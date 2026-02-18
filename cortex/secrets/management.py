@@ -265,7 +265,7 @@ def store_secret(
         source_ip: Source IP for audit trail
     """
     if vault_path is None:
-        vault_path = Path.home() / ".cortex" / ".vault"
+        vault_path = Path.home() / ".cortex-runtime" / ".vault"
     
     _initialize_vault(vault_path)
     
@@ -356,7 +356,7 @@ def get_secret(
         KeyError: If key not found or expired
     """
     if vault_path is None:
-        vault_path = Path.home() / ".cortex" / ".vault"
+        vault_path = Path.home() / ".cortex-runtime" / ".vault"
     
     if not vault_path.exists():
         _log_audit_entry(vault_path, "READ_FAILED", key, success=False)
@@ -404,7 +404,7 @@ def get_secret(
 def delete_secret(key: str, vault_path: Optional[Path] = None) -> None:
     """Delete secret from vault"""
     if vault_path is None:
-        vault_path = Path.home() / ".cortex" / ".vault"
+        vault_path = Path.home() / ".cortex-runtime" / ".vault"
     
     with _vault_lock:
         with open(vault_path, "r+") as f:
@@ -430,7 +430,7 @@ def delete_secret(key: str, vault_path: Optional[Path] = None) -> None:
 def list_secrets(vault_path: Optional[Path] = None) -> List[str]:
     """List all secret keys (without values)"""
     if vault_path is None:
-        vault_path = Path.home() / ".cortex" / ".vault"
+        vault_path = Path.home() / ".cortex-runtime" / ".vault"
     
     if not vault_path.exists():
         return []
@@ -462,7 +462,7 @@ def check_rotation_status(key: str, vault_path: Optional[Path] = None) -> Dict[s
         }
     """
     if vault_path is None:
-        vault_path = Path.home() / ".cortex" / ".vault"
+        vault_path = Path.home() / ".cortex-runtime" / ".vault"
     
     with open(vault_path, "r") as f:
         vault_data = json.load(f)
@@ -511,7 +511,7 @@ def rotate_secret(
         dry_run: Preview only (no changes)
     """
     if vault_path is None:
-        vault_path = Path.home() / ".cortex" / ".vault"
+        vault_path = Path.home() / ".cortex-runtime" / ".vault"
     
     if dry_run:
         return  # No changes
@@ -564,7 +564,7 @@ def batch_rotate_secrets(keys: List[str], vault_path: Optional[Path] = None) -> 
 def rollback_secret(key: str, vault_path: Optional[Path] = None) -> None:
     """Rollback to previous secret version"""
     if vault_path is None:
-        vault_path = Path.home() / ".cortex" / ".vault"
+        vault_path = Path.home() / ".cortex-runtime" / ".vault"
     
     history = get_secret_history(key, vault_path=vault_path)
     if len(history) < 2:
@@ -580,7 +580,7 @@ def rollback_secret(key: str, vault_path: Optional[Path] = None) -> None:
 def get_secret_history(key: str, vault_path: Optional[Path] = None) -> List[Dict[str, Any]]:
     """Get rotation history from vault metadata"""
     if vault_path is None:
-        vault_path = Path.home() / ".cortex" / ".vault"
+        vault_path = Path.home() / ".cortex-runtime" / ".vault"
     
     history_path = vault_path.parent / f".vault.history.{key}.json"
     
@@ -594,7 +594,7 @@ def get_secret_history(key: str, vault_path: Optional[Path] = None) -> List[Dict
 def get_rotation_metrics(vault_path: Optional[Path] = None) -> Dict[str, Any]:
     """Get rotation metrics from vault metadata"""
     if vault_path is None:
-        vault_path = Path.home() / ".cortex" / ".vault"
+        vault_path = Path.home() / ".cortex-runtime" / ".vault"
     
     metrics_path = vault_path.parent / ".vault.metrics.json"
     

@@ -3,7 +3,7 @@ CORTEX File Naming Factory & Validator
 =====================================================
 
 Enforces global file naming standards across CORTEX.
-SSOT: .cortex/standards/file-naming-config.yaml
+SSOT: .cortex-runtime/standards/file-naming-config.yaml
 DOCS: cortex_intelligence/tier0/governance/file-naming-standards.md
 
 Authority: CORE-035 (Single Canonical Implementation)
@@ -57,7 +57,7 @@ class FileNameFactory:
     This is the SINGLE location where all file naming is determined.
     All tools, generators, and scripts use this factory.
 
-    SSOT: .cortex/standards/file-naming-config.yaml
+    SSOT: .cortex-runtime/standards/file-naming-config.yaml
     """
 
     def __init__(self, config: Optional[FileNameConfig] = None):
@@ -540,6 +540,6 @@ if __name__ == "__main__":
         print()
 
     print("=" * 70)
-    print("SSOT: .cortex/standards/file-naming-config.yaml")
+    print("SSOT: .cortex-runtime/standards/file-naming-config.yaml")
     print("DOCS: cortex_intelligence/tier0/governance/file-naming-standards.md")
     print("=" * 70)

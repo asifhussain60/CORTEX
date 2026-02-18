@@ -38,7 +38,7 @@ issues:
     success_rate: 0.95
     references:
       - "https://github.com/microsoft/vscode/issues/mcp-client"
-      - ".cortex/setup-mcp.py"
+      - ".cortex-runtime/setup-mcp.py"
   
   - issue_id: "MCP-ERR-002"
     name: "Connection Refused"
@@ -167,7 +167,7 @@ fix_strategies:
 # Telemetry Configuration
 telemetry:
   enabled: true
-  log_path: ".cortex/mcp-self-healing.log"
+  log_path: ".cortex-runtime/mcp-self-healing.log"
   max_log_size_mb: 10
   rotation_count: 5
   metrics:

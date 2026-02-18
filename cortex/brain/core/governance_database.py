@@ -164,10 +164,10 @@ class GovernanceDatabaseManager:
         Initialize database manager.
 
         Args:
-            db_path: Path to SQLite database. Defaults to .cortex/governance_rules.db
+            db_path: Path to SQLite database. Defaults to .cortex-runtime/governance_rules.db
         """
         if db_path is None:
-            db_path = Path.home() / ".cortex" / "governance_rules.db"
+            db_path = Path.home() / ".cortex-runtime" / "governance_rules.db"
 
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)

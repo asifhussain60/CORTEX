@@ -9,9 +9,9 @@ services:
       - CORTEX_LOG_LEVEL=WARN
       - PYTHONUNBUFFERED=1
     volumes:
-      - cortex-state:/app/.cortex/state
+      - cortex-state:/app/.cortex-runtime/state
       - cortex-metrics:/app/metrics
-      - /var/log/cortex:/app/.cortex/logs
+      - /var/log/cortex:/app/.cortex-runtime/logs
     networks: [ cortex-network ]
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8443/health"]

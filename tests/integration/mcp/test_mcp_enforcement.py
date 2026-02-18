@@ -387,4 +387,4 @@ class TestCore051CrossPlatform:
         setup_script = project_root / ".cortex" / "setup-mcp.py"
         
         assert setup_script.exists(), \
-            f"CORE-051: .cortex/setup-mcp.py must exist at {setup_script}"
+            f"CORE-051: .cortex-runtime/setup-mcp.py must exist at {setup_script}"

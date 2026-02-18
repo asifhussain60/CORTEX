@@ -217,7 +217,7 @@ async def toolkit_analyze() -> dict:
     Analyze toolkit for scattered scripts and duplicates.
     
     Discovers:
-    - All tools in .cortex/ and scripts/
+    - All tools in .cortex-runtime/ and scripts/
     - Tool categories (diagnostics, setup, cleanup, validation, automation)
     - Duplicate functionality
     
@@ -228,7 +228,7 @@ async def toolkit_analyze() -> dict:
     discovery = ToolkitDiscovery(workspace_root=workspace_root)
     
     # Discover all tools in both directories
-    cortex_tools = discovery.discover_tools(directory=workspace_root / ".cortex")
+    cortex_tools = discovery.discover_tools(directory=workspace_root / ".cortex-runtime")
     script_tools = discovery.discover_tools(directory=workspace_root / "scripts")
     tools = cortex_tools + script_tools
     

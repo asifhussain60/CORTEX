@@ -118,7 +118,7 @@ class OrchestratorTraceLogger:
 
     # Configuration
     TRACE_ENABLED = os.getenv("CORTEX_TRACE_ENABLED", "true").lower() == "true"
-    TRACE_DB_PATH = Path(os.getenv("CORTEX_TRACE_DB", ".cortex/traces/orchestrator-traces.db"))
+    TRACE_DB_PATH = Path(os.getenv("CORTEX_TRACE_DB", ".cortex-runtime/traces/orchestrator-traces.db"))
     MAX_ROWS_PER_TABLE = int(os.getenv("CORTEX_TRACE_MAX_ROWS", "10000"))
     FLUSH_INTERVAL_HOURS = int(os.getenv("CORTEX_TRACE_FLUSH_INTERVAL", "24"))
     ENABLE_ASYNC_FLUSH = os.getenv("CORTEX_TRACE_ASYNC_FLUSH", "true").lower() == "true"

@@ -22,8 +22,8 @@ def test_setup_mcp_module_loads():
     """✅ Verify setup-mcp.py module loads without errors."""
     import importlib.util
     
-    setup_mcp_path = Path(".cortex/setup-mcp.py")
-    assert setup_mcp_path.exists(), "❌ .cortex/setup-mcp.py not found!"
+    setup_mcp_path = Path(".cortex-runtime/setup-mcp.py")
+    assert setup_mcp_path.exists(), "❌ .cortex-runtime/setup-mcp.py not found!"
     
     spec = importlib.util.spec_from_file_location("setup_mcp", setup_mcp_path)
     assert spec is not None, "❌ Could not load setup-mcp.py spec"

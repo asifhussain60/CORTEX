@@ -197,7 +197,7 @@ class NativeToolInterceptor:
                     return InterceptionResult(
                         allowed=False,
                         reason=f"MCP required for {intent.value} intent (CORE-050)",
-                        alternative="Run: python .cortex/setup-mcp.py → Reload VS Code",
+                        alternative="Run: python .cortex-runtime/setup-mcp.py → Reload VS Code",
                         mcp_tool="cortex_process_request"
                     )
                 

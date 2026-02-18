@@ -7,7 +7,7 @@ Date: 2026-01-26
 
 This module implements the hybrid knowledge architecture:
 1. YAML files (.knowledge-index.yaml, cortex-registry/company/domains/) are git-tracked source of truth
-2. SQLite cache (.cortex/knowledge.db) is local ephemeral cache (gitignored)
+2. SQLite cache (.cortex-runtime/knowledge.db) is local ephemeral cache (gitignored)
 3. Automatic rebuild on git pull via post-merge hook
 4. Explicit composition rules from .knowledge-synthesis-rules.yaml
 
@@ -137,7 +137,7 @@ class HybridKnowledgeLoader:
         self.repo_root = Path(repo_root)
         self.knowledge_index_path = self.repo_root / "cortex_intelligence" / "tier3" / "knowledge" / ".knowledge-index.yaml"
         self.synthesis_rules_path = self.repo_root / "cortex_intelligence" / "tier3" / "knowledge" / ".knowledge-synthesis-rules.yaml"
-        self.cache_db_path = self.repo_root / ".cortex" / "knowledge.db"
+        self.cache_db_path = self.repo_root / ".cortex-runtime" / "knowledge.db"
         self.cache_db_path.parent.mkdir(parents=True, exist_ok=True)
 
         self._index: Optional[KnowledgeIndex] = None

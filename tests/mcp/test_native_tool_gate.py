@@ -196,5 +196,5 @@ class TestErrorResponses:
             file="cortex/module.py"
         )
         
-        assert "python .cortex/setup-mcp.py" in error
+        assert "python .cortex-runtime/setup-mcp.py" in error
         assert "Reload VS Code" in error

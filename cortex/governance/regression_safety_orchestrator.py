@@ -25,7 +25,7 @@ class RegressionSafetyOrchestrator:
 
     def __init__(self) -> None:
         """Initialize regression safety orchestrator."""
-        self.baseline_dir = Path(".cortex/baselines")
+        self.baseline_dir = Path(".cortex-runtime/baselines")
         self.baseline_dir.mkdir(parents=True, exist_ok=True)
 
     def load_baseline(self, baseline_path: str) -> Dict[str, Any]:

@@ -71,7 +71,7 @@ class HealthIntelligence:
             workspace_root: Root path of workspace
         """
         self.workspace_root = workspace_root
-        self.cache_dir = workspace_root / ".cortex" / "health_cache"
+        self.cache_dir = workspace_root / ".cortex-runtime" / "health_cache"
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         
         self.patterns: Dict[str, HealthPattern] = {}

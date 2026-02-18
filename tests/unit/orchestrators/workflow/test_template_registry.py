@@ -97,12 +97,12 @@ class TestModeDetection:
 
     @patch("cortex.orchestrators.workflow.template_registry.Path")
     def test_mode_detection_architect(self, mock_path):
-        """Should detect ARCHITECT mode when .cortex/ marker exists."""
+        """Should detect ARCHITECT mode when .cortex-runtime/ marker exists."""
         from cortex.orchestrators.workflow.template_registry import (
             WorkflowTemplateRegistry,
         )
 
-        # Mock .cortex/ directory exists
+        # Mock .cortex-runtime/ directory exists
         mock_cortex_dir = MagicMock()
         mock_cortex_dir.exists.return_value = True
         mock_path.return_value = mock_cortex_dir
@@ -114,12 +114,12 @@ class TestModeDetection:
 
     @patch("cortex.orchestrators.workflow.template_registry.Path")
     def test_mode_detection_production(self, mock_path):
-        """Should detect PRODUCTION mode when .cortex/ marker absent."""
+        """Should detect PRODUCTION mode when .cortex-runtime/ marker absent."""
         from cortex.orchestrators.workflow.template_registry import (
             WorkflowTemplateRegistry,
         )
 
-        # Mock .cortex/ directory does NOT exist
+        # Mock .cortex-runtime/ directory does NOT exist
         mock_cortex_dir = MagicMock()
         mock_cortex_dir.exists.return_value = False
         mock_path.return_value = mock_cortex_dir

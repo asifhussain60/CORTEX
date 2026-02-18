@@ -386,7 +386,7 @@ class CortexValidate(ConsolidatedTool):
                 },
                 "workspace": {
                     "path": os.getcwd(),
-                    "cortex_marker": os.path.exists(".cortex"),
+                    "cortex_marker": os.path.exists(".cortex-runtime"),
                 },
             },
             metadata={"operation": "environment"},

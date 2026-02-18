@@ -2,7 +2,7 @@
 PRODUCTION mode workflow integration tests — Phase 100 Stage 4.
 
 Verifies workflow templates resolve with user's company knowledge when
-NO .cortex/ marker detected in workspace. Tests generic production profiles.
+NO .cortex-runtime/ marker detected in workspace. Tests generic production profiles.
 
 AC_START: AC-P100-S4-T3-001
 Phase: 100 | Stage: 4 | Priority: P0
@@ -31,7 +31,7 @@ class TestProductionModeResolution:
             WorkflowTemplateRegistry,
         )
 
-        # Mock no .cortex/ marker
+        # Mock no .cortex-runtime/ marker
         with patch("pathlib.Path.exists", return_value=False):
             registry = WorkflowTemplateRegistry()
 

@@ -45,7 +45,7 @@ class SecretsManager:
 
         Args:
             master_key: Master encryption key (defaults to CORTEX_MASTER_KEY env var)
-            storage_path: Storage directory for encrypted secrets (defaults to ~/.cortex/secrets)
+            storage_path: Storage directory for encrypted secrets (defaults to ~/.cortex-runtime/secrets)
             audit_enabled: Enable audit trail logging
 
         Raises:
@@ -66,7 +66,7 @@ class SecretsManager:
 
         # Setup storage path
         if storage_path is None:
-            storage_path = os.path.expanduser("~/.cortex/secrets")
+            storage_path = os.path.expanduser("~/.cortex-runtime/secrets")
         else:
             storage_path = os.path.expanduser(storage_path)
 

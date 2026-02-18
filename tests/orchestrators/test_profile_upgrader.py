@@ -151,6 +151,6 @@ class TestProfileUpgraderBackup:
         upgrader = ProfileUpgrader(tmp_path)
         upgrader.create_upgrade_backup("devops", "1.0")
         
-        backups_dir = tmp_path / ".cortex" / "profile-backups"
+        backups_dir = tmp_path / ".cortex-runtime" / "profile-backups"
         assert backups_dir.exists()
         assert len(list(backups_dir.glob("devops-*.yaml"))) >= 1

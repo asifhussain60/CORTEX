@@ -88,7 +88,7 @@ All code in this repository must comply with CORE governance rules:
 cortex/          ← Python source code
 cortex-registry/ ← YAML governance rules & patterns
 tests/           ← All test files (mirrors cortex/ structure)
-.cortex/         ← Runtime data (logs, traces, setup)
+.cortex-runtime/         ← Runtime data (logs, traces, setup)
 .github/         ← CI/CD, prompts, copilot instructions
 ```
 

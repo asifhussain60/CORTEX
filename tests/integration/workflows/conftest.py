@@ -114,7 +114,7 @@ def architect_context() -> Dict[str, Any]:
     """
     Mock ARCHITECT mode knowledge context.
 
-    Simulates CORTEX-internal knowledge loaded when .cortex/ marker
+    Simulates CORTEX-internal knowledge loaded when .cortex-runtime/ marker
     detected in workspace.
 
     Returns:

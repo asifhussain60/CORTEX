@@ -90,14 +90,14 @@ pip install -r requirements.txt
 
 # 3. Configure MCP for VS Code (Pylance-Style Architecture)
 # MCP runs locally within VS Code - NO manual server startup needed!
-python .cortex/setup-mcp.py
+python .cortex-runtime/setup-mcp.py
 
 # 4. Reload VS Code to activate MCP
 # Command Palette → Developer: Reload Window
 
 # 5. Verify MCP integration
 # In Copilot Chat, you should see cortex_* tools available
-# Check .cortex/setup.log for confirmation
+# Check .cortex-runtime/setup.log for confirmation
 
 # 6. Configure git hooks (IMPORTANT for team collaboration)
 make setup-hooks
@@ -113,7 +113,7 @@ make setup-hooks
 **Automatic (via git hooks):**
 ```bash
 # Post-checkout hook auto-runs after every git pull/checkout:
-python .cortex/setup-mcp.py --silent
+python .cortex-runtime/setup-mcp.py --silent
 
 # This regenerates .vscode/settings.json with correct platform paths
 # Then reload VS Code: Cmd+Shift+P → Developer: Reload Window
@@ -122,27 +122,27 @@ python .cortex/setup-mcp.py --silent
 **Manual (if hook fails or first-time setup):**
 ```bash
 # Regenerate platform-specific MCP configuration
-python .cortex/setup-mcp.py
+python .cortex-runtime/setup-mcp.py
 
 # Reload VS Code
 # Command Palette → Developer: Reload Window
 
 # Verify MCP tools are available
-python .cortex/verify-setup.py
+python .cortex-runtime/verify-setup.py
 ```
 
 **Troubleshooting:**
 ```bash
 # If MCP tools not available after reload:
-python .cortex/diagnose-mcp.py  # Diagnostic report
+python .cortex-runtime/diagnose-mcp.py  # Diagnostic report
 
 # Or check logs:
-cat .cortex/setup.log           # Last setup attempt
+cat .cortex-runtime/setup.log           # Last setup attempt
 cat .vscode/settings.json       # Verify Python path
 
 # Common fix: Delete and regenerate
 rm .vscode/settings.json
-python .cortex/setup-mcp.py
+python .cortex-runtime/setup-mcp.py
 ```
 
 **Why this matters:** Without correct paths, MCP tools won't be available in Copilot Chat, blocking all IMPLEMENT/FIX/REFACTOR operations (CORE-051).
@@ -189,7 +189,7 @@ CORTEX uses automated verification hooks to ensure code quality:
 make setup-hooks
 ```
 
-This configures Git to use version-controlled hooks from `.cortex/hooks/`.
+This configures Git to use version-controlled hooks from `.cortex-runtime/hooks/`.
 
 ## Development Commands
 

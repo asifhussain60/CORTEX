@@ -327,7 +327,7 @@ phase_status:
     # ============================================================================
     - id: "mega-e"
       title: "MEGA-E: Stabilization & Duplicate Elimination"
-      location: ".cortex/phase1-completion-report.md"
+      location: ".cortex-runtime/phase1-completion-report.md"
       completion_date: "2026-02-14"
       duration: "45 minutes"
       metrics:
@@ -337,7 +337,7 @@ phase_status:
         
     - id: "mega-i"
       title: "MEGA-I: Test Isolation & Standardization"
-      location: ".cortex/phase2-completion-report.md"
+      location: ".cortex-runtime/phase2-completion-report.md"
       completion_date: "2026-02-14"
       duration: "30 minutes"
       metrics:
@@ -347,7 +347,7 @@ phase_status:
         
     - id: "mega-m"
       title: "MEGA-M: Metrics & Observability"
-      location: ".cortex/phase3-completion-report.md"
+      location: ".cortex-runtime/phase3-completion-report.md"
       completion_date: "2026-02-14"
       duration: "40 minutes"
       metrics:
@@ -357,7 +357,7 @@ phase_status:
         
     - id: "mega-c"
       title: "MEGA-C: Code Quality & Linting"
-      location: ".cortex/phase4-completion-report.md"
+      location: ".cortex-runtime/phase4-completion-report.md"
       completion_date: "2026-02-15"
       duration: "30 minutes"
       metrics:
@@ -367,7 +367,7 @@ phase_status:
         
     - id: "mega-d"
       title: "MEGA-D: Documentation & Deployment"
-      location: ".cortex/phase5-completion-report.md"
+      location: ".cortex-runtime/phase5-completion-report.md"
       completion_date: "2026-02-15"
       duration: "2.5 hours"
       metrics:

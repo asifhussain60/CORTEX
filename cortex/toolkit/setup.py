@@ -139,7 +139,7 @@ class SetupVerifier:
                 passed=False,
                 message="MCP server not configured",
                 autofix_available=True,
-                fix_command="python .cortex/setup-mcp.py",
+                fix_command="python .cortex-runtime/setup-mcp.py",
             )
     
     def check_vscode_settings(self) -> SetupResult:
@@ -157,7 +157,7 @@ class SetupVerifier:
                 passed=False,
                 message="VS Code settings.json not found",
                 autofix_available=True,
-                fix_command="python .cortex/setup-mcp.py",
+                fix_command="python .cortex-runtime/setup-mcp.py",
             )
         
         try:
@@ -177,7 +177,7 @@ class SetupVerifier:
                 passed=False,
                 message="Invalid JSON in settings.json",
                 autofix_available=True,
-                fix_command="python .cortex/setup-mcp.py",
+                fix_command="python .cortex-runtime/setup-mcp.py",
             )
     
     def check_python_version(self) -> SetupResult:

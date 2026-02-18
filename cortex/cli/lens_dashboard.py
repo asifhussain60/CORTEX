@@ -19,7 +19,7 @@ from cortex.orchestrators.support.lens_visualization_orchestrator import (
 )
 
 # Configuration
-DASHBOARD_ROOT = Path.cwd() / ".cortex" / "lens-dashboard"
+DASHBOARD_ROOT = Path.cwd() / ".cortex-runtime" / "lens-dashboard"
 
 
 @click.group()
@@ -251,7 +251,7 @@ def list_cmd() -> None:
 @click.option(
     "--path",
     type=click.Path(exists=True, file_okay=False, dir_okay=True, path_type=Path),
-    help="Custom dashboard directory to serve (default: latest in .cortex/lens-dashboard)",
+    help="Custom dashboard directory to serve (default: latest in .cortex-runtime/lens-dashboard)",
     default=None,
 )
 def serve(port: int, no_cors: bool, path: Optional[Path]) -> None:

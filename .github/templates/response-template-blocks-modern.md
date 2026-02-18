@@ -435,7 +435,7 @@ source .venv/bin/activate  # Mac/Linux
 
 Run this once:
 ```bash
-python .cortex/setup-mcp.py
+python .cortex-runtime/setup-mcp.py
 ```
 
 ✅ Success: `.vscode/settings.json` is updated, Copilot Chat shows "CORTEX ready"
@@ -453,9 +453,9 @@ python .cortex/setup-mcp.py
 
 | Problem | Solution |
 |---------|----------|
-| "MCP server not found" | Run `python .cortex/setup-mcp.py` again |
+| "MCP server not found" | Run `python .cortex-runtime/setup-mcp.py` again |
 | "Python not in venv" | Check: `which python` shows `.venv/bin/python` |
-| "Permission denied" | `chmod +x .cortex/setup-mcp.py` |
+| "Permission denied" | `chmod +x .cortex-runtime/setup-mcp.py` |
 
 **Still stuck?** Share error message + `python --version` output — I'll guide you through it.
 ```

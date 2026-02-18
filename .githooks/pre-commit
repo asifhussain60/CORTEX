@@ -111,7 +111,7 @@ fi
 
 # Detect ARCHITECT mode
 ARCHITECT_MODE=0
-[ -d ".cortex" ] || [ -f "cortex/__init__.py" ] && [ -d "cortex-registry" ] && ARCHITECT_MODE=1
+[ -d ".cortex-runtime" ] || [ -f "cortex/__init__.py" ] && [ -d "cortex-registry" ] && ARCHITECT_MODE=1
 [ "$CORTEX_MODE" = "architect" ] && ARCHITECT_MODE=1
 
 # Single pass through registry patterns
@@ -212,9 +212,9 @@ except Exception as e:
 " 2>/dev/null; then
         echo -e "${RED}❌ MCP ENVIRONMENT VALIDATION FAILED${NC}"
         echo -e "${YELLOW}Resolution:${NC}"
-        echo -e "  1. Run: python .cortex/setup-mcp.py"
+        echo -e "  1. Run: python .cortex-runtime/setup-mcp.py"
         echo -e "  2. Reload VS Code: Cmd+Shift+P → Developer: Reload Window"
-        echo -e "  3. Verify: python .cortex/verify-setup.py"
+        echo -e "  3. Verify: python .cortex-runtime/verify-setup.py"
         echo ""
         exit 1
     fi

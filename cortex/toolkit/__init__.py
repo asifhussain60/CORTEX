@@ -1,7 +1,7 @@
 """
 CORTEX Toolkit - Centralized Utility Package
 
-This package consolidates scattered utility scripts from .cortex/ and scripts/
+This package consolidates scattered utility scripts from .cortex-runtime/ and scripts/
 directories into a unified, MCP-exposed, testable toolkit.
 
 **Module Structure:**

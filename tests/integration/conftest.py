@@ -10,7 +10,7 @@ from pathlib import Path
 @pytest.fixture
 def setup_mcp():
     """Fixture to load and provide the setup-mcp.py module."""
-    setup_mcp_path = Path(".cortex/setup-mcp.py")
+    setup_mcp_path = Path(".cortex-runtime/setup-mcp.py")
     
     if not setup_mcp_path.exists():
         pytest.skip(f"setup-mcp.py not found at {setup_mcp_path}")

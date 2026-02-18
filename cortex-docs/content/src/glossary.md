@@ -71,7 +71,7 @@ class HolisticValidationGate:
 
 **Definition:** An operational mode activated when developing the CORTEX platform itself (internal system development). Uses specialized prompt file (`cortex-architect.prompt.md`) and provides access to CORTEX-internal context including registry structure, wiring specifications, and phase definitions.
 
-**Detection Logic:** Mode activates when repository contains `.cortex/` directory, `cortex-registry/` directory, or `cortex/__init__.py` file.
+**Detection Logic:** Mode activates when repository contains `.cortex-runtime/` directory, `cortex-registry/` directory, or `cortex/__init__.py` file.
 
 **Header Format:** `🏛️ CORTEX Architect {MODE}` (e.g., "🏛️ CORTEX Architect IMPLEMENT")
 
@@ -618,7 +618,7 @@ else:
 
 **Definition:** Default operational mode for user production repositories. Uses standard prompt file (`CORTEX.prompt.md`) and loads user domain knowledge (not CORTEX-internal context).
 
-**Detection Logic:** Activated when repository does NOT contain `.cortex/`, `cortex-registry/`, or `cortex/__init__.py`
+**Detection Logic:** Activated when repository does NOT contain `.cortex-runtime/`, `cortex-registry/`, or `cortex/__init__.py`
 
 **Header Format:** `🧠 CORTEX {MODE}` (e.g., "🧠 CORTEX IMPLEMENT")
 
@@ -951,7 +951,7 @@ orchestrator:
 
 **Category:** Infrastructure | **Phase:** 90
 
-**Definition:** Consolidated set of 5 production modules that replace 47 scattered Python scripts from `.cortex/` and `scripts/` directories. Provides unified interfaces for development utilities with comprehensive test coverage and MCP tool exposure.
+**Definition:** Consolidated set of 5 production modules that replace 47 scattered Python scripts from `.cortex-runtime/` and `scripts/` directories. Provides unified interfaces for development utilities with comprehensive test coverage and MCP tool exposure.
 
 **5 Modules:**
 1. **Discovery** (19 tests) — Tool scanning and categorization

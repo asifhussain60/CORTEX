@@ -4,7 +4,7 @@ Vacuum Automation - Automated Cleanup Operations
 Consolidates cleanup logic from multiple vacuum scripts.
 
 **Source Scripts:**
-- .cortex/run_vacuum.py
+- .cortex-runtime/run_vacuum.py
 - scripts/vacuum-runner.py
 
 **Authority:** Phase 90 S-90-05
@@ -101,7 +101,7 @@ class VacuumAutomation:
             "docs/",
             "cortex-docs/",
             "cortex-registry/",
-            ".cortex/",  # Archive area
+            ".cortex-runtime/",  # Archive area
             "_archives/",  # Archive area (will be deleted by cleanup_archives)
             "_workspaces/",  # EXCEPTION per user request
         ]
@@ -361,7 +361,7 @@ class VacuumAutomation:
             "cortex-docs/",
             "cortex-registry/",
             "_workspaces/",  # EXCEPTION per user request
-            ".cortex/",
+            ".cortex-runtime/",
             "docs/",
             ".venv/",
             ".git/",

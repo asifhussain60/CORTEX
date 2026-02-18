@@ -10,7 +10,7 @@ Author: Asif Hussain
 Date: 2026-01-27
 
 CORE-030: Docker-first architecture - uses file-based locks (container-safe).
-Lock files are stored in /app/.cortex/locks/ (Docker) or .cortex/locks/ (local).
+Lock files are stored in /app/.cortex-runtime/locks/ (Docker) or .cortex-runtime/locks/ (local).
 """
 
 from __future__ import annotations
@@ -71,7 +71,7 @@ def _get_lock_directory() -> Path:
     """
     Get the lock directory path.
 
-    Uses /app/.cortex/locks/ in Docker, or .cortex/locks/ locally.
+    Uses /app/.cortex-runtime/locks/ in Docker, or .cortex-runtime/locks/ locally.
     Creates the directory if it doesn't exist.
 
     Returns:
@@ -79,10 +79,10 @@ def _get_lock_directory() -> Path:
     """
     # Check for Docker environment
     if os.path.exists("/app"):
-        lock_dir = Path("/app/.cortex/locks")
+        lock_dir = Path("/app/.cortex-runtime/locks")
     else:
         # Local development
-        lock_dir = Path(".cortex/locks")
+        lock_dir = Path(".cortex-runtime/locks")
 
     lock_dir.mkdir(parents=True, exist_ok=True)
     return lock_dir

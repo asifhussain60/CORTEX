@@ -203,7 +203,7 @@ stages:
          - Fallback to full extract if cache miss
       
       2. cortex/lens/cache/lens_cache.py (enhance existing)
-         - Storage: ~/.cortex/cache/lens/{repo_id}/{commit_sha}/
+         - Storage: ~/.cortex-runtime/cache/lens/{repo_id}/{commit_sha}/
          - TTL: 30 days (after which re-validate)
          - Invalidation: git hook (on commit, mark old cache for re-check)
          - Stats: hit rate, cache size, invalidation rate

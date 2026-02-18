@@ -44,7 +44,7 @@ class ToolkitDiscovery:
     """
     Discovery engine for scattered toolkit utilities.
     
-    Scans .cortex/ and scripts/ directories, categorizes tools,
+    Scans .cortex-runtime/ and scripts/ directories, categorizes tools,
     and identifies duplicate functionality.
     """
     
@@ -132,12 +132,12 @@ class ToolkitDiscovery:
     
     def discover_all(self) -> List[ToolMetadata]:
         """
-        Discover all tools in .cortex/ and scripts/.
+        Discover all tools in .cortex-runtime/ and scripts/.
         
         Returns:
             Combined list of all discovered tools
         """
-        cortex_tools = self.discover_tools(Path(".cortex"))
+        cortex_tools = self.discover_tools(Path(".cortex-runtime"))
         scripts_tools = self.discover_tools(Path("scripts"))
         
         return cortex_tools + scripts_tools

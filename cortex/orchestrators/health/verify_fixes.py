@@ -31,9 +31,9 @@ def test_duplicate_file_removed():
     """Verify run_vacuum.legacy.py duplicate was removed."""
     duplicate_file = CORTEX_ROOT / ".cortex" / "run_vacuum.legacy.py"
     
-    assert not duplicate_file.exists(), "❌ Duplicate file still exists: .cortex/run_vacuum.legacy.py"
+    assert not duplicate_file.exists(), "❌ Duplicate file still exists: .cortex-runtime/run_vacuum.legacy.py"
     
-    print("✅ Duplicate file removed (.cortex/run_vacuum.legacy.py)")
+    print("✅ Duplicate file removed (.cortex-runtime/run_vacuum.legacy.py)")
 
 
 def test_config_file_exists():

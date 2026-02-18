@@ -32,15 +32,15 @@ class TestOutputConfiguration:
             repo_path=Path("/path/to/repo"),
             is_cortex=False,
             is_remote=False,
-            output_path=Path("/path/to/repo/.cortex/lens-dashboard"),
-            gitignore_entry=".cortex/",
+            output_path=Path("/path/to/repo/.cortex-runtime/lens-dashboard"),
+            gitignore_entry=".cortex-runtime/",
         )
         
         assert config.repo_path == Path("/path/to/repo")
         assert config.is_cortex is False
         assert config.is_remote is False
-        assert config.output_path == Path("/path/to/repo/.cortex/lens-dashboard")
-        assert config.gitignore_entry == ".cortex/"
+        assert config.output_path == Path("/path/to/repo/.cortex-runtime/lens-dashboard")
+        assert config.gitignore_entry == ".cortex-runtime/"
     
     def test_create_local_cortex_config(self):
         """Test creating config for local CORTEX repository."""
@@ -62,13 +62,13 @@ class TestOutputConfiguration:
             repo_path=Path("/tmp/remote-repo"),
             is_cortex=False,
             is_remote=True,
-            output_path=Path.home() / ".cortex/cache/remote-repo-hash/lens-dashboard",
+            output_path=Path.home() / ".cortex-runtime/cache/remote-repo-hash/lens-dashboard",
             gitignore_entry=None,  # No gitignore for remote
         )
         
         assert config.is_remote is True
         assert str(config.output_path).startswith(str(Path.home()))
-        assert ".cortex/cache" in str(config.output_path)
+        assert ".cortex-runtime/cache" in str(config.output_path)
 
 
 class TestDashboardOutputManager:
@@ -85,8 +85,8 @@ class TestDashboardOutputManager:
         assert config.repo_path == tmp_path
         assert config.is_cortex is False
         assert config.is_remote is False
-        assert config.output_path == tmp_path / ".cortex/lens-dashboard"
-        assert config.gitignore_entry == ".cortex/"
+        assert config.output_path == tmp_path / ".cortex-runtime/lens-dashboard"
+        assert config.gitignore_entry == ".cortex-runtime/"
     
     def test_get_output_path_cortex_local(self, tmp_path):
         """Test output path for CORTEX repository (local)."""
@@ -114,9 +114,9 @@ class TestDashboardOutputManager:
         assert config.is_cortex is False
         assert config.is_remote is True
         
-        # Output path should be in ~/.cortex/cache/
+        # Output path should be in ~/.cortex-runtime/cache/
         assert str(config.output_path).startswith(str(Path.home()))
-        assert ".cortex/cache" in str(config.output_path)
+        assert ".cortex-runtime/cache" in str(config.output_path)
         assert "lens-dashboard" in str(config.output_path)
         assert config.gitignore_entry is None  # No gitignore for remote
     
@@ -129,7 +129,7 @@ class TestDashboardOutputManager:
             config = manager.get_output_configuration(tmp_path, output_override=custom_path)
         
         assert config.output_path == custom_path
-        assert config.gitignore_entry == ".cortex/"  # Still suggest gitignore
+        assert config.gitignore_entry == ".cortex-runtime/"  # Still suggest gitignore
     
     def test_ensure_output_directory_creates_path(self, tmp_path):
         """Test ensure_output_directory creates missing directories."""
@@ -159,11 +159,11 @@ class TestDashboardOutputManager:
         gitignore_path = tmp_path / ".gitignore"
         
         # Create new .gitignore
-        manager.create_gitignore_entry(tmp_path, ".cortex/")
+        manager.create_gitignore_entry(tmp_path, ".cortex-runtime/")
         
         assert gitignore_path.exists()
         content = gitignore_path.read_text()
-        assert ".cortex/" in content
+        assert ".cortex-runtime/" in content
         assert "# CORTEX LENS Dashboard" in content
     
     def test_create_gitignore_entry_appends_if_exists(self, tmp_path):
@@ -174,11 +174,11 @@ class TestDashboardOutputManager:
         # Create existing .gitignore
         gitignore_path.write_text("node_modules/\n*.log\n")
         
-        manager.create_gitignore_entry(tmp_path, ".cortex/")
+        manager.create_gitignore_entry(tmp_path, ".cortex-runtime/")
         
         content = gitignore_path.read_text()
         assert "node_modules/" in content  # Original content preserved
-        assert ".cortex/" in content  # New entry added
+        assert ".cortex-runtime/" in content  # New entry added
     
     def test_create_gitignore_entry_idempotent(self, tmp_path):
         """Test .gitignore entry not duplicated on multiple calls."""
@@ -186,12 +186,12 @@ class TestDashboardOutputManager:
         gitignore_path = tmp_path / ".gitignore"
         
         # Call twice
-        manager.create_gitignore_entry(tmp_path, ".cortex/")
-        manager.create_gitignore_entry(tmp_path, ".cortex/")
+        manager.create_gitignore_entry(tmp_path, ".cortex-runtime/")
+        manager.create_gitignore_entry(tmp_path, ".cortex-runtime/")
         
         content = gitignore_path.read_text()
         # Should only appear once
-        assert content.count(".cortex/") == 1
+        assert content.count(".cortex-runtime/") == 1
     
     def test_create_gitignore_entry_skips_if_none(self, tmp_path):
         """Test no .gitignore created if gitignore_entry is None."""
@@ -224,4 +224,4 @@ class TestDashboardOutputManager:
         with patch("cortex.visualization.output_manager.is_cortex_repository", return_value=False):
             output_path = get_output_path(tmp_path)
         
-        assert output_path == tmp_path / ".cortex/lens-dashboard"
+        assert output_path == tmp_path / ".cortex-runtime/lens-dashboard"

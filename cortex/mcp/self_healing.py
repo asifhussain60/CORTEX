@@ -103,7 +103,7 @@ class MCPSelfHealing:
         # Telemetry
         self.telemetry_enabled = self.registry.get("telemetry", {}).get("enabled", True)
         self.log_path = self.registry.get("telemetry", {}).get(
-            "log_path", ".cortex/mcp-self-healing.log"
+            "log_path", ".cortex-runtime/mcp-self-healing.log"
         )
     
     def detect_mcp_availability(self) -> Tuple[bool, str]:
@@ -344,13 +344,13 @@ class MCPSelfHealing:
         
         try:
             # Step 1: Run setup-mcp.py
-            setup_script = Path(".cortex/setup-mcp.py")
+            setup_script = Path(".cortex-runtime/setup-mcp.py")
             
             if not setup_script.exists():
                 logger.error("setup-mcp.py not found")
                 return False
             
-            # In production, would run: python .cortex/setup-mcp.py
+            # In production, would run: python .cortex-runtime/setup-mcp.py
             logger.info("Running setup-mcp.py to reconfigure paths...")
             
             # Step 2: Verify configuration
@@ -590,7 +590,7 @@ def handle_mcp_tool_error(
             f"❌ MCP Tool Error: {tool_name}\n"
             f"Error: {error_msg}\n\n"
             f"This is an unknown MCP issue.\n"
-            f"Please run: python .cortex/setup-mcp.py\n"
+            f"Please run: python .cortex-runtime/setup-mcp.py\n"
             f"Then reload VS Code."
         )
     
@@ -614,7 +614,7 @@ def handle_mcp_tool_error(
         logger.error(f"Auto-fix failed for {issue.issue_id}")
         raise Exception(
             f"❌ Auto-fix failed for {issue.issue_id}\n"
-            f"Please manually run: python .cortex/setup-mcp.py\n"
+            f"Please manually run: python .cortex-runtime/setup-mcp.py\n"
             f"Then reload VS Code."
         )
     

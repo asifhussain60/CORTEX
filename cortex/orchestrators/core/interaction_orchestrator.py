@@ -206,7 +206,7 @@ class InteractionOrchestrator(IOrchestrator):
             audit_entries = []
             
             # Try reading from trace database first
-            trace_db_path = Path(os.getenv("CORTEX_TRACE_DB", ".cortex/traces/orchestrator-traces.db"))
+            trace_db_path = Path(os.getenv("CORTEX_TRACE_DB", ".cortex-runtime/traces/orchestrator-traces.db"))
             if trace_db_path.exists():
                 import sqlite3
                 with sqlite3.connect(str(trace_db_path)) as conn:

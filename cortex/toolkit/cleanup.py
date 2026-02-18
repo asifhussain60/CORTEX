@@ -6,7 +6,7 @@ Consolidates markdown vacuum and debug marker cleanup scripts.
 **Consolidated Scripts:**
 - scripts/run_vacuum.py
 - scripts/vacuum-runner.py
-- .cortex/phase-80-root-cleanup.py
+- .cortex-runtime/phase-80-root-cleanup.py
 - cortex/debugging/debug_decorator.py (cleanup functions)
 
 **Authority:** Phase 90 S-90-05

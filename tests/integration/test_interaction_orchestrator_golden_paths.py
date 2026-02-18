@@ -50,14 +50,14 @@ def temp_trace_db():
         OrchestratorTraceLogger._initialized = False  # Reset initialized flag
         
         # Force re-evaluation of class variables
-        OrchestratorTraceLogger.TRACE_DB_PATH = Path(os.getenv("CORTEX_TRACE_DB", ".cortex/traces/orchestrator-traces.db"))
+        OrchestratorTraceLogger.TRACE_DB_PATH = Path(os.getenv("CORTEX_TRACE_DB", ".cortex-runtime/traces/orchestrator-traces.db"))
 
         yield db_path
 
         # Cleanup
         OrchestratorTraceLogger._instance = None
         # Restore to default
-        OrchestratorTraceLogger.TRACE_DB_PATH = Path(".cortex/traces/orchestrator-traces.db")
+        OrchestratorTraceLogger.TRACE_DB_PATH = Path(".cortex-runtime/traces/orchestrator-traces.db")
 
 
 class TestInteractionOrchestratorGoldenPaths:

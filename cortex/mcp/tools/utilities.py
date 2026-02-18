@@ -142,7 +142,7 @@ class CortexVerify(ConsolidatedTool):
                 "path": os.environ.get("VIRTUAL_ENV", "not set"),
             },
             "cortex_marker": {
-                "exists": os.path.exists(".cortex"),
+                "exists": os.path.exists(".cortex-runtime"),
             },
             "mcp_configured": {
                 "exists": os.path.exists(".vscode/settings.json"),

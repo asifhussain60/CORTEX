@@ -7,7 +7,7 @@ Consolidates governance and production validation scripts.
 - scripts/validate-production.py
 - scripts/validate_governance_alignment.py
 - scripts/execute_validation_suite.py
-- .cortex/validate-pre-commit.py
+- .cortex-runtime/validate-pre-commit.py
 
 **Authority:** Phase 90 S-90-06
 """

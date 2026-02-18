@@ -7,8 +7,8 @@ contain placeholders resolved by KnowledgeSynthesisEngine. Templates auto-discov
 from metadata.yaml files in cortex-registry/workflows/ and company/workflows/.
 
 Mode Detection:
-- ARCHITECT: .cortex/ marker exists → CORTEX-internal knowledge
-- PRODUCTION: No .cortex/ marker → User domain knowledge
+- ARCHITECT: .cortex-runtime/ marker exists → CORTEX-internal knowledge
+- PRODUCTION: No .cortex-runtime/ marker → User domain knowledge
 
 Override Precedence:
 - company/workflows/*.yaml > cortex-registry/workflows/*.yaml
@@ -89,12 +89,12 @@ class WorkflowTemplateRegistry:
         Detect repository mode (ARCHITECT vs PRODUCTION).
 
         Returns:
-            "ARCHITECT" if .cortex/ marker exists, "PRODUCTION" otherwise.
+            "ARCHITECT" if .cortex-runtime/ marker exists, "PRODUCTION" otherwise.
         """
         if self._mode is not None:
             return self._mode
 
-        cortex_marker = Path(".cortex")
+        cortex_marker = Path(".cortex-runtime")
         self._mode = "ARCHITECT" if cortex_marker.exists() else "PRODUCTION"
         return self._mode
 

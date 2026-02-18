@@ -14,7 +14,7 @@ RUN pip install --no-cache /app/wheels/* && rm -rf /app/wheels
 COPY cortex /app/cortex
 COPY cortex_intelligence /app/cortex_intelligence
 COPY deployment /app/deployment
-RUN mkdir -p /app/.cortex/logs /app/.cortex/state /app/metrics && \
+RUN mkdir -p /app/.cortex-runtime/logs /app/.cortex-runtime/state /app/metrics && \
     chown -R cortex:cortex /app
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD curl -f http://localhost:8443/health || exit 1
 USER cortex

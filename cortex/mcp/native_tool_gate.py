@@ -84,7 +84,7 @@ EXEMPT_DIRECTORIES = {
     ".github",
     "docs",
     "tests",
-    ".cortex",
+    ".cortex-runtime",
     "scripts",
 }
 
@@ -202,7 +202,7 @@ class NativeToolGate:
             return HALT_EXECUTION
     """
     
-    def __init__(self, log_path: str = ".cortex/native-tool-bypass.log"):
+    def __init__(self, log_path: str = ".cortex-runtime/native-tool-bypass.log"):
         """
         Initialize native tool gate.
         
@@ -345,7 +345,7 @@ cortex_process_request(
 
 **Setup MCP (if not configured):**
 ```bash
-python .cortex/setup-mcp.py
+python .cortex-runtime/setup-mcp.py
 # Then: Reload VS Code (Command Palette → Developer: Reload Window)
 ```
 

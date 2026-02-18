@@ -63,7 +63,7 @@ class StartupValidator:
     """
 
     # Cache file location (persists across sessions)
-    CACHE_DIR = Path.home() / ".cortex" / "startup"
+    CACHE_DIR = Path.home() / ".cortex-runtime" / "startup"
     CACHE_FILE = CACHE_DIR / "validation_status.json"
     # Docker-first: YAML config instead of SQLite
     REGISTRY_CONFIG = Path(__file__).parent.parent.parent / "cortex-registry" / "manifest.yaml"

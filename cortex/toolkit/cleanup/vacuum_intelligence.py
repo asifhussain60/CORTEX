@@ -5,7 +5,7 @@ Enhances vacuum operations with pattern learning, safety checks, and smart
 recommendations based on git history analysis.
 
 Insights from Recent Work (Feb 14-16, 2026):
-- Fixed 5 P0 duplicate files (.cortex/run_vacuum.py, phase files)
+- Fixed 5 P0 duplicate files (.cortex-runtime/run_vacuum.py, phase files)
 - 85.2% false positive reduction in health checks
 - Filename consolidation (124 conflicts → organized naming)
 - Markdown sprawl cleanup patterns identified
@@ -69,7 +69,7 @@ class VacuumIntelligence:
             workspace_root: Root path of workspace
         """
         self.workspace_root = workspace_root
-        self.cache_dir = workspace_root / ".cortex" / "vacuum_cache"
+        self.cache_dir = workspace_root / ".cortex-runtime" / "vacuum_cache"
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         
         self.patterns: Dict[str, CleanupPattern] = {}
@@ -94,7 +94,7 @@ class VacuumIntelligence:
             "conftest.py",
             
             # CORTEX core
-            ".cortex/setup-mcp.py",
+            ".cortex-runtime/setup-mcp.py",
             ".github/prompts/",
             ".github/agents/",
             "README.md",
@@ -302,11 +302,11 @@ class VacuumIntelligence:
             "README.md",
             "docs/",
             "cortex-docs/",
-            ".cortex/",
+            ".cortex-runtime/",
             "_archives/",
             "cortex-registry/",
         ]
-        
+
         for pattern in allowed:
             if pattern in rel_path:
                 return False

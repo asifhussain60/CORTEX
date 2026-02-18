@@ -84,7 +84,7 @@ def pytest_configure(config):
     """Configure pytest with trace settings."""
     # Set default trace settings for tests
     os.environ["CORTEX_TRACE_ENABLED"] = "true"
-    os.environ["CORTEX_TRACE_DB"] = ".cortex/traces/test-orchestrator-traces.db"
+    os.environ["CORTEX_TRACE_DB"] = ".cortex-runtime/traces/test-orchestrator-traces.db"
     os.environ["CORTEX_TRACE_MAX_ROWS"] = "50000"  # Higher limit for tests
     os.environ["CORTEX_TRACE_ASYNC_FLUSH"] = "true"
 

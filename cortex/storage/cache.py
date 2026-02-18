@@ -42,7 +42,7 @@ class CachedKnowledgeProvider(IKnowledgeProvider):
 
         # AC-PHASE50-S5-003: Initialize L2 cache (filesystem)
         self.l2_cache_enabled = config.cache_enabled if config.cache_enabled is not None else True
-        self.l2_cache_dir = Path.home() / ".cortex" / "cache" / "storage"
+        self.l2_cache_dir = Path.home() / ".cortex-runtime" / "cache" / "storage"
 
         if self.l2_cache_enabled:
             self.l2_cache_dir.mkdir(parents=True, exist_ok=True)

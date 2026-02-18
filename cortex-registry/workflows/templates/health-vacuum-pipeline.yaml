@@ -159,7 +159,7 @@ workflow:
           - "cortex-registry/**"
           - "cortex-docs/**"
           - "tests/**"
-          - ".cortex/**"
+          - ".cortex-runtime/**"
           - ".github/**"
           - "scripts/**"
           - "docs/**"

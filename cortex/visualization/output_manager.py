@@ -2,9 +2,9 @@
 Dashboard Output Manager - Smart Location Routing.
 
 Determines dashboard output location based on repository type and context:
-- External repository (local): repo_root/.cortex/lens-dashboard/
+- External repository (local): repo_root/.cortex-runtime/lens-dashboard/
 - CORTEX repository (local): repo_root/reports/lens-dashboard/
-- Remote repository: ~/.cortex/cache/{repo_hash}/lens-dashboard/
+- Remote repository: ~/.cortex-runtime/cache/{repo_hash}/lens-dashboard/
 
 Automatically handles:
 - .gitignore creation (external repos only)
@@ -50,15 +50,15 @@ class DashboardOutputManager:
     Determines output path based on repository type and execution context:
 
     **Local External Repository:**
-    - Output: `{repo_root}/.cortex/lens-dashboard/`
-    - Gitignore: `.cortex/` (auto-created)
+    - Output: `{repo_root}/.cortex-runtime/lens-dashboard/`
+    - Gitignore: `.cortex-runtime/` (auto-created)
 
     **Local CORTEX Repository:**
     - Output: `{repo_root}/reports/lens-dashboard/`
     - Gitignore: None (reports/ is tracked)
 
     **Remote Repository:**
-    - Output: `~/.cortex/cache/{repo_hash}/lens-dashboard/`
+    - Output: `~/.cortex-runtime/cache/{repo_hash}/lens-dashboard/`
     - Gitignore: None (outside repo)
 
     Example:
@@ -102,21 +102,21 @@ class DashboardOutputManager:
         if output_override:
             output_path = output_override
         elif is_remote:
-            # Remote: ~/.cortex/cache/{repo_hash}/lens-dashboard/
+            # Remote: ~/.cortex-runtime/cache/{repo_hash}/lens-dashboard/
             repo_hash = self._get_repo_hash(repo_path)
-            output_path = Path.home() / ".cortex/cache" / repo_hash / "lens-dashboard"
+            output_path = Path.home() / ".cortex-runtime/cache" / repo_hash / "lens-dashboard"
         elif is_cortex:
             # CORTEX local: reports/lens-dashboard/
             output_path = repo_path / "reports/lens-dashboard"
         else:
-            # External local: .cortex/lens-dashboard/
-            output_path = repo_path / ".cortex/lens-dashboard"
+            # External local: .cortex-runtime/lens-dashboard/
+            output_path = repo_path / ".cortex-runtime/lens-dashboard"
 
         # Determine gitignore entry
         if is_remote or is_cortex:
             gitignore_entry = None  # No gitignore needed
         else:
-            gitignore_entry = ".cortex/"  # External repos need gitignore
+            gitignore_entry = ".cortex-runtime/"  # External repos need gitignore
 
         return OutputConfiguration(
             repo_path=repo_path,
@@ -143,7 +143,7 @@ class DashboardOutputManager:
 
         Args:
             repo_path: Path to repository root
-            gitignore_entry: Entry to add (e.g., ".cortex/"), or None to skip
+            gitignore_entry: Entry to add (e.g., ".cortex-runtime/"), or None to skip
         """
         if gitignore_entry is None:
             return  # No gitignore needed

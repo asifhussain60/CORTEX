@@ -35,9 +35,9 @@ class GovernanceTelemetry:
         Initialize governance telemetry.
 
         Args:
-            log_dir: Directory for telemetry logs (default: .cortex/telemetry/)
+            log_dir: Directory for telemetry logs (default: .cortex-runtime/telemetry/)
         """
-        self.log_dir = log_dir or Path(".cortex/telemetry")
+        self.log_dir = log_dir or Path(".cortex-runtime/telemetry")
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
         self.current_session: Dict = {

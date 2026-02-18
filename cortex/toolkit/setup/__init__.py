@@ -4,9 +4,9 @@ CORTEX Toolkit - Setup Module
 Consolidates setup verification scripts.
 
 **Consolidated Scripts:**
-- .cortex/verify-setup.py
-- .cortex/verify-autonomous-setup.py
-- .cortex/setup-mcp.py (verification functions)
+- .cortex-runtime/verify-setup.py
+- .cortex-runtime/verify-autonomous-setup.py
+- .cortex-runtime/setup-mcp.py (verification functions)
 
 **Authority:** Phase 90 S-90-04
 """

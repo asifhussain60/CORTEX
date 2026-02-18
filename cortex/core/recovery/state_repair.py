@@ -200,7 +200,7 @@ class StateRepair:
         hash_chain_manager: Optional[HashChainManager] = None,
         enable_auto_repair: bool = False
     ):
-        self.storage_path = storage_path or Path.home() / ".cortex" / "repairs"
+        self.storage_path = storage_path or Path.home() / ".cortex-runtime" / "repairs"
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
         self.hash_chain_manager = hash_chain_manager

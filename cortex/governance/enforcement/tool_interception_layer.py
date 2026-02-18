@@ -197,7 +197,7 @@ cortex_process_request(
 
 **Setup MCP (if not configured):**
 ```bash
-python .cortex/setup-mcp.py
+python .cortex-runtime/setup-mcp.py
 # Then: Reload VS Code (Command Palette → Developer: Reload Window)
 ```
 

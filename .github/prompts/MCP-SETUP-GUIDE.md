@@ -65,7 +65,7 @@ VS Code handles the full lifecycle: start on workspace open, stop on workspace c
 
 ## Platform Support
 
-The setup script (`scripts/setup-mcp.py` or `.cortex/setup-mcp.py`) supports:
+The setup script (`scripts/setup-mcp.py` or `.cortex-runtime/setup-mcp.py`) supports:
 
 | Platform | Detection | Notes |
 |---|---|---|
@@ -85,7 +85,7 @@ The setup script (`scripts/setup-mcp.py` or `.cortex/setup-mcp.py`) supports:
 
 ### Logs
 
-Setup logs are written to `.cortex/setup.log` on first run.
+Setup logs are written to `.cortex-runtime/setup.log` on first run.
 
 ---
 
@@ -105,7 +105,7 @@ Setup logs are written to `.cortex/setup.log` on first run.
 
 - The MCP server runs with the **same permissions as VS Code**
 - No network sockets are opened (stdio only)
-- All tool calls are logged to `.cortex/traces/`
+- All tool calls are logged to `.cortex-runtime/traces/`
 - Secrets are never passed through MCP tool arguments — use environment variables
 
 See `SECURITY.md` for full threat model.

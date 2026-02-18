@@ -338,7 +338,7 @@ class TestCacheManager:
         gitignore = repo_path / ".gitignore"
         assert gitignore.exists()
         content = gitignore.read_text()
-        assert ".cortex/lens-dashboard/" in content
+        assert ".cortex-runtime/lens-dashboard/" in content
     
     def test_ensure_gitignore_appends_if_exists(
         self,
@@ -360,7 +360,7 @@ class TestCacheManager:
         
         content = gitignore.read_text()
         assert "*.pyc" in content
-        assert ".cortex/lens-dashboard/" in content
+        assert ".cortex-runtime/lens-dashboard/" in content
 
 
 class TestGetCacheManager:

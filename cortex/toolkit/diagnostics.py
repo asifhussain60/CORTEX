@@ -90,7 +90,7 @@ class MCPDiagnostics:
                 passed=False,
                 level=DiagnosticLevel.ERROR,
                 message="MCP server module not found",
-                recommendation="Run: python .cortex/setup-mcp.py",
+                recommendation="Run: python .cortex-runtime/setup-mcp.py",
             )
     
     def check_tools_available(self) -> DiagnosticResult:
@@ -128,7 +128,7 @@ class MCPDiagnostics:
                 passed=False,
                 level=DiagnosticLevel.ERROR,
                 message="MCP tools module not found",
-                recommendation="Run: python .cortex/setup-mcp.py",
+                recommendation="Run: python .cortex-runtime/setup-mcp.py",
             )
     
     def check_settings_configured(self) -> DiagnosticResult:
@@ -146,7 +146,7 @@ class MCPDiagnostics:
                 passed=False,
                 level=DiagnosticLevel.ERROR,
                 message=".vscode/settings.json not found",
-                recommendation="Run: python .cortex/setup-mcp.py",
+                recommendation="Run: python .cortex-runtime/setup-mcp.py",
             )
         
         try:
@@ -168,7 +168,7 @@ class MCPDiagnostics:
                     passed=False,
                     level=DiagnosticLevel.WARNING,
                     message="VS Code settings missing MCP config",
-                    recommendation="Run: python .cortex/setup-mcp.py",
+                    recommendation="Run: python .cortex-runtime/setup-mcp.py",
                 )
         except json.JSONDecodeError:
             return DiagnosticResult(

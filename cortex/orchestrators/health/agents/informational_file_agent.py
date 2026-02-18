@@ -45,7 +45,7 @@ class InformationalFileAgent(BaseHealthAgent):
             "cortex-docs/",
             "cortex-registry/",
             "_workspaces/",  # EXCEPTION per request
-            ".cortex/",
+            ".cortex-runtime/",
             "docs/",
             ".venv/",
             ".git/",

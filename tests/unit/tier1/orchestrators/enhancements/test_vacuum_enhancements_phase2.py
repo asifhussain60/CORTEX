@@ -326,7 +326,7 @@ rules:
             (tmpdir / "data.txt").write_text("data")
             
             # Create rules
-            rules_file = tmpdir / ".cortex" / "rules.yaml"
+            rules_file = tmpdir / ".cortex-runtime" / "rules.yaml"
             rules_file.parent.mkdir(exist_ok=True)
             rules_file.write_text("""
 rules:
@@ -348,7 +348,7 @@ rules:
         """Test creating default rules file."""
         with TemporaryDirectory() as tmpdir:
             tmpdir = Path(tmpdir)
-            rules_file = tmpdir / ".cortex" / "vacuum-rules.yaml"
+            rules_file = tmpdir / ".cortex-runtime" / "vacuum-rules.yaml"
             
             planner = RuleBasedPlanner(tmpdir, rules_file)
             success = planner.save_default_rules()

@@ -56,7 +56,7 @@ class MCPAutoHealingAgent(BaseHealthAgent):
         Args:
             config: Optional configuration with:
                 - auto_fix: Whether to auto-fix issues (default: True)
-                - mcp_setup_script: Path to setup-mcp.py (default: .cortex/setup-mcp.py)
+                - mcp_setup_script: Path to setup-mcp.py (default: .cortex-runtime/setup-mcp.py)
                 - expected_tools: Minimum number of MCP tools (default: 16)
         """
         super().__init__(
@@ -66,7 +66,7 @@ class MCPAutoHealingAgent(BaseHealthAgent):
         )
         
         self.auto_fix = self.config.get("auto_fix", True)
-        self.mcp_setup_script = self.config.get("mcp_setup_script", ".cortex/setup-mcp.py")
+        self.mcp_setup_script = self.config.get("mcp_setup_script", ".cortex-runtime/setup-mcp.py")
         self.expected_tools = self.config.get("expected_tools", 16)
     
     def check(self, workspace_root: Path) -> HealthCheckResult:
@@ -316,7 +316,7 @@ class MCPAutoHealingAgent(BaseHealthAgent):
         # Try to check if MCP server is responding
         # Note: This is a basic check - full MCP availability requires VS Code
         
-        setup_log = workspace_root / ".cortex" / "setup.log"
+        setup_log = workspace_root / ".cortex-runtime" / "setup.log"
         if setup_log.exists():
             try:
                 log_content = setup_log.read_text()
@@ -324,7 +324,7 @@ class MCPAutoHealingAgent(BaseHealthAgent):
                     return HealthIssue(
                         category=HealthIssueCategory.CONFIGURATION,
                         severity=HealthIssueSeverity.HIGH,
-                        file_path=Path(".cortex/setup.log"),
+                        file_path=Path(".cortex-runtime/setup.log"),
                         description="MCP setup incomplete",
                         suggested_fix=f"Run: python {self.mcp_setup_script}",
                         metadata={"setup_status": "incomplete"},

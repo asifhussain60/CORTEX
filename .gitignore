@@ -10,7 +10,7 @@
 #   ❌ Trace logs: *.db (local-only, auto-created on first run)
 #
 # FIRST-TIME SETUP: No manual steps — databases auto-created by bootstrap
-# PULLING UPDATES: Your local .cortex/traces/ preserved (not in git)
+# PULLING UPDATES: Your local .cortex-runtime/traces/ preserved (not in git)
 #
 # Authority: CORE-051 (Cross-Platform MCP), Industry Best Practice
 # ============================================================================
@@ -22,7 +22,7 @@
 *.db-shm
 
 # Local CORTEX dev artifacts (ephemeral, per-developer — never source-controlled)
-.cortex/
+.cortex-runtime/
 
 # VS Code personal preferences
 .favorites.json
@@ -76,7 +76,7 @@ env/
 #   - macOS/Linux: .venv/bin/python
 #   - Windows: .venv/Scripts/python.exe
 # Committing these files causes cross-platform breakage for team collaboration.
-# Each developer's machine regenerates its own via: python .cortex/setup-mcp.py
+# Each developer's machine regenerates its own via: python .cortex-runtime/setup-mcp.py
 # The post-checkout hook runs this automatically on git pull/checkout.
 .vscode/
 

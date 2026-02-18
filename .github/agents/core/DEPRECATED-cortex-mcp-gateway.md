@@ -96,7 +96,7 @@ Detection Results:
   ❌ Method 3: Configuration - .vscode/settings.json incomplete
 
 RESOLUTION:
-  1. Auto-Setup: python .cortex/setup-mcp.py
+  1. Auto-Setup: python .cortex-runtime/setup-mcp.py
   2. Reload: Command Palette → Developer: Reload Window
   3. Retry operation
 
@@ -136,7 +136,7 @@ Reference: .github/prompts/MCP-SETUP-GUIDE.md
 - Uses stdio transport (stdin/stdout JSON-RPC 2.0)
 - NO manual server startup required
 
-**Setup:** Run `python .cortex/setup-mcp.py` and reload VS Code
+**Setup:** Run `python .cortex-runtime/setup-mcp.py` and reload VS Code
 
 ---
 

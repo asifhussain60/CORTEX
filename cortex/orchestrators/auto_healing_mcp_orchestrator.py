@@ -368,7 +368,7 @@ class AutoHealingMCPOrchestrator:
             True if setup succeeded
         """
         try:
-            setup_script = Path(".cortex/setup-mcp.py")
+            setup_script = Path(".cortex-runtime/setup-mcp.py")
             
             if not setup_script.exists():
                 diagnostic.fix_log.append(f"❌ Setup script not found: {setup_script}")
@@ -492,11 +492,11 @@ class AutoHealingMCPOrchestrator:
         
         elif diagnostic.issue_type == "invalid_config":
             base_action += "1. Check requirements.txt for markdown fences\n"
-            base_action += "2. Run: python .cortex/setup-mcp.py\n"
+            base_action += "2. Run: python .cortex-runtime/setup-mcp.py\n"
         
         elif diagnostic.issue_type == "venv_not_activated":
             base_action += "1. Create venv: python -m venv .venv\n"
-            base_action += "2. Run: python .cortex/setup-mcp.py\n"
+            base_action += "2. Run: python .cortex-runtime/setup-mcp.py\n"
         
         elif diagnostic.issue_type == "platform_mismatch":
             base_action += "1. Verify venv structure matches OS\n"

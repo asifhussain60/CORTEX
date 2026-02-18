@@ -264,8 +264,8 @@ AI: [Runs ToolkitAnalyzer.analyze_audit_traces()]
 
 | Old Command | New MCP Tool |
 |-------------|--------------|
-| `python .cortex/diagnose-mcp.py` | `toolkit_diagnose` |
-| `python .cortex/setup-mcp.py --verify` | `toolkit_verify` |
+| `python .cortex-runtime/diagnose-mcp.py` | `toolkit_diagnose` |
+| `python .cortex-runtime/setup-mcp.py --verify` | `toolkit_verify` |
 | `python scripts/vacuum.py` | `toolkit_cleanup` |
 | `python scripts/validate-production.py` | `toolkit_validate validation_type=production` |
 | `python scripts/audit_traces.py` | `toolkit_analyze analysis_type=traces` |
@@ -373,7 +373,7 @@ cortex/mcp/tools/toolkit/
 1. Add deprecation warning to script header
 2. Add runtime warning message
 3. Provide migration path (MCP tool replacement)
-4. Archive to `.cortex/archive/pre-toolkit/`
+4. Archive to `.cortex-runtime/archive/pre-toolkit/`
 
 ---
 

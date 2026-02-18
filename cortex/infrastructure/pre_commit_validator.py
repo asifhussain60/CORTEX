@@ -182,7 +182,7 @@ class PreCommitConfig:
     def from_yaml(cls, config_path: Optional[str] = None) -> 'PreCommitConfig':
         """Load config from YAML file"""
         if config_path is None:
-            config_path = '.cortex/pre-commit-config.yaml'
+            config_path = '.cortex-runtime/pre-commit-config.yaml'
 
         path = Path(config_path)
         if not path.exists():
@@ -218,7 +218,7 @@ class PreCommitAuditLogger:
     Docker-first: Logs to JSON file instead of SQLite database.
     """
 
-    def __init__(self, log_path: str = '.cortex/pre_commit_audit.jsonl'):
+    def __init__(self, log_path: str = '.cortex-runtime/pre_commit_audit.jsonl'):
         """Initialize audit logger with JSON Lines file"""
         self.log_path = Path(log_path)
         self._ensure_log_file()

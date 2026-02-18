@@ -50,14 +50,14 @@ Add this to `.vscode/settings.json`:
 Run the setup script to auto-generate platform-specific settings:
 
 ```bash
-python .cortex/setup-mcp.py
+python .cortex-runtime/setup-mcp.py
 ```
 
 The script:
 1. Detects your OS and Python path
 2. Creates `.vscode/settings.json` with the correct `python` / `python3` command
 3. Validates the MCP module is importable
-4. Writes `.cortex/setup.log` with results
+4. Writes `.cortex-runtime/setup.log` with results
 
 ## Cross-Platform Support
 
@@ -82,7 +82,7 @@ If MCP tools are not available:
 
 ```bash
 # 1. Re-run setup
-python .cortex/setup-mcp.py
+python .cortex-runtime/setup-mcp.py
 
 # 2. Reload VS Code
 # Command Palette → Developer: Reload Window

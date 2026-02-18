@@ -212,7 +212,7 @@ settings = {
 
 | Issue | Symptom | Fix |
 |-------|---------|-----|
-| Missing settings.json | "MCP tools not available" | `python .cortex/setup-mcp.py` |
+| Missing settings.json | "MCP tools not available" | `python .cortex-runtime/setup-mcp.py` |
 | Wrong Python path | Server fails to start | Re-run `setup-mcp.py` on correct platform |
 | Deps not installed | Import errors in server | `pip install -r requirements.txt` |
 | Port conflict | "Address already in use" | Kill existing process on 9000 |

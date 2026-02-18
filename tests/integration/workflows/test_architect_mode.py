@@ -2,7 +2,7 @@
 ARCHITECT mode workflow integration tests — Phase 100 Stage 4.
 
 Verifies workflow templates resolve with CORTEX-internal patterns
-when .cortex/ marker detected in workspace.
+when .cortex-runtime/ marker detected in workspace.
 
 AC_START: AC-P100-S4-T2-001
 Phase: 100 | Stage: 4 | Priority: P0

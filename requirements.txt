@@ -25,7 +25,7 @@
 #      Verify: ls cortex/mcp/__init__.py  (should exist)
 #   
 #   ✅ VS Code MCP Config: .vscode/settings.json with MCP server config
-#      Auto-Configure: python .cortex/setup-mcp.py
+#      Auto-Configure: python .cortex-runtime/setup-mcp.py
 #      Manual Check:   grep "github.copilot.chat.mcpServers" .vscode/settings.json
 #
 # CRITICAL DEPENDENCY GROUPS (ALL required for preflight):
@@ -55,7 +55,7 @@
 #      git config core.hooksPath .githooks
 #   
 #   6. Auto-configure MCP (creates .vscode/settings.json if needed):
-#      python .cortex/setup-mcp.py
+#      python .cortex-runtime/setup-mcp.py
 #   
 #   7. Verify installation (run all tests):
 #      pytest
@@ -69,7 +69,7 @@
 # TROUBLESHOOTING:
 #   - ImportError for pyyaml: pip install --upgrade pyyaml
 #   - Missing pytest: pip install pytest pytest-cov pytest-asyncio
-#   - MCP server fails: python .cortex/setup-mcp.py && python -m cortex.mcp
+#   - MCP server fails: python .cortex-runtime/setup-mcp.py && python -m cortex.mcp
 #   - Git hooks not running: git config core.hooksPath .githooks
 #
 # PREFLIGHT VALIDATION SCRIPT (Automated):
@@ -273,7 +273,7 @@ py-zipkin==1.2.8          # Distributed tracing [OPTIONAL]
 #
 # PRODUCTION DEPLOYMENT (CORTEX-architect.prompt.md § PRE-FLIGHT):
 # - Install all dependencies: pip install -r requirements.txt
-# - Verify environment: python .cortex/setup-mcp.py
+# - Verify environment: python .cortex-runtime/setup-mcp.py
 # - Start MCP server: python -m cortex.mcp &
 # - Health check: curl http://localhost:8000/health
 # - Verify tests: pytest -v  (should show ALL TESTS PASS)

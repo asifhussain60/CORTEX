@@ -39,7 +39,7 @@ class TestMCPSetupValidation:
                 found = True
                 break
         
-        assert found, "setup-mcp.py must exist in .cortex/ or scripts/"
+        assert found, "setup-mcp.py must exist in .cortex-runtime/ or scripts/"
 
     def test_setup_script_cross_platform(self):
         """Test setup script supports cross-platform execution."""
@@ -97,7 +97,7 @@ class TestMCPSetupValidation:
             "Must clarify no manual server startup needed"
 
     def test_setup_log_creation(self):
-        """Test setup script creates .cortex/setup.log."""
+        """Test setup script creates .cortex-runtime/setup.log."""
         root = Path(__file__).parent.parent.parent
         
         # Check if setup.log exists (if setup was run)

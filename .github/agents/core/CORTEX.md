@@ -16,7 +16,7 @@
 ┃  • cortex_lens_analyze tool available    ┃
 ┃                                          ┃
 ┃  If MCP unavailable → HALT and display:  ┃
-┃  "Run: python .cortex/setup-mcp.py"      ┃
+┃  "Run: python .cortex-runtime/setup-mcp.py"      ┃
 ┃  "Then: Reload VS Code"                  ┃
 ┃                                          ┃
 ┃  ESCAPE HATCH (CORE-050):                ┃

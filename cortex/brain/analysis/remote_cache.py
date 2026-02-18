@@ -78,7 +78,7 @@ class RemoteCache:
     eviction and size management.
 
     Example:
-        >>> cache = RemoteCache(cache_dir=Path("~/.cortex/cache"))
+        >>> cache = RemoteCache(cache_dir=Path("~/.cortex-runtime/cache"))
         >>> cache.set("key", {"data": "value"}, ttl=3600)
         >>> result = cache.get("key")
     """
@@ -92,12 +92,12 @@ class RemoteCache:
         """Initialize remote cache.
 
         Args:
-            cache_dir: Directory for cache storage. Defaults to ~/.cortex/cache
+            cache_dir: Directory for cache storage. Defaults to ~/.cortex-runtime/cache
             max_size: Maximum cache size in bytes
             default_ttl: Default time-to-live in seconds
         """
         if cache_dir is None:
-            cache_dir = Path.home() / ".cortex" / "cache"
+            cache_dir = Path.home() / ".cortex-runtime" / "cache"
 
         self.cache_dir = cache_dir.expanduser().resolve()
         self.cache_dir.mkdir(parents=True, exist_ok=True)

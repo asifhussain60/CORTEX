@@ -378,7 +378,7 @@ blocks:
       
       **2. Configure MCP**
       ```bash
-      python .cortex/setup-mcp.py
+      python .cortex-runtime/setup-mcp.py
       ```
       
       **3. Reload VS Code**
@@ -405,7 +405,7 @@ blocks:
       **Troubleshooting:**
       - Tool disabled? Run setup-mcp.py again
       - Settings.json issues? Delete + regenerate via setup script
-      - Still issues? Check `.cortex/setup.log` for errors
+      - Still issues? Check `.cortex-runtime/setup.log` for errors
     
     usage_rules:
       - "Show for brand new repositories"

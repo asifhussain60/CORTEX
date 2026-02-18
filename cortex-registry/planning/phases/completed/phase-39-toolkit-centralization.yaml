@@ -21,7 +21,7 @@ metadata:
     - code-quality
 
 problem_statement: |
-  CORTEX has accumulated 20+ scattered Python utility scripts across .cortex/ and scripts/ 
+  CORTEX has accumulated 20+ scattered Python utility scripts across .cortex-runtime/ and scripts/ 
   directories to fix intermittent issues (MCP diagnostics, setup verification, governance 
   validation, cleanup automation). These tools are:
   
@@ -71,7 +71,7 @@ stages:
       Audit all scattered Python scripts and categorize by function
     tasks:
       - id: T-90-01-01
-        title: "Scan .cortex/ directory for Python utilities"
+        title: "Scan .cortex-runtime/ directory for Python utilities"
         acceptance: "List of 15+ scripts with function classification"
       
       - id: T-90-01-02
@@ -128,10 +128,10 @@ stages:
         title: "Extract MCP health check logic from 4 scripts"
         acceptance: "MCPHealthChecker class with unified checks"
         source_files:
-          - ".cortex/diagnose-mcp.py"
-          - ".cortex/verify-mcp-setup.py"
-          - ".cortex/verify-mcp-tools.py"
-          - ".cortex/verify-mcp-fix.py"
+          - ".cortex-runtime/diagnose-mcp.py"
+          - ".cortex-runtime/verify-mcp-setup.py"
+          - ".cortex-runtime/verify-mcp-tools.py"
+          - ".cortex-runtime/verify-mcp-fix.py"
       
       - id: T-90-03-02
         title: "Implement MCPHealthChecker.run_diagnostics()"
@@ -159,9 +159,9 @@ stages:
         title: "Extract setup checks from 3 scripts"
         acceptance: "SetupVerifier class with platform-aware checks"
         source_files:
-          - ".cortex/verify-setup.py"
-          - ".cortex/verify-autonomous-setup.py"
-          - ".cortex/setup-mcp.py (verification functions)"
+          - ".cortex-runtime/verify-setup.py"
+          - ".cortex-runtime/verify-autonomous-setup.py"
+          - ".cortex-runtime/setup-mcp.py (verification functions)"
       
       - id: T-90-04-02
         title: "Implement cross-platform path resolution"
@@ -185,7 +185,7 @@ stages:
         title: "Merge run_vacuum.py and vacuum-runner.py"
         acceptance: "Single VacuumAutomation class"
         source_files:
-          - ".cortex/run_vacuum.py"
+          - ".cortex-runtime/run_vacuum.py"
           - "scripts/vacuum-runner.py"
       
       - id: T-90-05-02
@@ -302,7 +302,7 @@ stages:
         acceptance: "CI/CD uses toolkit_* tools"
       
       - id: T-90-09-04
-        title: "Archive deprecated scripts to .cortex/archive/"
+        title: "Archive deprecated scripts to .cortex-runtime/archive/"
         acceptance: "20+ scripts moved with migration complete marker"
     
     tests:
@@ -313,10 +313,10 @@ toolkit_modules:
   diagnostics:
     description: "MCP health checks, environment diagnostics, auto-healing"
     consolidated_from:
-      - ".cortex/diagnose-mcp.py"
-      - ".cortex/verify-mcp-setup.py"
-      - ".cortex/verify-mcp-tools.py"
-      - ".cortex/verify-mcp-fix.py"
+      - ".cortex-runtime/diagnose-mcp.py"
+      - ".cortex-runtime/verify-mcp-setup.py"
+      - ".cortex-runtime/verify-mcp-tools.py"
+      - ".cortex-runtime/verify-mcp-fix.py"
     canonical_location: "cortex/toolkit/diagnostics/mcp_health.py"
     mcp_tool: "toolkit_diagnose"
     key_functions:
@@ -328,9 +328,9 @@ toolkit_modules:
   setup:
     description: "Cross-platform setup verification, dependency checks"
     consolidated_from:
-      - ".cortex/verify-setup.py"
-      - ".cortex/verify-autonomous-setup.py"
-      - ".cortex/setup-mcp.py (verify functions)"
+      - ".cortex-runtime/verify-setup.py"
+      - ".cortex-runtime/verify-autonomous-setup.py"
+      - ".cortex-runtime/setup-mcp.py (verify functions)"
     canonical_location: "cortex/toolkit/setup/verifier.py"
     mcp_tool: "toolkit_verify"
     key_functions:
@@ -342,7 +342,7 @@ toolkit_modules:
   cleanup:
     description: "Automated cleanup, vacuum operations, markdown suppression"
     consolidated_from:
-      - ".cortex/run_vacuum.py"
+      - ".cortex-runtime/run_vacuum.py"
       - "scripts/vacuum-runner.py"
     canonical_location: "cortex/toolkit/cleanup/vacuum.py"
     mcp_tool: "toolkit_cleanup"
@@ -368,8 +368,8 @@ toolkit_modules:
   analysis:
     description: "Trace analysis, orchestrator auditing, performance metrics"
     consolidated_from:
-      - ".cortex/audit_traces.py"
-      - ".cortex/analyze_root_dirs.py"
+      - ".cortex-runtime/audit_traces.py"
+      - ".cortex-runtime/analyze_root_dirs.py"
     canonical_location: "cortex/toolkit/analysis/traces.py"
     mcp_tool: "toolkit_analyze"
     key_functions:

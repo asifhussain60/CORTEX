@@ -183,7 +183,7 @@ stage_1_mvp:
     context_assembly: "ContextAssemblyOrchestrator (repo-aware)"
     handlers: "5 specialized InquiryHandlers (CORTEX-optimized)"
     generic_handler: "GenericCodeInquiryHandler (user repos)"
-    cache: "SQLite (.cortex/inquiry_cache.db, repo-scoped)"
+    cache: "SQLite (.cortex-runtime/inquiry_cache.db, repo-scoped)"
     interface: "CLI (/ask command)"
   
   # ─────────────────────────────────────────────────────────────────────────
@@ -1199,7 +1199,7 @@ rollback:
     steps:
       - "Git revert all inquiry system commits"
       - "Remove /ask CLI command"
-      - "Delete .cortex/inquiry_cache.db"
+      - "Delete .cortex-runtime/inquiry_cache.db"
       - "Analyze failure reasons (gather feedback)"
       - "Redesign based on feedback, retry in 2 weeks"
   

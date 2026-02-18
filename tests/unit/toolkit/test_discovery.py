@@ -21,11 +21,11 @@ class TestToolkitDiscovery:
     """Test toolkit discovery scanning."""
 
     def test_discover_cortex_directory(self) -> None:
-        """Test discovery scans .cortex/ directory."""
+        """Test discovery scans .cortex-runtime/ directory."""
         discovery = ToolkitDiscovery()
         tools = discovery.discover_tools(Path(".cortex"))
         
-        assert len(tools) >= 10, "Should find at least 10 tools in .cortex/"
+        assert len(tools) >= 10, "Should find at least 10 tools in .cortex-runtime/"
         assert all(isinstance(t, ToolMetadata) for t in tools)
 
     def test_discover_scripts_directory(self) -> None:
@@ -41,7 +41,7 @@ class TestToolkitDiscovery:
         discovery = ToolkitDiscovery()
         tool = ToolMetadata(
             name="verify-mcp-setup",
-            path=Path(".cortex/verify-mcp-setup.py"),
+            path=Path(".cortex-runtime/verify-mcp-setup.py"),
             category=ToolCategory.DIAGNOSTICS,
             description="Verify MCP server setup",
         )
@@ -105,19 +105,19 @@ class TestDuplicateDetection:
         tools = [
             ToolMetadata(
                 name="verify-mcp-setup",
-                path=Path(".cortex/verify-mcp-setup.py"),
+                path=Path(".cortex-runtime/verify-mcp-setup.py"),
                 category=ToolCategory.DIAGNOSTICS,
                 description="Verify MCP setup",
             ),
             ToolMetadata(
                 name="verify-mcp-tools",
-                path=Path(".cortex/verify-mcp-tools.py"),
+                path=Path(".cortex-runtime/verify-mcp-tools.py"),
                 category=ToolCategory.DIAGNOSTICS,
                 description="Verify MCP tools",
             ),
             ToolMetadata(
                 name="diagnose-mcp",
-                path=Path(".cortex/diagnose-mcp.py"),
+                path=Path(".cortex-runtime/diagnose-mcp.py"),
                 category=ToolCategory.DIAGNOSTICS,
                 description="Diagnose MCP issues",
             ),
@@ -134,7 +134,7 @@ class TestDuplicateDetection:
         tools = [
             ToolMetadata(
                 name="run_vacuum",
-                path=Path(".cortex/run_vacuum.py"),
+                path=Path(".cortex-runtime/run_vacuum.py"),
                 category=ToolCategory.CLEANUP,
                 description="Run vacuum cleanup",
             ),

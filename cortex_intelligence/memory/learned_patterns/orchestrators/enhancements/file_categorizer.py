@@ -27,7 +27,7 @@ class FileCategory(Enum):
     """Semantic file categories with destination hints."""
     
     SYSTEM_CODE = "cortex/"              # .py files implementing CORTEX core
-    SYSTEM_CONFIG = ".cortex/"           # CORTEX metadata, manifests
+    SYSTEM_CONFIG = ".cortex-runtime/"           # CORTEX metadata, manifests
     COMPANY_DATA = "company/"            # Domain-specific outputs, dashboards
     DEPLOYMENT = "deployment/"           # Docker, k8s, nginx configs
     DOCUMENTATION = "docs/"              # Markdown, guides, references
@@ -197,7 +197,7 @@ class FileClassifier:
             "confidence": 0.85,
         },
         FileCategory.SYSTEM_CONFIG: {
-            "patterns": [r"\.cortex-.*", r"\.cortex/.*", r"setup\.py", r"setup\.cfg"],
+            "patterns": [r"\.cortex-.*", r"\.cortex-runtime/.*", r"setup\.py", r"setup\.cfg"],
             "confidence": 0.9,
         },
     }

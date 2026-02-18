@@ -660,7 +660,7 @@ phase_9_3:
           class_name: "TopologyCache"
           tiers:
             - "L1: In-memory (LRU, 100 entries)"
-            - "L2: File system (.cortex/topology-cache/)"
+            - "L2: File system (.cortex-runtime/topology-cache/)"
             - "L3: Redis (team-shared, optional)"
           methods:
             - "get(repo_path: Path) -> Optional[TopologyMap]"

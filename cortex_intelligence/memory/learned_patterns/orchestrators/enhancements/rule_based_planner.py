@@ -5,7 +5,7 @@ AC-ID: AC-VAC-ENH-004 | Phase: Enhancement #4
 Purpose: Load cleanup rules from YAML and generate execution plans
 Authority: CORTEX Vacuum Enhancement Phase 2
 
-Rules defined in: .cortex/vacuum-rules.yaml
+Rules defined in: .cortex-runtime/vacuum-rules.yaml
 Enables: Non-developers to add cleanup rules without code changes
 """
 
@@ -112,14 +112,14 @@ class CleanupPlan:
 class RuleBasedPlanner:
     """Generate cleanup plans from declarative YAML rules."""
     
-    DEFAULT_RULES_FILE = Path(".cortex/vacuum-rules.yaml")
+    DEFAULT_RULES_FILE = Path(".cortex-runtime/vacuum-rules.yaml")
     
     def __init__(self, repo_root: Path = Path("."), rules_file: Optional[Path] = None):
         """Initialize planner.
         
         Args:
             repo_root: Repository root path
-            rules_file: Path to rules YAML file (default: .cortex/vacuum-rules.yaml)
+            rules_file: Path to rules YAML file (default: .cortex-runtime/vacuum-rules.yaml)
         """
         self.repo_root = Path(repo_root)
         self.rules_file = rules_file or self.repo_root / self.DEFAULT_RULES_FILE

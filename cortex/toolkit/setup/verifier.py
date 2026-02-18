@@ -4,9 +4,9 @@ Setup Verifier - Cross-Platform Environment Verification
 Consolidates setup verification logic from multiple scripts.
 
 **Source Scripts:**
-- .cortex/verify-setup.py
-- .cortex/verify-autonomous-setup.py
-- .cortex/setup-mcp.py (verify functions)
+- .cortex-runtime/verify-setup.py
+- .cortex-runtime/verify-autonomous-setup.py
+- .cortex-runtime/setup-mcp.py (verify functions)
 
 **Authority:** Phase 90 S-90-04
 **Author:** Asif Hussain
@@ -352,7 +352,7 @@ class SetupVerifier:
             lines.append("")
             lines.append("Resolution:")
             lines.append("1. Review failed checks above")
-            lines.append("2. Run: python .cortex/setup-mcp.py")
+            lines.append("2. Run: python .cortex-runtime/setup-mcp.py")
             lines.append("3. Re-run verification")
         
         lines.append("=" * 80)

@@ -119,7 +119,7 @@ class EnvironmentIntegrityAgent:
                 passed=False,
                 severity='WARNING',
                 reason=f'MCP policy violation: competing servers detected ({", ".join(policy_result.competing_servers)})',
-                action='Run: python .cortex/setup-mcp.py --cleanup',
+                action='Run: python .cortex-runtime/setup-mcp.py --cleanup',
                 mcp_policy=policy_result
             )
 
@@ -128,7 +128,7 @@ class EnvironmentIntegrityAgent:
                 passed=False,
                 severity='CRITICAL',
                 reason='CORTEX MCP not configured',
-                action='Run: python .cortex/setup-mcp.py',
+                action='Run: python .cortex-runtime/setup-mcp.py',
                 mcp_policy=policy_result
             )
 
@@ -252,9 +252,9 @@ class EnvironmentIntegrityAgent:
 
         # Determine action
         if not cortex_configured:
-            action = 'Run: python .cortex/setup-mcp.py'
+            action = 'Run: python .cortex-runtime/setup-mcp.py'
         elif not compliant:
-            action = 'Run: python .cortex/setup-mcp.py --cleanup'
+            action = 'Run: python .cortex-runtime/setup-mcp.py --cleanup'
         else:
             action = None
 
@@ -275,7 +275,7 @@ class EnvironmentIntegrityAgent:
         Returns:
             True if setup successful
         """
-        setup_script = Path('.cortex/setup-mcp.py')
+        setup_script = Path('.cortex-runtime/setup-mcp.py')
 
         if not setup_script.exists():
             return False

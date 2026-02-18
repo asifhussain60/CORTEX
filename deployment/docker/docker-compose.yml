@@ -13,8 +13,8 @@ services:
     volumes:
       - ./cortex:/app/cortex:ro
       - ./cortex_intelligence:/app/cortex_intelligence:ro
-      - cortex-logs:/app/.cortex/logs
-      - cortex-state:/app/.cortex/state
+      - cortex-logs:/app/.cortex-runtime/logs
+      - cortex-state:/app/.cortex-runtime/state
       - cortex-metrics:/app/metrics
     networks: [ cortex-network ]
     healthcheck:

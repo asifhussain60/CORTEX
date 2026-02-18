@@ -433,7 +433,7 @@ class TestValidationHealthChecks:
         
         Fix:
         1. Check internet connection
-        2. Try again: python .cortex/setup-mcp.py
+        2. Try again: python .cortex-runtime/setup-mcp.py
         3. Or: pip install -r requirements.txt --timeout 60
         """
         
@@ -499,7 +499,7 @@ class TestValidationHealthChecks:
         assert "C:\\" not in content or "${workspaceFolder}" in content
     
     def test_setup_log_creation(self, tmp_path):
-        """Test .cortex/setup.log created with details."""
+        """Test .cortex-runtime/setup.log created with details."""
         log_file = tmp_path / ".cortex" / "setup.log"
         log_file.parent.mkdir(exist_ok=True)
         log_file.write_text("[2026-02-12 10:30:00] INFO: Setup started\n")
@@ -588,8 +588,8 @@ class TestRollbackRecovery:
         
         Recovery steps:
         1. Remove partial .venv: rm -rf .venv
-        2. Re-run setup: python .cortex/setup-mcp.py
-        3. If issue persists, check .cortex/setup.log
+        2. Re-run setup: python .cortex-runtime/setup-mcp.py
+        3. If issue persists, check .cortex-runtime/setup.log
         """
         
         assert "Recovery steps:" in error

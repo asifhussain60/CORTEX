@@ -44,13 +44,13 @@ VSCODE_MCP=".vscode/mcp.json"
 # Solution: Regenerate settings.json on EVERY checkout (not tracked in git)
 
 echo -e "${CYAN}🔧 Regenerating platform-specific MCP configuration...${NC}"
-python .cortex/setup-mcp.py --silent 2>/dev/null || python .cortex/setup-mcp.py
+python .cortex-runtime/setup-mcp.py --silent 2>/dev/null || python .cortex-runtime/setup-mcp.py
 
 # Verify CORTEX is configured
 if [ -f "$VSCODE_SETTINGS" ] && grep -q '"cortex"' "$VSCODE_SETTINGS" 2>/dev/null; then
     echo -e "${GREEN}✅ CORTEX MCP server: Configured (platform-specific paths)${NC}"
 else
-    echo -e "${RED}❌ CORTEX MCP setup failed - run manually: python .cortex/setup-mcp.py${NC}"
+    echo -e "${RED}❌ CORTEX MCP setup failed - run manually: python .cortex-runtime/setup-mcp.py${NC}"
     echo -e "${RED}BLOCKING: Checkout cannot proceed without valid MCP configuration${NC}"
     exit 1
 fi
@@ -148,7 +148,7 @@ if [ $COMPETING_FOUND -eq 1 ]; then
     echo -e "${CYAN}Competing servers may cause tool conflicts.${NC}"
     echo ""
     echo -e "To clean up competing MCPs:"
-    echo -e "  ${GREEN}python .cortex/setup-mcp.py --cleanup${NC}"
+    echo -e "  ${GREEN}python .cortex-runtime/setup-mcp.py --cleanup${NC}"
     echo ""
 else
     echo -e "${GREEN}✅ MCP Environment: CORTEX-only policy enforced${NC}"

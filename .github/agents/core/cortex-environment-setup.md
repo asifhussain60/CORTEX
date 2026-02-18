@@ -64,7 +64,7 @@ Environment Check (cortex_verify_environment)
    └─ [❌ UNAVAILABLE - 0/10 tools] → HALT, show setup instructions
       ↓
    [IF HALT] → Display MCP Activation Instructions
-              ├─ Auto-setup: python .cortex/setup-mcp.py
+              ├─ Auto-setup: python .cortex-runtime/setup-mcp.py
               ├─ Manual: Edit .vscode/settings.json
               └─ Start Server: python -m cortex.mcp
               └─ Reference: .github/prompts/MCP-SETUP-GUIDE.md
@@ -256,7 +256,7 @@ RESOLUTION OPTIONS:
 OPTION A: AUTO-SETUP (Recommended - 30 seconds)
   
   Step 1: Run setup script
-    python .cortex/setup-mcp.py
+    python .cortex-runtime/setup-mcp.py
   
   Step 2: Reload VS Code
     Command Palette → Developer: Reload Window
@@ -289,7 +289,7 @@ OPTION C: START MCP SERVER (1 minute)
 
 DOCUMENTATION:
   Comprehensive Guide: .github/prompts/MCP-SETUP-GUIDE.md
-  Setup Log: .cortex/setup.log (check for errors)
+  Setup Log: .cortex-runtime/setup.log (check for errors)
   Prompt: cortex-architect.prompt.md (MCP ACTIVATION section)
 
 ═══════════════════════════════════════════════════════════
@@ -392,7 +392,7 @@ fi
 
 if [ $? -ne 0 ]; then
   ERROR: "MCP server initialization failed"
-  ACTION: "Check .cortex/setup.log for details"
+  ACTION: "Check .cortex-runtime/setup.log for details"
   SUGGESTION: "Run: .venv/bin/python -m cortex.mcp --help (for manual testing)"
   HALT: YES
 fi
@@ -400,11 +400,11 @@ fi
 
 **STEP 6: Log Setup Results**
 ```bash
-# Create .cortex directory if missing
-mkdir -p .cortex
+# Create .cortex-runtime directory if missing
+mkdir -p .cortex-runtime
 
 # Log all setup actions
-cat >> .cortex/setup.log << EOF
+cat >> .cortex-runtime/setup.log << EOF
 [$(date +'%Y-%m-%d %H:%M:%S')] ✅ Environment Setup
 - Python: $(.venv/bin/python --version)
 - Workspace: $(pwd)
@@ -450,13 +450,13 @@ EOF
 | .vscode/settings.json writable | CRITICAL | Check file permissions |
 | JSON syntax valid after injection | CRITICAL | Error + restore backup |
 | MCP server startup test passes | CRITICAL | Display error from cortex.mcp |
-| .cortex/setup.log created | WARNING | Log to alternative location |
+| .cortex-runtime/setup.log created | WARNING | Log to alternative location |
 
 ### Failure Recovery
 
 **If ANY step fails:**
 
-1. **Log error to .cortex/setup.log with full context**
+1. **Log error to .cortex-runtime/setup.log with full context**
 2. **Display user-friendly error message with fix instructions**
 3. **HALT execution (DO NOT PROCEED WITHOUT MCP)**
 4. **Provide manual recovery steps:**

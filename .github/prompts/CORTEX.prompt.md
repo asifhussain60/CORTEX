@@ -26,7 +26,7 @@
 
 ### Quick Setup
 ```bash
-python .cortex/setup-mcp.py  # Auto-detects platform, configures VS Code
+python .cortex-runtime/setup-mcp.py  # Auto-detects platform, configures VS Code
 ```
 
 **Verification:**
@@ -138,7 +138,7 @@ Route to appropriate orchestrator based on intent.
 **Intent:** {IMPLEMENT} (Tier 0 - Blocking)
 
 **Setup Required:**
-1. Run: `python .cortex/setup-mcp.py`
+1. Run: `python .cortex-runtime/setup-mcp.py`
 2. Restart VS Code
 3. Retry operation
 

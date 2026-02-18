@@ -21,7 +21,7 @@ from cortex.orchestrators.support.lens_visualization_orchestrator import (
 )
 
 # Configuration
-DASHBOARD_ROOT = Path.cwd() / ".cortex" / "lens-dashboard"
+DASHBOARD_ROOT = Path.cwd() / ".cortex-runtime" / "lens-dashboard"
 VERSION = "1.0.0"
 
 # Initialize FastAPI app

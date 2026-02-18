@@ -432,7 +432,7 @@ def validate_secrets_environment() -> Dict[str, Any]:
         "CORTEX_SECRETS_PATH",
         var_type="path",
         required=False,
-        default=os.path.expanduser("~/.cortex/secrets"),
+        default=os.path.expanduser("~/.cortex-runtime/secrets"),
     )
 
     validator.add_schema(

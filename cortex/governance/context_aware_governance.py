@@ -142,7 +142,7 @@ class RepositoryProfile:
             repo / "SECURITY.md",
             repo / ".github" / "SECURITY.md",
             repo / ".github" / "dependabot.yml",
-            repo / ".cortex",
+            repo / ".cortex-runtime",
             repo / "cortex-registry",
             repo / ".pre-commit-config.yaml",
             repo / ".bandit",
