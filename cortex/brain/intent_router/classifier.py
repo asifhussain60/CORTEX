@@ -229,6 +229,7 @@ class IntentClassifier:
         - Signal patterns (compiled regex)
         - Classification cache
         - Performance metrics
+        - Custom classification rules
 
         Raises:
             RuntimeError: If regex patterns fail to compile
@@ -246,12 +247,39 @@ class IntentClassifier:
         # Cache for identical inputs
         self.classification_cache: Dict[str, ClassificationResult] = {}
 
+        # Custom classification rules (high-priority, checked first)
+        self.custom_rules: List[ClassificationRule] = []
+
         # Performance metrics
         self.metrics: Dict[str, Any] = {
             "total_classifications": 0,
             "cache_hits": 0,
             "avg_confidence": 0.0,
         }
+        
+        # Register default custom rules
+        self._register_default_rules()
+    
+    def _register_default_rules(self) -> None:
+        """Register default custom classification rules."""
+        try:
+            from cortex.brain.intent_router.e2e_testing_rule import E2ETestingRule
+            self.add_rule(E2ETestingRule())
+        except ImportError:
+            # E2E rule not available yet
+            pass
+    
+    def add_rule(self, rule: ClassificationRule) -> None:
+        """
+        Add custom classification rule.
+        
+        Rules are checked before keyword-based classification.
+        If a rule matches, it takes precedence.
+        
+        Args:
+            rule: Classification rule to add
+        """
+        self.custom_rules.append(rule)
 
     def classify(self, text: str) -> ClassificationResult:
         """Classify operation intent from text description.
@@ -285,6 +313,33 @@ class IntentClassifier:
         try:
             # Normalize text for analysis
             normalized_text = text.lower().strip()
+            
+            # Check custom rules first (high-priority)
+            for rule in self.custom_rules:
+                if rule.matches(normalized_text):
+                    intent = rule.get_intent()
+                    confidence = rule.get_signal_strength()
+                    signals = rule.get_signals()
+                    keywords = rule.get_keywords() if hasattr(rule, 'get_keywords') else []
+                    
+                    result = ClassificationResult(
+                        primary_intent=intent,
+                        confidence_score=confidence,
+                        secondary_intents=[],
+                        detected_signals=signals,
+                        keywords=keywords,
+                        reasoning=f"Matched custom rule: {rule.__class__.__name__}",
+                        metadata={
+                            "text_length": len(text),
+                            "rule_matched": rule.__class__.__name__,
+                            "signal_count": len(signals),
+                        }
+                    )
+                    
+                    # Cache and return
+                    self.classification_cache[cache_key] = result
+                    self.metrics["total_classifications"] += 1
+                    return result
 
             # Detect signals
             signals = self._detect_signals(normalized_text)

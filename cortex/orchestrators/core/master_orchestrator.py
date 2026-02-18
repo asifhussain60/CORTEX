@@ -238,8 +238,11 @@ except ImportError:
 
 from cortex.orchestrators.registry import OrchestratorMetadata
 
+# AC-GOLDEN-E2E-017: Import OrchestratorAuditMixin for structured audit logging
+from cortex.orchestrators.mixins.audit_mixin import OrchestratorAuditMixin
 
-class MasterOrchestrator(IOrchestrator):
+
+class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
     """
     MasterOrchestrator - Coordinates all domain orchestrators.
 
@@ -250,12 +253,14 @@ class MasterOrchestrator(IOrchestrator):
     - Logs all delegation decisions with audit trail
 
     AC-AR-006-01: MasterOrchestrator coordinates domain orchestrators
+    AC-GOLDEN-E2E-017: Enhanced with structured audit logging via mixin
     """
 
     _instance: Optional['MasterOrchestrator'] = None
 
     def __init__(self):
         """Initialize MasterOrchestrator"""
+        super().__init__()  # Initialize OrchestratorAuditMixin
         self.logger = EnhancedAuditLogger.instance()
         self.domain_orchestrators: Dict[str, OrchestratorMetadata] = {}
         self.operation_history: List[Dict[str, Any]] = []

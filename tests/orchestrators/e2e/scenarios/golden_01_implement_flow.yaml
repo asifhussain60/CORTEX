@@ -1,0 +1,32 @@
+# Golden Test Scenario: Implement Intent Flow
+# Authority: AC-GOLDEN-E2E-008
+# Description: Test complete IMPLEMENT intent workflow with audit logging
+
+name: "golden_01_implement_flow"
+description: "IMPLEMENT intent → Master Orchestrator → TDD Orchestrator flow"
+utterance: "implement user authentication"
+
+expected_audit_events:
+  - orchestrator: "MasterOrchestrator"
+    activity: "CLASSIFY_INTENT"
+    workflow_stage: "INTENT"
+    expected_fields:
+      intent_type: "IMPLEMENT"
+      confidence: ">= 0.8"
+    
+  - orchestrator: "TDDOrchestrator"
+    activity: "GENERATE_RED_TESTS"
+    workflow_stage: "EXECUTION"
+    expected_fields:
+      test_count: ">= 1"
+    
+  - orchestrator: "TDDOrchestrator"
+    activity: "IMPLEMENT_GREEN"
+    workflow_stage: "EXECUTION"
+    expected_fields:
+      implementation_status: "COMPLETED"
+
+expected_outcome:
+  status: "COMPLETED"
+  has_tests: true
+  has_implementation: true

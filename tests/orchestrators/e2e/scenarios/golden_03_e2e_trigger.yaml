@@ -1,0 +1,25 @@
+# Golden Test Scenario: E2E Test Trigger
+# Authority: AC-GOLDEN-E2E-010
+# Description: Test that "golden tests" utterance triggers E2E flow
+
+name: "golden_03_e2e_trigger"
+description: "E2E testing utterance triggers golden test harness"
+utterance: "run golden tests"
+
+expected_audit_events:
+  - orchestrator: "MasterOrchestrator"
+    activity: "CLASSIFY_INTENT"
+    workflow_stage: "INTENT"
+    expected_fields:
+      intent_type: "TEST"
+      confidence: ">= 0.95"
+  
+  - orchestrator: "GoldenTestOrchestrator"
+    activity: "EXECUTE_TEST_SUITE"
+    workflow_stage: "EXECUTION"
+    expected_fields:
+      test_suite: "golden"
+
+expected_outcome:
+  status: "COMPLETED"
+  intent_type: "TEST"

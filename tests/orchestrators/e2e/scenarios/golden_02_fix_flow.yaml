@@ -1,0 +1,25 @@
+# Golden Test Scenario: Fix Intent Flow
+# Authority: AC-GOLDEN-E2E-009
+# Description: Test complete FIX intent workflow
+
+name: "golden_02_fix_flow"
+description: "FIX intent → Master Orchestrator → Intent Router flow"
+utterance: "fix the broken login authentication"
+
+expected_audit_events:
+  - orchestrator: "MasterOrchestrator"
+    activity: "CLASSIFY_INTENT"
+    workflow_stage: "INTENT"
+    expected_fields:
+      intent_type: "FIX"
+      urgency: "in:high,medium,low"
+    
+  - orchestrator: "IntentRouter"
+    activity: "ROUTE_FIX_INTENT"
+    workflow_stage: "INTENT"
+    expected_fields:
+      routing_decision: "not_null"
+
+expected_outcome:
+  status: "COMPLETED"
+  intent_classified: true

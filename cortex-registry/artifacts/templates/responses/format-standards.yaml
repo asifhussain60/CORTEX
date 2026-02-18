@@ -4,7 +4,7 @@ meta:
   updated: "2026-02-13"
 
 header:
-  template: "## {icon} CORTEX {mode}\n**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅"
+  template: "## {icon} CORTEX {mode}\n**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅\n\n---"
   required: true
   frequency: "once_per_response"
 
