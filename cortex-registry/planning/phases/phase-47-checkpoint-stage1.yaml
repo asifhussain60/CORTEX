@@ -1,0 +1,87 @@
+phase: 47
+name: "Brain Tier Architecture Validation & Fix"
+priority: P0
+status: in_progress
+stage: 1
+stage_name: "Directory Structure & Tier Precedence"
+
+progress:
+  stage_1_status: "75% complete"
+  tests_passing: 16/20
+  duration_so_far: "1.5 hours"
+  
+completed_tasks:
+  - task: "S1.T1: Audit current tier structure"
+    status: complete
+    tests: 2
+    duration: "15 min"
+    
+  - task: "S1.T2: Fix precedence.yaml"
+    status: complete
+    files_modified:
+      - cortex_intelligence/governance/precedence.yaml
+    change: "tier2>tier1>tier0 → tier0>tier1>tier2"
+    tests: 2
+    duration: "10 min"
+    
+  - task: "S1.T3: Create tier directories"
+    status: complete
+    directories_created:
+      - cortex-registry/core/tier0-skull/
+      - cortex-registry/core/tier1-project/
+      - cortex-registry/core/tier2-engineering/
+    files_copied:
+      - skull-rules.yaml → tier0-skull/
+    tests: 4
+    duration: "10 min"
+    
+  - task: "S1.T4: Implement GovernanceRegistry.get_rule()"
+    status: complete
+    files_modified:
+      - cortex/orchestrators/core/governance_registry.py
+    lines_added: 50
+    implementation: "get_rule() with tier precedence: tier0 > tier1 > tier2"
+    tests: 4
+    duration: "30 min"
+    
+  - task: "S1.T5: TDD RED → GREEN cycle"
+    status: complete
+    test_file: tests/unit/brain/core/test_tier_precedence.py
+    test_count: 16
+    red_phase: "5 failures confirmed"
+    green_phase: "16/16 passing"
+    duration: "25 min"
+
+remaining_tasks:
+  - task: "S1.T6: TierResolver integration"
+    estimate: "30 min"
+    tests: 2
+    
+  - task: "S1.T7: Golden tests for tier precedence"
+    estimate: "30 min"
+    tests: 2
+
+next_action: "Implement TierResolver integration tests and golden tests"
+estimated_completion: "2 hours"
+
+stage_2_preview:
+  name: "Memory Tier Clarification"
+  duration: "3 days"
+  tests: 20
+  key_changes:
+    - "Rename memory/tier1_learned/ → memory/learned_patterns/"
+    - "Fix BrainTierPusher paths"
+    - "Update documentation"
+
+architectural_impact:
+  breaking_changes: true
+  migration_required: true
+  precedence_change: "tier0 (SKULL) now immutable highest precedence"
+  governance_model: "Centralized tier0, distributed tier1/tier2"
+
+notes:
+  - "Phase 47 is multi-week effort (1-2 weeks total)"
+  - "User approved explicit execution"
+  - "TDD methodology: RED → GREEN → REFACTOR"
+  - "Stage 1 = 20% of total phase effort"
+  - "Checkpoint saved for continuation across sessions"

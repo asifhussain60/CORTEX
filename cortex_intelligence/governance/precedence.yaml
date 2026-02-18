@@ -4,16 +4,17 @@ precedence_order:
   - "tier2"
 
 resolution_strategy: "highest_tier_wins"
-conflict_resolution: "tier2_overrides_tier1_overrides_tier0"
+conflict_resolution: "tier0_overrides_tier1_overrides_tier2"
 
 explanation: |
   Tier precedence ensures that:
-  - Universal rules (tier0) apply everywhere
-  - Domain-specific rules (tier1) override universal for their domain
-  - Context-specific rules (tier2) override both for their context
+  - SKULL rules (tier0) have highest precedence - cannot be overridden
+  - Project governance (tier1) extends tier0 but cannot override it
+  - Engineering standards (tier2) have lowest precedence
   
-  Example: If tier0 says "logs must include timestamp", but
-  tier2/audit-critical says "logs must include timestamp + cryptographic signature",
-  then tier2 wins and the signature is required in audit-critical context.
+  Example: If tier0 says "all commits must be signed", then tier1 and tier2
+  cannot override this. Tier1 can add "commits must reference issue IDs" and
+  tier2 can add "commits must follow conventional commits format", but the
+  tier0 signature requirement remains immutable.
 
 status: "DEFINED"

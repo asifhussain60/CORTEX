@@ -338,17 +338,19 @@ class BrainTierPusher:
     Pushes approved comprehensions to appropriate brain tiers.
 
     Maps comprehension content to brain tier destinations:
-    - tier0: Governance rules
-    - tier1: AC mappings
-    - tier2: Standards/patterns
-    - tier3: General knowledge
+    - tier0: Governance rules (cortex-registry/core/tier0-skull/)
+    - tier1: Learned patterns (memory/learned_patterns/)
+    - tier2: Adaptive intelligence (memory/adaptive_intelligence/)
+    - tier3: Scratch space (memory/scratch_space/)
+    
+    Updated in Phase 47 Stage 3 to use new memory tier paths.
     """
 
     TIER_PATHS = {
-        BrainTier.TIER0: "cortex_intelligence/tier0/governance",
-        BrainTier.TIER1: "cortex_intelligence/tier1/acceptance-criteria",
-        BrainTier.TIER2: "cortex_intelligence/tier2/standards",
-        BrainTier.TIER3: "cortex_intelligence/tier3/knowledge",
+        BrainTier.TIER_0: "cortex-registry/core/tier0-skull",
+        BrainTier.TIER_1: "cortex_intelligence/memory/learned_patterns",
+        BrainTier.TIER_2: "cortex_intelligence/memory/adaptive_intelligence",
+        BrainTier.TIER_3: "cortex_intelligence/memory/scratch_space",
     }
 
     def __init__(self, workspace_root: str = ".") -> None:
@@ -363,18 +365,18 @@ class BrainTierPusher:
         # Heuristics for tier selection
         # Governance rules → tier0
         if "governance" in str(content).lower() or "rule" in str(content).lower():
-            return BrainTier.TIER0
+            return BrainTier.TIER_0
 
         # AC mappings → tier1
         if intent.scope.get("ac_ids"):
-            return BrainTier.TIER1
+            return BrainTier.TIER_1
 
         # Standards/patterns → tier2
         if intent.type in ["REFACTOR", "DESIGN_PATTERN"]:
-            return BrainTier.TIER2
+            return BrainTier.TIER_2
 
         # Default → tier3 knowledge
-        return BrainTier.TIER3
+        return BrainTier.TIER_3
 
     def push_to_tier(
         self,

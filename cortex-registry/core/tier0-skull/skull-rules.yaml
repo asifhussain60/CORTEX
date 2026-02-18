@@ -1,0 +1,1814 @@
+# ==============================================================================
+# CORTEX TIER 0 GOVERNANCE - SKULL RULES
+# ==============================================================================
+# Purpose: Immutable core rules that define CORTEX's operational boundaries
+# Status: ACTIVE
+#
+# CRITICAL: These rules are IMMUTABLE and take precedence over all other tiers.
+# Tier 0 = SKULL rules - cannot be overridden.
+# ==============================================================================
+
+schema_version: '1.0'
+governance_tier: 0
+category: CORTEX_CORE
+precedence: HIGHEST
+
+metadata:
+  rule_count: 54
+  author: "Asif Hussain"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  last_update: "2026-02-11 - CORE-051 through CORE-054 added (ENH-001/002/003/004 from chat01.md remediation)"
+  version: "3.5"
+  consolidation_date: "2026-02-11"
+  consolidation_status: "Phase A Complete - 4 new CORE rules added for MCP + Governance optimization"
+  naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"
+
+categories:
+  - orchestration_lifecycle
+  - response_formatting
+  - portability
+  - development_workflow
+  - architecture_integrity
+  - quality_gates
+  - security_privacy
+  - auditability
+
+# ==============================================================================
+# RULE DEFINITIONS
+# ==============================================================================
+rules:
+  # --------------------------------------------------------------------------
+  # CORE-001: Incremental Execution
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-001
+    principle: "Flywheel Effect"
+    category: orchestration_lifecycle
+    severity: blocked
+    name: Incremental Autonomous Execution
+    description: |
+      ALL orchestrators MUST work in small increments (<500 lines per turn)
+      to prevent token limit errors. State MUST persist between increments.
+      
+      Business Principle: Small consistent turns build momentum over time.
+    validation:
+      - Operations split into <500 line increments
+      - State persisted between turns
+      - Token usage capped at 80%
+
+  # --------------------------------------------------------------------------
+  # CORE-002: Markdown Report Suppression
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-002
+    principle: "Signal vs Noise"
+    category: response_formatting
+    severity: blocked
+    name: Markdown Report Suppression (Workspace-Wide)
+    description: |
+      SUPPRESS markdown report/status files UNLESS explicitly requested by user.
+      
+      Business Principle: Eliminate noise, amplify signal. Only create artifacts with explicit value.
+      
+      This rule applies workspace-wide (root + all subdirectories).
+      
+      BLOCKED patterns (unless explicitly requested):
+      - *-summary.md (status summaries)
+      - *-report.md (execution reports)
+      - *-status.md (status documents)
+      - DEPLOYMENT-*.md (deployment docs)
+      - ORCHESTRATOR-*.md (orchestrator docs)
+      - README.md (non-functional documentation)
+      - *-QUICKSTART.md, *-GUIDE.md (unless explicitly requested)
+      - Any markdown report/documentation files
+      
+      APPROVED locations (always allowed, no user request needed):
+      - docs/ (primary documentation directory)
+      - _workspaces/docs/ (workspace documentation directory)
+      
+      EXCEPTION: User may explicitly request markdown creation in request text.
+      Example: "Create DEPLOYMENT-STATUS.md with..."
+      Validation: validate_artifact_creation(path, user_explicit_request=True)
+    validation:
+      - Block markdown reports unless user explicitly requests in prompt
+      - Allow docs/, _workspaces/docs/ unconditionally (structural)
+      - Check for explicit user approval in request context
+      - Log all suppressed artifacts with reason
+    implementation:
+      method: governance_registry.validate_artifact_creation(artifact_path, user_explicit_request=False)
+      enforcement: master_orchestrator pre-execution gate + intent router
+
+  # --------------------------------------------------------------------------
+  # CORE-004: Minimal Continuation
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-004
+    principle: "Clarity Through Brevity"
+    category: response_formatting
+    severity: blocked
+    name: Minimal Continuation Prompts
+    description: |
+      CONTINUATION-PROMPT.md MUST be <500 tokens. Use pointer pattern.
+      
+      Business Principle: Say more with less. Precision beats verbosity.
+    validation:
+      - Line count ≤12
+      - Token count <500
+      - File size <2KB
+
+  # --------------------------------------------------------------------------
+  # CORE-005: Path Portability (CRITICAL)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-005
+    principle: "Write Once, Run Anywhere"
+    category: portability
+    severity: blocked
+    name: No Hardcoded Paths
+    description: |
+      NEVER use hardcoded absolute paths. Use src.core.path_resolver.
+      
+      Business Principle: Build for portability from day one.
+      
+      WRONG: /Users/asifhussain/PROJECTS/CORTEX
+      RIGHT: get_project_root() / "cortex_intelligence"
+    validation:
+      - No /Users/... paths
+      - No C:\Users\... paths
+      - Use get_project_root()
+    implementation:
+      utility: src.core.path_resolver
+
+  # --------------------------------------------------------------------------
+  # CORE-006: Setup Verification
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-006
+    principle: "Trust But Verify"
+    category: orchestration_lifecycle
+    severity: blocked
+    name: Phase -2 Setup Verification
+    description: |
+      ALL orchestrators MUST verify dependencies before execution.
+      
+      Business Principle: Validate assumptions before acting on them.
+    validation:
+      - Dependencies pass tests (not just file exists)
+      - VSCode cache checked
+      - Governance compliance validated
+
+  # --------------------------------------------------------------------------
+  # CORE-008: TDD Enforcement
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-008
+    principle: "Red-Green-Refactor Discipline"
+    category: development_workflow
+    severity: blocked
+    name: Test-First Development
+    description: |
+      Tests MUST exist BEFORE implementation (RED → GREEN → REFACTOR).
+      
+      Business Principle: Define success criteria before building the solution.
+    validation:
+      - Test file exists first
+      - Test fails initially (RED)
+      - Implementation makes test pass (GREEN)
+
+  # --------------------------------------------------------------------------
+  # CORE-011: Type Hints
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-011
+    principle: "Make Invalid States Unrepresentable"
+    category: quality_gates
+    severity: blocked
+    name: Python Type Hints Required
+    description: |
+      ALL Python functions MUST have complete type hints.
+      
+      Business Principle: Catch errors at design time, not runtime.
+    validation:
+      - Parameters have type hints
+      - Return types specified
+      - No bare Any
+
+  # --------------------------------------------------------------------------
+  # CORE-012: Docstrings
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-012
+    principle: "Code Tells How, Docs Tell Why"
+    category: quality_gates
+    severity: blocked
+    name: Docstrings Required
+    description: |
+      ALL public functions/classes MUST have Google-style docstrings.
+      
+      Business Principle: Future you shouldn't have to reverse-engineer present you.
+    validation:
+      - Public APIs documented
+      - Args/Returns/Raises sections
+      - Google style format
+
+  # --------------------------------------------------------------------------
+  # CORE-013: Error Handling
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-013
+    principle: "Fail Fast, Fail Explicitly"
+    book_reference: "Release It!: Design and Deploy Production-Ready Software by Michael Nygard"
+    category: quality_gates
+    severity: blocked
+    name: Explicit Error Handling
+    description: |
+      NO bare except. NO catching generic Exception.
+      
+      Business Principle: Silent failures are time bombs. Make errors visible and actionable.
+    validation:
+      - Specific exception types
+      - Custom exceptions for domain
+      - Error context preserved
+
+  # --------------------------------------------------------------------------
+  # CORE-017: Governance Enforcement
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-017
+    principle: "Culture of Discipline"
+    book_reference: "Good to Great by Jim Collins"
+    category: security_privacy
+    severity: blocked
+    name: Strict Governance
+    description: |
+      ALL rules enforced strictly. No overrides. All violations logged.
+      
+      Business Principle: Consistency at scale requires non-negotiable standards.
+    validation:
+      - Enforcement = strict
+      - Override = false
+      - Audit logging enabled
+
+  # --------------------------------------------------------------------------
+  # CORE-018: YAML-First
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-018
+    principle: "Machine-Readable First, Human-Readable Second"
+    book_reference: "Building Microservices by Sam Newman"
+    category: architecture_integrity
+    severity: blocked
+    name: YAML-First Design
+    description: |
+      Plans and configs MUST use YAML, not markdown. Machine-readable.
+      
+      Business Principle: Build for automation. Humans adapt, machines don't.
+    validation:
+      - No *-PLAN.md files
+      - Use YAML for tracking
+      - Exception: README.md, docs/
+
+  # --------------------------------------------------------------------------
+  # CORE-019: TDD-Master Required
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-019
+    principle: "Right Tool for the Job"
+    book_reference: "The Pragmatic Programmer by Andrew Hunt & David Thomas"
+    category: development_workflow
+    severity: blocked
+    name: Route Through TDD-Master
+    description: |
+      ALL implementation requests route to TDD-Master orchestrator.
+      
+      Business Principle: Specialization beats generalization for quality.
+    validation:
+      - '"implement X" routes to TDD-Master'
+      - '"build X" routes to TDD-Master'
+      - "Never write code directly"
+
+  # --------------------------------------------------------------------------
+  # CORE-020: No Markdown in cortex_intelligence
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-020
+    principle: "Separation of Concerns"
+    book_reference: "Clean Architecture by Robert C. Martin"
+    category: response_formatting
+    severity: blocked
+    name: No Markdown in Brain
+    description: |
+      cortex_intelligence/ MUST be YAML/JSON only. No .md files.
+      
+      Business Principle: Data structures separate from documentation.
+    validation:
+      - cortex_intelligence/**/*.md blocked
+      - Use YAML for all configs
+      - Exception: None in brain
+
+  # --------------------------------------------------------------------------
+  # CORE-024: MCP Tool Decorator
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-024
+    principle: "Convention Over Configuration"
+    category: architecture_integrity
+    severity: blocked
+    name: "@mcp_tool Required"
+    description: |
+      ALL MCP tools MUST use @mcp_tool decorator for registration.
+      
+      Business Principle: Standard patterns reduce cognitive load.
+    validation:
+      - Decorator on all tools
+      - Registered in manifest
+      - No manual registration
+
+  # --------------------------------------------------------------------------
+  # CORE-025: Result Pattern
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-025
+    principle: "Make Errors First-Class Citizens"
+    book_reference: "The Pragmatic Programmer by Andrew Hunt & David Thomas"
+    category: quality_gates
+    severity: blocked
+    name: Result[T] Pattern Required
+    description: |
+      Functions MUST return Result[T] for explicit error handling.
+      Use Ok(value) for success, Err(message) for failure.
+      
+      Business Principle: Errors are expected outcomes, not exceptional cases.
+    validation:
+      - Return Result, not exceptions
+      - Check is_ok() before unwrap()
+      - No silent failures
+    implementation:
+      module: src.core.result
+
+  # --------------------------------------------------------------------------
+  # CORE-026: Git Checkpoint Before Modify
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-026
+    principle: "Always Have an Escape Route"
+    book_reference: "Site Reliability Engineering by Google (Betsy Beyer et al.)"
+    category: development_workflow
+    severity: blocked
+    name: Git Checkpoint Required
+    description: |
+      Git checkpoint MUST be created before every major action.
+      Enables efficient rollback on failures.
+      
+      Business Principle: Make reversibility a design constraint.
+    validation:
+      - Checkpoint before AC-ID start
+      - Checkpoint before file modification
+      - Commit after successful test pass
+    commit_patterns:
+      before_ac_id: "checkpoint: before AC-XXX-XXX"
+      pre_modify: "checkpoint: pre-modify"
+      tests_pass: "AC-XXX-XXX: [description] - tests passing"
+      phase_complete: "phase-XX: COMPLETED - audit verified"
+
+  # --------------------------------------------------------------------------
+  # CORE-027: Audit Trail for Phase Completion
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-027
+    principle: "Radical Transparency"
+    book_reference: "Principles: Life and Work by Ray Dalio"
+    category: auditability
+    severity: blocked
+    name: Audit Verification Required
+    description: |
+      Phase completion MUST be validated by audit trail verification.
+      No phase lock without queryable audit entries.
+      
+      Business Principle: Trust comes from verifiable history, not assertions.
+    validation:
+      - Each AC-ID has AC_START, AC_EXECUTE, AC_COMPLETE entries
+      - Hash chain integrity verified
+      - "audit_verification.verified: true before locked: true"
+    required_entries:
+      per_ac_id: 3  # Minimum entries per AC-ID
+      operations:
+        - AC_START
+        - AC_EXECUTE
+        - AC_COMPLETE
+
+  # --------------------------------------------------------------------------
+  # CORE-028: Intelligent File Naming Convention (REVISED 2026-01-27)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-028
+    principle: "Self-Documenting Systems"
+    book_reference: "The Pragmatic Programmer by Andrew Hunt & David Thomas"
+    category: architecture_integrity
+    severity: blocked
+    name: Intelligent File Naming with Python Module Compliance
+    description: |
+      File naming convention varies by file type due to Python import syntax
+      requirements. Python modules MUST use snake_case (hyphens cause SyntaxError).
+      Non-Python files SHOULD use kebab-case for consistency with modern standards.
+      Total length including extension SHOULD NOT exceed 30 characters.
+      
+      Business Principle: Names should tell a story without needing comments.
+    
+    naming_principles:
+      python_modules:  # Files imported with 'from X import Y'
+        - "Use snake_case (lowercase with underscores, NO hyphens)"
+        - "Reason: Python imports treat hyphens as minus operators (SyntaxError)"
+        - "Examples: git_history_analyzer.py, intent_router.py"
+        - "Follows PEP 8 and 99.9% of Python ecosystem"
+      
+      cli_scripts:  # Standalone scripts (not imported)
+        - "Use kebab-case or snake_case (both acceptable)"
+        - "Examples: governance-cli.py, cortex-vacuum.py"
+        - "Executed directly, not imported"
+      
+      non_python_files:  # YAML, Markdown, Shell, Config
+        - "Use kebab-case (lowercase with hyphens)"
+        - "Examples: phase-8-consolidation.yaml, docker-compose.yml"
+        - "Modern standard for non-code files"
+      
+      plan_files:  # YAML plan specifications (EXCEPTION ADDED 2026-02-04)
+        - "Allow phase-{N} prefix (lowercase with hyphens)"
+        - "Max 40 characters (relaxed from general 30-char limit)"
+        - "Must end with -plan.yaml, -spec.yaml, or -system.yaml"
+        - "Examples: phase-21-spa-enhancement-plan.yaml (32 chars)"
+        - "NO SCREAMING_CASE (e.g., PHASE-21-... is INVALID)"
+        - "Rationale: Plan files need descriptive names for human readability"
+      
+      general:
+        - "Employ semantic acronyms for common terms (cfg=config, mgr=manager)"
+        - "Order: [domain]-[component]-[purpose].[ext]"
+        - "Max 30 chars (revised from 25 for clarity)"
+        - "Max 40 chars for plan files (see plan_files exception)"
+        - "Avoid articles (a, the), conjunctions (and)"
+    
+    acronym_dictionary:
+      # Infrastructure
+      cfg: config
+      db: database
+      mgr: manager
+      svc: service
+      util: utility
+      
+      # Operations
+      exec: execution
+      impl: implementation
+      ver: verification
+      sync: synchronization
+      gen: generator
+      
+      # Analysis & Reporting
+      rpt: report
+      ana: analysis
+      audit: audit log
+      trc: trace
+      diag: diagnostic
+      
+      # Governance & State
+      gov: governance
+      state: state machine
+      ac: acceptance criteria
+      ar: action record
+      
+      # Naming/Conventions
+      conv: convention
+      std: standard
+      pat: pattern
+      fmt: format
+      
+      # Testing & Quality
+      test: test
+      chk: check
+      val: validation
+      
+      # Directories
+      docs: documentation
+      src: source
+      lib: library
+      etc: etc
+    
+    examples:
+      valid:
+        - "cortex-vacuum-exec.py"        # VALID: 20 chars (domain-component-purpose.ext)
+        - "cortex-gov-core-rules.yaml"   # VALID: 22 chars (tier 0 rules file)
+        - "plan-ac-tracker.db"           # VALID: 16 chars (plan AC tracking database)
+        - "audit-hash-chain.py"          # VALID: 18 chars (audit hash chain manager)
+        - "phase-completion-rpt.md"      # VALID: 21 chars (phase completion report)
+        - "gov-cache-mgr.py"             # VALID: 14 chars (governance cache manager)
+        - "phase-21-spa-enhancement-plan.yaml"  # VALID: 32 chars (plan file exception)
+        - "cortex-self-improvement-sdlc-plan.yaml"  # VALID: 40 chars (plan file exception)
+        
+      invalid:
+        - "cortex_vacuum_executor.py"    # INVALID: underscores instead of hyphens
+        - "cortex-vacuum-implementation-executor.py"  # INVALID: 41 chars (exceeds general 30-char limit)
+        - "CortexVacuumExecutor.py"      # INVALID: PascalCase instead of kebab-case
+        - "cortex vacuum exec.py"        # INVALID: spaces instead of hyphens
+        - "PHASE-21-SPA-ENHANCEMENT-PLAN.yaml"  # INVALID: SCREAMING_CASE (must be lowercase)
+        - "SPA-AUDIT-REPORT.yaml"        # INVALID: SCREAMING_CASE (must be lowercase)
+    
+    validation:
+      - Matches regex pattern for kebab-case names
+      - "Length check: strlen(filename) <= 25 (including extension)"
+      - "No underscores except in Python files for internal/private symbols"
+      - "Semantic check: name clearly indicates file purpose"
+      - "Acronym check: non-standard acronyms documented in code comments"
+    
+    regex_pattern: '^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]+)?$'
+    
+    enforcement:
+      when: pre-commit
+      action: reject
+      message: |
+        File naming violates CORE-028:
+        - Must use kebab-case (lowercase-with-hyphens)
+        - Must not exceed 25 characters including extension
+        - Must use semantic acronyms from CORE-028 dictionary
+        - Must be self-documenting of purpose
+        
+        See core-rules.yaml CORE-028 for examples and acronym dictionary.
+    
+    exceptions:
+      - Python modules using _private naming for internal symbols (allowed)
+      - Third-party libraries (not subject to renaming)
+      - Generated files (if auto-generated by tools)
+      - Plan files (YAML specs): Max 40 chars, must end with -plan.yaml/-spec.yaml/-system.yaml
+    
+    implementation:
+      check_script: "src/governance/validators/name-validator.py"
+      git_hook: "pre-commit"
+      audit_logging: true
+
+  # --------------------------------------------------------------------------
+  # CORE-029: Documentation Drift Prevention
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-029
+    principle: "Documentation as Code"
+    book_reference: "The DevOps Handbook by Gene Kim, Jez Humble, Patrick Debois, John Willis"
+    category: quality_gates
+    severity: blocked
+    name: Documentation Drift Prevention
+    description: |
+      User-facing features MUST be documented in prompts BEFORE phase lock.
+      Implementation code alone is insufficient - prompts must teach usage.
+      
+      Business Principle: If it's not documented, it doesn't exist for users.
+      
+      This rule addresses the systematic gap where features are built but
+      never documented, rendering them invisible to users.
+    
+    affected_prompts:
+      - ".github/prompts/CORTEX.prompt.md"
+      - ".github/prompts/copilot-instruction.md"
+      - ".github/prompts/cortex-total-recall.prompt.md"
+    
+    validation:
+      - New features have prompt documentation section
+      - Response templates referenced in prompts
+      - Phase lock blocked if prompt updates missing
+      - Pre-lock validation script runs successfully
+    
+    ac_pattern:
+      description: |
+        Every feature AC (like FR-*, HP-*, etc.) that ships user-facing
+        functionality MUST have a companion documentation AC.
+      
+      format: "AC-DOC-XXX-XX: Update [prompt file] with [feature] section"
+      
+      example: |
+        # Feature AC
+        AC-HP-003-01: Implement response header injection
+        
+        # Required Companion AC
+        AC-DOC-003-01: Update CORTEX.prompt.md with Response Header section
+    
+    validation_script:
+      path: "scripts/validate_phase_deliverables.py"
+      required_checks:
+        - files_to_create exist
+        - files_to_modify exist
+        - prompt sections documented
+        - tier2 templates populated
+    
+    implementation:
+      pre_lock_check: "python scripts/validate_phase_deliverables.py --phase {PHASE_ID} --strict"
+      git_hook: "pre-commit"
+      audit_logging: true
+
+  # --------------------------------------------------------------------------
+  # CORE-032: Mandatory Intent Classification (DoR - Definition of Ready)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-032
+    principle: "Hedgehog Concept"
+    book_reference: "Good to Great by Jim Collins"
+    category: orchestration_lifecycle
+    severity: blocked
+    name: Mandatory Intent Classification (DoR Checkpoint)
+    description: |
+      EVERY operation MUST have intent classified BEFORE execution starts.
+      This is enforced architecturally via IntentRouterFactory pattern.
+      
+      Business Principle: Know what you're best at. Know what the user actually needs.
+      Understand deeply before acting.
+      
+      Problem: Intent classification was optional (Stage 1 skippable).
+      Solution: Factory pattern makes classification MANDATORY - factory
+      won't create orchestrator until intent is classified.
+      
+      Enforcement: IntentRouterFactory.create_router() → RouterInstance
+      RouterInstance.execute() requires prior RouterInstance.classify_intent()
+      Without classification: RuntimeError("Intent must be classified first")
+    
+    intent_classification_requirements:
+      - "Every user operation must classify intent (IMPLEMENT, FIX, REFACTOR)"
+      - "Classification MUST happen before orchestrator execution"
+      - "Intent classification is DoR checkpoint (Definition of Ready)"
+      - "Audit trail MUST log: INTENT_CLASSIFIED → ORCHESTRATOR_SELECTED"
+      - "Bypass impossible (architectural enforcement via factory)"
+    
+    factory_pattern_enforcement:
+      factory_class: "cortex.orchestrators.core.intent_router_factory.IntentRouterFactory"
+      router_wrapper: "RouterInstance"
+      
+      enforcement_flow: |
+        factory = IntentRouterFactory()
+        router = factory.create_router()      # Returns RouterInstance
+        
+        # MANDATORY BEFORE execute():
+        router.classify_intent(text="...", context={...})
+        
+        # Only NOW is execute allowed:
+        result = router.execute_orchestrated(text="...", context={...})
+        
+        # Without classify_intent(), execute raises:
+        # RuntimeError("Intent must be classified first")
+    
+    success_criteria:
+      - "IntentRouterFactory prevents execution without classification"
+      - "All 23 orchestrators created via factory"
+      - "Intent classification logs to audit trail"
+      - "Zero bypass paths (architectural enforcement)"
+      - "100% of operations have classified intent"
+    
+    implementation:
+      method: "Factory Pattern (IntentRouterFactory)"
+      enforcement_point: "RouterInstance.execute_orchestrated()"
+      audit_event: "INTENT_CLASSIFIED"
+      severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
+  # AC-PERMANENT-FIX-007: Holistic Duplicate Detection Prevention
+  - rule_id: AC-PERMANENT-FIX-007
+    title: "Holistic Duplicate Detection Prevention" 
+    severity: BLOCKED
+    category: "governance"
+    description: |
+      Prevents duplicate implementations from causing system conflicts.
+      Triggered by discovery of ConversationProtocol duplicates causing import conflicts.
+      
+      MANDATORY ACTIONS:
+      1. Before any major operation, scan for duplicate class names
+      2. Check for conflicting import paths (same class from different modules)
+      3. Verify single canonical implementation for all interfaces
+      4. Block operations if duplicates detected until resolved
+      
+      DETECTION SCOPE:
+      - Class name conflicts across modules
+      - Interface implementations with different behaviors
+      - MCP tool name collisions
+      - Orchestrator registry conflicts
+      
+    enforcement:
+      pre_commit: true
+      pre_push: true
+      scope: "system_wide"
+      action: "BLOCK execution with AC-PERMANENT-FIX-007 violation"
+      validation_commands:
+        - "grep -r 'class ConversationProtocol' cortex/ | wc -l == 1"
+        - "python -c 'from cortex.tools.duplicate_detector import detect_class_conflicts; assert len(detect_class_conflicts()) == 0'"
+      remediation:
+        immediate: "Resolve duplicate implementations before proceeding"
+        long_term: "Implement continuous duplicate detection in CI/CD"
+      audit_event: "AC-PERMANENT-FIX-007"
+  
+  # --------------------------------------------------------------------------
+  # CORE-038: File Placement Policy (TIER 0 - IMMUTABLE)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-038
+    principle: "A Place for Everything, Everything in its Place"
+    book_reference: "Domain-Driven Design by Eric Evans"
+    category: architecture_integrity
+    severity: blocked
+    name: File Placement Policy
+    description: |
+      All files in CORTEX repository MUST be stored in appropriate subfolders.
+      NO files are permitted in root directories of major folders.
+      Uses intelligent kebab-case naming convention.
+      
+      Business Principle: Organization is not optional. Structure enables scale.
+    
+    forbidden_patterns:
+      - "Root-level files (reports/my-file.md)"
+      - "Root-level docs (docs/file.md)"
+      - "Root-level cortex modules (cortex/module.py)"
+      - "Root-level brain files (cortex_intelligence/file.py)"
+    
+    required_patterns:
+      - "Subfolders mandatory: docs/{subfolder}/file.md"
+      - "Reports organized: reports/{subfolder}/file.md"
+      - "Code organized: cortex/{module}/file.py"
+      - "Brain organized: cortex_intelligence/{tier}/{domain}/file.py"
+    
+    allowed_root_files:
+      - "README.md, .gitignore, .gitattributes"
+      - "requirements.txt, pytest.ini, pyproject.toml"
+      - "cortex-config.yaml, cortex-impl-map.yaml"
+      - "mkdocs.yml, pyrightconfig.json, setup.py"
+    
+    naming_convention: "kebab-case (lowercase, hyphens, max 25 chars total)"
+    
+    examples:
+      valid:
+        - "cortex-vacuum-exec.py (20 chars)"
+        - "phase-15-deliverables.yaml"
+        - "governance-cache-mgr.py"
+      
+      invalid:
+        - "Planning Orchestrator.md (spaces)"
+        - "Planning_Orchestrator.md (underscores)"
+        - "PlanningOrchestrator.md (camelCase)"
+    
+    implementation:
+      validation_script: "scripts/validate-file-placement.py"
+      enforcement_point: "Pre-commit hook"
+      audit_event: "FILE_PLACEMENT_VALIDATED"
+      severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
+  # CORE-039: MD File Generation Prohibition (TIER 0 - IMMUTABLE)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-039
+    principle: "Prevention Over Cure"
+    book_reference: "The Lean Startup by Eric Ries"
+    category: response_formatting
+    severity: blocked
+    name: MD File Generation Prohibition
+    description: |
+      Eliminate automatic MD file generation at phase end.
+      Only MD files explicitly requested by user are permitted.
+      
+      Business Principle: Stop problems at the source. Don't create messes to clean up.
+    
+    scope:
+      applies_to:
+        - "All orchestrators"
+        - "Phase completion flows"
+        - "Autonomous executors"
+        - "Analysis tools"
+      
+      exception:
+        - "MD files explicitly created by user request"
+        - "User command: /doc {component}"
+        - "Explicit prompt text: 'Generate documentation for X'"
+    
+    allowed_patterns:
+      - "User-explicit documentation (user_requested=True)"
+      - "MD files in docs/ folder (pre-existing, user-requested)"
+      - "YAML data files (always allowed)"
+    
+    forbidden_patterns:
+      - "Phase-end MD generation (auto-blocked)"
+      - "Autonomous executor MD reports (auto-blocked)"
+      - "Tool-driven report generation (auto-blocked)"
+      - "End-of-session MD output (auto-blocked)"
+      - "*.md files written without user request"
+    
+    blocked_files:
+      - "reports/phase-tracking/phase-*-completion.md"
+      - "reports/session-summary-*.md"
+      - "reports/analysis/*.md (auto-generated)"
+      - "reports/*-report.md (unless user-requested)"
+    
+    allowed_files:
+      - "docs/*/filename.md (user-requested)"
+      - "reports/*.yaml (data files always OK)"
+      - "Any .md in docs/ folder"
+    
+    enforcement:
+      runtime_mechanism: "Monkey-patch Path.write_text() for .md files"
+      test_suite: "cortex/tests/test_md_generation_blocker.py (16 tests)"
+      test_status: "✅ 16/16 PASSING"
+      detection_scope:
+        - "Phase completion handlers"
+        - "Autonomous execution engines"
+        - "Documentation pipelines"
+        - "Tool report generators"
+        - "Session completion handlers"
+    
+    implementation:
+      blocking_class: "CORE039Violation (detailed error messages)"
+      context_manager: "UserRequestContext (for user-requested docs)"
+      test_coverage: "Phase completion, autonomous execution, tools, pipelines, orchestration, mechanisms, static-detection, integration"
+      audit_event: "MD_FILE_GENERATION_BLOCKED"
+      severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
+  # CORE-040: Documentation Lifecycle Management (AC-CLEANUP-PREVENTION)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-040
+    principle: "Design for Decay"
+    book_reference: "Building Evolutionary Architectures by Neal Ford, Rebecca Parsons, Patrick Kua"
+    category: architecture_integrity
+    severity: blocked
+    name: Documentation Lifecycle Management
+    description: |
+      Prevent documentation bloat at source through lifecycle management.
+      All generated documentation files MUST include expiration timestamps.
+      No cleanup processes—prevention is the enforcement mechanism.
+      
+      Business Principle: Entropy is inevitable. Design systems that self-maintain.
+      
+      This rule addresses the root cause of documentation accumulation by
+      enforcing expiration dates at creation time, not cleanup time.
+      Eliminates need for periodic cleanup by making old docs self-removing.
+    
+    scope:
+      applies_to:
+        - "*.md files generated in reports/ folder"
+        - "*.txt files (analysis outputs, temporary reports)"
+        - "*.bak files (backup/archive files)"
+        - "Session artifacts, analysis reports, phase documentation"
+      
+      exception:
+        - "docs/ folder (permanent user documentation)"
+        - "reports/*.yaml files (data storage, not reports)"
+        - "reports/*/README.md (structural documentation)"
+        - "User-explicitly-archived files"
+    
+    prevention_mechanism:
+      lifecycle_metadata:
+        - "expires_at: ISO8601 timestamp"
+        - "created_at: ISO8601 timestamp"
+        - "lifetime_days: integer (default 30 days)"
+        - "category: session|analysis|phase|tool-output"
+        - "auto_delete_on_expiry: boolean (default true)"
+      
+      metadata_storage:
+        - "Embedded in YAML front-matter: ---\nexpires_at: 2026-02-25\n---"
+        - "Or stored in .metadata.yaml sidecar file"
+        - "Or in central reports/lifecycle-registry.yaml"
+      
+      enforcement_points:
+        - "Creation time: Inject lifecycle metadata when file written"
+        - "Access time: Check expiry before serving/opening"
+        - "Background: Optional cleanup daemon (but NOT part of checks process)"
+    
+    file_naming_convention:
+      - "reports/{category}/{phase|session}-{name}-{timestamp}.md"
+      - "Example: reports/session/2026-01-26-analysis-xyz.md"
+      - "Timestamp in filename enables easy sorting/filtering"
+      - "Naming by date allows natural expiration via age checks"
+    
+    lifetime_defaults:
+      session_artifacts: 7  # Session work files
+      analysis_reports: 30  # Analysis outputs, temp reports
+      phase_documentation: 90  # Phase completion docs
+      test_outputs: 14  # Test run artifacts
+      tool_outputs: 30  # Generic tool outputs
+    
+    creator_checklist:
+      - "Set expires_at = now + lifetime_days"
+      - "Add category tag (session|analysis|phase|tool)"
+      - "Use kebab-case naming per CORE-028"
+      - "Store in reports/{category}/ per CORE-038"
+      - "Include creation_at and lifecycle metadata"
+      - "Do NOT run cleanup on checks process"
+    
+    validation:
+      - "File has expires_at metadata"
+      - "Metadata format is valid ISO8601"
+      - "lifetime_days matches category default (or documented exception)"
+      - "File stored in correct reports/{category}/ folder"
+      - "Sidecar .metadata.yaml exists (if using sidecar pattern)"
+    
+    enforcement:
+      pre_creation: true
+      validation_script: "cortex/governance/validators/lifecycle-validator.py"
+      git_hook: "pre-commit (warn only, don't block)"
+      audit_logging: true
+      audit_event: "LIFECYCLE_METADATA_VALIDATED"
+      severity_on_bypass: "warning"
+    
+    implementation:
+      method: "Lifecycle metadata validator + optional background cleanup daemon"
+      enforcement_point: "File creation (inject metadata), optional background sync"
+      decoupling: "Cleanup is NOT part of core checks process"
+      audit_event: "LIFECYCLE_METADATA_INJECTED"
+    
+    benefits:
+      - "Documents expire naturally—no cleanup process needed"
+      - "Extensible: new file types get lifecycle rules easily"
+      - "Prevents bloat: old artifacts self-remove after expiry"
+      - "Scalable: metadata-driven, no pattern matching needed"
+      - "Accurate: creator decides lifetime, not heuristics"
+      - "Governance-aligned: fits CORTEX 4-tier architecture"
+
+  # --------------------------------------------------------------------------
+  - rule_id: AC-PERMANENT-FIX-006
+    principle: "Built-In Quality"
+    book_reference: "Lean Software Development by Mary & Tom Poppendieck"
+    category: architectural_enforcement
+    severity: blocked
+    name: Challenge System Permanent Wiring
+    description: |
+      Challenge-driven interaction system MUST remain permanently wired.
+      InteractionOrchestrator with ChallengeEngine MUST be active in all
+      MasterOrchestrator instances.
+      
+      Business Principle: Quality cannot be inspected in; it must be built in.
+      
+      This prevents regression of challenge-driven interaction capability
+      that enables CORTEX to disagree with user requests when better
+      solutions exist.
+    
+    verification_points:
+      - "MasterOrchestrator.__init__ MUST initialize InteractionOrchestrator"
+      - "enable_challenges=True MUST be hardcoded (not configurable)"
+      - "ChallengeEngine MUST be accessible via get_challenge_engine()"
+      - "MCP server MUST expose cortex_challenge tool"
+      - "Challenge system MUST be invoked on every user request"
+    
+    protected_files:
+      - "cortex/orchestrators/core/master_orchestrator.py:313-340"
+      - "cortex/orchestrators/core/interaction_orchestrator.py:100-103"
+      - "cortex/orchestrators/core/challenge_engine.py"
+      - "cortex/mcp/cortex_tools.py:CORTEXChallengeTool"
+    
+    regression_detection:
+      condition: "enable_challenges=False OR ChallengeEngine not imported"
+      action: "BLOCK execution with AC-PERMANENT-FIX-006 violation"
+      message: "Challenge system regression detected! CORTEX challenge-driven interaction disabled."
+    
+    implementation:
+      method: "Hardcoded initialization in MasterOrchestrator.__init__"
+      enforcement_point: "InteractionOrchestrator creation"
+      audit_event: "AC-PERMANENT-FIX-006"
+      severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
+  # CORE-030: Implementation Truth Enforcement (AC-PERMANENT-FIX-005)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-030
+    principle: "Confront Brutal Facts"
+    book_reference: "Good to Great by Jim Collins"
+    category: quality_gates
+    severity: blocked
+    name: Implementation Truth Enforcement
+    description: |
+      CORTEX MUST validate claims against actual code BEFORE answering.
+      Documentation is guidance only - implementation is the single source of truth.
+      
+      Business Principle: Face reality, even when uncomfortable. Never lie to yourself.
+      The code doesn't lie - documentation might.
+      
+      This rule prevents documentation-driven hallucination where prompts
+      contain aspirational/false claims that diverge from actual implementation.
+    
+    enforcement_protocol:
+      1_check_implementation_first:
+        - "grep_search for actual class/function existence"
+        - "read_file to verify implementation details"
+        - "semantic_search for related production code"
+      
+      2_validate_documentation_claims:
+        - "Compare prompt claims against code reality"
+        - "Flag mismatches as CORE-030 violations"
+        - "Block response if documentation contradicts code"
+      
+      3_documentation_allowed_uses:
+        - "High-level architecture guidance"
+        - "Workflow descriptions (not implementation details)"
+        - "User-facing command reference"
+        - "Historical context and rationale"
+      
+      4_documentation_forbidden_uses:
+        - "Default parameter values (check code)"
+        - "Feature implementation status (check tests)"
+        - "API behavior (check actual functions)"
+        - "Production readiness claims (check wiring)"
+    
+    validation_checklist:
+      before_answering:
+        - "[ ] Searched actual code for referenced components"
+        - "[ ] Verified default values in __init__ signatures"
+        - "[ ] Checked test coverage for claimed features"
+        - "[ ] Validated wiring status in registry"
+      
+      if_documentation_referenced:
+        - "[ ] Cross-referenced docs against code"
+        - "[ ] Flagged any mismatches in response"
+        - "[ ] Cited code location as primary source"
+        - "[ ] Marked documentation claims as 'unverified' if no code check"
+    
+    examples:
+      correct_workflow: |
+        User: "What's the default for auto_wire_production?"
+        
+        CORTEX:
+        1. grep_search for "auto_wire_production" in *.py
+        2. read_file total_recall_agent.py __init__ signature
+        3. Find: auto_wire_production: bool = False
+        4. Answer: "Default is False (verified in total_recall_agent.py:572)"
+      
+      incorrect_workflow: |
+        User: "What's the default for auto_wire_production?"
+        
+        CORTEX:
+        1. Read cortex-total-recall.prompt.md
+        2. Find claim: "auto_wire_production=True (default)"
+        3. Answer: "Default is True" ← VIOLATION (didn't check code)
+    
+    remediation:
+      violation_detected: "Flag as AC-PERMANENT-FIX-005 regression"
+      permanent_fix: "Update interaction protocol to check code first"
+      documentation_update: "Add ⚠️ UNVERIFIED markers to aspirational claims"
+
+  # --------------------------------------------------------------------------
+  # CORE-034: Mandatory Audit Logging
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-034
+    principle: "Measure What Matters"
+    book_reference: "Measure What Matters by John Doerr"
+    category: auditability
+    severity: blocked
+    name: Mandatory Audit Logging (Observability)"
+    description: |
+      ALL operations MUST log to AuditLogger.
+      Provides observability, debugging, compliance tracking.
+      
+      Business Principle: You can't improve what you don't measure. Make everything observable.
+      
+      Mandatory log events:
+      - INTENT_CLASSIFIED (Stage 1 complete)
+      - ORCHESTRATOR_SELECTED (Stage 2 complete)
+      - GOVERNANCE_VALIDATED (Stage 3 complete)
+      - EXECUTION_STARTED (Stage 4 start)
+      - EXECUTION_COMPLETED (Stage 4 complete)
+      - ERROR events (any stage failure)
+    
+    audit_logging_requirements:
+      - "EnhancedAuditLogger.instance().log_event()"
+      - "All 5+ events logged per operation"
+      - "Timestamps ISO format (UTC)"
+      - "Audit trail searchable by: operation_id, intent, stage, status"
+      - "Retention: 90+ days"
+    
+    success_criteria:
+      - "All orchestrators call AuditLogger.log_event()"
+      - "No operations missing audit entries"
+      - "Audit trail complete for all 4 stages"
+      - "ERROR events captured with context"
+
+  # --------------------------------------------------------------------------
+  # CORE-035: Single Canonical Implementation (AC-PERMANENT-FIX-007)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-035
+    principle: "One Source of Truth"
+    book_reference: "The Phoenix Project by Gene Kim"
+    category: architecture
+    severity: blocked
+    name: Single Canonical Implementation
+    description: |
+      Each concept, pattern, or component MUST have exactly ONE canonical implementation.
+      No *_unified, *_refactored, *_v2, *_alternative, *_new, *_old variants allowed.
+      
+      Business Principle: Duplication is waste. Maintain one authoritative version.
+      
+      This rule prevents:
+      - Competing implementations causing confusion
+      - Orphaned code consuming maintenance budget
+      - Import uncertainty (which version to use?)
+      - Dead code accumulating in the codebase
+      
+      AC-PERMANENT-FIX-007: Permanent enforcement of single implementation pattern
+    
+    enforcement_protocol:
+      pre_creation_check:
+        - "Before creating new file, check if concept already exists"
+        - "Search for existing implementations: semantic_search, file_search, grep_search"
+        - "If exists: UPDATE existing, do NOT create parallel version"
+      
+      forbidden_patterns:
+        - "*_unified.py - consolidation experiments"
+        - "*_refactored.py - refactoring experiments"
+        - "*_v2.py, *_v3.py - version experiments"
+        - "*_alternative.py - alternative implementations"
+        - "*_new.py, *_old.py - temporal variants"
+        - "*_legacy.py - deprecated but kept"
+        - "*_backup.py - backup copies in production"
+      
+      allowed_pattern:
+        - "One canonical file per concept"
+        - "Update in place, use git for history"
+        - "If major refactor needed: create branch, not parallel file"
+      
+      git_validation:
+        check: "No files matching forbidden patterns in cortex/"
+        command: "git ls-files 'cortex/**/*_unified.py' 'cortex/**/*_refactored.py' 'cortex/**/*_v2.py'"
+        expected_count: 0
+    
+    success_criteria:
+      - "Zero competing implementations per concept"
+      - "No *_unified, *_refactored, *_v2 files in cortex/"
+      - "Single import path for each component"
+      - "Clear canonical file for each orchestrator"
+      - "git_history_analyzer validates this rule"
+    
+    implementation:
+      method: "Git pre-commit hook + AC-PERMANENT-FIX tracking"
+      enforcement_point: "File creation, git commit"
+      audit_event: "DUPLICATE_IMPLEMENTATION_BLOCKED"
+      severity_on_bypass: "blocked"
+
+  # --------------------------------------------------------------------------
+  # CORE-041: Event Idempotency (Phase 11)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-041
+    principle: "Same Input, Same Output"
+    book_reference: "Release It!: Design and Deploy Production-Ready Software by Michael Nygard"
+    category: architecture_integrity
+    severity: blocked
+    name: Event Idempotency Required
+    description: |
+      ALL event handlers MUST be idempotent. Replaying the same event twice
+      produces identical graph state. This prevents reconciliation crawlers
+      from creating duplicates and enables safe event replay for disaster recovery.
+      
+      Business Principle: Systems must tolerate replay. Duplicate processing should be harmless.
+      
+      Phase 11 (Event-Driven Knowledge Ingestion) introduces real-time event
+      processing (Git webhooks, API gateway hooks, database CDC). Events can
+      be replayed due to network failures, crashes, or manual reconciliation.
+      Without idempotency, replays corrupt the knowledge graph.
+      
+      This rule ensures:
+      - Event handlers check for existing state before mutation
+      - Duplicate events detected via event_id + timestamp
+      - Reconciliation produces deterministic results
+      - Replay operations logged to audit trail
+    
+    requirements:
+      event_deduplication:
+        - "Every event MUST have unique event_id"
+        - "Event handlers MUST check if event_id already processed"
+        - "Duplicate events logged but not reprocessed"
+        - "Event store maintains processed event_id index"
+      
+      state_mutation:
+        - "Handlers MUST be pure functions of (event + current_state) → new_state"
+        - "Same event + same state = same result (deterministic)"
+        - "No side effects beyond state mutation"
+        - "Timestamps from event payload, not system clock"
+      
+      graph_operations:
+        - "Graph upserts: CREATE if not exists, UPDATE if exists with newer timestamp"
+        - "Graph deletes: Idempotent (deleting non-existent = success)"
+        - "Graph queries: Read-only, no mutations"
+        - "Atomic transactions: All-or-nothing per event"
+    
+    validation:
+      unit_tests:
+        - "Process event twice → assert same graph state"
+        - "Process events out of order → assert deterministic result"
+        - "Replay event after crash → assert no duplicates"
+      
+      integration_tests:
+        - "Webhook replay → assert no duplicate nodes"
+        - "CDC stream replay → assert no duplicate edges"
+        - "Reconciliation full scan → assert no new duplicates"
+      
+      audit_trail:
+        - "Log: EVENT_RECEIVED → EVENT_DEDUPLICATED → EVENT_PROCESSED"
+        - "Log: REPLAY_ATTEMPTED → REPLAY_SKIPPED (duplicate)"
+        - "Log: RECONCILIATION_START → RECONCILIATION_NO_CHANGES"
+    
+    implementation:
+      event_store: "cortex/infrastructure/event_store.py"
+      deduplication: "cortex/event_listeners/deduplicator.py"
+      idempotent_handler: "@idempotent_event_handler decorator"
+      audit_logging: "AC_EVENT_PROCESSED"
+    
+    examples:
+      good:
+        - "def handle_git_push(event): if not event_processed(event.id): apply_changes(event)"
+        - "def upsert_dependency(pkg, ver): graph.merge((pkg, ver), on_exists='update_if_newer')"
+        - "def delete_service(svc_id): graph.delete(svc_id) if graph.exists(svc_id) else pass"
+      
+      bad:
+        - "def handle_event(event): graph.create(node)  # Always creates, causes duplicates"
+        - "def process_event(event): node.timestamp = datetime.now()  # Non-deterministic"
+        - "def handle_event(event): send_email(...)  # Side effect, not idempotent"
+    
+    enforcement:
+      pre_commit: "Unit tests for @idempotent_event_handler decorated functions"
+      ci_cd: "Integration tests replay events 3x, assert identical results"
+      runtime: "Event store rejects duplicate event_id processing"
+    
+    success_criteria:
+      - "100% of event handlers decorated with @idempotent_event_handler"
+      - "Unit tests replay events 2x minimum"
+      - "Reconciliation runs produce zero false-positive duplicates"
+      - "Graph state hash identical after replay"
+
+  # --------------------------------------------------------------------------
+  # CORE-042: Hierarchical Terminology Standard (Phase 38.0)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-042
+    principle: "Clear Hierarchy Eliminates Confusion"
+    book_reference: "The Goal by Eliyahu Goldratt"
+    category: planning_governance
+    severity: blocked
+    name: Hierarchical Terminology Standard
+    created: "2026-02-07"
+    description: |
+      ALL planning responses MUST use standardized 4-level hierarchy:
+      INITIATIVE → PHASE → STAGE → TASK
+      
+      Business Principle: Ambiguous language creates ambiguous systems.
+      Clear terminology prevents contradictory status messages.
+      
+      Problem Solved: Eliminates confusion like "Phase 38.0 COMPLETE" +
+      "Phase 38 READY" where "Phase" is used at multiple levels.
+      
+      Hierarchy ensures parent/child relationships are explicit,
+      preventing contradictory status messages and improving navigation.
+    
+    hierarchy_levels:
+      initiative:
+        prefix: "I-{num}"
+        scope: "Strategic goal"
+        duration: "Weeks to months"
+        example: "I-38 (Brain Cohesion & Health System)"
+        status_values: ["ACTIVE", "BLOCKED", "ARCHIVED"]
+        numbering: "Sequential (I-1, I-2, I-3...)"
+      
+      phase:
+        prefix: "P-{initiative}.{phase}"
+        scope: "Major deliverable"
+        duration: "1-2 weeks"
+        example: "P-38.1 (Baseline Remediation)"
+        status_values: ["planned", "active", "completed", "blocked"]
+        numbering: "Decimal notation (P-38.1, P-38.2...)"
+      
+      stage:
+        prefix: "S-{num}"
+        scope: "Sequential milestone"
+        duration: "1-3 days"
+        example: "S-1 (Test Collection Fix)"
+        status_values: ["pending", "in-progress", "complete"]
+        numbering: "Sequential within phase context (S-0, S-1, S-2...)"
+        context: "Stage numbers relative to current phase"
+      
+      task:
+        prefix: "T-{num}"
+        scope: "Atomic unit"
+        duration: "Hours"
+        example: "T-1 (Fix test_intent_router.py)"
+        status_values: ["todo", "doing", "done"]
+        numbering: "Sequential within stage context (T-1, T-2, T-3...)"
+        context: "Task numbers relative to current stage"
+    
+    status_icons:
+      completed: "✅ (green checkmark)"
+      ready: "🟢 (green circle - can start)"
+      active: "🔵 (blue circle - in progress)"
+      planned: "⚪ (white circle - not started)"
+      blocked: "🔴 (red circle - cannot proceed)"
+      archived: "⚫ (black circle - deprecated)"
+    
+    forbidden_patterns:
+      - "Phase X.Y notation for sub-phases (use P-X.Y)"
+      - "'Phase 38.0 COMPLETE, Phase 38 READY' (ambiguous)"
+      - "Mixing 'Phase' and 'Stage' at same level"
+      - "Non-prefixed references (just 'Phase 38')"
+    
+    correct_patterns:
+      - "I-38: ACTIVE, P-38.1: COMPLETED, P-38.2: READY"
+      - "Initiative-38 (Parent), Phase-38.1 (Child 1), Phase-38.2 (Child 2)"
+      - "P-38.2 contains S-0 through S-6"
+      - "S-1 contains T-1, T-2, T-3"
+    
+    response_format:
+      status_message: |
+        I-{num} Status: {STATUS}
+          └─ P-{num}.{phase}: {STATUS} ({description})
+          └─ P-{num}.{phase}: {STATUS} ({description})
+      
+      progress_table: |
+        | Phase | Status | Progress | Next Action |
+        |-------|--------|----------|-------------|
+        | P-{num}.1 | ✅ COMPLETE | 100% | - |
+        | P-{num}.2 | 🟢 READY | 0% | Begin S-1 |
+        | P-{num}.3 | ⚪ PLANNED | 0% | Wait for P-{num}.2 |
+    
+    migration_from_old:
+      old_phase_38: "I-38 (initiative)"
+      old_phase_38_0: "P-38.1 (first phase)"
+      old_stage_1_7: "P-38.2 through P-38.8 (were actually phases)"
+      old_stage_0_6: "S-0 through S-6 (true stages within P-38.1)"
+    
+    validation:
+      - "All planning responses use I-/P-/S-/T- prefixes"
+      - "Status messages show clear parent/child hierarchy"
+      - "No contradictory status messages (verified by validator)"
+      - "Registry files use standardized prefixes"
+      - "PlanOrchestrator enforces hierarchy in all outputs"
+    
+    enforcement:
+      orchestrator: "PlanOrchestrator"
+      validator: "cortex/governance/validators/terminology_validator.py"
+      git_hook: "pre-commit (warn only, don't block legacy files)"
+      audit_logging: true
+      audit_event: "TERMINOLOGY_HIERARCHY_VALIDATED"
+      severity_on_bypass: "blocked"
+    
+    implementation:
+      documentation: "docs/meta/TERMINOLOGY-HIERARCHY.md"
+      enforcement_class: "TerminologyHierarchyValidator"
+      registry_migration: "Rename phase-* files to initiative-*/phase-* structure"
+      dashboard_updates: "DashboardGenerator uses I-/P-/S-/T- prefixes"
+    
+    success_criteria:
+      - "Zero contradictory status messages in responses"
+      - "100% of plan responses use standardized prefixes"
+      - "Registry files migrated to new naming"
+      - "User confusion eliminated (measurable via feedback)"
+      - "Clear hierarchy visible in all planning documentation"
+    
+    examples:
+      correct_status_message: |
+        I-38 Status: ACTIVE
+          └─ P-38.1: COMPLETED ✅ (100% readiness)
+          └─ P-38.2: READY 🟢 (Implementation can begin)
+      
+      incorrect_status_message: |
+        Phase 38.0 Status: COMPLETE
+        Phase 38 Status: ACTIVE (Ready to implement)
+        ← VIOLATES CORE-042 (ambiguous use of "Phase")
+
+  # --------------------------------------------------------------------------
+  # CORE-050: No Quality Degradation (Phase 51 - MCP-FIRST Enforcement)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-050
+    principle: "Single Standard: Production"
+    category: quality_gates
+    severity: blocked
+    name: No Quality Degradation
+    created: "2026-02-08"
+    description: |
+      CORTEX MUST NEVER accept degraded execution modes or bypass quality standards.
+      When infrastructure/dependencies are missing, the system BLOCKS execution and
+      directs users to FIX the infrastructure, not work around it.
+      
+      Business Principle: Quality cannot be compromised. Ever. "Good enough" is never good enough.
+      
+      FORBIDDEN BEHAVIORS:
+      - ❌ Downgrade from MCP-FIRST to direct file operations
+      - ❌ Skip TDD when MCP unavailable
+      - ❌ Accept "basic mode" execution
+      - ❌ Bypass governance gates due to missing tools
+      - ❌ Use direct create_file/replace_string_in_file for IMPLEMENT intents
+      
+      REQUIRED BEHAVIORS:
+      - ✅ Pre-flight environment validation (MCP server health check)
+      - ✅ Block IMPLEMENT/FIX/REFACTOR if MCP unavailable
+      - ✅ Clear error message: "Fix infrastructure, do not bypass standards"
+      - ✅ Force user to: Start MCP server → Restart Copilot → Retry operation
+      - ✅ No fallback paths, no "lite versions", no degradation
+    
+    scope:
+      applies_to:
+        - "IMPLEMENT intents: MUST route through cortex_process_request"
+        - "FIX intents: MUST route through TDDOrchestrator"
+        - "REFACTOR intents: MUST route through RefactoringOrchestrator"
+        - "All direct file modification tools: create_file, replace_string_in_file"
+      
+      blocking_conditions:
+        - "MCP server unavailable + IMPLEMENT/FIX/REFACTOR intent → BLOCK"
+        - "cortex_process_request tool not discoverable → BLOCK"
+        - "Direct file tool usage + IMPLEMENT intent → BLOCK"
+        - "Governance gate bypass attempt → BLOCK"
+    
+    allowed_operations:
+      - "ANALYZE intents: Read-only operations allowed (no MCP required)"
+      - "DESIGN intents: Analysis only, no code generation"
+      - "AUDIT intents: Discovery and assessment"
+      - "QUERY intents: Information retrieval"
+    
+    enforcement_mechanism:
+      mcp_pre_flight_check:
+        - "Check tool availability: cortex_process_request exists?"
+        - "Check environment: MCP_SERVER_PORT, CORTEX_MCP_ENABLED set?"
+        - "Check network: localhost:8000 listening (default MCP port)?"
+      
+      environment_integrity_agent:
+        - "8th enforcement agent (EnforcementOrchestrator)"
+        - "Validates MCP readiness before operation"
+        - "Logs: MCP_HEALTH_CHECK → PASSED/FAILED"
+        - "Blocks if FAILED for IMPLEMENT/FIX/REFACTOR intents"
+      
+      intent_based_tool_blocking:
+        - "IMPLEMENT intent + direct file tool → BLOCK"
+        - "FIX intent + create_file → BLOCK"
+        - "REFACTOR intent + replace_string_in_file → BLOCK"
+        - "ANALYZE intent + same tools → ALLOW (read-only)"
+      
+      error_messaging:
+        - Clear error with root cause
+        - Exact fix instructions (start MCP server)
+        - No ambiguity about what user must do
+        - No fallback suggestions ("try this alternative")
+    
+    success_criteria:
+      - "Zero degraded execution paths"
+      - "100% of IMPLEMENT intents route through MCP"
+      - "0% TDD bypasses due to missing MCP"
+      - "All governance gates mandatory (no disable flag)"
+      - "Challenge gate active for every operation"
+    
+    audit_trail:
+      events:
+        - "MCP_HEALTH_CHECK_STARTED"
+        - "MCP_HEALTH_CHECK_PASSED / MCP_HEALTH_CHECK_FAILED"
+        - "IMPLEMENTATION_BLOCKED_MCP_UNAVAILABLE (if applicable)"
+        - "OPERATION_ROUTED_TO_MCP_TOOL"
+        - "DIRECT_FILE_TOOL_BLOCKED_IMPLEMENT_INTENT"
+    
+    implementation:
+      orchestrator: "EnvironmentIntegrityAgent (8th enforcement agent)"
+      location: "cortex/governance/enforcement/agents/environment_integrity_agent.py"
+      enforcement_point: "MasterOrchestrator pre-execution gate"
+      blocked_tools: "create_file, replace_string_in_file for IMPLEMENT intent"
+      required_tools: "cortex_process_request, cortex_validate_holistically"
+    
+    tests:
+      unit_tests:
+        - "test_core_050_mcp_health_check_passed"
+        - "test_core_050_mcp_health_check_failed_blocks_implement"
+        - "test_core_050_direct_file_tool_blocked_implement"
+        - "test_core_050_analyze_allowed_without_mcp"
+        - "test_core_050_error_message_clear"
+      
+      integration_tests:
+        - "test_phase_51_mcp_enforcement_end_to_end"
+        - "test_quality_degradation_never_occurs"
+        - "test_fallback_paths_not_present"
+    
+    governance_dependency:
+      requires: "CORE-008 (TDD), CORE-019 (MCP routing), CORE-048 (Holistic validation)"
+      enables: "Phase 51 MCP-FIRST enforcement"
+      blocks_until: "EnvironmentIntegrityAgent implemented"
+
+  # --------------------------------------------------------------------------
+  # CORE-051: Intelligence-Architecture Tier Coupling (ENH-004)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-051
+    principle: "Intelligence Depth Matches Architectural Tier"
+    category: architecture_integrity
+    severity: warning
+    name: Intelligence-Architecture Tier Coupling
+    created: "2026-02-11"
+    description: |
+      AC_START: AC-ENH-004-001
+      Orchestrator architectural tier MUST inform LENS intelligence tier selection.
+      Prevents tier downgrades where tier 3 orchestrator gets tier 2 LENS intelligence.
+      
+      Business Principle: Match intelligence investment to architectural importance.
+      Complex orchestrators deserve deeper analysis.
+      
+      TIER COUPLING RULES:
+      - Tier 1 (core) orchestrators → LENS tier_2_quick (10s response, baseline intelligence)
+      - Tier 2 (specialized) → LENS tier_3_targeted (30s response, enhanced intelligence)
+      - Tier 3 (enterprise) → LENS tier_4_full (60s response, maximum intelligence)
+      - NO tier downgrades: tier 3 orchestrator CANNOT use tier_2 LENS
+      
+      WHY: Higher tier orchestrators handle more complex scenarios requiring
+      deeper code intelligence, security scanning, and dependency analysis.
+      AC_COMPLETE: AC-ENH-004-001 ✅ Tier coupling defined
+    
+    scope:
+      applies_to:
+        - "LensOrchestratorTierSelection.select_tier_for_intent()"
+        - "MasterOrchestrator LENS tier selection"
+        - "wiring.yaml orchestrator tier property"
+      
+      validation_rules:
+        - "Read orchestrator.tier from wiring.yaml"
+        - "Map tier to LENS tier: {1: tier_2_quick, 2: tier_3_targeted, 3: tier_4_full}"
+        - "Block if tier downgrade detected"
+    
+    enforcement_mechanism:
+      validation_point: "LensOrchestratorTierSelection.select_tier_for_orchestrator()"
+      enforcement_agent: "OrchestratorIntegrityValidator"
+      logging: "LENS_TIER_SELECTED (orchestrator_tier=X, lens_tier=Y)"
+    
+    implementation:
+      location: "cortex/orchestrators/lens_orchestrator_integration.py"
+      method: "select_tier_for_orchestrator(orchestrator_tier, intent)"
+      wiring_property: "orchestrator.tier (1-3)"
+    
+    tests:
+      unit_tests:
+        - "test_core_051_tier1_gets_tier2_lens"
+        - "test_core_051_tier3_gets_tier4_lens"
+        - "test_core_051_no_tier_downgrade"
+      
+      integration_tests:
+        - "test_tier_coupling_end_to_end"
+
+  # --------------------------------------------------------------------------
+  # CORE-052: Holistic Validation Gate Mandatory (ENH-001 - Phase 48)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-052
+    principle: "Proactive Governance Over Reactive Enforcement"
+    category: quality_gates
+    severity: blocked
+    name: Holistic Validation Gate Mandatory
+    created: "2026-02-11"
+    description: |
+      AC_START: AC-ENH-001-001
+      ALL IMPLEMENT/FIX/REFACTOR intents MUST pass holistic validation BEFORE execution.
+      Uses Phase 48 HolisticValidationOrchestrator to detect regression risks proactively.
+      
+      Business Principle: Catch problems before they cascade. Validate dependencies,
+      registry consistency, and architecture drift BEFORE writing code.
+      
+      REQUIRED VALIDATIONS:
+      - ✅ Registry consistency (orchestrators, wiring, tests)
+      - ✅ Dependency graph analysis (circular deps, tier violations)
+      - ✅ Risk scoring (affected files, change type, test health)
+      - ✅ Architecture drift detection (deviation from master plan)
+      - ✅ Challenge Gate generation (alternatives, disagreements)
+      - ✅ cortex_intelligence integration (CORTEX self-development)
+      AC_COMPLETE: AC-ENH-001-001 ✅ Holistic validation mandatory
+    
+    scope:
+      applies_to:
+        - "IMPLEMENT intents (all feature implementations)"
+        - "FIX intents (all bug fixes)"
+        - "REFACTOR intents (all code improvements)"
+      
+      exempt:
+        - "ANALYZE intents (read-only operations)"
+        - "DESIGN intents (no code generation)"
+        - "AUDIT intents (discovery only)"
+    
+    validation_sequence:
+      1_registry_check:
+        - "Cross-validate orchestrators in wiring.yaml exist in codebase"
+        - "Verify MCP tools listed in wiring match MCPServer.list_tools()"
+        - "Check test coverage for affected orchestrators"
+      
+      2_dependency_analysis:
+        - "Build dependency graph for target files"
+        - "Detect circular dependencies (BLOCK if found)"
+        - "Validate tier precedence (tier0 > tier1 > tier2 > tier3)"
+      
+      3_risk_scoring:
+        - "Calculate regression risk (0-1.0 scale)"
+        - "Factors: file criticality, change size, test health, recent failures"
+        - "BLOCK if risk > 0.7 without explicit user override"
+      
+      4_architecture_drift:
+        - "Compare request against master plan (cortex-registry/_cortex-master/)"
+        - "Detect deviations from approved architecture"
+        - "Flag misalignments for user review"
+      
+      5_challenge_gate:
+        - "Generate alternative approaches (≥3 alternatives)"
+        - "Present disagreements (when CORTEX detects better solution)"
+        - "Require user confirmation of selected approach"
+    
+    mcp_tool_integration:
+      primary_tool: "cortex_validate_holistically"
+      parameters:
+        operation: "IMPLEMENT | FIX | REFACTOR"
+        target: "file path or module name"
+        scope: "['orchestrators', 'wiring', 'tests']"
+        challenge_required: true
+      
+      fallback_mechanism:
+        when: "MCP server unavailable"
+        action: "Load HolisticValidationOrchestrator from .github/agents/core/"
+        degradation: "Manual validation steps, no auto-challenge"
+        logging: "LOG: HOLISTIC_VALIDATION_FALLBACK_MODE"
+    
+    success_criteria:
+      - "100% of IMPLEMENT/FIX/REFACTOR pass holistic validation"
+      - "Zero architecture drift regressions in production"
+      - "Challenge Gate presented for all complex implementations"
+      - "<2% holistic validation false positives"
+    
+    audit_trail:
+      events:
+        - "HOLISTIC_VALIDATION_STARTED"
+        - "REGISTRY_CHECK_PASSED / REGISTRY_CHECK_FAILED"
+        - "DEPENDENCY_ANALYSIS_PASSED / CIRCULAR_DEPENDENCY_DETECTED"
+        - "RISK_SCORE_CALCULATED (score=X.XX)"
+        - "CHALLENGE_GATE_PRESENTED"
+        - "HOLISTIC_VALIDATION_PASSED / HOLISTIC_VALIDATION_BLOCKED"
+    
+    implementation:
+      orchestrator: "HolisticValidationOrchestrator"
+      location: "cortex/orchestrators/core/holistic_validation_orchestrator.py"
+      enforcement_agent: "EnvironmentIntegrityAgent"
+      enforcement_point: "MasterOrchestrator.process_request() pre-execution gate"
+      mcp_tool: "cortex_validate_holistically"
+    
+    tests:
+      unit_tests:
+        - "test_core_052_holistic_validation_passes_valid_request"
+        - "test_core_052_holistic_validation_blocks_high_risk"
+        - "test_core_052_holistic_validation_detects_circular_deps"
+        - "test_core_052_challenge_gate_generation"
+        - "test_core_052_fallback_mode_without_mcp"
+      
+      integration_tests:
+        - "test_phase_48_holistic_validation_end_to_end"
+        - "test_holistic_validation_with_mcp_tool"
+        - "test_holistic_validation_fallback_graceful"
+    
+    governance_dependency:
+      requires: "CORE-048 (Holistic Validation exists), CORE-050 (No quality degradation)"
+      enables: "Phase 48 full enforcement, proactive governance"
+      blocks_until: "HolisticValidationOrchestrator wired in registry"
+
+  # --------------------------------------------------------------------------
+  # CORE-053: Context Crystallization Layer Timeout Policy (ENH-002 - Phase 49)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-053
+    principle: "Graceful Degradation with Transparency"
+    category: orchestration_lifecycle
+    severity: warning
+    name: Context Crystallization Layer Timeout Policy
+    created: "2026-02-11"
+    description: |
+      AC_START: AC-ENH-002-001
+      Phase 49 CCL async prefetch MUST timeout gracefully without blocking execution.
+      System continues with cold context load if CCL exceeds 500ms SLA.
+      
+      Business Principle: Availability over perfection. Don't block user for performance optimization.
+      
+      CCL (Context Crystallization Layer) pre-warms context during holistic validation:
+      - Rules cache (company > tier1 > tier0)
+      - LENS warmed state (git history, AST, dependencies)
+      - Infrastructure capabilities (MCP tools, orchestrators)
+      
+      SLA:
+      - Normal: <300ms (p95)
+      - Fallback: <500ms (p99)
+      - Timeout: >500ms → Continue without pre-warmed context
+      AC_COMPLETE: AC-ENH-002-001 ✅ CCL timeout policy defined
+    
+    timeout_behavior:
+      normal_path:
+        - "CCL prefetch completes <300ms"
+        - "Stage 2 (IntentRouter) uses pre-warmed context"
+        - "Latency benefit: -15% vs cold load"
+        - "Log: CCL_PREFETCH_SUCCESS (duration=XXXms)"
+      
+      fallback_path:
+        - "CCL prefetch takes 300-500ms"
+        - "Stage 2 waits for completion (acceptable delay)"
+        - "Uses pre-warmed context despite delay"
+        - "Log: CCL_PREFETCH_SLOW (duration=XXXms)"
+      
+      timeout_path:
+        - "CCL prefetch exceeds 500ms"
+        - "Stage 2 proceeds immediately with cold context load"
+        - "Latency penalty: +15% (acceptable tradeoff)"
+        - "Log: CCL_TIMEOUT_FALLBACK (duration=XXXms)"
+        - "Audit: Track timeout rate for optimization"
+    
+    monitoring:
+      metrics:
+        - "ccl_prefetch_duration_ms (histogram)"
+        - "ccl_timeout_rate (gauge, target <5%)"
+        - "ccl_cache_hit_rate (gauge, target >70%)"
+      
+      alerts:
+        - "CCL timeout rate >5% for 10 minutes → Alert: Investigate performance"
+        - "CCL cache hit rate <50% → Alert: Cache warming ineffective"
+    
+    success_criteria:
+      - "Execution never blocked by CCL timeout"
+      - "Timeout rate <5% in production"
+      - "Cache hit rate >70% in production"
+      - "p95 latency <300ms, p99 <500ms"
+    
+    implementation:
+      module: "cortex/orchestrators/context_crystallization.py"
+      timeout_config: "CCL_TIMEOUT_MS=500 (environment variable)"
+      fallback: "Cold context load via IntentRouter"
+    
+    tests:
+      unit_tests:
+        - "test_core_053_ccl_completes_normal_path"
+        - "test_core_053_ccl_fallback_path_slow"
+        - "test_core_053_ccl_timeout_proceeds_cold_load"
+      
+      integration_tests:
+        - "test_phase_49_ccl_end_to_end_with_timeout"
+        - "test_execution_never_blocked_by_ccl"
+
+  # --------------------------------------------------------------------------
+  # CORE-054: MCP Tool Wiring Validation (ENH-003)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-054
+    principle: "Fail Fast on Configuration Errors"
+    category: architecture_integrity
+    severity: blocked
+    name: MCP Tool Wiring Validation
+    created: "2026-02-11"
+    description: |
+      AC_START: AC-ENH-003-001
+      Orchestrator wiring MUST reference only registered MCP tools.
+      Cross-validate wiring.yaml mcp_tools lists against MCPServer.list_tools().
+      
+      Business Principle: Configuration errors caught at startup, not at runtime.
+      
+      Problem: wiring.yaml can list tools that don't exist in MCP server
+      Result: Runtime errors when orchestrator attempts to use missing tool
+      Solution: Validate tool availability during registry initialization
+      AC_COMPLETE: AC-ENH-003-001 ✅ MCP tool wiring validation defined
+    
+    validation_sequence:
+      1_load_wiring:
+        - "Parse cortex-registry/core/wiring/orchestration-master-wiring.yaml"
+        - "Extract mcp_tools lists from all orchestrators"
+      
+      2_query_mcp_server:
+        - "Instantiate MCPServer()"
+        - "Call server.list_tools() → get available tools"
+      
+      3_cross_validate:
+        - "For each orchestrator.mcp_tools:"
+        - "  Check if tool in available_tools"
+        - "  If missing: Add to violations list"
+      
+      4_enforcement:
+        - "If violations: BLOCK orchestrator registration"
+        - "Display: Missing tools + suggested fix"
+        - "Prevent system startup until resolved"
+    
+    enforcement_point:
+      class: "OrchestratorIntegrityValidator"
+      method: "validate_mcp_tool_wiring()"
+      location: "cortex/orchestrators/audit/orchestrator_integrity_validator.py"
+      
+      health_check:
+        - "Run during GitBackedRegistry.initialize()"
+        - "Block if validation fails"
+        - "Log: MCP_TOOL_WIRING_VALIDATED"
+    
+    error_message_template: |
+      ❌ MCP Tool Wiring Validation Failed
+      
+      Orchestrator: {orchestrator_name}
+      Missing Tools: {missing_tools}
+      
+      Resolution:
+      1. Register tools in cortex/mcp/server.py
+      2. Remove from wiring.yaml if not needed
+      3. Verify: python -c "from cortex.mcp.server import MCPServer; print(MCPServer().list_tools())"
+    
+    success_criteria:
+      - "100% of wiring.yaml mcp_tools exist in MCPServer"
+      - "Zero runtime errors from missing tools"
+      - "Clear error messages guide resolution"
+    
+    implementation:
+      validator: "OrchestratorIntegrityValidator"
+      enforcement: "GitBackedRegistry.initialize()"
+      tests: "tests/unit/orchestrators/audit/test_mcp_tool_wiring.py"
+    
+    tests:
+      unit_tests:
+        - "test_core_054_valid_wiring_passes"
+        - "test_core_054_missing_tool_blocks_registration"
+        - "test_core_054_error_message_clear"
+    
+    governance_dependency:
+      requires: "CORE-031 (Declarative autowiring), CORE-050 (No quality degradation)"
+      enables: "Fail-fast configuration validation"
+      blocks_until: "OrchestratorIntegrityValidator enhanced"
+
+# ==============================================================================
+# ENFORCEMENT CONFIGURATION
+# ==============================================================================
+enforcement:
+  mode: strict
+  override_allowed: false
+  audit_logging: true
+  git_hooks:
+    pre_commit: true
+    pre_push: true
+  
+  core_rule_precedence:
+    highest: "CORE-029 (Response headers), CORE-030 (Implementation truth), CORE-031 (Declarative autowiring), CORE-032 (Intent classification), CORE-035 (Single canonical)"
+    high: "CORE-034 (Audit logging)"
+    medium: "CORE-005 (Path portability), CORE-011 (Type hints), CORE-012 (Docstrings)"
+    loading_sequence: "See cortex-registry/core/cognition/bootstrap-sequence.yaml"
+  
+  remediation_status:
+    "CORE-030": "✅ COMPLETE - Implementation-first validation protocol enforced"
+    "CORE-032": "✅ COMPLETE - IntentRouterFactory enforces mandatory intent classification"
+    "CORE-034": "IN_PROGRESS - Audit logging framework in Stage 3"
+    "CORE-035": "� IN_PROGRESS - ConversationProtocol RESOLVED! 323 violations remaining (down from 326). ValidationResult (17), AuditEntry (13) next priority."
+    "CORE-042": "✅ DEFINED - Hierarchical terminology standard created (Phase 38.0), enforcement pending registry migration"
