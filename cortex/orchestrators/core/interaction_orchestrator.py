@@ -316,9 +316,12 @@ class InteractionOrchestrator(IOrchestrator):
                         }
                     )
                 
-                # Use synthesized context for output
-                output = synthesized.context
-                
+                # Merge synthesis metadata — preserve canonical keys
+                # (challenge_evaluated, lens_context, type required downstream)
+                synthesis_meta = synthesized.context or {}
+                output["synthesized_content"] = synthesis_meta.get("synthesized_content")
+                output["compression_strategy"] = synthesis_meta.get("compression_strategy")
+
             except Exception as gateway_err:
                 # Graceful degradation - log but continue with original output
                 self.logger.log_operation_complete(
@@ -394,9 +397,13 @@ class InteractionOrchestrator(IOrchestrator):
                     session_id=session_id,
                     orchestrator_name="InteractionOrchestrator"
                 )
-                
-                return Ok(synthesized.context)
-                
+
+                # Merge synthesis metadata into output — preserve canonical keys
+                # (intent_type, lens_context, confidence) required by MasterOrchestrator
+                synthesis_meta = synthesized.context or {}
+                output["synthesized_content"] = synthesis_meta.get("synthesized_content")
+                output["compression_strategy"] = synthesis_meta.get("compression_strategy")
+
             except Exception:
                 # Graceful degradation - return original output
                 pass
