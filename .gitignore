@@ -21,12 +21,11 @@
 *.db-wal
 *.db-shm
 
-# Trace artifacts (ephemeral per-developer)
-.cortex/traces/
-.cortex/*.db
+# Local CORTEX dev artifacts (ephemeral, per-developer — never source-controlled)
+.cortex/
 
-# Knowledge cache (rebuilt via post-merge hook)
-.cortex/knowledge-cache/
+# VS Code personal preferences
+.favorites.json
 
 # State databases (ephemeral)
 cortex_intelligence/state/*.db
