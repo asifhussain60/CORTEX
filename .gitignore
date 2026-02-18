@@ -92,23 +92,7 @@ PHASE-*-COMPLETION.md
 ENH-*-PHASE-*-COMPLETION.md
 ARCHITECT-*-SUMMARY.md
 
-# Wave 8 Stage 2: Internal Registry Blacklist (CORE-056)
-# RATIONALE: Separate internal master plan (_cortex-master) from shipped capability
-# These internal artifacts must NOT appear in origin/main commits
-cortex-registry/_cortex-master/index.yaml
-cortex-registry/_cortex-master/phases/
-cortex-registry/_cortex-master/waves/
-cortex-registry/_cortex-master/execution/
-cortex-registry/_cortex-master/meta/
-
-# EXCEPTION: Shared governance & enhancements ARE exported (reusable patterns)
-!cortex-registry/_cortex-master/governance/
-!cortex-registry/_cortex-master/enhancements/
-!cortex-registry/_cortex-master/directives/
-
-# EXCEPTION: Wave documentation for reference (historical tracking)
-!cortex-registry/_cortex-master/WAVE-*.md
-!cortex-registry/_cortex-master/WAVE-*.yaml
+# cortex-registry/ is fully tracked (CORE-056 blacklist removed)
 
 # Local workspaces (developer sandboxes, sample apps, chat logs — never source-controlled)
 _workspaces/
@@ -197,15 +181,11 @@ _archives/
 # Phase executors must be in proper module, never in root
 /execute_phase_*.py
 
-# Wave 8 Stage 2: Registry Blacklist (CORTEX-internal planning state)
-# Planning orchestrator state lives in local cortex-registry only
-# Should NEVER be committed to git (prevents merge conflicts + reduces noise)
-# EXCEPTION: Template files in cortex/templates/planning/ ARE committed
-cortex-registry/_cortex-master/index.yaml
-cortex-registry/_cortex-master/phases/
-cortex-registry/_cortex-master/waves/
-cortex-registry/_cortex-master/execution/
-cortex-registry/_cortex-master/meta/
+# Wave 8 Stage 2: Registry Blacklist — REMOVED (CORE-056 retired)
+# cortex-registry/ including _cortex-master/ is fully tracked
+
+# Local registry/ (sealed artifacts, local-only generated output)
+/registry/
 
 # Reports directory (generated session artifacts - CORE-002 compliant)
 # Contains audit reports, status updates, phase tracking, and session artifacts
