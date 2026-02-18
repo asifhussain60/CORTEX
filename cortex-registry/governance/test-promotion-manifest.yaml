@@ -1,0 +1,457 @@
+# =============================================================================
+# CORTEX Test Promotion Manifest
+# =============================================================================
+#
+# Authority:  Phase 49 — Golden Test Promotion Pipeline
+# Location:   cortex-registry/governance/test-promotion-manifest.yaml
+# Status:     PLANNED (re-generated at Phase 49 GREEN time)
+# Created:    2026-02-18
+# Author:     Asif Hussain
+#
+# PURPOSE
+# -------
+# Machine-readable catalog of all 250 non-golden test files that scored
+# >= 40 on the 7-signal promotion scoring algorithm.
+# Used by:
+#   - TestClassifierOrchestrator: classify() reads golden_paths patterns
+#   - ParallelGoldenRunner: groups by domain for worker assignment
+#   - cortex_health_orchestrate(operation='classify'): MCP-exposed lookup
+#   - Pre-commit hook: validates new files against manifest tiers
+#   - CI/CD: enforces CORE-055 by checking manifest at push time
+#
+# SCORING SIGNALS (7 signals, max 160 points)
+# --------------------------------------------
+# S1 MASTER_ORCH  +40  References MasterOrchestrator or TDDOrchestrator
+# S2 SECURITY     +30  Contains secrets/AES/encryption/injection logic
+# S3 GOVERNANCE   +20  References 3+ CORE rules explicitly
+# S4 AC_ID        +15  Contains AC-ID or AC_START architecture control ID
+# S5 E2E          +10  Covers end-to-end/integration/pipeline path
+# S6 COVERAGE_MATRIX +25  Already has P0/P1 scenario tiers
+# S7 MCP          +20  Tests MCP tool or cortex_process_request entry point
+#
+# AC-ID: AC-P49-MANIFEST-001
+# =============================================================================
+
+manifest:
+  version: "1.0.0"
+  generated: "2026-02-18"
+  phase: "phase-49"
+  algorithm_version: "7-signal-v1"
+  total_candidates: 250
+  promotion_policy:
+    p0:
+      label: "Promote immediately (Phase 49)"
+      threshold: 100
+      action: "promote_and_restructure"
+      count: 12
+    p1:
+      label: "Promote next cycle (Phase 50)"
+      threshold: 70
+      action: "flag_for_promotion"
+      count: 64
+    p2:
+      label: "Evaluate manually (Phase 51+)"
+      threshold: 40
+      action: "annotate_for_review"
+      count: 174
+    standard:
+      label: "No action"
+      threshold: 0
+      action: "no_action"
+      count: 727
+
+  # ---------------------------------------------------------------------------
+  # CLASSIFIER RULES (source of truth for TestClassifierOrchestrator)
+  # ---------------------------------------------------------------------------
+  classifier_rules:
+    golden_paths:
+      - pattern: "cortex/orchestrators/"
+        required_concerns: [SECURITY, QUALITY, CCL]
+        coverage_floor: 95
+        target_root: "tests/golden/orchestrators/"
+
+      - pattern: "cortex/mcp/tools/"
+        required_concerns: [SECURITY, CONTRACT]
+        coverage_floor: 95
+        target_root: "tests/golden/mcp/tools/"
+
+      - pattern: "cortex/governance/"
+        required_concerns: [SECURITY, QUALITY]
+        coverage_floor: 95
+        target_root: "tests/golden/governance/"
+
+      - pattern: "cortex/brain/"
+        required_concerns: [CCL, QUALITY]
+        coverage_floor: 95
+        target_root: "tests/golden/brain/"
+
+      - pattern: "cortex/intelligence/"
+        required_concerns: [CCL, SECURITY]
+        coverage_floor: 95
+        target_root: "tests/golden/intelligence/"
+
+      - pattern: "cortex/domain_brain/"
+        required_concerns: [CCL]
+        coverage_floor: 95
+        target_root: "tests/golden/domain_brain/"
+
+      - pattern: "cortex/agents/"
+        required_concerns: [SECURITY, CONTRACT]
+        coverage_floor: 95
+        target_root: "tests/golden/agents/"
+
+    standard_paths:
+      - pattern: "cortex/common/"
+        required_concerns: [QUALITY]
+        coverage_floor: 80
+        target_root: "tests/unit/common/"
+
+      - pattern: "cortex/config/"
+        required_concerns: []
+        coverage_floor: 80
+        target_root: "tests/unit/config/"
+
+      - pattern: "cortex/models/"
+        required_concerns: []
+        coverage_floor: 80
+        target_root: "tests/unit/models/"
+
+      - pattern: "cortex/templates/"
+        required_concerns: []
+        coverage_floor: 80
+        target_root: "tests/unit/templates/"
+
+    default:
+      tier: "STANDARD"
+      required_concerns: []
+      coverage_floor: 80
+
+  # ---------------------------------------------------------------------------
+  # CONCERN DEFINITIONS
+  # ---------------------------------------------------------------------------
+  concerns:
+    SECURITY:
+      pytest_marker: "security"
+      description: "Test class MUST cover: auth bypass, injection, path traversal, secret exposure"
+      minimum_test_classes: 1
+
+    QUALITY:
+      pytest_marker: "quality"
+      description: "Coverage matrix header required, P0/P1/P2 tiers declared, coverage_floor asserted"
+      minimum_test_classes: 1
+
+    CCL:
+      pytest_marker: "ccl"
+      description: "At least 1 test validates CCL timeout (<=500ms) and cold-start fallback"
+      minimum_test_classes: 1
+
+    PERF:
+      pytest_marker: "perf"
+      description: "At least 1 test asserts latency SLA (<300ms per documented CCL SLA)"
+      minimum_test_classes: 1
+
+    CONTRACT:
+      pytest_marker: "contract"
+      description: "At least 1 test validates input/output schema (pydantic or YAML schema)"
+      minimum_test_classes: 1
+
+  # ---------------------------------------------------------------------------
+  # REQUIRED GOLDEN FILE STRUCTURE (enforced by CORE-055)
+  # ---------------------------------------------------------------------------
+  golden_file_template:
+    required_header_elements:
+      - "Module docstring with TEST COVERAGE MATRIX"
+      - "P0 (Critical Path - Sunshine scenarios)"
+      - "P1 (Important - Rainy Day scenarios)"
+      - "P2 (Edge Cases - Blind Spots)"
+      - "AC-ID: AC-{PHASE}-{DOMAIN}-{NUMBER}"
+    required_markers:
+      - "@pytest.mark.golden  (always)"
+      - "@pytest.mark.{concern}  (one per required concern)"
+    coverage_floor_assertion: |
+      # Assert in conftest.py or test teardown:
+      # assert coverage_percent >= TestDecision.coverage_floor
+
+  # ---------------------------------------------------------------------------
+  # P0 PROMOTION CANDIDATES (score >= 100, promote immediately in Phase 49)
+  # ---------------------------------------------------------------------------
+  p0_candidates:
+
+    - id: "P0-001"
+      source: "tests/integration/test_plan_system_integration.py"
+      target: "tests/golden/integration/test_plan_system_integration.py"
+      score: 110
+      signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, COVERAGE_MATRIX]
+      required_concerns: [QUALITY, CONTRACT]
+      required_markers: [golden, quality, contract]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-002"
+      source: "tests/integration/workflows/test_architect_mode.py"
+      target: "tests/golden/integration/workflows/test_architect_mode.py"
+      score: 110
+      signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, COVERAGE_MATRIX]
+      required_concerns: [QUALITY, CONTRACT]
+      required_markers: [golden, quality, contract]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-003"
+      source: "tests/e2e/test_mega_b_integration.py"
+      target: "tests/golden/e2e/test_mega_b_integration.py"
+      score: 105
+      signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, MCP]
+      required_concerns: [SECURITY, CONTRACT]
+      required_markers: [golden, security, contract]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-004"
+      source: "tests/unit/orchestrators/workflow/test_post_phase_dedup.py"
+      target: "tests/golden/orchestrators/workflow/test_post_phase_dedup.py"
+      score: 105
+      signals: [MASTER_ORCH, SECURITY, GOVERNANCE, AC_ID]
+      required_concerns: [SECURITY, QUALITY]
+      required_markers: [golden, security, quality]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-005"
+      source: "tests/integration/deployment/test_exit_gate_deployment.py"
+      target: "tests/golden/integration/deployment/test_exit_gate_deployment.py"
+      score: 105
+      signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, MCP]
+      required_concerns: [QUALITY, CONTRACT]
+      required_markers: [golden, quality, contract]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-006"
+      source: "tests/unit/orchestrators/workflow/test_holistic_refactoring_sweep.py"
+      target: "tests/golden/orchestrators/workflow/test_holistic_refactoring_sweep.py"
+      score: 105
+      signals: [MASTER_ORCH, SECURITY, GOVERNANCE, AC_ID]
+      required_concerns: [SECURITY, QUALITY]
+      required_markers: [golden, security, quality]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-007"
+      source: "tests/unit/orchestrators/core/test_interaction_orchestrator.py"
+      target: "tests/golden/orchestrators/core/test_interaction_orchestrator.py"
+      score: 105
+      signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, MCP]
+      required_concerns: [QUALITY, CONTRACT]
+      required_markers: [golden, quality, contract]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-008"
+      source: "tests/phase_53/test_s7_s9_integration_governance.py"
+      target: "tests/golden/phase_53/test_s7_s9_integration_governance.py"
+      score: 105
+      signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, MCP]
+      required_concerns: [QUALITY, CONTRACT]
+      required_markers: [golden, quality, contract]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-009"
+      source: "tests/integration/intent_router/test_mode_routing_integration.py"
+      target: "tests/golden/intent_router/test_mode_routing_integration.py"
+      score: 100
+      signals: [SECURITY, AC_ID, E2E, COVERAGE_MATRIX, MCP]
+      required_concerns: [SECURITY, CONTRACT]
+      required_markers: [golden, security, contract]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-010"
+      source: "tests/unit/remediation/test_remediation_verification.py"
+      target: "tests/golden/remediation/test_remediation_verification.py"
+      score: 100
+      signals: [MASTER_ORCH, SECURITY, GOVERNANCE, E2E]
+      required_concerns: [SECURITY, QUALITY]
+      required_markers: [golden, security, quality]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+    - id: "P0-011"
+      source: "tests/unit/brain/core/test_mandatory_checkpoints.py"
+      target: "tests/golden/brain/core/test_mandatory_checkpoints.py"
+      score: 100
+      signals: [MASTER_ORCH, SECURITY, GOVERNANCE, E2E]
+      required_concerns: [SECURITY, QUALITY, CCL]
+      required_markers: [golden, security, quality, ccl]
+      phase_assigned: "phase-49"
+      migration_note: "CCL concern added — brain path mandates CCL validation."
+
+    - id: "P0-012"
+      source: "tests/integration/test_rephrase_mcp_integration.py"
+      target: "tests/golden/integration/test_rephrase_mcp_integration.py"
+      score: 100
+      signals: [MASTER_ORCH, SECURITY, GOVERNANCE, E2E]
+      required_concerns: [SECURITY, QUALITY]
+      required_markers: [golden, security, quality]
+      phase_assigned: "phase-49"
+      migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
+
+  # ---------------------------------------------------------------------------
+  # P1 PROMOTION CANDIDATES (score 70-99, Phase 50)
+  # 64 total — top 15 shown, full list generated at Phase 49 GREEN time
+  # ---------------------------------------------------------------------------
+  p1_candidates:
+    note: "Full list of 64 P1 candidates generated by TestClassifierOrchestrator at GREEN time"
+    top_15_preview:
+
+      - id: "P1-001"
+        source: "tests/unit/interaction/test_context_synthesis_gateway_integration.py"
+        score: 95
+        signals: [MASTER_ORCH, GOVERNANCE, E2E, COVERAGE_MATRIX]
+        required_concerns: [QUALITY, CONTRACT]
+        phase_assigned: "phase-50"
+
+      - id: "P1-002"
+        source: "tests/unit/mcp/test_mcp_decorators.py"
+        score: 95
+        signals: [MASTER_ORCH, GOVERNANCE, AC_ID, MCP]
+        required_concerns: [SECURITY, CONTRACT]
+        phase_assigned: "phase-50"
+
+      - id: "P1-003"
+        source: "tests/unit/orchestrators/support/test_digest_session_orchestrator.py"
+        score: 90
+        signals: [MASTER_ORCH, GOVERNANCE, E2E, MCP]
+        required_concerns: [SECURITY, QUALITY, CCL]
+        phase_assigned: "phase-50"
+
+      - id: "P1-004"
+        source: "tests/unit/core/orchestrator/test_intent_router_core.py"
+        score: 90
+        signals: [MASTER_ORCH, GOVERNANCE, E2E, MCP]
+        required_concerns: [QUALITY, CONTRACT]
+        phase_assigned: "phase-50"
+
+      - id: "P1-005"
+        source: "tests/unit/orchestrators/test_analysis_execution_orchestrators.py"
+        score: 90
+        signals: [MASTER_ORCH, GOVERNANCE, E2E, MCP]
+        required_concerns: [QUALITY, CONTRACT]
+        phase_assigned: "phase-50"
+
+      - id: "P1-006"
+        source: "tests/unit/onboarding/test_requirements_extraction.py"
+        score: 90
+        signals: [GOVERNANCE, AC_ID, E2E, COVERAGE_MATRIX, MCP]
+        required_concerns: [QUALITY, CONTRACT]
+        phase_assigned: "phase-50"
+
+      - id: "P1-007"
+        source: "tests/unit/brain/test_copilot_context_optimizer.py"
+        score: 90
+        signals: [MASTER_ORCH, SECURITY, GOVERNANCE]
+        required_concerns: [SECURITY, QUALITY, CCL]
+        phase_assigned: "phase-50"
+
+      - id: "P1-008"
+        source: "tests/unit/brain/analysis/test_config_analyzer.py"
+        score: 90
+        signals: [SECURITY, GOVERNANCE, AC_ID, COVERAGE_MATRIX]
+        required_concerns: [SECURITY, QUALITY]
+        phase_assigned: "phase-50"
+
+      - id: "P1-009"
+        source: "tests/unit/brain/education/test_next_step_generator.py"
+        score: 90
+        signals: [MASTER_ORCH, GOVERNANCE, E2E, MCP]
+        required_concerns: [QUALITY, CCL]
+        phase_assigned: "phase-50"
+
+      - id: "P1-010"
+        source: "tests/mcp/test_onboard_repository_tool_enhanced.py"
+        score: 90
+        signals: [MASTER_ORCH, GOVERNANCE, E2E, MCP]
+        required_concerns: [SECURITY, CONTRACT]
+        phase_assigned: "phase-50"
+
+      - id: "P1-011"
+        source: "tests/orchestrators/test_debugging_orchestrator.py"
+        score: 85
+        signals: [SECURITY, GOVERNANCE, AC_ID, MCP]
+        required_concerns: [SECURITY, QUALITY]
+        phase_assigned: "phase-50"
+
+      - id: "P1-012"
+        source: "tests/unit/core/orchestrator/test_4stage_integration.py"
+        score: 85
+        signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E]
+        required_concerns: [QUALITY, CONTRACT]
+        phase_assigned: "phase-50"
+
+      - id: "P1-013"
+        source: "tests/integration/test_interaction_orchestrator_golden_paths.py"
+        score: 85
+        signals: [MASTER_ORCH, AC_ID, E2E, MCP]
+        required_concerns: [QUALITY, CONTRACT]
+        phase_assigned: "phase-50"
+
+      - id: "P1-014"
+        source: "tests/unit/orchestrators/support/test_debugger_orchestrator.py"
+        score: 85
+        signals: [MASTER_ORCH, SECURITY, AC_ID]
+        required_concerns: [SECURITY, QUALITY]
+        phase_assigned: "phase-50"
+
+      - id: "P1-015"
+        source: "tests/unit/orchestrators/test_super_orchestrator_integration.py"
+        score: 85
+        signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E]
+        required_concerns: [QUALITY, CONTRACT]
+        phase_assigned: "phase-50"
+
+  # ---------------------------------------------------------------------------
+  # STATISTICS
+  # ---------------------------------------------------------------------------
+  statistics:
+    total_non_golden_test_files: 987
+    total_scored: 977
+    promotion_candidates_total: 250
+    p0_count: 12
+    p1_count: 64
+    p2_count: 174
+    standard_no_action: 727
+    promotion_rate_percent: 25.4
+    highest_score: 110
+    lowest_scoring_candidate: 40
+    most_common_signal: "MASTER_ORCH (457 files)"
+    most_common_concern: "QUALITY"
+
+  # ---------------------------------------------------------------------------
+  # FOLDER STRUCTURE CONTRACT (CORE-055)
+  # ---------------------------------------------------------------------------
+  folder_contract:
+    description: |
+      Forward-only contract. Applies to new code from Phase 49 onward.
+      No existing test is retroactively moved or invalidated.
+    structure: |
+      tests/
+      ├── golden/                    ← GOLDEN tier (high-blast-radius code)
+      │   ├── orchestrators/         ← mirrors cortex/orchestrators/
+      │   │   ├── core/
+      │   │   ├── support/           ← Phase 48+49 golden tests live here
+      │   │   └── domain/
+      │   ├── mcp/
+      │   │   └── tools/
+      │   ├── governance/
+      │   ├── brain/
+      │   ├── intelligence/
+      │   ├── agents/
+      │   ├── integration/           ← P0 promotion targets
+      │   └── conftest.py            ← shared audit DB fixture (exists ✅)
+      └── unit/                      ← STANDARD tier
+          ├── common/
+          ├── config/
+          ├── models/
+          └── ...                    ← existing structure unchanged
+    migration_policy: "forward-only, zero retroactive moves"

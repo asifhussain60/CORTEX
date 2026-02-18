@@ -7,9 +7,9 @@
 # ============================================================================
 
 metadata:
-  version: "7.6"
-  last_updated: "2026-02-18T18:00:00Z"
-  total_phases: 48
+  version: "7.7"
+  last_updated: "2026-02-18T20:00:00Z"
+  total_phases: 49
   active: 0
   completed: 47
    deferred:
@@ -21,8 +21,8 @@ metadata:
     - phase-91  # (old numbering - consolidated into phase-40)
     - phase-92  # (old numbering - consolidated into phase-40)
 
-  planned: []  # ALL PHASES COMPLETE (47/47 = 100%)deferred: 6
-  planned: 0  # ALL PHASES COMPLETE!
+  planned: ["phase-48", "phase-49"]
+  planned: 2  # Phase 48 + Phase 49 (Golden Test Promotion Pipeline)
   
   synchronization_status:
     phase_files_synced: true
@@ -563,6 +563,86 @@ phase_status:
         - "CORE-035 (single canonical implementation)"
       note: "Created 2026-02-18. Workflow template + golden tests defined."
 
+    - id: "phase-49"
+      title: "Golden Test Promotion Pipeline"
+      location: "planning/phases/planned/phase-49-golden-test-promotion.yaml"
+      workflow_template: "cortex-registry/workflows/templates/golden-test-promotion.yaml"
+      manifest: "cortex-registry/governance/test-promotion-manifest.yaml"
+      priority: "P1"
+      status: "planned"
+      estimated_duration: "8 hours"
+      prerequisites: ["phase-48"]
+      description: |
+        Establishes CORTEX golden test standard for all future TDD cycles:
+        - TestClassifierOrchestrator: Classifies any module as GOLDEN or STANDARD tier
+          using 7-signal scoring algorithm (P0≥100pts, P1=70-99, P2=40-69)
+        - ParallelGoldenRunner: Runs all golden tests in parallel (pytest-xdist, 4 workers,
+          domain-grouped) with real-time VS Code terminal progress box
+        - CORE-055: New governance rule enforcing folder contract and concern markers
+        - Promotes 12 P0 legacy tests to golden standard (forward-only, zero retroactive migration)
+        - DoD convergence loop: refactor + re-test until all 7 conditions simultaneously true
+        - MCP: classify op added to existing CortexHealthOrchestrate (CORE-035 compliant)
+      scoring_algorithm:
+        signals: 7
+        p0_threshold: 100
+        p1_threshold: 70
+        p2_threshold: 40
+        signals_detail:
+          - "S1: Master orchestrator path (+40)"
+          - "S2: Security/auth/secrets content (+30)"
+          - "S3: Governance/enforcement content (+20)"
+          - "S4: AC-ID present (+15)"
+          - "S5: End-to-end markers (+10)"
+          - "S6: Full coverage matrix present (+25)"
+          - "S7: MCP tool path (+20)"
+      promotion_candidates:
+        p0: 12
+        p1: 64
+        p2: 174
+        standard: 727
+        total_scored: 977
+      stages:
+        - stage: 1
+          name: "Pre-flight"
+          tasks: ["git_status_clean", "pytest_baseline_39_golden", "manifest_parse_check"]
+        - stage: 2
+          name: "TDD RED — 29 Golden Tests"
+          tasks: ["classifier_golden_tests", "parallel_runner_golden_tests", "core055_golden_tests"]
+        - stage: 3
+          name: "TDD GREEN — 3 Implementation Files"
+          tasks: ["test_classifier_orchestrator", "parallel_golden_runner", "mcp_classify_op"]
+        - stage: 4
+          name: "REFACTOR — Quality Pass"
+          tasks: ["google_docstrings", "type_hints", "dedup_check"]
+        - stage: 5
+          name: "Verification + DoD Loop"
+          tasks: ["dod_1_golden_pass", "dod_2_zero_regressions", "dod_3_core055",
+                  "dod_4_manifest_valid", "dod_5_classifier_import", "dod_6_runner_import",
+                  "dod_7_mcp_classify", "git_commit", "registry_update"]
+      golden_tests:
+        location: "tests/golden/orchestrators/support/"
+        count: 29
+        categories:
+          - "classifier_orchestrator (15 scenarios: GC-001..015)"
+          - "parallel_golden_runner (8 scenarios: GP-001..008)"
+          - "core_055_governance (6 scenarios: GR-001..006)"
+      governance_authority:
+        - "CORE-008 (single source of truth)"
+        - "CORE-011 (type hints)"
+        - "CORE-012 (docstrings)"
+        - "CORE-028 (naming conventions)"
+        - "CORE-035 (single canonical implementation)"
+        - "CORE-055 (golden test folder contract — NEW)"
+      implementation_files:
+        - "cortex/orchestrators/support/test_classifier_orchestrator.py"
+        - "cortex/orchestrators/support/parallel_golden_runner.py"
+        - "cortex/mcp/tools/health_orchestrator_tool.py (classify op added)"
+      plan_artifacts:
+        - "cortex-registry/planning/phases/planned/phase-49-golden-test-promotion.yaml"
+        - "cortex-registry/governance/test-promotion-manifest.yaml"
+        - "cortex-registry/workflows/templates/golden-test-promotion.yaml"
+      note: "Plan artifacts created 2026-02-18. Implementation pending Phase 48 completion."
+
 # ============================================================================
 # EXECUTION ORDER
 # ============================================================================
@@ -582,6 +662,14 @@ execution_order:
       estimated_duration: "6 hours"
       stages: 5
       golden_tests: 16
+    - id: "phase-49"
+      title: "Golden Test Promotion Pipeline"
+      workflow: "cortex-registry/workflows/templates/golden-test-promotion.yaml"
+      manifest: "cortex-registry/governance/test-promotion-manifest.yaml"
+      estimated_duration: "8 hours"
+      stages: 5
+      golden_tests: 29
+      new_governance_rule: "CORE-055"
 
   timeline_to_completion:
     status: "IN PROGRESS"
@@ -589,9 +677,12 @@ execution_order:
       - id: "phase-48"
         title: "Health-Vacuum Integrity Pipeline"
         duration: "6 hours"
-    total_remaining_duration: "6 hours"
+      - id: "phase-49"
+        title: "Golden Test Promotion Pipeline"
+        duration: "8 hours"
+    total_remaining_duration: "14 hours"
     completion_date: "2026-02-19"
-    confidence: "95% (workflow template + golden tests defined)"
+    confidence: "95% (workflow templates + golden tests defined)"
 
 # ============================================================================
 # PRODUCTION READINESS
@@ -641,24 +732,32 @@ production_readiness:
 # ============================================================================
 
 summary:
-  total_phases: 48
+  total_phases: 49
   completed: 47
   active: 0
-  planned: 1
+  planned: 2
   consolidated: 2
   deferred: 6
   
-  completion_percentage: 98
-  production_status: "🟢 PRODUCTION READY - Phase 48 Planned"
-  timeline_to_100_percent: "2026-02-19 (6 hours remaining)"
-  phase_numbering: "Sequential 01-48 (v7.6 - 2026-02-18T18:00Z)"
+  completion_percentage: 96
+  production_status: "🟢 PRODUCTION READY - Phase 48 + 49 Planned"
+  timeline_to_100_percent: "2026-02-19 (14 hours remaining)"
+  phase_numbering: "Sequential 01-49 (v7.7 - 2026-02-18T20:00Z)"
   
   key_achievements:
-    - "🟢 47/48 PHASES COMPLETE (98%)"
+    - "🟢 47/49 PHASES COMPLETE (96%)"
     - "Phase 48 planned: Health-Vacuum Integrity Pipeline"
+    - "Phase 49 planned: Golden Test Promotion Pipeline"
+    - "Workflow template created: golden-test-promotion.yaml"
+    - "Test promotion manifest created: test-promotion-manifest.yaml"
+    - "29 golden test scenarios defined for Phase 49"
+    - "12 P0 promotion candidates identified (score ≥100 via 7-signal algorithm)"
+    - "250 total promotion candidates (P0=12, P1=64, P2=174)"
+    - "CORE-055 governance rule spec'd (TestClassifierOrchestrator enforcement)"
+    - "Parallel golden runner spec'd (pytest-xdist 4 workers, live terminal progress)"
     - "Workflow template created: health-vacuum-pipeline.yaml"
-    - "16 golden test scenarios defined"
-    - "Phase numbering standardized: Sequential 01-48"
+    - "16 golden test scenarios defined for Phase 48"
+    - "Phase numbering standardized: Sequential 01-49"
     - "5 MEGA phases complete (production ready)"
     - "Phase 45 complete with 110/110 tests passing (2026-02-17)"
     - "Phase 47 complete with 45/54 tests passing (2026-02-18, 3 hours)"
@@ -667,7 +766,7 @@ summary:
     - "Registry structure consolidated: eliminated wrapper directory"
     - "Clear linear execution path established"
     - "Zero conflicting phase numbers"
-    - "All phase files synced with cortex-master.yaml (2026-02-18T18:00Z)"
+    - "All phase files synced with cortex-master.yaml (2026-02-18T20:00Z)"
     - "Governance-compliant phase tracking"
     - "100% registry-to-filesystem synchronization achieved"
     - "Zero technical debt in phase system"
@@ -683,3 +782,4 @@ summary:
     - "phase-100 → phase-43 (Convergence-Gated Workflows)"
     - "phase-101 → phase-44 (Conversational Intent Gateway)"
     - "All other phases renumbered sequentially 01-38"
+    - "phase-49 added (Golden Test Promotion Pipeline — 2026-02-18)"
