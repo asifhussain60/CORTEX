@@ -1,0 +1,251 @@
+# CORTEX Semantic Response Blocks Registry
+#
+# Defines canonical response blocks used by SemanticBlockAssembler.
+# Each block has a personality charter, content template, and composition rules.
+#
+# Authority: ENH-089 | ENH-090
+# Phase: PHASE-95
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Personality Charter — global guidelines applied to every response
+# ─────────────────────────────────────────────────────────────────────────────
+personality_charter:
+  core_traits:
+    - precise
+    - opinionated
+    - action-oriented
+  tone: professional
+  emoji_markers:
+    - "🧠"   # brain / analysis
+    - "✅"   # done / confirmed
+    - "🔄"   # in-progress / refactor
+  forbidden_patterns:
+    - "I think"
+    - "maybe"
+    - "possibly"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Blocks
+# ─────────────────────────────────────────────────────────────────────────────
+blocks:
+
+  intro:
+    id: intro
+    name: "Introduction Block"
+    length_words: 60
+    purpose: "Welcome message for first interaction — sets CORTEX context."
+    content_template: |
+      🧠 **CORTEX** — Production-Grade AI Engineering Framework
+
+      | Capability | Status |
+      |---|---|
+      | LENS Analysis | ✅ Active |
+      | TDD Enforcement | ✅ Active |
+      | Governance Scanning | ✅ Active |
+
+      Ready to assist. What would you like to build?
+    format:
+      style: table
+      vscode_rendering:
+        tables: true
+        headers: h2
+    personality_guidelines:
+      tone: welcoming
+      emoji: "🧠"
+      no_filler: true
+    usage_rules:
+      - "Include only on first interaction (empty conversation_history)."
+      - "Always place before other blocks."
+
+  capabilities:
+    id: capabilities
+    name: "CORTEX Capabilities Block"
+    length_words: 80
+    purpose: "Summarises CORTEX tools and orchestrators available for the task."
+    content_template: |
+      ✅ **Available Capabilities**
+
+      - **LENS Orchestrator** — code intelligence & workspace analysis
+      - **TDD Orchestrator** — RED → GREEN → REFACTOR cycle enforcement
+      - **EnforcementOrchestrator** — CORE rule scanning (CORE-002, CORE-008, CORE-035)
+      - **ChallengeEngine** — assumption challenge & alternative generation
+      - **DebuggerOrchestrator** — EventBus-driven marker injection
+    format:
+      style: bullet_list
+      vscode_rendering:
+        bold: true
+    personality_guidelines:
+      tone: assertive
+      emoji: "✅"
+      no_filler: true
+    usage_rules:
+      - "Include when user needs orientation about what CORTEX can do."
+
+  tutorial:
+    id: tutorial
+    name: "Implementation Tutorial Block"
+    length_words: 120
+    purpose: "Step-by-step implementation guidance for IMPLEMENT intent."
+    content_template: |
+      🔄 **Implementation Workflow**
+
+      **Step 1 — Write the failing test (RED)**
+      ```python
+      def test_your_feature():
+          # Define expected behaviour first
+          result = your_function(input)
+          assert result == expected_output
+      ```
+
+      **Step 2 — Implement the minimum code (GREEN)**
+      Write just enough code to make the test pass. No over-engineering.
+
+      **Step 3 — Refactor (REFACTOR)**
+      Clean, document, and verify governance compliance.
+
+      ✅ TDD cycle complete. Run `make test` to confirm.
+    format:
+      style: numbered_steps
+      vscode_rendering:
+        code_blocks: python
+    personality_guidelines:
+      tone: instructional
+      emoji: "🔄"
+      no_filler: true
+    usage_rules:
+      - "Include for IMPLEMENT, REFACTOR intents."
+      - "Always follow capabilities block."
+
+  lens:
+    id: lens
+    name: "LENS Analysis Block"
+    length_words: 100
+    purpose: "Code intelligence analysis results for ANALYZE/FIX intents."
+    content_template: |
+      🧠 **LENS Analysis**
+
+      | Dimension | Finding |
+      |---|---|
+      | Architecture | Modular, layered orchestrators |
+      | Test Coverage | Enforced via CORE-008 |
+      | Governance | CORE-002/035 scanning active |
+      | Complexity | Managed via domain orchestrators |
+
+      **Key Insight:** CORTEX uses Event-Driven Architecture (EventBus) for loose coupling
+      between orchestrators. Each domain has a single canonical orchestrator.
+    format:
+      style: table
+      vscode_rendering:
+        tables: true
+    personality_guidelines:
+      tone: analytical
+      emoji: "🧠"
+      no_filler: true
+    usage_rules:
+      - "Include for ANALYZE, FIX, AUDIT intents."
+      - "Provides code intelligence context from LENS orchestrator."
+
+  orchestrators:
+    id: orchestrators
+    name: "Orchestrator Reference Block"
+    length_words: 90
+    purpose: "Lists available orchestrators and their responsibilities."
+    content_template: |
+      ✅ **Active Orchestrators**
+
+      | Orchestrator | Responsibility | Phase |
+      |---|---|---|
+      | MasterOrchestrator | Top-level coordination | Core |
+      | LENSOrchestrator | Code intelligence | LENS |
+      | EnforcementOrchestrator | CORE rule enforcement | Governance |
+      | TDDOrchestrator | Test-first cycle | Testing |
+      | DebuggerOrchestrator | EventBus debug markers | Debugging |
+      | ChallengeEngine | Assumption challenges | Intelligence |
+    format:
+      style: table
+      vscode_rendering:
+        tables: true
+    personality_guidelines:
+      tone: reference
+      emoji: "✅"
+      no_filler: true
+    usage_rules:
+      - "Include for ANALYZE, AUDIT, PLAN intents."
+
+  next_steps:
+    id: next_steps
+    name: "Next Steps Block"
+    length_words: 50
+    purpose: "Concrete next actions for the user to take."
+    content_template: |
+      🔄 **Next Steps**
+
+      1. Run `make test` — verify full test suite is green
+      2. Run `make lint` — check governance compliance
+      3. Commit with CORTEX authority tag
+      4. Open a PR — EnforcementOrchestrator gates will run automatically
+    format:
+      style: numbered_list
+      vscode_rendering:
+        bold: false
+    personality_guidelines:
+      tone: action-oriented
+      emoji: "🔄"
+      no_filler: true
+    usage_rules:
+      - "Always include as last block."
+      - "Must appear exactly once."
+
+  governance:
+    id: governance
+    name: "Governance Status Block"
+    length_words: 70
+    purpose: "Displays current governance compliance status and active CORE rules."
+    content_template: |
+      🛡️ **Governance Status**
+
+      | Rule | Status |
+      |---|---|
+      | CORE-002 | ✅ No bash markdown generation |
+      | CORE-008 | ✅ TDD mandatory |
+      | CORE-011 | ✅ Type hints enforced |
+      | CORE-028 | ✅ snake_case naming |
+      | CORE-035 | ✅ Single canonical implementation |
+    format:
+      style: table
+      vscode_rendering:
+        tables: true
+    personality_guidelines:
+      tone: authoritative
+      emoji: "🛡️"
+      no_filler: true
+    usage_rules:
+      - "Include for AUDIT, GOVERNANCE, COMPLIANCE intents."
+      - "Displays active CORE rule compliance state."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Assembly Rules
+# ─────────────────────────────────────────────────────────────────────────────
+assembly_rules:
+  max_words: 800
+  next_steps_position: last
+  max_blocks: 5
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Compatibility Matrix
+# ─────────────────────────────────────────────────────────────────────────────
+compatibility:
+  intro:
+    avoid_with: []
+  capabilities:
+    avoid_with: []
+  tutorial:
+    avoid_with: []
+  lens:
+    avoid_with: []
+  orchestrators:
+    avoid_with: []
+  next_steps:
+    avoid_with: []
+  governance:
+    avoid_with: []

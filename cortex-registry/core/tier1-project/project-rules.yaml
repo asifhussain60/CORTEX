@@ -1,0 +1,73 @@
+# CORTEX TIER 1 GOVERNANCE - PROJECT RULES
+# ============================================================
+# Purpose: Project-level governance rules for the CORTEX system.
+#          These supplement the immutable Tier 0 (SKULL) rules and
+#          apply to all code and configuration within the CORTEX project.
+# Status: ACTIVE
+# Precedence: Below Tier 0 (SKULL), above Tier 2 (Engineering)
+# ============================================================
+
+schema_version: "1.0"
+governance_tier: 1
+category: CORTEX_PROJECT
+precedence: HIGH
+
+metadata:
+  author: "Asif Hussain"
+  created: "2026-02-18"
+  last_updated: "2026-02-18"
+  version: "1.0"
+  description: >
+    Tier 1 (Project) rules define CORTEX-wide standards that apply across
+    all phases, orchestrators and contributors. They refine Tier 0 principles
+    into actionable, project-specific constraints.
+
+rules:
+  # P1-001: Phase Registry Synchronisation
+  - rule_id: "P1-001"
+    name: "Phase Registry Sync"
+    principle: "Single Source of Truth"
+    description: >
+      Every implemented phase MUST have a corresponding YAML entry in
+      cortex-registry/planning/phases/. Status must be kept accurate:
+      planned → in_progress → complete.
+    severity: "HIGH"
+    blocking: false
+    enforcement: "pre-commit hook validates phase YAML exists"
+
+  # P1-002: Test-First (Project-level TDD)
+  - rule_id: "P1-002"
+    name: "Project TDD"
+    principle: "Test-First Development"
+    description: >
+      All user-facing features must have golden tests in
+      tests/golden/ that demonstrate end-to-end behaviour before
+      implementation begins.  Unit tests alone are insufficient for
+      new orchestrators or agents.
+    severity: "HIGH"
+    blocking: true
+    enforcement: "CORE-008 enforcement layer"
+
+  # P1-003: Registry / Code Separation
+  - rule_id: "P1-003"
+    name: "Registry Code Separation"
+    principle: "Separation of Concerns"
+    description: >
+      Python code belongs in cortex/ (and cortex_intelligence/).
+      Metadata, rules, plans and configuration belong in cortex-registry/.
+      Cross-contamination is forbidden.
+    severity: "MEDIUM"
+    blocking: false
+    enforcement: "InventoryAgent CONSOLIDATE detection"
+
+  # P1-004: Deployment Safety
+  - rule_id: "P1-004"
+    name: "Deployment Safety Gate"
+    principle: "Safe Deployments"
+    description: >
+      No production deployment may proceed if any P0 test is failing.
+      A passing dry-run of the vacuum pipeline is required before any
+      automated cleanup operation.
+    severity: "CRITICAL"
+    blocking: true
+    enforcement: "HealthVacuumPipeline dry_run=True gate"

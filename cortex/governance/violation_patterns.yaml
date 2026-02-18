@@ -1,0 +1,232 @@
+# CORTEX Violation Patterns
+# Authority: CORE-008 (TDD mandatory), CORE-011, CORE-012, CORE-013
+# AC-ID: AC-PHASE41-016, AC-PHASE41-017
+# Description: Regex patterns for governance violation detection.
+#              Used by ViolationScanner.scan_bash_commands() and scan_python_code().
+
+metadata:
+  version: "1.0"
+  last_updated: "2026-02-18"
+  total_patterns: 38
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BASH COMMAND PATTERNS  (used by scan_bash_commands)
+# ─────────────────────────────────────────────────────────────────────────────
+patterns:
+  CORE-002:
+    name: "Markdown Report Suppression"
+    description: >
+      Detect bash commands that write markdown/text files (CORE-002 violations).
+      A command is a violation when it writes to a *.md / *.txt file via
+      shell redirection or heredoc.  Safe analysis redirects (grep, awk,
+      etc.) are intentionally excluded by the negative-lookahead patterns.
+    patterns:
+      # cat > file.md  (bare redirect)
+      - type: "cat_redirect"
+        regex: "\\bcat\\s+>\\s*[\\w\\-\\.]+\\.(?:md|txt)"
+        message: "cat > file generation detected — use inline results instead"
+        severity: "CRITICAL"
+
+      # cat > file.md << 'EOF'  (heredoc form)
+      - type: "cat_heredoc"
+        regex: "\\bcat\\s+>\\s*[\\w\\-\\.]+\\.(?:md|txt)\\s*<<"
+        message: "cat heredoc file generation detected — use inline results instead"
+        severity: "CRITICAL"
+
+      # echo "..." > file.md
+      - type: "echo_redirect"
+        regex: "\\becho\\b[^|]*>\\s*[\\w\\-\\.]+\\.(?:md|txt)"
+        message: "echo > file generation detected — use inline results instead"
+        severity: "CRITICAL"
+
+      # printf "..." > file.md
+      - type: "printf_redirect"
+        regex: "\\bprintf\\b[^|]*>\\s*[\\w\\-\\.]+\\.(?:md|txt)"
+        message: "printf > file generation detected — use inline results instead"
+        severity: "CRITICAL"
+
+      # tee file.md  (writes to stdout AND file)
+      - type: "tee_write"
+        regex: "\\btee\\s+[\\w\\-\\.]+\\.(?:md|txt)"
+        message: "tee file generation detected — use inline results instead"
+        severity: "CRITICAL"
+
+      # heredoc EOF patterns (generic heredoc to any .md/.txt file)
+      - type: "heredoc_eof"
+        regex: "<<\\s*['\"]?EOF['\"]?\\s*>?\\s*[\\w\\-\\.]+\\.(?:md|txt)"
+        message: "heredoc EOF file generation detected — use inline results instead"
+        severity: "CRITICAL"
+
+      # python -c "..." > file.md
+      - type: "python_redirect"
+        regex: "\\bpython3?\\b[^|]*>\\s*[\\w\\-\\.]+\\.(?:md|txt)"
+        message: "python output redirect to markdown file detected — use inline results instead"
+        severity: "CRITICAL"
+
+      # create_file tool call or similar
+      - type: "create_file_call"
+        regex: "create_file\\s*\\([^)]*\\.(?:md|txt)"
+        message: "create_file() generating markdown/text file — use inline results instead"
+        severity: "CRITICAL"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  CORE-008:
+    name: "TDD Mandatory"
+    description: "Test-first development — no implementation without a failing test first."
+    patterns:
+      - type: "code_before_test"
+        regex: "(?i)implement\\w*\\s+(?:without|before|skip)\\w*\\s+test"
+        message: "CORE-008 violation: code implemented before test — write test first"
+        severity: "HIGH"
+
+      - type: "skip_test"
+        regex: "@pytest\\.mark\\.skip(?!if)"
+        message: "CORE-008 violation: test skipped unconditionally — remove skip decorator"
+        severity: "HIGH"
+
+      - type: "xfail_strict_missing"
+        regex: "@pytest\\.mark\\.xfail(?!.*strict=True)"
+        message: "CORE-008 violation: xfail without strict=True allows hidden failures"
+        severity: "MEDIUM"
+
+      - type: "no_assert"
+        regex: "def test_\\w+\\(.*\\):\\s*(?:\"\"\"[^\"]*\"\"\"\\s*)?pass\\s*$"
+        message: "CORE-008 violation: test function has no assertions (empty test)"
+        severity: "HIGH"
+
+      - type: "commented_test"
+        regex: "#\\s*def test_\\w+"
+        message: "CORE-008 violation: test function commented out — fix or delete"
+        severity: "MEDIUM"
+
+      - type: "bypass_test"
+        regex: "(?i)skip.*test|no.*test.*need|test.*not.*required"
+        message: "CORE-008 violation: test bypass language detected in comments"
+        severity: "MEDIUM"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  CORE-028:
+    name: "File Naming Standards"
+    description: "Files must use snake_case, lowercase. SCREAMING_CASE and camelCase are forbidden."
+    patterns:
+      - type: "screaming_case_file"
+        regex: "[A-Z]{2,}[-_][A-Z]{2,}"
+        message: "CORE-028 violation: SCREAMING_CASE filename detected — use snake_case"
+        severity: "HIGH"
+
+      - type: "camel_case_file"
+        regex: "[a-z][A-Z][a-z]"
+        message: "CORE-028 violation: camelCase filename detected — use snake_case"
+        severity: "MEDIUM"
+
+      - type: "long_plan_file"
+        regex: "[\\w\\-]{40,}\\.(?:yaml|yml|json)"
+        message: "CORE-028 violation: plan/config filename exceeds 40 chars — use shorter name"
+        severity: "LOW"
+
+      - type: "report_suffix"
+        regex: "[-_](?:REPORT|SUMMARY|STATUS|GUIDE|QUICKSTART)\\.md$"
+        message: "CORE-028 violation: markdown report filename detected — results should be inline"
+        severity: "HIGH"
+
+      - type: "orchestrator_prefix_wrong"
+        regex: "ORCHESTRATOR-[A-Z].*\\.md"
+        message: "CORE-028 violation: ORCHESTRATOR- prefixed markdown file — forbidden naming pattern"
+        severity: "HIGH"
+
+      - type: "deployment_prefix_wrong"
+        regex: "DEPLOYMENT-[A-Z].*\\.md"
+        message: "CORE-028 violation: DEPLOYMENT- prefixed markdown file — forbidden naming pattern"
+        severity: "HIGH"
+
+      - type: "phase_uppercase"
+        regex: "PHASE-\\d+.*\\.(?:md|txt)"
+        message: "CORE-028 violation: PHASE- uppercase markdown file — use lowercase phase naming"
+        severity: "MEDIUM"
+
+      - type: "temp_suffix"
+        regex: "[-_](?:temp|tmp|bak|backup)\\."
+        message: "CORE-028 violation: temporary file suffix in tracked file — remove before commit"
+        severity: "LOW"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  CORE-035:
+    name: "Single Canonical Implementation"
+    description: "No duplicate functions, classes or orchestrators. One canonical source."
+    patterns:
+      - type: "duplicate_function"
+        regex: "(?s)def (\\w+)\\([^)]*\\):.*def \\1\\([^)]*\\):"
+        message: "CORE-035 violation: duplicate function definition detected"
+        severity: "HIGH"
+
+      - type: "duplicate_class"
+        regex: "(?s)class (\\w+)[:\\(].*class \\1[:\\(]"
+        message: "CORE-035 violation: duplicate class definition detected"
+        severity: "HIGH"
+
+      - type: "copy_paste_comment"
+        regex: "(?i)#\\s*copy[- ]?paste|#\\s*duplicated from|#\\s*same as above"
+        message: "CORE-035 violation: copy-paste comment indicates duplicate code"
+        severity: "MEDIUM"
+
+      - type: "similar_orchestrator"
+        regex: "class \\w+Orchestrator.*:\\s*(?:.|\\n)*class \\w+Orchestrator"
+        message: "CORE-035 violation: multiple orchestrator classes in one file — split into canonical modules"
+        severity: "HIGH"
+
+      - type: "mirror_implementation"
+        regex: "(?i)#\\s*mirror|#\\s*replica|#\\s*alternative implementation"
+        message: "CORE-035 violation: mirrored/replica implementation comment — consolidate to single canonical"
+        severity: "MEDIUM"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # PYTHON AST PATTERNS  (used by scan_python_code via ast_checks)
+  # ─────────────────────────────────────────────────────────────────────────
+  CORE-011:
+    name: "Type Hints Required"
+    description: "All functions and methods must have complete type annotations."
+    patterns:
+      - type: "missing_param_hint"
+        regex: "def\\s+\\w+\\s*\\([^)]*\\b\\w+\\s*(?:,|\\))"
+        message: "CORE-011 violation: function parameter missing type hint"
+        severity: "HIGH"
+
+  CORE-012:
+    name: "Docstrings Required"
+    description: "All public functions, classes and modules must have docstrings."
+    patterns:
+      - type: "missing_docstring"
+        regex: "def\\s+[a-z]\\w*\\s*\\([^)]*\\)\\s*(?:->\\s*\\w+)?\\s*:"
+        message: "CORE-012 violation: public function missing docstring"
+        severity: "HIGH"
+
+  CORE-013:
+    name: "Specific Exceptions Required"
+    description: "Bare except clauses are forbidden — always specify exception type."
+    patterns:
+      - type: "bare_except"
+        regex: "except\\s*:"
+        message: "CORE-013 violation: bare except clause detected — specify exception type"
+        severity: "HIGH"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PYTHON AST CHECKS  (used directly by scan_python_code AST walker)
+# ─────────────────────────────────────────────────────────────────────────────
+ast_checks:
+  bare_except:
+    rule_id: "CORE-013"
+    message: "bare except clause — specify exception type"
+    node_type: "ExceptHandler"
+    condition: "handler.type is None"
+
+  missing_type_hints:
+    rule_id: "CORE-011"
+    message: "function parameter missing type hint"
+    node_type: "FunctionDef"
+    condition: "any(arg.annotation is None for arg in node.args.args)"
+
+  missing_docstring:
+    rule_id: "CORE-012"
+    message: "public function missing docstring"
+    node_type: "FunctionDef"
+    condition: "not (node.body and isinstance(node.body[0], ast.Expr) and isinstance(node.body[0].value, ast.Constant))"

@@ -1,0 +1,1846 @@
+# ============================================================================
+# Phase 46: Registry & Intelligence Consolidation
+# ============================================================================
+# Authority: CORTEX Architecture Consolidation Initiative
+# Created: 2026-02-17
+# Updated: 2026-02-18 (Renumbered from phase-104)
+# Author: Asif Hussain
+# Status: planned
+# Prerequisites: phase-45 (Workflow Runtime Foundation)
+# ============================================================================
+# DIGEST CONTEXT: Based on _workspaces/.chats/chat01.md comprehensive design session
+# ============================================================================
+
+version: '2.1'
+phase_id: phase-46
+title: "Registry & Intelligence Consolidation - Brain-Aligned Architecture"
+status: planned
+priority: P1
+category: architecture
+created: '2026-02-17T00:00:00Z'
+updated: '2026-02-18T00:00:00Z'
+estimated_effort: "4 hours (using workflow runtime from Phase 45)"
+estimated_tokens: "150000"
+roi_score: 95
+confidence: 9.0
+
+# ============================================================================
+# CRITICAL: CORTEX vs. PRODUCTION REPO DISTINCTION
+# ============================================================================
+repo_scope:
+  target_repo: "CORTEX"
+  type: "development_planning_meta_repo"
+  purpose: |
+    This phase operates ONLY on the CORTEX repo - the meta repository for 
+    planning, governance, registry, and brain intelligence.
+    
+    CORTEX is NOT a production application repo. Changes here affect:
+    - Planning documents (cortex-registry/planning/)
+    - Governance rules (cortex_intelligence/memory/core/)
+    - CORTEX brain architecture (cortex_intelligence/)
+    - Development templates and patterns
+    
+  production_repos:
+    description: |
+      Production application repos are SEPARATE repositories where actual 
+      customer-facing applications live. They REFERENCE CORTEX but are NOT 
+      modified by this phase.
+    
+    examples:
+      - "company-app-backend/"
+      - "company-web-frontend/"
+      - "company-mobile-app/"
+      - "customer-project-xyz/"
+    
+    relationship: |
+      Production repos consume CORTEX via:
+      - Reading cortex-registry/ governance rules
+      - Using cortex_intelligence/ as a Python package
+      - Following templates from cortex-registry/artifacts/
+      - Referencing best practices from cortex-registry/knowledge-base/
+      
+      But they do NOT modify CORTEX files.
+  
+  clarity:
+    this_phase_modifies: "CORTEX repo folder structure only"
+    this_phase_does_not_modify: "Any production application repos"
+    deployment_impact: "Zero (CORTEX is not deployed to production)"
+    customer_impact: "Zero (CORTEX is internal tooling only)"
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+objective: |
+  Transform CORTEX repository folder architecture through two parallel tracks:
+  
+  TRACK A: cortex_intelligence → cortex_intelligence rename
+  - Rename cortex_intelligence to cortex_intelligence (brain-aligned semantics)
+  - Restructure tier0-3 to memory/{immutable,stable,evolving,experimental}
+  - Update 311 Python imports + 47 YAML references
+  - Preserve all git history via git mv
+  
+  TRACK B: cortex-registry/_cortex-master decomposition
+  - Eliminate _cortex-master wrapper directory
+  - Create semantic top-level structure: core/, artifacts/, integration/, planning/, knowledge-base/, metrics/
+  - Update 144 Python file references
+  - Consolidate duplicate templates/workflows folders
+  
+  FINAL STAGE: Golden test audit evidence
+  - Create comprehensive golden tests for all YAML files created/moved
+  - SQLite audit logging for all file operations
+  - Zero regression validation with hard evidence
+
+business_value: |
+  - 46% reduction in root-level folder sprawl (13 → 7 top-level registry folders)
+  - 100% semantic clarity (brain terms match cognitive architecture)
+  - Eliminates 3 levels of unnecessary nesting (_cortex-master/core/templates/)
+  - -53% file path length reduction
+  - Industry-standard naming (artifacts/ not content/)
+  - Comprehensive audit evidence via SQLite logging
+  - Zero regression risk via golden test harness
+  
+  IMPORTANT: All improvements apply to CORTEX development repo only.
+  Production application repos are unaffected and maintain their own structures.
+
+# ============================================================================
+# PLANNING SCOPE CLARITY
+# ============================================================================
+planning_scope:
+  cortex_repo_purpose: |
+    The CORTEX repository is a META-REPOSITORY that contains:
+    1. Planning documents and phase definitions (cortex-registry/planning/)
+    2. Governance rules and patterns (cortex_intelligence/memory/core/)
+    3. Intelligence architecture (cortex_intelligence/)
+    4. Best practices and templates (cortex-registry/knowledge-base/)
+    5. MCP tools and orchestrators (cortex/orchestrators/)
+    
+    CORTEX is the "operating system" for AI-driven development across
+    multiple production application repositories.
+  
+  production_repos_purpose: |
+    Production repos contain actual customer-facing applications:
+    - Backend services (APIs, microservices, databases)
+    - Frontend applications (web, mobile, desktop)
+    - Infrastructure code (Terraform, Kubernetes configs)
+    - Customer-specific implementations
+    
+    These repos REFERENCE CORTEX but live in separate repositories.
+  
+  this_phase_scope: |
+    ✅ Modifies: CORTEX repository folder structure
+    ✅ Updates: CORTEX Python imports (cortex_intelligence → cortex_intelligence)
+    ✅ Reorganizes: cortex-registry/ governance and planning structure
+    ❌ Does NOT modify: Production application repos
+    ❌ Does NOT deploy: CORTEX to customer environments
+    ❌ Does NOT affect: Customer-facing applications
+  
+  example_flow:
+    cortex_repo:
+      - "Developer plans feature using cortex-registry/planning/phases/"
+      - "CORTEX TDDOrchestrator generates tests following CORE-008"
+      - "CORTEX generates code using templates from cortex-registry/artifacts/"
+      - "Code is written to PRODUCTION REPO (e.g., company-app-backend/)"
+    
+    production_repo:
+      - "Developer opens company-app-backend/ in VS Code"
+      - "CORTEX extension reads governance from CORTEX repo"
+      - "Developer implements feature in company-app-backend/"
+      - "Tests run in company-app-backend/tests/"
+      - "Deploy from company-app-backend/ to production"
+  
+  key_distinction:
+    question: "When does code go to production?"
+    answer: |
+      Code from PRODUCTION REPOS goes to production (e.g., company-app-backend/).
+      Code from CORTEX REPO never goes to production - it's dev tooling only.
+    
+    question: "Where are customer applications?"
+    answer: |
+      Customer applications live in PRODUCTION REPOS, not in CORTEX.
+      CORTEX helps PLAN and GENERATE code, but the code lives elsewhere.
+    
+    question: "What changes when CORTEX updates?"
+    answer: |
+      Developer experience improves (better planning, governance, templates).
+      Production applications continue running unchanged until developers
+      actively modify them using the improved CORTEX tooling.
+
+# ============================================================================
+# IMPACT ANALYSIS (Evidence-Based)
+# ============================================================================
+impact_analysis:
+  cortex_intelligence_references:
+    python_imports: 311  # grep -r "from cortex_intelligence|import cortex_intelligence" --include="*.py"
+    yaml_references: 47  # grep -rl "cortex_intelligence" --include="*.yaml"
+    total_files: 358
+    
+  cortex_master_references:
+    python_files: 144  # grep -rl "_cortex-master" --include="*.py"
+    yaml_files: 50+
+    total_files: 194+
+    
+  company_references:
+    python_files: 53  # grep -rl "cortex-registry/company/domains|cortex-registry/company/dashboards" --include="*.py"
+    
+  total_migration_scope:
+    files_to_update: 605+
+    estimated_sed_commands: 15
+    manual_review_files: 20
+
+# ============================================================================
+# STRUCTURE TRANSFORMATIONS
+# ============================================================================
+structure_transformations:
+  track_a_intelligence:
+    before: |
+      cortex_intelligence/
+      ├── __init__.py
+      ├── perception/
+      ├── reasoning/
+      ├── action/
+      ├── domain/
+      ├── domain_brain/
+      ├── governance/
+      ├── onboarded_repos/
+      ├── tier0/                    ← Immutable core patterns
+      ├── tier1/                    ← Validated patterns
+      ├── tier2/                    ← Evolving patterns
+      └── tier3/                    ← Experimental patterns
+    
+    after: |
+      cortex_intelligence/
+      ├── __init__.py
+      ├── perception/               ← Sensory input processing
+      ├── reasoning/                ← Decision-making logic
+      ├── action/                   ← Execution planning
+      ├── domain/                   ← Domain-specific logic
+      ├── domain_brain/             ← Domain brain state
+      ├── governance/               ← Rules & enforcement
+      ├── onboarded_repos/          ← Repository profiles
+      └── memory/                   🆕 Brain memory hierarchy
+          ├── __init__.py
+          ├── core/                 ← tier0: Immutable fundamentals (instincts)
+          ├── tier1-learned/        ← tier1: Validated patterns (long-term memory)
+          ├── tier2-adaptive/       ← tier2: Evolving rules (working memory)
+          └── tier3-scratch/        ← tier3: Experiments (short-term/scratch)
+  
+  track_b_registry:
+    before: |
+      cortex-registry/
+      ├── _cortex-master/           ← ELIMINATE wrapper
+      │   ├── core/
+      │   │   ├── governance/
+      │   │   ├── config/
+      │   │   ├── wiring/
+      │   │   ├── specifications/
+      │   │   └── templates/
+      │   ├── phases/
+      │   ├── baselines/
+      │   ├── reports/
+      │   ├── dashboard/
+      │   ├── knowledge/
+      │   └── archive/
+      ├── templates/                ← Has duplicate workflows/
+      ├── workflows/                ← Authoritative source
+      ├── interaction/
+      ├── planning/
+      ├── patterns/
+      └── domains/
+    
+    after: |
+      cortex-registry/
+      ├── manifest.yaml             ← Updated registry index
+      ├── core/                     🆕 System foundation
+      │   ├── governance/           ← MOVED from _cortex-master/core/governance/
+      │   ├── config/               ← MOVED from _cortex-master/core/config/
+      │   ├── wiring/               ← MOVED from _cortex-master/core/wiring/
+      │   └── specifications/       ← MOVED from _cortex-master/core/specifications/
+      ├── artifacts/                🆕 Templates + Workflows (renamed from content/)
+      │   ├── templates/            ← MOVED from _cortex-master/core/templates/
+      │   │   ├── responses/
+      │   │   ├── phases/
+      │   │   └── documentation/
+      │   └── workflows/            ← KEEP (authoritative, delete duplicate)
+      ├── integration/              🆕 External patterns
+      │   ├── interaction/          ← MOVED from root interaction/
+      │   └── patterns/             ← MOVED from root patterns/
+      ├── planning/                 ← KEEP + add phases/
+      │   ├── phases/               ← MOVED from planning/phases/
+      │   │   ├── planned/
+      │   │   ├── completed/
+      │   │   ├── deferred/
+      │   │   └── consolidated/
+      │   ├── registry/
+      │   └── system/
+      ├── knowledge-base/           🆕 RENAMED from knowledge/
+      │   ├── architecture/
+      │   ├── security/
+      │   └── ...
+      ├── metrics/                  🆕 Observability
+      │   ├── baselines/            ← MOVED from _cortex-master/baselines/
+      │   ├── reports/              ← MOVED from _cortex-master/reports/
+      │   ├── dashboards/           ← MOVED from _cortex-master/dashboard/
+      │   └── status/               🆕 System health snapshots
+      └── archive/                  ← MOVED from _cortex-master/archive/
+
+# ============================================================================
+# ENFORCEMENT GATES
+# ============================================================================
+enforcement_gates:
+  pre_execution:
+    - gate: "EnforcementOrchestrator"
+      agents: 7
+      checks:
+        - "CORE-008: TDD mandatory (tests before code)"
+        - "CORE-026: Git checkpoint before major changes"
+        - "CORE-027: AC_START → AC_COMPLETE audit trail"
+        - "CORE-028: File naming (kebab-case)"
+        - "CORE-035: No duplicate files"
+      blocking: true
+      
+  stage_boundaries:
+    - gate: "Phase48HolisticValidation"
+      checks:
+        - "All tests passing (≥ baseline)"
+        - "Lint clean (zero ruff errors)"
+        - "Imports resolve (no ModuleNotFoundError)"
+        - "AC markers present (SQLite)"
+      blocking: true
+      frequency: "per_stage"
+      
+  phase_completion:
+    - gate: "GoldenTestAuditEvidence"
+      checks:
+        - "All golden tests passing"
+        - "SQLite audit log complete"
+        - "File operations logged"
+        - "Zero regression (diff baseline)"
+      blocking: true
+
+# ============================================================================
+# STAGES
+# ============================================================================
+stages:
+  # -------------------------------------------------------------------------
+  # STAGE 1: Pre-Migration Baseline (30 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S1"
+    title: "Pre-Migration Baseline Capture"
+    duration_minutes: 30
+    risk: LOW
+    deliverables:
+      - Capture pytest baseline (all tests)
+      - Capture lint baseline (ruff)
+      - Document current import counts
+      - Git checkpoint (pre-phase-103)
+      - Create rollback script
+    commands:
+      - "git checkout -b phase-103-migration"
+      - "pytest tests/ -v --tb=short > /tmp/phase-103-baseline-tests.txt 2>&1"
+      - "ruff check cortex/ > /tmp/phase-103-baseline-lint.txt 2>&1 || true"
+      - "grep -r 'from cortex_intelligence' --include='*.py' | wc -l > /tmp/phase-103-import-count.txt"
+      - "git tag pre-phase-103-baseline"
+    acceptance_criteria:
+      - Baseline files created
+      - Git tag created
+      - Import counts documented
+
+  # -------------------------------------------------------------------------
+  # STAGE 2: cortex_intelligence → cortex_intelligence Rename (60 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S2"
+    title: "Rename cortex_intelligence to cortex_intelligence"
+    duration_minutes: 60
+    risk: MEDIUM
+    dependencies: ["S1"]
+    deliverables:
+      - Git mv cortex_intelligence → cortex_intelligence
+      - Restructure tier0-3 → memory/*
+      - Create __init__.py for memory/
+      - Update pyproject.toml
+    commands:
+      - "git mv cortex_intelligence cortex_intelligence"
+      - "cd cortex_intelligence && mkdir -p memory"
+      - "git mv tier0 memory/core"
+      - "git mv tier1 memory/tier1-learned"
+      - "git mv tier2 memory/tier2-adaptive"
+      - "git mv tier3 memory/tier3-scratch"
+      - "touch memory/__init__.py"
+      - "git commit -m 'refactor: rename cortex_intelligence → cortex_intelligence, tier → memory/{core,tier1-learned,tier2-adaptive,tier3-scratch}'"
+    acceptance_criteria:
+      - cortex_intelligence/ exists
+      - memory/ subfolders created (core, tier1-learned, tier2-adaptive, tier3-scratch)
+      - Git history preserved
+
+  # -------------------------------------------------------------------------
+  # STAGE 3: Update Python Imports (90 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S3"
+    title: "Update Python Import Statements"
+    duration_minutes: 90
+    risk: MEDIUM
+    dependencies: ["S2"]
+    deliverables:
+      - Update 311 Python imports
+      - Update pyproject.toml known-first-party
+      - Update tier references to memory/*
+    commands:
+      - "find . -name '*.py' -type f -not -path './.venv/*' -exec sed -i '' 's/from cortex_intelligence/from cortex_intelligence/g' {} \\;"
+      - "find . -name '*.py' -type f -not -path './.venv/*' -exec sed -i '' 's/import cortex_intelligence/import cortex_intelligence/g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_intelligence\\.tier0/cortex_intelligence.memory.core/g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_intelligence\\.tier1/cortex_intelligence.memory.tier1_learned/g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_intelligence\\.tier2/cortex_intelligence.memory.tier2_adaptive/g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's/cortex_intelligence\\.tier3/cortex_intelligence.memory.tier3_scratch/g' {} \\;"
+      - "sed -i '' 's/cortex_intelligence/cortex_intelligence/g' pyproject.toml"
+      - "git commit -am 'refactor: update all cortex_intelligence imports to cortex_intelligence'"
+    acceptance_criteria:
+      - Zero 'from cortex_intelligence' in codebase
+      - pyproject.toml updated
+      - All imports resolve
+
+  # -------------------------------------------------------------------------
+  # STAGE 4: Update YAML/Markdown References (30 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S4"
+    title: "Update YAML and Markdown References"
+    duration_minutes: 30
+    risk: LOW
+    dependencies: ["S3"]
+    deliverables:
+      - Update 47 YAML files
+      - Update all Markdown documentation
+    commands:
+      - "find . -name '*.yaml' -type f -exec sed -i '' 's/cortex_intelligence/cortex_intelligence/g' {} \\;"
+      - "find . -name '*.yml' -type f -exec sed -i '' 's/cortex_intelligence/cortex_intelligence/g' {} \\;"
+      - "find . -name '*.md' -type f -exec sed -i '' 's/cortex_intelligence/cortex_intelligence/g' {} \\;"
+      - "git commit -am 'docs: update YAML/MD references to cortex_intelligence'"
+    acceptance_criteria:
+      - Zero cortex_intelligence references in YAML
+      - Documentation updated
+
+  # -------------------------------------------------------------------------
+  # STAGE 5: Track A Validation (30 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S5"
+    title: "Track A Intelligence Validation"
+    duration_minutes: 30
+    risk: LOW
+    dependencies: ["S4"]
+    deliverables:
+      - Validate all imports resolve
+      - Run brain-related tests
+      - Capture test count
+    commands:
+      - "python3 -c 'from cortex_intelligence.memory.core import governance; print(\"✅ Core OK\")'"
+      - "python3 -c 'from cortex_intelligence.memory.tier1_learned import *; print(\"✅ Tier1-Learned OK\")'"
+      - "python3 -c 'from cortex_intelligence.memory.tier2_adaptive import *; print(\"✅ Tier2-Adaptive OK\")'"
+      - "python3 -c 'from cortex_intelligence.memory.tier3_scratch import *; print(\"✅ Tier3-Scratch OK\")'"
+      - "python3 -c 'from cortex_intelligence.domain import DomainFactory; print(\"✅ Domain OK\")'"
+      - "python3 -c 'from cortex_intelligence.perception import PatternRegistry; print(\"✅ Perception OK\")'"
+      - "pytest tests/unit/brain/ -v --tb=short"
+      - "pytest tests/unit/domain/ -v --tb=short"
+    acceptance_criteria:
+      - All memory tier imports work (core, tier1-learned, tier2-adaptive, tier3-scratch)
+      - Brain tests pass
+      - Domain tests pass
+
+  # -------------------------------------------------------------------------
+  # STAGE 6: Decompose _cortex-master (60 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S6"
+    title: "Decompose _cortex-master Structure"
+    duration_minutes: 60
+    risk: MEDIUM
+    dependencies: ["S5"]
+    deliverables:
+      - Create new registry top-level structure
+      - Move governance, config, wiring, specifications → core/
+      - Move templates → artifacts/templates/
+      - Move phases → planning/phases/
+      - Move baselines, reports, dashboard → metrics/
+      - Move knowledge → knowledge-base/
+      - Delete _cortex-master wrapper
+    commands:
+      - "cd cortex-registry && mkdir -p core artifacts/templates integration metrics/status knowledge-base"
+      - "git mv _cortex-master/core/governance core/"
+      - "git mv _cortex-master/core/config core/"
+      - "git mv _cortex-master/core/wiring core/"
+      - "git mv _cortex-master/core/specifications core/"
+      - "git mv _cortex-master/core/templates/* artifacts/templates/"
+      - "git mv interaction integration/"
+      - "git mv patterns integration/"
+      - "git mv planning/phases planning/"
+      - "git mv _cortex-master/baselines metrics/"
+      - "git mv _cortex-master/reports metrics/"
+      - "git mv _cortex-master/dashboard metrics/dashboards"
+      - "git mv _cortex-master/CORTEX-STATUS-*.yaml metrics/status/"
+      - "git mv _cortex-master/DEFERRED-PHASES-ROADMAP.yaml metrics/status/"
+      - "git mv _cortex-master/knowledge/* knowledge-base/"
+      - "git mv _cortex-master/archive archive/"
+      - "rm -rf _cortex-master"
+      - "rm -rf templates/workflows"
+      - "git mv workflows artifacts/"
+      - "git commit -am 'refactor: decompose _cortex-master, create semantic registry structure'"
+    acceptance_criteria:
+      - _cortex-master/ deleted
+      - core/, artifacts/, integration/, metrics/, knowledge-base/ created
+      - No duplicate workflows/
+
+  # -------------------------------------------------------------------------
+  # STAGE 7: Update Registry Path References (60 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S7"
+    title: "Update Registry Path References"
+    duration_minutes: 60
+    risk: MEDIUM
+    dependencies: ["S6"]
+    deliverables:
+      - Update 144 Python files with new registry paths
+      - Update _cortex-master → appropriate new paths
+    commands:
+      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/governance|core/governance|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/config|core/config|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/wiring|core/wiring|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/templates|artifacts/templates|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|planning/phases|planning/phases|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/baselines|metrics/baselines|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/reports|metrics/reports|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/dashboard|metrics/dashboards|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/knowledge|knowledge-base|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|cortex-registry/interaction|cortex-registry/integration/interaction|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|cortex-registry/patterns|cortex-registry/integration/patterns|g' {} \\;"
+      - "git commit -am 'refactor: update all registry path references'"
+    acceptance_criteria:
+      - Zero _cortex-master references
+      - All paths updated
+
+  # -------------------------------------------------------------------------
+  # STAGE 8: Update Registry YAML References (30 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S8"
+    title: "Update Registry YAML/MD References"
+    duration_minutes: 30
+    risk: LOW
+    dependencies: ["S7"]
+    deliverables:
+      - Update YAML/MD files with new paths
+      - Update manifest.yaml with new structure
+    commands:
+      - "find cortex-registry -name '*.yaml' -type f -exec sed -i '' 's|_cortex-master/||g' {} \\;"
+      - "find . -name '*.md' -type f -exec sed -i '' 's|_cortex-master/||g' {} \\;"
+      - "git commit -am 'docs: update registry YAML/MD path references'"
+    acceptance_criteria:
+      - manifest.yaml reflects new structure
+      - Zero _cortex-master in YAML
+
+  # -------------------------------------------------------------------------
+  # STAGE 9: Create Golden Tests with SQLite Audit (120 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S9"
+    title: "Create Golden Tests with SQLite Audit Evidence"
+    duration_minutes: 120
+    risk: LOW
+    dependencies: ["S8"]
+    deliverables:
+      - Golden tests for cortex_intelligence YAML files
+      - Golden tests for cortex-registry YAML files
+      - SQLite audit logging for all file operations
+      - Test creates, reads, processes, deletes YAMLs
+      - Audit log evidence captured
+    test_files:
+      - tests/golden/test_cortex_intelligence_yaml_audit.py
+      - tests/golden/test_cortex_registry_yaml_audit.py
+      - tests/golden/conftest.py (SQLite audit fixture)
+    acceptance_criteria:
+      - All golden tests pass
+      - SQLite audit.db contains operation logs
+      - CREATE, READ, PROCESS, DELETE operations logged
+      - Evidence exportable as JSON/CSV
+
+  # -------------------------------------------------------------------------
+  # STAGE 10: Comprehensive Regression Testing (60 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S10"
+    title: "Comprehensive Regression Testing"
+    duration_minutes: 60
+    risk: LOW
+    dependencies: ["S9"]
+    deliverables:
+      - Full pytest suite passes
+      - Compare with baseline
+      - Zero new failures
+      - Import validation
+      - MCP tool availability
+    commands:
+      - "pytest tests/ -v --tb=short > /tmp/phase-103-post-tests.txt 2>&1"
+      - "diff /tmp/phase-103-baseline-tests.txt /tmp/phase-103-post-tests.txt || true"
+      - "python3 -c 'import cortex_intelligence; print(cortex_intelligence.__file__)'"
+      - "python3 -c 'from cortex.lens import LENSOrchestrator; print(\"LENS OK\")'"
+      - "pytest tests/mcp/ -v --tb=short"
+    acceptance_criteria:
+      - Test count ≥ baseline
+      - Zero new failures
+      - All imports resolve
+      - MCP tools functional
+
+  # -------------------------------------------------------------------------
+  # STAGE 11: Documentation & Cleanup (30 minutes)
+  # -------------------------------------------------------------------------
+  - stage_id: "S11"
+    title: "Documentation & Cleanup"
+    duration_minutes: 30
+    risk: LOW
+    dependencies: ["S10"]
+    deliverables:
+      - Update README.md with new structure
+      - Update CONTRIBUTING.md
+      - Create migration guide
+      - Clean up temporary files
+      - Final commit
+    commands:
+      - "rm /tmp/phase-103-*.txt"
+      - "git commit -am 'docs: update documentation for phase-103 migration'"
+      - "git tag phase-103-complete"
+    acceptance_criteria:
+      - Documentation updated
+      - Git tag created
+      - Branch ready for merge
+
+# ============================================================================
+# USER ADDITIONAL STAGES (from chat01.md request)
+# ============================================================================
+additional_stages:
+  - stage_id: "S12"
+    title: "Hard Audit Log Evidence Gathering"
+    description: |
+      After file relocation, gather hard audit log evidence from SQLite
+      to confirm everything is working correctly.
+    duration_minutes: 30
+    deliverables:
+      - Query SQLite governance.db for all operations
+      - Export audit evidence as JSON
+      - Verify AC markers complete
+      - Generate compliance report
+    acceptance_criteria:
+      - SQLite contains all file operation logs
+      - JSON export generated
+      - All AC markers have AC_COMPLETE
+
+  - stage_id: "S13"
+    title: "Golden Tests for cortex_intelligence YAMLs"
+    description: |
+      Create tests that actually create, read, process, and delete YAML files
+      in cortex_intelligence, logging all activity in SQLite.
+    test_scope:
+      - memory/immutable/*.yaml
+      - memory/stable/*.yaml
+      - memory/evolving/*.yaml
+      - memory/experimental/*.yaml
+      - governance/*.yaml
+    operations:
+      - CREATE: Generate test YAML files
+      - READ: Load and validate schema
+      - PROCESS: Transform/validate content
+      - DELETE: Clean up test files
+      - LOG: Record all operations in SQLite
+
+  - stage_id: "S14"
+    title: "Golden Tests for cortex-registry YAMLs"
+    description: |
+      Create tests for all YAML files in cortex-registry subfolders,
+      with SQLite audit logging for confirmation.
+    test_scope:
+      - core/governance/*.yaml
+      - core/config/*.yaml
+      - core/wiring/*.yaml
+      - core/specifications/*.yaml
+      - artifacts/templates/**/*.yaml
+      - artifacts/workflows/**/*.yaml
+      - integration/**/*.yaml
+      - planning/**/*.yaml
+      - knowledge-base/**/*.yaml
+      - metrics/**/*.yaml
+    operations:
+      - CREATE: Generate test YAML files
+      - READ: Load and validate schema
+      - PROCESS: Transform/validate content
+      - DELETE: Clean up test files
+      - LOG: Record all operations in SQLite
+
+# ============================================================================
+# ROLLBACK PLAN
+# ============================================================================
+rollback:
+  trigger: "Any stage fails with BLOCKING error"
+  commands:
+    - "git reset --hard pre-phase-103-baseline"
+    - "git checkout main"
+    - "git branch -D phase-103-migration"
+  recovery_time: "5 minutes"
+  data_loss: "None (git history preserved)"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  must_have:
+    - cortex_intelligence renamed to cortex_intelligence
+    - tier0-3 restructured to memory/*
+    - _cortex-master decomposed
+    - All 311 Python imports updated
+    - All 144 registry references updated
+    - All tests passing (≥ baseline)
+    - Zero import errors
+    - SQLite audit evidence captured
+    - Golden tests passing
+    
+  should_have:
+    - Documentation updated
+    - Migration guide created
+    - Coverage maintained
+    
+  nice_to_have:
+    - Performance benchmarks
+    - IDE integration verified
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+dependencies:
+  requires:
+    - Git v2.30+ (for mv history preservation)
+    - Python 3.11+
+    - pytest
+    - ruff
+    - SQLite3
+    
+  blocked_by: []
+  
+  blocks:
+    - phase-47+ (must use new paths)
+
+# ============================================================================
+# DECISION LOG: User Approvals (2026-02-17)
+# ============================================================================
+decision_log:
+  q1_template_location:
+    question: "Keep .github/prompts/ separate or move to registry?"
+    decision: "A - Keep .github/prompts/ for AI instructions"
+    rationale: "Follows GitHub conventions, separates AI instructions from data"
+    impact: "No breaking changes to existing prompt references"
+    
+  q2_stage_s15_scope:
+    question: "Split S15 into YAML Reader + Knowledge Hub?"
+    decision: "Split into S15A (YAML Reader) + S15B (Knowledge Hub)"
+    rationale: "Chat01 request distinct from phase 103 original goal"
+    impact: "+1 stage, clearer separation of concerns"
+    
+  q3_template_engine:
+    question: "TemplateCompositionEngine in S16 or separate S17?"
+    decision: "B - Separate S17 stage"
+    rationale: "Cleaner separation, dedicated testing scope"
+    impact: "+1 stage, better modularity"
+    
+  q4_rephrase_header:
+    question: "REPHRASE header format?"
+    decision: "A - Header once + single paragraph"
+    rationale: "Satisfies 'header on every response' + copy-pasteable content"
+    impact: "Update chat01.md clarification, no code changes"
+    
+  q5_duplicate_detection:
+    question: "Add automated duplicate detection?"
+    decision: "A - Add S6B validation stage"
+    rationale: "Catches stragglers before path updates"
+    impact: "+20 min, prevents orphaned files"
+
+# ============================================================================
+# UPDATED STAGES (18 Total, was 15)
+# ============================================================================
+updated_stage_summary:
+  total_stages: 18
+  added_stages: ["S6B", "S15A", "S15B_renamed", "S17"]
+  total_duration: "15-17 hours"
+  changes:
+    - "S6B: Duplicate detection (new, 20 min)"
+    - "S15A: YAML Reader SPA (new, 3-4 hours)"
+    - "S15B: Knowledge Hub (renamed from S15, 2-3 hours)"
+    - "S17: TemplateCompositionEngine (new, 2.5 hours)"
+
+# ============================================================================
+# STAGE 6B: DUPLICATE FILE DETECTION & CLEANUP (NEW)
+# ============================================================================
+stage_6b_duplicate_detection:
+  stage_id: "S6B"
+  title: "Duplicate File Detection & Cleanup"
+  duration_minutes: 20
+  risk: LOW
+  dependencies: ["S6"]
+  priority: P0
+  
+  purpose: |
+    Validate zero legacy conflicting contradictory files after _cortex-master 
+    decomposition. Catch stragglers before S7 path updates.
+  
+  deliverables:
+    - Validate old _cortex-master paths empty
+    - Detect duplicate template files
+    - Verify zero Python references to old paths
+    - Generate cleanup report
+  
+  commands:
+    - "echo '=== Checking for stragglers in old paths ===' > /tmp/phase-103-s6b-report.txt"
+    - "find cortex-registry -path '*_cortex-master*' -name '*.yaml' | tee -a /tmp/phase-103-s6b-report.txt"
+    - "find cortex-registry -path '*_cortex-master*' -name '*.py' | tee -a /tmp/phase-103-s6b-report.txt"
+    - "echo '=== Duplicate template files ===' >> /tmp/phase-103-s6b-report.txt"
+    - "find . -name 'response-template-blocks-modern.md' | tee -a /tmp/phase-103-s6b-report.txt"
+    - "find . -name '*template*.yaml' -path '*/templates/*' | sort | tee -a /tmp/phase-103-s6b-report.txt"
+    - "echo '=== Python references to old paths ===' >> /tmp/phase-103-s6b-report.txt"
+    - "grep -r '_cortex-master' --include='*.py' . 2>/dev/null | wc -l | tee -a /tmp/phase-103-s6b-report.txt"
+    - "echo '=== Expected counts after S6 ===' >> /tmp/phase-103-s6b-report.txt"
+    - "echo 'Old _cortex-master YAMLs: 0' >> /tmp/phase-103-s6b-report.txt"
+    - "echo 'response-template-blocks-modern.md: 1 (.github/prompts/)' >> /tmp/phase-103-s6b-report.txt"
+    - "echo 'Python _cortex-master refs: 144 (will be fixed in S7)' >> /tmp/phase-103-s6b-report.txt"
+    - "cat /tmp/phase-103-s6b-report.txt"
+  
+  acceptance_criteria:
+    - id: AC-PHASE103-S6B-OLD-PATHS
+      description: "Zero files in old _cortex-master paths after moves"
+      validation: "find cortex-registry -path '*_cortex-master*' | wc -l == 0"
+      
+    - id: AC-PHASE103-S6B-TEMPLATES
+      description: "Only 1 response-template-blocks-modern.md in .github/prompts/"
+      validation: "find . -name 'response-template-blocks-modern.md' | wc -l == 1"
+      
+    - id: AC-PHASE103-S6B-PYTHON-REFS
+      description: "Python refs to _cortex-master unchanged (will fix in S7)"
+      validation: "grep -r '_cortex-master' --include='*.py' | wc -l == 144"
+      
+    - id: AC-PHASE103-S6B-REPORT
+      description: "Cleanup report generated"
+      validation: "test -f /tmp/phase-103-s6b-report.txt"
+  
+  rollback:
+    commands:
+      - "# No rollback needed (validation only, no file changes)"
+    recovery_time: "0 minutes"
+
+# ============================================================================
+# STAGE 15A: YAML READER SPA (NEW - Chat01 Request)
+# ============================================================================
+stage_15a_yaml_reader:
+  stage_id: "S15A"
+  title: "YAML Reader SPA - Enterprise File Viewer"
+  duration: "3-4 hours"
+  risk: MEDIUM
+  dependencies: ["S14"]
+  priority: P1
+  
+  purpose: |
+    Create self-contained SPA (single index.html) that serves as enterprise 
+    YAML reader for cortex-registry files. Fulfills chat01.md request:
+    - Search and browse all YAML files in cortex-registry
+    - Human-readable rendering with visual diagrams
+    - Zero external dependencies
+    
+    Authority: chat01.md lines 1-50 (original user request)
+  
+  deliverables:
+    - cortex-registry/yaml-reader.html (self-contained SPA)
+    - File browser for all cortex-registry YAMLs
+    - YAML syntax highlighting and viewer
+    - Visual diagram generator (Mermaid inline)
+    - Search across YAML content
+    - Zero external dependencies (inline CSS, JS)
+  
+  features:
+    file_browser:
+      - "Tree view of cortex-registry folder structure"
+      - "Click folder → expand/collapse subfolders"
+      - "Click file → load YAML content in viewer"
+      - "Breadcrumb navigation"
+      - "File count indicators per folder"
+    
+    yaml_viewer:
+      - "Syntax highlighting (inline JS, no Prism.js CDN)"
+      - "Collapsible sections for nested structures"
+      - "Copy-to-clipboard for YAML snippets"
+      - "Line numbers"
+      - "Type indicators (string, array, object)"
+    
+    visual_diagrams:
+      - "Auto-generate Mermaid diagrams from YAML structure"
+      - "Flowcharts for workflow YAMLs"
+      - "Class diagrams for governance YAMLs"
+      - "Sequence diagrams for interaction YAMLs"
+      - "Inline Mermaid rendering (no CDN)"
+    
+    search:
+      - "Full-text search across all YAML files"
+      - "Search by key, value, or both"
+      - "Highlight matches in viewer"
+      - "Results grouped by file"
+      - "Jump to file from search results"
+    
+    technical:
+      - "Zero external dependencies (no CDN, no npm)"
+      - "All CSS inline in <style> block"
+      - "All JavaScript inline in <script> block"
+      - "Mermaid.js inline (~200KB minified)"
+      - "YAML parser inline (js-yaml, ~50KB)"
+      - "Total file size <500KB"
+      - "Loads in <1s on 3G"
+      - "Works offline"
+  
+  tasks:
+    - task_id: S15A.1
+      name: "Design UI/UX structure"
+      duration: "30 min"
+      deliverable: "Wireframe with 3-panel layout (tree, viewer, diagram)"
+      
+    - task_id: S15A.2
+      name: "Create HTML skeleton"
+      duration: "20 min"
+      deliverable: "cortex-registry/yaml-reader.html with semantic structure"
+      
+    - task_id: S15A.3
+      name: "Implement inline CSS"
+      duration: "45 min"
+      deliverable: "Glassmorphism theme matching cortex-docs/index.html"
+      
+    - task_id: S15A.4
+      name: "Inline js-yaml parser"
+      duration: "30 min"
+      deliverable: "YAML parsing without CDN"
+      
+    - task_id: S15A.5
+      name: "Build file browser"
+      duration: "60 min"
+      deliverable: "Tree view with expand/collapse, file loading"
+      
+    - task_id: S15A.6
+      name: "Build YAML viewer"
+      duration: "45 min"
+      deliverable: "Syntax highlighting, collapsible sections"
+      
+    - task_id: S15A.7
+      name: "Implement Mermaid diagram generator"
+      duration: "60 min"
+      deliverable: "Auto-generate diagrams from YAML structure"
+      
+    - task_id: S15A.8
+      name: "Implement search functionality"
+      duration: "30 min"
+      deliverable: "Full-text search with highlighting"
+      
+    - task_id: S15A.9
+      name: "Performance optimization"
+      duration: "20 min"
+      deliverable: "Lazy loading, debouncing, caching"
+      
+    - task_id: S15A.10
+      name: "Testing and validation"
+      duration: "30 min"
+      deliverable: "Test with all cortex-registry YAML files"
+  
+  acceptance_criteria:
+    - id: AC-PHASE103-S15A-FILE
+      description: "yaml-reader.html exists at cortex-registry root"
+      validation: "test -f cortex-registry/yaml-reader.html"
+      
+    - id: AC-PHASE103-S15A-SIZE
+      description: "File size <500KB"
+      validation: "test $(stat -f%z cortex-registry/yaml-reader.html) -lt 512000"
+      
+    - id: AC-PHASE103-S15A-INLINE
+      description: "Zero external dependencies"
+      validation: "grep -c 'href=\"http' cortex-registry/yaml-reader.html == 0"
+      
+    - id: AC-PHASE103-S15A-SEARCH
+      description: "Search works across all YAMLs"
+      validation: "Manual test: search for 'governance' finds core/governance files"
+      
+    - id: AC-PHASE103-S15A-DIAGRAMS
+      description: "Mermaid diagrams render inline"
+      validation: "Manual test: open workflow YAML, see flowchart"
+      
+    - id: AC-PHASE103-S15A-OFFLINE
+      description: "Works offline"
+      validation: "Disable network, reload page, verify full functionality"
+  
+  testing:
+    unit_tests:
+      - "test_yaml_parser_loads_all_files"
+      - "test_file_browser_tree_structure"
+      - "test_search_finds_content"
+      - "test_diagram_generation"
+      - "test_no_external_dependencies"
+    
+    integration_tests:
+      - "test_load_all_cortex_registry_yamls"
+      - "test_search_across_150_files"
+      - "test_diagram_render_performance"
+    
+    manual_tests:
+      - "Open cortex-registry/yaml-reader.html in Chrome/Firefox/Safari"
+      - "Browse to core/governance/core-rules.yaml"
+      - "Search for 'CORE-008' across all files"
+      - "Generate diagram from workflow YAML"
+      - "Disable network, verify offline functionality"
+
+# ============================================================================
+# STAGE 15B: DEVELOPER KNOWLEDGE HUB (RENAMED FROM S15)
+# ============================================================================
+stage_15b_knowledge_hub:
+  stage_id: "S15B"
+  title: "CORTEX Developer Knowledge Hub"
+  duration: "2-3 hours"
+  risk: LOW
+  dependencies: ["S15A"]
+  priority: P1
+  
+  purpose: |
+    Create comprehensive one-page knowledge hub at cortex-registry/index.html.
+    Provides WHAT/WHY/WHEN/HOW documentation for all registry folders.
+    
+    Note: This is the ORIGINAL S15 goal from phase 103, renamed to distinguish 
+    from S15A (YAML Reader per chat01 request).
+  
+  deliverables:
+    - cortex-registry/index.html (knowledge hub)
+    - WHAT/WHY/WHEN/HOW sections for 6 top-level folders
+    - Troubleshooting guides
+    - Interactive search across documentation
+    - Zero external dependencies
+  
+  knowledge_sections:
+    - section_id: core
+      title: "core/ - System Foundation"
+  
+  knowledge_sections:
+    - section_id: core
+      title: "core/ - System Foundation"
+      what: "4 subdirs: governance/, config/, wiring/, specifications/"
+      why: "Immutable system foundation - CORE rules, master config, orchestrator contracts"
+      when: "Start here for governance errors, wiring issues, flow routing problems"
+      how: "Troubleshooting guides, CORE rule references, config examples"
+      
+    - section_id: artifacts
+      title: "artifacts/ - Templates & Workflows"
+      what: "2 subdirs: templates/, workflows/"
+      why: "Generated outputs - Response formats, workflow definitions"
+      when: "Customize responses, create phases, modify workflows"
+      how: "LEGO block examples, workflow patterns"
+      
+    - section_id: integration
+      title: "integration/ - External Patterns"
+      what: "2 subdirs: interaction/, patterns/"
+      why: "MCP patterns and architectural standards"
+      when: "Add MCP tools, implement patterns, define standards"
+      how: "Pattern examples, MCP tool templates"
+      
+    - section_id: planning
+      title: "planning/ - Work Management"
+      what: "4 subdirs: phases/{planned,completed,deferred,consolidated}/, registry/, system/"
+      why: "Phase lifecycle tracking"
+      when: "Create phases, track progress, review completed work"
+      how: "Phase templates, roadmap examples"
+      
+    - section_id: knowledge_base
+      title: "knowledge-base/ - CORTEX Defaults"
+      what: "20+ subdirs: architecture/, security/, testing/, domains/"
+      why: "Industry best practices, Tier 0 fallback knowledge"
+      when: "Need standards, learning best practices, filling gaps"
+      how: "Best practice examples, pattern libraries"
+      
+    - section_id: metrics
+      title: "metrics/ - Observability"
+      what: "4 subdirs: baselines/, reports/, dashboards/, status/"
+      why: "System health monitoring"
+      when: "Check health, analyze performance, validate tests"
+      how: "Baseline comparisons, health dashboards"
+  
+  tasks:
+    - task_id: S15B.1
+      name: "Design knowledge structure"
+      duration: "20 min"
+      deliverable: "Outline with WHAT/WHY/WHEN/HOW for 6 sections"
+      
+    - task_id: S15B.2
+      name: "Create HTML skeleton"
+      duration: "15 min"
+      deliverable: "cortex-registry/index.html with semantic structure"
+      
+    - task_id: S15B.3
+      name: "Implement inline CSS"
+      duration: "40 min"
+      deliverable: "Glassmorphism theme matching cortex-docs/"
+      
+    - task_id: S15B.4
+      name: "Create SVG CORTEX logo"
+      duration: "20 min"
+      deliverable: "Inline SVG logo <5KB"
+      
+    - task_id: S15B.5
+      name: "Build knowledge sections"
+      duration: "60 min"
+      deliverable: "All 6 sections with WHAT/WHY/WHEN/HOW"
+      
+    - task_id: S15B.6
+      name: "Implement search"
+      duration: "30 min"
+      deliverable: "Search across all documentation"
+      
+    - task_id: S15B.7
+      name: "Add troubleshooting guides"
+      duration: "30 min"
+      deliverable: "Debugging tips per section"
+      
+    - task_id: S15B.8
+      name: "Testing and validation"
+      duration: "15 min"
+      deliverable: "WCAG AA compliance, performance"
+  
+  acceptance_criteria:
+    - id: AC-PHASE103-S15B-FILE
+      description: "index.html exists at cortex-registry root"
+      validation: "test -f cortex-registry/index.html"
+      
+    - id: AC-PHASE103-S15B-SIZE
+      description: "File size <200KB"
+      validation: "test $(stat -f%z cortex-registry/index.html) -lt 204800"
+      
+    - id: AC-PHASE103-S15B-SECTIONS
+      description: "All 6 knowledge sections present"
+      validation: "grep -c 'section_id' cortex-registry/index.html == 6"
+      
+    - id: AC-PHASE103-S15B-SEARCH
+      description: "Search works across content"
+      validation: "Manual test: search for 'governance' finds core section"
+      
+    - id: AC-PHASE103-S15B-WCAG
+      description: "WCAG 2.1 AA compliant"
+      validation: "lighthouse --only-categories=accessibility cortex-registry/index.html >= 95"
+
+# ============================================================================
+# STAGE 17: TEMPLATE COMPOSITION ENGINE (NEW)
+# ============================================================================
+stage_17_template_engine:
+  stage_id: "S17"
+  title: "TemplateCompositionEngine + VS Code Chat Optimization"
+  duration: "2.5 hours"
+  risk: MEDIUM
+  dependencies: ["S15B", "S16"]
+  priority: P1
+  
+  purpose: |
+    Implement intelligent template composition system with persona-aware 
+    response generation. Addresses chat01.md design for LEGO block assembly.
+    
+    Also creates .github/copilot-instructions.md for universal VS Code Chat 
+    rendering enforcement per ChatGPT advice.
+  
+  deliverables:
+    - cortex/interaction/template_composition_engine.py
+    - .github/copilot-instructions.md
+    - Update .github/prompts/response-template-blocks-modern.md
+    - tests/unit/interaction/test_template_composition_engine.py
+    - tests/e2e/test_vs_code_chat_rendering.py
+  
+  components:
+    template_composition_engine:
+      location: "cortex/interaction/template_composition_engine.py"
+      classes:
+        - TemplateCompositionEngine
+        - RenderingValidator
+        - BlockSelector
+        - PersonaAdapter
+      methods:
+        - "compose(request_type, persona, depth, user_request) -> str"
+        - "_select_blocks(persona, request_type) -> List[Block]"
+        - "_deduplicate_concepts(blocks) -> List[Block]"
+        - "_enforce_word_limit(text, persona) -> str"
+        - "_should_show_code(request, persona, request_type) -> bool"
+        - "validate_response(markdown) -> Tuple[bool, List[str]]"
+    
+    rendering_validator:
+      checks:
+        - "No full-response code blocks"
+        - "Heading hierarchy ≤3 levels"
+        - "Table row count ≤10 for educational"
+        - "No HTML tags (except <hr>)"
+        - "Paragraph length ≤100 words"
+        - "Emoji palette consistency"
+    
+    persona_rules:
+      business_leader:
+        max_words: 400
+        blocks: ["BLOCK-INTRO", "BLOCK-NEXT-STEPS"]
+        code_snippets: false
+        
+      product_owner:
+        max_words: 500
+        blocks: ["BLOCK-INTRO", "BLOCK-CAPABILITIES", "BLOCK-NEXT-STEPS"]
+        code_snippets: "pseudo_only"
+        
+      scrum_master:
+        max_words: 500
+        blocks: ["BLOCK-INTRO", "BLOCK-TUTORIAL", "BLOCK-NEXT-STEPS"]
+        code_snippets: "pseudo_only"
+        
+      tech_lead:
+        max_words: 700
+        blocks: ["BLOCK-INTRO", "BLOCK-CAPABILITIES", "BLOCK-LENS", "BLOCK-ORCHESTRATORS"]
+        code_snippets: "minimal"
+        
+      engineer:
+        max_words: 800
+        blocks: ["ALL"]
+        code_snippets: "full"
+  
+  copilot_instructions:
+    location: ".github/copilot-instructions.md"
+    content: |
+      # CORTEX Response Formatting Standards for VS Code Copilot Chat
+      
+      ## Core Principles
+      - **Always include CORTEX header** at top of every response (once)
+      - Format as **CommonMark Markdown** (not HTML)
+      - **Never** wrap entire response in single fenced code block
+      - Use VS Code Chat-optimized rendering (headings, lists, emojis)
+      
+      ## Header Template (MANDATORY - ONCE PER RESPONSE)
+      # 🧠 CORTEX
+      **Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+      ---
+      
+      ## Visual Elements
+      Standardized emoji palette:
+      - ✅ Success, ⚠️ Warning, ❌ Error, 🧠 Intelligence
+      - 🔧 Implementation, 🧪 Testing, 📊 Analysis, 🚀 Deployment
+      - 🔒 Security, 🎯 Goal, 🏛️ Architecture, 📋 Planning
+      
+      ## Anti-Patterns (AVOID)
+      ❌ Full-response code blocks (breaks Markdown rendering)
+      ❌ Deeply nested bullets (>3 levels)
+      ❌ Tables >10 rows for educational content
+      ❌ HTML tags (except <hr> for separators)
+  
+  tasks:
+    - task_id: S17.1
+      name: "Create .github/copilot-instructions.md"
+      duration: "20 min"
+      deliverable: "Copilot formatting standards file"
+      
+    - task_id: S17.2
+      name: "Implement TemplateCompositionEngine core"
+      duration: "45 min"
+      deliverable: "Block selection + composition algorithm"
+      
+    - task_id: S17.3
+      name: "Implement RenderingValidator"
+      duration: "30 min"
+      deliverable: "VS Code Chat validation rules"
+      
+    - task_id: S17.4
+      name: "Add persona-specific rules"
+      duration: "20 min"
+      deliverable: "Word limits, code suppression logic"
+      
+    - task_id: S17.5
+      name: "Update response-template-blocks-modern.md"
+      duration: "20 min"
+      deliverable: "VS Code Chat optimization section"
+      
+    - task_id: S17.6
+      name: "Create unit tests"
+      duration: "30 min"
+      deliverable: "15 tests for TemplateCompositionEngine"
+      
+    - task_id: S17.7
+      name: "Create E2E rendering tests"
+      duration: "15 min"
+      deliverable: "10 tests for VS Code Chat validation"
+      
+    - task_id: S17.8
+      name: "Test with all personas"
+      duration: "20 min"
+      deliverable: "Validation across 5 persona types"
+  
+  acceptance_criteria:
+    - id: AC-PHASE103-S17-ENGINE
+      description: "TemplateCompositionEngine class exists"
+      validation: "test -f cortex/interaction/template_composition_engine.py"
+      
+    - id: AC-PHASE103-S17-COPILOT
+      description: "copilot-instructions.md exists"
+      validation: "test -f .github/copilot-instructions.md"
+      
+    - id: AC-PHASE103-S17-TESTS
+      description: "Unit tests pass (15 tests)"
+      validation: "pytest tests/unit/interaction/test_template_composition_engine.py -v"
+      
+    - id: AC-PHASE103-S17-RENDERING
+      description: "Rendering tests pass (10 tests)"
+      validation: "pytest tests/e2e/test_vs_code_chat_rendering.py -v"
+      
+    - id: AC-PHASE103-S17-PERSONAS
+      description: "All 5 personas generate valid responses"
+      validation: "Manual test: generate response for each persona"
+      
+    - id: AC-PHASE103-S17-REPHRASE
+      description: "REPHRASE golden tests still pass"
+      validation: "pytest tests/e2e/test_rephrase_mode_golden.py -v == 29/29"
+  
+  testing:
+    unit_tests:
+      - "test_block_selection_by_persona"
+      - "test_word_limit_enforcement"
+      - "test_code_snippet_suppression"
+      - "test_concept_deduplication"
+      - "test_rendering_validation"
+      - "test_emoji_palette_consistency"
+      - "test_table_row_limit"
+      - "test_heading_hierarchy"
+      - "test_paragraph_length"
+      - "test_no_html_tags"
+      - "test_business_leader_format"
+      - "test_engineer_format"
+      - "test_rephrase_mode_integration"
+      - "test_header_once_per_response"
+      - "test_copy_pasteable_output"
+    
+    integration_tests:
+      - "test_vs_code_chat_heading_rendering"
+      - "test_vs_code_chat_table_rendering"
+      - "test_vs_code_chat_emoji_rendering"
+      - "test_vs_code_chat_code_block_rendering"
+      - "test_vs_code_chat_list_rendering"
+      - "test_full_response_pipeline"
+      - "test_persona_switching"
+      - "test_rephrase_header_format"
+      - "test_no_horizontal_scroll"
+      - "test_token_optimization"
+  
+  documentation_updates:
+    files:
+      - path: "README.md"
+        change: "Add link to .github/copilot-instructions.md"
+      - path: ".github/prompts/response-template-blocks-modern.md"
+        change: "Add VS Code Chat Rendering Optimization section"
+      - path: "cortex/interaction/README.md"
+        change: "Document TemplateCompositionEngine usage"
+
+# ============================================================================
+# UPDATED STAGE SEQUENCE
+# ============================================================================
+final_stage_sequence:
+  - stage_id: "S1"
+    title: "Pre-Migration Baseline Capture"
+    duration_minutes: 30
+    
+  - stage_id: "S2"
+    title: "Rename cortex_intelligence to cortex_intelligence"
+    duration_minutes: 60
+    
+  - stage_id: "S3"
+    title: "Update Python Import Statements"
+    duration_minutes: 90
+    
+  - stage_id: "S4"
+    title: "Update YAML and Markdown References"
+    duration_minutes: 30
+    
+  - stage_id: "S5"
+    title: "Track A Intelligence Validation"
+    duration_minutes: 30
+    
+  - stage_id: "S6"
+    title: "Decompose _cortex-master Structure"
+    duration_minutes: 60
+    
+  - stage_id: "S6B"
+    title: "Duplicate File Detection & Cleanup"
+    duration_minutes: 20
+    status: NEW
+    
+  - stage_id: "S7"
+    title: "Update Registry Path References"
+    duration_minutes: 60
+    
+  - stage_id: "S8"
+    title: "Update Registry YAML/MD References"
+    duration_minutes: 30
+    
+  - stage_id: "S9"
+    title: "Create Golden Tests with SQLite Audit"
+    duration_minutes: 120
+    
+  - stage_id: "S10"
+    title: "Comprehensive Regression Testing"
+    duration_minutes: 60
+    
+  - stage_id: "S11"
+    title: "Documentation & Cleanup"
+    duration_minutes: 30
+    
+  - stage_id: "S12"
+    title: "Hard Audit Log Evidence Gathering"
+    duration_minutes: 30
+    
+  - stage_id: "S13"
+    title: "Golden Tests for cortex_intelligence YAMLs"
+    duration_minutes: 60
+    
+  - stage_id: "S14"
+    title: "Golden Tests for cortex-registry YAMLs"
+    duration_minutes: 60
+    
+  - stage_id: "S15A"
+    title: "YAML Reader SPA - Enterprise File Viewer"
+    duration_minutes: 180-240
+    status: NEW
+    
+  - stage_id: "S15B"
+    title: "CORTEX Developer Knowledge Hub"
+    duration_minutes: 120-180
+    status: RENAMED_FROM_S15
+    
+  - stage_id: "S16"
+    title: "RESERVED - Available for future use"
+    duration_minutes: 0
+    status: SKIPPED
+    note: "Originally planned for copilot-instructions.md, moved to S17"
+    
+  - stage_id: "S17"
+    title: "TemplateCompositionEngine + VS Code Chat Optimization"
+    duration_minutes: 150
+    status: NEW
+
+# ============================================================================
+# EXECUTION SUMMARY
+# ============================================================================
+execution_summary:
+  total_stages: 18
+  total_duration_minutes: 1050-1170
+  total_duration_hours: "15-17 hours"
+  
+  track_a_duration: "240 min (4 hours)"
+  track_b_duration: "230 min (3.8 hours)"
+  testing_duration: "270 min (4.5 hours)"
+  new_features_duration: "450-570 min (7.5-9.5 hours)"
+  
+  added_stages:
+    - "S6B: Duplicate detection (20 min)"
+    - "S15A: YAML Reader SPA (180-240 min)"
+    - "S15B: Knowledge Hub renamed (120-180 min)"
+    - "S17: TemplateCompositionEngine (150 min)"
+  
+  critical_path:
+    - "S1-S5: Intelligence consolidation (4 hours)"
+    - "S6-S8: Registry decomposition (1.8 hours)"
+    - "S9-S14: Testing & audit (4.5 hours)"
+    - "S15A-S15B: Documentation (5-7 hours)"
+    - "S17: Template engine (2.5 hours)"
+  
+  blockers_resolved:
+    - "Template location: .github/prompts/ stays separate ✅"
+    - "REPHRASE header: Header once + paragraph ✅"
+    - "S15 scope: Split into S15A + S15B ✅"
+    - "TemplateCompositionEngine: Separate S17 stage ✅"
+    - "Duplicate detection: S6B validation ✅"
+  
+  rollback_safety:
+    git_tags:
+      - "pre-phase-103-baseline (before S1)"
+      - "post-s5-intelligence (after Track A)"
+      - "post-s8-registry (after Track B)"
+      - "post-s14-testing (before documentation)"
+      - "phase-103-complete (after S17)"
+    recovery_time: "5 minutes max per rollback"
+
+registry_structure:
+  sections:
+    - section_id: core
+      title: "core/ - System Foundation"
+      what: "4 subdirs: governance/, config/, wiring/, specifications/"
+      why: "Immutable system foundation - CORE rules, master config, orchestrator contracts, flow specs"
+      when: "Start here when debugging governance violations, orchestrator wiring issues, or flow routing problems"
+      how: |
+        Troubleshooting:
+        - Governance errors → Check core/governance/core-rules.yaml for CORE-XXX definitions
+        - Wiring failures → Verify core/wiring/contract.yaml and wiring.yaml
+        - Flow routing issues → Review core/specifications/intent-routing.yaml
+        - Config overrides → Examine core/config/master-plan.yaml
+      files:
+        - name: "core/governance/core-rules.yaml"
+          purpose: "48 CORE rules (CORE-001 to CORE-048)"
+          usage: "Reference for all governance enforcement"
+        - name: "core/config/master-plan.yaml"
+          purpose: "Master orchestrator configuration"
+          usage: "Entry point for orchestrator wiring"
+        - name: "core/wiring/contract.yaml"
+          purpose: "Orchestrator interface contracts"
+          usage: "Defines expected inputs/outputs"
+        - name: "core/specifications/exec-flow.yaml"
+          purpose: "Execution flow specifications"
+          usage: "Maps intent → orchestrator routing"
+    
+    - section_id: artifacts
+      title: "artifacts/ - Templates & Workflows"
+      what: "4 subdirs: response-templates/, phase-templates/, doc-templates/, workflows/"
+      why: "Generated outputs - Response formats, phase templates, workflow definitions"
+      when: "Customize response formats, create new phase templates, modify workflow steps"
+      how: |
+        Troubleshooting:
+        - Response format issues → Check artifacts/response-templates/format-standards.yaml
+        - LEGO blocks broken → Review artifacts/response-templates/content-blocks.yaml
+        - Phase creation errors → Verify artifacts/phase-templates/phase-template.yaml
+        - Workflow failures → Examine artifacts/workflows/*.yaml
+      files:
+        - name: "artifacts/response-templates/content-blocks.yaml"
+          purpose: "7 LEGO blocks (INTRO, CAPABILITIES, LENS, etc.)"
+          usage: "Composable educational response templates"
+        - name: "artifacts/response-templates/headers.yaml"
+          purpose: "Standard response headers (Tier 0 - immutable)"
+          usage: "Used by all orchestrator responses"
+        - name: "artifacts/workflows/tdd-workflow.yaml"
+          purpose: "TDD workflow (RED-GREEN-REFACTOR)"
+          usage: "Template for test-driven development"
+    
+    - section_id: integration
+      title: "integration/ - External Patterns"
+      what: "2 subdirs: interaction/, patterns/"
+      why: "MCP communication patterns and architectural patterns for external system integration"
+      when: "Adding new MCP tools, implementing new communication patterns, defining architectural standards"
+      how: |
+        Troubleshooting:
+        - MCP tool registration fails → Check integration/interaction/request-response.yaml
+        - Pattern enforcement errors → Review integration/patterns/*.yaml
+        - Communication timeout → Verify integration/interaction/orchestrator-coordination.yaml
+      files:
+        - name: "integration/interaction/request-response.yaml"
+          purpose: "Request-response MCP pattern validation"
+          usage: "Enforced by PatternEnforcer at runtime"
+        - name: "integration/patterns/api-design.yaml"
+          purpose: "REST API design standards"
+          usage: "Reference for all API implementations"
+    
+    - section_id: planning
+      title: "planning/ - Work Management"
+      what: "4 subdirs: phases/{planned,completed,deferred,consolidated}/, registry/, system/"
+      why: "Phase lifecycle management - Track work from planning → completion"
+      when: "Creating new phases, tracking progress, reviewing completed work, managing deferred items"
+      how: |
+        Troubleshooting:
+        - Phase not found → Check planning/phases/planned/ for YAML file
+        - Phase status wrong → Verify planning/index.yaml registry
+        - Roadmap out of sync → Review planning/system/roadmap.yaml
+        - Phase dependencies broken → Check phase YAML dependencies field
+      files:
+        - name: "planning/index.yaml"
+          purpose: "Active plans registry"
+          usage: "Used by PlanRegistry orchestrator"
+        - name: "planning/phases/planned/phase-103.yaml"
+          purpose: "This phase plan"
+          usage: "Defines registry consolidation"
+    
+    - section_id: knowledge_base
+      title: "knowledge-base/ - CORTEX Defaults"
+      what: "20+ subdirs: architecture/, security/, testing/, cloud/, domains/, etc."
+      why: "Industry best practices and CORTEX default knowledge (Tier 0 fallback)"
+      when: "Company rules don't cover scenario, need industry standards, learning best practices"
+      how: |
+        Troubleshooting:
+        - Missing best practice → Search knowledge-base/{domain}/ for YAML files
+        - Override not working → Check if cortex-registry/company/domains/ overrides Tier 0
+        - Knowledge gap → Review knowledge-base/architecture/ for patterns
+      files:
+        - name: "knowledge-base/architecture/solid-principles.yaml"
+          purpose: "SOLID principles reference"
+          usage: "Design pattern guidance"
+        - name: "knowledge-base/security/owasp-top10.yaml"
+          purpose: "OWASP Top 10 vulnerabilities"
+          usage: "Security scanning rules"
+        - name: "knowledge-base/testing/tdd-practices.yaml"
+          purpose: "TDD best practices"
+          usage: "Test-first development guide"
+    
+    - section_id: metrics
+      title: "metrics/ - Observability"
+      what: "4 subdirs: baselines/, reports/, dashboards/, status/"
+      why: "System health monitoring - Test baselines, readiness reports, performance dashboards"
+      when: "Checking system health, analyzing performance, validating test results, reviewing status"
+      how: |
+        Troubleshooting:
+        - Tests regressing → Compare against metrics/baselines/*.json
+        - Performance degraded → Review metrics/reports/*-inventory.json
+        - System status unknown → Check metrics/status/cortex-status-*.yaml
+        - Dashboard data stale → Examine metrics/dashboards/data/*.json
+      files:
+        - name: "metrics/baselines/phase-25-baseline.json"
+          purpose: "Phase 25 test baseline snapshot"
+          usage: "Regression detection reference"
+        - name: "metrics/status/cortex-status-2026-02-17.yaml"
+          purpose: "Current system health snapshot"
+          usage: "System status overview"
+  
+  features:
+    visual:
+      - "Glassmorphism dark blue theme (#0a0e27 background)"
+      - "Cyan (#00d4ff) and purple (#7b61ff) accent colors"
+      - "Glass cards with backdrop-filter blur"
+      - "Hover effects with elevation and glow"
+      - "Responsive grid layout (1-4 columns based on screen)"
+      - "SVG CORTEX logo with neural network visualization"
+      - "Smooth transitions and animations"
+    
+    interactive:
+      - "Expandable/collapsible folder sections"
+      - "Real-time search across folder names + descriptions + troubleshooting text"
+      - "Click folder name → copy full path to clipboard"
+      - "Click file name → show inline YAML preview"
+      - "Keyboard shortcuts: / (search), Esc (clear), ↑↓ (navigate)"
+      - "Toast notifications for user actions"
+      - "Breadcrumb navigation with depth indicators"
+    
+    informational:
+      - "WHAT section: Folder contents, structure, file counts"
+      - "WHY section: Purpose, design rationale, tier context"
+      - "WHEN section: Common use cases, scenarios, workflows"
+      - "HOW section: Troubleshooting guides, debugging tips, code examples"
+      - "Files section: Key files with purpose and usage"
+      - "Links section: Quick jumps to related registry sections"
+    
+    technical:
+      - "Zero external dependencies (no CDN, no npm packages)"
+      - "All CSS inline in <style> block"
+      - "All JavaScript inline in <script> block"
+      - "SVG logo inline in <svg> tag (~4KB vs 40KB PNG)"
+      - "Loads in <500ms on slow 3G"
+      - "WCAG 2.1 AA compliant (contrast, keyboard nav)"
+      - "Works offline (no network requests)"
+  
+  content_sources:
+    knowledge:
+      - "cortex-registry/_cortex-master/knowledge/ui-ux/glassmorphism-design-standards.yaml"
+      - "cortex-registry/_cortex-master/knowledge/architecture/*.yaml"
+      - "cortex-registry/_cortex-master/knowledge/testing/*.yaml"
+    
+    design_inspiration:
+      - "cortex-docs/index.html (glassmorphism patterns)"
+      - "_workspaces/cortex-doc-gemini/gemini-index.html (color palette, animations)"
+    
+    registry_data:
+      - "cortex-registry/manifest.yaml (folder structure)"
+      - "cortex-registry/core/governance/core-rules.yaml (governance data)"
+      - "cortex-registry/planning/index.yaml (phase data)"
+  
+  tasks:
+    - task_id: S15.1
+      name: "Design content structure"
+      duration: "30 min"
+      deliverable: "Content outline with all 6 sections (core, artifacts, integration, planning, knowledge-base, metrics)"
+      validation: "Each section has WHAT/WHY/WHEN/HOW + key files"
+    
+    - task_id: S15.2
+      name: "Create HTML skeleton"
+      duration: "20 min"
+      commands:
+        - "Create cortex-registry/index.html"
+        - "Add HTML5 doctype, meta viewport, semantic structure"
+      files_created:
+        - "cortex-registry/index.html"
+      validation: "HTML validates with W3C validator"
+    
+    - task_id: S15.3
+      name: "Implement inline CSS"
+      duration: "45 min"
+      knowledge_source: "knowledge/ui-ux/glassmorphism-design-standards.yaml"
+      implementation:
+        - "Copy CORTEX color palette (--bg-primary, --accent-primary, etc.)"
+        - "Implement glass card component (.glass-card)"
+        - "Add responsive grid layout (1-4 columns)"
+        - "Create hover animations with transform/glow"
+        - "Add smooth transitions (cubic-bezier easing)"
+        - "Implement dark gradient background with radial overlays"
+      size_target: "<50KB inline CSS"
+      validation: "All styles inline, no external stylesheets"
+    
+    - task_id: S15.4
+      name: "Create SVG CORTEX logo"
+      duration: "30 min"
+      implementation:
+        - "Design neural network visualization"
+        - "Add cyan-purple gradient definition"
+        - "Apply glow filter effect"
+        - "Make responsive (scales with viewport)"
+      size_target: "<5KB"
+      validation: "SVG renders at all screen sizes, no PNG fallback needed"
+    
+    - task_id: S15.5
+      name: "Build knowledge section renderer"
+      duration: "60 min"
+      implementation:
+        - "Create section template: title + WHAT/WHY/WHEN/HOW blocks"
+        - "Add collapsible file list with purpose/usage"
+        - "Implement code snippet highlighting"
+        - "Add copy-to-clipboard for paths and code"
+      validation: "All 6 sections render with complete content"
+    
+    - task_id: S15.6
+      name: "Implement search functionality"
+      duration: "45 min"
+      features:
+        - "Search input with / keyboard shortcut to focus"
+        - "Real-time filtering across section titles + descriptions + troubleshooting"
+        - "Highlight matching text"
+        - "Show match count"
+        - "Clear button (Esc key)"
+      validation: "Search finds text in WHAT/WHY/WHEN/HOW sections"
+    
+    - task_id: S15.7
+      name: "Add interactive features"
+      duration: "30 min"
+      features:
+        - "Click folder card → expand/collapse"
+        - "Click file name → show YAML preview modal"
+        - "Click path → copy to clipboard with toast notification"
+        - "Keyboard navigation (Tab, Enter, Esc)"
+        - "Breadcrumb navigation at top"
+      validation: "All interactions work without JavaScript errors"
+    
+    - task_id: S15.8
+      name: "Add troubleshooting guides"
+      duration: "45 min"
+      content:
+        - "Common error messages with solutions"
+        - "Debug checklist for each section"
+        - "Quick reference commands"
+        - "Links to related CORE rules"
+      validation: "Each section has actionable troubleshooting steps"
+    
+    - task_id: S15.9
+      name: "Performance optimization"
+      duration: "20 min"
+      optimizations:
+        - "Lazy load file previews"
+        - "Debounce search input (300ms)"
+        - "Use CSS containment for cards"
+        - "Optimize SVG (remove unnecessary attributes)"
+      validation: "Lighthouse performance score ≥90"
+    
+    - task_id: S15.10
+      name: "Accessibility audit"
+      duration: "20 min"
+      checks:
+        - "WCAG 2.1 AA color contrast (4.5:1 for text)"
+        - "Keyboard navigation (no mouse required)"
+        - "ARIA labels for interactive elements"
+        - "Focus indicators visible"
+        - "Screen reader compatible"
+      validation: "Lighthouse accessibility score ≥95"
+  
+  acceptance_criteria:
+    - id: AC-PHASE103-S15-FILE
+      description: "index.html exists at cortex-registry root"
+      validation: "os.path.exists('cortex-registry/index.html')"
+    
+    - id: AC-PHASE103-S15-INLINE
+      description: "Zero external dependencies (all inline)"
+      validation: "grep -c 'href=' cortex-registry/index.html == 0"
+    
+    - id: AC-PHASE103-S15-SIZE
+      description: "Total file size <200KB"
+      validation: "os.path.getsize('cortex-registry/index.html') < 204800"
+    
+    - id: AC-PHASE103-S15-SVG
+      description: "SVG logo inline (<5KB)"
+      validation: "svg_size_in_html() < 5000"
+    
+    - id: AC-PHASE103-S15-SECTIONS
+      description: "All 6 knowledge sections present"
+      validation: "count_sections() == 6"
+    
+    - id: AC-PHASE103-S15-SEARCH
+      description: "Search works across all content"
+      validation: "search_test('governance') finds core section"
+    
+    - id: AC-PHASE103-S15-RESPONSIVE
+      description: "Responsive 320px-4K"
+      validation: "responsive_test([320, 768, 1920, 3840])"
+    
+    - id: AC-PHASE103-S15-WCAG
+      description: "WCAG 2.1 AA compliant"
+      validation: "lighthouse_accessibility() >= 95"
+    
+    - id: AC-PHASE103-S15-PERFORMANCE
+      description: "Loads in <500ms"
+      validation: "lighthouse_performance() >= 90"
+    
+    - id: AC-PHASE103-S15-KNOWLEDGE
+      description: "Each section has WHAT/WHY/WHEN/HOW"
+      validation: "all_sections_have_knowledge_blocks()"
+  
+  testing:
+    unit_tests:
+      - "test_html_validates_w3c"
+      - "test_no_external_dependencies"
+      - "test_svg_logo_renders"
+      - "test_all_sections_present"
+      - "test_search_filters_content"
+      - "test_knowledge_blocks_complete"
+    
+    integration_tests:
+      - "test_manifest_yaml_parsing"
+      - "test_folder_structure_rendering"
+      - "test_file_preview_loads"
+      - "test_copy_to_clipboard"
+      - "test_keyboard_shortcuts"
+      - "test_troubleshooting_links"
+    
+    accessibility_tests:
+      - "test_wcag_color_contrast"
+      - "test_keyboard_navigation_complete"
+      - "test_screen_reader_labels"
+      - "test_focus_indicators_visible"
+      - "test_aria_attributes_correct"
+    
+    performance_tests:
+      - "test_page_load_under_500ms"
+      - "test_inline_css_under_50kb"
+      - "test_svg_logo_under_5kb"
+      - "test_total_file_under_200kb"
+      - "test_lighthouse_performance_90plus"
+    
+    visual_tests:
+      - "test_glassmorphism_theme_applied"
+      - "test_responsive_breakpoints"
+      - "test_hover_animations_smooth"
+      - "test_search_highlights_visible"
+  
+  rollback:
+    commands:
+      - "git checkout HEAD -- cortex-registry/index.html"
+    validation:
+      - "File removed or reverted to previous state"
+  
+  documentation_updates:
+    files:
+      - path: "README.md"
+        change: "Add link to cortex-registry/index.html in Getting Started section"
+      - path: "cortex-docs/content/getting-started.md"
+        change: "Reference index.html as primary registry navigation tool"
+      - path: "cortex-registry/manifest.yaml"
+        change: "Add index.html metadata with description and purpose"
+
+# ============================================================================
+# NOTES
+# ============================================================================
+notes:
+  - "NOT renaming cortex_intelligence to cortex_intelligence if just a simple rename - this includes tier restructuring"
+  - "company/ folder stays at root (Tier 1 override authority)"
+  - "cortex-registry remains config-only (no Python code)"
+  - "Use git mv for all moves to preserve history"
+  - "Golden tests must CREATE, READ, PROCESS, DELETE actual files"
+  - "SQLite audit.db is the evidence source of truth"
+  - "Stage S15 index.html becomes THE entry point for CORTEX developers - must be comprehensive and informative"

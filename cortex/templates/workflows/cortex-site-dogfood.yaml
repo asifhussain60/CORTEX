@@ -1,0 +1,122 @@
+---
+# cortex-site-dogfood.yaml
+# CORTEX Site Dogfood Workflow Template
+#
+# Defines the end-to-end TDD workflow for CORTEX site development using
+# Vision API analysis, challenge generation, and EnforcementOrchestrator gates.
+#
+# AC-ID:  AC-MEGA-PHASE99-S3-001 through AC-MEGA-PHASE99-S3-006
+# Author: Asif Hussain
+# Phase:  99 Stage 3
+
+name: cortex-site-dogfood
+version: "1.0"
+description: >
+  Full TDD lifecycle for CORTEX site development.
+  Integrates LENSOrchestrator (Vision API analysis), ChallengeEngine, and
+  EnforcementOrchestrator gates to drive the RED → GREEN → REFACTOR cycle.
+
+performance_budget:
+  max_duration_minutes: 30
+
+# ─────────────────────────────────────────────────────────────────────────────
+stages:
+
+  - id: analyze-screenshot
+    name: "Vision API Screenshot Analysis"
+    executor: LENSOrchestrator
+    description: >
+      Analyse the current site screenshot using Vision API to extract
+      UI elements, layout issues, and contrast violations.
+    inputs:
+      screenshot_path: "{{ context.screenshot_path }}"
+    outputs:
+      - ui_elements
+      - layout_issues
+      - contrast_violations
+    timeout_seconds: 120
+
+  - id: generate-challenges
+    name: "Challenge Generation"
+    executor: ChallengeEngine
+    description: >
+      Generate LENS-driven challenges against the proposed UI changes,
+      exposing assumptions and alternative approaches.
+    inputs:
+      ui_elements: "{{ stages.analyze-screenshot.outputs.ui_elements }}"
+      layout_issues: "{{ stages.analyze-screenshot.outputs.layout_issues }}"
+    outputs:
+      - challenges
+      - alternative_approaches
+    timeout_seconds: 60
+
+  - id: tdd-red-phase
+    name: "TDD RED — Write Failing Tests"
+    executor: TDDOrchestrator
+    phase: RED
+    description: >
+      Write failing tests that capture the desired behaviour identified
+      by the Vision analysis. No implementation code at this stage.
+    inputs:
+      challenges: "{{ stages.generate-challenges.outputs.challenges }}"
+    outputs:
+      - failing_tests
+      - test_report
+    timeout_seconds: 300
+    gates:
+      - enforcement: EnforcementOrchestrator
+        rule: CORE-008
+        on_fail: block
+
+  - id: tdd-green-phase
+    name: "TDD GREEN — Make Tests Pass"
+    executor: TDDOrchestrator
+    phase: GREEN
+    description: >
+      Write the minimal implementation to make the RED-phase tests pass.
+      EnforcementOrchestrator verifies no governance violations are introduced.
+    inputs:
+      failing_tests: "{{ stages.tdd-red-phase.outputs.failing_tests }}"
+    outputs:
+      - passing_tests
+      - implementation_delta
+    timeout_seconds: 600
+    gates:
+      - enforcement: EnforcementOrchestrator
+        rule: CORE-002
+        on_fail: block
+      - enforcement: EnforcementOrchestrator
+        rule: CORE-035
+        on_fail: warn
+
+  - id: tdd-refactor-phase
+    name: "TDD REFACTOR — Clean Code"
+    executor: TDDOrchestrator
+    phase: REFACTOR
+    description: >
+      Refactor the implementation for clarity, performance, and governance
+      compliance while keeping all tests green.
+    inputs:
+      passing_tests: "{{ stages.tdd-green-phase.outputs.passing_tests }}"
+      implementation_delta: "{{ stages.tdd-green-phase.outputs.implementation_delta }}"
+    outputs:
+      - refactored_files
+      - final_test_report
+      - deployment_preview
+    timeout_seconds: 300
+    gates:
+      - enforcement: EnforcementOrchestrator
+        rule: CORE-028
+        on_fail: warn
+      - enforcement: EnforcementOrchestrator
+        rule: CORE-011
+        on_fail: warn
+
+# ─────────────────────────────────────────────────────────────────────────────
+notifications:
+  on_success:
+    - channel: slack
+      message: "✅ cortex-site-dogfood workflow complete — deployment preview ready"
+  on_failure:
+    - channel: slack
+      message: "❌ cortex-site-dogfood workflow failed at stage {{ context.current_stage }}"

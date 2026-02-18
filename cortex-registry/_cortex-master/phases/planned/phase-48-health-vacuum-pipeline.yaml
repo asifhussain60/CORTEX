@@ -1,0 +1,420 @@
+# Phase 48: Health-Vacuum Integrity Pipeline
+# Status: PLANNED
+# Created: 2026-02-18
+# Authority: CORE-002, CORE-028, CORE-035
+
+metadata:
+  phase_id: "phase-48"
+  title: "Health-Vacuum Integrity Pipeline"
+  version: "1.0.0"
+  status: "planned"
+  priority: "P1"
+  created: "2026-02-18T18:00:00Z"
+  author: "CORTEX Architect"
+  workflow_template: "cortex-registry/workflows/templates/health-vacuum-pipeline.yaml"
+
+# =============================================================================
+# OVERVIEW
+# =============================================================================
+
+overview:
+  description: |
+    Comprehensive CORTEX repository integrity check and production cleanup pipeline.
+    
+    Two-phase orchestrator architecture:
+    1. **HealthOrchestrator**: Recursively scans repository, identifies 10 issue categories,
+       writes structured health-issues.yaml for handoff
+    2. **VacuumOrchestrator**: Reads health-issues.yaml, executes cleanup operations
+       with rollback capability, deletes handoff file on success
+    
+    This phase implements the "Health → Vacuum" pipeline pattern with:
+    - MCP-first tool exposure
+    - Golden test coverage (16 scenarios)
+    - Governance compliance (CORE-002, CORE-028)
+    - Teardown epilogue for cleanup
+
+  business_value:
+    - "Automated repository hygiene reduces manual maintenance burden"
+    - "Consistent naming conventions improve discoverability"
+    - "Empty/orphaned file cleanup reduces cognitive load"
+    - "Production readiness validation before deployments"
+
+  risk_assessment:
+    score: 0.45
+    category: "MEDIUM"
+    mitigations:
+      - "Dry-run mode default"
+      - "Rollback manifest for undo"
+      - "Protected files list"
+      - "Git stash before operations"
+      - "Test verification before commit"
+
+# =============================================================================
+# PREREQUISITES
+# =============================================================================
+
+prerequisites:
+  completed_phases:
+    - phase-47  # Brain Tier Architecture (memory tier paths fixed)
+  
+  required_components:
+    - "VacuumOrchestrator (cortex_intelligence/memory/learned_patterns/orchestrators/vacuum/)"
+    - "VacuumAutomation (cortex/toolkit/cleanup/vacuum.py)"
+    - "EnforcementOrchestrator (cortex/orchestrators/core/)"
+    - "TDDOrchestrator (cortex/orchestrators/core/)"
+  
+  governance_rules:
+    - "CORE-002: No markdown sprawl"
+    - "CORE-028: Naming conventions (snake_case Python, kebab-case others)"
+    - "CORE-035: Single canonical implementation"
+
+# =============================================================================
+# STAGES
+# =============================================================================
+
+stages:
+  - stage: 1
+    name: "Pre-flight Safety"
+    duration: "15 minutes"
+    tasks:
+      - id: "S1-T1"
+        name: "Check git status"
+        action: "git status --porcelain"
+        on_dirty: "git stash"
+      - id: "S1-T2"
+        name: "Run baseline tests"
+        action: "pytest tests/golden/ -q"
+        on_failure: "ABORT"
+    deliverables:
+      - "Clean working directory (or stashed)"
+      - "Baseline test verification"
+    
+  - stage: 2
+    name: "Health Scan"
+    duration: "30 minutes"
+    tasks:
+      - id: "S2-T1"
+        name: "Create HealthOrchestrator"
+        file: "cortex/orchestrators/support/health_orchestrator.py"
+        tests: "tests/golden/orchestrators/health_vacuum/test_health_orchestrator.py"
+      - id: "S2-T2"
+        name: "Create MCP health tool"
+        file: "cortex/mcp/tools/health_orchestrator_tool.py"
+      - id: "S2-T3"
+        name: "Execute health scan"
+        action: "cortex_health_orchestrate"
+        output: "cortex/brain/vacuum/health-issues.yaml"
+    deliverables:
+      - "HealthOrchestrator class"
+      - "MCP tool exposure"
+      - "health-issues.yaml handoff file"
+    
+  - stage: 3
+    name: "Review Issues"
+    duration: "30 minutes"
+    mode: "interactive"  # Can be switched to "autonomous"
+    tasks:
+      - id: "S3-T1"
+        name: "Display issues summary"
+        format: "markdown_table_in_chat"
+      - id: "S3-T2"
+        name: "Await approval"
+        timeout: "30 minutes"
+        on_timeout: "ABORT"
+    deliverables:
+      - "User-reviewed issue list"
+      - "Approval to proceed"
+    
+  - stage: 4
+    name: "Vacuum Execution"
+    duration: "1 hour"
+    tasks:
+      - id: "S4-T1"
+        name: "Enhance VacuumOrchestrator"
+        file: "cortex_intelligence/memory/learned_patterns/orchestrators/vacuum/orchestrator.py"
+        changes: "Add health-issues.yaml reader"
+      - id: "S4-T2"
+        name: "Create MCP vacuum tool"
+        file: "cortex/mcp/tools/vacuum_orchestrator_tool.py"
+      - id: "S4-T3"
+        name: "Execute vacuum operations"
+        operations:
+          - "V-001: Delete unneeded files"
+          - "V-002: Rename screaming → kebab"
+          - "V-003: Relocate to proper paths"
+          - "V-004: Clean root directory"
+          - "V-005: Remove empty directories"
+      - id: "S4-T4"
+        name: "Create rollback manifest"
+        output: "cortex/brain/vacuum/rollback-manifest.json"
+    deliverables:
+      - "Enhanced VacuumOrchestrator"
+      - "MCP tool exposure"
+      - "Cleanup operations executed"
+      - "Rollback manifest"
+    
+  - stage: 5
+    name: "Verification & Teardown"
+    duration: "30 minutes"
+    tasks:
+      - id: "S5-T1"
+        name: "Run verification tests"
+        action: "pytest tests/golden/ tests/unit/ -q"
+        on_failure: "ROLLBACK"
+      - id: "S5-T2"
+        name: "Delete health-issues.yaml"
+        action: "rm cortex/brain/vacuum/health-issues.yaml"
+      - id: "S5-T3"
+        name: "Delete rollback manifest"
+        action: "rm cortex/brain/vacuum/rollback-manifest.json"
+        condition: "tests_pass"
+      - id: "S5-T4"
+        name: "Git commit"
+        action: "git commit -m 'chore: Health-Vacuum pipeline cleanup (Phase 48)'"
+    deliverables:
+      - "All tests passing"
+      - "Temporary files deleted"
+      - "Changes committed"
+
+# =============================================================================
+# HEALTH CHECKS (10 Categories)
+# =============================================================================
+
+health_checks:
+  - id: "H-001"
+    name: "Screaming Case Files"
+    description: "Files with 3+ consecutive uppercase letters (CORE-028 violation)"
+    pattern: "[A-Z]{3,}"
+    action: "rename"
+    severity: "medium"
+    
+  - id: "H-002"
+    name: "Empty Files"
+    description: "Zero-byte files (stubs or deprecated)"
+    condition: "size == 0"
+    exclude: [".gitkeep", "__init__.py with imports"]
+    action: "delete_or_review"
+    severity: "low"
+    
+  - id: "H-003"
+    name: "Orphaned Directories"
+    description: "Directories with no children"
+    condition: "no_children"
+    action: "delete"
+    severity: "low"
+    
+  - id: "H-004"
+    name: "Orphaned Files"
+    description: "Files not referenced in imports or configs"
+    condition: "no_imports_no_config_refs"
+    file_types: [".py", ".yaml", ".json"]
+    action: "review"
+    severity: "medium"
+    
+  - id: "H-005"
+    name: "Duplicate Content"
+    description: "Files with identical hash (CORE-035 violation)"
+    method: "md5_hash"
+    min_size: 100
+    action: "keep_canonical"
+    severity: "high"
+    
+  - id: "H-006"
+    name: "Deprecated Markers"
+    description: "Files with DEPRECATED or TODO: remove comments"
+    patterns: ["DEPRECATED", "TODO: remove", "FIXME: delete"]
+    action: "review_for_deletion"
+    severity: "medium"
+    
+  - id: "H-007"
+    name: "Wrong Path References"
+    description: "Outdated module paths (cortex_brain → cortex_intelligence)"
+    replacements:
+      - old: "cortex_brain"
+        new: "cortex_intelligence"
+      - old: "_cortex-master"
+        new: "cortex-registry"
+    action: "fix"
+    severity: "high"
+    
+  - id: "H-008"
+    name: "Stale Files"
+    description: "Files >90 days old with no references"
+    days_threshold: 90
+    require_no_refs: true
+    action: "archive_or_delete"
+    severity: "low"
+    
+  - id: "H-009"
+    name: "Oversized Files"
+    description: "Non-binary files >500KB"
+    max_bytes: 512000
+    exclude_binary: true
+    action: "review"
+    severity: "medium"
+    
+  - id: "H-010"
+    name: "Invalid Markdown Location"
+    description: "Markdown files outside allowed paths (CORE-002)"
+    allowed_paths:
+      - ".github/prompts/**"
+      - ".github/agents/**"
+      - "docs/**"
+      - "cortex-docs/**"
+      - "cortex-registry/**"
+      - "_workspaces/**"
+      - "**/README.md"
+    action: "relocate_or_delete"
+    severity: "high"
+
+# =============================================================================
+# VACUUM OPERATIONS (5 Operations)
+# =============================================================================
+
+vacuum_operations:
+  - id: "V-001"
+    name: "Delete Unneeded Files"
+    targets:
+      - "*.bak"
+      - "*.tmp"
+      - "*.temp"
+      - "unauthorized *.md (per H-010)"
+    protected:
+      - "pytest.ini"
+      - "requirements.txt"
+      - "README.md"
+      - ".gitignore"
+      - "conftest.py"
+      - "pyproject.toml"
+      - "Makefile"
+      - "health_stubs.json"
+      - "cortex_intelligence/state/governance.db*"
+    
+  - id: "V-002"
+    name: "Rename Screaming to Kebab"
+    rules:
+      - "Convert UPPERCASE → lowercase"
+      - "Replace _ with - for non-Python files"
+      - "Max 30 characters (truncate with suffix)"
+      - "Preserve extension"
+    examples:
+      - from: "WAVE-1-CERTIFICATE.txt"
+        to: "wave-1-certificate.txt"
+      - from: "THIS-IS-A-VERY-LONG-FILENAME.txt"
+        to: "this-is-a-very-long-f.txt"
+    
+  - id: "V-003"
+    name: "Relocate Files"
+    rules:
+      - pattern: "^EXECUTIVE.*\\.md$"
+        destination: "docs/executive"
+      - pattern: "^PHASE.*\\.md$"
+        destination: "docs/phases"
+      - pattern: ".*[Rr]eport.*\\.md$"
+        destination: "reports"
+      - pattern: "^.*\\.py$ (in root)"
+        destination: "scripts"
+    
+  - id: "V-004"
+    name: "Clean Root Directory"
+    allowed_root_files:
+      - "pytest.ini"
+      - "requirements.txt"
+      - "README.md"
+      - ".gitignore"
+      - "conftest.py"
+      - "pyproject.toml"
+      - "Makefile"
+      - "health_stubs.json"
+    action: "move_others_to scripts/"
+    
+  - id: "V-005"
+    name: "Remove Empty Directories"
+    exclude: [".git", ".venv", "__pycache__"]
+    recursive: true
+
+# =============================================================================
+# GOLDEN TESTS
+# =============================================================================
+
+golden_tests:
+  location: "tests/golden/orchestrators/health_vacuum/"
+  total_scenarios: 16
+  
+  test_files:
+    - file: "test_health_orchestrator_golden.py"
+      scenarios: 7
+      coverage:
+        - "GH-001: Detect screaming case files"
+        - "GH-002: Detect empty Python files"
+        - "GH-003: Detect orphaned directories"
+        - "GH-004: Detect wrong references"
+        - "GH-005: Detect invalid markdown location"
+        - "GH-006: Respect protected files"
+        - "GH-007: Respect _workspaces exception"
+        
+    - file: "test_vacuum_orchestrator_golden.py"
+      scenarios: 6
+      coverage:
+        - "GV-001: Rename screaming to kebab"
+        - "GV-002: Truncate long names"
+        - "GV-003: Delete empty directories"
+        - "GV-004: Relocate root scripts"
+        - "GV-005: Rollback on test failure"
+        - "GV-006: Delete handoff file on success"
+        
+    - file: "test_pipeline_integration_golden.py"
+      scenarios: 3
+      coverage:
+        - "GP-001: End-to-end happy path"
+        - "GP-002: Abort on dirty git state"
+        - "GP-003: Dry run mode"
+
+# =============================================================================
+# ESTIMATED TIMELINE
+# =============================================================================
+
+timeline:
+  total_duration: "6 hours"
+  stages:
+    - name: "Stage 1: Pre-flight Safety"
+      duration: "15 minutes"
+    - name: "Stage 2: Health Scan"
+      duration: "30 minutes"
+    - name: "Stage 3: Review Issues"
+      duration: "30 minutes"
+    - name: "Stage 4: Vacuum Execution"
+      duration: "1 hour"
+    - name: "Stage 5: Verification & Teardown"
+      duration: "30 minutes"
+    - name: "Golden Tests (TDD)"
+      duration: "3 hours"
+      note: "16 scenarios across 3 test files"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+
+success_criteria:
+  - "All 16 golden tests passing"
+  - "Zero screaming case files in CORTEX repo"
+  - "Zero empty directories"
+  - "Zero invalid markdown locations"
+  - "Root directory contains only allowed files"
+  - "health-issues.yaml deleted after cleanup"
+  - "All verification tests passing"
+  - "Changes committed to repository"
+
+# =============================================================================
+# ROLLBACK PLAN
+# =============================================================================
+
+rollback:
+  trigger: "verification_tests_fail"
+  actions:
+    - "Read rollback-manifest.json"
+    - "Restore renamed files to original names"
+    - "Restore deleted files from git"
+    - "Restore relocated files to original paths"
+    - "Delete rollback-manifest.json"
+  verification: "Run baseline tests again"

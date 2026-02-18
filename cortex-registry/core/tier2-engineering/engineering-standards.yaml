@@ -1,0 +1,84 @@
+# CORTEX TIER 2 GOVERNANCE - ENGINEERING STANDARDS
+# ============================================================
+# Purpose: Engineering-level coding standards and conventions.
+#          These are the day-to-day rules contributors work within.
+#          Override by Tier 1 (Project) and Tier 0 (SKULL) where conflicts arise.
+# Status: ACTIVE
+# Precedence: Lowest (below Tier 0 and Tier 1)
+# ============================================================
+
+schema_version: "1.0"
+governance_tier: 2
+category: CORTEX_ENGINEERING
+precedence: STANDARD
+
+metadata:
+  author: "Asif Hussain"
+  created: "2026-02-18"
+  last_updated: "2026-02-18"
+  version: "1.0"
+  description: >
+    Tier 2 (Engineering) rules encode the coding standards, naming
+    conventions and tooling constraints that every contributor must follow
+    when writing code for the CORTEX project.
+
+rules:
+  # E2-001: Type Hints (reinforces CORE-011)
+  - rule_id: "E2-001"
+    name: "Type Annotations"
+    principle: "Explicit over Implicit"
+    description: >
+      All function parameters and return values must carry type annotations.
+      Use typing module constructs (Optional, List, Dict, etc.) for Python 3.9
+      compatibility. Avoid bare `Any` unless genuinely necessary.
+    severity: "HIGH"
+    blocking: false
+    core_rule_ref: "CORE-011"
+
+  # E2-002: Docstrings (reinforces CORE-012)
+  - rule_id: "E2-002"
+    name: "Docstring Standards"
+    principle: "Self-Documenting Code"
+    description: >
+      All public classes, methods and module-level functions must have a
+      docstring. Docstrings must include: one-line summary, Args section,
+      Returns section (if non-None), and Raises section (if exceptions are
+      propagated).
+    severity: "HIGH"
+    blocking: false
+    core_rule_ref: "CORE-012"
+
+  # E2-003: Specific Exceptions (reinforces CORE-013)
+  - rule_id: "E2-003"
+    name: "Specific Exception Handling"
+    principle: "Fail Loudly"
+    description: >
+      Bare `except:` clauses are forbidden. Always catch a specific exception
+      type (e.g., `except ValueError:`, `except (IOError, OSError):`).
+      Never silence exceptions without logging.
+    severity: "HIGH"
+    blocking: true
+    core_rule_ref: "CORE-013"
+
+  # E2-004: No Hardcoded Paths
+  - rule_id: "E2-004"
+    name: "No Hardcoded Absolute Paths"
+    principle: "Portability"
+    description: >
+      Absolute paths (/Users/..., C:\...) must never appear in source code.
+      Use pathlib.Path(__file__).parent or workspace_root parameters instead.
+    severity: "MEDIUM"
+    blocking: false
+    core_rule_ref: "CORE-051"
+
+  # E2-005: Golden Tests for Orchestrators
+  - rule_id: "E2-005"
+    name: "Orchestrator Golden Tests"
+    principle: "Test-First"
+    description: >
+      Every new orchestrator must have at least one golden test in
+      tests/golden/orchestrators/ that proves its core contract without
+      mocking the file system (use tmp_path fixtures instead).
+    severity: "HIGH"
+    blocking: true
+    core_rule_ref: "CORE-008"
