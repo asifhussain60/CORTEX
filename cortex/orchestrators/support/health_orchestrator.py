@@ -145,6 +145,9 @@ class ScanResult:
     invalid_markdown: IssueCategory = field(default_factory=IssueCategory)
     summary: ScanSummary = field(default_factory=ScanSummary)
 
+    # Inventory findings from InventoryAgent — raw dicts ready for YAML handoff
+    inventory_findings: list[dict] = field(default_factory=list)
+
     def issues_for_path(self, path_fragment: str) -> list[IssueFile]:
         """Return all issues matching a path fragment.
 
@@ -176,12 +179,15 @@ class ScanResult:
             self.wrong_references,
             self.invalid_markdown,
         ]
-        self.issues_found = sum(c.count for c in cats)
+        self.issues_found = sum(c.count for c in cats) + len(self.inventory_findings)
         self.summary.rename_count = self.screaming_case.count
         self.summary.delete_count = (
             self.empty_files.count
             + self.orphaned_directories.count
             + self.invalid_markdown.count
+        )
+        self.summary.relocate_count = sum(
+            1 for f in self.inventory_findings if f.get("action") == "relocate"
         )
 
 
@@ -332,6 +338,9 @@ class HealthOrchestrator:
         self._check_deprecated_markers(files, result)
         self._check_invalid_markdown(files, result)
 
+        # Inventory scan — delegate structural cleanup to VacuumExecutor
+        self._collect_inventory_findings(result)
+
         result._recount()
         result.scan_duration_ms = int(
             (datetime.now(timezone.utc) - t_start).total_seconds() * 1000
@@ -412,6 +421,9 @@ class HealthOrchestrator:
                         for f in result.invalid_markdown.files
                     ],
                 },
+            },
+            "inventory_findings": {
+                "findings": result.inventory_findings,
             },
             "summary": {
                 "delete_count": result.summary.delete_count,
@@ -562,6 +574,30 @@ class HealthOrchestrator:
                     )
                 )
         result.invalid_markdown.count = len(result.invalid_markdown.files)
+
+    def _collect_inventory_findings(self, result: ScanResult) -> None:
+        """Run InventoryAgent and attach findings to result for vacuum handoff.
+
+        The InventoryAgent is a pure reporter — it never mutates files.
+        Findings are serialised as dicts into ``result.inventory_findings``
+        so ``write_handoff`` can embed them in health-issues.yaml and the
+        VacuumExecutor can execute them in Stage 4.
+
+        Args:
+            result: ScanResult to attach findings to.
+        """
+        try:
+            from cortex.orchestrators.health.agents.inventory_agent import (
+                InventoryAgent,
+            )
+            agent = InventoryAgent()
+            check_result = agent.check(self.workspace_root)
+            for issue in check_result.issues:
+                finding = issue.metadata.get("inventory_finding")
+                if finding:
+                    result.inventory_findings.append(finding)
+        except Exception as exc:  # never let inventory failure break the scan
+            logger.warning("InventoryAgent skipped: %s", exc)
 
 
 # ---------------------------------------------------------------------------
@@ -747,6 +783,30 @@ class VacuumExecutor:
         if handoff_path.exists():
             handoff_path.unlink()
 
+    def delete_directory_tree(self, target: Path) -> OperationResult:
+        """Recursively delete a directory and all its contents.
+
+        Used by inventory vacuum for CONSOLIDATE / DELETE / STUB_DIR actions
+        where the target folder may still contain files.
+
+        Args:
+            target: Absolute path to directory to remove.
+
+        Returns:
+            OperationResult indicating success or failure.
+        """
+        if not target.is_dir():
+            return OperationResult(
+                success=False,
+                operation="delete_tree",
+                source=str(target),
+                error="not_dir",
+            )
+        self._operations.append({"op": "delete_tree", "source": str(target)})
+        if not self.dry_run:
+            shutil.rmtree(target)
+        return OperationResult(success=True, operation="delete_tree", source=str(target))
+
     def execute_from_handoff(self, handoff_path: Path) -> list[OperationResult]:
         """Read health-issues.yaml and execute all prescribed operations.
 
@@ -783,9 +843,60 @@ class VacuumExecutor:
             target = self.workspace_root / entry["path"]
             results.append(self.delete_file(target))
 
+        # Inventory findings — emitted by InventoryAgent
+        # action: consolidate | delete | relocate | stub_dir
+        for entry in data.get("inventory_findings", {}).get("findings", []):
+            action = entry.get("action", "")
+            source_path = entry.get("source_path", "")
+            target_path = entry.get("target_path")
+            safe = entry.get("safe", True)
+
+            source = self.workspace_root / source_path
+            if not safe:
+                # External imports detected — skip, leave for human review
+                results.append(
+                    OperationResult(
+                        success=False,
+                        operation=f"inventory_{action}",
+                        source=str(source),
+                        error="unsafe_external_imports",
+                    )
+                )
+                continue
+
+            if action in ("delete", "stub_dir"):
+                if source.is_dir():
+                    results.append(self.delete_directory_tree(source))
+                elif source.is_file():
+                    results.append(self.delete_file(source))
+
+            elif action == "consolidate":
+                # Inner duplicate is removed; root canonical is authoritative
+                if source.is_dir():
+                    results.append(self.delete_directory_tree(source))
+
+            elif action == "relocate" and target_path:
+                dest_dir = self.workspace_root / target_path
+                if source.is_dir():
+                    if not self.dry_run:
+                        dest_dir.mkdir(parents=True, exist_ok=True)
+                        shutil.copytree(str(source), str(dest_dir / source.name), dirs_exist_ok=True)
+                        shutil.rmtree(source)
+                    self._operations.append(
+                        {"op": "relocate_tree", "source": str(source), "destination": str(dest_dir / source.name)}
+                    )
+                    results.append(
+                        OperationResult(
+                            success=True,
+                            operation="relocate_tree",
+                            source=str(source),
+                            destination=str(dest_dir / source.name),
+                        )
+                    )
+                elif source.is_file():
+                    results.append(self.relocate_file(source, dest_dir))
+
         return results
-
-
 # ---------------------------------------------------------------------------
 # PipelineReport
 # ---------------------------------------------------------------------------

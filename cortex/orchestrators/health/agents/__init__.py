@@ -28,6 +28,7 @@ from .stub_autofix_agent import StubAutoFixAgent
 from .test_coverage_agent import TestCoverageAgent
 from .token_optimization_agent import TokenOptimizationAgent
 from .version_cleanup_agent import VersionCleanupAgent
+from .inventory_agent import InventoryAgent, InventoryAction, InventoryFinding
 
 __all__ = [
     "BaseHealthAgent",
@@ -36,6 +37,9 @@ __all__ = [
     "HealthIssueSeverity",
     "HealthCheckResult",
     "DuplicateDetectionAgent",
+    "InventoryAgent",
+    "InventoryAction",
+    "InventoryFinding",
     "PathIntegrityAgent",
     "RegistryConsistencyAgent",
     "StubDetectionAgent",
