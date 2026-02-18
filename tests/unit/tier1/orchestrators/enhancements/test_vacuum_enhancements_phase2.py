@@ -38,7 +38,7 @@ def load_module(name: str, path: Path):
 # Load modules
 ref_updater_mod = load_module(
     "reference_updater",
-    cortex_intelligence_path / "tier1/orchestrators/enhancements/reference_updater.py"
+    cortex_intelligence_path / "memory/tier1_learned/orchestrators/enhancements/reference_updater.py"
 )
 ReferenceType = ref_updater_mod.ReferenceType
 Reference = ref_updater_mod.Reference
@@ -48,7 +48,7 @@ ReferenceUpdater = ref_updater_mod.ReferenceUpdater
 
 planner_mod = load_module(
     "rule_based_planner",
-    cortex_intelligence_path / "tier1/orchestrators/enhancements/rule_based_planner.py"
+    cortex_intelligence_path / "memory/tier1_learned/orchestrators/enhancements/rule_based_planner.py"
 )
 CleanupAction = planner_mod.CleanupAction
 CleanupRule = planner_mod.CleanupRule
