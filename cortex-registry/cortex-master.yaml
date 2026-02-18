@@ -416,7 +416,7 @@ phase_status:
       note: "Originally phase-97, renumbered to phase-41"
 
     - id: "phase-42"
-      title: "Vision API Enhancement + HTML Mapping + Dogfooding Workflow"
+      title: "Vision API Enhancement + HTML Mapping + Internal Validation Workflow"
       location: "planning/phases/completed/phase-42-vision-api-dogfooding-workflow.yaml"
       completion_date: "2026-02-16"
       duration: "4 hours"
@@ -523,7 +523,7 @@ phase_status:
     - id: "phase-48"
       title: "Health-Vacuum Integrity Pipeline"
       location: "planning/phases/planned/phase-48-health-vacuum-pipeline.yaml"
-      workflow_template: "cortex-registry/workflows/templates/health-vacuum-pipeline.yaml"
+      workflow_template: "cortex-registry/workflows/templates/maintenance/health-vacuum-pipeline.yaml"
       status: "COMPLETE"
       completion_date: "2026-02-18"
       actual_duration: "6 hours"
@@ -540,7 +540,7 @@ phase_status:
     - id: "phase-49"
       title: "Golden Test Promotion Pipeline"
       location: "planning/phases/planned/phase-49-golden-test-promotion.yaml"
-      workflow_template: "cortex-registry/workflows/templates/golden-test-promotion.yaml"
+      workflow_template: "cortex-registry/workflows/templates/governance/golden-test-promotion.yaml"
       manifest: "cortex-registry/governance/test-promotion-manifest.yaml"
       status: "COMPLETE"
       completion_date: "2026-02-18"
@@ -567,7 +567,7 @@ phase_status:
       plan_artifacts:
         - "cortex-registry/planning/phases/planned/phase-49-golden-test-promotion.yaml"
         - "cortex-registry/governance/test-promotion-manifest.yaml"
-        - "cortex-registry/workflows/templates/golden-test-promotion.yaml"
+        - "cortex-registry/workflows/templates/governance/golden-test-promotion.yaml"
       note: "Plan artifacts created 2026-02-18. Implementation COMPLETE — Phase 49 committed ce089cb2e."
 
 # ============================================================================

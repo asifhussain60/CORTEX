@@ -197,7 +197,7 @@ convergence:
 | `tdd_feature_implementation` | ARCHITECT | 5 | RED → GREEN → REFACTOR cycle |
 | `bug_fix_workflow` | PRODUCTION | 4 | Reproduce → Fix → Test → Deploy |
 | `refactoring_sweep` | ARCHITECT | 6 | Analysis → Plan → Execute → Verify |
-| `site_dogfood` | ARCHITECT | 7 | Vision API → Challenge → TDD → Deploy |
+| `site_validation` | ARCHITECT | 7 | Vision API → Challenge → TDD → Deploy |
 | `phase_execution` | ARCHITECT | 8 | Setup → Stages → Teardown → Report |
 | `security_remediation` | PRODUCTION | 5 | Scan → Triage → Fix → Verify → Report |
 | `documentation_update` | PRODUCTION | 4 | Analyze → Generate → Review → Publish |

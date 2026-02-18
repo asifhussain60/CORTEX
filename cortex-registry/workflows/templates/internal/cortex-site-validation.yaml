@@ -1,5 +1,5 @@
 # ============================================================================
-# CORTEX Site Dogfooding Workflow Template
+# CORTEX Site Validation Workflow Template
 # ============================================================================
 # Purpose: TDD workflow for CORTEX site development using Vision API
 # Phase: 99 Stage 3
@@ -7,7 +7,7 @@
 # ============================================================================
 
 version: '2.0'
-workflow_id: cortex-site-dogfood
+workflow_id: cortex-site-validation
 title: "CORTEX Site TDD Workflow with Vision API"
 description: |
   5-stage TDD workflow for CORTEX site development:

@@ -11,7 +11,7 @@ metadata:
   priority: "P1"
   created: "2026-02-18T18:00:00Z"
   author: "CORTEX Architect"
-  workflow_template: "cortex-registry/workflows/templates/health-vacuum-pipeline.yaml"
+  workflow_template: "cortex-registry/workflows/templates/maintenance/health-vacuum-pipeline.yaml"
 
 # =============================================================================
 # OVERVIEW

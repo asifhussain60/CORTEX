@@ -4,14 +4,14 @@ Workflow Template Registry with mode detection and placeholder resolution.
 Provides convergence-gated, knowledge-parameterized workflow templates that resolve
 differently based on repository context (ARCHITECT vs PRODUCTION mode). Templates
 contain placeholders resolved by KnowledgeSynthesisEngine. Templates auto-discovered
-from metadata.yaml files in cortex-registry/workflows/ and company/workflows/.
+from metadata.yaml files in cortex-registry/workflows/templates/ and company/workflows/.
 
 Mode Detection:
 - ARCHITECT: .cortex-runtime/ marker exists → CORTEX-internal knowledge
 - PRODUCTION: No .cortex-runtime/ marker → User domain knowledge
 
 Override Precedence:
-- company/workflows/*.yaml > cortex-registry/workflows/*.yaml
+- company/workflows/*.yaml > cortex-registry/workflows/templates/*.yaml
 
 Phase: 100 Stage 1 Part 2
 Author: Asif Hussain

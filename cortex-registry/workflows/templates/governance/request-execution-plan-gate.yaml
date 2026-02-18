@@ -1,0 +1,322 @@
+# =============================================================================
+# Request Execution Workflow Template with Plan Gate & Intelligent LENS
+# =============================================================================
+# Phase 102 — Plan-Before-Execute Gate
+# Authority: CORTEX Architecture
+#
+# This template defines the full lifecycle for executing a user request:
+#   1. LENS analysis (intelligent depth)
+#   2. Plan gate (mandatory for code-modifying intents)
+#   3. User approval
+#   4. TDD execution with convergence looping
+#   5. Cleanup & refactoring sweep
+#   6. LENS data persistence to company registry
+#
+# Golden tests: tests/golden/orchestrators/plan_gate/test_plan_gate_golden.py
+# =============================================================================
+
+workflow:
+  id: "request-execution/plan-gate"
+  name: "Request Execution with Plan Gate & Intelligent LENS"
+  version: "1.0.0"
+  category: "execution"
+  description: >
+    Full user request execution lifecycle with mandatory plan creation,
+    intelligent LENS depth, TDD convergence loops, and cleanup sweep.
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-18"
+    phase: "102"
+    golden_tests: "tests/golden/orchestrators/plan_gate/test_plan_gate_golden.py"
+    core_rules: ["CORE-008", "CORE-011", "CORE-012", "CORE-028", "CORE-035"]
+
+  # ---------------------------------------------------------------------------
+  # Convergence gate: Loop until all criteria met
+  # ---------------------------------------------------------------------------
+  convergence_gate:
+    max_cycles: 10
+    success_criteria:
+      all_tests_pass: true
+      zero_regressions: true
+      lint_clean: true
+      plan_executed: true
+    convergence_predicate: "all_tests_pass and regressions == 0 and lint_errors == 0"
+    backoff_strategy: "linear"
+
+  # ---------------------------------------------------------------------------
+  # Intelligent LENS depth policy
+  # ---------------------------------------------------------------------------
+  lens_policy:
+    description: >
+      LENS scan depth is determined by intent type and complexity.
+      Deep scans only run when warranted — never run CCL/full AST
+      on simple queries.
+    depth_rules:
+      - intent: ["QUERY", "RECALL", "DIGEST"]
+        depth: "shallow"
+        analyzers: ["keyword_match"]
+        rationale: "Read-only, no code change risk"
+      - intent: ["ANALYZE", "ONBOARD", "DESIGN"]
+        depth: "standard"
+        analyzers: ["ast", "git_history", "dependency_graph"]
+        rationale: "Need context but not full CCL"
+      - intent: ["IMPLEMENT", "FIX", "REFACTOR"]
+        depth: "adaptive"
+        analyzers: ["ast", "git_history", "dependency_graph", "config", "api"]
+        adaptive_rules:
+          - condition: "complexity > 10 or files_affected > 5 or risk_score > 0.7"
+            depth: "deep"
+            additional_analyzers: ["ccl", "architecture", "security"]
+          - condition: "default"
+            depth: "standard"
+        rationale: "Deep only when complexity warrants it"
+
+  # ---------------------------------------------------------------------------
+  # Data persistence policy
+  # ---------------------------------------------------------------------------
+  persistence_policy:
+    description: >
+      All LENS output appends to company registry. Never overwrites.
+    targets:
+      - path: "cortex-registry/company/dashboards/lens/{repo}_data_{timestamp}.json"
+        format: "json"
+        mode: "create_new"
+      - path: "cortex-registry/company/repos/{repo}/lens_history.json"
+        format: "json"
+        mode: "append"
+    retention:
+      max_entries_per_repo: 500
+      archive_after_days: 90
+
+  # ---------------------------------------------------------------------------
+  # Workflow steps
+  # ---------------------------------------------------------------------------
+  steps:
+
+    # Step 1: Comprehension — LENS + Intent Classification
+    - step_id: "comprehension"
+      name: "Stage 1: LENS Comprehension"
+      orchestrator: "InteractionOrchestrator"
+      description: >
+        Run LENS analysis at intelligent depth. Classify intent.
+        Determine if plan gate is needed.
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          lens_context_available: true
+          intent_classified: true
+        convergence_predicate: "lens_context is not None and intent != 'UNKNOWN'"
+      outputs:
+        - lens_context
+        - intent_type
+        - scan_depth
+      params:
+        lens_depth: "{{lens_policy.depth_rules}}"
+
+    # Step 2: Plan Gate — Create mandatory plan
+    - step_id: "plan_gate"
+      name: "Stage 1.5: Plan-Before-Execute Gate"
+      orchestrator: "PlanGateService"
+      depends_on: ["comprehension"]
+      condition: "requires_plan_gate(intent_type)"
+      description: >
+        Create InteractionPlan with TDD steps, risk scoring,
+        and LENS context. Return to user for approval.
+        Skip for read-only intents (QUERY, ANALYZE, etc).
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          plan_created: true
+          plan_has_steps: true
+        convergence_predicate: "plan is not None and plan.step_count() > 0"
+      outputs:
+        - interaction_plan
+        - requires_approval
+      params:
+        intent_type: "{{intent_type}}"
+        lens_context: "{{lens_context}}"
+
+    # Step 3: User Approval Gate
+    - step_id: "approval"
+      name: "Stage 1.6: User Approval"
+      orchestrator: "MasterOrchestrator"
+      depends_on: ["plan_gate"]
+      condition: "requires_approval == true"
+      description: >
+        Present plan to user. Wait for approval.
+        Autonomous continuation bypasses this step.
+      params:
+        plan: "{{interaction_plan}}"
+        autonomous_bypass: true
+
+    # Step 4: TDD RED Phase — Write Failing Tests
+    - step_id: "tdd_red"
+      name: "Stage 2: TDD RED Phase"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["approval"]
+      description: >
+        Write failing tests based on plan steps.
+        CORE-008 mandatory.
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          tests_written: true
+          tests_failing: true
+        convergence_predicate: "test_count > 0 and all_failing"
+      params:
+        phase: "RED"
+        plan: "{{interaction_plan}}"
+
+    # Step 5: TDD GREEN Phase — Implement
+    - step_id: "tdd_green"
+      name: "Stage 3: TDD GREEN Phase"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["tdd_red"]
+      description: >
+        Implement minimum code to make all tests pass.
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          all_tests_pass: true
+          no_regressions: true
+        convergence_predicate: "all_tests_pass and regressions == 0"
+      params:
+        phase: "GREEN"
+        plan: "{{interaction_plan}}"
+
+    # Step 6: TDD REFACTOR Phase
+    - step_id: "tdd_refactor"
+      name: "Stage 4: TDD REFACTOR Phase"
+      orchestrator: "RefactoringOrchestrator"
+      depends_on: ["tdd_green"]
+      description: >
+        Improve code quality while keeping tests green.
+        Intelligent loop — stop when no more improvements found.
+      convergence_gate:
+        max_cycles: 5
+        success_criteria:
+          tests_still_pass: true
+          quality_improved: true
+        convergence_predicate: "all_tests_pass and complexity_reduced"
+      params:
+        phase: "REFACTOR"
+        plan: "{{interaction_plan}}"
+
+    # Step 7: Governance Validation
+    - step_id: "governance"
+      name: "Stage 5: Governance Validation"
+      orchestrator: "EnforcementOrchestrator"
+      depends_on: ["tdd_refactor"]
+      description: >
+        Validate all changes against CORE rules.
+        Loop until zero violations.
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          zero_violations: true
+          lint_clean: true
+        convergence_predicate: "violations == 0 and lint_errors == 0"
+      params:
+        rules: ["CORE-008", "CORE-011", "CORE-012", "CORE-028", "CORE-035"]
+
+    # Step 8: Cleanup & Deduplication Sweep
+    - step_id: "cleanup"
+      name: "Stage 6: Cleanup & Deduplication Sweep"
+      orchestrator: "VacuumOrchestrator"
+      depends_on: ["governance"]
+      description: >
+        Remove dead code, duplicates, and orphaned files.
+        Intelligent loop — scans changed files only.
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          no_duplicates: true
+          no_dead_code: true
+          tests_still_pass: true
+        convergence_predicate: "duplicates == 0 and dead_code == 0 and all_tests_pass"
+      params:
+        scope: "changed_files_only"
+        preserve_tests: true
+
+    # Step 9: LENS Data Persistence
+    - step_id: "persist_lens"
+      name: "Stage 7: Persist LENS Data to Company Registry"
+      orchestrator: "LensDataPersistenceService"
+      depends_on: ["cleanup"]
+      description: >
+        Append final LENS analysis to company registry.
+        Creates timestamped JSON and appends to repo history.
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          dashboard_file_written: true
+          history_appended: true
+        convergence_predicate: "dashboard_file is not None and history_appended"
+      params:
+        repo_slug: "{{repo_slug}}"
+        lens_context: "{{lens_context}}"
+        intent_type: "{{intent_type}}"
+        plan_id: "{{interaction_plan.plan_id}}"
+
+    # Step 10: Final Regression Verification
+    - step_id: "final_verify"
+      name: "Stage 8: Final Regression Verification"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["persist_lens"]
+      description: >
+        Run full test suite one final time.
+        Zero tolerance for regressions.
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          all_tests_pass: true
+          zero_regressions: true
+        convergence_predicate: "all_tests_pass and regressions == 0"
+      params:
+        phase: "VERIFY"
+        scope: "full_suite"
+
+  # ---------------------------------------------------------------------------
+  # Golden test mapping
+  # ---------------------------------------------------------------------------
+  golden_tests:
+    test_file: "tests/golden/orchestrators/plan_gate/test_plan_gate_golden.py"
+    sunshine_paths:
+      - "test_gp101_implement_creates_plan_with_tdd_steps"
+      - "test_gp102_fix_creates_plan_with_regression_test"
+      - "test_gp103_refactor_creates_plan_with_safety_verification"
+      - "test_gp104_query_bypasses_plan_gate_entirely"
+      - "test_gp105_lens_data_persisted_to_dashboard"
+      - "test_gp106_lens_history_appended_not_overwritten"
+      - "test_gp107_plan_output_format_matches_master_orchestrator"
+      - "test_gp108_intelligent_lens_depth_for_implement"
+      - "test_gp109_shallow_lens_for_query"
+      - "test_gp110_standard_lens_for_low_complexity_implement"
+    rainy_day_paths:
+      - "test_gp201_degraded_lens_still_creates_plan"
+      - "test_gp202_empty_user_request_handled"
+      - "test_gp203_invalid_intent_defaults_to_plan_required"
+      - "test_gp204_corrupted_lens_history_recovers"
+      - "test_gp205_risk_score_clamped_to_valid_range"
+      - "test_gp206_persistence_failure_does_not_crash_plan_gate"
+      - "test_gp207_challenge_stub_returns_none_no_crash"
+    edge_cases:
+      - "test_gp301_case_insensitive_intent_matching"
+      - "test_gp302_unique_plan_ids_across_1000_plans"
+      - "test_gp303_plan_with_zero_steps_edge"
+      - "test_gp304_very_long_user_request"
+      - "test_gp305_lens_context_with_nested_dicts"
+      - "test_gp306_all_bypass_intents_exhaustive"
+      - "test_gp307_approve_is_idempotent"
+      - "test_gp308_scan_depth_boundary_complexity_10"
+      - "test_gp309_scan_depth_boundary_complexity_11"
+    blind_spots:
+      - "test_gp401_concurrent_plan_ids_are_unique"
+      - "test_gp402_to_dict_is_json_serializable"
+      - "test_gp403_lens_persistence_with_special_characters"
+      - "test_gp404_plan_gate_service_is_stateless_per_request"
+      - "test_gp405_interaction_orchestrator_classify_intent_coverage"
+      - "test_gp406_lens_depth_missing_all_fields"
+      - "test_gp407_plan_high_risk_threshold_exact"
+      - "test_gp408_persistence_creates_missing_directories"

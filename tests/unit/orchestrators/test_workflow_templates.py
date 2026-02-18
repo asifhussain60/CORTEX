@@ -15,7 +15,7 @@ import pytest
 from pathlib import Path
 import yaml
 
-TEMPLATES_DIR = Path(__file__).parent.parent.parent.parent / "cortex" / "orchestrators" / "workflow" / "templates"
+TEMPLATES_DIR = Path(__file__).parent.parent.parent.parent / "cortex-registry" / "workflows" / "templates"
 
 
 class TestWorkflowTemplates:
@@ -23,22 +23,22 @@ class TestWorkflowTemplates:
 
     def test_legacy_rescue_template_exists(self):
         """AC-P84-S1-T3-001: Legacy Rescue template file exists."""
-        template_path = TEMPLATES_DIR / "legacy-rescue.yaml"
+        template_path = TEMPLATES_DIR / "lifecycle" / "legacy-rescue.yaml"
         assert template_path.exists(), f"Template not found: {template_path}"
 
     def test_security_hardening_template_exists(self):
         """Security Hardening template file exists."""
-        template_path = TEMPLATES_DIR / "security-hardening.yaml"
+        template_path = TEMPLATES_DIR / "security" / "security-hardening.yaml"
         assert template_path.exists(), f"Template not found: {template_path}"
 
     def test_quality_uplift_template_exists(self):
         """Quality Uplift template file exists."""
-        template_path = TEMPLATES_DIR / "quality-uplift.yaml"
+        template_path = TEMPLATES_DIR / "quality" / "quality-uplift.yaml"
         assert template_path.exists(), f"Template not found: {template_path}"
 
     def test_legacy_rescue_template_valid(self):
         """AC-P84-S1-T3-001: Legacy Rescue template loads and validates."""
-        template_path = TEMPLATES_DIR / "legacy-rescue.yaml"
+        template_path = TEMPLATES_DIR / "lifecycle" / "legacy-rescue.yaml"
         
         with open(template_path, "r") as f:
             data = yaml.safe_load(f)
@@ -65,7 +65,7 @@ class TestWorkflowTemplates:
 
     def test_security_hardening_template_valid(self):
         """Security Hardening template loads and validates."""
-        template_path = TEMPLATES_DIR / "security-hardening.yaml"
+        template_path = TEMPLATES_DIR / "security" / "security-hardening.yaml"
         
         with open(template_path, "r") as f:
             data = yaml.safe_load(f)
@@ -89,7 +89,7 @@ class TestWorkflowTemplates:
 
     def test_quality_uplift_template_valid(self):
         """Quality Uplift template loads and validates."""
-        template_path = TEMPLATES_DIR / "quality-uplift.yaml"
+        template_path = TEMPLATES_DIR / "quality" / "quality-uplift.yaml"
         
         with open(template_path, "r") as f:
             data = yaml.safe_load(f)
@@ -114,9 +114,9 @@ class TestWorkflowTemplates:
     def test_all_templates_have_metadata(self):
         """All templates include version and authorship metadata."""
         templates = [
-            "legacy-rescue.yaml",
-            "security-hardening.yaml",
-            "quality-uplift.yaml",
+            "lifecycle/legacy-rescue.yaml",
+            "security/security-hardening.yaml",
+            "quality/quality-uplift.yaml",
         ]
         
         for template_name in templates:
@@ -138,9 +138,9 @@ class TestWorkflowTemplates:
         required_step_fields = ["step_id", "orchestrator", "description", "parameters", "expected_output"]
         
         templates = [
-            "legacy-rescue.yaml",
-            "security-hardening.yaml",
-            "quality-uplift.yaml",
+            "lifecycle/legacy-rescue.yaml",
+            "security/security-hardening.yaml",
+            "quality/quality-uplift.yaml",
         ]
         
         for template_name in templates:

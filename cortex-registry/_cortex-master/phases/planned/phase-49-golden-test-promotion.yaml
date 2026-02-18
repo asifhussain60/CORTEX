@@ -42,7 +42,7 @@ phase:
        required concern annotations.
 
     3. Parallel Golden Test Workflow Template
-       (cortex-registry/workflows/templates/golden-test-promotion.yaml)
+       (cortex-registry/workflows/templates/governance/golden-test-promotion.yaml)
        — pytest-xdist parallelized, convergence-gated DoD loop with real-time
        VS Code terminal progress via ProgressReporter + TestProgressMonitor.
 
@@ -355,7 +355,7 @@ phase:
       name: "Verification, DoD Loop & Teardown"
       duration_estimate: "1 hour"
       orchestrator: "EnforcementOrchestrator"
-      workflow_template: "cortex-registry/workflows/templates/golden-test-promotion.yaml"
+      workflow_template: "cortex-registry/workflows/templates/governance/golden-test-promotion.yaml"
       dod_loop:
         description: |
           The DoD loop runs the Phase 49 golden tests in parallel, then

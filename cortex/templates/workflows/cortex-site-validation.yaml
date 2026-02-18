@@ -1,6 +1,6 @@
 ---
-# cortex-site-dogfood.yaml
-# CORTEX Site Dogfood Workflow Template
+# cortex-site-validation.yaml
+# CORTEX Site Validation Workflow Template
 #
 # Defines the end-to-end TDD workflow for CORTEX site development using
 # Vision API analysis, challenge generation, and EnforcementOrchestrator gates.
@@ -9,7 +9,7 @@
 # Author: Asif Hussain
 # Phase:  99 Stage 3
 
-name: cortex-site-dogfood
+name: cortex-site-validation
 version: "1.0"
 description: >
   Full TDD lifecycle for CORTEX site development.
@@ -116,7 +116,7 @@ stages:
 notifications:
   on_success:
     - channel: slack
-      message: "✅ cortex-site-dogfood workflow complete — deployment preview ready"
+      message: "✅ cortex-site-validation workflow complete — deployment preview ready"
   on_failure:
     - channel: slack
-      message: "❌ cortex-site-dogfood workflow failed at stage {{ context.current_stage }}"
+      message: "❌ cortex-site-validation workflow failed at stage {{ context.current_stage }}"

@@ -1,5 +1,5 @@
 """
-Integration tests for cortex-site-dogfood workflow template.
+Integration tests for cortex-site-validation workflow template.
 
 Tests the complete TDD workflow for CORTEX site development:
 - Vision API analysis integration
@@ -8,7 +8,7 @@ Tests the complete TDD workflow for CORTEX site development:
 - EnforcementOrchestrator gates
 - Deployment preview generation
 
-AC-MEGA-PHASE99-S3-001: cortex-site-dogfood.yaml template complete
+AC-MEGA-PHASE99-S3-001: cortex-site-validation.yaml template complete
 AC-MEGA-PHASE99-S3-002: Full workflow executes successfully
 AC-MEGA-PHASE99-S3-003: Challenge generation operational
 AC-MEGA-PHASE99-S3-004: TDD cycle completes
@@ -31,12 +31,12 @@ from typing import Dict, Any
 
 
 class TestWorkflowTemplateStructure:
-    """Test cortex-site-dogfood.yaml workflow structure."""
+    """Test cortex-site-validation.yaml workflow structure."""
 
     def test_workflow_template_exists(self) -> None:
         """Test that workflow template file exists."""
         # Arrange
-        template_path = Path("cortex/templates/workflows/cortex-site-dogfood.yaml")
+        template_path = Path("cortex-registry/workflows/templates/internal/cortex-site-validation.yaml")
 
         # Assert
         assert template_path.exists(), "Workflow template must exist"
@@ -44,7 +44,7 @@ class TestWorkflowTemplateStructure:
     def test_workflow_has_required_stages(self) -> None:
         """Test workflow contains all 5 required stages."""
         # Arrange
-        template_path = Path("cortex/templates/workflows/cortex-site-dogfood.yaml")
+        template_path = Path("cortex-registry/workflows/templates/internal/cortex-site-validation.yaml")
         
         # Act - This would load and parse YAML in real implementation
         # For now, we'll use a mock structure

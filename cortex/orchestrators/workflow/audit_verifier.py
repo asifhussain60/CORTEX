@@ -79,7 +79,7 @@ class AuditVerifier:
         Initialize AuditVerifier with workflow template.
         
         Args:
-            template_path: Path to workflow YAML template (relative to cortex/orchestrators/workflow/templates/)
+            template_path: Path to workflow YAML template (relative to cortex-registry/workflows/templates/)
         """
         self.template_path = template_path
         self.expected_events: List[str] = []

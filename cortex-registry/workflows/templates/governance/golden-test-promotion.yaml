@@ -208,7 +208,7 @@ workflow:
         - "decision.coverage_floor → {coverage_floor}"
       on_standard_tier:
         action: "redirect"
-        redirect_to: "cortex-registry/workflows/templates/tdd-feature-implementation.yaml"
+        redirect_to: "cortex-registry/workflows/templates/tdd/tdd-feature-implementation.yaml"
 
     # ── STEP 2: RED Phase ─────────────────────────────────────────────────────
     - step_id: "red_phase"
@@ -457,7 +457,7 @@ workflow:
               cortex-registry/core/governance/skull-rules.yaml \
               cortex-registry/governance/test-promotion-manifest.yaml \
               cortex-registry/planning/phases/planned/phase-49-golden-test-promotion.yaml \
-              cortex-registry/workflows/templates/golden-test-promotion.yaml \
+              cortex-registry/workflows/templates/governance/golden-test-promotion.yaml \
               tests/golden/orchestrators/support/test_classifier_golden.py \
               tests/golden/orchestrators/support/test_parallel_runner_golden.py \
               tests/golden/governance/test_core_055_golden.py
