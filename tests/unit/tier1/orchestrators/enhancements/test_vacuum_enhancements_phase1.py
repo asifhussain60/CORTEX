@@ -28,7 +28,7 @@ if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
 # Load file_categorizer
-file_cat_path = cortex_intelligence_path / "tier1/orchestrators/enhancements/file_categorizer.py"
+file_cat_path = cortex_intelligence_path / "memory" / "tier1_learned" / "orchestrators" / "enhancements" / "file_categorizer.py"
 spec = importlib.util.spec_from_file_location("file_categorizer", str(file_cat_path))
 if spec is None or spec.loader is None:
     raise RuntimeError(f"Could not load spec for file_categorizer at {file_cat_path}")
@@ -41,7 +41,7 @@ ClassificationSignals = fc_module.ClassificationSignals
 FileClassifier = fc_module.FileClassifier
 
 # Load conflict_detector
-conflict_det_path = cortex_intelligence_path / "tier1/orchestrators/enhancements/conflict_detector.py"
+conflict_det_path = cortex_intelligence_path / "memory" / "tier1_learned" / "orchestrators" / "enhancements" / "conflict_detector.py"
 spec = importlib.util.spec_from_file_location("conflict_detector", str(conflict_det_path))
 if spec is None or spec.loader is None:
     raise RuntimeError(f"Could not load spec for conflict_detector at {conflict_det_path}")

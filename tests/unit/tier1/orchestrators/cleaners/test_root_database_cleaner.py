@@ -25,13 +25,8 @@ from typing import Dict, Any
 import tempfile
 import shutil
 
-# Add paths
-import sys
-cortex_intelligence_path = Path(__file__).parent.parent.parent.parent.parent.parent / "cortex_intelligence"
-sys.path.insert(0, str(cortex_intelligence_path))
-
-from tier1.orchestrators.cleaners.root_database import RootDatabaseCleaner
-from tier1.orchestrators.cleaners import Analysis, Report, RollbackResult
+from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners.root_database import RootDatabaseCleaner
+from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners import Analysis, Report, RollbackResult
 
 
 @pytest.fixture

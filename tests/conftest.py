@@ -12,6 +12,14 @@ from _pytest.python import Module
 # This resolves the "pytest_plugins in non-top-level conftest" deprecation
 pytest_plugins = []
 
+# Collect ignore patterns - these files work when run directly but cause
+# collection conflicts during full test runs due to namespace issues
+collect_ignore = [
+    "visualization/scripts/test_bundle_dependencies.py",
+    "visualization/scripts/test_bundle_vendor_assets.py",
+    "visualization/scripts/test_lazy_module_loader.py",
+]
+
 # Add tier modules to path
 project_root = Path(__file__).parent
 tier_paths = [
