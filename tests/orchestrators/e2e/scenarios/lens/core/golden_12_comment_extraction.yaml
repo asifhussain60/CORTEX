@@ -1,0 +1,197 @@
+---
+# AC-GOLDEN-LENS-012: Comment Extraction Golden Test
+# Authority: CORTEX Test Governance
+# Purpose: Validate LENS ability to extract and categorize code comments (docstrings, inline, TODOs)
+# Created: 2026-02-17
+# Priority: P1
+
+scenario_id: "golden_12_comment_extraction"
+name: "Comment Extraction - Multi-Language Documentation"
+description: |
+  Tests LENS CommentExtractor's ability to parse and categorize comments across Python and TypeScript.
+  Validates extraction of docstrings, inline comments, TODOs, FIXMEs, and JSDoc annotations.
+
+authority_code: "AC-GOLDEN-LENS-012"
+priority: "P1"
+category: "core"
+lens_capabilities:
+  - "comment_extraction"
+  - "documentation_analysis"
+  - "todo_detection"
+
+temp_files:
+  - path: "src/services/payment_processor.py"
+    content: |
+      """
+      Payment Processing Service
+      
+      This module handles all payment transactions including credit cards,
+      PayPal, and cryptocurrency payments.
+      
+      .. note::
+         All payment methods must be PCI-DSS compliant.
+      
+      .. todo::
+         Add support for Apple Pay and Google Pay
+      """
+      
+      import logging
+      from typing import Dict, Optional
+      
+      logger = logging.getLogger(__name__)
+      
+      
+      class PaymentProcessor:
+          """Processes various payment methods with validation and fraud detection."""
+          
+          def __init__(self, merchant_id: str):
+              """
+              Initialize payment processor.
+              
+              Args:
+                  merchant_id: Unique merchant identifier
+              """
+              self.merchant_id = merchant_id
+          
+          def process_credit_card(self, card_number: str, amount: float) -> Dict:
+              """
+              Process credit card payment.
+              
+              Args:
+                  card_number: Credit card number (masked)
+                  amount: Transaction amount in USD
+              
+              Returns:
+                  Dict containing transaction_id and status
+              
+              Raises:
+                  PaymentError: If payment fails validation
+              """
+              # TODO: Implement fraud detection service integration
+              # FIXME: Card validation regex is too permissive
+              
+              # Validate card number format (Luhn algorithm)
+              if not self._validate_card(card_number):
+                  raise ValueError("Invalid card number")
+              
+              # HACK: Temporary workaround for Amex cards
+              if card_number.startswith("34") or card_number.startswith("37"):
+                  logger.warning("Amex processing uses legacy endpoint")
+              
+              return {"transaction_id": "txn_123", "status": "approved"}
+          
+          def _validate_card(self, card_number: str) -> bool:
+              """Internal validation - not exposed to API."""
+              return len(card_number) >= 13  # Simplified validation
+
+  - path: "src/utils/validators.ts"
+    content: |
+      /**
+       * Data Validation Utilities
+       * 
+       * Provides comprehensive validation functions for user input,
+       * API requests, and database models.
+       * 
+       * @module validators
+       * @author CORTEX Team
+       * @since 1.0.0
+       */
+      
+      /**
+       * Validates email address format using RFC 5322 standard.
+       * 
+       * @param email - Email address to validate
+       * @returns True if email is valid
+       * 
+       * @example
+       * ```typescript
+       * const isValid = validateEmail("user@example.com");
+       * ```
+       * 
+       * @todo Add support for internationalized email addresses (RFC 6531)
+       */
+      export function validateEmail(email: string): boolean {
+        // TODO: Replace regex with proper email parsing library
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+      }
+      
+      /**
+       * Validates phone number with optional country code.
+       * 
+       * @param phone - Phone number string
+       * @param countryCode - Optional ISO country code
+       * @returns True if phone number is valid
+       * 
+       * @deprecated Use validatePhoneNumberV2 instead
+       * @see validatePhoneNumberV2
+       */
+      export function validatePhone(phone: string, countryCode?: string): boolean {
+        // FIXME: Does not handle international formats properly
+        // NOTE: This is deprecated and will be removed in v2.0
+        return phone.length >= 10;
+      }
+      
+      // HACK: Quick fix for Safari issue with date parsing
+      // Should be replaced with proper date validation library
+      function parseDateSafari(dateStr: string): Date {
+        return new Date(dateStr.replace(/-/g, '/'));
+      }
+
+expected_outcome:
+  validation_type: "comment_analysis"
+  expected_results:
+    total_comments: 
+      min: 15
+      description: "Should extract all docstrings, inline comments, and JSDoc blocks"
+    
+    python_docstrings:
+      min: 5
+      description: "Module docstring, class docstring, 3 method docstrings"
+    
+    todo_markers:
+      min: 4
+      description: "4 TODO comments across both files"
+    
+    fixme_markers:
+      min: 2
+      description: "2 FIXME markers indicating known issues"
+    
+    hack_markers:
+      min: 2
+      description: "2 HACK comments indicating technical debt"
+    
+    jsdoc_blocks:
+      min: 3
+      description: "Module JSDoc + 2 function JSDoc blocks"
+    
+    deprecated_markers:
+      min: 1
+      description: "1 @deprecated annotation in TypeScript"
+    
+    comment_categories:
+      - "documentation"
+      - "todo"
+      - "fixme"
+      - "hack"
+      - "note"
+      - "deprecated"
+
+expected_audit_events:
+  - event_type: "LENS_ANALYSIS_STARTED"
+    component: "CommentExtractor"
+  - event_type: "COMMENTS_EXTRACTED"
+    metadata:
+      languages: ["python", "typescript"]
+  - event_type: "TECHNICAL_DEBT_DETECTED"
+    metadata:
+      markers: ["TODO", "FIXME", "HACK"]
+  - event_type: "LENS_ANALYSIS_COMPLETED"
+
+tags:
+  - "comment_extraction"
+  - "documentation"
+  - "technical_debt"
+  - "multi_language"
+  - "jsdoc"
+  - "sphinx"

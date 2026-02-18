@@ -1,0 +1,164 @@
+---
+# AC-GOLDEN-LENS-021: Graph Relationship Traversal Golden Test
+# Authority: CORTEX Test Governance
+# Purpose: Validate LENS ability to traverse knowledge graph relationships for impact analysis
+# Created: 2026-02-17
+# Priority: P1
+
+scenario_id: "golden_21_graph_traversal"
+name: "Knowledge Graph Traversal - Impact Analysis"
+description: |
+  Tests LENS GraphTraverser's ability to navigate knowledge graph relationships,
+  perform impact analysis, and identify dependency chains across the codebase.
+
+authority_code: "AC-GOLDEN-LENS-021"
+priority: "P1"
+category: "knowledge_graph"
+lens_capabilities:
+  - "graph_traversal"
+  - "relationship_navigation"
+  - "impact_analysis"
+  - "dependency_chains"
+
+temp_files:
+  - path: "models/user.py"
+    content: |
+      class User:
+          """Core user entity - referenced throughout system."""
+          def __init__(self, user_id: int, email: str):
+              self.user_id = user_id
+              self.email = email
+          
+          def get_profile(self):
+              """Retrieve user profile data."""
+              return {"id": self.user_id, "email": self.email}
+
+  - path: "services/auth_service.py"
+    content: |
+      from models.user import User
+      
+      class AuthService:
+          """Authentication service - depends on User model."""
+          def authenticate(self, email: str, password: str) -> User:
+              # Authenticate and return User instance
+              return User(123, email)
+
+  - path: "services/order_service.py"
+    content: |
+      from models.user import User
+      from services.auth_service import AuthService
+      
+      class OrderService:
+          """Order processing - depends on User and AuthService."""
+          def __init__(self):
+              self.auth = AuthService()
+          
+          def create_order(self, user: User, items: list):
+              """Create order for authenticated user."""
+              profile = user.get_profile()
+              return {"user_id": profile["id"], "items": items}
+
+  - path: "api/endpoints.py"
+    content: |
+      from services.order_service import OrderService
+      from services.auth_service import AuthService
+      
+      class OrderEndpoint:
+          """REST API endpoint - depends on OrderService."""
+          def __init__(self):
+              self.order_service = OrderService()
+              self.auth_service = AuthService()
+          
+          def post_order(self, request):
+              """POST /orders - depends on authentication and order creation."""
+              user = self.auth_service.authenticate(
+                  request['email'], 
+                  request['password']
+              )
+              return self.order_service.create_order(user, request['items'])
+
+  - path: "tests/test_orders.py"
+    content: |
+      from api.endpoints import OrderEndpoint
+      
+      def test_create_order():
+          """Integration test - exercises full dependency chain."""
+          endpoint = OrderEndpoint()
+          result = endpoint.post_order({
+              'email': 'test@example.com',
+              'password': 'password123',
+              'items': ['item1', 'item2']
+          })
+          assert result['user_id'] == 123
+
+expected_outcome:
+  validation_type: "graph_traversal"
+  expected_results:
+    dependency_graph_nodes:
+      min: 5
+      description: "User, AuthService, OrderService, OrderEndpoint, test_create_order"
+    
+    dependency_graph_edges:
+      min: 7
+      description: "All import and usage relationships"
+    
+    impact_analysis:
+      target_node: "models/user.py::User"
+      downstream_impact:
+        direct_dependents:
+          - "services/auth_service.py::AuthService"
+          - "services/order_service.py::OrderService"
+        transitive_dependents:
+          - "api/endpoints.py::OrderEndpoint"
+          - "tests/test_orders.py::test_create_order"
+        total_impacted_files: 4
+        impact_radius: 3
+    
+    dependency_chains:
+      - chain: ["User", "AuthService", "OrderService", "OrderEndpoint", "test_create_order"]
+        length: 5
+        type: "forward_dependency"
+      - chain: ["test_create_order", "OrderEndpoint", "OrderService", "User"]
+        length: 4
+        type: "reverse_dependency"
+    
+    critical_nodes:
+      - name: "User"
+        reason: "Highest downstream impact (4 dependent files)"
+        criticality_score: 0.95
+      - name: "AuthService"
+        reason: "Used by multiple services"
+        criticality_score: 0.75
+    
+    change_impact_scenarios:
+      - scenario: "Modify User.get_profile() signature"
+        impacted_files:
+          - "services/order_service.py"
+          - "api/endpoints.py"
+          - "tests/test_orders.py"
+        risk_level: "HIGH"
+      - scenario: "Refactor AuthService.authenticate()"
+        impacted_files:
+          - "services/order_service.py"
+          - "api/endpoints.py"
+        risk_level: "MEDIUM"
+    
+    traversal_metrics:
+      max_depth: 5
+      avg_fanout: 1.4
+      cyclic_dependencies: 0
+
+expected_audit_events:
+  - event_type: "LENS_ANALYSIS_STARTED"
+    component: "GraphTraverser"
+  - event_type: "DEPENDENCY_GRAPH_BUILT"
+  - event_type: "IMPACT_ANALYSIS_COMPLETED"
+  - event_type: "CRITICAL_NODES_IDENTIFIED"
+  - event_type: "LENS_ANALYSIS_COMPLETED"
+
+tags:
+  - "graph_traversal"
+  - "impact_analysis"
+  - "dependency_chains"
+  - "change_risk"
+  - "critical_paths"

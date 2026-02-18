@@ -1,0 +1,206 @@
+---
+# AC-GOLDEN-LENS-013: Vendor/Third-Party Detection Golden Test
+# Authority: CORTEX Test Governance
+# Purpose: Validate LENS ability to identify vendor libraries, frameworks, and third-party dependencies
+# Created: 2026-02-17
+# Priority: P1
+
+scenario_id: "golden_13_vendor_detection"
+name: "Vendor Detection - Third-Party Library Identification"
+description: |
+  Tests LENS VendorDetector's ability to identify third-party libraries, frameworks,
+  and external dependencies from imports, package manifests, and code patterns.
+
+authority_code: "AC-GOLDEN-LENS-013"
+priority: "P1"
+category: "core"
+lens_capabilities:
+  - "vendor_detection"
+  - "dependency_analysis"
+  - "framework_identification"
+
+temp_files:
+  - path: "requirements.txt"
+    content: |
+      # Web Framework
+      django==4.2.7
+      djangorestframework==3.14.0
+      
+      # Database
+      psycopg2-binary==2.9.9
+      sqlalchemy==2.0.23
+      
+      # Celery Task Queue
+      celery==5.3.4
+      redis==5.0.1
+      
+      # AWS SDK
+      boto3==1.29.7
+      botocore==1.32.7
+      
+      # Monitoring
+      sentry-sdk==1.38.0
+      datadog==0.48.0
+      
+      # Testing
+      pytest==7.4.3
+      pytest-django==4.7.0
+      factory-boy==3.3.0
+
+  - path: "package.json"
+    content: |
+      {
+        "name": "cortex-frontend",
+        "version": "1.0.0",
+        "dependencies": {
+          "react": "^18.2.0",
+          "react-dom": "^18.2.0",
+          "react-router-dom": "^6.20.0",
+          "redux": "^4.2.1",
+          "@reduxjs/toolkit": "^1.9.7",
+          "axios": "^1.6.2",
+          "lodash": "^4.17.21",
+          "moment": "^2.29.4",
+          "@mui/material": "^5.14.20",
+          "@mui/icons-material": "^5.14.19"
+        },
+        "devDependencies": {
+          "typescript": "^5.3.3",
+          "vite": "^5.0.7",
+          "vitest": "^1.0.4",
+          "@testing-library/react": "^14.1.2",
+          "eslint": "^8.55.0",
+          "prettier": "^3.1.1"
+        }
+      }
+
+  - path: "src/app.py"
+    content: |
+      from django.apps import AppConfig
+      from django.conf import settings
+      import sentry_sdk
+      from sentry_sdk.integrations.django import DjangoIntegration
+      from datadog import initialize, statsd
+      import boto3
+      from celery import Celery
+      
+      # Initialize Sentry for error tracking
+      sentry_sdk.init(
+          dsn=settings.SENTRY_DSN,
+          integrations=[DjangoIntegration()],
+          traces_sample_rate=0.1,
+      )
+      
+      # Initialize Datadog metrics
+      initialize(
+          api_key=settings.DATADOG_API_KEY,
+          app_key=settings.DATADOG_APP_KEY
+      )
+      
+      # AWS S3 client
+      s3_client = boto3.client('s3')
+      
+      # Celery configuration
+      app = Celery('cortex')
+      app.config_from_object('django.conf:settings', namespace='CELERY')
+
+  - path: "src/components/Dashboard.tsx"
+    content: |
+      import React, { useState, useEffect } from 'react';
+      import { useNavigate } from 'react-router-dom';
+      import { useDispatch, useSelector } from 'react-redux';
+      import axios from 'axios';
+      import _ from 'lodash';
+      import moment from 'moment';
+      import { Box, Container, Typography, Button } from '@mui/material';
+      import { Dashboard as DashboardIcon } from '@mui/icons-material';
+      
+      export const Dashboard: React.FC = () => {
+        const navigate = useNavigate();
+        const dispatch = useDispatch();
+        const data = useSelector((state: any) => state.dashboard.data);
+        
+        useEffect(() => {
+          // Fetch dashboard data using Axios
+          axios.get('/api/dashboard')
+            .then(response => {
+              const sortedData = _.sortBy(response.data, 'timestamp');
+              dispatch({ type: 'SET_DASHBOARD_DATA', payload: sortedData });
+            });
+        }, []);
+        
+        const formattedDate = moment().format('MMMM Do YYYY, h:mm:ss a');
+        
+        return (
+          <Container>
+            <Box display="flex" alignItems="center">
+              <DashboardIcon />
+              <Typography variant="h4">Dashboard</Typography>
+            </Box>
+            <Typography>{formattedDate}</Typography>
+          </Container>
+        );
+      };
+
+expected_outcome:
+  validation_type: "vendor_analysis"
+  expected_results:
+    total_vendors:
+      min: 20
+      description: "Should detect all third-party packages from manifests and imports"
+    
+    frameworks_detected:
+      - "Django"
+      - "React"
+      - "Redux"
+      - "Material-UI"
+      - "SQLAlchemy"
+      - "Celery"
+    
+    cloud_providers:
+      - name: "AWS"
+        services: ["S3", "boto3"]
+    
+    monitoring_tools:
+      - "Sentry"
+      - "Datadog"
+    
+    test_frameworks:
+      - "pytest"
+      - "vitest"
+      - "React Testing Library"
+    
+    utility_libraries:
+      - "lodash"
+      - "moment"
+      - "axios"
+    
+    vendor_categories:
+      - "web_framework"
+      - "ui_framework"
+      - "database"
+      - "task_queue"
+      - "cloud_sdk"
+      - "monitoring"
+      - "testing"
+      - "utilities"
+    
+    package_ecosystems:
+      - "PyPI"
+      - "npm"
+
+expected_audit_events:
+  - event_type: "LENS_ANALYSIS_STARTED"
+    component: "VendorDetector"
+  - event_type: "VENDORS_DETECTED"
+    metadata:
+      ecosystems: ["PyPI", "npm"]
+  - event_type: "FRAMEWORKS_IDENTIFIED"
+  - event_type: "LENS_ANALYSIS_COMPLETED"
+
+tags:
+  - "vendor_detection"
+  - "dependency_analysis"
+  - "framework_identification"
+  - "package_ecosystems"
+  - "third_party"

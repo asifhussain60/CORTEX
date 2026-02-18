@@ -1,0 +1,235 @@
+---
+# AC-GOLDEN-LENS-017: Business Language Extraction Golden Test
+# Authority: CORTEX Test Governance
+# Purpose: Validate LENS ability to extract business domain language from code and documentation
+# Created: 2026-02-17
+# Priority: P1
+
+scenario_id: "golden_17_business_language"
+name: "Business Language - Domain Terminology Extraction"
+description: |
+  Tests LENS BusinessLanguageExtractor's ability to identify domain-specific terminology,
+  business concepts, and ubiquitous language from code, comments, and documentation.
+
+authority_code: "AC-GOLDEN-LENS-017"
+priority: "P1"
+category: "domain"
+lens_capabilities:
+  - "business_language_extraction"
+  - "domain_terminology"
+  - "ubiquitous_language"
+  - "concept_identification"
+
+temp_files:
+  - path: "domain/insurance/policy.py"
+    content: |
+      """
+      Insurance Policy Domain Model
+      
+      Core Concepts:
+      - Policyholder: The insured party who owns the policy
+      - Premium: Regular payment made to maintain coverage
+      - Deductible: Amount paid out-of-pocket before coverage applies
+      - Coverage Limit: Maximum amount insurer will pay for covered loss
+      - Claim: Request for payment under policy terms
+      - Underwriting: Process of evaluating risk and setting premiums
+      """
+      
+      from enum import Enum
+      from datetime import datetime
+      from typing import List, Optional
+      
+      class PolicyStatus(Enum):
+          """Policy lifecycle states"""
+          QUOTED = "quoted"  # Initial quote provided
+          BOUND = "bound"  # Policy accepted and active
+          LAPSED = "lapsed"  # Premium payment overdue
+          CANCELLED = "cancelled"  # Policy terminated
+          EXPIRED = "expired"  # Policy term ended
+      
+      class CoverageType(Enum):
+          """Types of insurance coverage"""
+          LIABILITY = "liability"  # Covers legal responsibility
+          COLLISION = "collision"  # Vehicle damage from accident
+          COMPREHENSIVE = "comprehensive"  # Non-collision damage
+          MEDICAL = "medical"  # Medical expense coverage
+      
+      class Policy:
+          """
+          Represents an insurance policy contract.
+          
+          Business Rules:
+          - Premium must be paid within grace period (30 days) to avoid lapse
+          - Claims cannot exceed coverage limit
+          - Deductible applies to each claim
+          - Policy must be underwritten before binding
+          """
+          
+          def __init__(self, policy_number: str, policyholder: "Policyholder"):
+              self.policy_number = policy_number
+              self.policyholder = policyholder
+              self.premium_amount: float = 0.0
+              self.deductible: float = 0.0
+              self.coverage_limit: float = 0.0
+              self.status = PolicyStatus.QUOTED
+              self.effective_date: Optional[datetime] = None
+              self.expiration_date: Optional[datetime] = None
+              self.coverages: List[CoverageType] = []
+          
+          def underwrite(self, risk_assessment: "RiskAssessment") -> bool:
+              """
+              Underwrite policy based on risk assessment.
+              
+              Underwriting Process:
+              1. Evaluate risk factors (age, location, history)
+              2. Calculate premium based on risk score
+              3. Determine coverage limits
+              4. Set deductible amount
+              """
+              if risk_assessment.risk_score > 80:
+                  return False  # Too risky to underwrite
+              
+              self.premium_amount = self._calculate_premium(risk_assessment)
+              return True
+          
+          def bind_policy(self) -> bool:
+              """
+              Activate policy after underwriting approval and premium payment.
+              Policy moves from QUOTED to BOUND status.
+              """
+              if self.status != PolicyStatus.QUOTED:
+                  raise ValueError("Policy must be in QUOTED status to bind")
+              
+              self.status = PolicyStatus.BOUND
+              self.effective_date = datetime.now()
+              return True
+          
+          def file_claim(self, claim: "Claim") -> bool:
+              """
+              Process claim against policy.
+              
+              Claim Adjudication:
+              - Verify coverage type matches claim
+              - Check claim amount against coverage limit
+              - Apply deductible
+              - Validate policy is active (BOUND status)
+              """
+              if self.status != PolicyStatus.BOUND:
+                  return False
+              
+              if claim.amount > self.coverage_limit:
+                  claim.approved_amount = self.coverage_limit
+              else:
+                  claim.approved_amount = claim.amount - self.deductible
+              
+              return claim.approved_amount > 0
+          
+          def lapse_for_nonpayment(self) -> None:
+              """
+              Lapse policy when premium not paid within grace period.
+              Policyholder loses coverage until reinstatement.
+              """
+              self.status = PolicyStatus.LAPSED
+          
+          def _calculate_premium(self, risk_assessment: "RiskAssessment") -> float:
+              """Calculate premium using actuarial tables and risk score."""
+              base_rate = 100.0
+              risk_multiplier = 1 + (risk_assessment.risk_score / 100)
+              return base_rate * risk_multiplier
+
+  - path: "README.md"
+    content: |
+      # Insurance Policy Management System
+      
+      ## Business Domain
+      
+      This system manages **auto insurance policies** for individual policyholders.
+      
+      ### Key Business Terms
+      
+      - **Policyholder**: Customer who purchases insurance coverage
+      - **Premium**: Monthly or annual payment to maintain active coverage
+      - **Deductible**: Out-of-pocket amount before insurance coverage kicks in
+      - **Coverage Limit**: Maximum payout amount per claim or policy period
+      - **Grace Period**: 30-day window to make late premium payments
+      - **Underwriting**: Risk evaluation process to determine insurability
+      - **Risk Assessment**: Analysis of factors affecting likelihood of claims
+      - **Claim Adjudication**: Process of reviewing and approving claims
+      - **Policy Lapse**: Coverage suspension due to non-payment
+      - **Actuarial Tables**: Statistical data used for premium calculation
+      
+      ### Business Processes
+      
+      1. **Quote Generation**: Provide initial premium estimate
+      2. **Underwriting**: Evaluate risk and finalize terms
+      3. **Policy Binding**: Activate coverage after approval
+      4. **Premium Collection**: Monthly/annual payment processing
+      5. **Claim Processing**: Handle coverage requests
+      6. **Policy Renewal**: Extend coverage for new term
+
+expected_outcome:
+  validation_type: "business_language"
+  expected_results:
+    domain_terms:
+      min: 25
+      description: "Should extract all insurance-specific terminology"
+    
+    core_business_concepts:
+      - "Policyholder"
+      - "Premium"
+      - "Deductible"
+      - "Coverage Limit"
+      - "Claim"
+      - "Underwriting"
+      - "Risk Assessment"
+      - "Grace Period"
+      - "Policy Lapse"
+      - "Claim Adjudication"
+      - "Actuarial Tables"
+      - "Coverage Type"
+      - "Policy Status"
+    
+    business_processes:
+      - "underwrite"
+      - "bind_policy"
+      - "file_claim"
+      - "lapse_for_nonpayment"
+      - "calculate_premium"
+    
+    domain_enums:
+      - name: "PolicyStatus"
+        values: ["QUOTED", "BOUND", "LAPSED", "CANCELLED", "EXPIRED"]
+      - name: "CoverageType"
+        values: ["LIABILITY", "COLLISION", "COMPREHENSIVE", "MEDICAL"]
+    
+    business_rules:
+      min: 5
+      description: "Should extract documented business rules from docstrings"
+    
+    ubiquitous_language_alignment:
+      code_term_matches:
+        min: 20
+        description: "Terms used consistently between code and documentation"
+    
+    terminology_sources:
+      - "docstrings"
+      - "class_names"
+      - "method_names"
+      - "enum_values"
+      - "comments"
+      - "markdown_docs"
+
+expected_audit_events:
+  - event_type: "LENS_ANALYSIS_STARTED"
+    component: "BusinessLanguageExtractor"
+  - event_type: "DOMAIN_TERMS_EXTRACTED"
+  - event_type: "BUSINESS_CONCEPTS_IDENTIFIED"
+  - event_type: "UBIQUITOUS_LANGUAGE_MAPPED"
+  - event_type: "LENS_ANALYSIS_COMPLETED"
+
+tags:
+  - "business_language"
+  - "domain_terminology"
+  - "ubiquitous_language"
+  - "domain_driven_design"
+  - "concept_extraction"

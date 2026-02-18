@@ -1,0 +1,215 @@
+---
+# AC-GOLDEN-LENS-024: Hot Path Analysis Golden Test
+# Authority: CORTEX Test Governance
+# Purpose: Validate LENS ability to correlate test execution with code paths for hot path identification
+# Created: 2026-02-17
+# Priority: P1
+
+scenario_id: "golden_24_hot_path_analysis"
+name: "Hot Path Analysis - Test Execution Correlation"
+description: |
+  Tests LENS HotPathAnalyzer's ability to correlate test execution data with code paths,
+  identify frequently executed code (hot paths), and suggest optimization opportunities.
+
+authority_code: "AC-GOLDEN-LENS-024"
+priority: "P1"
+category: "runtime"
+lens_capabilities:
+  - "hot_path_analysis"
+  - "test_execution_correlation"
+  - "performance_profiling"
+  - "optimization_opportunities"
+
+temp_files:
+  - path: "src/core/authentication.py"
+    content: |
+      import hashlib
+      import time
+      from typing import Optional
+      
+      class AuthService:
+          """Authentication service with password verification and token generation."""
+          
+          def authenticate(self, username: str, password: str) -> Optional[str]:
+              """
+              Main authentication flow - called by every login request.
+              This is a HOT PATH - executed hundreds of times per minute.
+              """
+              # Step 1: Lookup user (DB query)
+              user = self._find_user(username)
+              if not user:
+                  return None
+              
+              # Step 2: Verify password (compute-intensive)
+              if not self._verify_password(password, user['password_hash']):
+                  return None
+              
+              # Step 3: Generate session token
+              token = self._generate_token(user['id'])
+              
+              # Step 4: Log authentication event
+              self._log_auth_event(user['id'], 'success')
+              
+              return token
+          
+          def _find_user(self, username: str) -> Optional[dict]:
+              """DB lookup - moderate performance impact."""
+              time.sleep(0.01)  # Simulate DB query
+              return {'id': 123, 'username': username, 'password_hash': 'hash123'}
+          
+          def _verify_password(self, password: str, stored_hash: str) -> bool:
+              """
+              Password verification using bcrypt-equivalent hashing.
+              PERFORMANCE BOTTLENECK: Takes ~100ms per verification.
+              Consider: Password hash caching for repeated failed attempts.
+              """
+              time.sleep(0.1)  # Simulate bcrypt computation
+              computed_hash = hashlib.sha256(password.encode()).hexdigest()
+              return computed_hash == stored_hash
+          
+          def _generate_token(self, user_id: int) -> str:
+              """Fast token generation - minimal overhead."""
+              return f"token_{user_id}_{int(time.time())}"
+          
+          def _log_auth_event(self, user_id: int, status: str) -> None:
+              """Logging - low priority, could be async."""
+              pass  # Placeholder
+
+  - path: "tests/test_authentication.py"
+    content: |
+      import pytest
+      from src.core.authentication import AuthService
+      
+      class TestAuthService:
+          """Authentication tests - executed frequently in CI/CD."""
+          
+          def test_successful_authentication(self):
+              """Most common test path - mirrors production hot path."""
+              auth = AuthService()
+              token = auth.authenticate("testuser", "password123")
+              assert token is not None
+              assert token.startswith("token_")
+          
+          def test_failed_authentication_bad_password(self):
+              """Second most common - tests security path."""
+              auth = AuthService()
+              token = auth.authenticate("testuser", "wrongpassword")
+              assert token is None
+          
+          def test_failed_authentication_user_not_found(self):
+              """Less common but still important."""
+              auth = AuthService()
+              token = auth.authenticate("nonexistent", "password123")
+              assert token is None
+          
+          @pytest.mark.parametrize("username,password", [
+              ("user1", "pass1"),
+              ("user2", "pass2"),
+              ("user3", "pass3"),
+              ("user4", "pass4"),
+              ("user5", "pass5"),
+          ])
+          def test_multiple_users(self, username, password):
+              """Parameterized test - exercises hot path 5 times."""
+              auth = AuthService()
+              token = auth.authenticate(username, password)
+              # Token generation happens 5 times
+
+  - path: ".cortex/test_execution.json"
+    content: |
+      {
+        "test_runs": [
+          {
+            "test_id": "test_authentication.py::TestAuthService::test_successful_authentication",
+            "execution_count": 250,
+            "avg_duration_ms": 115,
+            "code_paths": [
+              "src/core/authentication.py::AuthService.authenticate",
+              "src/core/authentication.py::AuthService._find_user",
+              "src/core/authentication.py::AuthService._verify_password",
+              "src/core/authentication.py::AuthService._generate_token",
+              "src/core/authentication.py::AuthService._log_auth_event"
+            ]
+          },
+          {
+            "test_id": "test_authentication.py::TestAuthService::test_failed_authentication_bad_password",
+            "execution_count": 180,
+            "avg_duration_ms": 112,
+            "code_paths": [
+              "src/core/authentication.py::AuthService.authenticate",
+              "src/core/authentication.py::AuthService._find_user",
+              "src/core/authentication.py::AuthService._verify_password"
+            ]
+          },
+          {
+            "test_id": "test_authentication.py::TestAuthService::test_multiple_users",
+            "execution_count": 500,
+            "avg_duration_ms": 110,
+            "code_paths": [
+              "src/core/authentication.py::AuthService.authenticate",
+              "src/core/authentication.py::AuthService._find_user",
+              "src/core/authentication.py::AuthService._verify_password",
+              "src/core/authentication.py::AuthService._generate_token"
+            ]
+          }
+        ]
+      }
+
+expected_outcome:
+  validation_type: "hot_path_analysis"
+  expected_results:
+    hot_paths_identified:
+      min: 3
+      description: "authenticate(), _verify_password(), _find_user()"
+    
+    hottest_method:
+      name: "AuthService.authenticate"
+      execution_count: 930
+      reason: "Called by all authentication tests (250 + 180 + 500)"
+    
+    performance_bottleneck:
+      method: "AuthService._verify_password"
+      avg_duration_ms: 100
+      optimization_suggestion: "Consider password hash caching or async hashing"
+    
+    test_coverage_correlation:
+      authenticate_method:
+        test_hits: 3
+        execution_count: 930
+        coverage_percentage: 100
+    
+    optimization_opportunities:
+      - method: "_verify_password"
+        type: "CACHING"
+        potential_improvement: "50% reduction in auth time"
+        priority: "HIGH"
+      - method: "_log_auth_event"
+        type: "ASYNC"
+        potential_improvement: "Non-blocking logging"
+        priority: "MEDIUM"
+    
+    execution_heatmap:
+      high_frequency:
+        - "authenticate"
+        - "_verify_password"
+        - "_find_user"
+      medium_frequency:
+        - "_generate_token"
+      low_frequency:
+        - "_log_auth_event"
+
+expected_audit_events:
+  - event_type: "LENS_ANALYSIS_STARTED"
+    component: "HotPathAnalyzer"
+  - event_type: "TEST_EXECUTION_DATA_LOADED"
+  - event_type: "HOT_PATHS_IDENTIFIED"
+  - event_type: "PERFORMANCE_BOTTLENECKS_DETECTED"
+  - event_type: "OPTIMIZATION_OPPORTUNITIES_SUGGESTED"
+  - event_type: "LENS_ANALYSIS_COMPLETED"
+
+tags:
+  - "hot_path_analysis"
+  - "performance"
+  - "test_correlation"
+  - "optimization"
+  - "profiling"

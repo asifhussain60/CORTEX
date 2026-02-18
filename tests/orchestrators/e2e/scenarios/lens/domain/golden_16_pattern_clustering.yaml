@@ -1,0 +1,223 @@
+---
+# AC-GOLDEN-LENS-016: Pattern Clustering Golden Test
+# Authority: CORTEX Test Governance
+# Purpose: Validate LENS ability to cluster similar code patterns and identify reusable abstractions
+# Created: 2026-02-17
+# Priority: P1
+
+scenario_id: "golden_16_pattern_clustering"
+name: "Pattern Clustering - Duplication & Abstraction Detection"
+description: |
+  Tests LENS PatternClusterer's ability to identify similar code patterns across files,
+  detect near-duplicate logic, and suggest opportunities for abstraction/refactoring.
+
+authority_code: "AC-GOLDEN-LENS-016"
+priority: "P1"
+category: "domain"
+lens_capabilities:
+  - "pattern_clustering"
+  - "code_similarity"
+  - "duplication_detection"
+  - "abstraction_opportunities"
+
+temp_files:
+  - path: "services/user_service.py"
+    content: |
+      from typing import Optional
+      import logging
+      
+      logger = logging.getLogger(__name__)
+      
+      class UserService:
+          def __init__(self, db):
+              self.db = db
+          
+          def get_user_by_id(self, user_id: int) -> Optional[dict]:
+              try:
+                  logger.info(f"Fetching user {user_id}")
+                  result = self.db.query("SELECT * FROM users WHERE id = ?", (user_id,))
+                  if not result:
+                      logger.warning(f"User {user_id} not found")
+                      return None
+                  logger.info(f"User {user_id} retrieved successfully")
+                  return result[0]
+              except Exception as e:
+                  logger.error(f"Error fetching user {user_id}: {e}")
+                  raise
+          
+          def update_user(self, user_id: int, data: dict) -> bool:
+              try:
+                  logger.info(f"Updating user {user_id}")
+                  self.db.execute("UPDATE users SET name = ?, email = ? WHERE id = ?",
+                                  (data['name'], data['email'], user_id))
+                  logger.info(f"User {user_id} updated successfully")
+                  return True
+              except Exception as e:
+                  logger.error(f"Error updating user {user_id}: {e}")
+                  raise
+
+  - path: "services/product_service.py"
+    content: |
+      from typing import Optional
+      import logging
+      
+      logger = logging.getLogger(__name__)
+      
+      class ProductService:
+          def __init__(self, db):
+              self.db = db
+          
+          def get_product_by_id(self, product_id: int) -> Optional[dict]:
+              try:
+                  logger.info(f"Fetching product {product_id}")
+                  result = self.db.query("SELECT * FROM products WHERE id = ?", (product_id,))
+                  if not result:
+                      logger.warning(f"Product {product_id} not found")
+                      return None
+                  logger.info(f"Product {product_id} retrieved successfully")
+                  return result[0]
+              except Exception as e:
+                  logger.error(f"Error fetching product {product_id}: {e}")
+                  raise
+          
+          def update_product(self, product_id: int, data: dict) -> bool:
+              try:
+                  logger.info(f"Updating product {product_id}")
+                  self.db.execute("UPDATE products SET name = ?, price = ? WHERE id = ?",
+                                  (data['name'], data['price'], product_id))
+                  logger.info(f"Product {product_id} updated successfully")
+                  return True
+              except Exception as e:
+                  logger.error(f"Error updating product {product_id}: {e}")
+                  raise
+
+  - path: "services/order_service.py"
+    content: |
+      from typing import Optional
+      import logging
+      
+      logger = logging.getLogger(__name__)
+      
+      class OrderService:
+          def __init__(self, db):
+              self.db = db
+          
+          def get_order_by_id(self, order_id: int) -> Optional[dict]:
+              try:
+                  logger.info(f"Fetching order {order_id}")
+                  result = self.db.query("SELECT * FROM orders WHERE id = ?", (order_id,))
+                  if not result:
+                      logger.warning(f"Order {order_id} not found")
+                      return None
+                  logger.info(f"Order {order_id} retrieved successfully")
+                  return result[0]
+              except Exception as e:
+                  logger.error(f"Error fetching order {order_id}: {e}")
+                  raise
+          
+          def update_order(self, order_id: int, data: dict) -> bool:
+              try:
+                  logger.info(f"Updating order {order_id}")
+                  self.db.execute("UPDATE orders SET status = ?, total = ? WHERE id = ?",
+                                  (data['status'], data['total'], order_id))
+                  logger.info(f"Order {order_id} updated successfully")
+                  return True
+              except Exception as e:
+                  logger.error(f"Error updating order {order_id}: {e}")
+                  raise
+
+  - path: "utils/validators.py"
+    content: |
+      import re
+      
+      def validate_email(email: str) -> bool:
+          if not email:
+              return False
+          pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+          return bool(re.match(pattern, email))
+      
+      def validate_phone(phone: str) -> bool:
+          if not phone:
+              return False
+          pattern = r'^\+?1?\d{9,15}$'
+          return bool(re.match(pattern, phone))
+      
+      def validate_username(username: str) -> bool:
+          if not username:
+              return False
+          pattern = r'^[a-zA-Z0-9_]{3,20}$'
+          return bool(re.match(pattern, username))
+      
+      def validate_zipcode(zipcode: str) -> bool:
+          if not zipcode:
+              return False
+          pattern = r'^\d{5}(-\d{4})?$'
+          return bool(re.match(pattern, zipcode))
+
+expected_outcome:
+  validation_type: "pattern_clustering"
+  expected_results:
+    pattern_clusters:
+      min: 2
+      description: "Should identify CRUD pattern cluster and validation pattern cluster"
+    
+    crud_pattern_cluster:
+      similar_methods:
+        - "UserService.get_user_by_id"
+        - "ProductService.get_product_by_id"
+        - "OrderService.get_order_by_id"
+      similarity_score:
+        min: 0.85
+      suggested_abstraction: "BaseRepository.get_by_id(table_name, entity_id)"
+    
+    update_pattern_cluster:
+      similar_methods:
+        - "UserService.update_user"
+        - "ProductService.update_product"
+        - "OrderService.update_order"
+      similarity_score:
+        min: 0.85
+      suggested_abstraction: "BaseRepository.update(table_name, entity_id, data)"
+    
+    validation_pattern_cluster:
+      similar_functions:
+        - "validate_email"
+        - "validate_phone"
+        - "validate_username"
+        - "validate_zipcode"
+      similarity_score:
+        min: 0.75
+      suggested_abstraction: "RegexValidator(pattern, min_length, max_length)"
+    
+    duplication_metrics:
+      near_duplicate_blocks:
+        min: 6
+        description: "Should detect similar try-catch-log blocks"
+      abstraction_opportunities:
+        min: 2
+        description: "BaseRepository and RegexValidator abstractions"
+    
+    refactoring_suggestions:
+      - type: "EXTRACT_BASE_CLASS"
+        reason: "CRUD patterns duplicated across 3 services"
+        estimated_loc_reduction: 40
+      - type: "EXTRACT_HELPER_CLASS"
+        reason: "Validation logic follows identical pattern"
+        estimated_loc_reduction: 15
+
+expected_audit_events:
+  - event_type: "LENS_ANALYSIS_STARTED"
+    component: "PatternClusterer"
+  - event_type: "PATTERNS_CLUSTERED"
+    metadata:
+      clusters_found: 2
+  - event_type: "DUPLICATION_DETECTED"
+  - event_type: "ABSTRACTION_OPPORTUNITIES_IDENTIFIED"
+  - event_type: "LENS_ANALYSIS_COMPLETED"
+
+tags:
+  - "pattern_clustering"
+  - "code_similarity"
+  - "duplication_detection"
+  - "refactoring_opportunities"
+  - "technical_debt"

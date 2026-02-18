@@ -1,0 +1,262 @@
+---
+# AC-GOLDEN-LENS-014: Polyglot Codebase Analysis Golden Test
+# Authority: CORTEX Test Governance
+# Purpose: Validate LENS ability to analyze multi-language codebases with cross-language relationships
+# Created: 2026-02-17
+# Priority: P1
+
+scenario_id: "golden_14_polyglot_analysis"
+name: "Polyglot Analysis - Multi-Language Integration"
+description: |
+  Tests LENS PolyglotAnalyzer's ability to analyze codebases with Python, TypeScript, C#, and SQL.
+  Validates detection of cross-language boundaries, API contracts, and data flow.
+
+authority_code: "AC-GOLDEN-LENS-014"
+priority: "P1"
+category: "core"
+lens_capabilities:
+  - "polyglot_analysis"
+  - "multi_language_ast"
+  - "cross_language_boundaries"
+  - "api_contract_detection"
+
+temp_files:
+  - path: "backend/api/users.py"
+    content: |
+      from fastapi import APIRouter, Depends, HTTPException
+      from sqlalchemy.orm import Session
+      from typing import List
+      from . import schemas, database
+      
+      router = APIRouter(prefix="/api/users", tags=["users"])
+      
+      @router.get("/", response_model=List[schemas.User])
+      async def get_users(db: Session = Depends(database.get_db)):
+          """Get all users - consumed by TypeScript frontend"""
+          return db.query(database.User).all()
+      
+      @router.post("/", response_model=schemas.User)
+      async def create_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
+          """Create user - called from React signup form"""
+          db_user = database.User(**user.dict())
+          db.add(db_user)
+          db.commit()
+          return db_user
+
+  - path: "frontend/src/services/api.ts"
+    content: |
+      import axios from 'axios';
+      
+      const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+      
+      export interface User {
+        id: number;
+        username: string;
+        email: string;
+        created_at: string;
+      }
+      
+      export interface UserCreate {
+        username: string;
+        email: string;
+        password: string;
+      }
+      
+      export class UserService {
+        /**
+         * Fetch all users from Python FastAPI backend
+         * Endpoint: GET /api/users/
+         */
+        static async getUsers(): Promise<User[]> {
+          const response = await axios.get<User[]>(`${API_BASE}/api/users/`);
+          return response.data;
+        }
+        
+        /**
+         * Create new user via Python backend
+         * Endpoint: POST /api/users/
+         */
+        static async createUser(userData: UserCreate): Promise<User> {
+          const response = await axios.post<User>(`${API_BASE}/api/users/`, userData);
+          return response.data;
+        }
+      }
+
+  - path: "reporting/ReportGenerator.cs"
+    content: |
+      using System;
+      using System.Net.Http;
+      using System.Threading.Tasks;
+      using Newtonsoft.Json;
+      
+      namespace CortexReporting
+      {
+          /// <summary>
+          /// Generates reports by fetching data from Python backend API
+          /// </summary>
+          public class ReportGenerator
+          {
+              private readonly HttpClient _httpClient;
+              private readonly string _apiBaseUrl;
+              
+              public ReportGenerator(string apiBaseUrl)
+              {
+                  _apiBaseUrl = apiBaseUrl;
+                  _httpClient = new HttpClient();
+              }
+              
+              /// <summary>
+              /// Fetch user data from Python FastAPI and generate Excel report
+              /// Calls: GET /api/users/
+              /// </summary>
+              public async Task<byte[]> GenerateUserReportAsync()
+              {
+                  // Call Python backend API
+                  var response = await _httpClient.GetAsync($"{_apiBaseUrl}/api/users/");
+                  var json = await response.Content.ReadAsStringAsync();
+                  var users = JsonConvert.DeserializeObject<User[]>(json);
+                  
+                  // Generate Excel using ClosedXML (not shown)
+                  return await CreateExcelReport(users);
+              }
+              
+              private async Task<byte[]> CreateExcelReport(User[] users)
+              {
+                  // Excel generation logic
+                  return Array.Empty<byte>();
+              }
+          }
+          
+          public class User
+          {
+              public int Id { get; set; }
+              public string Username { get; set; }
+              public string Email { get; set; }
+              public DateTime CreatedAt { get; set; }
+          }
+      }
+
+  - path: "database/migrations/001_create_users.sql"
+    content: |
+      -- Users table for Python backend
+      -- Accessed by: backend/api/users.py
+      -- Schema must match schemas.User TypeScript interface
+      
+      CREATE TABLE users (
+          id SERIAL PRIMARY KEY,
+          username VARCHAR(100) UNIQUE NOT NULL,
+          email VARCHAR(255) UNIQUE NOT NULL,
+          password_hash VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      CREATE INDEX idx_users_email ON users(email);
+      CREATE INDEX idx_users_username ON users(username);
+      
+      -- Trigger for updated_at
+      CREATE OR REPLACE FUNCTION update_updated_at_column()
+      RETURNS TRIGGER AS $$
+      BEGIN
+          NEW.updated_at = CURRENT_TIMESTAMP;
+          RETURN NEW;
+      END;
+      $$ language 'plpgsql';
+      
+      CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
+          FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+  - path: "docker-compose.yml"
+    content: |
+      version: '3.8'
+      services:
+        backend:
+          build: ./backend
+          ports:
+            - "8000:8000"
+          depends_on:
+            - db
+          environment:
+            DATABASE_URL: postgresql://user:pass@db:5432/cortex
+        
+        frontend:
+          build: ./frontend
+          ports:
+            - "3000:3000"
+          environment:
+            REACT_APP_API_URL: http://localhost:8000
+        
+        reporting:
+          build: ./reporting
+          depends_on:
+            - backend
+        
+        db:
+          image: postgres:15
+          environment:
+            POSTGRES_DB: cortex
+            POSTGRES_USER: user
+            POSTGRES_PASSWORD: pass
+
+expected_outcome:
+  validation_type: "polyglot_analysis"
+  expected_results:
+    languages_detected:
+      - "Python"
+      - "TypeScript"
+      - "C#"
+      - "SQL"
+      - "YAML"
+    
+    cross_language_calls:
+      min: 4
+      description: "TypeScript->Python, C#->Python, Python->SQL"
+    
+    api_boundaries:
+      - source: "TypeScript"
+        target: "Python"
+        endpoints: ["/api/users/"]
+      - source: "C#"
+        target: "Python"
+        endpoints: ["/api/users/"]
+    
+    shared_data_models:
+      - name: "User"
+        languages: ["Python", "TypeScript", "C#", "SQL"]
+        schema_alignment: true
+    
+    integration_points:
+      - type: "REST_API"
+        provider: "Python FastAPI"
+        consumers: ["TypeScript", "C#"]
+      - type: "DATABASE"
+        provider: "PostgreSQL"
+        consumers: ["Python"]
+      - type: "CONTAINER_ORCHESTRATION"
+        provider: "Docker Compose"
+        services: ["backend", "frontend", "reporting", "db"]
+    
+    technology_stack:
+      backend: ["Python", "FastAPI", "SQLAlchemy"]
+      frontend: ["TypeScript", "React", "Axios"]
+      reporting: ["C#", ".NET", "Newtonsoft.Json"]
+      database: ["PostgreSQL"]
+      infrastructure: ["Docker"]
+
+expected_audit_events:
+  - event_type: "LENS_ANALYSIS_STARTED"
+    component: "PolyglotAnalyzer"
+  - event_type: "LANGUAGES_DETECTED"
+    metadata:
+      count: 5
+  - event_type: "CROSS_LANGUAGE_BOUNDARIES_DETECTED"
+  - event_type: "API_CONTRACTS_IDENTIFIED"
+  - event_type: "LENS_ANALYSIS_COMPLETED"
+
+tags:
+  - "polyglot"
+  - "multi_language"
+  - "cross_language"
+  - "api_boundaries"
+  - "data_model_alignment"
+  - "microservices"
