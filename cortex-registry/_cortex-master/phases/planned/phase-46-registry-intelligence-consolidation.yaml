@@ -1,23 +1,25 @@
 # ============================================================================
-# Phase 104: Registry & Intelligence Consolidation
+# Phase 46: Registry & Intelligence Consolidation
 # ============================================================================
 # Authority: CORTEX Architecture Consolidation Initiative
 # Created: 2026-02-17
+# Updated: 2026-02-18 (Renumbered from phase-104)
 # Author: Asif Hussain
 # Status: planned
-# Prerequisites: phase-102 (Workflow Runtime Foundation)
+# Prerequisites: phase-45 (Workflow Runtime Foundation)
 # ============================================================================
 # DIGEST CONTEXT: Based on _workspaces/.chats/chat01.md comprehensive design session
 # ============================================================================
 
 version: '2.1'
-phase_id: phase-104
+phase_id: phase-46
 title: "Registry & Intelligence Consolidation - Brain-Aligned Architecture"
 status: planned
 priority: P1
 category: architecture
 created: '2026-02-17T00:00:00Z'
-estimated_effort: "4 hours (using workflow runtime from Phase 102)"
+updated: '2026-02-18T00:00:00Z'
+estimated_effort: "4 hours (using workflow runtime from Phase 45)"
 estimated_tokens: "150000"
 roi_score: 95
 confidence: 9.0
@@ -715,7 +717,7 @@ dependencies:
   blocked_by: []
   
   blocks:
-    - phase-104+ (must use new paths)
+    - phase-47+ (must use new paths)
 
 # ============================================================================
 # DECISION LOG: User Approvals (2026-02-17)

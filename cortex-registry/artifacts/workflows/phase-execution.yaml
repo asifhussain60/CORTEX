@@ -149,7 +149,7 @@ workflow:
 parameters:
   required:
     - phase_yaml: "Path to phase YAML file"
-    - phase_id: "Phase identifier (e.g., phase-104)"
+    - phase_id: "Phase identifier (e.g., phase-46)"
     - coverage_target: "Test coverage target (default: 95%)"
   
   optional:
@@ -163,12 +163,12 @@ parameters:
 
 hydration_example: |
   Input (template params):
-    phase_yaml: "cortex-registry/_cortex-master/phases/planned/phase-104-registry-intelligence-consolidation.yaml"
-    phase_id: "phase-104"
+    phase_yaml: "cortex-registry/_cortex-master/phases/planned/phase-46-registry-intelligence-consolidation.yaml"
+    phase_id: "phase-46"
     coverage_target: "95%"
   
   Output (instance):
-    request_id: "REQ-2026-02-17-001"
-    instance_file: "cortex-registry/.temp/instances/phase-104-2026-02-17-001.yaml"
+    request_id: "REQ-2026-02-18-001"
+    instance_file: "cortex-registry/.temp/instances/phase-46-2026-02-18-001.yaml"
     status: "in_progress"
     steps: [... hydrated steps with params replaced ...]
