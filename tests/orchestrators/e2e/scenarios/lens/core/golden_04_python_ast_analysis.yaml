@@ -1,0 +1,54 @@
+# Golden Test Scenario: Python AST Analysis
+# Authority: AC-GOLDEN-LENS-004
+# Description: Test complete Python AST parsing and code structure extraction
+
+name: "golden_04_python_ast_analysis"
+description: "Python AST analysis → extract classes, functions, complexity metrics"
+utterance: "analyze Python codebase structure"
+
+temp_files:
+  - path: "src/user_service.py"
+    content: |
+      """User service module with authentication."""
+      from typing import Optional
+      
+      class UserService:
+          """Handles user operations."""
+          
+          def __init__(self, db_connection):
+              self.db = db_connection
+          
+          def authenticate(self, username: str, password: str) -> Optional[dict]:
+              """Authenticate user with credentials."""
+              user = self.db.query("SELECT * FROM users WHERE username = ?", username)
+              if user and self._verify_password(password, user['password_hash']):
+                  return {'id': user['id'], 'username': user['username']}
+              return None
+          
+          def _verify_password(self, plain: str, hashed: str) -> bool:
+              """Verify password hash."""
+              return hash(plain) == hashed
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_AST"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "AST"
+      language: "Python"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "EXTRACT_STRUCTURE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      classes_found: ">= 1"
+      functions_found: ">= 2"
+
+expected_outcome:
+  status: "COMPLETED"
+  has_ast_data: true
+  classes:
+    - name: "UserService"
+      methods: ["__init__", "authenticate", "_verify_password"]
+  functions_extracted: true
+  complexity_calculated: true

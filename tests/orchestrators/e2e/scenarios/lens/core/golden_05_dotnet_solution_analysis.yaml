@@ -1,0 +1,65 @@
+# Golden Test Scenario: .NET Solution Analysis
+# Authority: AC-GOLDEN-LENS-005
+# Description: Test .NET solution and project parsing
+
+name: "golden_05_dotnet_solution_analysis"
+description: ".NET solution analysis → parse projects, dependencies, frameworks"
+utterance: "analyze .NET solution"
+
+temp_files:
+  - path: "MyApp.sln"
+    content: |
+      Microsoft Visual Studio Solution File, Format Version 12.00
+      Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp.Core", "MyApp.Core\MyApp.Core.csproj", "{ABC-123}"
+      EndProject
+      Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp.Web", "MyApp.Web\MyApp.Web.csproj", "{DEF-456}"
+      EndProject
+  
+  - path: "MyApp.Core/MyApp.Core.csproj"
+    content: |
+      <Project Sdk="Microsoft.NET.Sdk">
+        <PropertyGroup>
+          <TargetFramework>net8.0</TargetFramework>
+        </PropertyGroup>
+        <ItemGroup>
+          <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        </ItemGroup>
+      </Project>
+  
+  - path: "MyApp.Web/MyApp.Web.csproj"
+    content: |
+      <Project Sdk="Microsoft.NET.Sdk.Web">
+        <PropertyGroup>
+          <TargetFramework>net8.0</TargetFramework>
+        </PropertyGroup>
+        <ItemGroup>
+          <ProjectReference Include="..\MyApp.Core\MyApp.Core.csproj" />
+        </ItemGroup>
+      </Project>
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_DOTNET_SOLUTION"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "DotNet"
+      solution_parsed: true
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "EXTRACT_PROJECTS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      project_count: "2"
+      framework_version: "net8.0"
+
+expected_outcome:
+  status: "COMPLETED"
+  solution:
+    name: "MyApp"
+    project_count: 2
+    projects:
+      - name: "MyApp.Core"
+        type: "Library"
+      - name: "MyApp.Web"
+        type: "WebAPI"
+  dependencies_resolved: true

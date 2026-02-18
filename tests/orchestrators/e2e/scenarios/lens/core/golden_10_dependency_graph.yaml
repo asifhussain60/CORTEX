@@ -1,0 +1,60 @@
+# Golden Test Scenario: Dependency Graph Analysis
+# Authority: AC-GOLDEN-LENS-010
+# Description: Test dependency resolution and conflict detection
+
+name: "golden_10_dependency_graph"
+description: "Dependency analysis → resolve deps, detect conflicts, licenses"
+utterance: "analyze dependency graph"
+
+temp_files:
+  - path: "requirements.txt"
+    content: |
+      django==4.2.0
+      djangorestframework==3.14.0
+      celery==5.3.0
+      redis==4.5.5
+      psycopg2-binary==2.9.6
+  
+  - path: "package.json"
+    content: |
+      {
+        "name": "frontend",
+        "dependencies": {
+          "react": "^18.2.0",
+          "react-dom": "^18.2.0",
+          "axios": "^1.4.0",
+          "lodash": "^4.17.21"
+        },
+        "devDependencies": {
+          "webpack": "^5.88.0",
+          "typescript": "^5.1.0"
+        }
+      }
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_DEPENDENCIES"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "Dependency"
+      package_managers: "in:pip,npm"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "BUILD_DEPENDENCY_GRAPH"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      dependencies_found: ">= 10"
+      ecosystems_detected: ">= 2"
+
+expected_outcome:
+  status: "COMPLETED"
+  dependencies:
+    python:
+      direct: ["django", "djangorestframework", "celery", "redis", "psycopg2-binary"]
+      count: 5
+    javascript:
+      direct: ["react", "react-dom", "axios", "lodash"]
+      dev: ["webpack", "typescript"]
+      count: 6
+  dependency_graph_built: true
+  conflicts_detected: false

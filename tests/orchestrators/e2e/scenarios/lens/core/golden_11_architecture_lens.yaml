@@ -1,0 +1,68 @@
+# Golden Test Scenario: Architecture Pattern Detection
+# Authority: AC-GOLDEN-LENS-011
+# Description: Test architectural pattern detection and layer violations
+
+name: "golden_11_architecture_lens"
+description: "Architecture analysis → detect patterns, find violations"
+utterance: "detect architectural patterns"
+
+temp_files:
+  - path: "src/controllers/user_controller.py"
+    content: |
+      from src.services.user_service import UserService
+      
+      class UserController:
+          def __init__(self):
+              self.user_service = UserService()
+  
+  - path: "src/services/user_service.py"
+    content: |
+      from src.repositories.user_repository import UserRepository
+      
+      class UserService:
+          def __init__(self):
+              self.user_repo = UserRepository()
+  
+  - path: "src/repositories/user_repository.py"
+    content: |
+      class UserRepository:
+          def find_by_id(self, user_id):
+              pass
+  
+  - path: "src/models/user.py"
+    content: |
+      class User:
+          def __init__(self, id, name):
+              self.id = id
+              self.name = name
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_ARCHITECTURE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "Architecture"
+      files_scanned: ">= 4"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "DETECT_PATTERNS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      patterns_detected: ">= 1"
+      layers_identified: ">= 3"
+
+expected_outcome:
+  status: "COMPLETED"
+  patterns:
+    - name: "Layered Architecture"
+      confidence: ">= 0.8"
+    - name: "Repository Pattern"
+      confidence: ">= 0.9"
+  layers:
+    - name: "Controllers"
+      files: ["src/controllers/user_controller.py"]
+    - name: "Services"
+      files: ["src/services/user_service.py"]
+    - name: "Repositories"
+      files: ["src/repositories/user_repository.py"]
+  violations: []

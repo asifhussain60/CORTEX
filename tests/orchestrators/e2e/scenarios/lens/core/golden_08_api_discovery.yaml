@@ -1,0 +1,76 @@
+# Golden Test Scenario: API Discovery
+# Authority: AC-GOLDEN-LENS-008
+# Description: Test REST API endpoint discovery from OpenAPI and code
+
+name: "golden_08_api_discovery"
+description: "API discovery → extract endpoints, methods, auth schemes"
+utterance: "discover API endpoints"
+
+temp_files:
+  - path: "openapi.yaml"
+    content: |
+      openapi: 3.0.0
+      info:
+        title: My API
+        version: 1.0.0
+      paths:
+        /users:
+          get:
+            summary: List users
+            security:
+              - bearerAuth: []
+            responses:
+              '200':
+                description: Success
+          post:
+            summary: Create user
+            requestBody:
+              content:
+                application/json:
+                  schema:
+                    type: object
+            responses:
+              '201':
+                description: Created
+        /users/{id}:
+          get:
+            summary: Get user by ID
+            parameters:
+              - name: id
+                in: path
+                required: true
+            responses:
+              '200':
+                description: Success
+      components:
+        securitySchemes:
+          bearerAuth:
+            type: http
+            scheme: bearer
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_API"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "API"
+      spec_format: "OpenAPI"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "EXTRACT_ENDPOINTS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      endpoint_count: ">= 3"
+      auth_schemes_detected: ">= 1"
+
+expected_outcome:
+  status: "COMPLETED"
+  endpoints:
+    - path: "/users"
+      methods: ["GET", "POST"]
+    - path: "/users/{id}"
+      methods: ["GET"]
+  security_schemes:
+    - type: "bearer"
+      name: "bearerAuth"
+  openapi_version: "3.0.0"

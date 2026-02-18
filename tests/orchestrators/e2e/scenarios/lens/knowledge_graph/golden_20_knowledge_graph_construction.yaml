@@ -1,0 +1,71 @@
+# Golden Test Scenario: Knowledge Graph Construction
+# Authority: AC-GOLDEN-LENS-020
+# Description: Test knowledge graph building with nodes and edges
+
+name: "golden_20_knowledge_graph_construction"
+description: "Knowledge graph → build nodes/edges, track relationships"
+utterance: "build knowledge graph"
+
+temp_files:
+  - path: "src/main.py"
+    content: |
+      from src.auth import authenticate
+      from src.db import DatabaseConnection
+      
+      def main():
+          db = DatabaseConnection()
+          authenticate(db)
+  
+  - path: "src/auth.py"
+    content: |
+      from src.user import User
+      
+      def authenticate(db):
+          user = User.find_by_id(db, 1)
+          return user
+  
+  - path: "src/user.py"
+    content: |
+      class User:
+          @staticmethod
+          def find_by_id(db, user_id):
+              return db.query("SELECT * FROM users WHERE id = ?", user_id)
+  
+  - path: "src/db.py"
+    content: |
+      class DatabaseConnection:
+          def query(self, sql, *args):
+              pass
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "BUILD_KNOWLEDGE_GRAPH"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "KnowledgeGraph"
+      nodes_created: ">= 8"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "CREATE_RELATIONSHIPS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      edges_created: ">= 6"
+      relationship_types: "in:calls,imports,uses"
+
+expected_outcome:
+  status: "COMPLETED"
+  nodes:
+    - type: "FILE"
+      name: "src/main.py"
+    - type: "FUNCTION"
+      name: "main"
+    - type: "CLASS"
+      name: "User"
+  edges:
+    - type: "imports"
+      from: "src/main.py"
+      to: "src/auth.py"
+    - type: "calls"
+      from: "main"
+      to: "authenticate"
+  graph_traversal_enabled: true

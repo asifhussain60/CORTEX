@@ -1,0 +1,87 @@
+# Golden Test Scenario: Tech Stack Fingerprinting
+# Authority: AC-GOLDEN-LENS-032
+# Description: Test comprehensive tech stack detection
+
+name: "golden_32_tech_stack_fingerprinting"
+description: "Tech fingerprinting → detect languages, frameworks, tools"
+utterance: "fingerprint technology stack"
+
+temp_files:
+  - path: "backend/requirements.txt"
+    content: |
+      django==4.2.0
+      djangorestframework==3.14.0
+  
+  - path: "backend/manage.py"
+    content: |
+      #!/usr/bin/env python
+      import django
+  
+  - path: "frontend/package.json"
+    content: |
+      {
+        "dependencies": {
+          "react": "^18.2.0",
+          "next": "^13.4.0"
+        }
+      }
+  
+  - path: "frontend/tsconfig.json"
+    content: |
+      {
+        "compilerOptions": {
+          "target": "es5"
+        }
+      }
+  
+  - path: "docker-compose.yml"
+    content: |
+      version: '3.8'
+      services:
+        web:
+          image: python:3.11
+        db:
+          image: postgres:15
+  
+  - path: "k8s/deployment.yaml"
+    content: |
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: myapp
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "FINGERPRINT_TECH_STACK"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "TechStackFingerprint"
+      languages_detected: ">= 2"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "DETECT_FRAMEWORKS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      frameworks_found: ">= 3"
+      tools_detected: ">= 2"
+
+expected_outcome:
+  status: "COMPLETED"
+  fingerprint:
+    languages:
+      - name: "Python"
+        confidence: ">= 0.9"
+      - name: "TypeScript"
+        confidence: ">= 0.9"
+    frameworks:
+      - name: "Django"
+        version: "4.2.0"
+      - name: "React"
+        version: "18.2.0"
+      - name: "Next.js"
+        version: "13.4.0"
+    tools:
+      - name: "Docker"
+        config: "docker-compose.yml"
+      - name: "Kubernetes"
+        config: "k8s/deployment.yaml"

@@ -1,0 +1,62 @@
+# Golden Test Scenario: Configuration File Extraction
+# Authority: AC-GOLDEN-LENS-007
+# Description: Test multi-format config parsing and secret detection
+
+name: "golden_07_config_extraction"
+description: "Config extraction → parse YAML, JSON, TOML, detect secrets"
+utterance: "extract configuration files"
+
+temp_files:
+  - path: "config/app.yaml"
+    content: |
+      database:
+        host: localhost
+        port: 5432
+        name: myapp_db
+      api:
+        base_url: https://api.example.com
+        timeout: 30
+  
+  - path: "config/secrets.json"
+    content: |
+      {
+        "api_key": "sk-1234567890abcdef",
+        "db_password": "SuperSecret123!",
+        "jwt_secret": "my-jwt-secret-key-here"
+      }
+  
+  - path: ".env"
+    content: |
+      DATABASE_URL=postgresql://user:pass@localhost/db
+      REDIS_URL=redis://localhost:6379
+      SECRET_KEY=django-insecure-key-12345
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_CONFIGS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "Config"
+      formats_detected: "in:yaml,json,env"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "DETECT_SECRETS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      secrets_found: ">= 3"
+      security_warnings: ">= 1"
+
+expected_outcome:
+  status: "COMPLETED"
+  configs_parsed:
+    - format: "YAML"
+      file: "config/app.yaml"
+    - format: "JSON"
+      file: "config/secrets.json"
+    - format: "ENV"
+      file: ".env"
+  secrets_detected:
+    - type: "API_KEY"
+      location: "config/secrets.json"
+    - type: "PASSWORD"
+      location: "config/secrets.json"

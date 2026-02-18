@@ -1,0 +1,58 @@
+# Golden Test Scenario: Git History Analysis
+# Authority: AC-GOLDEN-LENS-006
+# Description: Test git history parsing and hotspot detection
+
+name: "golden_06_git_history_analysis"
+description: "Git history analysis → detect hotspots, churn, contributors"
+utterance: "analyze git history for hotspots"
+
+temp_files:
+  - path: ".git/config"
+    content: |
+      [core]
+      repositoryformatversion = 0
+  
+  - path: "src/auth.py"
+    content: |
+      # Auth module - modified frequently
+      def login(user): pass
+  
+  - path: "src/stable.py"
+    content: |
+      # Stable module - rarely changed
+      def process(): pass
+
+# Git commits will be created programmatically in test
+git_setup:
+  commits:
+    - message: "Initial commit"
+      files: ["src/auth.py", "src/stable.py"]
+    - message: "Fix auth bug"
+      files: ["src/auth.py"]
+    - message: "Update auth validation"
+      files: ["src/auth.py"]
+    - message: "Refactor auth module"
+      files: ["src/auth.py"]
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_GIT_HISTORY"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "GitHistory"
+      commits_analyzed: ">= 4"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "DETECT_HOTSPOTS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      hotspots_found: ">= 1"
+
+expected_outcome:
+  status: "COMPLETED"
+  hotspots:
+    - file: "src/auth.py"
+      change_frequency: "high"
+      churn_score: ">= 0.75"
+  commit_count: 4
+  contributors_identified: true

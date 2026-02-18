@@ -1,0 +1,70 @@
+# Golden Test Scenario: Database Schema Analysis
+# Authority: AC-GOLDEN-LENS-009
+# Description: Test database schema extraction from migrations and ORM models
+
+name: "golden_09_database_schema_analysis"
+description: "Database analysis → extract tables, relationships, migrations"
+utterance: "analyze database schema"
+
+temp_files:
+  - path: "migrations/001_create_users.sql"
+    content: |
+      CREATE TABLE users (
+          id SERIAL PRIMARY KEY,
+          username VARCHAR(255) NOT NULL UNIQUE,
+          email VARCHAR(255) NOT NULL,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+      
+      CREATE INDEX idx_users_username ON users(username);
+  
+  - path: "migrations/002_create_orders.sql"
+    content: |
+      CREATE TABLE orders (
+          id SERIAL PRIMARY KEY,
+          user_id INTEGER NOT NULL,
+          total_amount DECIMAL(10, 2),
+          status VARCHAR(50),
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (user_id) REFERENCES users(id)
+      );
+  
+  - path: "models/user.py"
+    content: |
+      from sqlalchemy import Column, Integer, String, DateTime
+      from sqlalchemy.orm import relationship
+      
+      class User(Base):
+          __tablename__ = 'users'
+          id = Column(Integer, primary_key=True)
+          username = Column(String(255), unique=True)
+          email = Column(String(255))
+          orders = relationship("Order", back_populates="user")
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_DATABASE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "Database"
+      migrations_found: ">= 2"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "EXTRACT_SCHEMA"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      tables_found: ">= 2"
+      relationships_detected: ">= 1"
+
+expected_outcome:
+  status: "COMPLETED"
+  tables:
+    - name: "users"
+      columns: ["id", "username", "email", "created_at"]
+      indexes: ["idx_users_username"]
+    - name: "orders"
+      columns: ["id", "user_id", "total_amount", "status"]
+      foreign_keys:
+        - column: "user_id"
+          references: "users.id"
+  migrations_parsed: 2

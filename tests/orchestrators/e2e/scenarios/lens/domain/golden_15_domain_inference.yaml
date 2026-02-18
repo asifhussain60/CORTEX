@@ -1,0 +1,73 @@
+# Golden Test Scenario: Domain Inference
+# Authority: AC-GOLDEN-LENS-015
+# Description: Test domain clustering and bounded context detection
+
+name: "golden_15_domain_inference"
+description: "Domain inference → cluster by prefix, detect aggregates"
+utterance: "infer business domains"
+
+temp_files:
+  - path: "src/user_repository.py"
+    content: |
+      class UserRepository:
+          def find_all(self): pass
+  
+  - path: "src/user_service.py"
+    content: |
+      class UserService:
+          def create_user(self): pass
+  
+  - path: "src/user.py"
+    content: |
+      class User:
+          """Aggregate root for user domain."""
+          pass
+  
+  - path: "src/order_repository.py"
+    content: |
+      class OrderRepository:
+          def find_by_user(self): pass
+  
+  - path: "src/order_service.py"
+    content: |
+      class OrderService:
+          def place_order(self): pass
+  
+  - path: "src/order.py"
+    content: |
+      class Order:
+          """Aggregate root for order domain."""
+          pass
+  
+  - path: "src/payment_processor.py"
+    content: |
+      class PaymentProcessor:
+          def process(self): pass
+
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "INFER_DOMAINS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analyzer_type: "DomainInference"
+      classes_analyzed: ">= 7"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "CLUSTER_DOMAINS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      domains_found: ">= 3"
+      aggregate_roots_detected: ">= 2"
+
+expected_outcome:
+  status: "COMPLETED"
+  domains:
+    - name: "User"
+      classes: ["UserRepository", "UserService", "User"]
+      aggregate_root: "User"
+    - name: "Order"
+      classes: ["OrderRepository", "OrderService", "Order"]
+      aggregate_root: "Order"
+    - name: "Payment"
+      classes: ["PaymentProcessor"]
+  confidence: ">= 0.8"
