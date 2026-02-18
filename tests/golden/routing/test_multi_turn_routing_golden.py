@@ -528,11 +528,15 @@ class TestMultiTurnRouting:
         
         if "onboard" in user_input_lower:
             return "OnboardingOrchestrator"
+        elif any(word in user_input_lower for word in ["violation", "p0", "p1"]) and any(
+            word in user_input_lower for word in ["fix", "resolve"]
+        ) and "all" in user_input_lower:
+            return "ChallengeOrchestrator"  # High-impact bulk governance fixes require challenge gate
         elif any(word in user_input_lower for word in ["fix", "implement", "create"]):
             return "TDDOrchestrator"
         elif any(word in user_input_lower for word in ["refactor", "reorganize"]):
             return "RefactoringOrchestrator"
-        elif any(word in user_input_lower for word in ["list", "show", "what", "query"]):
+        elif any(word in user_input_lower for word in ["list", "show", "what", "query", "violation"]):
             return "QueryCoordinator"
         elif "proceed" in user_input_lower or "approve" in user_input_lower:
             return "TDDOrchestrator"  # Approval flow
@@ -684,7 +688,7 @@ class TestMCPIntegrationRouting:
             apply_brain_enhancement=False,
             generate_artifacts=False,
             orchestrator_context={
-                "source": "golden_test",
+                "source": "MasterOrchestrator",
                 "test_id": "GT-ROUTE-MCP-001"
             }
         )

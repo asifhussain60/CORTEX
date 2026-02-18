@@ -69,28 +69,32 @@ class KnowledgePersistenceMixin:
             # Extract key patterns
             patterns = self._extract_patterns_from_analysis(analysis_result)
 
-            # Capture each pattern
-            captured_patterns = []
+            # Capture each pattern — use correct UniversalLearningLoop.capture_from_operation
+            # signature: (orchestrator, operation, context, result) → List[LearningCapture]
+            all_captures = []
             for pattern in patterns:
-                capture_result = self.learning_loop.capture_from_operation(
+                captures = self.learning_loop.capture_from_operation(
+                    orchestrator="OnboardingOrchestrator",
                     operation=f"onboarding:{repository_path}",
-                    operation_data={
+                    context={
                         "pattern_type": pattern["type"],
                         **pattern["data"]
                     },
-                    operation_result={"status": "success"},
-                    confidence=pattern.get("confidence", 0.8)
+                    result={"status": "success", "confidence": pattern.get("confidence", 0.8)},
                 )
-                captured_patterns.append(capture_result)
+                all_captures.extend(captures if isinstance(captures, list) else [captures])
 
             logger.info(
-                f"Captured {len(captured_patterns)} patterns from "
+                f"Captured {len(all_captures)} patterns from "
                 f"onboarding {repository_path}"
             )
 
             return {
-                "patterns_captured": len(captured_patterns),
-                "pattern_ids": [p.get("pattern_id") for p in captured_patterns],
+                "patterns_captured": len(all_captures),
+                "pattern_ids": [
+                    getattr(c, "pattern_id", None) or (c.get("pattern_id") if isinstance(c, dict) else None)
+                    for c in all_captures
+                ],
                 "status": "success"
             }
 
@@ -116,16 +120,16 @@ class KnowledgePersistenceMixin:
             Enhancement results with detected patterns and strategies
         """
         try:
-            # Detect similar patterns
+            # Detect similar patterns — use correct PatternRegistry.detect_patterns
+            # signature: (repository_analysis, fuzzy=False)
             detected_patterns = self.pattern_registry.detect_patterns(
                 repository_context,
-                threshold=0.6
+                fuzzy=False
             )
 
-            # Select strategies based on context
+            # Select strategies based on context — correct sig: (context,)
             strategies = self.strategy_selector.select_strategies(
-                repository_context,
-                max_strategies=5
+                repository_context
             )
 
             # Generate execution plan

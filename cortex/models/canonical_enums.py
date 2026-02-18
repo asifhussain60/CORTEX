@@ -244,6 +244,11 @@ class BrainTier(Enum):
     TIER_1 = "tier_1"
     TIER_2 = "tier_2"
     TIER_3 = "tier_3"
+    # Aliases for backward compatibility (underscore-free names)
+    TIER0 = "tier_0"
+    TIER1 = "tier_1"
+    TIER2 = "tier_2"
+    TIER3 = "tier_3"
 
 
 class TierType(Enum):
