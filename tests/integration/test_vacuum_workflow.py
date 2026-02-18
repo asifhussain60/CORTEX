@@ -102,8 +102,8 @@ class TestVacuumWorkflow:
             repo = Path(tmpdir) / "test-repo"
             repo.mkdir()
             
-            # Create test files
-            (repo / "test.db").write_text("test database")
+            # Create test files — use a known database name the cleaner targets
+            (repo / "intelligence_audit.db").write_text("test database")
             (repo / "temp-report.json").write_text("{}")
             
             # Create minimal config
@@ -124,8 +124,8 @@ class TestVacuumWorkflow:
             assert report.status in ("SUCCESS", "PARTIAL"), f"Vacuum failed: {report.status}"
             assert report.total_actions >= 0, "No actions recorded"
             
-            # Verify cleanup (test.db should be deleted)
-            assert not (repo / "test.db").exists(), "test.db not deleted"
+            # Verify cleanup (intelligence_audit.db should be deleted)
+            assert not (repo / "intelligence_audit.db").exists(), "intelligence_audit.db not deleted"
 
 
 class TestCleanerPluginArchitecture:

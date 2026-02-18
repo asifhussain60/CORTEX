@@ -384,7 +384,10 @@ class TestCore051CrossPlatform:
     def test_core_051_setup_script_exists(self) -> None:
         """Verify CORE-051: setup-mcp.py script exists."""
         project_root = Path(__file__).parent.parent.parent.parent
-        setup_script = project_root / ".cortex" / "setup-mcp.py"
-        
+        # Canonical location is .cortex-runtime/; redirect shim is in scripts/
+        setup_script = project_root / ".cortex-runtime" / "setup-mcp.py"
+        if not setup_script.exists():
+            setup_script = project_root / "scripts" / "setup-mcp.py"
+
         assert setup_script.exists(), \
-            f"CORE-051: .cortex-runtime/setup-mcp.py must exist at {setup_script}"
+            f"CORE-051: setup-mcp.py must exist (checked .cortex-runtime/ and scripts/)"

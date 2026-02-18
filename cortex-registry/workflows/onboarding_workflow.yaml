@@ -1,0 +1,294 @@
+# =============================================================================
+# CORTEX Repository Onboarding Workflow — Canonical Specification
+# =============================================================================
+# Authority: CORE-008 (TDD), CORE-028 (snake_case), CORE-035 (single canonical)
+# Version: 2.0.0
+# Updated: 2026-02-18
+# =============================================================================
+
+workflow:
+  name: repository_onboarding
+  version: "2.0.0"
+  description: >
+    Standardized end-to-end workflow for onboarding external repositories
+    into the CORTEX registry with 9-tab dashboard artifact generation,
+    validation gates, and cleanup guarantees.
+
+  entry_point: MasterOrchestrator
+  orchestrator: OnboardingOrchestrator
+  mcp_tool: cortex_onboard_repository
+
+  # ---------------------------------------------------------------------------
+  # Output Schema
+  # ---------------------------------------------------------------------------
+  output:
+    schema_version: "2.0.0"
+    base_path: "cortex-registry/company/repos/{repo_name}/"
+    tabs:
+      - id: "01_overview"
+        label: "Overview"
+        file: "index.json"
+        description: "Repository summary, health score, primary language, onboarding timestamp"
+
+      - id: "02_architecture"
+        label: "Architecture"
+        file: "index.json"
+        description: "Architecture type, pattern detection, module graph, layer analysis"
+
+      - id: "03_governance"
+        label: "Governance"
+        file: "index.json"
+        description: "CORE rule compliance, violations, audit history"
+
+      - id: "04_testing"
+        label: "Testing"
+        file: "index.json"
+        description: "Test coverage, test file inventory, framework detection"
+
+      - id: "05_dependencies"
+        label: "Dependencies"
+        file: "index.json"
+        description: "Dependency tree, vulnerability scan, outdated packages"
+
+      - id: "06_security"
+        label: "Security"
+        file: "index.json"
+        description: "Secret detection, CVE scan, SAST findings"
+
+      - id: "07_metrics"
+        label: "Metrics"
+        file: "index.json"
+        description: "Code metrics — LOC, complexity, duplication, churn"
+
+      - id: "08_knowledge"
+        label: "Knowledge"
+        file: "index.json"
+        description: "Domain model, brain enhancement, learning patterns"
+
+      - id: "09_dev_workflow"
+        label: "Dev Workflow"
+        file: "index.json"
+        description: "CI/CD pipeline, branching strategy, release cadence"
+
+    supplementary_files:
+      - "repository.yaml"       # Full analysis data in YAML
+      - "profile.json"          # Compact profile with learning metrics
+      - "ast-graph.json"        # AST node/edge graph for visualization
+      - "onboarding-summary.json"  # Dashboard-compatible summary with tab manifest
+
+  # ---------------------------------------------------------------------------
+  # Stages (Flowchart)
+  # ---------------------------------------------------------------------------
+  #
+  #   ┌─────────────────────┐
+  #   │  1. INPUT VALIDATION │
+  #   │  • orchestrator_context guard (MasterOrchestrator only)
+  #   │  • repo path existence check
+  #   │  • ephemeral path guard (/var/folders, /tmp, pytest-*)
+  #   └─────────┬───────────┘
+  #             │ PASS
+  #   ┌─────────▼───────────┐
+  #   │  2. REPO ANALYSIS    │
+  #   │  • OnboardingOrchestrator.onboard_repository()
+  #   │  • Architecture type detection
+  #   │  • Pattern scanning
+  #   │  • Language/framework inference
+  #   └─────────┬───────────┘
+  #             │
+  #   ┌─────────▼───────────┐
+  #   │  3. LEARNING CAPTURE │  (optional: capture_learning=True)
+  #   │  • UniversalLearningLoop
+  #   │  • Pattern capture & promotion
+  #   │  • Non-blocking on failure
+  #   └─────────┬───────────┘
+  #             │
+  #   ┌─────────▼───────────┐
+  #   │  4. BRAIN ENHANCEMENT│  (optional: apply_brain_enhancement=True)
+  #   │  • Perception layer (PatternRegistry)
+  #   │  • Reasoning layer (strategy selection)
+  #   │  • Action layer (execution plan)
+  #   │  • Non-blocking on failure
+  #   └─────────┬───────────┘
+  #             │
+  #   ┌─────────▼───────────┐
+  #   │  5. ARTIFACT GEN     │  (optional: generate_artifacts=True)
+  #   │  • Resolve base_dir (test_mode → tmp, prod → project root)
+  #   │  • Create 9-tab directory structure
+  #   │  • Write index.json per tab (schema_version + generated_at)
+  #   │  • Write repository.yaml, profile.json, ast-graph.json
+  #   │  • Write onboarding-summary.json (tab manifest)
+  #   │  • Write legacy copies (knowledge-base, ast-graphs)
+  #   └─────────┬───────────┘
+  #             │
+  #   ┌─────────▼───────────┐
+  #   │  6. ENFORCEMENT      │
+  #   │  • KnowledgePersistenceAgent.validate()
+  #   │  • Check BLOCKING violations
+  #   │  • Append warnings (non-blocking)
+  #   └─────────┬───────────┘
+  #             │
+  #   ┌─────────▼───────────┐
+  #   │  7. RESULT ASSEMBLY  │
+  #   │  • Determine status: success | partial_success | error
+  #   │  • Return OnboardingResult dict
+  #   └─────────────────────┘
+
+  stages:
+    - id: input_validation
+      name: "Input Validation"
+      order: 1
+      blocking: true
+      checks:
+        - name: orchestrator_context_guard
+          rule: "orchestrator_context.source == 'MasterOrchestrator'"
+          on_fail: "ValueError: BLOCKED — route through cortex_process_request"
+
+        - name: repo_path_exists
+          rule: "Path(repository_path).exists()"
+          on_fail: "Return status=error, error='Repository not found'"
+
+        - name: ephemeral_path_guard
+          rule: "No /var/folders/, /tmp/, \\Temp\\, pytest- in resolved path"
+          applies_to: "production mode only (test_mode=False)"
+          on_fail: "Return status=error, error='BLOCKED: ephemeral path'"
+
+    - id: repo_analysis
+      name: "Repository Analysis"
+      order: 2
+      blocking: true
+      actions:
+        - "OnboardingOrchestrator.onboard_repository(path)"
+        - "Detect architecture_type"
+        - "Scan patterns"
+
+    - id: learning_capture
+      name: "Learning Capture"
+      order: 3
+      blocking: false
+      condition: "capture_learning == True"
+      actions:
+        - "KnowledgePersistenceMixin.capture_onboarding_learning()"
+        - "Collect learning_metrics"
+      on_fail: "Append warning, continue"
+
+    - id: brain_enhancement
+      name: "Brain Enhancement"
+      order: 4
+      blocking: false
+      condition: "apply_brain_enhancement == True"
+      actions:
+        - "KnowledgePersistenceMixin.enhance_with_brain_intelligence()"
+        - "Perception → Reasoning → Action pipeline"
+      on_fail: "Append warning, continue"
+
+    - id: artifact_generation
+      name: "Artifact Generation"
+      order: 5
+      blocking: false
+      condition: "generate_artifacts == True"
+      actions:
+        - "Resolve base_dir from test_mode/test_output_dir or project root"
+        - "Create cortex-registry/company/repos/{repo}/ directory"
+        - "Create 9 tab subdirectories with index.json"
+        - "Write repository.yaml, profile.json, ast-graph.json"
+        - "Write onboarding-summary.json"
+        - "Write legacy copies to knowledge-base/ and artifacts/"
+      validations:
+        - "Every index.json has schema_version field"
+        - "Every index.json has generated_at (UTC, not midnight)"
+        - "No writes to cortex_intelligence/"
+        - "No tmp* or test_* named files in production paths"
+      on_fail: "Append warning, continue"
+
+    - id: enforcement_validation
+      name: "Enforcement Validation"
+      order: 6
+      blocking: false
+      actions:
+        - "KnowledgePersistenceAgent.validate(context)"
+        - "Collect BLOCKING violations"
+        - "Append as warnings"
+      on_fail: "Log and continue"
+
+    - id: result_assembly
+      name: "Result Assembly"
+      order: 7
+      blocking: true
+      actions:
+        - "Determine final status"
+        - "Build OnboardingResult dict"
+        - "Return to caller"
+      status_rules:
+        - condition: "no warnings"
+          result: "success"
+        - condition: "has warnings but no fatal errors"
+          result: "partial_success"
+        - condition: "fatal error in stages 1-2"
+          result: "error"
+
+  # ---------------------------------------------------------------------------
+  # Validation & Cleanup Rules
+  # ---------------------------------------------------------------------------
+  validation_rules:
+    - id: no_cortex_intelligence_writes
+      description: "Onboarding MUST NOT write to cortex_intelligence/"
+      severity: P0
+      test: "test_no_write_to_cortex_intelligence"
+
+    - id: no_tmp_files_in_production
+      description: "No tmp* or test_* files in any production artifact directory"
+      severity: P0
+      test: "test_ephemeral_path_is_blocked"
+
+    - id: schema_version_on_all_artifacts
+      description: "Every JSON artifact must carry schema_version=2.0.0"
+      severity: P0
+      test: "test_all_artifacts_schema_version"
+
+    - id: nine_tab_structure
+      description: "Every onboarded repo gets exactly 9 tab subdirectories"
+      severity: P0
+      test: "test_nine_tab_dirs_created"
+
+    - id: utc_timestamps
+      description: "All timestamps are datetime.utcnow().isoformat(), not midnight placeholders"
+      severity: P1
+      test: "test_utc_timestamp_not_midnight"
+
+    - id: snake_case_filenames
+      description: "All generated filenames use snake_case per CORE-028"
+      severity: P1
+
+    - id: idempotent_onboarding
+      description: "Running onboarding twice on same repo produces consistent output"
+      severity: P1
+      test: "test_onboarding_is_idempotent"
+
+    - id: no_duplicate_profiles
+      description: "Each repo has exactly one canonical profile (CORE-035)"
+      severity: P1
+
+  cleanup_rules:
+    - id: purge_ephemeral_on_startup
+      description: "On tool load, scan production dirs for tmp*/test_* and log warnings"
+      severity: P2
+
+    - id: legacy_location_sync
+      description: "Legacy knowledge-base/ and artifacts/ copies kept in sync with primary"
+      severity: P2
+
+  # ---------------------------------------------------------------------------
+  # Golden Test Mapping
+  # ---------------------------------------------------------------------------
+  golden_tests:
+    - file: "tests/golden/onboarding/test_repo_onboarding_e2e.py"
+      scope: "E2E workflow, 9-tab structure, path guards, timestamps"
+      test_count: 17
+
+    - file: "tests/golden/onboarding/test_onboarding_scenarios.py"
+      scope: "15 scenarios (Python, .NET, polyglot, empty, monorepo, secrets, etc.)"
+      test_count: 18
+
+    - file: "tests/golden/onboarding/test_onboarding_schema.py"
+      scope: "JSON/YAML schema validation, round-trip serialization"
+      test_count: 23

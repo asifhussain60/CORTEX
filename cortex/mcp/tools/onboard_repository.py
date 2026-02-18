@@ -245,6 +245,20 @@ def onboard_repository_tool(
                 artifacts={},
                 error=f"Repository not found: {repository_path}"
             ).to_dict()
+
+        # Ephemeral path guard — block tmp paths in production mode
+        if not test_mode:
+            str_path = str(repo_path.resolve())
+            _EPHEMERAL_MARKERS = ("/var/folders/", "/tmp/", "\\Temp\\", "pytest-")
+            if any(marker in str_path for marker in _EPHEMERAL_MARKERS):
+                return OnboardingResult(
+                    status="error",
+                    repository_path=repository_path,
+                    learning_metrics={},
+                    brain_enhancement={},
+                    artifacts={},
+                    error=f"BLOCKED: ephemeral path detected: {repository_path}"
+                ).to_dict()
         
         # Initialize components
         orchestrator = EnhancedOnboardingOrchestrator()
@@ -311,16 +325,29 @@ def onboard_repository_tool(
                 company_repos = base_dir / "cortex-registry" / "company" / "repos"
                 repo_artifacts_dir = company_repos / repo_name
                 
-                # Legacy locations for compatibility
+                # Legacy locations for backward compatibility (registry only)
                 registry_kb = base_dir / "cortex-registry" / "knowledge-base" / "repositories"
                 registry_ast = base_dir / "cortex-registry" / "artifacts" / "ast-graphs"
-                profile_dir = base_dir / "cortex_intelligence" / "onboarded_repos"
                 
-                # Create all directories
+                # Create all directories (NO cortex_intelligence writes)
                 repo_artifacts_dir.mkdir(parents=True, exist_ok=True)
                 registry_kb.mkdir(parents=True, exist_ok=True)
                 registry_ast.mkdir(parents=True, exist_ok=True)
-                profile_dir.mkdir(parents=True, exist_ok=True)
+
+                # Create 9-tab directory structure with schema_version JSON
+                now_ts = datetime.utcnow().isoformat()
+                for tab in DASHBOARD_TABS:
+                    tab_dir = repo_artifacts_dir / tab["id"]
+                    tab_dir.mkdir(parents=True, exist_ok=True)
+                    tab_file = tab_dir / tab["file"]
+                    tab_data = {
+                        "schema_version": SCHEMA_VERSION,
+                        "tab_id": tab["id"],
+                        "label": tab["label"],
+                        "repository": repo_path.name,
+                        "generated_at": now_ts,
+                    }
+                    tab_file.write_text(json.dumps(tab_data, indent=2))
                 
                 files_generated = []
                 
@@ -330,7 +357,7 @@ def onboard_repository_tool(
                     "repository": {
                         "name": repo_path.name,
                         "path": str(repo_path),
-                        "onboarded_at": orchestrator_context.get("timestamp", "")
+                        "onboarded_at": now_ts,
                     },
                     "analysis": onboarding_result,
                     "metadata": {
@@ -357,7 +384,7 @@ def onboard_repository_tool(
                     "relationships": [],
                     "metadata": {
                         "repository": str(repo_path),
-                        "generated_at": orchestrator_context.get("timestamp", "")
+                        "generated_at": now_ts,
                     }
                 }
                 
@@ -388,12 +415,13 @@ def onboard_repository_tool(
                 logger.info(f"Generated legacy AST: {ast_path_legacy}")
                 files_generated.append(str(ast_path_legacy))
                 
-                # Generate profile JSON in cortex_intelligence/onboarded_repos/
-                profile_path = profile_dir / f"{repo_name}.json"
+                # Generate profile JSON in cortex-registry (NOT cortex_intelligence)
+                profile_path = repo_artifacts_dir / "profile.json"
                 profile_data = {
+                    "schema_version": SCHEMA_VERSION,
                     "name": repo_path.name,
                     "path": str(repo_path),
-                    "onboarded_at": orchestrator_context.get("timestamp", ""),
+                    "onboarded_at": now_ts,
                     "analysis": onboarding_result,
                     "learning_metrics": learning_metrics,
                     "brain_enhancement": brain_enhancement,
@@ -411,15 +439,20 @@ def onboard_repository_tool(
                 # Generate onboarding summary in company/repos/{repo_name}/
                 summary_path = repo_artifacts_dir / "onboarding-summary.json"
                 summary_data = {
+                    "schema_version": SCHEMA_VERSION,
                     "repository_name": repo_path.name,
                     "repository_path": str(repo_path),
-                    "onboarded_at": orchestrator_context.get("timestamp", ""),
+                    "onboarded_at": now_ts,
                     "status": "success",
                     "file_count": file_count,
+                    "tabs": [
+                        {"id": t["id"], "label": t["label"], "file": t["file"]}
+                        for t in DASHBOARD_TABS
+                    ],
                     "artifacts": {
                         "yaml": str(yaml_path.name),
                         "ast_graph": str(ast_path.name),
-                        "profile": str(profile_path.name)
+                        "profile": "profile.json"
                     },
                     "warnings": warnings if warnings else []
                 }
@@ -431,9 +464,9 @@ def onboard_repository_tool(
                 artifacts = {
                     "files_generated": files_generated,
                     "company_artifacts_dir": str(repo_artifacts_dir),
+                    "tabs_written": len(DASHBOARD_TABS),
                     "yaml_files_created": 2,  # Primary + legacy
                     "ast_graphs_created": 2,  # Primary + legacy
-                    "profiles_created": 1,
                     "summary_created": 1,
                     "total_files": len(files_generated),
                     "ast_node_count": file_count
@@ -499,9 +532,27 @@ def onboard_repository_tool(
         ).to_dict()
 
 
+# Schema version for golden-test assertions — bump when output structure changes
+SCHEMA_VERSION = "2.0.0"
+
+# 9-tab dashboard structure per onboarded repo
+DASHBOARD_TABS = [
+    {"id": "01_overview",      "label": "Overview",      "file": "index.json"},
+    {"id": "02_architecture",  "label": "Architecture",  "file": "index.json"},
+    {"id": "03_governance",    "label": "Governance",    "file": "index.json"},
+    {"id": "04_testing",       "label": "Testing",       "file": "index.json"},
+    {"id": "05_dependencies",  "label": "Dependencies",  "file": "index.json"},
+    {"id": "06_security",      "label": "Security",      "file": "index.json"},
+    {"id": "07_metrics",       "label": "Metrics",       "file": "index.json"},
+    {"id": "08_knowledge",     "label": "Knowledge",     "file": "index.json"},
+    {"id": "09_dev_workflow",  "label": "Dev Workflow",  "file": "index.json"},
+]
+
 __all__ = [
     "onboard_repository_tool",
     "OnboardingResult",
     "TOOL_SCHEMA",
-    "TOOL_EXAMPLES"
+    "TOOL_EXAMPLES",
+    "SCHEMA_VERSION",
+    "DASHBOARD_TABS",
 ]

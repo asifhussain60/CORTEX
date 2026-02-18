@@ -81,7 +81,7 @@ def temp_workspace():
 @pytest.fixture
 def knowledge_service(temp_workspace):
     """Create KnowledgePersistenceService instance."""
-    return KnowledgePersistenceService(company_dir=temp_workspace / "company")
+    return KnowledgePersistenceService(company_dir=temp_workspace / "cortex-registry" / "company")
 
 
 @pytest.fixture

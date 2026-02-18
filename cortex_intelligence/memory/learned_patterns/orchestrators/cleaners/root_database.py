@@ -62,12 +62,8 @@ class RootDatabaseCleaner(CleanerInterface):
 
     @property
     def domain(self) -> str:
-        """Return cleaner domain.
-        
-        Note:
-            Uses 'database_migration' for backward compatibility with existing tests.
-        """
-        return "database_migration"
+        """Return cleaner domain."""
+        return "root_database"
 
     def analyze(self) -> Analysis:
         """

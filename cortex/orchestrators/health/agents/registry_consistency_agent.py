@@ -119,7 +119,7 @@ class RegistryConsistencyAgent(BaseHealthAgent):
                     severity = HealthIssueSeverity.LOW
                 
                 issues.append(HealthIssue(
-                    category=HealthIssueCategory.REGISTRY,
+                    category=HealthIssueCategory.CONFIG_MISPLACED,
                     severity=severity,
                     file_path=rel_path,
                     description=f"YAML file outside registry (type: {content_type})",
@@ -209,11 +209,12 @@ class RegistryConsistencyAgent(BaseHealthAgent):
         Returns:
             True if should exclude
         """
-        rel_path = str(file_path.relative_to(workspace_root))
+        rel_path = file_path.relative_to(workspace_root)
+        parts = set(rel_path.parts)
         
         for pattern in self.exclude_patterns:
-            pattern_clean = pattern.replace("*", "").replace("/", "")
-            if pattern_clean in rel_path:
+            stripped = pattern.strip("*/")
+            if stripped and stripped in parts:
                 return True
         
         return False

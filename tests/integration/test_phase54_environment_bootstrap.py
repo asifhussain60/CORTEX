@@ -176,8 +176,8 @@ class TestProductionBootstrapValidation:
         """Test wiring bootstrap is available for production startup."""
         try:
             from cortex.wiring import wiring_bootstrap_cortex
-            assert callable(bootstrap_cortex), \
-                "bootstrap_cortex not callable"
+            assert callable(wiring_bootstrap_cortex), \
+                "wiring_bootstrap_cortex not callable"
         except ImportError as e:
             pytest.fail(f"Wiring bootstrap not available: {e}")
     
@@ -252,7 +252,7 @@ class TestEnvironmentIntegrity:
             wired_before = is_wired()
             
             # Step 3: Bootstrap (should be idempotent)
-            registry = bootstrap_cortex()
+            registry = wiring_bootstrap_cortex()
             
             # Step 4: Verify wired
             wired_after = is_wired()
@@ -283,7 +283,7 @@ class TestBootstrapPerformance:
         from cortex.wiring import wiring_bootstrap_cortex
         
         start_time = time.time()
-        registry = bootstrap_cortex()
+        registry = wiring_bootstrap_cortex()
         elapsed = time.time() - start_time
         
         assert elapsed < 5.0, \
@@ -299,7 +299,7 @@ class TestBootstrapPerformance:
         
         # Bootstrap
         from cortex.wiring import wiring_bootstrap_cortex
-        registry = bootstrap_cortex()
+        registry = wiring_bootstrap_cortex()
         
         # Get memory usage
         current, peak = tracemalloc.get_traced_memory()

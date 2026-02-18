@@ -731,350 +731,350 @@
     {
       "id": "file_104",
       "type": "file",
+      "name": "setup-mcp.py",
+      "path": ".cortex-runtime/setup-mcp.py",
+      "extension": ".py"
+    },
+    {
+      "id": "file_105",
+      "type": "file",
       "name": "bootstrap.py",
       "path": "cortex/bootstrap.py",
       "extension": ".py"
     },
     {
-      "id": "file_105",
+      "id": "file_106",
       "type": "file",
       "name": "opentelemetry_tracing.py",
       "path": "cortex/opentelemetry_tracing.py",
       "extension": ".py"
     },
     {
-      "id": "file_106",
+      "id": "file_107",
       "type": "file",
       "name": "prometheus_metrics.py",
       "path": "cortex/prometheus_metrics.py",
       "extension": ".py"
     },
     {
-      "id": "file_107",
+      "id": "file_108",
       "type": "file",
       "name": "__init__.py",
       "path": "cortex/__init__.py",
       "extension": ".py"
     },
     {
-      "id": "file_108",
+      "id": "file_109",
       "type": "file",
       "name": "health_check_service.py",
       "path": "cortex/health_check_service.py",
       "extension": ".py"
     },
     {
-      "id": "file_109",
+      "id": "file_110",
       "type": "file",
       "name": "output_manager.py",
       "path": "cortex/visualization/output_manager.py",
       "extension": ".py"
     },
     {
-      "id": "file_110",
+      "id": "file_111",
       "type": "file",
       "name": "plan_viewer_engine.py",
       "path": "cortex/visualization/plan_viewer_engine.py",
       "extension": ".py"
     },
     {
-      "id": "file_111",
+      "id": "file_112",
       "type": "file",
       "name": "json_data_generator.py",
       "path": "cortex/visualization/json_data_generator.py",
       "extension": ".py"
     },
     {
-      "id": "file_112",
+      "id": "file_113",
       "type": "file",
       "name": "business_language_generator.py",
       "path": "cortex/visualization/business_language_generator.py",
       "extension": ".py"
     },
     {
-      "id": "file_113",
+      "id": "file_114",
       "type": "file",
       "name": "__init__.py",
       "path": "cortex/visualization/__init__.py",
       "extension": ".py"
     },
     {
-      "id": "file_114",
+      "id": "file_115",
       "type": "file",
       "name": "dashboard_data_adapter.py",
       "path": "cortex/visualization/dashboard_data_adapter.py",
       "extension": ".py"
     },
     {
-      "id": "file_115",
+      "id": "file_116",
       "type": "file",
       "name": "repository_detector.py",
       "path": "cortex/visualization/repository_detector.py",
       "extension": ".py"
     },
     {
-      "id": "file_116",
+      "id": "file_117",
       "type": "file",
       "name": "phase_detail_generator.py",
       "path": "cortex/visualization/phase_detail_generator.py",
       "extension": ".py"
     },
     {
-      "id": "file_117",
+      "id": "file_118",
       "type": "file",
       "name": "data_migration_orchestrator.py",
       "path": "cortex/visualization/data_migration_orchestrator.py",
       "extension": ".py"
     },
     {
-      "id": "file_118",
+      "id": "file_119",
       "type": "file",
       "name": "dashboard_configuration.py",
       "path": "cortex/visualization/dashboard_configuration.py",
       "extension": ".py"
     },
     {
-      "id": "file_119",
+      "id": "file_120",
       "type": "file",
       "name": "llm_content_generator.py",
       "path": "cortex/visualization/llm_content_generator.py",
       "extension": ".py"
     },
     {
-      "id": "file_120",
+      "id": "file_121",
       "type": "file",
       "name": "complexity_renderer.py",
       "path": "cortex/visualization/renderers/complexity_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_121",
+      "id": "file_122",
       "type": "file",
       "name": "author_network_renderer.py",
       "path": "cortex/visualization/renderers/author_network_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_122",
+      "id": "file_123",
       "type": "file",
       "name": "mermaid_sequence_diagram_generator.py",
       "path": "cortex/visualization/renderers/mermaid_sequence_diagram_generator.py",
       "extension": ".py"
     },
     {
-      "id": "file_123",
+      "id": "file_124",
       "type": "file",
       "name": "d3_import_graph_renderer.py",
       "path": "cortex/visualization/renderers/d3_import_graph_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_124",
+      "id": "file_125",
       "type": "file",
       "name": "d3_author_network_renderer.py",
       "path": "cortex/visualization/renderers/d3_author_network_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_125",
+      "id": "file_126",
       "type": "file",
       "name": "__init__.py",
       "path": "cortex/visualization/renderers/__init__.py",
       "extension": ".py"
     },
     {
-      "id": "file_126",
+      "id": "file_127",
       "type": "file",
       "name": "governance_heatmap_renderer.py",
       "path": "cortex/visualization/renderers/governance_heatmap_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_127",
+      "id": "file_128",
       "type": "file",
       "name": "impact_analysis_renderer.py",
       "path": "cortex/visualization/renderers/impact_analysis_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_128",
+      "id": "file_129",
       "type": "file",
       "name": "brain_architecture_renderer.py",
       "path": "cortex/visualization/renderers/brain_architecture_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_129",
+      "id": "file_130",
       "type": "file",
       "name": "d3_call_graph_renderer.py",
       "path": "cortex/visualization/renderers/d3_call_graph_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_130",
+      "id": "file_131",
       "type": "file",
       "name": "d3_git_timeline_renderer.py",
       "path": "cortex/visualization/renderers/d3_git_timeline_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_131",
+      "id": "file_132",
       "type": "file",
       "name": "mermaid_class_diagram_generator.py",
       "path": "cortex/visualization/renderers/mermaid_class_diagram_generator.py",
       "extension": ".py"
     },
     {
-      "id": "file_132",
+      "id": "file_133",
       "type": "file",
       "name": "mermaid_renderer.py",
       "path": "cortex/visualization/renderers/mermaid_renderer.py",
       "extension": ".py"
     },
     {
-      "id": "file_133",
+      "id": "file_134",
       "type": "file",
       "name": "__init__.py",
       "path": "cortex/visualization/formatters/__init__.py",
       "extension": ".py"
     },
     {
-      "id": "file_134",
+      "id": "file_135",
       "type": "file",
       "name": "diagram_data.py",
       "path": "cortex/visualization/models/diagram_data.py",
       "extension": ".py"
     },
     {
-      "id": "file_135",
+      "id": "file_136",
       "type": "file",
       "name": "__init__.py",
       "path": "cortex/visualization/models/__init__.py",
       "extension": ".py"
     },
     {
-      "id": "file_136",
+      "id": "file_137",
       "type": "file",
       "name": "models.py",
       "path": "cortex/visualization/spa/models.py",
       "extension": ".py"
     },
     {
-      "id": "file_137",
+      "id": "file_138",
       "type": "file",
       "name": "lazy_module_loader.py",
       "path": "cortex/visualization/spa/lazy_module_loader.py",
       "extension": ".py"
     },
     {
-      "id": "file_138",
+      "id": "file_139",
       "type": "file",
       "name": "__init__.py",
       "path": "cortex/visualization/spa/__init__.py",
       "extension": ".py"
     },
     {
-      "id": "file_139",
+      "id": "file_140",
       "type": "file",
       "name": "suite_generator.py",
       "path": "cortex/visualization/spa/suite_generator.py",
       "extension": ".py"
     },
     {
-      "id": "file_140",
+      "id": "file_141",
       "type": "file",
       "name": "static_server.py",
       "path": "cortex/visualization/spa/static_server.py",
       "extension": ".py"
     },
     {
-      "id": "file_141",
+      "id": "file_142",
       "type": "file",
       "name": "dependency_bundler.py",
       "path": "cortex/visualization/spa/dependency_bundler.py",
       "extension": ".py"
     },
     {
-      "id": "file_142",
+      "id": "file_143",
       "type": "file",
       "name": "__init__.py",
       "path": "cortex/visualization/adapters/__init__.py",
       "extension": ".py"
     },
     {
-      "id": "file_143",
+      "id": "file_144",
       "type": "file",
       "name": "json_adapter.py",
       "path": "cortex/visualization/adapters/json_adapter.py",
       "extension": ".py"
     },
     {
-      "id": "file_144",
+      "id": "file_145",
       "type": "file",
       "name": "test_dashboard_file_protocol.py",
       "path": "cortex/visualization/scripts/test_dashboard_file_protocol.py",
       "extension": ".py"
     },
     {
-      "id": "file_145",
+      "id": "file_146",
       "type": "file",
       "name": "bundle_vendor_assets.py",
       "path": "cortex/visualization/scripts/bundle_vendor_assets.py",
       "extension": ".py"
     },
     {
-      "id": "file_146",
+      "id": "file_147",
       "type": "file",
       "name": "__init__.py",
       "path": "cortex/visualization/scripts/__init__.py",
       "extension": ".py"
     },
     {
-      "id": "file_147",
+      "id": "file_148",
       "type": "file",
       "name": "bundle_dependencies.py",
       "path": "cortex/visualization/scripts/bundle_dependencies.py",
       "extension": ".py"
     },
     {
-      "id": "file_148",
+      "id": "file_149",
       "type": "file",
       "name": "viz_lazy_loader.py",
       "path": "cortex/visualization/scripts/viz_lazy_loader.py",
       "extension": ".py"
     },
     {
-      "id": "file_149",
+      "id": "file_150",
       "type": "file",
       "name": "dashboard_routes.py",
       "path": "cortex/visualization/api/dashboard_routes.py",
       "extension": ".py"
     },
     {
-      "id": "file_150",
+      "id": "file_151",
       "type": "file",
       "name": "__init__.py",
       "path": "cortex/visualization/api/__init__.py",
       "extension": ".py"
     },
     {
-      "id": "file_151",
+      "id": "file_152",
       "type": "file",
       "name": "user_context.py",
       "path": "cortex/collaboration/user_context.py",
-      "extension": ".py"
-    },
-    {
-      "id": "file_152",
-      "type": "file",
-      "name": "__init__.py",
-      "path": "cortex/collaboration/__init__.py",
       "extension": ".py"
     }
   ],
   "relationships": [],
   "metadata": {
     "repository": "/Users/asifhussain/PROJECTS/CORTEX",
-    "generated_at": "2026-02-18T10:40:45.134036"
+    "generated_at": "2026-02-18T14:19:43.956384"
   }
 }

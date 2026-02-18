@@ -29,6 +29,9 @@ from cortex.wiring.wiring_bootstrap import (
     get_wiring_hash,
     is_wired,
 )
+
+# Alias for backward compatibility (tests import wiring_bootstrap_cortex)
+wiring_bootstrap_cortex = bootstrap_cortex
 from cortex.wiring.registry import (
     GitBackedRegistry,
     LazyOrchestrator,
@@ -40,6 +43,7 @@ from cortex.wiring.registry import (
 __all__ = [
     # Bootstrap functions (primary API)
     "bootstrap_cortex",
+    "wiring_bootstrap_cortex",  # alias for bootstrap_cortex
     "get_cortex",
     "is_wired",
     "get_wiring_hash",

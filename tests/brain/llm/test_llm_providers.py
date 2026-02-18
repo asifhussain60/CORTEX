@@ -185,19 +185,22 @@ class TestAnthropicProvider:
 @pytest.mark.skipif(not OPENAI_AVAILABLE and not ANTHROPIC_AVAILABLE, reason="LLM packages not installed")
 class TestLLMFactory:
     """Test LLM provider factory."""
-    
-    def test_create_openai_provider(self):
+
+    @pytest.mark.skipif(not OPENAI_AVAILABLE, reason="openai package not installed")
+    @patch("cortex.brain.llm.openai_provider.OpenAI")
+    def test_create_openai_provider(self, mock_openai):
         """Test factory creates OpenAI provider."""
         provider = LLMFactory.create_provider(
             provider_name="openai",
             api_key="test-key",
             model="gpt-4"
         )
-        
+
         assert provider.get_name() == "openai"
         assert provider.get_model() == "gpt-4"
         assert isinstance(provider, OpenAIProvider)
-    
+
+    @pytest.mark.skipif(not ANTHROPIC_AVAILABLE, reason="anthropic package not installed")
     def test_create_anthropic_provider(self):
         """Test factory creates Anthropic provider."""
         provider = LLMFactory.create_provider(
@@ -205,11 +208,11 @@ class TestLLMFactory:
             api_key="test-key",
             model="claude-3-opus-20240229"
         )
-        
+
         assert provider.get_name() == "anthropic"
         assert provider.get_model() == "claude-3-opus-20240229"
         assert isinstance(provider, AnthropicProvider)
-    
+
     def test_create_invalid_provider(self):
         """Test factory raises error for invalid provider."""
         with pytest.raises(ValueError, match="Unknown provider"):
@@ -217,20 +220,23 @@ class TestLLMFactory:
                 provider_name="invalid_provider",
                 api_key="test-key"
             )
-    
+
+    @pytest.mark.skipif(not OPENAI_AVAILABLE, reason="openai package not installed")
     @patch.dict('os.environ', {'DEFAULT_LLM_PROVIDER': 'openai', 'DEFAULT_LLM_MODEL': 'gpt-4'})
-    def test_create_default_provider(self):
+    @patch("cortex.brain.llm.openai_provider.OpenAI")
+    def test_create_default_provider(self, mock_openai):
         """Test factory creates default provider from environment."""
         provider = LLMFactory.create_default_provider(api_key="test-key")
-        
+
         assert provider.get_name() == "openai"
         assert provider.get_model() == "gpt-4"
         assert isinstance(provider, OpenAIProvider)
-    
+
     def test_get_available_providers(self):
-        """Test factory returns list of available providers."""
+        """Test factory returns list of installed providers (subset of registered)."""
         providers = LLMFactory.get_available_providers()
-        
-        assert "openai" in providers
-        assert "anthropic" in providers
-        assert len(providers) >= 2
+        # get_available_providers() filters to installed packages only,
+        # so result must be a subset of registered providers
+        registered = set(LLMFactory._PROVIDERS.keys())
+        assert set(providers).issubset(registered)
+        assert len(providers) >= 1

@@ -126,7 +126,7 @@ def test_integration_with_version_artifacts(health_orchestrator, temp_workspace)
     # Verify version issue exists
     version_issues = [
         issue for issue in result.all_issues
-        if issue.category.value == "version"
+        if issue.category.value == "version_artifact"
     ]
     assert len(version_issues) > 0
 
@@ -146,7 +146,7 @@ def test_integration_with_missing_tests(health_orchestrator, temp_workspace):
     # Verify test issue exists
     test_issues = [
         issue for issue in result.all_issues
-        if issue.category.value == "test"
+        if issue.category.value == "missing_test"
     ]
     assert len(test_issues) > 0
 
@@ -166,7 +166,7 @@ def test_integration_with_misplaced_yaml(health_orchestrator, temp_workspace):
     # Verify registry issue exists
     registry_issues = [
         issue for issue in result.all_issues
-        if issue.category.value == "registry"
+        if issue.category.value == "config_misplaced"
     ]
     assert len(registry_issues) > 0
 

@@ -99,7 +99,7 @@ class TestCoverageAgent(BaseHealthAgent):
                         severity = HealthIssueSeverity.LOW
                     
                     issues.append(HealthIssue(
-                        category=HealthIssueCategory.TEST,
+                        category=HealthIssueCategory.MISSING_TEST,
                         severity=severity,
                         file_path=rel_path,
                         description="No corresponding test file found",
@@ -208,11 +208,12 @@ class TestCoverageAgent(BaseHealthAgent):
         Returns:
             True if should exclude
         """
-        rel_path = str(file_path.relative_to(workspace_root))
+        rel_path = file_path.relative_to(workspace_root)
+        parts = set(rel_path.parts)
         
         for pattern in self.exclude_patterns:
-            pattern_clean = pattern.replace("*", "").replace("/", "")
-            if pattern_clean in rel_path:
+            stripped = pattern.strip("*/")
+            if stripped and stripped in parts:
                 return True
         
         return False
