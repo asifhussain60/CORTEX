@@ -341,69 +341,87 @@ Default execution mode — proceed without narration:
 
 ## Documentation Structure
 
-### Core Documentation
+> Files are numbered within each section for progressive reading — start at 01 and work forward.
 
-- **[Index](./index.md)** — This file (architecture overview)
-- **[Glossary](./glossary.md)** — Term definitions and concepts
-- **[Capabilities Overview](./capabilities/overview.md)** — Feature catalog
+### Getting Started (read first)
+- [01 — One Pager](./00-getting-started/01-one-pager.md) — What CORTEX is in 2 minutes
+- [02 — Key Concepts](./00-getting-started/02-key-concepts.md) — Terminology reference
+- [03 — How CORTEX Works](./00-getting-started/03-how-cortex-works.md) — End-to-end mental model
+- [04 — Brain Tier Architecture](./00-getting-started/04-brain-tier-architecture.md) — 3-layer intelligence
+- [05 — Quick Start](./00-getting-started/05-quick-start.md) — First request in 5 minutes
 
-### Detailed Documentation
+### Reference
+- **[Glossary](./glossary.md)** — 58 terms defined
+- **[Index](./index.md)** — This file
 
-#### Capabilities
-- [Core Platform](./capabilities/core-platform.md)
-- [AI Intelligence](./capabilities/ai-intelligence.md)
-- [Governance & Compliance](./capabilities/governance-compliance.md)
-- [Response Formatting](./capabilities/response-formatting.md)
-- [Decisioning](./capabilities/decisioning.md)
-- [Extensibility](./capabilities/extensibility.md)
+### 01 — Capabilities
+- [01 Overview](./01-capabilities/01-overview.md) — Full capability inventory
+- [02 Core Platform](./01-capabilities/02-core-platform.md) — Foundation infrastructure
+- [03 AI Intelligence](./01-capabilities/03-ai-intelligence.md) — Multi-layer intelligence architecture
+- [04 Intelligence Layer](./01-capabilities/04-intelligence-layer.md) — Learning-enhanced orchestrators (Phase 96)
+- [05 Decisioning](./01-capabilities/05-decisioning.md) — Intent classification and routing
+- [06 Conversational Gateway](./01-capabilities/06-conversational-gateway.md) — Natural language interface
+- [07 Governance & Compliance](./01-capabilities/07-governance-compliance.md) — CORE rules enforcement
+- [08 Response Formatting](./01-capabilities/08-response-formatting.md) — Intent-adaptive output
+- [09 Semantic Blocks](./01-capabilities/09-semantic-blocks.md) — Structured response assembly
+- [10 Workflow Templates](./01-capabilities/10-workflow-templates.md) — Convergence-gated workflows
+- [11 Extensibility](./01-capabilities/11-extensibility.md) — Plugin architecture
 
-#### Orchestration
-- [Overview](./orchestration/overview.md)
-- [Master Orchestrator](./orchestration/master-orchestrator.md)
-- [Intent Router](./orchestration/intent-router.md)
-- [TDD Orchestrator](./orchestration/tdd-orchestrator.md)
-- [Domain Orchestrators](./orchestration/domain-orchestrators.md)
-- [Support Orchestrators](./orchestration/support-orchestrators.md)
-- [Cross-Orchestrator Communication](./orchestration/cross-orchestrator.md)
-- [End-to-End Flow](./orchestration/end-to-end-flow.md)
+### 02 — LENS (Code Intelligence)
+- [01 Overview](./02-lens/01-overview.md) — What LENS is and why it exists
+- [02 Architecture](./02-lens/02-architecture.md) — Layer architecture and wiring
+- [03 Analyzers](./02-lens/03-analyzers.md) — 8 parallel code intelligence streams
+- [04 Synthesis](./02-lens/04-synthesis.md) — Merging streams into unified context
+- [05 Caching](./02-lens/05-caching.md) — 3-tier performance optimisation
+- [06 Governance Integration](./02-lens/06-governance-integration.md) — LENS + enforcement
 
-#### LENS (Intelligence)
-- [Overview](./lens/overview.md)
-- [Architecture](./lens/architecture.md)
-- [Analyzers](./lens/analyzers.md)
-- [Synthesis](./lens/synthesis.md)
-- [Caching](./lens/caching.md)
-- [Governance Integration](./lens/governance.md)
+### 03 — Orchestration
+- [01 Overview](./03-orchestration/01-overview.md) — Full orchestrator registry and priority table
+- [02 Master Orchestrator](./03-orchestration/02-master-orchestrator.md) — Executive coordinator
+- [03 Intent Router](./03-orchestration/03-intent-router.md) — Request classification engine
+- [04 TDD Orchestrator](./03-orchestration/04-tdd-orchestrator.md) — RED → GREEN → REFACTOR engine
+- [05 Domain Orchestrators](./03-orchestration/05-domain-orchestrators.md) — Specialist capability engines
+- [06 Cross-Orchestrator Communication](./03-orchestration/06-cross-orchestrator.md) — Messaging and state sharing
+- [07 Request Rephrase](./03-orchestration/07-request-rephrase.md) — Stage -1 pre-processor
+- [08 End-to-End Flow](./03-orchestration/08-end-to-end-flow.md) — Complete request trace
 
-#### MCP (API Layer)
-- [Overview](./mcp/overview.md)
-- [README](./mcp/README.md)
-- [Protocol](./mcp/protocol.md)
-- [Tools Catalog](./mcp/tools-catalog.md)
-- [Integration](./mcp/integration.md)
-- [Versioning](./mcp/versioning.md)
+### 04 — MCP (API Layer)
+- [01 Overview](./04-mcp/01-overview.md) — MCP gateway architecture
+- [02 Protocol](./04-mcp/02-protocol.md) — JSON-RPC 2.0 specification
+- [03 Tools Catalog](./04-mcp/03-tools-catalog.md) — All 26 tools reference
+- [04 Integration](./04-mcp/04-integration.md) — Connecting clients to CORTEX
+- [05 Versioning](./04-mcp/05-versioning.md) — Semantic version management
 
-#### Infrastructure
-- [Overview](./infrastructure/overview.md)
-- [Tech Stack](./infrastructure/tech-stack.md)
-- [Learning Architecture](./infrastructure/learning-architecture.md)
-- [Observability](./infrastructure/observability.md)
-- [CI/CD](./infrastructure/ci-cd.md)
-- [Deployment](./infrastructure/deployment.md)
-- [Scalability](./infrastructure/scalability.md)
+### 05 — Infrastructure
+- [01 Overview](./05-infrastructure/01-overview.md) — Infrastructure and deployment architecture
+- [02 Tech Stack](./05-infrastructure/02-tech-stack.md) — Technology reference
+- [03 Deployment](./05-infrastructure/03-deployment.md) — Local to production guide
+- [04 CI/CD](./05-infrastructure/04-ci-cd.md) — Automated quality gates
+- [05 Observability](./05-infrastructure/05-observability.md) — Metrics, logs, traces
+- [06 Scalability](./05-infrastructure/06-scalability.md) — Horizontal and vertical scaling
+- [07 Learning Architecture](./05-infrastructure/07-learning-architecture.md) — Universal learning loop
 
-#### Diagrams
-- [Architecture Overview](./diagrams/architecture-overview.md)
-- [Component Relationships](./diagrams/component-relationships.md)
-- [Data Flow](./diagrams/data-flow.md)
-- [Request Lifecycle](./diagrams/request-lifecycle.md)
+### 06 — Toolkit
+- [01 Overview](./06-toolkit/01-overview.md) — MCP tool catalog
+- [02 Tool Categories](./06-toolkit/02-tool-categories.md) — Functional classification
+- [03 Tool Registry](./06-toolkit/03-tool-registry.md) — Central catalog and lifecycle
+- [04 Developer Guide](./06-toolkit/04-developer-guide.md) — Creating custom MCP tools
+- [05 Security Model](./06-toolkit/05-security-model.md) — Defence-in-depth architecture
 
-#### Toolkit
-- [Overview](./toolkit/overview.md)
-- [Developer Guide](./toolkit/developer-guide.md)
-- [Tool Registry](./toolkit/tool-registry.md)
-- [Tool Categories](./toolkit/tool-categories.md)
-- [Security Model](./toolkit/security-model.md)
+### 07 — Diagrams
+- [01 C4 Context](./07-diagrams/01-c4-context.md) — System context (who uses CORTEX)
+- [02 C4 Container](./07-diagrams/02-c4-container.md) — Runtime components
+- [03 Architecture Overview](./07-diagrams/03-architecture-overview.md) — System-level ASCII diagram
+- [04 Component Relationships](./07-diagrams/04-component-relationships.md) — Dependency graph
+- [05 Data Flow](./07-diagrams/05-data-flow.md) — End-to-end processing
+- [06 Request Lifecycle](./07-diagrams/06-request-lifecycle.md) — Request pipeline sequence
+- [07 Governance Gate Flow](./07-diagrams/07-governance-gate-flow.md) — Pre-execution validation
+- [08 TDD Cycle](./07-diagrams/08-tdd-cycle.md) — RED → GREEN → REFACTOR visual
+- [09 LENS Analyzer Pipeline](./07-diagrams/09-lens-analyzer-pipeline.md) — 8-stream parallel pipeline
+
+### 08 — Learning System
+- [01 Overview](./08-learning/01-overview.md) — Adaptive intelligence architecture
+- [02 Pattern Capture](./08-learning/02-pattern-capture.md) — What is captured and how it improves CORTEX
 
 ---
 
@@ -420,7 +438,7 @@ An intelligent software development platform that automates code analysis, imple
 - Test-driven development enforcement
 - Multi-language support (5 languages)
 
-**Next Step:** Review [Capabilities Overview](./capabilities/overview.md)
+**Next Step:** Review [Capabilities Overview](./01-capabilities/01-overview.md)
 
 ### For Product Owners
 
@@ -433,7 +451,7 @@ Standardizes development workflows, enforces quality gates, and provides real-ti
 - 10 specialized code analyzers
 - Comprehensive audit trails
 
-**Next Step:** Read [Orchestration Overview](./orchestration/overview.md)
+**Next Step:** Read [Orchestration Overview](./03-orchestration/01-overview.md)
 
 ### For Software Developers
 
@@ -448,7 +466,7 @@ CORTEX operates through MCP tools in VS Code. Every request routes through speci
 5. Governance validation (8 agents)
 6. Commit with audit markers
 
-**Next Step:** Explore [Developer Guide](./toolkit/developer-guide.md) and [TDD Orchestrator](./orchestration/tdd-orchestrator.md)
+**Next Step:** Explore [Quick Start](./00-getting-started/05-quick-start.md) and [TDD Orchestrator](./03-orchestration/04-tdd-orchestrator.md)
 
 ---
 
@@ -536,7 +554,7 @@ All governance-gated work marked with AC (Audit Commit) markers:
 - **Registry:** `cortex-registry/` — Configuration and governance rules
 - **Source Code:** `cortex/` — Python implementation
 - **Tests:** `tests/` — Comprehensive test suite
-- **MCP Server:** `cortex/mcp/` — API server implementation
+- **MCP Server:** `cortex/04-mcp/` — API server implementation
 - **Wiring:** `cortex/wiring/` — Orchestrator registration
 
 ---

@@ -854,20 +854,20 @@ orchestrator:
 
 **Core Documentation:**
 - [Architecture Overview](index.md) — System architecture and design principles
-- [MCP Protocol](mcp/overview.md) — Model Context Protocol specifications
-- [LENS Intelligence](lens/overview.md) — Code intelligence system
-- [Orchestration](orchestration/overview.md) — Orchestrator network
-- [Governance](capabilities/governance-compliance.md) — 4-layer defense architecture
+- [MCP Protocol](04-mcp/overview.md) — Model Context Protocol specifications
+- [LENS Intelligence](02-lens/overview.md) — Code intelligence system
+- [Orchestration](03-orchestration/overview.md) — Orchestrator network
+- [Governance](01-capabilities/governance-compliance.md) — 4-layer defense architecture
 
 **Diagrams:**
-- [C4 Context Diagram](diagrams/c4-context.md) — System boundaries
-- [C4 Container Diagram](diagrams/c4-container.md) — Runtime architecture
-- [MCP Request Lifecycle](diagrams/mcp-request-lifecycle.md) — End-to-end request flow
+- [C4 Context Diagram](07-diagrams/c4-context.md) — System boundaries
+- [C4 Container Diagram](07-diagrams/c4-container.md) — Runtime architecture
+- [MCP Request Lifecycle](07-diagrams/06-request-lifecycle.md) — End-to-end request flow
 
 **Guides:**
-- [Developer Guide](toolkit/developer-guide.md) — Getting started with CORTEX
-- [Tool Catalog](toolkit/overview.md) — MCP tool reference
-- [Infrastructure Guide](infrastructure/overview.md) — Deployment and operations
+- [Developer Guide](06-toolkit/developer-guide.md) — Getting started with CORTEX
+- [Tool Catalog](06-toolkit/overview.md) — MCP tool reference
+- [Infrastructure Guide](05-infrastructure/overview.md) — Deployment and operations
 
 ---
 
