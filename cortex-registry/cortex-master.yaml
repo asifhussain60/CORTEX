@@ -7,9 +7,9 @@
 # ============================================================================
 
 metadata:
-  version: "7.5"
-  last_updated: "2026-02-18T16:30:00Z"
-  total_phases: 47
+  version: "7.6"
+  last_updated: "2026-02-18T18:00:00Z"
+  total_phases: 48
   active: 0
   completed: 47
    deferred:
@@ -519,16 +519,49 @@ phase_status:
     - phase-91  # (old numbering - consolidated into phase-40)
     - phase-92  # (old numbering - consolidated into phase-40)
 
-  planned:      
-    - id: "phase-46"
-      title: "Registry & Intelligence Consolidation"
-      location: "planning/phases/planned/phase-46-registry-intelligence-consolidation.yaml"
+  planned:
+    - id: "phase-48"
+      title: "Health-Vacuum Integrity Pipeline"
+      location: "planning/phases/planned/phase-48-health-vacuum-pipeline.yaml"
+      workflow_template: "cortex-registry/workflows/templates/health-vacuum-pipeline.yaml"
       priority: "P1"
       status: "planned"
-      estimated_duration: "4 hours"
-      prerequisites: ["phase-45", "phase-47"]
-      description: "Clean up duplicate registry structure and unify intelligence"
-      note: "Originally phase-104, renumbered to phase-46 on 2026-02-18. Prerequisites updated: phase-47 completed."
+      estimated_duration: "6 hours"
+      prerequisites: ["phase-47"]
+      description: |
+        Comprehensive CORTEX repository integrity check and production cleanup:
+        - HealthOrchestrator: Scans 10 issue categories (screaming case, empty files,
+          orphaned directories, duplicates, deprecated code, wrong references, etc.)
+        - VacuumOrchestrator: Executes cleanup with rollback capability
+        - Teardown: Deletes temporary handoff file, commits changes
+      stages:
+        - stage: 1
+          name: "Pre-flight Safety"
+          tasks: ["git_status_clean", "pytest_baseline"]
+        - stage: 2
+          name: "Health Scan"
+          tasks: ["scan_1929_files", "write_health_issues_yaml"]
+        - stage: 3
+          name: "Review Issues"
+          tasks: ["display_issues", "await_approval"]
+        - stage: 4
+          name: "Vacuum Execution"
+          tasks: ["delete_unneeded", "rename_screaming_to_kebab", "relocate_files", "clean_root"]
+        - stage: 5
+          name: "Verification & Teardown"
+          tasks: ["run_tests", "delete_handoff", "git_commit"]
+      golden_tests:
+        location: "tests/golden/orchestrators/health_vacuum/"
+        count: 16
+        categories:
+          - "health_orchestrator (7 scenarios)"
+          - "vacuum_orchestrator (6 scenarios)"
+          - "pipeline_integration (3 scenarios)"
+      governance_authority:
+        - "CORE-002 (no markdown sprawl)"
+        - "CORE-028 (naming conventions)"
+        - "CORE-035 (single canonical implementation)"
+      note: "Created 2026-02-18. Workflow template + golden tests defined."
 
 # ============================================================================
 # EXECUTION ORDER
@@ -542,25 +575,40 @@ execution_order:
     governance: "87% automated (26/30 CORE rules)"
     phase_numbering: "Sequential 01-47 (v7.0)"
     
-  next_phases: []  # ALL PHASES COMPLETE
+  next_phases:
+    - id: "phase-48"
+      title: "Health-Vacuum Integrity Pipeline"
+      workflow: "cortex-registry/workflows/templates/health-vacuum-pipeline.yaml"
+      estimated_duration: "6 hours"
+      stages: 5
+      golden_tests: 16
 
   timeline_to_completion:
-    status: "COMPLETE"
-    phases: []
-    total_remaining_duration: "0 hours"
-    completion_date: "2026-02-18"
-    confidence: "100% (ALL PHASES COMPLETE)"
+    status: "IN PROGRESS"
+    phases:
+      - id: "phase-48"
+        title: "Health-Vacuum Integrity Pipeline"
+        duration: "6 hours"
+    total_remaining_duration: "6 hours"
+    completion_date: "2026-02-19"
+    confidence: "95% (workflow template + golden tests defined)"
 
 # ============================================================================
 # PRODUCTION READINESS
 # ============================================================================
 
 production_readiness:
-  status: "🎉 PRODUCTION READY - ALL PHASES COMPLETE"
-  overall_score: "100%"
+  status: "🟢 PRODUCTION READY - Phase 48 (Health-Vacuum) Planned"
+  overall_score: "98%"
   deployment_date: "2026-02-18 16:30 UTC"
   deployment_type: "Zero-downtime rolling update"
-  latest_phase: "Phase 46 complete (2026-02-18) - ALL 47 PHASES DONE"
+  latest_phase: "Phase 47 complete (2026-02-18) - Phase 48 planned"
+  next_phase:
+    id: "phase-48"
+    title: "Health-Vacuum Integrity Pipeline"
+    workflow: "cortex-registry/workflows/templates/health-vacuum-pipeline.yaml"
+    stages: 5
+    golden_tests: 16
   
   mega_phases_completed:
     - phase: "MEGA-E"
@@ -593,23 +641,25 @@ production_readiness:
 # ============================================================================
 
 summary:
-  total_phases: 47
+  total_phases: 48
   completed: 47
   active: 0
-  planned: 0
+  planned: 1
   consolidated: 2
   deferred: 6
   
-  completion_percentage: 100
-  production_status: "🎉 PRODUCTION READY - ALL PHASES COMPLETE"
-  timeline_to_100_percent: "ACHIEVED (2026-02-18)"
-  phase_numbering: "Sequential 01-47 (v7.5 - COMPLETE 2026-02-18T16:30Z)"
+  completion_percentage: 98
+  production_status: "🟢 PRODUCTION READY - Phase 48 Planned"
+  timeline_to_100_percent: "2026-02-19 (6 hours remaining)"
+  phase_numbering: "Sequential 01-48 (v7.6 - 2026-02-18T18:00Z)"
   
   key_achievements:
-    - "🎉 ALL 47 PHASES COMPLETE (100%)"
-    - "Phase numbering standardized: Sequential 01-47"
+    - "🟢 47/48 PHASES COMPLETE (98%)"
+    - "Phase 48 planned: Health-Vacuum Integrity Pipeline"
+    - "Workflow template created: health-vacuum-pipeline.yaml"
+    - "16 golden test scenarios defined"
+    - "Phase numbering standardized: Sequential 01-48"
     - "5 MEGA phases complete (production ready)"
-    - "47 of 47 phases completed (100% complete)"
     - "Phase 45 complete with 110/110 tests passing (2026-02-17)"
     - "Phase 47 complete with 45/54 tests passing (2026-02-18, 3 hours)"
     - "Phase 46 complete - _cortex-master eliminated (2026-02-18, 30 minutes)"
@@ -617,7 +667,7 @@ summary:
     - "Registry structure consolidated: eliminated wrapper directory"
     - "Clear linear execution path established"
     - "Zero conflicting phase numbers"
-    - "All phase files synced with cortex-master.yaml (2026-02-18T16:30Z)"
+    - "All phase files synced with cortex-master.yaml (2026-02-18T18:00Z)"
     - "Governance-compliant phase tracking"
     - "100% registry-to-filesystem synchronization achieved"
     - "Zero technical debt in phase system"
