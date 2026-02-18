@@ -111,9 +111,8 @@ cortex-registry/_cortex-master/meta/
 !cortex-registry/_cortex-master/WAVE-*.md
 !cortex-registry/_cortex-master/WAVE-*.yaml
 
-# VS Code Copilot Chat Sessions (keep in _workspaces/.chats/ only)
-_workspaces/*-COMPLETION.md
-_workspaces/*-SUMMARY.md
+# Local workspaces (developer sandboxes, sample apps, chat logs — never source-controlled)
+_workspaces/
 
 # Testing
 .pytest_cache/

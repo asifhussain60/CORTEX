@@ -1,8 +1,0 @@
-sequenceDiagram
-    user Client
-    user Updater_CreatePaymentTransactionInvoices
-
-    Client->>+Updater_CreatePaymentTransactionInvoices: Execute
-    Updater_CreatePaymentTransactionInvoices->>Updater_CreatePaymentTransactionInvoices: stringIsNullOrEmptycashInOutId
-    Updater_CreatePaymentTransactionInvoices->>Updater_CreatePaymentTransactionInvoices: HasParameters
-    Updater_CreatePaymentTransactionInvoices-->>-Client: Success
