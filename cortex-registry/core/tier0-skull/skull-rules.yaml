@@ -1566,7 +1566,7 @@ rules:
         - "BLOCK if risk > 0.7 without explicit user override"
       
       4_architecture_drift:
-        - "Compare request against master plan (cortex-registry/_cortex-master/)"
+        - "Compare request against master plan (cortex-registry/)"
         - "Detect deviations from approved architecture"
         - "Flag misalignments for user review"
       

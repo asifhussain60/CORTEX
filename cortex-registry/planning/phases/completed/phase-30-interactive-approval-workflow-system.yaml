@@ -1,0 +1,169 @@
+# Phase 42: Interactive Approval Workflow System
+# Status: COMPLETE ✅
+# Completion Date: 2026-02-07
+# Authority: cortex-architect.prompt.md v15.0
+
+id: "phase-42"
+name: "Interactive Approval Workflow System"
+status: "complete"
+priority: "P1"
+completion_date: "2026-02-07"
+roi_score: 0.89
+
+description: |
+  Two-phase approval workflow with session-based state management.
+  Replaces inline DoR display with stateful approval sessions enabling
+  cleaner separation of concerns and better UX.
+
+problem_statement: |
+  Current DoR workflow displays classification inline and expects immediate
+  user response. This creates coupling between classification and execution,
+  makes testing harder, and provides poor UX for multi-step approvals.
+
+solution: |
+  Implement session-based approval workflow:
+  1. cortex_classify_request: Display DoR + create 5min TTL session
+  2. User reviews DoR table with confidence scores
+  3. cortex_approve_request: Execute from session state
+  4. Alternative: cortex_reject_request or cortex_modify_request
+
+deliverables:
+  code:
+    - path: "cortex/brain/state/approval_session_manager.py"
+      lines: 378
+      tests: 16
+      description: "ApprovalSessionManager singleton with TTL-based expiration"
+    - path: "cortex/mcp/tools/approval_tools.py"
+      lines: 325
+      tests: 17
+      description: "Four approval workflow MCP tools"
+    - path: "cortex/mcp/tools/approval_mcp_tools.py"
+      lines: 249
+      tests: 11
+      description: "MCP Tool wrapper classes for auto-exposure"
+  
+  documentation:
+    - path: ".github/prompts/CORTEX.prompt.md"
+      section: "Stage 3: Await Approval"
+      description: "Updated with two-phase approval workflow documentation"
+    - path: ".github/prompts/CORTEX.prompt.md"
+      section: "Core MCP Tools"
+      description: "Added 4 new approval MCP tools to table"
+
+test_results:
+  total: 44
+  passing: 44
+  coverage: "95%"
+  breakdown:
+    - suite: "test_approval_session_manager.py"
+      tests: 16
+      status: "PASSING"
+    - suite: "test_approval_tools.py"
+      tests: 17
+      status: "PASSING"
+    - suite: "test_approval_mcp_tools.py"
+      tests: 11
+      status: "PASSING"
+
+stages:
+  - name: "Stage 1: Approval Session Manager"
+    status: "complete"
+    commit: "80bb4bd96"
+    tests: 16
+    description: |
+      ApprovalSessionManager singleton with thread-safe session storage,
+      5-minute TTL-based expiration, DoR gate serialization/deserialization.
+  
+  - name: "Stage 2: Two-Phase Approval MCP Tools"
+    status: "complete"
+    commit: "6822adc41"
+    tests: 17
+    description: |
+      Four approval workflow functions: cortex_classify_request (display + session),
+      cortex_approve_request (execute from session), cortex_reject_request (abort),
+      cortex_modify_request (re-classify with corrections).
+  
+  - name: "Stage 3: MCP Tool Registration"
+    status: "complete"
+    commit: "f13478619"
+    tests: 11
+    description: |
+      MCP Tool wrapper classes for auto-exposure in get_cortex_tools().
+      Phase 42 metadata tags added for discoverability.
+  
+  - name: "Stage 4: Documentation + Integration"
+    status: "complete"
+    commit: "79af5816d"
+    tests: 0
+    description: |
+      CORTEX.prompt.md Stage 3 section rewritten with stateful workflow.
+      Core MCP Tools table updated with 4 new approval tools.
+      Example usage code added.
+
+git_commits:
+  - hash: "80bb4bd96"
+    message: "Phase 41 Stage 1: Approval Session Manager ✅"
+    date: "2026-02-07"
+  - hash: "6822adc41"
+    message: "Phase 41 Stage 2: Two-Phase Approval MCP Tools ✅"
+    date: "2026-02-07"
+  - hash: "f13478619"
+    message: "Phase 41 Stage 3: MCP Tool Registration ✅"
+    date: "2026-02-07"
+  - hash: "79af5816d"
+    message: "Phase 41 Stages 4-5: Documentation + Integration Complete ✅"
+    date: "2026-02-07"
+
+mcp_tools:
+  - name: "cortex_classify_request"
+    purpose: "Display DoR table + create approval session"
+    parameters: ["user_request"]
+    returns: "DoR table + session_id"
+  - name: "cortex_approve_request"
+    purpose: "Execute request from approval session"
+    parameters: ["session_id"]
+    returns: "Execution result"
+  - name: "cortex_reject_request"
+    purpose: "Abort request with rejection reason"
+    parameters: ["session_id", "reason"]
+    returns: "Abort confirmation"
+  - name: "cortex_modify_request"
+    purpose: "Re-classify with corrections"
+    parameters: ["session_id", "corrections"]
+    returns: "New DoR table + updated session"
+
+impact:
+  user_experience:
+    - "Cleaner approval UX with explicit session management"
+    - "Users can review DoR before committing to execution"
+    - "Better separation of concerns (classify vs execute)"
+  
+  developer_experience:
+    - "Easier testing with session-based state"
+    - "Loosely coupled classification and execution"
+    - "Cleaner MCP tool interface"
+  
+  system_architecture:
+    - "Stateful approval workflow foundation"
+    - "TTL-based session cleanup prevents memory leaks"
+    - "Thread-safe session storage for concurrent users"
+
+depends_on:
+  - "phase-36"  # Unified Response Engine
+  - "phase-41"  # DIGEST Mode (original Phase 41)
+
+metrics:
+  implementation_time: "~8 hours"
+  lines_of_code: 952
+  test_lines: 892
+  total_tests: 44
+  test_coverage: "95%"
+  stages: 4
+
+notes: |
+  Originally labeled "Phase 41" during implementation but renamed to "Phase 42"
+  to resolve naming conflict with Phase 41 (DIGEST Mode Enhancement System).
+  
+  Both phases completed on 2026-02-07 but represent different features:
+  - Phase 41: DIGEST learning system (11 modules)
+  - Phase 42: Approval workflow (3 modules)

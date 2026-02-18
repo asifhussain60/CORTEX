@@ -1,0 +1,774 @@
+# Phase 48: Intelligent Code Review Orchestrator
+# Holistic PR validation with security-first CORTEX tooling
+# Authority: chat01.txt holistic analysis + cortex-architect.prompt.md
+# Created: 2026-02-08
+
+metadata:
+  phase_id: "phase-48"
+  name: "Code Review Orchestrator - Intelligent PR Validation"
+  version: "1.0.0"
+  created: "2026-02-08"
+  author: "Asif Hussain"
+  status: "pending_approval"
+  priority: "P0"  # Critical for enterprise collaboration
+  execution_order: 6
+  roi_score: 0.92  # High impact on code quality + team velocity
+  estimated_duration: "7 days"
+  test_target: 120
+  coverage_target: 90
+  autonomous_execution: false  # Requires human approval for merge decisions
+  approval_required: true
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+
+# Executive Summary
+overview: |
+  🎯 CRITICAL GAP: CORTEX lacks automated PR review capabilities for enterprise collaboration.
+  
+  **Problem Statement:**
+  Individual engineers use git pull/PR for collaboration but have NO:
+  - Automated code review against company standards
+  - Security-first validation before merge
+  - Cross-layer coherence checks for multi-stack projects
+  - Context-aware review using CORTEX LENS + MCP tools
+  - Conflict resolution assistance
+  - Review comment generation with fix suggestions
+  
+  **Solution:**
+  Intelligent Code Review Orchestrator that:
+  ✅ Reviews pulled code holistically against surrounding context
+  ✅ Security-first validation (OWASP, company domains)
+  ✅ Full CORTEX LENS integration (AST, Git history, security threats)
+  ✅ Cross-layer coherence verification (Python↔JS↔DB)
+  ✅ Business requirements validation (company domains)
+  ✅ Automated fix suggestions with TDD approach
+  ✅ MCP-exposed for real-time PR feedback
+  ✅ Extensible to future GitHub/GitLab/Azure DevOps integrations
+  
+  **Why P0:**
+  - Affects ALL production repos (KSESSIONS, KASHKOLE, ALIST, NOOR CANVAS)
+  - Prevents broken code from entering main branch
+  - Scales team collaboration without sacrificing quality
+  - Foundation for future CI/CD automation
+
+# Requirements from Chat Analysis
+requirements:
+  functional:
+    - id: "FR-48-001"
+      description: "Automated PR review against company standards (security, style, tests)"
+      source: "chat01.txt - CHALLENGE 1: PR Review & Collaboration Orchestrator"
+      
+    - id: "FR-48-002"
+      description: "Review comment generation with fix suggestions"
+      source: "chat01.txt - PR Automation Workflow"
+      
+    - id: "FR-48-003"
+      description: "Conflict resolution assistance using YAML merge strategies"
+      source: "chat01.txt - Git Pull Synchronization Deadlock"
+      
+    - id: "FR-48-004"
+      description: "Security-first validation (OWASP, CWE-89/94/327/etc)"
+      source: "chat01.txt - Security Scanning Gap"
+      
+    - id: "FR-48-005"
+      description: "Cross-layer coherence validation (Phase 4 integration)"
+      source: "cortex-self-improvement-sdlc.yaml - Phase 4"
+      
+    - id: "FR-48-006"
+      description: "LENS-based context analysis (Git history, AST, comments)"
+      source: "chat01.txt - Tooling Footprint Analysis"
+      
+    - id: "FR-48-007"
+      description: "Business requirements validation against company domains"
+      source: "chat01.txt - Company Standards (PRECEDENCE)"
+      
+    - id: "FR-48-008"
+      description: "Multi-stack support (Python, JavaScript, C#, SQL)"
+      source: "chat01.txt - Enterprise multi-tech stack requirement"
+      
+    - id: "FR-48-009"
+      description: "MCP tool exposure for real-time PR feedback"
+      source: "copilot-instructions.md - MCP-FIRST architecture"
+      
+    - id: "FR-48-010"
+      description: "Integration with existing ReviewOrchestrator (plan fidelity)"
+      source: "phase-05-review-orchestrator.yaml - Completed phase"
+
+  non_functional:
+    - id: "NFR-48-001"
+      description: "Review latency <3s for typical PR (500 LOC)"
+      rationale: "Real-time feedback for developer experience"
+      
+    - id: "NFR-48-002"
+      description: "Scale to 1000+ concurrent PR reviews (enterprise scenario)"
+      rationale: "Morning deployment window - 500 engineers"
+      
+    - id: "NFR-48-003"
+      description: "Graceful degradation when external services fail"
+      rationale: "Network partition shouldn't block all PRs"
+      
+    - id: "NFR-48-004"
+      description: "Immutable audit trail for compliance (SOX, HIPAA)"
+      rationale: "Enterprise compliance requirements"
+      
+    - id: "NFR-48-005"
+      description: "Tenant isolation for multi-team scenarios"
+      rationale: "Competing teams need data boundaries"
+
+# Architecture
+architecture:
+  component_name: "CodeReviewOrchestrator"
+  module_path: "cortex.orchestrators.domain.code_review_orchestrator"
+  tier: 2  # Domain orchestrator
+  priority: 45
+  
+  key_capabilities:
+    - "PR diff analysis with LENS integration"
+    - "Security vulnerability detection (CWE-89, 94, 327, etc)"
+    - "Cross-layer coherence validation"
+    - "Company domain compliance checking"
+    - "Automated fix suggestion generation"
+    - "Review comment synthesis"
+    - "Conflict resolution assistance"
+    - "Integration with GitHub/GitLab/Azure DevOps (future)"
+  
+  dependencies:
+    orchestrators:
+      - "LENSOrchestrator (code intelligence)"
+      - "ReviewOrchestrator (plan fidelity verification)"
+      - "CoherenceValidator (cross-layer checks)"
+      - "SecurityThreatAnalyzer (CWE detection)"
+      - "TDDOrchestrator (fix generation with tests)"
+    
+    mcp_tools:
+      - "cortex_lens_analyze (unified code analysis)"
+      - "cortex_git_history (commit context)"
+      - "cortex_detect_duplicates (CORE-035 enforcement)"
+      - "cortex_process_request (fix generation)"
+    
+    external_integrations:
+      - "Git (diff parsing, merge strategies)"
+      - "GitHub API (PR comments) - optional"
+      - "GitLab API (merge requests) - optional"
+      - "Azure DevOps API (PRs) - optional"
+  
+  data_flow: |
+    1. PR Submission → CodeReviewOrchestrator
+    2. Parse diff → identify changed files
+    3. LENS Analysis → AST, Git history, security threats
+    4. Company Domain Loading → compliance rules
+    5. Multi-Layer Validation:
+       a. Security Checks (OWASP, CWE patterns)
+       b. Cross-Layer Coherence (Python↔JS↔SQL)
+       c. Business Requirements (company domains)
+       d. CORE Rules (TDD, type hints, docstrings)
+       e. Plan Fidelity (if phase plan exists)
+    6. Generate Review Report:
+       - Severity (P0/P1/P2)
+       - Location (file:line)
+       - Description (what's wrong)
+       - Fix Suggestion (TDD-based)
+       - Context (why it matters)
+    7. MCP Response → structured review comments
+    8. Optional: Post to GitHub/GitLab/Azure DevOps
+
+# Implementation Plan
+stages:
+  - id: "S1"
+    name: "Core Review Engine + Diff Parsing"
+    duration: "1 day"
+    estimated_loc: 400
+    test_count: 20
+    description: |
+      Foundation: PR diff parser + review engine architecture
+      
+      DELIVERABLES:
+      - CodeReviewOrchestrator class (base structure)
+      - GitDiffParser (parse git diff to file changes)
+      - ReviewContext (PR metadata: author, branch, files changed)
+      - ReviewReport dataclass (findings, severity, suggestions)
+      - Review severity classification (P0/P1/P2)
+      
+      TESTS:
+      - Parse simple diff (1 file, 10 lines)
+      - Parse complex diff (10 files, 1000 lines)
+      - Handle binary files (skip review)
+      - Handle deleted files
+      - Handle renamed files
+    
+    acceptance_criteria:
+      - "GitDiffParser extracts file paths, line changes, and context"
+      - "ReviewContext captures PR metadata (author, branch, timestamp)"
+      - "ReviewReport structures findings with severity levels"
+      - "All tests passing (20/20)"
+
+  - id: "S2"
+    name: "LENS Integration - Security & Code Intelligence"
+    duration: "1.5 days"
+    estimated_loc: 600
+    test_count: 25
+    dependencies: ["S1"]
+    description: |
+      Deep integration with CORTEX LENS for holistic analysis
+      
+      DELIVERABLES:
+      - SecurityReviewEngine (CWE detection wrapper)
+      - ASTReviewEngine (code structure validation)
+      - GitHistoryReviewEngine (commit quality checks)
+      - CommentExtractionEngine (TODO/FIXME analysis)
+      - LENS analyzer orchestration
+      
+      CWE COVERAGE:
+      - CWE-89 (SQL Injection)
+      - CWE-94 (Code Injection)
+      - CWE-78 (Command Injection)
+      - CWE-327 (Weak Cryptography)
+      - CWE-22 (Path Traversal)
+      - CWE-79 (XSS)
+      - CWE-502 (Deserialization)
+      
+      TESTS:
+      - Detect SQL injection in Python
+      - Detect XSS in JavaScript
+      - Detect weak crypto (MD5, SHA1)
+      - Detect unsafe deserialization
+      - Validate AST extraction
+      - Validate git history analysis
+    
+    acceptance_criteria:
+      - "SecurityReviewEngine detects 7 CWE patterns with 95%+ accuracy"
+      - "ASTReviewEngine extracts function signatures, complexity metrics"
+      - "GitHistoryReviewEngine validates commit message quality"
+      - "All LENS analyzers integrate via MCP tools"
+      - "All tests passing (25/25)"
+
+  - id: "S3"
+    name: "Company Domain Compliance Validation"
+    duration: "1 day"
+    estimated_loc: 500
+    test_count: 20
+    dependencies: ["S2"]
+    description: |
+      Validate PRs against company-specific standards
+      
+      DELIVERABLES:
+      - CompanyDomainLoader (load relevant domains for PR)
+      - ComplianceValidator (check against domain rules)
+      - Domain rule matching engine
+      - Violation report generation
+      
+      DOMAIN CATEGORIES:
+      - Security standards (PCI-DSS, HIPAA, SOX)
+      - Architecture patterns (microservices, event-driven)
+      - API conventions (REST, GraphQL)
+      - Database standards (schema naming, indexes)
+      - Deployment requirements (12-factor)
+      
+      TESTS:
+      - Load PCI-DSS rules for payment code
+      - Validate HIPAA compliance for health data
+      - Check architecture pattern adherence
+      - Detect API convention violations
+      - Validate database naming standards
+    
+    acceptance_criteria:
+      - "CompanyDomainLoader identifies relevant domains based on file paths"
+      - "ComplianceValidator matches code patterns against domain rules"
+      - "Violation reports include specific rule references"
+      - "All tests passing (20/20)"
+
+  - id: "S4"
+    name: "Cross-Layer Coherence Validation"
+    duration: "1 day"
+    estimated_loc: 450
+    test_count: 18
+    dependencies: ["S3"]
+    description: |
+      Integrate CoherenceValidator for multi-stack consistency
+      
+      DELIVERABLES:
+      - CrossLayerReviewEngine (wrapper for CoherenceValidator)
+      - Enum alignment checks (Python↔JavaScript)
+      - Field naming consistency (camelCase↔snake_case)
+      - Type compatibility validation (Pydantic↔JSON Schema)
+      - Contract test suggestions
+      
+      VALIDATION LAYERS:
+      - Python ↔ JavaScript (models, enums, field names)
+      - Python ↔ SQL (table names, column names)
+      - JavaScript ↔ SQL (ORMs, query builders)
+      - API contracts (OpenAPI, GraphQL schemas)
+      
+      TESTS:
+      - Detect Python enum mismatch with JS
+      - Detect field naming inconsistency
+      - Validate Pydantic↔JSON Schema compatibility
+      - Suggest contract tests for new APIs
+    
+    acceptance_criteria:
+      - "CrossLayerReviewEngine detects enum mismatches with file references"
+      - "Field naming consistency validated across layers"
+      - "Type compatibility checked for API boundaries"
+      - "Contract test suggestions generated"
+      - "All tests passing (18/18)"
+
+  - id: "S5"
+    name: "Fix Suggestion Generation with TDD"
+    duration: "1.5 days"
+    estimated_loc: 550
+    test_count: 22
+    dependencies: ["S4"]
+    description: |
+      Generate automated fix suggestions using TDDOrchestrator
+      
+      DELIVERABLES:
+      - FixSuggestionEngine (coordinate TDD-based fixes)
+      - CodePatchGenerator (generate diff patches)
+      - TestCaseGenerator (generate tests for fixes)
+      - Fix confidence scoring
+      - Interactive fix application
+      
+      FIX CATEGORIES:
+      - Security fixes (parameterized queries, input validation)
+      - Code quality (type hints, docstrings)
+      - Cross-layer fixes (enum alignment, field renaming)
+      - Best practice violations (SOLID, DRY)
+      
+      TESTS:
+      - Generate SQL injection fix with test
+      - Generate missing type hints
+      - Generate docstring for function
+      - Generate enum alignment fix
+      - Score fix confidence (0-100)
+    
+    acceptance_criteria:
+      - "FixSuggestionEngine generates TDD-compliant fixes"
+      - "CodePatchGenerator produces valid git patches"
+      - "TestCaseGenerator creates passing tests"
+      - "Fix confidence scores >80 for automated suggestions"
+      - "All tests passing (22/22)"
+
+  - id: "S6"
+    name: "Review Report Synthesis & MCP Tool"
+    duration: "1 day"
+    estimated_loc: 400
+    test_count: 15
+    dependencies: ["S5"]
+    description: |
+      Synthesize review reports and expose via MCP
+      
+      DELIVERABLES:
+      - ReviewReportSynthesizer (aggregate findings)
+      - ReviewCommentFormatter (markdown output)
+      - MCPToolAdapter (cortex_review_pr)
+      - Review summary generation
+      - Approval/rejection logic
+      
+      REPORT SECTIONS:
+      - Executive Summary (approve/reject/conditional)
+      - Security Findings (P0/P1/P2)
+      - Cross-Layer Issues
+      - Business Requirements Violations
+      - Fix Suggestions (with confidence)
+      - Test Coverage Impact
+      
+      TESTS:
+      - Generate review report from findings
+      - Format review as markdown
+      - Test MCP tool invocation
+      - Validate approval logic
+      - Test rejection logic
+    
+    acceptance_criteria:
+      - "ReviewReportSynthesizer produces comprehensive reports"
+      - "ReviewCommentFormatter generates readable markdown"
+      - "MCP tool cortex_review_pr functional"
+      - "Approval/rejection logic follows governance rules"
+      - "All tests passing (15/15)"
+
+  - id: "S7"
+    name: "CI/CD Integration & GitHub Actions"
+    duration: "1 day"
+    estimated_loc: 300
+    test_count: 10
+    dependencies: ["S6"]
+    description: |
+      Integrate with GitHub Actions for automated PR review
+      
+      DELIVERABLES:
+      - GitHub Actions workflow (pr-review.yml)
+      - GitHub API client (post comments)
+      - PR status checks (approve/block merge)
+      - Webhook handler (PR events)
+      - Audit trail logging
+      
+      WORKFLOW TRIGGERS:
+      - PR opened
+      - PR updated (new commits)
+      - PR synchronized (force push)
+      
+      TESTS:
+      - Workflow triggers on PR events
+      - GitHub API client posts comments
+      - Status checks update correctly
+      - Webhook handler parses events
+      - Audit trail captures all actions
+    
+    acceptance_criteria:
+      - "GitHub Actions workflow runs on PR events"
+      - "Review comments posted to PR via API"
+      - "Status checks block merge on P0 violations"
+      - "Webhook handler processes PR payloads"
+      - "All tests passing (10/10)"
+
+  - id: "S8"
+    name: "Enterprise Extensions & Multi-Tenant Support"
+    duration: "1 day"
+    estimated_loc: 350
+    test_count: 10
+    dependencies: ["S7"]
+    description: |
+      Enterprise features for future scalability
+      
+      DELIVERABLES:
+      - TenantIsolation (multi-team support)
+      - RBAC integration (reviewer assignments)
+      - Custom review rules (team-specific standards)
+      - GitLab/Azure DevOps adapters (future)
+      - Performance optimization (caching, parallelization)
+      
+      ENTERPRISE FEATURES:
+      - Tenant-scoped domain loading
+      - Role-based reviewer routing
+      - Custom compliance rules per team
+      - Adapter pattern for multiple VCS platforms
+      - Review caching (same commit → same result)
+      
+      TESTS:
+      - Tenant isolation validates correctly
+      - RBAC routes reviewers by role
+      - Custom rules loaded per tenant
+      - Adapter pattern extensible
+      - Cache hit rate >70%
+    
+    acceptance_criteria:
+      - "TenantIsolation enforces data boundaries"
+      - "RBAC integration routes reviews correctly"
+      - "Custom rules per tenant functional"
+      - "Adapter pattern supports future VCS platforms"
+      - "All tests passing (10/10)"
+
+# Testing Strategy
+testing:
+  unit_tests:
+    target: 120
+    coverage: 90
+    categories:
+      - "Diff parsing (20 tests)"
+      - "Security detection (25 tests)"
+      - "Domain compliance (20 tests)"
+      - "Cross-layer validation (18 tests)"
+      - "Fix generation (22 tests)"
+      - "Report synthesis (15 tests)"
+      - "CI/CD integration (10 tests)"
+      - "Enterprise features (10 tests)"
+  
+  integration_tests:
+    target: 25
+    scenarios:
+      - "End-to-end PR review (LENS + domains + fixes)"
+      - "GitHub Actions workflow execution"
+      - "Multi-stack PR (Python + JS + SQL changes)"
+      - "Security vulnerability detection → fix suggestion"
+      - "Cross-layer coherence failure → rejection"
+      - "High-confidence fix → auto-apply suggestion"
+  
+  performance_tests:
+    target: 10
+    benchmarks:
+      - "Small PR (50 LOC, 1 file): <500ms"
+      - "Medium PR (500 LOC, 10 files): <3s"
+      - "Large PR (5000 LOC, 100 files): <30s"
+      - "Concurrent reviews (100 PRs): <5s/PR average"
+      - "Cache hit rate: >70%"
+
+# MCP Tool Specification
+mcp_tools:
+  - name: "cortex_review_pr"
+    description: "Comprehensive PR code review with security-first CORTEX tooling"
+    parameters:
+      - name: "pr_diff"
+        type: "string"
+        required: true
+        description: "Git diff output (unified format)"
+      
+      - name: "pr_metadata"
+        type: "object"
+        required: true
+        properties:
+          author: "string"
+          branch: "string"
+          base_branch: "string"
+          timestamp: "string (ISO 8601)"
+      
+      - name: "review_config"
+        type: "object"
+        required: false
+        properties:
+          enable_security: "boolean (default: true)"
+          enable_cross_layer: "boolean (default: true)"
+          enable_fix_suggestions: "boolean (default: true)"
+          min_confidence_threshold: "integer (0-100, default: 70)"
+          tenant_id: "string (optional, for multi-tenant)"
+    
+    returns:
+      type: "object"
+      properties:
+        status: "string (APPROVED|REJECTED|CONDITIONAL)"
+        summary: "string"
+        findings:
+          type: "array"
+          items:
+            severity: "string (P0|P1|P2)"
+            category: "string (security|cross_layer|compliance|quality)"
+            file: "string"
+            line: "integer"
+            description: "string"
+            fix_suggestion: "object (optional)"
+            confidence: "integer (0-100)"
+        metrics:
+          total_findings: "integer"
+          p0_count: "integer"
+          p1_count: "integer"
+          p2_count: "integer"
+          fix_suggestions_generated: "integer"
+          review_time_ms: "integer"
+        approval_decision:
+          approved: "boolean"
+          conditions: "array (if CONDITIONAL)"
+          block_reason: "string (if REJECTED)"
+
+# Governance & Compliance
+governance:
+  core_rules:
+    - "CORE-008 (TDD - tests before fixes)"
+    - "CORE-011 (type hints mandatory)"
+    - "CORE-012 (Google-style docstrings)"
+    - "CORE-027 (audit trail for reviews)"
+    - "CORE-030 (implementation truth verification)"
+    - "CORE-035 (single canonical implementation)"
+    - "CORE-036 (industry standards compliance)"
+    - "ARCH-012 (security-first validation)"
+  
+  audit_trail:
+    events:
+      - "PR_REVIEW_START"
+      - "SECURITY_CHECK_COMPLETE"
+      - "CROSS_LAYER_VALIDATION_COMPLETE"
+      - "DOMAIN_COMPLIANCE_COMPLETE"
+      - "FIX_SUGGESTIONS_GENERATED"
+      - "REVIEW_REPORT_SYNTHESIZED"
+      - "APPROVAL_DECISION_MADE"
+      - "PR_REVIEW_COMPLETE"
+    
+    markers:
+      - "AC_START: AC-PHASE48-REVIEW-{pr_id}"
+      - "AC_COMPLETE: AC-PHASE48-REVIEW-{pr_id} ✅ {status}"
+  
+  security_requirements:
+    - "Immutable audit logs (append-only)"
+    - "Cryptographic hash chaining (tamper-proof)"
+    - "Tenant isolation (multi-team scenarios)"
+    - "RBAC enforcement (reviewer permissions)"
+    - "Secrets exclusion (never log sensitive data)"
+
+# Rollback & Safety
+safety:
+  checkpoints:
+    - id: "PRE-PHASE-48"
+      tag: "phase-48/pre"
+      command: "git tag phase-48/pre"
+      description: "Checkpoint before Code Review Orchestrator implementation"
+    
+    - id: "POST-STAGE-4"
+      tag: "phase-48/s4-complete"
+      command: "git tag phase-48/s4-complete"
+      description: "Checkpoint after cross-layer validation complete"
+    
+    - id: "POST-PHASE-48"
+      tag: "phase-48/complete"
+      command: "git tag phase-48/complete"
+      description: "Checkpoint after full Code Review Orchestrator complete"
+  
+  rollback_procedure: |
+    If issues arise during Phase 48:
+    
+    1. STOP all PR reviews immediately
+    2. git checkout phase-48/pre (or relevant stage checkpoint)
+    3. Investigate failure (check logs in cortex-logs/)
+    4. Fix issue in isolated branch
+    5. Run full test suite (120 tests)
+    6. Resume from checkpoint
+    
+    EMERGENCY ROLLBACK:
+    - git reset --hard phase-48/pre
+    - git clean -fd
+    - Notify team of rollback
+  
+  graceful_degradation:
+    - "If LENS unavailable: Skip security checks, log warning"
+    - "If company domains unavailable: Use CORTEX defaults"
+    - "If GitHub API unavailable: Return review report only (no comment posting)"
+    - "If CoherenceValidator fails: Skip cross-layer checks, flag warning"
+
+# Success Metrics
+success_criteria:
+  phase_complete:
+    - "All 8 stages completed"
+    - "120/120 tests passing"
+    - "90%+ code coverage"
+    - "MCP tool cortex_review_pr functional"
+    - "Integration tests passing (25/25)"
+    - "Performance benchmarks met (<3s for 500 LOC PR)"
+  
+  production_ready:
+    - "Review latency <3s for typical PR"
+    - "Security detection accuracy >95%"
+    - "Fix suggestion confidence >70%"
+    - "Zero P0 violations in self-review"
+    - "Audit trail complete and tamper-proof"
+    - "Multi-tenant isolation validated"
+  
+  business_impact:
+    - "PR review time reduced from 30min → 3s (automated)"
+    - "Security vulnerabilities detected before merge (100% P0 blocking)"
+    - "Cross-layer inconsistencies caught early (prevent production bugs)"
+    - "Team velocity increase (fewer merge conflicts, faster reviews)"
+    - "Compliance risk reduced (automated domain validation)"
+
+# Dependencies & Blockers
+dependencies:
+  completed_phases:
+    - "phase-05 (ReviewOrchestrator - plan fidelity verification)"
+    - "phase-04 (CoherenceValidator - cross-layer checks)"
+  
+  external_dependencies:
+    - "GitPython >=3.1.40 (git operations)"
+    - "PyGithub >=2.1.1 (GitHub API) - optional"
+    - "python-gitlab >=4.4.0 (GitLab API) - optional"
+    - "azure-devops >=7.1.0 (Azure DevOps API) - optional"
+  
+  blockers:
+    - "None - all dependencies completed or optional"
+
+# Future Extensions
+future_work:
+  short_term:
+    - "GitLab merge request integration"
+    - "Azure DevOps pull request integration"
+    - "Bitbucket pull request integration"
+    - "Slack/Teams notifications for review status"
+  
+  long_term:
+    - "AI-powered fix suggestions (GPT-4 integration)"
+    - "Automatic PR merging for high-confidence fixes"
+    - "Learning from rejected reviews (improve detection)"
+    - "Visual diff rendering in review reports"
+    - "Real-time review streaming (WebSocket updates)"
+
+# Risk Assessment
+risks:
+  high:
+    - risk: "False positive security detections → developer frustration"
+      mitigation: "Tune detection thresholds, confidence scoring, manual override"
+    
+    - risk: "Review latency exceeds 3s → poor developer experience"
+      mitigation: "Parallel processing, caching, incremental analysis"
+  
+  medium:
+    - risk: "GitHub API rate limits → review delays"
+      mitigation: "Caching, webhook-based triggers, batch processing"
+    
+    - risk: "Complex merge conflicts → incorrect analysis"
+      mitigation: "Conflict detection, manual review flag, safe-mode fallback"
+  
+  low:
+    - risk: "Company domain drift → outdated validation"
+      mitigation: "Domain version tracking, cache invalidation, update notifications"
+
+# Documentation Requirements
+documentation:
+  technical:
+    - "Architecture diagram (orchestrator flow)"
+    - "MCP tool API reference"
+    - "Integration guide (GitHub Actions)"
+    - "Security detection patterns (CWE catalog)"
+    - "Fix suggestion templates"
+  
+  user_guides:
+    - "PR review workflow (engineer perspective)"
+    - "Review report interpretation"
+    - "Fix suggestion application"
+    - "Custom rule configuration (team leads)"
+    - "Troubleshooting guide"
+  
+  compliance:
+    - "Audit trail specification"
+    - "Tenant isolation architecture"
+    - "RBAC permission model"
+    - "Data retention policy"
+    - "Incident response procedures"
+
+# Approval Workflow
+approval:
+  required_approvals:
+    - role: "Architect"
+      reason: "Validate architecture design and CORTEX integration"
+    
+    - role: "Security Lead"
+      reason: "Validate security detection patterns and CWE coverage"
+    
+    - role: "Platform Team Lead"
+      reason: "Validate CI/CD integration and GitHub Actions workflow"
+  
+  approval_criteria:
+    - "Architecture review complete (no blocking issues)"
+    - "Security patterns validated (95%+ detection accuracy)"
+    - "CI/CD integration tested (workflow runs successfully)"
+    - "Performance benchmarks agreed (<3s for typical PR)"
+    - "Multi-tenant isolation design approved"
+  
+  approval_status: "pending"
+  approval_date: null
+  approved_by: []
+
+# Execution Notes
+execution_notes: |
+  CRITICAL SUCCESS FACTORS:
+  1. LENS integration is foundational - ensure all 4 analyzers functional
+  2. Company domain compliance is PRECEDENCE - respect existing standards
+  3. TDD approach for fix suggestions - never suggest untested code
+  4. Performance is UX - <3s review time is mandatory for adoption
+  5. Security-first mindset - P0 violations MUST block merges
+  
+  DEVELOPMENT APPROACH:
+  - Stage-by-stage execution (8 stages, 7 days)
+  - Checkpoint after each stage (git tags)
+  - Test-driven development (120 tests, 90% coverage)
+  - Parallel work streams where possible (S2-S3, S4-S5)
+  - Daily standup to track progress
+  
+  COLLABORATION:
+  - Architect: Design review after S1, S4, S6
+  - Security: CWE pattern validation after S2
+  - Platform: GitHub Actions review after S7
+  - QA: Performance testing after S6
+  
+  POST-COMPLETION:
+  - Run full CORTEX test suite (ensure no regressions)
+  - Deploy to staging environment
+  - Beta test with 3 PRs (small, medium, large)
+  - Collect feedback from 5 engineers
+  - Update documentation based on feedback
+  - Production deployment after sign-off

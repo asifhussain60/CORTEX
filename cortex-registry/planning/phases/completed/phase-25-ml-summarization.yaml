@@ -1,0 +1,492 @@
+---
+# Phase 36: ML-Based Summarization
+# Extractive/abstractive techniques for context compression
+
+id: "phase-36"
+name: "ML-Based Summarization"
+version: "1.0.0"
+status: "PLANNED"
+created: "2026-02-06"
+updated: "2026-02-06"
+priority: "P1"
+execution_order: 8
+authority: "PHASE-33-SESSION-SUMMARY.md + ROI analysis"
+
+description: |
+  Implements ML-based summarization for intelligent context compression:
+  - Extractive summarization: Select key sentences from responses
+  - Abstractive summarization: Generate concise reformulations
+  - Context-aware selection: Adapt summarization to user intent
+  
+  Leverages transformer models (BART, T5) for production-grade
+  summarization with <100ms latency and graceful fallback.
+
+problem_statement: |
+  Phase 33 (policy-based) and Phase 34 (semantic deduplication) achieve
+  70-80% cumulative reduction, but still rely on heuristic rules.
+  
+  ML-based summarization enables:
+  1. Contextual understanding (what matters for THIS user/request)
+  2. Abstractive reformulation (rewrite for clarity, not just cut)
+  3. Multi-document synthesis (combine insights across responses)
+  
+  Required for ultimate response quality: signal preservation + maximum compression.
+
+objective:
+  summary: |
+    Implement three ML-powered subsystems:
+    1. ExtractiveSummarizer: Select top-k sentences by relevance
+    2. AbstractiveSummarizer: Generate concise rewrites (BART/T5)
+    3. HybridSummarizer: Combine extractive + abstractive for best quality
+
+  success_criteria:
+    - Additional 10-20% reduction over Phase 34 (total 80-90% from baseline)
+    - Quality score maintained or improved (≥0.75)
+    - Latency <100ms per response (p95)
+    - Graceful fallback to Phase 34 if ML unavailable
+    - Support for both local models and cloud APIs
+
+roi_analysis:
+  architectural_impact: 0.80
+  efficiency_gain: 0.85
+  accuracy_improvement: 0.75
+  effort_cost: 0.75
+  blocking_severity: 0.05
+  roi_score: 0.6825
+  priority_tier: "HIGH"
+  calculation: |
+    ROI = (0.80 × 0.35) + (0.85 × 0.25) + (0.75 × 0.20) + (0.25 × 0.15) + (0.05 × 0.05)
+        = 0.2800 + 0.2125 + 0.1500 + 0.0375 + 0.0025
+        = 0.6825 (HIGH priority, highest ROI)
+
+scope:
+  in_scope:
+    - ExtractiveSummarizer with sentence ranking
+    - AbstractiveSummarizer with BART/T5 models
+    - HybridSummarizer combining both approaches
+    - Model selection strategy (local vs cloud)
+    - Latency optimization (caching, batching)
+    - Fallback pipeline (ML → deduplication → policy)
+    - Cost tracking for cloud API usage
+
+  out_of_scope:
+    - Model training/fine-tuning (use pre-trained only)
+    - Multi-language summarization (English only)
+    - Real-time streaming summarization (batch only)
+    - Custom model architectures (use HuggingFace only)
+
+  dependencies:
+    - Phase 34: SemanticDeduplicator + QualityScorer (REQUIRED)
+    - transformers library (BART, T5 models)
+    - torch or tensorflow (model inference)
+    - Optional: OpenAI API (GPT-4 for abstractive)
+    - Optional: Anthropic API (Claude for extractive)
+
+deliverables:
+  - name: "ExtractiveSummarizer"
+    file: "cortex/orchestrators/response/extractive_summarizer.py"
+    status: "PLANNED"
+    estimated_loc: 380
+    purpose: "Select top-k sentences by relevance using transformer encodings"
+    key_classes:
+      - "ExtractiveSummarizer: Main extraction logic"
+      - "SentenceRanker: Rank sentences by importance"
+      - "ExtractionStrategy: Enum (TOP_K, THRESHOLD, CLUSTER_BASED)"
+    key_methods:
+      - "summarize(text: str, compression_ratio: float) -> str"
+      - "rank_sentences(sentences: List[str]) -> List[Tuple[int, float]]"
+      - "extract_by_strategy(ranked: List, strategy: ExtractionStrategy) -> List[int]"
+      - "compute_sentence_embeddings(sentences: List[str]) -> ndarray"
+    models:
+      - "sentence-transformers/all-MiniLM-L6-v2 (fast, 22MB)"
+      - "sentence-transformers/all-mpnet-base-v2 (accurate, 420MB)"
+    tests: 15
+
+  - name: "AbstractiveSummarizer"
+    file: "cortex/orchestrators/response/abstractive_summarizer.py"
+    status: "PLANNED"
+    estimated_loc: 420
+    purpose: "Generate concise rewrites using BART/T5 or cloud APIs"
+    key_classes:
+      - "AbstractiveSummarizer: Main generation logic"
+      - "ModelBackend: Enum (BART_LOCAL, T5_LOCAL, OPENAI_API, ANTHROPIC_API)"
+      - "GenerationConfig: Dataclass for model parameters"
+      - "CloudAPIClient: Wrapper for OpenAI/Anthropic"
+    key_methods:
+      - "summarize(text: str, max_length: int, backend: ModelBackend) -> str"
+      - "summarize_with_bart(text: str) -> str: Local BART inference"
+      - "summarize_with_t5(text: str) -> str: Local T5 inference"
+      - "summarize_with_openai(text: str) -> str: GPT-4 API"
+      - "summarize_with_anthropic(text: str) -> str: Claude API"
+    models:
+      - "facebook/bart-large-cnn (local, 1.6GB)"
+      - "t5-base (local, 850MB)"
+      - "gpt-4-turbo (cloud, $0.01/1K tokens)"
+      - "claude-3-haiku (cloud, $0.00025/1K tokens)"
+    latency_targets:
+      - "BART_LOCAL: 200-500ms"
+      - "T5_LOCAL: 150-400ms"
+      - "OPENAI_API: 500-2000ms"
+      - "ANTHROPIC_API: 300-1500ms"
+    tests: 18
+
+  - name: "HybridSummarizer"
+    file: "cortex/orchestrators/response/hybrid_summarizer.py"
+    status: "PLANNED"
+    estimated_loc: 320
+    purpose: "Combine extractive + abstractive for optimal quality"
+    key_classes:
+      - "HybridSummarizer: Orchestrates extractive + abstractive"
+      - "HybridStrategy: Enum (EXTRACT_THEN_ABSTRACT, ABSTRACT_THEN_EXTRACT, PARALLEL_ENSEMBLE)"
+      - "QualityGate: Use Phase 34 QualityScorer to pick best output"
+    key_methods:
+      - "summarize(text: str, strategy: HybridStrategy) -> str"
+      - "extract_then_abstract(text: str) -> str: Sequential pipeline"
+      - "abstract_then_extract(text: str) -> str: Reverse pipeline"
+      - "parallel_ensemble(text: str) -> str: Run both, pick best"
+      - "evaluate_quality(summaries: List[str]) -> int: Return best index"
+    strategy_recommendations:
+      - "EXTRACT_THEN_ABSTRACT: Best for long responses (>2000 chars)"
+      - "ABSTRACT_THEN_EXTRACT: Best for technical content"
+      - "PARALLEL_ENSEMBLE: Best quality (highest latency)"
+    tests: 12
+
+  - name: "ModelManager"
+    file: "cortex/orchestrators/response/ml_model_manager.py"
+    status: "PLANNED"
+    estimated_loc: 280
+    purpose: "Lazy loading, caching, and lifecycle management for ML models"
+    key_classes:
+      - "ModelManager: Singleton for model lifecycle"
+      - "ModelCache: LRU cache for loaded models"
+      - "ModelDownloader: Download models on first use"
+    key_methods:
+      - "get_model(name: str) -> Any: Load or retrieve from cache"
+      - "preload_models(models: List[str]): Eager loading at startup"
+      - "unload_model(name: str): Free memory"
+      - "get_cache_stats() -> Dict: Memory usage, hit rate"
+    features:
+      - "Lazy loading: Models loaded on first use"
+      - "LRU eviction: Max 2 models in memory (configurable)"
+      - "Disk caching: Store models in ~/.cache/cortex/models/"
+      - "GPU support: Auto-detect CUDA availability"
+    tests: 10
+
+  - name: "FallbackPipeline"
+    file: "cortex/orchestrators/response/summarization_fallback.py"
+    status: "PLANNED"
+    estimated_loc: 220
+    purpose: "Graceful degradation if ML models fail or unavailable"
+    key_classes:
+      - "SummarizationFallbackPipeline: Multi-tier fallback"
+      - "FallbackTier: Enum (ML, DEDUPLICATION, POLICY, RAW)"
+    fallback_order:
+      - "Tier 1: ML-based (Phase 36)"
+      - "Tier 2: Semantic deduplication (Phase 34)"
+      - "Tier 3: Policy-based (Phase 33)"
+      - "Tier 4: Raw response (no optimization)"
+    key_methods:
+      - "summarize_with_fallback(text: str) -> Tuple[str, FallbackTier]"
+      - "attempt_ml_summarization(text: str) -> Optional[str]"
+      - "attempt_deduplication(text: str) -> Optional[str]"
+      - "attempt_policy(text: str) -> Optional[str]"
+    tests: 8
+
+  - name: "Cost Tracker"
+    file: "cortex/observability/ml_summarization_cost_tracker.py"
+    status: "PLANNED"
+    estimated_loc: 180
+    purpose: "Track cloud API usage and costs"
+    key_classes:
+      - "MLCostTracker: Track API calls and token usage"
+      - "APIUsage: Dataclass (provider, tokens_in, tokens_out, cost)"
+    key_methods:
+      - "record_api_call(provider: str, tokens_in: int, tokens_out: int)"
+      - "get_daily_cost() -> float: Sum costs for today"
+      - "get_cost_by_provider() -> Dict[str, float]: Breakdown"
+      - "check_budget(daily_limit: float) -> bool: Alert if exceeded"
+    pricing:
+      - "OpenAI GPT-4: $0.01/1K input, $0.03/1K output"
+      - "Anthropic Claude-3-Haiku: $0.00025/1K input, $0.00125/1K output"
+    tests: 6
+
+  - name: "Integration Tests"
+    file: "tests/integration/test_phase_36_ml_summarization.py"
+    status: "PLANNED"
+    estimated_loc: 480
+    purpose: "End-to-end testing of Phase 36 components"
+    test_classes:
+      - "TestExtractiveSummarizerIntegration (8 tests)"
+      - "TestAbstractiveSummarizerIntegration (10 tests)"
+      - "TestHybridSummarizerIntegration (6 tests)"
+      - "TestFallbackPipeline (5 tests)"
+      - "TestPhase36EndToEnd (6 tests)"
+    total_tests: 35
+
+  - name: "MasterOrchestrator Integration"
+    file: "cortex/orchestrators/core/master_orchestrator.py"
+    status: "PLANNED"
+    estimated_loc: 95
+    purpose: "Wire Phase 36 ML summarization into response pipeline"
+    integration_points:
+      - "get_response_with_headers(): Add ML summarization step"
+      - "get_response_with_headers(): Integrate fallback pipeline"
+      - "get_response_with_headers(): Track costs and latency"
+    configuration:
+      - "ml_summarization_enabled: bool (default True)"
+      - "preferred_backend: ModelBackend (default BART_LOCAL)"
+      - "max_latency_ms: int (default 100, fallback if exceeded)"
+      - "daily_api_budget: float (default $5.00)"
+    backward_compatibility: "100% (all features optional with fallback)"
+
+  - name: "Performance Benchmarks"
+    file: "tests/performance/test_ml_summarization_benchmarks.py"
+    status: "PLANNED"
+    estimated_loc: 240
+    purpose: "Benchmark latency, quality, and cost tradeoffs"
+    benchmarks:
+      - "Latency comparison: Local vs cloud models"
+      - "Quality comparison: Extractive vs abstractive vs hybrid"
+      - "Cost analysis: Cloud API usage projection"
+      - "Compression ratio: ML vs Phase 34 vs Phase 33"
+    tests: 12
+
+total_estimated_loc: 2615
+total_estimated_tests: 116
+estimated_duration: "6-8 weeks"
+estimated_effort_hours: 320
+
+phases:
+  phase_1:
+    name: "Infrastructure & Model Setup"
+    duration: "1 week"
+    deliverables:
+      - "ml_model_manager.py (280 LOC)"
+      - "Model download and caching setup"
+      - "GPU detection and configuration"
+      - "test_ml_model_manager.py (10 tests)"
+    acceptance_criteria:
+      - "BART and T5 models download and load successfully"
+      - "LRU cache working (max 2 models in memory)"
+      - "GPU auto-detection functional"
+      - "All 10 tests passing"
+
+  phase_2:
+    name: "ExtractiveSummarizer Implementation"
+    duration: "1.5 weeks"
+    deliverables:
+      - "extractive_summarizer.py (380 LOC)"
+      - "test_extractive_summarizer.py (15 tests)"
+      - "Benchmark: latency and quality"
+    acceptance_criteria:
+      - "Extractive summarization achieves 10-15% additional reduction"
+      - "Latency <50ms (p95)"
+      - "Quality score ≥0.70"
+      - "All 15 tests passing"
+
+  phase_3:
+    name: "AbstractiveSummarizer Implementation"
+    duration: "2 weeks"
+    deliverables:
+      - "abstractive_summarizer.py (420 LOC)"
+      - "test_abstractive_summarizer.py (18 tests)"
+      - "Cloud API integration (OpenAI, Anthropic)"
+      - "Cost tracking integration"
+    acceptance_criteria:
+      - "BART_LOCAL latency <200ms (p95)"
+      - "T5_LOCAL latency <150ms (p95)"
+      - "Cloud API fallback working"
+      - "Quality score ≥0.75"
+      - "All 18 tests passing"
+
+  phase_4:
+    name: "HybridSummarizer & Fallback"
+    duration: "1 week"
+    deliverables:
+      - "hybrid_summarizer.py (320 LOC)"
+      - "summarization_fallback.py (220 LOC)"
+      - "test_hybrid_summarizer.py (12 tests)"
+      - "test_summarization_fallback.py (8 tests)"
+    acceptance_criteria:
+      - "Hybrid strategies implemented and benchmarked"
+      - "Fallback pipeline degrades gracefully"
+      - "Quality gating selects best output"
+      - "All 20 tests passing"
+
+  phase_5:
+    name: "Integration & Performance Optimization"
+    duration: "1.5 weeks"
+    deliverables:
+      - "MasterOrchestrator integration (95 LOC)"
+      - "ml_summarization_cost_tracker.py (180 LOC)"
+      - "test_phase_36_ml_summarization.py (35 tests)"
+      - "test_ml_summarization_benchmarks.py (12 tests)"
+    acceptance_criteria:
+      - "All components wired into MasterOrchestrator"
+      - "Performance <100ms (p95) for local models"
+      - "Cost tracking functional and under budget"
+      - "All 47 integration/performance tests passing"
+      - "Zero breaking changes to Phase 34/33"
+
+  phase_6:
+    name: "Production Hardening & Documentation"
+    duration: "1 week"
+    deliverables:
+      - "Error handling and retry logic"
+      - "Prometheus metrics integration"
+      - "Grafana dashboard"
+      - "User documentation"
+    acceptance_criteria:
+      - "Graceful handling of model failures"
+      - "Retry logic for cloud API timeouts"
+      - "Metrics exported to Prometheus"
+      - "Documentation complete"
+
+acceptance_criteria:
+  - id: "AC-PHASE-36-001"
+    description: "ML summarization achieves additional 10-20% reduction"
+    validation: "Measure on 100 sample responses from Phase 34 baseline"
+    
+  - id: "AC-PHASE-36-002"
+    description: "Quality score maintained or improved (≥0.75)"
+    validation: "Phase 34 QualityScorer on ML-summarized responses"
+    
+  - id: "AC-PHASE-36-003"
+    description: "Latency <100ms (p95) for local models"
+    validation: "Performance benchmarks with 1000 responses"
+    
+  - id: "AC-PHASE-36-004"
+    description: "Cloud API usage under budget ($5/day default)"
+    validation: "Cost tracker reporting over 7-day period"
+    
+  - id: "AC-PHASE-36-005"
+    description: "Graceful fallback to Phase 34 if ML fails"
+    validation: "Test with models unavailable, verify Phase 34 still works"
+    
+  - id: "AC-PHASE-36-006"
+    description: "Zero breaking changes to Phase 34/33"
+    validation: "All Phase 34 (70 tests) and Phase 33 (12 tests) still pass"
+    
+  - id: "AC-PHASE-36-007"
+    description: "GPU acceleration working if CUDA available"
+    validation: "Test on GPU machine, verify speedup >2x"
+
+testing_strategy:
+  unit_tests: 69
+  integration_tests: 35
+  performance_tests: 12
+  total_tests: 116
+  coverage_target: "≥90%"
+  tdd_compliance: "100% (tests before code)"
+
+risks:
+  - risk: "Model download failures (network issues)"
+    mitigation: "Retry logic with exponential backoff, fallback to smaller models"
+    severity: "HIGH"
+    
+  - risk: "GPU memory exhaustion"
+    mitigation: "LRU cache with max 2 models, automatic CPU fallback"
+    severity: "MEDIUM"
+    
+  - risk: "Cloud API rate limits"
+    mitigation: "Daily budget cap, automatic fallback to local models"
+    severity: "MEDIUM"
+    
+  - risk: "Summarization quality degradation"
+    mitigation: "Quality gating with Phase 34 scorer, reject if score <0.7"
+    severity: "HIGH"
+    
+  - risk: "Latency exceeds 100ms target"
+    mitigation: "Automatic fallback to Phase 34 if latency >100ms"
+    severity: "MEDIUM"
+
+rollback_plan:
+  - "Disable ML summarization via feature flag"
+  - "Fallback to Phase 34 (semantic deduplication)"
+  - "Unload models to free memory"
+  - "No schema changes = instant rollback"
+
+next_phases:
+  - phase: "phase-37"
+    name: "Model Fine-Tuning Pipeline"
+    description: "Fine-tune BART/T5 on CORTEX responses for better quality"
+    depends_on: "phase-36"
+    
+  - phase: "phase-38"
+    name: "Multi-Language Summarization"
+    description: "Extend summarization to non-English languages"
+    depends_on: "phase-36"
+
+compliance:
+  core_rules:
+    - "CORE-008: TDD-first (tests before code)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-029: Response header mandatory"
+    - "CORE-035: Single canonical implementation"
+  
+  governance:
+    - "EnforcementOrchestrator validation required"
+    - "Git checkpoint before integration"
+    - "Audit trail (AC_START → AC_COMPLETE)"
+
+monitoring:
+  prometheus_metrics:
+    - "cortex_ml_summarization_latency_ms"
+    - "cortex_ml_summarization_compression_ratio"
+    - "cortex_ml_summarization_quality_score"
+    - "cortex_ml_api_cost_total"
+    - "cortex_ml_fallback_tier_count"
+  
+  grafana_dashboard:
+    name: "Phase 36: ML-Based Summarization"
+    panels:
+      - "Summarization Latency P50/P95/P99"
+      - "Compression Ratio Histogram"
+      - "Quality Score Distribution"
+      - "API Cost Over Time"
+      - "Fallback Tier Usage Breakdown"
+      - "GPU Memory Usage"
+
+documentation:
+  - file: "docs/implementation/phase-36-ml-summarization.md"
+    purpose: "Implementation guide and architecture"
+  - file: "docs/guides/ml-summarization-configuration.md"
+    purpose: "User guide for model selection and tuning"
+  - file: "docs/guides/cloud-api-setup.md"
+    purpose: "OpenAI/Anthropic API configuration"
+
+tags:
+  - "ml-summarization"
+  - "extractive-summarization"
+  - "abstractive-summarization"
+  - "hybrid-summarization"
+  - "phase-36"
+
+related_phases:
+  - "phase-33: Response Verbosity Reduction (61% reduction, policy-based)"
+  - "phase-34: Advanced Response Optimization (semantic deduplication, quality scoring)"
+  - "phase-35: User Preference System (future, user-driven optimization)"
+  - "phase-37: Model Fine-Tuning Pipeline (future)"
+  - "phase-38: Multi-Language Summarization (future)"
+
+infrastructure_requirements:
+  compute:
+    - "CPU: 4+ cores recommended"
+    - "RAM: 8GB minimum (16GB recommended for multiple models)"
+    - "GPU: Optional (NVIDIA CUDA for 2-5x speedup)"
+    - "Disk: 5GB for model cache"
+  
+  dependencies:
+    - "transformers>=4.30.0"
+    - "torch>=2.0.0 or tensorflow>=2.13.0"
+    - "sentence-transformers>=2.2.0"
+    - "openai>=1.0.0 (optional, for cloud API)"
+    - "anthropic>=0.7.0 (optional, for cloud API)"
+  
+  environment_variables:
+    - "CORTEX_ML_MODELS_PATH: Model cache directory (default ~/.cache/cortex/models/)"
+    - "OPENAI_API_KEY: OpenAI API key (optional)"
+    - "ANTHROPIC_API_KEY: Anthropic API key (optional)"
+    - "CORTEX_ML_DAILY_BUDGET: Daily API budget (default $5.00)"
+    - "CUDA_VISIBLE_DEVICES: GPU selection (default auto-detect)"

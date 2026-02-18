@@ -1,0 +1,288 @@
+metadata:
+  version: "1.0"
+  description: "CORTEX Audit Checklist - Priority-Based Governance Validation"
+  authority: "cortex-architect.prompt.md | CORE-008 (tests before code)"
+  last_updated: "2026-02-17"
+
+priority_checks:
+  P0:
+    name: "Security & Critical"
+    description: "Blocking issues that prevent deployment"
+    mandatory: true
+    checks:
+      - id: "P0-001"
+        name: "No Hardcoded Secrets"
+        description: "Verify no API keys, tokens, or credentials in code"
+        tool: "cortex_secrets_scan"
+        evidence_required: "scan_report"
+        severity: "critical"
+        blocking: true
+      
+      - id: "P0-002"
+        name: "No Code Injection Vulnerabilities"
+        description: "Check for SQL injection, command injection, XSS"
+        tool: "cortex_security_audit"
+        evidence_required: "security_report"
+        severity: "critical"
+        blocking: true
+      
+      - id: "P0-003"
+        name: "No Broken Core Functionality"
+        description: "All P0 tests passing"
+        tool: "pytest"
+        evidence_required: "test_results"
+        severity: "critical"
+        blocking: true
+      
+      - id: "P0-004"
+        name: "No Critical Test Failures"
+        description: "Zero test failures in critical path"
+        tool: "pytest"
+        evidence_required: "test_summary"
+        severity: "critical"
+        blocking: true
+  
+  P1:
+    name: "Infrastructure & Architecture"
+    description: "Essential system integrity checks"
+    mandatory: true
+    checks:
+      - id: "P1-001"
+        name: "Orchestrator Wiring Complete"
+        description: "All core orchestrators wired and active"
+        tool: "cortex_verify_wiring"
+        evidence_required: "wiring_status"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-002"
+        name: "Integration Tests Passing"
+        description: "Core integration tests green"
+        tool: "pytest"
+        evidence_required: "integration_results"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-003"
+        name: "Audit Trail Enabled"
+        description: "Governance decisions logged"
+        tool: "cortex_audit_check"
+        evidence_required: "audit_logs"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-004"
+        name: "Component Verification"
+        description: "All critical components registered"
+        tool: "cortex_verify_components"
+        evidence_required: "component_registry"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-005"
+        name: "Synthesis Duplication Prevention"
+        description: "No duplicate synthesis in domain_brain and cortex_intelligence"
+        tool: "cortex_verify_synthesis"
+        evidence_required: "synthesis_analysis"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-006"
+        name: "LENS Scope Validation"
+        description: "LENS only processes onboarded_repos"
+        tool: "cortex_verify_lens_scope"
+        evidence_required: "lens_analysis"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-007"
+        name: "Intelligence Gateway Enforcement"
+        description: "Single entry point for all intelligence operations"
+        tool: "cortex_verify_intelligence_gateway"
+        evidence_required: "gateway_analysis"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-008"
+        name: "No Orphaned Orchestrators"
+        description: "All orchestrators in repo-registry.yaml referenced in wiring"
+        tool: "cortex_verify_orchestrator_integrity"
+        evidence_required: "wiring_validation"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-009"
+        name: "No Circular Dependencies"
+        description: "DAG structure validated in orchestrator dependencies"
+        tool: "cortex_verify_dag"
+        evidence_required: "dag_analysis"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-010"
+        name: "Intelligence Flags Present"
+        description: "All domain orchestrators have intelligence_mode flag"
+        tool: "cortex_verify_intelligence_flags"
+        evidence_required: "flag_check"
+        severity: "high"
+        blocking: false
+      
+      - id: "P1-011"
+        name: "Registry-Wiring Sync"
+        description: "repo-registry.yaml and wiring.yaml synchronized"
+        tool: "cortex_verify_registry_sync"
+        evidence_required: "sync_report"
+        severity: "high"
+        blocking: false
+  
+  P1_5:
+    name: "Brain Cohesion & Health"
+    description: "Phase 38 - System health and cohesion checks"
+    mandatory: true
+    phase_reference: "Phase-38"
+    checks:
+      - id: "P1.5-001"
+        name: "Brain Health Score"
+        description: "Overall brain system health metrics"
+        tool: "cortex_intelligence_health"
+        evidence_required: "health_metrics"
+        severity: "high"
+        blocking: false
+        threshold: 80
+        dimensions:
+          - "cache_staleness_ratio"
+          - "orchestrator_connectivity_score"
+          - "knowledge_freshness_index"
+          - "governance_coverage_percent"
+          - "domain_utilization_rate"
+      
+      - id: "P1.5-002"
+        name: "Orchestrator Connectivity"
+        description: "All orchestrators properly wired and reachable"
+        tool: "cortex_capability_mesh"
+        evidence_required: "connectivity_report"
+        severity: "high"
+        blocking: false
+        threshold: 90
+        auto_fix: true
+        auto_fix_action: "cortex_rewire_orphans"
+      
+      - id: "P1.5-003"
+        name: "Company Domain Utilization"
+        description: "cortex-registry/company/domains actively used by orchestrators"
+        tool: "cortex_audit"
+        evidence_required: "domain_usage_stats"
+        severity: "medium"
+        blocking: false
+        threshold: 50
+        query: "company_domain_usage"
+      
+      - id: "P1.5-004"
+        name: "Brain State Freshness"
+        description: "cortex_intelligence state not stale"
+        tool: "cortex_check_freshness"
+        evidence_required: "freshness_timestamps"
+        severity: "high"
+        blocking: false
+        threshold: 95
+        auto_fix: true
+        auto_fix_action: "cortex_flush_brain"
+      
+      - id: "P1.5-005"
+        name: "Governance Adaptation Enabled"
+        description: "GovernanceContextAdapter active and integrated"
+        tool: "cortex_verify_integration"
+        evidence_required: "adapter_status"
+        severity: "high"
+        blocking: false
+        component: "GovernanceContextAdapter"
+      
+      - id: "P1.5-006"
+        name: "LENS Health"
+        description: "LENS analyzers operational and coverage adequate"
+        tool: "cortex_lens_health"
+        evidence_required: "lens_metrics"
+        severity: "medium"
+        blocking: false
+      
+      - id: "P1.5-007"
+        name: "Knowledge Graph Integrity"
+        description: "Knowledge graph nodes and edges consistent"
+        tool: "cortex_kg_validate"
+        evidence_required: "kg_validation"
+        severity: "medium"
+        blocking: false
+      
+      - id: "P1.5-008"
+        name: "Memory Coherence"
+        description: "cortex_intelligence memory not fragmented"
+        tool: "cortex_memory_check"
+        evidence_required: "memory_coherence"
+        severity: "medium"
+        blocking: false
+      
+      - id: "P1.5-009"
+        name: "Orchestrator Load Balance"
+        description: "No single orchestrator overloaded"
+        tool: "cortex_load_analysis"
+        evidence_required: "load_metrics"
+        severity: "low"
+        blocking: false
+      
+      - id: "P1.5-010"
+        name: "Brain Flush Recency"
+        description: "Last brain flush within acceptable time window"
+        tool: "cortex_flush_check"
+        evidence_required: "flush_timestamp"
+        severity: "low"
+        blocking: false
+  
+  P2:
+    name: "Quality & Performance"
+    description: "Non-blocking quality improvements"
+    mandatory: false
+    checks:
+      - id: "P2-001"
+        name: "Code Coverage > 80%"
+        description: "Unit test coverage threshold"
+        tool: "pytest-cov"
+        evidence_required: "coverage_report"
+        severity: "medium"
+        blocking: false
+      
+      - id: "P2-002"
+        name: "Documentation Complete"
+        description: "All public APIs documented"
+        tool: "cortex_doc_check"
+        evidence_required: "doc_coverage"
+        severity: "medium"
+        blocking: false
+      
+      - id: "P2-003"
+        name: "Performance Benchmarks"
+        description: "Latency within acceptable bounds"
+        tool: "cortex_benchmark"
+        evidence_required: "benchmark_results"
+        severity: "medium"
+        blocking: false
+  
+  P3:
+    name: "Nice to Have"
+    description: "Optional enhancements"
+    mandatory: false
+    checks:
+      - id: "P3-001"
+        name: "Code Linting Clean"
+        description: "No linting warnings"
+        tool: "ruff"
+        evidence_required: "lint_report"
+        severity: "low"
+        blocking: false
+      
+      - id: "P3-002"
+        name: "Type Hints Complete"
+        description: "All functions type-hinted"
+        tool: "mypy"
+        evidence_required: "type_check_report"
+        severity: "low"
+        blocking: false

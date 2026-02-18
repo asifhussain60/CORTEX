@@ -265,7 +265,7 @@ structure_transformations:
       │   ├── interaction/          ← MOVED from root interaction/
       │   └── patterns/             ← MOVED from root patterns/
       ├── planning/                 ← KEEP + add phases/
-      │   ├── phases/               ← MOVED from _cortex-master/phases/
+      │   ├── phases/               ← MOVED from planning/phases/
       │   │   ├── planned/
       │   │   ├── completed/
       │   │   ├── deferred/
@@ -469,7 +469,7 @@ stages:
       - "git mv _cortex-master/core/templates/* artifacts/templates/"
       - "git mv interaction integration/"
       - "git mv patterns integration/"
-      - "git mv _cortex-master/phases planning/"
+      - "git mv planning/phases planning/"
       - "git mv _cortex-master/baselines metrics/"
       - "git mv _cortex-master/reports metrics/"
       - "git mv _cortex-master/dashboard metrics/dashboards"
@@ -502,7 +502,7 @@ stages:
       - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/config|core/config|g' {} \\;"
       - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/wiring|core/wiring|g' {} \\;"
       - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/core/templates|artifacts/templates|g' {} \\;"
-      - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/phases|planning/phases|g' {} \\;"
+      - "find . -name '*.py' -type f -exec sed -i '' 's|planning/phases|planning/phases|g' {} \\;"
       - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/baselines|metrics/baselines|g' {} \\;"
       - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/reports|metrics/reports|g' {} \\;"
       - "find . -name '*.py' -type f -exec sed -i '' 's|_cortex-master/dashboard|metrics/dashboards|g' {} \\;"

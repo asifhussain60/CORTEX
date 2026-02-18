@@ -1,0 +1,455 @@
+# ============================================================================
+# PHASE-57: Architectural Pattern Detection & Classification
+# ============================================================================
+# Purpose: Implement AI-driven architectural pattern recognition engine
+#          that analyzes code structure, identifies design patterns,
+#          classifies architecture types, and provides LENS recommendations
+# Authority: cortex-architect.prompt.md, Strategic LENS Analysis 2026-02-09
+# Approach: TDD-First, Pattern Catalog, LENS Integration, ML-Ready
+# Status: APPROVED | Target Start: 2026-02-09
+# ============================================================================
+
+version: "1.1"
+created: "2026-02-09"
+updated: "2026-02-09"
+status: "approved"
+priority: "P1"
+execution_order: 9
+
+metadata:
+  phase_id: "phase-57"
+  title: "Architectural Pattern Detection & Classification"
+  subtitle: "AI-driven recognition of design patterns, architecture types, and code structures"
+  author: "Asif Hussain"
+  created_date: "2026-02-09T00:00:00Z"
+  revised_date: "2026-02-09T12:00:00Z"
+  target_start: "2026-02-09"
+  estimated_duration: "4 days"
+  test_target: 45
+  coverage_target: 92
+  roi_score: 0.82
+  cross_cutting: true
+  breaking_changes: false
+  production_blocker: false
+  autonomous_execution: true
+  approval_required: false
+  
+  autonomous_config:
+    silent_execution: true
+    user_notification: true
+    progress_visualization: "ascii_bar"
+    report_generation: "completion_report"
+    token_aware: true
+    continuation_prompt: true
+    visual_updates: "copilot_chat_inline"
+
+governance:
+  core_rules:
+    - "CORE-002: NO markdown file generation (inline chat only)"
+    - "CORE-008: TDD-first (tests BEFORE code)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-027: Audit trail (AC_START → AC_COMPLETE)"
+    - "CORE-030: Implementation Truth — verify code, not docs"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-036: Industry standards compliance"
+    - "CORE-048: Holistic Validation Gate"
+    - "MCP-FIRST: All functionality via MCP tools"
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+problem_statement: |
+  **Current Limitations:**
+  
+  1. **No Pattern Recognition:**
+     - LENS analyzes code but doesn't identify design patterns
+     - No classification of architecture types (MVC, DDD, layered, etc.)
+     - Missing pattern-based recommendations
+  
+  2. **Manual Architecture Classification:**
+     - Current approach: Manual review of codebase structure
+     - No automated architecture detection
+     - Expensive knowledge requirement from reviewers
+  
+  3. **Limited Pattern Catalog:**
+     - Only basic design patterns (Factory, Observer, etc.)
+     - Missing enterprise patterns (CQRS, Event Sourcing, DDD)
+     - No anti-pattern detection catalog
+  
+  4. **Scalability Challenge:**
+     - Adding new patterns requires manual code updates
+     - No plugin mechanism for pattern detectors
+     - Hard to extend to domain-specific patterns
+  
+  **Impact:**
+  - Manual reviews take 2-3x longer than necessary
+  - Architects miss patterns invisible to code inspection
+  - LENS recommendations lack pattern-aware context
+  - Enterprise users can't validate custom patterns
+
+# ============================================================================
+# STRATEGIC OBJECTIVES
+# ============================================================================
+objectives:
+  primary:
+    - "Implement pattern detection engine with 25+ design patterns"
+    - "Support architecture classification (MVC, DDD, Layered, Microservices, etc.)"
+    - "Create pluggable pattern detector framework for extensibility"
+    - "Integrate with LENS for pattern-aware recommendations"
+    - "Enable ML-based pattern similarity analysis"
+    - "Provide pattern recommendations for code refactoring"
+  
+  business_value:
+    - "Reduce architectural review time by 40%"
+    - "Enable automated compliance checks for pattern usage"
+    - "Improve architecture consistency across teams"
+    - "Support enterprise custom pattern definitions"
+  
+  technical_excellence:
+    - "Zero circular dependencies with existing code"
+    - "92% test coverage (43/45+ tests)"
+    - "Plugin architecture for future ML/embedding integration"
+    - "Backward compatible with existing LENS tools"
+
+# ============================================================================
+# STAGE BREAKDOWN (4 Days, 45+ Tests)
+# ============================================================================
+stages:
+  - id: "S1"
+    name: "Pattern Recognition Foundation & Design Pattern Catalog"
+    duration: "1 day"
+    test_target: 9
+    description: |
+      Establish pattern detection foundation and catalog 25+ design patterns.
+      
+      **Deliverables:**
+      1. BasePatternDetector (abstract base class)
+         - Pattern definition schema (name, signatures, confidence)
+         - Detection algorithm interface
+         - Matching confidence scoring
+      
+      2. PatternCatalog (registry of 25+ patterns)
+         - CreationalPatterns: Singleton, Factory, AbstractFactory, Builder, Prototype
+         - StructuralPatterns: Adapter, Bridge, Composite, Decorator, Facade, Proxy
+         - BehavioralPatterns: ChainOfResponsibility, Command, Interpreter, Iterator,
+           Mediator, Memento, Observer, State, Strategy, Template Method, Visitor
+         - ConcurrencyPatterns: ActiveObject, Monitor, Producer-Consumer, Thread Pool
+      
+      3. Pattern descriptors (meta-programming approach)
+         - Signature matching (call graphs, inheritance patterns)
+         - Structural matching (class relationships, method patterns)
+         - Behavioral matching (communication patterns, state flows)
+      
+      4. Tests (9):
+         - T1-T3: BasePatternDetector instantiation and interface
+         - T4-T6: PatternCatalog registry and lookups
+         - T7-T9: Signature matching algorithms
+    
+    completion_criteria:
+      - "✅ BasePatternDetector class with abstract methods"
+      - "✅ PatternCatalog with 25+ design patterns registered"
+      - "✅ Pattern descriptor schema validation"
+      - "✅ 9/9 tests passing, 90%+ coverage"
+
+  - id: "S2"
+    name: "Design Pattern Detectors (15+ patterns)"
+    duration: "1 day"
+    test_target: 12
+    description: |
+      Implement specific pattern detectors for high-value design patterns.
+      
+      **Detectors Implemented:**
+      1. CreationalPatectors:
+         - SingletonDetector: Static instance + getInstance()
+         - FactoryDetector: Factory class/method pattern
+         - BuilderDetector: Builder with fluent API
+      
+      2. StructuralDetectors:
+         - DecoratorDetector: Inheritance + wrapper pattern
+         - FacadeDetector: Simplified interface to complex subsystem
+         - ProxyDetector: Lazy loading / access control pattern
+      
+      3. BehavioralDetectors:
+         - ObserverDetector: Subject + Observer pattern
+         - StrategyDetector: Family of interchangeable algorithms
+         - StateDetector: Object behavior changes based on internal state
+         - TemplateMethodDetector: Algorithm skeleton in base class
+      
+      4. ConcurrencyDetectors:
+         - ThreadPoolDetector: Thread pool implementation
+         - ProducerConsumerDetector: Queue-based messaging
+      
+      **Tests (12):**
+         - T1-T3: Creational pattern detection
+         - T4-T7: Structural pattern detection
+         - T8-T10: Behavioral pattern detection
+         - T11-T12: Concurrency pattern detection
+    
+    completion_criteria:
+      - "✅ 15+ pattern detector implementations"
+      - "✅ Each detector with confidence scoring"
+      - "✅ All tests passing (12/12)"
+      - "✅ Coverage ≥ 90%"
+
+  - id: "S3"
+    name: "Architecture Classification Engine"
+    duration: "1 day"
+    test_target: 10
+    description: |
+      Classify overall architecture type based on pattern combinations.
+      
+      **Architecture Types:**
+      1. MVC (Model-View-Controller)
+         - Signatures: Models + Views + Controllers
+         - Pattern indicators: Observer (model-view sync)
+      
+      2. MVVM (Model-View-ViewModel)
+         - Signatures: Models + Views + ViewModels with bindings
+         - Pattern indicators: Observer, Data binding
+      
+      3. DDD (Domain-Driven Design)
+         - Signatures: Bounded contexts, Aggregates, Value objects, Services
+         - Pattern indicators: Factory, Repository, Domain events
+      
+      4. LayeredArchitecture
+         - Signatures: Presentation → Business → Persistence layers
+         - Pattern indicators: Facade, Proxy, Data access objects
+      
+      5. Microservices
+         - Signatures: Independent deployment units, API contracts
+         - Pattern indicators: Factory, Producer-Consumer, Service locator
+      
+      6. EventDrivenArchitecture
+         - Signatures: Event producers, consumers, brokers
+         - Pattern indicators: Observer, Publisher-Subscriber
+      
+      7. CQRS (Command Query Responsibility Segregation)
+         - Signatures: Separate command/query models
+         - Pattern indicators: Strategy, Command pattern
+      
+      **Tests (10):**
+         - T1-T2: MVC/MVVM classification
+         - T3-T4: DDD classification
+         - T5-T6: Layered/Microservices classification
+         - T7-T8: Event-driven/CQRS classification
+         - T9-T10: Confidence scoring and edge cases
+    
+    completion_criteria:
+      - "✅ ArchitectureClassifier implementation"
+      - "✅ 7+ architecture types recognized"
+      - "✅ Confidence scoring for classifications"
+      - "✅ 10/10 tests passing"
+
+  - id: "S4"
+    name: "Anti-Pattern Detection & Code Smell Classification"
+    duration: "0.5 days"
+    test_target: 8
+    description: |
+      Detect code smells and anti-patterns that violate CORTEX standards.
+      
+      **Anti-Patterns:**
+      1. Structural Anti-Patterns:
+         - GodClass: Class with too many responsibilities (>20 methods)
+         - FeatureEnvy: Class using fields of another class excessively
+         - DataClumps: Groups of variables that should be a class
+         - CircularDependencies: A→B→A dependency cycles
+      
+      2. Behavioral Anti-Patterns:
+         - DataTransferObject: Anemic models without behavior
+         - ServiceLocator: Hidden dependencies via global service access
+         - SwitchStatements: Complex switch/case replacing polymorphism
+      
+      3. Enterprise Anti-Patterns:
+         - AnalysisParalysis: Over-engineering before requirements
+         - GoldenHammer: Using one solution for all problems
+         - LavaFlow: Dead code nobody dares to remove
+      
+      **Tests (8):**
+         - T1-T3: Structural anti-pattern detection
+         - T4-T6: Behavioral anti-pattern detection
+         - T7-T8: Enterprise anti-pattern detection
+    
+    completion_criteria:
+      - "✅ AntiPatternDetector implementation"
+      - "✅ 8+ anti-patterns recognized"
+      - "✅ Severity scoring (Critical/Warning/Info)"
+      - "✅ 8/8 tests passing"
+
+  - id: "S5"
+    name: "LENS Integration & MCP Tools"
+    duration: "1 day"
+    test_target: 8
+    description: |
+      Integrate pattern detection with LENS and expose via MCP tools.
+      
+      **LENS Integration:**
+      1. ArchitecturePatternSource (LENS source)
+         - Detects patterns in analyzed code
+         - Returns confidence scores
+         - Provides refactoring recommendations
+      
+      2. Pattern-aware context enrichment
+         - Add pattern info to LENS analysis results
+         - Include architecture classification in reports
+         - Recommend pattern-based refactorings
+      
+      **MCP Tools:**
+      1. cortex_detect_patterns
+         - Input: file path or AST
+         - Output: {patterns: [{name, confidence, location}]}
+      
+      2. cortex_classify_architecture
+         - Input: repository path
+         - Output: {architecture_type, confidence, pattern_breakdown}
+      
+      3. cortex_detect_anti_patterns
+         - Input: file path
+         - Output: {anti_patterns: [{name, severity, location, fix}]}
+      
+      **Tests (8):**
+         - T1-T2: ArchitecturePatternSource integration
+         - T3-T4: LENS enrichment pipeline
+         - T5-T6: MCP tool functionality
+         - T7-T8: End-to-end pattern → recommendation
+    
+    completion_criteria:
+      - "✅ LENS source implementation"
+      - "✅ 3 MCP tools exposed"
+      - "✅ MCP tool signatures documented"
+      - "✅ 8/8 tests passing"
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  functional:
+    - "✅ Detect 25+ design patterns with > 85% accuracy"
+    - "✅ Classify 7+ architecture types"
+    - "✅ Detect 8+ anti-patterns"
+    - "✅ All MCP tools working end-to-end"
+    - "✅ Pattern recommendations integrated with LENS"
+  
+  quality:
+    - "✅ 45+ tests passing (100% of target)"
+    - "✅ Test coverage ≥ 92%"
+    - "✅ All CORE rules enforced"
+    - "✅ Type hints on 100% of functions"
+    - "✅ Zero circular dependencies"
+  
+  performance:
+    - "✅ Pattern detection < 500ms for typical file"
+    - "✅ Architecture classification < 2s for repository"
+    - "✅ No regression in existing LENS performance"
+  
+  documentation:
+    - "✅ Pattern catalog documented (name, signatures, examples)"
+    - "✅ Architecture classification guide"
+    - "✅ MCP tool documentation"
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+dependencies:
+  - "phase-45: Enhanced Planning System (completed ✅)"
+  - "phase-46: Infrastructure Discovery (completed ✅)"
+  - "phase-49: Context Crystallization Layer (completed ✅)"
+  - "phase-51: MCP-First Enforcement (completed ✅)"
+  - "phase-56: LENS/Intelligence Hybrid Architecture (pilot approved)"
+
+# ============================================================================
+# SUCCESSOR PHASES
+# ============================================================================
+next_phases:
+  - id: "phase-58"
+    name: "Async Crawler Framework & Repository Pattern Learning"
+    duration: "5 days"
+    description: "Build async crawler for discovering patterns across repositories"
+  
+  - id: "phase-59"
+    name: "ML-Based Pattern Similarity & Clustering"
+    duration: "5 days"
+    description: "Implement embedding-based pattern similarity analysis"
+  
+  - id: "phase-60"
+    name: "Enterprise Pattern Registry & Policy Engine"
+    duration: "3 days"
+    description: "Support custom pattern definitions and compliance policies"
+
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+risks:
+  - risk: "False positives in pattern detection"
+    probability: "Medium"
+    impact: "High (erodes trust in recommendations)"
+    mitigation: "Conservative confidence thresholds (>85%), human review workflow"
+  
+  - risk: "Performance degradation with large codebases"
+    probability: "Medium"
+    impact: "Medium (detection becomes impractical)"
+    mitigation: "Incremental analysis, caching, parallel processing"
+  
+  - risk: "Pattern catalog becomes unmaintainable"
+    probability: "Low"
+    impact: "Medium (technical debt)"
+    mitigation: "Plugin architecture enables community contributions"
+
+# ============================================================================
+# IMPLEMENTATION NOTES
+# ============================================================================
+implementation_notes: |
+  **Architecture:**
+  ```
+  cortex/
+    intelligence/
+      patterns/
+        __init__.py
+        base.py                      # BasePatternDetector
+        catalog.py                   # PatternCatalog registry
+        
+        detectors/
+          creational.py              # Factory, Singleton, Builder, etc.
+          structural.py              # Adapter, Facade, Proxy, Decorator, etc.
+          behavioral.py              # Observer, Strategy, State, etc.
+          concurrency.py             # Thread Pool, Producer-Consumer, etc.
+        
+        anti_patterns.py             # AntiPatternDetector
+        classification.py            # ArchitectureClassifier
+        confidence.py                # Confidence scoring algorithms
+    
+    lens/
+      sources/
+        architecture.py              # ArchitecturePatternSource (LENS source)
+  
+    mcp/
+      tools/
+        pattern_tools.py             # MCP tool definitions
+  ```
+  
+  **Plugin Interface:**
+  ```python
+  class BasePatternDetector(ABC):
+      @abstractmethod
+      def detect(self, ast_node, context) -> List[PatternMatch]:
+          """Detect pattern instances in AST node"""
+      
+      @property
+      @abstractmethod
+      def pattern_info(self) -> PatternInfo:
+          """Return pattern metadata"""
+  ```
+  
+  **TDD Approach:**
+  1. Tests first (9 tests S1 → 12 tests S2 → 10 tests S3 → 8 tests S4 → 8 tests S5)
+  2. Minimal implementation to pass tests
+  3. Refactor for elegance and performance
+  4. Validation gate before MCP exposure
+
+# ============================================================================
+# EXECUTION AUTHORITY
+# ============================================================================
+executive_sponsor: "Asif Hussain"
+technical_lead: "CORTEX Architecture Team"
+approval_authority: "cortex-architect.prompt.md"
+gate_authority: "Phase 48: Holistic Validation + Challenge Gate"
