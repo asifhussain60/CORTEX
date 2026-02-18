@@ -1,0 +1,207 @@
+# ============================================================================
+# CORTEX Orchestrator Wiring Specification
+# ============================================================================
+# Version: 1.0.0
+# Authority: Phase 3 - LENS Knowledge Graph (Code Level Planner)
+# Governance: CORE-035 (Single Canonical Implementation)
+# Last Updated: 2026-02-18
+# ============================================================================
+
+version: "1.0.0"
+
+# ============================================================================
+# ORCHESTRATORS
+# ============================================================================
+# Organized by tier: core > domain > support
+# Each orchestrator is lazy-loaded on first access
+
+orchestrators:
+  # ==========================================================================
+  # CORE ORCHESTRATORS (Tier 1)
+  # ==========================================================================
+  # Foundation orchestrators that other components depend on
+  
+  core:
+    - name: "MasterOrchestrator"
+      module: "cortex.orchestrators.core.master_orchestrator"
+      class: "MasterOrchestrator"
+      tier: 1
+      priority: 100
+      dependencies: []
+      capabilities:
+        - "orchestration"
+        - "routing"
+        - "governance"
+      mcp_tools:
+        - "cortex_orchestrate"
+        - "cortex_route_request"
+      
+    - name: "TDDOrchestrator"
+      module: "cortex.orchestrators.core.tdd_orchestrator"
+      class: "TDDOrchestrator"
+      tier: 1
+      priority: 95
+      dependencies: []
+      capabilities:
+        - "tdd_cycle"
+        - "test_generation"
+        - "red_green_refactor"
+      mcp_tools:
+        - "cortex_generate_tests"
+        - "cortex_tdd_cycle"
+      
+    - name: "IntentRouter"
+      module: "cortex.orchestrators.core.intent_router"
+      class: "IntentRouter"
+      tier: 1
+      priority: 90
+      dependencies: []
+      capabilities:
+        - "intent_classification"
+        - "request_routing"
+        - "orchestrator_selection"
+      mcp_tools:
+        - "cortex_classify_intent"
+        - "cortex_route_intent"
+      
+    - name: "InteractionOrchestrator"
+      module: "cortex.orchestrators.core.interaction_orchestrator"
+      class: "InteractionOrchestrator"
+      tier: 1
+      priority: 85
+      dependencies: []
+      capabilities:
+        - "user_interaction"
+        - "conversation_management"
+      mcp_tools:
+        - "cortex_interact"
+        
+    - name: "SecurityOrchestrator"
+      module: "cortex.orchestrators.core.security_orchestrator"
+      class: "SecurityOrchestrator"
+      tier: 1
+      priority: 88
+      dependencies: []
+      capabilities:
+        - "sast_scanning"
+        - "secrets_detection"
+        - "sca_scanning"
+        - "cicd_hardening"
+        - "security_gate"
+      mcp_tools:
+        - "cortex_security_scan"
+        - "cortex_validate_security"
+        - "cortex_generate_sbom"
+      knowledge_base:
+        - "cortex-registry/knowledge-base/security/owasp-top10.yaml"
+        - "cortex-registry/knowledge-base/security/secrets-patterns.yaml"
+        - "cortex-registry/knowledge-base/security/cicd-hardening.yaml"
+      
+    - name: "EnforcementOrchestrator"
+      module: "cortex.orchestrators.core.enforcement_orchestrator"
+      class: "EnforcementOrchestrator"
+      tier: 1
+      priority: 80
+      dependencies: []
+      capabilities:
+        - "governance_enforcement"
+        - "rule_validation"
+      
+    - name: "ArchitectureGuard"
+      module: "cortex.orchestrators.core.architecture_guard"
+      class: "ArchitectureGuard"
+      tier: 1
+      priority: 75
+      dependencies: []
+      capabilities:
+        - "architecture_validation"
+        - "pattern_enforcement"
+
+  # ==========================================================================
+  # DOMAIN ORCHESTRATORS (Tier 2)
+  # ==========================================================================
+  # Business domain-specific orchestrators
+  
+  domain:
+    - name: "PlanningOrchestrator"
+      module: "cortex.orchestrators.domain.planning_orchestrator"
+      class: "PlanningOrchestrator"
+      tier: 2
+      priority: 70
+      dependencies:
+        - "MasterOrchestrator"
+      capabilities:
+        - "phase_planning"
+        - "task_decomposition"
+        
+    - name: "EnhancedPlanningOrchestrator"
+      module: "cortex.orchestrators.domain.enhanced_planning_orchestrator"
+      class: "EnhancedPlanningOrchestrator"
+      tier: 2
+      priority: 68
+      dependencies:
+        - "PlanningOrchestrator"
+      capabilities:
+        - "enhanced_planning"
+        - "dependency_analysis"
+
+  # ==========================================================================
+  # SUPPORT ORCHESTRATORS (Tier 3)
+  # ==========================================================================
+  # Supporting orchestrators for specialized tasks
+  
+  support:
+    - name: "SeleniumPlaywrightOrchestrator"
+      module: "cortex.orchestrators.migration.selenium_playwright_orchestrator"
+      class: "SeleniumPlaywrightOrchestrator"
+      tier: 3
+      priority: 50
+      dependencies: []
+      capabilities:
+        - "migration_analysis"
+        - "code_transformation"
+        
+    - name: "DebuggerOrchestrator"
+      module: "cortex.orchestrators.support.debugger_orchestrator"
+      class: "DebuggerOrchestrator"
+      tier: 3
+      priority: 45
+      dependencies: []
+      capabilities:
+        - "debugging"
+        - "error_analysis"
+
+# ============================================================================
+# ANALYZERS (Optional, from LENS)
+# ============================================================================
+analyzers:
+  - name: "ComplexityAnalyzer"
+    module: "cortex_lens.analyzers.complexity_analyzer"
+    class: "ComplexityAnalyzer"
+    
+  - name: "DependencyAnalyzer"
+    module: "cortex_lens.analyzers.dependency_analyzer"
+    class: "DependencyAnalyzer"
+
+# ============================================================================
+# CONFIGURATION
+# ============================================================================
+config:
+  lazy_loading: true
+  health_check_on_load: false
+  max_initialization_time_seconds: 30
+  circular_dependency_detection: true
+  
+# ============================================================================
+# VALIDATION RULES
+# ============================================================================
+validation:
+  required_methods:
+    - "get_name"
+    - "get_version"
+    - "initialize"
+  optional_methods:
+    - "get_mode"
+    - "execute_operation"
+    - "get_mcp_tools"
+    - "get_audit_trail"

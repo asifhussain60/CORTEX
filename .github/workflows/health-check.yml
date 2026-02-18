@@ -18,10 +18,10 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4 - pinned SHA (Arnica artipacked fix)
       
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065  # v5 - pinned SHA (Arnica artipacked fix)
         with:
           python-version: '3.9'
       
@@ -33,13 +33,18 @@ jobs:
       
       - name: Run CORTEX health check
         id: health
+        env:
+          # Inputs isolated to env vars to prevent shell injection (Arnica SAST fix)
+          HEALTH_CHECK_AGENTS: ${{ github.event.inputs.agents }}
         run: |
           python -c "
+          import os
           from pathlib import Path
           from cortex.mcp.tools.health_check_tool import cortex_health_check
           
           workspace = Path.cwd()
-          agents = '${{ github.event.inputs.agents }}'.split(',') if '${{ github.event.inputs.agents }}' else None
+          agents_input = os.environ.get('HEALTH_CHECK_AGENTS', '')
+          agents = agents_input.split(',') if agents_input else None
           
           result = cortex_health_check(str(workspace), agents=agents)
           
@@ -82,7 +87,7 @@ jobs:
       
       - name: Upload report artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4 - pinned SHA (Arnica artipacked fix)
         with:
           name: health-report-${{ github.run_number }}
           path: health_report.md
@@ -90,19 +95,28 @@ jobs:
       
       - name: Check for critical issues
         if: steps.health.outputs.critical_issues > 0
+        env:
+          # Step outputs isolated to env vars to prevent shell injection (Arnica SAST fix)
+          CRITICAL_ISSUES: ${{ steps.health.outputs.critical_issues }}
+          HEALTH_SCORE: ${{ steps.health.outputs.health_score }}
         run: |
-          echo "::error::❌ Health check failed: ${{ steps.health.outputs.critical_issues }} critical issues detected"
-          echo "::error::Health Score: ${{ steps.health.outputs.health_score }}/100"
+          echo "::error::❌ Health check failed: $CRITICAL_ISSUES critical issues detected"
+          echo "::error::Health Score: $HEALTH_SCORE/100"
           echo "See artifact for full report"
           exit 1
       
       - name: Post summary
         if: always()
+        env:
+          # Step outputs isolated to env vars to prevent shell injection (Arnica SAST fix)
+          HEALTH_SCORE: ${{ steps.health.outputs.health_score }}
+          TOTAL_ISSUES: ${{ steps.health.outputs.total_issues }}
+          CRITICAL_ISSUES: ${{ steps.health.outputs.critical_issues }}
         run: |
           echo "### CORTEX Health Report 🏥" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Health Score:** ${{ steps.health.outputs.health_score }}/100" >> $GITHUB_STEP_SUMMARY
-          echo "**Total Issues:** ${{ steps.health.outputs.total_issues }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Critical Issues:** ${{ steps.health.outputs.critical_issues }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Health Score:** $HEALTH_SCORE/100" >> $GITHUB_STEP_SUMMARY
+          echo "**Total Issues:** $TOTAL_ISSUES" >> $GITHUB_STEP_SUMMARY
+          echo "**Critical Issues:** $CRITICAL_ISSUES" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "See artifacts for full markdown report." >> $GITHUB_STEP_SUMMARY

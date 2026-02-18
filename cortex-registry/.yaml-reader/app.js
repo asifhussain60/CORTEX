@@ -214,15 +214,16 @@ function renderExplorer() {
                 </div>
             `;
         } else {
+            // XSS fix: use data-file-id attributes instead of inline onclick with unescaped file.id (Arnica L217)
             container.innerHTML = state.loadedFiles.map(file => `
                 <div class="file-list-item ${state.currentFile?.id === file.id ? 'active' : ''}" 
-                     onclick="selectFile('${file.id}')">
+                     data-file-id="${escapeHtml(file.id)}" data-action="select">
                     <div class="file-icon">${file.error ? '⚠️' : '📄'}</div>
                     <div class="file-info">
                         <div class="file-name">${escapeHtml(file.name)}</div>
                         <div class="file-meta">${formatFileSize(file.size)}</div>
                     </div>
-                    <div class="file-close" onclick="event.stopPropagation(); removeFile('${file.id}')">✕</div>
+                    <div class="file-close" data-file-id="${escapeHtml(file.id)}" data-action="remove">✕</div>
                 </div>
             `).join('');
         }
@@ -333,8 +334,9 @@ function renderContent() {
             workflow: 'Workflow',
             raw: 'Raw'
         };
+        // XSS fix: use data-view attribute instead of inline onclick (Arnica L314 fix)
         return `<button class="view-tab ${state.currentView === view ? 'active' : ''}" 
-                        onclick="changeView('${view}')">${icons[view]} ${labels[view]}</button>`;
+                        data-view="${escapeHtml(view)}" data-action="changeView">${icons[view]} ${labels[view]}</button>`;
     }).join('');
     
     let html = `
@@ -967,6 +969,29 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.spotlight-modal')?.addEventListener('click', (e) => {
         if (e.target.classList.contains('spotlight-modal')) {
             e.target.classList.remove('active');
+        }
+    });
+
+    // XSS fix: event delegation for data-action handlers (replaces inline onclick, Arnica L196/L217/L314)
+    document.body.addEventListener('click', (e) => {
+        // Handle file-close (remove) actions
+        const removeEl = e.target.closest('[data-action="remove"][data-file-id]');
+        if (removeEl) {
+            e.stopPropagation();
+            removeFile(removeEl.dataset.fileId);
+            return;
+        }
+        // Handle file-select actions
+        const selectEl = e.target.closest('[data-action="select"][data-file-id]');
+        if (selectEl) {
+            selectFile(selectEl.dataset.fileId);
+            return;
+        }
+        // Handle view-tab changeView actions
+        const viewEl = e.target.closest('[data-action="changeView"][data-view]');
+        if (viewEl) {
+            changeView(viewEl.dataset.view);
+            return;
         }
     });
 });

@@ -23,13 +23,13 @@ jobs:
         python-version: ['3.13']
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5  # v4 - pinned SHA (Arnica artipacked fix)
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c  # v4 - pinned SHA (Arnica artipacked fix)
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'pip'
@@ -56,7 +56,7 @@ jobs:
 
       - name: Upload Production Readiness Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4 - pinned SHA (Arnica artipacked fix)
         with:
           name: production-readiness-results
           path: prod-ready-results.json
@@ -96,41 +96,58 @@ jobs:
 
       - name: Generate Test Summary
         if: always()
+        env:
+          # Step outcomes isolated to env vars to prevent shell injection (Arnica SAST fix)
+          VERIFY_PROD_READY_OUTCOME: ${{ steps.verify_prod_ready.outcome }}
+          CORE035_OUTCOME: ${{ steps.core035.outcome }}
+          DISCOVERY_OUTCOME: ${{ steps.discovery.outcome }}
+          DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
+          READINESS_OUTCOME: ${{ steps.readiness.outcome }}
+          CORE035_TESTS_OUTCOME: ${{ steps.core035_tests.outcome }}
+          GIT_REF_NAME: ${{ github.ref_name }}
+          GIT_SHA: ${{ github.sha }}
         run: |
           echo "## 🧠 CORTEX Production Readiness Verification" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Date:** $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> $GITHUB_STEP_SUMMARY
-          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** $GIT_REF_NAME" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** $GIT_SHA" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🎯 Production Readiness" >> $GITHUB_STEP_SUMMARY
-          if [ "${{ steps.verify_prod_ready.outcome }}" == "success" ]; then
+          if [ "$VERIFY_PROD_READY_OUTCOME" == "success" ]; then
             echo "✅ Production Readiness: PASSED" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ Production Readiness: 92.9% Ready" >> $GITHUB_STEP_SUMMARY
           fi
-          if [ "${{ steps.core035.outcome }}" == "success" ]; then
+          if [ "$CORE035_OUTCOME" == "success" ]; then
             echo "✅ CORE-035 Enforcement: No violations" >> $GITHUB_STEP_SUMMARY
           else
             echo "⚠️ CORE-035: 10 pre-existing violations (Phase 8)" >> $GITHUB_STEP_SUMMARY
           fi
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### 🧪 Test Suites" >> $GITHUB_STEP_SUMMARY
-          [ "${{ steps.discovery.outcome }}" == "success" ] && echo "✅ Module Discovery" >> $GITHUB_STEP_SUMMARY || echo "❌ Module Discovery" >> $GITHUB_STEP_SUMMARY
-          [ "${{ steps.dependencies.outcome }}" == "success" ] && echo "✅ Module Dependencies" >> $GITHUB_STEP_SUMMARY || echo "❌ Module Dependencies" >> $GITHUB_STEP_SUMMARY
-          [ "${{ steps.readiness.outcome }}" == "success" ] && echo "✅ Production Readiness Tests" >> $GITHUB_STEP_SUMMARY || echo "❌ Production Readiness Tests" >> $GITHUB_STEP_SUMMARY
-          [ "${{ steps.core035_tests.outcome }}" == "success" ] && echo "✅ CORE-035 Tests" >> $GITHUB_STEP_SUMMARY || echo "⚠️ CORE-035 Tests (6/10 passing)" >> $GITHUB_STEP_SUMMARY
+          [ "$DISCOVERY_OUTCOME" == "success" ] && echo "✅ Module Discovery" >> $GITHUB_STEP_SUMMARY || echo "❌ Module Discovery" >> $GITHUB_STEP_SUMMARY
+          [ "$DEPENDENCIES_OUTCOME" == "success" ] && echo "✅ Module Dependencies" >> $GITHUB_STEP_SUMMARY || echo "❌ Module Dependencies" >> $GITHUB_STEP_SUMMARY
+          [ "$READINESS_OUTCOME" == "success" ] && echo "✅ Production Readiness Tests" >> $GITHUB_STEP_SUMMARY || echo "❌ Production Readiness Tests" >> $GITHUB_STEP_SUMMARY
+          [ "$CORE035_TESTS_OUTCOME" == "success" ] && echo "✅ CORE-035 Tests" >> $GITHUB_STEP_SUMMARY || echo "⚠️ CORE-035 Tests (6/10 passing)" >> $GITHUB_STEP_SUMMARY
 
       - name: Comment on PR
         if: github.event_name == 'pull_request' && always()
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b  # v7 - pinned SHA (Arnica artipacked fix)
+        env:
+          # Step outcomes isolated to env vars to prevent injection (Arnica SAST fix)
+          PROD_READY_OUTCOME: ${{ steps.verify_prod_ready.outcome }}
+          CORE035_OUTCOME: ${{ steps.core035.outcome }}
+          DISCOVERY_OUTCOME: ${{ steps.discovery.outcome }}
+          DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
+          READINESS_OUTCOME: ${{ steps.readiness.outcome }}
         with:
           script: |
-            const prodReady = '${{ steps.verify_prod_ready.outcome }}' === 'success' ? '✅' : '⚠️';
-            const core035 = '${{ steps.core035.outcome }}' === 'success' ? '✅' : '⚠️';
-            const discovery = '${{ steps.discovery.outcome }}' === 'success' ? '✅' : '❌';
-            const dependencies = '${{ steps.dependencies.outcome }}' === 'success' ? '✅' : '❌';
-            const readiness = '${{ steps.readiness.outcome }}' === 'success' ? '✅' : '❌';
+            const prodReady = process.env.PROD_READY_OUTCOME === 'success' ? '✅' : '⚠️';
+            const core035 = process.env.CORE035_OUTCOME === 'success' ? '✅' : '⚠️';
+            const discovery = process.env.DISCOVERY_OUTCOME === 'success' ? '✅' : '❌';
+            const dependencies = process.env.DEPENDENCIES_OUTCOME === 'success' ? '✅' : '❌';
+            const readiness = process.env.READINESS_OUTCOME === 'success' ? '✅' : '❌';
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -149,19 +166,26 @@ jobs:
 
       - name: Determine Final Status
         if: always()
+        env:
+          # Step outcomes isolated to env vars to prevent shell injection (Arnica SAST fix)
+          PROD_READY_OUTCOME: ${{ steps.verify_prod_ready.outcome }}
+          CORE035_OUTCOME: ${{ steps.core035.outcome }}
+          DISCOVERY_OUTCOME: ${{ steps.discovery.outcome }}
+          DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
+          READINESS_OUTCOME: ${{ steps.readiness.outcome }}
         run: |
           PASSED=0
           TOTAL=5
-          [ "${{ steps.verify_prod_ready.outcome }}" == "success" ] && ((PASSED++)) || echo "⚠️ Production readiness: 92.9%"
-          [ "${{ steps.core035.outcome }}" == "success" ] && ((PASSED++)) || echo "⚠️ CORE-035: 10 violations"
-          [ "${{ steps.discovery.outcome }}" == "success" ] && ((PASSED++)) || echo "❌ Module Discovery failed"
-          [ "${{ steps.dependencies.outcome }}" == "success" ] && ((PASSED++)) || echo "❌ Module Dependencies failed"
-          [ "${{ steps.readiness.outcome }}" == "success" ] && ((PASSED++)) || echo "❌ Production Readiness Tests failed"
+          [ "$PROD_READY_OUTCOME" == "success" ] && ((PASSED++)) || echo "⚠️ Production readiness: 92.9%"
+          [ "$CORE035_OUTCOME" == "success" ] && ((PASSED++)) || echo "⚠️ CORE-035: 10 violations"
+          [ "$DISCOVERY_OUTCOME" == "success" ] && ((PASSED++)) || echo "❌ Module Discovery failed"
+          [ "$DEPENDENCIES_OUTCOME" == "success" ] && ((PASSED++)) || echo "❌ Module Dependencies failed"
+          [ "$READINESS_OUTCOME" == "success" ] && ((PASSED++)) || echo "❌ Production Readiness Tests failed"
           
           PERCENTAGE=$((PASSED * 100 / TOTAL))
           echo "Final Score: $PASSED/$TOTAL ($PERCENTAGE%)"
           
-          if [ "${{ steps.discovery.outcome }}" != "success" ] || [ "${{ steps.dependencies.outcome }}" != "success" ] || [ "${{ steps.readiness.outcome }}" != "success" ]; then
+          if [ "$DISCOVERY_OUTCOME" != "success" ] || [ "$DEPENDENCIES_OUTCOME" != "success" ] || [ "$READINESS_OUTCOME" != "success" ]; then
             echo "❌ CRITICAL: Core test suites failed"
             exit 1
           fi
