@@ -1,0 +1,285 @@
+---
+# AC-GOLDEN-LENS-027: Roslyn Semantic Analysis Golden Test
+# Authority: CORTEX Test Governance
+# Purpose: Validate LENS ability to perform deep semantic analysis of C# code using Roslyn
+# Created: 2026-02-17
+# Priority: P1
+
+scenario_id: "golden_27_roslyn_semantic"
+name: "Roslyn Semantic Analysis - C# Deep Analysis"
+description: |
+  Tests LENS RoslynAnalyzer's ability to perform deep semantic analysis of C# code,
+  including type inference, symbol resolution, interface implementation, and LINQ queries.
+
+authority_code: "AC-GOLDEN-LENS-027"
+priority: "P1"
+category: "dotnet"
+lens_capabilities:
+  - "roslyn_semantic_analysis"
+  - "csharp_type_inference"
+  - "symbol_resolution"
+  - "interface_analysis"
+  - "linq_query_analysis"
+
+temp_files:
+  - path: "Services/IUserRepository.cs"
+    content: |
+      using System.Collections.Generic;
+      using System.Threading.Tasks;
+      
+      namespace CortexApp.Services
+      {
+          /// <summary>
+          /// Repository interface for user data access
+          /// </summary>
+          public interface IUserRepository
+          {
+              Task<User> GetByIdAsync(int id);
+              Task<IEnumerable<User>> GetAllAsync();
+              Task<User> CreateAsync(User user);
+              Task UpdateAsync(User user);
+              Task DeleteAsync(int id);
+          }
+      }
+
+  - path: "Services/UserRepository.cs"
+    content: |
+      using System.Collections.Generic;
+      using System.Linq;
+      using System.Threading.Tasks;
+      using Microsoft.EntityFrameworkCore;
+      using CortexApp.Data;
+      
+      namespace CortexApp.Services
+      {
+          /// <summary>
+          /// Entity Framework implementation of IUserRepository
+          /// Demonstrates: Interface implementation, async/await, LINQ, dependency injection
+          /// </summary>
+          public class UserRepository : IUserRepository
+          {
+              private readonly ApplicationDbContext _context;
+              
+              public UserRepository(ApplicationDbContext context)
+              {
+                  _context = context;
+              }
+              
+              public async Task<User> GetByIdAsync(int id)
+              {
+                  // Simple async query with type inference
+                  return await _context.Users
+                      .FirstOrDefaultAsync(u => u.Id == id);
+              }
+              
+              public async Task<IEnumerable<User>> GetAllAsync()
+              {
+                  // LINQ query with projection
+                  var users = await _context.Users
+                      .Where(u => u.IsActive)
+                      .OrderBy(u => u.LastName)
+                      .ThenBy(u => u.FirstName)
+                      .Select(u => new User
+                      {
+                          Id = u.Id,
+                          Email = u.Email,
+                          FirstName = u.FirstName,
+                          LastName = u.LastName
+                      })
+                      .ToListAsync();
+                  
+                  return users;
+              }
+              
+              public async Task<User> CreateAsync(User user)
+              {
+                  _context.Users.Add(user);
+                  await _context.SaveChangesAsync();
+                  return user;
+              }
+              
+              public async Task UpdateAsync(User user)
+              {
+                  _context.Entry(user).State = EntityState.Modified;
+                  await _context.SaveChangesAsync();
+              }
+              
+              public async Task DeleteAsync(int id)
+              {
+                  var user = await GetByIdAsync(id);
+                  if (user != null)
+                  {
+                      _context.Users.Remove(user);
+                      await _context.SaveChangesAsync();
+                  }
+              }
+          }
+          
+          public class User
+          {
+              public int Id { get; set; }
+              public string Email { get; set; }
+              public string FirstName { get; set; }
+              public string LastName { get; set; }
+              public bool IsActive { get; set; }
+          }
+      }
+
+  - path: "Services/UserService.cs"
+    content: |
+      using System.Collections.Generic;
+      using System.Linq;
+      using System.Threading.Tasks;
+      
+      namespace CortexApp.Services
+      {
+          /// <summary>
+          /// Business logic layer for user operations
+          /// Demonstrates: Dependency injection, method chaining, complex LINQ
+          /// </summary>
+          public class UserService
+          {
+              private readonly IUserRepository _repository;
+              private readonly IEmailService _emailService;
+              
+              public UserService(IUserRepository repository, IEmailService emailService)
+              {
+                  _repository = repository;
+                  _emailService = emailService;
+              }
+              
+              public async Task<UserDTO> GetUserProfileAsync(int userId)
+              {
+                  var user = await _repository.GetByIdAsync(userId);
+                  
+                  // LINQ projection with complex query
+                  return new UserDTO
+                  {
+                      FullName = $"{user.FirstName} {user.LastName}",
+                      Email = user.Email,
+                      IsActive = user.IsActive
+                  };
+              }
+              
+              public async Task<IEnumerable<UserDTO>> SearchUsersAsync(string searchTerm)
+              {
+                  var allUsers = await _repository.GetAllAsync();
+                  
+                  // Complex LINQ with multiple conditions and type inference
+                  var results = allUsers
+                      .Where(u => 
+                          u.FirstName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                          u.LastName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                          u.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                      .Select(u => new UserDTO
+                      {
+                          FullName = $"{u.FirstName} {u.LastName}",
+                          Email = u.Email,
+                          IsActive = u.IsActive
+                      })
+                      .OrderBy(dto => dto.FullName)
+                      .ToList();
+                  
+                  return results;
+              }
+              
+              public async Task<bool> DeactivateUserAsync(int userId)
+              {
+                  var user = await _repository.GetByIdAsync(userId);
+                  if (user == null) return false;
+                  
+                  user.IsActive = false;
+                  await _repository.UpdateAsync(user);
+                  await _emailService.SendDeactivationEmailAsync(user.Email);
+                  
+                  return true;
+              }
+          }
+          
+          public class UserDTO
+          {
+              public string FullName { get; set; }
+              public string Email { get; set; }
+              public bool IsActive { get; set; }
+          }
+          
+          public interface IEmailService
+          {
+              Task SendDeactivationEmailAsync(string email);
+          }
+      }
+
+expected_outcome:
+  validation_type: "roslyn_semantic"
+  expected_results:
+    interfaces_detected:
+      - name: "IUserRepository"
+        methods: 5
+        implementations: ["UserRepository"]
+      - name: "IEmailService"
+        methods: 1
+        implementations: []
+    
+    interface_implementations:
+      - interface: "IUserRepository"
+        class: "UserRepository"
+        all_methods_implemented: true
+        implementation_correctness: "COMPLETE"
+    
+    type_inference:
+      - variable: "users"
+        inferred_type: "List<User>"
+        location: "UserRepository.GetAllAsync"
+      - variable: "results"
+        inferred_type: "List<UserDTO>"
+        location: "UserService.SearchUsersAsync"
+    
+    dependency_injection:
+      - class: "UserRepository"
+        injected: ["ApplicationDbContext"]
+      - class: "UserService"
+        injected: ["IUserRepository", "IEmailService"]
+    
+    linq_queries:
+      min: 6
+      description: "Should detect all LINQ query expressions"
+      complex_queries:
+        - location: "UserRepository.GetAllAsync"
+          operations: ["Where", "OrderBy", "ThenBy", "Select", "ToListAsync"]
+        - location: "UserService.SearchUsersAsync"
+          operations: ["Where", "Select", "OrderBy", "ToList"]
+    
+    async_patterns:
+      async_methods: 9
+      await_expressions: 12
+      task_return_types: 9
+    
+    semantic_symbols:
+      min: 30
+      description: "Classes, interfaces, methods, properties, parameters"
+    
+    symbol_resolution:
+      - symbol: "User"
+        references: 15
+        definition: "Services/UserRepository.cs"
+      - symbol: "IUserRepository"
+        references: 3
+        definition: "Services/IUserRepository.cs"
+
+expected_audit_events:
+  - event_type: "LENS_ANALYSIS_STARTED"
+    component: "RoslynAnalyzer"
+  - event_type: "CSHARP_SEMANTIC_MODEL_BUILT"
+  - event_type: "INTERFACES_ANALYZED"
+  - event_type: "TYPE_INFERENCE_COMPLETED"
+  - event_type: "LINQ_QUERIES_DETECTED"
+  - event_type: "LENS_ANALYSIS_COMPLETED"
+
+tags:
+  - "roslyn"
+  - "csharp"
+  - "semantic_analysis"
+  - "type_inference"
+  - "interface_implementation"
+  - "linq"
+  - "async_await"

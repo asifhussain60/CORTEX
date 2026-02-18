@@ -1,0 +1,302 @@
+---
+# AC-GOLDEN-LENS-033: Capability Gap Detection Golden Test
+# Authority: CORTEX Test Governance
+# Purpose: Validate LENS ability to identify missing capabilities and suggest improvements
+# Created: 2026-02-17
+# Priority: P1
+
+scenario_id: "golden_33_capability_gap"
+name: "Capability Gap Detection - Missing Features & Technical Debt"
+description: |
+  Tests LENS CapabilityGapDetector's ability to identify missing features, incomplete
+  implementations, TODO markers, stub methods, and technical debt across the codebase.
+
+authority_code: "AC-GOLDEN-LENS-033"
+priority: "P1"
+category: "discovery"
+lens_capabilities:
+  - "capability_gap_detection"
+  - "missing_feature_identification"
+  - "technical_debt_analysis"
+  - "incomplete_implementation_detection"
+
+temp_files:
+  - path: "api/payment_processor.py"
+    content: |
+      """
+      Payment Processing API
+      
+      Status: PARTIALLY IMPLEMENTED
+      Missing: Refund processing, webhook handling, fraud detection
+      """
+      
+      from typing import Dict, Optional
+      
+      class PaymentProcessor:
+          """
+          Core payment processing service.
+          
+          Implemented:
+          - Credit card processing
+          - Payment validation
+          
+          TODO: Implement the following capabilities:
+          - Apple Pay integration
+          - Google Pay integration
+          - Cryptocurrency payments
+          - Recurring billing
+          - Split payments
+          """
+          
+          def __init__(self, api_key: str):
+              self.api_key = api_key
+              self._fraud_detector = None  # TODO: Initialize fraud detection
+          
+          def process_credit_card(self, card_data: Dict) -> Dict:
+              """Process credit card payment - IMPLEMENTED"""
+              # Validate card
+              if not self._validate_card(card_data):
+                  return {"status": "failed", "error": "Invalid card"}
+              
+              # Process payment
+              result = self._charge_card(card_data)
+              return result
+          
+          def process_apple_pay(self, token: str) -> Dict:
+              """
+              Process Apple Pay payment.
+              
+              TODO: Implement Apple Pay integration
+              - Validate Apple Pay token
+              - Decrypt payment data
+              - Process transaction
+              """
+              raise NotImplementedError("Apple Pay not yet implemented")
+          
+          def process_refund(self, transaction_id: str, amount: float) -> Dict:
+              """
+              Process refund for transaction.
+              
+              STUB: Refund processing not implemented
+              """
+              # TODO: Implement refund logic
+              #  1. Validate transaction exists
+              #  2. Check refund eligibility
+              #  3. Process refund through payment gateway
+              #  4. Update transaction status
+              #  5. Send refund confirmation email
+              pass
+          
+          def handle_webhook(self, webhook_data: Dict) -> bool:
+              """
+              Handle payment gateway webhooks.
+              
+              INCOMPLETE: Only handles success events
+              Missing: failure, chargeback, dispute events
+              """
+              if webhook_data.get('event') == 'payment.success':
+                  return self._handle_success(webhook_data)
+              
+              # FIXME: Add handlers for other webhook events
+              return False
+          
+          def detect_fraud(self, transaction: Dict) -> float:
+              """
+              Fraud detection scoring.
+              
+              PLACEHOLDER: Returns dummy score
+              TODO: Integrate with fraud detection service
+              """
+              return 0.0  # Placeholder implementation
+          
+          def _validate_card(self, card_data: Dict) -> bool:
+              """Card validation - IMPLEMENTED"""
+              return 'number' in card_data and 'cvv' in card_data
+          
+          def _charge_card(self, card_data: Dict) -> Dict:
+              """Card charging - IMPLEMENTED"""
+              return {"status": "success", "transaction_id": "txn_123"}
+          
+          def _handle_success(self, webhook_data: Dict) -> bool:
+              """Success webhook handler - PARTIAL"""
+              # TODO: Add comprehensive success handling
+              return True
+
+  - path: "services/notification_service.py"
+    content: |
+      """
+      Notification Service
+      
+      Current: Email only
+      Planned: SMS, Push, In-app notifications
+      """
+      
+      class NotificationService:
+          """
+          Multi-channel notification service.
+          
+          Capability Matrix:
+          ✅ Email notifications
+          ❌ SMS notifications (planned Q2)
+          ❌ Push notifications (planned Q3)
+          ❌ In-app notifications (planned Q4)
+          ❌ Slack integration (backlog)
+          """
+          
+          def send_email(self, recipient: str, subject: str, body: str) -> bool:
+              """Email sending - FULLY IMPLEMENTED"""
+              # Implementation details...
+              return True
+          
+          def send_sms(self, phone: str, message: str) -> bool:
+              """
+              SMS notification.
+              
+              STATUS: NOT IMPLEMENTED
+              Blocked by: SMS provider contract negotiation
+              Target: Q2 2026
+              """
+              raise NotImplementedError("SMS not available")
+          
+          def send_push_notification(self, user_id: int, title: str, body: str) -> bool:
+              """
+              Push notification to mobile devices.
+              
+              STATUS: DESIGN PHASE
+              Dependencies: Mobile app release, FCM/APNS setup
+              """
+              raise NotImplementedError("Push notifications coming in Q3")
+          
+          def send_slack_message(self, channel: str, message: str) -> bool:
+              """
+              FUTURE CAPABILITY
+              Priority: LOW
+              """
+              raise NotImplementedError("Slack integration in backlog")
+
+  - path: "tests/test_payment_processor.py"
+    content: |
+      import pytest
+      from api.payment_processor import PaymentProcessor
+      
+      class TestPaymentProcessor:
+          """Test coverage: 40% - many features untested"""
+          
+          def test_credit_card_processing(self):
+              """✅ Credit card processing tested"""
+              processor = PaymentProcessor("test_key")
+              result = processor.process_credit_card({
+                  "number": "4242424242424242",
+                  "cvv": "123"
+              })
+              assert result["status"] == "success"
+          
+          @pytest.mark.skip(reason="Apple Pay not implemented yet")
+          def test_apple_pay_processing(self):
+              """❌ Skipped - awaiting implementation"""
+              processor = PaymentProcessor("test_key")
+              # Test will be written when feature is implemented
+              pass
+          
+          @pytest.mark.skip(reason="Refund processing not implemented")
+          def test_refund_processing(self):
+              """❌ Skipped - awaiting implementation"""
+              pass
+          
+          # MISSING TESTS:
+          # - Fraud detection
+          # - Webhook handling
+          # - Google Pay
+          # - Cryptocurrency
+
+expected_outcome:
+  validation_type: "capability_gap"
+  expected_results:
+    not_implemented_methods:
+      min: 5
+      examples:
+        - "PaymentProcessor.process_apple_pay"
+        - "PaymentProcessor.process_refund"
+        - "NotificationService.send_sms"
+        - "NotificationService.send_push_notification"
+    
+    stub_methods:
+      min: 3
+      description: "Methods with pass, placeholder, or NotImplementedError"
+    
+    todo_markers:
+      min: 10
+      categories:
+        - "FEATURE_TODO"
+        - "FIXME"
+        - "INCOMPLETE"
+        - "STUB"
+        - "PLACEHOLDER"
+    
+    missing_capabilities:
+      - capability: "Apple Pay Integration"
+        status: "NOT_IMPLEMENTED"
+        priority: "HIGH"
+        blocked_by: null
+      - capability: "Refund Processing"
+        status: "STUB"
+        priority: "HIGH"
+        impact: "Cannot process customer refunds"
+      - capability: "SMS Notifications"
+        status: "NOT_IMPLEMENTED"
+        priority: "MEDIUM"
+        blocked_by: "SMS provider contract"
+        target_date: "Q2 2026"
+      - capability: "Fraud Detection"
+        status: "PLACEHOLDER"
+        priority: "HIGH"
+        current_implementation: "Returns dummy score"
+    
+    incomplete_implementations:
+      - method: "PaymentProcessor.handle_webhook"
+        completion: 0.25
+        reason: "Only handles success events, missing failure/chargeback handlers"
+      - method: "PaymentProcessor.detect_fraud"
+        completion: 0.10
+        reason: "Placeholder that returns 0.0"
+    
+    test_coverage_gaps:
+      - class: "PaymentProcessor"
+        tested_methods: 1
+        total_methods: 6
+        coverage: 0.17
+        missing_tests: ["process_apple_pay", "process_refund", "handle_webhook", "detect_fraud"]
+    
+    technical_debt:
+      - type: "MISSING_FEATURE"
+        count: 8
+        priority: "HIGH"
+      - type: "STUB_IMPLEMENTATION"
+        count: 3
+        priority: "MEDIUM"
+      - type: "INCOMPLETE_TEST_COVERAGE"
+        count: 5
+        priority: "MEDIUM"
+    
+    capability_roadmap_detected:
+      q2_2026: ["SMS Notifications"]
+      q3_2026: ["Push Notifications"]
+      q4_2026: ["In-app Notifications"]
+      backlog: ["Slack Integration", "Cryptocurrency Payments"]
+
+expected_audit_events:
+  - event_type: "LENS_ANALYSIS_STARTED"
+    component: "CapabilityGapDetector"
+  - event_type: "NOT_IMPLEMENTED_METHODS_DETECTED"
+  - event_type: "STUB_METHODS_IDENTIFIED"
+  - event_type: "TECHNICAL_DEBT_ANALYZED"
+  - event_type: "CAPABILITY_GAPS_IDENTIFIED"
+  - event_type: "LENS_ANALYSIS_COMPLETED"
+
+tags:
+  - "capability_gap"
+  - "missing_features"
+  - "technical_debt"
+  - "incomplete_implementation"
+  - "test_coverage"
+  - "roadmap_analysis"

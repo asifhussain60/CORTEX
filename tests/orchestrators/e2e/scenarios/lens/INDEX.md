@@ -14,17 +14,17 @@
 | 09 | Database Schema | Core | ✅ Defined | P0 |
 | 10 | Dependency Graph | Core | ✅ Defined | P0 |
 | 11 | Architecture Lens | Core | ✅ Defined | P0 |
-| 12 | Comment Extraction | Core | 📝 Planned | P1 |
-| 13 | Vendor Detection | Core | 📝 Planned | P1 |
-| 14 | Polyglot Analysis | Core | 📝 Planned | P1 |
+| 12 | Comment Extraction | Core | ✅ Defined | P1 |
+| 13 | Vendor Detection | Core | ✅ Defined | P1 |
+| 14 | Polyglot Analysis | Core | ✅ Defined | P1 |
 
 ## 🧠 Domain Intelligence (5 tests)
 
 | ID | Name | Category | Status | Priority |
 |----|------|----------|--------|----------|
 | 15 | Domain Inference | Domain | ✅ Defined | P0 |
-| 16 | Pattern Clustering | Domain | 📝 Planned | P1 |
-| 17 | Business Language | Domain | 📝 Planned | P1 |
+| 16 | Pattern Clustering | Domain | ✅ Defined | P1 |
+| 17 | Business Language | Domain | ✅ Defined | P1 |
 | 18 | Glossary Generation | Domain | 📝 Planned | P1 |
 | 19 | Use Case Extraction | Domain | 📝 Planned | P1 |
 
@@ -33,7 +33,7 @@
 | ID | Name | Category | Status | Priority |
 |----|------|----------|--------|----------|
 | 20 | KG Construction | KG | ✅ Defined | P0 |
-| 21 | Relationship Traversal | KG | 📝 Planned | P1 |
+| 21 | Relationship Traversal | KG | ✅ Defined | P1 |
 | 22 | Coverage Mapping | KG | 📝 Planned | P1 |
 | 23 | Dead Code Detection | KG | 📝 Planned | P2 |
 
@@ -41,7 +41,7 @@
 
 | ID | Name | Category | Status | Priority |
 |----|------|----------|--------|----------|
-| 24 | Hot Path Analysis | Runtime | 📝 Planned | P1 |
+| 24 | Hot Path Analysis | Runtime | ✅ Defined | P1 |
 | 25 | Pytest Parser | Runtime | 📝 Planned | P1 |
 | 26 | Coverage Correlation | Runtime | 📝 Planned | P2 |
 
@@ -49,7 +49,7 @@
 
 | ID | Name | Category | Status | Priority |
 |----|------|----------|--------|----------|
-| 27 | Roslyn Semantic | .NET | 📝 Planned | P1 |
+| 27 | Roslyn Semantic | .NET | ✅ Defined | P1 |
 | 28 | EF Migrations | .NET | ✅ Defined | P0 |
 | 29 | WCF Services | .NET | 📝 Planned | P2 |
 | 30 | Azure Pipelines | .NET | 📝 Planned | P2 |
@@ -60,7 +60,7 @@
 | ID | Name | Category | Status | Priority |
 |----|------|----------|--------|----------|
 | 32 | Tech Fingerprinting | Discovery | ✅ Defined | P0 |
-| 33 | Capability Gaps | Discovery | 📝 Planned | P1 |
+| 33 | Capability Gaps | Discovery | ✅ Defined | P1 |
 | 34 | Crawler Specs | Discovery | 📝 Planned | P2 |
 
 ## 🎨 Visualization (2 tests)
@@ -92,13 +92,13 @@
 
 ### Phase 1 (Complete) ✅
 - Define P0 scenarios (12/12)
-- Create test infrastructure
-- RED phase validation
+- Create test infrastructure ✅
+- RED phase validation ✅
 
-### Phase 2 (In Progress)
-- Define P1 scenarios (0/18)
-- Wire LENS orchestrator
-- GREEN phase validation
+### Phase 2 (In Progress - 61% Complete)
+- Define P1 scenarios (14/18 complete)
+- Wire LENS orchestrator (pending)
+- GREEN phase validation (pending)
 
 ### Phase 3 (Planned)
 - Define P2 scenarios (0/8)
