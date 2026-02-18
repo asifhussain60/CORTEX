@@ -1,0 +1,221 @@
+id: phase-50
+title: "Documentation Upgrade — Complete Accurate Capability Coverage"
+status: PLANNED
+created: 2026-02-18
+author: Asif Hussain
+priority: P1
+repeatable: true
+
+description: |
+  Comprehensive documentation upgrade covering 100% of implemented CORTEX capabilities
+  (Phases 01–49). Produces rich, accurate, visualisation-enhanced documentation across
+  all 9 content sections. Designed to be re-run as capabilities evolve.
+
+source_of_truth:
+  - cortex-registry/planning/phases/completed/   # implemented phases only
+  - cortex/__wiring_contract__.yaml
+  - cortex/orchestrators/
+  - cortex/mcp/tools/
+  - cortex_intelligence/
+
+content_structure:
+  root: cortex-docs/content/src/
+  ordering_strategy: |
+    Folders: NN- numeric prefix (controls sidebar/nav order, zero link breakage risk)
+    Files:   `order: N` in YAML frontmatter (clean URLs, pipeline-native, trivially re-orderable)
+  folders:
+    - id: "00-getting-started"
+      order: 0
+      files: [one-pager.md, key-concepts.md, how-cortex-works.md, brain-tier-architecture.md]
+    - id: "01-capabilities"
+      order: 1
+      files:
+        - overview.md            # order: 1  — capability map
+        - core-platform.md       # order: 2  — MCP gateway, orchestration foundation
+        - ai-intelligence.md     # order: 3  — LENS, 8-analyzer pipeline
+        - brain-architecture.md  # order: 4  — 3-layer Perception/Reasoning/Action
+        - intelligence-layer.md  # order: 5  — Pattern learning, 48h git window
+        - decisioning.md         # order: 6  — Intent router, 12 intent types
+        - conversational-gateway.md # order: 7
+        - governance-compliance.md  # order: 8 — 4-layer defense, 59 CORE rules
+        - response-formatting.md    # order: 9
+        - semantic-blocks.md        # order: 10
+        - workflow-templates.md     # order: 11
+        - extensibility.md          # order: 12
+    - id: "02-lens"
+      order: 2
+      files: [overview.md, architecture.md, analyzers.md, synthesis.md, caching.md, governance.md]
+    - id: "03-orchestration"
+      order: 3
+      files: [overview.md, intent-router.md, request-rephrase.md]
+    - id: "04-mcp"
+      order: 4
+      files: [overview.md, protocol.md, tools-catalog.md, integration.md, versioning.md, README.md]
+    - id: "05-infrastructure"
+      order: 5
+      files: [overview.md, tech-stack.md, deployment.md, observability.md, scalability.md, ci-cd.md, learning-architecture.md]
+    - id: "06-toolkit"
+      order: 6
+      files: [overview.md, developer-guide.md, tool-categories.md, tool-registry.md, toolkit-reference.md, security-model.md]
+    - id: "07-diagrams"
+      order: 7
+      files: [architecture-overview.md, c4-context.md, c4-container.md, request-lifecycle.md, mcp-request-lifecycle.md, data-flow.md, component-relationships.md]
+    - id: "08-learning"
+      order: 8
+      files: [overview.md]
+
+stages:
+  - id: S0
+    name: "Audit — Implemented vs Documented Gap"
+    repeatable: true
+    actions:
+      - "Run: git log --oneline CORTEX | grep 'feat:\\|fix:\\|phase' to extract implemented phases"
+      - "Cross-reference cortex-registry/planning/phases/completed/ against cortex-docs/content/src/"
+      - "Identify: missing docs, stale claims, deferred capabilities incorrectly documented"
+      - "Output: gap table inline (NO files created — CORE-002)"
+    acceptance: "Gap table shows 0 undocumented completed phases"
+
+  - id: S1
+    name: "Structure — Verify Folder Order and Frontmatter"
+    repeatable: true
+    actions:
+      - "Confirm all folders have NN- prefix in correct reading order"
+      - "Confirm all files have `order: N` in YAML frontmatter"
+      - "Run: grep -r 'order:' cortex-docs/content/src --include='*.md' | wc -l (expect 52+)"
+      - "Run: python3 /tmp/inject_order.py to re-inject any missing entries"
+    acceptance: "All files have order: field; all folders have numeric prefix"
+
+  - id: S2
+    name: "Content — Accuracy Pass"
+    repeatable: true
+    per_section:
+      - section: "01-capabilities"
+        tasks:
+          - "Verify orchestrator counts match cortex/orchestrators/ actual subdirectories"
+          - "Verify MCP tool count matches cortex/mcp/tools/*.py file count"
+          - "Verify CORE rule count matches cortex-registry/governance/audit-checklist.yaml"
+          - "Verify phase count matches cortex-registry/planning/phases/completed/ count"
+      - section: "02-lens"
+        tasks:
+          - "Verify 8 analyzer names match cortex/lens/analyzers/ actual modules"
+          - "Verify latency figures match cortex/lens/cache.py or observability data"
+      - section: "03-orchestration"
+        tasks:
+          - "Verify orchestrator list matches cortex/__wiring_contract__.yaml"
+          - "Verify intent types match cortex/intent_router/ implementation"
+      - section: "04-mcp"
+        tasks:
+          - "Verify tool list matches cortex/mcp/tools/ directory"
+          - "Verify transport modes match deployment/mcp-gateway-config.yaml"
+      - section: "05-infrastructure"
+        tasks:
+          - "Verify tech stack matches requirements.txt + deployment/docker/"
+          - "Verify observability stack matches deployment/prometheus.yml + grafana-dashboards/"
+    acceptance: "Every claim in every file is backed by a file/module reference (source_of_truth field)"
+
+  - id: S3
+    name: "Visualisations — Mermaid and D3 Diagrams"
+    repeatable: true
+    diagram_targets:
+      - file: "07-diagrams/architecture-overview.md"
+        type: mermaid
+        diagram: "C4 System Context — CORTEX + IDE clients + Git registry + CI/CD"
+      - file: "07-diagrams/c4-context.md"
+        type: mermaid
+        diagram: "C4 Context with external actors (Developer, PO, Business Leader, Repo)"
+      - file: "07-diagrams/c4-container.md"
+        type: mermaid
+        diagram: "C4 Container — MCP Gateway, Orchestrators, LENS, Brain, Registry, DB"
+      - file: "07-diagrams/request-lifecycle.md"
+        type: mermaid
+        diagram: "Sequence: IDE → Stage-1 → Stage0 → IntentRouter → LENS → Brain → Governance → Orchestrator → Response"
+      - file: "07-diagrams/mcp-request-lifecycle.md"
+        type: mermaid
+        diagram: "Sequence: JSON-RPC over stdio → MCP Gateway → Tool dispatch → Result"
+      - file: "07-diagrams/data-flow.md"
+        type: mermaid
+        diagram: "Data flow: Source code → LENS (8 analyzers) → LENSContext → Brain → ExecutionPlan → Audit trail"
+      - file: "07-diagrams/component-relationships.md"
+        type: d3_json
+        diagram: "Force-directed graph: orchestrators + dependencies (from wiring contract)"
+      - file: "01-capabilities/overview.md"
+        type: d3_json
+        diagram: "Mind map: 6 capability domains with child capabilities"
+      - file: "02-lens/architecture.md"
+        type: mermaid
+        diagram: "L→E→N→S pipeline with 8 parallel analyzers feeding into LENSContext"
+      - file: "01-capabilities/governance-compliance.md"
+        type: mermaid
+        diagram: "4-layer defense: Pre-Execution → Runtime → Post-Audit → Production Gate"
+      - file: "01-capabilities/brain-architecture.md"
+        type: mermaid
+        diagram: "Brain: Perception (PatternRegistry) → Reasoning (StrategySelector) → Action (ExecutionPlanner)"
+    acceptance: "Every diagram has a mermaid or d3 JSON block; diagrams render in cortex-docs/index.html"
+
+  - id: S4
+    name: "Cross-link Integrity"
+    repeatable: true
+    actions:
+      - "Run: python3 /tmp/fix_links.py (idempotent — only changes stale paths)"
+      - "Run: grep -rn '\\bdiagrams/\\|\\bcapabilities/\\|\\blens/\\|\\borchestration/' cortex-docs/content/src --include='*.md' | wc -l (expect 0)"
+      - "Spot-check 5 random cross-links are resolvable relative to their file location"
+    acceptance: "Zero broken cross-links; all paths use prefixed folder names"
+
+  - id: S5
+    name: "Pipeline Sync"
+    repeatable: true
+    actions:
+      - "Update cortex-docs/pipeline/extract.py if ORDER_MAP needs refresh"
+      - "Update cortex-docs/pipeline/discover.py folder scan paths to use new NN- names"
+      - "Run: python3 cortex-docs/pipeline/build.py and verify build completes"
+      - "Confirm cortex-docs/assets/data/content.json includes order: field per document"
+    acceptance: "Build pipeline runs without errors; content.json includes all documents with order field"
+
+  - id: S6
+    name: "Master Plan Sync"
+    repeatable: false
+    actions:
+      - "Update this phase status → COMPLETE in cortex-registry/cortex-master.yaml"
+      - "Add phase-50 to completed phases list"
+      - "Record actual vs estimated effort"
+    acceptance: "cortex-master.yaml reflects phase-50 as COMPLETE"
+
+run_instructions: |
+  This phase is designed to be re-run as CORTEX evolves. Safe to run repeatedly because:
+  - inject_order.py is idempotent (updates existing order: field if present)
+  - fix_links.py is idempotent (only rewrites changed paths)
+  - Content accuracy pass is additive only (no deletions)
+  - Diagrams are embedded in existing files (no new files created — CORE-002 compliant)
+
+  To trigger a documentation refresh:
+  1. Run S0 to identify gaps
+  2. Run S2 on sections where new phases have shipped
+  3. Run S3 to add/update diagrams for new capabilities
+  4. Run S4 + S5 to validate and rebuild
+
+governance:
+  core_rules:
+    - CORE-002: All results inline, no report files created
+    - CORE-048: Holistic validation before each stage
+    - CORE-049: Silent autonomous execution
+  blocking_violations:
+    - Creating .md or .txt report files
+    - Documenting deferred/planned phases as implemented
+    - Cross-links pointing to non-existent paths
+
+estimated_effort:
+  S0_audit: 15min
+  S1_structure: 10min
+  S2_accuracy: 3h (first run), 45min (re-run)
+  S3_diagrams: 4h (first run), 1h (additions)
+  S4_links: 10min
+  S5_pipeline: 20min
+  S6_sync: 5min
+  total_first_run: ~8h
+  total_rerun: ~2h
+
+dependencies:
+  - cortex-registry/planning/phases/completed/ (source of truth for implemented phases)
+  - cortex/__wiring_contract__.yaml (orchestrator list)
+  - cortex/mcp/tools/ (tool list)
+  - cortex-docs/pipeline/ (build pipeline)

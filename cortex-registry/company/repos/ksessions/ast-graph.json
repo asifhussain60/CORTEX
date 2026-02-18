@@ -3,597 +3,597 @@
     {
       "id": "file_0",
       "type": "file",
-      "name": "vite.config.ts",
-      "path": "Source Code/IssueTrackerApp/Spa/vite.config.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_1",
-      "type": "file",
-      "name": "api.ts",
-      "path": "Source Code/IssueTrackerApp/Spa/src/api.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_2",
-      "type": "file",
-      "name": "types.ts",
-      "path": "Source Code/IssueTrackerApp/Spa/src/types.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_3",
-      "type": "file",
-      "name": "store.ts",
-      "path": "Source Code/IssueTrackerApp/Spa/src/store.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_4",
-      "type": "file",
-      "name": "index.d.ts",
-      "path": "Source Code/Sessions.Spa/app/services/node_modules/safe-buffer/index.d.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_5",
-      "type": "file",
-      "name": "index.d.ts",
-      "path": "Source Code/Sessions.Spa/Scripts/froala/index.d.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_6",
-      "type": "file",
-      "name": "angular-ui-router.d.ts",
-      "path": "Source Code/Sessions.Spa/Themes/Material/vendors/bower_components/angular-ui-router/api/angular-ui-router.d.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_7",
-      "type": "file",
-      "name": "example.spec.ts",
-      "path": "tests/example.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_8",
-      "type": "file",
-      "name": "admin-session-dropdown-refresh.spec.ts",
-      "path": "tests/admin-session-dropdown-refresh.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_9",
-      "type": "file",
-      "name": "hcp-collapsible-panel-phase1.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/hcp/tests/hcp-collapsible-panel-phase1.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_10",
-      "type": "file",
-      "name": "question-submission-broadcast.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/question-submission-broadcast.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_11",
-      "type": "file",
-      "name": "transcript-canvas-screenshot.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/transcript-canvas-screenshot.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_12",
-      "type": "file",
-      "name": "transcript-modal-submit-console.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/transcript-modal-submit-console.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_13",
-      "type": "file",
-      "name": "test-transcript-section-broadcast.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-tcanvas/tests/test-transcript-section-broadcast.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_14",
-      "type": "file",
-      "name": "transcript-share-overflow-visual.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/transcript-share-overflow-visual.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_15",
-      "type": "file",
-      "name": "clickable-elements-sanitization.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/clickable-elements-sanitization.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_16",
-      "type": "file",
-      "name": "transcript-section-share-sanitization.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/transcript-section-share-sanitization.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_17",
-      "type": "file",
-      "name": "qa-panel-overflow-visual.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/qa-panel-overflow-visual.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_18",
-      "type": "file",
-      "name": "hcp-overflow-visual.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/hcp-overflow-visual.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_19",
-      "type": "file",
-      "name": "html-cleaner-validation.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/html-cleaner-validation.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_20",
-      "type": "file",
-      "name": "hcp-session-controls-visual.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp/tests/hcp-session-controls-visual.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_21",
-      "type": "file",
-      "name": "sharebutton-injection-validation.spec.ts",
-      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hostcontrolpanel/tests/sharebutton-injection-validation.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_22",
-      "type": "file",
-      "name": "hcp-collapsible-panel-phase1.spec.ts",
-      "path": ".github/key-data-streams/hcp/tests/hcp-collapsible-panel-phase1.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_23",
-      "type": "file",
-      "name": "question-submission-broadcast.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/transcript-canvas/tests/question-submission-broadcast.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_24",
-      "type": "file",
-      "name": "transcript-canvas-screenshot.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/transcript-canvas/tests/transcript-canvas-screenshot.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_25",
-      "type": "file",
-      "name": "transcript-modal-submit-console.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/transcript-canvas/tests/transcript-modal-submit-console.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_26",
-      "type": "file",
-      "name": "test-transcript-section-broadcast.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/hcp-tcanvas/tests/test-transcript-section-broadcast.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_27",
-      "type": "file",
-      "name": "transcript-share-overflow-visual.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/transcript-share-overflow-visual.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_28",
-      "type": "file",
-      "name": "clickable-elements-sanitization.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/clickable-elements-sanitization.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_29",
-      "type": "file",
-      "name": "transcript-section-share-sanitization.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/transcript-section-share-sanitization.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_30",
-      "type": "file",
-      "name": "qa-panel-overflow-visual.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/qa-panel-overflow-visual.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_31",
-      "type": "file",
-      "name": "hcp-overflow-visual.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/hcp-overflow-visual.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_32",
-      "type": "file",
-      "name": "html-cleaner-validation.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/html-cleaner-validation.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_33",
-      "type": "file",
-      "name": "hcp-session-controls-visual.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/hcp/tests/hcp-session-controls-visual.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_34",
-      "type": "file",
-      "name": "sharebutton-injection-validation.spec.ts",
-      "path": ".github/key-data-streams/_ARCHIVE/hostcontrolpanel/tests/sharebutton-injection-validation.spec.ts",
-      "extension": ".ts"
-    },
-    {
-      "id": "file_35",
-      "type": "file",
       "name": "modernizr-custom.js",
       "path": "Source Code/IssueTrackerApp/Spa/dist/tales/modules/modernizr/modernizr-custom.js",
       "extension": ".js"
     },
     {
-      "id": "file_36",
+      "id": "file_1",
       "type": "file",
       "name": "html5-3.6-respond-1.1.0.min.js",
       "path": "Source Code/IssueTrackerApp/Spa/dist/tales/modules/respond/html5-3.6-respond-1.1.0.min.js",
       "extension": ".js"
     },
     {
-      "id": "file_37",
+      "id": "file_2",
       "type": "file",
       "name": "index-CJ4T_Cu3.js",
       "path": "Source Code/IssueTrackerApp/Spa/dist/assets/index-CJ4T_Cu3.js",
       "extension": ".js"
     },
     {
-      "id": "file_38",
+      "id": "file_3",
       "type": "file",
       "name": "modernizr-custom.js",
       "path": "Source Code/IssueTrackerApp/Spa/public/tales/modules/modernizr/modernizr-custom.js",
       "extension": ".js"
     },
     {
-      "id": "file_39",
+      "id": "file_4",
       "type": "file",
       "name": "html5-3.6-respond-1.1.0.min.js",
       "path": "Source Code/IssueTrackerApp/Spa/public/tales/modules/respond/html5-3.6-respond-1.1.0.min.js",
       "extension": ".js"
     },
     {
-      "id": "file_40",
+      "id": "file_5",
       "type": "file",
       "name": "modernizr-custom.js",
       "path": "Source Code/IssueTrackerApp/Tales CSS/modules/modernizr/modernizr-custom.js",
       "extension": ".js"
     },
     {
-      "id": "file_41",
+      "id": "file_6",
       "type": "file",
       "name": "html5-3.6-respond-1.1.0.min.js",
       "path": "Source Code/IssueTrackerApp/Tales CSS/modules/respond/html5-3.6-respond-1.1.0.min.js",
       "extension": ".js"
     },
     {
-      "id": "file_42",
+      "id": "file_7",
       "type": "file",
       "name": "jasmine.config.js",
       "path": "Source Code/Sessions.Tests/Frontend/AngularJS/jasmine.config.js",
       "extension": ".js"
     },
     {
-      "id": "file_43",
+      "id": "file_8",
       "type": "file",
       "name": "karma.conf.js",
       "path": "Source Code/Sessions.Tests/Frontend/AngularJS/karma.conf.js",
       "extension": ".js"
     },
     {
-      "id": "file_44",
+      "id": "file_9",
       "type": "file",
       "name": "dashboard.js",
       "path": "Source Code/Sessions.Tests/Dashboard/assets/js/dashboard.js",
       "extension": ".js"
     },
     {
-      "id": "file_45",
+      "id": "file_10",
       "type": "file",
       "name": "jquery-1.10.2.intellisense.js",
       "path": "Source Code/packages/jQuery.1.10.2/Tools/jquery-1.10.2.intellisense.js",
       "extension": ".js"
     },
     {
-      "id": "file_46",
+      "id": "file_11",
       "type": "file",
       "name": "jquery-1.10.2-vsdoc.js",
       "path": "Source Code/packages/jQuery.1.10.2/Content/Scripts/jquery-1.10.2-vsdoc.js",
       "extension": ".js"
     },
     {
-      "id": "file_47",
+      "id": "file_12",
       "type": "file",
       "name": "jquery-1.10.2.js",
       "path": "Source Code/packages/jQuery.1.10.2/Content/Scripts/jquery-1.10.2.js",
       "extension": ".js"
     },
     {
-      "id": "file_48",
+      "id": "file_13",
       "type": "file",
       "name": "jquery-1.10.2.min.js",
       "path": "Source Code/packages/jQuery.1.10.2/Content/Scripts/jquery-1.10.2.min.js",
       "extension": ".js"
     },
     {
-      "id": "file_49",
+      "id": "file_14",
       "type": "file",
       "name": "jquery.validate.unobtrusive.js",
       "path": "Source Code/packages/Microsoft.jQuery.Unobtrusive.Validation.3.2.3/Content/Scripts/jquery.validate.unobtrusive.js",
       "extension": ".js"
     },
     {
-      "id": "file_50",
+      "id": "file_15",
       "type": "file",
       "name": "jquery.validate.unobtrusive.min.js",
       "path": "Source Code/packages/Microsoft.jQuery.Unobtrusive.Validation.3.2.3/Content/Scripts/jquery.validate.unobtrusive.min.js",
       "extension": ".js"
     },
     {
-      "id": "file_51",
+      "id": "file_16",
       "type": "file",
       "name": "jquery.validate.min.js",
       "path": "Source Code/packages/jQuery.Validation.1.11.1/Content/Scripts/jquery.validate.min.js",
       "extension": ".js"
     },
     {
-      "id": "file_52",
+      "id": "file_17",
       "type": "file",
       "name": "jquery.validate-vsdoc.js",
       "path": "Source Code/packages/jQuery.Validation.1.11.1/Content/Scripts/jquery.validate-vsdoc.js",
       "extension": ".js"
     },
     {
-      "id": "file_53",
+      "id": "file_18",
       "type": "file",
       "name": "jquery.validate.js",
       "path": "Source Code/packages/jQuery.Validation.1.11.1/Content/Scripts/jquery.validate.js",
       "extension": ".js"
     },
     {
-      "id": "file_54",
+      "id": "file_19",
       "type": "file",
       "name": "bootstrap.js",
       "path": "Source Code/packages/bootstrap.3.0.0/content/Scripts/bootstrap.js",
       "extension": ".js"
     },
     {
-      "id": "file_55",
+      "id": "file_20",
       "type": "file",
       "name": "bootstrap.min.js",
       "path": "Source Code/packages/bootstrap.3.0.0/content/Scripts/bootstrap.min.js",
       "extension": ".js"
     },
     {
-      "id": "file_56",
+      "id": "file_21",
       "type": "file",
       "name": "respond.min.js",
       "path": "Source Code/packages/Respond.1.2.0/content/Scripts/respond.min.js",
       "extension": ".js"
     },
     {
-      "id": "file_57",
+      "id": "file_22",
       "type": "file",
       "name": "respond.js",
       "path": "Source Code/packages/Respond.1.2.0/content/Scripts/respond.js",
       "extension": ".js"
     },
     {
-      "id": "file_58",
+      "id": "file_23",
       "type": "file",
       "name": "modernizr-2.6.2.js",
       "path": "Source Code/packages/Modernizr.2.6.2/Content/Scripts/modernizr-2.6.2.js",
       "extension": ".js"
     },
     {
-      "id": "file_59",
+      "id": "file_24",
       "type": "file",
       "name": "etymology-audit-console.js",
       "path": "Source Code/Sessions.Spa/etymology-audit-console.js",
       "extension": ".js"
     },
     {
-      "id": "file_60",
+      "id": "file_25",
       "type": "file",
       "name": "config.exceptionHandler.js",
       "path": "Source Code/Sessions.Spa/app/config.exceptionHandler.js",
       "extension": ".js"
     },
     {
-      "id": "file_61",
+      "id": "file_26",
       "type": "file",
       "name": "config.js",
       "path": "Source Code/Sessions.Spa/app/config.js",
       "extension": ".js"
     },
     {
-      "id": "file_62",
+      "id": "file_27",
       "type": "file",
       "name": "config.route.js",
       "path": "Source Code/Sessions.Spa/app/config.route.js",
       "extension": ".js"
     },
     {
-      "id": "file_63",
+      "id": "file_28",
       "type": "file",
       "name": "app.run.js",
       "path": "Source Code/Sessions.Spa/app/app.run.js",
       "extension": ".js"
     },
     {
-      "id": "file_64",
+      "id": "file_29",
       "type": "file",
       "name": "app.js",
       "path": "Source Code/Sessions.Spa/app/app.js",
       "extension": ".js"
     },
     {
-      "id": "file_65",
+      "id": "file_30",
       "type": "file",
       "name": "sessionTokenPanel.js",
       "path": "Source Code/Sessions.Spa/app/directives/sessionTokenPanel.js",
       "extension": ".js"
     },
     {
-      "id": "file_66",
+      "id": "file_31",
       "type": "file",
       "name": "froala-plugins-loader.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/froala-plugins-loader.js",
       "extension": ".js"
     },
     {
-      "id": "file_67",
+      "id": "file_32",
       "type": "file",
       "name": "froala-deferred-registration.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/froala-deferred-registration.js",
       "extension": ".js"
     },
     {
-      "id": "file_68",
+      "id": "file_33",
       "type": "file",
       "name": "ahadees.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/ahadees.js",
       "extension": ".js"
     },
     {
-      "id": "file_69",
+      "id": "file_34",
       "type": "file",
       "name": "poetry-formatter.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/buttons/poetry-button/poetry-formatter.js",
       "extension": ".js"
     },
     {
-      "id": "file_70",
+      "id": "file_35",
       "type": "file",
       "name": "poetry-modal.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/buttons/poetry-button/poetry-modal.js",
       "extension": ".js"
     },
     {
-      "id": "file_71",
+      "id": "file_36",
       "type": "file",
       "name": "poetry-button.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/buttons/poetry-button/poetry-button.js",
       "extension": ".js"
     },
     {
-      "id": "file_72",
+      "id": "file_37",
       "type": "file",
       "name": "ahadees-formatter.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/buttons/ahadees-button/ahadees-formatter.js",
       "extension": ".js"
     },
     {
-      "id": "file_73",
+      "id": "file_38",
       "type": "file",
       "name": "ahadees-button.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/buttons/ahadees-button/ahadees-button.js",
       "extension": ".js"
     },
     {
-      "id": "file_74",
+      "id": "file_39",
       "type": "file",
       "name": "ahadees-modal.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/buttons/ahadees-button/ahadees-modal.js",
       "extension": ".js"
     },
     {
-      "id": "file_75",
+      "id": "file_40",
       "type": "file",
       "name": "ahadees-search.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/buttons/ahadees-button/ahadees-search.js",
       "extension": ".js"
     },
     {
-      "id": "file_76",
+      "id": "file_41",
       "type": "file",
       "name": "dialog-service.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/common/dialog-service.js",
       "extension": ".js"
     },
     {
-      "id": "file_77",
+      "id": "file_42",
       "type": "file",
       "name": "modal-service.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/common/modal-service.js",
       "extension": ".js"
     },
     {
-      "id": "file_78",
+      "id": "file_43",
       "type": "file",
       "name": "utilities.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/common/utilities.js",
       "extension": ".js"
     },
     {
-      "id": "file_79",
+      "id": "file_44",
       "type": "file",
       "name": "base-plugin.js",
       "path": "Source Code/Sessions.Spa/app/froala-plugins/common/base-plugin.js",
       "extension": ".js"
     },
     {
-      "id": "file_80",
+      "id": "file_45",
       "type": "file",
       "name": "shell.js",
       "path": "Source Code/Sessions.Spa/app/layout/shell.js",
       "extension": ".js"
     },
     {
-      "id": "file_81",
+      "id": "file_46",
       "type": "file",
       "name": "sidebar.js",
       "path": "Source Code/Sessions.Spa/app/layout/sidebar.js",
       "extension": ".js"
     },
     {
-      "id": "file_82",
+      "id": "file_47",
       "type": "file",
       "name": "topNav.js",
       "path": "Source Code/Sessions.Spa/app/layout/topNav.js",
       "extension": ".js"
     },
     {
-      "id": "file_83",
+      "id": "file_48",
       "type": "file",
       "name": "registration.js",
       "path": "Source Code/Sessions.Spa/app/features/registration/registration.js",
       "extension": ".js"
     },
     {
-      "id": "file_84",
+      "id": "file_49",
       "type": "file",
       "name": "adminDash.js",
       "path": "Source Code/Sessions.Spa/app/features/admin/adminDash.js",
       "extension": ".js"
+    },
+    {
+      "id": "file_50",
+      "type": "file",
+      "name": "vite.config.ts",
+      "path": "Source Code/IssueTrackerApp/Spa/vite.config.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_51",
+      "type": "file",
+      "name": "api.ts",
+      "path": "Source Code/IssueTrackerApp/Spa/src/api.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_52",
+      "type": "file",
+      "name": "types.ts",
+      "path": "Source Code/IssueTrackerApp/Spa/src/types.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_53",
+      "type": "file",
+      "name": "store.ts",
+      "path": "Source Code/IssueTrackerApp/Spa/src/store.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_54",
+      "type": "file",
+      "name": "index.d.ts",
+      "path": "Source Code/Sessions.Spa/app/services/node_modules/safe-buffer/index.d.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_55",
+      "type": "file",
+      "name": "index.d.ts",
+      "path": "Source Code/Sessions.Spa/Scripts/froala/index.d.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_56",
+      "type": "file",
+      "name": "angular-ui-router.d.ts",
+      "path": "Source Code/Sessions.Spa/Themes/Material/vendors/bower_components/angular-ui-router/api/angular-ui-router.d.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_57",
+      "type": "file",
+      "name": "example.spec.ts",
+      "path": "tests/example.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_58",
+      "type": "file",
+      "name": "admin-session-dropdown-refresh.spec.ts",
+      "path": "tests/admin-session-dropdown-refresh.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_59",
+      "type": "file",
+      "name": "hcp-collapsible-panel-phase1.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/hcp/tests/hcp-collapsible-panel-phase1.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_60",
+      "type": "file",
+      "name": "question-submission-broadcast.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/question-submission-broadcast.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_61",
+      "type": "file",
+      "name": "transcript-canvas-screenshot.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/transcript-canvas-screenshot.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_62",
+      "type": "file",
+      "name": "transcript-modal-submit-console.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/transcript-canvas/tests/transcript-modal-submit-console.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_63",
+      "type": "file",
+      "name": "test-transcript-section-broadcast.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-tcanvas/tests/test-transcript-section-broadcast.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_64",
+      "type": "file",
+      "name": "transcript-share-overflow-visual.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/transcript-share-overflow-visual.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_65",
+      "type": "file",
+      "name": "clickable-elements-sanitization.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/clickable-elements-sanitization.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_66",
+      "type": "file",
+      "name": "transcript-section-share-sanitization.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/transcript-section-share-sanitization.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_67",
+      "type": "file",
+      "name": "qa-panel-overflow-visual.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/qa-panel-overflow-visual.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_68",
+      "type": "file",
+      "name": "hcp-overflow-visual.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/hcp-overflow-visual.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_69",
+      "type": "file",
+      "name": "html-cleaner-validation.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp-canvas/tests/html-cleaner-validation.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_70",
+      "type": "file",
+      "name": "hcp-session-controls-visual.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hcp/tests/hcp-session-controls-visual.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_71",
+      "type": "file",
+      "name": "sharebutton-injection-validation.spec.ts",
+      "path": "Workspaces/CodeQuality/noorcanvas_github/prompts.keys/_ARCHIVE/hostcontrolpanel/tests/sharebutton-injection-validation.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_72",
+      "type": "file",
+      "name": "hcp-collapsible-panel-phase1.spec.ts",
+      "path": ".github/key-data-streams/hcp/tests/hcp-collapsible-panel-phase1.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_73",
+      "type": "file",
+      "name": "question-submission-broadcast.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/transcript-canvas/tests/question-submission-broadcast.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_74",
+      "type": "file",
+      "name": "transcript-canvas-screenshot.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/transcript-canvas/tests/transcript-canvas-screenshot.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_75",
+      "type": "file",
+      "name": "transcript-modal-submit-console.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/transcript-canvas/tests/transcript-modal-submit-console.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_76",
+      "type": "file",
+      "name": "test-transcript-section-broadcast.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/hcp-tcanvas/tests/test-transcript-section-broadcast.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_77",
+      "type": "file",
+      "name": "transcript-share-overflow-visual.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/transcript-share-overflow-visual.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_78",
+      "type": "file",
+      "name": "clickable-elements-sanitization.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/clickable-elements-sanitization.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_79",
+      "type": "file",
+      "name": "transcript-section-share-sanitization.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/transcript-section-share-sanitization.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_80",
+      "type": "file",
+      "name": "qa-panel-overflow-visual.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/qa-panel-overflow-visual.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_81",
+      "type": "file",
+      "name": "hcp-overflow-visual.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/hcp-overflow-visual.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_82",
+      "type": "file",
+      "name": "html-cleaner-validation.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/hcp-canvas/tests/html-cleaner-validation.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_83",
+      "type": "file",
+      "name": "hcp-session-controls-visual.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/hcp/tests/hcp-session-controls-visual.spec.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_84",
+      "type": "file",
+      "name": "sharebutton-injection-validation.spec.ts",
+      "path": ".github/key-data-streams/_ARCHIVE/hostcontrolpanel/tests/sharebutton-injection-validation.spec.ts",
+      "extension": ".ts"
     },
     {
       "id": "file_85",
@@ -949,6 +949,6 @@
   "relationships": [],
   "metadata": {
     "repository": "/Users/asifhussain/PROJECTS/KSESSIONS",
-    "generated_at": "2026-02-18T06:54:21.586485"
+    "generated_at": "2026-02-18T06:56:39.482416"
   }
 }

@@ -52,6 +52,7 @@ from .temp_script import TempScriptCleaner
 from .orphaned_test import OrphanedTestCleaner
 from .archived_phase_executor import ArchivedPhaseExecutorCleaner
 from .build_artifact import BuildArtifactCleaner
+from .github_folder_guard import GithubFolderGuard, GithubFileClassification
 
 # Backward compatibility aliases
 DatabaseMigrationCleaner = RootDatabaseCleaner  # Old name for compatibility
@@ -73,4 +74,7 @@ __all__ = [
     "BuildArtifactCleaner",
     # Backward compatibility
     "DatabaseMigrationCleaner",
+    # .github/ protection
+    "GithubFolderGuard",
+    "GithubFileClassification",
 ]

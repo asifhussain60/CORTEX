@@ -23,12 +23,13 @@ from .base import (
     Report,
     RollbackResult,
 )
+from .github_folder_guard import GithubFolderGuard, GithubFileClassification
 
 
 class MarkdownSprawlCleaner(CleanerInterface):
     """
     Cleaner for temporary markdown files.
-    
+
     Deletes:
         - *-summary.md
         - *-report.md
@@ -36,13 +37,21 @@ class MarkdownSprawlCleaner(CleanerInterface):
         - *-debug.md
         - TEMP-*.md
         - _*.md
-    
+
     Preserves:
-        - README.md
+        - README.md (everywhere outside .github/ informational roots)
         - docs/**/*.md
-        - .github/**/*.md
         - cortex-registry/**/*.md
+        - .github/**/*.md — governed by GithubFolderGuard:
+            PROTECTED (never deleted):
+                *.prompt.md, active agent specs, non-deprecated templates,
+                workflows/, hooks/, scripts/, prompts/reference/
+            VACUUM_ELIGIBLE (may delete):
+                DEPRECATED-*.md, agents/README.md, agents/AGENT-INDEX.md,
+                prompts/README.md
     """
+
+    _github_guard = GithubFolderGuard()
 
     @property
     def name(self) -> str:
@@ -87,14 +96,14 @@ class MarkdownSprawlCleaner(CleanerInterface):
             "conversation-*.md",  # Conversation logs
         ]
         
-        # Directories to exclude
+        # Directories to exclude unconditionally (no nuance needed)
         excluded_dirs = {
             ".cortex",
-            ".github",
             "cortex-registry",
             "deployment",
             "docs",
         }
+        # Note: .github/ is handled by GithubFolderGuard below (nuanced, not blanket)
         
         files_to_delete = []
         files_scanned = 0
@@ -103,13 +112,21 @@ class MarkdownSprawlCleaner(CleanerInterface):
             for md_file in self.repo_root.glob(f"**/{pattern}"):
                 files_scanned += 1
                 
-                # Skip excluded directories
+                # Skip unconditionally excluded directories
                 if any(excluded in md_file.parts for excluded in excluded_dirs):
                     continue
                 
-                # Skip if it's README.md (special case)
-                if md_file.name == "README.md":
+                # Skip if it's README.md outside .github/ (special case)
+                if md_file.name == "README.md" and ".github" not in md_file.parts:
                     continue
+                
+                # .github/ files: delegate to GithubFolderGuard
+                if ".github" in md_file.parts:
+                    rel = md_file.relative_to(self.repo_root)
+                    classification = self._github_guard.classify(rel)
+                    if classification != GithubFileClassification.VACUUM_ELIGIBLE:
+                        # PROTECTED or UNRELATED → skip
+                        continue
                 
                 files_to_delete.append(str(md_file.relative_to(self.repo_root)))
         
@@ -117,6 +134,7 @@ class MarkdownSprawlCleaner(CleanerInterface):
             "files_to_delete": files_to_delete,
             "patterns": delete_patterns,
             "excluded_dirs": list(excluded_dirs),
+            "github_guard": "GithubFolderGuard (VACUUM-GITHUB-GUARD-001)",
         }
         
         self._log(f"Found {len(files_to_delete)} markdown sprawl files")
