@@ -40,10 +40,9 @@ Stage 1: IntentRouter (tool selection)
 - ❌ NO tables, headers, code blocks, or bullet lists
 - ❌ NO multi-paragraph output
 
-**Header Format:**
+**Output Format:**
 ```markdown
 ## 🎯 CORTEX REPHRASE
-**Author:** Asif Hussain | **Mode:** Token Optimization ✅
 
 ---
 
@@ -142,7 +141,6 @@ if not any(marker in request for marker in ["AC_START", "AC_COMPLETE"]):
 
 ```markdown
 ## 🎯 CORTEX REPHRASE
-**Author:** Asif Hussain | **Mode:** Token Optimization ✅
 
 ---
 
@@ -151,17 +149,16 @@ if not any(marker in request for marker in ["AC_START", "AC_COMPLETE"]):
 
 **Rules:**
 - ✅ Single paragraph of plain text (no markdown formatting within paragraph)
-- ✅ CORTEX header included (author + mode)
 - ✅ Governance violations injected inline (e.g., "note: CORE-008 requires TDD")
 - ✅ Orchestrator routing inline (e.g., "via TDDOrchestrator")
 - ❌ NO challenge protocol appended
 - ❌ NO tables, code blocks, bullet lists
 - ❌ NO multi-paragraph output
+- ❌ NO author/orchestrator header
 
 **Example:**
 ```markdown
 ## 🎯 CORTEX REPHRASE
-**Author:** Asif Hussain | **Mode:** Token Optimization ✅
 
 ---
 

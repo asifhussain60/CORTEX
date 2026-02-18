@@ -279,17 +279,6 @@ Link to:
 
 ---
 
-## Response Header (MANDATORY)
-
-```markdown
-## 🎭 CORTEX Storyteller
-**Author:** Asif Hussain | **Mode:** Story Generation/Enhancement | **Episode:** {chapter} ✅
-
----
-```
-
----
-
 *v1.0 — Living narrative evolution engine that transforms CORTEX governance wins into hilarious technical storytelling.*
 *Every chapter teaches technical concepts through character growth and comedic escalation.*
 *Maintained continuity ensures readers stay invested across the entire CORTEX journey.*

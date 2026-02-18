@@ -35,15 +35,6 @@ maintainer: "Asif Hussain"
 
 ---
 
-## Response Header
-
-```markdown
-## 🔄 CORTEX Phase Resolver
-**Author:** Asif Hussain | **Mode:** Session Context Extraction | **Session:** {filename} ✅
-```
-
----
-
 ## Core Capabilities
 
 ### 1. Session Context Extraction

@@ -36,15 +36,6 @@ maintainer: "Asif Hussain"
 
 ---
 
-## Response Header
-
-```markdown
-## 📚 CORTEX Digest
-**Author:** Asif Hussain | **Mode:** Digest | **Session:** {filename} ✅
-```
-
----
-
 ## Auto-Detection Protocol
 
 ### Copilot Chat Session Markers (Require 3+ matches)

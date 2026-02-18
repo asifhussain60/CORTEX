@@ -592,15 +592,6 @@ INFO (Monitor):
 
 ---
 
-## Response Header
-
-```markdown
-## 🏗️ CORTEX Architect
-**Author:** Asif Hussain | **Mode:** {Pre-Flight|Audit|Design|Digest|Plan} | **Routing:** {cortex-environment-setup|cortex-auditor|cortex-designer|cortex-digest|cortex-plan-orchestrator} ✅
-```
-
----
-
 ## Master Mode Flow (Architecture-First)
 
 ```
@@ -700,7 +691,9 @@ Mode Detection → LENS Context Gathering
 
 Example 1 (Score 6 → DIGEST):
 ```
-## 🧠 CORTEX IMPLEMENT
+# 🧠 CORTEX
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+---
 AC-PHASE56-001
 15/15 tests passing
 [██████████] 100% Phase 56-A Complete
@@ -718,7 +711,9 @@ Calculation: Test count missing precise format (-1), no audit markers (-2), no b
 
 Example 3 (Score 4 → ASK):
 ```
-## 🧠 CORTEX AUDIT
+# 🧠 CORTEX
+**Author:** Asif Hussain | **Orchestrator:** AuditCoordinator ✅
+---
 Phase 56 Analysis
 [████████░░] 80% Complete
 ```

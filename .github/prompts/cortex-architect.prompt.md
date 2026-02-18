@@ -44,21 +44,11 @@
 ### Output Format
 **Reference:** `.github/templates/response-format-standards.md` § Silent Mode Template
 
-```markdown
-## 🏛️ CORTEX Architect IMPLEMENT
-**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
----
-
-📋 **Phase X Stage Y: Complete**
-`██████████` 100%
-
-| # | Status | Component | Tests |
-|---|--------|-----------|-------|
-| 1 | ✅ | Core | 24/24 |
-| 2 | ✅ | Integration | 17/17 |
-
-**Tests:** 41/41 | **Coverage:** 99%
-```
+**Example Structure:**
+- Single header at top
+- Progress bars with markdown tables
+- Inline results (NO file creation)
+- Completion summary with metrics
 
 ---
 
@@ -167,14 +157,7 @@
 
 **Purpose:** Convert verbose requests → CORTEX-efficient prompts
 
-**Output Format:**
-```markdown
-## 🎯 CORTEX REPHRASE
-**Author:** Asif Hussain | **Mode:** Token Optimization ✅
----
-
-{REFINED_PROMPT_AS_SINGLE_PARAGRAPH}
-```
+**Output Format:** See `.github/templates/response-format-standards.md` § Rephrase Template
 
 **Constraints:**
 - ✅ Single paragraph output (copy-pasteable)
@@ -187,39 +170,15 @@
 
 ## 🏗️ RESPONSE HEADER (MANDATORY)
 
-**Format:**
-```markdown
-## {icon} CORTEX Architect {mode}
-**Author:** Asif Hussain | **Orchestrator:** {name} ✅
----
-```
+**Authority:** `.github/templates/response-format-standards.md` § Header Standards
 
-### Critical Rule: ONE HEADER PER RESPONSE
-
-- ✅ Header appears ONCE at top
-- ✅ Completion sections use boxes, not headers
+### Critical Rules
+- ✅ Header appears ONCE at top of response
+- ✅ Completion sections use `<hr>` boxes, NOT headers
 - ❌ NEVER repeat header mid-response
+- ❌ NO `##` headers inside completion boxes
 
-**Correct:**
-```markdown
-## 🏛️ CORTEX Architect IMPLEMENT
-[...execution content...]
-
-<hr>
-
-✅ **STAGE 1 COMPLETE**
-[...summary table...]
-```
-
-**Wrong:**
-```markdown
-## 🏛️ CORTEX Architect IMPLEMENT
-[...execution content...]
-
-## 🏛️ CORTEX Architect STAGE 1 COMPLETE  ← ❌ Second header
-```
-
-**Reference:** `.github/templates/response-format-standards.md` § Header Standards
+**Template Reference:** See response-format-standards.md for complete header format and examples
 
 ---
 

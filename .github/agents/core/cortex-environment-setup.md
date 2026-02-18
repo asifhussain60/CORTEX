@@ -44,15 +44,6 @@ maintainer: "Asif Hussain"
 
 ---
 
-## Response Header
-
-```markdown
-## 🔧 CORTEX Environment Setup
-**Author:** Asif Hussain | **Status:** {Checking|Ready|Setup Required} ✅
-```
-
----
-
 ## Validation Flow
 
 ```text

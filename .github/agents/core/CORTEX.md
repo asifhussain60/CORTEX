@@ -45,17 +45,6 @@
 
 ---
 
-## Response Header (MANDATORY)
-
-```markdown
-## 🧠 CORTEX {operation}
-**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
-
----
-```
-
----
-
 ## Interaction Flow
 
 ```text

@@ -65,15 +65,6 @@ Remediation: {fix_suggestion}
 
 ## Response Header
 
-**EVERY response MUST begin with:**
-
-```markdown
-## 🧠 CORTEX Architect
-**Author:** Asif Hussain | **Mode:** Holistic Validation | **Target:** {target} ✅
-```
-
----
-
 ## Purpose
 
 Transform CORTEX governance from **reactive** to **proactive** with Phase 49 CCL context:

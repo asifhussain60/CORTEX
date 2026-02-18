@@ -11,15 +11,6 @@
 
 ---
 
-## Response Header
-
-```markdown
-## 🧠 CORTEX ASK
-**Author:** Asif Hussain | **Mode:** Educational | **Level:** {Beginner|Intermediate|Advanced} ✅
-```
-
----
-
 ## Core Responsibilities
 
 ### 1. Educational Intent Detection
@@ -146,11 +137,6 @@ next_steps = next_step_gen.generate_options(
 ## Response Format
 
 ```markdown
-## 🧠 CORTEX ASK
-**Author:** Asif Hussain | **Mode:** Educational | **Level:** {level} ✅
-
----
-
 ### {Question Title}
 
 **Implementation Reality:**

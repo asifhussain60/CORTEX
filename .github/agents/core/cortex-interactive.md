@@ -44,17 +44,6 @@ maintainer: "Asif Hussain"
 
 ---
 
-## Response Header (MANDATORY)
-
-```markdown
-## 🎓 CORTEX Interactive
-**Author:** Asif Hussain | **Mode:** Interactive | **Question Type:** {type} ✅
-
----
-```
-
----
-
 ## Execution Flow
 
 ```
@@ -303,7 +292,6 @@ def classify_question(text: str) -> QuestionType:
 
 ```markdown
 ## 🎓 CORTEX Interactive
-**Author:** Asif Hussain | **Mode:** Interactive | **Question Type:** {Architecture|Pattern|Tradeoff|Educational} ✅
 
 ---
 
@@ -457,7 +445,6 @@ Or continue asking questions to explore further.
 
 ```markdown
 ## 🎓 CORTEX Interactive
-**Author:** Asif Hussain | **Mode:** Interactive | **Question Type:** Architecture ✅
 
 ---
 
@@ -533,7 +520,6 @@ Type **`/implement caching-layer`** to switch to DESIGN mode with TDD.
 
 ```markdown
 ## 🎓 CORTEX Interactive
-**Author:** Asif Hussain | **Mode:** Interactive | **Question Type:** Tradeoff ✅
 
 ---
 

@@ -18,7 +18,11 @@ Modern response templates optimized for GitHub Copilot Chat with:
 ## 🏛️ Header Template (FIRST RESPONSE ONLY)
 
 **Trigger:** First response to user in a turn  
-**Frequency:** Once per multi-turn conversatio### Scenario 3: Silent Autonomous Execution
+**Frequency:** Once per multi-turn conversation
+
+**⚠️ NOTE: This header format is ONLY used in `.github/prompts/` files. Do NOT use in templates or other documents.**
+
+### Scenario 3: Silent Autonomous Execution (Prompts Only)
 
 ```markdown
 # 🧠 CORTEX
@@ -29,9 +33,11 @@ Modern response templates optimized for GitHub Copilot Chat with:
 [SILENT EXECUTION - PROGRESS BARS ONLY]
 
 [COMPLETION REPORT]
-````**Timing:** Appears WITH content (not separate announcement)
+```
 
-### Format
+**Timing:** Appears WITH content (not separate announcement)
+
+### Format (For Prompt Files Only)
 
 ```markdown
 # 🧠 CORTEX
@@ -46,8 +52,10 @@ Modern response templates optimized for GitHub Copilot Chat with:
 - ✅ Include orchestrator name (from MasterOrchestrator routing)
 - ✅ Always include author attribution
 - ✅ Use `---` separator (forces blank line, prevents heading stacking)
+- ✅ **ONLY USE IN `.github/prompts/` FILES**
 - ❌ DO NOT show on every turn (header sticky until conversation context changes)
 - ❌ DO NOT show during silent autonomous execution (progress bars only)
+- ❌ **DO NOT USE in templates, agents, or docs**
 
 **Operation Examples (context in content, not header):**
 - IMPLEMENT: TDD cycle for feature creation
@@ -55,7 +63,7 @@ Modern response templates optimized for GitHub Copilot Chat with:
 - REFACTOR: Code improvement operations
 - ANALYZE: LENS intelligence reports
 
-**Examples:**
+**Examples (Prompts Only):**
 
 ```markdown
 # 🧠 CORTEX
@@ -512,7 +520,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 **Personality:** Professional, metrics-focused (not educational)
 
-**Format:**
+**Format (Prompts Only):**
 
 ```markdown
 # 🧠 CORTEX
@@ -820,6 +828,8 @@ def my_function():
 ---
 
 ## 🚀 Assembly Examples
+
+**⚠️ NOTE: Header shown in examples below is ONLY for `.github/prompts/` files.**
 
 ### Scenario 1: First-Time User (Complete Onboarding)
 

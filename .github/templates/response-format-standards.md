@@ -1,6 +1,6 @@
 # 🎨 CORTEX Response Format Standards
 
-> **Updated:** 2026-02-13 | **Authority:** ENH-028 + ENH-032 + CORE-049 + Concise Decision Mode + Chat01 User Preferences
+> **Updated:** 2026-02-17 | **Authority:** ENH-028 + ENH-032 + CORE-049 + Concise Decision Mode + Chat01 User Preferences
 
 
 ---
@@ -31,7 +31,105 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 ---
 
 
-## � COMPOSABLE CONTENT BLOCKS (NEW)
+## 🎯 CORTEX HEADER FORMAT
+
+**Authority:** This section defines the standard header format.
+
+**⚠️ IMPORTANT: This header is ONLY used in `.github/prompts/` files (prompt definitions). Do NOT include this header in templates, agent definitions, or user-facing responses.**
+
+### Standard Format (Prompts Only)
+
+```markdown
+# 🧠 CORTEX
+**Author:** Asif Hussain | **Orchestrator:** {name} ✅
+---
+```
+
+### Header Rules (For Prompt Files Only)
+
+| Rule | Description |
+|------|-------------|
+| **PROMPTS ONLY** | Header appears ONLY in `.github/prompts/` directory |
+| **ONE HEADER PER RESPONSE** | Header appears ONCE at the top of response only |
+| **No Mid-Response Headers** | Completion sections use `<hr>` boxes, NOT headers |
+| **Dynamic Orchestrator** | Replace `{OrchestratorName}` with actual orchestrator (TDDOrchestrator, QueryCoordinator, etc.) |
+| **Checkmark Required** | Always include ✅ after orchestrator name |
+| **Separator Line** | Three dashes `---` after author/orchestrator line |
+
+### Example Usage (Prompt Files Only)
+
+```markdown
+# 🧠 CORTEX
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+---
+
+[...execution content...]
+
+<hr>
+
+✅ **STAGE 1 COMPLETE**
+
+| # | Status | Component | Tests |
+|---|--------|-----------|-------|
+| 1 | ✅ | Core | 24/24 |
+
+<hr>
+```
+
+### Wrong Usage Examples
+
+**❌ WRONG: Using header outside `.github/prompts/` directory**
+```markdown
+# 🧠 CORTEX  ← ❌ Don't use in templates/agents/docs
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+---
+```
+
+**❌ WRONG: Multiple headers**
+```markdown
+# 🧠 CORTEX
+**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+---
+
+[...execution content...]
+
+# 🧠 CORTEX  ← ❌ Second header (FORBIDDEN)
+**Stage 2 Results**
+```
+
+**❌ WRONG: Header inside completion box**
+```markdown
+<hr>
+
+## 🧠 CORTEX STAGE COMPLETE  ← ❌ NO ## headers in boxes
+
+<hr>
+```
+
+**✅ CORRECT: Box with bold title**
+```markdown
+<hr>
+
+✅ **STAGE COMPLETE**
+
+<hr>
+```
+
+### Orchestrator Names Reference
+
+Common orchestrator values:
+- `TDDOrchestrator` — Implementation/Fix/Refactor
+- `QueryCoordinator` — List/Show queries
+- `DigestCoordinator` — Summarize/Analyze
+- `PlanningCoordinator` — Planning/Roadmap
+- `DesignCoordinator` — Architecture/Design
+- `AuditCoordinator` — Governance audits
+- `BootstrapOrchestrator` — Session startup
+
+---
+
+
+## 📦 COMPOSABLE CONTENT BLOCKS (NEW)
 
 **Authority:** cortex-registry/interaction/content-blocks.yaml  
 **Updated:** 2026-02-14
@@ -836,7 +934,6 @@ For multi-step implementations, use visual ASCII progress bars:
 ### 📋 Layer 1: EXECUTIVE (Always Visible)
 ```markdown
 ## {icon} {title} [Operation]
-**Author:** Asif Hussain | **Orchestrator:** [Name] ✅
 
 ---
 
@@ -1005,7 +1102,6 @@ DoD confidence: [X%] — [short reason].
 **Format (CONDENSED):**
 ```markdown
 ## 🏗️ CORTEX Architect
-**Author:** Asif Hussain | **Mode:** Autonomous | **Phase:** {X} ✅
 
 **Executing Phase {X} immediately...**
 
@@ -1033,7 +1129,6 @@ DoD confidence: [X%] — [short reason].
 
 ```markdown
 ## 🔍 CORTEX Audit
-**Author:** Asif Hussain | **Mode:** Audit | **Scope:** [scope] ✅
 
 ---
 
@@ -1076,7 +1171,6 @@ DoD confidence: [X%] — [short reason].
 
 ```markdown
 ## 🏗️ CORTEX Architect
-**Author:** Asif Hussain | **Mode:** Design | **Scope:** [feature] ✅
 
 ---
 
@@ -1172,7 +1266,6 @@ DoD confidence: [X%] — [short reason].
 
 ```markdown
 # 🧠 CORTEX (Conversational)
-**Author:** Asif Hussain | **Orchestrator:** InteractionOrchestrator ✅
 
 ---
 
@@ -1226,7 +1319,6 @@ This involves module-level changes with medium impact.
 
 ```markdown
 ## 🏛️ CORTEX Architect DIGEST
-**Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅
 
 ---
 
@@ -1308,7 +1400,6 @@ TOTAL: {n}/{n} Tests Passing ✅ Foundation Proven ✅
 
 ```markdown
 ## 🏛️ CORTEX Architect DESIGN
-**Author:** Asif Hussain | **Orchestrator:** MasterOrchestrator ✅
 
 ---
 
@@ -1425,7 +1516,6 @@ Result: {expected_deliverable}
 
 ```markdown
 ## 🏛️ CORTEX Architect {OPERATION}
-**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
 
 ---
 
@@ -1561,7 +1651,6 @@ All committed: `{commit_hashes}`
 
 ```markdown
 ## 🏛️ CORTEX Architect {OPERATION}
-**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅
 
 ---
 

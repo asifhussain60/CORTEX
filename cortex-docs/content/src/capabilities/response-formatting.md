@@ -381,8 +381,9 @@ cortex_intelligence/
 **Usage:** User asks multiple questions needing structured answers
 
 ```markdown
-<hr>
-## 🧠 CORTEX QUERY
+# 🧠 CORTEX
+**Author:** Asif Hussain | **Orchestrator:** QueryCoordinator ✅
+---
 
 **Your Questions:**
 1. How many orchestrators exist?
