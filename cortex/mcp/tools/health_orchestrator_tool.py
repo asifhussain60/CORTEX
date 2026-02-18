@@ -1,4 +1,4 @@
-"""Health Orchestrator MCP Tool — Phase 48
+"""Health Orchestrator MCP Tool — Phase 48 + Phase 49
 
 Exposes Phase 48 HealthOrchestrator and HealthVacuumPipeline via MCP-first
 architecture.  Routes through MasterOrchestrator → validates orchestrator_context.
@@ -7,12 +7,15 @@ Operations:
 - scan:     Run HealthOrchestrator.scan() → write health-issues.yaml
 - pipeline: Run full HealthVacuumPipeline (scan + vacuum in one call)
 - status:   Query existing health-issues.yaml without rescanning
+- classify: (Phase 49) Classify a module path → TestDecision (tier, concerns,
+            target_folder, required_markers, coverage_floor) — CORE-055
 
 CORE-028: kebab-case file, snake_case symbols
 CORE-008: golden tests in tests/golden/orchestrators/health_vacuum/
 CORE-035: single canonical implementation in health_orchestrator.py
+CORE-055: Golden Test Tier Contract (Phase 49)
 
-Phase: Phase 48 — Health-Vacuum Integrity Pipeline
+Phase: Phase 48 / Phase 49 — Health-Vacuum + Golden Test Promotion
 Author: CORTEX Framework
 """
 
@@ -79,9 +82,19 @@ class CortexHealthOrchestrate(ConsolidatedTool):
             ToolParameter(
                 name="operation",
                 type="string",
-                description="Operation to perform: scan, pipeline, or status",
+                description="Operation to perform: scan, pipeline, status, or classify",
                 required=True,
-                enum=["scan", "pipeline", "status"],
+                enum=["scan", "pipeline", "status", "classify"],
+            ),
+            ToolParameter(
+                name="module_path",
+                type="string",
+                description=(
+                    "[classify only] Absolute or relative path to a Python module. "
+                    "Returns TestDecision (tier, concerns, target_folder, "
+                    "required_markers, coverage_floor). CORE-055."
+                ),
+                required=False,
             ),
             ToolParameter(
                 name="workspace_root",
@@ -129,7 +142,7 @@ class CortexHealthOrchestrate(ConsolidatedTool):
 
     @property
     def supported_operations(self) -> List[str]:
-        return ["scan", "pipeline", "status"]
+        return ["scan", "pipeline", "status", "classify"]
 
     # ------------------------------------------------------------------
     # Execution
@@ -171,6 +184,10 @@ class CortexHealthOrchestrate(ConsolidatedTool):
 
         if operation == "status":
             return await self._op_status(handoff)
+
+        if operation == "classify":
+            module_path: str = params.get("module_path", "")
+            return await self._op_classify(module_path)
 
         return ToolResult(
             success=False,
@@ -321,6 +338,47 @@ class CortexHealthOrchestrate(ConsolidatedTool):
                 success=False,
                 data={"error": f"Failed to read handoff: {exc}"},
                 metadata={"operation": "status"},
+            )
+
+    async def _op_classify(self, module_path: str) -> ToolResult:
+        """Classify a module path using TestClassifierOrchestrator (CORE-055).
+
+        Args:
+            module_path: Relative or absolute path to a Python module.
+
+        Returns:
+            ToolResult with tier, concerns, target_folder, required_markers,
+            and coverage_floor.
+        """
+        if not module_path:
+            return ToolResult(
+                success=False,
+                data={"error": "module_path is required for operation=classify"},
+                metadata={"operation": "classify"},
+            )
+        try:
+            from cortex.orchestrators.support.test_classifier_orchestrator import (
+                TestClassifierOrchestrator,
+            )
+            classifier = TestClassifierOrchestrator()
+            decision = classifier.classify(module_path)
+            return ToolResult(
+                success=True,
+                data={
+                    "module_path": module_path,
+                    "tier": decision.tier.value,
+                    "concerns": [c.value for c in decision.concerns],
+                    "target_folder": decision.target_folder,
+                    "required_markers": decision.required_markers,
+                    "coverage_floor": decision.coverage_floor,
+                },
+                metadata={"operation": "classify", "core_rule": "CORE-055"},
+            )
+        except Exception as exc:  # noqa: BLE001
+            return ToolResult(
+                success=False,
+                data={"error": str(exc)},
+                metadata={"operation": "classify"},
             )
 
 

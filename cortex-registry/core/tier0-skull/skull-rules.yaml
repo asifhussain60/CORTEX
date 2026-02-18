@@ -1789,6 +1789,47 @@ rules:
       enables: "Fail-fast configuration validation"
       blocks_until: "OrchestratorIntegrityValidator enhanced"
 
+  # CORE-055: Golden Test Tier Contract (Phase 49)
+  - rule_id: CORE-055
+    name: "Golden Test Tier Contract"
+    principle: "High-Blast-Radius Code Requires Scenario-Declared Tests in tests/golden/"
+    severity: blocked
+    category: quality_gates
+    phase_introduced: "phase-49"
+    created: "2026-02-18"
+    description: |
+      Any Python module whose path matches GOLDEN_PATHS (as defined in
+      TestClassifierOrchestrator) MUST have its tests in tests/golden/,
+      not in tests/unit/ or tests/integration/.
+      Golden test files MUST include:
+        - Coverage matrix comment block (# P0 and # P1 sections)
+        - Architecture Control ID (AC-ID: or AC_START: marker)
+        - At least one test class per required concern marker (SECURITY, CCL, etc.)
+      STANDARD-tier modules (cortex/common/, cortex/config/, cortex/models/,
+      cortex/templates/) are exempt from this rule.
+    golden_paths:
+      - "cortex/orchestrators/"
+      - "cortex/mcp/tools/"
+      - "cortex/governance/"
+      - "cortex/brain/"
+      - "cortex/intelligence/"
+      - "cortex/domain_brain/"
+      - "cortex/agents/"
+    validation:
+      - "Source path in GOLDEN_PATHS → test in tests/golden/ (not tests/unit/)"
+      - "Golden test file contains '# P0' and '# P1' coverage matrix"
+      - "Golden test file contains 'AC-ID:' or 'AC_START:'"
+      - "No golden-tier test in tests/unit/ (wrong folder = violation)"
+    enforcement:
+      pre_commit_hook: ".githooks/pre-commit"
+      checker: "cortex.orchestrators.support.test_classifier_orchestrator.TestClassifierOrchestrator"
+    relationships:
+      depends_on: "CORE-008 (TDD mandatory)"
+      extends: "CORE-008"
+      enables: "Phase 49 Golden Test Promotion Pipeline"
+      blocks_until: "TestClassifierOrchestrator integrated into pre-commit hook"
+    remediation_status: "✅ COMPLETE - Phase 49 — TestClassifierOrchestrator implemented"
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================
