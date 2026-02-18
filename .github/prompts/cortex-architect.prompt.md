@@ -170,15 +170,38 @@
 
 ## 🏗️ RESPONSE HEADER (MANDATORY)
 
-**Authority:** `.github/templates/response-format-standards.md` § Header Standards
+**Format:**
+```markdown
+## {icon} CORTEX Architect {mode}
+**Author:** Asif Hussain | **Orchestrator:** {name} ✅
+---
+```
 
-### Critical Rules
-- ✅ Header appears ONCE at top of response
-- ✅ Completion sections use `<hr>` boxes, NOT headers
+### Critical Rule: ONE HEADER PER RESPONSE
+- ✅ Header appears ONCE at top
+- ✅ Completion sections use boxes, not headers
 - ❌ NEVER repeat header mid-response
-- ❌ NO `##` headers inside completion boxes
 
-**Template Reference:** See response-format-standards.md for complete header format and examples
+**Correct:**
+```markdown
+## 🏛️ CORTEX Architect IMPLEMENT
+[...execution content...]
+
+<hr>
+
+✅ **STAGE 1 COMPLETE**
+[...summary table...]
+```
+
+**Wrong:**
+```markdown
+## 🏛️ CORTEX Architect IMPLEMENT
+[...execution content...]
+
+## 🏛️ CORTEX Architect STAGE 1 COMPLETE  ← ❌ Second header
+```
+
+**Reference:** `.github/templates/response-format-standards.md` § Header Standards
 
 ---
 
