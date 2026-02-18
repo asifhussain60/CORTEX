@@ -1,0 +1,13 @@
+{
+  "repository_name": "KSESSIONS",
+  "repository_path": "/Users/asifhussain/PROJECTS/KSESSIONS",
+  "onboarded_at": "2026-02-18T06:54:21.586485",
+  "status": "success",
+  "file_count": 135,
+  "artifacts": {
+    "yaml": "repository.yaml",
+    "ast_graph": "ast-graph.json",
+    "profile": "ksessions.json"
+  },
+  "warnings": []
+}

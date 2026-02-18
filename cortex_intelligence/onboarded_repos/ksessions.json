@@ -1,15 +1,70 @@
 {
   "name": "KSESSIONS",
   "path": "/Users/asifhussain/PROJECTS/KSESSIONS",
-  "onboarded_at": "2026-02-17T18:00:40.670002",
+  "onboarded_at": "2026-02-18T06:54:21.586485",
   "analysis": {
     "status": "success",
     "repository_path": "/Users/asifhussain/PROJECTS/KSESSIONS",
     "architecture_type": "unknown",
     "patterns_detected": []
   },
-  "learning_metrics": {},
-  "brain_enhancement": {},
+  "learning_metrics": {
+    "total_learnings": 1,
+    "by_orchestrator": {
+      "OnboardingOrchestrator": 1
+    },
+    "cached_learnings": 1,
+    "cache_keys": [
+      "OnboardingOrchestrator:onboarding:/Users/asifhussain/PROJECTS/KSESSIONS"
+    ]
+  },
+  "brain_enhancement": {
+    "patterns_detected": 0,
+    "strategies_recommended": 0,
+    "execution_plan_steps": 4,
+    "detected_patterns": [],
+    "strategies": [],
+    "execution_plan": {
+      "strategy_id": "unknown",
+      "steps": [
+        {
+          "order": 1,
+          "description": "Validate prerequisites",
+          "status": "PENDING",
+          "estimated_duration": "5m",
+          "error_message": null
+        },
+        {
+          "order": 2,
+          "description": "Analyze current state",
+          "status": "PENDING",
+          "estimated_duration": "15m",
+          "error_message": null
+        },
+        {
+          "order": 3,
+          "description": "Execute strategy",
+          "status": "PENDING",
+          "estimated_duration": "30m",
+          "error_message": null
+        },
+        {
+          "order": 4,
+          "description": "Verify results",
+          "status": "PENDING",
+          "estimated_duration": "10m",
+          "error_message": null
+        }
+      ],
+      "estimated_duration": "60m",
+      "context": {
+        "status": "success",
+        "repository_path": "/Users/asifhussain/PROJECTS/KSESSIONS",
+        "architecture_type": "unknown",
+        "patterns_detected": []
+      }
+    }
+  },
   "artifacts": {
     "yaml_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/company/repos/ksessions/repository.yaml",
     "ast_graph_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/company/repos/ksessions/ast-graph.json",
