@@ -303,12 +303,45 @@ context:
     - { id: "EA-008", name: "Observable by Default" }
     - { id: "EA-009", name: "Challenge-First Cognition (NEW — Session 4)" }
     - { id: "EA-010", name: "Token-Efficient Operations (NEW — Session 4)" }
+    - { id: "EA-011", name: "Plan-First Execution with Persistent Memory (NEW — Session 4)" }
+
+  # ============================================================================
+  # INTERACTION ORCHESTRATOR ARCHITECTURE (CONFIRMED)
+  # ============================================================================
+  interaction_orchestrator:
+    status: "CONFIRMED DEFAULT — unchanged, always Stage 1 after MasterOrchestrator"
+    location: "cortex/orchestrators/core/interaction_orchestrator.py"
+    pipeline: |
+      MasterOrchestrator
+        └── InteractionOrchestrator [Stage 1 — ALWAYS DEFAULT]
+              ├── CCL warm-up (LENS + 35+ YAMLs + archive/ plans)
+              └── PlanGateService (enhanced with D10)
+                    ├── pending/  → plan created, awaiting approval
+                    ├── approved/ → plan approved by user (explicit only)
+                    └── archive/  → plan completed, permanent reference
+    plan_locations:
+      pending: "cortex-registry/plans/pending/"
+      approved: "cortex-registry/plans/approved/"
+      archive: "cortex-registry/plans/archive/{YYYY}/{MM}/"
+      ccl_index: "cortex-registry/plans/archive/index.yaml"
+    approval_triggers: ["proceed", "approve", "yes, execute"]
+    auto_archive: true
+    archive_retention: "permanent (never deleted)"
+    ccl_synthesis_days: 90
+    new_components: ["cortex/orchestrators/core/interaction_plan_store.py"]
+    new_orchestrators: 0
+    new_mcp_tools: 0
+    deliverable: "D10 (Phase 00)"
 
   # ============================================================================
   # WHAT TO DO NEXT (CONTINUATION INSTRUCTIONS)
   # ============================================================================
   next_actions:
-    immediate: "Begin Phase 00, Step 1 — TDD RED for capability manifest test"
-    prerequisite: "User says 'proceed' or 'start phase 00'"
+    completed: "Phase 00 Step 1 — TDD RED capability manifest (commit 424528438)"
+    immediate: "Phase 00 Step 2 — TDD RED for test_file_factory.py (D2)"
+    then: "Phase 00 Step 7H — TDD RED for test_interaction_plan_store.py (D10)"
     approach: "TDD-first per CORE-008: write failing test → implement → pass → commit"
+    ea_principles_locked: ["EA-001 through EA-011"]
+    plan_deliverables: ["D1 (done)", "D2-D10 (pending)"]
+
 

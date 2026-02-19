@@ -364,6 +364,95 @@ phase:
         - "Golden test validates response efficiency metrics"
         - "No accuracy degradation (verify_claim still passes all checks)"
 
+    # --------------------------------------------------------------------------
+    # D10: InteractionPlan Persistence, Approval Gate & CCL Archive Synthesis
+    # --------------------------------------------------------------------------
+    - id: "D10"
+      name: "InteractionPlan Store — Persist, Approve, Archive, Synthesize in CCL"
+      description: |
+        Extend PlanGateService with YAML persistence, explicit approval gate,
+        automatic archival, and CCL synthesis of past plans.
+
+        CURRENT STATE (what already exists):
+        - InteractionOrchestrator: Stage 1, LENS-powered, default after MasterOrchestrator ✅
+        - PlanGateService: creates InteractionPlan in-memory ✅
+        - ContextCrystallizationLayer: warms LENS + governance rules — no plan archive ❌
+        - InteractionPlan model: exists — no YAML serialization ❌
+
+        DESIGN (minimal delta, zero new orchestrators):
+
+          MasterOrchestrator
+            └── InteractionOrchestrator [Stage 1 — UNCHANGED, remains default]
+                  ├── CCL (LENS + 35+ YAMLs + archived plans) ← ENHANCED
+                  └── PlanGateService ← ENHANCED
+                        ├── create_plan()
+                        │     └── writes temp YAML → cortex-registry/plans/pending/{plan-id}.yaml
+                        ├── approve_plan()          [EXPLICIT user approval only]
+                        │     ├── moves pending/ → approved/
+                        │     └── triggers execution via MasterOrchestrator
+                        └── archive_plan()          [auto on execution complete]
+                              ├── moves approved/ → archive/{YYYY}/{MM}/{plan-id}.yaml
+                              └── updates CCL past_plans source index
+
+        CCL SYNTHESIS PIPELINE:
+          1. On every turn, CCL reads archive/{YYYY}/{MM}/*.yaml (last 90 days)
+          2. Extracts: intent, steps taken, outcomes, files modified, test results
+          3. Synthesizes into CrystallizedContext.past_plans (CCL field)
+          4. InteractionOrchestrator injects past_plans into per-turn context
+          5. MasterOrchestrator uses past_plans for: dedup detection,
+             regression risk scoring, and avoiding repeated mistakes
+
+        PLAN YAML FORMAT (pending/approved/archive):
+          plan_id, created_at, status, intent, user_request, ccl_context_snapshot,
+          steps[], approved_at (nullable), executed_at (nullable),
+          outcome (nullable), files_modified[], tests_run[], commit_sha
+
+        EXECUTION APPROVAL PROTOCOL:
+          - Plans NEVER auto-execute — always require explicit "proceed" / "approve"
+          - Approval changes status: pending → approved
+          - Execution changes status: approved → executing → completed/failed
+          - Archive happens automatically after completed/failed
+
+        NO NEW ORCHESTRATORS. NO NEW MCP TOOLS.
+        PlanGateService gains persistence. CCL gains archive reader.
+        InteractionOrchestrator wiring is untouched.
+
+      builds_on:
+        - "cortex/orchestrators/core/plan_gate_service.py (existing)"
+        - "cortex/models/interaction_plan.py (existing)"
+        - "cortex/orchestrators/context_crystallization/ (existing CCL)"
+      output_files:
+        - "cortex/orchestrators/core/interaction_plan_store.py"
+        - "cortex/orchestrators/context_crystallization/ccl_core.py (enhanced)"
+        - "cortex-registry/plans/pending/.gitkeep"
+        - "cortex-registry/plans/approved/.gitkeep"
+        - "cortex-registry/plans/archive/.gitkeep"
+      test_files:
+        - "tests/core/test_interaction_plan_store.py"
+      acceptance_criteria:
+        - "InteractionOrchestrator remains default Stage 1 after MasterOrchestrator (unchanged)"
+        - "create_plan() persists YAML to cortex-registry/plans/pending/{plan-id}.yaml"
+        - "Plans NEVER execute without EXPLICIT user approval (proceed/approve keyword)"
+        - "approve_plan() moves pending → approved and triggers execution"
+        - "archive_plan() moves approved → archive/{YYYY}/{MM}/ after completion"
+        - "Archived plans remain permanently (never deleted) for CORTEX memory"
+        - "CCL reads archive/ on every turn — synthesizes past_plans into context"
+        - "InteractionOrchestrator injects past_plans CCL field into per-turn context"
+        - "MasterOrchestrator uses past_plans for regression risk scoring"
+        - "Plan YAML captures: intent, steps, ccl_snapshot, files_modified, commit_sha"
+        - "Zero new orchestrators. Zero new MCP tools."
+        - "All tests pass — zero regression on existing InteractionOrchestrator behavior"
+      plan_store_locations:
+        pending: "cortex-registry/plans/pending/"
+        approved: "cortex-registry/plans/approved/"
+        archive: "cortex-registry/plans/archive/{YYYY}/{MM}/"
+        ccl_index: "cortex-registry/plans/archive/index.yaml"
+      ccl_synthesis:
+        source: "cortex-registry/plans/archive/"
+        retention_days: 90
+        fields_extracted: ["intent", "steps", "outcome", "files_modified", "tests_run", "commit_sha"]
+        injected_as: "CrystallizedContext.past_plans"
+
   # ============================================================================
   # CONSOLIDATION OPPORTUNITIES (Phase 00 specific)
   # ============================================================================
@@ -539,6 +628,36 @@ phase:
       command: "pytest tests/core/test_token_optimizer.py -v"
       expected: "PASS"
 
+    - step: "7H"
+      name: "Write test_interaction_plan_store.py"
+      tdd: "RED — test plan persistence, approval gate, archive, CCL synthesis"
+      file: "tests/core/test_interaction_plan_store.py"
+      command: "pytest tests/core/test_interaction_plan_store.py -v"
+      expected: "FAIL (InteractionPlanStore not yet created)"
+      tests:
+        - "test_create_plan_writes_yaml_to_pending"
+        - "test_pending_plan_does_not_auto_execute"
+        - "test_approve_plan_moves_to_approved"
+        - "test_archive_plan_moves_to_archive_by_year_month"
+        - "test_archive_plan_is_never_deleted"
+        - "test_ccl_reads_archive_and_synthesizes_past_plans"
+        - "test_interaction_orchestrator_injects_past_plans"
+        - "test_plan_yaml_contains_required_fields"
+        - "test_zero_new_orchestrators"
+        - "test_interaction_orchestrator_remains_stage1_default"
+
+    - step: "7I"
+      name: "Implement interaction_plan_store.py + CCL enhancement"
+      tdd: "GREEN — make test_interaction_plan_store.py pass"
+      files:
+        - "cortex/orchestrators/core/interaction_plan_store.py"
+        - "cortex/orchestrators/context_crystallization/ccl_core.py (enhanced)"
+        - "cortex-registry/plans/pending/.gitkeep"
+        - "cortex-registry/plans/approved/.gitkeep"
+        - "cortex-registry/plans/archive/.gitkeep"
+      command: "pytest tests/core/test_interaction_plan_store.py -v"
+      expected: "PASS"
+
     - step: 8
       name: "Wire capability manifest golden test"
       tdd: "GREEN — make test_capability_manifest.py pass"
@@ -569,6 +688,7 @@ phase:
     mcp_consolidation_map_created: true
     challenge_first_wired: true
     token_optimizer_operational: true
+    interaction_plan_store_operational: true
     description: |
       Phase 00 is complete when:
       1. Capability manifest exists and all items are baselined
@@ -582,3 +702,5 @@ phase:
       9. SQLite retention policy YAML created
       10. Challenge-first cognition wired into MasterOrchestrator governance_gate (EA-009)
       11. Token optimization framework operational system-wide (EA-010)
+      12. InteractionPlanStore operational: persist → approve → archive → CCL synthesis (D10)
+      13. InteractionOrchestrator confirmed as default Stage 1 — zero regression

@@ -40,6 +40,9 @@ refactor:
     - "MCP tool count consolidated from 34+ to ~19 cohesive tools (zero capability loss)"
     - "Challenge-first cognition is DEFAULT brain behavior — intrinsic to MasterOrchestrator, never user-specified"
     - "Token-efficient operations system-wide — context compression, response optimization, caching (EA-010)"
+    - "InteractionOrchestrator is ALWAYS the default Stage 1 after MasterOrchestrator — unchanged"
+    - "Every action is plan-first: YAML plan created silently, approved explicitly, archived permanently (EA-011)"
+    - "CCL synthesizes archived plans on every turn — CORTEX has persistent memory of all past work"
 
   # ============================================================================
   # ARCHITECTURAL PRINCIPLES
@@ -219,12 +222,55 @@ refactor:
           tiered_lens_analyzer. ResponseOptimizer exists but not applied
           system-wide. Must be promoted to core infrastructure.
 
+      - id: "EA-011"
+        name: "Plan-First Execution with Persistent Memory"
+        description: |
+          InteractionOrchestrator (Stage 1) silently creates a YAML plan
+          for every non-trivial request. Plans are NEVER auto-executed —
+          they require EXPLICIT user approval ("proceed" / "approve").
+          After execution, plans are automatically archived to
+          cortex-registry/plans/archive/{YYYY}/{MM}/ and NEVER deleted.
+          
+          The archive feeds directly into the CCL (Context Crystallization
+          Layer) on every subsequent turn, giving CORTEX persistent memory
+          of what work was done, what files were modified, what tests ran,
+          and what commits were made. This prevents repeated mistakes and
+          enables accurate regression risk scoring.
+          
+          Pipeline (no new orchestrators, no new MCP tools):
+            MasterOrchestrator
+              └── InteractionOrchestrator [Stage 1 — ALWAYS DEFAULT]
+                    ├── CCL (LENS + 35+ YAMLs + archive/) — warm-up
+                    └── PlanGateService (enhanced)
+                          ├── pending/ → approved/ → archive/
+                          └── CCL re-reads archive/ each turn
+          
+          Explicit approval protocol:
+          - "proceed" | "approve" | "yes, execute" → triggers execution
+          - Any other response → plan remains in pending/, not executed
+          - Approval is ONE-WAY: approved plans cannot be un-approved
+          
+          Archive synthesis in CCL:
+          - Reads last 90 days of archive/*.yaml
+          - Extracts: intent, steps, outcome, files_modified, commit_sha
+          - Injects as CrystallizedContext.past_plans into every turn
+        enforced_by: |
+          InteractionPlanStore.create_plan() writes to pending/.
+          PlanGateService.approve_plan() requires explicit trigger word.
+          PlanGateService.archive_plan() auto-runs after completion.
+          ContextCrystallizationLayer reads archive/ on CCL warm-up.
+        current_gap: |
+          PlanGateService creates plans in-memory only — no persistence.
+          CCL does not read archived plans.
+          Must add InteractionPlanStore (D10) to close both gaps.
+
     quality_pillars:
       extensibility: "Plugin architecture via workflow templates + orchestrator registry"
       scalability: "Event-driven architecture + MCP tool isolation"
       accuracy: "Golden tests + hallucination prevention + verify_claim"
       challenge_first: "Every request evaluated against existing capabilities before action (EA-009)"
       token_efficiency: "Minimal context, maximal accuracy — every token earns its place (EA-010)"
+      plan_first_memory: "Every action is planned, approved, archived, and synthesized into CCL (EA-011)"
       team_collaboration: "Domain boundaries + YAML config + self-documenting code"
       maintainability: "SSOT + zero duplication + capability manifest regression gate"
       security: "Defense in depth + credential protection + governance gates"
