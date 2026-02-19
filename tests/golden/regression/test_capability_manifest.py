@@ -35,7 +35,7 @@ import yaml
 # ==============================================================================
 
 MANIFEST_PATH = Path(__file__).resolve().parents[3] / (
-    "cortex-registry/_cortex-master/phases/planned/gpt-refactor/capability-manifest.yaml"
+    "cortex-registry/planning/phases/planned/cortex-refactor/capability-manifest.yaml"
 )
 
 

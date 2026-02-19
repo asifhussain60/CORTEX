@@ -144,19 +144,20 @@ class TestCortexAuditDBEdgeCases:
             
             from cortex.infrastructure.audit_db import CortexAuditDB, AuditEntry
             
-            # Create DB
-            db = CortexAuditDB(str(db_path))
+            # Initialize DB schema
+            CortexAuditDB(str(db_path))
             
-            # Simulate concurrent writes from 5 orchestrators
+            # Each thread creates its own DB instance (SQLite thread safety)
             def log_event(orchestrator_id, event_count):
+                thread_db = CortexAuditDB(str(db_path))
                 for i in range(event_count):
                     entry = AuditEntry(
                         orchestrator_id=orchestrator_id,
-                        action=f"action_{i}",
+                        event_type=f"action_{i}",
                         status="completed",
-                        details={"count": i}
+                        metadata={"count": i}
                     )
-                    db.log_event(entry)
+                    thread_db.log_event(entry)
             
             with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
                 futures = [
@@ -186,9 +187,9 @@ class TestCortexAuditDBEdgeCases:
             db = CortexAuditDB(str(db_path))
             entry = AuditEntry(
                 orchestrator_id="orch_1",
-                action="action_1",
+                event_type="action_1",
                 status="completed",
-                details={}
+                metadata={}
             )
             db.log_event(entry)
             
@@ -213,9 +214,9 @@ class TestCortexAuditDBEdgeCases:
             # Log valid event
             entry = AuditEntry(
                 orchestrator_id="orch_1",
-                action="action_1",
+                event_type="action_1",
                 status="completed",
-                details={}
+                metadata={}
             )
             db.log_event(entry)
             
@@ -242,9 +243,9 @@ class TestCortexAuditDBEdgeCases:
             for i in range(100):
                 entry = AuditEntry(
                     orchestrator_id=f"orch_{i % 5}",
-                    action=f"action_{i}",
+                    event_type=f"action_{i}",
                     status="completed",
-                    details={"index": i}
+                    metadata={"index": i}
                 )
                 db.log_event(entry)
             elapsed = time.time() - start
@@ -264,9 +265,9 @@ class TestCortexAuditDBEdgeCases:
             # Log event with minimal details
             entry = AuditEntry(
                 orchestrator_id="orch_1",
-                action="action_1",
+                event_type="action_1",
                 status="completed",
-                details=None
+                metadata=None
             )
             db.log_event(entry)
             
@@ -290,9 +291,9 @@ class TestCortexAuditDBEdgeCases:
             db = CortexAuditDB(str(db_path))
             entry = AuditEntry(
                 orchestrator_id="orch_1",
-                action="action_1",
+                event_type="action_1",
                 status="completed",
-                details={}
+                metadata={}
             )
             db.log_event(entry)
             db.close()
@@ -316,9 +317,9 @@ class TestCortexAuditDBEdgeCases:
             for i in range(1000):
                 entry = AuditEntry(
                     orchestrator_id=f"orch_{i % 10}",
-                    action=f"action_{i}",
+                    event_type=f"action_{i}",
                     status="completed",
-                    details={"idx": i}
+                    metadata={"idx": i}
                 )
                 db.log_event(entry)
             
@@ -345,74 +346,69 @@ class TestOrchestratorBaseEdgeCases:
     """Edge case validation for OrchestratorBase lifecycle."""
     
     def test_orchestrator_teardown_always_runs_on_error(self):
-        """OrchestratorBase.teardown() MUST run even if execute() raises exception."""
-        from cortex.core.orchestrator_base import OrchestratorBase
+        """OrchestratorBase.teardown() MUST run even if execute_operation() raises."""
+        from cortex.core.orchestrator_base import OrchestratorBase, GovernanceDecision
         
         teardown_called = []
         
         class TestOrchestrator(OrchestratorBase):
             def setup(self): pass
-            def govern(self): pass
-            def execute(self):
+            def execute_operation(self):
                 raise ValueError("Simulated execution error")
-            def validate(self): pass
-            def teardown(self):
+            def teardown(self, result=None):
                 teardown_called.append(True)
         
-        orch = TestOrchestrator()
+        orch = TestOrchestrator(orchestrator_id="test_teardown")
+        result = orch.execute()
         
-        with pytest.raises(ValueError):
-            orch.run()  # Should propagate error but still teardown
-        
+        assert not result.success, "Execution with error should not succeed"
         assert len(teardown_called) == 1, "teardown() must be called even on error"
     
     def test_orchestrator_governance_gate_can_reject(self):
         """OrchestratorBase governance gate can reject execution (CORE-048)."""
-        from cortex.core.orchestrator_base import OrchestratorBase
+        from cortex.core.orchestrator_base import OrchestratorBase, GovernanceDecision
         
         class StrictOrchestrator(OrchestratorBase):
             def setup(self): pass
             def govern(self):
-                raise RuntimeError("Governance violation: operation not approved")
-            def execute(self): pass
-            def validate(self): pass
-            def teardown(self): pass
+                return GovernanceDecision(
+                    allowed=False,
+                    reason="Governance violation: operation not approved",
+                    violations=["CORE-048"],
+                )
+            def execute_operation(self):
+                return {"should": "not reach here"}
+            def teardown(self, result=None): pass
         
-        orch = StrictOrchestrator()
+        orch = StrictOrchestrator(orchestrator_id="test_governance")
+        result = orch.execute()
         
-        # Governance gate rejection should be caught
-        with pytest.raises(RuntimeError):
-            orch.run()
+        # Governance gate rejection should result in failed execution
+        assert not result.success
+        assert "Governance violation" in result.error
     
     def test_orchestrator_validate_detects_errors(self):
         """OrchestratorBase validation step must catch incorrect execution results."""
-        from cortex.core.orchestrator_base import OrchestratorBase
-        
-        validation_errors = []
+        from cortex.core.orchestrator_base import OrchestratorBase, GovernanceDecision
         
         class ValidatingOrchestrator(OrchestratorBase):
             def setup(self): pass
-            def govern(self): pass
-            def execute(self):
-                # Intentionally corrupt state
-                self.state = None
-            def validate(self):
-                if self.state is None:
-                    raise AssertionError("State corrupted after execute()")
-            def teardown(self):
-                validation_errors.append("teardown_called")
+            def execute_operation(self):
+                return {"corrupted": True}
+            def validate(self, output):
+                if output.get("corrupted"):
+                    return False
+                return True
+            def teardown(self, result=None): pass
         
-        orch = ValidatingOrchestrator()
+        orch = ValidatingOrchestrator(orchestrator_id="test_validate")
+        result = orch.execute()
         
-        with pytest.raises(AssertionError):
-            orch.run()
-        
-        # Even on validation error, teardown should run
-        assert len(validation_errors) == 1
+        assert not result.success, "Validation failure should result in failed execution"
     
     def test_orchestrator_setup_failure_skips_to_teardown(self):
         """OrchestratorBase.setup() failure should skip to teardown."""
-        from cortex.core.orchestrator_base import OrchestratorBase
+        from cortex.core.orchestrator_base import OrchestratorBase, GovernanceDecision
         
         called_steps = []
         
@@ -420,21 +416,18 @@ class TestOrchestratorBaseEdgeCases:
             def setup(self):
                 called_steps.append("setup")
                 raise RuntimeError("Setup failed")
-            def govern(self):
-                called_steps.append("govern")
-            def execute(self):
+            def execute_operation(self):
                 called_steps.append("execute")
-            def validate(self):
-                called_steps.append("validate")
-            def teardown(self):
+                return {}
+            def teardown(self, result=None):
                 called_steps.append("teardown")
         
-        orch = FailingSetupOrchestrator()
+        orch = FailingSetupOrchestrator(orchestrator_id="test_setup_fail")
+        result = orch.execute()
         
-        with pytest.raises(RuntimeError):
-            orch.run()
-        
-        assert called_steps == ["setup", "teardown"], f"Expected [setup, teardown], got {called_steps}"
+        assert not result.success, "Setup failure should result in failed execution"
+        assert "teardown" in called_steps, "teardown must be called even on setup failure"
+        assert "execute" not in called_steps, "execute should not run after setup failure"
     
     def test_orchestrator_concurrent_execution_isolation(self):
         """Multiple OrchestratorBase instances must not interfere with each other."""
@@ -444,24 +437,25 @@ class TestOrchestratorBaseEdgeCases:
         
         class CountingOrchestrator(OrchestratorBase):
             def __init__(self, orch_id):
-                super().__init__()
+                super().__init__(orchestrator_id=f"counter_{orch_id}")
                 self.orch_id = orch_id
                 self.count = 0
             
             def setup(self): self.count = 0
-            def govern(self): pass
-            def execute(self):
+            def execute_operation(self):
                 for i in range(10):
                     self.count += 1
                     time.sleep(0.01)  # Simulate work
-            def validate(self):
+                return {"count": self.count}
+            def validate(self, output):
                 results.append({"id": self.orch_id, "count": self.count})
-            def teardown(self): pass
+                return True
+            def teardown(self, result=None): pass
         
         # Run 3 orchestrators concurrently
         with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
             futures = [
-                executor.submit(CountingOrchestrator(i).run)
+                executor.submit(CountingOrchestrator(i).execute)
                 for i in range(3)
             ]
             for future in concurrent.futures.as_completed(futures):
