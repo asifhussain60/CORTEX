@@ -6,7 +6,7 @@ AC_START: AC-PHASE67-S1-TYPE-RESOLVER-TEST-001
 
 import pytest
 from pathlib import Path
-from cortex_lens.dotnet.type_symbol_resolver import TypeSymbolResolver
+from cortex.intelligence.lens.dotnet.type_symbol_resolver import TypeSymbolResolver
 
 
 @pytest.fixture

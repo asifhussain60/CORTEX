@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional
 
 from cortex.brain.core.orchestrator_base import OrchestrationContext, OrchestratorBase
 from cortex.domain_brain.api import Domain, DomainBrainAPI, Entity
-from cortex_intelligence.domain_brain.domain_brain_models import EntityType
+from cortex.intelligence.domain_brain.domain_brain_models import EntityType
 
 
 class DocumentFormat(str, Enum):
@@ -222,7 +222,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
             # Detect description conflict
             if existing.description and description and existing.description != description:
                 # Create conflict record
-                from cortex_intelligence.domain_brain.domain_brain_models import Conflict
+                from cortex.intelligence.domain_brain.domain_brain_models import Conflict
                 conflict = Conflict(
                     conflict_id=f"conflict-{entity_id}-desc",
                     domain_id=domain.domain_id,

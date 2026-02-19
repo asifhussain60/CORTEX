@@ -40,10 +40,10 @@ class TestTierDirectoryStructure:
             "Tier 2 (Engineering) governance directory missing"
 
     def test_memory_tier_directories_exist(self):
-        """Memory tiers must exist in cortex_intelligence."""
-        memory_path = Path("cortex_intelligence/memory")
+        """Memory tiers must exist in cortex/intelligence (Phase 3 consolidation)."""
+        memory_path = Path("cortex/intelligence/memory")
         
-        # New clarified names
+        # New clarified names (migrated from cortex_intelligence to cortex/intelligence)
         assert (memory_path / "learned_patterns").exists() or \
                (memory_path / "tier1_learned").exists(), \
             "Learned patterns memory tier missing"
@@ -74,7 +74,7 @@ class TestTierPrecedenceConsistency:
 
     def test_precedence_yaml_matches_tier_resolver(self):
         """precedence.yaml must match TierResolver implementation."""
-        precedence_path = Path("cortex_intelligence/governance/precedence.yaml")
+        precedence_path = Path("cortex/intelligence/governance/precedence.yaml")
         
         if precedence_path.exists():
             with open(precedence_path) as f:
@@ -239,7 +239,7 @@ class TestTierSystemSeparation:
 
     def test_memory_tiers_in_intelligence(self):
         """Memory tiers should be in cortex_intelligence/memory."""
-        memory_path = Path("cortex_intelligence/memory")
+        memory_path = Path("cortex/intelligence/memory")
         
         assert memory_path.exists(), \
             "Memory tier directory must exist"
@@ -255,7 +255,7 @@ class TestTierSystemSeparation:
     def test_no_tier_mixing(self):
         """Governance and memory tier files should not be mixed."""
         # Governance rules should not be in memory/
-        memory_path = Path("cortex_intelligence/memory")
+        memory_path = Path("cortex/intelligence/memory")
         if memory_path.exists():
             skull_files = list(memory_path.rglob("*skull*.yaml"))
             assert len(skull_files) == 0, \
@@ -275,7 +275,7 @@ class TestTierArchitectureDocumentation:
 
     def test_tier_system_documented_in_init(self):
         """cortex_intelligence.__init__.py should document tier system."""
-        init_file = Path("cortex_intelligence/__init__.py")
+        init_file = Path("cortex/intelligence/__init__.py")
         
         if init_file.exists():
             content = init_file.read_text()
@@ -286,7 +286,7 @@ class TestTierArchitectureDocumentation:
 
     def test_precedence_yaml_has_explanation(self):
         """precedence.yaml should have clear explanation."""
-        precedence_path = Path("cortex_intelligence/governance/precedence.yaml")
+        precedence_path = Path("cortex/intelligence/governance/precedence.yaml")
         
         if precedence_path.exists():
             with open(precedence_path) as f:
@@ -306,7 +306,7 @@ class TestTierArchitectureIntegrity:
     def test_no_contradictory_precedence(self):
         """System should not have contradictory precedence definitions."""
         # Check precedence.yaml
-        precedence_path = Path("cortex_intelligence/governance/precedence.yaml")
+        precedence_path = Path("cortex/intelligence/governance/precedence.yaml")
         yaml_precedence = None
         
         if precedence_path.exists():
@@ -332,7 +332,7 @@ class TestTierArchitectureIntegrity:
         # This is OK as long as they're separate
         
         governance_path = Path("cortex-registry/core")
-        memory_path = Path("cortex_intelligence/memory")
+        memory_path = Path("cortex/intelligence/memory")
         
         # Both should exist
         assert governance_path.exists() or memory_path.exists(), \
@@ -386,7 +386,7 @@ def test_brain_tier_architecture_summary():
         issues.append("❌ Governance tier directories missing at registry level")
     
     # 2. Check precedence consistency
-    precedence_path = Path("cortex_intelligence/governance/precedence.yaml")
+    precedence_path = Path("cortex/intelligence/governance/precedence.yaml")
     if precedence_path.exists():
         with open(precedence_path) as f:
             config = yaml.safe_load(f)
@@ -409,7 +409,7 @@ def test_brain_tier_architecture_summary():
     # 5. Check BrainTierPusher paths
     pusher = BrainTierPusher()
     for tier, path_str in pusher.TIER_PATHS.items():
-        if "cortex_intelligence/tier" in path_str and not Path(path_str).exists():
+        if "cortex/intelligence/tier" in path_str and not Path(path_str).exists():
             issues.append(f"❌ BrainTierPusher tier {tier} points to non-existent: {path_str}")
     
     # Report all issues

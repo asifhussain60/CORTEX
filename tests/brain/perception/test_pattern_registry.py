@@ -20,7 +20,7 @@ from typing import Any, Dict, List
 
 import pytest
 
-from cortex_intelligence.perception.pattern_registry import (
+from cortex.intelligence.perception.pattern_registry import (
     PatternRegistry,
     RegisteredPattern,
     PatternMatch,

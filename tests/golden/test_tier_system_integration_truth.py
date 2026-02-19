@@ -146,9 +146,9 @@ class TestTierValidationGates:
         ]
         
         required_memory_tiers = [
-            "cortex_intelligence/memory/learned_patterns",
-            "cortex_intelligence/memory/adaptive_intelligence",
-            "cortex_intelligence/memory/scratch_space"
+            "cortex/intelligence/memory/learned_patterns",
+            "cortex/intelligence/memory/adaptive_intelligence",
+            "cortex/intelligence/memory/scratch_space"
         ]
         
         # At least some should exist after Phase 105
@@ -225,12 +225,12 @@ class TestEndToEndTierWorkflows:
         
         # Memory tiers (1, 2, 3)
         memory_exists = any([
-            Path("cortex_intelligence/memory/tier1_learned").exists(),
-            Path("cortex_intelligence/memory/tier2_adaptive").exists(),
-            Path("cortex_intelligence/memory/tier3_scratch").exists(),
-            Path("cortex_intelligence/memory/learned_patterns").exists(),
-            Path("cortex_intelligence/memory/adaptive_intelligence").exists(),
-            Path("cortex_intelligence/memory/scratch_space").exists()
+            Path("cortex/intelligence/memory/tier1_learned").exists(),
+            Path("cortex/intelligence/memory/tier2_adaptive").exists(),
+            Path("cortex/intelligence/memory/tier3_scratch").exists(),
+            Path("cortex/intelligence/memory/learned_patterns").exists(),
+            Path("cortex/intelligence/memory/adaptive_intelligence").exists(),
+            Path("cortex/intelligence/memory/scratch_space").exists()
         ])
         
         # At least one system should exist
@@ -240,7 +240,7 @@ class TestEndToEndTierWorkflows:
         # If both exist, they should be separate
         if governance_exists and memory_exists:
             # No SKULL rules in memory
-            memory_path = Path("cortex_intelligence/memory")
+            memory_path = Path("cortex/intelligence/memory")
             if memory_path.exists():
                 skull_in_memory = list(memory_path.rglob("*skull*.yaml"))
                 assert len(skull_in_memory) == 0, \

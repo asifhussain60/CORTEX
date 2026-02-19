@@ -16,7 +16,7 @@ class TestDeadCodeDetector:
     
     def test_detect_untested_functions(self):
         """Test detecting functions with zero test coverage"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         coverage_data = {
             "cortex/module.py": {
@@ -36,7 +36,7 @@ class TestDeadCodeDetector:
     
     def test_detect_uncalled_functions(self):
         """Test detecting functions never called in execution"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         execution_data = {
             "cortex/module.py": {
@@ -55,7 +55,7 @@ class TestDeadCodeDetector:
     
     def test_identify_dead_code_candidates(self):
         """Test identifying dead code (untested + uncalled)"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         coverage_data = {
             "cortex/old_module.py": {
@@ -84,7 +84,7 @@ class TestDeadCodeDetector:
     
     def test_detect_unused_imports(self):
         """Test detecting imported but unused modules"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         import_data = {
             "cortex/module.py": {
@@ -101,7 +101,7 @@ class TestDeadCodeDetector:
     
     def test_identify_redundant_code(self):
         """Test identifying redundant/duplicate code"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         code_signatures = [
             {"file": "a.py", "function": "func_a", "signature_hash": "abc123"},
@@ -120,7 +120,7 @@ class TestDeadCodeDetector:
     
     def test_calculate_dead_code_score(self):
         """Test calculating dead code severity score"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         function_data = {
             "coverage_percent": 0.0,
@@ -138,7 +138,7 @@ class TestDeadCodeDetector:
     
     def test_prioritize_removal_candidates(self):
         """Test prioritizing dead code for removal"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         candidates = [
             {"name": "func_a", "coverage": 0.0, "calls": 0, "age_days": 30, "complexity": 5},
@@ -155,7 +155,7 @@ class TestDeadCodeDetector:
     
     def test_detect_deprecated_patterns(self):
         """Test detecting deprecated code patterns"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         code_patterns = [
             {"file": "old.py", "pattern": "eval()", "line": 10, "severity": "high"},
@@ -170,7 +170,7 @@ class TestDeadCodeDetector:
     
     def test_build_removal_impact_analysis(self):
         """Test analyzing impact of removing dead code"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         candidate = {
             "file": "cortex/old_module.py",
@@ -188,7 +188,7 @@ class TestDeadCodeDetector:
     
     def test_generate_removal_recommendations(self):
         """Test generating actionable removal recommendations"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         dead_code = [
             {"file": "a.py", "function": "old_a", "score": 0.95, "safe_to_remove": True},
@@ -211,7 +211,7 @@ class TestDeadCodeDetectorIntegration:
     
     def test_end_to_end_dead_code_detection(self):
         """Test complete dead code detection workflow"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         coverage_data = {
             "cortex/old.py": {
@@ -252,7 +252,7 @@ class TestDeadCodeDetectorIntegration:
     
     def test_comprehensive_dead_code_analysis(self):
         """Test comprehensive analysis with all detection methods"""
-        from cortex_lens.runtime_correlation.dead_code_detector import DeadCodeDetector
+        from cortex.intelligence.lens.runtime_correlation.dead_code_detector import DeadCodeDetector
         
         # Full dataset
         coverage_data = {

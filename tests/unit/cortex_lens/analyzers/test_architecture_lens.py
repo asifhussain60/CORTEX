@@ -115,7 +115,7 @@ class TestArchitectureLens:
     
     def test_detect_mvc_pattern(self, temp_repo):
         """Test detection of MVC architectural pattern"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(temp_repo)
         report = lens.analyze()
@@ -132,7 +132,7 @@ class TestArchitectureLens:
     
     def test_detect_repository_pattern(self, temp_repo):
         """Test detection of Repository pattern"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(temp_repo)
         report = lens.analyze()
@@ -147,7 +147,7 @@ class TestArchitectureLens:
     
     def test_detect_layering_violation_upward(self, temp_repo):
         """Test detection of upward layering violations (Controller → Repository direct)"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(temp_repo)
         report = lens.analyze()
@@ -167,7 +167,7 @@ class TestArchitectureLens:
     
     def test_detect_circular_dependency(self, circular_repo):
         """Test detection of circular dependencies"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(circular_repo)
         report = lens.analyze()
@@ -188,7 +188,7 @@ class TestArchitectureLens:
     
     def test_component_hierarchy_mapping(self, temp_repo):
         """Test mapping of component hierarchy"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(temp_repo)
         report = lens.analyze()
@@ -207,7 +207,7 @@ class TestArchitectureLens:
     
     def test_architecture_report_generation(self, temp_repo):
         """Test generation of architecture report with all sections"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(temp_repo)
         report = lens.analyze()
@@ -225,7 +225,7 @@ class TestArchitectureLens:
     
     def test_severity_scoring(self, temp_repo):
         """Test severity scoring for violations"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(temp_repo)
         report = lens.analyze()
@@ -242,7 +242,7 @@ class TestArchitectureLens:
     
     def test_integration_cortex_codebase_analysis(self):
         """Integration test: Analyze actual CORTEX codebase for known patterns"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         # Analyze CORTEX codebase (if running in CORTEX repo)
         cortex_path = Path.cwd()
@@ -276,7 +276,7 @@ class TestArchitectureReport:
     
     def test_report_creation(self):
         """Test ArchitectureReport dataclass creation"""
-        from cortex_lens.models.architecture_report import ArchitectureReport
+        from cortex.intelligence.lens.models.architecture_report import ArchitectureReport
         
         report = ArchitectureReport(
             repo_path=Path("/test"),
@@ -294,7 +294,7 @@ class TestArchitectureReport:
     
     def test_report_to_dict_export(self):
         """Test ArchitectureReport JSON export"""
-        from cortex_lens.models.architecture_report import ArchitectureReport
+        from cortex.intelligence.lens.models.architecture_report import ArchitectureReport
         
         report = ArchitectureReport(
             repo_path=Path("/test"),
@@ -315,7 +315,7 @@ class TestArchitectureReport:
     
     def test_report_violation_summary(self):
         """Test violation summary generation"""
-        from cortex_lens.models.architecture_report import ArchitectureReport
+        from cortex.intelligence.lens.models.architecture_report import ArchitectureReport
         
         report = ArchitectureReport(
             repo_path=Path("/test"),
@@ -375,7 +375,7 @@ class TestDependencyGraphBuilder:
     
     def test_build_import_graph(self, temp_repo):
         """Test building import dependency graph from Python files"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(temp_repo)
         report = lens.analyze()
@@ -391,7 +391,7 @@ class TestDependencyGraphBuilder:
     
     def test_detect_upward_dependencies(self, temp_repo):
         """Test detection of upward dependencies (anti-pattern)"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(temp_repo)
         report = lens.analyze()
@@ -403,7 +403,7 @@ class TestDependencyGraphBuilder:
     
     def test_cycle_detection_dfs(self, circular_repo):
         """Test cycle detection using DFS algorithm"""
-        from cortex_lens.analyzers.architecture_lens import ArchitectureLens
+        from cortex.intelligence.lens.analyzers.architecture_lens import ArchitectureLens
         
         lens = ArchitectureLens(circular_repo)
         report = lens.analyze()

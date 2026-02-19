@@ -1,0 +1,217 @@
+demands:
+- audit_requirements: []
+  blocks: []
+  category: silent_operation
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 1 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: YAML file exists, no console output, audit trail logged
+  id: INTERACTIONORCHESTRATOR-DEMAND-001
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 1
+  scenario: "User invokes InteractionOrchestrator.execute() \u2192 YAML file created"
+  title: 'Silent operation: InteractionOrchestrator creates YAML without console output'
+  validation_rules:
+    audit_marker: AC_INTERACTIONORCHESTRATOR_EXECUTE
+    file_pattern: interactionorchestrator_*.yaml
+  validation_type: file_system
+- audit_requirements: []
+  blocks: []
+  category: silent_operation
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 2 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: YAML file exists, no console output, audit trail logged
+  id: INTERACTIONORCHESTRATOR-DEMAND-002
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 1
+  scenario: "User invokes InteractionOrchestrator.execute() \u2192 YAML file created"
+  title: 'Silent operation: InteractionOrchestrator creates YAML without console output'
+  validation_rules:
+    audit_marker: AC_INTERACTIONORCHESTRATOR_EXECUTE
+    file_pattern: interactionorchestrator_*.yaml
+  validation_type: file_system
+- audit_requirements: []
+  blocks: []
+  category: silent_operation
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 3 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: YAML file exists, no console output, audit trail logged
+  id: INTERACTIONORCHESTRATOR-DEMAND-003
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 1
+  scenario: "User invokes InteractionOrchestrator.execute() \u2192 YAML file created"
+  title: 'Silent operation: InteractionOrchestrator creates YAML without console output'
+  validation_rules:
+    audit_marker: AC_INTERACTIONORCHESTRATOR_EXECUTE
+    file_pattern: interactionorchestrator_*.yaml
+  validation_type: file_system
+- audit_requirements: []
+  blocks: []
+  category: context_synthesis
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 4 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: 'Context dict has keys: lens_data, git_history, registry_entry'
+  id: INTERACTIONORCHESTRATOR-DEMAND-004
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 2
+  scenario: InteractionOrchestrator loads context from 3 sources
+  title: 'Context synthesis: InteractionOrchestrator merges LENS + Git + Registry'
+  validation_rules:
+    required_keys:
+    - lens_data
+    - git_history
+    - registry_entry
+  validation_type: output_structure
+- audit_requirements: []
+  blocks: []
+  category: context_synthesis
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 5 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: 'Context dict has keys: lens_data, git_history, registry_entry'
+  id: INTERACTIONORCHESTRATOR-DEMAND-005
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 2
+  scenario: InteractionOrchestrator loads context from 3 sources
+  title: 'Context synthesis: InteractionOrchestrator merges LENS + Git + Registry'
+  validation_rules:
+    required_keys:
+    - lens_data
+    - git_history
+    - registry_entry
+  validation_type: output_structure
+- audit_requirements: []
+  blocks: []
+  category: gate_enforcement
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 6 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Execution stops, error returned, no partial state
+  id: INTERACTIONORCHESTRATOR-DEMAND-006
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 1
+  scenario: InteractionOrchestrator encounters failing DoD check
+  title: 'Gate enforcement: InteractionOrchestrator blocks on DoD failure'
+  validation_rules:
+    expected_error: DoD_CHECK_FAILED
+    no_partial_writes: true
+  validation_type: execution_path
+- audit_requirements: []
+  blocks: []
+  category: gate_enforcement
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 7 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Execution stops, error returned, no partial state
+  id: INTERACTIONORCHESTRATOR-DEMAND-007
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 1
+  scenario: InteractionOrchestrator encounters failing DoD check
+  title: 'Gate enforcement: InteractionOrchestrator blocks on DoD failure'
+  validation_rules:
+    expected_error: DoD_CHECK_FAILED
+    no_partial_writes: true
+  validation_type: execution_path
+- audit_requirements: []
+  blocks: []
+  category: template_quality
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 8 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Response contains no code snippets, uses domain terms
+  id: INTERACTIONORCHESTRATOR-DEMAND-008
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 2
+  scenario: InteractionOrchestrator.execute() returns formatted response
+  title: 'Template quality: InteractionOrchestrator response uses business language'
+  validation_rules:
+    domain_terms_present: true
+    no_code_markers:
+    - '```'
+    - 'def '
+    - 'class '
+  validation_type: output_structure
+- audit_requirements: []
+  blocks: []
+  category: error_recovery
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 9 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Graceful failure, error logged, cleanup performed
+  id: INTERACTIONORCHESTRATOR-DEMAND-009
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 2
+  scenario: InteractionOrchestrator.execute() when dependency unavailable
+  title: 'Error recovery: InteractionOrchestrator handles missing dependencies'
+  validation_rules:
+    cleanup_marker: AC_INTERACTIONORCHESTRATOR_CLEANUP
+    error_logged: true
+  validation_type: audit_log
+- audit_requirements: []
+  blocks: []
+  category: integration_coupling
+  complexity: medium
+  coverage_percentage: 0.0
+  created_at: '2026-02-13'
+  depends_on: []
+  description: Generated demand 10 for InteractionOrchestrator
+  estimated_test_lines: 25
+  expected_behavior: Event {spec.name.upper()}_COMPLETE published
+  id: INTERACTIONORCHESTRATOR-DEMAND-010
+  is_golden_path: false
+  orchestrator: InteractionOrchestrator
+  priority: 2
+  scenario: InteractionOrchestrator.execute() completes successfully
+  title: 'Integration: InteractionOrchestrator publishes events to EventBus'
+  validation_rules:
+    event_data_keys:
+    - orchestrator
+    - status
+    - duration
+    event_type: INTERACTIONORCHESTRATOR_COMPLETE
+  validation_type: event_emission
+orchestrator: InteractionOrchestrator
+summary:
+  coverage: 0.0
+  generated_at: '2026-02-13'
+  total_demands: 10
+  total_test_code_lines: 250

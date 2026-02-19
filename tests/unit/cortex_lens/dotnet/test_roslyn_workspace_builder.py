@@ -12,7 +12,7 @@ import shutil
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex_lens.dotnet.roslyn_workspace_builder import RoslynWorkspaceBuilder
+from cortex.intelligence.lens.dotnet.roslyn_workspace_builder import RoslynWorkspaceBuilder
 
 
 @pytest.fixture

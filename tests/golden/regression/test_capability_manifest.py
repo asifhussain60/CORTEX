@@ -301,7 +301,7 @@ class TestIntelligenceLive:
                 from cortex.lens.analyzers import workspace_analyzer
                 assert workspace_analyzer is not None
             except ImportError:
-                from cortex_lens.analyzers import workspace_analyzer
+                from cortex.intelligence.lens.analyzers import workspace_analyzer
                 assert workspace_analyzer is not None
         except ImportError:
             pytest.skip("LENS analyzer not yet at canonical location")

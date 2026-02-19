@@ -23,7 +23,7 @@ from unittest.mock import Mock, patch, MagicMock
 import pytest
 
 # Tests assume implementation in cortex_intelligence/tier0/macos_path_compat.py
-from cortex_intelligence.memory.core.macos_path_compat import MacOSPathCompatibility
+from cortex.intelligence.memory.core.macos_path_compat import MacOSPathCompatibility
 
 
 class TestMacOSSymlinkResolution:

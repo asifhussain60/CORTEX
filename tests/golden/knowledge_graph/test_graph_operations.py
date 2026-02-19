@@ -13,7 +13,7 @@ class TestKnowledgeGraphConstruction:
     
     def test_create_graph_from_python_file(self, tmp_path: Path) -> None:
         """Golden: Create knowledge graph nodes from Python AST."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -37,7 +37,7 @@ def multiply(x, y):
     
     def test_graph_relationships(self, tmp_path: Path) -> None:
         """Golden: Capture relationships between code entities."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -59,7 +59,7 @@ class User:
     
     def test_cross_file_dependencies(self, tmp_path: Path) -> None:
         """Golden: Detect imports and cross-file dependencies."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -82,8 +82,8 @@ class TestSemanticSearch:
     
     def test_search_by_name(self, tmp_path: Path) -> None:
         """Golden: Search for code entities by name."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.semantic_search import SemanticSearchEngine
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.semantic_search import SemanticSearchEngine
         
         builder = ASTKnowledgeGraphBuilder()
         code_path = tmp_path / "app.py"
@@ -107,8 +107,8 @@ def process_order(order):
     
     def test_search_by_pattern(self, tmp_path: Path) -> None:
         """Golden: Search for architectural patterns."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.semantic_search import SemanticSearchEngine
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.semantic_search import SemanticSearchEngine
         
         builder = ASTKnowledgeGraphBuilder()
         code_path = tmp_path / "service.py"
@@ -188,8 +188,8 @@ class TestGraphPerformance:
     def test_search_performance(self, tmp_path: Path) -> None:
         """Golden: Search completes within 500ms."""
         import time
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.semantic_search import SemanticSearchEngine
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.semantic_search import SemanticSearchEngine
         
         builder = ASTKnowledgeGraphBuilder()
         

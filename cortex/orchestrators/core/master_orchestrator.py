@@ -68,7 +68,7 @@ from cortex.mcp.decorators import mcp_tool
 
 # AC-UX-VISIBILITY-001: Import orchestrator context decorator
 from cortex.orchestrators.decorators import inject_orchestrator_context
-from cortex_intelligence.memory.tier2_adaptive.hallucination_prevention import BehavioralBoundaryRules
+from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention import BehavioralBoundaryRules
 
 # AC-PHASE-2-5-WIRE-003: Import AdaptiveRouter for intelligent task routing
 # Use IntelligentKnowledgeRouter as the canonical implementation
@@ -415,7 +415,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
 
         # AC-PHASE-2-5-WIRE-002: Initialize GracefulDegradationFramework for resilience
         # Import from cortex_intelligence to avoid circular imports in cortex.brain.tier2
-        from cortex_intelligence.memory.tier2_adaptive.resilience import GracefulDegradationFramework
+        from cortex.intelligence.memory.tier2_adaptive.resilience import GracefulDegradationFramework
         self._graceful_degradation = GracefulDegradationFramework()
         self.logger.log_operation_complete(
             ac_id="AC-PHASE-2-5-WIRE-002",

@@ -35,7 +35,7 @@ class Expert:
 @pytest.fixture(scope="module")
 def expert_registry():
     """Create expert registry instance for tests."""
-    from cortex_intelligence.tier3.knowledge.expert_registry import ExpertRegistry
+    from cortex.intelligence.tier3.knowledge.expert_registry import ExpertRegistry
     return ExpertRegistry()
 
 

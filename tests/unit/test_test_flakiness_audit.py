@@ -18,7 +18,7 @@ from typing import List, Dict, Optional
 from datetime import datetime
 
 # RED Phase: These imports will fail until the implementation exists
-from cortex_intelligence.memory.core.test_flakiness_audit import TestFlakinessAudit
+from cortex.intelligence.memory.core.test_flakiness_audit import TestFlakinessAudit
 
 
 class TestFlakinessDetection(unittest.TestCase):

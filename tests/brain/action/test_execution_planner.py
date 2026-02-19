@@ -20,7 +20,7 @@ from typing import Any, Dict, List
 
 import pytest
 
-from cortex_intelligence.action.execution_planner import (
+from cortex.intelligence.action.execution_planner import (
     ExecutionPlanner,
     ExecutionPlan,
     ExecutionStep,

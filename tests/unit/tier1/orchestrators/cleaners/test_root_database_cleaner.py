@@ -25,8 +25,8 @@ from typing import Dict, Any
 import tempfile
 import shutil
 
-from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners.root_database import RootDatabaseCleaner
-from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners import Analysis, Report, RollbackResult
+from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.root_database import RootDatabaseCleaner
+from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners import Analysis, Report, RollbackResult
 
 
 @pytest.fixture

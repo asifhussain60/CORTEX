@@ -18,7 +18,7 @@ from cortex.domain_brain import (
     ConsistencyValidator,
     AuditLogger,
 )
-from cortex_intelligence.domain_brain.domain_brain_models import EntityType, ConflictResolution, AuditOperationType
+from cortex.intelligence.domain_brain.domain_brain_models import EntityType, ConflictResolution, AuditOperationType
 
 
 class TestDomainBrainAPI:

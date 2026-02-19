@@ -17,7 +17,7 @@ class TestGlossaryGenerator:
     
     def test_entity_extraction_from_classes(self):
         """Test extracting entities from class definitions"""
-        from cortex_lens.domain_inference.glossary_generator import GlossaryGenerator
+        from cortex.intelligence.lens.domain_inference.glossary_generator import GlossaryGenerator
         
         code = '''
 class User(BaseModel):
@@ -49,7 +49,7 @@ class Order(BaseModel):
     
     def test_relationship_detection(self):
         """Test detecting relationships between entities"""
-        from cortex_lens.domain_inference.glossary_generator import GlossaryGenerator
+        from cortex.intelligence.lens.domain_inference.glossary_generator import GlossaryGenerator
         
         code = '''
 class Order(BaseModel):
@@ -69,7 +69,7 @@ class Order(BaseModel):
     
     def test_verb_extraction_from_methods(self):
         """Test extracting domain verbs (use cases) from methods"""
-        from cortex_lens.domain_inference.glossary_generator import GlossaryGenerator
+        from cortex.intelligence.lens.domain_inference.glossary_generator import GlossaryGenerator
         
         code = '''
 class UserService:
@@ -96,7 +96,7 @@ class UserService:
     
     def test_lifecycle_stages_detection(self):
         """Test detecting entity lifecycle stages"""
-        from cortex_lens.domain_inference.glossary_generator import GlossaryGenerator
+        from cortex.intelligence.lens.domain_inference.glossary_generator import GlossaryGenerator
         
         # Code with state transitions
         code = '''
@@ -119,7 +119,7 @@ class Phase(BaseModel):
     
     def test_glossary_generation(self):
         """Test generating complete domain glossary"""
-        from cortex_lens.domain_inference.glossary_generator import GlossaryGenerator
+        from cortex.intelligence.lens.domain_inference.glossary_generator import GlossaryGenerator
         
         entities = [
             {"name": "User", "description": "System user", "attributes": ["id", "name"]},
@@ -147,7 +147,7 @@ class Phase(BaseModel):
     
     def test_confidence_scoring(self):
         """Test confidence scoring for glossary entries"""
-        from cortex_lens.domain_inference.glossary_generator import GlossaryGenerator
+        from cortex.intelligence.lens.domain_inference.glossary_generator import GlossaryGenerator
         
         # Strong signals: documented, has attributes, has relationships
         strong_entity = {
@@ -179,7 +179,7 @@ class TestGlossaryGeneratorIntegration:
     
     def test_cortex_glossary_generation(self):
         """Test generating glossary for CORTEX domain"""
-        from cortex_lens.domain_inference.glossary_generator import GlossaryGenerator
+        from cortex.intelligence.lens.domain_inference.glossary_generator import GlossaryGenerator
         from pathlib import Path
         
         generator = GlossaryGenerator()

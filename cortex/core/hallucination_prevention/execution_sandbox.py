@@ -6,6 +6,6 @@ NOTE: Wrapped import - module may have incomplete definitions (ExecutionState is
 """
 
 try:
-    from cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.execution_sandbox import *  # noqa: F401, F403
+    from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention.execution_sandbox import *  # noqa: F401, F403
 except (ImportError, NameError):
     pass

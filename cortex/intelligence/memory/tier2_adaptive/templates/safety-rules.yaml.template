@@ -1,0 +1,20 @@
+# Safety Rules Template
+# Generated: 2026-01-21
+# Tier: tier2 (safety and compliance rules)
+#
+# This template defines safety and compliance rules.
+# These rules help prevent hallucinations and ensure compliance.
+
+metadata:
+  template_version: "1.0.0"
+  tier: 2
+  description: "Safety and compliance rules"
+  extends: "tier1/domain-rules.yaml"
+
+rules: []
+  # Example safety rule:
+  # - id: "SAFE-001"
+  #   severity: "CRITICAL"
+  #   description: "Prevent hallucinated file paths"
+  #   condition: "action.creates_file"
+  #   action: "validate_path_exists"

@@ -322,7 +322,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
     def _ensure_profile_store(self):
         """Lazy-load ProfileStore."""
         if self._profile_store is None:
-            from cortex_intelligence.onboarded_repos.profile_store import ProfileStore
+            from cortex.intelligence.onboarded_repos.profile_store import ProfileStore
             self._profile_store = ProfileStore()
         return self._profile_store
 

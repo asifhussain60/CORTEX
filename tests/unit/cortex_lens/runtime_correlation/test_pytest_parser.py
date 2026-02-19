@@ -18,7 +18,7 @@ class TestPytestParser:
     
     def test_parse_test_results(self):
         """Test parsing basic test results from pytest JSON"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         json_data = {
             "tests": [
@@ -57,7 +57,7 @@ class TestPytestParser:
     
     def test_extract_test_file_mapping(self):
         """Test extracting test → source file relationships"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         json_data = {
             "tests": [
@@ -83,7 +83,7 @@ class TestPytestParser:
     
     def test_parse_call_chain(self):
         """Test extracting call chains from pytest output"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         # Simulate pytest traceback with call chain
         traceback_data = {
@@ -117,7 +117,7 @@ class TestPytestParser:
     
     def test_extract_test_fixtures(self):
         """Test extracting fixture dependencies"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         json_data = {
             "tests": [
@@ -151,7 +151,7 @@ class TestPytestParser:
     
     def test_aggregate_test_statistics(self):
         """Test aggregating test execution statistics"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         json_data = {
             "tests": [
@@ -181,7 +181,7 @@ class TestPytestParser:
     
     def test_parse_parametrized_tests(self):
         """Test parsing parametrized test results"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         json_data = {
             "tests": [
@@ -208,7 +208,7 @@ class TestPytestParser:
     
     def test_detect_flaky_tests(self):
         """Test detecting flaky tests from multiple runs"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         # Simulate multiple test runs
         run1 = {"tests": [{"nodeid": "tests/test_net.py::test_api", "outcome": "passed"}]}
@@ -224,7 +224,7 @@ class TestPytestParser:
     
     def test_extract_test_markers(self):
         """Test extracting pytest markers (slow, integration, etc.)"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         json_data = {
             "tests": [
@@ -246,7 +246,7 @@ class TestPytestParser:
     
     def test_build_test_dependency_graph(self):
         """Test building test dependency graph from execution order"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         json_data = {
             "tests": [
@@ -277,7 +277,7 @@ class TestPytestParserIntegration:
     
     def test_parse_cortex_test_output(self):
         """Test parsing actual CORTEX pytest output"""
-        from cortex_lens.runtime_correlation.pytest_parser import PytestParser
+        from cortex.intelligence.lens.runtime_correlation.pytest_parser import PytestParser
         
         # Simulate realistic CORTEX test output
         cortex_json = {

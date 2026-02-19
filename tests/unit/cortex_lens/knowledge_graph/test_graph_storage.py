@@ -31,7 +31,7 @@ class TestGraphStorage:
     
     def test_graph_schema_validation(self, temp_db):
         """Test graph schema creation and validation"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -58,7 +58,7 @@ class TestGraphStorage:
     
     def test_node_insertion(self, temp_db):
         """Test inserting nodes into graph"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -82,7 +82,7 @@ class TestGraphStorage:
     
     def test_edge_insertion(self, temp_db):
         """Test inserting edges between nodes"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -111,7 +111,7 @@ class TestGraphStorage:
     
     def test_query_1hop_relationships(self, temp_db):
         """Test querying 1-hop relationships from a node"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -134,7 +134,7 @@ class TestGraphStorage:
     
     def test_query_2hop_relationships(self, temp_db):
         """Test querying 2-hop relationships from a node"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -158,7 +158,7 @@ class TestGraphStorage:
     def test_query_performance_100ms(self, temp_db):
         """Test query performance meets <100ms SLA"""
         import time
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -184,7 +184,7 @@ class TestGraphStorage:
     
     def test_incremental_update_file_change(self, temp_db):
         """Test incremental graph update when file changes"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -202,7 +202,7 @@ class TestGraphStorage:
     
     def test_graph_serialization(self, temp_db):
         """Test graph serialization to JSON for export"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -225,7 +225,7 @@ class TestGraphStorage:
     
     def test_node_deletion(self, temp_db):
         """Test deleting nodes and cascade edges"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -246,7 +246,7 @@ class TestGraphStorage:
     def test_bulk_insert_performance(self, temp_db):
         """Test bulk insertion performance"""
         import time
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -266,7 +266,7 @@ class TestGraphStorage:
     
     def test_query_by_node_type(self, temp_db):
         """Test querying nodes by type"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()
@@ -307,7 +307,7 @@ class TestGraphQuery:
         with tempfile.NamedTemporaryFile(suffix=".db", delete=False) as tmp:
             db_path = Path(tmp.name)
         
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         storage = GraphStorage(db_path)
         storage.initialize_schema()
         
@@ -336,7 +336,7 @@ class TestGraphQuery:
     def test_traverse_single_edge_type(self, populated_db):
         """Test traversal filtering by edge type"""
         db_path, storage = populated_db
-        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        from cortex.intelligence.lens.knowledge_graph.graph_query import GraphQuery
         
         query = GraphQuery(storage)
         
@@ -360,7 +360,7 @@ class TestGraphQuery:
     def test_traverse_multiple_hops(self, populated_db):
         """Test multi-hop traversal"""
         db_path, storage = populated_db
-        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        from cortex.intelligence.lens.knowledge_graph.graph_query import GraphQuery
         
         query = GraphQuery(storage)
         
@@ -382,7 +382,7 @@ class TestGraphQuery:
     def test_find_path_between_nodes(self, populated_db):
         """Test finding path between two nodes"""
         db_path, storage = populated_db
-        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        from cortex.intelligence.lens.knowledge_graph.graph_query import GraphQuery
         
         query = GraphQuery(storage)
         
@@ -430,7 +430,7 @@ class TestGraphQuery:
     def test_find_callers(self, populated_db):
         """Test finding callers of a function by name"""
         db_path, storage = populated_db
-        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        from cortex.intelligence.lens.knowledge_graph.graph_query import GraphQuery
         
         query = GraphQuery(storage)
         
@@ -445,7 +445,7 @@ class TestGraphQuery:
     def test_find_callers_no_matches(self, populated_db):
         """Test find_callers with non-existent target"""
         db_path, storage = populated_db
-        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        from cortex.intelligence.lens.knowledge_graph.graph_query import GraphQuery
         
         query = GraphQuery(storage)
         
@@ -456,8 +456,8 @@ class TestGraphQuery:
     
     def test_find_callers_deduplication(self, temp_db):
         """Test that find_callers deduplicates results"""
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
-        from cortex_lens.knowledge_graph.graph_query import GraphQuery
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.knowledge_graph.graph_query import GraphQuery
         
         storage = GraphStorage(temp_db)
         storage.initialize_schema()

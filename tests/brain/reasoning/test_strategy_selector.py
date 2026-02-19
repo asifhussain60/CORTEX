@@ -20,7 +20,7 @@ from typing import Any, Dict, List
 
 import pytest
 
-from cortex_intelligence.reasoning.strategy_selector import (
+from cortex.intelligence.reasoning.strategy_selector import (
     StrategySelector,
     Strategy,
     StrategyRecommendation,

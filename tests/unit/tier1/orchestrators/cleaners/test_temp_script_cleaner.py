@@ -12,7 +12,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 from unittest.mock import patch, MagicMock
 
-from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners.temp_script import (
+from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.temp_script import (
     TempScriptCleaner,
 )
 
@@ -247,7 +247,7 @@ class TestTempScriptCleanerRollback:
         cleaner = TempScriptCleaner(config)
         
         # Create mock report
-        from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners.base import Report
+        from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.base import Report
         mock_report = Report(
             cleaner_id="TempScriptCleaner",
             timestamp=datetime.now().isoformat(),

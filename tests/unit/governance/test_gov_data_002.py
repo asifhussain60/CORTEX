@@ -3,7 +3,7 @@ import pytest
 from datetime import datetime, timedelta
 
 try:
-    from cortex_intelligence.memory.tier2_adaptive import (
+    from cortex.intelligence.memory.tier2_adaptive import (
         RetentionManager,
         DataRetentionPolicy,
         RetentionPeriod,

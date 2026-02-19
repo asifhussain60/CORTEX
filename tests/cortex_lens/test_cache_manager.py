@@ -17,7 +17,7 @@ import pytest
 
 # Fix: Import from correct package path
 try:
-    from cortex_lens.backend.cache_manager import CacheManager, CacheEntry, get_cache_manager
+    from cortex.intelligence.lens.backend.cache_manager import CacheManager, CacheEntry, get_cache_manager
 except ImportError:
     pytest.skip("cortex_lens backend module not available", allow_module_level=True)
 

@@ -2,7 +2,7 @@
 import pytest
 
 try:
-    from cortex_intelligence.memory.tier2_adaptive import (
+    from cortex.intelligence.memory.tier2_adaptive import (
         ScopeManager,
         ScopeItem,
         ScopeStatus,

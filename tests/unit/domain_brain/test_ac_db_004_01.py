@@ -16,7 +16,7 @@ from cortex.domain_brain.lens_integration import (
     LENSSynthesis,
 )
 from cortex.domain_brain.api import DomainBrainAPI
-from cortex_intelligence.domain_brain.domain_brain_models import Domain, Entity, Conflict, EntityType
+from cortex.intelligence.domain_brain.domain_brain_models import Domain, Entity, Conflict, EntityType
 import uuid
 
 

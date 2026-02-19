@@ -11,7 +11,7 @@ import pytest
 from datetime import datetime, timedelta
 import time
 
-from cortex_intelligence.domain_brain.domain_brain_models import (
+from cortex.intelligence.domain_brain.domain_brain_models import (
     Domain,
     Entity,
     EntityType,

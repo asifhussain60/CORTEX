@@ -469,7 +469,7 @@ class TestSandboxIntegration:
         
         Verify that boundary rules are enforced within sandbox.
         """
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             BehavioralBoundaryRules,
             BoundaryViolation,
         )
@@ -499,7 +499,7 @@ class TestSandboxIntegration:
         
         Verify that canonicalized intents execute correctly in sandbox.
         """
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             ExtendedIntentCanonicalizer,
         )
         

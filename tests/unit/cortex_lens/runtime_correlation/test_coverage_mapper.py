@@ -17,7 +17,7 @@ class TestCoverageMapper:
     
     def test_parse_coverage_data(self):
         """Test parsing pytest-cov coverage data"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         coverage_data = {
             "files": {
@@ -46,7 +46,7 @@ class TestCoverageMapper:
     
     def test_map_tests_to_coverage(self):
         """Test mapping tests to their coverage footprint"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         test_results = [
             {"test_id": "tests/test_orchestrator.py::test_process", "outcome": "passed"},
@@ -73,7 +73,7 @@ class TestCoverageMapper:
     
     def test_identify_uncovered_lines(self):
         """Test identifying uncovered lines in files"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         coverage_data = {
             "files": {
@@ -95,7 +95,7 @@ class TestCoverageMapper:
     
     def test_calculate_file_coverage_score(self):
         """Test calculating coverage score for files"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         file_coverage = {
             "covered_lines": 45,
@@ -111,7 +111,7 @@ class TestCoverageMapper:
     
     def test_aggregate_coverage_by_module(self):
         """Test aggregating coverage statistics by module"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         coverage_data = {
             "files": {
@@ -139,7 +139,7 @@ class TestCoverageMapper:
     
     def test_detect_critical_uncovered_paths(self):
         """Test detecting critical paths with low coverage"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         coverage_data = {
             "files": {
@@ -161,7 +161,7 @@ class TestCoverageMapper:
     
     def test_build_coverage_graph_edges(self):
         """Test building graph edges from coverage data"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         test_coverage = {
             "tests/test_orchestrator.py::test_process": {
@@ -178,7 +178,7 @@ class TestCoverageMapper:
     
     def test_identify_test_gaps(self):
         """Test identifying files with insufficient test coverage"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         coverage_data = {
             "files": {
@@ -200,7 +200,7 @@ class TestCoverageMapper:
     
     def test_calculate_test_redundancy(self):
         """Test detecting redundant tests (same coverage footprint)"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         test_coverage = {
             "tests/test_a.py::test_1": {
@@ -229,7 +229,7 @@ class TestCoverageMapper:
     
     def test_map_coverage_to_functions(self):
         """Test mapping coverage to individual functions"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         coverage_data = {
             "files": {
@@ -264,7 +264,7 @@ class TestCoverageMapperIntegration:
     
     def test_end_to_end_coverage_analysis(self):
         """Test complete coverage analysis workflow"""
-        from cortex_lens.runtime_correlation.coverage_mapper import CoverageMapper
+        from cortex.intelligence.lens.runtime_correlation.coverage_mapper import CoverageMapper
         
         coverage_data = {
             "files": {

@@ -13,8 +13,8 @@ class TestGraphQueries:
     
     def test_find_all_functions(self, tmp_path: Path) -> None:
         """Golden: Query all functions in graph."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.query_interface import QueryInterface
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.query_interface import QueryInterface
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -38,8 +38,8 @@ class Calculator:
     
     def test_find_classes_with_methods(self, tmp_path: Path) -> None:
         """Golden: Query classes and their methods."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.query_interface import QueryInterface
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.query_interface import QueryInterface
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -63,8 +63,8 @@ class User:
     
     def test_find_dependencies(self, tmp_path: Path) -> None:
         """Golden: Query import dependencies."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.query_interface import QueryInterface
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.query_interface import QueryInterface
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -88,8 +88,8 @@ class TestGraphVisualization:
     
     def test_generate_dependency_graph(self, tmp_path: Path) -> None:
         """Golden: Generate interactive dependency graph."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.visualizer import GraphVisualizer
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.visualizer import GraphVisualizer
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -110,8 +110,8 @@ class TestGraphVisualization:
     
     def test_generate_class_diagram(self, tmp_path: Path) -> None:
         """Golden: Generate class diagram."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.visualizer import GraphVisualizer
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.visualizer import GraphVisualizer
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -137,8 +137,8 @@ class Admin:
     
     def test_generate_call_graph(self, tmp_path: Path) -> None:
         """Golden: Generate function call graph."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.visualizer import GraphVisualizer
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.visualizer import GraphVisualizer
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -171,8 +171,8 @@ class TestGraphExport:
     def test_export_to_json(self, tmp_path: Path) -> None:
         """Golden: Export graph as JSON."""
         import json
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.exporter import GraphExporter
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.exporter import GraphExporter
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -192,8 +192,8 @@ class TestGraphExport:
     
     def test_export_to_graphml(self, tmp_path: Path) -> None:
         """Golden: Export graph as GraphML."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.exporter import GraphExporter
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.exporter import GraphExporter
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -213,8 +213,8 @@ class TestGraphExport:
     def test_export_to_cytoscape(self, tmp_path: Path) -> None:
         """Golden: Export graph for Cytoscape."""
         import json
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.exporter import GraphExporter
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.exporter import GraphExporter
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -238,8 +238,8 @@ class TestGraphMetrics:
     
     def test_calculate_complexity(self, tmp_path: Path) -> None:
         """Golden: Calculate cyclomatic complexity."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.metrics import GraphMetrics
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.metrics import GraphMetrics
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -263,8 +263,8 @@ def complex_function(x):
     
     def test_calculate_centrality(self, tmp_path: Path) -> None:
         """Golden: Calculate node centrality."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.metrics import GraphMetrics
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.metrics import GraphMetrics
         
         builder = ASTKnowledgeGraphBuilder()
         
@@ -284,8 +284,8 @@ def complex_function(x):
     
     def test_detect_hotspots(self, tmp_path: Path) -> None:
         """Golden: Detect code hotspots."""
-        from cortex_lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
-        from cortex_lens.knowledge_graph.metrics import GraphMetrics
+        from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import ASTKnowledgeGraphBuilder
+        from cortex.intelligence.lens.knowledge_graph.metrics import GraphMetrics
         
         builder = ASTKnowledgeGraphBuilder()
         

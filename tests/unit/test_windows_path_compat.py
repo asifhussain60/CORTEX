@@ -39,7 +39,7 @@ class TestWindowsDriveLetters:
 
     def test_valid_drive_letters(self) -> None:
         """Test that all valid drive letters (A-Z) are recognized."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
@@ -48,7 +48,7 @@ class TestWindowsDriveLetters:
 
     def test_lowercase_drive_letters(self) -> None:
         """Test that lowercase drive letters are accepted and normalized."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "c:\\test\\path"
@@ -58,7 +58,7 @@ class TestWindowsDriveLetters:
 
     def test_invalid_drive_characters(self) -> None:
         """Test that non-letter drive characters are rejected."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         invalid_paths = ["1:\\test", "@:\\test", "_:\\test"]
@@ -67,7 +67,7 @@ class TestWindowsDriveLetters:
 
     def test_missing_drive_letter(self) -> None:
         """Test that paths without drive letters are handled appropriately."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "\\test\\path"
@@ -80,7 +80,7 @@ class TestUNCPathSupport:
 
     def test_valid_unc_path(self) -> None:
         """Test that valid UNC paths are recognized."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         unc_path = "\\\\server\\share\\file.txt"
@@ -88,7 +88,7 @@ class TestUNCPathSupport:
 
     def test_unc_path_normalization(self) -> None:
         """Test that UNC paths are normalized correctly."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         unc_path = "//server/share/file.txt"
@@ -97,7 +97,7 @@ class TestUNCPathSupport:
 
     def test_unc_path_with_spaces(self) -> None:
         """Test UNC paths containing spaces."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         unc_path = "\\\\server name\\share folder\\file.txt"
@@ -105,7 +105,7 @@ class TestUNCPathSupport:
 
     def test_invalid_unc_path(self) -> None:
         """Test that invalid UNC paths are rejected."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         invalid = "\\\\\\invalid"  # Too many backslashes
@@ -119,7 +119,7 @@ class TestReservedNames:
 
     def test_reserved_name_detection(self) -> None:
         """Test detection of reserved names (CON, PRN, AUX, NUL, COM1-9, LPT1-9)."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         reserved_names = [
@@ -133,7 +133,7 @@ class TestReservedNames:
 
     def test_reserved_name_with_extension(self) -> None:
         """Test that reserved names with extensions are still reserved."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "C:\\CON.txt"
@@ -142,7 +142,7 @@ class TestReservedNames:
 
     def test_non_reserved_names(self) -> None:
         """Test that non-reserved names are not flagged."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "C:\\myfile.txt"
@@ -155,7 +155,7 @@ class TestPathNormalization:
 
     def test_forward_slash_normalization(self) -> None:
         """Test that forward slashes are converted to backslashes."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "C:/test/path/file.txt"
@@ -165,7 +165,7 @@ class TestPathNormalization:
 
     def test_mixed_slash_normalization(self) -> None:
         """Test that mixed slashes are normalized consistently."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "C:\\test/mixed\\path/file.txt"
@@ -177,7 +177,7 @@ class TestPathNormalization:
 
     def test_double_backslash_normalization(self) -> None:
         """Test that double backslashes are normalized."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "C:\\\\test\\\\path"
@@ -191,7 +191,7 @@ class TestCaseInsensitivity:
 
     def test_case_insensitive_comparison(self) -> None:
         """Test that paths are compared case-insensitively."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path1 = "C:\\Test\\File.txt"
@@ -203,7 +203,7 @@ class TestCaseInsensitivity:
 
     def test_uppercase_drive_letter(self) -> None:
         """Test that drive letters are uppercase after normalization."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "c:\\test\\path"
@@ -216,7 +216,7 @@ class TestEnvironmentVariables:
 
     def test_expand_userprofile(self) -> None:
         """Test expansion of %USERPROFILE% variable."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "%USERPROFILE%\\Documents\\file.txt"
@@ -225,7 +225,7 @@ class TestEnvironmentVariables:
 
     def test_expand_windir(self) -> None:
         """Test expansion of %WINDIR% variable."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "%WINDIR%\\System32\\file.txt"
@@ -234,7 +234,7 @@ class TestEnvironmentVariables:
 
     def test_expand_temp(self) -> None:
         """Test expansion of %TEMP% variable."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "%TEMP%\\tempfile.txt"
@@ -243,7 +243,7 @@ class TestEnvironmentVariables:
 
     def test_no_expansion_needed(self) -> None:
         """Test paths without environment variables."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "C:\\Users\\test\\file.txt"
@@ -256,7 +256,7 @@ class TestPathEncoding:
 
     def test_utf8_path(self) -> None:
         """Test UTF-8 encoded paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "C:\\тест\\файл.txt"  # Cyrillic characters
@@ -264,7 +264,7 @@ class TestPathEncoding:
 
     def test_ascii_path(self) -> None:
         """Test ASCII path validation."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "C:\\test\\file.txt"
@@ -272,7 +272,7 @@ class TestPathEncoding:
 
     def test_unicode_path(self) -> None:
         """Test Unicode paths with emoji characters."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "C:\\test\\📁\\file.txt"
@@ -285,7 +285,7 @@ class TestLongPathSupport:
 
     def test_long_path_detection(self) -> None:
         """Test detection of paths exceeding 260 characters."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         # Create a path longer than 260 characters
@@ -295,7 +295,7 @@ class TestLongPathSupport:
 
     def test_long_path_normalization(self) -> None:
         """Test normalization of long paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         long_path = "C:\\" + "dir\\" * 100 + "file.txt"
@@ -304,7 +304,7 @@ class TestLongPathSupport:
 
     def test_long_path_prefixing(self) -> None:
         """Test that long paths are prefixed with \\\\?\\ when needed."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         long_path = "C:\\" + "directory\\" * 50 + "file.txt"
@@ -318,7 +318,7 @@ class TestSpecialCharacters:
 
     def test_invalid_characters(self) -> None:
         """Test detection of invalid characters in paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         # Windows disallows: < > : " | ? * in filenames
@@ -338,7 +338,7 @@ class TestSpecialCharacters:
 
     def test_valid_special_characters(self) -> None:
         """Test that valid special characters are allowed."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         valid_paths = [
@@ -357,7 +357,7 @@ class TestShortnames:
 
     def test_shortname_detection(self) -> None:
         """Test detection of 8.3 shortnames."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         shortname = "C:\\PROGRA~1\\file.txt"  # Program Files in 8.3 format
@@ -366,7 +366,7 @@ class TestShortnames:
 
     def test_shortname_expansion(self) -> None:
         """Test expansion of 8.3 shortnames."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         shortname = "C:\\PROGRA~1\\MYAPP~1"
@@ -380,7 +380,7 @@ class TestNetworkPaths:
 
     def test_network_drive_path(self) -> None:
         """Test handling of mapped network drives."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         network_path = "Z:\\network\\share\\file.txt"
@@ -388,7 +388,7 @@ class TestNetworkPaths:
 
     def test_network_drive_normalization(self) -> None:
         """Test normalization of network drive paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         network_path = "Z:/network/share/file.txt"
@@ -401,7 +401,7 @@ class TestJunctionPoints:
 
     def test_junction_point_path_format(self) -> None:
         """Test that junction point paths are formatted correctly."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         # Junction points look like normal directories but point elsewhere
@@ -411,7 +411,7 @@ class TestJunctionPoints:
 
     def test_resolve_junction_target(self) -> None:
         """Test attempting to resolve junction point targets."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         junction_path = "C:\\Users\\Default"
@@ -425,70 +425,70 @@ class TestCoverageTips:
     
     def test_empty_path_validation(self) -> None:
         """Test validation of empty paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.validate_path("") is False
     
     def test_empty_path_normalization(self) -> None:
         """Test normalization of empty paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.normalize_path("") == ""
     
     def test_empty_path_env_expansion(self) -> None:
         """Test environment variable expansion on empty paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.expand_environment_vars("") == ""
     
     def test_empty_path_reserved_names(self) -> None:
         """Test reserved names handling on empty paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.handle_reserved_names("") == ""
     
     def test_empty_path_long_paths(self) -> None:
         """Test long path support on empty paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.support_long_paths("") == ""
     
     def test_empty_path_shortnames(self) -> None:
         """Test shortname support on empty paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.support_shortnames("") == ""
     
     def test_empty_path_junction_points(self) -> None:
         """Test junction point handling on empty paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.handle_junction_points("") == ""
     
     def test_unc_path_with_single_separator(self) -> None:
         """Test UNC path with single separator doesn't validate."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.validate_path("\\\\server") is False
     
     def test_unc_path_with_missing_share(self) -> None:
         """Test UNC path with missing share name doesn't validate."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.validate_path("\\\\server\\") is False
     
     def test_normalize_unc_with_forward_slashes(self) -> None:
         """Test normalization of UNC paths with forward slashes."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         result = compat.normalize_path("//server/share/file.txt")
@@ -496,14 +496,14 @@ class TestCoverageTips:
     
     def test_colon_in_filename_is_invalid(self) -> None:
         """Test that colon in filename (not drive letter) is invalid."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         assert compat.validate_path("C:\\file:name.txt") is False
     
     def test_multiple_environment_variables(self) -> None:
         """Test expansion of multiple environment variables."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         os.environ["TEST_A"] = "/a"
@@ -514,7 +514,7 @@ class TestCoverageTips:
     
     def test_nonexistent_environment_variable(self) -> None:
         """Test that nonexistent environment variables remain unchanged."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         path = "%NONEXISTENT_VAR_12345%\\file.txt"
@@ -523,7 +523,7 @@ class TestCoverageTips:
     
     def test_shortname_not_detected_in_normal_path(self) -> None:
         """Test that normal paths don't trigger shortname detection."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         normal_path = "C:\\Program Files\\MyApp"
@@ -532,7 +532,7 @@ class TestCoverageTips:
     
     def test_long_path_relative_path(self) -> None:
         """Test long path support on relative paths."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         long_relative = "dir\\" * 100 + "file.txt"
@@ -541,7 +541,7 @@ class TestCoverageTips:
     
     def test_normalize_mixed_separators_in_unc(self) -> None:
         """Test normalization of UNC path with mixed separators."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         
         compat = WindowsPathCompatibility()
         mixed_unc = "\\\\server/share\\file"
@@ -551,7 +551,7 @@ class TestCoverageTips:
     
     def test_thread_safety_concurrent_access(self) -> None:
         """Test thread-safe access to path compatibility methods."""
-        from cortex_intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
+        from cortex.intelligence.memory.core.windows_path_compat import WindowsPathCompatibility
         import threading
         
         compat = WindowsPathCompatibility()

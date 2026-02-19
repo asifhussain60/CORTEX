@@ -5,7 +5,7 @@ AC_START: AC-PHASE67-S1-METHOD-ANALYZER-TEST-001
 """
 
 import pytest
-from cortex_lens.dotnet.method_signature_analyzer import MethodSignatureAnalyzer
+from cortex.intelligence.lens.dotnet.method_signature_analyzer import MethodSignatureAnalyzer
 
 
 @pytest.fixture

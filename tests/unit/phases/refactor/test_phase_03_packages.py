@@ -28,17 +28,28 @@ class TestPackageConsolidationTargets:
     """Test package consolidation targets are properly identified."""
     
     def test_three_packages_exist(self) -> None:
-        """Test: All 3 source packages exist before consolidation."""
-        packages = [
-            Path("/Users/asifhussain/PROJECTS/CORTEX/cortex"),
-            Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_intelligence"),
-            Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_lens"),
-        ]
+        """Test: Consolidation complete - target packages exist, old packages archived."""
+        # After GREEN phase: old packages should be archived, target should exist
+        cortex_target = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex")
+        cortex_intelligence_target = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence")
+        cortex_lens_target = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence/lens")
         
-        for pkg in packages:
-            assert pkg.exists(), f"Package {pkg.name} must exist"
-            # Check if it's a package (may not have __init__.py in cortex_lens case)
-            assert pkg.is_dir(), f"Package {pkg.name} must be a directory"
+        # Target packages should exist
+        assert cortex_target.exists(), "cortex/ must exist"
+        assert cortex_intelligence_target.exists(), "cortex/intelligence/ must exist"
+        assert cortex_lens_target.exists(), "cortex/intelligence/lens/ must exist"
+        
+        # Old packages should be archived
+        cortex_intelligence_old = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_intelligence")
+        cortex_lens_old = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_lens")
+        assert not cortex_intelligence_old.exists(), "cortex_intelligence/ should be archived"
+        assert not cortex_lens_old.exists(), "cortex_lens/ should be archived"
+        
+        # Backup archives should exist
+        backup_intelligence = Path("/Users/asifhussain/PROJECTS/CORTEX/_archive/packages/cortex_intelligence_backup")
+        backup_lens = Path("/Users/asifhussain/PROJECTS/CORTEX/_archive/packages/cortex_lens_backup")
+        assert backup_intelligence.exists(), "cortex_intelligence backup must exist in _archive/"
+        assert backup_lens.exists(), "cortex_lens backup must exist in _archive/"
     
     def test_package_hierarchies_valid(self) -> None:
         """Test: Each package has valid module structure."""

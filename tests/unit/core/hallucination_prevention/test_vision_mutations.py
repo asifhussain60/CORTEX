@@ -25,7 +25,7 @@ import uuid
 import json
 
 try:
-    from cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.mutation_tracking import VisionMutation
+    from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention.mutation_tracking import VisionMutation
 except (ImportError, AttributeError):
     pass  # Skipped anyway
 

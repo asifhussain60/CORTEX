@@ -17,7 +17,7 @@ class TestPatternAnalyzer:
     
     def test_domain_clustering_by_prefix(self):
         """Test clustering classes by shared naming prefixes"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         
         # Mock AST nodes representing classes
         class_names = [
@@ -45,7 +45,7 @@ class TestPatternAnalyzer:
     
     def test_aggregate_root_detection(self):
         """Test identifying aggregate roots in domain clusters"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         
         # Mock domain cluster with typical DDD patterns
         user_cluster = {
@@ -62,7 +62,7 @@ class TestPatternAnalyzer:
     
     def test_repository_pattern_detection(self):
         """Test detecting repository pattern in codebase"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         
         # Mock class definitions
         classes = [
@@ -87,7 +87,7 @@ class TestPatternAnalyzer:
     
     def test_service_pattern_detection(self):
         """Test detecting service layer pattern"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         
         classes = [
             {
@@ -110,7 +110,7 @@ class TestPatternAnalyzer:
     
     def test_domain_boundary_detection(self):
         """Test identifying bounded context boundaries"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         
         # Mock module structure
         modules = {
@@ -130,7 +130,7 @@ class TestPatternAnalyzer:
     
     def test_naming_convention_analysis(self):
         """Test analyzing naming conventions in domain"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         
         class_names = [
             "UserRepository",
@@ -148,7 +148,7 @@ class TestPatternAnalyzer:
     
     def test_dependency_coupling_analysis(self):
         """Test analyzing coupling between domain clusters"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         
         # Mock import relationships
         imports = {
@@ -171,7 +171,7 @@ class TestPatternAnalyzer:
     
     def test_confidence_scoring(self):
         """Test confidence scoring for domain inferences"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         
         # Strong signals: prefix match + repository + service
         strong_cluster = {
@@ -201,7 +201,7 @@ class TestPatternAnalyzer:
     
     def test_cortex_domain_detection(self):
         """Test detecting actual CORTEX domains from codebase"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         from pathlib import Path
         
         analyzer = PatternAnalyzer()
@@ -222,7 +222,7 @@ class TestPatternAnalyzer:
     
     def test_pattern_confidence_validation(self):
         """Test that confidence scores are properly validated"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
         
         analyzer = PatternAnalyzer()
         
@@ -238,8 +238,8 @@ class TestDomainClusteringIntegration:
     
     def test_clustering_with_graph_data(self):
         """Test clustering using real graph node data"""
-        from cortex_lens.domain_inference.pattern_analyzer import PatternAnalyzer
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.domain_inference.pattern_analyzer import PatternAnalyzer
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         import tempfile
         
         # Create temporary graph

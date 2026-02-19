@@ -51,7 +51,7 @@ class TestBoundaryEnforcementIntegration:
         
         Tests existing BehavioralBoundaryRules.check_phase_lock() method.
         """
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             BehavioralBoundaryRules, BoundaryViolation, ViolationType
         )
         
@@ -72,7 +72,7 @@ class TestBoundaryEnforcementIntegration:
     
     def test_boundary_allows_query_on_locked_phase(self):
         """QUERY operations should be allowed on locked phases."""
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             BehavioralBoundaryRules
         )
         
@@ -93,7 +93,7 @@ class TestBoundaryEnforcementIntegration:
         
         Tests existing BehavioralBoundaryRules.check_ac_deletion() method.
         """
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             BehavioralBoundaryRules, BoundaryViolation, ViolationType
         )
         
@@ -113,7 +113,7 @@ class TestBoundaryEnforcementIntegration:
     
     def test_ac_deletion_with_valid_approval(self):
         """AC deletion with valid approval should be allowed."""
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             BehavioralBoundaryRules
         )
         from datetime import datetime, timedelta
@@ -288,7 +288,7 @@ class TestPathResolution:
     
     def test_behavioral_boundaries_uses_relative_db_path(self):
         """BehavioralBoundaryRules should use relative DB path, not absolute."""
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             BehavioralBoundaryRules
         )
         import inspect
@@ -336,7 +336,7 @@ class TestACStatusTracking:
     
     def test_boundary_rules_has_violation_logging(self):
         """BehavioralBoundaryRules should log violations to database."""
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             BehavioralBoundaryRules
         )
         import inspect
@@ -349,7 +349,7 @@ class TestACStatusTracking:
     
     def test_boundary_violation_has_audit_fields(self):
         """BoundaryViolation should have fields for audit trail."""
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             BoundaryViolation, ViolationType
         )
         
@@ -372,7 +372,7 @@ class TestACStatusTracking:
     
     def test_violation_types_cover_all_scenarios(self):
         """ViolationType enum should cover all boundary scenarios."""
-        from cortex_intelligence.memory.tier2_adaptive import ViolationType
+        from cortex.intelligence.memory.tier2_adaptive import ViolationType
         
         expected_types = [
             'LOCKED_PHASE_MODIFICATION',
@@ -394,7 +394,7 @@ class TestHallucinationPreventionIntegration:
     
     def test_boundary_rules_check_phase_lock_flow(self):
         """Test complete flow of phase lock checking."""
-        from cortex_intelligence.memory.tier2_adaptive import (
+        from cortex.intelligence.memory.tier2_adaptive import (
             BehavioralBoundaryRules, BoundaryViolation, ViolationType
         )
         

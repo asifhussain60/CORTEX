@@ -5,7 +5,7 @@ AC_START: AC-PHASE67-S1-ATTRIBUTE-EXTRACTOR-TEST-001
 """
 
 import pytest
-from cortex_lens.dotnet.attribute_data_extractor import AttributeDataExtractor
+from cortex.intelligence.lens.dotnet.attribute_data_extractor import AttributeDataExtractor
 
 
 @pytest.fixture

@@ -60,7 +60,7 @@ class TestBrainTierPusherPaths:
             # 2. Be in cortex_intelligence/memory/ (memory)
             # 3. NOT be in cortex_intelligence/tier0, tier1, tier2 (unless they exist)
             
-            if "cortex_intelligence/tier" in path_str:
+            if "cortex/intelligence/tier" in path_str:
                 # This is the problematic pattern
                 path = Path(path_str)
                 
@@ -174,7 +174,7 @@ class TestMemoryTierStructure:
 
     def test_memory_tier_directories_exist(self):
         """Memory tier directories should exist."""
-        memory_path = Path("cortex_intelligence/memory")
+        memory_path = Path("cortex/intelligence/memory")
         
         assert memory_path.exists(), \
             "Memory directory should exist"
@@ -213,7 +213,7 @@ class TestMemoryTierStructure:
 
     def test_memory_and_governance_separate(self):
         """Memory tiers and governance tiers should be in different locations."""
-        memory_path = Path("cortex_intelligence/memory")
+        memory_path = Path("cortex/intelligence/memory")
         registry_path = Path("cortex-registry/core")
         
         if memory_path.exists() and registry_path.exists():
@@ -258,9 +258,9 @@ class TestTierFileWrites:
         # Override TIER_PATHS to use temp structure
         pusher.TIER_PATHS = {
             BrainTier.TIER0: "cortex-registry/core/tier0-skull",
-            BrainTier.TIER1: "cortex_intelligence/memory/learned_patterns",
-            BrainTier.TIER2: "cortex_intelligence/memory/adaptive_intelligence",
-            BrainTier.TIER3: "cortex_intelligence/memory/scratch_space",
+            BrainTier.TIER1: "cortex/intelligence/memory/learned_patterns",
+            BrainTier.TIER2: "cortex/intelligence/memory/adaptive_intelligence",
+            BrainTier.TIER3: "cortex/intelligence/memory/scratch_space",
         }
         
         return pusher
@@ -338,7 +338,7 @@ def test_memory_tier_operations_end_to_end():
     assert tier in [BrainTier.TIER0, BrainTier.TIER1, BrainTier.TIER2, BrainTier.TIER3]
     
     # Check memory structure
-    memory_path = Path("cortex_intelligence/memory")
+    memory_path = Path("cortex/intelligence/memory")
     if memory_path.exists():
         tier_dirs = [d for d in memory_path.iterdir() 
                     if d.is_dir() and ('tier' in d.name or 'learned' in d.name or 

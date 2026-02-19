@@ -23,7 +23,7 @@ import hashlib
 
 # Wrapped import - module may not exist
 try:
-    from cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.detection_recovery import HallucinationDetector
+    from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention.detection_recovery import HallucinationDetector
 except ModuleNotFoundError:
     pass
 

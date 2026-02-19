@@ -223,7 +223,7 @@ class TestStubDetectionValidation:
         stub_file = tmp_path / "wrapper.py"
         stub_file.write_text("""
 # REDIRECT: This just points to brain implementation
-from cortex_intelligence.domain.models import Entity
+from cortex.intelligence.domain.models import Entity
 
 __all__ = ['Entity']
 """)

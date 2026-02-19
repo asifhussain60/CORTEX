@@ -22,7 +22,7 @@ class TestStubAutoFixAgent:
         stub_file = tmp_path / "wrapper.py"
         stub_file.write_text("""
 # REDIRECT: Points to cortex_intelligence implementation
-from cortex_intelligence.domain.models import Entity
+from cortex.intelligence.domain.models import Entity
 
 __all__ = ['Entity']
 """)
@@ -44,8 +44,8 @@ __all__ = ['Entity']
         # Create stub with clear target
         stub_file = tmp_path / "api.py"
         stub_file.write_text("""
-from cortex_intelligence.domain_brain.domain_brain_models import EntityType
-from cortex_intelligence.domain_brain.domain_brain_models import Conflict
+from cortex.intelligence.domain_brain.domain_brain_models import EntityType
+from cortex.intelligence.domain_brain.domain_brain_models import Conflict
 
 __all__ = ['EntityType', 'Conflict']
 """)
@@ -66,7 +66,7 @@ __all__ = ['EntityType', 'Conflict']
         stub_file = tmp_path / "stub.py"
         original_content = """
 # REDIRECT
-from cortex_intelligence.core import Helper
+from cortex.intelligence.core import Helper
 """
         stub_file.write_text(original_content)
         
@@ -93,7 +93,7 @@ from cortex_intelligence.core import Helper
         stub_file.parent.mkdir(parents=True)
         stub_file.write_text("""
 # REDIRECT
-from cortex_intelligence.models import User
+from cortex.intelligence.models import User
 """)
         
         # Create file that imports from stub
@@ -123,7 +123,7 @@ def process():
         # Validate imports updated (commented out in test, but would be real in auto-fix)
         updated_content = consumer_file.read_text()
         # Note: In real scenario, auto-fix would rewrite:
-        # from cortex.wrapper import User → from cortex_intelligence.models import User
+        # from cortex.wrapper import User → from cortex.intelligence.models import User
         assert "cortex.wrapper" not in updated_content or "# from cortex.wrapper" in updated_content, \
             "Import should be commented or removed"
         
@@ -146,7 +146,7 @@ class TestStubAutoFixIntegration:
         stub_file = tmp_path / "redirect.py"
         stub_file.write_text("""
 # REDIRECT
-from cortex_intelligence.utils import helper
+from cortex.intelligence.utils import helper
 """)
         
         # Run through orchestrator
@@ -171,7 +171,7 @@ from cortex_intelligence.utils import helper
         # Create legitimate implementation (not stub)
         impl_file = tmp_path / "service.py"
         impl_file.write_text("""
-from cortex_intelligence.domain.models import Entity
+from cortex.intelligence.domain.models import Entity
 from typing import List
 
 def process_entities(entities: List[Entity]) -> int:

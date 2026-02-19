@@ -21,9 +21,9 @@ from typing import Any, Dict, List, Optional
 
 from cortex.learning.universal_learning_loop import UniversalLearningLoop
 from cortex.learning.knowledge_synthesizer import KnowledgeSynthesizer
-from cortex_intelligence.perception.pattern_registry import PatternRegistry
-from cortex_intelligence.reasoning.strategy_selector import StrategySelector
-from cortex_intelligence.action.execution_planner import ExecutionPlanner
+from cortex.intelligence.perception.pattern_registry import PatternRegistry
+from cortex.intelligence.reasoning.strategy_selector import StrategySelector
+from cortex.intelligence.action.execution_planner import ExecutionPlanner
 
 logger = logging.getLogger(__name__)
 

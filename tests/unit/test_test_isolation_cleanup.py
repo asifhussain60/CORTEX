@@ -18,7 +18,7 @@ from typing import Any, Dict, List, Optional
 from unittest.mock import Mock, patch, MagicMock
 
 # RED Phase: These imports will fail until the implementation exists
-from cortex_intelligence.memory.core.test_isolation_cleanup import TestIsolationCleanup
+from cortex.intelligence.memory.core.test_isolation_cleanup import TestIsolationCleanup
 
 
 class TestFixtureLifecycleManagement(unittest.TestCase):

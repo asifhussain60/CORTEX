@@ -5,7 +5,7 @@ AC_START: AC-PHASE67-S1-CROSS-ASSEMBLY-TEST-001
 """
 
 import pytest
-from cortex_lens.dotnet.cross_assembly_resolver import CrossAssemblyResolver
+from cortex.intelligence.lens.dotnet.cross_assembly_resolver import CrossAssemblyResolver
 
 
 @pytest.fixture

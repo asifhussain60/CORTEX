@@ -17,7 +17,7 @@ class TestRuleExtractor:
     
     def test_validator_decorator_extraction(self):
         """Test extracting rules from @validator decorators"""
-        from cortex_lens.domain_inference.rule_extractor import RuleExtractor
+        from cortex.intelligence.lens.domain_inference.rule_extractor import RuleExtractor
         
         # Mock code with Pydantic validators
         code = '''
@@ -54,7 +54,7 @@ class User(BaseModel):
     
     def test_constraint_extraction_from_if_raise(self):
         """Test extracting constraints from if/raise patterns"""
-        from cortex_lens.domain_inference.rule_extractor import RuleExtractor
+        from cortex.intelligence.lens.domain_inference.rule_extractor import RuleExtractor
         
         code = '''
 def process_order(order):
@@ -82,7 +82,7 @@ def process_order(order):
     
     def test_business_logic_from_methods(self):
         """Test extracting business logic from method implementations"""
-        from cortex_lens.domain_inference.rule_extractor import RuleExtractor
+        from cortex.intelligence.lens.domain_inference.rule_extractor import RuleExtractor
         
         code = '''
 class OrderService:
@@ -108,7 +108,7 @@ class OrderService:
     
     def test_invariant_detection(self):
         """Test detecting class invariants"""
-        from cortex_lens.domain_inference.rule_extractor import RuleExtractor
+        from cortex.intelligence.lens.domain_inference.rule_extractor import RuleExtractor
         
         code = '''
 class BankAccount:
@@ -131,7 +131,7 @@ class BankAccount:
     
     def test_rule_confidence_scoring(self):
         """Test confidence scoring for extracted rules"""
-        from cortex_lens.domain_inference.rule_extractor import RuleExtractor
+        from cortex.intelligence.lens.domain_inference.rule_extractor import RuleExtractor
         
         # Strong signals: explicit validator, clear message
         strong_rule = {
@@ -159,7 +159,7 @@ class BankAccount:
     
     def test_cortex_rule_extraction(self):
         """Test extracting rules from CORTEX codebase"""
-        from cortex_lens.domain_inference.rule_extractor import RuleExtractor
+        from cortex.intelligence.lens.domain_inference.rule_extractor import RuleExtractor
         from pathlib import Path
         
         extractor = RuleExtractor()
@@ -182,7 +182,7 @@ class BankAccount:
     
     def test_rule_categorization(self):
         """Test categorizing rules by type"""
-        from cortex_lens.domain_inference.rule_extractor import RuleExtractor
+        from cortex.intelligence.lens.domain_inference.rule_extractor import RuleExtractor
         
         rules = [
             {"description": "Email must contain @", "field": "email"},
@@ -202,8 +202,8 @@ class TestRuleExtractorIntegration:
     
     def test_rules_to_graph_storage(self):
         """Test storing extracted rules in knowledge graph"""
-        from cortex_lens.domain_inference.rule_extractor import RuleExtractor
-        from cortex_lens.knowledge_graph.graph_storage import GraphStorage
+        from cortex.intelligence.lens.domain_inference.rule_extractor import RuleExtractor
+        from cortex.intelligence.lens.knowledge_graph.graph_storage import GraphStorage
         import tempfile
         
         # Create temporary graph

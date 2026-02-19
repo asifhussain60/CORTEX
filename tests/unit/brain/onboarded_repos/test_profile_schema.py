@@ -19,7 +19,7 @@ from pydantic import ValidationError
 
 def test_repository_profile_schema_validation():
     """Test that RepositoryProfile requires all mandatory fields."""
-    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex.intelligence.onboarded_repos.profile_schema import RepositoryProfile
     
     # RED: Should fail - no required fields provided
     with pytest.raises(ValidationError) as exc_info:
@@ -36,7 +36,7 @@ def test_repository_profile_schema_validation():
 
 def test_repository_profile_minimal_valid():
     """Test minimal valid RepositoryProfile creation."""
-    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex.intelligence.onboarded_repos.profile_schema import RepositoryProfile
     
     # RED: Should pass with minimal required fields
     profile = RepositoryProfile(
@@ -53,7 +53,7 @@ def test_repository_profile_minimal_valid():
 
 def test_repository_profile_with_tech_stack():
     """Test RepositoryProfile with tech stack information."""
-    from cortex_intelligence.onboarded_repos.profile_schema import (
+    from cortex.intelligence.onboarded_repos.profile_schema import (
         RepositoryProfile,
         TechStack
     )
@@ -78,7 +78,7 @@ def test_repository_profile_with_tech_stack():
 
 def test_repository_profile_to_yaml():
     """Test RepositoryProfile serialization to YAML."""
-    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex.intelligence.onboarded_repos.profile_schema import RepositoryProfile
     
     # RED: Should serialize to valid YAML string
     profile = RepositoryProfile(
@@ -97,7 +97,7 @@ def test_repository_profile_to_yaml():
 
 def test_repository_profile_from_yaml():
     """Test RepositoryProfile deserialization from YAML."""
-    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex.intelligence.onboarded_repos.profile_schema import RepositoryProfile
     
     # RED: Should deserialize from YAML string
     yaml_content = """
@@ -125,7 +125,7 @@ tech_stack:
 
 def test_repository_profile_loose_coupling_metadata():
     """Test loose coupling metadata in profile."""
-    from cortex_intelligence.onboarded_repos.profile_schema import (
+    from cortex.intelligence.onboarded_repos.profile_schema import (
         RepositoryProfile,
         LooseCoupling
     )
@@ -148,7 +148,7 @@ def test_repository_profile_loose_coupling_metadata():
 
 def test_repository_profile_company_domains_detection():
     """Test company domains structure detection."""
-    from cortex_intelligence.onboarded_repos.profile_schema import (
+    from cortex.intelligence.onboarded_repos.profile_schema import (
         RepositoryProfile,
         RepositoryStructure
     )
@@ -172,7 +172,7 @@ def test_repository_profile_company_domains_detection():
 
 def test_repository_profile_security_metadata():
     """Test security metadata in profile."""
-    from cortex_intelligence.onboarded_repos.profile_schema import (
+    from cortex.intelligence.onboarded_repos.profile_schema import (
         RepositoryProfile,
         SecurityMetadata
     )
@@ -196,7 +196,7 @@ def test_repository_profile_security_metadata():
 
 def test_repository_profile_standards():
     """Test standards detection in profile."""
-    from cortex_intelligence.onboarded_repos.profile_schema import (
+    from cortex.intelligence.onboarded_repos.profile_schema import (
         RepositoryProfile,
         Standards
     )
@@ -220,7 +220,7 @@ def test_repository_profile_standards():
 
 def test_repository_profile_validation_timestamps():
     """Test validation timestamp updates."""
-    from cortex_intelligence.onboarded_repos.profile_schema import RepositoryProfile
+    from cortex.intelligence.onboarded_repos.profile_schema import RepositoryProfile
     
     # RED: Should track validation timestamps
     profile = RepositoryProfile(

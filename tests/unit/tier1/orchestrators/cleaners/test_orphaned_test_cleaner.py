@@ -11,7 +11,7 @@ import pytest
 from pathlib import Path
 from datetime import datetime
 
-from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners.orphaned_test import (
+from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.orphaned_test import (
     OrphanedTestCleaner,
 )
 
@@ -245,7 +245,7 @@ class TestOrphanedTestCleanerExecute:
         
         if misplaced:
             # Create mock analysis with just misplaced tests
-            from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners.base import Analysis
+            from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.base import Analysis
             relocate_analysis = Analysis(
                 cleaner_id=analysis.cleaner_id,
                 timestamp=analysis.timestamp,
@@ -311,7 +311,7 @@ class TestOrphanedTestCleanerRollback:
         """Test rollback is not supported."""
         cleaner = OrphanedTestCleaner({"repo_root": str(tmp_path)})
         
-        from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners.base import Report
+        from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.base import Report
         mock_report = Report(
             cleaner_id="OrphanedTestCleaner",
             timestamp=datetime.now().isoformat(),

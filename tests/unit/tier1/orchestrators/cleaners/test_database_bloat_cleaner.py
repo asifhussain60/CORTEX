@@ -15,10 +15,10 @@ from typing import Dict, Any
 
 import pytest
 
-from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners.database_bloat import (
+from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.database_bloat import (
     DatabaseBloatCleaner,
 )
-from cortex_intelligence.memory.tier1_learned.orchestrators.cleaners.base import (
+from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.base import (
     Analysis,
     Report,
     RollbackResult,

@@ -17,7 +17,7 @@ from datetime import datetime
 import time
 import threading
 
-from cortex_intelligence.memory.tier2_adaptive.resilience import (
+from cortex.intelligence.memory.tier2_adaptive.resilience import (
     RealTimeProgressDashboard,
     DashboardMetrics,
     DashboardUpdate,

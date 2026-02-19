@@ -16,7 +16,7 @@ class TestHotPathAnalyzer:
     
     def test_identify_frequently_executed_paths(self):
         """Test identifying frequently executed code paths"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         execution_data = [
             {"file": "cortex/orchestrators/master.py", "function": "process_request", "call_count": 150},
@@ -33,7 +33,7 @@ class TestHotPathAnalyzer:
     
     def test_rank_by_execution_frequency(self):
         """Test ranking paths by execution frequency"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         execution_data = [
             {"file": "a.py", "function": "func_a", "call_count": 10},
@@ -52,7 +52,7 @@ class TestHotPathAnalyzer:
     
     def test_identify_performance_bottlenecks(self):
         """Test identifying performance bottlenecks from duration data"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         execution_data = [
             {"file": "a.py", "function": "slow_func", "call_count": 10, "total_duration": 15.0},
@@ -69,7 +69,7 @@ class TestHotPathAnalyzer:
     
     def test_calculate_hot_path_score(self):
         """Test calculating hot path score (frequency + duration)"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         path_data = {
             "call_count": 100,
@@ -86,7 +86,7 @@ class TestHotPathAnalyzer:
     
     def test_aggregate_by_module(self):
         """Test aggregating hot paths by module"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         execution_data = [
             {"file": "cortex/orchestrators/master.py", "function": "func1", "call_count": 100},
@@ -103,7 +103,7 @@ class TestHotPathAnalyzer:
     
     def test_identify_critical_paths(self):
         """Test identifying critical paths (hot + important)"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         execution_data = [
             {"file": "cortex/security/auth.py", "function": "authenticate", "call_count": 200},
@@ -120,7 +120,7 @@ class TestHotPathAnalyzer:
     
     def test_detect_call_patterns(self):
         """Test detecting common call patterns"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         call_sequences = [
             ["func_a", "func_b", "func_c"],
@@ -139,7 +139,7 @@ class TestHotPathAnalyzer:
     
     def test_build_execution_heatmap(self):
         """Test building execution heatmap for visualization"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         execution_data = [
             {"file": "a.py", "line": 10, "execution_count": 100},
@@ -158,7 +158,7 @@ class TestHotPathAnalyzer:
     
     def test_identify_optimization_candidates(self):
         """Test identifying code that would benefit from optimization"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         execution_data = [
             {
@@ -190,7 +190,7 @@ class TestHotPathAnalyzerIntegration:
     
     def test_end_to_end_hot_path_analysis(self):
         """Test complete hot path analysis workflow"""
-        from cortex_lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
+        from cortex.intelligence.lens.runtime_correlation.hot_path_analyzer import HotPathAnalyzer
         
         execution_data = [
             {"file": "cortex/orchestrators/master.py", "function": "process", "call_count": 500, "total_duration": 10.0},

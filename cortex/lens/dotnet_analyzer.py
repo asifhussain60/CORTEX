@@ -276,7 +276,7 @@ class DotNetLensAnalyzer:
         self.roslyn_builder = None
         if semantic_mode:
             try:
-                from cortex_lens.dotnet.roslyn_workspace_builder import (
+                from cortex.intelligence.lens.dotnet.roslyn_workspace_builder import (
                     RoslynWorkspaceBuilder,
                 )
                 self.roslyn_builder = RoslynWorkspaceBuilder()
@@ -334,14 +334,14 @@ class DotNetLensAnalyzer:
             import logging
             from pathlib import Path
 
-            from cortex_lens.dotnet.attribute_data_extractor import (
+            from cortex.intelligence.lens.dotnet.attribute_data_extractor import (
                 AttributeDataExtractor,
             )
-            from cortex_lens.dotnet.cross_assembly_resolver import CrossAssemblyResolver
-            from cortex_lens.dotnet.method_signature_analyzer import (
+            from cortex.intelligence.lens.dotnet.cross_assembly_resolver import CrossAssemblyResolver
+            from cortex.intelligence.lens.dotnet.method_signature_analyzer import (
                 MethodSignatureAnalyzer,
             )
-            from cortex_lens.dotnet.type_symbol_resolver import TypeSymbolResolver
+            from cortex.intelligence.lens.dotnet.type_symbol_resolver import TypeSymbolResolver
 
             logger = logging.getLogger(__name__)
 

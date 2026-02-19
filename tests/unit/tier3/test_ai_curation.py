@@ -37,7 +37,7 @@ class CurationResult:
 @pytest.fixture(scope="module")
 def ai_curator():
     """Create AI curator instance for tests."""
-    from cortex_intelligence.tier3.knowledge.ai_curator import AICurator
+    from cortex.intelligence.tier3.knowledge.ai_curator import AICurator
     return AICurator()
 
 
