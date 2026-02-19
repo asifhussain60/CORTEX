@@ -1,0 +1,390 @@
+# ==============================================================================
+# CONVERGENCE CRYSTAL LANGUAGE (CCL) - GOVERNANCE CRYSTAL
+# ==============================================================================
+# Purpose: Map technical governance rules (CORE-NNN) to business language
+# Status: ACTIVE (Phase 2 Deliverable G5)
+# Authority: CORE-061 (CCL Integration) + CORE-048 (Holistic Validation)
+#
+# Business stakeholders should understand governance through CCL terms,
+# not technical rule IDs. This document bridges the gap.
+# ==============================================================================
+
+schema_version: '1.0'
+name: GovernanceCrystal
+category: business_language
+status: active
+created_date: '2026-02-19'
+
+# ==============================================================================
+# BUSINESS TERMS GLOSSARY
+# ==============================================================================
+# Core vocabulary for expressing governance in business language
+
+business_terms:
+  orchestrate:
+    definition: "Coordinate multiple components or activities to achieve a specific goal while maintaining awareness of state and progress"
+    business_example: "We orchestrate the release process across QA, staging, and production"
+    technical_example: "OrchestratorBase.execute() orchestrates the 5-step lifecycle"
+
+  govern:
+    definition: "Establish rules and enforce compliance before and after actions to prevent drift and maintain standards"
+    business_example: "We govern access to production through approval workflows"
+    technical_example: "OrchestratorBase.govern() validates compliance against CORE rules"
+
+  synthesize:
+    definition: "Combine multiple analytical perspectives into a coherent, actionable recommendation"
+    business_example: "We synthesize feedback from engineering, product, and customers"
+    technical_example: "MasterOrchestrator synthesizes LENS analysis results"
+
+  validate:
+    definition: "Verify correctness through comprehensive testing, audit trails, and systematic checks"
+    business_example: "We validate all financial transactions before posting"
+    technical_example: "CortexAuditDB validates audit trail integrity via SQLite WAL"
+
+  challenge:
+    definition: "Critically question assumptions and evaluate alternative approaches before commitment"
+    business_example: "We challenge project scope to ensure feasibility"
+    technical_example: "CORE-048 requires holistic challenge before major implementation"
+
+  converge:
+    definition: "Reach consensus through iterative refinement, incorporating diverse perspectives"
+    business_example: "We converge on architecture through technical design reviews"
+    technical_example: "Multiple orchestrators converge through EventBus pub/sub"
+
+  crystallize:
+    definition: "Transform abstract requirements into concrete, testable implementations"
+    business_example: "We crystallize customer needs into product features"
+    technical_example: "TDD crystallizes requirements via test cases before code"
+
+  audit:
+    definition: "Create immutable records of all decisions, actions, and outcomes for compliance and learning"
+    business_example: "We audit all access to sensitive data for regulatory compliance"
+    technical_example: "CortexAuditDB logs all orchestrator lifecycle events"
+
+# ==============================================================================
+# CORE RULES → BUSINESS LANGUAGE MAPPING
+# ==============================================================================
+# Each CORE rule expressed in business vocabulary for stakeholder understanding
+
+rule_mappings:
+
+  CORE-001:
+    business_term: "orchestrate_incrementally"
+    principle: "Flywheel Effect"
+    business_statement: "Build momentum through consistent small steps; large jumps create instability and token exhaustion"
+    business_audience: ["Product Leaders", "Engineering Managers"]
+    alignment: "Enables sustainable delivery velocity"
+
+  CORE-002:
+    business_term: "suppress_noise_amplify_signal"
+    principle: "Signal vs Noise"
+    business_statement: "Eliminate status reports and noise; focus on meaningful deliverables. Documentation only where it adds value."
+    business_audience: ["All Stakeholders"]
+    alignment: "Reduces cognitive load and context switching"
+
+  CORE-004:
+    business_term: "clarity_through_brevity"
+    principle: "Clarity Through Brevity"
+    business_statement: "Communicate more with less. Precision beats verbosity. Pointer patterns guide readers efficiently."
+    business_audience: ["Communications Team", "Engineering"]
+    alignment: "Improves information transfer efficiency"
+
+  CORE-005:
+    business_term: "write_once_run_anywhere"
+    principle: "Portability"
+    business_statement: "Build solutions that work across environments without modification. No hardcoded assumptions about infrastructure."
+    business_audience: ["DevOps", "Infrastructure", "Product"]
+    alignment: "Enables deployment flexibility and cost optimization"
+
+  CORE-006:
+    business_term: "trust_but_verify"
+    principle: "Trust But Verify"
+    business_statement: "Assume nothing. Verify all dependencies before execution. Validate assumptions continuously."
+    business_audience: ["QA", "Security", "All Teams"]
+    alignment: "Prevents cascading failures and improves reliability"
+
+  CORE-008:
+    business_term: "crystallize_via_tests"
+    principle: "Test-First Development"
+    business_statement: "Requirements become concrete through tests before implementation. Tests are the first specification, not afterthought."
+    business_audience: ["Engineering Leadership", "QA"]
+    alignment: "Reduces rework and improves requirement clarity"
+
+  CORE-011:
+    business_term: "explicit_contracts"
+    principle: "Type Hints"
+    business_statement: "Function interfaces must be explicit about what they accept and return. Prevents silent failures and misuse."
+    business_audience: ["Engineering"]
+    alignment: "Reduces integration bugs and documentation burden"
+
+  CORE-012:
+    business_term: "self_documenting_code"
+    principle: "Docstrings"
+    business_statement: "Public APIs must document their purpose and usage. Code clarity enables faster onboarding."
+    business_audience: ["Engineering", "New Team Members"]
+    alignment: "Reduces onboarding time and support burden"
+
+  CORE-027:
+    business_term: "audit_trail_always"
+    principle: "Durable Audit Trail"
+    business_statement: "Every significant action creates an immutable record. Enables compliance, forensics, and learning."
+    business_audience: ["Compliance", "Security", "Executive"]
+    alignment: "Meets regulatory requirements and enables accountability"
+
+  CORE-028:
+    business_term: "naming_conventions"
+    principle: "File Naming Standards"
+    business_statement: "Consistent naming (snake_case) makes files discoverable and systems predictable."
+    business_audience: ["Engineering"]
+    alignment: "Improves codebase navigability"
+
+  CORE-035:
+    business_term: "single_source_of_truth"
+    principle: "Single Canonical Implementation"
+    business_statement: "One implementation per concept. Duplicates create inconsistency and maintenance burden."
+    business_audience: ["Engineering", "Architecture"]
+    alignment: "Reduces code debt and inconsistency bugs"
+
+  CORE-048:
+    business_term: "challenge_first_cognition"
+    principle: "Holistic Validation Gate"
+    business_statement: "Before major commitment, conduct holistic challenge: Is this optimal? What risks? What alternatives? Response shapes strategy."
+    business_audience: ["Engineering Leadership", "Product"]
+    alignment: "Prevents costly strategic errors"
+
+  CORE-049:
+    business_term: "silent_autonomous_execution"
+    principle: "Autonomous Execution"
+    business_statement: "Approved execution proceeds without intervention. Progress shown via metrics, not verbose logs."
+    business_audience: ["Executive", "Product Leadership"]
+    alignment: "Enables faster iteration cycles"
+
+  CORE-050:
+    business_term: "phase_metadata_tracking"
+    principle: "Phase Metadata"
+    business_statement: "Each phase documents its goals, completion criteria, and outcomes. Enables project visibility."
+    business_audience: ["Project Managers", "Executive"]
+    alignment: "Improves project transparency and predictability"
+
+  CORE-051:
+    business_term: "mcp_tool_consolidation"
+    principle: "MCP Tool Consolidation"
+    business_statement: "Tool proliferation creates complexity. Consolidate related tools into unified interfaces."
+    business_audience: ["Architecture", "Engineering"]
+    alignment: "Reduces cognitive load and maintenance"
+
+  CORE-058:
+    business_term: "durable_audit_trail"
+    principle: "SQLite WAL Mode Mandatory"
+    business_statement: "All audit data uses SQLite WAL for concurrent-safe, atomic logging. No data loss."
+    business_audience: ["Compliance", "DevOps", "Security"]
+    alignment: "Ensures audit trail integrity"
+
+  CORE-059:
+    business_term: "mcp_footprint_auditing"
+    principle: "Observability"
+    business_statement: "Track which tools are used, how often, and their performance. Enable optimization."
+    business_audience: ["Product", "DevOps", "Engineering"]
+    alignment: "Enables data-driven tool optimization"
+
+  CORE-060:
+    business_term: "sdlc_brain_governance"
+    principle: "Embedded Governance"
+    business_statement: "SDLC decisions go through governance brain for compliance verification. No direct shortcuts."
+    business_audience: ["Engineering Leadership", "Compliance"]
+    alignment: "Embeds governance into development process"
+
+  CORE-061:
+    business_term: "business_language_integration"
+    principle: "CCL Integration"
+    business_statement: "Business stakeholders can understand governance through their language, not technical terms."
+    business_audience: ["All Stakeholders"]
+    alignment: "Bridges business-technical language gap"
+
+  CORE-062:
+    business_term: "plan_before_execute"
+    principle: "Plan-First Execution"
+    business_statement: "No ad-hoc execution. All work follows approved plans specifying objectives, stages, success criteria, rollback."
+    business_audience: ["Project Managers", "Engineering Leadership"]
+    alignment: "Ensures intentional, coordinated action"
+
+  CORE-063:
+    business_term: "challenge_before_implement"
+    principle: "Challenge-First Governance Gate"
+    business_statement: "Before implementing, conduct holistic challenge. What could go wrong? What alternatives exist? Shape strategy accordingly."
+    business_audience: ["Engineering Leadership", "Product"]
+    alignment: "Prevents costly rework through upfront scrutiny"
+
+# ==============================================================================
+# CONVERGENCE PRINCIPLES
+# ==============================================================================
+# Core principles that guide how governance rules interact and reinforce
+
+convergence_principles:
+
+  single_source_of_truth:
+    principle: "Single Source of Truth"
+    description: |
+      One canonical rule source (Tier 0 SKULL rules), no duplicates.
+      All lower tiers inherit Tier 0 requirements.
+    implementation:
+      - Canonical location: cortex-registry/core/governance/skull-rules.yaml
+      - No duplicate copies in other locations
+      - Version control: git ensures single source
+
+  hierarchical_authority:
+    principle: "Hierarchical Authority Structure"
+    description: |
+      Tier 0 (SKULL) is immutable and takes precedence.
+      Tier 1 inherits Tier 0 requirements.
+      Tier 2 inherits Tier 0 + Tier 1 requirements.
+      No tier can override higher tier.
+    layers:
+      - Tier 0: HIGHEST precedence, immutable, CORE rules
+      - Tier 1: HIGH precedence, inherits Tier 0, domain enhancements
+      - Tier 2: MEDIUM precedence, inherits Tier 0+1, local optimizations
+
+  business_technical_bridge:
+    principle: "Business-Technical Language Bridge"
+    description: |
+      All technical rules expressible in business language.
+      Business stakeholders can understand and audit governance.
+      Reduces miscommunication and alignment issues.
+    components:
+      - Business terms glossary
+      - Rule mappings to business language
+      - Business audiences for each rule
+
+  audit_traceability:
+    principle: "Audit & Traceability"
+    description: |
+      Every governance decision traced to:
+        1. Rule ID (CORE-NNN)
+        2. Enforcement point (orchestrator + method)
+        3. Audit entry (timestamp + result)
+      Enable compliance verification and forensics.
+    components:
+      - CortexAuditDB SQLite WAL
+      - Audit entries with timestamps
+      - Governance decision log
+
+  continuous_verification:
+    principle: "Continuous Verification"
+    description: |
+      Governance is not one-time compliance check.
+      Rules enforced at every phase:
+        - PRE-execution: setup checks (CORE-006)
+        - PRE-action: governance gate (CORE-048)
+        - POST-execution: audit logging (CORE-027)
+    gates:
+      - Setup gate: Verify dependencies (CORE-006)
+      - Governance gate: Challenge and approve (CORE-048, CORE-063)
+      - Audit gate: Log results (CORE-027)
+
+# ==============================================================================
+# GOVERNANCE ENFORCEMENT MATRIX
+# ==============================================================================
+# Maps business rules to technical enforcement points
+
+enforcement_matrix:
+
+  CORE-008_crystallize_via_tests:
+    business_principle: "Tests define requirements before implementation"
+    enforcement_point: "TDDOrchestrator.execute()"
+    severity: "BLOCKED"
+    check:
+      - "Test file exists before implementation file"
+      - "Tests running with 100% pass rate"
+      - "Test coverage verified"
+
+  CORE-048_challenge_first:
+    business_principle: "Holistic challenge before major commitment"
+    enforcement_point: "MasterOrchestrator.challenge()"
+    severity: "BLOCKED"
+    check:
+      - "Challenge issued before implementation"
+      - "Challenge response documented"
+      - "Risk assessment completed"
+
+  CORE-058_sqlite_wal:
+    business_principle: "Audit trail reliability and concurrent safety"
+    enforcement_point: "CortexAuditDB._initialize_db()"
+    severity: "BLOCKED"
+    check:
+      - "PRAGMA journal_mode=WAL enabled"
+      - "WAL indexes created"
+      - "Concurrent write test passing"
+
+  CORE-062_plan_first:
+    business_principle: "Intentional execution following approved plans"
+    enforcement_point: "WorkflowEngine.load_workflow()"
+    severity: "BLOCKED"
+    check:
+      - "Execution plan exists"
+      - "Plan approved (governance gate passed)"
+      - "Stages defined with success criteria"
+
+  CORE-063_challenge_before_implement:
+    business_principle: "Governance gate before implementation"
+    enforcement_point: "OrchestratorBase.govern()"
+    severity: "BLOCKED"
+    check:
+      - "Challenge issued"
+      - "Risk assessment complete"
+      - "Approval obtained"
+
+# ==============================================================================
+# STAKEHOLDER COMMUNICATION TEMPLATES
+# ==============================================================================
+# Standard ways to explain governance rules to different audiences
+
+communication_templates:
+
+  engineering_team:
+    audience: "Software engineers"
+    language: "Technical with business context"
+    template: |
+      Rule: ${rule_id} - ${business_term}
+      
+      What it means: ${business_statement}
+      
+      Technical implementation: ${technical_implementation}
+      
+      How it helps: ${business_impact}
+      
+      Your responsibility: ${team_responsibility}
+
+  product_team:
+    audience: "Product managers and leaders"
+    language: "Business-focused"
+    template: |
+      Governance Focus: ${principle}
+      
+      Why it matters: ${business_impact}
+      
+      How it shapes our process: ${process_impact}
+      
+      What you'll see: ${observable_outcomes}
+
+  executive_leadership:
+    audience: "C-level and board"
+    language: "Strategic and business impact"
+    template: |
+      Strategic Priority: ${principle}
+      
+      Business Value: ${business_impact}
+      
+      Risk Mitigation: ${risk_mitigation}
+      
+      Competitive Advantage: ${competitive_advantage}
+
+# ==============================================================================
+# NEXT STEPS: PHASE 3+
+# ==============================================================================
+# CCL framework ready for integration into:
+# - Customer communications (explain governance in business language)
+# - Stakeholder reporting (dashboard of governance health)
+# - Process documentation (reference for all teams)
+# - Training materials (onboarding new team members)
+
+implementation_status: "Phase 2 Complete - Ready for Phase 3 integration"
