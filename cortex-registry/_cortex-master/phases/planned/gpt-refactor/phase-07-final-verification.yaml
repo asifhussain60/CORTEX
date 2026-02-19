@@ -1,0 +1,530 @@
+# ==============================================================================
+# PHASE 07 — FINAL VERIFICATION, REFACTOR & ARCHIVE DELETION
+# ==============================================================================
+# Purpose: Full regression validation, final refactor pass, delete _archive/
+# Gate: 100% capability manifest green, full test suite green, archive deleted
+# ==============================================================================
+
+phase:
+  id: "phase-07"
+  name: "Final Verification & Archive Deletion"
+  status: "pending"
+  priority: "P0"
+  estimated_effort: "5-7 days"
+  risk: "medium"
+  depends_on: ["phase-06"]
+  description: |
+    The final phase ensures ZERO regression before permanently deleting the
+    _archive/ directory. This phase runs the most comprehensive validation
+    suite in CORTEX history: every MCP tool, every orchestrator, every
+    governance rule, every golden test, and the full capability manifest.
+
+    Additionally, this phase performs a final refactor pass to ensure:
+    - Code quality meets enterprise standards
+    - No dead imports, unused variables, or orphaned code
+    - All type hints present (CORE-011)
+    - All docstrings present (CORE-012)
+    - File naming compliance (CORE-028) via file factory
+
+  # ============================================================================
+  # VERIFICATION STAGES
+  # ============================================================================
+  verification_stages:
+
+    # --------------------------------------------------------------------------
+    # V1: Capability Manifest — Full Regression Check
+    # --------------------------------------------------------------------------
+    - id: "V1"
+      name: "Capability Manifest Regression Gate"
+      description: |
+        Run the complete capability manifest checklist. Every single item
+        must be green. Any red item blocks archive deletion.
+      checks:
+        mcp_tools:
+          count: "28+"
+          method: "Invoke each MCP tool, verify non-error response"
+          blocking: true
+        orchestrators:
+          count: "~40"
+          method: "Instantiate each, verify workflow template loads"
+          blocking: true
+        governance_rules:
+          count: "54"
+          method: "Load skull-rules.yaml, verify all rules parseable"
+          blocking: true
+        intelligence_capabilities:
+          count: "9+"
+          method: "Run LENS analysis on cortex/ itself"
+          blocking: true
+        infrastructure_services:
+          count: "6+"
+          method: "Verify EventBus, tracing, storage, bootstrap"
+          blocking: true
+        workflow_templates:
+          count: "27+"
+          method: "Schema-validate all templates"
+          blocking: true
+
+    # --------------------------------------------------------------------------
+    # V2: Full Test Suite
+    # --------------------------------------------------------------------------
+    - id: "V2"
+      name: "Full Test Suite Execution"
+      description: "Run ALL tests — unit, integration, golden, e2e, regression"
+      test_suites:
+        - name: "Unit tests"
+          command: "pytest tests/unit/ -v --tb=short"
+          must_pass: true
+        - name: "Integration tests"
+          command: "pytest tests/integration/ -v --tb=short"
+          must_pass: true
+        - name: "Golden tests"
+          command: "pytest tests/golden/ -v --tb=short"
+          must_pass: true
+        - name: "E2E tests"
+          command: "pytest tests/e2e/ -v --tb=short"
+          must_pass: true
+        - name: "Regression tests"
+          command: "pytest tests/regression/ -v --tb=short"
+          must_pass: true
+        - name: "Contract tests"
+          command: "pytest tests/contracts/ -v --tb=short"
+          must_pass: true
+      coverage_gate:
+        minimum: 90
+        report: "pytest --cov=cortex --cov-report=term-missing"
+
+    # --------------------------------------------------------------------------
+    # V3: Import Validation
+    # --------------------------------------------------------------------------
+    - id: "V3"
+      name: "Import Integrity Check"
+      description: "Verify zero orphaned imports"
+      checks:
+        - "No imports from cortex_intelligence (archived)"
+        - "No imports from cortex_lens (archived)"
+        - "No imports from cortex.brain (archived)"
+        - "No imports from _archive/"
+        - "No circular imports"
+        - "All imports resolve to existing modules"
+      method: |
+        find cortex/ -name "*.py" -exec python -c "
+          import ast, sys
+          with open(sys.argv[1]) as f:
+              tree = ast.parse(f.read())
+          for node in ast.walk(tree):
+              if isinstance(node, (ast.Import, ast.ImportFrom)):
+                  # Check for archived references
+                  pass
+        " {} \;
+
+    # --------------------------------------------------------------------------
+    # V4: Governance Compliance Audit
+    # --------------------------------------------------------------------------
+    - id: "V4"
+      name: "Full Governance Audit"
+      description: "Run CORTEX governance audit against itself"
+      rules_checked:
+        - "CORE-002: No markdown reports generated"
+        - "CORE-008: All implementations have tests"
+        - "CORE-011: Type hints on all functions"
+        - "CORE-012: Docstrings on all public APIs"
+        - "CORE-028: File naming snake_case (via file factory)"
+        - "CORE-035: Single canonical implementation (no duplicates)"
+        - "CORE-048: Holistic validation gate"
+        - "CORE-049: Silent autonomous execution"
+        - "CORE-050: Intent-based MCP blocking"
+        - "CORE-051: Cross-platform compatibility"
+      must_pass: true
+
+    # --------------------------------------------------------------------------
+    # V5: MCP Tool End-to-End Verification
+    # --------------------------------------------------------------------------
+    - id: "V5"
+      name: "MCP Tool E2E Verification"
+      description: |
+        Each CONSOLIDATED MCP tool invoked with realistic parameters.
+        Post-consolidation: ~20 tools (not 34+). Verify zero capability loss.
+      tools:
+        - tool: "cortex_validate_compliance"
+          test: "Validate cortex/core/ against CORE rules"
+        - tool: "cortex_discover"
+          test: "scope=tools — verify count = 20; scope=features — verify all listed"
+        - tool: "cortex_load"
+          test: "resource=rules — verify 54 rules; resource=modes — verify HEPTA"
+        - tool: "cortex_verify_environment"
+          test: "check=full — verify Python, deps, MCP, venv, drift"
+        - tool: "cortex_refactor"
+          test: "operation=supported_languages — verify Python/C#/TS"
+        - tool: "cortex_health"
+          test: "operation=scan — verify health score; operation=db_maintenance — verify SQLite VACUUM"
+        - tool: "cortex_dashboard"
+          test: "operation=suite — verify HTML generation"
+        - tool: "cortex_audit"
+          test: "operation=validate — verify governance compliance"
+        - tool: "cortex_onboard_repository"
+          test: "Onboard cortex itself — verify analysis + infrastructure hints"
+        - tool: "cortex_onboard_infrastructure"
+          test: "Create platform YAML — verify file creation"
+      verification:
+        - "Tool count = ~20 (consolidated from 34+)"
+        - "Zero capability loss — every old tool's functionality accessible"
+        - "No toolkit_* prefixed tools remain"
+        - "No _v3 suffixed tools remain"
+
+    # --------------------------------------------------------------------------
+    # V6: SQLite Audit Infrastructure Verification
+    # --------------------------------------------------------------------------
+    - id: "V6"
+      name: "SQLite Audit Infrastructure Verification"
+      description: |
+        Verify ALL CORTEX activity is logged in SQLite, databases are healthy,
+        and no raw sqlite3.connect() calls exist outside CortexAuditDB.
+      checks:
+        database_consolidation:
+          - "Only 3 .db files exist in .cortex-runtime/"
+          - "Zero .db files scattered in cortex/ or cortex_intelligence/"
+          - "All databases use WAL journal mode"
+        activity_logging:
+          - "Orchestrator execution creates audit record"
+          - "MCP tool invocation creates audit record"
+          - "Governance check creates audit record"
+          - "Test execution creates audit record (golden tests)"
+        cleanup_operations:
+          - "Expired rows deleted per retention policy"
+          - "VACUUM runs on databases exceeding threshold"
+          - "WAL checkpoint completes without error"
+          - "No deadlocks during concurrent health scan + vacuum"
+        code_hygiene:
+          - "grep -r 'sqlite3.connect' cortex/ returns ONLY audit_db.py"
+          - "Zero raw database connections outside canonical manager"
+        golden_test_integration:
+          - "cortex_audit_db fixture provides clean in-memory db"
+          - "teardown asserts no leaked connections"
+          - "Golden tests validate audit trail, not just code output"
+      blocking: true
+
+  # ============================================================================
+  # FINAL REFACTOR PASS
+  # ============================================================================
+  final_refactor:
+    - id: "FR1"
+      name: "Dead Code Elimination"
+      description: |
+        Use static analysis to find:
+        - Unreachable functions/methods
+        - Unused imports
+        - Unused variables
+        - Empty __init__.py files with no re-exports
+      tool: "vulture cortex/ --min-confidence 80"
+
+    - id: "FR2"
+      name: "Type Hint Completion"
+      description: "Add missing type hints (CORE-011)"
+      tool: "mypy cortex/ --ignore-missing-imports"
+      target: "Zero type errors"
+
+    - id: "FR3"
+      name: "Docstring Completion"
+      description: "Add missing docstrings (CORE-012)"
+      tool: "interrogate cortex/ -v"
+      target: "≥95% documented"
+
+    - id: "FR4"
+      name: "File Naming Audit"
+      description: "Run file factory against all files (CORE-028)"
+      checks:
+        - "No version suffixes (v1, v2, _v)"
+        - "No SCREAMING_CASE"
+        - "No enhanced_, new_, old_, legacy_ prefixes"
+        - "snake_case for all .py files"
+        - "kebab-case for all .yaml files"
+
+    - id: "FR5"
+      name: "Compatibility Shim Removal"
+      description: |
+        Remove any backward-compatibility shims created during migration:
+        - cortex/lens/__init__.py re-exports
+        - Any temporary import bridges
+        - MCP tool backward-compat aliases (old tool names)
+      condition: "Only if all tests pass without shims"
+
+    - id: "FR6"
+      name: "Workflow Template Completeness"
+      description: |
+        Verify every active orchestrator:
+        1. Has workflow_template_id property set
+        2. Template exists in cortex-registry/workflows/templates/
+        3. Template has setup + teardown steps
+        4. Template schema validates
+
+    - id: "FR7"
+      name: "SQLite Database Consolidation Verification"
+      description: |
+        Verify all scattered .db files are consolidated:
+        1. Only 3 databases in .cortex-runtime/ (audit, traces, state)
+        2. Zero .db files in cortex/, cortex_intelligence/, or cortex/wiring/
+        3. All raw sqlite3.connect() calls replaced with CortexAuditDB
+        4. Retention policy YAML loaded and applied
+        5. WAL mode confirmed on all databases
+      checks:
+        - command: "find cortex/ -name '*.db' -type f | wc -l"
+          expected: "0"
+        - command: "find .cortex-runtime/ -name '*.db' -type f | wc -l"
+          expected: "3"
+        - command: "grep -r 'sqlite3.connect' cortex/ --include='*.py' | grep -v audit_db.py | wc -l"
+          expected: "0"
+
+    - id: "FR8"
+      name: "MCP Tool Consolidation Verification"
+      description: |
+        Verify MCP tools consolidated from 34+ to ~20:
+        1. No toolkit_* prefixed tools in registry
+        2. No _v3 suffixed tools
+        3. cortex_health handles scan + vacuum + diagnose + cleanup + db_maintenance
+        4. cortex_load handles rules + modes + response_format + audit_checklist
+        5. cortex_discover handles tools + features
+        6. cortex_refactor handles execute + list_operations + supported_languages
+        7. cortex_dashboard handles suite + landing + repo
+        8. cortex_audit handles remediate + validate + analyze
+        9. cortex_verify_environment handles full + venv + deps + mcp
+      checks:
+        - command: "python -c 'from cortex.mcp.tools import ALL_TOOLS; print(len(ALL_TOOLS))'"
+          expected: "~20"
+
+  # ============================================================================
+  # EXECUTION SEQUENCE (Step-by-step)
+  # ============================================================================
+  execution_sequence:
+    - step: 1
+      name: "V1 — Capability Manifest Full Regression"
+      command: "pytest tests/golden/regression/test_capability_manifest.py -v"
+      expected: "ALL items green — 28 MCP tools, ~40 orchestrators, 54 rules, 9 intel, 6 infra, 27+ templates"
+      blocking: true
+
+    - step: 2
+      name: "V2 — Full Test Suite"
+      commands:
+        - "pytest tests/unit/ -v --tb=short"
+        - "pytest tests/integration/ -v --tb=short"
+        - "pytest tests/golden/ -v --tb=short"
+        - "pytest tests/e2e/ -v --tb=short"
+        - "pytest tests/regression/ -v --tb=short"
+        - "pytest tests/contracts/ -v --tb=short"
+        - "pytest tests/ --cov=cortex --cov-report=term-missing"
+      expected: "ALL pass, coverage ≥90%"
+      blocking: true
+
+    - step: 3
+      name: "V3 — Import Integrity Check"
+      commands:
+        - "grep -r 'from cortex_intelligence' cortex/ | wc -l"
+        - "grep -r 'from cortex_lens' cortex/ | wc -l"
+        - "grep -r 'from cortex.brain' cortex/ | wc -l"
+        - "grep -r 'from _archive' cortex/ | wc -l"
+      expected: "ALL return 0"
+      blocking: true
+
+    - step: 4
+      name: "V4 — Governance Compliance Audit"
+      description: "Run CORTEX governance rules against itself"
+      command: "python -m cortex.governance.audit cortex/"
+      rules: "CORE-002, CORE-008, CORE-011, CORE-012, CORE-028, CORE-035"
+      expected: "Zero P0/P1 violations"
+      blocking: true
+
+    - step: 5
+      name: "V5 — MCP Tool E2E Verification (Consolidated ~20 tools)"
+      description: "Invoke each consolidated MCP tool — zero capability loss"
+      expected: "All ~20 tools respond without error, all modes work"
+      blocking: true
+
+    - step: "5A"
+      name: "V6 — SQLite Audit Infrastructure Verification"
+      commands:
+        - "find cortex/ -name '*.db' -type f | wc -l"
+        - "find .cortex-runtime/ -name '*.db' -type f | wc -l"
+        - "grep -r 'sqlite3.connect' cortex/ --include='*.py' | grep -v audit_db.py | wc -l"
+        - "pytest tests/core/test_audit_db.py tests/golden/test_audit_db_golden.py -v"
+      expected: "0 scattered dbs, 3 consolidated dbs, 0 raw connections, all tests pass"
+      blocking: true
+
+    - step: 6
+      name: "FR1 — Dead Code Elimination"
+      command: "vulture cortex/ --min-confidence 80"
+      expected: "Zero unreachable code"
+
+    - step: 7
+      name: "FR2 — Type Hint Completion"
+      command: "mypy cortex/ --ignore-missing-imports"
+      expected: "Zero type errors"
+
+    - step: 8
+      name: "FR3 — Docstring Completion"
+      command: "interrogate cortex/ -v"
+      expected: "≥95% documented"
+
+    - step: 9
+      name: "FR4 — File Naming Audit"
+      description: "Run file factory validation against all files"
+      expected: "Zero naming violations (no v1/v2, no SCREAMING, snake_case only)"
+
+    - step: 10
+      name: "FR5 — Compatibility Shim Removal"
+      description: "Remove any backward-compat shims from Phase 01 + MCP aliases"
+      command: "grep -r 'compatibility shim\\|backward compat\\|DEPRECATED' cortex/ | wc -l"
+      expected: "0 — all shims removed"
+
+    - step: 11
+      name: "FR6 — Workflow Template Completeness"
+      description: "Every orchestrator has template, template has setup+teardown"
+      expected: "100% coverage"
+
+    - step: "11A"
+      name: "FR7 — SQLite Database Consolidation"
+      description: "Verify zero scattered .db files, only 3 in .cortex-runtime/"
+      commands:
+        - "find cortex/ cortex_intelligence/ -name '*.db' -type f 2>/dev/null | wc -l"
+        - "find .cortex-runtime/ -name '*.db' -type f | wc -l"
+        - "grep -r 'sqlite3.connect' cortex/ --include='*.py' | grep -v audit_db.py | wc -l"
+      expected: "0 scattered, 3 consolidated, 0 raw connections"
+
+    - step: "11B"
+      name: "FR8 — MCP Tool Consolidation Verification"
+      description: "Verify ~20 tools, zero toolkit_* prefix, zero _v3 suffix"
+      command: "python -c \"from cortex.mcp.tools import ALL_TOOLS; print(f'Tool count: {len(ALL_TOOLS)}')\""
+      expected: "Tool count: ~20"
+
+    - step: 12
+      name: "Pre-deletion backup commit"
+      command: "git add -A && git commit -m 'refactor(phase-07): pre-archive-deletion checkpoint'"
+      tag: "gpt-refactor-pre-archive-deletion"
+
+    - step: 13
+      name: "Delete _archive/ permanently"
+      command: "rm -rf _archive/"
+      condition: "ONLY if steps 1-11 ALL pass"
+
+    - step: 14
+      name: "Post-deletion test run"
+      command: "pytest tests/ -v --tb=short -q"
+      expected: "ALL pass (proving no dependency on archive)"
+
+    - step: 15
+      name: "Clean clone test"
+      commands:
+        - "git clone <repo> /tmp/cortex-clean-test"
+        - "cd /tmp/cortex-clean-test && python -m venv .venv && source .venv/bin/activate"
+        - "pip install -r requirements.txt"
+        - "pytest tests/ -v"
+      expected: "ALL pass from clean clone"
+
+    - step: 16
+      name: "MCP server startup test"
+      description: "Verify MCP server starts and all tools register"
+      expected: "Server starts, 28 tools available"
+
+    - step: 17
+      name: "Final commit"
+      command: "git add -A && git commit -m 'refactor(phase-07): final verification complete — CORTEX cohesive brain achieved'"
+
+    - step: 18
+      name: "Tag release"
+      command: "git tag -a v2.0.0-cohesive-brain -m 'CORTEX Cohesive Brain Refactor — single package, ~40 orchestrators, workflow templates, zero regression'"
+
+  # ============================================================================
+  # ARCHIVE DELETION
+  # ============================================================================
+  archive_deletion:
+    condition: "ALL verification stages V1-V5 pass AND all refactors FR1-FR6 complete"
+    steps:
+      - step: 1
+        action: "Final backup commit with tag: pre-archive-deletion"
+      - step: 2
+        action: "rm -rf _archive/"
+      - step: 3
+        action: "Run full test suite one more time"
+      - step: 4
+        action: "Commit: 'refactor: delete _archive/ — zero regression confirmed'"
+      - step: 5
+        action: "Tag release: v2.0.0-cohesive-brain"
+
+  # ============================================================================
+  # POST-REFACTOR VALIDATION
+  # ============================================================================
+  post_refactor_validation:
+    - name: "Clean clone test"
+      description: |
+        Clone CORTEX fresh, install deps, run all tests.
+        Proves the repo is self-contained and works from scratch.
+      command: |
+        git clone <repo> /tmp/cortex-clean-test
+        cd /tmp/cortex-clean-test
+        python -m venv .venv && source .venv/bin/activate
+        pip install -r requirements.txt
+        pytest tests/ -v
+
+    - name: "MCP server startup test"
+      description: "Verify MCP server starts and all tools register"
+
+    - name: "Architecture consistency check"
+      description: |
+        Verify:
+        - cortex-docs/ matches actual code structure
+        - cortex-registry/ references resolve to real files
+        - All prompts reference valid paths
+
+  # ============================================================================
+  # DEFINITION OF DONE (FINAL)
+  # ============================================================================
+  definition_of_done:
+    - "✅ CORTEX operates as a SINGLE cohesive brain — one cortex/ package"
+    - "✅ All tests pass (unit, integration, golden, e2e, regression)"
+    - "✅ Coverage ≥90% across active code"
+    - "✅ All ~20 consolidated MCP tools respond correctly (zero capability loss)"
+    - "✅ All ~40 active orchestrators execute through workflow templates"
+    - "✅ All workflow templates have setup/teardown lifecycle"
+    - "✅ Zero imports from archived packages"
+    - "✅ Zero dead code (vulture clean)"
+    - "✅ Zero type hint violations (mypy clean)"
+    - "✅ ≥95% docstring coverage"
+    - "✅ All file names comply with file factory rules"
+    - "✅ cortex-registry is the one-stop YAML shop"
+    - "✅ cortex-docs reflects actual architecture"
+    - "✅ _archive/ directory deleted"
+    - "✅ Capability manifest 100% green"
+    - "✅ Clean clone test passes"
+    - "✅ Enterprise design patterns documented in registry"
+    - "✅ Team collaboration ready — self-documenting, navigable"
+    - "✅ ALL CORTEX activity logged in SQLite (3 consolidated databases)"
+    - "✅ Zero scattered .db files outside .cortex-runtime/"
+    - "✅ Zero raw sqlite3.connect() outside CortexAuditDB"
+    - "✅ SQLite WAL mode + auto-cleanup + bloat prevention operational"
+    - "✅ Golden tests validate audit trail integrity with setup/teardown"
+    - "✅ Health + Vacuum include SQLite db maintenance (VACUUM, WAL checkpoint)"
+    - "✅ MCP consolidated from 34+ to ~20 tools (no toolkit sprawl)"
+    - "✅ No toolkit_* prefixed MCP tools remain"
+
+  # ============================================================================
+  # EXIT GATE
+  # ============================================================================
+  exit_gate:
+    all_verifications_pass: true
+    all_refactors_complete: true
+    archive_deleted: true
+    clean_clone_passes: true
+    capability_manifest_100_percent: true
+    release_tagged: true
+    sqlite_consolidated: true
+    mcp_consolidated: true
+    description: |
+      Phase 07 is complete when:
+      1. ALL verification stages V1-V6 pass
+      2. ALL refactor passes FR1-FR8 complete
+      3. _archive/ directory deleted
+      4. Clean clone test passes
+      5. Release tagged v2.0.0-cohesive-brain
+      6. CORTEX operates as a single cohesive brain
+      7. SQLite: 3 consolidated databases, zero scattered, zero raw connections
+      8. MCP: ~20 consolidated tools, zero toolkit sprawl, zero capability loss
+      9. All CORTEX activity intelligently logged with auto-cleanup

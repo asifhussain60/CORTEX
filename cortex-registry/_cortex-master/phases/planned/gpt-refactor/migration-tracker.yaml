@@ -1,0 +1,183 @@
+# ==============================================================================
+# MIGRATION TRACKER — Source → Archive → Target → Validated → Deleted
+# ==============================================================================
+# Purpose: Track the lifecycle of every migrated component
+# Updated: After each phase completion
+# ==============================================================================
+
+tracker:
+  id: "migration-tracker"
+  version: "1.0.0"
+  created: "2026-02-19"
+  last_updated: "2026-02-19"
+
+  # ============================================================================
+  # PHASE 01 MIGRATIONS
+  # ============================================================================
+  phase_01:
+    name: "Package Consolidation"
+    status: "pending"
+    migrations:
+      - id: "M-001"
+        component: "cortex_intelligence"
+        source: "cortex_intelligence/"
+        archive: "_archive/cortex_intelligence/"
+        target: "cortex/intelligence/"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+      - id: "M-002"
+        component: "cortex_lens"
+        source: "cortex_lens/"
+        archive: "_archive/cortex_lens/"
+        target: "cortex/intelligence/lens/"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+      - id: "M-003"
+        component: "cortex/lens (original)"
+        source: "cortex/lens/"
+        archive: "_archive/cortex_lens_original/"
+        target: "cortex/intelligence/lens/"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+  # ============================================================================
+  # PHASE 02 MIGRATIONS
+  # ============================================================================
+  phase_02:
+    name: "Brain Deduplication"
+    status: "pending"
+    migrations:
+      - id: "M-010"
+        component: "brain/core (kernel)"
+        source: "cortex/brain/core/"
+        archive: "_archive/brain/core/"
+        target: "cortex/core/"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+      - id: "M-011"
+        component: "brain/governance"
+        source: "cortex/brain/governance/"
+        archive: "_archive/brain/governance/"
+        target: "cortex/governance/"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+      - id: "M-012"
+        component: "brain/domain_orchestrators"
+        source: "cortex/brain/domain_orchestrators/"
+        archive: "_archive/brain/domain_orchestrators/"
+        target: "cortex/orchestrators/domain/business/"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+      - id: "M-013"
+        component: "brain (full)"
+        source: "cortex/brain/"
+        archive: "_archive/brain/"
+        target: "(dissolved into multiple targets)"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+  # ============================================================================
+  # PHASE 03 MIGRATIONS
+  # ============================================================================
+  phase_03:
+    name: "Orchestrator Rationalization"
+    status: "pending"
+    migrations:
+      - id: "M-020"
+        component: "phase_38"
+        source: "cortex/phase_38/"
+        archive: "_archive/phase_38/"
+        target: "(logic already in cortex/tools/)"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+      - id: "M-021"
+        component: "phase_executors"
+        source: "cortex/phase_executors/"
+        archive: "_archive/phase_executors/"
+        target: "cortex/core/workflow_engine.py"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+      - id: "M-022"
+        component: "phase_management"
+        source: "cortex/phase_management/"
+        archive: "_archive/phase_management/"
+        target: "cortex/core/"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+      - id: "M-023"
+        component: "dormant orchestrators"
+        source: "(various)"
+        archive: "_archive/orchestrators/"
+        target: "(archived permanently unless restored)"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+  # ============================================================================
+  # PHASE 04 MIGRATIONS
+  # ============================================================================
+  phase_04:
+    name: "Directory Cleanup"
+    status: "pending"
+    migrations:
+      - id: "M-030"
+        component: "small directories (<5 files)"
+        source: "(~25 small directories)"
+        archive: "no archive needed — simple move"
+        target: "(canonical locations per phase-04 YAML)"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+  # ============================================================================
+  # PHASE 05 MIGRATIONS
+  # ============================================================================
+  phase_05:
+    name: "Test Consolidation"
+    status: "pending"
+    migrations:
+      - id: "M-040"
+        component: "phase-named test directories"
+        source: "tests/phase_23, phase_49, phase_52, phase_53, phase_54_a, phase_55, phase_56, phase_56_a, phase_71"
+        archive: "_archive/tests/phase_*/"
+        target: "tests/(proper structure)"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+      - id: "M-041"
+        component: "duplicate test directories"
+        source: "tests/dashboard, tests/cortex, tests/cortex_brain, tests/cortex_intelligence, tests/cortex_lens"
+        archive: "_archive/tests/duplicates/"
+        target: "tests/(merged proper structure)"
+        status: "pending"
+        validated: false
+        archive_deleted: false
+
+  # ============================================================================
+  # PHASE 07: ARCHIVE DELETION
+  # ============================================================================
+  phase_07:
+    name: "Archive Deletion"
+    status: "pending"
+    condition: "ALL phases 01-06 complete AND all validations pass"
+    action: "rm -rf _archive/"
+    final_tag: "v2.0.0-cohesive-brain"

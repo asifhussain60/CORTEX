@@ -1,0 +1,798 @@
+# ==============================================================================
+# CAPABILITY MANIFEST — ZERO REGRESSION CHECKLIST
+# ==============================================================================
+# Purpose: Machine-readable manifest of ALL CORTEX capabilities
+# Usage: Validate after every phase to ensure zero regression
+# Status: BASELINE (populated in Phase 00, checked in Phases 01-07)
+# ==============================================================================
+
+manifest:
+  id: "capability-manifest"
+  version: "1.0.0"
+  created: "2026-02-19"
+  last_validated: null
+  status: "baseline_pending"
+  description: |
+    This manifest lists every capability of CORTEX. After Phase 00 creates
+    the golden test that validates this manifest, it becomes the regression
+    gate for all subsequent phases. Every item must be ✅ after each phase.
+
+  # ============================================================================
+  # SECTION 1: MCP TOOLS (External API Surface)
+  # ============================================================================
+  mcp_tools:
+    expected_count: 20
+    consolidation_note: |
+      Consolidated from 34+ to ~20 tools. Zero capability loss.
+      Toolkit tools absorbed. Config loaders unified. Dashboard/refactor
+      tools use mode parameters. See 00-overview.yaml § mcp_consolidation.
+    items:
+      - id: "MCP-001"
+        tool: "cortex_approve_request"
+        category: "request_management"
+        description: "Approve classified request and execute"
+        validation: "Invoke with empty params, expect structured response"
+        status: "⬜ pending"
+
+      - id: "MCP-002"
+        tool: "cortex_ask"
+        category: "education"
+        description: "Educational questions about CORTEX architecture"
+        validation: "Ask 'what is CORTEX?', expect truth-verified answer"
+        status: "⬜ pending"
+
+      - id: "MCP-003"
+        tool: "cortex_audit"
+        category: "governance"
+        description: "Audit + remediation + validation + analysis (consolidated)"
+        absorbs: ["cortex_audit_remediation_plan", "toolkit_validate", "toolkit_analyze"]
+        modes: ["remediate", "validate", "analyze"]
+        validation: "operation=remediate, expect 4 options; operation=validate, expect compliance"
+        status: "⬜ pending"
+
+      - id: "MCP-004"
+        tool: "cortex_capture_metrics"
+        category: "observability"
+        description: "Record development metrics + export reports"
+        absorbs: ["cortex_metrics_report"]
+        modes: ["capture", "report"]
+        validation: "Capture TDD cycle metric; operation=report, expect YAML"
+        status: "⬜ pending"
+
+      - id: "MCP-005"
+        tool: "cortex_challenge"
+        category: "governance"
+        description: "Generate AI-driven challenge using LENS"
+        validation: "Challenge a request, expect LENS analysis"
+        status: "⬜ pending"
+
+      - id: "MCP-006"
+        tool: "cortex_dashboard"
+        category: "dashboard"
+        description: "Dashboard generation (consolidated)"
+        absorbs: ["cortex_generate_dashboard_suite", "cortex_generate_landing_page", "cortex_generate_repo_dashboard"]
+        modes: ["suite", "landing", "repo"]
+        validation: "operation=suite, expect HTML; operation=repo, expect embedded data"
+        status: "⬜ pending"
+
+      - id: "MCP-007"
+        tool: "cortex_discover"
+        category: "discovery"
+        description: "Discover tools + features (consolidated)"
+        absorbs: ["cortex_tools_catalog", "cortex_total_recall"]
+        modes: ["tools", "features", "all"]
+        validation: "scope=tools, expect 20 tools; scope=features, expect feature list"
+        status: "⬜ pending"
+
+      - id: "MCP-008"
+        tool: "cortex_execute_governance"
+        category: "governance"
+        description: "Execute governance actions with audit logging"
+        validation: "Execute enforcement check, expect audit trail in SQLite"
+        status: "⬜ pending"
+
+      - id: "MCP-009"
+        tool: "cortex_git_push"
+        category: "git"
+        description: "Git orchestration — replaces hooks + GitHub Actions"
+        validation: "Invoke, expect pre-push checks"
+        status: "⬜ pending"
+
+      - id: "MCP-010"
+        tool: "cortex_health"
+        category: "maintenance"
+        description: "Health scan + vacuum + diagnostics + SQLite maintenance (consolidated)"
+        absorbs: ["cortex_health_scan", "cortex_vacuum_execute", "toolkit_diagnose", "toolkit_cleanup"]
+        modes: ["scan", "vacuum", "diagnose", "cleanup", "db_maintenance"]
+        validation: |
+          operation=scan, expect health_score;
+          operation=vacuum, expect cleanup report;
+          operation=db_maintenance, expect SQLite VACUUM + WAL checkpoint results
+        status: "⬜ pending"
+
+      - id: "MCP-011"
+        tool: "cortex_load"
+        category: "config"
+        description: "Load config resources (consolidated)"
+        absorbs: ["cortex_load_core_rules", "cortex_load_modes", "cortex_load_response_format", "cortex_load_audit_checklist"]
+        modes: ["rules", "modes", "response_format", "audit_checklist"]
+        validation: "resource=rules, expect 54 rules; resource=modes, expect HEPTA"
+        status: "⬜ pending"
+
+      - id: "MCP-012"
+        tool: "cortex_onboard_repository"
+        category: "onboarding"
+        description: "Onboard repo with LENS + LLM + SQLite + infrastructure detection"
+        absorbs: ["cortex_onboard_repository_v3"]
+        validation: "Onboard cortex, expect analysis + infrastructure hints + SQLite logging"
+        status: "⬜ pending"
+
+      - id: "MCP-013"
+        tool: "cortex_onboard_infrastructure"
+        category: "onboarding"
+        description: "Register company infrastructure — platforms, APIs, applications"
+        validation: "Create platform YAML, expect file in company/infrastructure/platforms/"
+        status: "⬜ pending"
+
+      - id: "MCP-014"
+        tool: "cortex_query_governance"
+        category: "governance"
+        description: "Query governance state, rules, violations from SQLite"
+        validation: "Query rules, expect compliance data from audit db"
+        status: "⬜ pending"
+
+      - id: "MCP-015"
+        tool: "cortex_refactor"
+        category: "refactoring"
+        description: "Semantic refactoring (consolidated)"
+        absorbs: ["cortex_refactor_available_operations", "cortex_refactor_supported_languages"]
+        modes: ["execute", "list_operations", "supported_languages"]
+        validation: "operation=supported_languages, expect Python/C#/TypeScript"
+        status: "⬜ pending"
+
+      - id: "MCP-016"
+        tool: "cortex_validate_compliance"
+        category: "governance"
+        description: "Validate code against CORE rules"
+        validation: "Validate cortex/core/, expect compliance report"
+        status: "⬜ pending"
+
+      - id: "MCP-017"
+        tool: "cortex_verify_claim"
+        category: "verification"
+        description: "Verify claims against live code"
+        validation: "Verify a known claim, expect evidence"
+        status: "⬜ pending"
+
+      - id: "MCP-018"
+        tool: "cortex_verify_environment"
+        category: "environment"
+        description: "Environment verification (consolidated)"
+        absorbs: ["cortex_validate_venv", "cortex_check_dependency_drift", "toolkit_verify"]
+        modes: ["full", "venv", "deps", "mcp"]
+        validation: "check=full, expect Python 3.9+, deps, MCP, venv"
+        status: "⬜ pending"
+
+      - id: "MCP-019"
+        tool: "cortex_vision_analyze"
+        category: "vision"
+        description: "Analyze images via Vision API"
+        validation: "Analyze UI screenshot, expect structural mapping"
+        status: "⬜ pending"
+
+      - id: "MCP-020"
+        tool: "cortex_workflow"
+        category: "orchestration"
+        description: "Workflow execution and management"
+        validation: "Execute workflow template, expect lifecycle completion"
+        status: "⬜ pending"
+
+  # ============================================================================
+  # SECTION 2: ACTIVE ORCHESTRATORS
+  # ============================================================================
+  orchestrators:
+    expected_count: "~40"
+    items:
+      # Core orchestrators
+      - id: "ORCH-001"
+        name: "MasterOrchestrator"
+        domain: "core"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-002"
+        name: "TDDOrchestrator"
+        domain: "core"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-003"
+        name: "EnforcementOrchestrator"
+        domain: "core"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-004"
+        name: "IntentRouter"
+        domain: "core"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-005"
+        name: "InteractionOrchestrator"
+        domain: "core"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-006"
+        name: "WorkflowOrchestrator"
+        domain: "core"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-007"
+        name: "MasterPlanOrchestrator"
+        domain: "core"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-008"
+        name: "ReviewOrchestrator"
+        domain: "core"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-009"
+        name: "SecurityOrchestrator"
+        domain: "core"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      # Domain orchestrators
+      - id: "ORCH-010"
+        name: "PlanningOrchestrator"
+        domain: "domain"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-011"
+        name: "DashboardOrchestrator"
+        domain: "domain"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-012"
+        name: "RefactoringOrchestrator"
+        domain: "domain"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      # Git orchestrators
+      - id: "ORCH-013"
+        name: "GitOrchestrator"
+        domain: "git"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-014"
+        name: "GitPublishOrchestrator"
+        domain: "git"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-015"
+        name: "SanitizationOrchestrator"
+        domain: "git"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      # Health orchestrators
+      - id: "ORCH-016"
+        name: "HealthOrchestrator"
+        domain: "health"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-017"
+        name: "VacuumOrchestrator"
+        domain: "health"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      # Intelligence orchestrators
+      - id: "ORCH-018"
+        name: "IntelligenceOrchestrator"
+        domain: "intelligence"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-019"
+        name: "LensOrchestrator"
+        domain: "intelligence"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-020"
+        name: "CachedLensOrchestrator"
+        domain: "intelligence"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      # Support orchestrators
+      - id: "ORCH-021"
+        name: "DebuggerOrchestrator"
+        domain: "support"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-022"
+        name: "RollbackOrchestrator"
+        domain: "support"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-023"
+        name: "SetupOrchestrator"
+        domain: "support"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-024"
+        name: "UnifiedAnalysisOrchestrator"
+        domain: "support"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-025"
+        name: "UnifiedQualityOrchestrator"
+        domain: "support"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      # Validation
+      - id: "ORCH-026"
+        name: "HolisticValidationOrchestrator"
+        domain: "validation"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      # Onboarding
+      - id: "ORCH-027"
+        name: "OnboardingOrchestrator"
+        domain: "onboarding"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      # Other active
+      - id: "ORCH-028"
+        name: "ConversationOrchestrator"
+        domain: "core"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-029"
+        name: "AutoHealingMcpOrchestrator"
+        domain: "core"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-030"
+        name: "RequestRephraseOrchestrator"
+        domain: "core"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-031"
+        name: "RegressionSafetyOrchestrator"
+        domain: "governance"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-032"
+        name: "ObservabilityOrchestrator"
+        domain: "observability"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-033"
+        name: "StateOrchestrator"
+        domain: "core"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-034"
+        name: "CortexDocsOrchestrator"
+        domain: "internal"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-035"
+        name: "SeleniumPlaywrightOrchestrator"
+        domain: "migration"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-036"
+        name: "SOLIDOrchestrator"
+        domain: "quality"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-037"
+        name: "SecurityVulnerabilityOrchestrator"
+        domain: "security"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-038"
+        name: "TestClassifierOrchestrator"
+        domain: "support"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-039"
+        name: "UpgradeOrchestrator"
+        domain: "support"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+      - id: "ORCH-040"
+        name: "UnifiedDiscoveryOrchestrator"
+        domain: "support"
+        mcp_exposed: false
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+
+  # ============================================================================
+  # SECTION 3: GOVERNANCE RULES
+  # ============================================================================
+  governance_rules:
+    source: "cortex-registry/core/tier0-skull/skull-rules.yaml"
+    expected_count: 54
+    critical_rules:
+      - id: "GOV-001"
+        rule: "CORE-001"
+        name: "Incremental Execution"
+        status: "⬜ pending"
+      - id: "GOV-002"
+        rule: "CORE-002"
+        name: "Markdown Report Suppression"
+        status: "⬜ pending"
+      - id: "GOV-003"
+        rule: "CORE-008"
+        name: "TDD Enforcement"
+        status: "⬜ pending"
+      - id: "GOV-004"
+        rule: "CORE-011"
+        name: "Type Hints"
+        status: "⬜ pending"
+      - id: "GOV-005"
+        rule: "CORE-012"
+        name: "Docstrings"
+        status: "⬜ pending"
+      - id: "GOV-006"
+        rule: "CORE-028"
+        name: "File Naming"
+        status: "⬜ pending"
+      - id: "GOV-007"
+        rule: "CORE-035"
+        name: "Single Canonical Implementation"
+        status: "⬜ pending"
+      - id: "GOV-008"
+        rule: "CORE-048"
+        name: "Holistic Validation Gate"
+        status: "⬜ pending"
+      - id: "GOV-009"
+        rule: "CORE-049"
+        name: "Silent Autonomous Execution"
+        status: "⬜ pending"
+      - id: "GOV-010"
+        rule: "CORE-050"
+        name: "Intent-Based MCP Blocking"
+        status: "⬜ pending"
+      - id: "GOV-011"
+        rule: "CORE-051"
+        name: "Cross-Platform Audit"
+        status: "⬜ pending"
+      - id: "GOV-012"
+        rule: "CORE-053"
+        name: "Auto-Healing"
+        status: "⬜ pending"
+
+  # ============================================================================
+  # SECTION 4: INTELLIGENCE CAPABILITIES
+  # ============================================================================
+  intelligence:
+    items:
+      - id: "INTEL-001"
+        name: "LENS Workspace Analysis"
+        description: "Full workspace code analysis with tiered output"
+        status: "⬜ pending"
+      - id: "INTEL-002"
+        name: "CCL (CORTEX Code Language)"
+        description: "Structured code language for analysis results"
+        status: "⬜ pending"
+      - id: "INTEL-003"
+        name: "Domain Inference"
+        description: "Auto-detect project domain from code patterns"
+        status: "⬜ pending"
+      - id: "INTEL-004"
+        name: "Knowledge Graph"
+        description: "Code knowledge graph for dependency analysis"
+        status: "⬜ pending"
+      - id: "INTEL-005"
+        name: "Pattern Detection"
+        description: "Design pattern recognition in codebases"
+        status: "⬜ pending"
+      - id: "INTEL-006"
+        name: "Adaptive Memory"
+        description: "Learn from past interactions and outcomes"
+        status: "⬜ pending"
+      - id: "INTEL-007"
+        name: "Learned Patterns"
+        description: "Orchestrator and governance learned patterns"
+        status: "⬜ pending"
+      - id: "INTEL-008"
+        name: "Hallucination Prevention"
+        description: "Prevent AI hallucinations in code generation"
+        status: "⬜ pending"
+      - id: "INTEL-009"
+        name: "Credential Protection"
+        description: "Detect and prevent credential leaks"
+        status: "⬜ pending"
+      - id: "INTEL-010"
+        name: "Vision Analysis"
+        description: "Analyze UI screenshots and diagrams"
+        status: "⬜ pending"
+
+  # ============================================================================
+  # SECTION 5: INFRASTRUCTURE SERVICES
+  # ============================================================================
+  infrastructure:
+    items:
+      - id: "INFRA-001"
+        name: "EventBus"
+        description: "Pub/sub event system for orchestrator communication"
+        status: "⬜ pending"
+      - id: "INFRA-002"
+        name: "Orchestrator Tracing"
+        description: "Execution trace logging to cortex-traces.db"
+        status: "⬜ pending"
+      - id: "INFRA-003"
+        name: "CortexAuditDB (Unified SQLite)"
+        description: |
+          Single canonical SQLite manager. 3 consolidated databases:
+          cortex-audit.db (activity), cortex-traces.db (traces), cortex-state.db (state).
+          WAL mode, auto-cleanup, bloat prevention, golden test fixtures.
+        status: "⬜ pending"
+      - id: "INFRA-004"
+        name: "Prometheus Metrics"
+        description: "Metrics export for observability"
+        status: "⬜ pending"
+      - id: "INFRA-005"
+        name: "OpenTelemetry Tracing"
+        description: "Distributed tracing support"
+        status: "⬜ pending"
+      - id: "INFRA-006"
+        name: "Health Check Service (with SQLite)"
+        description: "System health monitoring including SQLite db health checks"
+        status: "⬜ pending"
+      - id: "INFRA-007"
+        name: "Bootstrap/Startup"
+        description: "Application initialization, wiring, and audit db schema migration"
+        status: "⬜ pending"
+      - id: "INFRA-008"
+        name: "Security Defense"
+        description: "Input validation, credential protection"
+        status: "⬜ pending"
+      - id: "INFRA-009"
+        name: "SQLite Retention Policy Engine"
+        description: |
+          YAML-driven retention: audit 30d, traces 7d, metrics 90d, state permanent.
+          Auto-cleanup on teardown. VACUUM on threshold. WAL checkpoint on close.
+        status: "⬜ pending"
+      - id: "INFRA-010"
+        name: "SQLite Health Checks"
+        description: |
+          Health scan targets for SQLite: db size, WAL size, row counts,
+          stale data, lock contention, schema drift. Integrated into cortex_health.
+        status: "⬜ pending"
+
+  # ============================================================================
+  # SECTION 6: WORKFLOW TEMPLATES
+  # ============================================================================
+  workflow_templates:
+    existing:
+      - id: "WF-001"
+        template: "tdd/tdd-feature-implementation.yaml"
+        status: "⬜ pending"
+      - id: "WF-002"
+        template: "tdd/tdd-api-service.yaml"
+        status: "⬜ pending"
+      - id: "WF-003"
+        template: "tdd/tdd-frontend-visual.yaml"
+        status: "⬜ pending"
+      - id: "WF-004"
+        template: "tdd/frontend-tdd-workflow.yaml"
+        status: "⬜ pending"
+      - id: "WF-005"
+        template: "governance/golden-test-promotion.yaml"
+        status: "⬜ pending"
+      - id: "WF-006"
+        template: "governance/request-execution-plan-gate.yaml"
+        status: "⬜ pending"
+      - id: "WF-007"
+        template: "lifecycle/legacy-rescue.yaml"
+        status: "⬜ pending"
+      - id: "WF-008"
+        template: "lifecycle/master-plan-execution.yaml"
+        status: "⬜ pending"
+      - id: "WF-009"
+        template: "lifecycle/master-plan-orchestrator.yaml"
+        status: "⬜ pending"
+      - id: "WF-010"
+        template: "lifecycle/migration-modernize.yaml"
+        status: "⬜ pending"
+      - id: "WF-011"
+        template: "lifecycle/onboarding-repo-setup.yaml"
+        status: "⬜ pending"
+      - id: "WF-012"
+        template: "lifecycle/onboarding-workflow.yaml"
+        status: "⬜ pending"
+      - id: "WF-013"
+        template: "maintenance/cleanup-deduplication.yaml"
+        status: "⬜ pending"
+      - id: "WF-014"
+        template: "maintenance/health-vacuum-unified-pipeline.yaml"
+        status: "⬜ pending"
+      - id: "WF-015"
+        template: "maintenance/review-post-phase-dedup.yaml"
+        status: "⬜ pending"
+      - id: "WF-016"
+        template: "quality/quality-code-uplift.yaml"
+        status: "⬜ pending"
+      - id: "WF-017"
+        template: "quality/quality-uplift.yaml"
+        status: "⬜ pending"
+      - id: "WF-018"
+        template: "quality/refactor-holistic-sweep.yaml"
+        status: "⬜ pending"
+      - id: "WF-019"
+        template: "security/security-compliance-audit.yaml"
+        status: "⬜ pending"
+      - id: "WF-020"
+        template: "security/security-hardening.yaml"
+        status: "⬜ pending"
+      - id: "WF-021"
+        template: "internal/cortex-site-validation.yaml"
+        status: "⬜ pending"
+
+    new_required:
+      description: "Templates to be created in Phase 03 for orchestrators without templates"
+      count: "~15"
+      status: "⬜ pending — created in Phase 03"
+
+  # ============================================================================
+  # SECTION 7: DESIGN PATTERNS (Enterprise Architecture)
+  # ============================================================================
+  design_patterns:
+    items:
+      - id: "DP-001"
+        pattern: "Mediator"
+        usage: "MasterOrchestrator coordinates domain orchestrators"
+        status: "⬜ pending"
+      - id: "DP-002"
+        pattern: "Strategy"
+        usage: "Workflow templates as interchangeable execution strategies"
+        status: "⬜ pending"
+      - id: "DP-003"
+        pattern: "Observer/EventBus"
+        usage: "Loose coupling between orchestrators"
+        status: "⬜ pending"
+      - id: "DP-004"
+        pattern: "Factory"
+        usage: "OrchestratorFactory, FileFactory"
+        status: "⬜ pending"
+      - id: "DP-005"
+        pattern: "Template Method"
+        usage: "OrchestratorBase lifecycle"
+        status: "⬜ pending"
+      - id: "DP-006"
+        pattern: "Chain of Responsibility"
+        usage: "Governance tier chain"
+        status: "⬜ pending"
+      - id: "DP-007"
+        pattern: "Decorator"
+        usage: "Orchestrator context injection"
+        status: "⬜ pending"
+      - id: "DP-008"
+        pattern: "Adapter"
+        usage: "MCP tools adapt internal orchestrators"
+        status: "⬜ pending"
+      - id: "DP-009"
+        pattern: "Repository/Registry"
+        usage: "Orchestrator lookup, rule lookup"
+        status: "⬜ pending"
+      - id: "DP-010"
+        pattern: "Command"
+        usage: "Workflow steps as commands"
+        status: "⬜ pending"

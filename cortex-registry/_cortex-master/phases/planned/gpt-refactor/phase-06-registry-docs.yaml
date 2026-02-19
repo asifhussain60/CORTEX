@@ -1,0 +1,461 @@
+# ==============================================================================
+# PHASE 06 — REGISTRY & DOCS ALIGNMENT
+# ==============================================================================
+# Purpose: cortex-registry as one-stop YAML shop, cortex-docs as architecture ref
+# Gate: All registry YAMLs valid, docs match code, workflow templates complete
+# ==============================================================================
+
+phase:
+  id: "phase-06"
+  name: "Registry & Docs Alignment"
+  status: "pending"
+  priority: "P1"
+  estimated_effort: "3-5 days"
+  risk: "low"
+  depends_on: ["phase-05"]
+  description: |
+    Ensure cortex-registry is the canonical one-stop shop for all YAML data:
+    governance rules, workflow templates, company data, knowledge base,
+    orchestrator wiring specs, and configuration.
+
+    Ensure cortex-docs accurately represents the new architecture and serves
+    as the living documentation for the CORTEX brain.
+
+  # ============================================================================
+  # REGISTRY AUDIT & CLEANUP
+  # ============================================================================
+  registry_tasks:
+    - id: "R1"
+      name: "Validate all workflow templates"
+      description: |
+        Every active orchestrator from Phase 03 must have a workflow template.
+        All templates must conform to the schema from Phase 00.
+        Templates must have setup/teardown steps.
+      validation:
+        - "Schema validation against workflow-template-schema.yaml"
+        - "All template references resolve (use_template directives)"
+        - "All orchestrator references in templates are valid"
+
+    - id: "R2"
+      name: "Clean stale YAMLs"
+      description: |
+        Remove or archive YAMLs that reference:
+        - Deleted/archived orchestrators
+        - Old directory paths (cortex/brain/, cortex_intelligence/, etc.)
+        - Phase-specific artifacts that are no longer relevant
+
+    - id: "R3"
+      name: "Validate knowledge base"
+      description: |
+        cortex-registry/knowledge-base/ should contain:
+        - Governance compliance rules (5 files)
+        - Industry profiles (6 files: auth, devops, finops, healthcare, legal, ml)
+        - Repository profiles (2 files: cortex, ksessions)
+        - Security knowledge (3 files: cicd-hardening, owasp-top10, secrets-patterns)
+      quality_check:
+        - "All YAML files parse without errors"
+        - "All rule_id references are unique"
+        - "All profile references resolve"
+
+    - id: "R4"
+      name: "Validate core specifications"
+      description: |
+        cortex-registry/core/specifications/ defines orchestrator wiring.
+        Ensure all wiring specs reference valid orchestrators in new structure.
+      files:
+        - "core-orchestrator-wiring.yaml"
+        - "domain-orchestrator-wiring.yaml"
+        - "domain-transition-rules.yaml"
+        - "execution-flow-specification.yaml"
+        - "governance-validation-gates.yaml"
+        - "intent-routing-rules.yaml"
+        - "orchestration-master-wiring.yaml"
+        - "support-orchestrator-wiring.yaml"
+
+    - id: "R5"
+      name: "Add enterprise patterns"
+      description: |
+        cortex-registry/patterns/ is currently empty. Populate with:
+        - Design patterns used in CORTEX (from 00-overview.yaml architecture)
+        - Enterprise architecture patterns for team collaboration
+        - Integration patterns for MCP tool composition
+      patterns_to_add:
+        - "patterns/mediator-orchestration.yaml"
+        - "patterns/strategy-workflow.yaml"
+        - "patterns/observer-event-bus.yaml"
+        - "patterns/factory-creation.yaml"
+        - "patterns/template-method-lifecycle.yaml"
+        - "patterns/chain-of-responsibility-governance.yaml"
+        - "patterns/adapter-mcp.yaml"
+        - "patterns/repository-registry.yaml"
+        - "patterns/command-workflow-step.yaml"
+
+    - id: "R6"
+      name: "Validate _cortex-master structure"
+      description: |
+        _cortex-master/ is the phase management directory. Ensure:
+        - All completed phases have proper completion records
+        - All planned phases are properly indexed
+        - cortex-master.yaml is in sync with actual state
+
+    # --------------------------------------------------------------------------
+    # R7-R9: COMPANY INFRASTRUCTURE CATALOG (GAP IDENTIFIED 2026-02-19)
+    # --------------------------------------------------------------------------
+    # Gap: cortex-registry/company/ has domains/, repos/, dashboards/ but
+    # ZERO infrastructure awareness — no platform definitions, no API catalog,
+    # no application inventory, no service topology. CORTEX cannot reason about
+    # how repos connect, which APIs call which services, or what platforms host them.
+    # --------------------------------------------------------------------------
+
+    - id: "R7"
+      name: "Create infrastructure catalog schema + folder structure"
+      description: |
+        Create cortex-registry/company/infrastructure/ with:
+        - _schema.yaml — master schema defining platform, api, application YAML structure
+        - platforms/ — one YAML per platform (e.g., azure-aks-prod.yaml, aws-eks-staging.yaml)
+        - apis/ — one YAML per API (internal + external), with versioning, endpoints, owners
+        - applications/ — one YAML per application (frontend, backend, mobile, data pipeline)
+        - topology.yaml — cross-cutting service map linking repos → apis → platforms
+      folder_structure:
+        company/infrastructure/:
+          _schema.yaml:
+            purpose: "Pydantic-style schema defining valid fields for platforms, apis, apps"
+            fields_platform:
+              - "name (required)"
+              - "type: enum[kubernetes, serverless, vm, paas, saas]"
+              - "provider: enum[azure, aws, gcp, on-prem, hybrid]"
+              - "environments: list[{name, url, tier: enum[prod, staging, dev]}]"
+              - "hosted_applications: list[app_ref]"
+              - "networking: {vpc, subnets, load_balancers}"
+              - "observability: {monitoring_url, logging_url, tracing_url}"
+              - "owner_team: string"
+              - "cost_center: string"
+              - "created_at, updated_at: datetime"
+            fields_api:
+              - "name (required)"
+              - "type: enum[rest, grpc, graphql, soap, event-stream]"
+              - "version: string"
+              - "base_url: string (per-environment)"
+              - "endpoints: list[{path, method, auth_required, rate_limit}]"
+              - "owner_repo: repo_ref"
+              - "consumers: list[app_ref]"
+              - "auth: enum[oauth2, api-key, jwt, mtls, none]"
+              - "documentation_url: string"
+              - "sla: {availability, latency_p99_ms}"
+              - "created_at, updated_at: datetime"
+            fields_application:
+              - "name (required)"
+              - "type: enum[web-spa, web-ssr, mobile-ios, mobile-android, api-service, worker, data-pipeline, cli]"
+              - "repository: repo_ref"
+              - "platform: platform_ref"
+              - "tech_stack: list[string]"
+              - "apis_consumed: list[api_ref]"
+              - "apis_exposed: list[api_ref]"
+              - "environments: list[{name, url, status}]"
+              - "owner_team: string"
+              - "dependencies: list[app_ref]"
+              - "created_at, updated_at: datetime"
+          platforms/: "One YAML per platform"
+          apis/: "One YAML per API"
+          applications/: "One YAML per application"
+          topology.yaml: "Auto-generated service map from all above"
+
+    - id: "R8"
+      name: "Enhance onboarding orchestrator with infrastructure detection"
+      description: |
+        Extend cortex_onboard_repository MCP tool to:
+        1. DETECT infrastructure hints from code (additive, non-breaking):
+           - Scan for API framework declarations (FastAPI routes, Express endpoints, gRPC protos)
+           - Scan for Dockerfile/docker-compose → infer containerized platform
+           - Scan for Kubernetes manifests (k8s/*.yaml, helm/) → infer K8s platform
+           - Scan for cloud provider config (azure-pipelines.yml, .github/workflows, serverless.yaml)
+           - Scan for API client imports → infer consumed APIs
+        2. Generate DRAFT infrastructure YAMLs in company/infrastructure/:
+           - draft-api-{repo_name}.yaml (if API routes detected)
+           - draft-app-{repo_name}.yaml (always — every repo is an application)
+        3. Mark all auto-generated YAMLs with "status: draft" and "source: auto-detected"
+           so human review is explicit
+        4. Link to existing repo profile via repo_ref
+      zero_regression: |
+        - Existing onboarding output (9-tab, profile.json, repository.yaml) unchanged
+        - Infrastructure detection is an ADDITIONAL step after existing flow
+        - Failures in infrastructure detection are NON-BLOCKING (same pattern as
+          existing learning_capture and brain_enhancement — try/except with warnings)
+      tdd_approach:
+        red:
+          - "test_infra_detection_fastapi_routes"
+          - "test_infra_detection_dockerfile"
+          - "test_infra_detection_k8s_manifests"
+          - "test_infra_detection_cloud_config"
+          - "test_infra_draft_yaml_generation"
+          - "test_infra_detection_non_blocking_on_failure"
+          - "test_existing_onboarding_output_unchanged"
+        green: "Implement InfrastructureDetector adapter in cortex/intelligence/infrastructure/"
+
+    - id: "R9"
+      name: "Create cortex_onboard_infrastructure MCP tool"
+      description: |
+        New MCP tool for EXPLICIT infrastructure registration (not code-inferred).
+        For platforms, APIs, and applications that can't be auto-detected.
+        
+        Tool: cortex_onboard_infrastructure
+        Parameters:
+          - entity_type: enum[platform, api, application]
+          - name: string (required)
+          - data: dict (validated against _schema.yaml per entity_type)
+          - link_to_repo: optional[string] (repo name to cross-reference)
+        
+        Output: YAML file created in company/infrastructure/{entity_type}s/{name}.yaml
+        
+        Topology auto-update: After any infrastructure YAML changes, regenerate
+        topology.yaml by walking all platform/api/application YAMLs and building
+        the dependency graph.
+      mcp_exposure:
+        tool_name: "cortex_onboard_infrastructure"
+        schema:
+          name: "cortex_onboard_infrastructure"
+          description: "Register company infrastructure — platforms, APIs, applications"
+          parameters:
+            entity_type: "enum[platform, api, application]"
+            name: "string"
+            data: "dict"
+            link_to_repo: "optional[string]"
+      tdd_approach:
+        red:
+          - "test_create_platform_yaml"
+          - "test_create_api_yaml"
+          - "test_create_application_yaml"
+          - "test_schema_validation_rejects_invalid"
+          - "test_topology_regeneration"
+          - "test_repo_cross_reference"
+        green: "Implement in cortex/mcp/tools/onboard_infrastructure.py"
+
+  # ============================================================================
+  # DOCS ALIGNMENT
+  # ============================================================================
+  docs_tasks:
+    - id: "D1"
+      name: "Update architecture documentation"
+      description: |
+        cortex-docs/ must reflect the new structure from Phases 01-04:
+        - Updated directory tree
+        - Updated orchestrator catalog
+        - Updated MCP tool documentation
+        - Updated governance rule reference
+      files_to_update:
+        - "cortex-docs/architecture/"
+        - "cortex-docs/engineering/"
+        - "cortex-docs/api/"
+
+    - id: "D2"
+      name: "Generate architecture diagrams"
+      description: |
+        Create/update diagrams showing:
+        - Package structure (single cortex/ package)
+        - Orchestrator hierarchy
+        - MCP tool mapping to orchestrators
+        - Workflow template execution flow
+        - Governance tier chain
+
+    - id: "D3"
+      name: "Update prompt files"
+      description: |
+        .github/prompts/ must reference correct paths:
+        - cortex-architect.prompt.md
+        - Reference docs
+        - MCP integration guide
+      validation: "All file paths in prompts resolve to existing files"
+
+    - id: "D4"
+      name: "Update copilot instructions"
+      description: |
+        .github/copilot-instructions.md must reflect:
+        - New file organization
+        - Updated development standards
+        - Correct import paths
+
+  # ============================================================================
+  # TEAM COLLABORATION ENHANCEMENTS
+  # ============================================================================
+  team_collaboration:
+    - name: "Self-documenting registry"
+      description: |
+        Every YAML in cortex-registry should be self-documenting:
+        - Clear description field
+        - Author and last_updated metadata
+        - References to related YAMLs
+        - Usage examples where applicable
+
+    - name: "Onboarding path"
+      description: |
+        New team members should be able to:
+        1. Read cortex-docs/ for architecture overview
+        2. Browse cortex-registry/ for all configuration
+        3. Navigate cortex/ following the same structure as tests/
+        4. Find any orchestrator's workflow template in the registry
+
+    - name: "Searchability"
+      description: |
+        cortex-registry/ must support:
+        - grep for any concept → find the YAML immediately
+        - All rule IDs are unique and searchable
+        - All orchestrator names map to exactly one workflow template
+
+  # ============================================================================
+  # EXECUTION SEQUENCE (Step-by-step)
+  # ============================================================================
+  execution_sequence:
+    - step: 1
+      name: "Schema-validate all workflow templates"
+      command: |
+        find cortex-registry/workflows/templates -name '*.yaml' | while read f; do
+          python -c "import yaml; yaml.safe_load(open('$f'))" && echo "OK: $f" || echo "FAIL: $f"
+        done
+      expected: "All YAML files parse without errors"
+
+    - step: 2
+      name: "Validate all orchestrator → template bindings"
+      description: |
+        For each active orchestrator in capability manifest:
+        - Verify workflow_template_id exists
+        - Verify template file exists at expected path
+        - Verify template has setup + teardown steps
+      gate: "100% binding coverage"
+
+    - step: 3
+      name: "Clean stale YAML references"
+      description: |
+        Search all YAMLs for references to deleted paths:
+        - cortex/brain/
+        - cortex_intelligence/
+        - cortex_lens/
+        - phase_38, phase_executors, phase_management
+      command: "grep -r 'cortex/brain\\|cortex_intelligence\\|cortex_lens' cortex-registry/ | wc -l"
+      expected: "0"
+
+    - step: 4
+      name: "Validate knowledge base integrity"
+      description: "All 16 knowledge base YAMLs parse, rule_ids unique, profiles resolve"
+      gate: "All YAMLs valid"
+
+    - step: 5
+      name: "Validate core specification wiring"
+      description: "All 8 wiring spec files reference valid orchestrators"
+      gate: "All references resolve"
+
+    - step: 6
+      name: "Create enterprise design patterns"
+      location: "cortex-registry/patterns/"
+      files:
+        - "patterns/mediator-orchestration.yaml"
+        - "patterns/strategy-workflow.yaml"
+        - "patterns/observer-event-bus.yaml"
+        - "patterns/factory-creation.yaml"
+        - "patterns/template-method-lifecycle.yaml"
+        - "patterns/chain-of-responsibility-governance.yaml"
+        - "patterns/adapter-mcp.yaml"
+        - "patterns/repository-registry.yaml"
+        - "patterns/command-workflow-step.yaml"
+      gate: "All pattern files created and valid YAML"
+
+    - step: 7
+      name: "Update cortex-docs/"
+      description: |
+        - Update architecture docs to reflect new structure
+        - Update API docs for MCP tools
+        - Update engineering docs for workflow templates
+        - Remove references to deleted/archived components
+      gate: "All file path references in docs resolve to existing files"
+
+    - step: 8
+      name: "Update prompt files"
+      files:
+        - ".github/prompts/cortex-architect.prompt.md"
+        - ".github/copilot-instructions.md"
+      gate: "All paths referenced in prompts exist"
+
+    - step: 9
+      name: "Validate team collaboration readiness"
+      checks:
+        - "Every YAML has description field"
+        - "Every YAML has author/last_updated metadata"
+        - "README.md exists in each major directory"
+      gate: "Self-documenting registry"
+
+    # --- Infrastructure Catalog steps (R7, R8, R9) ---
+
+    - step: "9A"
+      name: "Create infrastructure catalog folder structure"
+      commands:
+        - "mkdir -p cortex-registry/company/infrastructure/{platforms,apis,applications}"
+      gate: "Directories exist"
+
+    - step: "9B"
+      name: "TDD RED — Infrastructure schema + detection tests"
+      description: |
+        Write failing tests FIRST (CORE-008):
+        1. test_infrastructure_schema_valid — _schema.yaml defines platform/api/app
+        2. test_infra_detection_fastapi — detects FastAPI routes as API hints
+        3. test_infra_detection_dockerfile — detects Docker → containerized platform
+        4. test_infra_detection_k8s — detects k8s manifests → K8s platform
+        5. test_draft_yaml_generation — generates draft-api-{name}.yaml
+        6. test_detection_non_blocking — failure doesn't break onboarding
+        7. test_existing_onboarding_unchanged — 9-tab output still correct
+        8. test_create_platform_yaml — MCP tool creates platform YAML
+        9. test_create_api_yaml — MCP tool creates API YAML
+        10. test_topology_regeneration — topology.yaml auto-updates
+      command: "pytest tests/unit/infrastructure/ -v --tb=short"
+      expected: "ALL FAIL (RED)"
+
+    - step: "9C"
+      name: "TDD GREEN — Implement schema, detector, MCP tool"
+      description: |
+        1. Create cortex-registry/company/infrastructure/_schema.yaml
+        2. Create cortex/intelligence/infrastructure/detector.py (InfrastructureDetector)
+        3. Extend cortex/mcp/tools/onboard_repository.py — add infra detection step
+        4. Create cortex/mcp/tools/onboard_infrastructure.py — new MCP tool
+        5. Create topology generator in cortex/intelligence/infrastructure/topology.py
+      command: "pytest tests/unit/infrastructure/ -v --tb=short"
+      expected: "ALL PASS (GREEN)"
+
+    - step: "9D"
+      name: "Register MCP tool + validate integration"
+      description: |
+        1. Add cortex_onboard_infrastructure to MCP tool registry
+        2. Run full onboarding e2e test — verify existing output unchanged
+        3. Run infrastructure-specific e2e test — verify YAML generation
+        4. Update capability manifest with new MCP tool
+      gate: "New tool registered, existing tools unaffected"
+
+    - step: 10
+      name: "Run capability manifest regression gate"
+      command: "pytest tests/golden/regression/test_capability_manifest.py -v"
+      expected: "PASS"
+
+    - step: 11
+      name: "Commit Phase 06"
+      command: "git add -A && git commit -m 'refactor(phase-06): registry and docs alignment — one-stop YAML shop'"
+      tag: "gpt-refactor-phase-06"
+
+  # ============================================================================
+  # EXIT GATE
+  # ============================================================================
+  exit_gate:
+    all_yamls_valid: true
+    all_templates_schema_valid: true
+    all_doc_paths_resolve: true
+    patterns_directory_populated: true
+    infrastructure_catalog_created: true
+    infrastructure_mcp_tool_registered: true
+    capability_manifest_check: true
+    description: |
+      Phase 06 is complete when:
+      1. All YAML files parse without errors
+      2. All workflow templates conform to schema
+      3. All file path references in docs resolve
+      4. Patterns directory has enterprise architecture patterns
+      5. cortex-docs reflects new architecture
+      6. Infrastructure catalog exists (schema + folder structure)
+      7. cortex_onboard_infrastructure MCP tool registered and tested
+      8. Onboarding orchestrator detects infrastructure hints (non-blocking)
+      9. Capability manifest shows zero regressions

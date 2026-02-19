@@ -1,0 +1,643 @@
+# ==============================================================================
+# GPT REFACTOR — MASTER OVERVIEW
+# ==============================================================================
+# Purpose: Transform CORTEX from fragmented packages into a single cohesive brain
+# Author: Asif Hussain
+# Created: 2026-02-19
+# Branch: CORTEX-GPT
+# Status: APPROVED
+# ==============================================================================
+
+refactor:
+  id: "gpt-refactor"
+  name: "CORTEX Cohesive Brain Refactor"
+  version: "1.0.0"
+  status: "approved"
+  created: "2026-02-19"
+  estimated_duration: "8 phases"
+  branch: "CORTEX-GPT"
+
+  # ============================================================================
+  # DEFINITION OF DONE (DoD)
+  # ============================================================================
+  definition_of_done:
+    - "CORTEX operates as a SINGLE cohesive brain — one Python package"
+    - "All tests (unit, regression, integration, golden) are high-value — zero dead tests"
+    - "Clear separation between CORTEX internal brain workings and external MCP surface"
+    - "cortex-docs represents the enhanced CORTEX architecture accurately"
+    - "cortex-registry is the one-stop YAML shop for all governance, workflows, company data"
+    - "A clean, concise repo that works efficiently and accurately"
+    - "Zero regression — every capability in the manifest checklist passes"
+    - "All orchestrators execute through dedicated workflow templates"
+    - "No version suffixes in any file names (no v1, v2, _v, enhanced_)"
+    - "File factory is canonical SSOT for all file creation"
+    - "Team collaboration ready — clear boundaries, self-documenting"
+    - "Security, accuracy, efficiency, quality at the heart of every operation"
+    - "ALL CORTEX activity intelligently logged in SQLite with auto-cleanup and bloat prevention"
+    - "SQLite audit logging is integral to golden tests with setup/teardown cleanups"
+    - "Health and vacuum include SQLite database maintenance (VACUUM, bloat checks, deadlock prevention)"
+    - "ALL functionality exposed via MCP — consolidated small footprint (no toolkit sprawl)"
+    - "MCP tool count consolidated from 34+ to ~20 cohesive tools (zero capability loss)"
+
+  # ============================================================================
+  # ARCHITECTURAL PRINCIPLES
+  # ============================================================================
+  architecture:
+    pattern: "hexagonal_clean_architecture"
+    description: |
+      CORTEX uses a Hexagonal (Ports & Adapters) architecture where:
+      - The KERNEL (cortex/core/) contains stable business logic
+      - PORTS define interfaces (orchestrator contracts, tool interfaces)
+      - ADAPTERS connect to external systems (MCP, filesystem, git, LLM)
+      - Every orchestrator runs through a dedicated workflow template
+      - Governance is enforced at every boundary
+
+    layers:
+      kernel:
+        location: "cortex/core/"
+        purpose: "Stable foundation — orchestrator base, event bus, DI, file factory, workflow engine"
+        changes: "Rarely — only with full regression suite"
+
+      intelligence:
+        location: "cortex/intelligence/"
+        purpose: "LENS analysis, domain brain, pattern detection, adaptive memory"
+        changes: "Moderate — new analyzers, improved detection"
+
+      orchestration:
+        location: "cortex/orchestrators/"
+        purpose: "ALL orchestrators — flat registry, workflow-template-driven"
+        changes: "Frequently — new capabilities added here"
+
+      governance:
+        location: "cortex/governance/"
+        purpose: "ONE governance directory — rules, enforcement, audit"
+        changes: "Controlled — new rules go through challenge gate"
+
+      external:
+        location: "cortex/mcp/"
+        purpose: "MCP tool surface — the ONLY external API"
+        changes: "Carefully — public contract"
+
+      infrastructure:
+        location: "cortex/infrastructure/"
+        purpose: "Logging, tracing, DB, caching, security, event bus"
+        changes: "Stable — operational concerns"
+
+    design_patterns:
+      - pattern: "mediator"
+        usage: "MasterOrchestrator mediates between all domain orchestrators"
+      - pattern: "strategy"
+        usage: "Workflow templates provide interchangeable execution strategies"
+      - pattern: "observer"
+        usage: "EventBus enables loose coupling between orchestrators"
+      - pattern: "factory"
+        usage: "OrchestratorFactory, FileFactory create instances from config"
+      - pattern: "template_method"
+        usage: "OrchestratorBase.run() defines lifecycle; subclasses implement execute()"
+      - pattern: "chain_of_responsibility"
+        usage: "Governance rules chain — tier0 > tier1 > tier2"
+      - pattern: "decorator"
+        usage: "Orchestrator decorators inject governance, audit, tracing"
+      - pattern: "adapter"
+        usage: "MCP tools adapt internal orchestrators to external API"
+      - pattern: "repository"
+        usage: "Registry pattern for orchestrator lookup, rule lookup, template lookup"
+      - pattern: "command"
+        usage: "Workflow steps are commands with setup/teardown lifecycle"
+
+  # ============================================================================
+  # ENTERPRISE ARCHITECTURE PRINCIPLES
+  # ============================================================================
+  enterprise_architecture:
+    description: |
+      Synthesized from GPT review + cortex-registry knowledge-base + existing
+      CORTEX engineering standards. These principles guide every phase.
+
+    principles:
+      - id: "EA-001"
+        name: "Single Source of Truth (SSOT)"
+        description: "Every concept has exactly ONE canonical location"
+        enforced_by: "consolidation-matrix.yaml"
+
+      - id: "EA-002"
+        name: "Hexagonal Architecture"
+        description: |
+          Stable kernel (core) + ports (interfaces) + adapters (MCP, filesystem, git).
+          The kernel NEVER depends on adapters. Adapters depend on ports.
+        enforced_by: "Import direction checks at phase gates"
+
+      - id: "EA-003"
+        name: "Domain-Driven Orchestration"
+        description: "Each domain has exactly one canonical orchestrator"
+        enforced_by: "CORE-035 + orchestrator registry"
+
+      - id: "EA-004"
+        name: "Composition over Inheritance"
+        description: |
+          Workflow templates compose behavior. Orchestrators compose sub-templates.
+          Prefer use_template directive over deep class hierarchies.
+        enforced_by: "Workflow template engine"
+
+      - id: "EA-005"
+        name: "Defense in Depth"
+        description: |
+          Security at every layer: input validation (MCP), governance gates
+          (orchestrator lifecycle), credential protection (intelligence),
+          audit logging (infrastructure).
+        enforced_by: "Security compliance audit template"
+
+      - id: "EA-006"
+        name: "Team Collaboration Ready"
+        description: |
+          Clean boundaries between domains enable parallel team work.
+          Self-documenting code (type hints + docstrings). YAML-driven
+          configuration over hardcoded behavior.
+        enforced_by: "CORE-011, CORE-012, YAML config pattern"
+
+      - id: "EA-007"
+        name: "Accuracy First"
+        description: |
+          Every operation validates its outputs. Hallucination prevention.
+          Truth-based verification via cortex_verify_claim. Golden tests
+          as the ultimate accuracy contract.
+        enforced_by: "Validate step in workflow lifecycle"
+
+      - id: "EA-008"
+        name: "Observable by Default"
+        description: |
+          Every orchestrator emits traces, metrics, and audit events.
+          Single observability stack. No silent failures.
+        enforced_by: "Teardown step in workflow lifecycle"
+
+    quality_pillars:
+      extensibility: "Plugin architecture via workflow templates + orchestrator registry"
+      scalability: "Event-driven architecture + MCP tool isolation"
+      accuracy: "Golden tests + hallucination prevention + verify_claim"
+      team_collaboration: "Domain boundaries + YAML config + self-documenting code"
+      maintainability: "SSOT + zero duplication + capability manifest regression gate"
+      security: "Defense in depth + credential protection + governance gates"
+
+  # ============================================================================
+  # SQLITE AUDIT ARCHITECTURE (Unified Activity Logging)
+  # ============================================================================
+  sqlite_architecture:
+    description: |
+      ALL CORTEX activity is logged intelligently in SQLite. A single
+      CortexAuditDB manages all databases with auto-cleanup, bloat prevention,
+      WAL mode for zero deadlocks, and proper setup/teardown for golden tests.
+
+    principles:
+      - id: "SQL-001"
+        name: "Single DB Manager (SSOT)"
+        description: |
+          ONE canonical CortexAuditDB class at cortex/infrastructure/audit_db.py.
+          All SQLite access goes through this manager — no raw sqlite3.connect()
+          scattered across the codebase. Replaces 10+ ad-hoc db connections.
+        replaces:
+          - "cortex/tools/scaffolder_audit_logger.py (raw sqlite3)"
+          - "cortex/tools/governance_dashboard.py (raw sqlite3)"
+          - "cortex/tools/phase_readiness_checker.py (raw sqlite3)"
+          - "cortex/tools/cortex_intelligence_integration.py (raw sqlite3)"
+          - "cortex/tools/ac_populator.py (raw sqlite3)"
+          - "cortex/wiring/registry/contract_validation_audit.db (ad-hoc)"
+
+      - id: "SQL-002"
+        name: "Consolidated Database Files"
+        description: |
+          Reduce 10 scattered .db files to 3 purpose-built databases:
+          1. .cortex-runtime/cortex-audit.db — ALL activity logging (orchestrator
+             executions, governance checks, MCP tool calls, test runs)
+          2. .cortex-runtime/cortex-traces.db — execution traces + metrics
+          3. .cortex-runtime/cortex-state.db — conversations, state, onboarding data
+        current_scattered_dbs:
+          - ".cortex-runtime/traces/orchestrator-traces.db"
+          - "cortex_intelligence/governance.db"
+          - "cortex_intelligence/state/governance.db"
+          - "cortex_intelligence/state/conversations.db"
+          - "cortex_intelligence/intelligence/intelligence_audit.db"
+          - "cortex_intelligence/observability/observability_audit.db"
+          - "cortex_intelligence/quality/solid_audit.db"
+          - "cortex_intelligence/wiring/contract_validation_audit.db"
+          - "cortex/wiring/registry/contract_validation_audit.db"
+          - "cortex/orchestrators/intelligence/intelligence_audit.db"
+
+      - id: "SQL-003"
+        name: "WAL Mode + Zero Deadlocks"
+        description: |
+          All databases use WAL (Write-Ahead Logging) journal mode for:
+          - Concurrent reads during writes (zero blocking)
+          - No deadlocks between health scans, vacuum, and normal operations
+          - Busy timeout of 5000ms for retry on contention
+          - Connection pooling with max 3 writers per database
+        config:
+          journal_mode: "WAL"
+          busy_timeout_ms: 5000
+          max_connections: 5
+          wal_checkpoint_interval: 1000
+
+      - id: "SQL-004"
+        name: "Intelligent Auto-Cleanup"
+        description: |
+          Automatic bloat prevention with configurable retention:
+          - Audit logs: 30 days retention (configurable via YAML)
+          - Trace data: 7 days retention
+          - State data: permanent (conversations, onboarding)
+          - Auto-VACUUM on database size > threshold (default 50MB)
+          - Scheduled cleanup on orchestrator teardown lifecycle step
+        config_location: "cortex-registry/config/sqlite-retention.yaml"
+        retention:
+          audit_logs: "30d"
+          trace_data: "7d"
+          metrics_data: "90d"
+          state_data: "permanent"
+        bloat_prevention:
+          max_db_size_mb: 50
+          auto_vacuum: true
+          vacuum_on_startup: false
+          vacuum_on_health_scan: true
+          wal_checkpoint_on_close: true
+
+      - id: "SQL-005"
+        name: "Golden Test Integration"
+        description: |
+          SQLite audit logging is integral to golden tests:
+          - setup(): Create isolated test database (in-memory or temp file)
+          - Each test logs to isolated db — no cross-test contamination
+          - teardown(): Assert expected audit records exist, then cleanup
+          - Golden tests validate the audit trail itself (not just code output)
+          - Fixtures: cortex_audit_db (pytest fixture providing clean CortexAuditDB)
+        test_fixtures:
+          - name: "cortex_audit_db"
+            scope: "function"
+            provides: "Clean CortexAuditDB with in-memory SQLite"
+          - name: "cortex_audit_db_session"
+            scope: "session"
+            provides: "Shared CortexAuditDB across test session for integration tests"
+
+      - id: "SQL-006"
+        name: "Health + Vacuum SQLite Integration"
+        description: |
+          HealthOrchestrator and VacuumOrchestrator include SQLite as first-class targets:
+          Health scan checks:
+            - Database file sizes (warn > 20MB, critical > 50MB)
+            - WAL file sizes (warn if WAL > main db)
+            - Table row counts (detect unbounded growth)
+            - Stale data (rows older than retention policy)
+            - Lock contention (detect blocked writes)
+            - Schema drift (expected tables present)
+          Vacuum operations:
+            - VACUUM databases exceeding size threshold
+            - Delete rows past retention date
+            - Checkpoint WAL files
+            - Rebuild indexes if fragmented
+            - Report space reclaimed
+
+  # ============================================================================
+  # MCP TOOL CONSOLIDATION STRATEGY
+  # ============================================================================
+  mcp_consolidation:
+    description: |
+      Consolidate 34+ MCP tools into ~20 cohesive tools. The goal is a SMALL
+      footprint where each tool does one thing well. Toolkit tools (5) are
+      absorbed into existing tools. Redundant tools are merged.
+
+    principles:
+      - "Every MCP tool maps to exactly ONE orchestrator"
+      - "No 'toolkit_' prefix — toolkit functionality merges into core tools"
+      - "Prefer parameter-based modes over separate tools (e.g., health scan + classify + status = 1 tool)"
+      - "Discovery tools (tools_catalog + total_recall) merge into 1"
+      - "Config loaders (load_core_rules + load_modes + load_response_format + load_audit_checklist) merge into cortex_load with type parameter"
+      - "Duplicate onboarding tools (v1 + v3) merge into cortex_onboard_repository"
+
+    consolidation_map:
+      # --- KEEP AS-IS (core, well-defined) ---
+      keep:
+        - tool: "cortex_approve_request"
+          reason: "Unique lifecycle tool"
+        - tool: "cortex_ask"
+          reason: "Unique education tool"
+        - tool: "cortex_challenge"
+          reason: "Unique governance gate"
+        - tool: "cortex_capture_metrics"
+          reason: "Unique observability tool"
+        - tool: "cortex_execute_governance"
+          reason: "Unique enforcement tool"
+        - tool: "cortex_onboard_repository"
+          reason: "Core capability — absorbs v3"
+        - tool: "cortex_onboard_infrastructure"
+          reason: "New — Phase 06"
+        - tool: "cortex_query_governance"
+          reason: "Unique query tool"
+        - tool: "cortex_refactor"
+          reason: "Core capability"
+        - tool: "cortex_validate_compliance"
+          reason: "Core governance"
+        - tool: "cortex_verify_claim"
+          reason: "Unique verification"
+        - tool: "cortex_vision_analyze"
+          reason: "Unique vision tool"
+        - tool: "cortex_git_push"
+          reason: "Unique git orchestration"
+
+      # --- MERGE (reduce footprint) ---
+      merge:
+        - target: "cortex_health"
+          absorbs:
+            - "cortex_health_scan"
+            - "cortex_vacuum_execute"
+            - "toolkit_diagnose"
+            - "toolkit_cleanup"
+          mode_parameter: "operation: scan|vacuum|diagnose|cleanup|db_maintenance"
+          reason: "All health/maintenance ops through one tool"
+
+        - target: "cortex_load"
+          absorbs:
+            - "cortex_load_core_rules"
+            - "cortex_load_modes"
+            - "cortex_load_response_format"
+            - "cortex_load_audit_checklist"
+          mode_parameter: "resource: rules|modes|response_format|audit_checklist"
+          reason: "All config loading through one tool"
+
+        - target: "cortex_discover"
+          absorbs:
+            - "cortex_tools_catalog"
+            - "cortex_total_recall"
+          mode_parameter: "scope: tools|features|all"
+          reason: "Discovery is one concept"
+
+        - target: "cortex_verify_environment"
+          absorbs:
+            - "cortex_validate_venv"
+            - "cortex_check_dependency_drift"
+            - "toolkit_verify"
+          mode_parameter: "check: full|venv|deps|mcp"
+          reason: "Environment checks are one concept"
+
+        - target: "cortex_refactor"
+          absorbs:
+            - "cortex_refactor_available_operations"
+            - "cortex_refactor_supported_languages"
+          mode_parameter: "operation: execute|list_operations|supported_languages"
+          reason: "Refactoring is one concept"
+
+        - target: "cortex_dashboard"
+          absorbs:
+            - "cortex_generate_dashboard_suite"
+            - "cortex_generate_landing_page"
+            - "cortex_generate_repo_dashboard"
+          mode_parameter: "operation: suite|landing|repo"
+          reason: "Dashboard generation is one concept"
+
+        - target: "cortex_audit"
+          absorbs:
+            - "cortex_audit_remediation_plan"
+            - "toolkit_validate"
+            - "toolkit_analyze"
+          mode_parameter: "operation: remediate|validate|analyze"
+          reason: "Audit/analysis is one concept"
+
+      # --- DELETE (no longer needed after consolidation) ---
+      delete:
+        - tool: "cortex_onboard_repository_v3"
+          reason: "Merged into cortex_onboard_repository (no version suffixes)"
+        - tool: "cortex_metrics_report"
+          reason: "Merged into cortex_capture_metrics with operation=report"
+
+    target_tool_count: 20
+    target_tools:
+      - "cortex_approve_request"
+      - "cortex_ask"
+      - "cortex_audit"
+      - "cortex_capture_metrics"
+      - "cortex_challenge"
+      - "cortex_dashboard"
+      - "cortex_discover"
+      - "cortex_execute_governance"
+      - "cortex_git_push"
+      - "cortex_health"
+      - "cortex_load"
+      - "cortex_onboard_infrastructure"
+      - "cortex_onboard_repository"
+      - "cortex_query_governance"
+      - "cortex_refactor"
+      - "cortex_validate_compliance"
+      - "cortex_verify_claim"
+      - "cortex_verify_environment"
+      - "cortex_vision_analyze"
+      - "cortex_workflow"
+
+  # ============================================================================
+  # WORKFLOW TEMPLATE ARCHITECTURE
+  # ============================================================================
+  workflow_templates:
+    description: |
+      Every orchestrator MUST have a dedicated workflow template. The workflow
+      template is intrinsic to the orchestrator — not optional, not external.
+      Templates define the execution contract including setup, teardown, and
+      composition of reusable sub-templates.
+
+    lifecycle:
+      - step: "setup"
+        description: "Initialize context, load dependencies, validate preconditions"
+        mandatory: true
+      - step: "governance_gate"
+        description: "Evaluate applicable CORE rules before execution"
+        mandatory: true
+      - step: "execute"
+        description: "Run orchestrator-specific logic (may compose sub-templates)"
+        mandatory: true
+      - step: "validate"
+        description: "Verify outputs meet quality/accuracy requirements"
+        mandatory: true
+      - step: "teardown"
+        description: "Cleanup resources, persist state, emit audit events"
+        mandatory: true
+
+    composition:
+      description: |
+        Workflow templates can compose other templates. A dedicated template
+        can reference shared templates for common operations:
+        - tdd/tdd-feature-implementation.yaml for TDD cycles
+        - governance/golden-test-promotion.yaml for test promotion
+        - security/security-compliance-audit.yaml for security checks
+      example: |
+        steps:
+          - use_template: "governance/golden-test-promotion.yaml"
+            params: { test_dir: "tests/golden/" }
+          - step_id: "domain_logic"
+            action: "execute_orchestrator"
+          - use_template: "quality/quality-code-uplift.yaml"
+
+    locations:
+      templates: "cortex-registry/workflows/templates/"
+      schema: "cortex-registry/workflows/workflow-template-schema.yaml"
+      engine: "cortex/core/workflow_engine.py"
+
+  # ============================================================================
+  # FILE FACTORY SPECIFICATION
+  # ============================================================================
+  file_factory:
+    canonical_location: "cortex/core/file_factory.py"
+    config_location: "cortex-registry/core/config/file-naming-rules.yaml"
+    replaces:
+      - "cortex/governance/filename_factory.py"
+      - "cortex/tools/file_naming_factory.py"
+    rules:
+      python_files: "snake_case_only"
+      yaml_files: "kebab-case-only"
+      markdown_files: "kebab-case-only"
+      max_length: 55
+      prohibited_patterns:
+        - "v[0-9]"
+        - "_v[0-9]"
+        - "enhanced_"
+        - "new_"
+        - "SCREAMING_CASE"
+        - "old_"
+        - "legacy_"
+        - "deprecated_"
+      configurable: true
+      mcp_exposed: true
+
+  # ============================================================================
+  # MIGRATION STRATEGY
+  # ============================================================================
+  migration:
+    strategy: "phased_domain_archive"
+    description: |
+      Each phase archives ONE domain at a time, rewrites imports, validates
+      all tests pass, then proceeds. The archive is a safety net — not a
+      permanent location. Phase files live in a dedicated folder that is
+      NOT in the archive path.
+
+    phase_files_location: "cortex-registry/_cortex-master/phases/planned/gpt-refactor/"
+    archive_location: "_archive/"
+
+    safety_gates:
+      - "Capability manifest checklist must pass after every phase"
+      - "All MCP tools must respond correctly"
+      - "All golden tests must pass"
+      - "No orphaned imports"
+      - "Coverage >= 90%"
+      - "Import quarantine check — zero imports from _archive/ paths"
+      - "No file in cortex/ imports from cortex_intelligence or cortex_lens"
+
+    import_quarantine:
+      description: |
+        GPT review insight: "How do we migrate incrementally while making it
+        impossible for new code to accidentally depend on old code?"
+        
+        Solution: After each phase, run an import quarantine check that verifies
+        ZERO imports from archived paths. This is the enforcement mechanism that
+        prevents the "just this one import..." contamination.
+      check_command: "grep -r 'from _archive' cortex/ | wc -l  # must be 0"
+      enforced_at: "every phase gate"
+
+    rollback:
+      granularity: "per-phase"
+      method: "git revert to phase boundary commit"
+
+  # ============================================================================
+  # CURRENT STATE SNAPSHOT (59 cortex/ dirs, 55 test/ dirs)
+  # ============================================================================
+  current_state:
+    cortex_top_level_dirs: 59
+    test_top_level_dirs: 55
+    total_source_files: 1288
+    total_test_files: 1139
+    orchestrator_classes: 120
+    mcp_tools: 28
+    workflow_templates_existing: 21
+    top_level_packages: 3
+    duplicate_concept_dirs: 20+
+    governance_dirs: 9
+    lens_dirs: 3
+    domain_brain_dirs: 3
+    observability_dirs: 5
+    wiring_dirs: 3
+
+    # Directories NOT covered by prior plan versions — NOW included:
+    previously_uncovered:
+      - dir: "cortex/agents/ (11 files)"
+        resolution: "Phase 04 → cortex/orchestrators/agents/ or keep as cortex/agents/"
+      - dir: "cortex/validation/ (5 files)"
+        resolution: "Phase 04 → cortex/governance/validation/"
+      - dir: "cortex/cortex-registry/ (inner duplicate)"
+        resolution: "Phase 01 → delete (data belongs in top-level cortex-registry/)"
+      - dir: "cortex/cortex_intelligence/ (inner duplicate)"
+        resolution: "Phase 01 → delete (empty or duplicate)"
+      - dir: "cortex/tests/ (8 inner test files)"
+        resolution: "Phase 05 → move to tests/"
+
+  # ============================================================================
+  # PHASE INDEX
+  # ============================================================================
+  phases:
+    - id: "phase-00"
+      name: "Foundation — Capability Manifest, Core Factories, SQLite Audit, MCP Consolidation Map"
+      file: "phase-00-foundation.yaml"
+      status: "pending"
+      dependencies: []
+      deliverables: 7
+      risk: "low"
+      additions: "D6: CortexAuditDB (unified SQLite), D7: MCP consolidation map (34→20)"
+
+    - id: "phase-01"
+      name: "Package Consolidation — 3 packages to 1"
+      file: "phase-01-package-consolidation.yaml"
+      status: "pending"
+      dependencies: ["phase-00"]
+      deliverables: 4
+      risk: "medium"
+
+    - id: "phase-02"
+      name: "Brain Deduplication — Dissolve brain/ into proper domains"
+      file: "phase-02-brain-deduplication.yaml"
+      status: "pending"
+      dependencies: ["phase-01"]
+      deliverables: 8
+      risk: "high"
+
+    - id: "phase-03"
+      name: "Orchestrator Rationalization + MCP Consolidation — 120 to ~40 orchestrators, 34 to ~20 MCP tools"
+      file: "phase-03-orchestrator-rationalization.yaml"
+      status: "pending"
+      dependencies: ["phase-02"]
+      deliverables: 7
+      risk: "high"
+      additions: "MCP tool consolidation (34→20), toolkit absorption, SQLite audit wiring into orchestrator lifecycle"
+
+    - id: "phase-04"
+      name: "Directory Cleanup — 59 to ~15 canonical directories"
+      file: "phase-04-directory-cleanup.yaml"
+      status: "pending"
+      dependencies: ["phase-03"]
+      deliverables: 35
+      risk: "medium"
+
+    - id: "phase-05"
+      name: "Test Consolidation — 55 dirs to ~15, high-value only"
+      file: "phase-05-test-consolidation.yaml"
+      status: "pending"
+      dependencies: ["phase-04"]
+      deliverables: 6
+      risk: "medium"
+
+    - id: "phase-06"
+      name: "Registry & Docs Alignment + Infrastructure Catalog"
+      file: "phase-06-registry-docs.yaml"
+      status: "pending"
+      dependencies: ["phase-05"]
+      deliverables: 13
+      risk: "low"
+      additions: "R7-R9: company infrastructure catalog (platforms, APIs, applications), cortex_onboard_infrastructure MCP tool"
+
+    - id: "phase-07"
+      name: "Final Verification, Refactor & Archive Deletion"
+      file: "phase-07-final-verification.yaml"
+      status: "pending"
+      dependencies: ["phase-06"]
+      deliverables: 26
+      risk: "medium"
+      additions: "V6: SQLite verification, FR7: SQLite consolidation, FR8: MCP consolidation verification"

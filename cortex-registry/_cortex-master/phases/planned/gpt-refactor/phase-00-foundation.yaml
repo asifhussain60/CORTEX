@@ -1,0 +1,460 @@
+# ==============================================================================
+# PHASE 00 — FOUNDATION: Capability Manifest & Core Factories
+# ==============================================================================
+# Purpose: Build the safety net and foundational tools BEFORE any migration
+# Gate: All deliverables tested, manifest baseline captured
+# ==============================================================================
+
+phase:
+  id: "phase-00"
+  name: "Foundation — Capability Manifest & Core Factories"
+  status: "pending"
+  priority: "P0"
+  estimated_effort: "3-5 days"
+  risk: "low"
+  description: |
+    Build the zero-regression safety net (capability manifest), the canonical
+    file factory, and the enhanced workflow engine with setup/teardown lifecycle.
+    Nothing is moved or archived in this phase — only new foundational code.
+
+  # ============================================================================
+  # DELIVERABLES
+  # ============================================================================
+  deliverables:
+
+    # --------------------------------------------------------------------------
+    # D1: Capability Manifest
+    # --------------------------------------------------------------------------
+    - id: "D1"
+      name: "Capability Manifest & Regression Gate"
+      description: |
+        A machine-readable YAML manifest listing EVERY capability of CORTEX.
+        Used as the regression gate after every subsequent phase. Includes:
+        - All 28+ MCP tools with expected response signatures
+        - All active orchestrators with their contracts
+        - All governance rules with enforcement status
+        - All intelligence capabilities (LENS, domain brain, memory)
+        - All infrastructure services (event bus, tracing, storage)
+        - All workflow templates
+      output_files:
+        - "cortex-registry/_cortex-master/phases/planned/gpt-refactor/capability-manifest.yaml"
+      test_files:
+        - "tests/golden/regression/test_capability_manifest.py"
+      acceptance_criteria:
+        - "Manifest covers 100% of MCP tools"
+        - "Manifest covers 100% of active orchestrators"
+        - "Manifest covers all governance rules"
+        - "Golden test validates manifest against live system"
+        - "Can be run as a regression gate (exit code 0 = pass)"
+
+    # --------------------------------------------------------------------------
+    # D2: File Factory (Canonical SSOT)
+    # --------------------------------------------------------------------------
+    - id: "D2"
+      name: "File Factory — Canonical File Naming"
+      description: |
+        Merge the two existing file naming implementations into ONE canonical
+        factory. YAML-configurable, MCP-exposable, used everywhere in CORTEX.
+      replaces:
+        - source: "cortex/governance/filename_factory.py"
+          lines: 677
+          status: "archive_after_merge"
+        - source: "cortex/tools/file_naming_factory.py"
+          lines: 546
+          status: "archive_after_merge"
+      output_files:
+        - "cortex/core/file_factory.py"
+        - "cortex-registry/core/config/file-naming-rules.yaml"
+      test_files:
+        - "tests/core/test_file_factory.py"
+      acceptance_criteria:
+        - "All existing filename_factory tests pass against new implementation"
+        - "All existing file_naming_factory tests pass against new implementation"
+        - "YAML config drives all rules (no hardcoded patterns)"
+        - "Prohibited patterns enforced: v[0-9], _v[0-9], enhanced_, SCREAMING"
+        - "snake_case for Python, kebab-case for YAML/MD"
+        - "Max length configurable (default 55)"
+        - "Type hints on all functions (CORE-011)"
+        - "Docstrings on all public APIs (CORE-012)"
+
+    # --------------------------------------------------------------------------
+    # D3: Enhanced Workflow Engine with Setup/Teardown
+    # --------------------------------------------------------------------------
+    - id: "D3"
+      name: "Workflow Engine — Setup/Teardown Lifecycle"
+      description: |
+        Enhance the existing workflow runtime (cortex/orchestrators/workflow/)
+        to support mandatory setup and teardown steps, template composition,
+        and intrinsic binding to orchestrators.
+
+        Every workflow template gets:
+        1. setup — initialize context, load deps, validate preconditions
+        2. governance_gate — evaluate CORE rules
+        3. execute — orchestrator-specific steps (may compose sub-templates)
+        4. validate — verify outputs
+        5. teardown — cleanup, persist state, emit audit
+
+        Templates can reference other templates via use_template directive.
+      builds_on:
+        - "cortex/orchestrators/workflow/workflow_runtime.py (Phase 45)"
+        - "cortex/orchestrators/workflow/workflow_templates.py (Phase 100)"
+        - "cortex/orchestrators/workflow/workflow_composer.py (Phase 100)"
+      output_files:
+        - "cortex/core/workflow_engine.py"
+        - "cortex-registry/workflows/workflow-template-schema.yaml"
+      test_files:
+        - "tests/core/test_workflow_engine.py"
+      acceptance_criteria:
+        - "Setup step runs before any workflow execution"
+        - "Teardown step runs after execution (even on failure)"
+        - "Templates can compose other templates via use_template"
+        - "Governance gate is mandatory and cannot be skipped"
+        - "All existing workflow tests still pass"
+        - "Schema validates all existing workflow template YAMLs"
+
+    # --------------------------------------------------------------------------
+    # D4: Migration Tracker
+    # --------------------------------------------------------------------------
+    - id: "D4"
+      name: "Migration Tracker"
+      description: |
+        YAML document tracking the lifecycle of every migrated component:
+        source → archive → target → validated → archive_deleted
+      output_files:
+        - "cortex-registry/_cortex-master/phases/planned/gpt-refactor/migration-tracker.yaml"
+      acceptance_criteria:
+        - "Every subsequent phase updates this tracker"
+        - "Tracker can be queried to find any component's current location"
+
+    # --------------------------------------------------------------------------
+    # D5: Orchestrator Workflow Template Binding
+    # --------------------------------------------------------------------------
+    - id: "D5"
+      name: "Orchestrator Base — Workflow Template Integration"
+      description: |
+        Enhance OrchestratorBase to intrinsically bind to a workflow template.
+        Every orchestrator MUST declare its workflow template. The base class
+        loads the template and executes through the workflow engine.
+
+        This makes workflow templates an intrinsic part of every orchestrator,
+        not an optional external concern.
+      modifies:
+        - "cortex/brain/core/orchestrator_base.py"
+      output_files:
+        - "cortex/brain/core/orchestrator_base.py (enhanced)"
+      test_files:
+        - "tests/core/test_orchestrator_workflow_binding.py"
+      acceptance_criteria:
+        - "OrchestratorBase has workflow_template_id property"
+        - "run() method loads and executes through workflow engine"
+        - "Orchestrators without workflow template get a default template"
+        - "Setup/teardown lifecycle is enforced by base class"
+        - "All existing orchestrator tests still pass"
+
+    # --------------------------------------------------------------------------
+    # D6: SQLite Audit Infrastructure (CortexAuditDB)
+    # --------------------------------------------------------------------------
+    - id: "D6"
+      name: "CortexAuditDB — Unified SQLite Activity Logging"
+      description: |
+        Build the SINGLE canonical SQLite manager that ALL CORTEX activity
+        logs through. This is the foundation for intelligent audit logging,
+        golden test integration, and health/vacuum database maintenance.
+
+        Replaces 10+ scattered raw sqlite3.connect() calls across the codebase.
+        
+        Features:
+        1. WAL mode for zero deadlocks + concurrent reads
+        2. Connection pooling with busy_timeout
+        3. Auto-schema migration on startup
+        4. Configurable retention policies (YAML-driven)
+        5. Built-in cleanup methods (delete expired, VACUUM, checkpoint WAL)
+        6. Pytest fixtures for golden test setup/teardown
+        7. Context manager protocol for safe connection handling
+      output_files:
+        - "cortex/infrastructure/audit_db.py"
+        - "cortex-registry/config/sqlite-retention.yaml"
+        - "cortex/infrastructure/audit_schema.py"
+      test_files:
+        - "tests/core/test_audit_db.py"
+        - "tests/golden/test_audit_db_golden.py"
+      acceptance_criteria:
+        - "CortexAuditDB initializes 3 consolidated databases"
+        - "WAL mode enabled on all databases"
+        - "busy_timeout set to 5000ms"
+        - "Retention policy loaded from YAML config"
+        - "cleanup() deletes rows past retention date"
+        - "vacuum() runs VACUUM on databases exceeding size threshold"
+        - "checkpoint() forces WAL checkpoint"
+        - "Pytest fixture cortex_audit_db provides clean in-memory db"
+        - "Pytest fixture teardown asserts no leaked connections"
+        - "Context manager releases connections on __exit__"
+        - "Schema auto-migrates (creates tables if missing)"
+        - "log_activity() writes to cortex-audit.db with timestamp, category, payload"
+        - "No raw sqlite3.connect() anywhere outside this module"
+      database_schema:
+        cortex_audit_db:
+          tables:
+            - name: "activity_log"
+              columns:
+                - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+                - "timestamp TEXT NOT NULL DEFAULT (datetime('now'))"
+                - "category TEXT NOT NULL"
+                - "subcategory TEXT"
+                - "orchestrator TEXT"
+                - "mcp_tool TEXT"
+                - "operation TEXT NOT NULL"
+                - "status TEXT NOT NULL DEFAULT 'started'"
+                - "duration_ms INTEGER"
+                - "payload TEXT"
+                - "error TEXT"
+                - "session_id TEXT"
+              indexes:
+                - "idx_activity_timestamp ON activity_log(timestamp)"
+                - "idx_activity_category ON activity_log(category)"
+                - "idx_activity_orchestrator ON activity_log(orchestrator)"
+            - name: "governance_audit"
+              columns:
+                - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+                - "timestamp TEXT NOT NULL DEFAULT (datetime('now'))"
+                - "rule_id TEXT NOT NULL"
+                - "target_file TEXT"
+                - "result TEXT NOT NULL"
+                - "details TEXT"
+                - "session_id TEXT"
+            - name: "test_audit"
+              columns:
+                - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+                - "timestamp TEXT NOT NULL DEFAULT (datetime('now'))"
+                - "test_name TEXT NOT NULL"
+                - "test_file TEXT"
+                - "result TEXT NOT NULL"
+                - "duration_ms INTEGER"
+                - "golden_test BOOLEAN DEFAULT 0"
+        cortex_traces_db:
+          tables:
+            - name: "execution_traces"
+              columns:
+                - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+                - "timestamp TEXT NOT NULL DEFAULT (datetime('now'))"
+                - "trace_id TEXT NOT NULL"
+                - "span_id TEXT"
+                - "parent_span_id TEXT"
+                - "orchestrator TEXT NOT NULL"
+                - "operation TEXT NOT NULL"
+                - "duration_ms INTEGER"
+                - "metadata TEXT"
+        cortex_state_db:
+          tables:
+            - name: "conversations"
+              columns:
+                - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+                - "session_id TEXT NOT NULL"
+                - "timestamp TEXT NOT NULL DEFAULT (datetime('now'))"
+                - "role TEXT NOT NULL"
+                - "content TEXT"
+            - name: "onboarding_state"
+              columns:
+                - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+                - "repo_name TEXT NOT NULL UNIQUE"
+                - "onboarded_at TEXT NOT NULL"
+                - "profile_json TEXT"
+                - "status TEXT DEFAULT 'active'"
+
+    # --------------------------------------------------------------------------
+    # D7: MCP Tool Consolidation Plan
+    # --------------------------------------------------------------------------
+    - id: "D7"
+      name: "MCP Tool Consolidation — 34 to ~20 tools"
+      description: |
+        Create the consolidation mapping and shim layer that enables
+        gradual merge of 34+ MCP tools into ~20 cohesive tools.
+        
+        Phase 00 creates the mapping. Actual merge happens in Phase 03-04.
+        
+        Key merges:
+        - 5 toolkit_* tools → absorbed into cortex_health, cortex_audit, cortex_verify_environment
+        - 4 cortex_load_* tools → cortex_load with type parameter
+        - 3 cortex_generate_* dashboard tools → cortex_dashboard
+        - 3 cortex_refactor_* tools → cortex_refactor with operation parameter
+        - 2 discovery tools → cortex_discover
+        - 2 health/vacuum tools → cortex_health
+        - cortex_onboard_repository_v3 → merged into cortex_onboard_repository
+      output_files:
+        - "cortex-registry/config/mcp-consolidation-map.yaml"
+      acceptance_criteria:
+        - "Consolidation map covers all 34 tools"
+        - "Target count is ~20 tools"
+        - "Zero capability loss documented"
+        - "Backward compatibility shims planned for transition"
+
+  # ============================================================================
+  # CONSOLIDATION OPPORTUNITIES (Phase 00 specific)
+  # ============================================================================
+  consolidations:
+    - type: "file_factory"
+      from:
+        - "cortex/governance/filename_factory.py (677 lines)"
+        - "cortex/tools/file_naming_factory.py (546 lines)"
+      to: "cortex/core/file_factory.py"
+      savings: "~800 lines eliminated (shared logic)"
+
+    - type: "workflow_engine"
+      from:
+        - "cortex/orchestrators/workflow/workflow_runtime.py"
+        - "cortex/orchestrators/workflow/workflow_templates.py"
+        - "cortex/orchestrators/workflow/workflow_composer.py"
+        - "cortex/orchestrators/workflow/autonomous_workflow_executor.py"
+      to: "cortex/core/workflow_engine.py (enhanced, delegates to specialized modules)"
+      note: "Existing modules remain but are wired through the new engine"
+
+  # ============================================================================
+  # EXECUTION SEQUENCE (Step-by-step)
+  # ============================================================================
+  execution_sequence:
+    - step: 1
+      name: "Write test_capability_manifest.py"
+      tdd: "RED — test asserts all MCP tools, orchestrators, rules exist"
+      file: "tests/golden/regression/test_capability_manifest.py"
+      command: "pytest tests/golden/regression/test_capability_manifest.py -v"
+      expected: "FAIL (manifest validation not wired yet)"
+
+    - step: 2
+      name: "Write test_file_factory.py"
+      tdd: "RED — test all naming rules, prohibited patterns, YAML config"
+      file: "tests/core/test_file_factory.py"
+      command: "pytest tests/core/test_file_factory.py -v"
+      expected: "FAIL (file factory not created yet)"
+
+    - step: 3
+      name: "Write test_workflow_engine.py"
+      tdd: "RED — test setup/teardown lifecycle, template composition"
+      file: "tests/core/test_workflow_engine.py"
+      command: "pytest tests/core/test_workflow_engine.py -v"
+      expected: "FAIL (workflow engine not enhanced yet)"
+
+    - step: 4
+      name: "Write test_orchestrator_workflow_binding.py"
+      tdd: "RED — test OrchestratorBase workflow template integration"
+      file: "tests/core/test_orchestrator_workflow_binding.py"
+      command: "pytest tests/core/test_orchestrator_workflow_binding.py -v"
+      expected: "FAIL (binding not implemented yet)"
+
+    - step: "4A"
+      name: "Write test_audit_db.py"
+      tdd: "RED — test CortexAuditDB WAL mode, cleanup, retention, fixtures"
+      file: "tests/core/test_audit_db.py"
+      command: "pytest tests/core/test_audit_db.py -v"
+      expected: "FAIL (audit_db not created yet)"
+      tests:
+        - "test_audit_db_initializes_wal_mode"
+        - "test_audit_db_log_activity"
+        - "test_audit_db_cleanup_expired_rows"
+        - "test_audit_db_vacuum_on_threshold"
+        - "test_audit_db_checkpoint_wal"
+        - "test_audit_db_context_manager_releases_connection"
+        - "test_audit_db_schema_auto_migration"
+        - "test_audit_db_concurrent_reads_during_write"
+        - "test_audit_db_busy_timeout_retry"
+        - "test_audit_db_fixture_provides_clean_db"
+        - "test_audit_db_fixture_teardown_no_leaked_connections"
+        - "test_audit_db_retention_policy_from_yaml"
+
+    - step: "4B"
+      name: "Write golden test for audit DB"
+      tdd: "RED — golden test validates audit trail integrity"
+      file: "tests/golden/test_audit_db_golden.py"
+      command: "pytest tests/golden/test_audit_db_golden.py -v"
+      expected: "FAIL"
+      tests:
+        - "test_golden_orchestrator_execution_creates_audit_record"
+        - "test_golden_mcp_tool_call_creates_audit_record"
+        - "test_golden_governance_check_creates_audit_record"
+        - "test_golden_cleanup_removes_expired_only"
+
+    - step: 5
+      name: "Implement file_factory.py"
+      tdd: "GREEN — make test_file_factory.py pass"
+      file: "cortex/core/file_factory.py"
+      config: "cortex-registry/core/config/file-naming-rules.yaml"
+      command: "pytest tests/core/test_file_factory.py -v"
+      expected: "PASS"
+
+    - step: 6
+      name: "Implement workflow_engine.py"
+      tdd: "GREEN — make test_workflow_engine.py pass"
+      file: "cortex/core/workflow_engine.py"
+      schema: "cortex-registry/workflows/workflow-template-schema.yaml"
+      command: "pytest tests/core/test_workflow_engine.py -v"
+      expected: "PASS"
+
+    - step: 7
+      name: "Enhance OrchestratorBase with workflow binding"
+      tdd: "GREEN — make test_orchestrator_workflow_binding.py pass"
+      file: "cortex/brain/core/orchestrator_base.py (enhanced)"
+      command: "pytest tests/core/test_orchestrator_workflow_binding.py -v"
+      expected: "PASS"
+
+    - step: "7A"
+      name: "Implement CortexAuditDB"
+      tdd: "GREEN — make test_audit_db.py pass"
+      files:
+        - "cortex/infrastructure/audit_db.py"
+        - "cortex/infrastructure/audit_schema.py"
+        - "cortex-registry/config/sqlite-retention.yaml"
+      command: "pytest tests/core/test_audit_db.py -v"
+      expected: "PASS"
+
+    - step: "7B"
+      name: "Wire CortexAuditDB into OrchestratorBase teardown"
+      description: |
+        OrchestratorBase.teardown() now logs to CortexAuditDB:
+        - Orchestrator name, operation, duration, status
+        - Automatically called by workflow engine
+      command: "pytest tests/core/test_audit_db.py tests/golden/test_audit_db_golden.py -v"
+      expected: "PASS"
+
+    - step: "7C"
+      name: "Create MCP consolidation map YAML"
+      file: "cortex-registry/config/mcp-consolidation-map.yaml"
+      description: "Document all 34→20 tool merges with backward compat plan"
+
+    - step: 8
+      name: "Wire capability manifest golden test"
+      tdd: "GREEN — make test_capability_manifest.py pass"
+      file: "tests/golden/regression/test_capability_manifest.py (wired to live system)"
+      command: "pytest tests/golden/regression/test_capability_manifest.py -v"
+      expected: "PASS"
+
+    - step: 9
+      name: "Run full test suite — verify zero regression"
+      command: "pytest tests/ -v --tb=short -q"
+      expected: "ALL existing tests still pass"
+
+    - step: 10
+      name: "Commit Phase 00"
+      command: "git add -A && git commit -m 'refactor(phase-00): foundation — file factory, workflow engine, capability manifest'"
+      tag: "gpt-refactor-phase-00"
+
+  # ============================================================================
+  # EXIT GATE
+  # ============================================================================
+  exit_gate:
+    tests_passing: true
+    coverage_minimum: 95
+    capability_manifest_baseline: true
+    governance_audit_clean: true
+    no_new_files_with_versions: true
+    audit_db_operational: true
+    mcp_consolidation_map_created: true
+    description: |
+      Phase 00 is complete when:
+      1. Capability manifest exists and all items are baselined
+      2. File factory passes all tests + old factory tests
+      3. Workflow engine passes all tests + old runtime tests
+      4. OrchestratorBase enhanced with workflow binding
+      5. Migration tracker created
+      6. Zero governance violations
+      7. CortexAuditDB operational with WAL mode, cleanup, golden test fixtures
+      8. MCP consolidation map (34→20) documented in YAML
+      9. SQLite retention policy YAML created
