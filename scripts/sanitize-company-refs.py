@@ -3,7 +3,7 @@
 CORTEX Company Reference Sanitizer
 Morphs company-specific references to generic equivalents while maintaining consistency.
 
-Authority: User request - sanitize HealthEquity/Hqy references in _workspaces/sts/sample-apps/_Real
+Authority: User request - sanitize proprietary company references
 Purpose: Make sample code generic for testing CORTEX capabilities
 """
 
@@ -21,7 +21,7 @@ SANITIZATION_MAP = {
     'healthEquity': 'genericCompany',
     'HEALTHEQUITY': 'GENERICCOMPANY',
     
-    # Company abbreviation (Hqy -> Gcc for Generic Company Code)
+    # Company abbreviation (Gcc for Generic Company Code)
     'Hqy': 'Gcc',
     'HQY': 'GCC',
     'hqy': 'gcc',

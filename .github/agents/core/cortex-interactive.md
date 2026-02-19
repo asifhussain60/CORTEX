@@ -567,7 +567,7 @@ Use **Pattern X (Event Bus)** for CORTEX orchestrator communication because:
   
 - **Best Practices:**
   - `cortex/knowledge/best-practices/architecture/event-driven.yaml` — Event-driven patterns
-  - `cortex-registry/company/domains/healthequity/messaging-standards.yaml` — Async communication standards
+  - `cortex-registry/company/domains/generic/messaging-standards.yaml` — Async communication standards
   
 - **Patterns:**
   - `cortex-docs/patterns/event-bus-pattern.md` — Pub/sub architecture

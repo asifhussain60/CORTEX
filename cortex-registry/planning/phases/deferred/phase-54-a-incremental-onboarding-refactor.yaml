@@ -106,7 +106,7 @@ archive_analysis:
   git_references:
     commits:
       - hash: "5bdd559cf"
-        message: "chore: Remove proprietary HealthEquity/HQY sample data"
+        message: "chore: Remove proprietary company-specific sample data"
         date: "2026-02-08"
       - hash: "241574b66"
         message: "docs: Add PHASE-ENV-SETUP completion report"
