@@ -215,7 +215,10 @@ class TestHealthCheckExecution:
         assert isinstance(report, HealthReport)
         assert len(report.agent_results) == 1
         assert report.agent_results[0].agent_name == "TestAgent"
-        mock_agent.check.assert_called_once_with(workspace_root)
+        mock_agent.check.assert_called_once()
+        # Phase-48 delegation now passes ctx= kwarg, so verify positional arg only
+        call_args = mock_agent.check.call_args
+        assert call_args[0][0] == workspace_root
     
     def test_run_health_check_without_agents(self, workspace_root: Path) -> None:
         """Test running health check without agents.

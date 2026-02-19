@@ -24,7 +24,7 @@ from cortex.brain.core.tier_validator import (
 class Tier0Orchestrator(OrchestratorBase):
     """Orchestrator with tier 0 access only"""
     def __init__(self, context: OrchestrationContext = None):
-        super().__init__(name="Tier0Orchestrator")
+        super().__init__(context=context)
         self.context = context
     
     def get_tier_access(self):
@@ -43,7 +43,7 @@ class Tier0Orchestrator(OrchestratorBase):
 class Tier01Orchestrator(OrchestratorBase):
     """Orchestrator with tier 0,1 access"""
     def __init__(self, context: OrchestrationContext = None):
-        super().__init__(name="Tier01Orchestrator")
+        super().__init__(context=context)
         self.context = context
     
     def get_tier_access(self):
@@ -62,7 +62,7 @@ class Tier01Orchestrator(OrchestratorBase):
 class AllTierOrchestrator(OrchestratorBase):
     """Orchestrator with all tiers access"""
     def __init__(self, context: OrchestrationContext = None):
-        super().__init__(name="AllTierOrchestrator")
+        super().__init__(context=context)
         self.context = context
     
     def get_tier_access(self):
@@ -81,7 +81,7 @@ class AllTierOrchestrator(OrchestratorBase):
 class RuleRequiringOrchestrator(OrchestratorBase):
     """Orchestrator requiring specific rules"""
     def __init__(self, context: OrchestrationContext = None):
-        super().__init__(name="RuleRequiringOrchestrator")
+        super().__init__(context=context)
         self.context = context
     
     def get_tier_access(self):

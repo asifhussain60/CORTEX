@@ -9,11 +9,12 @@ capabilities:
   - clarity_optimization
 modes_served:
   - INTERACTIVE
-mcp_tools: []
+mcp_tools:
+  - cortex_format_response
 collaborators:
   - cortex-architect
 priority: "P2"
-token_cost_estimate: 1200
+token_cost_estimate: 1500
 created_date: "2026-02-08"
 last_updated: "2026-02-11"
 maintainer: "Asif Hussain"

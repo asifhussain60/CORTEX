@@ -96,6 +96,7 @@ try:
     from cortex.orchestrators.response.minimal_plan_spine import MinimalPlanSpine
 
 
+
 except ImportError:
     # Fallback if modules not accessible
     ChatResponsePolicyValidator = None
@@ -2374,6 +2375,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                             "ast_analysis": getattr(lens_result, 'ast_analysis', {}),
                             "comment_analysis": getattr(lens_result, 'comment_analysis', {}),
                             "metadata": getattr(lens_result, 'metadata', {})
+
                         }
 
                 # Log Stage 1 completion

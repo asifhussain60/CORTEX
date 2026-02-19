@@ -2,10 +2,13 @@
 Pytest configuration for CORTEX test suite.
 
 Handles graceful skipping of tests with missing module dependencies.
+Provides shared SQLite fixtures with proper setup/teardown cleanup.
 """
 import pytest
+import sqlite3
 import sys
 from pathlib import Path
+from typing import Generator
 from _pytest.python import Module
 
 # Disable pytest-asyncio plugin inheritance for all tests
@@ -69,34 +72,59 @@ def test_db_path(tmp_path):
     return str(tmp_path / "test.db")
 
 
-@pytest.fixture(scope="function", autouse=True)
-def cleanup_test_databases(tmp_path, request):
-    """Auto-cleanup all test SQLite databases after each test.
-    
-    This fixture automatically removes all .db files created during tests
-    to prevent SQLite bloat and ensure test isolation.
-    
-    Authority: Phase 92 Health + VAC-001-05 Vacuum
-    CORE-035: Single source of cleanup logic
-    
+@pytest.fixture
+def sqlite_db(tmp_path: Path) -> Generator[sqlite3.Connection, None, None]:
+    """Provide a SQLite connection with automatic cleanup.
+
+    Creates a temporary database with a connection that is guaranteed
+    to be closed after test completion. Uses tmp_path so the file
+    is also cleaned up by pytest.
+
     Args:
-        tmp_path: Pytest's temporary directory fixture
-        request: Pytest request object for test metadata
-    
+        tmp_path: Pytest's temporary directory fixture.
+
     Yields:
-        None: Cleanup happens after test execution
+        sqlite3.Connection: Open connection to temporary database.
     """
-    yield
-    
-    # Cleanup all .db, .db-wal, .db-shm files after test
-    if tmp_path.exists():
-        for db_file in tmp_path.rglob("*.db*"):
+    db_path = tmp_path / "test.db"
+    conn = sqlite3.connect(str(db_path))
+    conn.execute("PRAGMA journal_mode=DELETE;")  # Avoid WAL leftovers
+    try:
+        yield conn
+    finally:
+        conn.close()
+
+
+@pytest.fixture
+def sqlite_db_path(tmp_path: Path) -> Generator[Path, None, None]:
+    """Provide a temporary database path with WAL cleanup on teardown.
+
+    After test completion, ensures any WAL/SHM files are removed
+    by running a checkpoint if the database exists.
+
+    Args:
+        tmp_path: Pytest's temporary directory fixture.
+
+    Yields:
+        Path: Path to temporary database file.
+    """
+    db_path = tmp_path / "test.db"
+    try:
+        yield db_path
+    finally:
+        # Clean up WAL/SHM files if database was created in WAL mode
+        if db_path.exists():
             try:
-                if db_file.is_file():
-                    db_file.unlink()
-            except (OSError, PermissionError):
-                # File already cleaned or locked by another process
+                conn = sqlite3.connect(str(db_path))
+                conn.execute("PRAGMA wal_checkpoint(TRUNCATE);")
+                conn.close()
+            except sqlite3.Error:
                 pass
+        # Remove any remaining WAL/SHM files
+        for suffix in ("-wal", "-shm"):
+            leftover = db_path.parent / f"{db_path.name}{suffix}"
+            if leftover.exists():
+                leftover.unlink(missing_ok=True)
 
 
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)

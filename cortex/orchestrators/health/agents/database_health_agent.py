@@ -138,13 +138,20 @@ class DatabaseHealthAgent(BaseHealthAgent):
         
         # Scan for .db files
         for db_path in workspace_root.rglob("*.db"):
+            # Use path relative to workspace_root for filtering so
+            # temp directory names (e.g. pytest tmp_path) don't interfere
+            try:
+                rel_path = db_path.relative_to(workspace_root)
+            except ValueError:
+                continue
+            
             # Skip test databases unless configured to check them
             if not self.check_test_dbs:
-                if "test" in str(db_path).lower() or ".pytest_cache" in str(db_path):
+                if "test" in str(rel_path).lower() or ".pytest_cache" in str(rel_path):
                     continue
             
-            # Skip hidden directories
-            if any(part.startswith(".") for part in db_path.parts[:-1]):
+            # Skip hidden directories (relative to workspace root)
+            if any(part.startswith(".") for part in rel_path.parts[:-1]):
                 continue
             
             db_files.append(db_path)

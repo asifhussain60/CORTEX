@@ -94,7 +94,7 @@ class AgentMetadataParser:
             # Create metadata object
             metadata = AgentMetadata(
                 agent_id=data.get('agent_id'),
-                version=data.get('version'),
+                version=str(data.get('version', '')),
                 status=data.get('status', 'active'),
                 layer=data.get('layer'),
                 capabilities=data.get('capabilities', []),

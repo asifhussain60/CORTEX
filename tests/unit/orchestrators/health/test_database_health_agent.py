@@ -177,7 +177,7 @@ class TestDatabaseHealthAgent:
     
     def test_check_result_metadata(self, tmp_path: Path) -> None:
         """Test check result includes metadata."""
-        db_path = tmp_path / "cortex_intelligence" / "test.db"
+        db_path = tmp_path / "cortex_intelligence" / "governance.db"
         db_path.parent.mkdir(parents=True)
         
         conn = sqlite3.connect(str(db_path))

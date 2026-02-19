@@ -55,7 +55,7 @@ class DatabaseBloatCleaner(CleanerInterface):
     @property
     def name(self) -> str:
         """Return cleaner name."""
-        return "DatabaseBloatCleaner"
+        return "Database Bloat Cleaner"
     
     @property
     def version(self) -> str:
@@ -65,7 +65,7 @@ class DatabaseBloatCleaner(CleanerInterface):
     @property
     def domain(self) -> str:
         """Return cleaner domain."""
-        return "database_cleanup"
+        return "database_bloat"
     
     def __init__(self, config: Dict[str, Any]) -> None:
         """Initialize Database Bloat Cleaner.
@@ -91,17 +91,14 @@ class DatabaseBloatCleaner(CleanerInterface):
         1. Database size vs threshold
         2. WAL journal size ratio
         3. Orphaned WAL/SHM files
+        4. Duplicate databases with same schema
         
         Returns:
             Analysis with detected issues and cleanup plan
         """
         start_time = time.time()
-        logs = []
-        plan: Dict[str, Any] = {
-            "databases_to_vacuum": [],
-            "wal_files_to_checkpoint": [],
-            "orphaned_files_to_remove": [],
-        }
+        logs: List[str] = []
+        actions: List[Dict[str, Any]] = []
         
         logs.append(f"Scanning {self.repo_root} for database bloat...")
         
@@ -109,21 +106,32 @@ class DatabaseBloatCleaner(CleanerInterface):
         db_files = list(self.repo_root.rglob("*.db"))
         files_scanned = len(db_files)
         
+        # Track schemas for duplicate detection
+        schema_map: Dict[str, List[Path]] = {}
+        
         for db_path in db_files:
             # Skip production database if configured
             if self.skip_production_db and db_path.name == "governance.db":
                 logs.append(f"Skipping production database: {db_path.name}")
                 continue
             
-            # Skip test databases
-            if "test" in str(db_path).lower() or ".pytest_cache" in str(db_path):
+            # Skip test databases using relative path
+            try:
+                rel_path = db_path.relative_to(self.repo_root)
+            except ValueError:
+                continue
+            if "test" in str(rel_path).lower() or ".pytest_cache" in str(rel_path):
                 continue
             
             # Check database size
-            size_mb = db_path.stat().st_size / (1024 * 1024)
+            try:
+                size_mb = db_path.stat().st_size / (1024 * 1024)
+            except OSError:
+                continue
             
             if size_mb > self.bloat_threshold_mb:
-                plan["databases_to_vacuum"].append({
+                actions.append({
+                    "type": "vacuum",
                     "path": str(db_path),
                     "size_mb": size_mb,
                     "reason": f"Size {size_mb:.2f}MB exceeds threshold {self.bloat_threshold_mb}MB",
@@ -140,33 +148,63 @@ class DatabaseBloatCleaner(CleanerInterface):
                     wal_ratio = wal_size / db_size
                     
                     if wal_ratio > self.wal_ratio_threshold:
-                        plan["wal_files_to_checkpoint"].append({
-                            "db_path": str(db_path),
+                        actions.append({
+                            "type": "wal_checkpoint",
+                            "path": str(db_path),
                             "wal_path": str(wal_path),
                             "wal_ratio": wal_ratio,
                             "reason": f"WAL ratio {wal_ratio:.2%} exceeds threshold {self.wal_ratio_threshold:.0%}",
                         })
                         logs.append(f"Large WAL journal: {wal_path.name} ({wal_ratio:.2%} of DB)")
+            
+            # Collect schemas for duplicate detection
+            try:
+                conn = sqlite3.connect(str(db_path))
+                tables = conn.execute(
+                    "SELECT sql FROM sqlite_master WHERE type='table' ORDER BY name"
+                ).fetchall()
+                conn.close()
+                schema_key = "|".join(t[0] for t in tables if t[0])
+                if schema_key:
+                    schema_map.setdefault(schema_key, []).append(db_path)
+            except sqlite3.Error:
+                pass
+        
+        # Detect duplicate databases (same schema, different locations)
+        for schema_key, paths in schema_map.items():
+            if len(paths) > 1:
+                paths.sort(key=lambda p: p.stat().st_size, reverse=True)
+                for dup_path in paths[1:]:
+                    actions.append({
+                        "type": "delete_duplicate",
+                        "path": str(dup_path),
+                        "canonical": str(paths[0]),
+                        "reason": f"Duplicate of {paths[0].name}",
+                    })
+                    logs.append(f"Duplicate database: {dup_path.name}")
         
         # Find orphaned WAL/SHM files (no corresponding .db)
         for wal_path in self.repo_root.rglob("*.db-wal"):
-            db_path = wal_path.with_suffix(".db")
-            if not db_path.exists():
-                plan["orphaned_files_to_remove"].append(str(wal_path))
+            db_path_for_wal = wal_path.with_name(wal_path.name.replace("-wal", ""))
+            if not db_path_for_wal.exists():
+                actions.append({
+                    "type": "delete_orphan",
+                    "path": str(wal_path),
+                    "reason": f"No matching database for {wal_path.name}",
+                })
                 logs.append(f"Orphaned WAL file: {wal_path.name}")
         
         for shm_path in self.repo_root.rglob("*.db-shm"):
-            db_path = shm_path.with_suffix(".db")
-            if not db_path.exists():
-                plan["orphaned_files_to_remove"].append(str(shm_path))
+            db_path_for_shm = shm_path.with_name(shm_path.name.replace("-shm", ""))
+            if not db_path_for_shm.exists():
+                actions.append({
+                    "type": "delete_orphan",
+                    "path": str(shm_path),
+                    "reason": f"No matching database for {shm_path.name}",
+                })
                 logs.append(f"Orphaned SHM file: {shm_path.name}")
         
-        issues_found = (
-            len(plan["databases_to_vacuum"])
-            + len(plan["wal_files_to_checkpoint"])
-            + len(plan["orphaned_files_to_remove"])
-        )
-        
+        issues_found = len(actions)
         logs.append(f"Analysis complete: {issues_found} issues found in {files_scanned} databases")
         
         return Analysis(
@@ -174,92 +212,122 @@ class DatabaseBloatCleaner(CleanerInterface):
             timestamp=datetime.now().isoformat(),
             files_scanned=files_scanned,
             issues_found=issues_found,
-            plan=plan,
+            plan={"actions": actions, "retention_days": self.config.get("retention_days", 30)},
             logs=logs,
         )
     
     def execute(self, plan: Dict[str, Any]) -> Report:
         """Execute database cleanup plan.
         
-        Performs:
-        1. VACUUM on bloated databases
-        2. WAL checkpoint on large journals
-        3. Remove orphaned WAL/SHM files
+        Dispatches on action type from unified actions list:
+        - vacuum: VACUUM on bloated databases
+        - wal_checkpoint: WAL checkpoint on large journals
+        - delete_orphan: Remove orphaned WAL/SHM files
+        - delete_duplicate: Remove duplicate databases
+        - retention_purge: Delete rows older than retention threshold
         
         Args:
-            plan: Cleanup plan from analyze()
+            plan: Cleanup plan from analyze() with ``actions`` list
         
         Returns:
             Report with actions taken and results
         """
-        start_time = time.time()
-        logs = []
-        errors = []
+        logs: List[str] = []
+        errors: List[str] = []
         changes: Dict[str, int] = {
             "vacuumed": 0,
             "checkpointed": 0,
-            "orphans_removed": 0,
+            "orphans_deleted": 0,
+            "duplicates_deleted": 0,
+            "rows_purged": 0,
         }
+        retention_days = plan.get("retention_days", 30)
         
         if self.dry_run:
             logs.append("DRY RUN - No changes will be made")
         
-        # VACUUM bloated databases
-        for db_info in plan.get("databases_to_vacuum", []):
-            db_path = Path(db_info["path"])
+        for action in plan.get("actions", []):
+            action_type = action["type"]
+            action_path = Path(action["path"])
             
-            if self.dry_run:
-                logs.append(f"[DRY RUN] Would VACUUM: {db_path.name}")
-                changes["vacuumed"] += 1
-            else:
-                try:
-                    conn = sqlite3.connect(str(db_path))
-                    conn.execute("VACUUM")
-                    conn.close()
-                    
-                    new_size_mb = db_path.stat().st_size / (1024 * 1024)
-                    saved_mb = db_info["size_mb"] - new_size_mb
-                    
-                    logs.append(f"VACUUM completed: {db_path.name} (saved {saved_mb:.2f}MB)")
-                    changes["vacuumed"] += 1
-                except sqlite3.Error as e:
-                    errors.append(f"VACUUM failed for {db_path.name}: {e}")
-        
-        # Checkpoint WAL journals
-        for wal_info in plan.get("wal_files_to_checkpoint", []):
-            db_path = Path(wal_info["db_path"])
+            if action_type == "vacuum":
+                if self.dry_run:
+                    logs.append(f"[DRY RUN] Would VACUUM: {action_path.name}")
+                else:
+                    try:
+                        conn = sqlite3.connect(str(action_path))
+                        conn.execute("VACUUM")
+                        conn.close()
+                        changes["vacuumed"] += 1
+                        logs.append(f"VACUUM completed: {action_path.name}")
+                    except (sqlite3.Error, OSError) as e:
+                        errors.append(f"VACUUM failed for {action_path.name}: {e}")
             
-            if self.dry_run:
-                logs.append(f"[DRY RUN] Would checkpoint WAL: {db_path.name}")
-                changes["checkpointed"] += 1
-            else:
-                try:
-                    conn = sqlite3.connect(str(db_path))
-                    conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")
-                    conn.close()
-                    
-                    logs.append(f"WAL checkpoint completed: {db_path.name}")
-                    changes["checkpointed"] += 1
-                except sqlite3.Error as e:
-                    errors.append(f"WAL checkpoint failed for {db_path.name}: {e}")
-        
-        # Remove orphaned files
-        for orphan_path_str in plan.get("orphaned_files_to_remove", []):
-            orphan_path = Path(orphan_path_str)
+            elif action_type == "wal_checkpoint":
+                if self.dry_run:
+                    logs.append(f"[DRY RUN] Would checkpoint WAL: {action_path.name}")
+                else:
+                    try:
+                        conn = sqlite3.connect(str(action_path))
+                        conn.execute("PRAGMA wal_checkpoint(TRUNCATE)")
+                        conn.close()
+                        changes["checkpointed"] += 1
+                        logs.append(f"WAL checkpoint completed: {action_path.name}")
+                    except (sqlite3.Error, OSError) as e:
+                        errors.append(f"WAL checkpoint failed for {action_path.name}: {e}")
             
-            if self.dry_run:
-                logs.append(f"[DRY RUN] Would remove: {orphan_path.name}")
-                changes["orphans_removed"] += 1
+            elif action_type == "delete_orphan":
+                if self.dry_run:
+                    logs.append(f"[DRY RUN] Would remove: {action_path.name}")
+                else:
+                    try:
+                        action_path.unlink()
+                        changes["orphans_deleted"] += 1
+                        logs.append(f"Removed: {action_path.name}")
+                    except OSError as e:
+                        errors.append(f"Failed to remove {action_path.name}: {e}")
+            
+            elif action_type == "delete_duplicate":
+                if self.dry_run:
+                    logs.append(f"[DRY RUN] Would remove duplicate: {action_path.name}")
+                else:
+                    try:
+                        action_path.unlink()
+                        changes["duplicates_deleted"] += 1
+                        logs.append(f"Removed duplicate: {action_path.name}")
+                    except OSError as e:
+                        errors.append(f"Failed to remove {action_path.name}: {e}")
+            
+            elif action_type == "retention_purge":
+                table = action.get("table", "logs")
+                column = action.get("column", "timestamp")
+                if self.dry_run:
+                    logs.append(f"[DRY RUN] Would purge old rows from {table}")
+                else:
+                    try:
+                        conn = sqlite3.connect(str(action_path))
+                        cursor = conn.execute(
+                            f"DELETE FROM {table} WHERE {column} < datetime('now', ?)",
+                            (f"-{retention_days} days",),
+                        )
+                        purged = cursor.rowcount
+                        conn.commit()
+                        conn.close()
+                        changes["rows_purged"] += purged
+                        logs.append(f"Purged {purged} rows from {table}")
+                    except (sqlite3.Error, OSError) as e:
+                        errors.append(f"Retention purge failed for {table}: {e}")
+            
             else:
-                try:
-                    orphan_path.unlink()
-                    logs.append(f"Removed orphaned file: {orphan_path.name}")
-                    changes["orphans_removed"] += 1
-                except OSError as e:
-                    errors.append(f"Failed to remove {orphan_path.name}: {e}")
+                errors.append(f"Unknown action type: {action_type}")
         
         actions_taken = sum(changes.values())
-        status = "SUCCESS" if not errors else ("PARTIAL" if actions_taken > 0 else "FAILED")
+        if errors and actions_taken == 0:
+            status = "FAILED"
+        elif errors:
+            status = "PARTIAL"
+        else:
+            status = "SUCCESS"
         
         logs.append(f"Cleanup complete: {actions_taken} actions, {len(errors)} errors")
         
@@ -277,15 +345,15 @@ class DatabaseBloatCleaner(CleanerInterface):
         """Rollback database cleanup operations.
         
         Note: Database VACUUM and WAL checkpoint operations cannot be
-        rolled back. This method exists for interface compliance.
+        fully rolled back. Returns PARTIAL to indicate limited support.
         
         Returns:
-            RollbackResult indicating no rollback possible
+            RollbackResult indicating partial rollback capability
         """
         return RollbackResult(
             cleaner_id=self.domain,
             timestamp=datetime.now().isoformat(),
-            status="FAILED",
+            status="PARTIAL",
             files_restored=0,
             errors=["Database VACUUM operations cannot be rolled back"],
         )

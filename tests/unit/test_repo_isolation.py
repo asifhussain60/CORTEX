@@ -14,8 +14,19 @@ import pytest
 import os
 import tempfile
 import pathlib
+from dataclasses import dataclass
+from datetime import datetime
 from typing import Dict, Any, Optional
 from unittest.mock import Mock, patch, MagicMock
+
+
+@dataclass
+class MCPSession:
+    """Minimal session model for isolation tests."""
+    session_id: str
+    repo_id: str
+    repo_path: str
+    created_at: datetime
 
 
 class RepositoryIsolationError(Exception):
@@ -307,8 +318,6 @@ class TestIsolationCheckerIntegration:
     def test_orchestrator_operation_with_session(self):
         """Orchestrator operations respect session isolation."""
         from cortex.core.security.isolation import IsolationChecker
-        from cortex.mcp.models.session import MCPSession
-        from datetime import datetime
 
         checker = IsolationChecker()
         session = MCPSession(
@@ -333,8 +342,6 @@ class TestIsolationCheckerIntegration:
     def test_multiple_sessions_isolated(self):
         """Multiple sessions maintain independent isolation."""
         from cortex.core.security.isolation import IsolationChecker
-        from cortex.mcp.models.session import MCPSession
-        from datetime import datetime
 
         checker = IsolationChecker()
 

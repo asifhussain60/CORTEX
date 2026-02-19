@@ -9,6 +9,7 @@ capabilities:
   - context_clarification
 modes_served:
   - INTERACTIVE
+  - QUERY
 mcp_tools:
   - cortex_process_request
 collaborators:

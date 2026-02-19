@@ -70,11 +70,12 @@ class HealthOrchestrator:
         self.config = config or {}
         self.enabled = True
         
-        # Initialize intelligence layer
-        self.intelligence = HealthIntelligence(self.workspace_root)
-        
         if not self.workspace_root.exists():
             raise ValueError(f"Workspace root does not exist: {self.workspace_root}")
+        
+        # Initialize intelligence layer (after existence check — mkdir(parents=True)
+        # inside HealthIntelligence would create the workspace dir otherwise)
+        self.intelligence = HealthIntelligence(self.workspace_root)
     
     def register_agent(self, agent: BaseHealthAgent) -> None:
         """Register a health agent.
