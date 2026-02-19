@@ -10,7 +10,7 @@ Entry point for CORTEX system initialization.
 import logging
 from typing import Optional
 
-from cortex.wiring.registry import GitBackedRegistry, get_registry
+from cortex.core.wiring.registry import GitBackedRegistry, get_registry
 
 logger = logging.getLogger(__name__)
 

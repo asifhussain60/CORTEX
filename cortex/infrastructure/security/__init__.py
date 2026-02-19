@@ -1,36 +1,68 @@
 """
-Security infrastructure components for CORTEX.
+CORTEX Security Module - Unified vulnerability management framework
 
-Components:
-- SecretsFilter: Log-level secret redaction
-- InputValidator: Input sanitization and validation
-- TokenBucketRateLimiter: Rate limiting with circuit breaker
-- CryptoProvider: Cryptographic operations (AES-256-GCM, PBKDF2)
-- CORSHandler: CORS and CSRF protection
-- SecurityAuditor: Automated security scanning
-- DefenseOrchestrator: Defense-in-depth coordination
-- CrossRepoEnforcer: Cross-repository security enforcement
-
-Phase: impl-arch-005-hardening (Production Hardening & Security)
-Priority: P0 (Production Critical)
+Provides:
+- Vulnerability models (canonical, multi-tool)
+- SecurityVulnerabilityOrchestrator (canonical orchestrator)
+- RemediationRulesRegistry (pattern-based fixes)
+- VulnerabilityOrchestrationGateway (CORTEX integration)
 """
 
-from cortex.brain.core.input_validator import InputValidator
-from cortex.infrastructure.security.cors_handler import CORSHandler
-from cortex.infrastructure.security.cross_repo_enforcer import CrossRepoEnforcer
-from cortex.infrastructure.security.crypto_provider import CryptoProvider
-from cortex.infrastructure.security.defense_orchestrator import DefenseOrchestrator
-from cortex.infrastructure.security.rate_limiter import TokenBucketRateLimiter
-from cortex.infrastructure.security.secrets_filter import SecretsFilter
-from cortex.infrastructure.security.security_auditor import SecurityAuditor
+from cortex.security.vulnerability_models import (
+    RemediationBatch,
+    RemediationResult,
+    RemediationRule,
+    RemediationStatus,
+    RemediationType,
+    Severity,
+    VulnerabilityFinding,
+    VulnerabilityScanResult,
+)
+from cortex.security.remediation_rules import (
+    RemediationRulesRegistry,
+    get_registry,
+)
+from cortex.security.vulnerability_orchestration_gateway import (
+    VulnerabilityOrchestrationGateway,
+    get_vulnerability_gateway,
+)
+
+# Lazy imports for orchestrator to avoid circular dependencies
+def __getattr__(name):
+    if name == "SecurityVulnerabilityOrchestrator":
+        from cortex.orchestrators.security.security_vulnerability_orchestrator import (
+            SecurityVulnerabilityOrchestrator,
+        )
+        return SecurityVulnerabilityOrchestrator
+    elif name == "VulnerabilityAction":
+        from cortex.orchestrators.security.security_vulnerability_orchestrator import (
+            VulnerabilityAction,
+        )
+        return VulnerabilityAction
+    elif name == "RemediationHandler":
+        from cortex.orchestrators.security.security_vulnerability_orchestrator import (
+            RemediationHandler,
+        )
+        return RemediationHandler
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 __all__ = [
-    "SecretsFilter",
-    "InputValidator",
-    "TokenBucketRateLimiter",
-    "CryptoProvider",
-    "CORSHandler",
-    "SecurityAuditor",
-    "DefenseOrchestrator",
-    "CrossRepoEnforcer",
+    # Models
+    "Severity",
+    "RemediationType",
+    "RemediationStatus",
+    "VulnerabilityFinding",
+    "RemediationRule",
+    "RemediationResult",
+    "VulnerabilityScanResult",
+    "RemediationBatch",
+    # Orchestrator (lazy-loaded)
+    "SecurityVulnerabilityOrchestrator",
+    "VulnerabilityAction",
+    "RemediationHandler",
+    # Registry & Gateway
+    "RemediationRulesRegistry",
+    "get_registry",
+    "VulnerabilityOrchestrationGateway",
+    "get_vulnerability_gateway",
 ]

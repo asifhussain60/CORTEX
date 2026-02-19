@@ -5,25 +5,25 @@ Authority: cortex-registry/planning/phases/completed/2025/ (Phase 3)
 Rule: CORE-035 (Single Canonical Implementation)
 
 This is the SINGLE SOURCE OF TRUTH for orchestrator wiring.
-All orchestrator registration comes from cortex/wiring/specifications/wiring.yaml.
+All orchestrator registration comes from cortex/core/wiring/specifications/wiring.yaml.
 
 Example:
-    >>> from cortex.wiring import wiring_bootstrap_cortex, get_cortex
+    >>> from cortex.core.wiring import bootstrap_cortex, get_cortex
     >>> registry = bootstrap_cortex()  # Initialize system
     >>> orch = registry.get_orchestrator("TDDOrchestrator")
     >>> result = orch.generate_tests(...)
 
     # Check if wired
-    >>> from cortex.wiring import is_wired
+    >>> from cortex.core.wiring import is_wired
     >>> if not is_wired():
     ...     bootstrap_cortex()
 
     # Get wiring hash for change detection
-    >>> from cortex.wiring import get_wiring_hash
+    >>> from cortex.core.wiring import get_wiring_hash
     >>> hash_value = get_wiring_hash()
 """
 
-from cortex.wiring.wiring_bootstrap import (
+from cortex.core.wiring.wiring_bootstrap import (
     bootstrap_cortex,
     get_cortex,
     get_wiring_hash,
@@ -32,7 +32,7 @@ from cortex.wiring.wiring_bootstrap import (
 
 # Alias for backward compatibility (tests import wiring_bootstrap_cortex)
 wiring_bootstrap_cortex = bootstrap_cortex
-from cortex.wiring.registry import (
+from cortex.core.wiring.registry import (
     GitBackedRegistry,
     LazyOrchestrator,
     WiringValidator,

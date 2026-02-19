@@ -16,9 +16,9 @@ __email__ = 'asif@cortex.dev'
 __license__ = 'Proprietary'
 __description__ = 'AI-Powered Development Orchestration System'
 
-# Phase 3: Git-backed wiring system
+# Phase 6: Git-backed wiring system (consolidated to cortex.core.wiring)
 # Import new wiring API for orchestrator access
-from cortex.wiring import (
+from cortex.core.wiring import (
     bootstrap_cortex,
     get_cortex,
     get_wiring_hash,
@@ -29,7 +29,7 @@ from cortex.wiring import (
 # This ensures all critical issues are detected and auto-remediated
 # before any orchestrator code executes
 try:
-    from cortex.bootstrap import _bootstrap_success
+    from cortex.core.bootstrap import _bootstrap_success
 except ImportError:
     pass
 
@@ -51,7 +51,7 @@ __all__ = [
 def __getattr__(name: str):
     """Lazy load cortex modules."""
     # This allows: from cortex import brain, api, etc. without importing everything
-    if name in ('brain', 'api', 'core', 'infrastructure', 'lib', 'mcp', 'orchestrators', 'scripts', 'tools', 'wiring'):
+    if name in ('brain', 'api', 'core', 'infrastructure', 'lib', 'mcp', 'orchestrators', 'scripts', 'tools', 'dashboards', 'governance', 'intelligence', 'models', 'config', 'cli', 'templates', 'testing', 'lens', 'observability'):
         try:
             import importlib
             return importlib.import_module(f'cortex.{name}')

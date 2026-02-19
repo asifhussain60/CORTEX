@@ -12,7 +12,7 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from cortex.wiring.registry.lazy_orchestrator import LazyOrchestrator
+from cortex.core.wiring.registry.lazy_orchestrator import LazyOrchestrator
 
 logger = logging.getLogger(__name__)
 

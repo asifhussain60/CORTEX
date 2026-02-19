@@ -1,18 +1,39 @@
 """
-Diagram generators for CORTEX documentation visualizations.
+CORTEX Toolkit - Centralized Utility Package
 
-This module contains data generators for D3.js and Mermaid diagrams
-used in CORTEX system documentation.
+This package consolidates scattered utility scripts from .cortex-runtime/ and scripts/
+directories into a unified, MCP-exposed, testable toolkit.
 
-Generators:
-  - generate-governance-data.py: Governance pyramid visualization
-  - generate-lifecycle-data.py: Request lifecycle Sankey flow
-  - generate-tdd-cycle-data.py: TDD knowledge cycle
+**Module Structure:**
+- diagnostics: MCP health checks, environment diagnostics
+- setup: Cross-platform setup verification
+- cleanup: Automated cleanup and vacuum operations
+- validation: Governance and production readiness checks
+- analysis: Trace analysis and orchestrator auditing
+
+**Authority:** Phase 90 (Toolkit Centralization)
+**Author:** Asif Hussain
+**Created:** 2026-02-16
 """
 
 __version__ = "1.0.0"
-__all__ = [
-    "generate_governance_data",
-    "generate_lifecycle_data",
-    "generate_tdd_cycle_data",
-]
+
+# Module registry for discovery
+TOOLKIT_MODULES = {
+    "diagnostics": "cortex.toolkit.diagnostics",
+    "setup": "cortex.toolkit.setup",
+    "cleanup": "cortex.toolkit.cleanup",
+    "validation": "cortex.toolkit.validation",
+    "analysis": "cortex.toolkit.analysis",
+}
+
+# MCP tool mapping
+MCP_TOOLS = {
+    "toolkit_diagnose": "diagnostics",
+    "toolkit_verify": "setup",
+    "toolkit_cleanup": "cleanup",
+    "toolkit_validate": "validation",
+    "toolkit_analyze": "analysis",
+}
+
+__all__ = ["TOOLKIT_MODULES", "MCP_TOOLS"]
