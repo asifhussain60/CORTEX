@@ -17,7 +17,7 @@ completion_report: minimal
 
 ### Progress Bar Format
 
-**SSOT:** `.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
+**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
 
 All orchestrators (MasterOrchestrator, PlanningOrchestrator, VacuumOrchestrator, TDDOrchestrator, etc.) use the single golden template defined there. Do NOT define template format here.
 

@@ -298,8 +298,8 @@ Result: Zero duplication, 350 words
 ### When NOT to Use Blocks
 
 **Do NOT use composable blocks for:**
-- ❌ Autonomous execution (`proceed`, `implement`) → Use Silent Execution Template (§ SILENT AUTONOMOUS MODE)
-- ❌ Work operations (design, plan, audit, query, implement) → Use 5-Section Golden Format (§ USER RESPONSE TEMPLATE)
+- ❌ Autonomous execution (`proceed`, `implement`) → Use Silent Execution Template (§ Silent Autonomous Mode)
+- ❌ Work operations (design, plan, audit, query, implement) → Use 5-Section Golden Format (§ User Response Template)
 
 **Composable blocks are for:** Educational/onboarding scenarios only.
 
@@ -324,8 +324,8 @@ Result: Zero duplication, 350 words
 
 | Template | Purpose | Blocks Relationship |
 |----------|---------|-------------------|
-| **Silent Execution** (§ SILENT AUTONOMOUS MODE) | Autonomous work | Blocks NOT used (progress bars only) |
-| **5-Section Golden Format** (§ USER RESPONSE TEMPLATE) | All work operations | Optional: Add NEXT-STEPS, ORCHESTRATORS as needed |
+| **Silent Execution** (§ Silent Autonomous Mode) | Autonomous work | Blocks NOT used (progress bars only) |
+| **5-Section Golden Format** (§ User Response Template) | All work operations | Optional: Add NEXT-STEPS, ORCHESTRATORS as needed |
 
 **Hierarchy:**
 1. 5-Section Golden Format = primary for all work operations (adapts via density)
@@ -344,7 +344,7 @@ Result: Zero duplication, 350 words
 ---
 
 
-## 🤖 SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE (SSOT)
+## 🤖 Silent Autonomous Mode — Golden Template (SSOT)
 
 **Authority:** CORE-049 Silent Autonomous Execution Protocol
 **Version:** 2.0 | **Updated:** 2026-02-19
@@ -430,7 +430,7 @@ Fix: {fix_suggestion}
 5. **Metrics line:** Always include Tests + Coverage
 6. **Last stage:** Uses `└─` (not `├─`)
 
-### FORBIDDEN in Silent Mode
+### Forbidden in Silent Mode
 
 - ❌ "I'll now proceed to implement..."
 - ❌ "Let me check the registry first..."
@@ -764,7 +764,7 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 | **QUERY** | `🔍 CORTEX QUERY` | All 5 sections (simple density) | Simple-Medium |
 | **AUDIT** | `🔍 CORTEX AUDIT` | All 5 sections + findings table | Full |
 | **IMPLEMENT** (pre-approval) | `⚡ CORTEX IMPLEMENT` | All 5 sections (challenge gate) | Medium |
-| **IMPLEMENT** (post-approval) | Silent autonomous | Golden autonomous template (§ SILENT AUTONOMOUS MODE) | Progress bars only |
+| **IMPLEMENT** (post-approval) | Silent autonomous | Golden autonomous template (§ Silent Autonomous Mode) | Progress bars only |
 | **COMPLETION** | Inline summary | Summary + deliverables + metrics | Simple |
 
 ### Mode-Specific H3 Extensions
@@ -842,7 +842,7 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 - 21-50 items: group by category with H3 headers
 - 50+ items: show top 20, state total, offer `proceed` for full list
 
-### CONCISE DECISION Mode
+### Concise Decision Mode
 
 **Trigger:** Review, verification, assessment, synthesis, "does this address my concerns?"
 
@@ -866,7 +866,7 @@ Uses 5-section format (simple density):
 
 ### Post-Approval Autonomous Mode
 
-**Reference:** § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE (progress bars + hanging stages)
+**Reference:** § Silent Autonomous Mode — Golden Template (progress bars + hanging stages)
 
 ---
 
@@ -883,11 +883,11 @@ The golden format adapts via **Adaptive Density** (simple/medium/complex) rather
 def select_response_format(intent: str) -> str:
     """All intents use the 5-section golden format with adaptive density."""
     if intent in ["IMPLEMENT", "FIX", "REFACTOR"] and user_said_proceed:
-        return "SILENT_AUTONOMOUS_MODE"  # § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
-    return "FIVE_SECTION_GOLDEN_FORMAT"  # § USER RESPONSE TEMPLATE — GOLDEN FORMAT
+        return "SILENT_AUTONOMOUS_MODE"  # § Silent Autonomous Mode — Golden Template
+    return "FIVE_SECTION_GOLDEN_FORMAT"  # § User Response Template — Golden Format
 ```
 
-### CLASSIFY (Conversational Mode)
+### Classify (Conversational Mode)
 
 **Trigger:** `cortex_classify` MCP tool with `format='conversational'`
 **Purpose:** Pre-implementation intent reflection (≤60 tokens, 4-second scan)

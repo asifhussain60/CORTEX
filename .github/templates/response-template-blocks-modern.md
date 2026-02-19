@@ -508,7 +508,7 @@ I'm here to make you successful. Let's build something great. 🚀
 ## 🎯 Work Operation Templates (Autonomous Execution)
 
 > **⚠️ SSOT:** The golden template for silent autonomous execution lives in:
-> **`.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE**
+> **`.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template**
 >
 > Do NOT define inline templates here. Refer to the SSOT for all 3 variants:
 > in-progress, completion, and error templates.

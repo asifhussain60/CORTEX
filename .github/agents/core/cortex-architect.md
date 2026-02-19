@@ -841,7 +841,7 @@ if intent in exempt_intents:
 - User can request setup instructions → Gets guidance
 - User cannot implement/fix code → Governance enforced
 
-### NO BYPASS ALLOWED
+### No Bypass Allowed
 
 - ❌ "Just this once, I'll edit directly" → BLOCKED
 - ❌ "It's a simple fix" → BLOCKED  

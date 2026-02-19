@@ -141,7 +141,7 @@ templates:
   # --------------------------------------------------------------------------
   phase_progress:
     intent: ["IMPLEMENT", "FIX", "REFACTOR"]
-    ssot: ".github/templates/response-format-standards.md § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE"
+    ssot: ".github/templates/response-format-standards.md § Silent Autonomous Mode — Golden Template"
     note: "Visual template (progress bar + hanging stages) defined ONLY in the SSOT file. This section defines metadata only."
     update_frequency: "per_stage"
     required_fields:
@@ -248,7 +248,7 @@ rendering_rules:
   stage_display:
     format: "Hanging tree: ├─ {icon} S{n}: {name} ({detail})"
     note: "Each stage on its OWN line. Last stage uses └─"
-    ssot: ".github/templates/response-format-standards.md § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE"
+    ssot: ".github/templates/response-format-standards.md § Silent Autonomous Mode — Golden Template"
   
   status_icons:
     completed: "✅"

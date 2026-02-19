@@ -31,7 +31,7 @@
 ## 🤖 SILENT AUTONOMOUS EXECUTION (P0)
 
 **Authority:** CORE-049 | **Default:** ENABLED
-**Template SSOT:** `.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
+**Template SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
 
 ### Trigger Words
 - "proceed" | "implement" | "continue" | "yes" (after DoR) | "do it"
@@ -178,7 +178,7 @@
 **SSOT:** `.github/templates/response-format-standards.md`
 
 ### User-Facing Responses
-All non-autonomous responses use the **5-Section Golden Format** (§ USER RESPONSE TEMPLATE — GOLDEN FORMAT):
+All non-autonomous responses use the **5-Section Golden Format** (§ User Response Template — Golden Format):
 
 ```markdown
 ## {icon} CORTEX {mode}
@@ -212,7 +212,7 @@ All non-autonomous responses use the **5-Section Golden Format** (§ USER RESPON
 - ❌ NO tool usage narration ("I'll now search...", "Let me check...")
 
 ### Autonomous Execution
-**Reference:** `.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
+**Reference:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
 
 ---
 
@@ -298,8 +298,8 @@ If approaching limit:
 **Authority:** `.github/templates/response-format-standards.md`
 
 ### Two Response Templates (ONLY)
-1. **5-Section Golden Format** — ALL non-autonomous responses (§ USER RESPONSE TEMPLATE — GOLDEN FORMAT)
-2. **Silent Autonomous Execution** — IMPLEMENT/FIX/REFACTOR post-approval (§ SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE)
+1. **5-Section Golden Format** — ALL non-autonomous responses (§ User Response Template — Golden Format)
+2. **Silent Autonomous Execution** — IMPLEMENT/FIX/REFACTOR post-approval (§ Silent Autonomous Mode — Golden Template)
 
 **DO NOT duplicate templates here** — Load from reference doc
 
@@ -307,7 +307,7 @@ If approaching limit:
 
 ## 🎨 ASCII PROGRESS BAR FORMAT
 
-**SSOT:** `.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
+**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
 
 All autonomous execution output uses the single golden template (progress bar + hanging stages with ✅/🔵/⚪/🔴 icons). Do NOT define format here — load from SSOT.
 
