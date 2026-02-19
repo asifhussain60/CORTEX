@@ -265,10 +265,10 @@ phase:
     # D7: MCP Tool Consolidation Plan
     # --------------------------------------------------------------------------
     - id: "D7"
-      name: "MCP Tool Consolidation — 34 to ~20 tools"
+      name: "MCP Tool Consolidation — 34 to ~19 tools"
       description: |
         Create the consolidation mapping and shim layer that enables
-        gradual merge of 34+ MCP tools into ~20 cohesive tools.
+        gradual merge of 34+ MCP tools into ~19 cohesive tools.
         
         Phase 00 creates the mapping. Actual merge happens in Phase 03-04.
         
@@ -280,13 +280,89 @@ phase:
         - 2 discovery tools → cortex_discover
         - 2 health/vacuum tools → cortex_health
         - cortex_onboard_repository_v3 → merged into cortex_onboard_repository
+        - cortex_challenge → absorbed into MasterOrchestrator default behavior (EA-009)
       output_files:
         - "cortex-registry/config/mcp-consolidation-map.yaml"
       acceptance_criteria:
         - "Consolidation map covers all 34 tools"
-        - "Target count is ~20 tools"
+        - "Target count is ~19 tools"
         - "Zero capability loss documented"
+        - "cortex_challenge absorbed into MasterOrchestrator (EA-009)"
         - "Backward compatibility shims planned for transition"
+
+    # --------------------------------------------------------------------------
+    # D8: Challenge-First Cognition Wiring (EA-009)
+    # --------------------------------------------------------------------------
+    - id: "D8"
+      name: "Challenge-First Cognition — MasterOrchestrator Default Behavior"
+      description: |
+        Wire challenge-first cognition as the DEFAULT thinking process in
+        MasterOrchestrator (EA-009). This is NOT an optional mode — it's how
+        CORTEX always thinks on every request.
+        
+        Implementation:
+        1. Move ChallengeGenerator from optional to mandatory in governance_gate
+        2. Remove challenge-as-appended-text from cortex/mcp/tools/core.py
+        3. MasterOrchestrator.governance_gate auto-invokes:
+           a. Capability audit against existing workspace features
+           b. Architectural fit evaluation
+           c. Single-best-recommendation synthesis
+        4. Response format: executive-ready, ≤60s read, tables, visual hierarchy
+        5. All challenge output flows through normal response — no separate tool
+        
+        This replaces the current cortex_challenge MCP tool.
+      modifies:
+        - "cortex/orchestrators/core/master_orchestrator.py"
+        - "cortex/mcp/tools/core.py (remove challenge append text)"
+      output_files:
+        - "cortex/core/challenge_first_protocol.py"
+      test_files:
+        - "tests/core/test_challenge_first_protocol.py"
+      acceptance_criteria:
+        - "MasterOrchestrator governance_gate invokes ChallengeGenerator on every request"
+        - "Challenge output is part of normal response — not a separate tool"
+        - "No challenge prompt text appended in MCP tools layer"
+        - "Single-best-recommendation format enforced by default"
+        - "Executive-ready response format (tables, visual hierarchy)"
+        - "Can be verified by golden test — every response includes challenge evaluation"
+        - "cortex_challenge MCP tool removed from tool registry"
+
+    # --------------------------------------------------------------------------
+    # D9: Token Optimization Framework (EA-010)
+    # --------------------------------------------------------------------------
+    - id: "D9"
+      name: "Token Optimization — System-Wide Context Efficiency"
+      description: |
+        Promote TokenBudgetManager and ResponseOptimizer to system-wide
+        core infrastructure (EA-010). Every MCP tool response and orchestrator
+        output optimized for minimal token usage without accuracy loss.
+        
+        Implementation:
+        1. TokenBudgetManager promoted from LENS-only to core infrastructure
+        2. ResponseOptimizer applied to all MCP tool JSON responses
+        3. Context compression layer: read signatures first, bodies on demand
+        4. Session-level caching: LENS results, governance evaluations, file hashes
+        5. Deduplication: never send same context twice in a session
+        6. Incremental context: build on prior turns
+        
+        This is a cross-cutting concern wired through the workflow engine's
+        setup and teardown steps.
+      modifies:
+        - "cortex/brain/llm/token_budget_manager.py (promote to core)"
+        - "cortex/brain/core/response_optimizer.py (promote to core)"
+      output_files:
+        - "cortex/core/token_optimizer.py"
+        - "cortex-registry/config/token-budget-config.yaml"
+      test_files:
+        - "tests/core/test_token_optimizer.py"
+      acceptance_criteria:
+        - "TokenBudgetManager available system-wide (not just LENS)"
+        - "ResponseOptimizer applied to all MCP tool responses"
+        - "Context compression reduces average token usage by ≥30%"
+        - "Session caching prevents duplicate context reads"
+        - "YAML config controls budget thresholds per tool/orchestrator"
+        - "Golden test validates response efficiency metrics"
+        - "No accuracy degradation (verify_claim still passes all checks)"
 
   # ============================================================================
   # CONSOLIDATION OPPORTUNITIES (Phase 00 specific)
@@ -417,7 +493,51 @@ phase:
     - step: "7C"
       name: "Create MCP consolidation map YAML"
       file: "cortex-registry/config/mcp-consolidation-map.yaml"
-      description: "Document all 34→20 tool merges with backward compat plan"
+      description: "Document all 34→19 tool merges with backward compat plan"
+
+    - step: "7D"
+      name: "Write test_challenge_first_protocol.py"
+      tdd: "RED — test challenge-first is invoked on every MasterOrchestrator request"
+      file: "tests/core/test_challenge_first_protocol.py"
+      command: "pytest tests/core/test_challenge_first_protocol.py -v"
+      expected: "FAIL (protocol not wired yet)"
+      tests:
+        - "test_governance_gate_invokes_challenge_generator"
+        - "test_challenge_output_in_normal_response"
+        - "test_single_best_recommendation_format"
+        - "test_no_challenge_append_text_in_mcp_tools"
+        - "test_executive_ready_response_format"
+        - "test_challenge_cannot_be_skipped"
+
+    - step: "7E"
+      name: "Write test_token_optimizer.py"
+      tdd: "RED — test system-wide token optimization"
+      file: "tests/core/test_token_optimizer.py"
+      command: "pytest tests/core/test_token_optimizer.py -v"
+      expected: "FAIL (optimizer not promoted yet)"
+      tests:
+        - "test_token_budget_manager_available_system_wide"
+        - "test_response_optimizer_applied_to_mcp_responses"
+        - "test_context_compression_reduces_tokens"
+        - "test_session_caching_prevents_duplicate_reads"
+        - "test_yaml_config_controls_budget_thresholds"
+        - "test_no_accuracy_degradation"
+
+    - step: "7F"
+      name: "Implement challenge_first_protocol.py"
+      tdd: "GREEN — make test_challenge_first_protocol.py pass"
+      file: "cortex/core/challenge_first_protocol.py"
+      command: "pytest tests/core/test_challenge_first_protocol.py -v"
+      expected: "PASS"
+
+    - step: "7G"
+      name: "Implement token_optimizer.py"
+      tdd: "GREEN — make test_token_optimizer.py pass"
+      files:
+        - "cortex/core/token_optimizer.py"
+        - "cortex-registry/config/token-budget-config.yaml"
+      command: "pytest tests/core/test_token_optimizer.py -v"
+      expected: "PASS"
 
     - step: 8
       name: "Wire capability manifest golden test"
@@ -447,6 +567,8 @@ phase:
     no_new_files_with_versions: true
     audit_db_operational: true
     mcp_consolidation_map_created: true
+    challenge_first_wired: true
+    token_optimizer_operational: true
     description: |
       Phase 00 is complete when:
       1. Capability manifest exists and all items are baselined
@@ -456,5 +578,7 @@ phase:
       5. Migration tracker created
       6. Zero governance violations
       7. CortexAuditDB operational with WAL mode, cleanup, golden test fixtures
-      8. MCP consolidation map (34→20) documented in YAML
+      8. MCP consolidation map (34→19) documented in YAML
       9. SQLite retention policy YAML created
+      10. Challenge-first cognition wired into MasterOrchestrator governance_gate (EA-009)
+      11. Token optimization framework operational system-wide (EA-010)

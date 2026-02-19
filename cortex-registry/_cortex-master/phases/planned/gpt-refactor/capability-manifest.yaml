@@ -21,11 +21,13 @@ manifest:
   # SECTION 1: MCP TOOLS (External API Surface)
   # ============================================================================
   mcp_tools:
-    expected_count: 20
+    expected_count: 19
     consolidation_note: |
-      Consolidated from 34+ to ~20 tools. Zero capability loss.
+      Consolidated from 34+ to ~19 tools. Zero capability loss.
       Toolkit tools absorbed. Config loaders unified. Dashboard/refactor
-      tools use mode parameters. See 00-overview.yaml § mcp_consolidation.
+      tools use mode parameters. cortex_challenge absorbed into
+      MasterOrchestrator default behavior (EA-009).
+      See 00-overview.yaml § mcp_consolidation.
     items:
       - id: "MCP-001"
         tool: "cortex_approve_request"
@@ -62,9 +64,13 @@ manifest:
       - id: "MCP-005"
         tool: "cortex_challenge"
         category: "governance"
-        description: "Generate AI-driven challenge using LENS"
-        validation: "Challenge a request, expect LENS analysis"
-        status: "⬜ pending"
+        description: "ABSORBED into MasterOrchestrator default behavior (EA-009)"
+        absorbed_by: "MasterOrchestrator.governance_gate"
+        note: |
+          Challenge-first cognition is now intrinsic to how CORTEX thinks.
+          Not a separate MCP tool — invoked automatically on every request.
+        validation: "Verify MasterOrchestrator governance_gate includes challenge evaluation"
+        status: "🔄 absorbed (EA-009)"
 
       - id: "MCP-006"
         tool: "cortex_dashboard"

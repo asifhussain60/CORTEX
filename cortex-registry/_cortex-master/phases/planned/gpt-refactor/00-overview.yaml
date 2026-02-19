@@ -37,7 +37,9 @@ refactor:
     - "SQLite audit logging is integral to golden tests with setup/teardown cleanups"
     - "Health and vacuum include SQLite database maintenance (VACUUM, bloat checks, deadlock prevention)"
     - "ALL functionality exposed via MCP — consolidated small footprint (no toolkit sprawl)"
-    - "MCP tool count consolidated from 34+ to ~20 cohesive tools (zero capability loss)"
+    - "MCP tool count consolidated from 34+ to ~19 cohesive tools (zero capability loss)"
+    - "Challenge-first cognition is DEFAULT brain behavior — intrinsic to MasterOrchestrator, never user-specified"
+    - "Token-efficient operations system-wide — context compression, response optimization, caching (EA-010)"
 
   # ============================================================================
   # ARCHITECTURAL PRINCIPLES
@@ -169,10 +171,60 @@ refactor:
           Single observability stack. No silent failures.
         enforced_by: "Teardown step in workflow lifecycle"
 
+      - id: "EA-009"
+        name: "Challenge-First Cognition"
+        description: |
+          The MasterOrchestrator's DEFAULT thinking process on EVERY request.
+          NOT a user-specified instruction — this is how CORTEX always thinks:
+          1. Audit existing capabilities against the request
+          2. Identify architectural fit within current patterns
+          3. Deliver SINGLE BEST recommendation (no alternatives list)
+          4. Address ask vs. challenge tension inline
+          5. Evaluate through design pillars: extensibility, scalability,
+             accuracy, team collaboration, long-term maintainability
+          6. Ensure MCP-first exposure, orchestrator integrity, zero regression
+          7. Present in executive-ready format (≤60s read, tables, visual hierarchy)
+          8. ALL response feedback inline in VS Code Copilot Chat
+          9. NEVER create summary, reports, or markdown files
+          10. Assume user has no knowledge of CORTEX architecture or their repo
+          
+          This replaces the current append-on text in request_rephrase tool.
+          The MasterOrchestrator's governance_gate step now includes challenge
+          evaluation as an intrinsic phase — not an optional add-on.
+        enforced_by: "MasterOrchestrator.governance_gate (intrinsic, cannot be skipped)"
+        current_gap: |
+          Challenge-first currently lives in cortex/mcp/tools/core.py as
+          appended prompt text. ChallengeGenerator exists but requires manual
+          invocation. Must be wired into MasterOrchestrator default flow.
+
+      - id: "EA-010"
+        name: "Token-Efficient Operations"
+        description: |
+          Every request optimized for maximum token reduction without loss
+          of efficiency or accuracy. This is a system-wide concern:
+          1. Context compression — read only what's needed, cache per session
+          2. Response compression — concise by default, verbose only if asked
+          3. Smart file reading — signatures/structure first, bodies on demand
+          4. Incremental context — build on prior turns, never re-read everything
+          5. Tool output — minimal JSON, no redundant fields, no boilerplate
+          6. LENS caching — analysis results cached per workspace session
+          7. Governance caching — rule evaluations cached per file hash
+          8. Deduplication — never send the same context twice in a session
+          
+          Token budget is treated like memory budget: every operation has a
+          context window budget and must stay within it.
+        enforced_by: "TokenBudgetManager + ResponseOptimizer (system-wide, not per-tool)"
+        current_gap: |
+          TokenBudgetManager exists in cortex/brain/llm/ but only used by
+          tiered_lens_analyzer. ResponseOptimizer exists but not applied
+          system-wide. Must be promoted to core infrastructure.
+
     quality_pillars:
       extensibility: "Plugin architecture via workflow templates + orchestrator registry"
       scalability: "Event-driven architecture + MCP tool isolation"
       accuracy: "Golden tests + hallucination prevention + verify_claim"
+      challenge_first: "Every request evaluated against existing capabilities before action (EA-009)"
+      token_efficiency: "Minimal context, maximal accuracy — every token earns its place (EA-010)"
       team_collaboration: "Domain boundaries + YAML config + self-documenting code"
       maintainability: "SSOT + zero duplication + capability manifest regression gate"
       security: "Defense in depth + credential protection + governance gates"
@@ -297,9 +349,11 @@ refactor:
   # ============================================================================
   mcp_consolidation:
     description: |
-      Consolidate 34+ MCP tools into ~20 cohesive tools. The goal is a SMALL
+      Consolidate 34+ MCP tools into ~19 cohesive tools. The goal is a SMALL
       footprint where each tool does one thing well. Toolkit tools (5) are
       absorbed into existing tools. Redundant tools are merged.
+      cortex_challenge is absorbed into MasterOrchestrator default behavior
+      (EA-009) — challenge-first cognition is intrinsic, not a separate tool.
 
     principles:
       - "Every MCP tool maps to exactly ONE orchestrator"
@@ -316,8 +370,6 @@ refactor:
           reason: "Unique lifecycle tool"
         - tool: "cortex_ask"
           reason: "Unique education tool"
-        - tool: "cortex_challenge"
-          reason: "Unique governance gate"
         - tool: "cortex_capture_metrics"
           reason: "Unique observability tool"
         - tool: "cortex_execute_governance"
@@ -404,13 +456,22 @@ refactor:
         - tool: "cortex_metrics_report"
           reason: "Merged into cortex_capture_metrics with operation=report"
 
-    target_tool_count: 20
+      # --- ABSORBED INTO ORCHESTRATOR (EA-009) ---
+      absorbed_into_orchestrator:
+        - tool: "cortex_challenge"
+          absorbed_by: "MasterOrchestrator.governance_gate (default behavior)"
+          reason: |
+            Challenge-first cognition is intrinsic to how CORTEX thinks (EA-009).
+            The ChallengeGenerator is invoked automatically on every request
+            by the MasterOrchestrator — not as a separate tool invocation.
+            Users never need to "ask for" challenge mode; it's always on.
+
+    target_tool_count: 19
     target_tools:
       - "cortex_approve_request"
       - "cortex_ask"
       - "cortex_audit"
       - "cortex_capture_metrics"
-      - "cortex_challenge"
       - "cortex_dashboard"
       - "cortex_discover"
       - "cortex_execute_governance"
