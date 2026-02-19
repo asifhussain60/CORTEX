@@ -90,19 +90,8 @@ silent_mode_phases:
 progress_reporting:
   
   visual_format:
-    template: |
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      📋 Phase X: DESCRIPTION
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-      
-      [████████░░] 80% SUBTASK_NAME
-      ├─ ✅ S1: Completed (15 tests)
-      ├─ ✅ S2: Completed (10 tests)  
-      ├─ 🔵 S3: In Progress (current)
-      └─ ⚪ S4: Pending (12 tests)
-      
-      Progress: 40/50 | Coverage: 89%
-      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    ssot: ".github/templates/response-format-standards.md § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE"
+    note: "All orchestrators use the single golden template defined in the SSOT file. Do NOT duplicate template here."
     
     symbols:
       completed: "✅"

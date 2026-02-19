@@ -511,58 +511,22 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ## 🎯 Work Operation Templates (Autonomous Execution)
 
-### Silent Execution: Progress Bars (MANDATORY FORMAT)
+> **⚠️ SSOT:** The golden template for silent autonomous execution lives in:
+> **`.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE**
+>
+> Do NOT define inline templates here. Refer to the SSOT for all 3 variants:
+> in-progress, completion, and error templates.
 
-**When to use:**
-- User says "proceed", "implement", "continue", "yes"
-- Autonomous execution mode
-- All silent mode operations
+### Key Rules (Summary — see SSOT for full spec)
 
-**Personality:** Professional, metrics-focused (not educational)
-
-**Format (Prompts Only):**
-
-```markdown
-# 🧠 CORTEX
-**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
-
----
-
-<hr>
-
-📋 **Phase 42: Feature Implementation Complete**
-
-`████████████░░░░` 85% | Stage 4 In Progress
-
-| # | Status | Stage | Detail |
-|---|--------|-------|--------|
-| 1 | ✅ | RED: Test Suite | 12 tests, all passing |
-| 2 | ✅ | GREEN: Implementation | Core logic + edge cases |
-| 3 | 🔵 | REFACTOR: Code Quality | Type hints + docstrings |
-| 4 | ⚪ | Integration: Validation | Pending final checks |
-| 5 | ⚪ | Documentation: Updates | Waiting for S4 complete |
-
-**Tests:** 12/12 passing | **Coverage:** 98% | **Commits:** 3 staged
-
-<hr>
-```
-
-**Rules:**
-- ✅ Header once at top of response
-- ✅ Use `<hr>` for box separators (HTML tag, not dashes)
-- ✅ Use markdown tables for stage results (NOT tree characters)
-- ✅ Progress bar in inline code: `` `████████░░` ``
+- ✅ `━━━` (U+2501, 44 chars) separator lines — NOT `<hr>`
+- ✅ `[██████████]` 10-block progress bar — NOT backtick-wrapped
+- ✅ Hanging `├─` / `└─` stage tree — NOT markdown tables
+- ✅ Status icons: ✅ Complete, 🔵 In Progress, ⚪ Pending, 🔴 Failed
 - ✅ Only output during execution (no narration)
 - ❌ NO "I'll now implement..." sentences
 - ❌ NO approval requests mid-execution
 - ❌ NO bullet-point explanations
-
-**Rendering Notes:**
-- HTML `<hr>` prevents overflow in Copilot Chat
-- Inline code prevents markdown interpretation of `█` characters
-- Markdown tables collapse reliably (unlike tree characters)
-- Status icons (✅ 🔵 ⚪) show progress at a glance
-- Metrics (tests/coverage/commits) provide concrete evidence
 
 ---
 
@@ -573,29 +537,7 @@ I'm here to make you successful. Let's build something great. 🚀
 - User requested "show me results"
 - End of autonomous execution
 
-**Personality:** Confident, celebratory, teaching opportunity
-
-**Format:**
-
-```markdown
-<hr>
-
-✅ **Phase 42: COMPLETE**
-
-[██████████] 100% | All 4 stages delivered
-
-**What Was Built:**
-- ✅ 42 new test cases (RED phase)
-- ✅ Feature implementation with all edge cases (GREEN phase)
-- ✅ Type hints, docstrings, 98% coverage (REFACTOR phase)
-- ✅ Integration validated, git pushed (INTEGRATION phase)
-
-**Quality Metrics:**
-- Tests: 42/42 passing
-- Coverage: 98%
-- Type Safety: 100% (all parameters + returns)
-- Governance: 0 violations (P0-P3 checks passed)
-- Performance: No regressions detected
+> **Format:** See SSOT § Completion Template
 
 **Git Commits:**
 ```
@@ -916,13 +858,14 @@ def my_function():
 - [ ] Header shows exactly once (first response of turn)
 - [ ] Personality consistent (knowledgeable partner)
 - [ ] Visual elements use emoji system
-- [ ] Tables instead of tree characters
-- [ ] `<hr>` for all box separators
-- [ ] Inline code for progress bars
+- [ ] Hanging `├─` / `└─` stage trees for autonomous execution
+- [ ] `━━━` (U+2501) separators for autonomous execution
+- [ ] `[██████████]` progress bars (10-block, square brackets)
 - [ ] Teaching value visible
 - [ ] No duplication across blocks
 - [ ] Works in VSCode Copilot Chat (no rendering issues)
 - [ ] Orchestrator name included in header
+- [ ] Autonomous template matches SSOT in `response-format-standards.md`
 
 ---
 

@@ -270,73 +270,91 @@ Result: Zero duplication, 350 words
 ---
 
 
-## �🤖 SILENT AUTONOMOUS MODE (DEFAULT)
+## 🤖 SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE (SSOT)
+
+**Authority:** CORE-049 Silent Autonomous Execution Protocol
+**Version:** 2.0 | **Updated:** 2026-02-19
+**Scope:** ALL orchestrators (MasterOrchestrator, PlanningOrchestrator, VacuumOrchestrator, TDDOrchestrator, and all others)
+**Rule:** This is the ONLY autonomous execution template. All other files MUST pointer-reference this section — never duplicate.
 
 **When user triggers execution ("proceed", "implement", "yes", "continue"):**
 
-### Progress Bar Format (ONLY OUTPUT)
+### Progress Template (IN-PROGRESS)
 
-**CRITICAL:** Use markdown tables for stage results. Tree characters (`├─ └─`) collapse into one line in Copilot Chat.
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 {PHASE_NAME} Stage {N}: {STAGE_TITLE}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**SEPARATOR FORMAT:** Use `<hr>` HTML tag to prevent overflow in Copilot Chat (box-drawing characters render too wide).
+[████████░░] 80% Stage {N} In Progress
 
-```markdown
-<hr>
+├─ ✅ S1: {name} ({n} tests)
+├─ ✅ S2: {name} ({n} tests)
+├─ 🔵 S3: {name} (in progress)
+└─ ⚪ S4: {name} (pending)
 
-📋 **{Phase Name}**
-
-`[████████░░]` 80% {Current Stage}
-
-| # | Status | Stage | Detail |
-|---|--------|-------|--------|
-| 1 | ✅ | {name} | {n} tests |
-| 2 | ✅ | {name} | {n} tests |
-| 3 | 🔵 | {name} | in progress |
-| 4 | ⚪ | {name} | pending |
-
-**Tests:** {passed}/{total} | **Coverage:** {pct}%
-
-<hr>
+Tests: {passed}/{total} | Coverage: {pct}%
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**Rendering Validation:**
-- ✅ CORRECT: Use `<hr>` for box separators
-- ❌ WRONG: `────────────────────────────────────────` (overflows in UI)
-- ✅ CORRECT: Markdown table for stage results
-- ❌ WRONG: `├─ ✅ S1: Name ├─ ✅ S2: Name` (tree chars collapse into one line)
-- Stage names: Keep <30 chars to prevent overflow
+### Completion Template (ALL STAGES DONE)
 
-### Completion Summary (FINAL OUTPUT)
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 {PHASE_NAME} Stage {N}: {STAGE_TITLE}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-```markdown
-<hr>
+[██████████] 100% All Stages Complete
 
-✅ **{Phase Name}: COMPLETE**
+├─ ✅ S1: {name} ({n} tests)
+├─ ✅ S2: {name} ({n} tests)
+├─ ✅ S3: {name} ({n} tests)
+├─ ✅ S4: {name} ({n} tests)
+└─ ✅ S5: {name} ({n} tests)
 
-[██████████] 100% | {n}/{n} tests | {pct}% coverage
-
-Git: {commit_hash} "{commit_message}"
-
-<hr>
+Tests: {passed}/{total} | Coverage: {pct}%
+Commits: {n} (all pushed to remote)
+{ENH_ID}: ✅ COMPLETE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Error Report (ON FAILURE)
+### Error Template (BLOCKED)
 
-```markdown
-<hr>
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔴 {PHASE_NAME}: BLOCKED at Stage {N}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🔴 **{Phase Name}: BLOCKED at {Stage}**
+[████░░░░░░] 40% Stage {N} Blocked
 
-[████░░░░░░] 40% | {passed}/{total} tests | {failures} failures
+├─ ✅ S1: {name} ({n} tests)
+├─ 🔴 S2: {name} (FAILED)
+├─ ⚪ S3: {name} (pending)
+└─ ⚪ S4: {name} (pending)
 
+Tests: {passed}/{total} | Failures: {n}
 Error: {error_message}
-  - Expected: {expected}
-  - Actual: {actual}
-
 Fix: {fix_suggestion}
-
-<hr>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+### Status Icons (MANDATORY — all orchestrators)
+
+| Icon | Meaning | When to Use |
+|------|---------|-------------|
+| ✅ | Complete | Stage finished, tests passing |
+| 🔵 | In Progress | Currently executing |
+| ⚪ | Pending | Not yet started |
+| 🔴 | Failed/Blocked | Error, needs fix |
+
+### Template Rules
+
+1. **Hanging stages:** Each `├─` / `└─` stage on its OWN line (never concatenated)
+2. **Progress bar:** `[██████████]` format with 10-block width
+3. **Separators:** `━` (U+2501) line, exactly 44 characters
+4. **Stage names:** Keep <30 chars to prevent overflow
+5. **Metrics line:** Always include Tests + Coverage
+6. **Last stage:** Uses `└─` (not `├─`)
 
 ### FORBIDDEN in Silent Mode
 
@@ -346,6 +364,9 @@ Fix: {fix_suggestion}
 - ❌ "Should I continue?"
 - ❌ Multi-paragraph explanations
 - ❌ Approval requests between stages
+- ❌ Markdown tables for stage results (use hanging `├─` tree)
+- ❌ `<hr>` tags (use `━━━` separator lines)
+- ❌ Inline code backticks around progress bar
 
 ---
 
@@ -353,7 +374,8 @@ Fix: {fix_suggestion}
 ## � COMPLETION RESPONSE TEMPLATE (SSOT)
 
 **Authority:** This section is the SINGLE SOURCE OF TRUTH for completion response formatting.  
-**Scope:** All PHASE/STAGE completion responses across all modes.  
+**Scope:** All PHASE/STAGE completion responses in **educational/interactive** modes.  
+**Note:** For **silent autonomous execution**, use the GOLDEN TEMPLATE above (§ SILENT AUTONOMOUS MODE).  
 **Enforcement:** Prompt files reference this section (no duplicate examples).
 
 ### Box Separator Rules (CRITICAL)

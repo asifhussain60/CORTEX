@@ -15,22 +15,11 @@ approval_gates: disabled
 completion_report: minimal
 ```
 
-### Progress Bar Format (UNIVERSAL)
+### Progress Bar Format
 
-```
-<hr>
-📋 {phase_name}
-<hr>
+**SSOT:** `.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
 
-[████████░░] 80% {current_stage}
-├─ ✅ S1: {stage_1_name} ({tests} tests)
-├─ ✅ S2: {stage_2_name} ({tests} tests)  
-├─ 🔵 S3: {stage_3_name} (in progress)
-└─ ⚪ S4: {stage_4_name} (pending)
-
-Tests: {passed}/{total} | Coverage: {pct}% | {duration}
-<hr>
-```
+All orchestrators (MasterOrchestrator, PlanningOrchestrator, VacuumOrchestrator, TDDOrchestrator, etc.) use the single golden template defined there. Do NOT define template format here.
 
 ### Status Icons
 | Icon | Meaning |

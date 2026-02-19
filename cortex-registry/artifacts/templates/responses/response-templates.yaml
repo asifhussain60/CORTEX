@@ -142,7 +142,8 @@ templates:
   # --------------------------------------------------------------------------
   phase_progress:
     intent: ["IMPLEMENT", "FIX", "REFACTOR"]
-    format: "ascii_bar + stage_table"
+    ssot: ".github/templates/response-format-standards.md § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE"
+    note: "Visual template (progress bar + hanging stages) defined ONLY in the SSOT file. This section defines metadata only."
     update_frequency: "per_stage"
     required_fields:
       - "phase_id"
@@ -151,16 +152,12 @@ templates:
       - "stages_completed"
       - "stages_total"
     
-    structure:
-      progress_bar: "`{'█' * (progress // 10)}{'░' * (10 - progress // 10)}` {progress}% {status}"
-      stage_list: "| # | Status | Stage | Tests |\n|---|--------|-------|-------|\n"
-      stage_row: "| {num} | {icon} | {name} | {tests} |\n"
-    
     rules:
-      - "Show ONLY progress bars during execution"
+      - "Show ONLY progress bars with hanging stage trees during execution"
       - "NO text narration of what you're doing"
       - "Update after each stage completes"
-      - "Use <hr> separators, NOT box-drawing characters"
+      - "Use ━━━ (U+2501) separator lines, exactly 44 characters"
+      - "Each ├─ / └─ stage on its OWN line (never concatenated)"
 
   # --------------------------------------------------------------------------
   # QUERY RESPONSE (Educational, information requests)
@@ -211,13 +208,13 @@ templates:
 
 rendering_rules:
   separators:
-    preferred: "<hr>"
-    reason: "Prevents overflow in Copilot Chat UI"
-    forbidden: "Box-drawing characters (├─ └─) — collapse into single line"
+    preferred: "━━━ (U+2501) — 44 characters"
+    reason: "Consistent with golden template visual framing"
+    forbidden: "Box-drawing characters that overflow (────)"
   
   progress_bars:
-    format: "Inline code block: `██████░░░░`"
-    reason: "Prevents markdown link interpretation"
+    format: "[██████░░░░] — square brackets, no backticks"
+    reason: "Matches golden template visual from pasted image"
     chars:
       filled: "█"
       empty: "░"
@@ -228,10 +225,10 @@ rendering_rules:
     section_headers: "Use ### for sections, never ##"
     reason: "## conflicts with response header"
   
-  tables:
-    required_for: "Stage results, comparisons, structured data"
-    reason: "Tree characters collapse; tables render reliably"
-    format: "| # | Status | Component | Detail |"
+  stage_display:
+    format: "Hanging tree: ├─ {icon} S{n}: {name} ({detail})"
+    note: "Each stage on its OWN line. Last stage uses └─"
+    ssot: ".github/templates/response-format-standards.md § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE"
   
   status_icons:
     completed: "✅"
@@ -259,10 +256,8 @@ customization:
     verbose: "Full details (NOT RECOMMENDED for autonomous mode)"
   
   separator_style:
-    default: "<hr>"
-    alternatives:
-      - "---"
-      - "━━━"
+    default: "━━━ (U+2501, 44 chars)"
+    note: "Matches golden template. Do not use <hr> or --- for autonomous execution output."
 
 # ============================================================================
 # VALIDATION RULES
@@ -271,18 +266,19 @@ customization:
 validation:
   required_checks:
     - "Response header present ONCE at top"
-    - "Separator format correct (<hr> with blank line after)"
-    - "Progress bar uses inline code block"
-    - "Tables used for stage results (not tree characters)"
-    - "Status icons consistent"
+    - "Separator: ━━━ (U+2501) lines, 44 chars (for autonomous execution)"
+    - "Progress bar: [██████░░░░] format, 10-block width"
+    - "Hanging stages: ├─ / └─ each on own line (never concatenated)"
+    - "Status icons: ✅ 🔵 ⚪ 🔴 used consistently"
     - "No duplicate headers (## appears once only)"
   
   forbidden_patterns:
-    - "Box-drawing characters (├─ └─)"
+    - "Concatenated stage lines (├─ ✅ S1 ├─ ✅ S2 on same line)"
     - "Multiple ## headers in same response"
-    - "Progress bar without code block (causes link interpretation)"
+    - "Markdown tables for stage results during autonomous execution"
     - "Text narration during silent execution"
     - ".md file generation (CORE-002 violation)"
+    - "<hr> tags in autonomous execution output (use ━━━ separators)"
 
 # ============================================================================
 # TESTING SUPPORT

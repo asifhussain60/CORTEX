@@ -31,13 +31,14 @@
 ## 🤖 SILENT AUTONOMOUS EXECUTION (P0)
 
 **Authority:** CORE-049 | **Default:** ENABLED
+**Template SSOT:** `.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
 
 ### Trigger Words
 - "proceed" | "implement" | "continue" | "yes" (after DoR) | "do it"
 
 ### Behavior
-- ✅ Progress bars in **Chat Session** (markdown format)
-- ✅ Results inline via markdown tables
+- ✅ Use ONLY the golden template (progress bar + hanging stages with icons)
+- ✅ Display in **Chat Session** (never terminal)
 - ❌ NO narration or confirmations
 - ❌ NEVER create .md/.txt report files (CORE-002)
 - ❌ NEVER use `run_in_terminal` for progress bars or status updates
@@ -45,28 +46,9 @@
 ### Critical Rule: Chat vs Terminal Output
 **Reference:** `.github/templates/chat-vs-terminal-guide.md`
 
-**In Chat Session (markdown):**
-- Progress bars: `\`████████░░\` 80% Action`
-- Status updates: `✅ **Complete**`
-- Results tables
-- Stage completions
-- Metrics summaries
-
-**In Terminal (`run_in_terminal`):**
-- Long-running commands (pytest, build, git)
-- File operations (mv, cp, mkdir)
-- Actual work execution
-
+**In Chat Session:** Progress bars, hanging stage trees, status updates, metrics
+**In Terminal (`run_in_terminal`):** pytest, git, mv/cp, builds (actual work)
 **Golden Rule:** If user needs to **see it**, put in **chat**. If it's **command output**, run in **terminal**.
-
-### Output Format
-**Reference:** `.github/templates/response-format-standards.md` § Silent Mode Template
-
-**Example Structure:**
-- Single header at top
-- Progress bars with markdown tables **IN CHAT**
-- Inline results (NO file creation)
-- Completion summary with metrics
 
 ---
 
@@ -319,23 +301,9 @@ If approaching limit:
 
 ## 🎨 ASCII PROGRESS BAR FORMAT
 
-**Single-line format:**
-```
-`██████████` 100% {description}
-```
+**SSOT:** `.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
 
-**Multi-stage format:**
-```
-📋 **Phase X Stage Y: {name}**
-`████████░░` 80% {current_action}
-```
-
-**FORBIDDEN:**
-```
-████████████████████████████████████
-████████████████████████████████████  ← Screaming block bars
-████████████████████████████████████
-```
+All autonomous execution output uses the single golden template (progress bar + hanging stages with ✅/🔵/⚪/🔴 icons). Do NOT define format here — load from SSOT.
 
 ---
 
