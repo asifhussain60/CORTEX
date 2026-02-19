@@ -804,7 +804,7 @@ def my_function():
 |------|---|---|---|
 | **Educational** | Blocks (INTRO, CAPABILITIES, LENS, etc.) | Yes, once | ❌ No |
 | **Work/Silent** | Silent Execution + Completion | Yes, once | ✅ Yes |
-| **Interactive** | 5-Section Golden Format (§ USER RESPONSE TEMPLATE) | Yes, once | ❌ No |
+| **Interactive** | 5-Section Golden Format (§ User Response Template) | Yes, once | ❌ No |
 | **Q&A** | 5-Section Golden Format (simple density) | Yes, once | ❌ No |
 
 ---

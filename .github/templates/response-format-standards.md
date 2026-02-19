@@ -754,7 +754,7 @@ Use `<details>` tags for non-critical information:
 ### Intent-Based Template Selection
 
 All non-autonomous user responses follow the **5-Section Golden Format** defined in:
-**§ USER RESPONSE TEMPLATE — GOLDEN FORMAT (SSOT)** (above in this document)
+**§ User Response Template — Golden Format (SSOT)** (above in this document)
 
 | User Intent | Mode Header | Sections Used | Density |
 |-------------|-------------|---------------|---------|
@@ -872,7 +872,7 @@ Uses 5-section format (simple density):
 
 ## 🧠 INTENT-BASED TEMPLATE SELECTION (Unified)
 
-**Authority:** All user-facing responses use the 5-Section Golden Format (§ USER RESPONSE TEMPLATE above).
+**Authority:** All user-facing responses use the 5-Section Golden Format (§ User Response Template above).
 
 Templates A-E are **retired** — replaced by the single 5-section structure with mode-specific H3 extensions.
 The golden format adapts via **Adaptive Density** (simple/medium/complex) rather than separate templates per intent.

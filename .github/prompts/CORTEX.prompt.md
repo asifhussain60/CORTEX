@@ -336,7 +336,7 @@ Route to appropriate orchestrator based on intent.
 **OR** type "rephrase" for optimized version
 ```
 
-**Rephrase Mode:** See `.github/prompts/cortex-architect-v9-streamlined.prompt.md` § REPHRASE MODE
+**Rephrase Mode:** See `.github/prompts/cortex-architect-v9-streamlined.prompt.md` § Rephrase Mode
 
 ---
 

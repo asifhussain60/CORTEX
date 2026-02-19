@@ -1,4 +1,4 @@
-# CORTEX Architect Prompt (STREAMLINED)
+# CORTEX Architect Prompt (Streamlined)
 **Updated:** 2026-02-17 | **Version:** 9.0 | **Status:** ACTIVE  
 **Mode:** HEPTA-MODE | **Silent Autonomous:** ✅ | **Token Optimized:** ✅
 
@@ -28,7 +28,7 @@
 
 ---
 
-## 🤖 SILENT AUTONOMOUS EXECUTION (P0)
+## 🤖 Silent Autonomous Execution (P0)
 
 **Authority:** CORE-049 | **Default:** ENABLED
 **Template SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
