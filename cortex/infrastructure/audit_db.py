@@ -9,7 +9,7 @@ Authority: CORE-008 (TDD) | CORE-011 (type hints) | CORE-012 (docstrings)
 import sqlite3
 import json
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -50,13 +50,13 @@ class AuditEntry:
 class CortexAuditDB:
     """SQLite WAL-mode unified audit database."""
     
-    def __init__(self, db_path: Path = Path(".cortex-runtime/audit.db")) -> None:
+    def __init__(self, db_path: Union[str, Path] = Path(".cortex-runtime/audit.db")) -> None:
         """Initialize audit database.
         
         Args:
-            db_path: Path to SQLite database file.
+            db_path: Path to SQLite database file (str or Path).
         """
-        self.db_path = db_path
+        self.db_path = Path(db_path) if isinstance(db_path, str) else db_path
         self.logger = logging.getLogger("cortex.audit")
         self._connection: Optional[sqlite3.Connection] = None
         self._initialize_db()

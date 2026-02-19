@@ -7,7 +7,7 @@ Authority: CORE-008 (TDD) | CORE-011 (type hints) | CORE-012 (docstrings)
 """
 
 from pathlib import Path
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Union
 from dataclasses import dataclass
 from datetime import datetime
 import textwrap
@@ -90,7 +90,7 @@ class FileFactory:
     
     def create_python_file(
         self,
-        path: Path,
+        path: Union[str, Path],
         module_docstring: str = "Module docstring.",
         imports: Optional[List[str]] = None,
         content: str = "",
@@ -106,6 +106,7 @@ class FileFactory:
         Raises:
             FileExistsError: If file already exists.
         """
+        path = Path(path) if isinstance(path, str) else path
         if path.exists():
             raise FileExistsError(f"File already exists: {path}")
         
@@ -132,7 +133,7 @@ class FileFactory:
     
     def create_yaml_file(
         self,
-        path: Path,
+        path: Union[str, Path],
         metadata: Optional[Dict[str, Any]] = None,
         content: Optional[Dict[str, Any]] = None,
     ) -> None:
@@ -146,6 +147,7 @@ class FileFactory:
         Raises:
             FileExistsError: If file already exists.
         """
+        path = Path(path) if isinstance(path, str) else path
         if path.exists():
             raise FileExistsError(f"File already exists: {path}")
         
@@ -164,7 +166,7 @@ class FileFactory:
     
     def create_test_file(
         self,
-        path: Path,
+        path: Union[str, Path],
         test_class_name: str = "TestModule",
         test_methods: Optional[List[str]] = None,
     ) -> None:
@@ -178,6 +180,7 @@ class FileFactory:
         Raises:
             FileExistsError: If file already exists.
         """
+        path = Path(path) if isinstance(path, str) else path
         if path.exists():
             raise FileExistsError(f"File already exists: {path}")
         
@@ -224,7 +227,7 @@ class FileFactory:
     
     def create_markdown_file(
         self,
-        path: Path,
+        path: Union[str, Path],
         title: str,
         sections: Optional[List[tuple[str, str]]] = None,
     ) -> None:
@@ -238,6 +241,7 @@ class FileFactory:
         Raises:
             FileExistsError: If file already exists.
         """
+        path = Path(path) if isinstance(path, str) else path
         if path.exists():
             raise FileExistsError(f"File already exists: {path}")
         
