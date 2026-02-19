@@ -692,7 +692,6 @@ Mode Detection → LENS Context Gathering
 Example 1 (Score 6 → DIGEST):
 ```
 # 🧠 CORTEX
-**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
 ---
 AC-PHASE56-001
 15/15 tests passing
@@ -712,7 +711,6 @@ Calculation: Test count missing precise format (-1), no audit markers (-2), no b
 Example 3 (Score 4 → ASK):
 ```
 # 🧠 CORTEX
-**Author:** Asif Hussain | **Orchestrator:** AuditCoordinator ✅
 ---
 Phase 56 Analysis
 [████████░░] 80% Complete

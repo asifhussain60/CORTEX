@@ -34,7 +34,7 @@ templates:
       - "deliverables"
     
     structure:
-      header: "## {icon} CORTEX {mode}\n**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅\n\n---"
+      header: "## {icon} CORTEX {mode}\n\n---"
       separator_open: "<hr>\n"
       title: "📋 **{phase_name} {stage_name}: {title}**\n"
       progress_bar: "`{'█' * progress_filled}{'░' * progress_remaining}` {progress_percent}% {status_text}\n"
@@ -110,12 +110,11 @@ templates:
           content_type: "assessment + action_plan"
     
     example: |
-      ## 🏛️ CORTEX Architect DIGEST
-      **Author:** Asif Hussain | **Orchestrator:** LENSSynthesis ✅
+      ## 🏛️ CORTEX DIGEST
       
       ---
       
-      ## 📋 SESSION DIGEST SUMMARY
+      ## 📋 What Was Asked
       
       **Chat Session:** chat01.md
       **Core Activity:** Production readiness validation
@@ -173,7 +172,7 @@ templates:
       - "key_takeaway"
     
     structure:
-      header: "## 🧠 CORTEX QUERY\n**Author:** Asif Hussain | **Orchestrator:** {orchestrator} ✅\n\n---"
+      header: "## 🏛️ CORTEX QUERY\n\n---"
       questions_section: "### 📋 Your Questions\n"
       answers_section: "### ✅ ANSWERS\n"
       evidence_section: "### 🔍 EVIDENCE\n"

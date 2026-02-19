@@ -31,105 +31,175 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 ---
 
 
-## 🎯 CORTEX HEADER FORMAT
+## 🎯 USER RESPONSE TEMPLATE — GOLDEN FORMAT (SSOT)
 
-**Authority:** This section defines the standard header format.
+**Authority:** CORE-050 User Response Format Standard
+**Version:** 3.0 | **Updated:** 2026-02-19
+**Scope:** ALL non-autonomous responses in VS Code GitHub Copilot Chat
+**Rule:** This is the ONLY user response template. All other files MUST pointer-reference this section — never duplicate.
+**Rendering:** ALL feedback inline in Copilot Chat. NEVER create summary, report, or other .md/.txt files (CORE-002).
 
-**⚠️ IMPORTANT: This header is ONLY used in `.github/prompts/` files (prompt definitions). Do NOT include this header in templates, agent definitions, or user-facing responses.**
+### Design Principles
 
-### Standard Format (Prompts Only)
+| Principle | Implementation |
+|-----------|----------------|
+| **≤60 second read** | Executive-ready, scannable format |
+| **BLUF first** | Bottom Line Up Front — answer before details |
+| **Visual hierarchy** | H2 → H3 → bold → bullets (optimized for Copilot Chat) |
+| **Comparison tables** | Side-by-side analysis for decisions |
+| **Inline only** | Zero file generation — everything in chat session |
+| **Professional icons** | Subtle, semantic — not decorative |
 
-```markdown
-# 🧠 CORTEX
-**Author:** Asif Hussain | **Orchestrator:** {name} ✅
----
-```
+### The 5-Section Structure (MANDATORY)
 
-### Header Rules (For Prompt Files Only)
-
-| Rule | Description |
-|------|-------------|
-| **PROMPTS ONLY** | Header appears ONLY in `.github/prompts/` directory |
-| **ONE HEADER PER RESPONSE** | Header appears ONCE at the top of response only |
-| **No Mid-Response Headers** | Completion sections use `<hr>` boxes, NOT headers |
-| **Dynamic Orchestrator** | Replace `{OrchestratorName}` with actual orchestrator (TDDOrchestrator, QueryCoordinator, etc.) |
-| **Checkmark Required** | Always include ✅ after orchestrator name |
-| **Separator Line** | Three dashes `---` after author/orchestrator line |
-
-### Example Usage (Prompt Files Only)
+Every non-autonomous response MUST follow this H2 structure:
 
 ```markdown
-# 🧠 CORTEX
-**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
----
+## 📋 What Was Asked
 
-[...execution content...]
-
-<hr>
-
-✅ **STAGE 1 COMPLETE**
-
-| # | Status | Component | Tests |
-|---|--------|-----------|-------|
-| 1 | ✅ | Core | 24/24 |
-
-<hr>
-```
-
-### Wrong Usage Examples
-
-**❌ WRONG: Using header outside `.github/prompts/` directory**
-```markdown
-# 🧠 CORTEX  ← ❌ Don't use in templates/agents/docs
-**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
----
-```
-
-**❌ WRONG: Multiple headers**
-```markdown
-# 🧠 CORTEX
-**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
----
-
-[...execution content...]
-
-# 🧠 CORTEX  ← ❌ Second header (FORBIDDEN)
-**Stage 2 Results**
-```
-
-**❌ WRONG: Header inside completion box**
-```markdown
-<hr>
-
-## 🧠 CORTEX STAGE COMPLETE  ← ❌ NO ## headers in boxes
-
-<hr>
-```
-
-**✅ CORRECT: Box with bold title**
-```markdown
-<hr>
-
-✅ **STAGE COMPLETE**
-
-<hr>
-```
-
-### Orchestrator Names Reference
-
-Common orchestrator values:
-- `TDDOrchestrator` — Implementation/Fix/Refactor
-- `QueryCoordinator` — List/Show queries
-- `DigestCoordinator` — Summarize/Analyze
-- `PlanningCoordinator` — Planning/Roadmap
-- `DesignCoordinator` — Architecture/Design
-- `AuditCoordinator` — Governance audits
-- `BootstrapOrchestrator` — Session startup
+{BLUF — 1-2 sentences. State the request and the bottom-line answer immediately.}
 
 ---
 
+## ⚠️ Challenge
 
-## 📦 COMPOSABLE CONTENT BLOCKS (NEW)
+{Present the BLUF finding in a formatted panel. Include engineering analysis,
+risk assessment, or trade-off summary. Use comparison tables for alternatives.}
+
+### Key Findings
+
+| Finding | Impact | Confidence |
+|---------|--------|------------|
+| {finding_1} | {impact} | ✅ High |
+| {finding_2} | {impact} | 🟡 Medium |
+
+### Alternatives Considered
+
+| Approach | Pros | Cons | Verdict |
+|----------|------|------|---------|
+| {approach_A} | {pros} | {cons} | ✅ Recommended |
+| {approach_B} | {pros} | {cons} | ⚪ Viable |
+
+---
+
+## 💡 Recommendation
+
+**Primary:** {One clear recommended action}
+
+{Brief justification — extensibility, scalability, evidence.}
+
+### Implementation Path
+
+1. {Step 1 — concrete, actionable}
+2. {Step 2 — with expected outcome}
+3. {Step 3 — verification criteria}
+
+---
+
+## ⚖️ Benefits & Risks
+
+| Dimension | Benefit | Risk | Mitigation |
+|-----------|---------|------|------------|
+| {dimension_1} | {benefit} | {risk} | {mitigation} |
+| {dimension_2} | {benefit} | {risk} | {mitigation} |
+
+---
+
+## 🎯 Next Steps
+
+**Immediate:**
+1. {Highest-impact action}
+2. {Second priority action}
+
+**Later:**
+- {Deferred optimization}
+- {Future enhancement}
+
+> **Ready?** Type `proceed` to execute, or reply with modifications.
+```
+
+### Section Rules
+
+| Section | Required | Max Length | Key Rule |
+|---------|----------|-----------|----------|
+| **What Was Asked** | ✅ Always | 2 sentences | BLUF — answer first, context second |
+| **Challenge** | ✅ Always | 200 words | Tables for findings + alternatives |
+| **Recommendation** | ✅ Always | 150 words | ONE primary recommendation, numbered steps |
+| **Benefits & Risks** | ✅ Always | 1 table | 4-column comparison (Dimension/Benefit/Risk/Mitigation) |
+| **Next Steps** | ✅ Always | 100 words | Split: Immediate (numbered) + Later (bullets) |
+
+### H3 Sub-Sections (Optional Depth)
+
+Each H2 section can contain H3 sub-sections for progressive detail:
+
+```markdown
+## ⚠️ Challenge
+
+### Key Findings
+{table or bullets}
+
+### Root Cause
+{1-2 sentences with evidence}
+
+### Alternatives Considered
+{comparison table}
+```
+
+**Rule:** H3s are optional — use only when the analysis warrants depth. Simple requests skip H3s entirely.
+
+### Adaptive Density (MANDATORY)
+
+| Request Complexity | What Was Asked | Challenge | Recommendation | Benefits & Risks | Next Steps |
+|--------------------|---------------|-----------|----------------|-----------------|------------|
+| **Simple** (1-2 files) | 1 sentence | 2-3 bullets | 1 sentence | Skip or 2-row table | 1 action |
+| **Medium** (feature) | 2 sentences | Findings table | Numbered steps | 3-row table | 2-3 actions |
+| **Complex** (multi-phase) | 2 sentences + scope | Full analysis + alternatives table | Strategy + steps | Full table + mitigations | Immediate + Later split |
+
+### Formatting Standards (Copilot Chat Optimized)
+
+| Element | Format | Why |
+|---------|--------|-----|
+| **Section dividers** | `---` (markdown HR) | Clean rendering in Copilot Chat |
+| **Tables** | Standard markdown, ≤5 columns | Prevents overflow |
+| **Status icons** | ✅ 🟡 ⚪ 🔴 | Semantic, not decorative |
+| **Code references** | `inline backticks` | Scannable |
+| **Evidence** | Bold labels: `**File:** path` | Consistent field formatting |
+| **Spacing** | 1 blank line between sections | Readable without waste |
+
+### Suppression List (FORBIDDEN in User Responses)
+
+| Forbidden | Why | Use Instead |
+|-----------|-----|-------------|
+| ❌ "I'll now proceed to..." | Narration wastes read time | Just do the work silently |
+| ❌ "Let me check the registry..." | Tool usage narration | Present findings directly |
+| ❌ Creating .md/.txt files | CORE-002 violation | Inline in chat session |
+| ❌ >5 column tables | Overflow in Copilot Chat | Split into 2 tables |
+| ❌ Repeated information across sections | Cognitive overload | Each section adds NEW info only |
+| ❌ Generic phase names | No strategic meaning | Meaningful names always |
+| ❌ Log dumps or inventories | Not executive-ready | Themed findings, highest-impact per theme |
+| ❌ Ending with open questions | Leaves user uncertain | End with closure + proceed option |
+| ❌ `├─ └─` tree characters | Collapse in Copilot Chat | Use tables or bullet lists |
+
+### Response Header (Simplified)
+
+**ONE line, ONE time, top of response:**
+
+```markdown
+## {icon} CORTEX {mode}
+```
+
+**Icons by mode:** 🔧 PRE-FLIGHT | 🔍 AUDIT/QUERY | 📚 DIGEST | 📋 PLAN | 🎨 DESIGN | ⚡ IMPLEMENT
+
+**Rules:**
+- ✅ Appears ONCE at the very top (never repeated)
+- ✅ Followed by `---` separator
+- ❌ NO author/orchestrator line in user-facing responses (prompt-internal only)
+- ❌ NO mid-response headers
+
+---
+
+
+## 📦 COMPOSABLE CONTENT BLOCKS
 
 **Authority:** cortex-registry/interaction/content-blocks.yaml  
 **Updated:** 2026-02-14
@@ -218,10 +288,8 @@ Result: Zero duplication, 350 words
 ### When NOT to Use Blocks
 
 **Do NOT use composable blocks for:**
-- ❌ Autonomous execution (`proceed`, `implement`) → Use Silent Execution Template
-- ❌ Design sessions (`/design`, `/plan`) → Use Template B
-- ❌ Completion reports → Use Template D
-- ❌ Implementation responses → Use Templates A-E
+- ❌ Autonomous execution (`proceed`, `implement`) → Use Silent Execution Template (§ SILENT AUTONOMOUS MODE)
+- ❌ Work operations (design, plan, audit, query, implement) → Use 5-Section Golden Format (§ USER RESPONSE TEMPLATE)
 
 **Composable blocks are for:** Educational/onboarding scenarios only.
 
@@ -242,20 +310,16 @@ Result: Zero duplication, 350 words
 
 ### Integration with Existing Templates
 
-**Composable blocks complement existing templates:**
+**Composable blocks complement the two response templates:**
 
 | Template | Purpose | Blocks Relationship |
 |----------|---------|-------------------|
-| **Silent Execution** | Autonomous work | Blocks NOT used (progress bars only) |
-| **Template A (DIGEST)** | Session analysis | Optional: Add NEXT-STEPS |
-| **Template B (DESIGN/PLAN)** | Strategic planning | Optional: Add ORCHESTRATORS if relevant |
-| **Template C (QUERY)** | Q&A structured | Blocks can be answers to questions |
-| **Template D (COMPLETION)** | Phase complete | Optional: Add NEXT-STEPS |
-| **Template E (ENHANCEMENT)** | Feature enrichment | Blocks NOT used (feature-specific) |
+| **Silent Execution** (§ SILENT AUTONOMOUS MODE) | Autonomous work | Blocks NOT used (progress bars only) |
+| **5-Section Golden Format** (§ USER RESPONSE TEMPLATE) | All work operations | Optional: Add NEXT-STEPS, ORCHESTRATORS as needed |
 
 **Hierarchy:**
-1. Intent-based templates (A-E) = primary for work operations
-2. Silent execution template = autonomous mode
+1. 5-Section Golden Format = primary for all work operations (adapts via density)
+2. Silent execution template = autonomous mode (progress bars only)
 3. Composable blocks = educational/onboarding scenarios
 
 ### Full Specification
@@ -371,7 +435,7 @@ Fix: {fix_suggestion}
 ---
 
 
-## � COMPLETION RESPONSE TEMPLATE (SSOT)
+## ✅ COMPLETION RESPONSE TEMPLATE (SSOT)
 
 **Authority:** This section is the SINGLE SOURCE OF TRUTH for completion response formatting.  
 **Scope:** All PHASE/STAGE completion responses in **educational/interactive** modes.  
@@ -660,7 +724,7 @@ Before marking response complete, verify:
 ---
 
 
-## �🖥️ Chat UI Rendering Rules
+## 🖥️ Chat UI Rendering Rules
 
 ### 📏 Spacing Guidelines
 
@@ -739,14 +803,9 @@ Before marking response complete, verify:
 
 ## 🎨 Icon System
 
-### 🔵 Status Iconsr inline code (`backticks`) for commands:
-```markdown
-**Command:** `cortex_process_request`
-**Not:** ```python code block here ```
-```
+### 🔵 Status Icons
 
----
-✅ Use For | ❌ Never Use For |
+| Icon | Status | ✅ Use For | ❌ Never Use For |
 |------|---------|-----------|-----------------|
 | 🟢 | **Completed** | Work finished, verified, tests passing | Planned work, in-progress |
 | 🔵 | **In Progress** | Actively executing (async operations) | Completed or planned |
@@ -786,9 +845,8 @@ Use in section headers and issue lists:
 
 
 ## 🔢 Numbered Action Prompts
-```
 
----✅ When to Show Options
+### When to Show Options
 
 | Show Options | Don't Show Options |
 |--------------|-------------------|
@@ -797,11 +855,7 @@ Use in section headers and issue lists:
 | ✅ Critical branching point in workflow | ❌ Only one logical path forward (proceed automatically) |
 
 
-### 🎉 Completion Confirmation Formatonfirmation instead)
-- ❌ During holistic implementation (no exit options mid-flow)
-- ❌ Only one logical path forward (just proceed automatically)
-
-### **Completion Confirmation Format**
+### Completion Confirmation Format
 
 When all work is done, use this instead of "Next Steps":
 
@@ -818,13 +872,11 @@ When all work is done, use this instead of "Next Steps":
 - [Verification method 2]
 
 **Status:** All requested changes implemented and validated. No further action required.
-🎯 Standard Decision Format
----
 
 *Ready for your next request.*
 ```
 
-### **Standard Decision Format** (When Applicable)
+### Standard Decision Format (When Applicable)
 
 ```markdown
 **🎯 [Action Type] — Choose One:**
@@ -852,17 +904,11 @@ When all work is done, use this instead of "Next Steps":
 
 ## 📊 ASCII Progress Bar Standards
 
-### 📈 Visual Progress Formatns create technical debt and inconsistent state
+### Visual Progress Format
 
----
+For multi-step implementations, use visual ASCII progress bars.
 
-## 📊 ASCII Progress Bar Standards
-
-### **Visual Progress Format**
-
-For multi-step implementations, use visual ASCII progress bars:
-
-```m📏 Format Rules
+### Format Rules
 
 | Element | Specification | Example |
 |---------|---------------|---------|
@@ -874,16 +920,7 @@ For multi-step implementations, use visual ASCII progress bars:
 | **Description** | Clear task name + context | `S1: Core implementation complete` |
 
 
-### 🎚️ Phase Progress Hierarchy
-|---------|---------------|
-| **Width** | 10 blocks fixed `[██████████]` |
-| **Filled** | `█` character for completed |
-| **Empty** | `░` character for remaining |
-| **Percentage** | Right-aligned, 3 chars (` 0%`, ` 40%`, `100%`) |
-| **Status Icon** | ✅🔵⚪🔴 before description |
-| **Description** | Clear task name + context |
-
-### **Phase Progress Hierarchy (MANDATORY)**
+### Phase Progress Hierarchy (MANDATORY)
 
 **CRITICAL:** Phase title MUST be more prominent than progress bar.
 
@@ -915,7 +952,8 @@ For multi-step implementations, use visual ASCII progress bars:
 
 **Progress:** [████░░░░░░] 40%
 ```
-✅ When to Use Progress Bars
+
+### When to Use Progress Bars
 
 | ✅ Use For | ❌ Don't Use For |
 |-----------|-----------------|
@@ -925,8 +963,7 @@ For multi-step implementations, use visual ASCII progress bars:
 | TDD cycles (RED→GREEN→REFACTOR) | Quick confirmations |
 
 
-### 🏷️ Badge Types
-### **Badge Types**
+### Badge Types
 
 | Badge | When to Use |
 |-------|-------------|
@@ -936,10 +973,7 @@ For multi-step implementations, use visual ASCII progress bars:
 | 🔒 **Secure** | Highest security posture |
 | 🧪 **Experimental** | New feature, use with caution |
 
-### **Maximum Options Rule**
-- **Limit:** 5 numbered choices per decision point
-- **Rationale:** Beyond 5, users face decision paralysis
-- **⚖️ Maximum Options Rule
+### Maximum Options Rule
 
 | Aspect | Guideline |
 |--------|-----------|
@@ -953,19 +987,9 @@ For multi-step implementations, use visual ASCII progress bars:
 
 ## 📐 Semantic Layering Structure
 
-### 📋 Layer 1: EXECUTIVE (Always Visible)
-```markdown
-## {icon} {title} [Operation]
+### Layer 1: EXECUTIVE (Always Visible)
 
----
-
-### ⚡ Executive Summary
-
-**Status:** [Status with icon]  
-**Scope:** [What was analyzed/modified]  
-**Cr📝 Narrative Flow Principle
-
-Every response follows this linear structure:
+Every response follows this narrative flow:
 
 | Step | Purpose | Rule |
 |------|---------|------|
@@ -978,12 +1002,7 @@ Every response follows this linear structure:
 **✅ Correct Pattern:** Each section adds new information building on previous
 
 
-### 📂 Layer 2: TACTICAL (Collapsible)
-
-**Anti-Pattern:** Repeating the same information in multiple sections  
-**Correct Pattern:** Each section adds new information building on previous sections
-
-### **Layer 2: TACTICAL (Collapsible)**
+### Layer 2: TACTICAL (Collapsible)
 
 Use `<details>` tags for non-critical information:
 
@@ -996,7 +1015,7 @@ Use `<details>` tags for non-critical information:
 </details>
 ```
 
-### **Layer 3: TECHNICAL (Linked, Not Embedded)**
+### Layer 3: TECHNICAL (Linked, Not Embedded)
 
 ```markdown
 **🔍 Deep Dive Available:**
@@ -1008,817 +1027,97 @@ Use `<details>` tags for non-critical information:
 
 ## 🎭 Response Templates by Mode
 
-### **CONCISE DECISION Mode (NEW)**
+### Intent-Based Template Selection
 
-**Trigger:** User asks for review, verification, assessment, synthesis, or "does this address my concerns?"
+All non-autonomous user responses follow the **5-Section Golden Format** defined in:
+**§ USER RESPONSE TEMPLATE — GOLDEN FORMAT (SSOT)** (above in this document)
 
-**Purpose:** Produce executive decision memos (NOT verbose audit logs) for review requests.
+| User Intent | Mode Header | Sections Used | Density |
+|-------------|-------------|---------------|---------|
+| **DIGEST** | `📚 CORTEX DIGEST` | All 5 sections | Medium |
+| **DESIGN/PLAN** | `🎨 CORTEX DESIGN` / `📋 CORTEX PLAN` | All 5 sections + H3 alternatives | Full |
+| **QUERY** | `🔍 CORTEX QUERY` | All 5 sections (simple density) | Simple-Medium |
+| **AUDIT** | `🔍 CORTEX AUDIT` | All 5 sections + findings table | Full |
+| **IMPLEMENT** (pre-approval) | `⚡ CORTEX IMPLEMENT` | All 5 sections (challenge gate) | Medium |
+| **IMPLEMENT** (post-approval) | Silent autonomous | Golden autonomous template (§ SILENT AUTONOMOUS MODE) | Progress bars only |
+| **COMPLETION** | Inline summary | What Was Asked + deliverables + metrics | Simple |
 
-**Output Structure (Fixed Order):**
+### Mode-Specific H3 Extensions
 
-```markdown
-## [Decision Title]
+**DIGEST mode** — add under Challenge:
+- `### Concern Resolution` — table mapping concerns → solutions → status
 
-### ✅ Verdict
-[Yes|No|Partially|Verified with critical gaps] — [one-line reason]
+**DESIGN/PLAN mode** — add under Recommendation:
+- `### Phase Breakdown` — numbered phases with scope + duration
+- `### Metrics Forecast` — expected tests, coverage, effort
 
+**AUDIT mode** — add under Challenge:
+- `### Priority Breakdown` — P0/P1/P2/P3 findings with file:line references
 
-### 🧾 Key Findings
-- [Theme 1: highest-impact finding]
-- [Theme 2: critical insight]
-- [Theme 3: key observation]
+**QUERY mode** — keep simple:
+- Skip H3 sub-sections unless question requires deep analysis
 
-[3-6 bullets max, single-sentence preferred]
+### CONCISE DECISION Mode
 
+**Trigger:** Review, verification, assessment, synthesis, "does this address my concerns?"
 
-### 🚨 Gaps & Risks *(only if they exist)*
-- [Gap 1: specific issue]
-- [Gap 2: specific issue]
-
-
-### 🧭 Recommendations
-**Primary:** [One recommended approach]
-
-**Alternative:** [One viable alternative] *(only if realistic)*
-
-[Brief comparison: extensibility, scalability, accuracy, efficiency]
-
-
-### 🎯 DoD Confidence
-DoD confidence: [X%] — [short reason].
-
-
-### ⚡ Execute now vs later
-
-**Execute now:**
-- [Highest-impact immediate action 1]
-- [Highest-impact immediate action 2]
-
-**Plan for later:**
-- [Structural/optimization work 1]
-- [Structural/optimization work 2]
+Uses the same 5-section structure but with executive-memo density:
+- **What Was Asked:** 1 sentence
+- **Challenge → Key Findings:** 3-6 bullets max, single-sentence preferred
+- **Recommendation:** Primary + one alternative (brief comparison)
+- **Benefits & Risks:** DoD confidence score
+- **Next Steps:** Execute now vs plan for later
 
 ---
 
-**What was asked:** [brief]  
-**What was done:** [brief]  
-**What's next:** [brief]
-```
+### PRE-FLIGHT Mode
 
-**Format Rules:**
-- **Verdict:** One line, one of four options (Yes|No|Partially|Verified with critical gaps)
-- **Section Headers:** Use h3 headings (`###`) with emoji for Copilot Chat compatibility
-- **3-6 Bullets Max:** Per section, prefer single-sentence
-- **No Code Blocks:** Decision memos only
-- **No Questions:** End with closure, not open questions
-- **Themes Over Inventories:** Report highest-impact item per theme
-- **Smooth Memo Tone:** Not stitched audit fragments
-- **Generous Spacing:** 2 blank lines between sections for readability
+Uses 5-section format (simple density):
+- **What Was Asked:** "Environment readiness check"
+- **Challenge:** Status table (Ready ✅ / Setup Required ❌)
+- **Recommendation:** Auto-fix or manual steps
+- **Benefits & Risks:** Skip (simple request)
+- **Next Steps:** 1-3 numbered fix options
 
-**Suppression List (FORBIDDEN):**
-- ❌ Tool usage narration ("searched", "read", "ran", "checked")
-- ❌ Log dumps, long inventories, exhaustive tables
-- ❌ Repeated facts across sections
-- ❌ Timelines, hour estimates, theatrical plans
-- ❌ Code blocks
-- ❌ Ending with questions
+### Post-Approval Autonomous Mode
 
-**When to Use:**
-- Review/verify/assess intents
-- "Does this address concerns?" questions
-- Synthesis of analysis results
-- Final solution validation
-
-**Key Principle:** Decision memos for humans, not engineering diaries for machines.
+**Reference:** § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE (progress bars + hanging stages)
 
 ---
 
-### **PRE-FLIGHT Mode**
+## 🧠 INTENT-BASED TEMPLATE SELECTION (Unified)
 
-```markdown
-## 🔧 Environment Check
-**Status:** [Ready ✅ | Setup Required ❌] | **Python:** {version} | **Dependencies:** {count}/{total}
+**Authority:** All user-facing responses use the 5-Section Golden Format (§ USER RESPONSE TEMPLATE above).
 
-[If issues detected:]
+Templates A-E are **retired** — replaced by the single 5-section structure with mode-specific H3 extensions.
+The golden format adapts via **Adaptive Density** (simple/medium/complex) rather than separate templates per intent.
 
-**❌ Issue:** [description]
+### Classification → Format Mapping
 
-**🎯 Fix Options — Choose One:**
-
-1️⃣ **`auto-fix`** — Automatic installation (recommended) ✨
-   └─ **Impact:** Installs missing dependencies, ~2 minutes
-
-2️⃣ **`manual`** — Follow manual steps
-   └─ **Impact:** You control each step, ~5 minutes
-
-3️⃣ **`skip`** — Continue anyway (⚠️ operations may fail)
-   └─ **Impact:** Some features unavailable
-
-**Quick Select:** Reply with number (1-3) or full command
+```python
+def select_response_format(intent: str) -> str:
+    """All intents use the 5-section golden format with adaptive density."""
+    if intent in ["IMPLEMENT", "FIX", "REFACTOR"] and user_said_proceed:
+        return "SILENT_AUTONOMOUS_MODE"  # § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
+    return "FIVE_SECTION_GOLDEN_FORMAT"  # § USER RESPONSE TEMPLATE — GOLDEN FORMAT
 ```
 
-### **AUTONOMOUS CONTINUATION Mode (NEW)**
+### CLASSIFY (Conversational Mode)
 
-**Trigger:** User says "proceed" / "continue" / "autonomously" + active plan exists
+**Trigger:** `cortex_classify` MCP tool with `format='conversational'`
+**Purpose:** Pre-implementation intent reflection (≤60 tokens, 4-second scan)
 
-**Format (CONDENSED):**
 ```markdown
-## 🏗️ CORTEX Architect
-
-**Executing Phase {X} immediately...**
-
-[TOOL CALLS - NO PREAMBLE]
-
-## ✅ Phase {X} Complete
-
-**Delivered:**
-- [Deliverable 1]
-- [Deliverable 2]
-
-**Status:** [Brief status, no "Next Steps" unless decision required]
+**You want to {mirror user vocabulary}.**
+This involves {scope}-level changes with {impact} impact.
+**Confidence:** {High/Medium/Low} confidence ({pct}%)
 ```
 
 **Rules:**
-- ❌ NO context gathering explanations ("Let me check...")
-- ❌ NO verbose analysis before execution
-- ❌ NO DoR display (already approved by "proceed")
-- ❌ NO challenge generation (exploratory work only)
-- ✅ Immediate tool invocation
-- ✅ Results-first reporting
-- ✅ <10 lines before first tool call
-
-### **AUDIT Mode**
-
-```markdown
-## 🔍 CORTEX Audit
-
----
-
-### ⚡ Executive Summary
-
-**Status:** [🟢 Production-Ready | 🟡 Issues Detected | 🔴 Critical Issues]  
-**Compliance:** P0: {count} | P1: {count} | P2: {count} | P3: {count}
-
-<details>
-<summary><b>📋 Priority Breakdown</b></summary>
-
-#### 🔴 P0 — Critical ({count})
-[List with file:line references]
-
-#### 🟡 P1 — High ({count})
-[List with file:line references]
-
-</details>
-
----
-
-**🎯 Next Steps — Choose One:**
-
-1️⃣ **`proceed`** — Auto-fix all detected issues ✨
-   └─ **Impact:** Autonomous fixing, ~5 minutes, full verification
-
-2️⃣ **`fix-p0-only`** — Fix critical issues only
-   └─ **Impact:** Address blocking problems, P1-P3 remain
-
-3️⃣ **`explain [issue-id]`** — Get detailed breakdown
-   └─ **Impact:** Understand root cause before deciding
-
-4️⃣ **`defer`** — Save audit results and exit
-   └─ **Impact:** No changes made, audit saved to logs
-
-**Quick Select:** Reply with number (1-4) or full command
-```
-
-### **DESIGN Mode**
-
-```markdown
-## 🏗️ CORTEX Architect
-
----
-
-### ⚡ Request Analysis
-
-**Intent:** [IMPLEMENT|FIX|REFACTOR]  
-**Complexity:** [TRIVIAL|SIMPLE|MODERATE|COMPLEX]  
-**Estimated Effort:** [S|M|L]
-
----
-
-### ⚠️ ENGINEERING ANALYSIS
-
-**Problem:** [1-sentence problem statement]
-
-#### Critical Issues (High Confidence ✅)
-1. **[Issue 1]** — [evidence: grep/line numbers] | Impact: [specific]
-2. **[Issue 2]** — [evidence: concrete proof] | Impact: [specific]
-3. **[Issue 3]** — [evidence: test/implementation gap] | Impact: [specific]
-
-#### Recommended Fix (Effort: [S/M/L])
-**Strategy:** [1-2 sentences describing approach]  
-**Why:** [extensibility + scalability benefits in 1 sentence]  
-**Tradeoff:** [cost] → [benefit] ([acceptable/not acceptable])  
-**Evidence:** [Implementation Truth: what exists, what's missing, line numbers]
-
----
-
-**🎯 Decision Required — Choose One:**
-
-1️⃣ **`proceed`** — Implement with recommended approach ✨
-   └─ **Impact:** TDD execution, ~[time], [n] files modified
-
-2️⃣ **`modify: [changes]`** — Request approach changes
-   └─ **Impact:** Re-analyze with your constraints
-
-3️⃣ **`alternative`** — Explore different solution
-   └─ **Impact:** Generate counter-proposal
-
-4️⃣ **`cancel`** — Abort implementation
-   └─ **Impact:** No changes made
-
-**Quick Select:** Reply with number (1-4), full command, or describe changes
-```
-
-### **Progress Indicators (Async Operations)**
-
-```markdown
-## 🔄 Operation Progress
-
-[████████░░░░░░] 60% — P2 Analysis (2/3 tools complete)
-
-**Completed:**
-- 🟢 Duplication detection (47 functions analyzed)
-- 🟢 Dead code analysis (234 files scanned)
-
-**In Progress:**
-- 🔵 Complexity analysis (orchestrators/, ~30 sec remaining)
-
-**Pending:**
-- ⚪ Database hygiene check
-- ⚪ Markdown validation
-```
-
----
-
-## 🧠 USER-PREFERRED RESPONSE TEMPLATES (Chat01 Derived)
-
-**Authority:** Extracted from production chat sessions (chat01.md) — user-validated patterns  
-**Purpose:** Intelligent template selection based on operation type  
-**Rule:** Auto-select template based on intent classification. Each template is proven effective in live sessions.
-
-### Template Selection Matrix
-
-| User Intent | Template | When to Use |
-|-------------|----------|-------------|
-| **DIGEST** | Concern-Resolution Analysis | Chat review, session digestion, concern validation |
-| **DESIGN/PLAN** | Multi-Phase Roadmap | Phase planning, strategic breakdown, execution scoping |
-| **QUERY/REFINEMENT** | Question→Answer Structured | User asks specific questions, needs clear answers |
-| **IMPLEMENT (silent)** | ASCII Progress Bar | Active execution after "proceed" trigger |
-| **COMPLETION** | Metrics + Deliverables Summary | Phase completion, ready-to-execute handoff |
-| **CLASSIFY (conversational)** | Natural Language Reflection | Intent classification with conversational summary (Phase 101) |
-
----
-
-### Template F: CLASSIFY (Conversational Mode) — Natural Language Reflection
-
-**Trigger:** `cortex_classify` MCP tool with `format='conversational'`  
-**Purpose:** Pre-implementation intent reflection (≤60 tokens, 4-second scan)  
-**Pattern:** 2-sentence summary → Context → Confidence level
-
-**Example:**
-
-```markdown
-# 🧠 CORTEX (Conversational)
-
----
-
-**You want to implement user authentication for login to add new functionality.**
-
-This involves module-level changes with medium impact.
-
-**Confidence:** High confidence (92%)
-
----
-
-**Validation Data (Background):**
-- Intent: IMPLEMENT
-- Keywords: implement, authentication, login
-- Scope: module-level
-- Impact: medium
-- Estimated effort: 2-4 hours
-```
-
-**Key Rules (AC-CIG-S2-*):**
 - ✅ First sentence mirrors user vocabulary (not technical jargon)
 - ✅ Second sentence describes scope + impact
-- ✅ Total output ≤60 tokens (conversational_summary + context + confidence)
-- ✅ Confidence formatted as "High/Medium/Low confidence (XX%)"
+- ✅ Total output ≤60 tokens
 - ✅ Validation data in background (not user-facing)
-
-**Comparison: Table vs Conversational**
-
-| Format | Output Style | Token Count | Scan Time | When to Use |
-|--------|-------------|-------------|-----------|-------------|
-| **Table** (default) | DoR markdown table with 8+ fields | 180-240 tokens | 12 seconds | Technical review, full context needed |
-| **Conversational** (new) | 2-sentence natural language | 40-60 tokens | 4 seconds | Quick confirmation, pre-implementation check |
-
-**Implementation:**
-- Conversational format uses `RequestTransformer` (S1) + `ConversationalReflector` (S2)
-- Table format uses existing DoR logic (backward compatible)
-- Format parameter: `format='table'` (default) or `format='conversational'`
-- Both formats store full validation data in approval session
-
-**Backward Compatibility:**
-- Default format remains `'table'` (AC-CIG-S3-02)
-- Existing users see no change unless `format='conversational'` explicitly passed
-- All orchestrator integrations continue working with table format
-
----
-
-### Template A: DIGEST — Concern-Resolution Analysis
-
-**Trigger:** `/digest`, review requests, "have concerns been addressed?", session analysis  
-**Pattern:** Status summary → Concern table → Architecture visualization → Phase breakdown → Metrics
-
-```markdown
-## 🏛️ CORTEX Architect DIGEST
-
----
-
-<hr>
-
-📋 **{SESSION_ID} DIGEST: COMPLETE ANALYSIS**
-
-`██████████` 100% Chat Review Complete
-
-**Source:** {file} ({line_count} lines)
-**Duration:** Full conversation analysis
-**Status:** ✅ ALL CONCERNS ADDRESSED
-
-<hr>
-
-## ✅ YOUR {N} ORIGINAL CONCERNS — RESOLVED
-
-| Concern | Challenge You Raised | Solution Delivered | Status |
-|---------|---------------------|-------------------|--------|
-| **{concern_1}** | {user_challenge} | {solution} | ✅ SOLVED |
-| **{concern_2}** | {user_challenge} | {solution} | ✅ SOLVED |
-| **{concern_3}** | {user_challenge} | {solution} | ✅ SOLVED |
-
----
-
-## 🧠 {N}-LAYER SYSTEM (PROVEN)
-
-{Use code tree visualization for architecture layers:}
-
-Layer 1: {Layer Name} [{test_count} tests ✅]
-├─ {capability_1}
-├─ {capability_2}
-└─ Proven: {evidence}
-
-Layer 2: {Layer Name} [{test_count} tests ✅]
-├─ {capability_1}
-├─ {capability_2}
-└─ Proven: {evidence}
-
-TOTAL: {n}/{n} Tests Passing ✅ Foundation Proven ✅
-
----
-
-## 📁 DIGEST DOCUMENTATION CREATED
-
-| File | Purpose | Status |
-|------|---------|--------|
-| **{file_1}** | {purpose} | ✅ Created |
-| **{file_2}** | {purpose} | ✅ Created |
-
-**All committed:** `{commit_hash}`
-
----
-
-## ⚡ READY FOR AUTONOMOUS EXECUTION
-
-### Prerequisites All Met ✅
-- ✅ {prerequisite_1}
-- ✅ {prerequisite_2}
-- ✅ {prerequisite_3}
-
-### Next Action
-**Type "proceed" to begin {next_action} autonomously.**
-```
-
-**Key Rules:**
-- Always include concern-resolution table (maps user concerns → solutions)
-- Architecture visualization uses code tree format (├─ └─)
-- Test counts with pass status embedded in layer names
-- Commit hashes referenced inline
-- End with clear "proceed" trigger
-
----
-
-### Template B: DESIGN/PLAN — Multi-Phase Roadmap
-
-**Trigger:** `/plan`, "divide work into phases", strategic planning, execution scoping  
-**Pattern:** Scope summary → Named phases with stage trees → Metrics table → Concerns table → Execution command
-
-```markdown
-## 🏛️ CORTEX Architect DESIGN
-
----
-
-<hr>
-
-📋 **COMPLETE MASTER PHASE PLAN: {SCOPE}**
-
-`██████████` 100% Comprehensive Analysis Complete
-
-**Scope:** {description}
-**Duration:** {total_hours} hours autonomous execution
-**Token Budget:** <{total_tokens} total (<{per_phase_tokens} per phase)
-**Deliverable:** {primary_deliverable}
-
-<hr>
-
-## 🌊 {N}-PHASE COMPREHENSIVE ROADMAP
-
-### PHASE-1: {Meaningful Name} ({hours}h)
-
-Stage 1: {Stage Name} [{time}, {test_count} tests]
-├─ {action_1}
-├─ {action_2}
-└─ {action_3}
-
-Stage 2: {Stage Name} [{time}, {test_count} tests]
-├─ {action_1}
-├─ {action_2}
-└─ {action_3}
-
-Deliverable: {phase_deliverable}
-Success: {test_count}/{test_count} tests passing
-Commits: {n} (AC-marked)
-
-**What It Does:** {one_sentence_description}
-
-### PHASE-2: {Meaningful Name} ({hours}h)
-
-{Same stage tree structure...}
-
----
-
-## 📊 COMPLETE METRICS
-
-| Phase | Duration | Token | Tests | Commits | Scope | Pass Rate |
-|------|----------|-------|-------|---------|-------|-----------|
-| **1** | {h}h | {k}k | {n} | {n} | {scope} | 100% ✅ |
-| **2** | {h}h | {k}k | {n} | {n} | {scope} | 100% ✅ |
-| **TOTAL** | **{h}h** | **<{k}k** | **{n}+** | **{n}** | **{scope}** | **100%** |
-
----
-
-## ✅ ALL CONCERNS ADDRESSED
-
-| Original Concern | Resolution in Phase Plan | Phase | Status |
-|------------------|------------------------|------|--------|
-| **{concern_1}** | {resolution} | {phase_n} | ✅ Solved |
-| **{concern_2}** | {resolution} | {phase_n} | ✅ Solved |
-
----
-
-## 🎯 EXECUTION MODEL
-
-**Sequential Phases:**
-PHASE-1 ({h}h) → PHASE-2 ({h}h) → PHASE-{N} ({h}h)
-   ✅           ✅           ✅
-
-**Checkpoint Strategy:**
-- Token budget 75% → Commit + continue
-- Each phase independent but sequential
-- No dependencies between phases
-
-**Non-Breaking:**
-- ✅ Existing API unchanged
-- ✅ All tests backward compatible
-- ✅ Gradual rollout possible
-
----
-
-## ⚡ EXECUTION COMMAND
-
-/implement {PLAN_ID}: {Title}
-
-Authority: {authority_file}
-Mode: Silent autonomous with ASCII progress bars
-Total Duration: {hours} hours
-Token Budget: <{tokens}
-
-{Phase tree summary}
-
-Result: {expected_deliverable}
-
----
-
-**Ready to proceed?**
-**Type: "proceed {PLAN_ID}" to start autonomous execution**
-```
-
-**Key Rules:**
-- Every phase has a meaningful name (not generic "PHASE-1")
-- Stage trees use consistent format: `Stage N: {Name} [{time}, {test_count} tests]`
-- "What It Does" one-liner after each phase
-- Metrics table MUST include all phases + TOTAL row
-- Concern-resolution table cross-references phase numbers
-- Execution command block at bottom (copy-paste ready)
-- End with clear "proceed" trigger with plan ID
-
----
-
-### Template C: QUERY/REFINEMENT — Question→Answer Structured
-
-**Trigger:** User asks specific questions, "what best practices?", "have you created X?", tool audits  
-**Pattern:** Questions asked → Answers with evidence → Documents created → Success metrics
-
-```markdown
-## 🏛️ CORTEX Architect {OPERATION}
-
----
-
-## 📋 What You Asked For
-
-You requested {n} specific questions:
-
-1. **{question_1}** ({brief_context})
-2. **{question_2}** ({brief_context})
-3. **{question_3}** ({brief_context})
-
----
-
-## ✅ What You Got
-
-### 📚 {N} Comprehensive Documents Created
-
-| Document | Lines | Key Content |
-|----------|-------|------------|
-| **{doc_1}** | {n} | {content_summary} |
-| **{doc_2}** | {n} | {content_summary} |
-| **TOTAL** | **{n}+** | Complete package |
-
-All committed: `{commit_hashes}`
-
----
-
-## 🎯 Your {N} Questions → Our {N} Answers
-
-### ❓ **Question 1:** "{original_question}"
-
-✅ **ANSWER:** {concise_answer}
-
-{Supporting evidence: code trees, tables, formulas, examples}
-
-**Why This Matters:** {one_sentence_significance}
-
----
-
-### ❓ **Question 2:** "{original_question}"
-
-✅ **ANSWER:** {concise_answer}
-
-| # | Item | Detail | Status |
-|---|------|--------|--------|
-| 1 | **{item}** | {detail} | ✅ |
-| 2 | **{item}** | {detail} | ✅ |
-
-**Each Item Includes:**
-- {aspect_1}
-- {aspect_2}
-
----
-
-### ❓ **Question 3:** "{original_question}"
-
-✅ **ANSWER:** {concise_answer}
-
-**Active ✅ ({n} Total)**
-{tool_1} ({score}/10)    {tool_2} ({score}/10)
-
-**Underutilized ⚠️ ({n} Total)**
-{tool_3} → Activate in {phase} for {benefit}
-
-**Recommended 🔴 ({n} Total)**
-{tool_4} ({phase}) → {benefit}
-
----
-
-## 📊 Complete Documentation Package
-
-### Quick Entry Points
-
-1. **START HERE:** `{file_1}` ({n} lines, quick ref)
-2. **Details:** `{file_2}` ({n} lines, deep dive)
-3. **Algorithm:** `{file_3}` ({n} lines, specs)
-
----
-
-## ✅ Validation Status
-
-### All Proven ✅
-
-- ✅ **{validation_1}** ({evidence})
-- ✅ **{validation_2}** ({evidence})
-- ✅ **{validation_3}** ({evidence})
-
----
-
-## 📈 Success Metrics
-
-| Metric | Expected | Status |
-|--------|----------|--------|
-| **{metric_1}** | {expected} | ✅ Complete |
-| **{metric_2}** | {expected} | ✅ Complete |
-
----
-
-## 💡 Key Takeaway
-
-{System/feature} is:
-- **Proven** ({evidence} ✅)
-- **Documented** ({n}+ lines ✅)
-- **Non-Breaking** ({evidence} ✅)
-- **Scalable** ({evidence} ✅)
-- **Production-Ready** ({evidence} ✅)
-
-**All that's needed:** Your approval to execute.
-
----
-
-**📍 Location:** {file_location}
-**📦 Package:** {n} documents, {n}+ lines, {n} git commits
-**✅ Status:** {STATUS} | Ready for execution
-**⏱️ Timeline:** {hours} hours, {phases}
-```
-
-**Key Rules:**
-- Mirror user's questions back explicitly ("What You Asked For")
-- Answer each question with ✅ **ANSWER:** prefix
-- Use appropriate evidence format per question (tables, trees, formulas)
-- "Why This Matters" one-liner after significant answers
-- Tool audits use Active/Underutilized/Recommended tiers with scores
-- End with Key Takeaway bullet list (Proven/Documented/Non-Breaking/Scalable/Production-Ready)
-- Footer with location, package size, status
-
----
-
-### Template D: COMPLETION — Phase Complete
-
-**Trigger:** Phase completed, stage finished, work delivered  
-**Pattern:** Deliverables summary → What gets delivered per phase → Metrics → Ready confirmation
-
-```markdown
-## 🏛️ CORTEX Architect {OPERATION}
-
----
-
-<hr>
-
-✅ **{PHASE NAME}: COMPLETE**
-
-`██████████` 100% | {n}/{n} tests | {pct}% coverage
-
-**Commits:** {hash1} → {hash2}
-**Pushed:** origin/{branch}
-**Duration:** ~{time} total
-
-<hr>
-
-### What Gets Delivered
-
-**By {Phase} End:**
-- ✅ {deliverable_1}
-- ✅ {deliverable_2}
-- ✅ {deliverable_3}
-
-### Enhancements to Your Vision
-
-**Your Original Request:**
-"{user_original_request}"
-
-**What We Deliver:**
-
-**✅ {Quality_1}**
-- {detail_1}
-- {detail_2}
-
-**✅ {Quality_2}**
-- {detail_1}
-- {detail_2}
-
-**✅ {Quality_3}**
-- {detail_1}
-- {detail_2}
-
-**✅ Non-Breaking**
-- {backward_compat_detail}
-- {gradual_rollout_detail}
-
-<hr>
-```
-
-**Key Rules:**
-- Start with completion badge + progress bar at 100%
-- "What Gets Delivered" section maps deliverables to user expectations
-- "Enhancements to Your Vision" maps back to user's original request
-- Qualities listed with ✅ prefix (Automatic, Quality Guaranteed, Future-Proof, Non-Breaking)
-- Always confirm non-breaking backward compatibility
-
----
-
-### Template E: ENHANCEMENT DESCRIPTION — Feature Enrichment
-
-**Trigger:** Describing what an enhancement delivers beyond what was asked  
-**Pattern:** Original request → Enhanced delivery → Quality guarantees
-
-```markdown
-## 🎯 ENHANCEMENTS TO YOUR VISION
-
-### Your Original Request
-"{user_request_verbatim}"
-
-### What We Deliver
-
-**✅ Fully Automatic**
-- {auto_capability_1}
-- {auto_capability_2}
-- {auto_capability_3}
-
-**✅ Quality Guaranteed**
-- {quality_gate_1}
-- {quality_gate_2}
-- {quality_gate_3}
-
-**✅ Future-Proof**
-- {scaling_capability_1}
-- {scaling_capability_2}
-- {scaling_capability_3}
-
-**✅ Non-Breaking**
-- {compat_guarantee_1}
-- {compat_guarantee_2}
-- {compat_guarantee_3}
-```
-
-**Key Rules:**
-- Quote user's original request verbatim
-- Four quality dimensions: Automatic, Quality Guaranteed, Future-Proof, Non-Breaking
-- Three evidence points per dimension
-- Each point is a concrete capability (not abstract)
-
----
-
-### Template Selection Logic (Auto-Detect)
-
-```python
-def select_response_template(intent: str, context: dict) -> str:
-    """
-    Auto-select response template based on user intent and context.
-    
-    Returns template name: A|B|C|D|E
-    """
-    # Template A: DIGEST
-    if intent in ["DIGEST"] or "concerns addressed" in context.get("query", ""):
-        return "TEMPLATE_A_DIGEST"
-    
-    # Template B: DESIGN/PLAN
-    if intent in ["DESIGN", "PLAN"] or "phase" in context.get("query", ""):
-        return "TEMPLATE_B_PHASE_ROADMAP"
-    
-    # Template C: QUERY/REFINEMENT
-    if intent in ["QUERY"] or context.get("question_count", 0) > 1:
-        return "TEMPLATE_C_QUESTION_ANSWER"
-    
-    # Template D: COMPLETION
-    if context.get("is_completion", False):
-        return "TEMPLATE_D_COMPLETION"
-    
-    # Template E: ENHANCEMENT
-    if context.get("is_enhancement", False):
-        return "TEMPLATE_E_ENHANCEMENT"
-    
-    # Default: use existing mode templates
-    return "DEFAULT"
-```
-
----
-
-### Template Composition Rules
-
-Templates can be **composed** (combined) for complex responses:
-
-| Scenario | Templates Combined | Example |
-|----------|--------------------|---------|
-| DIGEST + PLAN | A + B | Session analysis → Phase plan (chat01 pattern) |
-| PLAN + COMPLETION | B + D | Phase plan → What gets delivered |
-| QUERY + PLAN | C + B | Answer questions → Updated phase plan |
-| COMPLETION + ENHANCEMENT | D + E | Phase complete → Enhancement description |
-
-**Composition Rule:** When combining, use `---` separator between template sections. Each template retains its own structure — do NOT merge fields.
 
 ---
 
@@ -1837,44 +1136,25 @@ Templates can be **composed** (combined) for complex responses:
 | >5 options in one decision | Decision paralysis | Categorize or phase decisions |
 | Technical jargon without definition | Excludes non-experts | Use `<abbr>` tooltips |
 | Embedded full file contents | Context overflow | Link with `#file:` or use excerpts |
+| **Creating .md/.txt report files** | **CORE-002 violation** | **All output inline in Copilot Chat** |
+| **Tool usage narration** | **Wastes read time ("I searched...", "I read...")** | **Present findings directly** |
+| **>60 second read time** | **Not executive-ready** | **BLUF first, tables for data, ≤5 sections** |
+| **Answering without mirroring question** | **User unsure if concern was understood** | **BLUF in "What Was Asked" mirrors user's words** |
 | **Generic phase names (PHASE-1)** | **No strategic meaning, harder to track** | **Meaningful names (Foundation & Bootstrap)** |
-| **Answering without mirroring question** | **User unsure if concern was understood** | **Quote user's question → provide answer** |
-| **Missing concern-resolution mapping** | **User can't verify all concerns addressed** | **Table: Concern → Solution → Status** |
-| **Architecture without visualization** | **Abstract, hard to grasp** | **Code tree format (├─ └─) with test counts** |
-| **Missing "What It Does" per phase** | **User can't quickly scan phase purpose** | **One-sentence description after each phase** |
-| **No execution command at bottom** | **User must compose command manually** | **Copy-paste ready /implement command** |
 
 ---
 
 ## 📊 Adaptive Density Guidelines
 
-### **Simple Requests (1-2 files, <100 LOC)**
+### Simple Requests (1-2 files, <100 LOC)
 
-```markdown
-## ⚡ Quick Response
+Use 5-section format at **simple density** — each section 1-2 sentences max.
 
-**Done:** [What changed]  
-**Verified:** [How confirmed]  
-**Files:** [List with diffs]
+### Complex Requests (Multi-phase, >1000 LOC)
 
-**🎯 Next Steps — Choose One:**
-
-1️⃣ **`continue`** — Accept changes
-2️⃣ **`undo`** — Rollback
-
-**Quick Select:** Reply with 1 or 2
-```
-
-### **Complex Requests (Multi-phase, >1000 LOC)**
-
-Full semantic layering with:
-- Executive summary (always visible)
-- Collapsible sections per phase
-- Progress indicators
-- Numbered decision points at each gate
+Use 5-section format at **full density** — with H3 sub-sections, comparison tables, and numbered implementation steps.
 
 ---
-
 ## 🔍 Accessibility Features
 
 ### **Tooltips for Technical Terms**
@@ -1892,7 +1172,7 @@ Full semantic layering with:
 
 ---
 
-## � Continuation Prompts (Token-Efficient)
+## 🔄 Continuation Prompts (Token-Efficient)
 
 **CRITICAL:** Continuation prompts are ONLY for token budget exhaustion (>90% usage), NOT for session convenience.
 
@@ -1990,7 +1270,7 @@ Full semantic layering with:
 
 ---
 
-## �📏 Quality Checklist
+## 📏 Quality Checklist
 
 Before sending any response, verify:
 

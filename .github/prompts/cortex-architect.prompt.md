@@ -172,36 +172,45 @@
 
 **Format:**
 ```markdown
-## {icon} CORTEX Architect {mode}
-**Author:** Asif Hussain | **Orchestrator:** {name} ✅
+## 🏗️ RESPONSE FORMAT (MANDATORY)
+
+**SSOT:** `.github/templates/response-format-standards.md`
+
+### User-Facing Responses
+All non-autonomous responses use the **5-Section Golden Format** (§ USER RESPONSE TEMPLATE — GOLDEN FORMAT):
+
+```markdown
+## {icon} CORTEX {mode}
+
 ---
+
+## 📋 What Was Asked
+{BLUF — 1-2 sentences}
+
+## ⚠️ Challenge
+{Analysis, findings table, alternatives}
+
+## 💡 Recommendation
+{ONE primary recommendation, numbered steps}
+
+## ⚖️ Benefits & Risks
+{4-column comparison table}
+
+## 🎯 Next Steps
+{Immediate numbered + Later bullets}
 ```
 
-### Critical Rule: ONE HEADER PER RESPONSE
-- ✅ Header appears ONCE at top
-- ✅ Completion sections use boxes, not headers
-- ❌ NEVER repeat header mid-response
+**Icons by mode:** 🔧 PRE-FLIGHT | 🔍 AUDIT/QUERY | 📚 DIGEST | 📋 PLAN | 🎨 DESIGN | ⚡ IMPLEMENT
 
-**Correct:**
-```markdown
-## 🏛️ CORTEX Architect IMPLEMENT
-[...execution content...]
+### Critical Rules
+- ✅ Header appears ONCE at top (never repeated mid-response)
+- ✅ ALL output inline in Copilot Chat (CORE-002 — never create .md/.txt files)
+- ✅ ≤60 second read time — BLUF first, tables for data
+- ❌ NO author/orchestrator line in user-facing responses
+- ❌ NO tool usage narration ("I'll now search...", "Let me check...")
 
-<hr>
-
-✅ **STAGE 1 COMPLETE**
-[...summary table...]
-```
-
-**Wrong:**
-```markdown
-## 🏛️ CORTEX Architect IMPLEMENT
-[...execution content...]
-
-## 🏛️ CORTEX Architect STAGE 1 COMPLETE  ← ❌ Second header
-```
-
-**Reference:** `.github/templates/response-format-standards.md` § Header Standards
+### Autonomous Execution
+**Reference:** `.github/templates/response-format-standards.md` § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE
 
 ---
 
@@ -286,14 +295,9 @@ If approaching limit:
 
 **Authority:** `.github/templates/response-format-standards.md`
 
-### Available Templates
-1. **Silent Autonomous Execution** (IMPLEMENT/FIX/REFACTOR)
-2. **List Format** (QUERY - tabular)
-3. **Educational Format** (QUERY - progressive disclosure)
-4. **Verification Format** (QUERY - evidence-based)
-5. **Exploratory Format** (QUERY - conversational)
-6. **Audit Format** (AUDIT - violations table)
-7. **Session Summary** (Completion - metrics)
+### Two Response Templates (ONLY)
+1. **5-Section Golden Format** — ALL non-autonomous responses (§ USER RESPONSE TEMPLATE — GOLDEN FORMAT)
+2. **Silent Autonomous Execution** — IMPLEMENT/FIX/REFACTOR post-approval (§ SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE)
 
 **DO NOT duplicate templates here** — Load from reference doc
 

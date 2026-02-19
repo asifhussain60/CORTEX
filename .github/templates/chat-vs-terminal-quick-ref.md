@@ -84,17 +84,19 @@ Is this user-facing feedback?
 ## 🔧 Template
 
 ```markdown
-## ⚡ CORTEX Architect IMPLEMENT
-**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+## ⚡ CORTEX IMPLEMENT
+
 ---
 
-<hr>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 {PHASE_NAME} Stage {N}: {STAGE_TITLE}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📋 **Task Name**
+[██████████] 100% All Stages Complete
 
-`██████████` 100% Current action
-
-<hr>
+├─ ✅ S1: {name} ({n} tests)
+└─ ✅ S2: {name} ({n} tests)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 Then run commands:

@@ -241,7 +241,6 @@ Route to appropriate orchestrator based on intent.
 **Format:**
 ```markdown
 # 🧠 CORTEX
-**Author:** Asif Hussain | **Orchestrator:** {name} ✅
 ---
 ```
 

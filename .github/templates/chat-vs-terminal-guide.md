@@ -207,7 +207,6 @@ run_in_terminal(
 
 ```markdown
 ## {mode_icon} CORTEX Architect {MODE}
-**Author:** Asif Hussain | **Orchestrator:** {name} ✅
 ---
 
 {brief_context_if_needed}
@@ -316,22 +315,20 @@ run_in_terminal(
 
 **Response:**
 ```markdown
-## ⚡ CORTEX Architect IMPLEMENT
-**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅
+## ⚡ CORTEX IMPLEMENT
+
 ---
 
-<hr>
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Phase 47 Stage 2: Memory Tier Rename
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📋 **Phase 47: Brain Tier Architecture Fix**
+[████░░░░░░] 40% Stage 2 In Progress
 
-`████░░░░░░` 40% Stage 2 - Memory tier rename
-
-| Stage | Status | Tests |
-|-------|--------|-------|
-| 1 | ✅ | 20/20 |
-| 2 | 🔵 | 6/19 |
-| 3 | ⚪ | 0/20 |
-| 4 | ⚪ | 0/15 |
+├─ ✅ S1: Brain Architecture (20 tests)
+├─ 🔵 S2: Memory Tier Rename (in progress)
+├─ ⚪ S3: Integration Tests (pending)
+└─ ⚪ S4: Cleanup (pending)
 
 <hr>
 ```
