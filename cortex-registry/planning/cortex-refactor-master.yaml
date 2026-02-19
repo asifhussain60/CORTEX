@@ -13,8 +13,8 @@ metadata:
   completed_dir: cortex-registry/planning/phases/completed/cortex-refactor/
   status_authority: "THIS FILE \u2014 cortex-refactor-master.yaml"
   counters:
-    total_phases: 10
-    pending: 6
+    total_phases: 11
+    pending: 7
     in_progress: 0
     complete: 3
     deferred: 0
@@ -345,6 +345,47 @@ phases:
         mcp_consolidation: "34→22"
         archive_target: 76
         workflow_templates: 44
+- id: phase-05-workflow-templates
+  title: "Workflow Template Integration — CORTEX + Production Orchestration"
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-05-workflow-templates.yaml
+  status: pending
+  priority: P0
+  risk: low
+  dependencies:
+  - phase-04
+  deliverables:
+  - "WF1: MasterPlanOrchestrator workflow (create phases sequentially)"
+  - "WF2: MasterPlanExecution workflow (LENS discovery → 10-phase execution → auto-remediation)"
+  - "WF3: PhaseExecutor workflow (reusable RED→GREEN→REFACTOR→CLEANUP)"
+  - "Folder split: cortex-registry/workflows/templates/{lifecycle/,production/}"
+  - "60 golden tests validating all workflow templates"
+  - "Template engine: SSOT + pointer-only refs (zero duplication)"
+  - "Integration: MasterPlanOrchestrator, WorkflowRuntime, LENS discovery"
+  progress:
+    started: null
+    completed: null
+    actual_duration: null
+    current_stage: null
+    stages_complete: []
+    tests_written: 0
+    tests_passing: 0
+    coverage_pct: 0
+    commits: []
+    issues_found: 0
+    issues_resolved: 0
+    validation_loop_iterations: 0
+    lens_scan_completed: false
+  completion_details:
+    red_phase:
+      test_file: tests/golden/workflows/test_workflow_templates.py
+      test_classes: 3
+      test_methods: 60
+      status: "⏳ PENDING"
+    green_phase:
+      deliverables_implemented: 0
+      files_created: 0
+      lines_added: 0
+      status: "⏳ PENDING"
 - id: phase-06
   title: "Directory Cleanup \u2014 59 to ~15 canonical directories"
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-06-directory-cleanup.yaml
@@ -352,7 +393,7 @@ phases:
   priority: P1
   risk: medium
   dependencies:
-  - phase-05
+  - phase-05-workflow-templates
   deliverables:
   - 30+ small/redundant dirs consolidated (automation, capacity, collaboration, confirmation,
     devx, etc.)
@@ -382,7 +423,7 @@ phases:
   priority: P1
   risk: medium
   dependencies:
-  - phase-06
+  - phase-06-directory-cleanup
   deliverables:
   - '9 phase-named test dirs archived: phase_23, phase_49, phase_52, phase_53, phase_54_a,
     phase_55, phase_56, phase_56_a, phase_71'
@@ -411,7 +452,7 @@ phases:
   priority: P1
   risk: low
   dependencies:
-  - phase-07
+  - phase-07-test-consolidation
   deliverables:
   - "All workflow templates audited \u2014 every active orchestrator has a template"
   - Stale YAMLs removed (references to deleted/archived components)
@@ -440,7 +481,7 @@ phases:
   priority: P0
   risk: medium
   dependencies:
-  - phase-08
+  - phase-08-registry-docs
   deliverables:
   - 'Capability manifest: every item verified green'
   - All 22 MCP tools respond correctly
@@ -471,7 +512,7 @@ phases:
   priority: P1
   risk: medium
   dependencies:
-  - phase-09
+  - phase-09-final-verification
   deliverables:
   - 'Performance benchmarks: MCP response <200ms p95, LENS scan <5s full, <500ms incremental'
   - 'Chaos testing: concurrent requests, db contention, partial failure recovery'

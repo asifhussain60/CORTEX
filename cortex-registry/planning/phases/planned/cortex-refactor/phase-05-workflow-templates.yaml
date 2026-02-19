@@ -1,0 +1,602 @@
+---
+metadata:
+  id: phase-05-workflow-templates
+  name: "CORTEX Phase 05: Workflow Template Integration"
+  version: 2.0.0
+  created: '2026-02-19'
+  updated: '2026-02-19'
+  branch: CORTEX-GPT
+  status: planned
+  owner: asifhussain60
+  orchestrator: WorkflowTemplateIntegrationOrchestrator
+  
+  rationale: |
+    Workflow templates are the orchestration layer for both CORTEX refactoring
+    (master plan execution) and production use (repo onboarding, CI/CD, etc.).
+    This phase establishes:
+    1. Three core workflows: master plan creation/execution, phase execution
+    2. Folder architecture: CORTEX-only vs production templates
+    3. Template SSOT with zero duplication (pointers-only elsewhere)
+    4. LENS discovery integration (maximize reuse, prevent duplication)
+    5. Auto-remediation loops (deduplication, debloat, regression checks)
+
+phase:
+  id: phase-05-workflow-templates
+  title: "Workflow Template Integration — CORTEX + Production Orchestration"
+  description: |
+    Consolidate 3 critical workflow templates with proper architecture,
+    eliminate template sprawl (6 conflicting copies), integrate LENS discovery
+    for first-time full scan, and establish auto-remediation loop.
+  
+  timeline:
+    estimated_duration_hours: 5.0
+    estimated_iterations: 1
+    estimated_tolerance_iterations: [1, 2]
+  
+  priority: P0
+  risk_level: low
+  
+  dependencies:
+    - phase-04-brain-deduplication  # Status: complete ✓
+  
+  # ========================================================================
+  # PRE-FLIGHT VALIDATION CHECKLIST
+  # ========================================================================
+  
+  pre_flight_validation:
+    enabled: true
+    description: "Validate prerequisites before RED stage execution"
+    
+    checks:
+      PF-WF-001:
+        description: "WorkflowRuntime and TemplateRegistry are importable"
+        command: "python3 -c 'from cortex.orchestrators.workflow import WorkflowRuntime, TemplateRegistry'"
+        failure_action: BLOCK
+        estimated_duration_sec: 3
+      
+      PF-WF-002:
+        description: "MasterPlanOrchestrator skeleton exists (or stub)"
+        command: "test -f cortex/orchestrators/core/master_plan_orchestrator.py || echo 'Will be created'"
+        failure_action: WARN
+        estimated_duration_sec: 1
+      
+      PF-WF-003:
+        description: "Current response template standard is defined"
+        command: "grep -c 'SILENT AUTONOMOUS MODE' .github/templates/response-format-standards.md"
+        failure_action: BLOCK
+        estimated_duration_sec: 2
+      
+      PF-WF-004:
+        description: "LENS discovery module is functional"
+        command: "python3 -c 'from cortex.lens.orchestrator_discovery import discover_orchestrators; discover_orchestrators()'"
+        failure_action: WARN
+        estimated_duration_sec: 5
+      
+      PF-WF-005:
+        description: "Workflow templates directory structure exists"
+        command: "test -d cortex-registry/workflows/templates/lifecycle && echo 'OK'"
+        failure_action: WARN
+        estimated_duration_sec: 1
+    
+    total_estimated_time_sec: 12
+    completion_criterion: "All BLOCK checks must pass; WARN checks logged"
+
+  # ========================================================================
+  # SPECIFICATIONS WITH TOLERANCE BANDS
+  # ========================================================================
+  
+  specifications:
+    description: "Target metrics for workflow template integration"
+    
+    targets:
+      workflow_templates:
+        description: "Three core workflow templates created and integrated"
+        target: 3
+        tolerance:
+          low: 3
+          high: 3
+        validation_rule: "actual == 3"
+        rationale: |
+          MasterPlanOrchestrator (creation)
+          MasterPlanExecution (execution + LENS + loops)
+          PhaseExecutor (reusable RED→GREEN→REFACTOR→CLEANUP)
+      
+      duplicate_templates_removed:
+        description: "Number of duplicate autonomous execution templates deleted"
+        target: 6
+        tolerance: {low: 5, high: 6}
+        rationale: |
+          agent-index.md (Progress Bar Format)
+          cortex-architect.prompt.md (ASCII PROGRESS BAR)
+          response-format-standards.md (Template D)
+          response-templates.yaml (phase_progress)
+          autonomous-execution-protocol.yaml (visual_format)
+          Plus 1 additional redundant copy
+      
+      golden_tests:
+        description: "Test suite validating all workflows"
+        target: 60
+        tolerance: {low: 55, high: 70}
+        rationale: |
+          MasterPlanCreator: 10 tests
+          MasterPlanExecution: 20 tests
+          PhaseExecutor: 30 tests
+      
+      test_coverage:
+        description: "Coverage percentage for workflow modules"
+        target: 95
+        tolerance: {low: 90, high: 100}
+      
+      response_template_ssot_coverage:
+        description: "Percentage of files now point to SSOT instead of inline"
+        target: 100
+        tolerance: {low: 95, high: 100}
+
+  # ========================================================================
+  # DELIVERABLES
+  # ========================================================================
+  
+  deliverables:
+    D1:
+      id: D1
+      title: "MasterPlanOrchestrator Workflow"
+      description: |
+        Workflow template for creating new refactoring phases in sequence.
+        Automatically computes next phase number, creates registry entry,
+        moves completed phases to archive, hydrates with v2 template.
+      
+      file_path: "cortex-registry/workflows/templates/lifecycle/master-plan-orchestrator.yaml"
+      acceptance_criteria:
+        - "Computes next_phase_number sequentially (50 after 49)"
+        - "Creates phase entry in cortex-master.yaml"
+        - "Moves completed phases from planned/ → completed/"
+        - "Syncs status between YAML and filesystem"
+        - "Hydrates phase YAML with tolerance bands + pre-flight"
+      
+      estimated_lines: 120
+      estimated_effort_hours: 0.5
+    
+    D2:
+      id: D2
+      title: "MasterPlanExecution Workflow"
+      description: |
+        Orchestrates entire 11-phase refactoring cycle with:
+        - Stage 0: LENS discovery (full scan first time, incremental after)
+        - Stages 1-11: Execute each phase autonomously
+        - Auto-remediation loop: deduplication, debloat, brittleness checks
+        - Regression loop: fix issues until zero issues remain
+        - Final: Mark cortex-master.yaml COMPLETE, move to completed/ folder
+      
+      file_path: "cortex-registry/workflows/templates/lifecycle/master-plan-execution.yaml"
+      acceptance_criteria:
+        - "LENS discovery runs as Stage 0"
+        - "All 11 phases execute autonomously"
+        - "Regression loop runs until clean (0 issues)"
+        - "Deduplication scan included"
+        - "Debloat scan included"
+        - "Brittleness scan included"
+        - "Final status update + move to completed/"
+      
+      estimated_lines: 200
+      estimated_effort_hours: 1.0
+    
+    D3:
+      id: D3
+      title: "PhaseExecutor Workflow"
+      description: |
+        Generic reusable workflow for RED→GREEN→REFACTOR→CLEANUP
+        for any single phase (1-11). Includes:
+        - RED: Write failing tests
+        - GREEN: Implement minimum code
+        - REFACTOR: Code quality improvements
+        - CLEANUP: Deduplication, debloat, regression checks
+        - AUTO-LOOP: Fix any issues, loop until clean
+      
+      file_path: "cortex-registry/workflows/templates/lifecycle/phase-executor.yaml"
+      acceptance_criteria:
+        - "RED tests all fail (as expected)"
+        - "GREEN tests all pass"
+        - "Coverage ≥95%"
+        - "Cleanup loop runs"
+        - "If issues found: fix autonomously"
+      
+      estimated_lines: 150
+      estimated_effort_hours: 0.75
+    
+    D4:
+      id: D4
+      title: "Folder Architecture: CORTEX vs Production Templates"
+      description: |
+        Reorganize workflow templates into two domains:
+        - cortex-registry/workflows/templates/lifecycle/ — CORTEX-only
+        - cortex-registry/workflows/templates/production/ — External repos
+        
+        Rationale: CORTEX templates manage CORTEX refactoring.
+                   Production templates are consumed by other repos.
+      
+      file_path: "cortex-registry/workflows/templates/"
+      acceptance_criteria:
+        - "lifecycle/ contains: master-plan-*.yaml, phase-executor.yaml"
+        - "production/ contains: repo-onboarding.yaml, ci-cd-pipeline.yaml, deployment-workflow.yaml"
+        - "All CORTEX templates reference lifecycle/ folder"
+        - "README.md documents the split"
+      
+      estimated_lines: 50
+      estimated_effort_hours: 0.25
+    
+    D5:
+      id: D5
+      title: "Template SSOT + Pointer Architecture"
+      description: |
+        Eliminate 6 duplicate autonomous execution templates by:
+        1. Keeping golden template in response-format-standards.md §SILENT AUTONOMOUS MODE
+        2. Deleting all inline copies
+        3. Replacing deleted copies with pointer: "See response-format-standards.md § SILENT AUTONOMOUS MODE"
+        
+        Architecture principle: No code duplication, only pointers.
+      
+      file_path: "Multiple files (see cleanup list below)"
+      cleanup_targets:
+        - file: "agent-index.md"
+          section: "Progress Bar Format"
+          action: "DELETE + add pointer"
+        - file: "cortex-architect.prompt.md"
+          section: "ASCII PROGRESS BAR FORMAT"
+          action: "DELETE + add pointer"
+        - file: "autonomous-execution-protocol.yaml"
+          section: "visual_format"
+          action: "DELETE + add pointer"
+      
+      acceptance_criteria:
+        - "Only ONE copy of golden template exists"
+        - "ALL other files point to it"
+        - "Zero markdown/code duplication"
+        - "All orchestrators use same response template"
+      
+      estimated_lines: 0 (cleanup only)
+      estimated_effort_hours: 0.75
+    
+    D6:
+      id: D6
+      title: "MasterPlanOrchestrator Implementation"
+      description: |
+        Python orchestrator that wires workflows + LENS discovery.
+        - Extends OrchestratorBase (5-step lifecycle)
+        - Implements MasterPlanCreator workflow
+        - Implements MasterPlanExecution workflow
+        - Integrates LENS discovery as Stage 0
+        - Handles auto-remediation loops
+      
+      file_path: "cortex/orchestrators/core/master_plan_orchestrator.py"
+      acceptance_criteria:
+        - "Extends OrchestratorBase"
+        - "Has setup(), govern(), execute(), validate(), teardown()"
+        - "Type hints on all methods"
+        - "Docstrings on all public methods"
+        - "Wires WorkflowRuntime + WorkflowComposer"
+      
+      estimated_lines: 350
+      estimated_effort_hours: 1.0
+    
+    D7:
+      id: D7
+      title: "Golden Test Suite (60 tests)"
+      description: |
+        Comprehensive test suite validating all workflow templates and orchestrator.
+        
+        Structure:
+        - TestMasterPlanCreator (10 tests)
+          * Sequential numbering (50 after 49)
+          * No gaps or duplicates
+          * Folder sync (completed moved)
+          * Template hydration
+        
+        - TestMasterPlanExecution (20 tests)
+          * LENS discovery runs first
+          * All 11 phases execute
+          * Regression loop fixes issues
+          * Deduplication/debloat/brittleness scans
+          * Final mark COMPLETE + move
+        
+        - TestPhaseExecutor (30 tests)
+          * RED all fail
+          * GREEN all pass
+          * Coverage ≥95%
+          * Cleanup loop runs
+          * Auto-fix issues
+      
+      file_path: "tests/golden/workflows/test_workflow_templates.py"
+      acceptance_criteria:
+        - "60 test methods"
+        - "ALL PASSING (GREEN stage)"
+        - "Coverage ≥95%"
+        - "Uses golden test framework"
+        - "Parametrized for multiple scenarios"
+      
+      estimated_lines: 800
+      estimated_effort_hours: 1.5
+  
+  total_estimated_effort: 5.5 hours
+
+  # ========================================================================
+  # ANTI-PATTERNS TO AVOID
+  # ========================================================================
+  
+  anti_patterns_to_check:
+    AP-WF-001:
+      pattern: "Inline template copies in multiple files"
+      wrong_example: |
+        # agent-index.md
+        The progress bar format is...
+        
+        # cortex-architect.prompt.md
+        The progress bar format is...
+        
+        # autonomus-execution-protocol.yaml
+        progress_bar_format: ...
+      
+      right_example: |
+        # agent-index.md
+        "See response-format-standards.md § SILENT AUTONOMOUS MODE"
+        
+        # cortex-architect.prompt.md
+        "Reference: response-format-standards.md § SILENT AUTONOMOUS MODE"
+    
+    AP-WF-002:
+      pattern: "Workflows without LENS discovery integration"
+      wrong_example: |
+        master_plan_execution:
+          stages:
+            - stage_1: execute_phase_1
+            - stage_2: execute_phase_2
+      
+      right_example: |
+        master_plan_execution:
+          stages:
+            - stage_0: lens_discovery  # ← FIRST!
+            - stage_1: execute_phase_1
+            - stage_2: execute_phase_2
+    
+    AP-WF-003:
+      pattern: "No auto-remediation loop at end of phases"
+      wrong_example: |
+        phase_executor:
+          stages:
+            - green_phase
+            - refactor_phase
+            # ← Missing: cleanup_phase + loop
+      
+      right_example: |
+        phase_executor:
+          stages:
+            - green_phase
+            - refactor_phase
+            - cleanup_phase:
+                - deduplication_scan
+                - debloat_scan
+                - regression_tests
+                - if_issues: fix_and_loop()
+
+  # ========================================================================
+  # TEST SPECIFICATIONS (RED → GREEN → REFACTOR)
+  # ========================================================================
+  
+  test_specifications:
+    
+    red_stage:
+      description: "Failing tests that define workflow template requirements"
+      expected_status: "ALL FAIL (before implementation)"
+      
+      test_categories:
+        - category: "MasterPlanCreator"
+          test_count: 10
+          examples:
+            - "test_compute_next_phase_number"
+            - "test_no_phase_gaps"
+            - "test_no_phase_duplicates"
+            - "test_completed_phases_moved_to_archive"
+            - "test_phase_yaml_created_with_sequence"
+            - "test_tolerance_bands_in_hydrated_spec"
+            - "test_pre_flight_checklist_in_spec"
+            - "test_efficiency_metrics_captured"
+            - "test_master_yaml_entry_status_updated"
+            - "test_all_dependencies_correct"
+        
+        - category: "MasterPlanExecution"
+          test_count: 20
+          examples:
+            - "test_lens_discovery_stage_runs_first"
+            - "test_lens_discovery_full_scan_on_first_run"
+            - "test_lens_discovery_incremental_after"
+            - "test_all_11_phases_execute_autonomously"
+            - "test_regression_loop_identifies_issues"
+            - "test_regression_loop_fixes_issues_autonomously"
+            - "test_regression_loop_ends_when_zero_issues"
+            - "test_regression_loop_escalates_after_5_attempts"
+            - "test_deduplication_scan_runs"
+            - "test_debloat_scan_runs"
+            - "test_brittleness_scan_runs"
+            - "test_cortex_master_marked_complete"
+            - "test_cortex_master_moved_to_completed_folder"
+            - "test_phase_status_synchronized"
+            - "test_artifacts_archived_correctly"
+            - "test_summary_generated(issues_identified, solution_implemented, next_steps)"
+            - "test_progress_bar_displayed_with_stages"
+            - "test_golden_tests_still_passing"
+            - "test_zero_regressions"
+            - "test_mcp_tools_registered_correctly"
+        
+        - category: "PhaseExecutor"
+          test_count: 30
+          examples:
+            - "test_red_tests_all_fail_initially"
+            - "test_green_tests_all_pass_after_impl"
+            - "test_coverage_gte_95_percent"
+            - "test_refactor_cycle_completes"
+            - "test_cleanup_deduplication_scan_runs"
+            - "test_cleanup_debloat_scan_runs"
+            - "test_cleanup_regression_tests_run"
+            - "test_cleanup_brittleness_check_runs"
+            - "test_cleanup_issues_found_and_fixed"
+            - "test_cleanup_loop_exits_when_zero_issues"
+            - "test_cleanup_escalates_after_5_loops"
+            - "test_all_tests_still_passing_after_cleanup"
+            - "test_no_new_regressions_introduced"
+            - "test_metrics_captured(iterations, debug_time, threshold_misses)"
+            - "test_efficiency_improvements_logged"
+            - "test_phase_stats_recorded_in_master_yaml"
+            - "test_stdout_uses_only_golden_response_template"
+            - "test_progress_bar_shows_all_stages"
+            - "test_stage_icons_correct(✅/🔵/⚪)"
+            - "test_no_logging_pollution_in_test_output"
+            - "test_orchestrator_stats_dict_returned"
+            - "test_template_agnostic(can_swap_templates)"
+            - "test_idempotent(can_re_run_safely)"
+            - "test_respects_tolerance_bands"
+            - "test_pre_flight_checklist_runs"
+            - "test_pre_flight_failures_block_red_stage"
+            - "test_anti_patterns_detected"
+            - "test_yaml_hydration_complete"
+            - "test_no_hardcoded_values"
+            - "test_all_docstrings_present"
+      
+      total_test_count: 60
+      
+      execution_command: |
+        python3 -m pytest tests/golden/workflows/test_workflow_templates.py \
+          -v --tb=short -x
+      
+      expected_result: "60 FAILED, 0 PASSED (all tests RED — this is correct)"
+    
+    green_stage:
+      description: "All tests passing after workflow implementation"
+      expected_status: "ALL PASS (after implementation + integration)"
+      test_count: 60
+      execution_command: |
+        python3 -m pytest tests/golden/workflows/test_workflow_templates.py \
+          -v --tb=short
+      
+      expected_result: "60 PASSED, 0 FAILED"
+    
+    refactor_stage:
+      description: "Code quality improvements while tests remain green"
+      improvements:
+        - "Extract workflow stage builders into mixins"
+        - "Add observability hooks to workflow execution"
+        - "Optimize LENS discovery incremental scan"
+        - "Document workflow template versioning strategy"
+
+  # ========================================================================
+  # EFFICIENCY TRACKING
+  # ========================================================================
+  
+  efficiency_metrics:
+    purpose: |
+      Track iterations, debug cycles, and threshold misses to verify
+      improvements from chat03 lessons are effective.
+    
+    tracked_metrics:
+      red_iterations:
+        description: "How many times were RED tests changed?"
+        target: 1
+        baseline_from_phases_0_4: 1.2
+      
+      template_duplicates_found_and_fixed:
+        description: "Number of duplicate autonomous execution templates removed"
+        target: 6
+        baseline_from_phases_0_4: 6  # Known issue
+      
+      ssot_coverage_achieved:
+        description: "Percentage of files now using pointer instead of inline"
+        target: 100
+        baseline_before: 0
+      
+      config_loads_failed:
+        description: "How many config auto-load issues encountered?"
+        target: 0
+        baseline_from_phases_0_4: 1
+      
+      total_debug_time:
+        unit: minutes
+        target: 0
+        baseline_from_phases_0_4: 50
+        improvement_target: 0
+
+# ============================================================================
+# EXECUTION TIMELINE
+# ============================================================================
+
+execution_timeline:
+  
+  stage_1_pre_flight:
+    name: "Pre-Flight Validation"
+    duration_minutes: 2
+    steps:
+      - "Display Phase 05 Definition of Ready"
+      - "Run 5 pre-flight checks (expect ~12 sec total)"
+      - "Prompt user: 'Proceed to RED stage?'"
+    user_action_required: "Type 'proceed' to continue"
+  
+  stage_2_red:
+    name: "TDD RED Phase"
+    duration_minutes: 15
+    steps:
+      - "Write 60 failing tests"
+      - "Display test results (expect 60 FAILED)"
+      - "Validate all RED tests correctly specify requirements"
+    user_action_required: "Type 'implement' to begin GREEN stage"
+  
+  stage_3_green:
+    name: "TDD GREEN Phase"
+    duration_minutes: 150
+    steps:
+      - "Create master-plan-orchestrator.yaml workflow (120 lines, 30 min)"
+      - "Create master-plan-execution.yaml workflow (200 lines, 40 min)"
+      - "Create phase-executor.yaml workflow (150 lines, 30 min)"
+      - "Implement MasterPlanOrchestrator (350 lines, 60 min)"
+      - "Move completed phases + reorganize folders (20 min)"
+      - "Run all 60 tests (expect 60 PASSED)"
+    user_action_required: "Type 'refactor' to begin REFACTOR stage"
+  
+  stage_4_refactor:
+    name: "Refactoring & Cleanup"
+    duration_minutes: 40
+    steps:
+      - "Delete 6 duplicate autonomous execution templates"
+      - "Replace with pointers to SSOT (response-format-standards.md)"
+      - "Extract workflow stage mixins"
+      - "Add observability hooks"
+      - "Run regression suite (expect 0 new failures)"
+    user_action_required: "Type 'commit' to finalize Phase 05"
+  
+  stage_5_validation:
+    name: "Validation & Sync"
+    duration_minutes: 10
+    steps:
+      - "Update cortex-refactor-master.yaml with Phase 05 completion"
+      - "Record efficiency metrics"
+      - "Generate recommendations for Phase 06"
+      - "Display session summary"
+    user_action_required: "Review metrics; approve Phase 06 next"
+
+---
+
+# ============================================================================
+# PHASE INTEGRATION NOTES
+# ============================================================================
+
+# This phase must complete BEFORE phase-06 (directory-cleanup) because:
+# 1. Workflow templates are foundational infrastructure
+# 2. Directory cleanup uses PhaseExecutor workflow
+# 3. LENS discovery needs to be working before major refactoring
+# 4. SSOT template cleanup prevents future duplication in all phases
+
+# Dependencies satisfied:
+# ✅ phase-04-brain-deduplication (COMPLETE)
+# ✅ OrchestratorBase exists (from phase-01)
+# ✅ WorkflowRuntime exists (from phase-01)
+# ✅ LENS discovery module exists (from phase-04)
+
+# Estimated TOE: 5-5.5 hours
+# Risk: LOW (workflows are purely additive, no breaking changes)
+# Regression risk: 0.0 (all wrapped in golden tests)
