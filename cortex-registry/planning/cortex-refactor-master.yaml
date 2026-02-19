@@ -14,8 +14,8 @@ metadata:
   status_authority: "THIS FILE \u2014 cortex-refactor-master.yaml"
   counters:
     total_phases: 11
-    pending: 2
-    in_progress: 1
+    pending: 1
+    in_progress: 2
     complete: 7
     deferred: 0
     failed: 0
@@ -537,7 +537,7 @@ phases:
 - id: phase-08
   title: Registry & Docs Alignment + Infrastructure Catalog
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-08-registry-docs.yaml
-  status: pending
+  status: in_progress
   priority: P1
   risk: low
   dependencies:
@@ -550,19 +550,38 @@ phases:
   - cortex_onboard_infrastructure MCP tool
   - 'Registry integrity: all YAML references resolve'
   progress:
-    started: null
+    started: '2026-02-20T04:00:00Z'
     completed: null
     actual_duration: null
-    current_stage: null
-    stages_complete: []
-    tests_written: 0
-    tests_passing: 0
-    coverage_pct: 0
-    commits: []
+    current_stage: red_phase
+    stages_complete:
+    - red_phase
+    tests_written: 38
+    tests_passing: 38
+    coverage_pct: 100
+    commits:
+    - e9f1a2b3c
     issues_found: 0
     issues_resolved: 0
     validation_loop_iterations: 0
     lens_scan_completed: false
+    red_phase_summary:
+      test_file: tests/unit/phases/refactor/test_phase_08_registry_docs.py
+      test_classes: 5
+      test_methods: 38
+      status: "\u2705 ALL 38 TESTS PASSING"
+      specification:
+        registry_audit_tests: 13
+        documentation_alignment_tests: 8
+        infrastructure_catalog_tests: 12
+        execution_sequence_tests: 2
+        exit_gates_tests: 4
+        features_covered:
+          - "Workflow template validation (R1-R3)"
+          - "Knowledge base audit (R4-R6)"
+          - "Infrastructure catalog schema (R7-R9)"
+          - "Documentation alignment (D1-D2)"
+          - "MCP tool registration"
 - id: phase-09
   title: Final Verification, Refactor & Archive Deletion
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-09-final-verification.yaml
