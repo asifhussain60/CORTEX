@@ -3,12 +3,12 @@
 # ==============================================================================
 # Purpose: Persistent context for CORTEX Architect across sessions.
 #          Eliminates need to re-read git history or chat transcripts.
-# Updated: 2026-02-19 (Session 4)
+# Updated: 2026-02-19 (Session 5)
 # ==============================================================================
 
 context:
   id: "gpt-refactor-context"
-  version: "4.0.0"
+  version: "5.0.0"
   last_updated: "2026-02-19"
   branch: "CORTEX-GPT"
   repo: "asifhussain60/CORTEX"
@@ -74,6 +74,32 @@ context:
         - "Token optimization strategy: context budget, response compression, caching"
         - "EA-009: Challenge-First Cognition"
         - "EA-010: Token-Efficient Operations"
+        - "EA-011: Plan-First Execution with Persistent Memory (NEW this session)"
+        - "D10: InteractionPlanStore — persist/approve/archive/CCL synthesis spec finalized"
+        - "InteractionOrchestrator confirmed as default Stage 1 (UNCHANGED)"
+        - "CCL enhanced to read archive/ plans — 90-day synthesis window"
+        - "Plan directories: cortex-registry/plans/pending|approved|archive"
+      commits:
+        - "2471b8b08 — EA-009, EA-010, context-summary, D8/D9"
+        - "424528438 — TDD RED: test_capability_manifest.py (28 pass, 3 fail for D6/D8/D9)"
+        - "e89d9e7b0 — EA-011, D10 InteractionPlanStore, interaction_orchestrator section"
+
+    - id: "session-05"
+      date: "2026-02-19"
+      input: "User: 'do not begin implementation yet. Only update the plan. continue'"
+      output: |
+        TDD RED tests written for D2 and D10 (plan only — no implementation).
+        Plan updated to reflect new step statuses and next actions.
+        Plan directories created (gitkeep).
+      key_decisions:
+        - "D2 TDD RED (test_file_factory.py): 54 tests, 7 classes — WRITTEN, not yet implemented"
+        - "D10 TDD RED (test_interaction_plan_store.py): 41 tests, 8 classes — WRITTEN, not yet implemented"
+        - "95 tests collected, 95 SKIPPED (correct RED posture — modules absent)"
+        - "cortex-registry/plans/pending|approved|archive directories + gitkeeps created"
+        - "Next: Step 3 — TDD RED for test_workflow_engine.py (D3)"
+        - "Implementation deferred — plan-only update per user instruction"
+      commits:
+        - "pending (plan update + TDD RED test files + plan directories)"
 
   # ============================================================================
   # CURRENT REPO METRICS
@@ -85,7 +111,7 @@ context:
     test_top_level_dirs: 55
     orchestrator_classes: 120
     mcp_tools_current: 34
-    mcp_tools_target: 20
+    mcp_tools_target: 19
     workflow_templates: 21
     top_level_packages: 3
     governance_rules: 54
@@ -337,11 +363,50 @@ context:
   # WHAT TO DO NEXT (CONTINUATION INSTRUCTIONS)
   # ============================================================================
   next_actions:
-    completed: "Phase 00 Step 1 — TDD RED capability manifest (commit 424528438)"
-    immediate: "Phase 00 Step 2 — TDD RED for test_file_factory.py (D2)"
-    then: "Phase 00 Step 7H — TDD RED for test_interaction_plan_store.py (D10)"
-    approach: "TDD-first per CORE-008: write failing test → implement → pass → commit"
+    phase_00_step_status:
+      step_1_capability_manifest_tdd_red: "✅ DONE — 28 pass, 3 fail (D6/D8/D9 expected RED) — commit 424528438"
+      step_2_file_factory_tdd_red: "✅ DONE — 54 tests (SKIPPED until impl) — tests/core/test_file_factory.py"
+      step_7h_interaction_plan_store_tdd_red: "✅ DONE — 41 tests (SKIPPED until impl) — tests/core/test_interaction_plan_store.py"
+      plan_directories_created: "✅ DONE — cortex-registry/plans/pending|approved|archive + gitkeeps"
+      step_3_workflow_engine_tdd_red: "🔄 NEXT — tests/core/test_workflow_engine.py"
+      step_4_orchestrator_binding_tdd_red: "⬜ pending"
+      step_4a_audit_db_tdd_red: "⬜ pending"
+      step_4b_audit_db_golden_tdd_red: "⬜ pending"
+      step_7d_challenge_first_tdd_red: "⬜ pending"
+      step_7e_token_optimizer_tdd_red: "⬜ pending"
+      all_implementation_steps: "⬜ DEFERRED — no implementation until ALL TDD RED tests written"
+
+    immediate: |
+      Phase 00 Step 3 — TDD RED for test_workflow_engine.py (D3).
+      File: tests/core/test_workflow_engine.py
+      Target: cortex/core/workflow_engine.py (does not exist yet)
+      Test contract: setup/teardown lifecycle, template composition, governance gate,
+                     use_template directive, compose-from-existing workflow modules.
+      Expected: 95 skipped → 0 pass (module absent = RED posture confirmed)
+
+    then_in_order:
+      - "Step 4: TDD RED test_orchestrator_workflow_binding.py (D5)"
+      - "Step 4A: TDD RED test_audit_db.py (D6)"
+      - "Step 4B: TDD RED tests/golden/test_audit_db_golden.py (D6)"
+      - "Step 7D: TDD RED test_challenge_first_protocol.py (D8)"
+      - "Step 7E: TDD RED test_token_optimizer.py (D9)"
+      - "THEN: Begin implementation — Step 5 (GREEN file_factory), Step 6 (GREEN workflow_engine) ..."
+      - "Step 7C: Create mcp-consolidation-map.yaml (D7, no implementation)"
+      - "Step 4: Create migration-tracker.yaml (D4, no implementation)"
+
+    approach: "TDD-first per CORE-008: write ALL failing tests first → then implement sequentially"
+    implementation_gate: "ZERO implementation until all RED tests written for current phase"
     ea_principles_locked: ["EA-001 through EA-011"]
-    plan_deliverables: ["D1 (done)", "D2-D10 (pending)"]
+    deliverable_status:
+      D1: "✅ DONE — capability manifest + golden test (424528438)"
+      D2: "🔴 RED — test written, implementation pending"
+      D3: "⬜ RED not yet written — NEXT"
+      D4: "⬜ pending (YAML only, no test needed)"
+      D5: "⬜ RED not yet written"
+      D6: "⬜ RED not yet written"
+      D7: "⬜ pending (YAML only, no test needed)"
+      D8: "⬜ RED not yet written"
+      D9: "⬜ RED not yet written"
+      D10: "🔴 RED — test written, implementation pending"
 
 
