@@ -1,0 +1,233 @@
+# =============================================================================
+# CORTEX Master Plan Execution — Phase Execution Workflow Template
+# =============================================================================
+# Authority: Phase 50 — CortexMasterPlanOrchestrator
+# Version: 1.0.0
+# Updated: 2026-02-19
+# CORE Rules: CORE-008, CORE-028, CORE-035, CORE-049
+#
+# Purpose: Standardized workflow for autonomously executing a CORTEX phase plan.
+#          Each stage ends with an instruction to begin the next stage automatically.
+#          Refactor + cleanup cycle runs after each stage completion.
+#
+# Usage: CortexMasterPlanOrchestrator.load_workflow_template("master-plan-execution")
+# Response: Silent autonomous execution with ━━━ + [████] + ├─/└─ progress format
+# =============================================================================
+
+workflow:
+  name: master_plan_execution
+  version: "1.0.0"
+  description: >
+    Autonomous end-to-end execution workflow for a CORTEX phase plan.
+    Stops only after completing the entire phase. Each stage triggers the next.
+    Tests run in parallel. Refactor + cleanup cycle after each stage.
+
+  entry_point: CortexMasterPlanOrchestrator
+  orchestrator: CortexMasterPlanOrchestrator
+  mcp_tool: cortex_master_plan
+  execution_mode: "autonomous"
+  visual_feedback: "SSOT: .github/templates/response-format-standards.md § SILENT AUTONOMOUS MODE"
+
+  # ---------------------------------------------------------------------------
+  # Input Schema
+  # ---------------------------------------------------------------------------
+  input:
+    required:
+      - phase_id: "Phase ID to execute (e.g. 'phase-50')"
+    optional:
+      - dry_run: "If true, validate plan without executing (default: false)"
+      - parallel_tests: "If true, run all test tiers in parallel (default: true)"
+
+  # ---------------------------------------------------------------------------
+  # Stages
+  # ---------------------------------------------------------------------------
+  stages:
+    - name: gap_analysis
+      order: 1
+      description: >
+        Load the phase YAML plan. Run CORTEX LENS analysis across the workspace.
+        Identify gaps vs. CORTEX best practices YAMLs. Fix the plan holistically
+        before execution begins. This ensures no mid-execution surprises.
+      actor: LensAnalysisOrchestrator
+      inputs:
+        - phase_file: "planned/{phase_id}-*.yaml"
+        - best_practices: "cortex-registry/governance/best-practices/"
+      actions:
+        - "Load phase YAML file"
+        - "Run LENS workspace analysis"
+        - "Compare plan stages vs CORTEX governance patterns"
+        - "Identify missing test tiers (golden/unit/integration/regression)"
+        - "Identify missing negative/edge/blind-spot tests"
+        - "Patch plan in-memory (no file write unless gaps found)"
+      validation:
+        - "plan_gaps == 0 OR plan patched successfully"
+        - "test_tiers_covered: golden, unit, integration"
+      on_complete: "proceed_to_stage_2"
+
+    - name: tdd_red_phase
+      order: 2
+      description: >
+        Write ALL failing tests FIRST (CORE-008 mandatory). Tests cover:
+        golden (end-to-end), unit (per class/method), integration (cross-module),
+        regression (existing behaviour preserved), negative (error handling),
+        edge cases (boundaries), blind spots (identified by LENS).
+        All test tiers run in parallel via pytest-xdist.
+      actor: TDDOrchestrator
+      parallel: true
+      test_tiers:
+        golden:
+          location: "tests/golden/orchestrators/{phase_slug}/"
+          description: "End-to-end scenarios — full pipeline validation"
+        unit:
+          location: "tests/unit/orchestrators/{phase_slug}/"
+          description: "Per-class/method isolation tests"
+        integration:
+          location: "tests/integration/"
+          description: "Cross-orchestrator + cross-module tests"
+        negative:
+          description: "Error inputs, missing dependencies, corrupt state"
+        edge_cases:
+          description: "Boundary values, empty inputs, max capacity"
+        blind_spots:
+          description: "LENS-identified gaps in test coverage"
+      validation:
+        - "all test files created"
+        - "all tests FAIL (RED phase confirmed)"
+        - "no import errors in test files"
+      on_complete: "proceed_to_stage_3"
+
+    - name: autonomous_execute
+      order: 3
+      description: >
+        Implement minimum code to pass all failing tests (GREEN phase).
+        Execute autonomously — no confirmations. Each sub-stage:
+        a. Write implementation
+        b. Run tests in parallel
+        c. Confirm GREEN before moving on
+        d. Never skip a failing test
+      actor: TDDOrchestrator
+      parallel: true
+      sub_stages:
+        - name: "core_implementation"
+          description: "Write production code to pass unit tests"
+        - name: "integration_wiring"
+          description: "Wire components to pass integration tests"
+        - name: "golden_validation"
+          description: "End-to-end validation via golden test suite"
+      validation:
+        - "all_tests_passing == true"
+        - "coverage >= 95%"
+        - "no P0/P1 governance violations"
+      on_complete: "proceed_to_stage_4"
+
+    - name: refactor_cycle
+      order: 4
+      description: >
+        Run CORTEX refactor + cleanup cycle on all work from this stage.
+        Refactoring must not break any passing tests. Uses LENS to identify
+        duplication, complexity hotspots, and naming violations (CORE-028).
+        Cleanup: remove dead code, consolidate duplicates, update docstrings.
+      actor: RefactoringOrchestrator
+      validation:
+        - "all_tests_still_passing == true"
+        - "no new governance violations"
+        - "CORE-028 naming compliance == 100%"
+      on_complete: "proceed_to_stage_5"
+
+    - name: governance_audit
+      order: 5
+      description: >
+        Run full governance audit. Check CORE rules compliance.
+        Verify audit logs confirm test execution. Block on any P0 violations.
+        P1 violations must be documented with remediation plan.
+      actor: EnforcementOrchestrator
+      validation:
+        - "P0_violations == 0"
+        - "coverage >= 95%"
+        - "audit_log_entries > 0"
+        - "CORE-008: tests_before_implementation verified"
+      on_complete: "proceed_to_stage_6"
+
+    - name: registry_update
+      order: 6
+      description: >
+        Update cortex-master.yaml to mark phase as COMPLETE.
+        Record: completion_date, actual_duration, test counts, commit hashes.
+        Status update happens ONLY in cortex-master.yaml (SSOT).
+        Move phase YAML file from planned/ to completed/ folder.
+      actor: CortexMasterPlanOrchestrator
+      actions:
+        - "Update phase status to 'complete' in cortex-master.yaml"
+        - "Record completion metrics (tests, coverage, duration)"
+        - "Increment metadata.completed counter"
+        - "Decrement metadata.planned counter"
+        - "Move phase file: planned/ → completed/"
+      validation:
+        - "cortex-master.yaml updated"
+        - "phase file in completed/ folder"
+        - "metadata counters consistent"
+      on_complete: "proceed_to_stage_7"
+
+    - name: commit_and_push
+      order: 7
+      description: >
+        Commit all changes with standardized commit message including phase ID,
+        test count, and coverage. Push to remote. Phase execution COMPLETE.
+      actor: GitOrchestrator
+      commit_format: "feat(phase-{N}): {title} — {test_count} tests, {coverage}% coverage"
+      validation:
+        - "git commit successful"
+        - "git push successful"
+        - "no uncommitted changes remain"
+      on_complete: "PHASE_COMPLETE"
+
+  # ---------------------------------------------------------------------------
+  # Parallel Test Execution
+  # ---------------------------------------------------------------------------
+  parallel_test_config:
+    runner: "pytest-xdist"
+    workers: "auto"
+    tiers_parallel: true
+    fail_fast: false
+    coverage_report: true
+    audit_log: true
+
+  # ---------------------------------------------------------------------------
+  # Visual Feedback
+  # ---------------------------------------------------------------------------
+  visual_feedback_format:
+    ssot: ".github/templates/response-format-standards.md § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE"
+    description: >
+      All progress displayed using the golden template:
+      ━━━ separators + [████] progress bar + ├─/└─ hanging stage tree.
+      Status icons: ✅ completed | 🔵 in-progress | ⚪ pending | 🔴 failed.
+      Output displayed in Copilot Chat Session ONLY (never in terminal).
+
+  # ---------------------------------------------------------------------------
+  # Completion Checklist
+  # ---------------------------------------------------------------------------
+  completion_checklist:
+    - "✅ LENS gap analysis complete — plan patched if needed"
+    - "✅ All test tiers written (RED confirmed)"
+    - "✅ All tests passing (GREEN confirmed)"
+    - "✅ Refactor + cleanup cycle complete"
+    - "✅ Governance audit: 0 P0 violations"
+    - "✅ Coverage >= 95%"
+    - "✅ Registry updated (cortex-master.yaml SSOT)"
+    - "✅ Phase file moved to completed/"
+    - "✅ Committed and pushed to remote"
+
+  # ---------------------------------------------------------------------------
+  # Governance
+  # ---------------------------------------------------------------------------
+  governance:
+    core_rules:
+      - "CORE-008: TDD mandatory — tests written before implementation"
+      - "CORE-027: Audit integration on every completion"
+      - "CORE-048: Holistic validation gate before implementation"
+      - "CORE-049: Silent autonomous execution (progress bars only)"
+    forbidden:
+      - "Do NOT skip any test tier"
+      - "Do NOT commit with failing tests"
+      - "Do NOT update phase status outside cortex-master.yaml"
+      - "Do NOT display raw terminal output in Copilot Chat"

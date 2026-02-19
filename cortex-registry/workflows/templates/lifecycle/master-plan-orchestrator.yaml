@@ -1,0 +1,125 @@
+# =============================================================================
+# CORTEX Master Plan Orchestrator — Phase Creation Workflow Template
+# =============================================================================
+# Authority: Phase 50 — CortexMasterPlanOrchestrator
+# Version: 1.0.0
+# Updated: 2026-02-19
+# CORE Rules: CORE-008, CORE-028, CORE-035
+#
+# Purpose: Standardized workflow for creating a new CORTEX phase entry.
+#          Used by CortexMasterPlanOrchestrator.create_phase() as the
+#          execution specification. Delegates to the orchestrator — never
+#          duplicates logic here.
+#
+# Usage: CortexMasterPlanOrchestrator.load_workflow_template("master-plan-orchestrator")
+# =============================================================================
+
+workflow:
+  name: master_plan_orchestrator
+  version: "1.0.0"
+  description: >
+    Standardized end-to-end workflow for creating a new CORTEX phase entry.
+    Ensures: registry is SSOT, sequence is correct, folders are synced,
+    and the phase YAML file contains only execution spec (no status authority).
+
+  entry_point: CortexMasterPlanOrchestrator
+  orchestrator: CortexMasterPlanOrchestrator
+  mcp_tool: cortex_master_plan
+
+  # ---------------------------------------------------------------------------
+  # Input Schema
+  # ---------------------------------------------------------------------------
+  input:
+    required:
+      - title: "Human-readable phase title (non-empty string)"
+      - description: "Detailed scope description"
+      - priority: "P0 | P1 | P2 | P3"
+    optional:
+      - supersedes: "List of prior phase IDs this phase replaces"
+      - governance_rules: "List of CORE rule strings"
+
+  # ---------------------------------------------------------------------------
+  # Stages
+  # ---------------------------------------------------------------------------
+  stages:
+    - name: sequence_check
+      order: 1
+      description: >
+        Read cortex-master.yaml and compute the next sequential phase number.
+        MUST ignore anomalous out-of-sequence IDs (e.g. phase-100 when only
+        49 phases exist). Uses the gapless sequential max, not the absolute max.
+      actor: CortexMasterPlanOrchestrator.next_sequence_number
+      validation:
+        - "sequence > 0"
+        - "sequence == max_sequential_phase + 1"
+        - "no anomalous phase IDs influence the result"
+      output: sequence_number
+
+    - name: sync_folders
+      order: 2
+      description: >
+        Scan planned/ folder and move any files whose status in cortex-master.yaml
+        is 'complete' to the completed/ folder. Flag anomalous phase filenames.
+        This must run BEFORE sequence_check result is used, so completed phases
+        are removed from planned/ before the new file is placed there.
+      actor: CortexMasterPlanOrchestrator.sync_phase_folders
+      validation:
+        - "no complete-status files remain in planned/"
+        - "moved_to_completed >= 0"
+      output: sync_result
+
+    - name: create_entry
+      order: 3
+      description: >
+        Write the new phase entry to cortex-master.yaml FIRST.
+        This is the SSOT — status lives ONLY here. The entry must include:
+        id, title, status='planned', sequence, priority, description, file, created.
+        Increment metadata.total_phases and metadata.planned counters.
+      actor: CortexMasterPlanOrchestrator._save_registry
+      precondition: "sync_folders completed without error"
+      validation:
+        - "phase_id appears in registry phases list"
+        - "metadata.total_phases incremented by 1"
+        - "metadata.planned incremented by 1"
+      output: phase_id
+
+    - name: create_file
+      order: 4
+      description: >
+        Write the phase YAML file to planned/{phase_id}-{slug}.yaml.
+        File contains: metadata (phase_id, title, sequence, priority, description,
+        status_authority='cortex-master.yaml'), stages (empty list), tests spec,
+        workflow_template reference. File must NOT contain authoritative status.
+      actor: CortexMasterPlanOrchestrator.create_phase (file write step)
+      precondition: "create_entry completed — registry updated"
+      validation:
+        - "file exists at planned/{phase_id}-{slug}.yaml"
+        - "file.metadata.status_authority == 'cortex-master.yaml'"
+        - "file name is CORE-028 compliant (snake_case/kebab-case, no spaces)"
+      output: file_path
+
+  # ---------------------------------------------------------------------------
+  # Post-Creation Checklist
+  # ---------------------------------------------------------------------------
+  completion_checklist:
+    - "✅ cortex-master.yaml updated (registry SSOT)"
+    - "✅ Phase file created in planned/"
+    - "✅ Completed phases moved from planned/ to completed/"
+    - "✅ Anomalous phase IDs flagged (if any)"
+    - "✅ Sequence is gapless integer (no skips, no anomalies)"
+    - "✅ File name is kebab-case (CORE-028)"
+    - "✅ status_authority = cortex-master.yaml in file"
+
+  # ---------------------------------------------------------------------------
+  # Governance
+  # ---------------------------------------------------------------------------
+  governance:
+    core_rules:
+      - "CORE-008: TDD mandatory — tests written before implementation"
+      - "CORE-028: File naming snake_case/kebab-case"
+      - "CORE-035: Single canonical implementation"
+    status_ssot: "cortex-master.yaml"
+    forbidden:
+      - "Do NOT store authoritative status in phase YAML files"
+      - "Do NOT use absolute max sequence (ignores anomalies)"
+      - "Do NOT create phase file before registry entry"
