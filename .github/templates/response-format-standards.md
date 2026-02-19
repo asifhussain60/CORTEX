@@ -44,7 +44,7 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 | Principle | Implementation |
 |-----------|----------------|
 | **≤60 second read** | Executive-ready, scannable format |
-| **BLUF first** | Bottom Line Up Front — answer before details |
+| **Answer first** | Lead with the bottom line — answer before details |
 | **Visual hierarchy** | H2 → H3 → bold → bullets (optimized for Copilot Chat) |
 | **Comparison tables** | Side-by-side analysis for decisions |
 | **Inline only** | Zero file generation — everything in chat session |
@@ -57,13 +57,13 @@ Every non-autonomous response MUST follow this H2 structure:
 ```markdown
 ## 📋 What Was Asked
 
-{BLUF — 1-2 sentences. State the request and the bottom-line answer immediately.}
+{1-2 sentences. State the request and the bottom-line answer immediately.}
 
 ---
 
 ## ⚠️ Challenge
 
-{Present the BLUF finding in a formatted panel. Include engineering analysis,
+{Present the core finding in a formatted panel. Include engineering analysis,
 risk assessment, or trade-off summary. Use comparison tables for alternatives.}
 
 ### Key Findings
@@ -122,7 +122,7 @@ risk assessment, or trade-off summary. Use comparison tables for alternatives.}
 
 | Section | Required | Max Length | Key Rule |
 |---------|----------|-----------|----------|
-| **What Was Asked** | ✅ Always | 2 sentences | BLUF — answer first, context second |
+| **What Was Asked** | ✅ Always | 2 sentences | Answer first, context second |
 | **Challenge** | ✅ Always | 200 words | Tables for findings + alternatives |
 | **Recommendation** | ✅ Always | 150 words | ONE primary recommendation, numbered steps |
 | **Benefits & Risks** | ✅ Always | 1 table | 4-column comparison (Dimension/Benefit/Risk/Mitigation) |
@@ -1138,8 +1138,8 @@ This involves {scope}-level changes with {impact} impact.
 | Embedded full file contents | Context overflow | Link with `#file:` or use excerpts |
 | **Creating .md/.txt report files** | **CORE-002 violation** | **All output inline in Copilot Chat** |
 | **Tool usage narration** | **Wastes read time ("I searched...", "I read...")** | **Present findings directly** |
-| **>60 second read time** | **Not executive-ready** | **BLUF first, tables for data, ≤5 sections** |
-| **Answering without mirroring question** | **User unsure if concern was understood** | **BLUF in "What Was Asked" mirrors user's words** |
+| **>60 second read time** | **Not executive-ready** | **Answer first, tables for data, ≤5 sections** |
+| **Answering without mirroring question** | **User unsure if concern was understood** | **"What Was Asked" mirrors user's words** |
 | **Generic phase names (PHASE-1)** | **No strategic meaning, harder to track** | **Meaningful names (Foundation & Bootstrap)** |
 
 ---

@@ -185,7 +185,7 @@ All non-autonomous responses use the **5-Section Golden Format** (§ USER RESPON
 ---
 
 ## 📋 What Was Asked
-{BLUF — 1-2 sentences}
+{1-2 sentences — answer first}
 
 ## ⚠️ Challenge
 {Analysis, findings table, alternatives}
@@ -205,7 +205,7 @@ All non-autonomous responses use the **5-Section Golden Format** (§ USER RESPON
 ### Critical Rules
 - ✅ Header appears ONCE at top (never repeated mid-response)
 - ✅ ALL output inline in Copilot Chat (CORE-002 — never create .md/.txt files)
-- ✅ ≤60 second read time — BLUF first, tables for data
+- ✅ ≤60 second read time — answer first, tables for data
 - ❌ NO author/orchestrator line in user-facing responses
 - ❌ NO tool usage narration ("I'll now search...", "Let me check...")
 
