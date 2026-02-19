@@ -22,9 +22,9 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.interfaces import IAuditLogger
-from cortex.brain.core.path_resolver import audit_logs_path, get_project_root
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.interfaces import IAuditLogger
+from cortex.core.path_resolver import audit_logs_path, get_project_root
+from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import AuditEntry
 
 

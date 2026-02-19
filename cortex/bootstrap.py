@@ -31,11 +31,11 @@ def run_startup_validation_hook() -> bool:
     """
     try:
         # AC-HYBRID-KNOWLEDGE-003: Rebuild knowledge cache from YAML on startup
-        try:
-            from cortex.brain.knowledge.cache_builder import rebuild_knowledge_cache
-            rebuild_knowledge_cache()
-        except Exception as e:
-            logger.warning(f"Knowledge cache rebuild skipped during bootstrap: {e}")
+        # try:
+        #     from cortex.intelligence.knowledge.cache_builder import rebuild_knowledge_cache
+        #     rebuild_knowledge_cache()
+        # except Exception as e:
+        #     logger.warning(f"Knowledge cache rebuild skipped during bootstrap: {e}")
 
         # Import validator (this also triggers auto-validation)
         from cortex.infrastructure.startup_validator import (

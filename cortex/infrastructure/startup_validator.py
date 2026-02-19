@@ -25,8 +25,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.path_resolver import resolve_path
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.path_resolver import resolve_path
+from cortex.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 

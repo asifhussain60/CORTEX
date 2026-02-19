@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 
 
 @dataclass

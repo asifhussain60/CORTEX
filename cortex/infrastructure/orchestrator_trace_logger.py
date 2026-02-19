@@ -41,7 +41,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 
