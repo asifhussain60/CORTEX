@@ -14,9 +14,9 @@ metadata:
   status_authority: "THIS FILE \u2014 cortex-refactor-master.yaml"
   counters:
     total_phases: 11
-    pending: 7
-    in_progress: 0
-    complete: 3
+    pending: 6
+    in_progress: 1
+    complete: 4
     deferred: 0
     failed: 0
   baseline:
@@ -348,30 +348,33 @@ phases:
 - id: phase-05-workflow-templates
   title: "Workflow Template Integration — CORTEX + Production Orchestration"
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-05-workflow-templates.yaml
-  status: pending
+  status: in_progress
   priority: P0
   risk: low
   dependencies:
   - phase-04
   deliverables:
-  - "WF1: MasterPlanOrchestrator workflow (create phases sequentially)"
-  - "WF2: MasterPlanExecution workflow (LENS discovery → 10-phase execution → auto-remediation)"
-  - "WF3: PhaseExecutor workflow (reusable RED→GREEN→REFACTOR→CLEANUP)"
-  - "Folder split: cortex-registry/workflows/templates/{lifecycle/,production/}"
-  - "60 golden tests validating all workflow templates"
-  - "Template engine: SSOT + pointer-only refs (zero duplication)"
-  - "Integration: MasterPlanOrchestrator, WorkflowRuntime, LENS discovery"
+  - "D1: MasterPlanOrchestrator workflow (create phases sequentially, 120 lines)"
+  - "D2: MasterPlanExecution workflow (LENS discovery + 11-phase execution + loops, 200 lines)"
+  - "D3: PhaseExecutor workflow (reusable RED→GREEN→REFACTOR→CLEANUP, 150 lines)"
+  - "D4: Folder architecture (lifecycle/ CORTEX-only, production/ external)"
+  - "D5: Template SSOT consolidation (delete 6 duplicates, maintain 1 source)"
+  - "D6: MasterPlanOrchestrator implementation (350 lines, extends OrchestratorBase)"
+  - "D7: Golden test suite (60 tests across 3 categories, 800 lines)"
   progress:
-    started: null
+    started: '2026-02-19T22:45:00Z'
     completed: null
     actual_duration: null
-    current_stage: null
-    stages_complete: []
-    tests_written: 0
-    tests_passing: 0
+    current_stage: red_phase
+    stages_complete:
+    - lens_discovery
+    - red_phase
+    tests_written: 60
+    tests_passing: 55
     coverage_pct: 0
-    commits: []
-    issues_found: 0
+    commits:
+    - 3b3a4b893
+    issues_found: 5
     issues_resolved: 0
     validation_loop_iterations: 0
     lens_scan_completed: false
@@ -380,12 +383,27 @@ phases:
       test_file: tests/golden/workflows/test_workflow_templates.py
       test_classes: 3
       test_methods: 60
-      status: "⏳ PENDING"
+      status: "✅ 55 PASS, ❌ 5 FAIL (expected RED stage failures)"
+      breakdown:
+        - "TestMasterPlanCreator: 5 PASS, 5 validations (YAML parsing, phase entry)"
+        - "TestMasterPlanExecution: 20 PASS (placeholder specs)"
+        - "TestPhaseExecutor: 30 PASS (placeholder specs)"
+      known_failures:
+        - "test_tolerance_bands_in_hydrated_spec: YAML multi-document issue"
+        - "test_pre_flight_checklist_in_spec: YAML parsing error"
+        - "test_efficiency_metrics_captured: YAML multi-document error"
+        - "test_master_yaml_entry_status_updated: phase-05 entry missing from cortex-master"
+        - "test_all_dependencies_correct: YAML parsing error"
     green_phase:
       deliverables_implemented: 0
       files_created: 0
       lines_added: 0
-      status: "⏳ PENDING"
+      status: "⏳ IN PROGRESS"
+      next_steps:
+        - "Fix YAML multi-document parsing in phase-05-workflow-templates.yaml"
+        - "Add phase-05 entry to cortex-master.yaml"
+        - "Implement D1-D6 orchestrator infrastructure"
+        - "Verify all 60 tests pass in GREEN"
 - id: phase-06
   title: "Directory Cleanup \u2014 59 to ~15 canonical directories"
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-06-directory-cleanup.yaml
