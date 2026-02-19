@@ -579,24 +579,21 @@ execution_timeline:
       - "Display session summary"
     user_action_required: "Review metrics; approve Phase 06 next"
 
----
-
-# ============================================================================
-# PHASE INTEGRATION NOTES
-# ============================================================================
-
-# This phase must complete BEFORE phase-06 (directory-cleanup) because:
-# 1. Workflow templates are foundational infrastructure
-# 2. Directory cleanup uses PhaseExecutor workflow
-# 3. LENS discovery needs to be working before major refactoring
-# 4. SSOT template cleanup prevents future duplication in all phases
-
-# Dependencies satisfied:
-# ✅ phase-04-brain-deduplication (COMPLETE)
-# ✅ OrchestratorBase exists (from phase-01)
-# ✅ WorkflowRuntime exists (from phase-01)
-# ✅ LENS discovery module exists (from phase-04)
-
-# Estimated TOE: 5-5.5 hours
-# Risk: LOW (workflows are purely additive, no breaking changes)
-# Regression risk: 0.0 (all wrapped in golden tests)
+  # ========================================================================
+  # PHASE INTEGRATION NOTES
+  # ========================================================================
+  # This phase must complete BEFORE phase-06 (directory-cleanup) because:
+  # 1. Workflow templates are foundational infrastructure
+  # 2. Directory cleanup uses PhaseExecutor workflow
+  # 3. LENS discovery needs to be working before major refactoring
+  # 4. SSOT template cleanup prevents future duplication in all phases
+  #
+  # Dependencies satisfied:
+  # ✅ phase-04-brain-deduplication (COMPLETE)
+  # ✅ OrchestratorBase exists (from phase-01)
+  # ✅ WorkflowRuntime exists (from phase-01)
+  # ✅ LENS discovery module exists (from phase-04)
+  #
+  # Estimated TOE: 5-5.5 hours
+  # Risk: LOW (workflows are purely additive, no breaking changes)
+  # Regression risk: 0.0 (all wrapped in golden tests)

@@ -256,7 +256,11 @@ class TestMasterPlanCreator:
             with open(phase_yaml_path) as f:
                 spec = yaml.safe_load(f)
             
-            has_metrics = "efficiency_metrics" in spec
+            # Check for efficiency_metrics in phase section (or anywhere in spec)
+            has_metrics = (
+                "efficiency_metrics" in spec or  # top level
+                "efficiency_metrics" in spec.get("phase", {})  # under phase
+            )
         else:
             has_metrics = False
         
@@ -265,28 +269,31 @@ class TestMasterPlanCreator:
 
     def test_master_yaml_entry_status_updated(self):
         """
-        Test: cortex-master.yaml is updated with new phase entry and status.
+        Test: cortex-refactor-master.yaml is updated with new phase entry and status.
         
-        Requirement: phase-05 entry exists with status=active or planned.
+        Requirement: phase-05 entry exists with status=pending or in_progress.
         """
         # Arrange
-        master_yaml_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/cortex-master.yaml")
+        master_yaml_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/planning/cortex-refactor-master.yaml")
         
         # Act
         if master_yaml_path.exists():
             with open(master_yaml_path) as f:
                 master = yaml.safe_load(f)
             
-            # Look for phase-05 entry
+            # Look for phase-05 or phase-05-workflow-templates entry
             has_phase_05 = False
-            if "phases" in master.get("cortex_master", {}):
-                phases = master["cortex_master"]["phases"]
-                has_phase_05 = any(p.get("id") == "phase-05" for p in phases)
+            if "phases" in master.get("metadata", {}):
+                phases = master["metadata"]["phases"]
+                has_phase_05 = any(p.get("id") == "phase-05" or p.get("id") == "phase-05-workflow-templates" for p in phases)
+            elif isinstance(master.get("phases"), list):
+                phases = master["phases"]
+                has_phase_05 = any(p.get("id") == "phase-05" or p.get("id") == "phase-05-workflow-templates" for p in phases)
         else:
             has_phase_05 = False
         
         # Assert
-        assert has_phase_05, "cortex-master.yaml should have phase-05 entry"
+        assert has_phase_05, "cortex-refactor-master.yaml should have phase-05 or phase-05-workflow-templates entry"
 
     def test_all_dependencies_correct(self):
         """
