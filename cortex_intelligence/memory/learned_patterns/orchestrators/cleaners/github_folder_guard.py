@@ -21,7 +21,7 @@ Purpose:
         - Any *.md in agents/**/ without a DEPRECATED- prefix (active agents)
         - Any non-.md file in .github/ (scripts, yaml, py — not vacuum targets)
         - Any file under .github/prompts/reference/ (setup references)
-        - Active templates (response-format-standards.md, etc.)
+        - Active templates (cortex-response-templates.md, etc.)
 
     VACUUM_ELIGIBLE:
         File is a legitimate vacuum candidate (informational / deprecated).
@@ -94,8 +94,7 @@ _PROTECTED_AGENT_SUBFOLDERS: frozenset[str] = frozenset(
 # Template files that are explicitly active (protected).
 _PROTECTED_TEMPLATE_FILES: frozenset[str] = frozenset(
     {
-        "response-format-standards.md",
-        "response-template-blocks-modern.md",
+        "cortex-response-templates.md",
         "chat-vs-terminal-guide.md",
         "chat-vs-terminal-quick-ref.md",  # kept — companion to guide
     }

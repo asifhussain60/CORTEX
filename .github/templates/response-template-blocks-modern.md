@@ -1,6 +1,6 @@
 # 🎨 CORTEX Modern Response Template Blocks
 
-> **Version:** 2.0 | **Updated:** 2026-02-16 | **Authority:** ENH-028 + ENH-032 + CORE-049 | **VSCode Integration:** ✅ Leverages native Copilot Chat rendering | **Visual System:** Modern, consistent, knowledgeable partner personality
+> **Version:** 2.1 | **Updated:** 2026-02-19 | **Authority:** ENH-028 + ENH-032 + CORE-049 | **VSCode Integration:** ✅ Leverages native Copilot Chat rendering | **Visual System:** Modern, consistent, knowledgeable partner personality
 
 ---
 
@@ -227,10 +227,10 @@ Low (<50%):    Evidence from 1 layer
 User: "How does authentication work?"
 
 LENS Output:
-├─ L1: 42 commits to auth/* (active area, ownership clear)
-├─ L2: JWT validation in 3 modules, OAuth2 token flow
-├─ L3: "Refresh token strategy for mobile clients"
-└─ L4: Follows industry pattern, no known anti-patterns
+- L1: 42 commits to auth/* (active area, ownership clear)
+- L2: JWT validation in 3 modules, OAuth2 token flow
+- L3: "Refresh token strategy for mobile clients"
+- L4: Follows industry pattern, no known anti-patterns
 
 Confidence: 92% (all 4 layers aligned)
 Recommendation: Safe to extend — add device fingerprinting without major refactor
@@ -298,10 +298,10 @@ Think of orchestrators as **specialized teams** — each team has one job, teams
 User Request
     ↓
 MasterOrchestrator (coordinator)
-    ├─ Stage 1: InteractionOrchestrator (gather requirements + DoR)
-    ├─ Stage 2: IntentRouter (classify what user wants)
-    ├─ Stage 3: LENSSynthesis (analyze code context)
-    └─ Stage 4: Domain Handler (IMPLEMENT/ANALYZE/PLAN/etc.)
+    → Stage 1: InteractionOrchestrator (gather requirements + DoR)
+    → Stage 2: IntentRouter (classify what user wants)
+    → Stage 3: LENSSynthesis (analyze code context)
+    → Stage 4: Domain Handler (IMPLEMENT/ANALYZE/PLAN/etc.)
     ↓
 Result + Audit Trail
 ```
@@ -517,7 +517,7 @@ I'm here to make you successful. Let's build something great. 🚀
 
 - ✅ `━━━` (U+2501, 44 chars) separator lines — NOT `<hr>`
 - ✅ `[██████████]` 10-block progress bar — NOT backtick-wrapped
-- ✅ Hanging `├─` / `└─` stage tree — NOT markdown tables
+- ✅ Markdown bullet list (`- {icon} S{N}: ...`) for stage status — NOT `├─ └─` tree characters (collapse in Copilot Chat) and NOT markdown tables
 - ✅ Status icons: ✅ Complete, 🔵 In Progress, ⚪ Pending, 🔴 Failed
 - ✅ Only output during execution (no narration)
 - ❌ NO "I'll now implement..." sentences
@@ -657,7 +657,7 @@ Roles:
 Navigation:
 1️⃣ 2️⃣ 3️⃣ 4️⃣ (Numbered steps)
 → Arrow (progression)
-├─ └─ (AVOID — collapse in Copilot Chat)
+⚠️ Do NOT use ├─ └─ box-drawing tree characters (collapse in Copilot Chat — use bullet lists instead)
 ```
 
 ---
@@ -675,7 +675,7 @@ Navigation:
 
 Renders reliably everywhere. Works in Copilot Chat.
 
-**❌ AVOID — Tree Characters**
+**❌ AVOID — Tree Characters (collapse in Copilot Chat)**
 
 ```markdown
 ├─ Stage 1
@@ -684,6 +684,16 @@ Renders reliably everywhere. Works in Copilot Chat.
 ```
 
 Collapses into single line in Copilot Chat UI. Poor user experience.
+
+**✅ USE INSTEAD — Markdown Bullet Lists**
+
+```markdown
+- ✅ S1: Stage 1 (done)
+- 🔵 S2: Stage 2 (in progress)
+- ⚪ S3: Stage 3 (pending)
+```
+
+Renders correctly in all environments. Each stage on its own line.
 
 ---
 
@@ -816,7 +826,7 @@ def my_function():
 - [ ] Header shows exactly once (first response of turn)
 - [ ] Personality consistent (knowledgeable partner)
 - [ ] Visual elements use emoji system
-- [ ] Hanging `├─` / `└─` stage trees for autonomous execution
+- [ ] Markdown bullet lists (`- {icon} S{N}: ...`) for stage status in autonomous execution (NOT `├─ └─` tree characters)
 - [ ] `━━━` (U+2501) separators for autonomous execution
 - [ ] `[██████████]` progress bars (10-block, square brackets)
 - [ ] Teaching value visible

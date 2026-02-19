@@ -80,7 +80,7 @@ class ResponseFormatValidator:
     """
     Response Format Validator.
 
-    Validates responses against response-format-standards.md rules.
+    Validates responses against cortex-response-templates.md rules.
     """
 
     # Required header pattern

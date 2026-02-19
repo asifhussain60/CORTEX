@@ -26,7 +26,7 @@ class ResponseFormat:
     """
     Response format validator and formatter.
 
-    Ensures all responses follow response-format-standards.md.
+    Ensures all responses follow cortex-response-templates.md.
     """
 
     REQUIRED_HEADER_PATTERN = r"##\s*🧠\s*CORTEX"

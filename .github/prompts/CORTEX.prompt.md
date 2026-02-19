@@ -366,7 +366,7 @@ Route to appropriate orchestrator based on intent.
 - **Universal Orchestration:** `.github/agents/orchestration/cortex-universal-orchestration.md`
 - **Architect Prompt:** `.github/prompts/cortex-architect-v9-streamlined.prompt.md`
 - **Execution Modes:** `.github/prompts/reference/execution-modes.md`
-- **Response Templates:** `.github/templates/response-format-standards.md`
+- **Response Templates:** `.github/templates/cortex-response-templates.md`
 - **MCP Integration:** `.github/prompts/reference/mcp-integration-guide.md`
 
 ### Governance

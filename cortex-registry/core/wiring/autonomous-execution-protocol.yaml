@@ -90,7 +90,7 @@ silent_mode_phases:
 progress_reporting:
   
   visual_format:
-    ssot: ".github/templates/response-format-standards.md § Silent Autonomous Mode — Golden Template"
+    ssot: ".github/templates/cortex-response-templates.md § Silent Autonomous Mode — Golden Template"
     note: "All orchestrators use the single golden template defined in the SSOT file. Do NOT duplicate template here."
     
     symbols:

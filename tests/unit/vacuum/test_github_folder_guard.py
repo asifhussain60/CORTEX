@@ -148,11 +148,8 @@ class TestPromptReferenceDocsProtected:
 class TestActiveTemplatesProtected:
     """Active template .md files are protected."""
 
-    def test_response_format_standards_is_protected(self, guard):
-        assert guard.is_protected(p(".github/templates/response-format-standards.md"))
-
-    def test_response_template_blocks_is_protected(self, guard):
-        assert guard.is_protected(p(".github/templates/response-template-blocks-modern.md"))
+    def test_cortex_response_templates_is_protected(self, guard):
+        assert guard.is_protected(p(".github/templates/cortex-response-templates.md"))
 
     def test_chat_vs_terminal_guide_is_protected(self, guard):
         assert guard.is_protected(p(".github/templates/chat-vs-terminal-guide.md"))

@@ -122,7 +122,7 @@ PROMPT_CLEANUP_TASKS: List[CleanupTask] = [
         3. Calculate similarity scores (SequenceMatcher)
         4. Flag duplicates (>80% similarity, >200 chars)
         """,
-        auto_fix="Extract to response-format-standards.md and reference from other prompts (DRY principle)",
+        auto_fix="Extract to cortex-response-templates.md and reference from other prompts (DRY principle)",
         priority=CleanupPriority.P3_LOW,
         frequency="weekly"
     ),

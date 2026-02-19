@@ -20,7 +20,7 @@ class TestResponseFormatCIG:
 
     def test_template_f_documented_in_standards(self):
         """AC-CIG-S4-001: Template F documented in response-format-standards.md."""
-        standards_path = Path(".github/prompts/response-format-standards.md")
+        standards_path = Path(".github/templates/cortex-response-templates.md")
         assert standards_path.exists(), "Response format standards file missing"
         
         content = standards_path.read_text()
@@ -32,7 +32,7 @@ class TestResponseFormatCIG:
     
     def test_table_vs_conversational_comparison_documented(self):
         """AC-CIG-S4-002: Table vs conversational comparison table exists."""
-        standards_path = Path(".github/prompts/response-format-standards.md")
+        standards_path = Path(".github/templates/cortex-response-templates.md")
         content = standards_path.read_text()
         
         # Check comparison table
@@ -42,7 +42,7 @@ class TestResponseFormatCIG:
     
     def test_backward_compatibility_documented(self):
         """AC-CIG-S4-003: Backward compatibility section exists."""
-        standards_path = Path(".github/prompts/response-format-standards.md")
+        standards_path = Path(".github/templates/cortex-response-templates.md")
         content = standards_path.read_text()
         
         # Check backward compatibility notes
@@ -52,7 +52,7 @@ class TestResponseFormatCIG:
     
     def test_template_selection_matrix_includes_classify(self):
         """Test Template Selection Matrix includes CLASSIFY entry."""
-        standards_path = Path(".github/prompts/response-format-standards.md")
+        standards_path = Path(".github/templates/cortex-response-templates.md")
         content = standards_path.read_text()
         
         # Check matrix updated
@@ -61,7 +61,7 @@ class TestResponseFormatCIG:
     
     def test_ac_markers_referenced(self):
         """Test AC markers from Stage 2 are referenced."""
-        standards_path = Path(".github/prompts/response-format-standards.md")
+        standards_path = Path(".github/templates/cortex-response-templates.md")
         content = standards_path.read_text()
         
         # Check AC markers referenced (at least one)

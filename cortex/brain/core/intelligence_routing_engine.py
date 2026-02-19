@@ -127,31 +127,31 @@ class IntelligenceRoutingEngine:
     # Intent → Secondary prompts/agents for context
     INTENT_SECONDARY_MAP = {
         IntentType.IMPLEMENT: {
-            "prompts": ["response-format-standards.md"],
+            "prompts": ["cortex-response-templates.md"],
             "agents": ["cortex-holistic-validator.md"],
         },
         IntentType.FIX: {
-            "prompts": ["response-format-standards.md"],
+            "prompts": ["cortex-response-templates.md"],
             "agents": ["cortex-debugger.md"],
         },
         IntentType.REFACTOR: {
-            "prompts": ["response-format-standards.md"],
+            "prompts": ["cortex-response-templates.md"],
             "agents": ["cortex-holistic-validator.md"],
         },
         IntentType.ANALYZE: {
-            "prompts": ["response-format-standards.md"],
+            "prompts": ["cortex-response-templates.md"],
             "agents": ["cortex-auditor.md"],
         },
         IntentType.AUDIT: {
-            "prompts": ["response-format-standards.md"],
+            "prompts": ["cortex-response-templates.md"],
             "agents": ["cortex-auditor.md"],
         },
         IntentType.DESIGN: {
-            "prompts": ["response-format-standards.md"],
+            "prompts": ["cortex-response-templates.md"],
             "agents": ["cortex-designer.md"],
         },
         IntentType.PLAN: {
-            "prompts": ["response-format-standards.md"],
+            "prompts": ["cortex-response-templates.md"],
             "agents": ["cortex-interactive.md"],
         },
     }

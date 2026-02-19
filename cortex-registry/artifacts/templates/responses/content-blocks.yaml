@@ -522,15 +522,15 @@ assembly_rules:
   autonomous_execution:
     blocks: []  # Uses Silent Execution Template instead
     use_case: "User says 'proceed', 'implement', 'yes'"
-    reference: ".github/prompts/SILENT-EXECUTION-RESPONSE-TEMPLATE.md"
+    reference: ".github/templates/cortex-response-templates.md § Silent Autonomous Mode — Golden Template"
   
   design_session:
-    blocks: []  # Uses Template B from response-format-standards.md
+    blocks: []  # Uses 5-Section Golden Format from cortex-response-templates.md
     optional_append: ["orchestrators"]  # Can add orchestrators if relevant
     use_case: "User requests design or planning"
   
   completion_report:
-    blocks: []  # Uses Template D from response-format-standards.md
+    blocks: []  # Uses Completion Confirmation from cortex-response-templates.md
     optional_append: ["next_steps"]
     use_case: "Phase completion"
 

@@ -17,7 +17,7 @@ completion_report: minimal
 
 ### Progress Bar Format
 
-**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
+**SSOT:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
 
 All orchestrators (MasterOrchestrator, PlanningOrchestrator, VacuumOrchestrator, TDDOrchestrator, etc.) use the single golden template defined there. Do NOT define template format here.
 
@@ -59,7 +59,7 @@ All orchestrators (MasterOrchestrator, PlanningOrchestrator, VacuumOrchestrator,
 | Two-Phase Approval | cortex-architect.md | Monthly | When to ask, when to execute silently |
 | Behavioral Patterns | AGENT-INDEX.md | Bi-weekly | What to do on test fail, token budget hit |
 | Validation Sequences | cortex-holistic-validator.md | Monthly | Registry checks, dependency analysis |
-| Response Formats | response-format-standards.md | Bi-weekly | Visual templates, icon usage |
+| Response Formats | cortex-response-templates.md | Bi-weekly | Visual templates, icon usage |
 | Mode Detection | cortex-architect.md | Quarterly | Intent classification, agent routing |
 
 ### Tier 3: Cross-References (Consistency)
@@ -85,7 +85,7 @@ All orchestrators (MasterOrchestrator, PlanningOrchestrator, VacuumOrchestrator,
 - ✅ cortex-holistic-validator.md — Owns Challenge Gate, Validation Sequences
 - ✅ cortex-architect.md — Owns Two-Phase Workflow, Mode Detection
 - ✅ AGENT-INDEX.md — Owns Protocol Definitions, Loading Strategy
-- ⚠️ response-format-standards.md — Owns Response Formats (move duplicates)
+- ✅ cortex-response-templates.md — Owns Response Formats (single consolidated SSOT)
 - ⚠️ cortex-architect.prompt.md — Owns Challenge Gate details (consolidate with agent)
 
 ---

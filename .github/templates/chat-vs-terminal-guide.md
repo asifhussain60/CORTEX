@@ -11,11 +11,11 @@
 
 ## ✅ CORRECT: Display in Chat Session
 
-### Progress Bars & Stage Trees
+### Progress Bars & Stage Lists
 
-**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
+**SSOT:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
 
-**Output the golden template directly in the chat markdown response** — NOT inside a fenced code block, NOT via `run_in_terminal`. The `━━━` separators, `[██████████]` progress bar, and `├─` hanging stage tree must render as live markdown characters in the chat panel.
+**Output the golden template directly in the chat markdown response** — NOT inside a fenced code block, NOT via `run_in_terminal`. The `━━━` separators, `[██████████]` progress bar, and stage bullet list must render as live markdown characters in the chat panel.
 
 **Implementation:**
 - Write the template content directly in your markdown response (no surrounding backticks)
@@ -103,9 +103,9 @@ run_in_terminal(
 
 ---
 
-## 🎨 Progress Bar & Stage Tree Implementation
+## 🎨 Progress Bar & Stage List Implementation
 
-**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
+**SSOT:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
 
 > ⚠️ **Do NOT define a progress template here.** The ONLY correct format is the golden template in the SSOT above. Output it **directly** in the chat markdown response — never inside a fenced code block, never via `run_in_terminal`.
 
@@ -123,7 +123,7 @@ run_in_terminal(
 ### Key Points
 
 1. **Header once** at top (per prompt standards)
-2. **Progress in chat** using the SSOT golden template (`━━━` + bar + `├─` tree) written directly as markdown
+2. **Progress in chat** using the SSOT golden template (`━━━` + bar + bullet list) written directly as markdown
 3. **Commands in terminal** using `run_in_terminal`
 4. **Results in chat** using markdown tables
 5. **Never wrap** the golden template in a fenced code block — that makes it render as preformatted text
@@ -134,7 +134,7 @@ run_in_terminal(
 
 | Content Type | Location | Format |
 |--------------|----------|--------|
-| Progress bar + stage tree | Chat | SSOT golden template (live markdown) |
+| Progress bar + stage list | Chat | SSOT golden template (live markdown) |
 | Status update | Chat | Markdown text |
 | Stage completion | Chat | SSOT completion template (live markdown) |
 | Test command | Terminal | `run_in_terminal` |
@@ -163,7 +163,7 @@ run_in_terminal(command='cat << "EOF"\n`████░░░░░░` 40% Work
 ...
 \`\`\`
 ```
-**Fix:** Output the `━━━` separators, progress bar, and `├─` tree **directly** in your markdown — no surrounding backticks.
+**Fix:** Output the `━━━` separators, progress bar, and stage bullet list **directly** in your markdown — no surrounding backticks.
 
 ### Mistake 3: Using `<hr>` + backtick bars instead of the SSOT format
 ```
@@ -188,4 +188,4 @@ run_in_terminal(command='cat << "EOF"\n`████░░░░░░` 40% Work
 
 **Golden Rule:** If the user needs to **see it**, put it in **chat as live markdown**. If it's a **command to run**, use `run_in_terminal`.
 
-**Template Reference:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
+**Template Reference:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template

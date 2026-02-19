@@ -228,15 +228,15 @@ class TestPromptLoading:
             # Gracefully handle if file doesn't exist in test environment
             pytest.skip("CORTEX.prompt.md not found")
     
-    def test_load_response_format_standards(self, integration):
-        """Test loading response-format-standards.md."""
-        standards_path = Path(".github/prompts/response-format-standards.md")
+    def test_load_cortex_response_templates(self, integration):
+        """Test loading cortex-response-templates.md."""
+        standards_path = Path(".github/templates/cortex-response-templates.md")
         
         if standards_path.exists():
-            standards = integration.load_prompt("response-format-standards.md")
+            standards = integration.load_prompt("cortex-response-templates.md")
             assert standards is not None
         else:
-            pytest.skip("response-format-standards.md not found")
+            pytest.skip("cortex-response-templates.md not found")
 
 
 class TestMarkdownVacuum:

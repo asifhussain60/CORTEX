@@ -44,7 +44,7 @@ def cortex_prompt_path() -> Path:
 @pytest.fixture
 def response_format_path() -> Path:
     """Path to response format standards."""
-    return Path(__file__).parent.parent / ".github" / "prompts" / "response-format-standards.md"
+    return Path(__file__).parent.parent / ".github" / "templates" / "cortex-response-templates.md"
 
 
 # ============================================================================
@@ -266,7 +266,7 @@ def test_no_file_paths_in_cortex_prompt(cortex_prompt_path: Path):
 
 def test_no_file_paths_in_response_format(response_format_path: Path):
     """
-    response-format-standards.md MUST NOT contain file paths.
+    response-format-standards.md (now cortex-response-templates.md) MUST NOT contain file paths.
     """
     content = response_format_path.read_text()
     paths = extract_backticked_paths(content)
@@ -280,7 +280,7 @@ def test_no_file_paths_in_response_format(response_format_path: Path):
             violations.append(f"Line {line_num}: `{path}`")
     
     assert not violations, (
-        f"Found {len(violations)} file path(s) in response-format-standards.md:\n" +
+        f"Found {len(violations)} file path(s) in cortex-response-templates.md:\n" +
         "\n".join(violations)
     )
 

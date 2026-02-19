@@ -22,7 +22,7 @@ Integration Points:
 Authority:
     - business-wisdom-wiring.md (Stage 2)
     - phase-06-business-wisdom-display-enhancement.yaml
-    - response-format-standards.md (Business Wisdom Panel Template)
+    - cortex-response-templates.md (Business Wisdom Panel Template)
 
 Governance:
     - CORE-011: Type hints 100%

@@ -6,7 +6,7 @@
 
 ## ✅ DO: Display in Chat Session
 
-**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
+**SSOT:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
 
 Output the golden template **directly as live markdown** in your chat response. Do NOT wrap it in a fenced code block — that converts it to preformatted text and breaks rendering.
 
@@ -52,29 +52,29 @@ run_in_terminal(
 
 ## 📋 Decision Tree
 
-```
-Is this user-facing feedback?
-├─ YES → Put in CHAT (markdown)
-│   ├─ Progress bar
-│   ├─ Status update
-│   ├─ Results table
-│   └─ Completion summary
-│
-└─ NO → Is this a command?
-    └─ YES → Run in TERMINAL
-        ├─ pytest
-        ├─ git
-        ├─ mv/cp/mkdir
-        └─ Long-running builds
-```
+**Is this user-facing feedback?**
+
+- **YES** → Put in **CHAT** (markdown)
+  - Progress bar
+  - Status update
+  - Results table
+  - Completion summary
+
+- **NO** → Is this a command?
+  - **YES** → Run in **TERMINAL**
+    - pytest
+    - git
+    - mv/cp/mkdir
+    - Long-running builds
 
 ---
 
 ## 🔧 Template Reference
 
-**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
+**SSOT:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
 
 > Output the golden template **directly as live markdown** — never inside a fenced code block.
+> Stage status uses bullet lists (`- ✅ S1: ...`), NOT `├─ └─` tree characters.
 > Then run actual commands via `run_in_terminal`.
 
 ---

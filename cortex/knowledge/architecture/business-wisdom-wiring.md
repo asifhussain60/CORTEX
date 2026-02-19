@@ -168,7 +168,7 @@ def format_dor_display(self, intent_reflection: Dict[str, Any]) -> str:
 
 ### File to Create/Update
 
-**Location:** `.github/prompts/response-format-standards.md`
+**Location:** `.github/templates/cortex-response-templates.md`
 
 **Template to Add:**
 
@@ -266,7 +266,7 @@ print(rule.get("book_reference"))    # "Test-Driven Development: By Example by K
 - Estimated effort: 4 hours
 
 **5. Document Stage 3 (response format standards):**
-- Create/update `.github/prompts/response-format-standards.md`
+- Create/update `.github/templates/cortex-response-templates.md`
 - Add business wisdom panel template
 - Estimated effort: 1 hour
 
@@ -331,7 +331,7 @@ Governance Rules: CORE-008, CORE-011, CORE-012
 - **Location TBD:** DoR markdown display logic (needs discovery)
 
 ### To Create (Stage 3)
-- `.github/prompts/response-format-standards.md` (business wisdom panel template)
+- `.github/templates/cortex-response-templates.md` (business wisdom panel template)
 
 ---
 

@@ -564,7 +564,7 @@ class CortexLoad(ConsolidatedTool):
                     "critical": "🔴",
                     "planned": "⚪",
                 },
-                "source": ".github/prompts/response-format-standards.md",
+                "source": ".github/templates/cortex-response-templates.md",
             },
             metadata={"operation": "format"},
         )

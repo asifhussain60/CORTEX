@@ -26,7 +26,7 @@ workflow:
   orchestrator: CortexMasterPlanOrchestrator
   mcp_tool: cortex_master_plan
   execution_mode: "autonomous"
-  visual_feedback: "SSOT: .github/templates/response-format-standards.md § SILENT AUTONOMOUS MODE"
+  visual_feedback: "SSOT: .github/templates/cortex-response-templates.md § SILENT AUTONOMOUS MODE"
 
   # ---------------------------------------------------------------------------
   # Input Schema
@@ -196,10 +196,10 @@ workflow:
   # Visual Feedback
   # ---------------------------------------------------------------------------
   visual_feedback_format:
-    ssot: ".github/templates/response-format-standards.md § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE"
+    ssot: ".github/templates/cortex-response-templates.md § SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE"
     description: >
       All progress displayed using the golden template:
-      ━━━ separators + [████] progress bar + ├─/└─ hanging stage tree.
+      ━━━ separators + [████] progress bar + bullet list stage status.
       Status icons: ✅ completed | 🔵 in-progress | ⚪ pending | 🔴 failed.
       Output displayed in Copilot Chat Session ONLY (never in terminal).
 

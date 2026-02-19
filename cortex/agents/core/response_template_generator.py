@@ -59,7 +59,7 @@ from enum import Enum
 from typing import Optional
 
 
-# SSOT Constants (response-format-standards.md)
+# SSOT Constants (cortex-response-templates.md)
 BOX_SEPARATOR = "-" * 40  # Exactly 40 chars per SSOT
 BOX_WIDTH = 40
 

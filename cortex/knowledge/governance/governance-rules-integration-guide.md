@@ -176,7 +176,7 @@ def assemble_response(self, context: Dict[str, Any]) -> str:
 
 ### 3. Response Template System (ENHANCE - ENH-091)
 
-**File:** `.github/prompts/response-format-standards.md`
+**File:** `.github/templates/cortex-response-templates.md`
 
 **Template:** "BLOCK-GOVERNANCE-RULES-WITH-REASON"
 
@@ -422,7 +422,7 @@ class RuleExposureTracker:
 
 ### Documentation
 - `.github/prompts/business-wisdom-wiring.md` — Integration guide
-- `.github/prompts/response-format-standards.md` — Template standards
+- `.github/templates/cortex-response-templates.md` — Template standards
 - `phase-06-business-wisdom-display-enhancement.yaml` — Enhancement spec
 
 ---

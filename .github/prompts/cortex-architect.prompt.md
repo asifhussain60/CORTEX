@@ -5,7 +5,7 @@
 **🔗 Full Documentation:**
 - **Orchestration:** `.github/agents/orchestration/cortex-universal-orchestration.md`
 - **Execution Modes:** `.github/prompts/reference/execution-modes.md`
-- **Response Templates:** `.github/templates/response-format-standards.md`
+- **Response Templates:** `.github/templates/cortex-response-templates.md`
 - **MCP Setup:** `.github/prompts/reference/mcp-integration-guide.md`
 - **Governance Rules:** `cortex-registry/core/`
 
@@ -31,13 +31,13 @@
 ## 🤖 Silent Autonomous Execution (P0)
 
 **Authority:** CORE-049 | **Default:** ENABLED
-**Template SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
+**Template SSOT:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
 
 ### Trigger Words
 - "proceed" | "implement" | "continue" | "yes" (after DoR) | "do it"
 
 ### Behavior
-- ✅ Use ONLY the golden template (progress bar + hanging stages with icons)
+- ✅ Use ONLY the golden template (progress bar + stage bullet list with icons)
 - ✅ Display in **Chat Session** (never terminal)
 - ❌ NO narration or confirmations
 - ❌ NEVER create .md/.txt report files (CORE-002)
@@ -46,7 +46,7 @@
 ### Critical Rule: Chat vs Terminal Output
 **Reference:** `.github/templates/chat-vs-terminal-guide.md`
 
-**In Chat Session:** Progress bars, hanging stage trees, status updates, metrics
+**In Chat Session:** Progress bars, stage bullet lists, status updates, metrics
 **In Terminal (`run_in_terminal`):** pytest, git, mv/cp, builds (actual work)
 **Golden Rule:** If user needs to **see it**, put in **chat**. If it's **command output**, run in **terminal**.
 
@@ -158,7 +158,7 @@
 
 **Purpose:** Convert verbose requests → CORTEX-efficient prompts
 
-**Output Format:** See `.github/templates/response-format-standards.md` § Rephrase Template
+**Output Format:** See `.github/templates/cortex-response-templates.md` § Rephrase Template
 
 **Constraints:**
 - ✅ Single paragraph output (copy-pasteable)
@@ -175,7 +175,7 @@
 ```markdown
 ## 🏗️ RESPONSE FORMAT (MANDATORY)
 
-**SSOT:** `.github/templates/response-format-standards.md`
+**SSOT:** `.github/templates/cortex-response-templates.md`
 
 ### User-Facing Responses
 All non-autonomous responses use the **5-Section Golden Format** (§ User Response Template — Golden Format):
@@ -222,7 +222,7 @@ All non-autonomous responses use the **5-Section Golden Format** (§ User Respon
 - ❌ NO vague `proceed` bullets — name exact file, function, or orchestrator per bullet
 
 ### Autonomous Execution
-**Reference:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
+**Reference:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
 
 ---
 
@@ -305,11 +305,11 @@ If approaching limit:
 
 ## 📊 RESPONSE TEMPLATES
 
-**Authority:** `.github/templates/response-format-standards.md`
+**Authority:** `.github/templates/cortex-response-templates.md`
 
 ### Two Response Templates (ONLY)
 1. **5-Section Golden Format** — ALL non-autonomous responses (§ User Response Template — Golden Format)
-2. **Silent Autonomous Execution** — IMPLEMENT/FIX/REFACTOR post-approval (§ Silent Autonomous Mode — Golden Template)
+2. **Silent Autonomous Execution** — IMPLEMENT/FIX/REFACTOR post-approval (§ Silent Autonomous Mode — Golden Template, uses bullet list stages)
 
 **DO NOT duplicate templates here** — Load from reference doc
 
@@ -317,9 +317,9 @@ If approaching limit:
 
 ## 🎨 ASCII PROGRESS BAR FORMAT
 
-**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
+**SSOT:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
 
-All autonomous execution output uses the single golden template (progress bar + hanging stages with ✅/🔵/⚪/🔴 icons). Do NOT define format here — load from SSOT.
+All autonomous execution output uses the single golden template (progress bar + stage bullet list with ✅/🔵/⚪/🔴 icons). Do NOT define format here — load from SSOT.
 
 ---
 
@@ -417,7 +417,7 @@ cortex_tools_catalog
 ### Core References
 - **Universal Orchestration:** `.github/agents/orchestration/cortex-universal-orchestration.md`
 - **Execution Modes:** `.github/prompts/reference/execution-modes.md`
-- **Response Templates:** `.github/templates/response-format-standards.md`
+- **Response Templates:** `.github/templates/cortex-response-templates.md`
 - **MCP Integration:** `.github/prompts/reference/mcp-integration-guide.md`
 
 ### Governance
