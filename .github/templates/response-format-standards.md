@@ -55,6 +55,11 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 Every non-autonomous response MUST follow this H2 structure:
 
 ```markdown
+## {icon} CORTEX {mode}
+**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+
+---
+
 ## 📋 Summary
 
 {1-2 sentences. State the request and the bottom-line answer immediately.}
@@ -184,18 +189,21 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 
 ### Response Header (Simplified)
 
-**ONE line, ONE time, top of response:**
+**ONE header block, ONE time, top of every response:**
 
 ```markdown
 ## {icon} CORTEX {mode}
+**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+
+---
 ```
 
-**Icons by mode:** 🔧 PRE-FLIGHT | 🔍 AUDIT/QUERY | 📚 DIGEST | 📋 PLAN | 🎨 DESIGN | ⚡ IMPLEMENT
+**Icons by mode:** 🔧 PRE-FLIGHT | 🔍 AUDIT/QUERY | 📚 DIGEST | 📋 PLAN | 🎨 DESIGN | ⚡ IMPLEMENT | 📝 LIST
 
 **Rules:**
 - ✅ Appears ONCE at the very top (never repeated)
+- ✅ Author + Orchestrator line immediately below the H2 header
 - ✅ Followed by `---` separator
-- ❌ NO author/orchestrator line in user-facing responses (prompt-internal only)
 - ❌ NO mid-response headers
 
 ---
@@ -750,6 +758,7 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 
 | User Intent | Mode Header | Sections Used | Density |
 |-------------|-------------|---------------|---------|
+| **LIST/SUMMARY** | `📝 CORTEX LIST` | Summary + Analysis (tabular/list body) | Concise |
 | **DIGEST** | `📚 CORTEX DIGEST` | All 5 sections | Medium |
 | **DESIGN/PLAN** | `🎨 CORTEX DESIGN` / `📋 CORTEX PLAN` | All 5 sections + H3 alternatives | Full |
 | **QUERY** | `🔍 CORTEX QUERY` | All 5 sections (simple density) | Simple-Medium |
@@ -759,6 +768,12 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 | **COMPLETION** | Inline summary | Summary + deliverables + metrics | Simple |
 
 ### Mode-Specific H3 Extensions
+
+**LIST/SUMMARY mode** — streamlined 2-section format:
+- **Summary** replaces the standard 5-section body
+- **Analysis** contains the list/table/numbered inventory — the deliverable itself
+- Sections 3-5 (Recommendation, Benefits & Risks, Next Steps) are **omitted**
+- Confidence footer still appears
 
 **DIGEST mode** — add under Analysis:
 - `### Concern Resolution` — table mapping concerns → solutions → status
@@ -772,6 +787,60 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 
 **QUERY mode** — keep simple:
 - Skip H3 sub-sections unless question requires deep analysis
+
+### LIST/SUMMARY Mode (Concise Response Template)
+
+**Trigger:** "list", "show", "summarize", "summary", "concise", "inventory", "what do we have"
+
+**Purpose:** Deliver a direct, scannable answer — table, bullets, or numbered list — with zero analysis overhead.
+
+**Template:**
+
+```markdown
+## 📝 CORTEX LIST
+**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+
+---
+
+## 📋 Summary
+
+{1 sentence restating the request and the count/scope of results.}
+
+---
+
+## 🔍 Analysis
+
+{Tabular, bulleted, or numbered list — format auto-selected:}
+
+| # | {Column A} | {Column B} | {Column C} |
+|---|------------|------------|------------|
+| 1 | {item} | {detail} | {status} |
+| 2 | {item} | {detail} | {status} |
+
+{— OR for simpler lists —}
+
+1. **{Item}** — {description}
+2. **{Item}** — {description}
+3. **{Item}** — {description}
+
+---
+
+> **Confidence:** {High · Medium · Low} · Based on {evidence summary}
+```
+
+**Format Selection Rules:**
+
+| Data Shape | Render As | Example |
+|------------|-----------|---------|
+| Structured with ≥2 attributes | Markdown table | Templates, files, rules |
+| Sequential or prioritized | Numbered list | Steps, phases, priorities |
+| Flat enumeration | Bulleted list | Features, capabilities |
+| Grouped by category | H3 sub-sections + bullets | Mixed inventories |
+
+**Density Rules:**
+- ≤20 items: show inline
+- 21-50 items: group by category with H3 headers
+- 50+ items: show top 20, state total, offer `proceed` for full list
 
 ### CONCISE DECISION Mode
 

@@ -144,7 +144,8 @@
 | AUDIT | 🔍 | `/audit` | AuditCoordinator |
 | META-AUDIT | 🔬 | `/meta-audit` | MetaAuditCoordinator |
 | DIGEST | 📚 | "summarize" | DigestCoordinator |
-| QUERY | 🔍 | "list", "show" | QueryCoordinator |
+| QUERY | 🔍 | "explain", "how" | QueryCoordinator |
+| LIST | 📝 | "list", "show", "concise" | QueryCoordinator |
 | PLAN | 📋 | "create plan" | PlanningCoordinator |
 | DESIGN | 🎨 | "architect" | DesignCoordinator |
 | IMPLEMENT | ⚡ | "build", "fix" | TDDOrchestrator |
@@ -181,6 +182,7 @@ All non-autonomous responses use the **5-Section Golden Format** (§ USER RESPON
 
 ```markdown
 ## {icon} CORTEX {mode}
+**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
 
 ---
 
@@ -200,13 +202,13 @@ All non-autonomous responses use the **5-Section Golden Format** (§ USER RESPON
 {Immediate numbered + Later bullets}
 ```
 
-**Icons by mode:** 🔧 PRE-FLIGHT | 🔍 AUDIT/QUERY | 📚 DIGEST | 📋 PLAN | 🎨 DESIGN | ⚡ IMPLEMENT
+**Icons by mode:** 🔧 PRE-FLIGHT | 🔍 AUDIT/QUERY | 📚 DIGEST | 📋 PLAN | 🎨 DESIGN | ⚡ IMPLEMENT | 📝 LIST
 
 ### Critical Rules
 - ✅ Header appears ONCE at top (never repeated mid-response)
+- ✅ Author + Orchestrator line immediately below H2 header
 - ✅ ALL output inline in Copilot Chat (CORE-002 — never create .md/.txt files)
 - ✅ ≤60 second read time — answer first, tables for data
-- ❌ NO author/orchestrator line in user-facing responses
 - ❌ NO tool usage narration ("I'll now search...", "Let me check...")
 
 ### Autonomous Execution

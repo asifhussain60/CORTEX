@@ -34,7 +34,7 @@ templates:
       - "deliverables"
     
     structure:
-      header: "## {icon} CORTEX {mode}\n\n---"
+      header: "## {icon} CORTEX {mode}\n**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅\n\n---"
       separator_open: "<hr>\n"
       title: "📋 **{phase_name} {stage_name}: {title}**\n"
       progress_bar: "`{'█' * progress_filled}{'░' * progress_remaining}` {progress_percent}% {status_text}\n"
@@ -184,22 +184,43 @@ templates:
   # LIST RESPONSE (Concise tabular/numbered responses)
   # --------------------------------------------------------------------------
   list_response:
-    intent: ["LIST", "QUERY"]
-    format: "table_or_numbered_list"
-    max_items: 20
+    intent: ["LIST", "SUMMARY", "CONCISE"]
+    format: "2-section (Summary + Analysis only)"
+    icon: "📝"
+    mode_label: "CORTEX LIST"
+    trigger_words: ["list", "show", "summary", "summarize", "concise", "brief"]
     required_fields:
       - "list_items"
       - "category"
     
     structure:
-      table_format: "| # | {column_headers} |\n|---|{column_separators}|\n{rows}"
-      numbered_format: "{num}. **{item_name}** — {description}"
+      header: "## 📝 CORTEX LIST\n**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅\n\n---"
+      section_1: "### Summary\n{1-2 sentence answer}"
+      section_2: "### 🔍 Analysis\n{table_or_list_body}"
+      footer: "---\n**Confidence:** {confidence} | **Source:** {source}\n\n**Action required:** Type `proceed` to act, or ask a follow-up."
+    
+    format_selection:
+      table: "structured/comparative data with ≥2 attributes"
+      numbered: "sequential/ranked items"
+      bulleted: "unordered items, no ranking"
+      grouped: "items with natural categories"
+    
+    density_rules:
+      inline: "≤20 items — render all inline"
+      grouped: "21-50 items — group by category with counts"
+      paginated: "50+ items — show top 20 with 'Type next for more'"
+    
+    omitted_sections:
+      - "Recommendation (section 3)"
+      - "Benefits & Risks (section 4)"
+      - "Next Steps (section 5)"
     
     rules:
       - "Prefer tables for structured data"
       - "Use numbered lists for sequential items"
       - "Keep descriptions concise (≤ 100 chars)"
       - "Include totals at bottom"
+      - "Omit sections 3-5 for conciseness"
 
 # ============================================================================
 # RENDERING RULES (VS Code Copilot Chat Compatibility)
