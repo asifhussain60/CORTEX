@@ -200,3 +200,21 @@ class CoherenceValidator:
             ready_to_implement=ready,
             details=details,
         ).to_dict()
+
+
+# ---------------------------------------------------------------------------
+# Phase 50 GAP-007: canonical alias
+# CORE-035 — single name per concept; domain/ validates Python↔JS cross-layer
+# coherence (distinct from coherence/ which validates post-edit file structure).
+# Expose a semantically-clear name while preserving the original for backward compat.
+# ---------------------------------------------------------------------------
+CrossLayerCoherenceValidator = CoherenceValidator
+"""Alias for CoherenceValidator that makes the Python↔JS scope explicit.
+
+Use ``CrossLayerCoherenceValidator`` in new code for clarity.
+``CoherenceValidator`` remains available for backward compatibility.
+
+AC: GAP-007 | Phase 50 | CORE-035
+"""
+
+__all__ = ["CoherenceValidator", "CrossLayerCoherenceValidator"]

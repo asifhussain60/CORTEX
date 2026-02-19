@@ -207,6 +207,15 @@ except ImportError:
     # Fallback if module not accessible
     PlanOrchestrator = None
 
+# AC-PHASE-50-001: Import CortexMasterPlanOrchestrator for canonical phase lifecycle
+# Owns phase numbering, cortex-master.yaml sync, create/load workflow templates
+try:
+    from cortex.orchestrators.core.master_plan_orchestrator import (
+        CortexMasterPlanOrchestrator,
+    )
+except ImportError:
+    CortexMasterPlanOrchestrator = None  # type: ignore[assignment,misc]
+
 # AC-PHASE-34B-WEEK-3-INC-7: Import TechIntelligenceOrchestrator for proactive tech stack intelligence
 # Provides readiness scoring, ecosystem scanning, knowledge synthesis, learning triggers
 # Priority 82 (high), supports IMPLEMENT intent pre-flight checks
@@ -769,6 +778,37 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                 operation="PLAN_ORCHESTRATOR_INIT",
                 success=False,
                 details={"error": f"Failed to initialize PlanOrchestrator: {str(e)}"}
+            )
+
+        # AC-PHASE-50-001: Initialize CortexMasterPlanOrchestrator for canonical phase lifecycle
+        # Owns phase numbering, cortex-master.yaml sync, create/next_sequence/load_template ops
+        # Routing: any operation whose name starts with "plan:" is delegated here
+        self.master_plan_orchestrator: Optional['CortexMasterPlanOrchestrator'] = None
+        try:
+            if CortexMasterPlanOrchestrator is not None:
+                self.master_plan_orchestrator = CortexMasterPlanOrchestrator()
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-50-001",
+                    operation="MASTER_PLAN_ORCHESTRATOR_INIT",
+                    success=True,
+                    details={
+                        "status": "CortexMasterPlanOrchestrator initialized",
+                        "routing": "plan:create | plan:sync | plan:next_sequence | plan:load_template",
+                    }
+                )
+            else:
+                self.logger.log_operation_complete(
+                    ac_id="AC-PHASE-50-001",
+                    operation="MASTER_PLAN_ORCHESTRATOR_INIT",
+                    success=False,
+                    details={"error": "CortexMasterPlanOrchestrator module not available"}
+                )
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE-50-001",
+                operation="MASTER_PLAN_ORCHESTRATOR_INIT",
+                success=False,
+                details={"error": f"Failed to initialize CortexMasterPlanOrchestrator: {str(e)}"}
             )
 
         # AC-PHASE-90-STAGE-4-001: Initialize ContextAwareSynthesisGateway for unified context synthesis
@@ -2085,11 +2125,36 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
         """
         try:
             # ═══════════════════════════════════════════════════════════════════════
+            # AC-PHASE-50-001: PLAN INTENT FAST-PATH
+            # Operations prefixed "plan:" are routed directly to
+            # CortexMasterPlanOrchestrator — bypassing the full 4-stage pipeline.
+            # Supported: plan:create | plan:sync | plan:next_sequence | plan:load_template
+            # ═══════════════════════════════════════════════════════════════════════
+            if operation_name.startswith("plan:") and self.master_plan_orchestrator is not None:
+                plan_action = operation_name[len("plan:"):]
+                mp = self.master_plan_orchestrator
+
+                if plan_action == "create":
+                    result = mp.create_phase(**parameters)
+                elif plan_action == "sync":
+                    result = mp.sync_phase_folders()
+                elif plan_action == "next_sequence":
+                    result = mp.next_sequence_number()
+                elif plan_action == "load_template":
+                    template_name = parameters.get("template_name", "")
+                    result = mp.load_workflow_template(template_name)
+                else:
+                    return Err(f"Unknown plan action: '{plan_action}'. "
+                               f"Valid: create | sync | next_sequence | load_template")
+
+                return Ok(result)
+
+            # ═══════════════════════════════════════════════════════════════════════
             # ENH-087 Track 1.3: 4-STAGE STRATEGY PIPELINE
             # ═══════════════════════════════════════════════════════════════════════
             # Refactored from inline logic to pluggable strategy pattern
             # Benefits: Testability, maintainability, extensibility
-            
+
             # Import stage strategies
             from cortex.orchestrators.strategies import (
                 Stage1ComprehensionStrategy,
@@ -2098,7 +2163,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                 Stage4DomainExecutionStrategy,
                 StageContext,
             )
-            
+
             # Initialize stage context with operation details
             stage_context = StageContext(
                 operation_name=operation_name,
@@ -2107,7 +2172,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                 result=None,
                 stage_results={}
             )
-            
+
             # Build dependency map for strategies
             dependencies = {
                 "interaction_orchestrator": self.interaction_orchestrator,
