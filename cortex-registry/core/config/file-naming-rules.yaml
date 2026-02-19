@@ -1,0 +1,139 @@
+# ============================================================================
+# CORTEX File Naming Governance Rules (CORE-028)
+# ============================================================================
+# Authority: CORE-008 (TDD) | CORE-028 (canonical naming)
+# Single source-of-truth for ALL file naming patterns across CORTEX
+# Replaces: cortex/governance/filename_factory.py (677 lines)
+#           cortex/tools/file_naming_factory.py   (546 lines)
+# ============================================================================
+
+file_naming:
+  # Python modules: snake_case per PEP 8
+  python:
+    pattern: "^[a-z][a-z0-9]*(_[a-z0-9]+)*\\.py$"
+    case: snake_case
+    max_length: 55
+    description: "Python module filenames must be lowercase with underscores"
+    violations:
+      - pattern: "_v\\d+"
+        reason: "version suffix (_v1, _v2) prohibited per CORE-028"
+      - pattern: "^(enhanced|new|improved|final)_"
+        reason: "adjective prefix prohibited per CORE-028"
+      - pattern: "[A-Z]"
+        reason: "uppercase characters prohibited in Python filenames"
+      - pattern: "^[^a-z]"
+        reason: "must start with lowercase letter"
+
+  # Test files: test_* prefix
+  test:
+    pattern: "^test_[a-z][a-z0-9]*(_[a-z0-9]+)*\\.py$"
+    case: snake_case
+    max_length: 55
+    prefix: "test_"
+    description: "Test files must use test_ prefix per pytest conventions"
+    violations:
+      - pattern: "^[^t]"
+        reason: "test files must start with 'test_'"
+      - pattern: "[A-Z]"
+        reason: "uppercase characters prohibited"
+
+  # YAML / Markdown: kebab-case
+  yaml:
+    pattern: "^[a-z][a-z0-9]*(-[a-z0-9]+)*\\.ya?ml$"
+    case: kebab_case
+    max_length: 60
+    description: "YAML files must be lowercase with hyphens"
+    violations:
+      - pattern: "_"
+        reason: "underscores prohibited in YAML filenames; use hyphens"
+      - pattern: "[A-Z]"
+        reason: "uppercase characters prohibited"
+      - pattern: "_v\\d+"
+        reason: "version suffix prohibited"
+
+  markdown:
+    pattern: "^[a-z][a-z0-9]*(-[a-z0-9]+)*\\.md$"
+    case: kebab_case
+    max_length: 60
+    description: "Markdown files must be lowercase with hyphens"
+    violations:
+      - pattern: "_"
+        reason: "underscores prohibited; use hyphens"
+      - pattern: "[A-Z]"
+        reason: "uppercase characters prohibited"
+
+  # Shell scripts
+  shell:
+    pattern: "^[a-z][a-z0-9]*(-[a-z0-9]+)*\\.sh$"
+    case: kebab_case
+    max_length: 50
+    description: "Shell scripts use kebab-case"
+
+# Prohibited naming patterns (universal blacklist)
+prohibited_patterns:
+  - "_v\\d+$"                    # version suffixes: _v1, _v2, v10
+  - "-v\\d+$"                    # version suffixes: -v1, -v2, -v10 (kebab-case)
+  - "^enhanced_"                  # enhanced_ prefix
+  - "^enhanced-"                  # enhanced- prefix (kebab-case)
+  - "^new_"                       # new_ prefix
+  - "^new-"                       # new- prefix (kebab-case)
+  - "^improved_"                  # improved_ prefix
+  - "^improved-"                  # improved- prefix (kebab-case)
+  - "^final_"                     # final_ prefix
+  - "^final-"                     # final- prefix (kebab-case)
+  - "^temp_"                      # temp_ prefix
+  - "^temp-"                      # temp- prefix (kebab-case)
+  - "^test$"                      # bare "test" (must be test_something)
+  - "^TODO"                       # TODO prefix
+  - "^FIXME"                      # FIXME prefix
+
+# File type rules
+file_types:
+  py:
+    naming_rule: python
+    extensions:
+      - .py
+  test:
+    naming_rule: test
+    extensions:
+      - .py
+  yaml:
+    naming_rule: yaml
+    extensions:
+      - .yaml
+      - .yml
+  markdown:
+    naming_rule: markdown
+    extensions:
+      - .md
+  shell:
+    naming_rule: shell
+    extensions:
+      - .sh
+
+# Enforcement
+enforcement:
+  level: strict  # strict | warn | off
+  auto_suggest: true
+  suggest_case: kebab_case  # default suggestion style
+
+# ============================================================================
+# BACKWARD COMPATIBILITY
+# ============================================================================
+# These patterns were accepted by legacy factories and must remain valid:
+#
+# Python (snake_case):
+#   - orchestrator.py
+#   - master_orchestrator.py
+#   - test_file_factory.py
+#   - audit_db.py
+#   - token_optimizer.py
+#   - interaction_plan_store.py
+#
+# YAML (kebab-case):
+#   - cortex-audit-log.yaml
+#   - sqlite-retention.yaml
+#   - phase-00-foundation.yaml
+#   - prometheus.yaml
+#   - deploy-kubernetes.sh
+# ============================================================================
