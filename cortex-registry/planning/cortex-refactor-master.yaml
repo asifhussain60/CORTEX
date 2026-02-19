@@ -15,8 +15,8 @@ metadata:
   counters:
     total_phases: 11
     pending: 5
-    in_progress: 2
-    complete: 4
+    in_progress: 1
+    complete: 5
     deferred: 0
     failed: 0
   baseline:
@@ -348,7 +348,7 @@ phases:
 - id: phase-05-workflow-templates
   title: "Workflow Template Integration — CORTEX + Production Orchestration"
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-05-workflow-templates.yaml
-  status: in_progress
+  status: complete
   priority: P0
   risk: low
   dependencies:
@@ -363,9 +363,9 @@ phases:
   - "D7: Golden test suite (60 tests across 3 categories, 800 lines)"
   progress:
     started: '2026-02-19T22:45:00Z'
-    completed: null
-    actual_duration: null
-    current_stage: refactor_phase
+    completed: '2026-02-19T23:15:00Z'
+    actual_duration: 30 minutes
+    current_stage: complete
     stages_complete:
     - lens_discovery
     - red_phase
