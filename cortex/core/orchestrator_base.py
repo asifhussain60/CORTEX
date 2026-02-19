@@ -185,8 +185,22 @@ class OrchestratorBase(ABC):
         Args:
             result: Result of execution (may be None if setup failed).
         """
-        # Default teardown: log execution result to audit
+        # Write to SQLite audit database (CORE-027)
+        from cortex.infrastructure.audit_db import get_audit_db, AuditEntry, EventType
+        
+        audit_db = get_audit_db()
+        
         if result:
+            entry = AuditEntry(
+                event_type=EventType.ORCHESTRATOR_END.value,
+                orchestrator_id=self.orchestrator_id,
+                status="success" if result.success else "failed",
+                duration_ms=result.duration_ms,
+                error_message=result.error,
+                metadata=result.output or {},
+            )
+            audit_db.log_event(entry)
+            
             self.logger.info(
                 f"{self.orchestrator_id}: Execution complete - "
                 f"success={result.success}, duration_ms={result.duration_ms}"

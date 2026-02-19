@@ -7,6 +7,7 @@ Authority: CORE-008 (TDD) | CORE-011 (type hints) | CORE-012 (docstrings)
 """
 
 import sqlite3
+import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from dataclasses import dataclass
@@ -171,7 +172,6 @@ class CortexAuditDB:
         conn = self._get_connection()
         cursor = conn.cursor()
         
-        import json
         metadata_json = json.dumps(entry.metadata) if entry.metadata else None
         
         cursor.execute("""
@@ -229,7 +229,6 @@ class CortexAuditDB:
         
         entries = []
         for row in results:
-            import json
             entry = AuditEntry(
                 id=row[0],
                 timestamp=datetime.fromisoformat(row[1]) if row[1] else None,
