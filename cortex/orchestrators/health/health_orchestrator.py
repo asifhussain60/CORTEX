@@ -293,6 +293,21 @@ class HealthOrchestrator:
             return True
         return False
     
+    def scan(self) -> Any:
+        """Proxy to Phase-48 HealthOrchestrator.scan() for unified API.
+
+        Exposes the raw filesystem scan result from the Phase-48 engine,
+        allowing callers to access low-level ScanResult without also needing
+        to import from cortex.orchestrators.support.
+
+        Returns:
+            ScanResult from Phase-48 HealthOrchestrator.scan()
+
+        AC: GP50-004 / GP50-005 — Phase 50 unified scan() API
+        """
+        phase48 = _Phase48Orchestrator(workspace_root=self.workspace_root)
+        return phase48.scan()
+
     def get_summary(self) -> Dict[str, Any]:
         """Get summary of orchestrator state.
         

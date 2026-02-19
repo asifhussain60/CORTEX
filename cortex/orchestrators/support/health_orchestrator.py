@@ -922,10 +922,12 @@ class VacuumExecutor:
             List of OperationResult for every operation attempted.
         """
         with open(handoff_path) as fh:
-            data = yaml.safe_load(fh)
+            data = yaml.safe_load(fh) or {}
 
         results: list[OperationResult] = []
-        issues = data.get("issues", {})
+        raw_issues = data.get("issues", {})
+        # Guard: issues may be an empty list (no categories written yet) or a dict
+        issues = raw_issues if isinstance(raw_issues, dict) else {}
 
         # Renames
         for entry in issues.get("screaming_case", {}).get("files", []):

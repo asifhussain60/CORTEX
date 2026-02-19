@@ -1,4 +1,4 @@
-"""Vacuum Orchestrator MCP Tool — Phase 48
+"""Vacuum Orchestrator MCP Tool — Phase 48 / Phase 50
 
 Exposes Phase 48 VacuumExecutor via MCP-first architecture.
 Consumes health-issues.yaml produced by CortexHealthOrchestrate (scan op)
@@ -8,12 +8,13 @@ Operations:
 - execute:  Consume handoff file, run all vacuum operations
 - rollback: Restore files from rollback manifest
 - preview:  Dry-run — show planned operations without executing
+- markdown: Archive stale .md files into .cortex-runtime/archived-docs/
 
 CORE-028: kebab-case file, snake_case symbols
 CORE-008: golden tests in tests/golden/orchestrators/health_vacuum/
 CORE-035: single canonical VacuumExecutor in health_orchestrator.py
 
-Phase: Phase 48 — Health-Vacuum Integrity Pipeline
+Phase: Phase 48 / Phase 50 — Health-Vacuum Integrity Pipeline
 Author: CORTEX Framework
 """
 
@@ -51,6 +52,7 @@ class CortexVacuumOrchestrate(ConsolidatedTool):
         execute  — Run all vacuum operations from handoff file
         rollback — Restore state from rollback-manifest.json
         preview  — Dry-run: show planned ops without executing
+        markdown — Archive stale .md files into .cortex-runtime/archived-docs/
     """
 
     @property
@@ -77,9 +79,9 @@ class CortexVacuumOrchestrate(ConsolidatedTool):
             ToolParameter(
                 name="operation",
                 type="string",
-                description="Operation to perform: execute, rollback, or preview",
+                description="Operation to perform: execute, rollback, preview, or markdown",
                 required=True,
-                enum=["execute", "rollback", "preview"],
+                enum=["execute", "rollback", "preview", "markdown"],
             ),
             ToolParameter(
                 name="handoff_path",
@@ -119,7 +121,7 @@ class CortexVacuumOrchestrate(ConsolidatedTool):
 
     @property
     def supported_operations(self) -> List[str]:
-        return ["execute", "rollback", "preview"]
+        return ["execute", "rollback", "preview", "markdown"]
 
     # ------------------------------------------------------------------
     # Execution
@@ -154,6 +156,9 @@ class CortexVacuumOrchestrate(ConsolidatedTool):
 
         if operation == "rollback":
             return await self._op_rollback(workspace, manifest)
+
+        if operation == "markdown":
+            return await self._op_markdown_vacuum(workspace)
 
         return ToolResult(
             success=False,
@@ -279,6 +284,73 @@ class CortexVacuumOrchestrate(ConsolidatedTool):
                 data={"error": str(exc)},
                 metadata={"operation": "rollback"},
             )
+
+
+    async def _op_markdown_vacuum(self, workspace: Path) -> ToolResult:
+        """Archive stale markdown files using CORTEX vacuum conventions.
+
+        Scans for .md files in non-canonical locations and archives them
+        under .cortex-runtime/archived-docs/ following CORE-002 (no bash
+        generation of markdown files) and cortex_vacuum cleanup rules.
+
+        Args:
+            workspace: Repository root path.
+
+        Returns:
+            ToolResult with count of archived markdown files.
+
+        AC: GP50-009 — markdown operation absorbed into CortexVacuumOrchestrate
+        """
+        archive_root = workspace / ".cortex-runtime" / "archived-docs"
+        archive_root.mkdir(parents=True, exist_ok=True)
+
+        # Protected locations — canonical docs live here
+        protected_prefixes = (
+            "cortex-docs",
+            "docs",
+            ".github",
+            "README",
+        )
+
+        archived: list[dict[str, str]] = []
+        errors: list[str] = []
+
+        for md_file in workspace.rglob("*.md"):
+            try:
+                rel = md_file.relative_to(workspace)
+            except ValueError:
+                continue
+
+            rel_str = str(rel)
+
+            # Skip protected locations
+            if any(rel_str.startswith(p) for p in protected_prefixes):
+                continue
+
+            # Skip already-archived files
+            if ".cortex-runtime" in rel_str:
+                continue
+
+            # Archive: move to .cortex-runtime/archived-docs/ preserving structure
+            dest = archive_root / rel
+            try:
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                if not dest.exists():
+                    md_file.rename(dest)
+                    archived.append({"source": rel_str, "dest": str(dest.relative_to(workspace))})
+            except Exception as exc:  # noqa: BLE001
+                errors.append(f"{rel_str}: {exc}")
+
+        return ToolResult(
+            success=len(errors) == 0,
+            data={
+                "archived": archived,
+                "archived_count": len(archived),
+                "errors": errors,
+                "archive_root": str(archive_root.relative_to(workspace)),
+            },
+            metadata={"operation": "markdown"},
+        )
 
 
 __all__ = ["CortexVacuumOrchestrate"]
