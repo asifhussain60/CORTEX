@@ -1,0 +1,351 @@
+# ============================================================================
+# MCP CONSOLIDATION MATRIX — 34+ Tools → 22 Consolidated
+# ============================================================================
+# Authority: CortexMasterPlanOrchestrator
+# Version: 1.0.0
+# Created: 2026-02-19
+# Status: PHASE 1 FOUNDATION
+#
+# PURPOSE:
+#   Document all MCP tool consolidation decisions for Phase 5.
+#   Every original tool is tracked: merged, absorbed, or deleted.
+# ============================================================================
+
+consolidation:
+  baseline_count: 34
+  target_count: 22
+  reduction_pct: 35
+  
+  decisions:
+    
+    # ========================================================================
+    # CATEGORY 1: CORE GOVERNANCE & ORCHESTRATION (7 ACTIVE)
+    # ========================================================================
+    
+    - tool_id: "001-approve_request"
+      current_name: "cortex_approve_request"
+      category: "request_management"
+      status: "ACTIVE"
+      reason: "Approval workflow is core capability"
+      operations: ["approve", "reject", "defer"]
+      
+    - tool_id: "002-ask"
+      current_name: "cortex_ask"
+      category: "education"
+      status: "ACTIVE"
+      reason: "Educational queries (truth-verified)"
+      operations: ["ask", "verify"]
+      
+    - tool_id: "003-audit_consolidated"
+      current_name: "cortex_audit"
+      category: "governance"
+      status: "ACTIVE"
+      consolidates:
+        - "cortex_audit_remediation_plan"
+        - "cortex_audit (original)"
+        - "cortex_validate_compliance"
+      reason: "Unified governance audit surface"
+      operations: ["audit", "remediate", "validate", "analyze"]
+      
+    - tool_id: "004-challenge_generator"
+      current_name: "cortex_challenge"
+      category: "governance_gate"
+      status: "ABSORBED INTO MASTER"
+      absorbed_by: "MasterOrchestrator.governance_gate"
+      reason: "Challenge-first cognition intrinsic to MasterOrchestrator (EA-009)"
+      note: "Not exposed as separate MCP tool anymore"
+      
+    - tool_id: "005-governance_validate"
+      current_name: "cortex_execute_governance"
+      category: "compliance"
+      status: "ACTIVE"
+      reason: "CORE rule enforcement"
+      operations: ["validate", "enforce", "report"]
+      
+    - tool_id: "006-metrics"
+      current_name: "cortex_capture_metrics"
+      category: "observability"
+      status: "ACTIVE"
+      consolidates:
+        - "cortex_metrics_report"
+      reason: "Development metrics and reporting"
+      operations: ["capture", "export", "report"]
+      
+    - tool_id: "007-health_scan"
+      current_name: "cortex_health_scan"
+      category: "diagnostics"
+      status: "ACTIVE"
+      reason: "Holistic workspace health"
+      operations: ["scan", "diagnose", "export"]
+    
+    # ========================================================================
+    # CATEGORY 2: INTELLIGENCE & LEARNING (5 ACTIVE)
+    # ========================================================================
+    
+    - tool_id: "008-lens_analyze"
+      current_name: "cortex_lens_analyze"
+      category: "code_intelligence"
+      status: "ACTIVE"
+      reason: "Code-level workspace analysis (core capability)"
+      operations: ["analyze", "detect_patterns", "generate_insights"]
+      
+    - tool_id: "009-brain_query"
+      current_name: "cortex_brain_query"
+      category: "reasoning"
+      status: "ACTIVE"
+      reason: "Domain brain knowledge synthesis"
+      operations: ["query", "reason", "synthesize"]
+      
+    - tool_id: "010-memory_persist"
+      current_name: "cortex_memory_persist"
+      category: "knowledge_storage"
+      status: "ACTIVE"
+      reason: "Tier-based memory persistence"
+      operations: ["store", "retrieve", "update"]
+      
+    - tool_id: "011-convergence_loop"
+      current_name: "cortex_convergence_loop"
+      category: "learning"
+      status: "ACTIVE"
+      reason: "Iterative refinement and learning"
+      operations: ["execute", "trace", "report"]
+      
+    - tool_id: "012-rag_integration"
+      current_name: "cortex_rag_integrate"
+      category: "ai_integration"
+      status: "ACTIVE"
+      reason: "Retrieval-augmented generation"
+      operations: ["retrieve", "augment", "generate"]
+    
+    # ========================================================================
+    # CATEGORY 3: WORKFLOW & EXECUTION (4 ACTIVE)
+    # ========================================================================
+    
+    - tool_id: "013-workflow_runtime"
+      current_name: "cortex_workflow_runtime"
+      category: "execution"
+      status: "ACTIVE"
+      reason: "Workflow template execution (Phase 1 foundation)"
+      operations: ["load", "execute", "monitor"]
+      
+    - tool_id: "014-tdd_orchestrate"
+      current_name: "cortex_tdd_orchestrate"
+      category: "development"
+      status: "ACTIVE"
+      reason: "Test-driven development orchestration"
+      operations: ["red_phase", "green_phase", "refactor"]
+      
+    - tool_id: "015-refactoring_orchestrate"
+      current_name: "cortex_refactoring_orchestrate"
+      category: "transformation"
+      status: "ACTIVE"
+      reason: "Semantic refactoring operations"
+      operations: ["extract", "rename", "organize"]
+      
+    - tool_id: "016-git_orchestrate"
+      current_name: "cortex_git_orchestrate"
+      category: "vcs"
+      status: "ACTIVE"
+      reason: "Git operations coordination"
+      operations: ["commit", "push", "sync"]
+    
+    # ========================================================================
+    # CATEGORY 4: KNOWLEDGE & DISCOVERY (3 ACTIVE)
+    # ========================================================================
+    
+    - tool_id: "017-onboard_repository"
+      current_name: "cortex_onboard_repository"
+      category: "integration"
+      status: "ACTIVE"
+      reason: "Repository onboarding with LENS analysis"
+      operations: ["onboard", "scan", "integrate"]
+      
+    - tool_id: "018-discover"
+      current_name: "cortex_discover"
+      category: "discovery"
+      status: "ACTIVE"
+      consolidates:
+        - "cortex_tools_catalog"
+        - "cortex_total_recall"
+      reason: "Unified capability discovery"
+      operations: ["list_tools", "list_features", "search"]
+      
+    - tool_id: "019-knowledge_graph"
+      current_name: "cortex_knowledge_graph"
+      category: "semantics"
+      status: "ACTIVE"
+      reason: "Semantic relationship mapping"
+      operations: ["query", "infer", "expand"]
+    
+    # ========================================================================
+    # CATEGORY 5: OBSERVABILITY & DASHBOARDS (3 ACTIVE)
+    # ========================================================================
+    
+    - tool_id: "020-dashboard"
+      current_name: "cortex_dashboard"
+      category: "visualization"
+      status: "ACTIVE"
+      consolidates:
+        - "cortex_generate_dashboard_suite"
+        - "cortex_generate_landing_page"
+        - "cortex_generate_repo_dashboard"
+      reason: "Unified dashboard generation (with mode parameters)"
+      operations: ["generate_suite", "generate_landing", "generate_repo"]
+      
+    - tool_id: "021-vision_analyze"
+      current_name: "cortex_vision_analyze"
+      category: "ui_analysis"
+      status: "ACTIVE"
+      reason: "Vision API integration for UI element analysis"
+      operations: ["analyze_image", "extract_ui", "map_urls"]
+      
+    - tool_id: "022-coherence_validate"
+      current_name: "cortex_coherence_validate"
+      category: "architecture"
+      status: "ACTIVE"
+      reason: "Architecture coherence validation"
+      operations: ["validate", "detect_issues", "report"]
+    
+    # ========================================================================
+    # DELETED: ABSORBED INTO CORE (9 TOOLS)
+    # ========================================================================
+    
+    - tool_id: "D-001"
+      current_name: "cortex_challenge"
+      status: "DELETED"
+      reason: "Absorbed into MasterOrchestrator (EA-009: challenge-first cognition)"
+      note: |
+        Challenge generation is now automatic behavior in MasterOrchestrator.
+        Not exposed as separate MCP tool.
+    
+    - tool_id: "D-002"
+      current_name: "cortex_toolkit_*.py"
+      status: "DELETED"
+      reason: "Toolkit utilities absorbed into cortex/core/toolkit/"
+      note: "All toolkit functions moved to canonical location"
+    
+    - tool_id: "D-003"
+      current_name: "cortex_config_*.py"
+      status: "DELETED"
+      reason: "Config loaders consolidated into cortex/config/"
+      note: "Single config loader replaces multiple versions"
+    
+    - tool_id: "D-004"
+      current_name: "cortex_health_check_v1"
+      status: "DELETED"
+      reason: "Merged into cortex_health_scan"
+      note: "Versioned health check tools consolidated"
+    
+    - tool_id: "D-005"
+      current_name: "cortex_health_check_v2"
+      status: "DELETED"
+      reason: "Merged into cortex_health_scan"
+      note: "Versioned health check tools consolidated"
+    
+    - tool_id: "D-006"
+      current_name: "cortex_dashboard_legacy"
+      status: "DELETED"
+      reason: "Legacy dashboard logic merged into cortex_dashboard"
+      note: "Mode parameters handle old vs new generation"
+    
+    - tool_id: "D-007"
+      current_name: "cortex_refactor_v1"
+      status: "DELETED"
+      reason: "Merged into cortex_refactoring_orchestrate"
+      note: "Versioned refactor tools consolidated"
+    
+    - tool_id: "D-008"
+      current_name: "cortex_refactor_v2"
+      status: "DELETED"
+      reason: "Merged into cortex_refactoring_orchestrate"
+      note: "Versioned refactor tools consolidated"
+    
+    - tool_id: "D-009"
+      current_name: "cortex_validate_compliance"
+      status: "DELETED"
+      reason: "Absorbed into cortex_audit (operation=validate)"
+      note: "Compliance validation moved to governance audit tool"
+    
+    # ========================================================================
+    # SUPPORT TOOLS (2 ACTIVE - NOT EXPOSED AS MCP BUT INTERNAL)
+    # ========================================================================
+    
+    - tool_id: "S-001"
+      current_name: "cortex_sts_analyzer"
+      category: "internal_analysis"
+      status: "ACTIVE"
+      reason: "SyntaxTree structure analysis (internal use)"
+      note: "Not exposed as user-facing MCP tool"
+      
+    - tool_id: "S-002"
+      current_name: "cortex_debug_tool"
+      category: "internal_debug"
+      status: "ACTIVE"
+      reason: "Comprehensive debugging (internal use)"
+      note: "Not exposed as user-facing MCP tool"
+  
+  # ========================================================================
+  # SUMMARY TABLE
+  # ========================================================================
+  
+  summary:
+    total_original: 34
+    active_tools: 22
+    consolidated_into_active: 9
+    absorbed_into_core: 1
+    deleted: 2
+    target_final_count: 22
+    reduction: "35% fewer tools, 0% capability loss"
+
+
+# ========================================================================
+# PHASE 5 EXECUTION PLAN
+# ========================================================================
+
+execution_plan:
+  phase: "phase-05-orchestrator-rationalization"
+  
+  steps:
+    - step: 1
+      title: "Backup all MCP tool definitions"
+      action: "Archive cortex/mcp/tools/*.py to _archive/"
+      
+    - step: 2
+      title: "Implement 22 active tools"
+      action: "Create minimal implementations for all 22 tools"
+      
+    - step: 3
+      title: "Consolidate versioned tools"
+      action: "Merge v1/v2 tools into single canonical version"
+      
+    - step: 4
+      title: "Remove deleted tools"
+      action: "Delete 9 tools marked as DELETED"
+      
+    - step: 5
+      title: "Update MCP registry"
+      action: "Register 22 tools in cortex/mcp/server.py"
+      
+    - step: 6
+      title: "Test all tools"
+      action: "Run MCP tool tests (22 tools × 3 tests = 66+ tests)"
+      
+    - step: 7
+      title: "Golden test regression"
+      action: "Verify 428 golden tests still passing"
+      
+    - step: 8
+      title: "Update documentation"
+      action: "Update cortex-docs/ with new tool list"
+
+
+# ========================================================================
+# VERIFICATION CHECKLIST
+# ========================================================================
+
+verification:
+  gate_1: "All 22 tools implemented and passing tests"
+  gate_2: "Zero imports from deleted tools in active code"
+  gate_3: "428 golden tests still passing"
+  gate_4: "MCP registry contains exactly 22 tools"
+  gate_5: "All consolidation decisions documented"
