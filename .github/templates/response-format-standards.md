@@ -120,9 +120,16 @@ risk assessment, or trade-off summary. Use comparison tables for alternatives.}
 - {Deferred optimization}
 - {Future enhancement}
 
-> **Confidence:** {High · Medium · Low} · Based on {evidence summary}
+### ⚡ If you type `proceed`, CORTEX will:
 
-> **Action required:** Type `proceed` to execute, or reply with modifications.
+- {Action 1 — specific file, function, or system being changed}
+- {Action 2 — test written or command run}
+- {Action 3 — validation step or commit made}
+- {Action 4 — any follow-on orchestrator invoked, if applicable}
+
+> Type `proceed` to execute this plan, or correct anything above before confirming.
+
+> **Confidence:** {High · Medium · Low} · Based on {evidence summary}
 ```
 
 ### Section Rules
@@ -133,7 +140,7 @@ risk assessment, or trade-off summary. Use comparison tables for alternatives.}
 | **Analysis** | ✅ Always | 200 words | Tables for findings + alternatives |
 | **Recommendation** | ✅ Always | 150 words | ONE primary recommendation, numbered steps |
 | **Benefits & Risks** | 🟡 Medium+ | 1 table | 4-column comparison — skip for simple requests |
-| **Next Steps** | ✅ Always | 100 words | Split: Immediate (numbered) + Later (bullets) |
+| **Next Steps** | ✅ Always | 150 words | Immediate (numbered) + Later (bullets) + `proceed` execution plan (≤5 bullets) |
 
 ### H3 Sub-Sections (Optional Depth)
 
@@ -186,6 +193,42 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 | ❌ Log dumps or inventories | Not executive-ready | Themed findings, highest-impact per theme |
 | ❌ Ending with open questions | Leaves user uncertain | End with closure + proceed option |
 | ❌ `├─ └─` tree characters | Collapse in Copilot Chat | Use tables or bullet lists |
+| ❌ Vague `proceed` bullets ("make changes") | User can't spot mistakes | Name exact file/function/orchestrator per bullet |
+| ❌ Omitting `proceed` plan for actionable requests | User executes blind | Always show execution plan before asking for `proceed` |
+
+### ⚡ Execution Plan Spec (Next Steps → `proceed` block)
+
+The `### ⚡ If you type proceed, CORTEX will:` sub-section is **mandatory** in every Next Steps block where autonomous execution is possible.
+
+**Rules:**
+- ✅ 2–5 bullets — one concrete action per bullet
+- ✅ Each bullet names the **specific file, function, orchestrator, or system** being touched
+- ✅ Ordered to match actual execution sequence
+- ✅ Written so the user can spot a mistake before confirming
+- ✅ Ends with: `> Type \`proceed\` to execute this plan, or correct anything above before confirming.`
+- ❌ NO vague bullets ("work on the feature", "make changes")
+- ❌ NO more than 5 bullets — collapse multi-step groups into one line if needed
+- ❌ NO list if the response is informational only (query, audit, digest) — omit block entirely
+
+**Example — correct:**
+```markdown
+### ⚡ If you type `proceed`, CORTEX will:
+- Write `tests/unit/auth/test_jwt_validator.py` (TDD first — CORE-008)
+- Implement `cortex/auth/jwt_validator.py` with `validate_token()` + `decode_claims()`
+- Run `pytest tests/unit/auth/` and verify ≥80% coverage
+- Commit: `feat(auth): add JWT validator with TDD coverage`
+- Update `cortex-registry/planning/master-cortex-plan.yaml` phase status
+```
+
+**Example — wrong:**
+```markdown
+### ⚡ If you type `proceed`, CORTEX will:
+- Implement the feature
+- Run tests
+- Update things
+```
+
+---
 
 ### Response Header (Simplified)
 

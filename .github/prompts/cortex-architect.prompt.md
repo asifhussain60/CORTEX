@@ -200,6 +200,14 @@ All non-autonomous responses use the **5-Section Golden Format** (§ User Respon
 
 ## 🎯 Next Steps
 {Immediate numbered + Later bullets}
+
+### ⚡ If you type `proceed`, CORTEX will:
+- {Specific action 1 — file/function/system}
+- {Specific action 2 — test written or command run}
+- {Specific action 3 — validation or commit}
+
+> Type `proceed` to execute this plan, or correct anything above before confirming.
+> **Confidence:** {High · Medium · Low}
 ```
 
 **Icons by mode:** 🔧 PRE-FLIGHT | 🔍 AUDIT/QUERY | 📚 DIGEST | 📋 PLAN | 🎨 DESIGN | ⚡ IMPLEMENT | 📝 LIST
@@ -209,7 +217,9 @@ All non-autonomous responses use the **5-Section Golden Format** (§ User Respon
 - ✅ Author + Orchestrator line immediately below H2 header
 - ✅ ALL output inline in Copilot Chat (CORE-002 — never create .md/.txt files)
 - ✅ ≤60 second read time — answer first, tables for data
+- ✅ Every actionable response ends with `### ⚡ If you type proceed, CORTEX will:` (2–5 specific bullets)
 - ❌ NO tool usage narration ("I'll now search...", "Let me check...")
+- ❌ NO vague `proceed` bullets — name exact file, function, or orchestrator per bullet
 
 ### Autonomous Execution
 **Reference:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
