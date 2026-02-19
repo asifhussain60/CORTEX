@@ -16,6 +16,7 @@ AC_FIX: AC-INTELLIGENCE-INTEGRATION-001 (Wire IntelligenceOrchestrator)
 """
 
 from typing import Any, Dict, List, Optional
+from cortex.mcp.tools._shared import validate_orchestrator_context
 from pathlib import Path
 
 from cortex.mcp.mcp_tool_base import (
@@ -35,29 +36,6 @@ try:
 except ImportError:
     INTELLIGENCE_ORCHESTRATOR_AVAILABLE = False
 
-
-def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
-    """
-    Validate request comes from MasterOrchestrator.
-    
-    Args:
-        context: Orchestrator context dict with 'source' key
-        
-    Raises:
-        ValueError: If context missing or source != MasterOrchestrator
-    """
-    if not context:
-        raise ValueError(
-            "BLOCKED: Missing orchestrator_context. All requests MUST route "
-            "through MasterOrchestrator via cortex_process_request entry point."
-        )
-    
-    source = context.get("source")
-    if source != "MasterOrchestrator":
-        raise ValueError(
-            f"BLOCKED: Request from '{source}'. Only MasterOrchestrator can "
-            "invoke MCP tools directly. Use cortex_process_request entry point."
-        )
 
 
 class CortexLens(ConsolidatedTool):

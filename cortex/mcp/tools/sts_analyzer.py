@@ -15,37 +15,13 @@ Only MasterOrchestrator can invoke directly (via cortex_process_request entry po
 import sqlite3
 from pathlib import Path
 from typing import Dict, Any, List, Optional
+from cortex.mcp.tools._shared import validate_orchestrator_context
 from dataclasses import dataclass, asdict
 from datetime import datetime
 import json
 import ast
 import re
 
-
-def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
-    """
-    Validate request comes from MasterOrchestrator.
-    
-    Args:
-        context: Orchestrator context with source information
-        
-    Raises:
-        ValueError: If context missing or source is not MasterOrchestrator
-    """
-    if not context:
-        raise ValueError(
-            "BLOCKED: Missing orchestrator_context. All requests MUST route "
-            "through MasterOrchestrator via cortex_process_request entry point. "
-            "This ensures DoR validation, intent classification, CCL pre-warming, "
-            "and governance enforcement."
-        )
-    
-    source = context.get("source")
-    if source != "MasterOrchestrator":
-        raise ValueError(
-            f"BLOCKED: Request from '{source}'. Only MasterOrchestrator can "
-            "invoke MCP tools directly. Use cortex_process_request entry point."
-        )
 
 
 @dataclass

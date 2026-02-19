@@ -254,7 +254,7 @@ def _check_mcp_policy(staged_files: List[str], repo_path: str) -> CheckResult:
 # ---------------------------------------------------------------------------
 
 
-class EnforcementOrchestrator:
+class PreCommitEnforcementOrchestrator:
     """Runs all pre-commit CORE rule enforcement checks in-process.
 
     Replaces the following shell hooks and GitHub Actions:
@@ -268,6 +268,17 @@ class EnforcementOrchestrator:
 
     Called by :class:`~cortex.orchestrators.git.git_orchestrator.GitOrchestrator`
     as Stage 1 before sanitization and publish.
+
+    .. note::
+        Renamed from ``EnforcementOrchestrator`` (CORE-035 de-duplication).
+        ``EnforcementOrchestrator`` in ``cortex.orchestrators.core`` is the
+        runtime governance orchestrator; this class is exclusively for
+        pre-commit enforcement.
+
+    .. deprecated::
+        The alias ``EnforcementOrchestrator`` is preserved for backward
+        compatibility but will be removed in a future release.
+        Import ``PreCommitEnforcementOrchestrator`` directly.
 
     Example::
 
@@ -396,10 +407,14 @@ class EnforcementOrchestrator:
             return CheckResult(name="wiring_health", passed=True, skipped=True)
 
 
+# Backward-compat alias — import the canonical name where possible
+EnforcementOrchestrator = PreCommitEnforcementOrchestrator
+
 __all__ = [
     "CheckResult",
     "EnforcementReport",
-    "EnforcementOrchestrator",
+    "PreCommitEnforcementOrchestrator",
+    "EnforcementOrchestrator",  # deprecated alias — use PreCommitEnforcementOrchestrator
 ]
 
-# AC_COMPLETE: AC-GIT-ORCH-003 ✅ EnforcementOrchestrator implemented
+# AC_COMPLETE: AC-GIT-ORCH-003 ✅ PreCommitEnforcementOrchestrator implemented (was EnforcementOrchestrator)

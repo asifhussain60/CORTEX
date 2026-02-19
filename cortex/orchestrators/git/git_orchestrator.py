@@ -110,6 +110,7 @@ class GitOrchestrator:
         proprietary_terms: Optional[Dict[str, str]] = None,
         remote: str = "origin",
         sanitize_dry_run: bool = False,
+        auto_push: bool = False,
     ) -> None:
         """Initialize GitOrchestrator.
 
@@ -117,11 +118,14 @@ class GitOrchestrator:
             proprietary_terms: Extra proprietary term → replacement mappings.
             remote: Remote name for push.
             sanitize_dry_run: Skip file writes during sanitization when True.
+            auto_push: When False (default), commit locally only.
+                       Set True only with explicit user approval to push to remote.
         """
         self.enforcement = EnforcementOrchestrator(strict=True)
         self.sanitizer = SanitizationOrchestrator(proprietary_terms=proprietary_terms)
-        self.publisher = GitPublishOrchestrator(remote=remote)
+        self.publisher = GitPublishOrchestrator(remote=remote, auto_push=auto_push)
         self._sanitize_dry_run = sanitize_dry_run
+        self._auto_push = auto_push
 
     async def execute(
         self,
@@ -173,7 +177,9 @@ class GitOrchestrator:
         )
 
         # ── Stage 3: Publish ──────────────────────────────────────────────
-        logger.info("Stage 3/3: Git publish → %s/%s", "origin", branch)
+        logger.info(
+            "Stage 3/3: Git publish → commit locally (auto_push=%s)", self._auto_push
+        )
         try:
             pub_result = await self.publisher.publish(
                 repo_path=repo_path,
@@ -185,7 +191,13 @@ class GitOrchestrator:
             raise GitOrchestratorError(
                 f"Publish stage failed — git error: {exc}"
             ) from exc
-        logger.info("Stage 3/3: Published ✅ commit=%s", pub_result.commit_sha)
+        if pub_result.pushed:
+            logger.info("Stage 3/3: Committed + pushed ✅ commit=%s", pub_result.commit_sha)
+        else:
+            logger.info(
+                "Stage 3/3: Committed locally ✅ commit=%s — NOT pushed (requires explicit approval)",
+                pub_result.commit_sha,
+            )
 
         return GitOrchestratorResult(
             success=True,

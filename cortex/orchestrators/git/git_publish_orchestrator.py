@@ -40,12 +40,13 @@ class PublishResult:
     """Result of a completed git publish operation.
 
     Attributes:
-        success: True when add, commit, and push all succeeded.
+        success: True when add and commit succeeded (push is optional).
         commit_sha: The full SHA of the created commit (empty string if none).
-        branch: Target branch that was pushed.
+        branch: Target branch name.
         message: Commit message used.
         files_committed: Number of files staged and committed.
-        remote: Remote name that was pushed to (default: 'origin').
+        remote: Remote name configured (push may not have occurred).
+        pushed: True only when a push to the remote actually ran.
     """
 
     success: bool
@@ -54,6 +55,7 @@ class PublishResult:
     message: str
     files_committed: int = 0
     remote: str = "origin"
+    pushed: bool = False
 
 
 # ---------------------------------------------------------------------------
@@ -62,12 +64,16 @@ class PublishResult:
 
 
 class GitPublishOrchestrator:
-    """Stages, commits, and pushes sanitized code to the configured remote.
+    """Stages, commits, and optionally pushes sanitized code to the configured remote.
+
+    By default **push is disabled** (``auto_push=False``).  The caller must
+    explicitly set ``auto_push=True`` to push to the remote, ensuring no
+    changes are sent to ``origin`` without explicit user approval.
 
     All git operations are async and protected by CORTEX's existing
     :class:`~cortex.infrastructure.git_circuit_breaker.GitCircuitBreaker`.
 
-    Example::
+    Example — local commit only (default)::
 
         publisher = GitPublishOrchestrator()
         result = await publisher.publish(
@@ -75,21 +81,31 @@ class GitPublishOrchestrator:
             branch="main",
             message="feat: sanitized repository",
         )
+        # result.pushed is False — change is local only
+
+    Example — explicit push (user-approved)::
+
+        publisher = GitPublishOrchestrator(auto_push=True)
+        result = await publisher.publish(...)
     """
 
     def __init__(
         self,
         remote: str = "origin",
         timeout_seconds: float = 30.0,
+        auto_push: bool = False,
     ) -> None:
         """Initialize GitPublishOrchestrator.
 
         Args:
             remote: Git remote name (default: 'origin').
             timeout_seconds: Timeout for each git command.
+            auto_push: When False (default), commit locally only.
+                       Set True only with explicit user approval to push.
         """
         self._remote = remote
         self._timeout = timeout_seconds
+        self._auto_push = auto_push
 
     async def publish(
         self,
@@ -97,21 +113,31 @@ class GitPublishOrchestrator:
         branch: str,
         message: str,
         paths: Optional[List[str]] = None,
+        auto_push: Optional[bool] = None,
     ) -> PublishResult:
-        """Run git add → git commit → git push.
+        """Run git add → git commit → (optional) git push.
+
+        Push only occurs when ``auto_push`` is True — either passed
+        explicitly here or set at construction time.  The default is
+        **False** (local commit only) to ensure no changes reach the
+        remote without explicit user approval.
 
         Args:
             repo_path: Absolute path to the git repository root.
-            branch: Branch to push to on the remote.
+            branch: Target branch (used for push when enabled).
             message: Commit message.
             paths: Specific paths to stage; defaults to all changes ('.').
+            auto_push: Per-call override for the push gate.  When None,
+                       falls back to the instance-level ``auto_push`` flag.
 
         Returns:
             :class:`PublishResult` with outcome details.
+            ``result.pushed`` is True only when a push actually occurred.
 
         Raises:
             PublishError: When any git command exits non-zero or raises.
         """
+        should_push = auto_push if auto_push is not None else self._auto_push
         stage_paths = paths or ["."]
         try:
             # Stage 1: git add
@@ -125,10 +151,20 @@ class GitPublishOrchestrator:
             commit_sha = self._extract_sha(commit_result.stdout if commit_result else "")
             logger.info("git commit '%s' → %s", message, commit_sha or "<no-sha>")
 
-            # Stage 3: git push
-            push_cmd = ["git", "push", self._remote, branch]
-            await self._run_git(push_cmd, cwd=repo_path)
-            logger.info("git push → %s/%s", self._remote, branch)
+            # Stage 3: git push (gated — requires explicit approval)
+            pushed = False
+            if should_push:
+                push_cmd = ["git", "push", self._remote, branch]
+                await self._run_git(push_cmd, cwd=repo_path)
+                logger.info("git push → %s/%s", self._remote, branch)
+                pushed = True
+            else:
+                logger.info(
+                    "git push SKIPPED — auto_push=False. "
+                    "Call publish(auto_push=True) to push to %s/%s after user approval.",
+                    self._remote,
+                    branch,
+                )
 
             return PublishResult(
                 success=True,
@@ -136,6 +172,7 @@ class GitPublishOrchestrator:
                 branch=branch,
                 message=message,
                 remote=self._remote,
+                pushed=pushed,
             )
 
         except Exception as exc:

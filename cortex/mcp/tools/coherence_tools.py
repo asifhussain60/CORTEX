@@ -19,6 +19,7 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 from typing import Any, Dict, Optional
+from cortex.mcp.tools._shared import validate_orchestrator_context
 
 from cortex.orchestrators.coherence import (
     ChangeCoherenceEngine,
@@ -29,31 +30,6 @@ from cortex.orchestrators.coherence import (
 
 logger = logging.getLogger(__name__)
 
-
-def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
-    """
-    Validate request comes from MasterOrchestrator.
-    
-    Args:
-        context: Orchestrator context with source information
-        
-    Raises:
-        ValueError: If context missing or source is not MasterOrchestrator
-    """
-    if not context:
-        raise ValueError(
-            "BLOCKED: Missing orchestrator_context. All requests MUST route "
-            "through MasterOrchestrator via cortex_process_request entry point. "
-            "This ensures DoR validation, intent classification, CCL pre-warming, "
-            "and governance enforcement."
-        )
-    
-    source = context.get("source")
-    if source != "MasterOrchestrator":
-        raise ValueError(
-            f"BLOCKED: Request from '{source}'. Only MasterOrchestrator can "
-            "invoke MCP tools directly. Use cortex_process_request entry point."
-        )
 
 
 async def cortex_validate_coherence(
