@@ -16,8 +16,14 @@ CORE Rules: CORE-008, CORE-011, CORE-012, CORE-028, CORE-035
 from __future__ import annotations
 
 import logging
-from typing import Any, Dict
+from typing import Any, Dict, List
 
+from cortex.mcp.mcp_tool_base import (
+    ConsolidatedTool,
+    ToolCategory,
+    ToolParameter,
+    ToolResult,
+)
 from cortex.orchestrators.core.master_plan_orchestrator import (
     CortexMasterPlanOrchestrator,
     PhaseCreationRequest,
@@ -143,3 +149,107 @@ def _require(kwargs: Dict[str, Any], *keys: str) -> None:
     missing = [k for k in keys if k not in kwargs or kwargs[k] is None]
     if missing:
         raise ValueError(f"Missing required parameters: {missing}")
+
+
+# ---------------------------------------------------------------------------
+# ConsolidatedTool wrapper — enables MCP ALL_TOOLS registration (Phase 50)
+# ---------------------------------------------------------------------------
+
+
+class CortexMasterPlanTool(ConsolidatedTool):
+    """MCP ConsolidatedTool wrapper for cortex_master_plan function.
+
+    Exposes CortexMasterPlanOrchestrator phase-lifecycle operations via the
+    standard ConsolidatedTool interface so it can be registered in ALL_TOOLS.
+
+    Operations: create | sync | next_sequence | load_template
+
+    Authority: Phase 50 | CORE-035 | CORE-011 | CORE-012
+    """
+
+    @property
+    def name(self) -> str:
+        """Return canonical MCP tool name."""
+        return "cortex_master_plan"
+
+    @property
+    def description(self) -> str:
+        """Return tool description for MCP discovery."""
+        return (
+            "Manage CORTEX phase lifecycle via CortexMasterPlanOrchestrator. "
+            "Operations: create (new sequential phase), sync (folder status), "
+            "next_sequence (compute next phase number), load_template (workflow YAML). "
+            "Authority: cortex-master.yaml is SSOT for all phase status."
+        )
+
+    @property
+    def category(self) -> ToolCategory:
+        """Return tool category."""
+        return ToolCategory.OPERATIONS
+
+    @property
+    def parameters(self) -> List[ToolParameter]:
+        """Return parameter schema for MCP introspection."""
+        return [
+            ToolParameter(
+                name="operation",
+                type="string",
+                description="Operation: create | sync | next_sequence | load_template",
+                required=True,
+                enum=["create", "sync", "next_sequence", "load_template"],
+            ),
+            ToolParameter(
+                name="title",
+                type="string",
+                description="[create] Phase title (non-empty string)",
+                required=False,
+            ),
+            ToolParameter(
+                name="description",
+                type="string",
+                description="[create] Phase scope description",
+                required=False,
+            ),
+            ToolParameter(
+                name="priority",
+                type="string",
+                description="[create] CORTEX priority: P0 | P1 | P2 | P3",
+                required=False,
+                enum=["P0", "P1", "P2", "P3"],
+            ),
+            ToolParameter(
+                name="supersedes",
+                type="array",
+                description="[create] Prior phase IDs this phase replaces",
+                required=False,
+            ),
+            ToolParameter(
+                name="template_name",
+                type="string",
+                description="[load_template] Template filename without .yaml extension",
+                required=False,
+            ),
+        ]
+
+    def execute(self, params: Dict[str, Any]) -> ToolResult:
+        """Execute the cortex_master_plan operation.
+
+        Args:
+            params: Dict containing 'operation' plus operation-specific keys.
+
+        Returns:
+            ToolResult with success/failure and operation data.
+        """
+        try:
+            operation = params.get("operation")
+            if not operation:
+                return ToolResult(
+                    success=False,
+                    error="Missing required parameter: operation",
+                )
+            kwargs = {k: v for k, v in params.items() if k != "operation"}
+            result = cortex_master_plan(operation, **kwargs)
+            return ToolResult(success=True, data=result)
+        except (ValueError, PhaseLifecycleError) as exc:
+            logger.warning("CortexMasterPlanTool error: %s", exc)
+            return ToolResult(success=False, error=str(exc))

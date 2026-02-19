@@ -33,7 +33,7 @@ from cortex.mcp.mcp_tool_base import (
     ToolParameter,
     ToolResult,
 )
-from cortex.mcp.tools.utilities import validate_orchestrator_context
+from cortex.mcp.tools._shared import validate_orchestrator_context
 from cortex.orchestrators.support.health_orchestrator import (
     HealthOrchestrator,
     HealthVacuumPipeline,

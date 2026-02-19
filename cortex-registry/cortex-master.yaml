@@ -630,7 +630,7 @@ execution_order:
       title: "Health-Vacuum Orchestrator Consolidation"
       status: "planned"
       priority: "P0"
-      file: "cortex-registry/_cortex-master/phases/planned/phase-50-health-vacuum-consolidation.yaml"
+      file: "cortex-registry/planning/phases/planned/phase-50-health-vacuum-consolidation.yaml"
       added: "2026-02-19"
       note: "Renamed from phase-100 (anomalous numbering fixed 2026-02-19)"
 
@@ -640,7 +640,7 @@ execution_order:
       - id: "phase-50"
         title: "Health-Vacuum Orchestrator Consolidation"
         estimated_duration: "1 day"
-        file: "cortex-registry/_cortex-master/phases/planned/phase-50-health-vacuum-consolidation.yaml"
+        file: "cortex-registry/planning/phases/planned/phase-50-health-vacuum-consolidation.yaml"
     total_remaining_duration: "1 day"
     completion_date: "2026-02-20"
     confidence: "100% (verified via git history + golden test suite)"

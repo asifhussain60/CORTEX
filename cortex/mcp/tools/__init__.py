@@ -1,11 +1,11 @@
 """
 CORTEX MCP v2 - Tool Implementations
 
-33 production tools organized by category:
+34 production tools organized by category:
 - Core (4): process_request, challenge, classify, request_lifecycle
 - Intelligence (4): lens, knowledge, git, generate_tests
 - Governance (4): governance, validate, load, validate_request (Phase 48)
-- Operations (5): debug, refactor, plan, onboard, dashboard
+- Operations (6): debug, refactor, plan, onboard, dashboard, master_plan (Phase 50)
 - Utilities (11): verify, ask, vacuum, tools_catalog, total_recall, metrics, check, vision, orchestrator,
                   health_orchestrate, vacuum_orchestrate (Phase 48)
 - Toolkit (5): diagnose, verify_env, cleanup, validate_gov, analyze (Phase 90)
@@ -13,6 +13,7 @@ CORTEX MCP v2 - Tool Implementations
 AC_START: AC-WAVE100-S2-006
 AC_START: AC-P90-S7-001
 AC_START: AC-P48-MCP-001
+AC_START: AC-P50-MCP-001
 """
 
 # Core tools
@@ -79,6 +80,9 @@ from cortex.mcp.tools.toolkit import (
 from cortex.mcp.tools.health_orchestrator_tool import CortexHealthOrchestrate
 from cortex.mcp.tools.vacuum_orchestrator_tool import CortexVacuumOrchestrate
 
+# Phase 50 — CortexMasterPlanOrchestrator exposure (CORE-035: registered via ConsolidatedTool)
+from cortex.mcp.tools.master_plan_tool import CortexMasterPlanTool
+
 # GitOrchestrator — replaces git hooks + GitHub Actions (2026-02-19)
 from cortex.mcp.tools.git_orchestrator_tool import CortexGitPush
 
@@ -126,6 +130,8 @@ ALL_TOOLS = [
     # Health-Vacuum (2) - Phase 48
     CortexHealthOrchestrate,
     CortexVacuumOrchestrate,
+    # MasterPlan (1) - Phase 50
+    CortexMasterPlanTool,
     # GitOrchestrator (1) - replaces git hooks + GitHub Actions
     CortexGitPush,
 ]
@@ -194,6 +200,8 @@ __all__ = [
     # Health-Vacuum (Phase 48)
     "CortexHealthOrchestrate",
     "CortexVacuumOrchestrate",
+    # MasterPlan (Phase 50)
+    "CortexMasterPlanTool",
     # GitOrchestrator (replaces git hooks + GitHub Actions)
     "CortexGitPush",
     # Registration
@@ -204,3 +212,4 @@ __all__ = [
 # AC_COMPLETE: AC-WAVE100-S2-006 ✅ All tools exported
 # AC_COMPLETE: AC-P90-S7-001 ✅ 5 toolkit tools integrated
 # AC_COMPLETE: AC-P48-MCP-001 ✅ 2 health-vacuum MCP tools registered
+# AC_COMPLETE: AC-P50-MCP-001 ✅ CortexMasterPlanTool registered
