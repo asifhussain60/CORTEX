@@ -1,0 +1,112 @@
+#!/bin/zsh
+# Wave 8 Stage 2: Pre-commit Hook - Registry Blacklist Enforcement (CORE-056)
+# Purpose: Prevent accidental staging of internal _cortex-master artifacts
+# Authority: CORE-056, WAVE-8-PLANNING-CAPABILITY-SEPARATION.yaml
+# 
+# Enforcement:
+# - Blocks staging of blacklisted files from cortex-registry/_cortex-master/
+# - Exceptions: governance/, enhancements/, directives/ (explicitly allowed)
+# - Override: git commit --no-verify (for internal development)
+# - Audit: Logs all violations to .cortex/git-violations.log
+
+set -e
+
+# Configuration
+BLACKLIST_PATTERNS=(
+    "cortex-registry/_cortex-master/index.yaml"
+    "cortex-registry/_cortex-master/phases/"
+    "cortex-registry/_cortex-master/waves/"
+    "cortex-registry/_cortex-master/execution/"
+    "cortex-registry/_cortex-master/meta/"
+)
+
+ALLOWED_PATTERNS=(
+    "cortex-registry/_cortex-master/governance/"
+    "cortex-registry/_cortex-master/enhancements/"
+    "cortex-registry/_cortex-master/directives/"
+    "cortex-registry/_cortex-master/WAVE-"
+)
+
+VIOLATION_LOG=".cortex/git-violations.log"
+
+# Initialize log directory
+mkdir -p .cortex
+
+# Function: Check if file is in allowed pattern
+is_allowed() {
+    local file="$1"
+    for pattern in "${ALLOWED_PATTERNS[@]}"; do
+        if [[ "$file" == *"$pattern"* ]]; then
+            return 0  # Allowed
+        fi
+    done
+    return 1  # Not allowed
+}
+
+# Function: Check if file is in blacklist pattern
+is_blacklisted() {
+    local file="$1"
+    for pattern in "${BLACKLIST_PATTERNS[@]}"; do
+        if [[ "$file" == *"$pattern"* ]]; then
+            # Check if it's in an allowed sub-pattern
+            if ! is_allowed "$file"; then
+                return 0  # Blacklisted (not allowed)
+            fi
+        fi
+    done
+    return 1  # Not blacklisted
+}
+
+# Get staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM 2>/dev/null || echo "")
+
+if [ -z "$STAGED_FILES" ]; then
+    exit 0
+fi
+
+# Check for violations
+VIOLATIONS=()
+while IFS= read -r file; do
+    if is_blacklisted "$file"; then
+        VIOLATIONS+=("$file")
+    fi
+done <<< "$STAGED_FILES"
+
+# Report violations
+if [ ${#VIOLATIONS[@]} -gt 0 ]; then
+    echo "❌ PRE-COMMIT HOOK: Registry Blacklist Violation Detected (CORE-056)"
+    echo ""
+    echo "🚫 Attempted to stage internal artifacts:"
+    for file in "${VIOLATIONS[@]}"; do
+        echo "   - $file"
+    done
+    echo ""
+    echo "📋 Blacklist Policy (Wave 8 Stage 2):"
+    echo "   ✗ cortex-registry/_cortex-master/index.yaml"
+    echo "   ✗ cortex-registry/_cortex-master/phases/"
+    echo "   ✗ cortex-registry/_cortex-master/waves/"
+    echo "   ✗ cortex-registry/_cortex-master/execution/"
+    echo "   ✗ cortex-registry/_cortex-master/meta/"
+    echo ""
+    echo "   ✓ Exceptions (explicitly allowed):"
+    echo "   ✓ cortex-registry/_cortex-master/governance/"
+    echo "   ✓ cortex-registry/_cortex-master/enhancements/"
+    echo "   ✓ cortex-registry/_cortex-master/directives/"
+    echo ""
+    echo "🔓 Override (internal development only):"
+    echo "   git commit --no-verify"
+    echo ""
+    
+    # Log violation
+    {
+        echo "$(date +'%Y-%m-%d %H:%M:%S') | PRE-COMMIT | VIOLATION | Files: ${#VIOLATIONS[@]}"
+        for file in "${VIOLATIONS[@]}"; do
+            echo "  - $file"
+        done
+        echo ""
+    } >> "$VIOLATION_LOG"
+    
+    exit 1
+fi
+
+exit 0

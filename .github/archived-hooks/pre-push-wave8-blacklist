@@ -1,0 +1,92 @@
+#!/bin/zsh
+# Wave 8 Stage 2: Pre-push Hook - Registry Blacklist Enforcement (CORE-056)
+# Purpose: Prevent pushing internal _cortex-master artifacts to origin/main
+# Authority: CORE-056, WAVE-8-PLANNING-CAPABILITY-SEPARATION.yaml
+#
+# Enforcement:
+# - Blocks pushing blacklisted files to origin/main
+# - Allows pushing to feature branches (cortex/*, develop, staging)
+# - Override: git push --no-verify (for critical fixes only)
+# - Audit: Logs all violations to .cortex/git-violations.log
+
+set -e
+
+VIOLATION_LOG=".cortex/git-violations.log"
+mkdir -p .cortex
+
+# Read push metadata
+while read -r local_ref local_sha remote_ref remote_sha; do
+    # Skip if deleting
+    if [[ "$local_sha" == "0000000000000000000000000000000000000000" ]]; then
+        continue
+    fi
+    
+    # Extract branch name from refs/heads/
+    branch_name="${remote_ref#refs/heads/}"
+    
+    # Skip if not pushing to origin/main
+    if [[ "$branch_name" != "main" ]] && [[ "$branch_name" != "master" ]]; then
+        continue
+    fi
+    
+    # Check commits being pushed
+    COMMITS=$(git rev-list "$remote_sha..$local_sha" 2>/dev/null || git rev-list "$local_sha" 2>/dev/null)
+    
+    if [ -z "$COMMITS" ]; then
+        continue
+    fi
+    
+    # Check each commit for blacklisted files
+    VIOLATIONS=()
+    while IFS= read -r commit; do
+        FILES=$(git diff-tree --no-commit-id --name-only -r "$commit" 2>/dev/null | grep -E "cortex-registry/_cortex-master/(index\.yaml|phases/|waves/|execution/|meta/)" || true)
+        
+        # Filter out exceptions
+        while IFS= read -r file; do
+            if [[ -z "$file" ]]; then
+                continue
+            fi
+            
+            # Check if in exception list
+            if [[ "$file" == *"governance/"* ]] || [[ "$file" == *"enhancements/"* ]] || [[ "$file" == *"directives/"* ]] || [[ "$file" == *"WAVE-"* ]]; then
+                continue
+            fi
+            
+            VIOLATIONS+=("$commit: $file")
+        done <<< "$FILES"
+    done <<< "$COMMITS"
+    
+    # Report violations
+    if [ ${#VIOLATIONS[@]} -gt 0 ]; then
+        echo "❌ PRE-PUSH HOOK: Registry Blacklist Violation (CORE-056)"
+        echo ""
+        echo "🚫 Attempted to push internal artifacts to origin/$branch_name:"
+        for violation in "${VIOLATIONS[@]}"; do
+            echo "   - $violation"
+        done
+        echo ""
+        echo "📋 Allowed Targets:"
+        echo "   ✓ Push to feature branches: cortex/*, develop, staging"
+        echo "   ✗ Push to main/master:     BLOCKED (blacklist enforcement)"
+        echo ""
+        echo "🔓 Override (critical fixes only):"
+        echo "   git push --no-verify"
+        echo ""
+        echo "ℹ️  This is Wave 8 Stage 2 enforcement (CORE-056)."
+        echo "   Blacklist details: .github/prompts/cortex-architect.prompt.md"
+        echo ""
+        
+        # Log violation
+        {
+            echo "$(date +'%Y-%m-%d %H:%M:%S') | PRE-PUSH | VIOLATION | Branch: $branch_name | Files: ${#VIOLATIONS[@]}"
+            for violation in "${VIOLATIONS[@]}"; do
+                echo "  - $violation"
+            done
+            echo ""
+        } >> "$VIOLATION_LOG"
+        
+        exit 1
+    fi
+done
+
+exit 0

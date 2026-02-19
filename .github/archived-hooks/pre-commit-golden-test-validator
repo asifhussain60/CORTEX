@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+"""
+Pre-commit hook: Golden Test Import Validator
+Ensures all imports in tests/golden/*.py resolve to real CORTEX classes.
+
+Phase 0 S9: Prevents mock imports from being committed.
+"""
+
+import subprocess
+import sys
+from pathlib import Path
+
+
+def get_golden_test_files():
+    """Get all golden test files being committed."""
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACM"],
+        capture_output=True,
+        text=True
+    )
+    
+    files = result.stdout.strip().split('\n')
+    return [f for f in files if f.startswith('tests/golden/') and f.endswith('.py')]
+
+
+def extract_imports(file_path):
+    """Extract all CORTEX imports from a Python file."""
+    imports = []
+    
+    with open(file_path, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith('from cortex.') or line.startswith('import cortex.'):
+                imports.append(line)
+    
+    return imports
+
+
+def validate_import(import_line):
+    """Validate that an import resolves to a real module."""
+    try:
+        # Extract module path
+        if import_line.startswith('from '):
+            parts = import_line.split()
+            module = parts[1]
+        else:
+            module = import_line.split()[1].split('.')[0]
+        
+        # Try to import
+        result = subprocess.run(
+            ["python3", "-c", f"import {module}"],
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        
+        return result.returncode == 0, result.stderr
+    
+    except Exception as e:
+        return False, str(e)
+
+
+def check_for_mock_classes(file_path):
+    """Check if file contains internal Mock* class definitions."""
+    with open(file_path, 'r') as f:
+        content = f.read()
+    
+    mock_classes = []
+    for line in content.split('\n'):
+        if line.strip().startswith('class Mock'):
+            class_name = line.split('(')[0].replace('class ', '').strip()
+            mock_classes.append(class_name)
+    
+    return mock_classes
+
+
+def main():
+    """Main validation logic."""
+    golden_files = get_golden_test_files()
+    
+    if not golden_files:
+        # No golden test files being committed
+        sys.exit(0)
+    
+    print("🔍 Validating golden test imports...")
+    
+    errors = []
+    
+    for file_path in golden_files:
+        if not Path(file_path).exists():
+            continue
+        
+        # Check for Mock classes
+        mock_classes = check_for_mock_classes(file_path)
+        if mock_classes:
+            errors.append(f"❌ {file_path}: Contains mock classes: {', '.join(mock_classes)}")
+            errors.append(f"   VIOLATION: Golden tests must use real imports only (Phase 24 S1)")
+            continue
+        
+        # Validate imports
+        imports = extract_imports(file_path)
+        for import_line in imports:
+            valid, error = validate_import(import_line)
+            if not valid:
+                errors.append(f"❌ {file_path}: Invalid import")
+                errors.append(f"   {import_line}")
+                errors.append(f"   Error: {error.strip()}")
+    
+    if errors:
+        print("\n".join(errors))
+        print("\n🚫 Golden test validation FAILED")
+        print("   Fix imports or remove mock classes before committing")
+        sys.exit(1)
+    
+    print(f"✅ {len(golden_files)} golden test file(s) validated")
+    sys.exit(0)
+
+
+if __name__ == "__main__":
+    main()

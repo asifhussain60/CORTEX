@@ -1,0 +1,60 @@
+# CORTEX Proprietary Terms Registry
+# ---------------------------------------------------------------------------
+# Maps company-specific proprietary terms to generic replacements used by
+# SanitizationOrchestrator before any code is committed to GitHub.
+#
+# Format:
+#   proprietary_terms:
+#     <original_term>: <replacement>
+#
+# Rules:
+#   - Matching is case-sensitive unless a lowercase variant is also listed
+#   - Replacements maintain grammatical consistency across all files
+#   - Add new terms as business context evolves (CORE-035: single canonical source)
+#
+# Governance: CORE-002 (no markdown sprawl), CORE-035 (single canonical)
+# Loaded by: cortex/orchestrators/git/sanitization_orchestrator.py
+# ---------------------------------------------------------------------------
+
+proprietary_terms:
+
+  # ── Company identifiers ──────────────────────────────────────────────────
+  healthequity: enterprise-client
+  HealthEquity: EnterpriseClient
+  HEALTHEQUITY: ENTERPRISE-CLIENT
+  HQY: TICKER
+  hqy: ticker
+
+  # ── Product names ─────────────────────────────────────────────────────────
+  # Add product-specific terms below as needed
+  # example_product: generic-product
+  # ExampleProduct: GenericProduct
+
+  # ── Internal codenames / project names ───────────────────────────────────
+  # Add internal codenames below as needed
+  # ProjectPhoenix: InternalProject
+
+  # ── Infrastructure hostnames ─────────────────────────────────────────────
+  # These prevent internal hostnames from leaking into public repos
+  # internal-api.healthequity.com: api.enterprise-client.internal
+  # db.healthequity.internal: db.enterprise-client.internal
+
+  # ── Team / org names ─────────────────────────────────────────────────────
+  # Add internal team names that should not appear in public commits
+  # TeamPlatform: platform-team
+
+# ---------------------------------------------------------------------------
+# Extension guide:
+#   To add new terms at runtime, call:
+#       registry = PatternRegistry()
+#       registry.add_proprietary_term("MyTerm", "generic-term")
+#
+#   To load this file in SanitizationOrchestrator:
+#       from cortex.orchestrators.git.sanitization_orchestrator import (
+#           SanitizationOrchestrator, PatternRegistry
+#       )
+#       import yaml
+#       config = yaml.safe_load(open("cortex-registry/config/proprietary_terms.yaml"))
+#       terms = config.get("proprietary_terms", {})
+#       orch = SanitizationOrchestrator(proprietary_terms=terms)
+# ---------------------------------------------------------------------------

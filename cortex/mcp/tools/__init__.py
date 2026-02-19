@@ -79,6 +79,9 @@ from cortex.mcp.tools.toolkit import (
 from cortex.mcp.tools.health_orchestrator_tool import CortexHealthOrchestrate
 from cortex.mcp.tools.vacuum_orchestrator_tool import CortexVacuumOrchestrate
 
+# GitOrchestrator — replaces git hooks + GitHub Actions (2026-02-19)
+from cortex.mcp.tools.git_orchestrator_tool import CortexGitPush
+
 
 # All tool classes for registration
 ALL_TOOLS = [
@@ -123,6 +126,8 @@ ALL_TOOLS = [
     # Health-Vacuum (2) - Phase 48
     CortexHealthOrchestrate,
     CortexVacuumOrchestrate,
+    # GitOrchestrator (1) - replaces git hooks + GitHub Actions
+    CortexGitPush,
 ]
 
 
@@ -189,6 +194,8 @@ __all__ = [
     # Health-Vacuum (Phase 48)
     "CortexHealthOrchestrate",
     "CortexVacuumOrchestrate",
+    # GitOrchestrator (replaces git hooks + GitHub Actions)
+    "CortexGitPush",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",

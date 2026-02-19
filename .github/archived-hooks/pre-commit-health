@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+"""Git Pre-Commit Hook - Health Check Integration
+
+Integrates CORTEX health checks into git pre-commit workflow.
+Blocks commits that violate health policies.
+
+Usage:
+    This hook is auto-installed by setup scripts.
+    To bypass (not recommended): git commit --no-verify
+
+Author: CORTEX Framework
+Phase: PHASE-95 S4
+"""
+
+import sys
+from pathlib import Path
+
+# Add project root to path
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root))
+
+from cortex.orchestrators.health.hooks.pre_commit_health import main
+
+if __name__ == "__main__":
+    sys.exit(main())
