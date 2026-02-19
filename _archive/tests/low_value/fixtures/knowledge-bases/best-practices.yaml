@@ -1,0 +1,41 @@
+# Sample Knowledge Base - Best Practices
+
+metadata:
+  domain: "best-practices"
+  version: "1.0"
+  last_updated: "2026-02-15"
+
+practices:
+  - id: "BP-001"
+    title: "Type Hints Mandatory"
+    description: "All functions must have type hints"
+    rule: "CORE-011"
+    examples:
+      - "def foo(x: int) -> str:"
+    
+  - id: "BP-002"
+    title: "Google-Style Docstrings"
+    description: "Use Google docstring format"
+    rule: "CORE-012"
+    examples:
+      - |
+        def foo(x: int) -> str:
+            """Short description.
+            
+            Args:
+                x: Parameter description
+                
+            Returns:
+                Return value description
+            """
+    
+  - id: "BP-003"
+    title: "No Bare Except"
+    description: "Catch specific exceptions only"
+    rule: "CORE-013"
+    anti_patterns:
+      - "except:"
+      - "except Exception:"
+    correct_patterns:
+      - "except ValueError:"
+      - "except (KeyError, AttributeError):"

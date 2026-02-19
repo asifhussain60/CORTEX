@@ -1,0 +1,18 @@
+# Sample Orchestrator Configuration - Invalid (for negative tests)
+
+name: ""  # Invalid: empty name
+type: "invalid_type"  # Invalid: unknown type
+tier: 0  # Invalid: tier must be >= 1
+priority: -1  # Invalid: priority cannot be negative
+capabilities: []  # Invalid: must have at least one capability
+dependencies:
+  - "NonExistentOrchestrator"  # Invalid: dependency doesn't exist
+event_subscriptions:
+  - event_type: ""  # Invalid: empty event type
+    handler: "missing_handler"  # Invalid: handler not implemented
+mcp_tools: null  # Invalid: should be array
+health_check:
+  enabled: true
+  timeout_seconds: 0  # Invalid: timeout must be positive
+audit_trail:
+  enabled: false  # Invalid: audit trail required for production

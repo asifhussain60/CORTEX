@@ -1,0 +1,13 @@
+concurrent_users: 100
+
+metrics:
+  p50_response_time_ms: "<500"
+  p95_response_time_ms: "<2000"
+  p99_response_time_ms: "<5000"
+  error_rate_percent: "<5"
+  throughput_req_per_sec: ">50"
+
+test_duration_seconds: 300
+ramp_up_seconds: 60
+
+status: "BASELINE_ESTABLISHED"
