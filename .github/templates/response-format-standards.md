@@ -396,14 +396,17 @@ Result: Zero duplication, 350 words
 
 **When user triggers execution ("proceed", "implement", "yes", "continue"):**
 
+> ⚠️ **RENDERING RULE:** Output these templates **directly in the chat response as live markdown** — NOT inside fenced code blocks. The `━━━` lines, progress bar, and `├─` tree MUST render as visible characters in the chat panel, not as preformatted text in a code box.
+
 ### Progress Template (IN-PROGRESS)
 
-```
+**Output this directly — no surrounding backticks or fenced block:**
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 {PHASE_NAME} Stage {N}: {STAGE_TITLE}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[████████░░] 80% Stage {N} In Progress
+**`[████████░░]` 80% Stage {N} In Progress**
 
 ├─ ✅ S1: {name} ({n} tests)
 ├─ ✅ S2: {name} ({n} tests)
@@ -411,17 +414,18 @@ Result: Zero duplication, 350 words
 └─ ⚪ S4: {name} (pending)
 
 Tests: {passed}/{total} | Coverage: {pct}%
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
 
 ### Completion Template (ALL STAGES DONE)
 
-```
+**Output this directly — no surrounding backticks or fenced block:**
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📋 {PHASE_NAME} Stage {N}: {STAGE_TITLE}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[██████████] 100% All Stages Complete
+**`[██████████]` 100% All Stages Complete**
 
 ├─ ✅ S1: {name} ({n} tests)
 ├─ ✅ S2: {name} ({n} tests)
@@ -432,17 +436,18 @@ Tests: {passed}/{total} | Coverage: {pct}%
 Tests: {passed}/{total} | Coverage: {pct}%
 Commits: {n} (all pushed to remote)
 {ENH_ID}: ✅ COMPLETE
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
 
 ### Error Template (BLOCKED)
 
-```
+**Output this directly — no surrounding backticks or fenced block:**
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🔴 {PHASE_NAME}: BLOCKED at Stage {N}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-[████░░░░░░] 40% Stage {N} Blocked
+**`[████░░░░░░]` 40% Stage {N} Blocked**
 
 ├─ ✅ S1: {name} ({n} tests)
 ├─ 🔴 S2: {name} (FAILED)
@@ -452,8 +457,8 @@ Commits: {n} (all pushed to remote)
 Tests: {passed}/{total} | Failures: {n}
 Error: {error_message}
 Fix: {fix_suggestion}
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
 
 ### Status Icons (MANDATORY — all orchestrators)
 

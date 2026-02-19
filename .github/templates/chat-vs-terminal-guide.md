@@ -11,53 +11,16 @@
 
 ## ✅ CORRECT: Display in Chat Session
 
-### Progress Bars
-```markdown
-<hr>
+### Progress Bars & Stage Trees
 
-📋 **Phase 47 Stage 2: Memory Tier Clarification**
+**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
 
-`████████░░` 80% Implementing GREEN phase
-
-| # | Status | Task | Tests |
-|---|--------|------|-------|
-| 1 | ✅ | Directory rename | 6/6 |
-| 2 | 🔵 | Path updates | 4/10 |
-| 3 | ⚪ | Documentation | 0/4 |
-
-<hr>
-```
+**Output the golden template directly in the chat markdown response** — NOT inside a fenced code block, NOT via `run_in_terminal`. The `━━━` separators, `[██████████]` progress bar, and `├─` hanging stage tree must render as live markdown characters in the chat panel.
 
 **Implementation:**
-- Write directly in markdown response
+- Write the template content directly in your markdown response (no surrounding backticks)
 - NO `run_in_terminal` with `cat` or `echo`
-- Renders inline in Chat Session
-
-### Stage Completions
-```markdown
-<hr>
-
-✅ **STAGE 2 COMPLETE**
-
-**Duration:** 45 minutes  
-**Tests:** 10/19 passing (9 skipped - expected)
-
-### Changes
-- Renamed `tier1_learned/` → `learned_patterns/`
-- Created backward-compatible symlinks
-- 19 TDD tests created
-
-<hr>
-```
-
-### Results Tables
-```markdown
-| Component | Before | After | Status |
-|-----------|--------|-------|--------|
-| Governance | tier2>tier1>tier0 | tier0>tier1>tier2 | ✅ |
-| Memory | tier1_learned/ | learned_patterns/ | ✅ |
-| Tests | 0 | 45 passing | ✅ |
-```
+- Renders inline in Chat Session as formatted text
 
 ---
 
@@ -140,57 +103,11 @@ run_in_terminal(
 
 ---
 
-## 🎨 Progress Bar Implementation
+## 🎨 Progress Bar & Stage Tree Implementation
 
-### In Chat Response (Correct)
+**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
 
-**Template:**
-```markdown
-<hr>
-
-📋 **{Phase Name} Stage {N}: {Stage Name}**
-
-`{fill_chars}{empty_chars}` {pct}% {current_action}
-
-{optional_table_if_multi_stage}
-
-<hr>
-```
-
-**Example:**
-```markdown
-<hr>
-
-📋 **Phase 47 Stage 3: Tier System Integration**
-
-`██████████` 100% Updating BrainTierPusher paths
-
-<hr>
-```
-
-**Rendering:**
-- Single-line bar with emoji
-- Percentage and action description
-- Clean `<hr>` separators
-- No overflow in narrow chat windows
-
-### Progress Updates
-
-**For multi-stage operations:**
-```markdown
-<hr>
-
-📋 **Phase 47: All Stages**
-
-| Stage | Progress | Status |
-|-------|----------|--------|
-| 1 | `██████████` 100% | ✅ Complete |
-| 2 | `██████████` 100% | ✅ Complete |
-| 3 | `████████░░` 80% | 🔵 In Progress |
-| 4 | `░░░░░░░░░░` 0% | ⚪ Pending |
-
-<hr>
-```
+> ⚠️ **Do NOT define a progress template here.** The ONLY correct format is the golden template in the SSOT above. Output it **directly** in the chat markdown response — never inside a fenced code block, never via `run_in_terminal`.
 
 ---
 
@@ -198,63 +115,33 @@ run_in_terminal(
 
 ### Before Writing Response
 
-- [ ] Is this user-facing feedback? → **Chat**
-- [ ] Is this a long-running command? → **Terminal**
-- [ ] Is this progress indication? → **Chat**
+- [ ] Is this user-facing feedback? → **Chat** (write as live markdown)
+- [ ] Is this a long-running command? → **Terminal** (`run_in_terminal`)
+- [ ] Is this progress/stage update? → **Chat** (use SSOT golden template directly)
 - [ ] Is this command output? → **Terminal**
-
-### Response Structure
-
-```markdown
-## {mode_icon} CORTEX Architect {MODE}
----
-
-{brief_context_if_needed}
-
-<hr>
-
-📋 **{Phase/Task Name}**
-
-`{progress_bar}` {pct}% {action}
-
-<hr>
-
-{run_terminal_commands_here_for_actual_work}
-
-<hr>
-
-✅ **{COMPLETION_TITLE}**
-
-{summary_table}
-
-<hr>
-```
 
 ### Key Points
 
 1. **Header once** at top (per prompt standards)
-2. **Progress in chat** using markdown bars
+2. **Progress in chat** using the SSOT golden template (`━━━` + bar + `├─` tree) written directly as markdown
 3. **Commands in terminal** using `run_in_terminal`
 4. **Results in chat** using markdown tables
-5. **Separators** use `<hr>` HTML tag
+5. **Never wrap** the golden template in a fenced code block — that makes it render as preformatted text
 
 ---
 
 ## 📊 Decision Matrix
 
-| Content Type | Location | Tool |
-|--------------|----------|------|
-| Progress bar | Chat | Markdown `\`bar\`` |
+| Content Type | Location | Format |
+|--------------|----------|--------|
+| Progress bar + stage tree | Chat | SSOT golden template (live markdown) |
 | Status update | Chat | Markdown text |
-| Stage completion | Chat | Markdown table |
+| Stage completion | Chat | SSOT completion template (live markdown) |
 | Test command | Terminal | `run_in_terminal` |
 | Build command | Terminal | `run_in_terminal` |
 | Git command | Terminal | `run_in_terminal` |
 | File operation | Terminal | `run_in_terminal` |
 | Summary table | Chat | Markdown table |
-| Metrics | Chat | Markdown table |
-| Error details | Chat | Markdown code block |
-| Fix suggestion | Chat | Markdown list |
 
 ---
 
@@ -262,108 +149,30 @@ run_in_terminal(
 
 ### Mistake 1: Progress Bars in Terminal
 ```python
-# ❌ WRONG
-run_in_terminal(
-    command='cat << "EOF"\n`████░░░░░░` 40% Working...\nEOF'
-)
+# ❌ WRONG — progress bars should NOT go to terminal
+run_in_terminal(command='cat << "EOF"\n`████░░░░░░` 40% Working...\nEOF')
 ```
+**Fix:** Write the SSOT golden template directly in your chat response.
 
-**Fix:** Write directly in markdown response
-```markdown
-<hr>
-📋 **Task Name**
-`████░░░░░░` 40% Working...
-<hr>
+### Mistake 2: Wrapping golden template in a fenced code block
 ```
-
-### Mistake 2: Status Messages in Terminal
-```python
-# ❌ WRONG
-run_in_terminal(
-    command='echo "✅ Complete"'
-)
-```
-
-**Fix:** Include in chat response
-```markdown
-<hr>
-✅ **COMPLETE**
-Details here
-<hr>
-```
-
-### Mistake 3: Tables in Terminal
-```python
-# ❌ WRONG
-run_in_terminal(
-    command='cat << "EOF"\n| Col | Val |\n|-----|-----|\nEOF'
-)
-```
-
-**Fix:** Use markdown tables in chat
-```markdown
-| Col | Val |
-|-----|-----|
-| A | 1 |
-```
-
----
-
-## ✅ Correct Implementation Example
-
-**Scenario:** Multi-stage phase execution
-
-**Response:**
-```markdown
-## ⚡ CORTEX IMPLEMENT
-
----
-
+# ❌ WRONG — fenced block causes raw preformatted text, not rendered markdown
+\`\`\`
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 Phase 47 Stage 2: Memory Tier Rename
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Phase N Stage N: Title
+...
+\`\`\`
+```
+**Fix:** Output the `━━━` separators, progress bar, and `├─` tree **directly** in your markdown — no surrounding backticks.
 
-[████░░░░░░] 40% Stage 2 In Progress
-
-├─ ✅ S1: Brain Architecture (20 tests)
-├─ 🔵 S2: Memory Tier Rename (in progress)
-├─ ⚪ S3: Integration Tests (pending)
-└─ ⚪ S4: Cleanup (pending)
-
+### Mistake 3: Using `<hr>` + backtick bars instead of the SSOT format
+```
+# ❌ WRONG — legacy format, contradicts SSOT
+<hr>
+`████████░░` 80% Working
 <hr>
 ```
-
-**Then run actual commands:**
-```python
-run_in_terminal(
-    command='mv cortex_intelligence/memory/tier1_learned cortex_intelligence/memory/learned_patterns',
-    explanation="Renaming memory directory",
-    isBackground=False
-)
-
-run_in_terminal(
-    command='python3 -m pytest tests/unit/brain/core/test_memory_tier_paths.py -v',
-    explanation="Running memory tier tests",
-    isBackground=False
-)
-```
-
-**Then show results in chat:**
-```markdown
-<hr>
-
-✅ **STAGE 2 COMPLETE**
-
-**Duration:** 45 minutes  
-**Tests:** 10/19 passing (9 skipped)
-
-### Changes
-- ✅ Directories renamed
-- ✅ Symlinks created
-- ✅ Tests passing
-
-<hr>
-```
+**Fix:** Use `━━━` separator lines and `[████████░░]` bar per the SSOT golden template.
 
 ---
 
@@ -371,11 +180,12 @@ run_in_terminal(
 
 | Principle | Implementation |
 |-----------|----------------|
-| User feedback | → Chat (markdown) |
+| User feedback | → Chat (live markdown) |
 | Command output | → Terminal (`run_in_terminal`) |
-| Progress bars | → Chat (markdown) |
-| Status updates | → Chat (markdown) |
+| Progress/stage updates | → Chat (SSOT golden template, no code block) |
 | Test results | → Chat (markdown table) |
 | Long commands | → Terminal (actual execution) |
 
-**Golden Rule:** If the user needs to **see it immediately**, put it in **chat**. If it's **command output**, run in **terminal**.
+**Golden Rule:** If the user needs to **see it**, put it in **chat as live markdown**. If it's a **command to run**, use `run_in_terminal`.
+
+**Template Reference:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template

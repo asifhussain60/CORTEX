@@ -6,20 +6,9 @@
 
 ## ✅ DO: Display in Chat Session
 
-```markdown
-<hr>
+**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
 
-📋 **Phase 47 Stage 2: Memory Tier Clarification**
-
-`████████░░` 80% Implementing GREEN phase
-
-| # | Status | Task | Tests |
-|---|--------|------|-------|
-| 1 | ✅ | Rename dirs | 6/6 |
-| 2 | 🔵 | Update paths | 4/10 |
-
-<hr>
-```
+Output the golden template **directly as live markdown** in your chat response. Do NOT wrap it in a fenced code block — that converts it to preformatted text and breaks rendering.
 
 **Write directly in markdown response body!**
 
@@ -81,41 +70,12 @@ Is this user-facing feedback?
 
 ---
 
-## 🔧 Template
+## 🔧 Template Reference
 
-```markdown
-## ⚡ CORTEX IMPLEMENT
+**SSOT:** `.github/templates/response-format-standards.md` § Silent Autonomous Mode — Golden Template
 
----
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 {PHASE_NAME} Stage {N}: {STAGE_TITLE}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-[██████████] 100% All Stages Complete
-
-├─ ✅ S1: {name} ({n} tests)
-└─ ✅ S2: {name} ({n} tests)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-Then run commands:
-```python
-run_in_terminal(command='actual work here')
-```
-
-Then show results:
-```markdown
-<hr>
-
-✅ **COMPLETE**
-
-| Metric | Value |
-|--------|-------|
-| Tests | 45/45 |
-
-<hr>
-```
+> Output the golden template **directly as live markdown** — never inside a fenced code block.
+> Then run actual commands via `run_in_terminal`.
 
 ---
 
