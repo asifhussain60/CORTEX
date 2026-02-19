@@ -1,0 +1,30 @@
+RA DOMAIN ANALYSIS SUMMARY
+================================================================================
+
+Total C# Files:    239
+Total Classes:     250
+Total Methods:     1086
+Total Projects:    12
+
+Top 20 Business Terms:
+----------------------------------------
+  Assert                          1256
+  App                              582
+  System                           571
+  Customer                           536
+  AreEqual                         533
+  GenericCorp                     468
+  Inc                              447
+  ReimbursementAccountId           441
+  IsTrue                           432
+  PaymentAccounts            419
+  PaymentPlan                412
+  Today                            339
+  Setup                            333
+  Domain                           317
+  ReturnsAsync                     308
+  AddDays                          295
+  Mock                             289
+  Object                           262
+  ConfigureAwait                   257
+  Property                         242

@@ -1,0 +1,12 @@
+sequenceDiagram
+    user Client
+    user XGenerateTransactionInvoice
+    user Database
+
+    Client->>+XGenerateTransactionInvoice: Execute
+    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: Validate Inputs
+    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: InvoiceAmount_less_equal_0
+    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: InvoiceDate_less_DateTime
+    XGenerateTransactionInvoice->>+Database: SELECT AccountCategory
+    Database-->>-XGenerateTransactionInvoice: Result
+    XGenerateTransactionInvoice-->>-Client: Success

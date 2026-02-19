@@ -1,407 +1,425 @@
-"""Health Orchestrator - Coordinates Health Agents
+"""HealthOrchestrator — Holistic Repository Health Scanner
 
-Main orchestrator that coordinates specialized health agents to detect
-and report repository health issues. Provides integration with CI/CD,
-pre-commit hooks, and MCP tools.
+Single canonical orchestrator that diagnoses every gap across:
+  • Filesystem integrity (naming, empty files, orphans, duplicates)
+  • Root cleanliness (files that don't belong in project root)
+  • Naming compliance (CORE-028)
+  • Deprecated markers
+  • Markdown location
 
-Architecture (post-refactor):
-    PHASE-92 HealthOrchestrator.run_health_check()
-        └── delegates file-system walk to Phase-48 HealthOrchestrator.scan()
-                via a shared FileContext (single rglob, zero subprocess spawns)
-        └── returns HealthReport for backward compatibility
+Produces a :class:`ScanResult` and writes a YAML handoff for
+:class:`VacuumOrchestrator`.
 
-Author: CORTEX Framework
-Phase: PHASE-92
-CORE Rules: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
+Phase: PHASE-51
+CORE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings),
+      CORE-028 (naming), CORE-035 (single canonical)
 """
 
-import time
+from __future__ import annotations
+
+import logging
+from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+import yaml
+
 from .agents.base_agent import BaseHealthAgent, HealthCheckResult
-from .reports.health_report import HealthReport, HealthMetrics
-from .intelligence import HealthIntelligence
-from cortex.orchestrators.support.health_orchestrator import (
-    HealthOrchestrator as _Phase48Orchestrator,
+from .constants import (
+    ALLOWED_MARKDOWN_PREFIXES,
+    EXCLUDED_DIRS,
+    PROTECTED_FILES,
+    PYTHON_EXTENSIONS,
 )
+from .file_context import FileContext
+from .models import IssueFile, IssueSeverity, ScanResult
+from .naming import (
+    classify_naming_violation,
+    is_screaming,
+    to_kebab_case,
+)
+from .reports.health_report import HealthReport
+
+logger = logging.getLogger(__name__)
+
 
 class HealthOrchestrator:
-    """Main orchestrator for repository health management.
-    
-    Coordinates multiple health agents to scan the repository for issues,
-    generates comprehensive reports, and provides actionable recommendations.
-    
+    """Holistic repository health scanner.
+
+    Usage::
+
+        orch = HealthOrchestrator(Path("/path/to/workspace"))
+        result = orch.scan()
+        orch.write_handoff(result, Path(".cortex-runtime/health-issues.yaml"))
+
     Attributes:
-        workspace_root: Root path of workspace to check
-        agents: List of registered health agents
-        config: Orchestrator configuration
-        enabled: Whether orchestrator is enabled
-    
-    Usage:
-        ```python
-        orchestrator = HealthOrchestrator(Path("/path/to/repo"))
-        
-        # Register agents
-        orchestrator.register_agent(DuplicateDetectionAgent())
-        orchestrator.register_agent(StubDetectionAgent())
-        
-        # Run health check
-        report = orchestrator.run_health_check()
-        
-        # Get recommendations
-        recommendations = report.generate_recommendations()
-        ```
+        workspace_root: Absolute path of the workspace.
     """
-    
+
     def __init__(
         self,
         workspace_root: Path,
+        *,
         config: Optional[Dict[str, Any]] = None,
     ) -> None:
-        """Initialize Health Orchestrator.
-        
+        """Initialise the orchestrator.
+
         Args:
-            workspace_root: Root path of workspace to check
-            config: Optional configuration dictionary
+            workspace_root: Root of the workspace to scan.
+            config: Optional configuration overrides.
+
+        Raises:
+            ValueError: If *workspace_root* does not exist.
         """
-        self.workspace_root = Path(workspace_root)
-        self.agents: List[BaseHealthAgent] = []
+        if not workspace_root.exists():
+            raise ValueError(f"Workspace root does not exist: {workspace_root}")
+        self.workspace_root = workspace_root
         self.config = config or {}
-        self.enabled = True
-        
-        if not self.workspace_root.exists():
-            raise ValueError(f"Workspace root does not exist: {self.workspace_root}")
-        
-        # Initialize intelligence layer (after existence check — mkdir(parents=True)
-        # inside HealthIntelligence would create the workspace dir otherwise)
-        self.intelligence = HealthIntelligence(self.workspace_root)
-    
+        self.agents: List[BaseHealthAgent] = []
+        self.enabled: bool = True
+
+    # ── agent registration (backward-compat with Phase-92 agents) ────────
+
     def register_agent(self, agent: BaseHealthAgent) -> None:
-        """Register a health agent.
-        
+        """Register a health agent for use during scans.
+
         Args:
-            agent: Health agent instance to register
+            agent: Agent instance implementing BaseHealthAgent.
         """
         self.agents.append(agent)
-    
-    def unregister_agent(self, agent_name: str) -> bool:
-        """Unregister a health agent by name.
-        
+
+    def unregister_agent(self, name: str) -> bool:
+        """Remove a registered agent by name.
+
         Args:
-            agent_name: Name of agent to unregister
-        
+            name: Agent name.
+
         Returns:
-            True if agent was found and removed, False otherwise
+            ``True`` if found and removed, ``False`` otherwise.
         """
-        for i, agent in enumerate(self.agents):
-            if agent.name == agent_name:
+        for i, a in enumerate(self.agents):
+            if a.name == name:
                 self.agents.pop(i)
                 return True
         return False
-    
-    def get_agent(self, agent_name: str) -> Optional[BaseHealthAgent]:
-        """Get agent by name.
-        
+
+    def get_agent(self, name: str) -> Optional[BaseHealthAgent]:
+        """Retrieve a registered agent by name.
+
         Args:
-            agent_name: Name of agent to find
-        
+            name: Agent name.
+
         Returns:
-            Agent instance or None if not found
+            The agent, or ``None``.
         """
-        for agent in self.agents:
-            if agent.name == agent_name:
-                return agent
+        for a in self.agents:
+            if a.name == name:
+                return a
         return None
-    
+
     def list_agents(self) -> List[str]:
-        """List all registered agent names.
-        
-        Returns:
-            List of agent names
-        """
-        return [agent.name for agent in self.agents]
-    
+        """Return names of all registered agents."""
+        return [a.name for a in self.agents]
+
     def run_health_check(
         self,
+        *,
         agent_names: Optional[List[str]] = None,
-        use_intelligence: bool = True,
     ) -> HealthReport:
-        """Run health check with registered agents.
+        """Run registered agents and return a HealthReport.
 
-        Delegates the filesystem walk to the Phase-48 HealthOrchestrator
-        (single ``rglob`` via ``FileContext``) then runs PHASE-92 agents
-        against the shared context so no additional disk I/O is needed.
+        This is the Phase-92 backward-compatible entry point. For the
+        Phase-51 holistic scan use :meth:`scan` instead.
 
         Args:
-            agent_names: Optional list of specific agents to run.
-                        If None, runs all enabled agents.
-            use_intelligence: Whether to use intelligence layer for
-                            caching and false positive suppression
+            agent_names: Run only these agents.  ``None`` = all.
 
         Returns:
-            HealthReport with aggregated results
+            HealthReport with agent results.
         """
-        from cortex.orchestrators.support.health_orchestrator import FileContext  # noqa: F401 (kept for type checking)
-
-        start_time = time.time()
         report = HealthReport(workspace_root=self.workspace_root)
+        if not self.enabled:
+            return report
 
-        # --- Phase-48 delegation: single rglob walk --------------------------
-        phase48 = _Phase48Orchestrator(workspace_root=self.workspace_root)
-        phase48_result = phase48.scan()
-
-        # Expose Phase-48 ScanResult on the report for callers that need it
-        report.metadata["phase48_scan"] = {
-            "total_files": phase48_result.total_files_scanned,
-            "issues_found": phase48_result.issues_found,
-            "duration_ms": phase48_result.scan_duration_ms,
-        }
-
-        # Reuse the FileContext built inside Phase-48 scan() — zero extra rglob
-        ctx = phase48.last_ctx
-
-        # --- PHASE-92 agents -------------------------------------------------
-        # Determine which agents to run
-        agents_to_run = self.agents
-        if agent_names:
-            agents_to_run = [
-                agent for agent in self.agents
-                if agent.name in agent_names
-            ]
-
-        # Run each agent
-        for agent in agents_to_run:
-            # Skip disabled agents AND check orchestrator enabled status
-            if not self.enabled or not agent.is_enabled():
+        for agent in self.agents:
+            if not agent.is_enabled():
                 continue
-
+            if agent_names and agent.name not in agent_names:
+                continue
             try:
-                # Check intelligence cache if enabled
-                if use_intelligence:
-                    cached_files = 0
-                    for file_path in ctx.files:
-                        if file_path.suffix == ".py" and self.intelligence.should_skip_file(
-                            file_path, agent.name
-                        ):
-                            cached_files += 1
-
-                    if cached_files > 0:
-                        print(f"  {agent.name}: Skipped {cached_files} unchanged files (cached)")
-
-                # Run agent — pass ctx if agent supports it
-                try:
-                    result = agent.check(self.workspace_root, ctx=ctx)
-                except TypeError:
-                    # Agent doesn't accept ctx yet — backward compat
-                    result = agent.check(self.workspace_root)
-
-                # Filter false positives using intelligence
-                if use_intelligence and result.issues:
-                    original_count = len(result.issues)
-                    filtered_issues = [
-                        issue for issue in result.issues
-                        if not self.intelligence.is_false_positive(
-                            issue.file_path,
-                            issue.category.value,
-                            issue.description,
-                        )
-                    ]
-                    result.issues = filtered_issues
-
-                    if len(filtered_issues) < original_count:
-                        suppressed = original_count - len(filtered_issues)
-                        print(f"  {agent.name}: Suppressed {suppressed} known false positives")
-
-                # Cache result
-                if use_intelligence:
-                    self.intelligence.cache_result(
-                        agent_name=agent.name,
-                        result=result,
-                    )
-
+                result = agent.check(self.workspace_root)
                 report.add_agent_result(result)
-            except Exception as e:
-                print(f"Error running {agent.name}: {str(e)}")
-                error_result = HealthCheckResult(
-                    agent_name=agent.name,
-                    issues=[],
-                    files_scanned=0,
-                    duration_seconds=0.0,
-                    metadata={"error": str(e)},
-                )
-                report.add_agent_result(error_result)
-        
-        # Generate recommendations with intelligence
-        report.generate_recommendations()
-        
-        # Update total duration
-        report.metadata["total_duration_seconds"] = time.time() - start_time
-        
-        # Add intelligence stats
-        if use_intelligence:
-            intel_stats = self.intelligence.get_efficiency_stats()
-            report.metadata["intelligence"] = intel_stats
-        
+            except Exception as exc:  # noqa: BLE001
+                logger.warning("Agent %s failed: %s", agent.name, exc)
+
         return report
-    
-    def run_agent(self, agent_name: str) -> Optional[HealthCheckResult]:
-        """Run a specific agent by name.
-        
+
+    # ── public API ───────────────────────────────────────────────────────
+
+    def scan(self) -> ScanResult:
+        """Run a full holistic scan.
+
+        Returns:
+            :class:`ScanResult` with all findings and a health score.
+        """
+        ctx = FileContext.build(self.workspace_root)
+        result = ScanResult(
+            workspace_root=self.workspace_root,
+            files_scanned=ctx.file_count,
+        )
+
+        # Built-in filesystem checks
+        self._check_screaming_case(ctx, result)
+        self._check_empty_files(ctx, result)
+        self._check_orphaned_dirs(ctx, result)
+        self._check_duplicate_content(ctx, result)
+        self._check_deprecated_markers(ctx, result)
+        self._check_markdown_location(ctx, result)
+        self._check_naming_violations(ctx, result)
+        self._check_root_violations(ctx, result)
+
+        result.recount()
+        return result
+
+    def write_handoff(self, result: ScanResult, path: Path) -> None:
+        """Write a YAML handoff file for VacuumOrchestrator.
+
         Args:
-            agent_name: Name of agent to run
-        
-        Returns:
-            HealthCheckResult or None if agent not found
+            result: Scan result to serialise.
+            path: Destination file path.
         """
-        agent = self.get_agent(agent_name)
-        if not agent:
-            return None
-        
-        if not agent.is_enabled():
-            return None
-        
-        return agent.check(self.workspace_root)
-    
-    def enable_agent(self, agent_name: str) -> bool:
-        """Enable a specific agent.
-        
-        Args:
-            agent_name: Name of agent to enable
-        
-        Returns:
-            True if agent was found, False otherwise
-        """
-        agent = self.get_agent(agent_name)
-        if agent:
-            agent.enable()
-            return True
-        return False
-    
-    def disable_agent(self, agent_name: str) -> bool:
-        """Disable a specific agent.
-        
-        Args:
-            agent_name: Name of agent to disable
-        
-        Returns:
-            True if agent was found, False otherwise
-        """
-        agent = self.get_agent(agent_name)
-        if agent:
-            agent.disable()
-            return True
-        return False
-    
-    def scan(self) -> Any:
-        """Proxy to Phase-48 HealthOrchestrator.scan() for unified API.
+        path.parent.mkdir(parents=True, exist_ok=True)
+        data = result.to_dict()
+        path.write_text(yaml.dump(data, default_flow_style=False, sort_keys=False))
+        logger.info("Handoff written to %s", path)
 
-        Exposes the raw filesystem scan result from the Phase-48 engine,
-        allowing callers to access low-level ScanResult without also needing
-        to import from cortex.orchestrators.support.
-
-        Returns:
-            ScanResult from Phase-48 HealthOrchestrator.scan()
-
-        AC: GP50-004 / GP50-005 — Phase 50 unified scan() API
-        """
-        phase48 = _Phase48Orchestrator(workspace_root=self.workspace_root)
-        return phase48.scan()
-
-    def get_summary(self) -> Dict[str, Any]:
-        """Get summary of orchestrator state.
-        
-        Returns:
-            Dictionary with orchestrator summary
-        """
-        return {
-            "workspace_root": str(self.workspace_root),
-            "agents_registered": len(self.agents),
-            "agents_enabled": sum(1 for agent in self.agents if agent.is_enabled()),
-            "agent_names": self.list_agents(),
-            "enabled": self.enabled,
-        }
-    
     def check_definition_of_done(
         self,
+        result: ScanResult,
+        *,
         min_score: float = 80.0,
-        blocking_agents: Optional[List[str]] = None,
-    ) -> Dict[str, Any]:
-        """Check if Definition of Done (DoD) gate is satisfied.
-        
-        This gate enforces production-ready code quality by validating
-        health score and critical agent checks.
-        
+    ) -> bool:
+        """Return ``True`` if the scan passes the DoD gate.
+
         Args:
-            min_score: Minimum health score required (0-100)
-            blocking_agents: List of agent names that must pass (no issues)
-                           Default: DuplicateDetectionAgent, StubDetectionAgent
-        
+            result: Scan result to evaluate.
+            min_score: Minimum health score required.
+
         Returns:
-            Dictionary with DoD check results:
-                - passed: bool - Whether DoD gate passed
-                - health_score: float - Overall health score
-                - blocking_failures: List[str] - Failed blocking agents
-                - recommendation: str - Action to take
-        
-        Usage:
-            ```python
-            orchestrator = HealthOrchestrator(Path("."))
-            dod_result = orchestrator.check_definition_of_done(min_score=80.0)
-            
-            if not dod_result["passed"]:
-                print(f"DoD FAILED: {dod_result['recommendation']}")
-                sys.exit(1)
-            ```
+            Whether the workspace is production-ready.
         """
-        # Default blocking agents (P0 violations)
-        if blocking_agents is None:
-            blocking_agents = [
-                "DuplicateDetectionAgent",
-                "StubDetectionAgent",
-            ]
-        
-        # Run health check
-        report = self.run_health_check()
-        
-        # Calculate health score (already calculated during metric updates)
-        health_score = report.metrics.health_score
-        
-        # Check blocking agents
-        blocking_failures: List[str] = []
-        for agent_name in blocking_agents:
-            agent_result = next(
-                (r for r in report.agent_results if r.agent_name == agent_name),
-                None
-            )
-            if agent_result and len(agent_result.issues) > 0:
-                blocking_failures.append(
-                    f"{agent_name}: {len(agent_result.issues)} issues"
+        return result.health_score >= min_score
+
+    # ── internal checks ──────────────────────────────────────────────────
+
+    def _check_screaming_case(
+        self, ctx: FileContext, result: ScanResult
+    ) -> None:
+        """H-001: Detect SCREAMING_CASE filenames."""
+        for f in ctx.all_files:
+            name = f.name
+            # Skip allowed screaming prefixes (README, LICENSE, etc.)
+            stem = name.split(".")[0] if "." in name else name
+            if stem.upper() in ALLOWED_MARKDOWN_PREFIXES:
+                continue
+            if is_screaming(name):
+                suggested = to_kebab_case(name)
+                result.issues.append(
+                    IssueFile(
+                        check_id="H-001",
+                        path=f.relative_to(self.workspace_root),
+                        severity=IssueSeverity.MEDIUM,
+                        description=f"SCREAMING_CASE filename: {name}",
+                        suggested_fix=f"Rename to {suggested}",
+                        category="naming",
+                    )
                 )
-        
-        # Determine if DoD passed
-        passed = health_score >= min_score and len(blocking_failures) == 0
-        
-        # Generate recommendation
-        if passed:
-            recommendation = "✅ DoD PASSED - Code meets production quality standards"
-        else:
-            reasons = []
-            if health_score < min_score:
-                reasons.append(f"Health score {health_score:.1f} < {min_score}")
-            if blocking_failures:
-                reasons.append(f"Blocking failures: {', '.join(blocking_failures)}")
-            recommendation = f"❌ DoD FAILED - {' | '.join(reasons)}"
-        
-        return {
-            "passed": passed,
-            "health_score": health_score,
-            "min_score_required": min_score,
-            "blocking_failures": blocking_failures,
-            "total_issues": report.metrics.total_issues,
-            "critical_issues": report.metrics.critical_issues,
-            "recommendation": recommendation,
-        }
+
+    def _check_empty_files(
+        self, ctx: FileContext, result: ScanResult
+    ) -> None:
+        """H-002: Detect empty files (excluding __init__.py, .gitkeep)."""
+        exempt = {"__init__.py", ".gitkeep", "conftest.py"}
+        for f in ctx.all_files:
+            if f.name in exempt:
+                continue
+            try:
+                if f.stat().st_size == 0:
+                    result.issues.append(
+                        IssueFile(
+                            check_id="H-002",
+                            path=f.relative_to(self.workspace_root),
+                            severity=IssueSeverity.LOW,
+                            description=f"Empty file: {f.name}",
+                            suggested_fix="Delete or add content",
+                            category="empty",
+                        )
+                    )
+            except OSError:
+                pass
+
+    def _check_orphaned_dirs(
+        self, ctx: FileContext, result: ScanResult
+    ) -> None:
+        """H-003: Detect directories with no files inside."""
+        # Build set of dirs that contain at least one file
+        dirs_with_files = {f.parent for f in ctx.all_files}
+        for d in ctx.directories:
+            if d not in dirs_with_files and d != self.workspace_root:
+                result.issues.append(
+                    IssueFile(
+                        check_id="H-003",
+                        path=d.relative_to(self.workspace_root),
+                        severity=IssueSeverity.LOW,
+                        description=f"Orphaned directory: {d.name}",
+                        suggested_fix="Delete empty directory",
+                        category="orphaned",
+                    )
+                )
+
+    def _check_duplicate_content(
+        self, ctx: FileContext, result: ScanResult
+    ) -> None:
+        """H-005: Detect files with identical content via MD5 hash."""
+        hash_map: Dict[str, List[Path]] = defaultdict(list)
+        for f in ctx.all_files:
+            # Skip very small files and __init__.py
+            if f.name == "__init__.py":
+                continue
+            try:
+                if f.stat().st_size < 10:
+                    continue
+            except OSError:
+                continue
+            h = ctx.get_hash(f)
+            if h:
+                hash_map[h].append(f)
+
+        for h, paths in hash_map.items():
+            if len(paths) > 1:
+                canonical = min(paths, key=lambda p: len(str(p)))
+                for p in paths:
+                    if p != canonical:
+                        result.issues.append(
+                            IssueFile(
+                                check_id="H-005",
+                                path=p.relative_to(self.workspace_root),
+                                severity=IssueSeverity.MEDIUM,
+                                description=(
+                                    f"Duplicate of {canonical.relative_to(self.workspace_root)}"
+                                ),
+                                suggested_fix=f"Keep {canonical.name}, remove this",
+                                category="duplicate",
+                                metadata={"canonical": str(canonical), "md5": h},
+                            )
+                        )
+
+    def _check_deprecated_markers(
+        self, ctx: FileContext, result: ScanResult
+    ) -> None:
+        """H-006: Detect files containing DEPRECATED markers."""
+        for f in ctx.all_files:
+            if f.suffix not in (".py", ".yaml", ".yml", ".md"):
+                continue
+            content = ctx.get_content(f)
+            if content and "DEPRECATED" in content.upper():
+                result.issues.append(
+                    IssueFile(
+                        check_id="H-006",
+                        path=f.relative_to(self.workspace_root),
+                        severity=IssueSeverity.LOW,
+                        description=f"Contains DEPRECATED marker: {f.name}",
+                        suggested_fix="Remove or replace deprecated code",
+                        category="deprecated",
+                    )
+                )
+
+    def _check_markdown_location(
+        self, ctx: FileContext, result: ScanResult
+    ) -> None:
+        """H-007: Detect markdown files in non-documentation directories."""
+        doc_dirs = {"docs", "cortex-docs", "documentation"}
+        for f in ctx.all_files:
+            if f.suffix != ".md":
+                continue
+            rel = f.relative_to(self.workspace_root)
+            # Root-level markdown is OK if it matches allowed prefixes
+            if len(rel.parts) == 1:
+                stem = f.stem.upper()
+                if any(stem.startswith(prefix) for prefix in ALLOWED_MARKDOWN_PREFIXES):
+                    continue
+            # Markdown under doc directories is OK
+            if rel.parts[0] in doc_dirs:
+                continue
+            result.issues.append(
+                IssueFile(
+                    check_id="H-007",
+                    path=rel,
+                    severity=IssueSeverity.LOW,
+                    description=f"Markdown in non-docs location: {rel}",
+                    suggested_fix="Move to docs/ or cortex-docs/",
+                    category="markdown_location",
+                )
+            )
+
+    def _check_naming_violations(
+        self, ctx: FileContext, result: ScanResult
+    ) -> None:
+        """H-008: Detect non-snake_case Python and non-kebab-case non-Python."""
+        exempt_names = {"__init__.py", "__main__.py", "conftest.py", "Makefile",
+                        "Dockerfile", "Pipfile", "Pipfile.lock", ".gitignore",
+                        ".gitattributes", ".editorconfig", ".dockerignore",
+                        ".pre-commit-config.yaml"}
+        for f in ctx.all_files:
+            if f.name in exempt_names:
+                continue
+            # Skip dunder files
+            if f.name.startswith("__") and f.name.endswith("__"):
+                continue
+            violation = classify_naming_violation(f.name)
+            if violation:
+                result.issues.append(
+                    IssueFile(
+                        check_id="H-008",
+                        path=f.relative_to(self.workspace_root),
+                        severity=IssueSeverity.MEDIUM,
+                        description=(
+                            f"Naming violation ({violation.violation_type}): "
+                            f"{violation.original_name}"
+                        ),
+                        suggested_fix=f"Rename to {violation.suggested_name}",
+                        category="naming",
+                    )
+                )
+
+    def _check_root_violations(
+        self, ctx: FileContext, result: ScanResult
+    ) -> None:
+        """H-009: Detect files in root that should be in subfolders."""
+        for f in ctx.all_files:
+            if f.parent != self.workspace_root:
+                continue
+            # Protected files stay in root
+            if f.name in PROTECTED_FILES:
+                continue
+            # Allowed markdown prefixes stay
+            if f.suffix == ".md":
+                stem = f.stem.upper()
+                if any(stem.startswith(prefix) for prefix in ALLOWED_MARKDOWN_PREFIXES):
+                    continue
+            # Dotfiles are generally OK
+            if f.name.startswith("."):
+                continue
+            result.issues.append(
+                IssueFile(
+                    check_id="H-009",
+                    path=f.relative_to(self.workspace_root),
+                    severity=IssueSeverity.LOW,
+                    description=f"File in root that may belong elsewhere: {f.name}",
+                    suggested_fix="Relocate to appropriate subdirectory",
+                    category="root_violation",
+                )
+            )
 
 
 __all__ = ["HealthOrchestrator"]

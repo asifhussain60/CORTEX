@@ -1,0 +1,670 @@
+# =============================================================================
+# Phase 51: Health-Vacuum Unified Pipeline
+# =============================================================================
+# Status Authority: cortex-master.yaml (this file does NOT hold status)
+# Created: 2026-02-19
+# Authority: CORE-002, CORE-008, CORE-028, CORE-035, CORE-048, CORE-055
+# Supersedes: Phase 48, Phase 50, Phase 92 (health/vacuum portions)
+# Workflow: cortex-registry/workflows/templates/maintenance/health-vacuum-unified-pipeline.yaml
+# =============================================================================
+
+metadata:
+  phase_id: "phase-51"
+  title: "Health-Vacuum Unified Pipeline"
+  version: "1.0.0"
+  status_authority: "cortex-master.yaml"
+  priority: "P0"
+  created: "2026-02-19T00:00:00Z"
+  author: "CORTEX Architect"
+  governance_rules:
+    - "CORE-002: No markdown sprawl"
+    - "CORE-008: TDD mandatory"
+    - "CORE-028: Naming conventions (snake_case Python, kebab-case rest)"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-048: Holistic validation gate"
+    - "CORE-055: Golden test tier contract"
+  supersedes:
+    - "phase-48 (Health-Vacuum Integrity Pipeline)"
+    - "phase-50 (Health-Vacuum Orchestrator Consolidation)"
+    - "phase-92 (Agent-based Health Orchestrator — health portions only)"
+  workflow_template: "cortex-registry/workflows/templates/maintenance/health-vacuum-unified-pipeline.yaml"
+
+# =============================================================================
+# OVERVIEW
+# =============================================================================
+
+overview:
+  description: |
+    Complete ground-up redesign of the Health-Vacuum pipeline into exactly
+    TWO canonical orchestrators with a single unified purpose:
+    
+    **HealthOrchestrator** — Diagnose every gap holistically across:
+      • Filesystem integrity (naming, empty files, orphans, duplicates)
+      • Architecture coherence (CORE-035 single canonical, stub detection)
+      • Infrastructure health (MCP registration, registry consistency, SQLite)
+      • Wiring correctness (imports, path references, test coverage)
+      • Root cleanliness (files that don't belong in project root)
+      • Naming compliance (snake_case Python, kebab-case everything else)
+    
+    **VacuumOrchestrator** — Standalone remediation engine + HealthOrchestrator companion:
+      
+      STANDALONE MODE (invoked directly without prior health scan):
+      • Root cleanup: relocate files not needed in root to subfolders
+      • Directory organization: nest files in subfolder roots into proper paths
+      • Naming standardization: enforce kebab-case / snake_case protocol
+      • File cleanup: delete empty files, orphaned dirs, stale markdown
+      • Markdown archival: archive stale .md to .cortex-runtime/archived-docs/
+      • Duplicate consolidation: keep canonical, remove duplicates
+      • Reference fixing: update stale import paths across codebase
+      • Quick scan: runs its own lightweight FileContext for standalone use
+      • All operations are atomic with rollback manifest support
+      
+      COMPANION MODE (consumes HealthOrchestrator handoff):
+      • consume(handoff_path) reads health-issues.yaml
+      • Executes ALL remediation operations prescribed by the scan
+      • Richer context from full agent-based health scan
+      • Convergence gated — retries until issues_fixed == issues_found
+    
+    The pipeline (companion mode) follows: Preflight → Scan → Review → Execute → Verify.
+    The standalone mode follows: Quick-Scan → Execute → Verify.
+
+  problem_statement: |
+    Prior state had massive fragmentation across 7+ implementations:
+    
+    DELETED (all instances removed):
+    1. cortex/orchestrators/support/health_orchestrator.py (1,154 lines)
+       - HealthOrchestrator, VacuumExecutor, HealthVacuumPipeline, FileContext
+       - Monolithic file doing too many things
+    2. cortex/orchestrators/health/health_orchestrator.py (408 lines)
+       - Second HealthOrchestrator class (CORE-035 violation)
+       - Agent coordinator that delegated back to #1
+    3. cortex/orchestrators/support/vacuum_orchestrator.py (36 lines)
+       - Re-export wrapper pointing to cortex_intelligence
+    4. cortex_intelligence/memory/tier1_learned/orchestrators/vacuum/ (625 lines)
+       - VacuumOrchestrator with cleaner plugin pattern
+       - Separate state machine, separate reporting
+    5. cortex_intelligence/memory/learned_patterns/orchestrators/vacuum/ (625 lines)
+       - Exact duplicate of #4
+    6. cortex/toolkit/cleanup/vacuum.py (697 lines)
+       - VacuumAutomation — third vacuum implementation
+    7. cortex/toolkit/cleanup/vacuum_intelligence.py (520 lines)
+       - Intelligence layer for vacuum (pattern learning, safety checks)
+    8. cortex/mcp/tools/health_orchestrator_tool.py (386 lines)
+       - MCP tool wrapping #1
+    9. cortex/mcp/tools/vacuum_orchestrator_tool.py (357 lines)
+       - MCP tool wrapping #1's VacuumExecutor
+    10. scripts/vacuum-runner.py — standalone script wrapping #4
+    11. .github/scripts/vacuum-cli.py — another standalone script
+    
+    Total deleted: ~4,800+ lines of fragmented, overlapping code.
+
+  design_principles:
+    - extensibility: |
+        Plugin-based agent architecture. New health checks are added by
+        creating a new agent class inheriting BaseHealthAgent and registering
+        it. New vacuum operations are added via the CleanerPlugin interface.
+        Zero changes to orchestrator code required.
+    - scalability: |
+        Single filesystem walk via FileContext (one rglob). Content and hash
+        caches prevent redundant I/O. Agents receive shared context — no
+        additional disk traversal per agent. Supports parallel agent execution.
+    - cleanliness: |
+        Exactly ONE HealthOrchestrator, ONE VacuumOrchestrator. No re-export
+        wrappers, no backward-compatibility shims, no duplicate classes.
+        Clear separation: Health diagnoses, Vacuum remediates.
+    - efficiency: |
+        FileContext builds once, shared everywhere. MD5 and content caches
+        prevent redundant reads. Handoff via YAML file — no in-memory coupling.
+        Dry-run mode for zero-cost previews.
+    - accuracy: |
+        Every health check has a specific ID (H-001..H-010, HA-001..HA-012,
+        HI-001..HI-003, HW-001..HW-003). Every vacuum operation maps to a
+        health finding. Audit log traces every action with timestamp, actor,
+        and outcome. Rollback manifest enables undo.
+
+# =============================================================================
+# FILES DELETED (CLEANUP RECORD)
+# =============================================================================
+
+files_deleted:
+  source_files:
+    - path: "cortex/orchestrators/support/health_orchestrator.py"
+      reason: "Monolithic 1,154-line file — split into focused modules"
+      contained: "HealthOrchestrator, VacuumExecutor, HealthVacuumPipeline, FileContext, 12 dataclasses"
+    - path: "cortex/orchestrators/health/health_orchestrator.py"
+      reason: "CORE-035 violation — second HealthOrchestrator class"
+      contained: "HealthOrchestrator (agent coordinator)"
+    - path: "cortex/orchestrators/support/vacuum_orchestrator.py"
+      reason: "Re-export wrapper — indirection adds no value"
+      contained: "Import aliases for cortex_intelligence VacuumOrchestrator"
+    - path: "cortex_intelligence/memory/tier1_learned/orchestrators/vacuum/orchestrator.py"
+      reason: "Separate VacuumOrchestrator — functionality absorbed into canonical"
+      contained: "VacuumOrchestrator, VacuumStrategy, OrchestratorState, StateTracker, VacuumStats"
+    - path: "cortex_intelligence/memory/learned_patterns/orchestrators/vacuum/orchestrator.py"
+      reason: "Exact duplicate of tier1_learned version"
+      contained: "Same as above"
+    - path: "cortex/toolkit/cleanup/vacuum.py"
+      reason: "Third vacuum implementation — VacuumAutomation absorbed"
+      contained: "VacuumAutomation, CleanupResult"
+    - path: "cortex/toolkit/cleanup/vacuum_intelligence.py"
+      reason: "Intelligence layer absorbed into HealthOrchestrator agent pattern"
+      contained: "VacuumIntelligence, CleanupPattern, SafetyCheck"
+
+  mcp_tools:
+    - path: "cortex/mcp/tools/health_orchestrator_tool.py"
+      reason: "Replaced by health_scan_tool.py — cleaner naming, focused scope"
+    - path: "cortex/mcp/tools/vacuum_orchestrator_tool.py"
+      reason: "Replaced by vacuum_execute_tool.py — cleaner naming, focused scope"
+
+  scripts:
+    - path: "scripts/vacuum-runner.py"
+      reason: "Standalone script — functionality in MCP tool"
+    - path: ".github/scripts/vacuum-cli.py"
+      reason: "Standalone script — functionality in MCP tool"
+
+  workflow_templates:
+    - path: "cortex-registry/workflows/templates/maintenance/health-vacuum-pipeline.yaml"
+      reason: "Replaced by health-vacuum-unified-pipeline.yaml"
+    - path: "cortex-registry/workflows/templates/maintenance/health-vacuum-consolidation.yaml"
+      reason: "Replaced by health-vacuum-unified-pipeline.yaml"
+
+  plans:
+    - path: "cortex-registry/planning/phases/planned/phase-50-health-vacuum-consolidation.yaml"
+      reason: "Replaced by this phase (phase-51)"
+
+  tests:
+    - path: "tests/golden/orchestrators/health_vacuum/"
+      reason: "Replaced by new golden tests with audit log trace acceptance criteria"
+    - path: "tests/integration/test_vacuum_workflow.py"
+      reason: "References deleted VacuumOrchestrator from cortex_intelligence"
+    - path: "tests/integration/test_phase44_vacuum_integration.py"
+      reason: "References deleted orchestrator"
+    - path: "tests/integration/test_health_orchestrator_integration.py"
+      reason: "References deleted HealthOrchestrator"
+    - path: "tests/unit/tier1/orchestrators/test_vacuum_orchestrator.py"
+      reason: "References deleted tier1_learned VacuumOrchestrator"
+    - path: "tests/unit/tier1/orchestrators/test_vacuum_golden_patterns.py"
+      reason: "References deleted tier1_learned VacuumOrchestrator"
+    - path: "tests/unit/tier1/orchestrators/enhancements/"
+      reason: "Enhancement tests for deleted VacuumOrchestrator"
+    - path: "tests/unit/vacuum/"
+      reason: "Unit tests for deleted vacuum plugins"
+    - path: "tests/toolkit/test_vacuum_automation.py"
+      reason: "Tests for deleted VacuumAutomation"
+    - path: "tests/golden/test_health_workflow_golden.py"
+      reason: "Tests for deleted orchestrator"
+
+  artifacts:
+    - path: "cortex/brain/vacuum/"
+      reason: "Runtime handoff directory — moved to .cortex-runtime/"
+    - path: "cortex_intelligence/memory/core/test_demands/test-demands/vacuumorchestrator-demands.yaml"
+      reason: "Test demands for deleted VacuumOrchestrator"
+
+# =============================================================================
+# TARGET STATE ARCHITECTURE
+# =============================================================================
+
+target_state:
+  file_layout:
+    orchestrators:
+      - path: "cortex/orchestrators/health/health_orchestrator.py"
+        class: "HealthOrchestrator"
+        description: |
+          Single canonical health orchestrator. Performs holistic scanning:
+          1. Builds FileContext (single rglob walk, content+hash caches)
+          2. Runs filesystem checks (H-001..H-010) against FileContext
+          3. Runs registered health agents (HA-001..HA-012, HI-001..HI-003, HW-001..HW-003)
+          4. Aggregates into HealthReport with health_score (0-100)
+          5. Writes health-issues.yaml handoff for VacuumOrchestrator
+          6. Supports DoD gate (min_score + blocking agents)
+
+      - path: "cortex/orchestrators/health/vacuum_orchestrator.py"
+        class: "VacuumOrchestrator"
+        description: |
+          Single canonical vacuum orchestrator with DUAL operating modes:
+          
+          STANDALONE MODE — VacuumOrchestrator(workspace_root).run():
+            Performs its own lightweight FileContext scan and executes
+            all cleanup operations without requiring a prior health scan.
+            Ideal for quick cleanup, CI/CD pipelines, and ad-hoc maintenance.
+            Methods: run(), run_root_cleanup(), run_naming_fix(), run_markdown_archive()
+          
+          COMPANION MODE — VacuumOrchestrator(workspace_root).consume(handoff_path):
+            Reads health-issues.yaml produced by HealthOrchestrator.scan()
+            and executes all prescribed remediation operations.
+            Richer context, convergence gated, part of full pipeline.
+          
+          Operations (both modes):
+          1. Root cleanup — relocate files not belonging in project root
+          2. Subfolder organization — nest orphaned files into proper paths
+          3. Naming standardization — kebab-case (non-Python), snake_case (Python)
+          4. File cleanup — delete empty files, orphaned dirs
+          5. Markdown archival — archive stale .md to .cortex-runtime/
+          6. Duplicate consolidation — keep canonical, remove duplicates
+          7. Reference fixing — update stale import paths
+          All operations record rollback entries. Dry-run mode supported.
+
+      - path: "cortex/orchestrators/health/pipeline.py"
+        class: "HealthVacuumPipeline"
+        description: |
+          5-stage coordinator: Preflight → Scan → Review → Execute → Verify.
+          Orchestrates Health → Vacuum handoff. Autonomous mode skips review.
+          Convergence gate retries on partial success.
+
+    shared_modules:
+      - path: "cortex/orchestrators/health/file_context.py"
+        class: "FileContext"
+        description: "Single filesystem snapshot (one rglob, content+hash caches)"
+
+      - path: "cortex/orchestrators/health/models.py"
+        description: |
+          All value objects: ScanResult, IssueFile, IssueDirectory, DuplicateGroup,
+          IssueCategory, ScanSummary, OperationResult, PipelineReport, HealthReport,
+          NamingViolation, RootViolation
+
+      - path: "cortex/orchestrators/health/naming.py"
+        description: |
+          Naming utilities: to_kebab_case, to_snake_case, is_screaming,
+          is_valid_python_name, is_valid_non_python_name, classify_naming_violation
+
+      - path: "cortex/orchestrators/health/constants.py"
+        description: |
+          Shared constants: PROTECTED_FILES, EXCLUDED_DIRS, ALLOWED_MARKDOWN_PREFIXES,
+          PROTECTED_ROOT_FILES, KEBAB_MAX_LEN, PLAN_FILE_MAX_LEN
+
+    agents:
+      location: "cortex/orchestrators/health/agents/"
+      description: |
+        Existing 14 agents are KEPT as-is — they already implement BaseHealthAgent.
+        New agents for root cleanup and naming violations will be added.
+      existing:
+        - "base_agent.py — BaseHealthAgent ABC"
+        - "consolidation_analyzer.py"
+        - "database_health_agent.py"
+        - "duplicate_detection_agent.py"
+        - "filename_governance_agent.py"
+        - "informational_file_agent.py"
+        - "inventory_agent.py"
+        - "mcp_auto_healing_agent.py"
+        - "path_integrity_agent.py"
+        - "registry_consistency_agent.py"
+        - "stub_autofix_agent.py"
+        - "stub_detection_agent.py"
+        - "test_coverage_agent.py"
+        - "token_optimization_agent.py"
+        - "version_cleanup_agent.py"
+      new:
+        - path: "cortex/orchestrators/health/agents/root_cleanup_agent.py"
+          class: "RootCleanupAgent"
+          description: "Detect files in project root that should be in subfolders"
+        - path: "cortex/orchestrators/health/agents/naming_compliance_agent.py"
+          class: "NamingComplianceAgent"
+          description: "Detect naming violations: non-snake_case Python, non-kebab-case rest"
+        - path: "cortex/orchestrators/health/agents/subfolder_organization_agent.py"
+          class: "SubfolderOrganizationAgent"
+          description: "Detect files sitting in root of subfolders that should be nested"
+
+    mcp_tools:
+      - path: "cortex/mcp/tools/health_scan_tool.py"
+        class: "CortexHealthScan"
+        operations: ["scan", "status", "classify"]
+        description: "MCP tool exposing HealthOrchestrator.scan()"
+
+      - path: "cortex/mcp/tools/vacuum_execute_tool.py"
+        class: "CortexVacuumExecute"
+        operations: ["run", "execute", "preview", "rollback", "markdown", "root_cleanup", "naming_fix"]
+        description: |
+          MCP tool exposing VacuumOrchestrator in both modes:
+          - run: Standalone mode — quick-scan + execute all cleanup ops
+          - execute: Companion mode — consume health-issues.yaml handoff
+          - preview: Dry-run either mode — zero changes, report only
+          - rollback: Reverse operations from manifest
+          - markdown: Standalone markdown archival
+          - root_cleanup: Standalone root file relocation
+          - naming_fix: Standalone naming standardization
+
+    handoff:
+      path: ".cortex-runtime/health-issues.yaml"
+      description: "Structured YAML handoff from Health to Vacuum"
+
+    rollback:
+      path: ".cortex-runtime/rollback-manifest.json"
+      description: "JSON manifest recording every destructive operation for undo"
+
+# =============================================================================
+# STAGES
+# =============================================================================
+
+stages:
+  - name: "Stage 1: Foundation — Models, Constants, FileContext, Naming"
+    order: 1
+    description: |
+      Create the shared foundation modules that both orchestrators depend on.
+      TDD-first: write tests for FileContext, naming helpers, and models before
+      implementing them.
+    tasks:
+      - name: "Create constants.py"
+        file: "cortex/orchestrators/health/constants.py"
+        description: |
+          PROTECTED_FILES, EXCLUDED_DIRS, ALLOWED_MARKDOWN_PREFIXES,
+          PROTECTED_ROOT_FILES (files that MUST stay in project root),
+          KEBAB_MAX_LEN, PLAN_FILE_MAX_LEN
+      - name: "Create models.py"
+        file: "cortex/orchestrators/health/models.py"
+        description: |
+          All dataclasses: FileContext is in its own module.
+          ScanResult, IssueFile, IssueDirectory, DuplicateGroup, IssueCategory,
+          ScanSummary, OperationResult, PipelineReport, NamingViolation,
+          RootViolation, AgentFinding
+      - name: "Create file_context.py"
+        file: "cortex/orchestrators/health/file_context.py"
+        description: |
+          FileContext.build() — single rglob walk
+          get_content() — cached text reads
+          get_hash() — cached MD5 hashes
+      - name: "Create naming.py"
+        file: "cortex/orchestrators/health/naming.py"
+        description: |
+          to_kebab_case(), to_snake_case(), is_screaming(),
+          is_valid_python_name(), is_valid_non_python_name(),
+          classify_naming_violation()
+    tests:
+      unit:
+        - file: "tests/unit/orchestrators/health/test_file_context.py"
+          scenarios: 8
+          description: "FileContext build, caching, exclusion, content, hash"
+        - file: "tests/unit/orchestrators/health/test_naming.py"
+          scenarios: 10
+          description: "All naming conversion and validation functions"
+        - file: "tests/unit/orchestrators/health/test_models.py"
+          scenarios: 6
+          description: "Model construction, recount, serialization"
+    acceptance_criteria:
+      - "FileContext.build() traverses filesystem exactly once"
+      - "get_content() reads from disk only on cache miss"
+      - "get_hash() computes MD5 only on cache miss"
+      - "to_kebab_case('AUDIT_REPORT.txt') == 'audit-report.txt'"
+      - "to_snake_case('kebab-case-file.py') == 'kebab_case_file.py'"
+      - "EXCLUDED_DIRS contains .git, __pycache__, .venv, node_modules"
+      - "PROTECTED_ROOT_FILES includes pytest.ini, requirements.txt, etc."
+
+  - name: "Stage 2: HealthOrchestrator — Holistic Scanner"
+    order: 2
+    description: |
+      Implement the single canonical HealthOrchestrator with all filesystem
+      checks (H-001..H-010) and agent registration/execution.
+      TDD-first: golden tests drive the implementation.
+    tasks:
+      - name: "Create HealthOrchestrator"
+        file: "cortex/orchestrators/health/health_orchestrator.py"
+        description: |
+          Single canonical class that:
+          1. Builds FileContext (single rglob)
+          2. Runs _check_screaming_case, _check_empty_files, etc.
+          3. Runs all registered BaseHealthAgent instances
+          4. NEW: _check_naming_violations (snake_case Python, kebab-case rest)
+          5. NEW: _check_root_violations (files in root that should be elsewhere)
+          6. Aggregates into unified ScanResult
+          7. write_handoff() → .cortex-runtime/health-issues.yaml
+          8. check_definition_of_done() → DoD gate
+      - name: "Create new agents"
+        files:
+          - "cortex/orchestrators/health/agents/root_cleanup_agent.py"
+          - "cortex/orchestrators/health/agents/naming_compliance_agent.py"
+          - "cortex/orchestrators/health/agents/subfolder_organization_agent.py"
+    tests:
+      golden:
+        - file: "tests/golden/orchestrators/health_vacuum/test_health_scan_golden.py"
+          scenarios: 10
+          prefix: "GH"
+          description: |
+            GH-001..GH-010: Each health check category tested end-to-end
+            with audit log trace verification.
+      unit:
+        - file: "tests/unit/orchestrators/health/test_health_orchestrator.py"
+          scenarios: 8
+          description: "HealthOrchestrator init, scan, agent registration, DoD gate"
+    acceptance_criteria:
+      - "GH-001: Screaming case files detected with recommended kebab name"
+      - "GH-002: Empty files detected (excluding .gitkeep)"
+      - "GH-003: Orphaned directories detected"
+      - "GH-004: Wrong path references detected (cortex_brain → cortex_intelligence)"
+      - "GH-005: Duplicate content detected via MD5 hash"
+      - "GH-006: Deprecated markers detected"
+      - "GH-007: Invalid markdown location detected"
+      - "GH-008: Naming violations detected (non-snake Python, non-kebab rest)"
+      - "GH-009: Root violations detected (files that should be in subfolders)"
+      - "GH-010: All agent findings aggregated into unified HealthReport"
+      - "AUDIT: Each finding logged with check_id, path, severity, timestamp"
+
+  - name: "Stage 3: VacuumOrchestrator — Standalone + Companion Remediation Engine"
+    order: 3
+    description: |
+      Implement the single canonical VacuumOrchestrator with DUAL operating modes:
+      1. STANDALONE — run() performs its own quick-scan and executes all cleanup
+      2. COMPANION — consume() reads health-issues.yaml from HealthOrchestrator
+      TDD-first: golden tests with rollback verification for both modes.
+    tasks:
+      - name: "Create VacuumOrchestrator"
+        file: "cortex/orchestrators/health/vacuum_orchestrator.py"
+        description: |
+          Single canonical class with dual operating modes:
+          
+          STANDALONE PUBLIC API:
+          - run(dry_run=False) → VacuumReport
+              Builds its own lightweight FileContext, detects issues,
+              executes all cleanup operations. One-call cleanup.
+          - run_root_cleanup() → list[OperationResult]
+              Standalone: relocate root files to subfolders
+          - run_naming_fix() → list[OperationResult]
+              Standalone: enforce naming conventions across workspace
+          - run_markdown_archive() → list[OperationResult]
+              Standalone: archive stale .md files
+          - run_empty_cleanup() → list[OperationResult]
+              Standalone: delete empty files and orphaned dirs
+          
+          COMPANION PUBLIC API (consumes HealthOrchestrator handoff):
+          - consume(handoff_path) → VacuumReport
+              Reads health-issues.yaml, executes all prescribed operations
+          - execute_from_scan_result(scan_result) → VacuumReport
+              Direct in-memory handoff from HealthOrchestrator (no YAML)
+          
+          SHARED OPERATIONS (used by both modes):
+          - rename_file(source, new_name) → OperationResult
+          - delete_file(target) → OperationResult
+          - delete_directory(target) → OperationResult
+          - relocate_file(source, dest_dir) → OperationResult
+          - delete_directory_tree(target) → OperationResult
+          
+          ROLLBACK & REPORTING:
+          - save_rollback_manifest(path) → None
+          - rollback(manifest_path) → None
+          - get_report() → VacuumReport
+          
+          All operations support dry_run mode.
+    tests:
+      golden:
+        - file: "tests/golden/orchestrators/health_vacuum/test_vacuum_execute_golden.py"
+          scenarios: 11
+          prefix: "GV"
+          description: |
+            GV-001..GV-008: Core vacuum operations (rename, delete, relocate, rollback)
+            GV-009: Standalone run() — quick-scan + execute without health scan
+            GV-010: Standalone run_root_cleanup() — relocate root files independently
+            GV-011: Standalone run_naming_fix() — fix naming without health scan
+      unit:
+        - file: "tests/unit/orchestrators/health/test_vacuum_orchestrator.py"
+          scenarios: 12
+          description: |
+            VacuumOrchestrator standalone run, companion consume, each operation,
+            rollback, dry-run, standalone run_root_cleanup, standalone run_naming_fix,
+            standalone run_markdown_archive, standalone run_empty_cleanup
+    acceptance_criteria:
+      - "GV-001: Rename screaming → kebab with two-step atomic rename (macOS APFS)"
+      - "GV-002: Delete empty files with rollback manifest entry"
+      - "GV-003: Remove orphaned directories"
+      - "GV-004: Root cleanup — relocate non-protected files to proper subfolders"
+      - "GV-005: Naming standardization — Python→snake_case, non-Python→kebab-case"
+      - "GV-006: Markdown archival to .cortex-runtime/archived-docs/"
+      - "GV-007: Dry-run mode — zero filesystem changes, operations planned > 0"
+      - "GV-008: Rollback — all operations reversed, files restored"
+      - "GV-009: Standalone run() — builds own FileContext, no health-issues.yaml required"
+      - "GV-010: Standalone run_root_cleanup() — works without any prior scan"
+      - "GV-011: Standalone run_naming_fix() — works without any prior scan"
+      - "AUDIT: Each operation logged with op_type, source, destination, timestamp"
+
+  - name: "Stage 4: Pipeline — Health → Vacuum → Verify"
+    order: 4
+    description: |
+      Implement HealthVacuumPipeline coordinating the full 5-stage lifecycle.
+      TDD-first: golden tests verify end-to-end handoff contract.
+    tasks:
+      - name: "Create HealthVacuumPipeline"
+        file: "cortex/orchestrators/health/pipeline.py"
+        description: |
+          5-stage coordinator:
+          Stage 1: Preflight (git status, protected files check)
+          Stage 2: Health scan (HealthOrchestrator.scan() + write_handoff())
+          Stage 3: Review (interactive or skipped in autonomous mode)
+          Stage 4: Vacuum execute (VacuumOrchestrator.consume())
+          Stage 5: Verification (test suite, teardown handoff + manifest)
+    tests:
+      golden:
+        - file: "tests/golden/orchestrators/health_vacuum/test_pipeline_golden.py"
+          scenarios: 4
+          prefix: "GP"
+          description: |
+            GP-001..GP-004: Pipeline stages, handoff contract, convergence gate.
+    acceptance_criteria:
+      - "GP-001: Full pipeline — all 5 stages complete, handoff consumed, teardown clean"
+      - "GP-002: Dry-run pipeline — scan runs, vacuum reports without changes"
+      - "GP-003: Handoff contract — health-issues.yaml schema validated"
+      - "GP-004: Convergence gate — retries on partial, exits on max_cycles"
+
+  - name: "Stage 5: MCP Tools — Health Scan + Vacuum Execute (Standalone + Companion)"
+    order: 5
+    description: |
+      Create two focused MCP tools exposing the orchestrators.
+      VacuumExecute MCP tool supports BOTH standalone and companion modes.
+      TDD-first: unit tests verify parameter validation and routing.
+    tasks:
+      - name: "Create CortexHealthScan MCP tool"
+        file: "cortex/mcp/tools/health_scan_tool.py"
+        description: "scan, status, classify operations"
+      - name: "Create CortexVacuumExecute MCP tool"
+        file: "cortex/mcp/tools/vacuum_execute_tool.py"
+        description: |
+          Standalone operations (no health scan required):
+          - run: Quick-scan + execute all cleanup (standalone mode)
+          - root_cleanup: Standalone root file relocation
+          - naming_fix: Standalone naming standardization  
+          - markdown: Standalone markdown archival
+          
+          Companion operations (requires health-issues.yaml):
+          - execute: Consume handoff file, run all vacuum operations
+          
+          Common operations:
+          - preview: Dry-run any mode — zero changes, report only
+          - rollback: Restore files from rollback manifest
+    tests:
+      unit:
+        - file: "tests/unit/mcp/tools/test_health_scan_tool.py"
+          scenarios: 4
+        - file: "tests/unit/mcp/tools/test_vacuum_execute_tool.py"
+          scenarios: 4
+    acceptance_criteria:
+      - "MCP tool parameters validated before execution"
+      - "orchestrator_context required on all calls"
+      - "Operations route to correct orchestrator methods"
+
+  - name: "Stage 6: Integration Verification & Cleanup"
+    order: 6
+    description: |
+      Final integration: verify all golden tests pass, update imports across
+      codebase, remove any remaining stale references.
+    tasks:
+      - name: "Update all import references"
+        description: |
+          Find and update all files still importing from deleted paths.
+          Replace with canonical imports from cortex.orchestrators.health.
+      - name: "Run full golden test suite"
+        description: "Verify 428+ golden tests still pass (plus new ones)"
+      - name: "Update cortex-master.yaml"
+        description: "Mark Phase 51 complete, update counters"
+    acceptance_criteria:
+      - "Zero import errors from deleted modules"
+      - "All existing golden tests still pass"
+      - "All new golden tests pass"
+      - "cortex-master.yaml updated with Phase 51 completion"
+
+# =============================================================================
+# TEST STRATEGY
+# =============================================================================
+
+test_strategy:
+  philosophy: |
+    Tests are meaningful, high-value, and intelligently categorized:
+    
+    **Golden Tests** (end-to-end with audit log trace):
+    Used when testing cross-component integration, handoff contracts,
+    pipeline stages, and operations with real filesystem effects.
+    Each golden test asserts audit log entries with timestamp, actor, outcome.
+    
+    **Unit Tests** (isolated single-responsibility):
+    Used when testing pure functions (naming helpers, FileContext caching),
+    individual agent detection logic, and model construction.
+    Fast, deterministic, no filesystem side effects.
+    
+    Decision framework:
+    - Does the test cross orchestrator boundaries? → Golden
+    - Does the test verify a handoff contract (YAML)? → Golden
+    - Does the test check audit trail completeness? → Golden
+    - Is it a pure function with defined input/output? → Unit
+    - Is it a single agent's detection logic? → Unit
+
+  golden_tests:
+    location: "tests/golden/orchestrators/health_vacuum/"
+    total_scenarios: 22
+    files:
+      - "test_health_scan_golden.py — GH-001..GH-010 (10 scenarios)"
+      - "test_vacuum_execute_golden.py — GV-001..GV-008 (8 scenarios)"
+      - "test_pipeline_golden.py — GP-001..GP-004 (4 scenarios)"
+
+  unit_tests:
+    location: "tests/unit/orchestrators/health/"
+    total_scenarios: 40
+    files:
+      - "test_file_context.py (8 scenarios)"
+      - "test_naming.py (10 scenarios)"
+      - "test_models.py (6 scenarios)"
+      - "test_health_orchestrator.py (8 scenarios)"
+      - "test_vacuum_orchestrator.py (8 scenarios)"
+
+  total_test_count: 62
+  estimated_duration: "< 2 seconds"
+
+# =============================================================================
+# METRICS & COMPLETION CRITERIA
+# =============================================================================
+
+metrics:
+  lines_deleted: "~4,800"
+  files_deleted: 16
+  directories_deleted: 4
+  new_source_files: 8
+  new_test_files: 8
+  golden_test_scenarios: 22
+  unit_test_scenarios: 40
+  total_tests: 62
+
+completion_criteria:
+  - "All 62 tests passing"
+  - "Zero import errors from deleted modules"
+  - "Existing 428 golden test baseline maintained"
+  - "Single HealthOrchestrator class (CORE-035)"
+  - "Single VacuumOrchestrator class (CORE-035)"
+  - "health-issues.yaml handoff contract validated"
+  - "Rollback manifest validated"
+  - "Root violations detected and remediated"
+  - "Naming violations detected and remediated"
+  - "All audit log traces verified in golden tests"

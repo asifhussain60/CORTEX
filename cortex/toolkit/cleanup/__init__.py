@@ -7,10 +7,14 @@ Consolidates cleanup and vacuum automation scripts.
 - .cortex-runtime/run_vacuum.py
 - scripts/vacuum-runner.py
 
-**Authority:** Phase 90 S-90-05
+**Authority:** Phase 90 S-90-05 → Phase-51 (VacuumOrchestrator canonical)
 """
 
-from cortex.toolkit.cleanup.vacuum import VacuumAutomation
+# Phase-51: VacuumAutomation replaced by VacuumOrchestrator
+try:
+    from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator as VacuumAutomation
+except ImportError:
+    VacuumAutomation = None  # type: ignore[assignment,misc]
 
 # Import consolidated cleanup from Phase 90
 try:

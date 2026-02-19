@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX | Neural Documentation Shell</title>
+    <!-- Use local D3.js or CDN fallback -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <style>
+        :root {
+            /* CORTEX GLASSMORPHISM v4.0 PALETTE */
+            --bg-primary: #0a0e27;
+            --bg-secondary: #1a1f3a;
+            --glass-bg: rgba(26, 31, 58, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-primary: #00d4ff; /* Cyan */
+            --accent-secondary: #7b61ff; /* Purple */
+            --accent-emerald: #10b981; /* Success/Emerald */
+            --text-primary: #ffffff;
+            --text-secondary: #a0a6c0;
+            --orch-core: #7b61ff;
+            --orch-domain: #00d4ff;
+            --orch-support: #10b981;
+            --success: #00ff88;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(123, 97, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(0, 212, 255, 0.1) 0%, transparent 40%);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #app-shell {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+        }
+
+        @keyframes electric-aura {
+            0%, 100% { filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4)); }
+            50% { filter: drop-shadow(0 0 40px rgba(123, 97, 255, 0.6)); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #role-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1000;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            transition: opacity 0.8s ease, visibility 0.8s;
+        }
+
+        #role-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .hero-title { text-align: center; margin-bottom: 3rem; }
+        .hero-logo {
+            font-size: 4rem; font-weight: 800; letter-spacing: 0.5rem;
+            color: var(--text-primary); margin-bottom: 0.5rem;
+            animation: electric-aura 5s ease-in-out infinite;
+        }
+        .hero-subtitle { color: var(--accent-primary); text-transform: uppercase; letter-spacing: 0.2rem; font-size: 0.9rem; }
+
+        .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; max-width: 1200px; width: 100%; }
+
+        .role-tile {
+            background: var(--glass-bg); backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 2rem; text-align: center; cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative; overflow: hidden;
+        }
+
+        .role-tile:hover {
+            transform: translateY(-10px); border-color: var(--accent-primary);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 212, 255, 0.2);
+        }
+
+        .role-tile span { font-size: 2.5rem; display: block; margin-bottom: 1rem; }
+        .role-tile h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+        .role-tile p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; }
+
+        #main-container { display: grid; grid-template-columns: 260px 1fr; flex-grow: 1; overflow: hidden; }
+
+        #sidebar { background: rgba(13, 17, 38, 0.8); border-right: 1px solid var(--glass-border); padding: 1.5rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .sidebar-header { margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem; }
+        .sidebar-logo { width: 40px; height: 40px; background: linear-gradient(135deg, var(--accent-purple), var(--accent-primary)); border-radius: 8px; }
+
+        .nav-item {
+            padding: 0.75rem 1rem; border-radius: 10px; cursor: pointer;
+            transition: all 0.2s; color: var(--text-secondary); font-weight: 500;
+            display: flex; align-items: center; gap: 0.75rem; border: 1px solid transparent;
+        }
+        .nav-item:hover { background: rgba(255, 255, 255, 0.05); color: var(--text-primary); }
+        .nav-item.active { background: rgba(123, 97, 255, 0.15); color: var(--text-primary); border-color: rgba(123, 97, 255, 0.3); box-shadow: 0 0 15px rgba(123, 97, 255, 0.1); }
+
+        #content-area { position: relative; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 2rem; }
+        .view-panel { display: none; animation: fadeIn 0.5s ease forwards; }
+        .view-panel.active { display: block; }
+
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); border-radius: 16px; padding: 1.5rem; position: relative; overflow: hidden; margin-bottom: 1rem; }
+        .truth-badge { position: absolute; top: 1rem; right: 1rem; font-size: 0.7rem; padding: 0.2rem 0.6rem; border-radius: 20px; background: rgba(0, 0, 0, 0.3); text-transform: uppercase; letter-spacing: 0.05rem; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .implemented { color: var(--success); border-color: var(--success); }
+        .partial { color: var(--warning); border-color: var(--warning); }
+        .aspirational { color: var(--accent-secondary); border-color: var(--accent-secondary); }
+
+        .viz-box { width: 100%; height: 400px; background: rgba(0, 0, 0, 0.2); border-radius: 12px; margin-top: 1rem; overflow: hidden; position: relative; }
+        .role-guidance { background: linear-gradient(90deg, rgba(123, 97, 255, 0.1), transparent); border-left: 4px solid var(--accent-purple); padding: 1rem; margin-bottom: 1.5rem; border-radius: 0 8px 8px 0; }
+
+        .d3-tooltip { position: absolute; padding: 0.75rem; background: rgba(10, 14, 39, 0.95); border: 1px solid var(--accent-primary); border-radius: 8px; pointer-events: none; font-size: 0.85rem; z-index: 2000; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+
+        #journey-bar { background: rgba(13, 17, 38, 0.9); border-top: 1px solid var(--glass-border); padding: 0.75rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .btn-next { background: var(--accent-primary); color: var(--bg-primary); border: none; padding: 0.5rem 1.5rem; border-radius: 8px; font-weight: bold; cursor: pointer; transition: transform 0.2s; }
+        .btn-next:hover { transform: scale(1.05); }
+
+        h2 { margin-bottom: 0.5rem; font-size: 1.8rem; }
+        p.desc { color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6; max-width: 800px; }
+        
+        /* New Text Content Styles */
+        .text-content {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-secondary);
+        }
+        .text-content h4 { color: var(--accent-primary); margin-bottom: 0.5rem; font-size: 1rem; }
+        .text-content p { font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary); margin-bottom: 0.8rem; }
+        .text-content ul { padding-left: 1.2rem; margin-bottom: 0.8rem; }
+        .text-content li { font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.4rem; }
+
+        /* Comparison Table Styles */
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
+        .comparison-table th, .comparison-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--glass-border); }
+        .comparison-table th { color: var(--accent-primary); text-transform: uppercase; font-size: 0.75rem; }
+
+        .highlight-emerald { color: var(--accent-emerald); font-weight: bold; }
+        .highlight-danger { color: var(--danger); font-weight: bold; }
+
+        /* Pipeline Styles */
+        .pipeline-step { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .pipeline-circle { width: 30px; height: 30px; border-radius: 50%; background: var(--accent-secondary); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.8rem; }
+        .pipeline-connector { width: 2px; height: 20px; background: var(--glass-border); margin-left: 14px; }
+    </style>
+</head>
+<body>
+
+    <div id="app-shell">
+        <!-- ROLE SELECTOR -->
+        <div id="role-overlay">
+            <div class="hero-title">
+                <div class="hero-logo">CORTEX</div>
+                <div class="hero-subtitle">Neural Orchestration & Intelligence Substrate</div>
+            </div>
+            <div class="role-grid">
+                <div class="role-tile" onclick="selectRole('business-leader')">
+                    <span>👔</span>
+                    <h3>Business Leader</h3>
+                    <p>Focus on ROI, Governance, Risk Mitigation, and Strategy.</p>
+                </div>
+                <div class="role-tile" onclick="selectRole('product-owner')">
+                    <span>📋</span>
+                    <h3>Product Owner</h3>
+                    <p>Focus on Use Cases, Feature Flow, and Definition of Ready.</p>
+                </div>
+                <div class="role-tile" onclick="selectRole('dev-manager')">
+                    <span>📊</span>
+                    <h3>Dev Manager</h3>
+                    <p>Focus on Delivery, Quality Signals, and Architecture Drift.</p>
+                </div>
+                <div class="role-tile" onclick="selectRole('software-engineer')">
+                    <span>💻</span>
+                    <h3>Software Engineer</h3>
+                    <p>Focus on Wiring, LENS Analysis, TDD, and Registry Logic.</p>
+                </div>
+                <div class="role-tile" onclick="selectRole('quality-assurance')">
+                    <span>🛡️</span>
+                    <h3>Quality / SET</h3>
+                    <p>Focus on Testing Tiers, Enforcement, and Regression Truth.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN DASHBOARD -->
+        <div id="main-container">
+            <div id="sidebar">
+                <div class="sidebar-header">
+                    <div class="sidebar-logo"></div>
+                    <span style="font-weight: 800; letter-spacing: 1px;">CORTEX LENS</span>
+                </div>
+                <div class="nav-item active" data-view="overview" onclick="switchView('overview')">🧠 Overview</div>
+                <div class="nav-item" data-view="capabilities" onclick="switchView('capabilities')">✨ Capabilities</div>
+                <div class="nav-item" data-view="architecture" onclick="switchView('architecture')">🏗️ Architecture</div>
+                <div class="nav-item" data-view="intelligence" onclick="switchView('intelligence')">💎 Intelligence</div>
+                <div class="nav-item" data-view="security" onclick="switchView('security')">🛡️ Security & Risk</div>
+                <div class="nav-item" data-view="quality" onclick="switchView('quality')">🧪 Quality & TDD</div>
+            </div>
+
+            <div id="content-area">
+                <!-- VIEW: OVERVIEW -->
+                <div id="view-overview" class="view-panel active">
+                    <div class="role-guidance" id="overview-guidance">Initializing neural path...</div>
+                    <h2>The CORTEX Pulse</h2>
+                    <p class="desc">CORTEX is a cognitive substrate mimicking the human brain's tiered processing structure. It transforms raw AI prompts into a <strong>governed intelligence pipeline</strong>.</p>
+                    
+                    <div class="glass-card">
+                        <span class="truth-badge implemented">Implemented</span>
+                        <h3>Neural Tiers (The Brainstem of Governance)</h3>
+                        <p style="font-size: 0.9rem; margin-bottom: 1rem; color: var(--text-secondary);">Tier 0 rules are immutable and non-negotiable. They block suboptimal AI signals before they reach implementation.</p>
+                        <div id="viz-brain-tiers" class="viz-box"></div>
+                        
+                        <div class="text-content">
+                            <h4>🧠 How to Read This Diagram</h4>
+                            <p>This radial map visualizes the governance hierarchy. Hover over the rings to see specific rules.</p>
+                            <ul>
+                                <li><strong>Inner Red Core (Tier 0):</strong> The "Brainstem". These are immutable rules like <code>CORE-008 (TDD Mandatory)</code> and <code>CORE-035 (Single Source of Truth)</code>. Violations here cause immediate stops.</li>
+                                <li><strong>Middle Rings (Tier 1-2):</strong> The "Limbic System". These manage domain coordination and response templates.</li>
+                                <li><strong>Outer Ring (Tier 3):</strong> The "Neocortex". This contains flexible, learned best practices that guide the AI but don't strictly block it.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <h3>CORTEX vs. Raw Copilot</h3>
+                        <div class="text-content" style="margin-bottom: 1rem; border-left-color: var(--accent-emerald);">
+                             <h4>🚀 Why This Architecture Matters</h4>
+                             <p>Standard AI coding assistants are "stateless"—they forget your project's context the moment a session ends. CORTEX is "stateful". It remembers your architecture, rules, and history via the <strong>Registry</strong> and <strong>LENS</strong>.</p>
+                        </div>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr><th>Aspect</th><th>Raw LLM/Copilot</th><th>CORTEX Substrate</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Memory</td><td>Stateless / Session-only</td><td class="highlight-emerald">Persistent Registry (wiring.yaml)</td></tr>
+                                <tr><td>Governance</td><td>Non-existent (Hallucination risk)</td><td class="highlight-emerald">29+ Blocking CORE Rules</td></tr>
+                                <tr><td>Context</td><td>Limited window</td><td class="highlight-emerald">LENS (Git, AST, Domain knowledge)</td></tr>
+                                <tr><td>Enforcement</td><td>None</td><td class="highlight-emerald">Mandatory TDD & DoR Gates</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- VIEW: CAPABILITIES -->
+                <div id="view-capabilities" class="view-panel">
+                    <h2>Capability Substrate</h2>
+                    <p class="desc">High-value capability clusters extracted by LENS. We map features to actual implementation status in the wiring registry.</p>
+                    <div class="glass-card">
+                        <div id="viz-capabilities" class="viz-box"></div>
+                        <div class="text-content">
+                            <h4>✨ Decoding the Heatmap</h4>
+                            <p>This is not just a list of features; it's a weighted architectural map.</p>
+                            <ul>
+                                <li><strong>Node Size:</strong> Represents architectural weight and complexity. Larger bubbles are "God Classes" or central hubs that require careful management.</li>
+                                <li><strong>Proximity:</strong> Nodes clustered together are tightly coupled. This helps Product Owners spot dependencies—you can't touch "Audit" without affecting "Governance".</li>
+                                <li><strong>Color:</strong> Indicates the domain (Governance, Intelligence, Quality, Core).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: INTELLIGENCE -->
+                <div id="view-intelligence" class="view-panel">
+                    <h2>LENS: Knowledge Crystallization</h2>
+                    <p class="desc">How CORTEX builds its intelligence end-to-end. LENS doesn't just "see" code; it understands intent, history, and patterns.</p>
+                    
+                    <div class="glass-card">
+                        <h3>The Crystallization Pipeline</h3>
+                        <div style="padding: 1rem;">
+                            <div class="pipeline-step">
+                                <div class="pipeline-circle">1</div>
+                                <div><strong>Signal Extraction:</strong> Git history, AST structures, and TODO/Intent comments are parsed.</div>
+                            </div>
+                            <div class="pipeline-connector"></div>
+                            <div class="pipeline-step">
+                                <div class="pipeline-circle">2</div>
+                                <div><strong>Pattern Matching:</strong> Signals are checked against 35+ Best Practice YAMLs in Tier 3.</div>
+                            </div>
+                            <div class="pipeline-connector"></div>
+                            <div class="pipeline-step">
+                                <div class="pipeline-circle">3</div>
+                                <div><strong>Synthesis:</strong> The IntelligenceEngine creates a Unified Context for orchestrators.</div>
+                            </div>
+                            <div class="pipeline-connector"></div>
+                            <div class="pipeline-step">
+                                <div class="pipeline-circle" style="background: var(--accent-primary);">4</div>
+                                <div><strong>Crystallization:</strong> Analysis is cached and transformed into a "Definition of Ready" (DoR).</div>
+                            </div>
+                        </div>
+                        <div class="text-content">
+                            <h4>💎 From Code to Wisdom</h4>
+                            <p>Most AI tools treat code as simple text. CORTEX treats code as a <strong>Knowledge Graph</strong>.</p>
+                            <p>The "Crystallization" process transforms raw data (like a commit hash or an import statement) into actionable intelligence (e.g., "This module changes frequently and lacks tests"). This creates a <strong>Definition of Ready (DoR)</strong> that blocks implementation until the AI fully understands the <i>intent</i> and <i>history</i> of the module it is about to modify.</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-card">
+                        <span class="truth-badge partial">Wiring</span>
+                        <h3>Neural Context Map</h3>
+                        <div id="viz-intelligence-radial" class="viz-box"></div>
+                        <div class="text-content">
+                             <p>This radial tree shows the taxonomy of signals CORTEX extracts. It combines <strong>Static Analysis</strong> (AST) with <strong>Temporal Analysis</strong> (Git History) to form a complete picture of the code's health.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: ARCHITECTURE -->
+                <div id="view-architecture" class="view-panel">
+                    <h2>Orchestration Nervous System</h2>
+                    <p class="desc">A Directed Acyclic Graph (DAG) of CORTEX orchestrators. Every node is a specialized unit wired via the central registry.</p>
+                    <div class="glass-card">
+                        <div id="viz-architecture" class="viz-box"></div>
+                        <div class="text-content">
+                            <h4>🏗️ Deterministic AI Architecture</h4>
+                            <p>This graph visualizes the <code>wiring.yaml</code> registry, the single source of truth for the system.</p>
+                            <p>Unlike "black box" agents that make up their own plans, CORTEX follows a deterministic <strong>Nervous System</strong>. Control flows from the <strong>IntentRouter</strong> (sensory input) to <strong>Enforcement</strong> (safety reflex) before reaching the <strong>MasterOrchestrator</strong> (executive decision). This guarantees that every action is intentional, governed, and traceable.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: SECURITY -->
+                <div id="view-security" class="view-panel">
+                    <h2>Security-First TDD Implementation</h2>
+                    <p class="desc">CORTEX prevents security drift by injecting mandatory security gates into the TDD cycle.</p>
+                    
+                    <div class="glass-card">
+                        <h3>The Secure Synapse</h3>
+                        <p style="font-size: 0.9rem; color: var(--text-secondary);">Implementation is blocked until <strong>SecurityThreatAnalyzer</strong> and <strong>TDDOrchestrator</strong> both provide a PASS signal.</p>
+                        <div id="viz-security" class="viz-box"></div>
+                        <div class="text-content">
+                            <h4>🛡️ Pre-Emptive Risk Blocking</h4>
+                            <p>This matrix represents a real-time snapshot of architectural risk.</p>
+                            <p>Unlike static analysis tools (SAST) that run in CI/CD <i>after</i> code is pushed, CORTEX operates <strong>pre-commit</strong>. It plots intended changes on a Risk Matrix (Probability vs. Severity). Any change falling into the top-right "Critical" quadrant triggers an immediate <strong>Challenge Gate</strong>, pausing the AI and requiring human Architect approval before proceeding.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VIEW: QUALITY -->
+                <div id="view-quality" class="view-panel">
+                    <h2>Intelligent Quality Enforcement</h2>
+                    <p class="desc">Moving beyond "fluff" tests. CORTEX generates tests based on LENS use-case boundaries and invariants, not just line coverage.</p>
+                    
+                    <div class="glass-card">
+                        <h3>Testing Tiers</h3>
+                        <div class="text-content" style="border-left-color: var(--orch-support);">
+                            <h4>🧪 Intelligent Test Generation</h4>
+                            <p>CORTEX explicitly filters out "fluff tests"—tests that assert trivial things just to increase coverage numbers. Instead, it generates:</p>
+                        </div>
+                        <ul style="list-style: none; padding-left: 0.5rem; line-height: 2;">
+                            <li>✅ <strong>Contract Tests:</strong> Derived directly from API route definitions to ensure interface stability.</li>
+                            <li>✅ <strong>Invariant Tests:</strong> Derived from domain model state machines to ensure impossible states are unreachable.</li>
+                            <li>✅ <strong>Scenario Tests:</strong> Derived from analyzed LENS use cases to verify end-to-end workflows.</li>
+                            <li>❌ <strong>Fluff Tests:</strong> Auto-filtered based on CORE-035 (Single Source of Truth) to reduce test suite noise.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER BAR -->
+        <div id="journey-bar">
+            <div id="active-role-display" style="font-size: 0.8rem; color: var(--accent-primary); font-weight: bold;">ROLE: GUEST</div>
+            <div id="journey-suggestion" style="font-size: 0.9rem; font-style: italic;">Select a role to begin the neural path.</div>
+            <button class="btn-next" onclick="nextLogicalStep()">Next Discovery →</button>
+        </div>
+    </div>
+
+    <script>
+        // --- EMBEDDED CONTEXT ---
+        window.CORTEX_DOC = {
+            roles: {
+                "business-leader": { guidance: "Welcome, Leader. CORTEX ensures every AI signal is governed and ROI-optimized.", path: ["overview", "capabilities", "security"] },
+                "product-owner": { guidance: "Welcome, PO. Focus on 'Definition of Ready' and the Capability Substrate.", path: ["capabilities", "intelligence", "quality"] },
+                "dev-manager": { guidance: "Welcome, Manager. Monitor architecture drift and quality signals.", path: ["overview", "architecture", "quality"] },
+                "software-engineer": { guidance: "Welcome, Engineer. This is the wiring registry and intelligence flow.", path: ["architecture", "intelligence", "quality"] },
+                "quality-assurance": { guidance: "Welcome, SET. See how CORTEX enforces TDD and eliminates fluff tests.", path: ["quality", "security", "architecture"] }
+            },
+            brainTiers: [
+                { id: 0, name: "Tier 0: Brainstem", meta: "Immutable Governance", color: "#ef4444", desc: "CORE Rules (29+). Blocks signals instantly if they violate safety or standards." },
+                { id: 1, name: "Tier 1: Cerebellum", meta: "Coordination", color: "#f59e0b", desc: "Manages domain rules and orchestrator coordination." },
+                { id: 2, name: "Tier 2: Limbic System", meta: "Response Patterns", color: "#7b61ff", desc: "Handles templates and resilient response generation." },
+                { id: 3, name: "Tier 3: Neocortex", meta: "High Intelligence", color: "#00d4ff", desc: "Learned best practices and deep contextual knowledge." }
+            ]
+        };
+
+        // --- UI & D3 LOGIC ---
+        let currentRole = null;
+        let currentView = 'overview';
+        const tooltip = d3.select("body").append("div").attr("class", "d3-tooltip").style("opacity", 0);
+
+        function selectRole(roleKey) {
+            currentRole = roleKey;
+            document.getElementById('role-overlay').classList.add('hidden');
+            document.getElementById('active-role-display').innerText = `ROLE: ${roleKey.toUpperCase().replace('-', ' ')}`;
+            document.getElementById('overview-guidance').innerText = window.CORTEX_DOC.roles[roleKey].guidance;
+            switchView(window.CORTEX_DOC.roles[roleKey].path[0]);
+        }
+
+        function switchView(viewId) {
+            currentView = viewId;
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.view === viewId));
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.toggle('active', p.id === `view-${viewId}`));
+            renderVisualsForView(viewId);
+            updateJourneySuggestion();
+        }
+
+        function updateJourneySuggestion() {
+            if (!currentRole) return;
+            const path = window.CORTEX_DOC.roles[currentRole].path;
+            const idx = path.indexOf(currentView);
+            document.getElementById('journey-suggestion').innerText = idx < path.length - 1 ? `Recommended: Explore ${path[idx+1].toUpperCase()}` : "Neural Path Completed. You are a CORTEX Architect.";
+        }
+
+        function nextLogicalStep() {
+            if (!currentRole) return;
+            const path = window.CORTEX_DOC.roles[currentRole].path;
+            const idx = path.indexOf(currentView);
+            if (idx < path.length - 1) switchView(path[idx+1]);
+            else switchView('overview');
+        }
+
+        function renderVisualsForView(viewId) {
+            if (viewId === 'overview') renderBrainTiers();
+            if (viewId === 'capabilities') renderCapabilityHeatmap();
+            if (viewId === 'architecture') renderArchGraph();
+            if (viewId === 'security') renderRiskMatrix();
+            if (viewId === 'intelligence') renderIntelligenceRadial();
+        }
+
+        function renderBrainTiers() {
+            const container = d3.select("#viz-brain-tiers"); container.selectAll("*").remove();
+            if (!container.node()) return;
+            const width = container.node().clientWidth, height = container.node().clientHeight;
+            const svg = container.append("svg").attr("width", width).attr("height", height);
+            const g = svg.append("g").attr("transform", `translate(${width/2}, ${height/2})`);
+            window.CORTEX_DOC.brainTiers.forEach((t, i) => {
+                const radius = 60 + (i * 45);
+                g.append("circle").attr("r", radius).attr("fill", "none").attr("stroke", t.color).attr("stroke-dasharray", "4,4").attr("opacity", 0.3);
+                const angle = (i * 1.5) - 1;
+                const node = g.append("g").attr("transform", `translate(${Math.cos(angle)*radius}, ${Math.sin(angle)*radius})`).style("cursor", "pointer")
+                .on("mouseover", (e) => {
+                    tooltip.transition().duration(200).style("opacity", .9);
+                    tooltip.html(`<strong>${t.name}</strong><br>${t.meta}<br>${t.desc}`).style("left", (e.pageX+10)+"px").style("top", (e.pageY-28)+"px");
+                }).on("mouseout", () => tooltip.transition().duration(500).style("opacity", 0));
+                node.append("circle").attr("r", 15).attr("fill", t.color).attr("stroke", "#fff").style("filter", `drop-shadow(0 0 10px ${t.color})`);
+            });
+        }
+
+        function renderCapabilityHeatmap() {
+            const container = d3.select("#viz-capabilities"); container.selectAll("*").remove();
+            if (!container.node()) return;
+            const width = container.node().clientWidth, height = container.node().clientHeight;
+            const svg = container.append("svg").attr("width", width).attr("height", height);
+            const data = [{n:"LENS"}, {n:"Governance"}, {n:"TDD"}, {n:"Registry"}, {n:"Audit"}, {n:"Challenge"}, {n:"Refactor"}];
+            const simulation = d3.forceSimulation(data).force("charge", d3.forceManyBody().strength(80)).force("center", d3.forceCenter(width/2, height/2)).force("collision", d3.forceCollide().radius(60));
+            const nodes = svg.selectAll("g").data(data).enter().append("g");
+            nodes.append("circle").attr("r", 45).attr("fill", "rgba(0, 212, 255, 0.1)").attr("stroke", "var(--accent-primary)");
+            nodes.append("text").attr("text-anchor", "middle").attr("fill", "#fff").attr("font-size", "10px").text(d => d.n);
+            simulation.on("tick", () => nodes.attr("transform", d => `translate(${d.x}, ${d.y})`));
+        }
+
+        function renderArchGraph() {
+            const container = d3.select("#viz-architecture"); container.selectAll("*").remove();
+            if (!container.node()) return;
+            const width = container.node().clientWidth, height = container.node().clientHeight;
+            const svg = container.append("svg").attr("width", width).attr("height", height);
+            const nodes = [{id:"Router", type:"c"}, {id:"LENS", type:"c"}, {id:"Enforce", type:"c"}, {id:"Master", type:"c"}, {id:"TDD", type:"d"}, {id:"Refactor", type:"d"}];
+            const links = [{source:"Router", target:"LENS"}, {source:"LENS", target:"Enforce"}, {source:"Enforce", target:"Master"}, {source:"Master", target:"TDD"}, {source:"Master", target:"Refactor"}];
+            const simulation = d3.forceSimulation(nodes).force("link", d3.forceLink(links).id(d=>d.id).distance(120)).force("charge", d3.forceManyBody().strength(-400)).force("center", d3.forceCenter(width/2, height/2));
+            const link = svg.append("g").selectAll("line").data(links).enter().append("line").attr("stroke", "var(--glass-border)").attr("stroke-width", 2);
+            const node = svg.append("g").selectAll("circle").data(nodes).enter().append("circle").attr("r", 14).attr("fill", d => d.type==='c' ? "var(--orch-core)" : "var(--orch-domain)").attr("stroke", "#fff");
+            node.append("title").text(d => d.id);
+            simulation.on("tick", () => {
+                link.attr("x1", d=>d.source.x).attr("y1", d=>d.source.y).attr("x2", d=>d.target.x).attr("y2", d=>d.target.y);
+                node.attr("cx", d=>d.x).attr("cy", d=>d.y);
+            });
+        }
+
+        function renderRiskMatrix() {
+            const container = d3.select("#viz-security"); container.selectAll("*").remove();
+            if (!container.node()) return;
+            const width = container.node().clientWidth, height = container.node().clientHeight;
+            const svg = container.append("svg").attr("width", width).attr("height", height);
+            const data = [{x:0.1, y:0.9, n:"Auth Breach"}, {x:0.6, y:0.5, n:"Wiring Drift"}, {x:0.3, y:0.2, n:"Token Leak"}];
+            const x = d3.scaleLinear().domain([0, 1]).range([50, width-50]), y = d3.scaleLinear().domain([0, 1]).range([height-50, 50]);
+            svg.append("g").attr("transform", `translate(0,${height-50})`).call(d3.axisBottom(x).ticks(5));
+            svg.append("g").attr("transform", "translate(50,0)").call(d3.axisLeft(y).ticks(5));
+            svg.selectAll("circle").data(data).enter().append("circle").attr("cx", d=>x(d.x)).attr("cy", d=>y(d.y)).attr("r", 10).attr("fill", "var(--danger)").attr("stroke", "#fff").style("filter", "drop-shadow(0 0 5px #ef4444)");
+            svg.selectAll("text").data(data).enter().append("text").attr("x", d=>x(d.x)+15).attr("y", d=>y(d.y)+5).attr("fill", "#fff").attr("font-size", "10px").text(d => d.n);
+        }
+
+        function renderIntelligenceRadial() {
+            const container = d3.select("#viz-intelligence-radial"); container.selectAll("*").remove();
+            if (!container.node()) return;
+            const width = container.node().clientWidth, height = container.node().clientHeight;
+            const svg = container.append("svg").attr("width", width).attr("height", height);
+            const data = {
+                name: "Context",
+                children: [
+                    { name: "Git", children: [{name:"Authors"}, {name:"Churn"}] },
+                    { name: "AST", children: [{name:"Classes"}, {name:"Imports"}] },
+                    { name: "Docs", children: [{name:"TODOs"}, {name:"Intent"}] }
+                ]
+            };
+            const root = d3.hierarchy(data);
+            const treeLayout = d3.tree().size([2 * Math.PI, Math.min(width, height) / 2 - 40]);
+            treeLayout(root);
+            const g = svg.append("g").attr("transform", `translate(${width/2}, ${height/2})`);
+            g.selectAll('line').data(root.links()).enter().append('line').attr('stroke', 'var(--accent-primary)').attr('x1', d => Math.cos(d.source.x - Math.PI/2) * d.source.y).attr('y1', d => Math.sin(d.source.x - Math.PI/2) * d.source.y).attr('x2', d => Math.cos(d.target.x - Math.PI/2) * d.target.y).attr('y2', d => Math.sin(d.target.x - Math.PI/2) * d.target.y);
+            const nodes = g.selectAll('g').data(root.descendants()).enter().append('g').attr('transform', d => `translate(${Math.cos(d.x - Math.PI/2) * d.y}, ${Math.sin(d.x - Math.PI/2) * d.y})`);
+            nodes.append('circle').attr('r', 6).attr('fill', 'var(--accent-secondary)');
+            nodes.append('text').attr('dy', '0.31em').attr('x', d => d.x < Math.PI ? 10 : -10).attr('text-anchor', d => d.x < Math.PI ? 'start' : 'end').attr('transform', d => d.x >= Math.PI ? 'rotate(180)' : null).attr('fill', '#fff').attr('font-size', '10px').text(d => d.data.name);
+        }
+    </script>
+</body>
+</html>

@@ -94,8 +94,7 @@ ARCHITECT-*-SUMMARY.md
 
 # cortex-registry/ is fully tracked (CORE-056 blacklist removed)
 
-# Local workspaces (developer sandboxes, sample apps, chat logs — never source-controlled)
-_workspaces/
+# _workspaces/ is now tracked (phase-51 — chat logs, approved views, workspace docs)
 
 # Testing
 .pytest_cache/

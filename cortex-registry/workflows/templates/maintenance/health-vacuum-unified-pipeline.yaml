@@ -1,0 +1,524 @@
+# =============================================================================
+# CORTEX Health-Vacuum Unified Pipeline — Workflow Template
+# =============================================================================
+# Authority: Phase 51 — Health-Vacuum Unified Pipeline
+# Version: 2.0.0
+# Created: 2026-02-19
+# CORE Rules: CORE-002, CORE-008, CORE-028, CORE-035, CORE-048, CORE-055
+#
+# Purpose: Two-orchestrator pipeline for CORTEX repository integrity.
+#   HealthOrchestrator (diagnose) → VacuumOrchestrator (remediate)
+#   Single unified purpose: ensure CORTEX works holistically and cohesively.
+#
+# Architecture:
+#   HealthOrchestrator.scan() produces HealthReport + health-issues.yaml
+#   VacuumOrchestrator.consume() reads handoff, executes cleanup operations
+#   Pipeline coordinates the full lifecycle with convergence gating.
+# =============================================================================
+
+workflow:
+  id: "maintenance/health-vacuum-unified-pipeline"
+  name: "Health-Vacuum Unified Pipeline"
+  version: "2.0.0"
+  category: "maintenance"
+  description: |
+    Unified two-orchestrator pipeline for CORTEX repository integrity:
+    
+    1. **HealthOrchestrator** (diagnose):
+       - Holistic scanning: filesystem, architecture, wiring, infrastructure
+       - Agent-based extensible checks (plugin pattern)
+       - Produces structured health-issues.yaml handoff
+       - Supports DoD gate for production readiness
+    
+    2. **VacuumOrchestrator** (remediate):
+       - Consumes health-issues.yaml handoff from HealthOrchestrator
+       - Root cleanup: relocate files not belonging in project root
+       - Directory organization: nest orphaned files into proper subfolders
+       - Naming standardization: kebab-case (non-Python), snake_case (Python)
+       - File cleanup: delete empty files, orphaned dirs, stale markdown
+       - Rollback support via manifest for all destructive operations
+    
+    Governance: CORE-002, CORE-008, CORE-028, CORE-035, CORE-048
+
+  metadata:
+    author: "CORTEX Architect"
+    created: "2026-02-19"
+    phase: "51"
+    authority: "CORE-002, CORE-008, CORE-028, CORE-035, CORE-048"
+    supersedes:
+      - "maintenance/health-vacuum-pipeline (Phase 48)"
+      - "maintenance/health-vacuum-consolidation (Phase 50)"
+
+  # ===========================================================================
+  # CONVERGENCE GATE (Pipeline-Level)
+  # ===========================================================================
+  convergence_gate:
+    max_cycles: 3
+    success_criteria:
+      issues_resolved: true
+      no_regressions: true
+      root_clean: true
+      naming_compliant: true
+    convergence_predicate: |
+      issues_found == issues_fixed 
+      AND test_failures == 0 
+      AND root_violations == 0
+      AND naming_violations == 0
+    backoff_strategy: "linear"
+
+  # ===========================================================================
+  # KNOWLEDGE CONTEXT
+  # ===========================================================================
+  knowledge_context:
+    health_check_categories:
+      filesystem:
+        - id: "H-001"
+          name: "Screaming Case Files"
+          description: "Files with 3+ consecutive uppercase chars violate CORE-028"
+          severity: "P1"
+        - id: "H-002"
+          name: "Empty Files"
+          description: "Zero-byte files (excluding .gitkeep)"
+          severity: "P2"
+        - id: "H-003"
+          name: "Orphaned Directories"
+          description: "Empty directories with no children"
+          severity: "P2"
+        - id: "H-004"
+          name: "Wrong Path References"
+          description: "Stale import paths (cortex_brain → cortex_intelligence)"
+          severity: "P0"
+        - id: "H-005"
+          name: "Duplicate Content"
+          description: "Files with identical MD5 hash (CORE-035 violation)"
+          severity: "P1"
+        - id: "H-006"
+          name: "Deprecated Markers"
+          description: "Files containing DEPRECATED, TODO: remove, FIXME: delete"
+          severity: "P2"
+        - id: "H-007"
+          name: "Invalid Markdown Location"
+          description: "Markdown files outside canonical docs paths (CORE-002)"
+          severity: "P1"
+
+      architecture:
+        - id: "HA-001"
+          name: "Duplicate Detection"
+          description: "Multiple implementations of same class (CORE-035)"
+          agent: "DuplicateDetectionAgent"
+          severity: "P0"
+        - id: "HA-002"
+          name: "Stub Detection"
+          description: "Placeholder implementations with no real logic"
+          agent: "StubDetectionAgent"
+          severity: "P1"
+        - id: "HA-003"
+          name: "Path Integrity"
+          description: "Broken imports and stale path references"
+          agent: "PathIntegrityAgent"
+          severity: "P0"
+        - id: "HA-004"
+          name: "Database Health"
+          description: "SQLite database bloat, WAL/SHM orphans"
+          agent: "DatabaseHealthAgent"
+          severity: "P2"
+        - id: "HA-005"
+          name: "Test Coverage"
+          description: "Production modules missing corresponding test files"
+          agent: "TestCoverageAgent"
+          severity: "P1"
+
+      infrastructure:
+        - id: "HI-001"
+          name: "Registry Consistency"
+          description: "Phase YAML files match cortex-master.yaml entries"
+          agent: "RegistryConsistencyAgent"
+          severity: "P1"
+        - id: "HI-002"
+          name: "MCP Auto-Healing"
+          description: "MCP tool registration gaps and configuration issues"
+          agent: "MCPAutoHealingAgent"
+          severity: "P1"
+        - id: "HI-003"
+          name: "Token Optimization"
+          description: "Files with excessive token count for LLM context"
+          agent: "TokenOptimizationAgent"
+          severity: "P2"
+
+      wiring:
+        - id: "HW-001"
+          name: "Inventory Analysis"
+          description: "Structural layout issues, misplaced files, consolidation targets"
+          agent: "InventoryAgent"
+          severity: "P1"
+        - id: "HW-002"
+          name: "Filename Governance"
+          description: "Python files not snake_case, non-Python not kebab-case"
+          agent: "FilenameGovernanceAgent"
+          severity: "P1"
+        - id: "HW-003"
+          name: "Version Cleanup"
+          description: "Stale versioned artifacts and old release files"
+          agent: "VersionCleanupAgent"
+          severity: "P2"
+
+    vacuum_operations:
+      - id: "V-001"
+        name: "Root Cleanup"
+        description: "Move files not belonging in project root to proper subfolders"
+        protected_root_files:
+          - "pytest.ini"
+          - "requirements.txt"
+          - "README.md"
+          - ".gitignore"
+          - "conftest.py"
+          - "pyproject.toml"
+          - "Makefile"
+          - ".pre-commit-config.yaml"
+      - id: "V-002"
+        name: "Subfolder Organization"
+        description: "Relocate files in root of subfolders neatly into subfolders"
+      - id: "V-003"
+        name: "Naming Standardization"
+        description: "Rename: kebab-case for non-Python, snake_case for Python"
+        rules:
+          python: "snake_case (PEP 8)"
+          yaml: "kebab-case (max 40 chars)"
+          markdown: "kebab-case (max 40 chars)"
+          other: "kebab-case (max 30 chars)"
+      - id: "V-004"
+        name: "Empty File Cleanup"
+        description: "Delete zero-byte files (excluding .gitkeep)"
+      - id: "V-005"
+        name: "Orphaned Directory Cleanup"
+        description: "Remove empty directories recursively"
+      - id: "V-006"
+        name: "Markdown Archival"
+        description: "Archive stale .md files to .cortex-runtime/archived-docs/"
+      - id: "V-007"
+        name: "Duplicate Consolidation"
+        description: "Keep canonical, remove duplicate files (CORE-035)"
+      - id: "V-008"
+        name: "Stale Reference Fix"
+        description: "Fix wrong import paths across codebase"
+
+    naming_rules:
+      python_modules: "snake_case (PEP 8) — e.g., health_orchestrator.py"
+      yaml_files: "kebab-case — e.g., health-vacuum-pipeline.yaml"
+      markdown_files: "kebab-case — e.g., architecture-recommendation.md"
+      phase_plan_files: "phase-{N}-{slug}.yaml (max 40 chars)"
+      test_files: "test_{module_name}.py (snake_case, mirrors source)"
+
+    protected_files:
+      - "pytest.ini"
+      - "requirements.txt"
+      - "README.md"
+      - ".gitignore"
+      - "conftest.py"
+      - "pyproject.toml"
+      - "Makefile"
+      - ".pre-commit-config.yaml"
+
+  # ===========================================================================
+  # HANDOFF CONTRACT
+  # ===========================================================================
+  handoff:
+    file: ".cortex-runtime/health-issues.yaml"
+    description: |
+      Structured YAML handoff from HealthOrchestrator to VacuumOrchestrator.
+      Written by scan(), consumed by consume(), deleted on teardown.
+    schema:
+      metadata:
+        generated_at: "ISO 8601 timestamp"
+        scan_duration_ms: "integer"
+        total_files_scanned: "integer"
+        issues_found: "integer"
+        health_score: "float (0-100)"
+      issues:
+        screaming_case:
+          count: "integer"
+          files: "list[{path, recommended_name, action}]"
+        empty_files:
+          count: "integer"
+          files: "list[{path, action}]"
+        orphaned_directories:
+          count: "integer"
+          directories: "list[{path, action}]"
+        deprecated_code:
+          count: "integer"
+          files: "list[{path, markers, action}]"
+        duplicate_content:
+          count: "integer"
+          groups: "list[{hash, files, action}]"
+        wrong_references:
+          count: "integer"
+          files: "list[{path, old_ref, new_ref, action}]"
+        invalid_markdown:
+          count: "integer"
+          files: "list[{path, action}]"
+        naming_violations:
+          count: "integer"
+          files: "list[{path, recommended_name, violation_type, action}]"
+        root_violations:
+          count: "integer"
+          files: "list[{path, target_dir, action}]"
+      agent_findings:
+        findings: "list[{agent, category, severity, path, description, action}]"
+      summary:
+        delete_count: "integer"
+        rename_count: "integer"
+        relocate_count: "integer"
+        fix_count: "integer"
+        estimated_bytes_freed: "integer"
+    rollback_manifest: ".cortex-runtime/rollback-manifest.json"
+
+  # ===========================================================================
+  # STAGES
+  # ===========================================================================
+  stages:
+    - name: "preflight"
+      order: 1
+      description: |
+        Safety checks before scan: verify git status, stash dirty changes,
+        validate workspace root exists, check protected files are present.
+      actor: "HealthVacuumPipeline._stage_preflight"
+      validation:
+        - "workspace_root exists and is a git repository"
+        - "protected files are present"
+      output: "preflight_status"
+
+    - name: "health_scan"
+      order: 2
+      description: |
+        Run HealthOrchestrator.scan() with all registered agents.
+        Single filesystem walk via FileContext (one rglob).
+        Produces unified HealthReport + writes health-issues.yaml handoff.
+        Categories: filesystem (H-001..007), architecture (HA-001..005),
+        infrastructure (HI-001..003), wiring (HW-001..003).
+      actor: "HealthOrchestrator.scan"
+      output: "health_report + health-issues.yaml"
+      validation:
+        - "health-issues.yaml written successfully"
+        - "total_files_scanned > 0"
+
+    - name: "review"
+      order: 3
+      description: |
+        Interactive review of health-issues.yaml (skipped in autonomous mode).
+        Human or LLM reviews planned operations before execution.
+      actor: "HealthVacuumPipeline._stage_review"
+      skippable: true
+      skip_condition: "autonomous == true"
+
+    - name: "vacuum_execute"
+      order: 4
+      description: |
+        VacuumOrchestrator.consume() reads health-issues.yaml and executes:
+        - Root cleanup (V-001): relocate root-level files to subfolders
+        - Subfolder organization (V-002): nest orphaned files properly
+        - Naming standardization (V-003): kebab/snake_case enforcement
+        - Empty file cleanup (V-004): delete zero-byte files
+        - Orphaned dir cleanup (V-005): remove empty directories
+        - Markdown archival (V-006): archive stale .md files
+        - Duplicate consolidation (V-007): keep canonical only
+        - Stale reference fix (V-008): fix wrong import paths
+        All operations record rollback entries in manifest.
+      actor: "VacuumOrchestrator.consume"
+      output: "operation_results + rollback-manifest.json"
+      validation:
+        - "all operations either succeed or have explicit skip reason"
+        - "rollback manifest written"
+
+    - name: "verification"
+      order: 5
+      description: |
+        Post-vacuum verification: run golden test suite, verify no regressions,
+        delete handoff file on success. If failures detected, trigger rollback.
+      actor: "HealthVacuumPipeline._stage_verification"
+      output: "verification_status"
+      validation:
+        - "golden test baseline maintained"
+        - "health-issues.yaml deleted on success"
+        - "rollback-manifest.json deleted on success (unless errors)"
+
+  # ===========================================================================
+  # TEST STRATEGY
+  # ===========================================================================
+  test_strategy:
+    philosophy: |
+      Tests are meaningful, high-value, and intelligent about WHEN to use
+      unit tests vs golden tests with audit log trace acceptance criteria.
+      
+      - Golden tests: End-to-end orchestrator workflows with YAML handoff
+        verification, rollback validation, and convergence gate checks.
+        Use when testing: cross-component integration, handoff contracts,
+        pipeline stages, audit trail completeness.
+      
+      - Unit tests: Isolated single-responsibility checks on pure functions
+        and individual agents. Use when testing: to_kebab_case conversion,
+        FileContext building, individual agent detection logic, naming rules.
+      
+      - Acceptance criteria: Every golden test includes audit log trace
+        assertions that verify the operation was logged with correct
+        timestamps, actors, and outcomes.
+
+    golden_tests:
+      location: "tests/golden/orchestrators/health_vacuum/"
+      categories:
+        health_scan:
+          prefix: "GH"
+          scenarios:
+            - id: "GH-001"
+              name: "Screaming case detection"
+              type: "golden"
+              acceptance: "Audit log contains H-001 finding with path + recommended_name"
+            - id: "GH-002"
+              name: "Empty file detection"
+              type: "golden"
+              acceptance: "Audit log contains H-002 finding with zero-byte path"
+            - id: "GH-003"
+              name: "Orphaned directory detection"
+              type: "golden"
+              acceptance: "Audit log contains H-003 finding with empty dir path"
+            - id: "GH-004"
+              name: "Wrong reference detection"
+              type: "golden"
+              acceptance: "Audit log contains H-004 finding with old→new ref"
+            - id: "GH-005"
+              name: "Duplicate content detection"
+              type: "golden"
+              acceptance: "Audit log contains H-005 group with hash + file list"
+            - id: "GH-006"
+              name: "Deprecated marker detection"
+              type: "golden"
+              acceptance: "Audit log contains H-006 finding with marker list"
+            - id: "GH-007"
+              name: "Invalid markdown detection"
+              type: "golden"
+              acceptance: "Audit log contains H-007 finding with path"
+            - id: "GH-008"
+              name: "Naming violation detection"
+              type: "golden"
+              acceptance: "Audit log contains naming violation with violation_type"
+            - id: "GH-009"
+              name: "Root violation detection"
+              type: "golden"
+              acceptance: "Audit log contains root violation with target_dir"
+            - id: "GH-010"
+              name: "Agent findings aggregation"
+              type: "golden"
+              acceptance: "All agent results merged into unified HealthReport"
+
+        vacuum_execute:
+          prefix: "GV"
+          scenarios:
+            - id: "GV-001"
+              name: "Rename screaming → kebab"
+              type: "golden"
+              acceptance: "File renamed on disk + rollback manifest entry + audit log"
+            - id: "GV-002"
+              name: "Delete empty files"
+              type: "golden"
+              acceptance: "File deleted + rollback manifest entry + audit log"
+            - id: "GV-003"
+              name: "Remove orphaned directory"
+              type: "golden"
+              acceptance: "Directory removed + rollback manifest entry + audit log"
+            - id: "GV-004"
+              name: "Root cleanup relocate"
+              type: "golden"
+              acceptance: "File moved to subfolder + rollback manifest + audit log"
+            - id: "GV-005"
+              name: "Naming standardization"
+              type: "golden"
+              acceptance: "Python→snake_case, non-Python→kebab-case + audit log"
+            - id: "GV-006"
+              name: "Markdown archival"
+              type: "golden"
+              acceptance: "Stale .md moved to .cortex-runtime/archived-docs/ + audit log"
+            - id: "GV-007"
+              name: "Dry-run mode"
+              type: "golden"
+              acceptance: "No filesystem changes + operations planned count > 0"
+            - id: "GV-008"
+              name: "Rollback restore"
+              type: "golden"
+              acceptance: "All operations reversed, files restored to original locations"
+
+        pipeline:
+          prefix: "GP"
+          scenarios:
+            - id: "GP-001"
+              name: "Full pipeline: scan → vacuum → verify"
+              type: "golden"
+              acceptance: "All 5 stages PASS, handoff created and consumed, teardown clean"
+            - id: "GP-002"
+              name: "Pipeline dry-run mode"
+              type: "golden"
+              acceptance: "Scan runs, vacuum reports but no changes, handoff preserved"
+            - id: "GP-003"
+              name: "Health → Vacuum handoff contract"
+              type: "golden"
+              acceptance: "health-issues.yaml schema validated, all required fields present"
+            - id: "GP-004"
+              name: "Convergence gate enforcement"
+              type: "golden"
+              acceptance: "Pipeline retries on partial success, exits on max_cycles"
+
+    unit_tests:
+      location: "tests/unit/orchestrators/health/"
+      categories:
+        - name: "FileContext"
+          tests:
+            - "test_build_single_walk — FileContext.build() uses one rglob"
+            - "test_get_content_caching — reads from disk only on miss"
+            - "test_get_hash_caching — computes MD5 only on miss"
+            - "test_excluded_dirs_skipped — .git, __pycache__ excluded"
+        - name: "NamingHelpers"
+          tests:
+            - "test_to_kebab_case — CamelCase → kebab-case"
+            - "test_to_snake_case — kebab-case → snake_case"
+            - "test_is_screaming — 3+ uppercase detection"
+            - "test_is_valid_python_name — PEP 8 compliance"
+        - name: "HealthAgents"
+          tests:
+            - "test_each_agent_implements_interface — ABC contract"
+            - "test_agent_returns_health_check_result — correct type"
+
+  # ===========================================================================
+  # MCP TOOLS
+  # ===========================================================================
+  mcp_tools:
+    - name: "cortex_health_scan"
+      tool_class: "CortexHealthScan"
+      file: "cortex/mcp/tools/health_scan_tool.py"
+      operations: ["scan", "status", "classify"]
+      description: |
+        Run HealthOrchestrator.scan() → write health-issues.yaml.
+        Operations: scan (full check), status (read existing), classify (module tier).
+
+    - name: "cortex_vacuum_execute"
+      tool_class: "CortexVacuumExecute"
+      file: "cortex/mcp/tools/vacuum_execute_tool.py"
+      operations: ["execute", "preview", "rollback", "markdown"]
+      description: |
+        Run VacuumOrchestrator.consume() → execute cleanup from health-issues.yaml.
+        Operations: execute, preview (dry-run), rollback, markdown (archive stale .md).
+
+  # ===========================================================================
+  # GOVERNANCE
+  # ===========================================================================
+  governance:
+    core_rules:
+      - "CORE-002: No markdown sprawl — only canonical docs paths"
+      - "CORE-008: TDD mandatory — tests before implementation"
+      - "CORE-028: Naming conventions — snake_case Python, kebab-case rest"
+      - "CORE-035: Single canonical implementation — one HealthOrchestrator, one VacuumOrchestrator"
+      - "CORE-048: Holistic validation gate — convergence predicate"
+      - "CORE-055: Golden test tier contract — golden vs unit decision"
+    forbidden:
+      - "Do NOT create multiple HealthOrchestrator classes"
+      - "Do NOT create multiple VacuumOrchestrator classes"
+      - "Do NOT skip handoff contract (health-issues.yaml)"
+      - "Do NOT execute vacuum without prior health scan"
+      - "Do NOT delete protected files"

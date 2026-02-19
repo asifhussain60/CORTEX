@@ -39,6 +39,7 @@ class StageContext:
     parameters: Dict[str, Any]
     metadata: Dict[str, Any] = field(default_factory=dict)
     result: Optional[Any] = None
+    stage_results: Dict[str, Any] = field(default_factory=dict)
 
 
 class StageExecutionStrategy(ABC):

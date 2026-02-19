@@ -1,0 +1,9 @@
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\MemberFlexSpanDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\MemberFlexStageChangeDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\MemberRecentActivitiesDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\MemberReimbursementAccountDetailsDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\MemberReimbursementAccountsSummaryDto.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\MemberSuspendedCard.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\MemberUnsubstantiatedTransaction.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\OverrideMemberFlexStageRequest.cs
+C:\PROJECTS\Product.Example\SDKs\App.PaymentAccounts.Contracts\DTOs\PercentPlanLedgerJobResponse.cs

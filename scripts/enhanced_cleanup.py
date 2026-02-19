@@ -32,7 +32,7 @@ from cortex.orchestrators.health.agents.filename_governance_agent import (
 from cortex.orchestrators.health.agents.duplicate_detection_agent import (
     DuplicateDetectionAgent,
 )
-from cortex.toolkit.cleanup.vacuum import VacuumAutomation
+from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator as VacuumAutomation
 
 
 def run_health_check(workspace_root: Path) -> dict:

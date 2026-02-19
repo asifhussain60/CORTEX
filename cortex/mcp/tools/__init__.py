@@ -76,12 +76,12 @@ from cortex.mcp.tools.toolkit import (
     ToolkitAnalyzeTool,
 )
 
-# Phase 48 — Health-Vacuum Integrity Pipeline tools
-from cortex.mcp.tools.health_orchestrator_tool import CortexHealthOrchestrate
-from cortex.mcp.tools.vacuum_orchestrator_tool import CortexVacuumOrchestrate
+# Phase 51 — Health-Vacuum Integrity Pipeline tools (replaces Phase 48)
+from cortex.mcp.tools.health_scan_tool import cortex_health_scan
+from cortex.mcp.tools.vacuum_execute_tool import cortex_vacuum_execute
 
 # Phase 50 — CortexMasterPlanOrchestrator exposure (CORE-035: registered via ConsolidatedTool)
-from cortex.mcp.tools.master_plan_tool import CortexMasterPlanTool
+from cortex.mcp.tools.master_plan_tool import CortexMasterPlanTool, cortex_master_plan
 
 # GitOrchestrator — replaces git hooks + GitHub Actions (2026-02-19)
 from cortex.mcp.tools.git_orchestrator_tool import CortexGitPush
@@ -127,9 +127,8 @@ ALL_TOOLS = [
     ToolkitCleanupTool,
     ToolkitValidateTool,
     ToolkitAnalyzeTool,
-    # Health-Vacuum (2) - Phase 48
-    CortexHealthOrchestrate,
-    CortexVacuumOrchestrate,
+    # Health-Vacuum (Phase 51 — function-based, not class-based)
+    # cortex_health_scan and cortex_vacuum_execute are standalone functions
     # MasterPlan (1) - Phase 50
     CortexMasterPlanTool,
     # GitOrchestrator (1) - replaces git hooks + GitHub Actions
@@ -181,6 +180,7 @@ __all__ = [
     "CortexPlan",
     "CortexOnboard",
     "CortexDashboard",
+    "CortexWorkflow",
     # Utilities
     "CortexVerify",
     "CortexAsk",
@@ -197,11 +197,12 @@ __all__ = [
     "ToolkitCleanupTool",
     "ToolkitValidateTool",
     "ToolkitAnalyzeTool",
-    # Health-Vacuum (Phase 48)
-    "CortexHealthOrchestrate",
-    "CortexVacuumOrchestrate",
+    # Health-Vacuum (Phase 51)
+    "cortex_health_scan",
+    "cortex_vacuum_execute",
     # MasterPlan (Phase 50)
     "CortexMasterPlanTool",
+    "cortex_master_plan",
     # GitOrchestrator (replaces git hooks + GitHub Actions)
     "CortexGitPush",
     # Registration

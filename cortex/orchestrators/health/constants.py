@@ -1,0 +1,142 @@
+"""Shared Constants — Health-Vacuum Pipeline
+
+Single source of truth for all constants used by HealthOrchestrator,
+VacuumOrchestrator, and the unified pipeline.
+
+Phase: PHASE-51
+CORE: CORE-011 (type hints), CORE-012 (docstrings), CORE-028 (naming)
+"""
+
+from typing import FrozenSet
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Filesystem traversal
+# ─────────────────────────────────────────────────────────────────────────────
+
+EXCLUDED_DIRS: FrozenSet[str] = frozenset({
+    ".git",
+    "__pycache__",
+    ".venv",
+    "venv",
+    "node_modules",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".tox",
+    ".eggs",
+    "*.egg-info",
+    ".cortex-runtime",
+    "_archives",
+    "_quarantine",
+    "_legacy_broken",
+    "_archived",
+})
+"""Directories that FileContext.build() will never descend into."""
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Root-file governance
+# ─────────────────────────────────────────────────────────────────────────────
+
+PROTECTED_FILES: FrozenSet[str] = frozenset({
+    # Build / packaging
+    "pyproject.toml",
+    "setup.py",
+    "setup.cfg",
+    "requirements.txt",
+    "Makefile",
+    "Pipfile",
+    "Pipfile.lock",
+    "poetry.lock",
+    # Test configuration
+    "pytest.ini",
+    "conftest.py",
+    "tox.ini",
+    ".coveragerc",
+    # Documentation
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "LICENSE.md",
+    "CONTRIBUTING.md",
+    # Git
+    ".gitignore",
+    ".gitattributes",
+    # Editor / CI
+    ".editorconfig",
+    ".pre-commit-config.yaml",
+    # Docker
+    "Dockerfile",
+    "docker-compose.yml",
+    "docker-compose.yaml",
+    ".dockerignore",
+})
+"""Files that MUST stay in the project root — never relocated by Vacuum."""
+
+PROTECTED_ROOT_EXTENSIONS: FrozenSet[str] = frozenset({
+    ".toml",
+    ".cfg",
+    ".ini",
+    ".lock",
+    ".txt",  # requirements.txt
+})
+"""File extensions commonly allowed in the project root."""
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Markdown governance
+# ─────────────────────────────────────────────────────────────────────────────
+
+ALLOWED_MARKDOWN_PREFIXES: FrozenSet[str] = frozenset({
+    "README",
+    "CHANGELOG",
+    "CONTRIBUTING",
+    "LICENSE",
+    "SECURITY",
+    "CODE_OF_CONDUCT",
+})
+"""Markdown files whose stem (uppercase) starts with these are allowed in root."""
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Naming conventions  (CORE-028)
+# ─────────────────────────────────────────────────────────────────────────────
+
+KEBAB_MAX_LEN: int = 80
+"""Maximum length for a kebab-case filename (excluding extension)."""
+
+PYTHON_EXTENSIONS: FrozenSet[str] = frozenset({".py", ".pyi"})
+"""File extensions that must follow snake_case naming."""
+
+NON_PYTHON_EXTENSIONS: FrozenSet[str] = frozenset({
+    ".yaml", ".yml", ".json", ".md", ".txt", ".html", ".css", ".js",
+    ".ts", ".sh", ".bat", ".xml", ".toml", ".cfg", ".ini", ".env",
+})
+"""Common file extensions that should follow kebab-case naming."""
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Handoff / runtime
+# ─────────────────────────────────────────────────────────────────────────────
+
+RUNTIME_DIR: str = ".cortex-runtime"
+"""Root directory for all runtime artifacts."""
+
+ARCHIVE_DIR: str = ".cortex-runtime/archived-docs"
+"""Destination for stale markdown files archived by Vacuum."""
+
+HANDOFF_FILENAME: str = "health-issues.yaml"
+"""Filename for the Health → Vacuum handoff contract."""
+
+ROLLBACK_FILENAME: str = "rollback-manifest.json"
+"""Filename for the Vacuum rollback manifest."""
+
+
+__all__ = [
+    "EXCLUDED_DIRS",
+    "PROTECTED_FILES",
+    "PROTECTED_ROOT_EXTENSIONS",
+    "ALLOWED_MARKDOWN_PREFIXES",
+    "KEBAB_MAX_LEN",
+    "PYTHON_EXTENSIONS",
+    "NON_PYTHON_EXTENSIONS",
+    "RUNTIME_DIR",
+    "ARCHIVE_DIR",
+    "HANDOFF_FILENAME",
+    "ROLLBACK_FILENAME",
+]

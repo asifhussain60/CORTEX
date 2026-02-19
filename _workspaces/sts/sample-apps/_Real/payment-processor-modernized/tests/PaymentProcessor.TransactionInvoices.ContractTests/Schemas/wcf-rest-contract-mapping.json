@@ -1,0 +1,362 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0",
+  "description": "WCF to REST contract mapping for PaymentProcessor Transaction Invoices migration",
+  "mappings": [
+    {
+      "wcfTransaction": "XAddTransactionInvoice",
+      "restEndpoint": {
+        "method": "POST",
+        "path": "/api/v1/transaction-invoices",
+        "controller": "TransactionInvoiceController",
+        "action": "CreateInvoice"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "EmployerId": "string",
+          "AccountCategoryId": "string",
+          "PaymentPlanId": "string",
+          "EmployerTransactionDefault": "decimal",
+          "EmployeeTransactionDefault": "decimal",
+          "EffectiveDate": "DateTime",
+          "InvoiceDescription": "string",
+          "IsLSA": "boolean",
+          "UpdateTemplate": "boolean",
+          "CreatedBy": "string"
+        },
+        "restSchema": {
+          "employerId": "string",
+          "account_categoryId": "string",
+          "paymentPlanId": "string",
+          "employerTransactionDefault": "number",
+          "employeeTransactionDefault": "number",
+          "effectiveDate": "string (ISO 8601)",
+          "invoiceDescription": "string",
+          "isLSA": "boolean",
+          "updateTemplate": "boolean",
+          "createdBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "EmployerId", "rest": "employerId", "type": "string", "required": true},
+          {"wcf": "AccountCategoryId", "rest": "account_categoryId", "type": "string", "required": true},
+          {"wcf": "PaymentPlanId", "rest": "paymentPlanId", "type": "string", "required": true},
+          {"wcf": "EmployerTransactionDefault", "rest": "employerTransactionDefault", "type": "decimal", "required": true},
+          {"wcf": "EmployeeTransactionDefault", "rest": "employeeTransactionDefault", "type": "decimal", "required": true},
+          {"wcf": "EffectiveDate", "rest": "effectiveDate", "type": "DateTime", "required": true},
+          {"wcf": "InvoiceDescription", "rest": "invoiceDescription", "type": "string", "required": true},
+          {"wcf": "IsLSA", "rest": "isLSA", "type": "boolean", "required": true},
+          {"wcf": "UpdateTemplate", "rest": "updateTemplate", "type": "boolean", "required": true},
+          {"wcf": "CreatedBy", "rest": "createdBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "InvoiceId": "string",
+          "EmployerId": "string",
+          "AccountCategoryId": "string",
+          "TotalAmount": "decimal",
+          "Status": "string",
+          "CreatedDate": "DateTime"
+        },
+        "restSchema": {
+          "invoiceId": "string",
+          "employerId": "string",
+          "account_categoryId": "string",
+          "totalAmount": "number",
+          "status": "string",
+          "createdDate": "string (ISO 8601)"
+        }
+      },
+      "businessLogic": [
+        "EmployerTransactionDefault + EmployeeTransactionDefault = TotalAmount",
+        "InvoiceNumber auto-generated",
+        "CashInOut record created",
+        "Status = 'Pending'"
+      ],
+      "errorCases": [
+        {"condition": "EmployerId empty", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Both amounts zero", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "AccountCategory not found", "wcfError": "Entity not found", "restStatus": 404}
+      ]
+    },
+    {
+      "wcfTransaction": "XGenerateTransactionInvoice",
+      "restEndpoint": {
+        "method": "POST",
+        "path": "/api/v1/transaction-invoices/generate",
+        "controller": "TransactionInvoiceController",
+        "action": "GenerateInvoice"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "AccountCategoryId": "string",
+          "InvoiceAmount": "decimal",
+          "InvoiceDate": "DateTime",
+          "CreatedBy": "string"
+        },
+        "restSchema": {
+          "account_categoryId": "string",
+          "invoiceAmount": "number",
+          "invoiceDate": "string (ISO 8601)",
+          "createdBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "AccountCategoryId", "rest": "account_categoryId", "type": "string", "required": true},
+          {"wcf": "InvoiceAmount", "rest": "invoiceAmount", "type": "decimal", "required": true},
+          {"wcf": "InvoiceDate", "rest": "invoiceDate", "type": "DateTime", "required": true},
+          {"wcf": "CreatedBy", "rest": "createdBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "Result": "string",
+          "CashInOutId": "string (nullable)",
+          "Invoice": "TransactionInvoice (nullable)",
+          "PaymentId": "string (nullable)"
+        },
+        "restSchema": {
+          "result": "string",
+          "cashInOutId": "string | null",
+          "invoice": "TransactionInvoiceResponse | null",
+          "paymentId": "string | null"
+        }
+      },
+      "businessLogic": [
+        "Compare InvoiceAmount with AccountCategory.Balance",
+        "If Balance >= InvoiceAmount, Result = 'invoice not needed'",
+        "If Balance < InvoiceAmount, Result = 'invoice created'",
+        "Peg amount = InvoiceAmount - Balance",
+        "Auto-debit payment created if enabled"
+      ],
+      "errorCases": [
+        {"condition": "AccountCategoryId empty", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "InvoiceAmount <= 0", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "AccountCategory not found", "wcfError": "Entity not found", "restStatus": 404}
+      ]
+    },
+    {
+      "wcfTransaction": "Updater_CreatePaymentTransactionInvoices",
+      "restEndpoint": {
+        "method": "POST",
+        "path": "/api/v1/transaction-invoices/batch",
+        "controller": "TransactionInvoiceController",
+        "action": "CreateBatchInvoices"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "EmployerIds": "string[]",
+          "CreatedBy": "string"
+        },
+        "restSchema": {
+          "employerIds": "string[]",
+          "createdBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "EmployerIds", "rest": "employerIds", "type": "string[]", "required": true},
+          {"wcf": "CreatedBy", "rest": "createdBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "TotalProcessed": "int",
+          "SuccessCount": "int",
+          "FailureCount": "int",
+          "SkippedCount": "int",
+          "Results": "BatchTransactionResult[]"
+        },
+        "restSchema": {
+          "totalProcessed": "number",
+          "successCount": "number",
+          "failureCount": "number",
+          "skippedCount": "number",
+          "results": "BatchTransactionResult[]"
+        }
+      },
+      "businessLogic": [
+        "Process all account_categorys for specified employers",
+        "Skip if invoice already exists for current period",
+        "Create invoice with employer/employee transaction defaults",
+        "Duplicate detection by AccountCategoryId + EffectiveDate"
+      ],
+      "errorCases": [
+        {"condition": "EmployerIds empty", "wcfError": "Validation error", "restStatus": 400}
+      ]
+    },
+    {
+      "wcfTransaction": "XCloseTransactionBatch",
+      "restEndpoint": {
+        "method": "POST",
+        "path": "/api/v1/transaction-batches/close",
+        "controller": "TransactionBatchController",
+        "action": "CloseBatch"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "BatchId": "string",
+          "Description": "string",
+          "ExcludedInvoiceIds": "string[]",
+          "ClosedBy": "string"
+        },
+        "restSchema": {
+          "batchId": "string",
+          "description": "string",
+          "excludedInvoiceIds": "string[]",
+          "closedBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "BatchId", "rest": "batchId", "type": "string", "required": true},
+          {"wcf": "Description", "rest": "description", "type": "string", "required": true},
+          {"wcf": "ExcludedInvoiceIds", "rest": "excludedInvoiceIds", "type": "string[]", "required": false},
+          {"wcf": "ClosedBy", "rest": "closedBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "Result": "string",
+          "CashInOutId": "string",
+          "PaymentId": "string (nullable)",
+          "Batch": "TransactionBatch"
+        },
+        "restSchema": {
+          "result": "string",
+          "cashInOutId": "string",
+          "paymentId": "string | null",
+          "batch": "TransactionBatchResponse"
+        }
+      },
+      "businessLogic": [
+        "Validate batch status = 'Open'",
+        "Exclude specified invoices from total",
+        "Calculate batch total (sum of non-excluded invoices)",
+        "Validate total > 0",
+        "State transition: Open -> Pending -> Closed",
+        "Create replenishment CashInOut (negative amount)",
+        "Create auto-debit payment if enabled (2 business days)",
+        "Reopen batch if payment fails"
+      ],
+      "errorCases": [
+        {"condition": "BatchId empty", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Batch not found", "wcfError": "Entity not found", "restStatus": 404},
+        {"condition": "Batch total = 0", "wcfError": "Business logic error", "restStatus": 409},
+        {"condition": "Batch already closed", "wcfError": "Business logic error", "restStatus": 409}
+      ]
+    },
+    {
+      "wcfTransaction": "XUpdateTransactionBatch",
+      "restEndpoint": {
+        "method": "PUT",
+        "path": "/api/v1/transaction-batches/{id}",
+        "controller": "TransactionBatchController",
+        "action": "UpdateBatch"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "BatchId": "string",
+          "Description": "string",
+          "EmployerId": "string",
+          "UpdatedBy": "string"
+        },
+        "restSchema": {
+          "batchId": "string",
+          "description": "string",
+          "employerId": "string",
+          "updatedBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "BatchId", "rest": "batchId", "type": "string", "required": true},
+          {"wcf": "Description", "rest": "description", "type": "string", "required": true},
+          {"wcf": "EmployerId", "rest": "employerId", "type": "string", "required": false},
+          {"wcf": "UpdatedBy", "rest": "updatedBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "BatchId": "string",
+          "Description": "string",
+          "EmployerId": "string",
+          "Status": "string"
+        },
+        "restSchema": {
+          "batchId": "string",
+          "description": "string",
+          "employerId": "string",
+          "status": "string"
+        }
+      },
+      "businessLogic": [
+        "Update metadata only (description, employer)",
+        "No status changes",
+        "Validation: Description max 500 chars"
+      ],
+      "errorCases": [
+        {"condition": "BatchId empty", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Description > 500 chars", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Batch not found", "wcfError": "Entity not found", "restStatus": 404}
+      ]
+    }
+  ],
+  "additionalRestEndpoints": [
+    {
+      "endpoint": "GET /api/v1/transaction-invoices/{id}",
+      "purpose": "Retrieve single invoice by ID",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/transaction-invoices/batch/{batchId}",
+      "purpose": "Retrieve all invoices in a batch",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/transaction-invoices/account_category/{account_categoryId}",
+      "purpose": "Retrieve all invoices for a account_category",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/transaction-batches/{id}",
+      "purpose": "Retrieve single batch by ID",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/transaction-batches/account_category/{account_categoryId}",
+      "purpose": "Retrieve all batches for a account_category",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/transaction-batches/account_category/{account_categoryId}/open",
+      "purpose": "Retrieve open batch for a account_category",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "POST /api/v1/transaction-batches",
+      "purpose": "Create new batch",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "POST /api/v1/transaction-batches/reopen",
+      "purpose": "Reopen closed batch",
+      "wcfEquivalent": "None - new functionality"
+    }
+  ],
+  "verificationRequirements": {
+    "schemaValidation": {
+      "fieldNameCasing": "WCF: PascalCase, REST: camelCase",
+      "dateFormat": "WCF: DateTime, REST: ISO 8601 string",
+      "decimalHandling": "WCF: decimal, REST: number (JSON)",
+      "nullability": "Must match between WCF and REST"
+    },
+    "businessLogicParity": {
+      "calculations": "100% match required",
+      "stateTransitions": "Exact sequence match",
+      "errorHandling": "Same error conditions, mapped status codes"
+    },
+    "performanceCriteria": {
+      "p95ResponseTime": "< 500ms",
+      "wcfComparison": "No more than 20% slower than WCF baseline"
+    },
+    "testCoverage": {
+      "minimumScenarios": 100,
+      "coverageTarget": "100% of WCF operations",
+      "errorScenarios": "All validation and business logic errors"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "items": [
+    {
+      "id": "TD-001",
+      "title": "ExampleDomainService too large (717 LOC)",
+      "type": "Code Complexity",
+      "severity": "CRITICAL",
+      "estimated_hours": 40,
+      "estimated_savings_per_year": 50000,
+      "sprint_target": "Sprint 3",
+      "status": "Open",
+      "created": "2025-12-11",
+      "owner": "TBD"
+    },
+    {
+      "id": "TD-002",
+      "title": "Zero test coverage for rollover logic",
+      "type": "Test Gap",
+      "severity": "CRITICAL",
+      "estimated_hours": 40,
+      "estimated_savings_per_year": 500000,
+      "sprint_target": "Sprint 1",
+      "status": "Open",
+      "created": "2025-12-11",
+      "owner": "TBD"
+    },
+    {
+      "id": "TD-003",
+      "title": "ClaimsProcessingService needs CQRS refactoring",
+      "type": "Code Complexity",
+      "severity": "HIGH",
+      "estimated_hours": 35,
+      "estimated_savings_per_year": 40000,
+      "sprint_target": "Sprint 4",
+      "status": "Open",
+      "created": "2025-12-11",
+      "owner": "TBD"
+    },
+    {
+      "id": "TD-004",
+      "title": "Missing README and architecture docs",
+      "type": "Documentation",
+      "severity": "HIGH",
+      "estimated_hours": 16,
+      "estimated_savings_per_year": 20000,
+      "sprint_target": "Sprint 2",
+      "status": "Open",
+      "created": "2025-12-11",
+      "owner": "TBD"
+    },
+    {
+      "id": "TD-005",
+      "title": "BalanceCalculationService split needed",
+      "type": "Code Complexity",
+      "severity": "HIGH",
+      "estimated_hours": 30,
+      "estimated_savings_per_year": 35000,
+      "sprint_target": "Sprint 3-4",
+      "status": "Open",
+      "created": "2025-12-11",
+      "owner": "TBD"
+    }
+  ],
+  "summary": {
+    "total_items": 5,
+    "critical_items": 2,
+    "high_items": 3,
+    "total_estimated_hours": 161,
+    "total_estimated_savings": 645000
+  }
+}

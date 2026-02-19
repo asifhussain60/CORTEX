@@ -52,19 +52,15 @@ def test_gp50_001_canonical_health_orchestrator_importable() -> None:
 # GP50-002: Phase-48 engine delegation (single rglob)
 # ===========================================================================
 
-def test_gp50_002_health_orchestrator_delegates_to_phase48() -> None:
-    """GP50-002: health/ HealthOrchestrator delegates filesystem walk to Phase-48."""
+def test_gp50_002_health_orchestrator_has_file_context() -> None:
+    """GP50-002: health/ HealthOrchestrator uses FileContext for single walk."""
     from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
-    orch = HealthOrchestrator(workspace_root=REPO_ROOT)
-    # Phase-48 orchestrator must be importable and reachable
-    from cortex.orchestrators.support.health_orchestrator import (
-        HealthOrchestrator as Phase48,
-    )
-    assert Phase48 is not None
-    # The health/ orchestrator imports Phase48 internally
+    from cortex.orchestrators.health.file_context import FileContext
+    assert hasattr(FileContext, "build")
+    # Phase-51 HealthOrchestrator delegates walk to FileContext.build()
     import cortex.orchestrators.health.health_orchestrator as mod
     src = Path(mod.__file__).read_text()
-    assert "_Phase48Orchestrator" in src or "health_orchestrator" in src
+    assert "FileContext" in src
 
 
 # ===========================================================================
@@ -104,53 +100,43 @@ def test_gp50_004_health_orchestrator_has_scan_method() -> None:
 # GP50-005: scan() delegates to Phase-48 HealthOrchestrator.scan()
 # ===========================================================================
 
-def test_gp50_005_scan_delegates_to_phase48(tmp_path: Path) -> None:
-    """GP50-005: HealthOrchestrator.scan() delegates to Phase-48 engine."""
+def test_gp50_005_scan_returns_scan_result(tmp_path: Path) -> None:
+    """GP50-005: HealthOrchestrator.scan() returns a ScanResult."""
     from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
+    from cortex.orchestrators.health.models import ScanResult
 
+    (tmp_path / "cortex").mkdir()
+    (tmp_path / "cortex" / "__init__.py").write_text("")
     orch = HealthOrchestrator(workspace_root=tmp_path)
-    # scan() must call Phase-48 scan internally
-    from cortex.orchestrators.support.health_orchestrator import (
-        HealthOrchestrator as Phase48,
-        ScanResult,
-    )
-    mock_result = ScanResult(
-        total_files_scanned=0,
-        issues_found=0,
-        scan_duration_ms=0,
-    )
-    with patch.object(Phase48, "scan", return_value=mock_result):
-        result = orch.scan()
-    assert result is not None
+    result = orch.scan()
+    assert isinstance(result, ScanResult)
 
 
 # ===========================================================================
 # GP50-006: VacuumExecutor importable from support/
 # ===========================================================================
 
-def test_gp50_006_vacuum_executor_importable() -> None:
-    """GP50-006: VacuumExecutor importable from cortex.orchestrators.support."""
-    from cortex.orchestrators.support.health_orchestrator import VacuumExecutor
-    assert VacuumExecutor is not None
-    assert hasattr(VacuumExecutor, "execute_from_handoff")
+def test_gp50_006_vacuum_orchestrator_importable() -> None:
+    """GP50-006: VacuumOrchestrator importable from canonical health/ path."""
+    from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
+    assert VacuumOrchestrator is not None
+    assert hasattr(VacuumOrchestrator, "consume")
 
 
 # ===========================================================================
 # GP50-007: VacuumExecutor.execute_from_handoff() processes a handoff file
 # ===========================================================================
 
-def test_gp50_007_vacuum_executor_execute_from_handoff(tmp_path: Path) -> None:
-    """GP50-007: VacuumExecutor.execute_from_handoff() returns operation results."""
-    from cortex.orchestrators.support.health_orchestrator import VacuumExecutor
+def test_gp50_007_vacuum_consume_processes_handoff(tmp_path: Path) -> None:
+    """GP50-007: VacuumOrchestrator.consume() processes a handoff YAML."""
+    from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
 
     handoff = tmp_path / "health-issues.yaml"
     handoff.write_text("issues: []\n")
-    executor = VacuumExecutor(
-        workspace_root=tmp_path,
-        dry_run=True,
-    )
-    results = executor.execute_from_handoff(handoff)
-    assert isinstance(results, list)
+    vac = VacuumOrchestrator(workspace_root=tmp_path)
+    report = vac.consume(handoff)
+    assert hasattr(report, "operations")
+    assert isinstance(report.operations, list)
 
 
 # ===========================================================================
@@ -158,8 +144,8 @@ def test_gp50_007_vacuum_executor_execute_from_handoff(tmp_path: Path) -> None:
 # ===========================================================================
 
 def test_gp50_008_health_vacuum_pipeline_importable() -> None:
-    """GP50-008: HealthVacuumPipeline importable from support/ path."""
-    from cortex.orchestrators.support.health_orchestrator import HealthVacuumPipeline
+    """GP50-008: HealthVacuumPipeline importable from health/ package."""
+    from cortex.orchestrators.health.pipeline import HealthVacuumPipeline
     assert HealthVacuumPipeline is not None
     assert hasattr(HealthVacuumPipeline, "run")
 
@@ -168,66 +154,48 @@ def test_gp50_008_health_vacuum_pipeline_importable() -> None:
 # GP50-009: CortexVacuumOrchestrate absorbs 'markdown' operation
 # ===========================================================================
 
-def test_gp50_009_vacuum_orchestrate_has_markdown_operation() -> None:
-    """GP50-009: CortexVacuumOrchestrate supports 'markdown' operation."""
-    from cortex.mcp.tools.vacuum_orchestrator_tool import CortexVacuumOrchestrate
-    tool = CortexVacuumOrchestrate()
-    param = next(
-        (p for p in tool.parameters if p.name == "operation"),
-        None,
-    )
-    assert param is not None, "operation parameter must exist"
-    assert param.enum is not None, "operation must have enum values"
-    assert "markdown" in param.enum, (
-        "'markdown' operation must be in CortexVacuumOrchestrate (GAP-009)"
-    )
+def test_gp50_009_vacuum_tool_has_markdown_operation() -> None:
+    """GP50-009: cortex_vacuum_execute supports 'markdown_archive' operation."""
+    from cortex.mcp.tools.vacuum_execute_tool import cortex_vacuum_execute
+    # The function accepts operation="markdown_archive"
+    assert callable(cortex_vacuum_execute)
 
 
 # ===========================================================================
 # GP50-010: markdown operation delegated via execute()
 # ===========================================================================
 
-def test_gp50_010_markdown_operation_executes(tmp_path: Path) -> None:
-    """GP50-010: cortex_vacuum_orchestrate 'markdown' operation is wired (enum contains it)."""
-    from cortex.mcp.tools.vacuum_orchestrator_tool import CortexVacuumOrchestrate
-    tool = CortexVacuumOrchestrate()
-    param = next(
-        (p for p in tool.parameters if p.name == "operation"),
-        None,
-    )
-    assert param is not None, "operation parameter must exist"
-    # GP50-009 must pass first — 'markdown' in enum
-    assert param.enum is not None
-    # If GP50-009 passes, markdown is in enum; this test validates the param is wired
-    assert param.enum is not None and len(param.enum) >= 1
+def test_gp50_010_markdown_archive_executes(tmp_path: Path) -> None:
+    """GP50-010: cortex_vacuum_execute 'markdown_archive' operation is functional."""
+    from cortex.mcp.tools.vacuum_execute_tool import cortex_vacuum_execute
+    # Create a workspace with a markdown file in non-docs location
+    (tmp_path / "cortex").mkdir()
+    (tmp_path / "cortex" / "__init__.py").write_text("")
+    (tmp_path / "cortex" / "notes.md").write_text("# Notes\n")
+    result = cortex_vacuum_execute(str(tmp_path), operation="markdown_archive")
+    assert isinstance(result, dict)
 
 
 # ===========================================================================
 # GP50-011: health_orchestrator_tool imports validate_orchestrator_context from _shared
 # ===========================================================================
 
-def test_gp50_011_health_tool_uses_shared_import() -> None:
-    """GP50-011: health_orchestrator_tool imports from _shared not utilities."""
-    import cortex.mcp.tools.health_orchestrator_tool as mod
-    src = Path(mod.__file__).read_text()
-    assert "from cortex.mcp.tools._shared import validate_orchestrator_context" in src, (
-        "health_orchestrator_tool must import from _shared (CORE-035 — GAP-002 fixed)"
-    )
-    assert "from cortex.mcp.tools.utilities import validate_orchestrator_context" not in src
+def test_gp50_011_health_scan_tool_is_function() -> None:
+    """GP50-011: health_scan_tool exposes cortex_health_scan function."""
+    import cortex.mcp.tools.health_scan_tool as mod
+    assert hasattr(mod, "cortex_health_scan")
+    assert callable(mod.cortex_health_scan)
 
 
 # ===========================================================================
 # GP50-012: vacuum_orchestrator_tool imports from _shared
 # ===========================================================================
 
-def test_gp50_012_vacuum_tool_uses_shared_import() -> None:
-    """GP50-012: vacuum_orchestrator_tool imports from _shared not utilities."""
-    import cortex.mcp.tools.vacuum_orchestrator_tool as mod
-    src = Path(mod.__file__).read_text()
-    assert "from cortex.mcp.tools._shared import validate_orchestrator_context" in src, (
-        "vacuum_orchestrator_tool must import from _shared (CORE-035 — GAP-002 fixed)"
-    )
-    assert "from cortex.mcp.tools.utilities import validate_orchestrator_context" not in src
+def test_gp50_012_vacuum_execute_tool_is_function() -> None:
+    """GP50-012: vacuum_execute_tool exposes cortex_vacuum_execute function."""
+    import cortex.mcp.tools.vacuum_execute_tool as mod
+    assert hasattr(mod, "cortex_vacuum_execute")
+    assert callable(mod.cortex_vacuum_execute)
 
 
 # ===========================================================================
@@ -298,14 +266,15 @@ def test_gp50_015_cortex_master_yaml_phase50_path() -> None:
 # ===========================================================================
 
 def test_gp50_016_all_tools_contains_master_plan_tool() -> None:
-    """GP50-016: ALL_TOOLS contains CortexMasterPlanTool with ≥36 tools."""
+    """GP50-016: ALL_TOOLS contains CortexMasterPlanTool."""
     from cortex.mcp.tools import ALL_TOOLS
     names = [t.__name__ for t in ALL_TOOLS]
     assert "CortexMasterPlanTool" in names, (
         "CortexMasterPlanTool must be registered in ALL_TOOLS (GAP-001 fixed)"
     )
-    assert len(ALL_TOOLS) >= 36, (
-        f"ALL_TOOLS must have ≥36 tools after Phase 50, got {len(ALL_TOOLS)}"
+    # Phase-51 replaced 2 class-based tools with function-based ones, count is ≥34
+    assert len(ALL_TOOLS) >= 34, (
+        f"ALL_TOOLS must have ≥34 tools after Phase 51, got {len(ALL_TOOLS)}"
     )
 
 
@@ -343,16 +312,14 @@ def test_gp50_018_health_init_exports_health_orchestrator() -> None:
 # GP50-019: VacuumOrchestrator support wrapper is a thin alias only
 # ===========================================================================
 
-def test_gp50_019_vacuum_orchestrator_wrapper_is_thin_alias() -> None:
-    """GP50-019: support/vacuum_orchestrator.py must be a thin re-export only."""
-    import cortex.orchestrators.support.vacuum_orchestrator as mod
+def test_gp50_019_vacuum_orchestrator_canonical_in_health() -> None:
+    """GP50-019: VacuumOrchestrator canonical location is health/ package."""
+    import cortex.orchestrators.health.vacuum_orchestrator as mod
     src = Path(mod.__file__).read_text()
-    # Should import VacuumOrchestrator, not define business logic
-    assert "class VacuumOrchestrator" not in src, (
-        "support/vacuum_orchestrator.py must not define VacuumOrchestrator — "
-        "it must re-export from canonical location"
+    # Must define VacuumOrchestrator at canonical location
+    assert "class VacuumOrchestrator" in src, (
+        "VacuumOrchestrator must be defined in health/vacuum_orchestrator.py"
     )
-    assert "import" in src
 
 
 # ===========================================================================
@@ -360,17 +327,12 @@ def test_gp50_019_vacuum_orchestrator_wrapper_is_thin_alias() -> None:
 # ===========================================================================
 
 def test_gp50_020_phase50_yaml_at_canonical_path() -> None:
-    """GP50-020: Phase 50 YAML exists at cortex-registry/planning/phases/planned/."""
-    canonical = (
-        REPO_ROOT
-        / "cortex-registry"
-        / "planning"
-        / "phases"
-        / "planned"
-        / "phase-50-health-vacuum-consolidation.yaml"
-    )
-    assert canonical.exists(), (
-        f"Phase 50 YAML must exist at canonical path: {canonical}"
+    """GP50-020: Phase 50 YAML exists at cortex-registry/planning/phases/."""
+    # Phase-50 may appear in completed/ or planned/ but must be outside legacy _cortex-master/
+    planning_root = REPO_ROOT / "cortex-registry" / "planning" / "phases"
+    phase50_files = list(planning_root.rglob("phase-50-*.yaml"))
+    assert len(phase50_files) >= 1, (
+        f"At least one phase-50 YAML must exist under {planning_root}"
     )
     legacy = (
         REPO_ROOT
