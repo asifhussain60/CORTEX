@@ -1,0 +1,82 @@
+# ============================================================================
+# Scenario S25: Adaptive onboarding (from chat context)
+# ============================================================================
+# Authority: Phase 51 § Tier 3 Complex Scenarios
+# Complexity: Complex
+# Validates: Dynamic template selection
+# ============================================================================
+
+id: "S25"
+name: "Adaptive onboarding (from chat context)"
+description: "Dynamic template selection"
+complexity: "complex"
+intent: "ONBOARD"
+user_request: "Onboard /Users/asifhussain/PROJECTS/my-python-microservice"
+
+# Expected subsystem engagement
+expected_components:
+  - "EnhancedOnboardingOrchestrator"
+  - "OnboardingProfiler"
+  - "LENSOrchestrator"
+  - "CCL"
+  - "AdaptiveTemplateResolver"
+  - "QualityGate"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "CCL"
+    activity: "PREWARM_CONTEXT"
+    workflow_stage: "PRE_STAGE_1"
+    expected_fields:
+      duration_ms: "<= 300"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_REPOSITORY"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      repo_path: "not_null"
+  
+  - orchestrator: "OnboardingProfiler"
+    activity: "CLASSIFY_REPOSITORY"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      repo_type: "python_microservice"
+      depth: "standard"
+      size: "medium"
+  
+  - orchestrator: "AdaptiveTemplateResolver"
+    activity: "SELECT_WORKFLOW"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      template_selected: true
+  
+  - orchestrator: "QualityGate"
+    activity: "VALIDATE_ARTIFACTS"
+    workflow_stage: "EXECUTION"
+    expected_fields:
+      iterations: "<= 3"
+      quality_passed: true
+
+# DoD
+dod:
+  - "CCL pre-warms LENS context"
+  - "LENS analyzes repo structure"
+  - "OnboardingProfiler classifies as 'python_microservice'"
+  - "Profile: repo_type=python_microservice, depth=standard, size=medium"
+  - "AdaptiveTemplateResolver selects appropriate workflow"
+  - "9 dashboard tabs generated (not 3, not 15)"
+  - "Quality loop validates artifacts (3 iterations max)"
+  - "CORTEX lint passes (snake_case, UTC timestamps, no tmp files)"
+  - "Dashboard integrity check passes (all tabs → data links valid)"
+  - "Template self-enhancement: If quality fails, creates repo-specific variant"
+  - "Audit trail: Complete onboarding sequence"
+  - "Performance: <45s for medium repo"
+
+performance:
+  max_duration_seconds: 45.0
+  
+expected_outcome:
+  onboarding_complete: true
+  dashboard_generated: true
+  quality_validated: true
+  adaptive_template_used: true

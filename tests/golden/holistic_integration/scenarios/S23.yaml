@@ -1,0 +1,69 @@
+# ============================================================================
+# Scenario S23: Multi-domain knowledge synthesis
+# ============================================================================
+# Authority: Phase 51 § Tier 3 Complex Scenarios
+# Complexity: Complex
+# Validates: 5+ domains + LENS + Git
+# ============================================================================
+
+id: "S23"
+name: "Multi-domain knowledge synthesis"
+description: "5+ domains + LENS + Git"
+complexity: "complex"
+intent: "DESIGN"
+user_request: "Design architecture for enterprise payment gateway"
+
+# Expected subsystem engagement
+expected_components:
+  - "LENSOrchestrator"
+  - "GitAnalyzer"
+  - "CompanyKnowledgeLoader"
+  - "LLMSynthesisEngine"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "CompanyKnowledgeLoader"
+    activity: "LOAD_MULTIPLE_DOMAINS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      domains_count: ">= 5"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_WORKSPACE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      target_pattern: "payment"
+  
+  - orchestrator: "GitAnalyzer"
+    activity: "ANALYZE_EVOLUTION"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      commits_analyzed: ">= 20"
+  
+  - orchestrator: "LLMSynthesisEngine"
+    activity: "SYNTHESIZE_ARCHITECTURE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      sources_count: ">= 7"
+      contradictions_resolved: true
+      diagrams_generated: true
+
+# DoD
+dod:
+  - "Domains loaded: api-design, security, payment, deployment, testing"
+  - "LENS analyzes existing payment implementations"
+  - "Git history shows evolution of payment systems"
+  - "Best practices from all 5 domains synthesized"
+  - "Contradictions resolved with priority ranking"
+  - "LLM synthesis: Comprehensive architecture document"
+  - "Includes: security controls, API contracts, deployment strategy, test plan"
+  - "Cross-references between domains (e.g., security ↔ payment)"
+  - "Markdown formatted with diagrams (Mermaid)"
+
+performance:
+  max_duration_seconds: 5.0
+  
+expected_outcome:
+  domains_synthesized: ">= 5"
+  architecture_document_generated: true
+  diagrams_included: true

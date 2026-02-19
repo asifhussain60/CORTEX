@@ -1,0 +1,65 @@
+# ============================================================================
+# Scenario S17: LLM synthesis (complex, 5+ sources)
+# ============================================================================
+# Authority: Phase 51 § Tier 2 Medium Scenarios
+# Complexity: Medium
+# Validates: Coherent narrative from multiple sources
+# ============================================================================
+
+id: "S17"
+name: "LLM synthesis (complex, 5+ sources)"
+description: "Coherent narrative from multiple sources"
+complexity: "medium"
+intent: "QUERY"
+user_request: "Explain CORTEX governance enforcement architecture"
+
+# Expected subsystem engagement
+expected_components:
+  - "LLMSynthesisEngine"
+  - "LENSOrchestrator"
+  - "CompanyKnowledgeLoader"
+  - "GitAnalyzer"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_WORKSPACE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      target_directory: "cortex/enforcement"
+  
+  - orchestrator: "CompanyKnowledgeLoader"
+    activity: "LOAD_MULTIPLE_DOMAINS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      domains_count: ">= 3"
+  
+  - orchestrator: "GitAnalyzer"
+    activity: "ANALYZE_GIT_HISTORY"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      commits_analyzed: ">= 10"
+  
+  - orchestrator: "LLMSynthesisEngine"
+    activity: "SYNTHESIZE_RESPONSE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      sources_count: ">= 5"
+      contradictions_resolved: true
+
+# DoD
+dod:
+  - "LENS code analysis (enforcement/ directory)"
+  - "3 company YAMLs (security, governance, api)"
+  - "Audit history (recent governance checks)"
+  - "Git history (enforcement implementation)"
+  - "Synthesis coherent, no contradictions"
+  - "Markdown formatted with sections"
+
+performance:
+  max_duration_seconds: 3.0
+  
+expected_outcome:
+  sources_synthesized: ">= 5"
+  synthesis_quality: ">= 0.8"
+  markdown_formatted: true

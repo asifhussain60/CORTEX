@@ -69,6 +69,36 @@ def test_db_path(tmp_path):
     return str(tmp_path / "test.db")
 
 
+@pytest.fixture(scope="function", autouse=True)
+def cleanup_test_databases(tmp_path, request):
+    """Auto-cleanup all test SQLite databases after each test.
+    
+    This fixture automatically removes all .db files created during tests
+    to prevent SQLite bloat and ensure test isolation.
+    
+    Authority: Phase 92 Health + VAC-001-05 Vacuum
+    CORE-035: Single source of cleanup logic
+    
+    Args:
+        tmp_path: Pytest's temporary directory fixture
+        request: Pytest request object for test metadata
+    
+    Yields:
+        None: Cleanup happens after test execution
+    """
+    yield
+    
+    # Cleanup all .db, .db-wal, .db-shm files after test
+    if tmp_path.exists():
+        for db_file in tmp_path.rglob("*.db*"):
+            try:
+                if db_file.is_file():
+                    db_file.unlink()
+            except (OSError, PermissionError):
+                # File already cleaned or locked by another process
+                pass
+
+
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
 def pytest_runtest_makereport(item, call):
     """

@@ -1,0 +1,59 @@
+# ============================================================================
+# Scenario S04: FIX with low-risk assessment
+# ============================================================================
+# Authority: Phase 51 § Tier 1 Simple Scenarios
+# Complexity: Simple
+# Validates: Risk calculation correct for low-risk changes
+# ============================================================================
+
+id: "S04"
+name: "FIX with low-risk assessment"
+description: "Validate risk calculation"
+complexity: "simple"
+intent: "FIX"
+user_request: "Fix typo in docstring"
+
+# Expected subsystem engagement
+expected_components:
+  - "RequestRephraseOrchestrator"
+  - "IntentRouter"
+
+not_expected:
+  - "HolisticValidationOrchestrator"  # Low risk, no validation gate
+  - "ChallengeEngine"  # Low risk, no challenge
+
+# Expected audit trail sequence
+expected_audit_events:
+  - orchestrator: "RequestRephraseOrchestrator"
+    activity: "CLASSIFY_INTENT"
+    workflow_stage: "REPHRASE"
+    expected_fields:
+      intent_type: "FIX"
+      confidence: ">= 0.9"
+  
+  - orchestrator: "RequestRephraseOrchestrator"
+    activity: "ASSESS_RISK"
+    workflow_stage: "REPHRASE"
+    expected_fields:
+      risk_level: "in:LOW,ZERO"
+      scope: "in:function,file"
+      change_type: "documentation"
+
+# Definition of Done
+dod:
+  - "Risk level = LOW or ZERO"
+  - "Dependencies analyzed"
+  - "Scope = function or file"
+  - "No challenge gate triggered (low risk)"
+  - "Response time < 1s"
+
+# Performance requirements
+performance:
+  max_duration_seconds: 1.0
+  
+# Expected outcome
+expected_outcome:
+  intent: "FIX"
+  risk_level: "in:LOW,ZERO"
+  scope: "in:function,file,line"
+  challenge_required: false

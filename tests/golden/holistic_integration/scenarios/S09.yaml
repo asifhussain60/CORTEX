@@ -1,0 +1,46 @@
+# ============================================================================
+# Scenario S09: Threat model generation (simple)
+# ============================================================================
+# Authority: Phase 51 § Tier 1 Simple Scenarios
+# Complexity: Simple
+# Validates: STRIDE analysis
+# ============================================================================
+
+id: "S09"
+name: "Threat model generation (simple)"
+description: "Validate STRIDE analysis"
+complexity: "simple"
+intent: "IMPLEMENT"
+user_request: "Add user input endpoint"
+
+# Expected subsystem engagement
+expected_components:
+  - "ThreatModelingEngine"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "ThreatModelingEngine"
+    activity: "GENERATE_THREAT_MODEL"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      methodology: "STRIDE"
+      threats_identified: ">= 1"
+
+# DoD
+dod:
+  - "STRIDE analysis performed"
+  - "Security threats identified (injection, XSS)"
+  - "Mitigations suggested (input validation)"
+  - "Threat severity scored"
+
+performance:
+  max_duration_seconds: 2.0
+  
+expected_outcome:
+  threat_model_generated: true
+  threats:
+    - type: "injection"
+      severity: "HIGH"
+    - type: "XSS"
+      severity: "MEDIUM"
+  mitigations_suggested: true

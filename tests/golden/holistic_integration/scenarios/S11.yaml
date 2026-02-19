@@ -1,0 +1,90 @@
+# ============================================================================
+# Scenario S11: IMPLEMENT with LENS + CCL + governance
+# ============================================================================
+# Authority: Phase 51 § Tier 2 Medium Scenarios
+# Complexity: Medium
+# Validates: Full Stage 1-4 pipeline
+# ============================================================================
+
+id: "S11"
+name: "IMPLEMENT with LENS + CCL + governance"
+description: "Full Stage 1-4 pipeline"
+complexity: "medium"
+intent: "IMPLEMENT"
+user_request: "Add JWT authentication"
+
+# Expected subsystem engagement
+expected_components:
+  - "MasterOrchestrator"
+  - "InteractionOrchestrator"
+  - "CCL"
+  - "LENSOrchestrator"
+  - "EnforcementOrchestrator"
+  - "TDDOrchestrator"
+
+# Expected audit trail sequence
+expected_audit_events:
+  - orchestrator: "RequestRephraseOrchestrator"
+    activity: "CLASSIFY_INTENT"
+    workflow_stage: "REPHRASE"
+    expected_fields:
+      intent_type: "IMPLEMENT"
+  
+  - orchestrator: "InteractionOrchestrator"
+    activity: "EXECUTE_TURN"
+    workflow_stage: "INTERACTION"
+    expected_fields:
+      lens_requested: true
+  
+  - orchestrator: "CCL"
+    activity: "PREWARM_CONTEXT"
+    workflow_stage: "PRE_STAGE_1"
+    expected_fields:
+      cache_hit: true
+      duration_ms: "<= 300"
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_WORKSPACE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analysis_complete: true
+  
+  - orchestrator: "IntentRouter"
+    activity: "ROUTE_INTENT"
+    workflow_stage: "INTENT"
+    expected_fields:
+      target_orchestrator: "TDDOrchestrator"
+  
+  - orchestrator: "EnforcementOrchestrator"
+    activity: "VALIDATE_COMPLIANCE"
+    workflow_stage: "GOVERNANCE"
+    expected_fields:
+      validation_passed: true
+  
+  - orchestrator: "TDDOrchestrator"
+    activity: "CREATE_EXECUTION_PLAN"
+    workflow_stage: "EXECUTION"
+    expected_fields:
+      plan_created: true
+
+# Definition of Done
+dod:
+  - "Stage -1: Intent classified as IMPLEMENT"
+  - "Stage 1: LENS analysis complete"
+  - "CCL: Context pre-warmed"
+  - "Stage 2: Intent routed to TDDOrchestrator"
+  - "Stage 3: Governance validation passed"
+  - "Stage 4: Execution plan created"
+  - "Audit trail has all AC_START → AC_COMPLETE pairs"
+
+# Performance requirements
+performance:
+  max_duration_seconds: 3.0
+  
+# Expected outcome
+expected_outcome:
+  all_stages_executed: true
+  ccl_prewarmed: true
+  lens_engaged: true
+  governance_validated: true
+  execution_plan_ready: true

@@ -1,0 +1,79 @@
+# ============================================================================
+# Scenario S22: Complex security audit
+# ============================================================================
+# Authority: Phase 51 § Tier 3 Complex Scenarios
+# Complexity: Complex
+# Validates: Multi-layer threat analysis
+# ============================================================================
+
+id: "S22"
+name: "Complex security audit"
+description: "Multi-layer threat analysis"
+complexity: "complex"
+intent: "AUDIT"
+user_request: "Perform security audit of payment processing system"
+
+# Expected subsystem engagement
+expected_components:
+  - "LENSOrchestrator"
+  - "CompanyKnowledgeLoader"
+  - "ThreatModelingEngine"
+  - "OWASPAnalyzer"
+  - "PCIDSSAnalyzer"
+  - "LLMSynthesisEngine"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_WORKSPACE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      target_directory: "payment"
+      vulnerability_scan: true
+  
+  - orchestrator: "CompanyKnowledgeLoader"
+    activity: "LOAD_DOMAIN_YAML"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      domain: "payment-security"
+  
+  - orchestrator: "PCIDSSAnalyzer"
+    activity: "ASSESS_COMPLIANCE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      compliant: "not_null"
+  
+  - orchestrator: "ThreatModelingEngine"
+    activity: "GENERATE_THREAT_MODEL"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      methodologies: "in:OWASP,STRIDE"
+  
+  - orchestrator: "LLMSynthesisEngine"
+    activity: "SYNTHESIZE_AUDIT_REPORT"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      executive_summary: true
+      technical_details: true
+
+# DoD
+dod:
+  - "LENS identifies vulnerable code patterns"
+  - "payment-security.yaml flags PCI-DSS violations"
+  - "security-standards.yaml provides compliance checklist"
+  - "OWASP Top 10 scan complete"
+  - "STRIDE threat model generated"
+  - "PCI-DSS compliance assessment"
+  - "Threat severity matrix (Critical/High/Medium/Low)"
+  - "Mitigation roadmap with priorities"
+  - "Synthesis: Executive summary + technical details"
+  - "Audit trail: All checks logged"
+
+performance:
+  max_duration_seconds: 5.0
+  
+expected_outcome:
+  security_audit_complete: true
+  vulnerabilities_identified: ">= 1"
+  compliance_assessed: true
+  mitigation_plan_generated: true

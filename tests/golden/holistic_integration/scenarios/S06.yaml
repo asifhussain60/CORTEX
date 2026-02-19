@@ -1,0 +1,39 @@
+# ============================================================================
+# Scenario S06: CCL pre-warming success
+# ============================================================================
+id: "S06"
+name: "CCL pre-warming success"
+description: "Validate context loaded <300ms"
+complexity: "simple"
+intent: "IMPLEMENT"
+user_request: "Add new endpoint"
+
+expected_components:
+  - "CCL"
+  - "LENSOrchestrator"
+  - "MasterOrchestrator"
+
+expected_audit_events:
+  - orchestrator: "CCL"
+    activity: "PREWARM_CONTEXT"
+    workflow_stage: "PRE_STAGE_1"
+    expected_fields:
+      duration_ms: "<= 300"
+      cache_hit: true
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_WORKSPACE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      prewarmed: true
+
+dod:
+  - "CCL cache hit detected"
+  - "LENS context pre-warmed"
+  - "Governance rules pre-loaded"
+  - "Total pre-warm time < 300ms"
+  - "CrystallizedContext available before Stage 2"
+
+performance:
+  max_duration_seconds: 1.0
+  ccl_prewarm_threshold_ms: 300

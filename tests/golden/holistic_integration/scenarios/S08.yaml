@@ -1,0 +1,49 @@
+# ============================================================================
+# Scenario S08: Governance enforcement (CORE-002 violation)
+# ============================================================================
+# Authority: Phase 51 § Tier 1 Simple Scenarios
+# Complexity: Simple
+# Validates: Blocked request
+# ============================================================================
+
+id: "S08"
+name: "Governance enforcement (CORE-002 violation)"
+description: "Validate blocked request"
+complexity: "simple"
+intent: "IMPLEMENT"
+user_request: "Generate summary report to workspace/report.md"
+
+# Expected subsystem engagement
+expected_components:
+  - "EnforcementOrchestrator"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "EnforcementOrchestrator"
+    activity: "VALIDATE_COMPLIANCE"
+    workflow_stage: "GOVERNANCE"
+    expected_fields:
+      rule: "CORE-002"
+      violation_detected: true
+  
+  - orchestrator: "EnforcementOrchestrator"
+    activity: "BLOCK_REQUEST"
+    workflow_stage: "GOVERNANCE"
+    expected_fields:
+      status: "BLOCKED"
+      reason: "CORE-002 violation"
+
+# DoD
+dod:
+  - "Request blocked (CORE-002 violation)"
+  - "Error message references CORE-002"
+  - "Audit trail shows BLOCKED status"
+  - "No execution occurred"
+
+performance:
+  max_duration_seconds: 0.5
+  
+expected_outcome:
+  request_blocked: true
+  violation: "CORE-002"
+  execution_prevented: true

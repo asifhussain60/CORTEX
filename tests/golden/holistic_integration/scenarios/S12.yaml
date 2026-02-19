@@ -1,0 +1,68 @@
+# ============================================================================
+# Scenario S12: Multi-domain best practices
+# ============================================================================
+# Authority: Phase 51 § Tier 2 Medium Scenarios
+# Complexity: Medium
+# Validates: 3 company YAMLs loaded and synthesized
+# ============================================================================
+
+id: "S12"
+name: "Multi-domain best practices"
+description: "3 company YAMLs loaded and synthesized"
+complexity: "medium"
+intent: "IMPLEMENT"
+user_request: "Add secure API endpoint for payment processing"
+
+# Expected subsystem engagement
+expected_components:
+  - "CompanyKnowledgeLoader"
+  - "LLMSynthesisEngine"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "CompanyKnowledgeLoader"
+    activity: "LOAD_DOMAIN_YAML"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      domain: "api-design-standards"
+      yaml_loaded: true
+  
+  - orchestrator: "CompanyKnowledgeLoader"
+    activity: "LOAD_DOMAIN_YAML"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      domain: "security-standards"
+      yaml_loaded: true
+  
+  - orchestrator: "CompanyKnowledgeLoader"
+    activity: "LOAD_DOMAIN_YAML"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      domain: "payment-security"
+      yaml_loaded: true
+  
+  - orchestrator: "LLMSynthesisEngine"
+    activity: "SYNTHESIZE_STANDARDS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      sources_count: ">= 3"
+      conflicts_resolved: true
+
+# DoD
+dod:
+  - "api-design-standards.yaml loaded"
+  - "security-standards.yaml loaded"
+  - "payment-security.yaml loaded"
+  - "Conflicting rules reconciled (priority: security > payment > api)"
+  - "Synthesis includes all 3 domain perspectives"
+
+performance:
+  max_duration_seconds: 3.0
+  
+expected_outcome:
+  company_yamls_loaded:
+    - "api-design-standards.yaml"
+    - "security-standards.yaml"
+    - "payment-security.yaml"
+  synthesis_complete: true
+  conflicts_resolved: true

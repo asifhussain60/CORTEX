@@ -1,0 +1,56 @@
+# ============================================================================
+# Scenario S13: Challenge gate triggered (high-risk)
+# ============================================================================
+# Authority: Phase 51 § Tier 2 Medium Scenarios
+# Complexity: Medium
+# Validates: Alternatives presented for risky change
+# ============================================================================
+
+id: "S13"
+name: "Challenge gate triggered (high-risk)"
+description: "Alternatives presented for risky change"
+complexity: "medium"
+intent: "REFACTOR"
+user_request: "Refactor authentication system"
+
+# Expected subsystem engagement
+expected_components:
+  - "HolisticValidationOrchestrator"
+  - "ChallengeEngine"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "RequestRephraseOrchestrator"
+    activity: "ASSESS_RISK"
+    workflow_stage: "REPHRASE"
+    expected_fields:
+      risk_level: "HIGH"
+  
+  - orchestrator: "HolisticValidationOrchestrator"
+    activity: "CALCULATE_CONFIDENCE"
+    workflow_stage: "VALIDATION"
+    expected_fields:
+      confidence_score: "< 0.7"
+  
+  - orchestrator: "ChallengeEngine"
+    activity: "GENERATE_ALTERNATIVES"
+    workflow_stage: "VALIDATION"
+    expected_fields:
+      alternatives_count: ">= 3"
+      roi_calculated: true
+
+# DoD
+dod:
+  - "Risk assessment = HIGH"
+  - "Confidence score < 0.7"
+  - "Challenge gate displays 3 alternatives"
+  - "ROI scores calculated for each alternative"
+  - "User cannot proceed without selecting alternative"
+
+performance:
+  max_duration_seconds: 3.0
+  
+expected_outcome:
+  challenge_gate_triggered: true
+  alternatives_count: ">= 3"
+  user_decision_required: true

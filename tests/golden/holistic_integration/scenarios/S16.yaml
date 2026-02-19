@@ -1,0 +1,57 @@
+# ============================================================================
+# Scenario S16: Complex threat model (OWASP Top 10)
+# ============================================================================
+# Authority: Phase 51 § Tier 2 Medium Scenarios
+# Complexity: Medium
+# Validates: All 10 categories checked
+# ============================================================================
+
+id: "S16"
+name: "Complex threat model (OWASP Top 10)"
+description: "All 10 categories checked"
+complexity: "medium"
+intent: "IMPLEMENT"
+user_request: "Add admin dashboard"
+
+# Expected subsystem engagement
+expected_components:
+  - "ThreatModelingEngine"
+  - "OWASPAnalyzer"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "ThreatModelingEngine"
+    activity: "GENERATE_THREAT_MODEL"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      methodology: "OWASP"
+      categories_analyzed: ">= 10"
+  
+  - orchestrator: "OWASPAnalyzer"
+    activity: "SCAN_VULNERABILITIES"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      injection_checked: true
+      auth_checked: true
+      xss_checked: true
+      csrf_checked: true
+
+# DoD
+dod:
+  - "Injection risks flagged"
+  - "Broken authentication checks"
+  - "Sensitive data exposure warnings"
+  - "XSS vulnerabilities identified"
+  - "CSRF mitigation suggested"
+  - "Security misconfiguration detected"
+  - "All OWASP Top 10 categories covered"
+  - "Severity scores assigned"
+  - "Mitigation plan generated"
+
+performance:
+  max_duration_seconds: 3.0
+  
+expected_outcome:
+  owasp_categories_covered: 10
+  threats_identified: ">= 5"
+  mitigation_plan_generated: true

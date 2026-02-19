@@ -1,0 +1,71 @@
+# ============================================================================
+# Scenario S05: REFACTOR with blind spot detection
+# ============================================================================
+# Authority: Phase 51 § Tier 1 Simple Scenarios
+# Complexity: Simple
+# Validates: Edge case identification, security concerns
+# ============================================================================
+
+id: "S05"
+name: "REFACTOR with blind spot detection"
+description: "Validate edge case identification"
+complexity: "simple"
+intent: "REFACTOR"
+user_request: "Extract common logging logic"
+
+# Expected subsystem engagement
+expected_components:
+  - "InteractionOrchestrator"
+  - "LENSOrchestrator"
+  - "ChallengeEngine"
+
+not_expected: []
+
+# Expected audit trail sequence
+expected_audit_events:
+  - orchestrator: "InteractionOrchestrator"
+    activity: "EXECUTE_TURN"
+    workflow_stage: "INTERACTION"
+    expected_fields:
+      lens_requested: true
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_WORKSPACE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      analysis_type: "dependency_graph"
+  
+  - orchestrator: "ChallengeEngine"
+    activity: "IDENTIFY_BLIND_SPOTS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      blind_spots: "not_null"
+      edge_cases: "not_null"
+      security_concerns: "not_null"
+
+# Definition of Done
+dod:
+  - "Blind spots identified (e.g., circular dependencies)"
+  - "Edge cases flagged (e.g., threading issues)"
+  - "Security concerns noted (e.g., log injection)"
+  - "LENS dependency graph analyzed"
+  - "Response time < 2s"
+
+# Performance requirements
+performance:
+  max_duration_seconds: 2.0
+  
+# Expected outcome
+expected_outcome:
+  intent: "REFACTOR"
+  blind_spots:
+    - type: "circular_dependency"
+      detected: true
+    - type: "thread_safety"
+      detected: true
+  security_concerns:
+    - type: "log_injection"
+      severity: "MEDIUM"
+  edge_cases:
+    - "concurrent logging from multiple threads"
+    - "logging during exception handling"

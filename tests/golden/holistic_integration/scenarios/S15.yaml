@@ -1,0 +1,64 @@
+# ============================================================================
+# Scenario S15: LENS + Git history correlation
+# ============================================================================
+# Authority: Phase 51 § Tier 2 Medium Scenarios
+# Complexity: Medium
+# Validates: Recent changes analyzed
+# ============================================================================
+
+id: "S15"
+name: "LENS + Git history correlation"
+description: "Recent changes analyzed"
+complexity: "medium"
+intent: "FIX"
+user_request: "Fix memory leak in LENS analyzer"
+
+# Expected subsystem engagement
+expected_components:
+  - "LENSOrchestrator"
+  - "GitAnalyzer"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_WORKSPACE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      target_file: "cortex/lens/analyzer.py"
+  
+  - orchestrator: "GitAnalyzer"
+    activity: "ANALYZE_GIT_HISTORY"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      commits_analyzed: ">= 5"
+      blame_integrated: true
+  
+  - orchestrator: "GitAnalyzer"
+    activity: "IDENTIFY_CHURN_HOTSPOTS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      hotspots_found: true
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "CORRELATE_CONTEXT"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      authors_identified: true
+      reviewers_suggested: true
+
+# DoD
+dod:
+  - "Git blame integrated into context"
+  - "Churn hotspots identified"
+  - "Recent commits analyzed"
+  - "Authors of affected code listed"
+  - "Recommended reviewers suggested"
+
+performance:
+  max_duration_seconds: 3.0
+  
+expected_outcome:
+  git_history_integrated: true
+  churn_hotspots_identified: true
+  authors_listed: true
+  reviewers_suggested: true

@@ -1,0 +1,57 @@
+# ============================================================================
+# Scenario S20: Quality concern: Test coverage <80%
+# ============================================================================
+# Authority: Phase 51 § Tier 2 Medium Scenarios
+# Complexity: Medium
+# Validates: Enforcement blocks IMPLEMENT
+# ============================================================================
+
+id: "S20"
+name: "Quality concern: Test coverage <80%"
+description: "Enforcement blocks IMPLEMENT"
+complexity: "medium"
+intent: "IMPLEMENT"
+user_request: "Add new orchestrator without tests"
+
+# Expected subsystem engagement
+expected_components:
+  - "EnforcementOrchestrator"
+  - "TestCoverageAnalyzer"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "TestCoverageAnalyzer"
+    activity: "ANALYZE_COVERAGE"
+    workflow_stage: "GOVERNANCE"
+    expected_fields:
+      coverage_percentage: "< 80"
+  
+  - orchestrator: "EnforcementOrchestrator"
+    activity: "VALIDATE_COMPLIANCE"
+    workflow_stage: "GOVERNANCE"
+    expected_fields:
+      rule: "CORE-008"
+      violation_detected: true
+  
+  - orchestrator: "EnforcementOrchestrator"
+    activity: "BLOCK_REQUEST"
+    workflow_stage: "GOVERNANCE"
+    expected_fields:
+      status: "BLOCKED"
+      reason: "Test coverage below threshold (CORE-008)"
+
+# DoD
+dod:
+  - "Test coverage check performed"
+  - "Coverage = 65% (below threshold)"
+  - "CORE-008 violation detected"
+  - "Request BLOCKED"
+  - "Error message: 'Add tests first (CORE-008)'"
+
+performance:
+  max_duration_seconds: 1.0
+  
+expected_outcome:
+  request_blocked: true
+  violation: "CORE-008"
+  coverage_below_threshold: true

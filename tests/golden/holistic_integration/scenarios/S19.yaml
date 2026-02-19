@@ -1,0 +1,56 @@
+# ============================================================================
+# Scenario S19: Blind spot: Circular dependency detection
+# ============================================================================
+# Authority: Phase 51 § Tier 2 Medium Scenarios
+# Complexity: Medium
+# Validates: Architecture warning
+# ============================================================================
+
+id: "S19"
+name: "Blind spot: Circular dependency detection"
+description: "Architecture warning"
+complexity: "medium"
+intent: "REFACTOR"
+user_request: "Make OrchestratorA import OrchestratorB"
+
+# Expected subsystem engagement
+expected_components:
+  - "DependencyGraphAnalyzer"
+  - "ArchitectureValidator"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "DependencyGraphAnalyzer"
+    activity: "BUILD_DEPENDENCY_GRAPH"
+    workflow_stage: "VALIDATION"
+    expected_fields:
+      graph_built: true
+  
+  - orchestrator: "DependencyGraphAnalyzer"
+    activity: "DETECT_CIRCULAR_DEPENDENCY"
+    workflow_stage: "VALIDATION"
+    expected_fields:
+      circular_detected: true
+      cycle_path: "not_null"
+  
+  - orchestrator: "ArchitectureValidator"
+    activity: "GENERATE_WARNING"
+    workflow_stage: "VALIDATION"
+    expected_fields:
+      warning_type: "circular_dependency"
+      recommendation: "not_null"
+
+# DoD
+dod:
+  - "Circular dependency detected (A → B → A)"
+  - "Architecture warning displayed"
+  - "Recommendation: Use event bus instead"
+  - "Alternative patterns suggested"
+
+performance:
+  max_duration_seconds: 2.0
+  
+expected_outcome:
+  circular_dependency_detected: true
+  warning_issued: true
+  alternatives_suggested: true

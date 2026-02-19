@@ -1,0 +1,58 @@
+# ============================================================================
+# Scenario S18: Edge case: Missing dependencies
+# ============================================================================
+# Authority: Phase 51 § Tier 2 Medium Scenarios
+# Complexity: Medium
+# Validates: Graceful degradation
+# ============================================================================
+
+id: "S18"
+name: "Edge case: Missing dependencies"
+description: "Graceful degradation"
+complexity: "medium"
+intent: "IMPLEMENT"
+user_request: "Add new feature"
+
+# Expected subsystem engagement
+expected_components:
+  - "MasterOrchestrator"
+
+# Mock failures to inject
+mock_failures:
+  - "LENS unavailable"
+  - "CCL timeout (>500ms)"
+  - "Company YAMLs missing"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "MasterOrchestrator"
+    activity: "DETECT_DEGRADED_MODE"
+    workflow_stage: "ENTRY"
+    expected_fields:
+      degraded_mode: true
+      fallbacks_activated: true
+  
+  - orchestrator: "MasterOrchestrator"
+    activity: "FALLBACK_EXECUTION"
+    workflow_stage: "EXECUTION"
+    expected_fields:
+      lens_fallback: "cold_analysis"
+      ccl_fallback: "partial_context"
+      yaml_fallback: "core_rules_only"
+
+# DoD
+dod:
+  - "LENS unavailable → fallback to cold analysis"
+  - "CCL timeout → proceed with partial context"
+  - "Company YAMLs missing → use core rules only"
+  - "Request still processed"
+  - "Warnings logged in audit trail"
+  - "User notified of degraded mode"
+
+performance:
+  max_duration_seconds: 3.0
+  
+expected_outcome:
+  degraded_mode_activated: true
+  request_completed: true
+  warnings_logged: true

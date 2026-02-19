@@ -1,0 +1,102 @@
+# ============================================================================
+# Scenario S21: Full e2e: IMPLEMENT new feature
+# ============================================================================
+# Authority: Phase 51 § Tier 3 Complex Scenarios
+# Complexity: Complex
+# Validates: All systems engaged
+# ============================================================================
+
+id: "S21"
+name: "Full e2e: IMPLEMENT new feature"
+description: "All systems engaged"
+complexity: "complex"
+intent: "IMPLEMENT"
+user_request: "Implement user authentication with JWT, OAuth2, and 2FA"
+
+# Expected subsystem engagement
+expected_components:
+  - "MasterOrchestrator"
+  - "RequestRephraseOrchestrator"
+  - "InteractionOrchestrator"
+  - "CCL"
+  - "LENSOrchestrator"
+  - "CompanyKnowledgeLoader"
+  - "EnforcementOrchestrator"
+  - "HolisticValidationOrchestrator"
+  - "ThreatModelingEngine"
+  - "LLMSynthesisEngine"
+  - "TDDOrchestrator"
+
+# Expected audit trail (comprehensive)
+expected_audit_events:
+  - orchestrator: "RequestRephraseOrchestrator"
+    activity: "CLASSIFY_INTENT"
+    workflow_stage: "REPHRASE"
+    expected_fields:
+      intent_type: "IMPLEMENT"
+      risk_level: "HIGH"
+  
+  - orchestrator: "CCL"
+    activity: "PREWARM_CONTEXT"
+    workflow_stage: "PRE_STAGE_1"
+    expected_fields:
+      duration_ms: "<= 300"
+  
+  - orchestrator: "InteractionOrchestrator"
+    activity: "EXECUTE_TURN"
+    workflow_stage: "INTERACTION"
+    expected_fields:
+      challenge_generated: true
+  
+  - orchestrator: "LENSOrchestrator"
+    activity: "ANALYZE_WORKSPACE"
+    workflow_stage: "INTELLIGENCE"
+  
+  - orchestrator: "CompanyKnowledgeLoader"
+    activity: "LOAD_MULTIPLE_DOMAINS"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      domains_count: ">= 3"
+  
+  - orchestrator: "ThreatModelingEngine"
+    activity: "GENERATE_THREAT_MODEL"
+    workflow_stage: "INTELLIGENCE"
+  
+  - orchestrator: "HolisticValidationOrchestrator"
+    activity: "VALIDATE_HOLISTICALLY"
+    workflow_stage: "VALIDATION"
+  
+  - orchestrator: "EnforcementOrchestrator"
+    activity: "VALIDATE_COMPLIANCE"
+    workflow_stage: "GOVERNANCE"
+  
+  - orchestrator: "TDDOrchestrator"
+    activity: "CREATE_EXECUTION_PLAN"
+    workflow_stage: "EXECUTION"
+    expected_fields:
+      tests_first: true
+
+# DoD
+dod:
+  - "Stage -1: Intent = IMPLEMENT, risk = HIGH, governance rules injected"
+  - "Stage 1: LENS analysis + challenge generation"
+  - "CCL: Pre-warmed LENS + rules in <300ms"
+  - "Stage 2: Intent routed to TDDOrchestrator"
+  - "Stage 3: Intelligence synthesis (LENS + 3 YAMLs + threat model)"
+  - "Company YAMLs: security, api-design, authentication loaded"
+  - "Threat model: OWASP Top 10 + STRIDE analysis"
+  - "Holistic validation: Dependency graph + regression risk"
+  - "Challenge gate: 3 alternatives presented"
+  - "Stage 4: TDD plan generated (tests first)"
+  - "LLM synthesis: Coherent implementation plan"
+  - "Audit trail: Complete AC_START → AC_COMPLETE"
+  - "Performance: <5s total"
+  - "Test coverage requirement enforced"
+
+performance:
+  max_duration_seconds: 5.0
+  
+expected_outcome:
+  all_subsystems_engaged: true
+  full_pipeline_executed: true
+  tdd_plan_generated: true

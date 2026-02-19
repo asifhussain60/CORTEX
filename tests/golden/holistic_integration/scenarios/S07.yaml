@@ -1,0 +1,50 @@
+# ============================================================================
+# Scenario S07: Company YAML loaded (single domain)
+# ============================================================================
+# Authority: Phase 51 § Tier 1 Simple Scenarios
+# Complexity: Simple
+# Validates: Domain-specific best practices loaded
+# ============================================================================
+
+id: "S07"
+name: "Company YAML loaded (single domain)"
+description: "Validate domain-specific best practices loaded"
+complexity: "simple"
+intent: "IMPLEMENT"
+user_request: "Add payment processing logic"
+
+# Expected subsystem engagement
+expected_components:
+  - "CompanyKnowledgeLoader"
+  - "MasterOrchestrator"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "CompanyKnowledgeLoader"
+    activity: "LOAD_DOMAIN_YAML"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      domain: "payment-security"
+      yaml_loaded: true
+  
+  - orchestrator: "CompanyKnowledgeLoader"
+    activity: "ENRICH_CONTEXT"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      standards: "in:PCI-DSS,payment-best-practices"
+
+# DoD
+dod:
+  - "payment-security.yaml loaded"
+  - "PCI-DSS rules in context"
+  - "Domain best practices available"
+  - "Context enriched with payment standards"
+
+performance:
+  max_duration_seconds: 1.0
+  
+expected_outcome:
+  company_yamls_loaded:
+    - "payment-security.yaml"
+  standards_applied:
+    - "PCI-DSS"

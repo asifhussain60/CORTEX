@@ -1,0 +1,47 @@
+# ============================================================================
+# Scenario S10: LLM synthesis (simple)
+# ============================================================================
+# Authority: Phase 51 § Tier 1 Simple Scenarios
+# Complexity: Simple
+# Validates: Coherent output
+# ============================================================================
+
+id: "S10"
+name: "LLM synthesis (simple)"
+description: "Validate coherent output"
+complexity: "simple"
+intent: "QUERY"
+user_request: "Explain LENS architecture"
+
+# Expected subsystem engagement
+expected_components:
+  - "LLMSynthesisEngine"
+  - "LENSOrchestrator"
+
+# Expected audit trail
+expected_audit_events:
+  - orchestrator: "LLMSynthesisEngine"
+    activity: "SYNTHESIZE_RESPONSE"
+    workflow_stage: "INTELLIGENCE"
+    expected_fields:
+      sources_count: ">= 2"
+      output_format: "markdown"
+
+# DoD
+dod:
+  - "Multiple sources synthesized (code + docs + comments)"
+  - "Markdown formatted output"
+  - "Coherent narrative"
+  - "No contradictions"
+
+performance:
+  max_duration_seconds: 2.0
+  
+expected_outcome:
+  synthesis_complete: true
+  sources:
+    - "lens_code_analysis"
+    - "documentation"
+    - "inline_comments"
+  format: "markdown"
+  quality_score: ">= 0.8"

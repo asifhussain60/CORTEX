@@ -1,0 +1,68 @@
+# ============================================================================
+# Scenario S03: IMPLEMENT intent classification
+# ============================================================================
+# Authority: Phase 51 § Tier 1 Simple Scenarios
+# Complexity: Simple
+# Validates: Governance rules injected, orchestrator mapping
+# ============================================================================
+
+id: "S03"
+name: "IMPLEMENT intent classification"
+description: "Validate governance rules injected"
+complexity: "simple"
+intent: "IMPLEMENT"
+user_request: "Add new authentication handler"
+
+# Expected subsystem engagement
+expected_components:
+  - "RequestRephraseOrchestrator"
+  - "IntentRouter"
+  - "EnforcementOrchestrator"
+
+not_expected:
+  - "TDDOrchestrator"  # Stage -1 only, not execution yet
+
+# Expected audit trail sequence
+expected_audit_events:
+  - orchestrator: "RequestRephraseOrchestrator"
+    activity: "CLASSIFY_INTENT"
+    workflow_stage: "REPHRASE"
+    expected_fields:
+      intent_type: "IMPLEMENT"
+      confidence: ">= 0.9"
+  
+  - orchestrator: "EnforcementOrchestrator"
+    activity: "INJECT_GOVERNANCE_RULES"
+    workflow_stage: "GOVERNANCE"
+    expected_fields:
+      rules_injected: "in:CORE-008,CORE-002,CORE-011,CORE-012"
+  
+  - orchestrator: "IntentRouter"
+    activity: "ROUTE_INTENT"
+    workflow_stage: "INTENT"
+    expected_fields:
+      target_orchestrator: "TDDOrchestrator"
+      routing_reason: "IMPLEMENT intent requires TDD workflow"
+
+# Definition of Done
+dod:
+  - "RequestRephraseOrchestrator classified intent as IMPLEMENT"
+  - "Governance rules include CORE-008, CORE-002"
+  - "Orchestrator mapping = TDDOrchestrator"
+  - "Risk assessment performed"
+  - "Challenge-first evaluation triggered"
+
+# Performance requirements
+performance:
+  max_duration_seconds: 1.0
+  
+# Expected outcome
+expected_outcome:
+  intent: "IMPLEMENT"
+  orchestrator: "TDDOrchestrator"
+  governance_rules:
+    - "CORE-008"
+    - "CORE-002"
+    - "CORE-011"
+    - "CORE-012"
+  risk_level: "in:MEDIUM,HIGH"

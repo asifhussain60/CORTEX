@@ -1,0 +1,59 @@
+# ============================================================================
+# Scenario S01: Simple QUERY without LENS
+# ============================================================================
+# Authority: Phase 51 § Tier 1 Simple Scenarios
+# Complexity: Simple
+# Validates: Intent classification only (no LENS engagement)
+# ============================================================================
+
+id: "S01"
+name: "Simple QUERY without LENS"
+description: "Validate intent classification only"
+complexity: "simple"
+intent: "QUERY"
+user_request: "What is the current phase status?"
+
+# Expected subsystem engagement
+expected_components:
+  - "MasterOrchestrator"
+  - "RequestRephraseOrchestrator"
+  - "IntentRouter"
+
+not_expected:
+  - "LENSOrchestrator"
+  - "CCL"
+  - "CompanyKnowledgeLoader"
+
+# Expected audit trail sequence
+expected_audit_events:
+  - orchestrator: "MasterOrchestrator"
+    activity: "COORDINATE_OPERATION"
+    workflow_stage: "ENTRY"
+    expected_fields:
+      utterance: "What is the current phase status?"
+  
+  - orchestrator: "IntentRouter"
+    activity: "CLASSIFY_INTENT"
+    workflow_stage: "INTENT"
+    expected_fields:
+      intent_type: "QUERY"
+      confidence: ">= 0.8"
+
+# Definition of Done
+dod:
+  - "MasterOrchestrator.coordinate_operation() invoked"
+  - "Intent classified as QUERY"
+  - "No LENS analysis performed"
+  - "Response time < 1s"
+  - "Audit trail complete (AC_START → AC_COMPLETE)"
+  - "No CCL pre-warming"
+
+# Performance requirements
+performance:
+  max_duration_seconds: 1.0
+  
+# Expected outcome
+expected_outcome:
+  intent: "QUERY"
+  orchestrator: "QueryOrchestrator"
+  lens_engaged: false
