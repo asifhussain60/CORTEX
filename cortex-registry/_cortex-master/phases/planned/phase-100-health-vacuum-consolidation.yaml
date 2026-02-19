@@ -1,0 +1,872 @@
+# Phase 100: Health-Vacuum Orchestrator Consolidation
+# Status: PLANNED
+# Created: 2026-02-19
+# Authority: CORE-002, CORE-008, CORE-028, CORE-035, CORE-048
+# Supersedes: Phase 48 (partial), Phase 92 (partial)
+
+metadata:
+  phase_id: "phase-100"
+  title: "Health-Vacuum Orchestrator Consolidation"
+  version: "1.0.0"
+  status: "planned"
+  priority: "P0"
+  created: "2026-02-19T00:00:00Z"
+  author: "CORTEX Architect"
+  origin: "_workspaces/.chats/chat01.md"
+  related_phases:
+    - "phase-48"   # Original Health-Vacuum Pipeline
+    - "phase-92"   # Agent-based Health Orchestrator
+    - "phase-95"   # Stub Detection Agent
+  governance_rules:
+    - "CORE-002: No markdown sprawl"
+    - "CORE-008: TDD mandatory"
+    - "CORE-028: Naming conventions"
+    - "CORE-035: Single canonical implementation"
+    - "CORE-048: Holistic validation gate"
+
+# =============================================================================
+# OVERVIEW
+# =============================================================================
+
+overview:
+  description: |
+    Consolidate all health scanning and vacuum cleanup into exactly TWO
+    canonical orchestrators with automatic health→vacuum handoff:
+    
+    1. **HealthOrchestrator** (single canonical):
+       - Absorbs Phase-48 filesystem checks (H-001 to H-010)
+       - Absorbs Phase-92 agent-based checks (14 agents)
+       - Adds 6 NEW check categories (stubs, low-value tests, SQLite, etc.)
+       - Writes structured health-issues.yaml for handoff
+    
+    2. **VacuumOrchestrator** (single canonical):
+       - Absorbs Phase-48 VacuumExecutor operations
+       - Absorbs cortex_intelligence VacuumOrchestrator cleaner plugins
+       - Adds automatic handoff consumption from HealthOrchestrator
+       - Provides rollback, dry-run, and reporting
+    
+    3. **HealthVacuumPipeline** (auto-handoff coordinator):
+       - Orchestrates Health → Vacuum → Verify → Teardown
+       - Supports autonomous mode (zero human intervention)
+       - MCP-first exposure via 2 tools (reduced from 3)
+
+  problem_statement: |
+    Current state has 2× HealthOrchestrator classes, 7× vacuum/cleanup
+    implementations, and 3× MCP tools for overlapping operations. The
+    chat01.md audit identified 30+ consolidation issues. Additionally:
+    - Stub implementations are not detected by health checks
+    - Low-value golden tests reduce confidence
+    - Leftover SQLite databases accumulate
+    - No automatic Health→Vacuum handoff exists
+    - Tests are misplaced inside cortex/ source tree
+
+  business_value:
+    - "Single source of truth for health scanning (CORE-035)"
+    - "Automatic remediation pipeline reduces manual maintenance to zero"
+    - "New check categories catch issues currently invisible"
+    - "Reduced MCP tool count improves discoverability"
+    - "~5,600 lines of duplicate code removed"
+    - "~30 files/directories deleted or consolidated"
+
+  risk_assessment:
+    score: 0.55
+    category: "MEDIUM"
+    mitigations:
+      - "All 16 existing golden tests must pass before and after"
+      - "Import compatibility shims for deprecated paths"
+      - "Dry-run mode on all vacuum operations"
+      - "Rollback manifest for undo"
+      - "Incremental migration across 6 stages"
+
+# =============================================================================
+# CURRENT STATE INVENTORY
+# =============================================================================
+
+current_state:
+  health_orchestrators:
+    - location: "cortex/orchestrators/support/health_orchestrator.py"
+      class: "HealthOrchestrator"
+      phase: "Phase 48"
+      lines: 1152
+      purpose: "Filesystem scan → health-issues.yaml (H-001 to H-007)"
+      status: "CANONICAL — keep as engine"
+
+    - location: "cortex/orchestrators/health/health_orchestrator.py"
+      class: "HealthOrchestrator"
+      phase: "Phase 92"
+      lines: 393
+      purpose: "Agent-based health check coordinator"
+      status: "MERGE — absorb agents into canonical"
+
+  vacuum_implementations:
+    - location: "cortex/orchestrators/support/health_orchestrator.py"
+      class: "VacuumExecutor"
+      phase: "Phase 48"
+      purpose: "File rename/delete/relocate from handoff"
+      status: "CANONICAL — keep as engine"
+
+    - location: "cortex/orchestrators/support/health_orchestrator.py"
+      class: "HealthVacuumPipeline"
+      phase: "Phase 48"
+      purpose: "5-stage pipeline coordinator"
+      status: "CANONICAL — keep and enhance"
+
+    - location: "cortex_intelligence/memory/tier1_learned/orchestrators/vacuum/orchestrator.py"
+      class: "VacuumOrchestrator"
+      phase: "PHASE-VAC-001"
+      lines: 625
+      purpose: "Cleaner plugin lifecycle coordinator"
+      status: "MERGE — absorb plugin pattern into canonical"
+
+    - location: "cortex/orchestrators/support/vacuum_orchestrator.py"
+      class: "VacuumOrchestrator (re-export)"
+      purpose: "Backward compatibility wrapper"
+      status: "DELETE — after migration"
+
+    - location: "cortex/mcp/tools/utilities.py"
+      class: "CortexVacuum"
+      purpose: "MCP tool for markdown cleanup"
+      status: "DELETE — merge into CortexVacuumOrchestrate"
+
+    - location: "cortex/toolkit/cleanup.py"
+      class: "ToolkitCleanupTool"
+      purpose: "Phase 90 toolkit cleanup"
+      status: "DELETE — merge into CortexVacuumOrchestrate"
+
+  mcp_tools:
+    - tool: "cortex_health_orchestrate"
+      file: "cortex/mcp/tools/health_orchestrator_tool.py"
+      operations: ["scan", "pipeline", "status", "classify"]
+      status: "KEEP — enhance with new operations"
+
+    - tool: "cortex_vacuum_orchestrate"
+      file: "cortex/mcp/tools/vacuum_orchestrator_tool.py"
+      operations: ["execute", "rollback", "preview"]
+      status: "KEEP — absorb CortexVacuum + ToolkitCleanupTool"
+
+    - tool: "cortex_vacuum (in utilities.py)"
+      file: "cortex/mcp/tools/utilities.py"
+      status: "DELETE — functionality merged into cortex_vacuum_orchestrate"
+
+  health_agents_existing:
+    - "ConsolidationAnalyzer"
+    - "DatabaseHealthAgent"
+    - "DuplicateDetectionAgent"
+    - "FilenameGovernanceAgent"
+    - "InformationalFileAgent"
+    - "InventoryAgent"
+    - "MCPAutoHealingAgent"
+    - "PathIntegrityAgent"
+    - "RegistryConsistencyAgent"
+    - "StubAutoFixAgent"
+    - "StubDetectionAgent"
+    - "TestCoverageAgent"
+    - "TokenOptimizationAgent"
+    - "VersionCleanupAgent"
+
+# =============================================================================
+# TARGET STATE ARCHITECTURE
+# =============================================================================
+
+target_state:
+  canonical_health:
+    location: "cortex/orchestrators/health/health_orchestrator.py"
+    class: "HealthOrchestrator"
+    description: |
+      Single canonical health orchestrator that:
+      1. Runs Phase-48 filesystem checks via FileContext (single rglob)
+      2. Runs all registered health agents (plugin pattern)
+      3. Aggregates results into unified HealthReport
+      4. Writes health-issues.yaml for vacuum handoff
+      5. Supports Definition of Done (DoD) gate
+    checks:
+      filesystem_checks:
+        - id: "H-001"
+          name: "Screaming Case Files"
+          source: "Phase 48"
+        - id: "H-002"
+          name: "Empty Files"
+          source: "Phase 48"
+        - id: "H-003"
+          name: "Orphaned Directories"
+          source: "Phase 48"
+        - id: "H-004"
+          name: "Wrong Path References"
+          source: "Phase 48"
+        - id: "H-005"
+          name: "Duplicate Content"
+          source: "Phase 48"
+        - id: "H-006"
+          name: "Deprecated Markers"
+          source: "Phase 48"
+        - id: "H-007"
+          name: "Invalid Markdown Location"
+          source: "Phase 48"
+
+      agent_checks:
+        - id: "HA-001"
+          agent: "DuplicateDetectionAgent"
+          source: "Phase 92"
+        - id: "HA-002"
+          agent: "StubDetectionAgent"
+          source: "Phase 95"
+        - id: "HA-003"
+          agent: "PathIntegrityAgent"
+          source: "Phase 92"
+        - id: "HA-004"
+          agent: "DatabaseHealthAgent"
+          source: "Phase 92"
+        - id: "HA-005"
+          agent: "TestCoverageAgent"
+          source: "Phase 92"
+        - id: "HA-006"
+          agent: "InventoryAgent"
+          source: "Phase 92"
+        - id: "HA-007"
+          agent: "FilenameGovernanceAgent"
+          source: "Phase 92"
+        - id: "HA-008"
+          agent: "RegistryConsistencyAgent"
+          source: "Phase 92"
+        - id: "HA-009"
+          agent: "MCPAutoHealingAgent"
+          source: "Phase 92"
+        - id: "HA-010"
+          agent: "TokenOptimizationAgent"
+          source: "Phase 92"
+        - id: "HA-011"
+          agent: "VersionCleanupAgent"
+          source: "Phase 92"
+        - id: "HA-012"
+          agent: "StubAutoFixAgent"
+          source: "Phase 92"
+
+      new_checks:
+        - id: "HN-001"
+          name: "Stub Implementation Detection"
+          description: |
+            Detect Python files <30 LOC with no classes or functions.
+            Currently 128 stub files exist. Flag as P1 for review.
+          severity: "medium"
+          action: "flag_for_review_or_delete"
+          agent: "EnhancedStubDetectionAgent"
+
+        - id: "HN-002"
+          name: "Low-Value Golden Test Detection"
+          description: |
+            Detect golden test files where ALL test functions have trivial
+            bodies (≤3 AST statements, ≤1 assertion). Currently 4 files:
+            - tests/golden/orchestrators/test_tdd_lens_e2e.py (9 trivial)
+            - tests/golden/planning/test_context_planning_e2e.py (6 trivial)
+            - tests/golden/intelligence/test_intelligence_pipeline_e2e.py (5 trivial)
+            - tests/golden/orchestrators/master/test_master_orchestrator_deep.py (4 trivial)
+          severity: "medium"
+          action: "flag_for_implementation_or_delete"
+          agent: "GoldenTestQualityAgent"
+
+        - id: "HN-003"
+          name: "SQLite Database Cleanup"
+          description: |
+            Detect leftover SQLite databases, WAL/SHM journals, and
+            duplicate databases across locations. Currently found:
+            - 10 .db files (256KB total)
+            - Duplicate: intelligence_audit.db (2 locations)
+            - Duplicate: contract_validation_audit.db (2 locations)
+            - Duplicate: governance.db (2 locations)
+          severity: "medium"
+          action: "vacuum_consolidate_or_delete"
+          agent: "DatabaseHealthAgent (enhanced)"
+
+        - id: "HN-004"
+          name: "Misplaced Test Files"
+          description: |
+            Detect test files inside cortex/ source tree instead of tests/.
+            Currently found:
+            - cortex/tests/ (deployment, telemetry test files)
+            - cortex/mcp/tests/ (MCP test files)
+            - cortex/infrastructure/tests/ (pre-commit tests)
+          severity: "high"
+          action: "relocate_to_tests_directory"
+          agent: "TestPlacementAgent"
+
+        - id: "HN-005"
+          name: "Empty Package Directory Detection"
+          description: |
+            Detect directories that only contain __init__.py with no real
+            code. Currently 15 empty orchestrator directories identified.
+            Additionally ~128 init-only packages across cortex/.
+          severity: "low"
+          action: "delete_or_consolidate"
+          agent: "EmptyPackageAgent"
+
+        - id: "HN-006"
+          name: "CORE-035 Cross-Module Duplication"
+          description: |
+            Detect same-named classes in different modules:
+            - 2× HealthOrchestrator
+            - 2× EnforcementOrchestrator
+            - 4× CoherenceValidator
+            - 5× IntentClassifier
+            - 10× validate_orchestrator_context
+          severity: "critical"
+          action: "flag_for_consolidation"
+          agent: "CrossModuleDuplicateAgent"
+
+  canonical_vacuum:
+    location: "cortex/orchestrators/support/vacuum_orchestrator.py"
+    class: "VacuumOrchestrator"
+    description: |
+      Single canonical vacuum orchestrator that:
+      1. Consumes health-issues.yaml automatically
+      2. Supports cleaner plugin registration (from cortex_intelligence)
+      3. Executes rename/delete/relocate/consolidate operations
+      4. Provides rollback via manifest
+      5. Reports all operations with success/failure
+    operations:
+      - id: "V-001"
+        name: "Rename Screaming→Kebab"
+        source: "Phase 48 VacuumExecutor"
+      - id: "V-002"
+        name: "Delete Empty Files"
+        source: "Phase 48 VacuumExecutor"
+      - id: "V-003"
+        name: "Delete Orphaned Directories"
+        source: "Phase 48 VacuumExecutor"
+      - id: "V-004"
+        name: "Relocate Misplaced Files"
+        source: "Phase 48 VacuumExecutor"
+      - id: "V-005"
+        name: "Consolidate Duplicates"
+        source: "Phase 48 InventoryAgent"
+      - id: "V-006"
+        name: "SQLite VACUUM & Cleanup"
+        source: "NEW — Phase 100"
+        description: "Run VACUUM on bloated DBs, delete duplicate DBs"
+      - id: "V-007"
+        name: "Relocate Misplaced Tests"
+        source: "NEW — Phase 100"
+        description: "Move tests from cortex/ to tests/"
+      - id: "V-008"
+        name: "Delete Empty Packages"
+        source: "NEW — Phase 100"
+        description: "Remove init-only directories"
+
+  auto_handoff:
+    description: |
+      Automatic pipeline that chains Health → Vacuum without human
+      intervention when running in autonomous mode:
+      
+      1. HealthOrchestrator.scan() → HealthReport + health-issues.yaml
+      2. VacuumOrchestrator.consume(health-issues.yaml) → execute operations
+      3. Verify: run pytest to confirm no regressions
+      4. Teardown: delete handoff files
+      
+      The handoff is triggered by HealthVacuumPipeline.run(autonomous=True)
+      and exposed via cortex_health_orchestrate(operation="pipeline")
+    
+    handoff_file: "cortex/brain/vacuum/health-issues.yaml"
+    rollback_file: "cortex/brain/vacuum/rollback-manifest.json"
+
+# =============================================================================
+# IMPLEMENTATION STAGES
+# =============================================================================
+
+stages:
+  - stage: 1
+    name: "Consolidate HealthOrchestrator"
+    duration: "2 hours"
+    priority: "P0"
+    description: |
+      Merge Phase-48 HealthOrchestrator (filesystem checks) and Phase-92
+      HealthOrchestrator (agent coordinator) into a single class at
+      cortex/orchestrators/health/health_orchestrator.py
+    tasks:
+      - id: "S1-T1"
+        name: "Write consolidation golden tests"
+        description: "Tests that verify merged orchestrator passes all existing scenarios"
+        tests: "tests/golden/orchestrators/health_vacuum/test_consolidated_health_golden.py"
+        scenarios:
+          - "CH-001: Merged orchestrator runs filesystem checks (H-001 to H-007)"
+          - "CH-002: Merged orchestrator runs registered agents"
+          - "CH-003: Single FileContext shared across all checks"
+          - "CH-004: Health report aggregates filesystem + agent results"
+          - "CH-005: DoD gate works with merged orchestrator"
+          - "CH-006: Backward compatibility — old imports still work"
+
+      - id: "S1-T2"
+        name: "Merge HealthOrchestrator implementations"
+        files:
+          modify:
+            - "cortex/orchestrators/health/health_orchestrator.py"
+          deprecate:
+            - "cortex/orchestrators/support/health_orchestrator.py → extract HealthOrchestrator class"
+        changes:
+          - "Move FileContext, ScanResult, IssueFile, etc. to health/models.py"
+          - "Move _check_* methods from support/ into health/ as internal methods"
+          - "Keep agent registration pattern from Phase-92"
+          - "Add Phase-48 filesystem checks as built-in (always-on) checks"
+          - "Unified run_health_check() → HealthReport with both result types"
+
+      - id: "S1-T3"
+        name: "Create import compatibility shims"
+        description: |
+          Update cortex/orchestrators/support/health_orchestrator.py to
+          re-export from the new canonical location for backward compat
+        files:
+          - "cortex/orchestrators/support/health_orchestrator.py → thin re-export wrapper"
+
+      - id: "S1-T4"
+        name: "Update MCP tool imports"
+        files:
+          - "cortex/mcp/tools/health_orchestrator_tool.py"
+        changes:
+          - "Import from cortex.orchestrators.health.health_orchestrator"
+          - "Keep all existing operations (scan, pipeline, status, classify)"
+
+    deliverables:
+      - "Single HealthOrchestrator class"
+      - "All existing golden tests passing"
+      - "Backward compatible imports"
+
+  - stage: 2
+    name: "Add New Health Agents"
+    duration: "3 hours"
+    priority: "P0"
+    description: |
+      Implement 6 new health check agents identified in the audit
+    tasks:
+      - id: "S2-T1"
+        name: "Write tests for new agents"
+        tests:
+          - "tests/unit/orchestrators/health/agents/test_enhanced_stub_detection_agent.py"
+          - "tests/unit/orchestrators/health/agents/test_golden_test_quality_agent.py"
+          - "tests/unit/orchestrators/health/agents/test_database_health_agent_enhanced.py"
+          - "tests/unit/orchestrators/health/agents/test_test_placement_agent.py"
+          - "tests/unit/orchestrators/health/agents/test_empty_package_agent.py"
+          - "tests/unit/orchestrators/health/agents/test_cross_module_duplicate_agent.py"
+
+      - id: "S2-T2"
+        name: "Implement EnhancedStubDetectionAgent"
+        file: "cortex/orchestrators/health/agents/stub_detection_agent.py"
+        description: |
+          Enhance existing StubDetectionAgent to also detect:
+          - Files <30 LOC with no classes/functions (init-only wrappers)
+          - Re-export-only modules (only import + __all__)
+          - Placeholder implementations (raise NotImplementedError everywhere)
+
+      - id: "S2-T3"
+        name: "Implement GoldenTestQualityAgent"
+        file: "cortex/orchestrators/health/agents/golden_test_quality_agent.py"
+        description: |
+          NEW agent that scans tests/golden/ for:
+          - Test files where ALL functions are trivial (≤3 stmts, ≤1 assert)
+          - Test files with 0 test functions
+          - Test files that import but don't actually test anything
+        severity: "medium"
+
+      - id: "S2-T4"
+        name: "Enhance DatabaseHealthAgent"
+        file: "cortex/orchestrators/health/agents/database_health_agent.py"
+        description: |
+          Enhance existing agent to also detect:
+          - Duplicate databases (same name in different locations)
+          - Databases that should be in .gitignore
+          - WAL/SHM journal cleanup opportunities
+          - Test databases that should be ephemeral
+
+      - id: "S2-T5"
+        name: "Implement TestPlacementAgent"
+        file: "cortex/orchestrators/health/agents/test_placement_agent.py"
+        description: |
+          NEW agent that detects tests inside cortex/ source tree:
+          - cortex/tests/ directory
+          - cortex/mcp/tests/ directory
+          - cortex/infrastructure/tests/ directory
+          Flags for relocation to tests/ root directory
+
+      - id: "S2-T6"
+        name: "Implement EmptyPackageAgent"
+        file: "cortex/orchestrators/health/agents/empty_package_agent.py"
+        description: |
+          NEW agent that detects directories with only __init__.py:
+          - No other .py files
+          - __init__.py has <5 meaningful lines (excluding comments)
+          - No subdirectories with content
+
+      - id: "S2-T7"
+        name: "Implement CrossModuleDuplicateAgent"
+        file: "cortex/orchestrators/health/agents/cross_module_duplicate_agent.py"
+        description: |
+          NEW agent that detects same-named classes across modules:
+          - Parses AST of all .py files
+          - Groups ClassDef nodes by name
+          - Flags classes with identical names in different files
+          - Excludes test files and __init__.py re-exports
+
+    deliverables:
+      - "6 new or enhanced health agents"
+      - "All agents registered in HealthOrchestrator"
+      - "Unit tests for each agent"
+
+  - stage: 3
+    name: "Consolidate VacuumOrchestrator"
+    duration: "2 hours"
+    priority: "P0"
+    description: |
+      Merge all vacuum implementations into a single canonical orchestrator
+    tasks:
+      - id: "S3-T1"
+        name: "Write vacuum consolidation tests"
+        tests: "tests/golden/orchestrators/health_vacuum/test_consolidated_vacuum_golden.py"
+        scenarios:
+          - "CV-001: Consume health-issues.yaml and execute operations"
+          - "CV-002: Support cleaner plugin registration"
+          - "CV-003: SQLite VACUUM operation"
+          - "CV-004: Test file relocation"
+          - "CV-005: Empty package deletion"
+          - "CV-006: Rollback all operations"
+          - "CV-007: Dry-run mode"
+          - "CV-008: Automatic handoff from HealthOrchestrator"
+
+      - id: "S3-T2"
+        name: "Create canonical VacuumOrchestrator"
+        file: "cortex/orchestrators/health/vacuum_orchestrator.py"
+        description: |
+          New canonical VacuumOrchestrator that combines:
+          - Phase-48 VacuumExecutor file operations (rename, delete, relocate)
+          - cortex_intelligence VacuumOrchestrator plugin pattern (register_cleaner, analyze, execute)
+          - New operations: SQLite VACUUM, test relocation, empty package deletion
+        api:
+          - "register_cleaner(cleaner_class, config) → None"
+          - "consume_handoff(path) → List[OperationResult]"
+          - "execute_operations(issues) → List[OperationResult]"
+          - "rollback(manifest_path) → None"
+          - "save_manifest(path) → None"
+
+      - id: "S3-T3"
+        name: "Implement new vacuum operations"
+        operations:
+          - name: "sqlite_vacuum"
+            description: "Run VACUUM on bloated databases, delete duplicates"
+          - name: "relocate_tests"
+            description: "Move tests from cortex/ to tests/ with import updates"
+          - name: "delete_empty_packages"
+            description: "Remove init-only directories safely"
+
+      - id: "S3-T4"
+        name: "Update VacuumOrchestrator re-export wrapper"
+        file: "cortex/orchestrators/support/vacuum_orchestrator.py"
+        description: "Re-export from new canonical location"
+
+    deliverables:
+      - "Single canonical VacuumOrchestrator"
+      - "New vacuum operations (SQLite, tests, packages)"
+      - "Plugin registration support preserved"
+
+  - stage: 4
+    name: "Auto-Handoff Pipeline"
+    duration: "1.5 hours"
+    priority: "P0"
+    description: |
+      Implement automatic Health→Vacuum pipeline with zero human intervention
+    tasks:
+      - id: "S4-T1"
+        name: "Write pipeline tests"
+        tests: "tests/golden/orchestrators/health_vacuum/test_auto_pipeline_golden.py"
+        scenarios:
+          - "AP-001: Health scan → auto-vacuum in autonomous mode"
+          - "AP-002: Pipeline aborts if pre-flight fails"
+          - "AP-003: Pipeline rolls back on verification failure"
+          - "AP-004: Dry-run pipeline reports without executing"
+          - "AP-005: Handoff file deleted on success"
+
+      - id: "S4-T2"
+        name: "Enhance HealthVacuumPipeline"
+        file: "cortex/orchestrators/health/pipeline.py"
+        description: |
+          Enhanced pipeline with:
+          - Auto-registration of all health agents
+          - Auto-consumption of health-issues.yaml by VacuumOrchestrator
+          - Verification via pytest (configurable test paths)
+          - Teardown (delete handoff + manifest)
+          - EventBus notifications for each stage
+        stages:
+          - "1. Pre-flight: git status, baseline tests"
+          - "2. Health scan: all checks + all agents"
+          - "3. Review: skip in autonomous mode"
+          - "4. Vacuum: auto-consume handoff, execute operations"
+          - "5. Verify: run tests, teardown"
+
+      - id: "S4-T3"
+        name: "Update MCP tools for auto-handoff"
+        files:
+          - "cortex/mcp/tools/health_orchestrator_tool.py"
+        changes:
+          - "pipeline operation triggers auto-handoff"
+          - "New operation: auto_pipeline (scan + vacuum + verify)"
+
+    deliverables:
+      - "Automatic Health→Vacuum pipeline"
+      - "EventBus integration"
+      - "MCP tool updated"
+
+  - stage: 5
+    name: "Delete Duplicates & Clean Up"
+    duration: "1 hour"
+    priority: "P1"
+    description: |
+      Remove all deprecated/duplicate implementations identified in chat01.md
+    tasks:
+      - id: "S5-T1"
+        name: "Delete duplicate vacuum implementations"
+        delete:
+          - description: "CortexVacuum class from utilities.py"
+            action: "Remove CortexVacuum class, keep other utilities"
+          - description: "ToolkitCleanupTool from toolkit/cleanup.py"
+            action: "Remove class, update toolkit __init__.py"
+        update_imports:
+          - "Any file importing CortexVacuum → use CortexVacuumOrchestrate"
+          - "Any file importing ToolkitCleanupTool → use CortexVacuumOrchestrate"
+
+      - id: "S5-T2"
+        name: "Delete empty orchestrator directories"
+        directories:
+          - "cortex/orchestrators/adapters/"
+          - "cortex/orchestrators/adaptive/"
+          - "cortex/orchestrators/composition/"
+          - "cortex/orchestrators/custom/"
+          - "cortex/orchestrators/debugging/"
+          - "cortex/orchestrators/documentation/"
+          - "cortex/orchestrators/domains/"
+          - "cortex/orchestrators/education/"
+          - "cortex/orchestrators/handlers/"
+          - "cortex/orchestrators/holistic/"
+          - "cortex/orchestrators/linting/"
+          - "cortex/orchestrators/performance/"
+          - "cortex/orchestrators/persona/"
+          - "cortex/orchestrators/policies/"
+          - "cortex/orchestrators/pr_review/"
+
+      - id: "S5-T3"
+        name: "Extract validate_orchestrator_context"
+        source_files:
+          - "cortex/mcp/tools/governance.py"
+          - "cortex/mcp/tools/operations.py"
+          - "cortex/mcp/tools/utilities.py"
+          - "cortex/mcp/tools/sts_analyzer.py"
+          - "cortex/mcp/tools/intelligence.py"
+          - "cortex/mcp/tools/debug_tools.py"
+          - "cortex/mcp/tools/coherence_tools.py"
+          - "cortex/mcp/tools/intelligence_generation.py"
+          - "cortex/mcp/tools/workflow_tools.py"
+          - "cortex/mcp/tools/onboard_repository.py"
+        target: "cortex/mcp/tools/utilities.py (already canonical)"
+        action: "Replace all 10 copies with import from utilities.py"
+
+      - id: "S5-T4"
+        name: "Consolidate Phase-48 support file"
+        description: |
+          After HealthOrchestrator is extracted, reduce
+          cortex/orchestrators/support/health_orchestrator.py to:
+          - FileContext (shared utility)
+          - VacuumExecutor (kept for VacuumOrchestrator delegation)
+          - Import shims for backward compatibility
+
+    deliverables:
+      - "Duplicate implementations removed"
+      - "15 empty directories deleted"
+      - "validate_orchestrator_context deduplicated"
+      - "All tests still passing"
+
+  - stage: 6
+    name: "Verification & Registry Update"
+    duration: "1 hour"
+    priority: "P0"
+    description: "Final verification, test run, and registry synchronization"
+    tasks:
+      - id: "S6-T1"
+        name: "Run full test suite"
+        action: "pytest tests/ -q --tb=short"
+        on_failure: "ROLLBACK"
+
+      - id: "S6-T2"
+        name: "Run health scan with new orchestrator"
+        action: "cortex_health_orchestrate(operation='scan')"
+        verify: "New checks detect expected issues"
+
+      - id: "S6-T3"
+        name: "Run auto-pipeline end-to-end"
+        action: "cortex_health_orchestrate(operation='pipeline', autonomous=True, dry_run=True)"
+        verify: "Pipeline completes all 5 stages"
+
+      - id: "S6-T4"
+        name: "Update cortex-master registry"
+        updates:
+          - "phase-48 status → SUPERSEDED by phase-100"
+          - "phase-92 status → SUPERSEDED by phase-100"
+          - "phase-100 status → COMPLETE"
+
+      - id: "S6-T5"
+        name: "Git commit"
+        action: |
+          git add -A
+          git commit -m 'feat: Health-Vacuum consolidation (Phase 100)
+          
+          - Merge 2× HealthOrchestrator into single canonical
+          - Merge 7× vacuum implementations into single canonical
+          - Add 6 new health check agents
+          - Implement auto Health→Vacuum handoff pipeline
+          - Delete 15 empty orchestrator directories
+          - Extract validate_orchestrator_context (10× dedup)
+          - Remove 3 duplicate MCP tools
+          
+          Refs: Phase 100, CORE-035, CORE-008'
+
+    deliverables:
+      - "All tests passing"
+      - "Registry updated"
+      - "Changes committed"
+
+# =============================================================================
+# FILE OPERATIONS SUMMARY
+# =============================================================================
+
+file_operations:
+  create:
+    - "cortex/orchestrators/health/models.py"
+    - "cortex/orchestrators/health/vacuum_orchestrator.py"
+    - "cortex/orchestrators/health/pipeline.py"
+    - "cortex/orchestrators/health/agents/golden_test_quality_agent.py"
+    - "cortex/orchestrators/health/agents/test_placement_agent.py"
+    - "cortex/orchestrators/health/agents/empty_package_agent.py"
+    - "cortex/orchestrators/health/agents/cross_module_duplicate_agent.py"
+    - "tests/golden/orchestrators/health_vacuum/test_consolidated_health_golden.py"
+    - "tests/golden/orchestrators/health_vacuum/test_consolidated_vacuum_golden.py"
+    - "tests/golden/orchestrators/health_vacuum/test_auto_pipeline_golden.py"
+    - "tests/unit/orchestrators/health/agents/test_golden_test_quality_agent.py"
+    - "tests/unit/orchestrators/health/agents/test_test_placement_agent.py"
+    - "tests/unit/orchestrators/health/agents/test_empty_package_agent.py"
+    - "tests/unit/orchestrators/health/agents/test_cross_module_duplicate_agent.py"
+
+  modify:
+    - "cortex/orchestrators/health/health_orchestrator.py"
+    - "cortex/orchestrators/health/agents/stub_detection_agent.py"
+    - "cortex/orchestrators/health/agents/database_health_agent.py"
+    - "cortex/mcp/tools/health_orchestrator_tool.py"
+    - "cortex/mcp/tools/vacuum_orchestrator_tool.py"
+    - "cortex/orchestrators/support/health_orchestrator.py"
+    - "cortex/orchestrators/support/vacuum_orchestrator.py"
+
+  delete:
+    - "cortex/orchestrators/adapters/"
+    - "cortex/orchestrators/adaptive/"
+    - "cortex/orchestrators/composition/"
+    - "cortex/orchestrators/custom/"
+    - "cortex/orchestrators/debugging/"
+    - "cortex/orchestrators/documentation/"
+    - "cortex/orchestrators/domains/"
+    - "cortex/orchestrators/education/"
+    - "cortex/orchestrators/handlers/"
+    - "cortex/orchestrators/holistic/"
+    - "cortex/orchestrators/linting/"
+    - "cortex/orchestrators/performance/"
+    - "cortex/orchestrators/persona/"
+    - "cortex/orchestrators/policies/"
+    - "cortex/orchestrators/pr_review/"
+
+# =============================================================================
+# GOLDEN TESTS
+# =============================================================================
+
+golden_tests:
+  location: "tests/golden/orchestrators/health_vacuum/"
+  existing_tests_preserved: true
+  total_new_scenarios: 19
+
+  new_test_files:
+    - file: "test_consolidated_health_golden.py"
+      scenarios: 6
+      coverage:
+        - "CH-001: Merged orchestrator runs filesystem checks"
+        - "CH-002: Merged orchestrator runs registered agents"
+        - "CH-003: Single FileContext shared across all checks"
+        - "CH-004: Health report aggregates filesystem + agent results"
+        - "CH-005: DoD gate works with merged orchestrator"
+        - "CH-006: Backward compatible imports"
+
+    - file: "test_consolidated_vacuum_golden.py"
+      scenarios: 8
+      coverage:
+        - "CV-001: Consume health-issues.yaml"
+        - "CV-002: Cleaner plugin registration"
+        - "CV-003: SQLite VACUUM operation"
+        - "CV-004: Test file relocation"
+        - "CV-005: Empty package deletion"
+        - "CV-006: Rollback all operations"
+        - "CV-007: Dry-run mode"
+        - "CV-008: Automatic handoff"
+
+    - file: "test_auto_pipeline_golden.py"
+      scenarios: 5
+      coverage:
+        - "AP-001: Auto scan→vacuum in autonomous mode"
+        - "AP-002: Abort on pre-flight failure"
+        - "AP-003: Rollback on verification failure"
+        - "AP-004: Dry-run pipeline"
+        - "AP-005: Handoff file cleanup"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+
+success_criteria:
+  mandatory:
+    - "All 16 existing golden tests still passing (zero regression)"
+    - "All 19 new golden tests passing"
+    - "Single HealthOrchestrator class (CORE-035)"
+    - "Single VacuumOrchestrator class (CORE-035)"
+    - "Auto-handoff pipeline working in autonomous mode"
+    - "6 new health agents registered and functional"
+    - "15 empty orchestrator directories deleted"
+    - "validate_orchestrator_context deduplicated to 1 source"
+    - "3 duplicate MCP tools removed (net: 2 tools)"
+
+  metrics:
+    lines_removed: "~5,600"
+    files_removed: "~30"
+    new_health_checks: 6
+    new_golden_tests: 19
+    mcp_tools_consolidated: 3
+
+# =============================================================================
+# TIMELINE
+# =============================================================================
+
+timeline:
+  total_duration: "10.5 hours"
+  stages:
+    - name: "Stage 1: Consolidate HealthOrchestrator"
+      duration: "2 hours"
+    - name: "Stage 2: Add New Health Agents"
+      duration: "3 hours"
+    - name: "Stage 3: Consolidate VacuumOrchestrator"
+      duration: "2 hours"
+    - name: "Stage 4: Auto-Handoff Pipeline"
+      duration: "1.5 hours"
+    - name: "Stage 5: Delete Duplicates & Clean Up"
+      duration: "1 hour"
+    - name: "Stage 6: Verification & Registry Update"
+      duration: "1 hour"
+
+# =============================================================================
+# ROLLBACK PLAN
+# =============================================================================
+
+rollback:
+  trigger: "Any golden test failure after Stage 1"
+  actions:
+    - "git stash pop (if stashed)"
+    - "git checkout -- cortex/orchestrators/"
+    - "git checkout -- cortex/mcp/tools/"
+    - "Restore deleted directories from git"
+  verification: "pytest tests/golden/ -q"
