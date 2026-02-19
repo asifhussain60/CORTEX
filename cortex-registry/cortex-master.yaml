@@ -522,7 +522,7 @@ phase_status:
   completed_late_additions:
     - id: "phase-48"
       title: "Health-Vacuum Integrity Pipeline"
-      location: "planning/phases/planned/phase-48-health-vacuum-pipeline.yaml"
+      location: "cortex-registry/_cortex-master/phases/completed/phase-48-health-vacuum-pipeline.yaml"
       workflow_template: "cortex-registry/workflows/templates/maintenance/health-vacuum-pipeline.yaml"
       status: "COMPLETE"
       completion_date: "2026-02-18"
@@ -539,7 +539,7 @@ phase_status:
 
     - id: "phase-49"
       title: "Golden Test Promotion Pipeline"
-      location: "planning/phases/planned/phase-49-golden-test-promotion.yaml"
+      location: "cortex-registry/_cortex-master/phases/completed/phase-49-golden-test-promotion.yaml"
       workflow_template: "cortex-registry/workflows/templates/governance/golden-test-promotion.yaml"
       manifest: "cortex-registry/governance/test-promotion-manifest.yaml"
       status: "COMPLETE"
@@ -640,9 +640,12 @@ execution_order:
       - id: "phase-50"
         title: "Health-Vacuum Orchestrator Consolidation"
         estimated_duration: "1 day"
+        file: "cortex-registry/_cortex-master/phases/planned/phase-50-health-vacuum-consolidation.yaml"
     total_remaining_duration: "1 day"
-    completion_date: "2026-02-19"
-    confidence: "100% (verified via git history + golden test suite)"# ============================================================================
+    completion_date: "2026-02-20"
+    confidence: "100% (verified via git history + golden test suite)"
+
+# ============================================================================
 # PRODUCTION READINESS
 # ============================================================================
 
