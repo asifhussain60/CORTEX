@@ -66,24 +66,6 @@ presentation:
         - "Archive deletion (Phase 09) depends on import quarantine passing"
         - "Production readiness (Phase 10) depends on Phase 09 completion"
   
-  recommendation:
-    primary_strategy: |
-      Execute Phase 09 Final Verification with immediate import remediation:
-      1. Fix all cortex.brain imports in 15+ active files (1-2 hours)
-      2. Run full test suite validation (unit + golden + integration)
-      3. Verify 18-point Definition of Done checklist
-      4. Delete _archive/ permanently
-      5. Tag release v2.0.0-cohesive-brain
-      
-      This approach prioritizes execution velocity while maintaining zero-regression guarantee.
-    
-    execution_path:
-      - Phase_09_Entry: Import quarantine fix (master_orchestrator.py, infrastructure/, lens/, cli/)
-      - Phase_09_Core: Registry audit, code compliance verification, 18-point DoD checklist
-      - Phase_09_Exit: Archive deletion, release tag, Go-live handoff documentation
-      - Phase_10: Production hardening (chaos testing, SLOs, security audit)
-      - Phase_11: Go-live and operations handoff
-  
   benefits_and_risks_analysis:
     - dimension: "Code Quality"
       benefit: "Reduced from 59 to 16 top-level directories; 120 to 44 orchestrators; 3 to 1 package"
@@ -108,6 +90,24 @@ presentation:
       risk: "Golden tests not yet executable; chaos testing not yet run"
       mitigation: "Phase 10 will execute performance SLOs and security hardening"
       confidence: "Medium"
+  
+  recommendation:
+    primary_strategy: |
+      Execute Phase 09 Final Verification with immediate import remediation:
+      1. Fix all cortex.brain imports in 15+ active files (1-2 hours)
+      2. Run full test suite validation (unit + golden + integration)
+      3. Verify 18-point Definition of Done checklist
+      4. Delete _archive/ permanently
+      5. Tag release v2.0.0-cohesive-brain
+      
+      This approach prioritizes execution velocity while maintaining zero-regression guarantee.
+    
+    execution_path:
+      - Phase_09_Entry: Import quarantine fix (master_orchestrator.py, infrastructure/, lens/, cli/)
+      - Phase_09_Core: Registry audit, code compliance verification, 18-point DoD checklist
+      - Phase_09_Exit: Archive deletion, release tag, Go-live handoff documentation
+      - Phase_10: Production hardening (chaos testing, SLOs, security audit)
+      - Phase_11: Go-live and operations handoff
   
   next_steps:
     immediate:
