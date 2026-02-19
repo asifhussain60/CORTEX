@@ -344,7 +344,7 @@ def classify_question(text: str) -> QuestionType:
 
 ---
 
-### ⚠️ Challenge (if applicable)
+### 🔍 Analysis (if applicable)
 
 **Your Approach:** {user's idea}  
 **Potential Issues:**

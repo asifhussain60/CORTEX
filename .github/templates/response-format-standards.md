@@ -34,7 +34,7 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 ## 🎯 USER RESPONSE TEMPLATE — GOLDEN FORMAT (SSOT)
 
 **Authority:** CORE-050 User Response Format Standard
-**Version:** 3.0 | **Updated:** 2026-02-19
+**Version:** 4.0 | **Updated:** 2026-02-19
 **Scope:** ALL non-autonomous responses in VS Code GitHub Copilot Chat
 **Rule:** This is the ONLY user response template. All other files MUST pointer-reference this section — never duplicate.
 **Rendering:** ALL feedback inline in Copilot Chat. NEVER create summary, report, or other .md/.txt files (CORE-002).
@@ -55,13 +55,13 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 Every non-autonomous response MUST follow this H2 structure:
 
 ```markdown
-## 📋 What Was Asked
+## 📋 Summary
 
 {1-2 sentences. State the request and the bottom-line answer immediately.}
 
 ---
 
-## ⚠️ Challenge
+## 🔍 Analysis
 
 {Present the core finding in a formatted panel. Include engineering analysis,
 risk assessment, or trade-off summary. Use comparison tables for alternatives.}
@@ -115,17 +115,19 @@ risk assessment, or trade-off summary. Use comparison tables for alternatives.}
 - {Deferred optimization}
 - {Future enhancement}
 
-> **Ready?** Type `proceed` to execute, or reply with modifications.
+> **Confidence:** {High · Medium · Low} · Based on {evidence summary}
+
+> **Action required:** Type `proceed` to execute, or reply with modifications.
 ```
 
 ### Section Rules
 
 | Section | Required | Max Length | Key Rule |
 |---------|----------|-----------|----------|
-| **What Was Asked** | ✅ Always | 2 sentences | Answer first, context second |
-| **Challenge** | ✅ Always | 200 words | Tables for findings + alternatives |
+| **Summary** | ✅ Always | 2 sentences | Answer first, context second |
+| **Analysis** | ✅ Always | 200 words | Tables for findings + alternatives |
 | **Recommendation** | ✅ Always | 150 words | ONE primary recommendation, numbered steps |
-| **Benefits & Risks** | ✅ Always | 1 table | 4-column comparison (Dimension/Benefit/Risk/Mitigation) |
+| **Benefits & Risks** | 🟡 Medium+ | 1 table | 4-column comparison — skip for simple requests |
 | **Next Steps** | ✅ Always | 100 words | Split: Immediate (numbered) + Later (bullets) |
 
 ### H3 Sub-Sections (Optional Depth)
@@ -133,7 +135,7 @@ risk assessment, or trade-off summary. Use comparison tables for alternatives.}
 Each H2 section can contain H3 sub-sections for progressive detail:
 
 ```markdown
-## ⚠️ Challenge
+## 🔍 Analysis
 
 ### Key Findings
 {table or bullets}
@@ -149,9 +151,9 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 
 ### Adaptive Density (MANDATORY)
 
-| Request Complexity | What Was Asked | Challenge | Recommendation | Benefits & Risks | Next Steps |
-|--------------------|---------------|-----------|----------------|-----------------|------------|
-| **Simple** (1-2 files) | 1 sentence | 2-3 bullets | 1 sentence | Skip or 2-row table | 1 action |
+| Request Complexity | Summary | Analysis | Recommendation | Benefits & Risks | Next Steps |
+|--------------------|---------|----------|----------------|-----------------|------------|
+| **Simple** (1-2 files) | 1 sentence | 2-3 bullets | 1 sentence | ⚪ Skip | 1 action |
 | **Medium** (feature) | 2 sentences | Findings table | Numbered steps | 3-row table | 2-3 actions |
 | **Complex** (multi-phase) | 2 sentences + scope | Full analysis + alternatives table | Strategy + steps | Full table + mitigations | Immediate + Later split |
 
@@ -1040,18 +1042,18 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 | **AUDIT** | `🔍 CORTEX AUDIT` | All 5 sections + findings table | Full |
 | **IMPLEMENT** (pre-approval) | `⚡ CORTEX IMPLEMENT` | All 5 sections (challenge gate) | Medium |
 | **IMPLEMENT** (post-approval) | Silent autonomous | Golden autonomous template (§ SILENT AUTONOMOUS MODE) | Progress bars only |
-| **COMPLETION** | Inline summary | What Was Asked + deliverables + metrics | Simple |
+| **COMPLETION** | Inline summary | Summary + deliverables + metrics | Simple |
 
 ### Mode-Specific H3 Extensions
 
-**DIGEST mode** — add under Challenge:
+**DIGEST mode** — add under Analysis:
 - `### Concern Resolution` — table mapping concerns → solutions → status
 
 **DESIGN/PLAN mode** — add under Recommendation:
 - `### Phase Breakdown` — numbered phases with scope + duration
 - `### Metrics Forecast` — expected tests, coverage, effort
 
-**AUDIT mode** — add under Challenge:
+**AUDIT mode** — add under Analysis:
 - `### Priority Breakdown` — P0/P1/P2/P3 findings with file:line references
 
 **QUERY mode** — keep simple:
@@ -1062,8 +1064,8 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 **Trigger:** Review, verification, assessment, synthesis, "does this address my concerns?"
 
 Uses the same 5-section structure but with executive-memo density:
-- **What Was Asked:** 1 sentence
-- **Challenge → Key Findings:** 3-6 bullets max, single-sentence preferred
+- **Summary:** 1 sentence
+- **Analysis → Key Findings:** 3-6 bullets max, single-sentence preferred
 - **Recommendation:** Primary + one alternative (brief comparison)
 - **Benefits & Risks:** DoD confidence score
 - **Next Steps:** Execute now vs plan for later
@@ -1073,8 +1075,8 @@ Uses the same 5-section structure but with executive-memo density:
 ### PRE-FLIGHT Mode
 
 Uses 5-section format (simple density):
-- **What Was Asked:** "Environment readiness check"
-- **Challenge:** Status table (Ready ✅ / Setup Required ❌)
+- **Summary:** "Environment readiness check"
+- **Analysis:** Status table (Ready ✅ / Setup Required ❌)
 - **Recommendation:** Auto-fix or manual steps
 - **Benefits & Risks:** Skip (simple request)
 - **Next Steps:** 1-3 numbered fix options
@@ -1139,7 +1141,7 @@ This involves {scope}-level changes with {impact} impact.
 | **Creating .md/.txt report files** | **CORE-002 violation** | **All output inline in Copilot Chat** |
 | **Tool usage narration** | **Wastes read time ("I searched...", "I read...")** | **Present findings directly** |
 | **>60 second read time** | **Not executive-ready** | **Answer first, tables for data, ≤5 sections** |
-| **Answering without mirroring question** | **User unsure if concern was understood** | **"What Was Asked" mirrors user's words** |
+| **Answering without mirroring question** | **User unsure if concern was understood** | **"Summary" mirrors user's words** |
 | **Generic phase names (PHASE-1)** | **No strategic meaning, harder to track** | **Meaningful names (Foundation & Bootstrap)** |
 
 ---

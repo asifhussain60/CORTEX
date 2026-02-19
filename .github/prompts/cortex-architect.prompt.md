@@ -184,17 +184,17 @@ All non-autonomous responses use the **5-Section Golden Format** (§ USER RESPON
 
 ---
 
-## 📋 What Was Asked
+## 📋 Summary
 {1-2 sentences — answer first}
 
-## ⚠️ Challenge
-{Analysis, findings table, alternatives}
+## 🔍 Analysis
+{Findings, trade-offs, alternatives table}
 
 ## 💡 Recommendation
 {ONE primary recommendation, numbered steps}
 
 ## ⚖️ Benefits & Risks
-{4-column comparison table}
+{4-column comparison table — skip for simple requests}
 
 ## 🎯 Next Steps
 {Immediate numbered + Later bullets}
