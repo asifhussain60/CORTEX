@@ -1,0 +1,151 @@
+name: Master Plan Presentation Layer
+
+# Extract and display presentation layer from master plan YAML
+# Useful for status dashboards, CI/CD displays, executive reports
+
+on:
+  push:
+    paths:
+      - 'cortex-registry/planning/cortex-refactor-master.yaml'
+    branches:
+      - CORTEX-GPT
+  workflow_dispatch:
+
+jobs:
+  extract-presentation:
+    runs-on: ubuntu-latest
+    name: Extract 5-section presentation from master plan
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
+      
+      - name: Extract presentation layer
+        id: extract
+        run: python3 scripts/extract-master-plan-presentation.py
+      
+      - name: Generate markdown report
+        run: python3 scripts/generate-master-plan-report.py
+      
+      - name: Upload presentation artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: master-plan-presentation
+          path: |
+            master-plan-presentation.json
+            master-plan-report.md
+          retention-days: 30
+      
+      - name: Comment on PR (if applicable)
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('master-plan-report.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+
+  validate-presentation:
+    runs-on: ubuntu-latest
+    name: Validate presentation layer schema
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema
+      
+      - name: Validate presentation schema
+        run: |
+          python3 << 'EOF'
+          import yaml
+          from pathlib import Path
+          
+          # Load master plan
+          with open("cortex-registry/planning/cortex-refactor-master.yaml") as f:
+              master_plan = yaml.safe_load(f)
+          
+          # Validate presentation section exists
+          assert "presentation" in master_plan, "Missing 'presentation' section"
+          
+          presentation = master_plan["presentation"]
+          
+          # Validate required fields
+          required_fields = ["summary", "analysis", "recommendation", "next_steps"]
+          for field in required_fields:
+              assert field in presentation, f"Missing required field: {field}"
+          
+          # Validate analysis subsections
+          analysis_required = ["current_state", "baseline_vs_targets", "key_findings", "blockers_and_risks"]
+          analysis = presentation["analysis"]
+          for field in analysis_required:
+              assert field in analysis, f"Missing analysis field: {field}"
+          
+          # Validate recommendation subsections
+          rec_required = ["primary_strategy", "execution_path"]
+          recommendation = presentation["recommendation"]
+          for field in rec_required:
+              assert field in recommendation, f"Missing recommendation field: {field}"
+          
+          # Validate next_steps subsections
+          next_steps = presentation["next_steps"]
+          assert "immediate" in next_steps, "Missing next_steps.immediate"
+          assert "later" in next_steps, "Missing next_steps.later"
+          assert isinstance(next_steps["immediate"], list), "next_steps.immediate must be a list"
+          assert isinstance(next_steps["later"], list), "next_steps.later must be a list"
+          
+          print("✅ Presentation schema valid")
+          print(f"✅ Summary length: {len(presentation['summary'].split())} words")
+          print(f"✅ Analysis sections: {len(analysis)} subsections")
+          print(f"✅ Next steps: {len(next_steps['immediate'])} immediate + {len(next_steps['later'])} later")
+          
+          EOF
+      
+      - name: Check YAML syntax
+        run: |
+          python3 -c "import yaml; yaml.safe_load(open('cortex-registry/planning/cortex-refactor-master.yaml')); print('✅ YAML syntax valid')"
+
+  notify-status:
+    runs-on: ubuntu-latest
+    name: Notify stakeholders of status update
+    needs: [extract-presentation, validate-presentation]
+    if: always()
+    
+    steps:
+      - name: Download presentation
+        uses: actions/download-artifact@v3
+        with:
+          name: master-plan-presentation
+      
+      - name: Display status
+        run: |
+          echo "## 📊 Master Plan Presentation Updated"
+          echo ""
+          echo "Artifacts generated:"
+          echo "- master-plan-presentation.json"
+          echo "- master-plan-report.md"
+          echo ""
+          echo "Validation: ${{ needs.validate-presentation.result }}"
+          echo "Extraction: ${{ needs.extract-presentation.result }}"
