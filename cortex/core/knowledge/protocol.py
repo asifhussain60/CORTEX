@@ -26,8 +26,8 @@ Design Benefits:
 
 Example Usage:
     from cortex.core.knowledge import KnowledgeProvider
-    from cortex.brain.core.knowledge import KnowledgeRepository
-    from cortex.brain.domain_brain import BusinessKnowledgeRepository
+    from cortex.core.knowledge import KnowledgeRepository
+    from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
 
     def process_with_provider(provider: KnowledgeProvider) -> None:
         \"\"\"Works with any knowledge provider.\"\"\"
@@ -317,11 +317,11 @@ def is_knowledge_provider(obj: Any) -> bool:
         True if object implements KnowledgeProvider protocol, False otherwise.
 
     Examples:
-        >>> from cortex.brain.core.knowledge import KnowledgeRepository
+        >>> from cortex.core.knowledge import KnowledgeRepository
         >>> repo = KnowledgeRepository()
         >>> assert is_knowledge_provider(repo)
 
-        >>> from cortex.brain.domain_brain import BusinessKnowledgeRepository
+        >>> from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
         >>> business_repo = BusinessKnowledgeRepository()
         >>> assert is_knowledge_provider(business_repo)
 

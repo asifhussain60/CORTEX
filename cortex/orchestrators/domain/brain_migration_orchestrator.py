@@ -260,18 +260,18 @@ class BrainMigrationOrchestrator:
         """
         # Import rewrite mapping
         rewrites = {
-            "from cortex.brain.core": "from cortex.core",
-            "import cortex.brain.core": "import cortex.core",
-            "from cortex.brain.governance": "from cortex.governance",
-            "import cortex.brain.governance": "import cortex.governance",
-            "from cortex.brain.lens": "from cortex.intelligence.lens",
-            "import cortex.brain.lens": "import cortex.intelligence.lens",
-            "from cortex.brain.domain_brain": "from cortex.intelligence.domain_brain",
-            "import cortex.brain.domain_brain": "import cortex.intelligence.domain_brain",
-            "from cortex.brain.domain_orchestrators": "from cortex.orchestrators.domain",
-            "import cortex.brain.domain_orchestrators": "import cortex.orchestrators.domain",
-            "from cortex.brain.observability": "from cortex.observability",
-            "import cortex.brain.observability": "import cortex.observability",
+            "from cortex.core": "from cortex.core",
+            "import cortex.core": "import cortex.core",
+            "from cortex.governance": "from cortex.governance",
+            "import cortex.governance": "import cortex.governance",
+            "from cortex.intelligence.lens": "from cortex.intelligence.lens",
+            "import cortex.intelligence.lens": "import cortex.intelligence.lens",
+            "from cortex.intelligence.domain_brain": "from cortex.intelligence.domain_brain",
+            "import cortex.intelligence.domain_brain": "import cortex.intelligence.domain_brain",
+            "from cortex.orchestrators.domain": "from cortex.orchestrators.domain",
+            "import cortex.orchestrators.domain": "import cortex.orchestrators.domain",
+            "from cortex.observability": "from cortex.observability",
+            "import cortex.observability": "import cortex.observability",
         }
         
         # Find all Python files in target directories

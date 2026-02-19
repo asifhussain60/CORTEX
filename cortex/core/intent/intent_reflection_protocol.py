@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.intent.comprehension_yaml import (
+from cortex.core.intent.comprehension_yaml import (
     CanonicalIntentComposer,
     ComprehensionYAML,
 )

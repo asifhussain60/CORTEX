@@ -3,7 +3,7 @@
 Defines protocols and abstract interfaces for orchestrators, executors,
 and core framework components.
 
-CORE-035: Re-exports canonical IOrchestrator from cortex.brain.core.interfaces.i_orchestrator
+CORE-035: Re-exports canonical IOrchestrator from cortex.core.interfaces.i_orchestrator
 
 Author: CORTEX Framework
 """
@@ -71,10 +71,10 @@ class ExecutionContext:
 # CORE-035: Single Canonical Implementation
 # Re-export IOrchestrator from canonical location
 # ============================================================================
-from cortex.brain.core.interfaces.i_orchestrator import (  # noqa: F401, E501
+from cortex.core.interfaces.i_orchestrator import (  # noqa: F401, E501
     IOrchestrator,
 )
-from cortex.brain.core.interfaces.i_orchestrator import (
+from cortex.core.interfaces.i_orchestrator import (
     OperationMode as OrchestratorOperationMode,
 )
 

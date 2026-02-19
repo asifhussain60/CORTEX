@@ -54,7 +54,7 @@ class PhaseState:
     COMPLETE = "COMPLETE"
 
 
-from cortex.brain.core.result import Result
+from cortex.core.result import Result
 
 
 class StateMachine:

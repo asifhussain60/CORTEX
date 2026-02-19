@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import PhaseStatus, IntentType
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 
 
 @dataclass

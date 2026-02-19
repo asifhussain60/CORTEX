@@ -16,8 +16,8 @@ from concurrent.futures import ThreadPoolExecutor
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
-from cortex.brain.core.result import Result
+from cortex.core.interfaces.i_orchestrator import IOrchestrator
+from cortex.core.result import Result
 
 
 # ---------------------------------------------------------------------------
@@ -118,7 +118,7 @@ class EnhancedPlanningOrchestrator(IOrchestrator):
         Returns:
             OperationMode.PLANNING
         """
-        from cortex.brain.core.interfaces.i_orchestrator import OperationMode
+        from cortex.core.interfaces.i_orchestrator import OperationMode
         return OperationMode.PLANNING
 
     def get_mcp_tools(self) -> Result:

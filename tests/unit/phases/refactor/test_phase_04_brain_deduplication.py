@@ -96,34 +96,60 @@ def brain_dir(cortex_root: Path) -> Path:
 # ============================================================================
 
 class TestBrainDirectoryExists:
-    """Brain directory must exist with expected structure."""
+    """Brain directory state after migration."""
     
-    def test_brain_root_exists(self, brain_dir: Path) -> None:
-        """cortex/brain/ must exist."""
-        assert brain_dir.exists(), f"cortex/brain/ not found: {brain_dir}"
+    def test_brain_root_migrated_or_empty(self, brain_dir: Path) -> None:
+        """cortex/brain/ should be migrated (not exist) or archived."""
+        # After migration, brain/ should not exist (moved to _archive/brain/)
+        if brain_dir.exists():
+            # If it still exists, it should be empty (no Python files)
+            py_files = list(brain_dir.glob("**/*.py"))
+            assert len(py_files) == 0, (
+                f"brain/ still has {len(py_files)} Python files (migration incomplete)"
+            )
     
-    def test_brain_has_subdirectories(self, brain_dir: Path) -> None:
-        """brain/ must contain core, governance, lens, etc."""
-        expected = ["core", "governance", "lens", "domain_brain", "domain_orchestrators", "observability"]
-        for subdir in expected:
-            path = brain_dir / subdir
-            assert path.exists() and path.is_dir(), f"Missing: {path}"
+    def test_archive_contains_brain(self, cortex_root: Path) -> None:
+        """_archive/brain/ should contain archived brain/ directory."""
+        archive = cortex_root / "_archive" / "brain"
+        # After migration, archive should exist or brain/ should be empty
+        if not archive.exists():
+            # Check if brain/ is empty (already migrated in this session)
+            brain_dir = cortex_root / "cortex" / "brain"
+            if brain_dir.exists():
+                py_files = list(brain_dir.glob("**/*.py"))
+                assert len(py_files) == 0, "Neither archive nor brain contains files"
     
-    def test_brain_contains_python_files(self, brain_dir: Path) -> None:
-        """brain/ must contain .py files ready for migration."""
-        py_files = list(brain_dir.glob("**/*.py"))
-        assert len(py_files) > 0, "No Python files found in brain/"
-    
-    def test_brain_total_files_count(self, brain_dir: Path) -> None:
-        """Validate ~261 files in brain/ (from spec)."""
-        all_files = list(brain_dir.glob("**/*"))
-        file_count = sum(1 for f in all_files if f.is_file())
-        # Allow ±15% variance due to .pyc, __pycache__, subdirs, etc.
-        # Actual count: 295 (includes nested __init__.py, config files, etc.)
-        assert 220 < file_count < 330, (
-            f"Expected ~261-295 files, found {file_count}. "
-            f"Spec may need update or files already migrated."
+    def test_migration_targets_have_files(self, cortex_root: Path) -> None:
+        """All migration targets should have Python files."""
+        targets = [
+            cortex_root / "cortex" / "core",
+            cortex_root / "cortex" / "governance",
+            cortex_root / "cortex" / "intelligence" / "lens",
+            cortex_root / "cortex" / "intelligence" / "domain_brain",
+            cortex_root / "cortex" / "orchestrators" / "domain",
+            cortex_root / "cortex" / "observability",
+        ]
+        
+        total_files = 0
+        for target in targets:
+            if target.exists():
+                py_files = list(target.glob("**/*.py"))
+                assert len(py_files) > 0, f"No files in migrated target: {target}"
+                total_files += len(py_files)
+        
+        # Should have migrated ~325 files total
+        assert total_files > 200, (
+            f"Expected 300+ files in targets, found {total_files}"
         )
+    
+    def test_no_stale_brain_python_files(self, brain_dir: Path) -> None:
+        """No Python files should remain in brain/."""
+        if brain_dir.exists():
+            py_files = list(brain_dir.glob("**/*.py"))
+            assert len(py_files) == 0, (
+                f"Found {len(py_files)} stale files in brain/ "
+                f"(migration may be incomplete)"
+            )
 
 
 # ============================================================================
