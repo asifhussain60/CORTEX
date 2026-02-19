@@ -96,8 +96,10 @@ ARCHITECT-*-SUMMARY.md
 
 # _workspaces/ is now tracked (phase-51 — chat logs, approved views, workspace docs)
 
-# Testing
+# Testing & Type Checking (Ephemeral Caches - Auto-Generated)
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 .coverage
 htmlcov/
 .tox/
