@@ -1,18 +1,18 @@
 # ==============================================================================
-# PHASE 07 — FINAL VERIFICATION, REFACTOR & ARCHIVE DELETION
+# PHASE 09 — FINAL VERIFICATION, REFACTOR & ARCHIVE DELETION
 # ==============================================================================
 # Purpose: Full regression validation, final refactor pass, delete _archive/
 # Gate: 100% capability manifest green, full test suite green, archive deleted
 # ==============================================================================
 
 phase:
-  id: "phase-07"
+  id: "phase-09"
   name: "Final Verification & Archive Deletion"
   status: "pending"
   priority: "P0"
   estimated_effort: "5-7 days"
   risk: "medium"
-  depends_on: ["phase-06"]
+  depends_on: ["phase-08"]
   description: |
     The final phase ensures ZERO regression before permanently deleting the
     _archive/ directory. This phase runs the most comprehensive validation
@@ -144,7 +144,7 @@ phase:
       name: "MCP Tool E2E Verification"
       description: |
         Each CONSOLIDATED MCP tool invoked with realistic parameters.
-        Post-consolidation: ~20 tools (not 34+). Verify zero capability loss.
+        Post-consolidation: ~22 tools (not 34+). Verify zero capability loss.
       tools:
         - tool: "cortex_validate_compliance"
           test: "Validate cortex/core/ against CORE rules"
@@ -202,6 +202,103 @@ phase:
           - "cortex_audit_db fixture provides clean in-memory db"
           - "teardown asserts no leaked connections"
           - "Golden tests validate audit trail, not just code output"
+      blocking: true
+
+    # --------------------------------------------------------------------------
+    # V7: SDLC Coverage — All 13 SDLC Phases Verified
+    # --------------------------------------------------------------------------
+    - id: "V7"
+      name: "SDLC Completeness Verification"
+      description: |
+        Verify CORTEX is a unified brain across ALL 13 SDLC phases.
+        Every phase must have: an active orchestrator + MCP surface + workflow template.
+      checks:
+        - phase: "SDLC-001 Plan"
+          orchestrator: "PlanningOrchestrator"
+          mcp: "cortex_workflow"
+          template: "lifecycle/planning-workflow.yaml"
+        - phase: "SDLC-002 Design & Architecture"
+          orchestrator: "DesignOrchestrator"
+          mcp: "cortex_onboard_repository (LENS)"
+          template: "lifecycle/design-analysis.yaml"
+        - phase: "SDLC-003 Code (TDD)"
+          orchestrator: "TDDOrchestrator + RefactoringOrchestrator"
+          mcp: "cortex_refactor"
+          template: "tdd/tdd-feature-implementation.yaml"
+        - phase: "SDLC-004 Quality"
+          orchestrator: "UnifiedQualityOrchestrator + SOLIDOrchestrator"
+          mcp: "cortex_audit (analyze)"
+          template: "quality/quality-code-uplift.yaml"
+        - phase: "SDLC-005 Security"
+          orchestrator: "SecurityOrchestrator + SecurityVulnerabilityOrchestrator"
+          mcp: "cortex_validate_compliance"
+          template: "security/security-compliance-audit.yaml"
+        - phase: "SDLC-006 Review"
+          orchestrator: "ReviewOrchestrator + HolisticValidationOrchestrator"
+          mcp: "cortex_audit (validate)"
+          template: "quality/code-review.yaml"
+        - phase: "SDLC-007 CI/CD"
+          orchestrator: "CiCdOrchestrator"
+          mcp: "cortex_workflow"
+          template: "lifecycle/ci-cd-pipeline.yaml"
+        - phase: "SDLC-008 Documentation"
+          orchestrator: "DesignOrchestrator + CortexDocsOrchestrator"
+          mcp: "cortex_onboard_repository"
+          template: "lifecycle/design-analysis.yaml"
+        - phase: "SDLC-009 Git"
+          orchestrator: "GitOrchestrator + SanitizationOrchestrator"
+          mcp: "cortex_git_push"
+          template: "lifecycle/git-operations.yaml"
+        - phase: "SDLC-010 Deploy"
+          orchestrator: "CiCdOrchestrator + RollbackOrchestrator"
+          mcp: "cortex_workflow"
+          template: "lifecycle/ci-cd-pipeline.yaml"
+        - phase: "SDLC-011 Monitor"
+          orchestrator: "HealthOrchestrator + ObservabilityOrchestrator"
+          mcp: "cortex_health + cortex_dashboard"
+          template: "maintenance/health-vacuum-unified-pipeline.yaml"
+        - phase: "SDLC-012 Maintain"
+          orchestrator: "VacuumOrchestrator + RefactoringOrchestrator"
+          mcp: "cortex_health (vacuum) + cortex_refactor"
+          template: "maintenance/cleanup-deduplication.yaml"
+        - phase: "SDLC-013 Onboard"
+          orchestrator: "OnboardingOrchestrator"
+          mcp: "cortex_onboard_repository + cortex_onboard_infrastructure"
+          template: "lifecycle/onboarding-repo-setup.yaml"
+      blocking: true
+      total_sdlc_phases: 13
+      sdlc_gate: "All 13 SDLC phases verified before archive deletion"
+
+    # V8: Governance Alignment — All Rules Valid Post-Refactor
+    # --------------------------------------------------------------------------
+    - id: "V8"
+      name: "Governance Alignment Verification"
+      description: |
+        Verify all governance rules from Phase 02 are correctly implemented:
+        - All 39 Tier 0 rules valid (no stale references)
+        - GovernanceCrystal loads all 3 tiers within SLA (<50ms)
+        - No duplicate rule files exist
+        - No rules reference cortex_intelligence/ or cortex_lens/
+        - AC-PERMANENT-FIX-* IDs fully normalized to CORE-*
+        - CORE-039 absorbed into CORE-002 (no separate file)
+        - 6 new rules (CORE-058 to CORE-063) enforced
+        - CCL GovernanceCrystal golden test passes
+      checks:
+        - check: "Single skull-rules.yaml"
+          command: "find cortex-registry/ -name 'skull-rules.yaml' | wc -l"
+          expected: 1
+        - check: "No stale package references"
+          command: "grep -r 'cortex_intelligence\\|cortex_lens' cortex-registry/core/tier0-skull/skull-rules.yaml | wc -l"
+          expected: 0
+        - check: "No AC-PERMANENT-FIX IDs"
+          command: "grep 'AC-PERMANENT-FIX' cortex-registry/core/tier0-skull/skull-rules.yaml | wc -l"
+          expected: 0
+        - check: "GovernanceCrystal golden test"
+          command: "pytest tests/golden/governance/test_governance_crystal.py -v"
+          expected: "all pass"
+        - check: "Rule count"
+          command: "grep -c 'rule_id:' cortex-registry/core/tier0-skull/skull-rules.yaml"
+          expected: 39
       blocking: true
 
   # ============================================================================
@@ -278,7 +375,7 @@ phase:
     - id: "FR8"
       name: "MCP Tool Consolidation Verification"
       description: |
-        Verify MCP tools consolidated from 34+ to ~20:
+        Verify MCP tools consolidated from 34+ to ~22:
         1. No toolkit_* prefixed tools in registry
         2. No _v3 suffixed tools
         3. cortex_health handles scan + vacuum + diagnose + cleanup + db_maintenance
@@ -334,9 +431,9 @@ phase:
       blocking: true
 
     - step: 5
-      name: "V5 — MCP Tool E2E Verification (Consolidated ~20 tools)"
+      name: "V5 — MCP Tool E2E Verification (Consolidated ~22 tools)"
       description: "Invoke each consolidated MCP tool — zero capability loss"
-      expected: "All ~20 tools respond without error, all modes work"
+      expected: "All ~22 tools respond without error, all modes work"
       blocking: true
 
     - step: "5A"
@@ -371,7 +468,7 @@ phase:
 
     - step: 10
       name: "FR5 — Compatibility Shim Removal"
-      description: "Remove any backward-compat shims from Phase 01 + MCP aliases"
+      description: "Remove any backward-compat shims from Phase 03 + MCP aliases"
       command: "grep -r 'compatibility shim\\|backward compat\\|DEPRECATED' cortex/ | wc -l"
       expected: "0 — all shims removed"
 
@@ -391,14 +488,14 @@ phase:
 
     - step: "11B"
       name: "FR8 — MCP Tool Consolidation Verification"
-      description: "Verify ~20 tools, zero toolkit_* prefix, zero _v3 suffix"
+      description: "Verify ~22 tools, zero toolkit_* prefix, zero _v3 suffix"
       command: "python -c \"from cortex.mcp.tools import ALL_TOOLS; print(f'Tool count: {len(ALL_TOOLS)}')\""
       expected: "Tool count: ~20"
 
     - step: 12
       name: "Pre-deletion backup commit"
-      command: "git add -A && git commit -m 'refactor(phase-07): pre-archive-deletion checkpoint'"
-      tag: "gpt-refactor-pre-archive-deletion"
+      command: "git add -A && git commit -m 'refactor(phase-09): pre-archive-deletion checkpoint'"
+      tag: "cortex-refactor-pre-archive-deletion"
 
     - step: 13
       name: "Delete _archive/ permanently"
@@ -426,7 +523,7 @@ phase:
 
     - step: 17
       name: "Final commit"
-      command: "git add -A && git commit -m 'refactor(phase-07): final verification complete — CORTEX cohesive brain achieved'"
+      command: "git add -A && git commit -m 'refactor(phase-09): final verification complete — CORTEX cohesive brain achieved'"
 
     - step: 18
       name: "Tag release"
@@ -482,7 +579,7 @@ phase:
     - "✅ All tests pass (unit, integration, golden, e2e, regression)"
     - "✅ Coverage ≥90% across active code"
     - "✅ All ~20 consolidated MCP tools respond correctly (zero capability loss)"
-    - "✅ All ~40 active orchestrators execute through workflow templates"
+    - "✅ All ~44 active orchestrators execute through workflow templates"
     - "✅ All workflow templates have setup/teardown lifecycle"
     - "✅ Zero imports from archived packages"
     - "✅ Zero dead code (vulture clean)"
@@ -502,8 +599,11 @@ phase:
     - "✅ SQLite WAL mode + auto-cleanup + bloat prevention operational"
     - "✅ Golden tests validate audit trail integrity with setup/teardown"
     - "✅ Health + Vacuum include SQLite db maintenance (VACUUM, WAL checkpoint)"
-    - "✅ MCP consolidated from 34+ to ~20 tools (no toolkit sprawl)"
+    - "✅ MCP consolidated from 34+ to ~22 tools (no toolkit sprawl)"
     - "✅ No toolkit_* prefixed MCP tools remain"
+    - "✅ SDLC coverage complete — all 13 SDLC phases have orchestrator + MCP surface"
+    - "✅ CiCdOrchestrator operational — pipeline analysis, generation, governance"
+    - "✅ DesignOrchestrator operational — ADRs, threat models, design reviews"
 
   # ============================================================================
   # EXIT GATE
@@ -518,7 +618,7 @@ phase:
     sqlite_consolidated: true
     mcp_consolidated: true
     description: |
-      Phase 07 is complete when:
+      Phase 09 is complete when:
       1. ALL verification stages V1-V6 pass
       2. ALL refactor passes FR1-FR8 complete
       3. _archive/ directory deleted
@@ -528,3 +628,114 @@ phase:
       7. SQLite: 3 consolidated databases, zero scattered, zero raw connections
       8. MCP: ~20 consolidated tools, zero toolkit sprawl, zero capability loss
       9. All CORTEX activity intelligently logged with auto-cleanup
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This stage runs AFTER all verification stages (V1–V6) and refactor
+  # passes (FR1–FR8) complete. It loops until every check passes clean.
+  # Once clean, CORTEX autonomously begins Phase 10 without user intervention.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-09"
+    phase: "phase-09"
+    next_phase: "phase-10"
+    next_phase_spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-10-production-readiness.yaml"
+    max_iterations: 10
+    iteration_timeout_minutes: 120
+
+    checks:
+      - id: "VL-09-C1"
+        name: "Capability manifest 100% green (all items pass)"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0, 100% items green"
+        on_fail: "Fix any red items — all MCP tools, orchestrators, governance rules must verify"
+
+      - id: "VL-09-C2"
+        name: "Full test suite — unit + integration + golden + e2e + regression + contracts"
+        command: "pytest tests/ -v --tb=short -q --ignore=tests/performance --ignore=tests/chaos"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix all test failures — this is a blocking gate, zero failures required"
+
+      - id: "VL-09-C3"
+        name: "Coverage ≥ 90%"
+        command: "pytest tests/ --cov=cortex --cov-report=term-missing -q | tail -3"
+        pass_condition: "coverage ≥ 90%"
+        on_fail: "Add tests to meet coverage — focus on uncovered orchestrator paths"
+
+      - id: "VL-09-C4"
+        name: "Zero imports from archived packages"
+        command: "grep -r 'from cortex_intelligence\\|from cortex_lens\\|from cortex\\.brain\\|from _archive' cortex/ | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Fix all remaining stale imports"
+
+      - id: "VL-09-C5"
+        name: "_archive/ directory deleted"
+        command: "test ! -d _archive/ && echo 'deleted' || echo 'STILL EXISTS'"
+        pass_condition: "prints deleted"
+        on_fail: "Delete _archive/ only after C1–C4 pass: rm -rf _archive/"
+
+      - id: "VL-09-C6"
+        name: "Clean clone test passes"
+        command: "cd /tmp && rm -rf cortex-clone-test && git clone file:///Users/asifhussain/PROJECTS/CORTEX cortex-clone-test && cd cortex-clone-test && python -c 'import cortex; print(\"clean clone OK\")' && rm -rf /tmp/cortex-clone-test"
+        pass_condition: "prints clean clone OK"
+        on_fail: "Fix any setup.py / pyproject.toml issues that prevent clean install"
+
+      - id: "VL-09-C7"
+        name: "SQLite consolidated — 3 DBs only, WAL mode, zero scattered"
+        command: "python -c \"from cortex.infrastructure.audit_db import CortexAuditDB; db=CortexAuditDB(); r=db.health_check(); assert r.get('wal_mode'), 'WAL not enabled'; assert r.get('db_count',0)<=3,'Too many DBs'; print('SQLite OK')\""
+        pass_condition: "prints SQLite OK"
+        on_fail: "Consolidate remaining SQLite databases, enable WAL mode on all"
+
+      - id: "VL-09-C8"
+        name: "MCP consolidated — ≤ 22 tools, zero toolkit_* prefix"
+        command: "python -c \"from cortex.mcp import list_tools; tools=list_tools(); names=[t.get('name','') for t in tools]; toolkit=[n for n in names if 'toolkit' in n.lower()]; assert not toolkit,'toolkit tools remain: '+str(toolkit); assert len(tools)<=24,'Too many: '+str(len(tools)); print(len(tools),'tools OK')\""
+        pass_condition: "prints N tools OK where N ≤ 24"
+        on_fail: "Complete MCP tool consolidation — merge remaining toolkit_* tools"
+
+      - id: "VL-09-C9"
+        name: "Governance audit clean — zero P0/P1 violations"
+        command: "python -m cortex.governance.audit --level P1 --path cortex/ --exit-nonzero"
+        pass_condition: "exit code 0"
+        on_fail: "Fix all P0 and P1 governance violations before proceeding"
+
+      - id: "VL-09-C10"
+        name: "Release tag v2.0.0-cohesive-brain ready"
+        command: "git tag -l 'v2.0.0-cohesive-brain' | wc -l"
+        pass_condition: "output is 1"
+        on_fail: "Create release tag: git tag -a v2.0.0-cohesive-brain -m 'CORTEX 2.0 — Cohesive Brain'"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-09-C1 through VL-09-C10) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to autonomous_advance.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 alert to user (full review needed).
+           e. Otherwise → restart from check C1.
+        4. C5 (_archive/ deletion) executes ONLY after C1–C4 all pass.
+        5. Never skip a check — all 10 must pass in the same iteration.
+
+    autonomous_advance:
+      enabled: true
+      trigger: "All VL-09 checks pass in same iteration"
+      actions:
+        - action: "Update cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-09].status → complete"
+            - "phases[phase-09].progress.completed → ISO timestamp"
+            - "phases[phase-09].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending -= 1"
+            - "metadata.counters.complete += 1"
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-09-final-verification.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+        - action: "Git checkpoint"
+          command: "git add -A && git commit -m 'refactor(phase-09): COMPLETE — 100% verified, v2.0.0-cohesive-brain tagged, advancing to phase-10'"
+        - action: "Load and execute next phase"
+          spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-10-production-readiness.yaml"
+          orchestrator: "CortexMasterPlanOrchestrator"
+          method: "execute_phase(phase_id='phase-10')"

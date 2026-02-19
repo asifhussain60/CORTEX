@@ -1,18 +1,23 @@
 # ============================================================================
 # CORTEX Master Registry Index
 # ============================================================================
-# Version: 9.0
-# Last Updated: 2026-02-19T12:00:00Z
-# Status: 50 PHASES COMPLETE — Phase 51 PLANNED (Health-Vacuum Unified Pipeline)
+# Version: 9.1
+# Last Updated: 2026-02-19T18:00:00Z
+# Status: 51 PHASES COMPLETE — CORTEX Refactor (10-phase plan) APPROVED
 # ============================================================================
 
 metadata:
-  version: "9.0"
-  last_updated: "2026-02-19T12:00:00Z"
+  version: "9.1"
+  last_updated: "2026-02-19T18:00:00Z"
   total_phases: 51
   active: 0
-  completed: 50
-  planned: 1  # Phase 51 — Health-Vacuum Unified Pipeline
+  completed: 51
+  planned: 1  # CORTEX Refactor — 10-phase cohesive brain refactoring plan
+  cortex_master_cleanup:
+    _cortex_master_dissolved: true
+    dissolved_date: "2026-02-19"
+    stale_files_deleted: 5
+    cortex_refactor_promoted_to: "cortex-registry/planning/phases/planned/cortex-refactor/"
   
   synchronization_status:
     phase_files_synced: true
@@ -466,7 +471,7 @@ phase_status:
     
     - id: "phase-47"
       title: "Brain Tier Architecture Validation & Fix"
-      location: "cortex-registry/planning/phases/phase-47-complete.yaml"
+      location: "cortex-registry/planning/phases/completed/phase-47-brain-tier-architecture-fix.yaml"
       completion_date: "2026-02-18"
       duration: "3 hours"
       metrics:
@@ -482,7 +487,7 @@ phase_status:
     
     - id: "phase-46"
       title: "Registry & Intelligence Consolidation (Track B Only)"
-      location: "cortex-registry/planning/phases/phase-46-complete.yaml"
+      location: "cortex-registry/planning/phases/completed/phase-46-registry-intelligence-consolidation.yaml"
       completion_date: "2026-02-18"
       duration: "30 minutes (Track B only - Track A completed in Phase 47)"
       metrics:
@@ -517,7 +522,36 @@ phase_status:
     - phase-91  # (old numbering - consolidated into phase-40)
     - phase-92  # (old numbering - consolidated into phase-40)
 
-  planned: []
+  planned:
+    - id: "cortex-refactor"
+      title: "CORTEX Cohesive Brain Refactor (10 Phases)"
+      location: "cortex-registry/planning/phases/planned/cortex-refactor/"
+      status: "APPROVED"
+      created: "2026-02-19"
+      branch: "CORTEX-GPT"
+      estimated_phases: 10
+      description: |
+        Transform CORTEX from fragmented packages (cortex/, cortex_intelligence/, cortex_lens/)
+        into a single cohesive brain. 10-phase plan covering foundation safety net, governance
+        alignment, package consolidation, brain deduplication, orchestrator rationalization,
+        directory cleanup, test consolidation, registry/docs, final verification, and production
+        readiness. MCP tools consolidated from 34+ to ~22.
+      phases:
+        - "phase-01-foundation.yaml"
+        - "phase-02-governance-alignment.yaml"
+        - "phase-03-package-consolidation.yaml"
+        - "phase-04-brain-deduplication.yaml"
+        - "phase-05-orchestrator-rationalization.yaml"
+        - "phase-06-directory-cleanup.yaml"
+        - "phase-07-test-consolidation.yaml"
+        - "phase-08-registry-docs.yaml"
+        - "phase-09-final-verification.yaml"
+        - "phase-10-production-readiness.yaml"
+      support_files:
+        - "00-overview.yaml"
+        - "capability-manifest.yaml"
+        - "consolidation-matrix.yaml"
+        - "README.md"
 
   completed_late_additions:
     - id: "phase-51"
@@ -533,7 +567,8 @@ phase_status:
       actual_tests: 207
     - id: "phase-48"
       title: "Health-Vacuum Integrity Pipeline"
-      location: "cortex-registry/_cortex-master/phases/completed/phase-48-health-vacuum-pipeline.yaml"
+      location: "cortex-registry/planning/phases/completed/phase-48-health-vacuum-pipeline.yaml"
+      note_location: "Original file removed — superseded by Phase 51. Record preserved in cortex-master.yaml."
       workflow_template: "cortex-registry/workflows/templates/maintenance/health-vacuum-pipeline.yaml"
       status: "COMPLETE"
       completion_date: "2026-02-18"
@@ -550,7 +585,8 @@ phase_status:
 
     - id: "phase-49"
       title: "Golden Test Promotion Pipeline"
-      location: "cortex-registry/_cortex-master/phases/completed/phase-49-golden-test-promotion.yaml"
+      location: "cortex-registry/planning/phases/completed/phase-49-golden-test-promotion.yaml"
+      note_location: "Original file removed — record preserved in cortex-master.yaml."
       workflow_template: "cortex-registry/workflows/templates/governance/golden-test-promotion.yaml"
       manifest: "cortex-registry/governance/test-promotion-manifest.yaml"
       status: "COMPLETE"

@@ -16,15 +16,26 @@
 
 workflow:
   name: master_plan_orchestrator
-  version: "1.0.0"
+  version: "2.0.0"
   description: >
     Standardized end-to-end workflow for creating a new CORTEX phase entry.
-    Ensures: registry is SSOT, sequence is correct, folders are synced,
-    and the phase YAML file contains only execution spec (no status authority).
+    Ensures: registry is SSOT (cortex-refactor-master.yaml), sequence is correct,
+    folders are synced, and the phase YAML file contains only execution spec
+    (no status authority — all status lives in cortex-refactor-master.yaml).
+    Auto-injects: validation_loop as final stage into every new phase execution.
 
   entry_point: CortexMasterPlanOrchestrator
   orchestrator: CortexMasterPlanOrchestrator
   mcp_tool: cortex_master_plan
+  status_authority: "cortex-registry/planning/cortex-refactor-master.yaml"
+
+  # Auto-injection: every phase created gets validation_loop appended as last
+  # stage in master-plan-execution.yaml. This ensures deduplication, debloat,
+  # regression, brittleness, and governance checks are mandatory on every phase.
+  auto_inject:
+    validation_loop: true
+    lens_discovery: true
+    injection_source: "cortex-registry/workflows/templates/lifecycle/master-plan-execution.yaml"
 
   # ---------------------------------------------------------------------------
   # Input Schema
@@ -71,44 +82,49 @@ workflow:
     - name: create_entry
       order: 3
       description: >
-        Write the new phase entry to cortex-master.yaml FIRST.
-        This is the SSOT — status lives ONLY here. The entry must include:
-        id, title, status='planned', sequence, priority, description, file, created.
-        Increment metadata.total_phases and metadata.planned counters.
+        Write the new phase entry to cortex-refactor-master.yaml FIRST (SSOT).
+        Status lives ONLY here. The entry must include: id, title,
+        status='pending', priority, description, spec_file, created.
+        Increment metadata.counters.total_phases and metadata.counters.pending.
+        The phase spec YAML must NOT contain authoritative status fields.
       actor: CortexMasterPlanOrchestrator._save_registry
       precondition: "sync_folders completed without error"
       validation:
-        - "phase_id appears in registry phases list"
-        - "metadata.total_phases incremented by 1"
-        - "metadata.planned incremented by 1"
+        - "phase_id appears in cortex-refactor-master.yaml phases list"
+        - "metadata.counters.total_phases incremented by 1"
+        - "metadata.counters.pending incremented by 1"
+        - "progress block initialized with null values"
       output: phase_id
 
     - name: create_file
       order: 4
       description: >
-        Write the phase YAML file to planned/{phase_id}-{slug}.yaml.
-        File contains: metadata (phase_id, title, sequence, priority, description,
-        status_authority='cortex-master.yaml'), stages (empty list), tests spec,
-        workflow_template reference. File must NOT contain authoritative status.
+        Write the phase spec YAML to planned/cortex-refactor/{phase_id}-{slug}.yaml.
+        File contains ONLY: metadata (phase_id, title, priority, description,
+        status_authority='cortex-refactor-master.yaml'), stages (execution spec),
+        tests spec, workflow_template reference.
+        File must NOT contain any status fields — status is in cortex-refactor-master.yaml.
       actor: CortexMasterPlanOrchestrator.create_phase (file write step)
-      precondition: "create_entry completed — registry updated"
+      precondition: "create_entry completed — cortex-refactor-master.yaml updated"
       validation:
-        - "file exists at planned/{phase_id}-{slug}.yaml"
-        - "file.metadata.status_authority == 'cortex-master.yaml'"
-        - "file name is CORE-028 compliant (snake_case/kebab-case, no spaces)"
+        - "file exists at planned/cortex-refactor/{phase_id}-{slug}.yaml"
+        - "file.metadata.status_authority == 'cortex-refactor-master.yaml'"
+        - "file contains NO status, started, completed, or progress fields"
+        - "file name is CORE-028 compliant (kebab-case, no spaces)"
       output: file_path
 
   # ---------------------------------------------------------------------------
   # Post-Creation Checklist
   # ---------------------------------------------------------------------------
   completion_checklist:
-    - "✅ cortex-master.yaml updated (registry SSOT)"
-    - "✅ Phase file created in planned/"
-    - "✅ Completed phases moved from planned/ to completed/"
+    - "✅ cortex-refactor-master.yaml updated (phase entry added — SSOT)"
+    - "✅ Phase spec YAML created in planned/cortex-refactor/"
+    - "✅ Completed phases moved from planned/ to completed/cortex-refactor/"
     - "✅ Anomalous phase IDs flagged (if any)"
-    - "✅ Sequence is gapless integer (no skips, no anomalies)"
     - "✅ File name is kebab-case (CORE-028)"
-    - "✅ status_authority = cortex-master.yaml in file"
+    - "✅ status_authority = cortex-refactor-master.yaml in spec file"
+    - "✅ Validation loop auto-injected into execution workflow"
+    - "✅ LENS discovery auto-injected as Stage 0 into execution workflow"
 
   # ---------------------------------------------------------------------------
   # Governance
@@ -118,8 +134,10 @@ workflow:
       - "CORE-008: TDD mandatory — tests written before implementation"
       - "CORE-028: File naming snake_case/kebab-case"
       - "CORE-035: Single canonical implementation"
-    status_ssot: "cortex-master.yaml"
+    status_ssot: "cortex-registry/planning/cortex-refactor-master.yaml"
     forbidden:
-      - "Do NOT store authoritative status in phase YAML files"
+      - "Do NOT store authoritative status in phase spec YAML files"
       - "Do NOT use absolute max sequence (ignores anomalies)"
-      - "Do NOT create phase file before registry entry"
+      - "Do NOT create phase file before registry entry in cortex-refactor-master.yaml"
+      - "Do NOT write status fields into phase spec YAML files"
+      - "Do NOT update cortex-master.yaml per-phase — only on full refactor completion"

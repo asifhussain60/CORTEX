@@ -1,18 +1,18 @@
 # ==============================================================================
-# PHASE 06 — REGISTRY & DOCS ALIGNMENT
+# PHASE 08 — REGISTRY & DOCS ALIGNMENT
 # ==============================================================================
 # Purpose: cortex-registry as one-stop YAML shop, cortex-docs as architecture ref
 # Gate: All registry YAMLs valid, docs match code, workflow templates complete
 # ==============================================================================
 
 phase:
-  id: "phase-06"
+  id: "phase-08"
   name: "Registry & Docs Alignment"
   status: "pending"
   priority: "P1"
   estimated_effort: "3-5 days"
   risk: "low"
-  depends_on: ["phase-05"]
+  depends_on: ["phase-07"]
   description: |
     Ensure cortex-registry is the canonical one-stop shop for all YAML data:
     governance rules, workflow templates, company data, knowledge base,
@@ -28,8 +28,8 @@ phase:
     - id: "R1"
       name: "Validate all workflow templates"
       description: |
-        Every active orchestrator from Phase 03 must have a workflow template.
-        All templates must conform to the schema from Phase 00.
+        Every active orchestrator from Phase 05 must have a workflow template.
+        All templates must conform to the schema from Phase 01.
         Templates must have setup/teardown steps.
       validation:
         - "Schema validation against workflow-template-schema.yaml"
@@ -91,12 +91,56 @@ phase:
         - "patterns/command-workflow-step.yaml"
 
     - id: "R6"
-      name: "Validate _cortex-master structure"
+      name: "Validate planning/phases structure"
       description: |
-        _cortex-master/ is the phase management directory. Ensure:
+        planning/phases/ is the phase management directory. Ensure:
         - All completed phases have proper completion records
         - All planned phases are properly indexed
         - cortex-master.yaml is in sync with actual state
+
+    - id: "R6B"
+      name: "Register SDLC brain orchestrators + MCP tools"
+      description: |
+        Wire the two new SDLC brain orchestrators and their MCP tools.
+        These cover the Design (SDLC-002/008) and CI/CD (SDLC-007/010) gaps.
+
+        CiCdOrchestrator:
+          location: cortex/orchestrators/sdlc/ci_cd_orchestrator.py
+          template: cortex-registry/workflows/templates/lifecycle/ci-cd-pipeline.yaml
+          mcp_tool: cortex_cicd
+          modes: analyze | generate | validate | monitor
+          builds_on: cortex/ci_cd/ + cortex/brain/ci_cd/ (already exists)
+
+        DesignOrchestrator:
+          location: cortex/orchestrators/sdlc/design_orchestrator.py
+          template: cortex-registry/workflows/templates/lifecycle/design-analysis.yaml
+          mcp_tool: cortex_document
+          modes: api_docs | readme | architecture_diagram | runbook | adr
+          builds_on: cortex/documentation/ (9 files) + cortex_lens/knowledge_graph/
+
+      tdd_approach:
+        red:
+          - "test_ci_cd_orchestrator_exists"
+          - "test_ci_cd_pipeline_analysis_returns_anti_patterns"
+          - "test_ci_cd_pipeline_generation_from_template"
+          - "test_design_orchestrator_exists"
+          - "test_design_adr_generation_from_lens"
+          - "test_document_mcp_tool_api_docs_mode"
+          - "test_cicd_mcp_tool_analyze_mode"
+        green: "Implement orchestrators + MCP tools"
+        test_files:
+          - "tests/sdlc/test_ci_cd_orchestrator.py"
+          - "tests/sdlc/test_design_orchestrator.py"
+          - "tests/sdlc/test_cortex_cicd_mcp_tool.py"
+          - "tests/sdlc/test_cortex_document_mcp_tool.py"
+      acceptance_criteria:
+        - "CiCdOrchestrator instantiates with lifecycle/ci-cd-pipeline.yaml template"
+        - "DesignOrchestrator instantiates with lifecycle/design-analysis.yaml template"
+        - "cortex_cicd MCP tool registered and responds to operation=analyze"
+        - "cortex_document MCP tool registered and responds to operation=adr"
+        - "Both orchestrators emit audit records to CortexAuditDB"
+        - "All 13 SDLC phases now have active orchestrator + MCP surface"
+        - "All existing tests still pass (zero regression)"
 
     # --------------------------------------------------------------------------
     # R7-R9: COMPANY INFRASTRUCTURE CATALOG (GAP IDENTIFIED 2026-02-19)
@@ -237,7 +281,7 @@ phase:
     - id: "D1"
       name: "Update architecture documentation"
       description: |
-        cortex-docs/ must reflect the new structure from Phases 01-04:
+        cortex-docs/ must reflect the new structure from Phases 03-06:
         - Updated directory tree
         - Updated orchestrator catalog
         - Updated MCP tool documentation
@@ -433,9 +477,9 @@ phase:
       expected: "PASS"
 
     - step: 11
-      name: "Commit Phase 06"
-      command: "git add -A && git commit -m 'refactor(phase-06): registry and docs alignment — one-stop YAML shop'"
-      tag: "gpt-refactor-phase-06"
+      name: "Commit Phase 08"
+      command: "git add -A && git commit -m 'refactor(phase-08): registry and docs alignment — one-stop YAML shop'"
+      tag: "cortex-refactor-phase-08"
 
   # ============================================================================
   # EXIT GATE
@@ -447,9 +491,12 @@ phase:
     patterns_directory_populated: true
     infrastructure_catalog_created: true
     infrastructure_mcp_tool_registered: true
+    sdlc_orchestrators_registered: true
+    sdlc_mcp_tools_registered: true
+    all_13_sdlc_phases_covered: true
     capability_manifest_check: true
     description: |
-      Phase 06 is complete when:
+      Phase 08 is complete when:
       1. All YAML files parse without errors
       2. All workflow templates conform to schema
       3. All file path references in docs resolve
@@ -458,4 +505,105 @@ phase:
       6. Infrastructure catalog exists (schema + folder structure)
       7. cortex_onboard_infrastructure MCP tool registered and tested
       8. Onboarding orchestrator detects infrastructure hints (non-blocking)
-      9. Capability manifest shows zero regressions
+      9. CiCdOrchestrator + cortex_cicd MCP tool operational (SDLC-007/010)
+      10. DesignOrchestrator + cortex_document MCP tool operational (SDLC-002/008)
+      11. All 13 SDLC phases covered — CORTEX is a unified brain for the full lifecycle
+      12. Capability manifest shows zero regressions
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This stage runs AFTER all deliverables are implemented.
+  # It loops until every exit gate check passes. Once clean, CORTEX
+  # autonomously begins Phase 09 without user intervention.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-08"
+    phase: "phase-08"
+    next_phase: "phase-09"
+    next_phase_spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-09-final-verification.yaml"
+    max_iterations: 10
+    iteration_timeout_minutes: 30
+
+    checks:
+      - id: "VL-08-C1"
+        name: "All YAML files in cortex-registry parse cleanly"
+        command: "python -c \"import yaml,os; errors=[]; [errors.append(f) or None for r,d,files in os.walk('cortex-registry/') for f in files if f.endswith('.yaml') and not [None for _ in [yaml.safe_load(open(os.path.join(r,f)).read())]]]; print('errors:',errors if errors else 'none')\""
+        pass_condition: "prints errors: none"
+        on_fail: "Fix YAML syntax errors in each flagged file"
+
+      - id: "VL-08-C2"
+        name: "All workflow templates validate against schema"
+        command: "python -m cortex.core.workflow_engine --validate-all cortex-registry/workflows/templates/ --schema cortex-registry/workflows/workflow-template-schema.yaml"
+        pass_condition: "exit code 0, all templates valid"
+        on_fail: "Fix templates that fail schema validation — add missing setup/teardown steps"
+
+      - id: "VL-08-C3"
+        name: "Every active orchestrator has a workflow template"
+        command: "python -m cortex.testing.template_coverage_check --quiet"
+        pass_condition: "exit code 0, zero orchestrators missing templates"
+        on_fail: "Create missing templates for flagged orchestrators"
+
+      - id: "VL-08-C4"
+        name: "Patterns directory populated (≥ 9 patterns)"
+        command: "find cortex-registry/patterns/ -name '*.yaml' | wc -l"
+        pass_condition: "output ≥ 9"
+        on_fail: "Create missing enterprise architecture pattern YAMLs"
+
+      - id: "VL-08-C5"
+        name: "Stale YAML references eliminated"
+        command: "grep -r 'cortex/brain/\\|cortex_intelligence/\\|cortex_lens/' cortex-registry/ | grep -v '.gitkeep' | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Update each stale path reference to use new cortex/ canonical paths"
+
+      - id: "VL-08-C6"
+        name: "CiCdOrchestrator MCP tool operational"
+        command: "python -c \"from cortex.mcp import get_tool; t=get_tool('cortex_cicd'); r=t.invoke({'mode':'analyze','pipeline':''}); print('cicd OK')\""
+        pass_condition: "prints cicd OK, no exception"
+        on_fail: "Fix CiCdOrchestrator or cortex_cicd MCP tool registration"
+
+      - id: "VL-08-C7"
+        name: "DesignOrchestrator MCP tool operational"
+        command: "python -c \"from cortex.mcp import get_tool; t=get_tool('cortex_document'); r=t.invoke({'mode':'api_docs','target':'cortex/core/'}); print('design OK')\""
+        pass_condition: "prints design OK, no exception"
+        on_fail: "Fix DesignOrchestrator or cortex_document MCP tool registration"
+
+      - id: "VL-08-C8"
+        name: "Capability manifest regression gate"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0"
+        on_fail: "Fix any regressions introduced during registry/docs alignment"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-08-C1 through VL-08-C8) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to autonomous_advance.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 alert to user.
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all must pass in the same iteration.
+
+    autonomous_advance:
+      enabled: true
+      trigger: "All VL-08 checks pass in same iteration"
+      actions:
+        - action: "Update cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-08].status → complete"
+            - "phases[phase-08].progress.completed → ISO timestamp"
+            - "phases[phase-08].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending -= 1"
+            - "metadata.counters.complete += 1"
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-08-registry-docs.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+        - action: "Git checkpoint"
+          command: "git add -A && git commit -m 'refactor(phase-08): COMPLETE — registry aligned, SDLC brain wired, advancing to phase-09'"
+        - action: "Load and execute next phase"
+          spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-09-final-verification.yaml"
+          orchestrator: "CortexMasterPlanOrchestrator"
+          method: "execute_phase(phase_id='phase-09')"

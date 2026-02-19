@@ -16,51 +16,90 @@
 
 workflow:
   name: master_plan_execution
-  version: "1.0.0"
+  version: "2.0.0"
   description: >
     Autonomous end-to-end execution workflow for a CORTEX phase plan.
     Stops only after completing the entire phase. Each stage triggers the next.
     Tests run in parallel. Refactor + cleanup cycle after each stage.
+    Stage 0: LENS full/incremental scan (prevents duplicate work per chat01.md findings).
+    Stage 9: Validation loop with auto-fix until zero issues, then marks phase complete.
 
   entry_point: CortexMasterPlanOrchestrator
   orchestrator: CortexMasterPlanOrchestrator
   mcp_tool: cortex_master_plan
   execution_mode: "autonomous"
   visual_feedback: "SSOT: .github/templates/cortex-response-templates.md § SILENT AUTONOMOUS MODE"
+  status_authority: "cortex-registry/planning/cortex-refactor-master.yaml"
 
   # ---------------------------------------------------------------------------
   # Input Schema
   # ---------------------------------------------------------------------------
   input:
     required:
-      - phase_id: "Phase ID to execute (e.g. 'phase-50')"
+      - phase_id: "Phase ID to execute (e.g. 'phase-01')"
     optional:
       - dry_run: "If true, validate plan without executing (default: false)"
       - parallel_tests: "If true, run all test tiers in parallel (default: true)"
+      - lens_mode: "full | incremental (default: incremental, forced full on first run)"
 
   # ---------------------------------------------------------------------------
   # Stages
   # ---------------------------------------------------------------------------
   stages:
+    - name: lens_discovery
+      order: 0
+      description: >
+        LENS workspace scan BEFORE any work begins. First execution of the entire
+        refactor plan: full repo scan (never been run before — chat01.md found 9
+        governance dirs, 3 lens dirs, 3 domain_brain dirs without this step).
+        Subsequent phase executions: git-diff incremental scan of changes since
+        last commit. Purpose: maximize existing CORTEX capabilities, prevent
+        duplicate work, surface hidden capabilities Copilot might recreate.
+        Writes results to cortex-refactor-master.yaml lens_scans.history[].
+      actor: LensOrchestrator
+      first_run_detection: "cortex-refactor-master.yaml lens_scans.history is empty"
+      first_run_mode: "full_scan"
+      subsequent_mode: "git_diff_since_last_commit"
+      actions:
+        - "Detect run mode: full (first ever) or incremental (git-diff)"
+        - "Run LENS workspace analysis across entire repo"
+        - "Build capability_map: every existing feature indexed by domain"
+        - "Identify duplication_risks: components at risk of being re-created by this phase"
+        - "Identify feature_gaps: capabilities missing that this phase should build"
+        - "Surface new_since_last_commit: changes in working tree not yet committed"
+        - "Write scan record to cortex-refactor-master.yaml → lens_scans.history[]"
+        - "Update cortex-refactor-master.yaml → phases[phase_id].progress.lens_scan_completed = true"
+      outputs:
+        capability_map: "All existing features indexed by domain and location"
+        duplication_risks: "Components that might be recreated — must be reused instead"
+        feature_gaps: "Missing capabilities to be built in this phase"
+        new_since_last_commit: "All uncommitted changes in workspace"
+      validation:
+        - "lens_scan_completed == true"
+        - "duplication_risks written to cortex-refactor-master.yaml"
+        - "capability_map generated (non-empty for full scan)"
+      on_complete: "proceed_to_stage_1"
+
     - name: gap_analysis
       order: 1
       description: >
-        Load the phase YAML plan. Run CORTEX LENS analysis across the workspace.
-        Identify gaps vs. CORTEX best practices YAMLs. Fix the plan holistically
-        before execution begins. This ensures no mid-execution surprises.
+        Load the phase YAML plan. Cross-reference LENS discovery output to patch
+        any gaps before execution begins. Ensures no mid-execution surprises and
+        no duplication of capabilities already discovered by Stage 0.
       actor: LensAnalysisOrchestrator
       inputs:
-        - phase_file: "planned/{phase_id}-*.yaml"
+        - phase_file: "cortex-registry/planning/phases/planned/cortex-refactor/{phase_id}-*.yaml"
+        - lens_output: "Stage 0 capability_map and duplication_risks"
         - best_practices: "cortex-registry/governance/best-practices/"
       actions:
-        - "Load phase YAML file"
-        - "Run LENS workspace analysis"
-        - "Compare plan stages vs CORTEX governance patterns"
+        - "Load phase spec YAML from cortex-refactor/"
+        - "Cross-reference plan against Stage 0 capability_map — reuse, don't recreate"
+        - "Identify plan gaps vs CORTEX governance patterns"
         - "Identify missing test tiers (golden/unit/integration/regression)"
-        - "Identify missing negative/edge/blind-spot tests"
-        - "Patch plan in-memory (no file write unless gaps found)"
+        - "Patch plan in-memory if gaps found (no file write — status is in cortex-refactor-master.yaml)"
       validation:
         - "plan_gaps == 0 OR plan patched successfully"
+        - "no duplication_risk from Stage 0 ignored"
         - "test_tiers_covered: golden, unit, integration"
       on_complete: "proceed_to_stage_2"
 
@@ -151,21 +190,21 @@ workflow:
     - name: registry_update
       order: 6
       description: >
-        Update cortex-master.yaml to mark phase as COMPLETE.
-        Record: completion_date, actual_duration, test counts, commit hashes.
-        Status update happens ONLY in cortex-master.yaml (SSOT).
-        Move phase YAML file from planned/ to completed/ folder.
+        Update cortex-refactor-master.yaml to record stage completion metrics.
+        Status is NOT set to complete here — the validation_loop (Stage 9) owns
+        that. This stage records: test counts, coverage, commit hashes, duration.
+        The phase YAML spec file is NOT modified — all status lives in cortex-refactor-master.yaml.
       actor: CortexMasterPlanOrchestrator
       actions:
-        - "Update phase status to 'complete' in cortex-master.yaml"
-        - "Record completion metrics (tests, coverage, duration)"
-        - "Increment metadata.completed counter"
-        - "Decrement metadata.planned counter"
-        - "Move phase file: planned/ → completed/"
+        - "Update phases[phase_id].progress in cortex-refactor-master.yaml"
+        - "Record: tests_written, tests_passing, coverage_pct, current_stage"
+        - "Add stages_complete entry for each finished stage"
+        - "Update metadata.last_updated timestamp"
+        - "DO NOT change phase status to 'complete' — validation_loop owns that"
       validation:
-        - "cortex-master.yaml updated"
-        - "phase file in completed/ folder"
-        - "metadata counters consistent"
+        - "cortex-refactor-master.yaml updated"
+        - "progress fields written (tests, coverage, duration)"
+        - "phase spec YAML unchanged (status authority is cortex-refactor-master.yaml)"
       on_complete: "proceed_to_stage_7"
 
     - name: commit_and_push
@@ -174,11 +213,107 @@ workflow:
         Commit all changes with standardized commit message including phase ID,
         test count, and coverage. Push to remote. Phase execution COMPLETE.
       actor: GitOrchestrator
-      commit_format: "feat(phase-{N}): {title} — {test_count} tests, {coverage}% coverage"
+      commit_format: "feat({phase_id}): {title} — {test_count} tests, {coverage}% coverage"
       validation:
         - "git commit successful"
         - "git push successful"
         - "no uncommitted changes remain"
+      on_complete: "proceed_to_stage_8"
+
+    - name: validation_loop
+      order: 8
+      description: >
+        Run a comprehensive issue-checking loop against everything the phase was
+        supposed to fix. If issues are found: auto-fix and loop back. Continue
+        until zero issues remain (max 10 iterations — fail if exceeded).
+        Checks run automatically on EVERY phase — deduplication, debloat,
+        regression, brittleness, governance violations, stale refs. This stage
+        is auto-injected by master-plan-orchestrator.yaml on every new phase.
+
+        On CLEAN (zero issues):
+          — Mark phase as 'complete' in cortex-refactor-master.yaml (SSOT)
+          — Move phase spec file: planned/cortex-refactor/ → completed/cortex-refactor/
+          — Update metadata counters (pending--, complete++)
+          — If ALL 10 phases complete: update cortex-master.yaml single summary
+            entry for cortex-refactor, then provide Issues/Solution/Next Steps summary.
+      actor: CortexMasterPlanOrchestrator
+      loop:
+        max_iterations: 10
+        exit_condition: "total_issues_found == 0"
+        on_max_exceeded: "fail_phase — report unresolved issues inline"
+      checks:
+        - id: "deduplication"
+          description: "No duplicate orchestrators, files, or concepts created by this phase"
+          tool: "LensOrchestrator.detect_duplicates()"
+          auto_fix: "Archive the duplicate, keep the canonical"
+
+        - id: "debloat"
+          description: "No unused imports, dead code, empty files, or TODO stubs left"
+          tool: "RefactoringOrchestrator.debloat()"
+          auto_fix: "Remove unused imports, stub cleanup"
+
+        - id: "regression"
+          description: "All 428 baseline golden tests still passing — zero new failures"
+          tool: "pytest tests/golden/ --tb=short"
+          auto_fix: "Fix regression before proceeding — never suppress"
+
+        - id: "brittleness"
+          description: "No hardcoded paths, no missing type hints, no bare except clauses"
+          tool: "EnforcementOrchestrator.brittleness_scan()"
+          auto_fix: "Replace hardcoded paths with constants, add type hints"
+
+        - id: "governance"
+          description: "P0 violations == 0, P1 violations == 0"
+          tool: "EnforcementOrchestrator.scan()"
+          auto_fix: "Apply remediation plan for each violation"
+
+        - id: "stale_refs"
+          description: "Zero references to dissolved/renamed components from this phase"
+          tool: "grep -r '_archive\\|cortex_intelligence\\|cortex_lens' cortex/"
+          auto_fix: "Rewrite import to canonical cortex.* path"
+
+        - id: "import_quarantine"
+          description: "Zero imports from _archive/ in any cortex/ source file"
+          tool: "grep -r 'from _archive' cortex/ | wc -l  # must be 0"
+          auto_fix: "Rewrite to canonical import"
+
+      loop_record:
+        description: "Each iteration written to cortex-refactor-master.yaml validation_loops.history[]"
+        fields:
+          - "loop_id: vloop-{phase_id}-{iteration:03d}"
+          - "phase: {phase_id}"
+          - "iteration: {N}"
+          - "checks_run: {per-check issues count}"
+          - "total_issues: {N}"
+          - "fixes_applied: [{description}]"
+          - "status: clean | fixed | failed"
+
+      on_clean:
+        actions:
+          - "Set phases[phase_id].status = 'complete' in cortex-refactor-master.yaml"
+          - "Set phases[phase_id].progress.completed = {timestamp}"
+          - "Set phases[phase_id].progress.validation_loop_iterations = {N}"
+          - "Increment metadata.counters.complete"
+          - "Decrement metadata.counters.pending"
+          - "Move spec file: planned/cortex-refactor/{phase_id}-*.yaml → completed/cortex-refactor/"
+          - "Update metadata.last_updated in cortex-refactor-master.yaml"
+          - "IF all 10 phases complete: update cortex-master.yaml cortex-refactor planned entry to status=COMPLETE"
+          - "IF all 10 phases complete: set cortex-refactor-master.yaml completion.status = 'complete'"
+          - "IF all 10 phases complete: set completion.release_tag = 'v2.0.0-cohesive-brain'"
+          - "Display Issues/Solution/Next Steps summary inline in Copilot Chat"
+
+      summary_format:
+        description: "Inline summary displayed in Copilot Chat — NEVER written to a file (CORE-002)"
+        sections:
+          issues_identified: "Bullet list of every issue found across all loop iterations"
+          solution_implemented: "What was fixed, what check it passed, which iteration"
+          next_steps: "Immediate: next phase to execute. Later: any deferred items."
+
+      validation:
+        - "total_issues_found == 0 (exit condition met)"
+        - "loop_record written to cortex-refactor-master.yaml"
+        - "phase status = 'complete' in cortex-refactor-master.yaml"
+        - "spec file moved to completed/cortex-refactor/"
       on_complete: "PHASE_COMPLETE"
 
   # ---------------------------------------------------------------------------
@@ -207,15 +342,19 @@ workflow:
   # Completion Checklist
   # ---------------------------------------------------------------------------
   completion_checklist:
-    - "✅ LENS gap analysis complete — plan patched if needed"
-    - "✅ All test tiers written (RED confirmed)"
-    - "✅ All tests passing (GREEN confirmed)"
-    - "✅ Refactor + cleanup cycle complete"
-    - "✅ Governance audit: 0 P0 violations"
-    - "✅ Coverage >= 95%"
-    - "✅ Registry updated (cortex-master.yaml SSOT)"
-    - "✅ Phase file moved to completed/"
-    - "✅ Committed and pushed to remote"
+    - "✅ Stage 0: LENS scan complete — capability map built, duplication risks documented"
+    - "✅ Stage 1: LENS gap analysis complete — plan cross-referenced, patched if needed"
+    - "✅ Stage 2: All test tiers written (RED confirmed)"
+    - "✅ Stage 3: All tests passing (GREEN confirmed)"
+    - "✅ Stage 4: Refactor + cleanup cycle complete"
+    - "✅ Stage 5: Governance audit: 0 P0 violations"
+    - "✅ Stage 6: Coverage >= 95%"
+    - "✅ Stage 6: cortex-refactor-master.yaml updated (progress metrics recorded)"
+    - "✅ Stage 7: Committed and pushed to remote"
+    - "✅ Stage 8: Validation loop — zero issues (all 7 checks clean)"
+    - "✅ Stage 8: Phase status = 'complete' in cortex-refactor-master.yaml"
+    - "✅ Stage 8: Spec file moved to completed/cortex-refactor/"
+    - "✅ Stage 8: Issues/Solution/Next Steps summary displayed inline"
 
   # ---------------------------------------------------------------------------
   # Governance

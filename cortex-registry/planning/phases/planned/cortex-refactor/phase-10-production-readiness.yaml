@@ -1,5 +1,5 @@
 # ==============================================================================
-# PHASE 08 — PRODUCTION READINESS: 100% Ready with Zero Regression
+# PHASE 10 — PRODUCTION READINESS: 100% Ready with Zero Regression
 # ==============================================================================
 # Purpose: Final hardening, performance optimization, security audit,
 #          SLA compliance, disaster recovery, monitoring dashboards
@@ -7,15 +7,15 @@
 # ==============================================================================
 
 phase:
-  id: "phase-08"
+  id: "phase-10"
   name: "Production Readiness — 100% Hardened, Zero Regression"
   status: "pending"
   priority: "P0"
   estimated_effort: "7-10 days"
   risk: "low (read-only operations primarily)"
-  depends_on: ["phase-07"]
+  depends_on: ["phase-09"]
   description: |
-    Phase 07 delivered a cohesive, consolidated CORTEX brain. Phase 08 hardens
+    Phase 09 delivered a cohesive, consolidated CORTEX brain. Phase 10 hardens
     it for production: performance profiling, security audit, SLA validation,
     disaster recovery testing, chaos engineering, monitoring dashboards, and
     comprehensive runbooks.
@@ -479,7 +479,7 @@ phase:
     - id: "REG-001"
       name: "Full Feature Parity Test"
       description: |
-        For EVERY feature from Phase 00-07:
+        For EVERY feature from Phase 01-09:
         1. Write a regression test (if not exists)
         2. Run test against OLD implementation (if applicable)
         3. Run test against NEW implementation
@@ -658,7 +658,7 @@ phase:
 
     - step: 10
       name: "Final Commit & Tag"
-      command: "git add -A && git commit -m 'refactor(phase-08): production readiness — 100% hardened, zero regression'"
+      command: "git add -A && git commit -m 'refactor(phase-10): production readiness — 100% hardened, zero regression'"
       tag: "v2.0.0-production-ready"
 
   # ============================================================================
@@ -697,7 +697,7 @@ phase:
     all_stakeholders_signed_off: true
     zero_regression_verified: true
     description: |
-      Phase 08 complete — CORTEX 2.0 production-ready when:
+      Phase 10 complete — CORTEX 2.0 production-ready when:
       1. All regression tests pass (ZERO changes to existing behavior)
       2. All performance SLAs met
       3. Security audit clean (pip-audit, bandit, gitleaks, OWASP clean)
@@ -723,11 +723,150 @@ phase:
       - "Analyze performance metrics"
       - "Review security logs for anomalies"
       - "Identify optimization opportunities"
-      - "Plan Phase 08.1 (continuous improvement)"
+      - "Plan Phase 10.1 (continuous improvement)"
 
     production_slos:
       availability: "99.9% (4.3 hours downtime/month)"
       latency_p99: "5000ms"
       error_rate: "< 0.5%"
       recovery_time: "< 15 minutes for full restore"
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This is the TERMINAL validation loop of the entire cortex-refactor plan.
+  # It loops until all production readiness criteria are met. Once clean,
+  # CORTEX marks the ENTIRE 10-phase refactor as COMPLETE in
+  # cortex-refactor-master.yaml and updates cortex-master.yaml with
+  # a single summary entry. No further phase follows — CORTEX is production-ready.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-10"
+    phase: "phase-10"
+    next_phase: null               # Terminal phase — no successor
+    is_terminal: true
+    max_iterations: 15
+    iteration_timeout_minutes: 120
+
+    checks:
+      - id: "VL-10-C1"
+        name: "Full regression test suite passes — zero failures"
+        command: "pytest tests/ -v --tb=short -q --ignore=tests/performance --ignore=tests/chaos"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix all regressions — production gate requires zero test failures"
+
+      - id: "VL-10-C2"
+        name: "Performance: MCP tool p95 < 2000ms"
+        command: "pytest tests/performance/test_mcp_latency.py -v --tb=short"
+        pass_condition: "exit code 0, p95 < 2000ms for all tools"
+        on_fail: "Profile slow MCP tools, optimize bottlenecks (lazy loading, caching)"
+
+      - id: "VL-10-C3"
+        name: "Performance: LENS analysis < 1000ms per 10K lines"
+        command: "pytest tests/performance/test_lens_latency.py -v --tb=short"
+        pass_condition: "exit code 0, latency within SLA"
+        on_fail: "Optimize LENS analyzer — check for redundant AST walks or I/O bottlenecks"
+
+      - id: "VL-10-C4"
+        name: "Security audit clean — pip-audit, bandit, gitleaks"
+        command: "pip-audit --strict -q && bandit -r cortex/ -ll -q && echo 'security OK'"
+        pass_condition: "prints security OK, no high-severity findings"
+        on_fail: "Fix each high-severity finding — update vulnerable dependencies, fix code issues"
+
+      - id: "VL-10-C5"
+        name: "Chaos tests pass — graceful failure handling"
+        command: "pytest tests/chaos/ -v --tb=short -q"
+        pass_condition: "exit code 0 — failures handled gracefully, no crashes"
+        on_fail: "Add graceful error handling for failing chaos scenarios"
+
+      - id: "VL-10-C6"
+        name: "Disaster recovery — backup/restore verified"
+        command: "python -m cortex.testing.disaster_recovery_test --quiet"
+        pass_condition: "exit code 0, restore time within RTO (< 15min)"
+        on_fail: "Fix backup/restore procedures — ensure SQLite and state can be fully restored"
+
+      - id: "VL-10-C7"
+        name: "Observability — Prometheus metrics exported"
+        command: "python -c \"from cortex.prometheus_metrics import get_metrics; m=get_metrics(); assert len(m)>0,'No metrics'; print(len(m),'metrics OK')\""
+        pass_condition: "prints N metrics OK where N > 0"
+        on_fail: "Fix Prometheus metrics registration — ensure all critical counters export"
+
+      - id: "VL-10-C8"
+        name: "OpenTelemetry traces operational"
+        command: "python -c \"from cortex.opentelemetry_tracing import get_tracer; t=get_tracer('test'); span=t.start_span('test-span'); span.end(); print('tracing OK')\""
+        pass_condition: "prints tracing OK, no exception"
+        on_fail: "Fix OpenTelemetry initialization and span lifecycle"
+
+      - id: "VL-10-C9"
+        name: "Governance audit clean — zero P0/P1 violations"
+        command: "python -m cortex.governance.audit --level P1 --path cortex/ --exit-nonzero"
+        pass_condition: "exit code 0"
+        on_fail: "Fix all remaining P0/P1 violations — production does not ship with governance failures"
+
+      - id: "VL-10-C10"
+        name: "Capability manifest 100% green — final confirmation"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0, 100% items green"
+        on_fail: "Fix any remaining capability regressions"
+
+      - id: "VL-10-C11"
+        name: "Release tag v2.0.0-production-ready present"
+        command: "git tag -l 'v2.0.0-production-ready' | wc -l"
+        pass_condition: "output is 1"
+        on_fail: "Create production release tag: git tag -a v2.0.0-production-ready -m 'CORTEX 2.0 — Production Ready'"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-10-C1 through VL-10-C11) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to terminal_completion.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 escalation to user.
+              (Production readiness requires human sign-off at this point.)
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all 11 must pass in the same iteration.
+        5. This is the TERMINAL loop — no further phases follow.
+
+    terminal_completion:
+      description: |
+        Executed ONLY when all VL-10 checks pass. This marks the entire
+        10-phase CORTEX Cohesive Brain Refactor as COMPLETE.
+      actions:
+        - action: "Update phase-10 status in cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-10].status → complete"
+            - "phases[phase-10].progress.completed → ISO timestamp"
+            - "phases[phase-10].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending → 0"
+            - "metadata.counters.complete → 10"
+            - "metadata.status → complete"
+            - "health_status.p0_issues → 0"
+            - "health_status.p1_issues → 0"
+
+        - action: "Update completion record in cortex-refactor-master.yaml"
+          changes:
+            - "completion.status → complete"
+            - "completion.completed_date → ISO timestamp"
+            - "completion.release_tag → v2.0.0-production-ready"
+            - "completion.cortex_master_yaml_updated → true (pending next action)"
+
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-10-production-readiness.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+
+        - action: "Update cortex-master.yaml with single summary entry"
+          changes:
+            - "planned[cortex-refactor].status → COMPLETE"
+            - "planned[cortex-refactor].completed → ISO timestamp"
+            - "planned[cortex-refactor].release_tag → v2.0.0-production-ready"
+            - "metadata.planned → 0"
+
+        - action: "Final git commit and push"
+          command: "git add -A && git commit -m 'refactor(cortex-refactor): ALL 10 PHASES COMPLETE — CORTEX 2.0 cohesive brain, production-ready' && git push origin CORTEX-GPT"
+
+        - action: "Log completion to CORTEX audit DB"
+          method: "CortexAuditDB().log_milestone(event='cortex-refactor-complete', phases=10, release='v2.0.0-production-ready')"
 

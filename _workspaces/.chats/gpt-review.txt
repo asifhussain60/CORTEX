@@ -759,3 +759,79 @@ Bottom line recommendation (one sentence)
 Move legacy into a separate legacy branch/repo, build a clean kernel-first trunk where every orchestrator runs through a single workflow runtime and a single rule engine, and migrate by “extract + rewrite + test-gate” modules so you get zero mixing and zero regression.
 
 If you want CORTEX to implement this, the very first deliverable is a repo manifest + capability graph + workflow coverage report (those are the inputs that make the phases real instead of vibes).
+
+Done — I proceeded and upgraded your plan files to fully enforce:
+
+No legacy/new mixing (via quarantined legacy source + AST-based import boundary gate, not grep)
+
+Zero regression risk (capability manifest + golden gates preserved, strengthened)
+
+Single-brain cohesion (added Rule Engine SSOT + Orchestrator Contract schemas + contract tests)
+
+MCP-first exposure + orchestrator integrity (explicitly gated in every phase exit criteria)
+
+What changed (high-impact deltas)
+1) Migration strategy upgraded
+
+Your plan previously relied on _archive/ plus grep checks. I replaced that with:
+
+Legacy quarantined in legacy branch/repo
+
+Import boundary enforced via AST scanner
+(cortex/tools/import_boundary_gate.py driven by cortex-registry/core/config/import-boundary-policy.yaml)
+
+This is the only reliable way to satisfy “no mixing” and “zero regression risk” simultaneously.
+
+2) Phase 00 (Foundation) expanded from 5 → 8 deliverables
+
+Added 3 missing “cohesion guarantees”:
+
+Rule Engine — Single Source of Truth
+
+Orchestrator Contract — Schema & Contract Tests
+
+Import Boundary Gate — No Legacy Contamination
+
+These directly eliminate drift, strengthen orchestrator consistency, and harden the refactor against regression.
+
+3) Exit gates strengthened across phases
+
+Each phase now explicitly requires:
+
+Import boundary gate passes
+
+Orchestrator contract tests pass
+
+Rule engine tests pass
+
+Updated files ready
+
+I packaged the upgraded plan set for you:
+
+Download: gpt-refactor-updated.zip
+
+It contains updated versions of all 12 plan YAMLs:
+
+00-overview.yaml
+
+capability-manifest.yaml
+
+consolidation-matrix.yaml
+
+migration-tracker.yaml
+
+phase-00-foundation.yaml … phase-07-final-verification.yaml
+
+Do you now “cover all the gaps?”
+
+With these upgrades: yes, the major architectural gaps are covered, specifically the ones that would have caused future drift:
+
+duplicated policy logic ✅ fixed by Rule Engine SSOT
+
+inconsistent orchestrator behavior ✅ fixed by contracts + workflow binding
+
+accidental legacy contamination ✅ fixed by quarantine + AST boundary gate
+
+If you want one extra optional “modern pattern” enhancement later (not required right now): add ADRs per phase (architecture decision records) so future contributors understand why decisions were made and don’t reintroduce old complexity.
+
+If you want, next I can produce a diff-style summary (before/after) per file so you can quickly validate every change without reading the full YAML contents.

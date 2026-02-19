@@ -1,20 +1,20 @@
-# ==============================================================================
-# PHASE 04 — DIRECTORY CLEANUP: Eliminate small/redundant directories
+# ===========================================================        rationale: "Already consolidated in Phase 03/04"==================
+# PHASE 06 — DIRECTORY CLEANUP: Eliminate small/redundant directories
 # ==============================================================================
 # Purpose: Reduce cortex/ top-level directories from ~50 to ~15 canonical ones
 # Gate: Clean directory tree, all imports resolve, all tests pass
 # ==============================================================================
 
 phase:
-  id: "phase-04"
+  id: "phase-06"
   name: "Directory Cleanup — Eliminate small/redundant directories"
   status: "pending"
   priority: "P1"
   estimated_effort: "3-5 days"
   risk: "medium"
-  depends_on: ["phase-03"]
+  depends_on: ["phase-05"]
   description: |
-    After phases 01-03, cortex/ still has ~50 top-level subdirectories.
+    After phases 03-05, cortex/ still has ~50 top-level subdirectories.
     Many contain 1-5 files and could be absorbed into canonical directories.
     This phase consolidates small directories into their natural homes,
     achieving a clean ~15-directory structure.
@@ -393,8 +393,8 @@ phase:
 
     - step: 14
       name: "Commit Phase 04"
-      command: "git add -A && git commit -m 'refactor(phase-04): directory cleanup — 59 dirs to ~15 canonical'"
-      tag: "gpt-refactor-phase-04"
+      command: "git add -A && git commit -m 'refactor(phase-06): directory cleanup — 59 dirs to ~15 canonical'"
+      tag: "cortex-refactor-phase-06"
 
   # ============================================================================
   # EXIT GATE
@@ -407,9 +407,107 @@ phase:
     all_imports_resolve: true
     coverage_minimum: 90
     description: |
-      Phase 04 is complete when:
+      Phase 06 is complete when:
       1. cortex/ has ≤15 top-level subdirectories
       2. No single-file directories at top level
       3. All imports resolve correctly
       4. All MCP tools respond
       5. Capability manifest shows zero regressions
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This stage runs AFTER all deliverables are implemented.
+  # It loops until every exit gate check passes. Once clean, CORTEX
+  # autonomously begins Phase 07 without user intervention.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-06"
+    phase: "phase-06"
+    next_phase: "phase-07"
+    next_phase_spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-07-test-consolidation.yaml"
+    max_iterations: 10
+    iteration_timeout_minutes: 45
+
+    checks:
+      - id: "VL-06-C1"
+        name: "cortex/ top-level directories ≤ 15"
+        command: "ls -d cortex/*/ 2>/dev/null | wc -l"
+        pass_condition: "output ≤ 15"
+        on_fail: "Continue consolidations — merge remaining small directories into canonical homes"
+
+      - id: "VL-06-C2"
+        name: "No single-file directories at top level"
+        command: "for d in cortex/*/; do count=$(find \"$d\" -maxdepth 1 -name '*.py' | wc -l); if [ \"$count\" -le 1 ]; then echo \"$d has $count files\"; fi; done | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Absorb single-file directories into their parent canonical directories"
+
+      - id: "VL-06-C3"
+        name: "All imports resolve (no broken imports)"
+        command: "python -c 'import cortex; print(\"cortex imports OK\")'"
+        pass_condition: "prints cortex imports OK"
+        on_fail: "Fix broken imports caused by directory consolidations — update all __init__.py files"
+
+      - id: "VL-06-C4"
+        name: "cortex/cortex-registry/ inner duplicate deleted"
+        command: "test ! -d cortex/cortex-registry/ && echo 'deleted' || echo 'STILL EXISTS'"
+        pass_condition: "prints deleted"
+        on_fail: "Delete cortex/cortex-registry/ inner duplicate"
+
+      - id: "VL-06-C5"
+        name: "cortex/cortex_intelligence/ inner duplicate deleted"
+        command: "test ! -d cortex/cortex_intelligence/ && echo 'deleted' || echo 'STILL EXISTS'"
+        pass_condition: "prints deleted"
+        on_fail: "Delete cortex/cortex_intelligence/ inner duplicate"
+
+      - id: "VL-06-C6"
+        name: "All MCP tools still respond"
+        command: "python -c \"from cortex.mcp import list_tools; tools=list_tools(); assert len(tools)>=22; print(len(tools),'MCP tools OK')\""
+        pass_condition: "prints N MCP tools OK where N ≥ 22"
+        on_fail: "Fix MCP tool regressions caused by directory consolidations"
+
+      - id: "VL-06-C7"
+        name: "All tests pass"
+        command: "pytest tests/ -v --tb=short -q --ignore=tests/performance"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix tests broken by directory cleanup — update fixture paths"
+
+      - id: "VL-06-C8"
+        name: "Capability manifest regression gate"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0"
+        on_fail: "Fix any capability regressions — no functionality should be lost in cleanup"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-06-C1 through VL-06-C8) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to autonomous_advance.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 alert to user.
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all must pass in the same iteration.
+
+    autonomous_advance:
+      enabled: true
+      trigger: "All VL-06 checks pass in same iteration"
+      actions:
+        - action: "Update cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-06].status → complete"
+            - "phases[phase-06].progress.completed → ISO timestamp"
+            - "phases[phase-06].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending -= 1"
+            - "metadata.counters.complete += 1"
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-06-directory-cleanup.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+        - action: "Git checkpoint"
+          command: "git add -A && git commit -m 'refactor(phase-06): COMPLETE — 59 dirs to ~15 canonical, advancing to phase-07'"
+        - action: "Load and execute next phase"
+          spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-07-test-consolidation.yaml"
+          orchestrator: "CortexMasterPlanOrchestrator"
+          method: "execute_phase(phase_id='phase-07')"

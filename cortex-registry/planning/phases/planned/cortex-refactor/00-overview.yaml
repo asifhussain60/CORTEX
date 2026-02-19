@@ -1,5 +1,5 @@
 # ==============================================================================
-# GPT REFACTOR — MASTER OVERVIEW
+# CORTEX REFACTOR — MASTER OVERVIEW
 # ==============================================================================
 # Purpose: Transform CORTEX from fragmented packages into a single cohesive brain
 # Author: Asif Hussain
@@ -9,12 +9,12 @@
 # ==============================================================================
 
 refactor:
-  id: "gpt-refactor"
+  id: "cortex-refactor"
   name: "CORTEX Cohesive Brain Refactor"
   version: "1.0.0"
   status: "approved"
   created: "2026-02-19"
-  estimated_duration: "8 phases"
+  estimated_duration: "10 phases"
   branch: "CORTEX-GPT"
 
   # ============================================================================
@@ -36,13 +36,21 @@ refactor:
     - "ALL CORTEX activity intelligently logged in SQLite with auto-cleanup and bloat prevention"
     - "SQLite audit logging is integral to golden tests with setup/teardown cleanups"
     - "Health and vacuum include SQLite database maintenance (VACUUM, bloat checks, deadlock prevention)"
-    - "ALL functionality exposed via MCP — consolidated small footprint (no toolkit sprawl)"
-    - "MCP tool count consolidated from 34+ to ~19 cohesive tools (zero capability loss)"
+    - "ALL functionality exposed via MCP — consolidated small footprint (~22 cohesive tools, zero toolkit sprawl)"
+    - "MCP tool count consolidated from 34+ to ~22 tools (zero capability loss) — includes SDLC brain tools"
     - "Challenge-first cognition is DEFAULT brain behavior — intrinsic to MasterOrchestrator, never user-specified"
     - "Token-efficient operations system-wide — context compression, response optimization, caching (EA-010)"
     - "InteractionOrchestrator is ALWAYS the default Stage 1 after MasterOrchestrator — unchanged"
     - "Every action is plan-first: YAML plan created silently, approved explicitly, archived permanently (EA-011)"
     - "CCL synthesizes archived plans on every turn — CORTEX has persistent memory of all past work"
+    - "CORTEX is the unified AI brain for ALL 13 SDLC phases — Plan, Design, Code, Test, Security, Review, CI/CD, Docs, Git, Deploy, Monitor, Maintain, Onboard"
+    - "CiCdOrchestrator covers SDLC-007/010 — pipeline analysis, generation, governance"
+    - "DesignOrchestrator covers SDLC-002/008 — ADRs, threat models, design reviews, documentation"
+    - "~44 active orchestrators with workflow templates (up from ~40 — includes SDLC brain orchestrators)"
+    - "ALL governance rules aligned with refactored architecture — zero stale references to dissolved packages"
+    - "GovernanceCrystal in CCL — rules are intrinsic to CORTEX cognition, not a bolt-on gate"
+    - "3-tier governance (Tier 0 skull + Tier 1 project + Tier 2 engineering) with no duplicate files"
+    - "CORTEX has persistent learning capability — violations tracked across turns, patterns detected, rules self-improve"
 
   # ============================================================================
   # ARCHITECTURAL PRINCIPLES
@@ -395,7 +403,7 @@ refactor:
   # ============================================================================
   mcp_consolidation:
     description: |
-      Consolidate 34+ MCP tools into ~19 cohesive tools. The goal is a SMALL
+      Consolidate 34+ MCP tools into ~22 cohesive tools. The goal is a SMALL
       footprint where each tool does one thing well. Toolkit tools (5) are
       absorbed into existing tools. Redundant tools are merged.
       cortex_challenge is absorbed into MasterOrchestrator default behavior
@@ -423,7 +431,7 @@ refactor:
         - tool: "cortex_onboard_repository"
           reason: "Core capability — absorbs v3"
         - tool: "cortex_onboard_infrastructure"
-          reason: "New — Phase 06"
+          reason: "New — Phase 08"
         - tool: "cortex_query_governance"
           reason: "Unique query tool"
         - tool: "cortex_refactor"
@@ -512,14 +520,16 @@ refactor:
             by the MasterOrchestrator — not as a separate tool invocation.
             Users never need to "ask for" challenge mode; it's always on.
 
-    target_tool_count: 19
+    target_tool_count: 22
     target_tools:
       - "cortex_approve_request"
       - "cortex_ask"
       - "cortex_audit"
       - "cortex_capture_metrics"
+      - "cortex_cicd"            # SDLC-007/010 — CI/CD pipeline brain
       - "cortex_dashboard"
       - "cortex_discover"
+      - "cortex_document"        # SDLC-008 — documentation brain
       - "cortex_execute_governance"
       - "cortex_git_push"
       - "cortex_health"
@@ -618,7 +628,7 @@ refactor:
       permanent location. Phase files live in a dedicated folder that is
       NOT in the archive path.
 
-    phase_files_location: "cortex-registry/_cortex-master/phases/planned/gpt-refactor/"
+    phase_files_location: "cortex-registry/planning/phases/planned/cortex-refactor/"
     archive_location: "_archive/"
 
     safety_gates:
@@ -667,84 +677,109 @@ refactor:
     # Directories NOT covered by prior plan versions — NOW included:
     previously_uncovered:
       - dir: "cortex/agents/ (11 files)"
-        resolution: "Phase 04 → cortex/orchestrators/agents/ or keep as cortex/agents/"
+        resolution: "Phase 06 → cortex/orchestrators/agents/ or keep as cortex/agents/"
       - dir: "cortex/validation/ (5 files)"
-        resolution: "Phase 04 → cortex/governance/validation/"
+        resolution: "Phase 06 → cortex/governance/validation/"
       - dir: "cortex/cortex-registry/ (inner duplicate)"
-        resolution: "Phase 01 → delete (data belongs in top-level cortex-registry/)"
+        resolution: "Phase 03 → delete (data belongs in top-level cortex-registry/)"
       - dir: "cortex/cortex_intelligence/ (inner duplicate)"
-        resolution: "Phase 01 → delete (empty or duplicate)"
+        resolution: "Phase 03 → delete (empty or duplicate)"
       - dir: "cortex/tests/ (8 inner test files)"
-        resolution: "Phase 05 → move to tests/"
+        resolution: "Phase 07 → move to tests/"
 
   # ============================================================================
   # PHASE INDEX
   # ============================================================================
   phases:
-    - id: "phase-00"
+    - id: "phase-01"
       name: "Foundation — Capability Manifest, Core Factories, SQLite Audit, MCP Consolidation Map"
-      file: "phase-00-foundation.yaml"
+      file: "phase-01-foundation.yaml"
       status: "pending"
       dependencies: []
       deliverables: 7
       risk: "low"
-      additions: "D6: CortexAuditDB (unified SQLite), D7: MCP consolidation map (34→20)"
+      additions: "D6: CortexAuditDB (unified SQLite), D7: MCP consolidation map (34→22)"
 
-    - id: "phase-01"
-      name: "Package Consolidation — 3 packages to 1"
-      file: "phase-01-package-consolidation.yaml"
+    - id: "phase-02"
+      name: "Governance Alignment — Rules Review, Enhancement & CCL Integration"
+      file: "phase-02-governance-alignment.yaml"
       status: "pending"
-      dependencies: ["phase-00"]
+      dependencies: ["phase-01"]
+      deliverables: 6
+      risk: "low"
+      additions: |
+        G1: Eliminate duplicate skull-rules.yaml. G2: 36-rule alignment audit.
+        G3: 6 new rules (CORE-058 to CORE-063) for SQLite/MCP/SDLC/CCL.
+        G4: Tier 1 & Tier 2 alignment. G5: CCL GovernanceCrystal design.
+        G6: Post-alignment inventory.
+      key_decision: |
+        Governance enforcement IS part of CCL — the GovernanceCrystal makes
+        rules intrinsic to CORTEX cognition on every turn.
+
+    - id: "phase-03"
+      name: "Package Consolidation — 3 packages to 1"
+      file: "phase-03-package-consolidation.yaml"
+      status: "pending"
+      dependencies: ["phase-02"]
       deliverables: 4
       risk: "medium"
 
-    - id: "phase-02"
+    - id: "phase-04"
       name: "Brain Deduplication — Dissolve brain/ into proper domains"
-      file: "phase-02-brain-deduplication.yaml"
+      file: "phase-04-brain-deduplication.yaml"
       status: "pending"
-      dependencies: ["phase-01"]
+      dependencies: ["phase-03"]
       deliverables: 8
       risk: "high"
 
-    - id: "phase-03"
-      name: "Orchestrator Rationalization + MCP Consolidation — 120 to ~40 orchestrators, 34 to ~20 MCP tools"
-      file: "phase-03-orchestrator-rationalization.yaml"
+    - id: "phase-05"
+      name: "Orchestrator Rationalization + MCP Consolidation — 120 to ~40 orchestrators, 34 to ~22 MCP tools"
+      file: "phase-05-orchestrator-rationalization.yaml"
       status: "pending"
-      dependencies: ["phase-02"]
+      dependencies: ["phase-04"]
       deliverables: 7
       risk: "high"
-      additions: "MCP tool consolidation (34→20), toolkit absorption, SQLite audit wiring into orchestrator lifecycle"
+      additions: "MCP tool consolidation (34→22), toolkit absorption, SQLite audit wiring into orchestrator lifecycle"
 
-    - id: "phase-04"
+    - id: "phase-06"
       name: "Directory Cleanup — 59 to ~15 canonical directories"
-      file: "phase-04-directory-cleanup.yaml"
+      file: "phase-06-directory-cleanup.yaml"
       status: "pending"
-      dependencies: ["phase-03"]
+      dependencies: ["phase-05"]
       deliverables: 35
       risk: "medium"
 
-    - id: "phase-05"
+    - id: "phase-07"
       name: "Test Consolidation — 55 dirs to ~15, high-value only"
-      file: "phase-05-test-consolidation.yaml"
+      file: "phase-07-test-consolidation.yaml"
       status: "pending"
-      dependencies: ["phase-04"]
+      dependencies: ["phase-06"]
       deliverables: 6
       risk: "medium"
 
-    - id: "phase-06"
+    - id: "phase-08"
       name: "Registry & Docs Alignment + Infrastructure Catalog"
-      file: "phase-06-registry-docs.yaml"
+      file: "phase-08-registry-docs.yaml"
       status: "pending"
-      dependencies: ["phase-05"]
+      dependencies: ["phase-07"]
       deliverables: 13
       risk: "low"
       additions: "R7-R9: company infrastructure catalog (platforms, APIs, applications), cortex_onboard_infrastructure MCP tool"
 
-    - id: "phase-07"
+    - id: "phase-09"
       name: "Final Verification, Refactor & Archive Deletion"
-      file: "phase-07-final-verification.yaml"
+      file: "phase-09-final-verification.yaml"
       status: "pending"
-      dependencies: ["phase-06"]
+      dependencies: ["phase-08"]
       deliverables: 26
       risk: "medium"
       additions: "V6: SQLite verification, FR7: SQLite consolidation, FR8: MCP consolidation verification"
+
+    - id: "phase-10"
+      name: "Production Readiness — Hardening, Chaos Testing, SLAs & Go-Live"
+      file: "phase-10-production-readiness.yaml"
+      status: "pending"
+      dependencies: ["phase-09"]
+      deliverables: 10
+      risk: "medium"
+      additions: "Performance benchmarking, chaos testing, disaster recovery, production SLOs"

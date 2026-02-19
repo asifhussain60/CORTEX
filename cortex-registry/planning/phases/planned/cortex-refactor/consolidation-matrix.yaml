@@ -14,7 +14,7 @@ consolidation:
   status: "approved"
 
   # ============================================================================
-  # SECTION 1: PACKAGE-LEVEL CONSOLIDATION (Phase 01)
+  # SECTION 1: PACKAGE-LEVEL CONSOLIDATION (Phase 03)
   # ============================================================================
   package_consolidation:
     description: "3 top-level Python packages → 1 (cortex)"
@@ -47,7 +47,7 @@ consolidation:
           - wiring → cortex/core/ (composition root)
           - governance → cortex/governance/ (SSOT)
           - observability → cortex/observability/ (SSOT)
-        phase: "01"
+        phase: "03"
         status: "pending"
 
       - id: "PKG-002"
@@ -68,7 +68,7 @@ consolidation:
           - domain_inference → cortex/intelligence/domain_brain/
           - knowledge_graph → cortex/intelligence/lens/knowledge_graph/
           - models → cortex/models/ (shared data models)
-        phase: "01"
+        phase: "03"
         status: "pending"
 
       - id: "PKG-003"
@@ -76,7 +76,7 @@ consolidation:
         current_locations:
           - path: "cortex/cortex_intelligence/"
         target: "DELETE (exact duplicate of top-level)"
-        phase: "01"
+        phase: "03"
         status: "pending"
 
   # ============================================================================
@@ -119,7 +119,7 @@ consolidation:
             role: "learned governance patterns"
             action: "merge into cortex/intelligence/memory/"
         target: "cortex/governance/ (ONE SSOT)"
-        phase: "02-04"
+        phase: "04-06"
         status: "pending"
 
       # --- lens (3 source directories → 1 SSOT) ---
@@ -137,7 +137,7 @@ consolidation:
             role: "standalone package"
             action: "migrate to cortex/intelligence/lens/"
         target: "cortex/intelligence/lens/ (ONE SSOT)"
-        phase: "01-02"
+        phase: "03-04"
         status: "pending"
 
       # --- domain_brain (3 source directories → 1 SSOT) ---
@@ -155,7 +155,7 @@ consolidation:
             role: "intelligence domain brain"
             action: "merge unique logic into cortex/intelligence/domain_brain/"
         target: "cortex/intelligence/domain_brain/ (ONE SSOT)"
-        phase: "01-02"
+        phase: "03-04"
         status: "pending"
 
       # --- observability (5 source directories → 1 SSOT) ---
@@ -179,7 +179,7 @@ consolidation:
             role: "intelligence observability"
             action: "merge into cortex/observability/"
         target: "cortex/observability/ (ONE SSOT)"
-        phase: "02-04"
+        phase: "04-06"
         status: "pending"
 
       # --- wiring (3 source directories → 1 SSOT) ---
@@ -194,7 +194,7 @@ consolidation:
             role: "intelligence wiring"
             action: "merge into cortex/wiring/"
         target: "cortex/core/ (composition root) or cortex/wiring/"
-        phase: "01-02"
+        phase: "03-04"
         status: "pending"
 
       # --- domain_orchestrators (2 source directories → 1 SSOT) ---
@@ -209,11 +209,11 @@ consolidation:
             role: "brain domain orchestrators"
             action: "merge into cortex/orchestrators/domain/"
         target: "cortex/orchestrators/domain/ (ONE SSOT)"
-        phase: "02-03"
+        phase: "04-05"
         status: "pending"
 
   # ============================================================================
-  # SECTION 3: ORCHESTRATOR CONSOLIDATION (Phase 03)
+  # SECTION 3: ORCHESTRATOR CONSOLIDATION (Phase 05)
   # ============================================================================
   orchestrator_consolidation:
     description: "Known duplicate orchestrator classes that must be merged"
@@ -260,7 +260,7 @@ consolidation:
         status: "pending"
 
   # ============================================================================
-  # SECTION 4: BRAIN DISSOLUTION MAP (Phase 02)
+  # SECTION 4: BRAIN DISSOLUTION MAP (Phase 04)
   # ============================================================================
   brain_dissolution:
     description: "cortex/brain/ (261 files, 28 subdirs) → dissolved into proper homes"
@@ -333,7 +333,7 @@ consolidation:
         rationale: "Templates stay as templates"
 
   # ============================================================================
-  # SECTION 5: SMALL DIRECTORY CONSOLIDATION (Phase 04)
+  # SECTION 5: SMALL DIRECTORY CONSOLIDATION (Phase 06)
   # ============================================================================
   small_directory_consolidation:
     description: "Directories with <5 files that should merge into proper domains"
@@ -399,7 +399,7 @@ consolidation:
         rationale: "Infrastructure concern"
 
   # ============================================================================
-  # SECTION 6: PHASE-NAMED DIRECTORIES (Phase 03-04)
+  # SECTION 6: PHASE-NAMED DIRECTORIES (Phase 05-06)
   # ============================================================================
   phase_named_directories:
     description: "Phase-named directories violate clean naming — archive all"
@@ -418,11 +418,11 @@ consolidation:
       - "tests/phase_56_a/"
       - "tests/phase_71/"
     action: "Archive all, migrate any live logic into proper domain directories"
-    phase: "03-04"
+    phase: "05-06"
     status: "pending"
 
   # ============================================================================
-  # SECTION 7: FILE-LEVEL CONSOLIDATION (Phase 00)
+  # SECTION 7: FILE-LEVEL CONSOLIDATION (Phase 01)
   # ============================================================================
   file_consolidation:
     description: "Known duplicate files that must merge"
@@ -435,11 +435,11 @@ consolidation:
           - path: "cortex/tools/file_naming_factory.py"
             lines: 546
         target: "cortex/core/file_factory.py"
-        phase: "00"
+        phase: "01"
         status: "pending"
 
   # ============================================================================
-  # SECTION 8: TEST CONSOLIDATION (Phase 05)
+  # SECTION 8: TEST CONSOLIDATION (Phase 07)
   # ============================================================================
   test_consolidation:
     description: "Duplicate and phase-named test directories → clean structure"

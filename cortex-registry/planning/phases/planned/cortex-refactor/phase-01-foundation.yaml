@@ -1,12 +1,12 @@
 # ==============================================================================
-# PHASE 00 — FOUNDATION: Capability Manifest & Core Factories
+# PHASE 01 — FOUNDATION: Capability Manifest & Core Factories
 # ==============================================================================
 # Purpose: Build the safety net and foundational tools BEFORE any migration
 # Gate: All deliverables tested, manifest baseline captured
 # ==============================================================================
 
 phase:
-  id: "phase-00"
+  id: "phase-01"
   name: "Foundation — Capability Manifest & Core Factories"
   status: "pending"
   priority: "P0"
@@ -37,7 +37,7 @@ phase:
         - All infrastructure services (event bus, tracing, storage)
         - All workflow templates
       output_files:
-        - "cortex-registry/_cortex-master/phases/planned/gpt-refactor/capability-manifest.yaml"
+        - "cortex-registry/planning/phases/planned/cortex-refactor/capability-manifest.yaml"
       test_files:
         - "tests/golden/regression/test_capability_manifest.py"
       acceptance_criteria:
@@ -121,7 +121,7 @@ phase:
         YAML document tracking the lifecycle of every migrated component:
         source → archive → target → validated → archive_deleted
       output_files:
-        - "cortex-registry/_cortex-master/phases/planned/gpt-refactor/migration-tracker.yaml"
+        - "cortex-registry/planning/phases/planned/cortex-refactor/migration-tracker.yaml"
       acceptance_criteria:
         - "Every subsequent phase updates this tracker"
         - "Tracker can be queried to find any component's current location"
@@ -265,12 +265,12 @@ phase:
     # D7: MCP Tool Consolidation Plan
     # --------------------------------------------------------------------------
     - id: "D7"
-      name: "MCP Tool Consolidation — 34 to ~19 tools"
+      name: "MCP Tool Consolidation — 34 to ~22 tools"
       description: |
         Create the consolidation mapping and shim layer that enables
-        gradual merge of 34+ MCP tools into ~19 cohesive tools.
+        gradual merge of 34+ MCP tools into ~22 cohesive tools.
         
-        Phase 00 creates the mapping. Actual merge happens in Phase 03-04.
+        Phase 01 creates the mapping. Actual merge happens in Phase 05-06.
         
         Key merges:
         - 5 toolkit_* tools → absorbed into cortex_health, cortex_audit, cortex_verify_environment
@@ -285,7 +285,7 @@ phase:
         - "cortex-registry/config/mcp-consolidation-map.yaml"
       acceptance_criteria:
         - "Consolidation map covers all 34 tools"
-        - "Target count is ~19 tools"
+        - "Target count is ~22 tools"
         - "Zero capability loss documented"
         - "cortex_challenge absorbed into MasterOrchestrator (EA-009)"
         - "Backward compatibility shims planned for transition"
@@ -454,7 +454,7 @@ phase:
         injected_as: "CrystallizedContext.past_plans"
 
   # ============================================================================
-  # CONSOLIDATION OPPORTUNITIES (Phase 00 specific)
+  # CONSOLIDATION OPPORTUNITIES (Phase 01 specific)
   # ============================================================================
   consolidations:
     - type: "file_factory"
@@ -621,7 +621,7 @@ phase:
     - step: "7C"
       name: "Create MCP consolidation map YAML"
       file: "cortex-registry/config/mcp-consolidation-map.yaml"
-      description: "Document all 34→19 tool merges with backward compat plan"
+      description: "Document all 34→22 tool merges with backward compat plan"
 
     - step: "7D"
       name: "Write test_challenge_first_protocol.py"
@@ -711,9 +711,9 @@ phase:
       expected: "ALL existing tests still pass"
 
     - step: 10
-      name: "Commit Phase 00"
-      command: "git add -A && git commit -m 'refactor(phase-00): foundation — file factory, workflow engine, capability manifest'"
-      tag: "gpt-refactor-phase-00"
+      name: "Commit Phase 01"
+      command: "git add -A && git commit -m 'refactor(phase-01): foundation — file factory, workflow engine, capability manifest'"
+      tag: "cortex-refactor-phase-01"
 
   # ============================================================================
   # EXIT GATE
@@ -730,7 +730,7 @@ phase:
     token_optimizer_operational: true
     interaction_plan_store_operational: true
     description: |
-      Phase 00 is complete when:
+      Phase 01 is complete when:
       1. Capability manifest exists and all items are baselined
       2. File factory passes all tests + old factory tests
       3. Workflow engine passes all tests + old runtime tests
@@ -738,9 +738,108 @@ phase:
       5. Migration tracker created
       6. Zero governance violations
       7. CortexAuditDB operational with WAL mode, cleanup, golden test fixtures
-      8. MCP consolidation map (34→19) documented in YAML
+      8. MCP consolidation map (34→22) documented in YAML
       9. SQLite retention policy YAML created
       10. Challenge-first cognition wired into MasterOrchestrator governance_gate (EA-009)
       11. Token optimization framework operational system-wide (EA-010)
       12. InteractionPlanStore operational: persist → approve → archive → CCL synthesis (D10)
       13. InteractionOrchestrator confirmed as default Stage 1 — zero regression
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This stage runs AFTER all deliverables are implemented.
+  # It loops until every exit gate check passes. Once clean, CORTEX
+  # autonomously begins Phase 02 without user intervention.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-01"
+    phase: "phase-01"
+    next_phase: "phase-02"
+    next_phase_spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-02-governance-alignment.yaml"
+    max_iterations: 10
+    iteration_timeout_minutes: 30
+
+    checks:
+      - id: "VL-01-C1"
+        name: "All tests passing"
+        command: "pytest tests/core/test_file_factory.py tests/core/test_workflow_engine.py tests/golden/regression/test_capability_manifest.py -v --tb=short -q"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Re-run TDD cycle for failing tests — fix implementation, re-run"
+
+      - id: "VL-01-C2"
+        name: "Coverage ≥ 95%"
+        command: "pytest tests/ --cov=cortex --cov-report=term-missing -q | tail -5"
+        pass_condition: "coverage report shows ≥95%"
+        on_fail: "Identify uncovered lines, add targeted tests, re-run"
+
+      - id: "VL-01-C3"
+        name: "Capability manifest baseline captured"
+        command: "python -c \"import yaml; d=yaml.safe_load(open('cortex-registry/planning/phases/planned/cortex-refactor/capability-manifest.yaml')); print(len(d.get('capabilities',{})), 'capabilities')\""
+        pass_condition: "Manifest loads, ≥ 28 MCP tools + 44 orchestrators + rules listed"
+        on_fail: "Re-run manifest generation, ensure all items are captured"
+
+      - id: "VL-01-C4"
+        name: "Governance audit clean (P0/P1)"
+        command: "python -m cortex.governance.audit --level P1 --path cortex/core/ --exit-nonzero"
+        pass_condition: "exit code 0, zero P0/P1 violations"
+        on_fail: "Fix each violation, re-audit until clean"
+
+      - id: "VL-01-C5"
+        name: "No versioned file names"
+        command: "find cortex/ -name '*_v[0-9]*' -o -name '*v[0-9]*.py' -o -name '*enhanced_*' | grep -v __pycache__ | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Rename offending files via file factory, update all imports"
+
+      - id: "VL-01-C6"
+        name: "CortexAuditDB operational"
+        command: "python -c \"from cortex.infrastructure.audit_db import CortexAuditDB; db=CortexAuditDB(); db.health_check(); print('OK')\""
+        pass_condition: "prints OK, no exceptions"
+        on_fail: "Debug CortexAuditDB initialization, fix WAL mode or schema issues"
+
+      - id: "VL-01-C7"
+        name: "MCP consolidation map present"
+        command: "python -c \"import yaml; d=yaml.safe_load(open('cortex-registry/planning/phases/planned/cortex-refactor/phase-01-foundation.yaml')); print('map present')\""
+        pass_condition: "file loads cleanly"
+        on_fail: "Ensure MCP consolidation decision YAML is committed"
+
+      - id: "VL-01-C8"
+        name: "InteractionOrchestrator is default Stage 1 — zero regression"
+        command: "pytest tests/orchestrators/test_master_orchestrator.py -k 'interaction' -v --tb=short"
+        pass_condition: "all interaction orchestrator tests pass"
+        on_fail: "Fix MasterOrchestrator pipeline, ensure InteractionOrchestrator is Stage 1"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-01-C1 through VL-01-C8) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to autonomous_advance.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 alert to user.
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all must pass in the same iteration.
+
+    autonomous_advance:
+      enabled: true
+      trigger: "All VL-01 checks pass in same iteration"
+      actions:
+        - action: "Update cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-01].status → complete"
+            - "phases[phase-01].progress.completed → ISO timestamp"
+            - "phases[phase-01].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending -= 1"
+            - "metadata.counters.complete += 1"
+            - "health_status.last_validation_loop → ISO timestamp"
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-01-foundation.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+        - action: "Git checkpoint"
+          command: "git add -A && git commit -m 'refactor(phase-01): COMPLETE — validation loop clean, advancing to phase-02'"
+        - action: "Load and execute next phase"
+          spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-02-governance-alignment.yaml"
+          orchestrator: "CortexMasterPlanOrchestrator"
+          method: "execute_phase(phase_id='phase-02')"

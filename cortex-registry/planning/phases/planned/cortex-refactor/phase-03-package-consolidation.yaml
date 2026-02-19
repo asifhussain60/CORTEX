@@ -1,18 +1,18 @@
 # ==============================================================================
-# PHASE 01 — PACKAGE CONSOLIDATION: 3 Packages → 1
+# PHASE 03 — PACKAGE CONSOLIDATION: 3 Packages → 1
 # ==============================================================================
 # Purpose: Eliminate cortex_intelligence/ and cortex_lens/ top-level packages
 # Gate: All imports resolve to cortex.*, all MCP tools respond, all tests pass
 # ==============================================================================
 
 phase:
-  id: "phase-01"
+  id: "phase-03"
   name: "Package Consolidation — 3 packages to 1"
   status: "pending"
   priority: "P0"
   estimated_effort: "3-5 days"
   risk: "medium"
-  depends_on: ["phase-00"]
+  depends_on: ["phase-02"]
   description: |
     CORTEX currently has 3 top-level Python packages:
     1. cortex/ (1,288 files) — main package
@@ -326,13 +326,13 @@ phase:
 
     - step: 14
       name: "Update migration tracker"
-      file: "cortex-registry/_cortex-master/phases/planned/gpt-refactor/migration-tracker.yaml"
+      file: "cortex-registry/planning/phases/planned/cortex-refactor/migration-tracker.yaml"
       updates: "M-001, M-002, M-003 → status: completed"
 
     - step: 15
       name: "Commit Phase 01"
-      command: "git add -A && git commit -m 'refactor(phase-01): package consolidation — 3 packages to 1'"
-      tag: "gpt-refactor-phase-01"
+      command: "git add -A && git commit -m 'refactor(phase-03): package consolidation — 3 packages to 1'"
+      tag: "cortex-refactor-phase-03"
 
   # ============================================================================
   # EXIT GATE
@@ -351,3 +351,107 @@ phase:
       4. Capability manifest checklist shows zero regressions
       5. cortex_intelligence/ and cortex_lens/ are in _archive/ only
       6. Migration tracker updated
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This stage runs AFTER all deliverables are implemented.
+  # It loops until every exit gate check passes. Once clean, CORTEX
+  # autonomously begins Phase 04 without user intervention.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-03"
+    phase: "phase-03"
+    next_phase: "phase-04"
+    next_phase_spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-04-brain-deduplication.yaml"
+    max_iterations: 10
+    iteration_timeout_minutes: 45
+
+    checks:
+      - id: "VL-03-C1"
+        name: "Zero imports from cortex_intelligence"
+        command: "grep -r 'from cortex_intelligence\\|import cortex_intelligence' cortex/ | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Re-run import rewriter on all files still referencing cortex_intelligence"
+
+      - id: "VL-03-C2"
+        name: "Zero imports from cortex_lens"
+        command: "grep -r 'from cortex_lens\\|import cortex_lens' cortex/ | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Re-run import rewriter on all files still referencing cortex_lens"
+
+      - id: "VL-03-C3"
+        name: "cortex_intelligence/ is in _archive only"
+        command: "test ! -d cortex_intelligence/ && echo 'archived' || echo 'STILL EXISTS'"
+        pass_condition: "prints archived"
+        on_fail: "Move cortex_intelligence/ to _archive/cortex_intelligence/ — only after C1 passes"
+
+      - id: "VL-03-C4"
+        name: "cortex_lens/ is in _archive only"
+        command: "test ! -d cortex_lens/ && echo 'archived' || echo 'STILL EXISTS'"
+        pass_condition: "prints archived"
+        on_fail: "Move cortex_lens/ to _archive/cortex_lens/ — only after C2 passes"
+
+      - id: "VL-03-C5"
+        name: "All MCP tools respond"
+        command: "python -c \"from cortex.mcp import list_tools; tools=list_tools(); print(len(tools),'tools'); assert len(tools)>=22,'Expected >=22 tools'\""
+        pass_condition: "prints N tools where N >= 22, no assertion error"
+        on_fail: "Debug MCP tool registration, fix broken imports causing tool failures"
+
+      - id: "VL-03-C6"
+        name: "All tests pass"
+        command: "pytest tests/ -v --tb=short -q --ignore=tests/performance"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix failing tests caused by import path changes, update all import statements"
+
+      - id: "VL-03-C7"
+        name: "Coverage ≥ 90%"
+        command: "pytest tests/ --cov=cortex --cov-report=term-missing -q | tail -3"
+        pass_condition: "coverage ≥ 90%"
+        on_fail: "Add tests for uncovered migration paths in cortex/intelligence/"
+
+      - id: "VL-03-C8"
+        name: "Capability manifest regression gate"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0"
+        on_fail: "Fix any capability regressions detected by the manifest check"
+
+      - id: "VL-03-C9"
+        name: "Migration tracker updated"
+        command: "python -c \"import yaml; t=yaml.safe_load(open('cortex-registry/planning/phases/planned/cortex-refactor/migration-tracker.yaml')); items=[i for i in t.get('migrations',[]) if i.get('id') in ['M-001','M-002','M-003']]; statuses=[i.get('status') for i in items]; assert all(s=='completed' for s in statuses), f'Not all complete: {statuses}'; print('tracker OK')\""
+        pass_condition: "prints tracker OK"
+        on_fail: "Update migration-tracker.yaml — set M-001, M-002, M-003 to status: completed"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-03-C1 through VL-03-C9) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to autonomous_advance.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 alert to user.
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all must pass in the same iteration.
+
+    autonomous_advance:
+      enabled: true
+      trigger: "All VL-03 checks pass in same iteration"
+      actions:
+        - action: "Update cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-03].status → complete"
+            - "phases[phase-03].progress.completed → ISO timestamp"
+            - "phases[phase-03].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending -= 1"
+            - "metadata.counters.complete += 1"
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-03-package-consolidation.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+        - action: "Git checkpoint"
+          command: "git add -A && git commit -m 'refactor(phase-03): COMPLETE — 3 packages consolidated to 1, advancing to phase-04'"
+        - action: "Load and execute next phase"
+          spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-04-brain-deduplication.yaml"
+          orchestrator: "CortexMasterPlanOrchestrator"
+          method: "execute_phase(phase_id='phase-04')"

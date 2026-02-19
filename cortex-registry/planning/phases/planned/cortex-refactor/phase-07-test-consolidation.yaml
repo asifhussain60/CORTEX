@@ -1,18 +1,18 @@
 # ==============================================================================
-# PHASE 05 — TEST CONSOLIDATION: High-value suite only
+# PHASE 07 — TEST CONSOLIDATION: High-value suite only
 # ==============================================================================
 # Purpose: 1,139 test files → high-value suite mirroring new cortex/ structure
 # Gate: Coverage ≥90%, all golden tests pass, zero dead tests
 # ==============================================================================
 
 phase:
-  id: "phase-05"
+  id: "phase-07"
   name: "Test Consolidation — High-value suite only"
   status: "pending"
   priority: "P1"
   estimated_effort: "5-7 days"
   risk: "medium"
-  depends_on: ["phase-04"]
+  depends_on: ["phase-06"]
   description: |
     tests/ currently has 56 subdirectories and 1,139 test files. Many are:
     - Phase-named (phase_23, phase_49, etc.) — tied to historical implementation
@@ -139,6 +139,93 @@ phase:
 
       fixtures:
         description: "Shared test fixtures and factories"
+
+  # ============================================================================
+  # EXPLICIT KEEP / ARCHIVE DECISION TABLE
+  # ============================================================================
+  # Every test directory is explicitly resolved — zero ambiguity for executor
+  # ============================================================================
+  directory_decisions:
+    keep:
+      - dir: "tests/api/"
+        reason: "API surface tests — keep"
+      - dir: "tests/core/"
+        reason: "Core kernel tests — keep (absorbs cortex/, cortex_brain/, brain/)"
+      - dir: "tests/governance/"
+        reason: "Governance tests — keep"
+      - dir: "tests/infrastructure/"
+        reason: "Infrastructure tests — keep"
+      - dir: "tests/intelligence/"
+        reason: "Intelligence tests — keep (absorbs cortex_intelligence/, cortex_lens/, lens/)"
+      - dir: "tests/mcp/"
+        reason: "MCP tool tests — keep"
+      - dir: "tests/models/"
+        reason: "Data model tests — keep"
+      - dir: "tests/observability/"
+        reason: "Observability tests — keep"
+      - dir: "tests/orchestrators/"
+        reason: "Orchestrator tests — keep"
+      - dir: "tests/dashboards/"
+        reason: "Dashboard tests — keep (absorbs dashboard/)"
+      - dir: "tests/golden/"
+        reason: "Golden tests — HIGHEST VALUE, always keep"
+      - dir: "tests/integration/"
+        reason: "Integration tests — keep"
+      - dir: "tests/e2e/"
+        reason: "E2E tests — keep"
+      - dir: "tests/regression/"
+        reason: "Regression tests — keep"
+      - dir: "tests/contracts/"
+        reason: "Contract tests — keep"
+      - dir: "tests/chaos/"
+        reason: "Chaos tests — keep"
+      - dir: "tests/performance/"
+        reason: "Performance benchmarks — keep"
+      - dir: "tests/fixtures/"
+        reason: "Shared fixtures — keep"
+      - dir: "tests/unit/"
+        reason: "Unit test root — keep"
+      - dir: "tests/sdlc/"
+        reason: "New: SDLC coverage tests (CiCdOrchestrator, DesignOrchestrator)"
+
+    merge_then_keep:
+      - from: "tests/dashboard/"
+        into: "tests/dashboards/"
+      - from: "tests/cortex_brain/"
+        into: "tests/core/"
+      - from: "tests/cortex/"
+        into: "tests/core/"
+      - from: "tests/brain/"
+        into: "tests/core/"
+      - from: "tests/cortex_intelligence/"
+        into: "tests/intelligence/"
+      - from: "tests/cortex_lens/"
+        into: "tests/intelligence/lens/"
+      - from: "tests/lens/"
+        into: "tests/intelligence/lens/"
+
+    archive:
+      - dir: "tests/phase_23/"
+        reason: "Phase-named — historical, no active code coverage"
+      - dir: "tests/phase_49/"
+        reason: "Phase-named — historical"
+      - dir: "tests/phase_52/"
+        reason: "Phase-named — historical"
+      - dir: "tests/phase_53/"
+        reason: "Phase-named — historical"
+      - dir: "tests/phase_54_a/"
+        reason: "Phase-named — historical"
+      - dir: "tests/phase_55/"
+        reason: "Phase-named — historical"
+      - dir: "tests/phase_56/"
+        reason: "Phase-named — historical"
+      - dir: "tests/phase_56_a/"
+        reason: "Phase-named — historical"
+      - dir: "tests/phase_71/"
+        reason: "Phase-named — historical"
+    pre_archive_check: |
+      Before archiving any phase-named dir: run it in isolation, extract any
+      test covering ACTIVE code (score ≥ 0.3), migrate to proper structure.
 
   # ============================================================================
   # TEST VALUE SCORING
@@ -273,8 +360,8 @@ phase:
 
     - step: 12
       name: "Commit Phase 05"
-      command: "git add -A && git commit -m 'refactor(phase-05): test consolidation — high-value suite, mirrors source'"
-      tag: "gpt-refactor-phase-05"
+      command: "git add -A && git commit -m 'refactor(phase-07): test consolidation — high-value suite, mirrors source'"
+      tag: "cortex-refactor-phase-07"
 
   # ============================================================================
   # EXIT GATE
@@ -288,7 +375,7 @@ phase:
     test_structure_mirrors_source: true
     zero_low_value_tests: true
     description: |
-      Phase 05 is complete when:
+      Phase 07 is complete when:
       1. Zero phase-named test directories
       2. Zero duplicate test directories
       3. tests/ structure mirrors cortex/ structure
@@ -296,3 +383,101 @@ phase:
       5. Coverage ≥90% across active code
       6. Every test file scores ≥0.3 on value scoring
       7. Capability manifest shows zero regressions
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This stage runs AFTER all deliverables are implemented.
+  # It loops until every exit gate check passes. Once clean, CORTEX
+  # autonomously begins Phase 08 without user intervention.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-07"
+    phase: "phase-07"
+    next_phase: "phase-08"
+    next_phase_spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-08-registry-docs.yaml"
+    max_iterations: 10
+    iteration_timeout_minutes: 60
+
+    checks:
+      - id: "VL-07-C1"
+        name: "Zero phase-named test directories"
+        command: "find tests/ -type d -name 'phase_*' | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Archive all phase_* test directories to _archive/tests/ (after salvaging high-value tests)"
+
+      - id: "VL-07-C2"
+        name: "No duplicate test directories"
+        command: "python -c \"import os; dirs=os.listdir('tests/'); dupes=[d for d in ['dashboard','cortex_brain','cortex_intelligence','cortex_lens'] if d in dirs]; print('dupes:',dupes if dupes else 'none')\""
+        pass_condition: "prints dupes: none"
+        on_fail: "Merge duplicate test directories — tests/dashboard/ + tests/dashboards/ etc."
+
+      - id: "VL-07-C3"
+        name: "Test structure mirrors cortex/ source structure"
+        command: "python -c \"import os; src_dirs=set(os.listdir('cortex/')); test_dirs=set(os.listdir('tests/unit/')); src_canonical={'core','governance','intelligence','orchestrators','mcp','infrastructure','observability','models','config','testing','cli','api','tools'}; missing=src_canonical-test_dirs; print('missing test dirs:',missing if missing else 'none')\""
+        pass_condition: "prints missing test dirs: none"
+        on_fail: "Create missing test subdirectories in tests/unit/ mirroring cortex/ structure"
+
+      - id: "VL-07-C4"
+        name: "All golden tests pass"
+        command: "pytest tests/golden/ -v --tb=short -q"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix failing golden tests — these are highest priority regression guards"
+
+      - id: "VL-07-C5"
+        name: "Coverage ≥ 90%"
+        command: "pytest tests/ --cov=cortex --cov-report=term-missing -q | tail -3"
+        pass_condition: "coverage ≥ 90%"
+        on_fail: "Add tests for uncovered modules — priority: core, orchestrators, mcp"
+
+      - id: "VL-07-C6"
+        name: "Zero low-value tests (score < 0.3)"
+        command: "python -m cortex.testing.test_value_scorer --threshold 0.3 --path tests/ --report-only | grep 'LOW VALUE' | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Remove or enhance tests scoring below 0.3 — replace stubs with real assertions"
+
+      - id: "VL-07-C7"
+        name: "All tests pass"
+        command: "pytest tests/ -v --tb=short -q --ignore=tests/performance"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix all test failures — no test regressions from consolidation"
+
+      - id: "VL-07-C8"
+        name: "Capability manifest regression gate"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0"
+        on_fail: "Fix capability regressions — test restructuring must not lose coverage"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-07-C1 through VL-07-C8) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to autonomous_advance.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 alert to user.
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all must pass in the same iteration.
+
+    autonomous_advance:
+      enabled: true
+      trigger: "All VL-07 checks pass in same iteration"
+      actions:
+        - action: "Update cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-07].status → complete"
+            - "phases[phase-07].progress.completed → ISO timestamp"
+            - "phases[phase-07].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending -= 1"
+            - "metadata.counters.complete += 1"
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-07-test-consolidation.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+        - action: "Git checkpoint"
+          command: "git add -A && git commit -m 'refactor(phase-07): COMPLETE — high-value test suite, mirrors source, advancing to phase-08'"
+        - action: "Load and execute next phase"
+          spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-08-registry-docs.yaml"
+          orchestrator: "CortexMasterPlanOrchestrator"
+          method: "execute_phase(phase_id='phase-08')"

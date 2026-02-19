@@ -1,18 +1,18 @@
 # ==============================================================================
-# PHASE 03 — ORCHESTRATOR RATIONALIZATION
+# PHASE 05 — ORCHESTRATOR RATIONALIZATION
 # ==============================================================================
 # Purpose: ~110 orchestrators → ~40 active, all workflow-template-driven
 # Gate: Every surviving orchestrator has a workflow template, all tests pass
 # ==============================================================================
 
 phase:
-  id: "phase-03"
+  id: "phase-05"
   name: "Orchestrator Rationalization — 110 to ~40 with workflow templates"
   status: "pending"
   priority: "P0"
   estimated_effort: "5-7 days"
   risk: "high"
-  depends_on: ["phase-02"]
+  depends_on: ["phase-04"]
   description: |
     CORTEX has ~110 orchestrator classes scattered across orchestrators/, brain/,
     tools/, and other directories. Only ~54 have active execute/run methods.
@@ -214,6 +214,54 @@ phase:
         workflow_template: "lifecycle/onboarding-repo-setup.yaml"
         mcp_exposed: true
 
+    quality:
+      - name: "SOLIDOrchestrator"
+        location: "cortex/orchestrators/quality/solid_orchestrator.py"
+        workflow_template: "quality/solid-principles-audit.yaml"
+        mcp_exposed: false
+        description: "SOLID principles analysis — absorbed into UnifiedQualityOrchestrator in Phase 04"
+        note: "Classify as active — has tests in cortex/orchestrators/quality/"
+
+    internal:
+      - name: "CortexDocsOrchestrator"
+        location: "cortex/orchestrators/internal/cortex_docs_orchestrator.py"
+        workflow_template: "internal/cortex-site-validation.yaml"
+        mcp_exposed: false
+        description: "cortex-docs site validation and generation — internal brain self-documentation"
+        note: "Classify as active — validates cortex-docs/ integrity"
+
+    sdlc_cicd:
+      - name: "CiCdOrchestrator"
+        location: "cortex/orchestrators/sdlc/ci_cd_orchestrator.py"
+        workflow_template: "lifecycle/ci-cd-pipeline.yaml"
+        mcp_exposed: true
+        description: |
+          SDLC brain for CI/CD operations. CORTEX understands and orchestrates
+          CI/CD pipelines for onboarded repositories. Capabilities:
+          - Analyze pipeline configs (GitHub Actions, GitLab CI, Jenkins)
+          - Detect pipeline anti-patterns and optimization opportunities
+          - Validate pipeline steps against governance rules
+          - Generate pipeline configurations from workflow templates
+          - Monitor pipeline health across onboarded repos
+        builds_on: "cortex/ci_cd/ (6 files) + cortex/brain/ci_cd/"
+        note: "New orchestrator — consolidates existing ci_cd capabilities"
+
+    sdlc_design:
+      - name: "DesignOrchestrator"
+        location: "cortex/orchestrators/sdlc/design_orchestrator.py"
+        workflow_template: "lifecycle/design-analysis.yaml"
+        mcp_exposed: true
+        description: |
+          SDLC brain for architecture analysis and design decisions. Capabilities:
+          - Generate Architecture Decision Records (ADRs) from LENS analysis
+          - Produce threat models from security scan results
+          - Review code against design patterns (from cortex-registry/patterns/)
+          - Generate design review checklists for PRs
+          - Detect architectural drift from declared patterns
+          - Produce design documentation from code (integrates documentation/)
+        builds_on: "cortex/documentation/ (9 files) + cortex_lens/knowledge_graph/"
+        note: "Consolidates documentation discovery_agent + design concerns"
+
     other_active:
       - name: "ConversationOrchestrator"
         location: "cortex/orchestrators/conversation_orchestrator.py"
@@ -264,7 +312,7 @@ phase:
   new_workflow_templates:
     description: |
       For each active orchestrator that lacks a workflow template, create one.
-      All templates follow the schema from Phase 00 with mandatory
+      All templates follow the schema from Phase 01 with mandatory
       setup/teardown steps and the ability to compose existing templates.
 
     templates_to_create:
@@ -295,6 +343,36 @@ phase:
       - "security/git-sanitization.yaml"
       - "maintenance/health-check.yaml"
       - "maintenance/vacuum-cleanup.yaml"
+      - "quality/solid-principles-audit.yaml"
+      - "internal/cortex-docs-validation.yaml"
+      - "lifecycle/ci-cd-pipeline.yaml"
+      - "lifecycle/design-analysis.yaml"
+
+    dormant_classification:
+      description: |
+        Orchestrators to explicitly classify as DORMANT (archive, restore if needed).
+        Confirmed via live code audit: exist but have no callers and no MCP exposure.
+      dormant:
+        - name: "MultiRegionOrchestrator"
+          location: "cortex/orchestrators/multi_region_orchestrator.py"
+          reason: "No callers, no MCP exposure, no tests — dormant capability"
+          action: "archive to _archive/orchestrators/ — keep for future geo-distribution work"
+        - name: "BkioOrchestrator"
+          location: "cortex/orchestrators/ (bkio)"
+          reason: "Domain-specific, no active callers"
+          action: "archive to _archive/orchestrators/"
+        - name: "DataMigrationOrchestrator"
+          location: "cortex/orchestrators/ (data_migration)"
+          reason: "Superseded by MasterOrchestrator migration workflow"
+          action: "archive to _archive/orchestrators/"
+        - name: "CapacityPlanningOrchestrators"
+          location: "cortex/capacity/ (multiple)"
+          reason: "No active callers, no MCP exposure"
+          action: "archive to _archive/capacity/"
+        - name: "SeleniumPlaywrightOrchestrator"
+          location: "cortex/orchestrators/sdlc/"
+          reason: "No active callers — migration helper"
+          action: "archive to _archive/orchestrators/"
 
   # ============================================================================
   # EXECUTION SEQUENCE (Step-by-step)
@@ -377,9 +455,9 @@ phase:
       expected: "PASS"
 
     - step: 11
-      name: "Commit Phase 03"
-      command: "git add -A && git commit -m 'refactor(phase-03): orchestrator rationalization — 120 to ~40 with workflow templates'"
-      tag: "gpt-refactor-phase-03"
+      name: "Commit Phase 05"
+      command: "git add -A && git commit -m 'refactor(phase-05): orchestrator rationalization — 120 to ~40 with workflow templates'"
+      tag: "cortex-refactor-phase-05"
 
   # ============================================================================
   # EXIT GATE
@@ -392,10 +470,108 @@ phase:
     no_duplicate_orchestrators: true
     coverage_minimum: 90
     description: |
-      Phase 03 is complete when:
+      Phase 05 is complete when:
       1. Every active orchestrator has a dedicated workflow template
       2. All duplicate orchestrators merged
       3. Phase-named directories archived
       4. All MCP tools respond correctly
       5. Capability manifest shows zero regressions
       6. ~40 orchestrators remain (down from ~110)
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This stage runs AFTER all deliverables are implemented.
+  # It loops until every exit gate check passes. Once clean, CORTEX
+  # autonomously begins Phase 06 without user intervention.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-05"
+    phase: "phase-05"
+    next_phase: "phase-06"
+    next_phase_spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-06-directory-cleanup.yaml"
+    max_iterations: 10
+    iteration_timeout_minutes: 60
+
+    checks:
+      - id: "VL-05-C1"
+        name: "No phase-named orchestrator directories"
+        command: "find cortex/ -type d -name 'phase_*' | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Archive cortex/phase_38/, cortex/phase_executors/, cortex/phase_management/ to _archive/"
+
+      - id: "VL-05-C2"
+        name: "No duplicate orchestrator implementations"
+        command: "python -c \"import subprocess; r=subprocess.run(['grep','-r','class EnforcementOrchestrator','cortex/','-l'],capture_output=True,text=True); files=r.stdout.strip().split(); assert len(files)<=1,f'Duplicate at: {files}'; print('no duplicates OK')\""
+        pass_condition: "prints no duplicates OK"
+        on_fail: "Merge duplicate orchestrators per known_duplicates list"
+
+      - id: "VL-05-C3"
+        name: "Every active orchestrator has a workflow template"
+        command: "python -c \"import yaml,os; spec=yaml.safe_load(open('cortex-registry/planning/phases/planned/cortex-refactor/phase-05-orchestrator-rationalization.yaml')); active=[o for cat in spec['phase']['active_orchestrators'].values() for o in cat]; missing=[o['name'] for o in active if not os.path.exists('cortex-registry/workflows/templates/'+o.get('workflow_template','__missing__'))]; print('missing templates:',missing if missing else 'none')\""
+        pass_condition: "prints missing templates: none"
+        on_fail: "Create missing workflow templates for each flagged orchestrator"
+
+      - id: "VL-05-C4"
+        name: "MCP tools consolidated to ≤22"
+        command: "python -c \"from cortex.mcp import list_tools; tools=list_tools(); print(len(tools),'tools'); assert len(tools)<=25,'Too many tools: consolidate further'\""
+        pass_condition: "prints N tools where N ≤ 25 (target ~22)"
+        on_fail: "Continue MCP tool consolidation — merge toolkit_* tools into primary tools"
+
+      - id: "VL-05-C5"
+        name: "All active orchestrators respond to instantiation"
+        command: "python -m cortex.testing.orchestrator_health_check --active-only --quiet"
+        pass_condition: "exit code 0, all active orchestrators instantiate"
+        on_fail: "Fix orchestrators that fail instantiation — broken imports or missing templates"
+
+      - id: "VL-05-C6"
+        name: "Import quarantine — no phase_38/phase_executors/phase_management imports"
+        command: "grep -r 'cortex\\.phase_38\\|cortex\\.phase_executors\\|cortex\\.phase_management' cortex/ | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Update all imports from archived phase directories"
+
+      - id: "VL-05-C7"
+        name: "All tests pass"
+        command: "pytest tests/ -v --tb=short -q --ignore=tests/performance"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix tests broken by orchestrator rationalization — update fixture references"
+
+      - id: "VL-05-C8"
+        name: "Capability manifest regression gate"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0"
+        on_fail: "Fix capability regressions — all active orchestrators must still be catalogued"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-05-C1 through VL-05-C8) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to autonomous_advance.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 alert to user.
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all must pass in the same iteration.
+
+    autonomous_advance:
+      enabled: true
+      trigger: "All VL-05 checks pass in same iteration"
+      actions:
+        - action: "Update cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-05].status → complete"
+            - "phases[phase-05].progress.completed → ISO timestamp"
+            - "phases[phase-05].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending -= 1"
+            - "metadata.counters.complete += 1"
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-05-orchestrator-rationalization.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+        - action: "Git checkpoint"
+          command: "git add -A && git commit -m 'refactor(phase-05): COMPLETE — 120 orchestrators to ~44, MCP to ~22, advancing to phase-06'"
+        - action: "Load and execute next phase"
+          spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-06-directory-cleanup.yaml"
+          orchestrator: "CortexMasterPlanOrchestrator"
+          method: "execute_phase(phase_id='phase-06')"

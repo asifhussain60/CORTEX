@@ -3,7 +3,7 @@
 # ==============================================================================
 # Purpose: Machine-readable manifest of ALL CORTEX capabilities
 # Usage: Validate after every phase to ensure zero regression
-# Status: BASELINE (populated in Phase 00, checked in Phases 01-07)
+# Status: BASELINE (populated in Phase 01, checked in Phases 02-10)
 # ==============================================================================
 
 manifest:
@@ -13,7 +13,7 @@ manifest:
   last_validated: null
   status: "baseline_pending"
   description: |
-    This manifest lists every capability of CORTEX. After Phase 00 creates
+    This manifest lists every capability of CORTEX. After Phase 01 creates
     the golden test that validates this manifest, it becomes the regression
     gate for all subsequent phases. Every item must be ✅ after each phase.
 
@@ -21,9 +21,9 @@ manifest:
   # SECTION 1: MCP TOOLS (External API Surface)
   # ============================================================================
   mcp_tools:
-    expected_count: 19
+    expected_count: 22
     consolidation_note: |
-      Consolidated from 34+ to ~19 tools. Zero capability loss.
+      Consolidated from 34+ to ~22 tools. Zero capability loss.
       Toolkit tools absorbed. Config loaders unified. Dashboard/refactor
       tools use mode parameters. cortex_challenge absorbed into
       MasterOrchestrator default behavior (EA-009).
@@ -87,7 +87,7 @@ manifest:
         description: "Discover tools + features (consolidated)"
         absorbs: ["cortex_tools_catalog", "cortex_total_recall"]
         modes: ["tools", "features", "all"]
-        validation: "scope=tools, expect 20 tools; scope=features, expect feature list"
+        validation: "scope=tools, expect 22 tools; scope=features, expect feature list"
         status: "⬜ pending"
 
       - id: "MCP-008"
@@ -191,6 +191,31 @@ manifest:
         category: "orchestration"
         description: "Workflow execution and management"
         validation: "Execute workflow template, expect lifecycle completion"
+        status: "⬜ pending"
+
+      # SDLC-complete MCP tools — added in coherence review
+      - id: "MCP-021"
+        tool: "cortex_document"
+        category: "sdlc_documentation"
+        description: |
+          SDLC brain for documentation generation. Covers SDLC-008.
+          Generates API docs, READMEs, architecture diagrams, and runbooks
+          from LENS analysis of onboarded repos. Backed by DesignOrchestrator.
+        modes: ["api_docs", "readme", "architecture_diagram", "runbook", "adr"]
+        validation: "operation=api_docs, expect OpenAPI/docstring extraction; operation=adr, expect ADR YAML"
+        added_in: "Phase 08 (registry-docs)"
+        status: "⬜ pending"
+
+      - id: "MCP-022"
+        tool: "cortex_cicd"
+        category: "sdlc_cicd"
+        description: |
+          SDLC brain for CI/CD operations. Covers SDLC-007 and SDLC-010.
+          Analyzes, generates, and validates CI/CD pipeline configurations.
+          Backed by CiCdOrchestrator.
+        modes: ["analyze", "generate", "validate", "monitor"]
+        validation: "operation=analyze, expect pipeline anti-patterns; operation=generate, expect pipeline YAML"
+        added_in: "Phase 08 (registry-docs)"
         status: "⬜ pending"
 
   # ============================================================================
@@ -528,61 +553,151 @@ manifest:
         has_tests: "⬜ pending"
         status: "⬜ pending"
 
+      # SDLC-complete orchestrators — added in coherence review
+      # NOTE: CortexDocsOrchestrator already listed as ORCH-034
+
+      - id: "ORCH-041"
+        name: "CiCdOrchestrator"
+        domain: "sdlc"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+        note: "SDLC brain for CI/CD operations — pipeline analysis, generation, governance"
+
+      - id: "ORCH-042"
+        name: "DesignOrchestrator"
+        domain: "sdlc"
+        mcp_exposed: true
+        has_workflow_template: "⬜ pending"
+        has_tests: "⬜ pending"
+        status: "⬜ pending"
+        note: "SDLC brain for architecture analysis — ADRs, threat models, design reviews"
+
+      # MultiRegionOrchestrator — dormant, not in active list
+      - id: "ORCH-043"
+        name: "MultiRegionOrchestrator"
+        domain: "infrastructure"
+        mcp_exposed: false
+        has_workflow_template: null
+        has_tests: false
+        status: "🗄️ dormant — archived to _archive/orchestrators/ in Phase 05"
+
   # ============================================================================
   # SECTION 3: GOVERNANCE RULES
   # ============================================================================
   governance_rules:
     source: "cortex-registry/core/tier0-skull/skull-rules.yaml"
-    expected_count: 54
-    critical_rules:
+    expected_count: 39  # Post Phase-02 alignment: 36 original - 1 merged + 6 new - 2 AC normalized
+    phase_02_alignment: |
+      Phase 02 reviews all 36 rules against the refactored architecture.
+      Dispositions: 14 KEEP, 17 ENHANCE, 1 MERGE (CORE-039 → CORE-002),
+      2 NORMALIZE (AC-PERMANENT-FIX-* → CORE-056 / absorbed into CORE-035),
+      6 NEW (CORE-058 through CORE-063).
+      CCL GovernanceCrystal provides per-turn rule enforcement.
+    
+    tier0_skull_rules:
       - id: "GOV-001"
         rule: "CORE-001"
         name: "Incremental Execution"
+        disposition: "KEEP"
         status: "⬜ pending"
       - id: "GOV-002"
         rule: "CORE-002"
-        name: "Markdown Report Suppression"
+        name: "No Automatic File Generation"
+        disposition: "ENHANCED — absorbs CORE-039"
         status: "⬜ pending"
       - id: "GOV-003"
         rule: "CORE-008"
         name: "TDD Enforcement"
+        disposition: "KEEP"
         status: "⬜ pending"
       - id: "GOV-004"
         rule: "CORE-011"
         name: "Type Hints"
+        disposition: "KEEP"
         status: "⬜ pending"
       - id: "GOV-005"
         rule: "CORE-012"
         name: "Docstrings"
+        disposition: "KEEP"
         status: "⬜ pending"
       - id: "GOV-006"
         rule: "CORE-028"
         name: "File Naming"
+        disposition: "ENHANCED — reference canonical FileFactory"
         status: "⬜ pending"
       - id: "GOV-007"
         rule: "CORE-035"
         name: "Single Canonical Implementation"
+        disposition: "ENHANCED — absorbs AC-PERMANENT-FIX-007 as sub-section"
         status: "⬜ pending"
       - id: "GOV-008"
-        rule: "CORE-048"
-        name: "Holistic Validation Gate"
+        rule: "CORE-050"
+        name: "No Quality Degradation"
+        disposition: "KEEP"
         status: "⬜ pending"
       - id: "GOV-009"
-        rule: "CORE-049"
-        name: "Silent Autonomous Execution"
+        rule: "CORE-052"
+        name: "Holistic Validation Gate Mandatory"
+        disposition: "ENHANCED — add workflow template validation"
         status: "⬜ pending"
       - id: "GOV-010"
-        rule: "CORE-050"
-        name: "Intent-Based MCP Blocking"
+        rule: "CORE-055"
+        name: "Golden Test Tier Contract"
+        disposition: "KEEP"
         status: "⬜ pending"
       - id: "GOV-011"
-        rule: "CORE-051"
-        name: "Cross-Platform Audit"
+        rule: "CORE-034"
+        name: "Mandatory Audit Logging"
+        disposition: "ENHANCED — reference CortexAuditDB"
         status: "⬜ pending"
       - id: "GOV-012"
-        rule: "CORE-053"
-        name: "Auto-Healing"
+        rule: "CORE-056"
+        name: "Challenge System Permanent Wiring"
+        disposition: "NORMALIZED from AC-PERMANENT-FIX-006"
         status: "⬜ pending"
+    
+    new_rules_phase_02:
+      - id: "GOV-013"
+        rule: "CORE-058"
+        name: "SQLite Audit Integrity"
+        category: "auditability"
+        status: "⬜ pending"
+      - id: "GOV-014"
+        rule: "CORE-059"
+        name: "Workflow Template Mandatory"
+        category: "architecture_integrity"
+        status: "⬜ pending"
+      - id: "GOV-015"
+        rule: "CORE-060"
+        name: "Single Package Boundary"
+        category: "architecture_integrity"
+        status: "⬜ pending"
+      - id: "GOV-016"
+        rule: "CORE-061"
+        name: "SDLC Brain Coverage"
+        category: "quality_gates"
+        status: "⬜ pending"
+      - id: "GOV-017"
+        rule: "CORE-062"
+        name: "MCP Tool Consolidation Contract"
+        category: "architecture_integrity"
+        status: "⬜ pending"
+      - id: "GOV-018"
+        rule: "CORE-063"
+        name: "CCL Governance Crystal Required"
+        category: "orchestration_lifecycle"
+        status: "⬜ pending"
+    
+    ccl_governance_crystal:
+      description: |
+        Governance enforcement is part of CCL (Context Crystallization Layer).
+        GovernanceCrystal pre-loads applicable rules per intent, carries
+        violation history across turns, and provides per-session caching.
+      module: "cortex/governance/crystal/governance_crystal.py"
+      integrated_with: "cortex/orchestrators/context_crystallization.py"
+      performance_sla: "<50ms warm-up, <5ms per-request filtering"
 
   # ============================================================================
   # SECTION 4: INTELLIGENCE CAPABILITIES
@@ -753,9 +868,41 @@ manifest:
         status: "⬜ pending"
 
     new_required:
-      description: "Templates to be created in Phase 03 for orchestrators without templates"
-      count: "~15"
-      status: "⬜ pending — created in Phase 03"
+      description: "Templates to be created in Phase 05 for orchestrators without templates"
+      items:
+        - "lifecycle/master-orchestration.yaml"
+        - "lifecycle/intent-routing.yaml"
+        - "lifecycle/interaction-pipeline.yaml"
+        - "lifecycle/workflow-execution.yaml"
+        - "lifecycle/intelligence-pipeline.yaml"
+        - "lifecycle/lens-analysis.yaml"
+        - "lifecycle/lens-cached-analysis.yaml"
+        - "lifecycle/conversation-management.yaml"
+        - "lifecycle/request-rephrase.yaml"
+        - "lifecycle/state-management.yaml"
+        - "lifecycle/observability-pipeline.yaml"
+        - "lifecycle/planning-workflow.yaml"
+        - "lifecycle/dashboard-generation.yaml"
+        - "lifecycle/git-operations.yaml"
+        - "lifecycle/git-publish.yaml"
+        - "lifecycle/ci-cd-pipeline.yaml"
+        - "lifecycle/design-analysis.yaml"
+        - "governance/enforcement-pipeline.yaml"
+        - "governance/holistic-validation.yaml"
+        - "governance/regression-safety.yaml"
+        - "quality/code-review.yaml"
+        - "quality/unified-analysis.yaml"
+        - "quality/solid-principles-audit.yaml"
+        - "support/debugging-workflow.yaml"
+        - "support/rollback-workflow.yaml"
+        - "support/environment-setup.yaml"
+        - "support/auto-healing.yaml"
+        - "security/git-sanitization.yaml"
+        - "maintenance/health-check.yaml"
+        - "maintenance/vacuum-cleanup.yaml"
+        - "internal/cortex-docs-validation.yaml"
+      count: 31
+      status: "⬜ pending — created in Phase 05"
 
   # ============================================================================
   # SECTION 7: DESIGN PATTERNS (Enterprise Architecture)
@@ -802,3 +949,143 @@ manifest:
         pattern: "Command"
         usage: "Workflow steps as commands"
         status: "⬜ pending"
+
+  # ============================================================================
+  # SECTION 8: SDLC COMPLETENESS — Full Software Development Lifecycle
+  # ============================================================================
+  # This section verifies CORTEX operates as a UNIFIED BRAIN across ALL SDLC
+  # phases: Plan → Design → Code → Test → Review → Integrate → Deploy → Monitor
+  # ============================================================================
+  sdlc_coverage:
+    description: |
+      CORTEX must be the single AI brain for every phase of software development.
+      This section maps each SDLC phase to the CORTEX capability that serves it.
+      Zero gaps allowed in a unified brain architecture.
+
+    phases:
+      - id: "SDLC-001"
+        name: "Plan"
+        description: "Project planning, roadmap, requirements analysis"
+        orchestrator: "PlanningOrchestrator (ORCH-010)"
+        mcp_tool: "cortex_workflow (WF mode: planning)"
+        workflow_template: "lifecycle/planning-workflow.yaml"
+        status: "⬜ pending"
+
+      - id: "SDLC-002"
+        name: "Design & Architecture"
+        description: "Architecture decisions, threat models, design reviews, ADRs"
+        orchestrator: "DesignOrchestrator (ORCH-042)"
+        mcp_tool: "cortex_discover (scope=design) → cortex_onboard_repository (LENS analysis)"
+        workflow_template: "lifecycle/design-analysis.yaml"
+        capabilities:
+          - "Architecture Decision Records (ADR) generation from LENS"
+          - "Threat model from SecurityOrchestrator output"
+          - "Design pattern detection from knowledge graph"
+          - "Design review checklist generation for PRs"
+          - "Architectural drift detection"
+        status: "⬜ pending"
+
+      - id: "SDLC-003"
+        name: "Code (TDD)"
+        description: "Test-driven development, code generation, refactoring"
+        orchestrator: "TDDOrchestrator (ORCH-002) + RefactoringOrchestrator (ORCH-012)"
+        mcp_tool: "cortex_refactor"
+        workflow_template: "tdd/tdd-feature-implementation.yaml"
+        status: "⬜ pending"
+
+      - id: "SDLC-004"
+        name: "Quality & Analysis"
+        description: "SOLID principles, code quality, coverage, duplication"
+        orchestrator: "UnifiedQualityOrchestrator (ORCH-025) + SOLIDOrchestrator (ORCH-036)"
+        mcp_tool: "cortex_audit (operation=analyze)"
+        workflow_template: "quality/quality-code-uplift.yaml"
+        status: "⬜ pending"
+
+      - id: "SDLC-005"
+        name: "Security"
+        description: "Vulnerability scan, secrets detection, compliance hardening"
+        orchestrator: "SecurityOrchestrator (ORCH-009) + SecurityVulnerabilityOrchestrator (ORCH-037)"
+        mcp_tool: "cortex_execute_governance + cortex_validate_compliance"
+        workflow_template: "security/security-compliance-audit.yaml"
+        status: "⬜ pending"
+
+      - id: "SDLC-006"
+        name: "Review"
+        description: "Code review, PR analysis, governance compliance checks"
+        orchestrator: "ReviewOrchestrator (ORCH-008) + HolisticValidationOrchestrator (ORCH-026)"
+        mcp_tool: "cortex_audit (operation=validate)"
+        workflow_template: "quality/code-review.yaml"
+        status: "⬜ pending"
+
+      - id: "SDLC-007"
+        name: "CI/CD Integration"
+        description: "Pipeline analysis, generation, governance validation"
+        orchestrator: "CiCdOrchestrator (ORCH-041)"
+        mcp_tool: "cortex_workflow (WF mode: ci-cd)"
+        workflow_template: "lifecycle/ci-cd-pipeline.yaml"
+        capabilities:
+          - "Analyze existing pipeline configs (GH Actions, GitLab CI, Jenkins)"
+          - "Detect pipeline anti-patterns"
+          - "Generate compliant pipeline YAML from templates"
+          - "Validate pipeline against governance rules"
+          - "Monitor pipeline health across onboarded repos"
+        status: "⬜ pending"
+
+      - id: "SDLC-008"
+        name: "Documentation"
+        description: "API docs, README generation, architecture diagrams, runbooks"
+        orchestrator: "DesignOrchestrator (ORCH-042) + CortexDocsOrchestrator (ORCH-034)"
+        mcp_tool: "cortex_onboard_repository (generates LENS-based docs)"
+        capabilities:
+          - "API documentation generation from code"
+          - "README generation from LENS analysis"
+          - "Architecture diagrams (from LENS knowledge graph)"
+          - "Runbook generation from orchestrator workflow templates"
+          - "In-code docstring validation (CORE-012)"
+        status: "⬜ pending"
+
+      - id: "SDLC-009"
+        name: "Git & Version Control"
+        description: "Commit governance, push validation, sanitization, history analysis"
+        orchestrator: "GitOrchestrator (ORCH-013) + SanitizationOrchestrator (ORCH-015)"
+        mcp_tool: "cortex_git_push"
+        workflow_template: "lifecycle/git-operations.yaml"
+        status: "⬜ pending"
+
+      - id: "SDLC-010"
+        name: "Deploy & Release"
+        description: "Deployment orchestration, canary config, rollback"
+        orchestrator: "CiCdOrchestrator (ORCH-041) + RollbackOrchestrator (ORCH-022)"
+        mcp_tool: "cortex_workflow (WF mode: release)"
+        workflow_template: "lifecycle/ci-cd-pipeline.yaml"
+        note: "Deployment is a CI/CD sub-phase — same orchestrator handles release"
+        status: "⬜ pending"
+
+      - id: "SDLC-011"
+        name: "Monitor & Observe"
+        description: "Health scans, metrics, traces, dashboard generation"
+        orchestrator: "HealthOrchestrator (ORCH-016) + ObservabilityOrchestrator (ORCH-032)"
+        mcp_tool: "cortex_health + cortex_dashboard + cortex_capture_metrics"
+        workflow_template: "maintenance/health-vacuum-unified-pipeline.yaml"
+        status: "⬜ pending"
+
+      - id: "SDLC-012"
+        name: "Maintain & Refactor"
+        description: "Technical debt reduction, dead code removal, vacuum, upgrade"
+        orchestrator: "VacuumOrchestrator (ORCH-017) + RefactoringOrchestrator (ORCH-012)"
+        mcp_tool: "cortex_health (operation=vacuum) + cortex_refactor"
+        workflow_template: "maintenance/cleanup-deduplication.yaml"
+        status: "⬜ pending"
+
+      - id: "SDLC-013"
+        name: "Onboard New Repo/Team"
+        description: "LENS analysis, infrastructure detection, dashboard, company catalog"
+        orchestrator: "OnboardingOrchestrator (ORCH-027)"
+        mcp_tool: "cortex_onboard_repository + cortex_onboard_infrastructure"
+        workflow_template: "lifecycle/onboarding-repo-setup.yaml"
+        status: "⬜ pending"
+
+    coverage_gate:
+      description: "All 13 SDLC phases must have a working orchestrator + MCP surface by Phase 09"
+      total_phases: 13
+      blocking: true

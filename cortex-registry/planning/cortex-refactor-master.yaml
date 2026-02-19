@@ -1,0 +1,442 @@
+# ============================================================================
+# CORTEX Refactor Master — Execution Index
+# ============================================================================
+# Authority: CortexMasterPlanOrchestrator
+# Version: 1.0.0
+# Created: 2026-02-19
+# Branch: CORTEX-GPT
+# Status: APPROVED — READY TO EXECUTE
+#
+# PURPOSE:
+#   This file is the SINGLE SOURCE OF TRUTH for all cortex-refactor progress.
+#   Phase YAML files in cortex-refactor/ contain execution specs ONLY.
+#   All status, progress, metrics, and completion dates live HERE ONLY.
+#   cortex-master.yaml gets ONE summary update when all 10 phases complete.
+#
+# EXECUTION:
+#   CortexMasterPlanOrchestrator.load_workflow_template("master-plan-execution")
+#   Workflow: cortex-registry/workflows/templates/lifecycle/master-plan-execution.yaml
+# ============================================================================
+
+metadata:
+  id: "cortex-refactor-master"
+  name: "CORTEX Cohesive Brain Refactor"
+  version: "1.0.0"
+  created: "2026-02-19"
+  last_updated: "2026-02-19"
+  branch: "CORTEX-GPT"
+  status: "approved"           # approved | in_progress | complete
+  owner: "asifhussain60"
+  orchestrator: "CortexMasterPlanOrchestrator"
+  workflow_template: "cortex-registry/workflows/templates/lifecycle/master-plan-execution.yaml"
+  phase_specs_dir: "cortex-registry/planning/phases/planned/cortex-refactor/"
+  completed_dir: "cortex-registry/planning/phases/completed/cortex-refactor/"
+  status_authority: "THIS FILE — cortex-refactor-master.yaml"
+
+  counters:
+    total_phases: 10
+    pending: 10
+    in_progress: 0
+    complete: 0
+    deferred: 0
+    failed: 0
+
+  baseline:
+    golden_tests_passing: 428
+    cortex_top_level_dirs: 59
+    test_top_level_dirs: 55
+    orchestrator_classes: 120
+    mcp_tools: 28
+    packages: 3                     # cortex/, cortex_intelligence/, cortex_lens/
+    governance_dirs: 9              # per chat01.md LENS scan
+    lens_dirs: 3
+    domain_brain_dirs: 3
+    observability_dirs: 5
+    source_files: 1288
+    test_files: 1139
+    recorded: "2026-02-19"
+
+  targets:
+    packages: 1                     # cortex/ only
+    orchestrator_classes: 44        # ~44 active (up from ~40 — includes SDLC brain)
+    mcp_tools: 22                   # consolidated from 34+
+    cortex_top_level_dirs: 15       # canonical domains only
+    governance_dirs: 1              # ONE cortex/governance/
+    lens_dirs: 1                    # ONE cortex/intelligence/lens/
+    domain_brain_dirs: 1            # ONE cortex/intelligence/domain_brain/
+    golden_tests_passing: 428       # zero regression
+    test_coverage_pct: 95
+
+  health_status:
+    p0_issues: 0
+    p1_issues: 0
+    last_lens_scan: null            # set by Stage 0 of execution workflow
+    last_validation_loop: null      # set by Stage 9 of execution workflow
+
+# ============================================================================
+# PHASE STATUS — ALL PROGRESS RECORDED HERE
+# ============================================================================
+# Status values: pending | in_progress | complete | deferred | failed
+# Stage values:  lens_discovery | gap_analysis | tdd_red_phase |
+#                autonomous_execute | refactor_cycle | governance_audit |
+#                registry_update | commit_and_push | validation_loop
+# ============================================================================
+
+phases:
+
+  - id: "phase-01"
+    title: "Foundation — Capability Manifest, Core Factories, SQLite Audit, MCP Consolidation Map"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-01-foundation.yaml"
+    status: "pending"
+    priority: "P0"
+    risk: "low"
+    dependencies: []
+    deliverables:
+      - "D1: Capability manifest YAML (100 items — 28 MCP tools, 44 orchestrators, 11 governance rules, 10 intelligence caps, 8 infra caps)"
+      - "D2: Migration test suite (golden tests for every manifest item)"
+      - "D3: FileFactory (cortex/core/file_factory.py — merge 677+546 line factories)"
+      - "D4: WorkflowEngine (cortex/core/workflow_engine.py — reads workflow YAML)"
+      - "D5: OrchestratorBase with 5-step lifecycle (setup/govern/execute/validate/teardown)"
+      - "D6: CortexAuditDB (cortex/infrastructure/audit_db.py — unified SQLite, WAL mode)"
+      - "D7: MCP consolidation map (34→22 tools decision table)"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+  - id: "phase-02"
+    title: "Governance Alignment — Rules Review, Enhancement & CCL Integration"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-02-governance-alignment.yaml"
+    status: "pending"
+    priority: "P0"
+    risk: "low"
+    dependencies: ["phase-01"]
+    deliverables:
+      - "G1: Eliminate duplicate skull-rules.yaml (3 locations → 1)"
+      - "G2: 36-rule alignment audit against refactored architecture"
+      - "G3: 6 new rules: CORE-058 (SQLite WAL), CORE-059 (MCP footprint), CORE-060 (SDLC brain), CORE-061 (CCL), CORE-062 (plan-first), CORE-063 (challenge-first)"
+      - "G4: Tier 1 & Tier 2 alignment (zero stale references)"
+      - "G5: CCL GovernanceCrystal design spec"
+      - "G6: Post-alignment governance inventory"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+  - id: "phase-03"
+    title: "Package Consolidation — 3 packages to 1"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-03-package-consolidation.yaml"
+    status: "pending"
+    priority: "P0"
+    risk: "medium"
+    dependencies: ["phase-02"]
+    deliverables:
+      - "cortex_intelligence/ → archived to _archive/, unique logic migrated to cortex/intelligence/memory/"
+      - "cortex_lens/ → archived to _archive/, unique logic migrated to cortex/intelligence/lens/"
+      - "All imports rewritten: cortex.* only"
+      - "Import quarantine check passing: zero imports from _archive/"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+  - id: "phase-04"
+    title: "Brain Deduplication — Dissolve brain/ into proper domains"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-04-brain-deduplication.yaml"
+    status: "pending"
+    priority: "P0"
+    risk: "high"
+    dependencies: ["phase-03"]
+    deliverables:
+      - "brain/ (261 files, 28 subdirs) dissolved into canonical domain dirs"
+      - "brain/core/ → cortex/core/"
+      - "brain/governance/ → cortex/governance/"
+      - "brain/lens/ → cortex/intelligence/lens/"
+      - "brain/domain_brain/ → cortex/intelligence/domain_brain/"
+      - "brain/domain_orchestrators/ → cortex/orchestrators/domain/"
+      - "brain/observability/ → cortex/observability/"
+      - "brain/ → _archive/brain/"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+  - id: "phase-05"
+    title: "Orchestrator Rationalization + MCP Consolidation — 120 to ~44 orchestrators, 34 to ~22 MCP tools"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-05-orchestrator-rationalization.yaml"
+    status: "pending"
+    priority: "P0"
+    risk: "high"
+    dependencies: ["phase-04"]
+    deliverables:
+      - "All 120 orchestrators classified: active/dormant/dead"
+      - "~76 dormant/dead archived to _archive/orchestrators/"
+      - "~44 active orchestrators — each bound to a workflow template"
+      - "5 known duplicates resolved: enforcement(2), rollback(2), hot_reload(2), dashboard(2), tdd(2)"
+      - "MCP tools consolidated: 34→22 (toolkit absorbed, versioned tools merged)"
+      - "cortex_challenge absorbed into MasterOrchestrator.governance_gate (EA-009)"
+      - "SQLite audit wired into every orchestrator teardown step"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+  - id: "phase-06"
+    title: "Directory Cleanup — 59 to ~15 canonical directories"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-06-directory-cleanup.yaml"
+    status: "pending"
+    priority: "P1"
+    risk: "medium"
+    dependencies: ["phase-05"]
+    deliverables:
+      - "30+ small/redundant dirs consolidated (automation, capacity, collaboration, confirmation, devx, etc.)"
+      - "Phase-named dirs archived: phase_38/, phase_executors/, phase_management/"
+      - "cortex/ top-level dirs: 59 → ~15 canonical"
+      - "cortex/cortex-registry/ inner duplicate deleted"
+      - "cortex/cortex_intelligence/ inner duplicate deleted"
+      - "cortex/tests/ inner test files moved to tests/"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+  - id: "phase-07"
+    title: "Test Consolidation — 55 test dirs to ~15, high-value only"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-07-test-consolidation.yaml"
+    status: "pending"
+    priority: "P1"
+    risk: "medium"
+    dependencies: ["phase-06"]
+    deliverables:
+      - "9 phase-named test dirs archived: phase_23, phase_49, phase_52, phase_53, phase_54_a, phase_55, phase_56, phase_56_a, phase_71"
+      - "Duplicate test dirs merged: dashboard/ + dashboards/, cortex + cortex_brain/"
+      - "Low-value tests removed (score < 0.3 on test value scorer)"
+      - "Test structure mirrors source: core, intelligence, orchestrators, mcp, etc."
+      - "Coverage ≥ 90% across active code"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+  - id: "phase-08"
+    title: "Registry & Docs Alignment + Infrastructure Catalog"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-08-registry-docs.yaml"
+    status: "pending"
+    priority: "P1"
+    risk: "low"
+    dependencies: ["phase-07"]
+    deliverables:
+      - "All workflow templates audited — every active orchestrator has a template"
+      - "Stale YAMLs removed (references to deleted/archived components)"
+      - "cortex-docs updated to reflect new architecture"
+      - "Company infrastructure catalog (platforms, APIs, applications)"
+      - "cortex_onboard_infrastructure MCP tool"
+      - "Registry integrity: all YAML references resolve"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+  - id: "phase-09"
+    title: "Final Verification, Refactor & Archive Deletion"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-09-final-verification.yaml"
+    status: "pending"
+    priority: "P0"
+    risk: "medium"
+    dependencies: ["phase-08"]
+    deliverables:
+      - "Capability manifest: every item verified green"
+      - "All 22 MCP tools respond correctly"
+      - "Full regression suite: unit + integration + golden + e2e"
+      - "SQLite verification: 3 DBs only, WAL mode, auto-cleanup"
+      - "MCP consolidation verified: exactly 22 tools"
+      - "_archive/ safely deleted (permanent)"
+      - "Zero imports from dissolved packages"
+      - "18-point Definition of Done checklist complete"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+  - id: "phase-10"
+    title: "Production Readiness — Hardening, Chaos Testing, SLAs & Go-Live"
+    spec_file: "cortex-registry/planning/phases/planned/cortex-refactor/phase-10-production-readiness.yaml"
+    status: "pending"
+    priority: "P1"
+    risk: "medium"
+    dependencies: ["phase-09"]
+    deliverables:
+      - "Performance benchmarks: MCP response <200ms p95, LENS scan <5s full, <500ms incremental"
+      - "Chaos testing: concurrent requests, db contention, partial failure recovery"
+      - "Disaster recovery runbook"
+      - "Production SLOs defined and baseline captured"
+      - "Security hardening: credential scan, dependency audit, SAST"
+      - "Tag release: v2.0.0-cohesive-brain"
+    progress:
+      started: null
+      completed: null
+      actual_duration: null
+      current_stage: null
+      stages_complete: []
+      tests_written: 0
+      tests_passing: 0
+      coverage_pct: 0
+      commits: []
+      issues_found: 0
+      issues_resolved: 0
+      validation_loop_iterations: 0
+      lens_scan_completed: false
+
+# ============================================================================
+# LENS SCAN HISTORY
+# ============================================================================
+# Stage 0 of master-plan-execution.yaml writes here after every scan.
+# First run: full workspace scan. Subsequent: git-diff incremental.
+# ============================================================================
+
+lens_scans:
+  history: []
+  # Example entry written by Stage 0:
+  # - scan_id: "lens-2026-02-19-001"
+  #   type: "full"               # full | incremental
+  #   phase: "phase-01"
+  #   timestamp: "2026-02-19T..."
+  #   capability_map_items: 0
+  #   duplication_risks: []
+  #   feature_gaps: []
+  #   new_since_last_commit: []
+
+# ============================================================================
+# VALIDATION LOOP HISTORY
+# ============================================================================
+# Stage 9 of master-plan-execution.yaml writes here after each phase.
+# Records every loop iteration, issues found, fixes applied.
+# ============================================================================
+
+validation_loops:
+  history: []
+  # Example entry written by Stage 9:
+  # - loop_id: "vloop-phase-01-001"
+  #   phase: "phase-01"
+  #   iteration: 1
+  #   timestamp: "2026-02-19T..."
+  #   checks_run:
+  #     - deduplication: {issues: 0}
+  #     - debloat: {issues: 0}
+  #     - regression: {golden_tests: 428, passing: 428, failing: 0}
+  #     - brittleness: {issues: 0}
+  #     - governance: {p0_violations: 0, p1_violations: 0}
+  #     - stale_refs: {issues: 0}
+  #   total_issues: 0
+  #   status: "clean"            # clean | fixed | failed
+
+# ============================================================================
+# COMPLETION RECORD
+# ============================================================================
+# Written by Stage 9 of master-plan-execution.yaml when all 10 phases
+# complete with zero issues. cortex-master.yaml gets ONE summary entry.
+# ============================================================================
+
+completion:
+  status: "pending"             # pending | complete
+  completed_date: null
+  total_duration: null
+  final_test_count: null
+  final_coverage_pct: null
+  final_golden_tests: null
+  release_tag: null             # v2.0.0-cohesive-brain
+  cortex_master_yaml_updated: false
+  summary:
+    issues_identified: null
+    solution_implemented: null
+    next_steps: null
