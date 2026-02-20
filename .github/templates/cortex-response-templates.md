@@ -691,6 +691,23 @@ I'm here to make you successful. Let's build something great. 🚀
 
 > ⚠️ **RENDERING RULE:** Output these templates **directly in the chat response as live markdown** — NOT inside fenced code blocks. The `━━━` lines, progress bar, and stage bullet list MUST render as visible characters in the chat panel, not as preformatted text in a code box.
 
+### Initialisation Template (STAGE 0 — before any work starts)
+
+**Output this directly — no surrounding backticks or fenced block:**
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 {PHASE_NAME}: Initialising
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**`[░░░░░░░░░░]` 0% — Initialising**
+
+- 🔵 S1: {name} (starting)
+- ⚪ S2: {name} (pending)
+- ⚪ S3: {name} (pending)
+- ⚪ S4: {name} (pending)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 ### Progress Template (IN-PROGRESS)
 
 **Output this directly — no surrounding backticks or fenced block:**
@@ -762,14 +779,46 @@ Fix: {fix_suggestion}
 | ⚪ | Pending | Not yet started |
 | 🔴 | Failed/Blocked | Error, needs fix |
 
+### Progress Bar Format Rules (CRITICAL — prevents rendering bugs)
+
+> ❌ **NEVER wrap the progress bar line in a fenced code block (` ``` `) or backtick-inline (`` ` ``).**
+> A fenced block renders as a full-width greyed box — it looks like a 100% full bar regardless of the actual percentage.
+> Output the bar as **plain markdown text on its own line**.
+
+**Bar format:** `[████████░░]` — always exactly **10 blocks** total (filled `█` + empty `░`)
+
+| % | Correct bar | Filled | Empty |
+|---|---|---|---|
+| 0% | `[░░░░░░░░░░]` | 0 | 10 |
+| 10% | `[█░░░░░░░░░]` | 1 | 9 |
+| 20% | `[██░░░░░░░░]` | 2 | 8 |
+| 30% | `[███░░░░░░░]` | 3 | 7 |
+| 40% | `[████░░░░░░]` | 4 | 6 |
+| 50% | `[█████░░░░░]` | 5 | 5 |
+| 60% | `[██████░░░░]` | 6 | 4 |
+| 70% | `[███████░░░]` | 7 | 3 |
+| 80% | `[████████░░]` | 8 | 2 |
+| 90% | `[█████████░]` | 9 | 1 |
+| 100% | `[██████████]` | 10 | 0 |
+
+**CORRECT initialisation (0%):**
+**`[░░░░░░░░░░]` 0% — Initialising**
+
+**WRONG (causes full-bar rendering bug):**
+```
+████████████████████████████████████████ 0% — Initialising
+```
+↑ This uses 40 raw `█` blocks inside a fenced code block — renders as a greyed full-width bar at every percentage.
+
 ### Template Rules
 
 1. **Stage list:** Each stage is a Markdown bullet (`- {icon} S{N}: ...`) — one per line (never concatenated)
-2. **Progress bar:** `[██████████]` format with 10-block width
+2. **Progress bar:** `[██████████]` format — exactly **10 blocks** total, plain markdown, never fenced
 3. **Separators:** `━` (U+2501) line, exactly 44 characters
 4. **Stage names:** Keep <30 chars to prevent overflow
 5. **Metrics line:** Always include Tests + Coverage
 6. **Last stage:** Same bullet format as all other stages (no special character)
+7. **0% start:** Use `[░░░░░░░░░░] 0%` — ALL empty blocks, NOT filled blocks
 
 ### Forbidden in Silent Mode
 

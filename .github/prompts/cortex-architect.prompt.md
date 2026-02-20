@@ -319,7 +319,26 @@ If approaching limit:
 
 **SSOT:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
 
-All autonomous execution output uses the single golden template (progress bar + stage bullet list with ✅/🔵/⚪/🔴 icons). Do NOT define format here — load from SSOT.
+All autonomous execution output uses the single golden template (progress bar + stage bullet list with ✅/🔵/⚪/🔴 icons).
+
+### Critical Rules (memorise — bugs are invisible until screenshot)
+
+- **Bar width:** Always exactly **10 blocks**: filled `█` + empty `░` = 10 total
+- **0% start:** `[░░░░░░░░░░] 0%` — ALL empty, zero filled blocks
+- **100% end:** `[██████████] 100%` — ALL filled, zero empty blocks
+- **Never fenced:** Output bar as **plain markdown** — never inside ` ``` ` or `` ` `` — a fenced block renders as a greyed full-width box at every percentage
+
+| % | Bar |
+|---|-----|
+| 0% | `[░░░░░░░░░░]` |
+| 14% | `[█░░░░░░░░░]` |
+| 28% | `[██░░░░░░░░]` |
+| 57% | `[█████░░░░░]` |
+| 85% | `[████████░░]` |
+| 100% | `[██████████]` |
+
+**❌ WRONG (renders as full bar regardless of %):**
+Never use: `████████████████████████████████████████ 0%` (40 raw blocks, no brackets, no empty blocks)
 
 ---
 
