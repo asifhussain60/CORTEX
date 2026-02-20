@@ -39,11 +39,11 @@ class IntelligenceOrchestrator:
         self.routing_engine = IntelligenceRoutingEngine()
         self._cache: Dict[str, Any] = {}
         
-        # SQLite audit logging (store in subdirectory to avoid root pollution)
+        # SQLite audit logging (store in .cortex-runtime/ to avoid root pollution)
         if audit_db_path:
             self.audit_db_path = audit_db_path
         else:
-            db_dir = Path("cortex_intelligence/intelligence")
+            db_dir = Path(".cortex-runtime/intelligence")
             db_dir.mkdir(parents=True, exist_ok=True)
             self.audit_db_path = db_dir / "intelligence_audit.db"
         self._init_audit_db()

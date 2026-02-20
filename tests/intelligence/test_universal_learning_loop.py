@@ -34,7 +34,6 @@ def temp_workspace(tmp_path: Path) -> Path:
     # Create directory structure
     (tmp_path / "cortex-registry" / "company" / "domains").mkdir(parents=True)
     (tmp_path / "cortex_intelligence" / "tier3" / "knowledge").mkdir(parents=True)
-    (tmp_path / "cortex-registry").mkdir(parents=True)
     return tmp_path
 
 

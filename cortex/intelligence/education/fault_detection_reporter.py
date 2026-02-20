@@ -193,7 +193,7 @@ class FaultDetectionReporter:
                 description=f"{topic} does not inherit from IOrchestrator interface",
                 recommendation=(
                     "Implement IOrchestrator interface:\n"
-                    "1. from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator\n"
+                    "1. from cortex.core.core.interfaces.i_orchestrator import IOrchestrator\n"
                     "2. class {topic}(IOrchestrator):\n"
                     "3. Implement required methods: execute(), get_name(), get_description()\n"
                     "4. Add type hints for all methods"

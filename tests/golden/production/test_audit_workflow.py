@@ -25,7 +25,7 @@ class TestProductionAudit:
     
     def test_meta_auditor_validates_results(self, tmp_path: Path) -> None:
         """Golden: Meta-auditor validates audit results."""
-        from cortex.agents.meta_auditor_agent import MetaAuditorAgent
+        from cortex.orchestrators.intelligence.meta_auditor_agent import MetaAuditorAgent
         
         agent = MetaAuditorAgent()
         

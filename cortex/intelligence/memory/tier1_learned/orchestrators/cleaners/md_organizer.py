@@ -15,8 +15,8 @@ from cortex.core.core.result import Result, Ok, Err
 from ..cleaners import CleanerInterface, Analysis, Report, RollbackResult
 
 
-# CONSOLIDATED: Import from cortex.brain.tier1.orchestrators.cleaners.md_organizer
-# class MDFileCategory(Enum):
+# CONSOLIDATED: Canonical location for MDFileCategory
+class MDFileCategory(Enum):
     """Categories for Markdown files."""
     PHASE = "phase"
     AC_FIX = "ac_fix"

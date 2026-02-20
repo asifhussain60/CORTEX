@@ -273,7 +273,7 @@ class CleanerRegistry:
         return f"CleanerRegistry(domains=[{domains}])"
 
 
-from cortex.brain.tier1.orchestrators.cleaners.registry import (
+from cortex.intelligence.memory.learned_patterns.orchestrators.cleaners.registry import (
     CleanerRegistrationError,
     CleanerNotFoundError,
 )

@@ -224,7 +224,7 @@ def test_gp50_014_domain_coherence_validator_canonical_alias() -> None:
     # The domain validator (Python↔JS cross-layer) must be discoverable
     from cortex.orchestrators.domain.coherence_validator import CoherenceValidator as DomainCV
     # Canonical package must not shadow it — both must coexist with distinct purposes
-    from cortex.orchestrators.coherence.coherence_validator import CoherenceValidator as PostEditCV
+    from cortex.orchestrators.validation.coherence_validator import CoherenceValidator as PostEditCV
     assert DomainCV is not PostEditCV, (
         "Domain and post-edit CoherenceValidator must remain distinct classes (different scopes)"
     )

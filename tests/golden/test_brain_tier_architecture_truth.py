@@ -57,7 +57,7 @@ class TestTierDirectoryStructure:
     def test_governance_and_memory_tiers_separate(self):
         """Governance tiers and memory tiers must be in separate locations."""
         registry_path = Path("cortex-registry/core")
-        intelligence_path = Path("cortex_intelligence")
+        intelligence_path = Path("cortex/intelligence")
         
         # Governance at registry level
         assert registry_path.exists()

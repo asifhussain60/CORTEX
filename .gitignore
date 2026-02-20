@@ -28,7 +28,7 @@
 .favorites.json
 
 # State databases (ephemeral)
-cortex_intelligence/state/*.db
+cortex_intelligence/
 cortex/core/state/*.db
 **/governance.db
 

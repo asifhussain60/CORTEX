@@ -16,13 +16,14 @@ class TestStubAutoFixAgent:
     def test_detect_redirect_stub(self, tmp_path: Path) -> None:
         """Golden: Detect redirect stub pattern.
         
-        Validates stub detection logic.
+        Validates stub detection logic — agent detects files with REDIRECT
+        comment or files that only re-export from cortex_intelligence.
         """
-        # Create a redirect stub
+        # Create a redirect stub (agent detects REDIRECT marker)
         stub_file = tmp_path / "wrapper.py"
         stub_file.write_text("""
 # REDIRECT: Points to cortex_intelligence implementation
-from cortex.intelligence.domain.models import Entity
+from cortex_intelligence.domain.models import Entity
 
 __all__ = ['Entity']
 """)
@@ -39,13 +40,14 @@ __all__ = ['Entity']
     def test_extract_target_module(self, tmp_path: Path) -> None:
         """Golden: Extract target module from stub.
         
-        Validates target module extraction.
+        Validates target module extraction — agent parses ast.ImportFrom
+        nodes looking for cortex_intelligence.* module prefixes.
         """
-        # Create stub with clear target
+        # Create stub with clear target (must use cortex_intelligence prefix)
         stub_file = tmp_path / "api.py"
         stub_file.write_text("""
-from cortex.intelligence.domain_brain.domain_brain_models import EntityType
-from cortex.intelligence.domain_brain.domain_brain_models import Conflict
+from cortex_intelligence.domain_brain.domain_brain_models import EntityType
+from cortex_intelligence.domain_brain.domain_brain_models import Conflict
 
 __all__ = ['EntityType', 'Conflict']
 """)
