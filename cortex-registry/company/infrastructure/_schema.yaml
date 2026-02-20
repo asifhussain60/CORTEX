@@ -1,0 +1,194 @@
+# ==============================================================================
+# INFRASTRUCTURE CATALOG SCHEMA
+# ==============================================================================
+# Purpose: Defines the canonical YAML structure for platforms, APIs, and applications
+# Authority: Phase 08 — Registry & Docs Alignment
+# ==============================================================================
+
+version: "1.0.0"
+created: "2026-02-20"
+updated: "2026-02-20"
+
+schemas:
+  platform:
+    description: "Infrastructure platform definition (K8s cluster, serverless, VM fleet, etc.)"
+    required_fields:
+      - name
+      - type
+      - provider
+    fields:
+      name:
+        type: string
+        required: true
+        description: "Unique platform identifier"
+      type:
+        type: enum
+        values: [kubernetes, serverless, vm, paas, saas]
+        required: true
+        description: "Platform category"
+      provider:
+        type: enum
+        values: [azure, aws, gcp, on-prem, hybrid]
+        required: true
+        description: "Cloud or infrastructure provider"
+      environments:
+        type: list
+        items:
+          name:
+            type: string
+          url:
+            type: string
+          tier:
+            type: enum
+            values: [prod, staging, dev]
+        description: "Deployment environments"
+      hosted_applications:
+        type: list
+        items:
+          type: string
+        description: "Application references hosted on this platform"
+      networking:
+        type: object
+        fields:
+          vpc: { type: string }
+          subnets: { type: list }
+          load_balancers: { type: list }
+        description: "Network configuration"
+      observability:
+        type: object
+        fields:
+          monitoring_url: { type: string }
+          logging_url: { type: string }
+          tracing_url: { type: string }
+        description: "Observability endpoints"
+      owner_team:
+        type: string
+        description: "Team responsible for this platform"
+      cost_center:
+        type: string
+        description: "Cost allocation identifier"
+      created_at:
+        type: datetime
+        description: "Creation timestamp"
+      updated_at:
+        type: datetime
+        description: "Last update timestamp"
+
+  api:
+    description: "API definition (REST, gRPC, GraphQL, event-stream, etc.)"
+    required_fields:
+      - name
+      - type
+      - version
+    fields:
+      name:
+        type: string
+        required: true
+        description: "Unique API identifier"
+      type:
+        type: enum
+        values: [rest, grpc, graphql, soap, event-stream]
+        required: true
+        description: "API protocol type"
+      version:
+        type: string
+        required: true
+        description: "API version (semver)"
+      base_url:
+        type: string
+        description: "Base URL (per-environment)"
+      endpoints:
+        type: list
+        items:
+          path: { type: string }
+          method: { type: string }
+          auth_required: { type: boolean }
+          rate_limit: { type: string }
+        description: "Endpoint definitions"
+      owner_repo:
+        type: string
+        description: "Repository that owns this API"
+      consumers:
+        type: list
+        items:
+          type: string
+        description: "Applications consuming this API"
+      auth:
+        type: enum
+        values: [oauth2, api-key, jwt, mtls, none]
+        description: "Authentication mechanism"
+      documentation_url:
+        type: string
+        description: "Link to API documentation"
+      sla:
+        type: object
+        fields:
+          availability: { type: string }
+          latency_p99_ms: { type: integer }
+        description: "Service level agreement"
+      created_at:
+        type: datetime
+        description: "Creation timestamp"
+      updated_at:
+        type: datetime
+        description: "Last update timestamp"
+
+  application:
+    description: "Application definition (web, mobile, API service, worker, etc.)"
+    required_fields:
+      - name
+      - type
+      - repository
+    fields:
+      name:
+        type: string
+        required: true
+        description: "Unique application identifier"
+      type:
+        type: enum
+        values: [web-spa, web-ssr, mobile-ios, mobile-android, api-service, worker, data-pipeline, cli]
+        required: true
+        description: "Application category"
+      repository:
+        type: string
+        required: true
+        description: "Source repository reference"
+      platform:
+        type: string
+        description: "Platform hosting this application"
+      tech_stack:
+        type: list
+        items:
+          type: string
+        description: "Technology stack"
+      apis_consumed:
+        type: list
+        items:
+          type: string
+        description: "APIs consumed by this application"
+      apis_exposed:
+        type: list
+        items:
+          type: string
+        description: "APIs exposed by this application"
+      environments:
+        type: list
+        items:
+          name: { type: string }
+          url: { type: string }
+          status: { type: string }
+        description: "Deployment environments"
+      owner_team:
+        type: string
+        description: "Team responsible for this application"
+      dependencies:
+        type: list
+        items:
+          type: string
+        description: "Application dependencies"
+      created_at:
+        type: datetime
+        description: "Creation timestamp"
+      updated_at:
+        type: datetime
+        description: "Last update timestamp"

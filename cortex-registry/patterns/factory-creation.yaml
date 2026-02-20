@@ -1,0 +1,27 @@
+# Enterprise Pattern: Factory Creation
+# Authority: Phase 08 — Registry & Docs Alignment (R5)
+pattern:
+  name: "Factory Creation"
+  type: creational
+  description: |
+    Centralized object creation via factory classes. All orchestrators,
+    workflow engines, and file handlers are created through factories
+    that encapsulate initialization logic and dependency injection.
+  cortex_usage:
+    - "FileFactory creates domain-specific file handlers"
+    - "OrchestratorFactory creates orchestrators from registry YAML"
+    - "WorkflowEngine creates step instances from template definitions"
+  participants:
+    factory: "FileFactory / OrchestratorFactory"
+    product_interface: "OrchestratorBase / FileHandler"
+    concrete_products: "MasterOrchestrator, TDDOrchestrator, GovernanceOrchestrator"
+  when_to_use:
+    - "Object creation requires complex initialization"
+    - "Creation logic should be decoupled from usage"
+    - "Registry-driven instantiation (YAML → Python object)"
+  anti_patterns:
+    - "Direct instantiation with hard-coded dependencies"
+    - "Constructor with 10+ parameters (use factory instead)"
+  references:
+    - "cortex/core/file_factory.py"
+    - "cortex-registry/core/specifications/core-orchestrator-wiring.yaml"

@@ -1,0 +1,27 @@
+# Enterprise Pattern: Observer Event Bus
+# Authority: Phase 08 — Registry & Docs Alignment (R5)
+pattern:
+  name: "Observer Event Bus"
+  type: behavioral
+  description: |
+    Loose coupling between orchestrators via publish/subscribe event bus.
+    Orchestrators emit events; interested parties subscribe without
+    direct dependency on the emitter.
+  cortex_usage:
+    - "EventBus for cross-domain orchestrator communication"
+    - "Audit events emitted by OrchestratorBase.teardown()"
+    - "Governance violations published for enforcement subscribers"
+  participants:
+    subject: "EventBus / OrchestratorBase"
+    observers: "AuditOrchestrator, GovernanceOrchestrator, MetricsCollector"
+    event: "AuditEvent, GovernanceViolation, PhaseCompletion"
+  when_to_use:
+    - "Multiple components need to react to the same event"
+    - "Emitter should not know about consumers"
+    - "Async processing of cross-cutting concerns"
+  anti_patterns:
+    - "Direct method calls between unrelated orchestrators"
+    - "Polling for state changes instead of event-driven"
+  references:
+    - "cortex/core/event_bus.py"
+    - "cortex/infrastructure/audit_db.py"

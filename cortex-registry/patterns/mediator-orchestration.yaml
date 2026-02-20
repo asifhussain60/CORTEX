@@ -1,0 +1,26 @@
+# Enterprise Pattern: Mediator Orchestration
+# Authority: Phase 08 — Registry & Docs Alignment (R5)
+pattern:
+  name: "Mediator Orchestration"
+  type: behavioral
+  description: |
+    Central orchestrator mediates interactions between domain components.
+    No domain component communicates directly with another — all routing
+    goes through the MasterOrchestrator or domain-specific orchestrator.
+  cortex_usage:
+    - "MasterOrchestrator mediates all intent routing"
+    - "DomainOrchestrators mediate between LENS, governance, and execution"
+    - "EventBus acts as async mediator for cross-domain events"
+  participants:
+    mediator: "MasterOrchestrator / DomainOrchestrator"
+    colleagues: "LENS, Governance, MCP Tools, Infrastructure"
+  when_to_use:
+    - "Multiple subsystems need coordination without tight coupling"
+    - "Intent routing requires classification before dispatch"
+    - "Cross-cutting concerns (audit, governance) apply to all operations"
+  anti_patterns:
+    - "Direct coupling between domain modules"
+    - "Bypassing orchestrator for 'quick' operations"
+  references:
+    - "cortex/orchestrators/core/master_orchestrator.py"
+    - "cortex-registry/core/specifications/orchestration-master-wiring.yaml"

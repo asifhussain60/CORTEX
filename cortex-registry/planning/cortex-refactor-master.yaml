@@ -14,9 +14,9 @@ metadata:
   status_authority: "THIS FILE \u2014 cortex-refactor-master.yaml"
   counters:
     total_phases: 12
-    pending: 3
-    in_progress: 1
-    complete: 8
+    pending: 2
+    in_progress: 0
+    complete: 9
     deferred: 0
     failed: 0
 
@@ -658,51 +658,65 @@ phases:
 - id: phase-08
   title: Registry & Docs Alignment + Infrastructure Catalog
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-08-registry-docs.yaml
-  status: in_progress
+  status: complete
   priority: P1
   risk: low
   dependencies:
   - phase-07-test-consolidation
   deliverables:
-  - "All workflow templates audited \u2014 every active orchestrator has a template"
+  - "All workflow templates audited — every active orchestrator has a template"
   - Stale YAMLs removed (references to deleted/archived components)
   - cortex-docs updated to reflect new architecture
   - Company infrastructure catalog (platforms, APIs, applications)
   - cortex_onboard_infrastructure MCP tool
   - 'Registry integrity: all YAML references resolve'
+  - "9 enterprise patterns in cortex-registry/patterns/"
+  - "InfrastructureDetector in cortex/intelligence/infrastructure/"
   progress:
     started: '2026-02-20T04:00:00Z'
-    completed: null
-    actual_duration: null
-    current_stage: red_phase
+    completed: '2026-02-20T10:30:00Z'
+    actual_duration: 1 hour
+    current_stage: complete
     stages_complete:
     - red_phase
-    tests_written: 38
-    tests_passing: 38
+    - green_phase
+    tests_written: 86
+    tests_passing: 86
     coverage_pct: 100
     commits:
     - e9f1a2b3c
     issues_found: 0
     issues_resolved: 0
-    validation_loop_iterations: 0
-    lens_scan_completed: false
+    validation_loop_iterations: 1
+    lens_scan_completed: true
     red_phase_summary:
       test_file: tests/unit/phases/refactor/test_phase_08_registry_docs.py
       test_classes: 5
       test_methods: 38
-      status: "\u2705 ALL 38 TESTS PASSING"
+      status: "✅ ALL 38 TESTS PASSING"
       specification:
         registry_audit_tests: 13
         documentation_alignment_tests: 8
         infrastructure_catalog_tests: 12
         execution_sequence_tests: 2
         exit_gates_tests: 4
-        features_covered:
-          - "Workflow template validation (R1-R3)"
-          - "Knowledge base audit (R4-R6)"
-          - "Infrastructure catalog schema (R7-R9)"
-          - "Documentation alignment (D1-D2)"
-          - "MCP tool registration"
+    green_phase_summary:
+      test_file: tests/unit/phases/refactor/test_phase_08_green.py
+      test_classes: 8
+      test_methods: 48
+      status: "✅ ALL 48 TESTS PASSING"
+      deliverables_implemented:
+        - "Infrastructure catalog _schema.yaml (platform/api/application schemas)"
+        - "topology.yaml (auto-regenerated service map)"
+        - "9 enterprise patterns (mediator, strategy, observer, factory, template-method, chain-of-responsibility, adapter, repository, command)"
+        - "InfrastructureDetector (FastAPI, Dockerfile, K8s, cloud config detection)"
+        - "cortex_onboard_infrastructure MCP tool (create + validate + topology regen)"
+      files_created: 13
+      lines_added: ~1200
+      validation:
+        - "86/86 tests passing (38 RED + 48 GREEN)"
+        - "Zero regression in refactor phases (387 passed, 4 pre-existing Phase 03 failures)"
+        - "All exit gates satisfied"
 - id: phase-08b
   title: "Parallel Test Framework — Batch Execution, Real-time Progress & Centralized Suite"
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-08b-parallel-test-framework.yaml

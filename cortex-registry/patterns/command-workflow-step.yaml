@@ -1,0 +1,28 @@
+# Enterprise Pattern: Command — Workflow Step
+# Authority: Phase 08 — Registry & Docs Alignment (R5)
+pattern:
+  name: "Command — Workflow Step"
+  type: behavioral
+  description: |
+    Each workflow step is a command object that encapsulates an action,
+    its parameters, and undo capability. WorkflowEngine executes commands
+    in sequence from YAML template definitions.
+  cortex_usage:
+    - "WorkflowEngine reads YAML templates → creates Command objects per step"
+    - "PhaseExecutor executes RED→GREEN→REFACTOR→CLEANUP as command sequence"
+    - "MasterPlanOrchestrator sequences phase commands with dependency resolution"
+  participants:
+    command_interface: "WorkflowStep"
+    concrete_commands: "SetupStep, ExecuteStep, ValidateStep, TeardownStep"
+    invoker: "WorkflowEngine"
+    receiver: "Orchestrator / Tool"
+  when_to_use:
+    - "Operations need to be parameterized and queued"
+    - "Undo/rollback capability is required"
+    - "Operations are defined declaratively (YAML) not imperatively"
+  anti_patterns:
+    - "Inline step logic in the workflow engine"
+    - "Steps with side effects that can't be rolled back"
+  references:
+    - "cortex/core/workflow_engine.py"
+    - "cortex-registry/workflows/templates/"

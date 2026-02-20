@@ -1,0 +1,29 @@
+# Enterprise Pattern: Repository — Registry
+# Authority: Phase 08 — Registry & Docs Alignment (R5)
+pattern:
+  name: "Repository — Registry"
+  type: structural
+  description: |
+    cortex-registry/ serves as a data repository, separating configuration
+    and metadata (YAML) from code (Python). All governance rules, workflow
+    templates, and planning data live in the registry, not in code.
+  cortex_usage:
+    - "cortex-registry/ holds all YAML metadata (rules, templates, plans)"
+    - "cortex/ holds all Python implementation code"
+    - "Registry is read-only at runtime; mutations go through MCP tools"
+  participants:
+    repository: "cortex-registry/"
+    entity: "GovernanceRule, WorkflowTemplate, PhasePlan, InfrastructureCatalog"
+    client: "Orchestrators, MCP Tools, CLI"
+  when_to_use:
+    - "Data and code have different change frequencies"
+    - "Configuration should be auditable independently"
+    - "Multiple consumers need the same data (DRY principle)"
+  anti_patterns:
+    - "Hard-coding configuration values in Python"
+    - "Storing YAML in cortex/ source tree"
+    - "Duplicating registry data across multiple locations"
+  references:
+    - "cortex-registry/"
+    - "cortex-registry/core/"
+    - "cortex-registry/governance/"

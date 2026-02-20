@@ -1,0 +1,27 @@
+# Enterprise Pattern: Chain of Responsibility — Governance
+# Authority: Phase 08 — Registry & Docs Alignment (R5)
+pattern:
+  name: "Chain of Responsibility — Governance"
+  type: behavioral
+  description: |
+    Governance validation passes through a chain of rule handlers.
+    Each handler checks one CORE rule; if it passes, the request
+    moves to the next handler. If any handler rejects, execution stops.
+  cortex_usage:
+    - "EnforcementOrchestrator chains CORE rule validators"
+    - "GovernanceValidationGates define ordered validation pipeline"
+    - "Pre-commit hooks chain file-level validators"
+  participants:
+    handler_interface: "GovernanceRule"
+    concrete_handlers: "CORE-002, CORE-008, CORE-011, CORE-012, CORE-028, CORE-035"
+    client: "EnforcementOrchestrator"
+  when_to_use:
+    - "Multiple validators must run in sequence"
+    - "Any validator can reject the request"
+    - "New validators can be added without modifying existing ones"
+  anti_patterns:
+    - "Monolithic validation function with all rules inline"
+    - "Skipping validators for 'quick' operations"
+  references:
+    - "cortex/governance/enforcement_orchestrator.py"
+    - "cortex-registry/core/specifications/governance-validation-gates.yaml"

@@ -1,0 +1,27 @@
+# Enterprise Pattern: Adapter — MCP
+# Authority: Phase 08 — Registry & Docs Alignment (R5)
+pattern:
+  name: "Adapter — MCP Tool Integration"
+  type: structural
+  description: |
+    MCP tools adapt internal orchestrator APIs to the external MCP protocol.
+    Each tool translates MCP parameters into orchestrator method calls,
+    providing a consistent interface for AI assistants.
+  cortex_usage:
+    - "Each MCP tool wraps one or more orchestrator methods"
+    - "Parameter validation adapts MCP JSON to Python typed dicts"
+    - "Response formatting adapts orchestrator output to MCP response schema"
+  participants:
+    target: "Orchestrator API (Python methods)"
+    adapter: "MCP Tool (cortex/mcp/tools/*.py)"
+    client: "AI Assistant (GitHub Copilot, Claude, etc.)"
+  when_to_use:
+    - "External interface protocol differs from internal API"
+    - "Multiple external clients need uniform access"
+    - "Internal API changes should not break external consumers"
+  anti_patterns:
+    - "MCP tool containing business logic (should delegate to orchestrator)"
+    - "Direct orchestrator access bypassing MCP tool layer"
+  references:
+    - "cortex/mcp/tools/"
+    - "cortex/mcp/server.py"

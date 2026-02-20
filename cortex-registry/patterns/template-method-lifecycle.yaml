@@ -1,0 +1,28 @@
+# Enterprise Pattern: Template Method Lifecycle
+# Authority: Phase 08 — Registry & Docs Alignment (R5)
+pattern:
+  name: "Template Method Lifecycle"
+  type: behavioral
+  description: |
+    OrchestratorBase defines a 5-step lifecycle template method:
+    setup → govern → execute → validate → teardown.
+    Subclasses override specific steps without changing the overall algorithm.
+  cortex_usage:
+    - "OrchestratorBase.run() defines the 5-step lifecycle"
+    - "Each orchestrator overrides execute() with domain-specific logic"
+    - "setup() and teardown() handle cross-cutting concerns (audit, governance)"
+  participants:
+    abstract_class: "OrchestratorBase"
+    template_method: "run()"
+    hook_methods: "setup(), govern(), execute(), validate(), teardown()"
+    concrete_classes: "MasterOrchestrator, TDDOrchestrator, GovernanceOrchestrator"
+  when_to_use:
+    - "Algorithm structure is fixed but steps vary by domain"
+    - "Cross-cutting concerns (audit, governance) must run on every execution"
+    - "Subclasses should focus on domain logic only"
+  anti_patterns:
+    - "Overriding the template method itself (run())"
+    - "Skipping lifecycle steps (no teardown = no audit)"
+  references:
+    - "cortex/core/orchestrator_base.py"
+    - "cortex-registry/core/specifications/execution-flow-specification.yaml"

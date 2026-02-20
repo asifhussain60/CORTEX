@@ -1,0 +1,27 @@
+# Enterprise Pattern: Strategy Workflow
+# Authority: Phase 08 — Registry & Docs Alignment (R5)
+pattern:
+  name: "Strategy Workflow"
+  type: behavioral
+  description: |
+    Workflow execution strategy is selected at runtime based on context.
+    Different execution profiles (smoke, unit, integration, golden) use
+    different strategies for parallelism, batching, and distribution.
+  cortex_usage:
+    - "ParallelRunner selects EXECUTION_PROFILES based on test tier"
+    - "WorkflowEngine selects step execution strategy from template YAML"
+    - "HEPTA-MODE selects response strategy based on intent classification"
+  participants:
+    context: "WorkflowEngine / ParallelRunner"
+    strategy_interface: "ExecutionProfile / WorkflowStep"
+    concrete_strategies: "SmokePlan, UnitPlan, IntegrationPlan, GoldenPlan"
+  when_to_use:
+    - "Multiple algorithms exist for the same operation"
+    - "Runtime context determines optimal approach"
+    - "New strategies may be added without modifying existing code"
+  anti_patterns:
+    - "Hard-coded if/elif chains for strategy selection"
+    - "Mixing strategy logic with business logic"
+  references:
+    - "cortex/testing/framework/parallel_runner.py"
+    - "cortex/core/workflow_engine.py"
