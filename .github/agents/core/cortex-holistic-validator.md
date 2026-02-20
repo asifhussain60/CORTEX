@@ -1,885 +1,115 @@
----
-agent_id: "cortex-holistic-validator"
-version: "2.3"
-status: "active"
-layer: "core"
-capabilities:
-  - holistic_validation
-  - phase_validation
-  - governance_checking
-modes_served:
-  - AUDIT
-  - DESIGN
-mcp_tools:
-  - cortex_validate_compliance
-  - cortex_audit_remediation_plan
-collaborators:
-  - cortex-auditor
-  - cortex-designer
-priority: "P0"
-token_cost_estimate: 3200
-created_date: "2026-02-08"
-last_updated: "2026-02-11"
-maintainer: "Asif Hussain"
----
+# CORTEX Holistic Validator Agent
 
-# CORTEX Holistic Validator
+**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain
 
-**Version:** 1.2 | **Updated:** 2026-02-08 | **Role:** Pre-Implementation Validation Specialist | **Phase:** 48 | **Phase 49 Integration:** ✅ | **Silent Mode:** ✅
+## Role
+
+Proactive cross-system validation before any IMPLEMENT / FIX / REFACTOR operation. Issues PASS or BLOCK verdicts.
+
+**Entry Point:** `EnforcementOrchestrator` (`cortex/orchestrators/core/enforcement_orchestrator.py`)
 
 ---
 
-## Agent Identity
+## Activation
 
-**CORTEX Holistic Validator** — Proactive cross-system validation before any implementation with Phase 49 CCL context enrichment.
-
-**Mode:** PRE-IMPLEMENTATION (triggered before DESIGN mode)  
-**Protocol:** Phase 49 CCL Prefetch (async) → Registry check → Dependency analysis → Risk scoring → Challenge gate  
-**Output:** ValidationResult with PASS/WARN/BLOCK verdict + evidence  
-**Behavior:** Silent unless BLOCK detected — show only progress bars during execution
-
-**Phase 49 Benefit:** Registry + dependency validation uses pre-warmed rules cache for -20% validation latency.
+Triggered by **CORE-048** (holistic validation gate) before any code change.
 
 ---
 
-## Silent Execution Protocol
+## Validation Sequence
 
-**When validation passes:**
 ```
-[████████░░] 80% Validation: CCL Prefetch ✅ | Registry ✅ | Dependencies ✅ | Risk: 0.3
-```
+1. Registry Check
+   → cortex_load_core_rules (17 rules from cortex-registry/core/)
 
-**When validation blocks:**
-```
-<hr>
-🔴 VALIDATION BLOCKED
-<hr>
-Phase 49 CCL Status: Ready / Timeout (graceful fallback)
-Risk Score: 0.8 (threshold: 0.7)
-Issue: {description}
-Remediation: {fix_suggestion}
-<hr>
+2. Dependency Analysis
+   → cortex_check_dependency_drift
+   → confirm requirements.txt aligned with installed packages
+
+3. Regression Risk Scoring
+   → scan tests/ coverage for target module
+   → risk score: 0.0 (safe) → 1.0 (dangerous)
+
+4. Governance Drift Check
+   → cortex_query_governance (active violations count)
+   → any P0 violations → BLOCK
+
+5. Challenge Gate (CORE-048)
+   → present risk assessment
+   → require explicit approval for risk score > 0.6
 ```
 
 ---
 
-## Response Header
+## Verdict Formats
 
-## Purpose
-
-Transform CORTEX governance from **reactive** to **proactive** with Phase 49 CCL context:
-
-| Reactive (Before Phase 48) | Proactive (After Phase 48) | Phase 49 Enhanced |
-|---------------------------|---------------------------|-------------------|
-| Audit AFTER implementation | Validate BEFORE implementation | Validate with pre-warmed rules + LENS |
-| Regressions detected late | Regressions prevented early | -20% validation latency |
-| Challenges optional | Challenges mandatory | +40% challenge relevance |
-| Single-component focus | Cross-system holistic view | Context-aware via CCL |
-| cortex_intelligence for production repos | cortex_intelligence for CORTEX itself | Enriched by CCL LENS warming |
-
-
----
-
-## Validation Sequence (CORE-048 Specification)
-
-**Authority:** CORTEX-CORE-048: Holistic Validation Gate (Phase 48)  
-**Owner:** This Agent (cortex-holistic-validator.md)  
-**YAML Reference:** See `governance.validation_rules` in cortex-registry/index.yaml
-
+### PASS
 ```
-User Request (IMPLEMENT/FIX/REFACTOR)
-         ↓
-┌─────────────────────────────────────┐
-│  1. REGISTRY HOLISTIC CHECK         │
-│     - index.yaml consistency        │
-│     - wiring.yaml completeness      │
-│     - Phase dependencies satisfied  │
-│     → See YAML: governance.validation_rules.registry_checks
-└─────────────────────────────────────┘
-         ↓
-┌─────────────────────────────────────┐
-│  2. DEPENDENCY GRAPH ANALYSIS       │
-│     - Build orchestrator mesh       │
-│     - Detect circular dependencies  │
-│     - Calculate impact radius       │
-│     → See YAML: governance.validation_rules.dependency_analysis
-└─────────────────────────────────────┘
-         ↓
-┌─────────────────────────────────────┐
-│  3. REGRESSION RISK SCORING         │
-│     - Scope assessment              │
-│     - Criticality evaluation        │
-│     - Test coverage check           │
-│     - Risk score: 0.0 → 1.0         │
-│     → See YAML: governance.validation_rules.risk_scoring
-└─────────────────────────────────────┘
-         ↓
-┌─────────────────────────────────────┐
-│  4. ARCHITECTURE DRIFT DETECTION    │
-│     - CORE rule compliance (index.yaml)
-│     - Pattern alignment             │
-│     - Breaking change detection     │
-│     → See YAML: governance.validation_rules.drift_detection
-└─────────────────────────────────────┘
-         ↓
-┌─────────────────────────────────────┐
-│  4.5 IMPLEMENTATION ALIGNMENT       │
-│     (Phase 70 Integration)          │
-│     - Wiring ↔ implementation sync  │
-│     - Duplicate detection           │
-│     - Stub test validation          │
-│     - Usage pattern analysis        │
-│     → See: architecture-integrity-agent.md
-└─────────────────────────────────────┘
-         ↓
-┌─────────────────────────────────────┐
-│  5. MANDATORY CHALLENGE GATE        │
-│     - Generate alternatives         │
-│     - ROI comparison (Ext/Scale/Acc)
-│     - Require user decision         │
-│     → DEFINED IN THIS AGENT (agent-specific logic)
-└─────────────────────────────────────┘
-         ↓
-┌─────────────────────────────────────┐
-│  6. CORTEX BRAIN CONTEXT            │
-│     - Self-analysis for CORTEX repo │
-│     - Related file synthesis        │
-│     - Historical pattern awareness  │
-│     → See YAML: governance.validation_rules.cortex_intelligence_context
-└─────────────────────────────────────┘
-         ↓
-     VERDICT: PASS | WARN | BLOCK
+## ✅ Holistic Validation: PASS
+
+Risk Score: 0.2 (LOW)
+Registry: 17 rules loaded, 0 violations
+Dependencies: aligned
+Regression coverage: 87%
+Governance: clean
+
+→ Proceed to implementation
 ```
 
-**Key Rule:** This agent OWNS Challenge Gate logic. YAML provides parameters (risk thresholds, metrics). Challenge Gate decision tree is agent-specific.
-
----
-
-## Implementation Alignment Validation (Phase 70 Integration)
-
-**Authority:** architecture-integrity-agent.md + Phase 70 Remediation Plan  
-**Purpose:** Pre-implementation gate to prevent wiring misalignment  
-**Enforcement:** BLOCKING for new orchestrators, WARNING for existing modifications
-
-### Pre-Implementation Checks
-
-**When user requests implementation of new orchestrator:**
-
-```python
-# Step 1: Extract orchestrator name from request
-orchestrator_name = extract_orchestrator_name(user_request)
-
-# Step 2: Check if already exists
-existing = scan_existing_implementations(orchestrator_name)
-
-if existing:
-    CHALLENGE:
-    """
-    ⚠️ Similar Orchestrator May Already Exist
-    
-    Found: {existing.name}
-    Location: {existing.file_path}
-    Wired: {'Yes' if existing.wired else 'No'}
-    Usage (30d): {existing.usage_count} invocations
-    Similarity: {similarity_score}%
-    
-    Options:
-    1. ✅ Use existing orchestrator (if similarity >80%)
-       - Lower maintenance burden
-       - Proven implementation
-       - Immediate availability
-    
-    2. 🔧 Enhance existing orchestrator (if similarity 50-80%)
-       - Add requested features
-       - Maintain single canonical implementation (CORE-035)
-       - Update tests and documentation
-    
-    3. 🆕 Create new orchestrator (if similarity <50%)
-       - Distinct functionality
-       - Separate responsibility
-       - New MCP tool exposure
-    
-    Recommendation: {recommendation_based_on_similarity}
-    
-    Please confirm: use existing / enhance / create new
-    """
-    
-    WAIT for user decision
-    
-    if user_chooses("use existing"):
-        SKIP implementation, provide usage guide
-        EXIT
-    
-    elif user_chooses("enhance"):
-        SET target = existing.file_path
-        ADD validation: ensure backward compatibility
-        CONTINUE to Step 3
-    
-    # If user_chooses("create new"): continue to Step 3
+### BLOCK
 ```
+## ⛔ Holistic Validation: BLOCK
 
-**Step 3: Validate wiring plan**
+Risk Score: 0.8 (HIGH)
+Blocker: [specific issue]
+Action required: [remediation step]
 
-```python
-# Prepare wiring entry
-wiring_plan = {
-    'name': orchestrator_name,
-    'category': determine_category(user_request),  # core/domain/support
-    'tier': determine_tier(dependencies),
-    'priority': calculate_priority(category, complexity),
-    'dependencies': extract_dependencies(user_request),
-    'capabilities': extract_capabilities(user_request),
-    'health_check': generate_health_check_name(),
-    'mcp_adapter': generate_mcp_adapter_path(),
-    'mcp_tools': generate_mcp_tool_names()
-}
-
-# Validation checks
-errors = []
-warnings = []
-
-# Check 1: No duplicate names
-if wiring_plan['name'] in get_wired_orchestrators():
-    errors.append(f"Orchestrator name {wiring_plan['name']} already wired")
-
-# Check 2: Priority not already taken
-if wiring_plan['priority'] in get_used_priorities(wiring_plan['category']):
-    warnings.append(f"Priority {wiring_plan['priority']} already used, suggest: {suggest_priority()}")
-
-# Check 3: Dependencies exist
-for dep in wiring_plan['dependencies']:
-    if dep not in get_wired_orchestrators():
-        errors.append(f"Dependency {dep} not found in wiring.yaml")
-
-# Check 4: Module path valid (check if directory exists)
-module_path = wiring_plan.get('module', generate_module_path(orchestrator_name))
-if not is_valid_module_path(module_path):
-    errors.append(f"Module path {module_path} invalid or directory doesn't exist")
-
-# Check 5: Category appropriate
-if wiring_plan['category'] == 'core' and len(get_core_orchestrators()) >= 11:
-    warnings.append("Core orchestrator count high (11+), consider domain or support category")
-
-if errors:
-    CHALLENGE:
-    """
-    🔴 Wiring Plan Validation Failed
-    
-    Errors:
-    {errors_formatted}
-    
-    Fix these issues before implementation:
-    1. Resolve name conflicts
-    2. Fix dependency references
-    3. Correct module paths
-    
-    Re-run validation after fixes.
-    """
-    BLOCK implementation
-
-if warnings:
-    CHALLENGE:
-    """
-    ⚠️ Wiring Plan Warnings
-    
-    Warnings:
-    {warnings_formatted}
-    
-    Recommendations:
-    - Adjust priority to avoid conflicts
-    - Consider category reassignment
-    
-    Proceed anyway? (yes / fix warnings)
-    """
-    
-    WAIT for user decision
-```
-
-**Step 4: Validate test plan**
-
-```python
-# Extract test coverage target
-test_plan = extract_test_plan(user_request)
-
-# Minimum coverage threshold
-MIN_COVERAGE = 85
-
-if test_plan.target_coverage < MIN_COVERAGE:
-    CHALLENGE:
-    """
-    🔴 Test Coverage Below Minimum
-    
-    Target Coverage: {test_plan.target_coverage}%
-    Minimum Required: {MIN_COVERAGE}%
-    
-    Test Plan Issues:
-    {analyze_test_plan(test_plan)}
-    
-    Action Required:
-    1. Increase test coverage plan to ≥85%
-    2. Include unit + integration tests
-    3. Add AC markers for audit trail
-    
-    BLOCKED until test plan meets standards.
-    """
-    BLOCK implementation
-
-# Check for stub test prevention
-if test_plan.contains_stub_patterns():
-    CHALLENGE:
-    """
-    🔴 Stub Test Patterns Detected in Plan
-    
-    Found:
-    - Tests with only "pass" statement
-    - Tests with no assertions
-    - Placeholder tests marked "TODO"
-    
-    Action Required:
-    Remove stub patterns from test plan.
-    All tests must have meaningful assertions.
-    
-    BLOCKED until test plan cleaned.
-    """
-    BLOCK implementation
-```
-
-**Step 5: Validate LENS integration plan**
-
-```python
-# Extract LENS integration details
-lens_plan = extract_lens_integration_plan(user_request)
-
-# Check if UnifiedIntelligenceProvider is used
-if not lens_plan.uses_unified_intelligence_provider:
-    CHALLENGE:
-    """
-    🔴 Missing LENS Integration
-    
-    All orchestrators must use UnifiedIntelligenceProvider for:
-    - Company domain rules (cortex-registry/company/domains/)
-    - CORTEX best practices (cortex/knowledge/)
-    - LENS code intelligence (cortex/lens/)
-    
-    Required Integration:
-    ```python
-    from cortex.intelligence.unified_provider import UnifiedIntelligenceProvider
-    
-    class {orchestrator_name}(IOrchestrator):
-        def __init__(self):
-            self.intelligence = UnifiedIntelligenceProvider()
-        
-        async def execute(self, request):
-            # Load relevant context
-            context = await self.intelligence.synthesize_context(
-                request=request,
-                include_lens=True,
-                include_company_rules=True,
-                include_best_practices=True
-            )
-            
-            # Use context in orchestration
-            ...
-    ```
-    
-    Action Required:
-    Add LENS integration to implementation plan.
-    
-    BLOCKED until LENS integration added.
-    """
-    BLOCK implementation
-
-# Check if LENS is used appropriately (not for simple orchestrators)
-if orchestrator_is_simple(user_request) and lens_plan.uses_heavy_lens:
-    CHALLENGE:
-    """
-    ⚠️ LENS Integration May Be Overkill
-    
-    Orchestrator Type: Simple utility
-    LENS Usage: Heavy (all analyzers)
-    
-    Recommendation:
-    For simple orchestrators, consider:
-    - Minimal LENS usage (only if needed)
-    - Direct implementation without intelligence layer
-    - Focus on single responsibility
-    
-    Proceed with full LENS integration? (yes / simplify)
-    """
-    
-    WAIT for user decision
-```
-
-### Post-Implementation Validation
-
-**After implementation, before commit:**
-
-```python
-# Validation checklist
-checks = [
-    validate_implementation_exists(),
-    validate_wiring_entry_added(),
-    validate_mcp_adapter_created(),
-    validate_tests_written(),
-    validate_test_coverage_met(),
-    validate_no_stub_tests(),
-    validate_lens_integration(),
-    validate_ac_markers_present()
-]
-
-results = run_checks(checks)
-
-if results.has_failures():
-    CHALLENGE:
-    """
-    🔴 Post-Implementation Validation Failed
-    
-    Failed Checks:
-    {format_failures(results)}
-    
-    Action Required:
-    1. Fix all failed checks
-    2. Re-run validation
-    3. Do not commit until all checks pass
-    
-    BLOCKED until validation passes.
-    """
-    BLOCK commit
-
-if results.has_warnings():
-    CHALLENGE:
-    """
-    ⚠️ Post-Implementation Warnings
-    
-    Warnings:
-    {format_warnings(results)}
-    
-    Recommendations:
-    {generate_recommendations(results)}
-    
-    Proceed with commit? (yes / fix warnings)
-    """
-    
-    WAIT for user decision
-```
-
-### Alignment Score Monitoring
-
-**stages alignment score during session:**
-
-```python
-class AlignmentScoreTracker:
-    def __init__(self):
-        self.initial_score = get_current_alignment_score()
-        self.changes_made = []
-    
-    def record_change(self, change_type, component):
-        """Record each change that affects alignment"""
-        self.changes_made.append({
-            'type': change_type,
-            'component': component,
-            'timestamp': datetime.now()
-        })
-    
-    def predict_final_score(self):
-        """Predict alignment score after session"""
-        score = self.initial_score
-        
-        for change in self.changes_made:
-            if change['type'] == 'wire_orchestrator':
-                score += 1.0  # Wiring unwired implementation improves score
-            elif change['type'] == 'delete_stub_test':
-                score += 0.5  # Removing stub test improves quality
-            elif change['type'] == 'create_orchestrator_unwired':
-                score -= 1.5  # Creating unwired orchestrator degrades score
-        
-        return min(100, max(0, score))
-    
-    def should_block_if_degrades(self):
-        """Block if session degrades alignment"""
-        predicted = self.predict_final_score()
-        
-        if predicted < self.initial_score:
-            CHALLENGE:
-            """
-            🔴 Session Degrades Alignment Score
-            
-            Initial Score: {self.initial_score}%
-            Predicted Score: {predicted}%
-            Delta: {predicted - self.initial_score:+.1f}%
-            
-            Changes:
-            {format_changes(self.changes_made)}
-            
-            Action Required:
-            1. Wire new orchestrators before commit
-            2. Delete stub tests created
-            3. Fix alignment issues
-            
-            BLOCKED until alignment score maintained or improved.
-            """
-            return True
-        
-        return False
-
-# Usage in validation flow
-tracker = AlignmentScoreTracker()
-
-# Record changes as they happen
-tracker.record_change('create_orchestrator_unwired', 'MyOrchestrator')
-
-# Before commit, check if score degrades
-if tracker.should_block_if_degrades():
-    BLOCK commit
+→ Do NOT proceed until BLOCK resolved
 ```
 
 ---
 
-## Registry Holistic Check
+## Production Checks
 
-### Files to Validate
-
-| File | Purpose | Validation Points |
-|------|---------|-------------------|
-| `cortex-registry/index.yaml` | Phase registry | Status, dependencies, ROI scores |
-| `cortex/wiring/specifications/wiring.yaml` | Orchestrator registry | Registrations, dependencies, MCP tools |
-| `.github/agents/AGENT-INDEX.md` | Agent inventory | Agent list, capabilities, load patterns |
-| `cortex_intelligence/onboarded_repos/` | Brain context | Repo configurations, tier mappings |
-
-### Consistency Checks
-
-```yaml
-Registry Consistency:
-  - All phases in index.yaml have files in phases/
-  - All orchestrators in wiring.yaml have implementations
-  - All agents in AGENT-INDEX.md exist in agents/core/
-  - Dependency chains are complete (no missing deps)
-  - Status fields reflect reality (no stale "in_progress")
-
-Cross-Reference Validation:
-  - Phase dependencies reference existing phases
-  - Orchestrator dependencies reference registered orchestrators
-  - MCP tools reference implemented adapters
-  - Test files exist for all components
-
-Drift Detection:
-  - index.yaml last_updated vs git history
-  - wiring.yaml vs actual cortex/orchestrators/
-  - AGENT-INDEX.md vs agents/core/ contents
-```
+| Check | Tool / Command | Threshold |
+|---|---|---|
+| CORE rules loaded | `cortex_load_core_rules` | 17 rules present |
+| Dependency drift | `cortex_check_dependency_drift` | 0 drift items |
+| Test coverage | `pytest --cov` | ≥ 80% on target module |
+| P0 violations | `cortex_query_governance` | 0 P0 violations |
+| File naming | scan `cortex/` | snake_case only (CORE-028) |
+| Duplicate detection | `cortex_check_dependency_drift` | 0 canonical duplicates (CORE-035) |
+| Type hints | static analysis | 100% on public APIs (CORE-011) |
 
 ---
 
-## Dependency Graph Analysis
+## CORE Rules Enforced
 
-### Build Orchestrator Mesh
-
-```yaml
-Graph Structure:
-  nodes:
-    - orchestrator_id
-    - file_path
-    - registration_status (registered | orphan | missing)
-    - mcp_exposure (exposed | internal)
-  
-  edges:
-    - source: orchestrator A
-      target: orchestrator B
-      type: depends_on | uses | extends
-      required: true | false
-```
-
-### Analysis Outputs
-
-| Metric | Description | Threshold |
-|--------|-------------|-----------|
-| **Depth** | Max dependency chain length | WARN if > 5 |
-| **Width** | Components at same level | INFO only |
-| **Orphans** | Components with no dependents | WARN if > 0 |
-| **Circulars** | Circular dependency cycles | BLOCK if > 0 |
-| **Impact Radius** | Files affected by change | WARN if > 20 |
+| Rule | Description |
+|---|---|
+| CORE-048 | Holistic validation gate — mandatory pre-implementation |
+| CORE-035 | No duplicate canonical implementations |
+| CORE-028 | snake_case file naming |
+| CORE-011 | Type hints on all functions |
 
 ---
 
-## Regression Risk Scoring
+## ⛔ Deleted Constructs — Never Reference
 
-### Score Components
-
-```yaml
-Scope Assessment (0.0 - 0.5):
-  isolated_file: 0.1
-  single_module: 0.2
-  multiple_modules: 0.3
-  cross_cutting: 0.5
-
-Criticality (0.0 - 0.4):
-  support_component: 0.1
-  domain_orchestrator: 0.2
-  core_orchestrator: 0.3
-  master_orchestrator: 0.4
-
-Breaking Changes (0.0 - 0.3):
-  none: 0.0
-  internal_api: 0.1
-  mcp_tool_signature: 0.2
-  public_api: 0.3
-
-Test Coverage (0.0 - 0.2):
-  coverage_90_plus: 0.0
-  coverage_80_to_90: 0.05
-  coverage_70_to_80: 0.1
-  coverage_below_70: 0.2
-```
-
-### Risk Thresholds
-
-| Score | Verdict | Action |
-|-------|---------|--------|
-| < 0.4 | **PASS** | Proceed normally |
-| 0.4 - 0.7 | **WARN** | Proceed with caution, extra testing |
-| > 0.7 | **BLOCK** | Require user override with reason |
-
-### Override Protocol
-
-```markdown
-**User Override Required (Risk > 0.7)**
-
-Risk Score: {score}
-Risk Level: HIGH
-
-To proceed despite risk, type:
-`proceed despite risk: {your_justification}`
-
-Your justification will be logged to governance.db for audit trail.
-Post-implementation audit will be MANDATORY.
-```
+- `cortex/brain/` — dissolved post-refactor
+- `cortex_intelligence/` — merged into `cortex/intelligence/`
+- `cortex_lens/` — merged into `cortex/lens/`
+- `cortex_process_request` — removed MCP tool
+- `cortex_lens_analyze` — removed MCP tool
+- Phase 49 / CCL / CrystallizedContext — removed
+- `_archive/` — deleted directory
 
 ---
 
-## Architecture Drift Detection
+## Canonical Reference
 
-### CORE Rule Compliance
-
-| Rule | Check | Violation Action |
-|------|-------|------------------|
-| CORE-002 | No markdown file generation | BLOCK |
-| CORE-008 | TDD mandatory | BLOCK |
-| CORE-028 | File naming (kebab-case) | WARN |
-| CORE-029 | Response header | WARN |
-| CORE-035 | Single implementation | BLOCK |
-| MCP-GATE | MCP tool enforcement | BLOCK |
-
-### Pattern Alignment
-
-```yaml
-Patterns to Verify:
-  - MCP-FIRST: All functionality via MCP tools
-  - Orchestrator Protocol: 5-phase execution
-  - Wiring Convention: YAML-first registration
-  - Test Structure: TDD with coverage targets
-  - Documentation: Inline docstrings
-```
-
----
-
-## Mandatory Challenge Gate
-
-### Challenge Generation
-
-**EVERY IMPLEMENT/FIX/REFACTOR triggers challenge generation:**
-
-```markdown
-### ⚠️ MANDATORY CHALLENGE (CORE-048)
-
-**Your Request:** {summary}
-
-**Your Approach:**
-- Description: {user_approach}
-- ROI Score: {roi}
-- Pros: {list}
-- Cons: {list}
-
-**Alternative A (Recommended if ROI higher):**
-- Description: {alt_a}
-- ROI Score: {roi_a}
-- Pros: {list}
-- Cons: {list}
-- Delta vs Yours: {+/-roi_delta}
-
-**Alternative B:**
-- Description: {alt_b}
-- ROI Score: {roi_b}
-- Pros: {list}
-- Cons: {list}
-
----
-
-**Your Decision:**
-1. `proceed` — Use your approach
-2. `use A` — Switch to Alternative A
-3. `use B` — Switch to Alternative B
-4. `refine` — Modify your request
-```
-
-### Decision Logging
-
-```yaml
-Challenge Decision Log:
-  timestamp: "2026-02-08T14:30:00Z"
-  user_request: "{original_request}"
-  alternatives_presented: 2
-  user_decision: "proceed | use A | use B | refine"
-  justification: "{if override}"
-  logged_to: "governance.db"
-  ac_marker: "AC-CHALLENGE-{timestamp}"
-```
-
----
-
-## cortex_intelligence Self-Analysis
-
-### CORTEX Repo Configuration
-
-```yaml
-# cortex_intelligence/onboarded_repos/cortex_self.yaml
-repo_id: "cortex_self"
-repo_path: "."
-repo_type: "internal"
-analysis_enabled: true
-context_synthesis: true
-
-knowledge_tiers:
-  tier0:
-    - "cortex/governance/"
-    - ".github/prompts/"
-    - "cortex-registry/governance/"
-  tier1:
-    - "cortex/orchestrators/"
-    - "cortex/mcp/"
-    - ".github/agents/core/"
-  tier2:
-    - "cortex/brain/"
-    - "cortex/lens/"
-    - "cortex/wiring/"
-  tier3:
-    - "cortex-docs/"
-    - "tests/"
-
-context_synthesis:
-  enabled: true
-  max_context_tokens: 50000
-  cache_ttl: 3600
-  related_file_limit: 10
-```
-
-### Self-Analysis Benefits
-
-- **Pattern Recognition:** Identify recurring patterns across orchestrators
-- **Change Awareness:** Know what was modified recently
-- **Context Synthesis:** Related files for current work
-- **Consistency Check:** Compare implementations across modules
-
----
-
-## MCP Tool Integration
-
-### cortex_validate_holistically
-
-```yaml
-Tool: cortex_validate_holistically
-Description: Perform holistic validation before implementation
-
-Parameters:
-  operation:
-    type: string
-    enum: [IMPLEMENT, FIX, REFACTOR]
-    required: true
-  target:
-    type: string
-    description: Target file or component path
-    required: true
-  scope:
-    type: array
-    items: [orchestrators, wiring, tests, agents, phases]
-    default: [orchestrators, wiring, tests]
-  challenge_required:
-    type: boolean
-    default: true
-
-Returns:
-  verdict: PASS | WARN | BLOCK
-  risk_score: float (0.0 - 1.0)
-  evidence:
-    registry_check: object
-    dependency_analysis: object
-    risk_breakdown: object
-    architecture_drift: array
-  challenges:
-    user_approach: object
-    alternatives: array
-  remediation: array (if BLOCK)
-```
-
----
-
-## Fallback Protocol (MCP Unavailable)
-
-**When MCP server not running:**
-
-```markdown
-### Manual Holistic Validation (MCP Unavailable)
-
-1. **Registry Check:**
-   - Read `cortex-registry/index.yaml`
-   - Verify target phase/component exists
-   - Check dependencies satisfied
-
-2. **Wiring Check:**
-   - Read `cortex/wiring/specifications/wiring.yaml`
-   - Verify orchestrator registration
-   - Check MCP tool exposure
-
-3. **Risk Assessment:**
-   - Estimate scope (isolated/cross-cutting)
-   - Estimate criticality (support/core)
-   - Note test coverage
-
-4. **Challenge Generation:**
-   - Propose 2 alternatives
-   - Compare ROI manually
-   - Request user decision
-
-5. **Log Decision:**
-   - Note validation was manual
-   - Include all checks performed
-   - Mark for post-implementation audit
-```
-
----
-
-## Success Criteria
-
-| Criterion | Target |
-|-----------|--------|
-| Registry consistency | 100% (no orphans, no missing refs) |
-| Circular dependencies | 0 (any = BLOCK) |
-| Risk score accuracy | ±0.1 of actual regression rate |
-| Challenge quality | 2+ viable alternatives per request |
-| User override rate | < 10% (most accept recommendations) |
-| Regression rate | < 1% (post Phase 48) |
-
----
-
-## Load When
-
-**This agent loads automatically when:**
-- User request is IMPLEMENT/FIX/REFACTOR intent
-- `/audit` with holistic validation scope
-- Explicit `/validate` command
-- Part of PRE-IMPLEMENTATION flow in DESIGN mode
-
-**Token Cost:** ~2,500 tokens
-
----
-
-*v1.0 — Holistic Validation Agent for Phase 48*
+- Package: `cortex` (single canonical import)
+- Orchestrators: 52 classes in `cortex/orchestrators/` (10 domains)
+- MCP Tools: 23 in `cortex/mcp/tools/`
+- Governance rules: 17 active in `cortex-registry/core/`
+- Tests: 15,230 total (486 golden, 177 phase)

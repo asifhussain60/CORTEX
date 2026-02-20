@@ -17,9 +17,7 @@ Stage 0 is a **synchronous governance audit layer** inserted BEFORE tool selecti
 ```
 User Request
     ↓
-Stage -1: Async Context Prefetch (Phase 49 CCL - parallel)
-    ↓
-Stage 0: SYNCHRONOUS GOVERNANCE AUDIT (NEW)
+Stage 0: SYNCHRONOUS GOVERNANCE AUDIT
   ├─ Parse Intent
   ├─ Detect Violations:
   │  ├─ CORE-002: MD file scope checks
@@ -237,7 +235,7 @@ Orchestrator: TDDOrchestrator (when violations cleared)
 
 **MCP Tool Chain:**
 ```
-cortex_process_request (user facing)
+cortex_load_core_rules (governance context)
     ↓ (internal)
 MasterOrchestrator.__init__
     ↓ (internal)

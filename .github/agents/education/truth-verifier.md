@@ -332,8 +332,7 @@ grep_search(query, isRegexp, includePattern)
 file_search(query)
 
 # Code analysis
-cortex_ast_analyze(target, analysis_type)
-cortex_lens_analyze(target, scope)
+cortex_onboard_repository_v3(target, scope)
 
 # Git context
 cortex_git_history(file_path, days)

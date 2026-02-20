@@ -1,27 +1,22 @@
 # CORTEX Agent Index
-**Version:** 1.4 | **Updated:** 2026-02-11 | **Purpose:** Lazy loading + silent autonomous execution + architecture integrity | **Agents:** 13 | **Default Mode:** Silent + Visual Progress | **Phase 70:** ✅ | **Phase 7 Stage 4:** Phase 2 COMPLETE ✅
+
+**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain  
+**Purpose:** Lazy loading + intent-based agent selection  
+**Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---
 
-## 🤖 SILENT AUTONOMOUS EXECUTION (DEFAULT)
+## Loading Protocol
 
-**All agents inherit this behavior when user says "proceed" or "implement":**
+**CRITICAL:** This file replaces bulk agent loading. Load specific agents ONLY when needed per intent.
 
 ```yaml
-silent_mode: true
-visual_feedback: "ascii_progress_bars"
-narration: disabled
-approval_gates: disabled
-completion_report: minimal
+Default Context: THIS FILE ONLY (~200 tokens)
+Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 ```
 
-### Progress Bar Format
-
-**SSOT:** `.github/templates/cortex-response-templates.md` § Silent Autonomous Mode — Golden Template
-
-All orchestrators (MasterOrchestrator, PlanningOrchestrator, VacuumOrchestrator, TDDOrchestrator, etc.) use the single golden template defined there. Do NOT define template format here.
-
 ### Status Icons
+
 | Icon | Meaning |
 |------|---------|
 | ✅ | Complete |
@@ -29,283 +24,136 @@ All orchestrators (MasterOrchestrator, PlanningOrchestrator, VacuumOrchestrator,
 | ⚪ | Pending |
 | 🔴 | Failed/Blocked |
 
----
-
-## 🏗️ Governance Architecture (Hybrid Pattern)
-
-**Authority:** CORTEX-CORE-035 (Single Canonical Implementation) + ENH-048 (Prompt Unbloating)  
-**Strategy:** YAML for structural rules (rarely change) + Agents for behavioral rules (actively evolving)
-
-### Tier 1: YAML Structural Rules (SSOT - Read-Only)
-
-**Location:** `cortex-registry/index.yaml` (governance section)
-
-| Rule Category | Owner | Change Frequency | Examples |
-|---------------|-------|------------------|----------|
-| Trigger Words | YAML | Yearly | "proceed", "implement", "continue" |
-| Progress Bar Format | YAML | Never | `[██░░]`, width=10, chars |
-| Status Icons | YAML | Never | ✅, 🔵, ⚪, 🔴 |
-| Token Budgets | YAML | Quarterly | Per-session limit, warning threshold |
-| File Naming | YAML | Never | kebab-case, max 35 chars |
-| Risk Thresholds | YAML | Quarterly | Block > 0.7, warn > 0.4 |
-
-### Tier 2: Agent Behavioral Rules (Active Development)
-
-**Location:** Agent specification files in `.github/agents/core/`
-
-| Rule Category | Agent Owner | Change Frequency | Examples |
-|---------------|-----------  |------------------|----------|
-| Challenge Gate Logic | cortex-holistic-validator.md | Monthly | Alternatives generation, ROI analysis |
-| Two-Phase Approval | cortex-architect.md | Monthly | When to ask, when to execute silently |
-| Behavioral Patterns | AGENT-INDEX.md | Bi-weekly | What to do on test fail, token budget hit |
-| Validation Sequences | cortex-holistic-validator.md | Monthly | Registry checks, dependency analysis |
-| Response Formats | cortex-response-templates.md | Bi-weekly | Visual templates, icon usage |
-| Mode Detection | cortex-architect.md | Quarterly | Intent classification, agent routing |
-
-### Tier 3: Cross-References (Consistency)
-
-**Enforcement:** Every 6 months, run Governance Coherence Audit (cortex-auditor.md)
-
-- YAML references agents: "Challenge Gate defined in cortex-holistic-validator.md"
-- Agents reference YAML: "See index.yaml for trigger word list and risk thresholds"
-- All 3 prompts link to agent/YAML definitions, not redefine them
+**Progress Bar SSOT:** `.github/templates/cortex-response-templates.md` — all orchestrators use this single golden template.
 
 ---
 
-## 🎯 Loading + Rule Ownership Protocol
+## Architecture Quick Reference
 
-**New agents follow this pattern:**
-
-1. **Declare rule ownership:** "This agent owns X behavioral rule"
-2. **Reference YAML:** "Parameters from cortex-registry/index.yaml"
-3. **No duplication:** Check CORTEX-AGENT-INDEX.md before defining new rule
-4. **Update audit checklist:** Add new rule to quarterly governance audit
-
-**Existing agents (audit required):**
-- ✅ cortex-holistic-validator.md — Owns Challenge Gate, Validation Sequences
-- ✅ cortex-architect.md — Owns Two-Phase Workflow, Mode Detection
-- ✅ AGENT-INDEX.md — Owns Protocol Definitions, Loading Strategy
-- ✅ cortex-response-templates.md — Owns Response Formats (single consolidated SSOT)
-- ⚠️ cortex-architect.prompt.md — Owns Challenge Gate details (consolidate with agent)
+| Metric | Value |
+|--------|-------|
+| Orchestrators | 52 canonical across 10 domains |
+| MCP Tools | 23 production tools |
+| CORE Rules | 17 active governance rules |
+| Package | `cortex` (single) |
+| Tests | 15,230 (486 golden, 177 phase) |
+| Entry Point | MasterOrchestrator → IntentRouter → Domain Orchestrator |
 
 ---
 
+## Agent Registry
 
+### Core Agents
 
-**CRITICAL:** This file replaces bulk agent loading. Load specific agents ONLY when needed per intent.
-
-### Loading Protocol
-
-```yaml
-Default Context: THIS FILE ONLY (~200 tokens)
-Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
-Total Savings: ~245,000 tokens per session (98% reduction)
-```
-
----
-
-## 🤖 Agent Registry (13 Core Agents)
-
-### Master Orchestration
-- **CORTEX.md** — Main orchestrator, routes all requests
-  - **Load when:** Any production request
-  - **Size:** ~250 lines
-  - **Key capabilities:** Intent routing, MCP gateway, DoR classification
-
-- **cortex-architect.md** — HEXA-mode router (AUDIT/DESIGN/PLAN/DIGEST/QUERY/META-AUDIT) + Production Readiness Gate
-  - **Load when:** Architecture requests, planning, audits, production deployment
-  - **Size:** ~939 lines
-  - **Key capabilities:** Mode detection, challenge generation, ROI prioritization, alignment validation, production readiness checklist
-
-### Validation & Governance Agents
-- **cortex-holistic-validator.md** — Pre-implementation holistic validation (Phase 48) + Implementation Alignment Gate ⭐ ENHANCED
-  - **Load when:** Before ANY IMPLEMENT/FIX/REFACTOR intent
-  - **Size:** ~480 lines
-  - **Key capabilities:** Registry cross-validation, dependency analysis, regression risk scoring, mandatory challenge gate, cortex_intelligence self-analysis, pre-implementation alignment checks, duplicate detection, test plan validation, LENS integration validation
-  - **Enforcement:** BLOCKING — No implementation without validation pass + alignment check
-
-- **architecture-integrity-agent.md** — Wiring alignment enforcer + Auto-remediation ⭐ NEW (Phase 70)
-  - **Load when:** Pre-commit hooks, CI/CD pipeline, monthly audits, alignment validation requests
-  - **Size:** ~850 lines
-  - **Key capabilities:** Wiring ↔ implementation alignment validation (100% target), stub test detection + auto-deletion, duplicate orchestrator detection (>85% similarity), usage tracking + retirement analysis, dependency validation, autonomous gap remediation, dashboard monitoring integration
-  - **Enforcement:** BLOCKING — Pre-commit validation blocks commits with alignment <100%, CI/CD blocks merges, production deployment requires full alignment
-  - **Auto-fix:** Module path correction, unwired implementation wiring (<5 count), stub test deletion (confidence >95%), priority conflict resolution
-  - **Integration:** Real-time dashboard widget, monthly comprehensive audit, GitHub Actions workflow
-  - **Target Metrics:** 100% wiring alignment, 0 stub tests, 0 duplicates, 95% orchestrator utilization
-
-- **cortex-auditor.md** — Codebase health scanning + Implementation Alignment Audit ⭐ ENHANCED
-  - **Load when:** `/audit`, quality analysis, alignment validation
-  - **Size:** ~327 lines
-  - **Key capabilities:** P0-P3 issue detection, security scanning, P0.5 holistic validation, P1 implementation alignment audit (wiring score, unwired implementations, stub tests, duplicates, usage analysis), autonomous remediation recommendations, GitHub Actions security scanning
-  - **Enforcement:** Comprehensive 12-check alignment matrix, auto-fix eligible issues with confidence >90%, monthly audit automation, credential persistence validation across CI/CD workflows
-  - **New Capability:** GitHub Actions Audit Check (AC-SEC-001)
-    - Validates all `.github/workflows/*.yml` files for `persist-credentials: false` on `actions/checkout`
-    - Severity: Medium (Credential Persistence Vulnerability)
-    - Auto-remediation: Injects `persist-credentials: false` where missing
-    - Detection: Scans 9 checkout patterns, reports on credential persistence risk
+| Agent | Purpose | Load When |
+|-------|---------|-----------|
+| **cortex.md** | Master orchestrator — routes all requests | Any production request |
+| **cortex-architect.md** | Mode router + challenge enforcer + production readiness | Architecture, audits, design |
+| **cortex-holistic-validator.md** | Pre-implementation validation gate | Before IMPLEMENT/FIX/REFACTOR |
+| **cortex-auditor.md** | Codebase health + P0-P3 scanning | `/audit`, quality analysis |
+| **cortex-executor.md** | Code execution + TDD implementation | Running tests, implementation |
+| **cortex-interactive.md** | Conversational mode | Questions, exploratory |
+| **cortex-meta-auditor.md** | Meta-level governance auditing | Governance coherence checks |
+| **cortex-master-plan-auditor.md** | Master plan validation | Plan integrity verification |
 
 ### Specialist Agents
-- **cortex-designer.md** — Design mode specialist
-  - **Load when:** Implementation requests with design phase
-  - **Size:** ~229 lines
-  - **Key capabilities:** TDD orchestration, incremental execution
 
-- **cortex-mcp-gateway.md** — MCP tool orchestration
-  - **Load when:** MCP tool invocation needed
-  - **Size:** ~229 lines
-  - **Key capabilities:** Tool routing, error handling, retry logic
+| Agent | Purpose | Load When |
+|-------|---------|-----------|
+| **cortex-digest.md** | Learning extraction from chat history | Processing chat files |
+| **cortex-environment-setup.md** | Environment validation | Pre-flight checks, setup issues |
+| **cortex-phase-resolver.md** | Plan phase management | `/plan` mode |
+| **cortex-storyteller.md** | Documentation generation | Creating narratives |
+| **cortex-documentation-architect.md** | Doc architecture + site builder | Documentation structure |
+| **cortex-gitpages-builder.md** | GitHub Pages deployment | Site publishing |
+| **request-rephrase-orchestrator.md** | Request token optimization | `/rephrase` command |
+| **architecture-integrity-agent.md** | Wiring alignment enforcement | Pre-commit, CI/CD |
 
-- **cortex-interactive.md** — Conversational mode
-  - **Load when:** Questions, exploratory discussions
-  - **Size:** ~516 lines
-  - **Key capabilities:** No TDD, no DoR gate, educational responses
+### Support Files
 
-- **cortex-digest.md** — Learning extraction
-  - **Load when:** Processing chat history files
-  - **Size:** ~276 lines
-  - **Key capabilities:** Pattern extraction, knowledge enhancement
-
-- **cortex-environment-setup.md** — Environment validation
-  - **Load when:** Pre-flight checks, setup issues
-  - **Size:** ~510 lines
-  - **Key capabilities:** Python validation, dependency checks
-
-- **cortex-storyteller.md** — Documentation generation
-  - **Load when:** Creating narratives, reports
-  - **Size:** ~274 lines
-  - **Key capabilities:** Context synthesis, markdown generation
-
-- **cortex-phase-resolver.md** — Plan phase management
-  - **Load when:** `/plan` mode, phase execution
-  - **Size:** ~346 lines
-  - **Key capabilities:** ROI calculation, progress tracking
-
-- **cortex-executor.md** — Code execution specialist
-  - **Load when:** Running tests, executing implementations
-  - **Size:** ~215 lines
-  - **Key capabilities:** Test execution, validation
+| File | Purpose |
+|------|---------|
+| **phase-creation-standards.md** | Standards for new phases |
+| **cleanup-audit-guide.md** | Cleanup procedure reference |
+| **STAGE-0-GOVERNANCE-AUDIT-SPEC.md** | Governance audit specification |
 
 ---
 
-## 🎯 Intent → Agent Mapping
+## Intent → Agent Mapping
 
 | User Intent | Load These Agents |
 |-------------|-------------------|
-| **IMPLEMENT** | CORTEX.md + cortex-holistic-validator.md + cortex-designer.md |
-| **AUDIT** | CORTEX.md + cortex-architect.md + cortex-auditor.md (includes GitHub Actions security scanning) |
-| **QUESTION** | CORTEX.md + cortex-interactive.md |
+| **IMPLEMENT** | cortex.md + cortex-holistic-validator.md + cortex-executor.md |
+| **FIX** | cortex.md + cortex-holistic-validator.md + cortex-executor.md |
+| **REFACTOR** | cortex.md + cortex-holistic-validator.md |
+| **AUDIT** | cortex.md + cortex-architect.md + cortex-auditor.md |
+| **INVESTIGATE** | cortex.md + cortex-architect.md |
+| **QUERY** | cortex.md + cortex-interactive.md |
+| **DESIGN** | cortex.md + cortex-architect.md |
 | **PLAN** | cortex-architect.md + cortex-phase-resolver.md |
 | **DIGEST** | cortex-architect.md + cortex-digest.md |
-| **FIX** | CORTEX.md + cortex-holistic-validator.md + cortex-designer.md |
-| **REFACTOR** | CORTEX.md + cortex-holistic-validator.md + cortex-designer.md |
+| **REPHRASE** | request-rephrase-orchestrator.md |
 | **SETUP** | cortex-environment-setup.md |
-| **MCP** | cortex-mcp-gateway.md |
-| **VALIDATE** | cortex-holistic-validator.md |
-| **SECURITY-AUDIT** | CORTEX.md + cortex-auditor.md (credential persistence, artifact safety, CI/CD hardening) |
 
 ---
 
-## 🛡️ Holistic Validation Flow (Phase 48)
+## Governance Architecture (Hybrid)
 
-**CRITICAL:** For IMPLEMENT/FIX/REFACTOR intents, load cortex-holistic-validator.md BEFORE cortex-designer.md
+### Tier 1: YAML Structural Rules (Read-Only)
+
+**Location:** `cortex-registry/core/` — governance rules YAML
+
+| Category | Change Frequency |
+|----------|-----------------|
+| CORE rules (17) | Rarely |
+| Progress bar format | Never |
+| Status icons | Never |
+| File naming rules | Never |
+| Risk thresholds | Quarterly |
+
+### Tier 2: Agent Behavioral Rules
+
+**Location:** `.github/agents/core/` — agent specification files
+
+| Category | Owner Agent |
+|----------|------------|
+| Challenge gate logic | cortex-holistic-validator.md |
+| Mode detection | cortex-architect.md |
+| Response formats | cortex-response-templates.md |
+| Validation sequences | cortex-holistic-validator.md |
+
+---
+
+## Validation Flow (IMPLEMENT/FIX/REFACTOR)
 
 ```
-User Request (IMPLEMENT/FIX/REFACTOR)
-         ↓
+User Request
+    ↓
 Load: cortex-holistic-validator.md
-         ↓
-Execute Validation Sequence:
-  1. Registry holistic check
-  2. Dependency graph analysis
+    ↓
+Validation Sequence:
+  1. Registry check
+  2. Dependency analysis
   3. Regression risk scoring
   4. Architecture drift detection
-  5. Mandatory challenge gate
-  6. cortex_intelligence self-analysis
-         ↓
-IF PASS/WARN → Load cortex-designer.md → Proceed
-IF BLOCK → Stop, show remediation, require override
+  5. Challenge gate (if risk > 0.4)
+    ↓
+IF PASS → Load executor → Proceed
+IF BLOCK → Show remediation, require override
 ```
 
 ---
 
-## 🛡️ GitHub Actions Security Audit Flow (AC-SEC-001)
+## ⛔ Deleted Constructs (Never Reference)
 
-**AUTOMATIC:** Triggered by `/audit` or monthly schedule
-
-```
-User Request (AUDIT or SECURITY-AUDIT intent)
-         ↓
-Load: cortex-auditor.md (with GitHub Actions capability)
-         ↓
-Execute Security Scan:
-  1. Scan all .github/workflows/*.yml files
-  2. Detect actions/checkout instances
-  3. Verify persist-credentials: false
-  4. Check for credential leakage vectors
-  5. Validate artifact upload safety
-         ↓
-RESULTS:
-  ✅ PASS: All 9 instances patched, credentials protected
-  🟡 WARN: Partial coverage, recommend fixes
-  🔴 FAIL: Credential persistence vulnerability detected
-         ↓
-AUTO-REMEDIATION:
-  - Inject persist-credentials: false where missing
-  - Add safety comments for context
-  - Generate audit report with AC markers
-```
+- `cortex/brain/` — dissolved into `cortex/orchestrators/`
+- `cortex_intelligence/` — merged into `cortex/intelligence/`
+- `cortex_lens/` — merged into `cortex/lens/`
+- `_archive/` — permanently deleted
+- Phase 49 CCL / CrystallizedContext — removed
+- `cortex_process_request` — replaced by specific MCP tools
+- `cortex_lens_analyze` — replaced by `cortex_onboard_repository_v3`
 
 ---
 
-## 📊 Token Budget Management
-
-```yaml
-Initial Budget: 1,000,000 tokens
-Reserved for User: 800,000 tokens (80%)
-Available for Context: 200,000 tokens (20%)
-
-Context Breakdown:
-  - copilot-instructions.md: ~10,000 tokens
-  - Primary prompt: ~20,000 tokens
-  - AGENT-INDEX.md: ~1,000 tokens
-  - Lazy-loaded agents: ~2,000 tokens (per intent)
-  - User workspace context: ~167,000 tokens
-
-Total Used: ~200,000 tokens
-Remaining for Response: 800,000 tokens ✅
-```
-
----
-
-## 🚀 Usage Instructions
-
-**For GitHub Copilot:**
-1. Load THIS file at initialization (not individual agents)
-2. Parse user request to determine intent
-3. Load ONLY the 1-2 agents needed per intent
-4. Never pre-load all agents simultaneously
-
-**For Prompts:**
-- Reference `AGENT-INDEX.md` instead of linking to individual agents
-- Use intent-based lazy loading
-- Monitor token usage per turn
-
----
-
-## ✅ Verification
-
-**Before this index:**
-- ❌ All 11 agents loaded (~8,200 lines)
-- ❌ ~250,000 tokens consumed at init
-- ❌ Forced summarization on every turn
-- ❌ Poor user experience
-
-**After this index:**
-- ✅ Only relevant agents loaded (~500-1,000 lines)
-- ✅ ~30,000 tokens consumed at init (88% reduction)
-- ✅ No premature summarization
-- ✅ Fast, responsive interactions
-
----
-
-*v1.2 — Silent autonomous execution + token optimization index*
+*v11.0 — Post-refactor v2.0.0-cohesive-brain. 52 orchestrators, 23 MCP tools, 1 package.*

@@ -1,132 +1,97 @@
 # CORTEX Agents
 
-**Version:** 4.0 | **Updated:** 2026-02-03 | **Architecture:** MCP-First SaaS
+**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain
 
 ---
 
-## 📁 Structure
+## Structure
 
 ```
 agents/
+├── agent-index.md                  # Lazy-loading registry (load FIRST)
+├── README.md                       # This file
 ├── core/                           # Production agents
-│   ├── CORTEX.md                  # Master orchestrator agent
-│   ├── cortex-architect.md        # Mode router + environment validator
-│   ├── cortex-environment-setup.md # Environment validation agent
-│   ├── cortex-auditor.md          # Codebase health auditor
-│   ├── cortex-designer.md         # DESIGN mode: challenge + approval
-│   ├── cortex-executor.md         # EXEC mode: direct implementation (NEW)
-│   └── cortex-mcp-gateway.md      # MCP tool routing agent
+│   ├── cortex.md                  # Master orchestrator
+│   ├── cortex-architect.md        # Mode router + challenge enforcer
+│   ├── cortex-holistic-validator.md # Pre-implementation gate
+│   ├── cortex-auditor.md          # Codebase health scanning
+│   ├── cortex-executor.md         # Code execution + TDD
+│   ├── cortex-interactive.md      # Conversational mode
+│   ├── cortex-digest.md           # Learning extraction
+│   ├── cortex-environment-setup.md # Environment validation
+│   ├── cortex-meta-auditor.md     # Meta governance auditing
+│   ├── cortex-master-plan-auditor.md # Plan integrity
+│   ├── cortex-documentation-architect.md # Doc architecture
+│   ├── cortex-storyteller.md      # Narrative generation
+│   ├── cortex-phase-resolver.md   # Phase management
+│   ├── cortex-gitpages-builder.md # GitHub Pages deployment
+│   ├── request-rephrase-orchestrator.md # Request optimization
+│   └── architecture-integrity-agent.md # Wiring enforcement
+├── orchestration/                  # Cross-agent orchestration
+│   └── cortex-universal-orchestration.md
 ├── education/                      # Educational agents
 │   ├── cortex-ask-coordinator.md
 │   └── truth-verifier.md
-└── archived/                       # Obsolete agents (reference only)
-    └── cortex-vacuum-agents.md
+└── support/                        # Support utilities
 ```
 
 ---
 
-## 🎯 Active Agents
+## Active Agents
 
-| Agent | File | Purpose | Mode |
-|-------|------|---------|------|
-| **CORTEX** | `core/CORTEX.md` (load explicitly when needed) | Master orchestrator, production entry point | Production |
-| **Architect** | `core/cortex-architect.md` (load explicitly when needed) | Mode router + pre-flight environment check | Routing |
-| **Environment Setup** | `core/cortex-environment-setup.md` (load explicitly when needed) | Python environment validation | Pre-Flight |
-| **Auditor** | `core/cortex-auditor.md` (load explicitly when needed) | Autonomous codebase health scan | Audit |
-| **Designer** | `core/cortex-designer.md` (load explicitly when needed) | Challenge + approval for exploratory requests | Design |
-| **Executor** | `core/cortex-executor.md` (load explicitly when needed) | Direct implementation (no challenge) | **Exec (NEW)** |
-| **MCP Gateway** | `core/cortex-mcp-gateway.md` (load explicitly when needed) | MCP tool routing, SaaS gateway | Production |
-
----
-
-## ⚡ EXEC vs DESIGN Mode
-
-| Trigger | Mode | Agent | Challenge? |
-|---------|------|-------|------------|
-| `/implement {feature}` | EXEC | cortex-executor | ❌ No |
-| `/fix {issue}` | EXEC | cortex-executor | ❌ No |
-| `/exec {task}` | EXEC | cortex-executor | ❌ No |
-| `/refactor {target}` | EXEC | cortex-executor | ❌ No |
-| `/design {question}` | DESIGN | cortex-designer | ✅ Yes |
-| Vague/exploratory | DESIGN | cortex-designer | ✅ Yes |
-
-**Key Insight:** Challenge adds value for exploratory requests but creates friction for clear tasks.
+| Agent | Purpose | Load When |
+|-------|---------|-----------|
+| **cortex.md** | Master orchestrator — routes all requests | Any production request |
+| **cortex-architect.md** | Mode router + production readiness | Architecture, audit, design |
+| **cortex-holistic-validator.md** | Pre-implementation validation | IMPLEMENT/FIX/REFACTOR |
+| **cortex-auditor.md** | P0-P3 health scanning | `/audit` |
+| **cortex-executor.md** | TDD execution | Tests, implementation |
+| **cortex-interactive.md** | Conversational Q&A | Questions, exploration |
+| **cortex-digest.md** | Chat session learning | Processing chat files |
+| **cortex-environment-setup.md** | Python/MCP validation | Pre-flight, setup |
+| **cortex-meta-auditor.md** | Governance coherence | Meta-level audits |
 
 ---
 
-## 🌐 MCP-First Architecture
+## Intent → Mode → Agent
 
-All agents route operations through MCP tools:
-
-| Agent | Primary MCP Tools |
-|-------|-------------------|
-| CORTEX | `cortex_process_request`, `cortex_challenge` |
-| Architect | `cortex_verify_environment` (routing only) |
-| Environment Setup | `cortex_verify_environment` |
-| Auditor | `cortex_lens_analyze`, `cortex_detect_duplicates` |
-| Designer | `cortex_git_history`, `cortex_manage_todo`, `cortex_ast_analyze` |
-| Executor | `cortex_git_history`, `cortex_manage_todo` (no challenge) |
-| MCP Gateway | All tools via `/tools/{name}` |
-
----
-
-## 🔄 Request Flow
-
-```
-User Request
-     ↓
-CORTEX.md (master)
-     ↓
-cortex-architect.md (router)
-     ↓
-PRE-FLIGHT CHECK (cortex_verify_environment)
-     ↓
-✅ READY → cortex-auditor.md OR cortex-designer.md
-❌ NOT READY → cortex-environment-setup.md (HALT)
-```
+| Intent | Agent(s) |
+|--------|----------|
+| IMPLEMENT | cortex.md + cortex-holistic-validator.md + cortex-executor.md |
+| FIX | cortex.md + cortex-holistic-validator.md + cortex-executor.md |
+| REFACTOR | cortex.md + cortex-holistic-validator.md |
+| AUDIT | cortex.md + cortex-architect.md + cortex-auditor.md |
+| INVESTIGATE | cortex.md + cortex-architect.md |
+| QUERY | cortex.md + cortex-interactive.md |
+| DESIGN | cortex.md + cortex-architect.md |
+| PLAN | cortex-architect.md + cortex-phase-resolver.md |
+| DIGEST | cortex-architect.md + cortex-digest.md |
+| REPHRASE | request-rephrase-orchestrator.md |
+| SETUP | cortex-environment-setup.md |
 
 ---
 
-## 🔗 Related Prompts
+## Architecture Reference
 
-| Prompt | Agent | Purpose |
-|--------|-------|---------|
-| `../prompts/CORTEX.prompt.md` (load explicitly when needed) | CORTEX.md | Production master |
-| `../prompts/cortex-architect.prompt.md` (load explicitly when needed) | cortex-architect.md + environment-setup.md | Tri-mode routing + environment validation |
-
----
-
-*v3.0 — Environment validation agent for pre-flight checks.*
-
----
-
-## 📊 Orchestrator Integration
-
-Agents coordinate 23 orchestrators via GitBackedRegistry:
-
-```
-Core (6):     MasterOrchestrator, InteractionOrchestrator, IntentRouter,
-              TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator
-
-Domain (6):   RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator,
-              ConversationOrchestrator, DocumentationOrchestrator, ChallengeEngine
-
-Support (11): OnboardingOrchestrator, ToolDiscoveryOrchestrator, LENSOrchestrator,
-              UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, ...
-```
+| Metric | Value |
+|--------|-------|
+| Orchestrators | 52 canonical (`cortex/orchestrators/`) |
+| MCP Tools | 23 (`cortex/mcp/tools/`) |
+| CORE Rules | 17 (`cortex-registry/core/`) |
+| Package | `cortex` (single canonical) |
+| Tests | 15,230 (486 golden, 177 phase) |
 
 ---
 
-## 🗄️ Archived Agents
+## Related
 
-Located in `/archived/` — kept for historical reference only.
-
-| Agent | Reason Archived |
-|-------|-----------------|
-| cortex-vacuum-agents.md | Cleanup complete, no longer needed |
-
-**Note:** Deprecated agents (`cortex-review.md`, `cortex-builder.md`, etc.) were deleted in Phase 8.3 consolidation.
+| Resource | Purpose |
+|----------|---------|
+| `agent-index.md` | Lazy-loading registry (SSOT) |
+| `../prompts/cortex-architect.prompt.md` | Expanded execution modes |
+| `../prompts/cortex.prompt.md` | Master orchestrator prompt |
+| `../templates/cortex-response-templates.md` | Response formatting |
 
 ---
 
-*MCP-first agents — production-ready, SaaS architecture.*
+*v11.0 — Post-refactor v2.0.0-cohesive-brain. 52 orchestrators, 23 MCP tools, 1 package.*

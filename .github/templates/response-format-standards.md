@@ -565,7 +565,7 @@ Fix: {fix_suggestion}
 **Avoid:** Large code blocks in chat responses
 
 ```markdown
-**Command:** `cortex_process_request`
+**Command:** `cortex_sample_tool` (MCP health check)
 **Not:** Triple-backtick blocks (breaks flow)
 ```
 
