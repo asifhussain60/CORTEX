@@ -77,10 +77,12 @@ class JSONProfileRepository:
         self._ensure_storage_exists()
 
     def _ensure_storage_exists(self) -> None:
-        """Ensure storage file exists."""
-        self.storage_path.parent.mkdir(parents=True, exist_ok=True)
+        """Ensure storage directory exists (per-file storage model)."""
+        # In the per-file storage model, storage_path is a directory.
+        # Each repo gets its own {repo_name}.json file inside it.
+        # We only create the directory here; files are created on save().
         if not self.storage_path.exists():
-            self.storage_path.write_text(json.dumps({"profiles": []}))
+            self.storage_path.mkdir(parents=True, exist_ok=True)
 
     def create(self, profile: RepositoryProfile) -> Result[RepositoryProfile]:
         """
@@ -316,6 +318,118 @@ class JSONProfileRepository:
     def _save_storage(self, data: Dict[str, Any]) -> None:
         """Save storage file."""
         self.storage_path.write_text(json.dumps(data, indent=2, default=str))
+
+    # ════════════════════════════════════════════════════════════════════════
+    # Dict-based API (AC-054A-S2 test contract)
+    # ════════════════════════════════════════════════════════════════════════
+
+    def save(self, profile_dict: Dict[str, Any]) -> str:
+        """
+        Save a profile dict to storage.
+
+        Each repo gets its own JSON file: storage_path/{repo_name}.json
+
+        Args:
+            profile_dict: Dict with required fields: repo_name, repo_url,
+                analysis_data, created_at, updated_at.
+
+        Returns:
+            repo_name (identifier) of saved profile.
+
+        Raises:
+            ValueError: If 'repo_name' is missing or None.
+            TypeError: If 'repo_name' is not a string or 'analysis_data' is not a dict.
+            PermissionError: If storage path is not writable.
+        """
+        required_fields = {"repo_name", "repo_url", "analysis_data", "created_at", "updated_at"}
+        missing = required_fields - set(profile_dict.keys())
+        if missing:
+            raise ValueError(f"Profile missing required fields: {missing}")
+
+        repo_name = profile_dict.get("repo_name")
+        if repo_name is None:
+            raise ValueError("Profile must contain a non-None 'repo_name' field")
+        if not isinstance(repo_name, str):
+            raise TypeError(f"'repo_name' must be a string, got {type(repo_name).__name__}")
+        if not repo_name.strip():
+            raise ValueError("'repo_name' must not be empty")
+
+        analysis_data = profile_dict.get("analysis_data")
+        if analysis_data is not None and not isinstance(analysis_data, dict):
+            raise TypeError(f"'analysis_data' must be a dict, got {type(analysis_data).__name__}")
+
+        self.storage_path.mkdir(parents=True, exist_ok=True)
+        profile_file = self.storage_path / f"{repo_name}.json"
+        try:
+            profile_file.write_text(json.dumps(profile_dict, indent=2, default=str))
+        except IsADirectoryError:
+            raise PermissionError(f"Storage path is a directory, cannot write: {profile_file}")
+        return repo_name
+
+    def get_by_name(self, repo_name: str) -> Optional[Dict[str, Any]]:
+        """
+        Retrieve a profile dict by repo_name.
+
+        Args:
+            repo_name: Name of the repository.
+
+        Returns:
+            Profile dict or None if not found.
+        """
+        profile_file = self.storage_path / f"{repo_name}.json"
+        if not profile_file.exists():
+            return None
+        try:
+            content = profile_file.read_text()
+            return json.loads(content)
+        except Exception:
+            return None
+
+    def delete(self, repo_name: str) -> bool:
+        """
+        Delete a profile by repo_name.
+
+        Args:
+            repo_name: Name of the repository.
+
+        Returns:
+            True if deleted, False if not found.
+        """
+        profile_file = self.storage_path / f"{repo_name}.json"
+        if not profile_file.exists():
+            return False
+        profile_file.unlink()
+        return True
+
+    def list_all(self) -> List[Dict[str, Any]]:
+        """
+        List all profiles.
+
+        Returns:
+            List of profile dicts.
+        """
+        if not self.storage_path.exists():
+            return []
+        profiles = []
+        for json_file in self.storage_path.glob("*.json"):
+            try:
+                content = json_file.read_text()
+                profiles.append(json.loads(content))
+            except Exception:
+                continue
+        return profiles
+
+    def exists(self, repo_name: str) -> bool:
+        """
+        Check if a profile exists by repo_name.
+
+        Args:
+            repo_name: Name of the repository.
+
+        Returns:
+            True if exists, False otherwise.
+        """
+        return (self.storage_path / f"{repo_name}.json").exists()
 
 
 # AC_COMPLETE: AC-PHASE54A-S2-001 ✅
