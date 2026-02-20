@@ -8,8 +8,8 @@ CORE Rules:
 import pytest
 from pathlib import Path
 
-from cortex.brain.knowledge.tech_stack_mapper import TechStackMapper, ImportMapping
-from cortex.brain.knowledge.staleness_checker import StalenessChecker, StalenessReport
+from cortex.intelligence.knowledge.tech_stack_mapper import TechStackMapper, ImportMapping
+from cortex.intelligence.knowledge.staleness_checker import StalenessChecker, StalenessReport
 
 
 class TestTechStackMapper:

@@ -14,7 +14,7 @@ from cortex.mcp.mcp_tool_base import (
     ToolParameter,
     ToolResult,
 )
-from cortex.toolkit.setup import SetupVerifier
+from cortex.tools.toolkit.setup import SetupVerifier
 
 
 class ToolkitVerifyTool(ConsolidatedTool):

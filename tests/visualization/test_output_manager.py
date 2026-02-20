@@ -16,7 +16,7 @@ from unittest.mock import MagicMock, patch, mock_open
 
 import pytest
 
-from cortex.visualization.output_manager import (
+from cortex.dashboards.output_manager import (
     DashboardOutputManager,
     OutputConfiguration,
     get_output_path,
@@ -79,7 +79,7 @@ class TestDashboardOutputManager:
         manager = DashboardOutputManager()
         
         # Mock repository detector to return False (external repo)
-        with patch("cortex.visualization.output_manager.is_cortex_repository", return_value=False):
+        with patch("cortex.dashboards.output_manager.is_cortex_repository", return_value=False):
             config = manager.get_output_configuration(tmp_path)
         
         assert config.repo_path == tmp_path
@@ -93,7 +93,7 @@ class TestDashboardOutputManager:
         manager = DashboardOutputManager()
         
         # Mock repository detector to return True (CORTEX repo)
-        with patch("cortex.visualization.output_manager.is_cortex_repository", return_value=True):
+        with patch("cortex.dashboards.output_manager.is_cortex_repository", return_value=True):
             config = manager.get_output_configuration(tmp_path)
         
         assert config.repo_path == tmp_path
@@ -107,7 +107,7 @@ class TestDashboardOutputManager:
         manager = DashboardOutputManager()
         
         # Mock repository detector and is_remote=True
-        with patch("cortex.visualization.output_manager.is_cortex_repository", return_value=False):
+        with patch("cortex.dashboards.output_manager.is_cortex_repository", return_value=False):
             config = manager.get_output_configuration(tmp_path, is_remote=True)
         
         assert config.repo_path == tmp_path
@@ -125,7 +125,7 @@ class TestDashboardOutputManager:
         manager = DashboardOutputManager()
         custom_path = tmp_path / "custom/dashboard"
         
-        with patch("cortex.visualization.output_manager.is_cortex_repository", return_value=False):
+        with patch("cortex.dashboards.output_manager.is_cortex_repository", return_value=False):
             config = manager.get_output_configuration(tmp_path, output_override=custom_path)
         
         assert config.output_path == custom_path
@@ -221,7 +221,7 @@ class TestDashboardOutputManager:
     
     def test_convenience_function_get_output_path(self, tmp_path):
         """Test convenience function get_output_path()."""
-        with patch("cortex.visualization.output_manager.is_cortex_repository", return_value=False):
+        with patch("cortex.dashboards.output_manager.is_cortex_repository", return_value=False):
             output_path = get_output_path(tmp_path)
         
         assert output_path == tmp_path / ".cortex-runtime/lens-dashboard"

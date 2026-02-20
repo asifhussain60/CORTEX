@@ -23,7 +23,7 @@ Date: 2026-02-07
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from cortex.core.yaml_loaders import load_response_format
+from cortex.core.core.yaml_loaders import load_response_format
 
 
 @dataclass

@@ -16,7 +16,7 @@ from fastapi.testclient import TestClient
 @pytest.fixture
 def mock_lens_orchestrator():
     """Mock LENSVisualizationOrchestrator."""
-    with patch("cortex.visualization.api.dashboard_routes.LENSVisualizationOrchestrator") as mock:
+    with patch("cortex.dashboards.api.dashboard_routes.LENSVisualizationOrchestrator") as mock:
         orchestrator = Mock()
         orchestrator.generate_dashboard.return_value = Path("/tmp/dashboard")
         mock.return_value = orchestrator
@@ -26,7 +26,7 @@ def mock_lens_orchestrator():
 @pytest.fixture
 def client(mock_lens_orchestrator):
     """Create FastAPI test client."""
-    from cortex.visualization.api.dashboard_routes import app
+    from cortex.dashboards.api.dashboard_routes import app
     return TestClient(app)
 
 
@@ -105,7 +105,7 @@ class TestDashboardServeEndpoint:
         index_file = dashboard_path / "index.html"
         index_file.write_text("<html><body>Test Dashboard</body></html>")
         
-        with patch("cortex.visualization.api.dashboard_routes.DASHBOARD_ROOT", dashboard_path):
+        with patch("cortex.dashboards.api.dashboard_routes.DASHBOARD_ROOT", dashboard_path):
             response = client.get("/api/lens/dashboard/index.html")
         
         # Should serve the file or return appropriate response
@@ -130,7 +130,7 @@ class TestDashboardListEndpoint:
         (dashboards_root / "repo1").mkdir()
         (dashboards_root / "repo2").mkdir()
         
-        with patch("cortex.visualization.api.dashboard_routes.DASHBOARD_ROOT", dashboards_root):
+        with patch("cortex.dashboards.api.dashboard_routes.DASHBOARD_ROOT", dashboards_root):
             response = client.get("/api/lens/dashboard/list")
         
         assert response.status_code == 200
@@ -166,7 +166,7 @@ class TestDashboardMetadataEndpoint:
         metadata_file = dashboard_path / "metadata.json"
         metadata_file.write_text('{"repository": "test-repo", "generated_at": "2026-01-29"}')
         
-        with patch("cortex.visualization.api.dashboard_routes.DASHBOARD_ROOT", tmp_path):
+        with patch("cortex.dashboards.api.dashboard_routes.DASHBOARD_ROOT", tmp_path):
             response = client.get("/api/lens/dashboard/test-repo/metadata")
         
         if response.status_code == 200:
@@ -206,7 +206,7 @@ class TestErrorHandling:
         repo_path = tmp_path / "test-repo"
         repo_path.mkdir()
         
-        with patch("cortex.visualization.api.dashboard_routes.LENSVisualizationOrchestrator") as mock:
+        with patch("cortex.dashboards.api.dashboard_routes.LENSVisualizationOrchestrator") as mock:
             mock.return_value.generate_dashboard.side_effect = Exception("Test error")
             
             response = client.post(

@@ -11,7 +11,7 @@ AC-ID: AC-WAVE-L-001
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
-from cortex.agents.lazy_loader import (
+from cortex.orchestrators.intelligence.lazy_loader import (
     IntentType,
     AgentMetadata,
     IntentAgentMapper,
@@ -233,7 +233,7 @@ class TestLoadAgentsForIntent:
     
     def test_load_agents_for_intent_function(self):
         """Test the convenience function."""
-        with patch('cortex.agents.lazy_loader.IntentAgentMapper') as MockMapper:
+        with patch('cortex.orchestrators.intelligence.lazy_loader.IntentAgentMapper') as MockMapper:
             mock_mapper_instance = Mock()
             mock_mapper_instance.get_agents_for_intent.return_value = [
                 AgentMetadata(name="test", file_path=Path("/test.md"))

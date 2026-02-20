@@ -25,16 +25,16 @@ from cortex.lens.analyzers.comment_extractor import CommentExtractor
 
 # Phase 7.1 LENS Intelligence
 from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
-from cortex.visualization.business_language_generator import BusinessLanguageGenerator
-from cortex.visualization.dashboard_configuration import DashboardConfiguration
-from cortex.visualization.renderers.author_network_renderer import AuthorNetworkRenderer
+from cortex.dashboards.business_language_generator import BusinessLanguageGenerator
+from cortex.dashboards.dashboard_configuration import DashboardConfiguration
+from cortex.dashboards.renderers.author_network_renderer import AuthorNetworkRenderer
 
 # Phase 14 Backend Renderers
-from cortex.visualization.renderers.complexity_renderer import ComplexityRenderer
-from cortex.visualization.renderers.mermaid_renderer import MermaidRenderer
+from cortex.dashboards.renderers.complexity_renderer import ComplexityRenderer
+from cortex.dashboards.renderers.mermaid_renderer import MermaidRenderer
 
 # Visualization Infrastructure
-from cortex.visualization.repository_detector import RepositoryDetector
+from cortex.dashboards.repository_detector import RepositoryDetector
 
 
 def create_dashboard_router() -> APIRouter:

@@ -14,7 +14,7 @@ AC-ID: LENS-DASH-003
 
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from cortex.visualization.renderers.d3_call_graph_renderer import (
+from cortex.dashboards.renderers.d3_call_graph_renderer import (
     D3Configuration,
     D3Edge,
     D3Graph,

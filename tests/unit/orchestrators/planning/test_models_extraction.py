@@ -5,17 +5,15 @@ Tests ROICompositeScorer, DependencyResolver, and ParallelismCalculator.
 """
 
 import pytest
-from cortex.orchestrators.planning.models import (
-    ROICompositeScorer,
-    DependencyResolver,
-    ParallelismCalculator,
-)
-from cortex.orchestrators.planning.models.roi_composite_scorer import (
+from cortex.orchestrators.domain.roi_composite_scorer import ROICompositeScorer
+from cortex.orchestrators.domain.dependency_resolver import DependencyResolver
+from cortex.orchestrators.domain.parallelism_calculator import ParallelismCalculator
+from cortex.orchestrators.domain.roi_composite_scorer import (
     ROIWeights,
     PhaseMetrics,
     PriorityTier,
 )
-from cortex.orchestrators.planning.models.dependency_resolver import (
+from cortex.orchestrators.domain.dependency_resolver import (
     DependencyGraph,
     ResolutionStatus,
 )

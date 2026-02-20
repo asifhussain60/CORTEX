@@ -42,12 +42,12 @@ Date: 2026-01-27
 CORE-030: Docker-first architecture - no database dependencies
 """
 
-from cortex.collaboration.operation_lock import (
+from cortex.infrastructure.collaboration.operation_lock import (
     LockTimeoutError,
     OperationLockError,
     operation_lock,
 )
-from cortex.collaboration.user_context import (
+from cortex.infrastructure.collaboration.user_context import (
     UserContext,
     clear_user_context,
     get_current_user,

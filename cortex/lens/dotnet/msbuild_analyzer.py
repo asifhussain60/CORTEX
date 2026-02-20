@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
-from cortex.brain.core.result import Err, Ok
+from cortex.core.core.result import Err, Ok
 
 
 class MSBuildDependencyResolver:

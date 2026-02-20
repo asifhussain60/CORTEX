@@ -9,7 +9,7 @@ Authority: Phase 27 specification
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, mock_open
-from cortex.common.standards_resolver import (
+from cortex.core.common.standards_resolver import (
     StandardsResolver,
     StandardsSource,
     StandardsResult,

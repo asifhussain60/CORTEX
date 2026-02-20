@@ -12,7 +12,7 @@ CORE Rules:
 import pytest
 from unittest.mock import Mock, patch
 
-from cortex.brain.knowledge.knowledge_synthesis_engine import KnowledgeSynthesisEngine
+from cortex.intelligence.knowledge.knowledge_synthesis_engine import KnowledgeSynthesisEngine
 
 
 class TestKnowledgeSynthesisGapFilling:

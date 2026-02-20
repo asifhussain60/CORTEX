@@ -41,7 +41,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
-from cortex.core.intent.comprehension_yaml import (
+from cortex.core.core.intent.comprehension_yaml import (
     ChallengeItem,
     ChallengeSection,
     ComprehensionYAML,
@@ -49,7 +49,7 @@ from cortex.core.intent.comprehension_yaml import (
     RecommendationItem,
     RecommendationSection,
 )
-from cortex.core.knowledge.knowledge_graph import (
+from cortex.core.core.knowledge.knowledge_graph import (
     EdgeType,
     KnowledgeGraph,
     NodeType,

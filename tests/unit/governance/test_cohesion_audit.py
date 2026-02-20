@@ -214,7 +214,7 @@ class TestVacuumOrchestratorBrainFlush:
         orchestrator = VacuumOrchestrator()
         
         # Should be able to trigger brain flush
-        with patch("cortex.brain.core.brain_state_manager.BrainStateManager") as mock_manager:
+        with patch("cortex.core.core.brain_state_manager.BrainStateManager") as mock_manager:
             mock_instance = Mock()
             mock_manager.return_value = mock_instance
             mock_instance.flush_state.return_value = Mock(success=True, snapshot_path="test.json")
@@ -262,7 +262,7 @@ class TestVacuumOrchestratorBrainFlush:
         orchestrator = VacuumOrchestrator()
         
         # Mock brain state manager
-        with patch("cortex.brain.core.brain_state_manager.BrainStateManager") as mock_manager:
+        with patch("cortex.core.core.brain_state_manager.BrainStateManager") as mock_manager:
             mock_instance = Mock()
             mock_manager.return_value = mock_instance
             mock_instance.flush_state.return_value = Mock(
@@ -287,7 +287,7 @@ class TestVacuumOrchestratorBrainFlush:
         orchestrator = VacuumOrchestrator()
         
         # Mock brain state manager with failure
-        with patch("cortex.brain.core.brain_state_manager.BrainStateManager") as mock_manager:
+        with patch("cortex.core.core.brain_state_manager.BrainStateManager") as mock_manager:
             mock_instance = Mock()
             mock_manager.return_value = mock_instance
             mock_instance.flush_state.side_effect = Exception("Flush failed")

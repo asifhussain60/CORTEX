@@ -18,7 +18,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from cortex.visualization.business_language_generator import (
+from cortex.dashboards.business_language_generator import (
     BusinessLanguageGenerator,
     BusinessDescription,
     CapabilitySet,

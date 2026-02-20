@@ -20,11 +20,11 @@ from pathlib import Path
 from typing import Optional
 import os
 
-from cortex.toolkit.diagnostics import MCPDiagnostics, DiagnosticLevel
-from cortex.toolkit.setup import SetupVerifier
-from cortex.toolkit.cleanup import CleanupManager
-from cortex.toolkit.validation import ValidationManager
-from cortex.toolkit.discovery import ToolkitDiscovery
+from cortex.tools.toolkit.diagnostics import MCPDiagnostics, DiagnosticLevel
+from cortex.tools.toolkit.setup import SetupVerifier
+from cortex.tools.toolkit.cleanup import CleanupManager
+from cortex.tools.toolkit.validation import ValidationManager
+from cortex.tools.toolkit.discovery import ToolkitDiscovery
 
 
 async def toolkit_diagnose() -> dict:

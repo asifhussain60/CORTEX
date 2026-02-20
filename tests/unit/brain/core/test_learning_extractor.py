@@ -13,7 +13,7 @@ import pytest
 from unittest.mock import Mock
 import numpy as np
 
-from cortex.brain.core.learning_extractor import (
+from cortex.core.core.learning_extractor import (
     LearningExtractor,
     InsightType,
     LearningInsight,

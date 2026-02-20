@@ -9,7 +9,7 @@ Comprehensive test suite validating:
 
 import pytest
 
-from cortex.domain_brain.optimistic_lock import (
+from cortex.intelligence.domain_brain.optimistic_lock import (
     OptimisticLockManager,
     ConflictError,
     VersionedDomain,

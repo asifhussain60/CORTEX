@@ -6,7 +6,7 @@ Test Count: 6 golden tests
 """
 import pytest
 from pathlib import Path
-from cortex.agents.plan_auditor_agent import PlanAuditorAgent, DashboardSyncResult
+from cortex.orchestrators.intelligence.plan_auditor_agent import PlanAuditorAgent, DashboardSyncResult
 
 
 class TestPlanAuditorSync:

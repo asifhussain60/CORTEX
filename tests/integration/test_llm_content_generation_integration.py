@@ -8,7 +8,7 @@ Author: Asif Hussain
 import pytest
 import yaml
 from pathlib import Path
-from cortex.visualization.llm_content_generator import (
+from cortex.dashboards.llm_content_generator import (
     LLMContentGenerator,
     TechnicalDecision,
     StoryContext,

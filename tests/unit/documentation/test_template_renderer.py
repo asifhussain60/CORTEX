@@ -8,7 +8,7 @@ AC_START: AC-PHASE98-S2-T3
 
 import pytest
 from pathlib import Path
-from cortex.documentation.template_renderer import (
+from cortex.intelligence.documentation.template_renderer import (
     TemplateRenderer,
     RoleConfig,
     BreadcrumbItem,

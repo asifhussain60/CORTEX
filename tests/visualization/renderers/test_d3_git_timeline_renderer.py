@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from cortex.visualization.renderers.d3_git_timeline_renderer import (
+from cortex.dashboards.renderers.d3_git_timeline_renderer import (
     D3GitTimelineRenderer,
     TimelineCommit,
     TimelineDay,

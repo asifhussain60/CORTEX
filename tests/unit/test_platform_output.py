@@ -8,7 +8,7 @@ import platform
 import pytest
 from unittest.mock import patch, MagicMock
 
-from cortex.common.platform_output import (
+from cortex.core.common.platform_output import (
     PlatformOutputFormatter,
     OutputLevel,
     success, error, warning, info, critical, fix, start, complete

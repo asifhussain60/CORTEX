@@ -131,7 +131,7 @@ class TestEndToEndWorkflow:
                 return "done"
         
         orch = TestOrchestrator()
-        with patch("cortex.learning.orchestrator_integration_mixin.get_learning_loop") as mock:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_learning_loop") as mock:
             mock.return_value = MagicMock()
             result = orch.execute()
             assert result == "done"
@@ -235,7 +235,7 @@ class TestArchitectureValidation:
         mixin = OrchestratorLearningMixin()
         
         # Even with errors, should not raise
-        with patch("cortex.learning.orchestrator_integration_mixin.get_learning_loop") as mock:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_learning_loop") as mock:
             mock.return_value = MagicMock()
             mock.return_value.capture_from_operation.side_effect = Exception("Test error")
             

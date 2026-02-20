@@ -28,7 +28,7 @@ class TestRollbackOrchestrator:
         - Rollback initiated automatically
         - Previous version restored
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator()
         
@@ -64,7 +64,7 @@ class TestRollbackOrchestrator:
         - State restored after rollback
         - Data consistency maintained
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator()
         
@@ -97,7 +97,7 @@ class TestRollbackOrchestrator:
         - Rollback steps logged
         - AC_COMPLETE marker with outcome
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator()
         
@@ -127,7 +127,7 @@ class TestCanaryDeployment:
         - Health metrics monitored
         - Promotion to full deployment
         """
-        from cortex.deployment.canary_validator import CanaryValidator
+        from cortex.infrastructure.deployment.canary_validator import CanaryValidator
         
         validator = CanaryValidator(canary_percentage=10)
         
@@ -158,7 +158,7 @@ class TestCanaryDeployment:
         - Rollback initiated automatically
         - Failed version not promoted
         """
-        from cortex.deployment.canary_validator import CanaryValidator
+        from cortex.infrastructure.deployment.canary_validator import CanaryValidator
         
         validator = CanaryValidator(canary_percentage=10)
         
@@ -189,7 +189,7 @@ class TestCanaryDeployment:
         - Validation at each stage
         - Automatic rollback on any stage failure
         """
-        from cortex.deployment.canary_validator import CanaryValidator
+        from cortex.infrastructure.deployment.canary_validator import CanaryValidator
         
         validator = CanaryValidator(canary_percentage=10)
         
@@ -226,7 +226,7 @@ class TestMultiRegionRollback:
         - Rollback order respected (reverse of deployment)
         - Cross-region consistency
         """
-        from cortex.deployment.multi_region_orchestrator import MultiRegionOrchestrator
+        from cortex.infrastructure.deployment.multi_region_orchestrator import MultiRegionOrchestrator
         
         orchestrator = MultiRegionOrchestrator(
             regions=["us-east-1", "eu-west-1", "ap-southeast-1"]
@@ -253,7 +253,7 @@ class TestMultiRegionRollback:
         - Other regions unchanged
         - Regional health verified
         """
-        from cortex.deployment.multi_region_orchestrator import MultiRegionOrchestrator
+        from cortex.infrastructure.deployment.multi_region_orchestrator import MultiRegionOrchestrator
         
         orchestrator = MultiRegionOrchestrator(
             regions=["us-east-1", "eu-west-1", "ap-southeast-1"]
@@ -282,7 +282,7 @@ class TestMultiRegionRollback:
         - Partial success reported
         - Failed regions logged
         """
-        from cortex.deployment.multi_region_orchestrator import MultiRegionOrchestrator
+        from cortex.infrastructure.deployment.multi_region_orchestrator import MultiRegionOrchestrator
         
         orchestrator = MultiRegionOrchestrator(
             regions=["us-east-1", "eu-west-1", "ap-southeast-1"]
@@ -318,8 +318,8 @@ class TestRollbackStrategies:
         - No pre-rollback validation
         - Minimal latency (<5s)
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
-        from cortex.deployment.rollback_strategy import ImmediateStrategy
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_strategy import ImmediateStrategy
         
         orchestrator = RollbackOrchestrator(strategy=ImmediateStrategy())
         
@@ -345,8 +345,8 @@ class TestRollbackStrategies:
         - Previous version health verified
         - Rollback only if safe
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
-        from cortex.deployment.rollback_strategy import ValidatedStrategy
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_strategy import ValidatedStrategy
         
         orchestrator = RollbackOrchestrator(strategy=ValidatedStrategy())
         
@@ -371,8 +371,8 @@ class TestRollbackStrategies:
         - Zero-downtime rollback
         - New environment decommissioned
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
-        from cortex.deployment.rollback_strategy import BlueGreenStrategy
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_strategy import BlueGreenStrategy
         
         orchestrator = RollbackOrchestrator(strategy=BlueGreenStrategy())
         
@@ -400,7 +400,7 @@ class TestRollbackMetrics:
         - Success/failure rate recorded
         - Prometheus metrics updated
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator()
         
@@ -422,7 +422,7 @@ class TestRollbackMetrics:
         - Historical data queryable
         - Trends analyzed
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator()
         
@@ -446,7 +446,7 @@ class TestRollbackMetrics:
         - Failed rollbacks tracked
         - Alerting thresholds
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator()
         
@@ -475,8 +475,8 @@ class TestRollbackIntegration:
         - Rollback orchestrator invoked
         - Deployment prevented
         """
-        from cortex.deployment.exit_gate_integration import DeploymentExitGate
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.exit_gate_integration import DeploymentExitGate
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
         
         gate = DeploymentExitGate(fail_safe=False)
         rollback_orchestrator = RollbackOrchestrator()
@@ -495,7 +495,7 @@ class TestRollbackIntegration:
         - Threshold breaches detected
         - Automatic rollback initiated
         """
-        from cortex.deployment.rollback_orchestrator import RollbackOrchestrator
+        from cortex.infrastructure.deployment.rollback_orchestrator import RollbackOrchestrator
         
         orchestrator = RollbackOrchestrator()
         

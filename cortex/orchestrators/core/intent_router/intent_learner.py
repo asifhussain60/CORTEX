@@ -8,7 +8,7 @@ Author: CORTEX Framework
 from dataclasses import dataclass
 from typing import List
 
-from cortex.intent_router.classifier import IntentCategory
+from cortex.orchestrators.core.intent_router.classifier import IntentCategory
 
 
 @dataclass

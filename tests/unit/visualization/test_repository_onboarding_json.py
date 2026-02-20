@@ -11,8 +11,8 @@ import tempfile
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex.visualization.json_data_generator import JSONDataGenerator
-from cortex.visualization.adapters.json_adapter import JSONAdapter
+from cortex.dashboards.json_data_generator import JSONDataGenerator
+from cortex.dashboards.adapters.json_adapter import JSONAdapter
 
 
 class TestRepositoryOnboardingJSONGeneration:

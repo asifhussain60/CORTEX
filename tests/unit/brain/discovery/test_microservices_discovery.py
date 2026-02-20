@@ -11,7 +11,7 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from cortex.brain.discovery.microservices_discovery import (
+from cortex.lens.discovery.microservices_discovery import (
     MicroservicesDiscovery,
     ServiceInfo,
     ContainerInfo,

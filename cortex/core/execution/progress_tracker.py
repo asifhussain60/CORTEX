@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 
-from cortex.execution.autonomous_executor import (
+from cortex.core.execution.autonomous_executor import (
     Plan,
     Stage,
     StageStatus,

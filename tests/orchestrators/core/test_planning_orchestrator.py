@@ -212,7 +212,7 @@ class TestOrchestratorInterface:
         from cortex.orchestrators.domain.enhanced_planning_orchestrator import (
             EnhancedPlanningOrchestrator,
         )
-        from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
+        from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
         
         orchestrator = EnhancedPlanningOrchestrator.instance()
         

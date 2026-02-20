@@ -14,8 +14,8 @@ import tempfile
 from pathlib import Path
 from datetime import datetime
 
-from cortex.secrets.secrets_manager import SecretsManager
-from cortex.secrets.errors import SecretsError
+from cortex.infrastructure.security.secrets.secrets_manager import SecretsManager
+from cortex.infrastructure.security.secrets.errors import SecretsError
 
 
 # ============================================================================

@@ -213,7 +213,7 @@ class TestContractValidation:
         Gap: No contract validation
         Value: Unwiring prevention infrastructure
         """
-        from cortex.wiring.registry.contract_validator import ContractValidator
+        from cortex.core.wiring.registry.contract_validator import ContractValidator
         
         validator = ContractValidator()
         
@@ -226,7 +226,7 @@ class TestContractValidation:
         Gap: No batch validation
         Value: Efficient validation of all orchestrators
         """
-        from cortex.wiring.registry.contract_validator import ContractValidator
+        from cortex.core.wiring.registry.contract_validator import ContractValidator
         
         validator = ContractValidator()
         

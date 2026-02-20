@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.core.response_format_validator import (
+from cortex.core.core.response_format_validator import (
     ResponseFormatValidator,
     StatusIcon,
     ValidationResult,

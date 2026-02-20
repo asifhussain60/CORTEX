@@ -13,8 +13,8 @@ import asyncio
 import logging
 from typing import Any, Dict
 
-from cortex.deployment.analytics import DeploymentAnalytics
-from cortex.deployment.monitor import DeploymentMonitor
+from cortex.infrastructure.deployment.analytics import DeploymentAnalytics
+from cortex.infrastructure.deployment.monitor import DeploymentMonitor
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ class DashboardAPI:
         """Initialize dashboard API."""
         self.analytics = DeploymentAnalytics()
         self.monitor = DeploymentMonitor()
-        self.logger = logging.getLogger("cortex.deployment.api")
+        self.logger = logging.getLogger("cortex.infrastructure.deployment.api")
 
     async def get_metrics(self, time_window_hours: int = 24) -> Dict[str, Any]:
         """Get deployment metrics.

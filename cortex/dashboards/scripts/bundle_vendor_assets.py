@@ -11,7 +11,7 @@ Assets:
     - Tailwind CSS 3.4.0 (CDN-compiled) - Styling
 
 Usage:
-    python -m cortex.visualization.scripts.bundle_vendor_assets
+    python -m cortex.dashboards.scripts.bundle_vendor_assets
 
     Or via CLI:
     cortex lens vendor bundle

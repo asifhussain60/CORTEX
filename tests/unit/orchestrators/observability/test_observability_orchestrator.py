@@ -1,6 +1,6 @@
 """ObservabilityOrchestrator tests."""
 import pytest
-from cortex.orchestrators.observability.observability_orchestrator import ObservabilityOrchestrator
+from cortex.orchestrators.core.observability_orchestrator import ObservabilityOrchestrator
 
 class TestObservabilityOrchestrator:
     @pytest.fixture

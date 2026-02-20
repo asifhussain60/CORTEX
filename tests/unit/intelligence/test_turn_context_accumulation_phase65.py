@@ -26,7 +26,7 @@ from cortex.intelligence.turn_context import (
     TurnEntry,
     get_turn_context,
 )
-from cortex.brain.knowledge.unified_intelligence_context import (
+from cortex.intelligence.knowledge.unified_intelligence_context import (
     UnifiedIntelligenceContext,
     LENSIntelligence,
     CompanyKnowledge,
@@ -175,8 +175,8 @@ class TestProviderSessionManagement:
     def provider(self):
         """Create provider with mocked dependencies."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
-             patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
-             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore'):
+             patch('cortex.intelligence.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
+             patch('cortex.intelligence.onboarded_repos.profile_store.ProfileStore'):
             provider = UnifiedIntelligenceProvider()
             UnifiedIntelligenceProvider._instance = None
             yield provider
@@ -233,8 +233,8 @@ class TestCrossDomainSynthesis:
     def provider(self):
         """Create provider with mocked dependencies."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
-             patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
-             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore'):
+             patch('cortex.intelligence.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
+             patch('cortex.intelligence.onboarded_repos.profile_store.ProfileStore'):
             provider = UnifiedIntelligenceProvider()
             UnifiedIntelligenceProvider._instance = None
             yield provider
@@ -312,8 +312,8 @@ class TestAccumulatedContextIntegration:
     def provider(self):
         """Create provider with turn context."""
         with patch('cortex.lens.orchestrator.LENSOrchestrator'), \
-             patch('cortex.brain.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
-             patch('cortex_intelligence.onboarded_repos.profile_store.ProfileStore'):
+             patch('cortex.intelligence.knowledge.knowledge_synthesis_engine.get_synthesis_engine'), \
+             patch('cortex.intelligence.onboarded_repos.profile_store.ProfileStore'):
             provider = UnifiedIntelligenceProvider()
             UnifiedIntelligenceProvider._instance = None
             yield provider

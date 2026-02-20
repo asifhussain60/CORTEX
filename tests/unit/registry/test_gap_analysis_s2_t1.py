@@ -8,9 +8,9 @@ Validates the tenant isolation architecture and gap analysis framework.
 """
 
 import pytest
-from cortex.registry.artifact_sealing import ArtifactSealingManager
-from cortex.registry.registry_access_control import RoleBasedAccessControl, Role
-from cortex.registry.tenant_context import TenantContext
+from cortex.core.registry.artifact_sealing import ArtifactSealingManager
+from cortex.core.registry.registry_access_control import RoleBasedAccessControl, Role
+from cortex.core.registry.tenant_context import TenantContext
 
 
 class TestGapAnalysis:
@@ -33,7 +33,7 @@ class TestGapAnalysis:
         assert meta.seal_hash is not None
         
         # Verify detects tampering
-        from cortex.registry.artifact_sealing import ArtifactTamperingDetectedError
+        from cortex.core.registry.artifact_sealing import ArtifactTamperingDetectedError
         with pytest.raises(ArtifactTamperingDetectedError):
             manager.verify_artifact("critical-artifact", {"critical": "modified"})
     
@@ -48,7 +48,7 @@ class TestGapAnalysis:
         rbac.assign_role("admin", Role.ADMIN)
         
         # Viewer read-only
-        from cortex.registry.registry_access_control import Permission
+        from cortex.core.registry.registry_access_control import Permission
         assert rbac.has_permission(ctx_viewer, Permission.READ) is True
         assert rbac.has_permission(ctx_viewer, Permission.DELETE) is False
         

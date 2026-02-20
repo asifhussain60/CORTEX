@@ -11,7 +11,7 @@ import re
 cortex_path = Path(__file__).parent.parent.parent.parent / "cortex"
 sys.path.insert(0, str(cortex_path))
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.core.core.result import Result, Ok, Err
 from ..cleaners import CleanerInterface, Analysis, Report, RollbackResult
 
 

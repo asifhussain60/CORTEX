@@ -17,7 +17,7 @@ Tests:
 
 import pytest
 from typing import Dict, Any
-from cortex.interaction.conversational_reflector import (
+from cortex.core.interaction.conversational_reflector import (
     ConversationalReflector,
     ConversationalReflection,
 )

@@ -10,7 +10,7 @@ Total: 55 tests
 """
 
 import pytest
-from cortex.domain_brain.adapters import (
+from cortex.intelligence.domain_brain.adapters import (
     ASTAdapter,
     GitAdapter,
     CommentsAdapter,

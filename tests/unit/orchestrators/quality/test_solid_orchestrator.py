@@ -1,7 +1,7 @@
 """SOLIDOrchestrator tests."""
 import pytest
 from pathlib import Path
-from cortex.orchestrators.quality.solid_orchestrator import SOLIDOrchestrator
+from cortex.orchestrators.validation.solid_orchestrator import SOLIDOrchestrator
 
 
 class TestSOLIDOrchestrator:

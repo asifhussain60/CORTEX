@@ -12,7 +12,7 @@ from datetime import datetime
 from unittest.mock import Mock, patch, MagicMock
 
 # Import will fail initially (TDD RED phase - expected!)
-# from cortex.visualization.llm_content_generator import (
+# from cortex.dashboards.llm_content_generator import (
 #     LLMContentGenerator,
 #     GeneratedContent,
 #     StoryContext,

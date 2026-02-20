@@ -317,7 +317,7 @@ class TestIntelligenceLive:
     def test_token_budget_manager_exists(self) -> None:
         """TokenBudgetManager must be importable (EA-010 dependency)."""
         try:
-            from cortex.brain.llm.token_budget_manager import TokenBudgetManager
+            from cortex.intelligence.llm.token_budget_manager import TokenBudgetManager
             assert TokenBudgetManager is not None
         except ImportError:
             pytest.fail("TokenBudgetManager not importable — needed for EA-010")
@@ -325,7 +325,7 @@ class TestIntelligenceLive:
     def test_response_optimizer_exists(self) -> None:
         """ResponseOptimizer must be importable (EA-010 dependency)."""
         try:
-            from cortex.brain.core.response_optimizer import ResponseOptimizer
+            from cortex.core.core.response_optimizer import ResponseOptimizer
             assert ResponseOptimizer is not None
         except ImportError:
             pytest.fail("ResponseOptimizer not importable — needed for EA-010")

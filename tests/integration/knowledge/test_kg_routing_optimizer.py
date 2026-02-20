@@ -6,9 +6,9 @@ and MasterOrchestrator integration with fallback mechanisms.
 
 import pytest
 from typing import Dict, List, Any, Optional
-from cortex.brain.core.knowledge.graph.interface import IGraphAdapter
-from cortex.brain.core.knowledge.graph.mock_adapter import MockGraphAdapter
-from cortex.brain.domain_brain.kg_routing_optimizer import (
+from cortex.core.core.knowledge.graph.interface import IGraphAdapter
+from cortex.core.core.knowledge.graph.mock_adapter import MockGraphAdapter
+from cortex.intelligence.domain_brain.domain_brain.kg_routing_optimizer import (
     SemanticCapabilityMatcher,
     RoutingDecisionEngine,
     OptimizedRouteResult,

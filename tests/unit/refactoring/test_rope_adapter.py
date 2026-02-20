@@ -14,8 +14,8 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict
 
-from cortex.brain.core.result import Ok, Err
-from cortex.refactoring.refactoring_models import RefactoringLanguage, RefactoringRequest
+from cortex.core.core.result import Ok, Err
+from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage, RefactoringRequest
 
 
 @pytest.fixture
@@ -68,34 +68,34 @@ class TestRopeAdapterInitialization:
     def test_rope_adapter_import(self):
         """RopeAdapter must be importable."""
         # RED: Will fail until implemented
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         assert RopeAdapter is not None
     
     def test_rope_adapter_implements_interface(self):
         """RopeAdapter must implement RefactoringToolAdapter."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
         
         assert issubclass(RopeAdapter, RefactoringToolAdapter)
     
     def test_rope_adapter_initialization(self):
         """RopeAdapter must initialize without errors."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         assert adapter is not None
     
     def test_rope_adapter_language(self):
         """RopeAdapter must report Python as language."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         assert adapter.get_language() == RefactoringLanguage.PYTHON
     
     def test_rope_adapter_availability(self):
         """RopeAdapter must check Rope availability."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         # Should be True since we installed Rope
@@ -103,7 +103,7 @@ class TestRopeAdapterInitialization:
     
     def test_rope_adapter_supported_operations(self):
         """RopeAdapter must list supported operations."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         operations = adapter.get_supported_operations()
@@ -123,7 +123,7 @@ class TestRopeAdapterValidation:
     
     def test_validate_valid_request(self, temp_python_file):
         """Valid request must pass validation."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         request = RefactoringRequest(
@@ -138,7 +138,7 @@ class TestRopeAdapterValidation:
     
     def test_validate_wrong_language(self, temp_python_file):
         """Request with wrong language must fail validation."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         request = RefactoringRequest(
@@ -154,7 +154,7 @@ class TestRopeAdapterValidation:
     
     def test_validate_unsupported_operation(self, temp_python_file):
         """Unsupported operation must fail validation."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         request = RefactoringRequest(
@@ -170,7 +170,7 @@ class TestRopeAdapterValidation:
     
     def test_validate_nonexistent_file(self):
         """Nonexistent file must fail validation."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         request = RefactoringRequest(
@@ -186,7 +186,7 @@ class TestRopeAdapterValidation:
     
     def test_validate_missing_required_parameters(self, temp_python_file):
         """Missing required parameters must fail validation."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         request = RefactoringRequest(
@@ -205,7 +205,7 @@ class TestRopeAdapterExtractMethod:
     
     def test_extract_method_basic(self, temp_python_file):
         """Extract method must create new method from code block."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         
@@ -245,7 +245,7 @@ class TestRopeAdapterRename:
     
     def test_rename_function(self, temp_python_file):
         """Rename must update function/variable names."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         request = RefactoringRequest(
@@ -271,7 +271,7 @@ class TestRopeAdapterInline:
     
     def test_inline_variable(self, temp_python_file):
         """Inline must replace variable with its value."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         request = RefactoringRequest(
@@ -294,7 +294,7 @@ class TestRopeAdapterErrorHandling:
     
     def test_handle_rope_exception(self, temp_python_file):
         """Rope exceptions must be caught and converted to Err."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         request = RefactoringRequest(
@@ -315,7 +315,7 @@ class TestRopeAdapterErrorHandling:
     
     def test_handle_invalid_python_syntax(self):
         """Invalid Python syntax must be handled gracefully."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         # Create file with syntax error
         with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -345,7 +345,7 @@ class TestRopeAdapterPerformance:
     
     def test_lazy_project_initialization(self):
         """Rope project must be lazily initialized."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         
@@ -354,7 +354,7 @@ class TestRopeAdapterPerformance:
     
     def test_project_caching(self, temp_python_file):
         """Rope project must be cached between operations."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         
@@ -384,8 +384,8 @@ class TestRopeAdapterIntegration:
     
     def test_register_with_registry(self):
         """RopeAdapter must register with RefactoringToolRegistry."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
         
         registry = RefactoringToolRegistry()
         adapter = RopeAdapter()
@@ -397,8 +397,8 @@ class TestRopeAdapterIntegration:
     
     def test_retrieve_from_registry(self):
         """RopeAdapter must be retrievable from registry."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
         
         registry = RefactoringToolRegistry()
         adapter = RopeAdapter()

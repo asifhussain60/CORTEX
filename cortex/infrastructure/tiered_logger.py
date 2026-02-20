@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.core.result import Err, Ok, Result
 
 
 class LogLevel(Enum):

@@ -23,7 +23,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.registry.tenant_context import TenantContext
+from cortex.core.registry.tenant_context import TenantContext
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +86,7 @@ class ArtifactSealingManager:
     - Rollback support
 
     Example:
-        >>> from cortex.registry.artifact_sealing import ArtifactSealingManager
+        >>> from cortex.core.registry.artifact_sealing import ArtifactSealingManager
         >>> manager = ArtifactSealingManager()
         >>>
         >>> # Create and seal artifact

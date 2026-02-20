@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.core.result import Err, Ok, Result
 
 
 @dataclass

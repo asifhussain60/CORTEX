@@ -9,13 +9,13 @@ Authority: Phase 24.2.1 - Roslyn Adapter
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
-from cortex.refactoring.adapters.roslyn_adapter import RoslynAdapter
-from cortex.refactoring.refactoring_models import (
+from cortex.orchestrators.domain.refactoring.adapters.roslyn_adapter import RoslynAdapter
+from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringRequest,
     RefactoringLanguage,
     RefactoringResult
 )
-from cortex.brain.core.result import Ok, Err
+from cortex.core.core.result import Ok, Err
 
 
 class TestRoslynAdapterInitialization:
@@ -23,7 +23,7 @@ class TestRoslynAdapterInitialization:
 
     def test_roslyn_adapter_import(self):
         """Test that RoslynAdapter can be imported."""
-        from cortex.refactoring.adapters.roslyn_adapter import RoslynAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.roslyn_adapter import RoslynAdapter
         assert RoslynAdapter is not None
 
     def test_roslyn_adapter_initialization(self):
@@ -50,7 +50,7 @@ class TestRoslynAdapterInitialization:
 class TestRoslynAdapterAvailability:
     """Test RoslynAdapter availability checking."""
 
-    @patch('cortex.refactoring.adapters.roslyn_process.RoslynProcessManager.is_available')
+    @patch('cortex.orchestrators.domain.refactoring.adapters.roslyn_process.RoslynProcessManager.is_available')
     def test_is_available_delegates_to_process_manager(self, mock_available):
         """Test is_available delegates to RoslynProcessManager."""
         mock_available.return_value = True
@@ -60,7 +60,7 @@ class TestRoslynAdapterAvailability:
         
         mock_available.assert_called_once()
 
-    @patch('cortex.refactoring.adapters.roslyn_process.RoslynProcessManager.is_available')
+    @patch('cortex.orchestrators.domain.refactoring.adapters.roslyn_process.RoslynProcessManager.is_available')
     def test_is_available_false_when_dotnet_missing(self, mock_available):
         """Test is_available returns False when dotnet missing."""
         mock_available.return_value = False
@@ -126,7 +126,7 @@ class TestRoslynAdapterValidation:
 class TestRoslynAdapterExecution:
     """Test RoslynAdapter refactoring execution."""
 
-    @patch('cortex.refactoring.adapters.roslyn_adapter.RoslynAdapter._execute_via_process')
+    @patch('cortex.orchestrators.domain.refactoring.adapters.roslyn_adapter.RoslynAdapter._execute_via_process')
     def test_execute_refactoring_delegates_to_process(self, mock_execute, tmp_path):
         """Test execute_refactoring delegates to process execution."""
         test_file = tmp_path / "test.cs"

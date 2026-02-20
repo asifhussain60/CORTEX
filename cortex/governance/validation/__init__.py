@@ -2,14 +2,14 @@
 CORTEX Validation Module
 Data integrity and cross-reference validation
 """
-from cortex.validation.cross_reference_validator import (
+from cortex.governance.validation.cross_reference_validator import (
     CrossReferenceValidator,
     ContradictionReport,
     ContradictionType,
     ContradictionSeverity,
 )
 
-from cortex.validation.contradiction_resolver import (
+from cortex.governance.validation.contradiction_resolver import (
     ContradictionResolver,
     Resolution,
     ResolutionStrategy,

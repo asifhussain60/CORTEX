@@ -9,11 +9,11 @@ Compliance: CORE-008 (tests first), Zero mocks for core logic
 
 import pytest
 
-from cortex.orchestrators.coherence.structure_analyzer import (
+from cortex.orchestrators.validation.structure_analyzer import (
     StructureAnalyzer,
     StructureMetrics,
 )
-from cortex.orchestrators.coherence.coherence_models import (
+from cortex.orchestrators.validation.coherence_models import (
     FileStructure,
     Section,
     SectionType,

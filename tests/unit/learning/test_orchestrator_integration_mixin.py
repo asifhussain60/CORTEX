@@ -19,7 +19,7 @@ Date: 2026-02-10
 import pytest
 from unittest.mock import Mock, MagicMock, patch
 
-from cortex.learning.orchestrator_integration_mixin import OrchestratorLearningMixin
+from cortex.intelligence.learning.orchestrator_integration_mixin import OrchestratorLearningMixin
 from cortex.testing.test_value_scorer import ScoreTier
 
 
@@ -34,7 +34,7 @@ class TestMixinLearningCapture:
         """Mixin should capture learning with patterns."""
         mixin = OrchestratorLearningMixin()
         
-        with patch("cortex.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
             mock_loop = MagicMock()
             mock_get.return_value = mock_loop
             
@@ -49,7 +49,7 @@ class TestMixinLearningCapture:
         """Mixin should capture learning with test scores."""
         mixin = OrchestratorLearningMixin()
         
-        with patch("cortex.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
             mock_loop = MagicMock()
             mock_get.return_value = mock_loop
             
@@ -62,7 +62,7 @@ class TestMixinLearningCapture:
         """Mixin should gracefully handle missing learning loop."""
         mixin = OrchestratorLearningMixin()
         
-        with patch("cortex.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
             mock_get.return_value = None
             
             # Should not raise
@@ -72,7 +72,7 @@ class TestMixinLearningCapture:
         """Mixin should handle exceptions in learning capture."""
         mixin = OrchestratorLearningMixin()
         
-        with patch("cortex.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
             mock_loop = MagicMock()
             mock_loop.capture_from_operation.side_effect = Exception("Test error")
             mock_get.return_value = mock_loop
@@ -92,7 +92,7 @@ class TestQualityScoring:
         """Mixin should score high-quality tests."""
         mixin = OrchestratorLearningMixin()
         
-        with patch("cortex.learning.orchestrator_integration_mixin.get_test_value_scorer") as mock_get:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_test_value_scorer") as mock_get:
             mock_scorer = MagicMock()
             mock_score = MagicMock()
             mock_score.tier = ScoreTier.HIGH
@@ -120,7 +120,7 @@ class TestQualityScoring:
         """Mixin should gracefully handle missing scorer."""
         mixin = OrchestratorLearningMixin()
         
-        with patch("cortex.learning.orchestrator_integration_mixin.get_test_value_scorer") as mock_get:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_test_value_scorer") as mock_get:
             mock_get.return_value = None
             
             result = mixin._score_test_quality(
@@ -138,7 +138,7 @@ class TestQualityScoring:
         """Mixin should handle exceptions in scoring."""
         mixin = OrchestratorLearningMixin()
         
-        with patch("cortex.learning.orchestrator_integration_mixin.get_test_value_scorer") as mock_get:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_test_value_scorer") as mock_get:
             mock_scorer = MagicMock()
             mock_scorer.score_test.side_effect = Exception("Scoring failed")
             mock_get.return_value = mock_scorer
@@ -240,8 +240,8 @@ class TestIntegrationScenarios:
         
         orch = TDDOrchestrator()
         
-        with patch("cortex.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get_loop:
-            with patch("cortex.learning.orchestrator_integration_mixin.get_test_value_scorer") as mock_get_scorer:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get_loop:
+            with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_test_value_scorer") as mock_get_scorer:
                 mock_loop = MagicMock()
                 mock_get_loop.return_value = mock_loop
                 
@@ -276,7 +276,7 @@ class TestIntegrationScenarios:
         
         orch = RefactoringOrchestrator()
         
-        with patch("cortex.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
+        with patch("cortex.intelligence.learning.orchestrator_integration_mixin.get_learning_loop") as mock_get:
             mock_loop = MagicMock()
             mock_get.return_value = mock_loop
             

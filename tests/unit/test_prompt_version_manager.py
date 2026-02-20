@@ -27,7 +27,7 @@ from unittest.mock import Mock, patch, MagicMock
 @pytest.fixture(autouse=True)
 def reset_singleton():
     """Reset PromptVersionManager singleton before each test."""
-    from cortex.versioning.prompt_version_manager import PromptVersionManager
+    from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
     PromptVersionManager.reset_singleton()
     yield
     PromptVersionManager.reset_singleton()
@@ -38,7 +38,7 @@ class TestVersionEntry:
 
     def test_version_entry_creation(self):
         """VersionEntry created with version string."""
-        from cortex.versioning.prompt_version_manager import VersionEntry
+        from cortex.infrastructure.versioning.prompt_version_manager import VersionEntry
 
         entry = VersionEntry(
             version="1.0.0",
@@ -53,7 +53,7 @@ class TestVersionEntry:
 
     def test_version_entry_semantic_versioning(self):
         """VersionEntry validates semantic versioning format."""
-        from cortex.versioning.prompt_version_manager import VersionEntry
+        from cortex.infrastructure.versioning.prompt_version_manager import VersionEntry
 
         entry = VersionEntry(
             version="1.2.3",
@@ -69,7 +69,7 @@ class TestVersionEntry:
 
     def test_version_entry_deprecation_flag(self):
         """VersionEntry tracks deprecation status."""
-        from cortex.versioning.prompt_version_manager import VersionEntry
+        from cortex.infrastructure.versioning.prompt_version_manager import VersionEntry
 
         entry = VersionEntry(
             version="0.9.0",
@@ -86,7 +86,7 @@ class TestPromptVersionManager:
 
     def test_manager_initialization(self):
         """PromptVersionManager initializes with empty version store."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
 
@@ -95,7 +95,7 @@ class TestPromptVersionManager:
 
     def test_register_version(self):
         """PromptVersionManager registers new prompt version."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
 
@@ -112,7 +112,7 @@ class TestPromptVersionManager:
 
     def test_register_version_multiple(self):
         """PromptVersionManager registers multiple versions."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
 
@@ -125,7 +125,7 @@ class TestPromptVersionManager:
 
     def test_get_version_by_string(self):
         """PromptVersionManager retrieves version by version string."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         registered = manager.register_version("1.0.0", "hash100", False)
@@ -137,7 +137,7 @@ class TestPromptVersionManager:
 
     def test_get_version_nonexistent(self):
         """PromptVersionManager returns None for nonexistent version."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
 
@@ -147,7 +147,7 @@ class TestPromptVersionManager:
 
     def test_version_negotiation_exact_match(self):
         """Version negotiation succeeds when repo version matches hub version."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("1.0.0", "hash100", False)
@@ -163,7 +163,7 @@ class TestPromptVersionManager:
 
     def test_version_negotiation_minor_version_compatible(self):
         """Minor version bumps are backward compatible."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("1.0.0", "hash100", False)
@@ -181,7 +181,7 @@ class TestPromptVersionManager:
 
     def test_version_negotiation_major_version_incompatible(self):
         """Major version changes are incompatible."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("1.0.0", "hash100", False)
@@ -198,7 +198,7 @@ class TestPromptVersionManager:
 
     def test_future_version_rejected(self):
         """Repository requesting future version is rejected."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("1.0.0", "hash100", False)
@@ -218,7 +218,7 @@ class TestPromptVersionManager:
 
     def test_deprecated_version_detection(self):
         """Deprecated versions are detected."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("0.9.0", "hash090", True)  # deprecated
@@ -231,7 +231,7 @@ class TestPromptVersionManager:
 
     def test_deprecated_version_rejected_in_negotiation(self):
         """Negotiation rejects deprecated versions."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("0.9.0", "hash090", True)  # deprecated
@@ -249,7 +249,7 @@ class TestPromptVersionManager:
 
     def test_compatibility_matrix_lookup(self):
         """Compatibility matrix determines version compatibility."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("1.0.0", "hash100", False)
@@ -264,7 +264,7 @@ class TestPromptVersionManager:
 
     def test_version_history_tracking(self):
         """Version history is maintained and queryable."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("1.0.0", "hash100", False)
@@ -279,7 +279,7 @@ class TestPromptVersionManager:
 
     def test_version_release_directory_created(self):
         """Version registration creates release directory structure."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         with tempfile.TemporaryDirectory() as tmpdir:
             releases_path = Path(tmpdir) / "releases"
@@ -293,7 +293,7 @@ class TestPromptVersionManager:
 
     def test_version_manifest_persistence(self):
         """Version manifest saved to prompt-versions.yaml."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         with tempfile.TemporaryDirectory() as tmpdir:
             manifest_path = Path(tmpdir) / "prompt-versions.yaml"
@@ -313,7 +313,7 @@ class TestPromptVersionManager:
 
     def test_version_manifest_roundtrip(self):
         """Version manifest can be saved and loaded."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         with tempfile.TemporaryDirectory() as tmpdir:
             manifest_path = Path(tmpdir) / "prompt-versions.yaml"
@@ -338,7 +338,7 @@ class TestVersionEdgeCases:
 
     def test_patch_version_changes_compatible(self):
         """Patch version changes are backward compatible."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("1.0.0", "hash100", False)
@@ -350,7 +350,7 @@ class TestVersionEdgeCases:
 
     def test_empty_version_string_rejected(self):
         """Empty version string rejected."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
 
@@ -359,7 +359,7 @@ class TestVersionEdgeCases:
 
     def test_invalid_semantic_version_rejected(self):
         """Invalid semantic version format rejected."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
 
@@ -368,7 +368,7 @@ class TestVersionEdgeCases:
 
     def test_version_hash_validation(self):
         """Version SHA hash is validated and stored."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         version = manager.register_version("1.0.0", "abc123", False)
@@ -377,7 +377,7 @@ class TestVersionEdgeCases:
 
     def test_version_release_date_tracking(self):
         """Version release date is tracked."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         before = datetime.now()
@@ -392,7 +392,7 @@ class TestVersionManagerThreadSafety:
 
     def test_concurrent_version_registration(self):
         """Multiple threads can register versions concurrently."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
         import threading
 
         manager = PromptVersionManager()
@@ -419,7 +419,7 @@ class TestVersionManagerThreadSafety:
 
     def test_concurrent_version_negotiation(self):
         """Multiple threads can negotiate versions concurrently."""
-        from cortex.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.infrastructure.versioning.prompt_version_manager import PromptVersionManager
         import threading
 
         manager = PromptVersionManager()

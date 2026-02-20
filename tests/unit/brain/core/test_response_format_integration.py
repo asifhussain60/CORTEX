@@ -13,7 +13,7 @@ import pytest
 from unittest.mock import Mock, patch
 from typing import Dict, Any
 
-from cortex.brain.core.response_format_integration import (
+from cortex.core.core.response_format_integration import (
     ResponseFormatIntegration,
     FormatEnforcer,
     FormatGate,
@@ -138,7 +138,7 @@ class TestResponseFormatIntegration:
     
     def test_integration_with_gateway(self, integration):
         """Test integration with master orchestrator gateway."""
-        from cortex.brain.core.master_orchestrator_gateway import GatewayResponse
+        from cortex.core.core.master_orchestrator_gateway import GatewayResponse
         
         # Simulate gateway response
         gateway_response = Mock(spec=GatewayResponse)

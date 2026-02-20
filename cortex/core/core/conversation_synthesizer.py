@@ -25,7 +25,7 @@ except ImportError:
     cosine_similarity = None  # type: ignore
     np = None  # type: ignore
 
-from cortex.core.ml_summarizer import MLSummarizer
+from cortex.core.core.ml_summarizer import MLSummarizer
 
 logger = logging.getLogger(__name__)
 

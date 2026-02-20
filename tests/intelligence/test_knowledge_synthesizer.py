@@ -22,13 +22,13 @@ from typing import Any, Dict, List
 import pytest
 import yaml
 
-from cortex.learning.knowledge_synthesizer import (
+from cortex.intelligence.learning.knowledge_synthesizer import (
     DecisionNode,
     KnowledgeArtifact,
     KnowledgeSynthesizer,
     PatternTemplate,
 )
-from cortex.learning.pattern_extractor import ExtractedPattern, PatternType
+from cortex.intelligence.learning.pattern_extractor import ExtractedPattern, PatternType
 
 
 @pytest.fixture

@@ -19,12 +19,12 @@ Acceptance Criteria:
 import pytest
 import time
 from typing import List, Dict
-from cortex.registry.tenant_context import TenantContext
-from cortex.registry.tenant_aware_git_backed_registry import (
+from cortex.core.registry.tenant_context import TenantContext
+from cortex.core.registry.tenant_aware_git_backed_registry import (
     TenantAwareGitBackedRegistry,
 )
-from cortex.registry.workspace_manager import WorkspaceManager
-from cortex.registry.health_monitor import RegistryHealthMonitor
+from cortex.core.registry.workspace_manager import WorkspaceManager
+from cortex.core.registry.health_monitor import RegistryHealthMonitor
 
 
 # ============================================================================

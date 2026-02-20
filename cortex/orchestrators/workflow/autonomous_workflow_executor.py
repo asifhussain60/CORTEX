@@ -213,7 +213,7 @@ class AutonomousWorkflowExecutor:
         """
         # Mock implementation (integrate with real ProgressTracker)
         try:
-            from cortex.execution.progress_tracker import ProgressTracker
+            from cortex.core.execution.progress_tracker import ProgressTracker
 
             self._progress_tracker = ProgressTracker()
             if hasattr(self._progress_tracker, 'initialize'):
@@ -239,7 +239,7 @@ class AutonomousWorkflowExecutor:
         """
         # Mock implementation (integrate with real AutonomousExecutor)
         try:
-            from cortex.execution.autonomous_executor import AutonomousExecutor
+            from cortex.core.execution.autonomous_executor import AutonomousExecutor
 
             self._autonomous_executor = AutonomousExecutor()
             result = self._autonomous_executor.execute_plan(plan, silent=silent)

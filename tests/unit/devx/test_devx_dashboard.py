@@ -10,7 +10,7 @@ import time
 from datetime import datetime
 from unittest.mock import Mock, MagicMock
 
-from cortex.devx.devx_dashboard import (
+from cortex.infrastructure.devx.devx_dashboard import (
     DevXDashboard,
     DashboardMetrics,
     DashboardSection,

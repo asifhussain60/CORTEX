@@ -25,7 +25,7 @@ class TestKnowledgeYAMLResolverBasic:
     def test_resolve_python_yamls(self):
         """Test: Python tech stack → [python.yaml, pytest.yaml, python-typing.yaml]."""
         # RED: KnowledgeYAMLResolver not implemented yet
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -44,7 +44,7 @@ class TestKnowledgeYAMLResolverBasic:
     
     def test_resolve_dotnet_yamls(self):
         """Test: .NET tech stack → [dotnet.yaml, csharp.yaml, aspnet.yaml]."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -68,7 +68,7 @@ class TestKnowledgeYAMLResolverBasic:
     
     def test_resolve_flask_yamls(self):
         """Test: Flask tech stack → [flask.yaml, rest-api.yaml, python.yaml]."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -92,7 +92,7 @@ class TestKnowledgeYAMLResolverBasic:
     
     def test_resolve_react_typescript_yamls(self):
         """Test: React+TypeScript → [react.yaml, typescript.yaml, frontend-patterns.yaml]."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -120,7 +120,7 @@ class TestKnowledgeYAMLResolverMultiStack:
     
     def test_resolve_multi_stack_monorepo(self):
         """Test: Python backend + React frontend → merged YAMLs."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -141,7 +141,7 @@ class TestKnowledgeYAMLResolverMultiStack:
     
     def test_resolve_no_duplicate_yamls(self):
         """Test: Duplicate YAMLs merged (no duplicates in result)."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -163,7 +163,7 @@ class TestKnowledgeYAMLResolverCompanyPrecedence:
     
     def test_company_override_exists(self):
         """Test: company/python.yaml overrides cortex/python.yaml."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -181,7 +181,7 @@ class TestKnowledgeYAMLResolverCompanyPrecedence:
     
     def test_company_override_not_exists(self):
         """Test: Falls back to CORTEX YAML if company override doesn't exist."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -200,7 +200,7 @@ class TestKnowledgeYAMLResolverEdgeCases:
     
     def test_empty_tech_stack(self):
         """Test: Empty tech stack → fallback YAMLs."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -213,7 +213,7 @@ class TestKnowledgeYAMLResolverEdgeCases:
     
     def test_unknown_tech_stack(self):
         """Test: Unknown tech → fallback YAMLs."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -231,7 +231,7 @@ class TestKnowledgeYAMLResolverEdgeCases:
     
     def test_fuzzy_matching_python3(self):
         """Test: 'python3' → matches 'python' mapping."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -249,7 +249,7 @@ class TestKnowledgeYAMLResolverEdgeCases:
     
     def test_framework_requires_language(self):
         """Test: Flask without Python → still includes Python YAMLs."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -272,7 +272,7 @@ class TestKnowledgeYAMLResolverIntegration:
     
     def test_hybrid_loader_integration(self):
         """Test: Resolver output compatible with HybridKnowledgeLoader."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -288,7 +288,7 @@ class TestKnowledgeYAMLResolverIntegration:
     
     def test_resolve_with_metadata(self):
         """Test: Resolver returns metadata about resolution."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -304,7 +304,7 @@ class TestKnowledgeYAMLResolverIntegration:
     
     def test_caching_same_tech_stack(self):
         """Test: Caching works for repeated resolution."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         
@@ -319,7 +319,7 @@ class TestKnowledgeYAMLResolverIntegration:
     
     def test_sql_alchemy_mapping(self):
         """Test: SQLAlchemy detected → [sqlalchemy.yaml, database-patterns.yaml]."""
-        from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+        from cortex.intelligence.knowledge.yaml_resolver import KnowledgeYAMLResolver
         
         resolver = KnowledgeYAMLResolver()
         

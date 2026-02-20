@@ -50,7 +50,7 @@ class TestPhase21FullWorkflow:
         }
         
         # Step 2: Generate dashboard (JSONDataGenerator)
-        from cortex.visualization.json_data_generator import JSONDataGenerator
+        from cortex.dashboards.json_data_generator import JSONDataGenerator
         generator = JSONDataGenerator()
         dashboard = generator.generate(lens_output)
         
@@ -59,7 +59,7 @@ class TestPhase21FullWorkflow:
         assert dashboard["repo"]["display_name"] == "cortex"
         
         # Step 3: Save dashboard (JSONAdapter)
-        from cortex.visualization.adapters.json_adapter import JSONAdapter
+        from cortex.dashboards.adapters.json_adapter import JSONAdapter
         adapter = JSONAdapter(base_path=self.data_dir)
         saved = adapter.save("cortex", dashboard)
         
@@ -74,8 +74,8 @@ class TestPhase21FullWorkflow:
     
     def test_workflow_performance_end_to_end(self):
         """Complete workflow performs under time limits"""
-        from cortex.visualization.json_data_generator import JSONDataGenerator
-        from cortex.visualization.adapters.json_adapter import JSONAdapter
+        from cortex.dashboards.json_data_generator import JSONDataGenerator
+        from cortex.dashboards.adapters.json_adapter import JSONAdapter
         
         # Generate lens data
         lens_output = {
@@ -148,8 +148,8 @@ class TestAdapterIntegration:
     
     def test_adapter_protocol_enables_swaps(self):
         """Adapter protocol supports multiple implementations"""
-        from cortex.visualization.dashboard_data_adapter import DashboardDataAdapter
-        from cortex.visualization.adapters.json_adapter import JSONAdapter
+        from cortex.dashboards.dashboard_data_adapter import DashboardDataAdapter
+        from cortex.dashboards.adapters.json_adapter import JSONAdapter
         
         # JSONAdapter implements protocol
         adapter = JSONAdapter(base_path=self.data_dir)
@@ -162,7 +162,7 @@ class TestAdapterIntegration:
     
     def test_adapter_data_flow_consistency(self):
         """Data flow is consistent through adapter"""
-        from cortex.visualization.adapters.json_adapter import JSONAdapter
+        from cortex.dashboards.adapters.json_adapter import JSONAdapter
         
         test_data = {
             "repo": {"name": "test", "lines": 1000},
@@ -237,8 +237,8 @@ class TestPerformanceBoundaries:
     
     def test_json_adapter_load_performance(self):
         """JSONAdapter load time <10ms"""
-        from cortex.visualization.adapters.json_adapter import JSONAdapter
-        from cortex.visualization.json_data_generator import JSONDataGenerator
+        from cortex.dashboards.adapters.json_adapter import JSONAdapter
+        from cortex.dashboards.json_data_generator import JSONDataGenerator
         
         temp_dir = Path(tempfile.mkdtemp())
         data_dir = temp_dir / "data"
@@ -270,7 +270,7 @@ class TestPerformanceBoundaries:
     
     def test_data_generator_performance(self):
         """JSONDataGenerator generation <60s"""
-        from cortex.visualization.json_data_generator import JSONDataGenerator
+        from cortex.dashboards.json_data_generator import JSONDataGenerator
         import time
         
         generator = JSONDataGenerator()
@@ -310,7 +310,7 @@ class TestErrorRecoveryE2E:
     
     def test_recovery_from_corrupted_json(self):
         """System recovers from corrupted JSON files"""
-        from cortex.visualization.adapters.json_adapter import JSONAdapter
+        from cortex.dashboards.adapters.json_adapter import JSONAdapter
         
         adapter = JSONAdapter(base_path=self.data_dir)
         
@@ -327,7 +327,7 @@ class TestErrorRecoveryE2E:
     
     def test_recovery_from_missing_data(self):
         """System handles missing data gracefully"""
-        from cortex.visualization.json_data_generator import JSONDataGenerator
+        from cortex.dashboards.json_data_generator import JSONDataGenerator
         
         generator = JSONDataGenerator()
         
@@ -344,7 +344,7 @@ class TestCrossPhaseValidation:
     
     def test_adapter_protocol_compliance(self):
         """All adapters comply with protocol"""
-        from cortex.visualization.adapters.json_adapter import JSONAdapter
+        from cortex.dashboards.adapters.json_adapter import JSONAdapter
         import inspect
         
         # Check JSONAdapter has all required methods

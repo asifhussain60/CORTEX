@@ -32,7 +32,7 @@ else:
     fcntl = None  # type: ignore
     HAS_FCNTL = False
 
-from cortex.collaboration.user_context import get_current_user
+from cortex.infrastructure.collaboration.user_context import get_current_user
 
 
 class OperationLockError(Exception):

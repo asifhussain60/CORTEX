@@ -6,7 +6,7 @@ Authority: ENH-089 REFACTOR | Code quality + personality consistency enforcement
 
 import pytest
 from pathlib import Path
-from cortex.registry.semantic_blocks import (
+from cortex.core.registry.semantic_blocks import (
     SemanticBlockLoader,
     SemanticBlockReasoner,
     SemanticBlockAssembler,

@@ -264,7 +264,7 @@ class GitAwareDeltaDetector:
             List of tool metadata for tools needing update
         
         Example:
-            >>> from cortex.documentation.mcp_tool_scanner import MCPToolScanner
+            >>> from cortex.intelligence.documentation.mcp_tool_scanner import MCPToolScanner
             >>> detector = GitAwareDeltaDetector()
             >>> scanner = MCPToolScanner()
             >>> changed = detector.get_changed_since_commit("HEAD~1")

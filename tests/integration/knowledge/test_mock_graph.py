@@ -6,8 +6,8 @@ queries, and error handling.
 """
 
 import pytest
-from cortex.brain.core.knowledge.graph.mock_adapter import MockGraphAdapter
-from cortex.brain.core.knowledge.graph.interface import (
+from cortex.core.core.knowledge.graph.mock_adapter import MockGraphAdapter
+from cortex.core.core.knowledge.graph.interface import (
     GraphQueryError,
     HealthStatus,
 )

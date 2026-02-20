@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from cortex.visualization.renderers.mermaid_class_diagram_generator import (
+from cortex.dashboards.renderers.mermaid_class_diagram_generator import (
     MermaidClassDiagramGenerator,
     ClassInfo,
     MethodInfo,

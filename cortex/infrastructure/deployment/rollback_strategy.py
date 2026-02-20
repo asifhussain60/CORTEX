@@ -51,7 +51,7 @@ class ImmediateStrategy(RollbackStrategy):
 
     def __init__(self) -> None:
         """Initialize immediate strategy."""
-        self.logger = logging.getLogger("cortex.deployment.rollback.immediate")
+        self.logger = logging.getLogger("cortex.infrastructure.deployment.rollback.immediate")
 
     async def execute_rollback(
         self,
@@ -89,7 +89,7 @@ class ValidatedStrategy(RollbackStrategy):
 
     def __init__(self) -> None:
         """Initialize validated strategy."""
-        self.logger = logging.getLogger("cortex.deployment.rollback.validated")
+        self.logger = logging.getLogger("cortex.infrastructure.deployment.rollback.validated")
 
     async def execute_rollback(
         self,
@@ -152,7 +152,7 @@ class BlueGreenStrategy(RollbackStrategy):
 
     def __init__(self) -> None:
         """Initialize blue-green strategy."""
-        self.logger = logging.getLogger("cortex.deployment.rollback.bluegreen")
+        self.logger = logging.getLogger("cortex.infrastructure.deployment.rollback.bluegreen")
 
     async def execute_rollback(
         self,

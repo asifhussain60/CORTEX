@@ -25,9 +25,9 @@ from dataclasses import dataclass, asdict
 from typing import Any, Dict, Optional
 from cortex.mcp.tools._shared import validate_orchestrator_context
 
-from cortex.learning.universal_learning_loop import UniversalLearningLoop
-from cortex.orchestrators.onboarding.orchestrator import OnboardingOrchestrator
-from cortex.orchestrators.onboarding.knowledge_persistence_mixin import (
+from cortex.intelligence.learning.universal_learning_loop import UniversalLearningLoop
+from cortex.orchestrators.support.orchestrator import OnboardingOrchestrator
+from cortex.orchestrators.support.knowledge_persistence_mixin import (
     KnowledgePersistenceMixin
 )
 from cortex.governance.enforcement.agents.knowledge_persistence_agent import (

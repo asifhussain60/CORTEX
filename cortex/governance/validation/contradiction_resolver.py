@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import uuid
 
-from cortex.validation.cross_reference_validator import ContradictionReport, ContradictionType
+from cortex.governance.validation.cross_reference_validator import ContradictionReport, ContradictionType
 
 
 class ResolutionStrategy(Enum):

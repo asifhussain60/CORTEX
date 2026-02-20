@@ -79,7 +79,7 @@ class CanaryValidator:
         self.error_rate_threshold = error_rate_threshold
         self.latency_threshold_ms = latency_threshold_ms
         self.cpu_threshold = cpu_threshold
-        self.logger = logging.getLogger("cortex.deployment.canary")
+        self.logger = logging.getLogger("cortex.infrastructure.deployment.canary")
 
     async def validate_canary(
         self,

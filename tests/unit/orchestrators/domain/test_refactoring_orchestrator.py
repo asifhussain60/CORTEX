@@ -15,8 +15,8 @@ import pytest
 from unittest.mock import MagicMock, patch
 from typing import Dict, Any
 
-from cortex.brain.core.result import Result, Ok, Err
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.core.result import Result, Ok, Err
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 
 
 class TestRefactoringOrchestratorInterface:

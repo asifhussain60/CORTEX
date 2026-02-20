@@ -175,8 +175,8 @@ class TestMCPOnboardToolIntegration:
     
     def test_tool_integrates_with_adapter(self):
         """Tool output compatible with JSONAdapter"""
-        from cortex.visualization.adapters.json_adapter import JSONAdapter
-        from cortex.visualization.json_data_generator import JSONDataGenerator
+        from cortex.dashboards.adapters.json_adapter import JSONAdapter
+        from cortex.dashboards.json_data_generator import JSONDataGenerator
         
         tool = MockMCPOnboardTool()
         generator = JSONDataGenerator()

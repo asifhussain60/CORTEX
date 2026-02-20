@@ -27,14 +27,14 @@ from typing import List
 # AC_START: AC-MEGA-PHASE99-S1-004
 # AC_START: AC-MEGA-PHASE99-S1-005
 
-from cortex.brain.analysis.analysis_models import (
+from cortex.lens.analysis.analysis_models import (
     PixelGrid,
     BoundingBox,
     TextSegment,
     ColorInfo,
     FontInfo,
 )
-from cortex.brain.analysis.vision_analyzer import (
+from cortex.lens.analysis.vision_analyzer import (
     AnalysisDepth,
     ImageType,
     VisionAnalyzer,

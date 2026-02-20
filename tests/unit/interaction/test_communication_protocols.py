@@ -8,7 +8,7 @@ import pytest
 from pathlib import Path
 import yaml
 
-from cortex.brain.core.orchestrator.pattern_enforcer import PatternEnforcer
+from cortex.core.core.orchestrator.pattern_enforcer import PatternEnforcer
 
 
 @pytest.fixture

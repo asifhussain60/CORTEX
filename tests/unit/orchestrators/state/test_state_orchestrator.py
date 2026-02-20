@@ -23,7 +23,7 @@ from typing import Any, Dict, Optional
 
 import pytest
 
-from cortex.orchestrators.state.state_orchestrator import (
+from cortex.orchestrators.core.state_orchestrator import (
     AuditLogEntry,
     StateOrchestrator,
     StateOperation,

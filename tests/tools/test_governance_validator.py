@@ -7,8 +7,8 @@ and validate_governance_alignment.py scripts.
 
 import pytest
 from pathlib import Path
-from cortex.toolkit.validation import GovernanceValidator
-from cortex.toolkit.validation.governance_validator import (
+from cortex.tools.toolkit.validation import GovernanceValidator
+from cortex.tools.toolkit.validation.governance_validator import (
     ValidationCheck,
     Severity,
     ProductionReadinessReport

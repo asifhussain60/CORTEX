@@ -10,10 +10,10 @@ import pytest
 from typing import Dict, Any
 from unittest.mock import Mock, patch, MagicMock
 
-from cortex.brain.llm.i_llm_provider import ILLMProvider, LLMResponse, LLMUsage
-from cortex.brain.llm.openai_provider import OpenAIProvider, OPENAI_AVAILABLE
-from cortex.brain.llm.anthropic_provider import AnthropicProvider, ANTHROPIC_AVAILABLE
-from cortex.brain.llm.llm_factory import LLMFactory
+from cortex.intelligence.llm.i_llm_provider import ILLMProvider, LLMResponse, LLMUsage
+from cortex.intelligence.llm.openai_provider import OpenAIProvider, OPENAI_AVAILABLE
+from cortex.intelligence.llm.anthropic_provider import AnthropicProvider, ANTHROPIC_AVAILABLE
+from cortex.intelligence.llm.llm_factory import LLMFactory
 
 
 class TestILLMProvider:
@@ -46,7 +46,7 @@ class TestILLMProvider:
 class TestOpenAIProvider:
     """Test OpenAI provider implementation."""
     
-    @patch('cortex.brain.llm.openai_provider.OpenAI')
+    @patch('cortex.intelligence.llm.openai_provider.OpenAI')
     def test_provider_initialization_with_api_key(self, mock_openai_class):
         """Test provider initializes with API key."""
         provider = OpenAIProvider(api_key="test-key", model="gpt-4")
@@ -56,7 +56,7 @@ class TestOpenAIProvider:
         mock_openai_class.assert_called_once()
     
     @patch.dict('os.environ', {'OPENAI_API_KEY': 'env-key'})
-    @patch('cortex.brain.llm.openai_provider.OpenAI')
+    @patch('cortex.intelligence.llm.openai_provider.OpenAI')
     def test_provider_initialization_from_env(self, mock_openai_class):
         """Test provider initializes from environment variable."""
         provider = OpenAIProvider(model="gpt-4")
@@ -70,7 +70,7 @@ class TestOpenAIProvider:
             with pytest.raises(ValueError, match="API key required"):
                 OpenAIProvider()
     
-    @patch('cortex.brain.llm.openai_provider.OpenAI')
+    @patch('cortex.intelligence.llm.openai_provider.OpenAI')
     def test_generate_success(self, mock_openai_class):
         """Test successful text generation."""
         # Setup mock
@@ -101,7 +101,7 @@ class TestOpenAIProvider:
         assert response.model == "gpt-4"
         assert response.provider == "openai"
     
-    @patch('cortex.brain.llm.openai_provider.OpenAI')
+    @patch('cortex.intelligence.llm.openai_provider.OpenAI')
     def test_generate_with_timeout(self, mock_openai_class):
         """Test generation with timeout handling."""
         mock_client = MagicMock()
@@ -116,7 +116,7 @@ class TestOpenAIProvider:
         with pytest.raises(TimeoutError):
             provider.generate("Test prompt", timeout=5)
     
-    @patch('cortex.brain.llm.openai_provider.OpenAI')
+    @patch('cortex.intelligence.llm.openai_provider.OpenAI')
     def test_generate_with_rate_limit(self, mock_openai_class):
         """Test generation with rate limit handling."""
         mock_client = MagicMock()
@@ -143,7 +143,7 @@ class TestOpenAIProvider:
 class TestAnthropicProvider:
     """Test Anthropic provider implementation."""
     
-    @patch('cortex.brain.llm.anthropic_provider.Anthropic')
+    @patch('cortex.intelligence.llm.anthropic_provider.Anthropic')
     def test_provider_initialization(self, mock_anthropic_class):
         """Test Anthropic provider initializes correctly."""
         provider = AnthropicProvider(api_key="test-key", model="claude-3-opus-20240229")
@@ -152,7 +152,7 @@ class TestAnthropicProvider:
         assert provider.get_model() == "claude-3-opus-20240229"
         mock_anthropic_class.assert_called_once()
     
-    @patch('cortex.brain.llm.anthropic_provider.Anthropic')
+    @patch('cortex.intelligence.llm.anthropic_provider.Anthropic')
     def test_generate_success(self, mock_anthropic_class):
         """Test successful text generation with Anthropic."""
         # Setup mock
@@ -187,7 +187,7 @@ class TestLLMFactory:
     """Test LLM provider factory."""
 
     @pytest.mark.skipif(not OPENAI_AVAILABLE, reason="openai package not installed")
-    @patch("cortex.brain.llm.openai_provider.OpenAI")
+    @patch("cortex.intelligence.llm.openai_provider.OpenAI")
     def test_create_openai_provider(self, mock_openai):
         """Test factory creates OpenAI provider."""
         provider = LLMFactory.create_provider(
@@ -223,7 +223,7 @@ class TestLLMFactory:
 
     @pytest.mark.skipif(not OPENAI_AVAILABLE, reason="openai package not installed")
     @patch.dict('os.environ', {'DEFAULT_LLM_PROVIDER': 'openai', 'DEFAULT_LLM_MODEL': 'gpt-4'})
-    @patch("cortex.brain.llm.openai_provider.OpenAI")
+    @patch("cortex.intelligence.llm.openai_provider.OpenAI")
     def test_create_default_provider(self, mock_openai):
         """Test factory creates default provider from environment."""
         provider = LLMFactory.create_default_provider(api_key="test-key")

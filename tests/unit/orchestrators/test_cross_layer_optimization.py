@@ -16,7 +16,7 @@ from typing import Dict, Any, List
 from dataclasses import dataclass
 
 # Import modules to test (will be created)
-from cortex.orchestrators.optimization.cross_layer_optimizer import (
+from cortex.orchestrators.core.cross_layer_optimizer import (
     CrossLayerOptimizer,
     CoordinationResult,
     LatencyMeasurement,

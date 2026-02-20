@@ -12,8 +12,8 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from cortex.brain.core.path_resolver import resolve_path
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.core.path_resolver import resolve_path
+from cortex.core.core.result import Err, Ok, Result
 from cortex.infrastructure.database import DatabaseManager
 
 

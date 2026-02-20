@@ -8,7 +8,7 @@ AC_START: AC-P90-S3-T1
 
 import pytest
 from pathlib import Path
-from cortex.toolkit.setup import (
+from cortex.tools.toolkit.setup import (
     SetupVerifier,
     SetupResult,
     SetupCheck,

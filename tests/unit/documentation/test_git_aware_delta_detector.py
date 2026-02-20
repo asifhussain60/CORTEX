@@ -29,7 +29,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from cortex.documentation.git_aware_delta_detector import GitAwareDeltaDetector, ChangedFile
+from cortex.intelligence.documentation.git_aware_delta_detector import GitAwareDeltaDetector, ChangedFile
 
 
 class TestGitDiffParsing:

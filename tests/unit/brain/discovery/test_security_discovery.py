@@ -10,7 +10,7 @@ import tempfile
 import pytest
 from pathlib import Path
 
-from cortex.brain.discovery.security_discovery import (
+from cortex.lens.discovery.security_discovery import (
     SecurityDiscovery,
     AuthProviderType,
     LoggingFramework,

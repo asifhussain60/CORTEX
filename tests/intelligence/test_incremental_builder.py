@@ -21,7 +21,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from cortex.documentation.incremental_builder import (
+from cortex.intelligence.documentation.incremental_builder import (
     BuildCache,
     BuildResult,
     IncrementalBuilder,
@@ -136,7 +136,7 @@ class TestContentHashCaching:
         assert file_hash is not None
         assert len(file_hash) == 64  # SHA-256 hex length
     
-    @patch("cortex.documentation.incremental_builder.subprocess.run")
+    @patch("cortex.intelligence.documentation.incremental_builder.subprocess.run")
     def test_cache_hit_when_content_unchanged(
         self,
         mock_run,
@@ -164,7 +164,7 @@ class TestContentHashCaching:
         assert second_result.cache_hit_rate > 0.8
         assert second_result.files_rebuilt == 0
     
-    @patch("cortex.documentation.incremental_builder.subprocess.run")
+    @patch("cortex.intelligence.documentation.incremental_builder.subprocess.run")
     def test_cache_miss_when_content_changed(
         self,
         mock_run,

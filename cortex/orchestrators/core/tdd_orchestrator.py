@@ -50,24 +50,24 @@ import yaml
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
-from cortex.brain.core.knowledge_guidance_engine import (
+from cortex.core.core.knowledge_guidance_engine import (
     KnowledgeGuidanceEngine,
     ModuleGuidance,
 )
 
 # Phase 27: Import StandardsResolver for company domain integration
-from cortex.common.standards_resolver import StandardsResolver
+from cortex.core.common.standards_resolver import StandardsResolver
 from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import IntentType
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.refactoring.refactoring_models import (
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringRequest,
 )
 
 # Phase 43: Import RefactoringOrchestrator for REFACTOR phase wiring
 # NOTE: Consolidated in Wave 7, import removed
-# from cortex.refactoring.orchestrator import RefactoringOrchestrator
+# from cortex.orchestrators.domain.refactoring.orchestrator import RefactoringOrchestrator
 
 logger = logging.getLogger(__name__)
 

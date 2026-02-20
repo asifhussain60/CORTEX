@@ -7,9 +7,9 @@ to ensure CORTEX continues operating even when KG backend is unavailable.
 import pytest
 import tempfile
 import os
-from cortex.brain.core.knowledge.graph.mock_adapter import MockGraphAdapter
-from cortex.brain.core.knowledge.graph.sqlite_adapter import SQLiteGraphAdapter
-from cortex.brain.core.knowledge.graph.interface import (
+from cortex.core.core.knowledge.graph.mock_adapter import MockGraphAdapter
+from cortex.core.core.knowledge.graph.sqlite_adapter import SQLiteGraphAdapter
+from cortex.core.core.knowledge.graph.interface import (
     GraphQueryError,
     HealthStatus,
 )
@@ -169,7 +169,7 @@ class TestAdapterEquivalence:
 
     def test_adapter_interface_compliance(self) -> None:
         """Verify adapters comply with interface."""
-        from cortex.brain.core.knowledge.graph.interface import IGraphAdapter
+        from cortex.core.core.knowledge.graph.interface import IGraphAdapter
 
         mock = MockGraphAdapter()
         sqlite = SQLiteGraphAdapter()

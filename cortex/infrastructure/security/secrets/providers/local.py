@@ -6,9 +6,9 @@ import os
 import secrets
 from typing import Any, Dict, List, Optional
 
-from cortex.secrets.config import SecretsConfig
-from cortex.secrets.errors import AuthError
-from cortex.secrets.secrets_provider import ISecretsProvider
+from cortex.infrastructure.security.secrets.config import SecretsConfig
+from cortex.infrastructure.security.secrets.errors import AuthError
+from cortex.infrastructure.security.secrets.secrets_provider import ISecretsProvider
 
 
 class LocalSecretsProvider(ISecretsProvider):

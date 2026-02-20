@@ -47,7 +47,7 @@ class TestProductionPerformance:
     def test_onboarding_performance(self, tmp_path: Path) -> None:
         """Golden: Onboarding completes within time budget."""
         import time
-        from cortex.repositories.onboarding_service import OnboardingService
+        from cortex.infrastructure.repositories.onboarding_service import OnboardingService
         
         service = OnboardingService()
         

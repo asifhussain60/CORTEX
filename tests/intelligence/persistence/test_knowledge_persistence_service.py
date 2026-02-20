@@ -9,7 +9,7 @@ Priority: P0
 import pytest
 from pathlib import Path
 from typing import Dict, Any
-from cortex.knowledge.persistence.knowledge_persistence_service import (
+from cortex.intelligence.knowledge.persistence.knowledge_persistence_service import (
     KnowledgePersistenceService,
     DomainArtifact,
     PersistenceResult,

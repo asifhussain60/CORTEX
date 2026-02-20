@@ -3,9 +3,9 @@
 import time
 from typing import List, Optional
 
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.errors import NetworkError, StorageError
-from cortex.storage.storage_provider import IKnowledgeProvider
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.errors import NetworkError, StorageError
+from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
 
 
 class OfflineModeProvider(IKnowledgeProvider):

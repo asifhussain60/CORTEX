@@ -13,7 +13,7 @@ import os
 from unittest.mock import Mock
 
 from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
-from cortex.debugging.marker_injection_engine import MarkerInjectionEngine
+from cortex.orchestrators.support.debugging.marker_injection_engine import MarkerInjectionEngine
 from cortex.core.event_bus import EventBus, Event
 
 

@@ -8,7 +8,7 @@ import pytest
 from pathlib import Path
 import yaml
 from datetime import datetime
-from cortex.registry.sync.registry_sync_service import RegistrySyncService
+from cortex.core.registry.sync.registry_sync_service import RegistrySyncService
 from cortex.core.event_bus import EventBus, Event
 
 

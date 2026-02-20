@@ -9,7 +9,7 @@ Date: 2026-01-27
 import pytest
 from datetime import datetime, timezone
 
-from cortex.collaboration.user_context import (
+from cortex.infrastructure.collaboration.user_context import (
     UserContext,
     get_current_user,
     set_current_user,

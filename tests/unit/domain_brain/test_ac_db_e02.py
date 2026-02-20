@@ -12,7 +12,7 @@ import time
 from datetime import datetime, timedelta
 
 from cortex.intelligence.domain_brain.domain_brain_models import AuditOperationType
-from cortex.domain_brain.audit_log_manager import AuditLogManager, ArchivalStats
+from cortex.intelligence.domain_brain.audit_log_manager import AuditLogManager, ArchivalStats
 
 
 class TestTTLEnforcement:

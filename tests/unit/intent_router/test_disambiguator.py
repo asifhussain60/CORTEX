@@ -7,8 +7,8 @@ context-aware disambiguation, and fallback suggestions.
 """
 
 import pytest
-from cortex.intent_router.disambiguator import IntentDisambiguator
-from cortex.intent_router.classifier import (
+from cortex.orchestrators.core.intent_router.disambiguator import IntentDisambiguator
+from cortex.orchestrators.core.intent_router.classifier import (
     IntentClassifier,
     IntentCategory,
     ClassificationResult,

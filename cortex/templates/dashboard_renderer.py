@@ -12,7 +12,7 @@ from typing import Any, Dict, Optional
 
 import jinja2
 
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.core.result import Err, Ok, Result
 
 
 class DashboardTemplateRenderer:

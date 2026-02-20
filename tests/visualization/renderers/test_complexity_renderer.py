@@ -11,7 +11,7 @@ import json
 import pytest
 from pathlib import Path
 
-from cortex.visualization.renderers.complexity_renderer import (
+from cortex.dashboards.renderers.complexity_renderer import (
     ComplexityMetrics,
     ComplexityRenderer,
     ComplexityVisualization,

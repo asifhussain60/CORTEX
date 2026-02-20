@@ -13,7 +13,7 @@ import pytest
 from unittest.mock import Mock, patch
 import numpy as np
 
-from cortex.brain.core.ml_integration import (
+from cortex.core.core.ml_integration import (
     MLIntegration,
     IntegrationMode,
     MLMetrics,

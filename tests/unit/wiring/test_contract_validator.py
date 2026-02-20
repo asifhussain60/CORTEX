@@ -6,7 +6,7 @@ Tests 4-layer contract validation system.
 """
 import pytest
 from pathlib import Path
-from cortex.wiring.registry.contract_validator import (
+from cortex.core.wiring.registry.contract_validator import (
     ContractValidator,
     ValidationLevel,
     ContractViolation,

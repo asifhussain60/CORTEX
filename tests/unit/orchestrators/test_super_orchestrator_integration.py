@@ -318,7 +318,7 @@ class TestContractValidationAcrossOrchestrators:
         Gap: Contract validation not run on super-orchestrators
         Value: Ensures all super-orchestrators comply with contracts
         """
-        from cortex.wiring.registry.contract_validator import ContractValidator
+        from cortex.core.wiring.registry.contract_validator import ContractValidator
         
         validator = ContractValidator()
         
@@ -344,7 +344,7 @@ class TestContractValidationAcrossOrchestrators:
         Gap: No protection against super-orchestrator removal
         Value: Unwiring prevention for critical orchestrators
         """
-        from cortex.wiring.registry.contract_validator import ContractValidator
+        from cortex.core.wiring.registry.contract_validator import ContractValidator
         
         validator = ContractValidator()
         

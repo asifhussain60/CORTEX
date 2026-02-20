@@ -18,13 +18,13 @@ from typing import List, Dict, Any
 pytestmark = pytest.mark.skip(reason="Phase 81 tests depend on deprecated EnhancedIntentRouter (Phase 25 S2)")
 
 # Import modules to test
-from cortex.intent_router.capability_matcher import CapabilityMatcher, IntentType
-from cortex.intent_router.collaboration_coordinator import (
+from cortex.orchestrators.core.intent_router.capability_matcher import CapabilityMatcher, IntentType
+from cortex.orchestrators.core.intent_router.collaboration_coordinator import (
     AgentCollaborationCoordinator,
     CollaborationPattern,
     AgentContext
 )
-from cortex.intent_router.router import EnhancedIntentRouter, IntentRoutingRequest
+from cortex.orchestrators.core.intent_router.router import EnhancedIntentRouter, IntentRoutingRequest
 
 
 class TestCapabilityMatchingIntegration:

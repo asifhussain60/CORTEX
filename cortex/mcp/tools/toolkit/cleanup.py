@@ -14,7 +14,7 @@ from cortex.mcp.mcp_tool_base import (
     ToolParameter,
     ToolResult,
 )
-from cortex.toolkit.cleanup import VacuumAutomation
+from cortex.tools.toolkit.cleanup import VacuumAutomation
 
 
 class ToolkitCleanupTool(ConsolidatedTool):

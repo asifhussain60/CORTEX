@@ -10,7 +10,7 @@ import tempfile
 import pytest
 from pathlib import Path
 
-from cortex.brain.discovery.testing_discovery import (
+from cortex.lens.discovery.testing_discovery import (
     TestingDiscovery,
     TestFramework,
     TestFileInfo,

@@ -14,7 +14,7 @@ from cortex.mcp.mcp_tool_base import (
     ToolParameter,
     ToolResult,
 )
-from cortex.toolkit.validation import GovernanceValidator
+from cortex.tools.toolkit.validation import GovernanceValidator
 
 
 class ToolkitValidateTool(ConsolidatedTool):

@@ -24,7 +24,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from cortex.brain.core.result import Ok, Err
+from cortex.core.core.result import Ok, Err
 from cortex.infrastructure.orchestrator_trace_logger import (
     get_trace_logger,
     OrchestratorTraceLogger,

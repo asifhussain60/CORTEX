@@ -24,7 +24,7 @@ from xml.etree import ElementTree as ET
 
 import yaml
 
-from cortex.brain.discovery import DiscoveryPlugin
+from cortex.lens.discovery import DiscoveryPlugin
 
 logger = logging.getLogger(__name__)
 

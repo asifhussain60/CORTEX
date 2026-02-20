@@ -30,7 +30,7 @@ class TestInteractionOrchestratorImport:
         from cortex.orchestrators.core.interaction_orchestrator import (
             InteractionOrchestrator,
         )
-        from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
+        from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
 
         assert issubclass(InteractionOrchestrator, IOrchestrator)
 
@@ -118,7 +118,7 @@ class TestInteractionOrchestratorIOrchestratorContract:
 
     def test_get_mode(self, orchestrator: Any) -> None:
         """get_mode must return an OperationMode."""
-        from cortex.brain.core.interfaces.i_orchestrator import OperationMode
+        from cortex.core.core.interfaces.i_orchestrator import OperationMode
 
         mode = orchestrator.get_mode()
         assert isinstance(mode, OperationMode)
@@ -176,7 +176,7 @@ class TestInteractionOrchestratorLensPerTurn:
 
     def test_execute_turn_with_challenge_returns_result(self, orchestrator: Any) -> None:
         """execute_turn_with_challenge must return a Result."""
-        from cortex.brain.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.core.orchestrator.conversation_protocol import RoundContext
 
         round_context = RoundContext(
             round_number=1,
@@ -195,7 +195,7 @@ class TestInteractionOrchestratorLensPerTurn:
 
     def test_execute_turn_includes_lens_context(self, orchestrator: Any) -> None:
         """Each turn must include LENS analysis in output."""
-        from cortex.brain.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.core.orchestrator.conversation_protocol import RoundContext
 
         round_context = RoundContext(
             round_number=1,
@@ -215,7 +215,7 @@ class TestInteractionOrchestratorLensPerTurn:
 
     def test_turn_number_increments(self, orchestrator: Any) -> None:
         """Turn number must increment with each execute_turn_with_challenge call."""
-        from cortex.brain.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.core.orchestrator.conversation_protocol import RoundContext
 
         for i in range(3):
             ctx = RoundContext(
@@ -241,7 +241,7 @@ class TestInteractionOrchestratorChallengeSystem:
         from cortex.orchestrators.core.interaction_orchestrator import (
             InteractionOrchestrator,
         )
-        from cortex.brain.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.core.orchestrator.conversation_protocol import RoundContext
 
         mock_protocol = MagicMock()
         orch = InteractionOrchestrator(
@@ -270,7 +270,7 @@ class TestInteractionOrchestratorChallengeSystem:
         from cortex.orchestrators.core.interaction_orchestrator import (
             InteractionOrchestrator,
         )
-        from cortex.brain.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.core.orchestrator.conversation_protocol import RoundContext
 
         mock_protocol = MagicMock()
         orch = InteractionOrchestrator(

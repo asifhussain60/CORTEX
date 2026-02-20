@@ -9,7 +9,7 @@ Learning: replace_string_in_file unreliable with multi-line Jinja2 templates
 import pytest
 import tempfile
 from pathlib import Path
-from cortex.common.file_operations.safe_template_editor import (
+from cortex.core.common.file_operations.safe_template_editor import (
     SafeTemplateEditor,
     TemplateCorruptionError,
     TemplateSyntaxError

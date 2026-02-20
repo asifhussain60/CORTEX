@@ -99,8 +99,8 @@ class UniversalLearningLoop:
 
         # Initialize sub-components
         from cortex.orchestrators.validation.confidence_scorer import ConfidenceScorer
-        from cortex.learning.knowledge_merger import KnowledgeMerger
-        from cortex.learning.pattern_extractor import PatternExtractor
+        from cortex.intelligence.learning.knowledge_merger import KnowledgeMerger
+        from cortex.intelligence.learning.pattern_extractor import PatternExtractor
 
         self._pattern_extractor = PatternExtractor()
         self._knowledge_merger = KnowledgeMerger(self.workspace_root)

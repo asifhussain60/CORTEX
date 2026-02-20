@@ -115,7 +115,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
     def _check_gateway_exists(self) -> Optional[HealthIssue]:
         """Check if ContextSynthesisGateway singleton exists."""
         try:
-            from cortex.interaction.context_synthesis_gateway import get_gateway
+            from cortex.core.interaction.context_synthesis_gateway import get_gateway
             
             gateway = get_gateway()
             
@@ -144,7 +144,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
     def _check_token_budget(self) -> Optional[HealthIssue]:
         """Check token budget configuration."""
         try:
-            from cortex.interaction.context_synthesis_gateway import get_gateway
+            from cortex.core.interaction.context_synthesis_gateway import get_gateway
             
             gateway = get_gateway()
             
@@ -177,7 +177,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
     def _check_cache_hit_rate(self) -> Optional[HealthIssue]:
         """Check cache hit rate meets target."""
         try:
-            from cortex.interaction.context_synthesis_gateway import get_gateway
+            from cortex.core.interaction.context_synthesis_gateway import get_gateway
             
             gateway = get_gateway()
             
@@ -209,7 +209,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
     def _check_session_tracking(self) -> Optional[HealthIssue]:
         """Check session token tracking is active."""
         try:
-            from cortex.interaction.context_synthesis_gateway import get_gateway
+            from cortex.core.interaction.context_synthesis_gateway import get_gateway
             
             gateway = get_gateway()
             
@@ -239,7 +239,7 @@ class TokenOptimizationAgent(BaseHealthAgent):
     def _check_metrics_registration(self) -> Optional[HealthIssue]:
         """Check Prometheus metrics are registered."""
         try:
-            from cortex.interaction.context_metrics_collector import (
+            from cortex.core.interaction.context_metrics_collector import (
                 token_budget_violations,
                 token_budget_usage,
             )

@@ -6,13 +6,13 @@ RED Phase - 8 tests for automated resolution strategies
 import pytest
 from pathlib import Path
 from datetime import datetime
-from cortex.validation.contradiction_resolver import (
+from cortex.governance.validation.contradiction_resolver import (
     ContradictionResolver,
     ResolutionStrategy,
     Resolution,
     ResolutionStatus
 )
-from cortex.validation.cross_reference_validator import (
+from cortex.governance.validation.cross_reference_validator import (
     ContradictionReport,
     ContradictionType,
     ContradictionSeverity

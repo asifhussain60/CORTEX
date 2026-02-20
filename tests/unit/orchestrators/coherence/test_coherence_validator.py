@@ -11,12 +11,12 @@ from pathlib import Path
 
 import pytest
 
-from cortex.orchestrators.coherence.coherence_validator import (
+from cortex.orchestrators.validation.coherence_validator import (
     CoherenceIssue,
     CoherenceValidator,
     ValidationConfig,
 )
-from cortex.orchestrators.coherence.coherence_models import (
+from cortex.orchestrators.validation.coherence_models import (
     CoherenceReport,
     CoherenceStatus,
     FileStructure,

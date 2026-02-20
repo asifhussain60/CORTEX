@@ -21,8 +21,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.coherence.duplicate_scanner import DuplicateScanner, ScanResult
-from cortex.orchestrators.coherence.coherence_models import (
+from cortex.orchestrators.validation.duplicate_scanner import DuplicateScanner, ScanResult
+from cortex.orchestrators.validation.coherence_models import (
     CoherenceReport,
     CoherenceStatus,
     FileStructure,
@@ -31,7 +31,7 @@ from cortex.orchestrators.coherence.coherence_models import (
     ValidationResult,
     VersionMarker,
 )
-from cortex.orchestrators.coherence.structure_analyzer import StructureAnalyzer
+from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer
 
 logger = logging.getLogger(__name__)
 

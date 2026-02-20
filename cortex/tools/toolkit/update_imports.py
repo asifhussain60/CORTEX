@@ -35,8 +35,8 @@ class ImportUpdater:
         "import core.": "import cortex.core.",
 
         # Domain brain
-        "from domain_brain": "from cortex.domain_brain",
-        "import domain_brain": "import cortex.domain_brain",
+        "from domain_brain": "from cortex.intelligence.domain_brain",
+        "import domain_brain": "import cortex.intelligence.domain_brain",
     }
 
     # Tier isolation rules - prevents cross-tier imports

@@ -14,8 +14,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, Optional
 
-from cortex.core.response_format_validator import ResponseFormatValidator
-from cortex.core.response_optimizer import ResponseOptimizer
+from cortex.core.core.response_format_validator import ResponseFormatValidator
+from cortex.core.core.response_optimizer import ResponseOptimizer
 
 logger = logging.getLogger(__name__)
 

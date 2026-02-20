@@ -19,8 +19,8 @@ import pytest
 from pathlib import Path
 
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry, GovernanceRule
-from cortex.brain.core.tier_resolver import TierResolver
-from cortex.brain.core.result import Ok, Err
+from cortex.core.core.tier_resolver import TierResolver
+from cortex.core.result import Ok, Err
 
 
 class TestTier0HighestPrecedence:

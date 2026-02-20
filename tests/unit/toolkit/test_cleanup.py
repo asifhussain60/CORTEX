@@ -1,5 +1,5 @@
 """
-Tests for cortex.toolkit.cleanup module (Phase 90 S4).
+Tests for cortex.tools.toolkit.cleanup module (Phase 90 S4).
 
 Authority: Phase 90 S-90-05
 """
@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 import pytest
 
-from cortex.toolkit.cleanup import (
+from cortex.tools.toolkit.cleanup import (
     CleanupManager,
     CleanupResult,
     CleanupOperation,

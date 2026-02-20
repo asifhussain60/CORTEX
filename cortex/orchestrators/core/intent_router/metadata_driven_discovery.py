@@ -15,8 +15,8 @@ from dataclasses import dataclass, field
 import logging
 from pathlib import Path
 
-from cortex.agents.metadata_parser import AgentMetadataParser, AgentMetadata
-from cortex.intent_router.mcp_executor import MCPToolExecutor
+from cortex.orchestrators.intelligence.metadata_parser import AgentMetadataParser, AgentMetadata
+from cortex.orchestrators.core.intent_router.mcp_executor import MCPToolExecutor
 
 logger = logging.getLogger(__name__)
 

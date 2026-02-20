@@ -6,8 +6,8 @@ for production deployment.
 
 import pytest
 from typing import Dict, Any
-from cortex.brain.core.knowledge.graph.mock_adapter import MockGraphAdapter
-from cortex.brain.domain_brain.kg_validation import (
+from cortex.core.core.knowledge.graph.mock_adapter import MockGraphAdapter
+from cortex.intelligence.domain_brain.domain_brain.kg_validation import (
     GraphValidator,
     PerformanceBenchmark,
     HealthChecker,

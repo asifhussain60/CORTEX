@@ -26,7 +26,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.core.governance_database import AuditAction, GovernanceDatabaseManager
+from cortex.core.core.governance_database import AuditAction, GovernanceDatabaseManager
 from cortex.models.canonical_enums import AuditEventType
 
 logger = logging.getLogger(__name__)

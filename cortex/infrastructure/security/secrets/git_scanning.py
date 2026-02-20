@@ -48,7 +48,7 @@ class PreCommitHookScanner:
         for secret_type, pattern in self.SECRET_PATTERNS.items():
             matches = re.findall(pattern, content, re.IGNORECASE)
             if matches:
-                from cortex.secrets.errors import StorageError
+                from cortex.infrastructure.security.secrets.errors import StorageError
                 raise StorageError(f"Potential {secret_type} detected in {file_name}")
 
         return secrets if secrets else None

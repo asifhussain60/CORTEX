@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 from unittest.mock import Mock
 
 try:
-    from cortex.debugging.auto_cleanup_manager import AutoCleanupManager
+    from cortex.orchestrators.support.debugging.auto_cleanup_manager import AutoCleanupManager
 except (ModuleNotFoundError, ImportError):
     # Module refactored into cortex.toolkit.cleanup (Phase 90)
     pytest.skip("AutoCleanupManager moved to cortex.toolkit.cleanup", allow_module_level=True)

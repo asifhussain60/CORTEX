@@ -1,11 +1,11 @@
 """pytest plugin for test progress monitoring.
 
 Install by adding to conftest.py:
-    pytest_plugins = ['cortex.devx.pytest_progress_plugin']
+    pytest_plugins = ['cortex.infrastructure.devx.pytest_progress_plugin']
 
 Or enable via pytest.ini:
     [pytest]
-    addopts = -p cortex.devx.pytest_progress_plugin
+    addopts = -p cortex.infrastructure.devx.pytest_progress_plugin
 """
 
 import sys

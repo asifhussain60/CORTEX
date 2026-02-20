@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from difflib import SequenceMatcher
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-from cortex.orchestrators.coherence.coherence_models import (
+from cortex.orchestrators.validation.coherence_models import (
     DuplicateMatch,
     Section,
     SectionType,

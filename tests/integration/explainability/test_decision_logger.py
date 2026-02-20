@@ -6,7 +6,7 @@ RED Phase - 5 tests for decision logging and audit trails
 import pytest
 from pathlib import Path
 from datetime import datetime
-from cortex.explainability.decision_logger import (
+from cortex.intelligence.explainability.decision_logger import (
     DecisionTraceabilityLogger,
     DecisionLog,
     DecisionType,

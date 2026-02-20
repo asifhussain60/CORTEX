@@ -54,7 +54,7 @@ class MultiRegionOrchestrator:
             regions: List of region identifiers
         """
         self.regions = regions
-        self.logger = logging.getLogger("cortex.deployment.multiregion")
+        self.logger = logging.getLogger("cortex.infrastructure.deployment.multiregion")
 
     async def rollback_all_regions(
         self,

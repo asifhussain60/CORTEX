@@ -14,7 +14,7 @@ from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.common.debug_logger import (
+from cortex.core.common.debug_logger import (
     dashboard_debug,
     log_dashboard_debug,
     log_dashboard_schema_validation,

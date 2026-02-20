@@ -229,7 +229,7 @@ class TestBrainArchiveAndCleanup:
         
         # Search for old imports
         result = subprocess.run(
-            ["grep", "-r", "from cortex.domain_brain", "cortex/", "--include=*.py"],
+            ["grep", "-r", "from cortex.intelligence.domain_brain", "cortex/", "--include=*.py"],
             capture_output=True,
             text=True
         )

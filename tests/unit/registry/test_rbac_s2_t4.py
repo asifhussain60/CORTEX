@@ -15,14 +15,14 @@ Test Coverage:
 import pytest
 from datetime import datetime
 
-from cortex.registry.registry_access_control import (
+from cortex.core.registry.registry_access_control import (
     RoleBasedAccessControl,
     Role,
     Permission,
     AccessDeniedException,
     PermissionPolicy,
 )
-from cortex.registry.tenant_context import TenantContext
+from cortex.core.registry.tenant_context import TenantContext
 
 
 class TestRoleAssignment:

@@ -15,8 +15,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from cortex.core.environment_detector import EnvironmentDetector, EnvironmentType
-from cortex.core.tool_adapter import (
+from cortex.core.core.environment_detector import EnvironmentDetector, EnvironmentType
+from cortex.core.core.tool_adapter import (
     CopilotToolAdapter,
     DevelopmentToolAdapter,
     IToolAdapter,

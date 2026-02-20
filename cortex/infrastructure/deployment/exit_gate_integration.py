@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from cortex.deployment.deployment_validator import (
+from cortex.infrastructure.deployment.deployment_validator import (
     DeploymentMode,
     DeploymentValidator,
     ValidationResult,
@@ -76,7 +76,7 @@ class DeploymentExitGate:
             saas_api_endpoint=saas_api_endpoint,
             timeout=timeout
         )
-        self.audit_logger = logging.getLogger("cortex.deployment.audit")
+        self.audit_logger = logging.getLogger("cortex.infrastructure.deployment.audit")
         self.fail_safe = fail_safe
 
     async def validate_deployment_gate(

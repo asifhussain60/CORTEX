@@ -6,7 +6,7 @@ Test Count: 8 golden tests
 """
 import pytest
 from pathlib import Path
-from cortex.agents.meta_auditor_agent import MetaAuditorAgent, AuditValidationResult
+from cortex.orchestrators.intelligence.meta_auditor_agent import MetaAuditorAgent, AuditValidationResult
 
 
 class TestMetaAuditorValidation:

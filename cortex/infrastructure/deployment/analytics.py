@@ -58,7 +58,7 @@ class DeploymentAnalytics:
             workspace_root: Workspace root path
         """
         self.workspace_root = workspace_root or Path.cwd()
-        self.logger = logging.getLogger("cortex.deployment.analytics")
+        self.logger = logging.getLogger("cortex.infrastructure.deployment.analytics")
         self._deployment_history: List[Dict[str, Any]] = []
         self._canary_history: List[Dict[str, Any]] = []
 

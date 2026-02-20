@@ -10,7 +10,7 @@ from unittest.mock import patch, MagicMock
 
 import pytest
 
-from cortex.visualization.scripts.bundle_vendor_assets import (
+from cortex.dashboards.scripts.bundle_vendor_assets import (
     VendorAsset,
     VENDOR_ASSETS,
     TAILWIND_CSS,

@@ -8,10 +8,10 @@ Validates that the KG implementation complies with CORTEX governance rules:
 
 import pytest
 from inspect import signature, getsource, Parameter
-import cortex.brain.core.knowledge.graph.interface as interface_module
-import cortex.brain.core.knowledge.graph.mock_adapter as mock_module
-import cortex.brain.core.knowledge.graph.sqlite_adapter as sqlite_module
-import cortex.brain.core.knowledge.graph.constraint_validator as validator_module
+import cortex.core.core.knowledge.graph.interface as interface_module
+import cortex.core.core.knowledge.graph.mock_adapter as mock_module
+import cortex.core.core.knowledge.graph.sqlite_adapter as sqlite_module
+import cortex.core.core.knowledge.graph.constraint_validator as validator_module
 
 
 class TestGovernanceCORE011TypeHints:
@@ -233,7 +233,7 @@ class TestGovernanceSpecificExceptionHandling:
 
     def test_graph_query_error_used_for_errors(self) -> None:
         """Test that GraphQueryError is used appropriately."""
-        from cortex.brain.core.knowledge.graph.interface import GraphQueryError
+        from cortex.core.core.knowledge.graph.interface import GraphQueryError
 
         adapter = mock_module.MockGraphAdapter()
 
@@ -245,7 +245,7 @@ class TestGovernanceSpecificExceptionHandling:
     def test_sqlite_uses_specific_exceptions(self) -> None:
         """Test that SQLite adapter uses specific exceptions."""
         import sqlite3
-        from cortex.brain.core.knowledge.graph.interface import GraphQueryError
+        from cortex.core.core.knowledge.graph.interface import GraphQueryError
 
         adapter = sqlite_module.SQLiteGraphAdapter(":memory:")
 
@@ -261,7 +261,7 @@ class TestGovernanceNonBreakingDesign:
     def test_kg_module_optional_import(self) -> None:
         """Test that KG module can be imported without affecting core."""
         try:
-            from cortex.brain.core.knowledge.graph import IGraphAdapter
+            from cortex.core.core.knowledge.graph import IGraphAdapter
 
             adapter_imported = True
         except ImportError:
@@ -274,7 +274,7 @@ class TestGovernanceNonBreakingDesign:
         """Test that graph module doesn't create circular imports."""
         # Should import without issues
         try:
-            import cortex.brain.core.knowledge.graph
+            import cortex.core.core.knowledge.graph
             import cortex.brain
 
             success = True
@@ -285,7 +285,7 @@ class TestGovernanceNonBreakingDesign:
 
     def test_adapters_dont_require_external_dependencies(self) -> None:
         """Test that mock and SQLite adapters don't require external KG."""
-        import cortex.brain.core.knowledge.graph
+        import cortex.core.core.knowledge.graph
 
         # MockGraphAdapter should work without Neo4j/Neptune
         mock = mock_module.MockGraphAdapter()

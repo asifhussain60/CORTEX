@@ -7,7 +7,7 @@ import pytest
 from typing import Any, Dict, List
 from datetime import datetime
 
-from cortex.brain.core.knowledge.bulk_ingestion import (
+from cortex.core.core.knowledge.bulk_ingestion import (
     IngestionStatus,
     FilterAction,
     IngestionEntry,

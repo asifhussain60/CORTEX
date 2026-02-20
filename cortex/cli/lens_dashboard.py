@@ -167,7 +167,7 @@ def serve(host: str, port: int, reload: bool) -> None:
     click.echo("\n⏹️  Press CTRL+C to stop\n")
 
     try:
-        from cortex.visualization.api.dashboard_routes import app
+        from cortex.dashboards.api.dashboard_routes import app
 
         uvicorn.run(
             app,
@@ -271,7 +271,7 @@ def serve(port: int, no_cors: bool, path: Optional[Path]) -> None:
         cortex lens dashboard serve --port 3000
         cortex lens dashboard serve --path /path/to/dashboard
     """
-    from cortex.visualization.spa.static_server import serve
+    from cortex.dashboards.spa.static_server import serve
 
     # Determine dashboard path
     if path:

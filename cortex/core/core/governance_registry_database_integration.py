@@ -29,11 +29,11 @@ import threading
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from cortex.core.governance_database import (
+from cortex.core.core.governance_database import (
     GovernanceDatabaseManager,
     RuleTier,
 )
-from cortex.core.governance_database import (
+from cortex.core.core.governance_database import (
     GovernanceRule as DBGovernanceRule,
 )
 from cortex.core.result import Err, Ok, Result

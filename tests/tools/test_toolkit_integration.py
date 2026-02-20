@@ -6,10 +6,10 @@ Tests cross-module workflows and end-to-end scenarios.
 
 import pytest
 from pathlib import Path
-from cortex.toolkit.diagnostics import MCPHealthChecker
-from cortex.toolkit.setup import SetupVerifier
-from cortex.toolkit.cleanup import VacuumAutomation
-from cortex.toolkit.validation import GovernanceValidator
+from cortex.tools.toolkit.diagnostics import MCPHealthChecker
+from cortex.tools.toolkit.setup import SetupVerifier
+from cortex.tools.toolkit.cleanup import VacuumAutomation
+from cortex.tools.toolkit.validation import GovernanceValidator
 
 
 @pytest.fixture

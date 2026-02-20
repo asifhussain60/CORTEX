@@ -195,7 +195,7 @@ class TestPhase38AuditWorkflow:
 
     def test_p1_5_saas_deployment_audit(self):
         """Integration: P1.5-008 SaaS/MCP Deployment Ready audit"""
-        from cortex.deployment.deployment_validator import DeploymentValidator
+        from cortex.infrastructure.deployment.deployment_validator import DeploymentValidator
         from unittest.mock import MagicMock
         
         validator = MagicMock(spec=DeploymentValidator)

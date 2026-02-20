@@ -16,7 +16,7 @@ import pytest
 import json
 import yaml
 from pathlib import Path
-from cortex.brain.discovery.topology_export import (
+from cortex.lens.discovery.topology_export import (
     TopologyExporter,
     ExportFormat,
     MermaidGenerator,

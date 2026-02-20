@@ -10,7 +10,7 @@ AC-ID: LENS-DASH-003
 import pytest
 from pathlib import Path
 
-from cortex.visualization.renderers.mermaid_renderer import (
+from cortex.dashboards.renderers.mermaid_renderer import (
     MermaidDiagram,
     MermaidRenderer,
 )

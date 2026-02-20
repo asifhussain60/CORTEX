@@ -12,13 +12,13 @@ from typing import Any, Dict, Optional, TypeVar, Union
 
 import yaml
 
-from cortex.core.models import (
+from cortex.core.core.models import (
     AuditChecklistYAML,
     CoreRulesYAML,
     ModesYAML,
     ResponseFormatYAML,
 )
-from cortex.core.models.persona_models import PersonasYAML
+from cortex.core.core.models.persona_models import PersonasYAML
 
 # Type variable for generic loader data
 T = TypeVar('T', CoreRulesYAML, AuditChecklistYAML, ModesYAML, ResponseFormatYAML, PersonasYAML)
@@ -366,7 +366,7 @@ class TierRulesLoader:
             GovernanceDatabaseManager singleton
         """
         if self._db_manager is None:
-            from cortex.core.governance_database import GovernanceDatabaseManager
+            from cortex.core.core.governance_database import GovernanceDatabaseManager
             self._db_manager = GovernanceDatabaseManager.instance()
             self._db_manager.initialize()
         return self._db_manager

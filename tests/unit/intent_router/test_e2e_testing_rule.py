@@ -7,8 +7,8 @@ TDD Phase: RED → GREEN
 
 import pytest
 
-from cortex.brain.intent_router.e2e_testing_rule import E2ETestingRule
-from cortex.brain.intent_router.classifier import IntentCategory, IntentSignal
+from cortex.orchestrators.core.intent_router.e2e_testing_rule import E2ETestingRule
+from cortex.orchestrators.core.intent_router.classifier import IntentCategory, IntentSignal
 
 
 class TestE2ETestingRule:
@@ -26,7 +26,7 @@ class TestE2ETestingRule:
     
     def test_rule_is_classification_rule(self, rule: E2ETestingRule):
         """E2ETestingRule should implement ClassificationRule interface."""
-        from cortex.brain.intent_router.classifier import ClassificationRule
+        from cortex.orchestrators.core.intent_router.classifier import ClassificationRule
         assert isinstance(rule, ClassificationRule)
     
     def test_matches_golden_tests(self, rule: E2ETestingRule):

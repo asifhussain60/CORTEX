@@ -14,7 +14,7 @@ from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
-from cortex.visualization.spa.static_server import (
+from cortex.dashboards.spa.static_server import (
     SPAStaticServer,
     create_server,
     serve_dashboard,
@@ -245,7 +245,7 @@ class TestSPAStaticServer:
 class TestCreateServer:
     """Test create_server function."""
 
-    @patch("cortex.visualization.spa.static_server.socketserver.TCPServer")
+    @patch("cortex.dashboards.spa.static_server.socketserver.TCPServer")
     @patch("os.chdir")
     def test_create_server_basic(
         self, mock_chdir: Mock, mock_tcp_server: Mock
@@ -261,7 +261,7 @@ class TestCreateServer:
                 mock_server_instance
             )
 
-            from cortex.visualization.spa.static_server import create_server
+            from cortex.dashboards.spa.static_server import create_server
 
             result = create_server(root_dir, port)
 
@@ -273,7 +273,7 @@ class TestCreateServer:
             call_args = mock_tcp_server.call_args
             assert call_args[0][0] == ("", port)
 
-    @patch("cortex.visualization.spa.static_server.socketserver.TCPServer")
+    @patch("cortex.dashboards.spa.static_server.socketserver.TCPServer")
     @patch("os.chdir")
     def test_create_server_with_logger(
         self, mock_chdir: Mock, mock_tcp_server: Mock
@@ -289,14 +289,14 @@ class TestCreateServer:
                 mock_server_instance
             )
 
-            from cortex.visualization.spa.static_server import create_server
+            from cortex.dashboards.spa.static_server import create_server
 
             create_server(root_dir, logger=logger)
 
             # Verify logger was set
             assert SPAStaticServer.logger == logger
 
-    @patch("cortex.visualization.spa.static_server.socketserver.TCPServer")
+    @patch("cortex.dashboards.spa.static_server.socketserver.TCPServer")
     @patch("os.chdir")
     def test_create_server_custom_port(
         self, mock_chdir: Mock, mock_tcp_server: Mock
@@ -312,7 +312,7 @@ class TestCreateServer:
                 mock_server_instance
             )
 
-            from cortex.visualization.spa.static_server import create_server
+            from cortex.dashboards.spa.static_server import create_server
 
             create_server(root_dir, port=custom_port)
 
@@ -324,7 +324,7 @@ class TestCreateServer:
 class TestServeDashboard:
     """Test serve_dashboard function."""
 
-    @patch("cortex.visualization.spa.static_server.serve")
+    @patch("cortex.dashboards.spa.static_server.serve")
     @patch("pathlib.Path.exists")
     def test_serve_dashboard_success(
         self, mock_exists: Mock, mock_serve: Mock
@@ -352,7 +352,7 @@ class TestServeDashboard:
         assert "Dashboard directory not found" in str(exc_info.value)
         assert "cortex dashboard build" in str(exc_info.value)
 
-    @patch("cortex.visualization.spa.static_server.serve")
+    @patch("cortex.dashboards.spa.static_server.serve")
     @patch("pathlib.Path.exists")
     def test_serve_dashboard_custom_port(
         self, mock_exists: Mock, mock_serve: Mock
@@ -366,7 +366,7 @@ class TestServeDashboard:
         call_args = mock_serve.call_args
         assert call_args[0][1] == custom_port
 
-    @patch("cortex.visualization.spa.static_server.serve")
+    @patch("cortex.dashboards.spa.static_server.serve")
     @patch("pathlib.Path.exists")
     def test_serve_dashboard_with_logger(
         self, mock_exists: Mock, mock_serve: Mock

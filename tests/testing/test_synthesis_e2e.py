@@ -27,7 +27,7 @@ from typing import Dict, Any
 import tempfile
 import os
 
-from cortex.orchestrators.synthesis.context_aware_synthesis import (
+from cortex.orchestrators.intelligence.context_aware_synthesis import (
     ContextAwareSynthesisGateway,
 )
 from cortex.models.enriched_context import EnrichedContext

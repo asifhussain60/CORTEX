@@ -3,13 +3,13 @@ CORTEX Explainability Module
 KPI transparency and decision traceability
 """
 
-from cortex.explainability.kpi_transparency import (
+from cortex.intelligence.explainability.kpi_transparency import (
     KPITransparencyEngine,
     KPIExplanation,
     DataSource,
 )
 
-from cortex.explainability.decision_logger import (
+from cortex.intelligence.explainability.decision_logger import (
     DecisionTraceabilityLogger,
     DecisionLog,
     DecisionType,

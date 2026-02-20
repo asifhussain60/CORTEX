@@ -1,22 +1,7 @@
-"""IOrchestrator Interface - Core orchestrator interface definition.
+"""IOrchestrator Interface - Re-export from canonical location.
 
-Provides lazy-loaded access to IOrchestrator and OrchestratorBase.
-
-Author: CORTEX Framework
+Canonical location: cortex.core.core.interfaces.i_orchestrator
 """
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 
-def __getattr__(name):
-    """Lazy load from parent interfaces module."""
-    if name in ("IOrchestrator", "OrchestratorBase"):
-        # Import on demand to avoid circular imports
-        import sys
-        parent = sys.modules.get("cortex.core.interfaces")
-        if parent and hasattr(parent, name):
-            return getattr(parent, name)
-        # Fall back to loading from parent module directly
-        from .. import interfaces as parent_mod
-        return getattr(parent_mod, name)
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
-
-
-__all__ = ["IOrchestrator", "OrchestratorBase"]
+__all__ = ["IOrchestrator", "OperationMode"]

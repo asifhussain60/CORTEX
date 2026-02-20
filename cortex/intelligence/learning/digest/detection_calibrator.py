@@ -19,7 +19,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
-from cortex.learning.digest.detection_metrics import (
+from cortex.intelligence.learning.digest.detection_metrics import (
     CalibrationResult,
     CalibrationState,
     DetectionMetrics,

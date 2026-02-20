@@ -9,12 +9,12 @@ Priority: P1
 import pytest
 from pathlib import Path
 from typing import Dict, Any
-from cortex.learning.cross_session_pattern_cache import (
+from cortex.intelligence.learning.cross_session_pattern_cache import (
     CrossSessionPatternCache,
     CachedPattern,
     PatternMatch,
 )
-from cortex.learning.universal_learning_loop import PatternType
+from cortex.intelligence.learning.universal_learning_loop import PatternType
 
 
 class TestCrossSessionPatternCache:

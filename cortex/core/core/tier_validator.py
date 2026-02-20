@@ -16,7 +16,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
 
-from cortex.core.orchestrator_base import OrchestrationContext, OrchestratorBase
+from cortex.core.core.orchestrator_base import OrchestrationContext, OrchestratorBase
 
 logger = logging.getLogger(__name__)
 

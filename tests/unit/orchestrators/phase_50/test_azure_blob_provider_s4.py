@@ -14,16 +14,16 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 from azure.core.exceptions import ResourceNotFoundError, ClientAuthenticationError
 
-from cortex.storage.storage_provider import IKnowledgeProvider
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.errors import (
+from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.errors import (
     StorageError,
     PermissionError,
     NotFoundError,
     NetworkError,
     ConfigurationError,
 )
-from cortex.storage.providers.azure import AzureBlobProvider
+from cortex.infrastructure.storage.providers.azure import AzureBlobProvider
 
 
 class TestAzureBlobProviderInitialization:
@@ -36,7 +36,7 @@ class TestAzureBlobProviderInitialization:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient'):
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient'):
             provider = AzureBlobProvider(config)
             assert isinstance(provider, IKnowledgeProvider)
 
@@ -47,7 +47,7 @@ class TestAzureBlobProviderInitialization:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient'):
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient'):
             provider = AzureBlobProvider(config)
             assert provider.account_name == "mystorageacct"
             assert provider.container_name == "knowledge"
@@ -69,7 +69,7 @@ class TestAzureBlobProviderInitialization:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_client_class.from_connection_string.return_value = mock_client
             provider = AzureBlobProvider(config)
@@ -86,7 +86,7 @@ class TestAzureBlobProviderReadMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob_client = Mock()
             mock_blob_data = Mock()
@@ -110,7 +110,7 @@ class TestAzureBlobProviderReadMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob_client = Mock()
             mock_blob_client.download_blob.side_effect = ResourceNotFoundError("Blob not found")
@@ -131,7 +131,7 @@ class TestAzureBlobProviderReadMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob_client = Mock()
             mock_blob_client.download_blob.side_effect = Exception("Connection timeout")
@@ -156,7 +156,7 @@ class TestAzureBlobProviderWriteMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob_client = Mock()
             mock_container = Mock()
@@ -176,7 +176,7 @@ class TestAzureBlobProviderWriteMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob_client = Mock()
             mock_blob_client.upload_blob.side_effect = ClientAuthenticationError("Access denied")
@@ -201,7 +201,7 @@ class TestAzureBlobProviderListMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob1 = Mock(name="file1.txt")
             mock_blob2 = Mock(name="file2.txt")
@@ -224,7 +224,7 @@ class TestAzureBlobProviderListMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_container = Mock()
             mock_container.list_blobs.return_value = []
@@ -247,7 +247,7 @@ class TestAzureBlobProviderExistsMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob_client = Mock()
             mock_blob_props = Mock()
@@ -270,7 +270,7 @@ class TestAzureBlobProviderExistsMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob_client = Mock()
             mock_blob_client.get_blob_properties.side_effect = ResourceNotFoundError("Not found")
@@ -296,7 +296,7 @@ class TestAzureBlobProviderDeleteMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob_client = Mock()
             
@@ -317,7 +317,7 @@ class TestAzureBlobProviderDeleteMethod:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "key"}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client = Mock()
             mock_blob_client = Mock()
             mock_blob_client.get_blob_properties.side_effect = ResourceNotFoundError("Not found")
@@ -342,7 +342,7 @@ class TestAzureBlobProviderAuthentication:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials={"account_key": "SharedKeyLike..."}
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             AzureBlobProvider(config)
             mock_client_class.from_connection_string.assert_called_once()
 
@@ -353,7 +353,7 @@ class TestAzureBlobProviderAuthentication:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials=None
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             AzureBlobProvider(config)
             mock_client_class.assert_called_once()
 
@@ -364,7 +364,7 @@ class TestAzureBlobProviderAuthentication:
             endpoint="https://mystorageacct.blob.core.windows.net/knowledge",
             credentials=None
         )
-        with patch('cortex.storage.providers.azure.BlobServiceClient') as mock_client_class:
+        with patch('cortex.infrastructure.storage.providers.azure.BlobServiceClient') as mock_client_class:
             mock_client_class.side_effect = ClientAuthenticationError("Invalid credentials")
             with pytest.raises((PermissionError, ConfigurationError)):
                 AzureBlobProvider(config)

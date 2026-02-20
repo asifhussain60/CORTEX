@@ -23,7 +23,7 @@ try:
         ChatFileScore,
         CopilotMarker,
     )
-    from cortex.learning.enhancement_proposal_generator import (
+    from cortex.intelligence.learning.enhancement_proposal_generator import (
         EnhancementProposalGenerator,
         EnhancementProposal,
         EnhancementCategory,

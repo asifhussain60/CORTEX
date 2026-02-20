@@ -48,7 +48,7 @@ class ComplexityCalculator:
         Returns:
             ComplexityScore object with score and category
         """
-        from cortex.execution.complexity_metrics import ComplexityMetrics
+        from cortex.core.execution.complexity_metrics import ComplexityMetrics
 
         metrics = ComplexityMetrics()
 

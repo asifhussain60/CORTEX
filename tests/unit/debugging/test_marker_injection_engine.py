@@ -9,7 +9,7 @@ from pathlib import Path
 import tempfile
 import os
 
-from cortex.debugging.marker_injection_engine import (
+from cortex.orchestrators.support.debugging.marker_injection_engine import (
     MarkerInjectionEngine,
     TestFailureStrategy,
     RefactorRegressionStrategy,

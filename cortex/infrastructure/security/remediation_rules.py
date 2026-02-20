@@ -11,9 +11,9 @@ Provides pattern-based remediation for:
 """
 
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
-from cortex.security.vulnerability_models import (
+from cortex.infrastructure.security.vulnerability_models import (
     RemediationRule,
     RemediationType,
 )
@@ -127,7 +127,7 @@ class RemediationRulesRegistry:
         for rule in all_rules:
             self.rules[rule.id] = rule
 
-    def get_rule(self, rule_id: str) -> RemediationRule | None:
+    def get_rule(self, rule_id: str) -> Optional[RemediationRule]:
         """Get rule by ID."""
         return self.rules.get(rule_id)
 

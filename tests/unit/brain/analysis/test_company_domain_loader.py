@@ -9,7 +9,7 @@ Authority: CORE-008 (TDD)
 
 import pytest
 from pathlib import Path
-from cortex.brain.analysis.company_domain_loader import (
+from cortex.lens.analysis.company_domain_loader import (
     CompanyDomainLoader,
     DomainKnowledge,
     CompanyDomainResult,

@@ -14,9 +14,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.secrets.audit_trail import AuditLogger, HashChain
-from cortex.secrets.encryption import EncryptionManager, decrypt_value, encrypt_value
-from cortex.secrets.errors import SecretsError
+from cortex.infrastructure.security.secrets.audit_trail import AuditLogger, HashChain
+from cortex.infrastructure.security.secrets.encryption import EncryptionManager, decrypt_value, encrypt_value
+from cortex.infrastructure.security.secrets.errors import SecretsError
 
 logger = logging.getLogger(__name__)
 

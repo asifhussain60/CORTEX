@@ -14,7 +14,7 @@ Exports:
     LENSPipelineOutput: Complete pipeline output
 """
 
-from cortex.intelligence.lens.pipeline import (
+from cortex.intelligence.lens.lens.pipeline import (
     ExaminationPhase,
     ExaminationPhaseOutput,
     KnowledgePhase,

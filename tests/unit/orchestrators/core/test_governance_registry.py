@@ -136,7 +136,7 @@ class TestGovernanceRegistryIntegration:
     
     def test_governance_registry_used_by_gateway_executor(self):
         """Should be usable by MasterGatewayExecutor"""
-        from cortex.execution.gateway_exec_full import MasterGatewayExecutor
+        from cortex.core.execution.gateway_exec_full import MasterGatewayExecutor
         
         # This should not raise ModuleNotFoundError
         executor = MasterGatewayExecutor()

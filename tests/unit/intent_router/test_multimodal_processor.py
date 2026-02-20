@@ -13,7 +13,7 @@ Test coverage for multi-modal input handling including:
 
 import pytest
 
-from cortex.intent_router.multimodal_processor import (
+from cortex.orchestrators.core.intent_router.multimodal_processor import (
     MultiModalIntentProcessor,
     ModalityInput,
     InputModality,

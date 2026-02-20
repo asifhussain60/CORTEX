@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from enum import Enum
 
-from cortex.learning.pattern_extractor import ExtractedPattern, PatternType
+from cortex.intelligence.learning.pattern_extractor import ExtractedPattern, PatternType
 
 logger = logging.getLogger(__name__)
 

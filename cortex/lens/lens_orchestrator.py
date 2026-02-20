@@ -20,9 +20,9 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.analysis.branch_comparator import BranchComparator
-from cortex.brain.analysis.remote_git_adapter import RemoteGitAdapter
-from cortex.brain.analysis.vision_analyzer import VisionAnalysisResult, VisionAnalyzer
+from cortex.lens.analysis.branch_comparator import BranchComparator
+from cortex.lens.analysis.remote_git_adapter import RemoteGitAdapter
+from cortex.lens.analysis.vision_analyzer import VisionAnalysisResult, VisionAnalyzer
 
 # Phase 56: Intelligence layer integration (NEW)
 from cortex.intelligence.base import AnalysisContext
@@ -35,7 +35,7 @@ from cortex.lens.analyzers.database_analyzer import get_database_analyzer
 from cortex.lens.analyzers.git_history_analyzer import GitHistoryAnalyzer
 from cortex.lens.analyzers.tech_stack_analyzer import TechStackAnalyzer  # Phase 90
 from cortex.lens.cache import LENSCache, get_lens_cache
-from cortex.orchestrators.mixins.security_advisor_mixin import SecurityAdvisorMixin
+from cortex.orchestrators.core.security_advisor_mixin import SecurityAdvisorMixin
 
 # Backward compatibility aliases (deprecated, use intelligence layer)
 _LegacyRelationshipTraversalEngine = None  # Will be imported if legacy code exists
@@ -166,7 +166,7 @@ class LENSOrchestrator:
         self.dependency_mapper = DependencyMapper()
 
         # Phase 43: PatternDetector for pattern findings (AC-PHASE43-005)
-        from cortex.brain.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.core.intelligence.pattern_detector import PatternDetector
         self.pattern_detector = PatternDetector()
 
         # Phase 90: TechStackAnalyzer for tech stack detection (AC-PHASE90-S1-001)
@@ -703,7 +703,7 @@ class LENSOrchestrator:
                 print(f"Element: {element['type']} - {element['text']}")
             ```
         """
-        from cortex.brain.analysis.vision_analyzer import (
+        from cortex.lens.analysis.vision_analyzer import (
             AnalysisDepth,
             ImageType,
         )
@@ -910,8 +910,8 @@ class LENSOrchestrator:
 
         Example:
             ```python
-            from cortex.brain.analysis.remote_git_adapter import create_adapter
-            from cortex.brain.analysis.providers import ProviderConfig
+            from cortex.lens.analysis.remote_git_adapter import create_adapter
+            from cortex.lens.analysis.providers import ProviderConfig
 
             config = ProviderConfig(provider="github", token="ghp_...")
             adapter = create_adapter(config)

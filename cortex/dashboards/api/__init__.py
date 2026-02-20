@@ -6,6 +6,6 @@ Author: Asif Hussain
 Phase: 14
 """
 
-from cortex.visualization.api.dashboard_routes import app
+from cortex.dashboards.api.dashboard_routes import app
 
 __all__ = ["app"]

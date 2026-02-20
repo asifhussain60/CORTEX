@@ -15,7 +15,7 @@ from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
 from typing import Dict, Any, List
 
-from cortex.learning.registry_intelligence_agent import (
+from cortex.intelligence.learning.registry_intelligence_agent import (
     RegistryIntelligenceAgent,
     OrchestratorDiscovery,
     RegistryGap,
@@ -136,7 +136,7 @@ class TestRegistryIntelligenceIntegration(unittest.TestCase):
         if not result["success"]:
             self.assertIn("error", result)
     
-    @patch('cortex.learning.registry_intelligence_agent.get_learning_loop')
+    @patch('cortex.intelligence.learning.registry_intelligence_agent.get_learning_loop')
     def test_learning_integration(self, mock_get_loop):
         """Test that registry intelligence integrates with learning loop."""
         # Mock learning loop

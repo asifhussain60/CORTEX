@@ -17,13 +17,13 @@ import pytest
 from pathlib import Path
 from datetime import datetime
 
-from cortex.registry.artifact_sealing import (
+from cortex.core.registry.artifact_sealing import (
     ArtifactSealingManager,
     ArtifactMetadata,
     ArtifactAlreadySealedError,
     ArtifactTamperingDetectedError,
 )
-from cortex.registry.tenant_context import TenantContext
+from cortex.core.registry.tenant_context import TenantContext
 
 
 class TestArtifactSealing:

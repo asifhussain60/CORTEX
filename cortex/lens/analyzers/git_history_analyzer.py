@@ -18,13 +18,13 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from cortex.brain.analysis.remote_git_adapter import (
+from cortex.lens.analysis.remote_git_adapter import (
     RemoteBlame as RemoteBlameModel,
 )
-from cortex.brain.analysis.remote_git_adapter import (
+from cortex.lens.analysis.remote_git_adapter import (
     RemoteCommit as RemoteCommitModel,
 )
-from cortex.brain.analysis.remote_git_adapter import (
+from cortex.lens.analysis.remote_git_adapter import (
     RemoteFile,
     RemoteGitAdapter,
 )
@@ -136,7 +136,7 @@ class GitHistoryAnalyzer:
 
     Example (Remote):
         ```python
-        from cortex.brain.analysis.remote_git_adapter import create_adapter, ProviderConfig, ProviderType
+        from cortex.lens.analysis.remote_git_adapter import create_adapter, ProviderConfig, ProviderType
 
         config = ProviderConfig(provider_type=ProviderType.GITHUB, token=os.getenv("GITHUB_TOKEN"))
         adapter = create_adapter(config)

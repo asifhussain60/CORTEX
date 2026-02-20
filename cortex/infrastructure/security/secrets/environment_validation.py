@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 from urllib.parse import urlparse
 
-from cortex.secrets.errors import SecretsError
+from cortex.infrastructure.security.secrets.errors import SecretsError
 
 logger = logging.getLogger(__name__)
 

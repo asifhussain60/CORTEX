@@ -25,7 +25,7 @@ class DashboardGenerator:
 
     def __init__(self) -> None:
         """Initialize dashboard generator."""
-        self.logger = logging.getLogger("cortex.deployment.dashboard")
+        self.logger = logging.getLogger("cortex.infrastructure.deployment.dashboard")
 
     def generate_dashboard(self, metrics: Dict[str, Any]) -> str:
         """Generate complete deployment analytics dashboard.

@@ -14,7 +14,7 @@ from typing import Dict, Any
 @pytest.fixture(autouse=True)
 def reset_wiring_registry():
     """Reset registry singleton before each test."""
-    from cortex.wiring.registry import reset_registry
+    from cortex.core.wiring.registry import reset_registry
     reset_registry()
     yield
     reset_registry()
@@ -249,7 +249,7 @@ def test_wiring_hash_is_deterministic() -> None:
 def test_is_wired_returns_true_after_bootstrap() -> None:
     """Test that is_wired() returns True after bootstrap."""
     from cortex.wiring import wiring_bootstrap_cortex, is_wired
-    from cortex.wiring.registry import reset_registry
+    from cortex.core.wiring.registry import reset_registry
     
     # Force reset to ensure clean state
     reset_registry()

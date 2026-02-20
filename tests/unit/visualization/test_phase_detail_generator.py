@@ -9,7 +9,7 @@ Authority: ENH-037 (Phase Detail Page Generation)
 import pytest
 from pathlib import Path
 from datetime import datetime
-from cortex.visualization.phase_detail_generator import PhaseDetailPageGenerator
+from cortex.dashboards.phase_detail_generator import PhaseDetailPageGenerator
 from cortex.models.phase_detail_schema import (
     PhaseDetail,
     PhaseStatus,

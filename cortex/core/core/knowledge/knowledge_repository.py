@@ -195,7 +195,7 @@ class KnowledgeRepository:
             CompanyKnowledgeLoader instance
         """
         if self._company_loader is None:
-            from cortex.core.knowledge.company_knowledge_loader import (
+            from cortex.core.core.knowledge.company_knowledge_loader import (
                 CompanyKnowledgeLoader,
             )
             self._company_loader = CompanyKnowledgeLoader(

@@ -1200,7 +1200,7 @@ class EnforcementOrchestrator:
         AC-ID: AC-PHASE-06-S2-001
         """
         try:
-            from cortex.interaction.business_wisdom_formatter import BusinessWisdomFormatter
+            from cortex.core.interaction.business_wisdom_formatter import BusinessWisdomFormatter
             
             formatter = BusinessWisdomFormatter()
             markdown = formatter.format_governance_with_books(

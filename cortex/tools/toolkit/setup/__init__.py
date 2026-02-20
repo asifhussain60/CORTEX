@@ -11,7 +11,7 @@ Consolidates setup verification scripts.
 **Authority:** Phase 90 S-90-04
 """
 
-from cortex.toolkit.setup.verifier import SetupVerifier
+from cortex.tools.toolkit.setup.verifier import SetupVerifier
 
 # Import consolidated setup from Phase 90
 try:

@@ -1329,7 +1329,7 @@ class {class_name}:
         from cortex.tools.scaffolder_audit_logger import RegistryQueryResult
         
         try:
-            from cortex.wiring.registry_backed_orchestrator_registry import (
+            from cortex.core.wiring.registry_backed_orchestrator_registry import (
                 GitBackedOrchestratorRegistry,
             )
             

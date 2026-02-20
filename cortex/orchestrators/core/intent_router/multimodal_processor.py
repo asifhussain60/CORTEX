@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, Union
 
-from cortex.intent_router.classifier import IntentClassifier
+from cortex.orchestrators.core.intent_router.classifier import IntentClassifier
 
 
 class InputModality(Enum):

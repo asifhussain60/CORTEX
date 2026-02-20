@@ -10,14 +10,14 @@ import pytest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-from cortex.brain.core.environment_detector import (
+from cortex.core.core.environment_detector import (
     EnvironmentDetector,
     EnvironmentType,
     EnvironmentConfig,
     detect_environment,
     get_environment_detector,
 )
-from cortex.brain.core.tool_adapter import (
+from cortex.core.core.tool_adapter import (
     IToolAdapter,
     MCPToolAdapter,
     CopilotToolAdapter,
@@ -75,7 +75,7 @@ class TestEnvironmentDetection:
             is_copilot_available=False,
             is_development=False,
             cortex_root=Path("/tmp/cortex"),
-            tool_adapter_class="cortex.brain.core.tool_adapter.MCPToolAdapter",
+            tool_adapter_class="cortex.core.core.tool_adapter.MCPToolAdapter",
         )
         
         assert config.environment_type == EnvironmentType.MCP_SERVER
@@ -89,7 +89,7 @@ class TestEnvironmentDetection:
             is_copilot_available=True,
             is_development=False,
             cortex_root=Path("/tmp/cortex"),
-            tool_adapter_class="cortex.brain.core.tool_adapter.CopilotToolAdapter",
+            tool_adapter_class="cortex.core.core.tool_adapter.CopilotToolAdapter",
         )
         
         assert "Copilot" in str(config)

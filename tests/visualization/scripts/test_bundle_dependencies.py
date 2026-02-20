@@ -11,7 +11,7 @@ import json
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
-from cortex.visualization.scripts.bundle_dependencies import (
+from cortex.dashboards.scripts.bundle_dependencies import (
     DependencyAsset,
     DependencyBundler,
     bundle_dependencies,
@@ -151,7 +151,7 @@ class TestDependencyBundler:
     def test_save_checksums_manifest(self, bundler, temp_vendor_dir):
         """Test saving checksums manifest."""
         # Create mock files matching DEPENDENCIES
-        from cortex.visualization.scripts.bundle_dependencies import DEPENDENCIES
+        from cortex.dashboards.scripts.bundle_dependencies import DEPENDENCIES
         
         for dep in DEPENDENCIES[:2]:  # Create first 2 dependencies
             (temp_vendor_dir / dep.filename).write_bytes(b"/* Mock Content */")

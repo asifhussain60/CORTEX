@@ -9,8 +9,8 @@ Tests for registry health monitoring and performance characteristics.
 
 import pytest
 import time
-from cortex.registry.artifact_sealing import ArtifactSealingManager
-from cortex.registry.registry_access_control import RoleBasedAccessControl, Role, Permission
+from cortex.core.registry.artifact_sealing import ArtifactSealingManager
+from cortex.core.registry.registry_access_control import RoleBasedAccessControl, Role, Permission
 
 
 class TestRegistryHealthMetrics:
@@ -71,7 +71,7 @@ class TestPerformanceCharacteristics:
         rbac = RoleBasedAccessControl()
         rbac.assign_role("user1", Role.EDITOR)
         
-        from cortex.registry.tenant_context import TenantContext
+        from cortex.core.registry.tenant_context import TenantContext
         ctx = TenantContext("ws1", "user1", ["editor"])
         
         times = []
@@ -91,7 +91,7 @@ class TestMultiTenantRegistryConsistency:
         """Tenant artifacts remain consistent."""
         manager = ArtifactSealingManager()
         
-        from cortex.registry.tenant_context import TenantContext
+        from cortex.core.registry.tenant_context import TenantContext
         
         ctx1 = TenantContext("ws1", "user1", ["admin"])
         ctx2 = TenantContext("ws2", "user2", ["admin"])

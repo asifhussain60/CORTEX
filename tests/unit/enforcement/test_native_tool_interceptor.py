@@ -6,7 +6,7 @@ Tests CORE-049 (MCP-FIRST) and CORE-050 (MCP Circuit Breaker) enforcement.
 
 import pytest
 from unittest.mock import patch, MagicMock
-from cortex.enforcement.native_tool_interceptor import (
+from cortex.governance.enforcement.native_tool_interceptor import (
     NativeToolInterceptor,
     MCPDetector,
     Intent,

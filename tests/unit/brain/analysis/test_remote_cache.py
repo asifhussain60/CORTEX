@@ -15,7 +15,7 @@ import pytest
 # Skip all tests if diskcache is not installed
 pytest.importorskip("diskcache", reason="diskcache not installed")
 
-from cortex.brain.analysis.remote_cache import (
+from cortex.lens.analysis.remote_cache import (
     RemoteCache,
     CacheEntry,
     CacheStats,
@@ -277,7 +277,7 @@ class TestGlobalCache:
     def test_get_remote_cache_singleton(self, tmp_path: Path):
         """Test global cache singleton pattern."""
         # Reset global cache
-        import cortex.brain.analysis.remote_cache as cache_module
+        import cortex.lens.analysis.remote_cache as cache_module
         cache_module._global_cache = None
         
         cache1 = get_remote_cache(cache_dir=tmp_path / "cache")

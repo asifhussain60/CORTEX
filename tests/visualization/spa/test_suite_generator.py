@@ -19,7 +19,7 @@ import re
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex.visualization.spa.models import (
+from cortex.dashboards.spa.models import (
     RepoManifestEntry,
     RepoDashboardData,
     DashboardSuiteConfig,
@@ -29,7 +29,7 @@ from cortex.visualization.spa.models import (
     Severity,
     to_dict,
 )
-from cortex.visualization.spa.suite_generator import (
+from cortex.dashboards.spa.suite_generator import (
     DashboardSuiteGenerator,
     GenerationResult,
     generate_dashboard_suite,

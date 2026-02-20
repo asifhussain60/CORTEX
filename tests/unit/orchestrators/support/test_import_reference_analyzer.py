@@ -40,7 +40,7 @@ from cortex.orchestrators import MasterOrchestrator
         AC-044-S3-05: Handles absolute imports
         """
         test_code = """
-from cortex.brain.core.orchestrator_base import OrchestratorBase
+from cortex.core.core.orchestrator_base import OrchestratorBase
 import cortex.mcp.tools as mcp_tools
         """
         
@@ -53,7 +53,7 @@ import cortex.mcp.tools as mcp_tools
         # Assert
         assert len(refs) == 2
         assert refs[0]["type"] == "absolute"
-        assert refs[0]["module"] == "cortex.brain.core.orchestrator_base"
+        assert refs[0]["module"] == "cortex.core.core.orchestrator_base"
     
     def test_analyze_relative_imports(self, tmp_path):
         """

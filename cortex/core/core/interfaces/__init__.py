@@ -2,7 +2,7 @@
 Core Interfaces - Subdirectory
 
 This directory provides i_orchestrator.py.
-Other interfaces (IAuditLogger, GovernanceRule) are in parent cortex.brain.core.interfaces module.
+Other interfaces (IAuditLogger, GovernanceRule) are in parent cortex.core.core.interfaces module.
 """
 
 # Import from parent module (consolidation - i_audit_logger.py deleted)

@@ -9,9 +9,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.intelligence.ast_intelligence import ASTIntelligenceEngine, ParseResult
-from cortex.brain.core.intelligence.comment_analyzer import CommentAnalyzer
-from cortex.brain.core.intelligence_routing_engine import IntelligenceRoutingEngine
+from cortex.core.core.intelligence.ast_intelligence import ASTIntelligenceEngine, ParseResult
+from cortex.core.core.intelligence.comment_analyzer import CommentAnalyzer
+from cortex.core.core.intelligence_routing_engine import IntelligenceRoutingEngine
 
 
 class IntelligenceOrchestrator:
@@ -169,7 +169,7 @@ class IntelligenceOrchestrator:
             Routing decision with target and confidence
         """
         # IntelligenceRoutingEngine.route expects IntentType enum and request string
-        from cortex.brain.core.intelligence_routing_engine import IntentType
+        from cortex.core.core.intelligence_routing_engine import IntentType
         
         # Convert string intent to enum
         try:

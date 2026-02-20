@@ -9,7 +9,7 @@ Author: CORTEX Framework
 from dataclasses import dataclass
 from typing import Any, Dict, List
 
-from cortex.intent_router.classifier import ClassificationResult, IntentCategory
+from cortex.orchestrators.core.intent_router.classifier import ClassificationResult, IntentCategory
 
 
 @dataclass

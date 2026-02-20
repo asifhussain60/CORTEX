@@ -21,7 +21,7 @@ from pathlib import Path
 from datetime import datetime
 from unittest.mock import Mock
 
-from cortex.brain.core.intent.comprehension_loop import (
+from cortex.core.core.intent.comprehension_loop import (
     BrainTierPusher,
     BrainTier,
     ComprehensionYAML,

@@ -5,12 +5,12 @@ Provides self-contained frontend with zero external CDN dependencies.
 Includes GPT-spec compliant dashboard suite generation.
 """
 
-from cortex.visualization.spa.dependency_bundler import (
+from cortex.dashboards.spa.dependency_bundler import (
     Dependency,
     DependencyBundler,
     bundle_dependencies,
 )
-from cortex.visualization.spa.models import (
+from cortex.dashboards.spa.models import (
     ArchitectureLayer,
     DashboardSuiteConfig,
     DependencyInfo,
@@ -26,7 +26,7 @@ from cortex.visualization.spa.models import (
     VulnerabilityFinding,
     to_dict,
 )
-from cortex.visualization.spa.suite_generator import (
+from cortex.dashboards.spa.suite_generator import (
     DashboardSuiteGenerator,
     GenerationResult,
     generate_dashboard_suite,

@@ -11,7 +11,7 @@ Rules: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 import unittest
 from typing import List
 
-from cortex.brain.education.knowledge_level_detector import (
+from cortex.intelligence.education.knowledge_level_detector import (
     KnowledgeLevelDetector,
     KnowledgeLevel,
     DetectionSignals,

@@ -11,7 +11,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.visualization.dashboard_data_adapter import DashboardDataAdapter
+from cortex.dashboards.dashboard_data_adapter import DashboardDataAdapter
 
 logger = logging.getLogger(__name__)
 

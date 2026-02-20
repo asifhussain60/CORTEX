@@ -27,7 +27,7 @@ from cortex.orchestrators.core.intent_router import IntentRouter
 class TestIntentRouterBookReferences:
     """Test IntentRouter integration with BusinessWisdomFormatter."""
 
-    @patch("cortex.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
+    @patch("cortex.core.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
     def test_routing_message_includes_book_reference_single_rule(
         self, mock_formatter_class
     ):
@@ -55,7 +55,7 @@ class TestIntentRouterBookReferences:
             include_icon=False
         )
 
-    @patch("cortex.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
+    @patch("cortex.core.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
     def test_routing_message_graceful_fallback_on_error(self, mock_formatter_class):
         """Test routing message falls back to rule ID if formatter raises exception."""
         # Setup

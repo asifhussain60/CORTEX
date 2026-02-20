@@ -27,7 +27,7 @@ class TestEndToEndTierPrecedence:
         """AC-PHASE47-S4-001: GovernanceRegistry.get_rule() respects tier precedence."""
         try:
             from cortex.orchestrators.core.governance_registry import GovernanceRegistry
-            from cortex.brain.core.interfaces import GovernanceRule
+            from cortex.core.core.interfaces import GovernanceRule
             
             registry = GovernanceRegistry()
             
@@ -65,9 +65,9 @@ class TestEndToEndTierPrecedence:
     def test_tier_resolver_enforces_precedence(self):
         """AC-PHASE47-S4-001: TierResolver enforces tier precedence."""
         try:
-            from cortex.brain.core.tier_resolver import TierResolver
+            from cortex.core.core.tier_resolver import TierResolver
             from cortex.orchestrators.core.governance_registry import GovernanceRegistry
-            from cortex.brain.core.interfaces import GovernanceRule
+            from cortex.core.core.interfaces import GovernanceRule
             
             registry = GovernanceRegistry()
             resolver = TierResolver(registry)
@@ -175,7 +175,7 @@ class TestBrainTierPusherIntegration:
     def test_brain_tier_pusher_paths_updated(self):
         """AC-PHASE47-S4-003: BrainTierPusher uses new memory paths."""
         try:
-            from cortex.brain.core.intent.comprehension_loop import BrainTierPusher
+            from cortex.core.core.intent.comprehension_loop import BrainTierPusher
             from cortex.models.canonical_enums import BrainTier
             
             pusher = BrainTierPusher()
@@ -198,8 +198,8 @@ class TestBrainTierPusherIntegration:
     def test_brain_tier_pusher_identify_target_tier(self):
         """AC-PHASE47-S4-003: BrainTierPusher.identify_target_tier() uses correct enum."""
         try:
-            from cortex.brain.core.intent.comprehension_loop import BrainTierPusher
-            from cortex.brain.core.intent.comprehension_yaml import (
+            from cortex.core.core.intent.comprehension_loop import BrainTierPusher
+            from cortex.core.core.intent.comprehension_yaml import (
                 ComprehensionYAML, 
                 IntentSection, 
                 ChallengeSection, 
@@ -306,7 +306,7 @@ class TestPhase47IntegrationSmoke:
     def test_tier_resolver_can_be_instantiated(self):
         """Smoke test: TierResolver instantiation."""
         try:
-            from cortex.brain.core.tier_resolver import TierResolver
+            from cortex.core.core.tier_resolver import TierResolver
             resolver = TierResolver()
             assert resolver is not None
             assert hasattr(resolver, "get_effective_rule")
@@ -316,7 +316,7 @@ class TestPhase47IntegrationSmoke:
     def test_brain_tier_pusher_can_be_instantiated(self):
         """Smoke test: BrainTierPusher instantiation."""
         try:
-            from cortex.brain.core.intent.comprehension_loop import BrainTierPusher
+            from cortex.core.core.intent.comprehension_loop import BrainTierPusher
             pusher = BrainTierPusher()
             assert pusher is not None
             assert hasattr(pusher, "identify_target_tier")

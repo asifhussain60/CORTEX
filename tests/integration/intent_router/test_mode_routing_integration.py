@@ -20,18 +20,18 @@ from dataclasses import dataclass
 # Mark entire module as skipped pending migration
 pytestmark = pytest.mark.skip(reason="Phase 82 tests depend on deprecated EnhancedIntentRouter (Phase 25 S2)")
 
-from cortex.intent_router.router import (
+from cortex.orchestrators.core.intent_router.router import (
     EnhancedIntentRouter,
     IntentRoutingRequest,
     IntentRoutingResult,
 )
-from cortex.intent_router.capability_matcher import CapabilityMatcher, IntentType
-from cortex.intent_router.collaboration_coordinator import (
+from cortex.orchestrators.core.intent_router.capability_matcher import CapabilityMatcher, IntentType
+from cortex.orchestrators.core.intent_router.collaboration_coordinator import (
     AgentCollaborationCoordinator,
     CollaborationRequest,
     CollaborationPattern,
 )
-from cortex.intent_router.mcp_executor import MCPToolExecutor
+from cortex.orchestrators.core.intent_router.mcp_executor import MCPToolExecutor
 
 
 # ============================================================================

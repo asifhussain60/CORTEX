@@ -23,8 +23,8 @@ from pathlib import Path
 import sqlite3
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.trace_integration import trace_orchestrator_action
 
@@ -291,7 +291,7 @@ class InteractionOrchestrator(IOrchestrator):
 
             # Step 4: Apply token optimization (ENH-046 Phase 4 Integration)
             try:
-                from cortex.interaction.context_synthesis_gateway import get_gateway
+                from cortex.core.interaction.context_synthesis_gateway import get_gateway
                 
                 gateway = get_gateway()
                 session_id = getattr(round_context, 'session_id', 'default_session')
@@ -387,7 +387,7 @@ class InteractionOrchestrator(IOrchestrator):
             
             # Apply token optimization (ENH-046 Phase 4 Integration)
             try:
-                from cortex.interaction.context_synthesis_gateway import get_gateway
+                from cortex.core.interaction.context_synthesis_gateway import get_gateway
                 
                 gateway = get_gateway()
                 session_id = context.get('session_id', 'default_session')
@@ -550,7 +550,7 @@ class InteractionOrchestrator(IOrchestrator):
             SemanticBlockAssembler instance or None if unavailable.
         """
         try:
-            from cortex.registry.semantic_blocks import SemanticBlockAssembler, SemanticBlockLoader, SemanticBlockReasoner
+            from cortex.core.registry.semantic_blocks import SemanticBlockAssembler, SemanticBlockLoader, SemanticBlockReasoner
 
             loader = SemanticBlockLoader()
             reasoner = SemanticBlockReasoner(loader)

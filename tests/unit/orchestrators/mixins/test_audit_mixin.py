@@ -12,7 +12,7 @@ from typing import Any, Dict, Optional
 import pytest
 import time
 
-from cortex.orchestrators.mixins.audit_mixin import OrchestratorAuditMixin
+from cortex.orchestrators.core.audit_mixin import OrchestratorAuditMixin
 
 
 class MockOrchestrator(OrchestratorAuditMixin):

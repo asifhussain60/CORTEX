@@ -36,7 +36,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
 from cortex.core.result import Err, Ok, Result
-from cortex.learning.universal_learning_loop import get_learning_loop
+from cortex.intelligence.learning.universal_learning_loop import get_learning_loop
 
 logger = logging.getLogger(__name__)
 
@@ -494,7 +494,7 @@ class RegistryIntelligenceAgent:
 
         try:
             # Import OrchestratorLookup to check registration
-            from cortex.orchestrators.registry.orchestrator_lookup import (
+            from cortex.orchestrators.core.orchestrator_lookup import (
                 OrchestratorLookup,
             )
             lookup = OrchestratorLookup.instance()
@@ -796,7 +796,7 @@ class RegistryIntelligenceAgent:
             if not discovery:
                 return False
 
-            from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+            from cortex.orchestrators.core.orchestrator_lookup import OrchestratorLookup
             lookup = OrchestratorLookup.instance()
 
             # Dynamically import and register the orchestrator
@@ -847,7 +847,7 @@ class RegistryIntelligenceAgent:
             return True
 
         try:
-            from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+            from cortex.orchestrators.core.orchestrator_lookup import OrchestratorLookup
             lookup = OrchestratorLookup.instance()
 
             # Add keyword mappings to existing orchestrator
@@ -880,7 +880,7 @@ class RegistryIntelligenceAgent:
             True if registration succeeded
         """
         try:
-            from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+            from cortex.orchestrators.core.orchestrator_lookup import OrchestratorLookup
 
             lookup = OrchestratorLookup.instance()
 
@@ -975,7 +975,7 @@ class RegistryIntelligenceAgent:
             True if mapping succeeded
         """
         try:
-            from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+            from cortex.orchestrators.core.orchestrator_lookup import OrchestratorLookup
 
             lookup = OrchestratorLookup.instance()
 

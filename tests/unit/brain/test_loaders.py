@@ -6,7 +6,7 @@ Part of ENH-048: Prompt Unbloating System - Phase 2
 
 import pytest
 from pathlib import Path
-from cortex.brain.core.yaml_loaders import (
+from cortex.core.core.yaml_loaders import (
     CoreRulesLoader,
     AuditChecklistLoader,
     ModesLoader,
@@ -19,7 +19,7 @@ from cortex.brain.core.yaml_loaders import (
     load_response_format,
     YAMLLoadError,
 )
-from cortex.brain.core.models import EnforcementLevel, Priority
+from cortex.core.core.models import EnforcementLevel, Priority
 
 
 @pytest.fixture

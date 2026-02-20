@@ -11,7 +11,7 @@ import pytest
 from datetime import datetime, timedelta
 
 from cortex.intelligence.domain_brain.domain_brain_models import Conflict, AuditOperationType
-from cortex.domain_brain.conflict_resolver import (
+from cortex.intelligence.domain_brain.conflict_resolver import (
     ConflictResolver,
     ResolutionTier,
     ReviewStatus,

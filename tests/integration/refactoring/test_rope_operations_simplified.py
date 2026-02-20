@@ -12,8 +12,8 @@ Testing focus: New operations (organize_imports, add_type_hints, convert_to_f_st
 import pytest
 import tempfile
 from pathlib import Path
-from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-from cortex.refactoring.refactoring_models import RefactoringRequest, RefactoringLanguage
+from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
+from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringRequest, RefactoringLanguage
 
 # Skip all tests if Rope is not installed
 try:

@@ -4,9 +4,9 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
-from cortex.intelligence.domain_brain.intent_classifier import IntentClassifier
-from cortex.intelligence.domain_brain.intent_parser import NLPIntentParser, ParsedIntent
-from cortex.intelligence.domain_brain.intent_router_interface import IIntentRouter
+from cortex.intelligence.domain_brain.domain_brain.intent_classifier import IntentClassifier
+from cortex.intelligence.domain_brain.domain_brain.intent_parser import NLPIntentParser, ParsedIntent
+from cortex.intelligence.domain_brain.domain_brain.intent_router_interface import IIntentRouter
 
 
 @dataclass

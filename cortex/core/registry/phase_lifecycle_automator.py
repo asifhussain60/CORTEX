@@ -18,7 +18,7 @@ from cortex.orchestrators.planning.strategies.strategy_base import (
     ExecutionResult,
     ExecutionStatus,
 )
-from cortex.registry.phase_manager import PhaseManager
+from cortex.core.registry.phase_manager import PhaseManager
 
 
 logger = logging.getLogger(__name__)

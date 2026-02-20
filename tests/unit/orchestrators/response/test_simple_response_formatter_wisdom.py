@@ -22,7 +22,7 @@ Date: 2026-02-13
 
 import pytest
 
-from cortex.orchestrators.response.simple_response_formatter import format_response
+from cortex.orchestrators.core.simple_response_formatter import format_response
 
 
 class TestBusinessWisdomDisplay:

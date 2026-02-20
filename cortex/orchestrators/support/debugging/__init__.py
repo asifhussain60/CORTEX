@@ -15,7 +15,7 @@ Authority:
 AC-ID: AC-WAVE-R-S2-001
 """
 
-from cortex.debugging.marker_injection_engine import MarkerInjectionEngine
+from cortex.orchestrators.support.debugging.marker_injection_engine import MarkerInjectionEngine
 
 __all__ = [
     "MarkerInjectionEngine",

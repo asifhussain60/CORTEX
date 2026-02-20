@@ -14,7 +14,7 @@ from cortex.mcp.mcp_tool_base import (
     ToolParameter,
     ToolResult,
 )
-from cortex.toolkit.diagnostics import MCPHealthChecker
+from cortex.tools.toolkit.diagnostics import MCPHealthChecker
 
 
 class ToolkitDiagnoseTool(ConsolidatedTool):

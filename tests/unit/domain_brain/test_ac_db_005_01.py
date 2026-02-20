@@ -14,12 +14,12 @@ from cortex.intelligence.domain_brain.domain_brain_models import (
     Conflict,
     AuditOperationType,
 )
-from cortex.domain_brain.api import DomainBrainAPI
-from cortex.domain_brain.deduplication import DuplicateDetector
-from cortex.domain_brain.audit_log_manager import AuditLogManager
-from cortex.domain_brain.conflict_resolver import ConflictResolver
-from cortex.domain_brain.lens_integration import LENSIntegrationLayer
-from cortex.domain_brain.orphan_detector import ReferenceValidator
+from cortex.intelligence.domain_brain.api import DomainBrainAPI
+from cortex.intelligence.domain_brain.deduplication import DuplicateDetector
+from cortex.intelligence.domain_brain.audit_log_manager import AuditLogManager
+from cortex.intelligence.domain_brain.conflict_resolver import ConflictResolver
+from cortex.intelligence.domain_brain.lens_integration import LENSIntegrationLayer
+from cortex.intelligence.domain_brain.orphan_detector import ReferenceValidator
 
 
 class TestEndToEndWorkflow:

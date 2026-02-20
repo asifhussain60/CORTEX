@@ -14,7 +14,7 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from cortex.core.intelligence_routing_engine import (
+from cortex.core.core.intelligence_routing_engine import (
     IntelligenceRoutingEngine,
     IntentType,
     RoutingDecision,

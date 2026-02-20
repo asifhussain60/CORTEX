@@ -40,7 +40,7 @@ class EnvironmentConfig:
     is_copilot_available: bool
     is_development: bool
     cortex_root: Path
-    tool_adapter_class: str  # Qualified class name (e.g., 'cortex.brain.core.tool_adapter.MCPToolAdapter')
+    tool_adapter_class: str  # Qualified class name (e.g., 'cortex.core.core.tool_adapter.MCPToolAdapter')
 
     def __str__(self) -> str:
         """Return human-readable environment description."""
@@ -204,13 +204,13 @@ class EnvironmentDetector:
         # Select environment type
         if is_mcp:
             env_type = EnvironmentType.MCP_SERVER
-            adapter_class = "cortex.brain.core.tool_adapter.MCPToolAdapter"
+            adapter_class = "cortex.core.core.tool_adapter.MCPToolAdapter"
         elif is_copilot:
             env_type = EnvironmentType.COPILOT
-            adapter_class = "cortex.brain.core.tool_adapter.CopilotToolAdapter"
+            adapter_class = "cortex.core.core.tool_adapter.CopilotToolAdapter"
         else:
             env_type = EnvironmentType.DEVELOPMENT
-            adapter_class = "cortex.brain.core.tool_adapter.DevelopmentToolAdapter"
+            adapter_class = "cortex.core.core.tool_adapter.DevelopmentToolAdapter"
 
         config = EnvironmentConfig(
             environment_type=env_type,

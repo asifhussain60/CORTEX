@@ -25,32 +25,32 @@ from typing import Any, Dict, List, Optional, Tuple
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository
-from cortex.brain.core.response_header_config import HeaderConfigurationManager
-from cortex.brain.core.response_header_injector import ResponseHeaderInjector
-from cortex.brain.core.state_manager import (
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.core.knowledge.knowledge_repository import KnowledgeRepository
+from cortex.core.core.response_header_config import HeaderConfigurationManager
+from cortex.core.core.response_header_injector import ResponseHeaderInjector
+from cortex.core.core.state_manager import (
     OperationState,
     StateManager,
     get_state_manager,
 )
-from cortex.brain.knowledge.knowledge_synthesis_engine import (
+from cortex.intelligence.knowledge.synthesis.knowledge_synthesis_engine import (
     KnowledgeSynthesisEngine,
     get_synthesis_engine,
 )
-from cortex.brain.knowledge.unified_intelligence_context import (
+from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (
     UnifiedIntelligenceContext,
 )
 
 # Phase 27: Import StandardsResolver for company domain integration
-from cortex.common.standards_resolver import StandardsResolver
+from cortex.core.common.standards_resolver import StandardsResolver
 from cortex.core.intent.challenge_generator import ChallengeGenerator
 from cortex.core.orchestrator.holistic_context_builder import HolisticContextBuilder
 from cortex.core.result import Err, Ok, Result
-from cortex.domain_brain.business_knowledge_repository import (
+from cortex.intelligence.domain_brain.business_knowledge_repository import (
     BusinessKnowledgeRepository,
 )
-from cortex.execution.exec_gateway_impl import GovernanceViolationError
+from cortex.core.execution.exec_gateway_impl import GovernanceViolationError
 from cortex.infrastructure.database_transaction_manager import (
     DatabaseTransactionManager,
 )
@@ -67,13 +67,13 @@ from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.mcp.decorators import mcp_tool
 
 # AC-UX-VISIBILITY-001: Import orchestrator context decorator
-from cortex.orchestrators.decorators import inject_orchestrator_context
+from cortex.orchestrators.core.orchestrator_context_injector import inject_orchestrator_context
 from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention import BehavioralBoundaryRules
 
 # AC-PHASE-2-5-WIRE-003: Import AdaptiveRouter for intelligent task routing
 # Use IntelligentKnowledgeRouter as the canonical implementation
 try:
-    from cortex.brain.core.knowledge.router import (
+    from cortex.core.core.knowledge.router import (
         IntelligentKnowledgeRouter as AdaptiveRouter,
     )
 except ImportError:
@@ -81,7 +81,7 @@ except ImportError:
     AdaptiveRouter = None  # type: ignore
 
 # ENH-046 Phase 4 & 5: Import Context Synthesis Gateway (EXIT GATE)
-from cortex.interaction.context_synthesis_gateway import get_gateway
+from cortex.core.interaction.context_synthesis_gateway import get_gateway
 
 # Phase 33: Import response verbosity policies for chat response compression
 try:
@@ -94,6 +94,14 @@ try:
         MarkdownReportBanPolicy,
     )
     from cortex.orchestrators.response.minimal_plan_spine import MinimalPlanSpine
+
+
+
+
+
+
+
+
 
 
 
@@ -127,7 +135,7 @@ except ImportError:
 # Phase 51-52: Import AgentRulesInterpreter for rules-driven orchestrator routing
 # AC-PHASE52-001: Rules-driven ExecutionDirective generation and routing
 try:
-    from cortex.agents.core.agent_rules_interpreter import (
+    from cortex.orchestrators.intelligence.agent_rules_interpreter import (
         AgentRulesInterpreter,
         ExecutionDirective,
     )
@@ -140,7 +148,7 @@ except ImportError:
 # AC-PHASE-35-001: Autonomous continuation detection (R1)
 # AC-PHASE-35-002: ASCII progress bar integration (R2)
 try:
-    from cortex.interaction.autonomous_plan_executor import AutonomousPlanExecutor
+    from cortex.core.interaction.autonomous_plan_executor import AutonomousPlanExecutor
     from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
 except ImportError:
     # Fallback if modules not accessible
@@ -151,7 +159,7 @@ except ImportError:
 
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
 try:
-    from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
+    from cortex.core.core.knowledge.router import IntelligentKnowledgeRouter
 except ImportError:
     # Fallback if module not accessible
     IntelligentKnowledgeRouter = None
@@ -230,10 +238,10 @@ except ImportError:
 # AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Import InteractionOrchestrator with challenge system
 # Stage 1 comprehension with LENS-powered challenge generation
 try:
-    from cortex.brain.core.orchestrator.conversation_protocol import (
+    from cortex.core.core.orchestrator.conversation_protocol import (
         ConversationProtocol,
     )
-    from cortex.brain.core.orchestrator.round_context import RoundContext
+    from cortex.core.core.orchestrator.round_context import RoundContext
     from cortex.orchestrators.core.interaction_orchestrator import (
         InteractionOrchestrator,
     )
@@ -246,10 +254,10 @@ except ImportError:
 # Docker-First Architecture: YAML-backed wiring (no database registries)
 # Orchestrator config loaded from cortex/wiring/specifications/wiring.yaml
 
-from cortex.orchestrators.registry import OrchestratorMetadata
+from cortex.models.orchestrator_metadata import OrchestratorMetadata
 
 # AC-GOLDEN-E2E-017: Import OrchestratorAuditMixin for structured audit logging
-from cortex.orchestrators.mixins.audit_mixin import OrchestratorAuditMixin
+from cortex.orchestrators.core.audit_mixin import OrchestratorAuditMixin
 
 
 class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
@@ -613,7 +621,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
         # Import here to avoid circular import issues
         self.interaction_orchestrator_with_challenges: Optional[Any] = None
         try:
-            from cortex.brain.core.orchestrator.conversation_protocol import (
+            from cortex.core.core.orchestrator.conversation_protocol import (
                 ConversationProtocol as ConvProtocol,
             )
             from cortex.orchestrators.core.interaction_orchestrator import (
@@ -1156,7 +1164,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
             # This allows IntentRouter to use citations in routing decision
             unified_context = None
             try:
-                from cortex.brain.knowledge.unified_intelligence_context import (
+                from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (
                     CompanyKnowledge,
                     LENSIntelligence,
                 )
@@ -1220,7 +1228,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                 lens_context = result.get("context", {}).get("lens_insights", {})
                 if lens_context and unified_context:
                     # Update LENS intelligence with fetched data
-                    from cortex.brain.knowledge.unified_intelligence_context import (
+                    from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (
                         CompanyKnowledge,
                         LENSIntelligence,
                     )
@@ -2359,7 +2367,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
             try:
                 from pathlib import Path
 
-                from cortex.brain.core.context_synthesis_gateway import create_exit_gate
+                from cortex.core.core.context_synthesis_gateway import create_exit_gate
 
                 # Create EXIT GATE
                 workspace_root = Path.cwd()
@@ -2367,13 +2375,21 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
 
                 # Synthesize context for this operation
                 request_text = f"{operation_name}: {str(parameters)}"
+
                 context_synthesis = exit_gate.synthesize_context(
+
                     request=request_text,
+
                     intent=operation_name.upper()
+
                 )
 
+
+
                 # Log context synthesis metrics
+
                 self.logger.log_operation_complete(
+
                     ac_id="ENH-046-PHASE-1.6",
                     operation="EXIT_GATE_CONTEXT_SYNTHESIS",
                     success=True,
@@ -2477,7 +2493,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
             try:
                 import asyncio
 
-                from cortex.deployment.exit_gate_integration import (
+                from cortex.infrastructure.deployment.exit_gate_integration import (
                     create_deployment_gate,
                 )
 
@@ -2572,7 +2588,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                     request_text = f"{operation_name}: {str(parameters.get('request', ''))}"
 
                     # Detect execution context
-                    from cortex.agents.core.agent_rules_interpreter import (
+                    from cortex.orchestrators.intelligence.agent_rules_interpreter import (
                         ExecutionContext,
                     )
                     context = ExecutionContext.PRODUCTION_REPO
@@ -3020,7 +3036,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
             # This is the SINGLE integration point that automatically covers ALL
             # orchestrators without per-orchestrator wiring
             try:
-                from cortex.interaction.context_synthesis_gateway import get_gateway
+                from cortex.core.interaction.context_synthesis_gateway import get_gateway
 
                 # Get gateway singleton
                 gateway = get_gateway()
@@ -4506,7 +4522,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
         Route user intent through LENS pipeline.
         """
         try:
-            from cortex.brain.lens.pipeline import LENSPipeline
+            from cortex.intelligence.lens.lens.pipeline import LENSPipeline
 
             pipeline = LENSPipeline()
             result = pipeline.execute(context)
@@ -5012,7 +5028,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
         try:
             # Import complexity router
             from cortex.intent_router import WorkflowComplexityRouter, Intent as ComplexityIntent
-            from cortex.intent_router.workflow_gate import RoutingStrategy
+            from cortex.orchestrators.core.intent_router.workflow_gate import RoutingStrategy
             
             # Extract operation details
             operation = context.get("operation", "").lower()

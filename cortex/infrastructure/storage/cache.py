@@ -6,8 +6,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.storage_provider import IKnowledgeProvider
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
 
 
 class CachedKnowledgeProvider(IKnowledgeProvider):

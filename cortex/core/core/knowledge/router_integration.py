@@ -16,7 +16,7 @@ Integration Points:
   - Maintains backward compatibility
 
 Usage:
-    from cortex.core.knowledge.router_integration import KnowledgeRouterIntegration
+    from cortex.core.core.knowledge.router_integration import KnowledgeRouterIntegration
 
     integration = KnowledgeRouterIntegration(
         tech_provider=knowledge_repo,

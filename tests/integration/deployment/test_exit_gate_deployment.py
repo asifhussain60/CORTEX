@@ -13,7 +13,7 @@ Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 import pytest
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 from typing import Dict, Any
-from cortex.deployment.deployment_validator import (
+from cortex.infrastructure.deployment.deployment_validator import (
     DeploymentValidator,
     DeploymentMode,
     ValidationResult,
@@ -32,7 +32,7 @@ class TestExitGateDeploymentValidation:
         - DeploymentValidator invoked
         - Validation results captured
         """
-        from cortex.deployment.exit_gate_integration import DeploymentExitGate
+        from cortex.infrastructure.deployment.exit_gate_integration import DeploymentExitGate
         
         gate = DeploymentExitGate(fail_safe=True)
         
@@ -66,7 +66,7 @@ class TestExitGateDeploymentValidation:
         - Error details captured
         - Audit trail created
         """
-        from cortex.deployment.exit_gate_integration import DeploymentExitGate
+        from cortex.infrastructure.deployment.exit_gate_integration import DeploymentExitGate
         
         # Create gate in strict mode (fail_safe=False)
         gate = DeploymentExitGate(fail_safe=False)
@@ -100,7 +100,7 @@ class TestExitGateDeploymentValidation:
         - Health endpoint verified
         - Tool discovery validated
         """
-        from cortex.deployment.deployment_validator import DeploymentValidator
+        from cortex.infrastructure.deployment.deployment_validator import DeploymentValidator
         
         validator = DeploymentValidator(
             mcp_endpoint="http://localhost:8443",
@@ -141,7 +141,7 @@ class TestExitGateDeploymentValidation:
         - REST API validated
         - WebSocket connectivity verified
         """
-        from cortex.deployment.deployment_validator import DeploymentValidator
+        from cortex.infrastructure.deployment.deployment_validator import DeploymentValidator
         
         validator = DeploymentValidator(
             mcp_endpoint="http://localhost:8443",
@@ -169,7 +169,7 @@ class TestExitGateDeploymentValidation:
         - Correct validator configuration
         - Mode detection from parameters
         """
-        from cortex.deployment.exit_gate_integration import create_deployment_gate
+        from cortex.infrastructure.deployment.exit_gate_integration import create_deployment_gate
         
         # Create gate with custom config
         gate = create_deployment_gate(
@@ -197,7 +197,7 @@ class TestDeploymentReadinessChecks:
         - Health status reported correctly
         - Timeout handling
         """
-        from cortex.deployment.deployment_validator import DeploymentValidator
+        from cortex.infrastructure.deployment.deployment_validator import DeploymentValidator
         
         validator = DeploymentValidator(
             mcp_endpoint="http://localhost:8443",
@@ -225,7 +225,7 @@ class TestDeploymentReadinessChecks:
         - Tool schema validation
         - Protocol version detection
         """
-        from cortex.deployment.deployment_validator import DeploymentValidator
+        from cortex.infrastructure.deployment.deployment_validator import DeploymentValidator
         
         validator = DeploymentValidator(
             mcp_endpoint="http://localhost:8443",
@@ -259,7 +259,7 @@ class TestDeploymentReadinessChecks:
         
         Note: Memory threshold is adaptive to environment (typical: 500-800MB for dev)
         """
-        from cortex.deployment.deployment_validator import DeploymentValidator
+        from cortex.infrastructure.deployment.deployment_validator import DeploymentValidator
         
         validator = DeploymentValidator(
             mcp_endpoint="http://localhost:8443",
@@ -294,7 +294,7 @@ class TestProductionDeploymentChecklist:
         - Resource availability ✅
         - Load capacity ✅
         """
-        from cortex.deployment.deployment_validator import DeploymentValidator
+        from cortex.infrastructure.deployment.deployment_validator import DeploymentValidator
         
         validator = DeploymentValidator(
             mcp_endpoint="http://localhost:8443",
@@ -326,7 +326,7 @@ class TestProductionDeploymentChecklist:
         - Success checks recorded
         - Overall failure status
         """
-        from cortex.deployment.deployment_validator import DeploymentValidator
+        from cortex.infrastructure.deployment.deployment_validator import DeploymentValidator
         
         validator = DeploymentValidator(
             mcp_endpoint="http://localhost:8443",

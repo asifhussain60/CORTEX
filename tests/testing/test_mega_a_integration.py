@@ -24,12 +24,12 @@ from typing import Any, Dict
 import pytest
 
 from cortex.intelligence.capability_matcher import CapabilityMatcher
-from cortex.knowledge.persistence.knowledge_persistence_service import (
+from cortex.intelligence.knowledge.persistence.knowledge_persistence_service import (
     KnowledgePersistenceService,
 )
-from cortex.learning.cross_session_pattern_cache import CrossSessionPatternCache
-from cortex.learning.orchestrator_learning_mixin import OrchestratorLearningMixin
-from cortex.learning.universal_learning_loop import (
+from cortex.intelligence.learning.cross_session_pattern_cache import CrossSessionPatternCache
+from cortex.intelligence.learning.orchestrator_learning_mixin import OrchestratorLearningMixin
+from cortex.intelligence.learning.universal_learning_loop import (
     LearningCapture,
     PatternType,
     UniversalLearningLoop,

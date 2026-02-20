@@ -23,7 +23,7 @@ from datetime import datetime
 # IMPORT PRODUCTION CODE
 # ============================================================================
 
-from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
 
 
 # ============================================================================

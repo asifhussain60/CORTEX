@@ -10,6 +10,28 @@ Available Plugins:
 Authority: CORE-035 (Consolidation)
 """
 
+from typing import Any, Dict
+
+
+class DiscoveryPlugin:
+    """Base interface for discovery plugins."""
+
+    def discover(self, repo_path: Any) -> Dict[str, Any]:
+        """Discover topology information from repository."""
+        raise NotImplementedError("Discovery plugins must implement discover()")
+
+
+class TopologyMap:
+    """Unified topology information container."""
+
+    def __init__(self) -> None:
+        """Initialize empty topology map."""
+        self.config: Dict[str, Any] = {}
+        self.databases: Dict[str, Any] = {}
+        self.apis: Dict[str, Any] = {}
+        self.microservices: Dict[str, Any] = {}
+
+
 from cortex.lens.discovery.config_discovery import (
     ConfigTopology,
     ConfigurationDiscovery,
@@ -24,6 +46,8 @@ from cortex.lens.discovery.database_discovery import (
 )
 
 __all__ = [
+    "DiscoveryPlugin",
+    "TopologyMap",
     "ConfigurationDiscovery",
     "ConnectionString",
     "ConfigTopology",

@@ -9,7 +9,7 @@ AC-ID: LENS-DASH-001
 
 import pytest
 from pathlib import Path
-from cortex.visualization.repository_detector import (
+from cortex.dashboards.repository_detector import (
     RepositoryDetector,
     CortexFeatures,
     is_cortex_repository,

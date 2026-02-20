@@ -20,28 +20,28 @@ from cortex.orchestrators.validation.confidence_scorer import (
 from cortex.lens.schemas.ldv1_schema import (
     ConfidenceLevel,
 )
-from cortex.learning.intelligence_validator import (
+from cortex.intelligence.learning.intelligence_validator import (
     IntelligenceValidator,
     ValidationReport,
     get_intelligence_validator,
 )
-from cortex.learning.knowledge_merger import (
+from cortex.intelligence.learning.knowledge_merger import (
     KnowledgeMerger,
     MergeStrategy,
 )
-from cortex.learning.learning_dashboard import (
+from cortex.intelligence.learning.learning_dashboard import (
     LearningDashboard,
     MetricsSnapshot,
     get_learning_dashboard,
 )
-from cortex.learning.orchestrator_integration_mixin import (
+from cortex.intelligence.learning.orchestrator_integration_mixin import (
     OrchestratorLearningMixin,
 )
-from cortex.learning.pattern_extractor import (
+from cortex.intelligence.learning.pattern_extractor import (
     ExtractedPattern,
     PatternExtractor,
 )
-from cortex.learning.universal_learning_loop import (
+from cortex.intelligence.learning.universal_learning_loop import (
     LearningCapture,
     PatternType,
     UniversalLearningLoop,

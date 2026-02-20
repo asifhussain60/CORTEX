@@ -10,7 +10,7 @@ from pathlib import Path
 
 import pytest
 
-from cortex.visualization.renderers.mermaid_sequence_diagram_generator import (
+from cortex.dashboards.renderers.mermaid_sequence_diagram_generator import (
     MermaidSequenceDiagramGenerator,
     Participant,
     Message,

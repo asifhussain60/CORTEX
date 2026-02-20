@@ -14,7 +14,7 @@ from cortex.models.plan_models import (
     PlanStatus,
     StageType,
 )
-from cortex.registry.plan_registry import PlanRegistry, PlanSummary
+from cortex.core.registry.plan_registry import PlanRegistry, PlanSummary
 
 
 class TestPlanModels:

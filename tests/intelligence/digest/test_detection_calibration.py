@@ -17,8 +17,8 @@ import pytest
 from pathlib import Path
 from typing import Dict, List, Tuple
 
-from cortex.learning.digest.detection_calibrator import DetectionCalibrator
-from cortex.learning.digest.detection_metrics import (
+from cortex.intelligence.learning.digest.detection_calibrator import DetectionCalibrator
+from cortex.intelligence.learning.digest.detection_metrics import (
     DetectionMetrics,
     GroundTruthLabel,
     CalibrationResult,

@@ -15,24 +15,23 @@ from cortex.core.intelligence.ast_intelligence import (
     ClassInfo,
     ConstantInfo,
     FunctionInfo,
-    Parameter,
+    ParameterInfo as Parameter,
     ParseResult,
 )
-from cortex.core.intelligence.author_context import (
+from cortex.core.core.intelligence.author_context import (
     Author,
     AuthorContextBuilder,
     AuthorContribution,
 )
 from cortex.core.intelligence.call_graph import (
-    CallEdge,
     CallGraph,
     CallGraphBuilder,
 )
-from cortex.core.intelligence.change_frequency import (
+from cortex.core.core.intelligence.change_frequency import (
     ChangeFrequencyMapper,
     HotSpot,
 )
-from cortex.core.intelligence.comment_analyzer import (
+from cortex.core.core.intelligence.comment_analyzer import (
     ArgInfo,
     CommentAnalysisResult,
     CommentAnalyzer,
@@ -46,13 +45,13 @@ from cortex.core.intelligence.comment_analyzer import (
 from cortex.core.intelligence.dependency_mapper import (
     DependencyMap,
     DependencyMapper,
-    ImportInfo,
+    DependencyInfo as ImportInfo,
 )
-from cortex.core.intelligence.pattern_detector import (
+from cortex.core.core.intelligence.pattern_detector import (
     DetectedPattern,
     PatternDetector,
 )
-from cortex.core.intelligence.relationship_traversal import (
+from cortex.core.core.intelligence.relationship_traversal import (
     APIEndpoint,
     ConfigReference,
     DatabaseModel,
@@ -83,7 +82,6 @@ __all__ = [
     # Call Graph
     "CallGraphBuilder",
     "CallGraph",
-    "CallEdge",
     # Pattern Detection
     "PatternDetector",
     "DetectedPattern",

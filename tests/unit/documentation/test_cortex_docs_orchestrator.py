@@ -10,7 +10,7 @@ AC_START: AC-PHASE98-S1-T3
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
-from cortex.orchestrators.internal.cortex_docs_orchestrator import (
+from cortex.orchestrators.support.cortex_docs_orchestrator import (
     CortexDocsOrchestrator,
     PipelineStage,
     BuildMode,

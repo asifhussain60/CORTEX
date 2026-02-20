@@ -24,7 +24,7 @@ from typing import Dict, Any
 
 # Wrapped import - module may not exist
 try:
-    from cortex.brain.discovery.database_discovery import (
+    from cortex.lens.discovery.database_discovery import (
         DatabaseDiscovery,
         ConnectionInfo,
         ORMType,

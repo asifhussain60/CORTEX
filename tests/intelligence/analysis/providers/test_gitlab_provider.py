@@ -28,13 +28,13 @@ def patch_requests():
     with patch.dict(sys.modules, {'requests': mock_requests}):
         # Re-import to get fresh module with mocked requests
         import importlib
-        import cortex.brain.analysis.providers.gitlab_provider as gitlab_module
+        import cortex.lens.analysis.providers.gitlab_provider as gitlab_module
         importlib.reload(gitlab_module)
         yield mock_requests
         
 
-from cortex.brain.analysis.providers.gitlab_provider import GitLabProvider
-from cortex.brain.analysis.remote_git_adapter import (
+from cortex.lens.analysis.providers.gitlab_provider import GitLabProvider
+from cortex.lens.analysis.remote_git_adapter import (
     ProviderConfig,
     ProviderType,
     RemoteFile,

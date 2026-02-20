@@ -24,9 +24,9 @@ from cortex.models.plan_models import (
     StageType,
     Deliverable,
 )
-from cortex.registry.plan_registry import PlanRegistry
-from cortex.registry.plan_enrichment import PlanEnrichmentPipeline, EnrichedPlanSpec
-from cortex.registry.plan_viewer_generator import PlanViewerDataGenerator, PlanJsonSchema
+from cortex.core.registry.plan_registry import PlanRegistry
+from cortex.core.registry.plan_enrichment import PlanEnrichmentPipeline, EnrichedPlanSpec
+from cortex.core.registry.plan_viewer_generator import PlanViewerDataGenerator, PlanJsonSchema
 
 
 class TestCompleteLifecycle:
@@ -263,8 +263,8 @@ class TestDocumentationReadiness:
 
     def test_module_docstrings_present(self):
         """Test that all modules have docstrings."""
-        import cortex.registry.plan_enrichment as enrichment_module
-        import cortex.registry.plan_viewer_generator as viewer_module
+        import cortex.core.registry.plan_enrichment as enrichment_module
+        import cortex.core.registry.plan_viewer_generator as viewer_module
 
         # Check module docstrings exist
         assert enrichment_module.__doc__ is not None
@@ -272,11 +272,11 @@ class TestDocumentationReadiness:
 
     def test_function_docstrings_present(self):
         """Test that public functions have docstrings."""
-        from cortex.registry.plan_enrichment import (
+        from cortex.core.registry.plan_enrichment import (
             PlanEnrichmentPipeline,
             GitLensEnricher,
         )
-        from cortex.registry.plan_viewer_generator import (
+        from cortex.core.registry.plan_viewer_generator import (
             PlanViewerDataGenerator,
         )
 
@@ -287,7 +287,7 @@ class TestDocumentationReadiness:
 
     def test_type_hints_coverage(self):
         """Test that public APIs have type hints."""
-        from cortex.registry.plan_enrichment import PlanEnrichmentPipeline
+        from cortex.core.registry.plan_enrichment import PlanEnrichmentPipeline
         from inspect import signature, Parameter
 
         # Check type hints on key methods
@@ -296,7 +296,7 @@ class TestDocumentationReadiness:
 
     def test_error_handling_documented(self):
         """Test that error cases are documented."""
-        from cortex.registry.plan_enrichment import PlanEnrichmentPipeline
+        from cortex.core.registry.plan_enrichment import PlanEnrichmentPipeline
 
         # Pipeline should handle errors gracefully
         pipeline = PlanEnrichmentPipeline()
@@ -308,8 +308,8 @@ class TestAuditTrail:
 
     def test_ac_markers_in_code(self):
         """Test that AC markers are present in implementation."""
-        import cortex.registry.plan_enrichment as enrichment
-        import cortex.registry.plan_viewer_generator as viewer
+        import cortex.core.registry.plan_enrichment as enrichment
+        import cortex.core.registry.plan_viewer_generator as viewer
 
         # Check source files contain AC markers
         enrichment_source = enrichment.__file__

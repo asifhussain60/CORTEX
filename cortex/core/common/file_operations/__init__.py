@@ -1,6 +1,6 @@
 """File operations utilities."""
 
-from cortex.common.file_operations.safe_template_editor import (
+from cortex.core.common.file_operations.safe_template_editor import (
     SafeTemplateEditor,
     TemplateCorruptionError,
     TemplateSyntaxError,

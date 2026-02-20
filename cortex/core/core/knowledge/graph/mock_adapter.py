@@ -11,7 +11,7 @@ operate on in-memory data structures.
 import time
 from typing import Any, Dict, List, Optional
 
-from cortex.core.knowledge.graph.interface import (
+from cortex.core.core.knowledge.graph.interface import (
     EntityNode,
     GraphQueryError,
     HealthStatus,

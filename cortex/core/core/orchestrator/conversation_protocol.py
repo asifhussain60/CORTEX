@@ -20,13 +20,13 @@ from cortex.core.governance_pregate import PreGateDecision, get_governance_prega
 from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 from cortex.core.intelligence.call_graph import CallGraphBuilder
 from cortex.core.intelligence.dependency_mapper import DependencyMapper
-from cortex.core.intelligence.pattern_detector import PatternDetector
+from cortex.core.core.intelligence.pattern_detector import PatternDetector
 from cortex.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )
 from cortex.core.result import Err, Ok, Result
-from cortex.core.tier_validator import TierAccessValidator
+from cortex.core.core.tier_validator import TierAccessValidator
 from cortex.core.orchestrator.terminal_events import (
     ErrorOccurredEvent,
     EventRegistry,
@@ -37,7 +37,7 @@ from cortex.core.orchestrator.terminal_events import (
     UserApprovalRejectedEvent,
     UserCancelledEvent,
 )
-from cortex.execution.exec_gateway_impl import GovernanceViolationError
+from cortex.core.execution.exec_gateway_impl import GovernanceViolationError
 from cortex.infrastructure.database_transaction_manager import (
     DatabaseTransactionManager,
 )

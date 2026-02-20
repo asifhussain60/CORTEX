@@ -25,7 +25,7 @@ import pytest
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex.brain.core.knowledge.company_knowledge_loader import (
+from cortex.core.core.knowledge.company_knowledge_loader import (
     CompanyKnowledgeLoader,
     KnowledgeLayer,
     MergedKnowledgeResult

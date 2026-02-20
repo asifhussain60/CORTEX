@@ -19,7 +19,7 @@ import importlib.util
 test_file = Path(__file__)
 tests_dir = test_file.parent.parent.parent.parent
 project_root = tests_dir.parent
-diagram_file = project_root / "cortex" / "visualization" / "models" / "diagram_data.py"
+diagram_file = project_root / "cortex" / "dashboards" / "models" / "diagram_data.py"
 
 spec = importlib.util.spec_from_file_location("diagram_data", diagram_file)
 diagram_module = importlib.util.module_from_spec(spec)

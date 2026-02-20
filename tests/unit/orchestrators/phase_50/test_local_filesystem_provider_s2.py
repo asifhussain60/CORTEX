@@ -15,15 +15,15 @@ import tempfile
 import pytest
 from pathlib import Path
 
-from cortex.storage.storage_provider import IKnowledgeProvider
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.errors import (
+from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.errors import (
     StorageError,
     PermissionError,
     NotFoundError,
     ConfigurationError,
 )
-from cortex.storage.providers.local import LocalFileSystemProvider
+from cortex.infrastructure.storage.providers.local import LocalFileSystemProvider
 
 
 class TestLocalFileSystemProviderInitialization:

@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, List, Optional
 
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
 
 
 @dataclass

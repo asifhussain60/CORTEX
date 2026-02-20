@@ -17,7 +17,7 @@ from typing import Any, Dict, List
 
 import pytest
 
-from cortex.visualization.renderers.d3_call_graph_renderer import (
+from cortex.dashboards.renderers.d3_call_graph_renderer import (
     D3CallGraphRenderer,
     D3Graph,
     D3Node,

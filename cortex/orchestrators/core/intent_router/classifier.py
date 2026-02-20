@@ -7,10 +7,11 @@ Author: CORTEX Framework
 """
 
 import re
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 
 class IntentCategory(str, Enum):
@@ -44,12 +45,36 @@ class ClassificationResult:
     """Result of intent classification."""
     primary_intent: IntentCategory
     confidence_score: float
-    secondary_intents: List[tuple[IntentCategory, float]] = field(default_factory=list)
+    secondary_intents: List[Tuple[IntentCategory, float]] = field(default_factory=list)
     detected_signals: List[IntentSignal] = field(default_factory=list)
     keywords: List[str] = field(default_factory=list)
     reasoning: str = ""
     metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
+
+
+class ClassificationRule(ABC):
+    """Abstract base class for classification rules."""
+
+    @abstractmethod
+    def matches(self, text: str) -> bool:
+        """Check if rule matches the input text."""
+        pass
+
+    @abstractmethod
+    def get_intent(self) -> IntentCategory:
+        """Get the intent category this rule represents."""
+        pass
+
+    @abstractmethod
+    def get_signal_strength(self) -> float:
+        """Get the signal strength (confidence multiplier)."""
+        pass
+
+    @abstractmethod
+    def get_signals(self) -> List[IntentSignal]:
+        """Get intent signals detected by this rule."""
+        pass
 
 
 class IntentClassifier:

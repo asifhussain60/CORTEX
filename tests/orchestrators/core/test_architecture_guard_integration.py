@@ -43,7 +43,7 @@ class TestArchitectureGuardInitialization:
     def test_guard_uses_validation_mode(self):
         """Test guard operates in VALIDATION mode."""
         guard = ArchitectureGuard()
-        from cortex.brain.core.interfaces.i_orchestrator import OperationMode
+        from cortex.core.core.interfaces.i_orchestrator import OperationMode
         assert guard.get_mode() == OperationMode.VALIDATION
 
 

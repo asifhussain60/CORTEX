@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from cortex.models.enriched_context import EnrichedContext
 from cortex.lens.lens_orchestrator import LENSOrchestrator
 from cortex.lens.analyzers.tech_stack_analyzer import TechStackAnalyzer
-from cortex.brain.knowledge.yaml_resolver import KnowledgeYAMLResolver
+from cortex.intelligence.knowledge.synthesis.yaml_resolver import KnowledgeYAMLResolver
 
 
 @dataclass

@@ -92,7 +92,7 @@ class RollbackOrchestrator:
             workspace_root: Workspace root path
         """
         self.strategy = strategy
-        self.audit_logger = logging.getLogger("cortex.deployment.rollback.audit")
+        self.audit_logger = logging.getLogger("cortex.infrastructure.deployment.rollback.audit")
         self.metrics_collector = None  # Optional
         self.workspace_root = workspace_root or Path.cwd()
         self._history: List[Dict[str, Any]] = []

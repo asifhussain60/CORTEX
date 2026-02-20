@@ -27,7 +27,7 @@ class TestCoreRulesLoader:
 
     def test_load_core_rules_successfully(self) -> None:
         """Test loading core rules from registry."""
-        from cortex.brain.core.yaml_loaders import load_core_rules
+        from cortex.core.core.yaml_loaders import load_core_rules
         
         rules = load_core_rules()
         
@@ -40,7 +40,7 @@ class TestCoreRulesLoader:
 
     def test_core_rules_have_required_fields(self) -> None:
         """Test that rules have all required fields."""
-        from cortex.brain.core.yaml_loaders import load_core_rules
+        from cortex.core.core.yaml_loaders import load_core_rules
         
         rules = load_core_rules()
         
@@ -53,7 +53,7 @@ class TestCoreRulesLoader:
 
     def test_get_rule_by_id(self) -> None:
         """Test getting a specific rule by ID."""
-        from cortex.brain.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
@@ -66,7 +66,7 @@ class TestCoreRulesLoader:
 
     def test_get_all_rules(self) -> None:
         """Test getting all rules via new loader method."""
-        from cortex.brain.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
@@ -80,7 +80,7 @@ class TestCoreRulesLoader:
 
     def test_get_enforcement_levels(self) -> None:
         """Test getting rules grouped by enforcement level."""
-        from cortex.brain.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
@@ -95,7 +95,7 @@ class TestCoreRulesLoader:
 
     def test_get_policy_categories(self) -> None:
         """Test getting policy categories."""
-        from cortex.brain.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
@@ -107,7 +107,7 @@ class TestCoreRulesLoader:
 
     def test_get_rules_by_enforcement(self) -> None:
         """Test getting rules with specific enforcement level."""
-        from cortex.brain.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
@@ -128,7 +128,7 @@ class TestAuditChecklistLoader:
 
     def test_load_audit_checklist(self) -> None:
         """Test loading audit checklist from registry."""
-        from cortex.brain.core.yaml_loaders import load_audit_checklist
+        from cortex.core.core.yaml_loaders import load_audit_checklist
         
         checklist = load_audit_checklist()
         
@@ -137,7 +137,7 @@ class TestAuditChecklistLoader:
 
     def test_get_checks_by_priority(self) -> None:
         """Test getting checks by priority level."""
-        from cortex.brain.core.yaml_loaders import AuditChecklistLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import AuditChecklistLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = AuditChecklistLoader(registry_path / "governance" / "audit-checklist.yaml")
@@ -149,7 +149,7 @@ class TestAuditChecklistLoader:
 
     def test_get_check_by_id(self) -> None:
         """Test getting specific check by ID."""
-        from cortex.brain.core.yaml_loaders import AuditChecklistLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import AuditChecklistLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = AuditChecklistLoader(registry_path / "governance" / "audit-checklist.yaml")
@@ -173,7 +173,7 @@ class TestModesLoader:
 
     def test_load_modes(self) -> None:
         """Test loading modes YAML."""
-        from cortex.brain.core.yaml_loaders import load_modes
+        from cortex.core.core.yaml_loaders import load_modes
         
         modes = load_modes()
         
@@ -182,7 +182,7 @@ class TestModesLoader:
 
     def test_get_mode(self) -> None:
         """Test getting specific mode."""
-        from cortex.brain.core.yaml_loaders import ModesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import ModesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = ModesLoader(registry_path / "meta" / "modes.yaml")
@@ -196,7 +196,7 @@ class TestModesLoader:
 
     def test_get_all_mode_names(self) -> None:
         """Test getting all mode names."""
-        from cortex.brain.core.yaml_loaders import ModesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import ModesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = ModesLoader(registry_path / "meta" / "modes.yaml")
@@ -212,7 +212,7 @@ class TestResponseFormatLoader:
 
     def test_load_response_format(self) -> None:
         """Test loading response format YAML."""
-        from cortex.brain.core.yaml_loaders import load_response_format
+        from cortex.core.core.yaml_loaders import load_response_format
         
         response_format = load_response_format()
         
@@ -220,7 +220,7 @@ class TestResponseFormatLoader:
 
     def test_get_header_template(self) -> None:
         """Test getting header template."""
-        from cortex.brain.core.yaml_loaders import ResponseFormatLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import ResponseFormatLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = ResponseFormatLoader(registry_path / "meta" / "response-format.yaml")
@@ -232,7 +232,7 @@ class TestResponseFormatLoader:
 
     def test_get_status_icons(self) -> None:
         """Test getting status icons."""
-        from cortex.brain.core.yaml_loaders import ResponseFormatLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import ResponseFormatLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = ResponseFormatLoader(registry_path / "meta" / "response-format.yaml")
@@ -248,7 +248,7 @@ class TestLoaderCaching:
 
     def test_loader_caching(self) -> None:
         """Test that loader caches data after first load."""
-        from cortex.brain.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
@@ -268,7 +268,7 @@ class TestLoaderCaching:
 
     def test_load_time_tracking(self) -> None:
         """Test that load time is tracked."""
-        from cortex.brain.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
@@ -287,14 +287,14 @@ class TestLoaderErrorHandling:
 
     def test_missing_file_raises_error(self) -> None:
         """Test that missing file raises YAMLLoadError."""
-        from cortex.brain.core.yaml_loaders import CoreRulesLoader, YAMLLoadError
+        from cortex.core.core.yaml_loaders import CoreRulesLoader, YAMLLoadError
         
         with pytest.raises(YAMLLoadError):
             CoreRulesLoader(Path("/nonexistent/path/rules.yaml"))
 
     def test_invalid_rule_id_returns_none(self) -> None:
         """Test that invalid rule ID returns None."""
-        from cortex.brain.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
@@ -305,7 +305,7 @@ class TestLoaderErrorHandling:
 
     def test_invalid_priority_returns_empty_list(self) -> None:
         """Test that invalid priority returns empty list."""
-        from cortex.brain.core.yaml_loaders import AuditChecklistLoader, get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import AuditChecklistLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         loader = AuditChecklistLoader(registry_path / "governance" / "audit-checklist.yaml")
@@ -321,7 +321,7 @@ class TestLoaderIntegration:
 
     def test_load_all_yaml_types(self) -> None:
         """Test that all YAML loaders can load successfully."""
-        from cortex.brain.core.yaml_loaders import (
+        from cortex.core.core.yaml_loaders import (
             load_core_rules,
             load_audit_checklist,
             load_modes,
@@ -341,7 +341,7 @@ class TestLoaderIntegration:
 
     def test_registry_path_discovery(self) -> None:
         """Test that registry path is discovered correctly."""
-        from cortex.brain.core.yaml_loaders import get_cortex_registry_path
+        from cortex.core.core.yaml_loaders import get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
         
@@ -355,7 +355,7 @@ class TestTierRulesLoader:
 
     def test_tier_rules_loader_initialization(self) -> None:
         """Test TierRulesLoader can initialize."""
-        from cortex.brain.core.yaml_loaders import TierRulesLoader
+        from cortex.core.core.yaml_loaders import TierRulesLoader
         
         loader = TierRulesLoader()
         
@@ -363,7 +363,7 @@ class TestTierRulesLoader:
 
     def test_get_project_rules(self) -> None:
         """Test getting project-level (Tier 1) rules."""
-        from cortex.brain.core.yaml_loaders import TierRulesLoader
+        from cortex.core.core.yaml_loaders import TierRulesLoader
         
         loader = TierRulesLoader()
         rules = loader.get_project_rules()
@@ -372,7 +372,7 @@ class TestTierRulesLoader:
 
     def test_get_team_rules(self) -> None:
         """Test getting team-level (Tier 2) rules."""
-        from cortex.brain.core.yaml_loaders import TierRulesLoader
+        from cortex.core.core.yaml_loaders import TierRulesLoader
         
         loader = TierRulesLoader()
         rules = loader.get_team_rules()
@@ -381,7 +381,7 @@ class TestTierRulesLoader:
 
     def test_get_rule_by_id(self) -> None:
         """Test getting rule by ID from database."""
-        from cortex.brain.core.yaml_loaders import TierRulesLoader
+        from cortex.core.core.yaml_loaders import TierRulesLoader
         
         loader = TierRulesLoader()
         
@@ -393,7 +393,7 @@ class TestTierRulesLoader:
 
     def test_get_rules_by_category(self) -> None:
         """Test getting rules by category."""
-        from cortex.brain.core.yaml_loaders import TierRulesLoader
+        from cortex.core.core.yaml_loaders import TierRulesLoader
         
         loader = TierRulesLoader()
         rules = loader.get_rules_by_category("governance")
@@ -402,7 +402,7 @@ class TestTierRulesLoader:
 
     def test_get_rules_by_severity(self) -> None:
         """Test getting rules by severity."""
-        from cortex.brain.core.yaml_loaders import TierRulesLoader
+        from cortex.core.core.yaml_loaders import TierRulesLoader
         
         loader = TierRulesLoader()
         rules = loader.get_rules_by_severity("CRITICAL")
@@ -411,7 +411,7 @@ class TestTierRulesLoader:
 
     def test_get_rules_by_enforcement_point(self) -> None:
         """Test getting rules by enforcement point."""
-        from cortex.brain.core.yaml_loaders import TierRulesLoader
+        from cortex.core.core.yaml_loaders import TierRulesLoader
         
         loader = TierRulesLoader()
         rules = loader.get_rules_by_enforcement_point("PRE_EXECUTION")
@@ -420,7 +420,7 @@ class TestTierRulesLoader:
 
     def test_search_rules(self) -> None:
         """Test searching rules."""
-        from cortex.brain.core.yaml_loaders import TierRulesLoader
+        from cortex.core.core.yaml_loaders import TierRulesLoader
         
         loader = TierRulesLoader()
         results = loader.search_rules("governance")
@@ -429,7 +429,7 @@ class TestTierRulesLoader:
 
     def test_get_enforcement_statistics(self) -> None:
         """Test getting enforcement statistics."""
-        from cortex.brain.core.yaml_loaders import TierRulesLoader
+        from cortex.core.core.yaml_loaders import TierRulesLoader
         
         loader = TierRulesLoader()
         stats = loader.get_enforcement_statistics()

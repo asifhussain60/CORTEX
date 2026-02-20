@@ -20,7 +20,7 @@ __all__ = [
     "render_call_graph",
 ]
 
-from cortex.visualization.renderers.d3_call_graph_renderer import (
+from cortex.dashboards.renderers.d3_call_graph_renderer import (
     D3CallGraphRenderer,
     render_call_graph,
 )

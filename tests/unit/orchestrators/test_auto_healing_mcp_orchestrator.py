@@ -12,7 +12,7 @@ import platform
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
-from cortex.orchestrators.auto_healing_mcp_orchestrator import (
+from cortex.orchestrators.support.auto_healing_mcp_orchestrator import (
     AutoHealingMCPOrchestrator,
     DiagnosticResult,
     HealingResult,

@@ -12,14 +12,14 @@ import sqlite3
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.core.knowledge.graph.interface import (
+from cortex.core.core.knowledge.graph.interface import (
     EntityNode,
     GraphQueryError,
     HealthStatus,
     IGraphAdapter,
     Relationship,
 )
-from cortex.core.knowledge.graph.interface import (
+from cortex.core.core.knowledge.graph.interface import (
     Path as GraphPath,
 )
 

@@ -17,10 +17,10 @@ import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
-from cortex.registry.artifact_sealing import ArtifactSealingManager
-from cortex.registry.registry_access_control import RoleBasedAccessControl, Role, Permission, AccessDeniedException
-from cortex.registry.tenant_context import TenantContext
-from cortex.registry.health_monitor import RegistryHealthMonitor
+from cortex.core.registry.artifact_sealing import ArtifactSealingManager
+from cortex.core.registry.registry_access_control import RoleBasedAccessControl, Role, Permission, AccessDeniedException
+from cortex.core.registry.tenant_context import TenantContext
+from cortex.core.registry.health_monitor import RegistryHealthMonitor
 
 
 class TestMultiTenantIntegration:
@@ -139,8 +139,8 @@ class TestHealthMonitoring:
     
     def test_registry_health_check(self):
         """Registry health check returns status."""
-        from cortex.registry.tenant_aware_git_backed_registry import TenantAwareGitBackedRegistry
-        from cortex.registry.workspace_manager import WorkspaceManager
+        from cortex.core.registry.tenant_aware_git_backed_registry import TenantAwareGitBackedRegistry
+        from cortex.core.registry.workspace_manager import WorkspaceManager
         
         registry = TenantAwareGitBackedRegistry()
         workspace_mgr = WorkspaceManager()

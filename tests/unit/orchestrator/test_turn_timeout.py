@@ -8,7 +8,7 @@ import pytest
 import asyncio
 from unittest.mock import Mock
 
-from cortex.brain.core.orchestrator.turn_timeout import (
+from cortex.core.core.orchestrator.turn_timeout import (
     TurnTimeoutManager,
     TurnTimeoutError,
     TurnCancelledError,

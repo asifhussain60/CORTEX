@@ -13,8 +13,8 @@ try:
     print("Testing CORTEX Best Practices Knowledge Repository...")
     print("-" * 60)
 
-    from cortex.knowledge.best_practices_discovery import get_discovery
-    from cortex.knowledge.knowledge_repository_integration import get_repository
+    from cortex.intelligence.knowledge.best_practices_discovery import get_discovery
+    from cortex.intelligence.knowledge.knowledge_repository_integration import get_repository
 
     # Test repository
     repo = get_repository()

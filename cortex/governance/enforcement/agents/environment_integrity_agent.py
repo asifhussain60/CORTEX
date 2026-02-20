@@ -28,7 +28,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.models.canonical_enums import IntentType
-from cortex.orchestrators.auto_healing_mcp_orchestrator import (
+from cortex.orchestrators.support.auto_healing_mcp_orchestrator import (
     AutoHealingMCPOrchestrator,
     HealingResult,
 )

@@ -24,7 +24,7 @@ from datetime import datetime
 from unittest.mock import Mock, patch
 
 # RED Phase: These imports will fail until implementation exists
-from cortex.brain.core.brain_state_manager import (
+from cortex.core.core.brain_state_manager import (
     BrainStateManager,
     StateSnapshot,
     FlushResult,

@@ -29,7 +29,7 @@ from unittest.mock import Mock, patch, mock_open
 
 import pytest
 
-from cortex.documentation.mcp_tool_scanner import MCPToolScanner, ToolMetadata
+from cortex.intelligence.documentation.mcp_tool_scanner import MCPToolScanner, ToolMetadata
 
 
 class TestDecoratorExtraction:

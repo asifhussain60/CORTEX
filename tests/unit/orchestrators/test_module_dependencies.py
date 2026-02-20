@@ -34,11 +34,11 @@ MODULE_CATEGORIES = {
         "cortex.orchestrators.core.governance_registry",
     ],
     "intent_routing": [
-        "cortex.intent_router.classifier",
+        "cortex.orchestrators.core.intent_router.classifier",
     ],
     "governance": [
         "cortex.orchestrators.core.governance_registry",
-        "cortex.brain.core.state_manager",
+        "cortex.core.core.state_manager",
     ],
     "infrastructure": [
         "cortex.infrastructure.enhanced_audit_logger",
@@ -370,7 +370,7 @@ class TestModuleLoading:
         orchestrator_modules = [
             "cortex.orchestrators.core.master_orchestrator",
             "cortex.orchestrators.core.governance_registry",
-            "cortex.intent_router.classifier",
+            "cortex.orchestrators.core.intent_router.classifier",
         ]
         
         for module_name in orchestrator_modules:

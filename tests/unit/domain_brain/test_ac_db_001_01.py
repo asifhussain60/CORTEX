@@ -10,7 +10,7 @@ Total: 60 tests
 
 import pytest
 from datetime import datetime
-from cortex.domain_brain import (
+from cortex.intelligence.domain_brain import (
     DomainBrainAPI,
     Domain,
     Entity,

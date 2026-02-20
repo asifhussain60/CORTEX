@@ -11,7 +11,7 @@ import json
 import pytest
 from pathlib import Path
 
-from cortex.visualization.renderers.author_network_renderer import (
+from cortex.dashboards.renderers.author_network_renderer import (
     AuthorNetworkRenderer,
     AuthorNetworkVisualization,
     AuthorNode,

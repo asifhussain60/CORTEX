@@ -303,7 +303,7 @@ def bundle_dependencies(output_dir: Path) -> Dict[str, any]:
     Example:
         ```python
         from pathlib import Path
-        from cortex.visualization.spa.dependency_bundler import bundle_dependencies
+        from cortex.dashboards.spa.dependency_bundler import bundle_dependencies
 
         result = bundle_dependencies(Path("cortex/visualization/static/vendor"))
         print(f"Downloaded {result['downloaded']} dependencies")

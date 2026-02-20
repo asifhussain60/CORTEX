@@ -21,7 +21,7 @@ from typing import Any, Dict, List
 
 import pytest
 
-from cortex.learning.effectiveness_analyzer import (
+from cortex.intelligence.learning.effectiveness_analyzer import (
     EffectivenessAnalyzer,
     EffectivenessMetrics,
     PatternApplication,

@@ -11,7 +11,7 @@ from unittest.mock import Mock, patch, mock_open
 
 import pytest
 
-from cortex.visualization.spa.dependency_bundler import (
+from cortex.dashboards.spa.dependency_bundler import (
     DependencyBundler,
     Dependency,
     bundle_dependencies,

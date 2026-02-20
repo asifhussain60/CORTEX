@@ -20,11 +20,11 @@ __version__ = "1.0.0"
 
 # Module registry for discovery
 TOOLKIT_MODULES = {
-    "diagnostics": "cortex.toolkit.diagnostics",
-    "setup": "cortex.toolkit.setup",
-    "cleanup": "cortex.toolkit.cleanup",
-    "validation": "cortex.toolkit.validation",
-    "analysis": "cortex.toolkit.analysis",
+    "diagnostics": "cortex.tools.toolkit.diagnostics",
+    "setup": "cortex.tools.toolkit.setup",
+    "cleanup": "cortex.tools.toolkit.cleanup",
+    "validation": "cortex.tools.toolkit.validation",
+    "analysis": "cortex.tools.toolkit.analysis",
 }
 
 # MCP tool mapping

@@ -24,7 +24,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, TypeVar
 
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.core.result import Err, Ok, Result
 
 T = TypeVar('T')
 

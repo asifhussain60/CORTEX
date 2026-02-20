@@ -38,7 +38,7 @@ def vscode_module():
     Returns:
         The vscode_configurator module.
     """
-    from cortex.orchestrators.onboarding import vscode_configurator
+    from cortex.orchestrators.support import vscode_configurator
     return vscode_configurator
 
 

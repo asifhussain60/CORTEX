@@ -23,7 +23,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from cortex.orchestrators.onboarding.knowledge_persistence_mixin import (
+from cortex.orchestrators.support.knowledge_persistence_mixin import (
     KnowledgePersistenceMixin
 )
 
@@ -94,10 +94,10 @@ def orchestrator(
                 "promoted": promote_result
             }
     
-    with patch("cortex.orchestrators.onboarding.knowledge_persistence_mixin.UniversalLearningLoop", return_value=mock_learning_loop), \
-         patch("cortex.orchestrators.onboarding.knowledge_persistence_mixin.PatternRegistry", return_value=mock_pattern_registry), \
-         patch("cortex.orchestrators.onboarding.knowledge_persistence_mixin.StrategySelector", return_value=mock_strategy_selector), \
-         patch("cortex.orchestrators.onboarding.knowledge_persistence_mixin.ExecutionPlanner", return_value=mock_execution_planner):
+    with patch("cortex.orchestrators.support.knowledge_persistence_mixin.UniversalLearningLoop", return_value=mock_learning_loop), \
+         patch("cortex.orchestrators.support.knowledge_persistence_mixin.PatternRegistry", return_value=mock_pattern_registry), \
+         patch("cortex.orchestrators.support.knowledge_persistence_mixin.StrategySelector", return_value=mock_strategy_selector), \
+         patch("cortex.orchestrators.support.knowledge_persistence_mixin.ExecutionPlanner", return_value=mock_execution_planner):
         return TestOrchestrator()
 
 

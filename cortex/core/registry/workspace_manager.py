@@ -20,7 +20,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
-from cortex.registry.tenant_context import TenantContext, validate_tenant_context
+from cortex.core.registry.tenant_context import TenantContext, validate_tenant_context
 
 logger = logging.getLogger(__name__)
 

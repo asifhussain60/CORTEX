@@ -6,7 +6,7 @@ Authority: AC-GOLDEN-E2E-016
 
 import pytest
 
-from cortex.brain.intent_router.classifier import IntentClassifier, IntentCategory
+from cortex.orchestrators.core.intent_router.classifier import IntentClassifier, IntentCategory
 
 
 class TestIntentClassifierE2EIntegration:
@@ -70,7 +70,7 @@ class TestIntentClassifierE2EIntegration:
     
     def test_add_rule_method_works(self, classifier: IntentClassifier):
         """add_rule method should allow adding custom rules."""
-        from cortex.brain.intent_router.classifier import ClassificationRule, IntentSignal
+        from cortex.orchestrators.core.intent_router.classifier import ClassificationRule, IntentSignal
         
         class TestRule(ClassificationRule):
             def matches(self, text: str) -> bool:
@@ -92,7 +92,7 @@ class TestIntentClassifierE2EIntegration:
     
     def test_custom_rule_precedence(self, classifier: IntentClassifier):
         """Custom rules should be checked before keyword matching."""
-        from cortex.brain.intent_router.classifier import ClassificationRule, IntentSignal
+        from cortex.orchestrators.core.intent_router.classifier import ClassificationRule, IntentSignal
         
         class HighPriorityRule(ClassificationRule):
             def matches(self, text: str) -> bool:

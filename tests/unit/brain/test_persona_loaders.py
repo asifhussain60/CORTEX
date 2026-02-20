@@ -16,8 +16,8 @@ from unittest.mock import patch, mock_open
 import yaml
 
 # Import loaders
-from cortex.brain.core.yaml_loaders import load_personas, clear_personas_cache, YAMLLoadError
-from cortex.brain.core.models.persona_models import PersonasYAML
+from cortex.core.core.yaml_loaders import load_personas, clear_personas_cache, YAMLLoadError
+from cortex.core.core.models.persona_models import PersonasYAML
 
 
 class TestLoadPersonas:
@@ -50,7 +50,7 @@ class TestLoadPersonas:
     
     def test_load_personas_file_not_found_raises_error(self):
         """Should raise FileNotFoundError if personas.yaml missing."""
-        with patch('cortex.brain.core.yaml_loaders.Path.exists', return_value=False):
+        with patch('cortex.core.core.yaml_loaders.Path.exists', return_value=False):
             clear_personas_cache()
             with pytest.raises(YAMLLoadError):
                 load_personas()

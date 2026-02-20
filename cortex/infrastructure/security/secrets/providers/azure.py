@@ -5,16 +5,16 @@ from typing import Any, Dict, List, Optional
 from azure.core.exceptions import ClientAuthenticationError, ResourceNotFoundError
 from azure.keyvault.secrets import SecretClient
 
-from cortex.secrets.config import SecretsConfig
-from cortex.secrets.errors import (
+from cortex.infrastructure.security.secrets.config import SecretsConfig
+from cortex.infrastructure.security.secrets.errors import (
     AuthError,
     SecretNotFoundError,
     StorageError,
 )
-from cortex.secrets.errors import (
+from cortex.infrastructure.security.secrets.errors import (
     PermissionError as SecretsPermissionError,
 )
-from cortex.secrets.secrets_provider import ISecretsProvider
+from cortex.infrastructure.security.secrets.secrets_provider import ISecretsProvider
 
 
 class AzureKeyVaultProvider(ISecretsProvider):

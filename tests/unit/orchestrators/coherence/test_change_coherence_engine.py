@@ -20,7 +20,7 @@ from typing import TYPE_CHECKING
 
 import pytest
 
-from cortex.orchestrators.coherence.coherence_models import (
+from cortex.orchestrators.validation.coherence_models import (
     Change,
     ChangeType,
     CoherenceReport,
@@ -34,7 +34,7 @@ from cortex.orchestrators.coherence.coherence_models import (
 )
 
 if TYPE_CHECKING:
-    from cortex.orchestrators.coherence.change_coherence_engine import (
+    from cortex.orchestrators.validation.change_coherence_engine import (
         ChangeCoherenceEngine,
     )
 
@@ -129,7 +129,7 @@ Some content.
 @pytest.fixture
 def cce() -> "ChangeCoherenceEngine":
     """Create a ChangeCoherenceEngine instance."""
-    from cortex.orchestrators.coherence.change_coherence_engine import (
+    from cortex.orchestrators.validation.change_coherence_engine import (
         ChangeCoherenceEngine,
     )
     return ChangeCoherenceEngine()

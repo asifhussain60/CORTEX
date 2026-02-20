@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from cortex.visualization.repository_detector import is_cortex_repository
+from cortex.dashboards.repository_detector import is_cortex_repository
 
 
 @dataclass

@@ -27,7 +27,7 @@ class SecretsConfig:
 
     def __post_init__(self):
         """Validate configuration after initialization"""
-        from cortex.secrets.errors import ConfigError
+        from cortex.infrastructure.security.secrets.errors import ConfigError
 
         if self.provider_type not in ("aws", "azure", "vault", "local"):
             raise ConfigError(f"Invalid provider_type: {self.provider_type}")

@@ -8,7 +8,7 @@ relationship management, and error handling.
 import pytest
 from typing import Any, Dict, List
 from dataclasses import dataclass
-from cortex.brain.core.knowledge.graph.interface import (
+from cortex.core.core.knowledge.graph.interface import (
     IGraphAdapter,
     EntityNode,
     Relationship,
@@ -132,7 +132,7 @@ class TestGraphAdapterInterface:
         Verifies CORE-011 governance rule: 100% type hint coverage.
         """
         from inspect import signature, Parameter
-        import cortex.brain.core.knowledge.graph.interface as interface_module
+        import cortex.core.core.knowledge.graph.interface as interface_module
 
         # Check IGraphAdapter methods have return type hints
         adapter_class = interface_module.IGraphAdapter
@@ -155,7 +155,7 @@ class TestGraphAdapterInterface:
 
         Verifies CORE-012 governance rule: 100% Google-style docstrings.
         """
-        from cortex.brain.core.knowledge.graph.interface import IGraphAdapter
+        from cortex.core.core.knowledge.graph.interface import IGraphAdapter
 
         # Check each method has a docstring
         for method_name in [
@@ -183,7 +183,7 @@ class TestGraphAdapterInterface:
         Verifies CORE-013 governance rule: no bare except.
         """
         import inspect
-        from cortex.brain.core.knowledge.graph import interface
+        from cortex.core.core.knowledge.graph import interface
 
         # Read interface module source
         source = inspect.getsource(interface)
@@ -197,7 +197,7 @@ class TestGraphAdapterInterface:
         """
         # KG module should be importable without affecting core
         try:
-            from cortex.brain.core.knowledge.graph.interface import IGraphAdapter
+            from cortex.core.core.knowledge.graph.interface import IGraphAdapter
             adapter_imported = True
         except ImportError:
             adapter_imported = False

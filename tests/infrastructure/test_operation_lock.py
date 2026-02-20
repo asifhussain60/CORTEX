@@ -14,7 +14,7 @@ from unittest.mock import patch
 
 import pytest
 
-from cortex.collaboration.operation_lock import (
+from cortex.infrastructure.collaboration.operation_lock import (
     operation_lock,
     check_lock_status,
     clear_stale_locks,
@@ -23,7 +23,7 @@ from cortex.collaboration.operation_lock import (
     _get_lock_directory,
     _sanitize_resource_id,
 )
-from cortex.collaboration.user_context import (
+from cortex.infrastructure.collaboration.user_context import (
     UserContext,
     set_current_user,
     clear_user_context,

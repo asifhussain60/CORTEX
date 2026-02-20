@@ -15,7 +15,7 @@ from typing import Dict, Any, List
 from dataclasses import dataclass
 
 # Import modules to test (will be created)
-from cortex.orchestrators.routing.intelligent_response_router import (
+from cortex.orchestrators.core.intelligent_response_router import (
     IntelligentResponseRouter,
     ContextAnalysisResult,
     PatternMatchResult,

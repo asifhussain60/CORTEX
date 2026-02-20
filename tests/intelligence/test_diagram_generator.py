@@ -20,7 +20,7 @@ from typing import List
 
 import pytest
 
-from cortex.documentation.diagram_generator import (
+from cortex.intelligence.documentation.diagram_generator import (
     DiagramConfig,
     DiagramGenerator,
     DiagramType,

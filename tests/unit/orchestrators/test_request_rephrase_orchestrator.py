@@ -6,7 +6,7 @@ AC_START: AC-AUTO-REPHRASE-S1-GREEN-001
 """
 
 import pytest
-from cortex.orchestrators.request_rephrase_orchestrator import (
+from cortex.orchestrators.core.request_rephrase_orchestrator import (
     RequestRephraseOrchestrator,
     RephraseContext,
     parse_primary_intent,

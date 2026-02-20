@@ -16,7 +16,7 @@ import subprocess
 
 import yaml
 
-from cortex.validation.registry_validator import RegistryValidator
+from cortex.governance.validation.registry_validator import RegistryValidator
 
 
 logger = logging.getLogger(__name__)

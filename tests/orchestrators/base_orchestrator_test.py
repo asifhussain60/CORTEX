@@ -24,7 +24,7 @@ class BaseOrchestratorTest:
         Returns:
             EventBus: Live event bus for testing
             
-        Note: EventBus located at cortex.core.event_bus (not cortex.common.event_bus)
+        Note: EventBus located at cortex.core.event_bus (not cortex.core.common.event_bus)
         """
         from cortex.core.event_bus import EventBus
         return EventBus()
@@ -67,7 +67,7 @@ class BaseOrchestratorTest:
         Returns:
             GitBackedRegistry: Live registry for testing
         """
-        from cortex.registry.git_backed_registry import GitBackedRegistry
+        from cortex.core.registry.git_backed_registry import GitBackedRegistry
         return GitBackedRegistry()
     
     def assert_audit_trail(self, db_path: Path, expected_ac_id: str) -> None:

@@ -18,7 +18,7 @@ import logging
 from datetime import datetime
 
 if TYPE_CHECKING:
-    from cortex.intent_router.metadata_driven_discovery import MetadataDrivenDiscovery
+    from cortex.orchestrators.core.intent_router.metadata_driven_discovery import MetadataDrivenDiscovery
 
 logger = logging.getLogger(__name__)
 
@@ -114,7 +114,7 @@ class MCPToolExecutor:
             Number of agents initialized
         """
         try:
-            from cortex.intent_router.metadata_driven_discovery import MetadataDrivenDiscovery
+            from cortex.orchestrators.core.intent_router.metadata_driven_discovery import MetadataDrivenDiscovery
             
             self._metadata_discovery = MetadataDrivenDiscovery(agents_dir)
             self._metadata_discovery.initialize()

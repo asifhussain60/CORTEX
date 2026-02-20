@@ -12,7 +12,7 @@ from pathlib import Path
 from datetime import datetime
 from dataclasses import dataclass
 
-from cortex.brain.analysis.security_threat_analyzer import (
+from cortex.lens.analysis.security_threat_analyzer import (
     SecurityThreatAnalyzer,
     ThreatFinding,
     ThreatSeverity,

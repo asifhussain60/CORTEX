@@ -19,7 +19,7 @@ import pytest
 import os
 import json
 from unittest.mock import patch
-from cortex.secrets.encryption import (
+from cortex.infrastructure.security.secrets.encryption import (
     EncryptionManager,
     encrypt_value,
     decrypt_value,
@@ -226,11 +226,11 @@ class TestEncryptionPerformance:
         plaintext = "secret-value"
         
         # Pre-derive key so we test only encryption, not key derivation
-        from cortex.secrets.encryption import derive_key
+        from cortex.infrastructure.security.secrets.encryption import derive_key
         key = derive_key(master_key)
         
         # Now test just the encryption (no key derivation)
-        from cortex.secrets.encryption import EncryptedValue
+        from cortex.infrastructure.security.secrets.encryption import EncryptedValue
         from cryptography.hazmat.primitives.ciphers.aead import AESGCM
         import secrets
         
@@ -255,7 +255,7 @@ class TestEncryptionPerformance:
         ciphertext = encrypt_value(plaintext, master_key)
         
         # Pre-derive key so we test only decryption
-        from cortex.secrets.encryption import EncryptedValue, derive_key
+        from cortex.infrastructure.security.secrets.encryption import EncryptedValue, derive_key
         from cryptography.hazmat.primitives.ciphers.aead import AESGCM
         
         key = derive_key(master_key)

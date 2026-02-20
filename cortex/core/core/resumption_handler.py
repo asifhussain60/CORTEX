@@ -18,7 +18,7 @@ from datetime import datetime, timezone
 from enum import Enum, auto
 from typing import Any, Callable, Dict, List, Optional
 
-from cortex.core.checkpoint_manager import (
+from cortex.core.core.checkpoint_manager import (
     Checkpoint,
     CheckpointManager,
     CheckpointStatus,

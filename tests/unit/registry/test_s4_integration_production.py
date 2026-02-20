@@ -9,9 +9,9 @@ in production scenarios.
 """
 
 import pytest
-from cortex.registry.artifact_sealing import ArtifactSealingManager
-from cortex.registry.registry_access_control import RoleBasedAccessControl, Role, Permission
-from cortex.registry.tenant_context import TenantContext
+from cortex.core.registry.artifact_sealing import ArtifactSealingManager
+from cortex.core.registry.registry_access_control import RoleBasedAccessControl, Role, Permission
+from cortex.core.registry.tenant_context import TenantContext
 
 
 class TestS1S2S3Integration:
@@ -63,7 +63,7 @@ class TestS1S2S3Integration:
         meta_a = sealing.seal_artifact("phase-a", "phase", {"company": "ACME"}, ctx_a_admin)
         
         # Viewer cannot seal
-        from cortex.registry.registry_access_control import AccessDeniedException
+        from cortex.core.registry.registry_access_control import AccessDeniedException
         with pytest.raises(AccessDeniedException):
             rbac.require_permission(ctx_b_viewer, Permission.SEAL_ARTIFACT)
     
@@ -156,7 +156,7 @@ class TestFailoverAndRecovery:
         rbac.assign_role("user", Role.VIEWER)
         
         # Attempt denied operation
-        from cortex.registry.registry_access_control import AccessDeniedException
+        from cortex.core.registry.registry_access_control import AccessDeniedException
         try:
             rbac.require_permission(ctx, Permission.DELETE)
         except AccessDeniedException:
@@ -199,7 +199,7 @@ class TestLoadAndScalability:
             rbac.assign_role(f"user-{i}", role)
         
         # Check permissions
-        from cortex.registry.tenant_context import TenantContext
+        from cortex.core.registry.tenant_context import TenantContext
         ctx = TenantContext("ws", "user-0", ["viewer"])
         
         for _ in range(100):

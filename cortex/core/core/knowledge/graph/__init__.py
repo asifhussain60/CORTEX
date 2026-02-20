@@ -10,7 +10,7 @@ Implementations:
   - Neo4jGraphAdapter: Neo4j/Neptune backend (future)
 """
 
-from cortex.core.knowledge.graph.interface import (
+from cortex.core.core.knowledge.graph.interface import (
     EntityNode,
     GraphQueryError,
     HealthStatus,
@@ -18,8 +18,8 @@ from cortex.core.knowledge.graph.interface import (
     Path,
     Relationship,
 )
-from cortex.core.knowledge.graph.mock_adapter import MockGraphAdapter
-from cortex.core.knowledge.graph.sqlite_adapter import SQLiteGraphAdapter
+from cortex.core.core.knowledge.graph.mock_adapter import MockGraphAdapter
+from cortex.core.core.knowledge.graph.sqlite_adapter import SQLiteGraphAdapter
 
 __all__ = [
     "IGraphAdapter",

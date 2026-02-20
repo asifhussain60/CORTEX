@@ -26,7 +26,7 @@ from typing import Dict, Any
 
 # Wrapped import - module may not exist
 try:
-    from cortex.brain.discovery.config_discovery import (
+    from cortex.lens.discovery.config_discovery import (
         ConfigurationDiscovery,
         ConnectionString,
         ConfigTopology,

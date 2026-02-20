@@ -13,7 +13,7 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
-from cortex.brain.verification.truth_verification_engine import (
+from cortex.intelligence.verification.truth_verification_engine import (
     TruthVerificationEngine,
     VerificationResult,
     VerificationStatus,

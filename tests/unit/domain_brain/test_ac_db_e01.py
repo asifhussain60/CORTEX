@@ -17,7 +17,7 @@ from cortex.intelligence.domain_brain.domain_brain_models import (
     EntityType,
     Conflict,
 )
-from cortex.domain_brain.deduplication import DuplicateDetector, DuplicateEntry
+from cortex.intelligence.domain_brain.deduplication import DuplicateDetector, DuplicateEntry
 
 
 class TestHashComputation:

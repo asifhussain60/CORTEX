@@ -9,7 +9,7 @@ Author: CORTEX Framework
 from enum import Enum
 from typing import List
 
-from cortex.intent_router.classifier import IntentCategory
+from cortex.orchestrators.core.intent_router.classifier import IntentCategory
 
 
 class FallbackType(Enum):

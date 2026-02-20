@@ -10,7 +10,7 @@ AC_START: AC-P90-S1-T1
 import pytest
 from pathlib import Path
 from typing import Dict, List
-from cortex.toolkit.discovery import (
+from cortex.tools.toolkit.discovery import (
     ToolkitDiscovery,
     ToolCategory,
     ToolMetadata,

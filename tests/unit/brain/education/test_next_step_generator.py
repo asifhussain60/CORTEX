@@ -12,7 +12,7 @@ import unittest
 from typing import List
 from dataclasses import dataclass
 
-from cortex.brain.education.next_step_generator import (
+from cortex.intelligence.education.next_step_generator import (
     NextStepGenerator,
     NextStepOption,
     NextStepContext,

@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from cortex.common.validators import ValidationResult
+from cortex.core.common.validators import ValidationResult
 
 
 class ConsistencyValidator:

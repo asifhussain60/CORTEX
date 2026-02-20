@@ -11,7 +11,7 @@ Authority: Phase 81 S3
 import pytest
 from datetime import datetime
 
-from cortex.intent_router.collaboration_coordinator import (
+from cortex.orchestrators.core.intent_router.collaboration_coordinator import (
     AgentCollaborationCoordinator,
     CollaborationRequest,
     CollaborationPattern,

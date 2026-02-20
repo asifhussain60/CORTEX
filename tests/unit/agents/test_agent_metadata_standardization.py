@@ -11,7 +11,7 @@ import os
 from pathlib import Path
 from typing import Dict
 
-from cortex.agents.metadata_parser import (
+from cortex.orchestrators.intelligence.metadata_parser import (
     AgentMetadata,
     AgentMetadataParser,
     get_agents_by_capability,
@@ -259,7 +259,7 @@ class TestAgentDiscovery:
 
     def test_discovery_collaborators(self):
         """Test getting agent collaborators."""
-        from cortex.agents.metadata_parser import get_agent_collaborators
+        from cortex.orchestrators.intelligence.metadata_parser import get_agent_collaborators
         
         collabs = get_agent_collaborators("cortex-meta-auditor")
         
@@ -280,7 +280,7 @@ class TestMetadataValidation:
 
     def test_validate_no_uncovered_modes(self):
         """Test that all modes are covered by agents."""
-        from cortex.agents.metadata_parser import get_mode_agent_mapping
+        from cortex.orchestrators.intelligence.metadata_parser import get_mode_agent_mapping
         
         mapping = get_mode_agent_mapping()
         
@@ -296,7 +296,7 @@ class TestMetadataValidation:
 
     def test_validate_mode_agent_mapping_consistency(self):
         """Test consistency of mode-agent mapping."""
-        from cortex.agents.metadata_parser import get_mode_agent_mapping
+        from cortex.orchestrators.intelligence.metadata_parser import get_mode_agent_mapping
         
         mapping = get_mode_agent_mapping()
         
@@ -307,7 +307,7 @@ class TestMetadataValidation:
 
     def test_validate_capability_agent_mapping(self):
         """Test capability-agent mapping."""
-        from cortex.agents.metadata_parser import get_agents_by_capability
+        from cortex.orchestrators.intelligence.metadata_parser import get_agents_by_capability
         
         # Meta-auditor should provide governance validation
         agents = get_agents_by_capability("recursive_governance_validation")
@@ -387,7 +387,7 @@ class TestMetadataParserIntegration:
 
     def test_get_agent_for_intent_audit(self):
         """Test selecting agent for AUDIT intent."""
-        from cortex.agents.metadata_parser import AgentMetadataParser
+        from cortex.orchestrators.intelligence.metadata_parser import AgentMetadataParser
         
         parser = AgentMetadataParser()
         agent = parser.get_agent_for_intent("AUDIT")

@@ -69,7 +69,7 @@ def process():
     def test_libcst_adapter_interface(self) -> None:
         """AC-PHASE43-028-1: LibCST adapter has standard interface."""
         # Adapter should follow RefactoringToolAdapter interface
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
         
         # Check that adapter interface exists
         assert hasattr(RefactoringToolAdapter, "execute_refactoring")
@@ -130,7 +130,7 @@ def process():
 
     def test_rope_adapter_available(self) -> None:
         """AC-PHASE43-029-3: Rope adapter available for fallback."""
-        from cortex.refactoring.adapters.rope_adapter import RopeAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
         
         adapter = RopeAdapter()
         # Adapter should have standard interface

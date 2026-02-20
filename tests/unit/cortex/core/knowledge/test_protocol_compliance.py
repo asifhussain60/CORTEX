@@ -33,8 +33,8 @@ from cortex.core.knowledge import KnowledgeProvider
 from cortex.core.knowledge.protocol import is_knowledge_provider
 
 if TYPE_CHECKING:
-    from cortex.brain.core.knowledge import KnowledgeRepository
-    from cortex.brain.domain_brain import BusinessKnowledgeRepository
+    from cortex.core.core.knowledge import KnowledgeRepository
+    from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
 
 
 # =============================================================================
@@ -49,7 +49,7 @@ def test_knowledge_repository_implements_protocol():
     methods and properties, so it satisfies the protocol automatically.
     """
     try:
-        from cortex.brain.core.knowledge import KnowledgeRepository
+        from cortex.core.core.knowledge import KnowledgeRepository
         
         # Verify class has required interface
         assert hasattr(KnowledgeRepository, "is_loaded")
@@ -70,7 +70,7 @@ def test_knowledge_repository_protocol_satisfaction():
     that the object has the required methods and properties at runtime.
     """
     try:
-        from cortex.brain.core.knowledge import KnowledgeRepository
+        from cortex.core.core.knowledge import KnowledgeRepository
         
         # Would instantiate with mock paths in real test
         # repo = KnowledgeRepository(project_root="...", index_path="...")
@@ -87,7 +87,7 @@ def test_knowledge_repository_protocol_satisfaction():
 def test_knowledge_repository_has_query_method():
     """Test that KnowledgeRepository has query method with correct signature."""
     try:
-        from cortex.brain.core.knowledge import KnowledgeRepository
+        from cortex.core.core.knowledge import KnowledgeRepository
         from inspect import signature
         
         method = getattr(KnowledgeRepository, "query", None)
@@ -108,7 +108,7 @@ def test_knowledge_repository_has_query_method():
 def test_knowledge_repository_has_get_by_domain_method():
     """Test that KnowledgeRepository has get_by_domain method."""
     try:
-        from cortex.brain.core.knowledge import KnowledgeRepository
+        from cortex.core.core.knowledge import KnowledgeRepository
         
         method = getattr(KnowledgeRepository, "get_by_domain", None)
         assert method is not None
@@ -120,7 +120,7 @@ def test_knowledge_repository_has_get_by_domain_method():
 def test_knowledge_repository_has_get_relevant_knowledge_method():
     """Test that KnowledgeRepository has get_relevant_knowledge method."""
     try:
-        from cortex.brain.core.knowledge import KnowledgeRepository
+        from cortex.core.core.knowledge import KnowledgeRepository
         
         method = getattr(KnowledgeRepository, "get_relevant_knowledge", None)
         assert method is not None
@@ -141,7 +141,7 @@ def test_business_knowledge_repository_implements_protocol():
     methods and properties, so it satisfies the protocol automatically.
     """
     try:
-        from cortex.brain.domain_brain import BusinessKnowledgeRepository
+        from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
         
         # Verify class has required interface
         assert hasattr(BusinessKnowledgeRepository, "is_loaded")
@@ -162,7 +162,7 @@ def test_business_knowledge_repository_protocol_satisfaction():
     and properties for protocol compliance.
     """
     try:
-        from cortex.brain.domain_brain import BusinessKnowledgeRepository
+        from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
         
         # Verify interface completeness
         assert callable(getattr(BusinessKnowledgeRepository, "query", None))
@@ -175,7 +175,7 @@ def test_business_knowledge_repository_protocol_satisfaction():
 def test_business_knowledge_repository_has_query_method():
     """Test that BusinessKnowledgeRepository has query method."""
     try:
-        from cortex.brain.domain_brain import BusinessKnowledgeRepository
+        from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
         
         method = getattr(BusinessKnowledgeRepository, "query", None)
         assert method is not None
@@ -187,7 +187,7 @@ def test_business_knowledge_repository_has_query_method():
 def test_business_knowledge_repository_has_get_by_domain_method():
     """Test that BusinessKnowledgeRepository has get_by_domain method."""
     try:
-        from cortex.brain.domain_brain import BusinessKnowledgeRepository
+        from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
         
         method = getattr(BusinessKnowledgeRepository, "get_by_domain", None)
         assert method is not None
@@ -199,7 +199,7 @@ def test_business_knowledge_repository_has_get_by_domain_method():
 def test_business_knowledge_repository_has_get_relevant_knowledge_method():
     """Test that BusinessKnowledgeRepository has get_relevant_knowledge method."""
     try:
-        from cortex.brain.domain_brain import BusinessKnowledgeRepository
+        from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
         
         method = getattr(BusinessKnowledgeRepository, "get_relevant_knowledge", None)
         assert method is not None
@@ -314,7 +314,7 @@ def test_protocol_backward_compatible():
     # After: MasterOrchestrator can import via protocol and still work
     #
     # Old code continues to work:
-    #   from cortex.brain.core.knowledge import KnowledgeRepository
+    #   from cortex.core.core.knowledge import KnowledgeRepository
     #   repo = KnowledgeRepository()
     #   repo.query()
     #
@@ -333,7 +333,7 @@ def test_no_breaking_changes_to_knowledge_repository():
     to work exactly as before.
     """
     try:
-        from cortex.brain.core.knowledge import KnowledgeRepository
+        from cortex.core.core.knowledge import KnowledgeRepository
         
         # Original interface is unchanged
         assert hasattr(KnowledgeRepository, "query")
@@ -360,7 +360,7 @@ def test_no_breaking_changes_to_business_knowledge_repository():
     to work exactly as before.
     """
     try:
-        from cortex.brain.domain_brain import BusinessKnowledgeRepository
+        from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
         
         # Original interface is unchanged
         assert hasattr(BusinessKnowledgeRepository, "query")

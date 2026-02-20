@@ -23,7 +23,7 @@ from unittest.mock import Mock, patch, MagicMock
 
 # Import will fail initially (RED phase) - implementation comes after
 try:
-    from cortex.brain.core.context_synthesizer import (
+    from cortex.core.core.context_synthesizer import (
         ContextSynthesizer,
         SynthesisResult,
         SynthesisStrategy,

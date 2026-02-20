@@ -15,14 +15,14 @@ Acceptance Criteria:
 """
 
 import pytest
-from cortex.registry.health_monitor import (
+from cortex.core.registry.health_monitor import (
     RegistryHealthMonitor,
     HealthCheckResult,
 )
-from cortex.registry.tenant_aware_git_backed_registry import (
+from cortex.core.registry.tenant_aware_git_backed_registry import (
     TenantAwareGitBackedRegistry,
 )
-from cortex.registry.workspace_manager import WorkspaceManager
+from cortex.core.registry.workspace_manager import WorkspaceManager
 
 
 # ============================================================================

@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pytest
 
-from cortex.visualization.renderers.d3_author_network_renderer import (
+from cortex.dashboards.renderers.d3_author_network_renderer import (
     D3AuthorNetworkRenderer,
     Author,
     Collaboration,

@@ -8,7 +8,7 @@ AC_START: AC-P90-S2-T1
 
 import pytest
 from pathlib import Path
-from cortex.toolkit.diagnostics import (
+from cortex.tools.toolkit.diagnostics import (
     MCPDiagnostics,
     DiagnosticResult,
     DiagnosticLevel,

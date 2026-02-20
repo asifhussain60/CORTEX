@@ -19,11 +19,11 @@ import logging
 from datetime import datetime
 from typing import Any, Dict, List
 
-from cortex.registry.tenant_aware_git_backed_registry import (
+from cortex.core.registry.tenant_aware_git_backed_registry import (
     TenantAwareGitBackedRegistry,
 )
-from cortex.registry.tenant_context import TenantContext, validate_tenant_context
-from cortex.registry.workspace_manager import WorkspaceManager
+from cortex.core.registry.tenant_context import TenantContext, validate_tenant_context
+from cortex.core.registry.workspace_manager import WorkspaceManager
 
 logger = logging.getLogger(__name__)
 

@@ -1,5 +1,5 @@
 """
-Tests for cortex.toolkit.validation module (Phase 90 S5).
+Tests for cortex.tools.toolkit.validation module (Phase 90 S5).
 
 Authority: Phase 90 S-90-06
 """
@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest.mock import MagicMock, patch
 import pytest
 
-from cortex.toolkit.validation import (
+from cortex.tools.toolkit.validation import (
     ValidationManager,
     ValidationResult,
     ValidationLevel,
@@ -29,9 +29,9 @@ try:
             spec.loader.exec_module(module)
             ValidationCheck = module.ValidationCheck
     else:
-        from cortex.toolkit.validation import ValidationCheck
+        from cortex.tools.toolkit.validation import ValidationCheck
 except Exception:
-    from cortex.toolkit.validation import ValidationCheck
+    from cortex.tools.toolkit.validation import ValidationCheck
 
 
 class TestValidationManager:

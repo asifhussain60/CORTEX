@@ -18,7 +18,7 @@ GITLAB_TOKEN = os.getenv("GITLAB_TOKEN")
 HAS_GITHUB_TOKEN = GITHUB_TOKEN is not None
 HAS_GITLAB_TOKEN = GITLAB_TOKEN is not None
 
-from cortex.brain.analysis.remote_git_adapter import (
+from cortex.lens.analysis.remote_git_adapter import (
     RemoteGitProvider,
     RemoteGitAdapter,
     RemoteFile,
@@ -217,7 +217,7 @@ class TestRemoteGitAdapter:
 class TestCreateAdapter:
     """Tests for create_adapter factory function."""
     
-    @patch("cortex.brain.analysis.providers.GitHubProvider")
+    @patch("cortex.lens.analysis.providers.GitHubProvider")
     def test_create_github_adapter(self, mock_github_provider_class):
         """Test creating GitHub adapter."""
         mock_provider_instance = Mock(spec=RemoteGitProvider)
@@ -230,7 +230,7 @@ class TestCreateAdapter:
         assert isinstance(adapter, RemoteGitAdapter)
         assert adapter.provider == mock_provider_instance
     
-    @patch("cortex.brain.analysis.providers.GitLabProvider")
+    @patch("cortex.lens.analysis.providers.GitLabProvider")
     def test_create_gitlab_adapter(self, mock_gitlab_provider_class):
         """Test creating GitLab adapter."""
         mock_provider_instance = Mock(spec=RemoteGitProvider)

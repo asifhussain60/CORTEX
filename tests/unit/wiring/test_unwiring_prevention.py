@@ -7,7 +7,7 @@ Tests prevention of accidental orchestrator unwiring and contract violations.
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
-from cortex.wiring.registry.contract_validator import (
+from cortex.core.wiring.registry.contract_validator import (
     ContractValidator,
     ValidationLevel,
 )

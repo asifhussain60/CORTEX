@@ -5,7 +5,7 @@ RED Phase - 5 tests for transparent KPI calculations
 
 import pytest
 from pathlib import Path
-from cortex.explainability.kpi_transparency import (
+from cortex.intelligence.explainability.kpi_transparency import (
     KPITransparencyEngine,
     KPIExplanation,
     DataSource

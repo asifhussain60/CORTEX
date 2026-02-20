@@ -5,16 +5,16 @@ from typing import Any, Dict, List, Optional
 import hvac
 import hvac.exceptions
 
-from cortex.secrets.config import SecretsConfig
-from cortex.secrets.errors import (
+from cortex.infrastructure.security.secrets.config import SecretsConfig
+from cortex.infrastructure.security.secrets.errors import (
     AuthError,
     SecretNotFoundError,
     StorageError,
 )
-from cortex.secrets.errors import (
+from cortex.infrastructure.security.secrets.errors import (
     PermissionError as SecretsPermissionError,
 )
-from cortex.secrets.secrets_provider import ISecretsProvider
+from cortex.infrastructure.security.secrets.secrets_provider import ISecretsProvider
 
 
 class VaultProvider(ISecretsProvider):

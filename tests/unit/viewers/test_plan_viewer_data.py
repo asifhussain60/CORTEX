@@ -24,7 +24,7 @@ from cortex.models.plan_models import (
     PlanStage,
     StageType,
 )
-from cortex.registry.plan_viewer_generator import (
+from cortex.core.registry.plan_viewer_generator import (
     PlanViewerDataGenerator,
     PlanJsonSchema,
     MetricsCardData,

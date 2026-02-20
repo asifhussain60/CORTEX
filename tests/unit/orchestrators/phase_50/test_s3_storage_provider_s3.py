@@ -14,16 +14,16 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 from botocore.exceptions import NoCredentialsError, ClientError
 
-from cortex.storage.storage_provider import IKnowledgeProvider
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.errors import (
+from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.errors import (
     StorageError,
     PermissionError,
     NotFoundError,
     NetworkError,
     ConfigurationError,
 )
-from cortex.storage.providers.s3 import S3StorageProvider
+from cortex.infrastructure.storage.providers.s3 import S3StorageProvider
 
 
 class TestS3StorageProviderInitialization:
@@ -36,7 +36,7 @@ class TestS3StorageProviderInitialization:
             endpoint="s3://my-bucket/prefix",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3'):
+        with patch('cortex.infrastructure.storage.providers.s3.boto3'):
             provider = S3StorageProvider(config)
             assert isinstance(provider, IKnowledgeProvider)
 
@@ -47,7 +47,7 @@ class TestS3StorageProviderInitialization:
             endpoint="s3://my-bucket/knowledge/prefix",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3'):
+        with patch('cortex.infrastructure.storage.providers.s3.boto3'):
             provider = S3StorageProvider(config)
             assert provider.bucket_name == "my-bucket"
             assert provider.prefix == "knowledge/prefix"
@@ -59,7 +59,7 @@ class TestS3StorageProviderInitialization:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3'):
+        with patch('cortex.infrastructure.storage.providers.s3.boto3'):
             provider = S3StorageProvider(config)
             assert provider.bucket_name == "my-bucket"
             assert provider.prefix == ""
@@ -81,7 +81,7 @@ class TestS3StorageProviderInitialization:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             mock_boto3.client.return_value = mock_client
             provider = S3StorageProvider(config)
@@ -98,7 +98,7 @@ class TestS3StorageProviderReadMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             mock_response = {"Body": Mock(read=Mock(return_value=b"S3 content"))}
             mock_client.get_object.return_value = mock_response
@@ -117,7 +117,7 @@ class TestS3StorageProviderReadMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             error_response = {"Error": {"Code": "NoSuchKey"}}
             mock_client.get_object.side_effect = ClientError(error_response, "GetObject")
@@ -134,7 +134,7 @@ class TestS3StorageProviderReadMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             mock_client.get_object.side_effect = Exception("Connection timeout")
             mock_boto3.client.return_value = mock_client
@@ -150,7 +150,7 @@ class TestS3StorageProviderReadMethod:
             endpoint="s3://my-bucket/knowledge",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             mock_response = {"Body": Mock(read=Mock(return_value=b"content"))}
             mock_client.get_object.return_value = mock_response
@@ -174,7 +174,7 @@ class TestS3StorageProviderWriteMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             mock_boto3.client.return_value = mock_client
             
@@ -190,7 +190,7 @@ class TestS3StorageProviderWriteMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             error_response = {"Error": {"Code": "AccessDenied"}}
             mock_client.put_object.side_effect = ClientError(error_response, "PutObject")
@@ -211,7 +211,7 @@ class TestS3StorageProviderListMethod:
             endpoint="s3://my-bucket/knowledge",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             mock_response = {
                 "Contents": [
@@ -235,7 +235,7 @@ class TestS3StorageProviderListMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             mock_client.list_objects_v2.return_value = {}
             mock_boto3.client.return_value = mock_client
@@ -256,7 +256,7 @@ class TestS3StorageProviderExistsMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             mock_client.head_object.return_value = {}
             mock_boto3.client.return_value = mock_client
@@ -273,7 +273,7 @@ class TestS3StorageProviderExistsMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             error_response = {"Error": {"Code": "NotFound"}}
             mock_client.head_object.side_effect = ClientError(error_response, "HeadObject")
@@ -295,7 +295,7 @@ class TestS3StorageProviderDeleteMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             mock_boto3.client.return_value = mock_client
             
@@ -311,7 +311,7 @@ class TestS3StorageProviderDeleteMethod:
             endpoint="s3://my-bucket",
             credentials={"aws_access_key_id": "key", "aws_secret_access_key": "secret"}
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_client = Mock()
             error_response = {"Error": {"Code": "NoSuchKey"}}
             mock_client.head_object.side_effect = ClientError(error_response, "HeadObject")
@@ -336,7 +336,7 @@ class TestS3StorageProviderAuthentication:
                 "aws_secret_access_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
             }
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             S3StorageProvider(config)
             mock_boto3.client.assert_called_once()
 
@@ -347,7 +347,7 @@ class TestS3StorageProviderAuthentication:
             endpoint="s3://my-bucket",
             credentials=None
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             S3StorageProvider(config)
             mock_boto3.client.assert_called_once()
 
@@ -358,7 +358,7 @@ class TestS3StorageProviderAuthentication:
             endpoint="s3://my-bucket",
             credentials=None
         )
-        with patch('cortex.storage.providers.s3.boto3') as mock_boto3:
+        with patch('cortex.infrastructure.storage.providers.s3.boto3') as mock_boto3:
             mock_boto3.client.side_effect = NoCredentialsError()
             with pytest.raises((PermissionError, ConfigurationError)):
                 S3StorageProvider(config)

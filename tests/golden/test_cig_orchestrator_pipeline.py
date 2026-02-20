@@ -20,8 +20,8 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 from typing import Dict, Any
 import time
-from cortex.interaction.request_transformer import RequestTransformer, TransformedRequest
-from cortex.interaction.conversational_reflector import ConversationalReflector, ConversationalReflection
+from cortex.core.interaction.request_transformer import RequestTransformer, TransformedRequest
+from cortex.core.interaction.conversational_reflector import ConversationalReflector, ConversationalReflection
 
 
 class TestCIGOrchestratorPipeline:

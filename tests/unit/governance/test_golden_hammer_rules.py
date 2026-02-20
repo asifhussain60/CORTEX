@@ -12,7 +12,7 @@ from cortex.governance.golden_hammer_rules import (
     GoldenHammerRules,
     GoldenHammerViolation,
 )
-from cortex.intent_router.workflow_gate import (
+from cortex.orchestrators.core.intent_router.workflow_gate import (
     RoutingDecision,
     RoutingStrategy,
 )

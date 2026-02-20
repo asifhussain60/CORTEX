@@ -61,12 +61,12 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from cortex.intent_router.router import (
+from cortex.orchestrators.core.intent_router.router import (
     EnhancedIntentRouter,
     IntentRoutingRequest,
     IntentRoutingResult,
 )
-from cortex.intent_router.capability_matcher import IntentType
+from cortex.orchestrators.core.intent_router.capability_matcher import IntentType
 
 
 class TestConcurrentLoadTesting:

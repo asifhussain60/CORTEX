@@ -25,7 +25,7 @@ from typing import Any, Dict, List, Optional, Set, Union
 import yaml
 
 from cortex.core.result import Err, Ok, Result
-from cortex.learning.universal_learning_loop import get_learning_loop
+from cortex.intelligence.learning.universal_learning_loop import get_learning_loop
 
 logger = logging.getLogger(__name__)
 

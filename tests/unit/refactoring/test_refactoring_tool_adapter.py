@@ -15,7 +15,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.core.core.result import Result, Ok, Err
 
 
 # Test fixtures and mock data
@@ -55,7 +55,7 @@ class TestRefactoringToolAdapterInterface:
     def test_adapter_has_required_abstract_methods(self):
         """Adapter interface must define abstract methods."""
         # RED: Test will fail until we create the interface
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
         
         # Check abstract methods exist
         assert hasattr(RefactoringToolAdapter, 'get_supported_operations')
@@ -66,15 +66,15 @@ class TestRefactoringToolAdapterInterface:
     
     def test_adapter_cannot_be_instantiated_directly(self):
         """Base adapter must be abstract."""
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
         
         with pytest.raises(TypeError, match="Can't instantiate abstract class"):
             RefactoringToolAdapter()
     
     def test_adapter_requires_language_property(self):
         """Adapter must expose language property."""
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
-        from cortex.refactoring.refactoring_models import RefactoringLanguage
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
         
         class MockAdapter(RefactoringToolAdapter):
             def get_supported_operations(self) -> List[str]:
@@ -97,8 +97,8 @@ class TestRefactoringToolAdapterInterface:
     
     def test_adapter_graceful_unavailability_check(self):
         """Adapter must report availability status."""
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
-        from cortex.refactoring.refactoring_models import RefactoringLanguage
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
         
         class UnavailableAdapter(RefactoringToolAdapter):
             def get_supported_operations(self) -> List[str]:
@@ -126,7 +126,7 @@ class TestRefactoringToolRegistry:
     def test_registry_initialization(self):
         """Registry must initialize empty."""
         # RED: Will fail until registry implemented
-        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
+        from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
         
         registry = RefactoringToolRegistry()
         assert registry is not None
@@ -134,9 +134,9 @@ class TestRefactoringToolRegistry:
     
     def test_registry_register_adapter(self):
         """Registry must allow adapter registration."""
-        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
-        from cortex.refactoring.refactoring_models import RefactoringLanguage
+        from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
         
         class TestAdapter(RefactoringToolAdapter):
             def get_supported_operations(self) -> List[str]:
@@ -164,9 +164,9 @@ class TestRefactoringToolRegistry:
     
     def test_registry_get_adapter_by_language(self):
         """Registry must retrieve adapter by language."""
-        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
-        from cortex.refactoring.refactoring_models import RefactoringLanguage
+        from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
         
         class PythonAdapter(RefactoringToolAdapter):
             def get_supported_operations(self) -> List[str]:
@@ -196,8 +196,8 @@ class TestRefactoringToolRegistry:
     
     def test_registry_handles_missing_adapter(self):
         """Registry must handle requests for unregistered languages."""
-        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
-        from cortex.refactoring.refactoring_models import RefactoringLanguage
+        from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
         
         registry = RefactoringToolRegistry()
         
@@ -209,9 +209,9 @@ class TestRefactoringToolRegistry:
     
     def test_registry_duplicate_language_registration(self):
         """Registry must handle duplicate language registrations."""
-        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
-        from cortex.refactoring.refactoring_models import RefactoringLanguage
+        from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
         
         class PythonAdapter1(RefactoringToolAdapter):
             def get_supported_operations(self) -> List[str]:
@@ -258,9 +258,9 @@ class TestRefactoringToolRegistry:
     
     def test_registry_list_available_languages(self):
         """Registry must list all registered languages."""
-        from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
-        from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
-        from cortex.refactoring.refactoring_models import RefactoringLanguage
+        from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
+        from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
         
         class PythonAdapter(RefactoringToolAdapter):
             def get_supported_operations(self) -> List[str]:
@@ -310,7 +310,7 @@ class TestRefactoringModels:
     
     def test_refactoring_language_enum(self):
         """RefactoringLanguage enum must define supported languages."""
-        from cortex.refactoring.refactoring_models import RefactoringLanguage
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
         
         assert RefactoringLanguage.PYTHON
         assert RefactoringLanguage.CSHARP
@@ -319,7 +319,7 @@ class TestRefactoringModels:
     
     def test_refactoring_request_model(self):
         """RefactoringRequest must capture operation details."""
-        from cortex.refactoring.refactoring_models import RefactoringRequest, RefactoringLanguage
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringRequest, RefactoringLanguage
         
         request = RefactoringRequest(
             operation="extract_method",
@@ -335,7 +335,7 @@ class TestRefactoringModels:
     
     def test_refactoring_result_model(self):
         """RefactoringResult must capture execution outcome."""
-        from cortex.refactoring.refactoring_models import RefactoringResult
+        from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringResult
         
         result = RefactoringResult(
             success=True,

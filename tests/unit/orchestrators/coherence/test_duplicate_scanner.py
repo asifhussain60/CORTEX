@@ -9,12 +9,12 @@ Compliance: CORE-008 (tests first), Zero mocks for core logic
 
 import pytest
 
-from cortex.orchestrators.coherence.duplicate_scanner import (
+from cortex.orchestrators.validation.duplicate_scanner import (
     ConsolidationSuggestion,
     DuplicateScanner,
     ScanResult,
 )
-from cortex.orchestrators.coherence.coherence_models import DuplicateMatch, Section, SectionType
+from cortex.orchestrators.validation.coherence_models import DuplicateMatch, Section, SectionType
 
 
 # =============================================================================

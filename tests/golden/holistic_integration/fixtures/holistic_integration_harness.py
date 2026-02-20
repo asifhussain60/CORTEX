@@ -33,7 +33,7 @@ from unittest.mock import MagicMock, patch
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 
 # Import Result types for mocking
-from cortex.brain.core.result import Ok, Err
+from cortex.core.result import Ok, Err
 
 # Reuse base golden test harness
 tests_root = Path(__file__).parent.parent.parent.parent

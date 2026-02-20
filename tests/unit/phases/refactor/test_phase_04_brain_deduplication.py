@@ -320,7 +320,7 @@ class TestImportRewritingSpec:
         # Before: from cortex.brain.governance import CORE_RULES
         # After:  from cortex.governance import CORE_RULES
         
-        # Before: from cortex.brain.lens.analysis import *
+        # Before: from cortex.intelligence.lens.analysis import *
         # After:  from cortex.intelligence.lens.analysis import *
         
         # This spec is validated in GREEN phase

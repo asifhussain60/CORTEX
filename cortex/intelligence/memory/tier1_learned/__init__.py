@@ -22,9 +22,6 @@ from .orchestrators import (
     FormatCleaner,
     CleaningRule,
     CleanerType,
-    VacuumOrchestrator,
-    VacuumStats,
-    VacuumStrategy,
     cleaners,
 )
 
@@ -44,9 +41,6 @@ __all__ = [
     'FormatCleaner',
     'CleaningRule',
     'CleanerType',
-    'VacuumOrchestrator',
-    'VacuumStats',
-    'VacuumStrategy',
     'cleaners',
 ]
 

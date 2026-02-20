@@ -13,7 +13,7 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
 
-from cortex.brain.core.tool_adapter import (
+from cortex.core.core.tool_adapter import (
     IToolAdapter,
     MCPToolAdapter,
     CopilotToolAdapter,

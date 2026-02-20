@@ -48,7 +48,7 @@ def resolver_module():
     Returns:
         The dependency_resolver module.
     """
-    from cortex.orchestrators.onboarding import dependency_resolver
+    from cortex.orchestrators.domain import dependency_resolver
     return dependency_resolver
 
 

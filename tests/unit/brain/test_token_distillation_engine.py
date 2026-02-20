@@ -9,7 +9,7 @@ Created: 2026-02-06
 
 import pytest
 from pathlib import Path
-from cortex.brain.core.token_distillation_engine import (
+from cortex.core.core.token_distillation_engine import (
     TokenDistillationEngine,
     DistillationResult
 )

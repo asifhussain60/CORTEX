@@ -23,7 +23,7 @@ from cortex.orchestrators.support.parallel_golden_runner import (
     WorkerResult,
     ParallelRunResult,
 )
-from cortex.common.progress_reporter import ProgressReporter
+from cortex.core.common.progress_reporter import ProgressReporter
 
 
 # =============================================================================
@@ -125,7 +125,7 @@ class TestProgressMonitorIntegration:
 
     def test_test_progress_monitor_integration(self):
         """GP-008: TestProgressMonitor integration — output format has expected structure."""
-        from cortex.devx.test_progress_monitor import TestProgressMonitor
+        from cortex.infrastructure.devx.test_progress_monitor import TestProgressMonitor
         # TestProgressMonitor requires a command list to initialise
         monitor = TestProgressMonitor(command=["python", "-m", "pytest", "--co", "-q"])
         assert hasattr(monitor, "run") or hasattr(monitor, "get_metrics_summary")

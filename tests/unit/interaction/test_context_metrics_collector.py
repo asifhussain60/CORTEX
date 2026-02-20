@@ -7,7 +7,7 @@ Test Coverage: Metrics tracking, Prometheus integration, session summaries
 
 import pytest
 import time
-from cortex.interaction.context_metrics_collector import (
+from cortex.core.interaction.context_metrics_collector import (
     ContextMetricsCollector,
     ContextMetrics,
     get_context_metrics_collector,

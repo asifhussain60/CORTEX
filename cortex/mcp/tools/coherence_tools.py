@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 from cortex.mcp.tools._shared import validate_orchestrator_context
 
-from cortex.orchestrators.coherence import (
+from cortex.orchestrators.validation import (
     ChangeCoherenceEngine,
     CoherenceReport,
     CoherenceStatus,
@@ -96,9 +96,9 @@ async def cortex_validate_coherence(
     validate_orchestrator_context(orchestrator_context)
     
     try:
-        from cortex.orchestrators.coherence.structure_analyzer import StructureAnalyzer
-        from cortex.orchestrators.coherence.duplicate_scanner import DuplicateScanner
-        from cortex.orchestrators.coherence import (
+        from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer
+        from cortex.orchestrators.validation.duplicate_scanner import DuplicateScanner
+        from cortex.orchestrators.validation import (
             CoherenceValidator,
             ValidationConfig,
         )
@@ -153,12 +153,12 @@ async def cortex_validate_coherence(
             )
         else:
             # Just check the content directly (no before/after comparison)
-            from cortex.orchestrators.coherence import (
+            from cortex.orchestrators.validation import (
                 CoherenceValidator,
                 FileStructure,
                 ValidationConfig,
             )
-            from cortex.orchestrators.coherence.structure_analyzer import StructureAnalyzer
+            from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer
             
             config = ValidationConfig(
                 check_duplicates=check_duplicates,
@@ -181,7 +181,7 @@ async def cortex_validate_coherence(
             validation_result = validator.validate(pre_context, content)
             
             # Build report manually
-            from cortex.orchestrators.coherence.duplicate_scanner import DuplicateScanner
+            from cortex.orchestrators.validation.duplicate_scanner import DuplicateScanner
             
             scanner = DuplicateScanner()
             scan_result = scanner.scan_sections(structure.sections)

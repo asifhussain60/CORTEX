@@ -14,7 +14,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.core.result import Err, Ok, Result
 
 
 class ProfileTier(Enum):

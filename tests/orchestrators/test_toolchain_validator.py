@@ -32,7 +32,7 @@ def toolchain_module():
     Returns:
         The toolchain_validator module.
     """
-    from cortex.orchestrators.onboarding import toolchain_validator
+    from cortex.orchestrators.support import toolchain_validator
     return toolchain_validator
 
 

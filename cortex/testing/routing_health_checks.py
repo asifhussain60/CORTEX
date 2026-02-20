@@ -303,7 +303,7 @@ class RoutingHealthChecker:
         all 3 Microsoft stack analyzers.
         """
         try:
-            from cortex.brain.analysis.unified_edge_case_detector import (
+            from cortex.lens.analysis.unified_edge_case_detector import (
                 UnifiedEdgeCaseDetector,
             )
 
@@ -415,7 +415,7 @@ class RoutingHealthChecker:
         Verifies embedding cache is functional (if enabled).
         """
         try:
-            from cortex.brain.nlp.embedding_cache import EmbeddingCache
+            from cortex.intelligence.nlp.embedding_cache import EmbeddingCache
 
             cache = EmbeddingCache(max_size=100, ttl_seconds=3600)
 

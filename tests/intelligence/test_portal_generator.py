@@ -19,7 +19,7 @@ from typing import Dict, List
 
 import pytest
 
-from cortex.documentation.portal_generator import (
+from cortex.intelligence.documentation.portal_generator import (
     PortalConfig,
     PortalGenerator,
     RoleView,

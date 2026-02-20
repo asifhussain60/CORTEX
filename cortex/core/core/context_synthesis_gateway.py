@@ -20,9 +20,9 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.core.context_cache_layer import ContextCacheLayer
-from cortex.core.incremental_context_loader import IncrementalContextLoader
-from cortex.core.token_distillation_engine import TokenDistillationEngine
+from cortex.core.core.context_cache_layer import ContextCacheLayer
+from cortex.core.core.incremental_context_loader import IncrementalContextLoader
+from cortex.core.core.token_distillation_engine import TokenDistillationEngine
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 logger = logging.getLogger(__name__)

@@ -6,15 +6,15 @@ rule inference, and SQLite fallback mechanisms.
 
 import pytest
 from typing import Dict, List, Any, Optional
-from cortex.brain.core.knowledge.graph.interface import IGraphAdapter, GraphQueryError
-from cortex.brain.core.knowledge.graph.mock_adapter import MockGraphAdapter
-from cortex.brain.domain_brain.kg_query_layer import (
+from cortex.core.core.knowledge.graph.interface import IGraphAdapter, GraphQueryError
+from cortex.core.core.knowledge.graph.mock_adapter import MockGraphAdapter
+from cortex.intelligence.domain_brain.domain_brain.kg_query_layer import (
     SemanticQueryBuilder,
     GraphTraversal,
     RuleInferenceEngine,
     QueryOrchestrator,
 )
-from cortex.brain.domain_brain.kg_query_interface import QueryResult
+from cortex.intelligence.domain_brain.domain_brain.kg_query_interface import QueryResult
 
 
 @pytest.fixture

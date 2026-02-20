@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Dict, List, Any
 from unittest.mock import Mock, patch, MagicMock
 
-from cortex.visualization.renderers.impact_analysis_renderer import (
+from cortex.dashboards.renderers.impact_analysis_renderer import (
     ImpactAnalysisRenderer,
     ImpactNode,
     ChangeImpact,

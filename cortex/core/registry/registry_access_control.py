@@ -21,7 +21,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
 
-from cortex.registry.tenant_context import TenantContext
+from cortex.core.registry.tenant_context import TenantContext
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +106,7 @@ class RoleBasedAccessControl:
     - Audit logging
 
     Example:
-        >>> from cortex.registry.registry_access_control import RoleBasedAccessControl
+        >>> from cortex.core.registry.registry_access_control import RoleBasedAccessControl
         >>> rbac = RoleBasedAccessControl()
         >>> ctx = TenantContext("ws1", "alice@acme.com", ["editor", "maintainer"])
         >>>

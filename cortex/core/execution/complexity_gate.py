@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 if TYPE_CHECKING:
-    from cortex.execution.complexity_calculator import ComplexityScore
+    from cortex.core.execution.complexity_calculator import ComplexityScore
 
 
 @dataclass
@@ -57,7 +57,7 @@ class ComplexityGate:
         Returns:
             GateDecision with allow/block/warn and reasoning
         """
-        from cortex.execution.complexity_calculator import ComplexityScore
+        from cortex.core.execution.complexity_calculator import ComplexityScore
 
         complexity_level = score.category
         complexity_score = score.score

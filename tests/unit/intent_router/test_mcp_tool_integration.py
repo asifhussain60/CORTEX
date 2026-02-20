@@ -14,12 +14,12 @@ from unittest.mock import Mock, MagicMock, patch
 from datetime import datetime
 from typing import Dict, Any
 
-from cortex.intent_router.mcp_executor import (
+from cortex.orchestrators.core.intent_router.mcp_executor import (
     MCPToolExecutor,
     MCPExecutionRequest,
     MCPExecutionResult
 )
-from cortex.intent_router.collaboration_coordinator import (
+from cortex.orchestrators.core.intent_router.collaboration_coordinator import (
     AgentCollaborationCoordinator,
     CollaborationRequest,
     CollaborationPattern,

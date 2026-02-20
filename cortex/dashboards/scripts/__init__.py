@@ -13,12 +13,12 @@ AC-ID: LENS-DASH-007
 __version__ = "1.0.0"
 __author__ = "Asif Hussain"
 
-from cortex.visualization.scripts.bundle_dependencies import (
+from cortex.dashboards.scripts.bundle_dependencies import (
     DependencyBundler,
     bundle_dependencies,
     verify_bundle,
 )
-from cortex.visualization.scripts.viz_lazy_loader import (
+from cortex.dashboards.scripts.viz_lazy_loader import (
     LazyModuleLoader,
     get_lazy_loader,
 )

@@ -6,7 +6,7 @@ Description: Pre-Flight Request Transformer - Stage 0 orchestration layer
 """
 
 import pytest
-from cortex.orchestrators.interaction.pfrt import PreFlightRequestTransformer
+from cortex.orchestrators.core.pfrt import PreFlightRequestTransformer
 
 
 class TestPFRTDistillation:

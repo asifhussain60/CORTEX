@@ -7,7 +7,7 @@ Task: 017 - SPA Lazy Module Loader
 
 import pytest
 
-from cortex.visualization.spa.lazy_module_loader import (
+from cortex.dashboards.spa.lazy_module_loader import (
     LazyModuleLoader,
     ModuleConfig,
     create_default_loader,

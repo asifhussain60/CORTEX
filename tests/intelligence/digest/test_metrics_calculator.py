@@ -18,8 +18,8 @@ import pytest
 from datetime import datetime
 from typing import Dict, List, Any
 
-from cortex.learning.digest.metrics_calculator import MetricsCalculator
-from cortex.learning.digest.metrics_schema import (
+from cortex.intelligence.learning.digest.metrics_calculator import MetricsCalculator
+from cortex.intelligence.learning.digest.metrics_schema import (
     EfficiencyMetrics,
     AccuracyMetrics,
     ToolSuccessMetrics,
@@ -27,7 +27,7 @@ from cortex.learning.digest.metrics_schema import (
     ContextEfficiencyMetrics,
     DigestMetrics,
 )
-from cortex.learning.digest.digest_models import DigestResult
+from cortex.intelligence.learning.digest.digest_models import DigestResult
 
 
 # AC_START: AC-PHASE41-006

@@ -10,7 +10,7 @@ import pytest
 from datetime import datetime, timedelta
 from unittest.mock import Mock, patch
 
-from cortex.brain.llm.token_budget_manager import (
+from cortex.intelligence.llm.token_budget_manager import (
     TokenBudgetManager,
     BudgetExceededError,
     ContextTooLargeError,

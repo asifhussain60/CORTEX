@@ -16,7 +16,7 @@ import json
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime, timedelta
-from cortex.brain.discovery.distributed_cache import (
+from cortex.lens.discovery.distributed_cache import (
     DistributedCache,
     FileCacheBackend,
     RedisCacheBackend,

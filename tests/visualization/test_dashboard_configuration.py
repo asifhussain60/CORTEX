@@ -9,7 +9,7 @@ AC-ID: LENS-DASH-001
 
 import pytest
 from pathlib import Path
-from cortex.visualization.dashboard_configuration import (
+from cortex.dashboards.dashboard_configuration import (
     DashboardConfiguration,
     DashboardTab,
     get_universal_tabs,

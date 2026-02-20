@@ -16,13 +16,13 @@ from pathlib import Path
 from typing import Dict, Any
 from unittest.mock import Mock, patch, MagicMock
 
-from cortex.orchestrators.planning.strategies import (
+from cortex.orchestrators.domain.phase import (
     PhaseExecutionStrategy,
     PhaseExecutionConfig,
     ExecutionContext,
     ExecutionStatus,
 )
-from cortex.registry.phase_manager import PhaseManager, PhaseOperation
+from cortex.core.registry.phase_manager import PhaseManager, PhaseOperation
 
 
 class TestPhaseLifecycleAutomation:

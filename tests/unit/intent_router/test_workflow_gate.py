@@ -9,7 +9,7 @@ Date: 2026-02-17
 """
 
 import pytest
-from cortex.intent_router.workflow_gate import (
+from cortex.orchestrators.core.intent_router.workflow_gate import (
     WorkflowComplexityRouter,
     Intent,
     RoutingDecision,

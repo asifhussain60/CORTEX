@@ -26,7 +26,7 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from cortex.learning.pattern_extractor import ExtractedPattern, PatternType
+from cortex.intelligence.learning.pattern_extractor import ExtractedPattern, PatternType
 
 logger = logging.getLogger(__name__)
 

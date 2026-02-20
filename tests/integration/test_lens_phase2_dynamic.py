@@ -7,7 +7,7 @@ Authority: WAVE-D (Phase 54 - LENS Phase 2 stub removal)
 
 import pytest
 from typing import Dict, Any, List, Tuple
-from cortex.brain.lens.pipeline import ExaminationPhase, LanguagePhaseOutput
+from cortex.intelligence.lens.lens.pipeline import ExaminationPhase, LanguagePhaseOutput
 
 
 class TestLENSPhase2Dynamic:

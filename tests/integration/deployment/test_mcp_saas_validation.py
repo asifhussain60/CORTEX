@@ -16,7 +16,7 @@ from typing import Dict, Any, List
 from unittest.mock import Mock, AsyncMock, patch
 from datetime import datetime, timedelta
 
-from cortex.deployment.deployment_validator import (
+from cortex.infrastructure.deployment.deployment_validator import (
     DeploymentValidator,
     DeploymentMode,
     ValidationResult,
@@ -24,7 +24,7 @@ from cortex.deployment.deployment_validator import (
     ProtocolComplianceResult,
     ScalingValidationResult,
 )
-from cortex.deployment.load_test_scenarios import (
+from cortex.infrastructure.deployment.load_test_scenarios import (
     LoadTestScenario,
     LoadTestRunner,
     UserSimulator,

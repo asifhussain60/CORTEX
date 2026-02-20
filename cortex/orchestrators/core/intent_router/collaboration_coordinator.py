@@ -17,7 +17,7 @@ import logging
 from datetime import datetime
 
 # MCP Tool Integration (Phase 81 S3 Part 3)
-from cortex.intent_router.mcp_executor import MCPToolExecutor, MCPExecutionRequest
+from cortex.orchestrators.core.intent_router.mcp_executor import MCPToolExecutor, MCPExecutionRequest
 
 logger = logging.getLogger(__name__)
 

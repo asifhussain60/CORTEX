@@ -13,19 +13,19 @@ from unittest.mock import Mock, MagicMock, patch
 from datetime import datetime
 from typing import Any, Dict
 
-from cortex.wiring.orchestrator_factory import (
+from cortex.core.wiring.orchestrator_factory import (
     OrchestratorFactory,
     OrchestrationBootstrap,
     OrchestrationSpec,
     OrchestrationContext,
 )
-from cortex.wiring.dependency_injection import (
+from cortex.core.wiring.dependency_injection import (
     DIContainer,
     DIProvider,
     DIParameter,
     ParameterResolver,
 )
-from cortex.wiring.event_subscription_manager import (
+from cortex.core.wiring.event_subscription_manager import (
     EventSubscriptionRegistry,
     EventSubscriptionBuilder,
     EventSubscriptionManager,
@@ -33,7 +33,7 @@ from cortex.wiring.event_subscription_manager import (
     EventEmission,
     SubscriptionGraph,
 )
-from cortex.wiring.health_check import (
+from cortex.core.wiring.health_check import (
     HealthStatus,
     HealthCheckResult,
     HealthCheckExecutor,

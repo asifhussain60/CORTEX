@@ -301,7 +301,7 @@ def create_default_loader() -> LazyModuleLoader:
 
     Example:
         ```python
-        from cortex.visualization.spa.lazy_module_loader import create_default_loader
+        from cortex.dashboards.spa.lazy_module_loader import create_default_loader
 
         loader = create_default_loader()
         script = loader.generate_loader_script()

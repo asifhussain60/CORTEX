@@ -27,8 +27,8 @@ from enum import Enum
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 if TYPE_CHECKING:
-    from cortex.execution.spec_registry_impl import SpecRegistry
-    from cortex.execution.structured_decision import StructuredDecisionFormatter
+    from cortex.core.execution.spec_registry_impl import SpecRegistry
+    from cortex.core.execution.structured_decision import StructuredDecisionFormatter
     from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 
@@ -160,10 +160,10 @@ class MasterGatewayExecutor:
             governance_registry: GovernanceRegistry singleton (default: get_registry())
         """
         # Import at runtime to avoid circular dependencies
-        from cortex.execution.spec_registry_impl import (
+        from cortex.core.execution.spec_registry_impl import (
             get_registry as _get_spec_registry,  # type: ignore
         )
-        from cortex.execution.structured_decision import (
+        from cortex.core.execution.structured_decision import (
             StructuredDecisionFormatter as _SDF,  # type: ignore
         )
         from cortex.orchestrators.core.governance_registry import (

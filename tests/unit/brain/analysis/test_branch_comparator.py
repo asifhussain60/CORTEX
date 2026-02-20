@@ -13,13 +13,13 @@ from unittest.mock import Mock, patch, MagicMock
 
 import pytest
 
-from cortex.brain.analysis.branch_comparator import (
+from cortex.lens.analysis.branch_comparator import (
     BranchComparator,
     BranchComparison,
     FileDiff,
     ConflictInfo,
 )
-from cortex.brain.analysis.remote_git_adapter import (
+from cortex.lens.analysis.remote_git_adapter import (
     RemoteGitAdapter,
     RemoteCommit,
 )

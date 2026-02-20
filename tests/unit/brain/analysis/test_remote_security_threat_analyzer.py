@@ -11,7 +11,7 @@ import unittest
 from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
 
-from cortex.brain.analysis.remote_security_threat_analyzer import (
+from cortex.lens.analysis.remote_security_threat_analyzer import (
     RemoteSecurityThreatAnalyzer,
     RemoteSecurityAnalysisResult,
     get_remote_security_threat_analyzer,
@@ -23,7 +23,7 @@ class TestRemoteSecurityThreatAnalyzer(unittest.TestCase):
 
     def setUp(self) -> None:
         """Initialize analyzer before each test."""
-        with patch('cortex.brain.analysis.remote_security_threat_analyzer.RemoteGitAdapter'):
+        with patch('cortex.lens.analysis.remote_security_threat_analyzer.RemoteGitAdapter'):
             self.analyzer = RemoteSecurityThreatAnalyzer()
 
     def test_remote_analyzer_initializes(self) -> None:
@@ -31,7 +31,7 @@ class TestRemoteSecurityThreatAnalyzer(unittest.TestCase):
         self.assertIsNotNone(self.analyzer)
         self.assertIsNotNone(self.analyzer.remote_adapter)
 
-    @patch('cortex.brain.analysis.remote_security_threat_analyzer.RemoteGitAdapter')
+    @patch('cortex.lens.analysis.remote_security_threat_analyzer.RemoteGitAdapter')
     def test_analyze_remote_file_returns_result(self, mock_adapter_class) -> None:
         """Test analyzing a remote file."""
         # Mock the adapter
@@ -67,7 +67,7 @@ class TestRemoteSecurityThreatAnalyzer(unittest.TestCase):
     def test_risk_score_calculation(self) -> None:
         """Test risk score calculation."""
         # Create mock threats
-        from cortex.brain.analysis.security_threat_analyzer import (
+        from cortex.lens.analysis.security_threat_analyzer import (
             ThreatFinding,
             ThreatSeverity,
         )
@@ -98,7 +98,7 @@ class TestRemoteSecurityThreatAnalyzer(unittest.TestCase):
 
     def test_remote_file_url_generation(self) -> None:
         """Test GitHub URL generation."""
-        with patch('cortex.brain.analysis.remote_security_threat_analyzer.RemoteGitAdapter'):
+        with patch('cortex.lens.analysis.remote_security_threat_analyzer.RemoteGitAdapter'):
             analyzer = RemoteSecurityThreatAnalyzer()
             
             # Mock remote file
@@ -160,14 +160,14 @@ class TestRemoteSecurityAnalysisResult(unittest.TestCase):
 class TestRemoteSecurityThreatAnalyzerFactory(unittest.TestCase):
     """Test factory function."""
 
-    @patch('cortex.brain.analysis.remote_security_threat_analyzer.RemoteGitAdapter')
+    @patch('cortex.lens.analysis.remote_security_threat_analyzer.RemoteGitAdapter')
     def test_factory_returns_instance(self, mock_adapter_class) -> None:
         """Test factory returns RemoteSecurityThreatAnalyzer."""
         analyzer = get_remote_security_threat_analyzer()
         
         self.assertIsInstance(analyzer, RemoteSecurityThreatAnalyzer)
 
-    @patch('cortex.brain.analysis.remote_security_threat_analyzer.RemoteGitAdapter')
+    @patch('cortex.lens.analysis.remote_security_threat_analyzer.RemoteGitAdapter')
     def test_factory_with_github_token(self, mock_adapter_class) -> None:
         """Test factory with GitHub token."""
         token = "gh_test_token_123"

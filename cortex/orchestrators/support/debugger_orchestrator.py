@@ -24,7 +24,7 @@ import logging
 
 from cortex.core.event_bus import EventBus, Event
 from cortex.models.canonical_enums import IntentType
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
 
 
 logger = logging.getLogger(__name__)
@@ -78,13 +78,13 @@ class DebuggerOrchestrator(IOrchestrator):
         
         # Initialize engine and manager if not provided
         if marker_injection_engine is None:
-            from cortex.debugging.marker_injection_engine import MarkerInjectionEngine
+            from cortex.orchestrators.support.debugging.marker_injection_engine import MarkerInjectionEngine
             self.marker_injection_engine = MarkerInjectionEngine()
         else:
             self.marker_injection_engine = marker_injection_engine
         
         if auto_cleanup_manager is None:
-            from cortex.debugging.auto_cleanup_manager import AutoCleanupManager
+            from cortex.orchestrators.support.debugging.auto_cleanup_manager import AutoCleanupManager
             self.auto_cleanup_manager = AutoCleanupManager()
         else:
             self.auto_cleanup_manager = auto_cleanup_manager
@@ -359,17 +359,17 @@ class DebuggerOrchestrator(IOrchestrator):
     
     def initialize(self):
         """Initialize orchestrator (already done in __init__)."""
-        from cortex.brain.core.result import Result
+        from cortex.core.core.result import Result
         return Result.success("DebuggerOrchestrator initialized")
     
     def get_mode(self):
         """Get operation mode."""
-        from cortex.brain.core.interfaces.i_orchestrator import OperationMode
+        from cortex.core.core.interfaces.i_orchestrator import OperationMode
         return OperationMode.EXECUTION
     
     def get_mcp_tools(self):
         """Get MCP tools exposed by this orchestrator."""
-        from cortex.brain.core.result import Result
+        from cortex.core.core.result import Result
         return Result.success({
             "cortex_debug_auto_inject": {
                 "description": "Auto-inject debug markers on event",
@@ -387,13 +387,13 @@ class DebuggerOrchestrator(IOrchestrator):
     
     def execute_operation(self, operation_name: str, parameters: Dict[str, Any]):
         """Execute operation with audit logging."""
-        from cortex.brain.core.result import Result
+        from cortex.core.core.result import Result
         result = self.execute(operation_name, parameters)
         return Result.success(result)
     
     def get_audit_trail(self, limit: int = 100):
         """Get audit trail."""
-        from cortex.brain.core.result import Result
+        from cortex.core.core.result import Result
         # EventBus-driven, audit trail tracked via EventBus events
         return Result.success([])
     

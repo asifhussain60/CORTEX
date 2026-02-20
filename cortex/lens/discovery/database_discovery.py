@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
-from cortex.brain.discovery import DiscoveryPlugin
+from cortex.lens.discovery import DiscoveryPlugin
 
 logger = logging.getLogger(__name__)
 

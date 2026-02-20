@@ -18,7 +18,7 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
-from cortex.brain.analysis.vision_analyzer import (
+from cortex.lens.analysis.vision_analyzer import (
     VisionAnalyzer,
     VisionAnalysisResult,
     UIElement,
@@ -317,7 +317,7 @@ class TestMCPToolIntegration:
         assert result["status"] == "error"
         assert "Must provide" in result["error"]
     
-    @patch("cortex.brain.analysis.vision_analyzer.VisionAnalyzer.analyze_base64")
+    @patch("cortex.lens.analysis.vision_analyzer.VisionAnalyzer.analyze_base64")
     def test_cortex_vision_analyze_base64(self, mock_analyze):
         """Test MCP tool with base64 input."""
         from cortex.mcp.tools.lens_tools import cortex_vision_analyze
@@ -338,7 +338,7 @@ class TestMCPToolIntegration:
         assert result["status"] == "success"
         mock_analyze.assert_called_once()
     
-    @patch("cortex.brain.analysis.vision_analyzer.VisionAnalyzer.analyze_url")
+    @patch("cortex.lens.analysis.vision_analyzer.VisionAnalyzer.analyze_url")
     def test_cortex_vision_analyze_url(self, mock_analyze):
         """Test MCP tool with URL input."""
         from cortex.mcp.tools.lens_tools import cortex_vision_analyze
@@ -409,7 +409,7 @@ class TestLENSOrchestratorVisionIntegration:
 class TestConvenienceFunction:
     """Tests for analyze_image convenience function."""
     
-    @patch("cortex.brain.analysis.vision_analyzer.VisionAnalyzer.analyze_base64")
+    @patch("cortex.lens.analysis.vision_analyzer.VisionAnalyzer.analyze_base64")
     def test_analyze_image_base64(self, mock_analyze):
         """Test convenience function with base64 input."""
         mock_result = VisionAnalysisResult(
@@ -424,7 +424,7 @@ class TestConvenienceFunction:
         assert result["status"] == "success"
         mock_analyze.assert_called_once()
     
-    @patch("cortex.brain.analysis.vision_analyzer.VisionAnalyzer.analyze_url")
+    @patch("cortex.lens.analysis.vision_analyzer.VisionAnalyzer.analyze_url")
     def test_analyze_image_url(self, mock_analyze):
         """Test convenience function with URL input."""
         mock_result = VisionAnalysisResult(

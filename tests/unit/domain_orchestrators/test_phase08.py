@@ -1,6 +1,6 @@
 """Tests for PHASE-08: Domain Orchestrators - 6 ACs"""
 import pytest
-from cortex.domain_orchestrators.domain_orchestrator import (
+from cortex.orchestrators.domain.domain_orchestrator import (
     DomainRegistry, CreateHandler, ModifyHandler, FixHandler,
     AnalysisHandler, OptimizationHandler, IntegrationHandler
 )

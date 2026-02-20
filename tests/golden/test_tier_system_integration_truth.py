@@ -187,7 +187,7 @@ class TestEndToEndTierWorkflows:
     def test_rule_lookup_with_precedence(self):
         """Test rule lookup respecting tier precedence."""
         from cortex.orchestrators.core.governance_registry import GovernanceRegistry
-        from cortex.brain.core.tier_resolver import TierResolver
+        from cortex.core.core.tier_resolver import TierResolver
         
         registry = GovernanceRegistry.instance()
         registry.initialize()
@@ -201,7 +201,7 @@ class TestEndToEndTierWorkflows:
 
     def test_knowledge_push_to_correct_tier(self):
         """Test pushing knowledge to correct tier."""
-        from cortex.brain.core.intent.comprehension_loop import BrainTierPusher, BrainTier
+        from cortex.core.core.intent.comprehension_loop import BrainTierPusher, BrainTier
         
         pusher = BrainTierPusher()
         
@@ -273,7 +273,7 @@ def test_tier_system_integration_complete():
     
     # Test 1: Governance tier precedence
     try:
-        from cortex.brain.core.tier_resolver import TierResolver
+        from cortex.core.core.tier_resolver import TierResolver
         resolver = TierResolver()
         order = resolver.get_precedence_order()
         assert order[0][0] == 0  # Tier 0 first
@@ -284,7 +284,7 @@ def test_tier_system_integration_complete():
     
     # Test 2: Memory tier operations
     try:
-        from cortex.brain.core.intent.comprehension_loop import BrainTierPusher
+        from cortex.core.core.intent.comprehension_loop import BrainTierPusher
         pusher = BrainTierPusher()
         assert hasattr(pusher, 'TIER_PATHS')
         results["memory_tiers"] = True

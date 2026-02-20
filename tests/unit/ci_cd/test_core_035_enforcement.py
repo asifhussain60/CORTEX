@@ -53,7 +53,7 @@ class TestCore035Enforcement:
     # AC-CORE-035-TEST-002
     def test_single_registry_implementation(self):
         """Verify only one canonical registry exists."""
-        from cortex.wiring.registry.git_backed_registry import GitBackedRegistry
+        from cortex.core.wiring.registry.git_backed_registry import GitBackedRegistry
         from cortex.wiring import get_registry
         
         # Should get same instance

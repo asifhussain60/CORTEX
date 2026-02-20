@@ -22,7 +22,7 @@ import yaml
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex.brain.discovery.api_discovery import (
+from cortex.lens.discovery.api_discovery import (
     APIDiscovery,
     EndpointInfo,
     APITopology,

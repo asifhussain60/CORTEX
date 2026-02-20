@@ -18,7 +18,7 @@ from cortex.lens.analyzers.git_history_analyzer import (
     GitBlame,
     GitHistoryResult,
 )
-from cortex.brain.analysis.remote_git_adapter import (
+from cortex.lens.analysis.remote_git_adapter import (
     RemoteGitAdapter,
     RemoteCommit as RemoteCommitModel,
     RemoteBlame as RemoteBlameModel,

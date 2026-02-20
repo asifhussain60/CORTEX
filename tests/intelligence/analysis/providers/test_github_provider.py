@@ -11,8 +11,8 @@ from datetime import datetime
 from unittest.mock import Mock, patch, MagicMock
 import base64
 
-from cortex.brain.analysis.providers.github_provider import GitHubProvider
-from cortex.brain.analysis.remote_git_adapter import (
+from cortex.lens.analysis.providers.github_provider import GitHubProvider
+from cortex.lens.analysis.remote_git_adapter import (
     ProviderConfig,
     ProviderType,
     RemoteFile,

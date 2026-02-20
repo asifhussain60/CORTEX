@@ -24,7 +24,7 @@ class JourneyState(str, Enum):
     COMPLETED = "completed"
 
 
-from cortex.brain.core.result import Err, Ok, Result
+from cortex.core.core.result import Err, Ok, Result
 
 
 @dataclass

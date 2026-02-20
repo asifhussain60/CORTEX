@@ -12,7 +12,7 @@ Phase: 41 Stage 1 (ENH-053)
 import json
 from typing import Any
 
-from cortex.learning.digest.digest_models import DigestResult
+from cortex.intelligence.learning.digest.digest_models import DigestResult
 
 
 class OutputFormatter:

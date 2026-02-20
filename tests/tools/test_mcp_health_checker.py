@@ -13,7 +13,7 @@ from unittest.mock import MagicMock, mock_open, patch
 
 import pytest
 
-from cortex.toolkit.diagnostics.mcp_health import DiagnosticResult, MCPHealthChecker
+from cortex.tools.toolkit.diagnostics.mcp_health import DiagnosticResult, MCPHealthChecker
 
 
 class TestDiagnosticResult:

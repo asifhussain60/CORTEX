@@ -9,7 +9,7 @@ Authority: Phase 24.2.1 - Roslyn Process Manager
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
-from cortex.refactoring.adapters.roslyn_process import RoslynProcessManager
+from cortex.orchestrators.domain.refactoring.adapters.roslyn_process import RoslynProcessManager
 
 
 class TestRoslynProcessManagerInitialization:
@@ -17,7 +17,7 @@ class TestRoslynProcessManagerInitialization:
 
     def test_roslyn_process_manager_import(self):
         """Test that RoslynProcessManager can be imported."""
-        from cortex.refactoring.adapters.roslyn_process import RoslynProcessManager
+        from cortex.orchestrators.domain.refactoring.adapters.roslyn_process import RoslynProcessManager
         assert RoslynProcessManager is not None
 
     def test_roslyn_process_manager_initialization(self):

@@ -8,11 +8,11 @@ Priority: P1
 
 import pytest
 from typing import Any, Dict
-from cortex.learning.orchestrator_learning_mixin import (
+from cortex.intelligence.learning.orchestrator_learning_mixin import (
     OrchestratorLearningMixin,
     LearningContext,
 )
-from cortex.learning.universal_learning_loop import (
+from cortex.intelligence.learning.universal_learning_loop import (
     UniversalLearningLoop,
     PatternType,
 )

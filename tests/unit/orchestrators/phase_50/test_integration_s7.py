@@ -13,10 +13,10 @@ Target: 12 tests, 100% pass rate for Stage 7
 import os
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.errors import ConfigurationError
-from cortex.storage.factory import StorageProviderFactory
-from cortex.storage.storage_provider import IKnowledgeProvider
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.errors import ConfigurationError
+from cortex.infrastructure.storage.factory import StorageProviderFactory
+from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
 
 
 class TestStorageFactoryIntegration:
@@ -156,7 +156,7 @@ class TestStorageOrchestrationIntegration:
         assert config.backend == "local"
         assert config.endpoint == "/tmp/cortex"
 
-    @patch('cortex.storage.factory.StorageProviderFactory.get_provider')
+    @patch('cortex.infrastructure.storage.factory.StorageProviderFactory.get_provider')
     def test_orchestrator_can_call_factory(self, mock_get_provider):
         """Orchestrators can call StorageProviderFactory.get_provider()"""
         mock_provider = Mock(spec=IKnowledgeProvider)

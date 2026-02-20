@@ -20,7 +20,7 @@ from typing import Any, Dict
 
 import pytest
 
-from cortex.learning.universal_learning_loop import (
+from cortex.intelligence.learning.universal_learning_loop import (
     LearningCapture,
     PatternType,
     UniversalLearningLoop,

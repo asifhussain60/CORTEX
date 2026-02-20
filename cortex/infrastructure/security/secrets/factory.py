@@ -5,10 +5,10 @@ Factory for creating secrets providers
 import os
 from typing import Optional
 
-from cortex.secrets.config import SecretsConfig
-from cortex.secrets.errors import ConfigError
-from cortex.secrets.secrets_provider import ISecretsProvider
-from cortex.secrets.providers.local import LocalSecretsProvider
+from cortex.infrastructure.security.secrets.config import SecretsConfig
+from cortex.infrastructure.security.secrets.errors import ConfigError
+from cortex.infrastructure.security.secrets.secrets_provider import ISecretsProvider
+from cortex.infrastructure.security.secrets.providers.local import LocalSecretsProvider
 
 
 def get_secrets_provider(config: SecretsConfig) -> ISecretsProvider:
@@ -29,15 +29,15 @@ def get_secrets_provider(config: SecretsConfig) -> ISecretsProvider:
         return LocalSecretsProvider(config)
 
     elif config.provider_type == "aws":
-        from cortex.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.security.secrets.providers.aws import AWSSecretsProvider
         return AWSSecretsProvider(config)
 
     elif config.provider_type == "azure":
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.security.secrets.providers.azure import AzureKeyVaultProvider
         return AzureKeyVaultProvider(config)
 
     elif config.provider_type == "vault":
-        from cortex.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.security.secrets.providers.vault import VaultProvider
         return VaultProvider(config)
 
     else:

@@ -11,7 +11,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
 
-from cortex.registry.phase_manager import (
+from cortex.core.registry.phase_manager import (
     PhaseManager,
     PhaseOperation,
     PhaseResolutionResult,
@@ -24,7 +24,7 @@ from cortex.models.canonical_enums import IntentType
 @pytest.fixture
 def phase_manager():
     """Create PhaseManager instance with mocked registry."""
-    with patch('cortex.registry.phase_manager.Path') as mock_path:
+    with patch('cortex.core.registry.phase_manager.Path') as mock_path:
         mock_path.return_value.exists.return_value = True
         manager = PhaseManager(registry_root="/fake/registry")
         return manager
@@ -225,7 +225,7 @@ class TestPhaseCRUD:
                     with patch.object(phase_manager, '_move_phase_file') as mock_move:
                         with patch.object(phase_manager, '_save_phase_yaml'):
                             with patch.object(phase_manager, '_update_index'):
-                                with patch('cortex.registry.phase_manager.Path.mkdir'):
+                                with patch('cortex.core.registry.phase_manager.Path.mkdir'):
                                     phase_manager.complete_phase("phase-25")
                                     
                                     # Verify move was called (path construction verified in implementation)

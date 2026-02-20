@@ -5,14 +5,14 @@ import shutil
 from pathlib import Path
 from typing import List
 
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.errors import (
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.errors import (
     ConfigurationError,
     NotFoundError,
     PermissionError,
     StorageError,
 )
-from cortex.storage.storage_provider import IKnowledgeProvider
+from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
 
 
 class LocalFileSystemProvider(IKnowledgeProvider):

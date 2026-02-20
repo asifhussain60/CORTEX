@@ -378,7 +378,7 @@ class TestTestFrameworkNaming:
     
     def test_framework_not_collected_as_test(self):
         """TestFramework class should not be collected as a test."""
-        from cortex.intent_router.test_framework import TestFramework
+        from cortex.orchestrators.core.intent_router.test_framework import TestFramework
         
         # Should have __test__ = False or be renamed
         if hasattr(TestFramework, '__test__'):

@@ -354,7 +354,7 @@ class TestPhase06ImportMapping:
 
     def test_red_import_mapping_documentation(self):
         """SPEC: Import mapping for documentation consolidation"""
-        # from cortex.documentation.X → from cortex.intelligence.documentation.X
+        # from cortex.intelligence.documentation.X → from cortex.intelligence.documentation.X
         old_import = "cortex.documentation"
         new_import = "cortex.intelligence.documentation"
         assert old_import != new_import, "Import path must change"

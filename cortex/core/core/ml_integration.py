@@ -15,9 +15,9 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List, Optional
 
-from cortex.core.conversation_synthesizer import ContextSynthesizer
-from cortex.core.learning_extractor import LearningExtractor
-from cortex.core.ml_summarizer import MLSummarizer
+from cortex.core.core.conversation_synthesizer import ContextSynthesizer
+from cortex.core.core.learning_extractor import LearningExtractor
+from cortex.core.core.ml_summarizer import MLSummarizer
 
 logger = logging.getLogger(__name__)
 

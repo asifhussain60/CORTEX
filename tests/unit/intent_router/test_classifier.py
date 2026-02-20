@@ -24,7 +24,7 @@ Expected Tests: 45 unit tests
 import pytest
 from typing import List
 
-from cortex.intent_router.classifier import (
+from cortex.orchestrators.core.intent_router.classifier import (
     IntentClassifier,
     IntentCategory,
     IntentSignal,

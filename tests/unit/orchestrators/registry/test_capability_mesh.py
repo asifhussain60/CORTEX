@@ -18,12 +18,12 @@ from typing import Dict, Any, List
 
 # Test Doubles (will fail until implementation exists)
 try:
-    from cortex.orchestrators.registry.capability_mesh import (
+    from cortex.orchestrators.core.capability_mesh import (
         CapabilityMeshRouter,
         Capability,
         CapabilityType
     )
-    from cortex.orchestrators.registry.capability_discovery import (
+    from cortex.orchestrators.core.capability_discovery import (
         OrchestratorCapabilityRegistry,
         CapabilityDiscoveryAgent
     )
@@ -463,7 +463,7 @@ class TestStandardsResolverIntegration:
     
     def test_standards_resolver_initialization(self):
         """Test StandardsResolver can be initialized."""
-        from cortex.common.standards_resolver import StandardsResolver
+        from cortex.core.common.standards_resolver import StandardsResolver
         
         resolver = StandardsResolver()
         assert resolver is not None
@@ -471,7 +471,7 @@ class TestStandardsResolverIntegration:
     
     def test_standards_resolver_loads_company_first(self):
         """Test resolver prioritizes company standards over cortex."""
-        from cortex.common.standards_resolver import StandardsResolver, StandardsSource
+        from cortex.core.common.standards_resolver import StandardsResolver, StandardsSource
         
         resolver = StandardsResolver()
         
@@ -483,7 +483,7 @@ class TestStandardsResolverIntegration:
     
     def test_standards_resolver_fallback_to_cortex(self):
         """Test resolver falls back to cortex standards if company missing."""
-        from cortex.common.standards_resolver import StandardsResolver, StandardsSource
+        from cortex.core.common.standards_resolver import StandardsResolver, StandardsSource
         
         resolver = StandardsResolver()
         result = resolver.load_standards("nonexistent_domain", "test")
@@ -493,7 +493,7 @@ class TestStandardsResolverIntegration:
     
     def test_standards_resolver_gap_detection(self):
         """Test resolver detects gaps in standards coverage."""
-        from cortex.common.standards_resolver import StandardsResolver
+        from cortex.core.common.standards_resolver import StandardsResolver
         
         resolver = StandardsResolver()
         result = resolver.load_standards("security", "authentication")
@@ -503,7 +503,7 @@ class TestStandardsResolverIntegration:
     
     def test_orchestrator_uses_standards_resolver(self):
         """Test orchestrators can integrate StandardsResolver."""
-        from cortex.common.standards_resolver import StandardsResolver
+        from cortex.core.common.standards_resolver import StandardsResolver
         
         resolver = StandardsResolver()
         
@@ -522,7 +522,7 @@ class TestStandardsResolverIntegration:
     
     def test_standards_resolver_caching(self):
         """Test resolver caches standards for performance."""
-        from cortex.common.standards_resolver import StandardsResolver
+        from cortex.core.common.standards_resolver import StandardsResolver
         import time
         
         resolver = StandardsResolver(cache_ttl=10)
@@ -542,7 +542,7 @@ class TestStandardsResolverIntegration:
     
     def test_standards_resolver_integration_with_mesh(self):
         """Test StandardsResolver integrates with CapabilityMesh."""
-        from cortex.common.standards_resolver import StandardsResolver
+        from cortex.core.common.standards_resolver import StandardsResolver
         
         resolver = StandardsResolver()
         router = CapabilityMeshRouter()

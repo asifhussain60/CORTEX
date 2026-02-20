@@ -11,7 +11,7 @@ import pytest
 from datetime import datetime, timedelta
 from typing import Dict, Any
 
-from cortex.brain.core.dor_tracker import (
+from cortex.core.core.dor_tracker import (
     DoRTracker,
     DoRTurn,
     UserResponse,

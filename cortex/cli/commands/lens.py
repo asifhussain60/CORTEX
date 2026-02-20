@@ -13,7 +13,7 @@ from typing import Optional
 
 import click
 
-from cortex.brain.analysis.remote_git_adapter import ProviderConfig, create_adapter
+from cortex.lens.analysis.remote_git_adapter import ProviderConfig, create_adapter
 from cortex.lens import LENSOrchestrator
 
 
@@ -244,7 +244,7 @@ def cache_stats() -> None:
     Displays cache hit rate, size, and entry count.
     """
     try:
-        from cortex.brain.analysis.remote_cache import get_remote_cache
+        from cortex.lens.analysis.remote_cache import get_remote_cache
 
         cache = get_remote_cache()
         stats = cache.stats()
@@ -275,7 +275,7 @@ def cache_clear() -> None:
     Removes all cached remote API responses.
     """
     try:
-        from cortex.brain.analysis.remote_cache import get_remote_cache
+        from cortex.lens.analysis.remote_cache import get_remote_cache
 
         cache = get_remote_cache()
         cache.clear()

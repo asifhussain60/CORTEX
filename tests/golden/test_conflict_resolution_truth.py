@@ -25,7 +25,7 @@ import pytest
 from datetime import datetime
 from typing import Dict, Any
 
-from cortex.domain_brain.conflict_resolver import (
+from cortex.intelligence.domain_brain.conflict_resolver import (
     ConflictResolver,
     Resolution,
     ResolutionTier,

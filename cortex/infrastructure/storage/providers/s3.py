@@ -2,15 +2,15 @@
 
 from typing import Any, Dict, List, Optional
 
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.errors import (
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.errors import (
     ConfigurationError,
     NetworkError,
     NotFoundError,
     PermissionError,
     StorageError,
 )
-from cortex.storage.storage_provider import IKnowledgeProvider
+from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
 
 try:
     import boto3

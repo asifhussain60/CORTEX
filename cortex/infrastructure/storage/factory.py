@@ -6,11 +6,11 @@ AC-PHASE50-S1-002: Factory returns correct provider based on config
 
 from typing import TYPE_CHECKING
 
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.errors import ConfigurationError
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.errors import ConfigurationError
 
 if TYPE_CHECKING:
-    from cortex.storage.storage_provider import IKnowledgeProvider
+    from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
 
 
 class StorageProviderFactory:
@@ -58,19 +58,19 @@ class StorageProviderFactory:
 def _register_default_providers():
     """Register built-in providers."""
     try:
-        from cortex.storage.providers.local import LocalFileSystemProvider
+        from cortex.infrastructure.storage.providers.local import LocalFileSystemProvider
         StorageProviderFactory.register_provider("local", LocalFileSystemProvider)
     except ImportError:
         pass
 
     try:
-        from cortex.storage.providers.s3 import S3StorageProvider
+        from cortex.infrastructure.storage.providers.s3 import S3StorageProvider
         StorageProviderFactory.register_provider("s3", S3StorageProvider)
     except ImportError:
         pass
 
     try:
-        from cortex.storage.providers.azure import AzureBlobProvider
+        from cortex.infrastructure.storage.providers.azure import AzureBlobProvider
         StorageProviderFactory.register_provider("azure", AzureBlobProvider)
     except ImportError:
         pass

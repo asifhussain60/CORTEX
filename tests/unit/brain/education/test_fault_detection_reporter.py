@@ -12,7 +12,7 @@ import unittest
 from typing import List
 from dataclasses import dataclass
 
-from cortex.brain.education.fault_detection_reporter import (
+from cortex.intelligence.education.fault_detection_reporter import (
     FaultDetectionReporter,
     FaultReport,
     FaultSeverity,

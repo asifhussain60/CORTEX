@@ -22,7 +22,7 @@ from pathlib import Path
 from threading import Lock
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.knowledge.unified_intelligence_context import (
+from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (
     CompanyKnowledge,
     CORTEXKnowledge,
     LENSIntelligence,
@@ -313,7 +313,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
     def _ensure_synthesis_engine(self):
         """Lazy-load KnowledgeSynthesisEngine."""
         if self._synthesis_engine is None:
-            from cortex.brain.knowledge.knowledge_synthesis_engine import (
+            from cortex.intelligence.knowledge.synthesis.knowledge_synthesis_engine import (
                 get_synthesis_engine,
             )
             self._synthesis_engine = get_synthesis_engine()

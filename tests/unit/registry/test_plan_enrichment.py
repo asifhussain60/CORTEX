@@ -22,7 +22,7 @@ from cortex.models.plan_models import (
     RiskLevel,
     Overview,
 )
-from cortex.registry.plan_enrichment import (
+from cortex.core.registry.plan_enrichment import (
     PlanEnrichmentPipeline,
     GitLensEnricher,
     CodeLensEnricher,
@@ -50,7 +50,7 @@ class TestGitLensEnricher:
         assert self.enricher is not None
         assert hasattr(self.enricher, "enrich")
 
-    @patch("cortex.registry.plan_enrichment.GitLensEnricher._get_git_context")
+    @patch("cortex.core.registry.plan_enrichment.GitLensEnricher._get_git_context")
     def test_enrich_returns_git_enrichment(self, mock_git):
         """Test enrichment returns GitEnrichment structure."""
         mock_git.return_value = {
@@ -129,7 +129,7 @@ class TestCodeLensEnricher:
         """Test CodeLensEnricher initializes correctly."""
         assert self.enricher is not None
 
-    @patch("cortex.registry.plan_enrichment.CodeLensEnricher._analyze_code")
+    @patch("cortex.core.registry.plan_enrichment.CodeLensEnricher._analyze_code")
     def test_enrich_returns_code_enrichment(self, mock_analysis):
         """Test enrichment returns CodeEnrichment structure."""
         mock_analysis.return_value = {
@@ -165,7 +165,7 @@ class TestPolicyEnricher:
         """Test PolicyEnricher initializes correctly."""
         assert self.enricher is not None
 
-    @patch("cortex.registry.plan_enrichment.PolicyEnricher._get_policy_context")
+    @patch("cortex.core.registry.plan_enrichment.PolicyEnricher._get_policy_context")
     def test_enrich_returns_policy_enrichment(self, mock_policy):
         """Test enrichment returns PolicyEnrichment structure."""
         mock_policy.return_value = {
@@ -199,7 +199,7 @@ class TestBestPracticesEnricher:
         """Test BestPracticesEnricher initializes correctly."""
         assert self.enricher is not None
 
-    @patch("cortex.registry.plan_enrichment.BestPracticesEnricher._get_best_practices")
+    @patch("cortex.core.registry.plan_enrichment.BestPracticesEnricher._get_best_practices")
     def test_enrich_returns_best_practices_enrichment(self, mock_practices):
         """Test enrichment returns BestPracticesEnrichment structure."""
         mock_practices.return_value = {
@@ -233,7 +233,7 @@ class TestDomainEnricher:
         """Test DomainEnricher initializes correctly."""
         assert self.enricher is not None
 
-    @patch("cortex.registry.plan_enrichment.DomainEnricher._get_domain_context")
+    @patch("cortex.core.registry.plan_enrichment.DomainEnricher._get_domain_context")
     def test_enrich_returns_domain_enrichment(self, mock_domain):
         """Test enrichment returns DomainEnrichment structure."""
         mock_domain.return_value = {
@@ -284,7 +284,7 @@ class TestPlanEnrichmentPipeline:
         plan = TestGitLensEnricher._create_test_plan()
 
         with patch.multiple(
-            "cortex.registry.plan_enrichment",
+            "cortex.core.registry.plan_enrichment",
             GitLensEnricher=self._mock_enricher_class("git"),
             CodeLensEnricher=self._mock_enricher_class("code"),
             PolicyEnricher=self._mock_enricher_class("policy"),

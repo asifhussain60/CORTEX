@@ -8,7 +8,7 @@ execution system to improve strategies based on actual outcomes.
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
-from cortex.execution.adaptive_execution_engine import ExecutionStrategy
+from cortex.core.execution.adaptive_execution_engine import ExecutionStrategy
 
 
 @dataclass

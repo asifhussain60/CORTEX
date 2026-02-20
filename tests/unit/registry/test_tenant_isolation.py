@@ -16,7 +16,7 @@ Acceptance Criteria:
 
 import pytest
 from datetime import datetime
-from cortex.registry.tenant_context import (
+from cortex.core.registry.tenant_context import (
     TenantContext,
     validate_tenant_context,
     require_permission,

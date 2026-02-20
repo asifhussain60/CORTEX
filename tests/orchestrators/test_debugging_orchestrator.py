@@ -409,7 +409,7 @@ def simple_func():
         )
         
         modified_content = no_logging_file.read_text()
-        assert "import logging" in modified_content or "from cortex.common.debug_logger" in modified_content
+        assert "import logging" in modified_content or "from cortex.core.common.debug_logger" in modified_content
 
 
 # =============================================================================
@@ -585,7 +585,7 @@ class TestDebuggingOrchestrator:
     
     def test_orchestrator_implements_i_orchestrator(self):
         """Orchestrator implements IOrchestrator interface."""
-        from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator
+        from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
         
         orchestrator = DebuggingOrchestrator()
         

@@ -138,14 +138,14 @@ class EnhancedWiringHarness:
         ),
         WiringHarnessComponent(
             component_id="UNWIRED-GOVERNANCE-001",
-            entry_point="cortex.brain.core.governance_intelligence.GovernanceIntelligence",
+            entry_point="cortex.core.core.governance_intelligence.GovernanceIntelligence",
             priority=1,
             category="HIGH",
             required=True,
         ),
         WiringHarnessComponent(
             component_id="UNWIRED-TIER-001",
-            entry_point="cortex.brain.core.tier_composer.TierComposer",
+            entry_point="cortex.core.core.tier_composer.TierComposer",
             priority=1,
             category="HIGH",
             required=True,
@@ -159,7 +159,7 @@ class EnhancedWiringHarness:
         ),
         WiringHarnessComponent(
             component_id="UNWIRED-INTENT-001",
-            entry_point="cortex.intent_router.intent_canonicalizer.IntentCanonicalizer",
+            entry_point="cortex.orchestrators.core.intent_router.intent_canonicalizer.IntentCanonicalizer",
             priority=1,
             category="HIGH",
             required=False,

@@ -8,7 +8,7 @@ Author: Asif Hussain
 Date: 2026-02-07
 """
 
-from cortex.core.session_summary_generator import (
+from cortex.core.core.session_summary_generator import (
     SessionMetrics,
     StageResult,
     format_session_summary,

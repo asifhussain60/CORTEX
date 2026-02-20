@@ -13,8 +13,8 @@ from datetime import datetime
 import tempfile
 import shutil
 
-from cortex.learning.pattern_extractor import ExtractedPattern, PatternType
-from cortex.learning.pattern_library import PatternLibrary, StoredPattern, get_pattern_library
+from cortex.intelligence.learning.pattern_extractor import ExtractedPattern, PatternType
+from cortex.intelligence.learning.pattern_library import PatternLibrary, StoredPattern, get_pattern_library
 
 
 class TestPatternLibrary:

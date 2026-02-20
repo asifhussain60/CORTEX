@@ -14,7 +14,7 @@ Purpose:
 import pytest
 from pathlib import Path
 
-from cortex.orchestrators.coherence import (
+from cortex.orchestrators.validation import (
     ChangeCoherenceEngine,
     CoherenceStatus,
     CoherenceValidator,

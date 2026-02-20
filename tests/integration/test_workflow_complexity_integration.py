@@ -195,7 +195,7 @@ class TestGoldenHammerIntegration:
     def test_trivial_operation_cannot_use_template(self):
         """Trivial operations routed to templates should be blocked."""
         from cortex.governance import GoldenHammerRules, GoldenHammerViolation
-        from cortex.intent_router.workflow_gate import RoutingDecision, RoutingStrategy
+        from cortex.orchestrators.core.intent_router.workflow_gate import RoutingDecision, RoutingStrategy
         
         rules = GoldenHammerRules()
         
@@ -215,7 +215,7 @@ class TestGoldenHammerIntegration:
     def test_complex_operation_cannot_bypass_template(self):
         """Complex operations bypassing templates should be blocked."""
         from cortex.governance import GoldenHammerRules, GoldenHammerViolation
-        from cortex.intent_router.workflow_gate import RoutingDecision, RoutingStrategy
+        from cortex.orchestrators.core.intent_router.workflow_gate import RoutingDecision, RoutingStrategy
         
         rules = GoldenHammerRules()
         

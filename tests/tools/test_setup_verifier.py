@@ -13,7 +13,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from cortex.toolkit.setup.verifier import SetupVerifier, VerificationResult
+from cortex.tools.toolkit.setup.verifier import SetupVerifier, VerificationResult
 
 
 class TestVerificationResult:

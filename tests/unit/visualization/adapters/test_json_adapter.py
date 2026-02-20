@@ -11,8 +11,8 @@ import tempfile
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex.visualization.adapters.json_adapter import JSONAdapter
-from cortex.visualization.dashboard_data_adapter import DashboardDataAdapter
+from cortex.dashboards.adapters.json_adapter import JSONAdapter
+from cortex.dashboards.dashboard_data_adapter import DashboardDataAdapter
 from cortex.models.dashboard_schema_pydantic import Repository, Dashboard, Overview
 
 

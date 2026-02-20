@@ -6,7 +6,7 @@ Test Count: 8 golden tests
 """
 import pytest
 from pathlib import Path
-from cortex.repositories.onboarding_service import OnboardingService
+from cortex.infrastructure.repositories.onboarding_service import OnboardingService
 
 
 class TestProductionOnboarding:
@@ -84,8 +84,8 @@ class Calculator:
     
     def test_detect_patterns(self, tmp_path: Path) -> None:
         """Golden: Detect design patterns in code."""
-        from cortex.brain.core.intelligence.pattern_detector import PatternDetector
-        from cortex.brain.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         detector = PatternDetector()
         ast_intel = ASTIntelligenceEngine()

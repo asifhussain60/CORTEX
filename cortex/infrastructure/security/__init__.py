@@ -8,7 +8,7 @@ Provides:
 - VulnerabilityOrchestrationGateway (CORTEX integration)
 """
 
-from cortex.security.vulnerability_models import (
+from cortex.infrastructure.security.vulnerability_models import (
     RemediationBatch,
     RemediationResult,
     RemediationRule,
@@ -18,11 +18,11 @@ from cortex.security.vulnerability_models import (
     VulnerabilityFinding,
     VulnerabilityScanResult,
 )
-from cortex.security.remediation_rules import (
+from cortex.infrastructure.security.remediation_rules import (
     RemediationRulesRegistry,
     get_registry,
 )
-from cortex.security.vulnerability_orchestration_gateway import (
+from cortex.infrastructure.security.vulnerability_orchestration_gateway import (
     VulnerabilityOrchestrationGateway,
     get_vulnerability_gateway,
 )
@@ -30,17 +30,17 @@ from cortex.security.vulnerability_orchestration_gateway import (
 # Lazy imports for orchestrator to avoid circular dependencies
 def __getattr__(name):
     if name == "SecurityVulnerabilityOrchestrator":
-        from cortex.orchestrators.security.security_vulnerability_orchestrator import (
+        from cortex.orchestrators.validation.security_vulnerability_orchestrator import (
             SecurityVulnerabilityOrchestrator,
         )
         return SecurityVulnerabilityOrchestrator
     elif name == "VulnerabilityAction":
-        from cortex.orchestrators.security.security_vulnerability_orchestrator import (
+        from cortex.orchestrators.validation.security_vulnerability_orchestrator import (
             VulnerabilityAction,
         )
         return VulnerabilityAction
     elif name == "RemediationHandler":
-        from cortex.orchestrators.security.security_vulnerability_orchestrator import (
+        from cortex.orchestrators.validation.security_vulnerability_orchestrator import (
             RemediationHandler,
         )
         return RemediationHandler

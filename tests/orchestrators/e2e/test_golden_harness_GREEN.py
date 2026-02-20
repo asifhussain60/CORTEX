@@ -12,7 +12,7 @@ from tests.orchestrators.e2e.test_golden_harness import (
     GoldenTestHarness,
     AuditAssertion,
 )
-from cortex.orchestrators.mixins.audit_mixin import OrchestratorAuditMixin
+from cortex.orchestrators.core.audit_mixin import OrchestratorAuditMixin
 
 
 class MockMasterOrchestrator(OrchestratorAuditMixin):

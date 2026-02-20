@@ -15,9 +15,9 @@ from pathlib import Path
 import pytest
 import yaml
 
-from cortex.automation.status_update_hook import StatusUpdateHook
-from cortex.automation.recommendation_gate import RecommendationGate
-from cortex.validation.registry_validator import RegistryValidator
+from cortex.infrastructure.automation.status_update_hook import StatusUpdateHook
+from cortex.infrastructure.automation.recommendation_gate import RecommendationGate
+from cortex.governance.validation.registry_validator import RegistryValidator
 
 
 class TestStatusUpdateHook:

@@ -12,7 +12,7 @@ Consolidates MCP health checks and environment diagnostics.
 **Authority:** Phase 90 S-90-03
 """
 
-from cortex.toolkit.diagnostics.mcp_health import MCPHealthChecker
+from cortex.tools.toolkit.diagnostics.mcp_health import MCPHealthChecker
 
 # Import consolidated diagnostics from Phase 90
 try:

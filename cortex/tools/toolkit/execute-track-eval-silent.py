@@ -106,7 +106,7 @@ def audit_002_phase_e_verify() -> Dict:
     result["ac_002_03"] = "PASS" if rc == 0 else f"FAIL (rc={rc})"
 
     # Coverage
-    rc, cov_out, _ = run_cmd("python -m pytest cortex/domain_brain/ --cov=cortex.domain_brain --cov-report=term-missing -q --tb=no 2>&1 | grep TOTAL")
+    rc, cov_out, _ = run_cmd("python -m pytest cortex/domain_brain/ --cov=cortex.intelligence.domain_brain --cov-report=term-missing -q --tb=no 2>&1 | grep TOTAL")
     coverage_line = cov_out.strip()
     result["ac_002_04"] = coverage_line if coverage_line else "UNKNOWN"
 

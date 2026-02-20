@@ -7,8 +7,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.brain.core.orchestrator_base import OrchestrationContext, OrchestratorBase
-from cortex.domain_brain.api import Domain, DomainBrainAPI, Entity
+from cortex.core.core.orchestrator_base import OrchestrationContext, OrchestratorBase
+from cortex.intelligence.domain_brain.api import Domain, DomainBrainAPI, Entity
 from cortex.intelligence.domain_brain.domain_brain_models import EntityType
 
 
@@ -42,7 +42,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
             context: Orchestration context.
             api: Domain brain API instance.
         """
-        super().__init__("BKIO")
+        super().__init__(context)
         self.context = context
         self.domain_brain_api = api
         self.documents_processed = 0

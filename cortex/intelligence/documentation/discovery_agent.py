@@ -10,9 +10,9 @@ Autonomous discovery agent that:
 5. Generates detailed reports
 
 Usage:
-    python -m cortex.documentation.discovery_agent --full-refresh --cleanup
-    python -m cortex.documentation.discovery_agent --cleanup-only
-    python -m cortex.documentation.discovery_agent --full-refresh --cleanup --dry-run
+    python -m cortex.intelligence.documentation.discovery_agent --full-refresh --cleanup
+    python -m cortex.intelligence.documentation.discovery_agent --cleanup-only
+    python -m cortex.intelligence.documentation.discovery_agent --full-refresh --cleanup --dry-run
 """
 
 import argparse

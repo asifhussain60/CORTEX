@@ -19,7 +19,7 @@ from pathlib import Path
 
 import pytest
 
-from cortex.documentation.glassmorphism_theme import (
+from cortex.intelligence.documentation.glassmorphism_theme import (
     GlassmorphismTheme,
     ThemeConfig,
 )

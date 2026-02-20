@@ -32,7 +32,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
-from cortex.learning.universal_learning_loop import (
+from cortex.intelligence.learning.universal_learning_loop import (
     UniversalLearningLoop,
     PatternType,
     LearningCapture,

@@ -64,7 +64,7 @@ class IncrementalContextLoader:
         Args:
             workspace_root: Root directory of CORTEX workspace
         """
-        from cortex.core.context_cache_layer import ContextCacheLayer
+        from cortex.core.core.context_cache_layer import ContextCacheLayer
 
         self.workspace_root = workspace_root or Path.cwd()
         self._loaded_agents: Dict[str, Any] = {}

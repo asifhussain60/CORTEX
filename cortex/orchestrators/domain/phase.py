@@ -12,7 +12,7 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 import logging
 
-from cortex.orchestrators.planning.strategies.strategy_base import (
+from cortex.orchestrators.domain.strategy_base import (
     ExecutionStrategy,
     ExecutionContext,
     ExecutionResult,

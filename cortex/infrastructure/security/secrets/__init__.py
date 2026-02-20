@@ -4,7 +4,7 @@ Core provider interface and configuration
 
 AC_START: AC-AUDIT-2026-02-12-001
 Fix: CORE-035 violation - Remove duplicate ISecretsProvider definition
-Resolution: Import from cortex.secrets.provider (canonical source)
+Resolution: Import from cortex.infrastructure.security.secrets.provider (canonical source)
 
 AC_START: AC-PHASE51-EXPORT-001
 Enhancement: Export Phase 51 secrets management functions
@@ -13,9 +13,9 @@ Enhancement: Export Phase 51 secrets management functions
 from typing import Any, Dict, List, Optional
 
 # Import canonical ISecretsProvider from provider module
-from cortex.secrets.secrets_provider import ISecretsProvider
+from cortex.infrastructure.security.secrets.secrets_provider import ISecretsProvider
 
-from cortex.secrets.encryption import (
+from cortex.infrastructure.security.secrets.encryption import (
     EncryptedValue,
     EncryptionManager,
     decrypt_value,
@@ -24,7 +24,7 @@ from cortex.secrets.encryption import (
 )
 
 # Phase 51: Enhanced secrets management (AES-256-GCM + audit trail + rotation)
-from cortex.secrets.management import (
+from cortex.infrastructure.security.secrets.management import (
     # Encryption
     encrypt_secret,
     decrypt_secret,

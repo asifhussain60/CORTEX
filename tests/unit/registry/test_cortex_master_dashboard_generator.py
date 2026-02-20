@@ -55,7 +55,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_generator_initialization(self, mock_registry_path):
         """Test generator initializes with registry path."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         generator = CortexMasterDashboardGenerator(mock_registry_path)
         assert generator.registry_path == mock_registry_path
@@ -63,7 +63,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_load_registry_data(self, mock_registry_path):
         """Test loading registry index.yaml."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         generator = CortexMasterDashboardGenerator(mock_registry_path)
         data = generator.load_registry_data()
@@ -75,7 +75,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_calculate_variance_no_previous_data(self, mock_registry_path):
         """Test variance calculation when no previous data exists."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         generator = CortexMasterDashboardGenerator(mock_registry_path)
         variance = generator.calculate_variance(previous_data=None)
@@ -84,7 +84,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_calculate_variance_with_progress_change(self, mock_registry_path):
         """Test variance calculation with phase progress changes."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         generator = CortexMasterDashboardGenerator(mock_registry_path)
         
@@ -103,7 +103,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_calculate_variance_phase_completion(self, mock_registry_path):
         """Test variance when phase moves from active to completed."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         generator = CortexMasterDashboardGenerator(mock_registry_path)
         
@@ -125,7 +125,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_generate_dashboard_data(self, mock_registry_path):
         """Test dashboard data generation."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         generator = CortexMasterDashboardGenerator(mock_registry_path)
         dashboard_data = generator.generate_dashboard_data()
@@ -146,7 +146,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_save_dashboard_data(self, mock_registry_path):
         """Test saving dashboard data to JSON."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         generator = CortexMasterDashboardGenerator(mock_registry_path)
         dashboard_data = generator.generate_dashboard_data()
@@ -163,7 +163,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_full_generation_workflow(self, mock_registry_path):
         """Test complete generation workflow."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         generator = CortexMasterDashboardGenerator(mock_registry_path)
         result = generator.generate()
@@ -178,7 +178,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_error_handling_missing_index(self, tmp_path):
         """Test error handling when index.yaml is missing."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         empty_registry = tmp_path / "empty-registry"
         empty_registry.mkdir()
@@ -190,7 +190,7 @@ class TestCortexMasterDashboardGenerator:
     
     def test_variance_threshold_detection(self, mock_registry_path):
         """Test variance threshold detection logic."""
-        from cortex.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
+        from cortex.core.registry.cortex_master_dashboard_generator import CortexMasterDashboardGenerator
         
         generator = CortexMasterDashboardGenerator(mock_registry_path)
         

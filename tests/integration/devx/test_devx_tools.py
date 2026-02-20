@@ -2,10 +2,10 @@
 
 import pytest
 from typing import Dict, Any
-from cortex.devx.devx_formatter import DevxFormatter
-from cortex.devx.devx_debugger import DevxDebugger, DebugContext
-from cortex.devx.devx_profiler import DevxProfiler, ProfileResult
-from cortex.devx.ide_integration import IDEIntegration
+from cortex.infrastructure.devx.devx_formatter import DevxFormatter
+from cortex.infrastructure.devx.devx_debugger import DevxDebugger, DebugContext
+from cortex.infrastructure.devx.devx_profiler import DevxProfiler, ProfileResult
+from cortex.infrastructure.devx.ide_integration import IDEIntegration
 
 
 class TestDevxFormatter:

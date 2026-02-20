@@ -29,7 +29,7 @@ class TestDeploymentAnalytics:
         - Average deployment duration
         - Rollback frequency
         """
-        from cortex.deployment.analytics import DeploymentAnalytics
+        from cortex.infrastructure.deployment.analytics import DeploymentAnalytics
         
         analytics = DeploymentAnalytics()
         
@@ -58,7 +58,7 @@ class TestDeploymentAnalytics:
         - Duration trends
         - Rollback rate trends
         """
-        from cortex.deployment.analytics import DeploymentAnalytics
+        from cortex.infrastructure.deployment.analytics import DeploymentAnalytics
         
         analytics = DeploymentAnalytics()
         
@@ -89,7 +89,7 @@ class TestDeploymentAnalytics:
         - Rollback triggers
         - Traffic ramp-up patterns
         """
-        from cortex.deployment.analytics import DeploymentAnalytics
+        from cortex.infrastructure.deployment.analytics import DeploymentAnalytics
         
         analytics = DeploymentAnalytics()
         
@@ -119,7 +119,7 @@ class TestDashboardGeneration:
         - Metrics tables present
         - Real-time data display
         """
-        from cortex.deployment.dashboard_generator import DashboardGenerator
+        from cortex.infrastructure.deployment.dashboard_generator import DashboardGenerator
         
         generator = DashboardGenerator()
         
@@ -146,7 +146,7 @@ class TestDashboardGeneration:
         - Duration histogram
         - Rollback frequency chart
         """
-        from cortex.deployment.dashboard_generator import DashboardGenerator
+        from cortex.infrastructure.deployment.dashboard_generator import DashboardGenerator
         
         generator = DashboardGenerator()
         
@@ -170,7 +170,7 @@ class TestDashboardGeneration:
         - Status indicators
         - Trend arrows
         """
-        from cortex.deployment.dashboard_generator import DashboardGenerator
+        from cortex.infrastructure.deployment.dashboard_generator import DashboardGenerator
         
         generator = DashboardGenerator()
         
@@ -202,7 +202,7 @@ class TestRealTimeMonitoring:
         - Progress indicators
         - Time remaining estimates
         """
-        from cortex.deployment.monitor import DeploymentMonitor
+        from cortex.infrastructure.deployment.monitor import DeploymentMonitor
         
         monitor = DeploymentMonitor()
         
@@ -229,7 +229,7 @@ class TestRealTimeMonitoring:
         - Alert conditions
         - Degradation detection
         """
-        from cortex.deployment.monitor import DeploymentMonitor
+        from cortex.infrastructure.deployment.monitor import DeploymentMonitor
         
         monitor = DeploymentMonitor()
         
@@ -256,7 +256,7 @@ class TestRealTimeMonitoring:
         - Rollback frequency alerts
         - Component health alerts
         """
-        from cortex.deployment.monitor import DeploymentMonitor
+        from cortex.infrastructure.deployment.monitor import DeploymentMonitor
         
         monitor = DeploymentMonitor()
         
@@ -286,7 +286,7 @@ class TestMultiRegionDashboard:
         - Cross-region latency
         - Regional health status
         """
-        from cortex.deployment.analytics import DeploymentAnalytics
+        from cortex.infrastructure.deployment.analytics import DeploymentAnalytics
         
         analytics = DeploymentAnalytics()
         
@@ -312,7 +312,7 @@ class TestMultiRegionDashboard:
         - Deployment counts per region
         - Interactive tooltips
         """
-        from cortex.deployment.dashboard_generator import DashboardGenerator
+        from cortex.infrastructure.deployment.dashboard_generator import DashboardGenerator
         
         generator = DashboardGenerator()
         
@@ -341,7 +341,7 @@ class TestDashboardAPI:
         - Response time
         - Error handling
         """
-        from cortex.deployment.dashboard_api import DashboardAPI
+        from cortex.infrastructure.deployment.dashboard_api import DashboardAPI
         
         api = DashboardAPI()
         
@@ -367,7 +367,7 @@ class TestDashboardAPI:
         - Aggregation levels
         - Data completeness
         """
-        from cortex.deployment.dashboard_api import DashboardAPI
+        from cortex.infrastructure.deployment.dashboard_api import DashboardAPI
         
         api = DashboardAPI()
         
@@ -392,7 +392,7 @@ class TestDashboardAPI:
         - Uptime information
         - Version details
         """
-        from cortex.deployment.dashboard_api import DashboardAPI
+        from cortex.infrastructure.deployment.dashboard_api import DashboardAPI
         
         api = DashboardAPI()
         
@@ -421,8 +421,8 @@ class TestDashboardIntegration:
         - Dashboard refresh
         - Notification triggers
         """
-        from cortex.deployment.dashboard_api import DashboardAPI
-        from cortex.deployment.analytics import DeploymentAnalytics
+        from cortex.infrastructure.deployment.dashboard_api import DashboardAPI
+        from cortex.infrastructure.deployment.analytics import DeploymentAnalytics
         
         api = DashboardAPI()
         analytics = DeploymentAnalytics()
@@ -450,7 +450,7 @@ class TestDashboardIntegration:
         - Impact visualization
         - Recovery time tracking
         """
-        from cortex.deployment.dashboard_generator import DashboardGenerator
+        from cortex.infrastructure.deployment.dashboard_generator import DashboardGenerator
         
         generator = DashboardGenerator()
         

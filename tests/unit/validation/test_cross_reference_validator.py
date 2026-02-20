@@ -9,7 +9,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import List
 
-from cortex.validation.cross_reference_validator import (
+from cortex.governance.validation.cross_reference_validator import (
     CrossReferenceValidator,
     ContradictionReport,
     ContradictionType,

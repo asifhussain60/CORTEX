@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.orchestrators.coherence.coherence_models import (
+from cortex.orchestrators.validation.coherence_models import (
     FileStructure,
     Section,
     SectionType,

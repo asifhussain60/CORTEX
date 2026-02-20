@@ -9,7 +9,7 @@ import pytest
 import time
 from typing import Dict, Any, Optional
 
-from cortex.brain.knowledge.unified_intelligence_context import (
+from cortex.intelligence.knowledge.unified_intelligence_context import (
     UnifiedIntelligenceContext,
     LENSIntelligence,
     CompanyKnowledge,

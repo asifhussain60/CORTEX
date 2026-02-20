@@ -21,7 +21,7 @@ from unittest.mock import Mock, MagicMock, patch
 import tempfile
 import yaml
 
-from cortex.learning.intelligence_validator import (
+from cortex.intelligence.learning.intelligence_validator import (
     IntelligenceValidator,
     ValidationReport,
     get_intelligence_validator,
@@ -102,7 +102,7 @@ class TestLearningPipelineValidation:
         """Validation should fail gracefully if learning loop unavailable."""
         validator = IntelligenceValidator()
         
-        with patch("cortex.learning.intelligence_validator.get_learning_loop") as mock_get:
+        with patch("cortex.intelligence.learning.intelligence_validator.get_learning_loop") as mock_get:
             mock_get.return_value = None
             validator.learning_loop = None
             

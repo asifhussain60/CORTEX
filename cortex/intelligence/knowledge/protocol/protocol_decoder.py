@@ -3,7 +3,7 @@
 import json
 from typing import Any, Union
 
-from cortex.knowledge.protocol.knowledge_protocol_spec import (
+from cortex.intelligence.knowledge.protocol.knowledge_protocol_spec import (
     QueryMessage,
     ResultMessage,
     SubscribeMessage,

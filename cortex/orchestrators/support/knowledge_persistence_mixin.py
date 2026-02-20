@@ -19,8 +19,8 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
-from cortex.learning.universal_learning_loop import UniversalLearningLoop
-from cortex.learning.knowledge_synthesizer import KnowledgeSynthesizer
+from cortex.intelligence.learning.universal_learning_loop import UniversalLearningLoop
+from cortex.intelligence.learning.knowledge_synthesizer import KnowledgeSynthesizer
 from cortex.intelligence.perception.pattern_registry import PatternRegistry
 from cortex.intelligence.reasoning.strategy_selector import StrategySelector
 from cortex.intelligence.action.execution_planner import ExecutionPlanner

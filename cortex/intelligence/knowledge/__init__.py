@@ -28,4 +28,17 @@ Updated: 2026-01-28
 
 # No imports from best-practices (YAML files, not Python modules)
 
-__all__: list[str] = []
+# Re-export synthesis modules at package root level for backward compat
+from cortex.intelligence.knowledge.synthesis.knowledge_synthesis_engine import (  # noqa: F401
+    KnowledgeSynthesisEngine,
+    get_synthesis_engine,
+)
+from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (  # noqa: F401
+    UnifiedIntelligenceContext,
+)
+
+__all__: list[str] = [
+    "KnowledgeSynthesisEngine",
+    "get_synthesis_engine",
+    "UnifiedIntelligenceContext",
+]

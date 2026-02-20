@@ -18,7 +18,7 @@ Created: 2026-02-06
 import pytest
 import time
 import threading
-from cortex.interaction.context_cache_layer import (
+from cortex.core.interaction.context_cache_layer import (
     ContextCacheLayer,
     CacheStats,
     get_cache

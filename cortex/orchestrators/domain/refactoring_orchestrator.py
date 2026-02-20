@@ -27,15 +27,15 @@ from typing import Any, Dict, List, Union
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.core.result import Err, Ok
-from cortex.refactoring.adapters.adapter_base import RefactoringToolAdapter
-from cortex.refactoring.adapters.rope_adapter import RopeAdapter
-from cortex.refactoring.adapters.typescript_adapter import TypeScriptAdapter
-from cortex.refactoring.refactoring_models import (
+from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
+from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
+from cortex.orchestrators.domain.refactoring.adapters.typescript_adapter import TypeScriptAdapter
+from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringRequest,
     RefactoringResult,
 )
-from cortex.refactoring.refactoring_registry import RefactoringToolRegistry
+from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
 
 logger = logging.getLogger(__name__)
 
@@ -104,7 +104,7 @@ class RefactoringOrchestrator:
 
         # Try to register RoslynAdapter (may not be imported in all environments)
         try:
-            from cortex.refactoring.adapters.roslyn_adapter import (
+            from cortex.orchestrators.domain.refactoring.adapters.roslyn_adapter import (
                 RoslynAdapter,
             )
             adapters_to_register.append(RoslynAdapter())

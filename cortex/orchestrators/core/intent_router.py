@@ -29,8 +29,8 @@ import yaml
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
-from cortex.brain.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.brain.knowledge.unified_intelligence_context import (
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (
     UnifiedIntelligenceContext,
 )
 from cortex.core.result import Err, Ok, Result
@@ -44,15 +44,15 @@ from cortex.orchestrators.core.routing_enforcement import (
 
 # Note: SpecRegistry import removed - not yet implemented (AC-PERMANENT-FIX-010)
 # Phase 8.2: Import orchestrator lookup and enforcement
-from cortex.orchestrators.registry.orchestrator_lookup import OrchestratorLookup
+from cortex.orchestrators.core.orchestrator_lookup import OrchestratorLookup
 
 # WORKFLOW-COMPLEXITY-GATE-001: Complexity-based routing
-from cortex.intent_router import WorkflowComplexityRouter, Intent as ComplexityIntent
+from cortex.orchestrators.core.intent_router import WorkflowComplexityRouter, Intent as ComplexityIntent
 from cortex.governance import GoldenHammerRules
 
 # Registry Intelligence Integration
 try:
-    from cortex.learning.registry_intelligence_agent import (
+    from cortex.intelligence.learning.registry_intelligence_agent import (
         get_registry_intelligence_agent,
     )
 except ImportError:
@@ -1611,7 +1611,7 @@ class IntentRouter(IOrchestrator):
             )
             
             # Get routing decision from complexity router
-            from cortex.intent_router.workflow_gate import RoutingStrategy as ComplexityRoutingStrategy
+            from cortex.orchestrators.core.intent_router.workflow_gate import RoutingStrategy as ComplexityRoutingStrategy
             complexity_routing = self.complexity_router.route(complexity_intent)
             
             # Validate with golden hammer rules
@@ -2076,7 +2076,7 @@ class IntentRouter(IOrchestrator):
         AC-ID: AC-PHASE-06-S2-002
         """
         try:
-            from cortex.interaction.business_wisdom_formatter import BusinessWisdomFormatter
+            from cortex.core.interaction.business_wisdom_formatter import BusinessWisdomFormatter
             
             formatter = BusinessWisdomFormatter()
             markdown = formatter.format_governance_with_books(

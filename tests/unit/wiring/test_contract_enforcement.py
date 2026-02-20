@@ -7,7 +7,7 @@ Tests contract enforcement during orchestrator registration and runtime.
 import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
-from cortex.wiring.registry.contract_validator import (
+from cortex.core.wiring.registry.contract_validator import (
     ContractValidator,
     ValidationLevel,
     ContractViolation,

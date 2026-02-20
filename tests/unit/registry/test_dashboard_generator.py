@@ -12,7 +12,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock, mock_open
 from datetime import datetime
 
-from cortex.registry.dashboard_generator import (
+from cortex.core.registry.dashboard_generator import (
     DashboardGenerator,
     DashboardData,
     PhaseSummary,
@@ -107,7 +107,7 @@ class TestDashboardDataGeneration:
         
         mock_file = mock_open()
         with patch('builtins.open', mock_file):
-            with patch('cortex.registry.dashboard_generator.Path.mkdir'):
+            with patch('cortex.core.registry.dashboard_generator.Path.mkdir'):
                 dashboard_generator.save_dashboard_json(dashboard_data)
                 
                 mock_file.assert_called_once()
@@ -180,7 +180,7 @@ class TestDashboardHTMLUpdate:
         
         mock_file = mock_open()
         with patch('builtins.open', mock_file):
-            with patch('cortex.registry.dashboard_generator.Path.mkdir'):
+            with patch('cortex.core.registry.dashboard_generator.Path.mkdir'):
                 dashboard_generator.save_updated_html(html_content)
                 
                 mock_file.assert_called_once()

@@ -11,7 +11,7 @@ Date: 2026-02-17
 from typing import List, Optional
 from dataclasses import dataclass
 
-from cortex.intent_router.workflow_gate import RoutingDecision, RoutingStrategy
+from cortex.orchestrators.core.intent_router.workflow_gate import RoutingDecision, RoutingStrategy
 
 
 @dataclass

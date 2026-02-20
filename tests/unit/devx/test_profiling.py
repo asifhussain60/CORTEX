@@ -11,7 +11,7 @@ from unittest.mock import Mock, patch, MagicMock
 from typing import Dict, Any
 from datetime import datetime
 
-from cortex.devx.profiling_tools import (
+from cortex.infrastructure.devx.profiling_tools import (
     ProfileConfig,
     ProfilingTools,
     CPUProfile,

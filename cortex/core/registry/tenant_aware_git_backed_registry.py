@@ -21,8 +21,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.registry.tenant_context import TenantContext, validate_tenant_context
-from cortex.wiring.registry.git_backed_registry import (
+from cortex.core.registry.tenant_context import TenantContext, validate_tenant_context
+from cortex.core.wiring.registry.git_backed_registry import (
     GitBackedRegistry as BaseGitBackedRegistry,
 )
 

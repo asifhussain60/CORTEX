@@ -11,7 +11,7 @@ Updated: 2026-01-25 - Use is_ok()/is_err()/unwrap() API
 """
 
 import pytest
-from cortex.orchestrators.onboarding.orchestrator import (
+from cortex.orchestrators.support.orchestrator import (
     OnboardingOrchestrator,
     JourneyState,
     JourneyProgress

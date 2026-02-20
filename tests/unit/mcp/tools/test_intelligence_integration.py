@@ -183,7 +183,7 @@ class Calculator:
         assert len(comments) > 0, "Expected comment analysis results"
         
         # Get the CommentAnalysisResult object
-        from cortex.brain.core.intelligence.comment_analyzer import CommentAnalysisResult
+        from cortex.core.core.intelligence.comment_analyzer import CommentAnalysisResult
         result = comments[0]
         assert isinstance(result, CommentAnalysisResult)
 

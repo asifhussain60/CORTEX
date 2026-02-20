@@ -30,8 +30,8 @@ from cortex.health_check_service import (
     ComponentHealth,
     HealthResponse,
 )
-from cortex.intent_router.router import EnhancedIntentRouter, IntentRoutingRequest
-from cortex.intent_router.capability_matcher import IntentType
+from cortex.orchestrators.core.intent_router.router import EnhancedIntentRouter, IntentRoutingRequest
+from cortex.orchestrators.core.intent_router.capability_matcher import IntentType
 
 
 class TestHealthCheckServiceBasics:

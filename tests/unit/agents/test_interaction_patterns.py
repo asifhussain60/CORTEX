@@ -10,7 +10,7 @@ import pytest
 from typing import List
 from unittest.mock import Mock
 
-from cortex.agents.interaction_patterns import (
+from cortex.orchestrators.intelligence.interaction_patterns import (
     AgentRequest,
     AgentResponse,
     AgentResponseFormat,

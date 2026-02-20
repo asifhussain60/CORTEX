@@ -25,7 +25,7 @@ class DeploymentMonitor:
 
     def __init__(self) -> None:
         """Initialize deployment monitor."""
-        self.logger = logging.getLogger("cortex.deployment.monitor")
+        self.logger = logging.getLogger("cortex.infrastructure.deployment.monitor")
         self._active_deployments: List[Dict[str, Any]] = []
 
     async def get_active_status(self) -> Dict[str, Any]:

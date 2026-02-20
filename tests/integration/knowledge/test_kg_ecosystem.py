@@ -8,10 +8,10 @@ import pytest
 from typing import Dict, List, Any, Set
 from datetime import datetime
 
-from cortex.brain.domain_brain.kg_indexer import KnowledgeIndexer
-from cortex.brain.domain_brain.kg_querier import KnowledgeQuerier
-from cortex.brain.domain_brain.kg_inference import KnowledgeInference
-from cortex.brain.domain_brain.kg_exchange import KnowledgeExchange
+from cortex.intelligence.domain_brain.domain_brain.kg_indexer import KnowledgeIndexer
+from cortex.intelligence.domain_brain.domain_brain.kg_querier import KnowledgeQuerier
+from cortex.intelligence.domain_brain.domain_brain.kg_inference import KnowledgeInference
+from cortex.intelligence.domain_brain.domain_brain.kg_exchange import KnowledgeExchange
 
 
 class TestKnowledgeIndexer:

@@ -8,7 +8,7 @@ AC-PERMANENT-FIX-015: Prevent repeated discovery of same critical issues
 by running mandatory startup validation on first import.
 
 IMPORTANT (CORE-035): This module handles STARTUP VALIDATION only.
-For ORCHESTRATOR WIRING, use cortex.wiring.bootstrap_cortex() which
+For ORCHESTRATOR WIRING, use cortex.core.wiring.bootstrap_cortex() which
 returns the GitBackedRegistry with all 23 orchestrators.
 """
 

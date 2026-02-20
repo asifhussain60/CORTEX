@@ -20,7 +20,7 @@ import pytest
 from datetime import datetime
 from unittest.mock import Mock, MagicMock, patch
 
-from cortex.learning.learning_dashboard import (
+from cortex.intelligence.learning.learning_dashboard import (
     LearningDashboard,
     MetricsSnapshot,
     get_learning_dashboard,

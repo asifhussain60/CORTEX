@@ -1,15 +1,15 @@
 """Storage module initialization."""
 
-from cortex.storage.storage_config import StorageConfig
-from cortex.storage.errors import (
+from cortex.infrastructure.storage.storage_config import StorageConfig
+from cortex.infrastructure.storage.errors import (
     ConfigurationError,
     NetworkError,
     NotFoundError,
     PermissionError,
     StorageError,
 )
-from cortex.storage.factory import StorageProviderFactory
-from cortex.storage.storage_provider import IKnowledgeProvider
+from cortex.infrastructure.storage.factory import StorageProviderFactory
+from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
 
 __all__ = [
     "IKnowledgeProvider",

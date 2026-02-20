@@ -12,7 +12,7 @@ Date: 2026-02-07
 """
 
 import pytest
-from cortex.brain.core.session_summary_generator import (
+from cortex.core.core.session_summary_generator import (
     format_session_summary,
     generate_continuation_checkpoint,
     get_token_status,

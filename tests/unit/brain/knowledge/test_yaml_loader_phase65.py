@@ -19,7 +19,7 @@ from unittest.mock import Mock, patch, MagicMock
 import yaml
 import time
 
-from cortex.brain.knowledge.knowledge_synthesis_engine import (
+from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
     KnowledgeSynthesisEngine,
     SynthesizedInstruction,
     KnowledgeSource,

@@ -32,6 +32,18 @@ from cortex.orchestrators.validation.confidence_scorer import (
     ConfidenceResult,
     ConfidenceFactor,
 )
+from cortex.orchestrators.validation.change_coherence_engine import ChangeCoherenceEngine
+from cortex.orchestrators.validation.coherence_models import (
+    CoherenceStatus,
+    PreEditContext,
+    CoherenceReport,
+)
+from cortex.orchestrators.validation.coherence_validator import (
+    CoherenceValidator,
+    ValidationConfig,
+)
+from cortex.orchestrators.validation.duplicate_scanner import DuplicateScanner
+from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer
 
 __all__ = [
     "HolisticValidationOrchestrator",
@@ -44,6 +56,14 @@ __all__ = [
     "ConfidenceScorer",
     "ConfidenceResult",
     "ConfidenceFactor",
+    "ChangeCoherenceEngine",
+    "CoherenceStatus",
+    "PreEditContext",
+    "CoherenceReport",
+    "CoherenceValidator",
+    "ValidationConfig",
+    "DuplicateScanner",
+    "StructureAnalyzer",
 ]
 
 __version__ = "1.0.0"

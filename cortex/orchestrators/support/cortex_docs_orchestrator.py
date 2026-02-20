@@ -229,7 +229,7 @@ class CortexDocsOrchestrator:
         """Run discovery pipeline (orchestrators, tools, metrics)."""
         # Import here to avoid circular dependencies
         try:
-            from cortex.documentation.discovery_pipeline import DiscoveryPipeline
+            from cortex.intelligence.documentation.discovery_pipeline import DiscoveryPipeline
             
             pipeline = DiscoveryPipeline()
             result = pipeline.discover()
@@ -250,7 +250,7 @@ class CortexDocsOrchestrator:
     def _run_extraction(self) -> Dict[str, Any]:
         """Run content extraction (MD → content.json)."""
         try:
-            from cortex.documentation.content_extractor import ContentExtractor
+            from cortex.intelligence.documentation.content_extractor import ContentExtractor
             
             extractor = ContentExtractor(self.content_root)
             result = extractor.extract()
@@ -269,7 +269,7 @@ class CortexDocsOrchestrator:
     def _run_rendering(self) -> Dict[str, Any]:
         """Run template rendering (content.json → HTML)."""
         try:
-            from cortex.documentation.template_renderer import TemplateRenderer
+            from cortex.intelligence.documentation.template_renderer import TemplateRenderer
             
             renderer = TemplateRenderer(self.template_dir, self.output_root)
             result = renderer.render(self._content_json)
@@ -288,7 +288,7 @@ class CortexDocsOrchestrator:
     def _run_validation(self) -> Dict[str, Any]:
         """Run content validation (link checking, schema)."""
         try:
-            from cortex.documentation.content_validator import ContentValidator
+            from cortex.intelligence.documentation.content_validator import ContentValidator
             
             validator = ContentValidator(self.output_root)
             result = validator.validate()

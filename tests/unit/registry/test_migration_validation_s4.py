@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Dict, Any
 from unittest.mock import Mock, patch
 
-from cortex.registry.migration import RegistryMigration
+from cortex.core.registry.migration import RegistryMigration
 
 
 # ============================================================================
@@ -77,7 +77,7 @@ class TestBackwardCompatibility:
     
     def test_local_workspace_works_without_migration(self):
         """Local workspace works without migration (single-tenant mode)."""
-        from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+        from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
         
         # Default to local mode (no migration needed)
         registry = MultiTenantRegistry()
@@ -86,7 +86,7 @@ class TestBackwardCompatibility:
     
     def test_existing_code_unaffected(self):
         """Existing code using registry unaffected by multi-tenant changes."""
-        from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+        from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
         
         # Old code that doesn't specify workspace
         registry = MultiTenantRegistry()
@@ -100,7 +100,7 @@ class TestBackwardCompatibility:
     
     def test_no_breaking_changes_in_api(self):
         """No breaking changes in MultiTenantRegistry API."""
-        from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+        from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
         
         # All original methods still work
         registry = MultiTenantRegistry()
@@ -120,7 +120,7 @@ class TestWorkspaceIsolationValidation:
     
     def test_concurrent_workspace_operations_isolated(self):
         """Concurrent operations on different workspaces remain isolated."""
-        from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+        from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
         
         registries = [
             MultiTenantRegistry(workspace_id="workspace-1", tenant_id="tenant-1"),
@@ -140,7 +140,7 @@ class TestWorkspaceIsolationValidation:
     
     def test_workspace_deletion_no_impact_on_others(self):
         """Deleting one workspace doesn't impact other workspaces."""
-        from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+        from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
         
         registry1 = MultiTenantRegistry(workspace_id="workspace-1")
         registry2 = MultiTenantRegistry(workspace_id="workspace-2")
@@ -160,7 +160,7 @@ class TestWorkspaceIsolationValidation:
     
     def test_stress_test_100_workspaces(self):
         """Stress test: 100 workspaces maintain isolation."""
-        from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+        from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
         
         registries = []
         for i in range(100):
@@ -186,7 +186,7 @@ class TestPerformanceValidation:
     
     def test_registry_load_time_under_100ms(self):
         """Registry load time ≤100ms per tenant."""
-        from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+        from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
         
         registry = MultiTenantRegistry(workspace_id="acme-dev", tenant_id="acme")
         
@@ -203,7 +203,7 @@ class TestPerformanceValidation:
     
     def test_cache_hit_rate_above_70_percent(self):
         """Cache hit rate ≥70% after typical usage."""
-        from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+        from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
         
         registry = MultiTenantRegistry(workspace_id="acme-dev", tenant_id="acme")
         
@@ -222,7 +222,7 @@ class TestPerformanceValidation:
     
     def test_cache_effectiveness_multiple_files(self):
         """Cache effective across multiple files."""
-        from cortex.registry.multi_tenant_registry import MultiTenantRegistry
+        from cortex.core.registry.multi_tenant_registry import MultiTenantRegistry
         
         registry = MultiTenantRegistry(workspace_id="acme-dev", tenant_id="acme")
         
