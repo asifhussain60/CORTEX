@@ -69,8 +69,14 @@ class MarkerInjectionEngine:
     """
     
     # Marker template (Jinja2)
-    MARKER_TEMPLATE = Template("""
-""")
+    MARKER_TEMPLATE = Template(
+        "# === CORTEX DEBUG MARKER [{{ trigger_type }}] ===\n"
+        "# session_id: {{ session_id }}\n"
+        "# trigger_type: {{ trigger_type }}\n"
+        "# context: {{ context }}\n"
+        "# timestamp: {{ timestamp }}\n"
+        "# === END MARKER ===\n"
+    )
     
     def __init__(self):
         """Initialize MarkerInjectionEngine with strategies."""
