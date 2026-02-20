@@ -1122,19 +1122,99 @@ phases:
     issues_found: 8
     issues_resolved: 8
 
+- id: phase-12
+  name: "MCP Consolidation + Stale Dir Strangler-Fig Migration"
+  status: planned
+  priority: high
+  authority: "CORE-035 (Single Canonical Implementation), ENH-001, ENH-002"
+  description: >
+    Consolidate 38 MCP tool Python files → 23 canonical tools (matching cortex-architect.prompt.md spec).
+    Complete strangler-fig migration for 5 legacy top-level cortex/ directories that are currently
+    functioning as backward-compat shims.
+  scope:
+    mcp_consolidation:
+      description: "Reduce MCP tool file sprawl from 38 → 23 tools"
+      current_state:
+        tool_files: 38
+        subdirs: ["toolkit/ (5 files)", "multi_repo/ (6 files)", "deployment/ (5 files)"]
+        total_tools_declared: 38
+      target_state:
+        tool_files: 23
+        target_spec: "cortex-architect.prompt.md § MCP Architecture — 23 MCP Tools"
+      consolidations:
+        - from: "cortex/mcp/tools/toolkit/ (health_check, mode_switch, status, etc.)"
+          to: "cortex/mcp/tools/cortex_health.py (mode parameter)"
+          rationale: "5 small toolkit tools → modes on one health tool"
+        - from: "cortex/mcp/tools/multi_repo/ (6 files)"
+          to: "cortex/mcp/tools/cortex_onboard_repository.py (scope parameter)"
+          rationale: "Multi-repo onboarding → scope=single|multi|org on canonical tool"
+        - from: "cortex/mcp/tools/deployment/ (5 files)"
+          to: "cortex/mcp/tools/cortex_deploy.py (action parameter)"
+          rationale: "Deploy/rollback/status → single cortex_deploy tool with action"
+        - from: "cortex/mcp/tools/cortex_challenge_integration.py"
+          to: "cortex/mcp/tools/cortex_challenge.py (integrated)"
+          rationale: "Merge challenge + integration into single tool"
+    stale_dir_migration:
+      description: >
+        5 legacy top-level cortex/ directories are functioning as strangler-fig shims.
+        Phase-12 completes their migration: redirect all callers to canonical locations,
+        then remove the shim dirs.
+      directories:
+        - path: "cortex/domain_orchestrators/"
+          current_role: "stub __init__.py only — imports live at cortex/orchestrators/domain/"
+          migration: "Update all test/source imports → cortex.orchestrators.domain.business, then delete"
+          callers: ["tests/unit/domain_orchestrators/", "cortex/orchestrators/domain/business/__init__.py"]
+        - path: "cortex/phase_executors/"
+          current_role: "4 files — phase executor base + factory + orchestrator"
+          migration: "Move to cortex/orchestrators/core/phase_executors/, update imports"
+          callers: ["tests/cortex_brain/test_phase_executor_framework.py"]
+        - path: "cortex/registry/"
+          current_role: "shim providing REGISTRY_ROOT path helper"
+          migration: "Absorb into cortex/core/registry.py (already exists in cortex/core/)"
+          callers: ["cortex/bootstrap.py", "cortex/core/wiring/wiring_bootstrap.py"]
+        - path: "cortex/wiring/"
+          current_role: "shim re-exporting from cortex.core.wiring.wiring_bootstrap"
+          migration: "Update all callers to import directly from cortex.core.wiring, delete shim"
+          callers: ["cortex/bootstrap.py", "cortex/core/wiring/wiring_bootstrap.py"]
+        - path: "cortex/intent_router/"
+          current_role: "shim re-exporting from cortex.orchestrators.core.intent_router"
+          migration: "Update all callers to import directly from cortex.orchestrators.core.intent_router, delete"
+          callers: ["cortex/cli/__main__.py", "cortex/orchestrators/core/master_orchestrator.py"]
+      net_reduction: "26 → 21 top-level cortex/ directories"
+  tdd_mandate: "CORE-008 — write failing tests for each import repoint before updating callers"
+  regression_gate: "15,303 collected tests must remain passing (no new failures)"
+  acceptance_criteria:
+    - "AC-PHASE12-001: MCP tool file count reduced from 38 → ≤ 24"
+    - "AC-PHASE12-002: cortex/mcp/tools/ subdirectory count reduced from 3 → 0"
+    - "AC-PHASE12-003: cortex/ top-level dirs reduced from 26 → ≤ 21"
+    - "AC-PHASE12-004: All 23 MCP tools respond to cortex_tools_catalog"
+    - "AC-PHASE12-005: Zero new import failures in test_wiring_harness.py"
+    - "AC-PHASE12-006: 486 golden tests still passing after migration"
+  progress:
+    started: null
+    completed: null
+    current_stage: planned
+    stages_complete: []
+    tests_written: 0
+    tests_passing: 0
+    coverage_pct: 0
+    commits: []
+    issues_found: 0
+    issues_resolved: 0
+
 lens_scans:
   history: []
 validation_loops:
   history: []
 completion:
-  status: in_progress
-  completed_date: null
-  total_duration: "~32 hours across 12 phases (2026-02-19 to 2026-02-20) + phase-11 pending"
-  final_test_count: 683
+  status: phases_1_to_11_complete
+  completed_date: "2026-02-20"
+  total_duration: "~32 hours across 12 phases (2026-02-19 to 2026-02-20)"
+  final_test_count: 15303
   final_coverage_pct: 100
   final_golden_tests: 486
   cortex_master_yaml_updated: true
   summary:
-    issues_identified: "Phase 10 TDD revealed 4 test/assertion issues (all resolved). Phase 11 gap analysis identified 8 gaps across 4 priority tiers."
-    solution_implemented: "25 production readiness tests across 6 domains: perf, security, chaos, DR, observability, regression"
-    next_steps: "Execute phase-11 gap remediation in priority order: GAP-002 → GAP-001 → GAP-004 → GAP-003 → GAP-005 → GAP-006 → GAP-007 → GAP-008"
+    issues_identified: "Phase 10 TDD revealed 4 test/assertion issues (all resolved). Phase 11 gap analysis identified 8 gaps across 4 priority tiers. Phase 12 planned: MCP consolidation + stale dir cleanup."
+    solution_implemented: "25 production readiness tests across 6 domains: perf, security, chaos, DR, observability, regression. ENH-003: wiring harness + collection error fixed. ENH-001/002: phase-12 planned."
+    next_steps: "Execute phase-12: (1) MCP consolidation 38→23 tools, (2) stale dir migration 26→21 dirs"

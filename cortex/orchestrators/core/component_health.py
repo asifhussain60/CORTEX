@@ -264,6 +264,26 @@ class ComponentHealthTracker:
             self._components[name].success_count = 0
             self._components[name].last_check = None
     
+    def get_initialization_status(self) -> List[Dict[str, Any]]:
+        """Get initialization status for all registered components.
+
+        Returns a snapshot of each registered component's name, type and current
+        health status — used by test harness and startup diagnostics.
+
+        Returns:
+            List of dicts with keys: name, component_type, status, error_count, success_count
+        """
+        return [
+            {
+                "name": c.name,
+                "component_type": c.component_type.value,
+                "status": c.status.value,
+                "error_count": c.error_count,
+                "success_count": c.success_count,
+            }
+            for c in self._components.values()
+        ]
+
     def unregister_component(self, name: str) -> None:
         """Unregister component from health tracking.
         
