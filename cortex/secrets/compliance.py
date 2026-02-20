@@ -24,6 +24,7 @@ class ComplianceReporter:
         regulation: str = "SOC2",
         findings: Optional[List[Dict[str, Any]]] = None,
     ) -> ComplianceReport:
+        """TODO: Add docstring (CORE-012)."""
         findings = findings or []
         score = max(0.0, 100.0 - len(findings) * 10)
         status = "COMPLIANT" if not findings else "NON_COMPLIANT"
@@ -35,6 +36,7 @@ class ComplianceReporter:
         )
 
     def export_csv(self, report: ComplianceReport) -> str:
+        """TODO: Add docstring (CORE-012)."""
         lines = ["regulation,status,score,finding_count"]
         lines.append(f"{report.regulation},{report.status},{report.score},{len(report.findings)}")
         return "\n".join(lines)
@@ -47,6 +49,7 @@ class EvidenceCollector:
         self._evidence: List[Dict[str, Any]] = []
 
     def collect(self, evidence_type: str, data: Any, source: str = "system") -> None:
+        """TODO: Add docstring (CORE-012)."""
         self._evidence.append({
             "type": evidence_type,
             "data": data,
@@ -55,6 +58,7 @@ class EvidenceCollector:
         })
 
     def get_evidence(self) -> List[Dict[str, Any]]:
+        """TODO: Add docstring (CORE-012)."""
         return list(self._evidence)
 
 
@@ -66,6 +70,7 @@ class ComplianceAutomation:
         self._collector = EvidenceCollector()
 
     def run_checks(self, controls: List[str]) -> Dict[str, Any]:
+        """TODO: Add docstring (CORE-012)."""
         results = {}
         for control in controls:
             results[control] = {"status": "PASS", "evidence": []}
@@ -79,6 +84,7 @@ class ComplianceDashboard:
         self._reporter = reporter or ComplianceReporter()
 
     def get_summary(self, findings: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+        """TODO: Add docstring (CORE-012)."""
         report = self._reporter.generate_report(findings=findings)
         return {
             "overall_status": report.status,
@@ -97,6 +103,7 @@ class ComplianceOrchestrator:
         self.automation = ComplianceAutomation()
 
     def run(self, regulations: Optional[List[str]] = None) -> List[ComplianceReport]:
+        """TODO: Add docstring (CORE-012)."""
         regulations = regulations or ["SOC2", "GDPR", "HIPAA"]
         return [self.reporter.generate_report(reg) for reg in regulations]
 
@@ -105,6 +112,7 @@ class CertificationGenerator:
     """Generates compliance certification documents."""
 
     def generate(self, report: ComplianceReport) -> str:
+        """TODO: Add docstring (CORE-012)."""
         return (
             f"COMPLIANCE CERTIFICATE\n"
             f"Regulation: {report.regulation}\n"

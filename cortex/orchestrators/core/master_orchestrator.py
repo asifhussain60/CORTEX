@@ -376,7 +376,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                 )
 
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic operations
-        db_path = Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "state" / "governance.db"
+        db_path = Path(__file__).parent.parent.parent.parent / ".cortex-runtime" / "governance.db"
         self.transaction_manager = DatabaseTransactionManager(str(db_path))
 
         # Phase 27: Initialize StandardsResolver for company domain integration
@@ -653,7 +653,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
         # AC-ENH-002-01: Initialize ResponseHeaderInjector for header wrapping
         try:
             config_manager = HeaderConfigurationManager.get_instance()
-            config_manager.load_configuration('cortex_intelligence/tier0/response-headers.yaml')
+            config_manager.load_configuration('cortex-registry/core/response-headers.yaml')
 
             # Create ResponseHeaderInjector instance
             # Uses composition pattern - injector wraps a template engine

@@ -144,10 +144,10 @@ class GovernanceDashboardBuilder:
         """
         self.workspace_root = workspace_root or Path.cwd()
         self.governance_db = (
-            self.workspace_root / "cortex_intelligence" / "state" / "governance.db"
+            self.workspace_root / ".cortex-runtime" / "governance.db"
         )
         self.rules_file = (
-            self.workspace_root / "cortex_intelligence" / "tier0" / "governance" / "core-rules.yaml"
+            self.workspace_root / "cortex-registry" / "core" / "governance" / "core-rules.yaml"
         )
 
     def build_dashboard(self, phase_id: Optional[str] = None) -> GovernanceRuleDashboard:

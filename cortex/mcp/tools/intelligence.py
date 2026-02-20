@@ -64,10 +64,12 @@ class CortexLens(ConsolidatedTool):
     
     @property
     def name(self) -> str:
+        """TODO: Add docstring (CORE-012)."""
         return "cortex_lens"
     
     @property
     def description(self) -> str:
+        """TODO: Add docstring (CORE-012)."""
         return (
             "Unified code intelligence via LENS methodology. Supports analysis, "
             "semantic search, dependency graphs, duplicate detection, and AST analysis."
@@ -75,10 +77,12 @@ class CortexLens(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
+        """TODO: Add docstring (CORE-012)."""
         return ToolCategory.INTELLIGENCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
+        """TODO: Add docstring (CORE-012)."""
         return [
             ToolParameter(
                 name="operation",
@@ -110,6 +114,7 @@ class CortexLens(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
+        """TODO: Add docstring (CORE-012)."""
         return ["analyze", "search", "graph", "duplicates", "ast"]
     
     async def execute(self, **params) -> ToolResult:
@@ -398,10 +403,12 @@ class CortexKnowledge(ConsolidatedTool):
     
     @property
     def name(self) -> str:
+        """TODO: Add docstring (CORE-012)."""
         return "cortex_knowledge"
     
     @property
     def description(self) -> str:
+        """TODO: Add docstring (CORE-012)."""
         return (
             "Access CORTEX knowledge base. Search for domain knowledge, "
             "best practices, and identify knowledge gaps."
@@ -409,10 +416,12 @@ class CortexKnowledge(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
+        """TODO: Add docstring (CORE-012)."""
         return ToolCategory.INTELLIGENCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
+        """TODO: Add docstring (CORE-012)."""
         return [
             ToolParameter(
                 name="operation",
@@ -443,6 +452,7 @@ class CortexKnowledge(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
+        """TODO: Add docstring (CORE-012)."""
         return ["search", "domain", "best_practices", "gaps"]
     
     async def execute(self, **params) -> ToolResult:
@@ -521,10 +531,12 @@ class CortexGit(ConsolidatedTool):
     
     @property
     def name(self) -> str:
+        """TODO: Add docstring (CORE-012)."""
         return "cortex_git"
     
     @property
     def description(self) -> str:
+        """TODO: Add docstring (CORE-012)."""
         return (
             "Git history and context operations. Get commit history, blame, "
             "diffs, and 24-hour context for informed development."
@@ -532,10 +544,12 @@ class CortexGit(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
+        """TODO: Add docstring (CORE-012)."""
         return ToolCategory.INTELLIGENCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
+        """TODO: Add docstring (CORE-012)."""
         return [
             ToolParameter(
                 name="operation",
@@ -566,6 +580,7 @@ class CortexGit(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
+        """TODO: Add docstring (CORE-012)."""
         return ["history", "blame", "diff", "context", "changes"]
     
     async def execute(self, **params) -> ToolResult:

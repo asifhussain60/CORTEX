@@ -19,6 +19,7 @@ class SecretsScanner:
     """Base scanner — scans text content for secret patterns."""
 
     def scan_text(self, text: str) -> List[Dict[str, Any]]:
+        """TODO: Add docstring (CORE-012)."""
         findings: List[Dict[str, Any]] = []
         for i, line in enumerate(text.splitlines(), 1):
             for pattern in _SECRET_PATTERNS:
@@ -27,6 +28,7 @@ class SecretsScanner:
         return findings
 
     def scan_file(self, file_path: str) -> List[Dict[str, Any]]:
+        """TODO: Add docstring (CORE-012)."""
         try:
             content = Path(file_path).read_text(errors="replace")
             findings = self.scan_text(content)
@@ -44,6 +46,7 @@ class GitHistoryScanner(SecretsScanner):
         self.repo_path = repo_path
 
     def scan_commits(self, max_commits: int = 100) -> List[Dict[str, Any]]:
+        """TODO: Add docstring (CORE-012)."""
         try:
             result = subprocess.run(
                 ["git", "log", f"-{max_commits}", "--patch", "--unified=0"],
@@ -54,6 +57,7 @@ class GitHistoryScanner(SecretsScanner):
             return []
 
     def scan_all_history(self) -> List[Dict[str, Any]]:
+        """TODO: Add docstring (CORE-012)."""
         return self.scan_commits(max_commits=500)
 
 
@@ -61,6 +65,7 @@ class GitHubActionsScanner(SecretsScanner):
     """Scans GitHub Actions workflow files for hardcoded secrets."""
 
     def scan_workflows(self, repo_path: str = ".") -> List[Dict[str, Any]]:
+        """TODO: Add docstring (CORE-012)."""
         findings: List[Dict[str, Any]] = []
         workflows_dir = Path(repo_path) / ".github" / "workflows"
         if workflows_dir.exists():
@@ -76,6 +81,7 @@ class PreCommitHookScanner(SecretsScanner):
         self.repo_path = repo_path
 
     def install_hook(self) -> bool:
+        """TODO: Add docstring (CORE-012)."""
         hooks_dir = Path(self.repo_path) / ".git" / "hooks"
         if not hooks_dir.exists():
             return False
@@ -86,6 +92,7 @@ class PreCommitHookScanner(SecretsScanner):
         return True
 
     def is_installed(self) -> bool:
+        """TODO: Add docstring (CORE-012)."""
         hook_path = Path(self.repo_path) / ".git" / "hooks" / "pre-commit"
         return hook_path.exists()
 
@@ -94,6 +101,7 @@ class SecretsRemediator:
     """Remediates detected secrets — rotates, redacts, or removes them."""
 
     def redact_file(self, file_path: str, findings: List[Dict[str, Any]]) -> bool:
+        """TODO: Add docstring (CORE-012)."""
         path = Path(file_path)
         if not path.exists():
             return False
@@ -106,6 +114,7 @@ class SecretsRemediator:
         return True
 
     def generate_remediation_plan(self, findings: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+        """TODO: Add docstring (CORE-012)."""
         return [
             {
                 "file": f.get("file", "unknown"),

@@ -255,11 +255,11 @@ orchestrators:
 # =============================================================================
 analyzers:
   - name: "ComplexityAnalyzer"
-    module: "cortex_lens.analyzers.complexity_analyzer"
+    module: "cortex.lens.analyzers.complexity_analyzer"
     class: "ComplexityAnalyzer"
 
   - name: "DependencyAnalyzer"
-    module: "cortex_lens.analyzers.dependency_analyzer"
+    module: "cortex.lens.analyzers.dependency_analyzer"
     class: "DependencyAnalyzer"
 
 # =============================================================================

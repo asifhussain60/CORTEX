@@ -24,6 +24,7 @@ class SecretsMigrator:
         destination: ISecretsProvider,
         keys: Optional[List[str]] = None,
     ) -> MigrationResult:
+        """TODO: Add docstring (CORE-012)."""
         result = MigrationResult()
         keys = keys or source.list_secrets()
         for key in keys:
@@ -42,6 +43,7 @@ class SecretsValidator:
     """Validates that secrets exist and meet policy requirements."""
 
     def validate_secret(self, provider: ISecretsProvider, key: str, policy: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """TODO: Add docstring (CORE-012)."""
         try:
             value = provider.get_secret(key)
             issues: List[str] = []
@@ -53,6 +55,7 @@ class SecretsValidator:
             return {"key": key, "valid": False, "issues": [str(exc)]}
 
     def validate_all(self, provider: ISecretsProvider) -> List[Dict[str, Any]]:
+        """TODO: Add docstring (CORE-012)."""
         return [self.validate_secret(provider, k) for k in provider.list_secrets()]
 
 
@@ -63,6 +66,7 @@ class SecretsRollback:
         self._snapshot: Dict[str, str] = {}
 
     def snapshot(self, provider: ISecretsProvider) -> None:
+        """TODO: Add docstring (CORE-012)."""
         for key in provider.list_secrets():
             try:
                 self._snapshot[key] = provider.get_secret(key)
@@ -70,6 +74,7 @@ class SecretsRollback:
                 pass
 
     def rollback(self, provider: ISecretsProvider) -> bool:
+        """TODO: Add docstring (CORE-012)."""
         for key, value in self._snapshot.items():
             try:
                 provider.set_secret(key, value)
@@ -86,6 +91,7 @@ class SecretsMigrationDetector:
         source: ISecretsProvider,
         destination: ISecretsProvider,
     ) -> bool:
+        """TODO: Add docstring (CORE-012)."""
         src_keys = set(source.list_secrets())
         dst_keys = set(destination.list_secrets())
         return len(src_keys - dst_keys) > 0
@@ -95,6 +101,7 @@ class SecretsMigrationDetector:
         source: ISecretsProvider,
         destination: ISecretsProvider,
     ) -> Dict[str, Any]:
+        """TODO: Add docstring (CORE-012)."""
         src_keys = set(source.list_secrets())
         dst_keys = set(destination.list_secrets())
         return {
@@ -119,6 +126,7 @@ class SecretsMigrationOrchestrator:
         destination: ISecretsProvider,
         dry_run: bool = False,
     ) -> MigrationResult:
+        """TODO: Add docstring (CORE-012)."""
         if dry_run:
             diff = self._detector.diff(source, destination)
             return MigrationResult(

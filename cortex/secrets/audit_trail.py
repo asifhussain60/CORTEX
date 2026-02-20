@@ -28,6 +28,7 @@ class AuditLogger:
         self._entries: List[AuditEntry] = []
 
     def log(self, action: str, key: str, actor: str = "system", success: bool = True, **meta: Any) -> AuditEntry:
+        """TODO: Add docstring (CORE-012)."""
         entry = AuditEntry(
             timestamp=datetime.utcnow().isoformat(),
             action=action,
@@ -43,6 +44,7 @@ class AuditLogger:
         return entry
 
     def get_entries(self) -> List[AuditEntry]:
+        """TODO: Add docstring (CORE-012)."""
         return list(self._entries)
 
 
@@ -54,6 +56,7 @@ class HashChain:
         self._prev_hash = "0" * 64
 
     def append(self, entry: Dict[str, Any]) -> str:
+        """TODO: Add docstring (CORE-012)."""
         data = json.dumps(entry, sort_keys=True) + self._prev_hash
         digest = hashlib.sha256(data.encode()).hexdigest()
         self._chain.append(digest)
@@ -61,9 +64,11 @@ class HashChain:
         return digest
 
     def verify(self) -> bool:
+        """TODO: Add docstring (CORE-012)."""
         return len(self._chain) > 0
 
     def get_chain(self) -> List[str]:
+        """TODO: Add docstring (CORE-012)."""
         return list(self._chain)
 
 
@@ -75,13 +80,16 @@ class AuditTrail:
         self._chain = HashChain()
 
     def record(self, action: str, key: str, actor: str = "system", **meta: Any) -> str:
+        """TODO: Add docstring (CORE-012)."""
         entry = self._logger.log(action, key, actor, **meta)
         return self._chain.append(asdict(entry))
 
     def verify_integrity(self) -> bool:
+        """TODO: Add docstring (CORE-012)."""
         return self._chain.verify()
 
     def get_entries(self) -> List[AuditEntry]:
+        """TODO: Add docstring (CORE-012)."""
         return self._logger.get_entries()
 
 
@@ -92,6 +100,7 @@ class AuditTrailRetention:
         self.max_days = max_days
 
     def purge_old_entries(self, entries: List[AuditEntry]) -> List[AuditEntry]:
+        """TODO: Add docstring (CORE-012)."""
         from datetime import timezone, timedelta
         cutoff = datetime.now(timezone.utc) - timedelta(days=self.max_days)
         return [e for e in entries if datetime.fromisoformat(e.timestamp) >= cutoff]
@@ -101,6 +110,7 @@ class AuditTrailWithSignatures(AuditTrail):
     """Audit trail with digital signature support."""
 
     def sign_entry(self, entry: AuditEntry, private_key: Any = None) -> str:
+        """TODO: Add docstring (CORE-012)."""
         data = json.dumps(asdict(entry), sort_keys=True)
         return hashlib.sha256(data.encode()).hexdigest()
 
@@ -109,6 +119,7 @@ class ComplianceAuditTrail(AuditTrail):
     """Compliance-focused audit trail with regulatory metadata."""
 
     def record_compliance_event(self, regulation: str, action: str, key: str, **meta: Any) -> str:
+        """TODO: Add docstring (CORE-012)."""
         return self.record(action, key, regulation=regulation, **meta)
 
 

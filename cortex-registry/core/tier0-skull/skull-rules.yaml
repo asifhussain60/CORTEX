@@ -1811,7 +1811,7 @@ rules:
       - "cortex/orchestrators/"
       - "cortex/mcp/tools/"
       - "cortex/governance/"
-      - "cortex/brain/"
+      - "cortex/orchestrators/ (canonical)"
       - "cortex/intelligence/"
       - "cortex/domain_brain/"
       - "cortex/agents/"
