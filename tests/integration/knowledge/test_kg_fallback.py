@@ -196,7 +196,7 @@ class TestNonBlockingFallback:
 
     def test_fallback_zero_impact_on_production(self) -> None:
         """Test that KG operations don't affect CORTEX core."""
-        from cortex.brain import core as cortex_core
+        from cortex import core as cortex_core
         assert cortex_core is not None
 
     def test_adapter_isolation(self) -> None:

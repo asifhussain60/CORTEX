@@ -1,0 +1,420 @@
+---
+# CORTEX Sanitization Orchestrator Initiative
+# Authority: PlanningCoordinator
+# Created: 2026-02-19
+# Status: APPROVED
+
+metadata:
+  initiative_id: "SANITIZATION-ORCHESTRATOR-V1"
+  title: "CORTEX Sanitization Orchestrator - Proprietary Data Removal"
+  description: "Production-grade orchestrator for intelligent sanitization of CORTEX repository, removing all proprietary markers (HQY, healthequity) while maintaining code integrity"
+  owner: "Asif Hussain"
+  created_date: "2026-02-19"
+  target_completion: "2026-02-19"
+  status: "ACTIVE"
+  priority: "P0"
+  risk_level: "MEDIUM"
+
+objectives:
+  - "Build SanitizationOrchestrator coordinating intelligent pattern-driven sanitization"
+  - "Create comprehensive pattern library for proprietary markers, PII, API keys"
+  - "Implement context-aware morphing engine preserving code integrity"
+  - "Execute full repository sanitization with complete audit trail"
+  - "Achieve ≥95% test coverage with TDD-first development"
+  - "Ensure governance compliance (CORE-048, CORE-008, CORE-051)"
+
+phases:
+  - phase_number: 1
+    name: "Architecture & Design"
+    duration_minutes: 15
+    status: "NOT_STARTED"
+    critical: true
+    dependencies: []
+    
+    objectives:
+      - "Design pattern-driven sanitization system"
+      - "Define core components and data structures"
+      - "Specify file processing strategy"
+    
+    stages:
+      - stage: 1.1
+        name: "Core Components Definition"
+        tasks:
+          - "Define SanitizationOrchestrator interface"
+          - "Design PatternRegistry component"
+          - "Plan FileScannerEngine architecture"
+          - "Specify MorphingEngine behavior"
+          - "Define IntegrityValidator logic"
+          - "Plan AuditTrail implementation"
+      
+      - stage: 1.2
+        name: "Pattern Schema Design"
+        tasks:
+          - "Design YAML pattern schema"
+          - "Define replacement strategies"
+          - "Specify context awareness rules"
+          - "Plan risk classification system"
+      
+      - stage: 1.3
+        name: "File Processing Strategy"
+        tasks:
+          - "Define file inclusion rules (.py, .yaml, .md, .txt, .json)"
+          - "Define file exclusion rules (__pycache__, .git, .venv)"
+          - "Plan recursive traversal algorithm"
+          - "Specify safety mechanisms (read-only first pass)"
+
+  - phase_number: 2
+    name: "TDD Foundation (CORE-008)"
+    duration_minutes: 20
+    status: "NOT_STARTED"
+    critical: true
+    dependencies: [1]
+    
+    objectives:
+      - "Write comprehensive test suite BEFORE implementation"
+      - "Target ≥95% code coverage"
+      - "Validate all key scenarios"
+    
+    deliverables:
+      - file: "tests/test_sanitization_orchestrator.py"
+        test_count: 12
+        target_coverage: 95
+    
+    stages:
+      - stage: 2.1
+        name: "Pattern Detection Tests"
+        test_count: 4
+        tasks:
+          - "Test HQY ticker pattern detection"
+          - "Test healthequity mention detection"
+          - "Test PII pattern detection (email, IP, API keys)"
+          - "Test false positive filtering and context awareness"
+      
+      - stage: 2.2
+        name: "File Scanning Tests"
+        test_count: 3
+        tasks:
+          - "Test recursive file scanning with nested directories"
+          - "Test file type filtering (inclusion/exclusion rules)"
+          - "Test large file handling with chunked processing"
+      
+      - stage: 2.3
+        name: "Morphing Engine Tests"
+        test_count: 3
+        tasks:
+          - "Test context-aware replacement (code vs docs vs config)"
+          - "Test multiple pattern matching in single file"
+          - "Test syntax validation after replacement"
+      
+      - stage: 2.4
+        name: "Rollback & Audit Tests"
+        test_count: 2
+        tasks:
+          - "Test git diff validation before sanitization"
+          - "Test audit trail recording with timestamps"
+
+  - phase_number: 3
+    name: "Core Implementation"
+    duration_minutes: 25
+    status: "NOT_STARTED"
+    critical: true
+    dependencies: [2]
+    
+    objectives:
+      - "Implement SanitizationOrchestrator with minimum viable code"
+      - "Build morphing engine with integrity preservation"
+      - "Establish pattern registry loading"
+    
+    deliverables:
+      - file: "cortex/orchestrators/sanitization_orchestrator.py"
+        type: "orchestrator"
+        lines_of_code: 400
+      - file: "cortex-registry/patterns/proprietary-patterns.yaml"
+        type: "registry"
+    
+    stages:
+      - stage: 3.1
+        name: "Orchestrator Skeleton"
+        tasks:
+          - "Create SanitizationOrchestrator class"
+          - "Wire pattern registry loader"
+          - "Implement coordination methods"
+          - "Establish logging and audit trail"
+      
+      - stage: 3.2
+        name: "Pattern Registry Loader"
+        tasks:
+          - "Load pattern definitions from YAML"
+          - "Build pattern index for fast lookup"
+          - "Implement pattern validation"
+          - "Create pattern statistics tracking"
+      
+      - stage: 3.3
+        name: "Morphing Engine"
+        tasks:
+          - "Build context analyzer (code vs docs vs config)"
+          - "Implement safe replacement logic"
+          - "Create syntax validation post-replacement"
+          - "Establish rollback points"
+      
+      - stage: 3.4
+        name: "Integrity Preservation"
+        tasks:
+          - "Implement file checksum tracking"
+          - "Create structure validation logic"
+          - "Build git safety checks"
+          - "Establish file permissions preservation"
+
+  - phase_number: 4
+    name: "Pattern Detection Engine"
+    duration_minutes: 15
+    status: "NOT_STARTED"
+    critical: true
+    dependencies: [3]
+    
+    objectives:
+      - "Build comprehensive pattern matchers"
+      - "Implement intelligent morphing rules"
+      - "Create context-aware replacement strategies"
+    
+    deliverables:
+      - file: "cortex-registry/patterns/proprietary-patterns.yaml"
+        pattern_categories: 4
+      - file: "cortex-registry/patterns/morphing-rules.yaml"
+        rule_count: 25
+    
+    stages:
+      - stage: 4.1
+        name: "Proprietary Markers"
+        patterns:
+          - name: "HQY_TICKER"
+            pattern: '\bHQY\b'
+            replacement: "{REMOVED_TICKER}"
+            risk: "HIGH"
+          - name: "HEALTHEQUITY_MENTION"
+            pattern: "(healthequity|Health Equity|HealthEquity|health equity)"
+            replacement: "{REMOVED_COMPANY}"
+            risk: "HIGH"
+          - name: "INTERNAL_DOMAIN"
+            pattern: "healthequity\\.com"
+            replacement: "{REMOVED_DOMAIN}"
+            risk: "HIGH"
+      
+      - stage: 4.2
+        name: "PII Pattern Matchers"
+        patterns:
+          - name: "EMAIL_PATTERN"
+            pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+            replacement: "{REMOVED_EMAIL}"
+            risk: "MEDIUM"
+          - name: "API_KEY_PATTERN"
+            pattern: '(sk-|api_key|apikey)[-\w]{20,}'
+            replacement: "{REMOVED_API_KEY}"
+            risk: "HIGH"
+          - name: "IP_ADDRESS_PATTERN"
+            pattern: '\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'
+            replacement: "{REMOVED_IP}"
+            risk: "MEDIUM"
+      
+      - stage: 4.3
+        name: "Morphing Rules"
+        tasks:
+          - "Code comment rules: replace but preserve syntax"
+          - "Docstring rules: replace with {PLACEHOLDER}"
+          - "YAML key/value rules: intelligent replacement"
+          - "Markdown rules: replace with context markers"
+          - "Configuration rules: preserve structure integrity"
+
+  - phase_number: 5
+    name: "Execution & Reporting"
+    duration_minutes: 20
+    status: "NOT_STARTED"
+    critical: true
+    dependencies: [4]
+    
+    objectives:
+      - "Run full repository sanitization"
+      - "Generate comprehensive sanitization report"
+      - "Verify integrity of all modifications"
+    
+    deliverables:
+      - type: "report"
+        format: "markdown_table"
+        content: "Sanitization Statistics"
+    
+    stages:
+      - stage: 5.1
+        name: "Scan Initiation"
+        tasks:
+          - "Traverse directory tree recursively"
+          - "Pattern match against all eligible files"
+          - "Build change manifest with findings"
+          - "Categorize patterns by risk level"
+      
+      - stage: 5.2
+        name: "Morphing Execution"
+        tasks:
+          - "Apply patterns with context awareness"
+          - "Validate each replacement individually"
+          - "Create rollback savepoints"
+          - "Log all modifications to audit trail"
+      
+      - stage: 5.3
+        name: "Integrity Verification"
+        tasks:
+          - "Validate all files still parse correctly"
+          - "Verify Python AST for .py files"
+          - "Verify YAML structure for .yaml files"
+          - "Checksum validation before/after"
+          - "Git status verification"
+      
+      - stage: 5.4
+        name: "Report Generation"
+        tasks:
+          - "Calculate sanitization statistics"
+          - "Document patterns found and replaced"
+          - "Generate rollback instructions"
+          - "Create comprehensive audit trail"
+
+  - phase_number: 6
+    name: "Governance & Synchronization"
+    duration_minutes: 10
+    status: "NOT_STARTED"
+    critical: true
+    dependencies: [5]
+    
+    objectives:
+      - "Ensure full governance compliance"
+      - "Synchronize registry and master plan"
+      - "Complete audit cycle"
+    
+    stages:
+      - stage: 6.1
+        name: "Test Execution & Coverage"
+        tasks:
+          - "Run pytest on test suite"
+          - "Verify ≥95% code coverage"
+          - "Validate all tests passing"
+          - "Generate coverage report"
+      
+      - stage: 6.2
+        name: "Governance Audit"
+        compliance_rules:
+          - "CORE-002: All results inline (no .md/.txt files)"
+          - "CORE-008: TDD mandatory (tests before code)"
+          - "CORE-027: Audit integration"
+          - "CORE-048: Holistic validation gate"
+          - "CORE-051: Cross-platform audit"
+        tasks:
+          - "Run EnforcementOrchestrator scan"
+          - "Verify no P0/P1 violations"
+          - "Check CORE rules compliance"
+          - "Security audit for new vulnerabilities"
+      
+      - stage: 6.3
+        name: "Registry Synchronization"
+        tasks:
+          - "Register SanitizationOrchestrator in orchestrator registry"
+          - "Add pattern library to governance registry"
+          - "Update orchestrator routing table"
+          - "Sync phase metadata to master plan"
+      
+      - stage: 6.4
+        name: "Master Plan Update"
+        tasks:
+          - "Record actual completion time"
+          - "Document efficiency metrics"
+          - "Update dependent phases"
+          - "Log lessons learned"
+
+timeline:
+  total_duration_minutes: 105
+  phases:
+    - number: 1
+      estimated: 15
+      actual: null
+    - number: 2
+      estimated: 20
+      actual: null
+    - number: 3
+      estimated: 25
+      actual: null
+    - number: 4
+      estimated: 15
+      actual: null
+    - number: 5
+      estimated: 20
+      actual: null
+    - number: 6
+      estimated: 10
+      actual: null
+
+risk_assessment:
+  overall_risk: "MEDIUM"
+  mitigations:
+    - risk: "Over-replacement (code breaks)"
+      mitigation: "Context-aware morphing, syntax validation"
+      severity: "HIGH"
+    
+    - risk: "False positives"
+      mitigation: "Conservative pattern matching, manual review"
+      severity: "MEDIUM"
+    
+    - risk: "Rollback failure"
+      mitigation: "Git-backed safety, checksum validation"
+      severity: "HIGH"
+    
+    - risk: "Performance degradation"
+      mitigation: "Chunked processing, parallel scanning"
+      severity: "LOW"
+
+success_criteria:
+  - criterion: "All tests passing (≥95% coverage)"
+    measurement: "pytest coverage report"
+    target: 95
+  
+  - criterion: "Governance audit clean"
+    measurement: "EnforcementOrchestrator report (P0/P1 violations)"
+    target: 0
+  
+  - criterion: "Repository fully sanitized"
+    measurement: "Pattern detection sweep"
+    target: "0 matches on HQY, healthequity"
+  
+  - criterion: "Code integrity preserved"
+    measurement: "Syntax validation, checksums"
+    target: "100%"
+  
+  - criterion: "Audit trail complete"
+    measurement: "Audit log entries"
+    target: "All operations logged"
+  
+  - criterion: "Master plan synchronized"
+    measurement: "Registry metadata updated"
+    target: "Phase marked COMPLETE"
+
+dependencies:
+  internal_orchestrators:
+    - "PatternAnalyzerOrchestrator"
+    - "FileSystemOrchestrator"
+    - "IntegrityValidatorOrchestrator"
+    - "AuditTrailOrchestrator"
+  
+  external_tools:
+    - "pytest"
+    - "ast"
+    - "yaml"
+    - "git"
+
+notes:
+  - "Comprehensive pattern library ensures intelligent replacement without code corruption"
+  - "Context-aware morphing preserves code semantics while removing proprietary markers"
+  - "Rollback capability via git enables safe reversal if issues detected"
+  - "Audit trail enables forensic analysis of all changes"
+  - "TDD-first approach ensures robustness before execution"
+  - "CORE-048 holistic validation gate provides additional safety layer"
+
+version: "1.0"
+last_updated: "2026-02-19"
+approval_status: "APPROVED"
+approved_by: "Asif Hussain (PlanningCoordinator)"

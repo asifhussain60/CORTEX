@@ -1,0 +1,577 @@
+# ==============================================================================
+# PHASE 05 — ORCHESTRATOR RATIONALIZATION
+# ==============================================================================
+# Purpose: ~110 orchestrators → ~40 active, all workflow-template-driven
+# Gate: Every surviving orchestrator has a workflow template, all tests pass
+# ==============================================================================
+
+phase:
+  id: "phase-05"
+  name: "Orchestrator Rationalization — 110 to ~40 with workflow templates"
+  status: "pending"
+  priority: "P0"
+  estimated_effort: "5-7 days"
+  risk: "high"
+  depends_on: ["phase-04"]
+  description: |
+    CORTEX has ~110 orchestrator classes scattered across orchestrators/, brain/,
+    tools/, and other directories. Only ~54 have active execute/run methods.
+    This phase classifies each orchestrator as active/dormant/dead, merges
+    duplicates, and binds every surviving orchestrator to a dedicated workflow
+    template with setup/teardown lifecycle.
+
+    Git history shows phases 90-103 already did partial consolidation. This
+    phase completes it.
+
+  # ============================================================================
+  # ORCHESTRATOR CLASSIFICATION
+  # ============================================================================
+  classification:
+    method: |
+      For each orchestrator class:
+      1. Has execute/run/process method? → if no, DEAD
+      2. Has tests? → if no, DORMANT unless MCP-exposed
+      3. Has callers (imported elsewhere)? → if no, DORMANT
+      4. Is MCP-exposed? → if yes, ACTIVE regardless
+      5. Has workflow template? → track for binding
+
+    categories:
+      active:
+        description: "Has tests, callers, and/or MCP exposure"
+        target_count: "~40"
+        action: "Keep, bind to workflow template"
+
+      dormant:
+        description: "Has code but no tests or callers"
+        target_count: "~30"
+        action: "Archive to _archive/orchestrators/, restore if needed"
+
+      dead:
+        description: "Empty stubs, no execute method, or fully superseded"
+        target_count: "~40"
+        action: "Archive permanently"
+
+  # ============================================================================
+  # KNOWN DUPLICATES (from audit)
+  # ============================================================================
+  known_duplicates:
+    - name: "EnforcementOrchestrator"
+      locations:
+        - "cortex/orchestrators/core/enforcement_orchestrator.py"
+        - "cortex/orchestrators/git/enforcement_orchestrator.py"
+      action: "Merge — core handles governance, git handles git-specific enforcement"
+      recommendation: "Keep core, extend with git capabilities"
+
+    - name: "RollbackOrchestrator"
+      locations:
+        - "cortex/orchestrators/support/rollback_orchestrator.py"
+        - "cortex/deployment/rollback_orchestrator.py"
+      action: "Merge — one rollback orchestrator with deployment + general capabilities"
+
+    - name: "HotReload"
+      locations:
+        - "cortex/brain/devx/hot_reload.py"
+        - "cortex/devx/hot_reload.py"
+      action: "Keep one, archive other"
+
+    - name: "OrchestratorInventoryAuditor"
+      locations:
+        - "cortex/phase_38/orchestrator_inventory_auditor.py"
+        - "cortex/tools/orchestrator_inventory_auditor.py"
+      action: "Keep tools/ version, archive phase_38/"
+
+    - name: "PlanningOrchestrator"
+      locations:
+        - "cortex/orchestrators/domain/planning_orchestrator.py"
+        - "cortex/orchestrators/domain/enhanced_planning_orchestrator.py"
+      action: "Merge — enhanced becomes the canonical version (no 'enhanced_' prefix)"
+
+  # ============================================================================
+  # ACTIVE ORCHESTRATORS (Expected survivors — ~40)
+  # ============================================================================
+  active_orchestrators:
+    core:
+      - name: "MasterOrchestrator"
+        location: "cortex/orchestrators/core/master_orchestrator.py"
+        workflow_template: "lifecycle/master-orchestration.yaml"
+        mcp_exposed: true
+      - name: "TDDOrchestrator"
+        location: "cortex/orchestrators/core/tdd_orchestrator.py"
+        workflow_template: "tdd/tdd-feature-implementation.yaml"
+        mcp_exposed: true
+      - name: "EnforcementOrchestrator"
+        location: "cortex/orchestrators/core/enforcement_orchestrator.py"
+        workflow_template: "governance/enforcement-pipeline.yaml"
+        mcp_exposed: true
+      - name: "IntentRouter"
+        location: "cortex/orchestrators/core/intent_router.py"
+        workflow_template: "lifecycle/intent-routing.yaml"
+        mcp_exposed: false
+      - name: "InteractionOrchestrator"
+        location: "cortex/orchestrators/core/interaction_orchestrator.py"
+        workflow_template: "lifecycle/interaction-pipeline.yaml"
+        mcp_exposed: false
+      - name: "WorkflowOrchestrator"
+        location: "cortex/orchestrators/core/workflow_orchestrator.py"
+        workflow_template: "lifecycle/workflow-execution.yaml"
+        mcp_exposed: true
+      - name: "MasterPlanOrchestrator"
+        location: "cortex/orchestrators/core/master_plan_orchestrator.py"
+        workflow_template: "lifecycle/master-plan-execution.yaml"
+        mcp_exposed: true
+      - name: "ReviewOrchestrator"
+        location: "cortex/orchestrators/core/review_orchestrator.py"
+        workflow_template: "quality/code-review.yaml"
+        mcp_exposed: false
+      - name: "SecurityOrchestrator"
+        location: "cortex/orchestrators/core/security_orchestrator.py"
+        workflow_template: "security/security-compliance-audit.yaml"
+        mcp_exposed: true
+
+    domain:
+      - name: "PlanningOrchestrator"
+        location: "cortex/orchestrators/domain/planning_orchestrator.py"
+        workflow_template: "lifecycle/planning-workflow.yaml"
+        mcp_exposed: true
+      - name: "DashboardOrchestrator"
+        location: "cortex/orchestrators/domain/dashboard_orchestrator.py"
+        workflow_template: "lifecycle/dashboard-generation.yaml"
+        mcp_exposed: true
+      - name: "RefactoringOrchestrator"
+        location: "cortex/orchestrators/domain/refactoring_orchestrator.py"
+        workflow_template: "quality/refactor-holistic-sweep.yaml"
+        mcp_exposed: true
+
+    git:
+      - name: "GitOrchestrator"
+        location: "cortex/orchestrators/git/git_orchestrator.py"
+        workflow_template: "lifecycle/git-operations.yaml"
+        mcp_exposed: true
+      - name: "GitPublishOrchestrator"
+        location: "cortex/orchestrators/git/git_publish_orchestrator.py"
+        workflow_template: "lifecycle/git-publish.yaml"
+        mcp_exposed: false
+      - name: "SanitizationOrchestrator"
+        location: "cortex/orchestrators/git/sanitization_orchestrator.py"
+        workflow_template: "security/git-sanitization.yaml"
+        mcp_exposed: false
+
+    health:
+      - name: "HealthOrchestrator"
+        location: "cortex/orchestrators/health/health_orchestrator.py"
+        workflow_template: "maintenance/health-check.yaml"
+        mcp_exposed: true
+      - name: "VacuumOrchestrator"
+        location: "cortex/orchestrators/health/vacuum_orchestrator.py"
+        workflow_template: "maintenance/vacuum-cleanup.yaml"
+        mcp_exposed: true
+
+    intelligence:
+      - name: "IntelligenceOrchestrator"
+        location: "cortex/orchestrators/intelligence/intelligence_orchestrator.py"
+        workflow_template: "lifecycle/intelligence-pipeline.yaml"
+        mcp_exposed: false
+      - name: "LensOrchestrator"
+        location: "cortex/intelligence/lens/lens_orchestrator.py"
+        workflow_template: "lifecycle/lens-analysis.yaml"
+        mcp_exposed: true
+      - name: "CachedLensOrchestrator"
+        location: "cortex/intelligence/lens/cached_lens_orchestrator.py"
+        workflow_template: "lifecycle/lens-cached-analysis.yaml"
+        mcp_exposed: false
+
+    support:
+      - name: "DebuggerOrchestrator"
+        location: "cortex/orchestrators/support/debugger_orchestrator.py"
+        workflow_template: "support/debugging-workflow.yaml"
+        mcp_exposed: true
+      - name: "RollbackOrchestrator"
+        location: "cortex/orchestrators/support/rollback_orchestrator.py"
+        workflow_template: "support/rollback-workflow.yaml"
+        mcp_exposed: false
+      - name: "SetupOrchestrator"
+        location: "cortex/orchestrators/support/setup_orchestrator.py"
+        workflow_template: "support/environment-setup.yaml"
+        mcp_exposed: false
+      - name: "UnifiedAnalysisOrchestrator"
+        location: "cortex/orchestrators/support/unified_analysis_orchestrator.py"
+        workflow_template: "quality/unified-analysis.yaml"
+        mcp_exposed: false
+      - name: "UnifiedQualityOrchestrator"
+        location: "cortex/orchestrators/support/unified_quality_orchestrator.py"
+        workflow_template: "quality/quality-code-uplift.yaml"
+        mcp_exposed: false
+
+    validation:
+      - name: "HolisticValidationOrchestrator"
+        location: "cortex/orchestrators/validation/holistic_validation_orchestrator.py"
+        workflow_template: "governance/holistic-validation.yaml"
+        mcp_exposed: true
+
+    onboarding:
+      - name: "OnboardingOrchestrator"
+        location: "cortex/orchestrators/onboarding/orchestrator.py"
+        workflow_template: "lifecycle/onboarding-repo-setup.yaml"
+        mcp_exposed: true
+
+    quality:
+      - name: "SOLIDOrchestrator"
+        location: "cortex/orchestrators/quality/solid_orchestrator.py"
+        workflow_template: "quality/solid-principles-audit.yaml"
+        mcp_exposed: false
+        description: "SOLID principles analysis — absorbed into UnifiedQualityOrchestrator in Phase 04"
+        note: "Classify as active — has tests in cortex/orchestrators/quality/"
+
+    internal:
+      - name: "CortexDocsOrchestrator"
+        location: "cortex/orchestrators/internal/cortex_docs_orchestrator.py"
+        workflow_template: "internal/cortex-site-validation.yaml"
+        mcp_exposed: false
+        description: "cortex-docs site validation and generation — internal brain self-documentation"
+        note: "Classify as active — validates cortex-docs/ integrity"
+
+    sdlc_cicd:
+      - name: "CiCdOrchestrator"
+        location: "cortex/orchestrators/sdlc/ci_cd_orchestrator.py"
+        workflow_template: "lifecycle/ci-cd-pipeline.yaml"
+        mcp_exposed: true
+        description: |
+          SDLC brain for CI/CD operations. CORTEX understands and orchestrates
+          CI/CD pipelines for onboarded repositories. Capabilities:
+          - Analyze pipeline configs (GitHub Actions, GitLab CI, Jenkins)
+          - Detect pipeline anti-patterns and optimization opportunities
+          - Validate pipeline steps against governance rules
+          - Generate pipeline configurations from workflow templates
+          - Monitor pipeline health across onboarded repos
+        builds_on: "cortex/ci_cd/ (6 files) + cortex/brain/ci_cd/"
+        note: "New orchestrator — consolidates existing ci_cd capabilities"
+
+    sdlc_design:
+      - name: "DesignOrchestrator"
+        location: "cortex/orchestrators/sdlc/design_orchestrator.py"
+        workflow_template: "lifecycle/design-analysis.yaml"
+        mcp_exposed: true
+        description: |
+          SDLC brain for architecture analysis and design decisions. Capabilities:
+          - Generate Architecture Decision Records (ADRs) from LENS analysis
+          - Produce threat models from security scan results
+          - Review code against design patterns (from cortex-registry/patterns/)
+          - Generate design review checklists for PRs
+          - Detect architectural drift from declared patterns
+          - Produce design documentation from code (integrates documentation/)
+        builds_on: "cortex/documentation/ (9 files) + cortex_lens/knowledge_graph/"
+        note: "Consolidates documentation discovery_agent + design concerns"
+
+    other_active:
+      - name: "ConversationOrchestrator"
+        location: "cortex/orchestrators/conversation_orchestrator.py"
+        workflow_template: "lifecycle/conversation-management.yaml"
+        mcp_exposed: false
+      - name: "AutoHealingMcpOrchestrator"
+        location: "cortex/orchestrators/auto_healing_mcp_orchestrator.py"
+        workflow_template: "support/auto-healing.yaml"
+        mcp_exposed: true
+      - name: "RequestRephraseOrchestrator"
+        location: "cortex/orchestrators/request_rephrase_orchestrator.py"
+        workflow_template: "lifecycle/request-rephrase.yaml"
+        mcp_exposed: true
+      - name: "RegressionSafetyOrchestrator"
+        location: "cortex/governance/regression_safety_orchestrator.py"
+        workflow_template: "governance/regression-safety.yaml"
+        mcp_exposed: false
+      - name: "ObservabilityOrchestrator"
+        location: "cortex/orchestrators/observability/observability_orchestrator.py"
+        workflow_template: "lifecycle/observability-pipeline.yaml"
+        mcp_exposed: false
+      - name: "StateOrchestrator"
+        location: "cortex/orchestrators/state/state_orchestrator.py"
+        workflow_template: "lifecycle/state-management.yaml"
+        mcp_exposed: false
+
+  # ============================================================================
+  # PHASE-NAMED DIRECTORIES TO ARCHIVE
+  # ============================================================================
+  phase_named_cleanup:
+    - directory: "cortex/phase_38/"
+      files: 4
+      action: "archive to _archive/phase_38/"
+      migrate_if_unique: "orchestrator_inventory_auditor.py already in tools/"
+
+    - directory: "cortex/phase_executors/"
+      files: 4
+      action: "archive to _archive/phase_executors/"
+      migrate_if_unique: "phase_orchestrator.py logic into core workflow engine"
+
+    - directory: "cortex/phase_management/"
+      files: 1
+      action: "archive to _archive/phase_management/"
+
+  # ============================================================================
+  # WORKFLOW TEMPLATE CREATION
+  # ============================================================================
+  new_workflow_templates:
+    description: |
+      For each active orchestrator that lacks a workflow template, create one.
+      All templates follow the schema from Phase 01 with mandatory
+      setup/teardown steps and the ability to compose existing templates.
+
+    templates_to_create:
+      - "lifecycle/master-orchestration.yaml"
+      - "lifecycle/intent-routing.yaml"
+      - "lifecycle/interaction-pipeline.yaml"
+      - "lifecycle/workflow-execution.yaml"
+      - "lifecycle/intelligence-pipeline.yaml"
+      - "lifecycle/lens-analysis.yaml"
+      - "lifecycle/lens-cached-analysis.yaml"
+      - "lifecycle/conversation-management.yaml"
+      - "lifecycle/request-rephrase.yaml"
+      - "lifecycle/state-management.yaml"
+      - "lifecycle/observability-pipeline.yaml"
+      - "lifecycle/planning-workflow.yaml"
+      - "lifecycle/dashboard-generation.yaml"
+      - "lifecycle/git-operations.yaml"
+      - "lifecycle/git-publish.yaml"
+      - "governance/enforcement-pipeline.yaml"
+      - "governance/holistic-validation.yaml"
+      - "governance/regression-safety.yaml"
+      - "quality/code-review.yaml"
+      - "quality/unified-analysis.yaml"
+      - "support/debugging-workflow.yaml"
+      - "support/rollback-workflow.yaml"
+      - "support/environment-setup.yaml"
+      - "support/auto-healing.yaml"
+      - "security/git-sanitization.yaml"
+      - "maintenance/health-check.yaml"
+      - "maintenance/vacuum-cleanup.yaml"
+      - "quality/solid-principles-audit.yaml"
+      - "internal/cortex-docs-validation.yaml"
+      - "lifecycle/ci-cd-pipeline.yaml"
+      - "lifecycle/design-analysis.yaml"
+
+    dormant_classification:
+      description: |
+        Orchestrators to explicitly classify as DORMANT (archive, restore if needed).
+        Confirmed via live code audit: exist but have no callers and no MCP exposure.
+      dormant:
+        - name: "MultiRegionOrchestrator"
+          location: "cortex/orchestrators/multi_region_orchestrator.py"
+          reason: "No callers, no MCP exposure, no tests — dormant capability"
+          action: "archive to _archive/orchestrators/ — keep for future geo-distribution work"
+        - name: "BkioOrchestrator"
+          location: "cortex/orchestrators/ (bkio)"
+          reason: "Domain-specific, no active callers"
+          action: "archive to _archive/orchestrators/"
+        - name: "DataMigrationOrchestrator"
+          location: "cortex/orchestrators/ (data_migration)"
+          reason: "Superseded by MasterOrchestrator migration workflow"
+          action: "archive to _archive/orchestrators/"
+        - name: "CapacityPlanningOrchestrators"
+          location: "cortex/capacity/ (multiple)"
+          reason: "No active callers, no MCP exposure"
+          action: "archive to _archive/capacity/"
+        - name: "SeleniumPlaywrightOrchestrator"
+          location: "cortex/orchestrators/sdlc/"
+          reason: "No active callers — migration helper"
+          action: "archive to _archive/orchestrators/"
+
+  # ============================================================================
+  # EXECUTION SEQUENCE (Step-by-step)
+  # ============================================================================
+  execution_sequence:
+    - step: 1
+      name: "Classify all orchestrators"
+      command: |
+        find cortex/ -name "*.py" | xargs grep -l "class.*Orchestrator" 2>/dev/null | sort > /tmp/all_orchestrators.txt
+      description: |
+        For each file in the list:
+        1. Check for execute/run/process method
+        2. Check for tests (grep in tests/)
+        3. Check for callers (grep import across cortex/)
+        4. Check MCP exposure (grep in cortex/mcp/tools/)
+        Produce: active.txt, dormant.txt, dead.txt
+
+    - step: 2
+      name: "Archive dead + dormant orchestrators"
+      command: "mkdir -p _archive/orchestrators/ && mv <dormant/dead files> _archive/orchestrators/"
+      gate: "Only active orchestrators remain"
+
+    - step: 3
+      name: "Merge known duplicates"
+      description: |
+        For each duplicate pair:
+        1. Diff the two files
+        2. Merge unique logic into the canonical version
+        3. Archive the duplicate
+        4. Rewrite imports to point to canonical
+      duplicates:
+        - "EnforcementOrchestrator: merge git + core → core"
+        - "RollbackOrchestrator: merge deployment + support → support"
+        - "HotReload: keep most complete, archive other"
+        - "OrchestratorInventoryAuditor: keep tools/, archive phase_38/"
+        - "PlanningOrchestrator: merge enhanced_ into canonical (drop prefix)"
+
+    - step: 4
+      name: "Archive phase-named source directories"
+      commands:
+        - "mv cortex/phase_38/ _archive/phase_38/"
+        - "mv cortex/phase_executors/ _archive/phase_executors/"
+        - "mv cortex/phase_management/ _archive/phase_management/"
+      gate: "No phase-named dirs in cortex/"
+
+    - step: 5
+      name: "Create workflow template schema"
+      file: "cortex-registry/workflows/workflow-template-schema.yaml"
+      description: "Define the 5-step lifecycle schema (setup, governance_gate, execute, validate, teardown)"
+
+    - step: 6
+      name: "Create ~27 new workflow templates"
+      description: "One template per active orchestrator that lacks one"
+      location: "cortex-registry/workflows/templates/"
+      templates: "(see new_workflow_templates section above)"
+      gate: "Every active orchestrator has workflow_template_id set"
+
+    - step: 7
+      name: "Bind all orchestrators to workflow templates"
+      description: |
+        For each active orchestrator:
+        1. Set workflow_template_id property
+        2. Verify template loads via workflow engine
+        3. Run orchestrator's tests
+      gate: "All orchestrators instantiate with template"
+
+    - step: 8
+      name: "Import quarantine check"
+      command: "grep -r 'from _archive\\|cortex.phase_38\\|cortex.phase_executors\\|cortex.phase_management' cortex/ | wc -l"
+      expected: "0"
+
+    - step: 9
+      name: "Run full test suite"
+      command: "pytest tests/ -v --tb=short -q"
+      expected: "ALL tests pass"
+
+    - step: 10
+      name: "Run capability manifest regression gate"
+      command: "pytest tests/golden/regression/test_capability_manifest.py -v"
+      expected: "PASS"
+
+    - step: 11
+      name: "Commit Phase 05"
+      command: "git add -A && git commit -m 'refactor(phase-05): orchestrator rationalization — 120 to ~40 with workflow templates'"
+      tag: "cortex-refactor-phase-05"
+
+  # ============================================================================
+  # EXIT GATE
+  # ============================================================================
+  exit_gate:
+    all_tests_passing: true
+    capability_manifest_check: true
+    all_orchestrators_have_templates: true
+    no_phase_named_dirs: true
+    no_duplicate_orchestrators: true
+    coverage_minimum: 90
+    description: |
+      Phase 05 is complete when:
+      1. Every active orchestrator has a dedicated workflow template
+      2. All duplicate orchestrators merged
+      3. Phase-named directories archived
+      4. All MCP tools respond correctly
+      5. Capability manifest shows zero regressions
+      6. ~40 orchestrators remain (down from ~110)
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This stage runs AFTER all deliverables are implemented.
+  # It loops until every exit gate check passes. Once clean, CORTEX
+  # autonomously begins Phase 06 without user intervention.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-05"
+    phase: "phase-05"
+    next_phase: "phase-06"
+    next_phase_spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-06-directory-cleanup.yaml"
+    max_iterations: 10
+    iteration_timeout_minutes: 60
+
+    checks:
+      - id: "VL-05-C1"
+        name: "No phase-named orchestrator directories"
+        command: "find cortex/ -type d -name 'phase_*' | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Archive cortex/phase_38/, cortex/phase_executors/, cortex/phase_management/ to _archive/"
+
+      - id: "VL-05-C2"
+        name: "No duplicate orchestrator implementations"
+        command: "python -c \"import subprocess; r=subprocess.run(['grep','-r','class EnforcementOrchestrator','cortex/','-l'],capture_output=True,text=True); files=r.stdout.strip().split(); assert len(files)<=1,f'Duplicate at: {files}'; print('no duplicates OK')\""
+        pass_condition: "prints no duplicates OK"
+        on_fail: "Merge duplicate orchestrators per known_duplicates list"
+
+      - id: "VL-05-C3"
+        name: "Every active orchestrator has a workflow template"
+        command: "python -c \"import yaml,os; spec=yaml.safe_load(open('cortex-registry/planning/phases/planned/cortex-refactor/phase-05-orchestrator-rationalization.yaml')); active=[o for cat in spec['phase']['active_orchestrators'].values() for o in cat]; missing=[o['name'] for o in active if not os.path.exists('cortex-registry/workflows/templates/'+o.get('workflow_template','__missing__'))]; print('missing templates:',missing if missing else 'none')\""
+        pass_condition: "prints missing templates: none"
+        on_fail: "Create missing workflow templates for each flagged orchestrator"
+
+      - id: "VL-05-C4"
+        name: "MCP tools consolidated to ≤22"
+        command: "python -c \"from cortex.mcp import list_tools; tools=list_tools(); print(len(tools),'tools'); assert len(tools)<=25,'Too many tools: consolidate further'\""
+        pass_condition: "prints N tools where N ≤ 25 (target ~22)"
+        on_fail: "Continue MCP tool consolidation — merge toolkit_* tools into primary tools"
+
+      - id: "VL-05-C5"
+        name: "All active orchestrators respond to instantiation"
+        command: "python -m cortex.testing.orchestrator_health_check --active-only --quiet"
+        pass_condition: "exit code 0, all active orchestrators instantiate"
+        on_fail: "Fix orchestrators that fail instantiation — broken imports or missing templates"
+
+      - id: "VL-05-C6"
+        name: "Import quarantine — no phase_38/phase_executors/phase_management imports"
+        command: "grep -r 'cortex\\.phase_38\\|cortex\\.phase_executors\\|cortex\\.phase_management' cortex/ | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Update all imports from archived phase directories"
+
+      - id: "VL-05-C7"
+        name: "All tests pass"
+        command: "pytest tests/ -v --tb=short -q --ignore=tests/performance"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix tests broken by orchestrator rationalization — update fixture references"
+
+      - id: "VL-05-C8"
+        name: "Capability manifest regression gate"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0"
+        on_fail: "Fix capability regressions — all active orchestrators must still be catalogued"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-05-C1 through VL-05-C8) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to autonomous_advance.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 alert to user.
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all must pass in the same iteration.
+
+    autonomous_advance:
+      enabled: true
+      trigger: "All VL-05 checks pass in same iteration"
+      actions:
+        - action: "Update cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-05].status → complete"
+            - "phases[phase-05].progress.completed → ISO timestamp"
+            - "phases[phase-05].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending -= 1"
+            - "metadata.counters.complete += 1"
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-05-orchestrator-rationalization.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+        - action: "Git checkpoint"
+          command: "git add -A && git commit -m 'refactor(phase-05): COMPLETE — 120 orchestrators to ~44, MCP to ~22, advancing to phase-06'"
+        - action: "Load and execute next phase"
+          spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-06-directory-cleanup.yaml"
+          orchestrator: "CortexMasterPlanOrchestrator"
+          method: "execute_phase(phase_id='phase-06')"

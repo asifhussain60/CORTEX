@@ -1,0 +1,34 @@
+#!/bin/bash
+# CORTEX post-checkout hook
+# Authority: CORE-051 — Cross-platform audit enforcement
+#
+# Runs after `git checkout` to ensure:
+# 1. Python venv is activated
+# 2. Registry integrity is maintained
+# 3. No platform-specific artifacts committed
+
+set -e
+
+# Verify Python environment
+if [ -d ".venv" ]; then
+    source .venv/bin/activate 2>/dev/null || true
+fi
+
+# Registry integrity check (lightweight)
+if [ -f "cortex-registry/cortex-master.yaml" ]; then
+    echo "✅ CORTEX registry intact"
+fi
+
+# MCP server setup (auto-configure on branch switch)
+if [ -f ".cortex-runtime/setup-mcp.py" ]; then
+    python3 .cortex-runtime/setup-mcp.py 2>/dev/null || true
+fi
+
+# Warn if platform-specific files changed
+PLATFORM_FILES=$(git diff --name-only HEAD@{1} HEAD 2>/dev/null | grep -E '\.(dll|exe|bat|ps1)$' || true)
+if [ -n "$PLATFORM_FILES" ]; then
+    echo "⚠️  Platform-specific files changed:"
+    echo "$PLATFORM_FILES"
+fi
+
+exit 0

@@ -1,0 +1,872 @@
+# ==============================================================================
+# PHASE 10 — PRODUCTION READINESS: 100% Ready with Zero Regression
+# ==============================================================================
+# Purpose: Final hardening, performance optimization, security audit,
+#          SLA compliance, disaster recovery, monitoring dashboards
+# Gate: 100% functionality regression-free, production metrics pass, runbooks complete
+# ==============================================================================
+
+phase:
+  id: "phase-10"
+  name: "Production Readiness — 100% Hardened, Zero Regression"
+  status: "pending"
+  priority: "P0"
+  estimated_effort: "7-10 days"
+  risk: "low (read-only operations primarily)"
+  depends_on: ["phase-09"]
+  description: |
+    Phase 09 delivered a cohesive, consolidated CORTEX brain. Phase 10 hardens
+    it for production: performance profiling, security audit, SLA validation,
+    disaster recovery testing, chaos engineering, monitoring dashboards, and
+    comprehensive runbooks.
+
+    This phase ensures:
+    1. ZERO regression from existing functionality (verified comprehensively)
+    2. Performance: response times < SLA, throughput ≥ baseline
+    3. Security: vulnerability scan clean, secrets audit passed
+    4. Reliability: chaos tests pass, recovery procedures validated
+    5. Observability: dashboards, alerts, distributed tracing operational
+    6. Documentation: runbooks, on-call procedures, escalation paths
+    7. Cost: infrastructure optimized, unused resources identified
+
+  # ============================================================================
+  # PRODUCTION READINESS CRITERIA
+  # ==============================================================================
+  readiness_criteria:
+    zero_regression:
+      description: "Every feature from prior phases still works identically"
+      verification:
+        - "Regression test suite passes (P1 coverage)"
+        - "Golden tests pass (contracts verified)"
+        - "All MCP tool invocations produce same output"
+        - "All orchestrator workflows execute end-to-end"
+        - "File factory accepts all existing files"
+        - "Governance rules unchanged in behavior"
+      blocking: true
+
+    performance:
+      description: "Meets or exceeds SLA targets"
+      targets:
+        - "MCP tool response time: p95 < 2000ms, p99 < 5000ms"
+        - "Orchestrator startup: < 500ms"
+        - "LENS analysis: < 1000ms per 10K lines"
+        - "Governance check: < 100ms per rule"
+        - "Memory usage: cortex/ package < 100MB on startup"
+        - "SQLite query: < 10ms for typical queries"
+      verification:
+        - "pytest tests/performance/ --benchmark"
+        - "Load test: 100 concurrent MCP invocations"
+        - "Memory profiling: baseline + check regression"
+      blocking: true
+
+    security:
+      description: "Security audit clean, no vulnerabilities"
+      checks:
+        - "Dependency scan: pip-audit, bandit, safety"
+        - "Code scan: bandit CORTEX codebase"
+        - "Secrets scan: gitleaks on git history"
+        - "Container scan: if Docker image, scan layers"
+        - "OWASP top 10: verify no high-severity findings"
+        - "Type safety: mypy clean"
+        - "SQL injection: all queries parameterized"
+      blocking: true
+
+    reliability:
+      description: "Withstand failures gracefully"
+      tests:
+        - "Chaos test: randomly fail 10% of MCP tool calls (with graceful handling)"
+        - "Chaos test: kill health service, verify fallback to manual check"
+        - "Chaos test: corrupt SQLite database, verify recovery"
+        - "Chaos test: fill disk, verify cleanup and alert"
+        - "Recovery test: restore from backup, verify zero data loss"
+      blocking: true
+
+    observability:
+      description: "Dashboards, metrics, logs, traces operational"
+      components:
+        - "Prometheus metrics: all important counters exported"
+        - "Grafana dashboards: infrastructure + cortex + mcp health"
+        - "Structured logging: all events logged with trace ID"
+        - "Distributed tracing: OpenTelemetry traces complete"
+        - "Alerting: critical alerts to on-call channel"
+      blocking: true
+
+    documentation:
+      description: "Runbooks, troubleshooting, escalation procedures complete"
+      artifacts:
+        - "RUNBOOK-on-call.md — on-call quick reference"
+        - "RUNBOOK-incident-response.md — incident classification + response"
+        - "RUNBOOK-disaster-recovery.md — restore procedures, RTO/RPO"
+        - "TROUBLESHOOTING.md — common issues + fixes"
+        - "DEPLOYMENT.md — deployment procedures + rollback"
+        - "ESCALATION-MATRIX.md — who to call for each component"
+      blocking: false (nice-to-have for v1, critical for v1.1)
+
+  # ============================================================================
+  # PERFORMANCE PROFILING & OPTIMIZATION
+  # ==============================================================================
+  performance_tasks:
+    - id: "PERF-001"
+      name: "Baseline Performance Metrics"
+      description: |
+        Establish baseline for:
+        - MCP tool invocation latency (p50, p95, p99)
+        - Orchestrator execution time
+        - LENS analysis time per KB
+        - SQLite query latency
+        - Memory usage at startup and under load
+        - CPU usage during orchestrator execution
+      deliverables:
+        - "cortex-docs/performance/baseline-metrics.md"
+        - "tests/performance/test_mcp_latency.py"
+        - "tests/performance/test_orchestrator_latency.py"
+        - "tests/performance/test_lens_latency.py"
+      gate: "Baseline established, values committed to repo"
+
+    - id: "PERF-002"
+      name: "Load Testing & Throughput"
+      description: |
+        Verify CORTEX handles concurrent load:
+        - 10 concurrent MCP invocations
+        - 100 concurrent requests
+        - 1000 concurrent request spike test
+      test_framework: "pytest-benchmark + locust"
+      deliverables:
+        - "tests/performance/test_load.py"
+        - "cortex-docs/performance/load-test-report.md"
+      pass_criteria:
+        - "p99 latency < 5000ms under 100 concurrent"
+        - "Zero timeouts under sustained load"
+        - "Memory growth < 10% over test duration"
+
+    - id: "PERF-003"
+      name: "Memory Profiling & Optimization"
+      description: |
+        Profile memory usage across all major operations:
+        - Package import: cortex/
+        - MCP tool initialization
+        - Orchestrator instantiation
+        - LENS analysis
+      tool: "tracemalloc + memory_profiler"
+      deliverables:
+        - "Memory profile report showing top allocators"
+        - "Optimization recommendations"
+      gate: "Memory footprint < 100MB at startup"
+
+    - id: "PERF-004"
+      name: "Query Optimization (SQLite)"
+      description: |
+        Analyze and optimize SQLite queries:
+        - Index efficiency (EXPLAIN QUERY PLAN)
+        - Bulk operation batching
+        - Connection pooling effectiveness
+      deliverables:
+        - "Slow query log analysis"
+        - "Index recommendations implemented"
+      gate: "All queries < 10ms median latency"
+
+  # ============================================================================
+  # SECURITY AUDIT & HARDENING
+  # ==============================================================================
+  security_tasks:
+    - id: "SEC-001"
+      name: "Dependency Vulnerability Scan"
+      description: |
+        Comprehensive scan of all Python dependencies:
+        - pip-audit: known vulnerabilities
+        - bandit: code vulnerabilities
+        - safety: CVE databases
+      tools:
+        - "pip-audit requirements.txt"
+        - "bandit -r cortex/"
+        - "safety check"
+      gate: "Zero high/critical vulnerabilities; medium vulnerabilities documented"
+
+    - id: "SEC-002"
+      name: "Secrets Detection"
+      description: |
+        Scan entire repo history for accidentally committed secrets:
+        - API keys
+        - Database credentials
+        - Private keys
+      tool: "gitleaks scan --source=all"
+      gate: "Zero secrets found; if any, rotate + update"
+
+    - id: "SEC-003"
+      name: "OWASP Top 10 Review"
+      description: |
+        Manual security review against OWASP top 10:
+        - A01: Broken Access Control
+        - A02: Cryptographic Failures
+        - A03: Injection
+        - A04: Insecure Design
+        - A05: Security Misconfiguration
+        - A06: Vulnerable Components
+        - A07: Auth/Session Management
+        - A08: Software/Data Integrity Failures
+        - A09: Logging/Monitoring
+        - A10: SSRF
+      deliverable: "SECURITY-AUDIT.md with findings + mitigations"
+
+    - id: "SEC-004"
+      name: "Type Safety Audit"
+      description: |
+        Full mypy compliance check to catch type-related security issues
+        (buffer overflows, type confusion, etc.)
+      command: "mypy cortex/ --strict"
+      gate: "Zero type errors"
+
+    - id: "SEC-005"
+      name: "SQL Injection Prevention Audit"
+      description: |
+        Verify all database access is parameterized (no string interpolation)
+      command: "grep -r 'cursor.execute.*%' cortex/ | wc -l"
+      expected: "0 (all uses parameterized)"
+
+  # ============================================================================
+  # CHAOS ENGINEERING & RESILIENCE TESTING
+  # ==============================================================================
+  chaos_tasks:
+    - id: "CHAOS-001"
+      name: "MCP Tool Failure Injection"
+      description: |
+        Randomly fail 10% of MCP tool calls to verify graceful degradation.
+        Expect orchestrators to handle failures, retry if appropriate.
+      test: "tests/chaos/test_mcp_failure_injection.py"
+      gate: "No unhandled exceptions; retries work as expected"
+
+    - id: "CHAOS-002"
+      name: "Orchestrator Timeout Injection"
+      description: |
+        Inject timeouts in orchestrator execution to verify timeout handling.
+        Verify cleanup happens correctly (no resource leaks).
+      test: "tests/chaos/test_orchestrator_timeout.py"
+      gate: "Timeouts handled gracefully, cleanup complete"
+
+    - id: "CHAOS-003"
+      name: "SQLite Corruption Handling"
+      description: |
+        Corrupt SQLite database file, verify recovery (rollback, restore backup).
+        Verify no data loss, no infinite loops.
+      test: "tests/chaos/test_database_corruption.py"
+      gate: "Corruption detected, recovery successful"
+
+    - id: "CHAOS-004"
+      name: "Disk Full Simulation"
+      description: |
+        Simulate disk full condition, verify graceful failure (not panic).
+        Verify cleanup is triggered (VACUUM, old logs deleted).
+      test: "tests/chaos/test_disk_full.py"
+      gate: "Graceful failure, cleanup triggered"
+
+    - id: "CHAOS-005"
+      name: "Memory Pressure Handling"
+      description: |
+        Use memory pressure tools to simulate low-memory conditions.
+        Verify CORTEX degrades gracefully (doesn't OOM).
+      test: "tests/chaos/test_memory_pressure.py"
+      gate: "Graceful degradation, no OOM kill"
+
+    - id: "CHAOS-006"
+      name: "Network Failure Injection"
+      description: |
+        Simulate network failures (latency, packet loss, disconnections).
+        Verify retries work, timeouts trigger, failover functions.
+      test: "tests/chaos/test_network_failure.py"
+      gate: "Network failures handled, retries succeed"
+
+  # ============================================================================
+  # DISASTER RECOVERY TESTING
+  # ==============================================================================
+  dr_tasks:
+    - id: "DR-001"
+      name: "Backup & Restore Procedure"
+      description: |
+        Validate backup/restore process:
+        1. Create backup of all state (config, SQLite, secrets)
+        2. Restore from backup to clean system
+        3. Verify zero data loss, all services functional
+      rto: "< 15 minutes"
+      rpo: "< 1 hour"
+      test: "tests/dr/test_backup_restore.py"
+      gate: "Backup captures all state, restore successful"
+
+    - id: "DR-002"
+      name: "Failover Procedure"
+      description: |
+        If multi-node deployment: test failover to standby.
+        Verify health checks work, automatic failover triggers, no data loss.
+      condition: "Only if multi-node architecture exists"
+      rto: "< 2 minutes"
+      rpo: "0 minutes"
+
+    - id: "DR-003"
+      name: "State Reconstruction"
+      description: |
+        Verify state can be reconstructed from audit logs (SQLite activity_log).
+        This enables recovery from corruption without full restore.
+      test: "tests/dr/test_state_reconstruction.py"
+      gate: "State reconstructable from audit trail"
+
+  # ============================================================================
+  # OBSERVABILITY & MONITORING
+  # ==============================================================================
+  observability_tasks:
+    - id: "OBS-001"
+      name: "Prometheus Metrics Export"
+      description: |
+        Export metrics for:
+        - MCP tool latency (histogram)
+        - Orchestrator execution count (counter)
+        - Governance rule violations (gauge)
+        - SQLite query performance (histogram)
+        - Error rates (counter)
+      deliverable: "cortex/observability/prometheus_exporter.py"
+      gate: "Metrics exported on /metrics endpoint"
+
+    - id: "OBS-002"
+      name: "Grafana Dashboard Creation"
+      description: |
+        Create dashboards for:
+        - CORTEX System Health (uptime, errors, latency)
+        - MCP Tools (throughput, latency, success rate)
+        - Orchestrators (execution time, error rate, queue depth)
+        - SQLite (query latency, cache hit ratio, db size)
+        - Infrastructure (CPU, memory, disk, network)
+      deliverable: "deployment/grafana-dashboards/cortex-system-health.json"
+      gate: "Dashboards operational, data flowing"
+
+    - id: "OBS-003"
+      name: "Distributed Tracing"
+      description: |
+        OpenTelemetry traces for all major operations:
+        - MCP tool invocation (span per tool)
+        - Orchestrator execution (span per phase)
+        - Database operations (span per query)
+        - Event bus messaging (span per event)
+      tool: "OpenTelemetry with Jaeger/Datadog exporter"
+      gate: "Traces complete, latency visibility end-to-end"
+
+    - id: "OBS-004"
+      name: "Structured Logging"
+      description: |
+        All logs include:
+        - Trace ID (correlation across all events)
+        - Span ID (for ordering)
+        - Timestamp, level, message, context
+        - Structured fields (component, user, operation)
+      deliverable: "cortex/observability/structured_logger.py"
+      gate: "All logs include trace ID, searchable in ELK/Datadog"
+
+    - id: "OBS-005"
+      name: "Alerting Rules"
+      description: |
+        Prometheus alert rules for:
+        - MCP tool p99 latency > 5000ms (WARN)
+        - Error rate > 1% (WARN)
+        - Error rate > 5% (CRIT)
+        - SQLite queries > 50ms median (WARN)
+        - Disk usage > 80% (WARN)
+        - Memory usage > 80% (CRIT)
+        - Orchestrator failure rate > 2% (WARN)
+      deliverable: "deployment/prometheus-alerts.yaml"
+      gate: "Alerts fire correctly in test environment"
+
+  # ============================================================================
+  # DOCUMENTATION & RUNBOOKS
+  # ==============================================================================
+  documentation_tasks:
+    - id: "DOC-001"
+      name: "On-Call Runbook"
+      description: |
+        Quick reference for on-call engineer:
+        - Alert escalation matrix
+        - Common issues + quick fixes
+        - Incident severity classification
+        - When to escalate to L2/L3
+        - Contact information
+      deliverable: "cortex-docs/RUNBOOK-on-call.md"
+      gate: "Readable in < 5 minutes, actionable"
+
+    - id: "DOC-002"
+      name: "Incident Response Playbook"
+      description: |
+        Comprehensive incident response:
+        - Detection (how to know there's a problem)
+        - Initial triage (classify severity)
+        - Investigation (how to debug)
+        - Remediation (how to fix)
+        - Post-incident (blameless review)
+      deliverable: "cortex-docs/RUNBOOK-incident-response.md"
+
+    - id: "DOC-003"
+      name: "Disaster Recovery Runbook"
+      description: |
+        Step-by-step recovery procedures:
+        - Full system restore (from backup)
+        - Partial data recovery (from audit logs)
+        - Database recovery (from WAL)
+        - State verification (post-recovery checks)
+      deliverable: "cortex-docs/RUNBOOK-disaster-recovery.md"
+
+    - id: "DOC-004"
+      name: "Troubleshooting Guide"
+      description: |
+        Common issues + solutions:
+        - MCP tool timeout → increase timeout, check resource usage
+        - Orchestrator hang → kill and retry, check for deadlock
+        - SQLite locked → check for hung connections
+        - Memory leak → profile memory, check for resource leaks
+        - High latency → check load, profile code
+      deliverable: "cortex-docs/TROUBLESHOOTING.md"
+
+    - id: "DOC-005"
+      name: "Deployment Procedures"
+      description: |
+        Step-by-step deployment + rollback:
+        - Blue-green deployment (if applicable)
+        - Canary deployment (gradual rollout)
+        - Automated rollback (on error detection)
+        - Verification steps post-deployment
+      deliverable: "cortex-docs/DEPLOYMENT.md"
+
+    - id: "DOC-006"
+      name: "Escalation Matrix"
+      description: |
+        Who to contact for each component:
+        - MCP tool issues → platform team
+        - Orchestrator issues → CORTEX team
+        - Database issues → DBA
+        - Infrastructure issues → infrastructure team
+      deliverable: "cortex-docs/ESCALATION-MATRIX.md"
+
+  # ============================================================================
+  # COST OPTIMIZATION & RESOURCE AUDIT
+  # ==============================================================================
+  cost_tasks:
+    - id: "COST-001"
+      name: "Resource Utilization Audit"
+      description: |
+        Analyze resource usage:
+        - CPU: average, peak, idle time
+        - Memory: average, peak, min
+        - Disk: used, free, growth rate
+        - Network: inbound, outbound, peak
+      deliverable: "Resource utilization report with optimization recommendations"
+
+    - id: "COST-002"
+      name: "Unused Resource Identification"
+      description: |
+        Find and document:
+        - Unused Python packages (can be removed)
+        - Unused database indexes (can be dropped)
+        - Unused test fixtures (can be cleaned up)
+        - Unused cached data (can be pruned)
+
+    - id: "COST-003"
+      name: "Scaling Analysis"
+      description: |
+        Determine scaling limits:
+        - How many concurrent MCP tool calls?
+        - How many concurrent orchestrators?
+        - Maximum database size before performance degrades?
+        - Maximum load before error rate increases?
+
+  # ============================================================================
+  # ZERO-REGRESSION VERIFICATION (COMPREHENSIVE)
+  # ==============================================================================
+  regression_verification:
+    - id: "REG-001"
+      name: "Full Feature Parity Test"
+      description: |
+        For EVERY feature from Phase 01-09:
+        1. Write a regression test (if not exists)
+        2. Run test against OLD implementation (if applicable)
+        3. Run test against NEW implementation
+        4. Verify output is identical
+      test_suite: "tests/regression/test_feature_parity.py"
+      coverage: "100% of public APIs"
+      gate: "All regression tests pass"
+
+    - id: "REG-002"
+      name: "MCP Tool Output Regression"
+      description: |
+        Compare MCP tool output (JSON/text) between versions.
+        Document any intentional changes (e.g., new fields).
+      test: "tests/regression/test_mcp_output_parity.py"
+      snapshots: "cortex-docs/regression/mcp-tool-outputs-baseline.json"
+      gate: "No unintended output changes"
+
+    - id: "REG-003"
+      name: "Orchestrator Behavior Regression"
+      description: |
+        Run orchestrators with the same inputs, verify same outputs.
+        Test both success and failure paths.
+      test: "tests/regression/test_orchestrator_behavior.py"
+      gate: "All orchestrators behave identically"
+
+    - id: "REG-004"
+      name: "Governance Rule Regression"
+      description: |
+        Test all 54 governance rules with representative code samples.
+        Verify rules produce same pass/fail results as before.
+      test: "tests/regression/test_governance_rules.py"
+      gate: "All rules unchanged in behavior"
+
+    - id: "REG-005"
+      name: "File Factory Acceptance Regression"
+      description: |
+        Test file factory against 1000+ existing files in repo.
+        Verify all files accepted (none rejected).
+      test: "tests/regression/test_file_factory_acceptance.py"
+      gate: "100% of existing files pass file factory"
+
+    - id: "REG-006"
+      name: "LENS Analysis Regression"
+      description: |
+        Run LENS analysis on representative codebases.
+        Verify analysis output (structure, recommendations) unchanged.
+      test: "tests/regression/test_lens_analysis_parity.py"
+      gate: "LENS output unchanged for test cases"
+
+  # ============================================================================
+  # PRODUCTION SIGN-OFF
+  # ==============================================================================
+  sign_off:
+    - stakeholder: "Tech Lead"
+      sign_off_criteria:
+        - "All regression tests pass"
+        - "No unintended behavior changes"
+        - "Performance SLAs met"
+    - stakeholder: "Security Officer"
+      sign_off_criteria:
+        - "Security audit clean"
+        - "No vulnerabilities"
+        - "Secrets scan passed"
+    - stakeholder: "Operations"
+      sign_off_criteria:
+        - "Runbooks complete"
+        - "Monitoring dashboards operational"
+        - "Alerting working"
+    - stakeholder: "Product"
+      sign_off_criteria:
+        - "All features functional"
+        - "User experience unchanged"
+        - "Performance acceptable"
+
+  # ============================================================================
+  # EXECUTION SEQUENCE (Step-by-step)
+  # ==============================================================================
+  execution_sequence:
+    - step: 1
+      name: "Performance Baseline & Testing"
+      description: "Establish baseline, load test, memory profile"
+      tasks:
+        - "Run tests/performance/ suite"
+        - "Establish baseline metrics"
+        - "Run load tests (10, 100, 1000 concurrent)"
+        - "Memory profile all major operations"
+      gate: "SLA targets met or documented as exemptions"
+
+    - step: 2
+      name: "Security Audit & Hardening"
+      description: "Vulnerability scan, secrets audit, OWASP review"
+      tasks:
+        - "pip-audit requirements.txt"
+        - "bandit -r cortex/"
+        - "gitleaks scan --source=all"
+        - "Manual OWASP review"
+        - "mypy --strict cortex/"
+      gate: "Security audit clean"
+
+    - step: 3
+      name: "Chaos Engineering"
+      description: "Failure injection, resilience testing"
+      tasks:
+        - "pytest tests/chaos/ -v"
+        - "MCP tool failure injection"
+        - "Orchestrator timeout injection"
+        - "SQLite corruption handling"
+        - "Disk full simulation"
+        - "Memory pressure handling"
+        - "Network failure injection"
+      gate: "All chaos tests pass, graceful degradation verified"
+
+    - step: 4
+      name: "Disaster Recovery Testing"
+      description: "Backup/restore, failover, state reconstruction"
+      tasks:
+        - "Test backup procedure"
+        - "Test restore to clean system"
+        - "Verify zero data loss"
+        - "Test state reconstruction"
+      gate: "RTO/RPO met, restore successful"
+
+    - step: 5
+      name: "Observability Setup"
+      description: "Prometheus, Grafana, tracing, logging, alerting"
+      tasks:
+        - "Implement prometheus_exporter.py"
+        - "Create Grafana dashboards"
+        - "Enable OpenTelemetry tracing"
+        - "Implement structured logging"
+        - "Create alert rules"
+      gate: "Dashboards operational, alerts fire correctly"
+
+    - step: 6
+      name: "Documentation"
+      description: "Runbooks, playbooks, troubleshooting guide"
+      tasks:
+        - "Create RUNBOOK-on-call.md"
+        - "Create RUNBOOK-incident-response.md"
+        - "Create RUNBOOK-disaster-recovery.md"
+        - "Create TROUBLESHOOTING.md"
+        - "Create DEPLOYMENT.md"
+        - "Create ESCALATION-MATRIX.md"
+      gate: "All docs complete, reviewed"
+
+    - step: 7
+      name: "Full Feature Parity Regression Testing"
+      description: "Comprehensive zero-regression verification"
+      tasks:
+        - "Feature parity test (100% of public APIs)"
+        - "MCP tool output parity"
+        - "Orchestrator behavior parity"
+        - "Governance rule parity"
+        - "File factory acceptance test"
+        - "LENS analysis parity"
+      gate: "All regression tests pass"
+
+    - step: 8
+      name: "Resource & Cost Audit"
+      description: "Resource utilization, unused resources, scaling limits"
+      tasks:
+        - "Analyze resource utilization"
+        - "Identify unused resources"
+        - "Determine scaling limits"
+      gate: "Report complete with recommendations"
+
+    - step: 9
+      name: "Stakeholder Sign-Off"
+      description: "Tech lead, security, operations, product review"
+      tasks:
+        - "Tech lead reviews regression tests"
+        - "Security officer reviews audit"
+        - "Operations reviews runbooks + monitoring"
+        - "Product reviews functionality + UX"
+      gate: "All stakeholders sign off"
+
+    - step: 10
+      name: "Final Commit & Tag"
+      command: "git add -A && git commit -m 'refactor(phase-10): production readiness — 100% hardened, zero regression'"
+      tag: "v2.0.0-production-ready"
+
+  # ============================================================================
+  # DEFINITION OF DONE (PRODUCTION)
+  # ==============================================================================
+  definition_of_done:
+    - "✅ ZERO regression — all existing functionality works identically"
+    - "✅ Performance: All SLAs met (latency, throughput, memory)"
+    - "✅ Security: Audit clean, no vulnerabilities, no secrets in history"
+    - "✅ Reliability: Chaos tests pass, graceful degradation verified"
+    - "✅ Disaster Recovery: Backup/restore tested, RTO/RPO met"
+    - "✅ Observability: Dashboards, metrics, logs, traces, alerts operational"
+    - "✅ Documentation: Runbooks, playbooks, troubleshooting, escalation complete"
+    - "✅ Cost: Resource audit complete, optimizations identified"
+    - "✅ Stakeholder Sign-Off: Tech lead, security, ops, product approved"
+    - "✅ Feature Parity: 100% of public APIs tested for regression"
+    - "✅ MCP Tool Output: Identical output (or intentional changes documented)"
+    - "✅ Orchestrator Behavior: All orchestrators behave identically"
+    - "✅ Governance Rules: All 54 rules unchanged in behavior"
+    - "✅ File Factory: 100% of existing files pass validation"
+    - "✅ LENS Analysis: Analysis output unchanged for test cases"
+    - "✅ Production deployment procedures validated"
+    - "✅ On-call procedures tested (mock incident)"
+    - "✅ CORTEX ready for production traffic"
+
+  # ============================================================================
+  # EXIT GATE (PRODUCTION)
+  # ==============================================================================
+  exit_gate:
+    all_performance_slas_met: true
+    security_audit_clean: true
+    chaos_tests_pass: true
+    disaster_recovery_verified: true
+    observability_operational: true
+    documentation_complete: true
+    all_stakeholders_signed_off: true
+    zero_regression_verified: true
+    description: |
+      Phase 10 complete — CORTEX 2.0 production-ready when:
+      1. All regression tests pass (ZERO changes to existing behavior)
+      2. All performance SLAs met
+      3. Security audit clean (pip-audit, bandit, gitleaks, OWASP clean)
+      4. Chaos tests pass (failures handled gracefully)
+      5. Disaster recovery tested (backup/restore works, RTO/RPO met)
+      6. Observability complete (dashboards, traces, alerts operational)
+      7. Documentation complete (runbooks, playbooks, escalation)
+      8. All stakeholders sign off
+      9. Release tag: v2.0.0-production-ready
+
+  # ============================================================================
+  # POST-PRODUCTION MONITORING
+  # ==============================================================================
+  post_production:
+    first_week:
+      - "Monitor error rates (alert if > 0.5%)"
+      - "Monitor performance (alert if p99 > 5000ms)"
+      - "Review on-call incidents (if any)"
+      - "Monitor resource usage (check for leaks)"
+
+    first_month:
+      - "Collect user feedback"
+      - "Analyze performance metrics"
+      - "Review security logs for anomalies"
+      - "Identify optimization opportunities"
+      - "Plan Phase 10.1 (continuous improvement)"
+
+    production_slos:
+      availability: "99.9% (4.3 hours downtime/month)"
+      latency_p99: "5000ms"
+      error_rate: "< 0.5%"
+      recovery_time: "< 15 minutes for full restore"
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This is the TERMINAL validation loop of the entire cortex-refactor plan.
+  # It loops until all production readiness criteria are met. Once clean,
+  # CORTEX marks the ENTIRE 10-phase refactor as COMPLETE in
+  # cortex-refactor-master.yaml and updates cortex-master.yaml with
+  # a single summary entry. No further phase follows — CORTEX is production-ready.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-10"
+    phase: "phase-10"
+    next_phase: null               # Terminal phase — no successor
+    is_terminal: true
+    max_iterations: 15
+    iteration_timeout_minutes: 120
+
+    checks:
+      - id: "VL-10-C1"
+        name: "Full regression test suite passes — zero failures"
+        command: "pytest tests/ -v --tb=short -q --ignore=tests/performance --ignore=tests/chaos"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix all regressions — production gate requires zero test failures"
+
+      - id: "VL-10-C2"
+        name: "Performance: MCP tool p95 < 2000ms"
+        command: "pytest tests/performance/test_mcp_latency.py -v --tb=short"
+        pass_condition: "exit code 0, p95 < 2000ms for all tools"
+        on_fail: "Profile slow MCP tools, optimize bottlenecks (lazy loading, caching)"
+
+      - id: "VL-10-C3"
+        name: "Performance: LENS analysis < 1000ms per 10K lines"
+        command: "pytest tests/performance/test_lens_latency.py -v --tb=short"
+        pass_condition: "exit code 0, latency within SLA"
+        on_fail: "Optimize LENS analyzer — check for redundant AST walks or I/O bottlenecks"
+
+      - id: "VL-10-C4"
+        name: "Security audit clean — pip-audit, bandit, gitleaks"
+        command: "pip-audit --strict -q && bandit -r cortex/ -ll -q && echo 'security OK'"
+        pass_condition: "prints security OK, no high-severity findings"
+        on_fail: "Fix each high-severity finding — update vulnerable dependencies, fix code issues"
+
+      - id: "VL-10-C5"
+        name: "Chaos tests pass — graceful failure handling"
+        command: "pytest tests/chaos/ -v --tb=short -q"
+        pass_condition: "exit code 0 — failures handled gracefully, no crashes"
+        on_fail: "Add graceful error handling for failing chaos scenarios"
+
+      - id: "VL-10-C6"
+        name: "Disaster recovery — backup/restore verified"
+        command: "python -m cortex.testing.disaster_recovery_test --quiet"
+        pass_condition: "exit code 0, restore time within RTO (< 15min)"
+        on_fail: "Fix backup/restore procedures — ensure SQLite and state can be fully restored"
+
+      - id: "VL-10-C7"
+        name: "Observability — Prometheus metrics exported"
+        command: "python -c \"from cortex.prometheus_metrics import get_metrics; m=get_metrics(); assert len(m)>0,'No metrics'; print(len(m),'metrics OK')\""
+        pass_condition: "prints N metrics OK where N > 0"
+        on_fail: "Fix Prometheus metrics registration — ensure all critical counters export"
+
+      - id: "VL-10-C8"
+        name: "OpenTelemetry traces operational"
+        command: "python -c \"from cortex.opentelemetry_tracing import get_tracer; t=get_tracer('test'); span=t.start_span('test-span'); span.end(); print('tracing OK')\""
+        pass_condition: "prints tracing OK, no exception"
+        on_fail: "Fix OpenTelemetry initialization and span lifecycle"
+
+      - id: "VL-10-C9"
+        name: "Governance audit clean — zero P0/P1 violations"
+        command: "python -m cortex.governance.audit --level P1 --path cortex/ --exit-nonzero"
+        pass_condition: "exit code 0"
+        on_fail: "Fix all remaining P0/P1 violations — production does not ship with governance failures"
+
+      - id: "VL-10-C10"
+        name: "Capability manifest 100% green — final confirmation"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0, 100% items green"
+        on_fail: "Fix any remaining capability regressions"
+
+      - id: "VL-10-C11"
+        name: "Release tag v2.0.0-production-ready present"
+        command: "git tag -l 'v2.0.0-production-ready' | wc -l"
+        pass_condition: "output is 1"
+        on_fail: "Create production release tag: git tag -a v2.0.0-production-ready -m 'CORTEX 2.0 — Production Ready'"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-10-C1 through VL-10-C11) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to terminal_completion.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 escalation to user.
+              (Production readiness requires human sign-off at this point.)
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all 11 must pass in the same iteration.
+        5. This is the TERMINAL loop — no further phases follow.
+
+    terminal_completion:
+      description: |
+        Executed ONLY when all VL-10 checks pass. This marks the entire
+        10-phase CORTEX Cohesive Brain Refactor as COMPLETE.
+      actions:
+        - action: "Update phase-10 status in cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-10].status → complete"
+            - "phases[phase-10].progress.completed → ISO timestamp"
+            - "phases[phase-10].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending → 0"
+            - "metadata.counters.complete → 10"
+            - "metadata.status → complete"
+            - "health_status.p0_issues → 0"
+            - "health_status.p1_issues → 0"
+
+        - action: "Update completion record in cortex-refactor-master.yaml"
+          changes:
+            - "completion.status → complete"
+            - "completion.completed_date → ISO timestamp"
+            - "completion.release_tag → v2.0.0-production-ready"
+            - "completion.cortex_master_yaml_updated → true (pending next action)"
+
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-10-production-readiness.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+
+        - action: "Update cortex-master.yaml with single summary entry"
+          changes:
+            - "planned[cortex-refactor].status → COMPLETE"
+            - "planned[cortex-refactor].completed → ISO timestamp"
+            - "planned[cortex-refactor].release_tag → v2.0.0-production-ready"
+            - "metadata.planned → 0"
+
+        - action: "Final git commit and push"
+          command: "git add -A && git commit -m 'refactor(cortex-refactor): ALL 10 PHASES COMPLETE — CORTEX 2.0 cohesive brain, production-ready' && git push origin CORTEX-GPT"
+
+        - action: "Log completion to CORTEX audit DB"
+          method: "CortexAuditDB().log_milestone(event='cortex-refactor-complete', phases=10, release='v2.0.0-production-ready')"
+

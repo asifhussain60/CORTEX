@@ -92,9 +92,9 @@ class TestPhaseFileDistribution:
         print(f"✅ CORTEX _cortex-master phases: {len(all_phases)}")
     
     def test_completed_phases_exist(self):
-        """Verify completed phases exist in _cortex-master/phases/completed/."""
-        completed = Path("cortex-registry/_cortex-master/phases/completed")
-        assert completed.exists(), "Missing _cortex-master/phases/completed"
+        """Verify completed phases exist in planning/phases/completed/."""
+        completed = Path("cortex-registry/planning/phases/completed")
+        assert completed.exists(), "Missing planning/phases/completed"
         
         completed_files = list(completed.glob("*.yaml"))
         assert len(completed_files) > 0, "No completed phases found"
