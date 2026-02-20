@@ -42,7 +42,7 @@ class ValidationResult:
 class WiringValidator:
     """Validates wiring.yaml against actual implementations."""
 
-    def __init__(self, wiring_path: str = "cortex/wiring/specifications/wiring.yaml"):
+    def __init__(self, wiring_path: str = "cortex/core/wiring/specifications/wiring.yaml"):
         self.wiring_path = wiring_path
         self.results: List[ValidationResult] = []
 

@@ -68,7 +68,7 @@ class AuditIntelligence:
         Initialize audit intelligence.
 
         Args:
-            wiring_path: Path to wiring.yaml (defaults to cortex/wiring/specifications/wiring.yaml)
+            wiring_path: Path to wiring.yaml (defaults to cortex/core/wiring/specifications/wiring.yaml)
         """
         if wiring_path is None:
             wiring_path = str(

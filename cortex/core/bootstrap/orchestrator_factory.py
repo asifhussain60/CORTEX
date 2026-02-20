@@ -190,7 +190,7 @@ class OrchestratorFactory:
         7. Audit trail logging (AC_START → AC_COMPLETE)
     """
 
-    def __init__(self, wiring_spec_path: str = "cortex/wiring/specifications/wiring.yaml"):
+    def __init__(self, wiring_spec_path: str = "cortex/core/wiring/specifications/wiring.yaml"):
         """Initialize factory with wiring specification path."""
         self.wiring_spec_path = Path(wiring_spec_path)
         self.specs: Dict[str, OrchestrationSpec] = {}

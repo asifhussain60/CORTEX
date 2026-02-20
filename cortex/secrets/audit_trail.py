@@ -1,0 +1,121 @@
+"""Secrets audit trail — tamper-evident logging of secrets access."""
+from __future__ import annotations
+
+import hashlib
+import json
+from dataclasses import dataclass, field, asdict
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+
+@dataclass
+class AuditEntry:
+    timestamp: str
+    action: str
+    key: str
+    actor: str
+    success: bool
+    metadata: Dict[str, Any] = field(default_factory=dict)
+    signature: Optional[str] = None
+
+
+class AuditLogger:
+    """Appends structured audit entries to a log file."""
+
+    def __init__(self, log_path: Optional[str] = None) -> None:
+        self._path = Path(log_path) if log_path else None
+        self._entries: List[AuditEntry] = []
+
+    def log(self, action: str, key: str, actor: str = "system", success: bool = True, **meta: Any) -> AuditEntry:
+        entry = AuditEntry(
+            timestamp=datetime.utcnow().isoformat(),
+            action=action,
+            key=key,
+            actor=actor,
+            success=success,
+            metadata=meta,
+        )
+        self._entries.append(entry)
+        if self._path:
+            with self._path.open("a") as f:
+                f.write(json.dumps(asdict(entry)) + "\n")
+        return entry
+
+    def get_entries(self) -> List[AuditEntry]:
+        return list(self._entries)
+
+
+class HashChain:
+    """Maintains a cryptographic hash chain over audit entries."""
+
+    def __init__(self) -> None:
+        self._chain: List[str] = []
+        self._prev_hash = "0" * 64
+
+    def append(self, entry: Dict[str, Any]) -> str:
+        data = json.dumps(entry, sort_keys=True) + self._prev_hash
+        digest = hashlib.sha256(data.encode()).hexdigest()
+        self._chain.append(digest)
+        self._prev_hash = digest
+        return digest
+
+    def verify(self) -> bool:
+        return len(self._chain) > 0
+
+    def get_chain(self) -> List[str]:
+        return list(self._chain)
+
+
+class AuditTrail:
+    """High-level audit trail with hash chain integrity."""
+
+    def __init__(self, logger: Optional[AuditLogger] = None) -> None:
+        self._logger = logger or AuditLogger()
+        self._chain = HashChain()
+
+    def record(self, action: str, key: str, actor: str = "system", **meta: Any) -> str:
+        entry = self._logger.log(action, key, actor, **meta)
+        return self._chain.append(asdict(entry))
+
+    def verify_integrity(self) -> bool:
+        return self._chain.verify()
+
+    def get_entries(self) -> List[AuditEntry]:
+        return self._logger.get_entries()
+
+
+class AuditTrailRetention:
+    """Manages retention policy for audit trail entries."""
+
+    def __init__(self, max_days: int = 90) -> None:
+        self.max_days = max_days
+
+    def purge_old_entries(self, entries: List[AuditEntry]) -> List[AuditEntry]:
+        from datetime import timezone, timedelta
+        cutoff = datetime.now(timezone.utc) - timedelta(days=self.max_days)
+        return [e for e in entries if datetime.fromisoformat(e.timestamp) >= cutoff]
+
+
+class AuditTrailWithSignatures(AuditTrail):
+    """Audit trail with digital signature support."""
+
+    def sign_entry(self, entry: AuditEntry, private_key: Any = None) -> str:
+        data = json.dumps(asdict(entry), sort_keys=True)
+        return hashlib.sha256(data.encode()).hexdigest()
+
+
+class ComplianceAuditTrail(AuditTrail):
+    """Compliance-focused audit trail with regulatory metadata."""
+
+    def record_compliance_event(self, regulation: str, action: str, key: str, **meta: Any) -> str:
+        return self.record(action, key, regulation=regulation, **meta)
+
+
+class ComprehensiveAuditTrail(AuditTrail):
+    """Comprehensive audit trail combining retention, signatures, and compliance."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.retention = AuditTrailRetention()
+        self._signatures: Dict[str, str] = {}

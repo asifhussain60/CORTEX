@@ -37,10 +37,10 @@ class WiringValidator:
         Initialize validator.
 
         Args:
-            wiring_file: Path to wiring.yaml (default: cortex/wiring/specifications/wiring.yaml)
+            wiring_file: Path to wiring.yaml (default: cortex/core/wiring/specifications/wiring.yaml)
         """
         if wiring_file is None:
-            wiring_file = Path("cortex/wiring/specifications/wiring.yaml")
+            wiring_file = Path("cortex/core/wiring/specifications/wiring.yaml")
 
         self.wiring_file = wiring_file
         self._spec: Optional[Dict[str, Any]] = None

@@ -1,0 +1,98 @@
+"""KnowledgeIndexer — auto-indexing system for tier3 knowledge (KN-001-02)."""
+from __future__ import annotations
+
+import sqlite3
+from datetime import datetime
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+
+_KNOWLEDGE_DIR = (
+    Path(__file__).parent.parent.parent.parent.parent.parent
+    / "cortex_intelligence" / "tier3" / "knowledge"
+)
+
+
+@dataclass
+class IndexEntry:
+    entry_id: str
+    domain: str
+    title: str
+    ac_ids: List[str]
+    created_at: datetime
+    quality_score: Optional[float] = None
+    file_path: Optional[str] = None
+
+
+class KnowledgeIndexer:
+    """Maintains a SQLite index of knowledge entries."""
+
+    def __init__(self, db_path: Optional[str] = None) -> None:
+        if db_path:
+            self._db_path = Path(db_path)
+        else:
+            _KNOWLEDGE_DIR.mkdir(parents=True, exist_ok=True)
+            self._db_path = _KNOWLEDGE_DIR / "knowledge-index.db"
+        self._init_db()
+
+    def _init_db(self) -> None:
+        with sqlite3.connect(str(self._db_path)) as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS entries (
+                    entry_id TEXT PRIMARY KEY,
+                    domain TEXT NOT NULL,
+                    title TEXT NOT NULL,
+                    ac_ids TEXT DEFAULT '[]',
+                    created_at TEXT NOT NULL,
+                    quality_score REAL,
+                    file_path TEXT
+                )
+            """)
+            conn.commit()
+
+    def index_entry(self, entry: IndexEntry) -> bool:
+        with sqlite3.connect(str(self._db_path)) as conn:
+            import json
+            conn.execute("""
+                INSERT OR REPLACE INTO entries
+                (entry_id, domain, title, ac_ids, created_at, quality_score, file_path)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (
+                entry.entry_id, entry.domain, entry.title,
+                json.dumps(entry.ac_ids), entry.created_at.isoformat(),
+                entry.quality_score, entry.file_path,
+            ))
+            conn.commit()
+        return True
+
+    def search(self, query: str, domain: Optional[str] = None) -> List[IndexEntry]:
+        with sqlite3.connect(str(self._db_path)) as conn:
+            import json
+            if domain:
+                rows = conn.execute(
+                    "SELECT * FROM entries WHERE domain=? AND (title LIKE ? OR entry_id LIKE ?)",
+                    (domain, f"%{query}%", f"%{query}%")
+                ).fetchall()
+            else:
+                rows = conn.execute(
+                    "SELECT * FROM entries WHERE title LIKE ? OR entry_id LIKE ?",
+                    (f"%{query}%", f"%{query}%")
+                ).fetchall()
+            return [
+                IndexEntry(
+                    entry_id=r[0], domain=r[1], title=r[2],
+                    ac_ids=json.loads(r[3]), created_at=datetime.fromisoformat(r[4]),
+                    quality_score=r[5], file_path=r[6],
+                )
+                for r in rows
+            ]
+
+    def get_by_ac_id(self, ac_id: str) -> List[IndexEntry]:
+        return self.search(ac_id)
+
+    def get_by_domain(self, domain: str) -> List[IndexEntry]:
+        return self.search("", domain=domain)
+
+    def get_index_file(self) -> Path:
+        return self._db_path

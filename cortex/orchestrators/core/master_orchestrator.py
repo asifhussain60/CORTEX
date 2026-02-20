@@ -105,6 +105,7 @@ try:
 
 
 
+
 except ImportError:
     # Fallback if modules not accessible
     ChatResponsePolicyValidator = None
@@ -2374,6 +2375,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                 exit_gate = create_exit_gate(workspace_root)
 
                 # Synthesize context for this operation
+
                 request_text = f"{operation_name}: {str(parameters)}"
 
                 context_synthesis = exit_gate.synthesize_context(

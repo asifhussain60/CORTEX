@@ -22,7 +22,7 @@ def reset_wiring_registry():
 
 def test_wiring_yaml_exists() -> None:
     """Test that wiring.yaml specification file exists."""
-    wiring_file = Path("cortex/wiring/specifications/wiring.yaml")
+    wiring_file = Path("cortex/core/wiring/specifications/wiring.yaml")
     assert wiring_file.exists(), f"Wiring specification not found at {wiring_file}"
 
 
@@ -30,7 +30,7 @@ def test_wiring_yaml_is_valid() -> None:
     """Test that wiring.yaml is valid YAML and loads correctly."""
     import yaml
     
-    wiring_file = Path("cortex/wiring/specifications/wiring.yaml")
+    wiring_file = Path("cortex/core/wiring/specifications/wiring.yaml")
     with open(wiring_file, 'r') as f:
         spec = yaml.safe_load(f)
     
@@ -45,7 +45,7 @@ def test_all_23_orchestrators_defined() -> None:
     """Test that all 23 orchestrators are defined in wiring.yaml."""
     import yaml
     
-    wiring_file = Path("cortex/wiring/specifications/wiring.yaml")
+    wiring_file = Path("cortex/core/wiring/specifications/wiring.yaml")
     with open(wiring_file, 'r') as f:
         spec = yaml.safe_load(f)
     
@@ -67,7 +67,7 @@ def test_orchestrators_have_required_fields() -> None:
     """Test that all orchestrators have required fields."""
     import yaml
     
-    wiring_file = Path("cortex/wiring/specifications/wiring.yaml")
+    wiring_file = Path("cortex/core/wiring/specifications/wiring.yaml")
     with open(wiring_file, 'r') as f:
         spec = yaml.safe_load(f)
     
@@ -83,7 +83,7 @@ def test_no_circular_dependencies() -> None:
     """Test that there are no circular dependencies in wiring."""
     import yaml
     
-    wiring_file = Path("cortex/wiring/specifications/wiring.yaml")
+    wiring_file = Path("cortex/core/wiring/specifications/wiring.yaml")
     with open(wiring_file, 'r') as f:
         spec = yaml.safe_load(f)
     
@@ -120,7 +120,7 @@ def test_all_dependencies_exist() -> None:
     """Test that all dependency names reference existing orchestrators."""
     import yaml
     
-    wiring_file = Path("cortex/wiring/specifications/wiring.yaml")
+    wiring_file = Path("cortex/core/wiring/specifications/wiring.yaml")
     with open(wiring_file, 'r') as f:
         spec = yaml.safe_load(f)
     
@@ -139,31 +139,31 @@ def test_all_dependencies_exist() -> None:
 
 def test_git_backed_registry_module_exists() -> None:
     """Test that git_backed_registry.py module exists."""
-    registry_file = Path("cortex/wiring/registry/git_backed_registry.py")
+    registry_file = Path("cortex/core/wiring/registry/git_backed_registry.py")
     assert registry_file.exists(), f"Git-backed registry not found at {registry_file}"
 
 
 def test_lazy_orchestrator_module_exists() -> None:
     """Test that lazy_orchestrator.py module exists."""
-    lazy_file = Path("cortex/wiring/registry/lazy_orchestrator.py")
+    lazy_file = Path("cortex/core/wiring/registry/lazy_orchestrator.py")
     assert lazy_file.exists(), f"Lazy orchestrator not found at {lazy_file}"
 
 
 def test_wiring_validator_module_exists() -> None:
     """Test that wiring_validator.py module exists."""
-    validator_file = Path("cortex/wiring/registry/wiring_validator.py")
+    validator_file = Path("cortex/core/wiring/registry/wiring_validator.py")
     assert validator_file.exists(), f"Wiring validator not found at {validator_file}"
 
 
 def test_bootstrap_module_exists() -> None:
     """Test that bootstrap.py module exists."""
-    bootstrap_file = Path("cortex/wiring/bootstrap.py")
+    bootstrap_file = Path("cortex/core/wiring/wiring_bootstrap.py")
     assert bootstrap_file.exists(), f"Bootstrap module not found at {bootstrap_file}"
 
 
 def test_wiring_init_exports() -> None:
     """Test that cortex/wiring/__init__.py exports required functions."""
-    from cortex.wiring import (
+    from cortex.core.wiring import (
         bootstrap_cortex,
         get_cortex,
         is_wired,
@@ -178,7 +178,7 @@ def test_wiring_init_exports() -> None:
 
 def test_bootstrap_cortex_returns_registry() -> None:
     """Test that bootstrap_cortex() returns a valid registry."""
-    from cortex.wiring import wiring_bootstrap_cortex
+    from cortex.core.wiring import bootstrap_cortex
     
     registry = bootstrap_cortex()
     
@@ -189,7 +189,7 @@ def test_bootstrap_cortex_returns_registry() -> None:
 
 def test_registry_can_list_orchestrators() -> None:
     """Test that registry can list all 26 orchestrators (Phase 8.3: +ChallengeEngine, +RecommendationEngine)."""
-    from cortex.wiring import wiring_bootstrap_cortex
+    from cortex.core.wiring import bootstrap_cortex
     
     registry = bootstrap_cortex()
     orchestrators = registry.list_orchestrators()
@@ -204,7 +204,7 @@ def test_lazy_initialization_works() -> None:
     Note: We test with OnboardingOrchestrator which has simpler dependencies.
     MasterOrchestrator requires providers that aren't available in test context.
     """
-    from cortex.wiring import wiring_bootstrap_cortex
+    from cortex.core.wiring import bootstrap_cortex
     
     registry = bootstrap_cortex()
     
@@ -237,7 +237,7 @@ def test_lazy_initialization_works() -> None:
 
 def test_wiring_hash_is_deterministic() -> None:
     """Test that wiring hash is deterministic for same YAML."""
-    from cortex.wiring import get_wiring_hash
+    from cortex.core.wiring import get_wiring_hash
     
     hash1 = get_wiring_hash()
     hash2 = get_wiring_hash()
@@ -248,14 +248,14 @@ def test_wiring_hash_is_deterministic() -> None:
 
 def test_is_wired_returns_true_after_bootstrap() -> None:
     """Test that is_wired() returns True after bootstrap."""
-    from cortex.wiring import wiring_bootstrap_cortex, is_wired
+    from cortex.core.wiring import bootstrap_cortex, is_wired
     from cortex.core.wiring.registry import reset_registry
-    
+
     # Force reset to ensure clean state
     reset_registry()
-    
+
     # Bootstrap system
     bootstrap_cortex()
-    
+
     # Now should be wired
     assert is_wired(), "Should be wired after bootstrap"

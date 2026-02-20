@@ -62,7 +62,7 @@ class Core035Enforcer:
         "bootstrap_cortex": "cortex/wiring/bootstrap.py",
         "GitBackedRegistry": "cortex/wiring/registry/git_backed_registry.py",
         "get_registry": "cortex/wiring/registry/git_backed_registry.py",
-        "wiring.yaml": "cortex/wiring/specifications/wiring.yaml",
+        "wiring.yaml": "cortex/core/wiring/specifications/wiring.yaml",
     }
 
     def __init__(self, cortex_root: Path, verbose: bool = False):
