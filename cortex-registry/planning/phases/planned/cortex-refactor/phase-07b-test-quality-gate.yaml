@@ -13,9 +13,11 @@
 phase:
   id: "phase-07b"
   name: "Test Quality Gate — Canonical Service"
-  status: "pending"
+  status: "complete"
   priority: "P0"
   estimated_effort: "4-6 hours"
+  actual_duration: "2 hours"
+  completed: "2026-02-20T18:00:00Z"
   risk: "low"
   depends_on: ["phase-07"]
   description: |
