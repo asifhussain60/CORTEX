@@ -9,7 +9,7 @@ last_verified: 2026-02-15
 source_of_truth: cortex-registry/interaction/ + .github/prompts/
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 enhancements: ENH-97a30b8a2, ENH-5020aebd2
 diagrams: ASCII system architecture
 order: 9
@@ -337,7 +337,7 @@ cortex_intelligence/
 **Orchestrator:** PlanOrchestrator, MasterOrchestrator  
 **Pattern:** Named waves → Stage trees → Metrics table → Execution command
 
-**Usage:** Design sessions, phase planning, architecture proposals
+**Usage:** Design sessions, feature planning, architecture proposals
 
 ```markdown
 <hr>
@@ -369,7 +369,7 @@ cortex_intelligence/
 
 **When to Use:**
 - DESIGN intent (architecture proposals)
-- PLAN intent (phase management)
+- PLAN intent (feature management)
 - Wave/stage breakdowns
 - Multi-stage efforts
 
@@ -458,7 +458,7 @@ cortex_intelligence/
 | 1 | ✅ | Tests | 18/18 passing (RED → GREEN → REFACTOR) |
 | 2 | ✅ | StateOrchestrator | 3 state managers consolidated |
 | 3 | ✅ | Audit trail | SQLite logging active |
-| 4 | ✅ | Wiring contract | v2.1.0 updated |
+| 4 | ✅ | Wiring contract |  updated |
 
 **Tests:** 18/18 | **Coverage:** 95% | **AC Marker:** AC-MEGA-B-S2-001 ✅
 

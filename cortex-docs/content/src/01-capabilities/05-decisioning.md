@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/intent_router/ + cortex/orchestrators/ + cortex/02-lens/
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII classification flow, decision trees
 order: 6
 ---
 
-> **Notice:** Intent classification represents a continuously improving system using LENS intelligence. Classification accuracy improves over time as CORTEX learns from more interactions. Performance characteristics reflect production deployment as of v8.1.
+> **Notice:** Intent classification represents a continuously improving system using LENS intelligence. Classification accuracy improves over time as CORTEX learns from more interactions. Performance characteristics reflect production deployment as of .
 
 ---
 
@@ -24,7 +24,7 @@ The Decisioning & Routing layer provides intelligent request interpretation and 
 
 **Core Capabilities:**
 - **Intent Classification** — 12 distinct types (IMPLEMENT, FIX, REFACTOR, ANALYZE, TEST, PLAN, AUDIT, DESIGN, DEBUG, DIGEST, QUERY, RECALL)
-- **LENS Integration** — Four-phase cycle (Language→Examination→Navigation→Synthesis) enhances accuracy
+- **LENS Integration** — Four-feature cycle (Language→Examination→Navigation→Synthesis) enhances accuracy
 - **Routing Engine** — Maps intents to 20+ orchestrators with load balancing
 - **Composite Detection** — Identifies multiple intents in single request (e.g., IMPLEMENT + TEST)
 - **Confidence Scoring** — 0.0-1.0 scale with ≥0.7 threshold for auto-execution
@@ -48,7 +48,7 @@ The Decisioning layer provides the intelligence enabling CORTEX to understand us
 
 **Routing** — Selecting the best orchestrator for the task
 - **Orchestrator Mapping:** 12 intents → 20+ orchestrators with priority rules
-- **Load Balancing:** Round-robin across orchestrator replicas (Phase 11)
+- **Load Balancing:** Round-robin across orchestrator replicas (Iteration 11)
 - **Capability Matching:** Validate orchestrator supports required operations
 - **Health Checks:** Route around unhealthy orchestrators (circuit breaker)
 
@@ -85,14 +85,14 @@ CORTEX classifies requests into 12 distinct intent types with 95%+ accuracy usin
 | **TEST** | Test creation (standalone) | TDDOrchestrator | `cortex_process_request` | 200-600ms |
 | **AUDIT** | Governance/health checks | EnforcementOrchestrator | `cortex_audit` | 500-1500ms |
 | **QUERY** | Information requests | InteractionOrchestrator | (inline response) | 50-200ms |
-| **PLAN** | Development planning/phase mgmt | PlanOrchestrator | `cortex_plan_setup/resolve` | 100-400ms |
+| **PLAN** | Development planning/feature mgmt | PlanOrchestrator | `cortex_plan_setup/resolve` | 100-400ms |
 | **DESIGN** | Architecture reviews | ChallengeEngine | `cortex_challenge` | 200-600ms |
 | **DEBUG** | Debug injection + analysis | DebugOrchestrator | `cortex_debug_inject` | 150-500ms |
 | **DIGEST** | Session learning extraction | DigestOrchestrator | `cortex_digest_session` | 300-1000ms |
 | **RECALL** | Feature discovery | TotalRecallOrchestrator | `cortex_total_recall` | 200-800ms |
 | **UNKNOWN** | Unclassified (needs clarification) | MasterOrchestrator | (clarification prompt) | 100ms |
 
-**Intent Evolution:** CORTEX v8.0 introduced DEBUG, DIGEST, RECALL intents. Earlier versions (v6.x-v7.x) had 9 intents. Future versions may add MIGRATE, OPTIMIZE, SECURITY-AUDIT as specialized intents.
+**Intent Evolution:** CORTEX  introduced DEBUG, DIGEST, RECALL intents. Earlier versions (v6.x-v7.x) had 9 intents. Future versions may add MIGRATE, OPTIMIZE, SECURITY-AUDIT as specialized intents.
 
 ### Classification Process
 

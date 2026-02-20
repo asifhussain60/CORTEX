@@ -1,6 +1,6 @@
 # 🎨 CORTEX Response Format Standards
 
-> **Updated:** 2026-02-19 | **Authority:** ENH-028 + ENH-032 + CORE-049 + Concise Decision Mode + Chat01 User Preferences
+> **Authority:** ENH-028 + ENH-032 + CORE-049 + Concise Decision Mode + Chat01 User Preferences
 
 ---
 
@@ -29,7 +29,6 @@ Unified response format for **all CORTEX operations** across modes: PRE-FLIGHT, 
 ## 🎯 USER RESPONSE TEMPLATE — GOLDEN FORMAT (SSOT)
 
 **Authority:** CORE-050 User Response Format Standard
-**Updated:** 2026-02-19
 **Scope:** ALL non-autonomous responses in VS Code GitHub Copilot Chat
 **Rule:** This is the ONLY user response template. All other files MUST pointer-reference this section — never duplicate.
 **Rendering:** ALL feedback inline in Copilot Chat. NEVER create summary, report, or other .md/.txt files (CORE-002).
@@ -162,7 +161,7 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 |--------------------|---------|----------|----------------|-----------------|------------|
 | **Simple** (1-2 files) | 1 sentence | 2-3 bullets | 1 sentence | ⚪ Skip | 1 action |
 | **Medium** (feature) | 2 sentences | Findings table | Numbered steps | 3-row table | 2-3 actions |
-| **Complex** (multi-phase) | 2 sentences + scope | Full analysis + alternatives table | Strategy + steps | Full table + mitigations | Immediate + Later split |
+| **Complex** (multi-step) | 2 sentences + scope | Full analysis + alternatives table | Strategy + steps | Full table + mitigations | Immediate + Later split |
 
 ### Formatting Standards (Copilot Chat Optimized)
 
@@ -184,7 +183,7 @@ Each H2 section can contain H3 sub-sections for progressive detail:
 | ❌ Creating .md/.txt files | CORE-002 violation | Inline in chat session |
 | ❌ >5 column tables | Overflow in Copilot Chat | Split into 2 tables |
 | ❌ Repeated information across sections | Cognitive overload | Each section adds NEW info only |
-| ❌ Generic phase names | No strategic meaning | Meaningful names always |
+| ❌ Generic stage names | No strategic meaning | Meaningful names always |
 | ❌ Log dumps or inventories | Not executive-ready | Themed findings, highest-impact per theme |
 | ❌ Ending with open questions | Leaves user uncertain | End with closure + proceed option |
 | ❌ `├─ └─` box-drawing tree characters | Collapse into one line in Copilot Chat | Use `- ✅` / `- 🔵` / `- ⚪` / `- 🔴` Markdown bullet lists |
@@ -212,7 +211,6 @@ The `### ⚡ If you type proceed, CORTEX will:` sub-section is **mandatory** in 
 - Implement `cortex/auth/jwt_validator.py` with `validate_token()` + `decode_claims()`
 - Run `pytest tests/unit/auth/` and verify ≥80% coverage
 - Commit: `feat(auth): add JWT validator with TDD coverage`
-- Update `cortex-registry/planning/master-cortex-plan.yaml` phase status
 ```
 
 **Example — wrong:**
@@ -249,8 +247,6 @@ The `### ⚡ If you type proceed, CORTEX will:` sub-section is **mandatory** in 
 ## 📦 COMPOSABLE CONTENT BLOCKS
 
 **Authority:** cortex-registry/interaction/content-blocks.yaml  
-**Updated:** 2026-02-14
-
 ### Purpose
 
 Reusable content sections that compose into situation-specific responses without duplication.
@@ -383,7 +379,6 @@ Result: Zero duplication, 350 words
 ## 🤖 Silent Autonomous Mode — Golden Template (SSOT)
 
 **Authority:** CORE-049 Silent Autonomous Execution Protocol
-**Updated:** 2026-02-19
 **Scope:** ALL orchestrators (MasterOrchestrator, PlanningOrchestrator, VacuumOrchestrator, TDDOrchestrator, and all others)
 **Rule:** This is the ONLY autonomous execution template. All other files MUST pointer-reference this section — never duplicate.
 
@@ -676,7 +671,7 @@ For multi-step implementations, use visual ASCII progress bars.
 
 ✅ **CORRECT FORMAT** (Phase title in heading):
 ```markdown
-### Phase 25: PLAN MODE Enhancement
+### 🔧 Current Operation
 
 **Progress:** [████░░░░░░] 40% - Core Infrastructure Complete
 
@@ -685,19 +680,19 @@ For multi-step implementations, use visual ASCII progress bars.
 
 ❌ **WRONG FORMAT** (Title and bar same level):
 ```markdown
-### 🔄 Phase 25 Progress - Stage 1
-**[████░░░░░░] 20% - Core PLAN Mode Infrastructure**
+### 🔧 Operation Progress - Stage 1
+**[████░░░░░░] 20% - Core Infrastructure**
 ```
 
 **Visual Hierarchy Rules:**
-1. **Phase Title** = h3 heading (`###`) with phase number + name
+1. **Operation Title** = h3 heading (`###`) with operation name
 2. **Progress Bar** = Bold paragraph below heading with "Progress:" label
 3. **Stage Name** = Optional subheading or bold text after title
 4. **Always separate** = Progress bar on its own line, not inline with heading
 
 **Alternative Format (Multi-Stage):**
 ```markdown
-### Phase 25: PLAN MODE Enhancement
+### 🔧 Current Operation
 **Stage 1: Core Infrastructure**
 
 **Progress:** [████░░░░░░] 40%
@@ -709,7 +704,7 @@ For multi-step implementations, use visual ASCII progress bars.
 |-----------|-----------------|
 | Multi-step implementations (>3 steps) | Single-step operations |
 | Long-running operations | Analysis/audit results (use tables) |
-| Phase/sprint tracking | Conversational responses |
+| Multi-step tracking | Conversational responses |
 | TDD cycles (RED→GREEN→REFACTOR) | Quick confirmations |
 
 ### Badge Types
@@ -939,14 +934,14 @@ This involves {scope}-level changes with {impact} impact.
 | Unnumbered action lists | Slow to scan, harder to select | 1️⃣ 2️⃣ 3️⃣ format |
 | Code blocks without context | Interrupts flow, requires scrolling | Use `<details>` or link to file |
 | Flat severity indicators | P0 and P3 look identical | 🔴 P0, ⚪ P3 prefixes |
-| >5 options in one decision | Decision paralysis | Categorize or phase decisions |
+| >5 options in one decision | Decision paralysis | Categorize or group decisions |
 | Technical jargon without definition | Excludes non-experts | Use `<abbr>` tooltips |
 | Embedded full file contents | Context overflow | Link with `#file:` or use excerpts |
 | **Creating .md/.txt report files** | **CORE-002 violation** | **All output inline in Copilot Chat** |
 | **Tool usage narration** | **Wastes read time ("I searched...", "I read...")** | **Present findings directly** |
 | **>60 second read time** | **Not executive-ready** | **Answer first, tables for data, ≤5 sections** |
 | **Answering without mirroring question** | **User unsure if concern was understood** | **"Summary" mirrors user's words** |
-| **Generic phase names (PHASE-1)** | **No strategic meaning, harder to track** | **Meaningful names (Foundation & Bootstrap)** |
+| **Generic stage names (STAGE-1)** | **No strategic meaning, harder to track** | **Meaningful names (Foundation & Bootstrap)** |
 
 ---
 
@@ -956,7 +951,7 @@ This involves {scope}-level changes with {impact} impact.
 
 Use 5-section format at **simple density** — each section 1-2 sentences max.
 
-### Complex Requests (Multi-phase, >1000 LOC)
+### Complex Requests (Multi-step, >1000 LOC)
 
 Use 5-section format at **full density** — with H3 sub-sections, comparison tables, and numbered implementation steps.
 
@@ -998,7 +993,7 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 
 **BAD (60,000 tokens):**
 ```markdown
-## Phase 38 Continuation Prompt
+## 🔄 Continuation Required
 
 **Session Context:**
 - Completed: Stages 0-2 (OrchestratorInventoryAuditor with 21/21 tests passing)
@@ -1031,7 +1026,7 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 
 **#file:cortex-architect.prompt.md**
 
-**Session:** Phase 38 Stage 7.2
+**Session:** Current task · Stage 7.2
 **Branch:** CORTEX  
 **Context:** exposure_auditor.py ✅
 
@@ -1064,12 +1059,12 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 - ❌ Chat history (automatically available)
 - ❌ File contents (use #file: references)
 - ❌ Implementation details (in git history)
-- ❌ Stage specifications (in phase YAMLs)
+- ❌ Stage specifications (in task specs)
 - ❌ Commands already executed (in terminal history)
 
 **DO provide:**
 - ✅ Prompt file reference (#file:)
-- ✅ Current phase/stage ID
+- ✅ Current operation/stage ID
 - ✅ Last completed checkpoint
 - ✅ Next immediate action
 - ✅ Critical command to resume
@@ -1097,12 +1092,6 @@ Before sending any response, verify:
 - [ ] Impact statements provided for each option (when choices offered)
 
 ---
-
-## 🔄 Version History
-
-- **v2.0** (2026-02-13) — Added 5 user-preferred response templates (A-E) from chat01 production sessions: DIGEST, DESIGN/PLAN, QUERY/REFINEMENT, COMPLETION, ENHANCEMENT. Added template selection matrix, composition rules, auto-detect logic. Extended anti-patterns with 6 new patterns from user feedback.
-- **v1.1** (2026-02-05) — Added narrative flow principle, completion confirmation format, holistic implementation principle
-- **v1.0** (2026-02-05) — Initial response format standards (ENH-028)
 
 ---
 

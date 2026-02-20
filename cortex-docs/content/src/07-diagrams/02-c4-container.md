@@ -142,7 +142,7 @@ graph TB
 **Architecture:** Hierarchical orchestrator dispatch with intent-based routing  
 **Responsibilities:**
 - Route user requests to specialized orchestrators based on intent classification
-- Coordinate multi-stage workflows (TDD cycles, analysis pipelines, phase execution)
+- Coordinate multi-stage workflows (TDD cycles, analysis pipelines, feature execution)
 - Manage orchestrator lifecycle and state transitions
 - Enforce workflow governance through pre-execution gates
 
@@ -154,7 +154,7 @@ graph TB
 | **IntentRouter** | All | LANGUAGE→EXAMINATION→NAVIGATION→SYNTHESIS (LENS) classification | 20-40ms |
 | **TDDOrchestrator** | IMPLEMENT, FIX | RED→GREEN→REFACTOR cycle enforcement | 500-2000ms |
 | **LENSSynthesis** | ANALYZE | Code intelligence synthesis across 8 analyzers | 300-800ms |
-| **PlanOrchestrator** | PLAN | Phase lifecycle management, dashboard generation | 150-400ms |
+| **PlanOrchestrator** | PLAN | Feature lifecycle management, dashboard generation | 150-400ms |
 | **RefactoringOrchestrator** | REFACTOR | Code improvement workflows with quality gates | 600-1500ms |
 
 **Wiring:** Orchestrators discovered via `__wiring_contract__.yaml` Git-backed registry, supporting hot-reload without server restart.
@@ -232,7 +232,7 @@ graph LR
 **Responsibilities:**
 - Store orchestrator specifications and wiring contracts
 - Maintain knowledge base of 45+ best practice YAMLs
-- Track phase definitions (active, completed, future roadmap)
+- Track feature definitions (active, completed, future direction)
 - Provide single source of truth for all governance rules
 
 **Registry Structure:**
@@ -278,7 +278,7 @@ cortex-registry/
 **Asynchronous Operations:**
 - Git commits (audit trail, registry updates) — fire-and-forget
 - SQLite cache updates — background writes
-- Context Crystallization Layer prefetch (Phase 49) — parallel warm-up
+- Context Crystallization Layer prefetch (Iteration 49) — parallel warm-up
 
 **Message Format:**
 All internal communication uses Python dataclasses with type hints (no JSON serialization overhead).
@@ -290,7 +290,7 @@ All internal communication uses Python dataclasses with type hints (no JSON seri
 VS Code → MCP Server (localhost stdio) → CORTEX Python Runtime
 ```
 
-**Production Mode (future — Phase 11):**
+**Production Mode (future — Iteration 11):**
 ```
 Clients → nginx → MCP Gateway (HTTP/JSON-RPC) → CORTEX SaaS
                 ↓

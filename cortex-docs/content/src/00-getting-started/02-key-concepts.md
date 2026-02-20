@@ -35,7 +35,7 @@ An orchestrator is not a generic LLM prompt. Each one has a defined responsibili
 The Git-backed registry file that tells CORTEX which orchestrators exist, their priorities, and their capabilities. When CORTEX starts, it reads this file to discover all available orchestrators — no hard-coded lists. Adding a new orchestrator means adding an entry here; removal is equally simple. Hot-reload means changes take effect without restarting the server.
 
 ### Git-Backed Registry (`cortex-registry/`)
-Instead of a database, CORTEX stores all configuration, governance rules, phase definitions, and knowledge in plain YAML files committed to Git. This means:
+Instead of a database, CORTEX stores all configuration, governance rules, feature definitions, and knowledge in plain YAML files committed to Git. This means:
 - All changes are versioned and auditable
 - No PostgreSQL or MongoDB dependency
 - Configuration is readable by both humans and machines
@@ -122,8 +122,8 @@ What you are asking CORTEX to do. CORTEX recognises 12 intents: IMPLEMENT, FIX, 
 ### Session
 A single interaction session between your IDE and CORTEX. State is maintained within a session (checkpoints, in-progress operations). Long operations (>30s) are checkpointed to SQLite so they survive interruption.
 
-### Phase
-A numbered unit of CORTEX's own development roadmap, stored in `cortex-registry/planning/`. When CORTEX documentation mentions "Phase 48" or "Phase 96", it refers to a specific completed increment of the platform itself. Phases are how CORTEX tracks its own evolution.
+### Feature
+A numbered unit of CORTEX's own development direction, stored in `cortex-registry/planning/`. When CORTEX documentation mentions "Iteration 48" or "Iteration 96", it refers to a specific completed increment of the platform itself. Phases are how CORTEX tracks its own evolution.
 
 ---
 
@@ -139,7 +139,7 @@ An orchestrator specialised for a specific business or technology domain (e.g., 
 A collection of 45+ YAML files in `cortex-registry/knowledge-base/` containing best practices, patterns, and guidance. CORTEX's Reasoning tier consults these files when selecting strategies. The knowledge base uses a tier-precedence system: company-level rules override tier1, which override tier0 defaults.
 
 ### Context Crystallization Layer (CCL)
-An async prefetch system (introduced in Phase 49) that loads LENS state, governance rules, and infrastructure detection data in parallel with intent classification. This reduces perceived latency for complex operations by 40–60% because context is ready before it's needed.
+An async prefetch system (introduced in Iteration 49) that loads LENS state, governance rules, and infrastructure detection data in parallel with intent classification. This reduces perceived latency for complex operations by 40–60% because context is ready before it's needed.
 
 ---
 
@@ -177,4 +177,4 @@ These documents build on each other. The recommended order for a new reader:
 
 ---
 
-*CORTEX v8.1 · February 2026*
+*CORTEX  · February 2026*

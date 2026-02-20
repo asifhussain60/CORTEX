@@ -1,7 +1,7 @@
 # Holistic Integration Golden Test Suite
 
-**Authority:** Phase 51 — Holistic Integration Testing  
-**Status:** Week 3 Complete (25/25 tests implemented, RED phase)  
+**Authority:** Iteration 51 — Holistic Integration Testing  
+**Status:** Week 3 Complete (25/25 tests implemented, RED feature)  
 **Location:** `tests/golden/holistic_integration/`  
 **Created:** 2026-02-18  
 
@@ -132,7 +132,7 @@ tests/golden/holistic_integration/
 | **S21** | Full e2e: IMPLEMENT new feature | All 11 subsystems engaged |
 | **S22** | Complex security audit | PCI-DSS + OWASP + STRIDE |
 | **S23** | Multi-domain knowledge synthesis | 5+ domains + LENS + Git |
-| **S24** | Regression prevention (Phase 48) | Validation blocks breaking change |
+| **S24** | Regression prevention (Iteration 48) | Validation blocks breaking change |
 | **S25** | Adaptive onboarding (from chat context) | Dynamic template selection |
 
 ---
@@ -168,7 +168,7 @@ python3 -m pytest tests/golden/holistic_integration/test_holistic_integration_me
 
 ### Current Status (Week 3)
 
-All 25 tests are **implemented but in RED phase** (xfail):
+All 25 tests are **implemented but in RED feature** (xfail):
 
 ```bash
 $ python3 -m pytest tests/golden/holistic_integration/ -v
@@ -300,7 +300,7 @@ expected_outcome:
 
 ---
 
-## Week 4 Roadmap
+## Week 4 direction
 
 ### Transition RED → GREEN
 
@@ -327,7 +327,7 @@ expected_outcome:
    - Establish regression thresholds
 
 5. **Update cortex-master.yaml**
-   - Phase 51 status → "COMPLETED"
+   - Iteration 51 status → "COMPLETED"
    - Record completion date
    - Note actual vs estimated effort
 
@@ -335,10 +335,10 @@ expected_outcome:
 
 ## Related Documentation
 
-- **Phase 51 Plan:** `cortex-registry/planning/phases/planned/phase-51-holistic-integration-golden-test-suite.yaml`
+- **Iteration 51 Plan:** `cortex-registry/planning/features/planned/feature-holistic-integration-golden-test-suite.yaml`
 - **Golden Test Framework:** `docs/golden-test-framework-usage.md`
 - **Holistic Validation:** `.github/prompts/cortex-architect.prompt.md § Holistic Validation`
-- **Phase 48:** Holistic Validation & Challenge Gate (dependency)
+- **Iteration 48:** Holistic Validation & Challenge Gate (dependency)
 - **CORE-008:** TDD mandatory (tests before implementation)
 
 ---
@@ -349,7 +349,7 @@ expected_outcome:
 |--------|-------|
 | **Total Tests** | 25 |
 | **Tests Implemented** | 25 (100%) |
-| **Tests Passing** | 0 (RED phase, expected) |
+| **Tests Passing** | 0 (RED feature, expected) |
 | **Tests xfailed** | 25 (waiting for MasterOrchestrator wiring) |
 | **Total LOC** | 1,645 |
 | **Harness LOC** | 420 |
@@ -369,19 +369,19 @@ expected_outcome:
 - ⏳ Performance baselines met (Week 4)
 - ✅ Documentation complete
 - ⏳ cortex-master.yaml updated (Week 4)
-- ⏳ Phase 51 marked COMPLETED (Week 4)
+- ⏳ Iteration 51 marked COMPLETED (Week 4)
 
 ---
 
 ## Notes
 
 - **Test Philosophy:** Zero-mock testing. Real orchestrators, real SQLite, real components.
-- **TDD Enforcement:** All tests written BEFORE MasterOrchestrator wiring (RED phase).
+- **TDD Enforcement:** All tests written BEFORE MasterOrchestrator wiring (RED feature).
 - **Determinism:** Fixed random seeds, stable ordering, idempotent execution.
 - **Audit Trail:** Every operation logged with AC_START → AC_COMPLETE markers.
 - **Performance:** Baselines ensure no regressions in production.
-- **Extensibility:** Phase 52 planned for domain-specific test extensions.
+- **Extensibility:** Iteration 52 planned for domain-specific test extensions.
 
-**Authority:** Phase 51 — Holistic Integration Golden Test Suite  
+**Authority:** Iteration 51 — Holistic Integration Golden Test Suite  
 **Created:** 2026-02-18  
 **Last Updated:** 2026-02-18 (Week 3 Complete)

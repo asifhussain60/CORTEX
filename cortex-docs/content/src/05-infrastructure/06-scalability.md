@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: deployment/kubernetes/ + cortex/04-mcp/server.py + cortex/intelligence/02-lens/caching/
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII scaling architecture, multi-level cache, HPA configuration
 order: 5
 ---
 
-> **Notice:** Scalability patterns reflect production-tested architectures as of v8.1. Organizations may adapt based on workload characteristics. Kubernetes HPA (Phase 11) represents target architecture for horizontal scaling.
+> **Notice:** Scalability patterns reflect production-tested architectures as of . Organizations may adapt based on workload characteristics. Kubernetes HPA (Iteration 11) represents target architecture for horizontal scaling.
 
 ---
 

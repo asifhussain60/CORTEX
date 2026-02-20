@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/08-learning/ + cortex/knowledge/learned-patterns/ + cortex/orchestrators/core/orchestrator_base_protocol.py
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (Phase 71)
+feature: Production (Iteration 71)
 diagrams: ASCII interception layers, pattern storage, validation pipeline
 order: 7
 ---
 
-> **Notice:** Learning system represents Phase 71 implementation. Organizations benefit from automatic pattern capture and knowledge accumulation. Pattern storage uses git-backed YAML files requiring no external database. Performance overhead <10ms per operation (non-blocking).
+> **Notice:** Learning system represents Iteration 71 implementation. Organizations benefit from automatic pattern capture and knowledge accumulation. Pattern storage uses git-backed YAML files requiring no external database. Performance overhead <10ms per operation (non-blocking).
 
 ---
 
@@ -23,7 +23,7 @@ order: 7
 CORTEX learning infrastructure implements universal pattern capture through two-layer interception (orchestrator Current + MCP Gateway), YAML-based pattern storage, and automated validation. Organizations benefit from automatic knowledge accumulation reducing repetitive problem-solving by 30-50% as pattern library grows [Business Leaders]. Product teams gain insight into usage patterns (top orchestrators, common intents, refactoring trends) enabling data-driven feature prioritization [Product Owners]. The system captures 1,000+ patterns with 85% high-confidence (≥0.75), validates through 5-stage pipeline (pipeline → hooks → persistence → confidence → quality), and exposes real-time metrics via LearningDashboard [Software Developers].
 
 **Learning Loop Architecture:**
-1. **Pattern Capture** — Orchestrators execute normally → Current triggers learning phase → Pattern extracted async (non-blocking)
+1. **Pattern Capture** — Orchestrators execute normally → Current triggers learning feature → Pattern extracted async (non-blocking)
 2. **Interception Layer 1** — OrchestratorBaseProtocol hooks capture orchestrator-level patterns (refactoring, interaction, domain)
 3. **Interception Layer 2** — MCPLearningInterceptor captures MCP tool usage patterns (tool name + parameters)
 4. **Pattern Storage** — YAML files in cortex/knowledge/learned-patterns/ (git-backed, human-readable, ~100 bytes per pattern)

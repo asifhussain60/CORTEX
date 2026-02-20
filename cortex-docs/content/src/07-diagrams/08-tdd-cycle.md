@@ -17,7 +17,7 @@ order: 8
 
 ---
 
-## The Three-Phase Cycle
+## The Three-Feature Cycle
 
 ```mermaid
 stateDiagram-v2
@@ -149,7 +149,7 @@ TDDOrchestrator    TestRunner    FileSystem    EnforcementAgent
 
 ## Test Quality Checklist
 
-A test written in the RED phase must satisfy:
+A test written in the RED feature must satisfy:
 
 | Criterion | Check |
 |-----------|-------|
@@ -166,8 +166,8 @@ A test written in the RED phase must satisfy:
 
 | Anti-Pattern | Problem | CORTEX Response |
 |---|---|---|
-| Test written after code | GREEN phase skipped | Governance block on commit |
-| Test passes before implementation | RED phase invalid | Orchestrator rewrites with stricter assertion |
+| Test written after code | GREEN feature skipped | Governance block on commit |
+| Test passes before implementation | RED feature invalid | Orchestrator rewrites with stricter assertion |
 | `assert True` | No real assertion | EnforcementAgent rejects |
 | No type hints in implementation | CORE-008 violation | Auto-added before commit, warning logged |
 | No docstring | CORE-008 violation | Auto-added before commit, warning logged |
@@ -190,7 +190,7 @@ A test written in the RED phase must satisfy:
 ## Related Documents
 
 - **[TDD Orchestrator](../03-orchestration/04-tdd-orchestrator.md)** — Full orchestrator spec
-- **[End-to-End Flow](../03-orchestration/08-end-to-end-flow.md)** — Complete request trace with TDD phases
+- **[End-to-End Flow](../03-orchestration/08-end-to-end-flow.md)** — Complete request trace with TDD features
 - **[Governance Gate Flow](./07-governance-gate-flow.md)** — Pre-execution gate that precedes TDD
 - **[Governance & Compliance](../01-capabilities/07-governance-compliance.md)** — CORE-008 authority
 

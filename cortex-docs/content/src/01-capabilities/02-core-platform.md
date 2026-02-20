@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/api/ + cortex/core/ + cortex/config/ + cortex/observability/
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII service architecture, sequence diagrams
 order: 2
 ---
 
-> **Notice:** Core Platform capabilities represent the foundational infrastructure upon which all CORTEX functionality is built. Organizations may customize configuration and deployment patterns while retaining standardized service interfaces. Performance characteristics reflect production deployment patterns as of v8.1.
+> **Notice:** Core Platform capabilities represent the foundational infrastructure upon which all CORTEX functionality is built. Organizations may customize configuration and deployment patterns while retaining standardized service interfaces. Performance characteristics reflect production deployment patterns as of .
 
 ---
 
@@ -55,7 +55,7 @@ The Core Platform capabilities provide the foundation upon which all CORTEX func
 
 **Request Reception** — Accepting and validating incoming MCP requests (JSON-RPC 2.0)
 - **Protocol Validation:** JSON-RPC 2.0 schema validation (5-10ms)
-- **Authentication:** API key validation Phase 11 (JWT tokens)
+- **Authentication:** API key validation Iteration 11 (JWT tokens)
 - **Rate Limiting:** 60 requests/minute default (configurable)
 - **Request Parsing:** Parameter extraction and type checking
 
@@ -81,13 +81,13 @@ The Core Platform capabilities provide the foundation upon which all CORTEX func
 - **Health Endpoints:** `/health`, `/health/wiring`, `/health/orchestrators`
 - **Circuit Breakers:** Automatic fault isolation (3 failures → OPEN)
 - **Prometheus Metrics:** Request count, latency histograms, error rates
-- **Grafana Dashboards:** Real-time visualization (Phase 11)
+- **Grafana Dashboards:** Real-time visualization (Iteration 11)
 
 **Architecture Principles:**
 1. **Stateless Processing** — No session affinity required (horizontal scaling)
-2. **Container-First** — Docker-native design (Phase 11)
+2. **Container-First** — Docker-native design (Iteration 11)
 3. **Zero Database Runtime** — Git-backed config eliminates PostgreSQL/MongoDB
-4. **Dual Transport** — stdio (dev) + HTTP (prod Phase 11)
+4. **Dual Transport** — stdio (dev) + HTTP (prod Iteration 11)
 5. **Observability-First** — OpenTelemetry tracing built-in
 
 ---
@@ -107,7 +107,7 @@ CORTEX implements a service-oriented architecture (SOA) where each orchestrator 
 │  │   │  Auth   │  │  Rate   │  │ Health  │  │  Load   │   │ │
 │  │   │ Checker │  │ Limiter │  │ Monitor │  │Balancer │   │ │
 │  │   └─────────┘  └─────────┘  └─────────┘  └─────────┘   │ │
-│  │  (JWT Phase 11) (60/min)    (Circuit Break)  (RoundRobin)│ │
+│  │  (JWT Iteration 11) (60/min)    (Circuit Break)  (RoundRobin)│ │
 │  └──────────────────────────────────────────────────────────┘ │
 └────────────────────────────────────────────────────────────────┘
                               │
@@ -119,7 +119,7 @@ CORTEX implements a service-oriented architecture (SOA) where each orchestrator 
    │Orchestr.│          │Synthesis│          │Orchestr.│
    │(Replica)│          │(Replica)│          │(Replica)│
    └─────────┘          └─────────┘          └─────────┘
-   Wiring v8.1         Wiring v8.1           Wiring v8.1
+   Wiring          Wiring            Wiring 
    Hot-Reload OK       Hot-Reload OK         Hot-Reload OK
 ```
 
@@ -138,12 +138,12 @@ CORTEX implements a service-oriented architecture (SOA) where each orchestrator 
 | Category | Count | Purpose | Examples | Resource Profile |
 |----------|-------|---------|----------|------------------|
 | **Core** | 8 | Central coordination | MasterOrchestrator (pre-flight), IntentRouter (LENS classification), TDDOrchestrator (RED-GREEN-REFACTOR), EnforcementOrchestrator (7 agents) | CPU-intensive (validation cycles) |
-| **Domain** | 6 | Domain-specific logic | RefactoringOrchestrator (code improvement), PlanningOrchestrator (phase lifecycle), ConversationOrchestrator (multi-turn) | Memory-intensive (context storage) |
+| **Domain** | 6 | Domain-specific logic | RefactoringOrchestrator (code improvement), PlanningOrchestrator (feature lifecycle), ConversationOrchestrator (multi-turn) | Memory-intensive (context storage) |
 | **Support** | 6+ | Support functions | OnboardingOrchestrator (repo scanning), ToolDiscoveryOrchestrator (capability mapping), RecommendationGate (REJ-* validation) | I/O-intensive (git operations) |
 
 **Wiring Discovery:** Orchestrators auto-discovered via `cortex-registry/master/__wiring_contract__.yaml` on startup (200-400ms). Hot-reload detects file changes and reloads affected orchestrators within 1 request cycle (no service restart required).
 
-**Service Communication:** Event-driven messaging via internal event bus (Phase 11). Current implementation uses direct Python imports with async/await (zero network latency).
+**Service Communication:** Event-driven messaging via internal event bus (Iteration 11). Current implementation uses direct Python imports with async/await (zero network latency).
 
 ---
 
@@ -151,15 +151,15 @@ CORTEX implements a service-oriented architecture (SOA) where each orchestrator 
 
 ### Purpose
 
-The MCP Gateway serves as the single entry point for all AI assistant interactions (VS Code Copilot, Claude Desktop, Cursor). Organizations benefit from standardized protocol implementation reducing integration complexity [Business Leaders]. Product teams gain consistent request validation, authentication, and routing without custom gateway development [Product Owners]. The gateway implements JSON-RPC 2.0 over stdio (development) and HTTP (production Phase 11) with <10ms latency overhead [Software Developers].
+The MCP Gateway serves as the single entry point for all AI assistant interactions (VS Code Copilot, Claude Desktop, Cursor). Organizations benefit from standardized protocol implementation reducing integration complexity [Business Leaders]. Product teams gain consistent request validation, authentication, and routing without custom gateway development [Product Owners]. The gateway implements JSON-RPC 2.0 over stdio (development) and HTTP (production Iteration 11) with <10ms latency overhead [Software Developers].
 
 ### Protocol Details
 
 **Protocol:** JSON-RPC 2.0 (specification-compliant)  
 **Transport (Current):** stdio (stdin/stdout) with <5ms latency  
-**Transport (Phase 11):** HTTP/HTTPS with Nginx reverse proxy  
+**Transport (Iteration 11):** HTTP/HTTPS with Nginx reverse proxy  
 **Default Port:** 8000 (production), N/A (stdio development)  
-**Authentication:** API Key via `X-CORTEX-API-KEY` header (Phase 11), none required (stdio)  
+**Authentication:** API Key via `X-CORTEX-API-KEY` header (Iteration 11), none required (stdio)  
 **Rate Limiting:** 60 requests/minute default (configurable via env vars)
 
 **Why stdio First?** Zero network latency (local process communication), simplified debugging (stderr for logs), no port conflicts, auto-started by VS Code (Pylance-style architecture).

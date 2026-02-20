@@ -18,7 +18,7 @@
 3. **Intelligence** — LENS analysis (Language → Examination → Navigation → Synthesis)
 4. **Execution** — delegate to domain orchestrator via MasterOrchestrator
 
-**Canonical Locations (Post-Refactor v2.0.0):**
+**Canonical Locations:**
 
 | Component | Path |
 |---|---|
@@ -34,7 +34,7 @@
 - `cortex/brain/` — dissolved into `cortex/orchestrators/`, `cortex/intelligence/`, `cortex/governance/`
 - `cortex_intelligence/` — deleted, migrated to `cortex/intelligence/`
 - `cortex_lens/` — deleted, migrated to `cortex/lens/`
-- `_archive/` — permanently deleted (Phase 09)
+- `_archive/` — permanently deleted
 
 ---
 
@@ -261,7 +261,7 @@ Everything else → move to canonical location or delete.
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`)
 - No stale orchestrator counts (must say 52 orchestrators, 23 MCP tools)
-- No references to Phase 49 CCL, `CrystallizedContext`, or pre-refactor constructs
+- No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
 
 ---
@@ -357,4 +357,4 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ---
 
-**End of CORTEX Architect Prompt v11.0**
+**End of CORTEX Architect Prompt**

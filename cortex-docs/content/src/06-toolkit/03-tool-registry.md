@@ -9,7 +9,7 @@ last_verified: 2026-02-15
 source_of_truth: cortex/tools/registry.py + cortex-registry/
 format: diátaxis-reference
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 order: 4
 ---
 

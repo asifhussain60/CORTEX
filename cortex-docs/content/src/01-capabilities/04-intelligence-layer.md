@@ -8,14 +8,14 @@ word_count: 1900
 last_verified: 2026-02-16
 source_of_truth: cortex/orchestrators/health/intelligence.py + cortex/06-toolkit/cleanup/vacuum_intelligence.py
 format: diátaxis-explanation
-phase: PHASE-96
+feature: intelligence-layer
 authority: CORE-030 (Implementation Truth), CORE-035 (Single Canonical)
 order: 5
 ---
 
 ## Executive Summary
 
-The **Intelligence Layer** enhances CORTEX orchestrators with learning capabilities, pattern recognition, and adaptive optimization based on git history analysis. Initially deployed in HealthOrchestrator and VacuumOrchestrator (Phase 96), this layer learns from recent development activity (48-hour window) to:
+The **Intelligence Layer** enhances CORTEX orchestrators with learning capabilities, pattern recognition, and adaptive optimization based on git history analysis. Initially deployed in HealthOrchestrator and VacuumOrchestrator (Iteration 96), this layer learns from recent development activity (48-hour window) to:
 
 - **Reduce False Positives:** Health checks improved from 85.2% false positive rate to near-zero through pattern learning
 - **Smart Caching:** File-based caching reduces repeated analysis overhead by 73%
@@ -215,7 +215,7 @@ def suppress_false_positives(self, issues: List[HealthIssue]) -> List[HealthIssu
     return genuine_issues
 ```
 
-### Results (Phase 96 Deployment)
+### Results (Iteration 96 Deployment)
 
 **Before Intelligence Layer:**
 
@@ -389,10 +389,10 @@ def learn_from_rollback(self, restored_file: Path, reason: str):
 
 | Pattern Name | File Glob | Safe? | Confidence | Bytes Saved | Notes |
 |--------------|-----------|-------|------------|-------------|-------|
-| **Duplicate Phase Scripts** | `.cortex/phase-*.py` | ✅ Yes | 0.95 | 45KB | Common consolidation target |
+| **Duplicate Feature Scripts** | `.cortex/feature-*.py` | ✅ Yes | 0.95 | 45KB | Common consolidation target |
 | **Old Log Files** | `logs/*-2025-*.log` | ✅ Yes | 0.92 | 128MB | Older than 90 days |
 | **Temp Test Artifacts** | `tests/__pycache__/*` | ✅ Yes | 0.98 | 12MB | Regenerated automatically |
-| **Markdown Sprawl** | `phase-*.md` (isolated) | ✅ Yes | 0.87 | 2.3MB | CORE-002 violations |
+| **Markdown Sprawl** | `feature-*.md` (isolated) | ✅ Yes | 0.87 | 2.3MB | CORE-002 violations |
 | **Backup Files** | `*.bak`, `*~` | ✅ Yes | 0.99 | 5.6MB | Editor backups |
 | **Active Experiments** | `experiments/*.py` | ❌ No | 0.88 | - | Often revived later |
 | **Migration Scripts** | `migrations/*.sql` | ❌ No | 0.95 | - | Historical record |
@@ -447,7 +447,7 @@ def prompt_for_confirmation(self, candidates: List[Path]) -> List[Path]:
     return approved
 ```
 
-### Results (Phase 96 Deployment)
+### Results (Iteration 96 Deployment)
 
 **Cleanup Metrics:**
 
@@ -506,7 +506,7 @@ def prompt_for_confirmation(self, candidates: List[Path]) -> List[Path]:
 - **TDDOrchestrator:** Learn optimal test structures from successful implementations
 - **RefactoringOrchestrator:** Identify safe refactoring patterns
 - **EnforcementOrchestrator:** Adapt rules based on false positive feedback
-- **PlanOrchestrator:** Learn effective phase structures from completed work
+- **PlanOrchestrator:** Learn effective feature structures from completed work
 
 ---
 
@@ -519,6 +519,6 @@ def prompt_for_confirmation(self, candidates: List[Path]) -> List[Path]:
 
 ---
 
-**Status:** Production (Phase 96)  
+**Status:** Production (Iteration 96)  
 **Last Updated:** 2026-02-16  
 **Authority:** CORE-030 (Implementation Truth), CORE-035 (Single Canonical)

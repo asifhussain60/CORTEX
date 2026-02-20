@@ -8,7 +8,7 @@ word_count: 1700
 last_verified: 2026-02-16
 source_of_truth: cortex/registry/semantic_blocks.py + cortex-registry/interaction/
 format: diátaxis-explanation
-phase: Production (ENH-089, ENH-090)
+feature: Production (ENH-089, ENH-090)
 authority: cortex-registry/interaction/content-blocks.yaml
 order: 10
 ---
@@ -137,7 +137,7 @@ CORTEX defines 8 standard block categories:
 | **Status** | Operation results | 200-400 | Factual | Health reports |
 | **Error** | Failure messages | 100-300 | Clear | Validation errors |
 | **Confirmation** | Approval prompts | 50-150 | Concise | Dangerous operations |
-| **Summary** | Digest/recap | 300-600 | Condensed | Phase completion |
+| **Summary** | Digest/recap | 300-600 | Condensed | Feature completion |
 
 ---
 

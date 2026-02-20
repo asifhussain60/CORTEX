@@ -9,11 +9,11 @@ last_verified: 2026-02-16
 source_of_truth: cortex/orchestrators/workflow/ + cortex/collaboration/
 format: diátaxis-explanation
 voice: third-person-blended
-phase: Phase 100 Complete
+feature: Iteration 100 Complete
 order: 11
 ---
 
-> **Notice:** Workflow templates represent production-tested automation patterns as of v8.1. Templates adapt to repository context via profile detection. Performance characteristics depend on step complexity and convergence criteria.
+> **Notice:** Workflow templates represent production-tested automation patterns as of . Templates adapt to repository context via profile detection. Performance characteristics depend on step complexity and convergence criteria.
 
 ---
 
@@ -280,4 +280,4 @@ Access workflow templates via MCP:
 
 ---
 
-*Phase 100 Complete | v8.1 | 102/102 tests passing*
+*Iteration 100 Complete |  | 102/102 tests passing*

@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/02-lens/ + cortex/enforcement/ + cortex/orchestrators/quality/unified_quality_assurance_orchestrator.py
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII LENS + governance integration, enforcement flow
 order: 6
 ---
 
-> **Notice:** Governance integration reflects production enforcement patterns as of v8.1. LENS provides context to 7 enforcement agents (governance, security, compliance, file naming, incremental, markdown suppression, architecture). Organizations may extend enforcement agents while preserving LENS integration interface.
+> **Notice:** Governance integration reflects production enforcement patterns as of . LENS provides context to 7 enforcement agents (governance, security, compliance, file naming, incremental, markdown suppression, architecture). Organizations may extend enforcement agents while preserving LENS integration interface.
 
 ---
 

@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/04-mcp/security/ + cortex/enforcement/
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 security_layers: 6
 order: 6
 ---
 
-> **Notice:** Security model represents production-tested defense-in-depth architecture as of v8.1. Organizations should validate security controls against their specific compliance requirements (OWASP Top 10, SOC 2, ISO 27001). Authentication and authorization are mandatory for production deployments. Rate limiting and audit logging are configurable based on threat model.
+> **Notice:** Security model represents production-tested defense-in-depth architecture as of . Organizations should validate security controls against their specific compliance requirements (OWASP Top 10, SOC 2, ISO 27001). Authentication and authorization are mandatory for production deployments. Rate limiting and audit logging are configurable based on threat model.
 
 ---
 

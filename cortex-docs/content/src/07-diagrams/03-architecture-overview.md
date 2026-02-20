@@ -14,11 +14,9 @@ c4_level: Context + Container
 order: 1
 ---
 
-> **Notice:** Architecture diagram represents production deployment as of v8.1. Organizations may adapt deployment topology based on infrastructure requirements. Diagram shows logical layers, not physical deployment boundaries.
+> **Notice:** Architecture diagram represents production deployment as of . Organizations may adapt deployment topology based on infrastructure requirements. Diagram shows logical layers, not physical deployment boundaries.
 
 ---
-
-**Updated:** 2026-02-15 | **Version:** 2.1.0 | **Orchestrator Enhancement**
 
 ---
 
@@ -163,7 +161,7 @@ Specialist Orchestrators (60 total)
 - **EnforcementOrchestrator:** CORE rules validation
 - **HolisticValidationOrchestrator:** Current gate
 - **RefactoringOrchestrator:** Code improvement
-- **PlanOrchestrator:** Phase management
+- **PlanOrchestrator:** Feature management
 
 ---
 
@@ -184,7 +182,7 @@ Specialist Orchestrators (60 total)
 
 **Components:**
 - `cortex_intelligence/`: System state, learned patterns
-- `cortex-registry/`: Orchestrator wiring, phase definitions
+- `cortex-registry/`: Orchestrator wiring, feature definitions
 - `company/`: Customer-specific configurations
 - Knowledge repositories: Best practices, domain wisdom
 

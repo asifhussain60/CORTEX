@@ -13,11 +13,9 @@ diagram_type: Mermaid flowchart + ASCII sequence
 order: 6
 ---
 
-> **Notice:** Data flow diagrams represent production request processing as of v8.1 including Holistic Validation Gate (Phase 48) and Context Crystallization Layer (Phase 49). Organizations may experience flow variations based on intent classification, challenge gate outcomes, and governance enforcement results. Mermaid diagrams render in GitHub and compatible markdown viewers.
+> **Notice:** Data flow diagrams represent production request processing as of  including Holistic Validation Gate (Iteration 48) and Context Crystallization Layer (Iteration 49). Organizations may experience flow variations based on intent classification, challenge gate outcomes, and governance enforcement results. Mermaid diagrams render in GitHub and compatible markdown viewers.
 
 ---
-
-**Updated:** 2026-02-15 | **Version:** 2.0.0
 
 ---
 
@@ -261,7 +259,7 @@ MasterOrchestrator routes to TDDOrchestrator:
 Time: T+220ms
 
 ┌─────────────────────────────────────────────────────────────────┐
-│ STAGE 6: PHASE 48 - HOLISTIC VALIDATION                         │
+│ STAGE 6: HOLISTIC VALIDATION                         │
 └─────────────────────────────────────────────────────────────────┘
 
 HolisticValidationOrchestrator.validate():
@@ -278,7 +276,7 @@ HolisticValidationOrchestrator.validate():
 Time: T+370ms
 
 ┌─────────────────────────────────────────────────────────────────┐
-│ STAGE 7: PHASE 49 - CONTEXT CRYSTALLIZATION                     │
+│ STAGE 7: CONTEXT SYNTHESIS                     │
 └─────────────────────────────────────────────────────────────────┘
 
 ContextCrystallizationLayer.warm_context():
@@ -570,9 +568,9 @@ Total Time: 32.2 seconds (user wait: 15s + execution: 17.2s)
 | LENS Analysis | 800ms | 2.5% |
 | Challenge Generation | 600ms | 1.9% |
 | **User Wait Time** | **13.2s** | **41%** |
-| RED Phase | 1.5s | 4.7% |
-| GREEN Phase | 8.5s | 26.4% |
-| REFACTOR Phase | 6s | 18.6% |
+| RED Feature | 1.5s | 4.7% |
+| GREEN Feature | 8.5s | 26.4% |
+| REFACTOR Feature | 6s | 18.6% |
 | Governance Validation | 500ms | 1.6% |
 | Audit Trail | 500ms | 1.6% |
 | Response Generation | 100ms | 0.3% |

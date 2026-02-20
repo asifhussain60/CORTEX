@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/02-lens/analyzers/ + cortex/02-lens/adapters/
 format: diátaxis-reference
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII analyzer pipeline, performance table
 order: 3
 ---
 
-> **Notice:** Analyzer implementations represent production-tested code intelligence as of v8.1. Performance metrics based on typical repository sizes (<100K LOC). Language support varies by analyzer. Organizations may extend analyzers for custom languages via BaseAnalyzer interface.
+> **Notice:** Analyzer implementations represent production-tested code intelligence as of . Performance metrics based on typical repository sizes (<100K LOC). Language support varies by analyzer. Organizations may extend analyzers for custom languages via BaseAnalyzer interface.
 
 ---
 

@@ -8,7 +8,7 @@ word_count: 1800
 last_verified: 2026-02-16
 source_of_truth: cortex/orchestrators/request_rephrase_orchestrator.py
 format: diátaxis-explanation
-phase: GREEN (34/34 tests passing)
+feature: GREEN (34/34 tests passing)
 authority: cortex-architect.prompt.md § REPHRASE MODE
 order: 3
 ---
@@ -398,7 +398,7 @@ Based on internal testing with typical requests:
 - **Total Tests:** 34
 - **Passing:** 34 (100%)
 - **Coverage:** 98.7% (request_rephrase_orchestrator.py)
-- **Status:** GREEN Phase (fully implemented and tested)
+- **Status:** GREEN Feature (fully implemented and tested)
 
 ### Key Test Scenarios
 
@@ -440,6 +440,6 @@ The orchestrator includes comprehensive test coverage for:
 
 ---
 
-**Status:** GREEN Phase (34/34 tests passing)  
+**Status:** GREEN Feature (34/34 tests passing)  
 **Last Updated:** 2026-02-16  
 **Authority:** cortex-architect.prompt.md § REPHRASE MODE

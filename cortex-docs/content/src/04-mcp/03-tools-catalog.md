@@ -9,18 +9,17 @@ last_verified: 2026-02-16
 source_of_truth: cortex/04-mcp/mcp_registry.py
 format: diátaxis-reference
 voice: third-person-blended
-phase: Production (v8.1)
+feature: Production ()
 total_tools: 26
 total_operations: 90+
 order: 3
 ---
 
-> **Notice:** MCP tools represent production-tested capabilities as of v8.1. CORTEX exposes 26 production MCP tools organized in 5 tiers with 90+ operations. Organizations may use any MCP-compatible client (VS Code, Cursor, Claude Desktop) to access these tools. Performance characteristics depend on repository size, network latency, and concurrent request patterns.
+> **Notice:** MCP tools represent production-tested capabilities as of . CORTEX exposes 26 production MCP tools organized in 5 tiers with 90+ operations. Organizations may use any MCP-compatible client (VS Code, Cursor, Claude Desktop) to access these tools. Performance characteristics depend on repository size, network latency, and concurrent request patterns.
 
 ---
 
-**Total Tools:** 26 | **Total Operations:** 90+ | **Updated:** 2026-02-16  
-**MCP Server:** stdio/HTTP (Port 9000) | **Protocol:** JSON-RPC 2.0  
+**Total Tools:** 26 | **Total Operations:** 90+ | **MCP Server:** stdio/HTTP (Port 9000) | **Protocol:** JSON-RPC 2.0  
 **Architecture:** Orchestrator-driven with governance validation
 
 ---
@@ -929,7 +928,7 @@ asyncio.run(challenge_design())
 
 #### `cortex_plan_execute_autonomous`
 
-**Description:** Execute entire phase autonomously through all stages with ASCII progress bars
+**Description:** Execute entire feature autonomously through all stages with ASCII progress bars
 
 **Usage Pattern:**
 ```json
@@ -945,7 +944,7 @@ asyncio.run(challenge_design())
 
 #### `cortex_plan_resolve`
 
-**Description:** Intelligently resolve phase operation from user request
+**Description:** Intelligently resolve feature operation from user request
 
 **Usage Pattern:**
 ```json
@@ -961,7 +960,7 @@ asyncio.run(challenge_design())
 
 #### `cortex_plan_setup`
 
-**Description:** Execute setup hook before phase implementation
+**Description:** Execute setup hook before feature implementation
 
 **Usage Pattern:**
 ```json
@@ -993,7 +992,7 @@ asyncio.run(challenge_design())
 
 #### `cortex_plan_teardown`
 
-**Description:** Execute teardown hook after phase completion
+**Description:** Execute teardown hook after feature completion
 
 **Usage Pattern:**
 ```json
@@ -1737,7 +1736,6 @@ asyncio.run(challenge_design())
 
 ---
 
-
 ## Quick Reference
 
 ### Most Used Tools
@@ -1748,7 +1746,7 @@ asyncio.run(challenge_design())
 | `cortex_lens_analyze` | Deep code intelligence | Security, complexity, architecture analysis |
 | `cortex_challenge` | Alternative generation | Design reviews, approach validation |
 | `cortex_validate_holistically` | Pre-implementation validation | Current holistic validation gate |
-| `cortex_plan_setup` | Phase initialization | Start new phase with hooks |
+| `cortex_plan_setup` | Feature initialization | Start new feature with hooks |
 | `cortex_debug_full_cycle` | Complete debug workflow | Inject → Capture → Analyze → Fix |
 
 ### Tool Naming Convention

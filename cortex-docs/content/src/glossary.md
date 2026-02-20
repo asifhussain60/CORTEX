@@ -69,14 +69,14 @@ class HolisticValidationGate:
 
 **Category:** Operational Mode | **Full Name:** CORTEX Architect Development Mode
 
-**Definition:** An operational mode activated when developing the CORTEX platform itself (internal system development). Uses specialized prompt file (`cortex-architect.prompt.md`) and provides access to CORTEX-internal context including registry structure, wiring specifications, and phase definitions.
+**Definition:** An operational mode activated when developing the CORTEX platform itself (internal system development). Uses specialized prompt file (`cortex-architect.prompt.md`) and provides access to CORTEX-internal context including registry structure, wiring specifications, and feature definitions.
 
 **Detection Logic:** Mode activates when repository contains `.cortex-runtime/` directory, `cortex-registry/` directory, or `cortex/__init__.py` file.
 
 **Header Format:** `🏛️ CORTEX Architect {MODE}` (e.g., "🏛️ CORTEX Architect IMPLEMENT")
 
 **Differences from Production Mode:**
-- **Context Loading:** CORTEX-internal specifications (registry, wiring, phases) vs user domain knowledge
+- **Context Loading:** CORTEX-internal specifications (registry, wiring, features) vs user domain knowledge
 - **Prompt File:** `cortex-architect.prompt.md` vs `CORTEX.prompt.md`
 - **Header Icon:** 🏛️ (building) vs 🧠 (brain)
 - **Purpose:** Build/enhance CORTEX system vs implement user features
@@ -103,7 +103,7 @@ class HolisticValidationGate:
 
 **Performance:** AST parsing completes in 50-150ms for typical files (100-500 LOC). Results cached in SQLite with 60-70% cache hit rate.
 
-**LENS Integration:** AST Analyzer is Phase 1 (Language) component executing in parallel with Git History and Comment analyzers.
+**LENS Integration:** AST Analyzer is Iteration 1 (Language) component executing in parallel with Git History and Comment analyzers.
 
 **Related:** [LENS](#lens), [Code Intelligence](#code-intelligence), [Static Analysis](#static-analysis)
 
@@ -161,7 +161,7 @@ class HolisticValidationGate:
 
 **Category:** Performance | **Full Name:** Context Crystallization Layer
 
-**Definition:** Asynchronous context pre-warming system introduced in Phase 49 that loads rules cache, LENS state, and infrastructure detection before request processing begins. Reduces Stage 2 latency by ~15% through parallel context preparation.
+**Definition:** Asynchronous context pre-warming system introduced in Iteration 49 that loads rules cache, LENS state, and infrastructure detection before request processing begins. Reduces Stage 2 latency by ~15% through parallel context preparation.
 
 **Process:**
 1. **Async Load Rules Cache** — Company > Tier1 > Tier0 (100ms parallel)
@@ -347,12 +347,12 @@ class HolisticValidationGate:
 **Definition:** File-based configuration system using Git as the storage backend. Eliminates need for PostgreSQL/MongoDB in production, providing version-controlled, auditable configuration with zero runtime database dependencies.
 
 **Registry Structure:** (cortex-registry/)
-- **** — Master indices, phase definitions, enhancements
+- **** — Master indices, feature definitions, enhancements
 - **domains/** — Domain-specific knowledge graphs
 - **governance/** — Compliance rules, audit policies
 - **interaction/** — Content blocks, response templates
 - **master/** — Wiring specifications, tool catalog
-- **planning/** — Phase management, wave definitions
+- **planning/** — Feature management, wave definitions
 
 **File Formats:** YAML (configuration), Markdown (documentation), JSON (metrics)
 
@@ -403,9 +403,9 @@ class HolisticValidationGate:
 
 ### Holistic Validation Gate
 
-**Category:** Governance | **Full Name:** Phase 48 Holistic Validation Gate
+**Category:** Governance | **Full Name:** Iteration 48 Holistic Validation Gate
 
-**Definition:** Mandatory pre-implementation validation combining Challenge Gate, DoR confidence scoring, and multi-factor analysis. Introduced in Phase 48 as CORE-048 requirement.
+**Definition:** Mandatory pre-implementation validation combining Challenge Gate, DoR confidence scoring, and multi-factor analysis. Introduced in Iteration 48 as CORE-048 requirement.
 
 **Components:**
 1. **Challenge Gate** — Present alternative approaches (mandatory)
@@ -487,23 +487,23 @@ else:
 
 **Category:** Intelligence | **Full Name:** Language → Examination → Navigation → Synthesis
 
-**Definition:** Four-phase cognitive cycle providing unified code intelligence. LENS powers intent classification, context analysis, capability navigation, and recommendation synthesis across all orchestrators.
+**Definition:** Four-feature cognitive cycle providing unified code intelligence. LENS powers intent classification, context analysis, capability navigation, and recommendation synthesis across all orchestrators.
 
 **Four Phases:**
 
-**Phase 1: Language (L)** — Parse input, extract keywords, classify intent (50-150ms)
+**Iteration 1: Language (L)** — Parse input, extract keywords, classify intent (50-150ms)
 - **Analyzers:** AST, Git History, Comment (parallel execution)
 - **Output:** Syntactic structure, change context, semantic hints
 
-**Phase 2: Examination (E)** — Deep code analysis, pattern detection (100-300ms)
+**Iteration 2: Examination (E)** — Deep code analysis, pattern detection (100-300ms)
 - **Analyzers:** Import, Security, Pattern, Metrics (parallel execution)
 - **Output:** Dependencies, vulnerabilities, design patterns, complexity metrics
 
-**Phase 3: Navigation (N)** — Map capabilities, generate options (80-200ms)
+**Iteration 3: Navigation (N)** — Map capabilities, generate options (80-200ms)
 - **Analyzers:** Domain inference, orchestrator matching
 - **Output:** Available tools, orchestrator candidates, effort estimates
 
-**Phase 4: Synthesis (S)** — Recommend action, build DoR (70-150ms)
+**Iteration 4: Synthesis (S)** — Recommend action, build DoR (70-150ms)
 - **Analyzers:** Confidence scoring, challenge generation
 - **Output:** Final recommendation, DoR table, challenge alternatives
 
@@ -527,13 +527,13 @@ else:
 
 **Transport Modes:**
 - **stdio (Development):** JSON-RPC over stdin/stdout (<5ms latency)
-- **HTTP (Production Phase 11):** JSON-RPC over HTTP with Nginx gateway
+- **HTTP (Production Iteration 11):** JSON-RPC over HTTP with Nginx gateway
 
 **10 Core MCP Tools:**
 1. `cortex_process_request` — Main implementation workflow
 2. `cortex_lens_analyze` — Code intelligence
 3. `cortex_plan_setup` — Pre-implementation hook
-4. `cortex_plan_resolve` — Phase resolution
+4. `cortex_plan_resolve` — Feature resolution
 5. `cortex_challenge` — Design challenges
 6. `cortex_audit` — Health scans
 7. `cortex_digest_session` — Learning extraction
@@ -551,11 +551,11 @@ else:
 
 **Category:** Infrastructure | **Full Name:** MCP Protocol Gateway
 
-**Definition:** Entry point for all AI assistant requests. Performs request validation, authentication (Phase 11), routing to orchestrators, and response serialization.
+**Definition:** Entry point for all AI assistant requests. Performs request validation, authentication (Iteration 11), routing to orchestrators, and response serialization.
 
 **Responsibilities:**
 - **Request Validation:** Schema validation, parameter checking (5-15ms)
-- **Authentication:** JWT token validation (Phase 11 production)
+- **Authentication:** JWT token validation (Iteration 11 production)
 - **Intent Classification:** Route to IntentRouter for LENS analysis
 - **Response Formatting:** Serialize orchestrator results to JSON-RPC
 - **Error Handling:** Standardized error codes + messages
@@ -601,7 +601,7 @@ else:
 - ToolDiscoveryOrchestrator — MCP tool catalog
 - RecommendationGate — REJ-* validation
 - EducationalOrchestrator — Learning content
-- PlanOrchestrator — Phase lifecycle management
+- PlanOrchestrator — Feature lifecycle management
 - ContextSynthesisGateway — Cost-aware context (EXIT GATE)
 
 **Wiring:** Auto-discovered via `cortex-registry/master/__wiring_contract__.yaml`
@@ -634,19 +634,19 @@ else:
 
 **Category:** Process | **Full Name:** TDD Cycle
 
-**Definition:** Three-phase Test-Driven Development workflow enforced by TDDOrchestrator. CORE-008 mandates this cycle for all IMPLEMENT/FIX operations.
+**Definition:** Three-feature Test-Driven Development workflow enforced by TDDOrchestrator. CORE-008 mandates this cycle for all IMPLEMENT/FIX operations.
 
-**Phase 1: RED (Write Failing Test)**
+**Iteration 1: RED (Write Failing Test)**
 - Write test that fails (demonstrates missing functionality)
 - Verify test execution (confirms test framework works)
 - Commit test: `git commit -m "RED: test_{feature_name}"`
 
-**Phase 2: GREEN (Make Test Pass)**
+**Iteration 2: GREEN (Make Test Pass)**
 - Implement minimal code to pass test
 - Run tests to verify (no skipping, no mocking failures)
 - Commit implementation: `git commit -m "GREEN: {feature_name}"`
 
-**Phase 3: REFACTOR (Improve Code Quality)**
+**Iteration 3: REFACTOR (Improve Code Quality)**
 - Enhance code quality (DRY, SOLID, Clean Code)
 - Run tests to verify (ensure no regressions)
 - Commit refactoring: `git commit -m "REFACTOR: {feature_name}"`
@@ -674,13 +674,13 @@ else:
 ```bash
 ❌ git checkout -b feature/new-thing
 ❌ git switch -c backup/save-point
-❌ git branch wave-2/phase-10
+❌ git branch wave-2/feature
 ```
 
 **Allowed Operations:**
 ```bash
 ✅ git commit -m "Checkpoint: Stage 2 complete"
-✅ git tag v8.1-release
+✅ git tag -release
 ✅ git stash save "WIP: Testing approach"
 ```
 
@@ -710,7 +710,7 @@ else:
 - Rules cache loading
 
 **Stage 3: Intent Classification (20-40ms)**
-- LENS four-phase cycle
+- LENS four-feature cycle
 - DoR confidence scoring
 - Orchestrator selection
 
@@ -760,9 +760,9 @@ else:
 **Workflow:**
 1. **Pre-Execution Gate** — EnforcementOrchestrator validation (7 agents)
 2. **Challenge Gate** — Present alternatives before implementation
-3. **RED Phase** — Write failing test, verify execution, commit
-4. **GREEN Phase** — Implement code, pass test, commit
-5. **REFACTOR Phase** — Improve quality, verify tests, commit
+3. **RED Feature** — Write failing test, verify execution, commit
+4. **GREEN Feature** — Implement code, pass test, commit
+5. **REFACTOR Feature** — Improve quality, verify tests, commit
 6. **Post-Execution Audit** — Verify AC markers, test results, coverage
 
 **Test Bypass Prevention:**
@@ -794,7 +794,7 @@ else:
 
 **Planning (2 tools):**
 - `cortex_plan_setup` — Pre-implementation hook
-- `cortex_plan_resolve` — Intelligent phase resolution
+- `cortex_plan_resolve` — Intelligent feature resolution
 
 **Governance (1 tool):**
 - `cortex_audit` — Health scans, compliance checks
@@ -809,7 +809,7 @@ else:
 **Learning (1 tool):**
 - `cortex_digest_session` — Learning extraction from chat sessions
 
-**Performance:** Tool invocation overhead <5ms (stdio), <20ms (HTTP Phase 11)
+**Performance:** Tool invocation overhead <5ms (stdio), <20ms (HTTP Iteration 11)
 
 **Related:** [MCP](#mcp-model-context-protocol), [MCP Gateway](#mcp-gateway)
 
@@ -879,7 +879,7 @@ orchestrator:
 
 ### Intelligence Layer
 
-**Category:** Intelligence | **Phase:** 96
+**Category:** Intelligence | **Feature:** 96
 
 **Definition:** Learning-enhanced capability layer that provides pattern recognition, adaptive optimization, and self-improvement to CORTEX orchestrators. Initially deployed in HealthOrchestrator and VacuumOrchestrator, the Intelligence Layer learns from 48-hour git history to reduce false positives, cache results, and improve accuracy over time.
 
@@ -895,7 +895,7 @@ orchestrator:
 - False positive reduction: 80+ percentage points
 - Path integrity warnings: 6,901 → 759 (89% reduction)
 
-**Related:** [HealthOrchestrator](#healthorchestrator), [Phase 96](#phase-96), [Pattern Learning](#pattern-learning)
+**Related:** [HealthOrchestrator](#healthorchestrator), [Iteration 96](#feature), [Pattern Learning](#pattern-learning)
 
 ---
 
@@ -914,7 +914,7 @@ orchestrator:
 
 **Performance:** P50: 18ms, P95: 28ms, P99: 42ms (1.1% overhead on typical workflows)
 
-**Test Status:** 34/34 tests passing (GREEN phase)
+**Test Status:** 34/34 tests passing (GREEN feature)
 
 **Related:** [MasterOrchestrator](#masterorchestrator), [Intent Classification](#intent-classification), [Stage -1](#stage--1)
 
@@ -949,7 +949,7 @@ orchestrator:
 
 ### Toolkit Module
 
-**Category:** Infrastructure | **Phase:** 90
+**Category:** Infrastructure | **Feature:** 90
 
 **Definition:** Consolidated set of 5 production modules that replace 47 scattered Python scripts from `.cortex-runtime/` and `scripts/` directories. Provides unified interfaces for development utilities with comprehensive test coverage and MCP tool exposure.
 
@@ -968,7 +968,7 @@ orchestrator:
 - Test coverage: 0% → 95.4%
 - Passing tests: 0 → 66
 
-**Related:** [Phase 90](#phase-90), [MCP Tools](#mcp-tools), [Vacuum](#vacuum)
+**Related:** [Iteration 90](#feature), [MCP Tools](#mcp-tools), [Vacuum](#vacuum)
 
 ---
 
@@ -995,7 +995,7 @@ orchestrator:
 
 **Category:** Intelligence | **Technique:** Git History Analysis
 
-**Definition:** Automated learning technique that analyzes recent git history (48-hour window) to extract recurring patterns, identify false positives, and improve algorithmic accuracy over time. Core capability of the Intelligence Layer (Phase 96).
+**Definition:** Automated learning technique that analyzes recent git history (48-hour window) to extract recurring patterns, identify false positives, and improve algorithmic accuracy over time. Core capability of the Intelligence Layer (Iteration 96).
 
 **Learning Sources:**
 - Recent commits (intent, changes, fixes)

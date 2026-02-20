@@ -443,7 +443,7 @@ python .cortex-runtime/setup-mcp.py
 /cortex-version
 ```
 
-✅ Success: Returns version number (e.g., "CORTEX v2.0")
+✅ Success: Returns status confirmation from CORTEX
 
 **Troubleshooting:**
 
@@ -576,16 +576,16 @@ Tests first, implementation second, refactoring third. Every cycle produces work
 **Real Example:**
 
 ```python
-# Phase 1: RED - Write test first
+# Step 1: RED - Write test first
 def test_calculate_total_with_tax():
     total = calculate_total(100, tax_rate=0.10)
     assert total == 110.0  # Fails (function doesn't exist yet)
 
-# Phase 2: GREEN - Make test pass
+# Step 2: GREEN - Make test pass
 def calculate_total(amount, tax_rate):
     return amount * (1 + tax_rate)  # Minimal, focused
 
-# Phase 3: REFACTOR - Improve quality
+# Step 3: REFACTOR - Improve quality
 def calculate_total(amount: float, tax_rate: float) -> float:
     """Calculate total cost including tax.
     

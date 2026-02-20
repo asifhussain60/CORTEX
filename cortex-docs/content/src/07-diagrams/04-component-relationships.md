@@ -13,7 +13,7 @@ diagram_type: ASCII dependency graph
 order: 7
 ---
 
-> **Notice:** Component relationships reflect production wiring as of v8.1. Organizations may extend with custom orchestrators while maintaining wiring contract compliance. Dependency graph generated from __wiring_contract__.yaml.
+> **Notice:** Component relationships reflect production wiring as of . Organizations may extend with custom orchestrators while maintaining wiring contract compliance. Dependency graph generated from __wiring_contract__.yaml.
 
 ---
 

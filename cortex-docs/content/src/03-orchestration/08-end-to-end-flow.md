@@ -8,7 +8,7 @@ last_verified: 2026-02-18
 source_of_truth: cortex/orchestrators/ + cortex/__wiring_contract__.yaml + cortex/mcp/
 format: diátaxis-explanation
 voice: third-person-blended
-phase: Production (v8.1)
+feature: Production ()
 order: 8
 ---
 
@@ -136,7 +136,7 @@ LENSSynthesis runs 8 analyzers (pre-warmed from async fetch):
 
 ---
 
-### T+500ms → T+850ms — TDDOrchestrator: RED Phase
+### T+500ms → T+850ms — TDDOrchestrator: RED Feature
 
 Writes failing test first:
 
@@ -166,7 +166,7 @@ Test run: **5/5 FAILING** ✅ (RED confirmed)
 
 ---
 
-### T+850ms → T+1000ms — TDDOrchestrator: GREEN Phase
+### T+850ms → T+1000ms — TDDOrchestrator: GREEN Feature
 
 Minimal implementation:
 
@@ -193,7 +193,7 @@ Test run: **5/5 PASSING** ✅ (GREEN confirmed)
 
 ---
 
-### T+1000ms → T+1060ms — TDDOrchestrator: REFACTOR Phase
+### T+1000ms → T+1060ms — TDDOrchestrator: REFACTOR Feature
 
 Checks for improvement opportunities:
 - Naming: clear ✅

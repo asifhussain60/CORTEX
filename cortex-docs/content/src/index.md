@@ -31,11 +31,11 @@ When development requests enter CORTEX, they flow through a multi-stage processi
 
 3. **Orchestration Layer** — MasterOrchestrator coordinates 20+ specialized orchestrators through hierarchical dispatch. IntentRouter performs LENS-based classification (LANGUAGE→EXAMINATION→NAVIGATION→SYNTHESIS) to route requests: IMPLEMENT/FIX → TDDOrchestrator, ANALYZE → LENSSynthesis, PLAN → PlanOrchestrator, REFACTOR → RefactoringOrchestrator.
 
-4. **Intelligence Layer** — LENS analyzers execute in parallel (8 core analyzers: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain) to provide unified code intelligence. Context Crystallization Layer (Phase 49) performs async prefetch of rules, LENS state, and infrastructure detection with 245ms average completion. Intelligence layers in HealthOrchestrator and VacuumOrchestrator learn from 48h git history to reduce false positives by 85.2%.
+4. **Intelligence Layer** — LENS analyzers execute in parallel (8 core analyzers: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain) to provide unified code intelligence. Context Crystallization Layer (Iteration 49) performs async prefetch of rules, LENS state, and infrastructure detection with 245ms average completion. Intelligence layers in HealthOrchestrator and VacuumOrchestrator learn from 48h git history to reduce false positives by 85.2%.
 
 5. **Governance Layer** — EnforcementOrchestrator coordinates 7 enforcement agents performing pre-execution validation with <150ms latency. Agents check TDD enforcement (CORE-008), type hints (CORE-011), file naming (CORE-028), incremental execution limits (CORE-001), and architecture integrity across 26 automated CORE rules (87% coverage). Governance audit can run synchronously in Stage 0 for high-priority requests.
 
-6. **CORTEX Brain** — Git-backed registry (cortex-registry/) stores orchestrator specifications, governance rules (59 CORE rules), knowledge base (45+ best practice YAMLs), and phase definitions. Wiring contract (__wiring_contract__.yaml) drives orchestrator discovery with hot-reload support.
+6. **CORTEX Brain** — Git-backed registry (cortex-registry/) stores orchestrator specifications, governance rules (59 CORE rules), knowledge base (45+ best practice YAMLs), and feature definitions. Wiring contract (__wiring_contract__.yaml) drives orchestrator discovery with hot-reload support.
 
 CORTEX represents a **cognitive architecture** — an event-driven system that classifies intent, synthesizes context, enforces governance, and executes development workflows autonomously.
 
@@ -55,7 +55,7 @@ Organizations deploying CORTEX benefit from understanding the platform's archite
 | **LENS Analyzers** | 8 core | Parallel code intelligence (AST, Git, Security, Metrics, Pattern, Comment, Import, Domain) | 300-800ms |
 | **Enforcement Agents** | 7 | Pre-execution governance (TDD, Security, Compliance, Naming, Incremental, Markdown, Architecture) | <150ms |
 | **CORE Rules** | 59 automated | Governance standards (87% coverage across 7 agents) | <5ms per rule |
-| **Toolkit Modules** | 5 | Discovery, diagnostics, setup, cleanup, validation (Phase 90 consolidation) | 50-200ms |
+| **Toolkit Modules** | 5 | Discovery, diagnostics, setup, cleanup, validation (Iteration 90 consolidation) | 50-200ms |
 
 **Git-Backed Registry Structure:**
 
@@ -66,7 +66,7 @@ cortex-registry/
 ├── governance/              # 2 files: CORE rules, audit checklists
 ├── interaction/             # 6 files: Response templates, content blocks
 ├── master/                  # 2 files: Orchestrator master registry
-├── planning/                # 7 files: Phase definitions, roadmap
+├── planning/                # 7 files: Phase definitions, direction
 └── manifest.yaml            # Registry metadata
 ```
 
@@ -90,7 +90,7 @@ Organizations may observe the following performance patterns based on internal t
 **Technology Stack:**
 
 - **Runtime:** Python 3.9+ with async/await patterns
-- **Transport:** stdio (development), HTTP/JSON-RPC (production Phase 11)
+- **Transport:** stdio (development), HTTP/JSON-RPC (production Iteration 11)
 - **Storage:** Git (registry), SQLite (AST cache), File system (workspace)
 - **Analysis:** tree-sitter (multi-language parsing), git-python (history), AST (Python native)
 - **Integration:** MCP SDK (protocol), JSON-RPC 2.0 (messaging)
@@ -197,7 +197,7 @@ Specialized orchestrators providing deep expertise in specific areas:
 | Orchestrator | Priority | Purpose |
 |--------------|----------|---------|
 | **RefactoringOrchestrator** | 60 | Code improvement — structure optimization |
-| **PlanningOrchestrator** | 75 | Strategy planner — roadmap management |
+| **PlanningOrchestrator** | 75 | Strategy planner — direction management |
 | **ConversationOrchestrator** | 90 | Dialog manager — interactive discussions |
 | **DomainOrchestrator** | 95 | Business logic — domain-specific patterns |
 
@@ -358,7 +358,7 @@ Default execution mode — proceed without narration:
 - [01 Overview](./01-capabilities/01-overview.md) — Full capability inventory
 - [02 Core Platform](./01-capabilities/02-core-platform.md) — Foundation infrastructure
 - [03 AI Intelligence](./01-capabilities/03-ai-intelligence.md) — Multi-layer intelligence architecture
-- [04 Intelligence Layer](./01-capabilities/04-intelligence-layer.md) — Learning-enhanced orchestrators (Phase 96)
+- [04 Intelligence Layer](./01-capabilities/04-intelligence-layer.md) — Learning-enhanced orchestrators (Iteration 96)
 - [05 Decisioning](./01-capabilities/05-decisioning.md) — Intent classification and routing
 - [06 Conversational Gateway](./01-capabilities/06-conversational-gateway.md) — Natural language interface
 - [07 Governance & Compliance](./01-capabilities/07-governance-compliance.md) — CORE rules enforcement
@@ -528,24 +528,6 @@ All governance-gated work marked with AC (Audit Commit) markers:
 - **Orchestrator Availability:** 100% (21/21 active)
 
 ---
-
-## Version History
-
-**Current:** 3.0.0 (2026-02-14)
-
-**Recent Changes:**
-- Added 4 super-orchestrators (State, Observability, Intelligence, SOLID)
-- Consolidated 12 support orchestrators into 4 unified orchestrators
-- MCP tool consolidation (86 → 26 parent tools)
-- Holistic validation gate implementation
-- Context crystallization layer (async pre-warming)
-- Pylance-style MCP architecture
-- Cross-platform MCP support
-- Single branch policy enforcement
-
-**Breaking Changes:** None (backward compatible)
-
-**Deprecations:** 7 orchestrators (sunset 2026-03-31)
 
 ---
 

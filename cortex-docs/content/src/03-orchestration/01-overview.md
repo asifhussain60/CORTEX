@@ -19,12 +19,12 @@ order: 1
 
 ## Overview: Hierarchical Orchestrator Architecture
 
-Organizations deploying CORTEX benefit from understanding the platform's hierarchical orchestrator network that coordinates 20+ specialized processing components [Business Leaders]. Product teams leverage orchestrators for automated feature implementation, code analysis, refactoring workflows, and phase management across development lifecycles [Product Owners]. The orchestration layer provides developers with intent-based routing where MasterOrchestrator dispatches requests to specialized orchestrators based on LENS classification (LANGUAGE→EXAMINATION→NAVIGATION→SYNTHESIS) [Software Developers].
+Organizations deploying CORTEX benefit from understanding the platform's hierarchical orchestrator network that coordinates 20+ specialized processing components [Business Leaders]. Product teams leverage orchestrators for automated feature implementation, code analysis, refactoring workflows, and feature management across development lifecycles [Product Owners]. The orchestration layer provides developers with intent-based routing where MasterOrchestrator dispatches requests to specialized orchestrators based on LENS classification (LANGUAGE→EXAMINATION→NAVIGATION→SYNTHESIS) [Software Developers].
 
 **Core Orchestration Pattern:**
 
 When requests enter CORTEX through the MCP Gateway, MasterOrchestrator performs three critical operations:
-1. **Pre-Flight Validation** — Holistic validation (Phase 48) + Context Crystallization async prefetch (Phase 49) execute in parallel with 245ms average completion
+1. **Pre-Flight Validation** — Holistic validation (Iteration 48) + Context Crystallization async prefetch (Iteration 49) execute in parallel with 245ms average completion
 2. **Intent Classification** — IntentRouter uses LENS to determine request type (IMPLEMENT/FIX/REFACTOR/ANALYZE/PLAN/AUDIT/DIGEST) with 32ms median latency
 3. **Orchestrator Dispatch** — Routes to specialized orchestrator: TDDOrchestrator (IMPLEMENT/FIX), LENSSynthesis (ANALYZE), PlanOrchestrator (PLAN), RefactoringOrchestrator (REFACTOR)
 

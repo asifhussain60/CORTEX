@@ -9,7 +9,7 @@ last_verified: 2026-02-15
 source_of_truth: cortex/wiring/ + cortex/04-mcp/ + cortex/orchestrators/ + cortex/knowledge/
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII plugin architecture, extension lifecycle
 order: 12
 ---
@@ -498,7 +498,7 @@ Extensions follow semantic versioning:
 
 ### Deprecation Policy
 
-| Phase | Duration | Action |
+| Feature | Duration | Action |
 |-------|----------|--------|
 | **Deprecated** | 2 releases | Add deprecation warnings |
 | **Removed** | Next major | Remove from codebase |
@@ -547,7 +547,7 @@ File Change \u2192 Detection \u2192 Validation \u2192 Dependency Resolution \u21
 - **Caching:** Cache extension results (60-85% hit rate target)
 - **Resource Limits:** Set CPU/memory quotas per extension
 - **Metrics:** Track extension-specific latency separately
-- **Isolation:** Run heavy extensions in separate processes (Phase 11)
+- **Isolation:** Run heavy extensions in separate processes (Iteration 11)
 
 ---
 

@@ -9,11 +9,11 @@ last_verified: 2026-02-15
 source_of_truth: cortex/08-learning/ + cortex_intelligence/
 format: diátaxis-explanation
 voice: third-person-blended
-phase: Production (v8.1, Phase 71)
+feature: Production (, Iteration 71)
 order: 1
 ---
 
-> **Notice:** Learning system represents Phase 71 implementation capturing operational patterns from every orchestrator invocation. Organizations benefit from adaptive intelligence that improves continuously without manual intervention. Pattern capture adds <10ms overhead (non-blocking) per operation. High-confidence patterns (≥0.75) automatically inform future recommendations.
+> **Notice:** Learning system represents Iteration 71 implementation capturing operational patterns from every orchestrator invocation. Organizations benefit from adaptive intelligence that improves continuously without manual intervention. Pattern capture adds <10ms overhead (non-blocking) per operation. High-confidence patterns (≥0.75) automatically inform future recommendations.
 
 ---
 

@@ -30,7 +30,7 @@ Build multi-level navigable documentation site starting from `cortex-docs/index.
 |---------|------|------------|
 | **Markdown → HTML Sync** | Manual drift, stale content | JSON extraction layer + automated pipeline |
 | **45 MD files × 3 roles = 135+ pages?** | Maintenance explosion | Role-filtered single-page views with client-side rendering |
-| **Discovery pipeline scope** | LENS integration complexity | Phase-based build: P1 static content, P2 discovery automation |
+| **Discovery pipeline scope** | LENS integration complexity | Feature-based build: P1 static content, P2 discovery automation |
 | **Glassmorphism theme fidelity** | CSS complexity without SPA tooling | Extract CSS variables, use vanilla JS DOM manipulation |
 | **Agent awareness** | Agents don't know new structure | Update agent specs (cortex-gitpages-builder, cortex-doc) with bounds |
 
@@ -78,7 +78,7 @@ cortex-docs/
 
 ## Implementation Phases
 
-### Phase 1: Static Content Foundation (Non-Breaking)
+### Iteration 1: Static Content Foundation (Non-Breaking)
 **Scope:** Extract data, build role views, deploy static site  
 **Deliverables:**
 1. `assets/data/content.json` — JSON extraction script from 45 markdown files
@@ -100,7 +100,7 @@ cortex-docs/
 
 ---
 
-### Phase 2: Discovery Pipeline Automation (Future)
+### Iteration 2: Discovery Pipeline Automation (Future)
 **Scope:** LENS-powered content discovery + automated deployment  
 **Deliverables:**
 1. Enhanced `pipeline/discover.py` — LENS git history integration
@@ -108,11 +108,11 @@ cortex-docs/
 3. Git Pages deployment — Automated push on content changes
 
 **Dependencies:**
-- Phase 1 complete (static structure established)
+- Iteration 1 complete (static structure established)
 - LENS git history API stabilized
 - GitHub Actions workflow for automated builds
 
-**Timeline:** 4-6 hours (after Phase 1 validation)
+**Timeline:** 4-6 hours (after Iteration 1 validation)
 
 ---
 
@@ -276,7 +276,7 @@ output:
 
 ✅ **Existing markdown files unchanged** — Still source of truth  
 ✅ **Existing pipeline/discover.py preserved** — Enhanced, not replaced  
-✅ **Current cortex-docs/index.html** — Replaced only in Phase 1  
+✅ **Current cortex-docs/index.html** — Replaced only in Iteration 1  
 ✅ **GitHub Pages deployment** — No infrastructure changes  
 ✅ **No new dependencies** — Pure HTML5+CSS3+JS (ES6)
 
@@ -284,7 +284,7 @@ output:
 
 ## Next Step
 
-**Recommended:** Proceed with Phase 1 collaboratively via InteractionOrchestrator:
+**Recommended:** Proceed with Iteration 1 collaboratively via InteractionOrchestrator:
 1. Extract JSON schema from 8 content categories
 2. Build role selector panel (index.html)
 3. Create 3 role-specific views with glassmorphism theme
@@ -292,7 +292,7 @@ output:
 
 **Command to continue:**
 ```
-/implement phase 1 cortex-docs static architecture
+/implement iteration 1 cortex-docs static architecture
 ```
 
 ---

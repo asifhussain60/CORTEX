@@ -2,7 +2,7 @@
 
 **Unified toolkit modules exposed via MCP for operational excellence.**
 
-**Phase:** 90 (Toolkit Centralization)  
+**Feature:** 90 (Toolkit Centralization)  
 **Status:** Production  
 **MCP Tools:** 5 (diagnose, verify, cleanup, validate, analyze)
 
@@ -311,7 +311,7 @@ pytest tests/mcp/tools/test_toolkit_tools.py -v
 
 ## Architecture
 
-### Before Phase 90 (Script Sprawl)
+### Before Iteration 90 (Script Sprawl)
 
 ```
 scripts/
@@ -331,7 +331,7 @@ scripts/
 - ❌ Inconsistent interfaces (different CLI args)
 - ❌ Hard to maintain (scattered across repository)
 
-### After Phase 90 (Toolkit Centralization)
+### After Iteration 90 (Toolkit Centralization)
 
 ```
 cortex/toolkit/
@@ -377,9 +377,9 @@ cortex/mcp/tools/toolkit/
 
 ---
 
-## Roadmap
+## direction
 
-### Phase 90 (Current)
+### Iteration 90 (Current)
 - ✅ S1-S5: MCPHealthChecker, SetupVerifier, VacuumAutomation
 - ✅ S6: GovernanceValidator
 - ✅ S7: 5 MCP tools (diagnose, verify, cleanup, validate, analyze)
@@ -418,7 +418,7 @@ User: /toolkit_validate validation_type=all
 
 ---
 
-**Phase 90:** Toolkit Centralization  
+**Iteration 90:** Toolkit Centralization  
 **Status:** 70% Complete (S1-S7 done, S8-S9 pending)  
 **Tests:** 84/85 passing (98.8%)  
 **MCP Tools:** 31 total (26 existing + 5 toolkit)

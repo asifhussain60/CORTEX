@@ -9,7 +9,7 @@ last_verified: 2026-02-15
 source_of_truth: cortex/04-mcp/server.py + deployment/
 format: diátaxis-reference
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 protocol_version: 2024-11-05
 order: 2
 ---

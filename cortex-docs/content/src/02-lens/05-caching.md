@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/intelligence/02-lens/caching/ + cortex/02-lens/cache.py
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII cache layers, invalidation flow, warming strategy
 order: 5
 ---
 
-> **Notice:** Caching strategy reflects production-tested optimization as of v8.1. Organizations may tune TTL values and cache sizes based on workload characteristics. Cache hit rate targets (60-85%) based on typical development workflow patterns.
+> **Notice:** Caching strategy reflects production-tested optimization as of . Organizations may tune TTL values and cache sizes based on workload characteristics. Cache hit rate targets (60-85%) based on typical development workflow patterns.
 
 ---
 

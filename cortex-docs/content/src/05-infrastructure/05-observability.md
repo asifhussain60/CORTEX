@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/prometheus_metrics.py + cortex/opentelemetry_tracing.py + deployment/prometheus.yml
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII observability stack, Grafana dashboard layout
 order: 4
 ---
 
-> **Notice:** Observability implementation reflects production deployment patterns as of v8.1. Organizations may substitute equivalent tools (Prometheus → Datadog, Grafana → Kibana) while maintaining interface compatibility. OpenTelemetry ensures vendor portability.
+> **Notice:** Observability implementation reflects production deployment patterns as of . Organizations may substitute equivalent tools (Prometheus → Datadog, Grafana → Kibana) while maintaining interface compatibility. OpenTelemetry ensures vendor portability.
 
 ---
 

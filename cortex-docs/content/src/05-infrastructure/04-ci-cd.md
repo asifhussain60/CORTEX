@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: .github/workflows/ + deployment/hooks/
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII pipeline stages, quality gate flow
 order: 6
 ---
 
-> **Notice:** CI/CD pipeline represents production-tested automation as of v8.1. Organizations may adapt pipeline stages based on compliance requirements. Security scanning and quality gates are mandatory for production deployments.
+> **Notice:** CI/CD pipeline represents production-tested automation as of . Organizations may adapt pipeline stages based on compliance requirements. Security scanning and quality gates are mandatory for production deployments.
 
 ---
 
@@ -242,7 +242,7 @@ tests/
 # .pre-commit-config.yaml
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.0.280
+    rev: 
     hooks:
       - id: ruff
         args: [--fix]
@@ -411,9 +411,9 @@ main:
 v{major}.{minor}.{patch}
 
 Examples:
-- v1.0.0 - Major release
-- v1.1.0 - Feature release
-- v1.1.1 - Bug fix
+-  - Major release
+-  - Feature release
+-  - Bug fix
 ```
 
 ### Release Workflow

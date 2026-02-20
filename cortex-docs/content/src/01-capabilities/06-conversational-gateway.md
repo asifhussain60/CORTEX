@@ -9,7 +9,7 @@ last_verified: 2026-02-16
 source_of_truth: cortex/intent_router/ + cortex/interaction/
 format: diátaxis-explanation
 voice: third-person-blended
-phase: Phase 101 Complete
+feature: Iteration 101 Complete
 order: 7
 ---
 
@@ -158,4 +158,4 @@ Access conversational classification via MCP:
 
 ---
 
-*Phase 101 Complete | v8.1 | 50/50 tests passing*
+*Iteration 101 Complete |  | 50/50 tests passing*

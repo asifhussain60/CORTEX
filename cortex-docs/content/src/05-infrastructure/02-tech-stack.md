@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: requirements.txt + Dockerfile + deployment/
 format: diátaxis-reference
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII layer architecture
 order: 2
 ---
 
-> **Notice:** Technology choices reflect production deployment requirements as of v8.1. Organizations may substitute equivalent technologies (e.g., PostgreSQL → MySQL, Redis → Memcached) while maintaining interface compatibility. Version requirements represent minimum tested versions.
+> **Notice:** Technology choices reflect production deployment requirements as of . Organizations may substitute equivalent technologies (e.g., PostgreSQL → MySQL, Redis → Memcached) while maintaining interface compatibility. Version requirements represent minimum tested versions.
 
 ---
 
@@ -25,7 +25,7 @@ CORTEX implements a modern cloud-native technology stack optimized for reliabili
 **Core Technology Layers:**
 - **Application Layer** — Python 3.9+ with FastAPI (async HTTP), Pydantic 2.0 (validation), asyncio (concurrency)
 - **Data Layer** — Git registry (configuration), Redis 7.x (caching), SQLite (AST cache), No PostgreSQL in production
-- **Infrastructure Layer** — Docker (containerization), Kubernetes (orchestration Phase 11), Nginx (reverse proxy)
+- **Infrastructure Layer** — Docker (containerization), Kubernetes (orchestration Iteration 11), Nginx (reverse proxy)
 - **Observability Layer** — Prometheus (metrics), Grafana (dashboards), OpenTelemetry (tracing), structlog (logging)
 - **Development Layer** — pytest (testing), mypy (type checking), ruff (linting), black (formatting)
 

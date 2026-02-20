@@ -1,7 +1,6 @@
 # CORTEX Diagrams - Single Source of Truth
 
-**Authority:** CORTEX Documentation Architect v6.0  
-**Updated:** 2026-02-17  
+**Authority:** CORTEX Documentation Architect   
 **Purpose:** Centralized diagram repository for all CORTEX documentation
 
 ---
@@ -48,7 +47,7 @@ title: Human-readable title                # Display name
 purpose: What question does this answer?   # 1-sentence value prop
 audience: [Role1, Role2]                   # Business Leaders | Product Owners | Software Developers
 source_of_truth: path/to/wiring.yaml       # SSOT reference
-last_verified: v10.0                       # Release tag
+last_verified:                        # Release tag
 diagram_type: C4-Container                 # C4-Context | C4-Container | C4-Component | Sequence | Flowchart | State | Class
 interactive: false                         # true for D3, false for Mermaid
 tier: 1                                    # 1 | 2 | 3 | 4 | all
@@ -209,7 +208,7 @@ python cortex-docs/pipeline/check-diagram-references.py
 - **Diagrams Migrated:** 5/86 (6%)
 - **Frontmatter Compliance:** 100% (migrated diagrams)
 - **Validation:** All 5 diagrams passing automated checks
-- **Next Milestone:** Migrate remaining 81 diagrams (Week 2)
+- **Next goal:** Migrate remaining 81 diagrams (Week 2)
 
 **Maintainers:** CORTEX Documentation Architect Agent  
 **Contact:** cortex-docs@cortex.dev  

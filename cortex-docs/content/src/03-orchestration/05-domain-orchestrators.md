@@ -8,7 +8,7 @@ last_verified: 2026-02-18
 source_of_truth: cortex/orchestrators/ + cortex/domain_orchestrators/ + cortex/__wiring_contract__.yaml
 format: diátaxis-explanation
 voice: third-person-blended
-phase: Production (v8.1)
+feature: Production ()
 order: 5
 ---
 
@@ -64,16 +64,16 @@ Applies semantic code improvements without changing external behaviour. Supports
 **Trigger intent:** `PLAN`, `DESIGN`  
 **Source:** `cortex/orchestrators/planning/`
 
-Manages roadmap, phase planning, and architecture design decisions.
+Manages direction, feature planning, and architecture design decisions.
 
 **Capabilities:**
 - Generate phased implementation plans from high-level requests
-- Decompose epics into auditable phases with DoR (Definition of Ready) criteria
+- Decompose epics into auditable features with DoR (Definition of Ready) criteria
 - Estimate effort using historical velocity from LENS git history analysis
-- Update `cortex-registry/planning/master-cortex-plan.yaml` on phase completion
+- Update `cortex-registry/planning/master-cortex-plan.yaml` on feature completion
 - ROI scoring: calculate expected return on proposed changes
 
-**Output format:** Structured phase plan with:
+**Output format:** Structured feature plan with:
 - DoR checklist
 - Acceptance criteria
 - Risk score
@@ -132,7 +132,7 @@ Four consolidated orchestrators handle cross-cutting concerns that were previous
 | UnifiedQualityAssuranceOrchestrator | 120 | Governance + Enforcement + Audit | Standards enforcement |
 | UnifiedDiscoveryOrchestrator | 125 | Documentation + Search + Catalog | Feature and knowledge exploration |
 
-These replaced 12 separate orchestrators during the Phase 93 consolidation, reducing tool surface area by 54% while retaining all capabilities.
+These replaced 12 separate orchestrators during the Iteration 93 consolidation, reducing tool surface area by 54% while retaining all capabilities.
 
 ---
 

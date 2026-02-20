@@ -27,7 +27,7 @@ CORTEX's AI and intelligence capabilities transform raw code repositories into a
 2. **Context Synthesis** — Unified intelligence aggregation across git history, AST structure, and domain patterns
 3. **Knowledge Repository** — Git-backed knowledge base (45+ best practice YAMLs) with tier precedence (company > tier1 > tier0)
 4. **Domain Intelligence** — Framework-specific analyzers (.NET/Roslyn, Angular, React, Vue, Python)
-5. **Context Crystallization Layer (Phase 49)** — Async prefetch of rules, LENS state, and infrastructure detection
+5. **Context Crystallization Layer (Iteration 49)** — Async prefetch of rules, LENS state, and infrastructure detection
 
 These systems operate in concert to provide orchestrators with evidence-based context for test generation, implementation guidance, refactoring decisions, and architecture validation.
 
@@ -37,7 +37,7 @@ These systems operate in concert to provide orchestrators with evidence-based co
 
 ### What is LENS?
 
-LENS stands for **L**anguage → **E**xamination → **N**avigation → **S**ynthesis. Organizations benefit from this four-phase intelligence cycle that transforms code into structured understanding suitable for automated decision-making [Business Leaders]. The LENS pipeline processes code repositories through progressive stages of analysis, from lexical parsing to semantic synthesis [Software Developers].
+LENS stands for **L**anguage → **E**xamination → **N**avigation → **S**ynthesis. Organizations benefit from this four-feature intelligence cycle that transforms code into structured understanding suitable for automated decision-making [Business Leaders]. The LENS pipeline processes code repositories through progressive stages of analysis, from lexical parsing to semantic synthesis [Software Developers].
 
 ```mermaid
 graph LR
@@ -57,7 +57,7 @@ graph LR
 
 ### LENS Processing Phases
 
-| Phase | Purpose | Outputs | Typical Latency |
+| Feature | Purpose | Outputs | Typical Latency |
 |-------|---------|---------|-----------------|
 | **Language** | Lexical parsing and tokenization | AST, tokens, syntax structure | 50-150ms |
 | **Examination** | Pattern analysis and metric extraction | Complexity, dependencies, security patterns | 100-300ms |
@@ -115,10 +115,10 @@ graph TB
 **Analyzer Coordination Architecture:**
 
 Analyzers execute asynchronously with dependency-aware sequencing:
-- **Phase 1 (parallel, no dependencies):** Git History, Comment, Import
-- **Phase 2 (requires AST):** Security, Pattern, Metrics
-- **Phase 3 (requires domain detection):** Domain-specific analyzers
-- **Phase 4 (aggregation):** LENSSynthesis combines all results
+- **Iteration 1 (parallel, no dependencies):** Git History, Comment, Import
+- **Iteration 2 (requires AST):** Security, Pattern, Metrics
+- **Iteration 3 (requires domain detection):** Domain-specific analyzers
+- **Iteration 4 (aggregation):** LENSSynthesis combines all results
 
 **Performance Characteristics:**
 

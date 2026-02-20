@@ -71,7 +71,7 @@ graph TB
 
 **User → CORTEX:**
 - Business Leaders query system capabilities and metrics for strategic decision-making
-- Product Owners use planning tools for feature decomposition and roadmap management
+- Product Owners use planning tools for feature decomposition and direction management
 - Software Developers interact through implementation, fix, refactor, and analysis operations
 
 **CORTEX → External Systems:**

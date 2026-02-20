@@ -204,7 +204,7 @@ The 8-agent enforcement system provides comprehensive pre-execution validation w
 | **5** | **IncrementalExecutionAgent** | CORE-001, 004 | Code generation >200 LOC | ❌ Single commit >500 LOC<br>❌ Silent errors<br>❌ Exceeded continuation limit | <20ms |
 | **6** | **MarkdownSuppressionAgent** | CORE-002 | File creation with `.md` extension | ❌ `.md` file outside `.github/prompts/`<br>❌ `.md` file outside `.github/agents/`<br>❌ Any `README.md` except root | <5ms |
 | **7** | **ArchitectureIntegrityAgent** | CORE-017-020, 032, 034, 035, 038-041 | Design review, architecture changes | ❌ Versioned filenames<br>❌ Performance violations<br>❌ Duplicate implementations (CORE-035)<br>❌ Turn budget exceeded | <80ms |
-| **8** | **EnvironmentIntegrityAgent** | MCP-FIRST, CORE-050, CORE-051 + Phase 89 Auto-Healing | IMPLEMENT/FIX/REFACTOR intents | ❌ MCP tools unavailable (after auto-healing attempts)<br>❌ Python version <3.9<br>❌ Virtual env not activated<br>❌ settings.json tracked in git | <40ms (detection)<br>+2-5s (auto-healing) |
+| **8** | **EnvironmentIntegrityAgent** | MCP-FIRST, CORE-050, CORE-051 + Iteration 89 Auto-Healing | IMPLEMENT/FIX/REFACTOR intents | ❌ MCP tools unavailable (after auto-healing attempts)<br>❌ Python version <3.9<br>❌ Virtual env not activated<br>❌ settings.json tracked in git | <40ms (detection)<br>+2-5s (auto-healing) |
 
 **Total Validation Time:** <335ms (worst case with all 8 agents triggered)
 
@@ -306,12 +306,12 @@ Resolution:
 Audit trail integrity is mandatory for all governance-gated work.
 ```
 
-#### EnvironmentIntegrityAgent (Agent 8) — Enhanced with Auto-Healing (Phase 89)
+#### EnvironmentIntegrityAgent (Agent 8) — Enhanced with Auto-Healing (Iteration 89)
 **Purpose:** MCP-FIRST enforcement and environment validation with intelligent auto-recovery  
 **Activation:** IMPLEMENT/FIX/REFACTOR intents (BLOCKING), ANALYZE intent (non-blocking)  
 **Blocking Threshold:** MCP unavailable for code-modifying operations (after auto-healing attempts)
 
-Organizations benefit from the EnvironmentIntegrityAgent's enhanced capabilities that validate development environment prerequisites before code-modifying operations [Business Leaders]. The agent performs comprehensive validation of MCP server availability, Python environment configuration, and virtual environment setup, with new auto-healing features that attempt automated recovery before blocking operations [Product Owners]. The multi-method detection cascade uses environment variables, settings.json validation, and network health checks to ensure MCP tools are accessible, while Phase 89 enhancements add OS-aware diagnosis and automatic remediation for common configuration issues [Software Developers].
+Organizations benefit from the EnvironmentIntegrityAgent's enhanced capabilities that validate development environment prerequisites before code-modifying operations [Business Leaders]. The agent performs comprehensive validation of MCP server availability, Python environment configuration, and virtual environment setup, with new auto-healing features that attempt automated recovery before blocking operations [Product Owners]. The multi-method detection cascade uses environment variables, settings.json validation, and network health checks to ensure MCP tools are accessible, while Iteration 89 enhancements add OS-aware diagnosis and automatic remediation for common configuration issues [Software Developers].
 
 **3-Method MCP Detection Cascade:**
 1. **Environment Variables:** Check `MCP_SERVER_URL`, `CORTEX_MCP_ENABLED`
@@ -325,7 +325,7 @@ Organizations benefit from the EnvironmentIntegrityAgent's enhanced capabilities
 - ✅ `.vscode/settings.json` NOT tracked in git (CORE-051)
 - ✅ Setup log shows "✅ SETUP COMPLETE"
 
-**Phase 89 Enhancement: Auto-Healing Capabilities**
+**Iteration 89 Enhancement: Auto-Healing Capabilities**
 
 When MCP unavailability is detected, the agent now attempts OS-aware diagnosis and automatic remediation before blocking operations. Organizations may experience reduced workflow interruptions through intelligent auto-recovery mechanisms that resolve common environment issues without manual intervention [Business Leaders].
 
@@ -336,7 +336,7 @@ EnvironmentIntegrityAgent.validate_pre_flight(IMPLEMENT)
     ↓
 MCP Available? 
     ↓
-    NO → Initiate Auto-Healing (Phase 89)
+    NO → Initiate Auto-Healing (Iteration 89)
          ↓
          [1] OS-Aware Diagnosis
          │   ├─ Windows: Check %APPDATA%\Code\User\settings.json
@@ -365,7 +365,7 @@ MCP Available?
 
 **Auto-Healing Performance (Internal Testing):**
 
-Organizations using auto-healing capabilities may experience successful issue resolution in 60-75% of MCP unavailability scenarios based on internal testing during Phase 89 development [Business Leaders]. Common issues like missing dependencies or inactive virtual environments can potentially be detected and resolved within 2-5 seconds [Product Owners]. The system maintains detailed healing logs for post-incident analysis and continuous improvement [Software Developers].
+Organizations using auto-healing capabilities may experience successful issue resolution in 60-75% of MCP unavailability scenarios based on internal testing during Iteration 89 development [Business Leaders]. Common issues like missing dependencies or inactive virtual environments can potentially be detected and resolved within 2-5 seconds [Product Owners]. The system maintains detailed healing logs for post-incident analysis and continuous improvement [Software Developers].
 
 | Issue Type | Auto-Fix Success Rate (Internal) | Typical Resolution Time | Fallback Action |
 |------------|----------------------------------|-------------------------|-----------------|
@@ -377,7 +377,7 @@ Organizations using auto-healing capabilities may experience successful issue re
 
 > **Notice:** Auto-healing capabilities represent best-effort automated recovery mechanisms. Success rates shown reflect internal testing environments and may vary significantly based on system configuration, permissions, operating system version, and specific error conditions. Organizations should not rely exclusively on auto-healing for production environments and should implement proper environment validation as part of deployment pipelines. The system maintains audit logs of all auto-healing attempts for compliance and troubleshooting purposes.
 
-**Phase 50 Enhancement: MCP Policy Enforcement**
+**Iteration 50 Enhancement: MCP Policy Enforcement**
 
 The EnvironmentIntegrityAgent includes MCP policy enforcement to prevent conflicts with competing MCP servers. Organizations benefit from automatic detection of Pylance, GitKraken, and other MCP implementations that may interfere with CORTEX operations [Business Leaders]. When competing servers are detected, the agent can automatically trigger setup scripts to establish CORTEX-only MCP policies [Product Owners].
 

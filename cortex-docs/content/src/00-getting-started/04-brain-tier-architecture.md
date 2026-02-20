@@ -241,4 +241,4 @@ LENS feeds raw intelligence *into* Perception. The Brain tiers produce plans tha
 
 ---
 
-*CORTEX v8.1 · February 2026 · Source of truth: `cortex_intelligence/perception/` · `cortex_intelligence/reasoning/` · `cortex_intelligence/action/`*
+*CORTEX  · February 2026 · Source of truth: `cortex_intelligence/perception/` · `cortex_intelligence/reasoning/` · `cortex_intelligence/action/`*

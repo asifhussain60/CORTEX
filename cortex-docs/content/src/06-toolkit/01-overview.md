@@ -21,12 +21,12 @@ order: 1
 
 ## Overview: MCP Tool Catalog (10 Core Tools)
 
-Organizations benefit from CORTEX's 10 core MCP tools that expose orchestrator capabilities through standardized JSON-RPC 2.0 interfaces [Business Leaders]. Product teams leverage these tools for automated feature implementation (`cortex_process_request`), code intelligence analysis (`cortex_lens_analyze`), phase lifecycle management (`cortex_plan_*`), and repository onboarding (`cortex_onboard_repository`) [Product Owners]. Developers interact with tools through IDE integrations (VS Code Copilot Chat, Cursor, Claude Desktop) using natural language commands that map to tool invocations [Software Developers].
+Organizations benefit from CORTEX's 10 core MCP tools that expose orchestrator capabilities through standardized JSON-RPC 2.0 interfaces [Business Leaders]. Product teams leverage these tools for automated feature implementation (`cortex_process_request`), code intelligence analysis (`cortex_lens_analyze`), feature lifecycle management (`cortex_plan_*`), and repository onboarding (`cortex_onboard_repository`) [Product Owners]. Developers interact with tools through IDE integrations (VS Code Copilot Chat, Cursor, Claude Desktop) using natural language commands that map to tool invocations [Software Developers].
 
 **Tool Categories:**
 
 1. **Core Operations (3 tools)** — `cortex_process_request` (IMPLEMENT/FIX/REFACTOR), `cortex_lens_analyze` (ANALYZE), `cortex_audit` (health scans)
-2. **Phase Management (3 tools)** — `cortex_plan_setup`, `cortex_plan_resolve`, `cortex_plan_sync`
+2. **Feature Management (3 tools)** — `cortex_plan_setup`, `cortex_plan_resolve`, `cortex_plan_sync`
 3. **Intelligence Tools (2 tools)** — `cortex_git_history` (24h context), `cortex_detect_duplicates` (CORE-035)
 4. **Specialized Tools (2 tools)** — `cortex_challenge` (design reviews), `cortex_onboard_repository` (repo initialization)
 
@@ -38,7 +38,7 @@ Organizations benefit from CORTEX's 10 core MCP tools that expose orchestrator c
 | `cortex_process_request` | IMPLEMENT (large) | 2100ms | 2600ms | 3500ms |
 | `cortex_lens_analyze` | Full analysis | 450ms | 750ms | 1200ms |
 | `cortex_lens_analyze` | Cached | 50ms | 120ms | 200ms |
-| `cortex_plan_resolve` | Phase resolution | 180ms | 320ms | 450ms |
+| `cortex_plan_resolve` | Feature resolution | 180ms | 320ms | 450ms |
 | `cortex_git_history` | 24h context | 120ms | 200ms | 350ms |
 | `cortex_detect_duplicates` | CORE-035 check | 200ms | 400ms | 600ms |
 | `cortex_audit` | Full scan | 1500ms | 2200ms | 3000ms |
@@ -338,7 +338,7 @@ These tools are the **neural pathways** that external systems use to tap into CO
 |----------|-------|---------|
 | **Core** | 10 | Primary operations (implement, fix, refactor) |
 | **Analysis** | 8 | Code intelligence (LENS, AST, git) |
-| **Planning** | 5 | Phase and roadmap management |
+| **Planning** | 5 | Feature and direction management |
 | **Governance** | 4 | Auditing and compliance |
 | **Debug** | 3 | Troubleshooting and diagnostics |
 | **Discovery** | 5 | Tool and feature discovery |

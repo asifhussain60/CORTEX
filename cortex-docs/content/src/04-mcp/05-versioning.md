@@ -9,7 +9,7 @@ last_verified: 2026-02-15
 source_of_truth: cortex/04-mcp/versioning.py + cortex-registry/
 format: diátaxis-reference
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 version_schema: semantic (major.minor.patch)
 order: 5
 ---
@@ -229,16 +229,16 @@ async def negotiate_version(
 │                  DEPRECATION TIMELINE                            │
 ├─────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  v1.0 ──► v1.1 ──► v1.2 ──► v2.0 ──► v2.1 ──► v2.2 ──► v3.0   │
+│   ──►  ──►  ──►  ──►  ──►  ──►    │
 │                      │                  │                        │
 │                      │                  └── Old tool removed     │
 │                      │                                           │
 │                      └── Tool deprecated, replacement available  │
 │                                                                  │
 │  Timeline:                                                       │
-│  • Deprecation announced at v1.2                                │
-│  • Warning emitted at v2.0                                      │
-│  • Tool removed at v3.0 (minimum 2 minor versions)              │
+│  • Deprecation announced at                                 │
+│  • Warning emitted at                                       │
+│  • Tool removed at  (minimum 2 minor versions)              │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
 ```

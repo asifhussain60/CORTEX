@@ -13,7 +13,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-## Architecture (Post-Refactor v2.0.0)
+## Architecture
 
 | Metric | Value |
 |---|---|

@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/ + cortex-registry/ + .github/
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: D3.js mind map (approved), ASCII capability matrix
 order: 1
 ---
 
-> **Notice:** CORTEX capabilities represent an integrated platform with 6 cognitive domains. Organizations may prioritize specific capabilities based on team maturity and use case requirements. Performance characteristics reflect production deployment as of v8.1.
+> **Notice:** CORTEX capabilities represent an integrated platform with 6 cognitive domains. Organizations may prioritize specific capabilities based on team maturity and use case requirements. Performance characteristics reflect production deployment as of .
 
 ---
 
@@ -24,7 +24,7 @@ order: 1
 - [Capability Matrix](#capability-matrix)
 - [Core Platform Capabilities](#core-platform-capabilities)
 - [AI & Intelligence Capabilities](#ai--intelligence-capabilities)
-- [Brain Architecture (Current)](#brain-architecture-phase-12)
+- [Brain Architecture (Current)](#brain-architecture-feature)
 - [Response Formatting & Content Blocks](#response-formatting--content-blocks)
 - [Decisioning Capabilities](#decisioning-capabilities)
 - [Governance & Compliance Capabilities](#governance--compliance-capabilities)
@@ -728,8 +728,8 @@ Custom knowledge can be integrated:
 - [Decisioning](decisioning.md) — Routing and classification details
 - [Governance & Compliance](governance-compliance.md) — Security and audit details
 - [Extensibility](extensibility.md) — Extension mechanisms
-- [Workflow Templates](workflow-templates.md) — Phase 100: Convergence-gated automation
-- [Conversational Gateway](conversational-gateway.md) — Phase 101: Natural language classification
+- [Workflow Templates](workflow-templates.md) — Iteration 100: Convergence-gated automation
+- [Conversational Gateway](conversational-gateway.md) — Iteration 101: Natural language classification
 
 ---
 

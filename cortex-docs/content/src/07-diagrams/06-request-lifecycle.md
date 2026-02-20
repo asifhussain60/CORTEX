@@ -25,7 +25,7 @@ voice: third-person-neutral
 diagram_type: D3.js interactive sequence
 ---
 
-> **Notice:** Request lifecycle diagrams represent production processing flow as of v8.1. Organizations may experience variations based on intent classification, orchestrator availability, and governance enforcement outcomes. Interactive D3.js visualizations require JavaScript-enabled environment.
+> **Notice:** Request lifecycle diagrams represent production processing flow as of . Organizations may experience variations based on intent classification, orchestrator availability, and governance enforcement outcomes. Interactive D3.js visualizations require JavaScript-enabled environment.
 
 ---
 
@@ -281,7 +281,7 @@ diagram_type: D3.js interactive sequence
 │                                      │                                                   │
 │                                      ▼                                                   │
 │  ┌──────────────────────────────────────────────────────────────────────────────────┐  │
-│  │  PHASE 4: INTENT CLASSIFICATION (10-20ms)                                         │  │
+│  │  STEP 4: INTENT CLASSIFICATION (10-20ms)                                         │  │
 │  │                                                                                    │  │
 │  │  ┌─────────────────────────────────────────────────────────────────────────────┐ │  │
 │  │  │                      IntentRouter                                            │ │  │
@@ -301,7 +301,7 @@ diagram_type: D3.js interactive sequence
 │                                      │                                                   │
 │                                      ▼                                                   │
 │  ┌──────────────────────────────────────────────────────────────────────────────────┐  │
-│  │  PHASE 5: CONTEXT GATHERING (50-200ms)                                            │  │
+│  │  STEP 5: CONTEXT GATHERING (50-200ms)                                            │  │
 │  │                                                                                    │  │
 │  │  ┌─────────────────────────────────────────────────────────────────────────────┐ │  │
 │  │  │                        LENS Engine                                           │ │  │
@@ -329,7 +329,7 @@ diagram_type: D3.js interactive sequence
 │                                      │                                                   │
 │                                      ▼                                                   │
 │  ┌──────────────────────────────────────────────────────────────────────────────────┐  │
-│  │  PHASE 6: GOVERNANCE VALIDATION (50-150ms)                                        │  │
+│  │  STEP 6: GOVERNANCE VALIDATION (50-150ms)                                        │  │
 │  │                                                                                    │  │
 │  │  ┌─────────────────────────────────────────────────────────────────────────────┐ │  │
 │  │  │                    EnforcementOrchestrator                                   │ │  │
@@ -353,7 +353,7 @@ diagram_type: D3.js interactive sequence
 │                                      │                                                   │
 │                                      ▼ (if PASS/WARN)                                   │
 │  ┌──────────────────────────────────────────────────────────────────────────────────┐  │
-│  │  PHASE 7: ORCHESTRATOR EXECUTION (100-5000ms)                                     │  │
+│  │  STEP 7: ORCHESTRATOR EXECUTION (100-5000ms)                                     │  │
 │  │                                                                                    │  │
 │  │  ┌─────────────────────────────────────────────────────────────────────────────┐ │  │
 │  │  │                      Selected Orchestrator                                   │ │  │
@@ -362,21 +362,21 @@ diagram_type: D3.js interactive sequence
 │  │  │      │                                                                       │ │  │
 │  │  │      ▼                                                                       │ │  │
 │  │  │  ┌───────────────────────────────────────────────────────────────────────┐  │ │  │
-│  │  │  │  RED Phase                                                             │  │ │  │
+│  │  │  │  RED Feature                                                             │  │ │  │
 │  │  │  │  • Generate failing test                                               │  │ │  │
 │  │  │  │  • Validate test fails                                                 │  │ │  │
 │  │  │  └───────────────────────────────────────────────────────────────────────┘  │ │  │
 │  │  │      │                                                                       │ │  │
 │  │  │      ▼                                                                       │ │  │
 │  │  │  ┌───────────────────────────────────────────────────────────────────────┐  │ │  │
-│  │  │  │  GREEN Phase                                                           │  │ │  │
+│  │  │  │  GREEN Feature                                                           │  │ │  │
 │  │  │  │  • Implement minimal code                                              │  │ │  │
 │  │  │  │  • Run test until pass                                                 │  │ │  │
 │  │  │  └───────────────────────────────────────────────────────────────────────┘  │ │  │
 │  │  │      │                                                                       │ │  │
 │  │  │      ▼                                                                       │ │  │
 │  │  │  ┌───────────────────────────────────────────────────────────────────────┐  │ │  │
-│  │  │  │  REFACTOR Phase                                                        │  │ │  │
+│  │  │  │  REFACTOR Feature                                                        │  │ │  │
 │  │  │  │  • Clean up code                                                       │  │ │  │
 │  │  │  │  • Ensure tests still pass                                             │  │ │  │
 │  │  │  └───────────────────────────────────────────────────────────────────────┘  │ │  │
@@ -387,7 +387,7 @@ diagram_type: D3.js interactive sequence
 │                                      │                                                   │
 │                                      ▼                                                   │
 │  ┌──────────────────────────────────────────────────────────────────────────────────┐  │
-│  │  PHASE 8: RESPONSE FORMATTING (5-10ms)                                            │  │
+│  │  STEP 8: RESPONSE FORMATTING (5-10ms)                                            │  │
 │  │                                                                                    │  │
 │  │  Result ──► Format as MCP Response ──► Add Metadata ──► Serialize JSON           │  │
 │  │                                             │                                      │  │
@@ -409,7 +409,7 @@ diagram_type: D3.js interactive sequence
 
 ## Timing Breakdown
 
-| Phase | Component | Typical Time | Max Time |
+| Feature | Component | Typical Time | Max Time |
 |-------|-----------|--------------|----------|
 | 1 | Ingestion | 5-10ms | 50ms |
 | 2 | Auth/Authz | 10-20ms | 100ms |

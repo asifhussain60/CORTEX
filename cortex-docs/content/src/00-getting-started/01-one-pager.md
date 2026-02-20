@@ -148,4 +148,4 @@ Every action runs through four enforcement layers:
 
 ---
 
-*CORTEX v8.1 · February 2026 · Source of truth: `cortex/__wiring_contract__.yaml` + `cortex-registry/`*
+*CORTEX  · February 2026 · Source of truth: `cortex/__wiring_contract__.yaml` + `cortex-registry/`*

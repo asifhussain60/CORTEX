@@ -19,19 +19,19 @@ order: 1
 
 ---
 
-## Overview: Four-Phase Intelligence Cycle
+## Overview: Four-Feature Intelligence Cycle
 
-Organizations benefit from LENS's four-phase intelligence cycle that transforms raw source code into actionable development insights through progressive analysis stages [Business Leaders]. Product teams leverage LENS for technical debt assessment, security vulnerability detection, and architecture pattern identification across multi-language codebases [Product Owners]. The LENS pipeline processes code through Language (parsing), Examination (pattern analysis), Navigation (relationship traversal), and Synthesis (intelligence combination) with 300-800ms typical completion for standard files [Software Developers].
+Organizations benefit from LENS's four-feature intelligence cycle that transforms raw source code into actionable development insights through progressive analysis stages [Business Leaders]. Product teams leverage LENS for technical debt assessment, security vulnerability detection, and architecture pattern identification across multi-language codebases [Product Owners]. The LENS pipeline processes code through Language (parsing), Examination (pattern analysis), Navigation (relationship traversal), and Synthesis (intelligence combination) with 300-800ms typical completion for standard files [Software Developers].
 
 **LENS Architecture (L→E→N→S):**
 
-1. **Language Phase** — Lexical parsing and tokenization. Generates Abstract Syntax Trees (AST) using tree-sitter for multi-language support. Extracts tokens, identifies syntax structure, detects language/framework. Typical latency: 50-150ms.
+1. **Language Feature** — Lexical parsing and tokenization. Generates Abstract Syntax Trees (AST) using tree-sitter for multi-language support. Extracts tokens, identifies syntax structure, detects language/framework. Typical latency: 50-150ms.
 
-2. **Examination Phase** — Pattern analysis and metric extraction. Computes cyclomatic complexity, Halstead metrics, maintainability index. Detects security patterns (OWASP), design patterns (Singleton, Factory, Observer), anti-patterns. Typical latency: 100-300ms.
+2. **Examination Feature** — Pattern analysis and metric extraction. Computes cyclomatic complexity, Halstead metrics, maintainability index. Detects security patterns (OWASP), design patterns (Singleton, Factory, Observer), anti-patterns. Typical latency: 100-300ms.
 
-3. **Navigation Phase** — Relationship traversal and graph construction. Builds call graphs, data flow diagrams, dependency chains. Identifies circular dependencies, unused imports, dead code. Typical latency: 80-200ms.
+3. **Navigation Feature** — Relationship traversal and graph construction. Builds call graphs, data flow diagrams, dependency chains. Identifies circular dependencies, unused imports, dead code. Typical latency: 80-200ms.
 
-4. **Synthesis Phase** — Intelligence aggregation and recommendation generation. Combines results from 8 parallel analyzers, generates unified LENSContext, produces actionable recommendations. Typical latency: 70-150ms.
+4. **Synthesis Feature** — Intelligence aggregation and recommendation generation. Combines results from 8 parallel analyzers, generates unified LENSContext, produces actionable recommendations. Typical latency: 70-150ms.
 
 **Performance Characteristics:**
 
@@ -86,7 +86,7 @@ title: LENS Intelligence Pipeline
 purpose: Shows the sequential processing stages from code to insights
 audience: [Product Owners, Software Developers]
 source_of_truth: cortex/02-lens/core.py
-last_verified: v8.1
+last_verified: 
 diagram_type: Flowchart
 interactive: false
 ---
@@ -623,7 +623,6 @@ polyglot_analysis:
 
 ---
 
-
 ## Performance Characteristics
 
 ### Latency by Analyzer
@@ -854,7 +853,7 @@ title: LENS Integration with Orchestrators
 purpose: Shows how LENS feeds intelligence to decision-making orchestrators
 audience: [Product Owners, Software Developers]
 source_of_truth: cortex/__wiring_contract__.yaml
-last_verified: v8.1
+last_verified: 
 diagram_type: Mindmap
 interactive: false
 ---
@@ -922,7 +921,7 @@ mindmap
 
 ---
 
-## Roadmap
+## direction
 
 ### Planned Enhancements (Q1 2026)
 
@@ -955,4 +954,4 @@ mindmap
 **Word Count:** 1,850 | **Diátaxis Category:** Explanation  
 
 **Status:**  
-![CI](https://img.shields.io/badge/CI-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-87%25-green) ![Release](https://img.shields.io/badge/release-v2.1.0-blue)
+![CI](https://img.shields.io/badge/CI-passing-brightgreen) ![Coverage](https://img.shields.io/badge/coverage-87%25-green) ![Release](https://img.shields.io/badge/release--blue)

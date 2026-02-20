@@ -8,7 +8,7 @@ last_verified: 2026-02-18
 source_of_truth: cortex/orchestrators/core/master_orchestrator.py + cortex/__wiring_contract__.yaml
 format: diátaxis-explanation
 voice: third-person-blended
-phase: Production (v8.1, Priority 10)
+feature: Production (, Priority 10)
 order: 2
 ---
 

@@ -247,4 +247,4 @@ Every execution updates pattern success rates in the Brain's Perception tier. Th
 
 ---
 
-*CORTEX v8.1 · February 2026 · Source of truth: `cortex/__wiring_contract__.yaml`*
+*CORTEX  · February 2026 · Source of truth: `cortex/__wiring_contract__.yaml`*

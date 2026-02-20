@@ -9,18 +9,17 @@ last_verified: 2026-02-15
 source_of_truth: cortex/intent_router/ + cortex-registry/master/
 format: diátaxis-explanation
 voice: third-person-blended
-phase: Production (v8.1)
+feature: Production ()
 related_orchestrators: [MasterOrchestrator, TDDOrchestrator, LENSSynthesis]
 order: 2
 ---
 
-> **Notice:** Intent classification represents a continuously improving system using LENS intelligence. Classification accuracy improves over time as CORTEX learns from more interactions. Performance characteristics reflect production deployment as of v8.1. Organizations should validate routing accuracy against their specific use case patterns.
+> **Notice:** Intent classification represents a continuously improving system using LENS intelligence. Classification accuracy improves over time as CORTEX learns from more interactions. Performance characteristics reflect production deployment as of . Organizations should validate routing accuracy against their specific use case patterns.
 
 ---
 
 **Category:** Core Orchestrator  
 **Priority:** 20  
-**Updated:** 2026-02-15
 
 ---
 
@@ -58,7 +57,7 @@ Each intent maps to a specific orchestrator. The IntentRouter maintains this rou
 | **ANALYZE** | analyze, review, examine | UnifiedAnalysisOrchestrator | Building inspector — examination |
 | **TEST** | test, verify, validate | TDDOrchestrator | Quality assurance — verification |
 | **ONBOARD** | onboard, setup, initialize | UnifiedOnboardingOrchestrator | Initial setup — first-time configuration |
-| **PLAN** | plan, roadmap, strategy | PlanningOrchestrator | Project manager — strategic planning |
+| **PLAN** | plan, direction, strategy | PlanningOrchestrator | Project manager — strategic planning |
 | **QUERY** | what, how, why, explain | UnifiedDiscoveryOrchestrator | Research librarian — information discovery |
 | **CONVERSATION** | chat, discuss, talk | ConversationOrchestrator | Receptionist — interactive communication |
 | **WORKFLOW** | workflow, sequence, pipeline | WorkflowOrchestrator | Assembly line coordinator — process sequencing |

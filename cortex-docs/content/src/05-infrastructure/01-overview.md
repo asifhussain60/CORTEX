@@ -40,7 +40,7 @@ Organizations deploying CORTEX benefit from understanding the platform's cloud-n
 DEVELOPMENT MODE (current):
 VS Code → stdio → MCP Server (localhost) → Orchestrators → Git Registry
 
-PRODUCTION MODE (Phase 11):
+PRODUCTION MODE (Iteration 11):
 Clients → Nginx (443) → MCP Gateway (8000) → Orchestrators → Git Registry
            ↓                ↓
     Rate Limiting      Load Balancer (3+ instances)

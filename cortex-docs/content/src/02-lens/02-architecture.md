@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/02-lens/ + cortex/orchestrators/analysis/unified_analysis_orchestrator.py
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII layer architecture, component relationships, data flow
 order: 2
 ---
 
-> **Notice:** LENS architecture reflects production deployment as of v8.1. UnifiedAnalysisOrchestrator (P115) represents consolidated orchestration combining former LENSOrchestrator and ToolDiscoveryOrchestrator. Organizations may extend LENS via BaseAnalyzer interface for custom intelligence requirements.
+> **Notice:** LENS architecture reflects production deployment as of . UnifiedAnalysisOrchestrator (P115) represents consolidated orchestration combining former LENSOrchestrator and ToolDiscoveryOrchestrator. Organizations may extend LENS via BaseAnalyzer interface for custom intelligence requirements.
 
 ---
 

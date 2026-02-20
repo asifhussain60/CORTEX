@@ -9,7 +9,7 @@ last_verified: 2026-02-15
 source_of_truth: cortex/tools/categories.py + cortex-registry/
 format: diátaxis-reference
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 tool_categories: 6
 order: 3
 ---
@@ -249,16 +249,16 @@ CORE-035 duplication detection.
 
 ## Planning Tools
 
-Phase lifecycle and roadmap management.
+Feature lifecycle and direction management.
 
 ### cortex_plan_setup
 
-Pre-implementation phase setup.
+Pre-implementation feature setup.
 
 ```python
 # Parameters
 {
-    "phase_id": "phase-42",
+    "phase_id": "feature",
     "metadata": {
         "title": "Authentication Refactor",
         "stages": 5
@@ -268,7 +268,7 @@ Pre-implementation phase setup.
 # Response
 {
     "setup_complete": true,
-    "artifacts_created": ["phase-42.yaml"],
+    "artifacts_created": ["feature.yaml"],
     "dashboard_updated": true
 }
 ```
@@ -280,7 +280,7 @@ Post-completion cleanup.
 ```python
 # Parameters
 {
-    "phase_id": "phase-42",
+    "phase_id": "feature",
     "status": "completed|cancelled",
     "summary": "Successfully implemented OAuth"
 }
@@ -288,25 +288,25 @@ Post-completion cleanup.
 # Response
 {
     "teardown_complete": true,
-    "artifacts_archived": ["phase-42.yaml"],
+    "artifacts_archived": ["feature.yaml"],
     "metrics_captured": true
 }
 ```
 
 ### cortex_plan_resolve
 
-Intelligent phase resolution.
+Intelligent feature resolution.
 
 ```python
 # Parameters
 {
-    "query": "What's the status of phase 42?"
+    "query": "What's the status of iteration 42?"
 }
 
 # Response
 {
     "phase": {
-        "id": "phase-42",
+        "id": "feature",
         "title": "Authentication Refactor",
         "status": "in_progress",
         "progress": 0.6,

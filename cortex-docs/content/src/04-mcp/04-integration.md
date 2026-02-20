@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/04-mcp/ + deployment/
 format: diátaxis-how-to
 voice: third-person-blended
-phase: Production (v8.1)
+feature: Production ()
 integration_modes: [VS Code, HTTP, WebSocket, CLI]
 order: 4
 ---
 
-> **Notice:** Integration patterns reflect production-tested configurations as of v8.1. Organizations may adapt integration approaches based on infrastructure requirements and security policies. VS Code integration represents primary deployment mode with auto-starting MCP server. HTTP integration represents Phase 11 target architecture.
+> **Notice:** Integration patterns reflect production-tested configurations as of . Organizations may adapt integration approaches based on infrastructure requirements and security policies. VS Code integration represents primary deployment mode with auto-starting MCP server. HTTP integration represents Iteration 11 target architecture.
 
 ---
 

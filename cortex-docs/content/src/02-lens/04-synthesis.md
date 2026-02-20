@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: cortex/02-lens/synthesis/ + cortex/intelligence/02-lens/context_synthesizer.py
 format: diátaxis-explanation
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII synthesis pipeline, conflict resolution flow, quality scoring
 order: 4
 ---
 
-> **Notice:** Synthesis implementation reflects production-tested aggregation patterns as of v8.1. Organizations benefit from 95%+ accuracy in unified context generation through 6-stage pipeline validation. Conflict resolution strategies prioritize timestamp freshness and confidence scoring.
+> **Notice:** Synthesis implementation reflects production-tested aggregation patterns as of . Organizations benefit from 95%+ accuracy in unified context generation through 6-stage pipeline validation. Conflict resolution strategies prioritize timestamp freshness and confidence scoring.
 
 ---
 

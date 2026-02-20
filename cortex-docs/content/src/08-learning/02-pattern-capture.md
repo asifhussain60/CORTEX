@@ -8,7 +8,7 @@ last_verified: 2026-02-18
 source_of_truth: cortex/learning/ + cortex_intelligence/memory/ + cortex/orchestrators/health/intelligence.py
 format: diátaxis-explanation
 voice: third-person-blended
-phase: Production (Phase 71 + Phase 96)
+feature: Production (Iteration 71 + Iteration 96)
 order: 2
 ---
 
@@ -78,7 +78,7 @@ Pattern weight: 1.0                     Pattern weight: 0.02
 
 ## Impact: Before vs After Learning
 
-### Health Check False Positives (Phase 96)
+### Health Check False Positives (Iteration 96)
 
 The HealthOrchestrator learned to distinguish genuine problems from noisy false positives by observing 48h of activity:
 
@@ -90,7 +90,7 @@ The HealthOrchestrator learned to distinguish genuine problems from noisy false 
 
 **How it works:** The learner detects files that change frequently (hot paths). Health warnings about "uncommitted changes" in hot-path files during active development are suppressed — they are expected, not problems.
 
-### Vacuum Safety (Phase 96)
+### Vacuum Safety (Iteration 96)
 
 The VacuumOrchestrator learned which files are "critically active" before proposing deletion:
 
@@ -163,10 +163,10 @@ Higher-precedence patterns override lower-precedence ones. This means CORTEX ada
 ## Related Documents
 
 - **[Learning Overview](./01-overview.md)** — Architecture and lifecycle
-- **[Intelligence Layer](../01-capabilities/04-intelligence-layer.md)** — Phase 96 learning-enhanced orchestrators
+- **[Intelligence Layer](../01-capabilities/04-intelligence-layer.md)** — Iteration 96 learning-enhanced orchestrators
 - **[LENS Caching](../02-lens/05-caching.md)** — Cache layer detail
 - **[Infrastructure Overview](../05-infrastructure/01-overview.md)** — Storage backends
 
 ---
 
-*Last verified: 2026-02-18 | Phase: 71 + 96 | Source: cortex/learning/ + cortex_intelligence/memory/*
+*Last verified: 2026-02-18 | Feature: 71 + 96 | Source: cortex/learning/ + cortex_intelligence/memory/*

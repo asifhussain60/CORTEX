@@ -8,7 +8,7 @@ last_verified: 2026-02-18
 source_of_truth: cortex/orchestrators/core/tdd_orchestrator.py + cortex-registry/core/CORE-008.yaml
 format: diátaxis-explanation
 voice: third-person-blended
-phase: Production (v8.1, Priority 55)
+feature: Production (, Priority 55)
 authority: CORE-008 (TDD Mandatory)
 order: 4
 ---
@@ -50,7 +50,7 @@ There are **zero exceptions**. Override is not permitted. Governance blocks comm
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### Phase 1 — RED (Write Failing Test)
+### Iteration 1 — RED (Write Failing Test)
 
 The orchestrator:
 1. Analyses the request using LENS context (existing patterns, function signatures, domain)
@@ -65,7 +65,7 @@ def test_validate_email_rejects_missing_at_symbol():
     assert validate_email("notanemail.com") is False
 ```
 
-### Phase 2 — GREEN (Minimal Implementation)
+### Iteration 2 — GREEN (Minimal Implementation)
 
 The orchestrator writes the **minimum code** required to make the failing test pass:
 
@@ -82,7 +82,7 @@ def validate_email(address: str) -> bool:
 
 Test runs — must pass. If it fails, the orchestrator debugs the implementation, not the test.
 
-### Phase 3 — REFACTOR (Improve Without Breaking)
+### Iteration 3 — REFACTOR (Improve Without Breaking)
 
 With a green test as a safety net:
 1. Improve naming, structure, and readability
@@ -150,9 +150,9 @@ These markers link to `cortex_intelligence/governance.db` for full traceability.
 
 | Operation | P50 | P95 | P99 |
 |-----------|-----|-----|-----|
-| RED phase (test generation) | 320ms | 450ms | 600ms |
-| GREEN phase (implementation) | 380ms | 600ms | 900ms |
-| REFACTOR phase | 150ms | 250ms | 400ms |
+| RED feature (test generation) | 320ms | 450ms | 600ms |
+| GREEN feature (implementation) | 380ms | 600ms | 900ms |
+| REFACTOR feature | 150ms | 250ms | 400ms |
 | Full cycle (small) | 850ms | 1200ms | 1800ms |
 | Full cycle (large) | 2100ms | 2600ms | 3500ms |
 
@@ -163,7 +163,7 @@ These markers link to `cortex_intelligence/governance.db` for full traceability.
 | Failure | Cause | Resolution |
 |---------|-------|------------|
 | Test passes immediately (RED) | Test is not specific enough | Orchestrator rewrites test with tighter assertion |
-| GREEN phase loops | Implementation does not converge | Decompose into smaller chunk |
+| GREEN feature loops | Implementation does not converge | Decompose into smaller chunk |
 | REFACTOR breaks tests | Refactoring changed behaviour | Revert refactoring, re-examine test |
 | Governance block | Missing type hint / docstring | Auto-added by enforcement agent before commit |
 

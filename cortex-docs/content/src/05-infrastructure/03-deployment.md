@@ -9,12 +9,12 @@ last_verified: 2026-02-15
 source_of_truth: deployment/ + Dockerfile + .github/workflows/
 format: diátaxis-howto
 voice: third-person-neutral
-phase: Production (v8.1)
+feature: Production ()
 diagrams: ASCII deployment pipeline, Kubernetes architecture
 order: 3
 ---
 
-> **Notice:** Deployment procedures reflect production-tested patterns as of v8.1. Organizations may customize deployment strategies based on infrastructure requirements. Kubernetes deployment represents Phase 11 target architecture (stdio deployment current for v8.1).
+> **Notice:** Deployment procedures reflect production-tested patterns as of . Organizations may customize deployment strategies based on infrastructure requirements. Kubernetes deployment represents Iteration 11 target architecture (stdio deployment current for ).
 
 ---
 
@@ -34,7 +34,7 @@ Code Commit → Lint/Type Check → Unit Tests → Integration Tests → Securit
 ```
 
 **Key Capabilities:**
-- **Zero-Downtime Deployments** — Rolling updates with health check gating (Kubernetes Phase 11)
+- **Zero-Downtime Deployments** — Rolling updates with health check gating (Kubernetes Iteration 11)
 - **Automated Rollback** — Failed health checks trigger automatic rollback (<2min)
 - **Environment Parity** — Docker ensures dev/staging/prod consistency
 - **Configuration Management** — Environment variables + Git-backed config (no secrets in code)
@@ -164,7 +164,7 @@ pytest -m integration
 docker build -t cortex/mcp-server:latest .
 
 # Build with specific tag
-docker build -t cortex/mcp-server:v1.0.0 .
+docker build -t cortex/mcp-server: .
 
 # Multi-platform build
 docker buildx build --platform linux/amd64,linux/arm64 \
@@ -208,7 +208,7 @@ services:
     command: redis-server --appendonly yes
 
   prometheus:
-    image: prom/prometheus:v2.45.0
+    image: prom/prometheus:
     ports:
       - "9090:9090"
     volumes:
@@ -306,7 +306,7 @@ spec:
     spec:
       containers:
         - name: mcp
-          image: cortex/mcp-server:v1.0.0
+          image: cortex/mcp-server:
           ports:
             - containerPort: 8000
           envFrom:

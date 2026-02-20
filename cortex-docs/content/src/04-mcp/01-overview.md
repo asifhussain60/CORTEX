@@ -29,7 +29,7 @@ Organizations benefit from understanding CORTEX's MCP architecture, which operat
 
 2. **Stdio Transport (Development)** — JSON-RPC 2.0 messages over standard input/output for local IDE integration. Zero network overhead, sub-5ms gateway validation latency, simplified debugging with `--verbose` flag.
 
-3. **HTTP Transport (Production - Phase 11)** — RESTful JSON-RPC endpoint at `http://localhost:9000/mcp` for multi-client scenarios, load balancing, and horizontal scaling. Nginx reverse proxy with rate limiting and authentication.
+3. **HTTP Transport (Production - Iteration 11)** — RESTful JSON-RPC endpoint at `http://localhost:9000/mcp` for multi-client scenarios, load balancing, and horizontal scaling. Nginx reverse proxy with rate limiting and authentication.
 
 4. **Native Tool Gate (CORE-049)** — Enforces MCP-first architecture by blocking direct file operations for IMPLEMENT/FIX/REFACTOR intents. Validates intent classification before dispatch to prevent governance bypass.
 
