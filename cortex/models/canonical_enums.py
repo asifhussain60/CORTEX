@@ -206,6 +206,12 @@ class IntentType(Enum):
     MIGRATE = "migrate"
     ONBOARD = "onboard"  # AC-ONBOARD-001: Repository onboarding intent
     PLAN = "plan"  # PHASE-25: CORTEX development planning and phase management
+    # GAP-005: All 10 CORTEX execution modes — phase-11 remediation
+    AUDIT = "audit"        # Repo health scan with auto-fix
+    DESIGN = "design"      # Challenge-first architecture
+    DIGEST = "digest"      # Knowledge synthesis / summarize
+    REPHRASE = "rephrase"  # Token-optimize prompts
+    INVESTIGATE = "investigate"  # Deep analysis + evidence
     UNKNOWN = "unknown"
 
 

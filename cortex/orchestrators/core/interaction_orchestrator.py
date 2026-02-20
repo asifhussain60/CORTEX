@@ -237,6 +237,44 @@ class InteractionOrchestrator(IOrchestrator):
     # Core Turn Execution (used by MasterOrchestrator)
     # =========================================================================
 
+    def execute_turn(self, user_input: str) -> Result[Dict[str, Any]]:
+        """
+        Execute a single interaction turn (simplified interface).
+
+        Delegates core logic without challenge evaluation.
+        Required by startup_validator (line 317) and ConversationProtocol contract.
+
+        Args:
+            user_input: User's natural language request.
+
+        Returns:
+            Result with turn output including user_input, lens_context, turn_number.
+        """
+        self.turn_number += 1
+
+        try:
+            lens_context = self._run_lens_analysis(user_input)
+
+            output: Dict[str, Any] = {
+                "user_input": user_input,
+                "lens_context": lens_context,
+                "turn_number": self.turn_number,
+                "timestamp": datetime.now().isoformat(),
+                "challenge_evaluated": False,
+            }
+
+            self._audit_trail.append({
+                "operation": "execute_turn",
+                "turn_number": self.turn_number,
+                "success": True,
+                "timestamp": datetime.now().isoformat(),
+            })
+
+            return Ok(output)
+
+        except Exception as e:
+            return Err(f"execute_turn {self.turn_number} failed: {str(e)}")
+
     @trace_orchestrator_action("EXECUTE_TURN_WITH_CHALLENGE")
     def execute_turn_with_challenge(
         self,

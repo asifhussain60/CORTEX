@@ -4,7 +4,7 @@
 # Quick commands for development workflow
 # =============================================================================
 
-.PHONY: setup-hooks verify test test-all test-fast test-smoke test-batch help validate-wiring
+.PHONY: verify test test-all test-fast test-smoke test-batch help validate-wiring
 
 # Default target
 help:
@@ -12,7 +12,6 @@ help:
 	@echo "🧠 CORTEX Development Commands"
 	@echo "════════════════════════════════════════════════════════════════════"
 	@echo ""
-	@echo "  make setup-hooks      Configure git hooks (run after clone)"
 	@echo "  make verify           Run production readiness verification"
 	@echo "  make validate-wiring  Validate wiring.yaml accuracy (--strict mode)"
 	@echo "  make test             Run wiring tests"
@@ -21,10 +20,6 @@ help:
 	@echo "  make test-smoke       Run smoke tests only (<30s)"
 	@echo "  make test-batch       Run tests directory-by-directory (incremental feedback)"
 	@echo ""
-
-# Configure git to use version-controlled hooks
-setup-hooks:
-	@./scripts/setup-hooks.sh
 
 # Run production readiness verification
 verify:

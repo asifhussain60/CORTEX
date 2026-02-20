@@ -64,11 +64,11 @@ class ContractValidator:
         Args:
             audit_db: Path to SQLite audit database
         """
-        # Store in subdirectory to avoid root pollution
+        # Store in .cortex-runtime/ to avoid gitignored cortex_intelligence/ directory
         if audit_db:
             self.audit_db = audit_db
         else:
-            db_dir = Path("cortex_intelligence/wiring")
+            db_dir = Path(".cortex-runtime/wiring")
             db_dir.mkdir(parents=True, exist_ok=True)
             self.audit_db = db_dir / "contract_validation_audit.db"
         self._init_audit_db()

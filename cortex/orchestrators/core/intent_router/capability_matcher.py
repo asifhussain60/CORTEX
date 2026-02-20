@@ -24,6 +24,10 @@ class IntentType(Enum):
     PLAN = "PLAN"
     DESIGN = "DESIGN"
     QUERY = "QUERY"
+    # GAP-005: All 10 CORTEX execution modes
+    DIGEST = "DIGEST"
+    REPHRASE = "REPHRASE"
+    INVESTIGATE = "INVESTIGATE"
 
 
 @dataclass

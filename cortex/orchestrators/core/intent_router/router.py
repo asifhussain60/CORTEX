@@ -353,14 +353,25 @@ class EnhancedIntentRouter:
 
     def _detect_intent_from_dict(self, d: Dict[str, Any]) -> IntentType:
         """Detect intent type from a dict-based request using keyword matching."""
-        text = f"{d.get('operation', '')} {d.get('description', '')}".lower()
-        if re.search(r'implement|create|build|add|new', text):
+        text = f"{d.get('operation', '')} {d.get('description', '')} {d.get('user_request', '')}".lower()
+        # GAP-005: Check specific modes before generic fallbacks (priority order)
+        if re.search(r'rephrase|reword|token.optim|compact this|make this concise', text):
+            return IntentType.REPHRASE
+        elif re.search(r'audit|scan repo|production readiness|health check|check repo|repo health', text):
+            return IntentType.AUDIT
+        elif re.search(r'digest|summarize|summary|what happened|recap|tldr', text):
+            return IntentType.DIGEST
+        elif re.search(r'investigate|root cause|why is|what causes|deep analysis|trace the|debug why|find the cause', text):
+            return IntentType.INVESTIGATE
+        elif re.search(r'\bdesign\b|architect|blueprint|system design', text):
+            return IntentType.DESIGN
+        elif re.search(r'implement|create|build|add|new', text):
             return IntentType.IMPLEMENT
         elif re.search(r'fix|bug|error|broken|debug|resolve|correct|patch|repair', text):
             return IntentType.FIX
         elif re.search(r'refactor|clean|improve|optimize|migrate|restructure|reorganize', text):
             return IntentType.REFACTOR
-        elif re.search(r'plan|design|organize|roadmap', text):
+        elif re.search(r'plan|organize|roadmap', text):
             return IntentType.PLAN
         else:
             return IntentType.ANALYZE

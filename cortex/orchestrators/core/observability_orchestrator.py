@@ -60,11 +60,11 @@ class ObservabilityOrchestrator:
         self._metrics: Dict[str, float] = {}
         self._spans: List[Span] = []
         
-        # SQLite audit logging (store in subdirectory to avoid root pollution)
+        # SQLite audit logging — stored under .cortex-runtime/ (not gitignored cortex_intelligence/)
         if audit_db_path:
             self.audit_db_path = audit_db_path
         else:
-            db_dir = Path("cortex_intelligence/observability")
+            db_dir = Path(".cortex-runtime/observability")
             db_dir.mkdir(parents=True, exist_ok=True)
             self.audit_db_path = db_dir / "observability_audit.db"
         self._init_audit_db()

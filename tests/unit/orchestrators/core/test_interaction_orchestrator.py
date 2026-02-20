@@ -326,4 +326,69 @@ class TestInteractionOrchestratorExecuteMethod:
         assert "intent_type" in data
 
 
+class TestExecuteTurn:
+    """GAP-001: execute_turn() required by startup_validator (CORE-008 RED)."""
+
+    def test_execute_turn_exists(self) -> None:
+        """InteractionOrchestrator must have execute_turn() method."""
+        from cortex.orchestrators.core.interaction_orchestrator import (
+            InteractionOrchestrator,
+        )
+
+        assert hasattr(InteractionOrchestrator, "execute_turn"), (
+            "execute_turn() missing — startup_validator raises warning on every boot"
+        )
+
+    def test_execute_turn_returns_result(self) -> None:
+        """execute_turn(user_input) must return a Result."""
+        from cortex.orchestrators.core.interaction_orchestrator import (
+            InteractionOrchestrator,
+        )
+        from cortex.core.core.result import Ok
+
+        mock_protocol = MagicMock()
+        orch = InteractionOrchestrator(conversation_protocol=mock_protocol)
+        result = orch.execute_turn("fix the broken import")
+        assert result is not None
+        assert hasattr(result, "is_ok"), "execute_turn must return a Result type"
+        assert result.is_ok()
+
+    def test_execute_turn_output_contains_user_input(self) -> None:
+        """execute_turn output must echo back user_input for traceability."""
+        from cortex.orchestrators.core.interaction_orchestrator import (
+            InteractionOrchestrator,
+        )
+
+        mock_protocol = MagicMock()
+        orch = InteractionOrchestrator(conversation_protocol=mock_protocol)
+        result = orch.execute_turn("implement the new dashboard")
+        data = result.unwrap()
+        assert "user_input" in data
+
+    def test_execute_turn_increments_turn_number(self) -> None:
+        """execute_turn() must increment the turn counter."""
+        from cortex.orchestrators.core.interaction_orchestrator import (
+            InteractionOrchestrator,
+        )
+
+        mock_protocol = MagicMock()
+        orch = InteractionOrchestrator(conversation_protocol=mock_protocol)
+        assert orch.turn_number == 0
+        orch.execute_turn("first turn")
+        assert orch.turn_number == 1
+        orch.execute_turn("second turn")
+        assert orch.turn_number == 2
+
+    def test_startup_validator_no_longer_warns(self) -> None:
+        """startup_validator check for execute_turn must pass (no warning emitted)."""
+        from cortex.orchestrators.core.interaction_orchestrator import (
+            InteractionOrchestrator,
+        )
+
+        class_attrs = dir(InteractionOrchestrator)
+        assert "execute_turn" in class_attrs, (
+            "startup_validator line 317: 'execute_turn' not in class_attrs triggers P2 warning"
+        )
+
+
 # AC_COMPLETE: AC-P0-INTERACTION-ORCH-001

@@ -311,6 +311,32 @@ class IntentRouter(IOrchestrator):
         "remove broken", "remove unused", "remove temp", "remove temporary"
     ]
 
+    # GAP-005: Missing CORTEX execution modes — phase-11 remediation
+    AUDIT_KEYWORDS: List[str] = [
+        "audit", "scan repo", "production readiness", "health check", "check repo",
+        "/audit", "scan for issues", "repo health", "10-point"
+    ]
+
+    DESIGN_KEYWORDS: List[str] = [
+        "design", "architect", "architecture", "structure", "pattern", "blueprint",
+        "design the", "architect the", "system design", "design pattern"
+    ]
+
+    DIGEST_KEYWORDS: List[str] = [
+        "digest", "summarize", "summary", "what happened", "recap", "recap of",
+        "give me a summary", "synthesize", "tldr", "tl;dr"
+    ]
+
+    REPHRASE_KEYWORDS: List[str] = [
+        "rephrase", "reword", "token optimize", "optimize this prompt", "rewrite request",
+        "make this concise", "compact this"
+    ]
+
+    INVESTIGATE_KEYWORDS: List[str] = [
+        "investigate", "root cause", "why is", "what causes", "deep analysis",
+        "investigate the", "trace the", "debug why", "find the cause"
+    ]
+
     def __init__(self) -> None:
         """
         Initialize IntentRouter orchestrator.
@@ -341,6 +367,12 @@ class IntentRouter(IOrchestrator):
             IntentType.ANALYZE: self.ANALYZE_KEYWORDS,  # AC-LENS-LLM-005
             IntentType.ONBOARD: self.ONBOARD_KEYWORDS,  # AC-ONBOARD-001
             IntentType.PLAN: self.PLAN_KEYWORDS,  # PHASE-25: CORTEX planning
+            # GAP-005: All 10 CORTEX execution modes
+            IntentType.AUDIT: self.AUDIT_KEYWORDS,
+            IntentType.DESIGN: self.DESIGN_KEYWORDS,
+            IntentType.DIGEST: self.DIGEST_KEYWORDS,
+            IntentType.REPHRASE: self.REPHRASE_KEYWORDS,
+            IntentType.INVESTIGATE: self.INVESTIGATE_KEYWORDS,
         }
 
         # Vacuum keywords (cleanup operations) - mapped to REFACTOR for routing
@@ -834,6 +866,9 @@ class IntentRouter(IOrchestrator):
 
             if "description" in context and context["description"]:
                 text_parts.append(str(context["description"]).lower())
+
+            if "user_request" in context and context["user_request"]:
+                text_parts.append(str(context["user_request"]).lower())
 
             if "keywords" in context and isinstance(context["keywords"], list):
                 keywords = [str(k).lower() for k in context["keywords"]]
