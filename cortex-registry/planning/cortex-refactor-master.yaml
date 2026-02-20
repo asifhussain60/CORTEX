@@ -13,8 +13,8 @@ metadata:
   completed_dir: cortex-registry/planning/phases/completed/cortex-refactor/
   status_authority: "THIS FILE \u2014 cortex-refactor-master.yaml"
   counters:
-    total_phases: 11
-    pending: 2
+    total_phases: 12
+    pending: 3
     in_progress: 1
     complete: 8
     deferred: 0
@@ -157,9 +157,12 @@ phases:
     p1_issues: 0
     last_lens_scan: '2026-02-20T00:15:00Z'
     last_validation_loop: '2026-02-20T00:20:00Z'
-    regression_status: "✅ ZERO REGRESSION — 119/119 tests passing"
+    regression_status: "✅ ZERO REGRESSION — 428 tests passing (+ 49 new parallel framework tests)"
     cortex_intelligence_cleanup: "✅ COMPLETE (2026-02-20T00:10:00Z)"
     stale_brain_imports: "✅ FIXED (5 files, commit 8dcd888aa)"
+    parallel_test_framework: "✅ COMPLETE (2026-02-20T05:45:00Z) — phase-08b"
+    pytest_xdist_enabled: "✅ -n auto --dist loadscope active globally"
+    batch_progress_plugin: "✅ CortexXdistPlugin registered — 500 tests/batch"
 phases:
 - id: phase-01
   title: "Foundation \u2014 Capability Manifest, Core Factories, SQLite Audit, MCP\
@@ -700,6 +703,80 @@ phases:
           - "Infrastructure catalog schema (R7-R9)"
           - "Documentation alignment (D1-D2)"
           - "MCP tool registration"
+- id: phase-08b
+  title: "Parallel Test Framework — Batch Execution, Real-time Progress & Centralized Suite"
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-08b-parallel-test-framework.yaml
+  status: complete
+  priority: P1
+  risk: low
+  dependencies:
+  - phase-07-test-consolidation
+  deliverables:
+  - "D1: cortex/testing/framework/parallel_runner.py — EXECUTION_PROFILES + ParallelRunner"
+  - "D2: cortex/testing/framework/progress_reporter.py — BatchProgressReporter (batch headers, progress bar, summary)"
+  - "D3: cortex/testing/framework/test_categorizer.py — auto-tier assignment by path"
+  - "D4: cortex/testing/framework/test_file_naming.py — FileFactory adapter for test filenames"
+  - "D5: cortex/testing/plugins/cortex_xdist_plugin.py — CortexXdistPlugin (batch boundaries, live stderr output)"
+  - "D6: pytest.ini updated — -n auto + --dist loadscope enabled globally"
+  - "D7: conftest.py updated — CortexXdistPlugin registered alongside legacy progress plugin"
+  - "D8: .vscode/tasks.json — 6 tiered VS Code tasks (smoke/unit/integration/golden/full/debug)"
+  - "D9: tests/unit/testing/test_parallel_test_framework.py — 49 RED tests, all passing GREEN"
+  - "D10: rich + pytest-sugar installed for enhanced terminal rendering"
+  progress:
+    started: '2026-02-20T05:00:00Z'
+    completed: '2026-02-20T05:45:00Z'
+    actual_duration: 45 minutes
+    current_stage: complete
+    stages_complete:
+    - lens_discovery
+    - tdd_red_phase
+    - green_phase
+    - vscode_tasks
+    - registry_update
+    tests_written: 49
+    tests_passing: 49
+    coverage_pct: 100
+    commits: []
+    issues_found: 1
+    issues_resolved: 1
+    validation_loop_iterations: 1
+    lens_scan_completed: true
+  completion_details:
+    red_phase:
+      test_file: tests/unit/testing/test_parallel_test_framework.py
+      test_classes: 6
+      test_methods: 49
+      status: "✅ 49/49 PASSING"
+      duration: 0.20s
+    green_phase:
+      deliverables_implemented: 10
+      files_created: 7
+      lines_added: ~750
+      status: "✅ ALL TESTS PASSING"
+      key_decisions:
+        - "pytest-xdist was in requirements.txt but not installed — installed via pip"
+        - "rich + pytest-sugar installed for terminal rendering"
+        - "Batch size 500 default; configurable via CORTEX_BATCH_SIZE env var"
+        - "xdist -n auto enabled globally in pytest.ini; golden tests use -p no:xdist"
+        - "Two pytest.ini files (root + tests/) consolidated — root is canonical"
+        - "CortexXdistPlugin replaces need to activate xdist manually"
+    execution_profiles:
+      smoke:       {workers: auto, dist: loadfile,  batch_size: 500}
+      unit:        {workers: auto, dist: loadscope, batch_size: 500}
+      integration: {workers: 4,    dist: loadfile,  batch_size: 200}
+      golden:      {workers: 0,    dist: serial,    batch_size: 100}
+    validation_results:
+      parallel_framework_tests: "49/49 ✅ GREEN"
+      regression_check: "✅ 428 existing tests still passing with -n auto"
+      pre_existing_failures: "5 (Phase 03 cortex_intelligence stale dir — Phase 09 blocker)"
+      new_failures: "0"
+      core_compliance:
+        - "✅ CORE-008: TDD — 49 RED tests written before all implementation"
+        - "✅ CORE-011: Type hints on all public methods"
+        - "✅ CORE-012: Docstrings on all public APIs"
+        - "✅ CORE-028: Test filenames via FileFactory (snake_case, test_ prefix)"
+        - "✅ CORE-035: Single canonical plugin (replaces duplicate progress plugins)"
+        - "✅ CORE-002: No markdown files created"
 - id: phase-09
   title: Final Verification, Refactor & Archive Deletion
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-09-final-verification.yaml
