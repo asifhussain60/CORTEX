@@ -10,7 +10,7 @@ CORTEX is a production-grade AI Engineering Framework built on:
 
 ---
 
-## MCP Architecture
+## MCP ARCHITECTURE
 
 CORTEX uses a **Pylance-style MCP architecture** — the MCP server behaves exactly
 like Pylance (the VS Code Python language server):

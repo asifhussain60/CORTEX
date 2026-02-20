@@ -72,7 +72,7 @@ class SemanticBlockLoader:
             # Find registry relative to this file
             base = Path(__file__).parent
             registry_path = (
-                base.parent.parent
+                base.parent.parent.parent
                 / "cortex-registry/artifacts/templates/content-blocks.yaml"
             )
 
