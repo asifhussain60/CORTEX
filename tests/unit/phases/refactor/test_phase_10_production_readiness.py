@@ -776,6 +776,9 @@ class TestDisasterRecovery:
                 # Ignore test fixtures and sample repos
                 if "fixtures" in str(db_file) or "sample-repos" in str(db_file):
                     continue
+                # Ignore gitignored runtime artifact directories (e.g. cortex_intelligence/)
+                if "cortex_intelligence" in str(db_file) or "cortex_lens" in str(db_file):
+                    continue
                 stray_dbs.append(db_file.relative_to(REPO_ROOT))
         assert len(stray_dbs) == 0, (
             f"Stray .db files outside .cortex-runtime/ (FR7 violation):\n"

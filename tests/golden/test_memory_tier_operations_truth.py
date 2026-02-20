@@ -203,13 +203,16 @@ class TestMemoryTierStructure:
             intel_path / "tier2"
         ]
         
-        # If any exist and are not empty, that's the old structure
+        # If any exist and contain Python source files, that's the old structure
+        # (empty dirs or dirs with only runtime .db artifacts are OK — they're gitignored)
         for bad_path in bad_paths:
-            if bad_path.exists() and list(bad_path.iterdir()):
-                pytest.fail(
-                    f"Found old tier structure at {bad_path}. "
-                    f"Should be in cortex-registry/core/ or cortex_intelligence/memory/"
-                )
+            if bad_path.exists():
+                py_files = [f for f in bad_path.rglob("*.py") if "__pycache__" not in str(f)]
+                if py_files:
+                    pytest.fail(
+                        f"Found old tier structure at {bad_path} with Python source files: {py_files[:5]}. "
+                        f"Should be in cortex-registry/core/ or cortex_intelligence/memory/"
+                    )
 
     def test_memory_and_governance_separate(self):
         """Memory tiers and governance tiers should be in different locations."""

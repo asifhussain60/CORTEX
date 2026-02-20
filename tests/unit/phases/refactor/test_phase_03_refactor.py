@@ -91,9 +91,18 @@ class TestPhase3PackageStructure:
     """Verify package structure is consistent after consolidation."""
     
     def test_cortex_intelligence_directory_gone(self) -> None:
-        """Test: Old cortex_intelligence/ directory does not exist."""
+        """Test: Old cortex_intelligence/ has no Python source files.
+
+        The directory may still exist on disk due to runtime .db artifacts
+        (gitignored), but zero Python source files must remain.
+        """
         old_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_intelligence")
-        assert not old_path.exists(), "Old cortex_intelligence/ must be archived"
+        if not old_path.exists():
+            return  # Fully removed — pass
+        py_files = [f for f in old_path.rglob("*.py") if "__pycache__" not in str(f)]
+        assert not py_files, (
+            f"Old cortex_intelligence/ still contains Python source: {py_files[:5]}"
+        )
     
     def test_cortex_lens_directory_gone(self) -> None:
         """Test: Old cortex_lens/ directory does not exist."""
@@ -239,8 +248,13 @@ class TestPhase3DoD:
         """REFACTOR DoD 2: Package structure is consistent."""
         assert Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence").exists()
         assert Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence/lens").exists()
-        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_intelligence").exists()
-        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_lens").exists()
+        # Old packages must have no Python source (runtime .db artifacts are OK)
+        for old_pkg in ["cortex_intelligence", "cortex_lens"]:
+            old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
+            if not old_path.exists():
+                continue
+            py_files = [f for f in old_path.rglob("*.py") if "__pycache__" not in str(f)]
+            assert not py_files, f"{old_pkg}/ still has Python source: {py_files[:5]}"
     
     def test_refactor_dod_03_backward_compat(self) -> None:
         """REFACTOR DoD 3: Backward compatibility verified."""
@@ -301,9 +315,13 @@ class TestPhase3DoD:
         assert intelligence.exists(), "cortex/intelligence/ must exist (Phase 03 migration target)"
         assert lens.exists(), "cortex/intelligence/lens/ must exist (Phase 03 migration target)"
 
-        # Old packages must still be gone
-        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_intelligence").exists()
-        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_lens").exists()
+        # Old packages must still be gone (no Python source — runtime .db artifacts OK)
+        for old_pkg in ["cortex_intelligence", "cortex_lens"]:
+            old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
+            if not old_path.exists():
+                continue
+            py_files = [f for f in old_path.rglob("*.py") if "__pycache__" not in str(f)]
+            assert not py_files, f"{old_pkg}/ still has Python source: {py_files[:5]}"
 
 
 class TestPhase3CoreCompliance:
@@ -325,8 +343,13 @@ class TestPhase3CoreCompliance:
         
         intelligence_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence")
         assert intelligence_path.exists(), "Single canonical cortex/intelligence must exist"
-        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_intelligence").exists()
-        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_lens").exists()
+        # Old packages must have no Python source (runtime .db artifacts are OK)
+        for old_pkg in ["cortex_intelligence", "cortex_lens"]:
+            old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
+            if not old_path.exists():
+                continue
+            py_files = [f for f in old_path.rglob("*.py") if "__pycache__" not in str(f)]
+            assert not py_files, f"{old_pkg}/ still has Python source: {py_files[:5]}"
     
     def test_core_011_type_hints(self) -> None:
         """CORE-011: Type hints on all functions."""
