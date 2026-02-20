@@ -13,8 +13,8 @@ metadata:
   completed_dir: cortex-registry/planning/phases/completed/cortex-refactor/
   status_authority: "THIS FILE \u2014 cortex-refactor-master.yaml"
   counters:
-    total_phases: 12
-    pending: 1
+    total_phases: 13
+    pending: 2
     in_progress: 1
     complete: 9
     deferred: 0
@@ -22,10 +22,12 @@ metadata:
 
 presentation:
   summary: |
-    CORTEX Cohesive Brain Refactor is a 11-phase restructuring to consolidate 120+ orchestrators 
+    CORTEX Cohesive Brain Refactor is a 12-phase restructuring to consolidate 120+ orchestrators 
     into 44 canonical implementations, migrate 3 packages into 1, and establish a unified 
-    governance layer. Phases 1-8 are complete with zero regression (all 428+ golden tests passing). 
-    Phase 9 Final Verification is in progress; phases 10-11 are pending.
+    governance layer. Phases 1-8 are complete with zero regression (all 486 golden tests passing). 
+    Phase 07b (Test Quality Gate) is pending — bakes test-quality.txt 7-step algorithm into 
+    CORTEX as a canonical service wired into TDDOrchestrator, MCP, and pytest. 
+    Phase 09 Final Verification is in progress; phases 10 is pending.
   
   analysis:
     current_state: |
@@ -161,6 +163,8 @@ phases:
     cortex_intelligence_cleanup: "🔴 PENDING — cortex_intelligence/ still exists (Phase 09 blocker)"
     stale_brain_imports: "🔴 9 files with stale imports (cortex.brain/cortex_intelligence/cortex_lens)"
     scattered_db_files: "🔴 8 .db files scattered in cortex/, 2 in cortex_intelligence/ (Phase 09 FR7)"
+    test_quality_gate: "🔵 PENDING — phase-07b (TestQualityGate canonical service, MCP tool, pytest plugin, TDDOrchestrator wiring)"
+    test_suite_cleanup: "✅ COMPLETE (2026-02-20) — phase-07b prep: 3,360 low-value tests deleted (18%), 15,245 signal-dense tests remain, 486 golden passing"
     parallel_test_framework: "✅ COMPLETE (2026-02-20T05:45:00Z) — phase-08b"
     pytest_xdist_enabled: "✅ -n auto --dist loadscope active globally"
     batch_progress_plugin: "✅ CortexXdistPlugin registered — 500 tests/batch"
@@ -659,6 +663,50 @@ phases:
         - "✅ Phase 07 RED tests: 41/41 PASSING"
         - "✅ Test structure consolidated and canonical"
         - "✅ Zero test files lost during consolidation"
+- id: phase-07b
+  title: "Test Quality Gate — Canonical Service (TestQualityGate + MCP + pytest plugin)"
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-07b-test-quality-gate.yaml
+  status: pending
+  priority: P0
+  risk: low
+  dependencies:
+  - phase-07
+  deliverables:
+  - "D1: cortex-registry/core/test-quality-gate.yaml — scoring SSOT (weights, thresholds, banned patterns, golden detection)"
+  - "D2: cortex/testing/quality_gate.py — canonical TestQualityGate (replaces 3 existing scorers, CORE-035)"
+  - "D3: cortex/testing/pytest_quality_plugin.py — pytest hook: warn/block at --collect based on score"
+  - "D4: cortex/mcp/tools/test_quality_tool.py — MCP tool: cortex_score_tests (callable from production repos)"
+  - "D5: TDDOrchestrator wiring — blocks test generation scoring < 7 before tests are written"
+  - "D6: conftest.py registration — plugin active by default; CORTEX_QUALITY_GATE=strict for CI blocking"
+  - "D7: tests/unit/testing/test_quality_gate.py — 45+ TDD-first tests, self-verifying (own score ≥ 7)"
+  progress:
+    started: null
+    completed: null
+    actual_duration: null
+    current_stage: pending
+    stages_complete: []
+    tests_written: 0
+    tests_passing: 0
+    coverage_pct: 0
+    commits: []
+    issues_found: 0
+    issues_resolved: 0
+    validation_loop_iterations: 0
+    lens_scan_completed: false
+  context:
+    prerequisite_work_done: |
+      Phase 07b prep complete (commit a72042e7c):
+      - 3,360 low-value tests deleted (18% of 18,605)
+      - 137 files archived to _archive/tests/deleted-low-value/ (recoverable)
+      - Algorithm: 7-step test-quality.txt rubric applied via Python script
+      - 15,245 signal-dense tests remain; 486 golden tests 100% passing
+      - Algorithm documented in _workspaces/.recommendations/test-quality.txt
+    existing_scorers_to_replace:
+      - "cortex/testing/test_value_scorer.py (Phase 71) — deprecated alias"
+      - "cortex/testing/test_quality_validator.py (Phase 51) — deprecated alias"
+      - "cortex/orchestrators/intelligence/test_value_scorer.py (Wave-2) — deprecated alias"
+    scoring_formula: "Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2) − Maintenance(0-2) = 0–9"
+    gate_threshold: "≥ 7 = KEEP | 4–6 = REVIEW | < 4 = DELETE"
 - id: phase-08
   title: Registry & Docs Alignment + Infrastructure Catalog
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-08-registry-docs.yaml
