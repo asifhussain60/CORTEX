@@ -14,8 +14,8 @@ metadata:
   status_authority: "THIS FILE \u2014 cortex-refactor-master.yaml"
   counters:
     total_phases: 12
-    pending: 2
-    in_progress: 0
+    pending: 1
+    in_progress: 1
     complete: 9
     deferred: 0
     failed: 0
@@ -51,17 +51,18 @@ presentation:
       | Golden Tests | 428 | 428+ | 428+ | ✅ Maintained, zero regression |
     
     key_findings:
-      - Phase 08 discovered 20+ stale cortex.brain imports (Phase 04 aftermath) — blocking golden tests
-      - Master plan needs import quarantine fix before Phase 09 completion
-      - All test suites passing at phase-specific scope; cross-phase golden suite blocked
+      - All 9 core phases complete (Phase 01-08 + 08b); Phase 09 Final Verification next
+      - 9 stale import files remain (cortex.brain, cortex_intelligence, cortex_lens)
+      - 8 scattered .db files in cortex/, 2 in cortex_intelligence/ — need consolidation
+      - cortex_intelligence/ directory still exists (should be archived in Phase 03)
       - Registry integrity 100% (cortex-registry/ references all resolve)
-      - Active code has stale imports to archived modules (requires Phase 09 remediation)
+      - 1,813 tests passing, 5 pre-existing failures, 179 skipped
     
     blockers_and_risks:
       P0:
-        - "20+ stale 'cortex.brain' imports in active code (master_orchestrator.py + infrastructure/*.py + lens/*.py + cli/*.py)"
-        - "Golden test suite cannot execute (master_orchestrator import fails)"
-        - "Phase 09 Final Verification blocked until imports fixed"
+        - "9 files with stale imports (cortex.brain/cortex_intelligence/cortex_lens)"
+        - "cortex_intelligence/ directory not fully archived — blocks Phase 03 tests"
+        - "8 scattered .db files in cortex/ violate FR7 consolidation requirement"
       P1:
         - "Archive deletion (Phase 09) depends on import quarantine passing"
         - "Production readiness (Phase 10) depends on Phase 09 completion"
@@ -111,16 +112,15 @@ presentation:
   
   next_steps:
     immediate:
-      - Fix all 20+ stale cortex.brain imports (master_orchestrator, infrastructure/, lens/, cli/)
-      - Run full test suite (unit + golden + integration) — target: 428+ pass
-      - Execute 18-point Definition of Done checklist
-      - Verify registry integrity (100% reference resolution)
+      - "Fix 9 stale imports (cortex.brain, cortex_intelligence, cortex_lens) in active code"
+      - "Consolidate 8+2 scattered .db files → .cortex-runtime/ (FR7)"
+      - "Remove cortex_intelligence/ directory (Phase 03 artifact)"
+      - "Run full test suite — target: 1800+ pass, 0 fail"
     
     later:
       - Delete _archive/ permanently
       - Tag release v2.0.0-cohesive-brain
       - Execute production hardening (Phase 10)
-      - Operations handoff (Phase 11)
     
     proceed_plan:
       - This presentation layer is now part of master plan; future updates sync to it
@@ -153,16 +153,20 @@ phases:
     golden_tests_passing: 428
     test_coverage_pct: 95
   health_status:
-    p0_issues: 0
-    p1_issues: 0
-    last_lens_scan: '2026-02-20T00:15:00Z'
-    last_validation_loop: '2026-02-20T00:20:00Z'
-    regression_status: "✅ ZERO REGRESSION — 428 tests passing (+ 49 new parallel framework tests)"
-    cortex_intelligence_cleanup: "✅ COMPLETE (2026-02-20T00:10:00Z)"
-    stale_brain_imports: "✅ FIXED (5 files, commit 8dcd888aa)"
+    p0_issues: 2
+    p1_issues: 1
+    last_lens_scan: '2026-02-20T11:00:00Z'
+    last_validation_loop: '2026-02-20T11:00:00Z'
+    regression_status: "✅ 1813 passed, 5 failed (pre-existing Phase 03), 179 skipped"
+    cortex_intelligence_cleanup: "🔴 PENDING — cortex_intelligence/ still exists (Phase 09 blocker)"
+    stale_brain_imports: "🔴 9 files with stale imports (cortex.brain/cortex_intelligence/cortex_lens)"
+    scattered_db_files: "🔴 8 .db files scattered in cortex/, 2 in cortex_intelligence/ (Phase 09 FR7)"
     parallel_test_framework: "✅ COMPLETE (2026-02-20T05:45:00Z) — phase-08b"
     pytest_xdist_enabled: "✅ -n auto --dist loadscope active globally"
     batch_progress_plugin: "✅ CortexXdistPlugin registered — 500 tests/batch"
+    phase_08_complete: "✅ 86/86 tests passing (2026-02-20T10:30:00Z)"
+    enterprise_patterns: "✅ 9 patterns in cortex-registry/patterns/"
+    infrastructure_catalog: "✅ _schema.yaml + topology.yaml + InfrastructureDetector + MCP tool"
 phases:
 - id: phase-01
   title: "Foundation \u2014 Capability Manifest, Core Factories, SQLite Audit, MCP\
@@ -794,31 +798,29 @@ phases:
 - id: phase-09
   title: Final Verification, Refactor & Archive Deletion
   spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-09-final-verification.yaml
-  status: pending
+  status: in_progress
   priority: P0
   risk: medium
   dependencies:
   - phase-08-registry-docs
   deliverables:
-  - 'Capability manifest: every item verified green'
-  - All 22 MCP tools respond correctly
-  - 'Full regression suite: unit + integration + golden + e2e'
-  - 'SQLite verification: 3 DBs only, WAL mode, auto-cleanup'
-  - 'MCP consolidation verified: exactly 22 tools'
+  - 'V3: Fix 9 stale imports (cortex.brain, cortex_intelligence, cortex_lens)'
+  - 'FR7: Consolidate 10 scattered .db files → .cortex-runtime/'
+  - 'V3: Remove cortex_intelligence/ directory'
+  - 'V2: Full regression suite — unit + golden + integration (1800+ pass, 0 fail)'
   - _archive/ safely deleted (permanent)
-  - Zero imports from dissolved packages
   - 18-point Definition of Done checklist complete
   progress:
-    started: null
+    started: '2026-02-20T11:00:00Z'
     completed: null
     actual_duration: null
-    current_stage: null
+    current_stage: entry_remediation
     stages_complete: []
     tests_written: 0
     tests_passing: 0
     coverage_pct: 0
     commits: []
-    issues_found: 0
+    issues_found: 3
     issues_resolved: 0
     validation_loop_iterations: 0
     lens_scan_completed: false
