@@ -320,12 +320,17 @@ class TDDOrchestrator(IOrchestrator):
         # Phase 27: Initialize StandardsResolver for company domain integration
         self.standards_resolver = StandardsResolver()
 
+        # Phase 07b: Wire canonical TestQualityGate — gates test generation at score < 7
+        from cortex.testing.quality_gate import TestQualityGate
+        self.quality_gate = TestQualityGate()
+
         logger.info(
             f"TDD Orchestrator V2 initialized with base protocol + "
             f"{len(self.knowledge_loader.tdd_yamls)} knowledge YAMLs + "
             f"BrittlenessScanner (AC-PHASE24-005) + "
             f"PhaseCompletionOrchestrator (AC-PHASE24-007) + "
-            f"StandardsResolver (Phase 27)"
+            f"StandardsResolver (Phase 27) + "
+            f"TestQualityGate (Phase 07b)"
         )
 
     # =========================================================================

@@ -1,0 +1,125 @@
+# ==============================================================================
+# CORTEX Test Quality Gate — Scoring SSOT
+# ==============================================================================
+# Authority: test-quality.txt | CORE-008 | CORE-035
+# Consumed by: cortex/testing/quality_gate.py (canonical scorer)
+# AC-ID: AC-PHASE-07B-TEST-QUALITY-GATE-001
+# ==============================================================================
+
+version: "1.0"
+created: "2026-02-20"
+authority: "test-quality.txt"
+
+# Scoring formula:
+#   Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2)
+#   − MaintenancePenalty(0-2) = Score 0–9
+#
+# Gate threshold:
+#   KEEP   ≥ 7
+#   REVIEW  4–6
+#   DELETE  < 4
+
+thresholds:
+  keep: 7
+  review: 4
+  delete: 0
+
+dimensions:
+  impact:
+    max: 3
+    signals:
+      security:
+        patterns: [security, auth, permission, injection, xss, csrf, sanitiz, encrypt, authz, authn]
+        points: 1
+      reliability:
+        patterns: ["retry", "backoff", "idempoten", "timeout", "circuit.?break", "fallback", "graceful", "rate.?limit"]
+        points: 1
+      business_invariant:
+        patterns: [invariant, business_rule, must_never, must_always, violation, compliance, governance, audit]
+        points: 1
+
+  likelihood:
+    max: 2
+    signals:
+      orchestration:
+        patterns: [orchestrat, workflow, pipeline, phase, stage, coordinator, master_orchestrator]
+        min_occurrences: 2
+        points: 1
+      integration_seam:
+        patterns: [api_call, database, db_session, http_client, message_bus, event_bus, filesystem, external, sqlite, requests\.]
+        min_occurrences: 1
+        points: 1
+
+  detection:
+    max: 2
+    signals:
+      data_correctness:
+        patterns: [schema, migration, transform, rounding, timezone, ordering, constraint, serializ, deserializ]
+        points: 1
+      operational:
+        patterns: ["observability", "metrics", "traces", "audit_log", "correlation.?id", "alert", "telemetry", "structured.?log"]
+        points: 1
+
+  efficiency:
+    max: 2
+    rules:
+      lines_per_test_threshold: 15    # +1 if avg lines/test > this
+      asserts_per_test_threshold: 2   # +1 if avg asserts/test > this
+
+  maintenance_penalty:
+    max: -2
+    rules:
+      mock_ratio_threshold: 3         # -1 if mocks/test > this
+      stub_ratio_threshold: 0.5       # -1 if skipped/total > this
+      trivial_assert_ratio: 0.6       # -1 if trivial/total_asserts > this
+      single_assert_ratio: 0.6        # -1 if 1-assert tests/total > this
+
+# Patterns that make an assertion TRIVIAL (test-quality.txt: banned patterns)
+trivial_assert_patterns:
+  - "assert\\s+\\w+\\s+is\\s+not\\s+None"
+  - "assert\\s+isinstance\\("
+  - "assert\\s+\\w+\\s*==\\s*(True|False|None|0|1)"
+  - "assert\\s+hasattr\\("
+  - "assert\\s+True"
+  - "assert\\s+\\w+\\.exists\\(\\)"
+
+# Patterns that make a test function LOW-VALUE by name
+banned_name_patterns:
+  - "def test_.*_exists\\b"
+  - "def test_.*_is_not_none\\b"
+  - "def test_.*_not_none\\b"
+  - "def test_.*_importable\\b"
+  - "def test_.*_import\\b"
+  - "def test_can_import\\b"
+  - "def test_.*_initializes?\\b"
+  - "def test_.*_default\\b"
+  - "def test_.*_constructor\\b"
+  - "def test_.*_getter\\b"
+  - "def test_.*_setter\\b"
+
+# Golden test detection criteria — ALL must match
+golden_detection:
+  min_orchestrator_references: 2
+  orchestrator_pattern: "(Orchestrator|Coordinator|Runner)\\("
+  audit_log_patterns:
+    - "sqlite3\\.connect"
+    - "pd\\.read_sql"
+    - "\\.execute\\(.*SELECT.*FROM.*audit"
+    - "audit_log"
+    - "orchestrator_activity"
+  golden_dir_pattern: "tests/golden"
+
+# Stub/skip patterns
+skip_patterns:
+  - "@pytest\\.mark\\.skip"
+  - "skipif.*is\\s+None"
+  - "skipif.*not.*implemented"
+  - "reason.*not yet implemented"
+
+# Mock detection patterns
+mock_patterns:
+  - "MagicMock"
+  - "Mock\\("
+  - "@patch"
+  - "patch\\.object"
+  - "mock_open"

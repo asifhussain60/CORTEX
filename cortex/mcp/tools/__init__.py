@@ -86,6 +86,9 @@ from cortex.mcp.tools.master_plan_tool import CortexMasterPlanTool, cortex_maste
 # GitOrchestrator — replaces git hooks + GitHub Actions (2026-02-19)
 from cortex.mcp.tools.git_orchestrator_tool import CortexGitPush
 
+# Phase 07b — Canonical test quality gate MCP tool
+from cortex.mcp.tools.test_quality_tool import CortexScoreTests
+
 
 # All tool classes for registration
 ALL_TOOLS = [
@@ -133,6 +136,8 @@ ALL_TOOLS = [
     CortexMasterPlanTool,
     # GitOrchestrator (1) - replaces git hooks + GitHub Actions
     CortexGitPush,
+    # TestQualityGate (1) - Phase 07b canonical scorer
+    CortexScoreTests,
 ]
 
 
@@ -205,6 +210,8 @@ __all__ = [
     "cortex_master_plan",
     # GitOrchestrator (replaces git hooks + GitHub Actions)
     "CortexGitPush",
+    # TestQualityGate (Phase 07b)
+    "CortexScoreTests",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",

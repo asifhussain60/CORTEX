@@ -23,6 +23,7 @@ from cortex.infrastructure.orchestrator_trace_logger import get_trace_logger, Tr
 # Register CORTEX testing plugins — order matters:
 # 1. cortex_xdist_plugin: batch-aware parallel progress (supersedes legacy plugin)
 # 2. pytest_progress_plugin: retained for slow-test detection (complementary)
+# Phase 07b: pytest_quality_plugin registered dynamically in pytest_configure below
 pytest_plugins = [
     "cortex.testing.plugins.cortex_xdist_plugin",
     "cortex.testing.pytest_progress_plugin",
@@ -86,12 +87,18 @@ def orchestrator_trace_writer():
 
 
 def pytest_configure(config):
-    """Configure pytest with trace settings."""
+    """Configure pytest with trace settings and quality gate plugin."""
     # Set default trace settings for tests
     os.environ["CORTEX_TRACE_ENABLED"] = "true"
     os.environ["CORTEX_TRACE_DB"] = ".cortex-runtime/traces/test-orchestrator-traces.db"
     os.environ["CORTEX_TRACE_MAX_ROWS"] = "50000"  # Higher limit for tests
     os.environ["CORTEX_TRACE_ASYNC_FLUSH"] = "true"
+    # Phase 07b: Quality gate — default=warn; set CORTEX_QUALITY_GATE=strict for CI blocking
+    try:
+        from cortex.testing.pytest_quality_plugin import make_plugin
+        config.pluginmanager.register(make_plugin(), name="cortex_quality_gate")
+    except Exception:
+        pass  # Non-blocking — unavailability must not break test runs
 
 
 def pytest_unconfigure(config):
