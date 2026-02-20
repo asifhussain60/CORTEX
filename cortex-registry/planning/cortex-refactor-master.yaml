@@ -994,19 +994,129 @@ phases:
       - "✅ CORE-011: Type hints on all test functions"
       - "✅ CORE-012: Docstrings on all test classes and methods"
       - "✅ CORE-002: No markdown report files created"
+- id: phase-11
+  title: "Gap Remediation — SQLite Consolidation, IntentRouter Modes, Bootstrap Fix, Makefile"
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-11-gap-remediation.yaml
+  status: planned
+  priority: P0
+  risk: low
+  dependencies:
+    - phase-10
+  source: "_workspaces/.chats/gaps.md — post-refactor gap analysis (2026-02-20)"
+  deliverables:
+    - "P0-A: InteractionOrchestrator.execute_turn() implemented (bootstrap warning resolved)"
+    - "P0-B: Makefile scripts/setup-hooks.sh dead reference removed"
+    - "P1-A: SQL-001 — IntelligenceOrchestrator, ObservabilityOrchestrator, ContractValidator migrated to CortexAuditDB"
+    - "P1-B: SQL-002/003 — ObservabilityOrchestrator default db path fixed to .cortex-runtime/"
+    - "P1-C: IntentRouter — 4 missing modes routed: DESIGN, QUERY, DIGEST, REPHRASE"
+    - "P2-A: CortexMasterPlanOrchestrator — phase lifecycle management, cortex-master.yaml sequence, folder automation"
+    - "P2-B: MCP tool cortex_master_plan exposed"
+    - "P2-C: Infrastructure Catalog — cortex-registry/company/ YAMLs, OnboardingOrchestrator enhancement"
+    - "P3: CORE-058..063 enforcement wired into EnforcementOrchestrator"
+  gap_inventory:
+    p0_critical:
+      - id: "GAP-001"
+        description: "InteractionOrchestrator missing execute_turn() method"
+        evidence: "Bootstrap warning on every startup — non-blocking but P2 pre-existing"
+        file: "cortex/orchestrators/core/interaction_orchestrator.py"
+        fix: "Add execute_turn(self, user_input: str) -> str via TDD"
+        effort: S
+      - id: "GAP-002"
+        description: "Makefile references scripts/setup-hooks.sh which does not exist"
+        evidence: "grep Makefile shows dead reference — CI/developer friction"
+        file: "Makefile"
+        fix: "Remove dead target or create minimal setup-hooks.sh"
+        effort: XS
+    p1_high:
+      - id: "GAP-003"
+        description: "SQL-001: 3 orchestrators use raw sqlite3.connect() bypassing CortexAuditDB"
+        evidence: "IntelligenceOrchestrator, ObservabilityOrchestrator, ContractValidator all create ad-hoc .db files"
+        files:
+          - "cortex/orchestrators/intelligence/intelligence_orchestrator.py"
+          - "cortex/orchestrators/core/observability_orchestrator.py"
+          - "cortex/core/wiring/registry/contract_validator.py"
+        fix: "Route all SQLite access through cortex/infrastructure/audit_db.py CortexAuditDB"
+        effort: M
+      - id: "GAP-004"
+        description: "SQL-002: ObservabilityOrchestrator default db path writes to cortex_intelligence/ (gitignored)"
+        evidence: "Default path cortex_intelligence/observability/ recreates gitignored dir at runtime"
+        file: "cortex/orchestrators/core/observability_orchestrator.py"
+        fix: "Change default to .cortex-runtime/observability/"
+        effort: XS
+      - id: "GAP-005"
+        description: "IntentRouter missing 4 of 10 execution modes: DESIGN, QUERY, DIGEST, REPHRASE"
+        evidence: "Only AUDIT, FIX, IMPLEMENT, INVESTIGATE, PLAN, REFACTOR detected in router"
+        file: "cortex/orchestrators/core/intent_router.py"
+        fix: "Add routing logic for DESIGN, QUERY, DIGEST, REPHRASE modes with appropriate orchestrator delegation"
+        effort: M
+    p2_medium:
+      - id: "GAP-006"
+        description: "CortexMasterPlanOrchestrator not implemented"
+        evidence: "Phase lifecycle management identified in cortexmaster-orch.md — planned but never built"
+        deliverables:
+          - "cortex/orchestrators/core/master_plan_orchestrator.py"
+          - "cortex-registry/workflows/templates/lifecycle/master-plan-orchestrator.yaml"
+          - "cortex-registry/workflows/templates/lifecycle/master-plan-execution.yaml"
+          - "cortex/mcp/tools/master_plan_tool.py"
+        fix: "TDD implementation: reads cortex-master.yaml for next sequence, manages phase folder lifecycle"
+        effort: L
+      - id: "GAP-007"
+        description: "Infrastructure Catalog not populated"
+        evidence: "cortex-registry/company/ empty — no company platforms, APIs, application YAMLs"
+        deliverables:
+          - "cortex-registry/company/infrastructure-catalog.yaml"
+          - "cortex-registry/company/platforms/ (per-platform YAMLs)"
+          - "OnboardingOrchestrator enhancement to generate catalog entries"
+        fix: "Enhance OnboardingOrchestrator + create catalog schema"
+        effort: L
+    p3_backlog:
+      - id: "GAP-008"
+        description: "CORE-058..063 defined in plan but not enforced"
+        rules:
+          CORE-058: "SQLite WAL mode mandatory — EnforcementOrchestrator check"
+          CORE-059: "MCP footprint auditing — tool count validation"
+          CORE-060: "SDLC brain governance"
+          CORE-061: "CCL integration"
+          CORE-062: "Plan-first execution requirement"
+          CORE-063: "Challenge-first governance gate"
+        fix: "Wire rules into EnforcementOrchestrator pre-commit checks"
+        effort: XL
+  execution_order:
+    - "GAP-002 (XS — Makefile fix, zero risk)"
+    - "GAP-001 (S — execute_turn, TDD)"
+    - "GAP-004 (XS — db path fix)"
+    - "GAP-003 (M — SQL-001 CortexAuditDB migration)"
+    - "GAP-005 (M — IntentRouter 4 modes)"
+    - "GAP-006 (L — CortexMasterPlanOrchestrator)"
+    - "GAP-007 (L — Infrastructure Catalog)"
+    - "GAP-008 (XL — CORE-058..063 enforcement)"
+  tdd_mandate: "CORE-008 — all fixes require RED test before GREEN implementation"
+  regression_gate: "683 tests must remain passing after each gap fix"
+  progress:
+    started: null
+    completed: null
+    current_stage: planned
+    stages_complete: []
+    tests_written: 0
+    tests_passing: 0
+    coverage_pct: 0
+    commits: []
+    issues_found: 8
+    issues_resolved: 0
+
 lens_scans:
   history: []
 validation_loops:
   history: []
 completion:
-  status: complete
-  completed_date: '2026-02-20T20:00:00Z'
-  total_duration: "~32 hours across 12 phases (2026-02-19 to 2026-02-20)"
+  status: in_progress
+  completed_date: null
+  total_duration: "~32 hours across 12 phases (2026-02-19 to 2026-02-20) + phase-11 pending"
   final_test_count: 683
   final_coverage_pct: 100
   final_golden_tests: 486
   cortex_master_yaml_updated: true
   summary:
-    issues_identified: "Phase 10 TDD revealed 4 test/assertion issues (all resolved)"
+    issues_identified: "Phase 10 TDD revealed 4 test/assertion issues (all resolved). Phase 11 gap analysis identified 8 gaps across 4 priority tiers."
     solution_implemented: "25 production readiness tests across 6 domains: perf, security, chaos, DR, observability, regression"
-    next_steps: "Monitor production SLOs, run pip-audit periodically, expand chaos tests as new orchestrators added"
+    next_steps: "Execute phase-11 gap remediation in priority order: GAP-002 → GAP-001 → GAP-004 → GAP-003 → GAP-005 → GAP-006 → GAP-007 → GAP-008"
