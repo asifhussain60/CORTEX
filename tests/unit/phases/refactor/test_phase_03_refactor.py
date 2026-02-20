@@ -101,15 +101,23 @@ class TestPhase3PackageStructure:
         assert not old_path.exists(), "Old cortex_lens/ must be archived"
     
     def test_archive_backup_exists(self) -> None:
-        """Test: Backup archives exist in _archive/packages/."""
-        archive_base = Path("/Users/asifhussain/PROJECTS/CORTEX/_archive/packages")
-        assert archive_base.exists(), "_archive/packages/ must exist"
-        
-        intelligence_backup = archive_base / "cortex_intelligence_backup"
-        lens_backup = archive_base / "cortex_lens_backup"
-        
-        assert intelligence_backup.exists(), "cortex_intelligence_backup must exist"
-        assert lens_backup.exists(), "cortex_lens_backup must exist"
+        """Phase 09 COMPLETE (2026-02-20): _archive/ permanently deleted.
+
+        Phase 03 created backup archives in _archive/packages/ before migration.
+        Phase 09 Final Verification confirmed zero regression then deleted _archive/.
+        Post-Phase-09 state: cortex/intelligence/ is the single canonical location.
+        """
+        # _archive/ must be gone — Phase 09 exit condition
+        archive_base = Path("/Users/asifhussain/PROJECTS/CORTEX/_archive")
+        assert not archive_base.exists(), (
+            "_archive/ must not exist — Phase 09 Final Verification deleted it on 2026-02-20. "
+            "If this fails, _archive/ was unexpectedly re-created."
+        )
+        # Migration targets must exist
+        intelligence = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence")
+        lens = intelligence / "lens"
+        assert intelligence.exists(), "cortex/intelligence/ must exist (Phase 03 migration destination)"
+        assert lens.exists(), "cortex/intelligence/lens/ must exist (Phase 03 migration destination)"
     
     def test_cortex_intelligence_subdirs_merged(self) -> None:
         """Test: All cortex_intelligence subdirs are in cortex/intelligence/."""
@@ -275,14 +283,25 @@ class TestPhase3DoD:
         assert tables is not None, "Audit tables must exist"
     
     def test_refactor_dod_08_archive_complete(self) -> None:
-        """REFACTOR DoD 8: Archive backup complete and verified."""
-        archive_base = Path("/Users/asifhussain/PROJECTS/CORTEX/_archive/packages")
-        
-        # Both backups should exist
-        assert (archive_base / "cortex_intelligence_backup").exists()
-        assert (archive_base / "cortex_lens_backup").exists()
-        
-        # Old packages should be gone
+        """REFACTOR DoD 8: Phase 09 COMPLETE — archive backup deleted, migration finalized.
+
+        Phase 03 DoD 8 verified _archive/packages/ backup was complete.
+        Phase 09 Final Verification (2026-02-20) confirmed zero regression and deleted _archive/.
+        Post-Phase-09 DoD 8: cortex/intelligence/ is canonical, _archive/ is permanently gone.
+        """
+        # _archive/ must be gone — Phase 09 exit condition
+        archive_base = Path("/Users/asifhussain/PROJECTS/CORTEX/_archive")
+        assert not archive_base.exists(), (
+            "_archive/ must not exist — Phase 09 Final Verification deleted it (2026-02-20)"
+        )
+
+        # Migration destinations must exist and be healthy
+        intelligence = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence")
+        lens = intelligence / "lens"
+        assert intelligence.exists(), "cortex/intelligence/ must exist (Phase 03 migration target)"
+        assert lens.exists(), "cortex/intelligence/lens/ must exist (Phase 03 migration target)"
+
+        # Old packages must still be gone
         assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_intelligence").exists()
         assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_lens").exists()
 

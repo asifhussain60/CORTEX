@@ -26,11 +26,26 @@ class TestPathReconciliation:
     """Verify both old (archived) and new (active) paths are discoverable."""
     
     def test_archive_packages_backup_location_exists(self):
-        """Archive location must contain cortex_intelligence_backup + cortex_lens_backup."""
-        archive_path = Path("_archive/packages")
-        assert archive_path.exists(), f"Archive path {archive_path} must exist"
-        assert (archive_path / "cortex_intelligence_backup").exists(), "cortex_intelligence_backup must exist in archive"
-        assert (archive_path / "cortex_lens_backup").exists(), "cortex_lens_backup must exist in archive"
+        """Phase 09 COMPLETE: _archive/ permanently deleted — verify packages migrated to cortex/.
+
+        Phase 03 backed up old packages to _archive/packages/ before migration.
+        Phase 09 (2026-02-20) deleted _archive/ after full regression verification.
+        The correct assertion is now that cortex/intelligence/ contains the migrated code.
+        """
+        # _archive/ was deleted in Phase 09 Final Verification (2026-02-20)
+        # Verify the migration destination is healthy instead
+        active_intelligence = Path("cortex/intelligence")
+        assert active_intelligence.exists(), (
+            "cortex/intelligence/ must exist — packages migrated here in Phase 03"
+        )
+        assert (active_intelligence / "__init__.py").exists(), (
+            "cortex/intelligence/__init__.py must exist (Phase 03 migration complete)"
+        )
+        # Verify _archive/ is gone (Phase 09 exit condition)
+        archive_path = Path("_archive")
+        assert not archive_path.exists(), (
+            f"_archive/ should be deleted (Phase 09 complete). Found: {archive_path}"
+        )
     
     def test_consolidated_packages_at_cortex_intelligence_active_location(self):
         """Active intelligence location must exist at cortex/intelligence."""

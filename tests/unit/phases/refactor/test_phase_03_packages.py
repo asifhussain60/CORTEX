@@ -45,16 +45,37 @@ class TestPackageMigrationPreconditions:
         assert Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence/lens").exists()
 
     def test_archive_directory_exists(self) -> None:
-        """_archive/packages/ must exist as backup destination."""
-        assert Path("/Users/asifhussain/PROJECTS/CORTEX/_archive/packages").exists()
+        """Phase 09 COMPLETE (2026-02-20): _archive/ permanently deleted.
+
+        Phase 03 created _archive/packages/ as a backup destination.
+        Phase 09 Final Verification confirmed zero regression and deleted _archive/.
+        The post-Phase-09 invariant: _archive/ must NOT exist.
+        """
+        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/_archive").exists(), (
+            "_archive/ must not exist — Phase 09 Final Verification deleted it (2026-02-20). "
+            "If this fails, _archive/ was re-created unexpectedly."
+        )
 
     def test_cortex_intelligence_backup_archived(self) -> None:
-        """cortex_intelligence backup must exist in _archive/packages/."""
-        assert Path("/Users/asifhussain/PROJECTS/CORTEX/_archive/packages/cortex_intelligence_backup").exists()
+        """Phase 09 COMPLETE: Migration confirmed — cortex/intelligence/ is the canonical location.
+
+        Phase 03 backed up cortex_intelligence/ to _archive/packages/cortex_intelligence_backup/.
+        Phase 09 deleted _archive/ after full regression verification.
+        The post-Phase-09 invariant: cortex/intelligence/ is the single source of truth.
+        """
+        canon = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence")
+        assert canon.exists(), "cortex/intelligence/ must exist — this is the Phase 03 migration target"
+        assert (canon / "__init__.py").exists(), "cortex/intelligence/__init__.py must exist"
 
     def test_cortex_lens_backup_archived(self) -> None:
-        """cortex_lens backup must exist in _archive/packages/."""
-        assert Path("/Users/asifhussain/PROJECTS/CORTEX/_archive/packages/cortex_lens_backup").exists()
+        """Phase 09 COMPLETE: Migration confirmed — cortex/intelligence/lens/ is canonical.
+
+        Phase 03 backed up cortex_lens/ to _archive/packages/cortex_lens_backup/.
+        Phase 09 deleted _archive/. The canonical location is cortex/intelligence/lens/.
+        """
+        canon = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence/lens")
+        assert canon.exists(), "cortex/intelligence/lens/ must exist — this is the Phase 03 migration target"
+        assert (canon / "__init__.py").exists(), "cortex/intelligence/lens/__init__.py must exist"
 
 
 class TestOldPackagesGone:
@@ -180,12 +201,19 @@ class TestPhase3MigrationStats:
         )
 
     def test_archive_packages_backup_size(self) -> None:
-        """_archive/packages/ must contain the two package backups."""
-        archive = Path("/Users/asifhussain/PROJECTS/CORTEX/_archive/packages")
-        assert archive.exists(), "_archive/packages/ must exist"
-        subdirs = [d for d in archive.iterdir() if d.is_dir()]
-        assert len(subdirs) >= 2, (
-            f"Expected ≥2 backup dirs in _archive/packages/, found {len(subdirs)}: {subdirs}"
+        """Phase 09 COMPLETE (2026-02-20): _archive/ deleted — migration fully committed.
+
+        Phase 03 verified ≥2 backup dirs in _archive/packages/.
+        Phase 09 deleted _archive/ after all regression gates passed.
+        The post-Phase-09 invariant: cortex/intelligence/ contains both migrated packages.
+        """
+        intel = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence")
+        lens = intel / "lens"
+        assert intel.exists(), "cortex/intelligence/ must exist (Phase 03 migration target)"
+        assert lens.exists(), "cortex/intelligence/lens/ must exist (cortex_lens migration target)"
+        # Verify _archive/ is gone — Phase 09 exit condition
+        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/_archive").exists(), (
+            "_archive/ must be deleted — Phase 09 Final Verification completed 2026-02-20"
         )
 
 
