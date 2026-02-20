@@ -183,18 +183,18 @@ class TDDImplementationGuidance:
 
 
 class TDDKnowledgeLoader:
-    """Loads TDD best practices YAMLs from cortex_intelligence/tier3/knowledge/."""
+    """Loads TDD best practices YAMLs from cortex-registry/workflows/templates/tdd/."""
 
     def __init__(self, knowledge_root: Optional[Path] = None) -> None:
         """Initialize TDD knowledge loader."""
         if knowledge_root is None:
             knowledge_root = (
                 Path(__file__).parent.parent.parent.parent
-                / "cortex_intelligence" / "tier3" / "knowledge"
+                / "cortex-registry" / "workflows" / "templates"
             )
 
         self.knowledge_root = Path(knowledge_root)
-        self.tdd_domain_path = self.knowledge_root / "TESTING-VALIDATION"
+        self.tdd_domain_path = self.knowledge_root / "tdd"
         self.tdd_yamls: Dict[str, Dict[str, Any]] = {}
         self.tdd_rules: List[TDDDisciplineRule] = []
         self._load_tdd_yamls()
