@@ -1,5 +1,5 @@
 # CORTEX ASK Coordinator Agent
-**Version:** 1.0 | **Updated:** 2026-02-03 | **Role:** Educational Query Router | **Status:** ACTIVE
+**Updated:** 2026-02-03 | **Role:** Educational Query Router | **Status:** ACTIVE
 
 ---
 

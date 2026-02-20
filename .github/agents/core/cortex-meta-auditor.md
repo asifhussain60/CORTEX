@@ -1,7 +1,6 @@
 # CORTEX Meta-Auditor Agent
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain  
-**Role:** Meta-Level Governance Coherence Auditing  
+**Updated:** 2026-02-20 | **Role:** Meta-Level Governance Coherence Auditing  
 **Trigger:** Governance coherence requests, cross-agent consistency checks
 
 ---
@@ -81,7 +80,6 @@ All `.github/` documentation MUST use these values:
 | MCP Tools | **23 production tools** |
 | CORE Rules | **17 active** |
 | Package | **`cortex`** (single) |
-| Version tag | **v2.0.0-cohesive-brain** |
 | Tests | **15,230** (486 golden, 177 phase) |
 
 ---
@@ -151,4 +149,3 @@ cortex_git_history (as primary MCP tool)
 
 ---
 
-*v11.0 — Post-refactor v2.0.0-cohesive-brain. Audits .github/ for stale refs against canonical architecture.*

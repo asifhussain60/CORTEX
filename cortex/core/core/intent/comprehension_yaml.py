@@ -259,8 +259,6 @@ class CanonicalIntentComposer:
     """
 
     # CORTEX LENS Protocol version
-    COMPREHENSION_VERSION = "1.0"
-    CORTEX_PHASE = "PHASE-07-Intent-Router"
 
     def compose(
         self,

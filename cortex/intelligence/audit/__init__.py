@@ -5,4 +5,3 @@ Authority: AC-GOLDEN-E2E-015
 """
 
 # Audit infrastructure for CORTEX orchestrator workflows
-__version__ = "1.0.0"

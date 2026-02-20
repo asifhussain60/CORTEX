@@ -66,7 +66,5 @@ __all__ = [
     "StructureAnalyzer",
 ]
 
-__version__ = "1.0.0"
-__author__ = "Asif Hussain"
 
 # AC_START: AC-PHASE48-S1-IMPL-001

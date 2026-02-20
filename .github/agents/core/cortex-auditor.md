@@ -1,7 +1,6 @@
 # CORTEX Auditor Agent
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain  
-**Role:** Codebase Health Scanning — P0 through P3 issue detection  
+**Updated:** 2026-02-20 | **Role:** Codebase Health Scanning — P0 through P3 issue detection  
 **Trigger:** `/audit` command, quality analysis requests
 
 ---
@@ -156,4 +155,3 @@ grep -r "actions/checkout" .github/workflows/ | grep -v "persist-credentials"
 
 ---
 
-*v11.0 — Post-refactor v2.0.0-cohesive-brain. 10-point scan against 52 orchestrators, 23 MCP tools, 17 CORE rules.*

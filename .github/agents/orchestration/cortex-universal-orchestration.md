@@ -1,6 +1,6 @@
 # CORTEX Universal Orchestration Agent
 
-**Version:** 2.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain | **Status:** ✅ ACTIVE
+**Updated:** 2026-02-20 | **Status:** ✅ ACTIVE
 
 ---
 

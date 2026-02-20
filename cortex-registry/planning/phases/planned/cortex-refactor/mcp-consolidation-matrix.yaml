@@ -297,7 +297,6 @@ consolidation:
     target_final_count: 22
     reduction: "35% fewer tools, 0% capability loss"
 
-
 # ========================================================================
 # PHASE 5 EXECUTION PLAN
 # ========================================================================
@@ -337,7 +336,6 @@ execution_plan:
     - step: 8
       title: "Update documentation"
       action: "Update cortex-docs/ with new tool list"
-
 
 # ========================================================================
 # VERIFICATION CHECKLIST

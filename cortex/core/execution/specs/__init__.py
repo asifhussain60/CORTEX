@@ -16,7 +16,6 @@ CORE Rules Applied:
     - CORE-040: Execution Specification Mandate
 """
 
-__version__ = "1.0.0"
 __all__ = [
     "SpecRegistry",
     "SpecValidator",

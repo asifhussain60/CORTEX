@@ -1,6 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-20 | **Version:** 11.0 | **Post-Refactor:** v2.0.0-cohesive-brain  
-**Architecture:** 52 Orchestrators · 23 MCP Tools · 17 CORE Rules · 1 Package  
+**Updated:** 2026-02-20 | **Architecture:** 52 Orchestrators · 23 MCP Tools · 17 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅
 
 **🔗 References:**

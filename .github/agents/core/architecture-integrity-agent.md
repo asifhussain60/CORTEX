@@ -1,5 +1,4 @@
 # Architecture Integrity Agent
-**Version:** 1.0  
 **Created:** 2026-02-10  
 **Authority:** Phase 70 Implementation Alignment Remediation  
 **Purpose:** Automated implementation ↔ specification alignment validation with autonomous remediation

@@ -299,7 +299,7 @@ workflow:
           - "Update metadata.last_updated in cortex-refactor-master.yaml"
           - "IF all 10 phases complete: update cortex-master.yaml cortex-refactor planned entry to status=COMPLETE"
           - "IF all 10 phases complete: set cortex-refactor-master.yaml completion.status = 'complete'"
-          - "IF all 10 phases complete: set completion.release_tag = 'v2.0.0-cohesive-brain'"
+          - "IF all 10 phases complete: set completion.release_tag = ''"
           - "Display Issues/Solution/Next Steps summary inline in Copilot Chat"
 
       summary_format:

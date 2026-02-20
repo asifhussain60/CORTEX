@@ -1,6 +1,6 @@
 # Request Rephrase Orchestrator
 
-**Version:** 1.0 | **Authority:** MCP-First Architecture + Challenge-First Protocol | **Status:** ✅ ACTIVE | **Integration:** Pre-MasterOrchestrator Gate
+**Authority:** MCP-First Architecture + Challenge-First Protocol | **Status:** ✅ ACTIVE | **Integration:** Pre-MasterOrchestrator Gate
 
 ---
 

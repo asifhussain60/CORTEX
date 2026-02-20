@@ -15,8 +15,6 @@ Note: Uses lazy imports via __getattr__ to prevent circular import issues.
       full package initialization.
 """
 
-__version__ = "2.0.0"
-
 __all__ = [
     "LENSOrchestrator",
     "LENSContext",

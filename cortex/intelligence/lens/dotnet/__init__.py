@@ -10,8 +10,6 @@ from pathlib import Path
 from typing import Optional
 import os
 
-__version__ = "0.1.0"
-__phase__ = "phase-67"
 __stage__ = "S1"
 
 # Module-level configuration - auto-detect Roslyn CLI path

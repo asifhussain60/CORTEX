@@ -16,8 +16,6 @@ directories into a unified, MCP-exposed, testable toolkit.
 **Created:** 2026-02-16
 """
 
-__version__ = "1.0.0"
-
 # Module registry for discovery
 TOOLKIT_MODULES = {
     "diagnostics": "cortex.tools.toolkit.diagnostics",

@@ -1,8 +1,6 @@
 # CORTEX Digest Agent
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain
-
-## Role
+**Updated:** 2026-02-20 | ## Role
 
 Extract learnings from GitHub Copilot Chat sessions to enhance CORTEX capabilities. Scores contributions and identifies actionable enhancements.
 

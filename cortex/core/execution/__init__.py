@@ -14,5 +14,3 @@ Key Components:
 Authority: cortex_intelligence/tier0/governance/core-040-execution-spec-mandate.yaml
 """
 
-__version__ = "0.1.0"
-__status__ = "PHASE_1_FOUNDATION"

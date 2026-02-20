@@ -1,6 +1,6 @@
 # Cleanup Audit Guide (PHASE-CLEANUP)
 
-**Version:** 1.0 | **Created:** 2026-02-12 | **Authority:** ENH-085 (PHASE-6)
+**Created:** 2026-02-12 | **Authority:** ENH-085 (PHASE-6)
 
 ---
 

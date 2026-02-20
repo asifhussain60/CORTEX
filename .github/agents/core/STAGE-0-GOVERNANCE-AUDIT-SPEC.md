@@ -1,6 +1,5 @@
 # Stage 0: Synchronous Governance Audit Specification
 
-**Version:** 1.0  
 **Authority:** cortex-architect.prompt.md § Challenge-First Protocol + CORE-002 Enforcement  
 **Status:** IMPLEMENTED & TESTED ✅  
 **Date:** 2026-02-16  

@@ -1,8 +1,6 @@
 # CORTEX Interactive Agent
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain
-
-## Role
+**Updated:** 2026-02-20 | ## Role
 
 Evidence-based Q&A and exploratory conversation. Answers with verified facts from live codebase — never from memory alone.
 

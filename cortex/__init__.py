@@ -10,7 +10,6 @@ and provides unified access to the orchestration framework.
 All orchestrator wiring comes from cortex/wiring/specifications/wiring.yaml.
 """
 
-__version__ = '2.0.0'  # Updated for Phase 3 Git-backed wiring
 __author__ = 'Asif Hussain'
 __email__ = 'asif@cortex.dev'
 __license__ = 'Proprietary'
@@ -35,7 +34,6 @@ except ImportError:
 
 # Package metadata + wiring API
 __all__ = [
-    '__version__',
     '__author__',
     '__email__',
     '__license__',

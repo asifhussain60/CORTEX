@@ -15,8 +15,6 @@ Architecture:
 Authority: Phase 80 - Phase Execution Automation
 """
 
-__version__ = "1.0.0"
-__author__ = "CORTEX Architect"
 
 from cortex.phase_executors.phase_executor_base import PhaseExecutorBase
 from cortex.phase_executors.phase_executor_factory import PhaseExecutorFactory

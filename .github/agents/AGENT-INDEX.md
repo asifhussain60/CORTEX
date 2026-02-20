@@ -1,7 +1,6 @@
 # CORTEX Agent Index
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain  
-**Purpose:** Lazy loading + intent-based agent selection  
+**Updated:** 2026-02-20 | **Purpose:** Lazy loading + intent-based agent selection  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---
@@ -156,4 +155,3 @@ IF BLOCK → Show remediation, require override
 
 ---
 
-*v11.0 — Post-refactor v2.0.0-cohesive-brain. 52 orchestrators, 23 MCP tools, 1 package.*

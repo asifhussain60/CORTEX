@@ -659,7 +659,7 @@ phase:
     - step: 10
       name: "Final Commit & Tag"
       command: "git add -A && git commit -m 'refactor(phase-10): production readiness — 100% hardened, zero regression'"
-      tag: "v2.0.0-production-ready"
+      tag: ""
 
   # ============================================================================
   # DEFINITION OF DONE (PRODUCTION)
@@ -706,7 +706,7 @@ phase:
       6. Observability complete (dashboards, traces, alerts operational)
       7. Documentation complete (runbooks, playbooks, escalation)
       8. All stakeholders sign off
-      9. Release tag: v2.0.0-production-ready
+      9. Release tag: 
 
   # ============================================================================
   # POST-PRODUCTION MONITORING
@@ -811,10 +811,10 @@ phase:
         on_fail: "Fix any remaining capability regressions"
 
       - id: "VL-10-C11"
-        name: "Release tag v2.0.0-production-ready present"
-        command: "git tag -l 'v2.0.0-production-ready' | wc -l"
+        name: "Release tag  present"
+        command: "git tag -l '' | wc -l"
         pass_condition: "output is 1"
-        on_fail: "Create production release tag: git tag -a v2.0.0-production-ready -m 'CORTEX 2.0 — Production Ready'"
+        on_fail: "Create production release tag: git tag -a  -m 'CORTEX 2.0 — Production Ready'"
 
     loop_behavior:
       strategy: "conditional_retry"
@@ -851,7 +851,7 @@ phase:
           changes:
             - "completion.status → complete"
             - "completion.completed_date → ISO timestamp"
-            - "completion.release_tag → v2.0.0-production-ready"
+            - "completion.release_tag → "
             - "completion.cortex_master_yaml_updated → true (pending next action)"
 
         - action: "Move phase spec to completed/"
@@ -861,12 +861,12 @@ phase:
           changes:
             - "planned[cortex-refactor].status → COMPLETE"
             - "planned[cortex-refactor].completed → ISO timestamp"
-            - "planned[cortex-refactor].release_tag → v2.0.0-production-ready"
+            - "planned[cortex-refactor].release_tag → "
             - "metadata.planned → 0"
 
         - action: "Final git commit and push"
           command: "git add -A && git commit -m 'refactor(cortex-refactor): ALL 10 PHASES COMPLETE — CORTEX 2.0 cohesive brain, production-ready' && git push origin CORTEX-GPT"
 
         - action: "Log completion to CORTEX audit DB"
-          method: "CortexAuditDB().log_milestone(event='cortex-refactor-complete', phases=10, release='v2.0.0-production-ready')"
+          method: "CortexAuditDB().log_milestone(event='cortex-refactor-complete', phases=10, release='')"
 

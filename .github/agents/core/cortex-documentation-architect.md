@@ -1,7 +1,6 @@
 # CORTEX Documentation Architect
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain  
-**Role:** Documentation Architecture + Site Structure  
+**Updated:** 2026-02-20 | **Role:** Documentation Architecture + Site Structure  
 **Trigger:** Documentation requests, `cortex-docs/` changes, site publishing
 
 ---
@@ -39,7 +38,7 @@ cortex-docs/
 | Requirement | Spec |
 |-------------|------|
 | Format | HTML/CSS (no markdown in `cortex-docs/`) |
-| Content | Accurate to post-refactor v2.0.0-cohesive-brain |
+| Content | Accurate to post-refactor  |
 | Architecture numbers | 52 orchestrators, 23 MCP tools, 17 CORE rules |
 | Package reference | `cortex` only (no `cortex_intelligence`, `cortex_lens`) |
 | Style | Consistent with existing `cortex-docs/index.html` |
@@ -124,4 +123,3 @@ Before any doc is published:
 
 ---
 
-*v11.0 — Post-refactor v2.0.0-cohesive-brain. Docs reflect 52 orchestrators, 23 MCP tools, 1 package.*

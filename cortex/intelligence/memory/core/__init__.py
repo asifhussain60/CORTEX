@@ -10,14 +10,11 @@ TIER 0 provides the foundational governance layer:
 This tier is the foundation for all higher tiers.
 """
 
-__version__ = '1.0.0'
-__author__ = 'Asif Hussain'
 __license__ = 'Proprietary'
 __description__ = 'TIER 0 - Governance, Audit, and Infrastructure'
 
 # Key TIER 0 components
 __all__ = [
-    '__version__',
     '__author__',
     '__license__',
     '__description__',

@@ -265,8 +265,6 @@ def check_domain_health() -> Dict[str, Any]:
 
 
 # Version and metadata
-__version__ = "1.0"
-__acceptance_criteria__ = "BD-002-01"
 __breaking_changes__ = False
 __backward_compatible__ = True
 __graceful_degradation__ = True

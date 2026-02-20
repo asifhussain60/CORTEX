@@ -88,4 +88,3 @@ __all__ = [
     "HealthMetrics",
 ]
 
-__version__ = "2.0.0"

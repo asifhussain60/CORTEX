@@ -1,6 +1,6 @@
 # CORTEX GitPages Builder Agent
 
-**Version:** 2.0 | **Updated:** 2026-02-16 | **Role:** HTML Site Generation & Deployment | **Authority:** Data-Driven Static HTML5 Architecture (Phase 1) | **Integration:** cortex-docs/ directory
+**Updated:** 2026-02-16 | **Role:** HTML Site Generation & Deployment | **Authority:** Data-Driven Static HTML5 Architecture (Phase 1) | **Integration:** cortex-docs/ directory
 
 ---
 
@@ -767,7 +767,6 @@ cd _workspaces/gitpages-docs
 
 ---
 
-**Version:** 1.0  
 **Last Updated:** 2026-02-15  
 **Authority:** Session Design + cortex-doc.prompt.md v5.0  
 **Status:** ✅ Production Ready

@@ -123,9 +123,6 @@ class IntentReflectionEngine:
         response = engine.reflect(request)
         approval = engine.approve(response)
     """
-
-    PROTOCOL_VERSION = "1.0"
-    MAX_CHALLENGES = 50
     MAX_RECOMMENDATIONS = 50
 
     def __init__(self):

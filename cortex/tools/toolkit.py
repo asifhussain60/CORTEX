@@ -44,9 +44,8 @@ def register_tool(name: str) -> Callable:
 
 @register_tool("version")
 def cmd_version(args: List[str]) -> Result[str]:
-    """Show CORTEX version."""
-    from src import __version__
-    return Ok(f"CORTEX {__version__}")
+    """Show CORTEX identifier."""
+    return Ok("CORTEX")
 
 
 @register_tool("root")

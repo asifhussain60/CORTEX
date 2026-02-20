@@ -1,6 +1,5 @@
 # CORTEX Debug Orchestrator Agent
 
-**Version:** 1.0  
 **Role:** Multi-Stack Debugging Specialist  
 **Authority:** Debug injection, capture, analysis, and cleanup
 

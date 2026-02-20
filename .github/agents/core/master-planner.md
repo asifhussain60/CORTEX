@@ -1,6 +1,6 @@
 # Master Planner Agent
 
-**Version:** 2.0 | **Updated:** 2026-02-14 | **Role:** Phase-Based Planning & Execution Orchestration | **Architecture:** ROI + Dependency Graph | **Status:** ACTIVE ✅
+**Updated:** 2026-02-14 | **Role:** Phase-Based Planning & Execution Orchestration | **Architecture:** ROI + Dependency Graph | **Status:** ACTIVE ✅
 
 ---
 

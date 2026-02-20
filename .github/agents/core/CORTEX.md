@@ -1,7 +1,6 @@
 # CORTEX Master Agent
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain  
-**Orchestrators:** 52 canonical | **MCP Tools:** 23 | **CORE Rules:** 17
+**Updated:** 2026-02-20 | **Orchestrators:** 52 canonical | **MCP Tools:** 23 | **CORE Rules:** 17
 
 ---
 
@@ -142,4 +141,3 @@
 
 ---
 
-*v11.0 — Post-refactor v2.0.0-cohesive-brain. 52 orchestrators, 23 MCP tools, 1 package.*

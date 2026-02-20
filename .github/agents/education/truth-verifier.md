@@ -1,5 +1,5 @@
 # Truth Verifier Agent
-**Version:** 1.0 | **Updated:** 2026-02-03 | **Role:** Implementation Truth Specialist | **Status:** ACTIVE
+**Updated:** 2026-02-03 | **Role:** Implementation Truth Specialist | **Status:** ACTIVE
 
 ---
 

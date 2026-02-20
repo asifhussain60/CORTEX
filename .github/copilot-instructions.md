@@ -1,8 +1,6 @@
 # CORTEX GitHub Copilot Instructions
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain
-
-## About CORTEX
+**Updated:** 2026-02-20 | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 

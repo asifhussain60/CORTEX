@@ -9,8 +9,6 @@ Unified intelligence package consolidating:
 Authority: Phase 3 - Package Consolidation
 """
 
-__version__ = '1.0.0'
-__author__ = 'CORTEX Team'
 __license__ = 'Proprietary'
 __description__ = 'Unified Intelligence and Analysis Layer'
 

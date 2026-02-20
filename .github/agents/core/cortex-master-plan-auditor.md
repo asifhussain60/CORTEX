@@ -1,7 +1,6 @@
 # CORTEX Master Plan Auditor
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain  
-**Role:** Master Plan Integrity Validation  
+**Updated:** 2026-02-20 | **Role:** Master Plan Integrity Validation  
 **Trigger:** Plan integrity checks, phase dependency validation
 
 ---
@@ -30,7 +29,7 @@
 
 ## Refactor Master Plan Status
 
-**Completed (v2.0.0-cohesive-brain tag):**
+**Completed :**
 
 | Phase | Description | Status |
 |-------|-------------|--------|
@@ -73,7 +72,7 @@
 # Check refactor master plan
 cat cortex-registry/planning/cortex-refactor-master.yaml | grep -A3 "status:"
 
-# Verify v2.0.0-cohesive-brain tag exists
+# Verify  tag exists
 git tag | grep v2.0.0
 
 # Check for zombie IN_PROGRESS phases
@@ -94,7 +93,7 @@ find cortex/mcp/tools -name "*.py" | grep -v "__init__\|test" | wc -l
 ### 📋 Master Plan Audit
 
 **Plan:** cortex-refactor-master.yaml
-**Current Phase:** Post-Phase 09 (v2.0.0-cohesive-brain)
+**Current Phase:** Post-Phase 09 ()
 
 #### Phase Integrity
 | Phase | Status | Verified | Issues |
@@ -145,4 +144,3 @@ actual_outcome: ""  # Fill on completion
 
 ---
 
-*v11.0 — Post-refactor v2.0.0-cohesive-brain. Validates master plan against 52 orchestrators, 23 MCP tools.*

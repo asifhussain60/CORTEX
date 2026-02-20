@@ -40,5 +40,3 @@ __all__ = [
     "KnowledgeQueryResult",
 ]
 
-__version__ = "1.0.0"
-__doc_module__ = __doc__

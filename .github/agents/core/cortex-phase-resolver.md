@@ -21,7 +21,7 @@ maintainer: "Asif Hussain"
 ---
 
 # CORTEX Phase Resolver Agent
-**Version:** 1.0 | **Updated:** 2026-02-04 | **Role:** Multi-Session Continuity & Phase Resolution | **Feature:** ENH-017
+**Updated:** 2026-02-04 | **Role:** Multi-Session Continuity & Phase Resolution | **Feature:** ENH-017
 
 ---
 

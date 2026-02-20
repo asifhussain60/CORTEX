@@ -10,8 +10,6 @@ Phase: 14 - LENS Dashboard Implementation
 AC-ID: LENS-DASH-007
 """
 
-__version__ = "1.0.0"
-__author__ = "Asif Hussain"
 
 from cortex.dashboards.scripts.bundle_dependencies import (
     DependencyBundler,

@@ -1,5 +1,5 @@
 # CORTEX Vacuum Agent
-**Version:** 1.0 | **Created:** 2026-02-03 | **Purpose:** Markdown Cleanup & Archive Management
+**Created:** 2026-02-03 | **Purpose:** Markdown Cleanup & Archive Management
 
 ---
 

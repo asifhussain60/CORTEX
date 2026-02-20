@@ -527,7 +527,7 @@ phase:
 
     - step: 18
       name: "Tag release"
-      command: "git tag -a v2.0.0-cohesive-brain -m 'CORTEX Cohesive Brain Refactor — single package, ~40 orchestrators, workflow templates, zero regression'"
+      command: "git tag -a  -m 'CORTEX Cohesive Brain Refactor — single package, ~40 orchestrators, workflow templates, zero regression'"
 
   # ============================================================================
   # ARCHIVE DELETION
@@ -544,7 +544,7 @@ phase:
       - step: 4
         action: "Commit: 'refactor: delete _archive/ — zero regression confirmed'"
       - step: 5
-        action: "Tag release: v2.0.0-cohesive-brain"
+        action: "Tag release: "
 
   # ============================================================================
   # POST-REFACTOR VALIDATION
@@ -614,7 +614,6 @@ phase:
     archive_deleted: true
     clean_clone_passes: true
     capability_manifest_100_percent: true
-    release_tagged: true
     sqlite_consolidated: true
     mcp_consolidated: true
     description: |
@@ -623,7 +622,7 @@ phase:
       2. ALL refactor passes FR1-FR8 complete
       3. _archive/ directory deleted
       4. Clean clone test passes
-      5. Release tagged v2.0.0-cohesive-brain
+      5. Release tagged 
       6. CORTEX operates as a single cohesive brain
       7. SQLite: 3 consolidated databases, zero scattered, zero raw connections
       8. MCP: ~20 consolidated tools, zero toolkit sprawl, zero capability loss
@@ -701,10 +700,10 @@ phase:
         on_fail: "Fix all P0 and P1 governance violations before proceeding"
 
       - id: "VL-09-C10"
-        name: "Release tag v2.0.0-cohesive-brain ready"
-        command: "git tag -l 'v2.0.0-cohesive-brain' | wc -l"
+        name: "Release tag  ready"
+        command: "git tag -l '' | wc -l"
         pass_condition: "output is 1"
-        on_fail: "Create release tag: git tag -a v2.0.0-cohesive-brain -m 'CORTEX 2.0 — Cohesive Brain'"
+        on_fail: "Create release tag: git tag -a  -m 'CORTEX 2.0 — Cohesive Brain'"
 
     loop_behavior:
       strategy: "conditional_retry"
@@ -734,7 +733,7 @@ phase:
         - action: "Move phase spec to completed/"
           command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-09-final-verification.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
         - action: "Git checkpoint"
-          command: "git add -A && git commit -m 'refactor(phase-09): COMPLETE — 100% verified, v2.0.0-cohesive-brain tagged, advancing to phase-10'"
+          command: "git add -A && git commit -m 'refactor(phase-09): COMPLETE — 100% verified,  tagged, advancing to phase-10'"
         - action: "Load and execute next phase"
           spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-10-production-readiness.yaml"
           orchestrator: "CortexMasterPlanOrchestrator"

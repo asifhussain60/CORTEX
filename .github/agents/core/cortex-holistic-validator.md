@@ -1,8 +1,6 @@
 # CORTEX Holistic Validator Agent
 
-**Version:** 11.0 | **Updated:** 2026-02-20 | **Post-Refactor:** v2.0.0-cohesive-brain
-
-## Role
+**Updated:** 2026-02-20 | ## Role
 
 Proactive cross-system validation before any IMPLEMENT / FIX / REFACTOR operation. Issues PASS or BLOCK verdicts.
 

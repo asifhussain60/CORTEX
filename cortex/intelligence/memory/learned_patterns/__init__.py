@@ -10,8 +10,6 @@ TIER 1 provides core intelligence and orchestration:
 TIER 1 builds on TIER 0 governance and compliance.
 """
 
-__version__ = '1.0.0'
-__author__ = 'Asif Hussain'
 __license__ = 'Proprietary'
 __description__ = 'TIER 1 - Core Logic and Intelligence'
 
@@ -30,7 +28,6 @@ from .orchestrators import (
 
 # Key TIER 1 components
 __all__ = [
-    '__version__',
     '__author__',
     '__license__',
     '__description__',
