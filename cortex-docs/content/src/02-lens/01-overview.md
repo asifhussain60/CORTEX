@@ -4,7 +4,7 @@
 title: LENS — Language Examination Navigation Synthesis
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-21
 source_of_truth: cortex/lens/
 order: 1
 ---
@@ -17,7 +17,7 @@ order: 1
 
 **L**anguage → **E**xamination → **N**avigation → **S**ynthesis
 
-LENS is CORTEX's code intelligence engine. It runs **8 specialized analyzers in parallel** against any codebase and produces a unified context — structured intelligence that feeds the Brain's Perception → Reasoning → Action pipeline.
+LENS is CORTEX's code intelligence engine. It runs **9 specialized analyzers in parallel** against any codebase and produces a unified context — structured intelligence that feeds the Brain's Perception → Reasoning → Action pipeline.
 
 **Live location:** `cortex/lens/` (analyzers, adapters, cache, models, schemas, discovery, extractors)
 
@@ -34,7 +34,7 @@ LENS is CORTEX's code intelligence engine. It runs **8 specialized analyzers in 
 
 ---
 
-## 8 Parallel Analyzers
+## 9 Parallel Analyzers
 
 | Analyzer | What It Detects | Output |
 |----------|----------------|--------|
@@ -46,8 +46,9 @@ LENS is CORTEX's code intelligence engine. It runs **8 specialized analyzers in 
 | **Pattern** | Architecture — framework signatures, design pattern usage | Pattern match list with confidence |
 | **Metrics** | Complexity — cyclomatic, coupling, LOC, maintainability | Metric dashboard |
 | **Domain** | Business context — industry, vertical, regulatory context | Domain classification |
+| **Tech Stack** | Framework detection — imports, config files, dependency manifests | Tech stack fingerprint, framework list |
 
-All 8 run **in parallel**. Combined latency: 300–800ms.
+All 9 run **in parallel**. Combined latency: 300–800ms.
 
 ---
 

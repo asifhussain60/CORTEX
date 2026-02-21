@@ -1,8 +1,21 @@
 """
 Knowledge Indexer - Index entities and relationships for fast retrieval.
+
+Extended in Phase 20 with index_registry_yaml() — loads entities directly from
+cortex-registry YAML files (profiles, repositories, domains) into the in-memory
+entity index so KGInference can reason over them.
+
+Authority: AC-P20-004, AC-P20-014
+Rule: CORE-011 (type hints), CORE-012 (docstrings)
 """
 
-from typing import Any, Dict, List
+import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import yaml
+
+logger = logging.getLogger(__name__)
 
 
 class KnowledgeIndexer:
@@ -68,3 +81,88 @@ class KnowledgeIndexer:
         """Batch add entities."""
         for entity in entities:
             self.add_entity(entity)
+
+    def index_registry_yaml(self, yaml_path: Path, entity_type: str) -> None:
+        """
+        Load entities from a cortex-registry YAML file into the entity index.
+
+        Reads *yaml_path* and extracts the canonical entity id from the
+        ``profile.id`` key (knowledge-base/profiles/) or ``repository.name``
+        key (knowledge-base/repositories/).  Entities already present in the
+        index are overwritten in-place (idempotent — AC-P20-014).
+
+        Missing or malformed files are logged and silently skipped (graceful
+        degradation — AC-P20-004c).
+
+        Args:
+            yaml_path: Absolute path to the YAML file to index.
+            entity_type: Semantic type label (e.g. ``"profile"``, ``"repo"``,
+                         ``"domain"``).  Stored on the entity as ``entity["type"]``.
+
+        Returns:
+            None — entities are added to :attr:`entity_index` in place.
+
+        Example::
+
+            indexer = KnowledgeIndexer()
+            indexer.index_registry_yaml(
+                Path("cortex-registry/knowledge-base/profiles/finops.yaml"),
+                entity_type="profile",
+            )
+            assert indexer.get_entity("finops-v1.0") is not None
+        """
+        if not yaml_path.exists():
+            logger.debug("index_registry_yaml: file not found — %s", yaml_path)
+            return
+
+        try:
+            raw: Any = yaml.safe_load(yaml_path.read_text(encoding="utf-8"))
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("index_registry_yaml: failed to parse %s — %s", yaml_path, exc)
+            return
+
+        if not isinstance(raw, dict):
+            logger.debug("index_registry_yaml: root is not a mapping — %s", yaml_path)
+            return
+
+        # ---- Extract entity id using known YAML layouts ----
+        entity_id: Optional[str] = None
+        entity_data: Dict[str, Any] = dict(raw)
+
+        # Layout 1: profile: {id: "...", ...}
+        profile_block = raw.get("profile") or {}
+        if isinstance(profile_block, dict) and profile_block.get("id"):
+            entity_id = str(profile_block["id"])
+            entity_data = {**profile_block, "raw_yaml": raw}
+
+        # Layout 2: repository: {name: "..."}
+        elif raw.get("repository", {}).get("name"):
+            entity_id = str(raw["repository"]["name"])
+            entity_data = {**raw.get("repository", {}), "raw_yaml": raw}
+
+        # Layout 3: fallback — use stem of filename
+        else:
+            entity_id = yaml_path.stem
+            entity_data = {**raw, "id": entity_id}
+
+        entity_data["id"] = entity_id
+        entity_data["type"] = entity_type
+        entity_data["source_file"] = str(yaml_path)
+
+        # Overwrite existing entry (idempotent — AC-P20-014)
+        self.entity_index[entity_id] = entity_data
+
+        # Rebuild full-text index entry for this entity
+        text_fields = [
+            str(entity_data.get("name", "")),
+            str(entity_data.get("description", "")),
+            entity_id,
+        ]
+        self.full_text_index[entity_id] = " ".join(text_fields).lower().split()
+
+        logger.debug(
+            "index_registry_yaml: indexed entity '%s' (type=%s) from %s",
+            entity_id,
+            entity_type,
+            yaml_path.name,
+        )

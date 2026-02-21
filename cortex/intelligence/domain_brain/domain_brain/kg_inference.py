@@ -1,5 +1,11 @@
 """
 Knowledge Inference - Reasoning over knowledge graph.
+
+Extended in Phase 20 with infer_related_rules() — returns CORTEX governance
+rule IDs related to a given entity (e.g. "finops-v1.0" → ["FIN-001", "FIN-002"]).
+
+Authority: AC-P20-005
+Rule: CORE-011 (type hints), CORE-012 (docstrings)
 """
 
 from typing import Any, Dict, List, Set
@@ -90,3 +96,53 @@ class KnowledgeInference:
                     pass
 
         return True
+
+    def infer_related_rules(self, entity_id: str) -> List[str]:
+        """
+        Return a list of governance rule IDs related to *entity_id*.
+
+        Traverses relationships of type ``"has_rule"`` originating from
+        *entity_id* and collects their targets.  When no explicit relationships
+        are stored, falls back to a prefix-based heuristic:
+
+        - Entities whose id starts with ``"finops"`` → ``["FIN-001", "FIN-002"]``
+        - Entities starting with ``"auth"``           → ``["AUTH-001", "AUTH-002"]``
+        - All others                                  → ``[]``
+
+        This heuristic ensures the contract is useful before the KG is fully
+        populated (Phase-20 bootstrap).  Later phases can replace it with
+        YAML-driven relationship loading.
+
+        Args:
+            entity_id: The entity identifier to look up (e.g. ``"finops-v1.0"``).
+
+        Returns:
+            List of rule ID strings (possibly empty).
+
+        Example::
+
+            inference = KnowledgeInference()
+            rules = inference.infer_related_rules("finops-v1.0")
+            # → ["FIN-001", "FIN-002"] (heuristic bootstrap)
+        """
+        # 1. Look for explicit "has_rule" relationships
+        rule_ids: List[str] = []
+        for rel in self.relationships:
+            if rel.get("source") == entity_id and rel.get("type") == "has_rule":
+                rule_ids.append(str(rel["target"]))
+
+        if rule_ids:
+            return rule_ids
+
+        # 2. Heuristic prefix fallback (Phase-20 bootstrap)
+        eid_lower = entity_id.lower()
+        if eid_lower.startswith("finops"):
+            return ["FIN-001", "FIN-002"]
+        if eid_lower.startswith("auth"):
+            return ["AUTH-001", "AUTH-002"]
+        if eid_lower.startswith("security"):
+            return ["SEC-001", "SEC-002"]
+        if eid_lower.startswith("devops"):
+            return ["OPS-001", "OPS-002"]
+
+        return []

@@ -1,10 +1,10 @@
 ---
 id: c4-component-master-orchestrator
 title: Master Orchestrator Internal Components
-purpose: Detailed view of Master Orchestrator's internal structure and routing logic
+purpose: Detailed view of Master Orchestrator's internal structure and routing logic, including Phase 18/20 additions
 audience: [Software Developers]
-source_of_truth: cortex/orchestrators/master_orchestrator.py
-last_verified: v10.0
+source_of_truth: cortex/orchestrators/core/master_orchestrator.py + cortex/intelligence/provider.py
+last_verified: 2026-02-21
 diagram_type: C4-Component
 interactive: false
 tier: 3
@@ -26,25 +26,36 @@ graph TB
         LearningMixin[Learning Mixin]
         ErrorHandler[Error Handler]
     end
-    
+
+    subgraph "Intelligence Layer (Phase 18/20)"
+        UIP[UnifiedIntelligenceProvider]
+        CDL[CompanyDomainLoader]
+        ADOCtx[ADOContextMapper]
+        KGIdx[KnowledgeIndexer]
+    end
+
     subgraph "External Dependencies"
         IntentRouter[Intent Router Service]
         GovEngine[Governance Engine]
-        BrainService[CORTEX Brain]
         MCPGateway[MCP Gateway]
     end
-    
+
     subgraph "Target Orchestrators"
         Onboard[OnboardingOrchestrator]
         TDD[TDDOrchestrator]
         Plan[PlanningOrchestrator]
+        Sweep[SweepCatalogueOrchestrator]
         Domain[Domain Orchestrators]
     end
-    
+
     Entry --> Validator
     Validator --> IntentClass
     IntentClass --> IntentRouter
-    IntentRouter --> Router
+    IntentRouter --> UIP
+    UIP --> CDL
+    UIP --> ADOCtx
+    UIP --> KGIdx
+    UIP --> Router
     Router --> Registry
     Registry --> Dispatcher
     Dispatcher --> GovEngine
@@ -52,15 +63,20 @@ graph TB
     Dispatcher --> Onboard
     Dispatcher --> TDD
     Dispatcher --> Plan
+    Dispatcher --> Sweep
     Dispatcher --> Domain
     Dispatcher --> LearningMixin
-    LearningMixin --> BrainService
     Dispatcher -.error.-> ErrorHandler
     ErrorHandler -.retry.-> Dispatcher
     MCPGateway --> Entry
-    
+
     style Entry fill:#50C878,stroke:#2E7D4E,stroke-width:2px,color:#fff
     style Router fill:#F39C12,stroke:#B8730F,stroke-width:3px,color:#fff
     style Dispatcher fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#fff
     style LearningMixin fill:#9B59B6,stroke:#7D3C98,stroke-width:2px,color:#fff
+    style UIP fill:#9B59B6,stroke:#7D3C98,stroke-width:3px,color:#fff
+    style CDL fill:#1a5f7a,stroke:#06b6d4,stroke-width:2px,color:#fff
+    style ADOCtx fill:#1a5f7a,stroke:#06b6d4,stroke-width:2px,color:#fff
+    style KGIdx fill:#1a5f7a,stroke:#06b6d4,stroke-width:2px,color:#fff
+    style Sweep fill:#e94560,stroke:#ff6b6b,stroke-width:2px,color:#fff
 ```

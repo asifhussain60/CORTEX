@@ -45,9 +45,9 @@ There are 35 CORE rules defined in `cortex-registry/core/tier0-skull/skull-rules
 | **CORE-048** | Holistic Validation | Validation gate before IMPLEMENT/FIX/REFACTOR |
 | **CORE-049** | Silent Execution | Progress bars only, no verbose chatter |
 
-### Extended Rules (CORE-058 through CORE-063)
+### Extended Rules (CORE-058 through CORE-064)
 
-Added during Phase 02 (Governance Alignment) and wired via ExtendedGovernanceAgent in Phase 11:
+Added during Phase 02 (Governance Alignment) through Phase 16 (Sweep Completeness) and wired via ExtendedGovernanceAgent in Phase 11:
 
 | Rule | Name | Purpose |
 |------|------|---------|
@@ -56,6 +56,7 @@ Added during Phase 02 (Governance Alignment) and wired via ExtendedGovernanceAge
 | **CORE-060** | SDLC Brain | SDLC governance enforcement |
 | **CORE-062** | Plan-First | Plan before execution for complex operations |
 | **CORE-063** | Challenge-First | Challenge gate for high-risk changes |
+| **CORE-064** | Sweep Completeness Contract | Every FIX/REFACTOR/AUDIT must exhaust its full issue catalogue — no partial sweeps. `SweepCatalogueOrchestrator` persists an open catalogue to `.cortex-runtime/sweeps/` so session restarts cannot silently abandon outstanding items. |
 
 ---
 
@@ -123,7 +124,7 @@ The trail is immutable and Git-versioned where applicable.
 
 ## Practical Examples
 
-**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to 22 CORE rules enforced automatically on every commit, 7 enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
+**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to 22 CORE rules enforced automatically on every commit, 8 enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
 
 **Product Owner:** "Last week a developer tried to commit a utility function without tests. CORE-008 blocked the commit automatically. The developer wrote the test, it passed, and the commit went through — all in 10 minutes."
 
@@ -131,4 +132,18 @@ The trail is immutable and Git-versioned where applicable.
 
 ---
 
-*All rule IDs and agent names verified against live governance registry · 20 February 2026*
+## SweepCatalogueOrchestrator (CORE-064)
+
+`cortex/orchestrators/support/sweep_catalogue_orchestrator.py` implements the Sweep Completeness Contract. When a FIX/REFACTOR/AUDIT sweep begins, it:
+
+1. **Opens** a named catalogue in `.cortex-runtime/sweeps/{sweep_id}.db`
+2. **Records** every issue found as a catalogue entry (pending/resolved states)
+3. **Persists** across session boundaries — restarting VS Code does not lose open items
+4. **Asserts** completion before the sweep can be closed — zero pending items required
+5. **Guards** `VacuumOrchestrator` from deleting open `.db` catalogue files
+
+**MCP tool:** `cortex_sweep_status` — query open sweeps, remaining items, and resolution rate.
+
+---
+
+*All rule IDs and agent names verified against live governance registry · 21 February 2026*

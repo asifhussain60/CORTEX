@@ -1,8 +1,19 @@
 analysis: &id001
-  architecture_type: unknown
-  patterns_detected: []
+  architecture_type: hexagonal
+  patterns_detected:
+    - hexagonal-architecture
+    - domain-driven-design
+    - event-driven-orchestration
+    - ports-and-adapters
+    - tdd-first
   repository_path: /Users/asifhussain/PROJECTS/CORTEX
   status: success
+  analysis_updated_at: "2026-02-21T00:00:00Z"
+  analysis_notes: >
+    Updated by Phase 19 registry expansion. CORTEX follows Hexagonal Architecture
+    (IOrchestrator as ports, concrete orchestrators as driving adapters,
+    ADOWorkItemProvider as driven adapter). Domain-Driven Design is applied via
+    3-tier orchestrator bounded contexts (core / domain / support).
 metadata:
   brain_enhancement:
     detected_patterns: []

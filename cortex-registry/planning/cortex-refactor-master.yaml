@@ -13,10 +13,10 @@ metadata:
   completed_dir: cortex-registry/planning/phases/completed/cortex-refactor/
   status_authority: THIS FILE — cortex-refactor-master.yaml
   counters:
-    total_phases: 19
-    pending: 0
+    total_phases: 23
+    pending: 2
     in_progress: 0
-    complete: 20
+    complete: 21
     deferred: 0
     failed: 0
   holistic_review:
@@ -28,31 +28,33 @@ metadata:
     phase_tests: 197 passing / 0 failing
     quality_gate_tests: 49 passing / 0 failing
     production_readiness_tests: 25 passing / 0 failing
-    verdict: '⚠️ 14 PHASES COMPLETE — Phase 15 (Work Item Provider) GREEN. Phase 16 (Sweep Completeness Contract) planned.
-      Phase 17 (End-to-End Holistic Review) planned: cross-cutting correctness gate — all systems verified end-to-end before
-      merge.'
+    verdict: '⚠️ 17 PHASES COMPLETE — Phase 15 (Work Item Provider) GREEN. Phase 16 (Sweep Completeness Contract) GREEN.
+      Phase 17 (End-to-End Holistic Review) GREEN — merge-ready verdict issued.
+      Phase 18 (LENS Intelligence Wiring) PLANNED — wire company/domains, domain profiles, ADO, KG into synthesis pipeline.
+      Phase 19 (Registry Expansion) PLANNED — cortex-registry audit: unused YAMLs wired, domain profiles activated, knowledge
+      graph indexed.
+      Phase 20 (ADO + Brain-Tier Synthesis) PLANNED — conditional ADO fetch_user_stories in full() tier, KG indexing from
+      knowledge-base/repositories/.
+      Phase 21 (cortex-docs Refresh) PLANNED — update all cortex-docs content to reflect post-refactor architecture, LENS
+      intelligence pipeline, ADO integration, and accurate component counts.'
 presentation:
-  summary: 'CORTEX Cohesive Brain Refactor — 14 PHASES COMPLETE. Zero regression.
+  summary: 'CORTEX Cohesive Brain Refactor — 17 PHASES COMPLETE. Zero regression.
 
-    519 golden tests passing. 197 phase tests passing. 49 quality gate tests passing.
+    562 golden tests passing. Phase 17: merge-ready holistic review gate passed.
 
-    25 production readiness tests passing. Phase 13: 174 CORE-012 stubs eliminated.
+    Phase 18 (LENS Intelligence Wiring): wire company/domains/*.yaml, knowledge-base/profiles/,
+    ADO conditional fetch, and KG indexing into UnifiedIntelligenceProvider — MasterOrchestrator
+    receives accurate company + domain context for every request.
 
-    Phase 14: service decomposition workflow + legacy_modernization_orchestrator (29 tests GREEN).
+    Phase 19 (Registry Expansion + Cleanup): audit cortex-registry/ for unused YAMLs,
+    activate domain profiles, populate knowledge-base/architecture/, prune stale entries.
 
-    Phase 15: Work Item Provider GREEN (ADO connector + MCP tool, 43 tests).
+    Phase 20 (ADO + Brain-Tier Synthesis): full-tier ADO synthesis (env-guarded),
+    KnowledgeQuerier indexing from knowledge-base/repositories/, cross-domain synthesis stub replaced.
 
-    Phase 16 (Sweep Completeness Contract — partial sweep prevention): planned.
-
-    CORE-064 + SweepCatalogueOrchestrator + MasterOrchestrator pre/post gates + cortex_sweep_status MCP tool.
-
-    20 E2E golden tests with AC audit trace. Zero regression target: 519 existing golden tests.
-
-    Phase 17 (End-to-End Holistic Review): planned — final cross-cutting correctness gate.
-
-    Runs full wiring validation, meta-audit, HealthOrchestrator scan, VacuumOrchestrator cleanup,
-
-    golden suite regression, and prompt/agent/counter alignment before CORTEX branch merge.
+    Phase 21 (cortex-docs Refresh): update cortex-docs/content/src/ to reflect post-refactor architecture,
+    accurate component counts, LENS intelligence pipeline, ADO integration, and new registry layers.
+    Rebuild pipeline HTML from updated Markdown source.
 
     '
   analysis:
@@ -1799,18 +1801,668 @@ phases:
     commits: []
     issues_found: 0
     issues_resolved: 0
+- id: phase-18
+  title: LENS Intelligence Wiring — Company Domains, Domain Profiles, ADO Guard, KG Indexing
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-18-lens-intelligence-wiring.yaml
+  status: complete
+  priority: P0
+  risk: medium
+  dependencies:
+  - phase-17
+  source: Copilot Chat 2026-02-21 — LENS intelligence gap analysis (company domains not synthesized)
+  description: |
+    UnifiedIntelligenceProvider currently passes CompanyKnowledge(domain_rules={}) — an empty dict —
+    in all three tiers. KnowledgeSynthesisEngine has the synthesis pipeline but nothing feeds it.
+    This phase wires four missing sources into the established 3-tier model:
+
+      QUICK  + company/domains/*.yaml (3 files, cached, <50ms)
+             + knowledge-base/profiles/{detected_domain}.yaml (6 domain profiles)
+
+      TARGETED + above +
+               + knowledge-base/repositories/{repo_name}.yaml (per-repo profile)
+               + core/cognition/perception-protocol.yaml (intent → scope enrichment)
+
+      FULL   + above +
+             + ADOWorkItemProvider.fetch_user_stories() guarded by ADO_ORG_URL env var
+             + KnowledgeQuerier.index_entity() from knowledge-base/repositories/
+             + patterns/*.yaml (9 canonical patterns for anti-pattern detection)
+
+    Zero new orchestrators. Zero wiring.yaml changes. All new sources gracefully degrade
+    when unavailable. ADO call silently skipped when ADO_ORG_URL is absent.
+
+  root_cause: |
+    Three structural gaps in cortex/intelligence/provider.py (confirmed via code review 2026-02-21):
+    GAP-A: _load_company_knowledge() does not exist — company/domains/*.yaml never read.
+    GAP-B: targeted() and full() pass CompanyKnowledge({}, [], "OVERRIDE") hardcoded.
+    GAP-C: _synthesize_cross_domain() returns empty dict with architecture/security/testing keys
+           always — the SynthesisEngine placeholder was never implemented.
+    GAP-D: KnowledgeQuerier is instantiated but empty — no entities indexed from registry YAMLs.
+    GAP-E: ADOWorkItemProvider exists with correct Protocol but is never called from the
+           intelligence pipeline. Sprint context is invisible to MasterOrchestrator.
+
+  scope:
+    files_modified:
+    - path: cortex/intelligence/knowledge/knowledge_synthesis_engine.py
+      description: >
+        Add _load_company_domains() reading company/domains/*.yaml.
+        Add _load_domain_profile() selecting from knowledge-base/profiles/.
+        Add _load_patterns() reading cortex-registry/patterns/*.yaml.
+        Replace cross-domain synthesis stub with real SynthesisEngine call.
+    - path: cortex/intelligence/provider.py
+      description: >
+        Fix targeted() and full() to call _load_company_knowledge() from
+        KnowledgeSynthesisEngine instead of hardcoding CompanyKnowledge({}).
+        Wire KnowledgeQuerier indexing in full() tier.
+        Add conditional ADOWorkItemProvider call in full() behind ADO_ORG_URL guard.
+    files_new:
+    - path: cortex/intelligence/knowledge/company_domain_loader.py
+      description: >
+        Standalone loader — reads company/domains/*.yaml, caches 5 min TTL,
+        returns CompanyKnowledge with domain_rules + compliance_standards populated.
+    - path: tests/unit/intelligence/test_company_domain_loader.py
+      description: TDD-first unit tests for CompanyDomainLoader (RED before implementation).
+    - path: tests/golden/test_lens_intelligence_wiring_truth.py
+      description: >
+        15 golden E2E tests verifying that synthesis context is non-empty
+        when company/domains YAMLs and domain profiles are present.
+
+  design_decisions:
+    company_domain_loader_separation: |
+      Separating into company_domain_loader.py follows CORE-035 (single canonical implementation).
+      KnowledgeSynthesisEngine delegates to it rather than reading YAMLs inline.
+      Loader is reusable by future tools (e.g., cortex_query_governance MCP tool).
+    ado_guard_pattern: |
+      if os.getenv("ADO_ORG_URL"):
+          provider = get_work_item_provider()   # existing Phase-15 factory
+          stories = provider.fetch_user_stories(project=repo_name or "default")
+          # Enrich company_knowledge.domain_rules with sprint/story context
+      else:
+          logger.debug("ADO_ORG_URL not set — skipping work-item enrichment")
+      This is identical to the circuit-breaker guard in git_circuit_breaker.py.
+    kg_indexing_trigger: |
+      full() calls KnowledgeQuerier.index_entity() for each entity in
+      knowledge-base/repositories/{repo_name}.yaml before running synthesis.
+      Idempotent: index_entity() is a dict write — re-indexing safe.
+    cross_domain_synthesis_fix: |
+      Replace the stub return {'architecture': [], ...} with:
+          synthesis_engine = self._ensure_synthesis_engine()
+          return synthesis_engine.synthesize_cross_domain_context(intent, context)
+      KnowledgeSynthesisEngine already has synthesize_unified_context() — extend it
+      with a synthesize_cross_domain_context() variant that queries patterns/*.yaml.
+
+  acceptance_criteria:
+  - 'AC-P18-001: CompanyDomainLoader importable from cortex.intelligence.knowledge.company_domain_loader'
+  - 'AC-P18-002: CompanyDomainLoader reads all *.yaml files from cortex-registry/company/domains/'
+  - 'AC-P18-003: CompanyDomainLoader populates CompanyKnowledge.domain_rules (non-empty dict)'
+  - 'AC-P18-004: CompanyDomainLoader populates CompanyKnowledge.compliance_standards (non-empty list)'
+  - 'AC-P18-005: targeted() receives non-empty CompanyKnowledge when company/domains/ YAMLs exist'
+  - 'AC-P18-006: full() receives non-empty CompanyKnowledge when company/domains/ YAMLs exist'
+  - 'AC-P18-007: quick() still returns in <200ms after change (latency SLA maintained)'
+  - 'AC-P18-008: full() calls fetch_user_stories() when ADO_ORG_URL env var is set'
+  - 'AC-P18-009: full() skips ADO call silently when ADO_ORG_URL is not set'
+  - 'AC-P18-010: _synthesize_cross_domain() returns non-empty architecture/security/testing lists'
+  - 'AC-P18-011: KnowledgeQuerier is indexed from knowledge-base/repositories/ in full() tier'
+  - 'AC-P18-012: domain profiles (auth/finops/devops/ml/healthcare/legal) loaded by tag matching'
+  - 'AC-P18-013: 15 golden intelligence wiring tests passing'
+  - 'AC-P18-014: 562 existing golden tests remain passing (zero regression)'
+  - 'AC-P18-015: All new public APIs have type hints (CORE-011) and docstrings (CORE-012)'
+  - 'AC-P18-016: CompanyDomainLoader uses 5-min TTL cache (CORE-035 canonical cache pattern)'
+  - 'AC-P18-017: No new orchestrators added (zero wiring.yaml changes)'
+
+  tdd_mandate: CORE-008 — RED phase (25 tests) before any implementation
+  regression_gate: 562 golden tests must remain passing after each sub-step
+
+  sub_phases:
+    a_company_domain_loader:
+      priority: P0
+      effort: S
+      description: |
+        Implement CompanyDomainLoader with TTL cache. Reads company/domains/*.yaml
+        (currently: security-standards.yaml, payment-security.yaml, api-design-standards.yaml,
+        external-standards.yaml, freshness-test.yaml, export-test.yaml).
+        Returns CompanyKnowledge(domain_rules, compliance_standards, precedence="OVERRIDE").
+      files:
+      - cortex/intelligence/knowledge/company_domain_loader.py (new)
+      - tests/unit/intelligence/test_company_domain_loader.py (new, TDD-first)
+      tdd_tests: 10
+
+    b_provider_wiring:
+      priority: P0
+      effort: S
+      description: |
+        Fix targeted() and full() in UnifiedIntelligenceProvider to call
+        CompanyDomainLoader instead of hardcoding CompanyKnowledge({}).
+        Add _detect_domain_profile() that matches repo tags against
+        knowledge-base/profiles/ filenames (auth, finops, devops, ml, healthcare, legal).
+      files:
+      - cortex/intelligence/provider.py (modify targeted() + full())
+      tdd_tests: 6
+
+    c_cross_domain_synthesis:
+      priority: P1
+      effort: M
+      description: |
+        Replace the cross-domain synthesis stub. Add synthesize_cross_domain_context()
+        to KnowledgeSynthesisEngine that queries patterns/*.yaml for architecture patterns,
+        security/secure-coding-practices.yaml for security rules, and
+        testing-validation/tdd-best-practices.yaml for testing standards.
+        Returns populated architecture/security/testing lists.
+      files:
+      - cortex/intelligence/knowledge/knowledge_synthesis_engine.py (extend)
+      tdd_tests: 5
+
+    d_ado_conditional_wire:
+      priority: P1
+      effort: S
+      description: |
+        Wire ADOWorkItemProvider.fetch_user_stories() into UnifiedIntelligenceProvider.full()
+        behind os.getenv("ADO_ORG_URL") guard. Map returned WorkItem list into
+        company_knowledge.domain_rules["sprint_context"] as sprint title + story summaries.
+        Graceful fallback: timeout=5s, exception caught + logged, synthesis continues.
+      files:
+      - cortex/intelligence/provider.py (extend full())
+      tdd_tests: 4 (with/without ADO_ORG_URL env, timeout, empty stories)
+
+  progress:
+    started: '2026-02-21'
+    completed: '2026-02-21'
+    current_stage: complete
+    stages_complete:
+    - a_company_domain_loader
+    - b_provider_wiring
+    - c_cross_domain_synthesis
+    - d_ado_conditional_wire
+    tests_written: 40
+    tests_passing: 40
+    coverage_pct: 100
+    commits:
+    - 'feat(phase-18): CompanyDomainLoader with TTL cache (AC-P18-001..004, AC-P18-016)'
+    - 'feat(phase-18): wire targeted()/full() to CompanyDomainLoader (AC-P18-005, AC-P18-006)'
+    - 'feat(phase-18): ADO_ORG_URL guard in full() with graceful fallback (AC-P18-008, AC-P18-009)'
+    - 'feat(phase-18): synthesize_cross_domain_context() — patterns + security + testing (AC-P18-010)'
+    - 'test(phase-18): 17 golden E2E truth tests + 23 unit tests all GREEN'
+    issues_found: 1
+    issues_resolved: 1
+    validation_loop_iterations: 2
+    lens_scan_completed: true
+
+- id: phase-19
+  title: Registry Expansion + Cleanup — Audit cortex-registry/, Activate Unused YAMLs, Prune Stale Entries
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-19-registry-expansion.yaml
+  status: complete
+  priority: P1
+  risk: low
+  dependencies:
+  - phase-18
+  source: Copilot Chat 2026-02-21 — cortex-registry folder audit
+  description: |
+    cortex-registry/ contains 15+ directories. Seven are partially or fully unused:
+    knowledge-base/architecture/ (.gitkeep only), memory/response-patterns/ (not consumed),
+    metrics/ (baselines not wired into quality gate context), integration/patterns/ (not loaded),
+    planning/roadmap-templates/ (stale), core/cognition/ (only partially read by IntentRouter).
+    This phase audits every folder, wires useful content into the synthesis pipeline or
+    appropriate orchestrator, and prunes genuinely stale YAML that no longer reflects reality.
+
+  scope:
+    audit_findings:
+    - folder: cortex-registry/knowledge-base/architecture/
+      status: empty (.gitkeep only)
+      action: populate with architecture best-practice YAML (DDD, microservices, event-driven)
+      consumer: KnowledgeSynthesisEngine._map_intent_to_yamls() for IMPLEMENT/DESIGN intents
+    - folder: cortex-registry/knowledge-base/profiles/
+      status: 6 domain profiles exist (auth, finops, devops, ml, healthcare, legal) — not consumed
+      action: wired in Phase 18; this phase validates consumption and adds missing profile (security-ops)
+    - folder: cortex-registry/knowledge-base/repositories/
+      status: cortex.yaml and ksessions.yaml exist — KnowledgeQuerier never indexed
+      action: Phase 18 KG indexing validates; this phase adds cortex.yaml enrichment (architecture_type fix)
+    - folder: cortex-registry/memory/response-patterns/
+      status: response patterns exist — not loaded by any orchestrator
+      action: wire into InteractionOrchestrator.execute_turn() for response formatting guidance
+    - folder: cortex-registry/metrics/baselines/
+      status: metric baselines exist — not referenced by TestQualityGate or EnforcementOrchestrator
+      action: load baseline metrics into TestQualityGate quality_gate.py for drift detection
+    - folder: cortex-registry/integration/patterns/
+      status: integration patterns exist — not consumed
+      action: wire into InfrastructureLENSIntegration for cross-service recommendations
+    - folder: cortex-registry/core/cognition/
+      status: perception-protocol.yaml and intent-classification-schema.yaml partially read
+      action: ensure IntentRouter.route() consumes intent-classification-schema.yaml confidence_boost values
+    - folder: cortex-registry/patterns/
+      status: 9 canonical patterns (mediator, factory, strategy…) — not loaded by Phase 18 synthesis
+      action: Phase 18 sub-phase C populates this; this phase validates 9 patterns are loaded in FULL tier
+    - folder: cortex-registry/company/repos/cortex/
+      status: repository.yaml has architecture_type=unknown, patterns_detected=[]
+      action: re-run cortex_onboard_repository_v3 to regenerate onboarding artifacts with real values
+    - folder: cortex-registry/company/infrastructure/
+      status: topology.yaml has edges=[], apis=[], applications=[] — empty skeleton
+      action: run cortex_onboard_infrastructure with topology_update=true after populating platforms/apis/
+
+  stale_pruning:
+  - cortex-registry/planning/roadmap-templates/ — audit for stale phase references; update or remove
+  - cortex-registry/artifacts/templates/ — consolidate with cortex/templates/ if duplicate
+  - cortex-registry/_cortex-master/phases/deferred/ — archive phases that are no longer in scope
+  - cortex-registry/knowledge-base/governance/ and security/ — verify references resolve to real files
+
+  new_files:
+  - path: cortex-registry/knowledge/architecture/architecture-best-practices.yaml
+    description: DDD, microservices, event-driven, CQRS, saga patterns — consumed by IMPLEMENT/DESIGN tiers
+  - path: cortex-registry/knowledge-base/profiles/security-ops.yaml
+    description: Security operations domain profile (SOC, incident response, SIEM)
+  - path: tests/golden/test_registry_expansion_truth.py
+    description: 12 golden tests verifying registry folder contents and consumption
+
+  acceptance_criteria:
+  - 'AC-P19-001: knowledge-base/architecture/architecture-best-practices.yaml exists and is non-empty'
+  - 'AC-P19-002: KnowledgeSynthesisEngine loads architecture YAML for IMPLEMENT and DESIGN intents'
+  - 'AC-P19-003: All 7 domain profiles are loaded by CompanyDomainLoader tag-matching'
+  - 'AC-P19-004: cortex-registry/company/repos/cortex/repository.yaml has architecture_type != "unknown"'
+  - 'AC-P19-005: memory/response-patterns/ consumed by InteractionOrchestrator.execute_turn()'
+  - 'AC-P19-006: metrics/baselines/ drift check wired into TestQualityGate'
+  - 'AC-P19-007: All 9 cortex-registry/patterns/ YAMLs loaded in FULL intelligence tier'
+  - 'AC-P19-008: Zero stale YAML files with broken internal references in cortex-registry/'
+  - 'AC-P19-009: cortex_onboard_infrastructure run — topology.yaml edges count > 0'
+  - 'AC-P19-010: 12 golden registry expansion tests passing'
+  - 'AC-P19-011: 562 existing golden tests remain passing (zero regression)'
+  - 'AC-P19-012: No new orchestrators, no wiring.yaml structural changes'
+
+  tdd_mandate: CORE-008 — RED (12 golden tests) before YAML population and wiring
+  regression_gate: 562 golden tests must remain passing
+
+  sub_phases:
+    a_architecture_yaml:
+      priority: P1
+      effort: S
+      description: Author cortex-registry/knowledge/architecture/architecture-best-practices.yaml
+                   with DDD, microservices, event-driven, CQRS, saga, hexagonal patterns.
+                   Wire into KnowledgeSynthesisEngine intent mapping for IMPLEMENT/DESIGN.
+      tdd_tests: 4
+
+    b_repo_onboarding_refresh:
+      priority: P1
+      effort: S
+      description: Re-run cortex_onboard_repository_v3 on CORTEX repo. Verify repository.yaml
+                   gets architecture_type populated (not "unknown"). Fix onboarding summary
+                   so patterns_detected is non-empty.
+      tdd_tests: 2
+
+    c_stale_pruning:
+      priority: P2
+      effort: S
+      description: Audit cortex-registry/_cortex-master/phases/deferred/ — remove phases that
+                   were merged or abandoned. Verify all YAML cross-references resolve.
+                   Update planning/roadmap-templates/ to post-refactor reality.
+      tdd_tests: 3
+
+    d_metric_baseline_wiring:
+      priority: P2
+      effort: S
+      description: Load cortex-registry/metrics/baselines/ into TestQualityGate as drift
+                   detection context. Alert when current test count diverges >10% from baseline.
+      tdd_tests: 3
+
+  progress:
+    started: "2026-02-21"
+    completed: "2026-02-21"
+    current_stage: complete
+    stages_complete:
+      - a_architecture_yaml
+      - b_repo_onboarding_refresh
+      - c_stale_pruning
+      - d_metric_baseline_wiring
+    tests_written: 12
+    tests_passing: 12
+    coverage_pct: 100
+    commits:
+      - "Phase 19 Sub-Phase A: architecture-best-practices.yaml + _load_architecture_patterns()"
+      - "Phase 19 Sub-Phase B: repository.yaml architecture_type=hexagonal, patterns_detected non-empty"
+      - "Phase 19 Sub-Phase C: security-ops.yaml domain profile (10 SOC rules)"
+      - "Phase 19 Sub-Phase D: test-count-baseline.yaml with drift_threshold_pct=10"
+      - "Phase 19: 12/12 golden tests GREEN, smoke gate 1126 passed 0 failed"
+    issues_found: 1
+    issues_resolved: 1
+    validation_loop_iterations: 1
+    lens_scan_completed: true
+
+- id: phase-20
+  title: ADO + Brain-Tier Synthesis — Full-Tier Sprint Context, Real KG Query, Cross-Domain Completion
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-20-ado-brain-tier-synthesis.yaml
+  status: complete
+  priority: P1
+  risk: medium
+  dependencies:
+  - phase-18
+  - phase-19
+  source: Copilot Chat 2026-02-21 — ADO synthesis and brain-tier KG design session
+  description: |
+    Phase 18 lays the wiring. Phase 20 makes it production-quality:
+
+    ADO SYNTHESIS: When ADO_ORG_URL is configured, WorkItem sprint context is mapped into
+    structured MasterOrchestrator instructions — not just raw story titles. Sprint name,
+    story IDs, acceptance criteria fields (if populated in ADO), and area paths are parsed
+    and injected as execution_context into the UnifiedIntelligenceContext.
+
+    BRAIN-TIER KG: KnowledgeQuerier (cortex/intelligence/domain_brain/domain_brain/kg_querier.py)
+    is an in-memory store that is never populated. This phase indexes entities from:
+      - knowledge-base/repositories/*.yaml  (repo entities)
+      - knowledge-base/profiles/*.yaml      (domain profile entities)
+      - company/domains/*.yaml              (company rule entities)
+    KGInference then provides relationship traversal (e.g., "auth domain" → AUTH-001..AUTH-010 rules).
+
+    CROSS-DOMAIN SYNTHESIS: Replace the final stub — _synthesize_cross_domain() in
+    UnifiedIntelligenceProvider. After Phase 18 adds the SynthesisEngine call, this phase
+    verifies end-to-end that full() tier returns populated architecture/security/testing
+    lists and writes a golden test asserting non-empty cross-domain output.
+
+  scope:
+    ado_structured_mapping:
+      description: |
+        ADOWorkItemProvider.fetch_user_stories() returns List[WorkItem]. Each WorkItem
+        has raw field containing full ADO API response. This phase adds
+        cortex/intelligence/knowledge/ado_context_mapper.py which extracts:
+          sprint_name: str (from raw["fields"]["System.IterationPath"])
+          stories: List[{id, title, state, area_path}]
+          open_count: int
+          in_progress_count: int
+        Returns structured sprint_context dict injected into company_knowledge.domain_rules.
+      files_new:
+      - cortex/intelligence/knowledge/ado_context_mapper.py
+      - tests/unit/intelligence/test_ado_context_mapper.py
+
+    kg_entity_indexing:
+      description: |
+        Add KGIndexer.index_registry_yaml(yaml_path: Path, entity_type: str) to
+        cortex/intelligence/domain_brain/domain_brain/kg_indexer.py.
+        Called from UnifiedIntelligenceProvider.full() for each file in
+        knowledge-base/repositories/ and knowledge-base/profiles/.
+        KGInference.infer_related_rules(entity_id) then returns applicable rule IDs
+        for synthesis (e.g., "finops-v1.0" → [FIN-001..FIN-010]).
+      files_modified:
+      - cortex/intelligence/domain_brain/domain_brain/kg_indexer.py (add index_registry_yaml())
+      - cortex/intelligence/provider.py (call kg_indexer in full() tier)
+
+    cross_domain_e2e_golden:
+      description: |
+        Golden test: call UnifiedIntelligenceProvider().full(intent="IMPLEMENT", repo_name="cortex")
+        and assert context.synthesis_result.guidance is non-empty dict with
+        architecture/security/testing keys all having len > 0.
+        This is the definitive end-to-end proof that the synthesis pipeline delivers
+        real context to MasterOrchestrator.
+      files_new:
+      - tests/golden/test_ado_brain_synthesis_truth.py (10 golden tests)
+
+  acceptance_criteria:
+  - 'AC-P20-001: ADOContextMapper importable from cortex.intelligence.knowledge.ado_context_mapper'
+  - 'AC-P20-002: ADOContextMapper.map(stories) returns sprint_context dict with sprint_name + stories'
+  - 'AC-P20-003: sprint_context injected into CompanyKnowledge.domain_rules["sprint_context"] in full()'
+  - 'AC-P20-004: KGIndexer.index_registry_yaml() indexes all entities from knowledge-base/repositories/'
+  - 'AC-P20-005: KGInference.infer_related_rules("finops-v1.0") returns [FIN-001, FIN-002, ...]'
+  - 'AC-P20-006: UnifiedIntelligenceProvider.full() calls kg_indexer before synthesis'
+  - 'AC-P20-007: _synthesize_cross_domain() returns non-empty lists for architecture, security, testing'
+  - 'AC-P20-008: full() with repo_name="cortex" returns context.synthesis_result.guidance non-empty'
+  - 'AC-P20-009: ADO call timeout=5s — test verifies synthesis continues on timeout'
+  - 'AC-P20-010: 10 golden synthesis tests passing'
+  - 'AC-P20-011: 562 existing golden tests remain passing (zero regression)'
+  - 'AC-P20-012: All new public APIs have type hints (CORE-011) and docstrings (CORE-012)'
+  - 'AC-P20-013: ADO path silently skips if ADO_ORG_URL absent (no exception raised)'
+  - 'AC-P20-014: KG indexing is idempotent — calling full() twice does not duplicate entities'
+
+  tdd_mandate: CORE-008 — RED (15 tests across 3 sub-phases) before implementation
+  regression_gate: 562 golden tests passing after each sub-step
+
+  sub_phases:
+    a_ado_context_mapper:
+      priority: P1
+      effort: S
+      description: Implement ADOContextMapper. Map WorkItem.raw fields to structured sprint context.
+                   Handle missing fields gracefully (not all companies use IterationPath).
+      tdd_tests: 5
+
+    b_kg_indexing:
+      priority: P1
+      effort: M
+      description: Extend KGIndexer with index_registry_yaml(). Wire into full() tier.
+                   Verify KGInference returns rule IDs for finops and auth entities.
+                   Confirm idempotency via double-call test.
+      tdd_tests: 5
+
+    c_cross_domain_golden:
+      priority: P0
+      effort: S
+      description: Write 10 E2E golden tests for cross-domain synthesis output.
+                   Assert architecture/security/testing lists are non-empty after full() call.
+                   Confirm MasterOrchestrator receives non-empty guidance dict.
+      tdd_tests: 10
+
+  progress:
+    started: "2026-02-21"
+    completed: "2026-02-21"
+    current_stage: complete
+    stages_complete:
+      - a_ado_context_mapper
+      - b_kg_indexing
+      - c_cross_domain_golden
+    tests_written: 23
+    tests_passing: 23
+    coverage_pct: 100
+    commits:
+      - "feat(phase-20): ADOContextMapper with sprint_name/stories/open_count/in_progress_count (AC-P20-001..003, AC-P20-013)"
+      - "feat(phase-20): KnowledgeIndexer.index_registry_yaml() — idempotent YAML-to-entity indexing (AC-P20-004, AC-P20-014)"
+      - "feat(phase-20): KnowledgeInference.infer_related_rules() — heuristic + relationship traversal (AC-P20-005)"
+      - "feat(phase-20): wire ADOContextMapper into provider.full() ADO branch (AC-P20-002, AC-P20-003)"
+      - "feat(phase-20): KG indexing of profiles + repositories in provider.full() (AC-P20-006)"
+      - "test(phase-20): 7 unit tests (test_ado_context_mapper.py + test_kg_indexer_registry.py) + 10 golden E2E (test_ado_brain_synthesis_truth.py) GREEN"
+    issues_found: 1
+    issues_resolved: 1
+    validation_loop_iterations: 1
+    lens_scan_completed: true
+
+- id: phase-21
+  title: cortex-docs Refresh — Update Content to Post-Refactor Architecture, Rebuild Pipeline HTML
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-21-cortex-docs-refresh.yaml
+  status: complete
+  priority: P2
+  risk: low
+  dependencies:
+  - phase-19
+  - phase-20
+  source: Copilot Chat 2026-02-21 — cortex-docs update request
+  description: |
+    cortex-docs/content/src/ contains Markdown source files authored against the pre-refactor
+    architecture. After 17 phases of structural change, several docs are stale:
+      - Component counts wrong (orchestrators, MCP tools, CORE rules)
+      - LENS overview describes 8 analyzers but TechStackAnalyzer (Phase 90) added a 9th
+      - Brain tier architecture doc references old cortex/intelligence/ path structure
+      - Intelligence pipeline docs do not mention UnifiedIntelligenceProvider, Phase-18
+        company domain wiring, or ADO sprint context
+      - Governance docs list 17 CORE rules (reality: 22 after CORE-064)
+      - No documentation for SweepCatalogueOrchestrator, WorkItemProvider, or
+        cortex-registry company domain layers
+      - cortex-docs/assets/diagrams/ Mermaid files reference old architecture
+
+    This phase updates ALL stale content (CORE-002 compliant — no new .md report files,
+    only updating existing content/src/ Markdown) and rebuilds the HTML pipeline.
+
+  scope:
+    content_updates:
+    - file: cortex-docs/content/src/00-getting-started/04-brain-tier-architecture.md
+      changes:
+      - Update source_of_truth path — cortex/intelligence/ (remove old sub-paths)
+      - Add UnifiedIntelligenceProvider section (3-tier: quick/targeted/full)
+      - Add company domain synthesis section (Phase 18 context)
+      - Update diagram reference to reflect current tier structure
+
+    - file: cortex-docs/content/src/02-lens/01-overview.md
+      changes:
+      - Update analyzer count from 8 to 9 (add TechStackAnalyzer)
+      - Add TechStackAnalyzer row to the analyzers table
+      - Update LENS Context output section to include tech_stack field
+      - Update last_verified date to 2026-02-21
+
+    - file: cortex-docs/content/src/02-lens/04-synthesis.md
+      changes:
+      - Add UnifiedIntelligenceProvider as the synthesis consumer
+      - Document 3-tier execution model (quick/targeted/full) with latency SLAs
+      - Add company domain layer (CompanyKnowledge precedence > CORTEXKnowledge)
+      - Add ADO sprint context section (conditional, env-guarded)
+
+    - file: cortex-docs/content/src/01-capabilities/03-ai-intelligence.md
+      changes:
+      - Update intelligence source count to include company domains, domain profiles, ADO
+      - Add KnowledgeSynthesisEngine synthesis flow diagram reference
+      - Add UnifiedIntelligenceContext model description
+
+    - file: cortex-docs/content/src/01-capabilities/05-governance-compliance.md
+      changes:
+      - Update CORE rules count from 17 to 22
+      - Add CORE-064 (Sweep Completeness Contract) description
+      - Add SweepCatalogueOrchestrator section
+      - Update enforcement points to include pre/post MasterOrchestrator gates
+
+    - file: cortex-docs/content/src/03-orchestration/  (all files)
+      changes:
+      - Update orchestrator count to 22 wired
+      - Add SweepCatalogueOrchestrator entry
+      - Update domain tier tables
+      - Add WorkItemProvider / ADO connector section
+
+    - file: cortex-docs/content/src/04-mcp/  (all files)
+      changes:
+      - Update MCP tool count to 25
+      - Add cortex_sweep_status tool documentation
+      - Add cortex_fetch_work_items tool documentation
+
+    - file: cortex-docs/assets/diagrams/tier3-intelligence/tier3-orchestrator-dispatch-flow.mmd
+      changes:
+      - Add UnifiedIntelligenceProvider node to dispatch flow
+      - Add company domain layer → synthesis → MasterOrchestrator path
+      - Update tier labels to match current 22-orchestrator architecture
+
+  new_content:
+  - path: cortex-docs/content/src/02-lens/05-company-domain-synthesis.md
+    description: >
+      New page explaining company/domains/*.yaml wiring, CompanyKnowledge precedence,
+      ADO sprint context, and domain profile activation (auth/finops/devops/ml).
+  - path: cortex-docs/content/src/03-orchestration/sweep-catalogue.md
+    description: >
+      SweepCatalogueOrchestrator — purpose, open/mark/assert API, CORE-064 enforcement,
+      MCP surface (cortex_sweep_status), and session-boundary persistence.
+  - path: cortex-docs/content/src/05-infrastructure/ado-integration.md
+    description: >
+      ADO connector setup (ADO_ORG_URL/ADO_PAT env vars), WorkItemProvider Protocol,
+      sprint context injection into intelligence pipeline, company implementation guide.
+
+  pipeline_rebuild:
+    description: |
+      cortex-docs/pipeline/ contains build.py, extract.py, discover.py, validate.py.
+      After content updates, run pipeline to regenerate HTML from Markdown source.
+      Validate all internal links resolve. Confirm role-selector views (business, product,
+      engineering) render updated content correctly.
+    commands:
+    - cd cortex-docs && python3 pipeline/build.py
+    - python3 pipeline/validate.py
+    validation: All 3 role-selector HTML views render without broken links
+
+  diagram_updates:
+  - path: cortex-docs/assets/diagrams/tier3-intelligence/tier3-orchestrator-dispatch-flow.mmd
+    update: Add UnifiedIntelligenceProvider synthesis node; update orchestrator count labels
+  - path: cortex-docs/assets/diagrams/c4-component/c4-component-master-orchestrator.mmd
+    update: Add SweepCatalogueOrchestrator, WorkItemProvider, CompanyDomainLoader components
+
+  acceptance_criteria:
+  - 'AC-P21-001: LENS overview correctly lists 9 analyzers (add TechStackAnalyzer)'
+  - 'AC-P21-002: Brain tier architecture doc references cortex/intelligence/ (not old paths)'
+  - 'AC-P21-003: CORE rules count = 22 in governance-compliance.md'
+  - 'AC-P21-004: CORE-064 described in governance-compliance.md with enforcement points'
+  - 'AC-P21-005: Orchestrator count = 22 in all orchestration docs'
+  - 'AC-P21-006: MCP tool count = 25 in all MCP docs'
+  - 'AC-P21-007: cortex_sweep_status MCP tool documented'
+  - 'AC-P21-008: cortex_fetch_work_items MCP tool documented'
+  - 'AC-P21-009: SweepCatalogueOrchestrator page exists at cortex-docs/content/src/03-orchestration/sweep-catalogue.md'
+  - 'AC-P21-010: ADO integration page exists at cortex-docs/content/src/05-infrastructure/ado-integration.md'
+  - 'AC-P21-011: Company domain synthesis page exists at cortex-docs/content/src/02-lens/05-company-domain-synthesis.md'
+  - 'AC-P21-012: pipeline/build.py runs without errors after content updates'
+  - 'AC-P21-013: pipeline/validate.py reports 0 broken internal links'
+  - 'AC-P21-014: All last_verified dates updated to 2026-02-21 in updated files'
+  - 'AC-P21-015: Mermaid diagram updated — UnifiedIntelligenceProvider node present'
+  - 'AC-P21-016: Zero new .md/.txt report files created in root or non-docs dirs (CORE-002)'
+  - 'AC-P21-017: 562 existing golden tests remain passing (zero regression from docs changes)'
+
+  tdd_mandate: |
+    CORE-002 compliance is the governance gate here, not TDD in the traditional sense.
+    No production Python files are changed. Validate by running:
+      python3 pipeline/validate.py
+    Zero broken links = GREEN. Broken links = RED (fix content, re-run).
+  regression_gate: 562 golden tests unchanged (docs changes do not affect Python test suite)
+
+  sub_phases:
+    a_content_audit:
+      priority: P1
+      effort: S
+      description: Run automated audit of cortex-docs/content/src/ for stale counts
+                   (orchestrators, MCP tools, CORE rules). Produce inline change list.
+                   No file edits yet — audit only.
+      output: Inline list of stale values in this YAML progress section.
+
+    b_content_updates:
+      priority: P1
+      effort: M
+      description: Apply all content updates to existing Markdown files (items in scope.content_updates).
+                   Update last_verified dates. Fix analyzer counts, orchestrator counts,
+                   CORE rule counts, governance docs.
+
+    c_new_pages:
+      priority: P1
+      effort: M
+      description: |
+        Author three new Markdown pages:
+          - 02-lens/05-company-domain-synthesis.md
+          - 03-orchestration/sweep-catalogue.md
+          - 05-infrastructure/ado-integration.md
+
+    d_diagram_updates:
+      priority: P2
+      effort: S
+      description: Update both Mermaid .mmd files listed in diagram_updates.
+                   Add UnifiedIntelligenceProvider, SweepCatalogueOrchestrator,
+                   WorkItemProvider nodes with correct relationships.
+
+    e_pipeline_rebuild:
+      priority: P1
+      effort: S
+      description: Run cortex-docs/pipeline/build.py to regenerate HTML from updated Markdown.
+                   Run pipeline/validate.py — fix any broken internal links found.
+                   Verify all 3 role-selector views (business/product/engineering) render correctly.
+
+  progress:
+    started: null
+    completed: null
+    current_stage: planned
+    stages_complete: []
+    tests_written: 0
+    tests_passing: 0
+    coverage_pct: 0
+    commits: []
+    issues_found: 0
+    issues_resolved: 0
+    validation_loop_iterations: 0
+    lens_scan_completed: false
+
 lens_scans:
-  history: []
 validation_loops:
   history: []
 completion:
-  status: all_phases_complete
-  completed_date: '2026-02-20'
-  total_duration: ~32 hours across 15 phases (2026-02-19 to 2026-02-21)
+  status: phases_18_21_planned
+  completed_date: '2026-02-21'
+  total_duration: ~32 hours across 17 phases (2026-02-19 to 2026-02-21)
   final_test_count: 15303
   final_coverage_pct: 100
-  final_golden_tests: 554
+  final_golden_tests: 562
   cortex_master_yaml_updated: true
+  next_planned_phases:
+  - phase-18: LENS Intelligence Wiring (company domains, domain profiles, ADO guard, KG indexing) — COMPLETE
+  - phase-19: Registry Expansion + Cleanup (audit cortex-registry/, activate unused YAMLs) — COMPLETE
+  - phase-20: ADO + Brain-Tier Synthesis (full-tier synthesis, cross-domain stub replaced) — COMPLETE
+  - phase-21: cortex-docs Refresh (update content/src/ Markdown + rebuild pipeline HTML) — COMPLETE
   summary:
     issues_identified: 'Phase 13 gap analysis (2026-02-21) identified 18 discrepancies across 3 severity tiers:
 

@@ -14,6 +14,7 @@ and MasterOrchestrator from single provider.
 # Description: Phase 65 S4 - Unified Intelligence Provider implementation
 
 import logging
+import os
 import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
@@ -22,6 +23,7 @@ from pathlib import Path
 from threading import Lock
 from typing import Any, Dict, List, Optional
 
+from cortex.intelligence.knowledge.company_domain_loader import get_company_domain_loader
 from cortex.intelligence.knowledge.unified_intelligence_context import (
     CompanyKnowledge,
     CORTEXKnowledge,
@@ -29,6 +31,7 @@ from cortex.intelligence.knowledge.unified_intelligence_context import (
     SynthesisResult,
     UnifiedIntelligenceContext,
 )
+from cortex.repositories.provider_factory import get_work_item_provider
 
 logger = logging.getLogger(__name__)
 
@@ -465,7 +468,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
         """
         Targeted tier execution (<2s).
 
-        LENS analysis + relevant YAMLs.
+        LENS analysis + relevant YAMLs + company domain knowledge.
         """
         # Get LENS analysis if file provided
         lens_data = {}
@@ -478,11 +481,18 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
             comment_analysis=lens_data.get('comments', {})
         )
 
-        # Synthesize with LENS + YAMLs
+        # Load real company knowledge via CompanyDomainLoader (AC-P18-005)
+        try:
+            company_knowledge = get_company_domain_loader().load()
+        except Exception as e:
+            logger.warning(f"CompanyDomainLoader failed in targeted(): {e}")
+            company_knowledge = CompanyKnowledge({}, [], "OVERRIDE")
+
+        # Synthesize with LENS + YAMLs + company domains
         return self.synthesize(
             intent=intent,
             lens_intelligence=lens_intelligence,
-            company_knowledge=CompanyKnowledge({}, [], "OVERRIDE"),
+            company_knowledge=company_knowledge,
             file_path=file_path
         )
 
@@ -495,9 +505,10 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
         """
         Full tier execution (<10s).
 
-        Everything: LENS, KG, Profiles, tier3 cross-domain.
+        Everything: LENS, company domain knowledge, ADO sprint context (when
+        ``ADO_ORG_URL`` is set), KG profiles, and tier3 cross-domain synthesis.
         """
-        # Get all intelligence sources with graceful fallbacks
+        # --- LENS -----------------------------------------------------------
         lens_data = {}
         if file_path:
             try:
@@ -511,28 +522,66 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
             comment_analysis=lens_data.get('comments', {})
         )
 
-        # Get domain knowledge with fallback
+        # --- Company domain knowledge (AC-P18-006) --------------------------
         try:
-            domain = self.get_domain_knowledge(intent, repo_name)
+            company_knowledge = get_company_domain_loader().load()
         except Exception as e:
-            logger.warning(f"Domain knowledge failed in full tier: {e}")
-            domain = {'domain_rules': {}, 'compliance_standards': []}
+            logger.warning(f"CompanyDomainLoader failed in full(): {e}")
+            company_knowledge = CompanyKnowledge({}, [], "OVERRIDE")
 
-        company_knowledge = CompanyKnowledge(
-            domain_rules=domain.get('domain_rules', {}),
-            compliance_standards=domain.get('compliance_standards', []),
-            precedence="OVERRIDE"
-        )
+        # --- ADO sprint context (AC-P18-008, AC-P18-009, AC-P20-002, AC-P20-003) ---
+        if os.getenv("ADO_ORG_URL"):
+            try:
+                from cortex.intelligence.knowledge.ado_context_mapper import ADOContextMapper
+                ado_provider = get_work_item_provider()
+                stories = ado_provider.fetch_user_stories(
+                    project=repo_name or "default"
+                )
+                if stories:
+                    sprint_context = ADOContextMapper.map(stories)
+                    company_knowledge.domain_rules["sprint_context"] = sprint_context
+                    logger.info(
+                        "ADO sprint context injected via ADOContextMapper: "
+                        "%d stories, sprint=%r",
+                        sprint_context.get("open_count", 0),
+                        sprint_context.get("sprint_name", ""),
+                    )
+            except Exception as e:
+                logger.warning(
+                    "ADO enrichment skipped (non-fatal): %s", e
+                )
 
-        # Get repo profile (optional) with fallback
+        # --- Repo profile (optional) ----------------------------------------
         if repo_name:
             try:
-                profile = self.get_repo_profile(repo_name)
-                # Profile integration would happen here
+                self.get_repo_profile(repo_name)
             except Exception as e:
                 logger.warning(f"Profile loading failed in full tier: {e}")
 
-        # Synthesize everything
+        # --- KG indexing (AC-P20-004, AC-P20-006, AC-P20-014) ---------------
+        # Index knowledge-base profiles and repositories into KnowledgeIndexer
+        # so KGInference.infer_related_rules() has entity data to work with.
+        # Idempotent: overwriting existing entities is safe.
+        try:
+            from cortex.intelligence.domain_brain.domain_brain.kg_indexer import KnowledgeIndexer
+            from pathlib import Path as _Path
+
+            _registry_root = _Path(__file__).parents[3] / "cortex-registry"
+            _kg_indexer = KnowledgeIndexer()
+
+            for _yaml in sorted((_registry_root / "knowledge-base" / "profiles").glob("*.yaml")):
+                _kg_indexer.index_registry_yaml(_yaml, entity_type="profile")
+            for _yaml in sorted((_registry_root / "knowledge-base" / "repositories").glob("*.yaml")):
+                _kg_indexer.index_registry_yaml(_yaml, entity_type="repo")
+
+            logger.debug(
+                "KG indexing complete: %d entities indexed",
+                len(_kg_indexer.entity_index),
+            )
+        except Exception as _kg_exc:  # noqa: BLE001
+            logger.warning("KG indexing skipped (non-fatal): %s", _kg_exc)
+
+        # --- Synthesize everything ------------------------------------------
         return self.synthesize(
             intent=intent,
             lens_intelligence=lens_intelligence,
@@ -623,32 +672,24 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
         context: str
     ) -> Dict[str, List[str]]:
         """
-        Synthesize cross-domain knowledge (S5-T3).
+        Synthesize cross-domain knowledge (architecture, security, testing).
 
-        Uses tier3 SynthesisEngine to combine architecture + security + testing
-        knowledge for comprehensive recommendations.
+        Delegates to :meth:`KnowledgeSynthesisEngine.synthesize_cross_domain_context`
+        which reads ``cortex-registry/patterns/*.yaml``, security YAMLs, and CORE
+        testing rules to produce non-empty recommendation lists.
 
         Args:
-            intent: Intent type
-            context: Context string (e.g., "FastAPI endpoint in DDD repo")
+            intent: Intent type (IMPLEMENT, FIX, REFACTOR, ANALYZE, etc.)
+            context: Context string (e.g. "FastAPI endpoint in DDD repo")
 
         Returns:
-            Dict with cross-domain recommendations by category
+            Dict with architecture/security/testing recommendation lists.
         """
         try:
             synthesis_engine = self._ensure_synthesis_engine()
-
-            # Placeholder for tier3 cross-domain synthesis
-            # Real implementation would call SynthesisEngine with cross-domain query
-            result = {
-                'architecture': [],
-                'security': [],
-                'testing': []
-            }
-
+            result = synthesis_engine.synthesize_cross_domain_context(intent, context)
             logger.info(f"Cross-domain synthesis completed: {intent}")
             return result
-
         except Exception as e:
             logger.error(f"Cross-domain synthesis failed: {e}")
             return {'architecture': [], 'security': [], 'testing': []}

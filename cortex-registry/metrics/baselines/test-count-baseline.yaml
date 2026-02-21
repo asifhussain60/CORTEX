@@ -1,0 +1,56 @@
+# Test Count Baseline
+# Authority: Phase 19 Sub-Phase D — Metrics Baselines
+# Consumer: CI drift-detection gate, KnowledgeSynthesisEngine metrics queries
+# Updated: 2026-02-21
+
+# Top-level fields expected by CI drift-detection gate
+test_count: 1126
+drift_threshold_pct: 10
+
+metadata:
+  version: "1.0"
+  created_at: "2026-02-21T00:00:00Z"
+  updated_at: "2026-02-21T00:00:00Z"
+  description: >
+    Canonical test-count baseline recorded after Phase 18 completion (smoke gate
+    pass: 1,126 collected, 305 skipped). Used by the CI drift-detection gate to
+    block merges that would reduce the test suite beyond the allowed threshold.
+  recorded_by: "Phase 19 registry expansion (manual capture post Phase-18 smoke)"
+
+baseline:
+  # Smoke-gate collected count (Phase 18 post-completion)
+  test_count: 1126
+  # Skipped tests at time of recording (not counted toward drift)
+  skipped_count: 305
+  # Golden tests (tests/golden/) count at recording time
+  golden_count: 562
+  # Phase tests (tests/golden/ phase-* files) count
+  phase_test_count: 177
+  # Recorded ISO timestamp
+  recorded_at: "2026-02-21"
+  # Pytest mode used to collect the count
+  collection_mode: "smoke"
+  # Run script command used
+  collection_command: "python3 scripts/run_tests.py smoke"
+
+drift_policy:
+  # Alert if total collected tests drop by more than this percentage
+  drift_threshold_pct: 10
+  # Absolute floor — never allow fewer than this many collected tests
+  minimum_test_count: 900
+  # Golden tests must never decrease (any reduction is a hard failure)
+  golden_floor: 500
+  # Enforcement action on breach
+  enforcement: block_merge
+  enforcement_notes: >
+    CI must re-run 'python3 scripts/run_tests.py smoke' and compare
+    collected count against test_count. If (baseline - actual) / baseline > 0.10,
+    the merge is blocked and a drift report is posted to the PR.
+
+history:
+  - snapshot_date: "2026-02-21"
+    test_count: 1126
+    skipped_count: 305
+    golden_count: 562
+    phase: "post-phase-18"
+    notes: "Initial baseline captured after Phase 18 completion"

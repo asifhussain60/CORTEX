@@ -4,8 +4,8 @@
 title: CORTEX Brain — 3-Tier Intelligence Architecture
 type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-20
-source_of_truth: cortex/intelligence/perception/ + cortex/intelligence/reasoning/ + cortex/intelligence/action/
+last_verified: 2026-02-21
+source_of_truth: cortex/intelligence/provider.py + cortex/intelligence/knowledge/
 order: 4
 ---
 
@@ -191,26 +191,48 @@ The Action tier (`cortex/intelligence/action/`) builds an `ExecutionPlan`:
 ## How the Tiers Connect
 
 ```
-[LENS 8-Analyzer Output]
+[LENS 9-Analyzer Output]
         │
         ▼
-[Perception] ── pattern matches + confidence scores
+[UnifiedIntelligenceProvider]  ← cortex/intelligence/provider.py
+     quick() / targeted() / full()
+        │
+        ├── company/domains/*.yaml (CompanyDomainLoader, 5-min TTL)
+        ├── knowledge-base/profiles/{domain}.yaml (tag-matched)
+        ├── ADO sprint context (ADO_ORG_URL guard, ADOContextMapper)
+        └── KG entity indexing (KnowledgeIndexer, idempotent)
         │
         ▼
-[Reasoning] ── strategy selection + success ranking
+[KnowledgeSynthesisEngine.synthesize_unified_context()]
+        │
+        ├── architecture patterns (cortex-registry/patterns/*.yaml)
+        ├── security rules (knowledge-base/security/)
+        └── testing standards (CORE-008, CORE-064)
         │
         ▼
-[Action] ── execution plan + TDD gates + rollback
+[UnifiedIntelligenceContext] → MasterOrchestrator
         │
         ▼
 [Orchestrator Execution] ── RED → GREEN → REFACTOR
         │
         ▼
-[Governance Validation] ── 7 agents check compliance
+[Governance Validation] ── 22 CORE rules, EnforcementOrchestrator
         │
         ▼
 [Learning Update] ── success rates updated for next time
 ```
+
+## UnifiedIntelligenceProvider — The Intelligence Hub
+
+`cortex/intelligence/provider.py` is the canonical entry point post-Phase-18. It replaces the old three-package split (`cortex_intelligence/`, `cortex_lens/`, `cortex.brain/` — all dissolved).
+
+| Tier | Method | Latency | Company Knowledge |
+|------|--------|---------|------------------|
+| Quick | `provider.quick(intent)` | <200ms | ✅ (cached) |
+| Targeted | `provider.targeted(intent, file_path)` | <2s | ✅ + domain profile |
+| Full | `provider.full(intent, repo_name)` | <10s | ✅ + ADO + KG |
+
+Company domain rules take **precedence over all CORTEX defaults** (`CompanyKnowledge.precedence = "OVERRIDE"`). This means your `cortex-registry/company/domains/*.yaml` files are the highest-authority knowledge source in the entire pipeline.
 
 ---
 
@@ -225,4 +247,4 @@ This feedback loop means CORTEX improves with every project it touches. The `cor
 
 ---
 
-*All module paths verified against live codebase · 20 February 2026*
+*All module paths verified against live codebase · 21 February 2026*

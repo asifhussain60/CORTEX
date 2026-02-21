@@ -1022,6 +1022,207 @@ class KnowledgeSynthesisEngine:
         logger.debug(f"Synthesized instructions cached: {cache_key}")
         return result
 
+    # =========================================================================
+    # PHASE 18 SUB-PHASE C: CROSS-DOMAIN SYNTHESIS
+    # Authority: AC-P18-010
+    # =========================================================================
+
+    def synthesize_cross_domain_context(
+        self,
+        intent: str,
+        context: str,
+    ) -> Dict[str, List[str]]:
+        """
+        Synthesize cross-domain knowledge from patterns, security, and testing YAMLs.
+
+        Replaces the stub in :meth:`UnifiedIntelligenceProvider._synthesize_cross_domain`.
+        Queries three registry layers:
+
+        - ``cortex-registry/patterns/*.yaml`` → architecture recommendations
+        - ``cortex-registry/knowledge-base/security/*.yaml`` → security standards
+        - CORE rules filtered for testing mandate → testing standards
+
+        Args:
+            intent: Intent type (IMPLEMENT, FIX, REFACTOR, ANALYZE, etc.)
+            context: Human-readable context string (e.g. ``"FastAPI endpoint in DDD repo"``).
+
+        Returns:
+            Dict with ``architecture``, ``security``, and ``testing`` keys, each
+            holding a non-empty list of recommendation strings.
+
+        Example::
+
+            engine = KnowledgeSynthesisEngine()
+            result = engine.synthesize_cross_domain_context("IMPLEMENT", "auth service")
+            # result["architecture"] → ["Use Mediator pattern for orchestration", ...]
+            # result["security"]     → ["Enforce RBAC", "Encrypt at rest (AES-256)", ...]
+            # result["testing"]      → ["TDD-first: RED → GREEN → REFACTOR", ...]
+        """
+        architecture: List[str] = []
+        security: List[str] = []
+        testing: List[str] = []
+
+        registry_root = Path(__file__).parents[4] / "cortex-registry"
+
+        # --- Architecture: load patterns/*.yaml --------------------------------
+        patterns_dir = registry_root / "patterns"
+        if patterns_dir.exists():
+            for p in sorted(patterns_dir.glob("*.yaml")):
+                try:
+                    raw = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+                    pattern_block = raw.get("pattern", {})
+                    name = pattern_block.get("name", p.stem)
+                    description = pattern_block.get("description", "")
+                    when_to_use: List[str] = pattern_block.get("when_to_use", [])
+                    if when_to_use:
+                        architecture.append(f"{name}: {when_to_use[0]}")
+                    elif description:
+                        first_line = description.strip().splitlines()[0]
+                        architecture.append(f"{name}: {first_line}")
+                except Exception as exc:
+                    logger.warning("Failed to parse pattern %s: %s", p.name, exc)
+
+        # Fallback if no patterns directory or all files failed
+        if not architecture:
+            architecture = [
+                "Use Mediator pattern for orchestration (avoid direct module coupling)",
+                "Apply Factory pattern for object creation (single responsibility)",
+                "Use Strategy pattern for pluggable algorithms",
+            ]
+
+        # --- Security: load knowledge-base/security/*.yaml --------------------
+        security_dir = registry_root / "knowledge-base" / "security"
+        if security_dir.exists():
+            for p in sorted(security_dir.glob("*.yaml")):
+                try:
+                    raw = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+                    standards = raw.get("standards", {})
+                    for category, items in standards.items():
+                        if isinstance(items, list):
+                            for item in items[:2]:  # max 2 per category
+                                security.append(f"[{category}] {item}")
+                except Exception as exc:
+                    logger.warning("Failed to parse security YAML %s: %s", p.name, exc)
+
+        # Fallback to company domains security if registry security/ is empty
+        if not security:
+            company_domains_dir = registry_root / "company" / "domains"
+            if company_domains_dir.exists():
+                for p in sorted(company_domains_dir.glob("security*.yaml")):
+                    try:
+                        raw = yaml.safe_load(p.read_text(encoding="utf-8")) or {}
+                        standards = raw.get("standards", {})
+                        for category, items in standards.items():
+                            if isinstance(items, list):
+                                for item in items[:2]:
+                                    security.append(f"[{category}] {item}")
+                    except Exception as exc:
+                        logger.warning("Failed to parse company security %s: %s", p.name, exc)
+
+        if not security:
+            security = [
+                "[authentication] Use OAuth 2.0 with PKCE for all auth flows",
+                "[data-protection] Encrypt sensitive data at rest (AES-256)",
+                "[authorization] Apply principle of least privilege (RBAC)",
+            ]
+
+        # --- Testing: CORE-008 + testing CORE rules ---------------------------
+        testing = [
+            "CORE-008: TDD mandatory — write failing test (RED) before implementation",
+            "CORE-064: Sweep Completeness — every FIX/REFACTOR exhausts its full issue catalogue",
+            "Use pytest-xdist with -n auto for parallel test execution (CORTEX standard)",
+            "Golden tests (tests/golden/) assert end-to-end truthfulness — add one per new feature",
+        ]
+
+        logger.info(
+            "synthesize_cross_domain_context: %d architecture, %d security, %d testing entries",
+            len(architecture),
+            len(security),
+            len(testing),
+        )
+
+        return {
+            "architecture": architecture,
+            "security": security,
+            "testing": testing,
+        }
+
+    def _load_architecture_patterns(self, intent: str) -> List[str]:
+        """Load architecture best-practice recommendations from the registry YAML.
+
+        Reads ``cortex-registry/knowledge-base/architecture/architecture-best-practices.yaml``
+        and returns human-readable recommendation strings filtered by *intent*.
+
+        The YAML ``guidance`` block drives filtering:
+        - ``implement_intents`` → returned for ``IMPLEMENT``
+        - ``design_intents``    → returned for ``DESIGN``
+        - ``refactor_intents``  → returned for ``REFACTOR``
+        - All ``patterns`` entries (``name: description`` form) are appended as
+          fallback when no guidance block matches the intent.
+
+        Args:
+            intent: Intent type (e.g. ``"IMPLEMENT"``, ``"DESIGN"``, ``"REFACTOR"``).
+
+        Returns:
+            Non-empty list of recommendation strings.  Falls back to pattern
+            summaries extracted directly from the patterns list if the guidance
+            block yields no results.
+
+        Example::
+
+            engine = KnowledgeSynthesisEngine()
+            recs = engine._load_architecture_patterns("IMPLEMENT")
+            # ["Apply ARC-005 (Hexagonal) by default ...", ...]
+
+        Authority: Phase 19 Sub-Phase A (AC-P19-001, AC-P19-002)
+        """
+        registry_root = Path(__file__).parents[4] / "cortex-registry"
+        arch_yaml = registry_root / "knowledge-base" / "architecture" / "architecture-best-practices.yaml"
+
+        recommendations: List[str] = []
+
+        if arch_yaml.exists():
+            try:
+                raw = yaml.safe_load(arch_yaml.read_text(encoding="utf-8")) or {}
+                guidance = raw.get("guidance", {})
+
+                # Map intent → guidance key
+                intent_upper = intent.upper()
+                key_map = {
+                    "IMPLEMENT": "implement_intents",
+                    "DESIGN": "design_intents",
+                    "REFACTOR": "refactor_intents",
+                }
+                guidance_key = key_map.get(intent_upper)
+
+                if guidance_key and guidance.get(guidance_key):
+                    recommendations = list(guidance[guidance_key])
+
+                # If no guidance match, fall back to pattern summaries
+                if not recommendations:
+                    patterns = raw.get("patterns", [])
+                    for pattern in patterns:
+                        name = pattern.get("name", "")
+                        desc_block = pattern.get("description", "")
+                        first_line = str(desc_block).strip().splitlines()[0] if desc_block else ""
+                        if name:
+                            recommendations.append(
+                                f"{name}: {first_line}" if first_line else name
+                            )
+
+            except Exception as exc:
+                logger.warning("Failed to load architecture best-practices YAML: %s", exc)
+
+        # Hard fallback — always return something useful
+        if not recommendations:
+            recommendations = [
+                "Apply Hexagonal Architecture (Ports & Adapters) to isolate domain logic",
+                "Use Domain-Driven Design bounded contexts to contain new features",
+                "Prefer Event-Driven Architecture for cross-service integration",
+            ]
+
+        return recommendations
+
 
 # Singleton accessor
 _engine: Optional[KnowledgeSynthesisEngine] = None

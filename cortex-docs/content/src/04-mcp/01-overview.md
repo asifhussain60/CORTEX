@@ -39,7 +39,7 @@ order: 1
         └── Dispatch to MCP tool function
         │
         ▼
-[24 Canonical MCP Tools]
+[25 Canonical MCP Tools]
         │
         ▼
 [Orchestrator Execution]
@@ -72,7 +72,7 @@ The MCP server auto-starts via `.vscode/settings.json`:
 
 **Business Leader:** "MCP is the invisible infrastructure. Teams don't manage servers — the IDE starts CORTEX automatically when the workspace opens."
 
-**Product Owner:** "24 tools available from any IDE that supports MCP. VS Code, Cursor, Claude Desktop — same tools, same experience."
+**Product Owner:** "25 tools available from any IDE that supports MCP. VS Code, Cursor, Claude Desktop — same tools, same experience."
 
 **Developer:** "I open VS Code, and CORTEX is ready. No `python3 -m cortex.mcp start` command. No Docker container. It's just there. I call tools directly from Copilot Chat."
 
