@@ -1,0 +1,300 @@
+# ==============================================================================
+# Composite Execution Pipeline — Generic Pipeline-of-Pipelines
+# ==============================================================================
+# Authority: CORE-008 (TDD) · CORE-035 (no duplication) · CORE-049 (silent)
+# Purpose: Generic, reusable pipeline that composes existing workflow templates
+#          as lego bricks. Enforces security-first, TDD-first, quality-first
+#          execution with holistic cleanup after every phase.
+#
+# Architecture:
+#   template_ref → existing YAML brick (independently testable)
+#   depends_on   → step ordering (DAG, no cycles)
+#   epilogue_ref → auto-injected after each code-modifying phase
+#   knowledge_context → cascades to all referenced templates
+#
+# Generic: No hardcoded app names, languages, or frameworks.
+#          All domain-specific values come from knowledge_context placeholders
+#          resolved at runtime by WorkflowTemplateRegistry.
+# ==============================================================================
+
+workflow:
+  id: "lifecycle/composite-execution-pipeline"
+  name: "Composite Execution Pipeline"
+  version: "1.0.0"
+  category: "lifecycle"
+  description: |
+    Generic pipeline-of-pipelines for end-to-end application transformation.
+    Composes existing workflow templates as lego bricks in a security-first,
+    TDD-first, quality-first sequence. Each step references a standalone
+    template via template_ref — no logic is duplicated.
+
+    Execution order:
+      LENS Baseline → Threat Model → Security Hardening → Legacy Rescue →
+      TDD Implementation → Test Strategy Enforcement → Quality Uplift →
+      Holistic Sweep → Final Verification
+
+    All steps are optional and can be omitted by setting enabled: false.
+    The pipeline is fully parameterised via knowledge_context.
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-21"
+    phase: "102"
+    composable: true
+    reusable_for:
+      - "Legacy application modernisation"
+      - "Greenfield application scaffolding with quality gates"
+      - "Post-acquisition codebase uplift"
+      - "Compliance-driven security remediation"
+      - "Technical debt reduction campaigns"
+    design_principles:
+      - "Security-first: threat model and hardening before any code changes"
+      - "TDD-first: tests written before implementation (CORE-008)"
+      - "Quality-first: holistic sweep after every phase"
+      - "Generic: no hardcoded app names, languages, or frameworks"
+      - "Composable: each step is an independent lego brick"
+      - "Extensible: add new steps by referencing new template YAMLs"
+    company_registry_refs:
+      architecture: "cortex-registry/company/domains/api-design-standards.yaml"
+      security: "cortex-registry/company/domains/security-standards.yaml"
+      infrastructure: "cortex-registry/company/infrastructure/topology.yaml"
+
+  # ── CONVERGENCE GATE (global) ────────────────────────────────────
+  convergence_gate:
+    max_cycles: 20
+    success_criteria:
+      all_tests_pass: true
+      security_clean: true
+      quality_gate_met: true
+      zero_regressions: true
+    convergence_predicate: "all_pass and security_ok and quality >= threshold and regressions == 0"
+    backoff_strategy: "exponential"
+
+  # ── KNOWLEDGE CONTEXT ────────────────────────────────────────────
+  knowledge_context:
+    architect_mode:
+      backend_language: "python"
+      frontend_language: "typescript"
+      test_framework_backend: "pytest"
+      test_framework_frontend: "jest"
+      orm: "sqlalchemy"
+      api_style: "FastAPI REST"
+      security_standard: "OWASP Top 10 + CWE Top 25"
+      quality_gate_threshold: 7
+      coverage_target: "90%"
+      complexity_target: 10
+      parallel_runner: "pytest-xdist (-n auto --dist loadscope)"
+      batch_runner: "CortexXdistPlugin (CORTEX_BATCH_SIZE=500)"
+      governance_rules: ["CORE-008", "CORE-011", "CORE-012", "CORE-028", "CORE-035"]
+      security_frameworks: ["OWASP_Top_10_2024", "CWE_Top_25_2024", "STRIDE", "DREAD"]
+      company_architecture_ref: "cortex-registry/company/domains/api-design-standards.yaml"
+      company_security_ref: "cortex-registry/company/domains/security-standards.yaml"
+      company_infrastructure_ref: "cortex-registry/company/infrastructure/topology.yaml"
+    production_mode:
+      backend_language: "{{backend_language}}"
+      frontend_language: "{{frontend_language}}"
+      test_framework_backend: "{{test_framework_backend}}"
+      test_framework_frontend: "{{test_framework_frontend}}"
+      orm: "{{orm}}"
+      api_style: "{{api_style}}"
+      security_standard: "{{security_standard}}"
+      quality_gate_threshold: "{{quality_gate_threshold}}"
+      coverage_target: "{{coverage_target}}"
+      complexity_target: "{{complexity_target}}"
+      parallel_runner: "{{parallel_runner}}"
+      batch_runner: "{{batch_runner}}"
+      governance_rules: "{{governance_rules}}"
+      security_frameworks: "{{security_frameworks}}"
+      company_architecture_ref: "{{company_architecture_ref}}"
+      company_security_ref: "{{company_security_ref}}"
+      company_infrastructure_ref: "{{company_infrastructure_ref}}"
+
+  # ── STEPS (Lego Composition) ─────────────────────────────────────
+  steps:
+
+    # ── Step 0: LENS Baseline ──────────────────────────────────────
+    - step_id: "lens_baseline"
+      name: "LENS Baseline Analysis"
+      orchestrator: "LENSOrchestrator"
+      description: "Full codebase scan to establish quality and security baseline."
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          baseline_captured: true
+        convergence_predicate: "lens_report_exists"
+      params:
+        scope: "full"
+        metrics: ["complexity", "duplication", "test_coverage", "security_issues"]
+        output_keys: ["baseline_quality_score", "baseline_security_score", "anti_patterns"]
+
+    # ── Step 1: Threat Model ───────────────────────────────────────
+    - step_id: "threat_model"
+      name: "Threat Model Analysis"
+      orchestrator: "SecurityOrchestrator"
+      depends_on: ["lens_baseline"]
+      template_ref: "cortex-registry/workflows/templates/security/threat-model-analysis.yaml"
+      description: "Identify attack surface, classify threats, produce mitigation plan."
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          threat_model_complete: true
+          mitigation_plan_exists: true
+        convergence_predicate: "model_complete and plan_exists"
+      params:
+        security_frameworks: "{{security_frameworks}}"
+        output_keys: ["threat_model", "mitigation_plan", "risk_matrix"]
+
+    # ── Step 2: Security Hardening ─────────────────────────────────
+    - step_id: "security_hardening"
+      name: "Security Hardening — Fix Critical/High Vulnerabilities"
+      orchestrator: "SecurityOrchestrator"
+      depends_on: ["threat_model"]
+      template_ref: "cortex-registry/workflows/templates/security/security-hardening.yaml"
+      blocking: true
+      description: "Fix all critical and high security issues. Hard blocker — no downstream work until clean."
+      convergence_gate:
+        max_cycles: 10
+        success_criteria:
+          critical_vulnerabilities: 0
+          high_vulnerabilities: 0
+          secrets_clean: true
+        convergence_predicate: "critical == 0 and high == 0 and secrets_clean"
+        failure_action: "HALT — do not proceed until security gate passes"
+      params:
+        language: "{{backend_language}}"
+        owasp_checks: ["A01", "A02", "A03", "A05", "A07", "A09"]
+        auto_remediate: true
+        output_keys: ["security_report", "fixes_applied", "remaining_issues"]
+
+    # ── Step 3: Legacy Rescue ──────────────────────────────────────
+    - step_id: "codebase_rescue"
+      name: "Codebase Rescue — Scan, Classify, Fix Critical Issues"
+      orchestrator: "LENSOrchestrator"
+      depends_on: ["security_hardening"]
+      template_ref: "cortex-registry/workflows/templates/lifecycle/legacy-rescue.yaml"
+      description: "Rescue poorly structured codebase: scan, classify, fix, test, verify."
+      convergence_gate:
+        max_cycles: 10
+        success_criteria:
+          critical_issues_fixed: true
+          quality_improved: true
+        convergence_predicate: "critical == 0 and quality_delta > 0"
+      params:
+        quality_threshold: "{{quality_gate_threshold}}"
+        output_keys: ["rescue_report", "quality_delta", "issues_fixed"]
+
+    # ── Step 4: TDD Implementation ─────────────────────────────────
+    - step_id: "tdd_implementation"
+      name: "TDD Feature Implementation (RED → GREEN → REFACTOR)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["codebase_rescue"]
+      template_ref: "cortex-registry/workflows/templates/tdd/tdd-feature-implementation.yaml"
+      description: "Implement features using strict TDD cycle with convergence gates."
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          all_tests_pass: true
+          coverage_target_met: true
+        convergence_predicate: "all_pass and coverage >= {{coverage_target}}"
+      params:
+        test_framework: "{{test_framework_backend}}"
+        coverage_target: "{{coverage_target}}"
+        core_rules: "{{governance_rules}}"
+        output_keys: ["implementation_report", "test_results", "coverage"]
+
+    # ── Step 5: Test Strategy Enforcement ──────────────────────────
+    - step_id: "test_strategy_enforcement"
+      name: "Test Strategy Matrix — All Tiers"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["tdd_implementation"]
+      template_ref: "cortex-registry/workflows/templates/tdd/test-strategy-matrix.yaml"
+      description: "Enforce multi-tier testing: unit → integration → security → smoke → regression → golden."
+      convergence_gate:
+        max_cycles: 12
+        success_criteria:
+          all_tiers_pass: true
+          quality_gate_met: true
+        convergence_predicate: "all_tiers_ok and quality >= {{quality_gate_threshold}}"
+      params:
+        test_framework: "{{test_framework_backend}}"
+        quality_gate_threshold: "{{quality_gate_threshold}}"
+        coverage_target: "{{coverage_target}}"
+        output_keys: ["tier_summary", "quality_scores", "coverage_report"]
+
+    # ── Step 6: Quality Uplift ─────────────────────────────────────
+    - step_id: "quality_uplift"
+      name: "Code Quality Uplift — Complexity, Duplication, Coverage"
+      orchestrator: "RefactoringOrchestrator"
+      depends_on: ["test_strategy_enforcement"]
+      template_ref: "cortex-registry/workflows/templates/quality/quality-code-uplift.yaml"
+      description: "Systematic code quality improvement with convergence gates."
+      convergence_gate:
+        max_cycles: 12
+        success_criteria:
+          complexity_acceptable: true
+          duplication_eliminated: true
+          coverage_target_met: true
+        convergence_predicate: "complexity <= {{complexity_target}} and dupes == 0 and coverage >= {{coverage_target}}"
+      params:
+        complexity_target: "{{complexity_target}}"
+        coverage_target: "{{coverage_target}}"
+        output_keys: ["quality_report", "complexity_delta", "duplication_delta"]
+
+    # ── Step 7: Holistic Sweep ─────────────────────────────────────
+    - step_id: "holistic_sweep"
+      name: "Holistic Refactoring Sweep — Cross-Cutting Quality"
+      orchestrator: "RefactoringOrchestrator"
+      depends_on: ["quality_uplift"]
+      template_ref: "cortex-registry/workflows/templates/quality/refactor-holistic-sweep.yaml"
+      description: "Final holistic code quality pass across entire codebase."
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          quality_improved: true
+          all_tests_pass: true
+        convergence_predicate: "quality_delta >= 0 and all_tests_pass"
+      params:
+        complexity_target: "{{complexity_target}}"
+        coverage_target: "{{coverage_target}}"
+        output_keys: ["sweep_report", "final_quality_score"]
+
+    # ── Step 8: Final LENS Verification ────────────────────────────
+    - step_id: "final_verification"
+      name: "LENS Final Verification — Compare Against Baseline"
+      orchestrator: "LENSOrchestrator"
+      depends_on: ["holistic_sweep"]
+      description: "Re-scan codebase and compare against Step 0 baseline. Verify all targets met."
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          quality_improved: true
+          security_issues_zero: true
+          all_tests_pass: true
+        convergence_predicate: "final_score > baseline_score and security == 0 and all_pass"
+      params:
+        compare_baseline: true
+        output_keys: ["improvement_percentage", "remaining_issues", "final_verdict"]
+
+  # ── SUCCESS CRITERIA (global) ────────────────────────────────────
+  success_criteria:
+    security_issues: "== 0"
+    test_quality_gate_score: ">= threshold"
+    cyclomatic_complexity: "<= target"
+    test_coverage: ">= target"
+    code_duplication: "== 0"
+    regressions: "== 0"
+    golden_tests: "all pass"
+    threat_model: "complete"
+
+  # ── EPILOGUES ────────────────────────────────────────────────────
+  epilogues:
+    - epilogue_id: "holistic_sweep"
+      name: "Cross-Phase Holistic Epilogue"
+      description: "Auto-inject linting, cleanup, dedup, and security re-verification after each code-modifying phase"
+      trigger: "after_each_code_modifying_phase"
+      template_ref: "cortex-registry/workflows/templates/quality/cross-phase-holistic-epilogue.yaml"
+
+    - epilogue_id: "post_phase_dedup"
+      name: "PostPhaseDeduplicationReview"
+      description: "Auto-detect and fix duplicate code (CORE-035)"
+      trigger: "after_each_phase"

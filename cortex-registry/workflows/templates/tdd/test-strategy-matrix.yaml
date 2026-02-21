@@ -1,0 +1,299 @@
+# ==============================================================================
+# Test Strategy Matrix — Multi-Tier Test Enforcement Template
+# ==============================================================================
+# Authority: CORE-008 (TDD mandatory) · TestQualityGate · CortexXdistPlugin
+# Purpose: Enforce high-value tests across all tiers: unit → integration →
+#          security → smoke → regression → golden. Each tier has quality gates,
+#          coverage targets, and convergence criteria.
+# Composable: Invocable standalone OR via template_ref from any pipeline.
+# ==============================================================================
+
+workflow:
+  id: "tdd/test-strategy-matrix"
+  name: "Test Strategy Matrix — Multi-Tier Enforcement"
+  version: "1.0.0"
+  category: "tdd"
+  description: |
+    Comprehensive multi-tier test enforcement following the testing pyramid.
+    Ensures high-value tests (no assert-True stubs) across unit, integration,
+    security, smoke, regression, and golden tiers. Each tier has its own
+    convergence gate, quality score threshold, and coverage target.
+    Supports parallel execution via pytest-xdist and company-specific overrides.
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-21"
+    phase: "102"
+    composable: true
+    standalone: true
+    test_pyramid_order: ["unit", "integration", "security", "smoke", "regression", "golden"]
+    reusable_for:
+      - "Any codebase requiring structured test enforcement"
+      - "Post-refactoring test validation"
+      - "CI/CD pipeline test gates"
+
+  # ── CONVERGENCE GATE (global) ────────────────────────────────────
+  convergence_gate:
+    max_cycles: 12
+    success_criteria:
+      all_tiers_pass: true
+      quality_gate_met: true
+      coverage_target_met: true
+      no_regressions: true
+    convergence_predicate: "all_tiers_pass and quality_score >= threshold and coverage >= target and regressions == 0"
+    backoff_strategy: "exponential"
+
+  # ── KNOWLEDGE CONTEXT ────────────────────────────────────────────
+  knowledge_context:
+    architect_mode:
+      test_framework: "pytest"
+      parallel_runner: "pytest-xdist (-n auto --dist loadscope)"
+      quality_gate_plugin: "TestQualityGate"
+      quality_gate_threshold: 7
+      coverage_target: "90%"
+      test_pattern: "AAA (Arrange-Act-Assert)"
+      naming_convention: "test_{method}_{scenario}_{expected_result}"
+      core_rules: ["CORE-008", "CORE-011", "CORE-012"]
+      batch_runner: "CortexXdistPlugin (CORTEX_BATCH_SIZE=500)"
+      anti_patterns:
+        - "assert True (stub test)"
+        - "mock everything (no real logic tested)"
+        - "shared mutable state between tests"
+        - "no assertions (empty test body)"
+        - "testing implementation details instead of behaviour"
+      tdd_cycle: "RED → GREEN → REFACTOR"
+    production_mode:
+      test_framework: "{{test_framework}}"
+      parallel_runner: "{{parallel_runner}}"
+      quality_gate_plugin: "{{quality_gate_plugin}}"
+      quality_gate_threshold: "{{quality_gate_threshold}}"
+      coverage_target: "{{coverage_target}}"
+      test_pattern: "{{test_pattern}}"
+      naming_convention: "{{naming_convention}}"
+      core_rules: "{{core_rules}}"
+      batch_runner: "{{batch_runner}}"
+      anti_patterns: "{{anti_patterns}}"
+      tdd_cycle: "{{tdd_cycle}}"
+
+  # ── STEPS (Testing Pyramid Order) ───────────────────────────────
+
+  steps:
+
+    # ── TIER 1: UNIT TESTS ──────────────────────────────────────────
+    - step_id: "unit_tests"
+      name: "Tier 1 — Unit Tests (Isolated, Fast, High Coverage)"
+      orchestrator: "TDDOrchestrator"
+      description: |
+        Write and run unit tests for all new/modified functions. Tests must
+        follow AAA pattern (Arrange-Act-Assert), use isolation (no shared
+        state), and achieve coverage target. RED phase writes failing tests
+        first per CORE-008.
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          all_unit_tests_pass: true
+          coverage_target_met: true
+          quality_score_met: true
+          no_stub_tests: true
+        convergence_predicate: "unit_pass and coverage >= {{coverage_target}} and quality >= {{quality_gate_threshold}} and stubs == 0"
+      params:
+        tdd_phase: "RED → GREEN → REFACTOR"
+        test_type: "unit"
+        test_framework: "{{test_framework}}"
+        pattern: "{{test_pattern}}"
+        naming: "{{naming_convention}}"
+        isolation: "no_shared_state"
+        coverage_target: "{{coverage_target}}"
+        quality_gate_threshold: "{{quality_gate_threshold}}"
+        anti_pattern_checks:
+          - "reject assert True / assert 1 == 1"
+          - "reject tests with zero assertions"
+          - "reject tests mocking all dependencies"
+          - "reject tests testing private implementation details"
+        focus_areas:
+          - "Public API methods"
+          - "Edge cases and boundary values"
+          - "Error handling paths"
+          - "Business logic functions"
+        output_keys: ["unit_results", "coverage_report", "quality_scores"]
+
+    # ── TIER 2: INTEGRATION TESTS ──────────────────────────────────
+    - step_id: "integration_tests"
+      name: "Tier 2 — Integration Tests (Cross-Module, Real Dependencies)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["unit_tests"]
+      description: |
+        Verify cross-module interactions with real (or in-memory) dependencies.
+        Database tests use isolated per-test databases. API tests validate
+        request/response contracts. No mocking of the system under test.
+      convergence_gate:
+        max_cycles: 6
+        success_criteria:
+          all_integration_tests_pass: true
+          cross_module_coverage: true
+          contract_valid: true
+        convergence_predicate: "int_pass and cross_coverage and contract_match"
+      params:
+        test_type: "integration"
+        test_framework: "{{test_framework}}"
+        isolation_strategy: "per_test_database"
+        contract_validation: true
+        focus_areas:
+          - "Module-to-module communication"
+          - "Database CRUD operations"
+          - "API endpoint request/response"
+          - "Event handler chains"
+          - "Configuration loading"
+        output_keys: ["integration_results", "contract_report", "cross_module_coverage"]
+
+    # ── TIER 3: SECURITY TESTS ─────────────────────────────────────
+    - step_id: "security_tests"
+      name: "Tier 3 — Security Tests (Injection, Auth, Secrets)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["integration_tests"]
+      description: |
+        Dedicated security test tier. Validates defences against OWASP Top 10:
+        injection attacks, authentication bypass, authorisation failures,
+        secrets exposure, and error information leakage.
+      convergence_gate:
+        max_cycles: 5
+        success_criteria:
+          all_security_tests_pass: true
+          injection_tests_pass: true
+          auth_tests_pass: true
+          secrets_tests_pass: true
+        convergence_predicate: "sec_pass and injection_ok and auth_ok and secrets_ok"
+      params:
+        test_type: "security"
+        owasp_coverage:
+          A01_broken_access_control: "IDOR, privilege escalation, missing auth"
+          A02_cryptographic_failures: "Weak algorithms, plaintext secrets"
+          A03_injection: "SQL injection, XSS, command injection"
+          A05_security_misconfiguration: "Debug mode, verbose errors, default credentials"
+          A07_auth_failures: "Brute force, session fixation, weak passwords"
+          A09_logging_failures: "Missing audit trail, PII in logs"
+        test_scenarios:
+          - "SQL injection payloads rejected by parameterised queries"
+          - "XSS payloads sanitised in output encoding"
+          - "Hardcoded secrets detected and removed"
+          - "Stack traces not exposed in production error responses"
+          - "Authentication required for protected endpoints"
+          - "Rate limiting enforced on sensitive endpoints"
+        output_keys: ["security_results", "owasp_coverage_map", "vulnerabilities_found"]
+
+    # ── TIER 4: SMOKE TESTS ────────────────────────────────────────
+    - step_id: "smoke_tests"
+      name: "Tier 4 — Smoke Tests (Critical Path Verification)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["security_tests"]
+      description: |
+        Fast smoke tests verifying critical paths work end-to-end.
+        Run after every build to catch catastrophic failures early.
+        Must complete in under 30 seconds.
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          all_smoke_tests_pass: true
+          execution_time_acceptable: true
+        convergence_predicate: "smoke_pass and duration_seconds <= 30"
+      params:
+        test_type: "smoke"
+        max_duration_seconds: 30
+        critical_paths:
+          - "Application starts without errors"
+          - "Health check endpoint responds 200"
+          - "Primary CRUD operations succeed"
+          - "Authentication flow completes"
+          - "Database connection established"
+        output_keys: ["smoke_results", "execution_time", "critical_path_status"]
+
+    # ── TIER 5: REGRESSION TESTS ───────────────────────────────────
+    - step_id: "regression_tests"
+      name: "Tier 5 — Regression Tests (Zero-Regression Guarantee)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["smoke_tests"]
+      description: |
+        Full regression suite ensuring no previously passing tests break.
+        Compares current results against baseline. Any new failure is a
+        P0 blocker that halts the pipeline.
+      convergence_gate:
+        max_cycles: 4
+        success_criteria:
+          zero_regressions: true
+          baseline_maintained: true
+          all_existing_tests_pass: true
+        convergence_predicate: "regressions == 0 and baseline_pass and existing_pass"
+      params:
+        test_type: "regression"
+        parallel: true
+        batch_runner: "{{batch_runner}}"
+        baseline_comparison: true
+        failure_policy: "P0_blocker"
+        output_keys: ["regression_results", "baseline_delta", "regression_count"]
+
+    # ── TIER 6: GOLDEN TESTS ──────────────────────────────────────
+    - step_id: "golden_tests"
+      name: "Tier 6 — Golden Tests (Invariant Contract Verification)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["regression_tests"]
+      description: |
+        Golden tests verify architectural invariants that must never break.
+        These are the highest-value tests: they protect core contracts,
+        governance rules, and production-critical behaviour.
+      convergence_gate:
+        max_cycles: 2
+        success_criteria:
+          all_golden_tests_pass: true
+          zero_golden_failures: true
+        convergence_predicate: "golden_pass and golden_failures == 0"
+      params:
+        test_type: "golden"
+        failure_policy: "P0_blocker_immediate_halt"
+        golden_categories:
+          - "Orchestrator wiring contracts"
+          - "Governance rule enforcement"
+          - "MCP tool availability"
+          - "Security gate enforcement"
+          - "Test quality gate thresholds"
+          - "Architecture invariants"
+        output_keys: ["golden_results", "golden_pass_count", "golden_fail_count"]
+
+    # ── FINAL: Quality Gate Enforcement ────────────────────────────
+    - step_id: "quality_gate_enforcement"
+      name: "Final Quality Gate — All Tiers Summary"
+      orchestrator: "EnforcementOrchestrator"
+      depends_on: ["golden_tests"]
+      description: |
+        Aggregate all tier results. Enforce quality gate score across all
+        tests. Produce comprehensive test report. Block if any tier failed.
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          all_tiers_pass: true
+          quality_gate_score_met: true
+        convergence_predicate: "all_tiers_ok and quality >= {{quality_gate_threshold}}"
+      params:
+        aggregate_tiers: ["unit", "integration", "security", "smoke", "regression", "golden"]
+        quality_gate_threshold: "{{quality_gate_threshold}}"
+        report_format: "inline"
+        output_keys: ["aggregate_report", "tier_summary", "final_verdict"]
+
+  # ── SUCCESS CRITERIA (global) ────────────────────────────────────
+  success_criteria:
+    unit_tests_pass: "all"
+    integration_tests_pass: "all"
+    security_tests_pass: "all"
+    smoke_tests_pass: "all"
+    regression_count: "== 0"
+    golden_tests_pass: "all"
+    quality_gate_score: ">= threshold"
+    coverage: ">= target"
+    stub_tests: "== 0"
+    test_execution_parallel: true
+
+  # ── EPILOGUES ────────────────────────────────────────────────────
+  epilogues:
+    - epilogue_id: "test_report_generation"
+      name: "Generate Consolidated Test Report"
+      description: "Aggregate all tier results into a single inline report"
+      trigger: "workflow_complete"

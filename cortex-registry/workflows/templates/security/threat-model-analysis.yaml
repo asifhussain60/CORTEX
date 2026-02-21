@@ -1,0 +1,196 @@
+# ==============================================================================
+# Threat Model Analysis — Standalone Security Brick
+# ==============================================================================
+# Authority: OWASP Top 10 · CWE Top 25 · STRIDE · DREAD
+# Composable: Independently invocable OR via template_ref from any pipeline
+# Compliance: CORE-008 (TDD), CORE-012 (docstrings), CORE-028 (kebab-case)
+#
+# Purpose: Identify attack surface, classify threats, assess risk,
+#          produce prioritised mitigation plan. Reusable across any codebase.
+# ==============================================================================
+
+workflow:
+  id: "security/threat-model-analysis"
+  name: "Threat Model Analysis"
+  version: "1.0.0"
+  category: "security"
+  description: |
+    Standalone threat modelling workflow. Identifies attack surface, classifies
+    threats using STRIDE/DREAD, assesses risk severity, and produces a
+    prioritised mitigation plan. Designed as an independent lego brick —
+    invocable standalone or composed into any pipeline via template_ref.
+
+  metadata:
+    author: "CORTEX"
+    created: "2026-02-21"
+    phase: "102"
+    reusable_for:
+      - "Any codebase requiring security threat assessment"
+      - "Pre-refactoring security baseline"
+      - "Compliance audit preparation (SOC2, PCI-DSS, HIPAA)"
+    composable: true
+    standalone: true
+
+  # ── CONVERGENCE GATE ──────────────────────────────────────────────
+  convergence_gate:
+    max_cycles: 8
+    success_criteria:
+      attack_surface_mapped: true
+      critical_risks_mitigated: true
+      high_risks_mitigated: true
+      mitigation_plan_complete: true
+    convergence_predicate: "surface_mapped and critical_mitigated and high_mitigated and plan_complete"
+    backoff_strategy: "exponential"
+
+  # ── KNOWLEDGE CONTEXT ────────────────────────────────────────────
+  knowledge_context:
+    architect_mode:
+      security_frameworks: ["OWASP_Top_10_2024", "CWE_Top_25_2024", "STRIDE", "DREAD"]
+      compliance_targets: ["SOC2", "ASVS_L2"]
+      scan_tools: ["bandit", "semgrep", "trufflehog", "safety"]
+      risk_scoring: "DREAD (Damage, Reproducibility, Exploitability, Affected Users, Discoverability)"
+      classification_model: "STRIDE (Spoofing, Tampering, Repudiation, Info Disclosure, DoS, Elevation)"
+    production_mode:
+      security_frameworks: "{{security_frameworks}}"
+      compliance_targets: "{{compliance_targets}}"
+      scan_tools: "{{scan_tools}}"
+      risk_scoring: "{{risk_scoring}}"
+      classification_model: "{{classification_model}}"
+
+  # ── STEPS ────────────────────────────────────────────────────────
+  steps:
+
+    # Step 1 — Attack Surface Analysis
+    - step_id: "attack_surface_analysis"
+      name: "Map Attack Surface"
+      orchestrator: "SecurityOrchestrator"
+      description: |
+        Identify all entry points, data flows, trust boundaries, and external
+        dependencies. Produces a structured attack surface map.
+      convergence_gate:
+        max_cycles: 2
+        success_criteria:
+          surface_mapped: true
+          entry_points_identified: true
+        convergence_predicate: "entry_point_count > 0 and trust_boundaries_mapped"
+      params:
+        analysis_type: "attack_surface"
+        entry_point_types:
+          - "API endpoints (REST, GraphQL, gRPC)"
+          - "User input fields (forms, query params, headers)"
+          - "File upload handlers"
+          - "Database connections"
+          - "External service integrations"
+          - "Configuration files"
+          - "Environment variables"
+        trust_boundaries:
+          - "Client → Server"
+          - "Server → Database"
+          - "Server → External API"
+          - "User → Admin boundary"
+        output_keys: ["attack_surface_map", "entry_points", "trust_boundaries", "data_flows"]
+
+    # Step 2 — Threat Classification (STRIDE)
+    - step_id: "threat_classification"
+      name: "Classify Threats (STRIDE)"
+      orchestrator: "SecurityOrchestrator"
+      depends_on: ["attack_surface_analysis"]
+      description: |
+        Classify identified threats using STRIDE model. Map each entry point
+        to applicable threat categories.
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          threats_classified: true
+          stride_coverage_complete: true
+        convergence_predicate: "all_entry_points_classified and stride_categories_covered"
+      params:
+        classification_model: "{{classification_model}}"
+        stride_categories:
+          spoofing: "Authentication bypass, credential theft, session hijacking"
+          tampering: "SQL injection, XSS, parameter manipulation, data corruption"
+          repudiation: "Missing audit logs, unsigned transactions"
+          information_disclosure: "Stack traces, verbose errors, hardcoded secrets"
+          denial_of_service: "Resource exhaustion, unbounded queries, missing rate limits"
+          elevation_of_privilege: "Broken access control, IDOR, privilege escalation"
+        output_keys: ["threat_catalog", "stride_matrix", "threat_count_by_category"]
+
+    # Step 3 — Risk Assessment (DREAD)
+    - step_id: "risk_assessment"
+      name: "Assess Risk Severity (DREAD)"
+      orchestrator: "SecurityOrchestrator"
+      depends_on: ["threat_classification"]
+      description: |
+        Score each threat using DREAD model. Prioritise by composite risk score.
+      convergence_gate:
+        max_cycles: 2
+        success_criteria:
+          all_threats_scored: true
+          risk_matrix_complete: true
+        convergence_predicate: "unscored_threats == 0 and risk_matrix_generated"
+      params:
+        risk_scoring: "{{risk_scoring}}"
+        dread_dimensions:
+          damage: "1-10 (impact if exploited)"
+          reproducibility: "1-10 (ease of reproduction)"
+          exploitability: "1-10 (skill required)"
+          affected_users: "1-10 (scope of impact)"
+          discoverability: "1-10 (ease of finding)"
+        severity_thresholds:
+          critical: "score >= 8.0"
+          high: "score >= 6.0"
+          medium: "score >= 4.0"
+          low: "score < 4.0"
+        output_keys: ["risk_matrix", "prioritised_threats", "severity_breakdown"]
+
+    # Step 4 — Mitigation Planning
+    - step_id: "mitigation_planning"
+      name: "Generate Prioritised Mitigation Plan"
+      orchestrator: "PlanningOrchestrator"
+      depends_on: ["risk_assessment"]
+      description: |
+        Produce actionable mitigation plan ordered by risk severity. Each
+        mitigation maps to a specific threat, fix approach, and verification test.
+      convergence_gate:
+        max_cycles: 3
+        success_criteria:
+          all_critical_have_mitigation: true
+          all_high_have_mitigation: true
+          verification_tests_defined: true
+        convergence_predicate: "critical_covered and high_covered and tests_defined"
+      params:
+        mitigation_strategies:
+          sql_injection: "Parameterised queries / ORM"
+          xss: "Output encoding / CSP headers"
+          hardcoded_secrets: "Secret manager / environment variables"
+          broken_auth: "OAuth2 / JWT with rotation"
+          missing_rate_limits: "Rate limiter middleware"
+          verbose_errors: "Structured error responses / correlation IDs"
+          missing_audit_logs: "Structured logging / audit trail"
+        output_keys: ["mitigation_plan", "fix_priorities", "verification_tests"]
+
+    # Step 5 — Compliance Mapping
+    - step_id: "compliance_mapping"
+      name: "Map Mitigations to Compliance Standards"
+      orchestrator: "SecurityOrchestrator"
+      depends_on: ["mitigation_planning"]
+      description: |
+        Map each mitigation to relevant compliance standards (OWASP ASVS,
+        SOC2, PCI-DSS). Identify residual compliance gaps.
+      convergence_gate:
+        max_cycles: 2
+        success_criteria:
+          compliance_mapped: true
+          residual_gaps_identified: true
+        convergence_predicate: "all_mitigations_mapped and gaps_documented"
+      params:
+        compliance_frameworks: "{{compliance_targets}}"
+        output_keys: ["compliance_map", "residual_gaps", "certification_readiness"]
+
+  # ── SUCCESS CRITERIA ─────────────────────────────────────────────
+  success_criteria:
+    unmitigated_critical: "== 0"
+    unmitigated_high: "== 0"
+    compliance_gaps: "<= 3"
+    attack_surface_coverage: ">= 95%"
+    mitigation_verification_tests: ">= 1 per critical/high threat"

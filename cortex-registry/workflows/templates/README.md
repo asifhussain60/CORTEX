@@ -10,19 +10,23 @@ templates/
 │   ├── tdd-feature-implementation.yaml
 │   ├── tdd-api-service.yaml
 │   ├── tdd-frontend-visual.yaml
-│   └── frontend-tdd-workflow.yaml
+│   ├── frontend-tdd-workflow.yaml
+│   └── test-strategy-matrix.yaml          # Multi-tier test enforcement (unit→integration→security→smoke→regression→golden)
 ├── security/             # Security audit, hardening, compliance
 │   ├── security-hardening.yaml
-│   └── security-compliance-audit.yaml
+│   ├── security-compliance-audit.yaml
+│   └── threat-model-analysis.yaml         # Standalone STRIDE/DREAD threat modelling brick
 ├── quality/              # Code quality, refactoring, uplift
 │   ├── quality-uplift.yaml
 │   ├── quality-code-uplift.yaml
-│   └── refactor-holistic-sweep.yaml
+│   ├── refactor-holistic-sweep.yaml
+│   └── cross-phase-holistic-epilogue.yaml # Declarative epilogue (lint, dedup, security, cleanup)
 ├── lifecycle/            # Repo onboarding, migration, legacy rescue
 │   ├── onboarding-workflow.yaml
 │   ├── onboarding-repo-setup.yaml
 │   ├── migration-modernize.yaml
-│   └── legacy-rescue.yaml
+│   ├── legacy-rescue.yaml
+│   └── composite-execution-pipeline.yaml  # Generic pipeline-of-pipelines (lego connector)
 ├── governance/           # Execution gates, test promotion, compliance
 │   ├── request-execution-plan-gate.yaml
 │   └── golden-test-promotion.yaml
