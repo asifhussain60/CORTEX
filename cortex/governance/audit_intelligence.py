@@ -63,7 +63,7 @@ class AuditIntelligence:
         >>> print(f"Coverage: {report.coverage_percentage}%")
     """
 
-    def __init__(self, wiring_path: str = None):
+    def __init__(self, wiring_path: str = None) -> None:
         """
         Initialize audit intelligence.
 

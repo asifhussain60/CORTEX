@@ -93,7 +93,7 @@ class ResponseFormatValidator:
     # Repetition threshold
     REPETITION_THRESHOLD = 0.7  # 70% similarity triggers warning
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize validator."""
         logger.info("ResponseFormatValidator initialized")
 

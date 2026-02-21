@@ -184,7 +184,7 @@ class AssertionBuilder:
         assertions = builder.build()
     """
 
-    def __init__(self, target: Any):
+    def __init__(self, target: Any) -> None:
         """
         Initialize builder.
 
@@ -200,7 +200,7 @@ class AssertionBuilder:
         """Assert target has a field."""
         self._current_name = field
 
-        def check():
+        def check() -> None:
             """Check."""
             if hasattr(self._target, field):
                 self._current_value = getattr(self._target, field)
@@ -221,7 +221,7 @@ class AssertionBuilder:
         """Assert target has a section (for templates)."""
         self._current_name = f"section_{section}"
 
-        def check():
+        def check() -> None:
             """Check."""
             if hasattr(self._target, 'get_section'):
                 sec = self._target.get_section(section)
@@ -247,7 +247,7 @@ class AssertionBuilder:
 
     def equals(self, expected: Any) -> 'AssertionBuilder':
         """Assert current value equals expected."""
-        def check():
+        def check() -> None:
             """Check."""
             return self._current_value == expected
 
@@ -260,7 +260,7 @@ class AssertionBuilder:
 
     def not_equals(self, expected: Any) -> 'AssertionBuilder':
         """Assert current value does not equal expected."""
-        def check():
+        def check() -> None:
             """Check."""
             return self._current_value != expected
 
@@ -273,7 +273,7 @@ class AssertionBuilder:
 
     def is_not_none(self) -> 'AssertionBuilder':
         """Assert current value is not None."""
-        def check():
+        def check() -> None:
             """Check."""
             return self._current_value is not None
 
@@ -286,7 +286,7 @@ class AssertionBuilder:
 
     def is_not_empty(self) -> 'AssertionBuilder':
         """Assert current value is not empty."""
-        def check():
+        def check() -> None:
             """Check."""
             if self._current_value is None:
                 return False
@@ -305,7 +305,7 @@ class AssertionBuilder:
 
     def contains(self, item: Any) -> 'AssertionBuilder':
         """Assert current value contains item."""
-        def check():
+        def check() -> None:
             """Check."""
             if isinstance(self._current_value, (list, tuple, set)):
                 return item in self._current_value
@@ -324,7 +324,7 @@ class AssertionBuilder:
 
     def has_length(self, length: int) -> 'AssertionBuilder':
         """Assert current value has specific length."""
-        def check():
+        def check() -> None:
             """Check."""
             if hasattr(self._current_value, '__len__'):
                 return len(self._current_value) == length
@@ -341,7 +341,7 @@ class AssertionBuilder:
         """Assert current value matches regex pattern."""
         import re
 
-        def check():
+        def check() -> None:
             """Check."""
             if isinstance(self._current_value, str):
                 return bool(re.match(pattern, self._current_value))
@@ -356,7 +356,7 @@ class AssertionBuilder:
 
     def is_type(self, expected_type: type) -> 'AssertionBuilder':
         """Assert current value is of expected type."""
-        def check():
+        def check() -> None:
             """Check."""
             return isinstance(self._current_value, expected_type)
 
@@ -369,7 +369,7 @@ class AssertionBuilder:
 
     def satisfies(self, condition: Callable[[Any], bool], message: str = "") -> 'AssertionBuilder':
         """Assert current value satisfies custom condition."""
-        def check():
+        def check() -> None:
             """Check."""
             return condition(self._current_value)
 
@@ -530,7 +530,7 @@ class TemplateTestFramework:
         print(framework.report(suite))
     """
 
-    def __init__(self, name: str = "Template Tests"):
+    def __init__(self, name: str = "Template Tests") -> None:
         """
         Initialize framework.
 
@@ -808,14 +808,14 @@ def create_validation_test(
     Returns:
         TemplateTestCase
     """
-    def setup():
+    def setup() -> None:
         """Setup."""
         from cortex.models.canonical_enums import TestStatus
         from cortex.tools.template_validator import TemplateValidator
         v = validator or TemplateValidator()
         return v.validate(template)
 
-    def check_valid(result):
+    def check_valid(result) -> None:
         """Check valid.
         
         Args:

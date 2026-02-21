@@ -43,7 +43,7 @@ class RegressionDetector:
         latency_threshold_percent: float = 10.0,
         memory_threshold_percent: float = 15.0,
         test_time_threshold_percent: float = 20.0
-    ):
+    ) -> None:
         """
         Initialize regression detector.
 

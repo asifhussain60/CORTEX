@@ -103,7 +103,7 @@ class ROICompositeScorer:
     MEDIUM_ROI_THRESHOLD = 0.60
     LOW_ROI_THRESHOLD = 0.40
     
-    def __init__(self, weights: Optional[ROIWeights] = None):
+    def __init__(self, weights: Optional[ROIWeights] = None) -> None:
         """
         Initialize scorer with optional custom weights.
         

@@ -337,6 +337,7 @@ class ToolRegistry:
     """
     
     def __init__(self) -> None:
+        """Initialize instance."""
         self.logger = logging.getLogger(__name__)
         self._tools: Dict[str, ToolMetadata] = {}
         self._implementations: Dict[str, Tool] = {}

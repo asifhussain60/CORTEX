@@ -274,6 +274,7 @@ class CrossLayerOptimizer:
         rec_stack = set()
         
         def visit(node: str) -> bool:
+            """Check if visiting this node creates a cycle in the dependency graph."""
             visited.add(node)
             rec_stack.add(node)
             
@@ -307,6 +308,7 @@ class CrossLayerOptimizer:
         plan = []
         
         def visit(node: str) -> None:
+            """Visit a node and its dependencies in topological order."""
             if node in visited:
                 return
             visited.add(node)
@@ -423,6 +425,7 @@ class CrossLayerOptimizer:
             import signal
             
             def timeout_handler(signum: int, frame: object) -> None:
+                """Handle SIGALRM by raising TimeoutError."""
                 raise TimeoutError("Operation timed out")
             
             # Set timeout if configured
@@ -566,6 +569,19 @@ class CrossLayerOptimizer:
         
         self._resource_pools[resource_type] = pool
         return pool
+
+    # ------------------------------------------------------------------
+    # Health Check (IOrchestrator protocol)
+    # ------------------------------------------------------------------
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status for wiring-contract validation."""
+        return {
+            "status": "healthy",
+            "orchestrator": "CrossLayerOptimizer",
+            "cache_size": len(self._cache),
+            "pool_count": len(self._resource_pools),
+        }
 
 
 # AC_COMPLETE: AC-WAVE-4-S2-002 (Implementation complete - GREEN phase)

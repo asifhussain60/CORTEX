@@ -114,8 +114,10 @@ def handle_database_error(
             pass
     """
     def decorator(fn: Callable[..., T]) -> Callable[..., T]:
+        """Wrap *fn* with database error handling."""
         @functools.wraps(fn)
         def wrapper(*args: Any, **kwargs: Any) -> Optional[T]:
+            """Execute *fn* and catch sqlite3 errors."""
             try:
                 return fn(*args, **kwargs)
             except sqlite3.Error as e:
@@ -158,8 +160,10 @@ def handle_validation_error(
         Decorated function or decorator
     """
     def decorator(fn: Callable[..., T]) -> Callable[..., T]:
+        """Wrap *fn* with validation error handling."""
         @functools.wraps(fn)
         def wrapper(*args: Any, **kwargs: Any) -> T:
+            """Execute *fn* and catch ValueError/TypeError."""
             try:
                 return fn(*args, **kwargs)
             except (ValueError, TypeError) as e:
@@ -194,8 +198,10 @@ def handle_io_error(
         Decorated function or decorator
     """
     def decorator(fn: Callable[..., T]) -> Callable[..., T]:
+        """Wrap *fn* with I/O error handling."""
         @functools.wraps(fn)
         def wrapper(*args: Any, **kwargs: Any) -> Optional[T]:
+            """Execute *fn* and catch I/O errors."""
             try:
                 return fn(*args, **kwargs)
             except (FileNotFoundError, PermissionError, IOError) as e:
@@ -234,8 +240,10 @@ def retry_on_error(
         RetryExhaustedError: When all retries are exhausted
     """
     def decorator(fn: Callable[..., T]) -> Callable[..., T]:
+        """Wrap *fn* with retry logic."""
         @functools.wraps(fn)
         def wrapper(*args: Any, **kwargs: Any) -> T:
+            """Execute *fn* with exponential-backoff retries."""
             last_exception: Optional[Exception] = None
             delay = delay_seconds
 
@@ -270,7 +278,7 @@ class ValidationError(Exception):
     """
 
     def __init__(self, message: str, file_path: str = None, line_info: str = None,
-                 context: dict = None):
+                 context: dict = None) -> None:
         """Initialize validation error.
 
         Args:
@@ -301,7 +309,7 @@ class RecoverableError(Exception):
     """
 
     def __init__(self, message: str, retry_count: int = 0,
-                 retry_delay_ms: float = 100):
+                 retry_delay_ms: float = 100) -> None:
         """Initialize recoverable error.
 
         Args:
@@ -325,7 +333,7 @@ class ConfigurationError(Exception):
     """
 
     def __init__(self, message: str, config_key: str = None,
-                 expected: str = None, received: str = None):
+                 expected: str = None, received: str = None) -> None:
         """Initialize configuration error.
 
         Args:
@@ -355,7 +363,7 @@ class HealthCheckError(Exception):
     """
 
     def __init__(self, component: str, message: str,
-                 recovery_action: str = None):
+                 recovery_action: str = None) -> None:
         """Initialize health check error.
 
         Args:

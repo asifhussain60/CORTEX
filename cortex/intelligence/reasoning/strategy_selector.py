@@ -100,7 +100,7 @@ class StrategySelector:
     AC-PHASE71-010: Context-aware strategy selection
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize strategy selector."""
         self._strategies: Dict[str, Strategy] = {}
 

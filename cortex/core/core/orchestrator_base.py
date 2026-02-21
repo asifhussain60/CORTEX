@@ -120,7 +120,7 @@ class OrchestratorBase(ABC):
     6. Result returned with metadata
     """
 
-    def __init__(self, context: OrchestrationContext):
+    def __init__(self, context: OrchestrationContext) -> None:
         """
         Initialize orchestrator with execution context.
 

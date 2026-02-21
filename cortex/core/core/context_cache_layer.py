@@ -66,7 +66,7 @@ class ContextCacheLayer:
         self,
         max_entries: int = 1000,
         default_ttl: float = 600.0  # 10 minutes
-    ):
+    ) -> None:
         """
         Initialize cache
 

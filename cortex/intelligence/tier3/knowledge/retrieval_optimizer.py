@@ -8,6 +8,7 @@ class RetrievalOptimizer:
     """Optimizes knowledge retrieval with caching and ranking."""
 
     def __init__(self) -> None:
+        """Initialise retrieval optimizer with empty cache."""
         self._cache: Dict[str, List[Dict[str, Any]]] = {}
 
     def retrieve(
@@ -17,6 +18,7 @@ class RetrievalOptimizer:
         limit: int = 10,
         use_cache: bool = True,
     ) -> List[Dict[str, Any]]:
+        """Retrieve knowledge entries with optional caching."""
         cache_key = f"{query}:{domain}:{limit}"
         if use_cache and cache_key in self._cache:
             return self._cache[cache_key]
@@ -32,6 +34,7 @@ class RetrievalOptimizer:
     ) -> List[Dict[str, Any]]:
         """Rank results by relevance score."""
         def score(item: Dict[str, Any]) -> float:
+            """Score result relevance."""
             title = str(item.get("title", "")).lower()
             return float(query.lower() in title)
         return sorted(results, key=score, reverse=True)
@@ -43,7 +46,9 @@ class RetrievalOptimizer:
         return len(queries)
 
     def clear_cache(self) -> None:
+        """Clear the retrieval cache."""
         self._cache.clear()
 
     def get_cache_stats(self) -> Dict[str, Any]:
+        """Return cache statistics."""
         return {"cached_queries": len(self._cache), "hits": 0}

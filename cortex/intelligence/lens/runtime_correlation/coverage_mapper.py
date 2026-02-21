@@ -33,7 +33,8 @@ class CoverageMapper:
         >>> gaps = mapper.identify_test_gaps(parsed, min_coverage=80.0)
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         pass
     
     def parse_coverage_data(self, coverage_data: Dict[str, Any]) -> List[Dict[str, Any]]:

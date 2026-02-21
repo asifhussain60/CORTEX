@@ -74,7 +74,7 @@ class NextStepGenerator:
     - CORTEX feature availability
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize NextStepGenerator with topic mappings."""
         # Map topics to related concepts
         self._related_topics: Dict[str, List[str]] = {

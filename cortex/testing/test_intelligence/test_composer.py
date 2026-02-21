@@ -38,7 +38,7 @@ class TestComposer:
     - Quality scoring (70% threshold)
     """
     
-    def __init__(self, cortex_root: Path):
+    def __init__(self, cortex_root: Path) -> None:
         """
         Initialize test composer.
         

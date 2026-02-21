@@ -20,6 +20,7 @@ class OrchestratorDiscovery:
     confidence: float
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert instance to dictionary representation."""
         return {
             "name": self.name,
             "file_path": str(self.file_path),
@@ -38,6 +39,7 @@ class RegistryGap:
     suggested_fix: str
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert instance to dictionary representation."""
         return {
             "orchestrator": self.orchestrator.to_dict(),
             "gap_type": self.gap_type,
@@ -48,7 +50,7 @@ class RegistryGap:
 class RegistryIntelligenceAgent:
     """Universal orchestrator discovery and wiring system."""
 
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """Initialize registry intelligence agent."""
         self.workspace_root = workspace_root or Path.cwd()
         self._discovery_cache: Dict[str, OrchestratorDiscovery] = {}

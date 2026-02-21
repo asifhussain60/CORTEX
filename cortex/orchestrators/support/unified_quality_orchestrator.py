@@ -53,7 +53,7 @@ class UnifiedQualityAssuranceOrchestrator:
         ...     report = orchestrator.generate_qa_report(safety, [])
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize orchestrator with rejection history and gate registry."""
         self._rejection_history: List[RejectionEntry] = []
         self._gate_handlers: Dict[GateType, Callable] = {

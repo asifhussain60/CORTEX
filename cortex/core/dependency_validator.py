@@ -1,4 +1,5 @@
 """dependency_validator.py"""
 
 class DependencyValidator:
-    pass
+    """Validates dependency constraints between orchestrators."""
+

@@ -8,7 +8,8 @@ import sys
 from datetime import datetime
 
 
-def main():
+def main() -> None:
+    """Entry point for production readiness verification."""
     print("\n" + "="*80)
     print("🚀 CORTEX PRODUCTION READINESS VERIFICATION - 2026-01-24")
     print("="*80)

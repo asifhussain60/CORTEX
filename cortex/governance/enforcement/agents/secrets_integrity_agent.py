@@ -67,7 +67,7 @@ class SecretsIntegrityAgent:
         "CORTEX_",  # Should use SecretsManager
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize SecretsIntegrityAgent."""
         pass
 

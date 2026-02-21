@@ -266,35 +266,35 @@ stages:
 # GOLDEN TESTS
 # ============================================================================
 golden_tests:
-  - path: 'tests/test_frontend_tdd_workflow_execution.py'
+# [TEMPLATE-REF] - path: 'tests/test_frontend_tdd_workflow_execution.py'
     description: 'Verify workflow completes successfully end-to-end'
     assertions:
       - 'execution_success'
       - 'all_stages_completed'
       - 'duration_within_bounds'
   
-  - path: 'tests/test_frontend_tdd_governance.py'
+# [TEMPLATE-REF] - path: 'tests/test_frontend_tdd_governance.py'
     description: 'Verify governance gates enforced at each stage'
     assertions:
       - 'enforcement_orchestrator_invoked'
       - 'core_rules_validated'
       - 'no_bypass_flags'
   
-  - path: 'tests/test_frontend_tdd_audit_trail.py'
+# [TEMPLATE-REF] - path: 'tests/test_frontend_tdd_audit_trail.py'
     description: 'Verify AC markers and audit log integrity'
     assertions:
       - 'ac_markers_present'
       - 'git_checkpoints_created'
       - 'test_coverage_verified'
   
-  - path: 'tests/test_frontend_tdd_performance.py'
+# [TEMPLATE-REF] - path: 'tests/test_frontend_tdd_performance.py'
     description: 'Verify performance targets met'
     assertions:
       - 'total_duration_under_30_min'
       - 'vision_api_under_20s'
       - 'lighthouse_score_above_95'
   
-  - path: 'tests/test_frontend_tdd_non_breaking.py'
+# [TEMPLATE-REF] - path: 'tests/test_frontend_tdd_non_breaking.py'
     description: 'Verify no regressions introduced'
     assertions:
       - 'existing_tests_still_pass'

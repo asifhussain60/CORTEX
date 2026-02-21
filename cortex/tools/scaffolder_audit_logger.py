@@ -87,7 +87,7 @@ class ScaffolderAuditLogger:
     for forensic analysis and compliance verification.
     """
     
-    def __init__(self, db_path: Optional[Path] = None):
+    def __init__(self, db_path: Optional[Path] = None) -> None:
         """
         Initialize audit logger.
         

@@ -132,7 +132,7 @@ class InMemoryCacheBackend:
         cache: OrderedDict for LRU behavior
     """
 
-    def __init__(self, max_entries: int = 1000, max_size_mb: int = 100):
+    def __init__(self, max_entries: int = 1000, max_size_mb: int = 100) -> None:
         """Initialize in-memory cache.
 
         Args:
@@ -281,7 +281,7 @@ class LENSCache:
         ttl_seconds: int = 300,
         max_entries: int = 1000,
         max_size_mb: int = 100,
-    ):
+    ) -> None:
         """Initialize LENS cache.
 
         Args:

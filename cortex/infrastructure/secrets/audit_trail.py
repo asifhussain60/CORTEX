@@ -24,6 +24,7 @@ class AuditLogger:
     """Appends structured audit entries to a log file."""
 
     def __init__(self, log_path: Optional[str] = None) -> None:
+        """Initialise audit logger with optional file path."""
         self._path = Path(log_path) if log_path else None
         self._entries: List[AuditEntry] = []
 
@@ -66,6 +67,7 @@ class HashChain:
     """Maintains a cryptographic hash chain over audit entries."""
 
     def __init__(self) -> None:
+        """Initialise empty hash chain."""
         self._chain: List[str] = []
         self._prev_hash = "0" * 64
 
@@ -105,6 +107,7 @@ class AuditTrail:
     """High-level audit trail with hash chain integrity."""
 
     def __init__(self, logger: Optional[AuditLogger] = None) -> None:
+        """Initialise audit trail with optional logger."""
         self._logger = logger or AuditLogger()
         self._chain = HashChain()
 
@@ -143,6 +146,7 @@ class AuditTrailRetention:
     """Manages retention policy for audit trail entries."""
 
     def __init__(self, max_days: int = 90) -> None:
+        """Initialise retention policy with max age in days."""
         self.max_days = max_days
 
     def purge_old_entries(self, entries: List[AuditEntry]) -> List[AuditEntry]:
@@ -197,6 +201,6 @@ class ComprehensiveAuditTrail(AuditTrail):
     """Comprehensive audit trail combining retention, signatures, and compliance."""
 
     def __init__(self) -> None:
+        """Initialise comprehensive audit trail with retention and signatures."""
         super().__init__()
-        self.retention = AuditTrailRetention()
         self._signatures: Dict[str, str] = {}

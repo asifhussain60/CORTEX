@@ -24,7 +24,8 @@ class GovernanceRule:
         rule_id: str,
         rule_type: GovernanceRuleType,
         evaluator: Callable[[Dict[str, Any]], bool]
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.rule_id = rule_id
         self.rule_type = rule_type
         self.evaluator = evaluator
@@ -40,7 +41,8 @@ class GovernanceRule:
 class GovernanceEngine:
     """Enforce governance rules."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.rules: Dict[str, GovernanceRule] = {}
         self.audit_log: List[Dict[str, Any]] = []
 

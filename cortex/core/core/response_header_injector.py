@@ -232,7 +232,7 @@ class ResponseHeaderInjector:
         self,
         template_engine: Any,  # Type stub removed - accepts any template engine
         config_manager: Optional[HeaderConfigurationManager] = None
-    ):
+    ) -> None:
         """
         Initialize header injector.
 

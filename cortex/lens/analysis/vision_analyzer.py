@@ -307,7 +307,7 @@ Return comprehensive JSON with: urls, elements, issues, text, structure, metadat
         self,
         api_key: Optional[str] = None,
         default_depth: AnalysisDepth = AnalysisDepth.STANDARD,
-    ):
+    ) -> None:
         """
         Initialize VisionAnalyzer.
 

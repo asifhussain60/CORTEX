@@ -34,7 +34,8 @@ class BoundaryViolation(Exception):
         violation_id: Unique violation identifier
         context: Context dict that triggered violation
     """
-    def __init__(self, violation_type: ViolationType, message: str, severity: str = "WARNING", context: Optional[Dict[str, Any]] = None):
+    def __init__(self, violation_type: ViolationType, message: str, severity: str = "WARNING", context: Optional[Dict[str, Any]] = None) -> None:
+        """Initialize instance."""
         self.violation_type = violation_type
         self.message = message
         self.severity = severity

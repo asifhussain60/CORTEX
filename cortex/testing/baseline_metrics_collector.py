@@ -44,7 +44,7 @@ class BaselineMetricsCollector:
     AC-PHASE38.0-011: Captures test execution, orchestrator latency, memory, cache metrics.
     """
 
-    def __init__(self, cortex_root: Optional[Path] = None):
+    def __init__(self, cortex_root: Optional[Path] = None) -> None:
         """
         Initialize metrics collector.
 

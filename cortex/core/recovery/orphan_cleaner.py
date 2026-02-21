@@ -186,7 +186,8 @@ class OrphanedResourceCleaner:
         scan_interval_seconds: int = 300,
         lock_threshold_minutes: int = 10,
         operation_threshold_hours: int = 1
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.lock_manager = lock_manager
         self.operation_tracker = operation_tracker
         self.scan_interval_seconds = scan_interval_seconds

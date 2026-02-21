@@ -39,6 +39,7 @@ class ProjectDiscoverer:
     }
 
     def __init__(self) -> None:
+        """Initialize instance."""
         self._projects: Dict[str, Dict[str, Any]] = {}
 
     # ── Patchable I/O helpers ────────────────────────────────────────

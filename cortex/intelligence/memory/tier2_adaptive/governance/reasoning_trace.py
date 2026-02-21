@@ -169,7 +169,7 @@ class ReasoningTrace:
 class ReasoningTraceValidator:
     """Validate reasoning traces."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the validator."""
         self.traces: Dict[str, ReasoningTrace] = {}
     

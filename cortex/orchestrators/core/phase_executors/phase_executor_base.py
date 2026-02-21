@@ -53,7 +53,7 @@ class PhaseExecutorBase(ABC):
     - Handle failures gracefully
     """
 
-    def __init__(self, phase_id: str, cortex_root: Path):
+    def __init__(self, phase_id: str, cortex_root: Path) -> None:
         """
         Initialize phase executor.
 

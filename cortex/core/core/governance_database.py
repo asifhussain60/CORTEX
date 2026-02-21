@@ -106,7 +106,7 @@ class QueryCache:
     Max size: 128 entries (rules and query results)
     """
 
-    def __init__(self, maxsize: int = 128):
+    def __init__(self, maxsize: int = 128) -> None:
         """Initialize query cache."""
         self.maxsize = maxsize
         self.cache: Dict[str, Any] = {}
@@ -159,7 +159,7 @@ class GovernanceDatabaseManager:
     _lock = threading.Lock()
     _db_lock = threading.Lock()
 
-    def __init__(self, db_path: Optional[Path] = None):
+    def __init__(self, db_path: Optional[Path] = None) -> None:
         """
         Initialize database manager.
 

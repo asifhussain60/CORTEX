@@ -32,7 +32,7 @@ class PatternDiscoveryPipeline:
     and result aggregation.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize PatternDiscoveryPipeline."""
         self.catalog = PatternCatalog()
         self.classifier = ArchitectureClassifier()
@@ -101,7 +101,7 @@ class BatchProcessor:
     - Error resilience
     """
 
-    def __init__(self, pool_size: int = 10, timeout: float = 30.0):
+    def __init__(self, pool_size: int = 10, timeout: float = 30.0) -> None:
         """
         Initialize BatchProcessor.
 
@@ -128,7 +128,8 @@ class BatchProcessor:
         Returns:
             List of results
         """
-        async def bounded_handler(item):
+        async def bounded_handler(item) -> None:
+            """Handle events within bounded context."""
             async with self.semaphore:
                 try:
                     return await asyncio.wait_for(
@@ -149,7 +150,7 @@ class DiscoveryMetrics:
     Track metrics for pattern discovery operations.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize DiscoveryMetrics."""
         self.patterns_by_type: Dict[str, int] = defaultdict(int)
         self.files_processed = 0

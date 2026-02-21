@@ -71,7 +71,7 @@ class MCPToolExecutor:
         >>> result = executor.execute(req)  # Tools auto-resolved from metadata
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize MCP tool executor."""
         self._tool_handlers: Dict[str, Any] = {}
         self._agent_tools: Dict[str, List[str]] = {}

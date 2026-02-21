@@ -17,6 +17,7 @@ class VaultProvider(ISecretsProvider):
         mount_point: str = "secret",
         **kwargs: Any,
     ) -> None:
+        """Initialise HashiCorp Vault secrets provider."""
         self.addr = addr
         self.token = token
         self.mount_point = mount_point
@@ -34,6 +35,7 @@ class VaultProvider(ISecretsProvider):
             raise AuthError("hvac is not installed") from exc
 
     def get_secret(self, key: str) -> str:
+        """Retrieve a secret value by key."""
         client = self._get_client()
         resp = client.secrets.kv.v2.read_secret_version(path=key, mount_point=self.mount_point)
         data = resp.get("data", {}).get("data", {})
@@ -42,24 +44,28 @@ class VaultProvider(ISecretsProvider):
         return data["value"]
 
     def set_secret(self, key: str, value: str, **meta: Any) -> bool:
+        """Store or update a secret value."""
         self._get_client().secrets.kv.v2.create_or_update_secret(
             path=key, secret={"value": value}, mount_point=self.mount_point
         )
         return True
 
     def delete_secret(self, key: str) -> bool:
+        """Delete a secret by key."""
         self._get_client().secrets.kv.v2.delete_metadata_and_all_versions(
             path=key, mount_point=self.mount_point
         )
         return True
 
     def list_secrets(self) -> List[str]:
+        """List all available secret keys."""
         resp = self._get_client().secrets.kv.v2.list_secrets(
             path="", mount_point=self.mount_point
         )
         return resp.get("data", {}).get("keys", [])
 
     def rotate_secret(self, key: str) -> str:
+        """Rotate a secret and return the new value."""
         import secrets as _secrets
         new_val = _secrets.token_urlsafe(32)
         self.set_secret(key, new_val)

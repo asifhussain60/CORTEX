@@ -65,7 +65,7 @@ class PromptInjectionSanitizer:
     - Instruction override attempts
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the sanitizer with default patterns."""
         self.injection_patterns: List[InjectionPattern] = []
         self.sanitization_history: List[SanitizationResult] = []

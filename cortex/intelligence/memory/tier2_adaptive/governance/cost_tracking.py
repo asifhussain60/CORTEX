@@ -19,7 +19,7 @@ class CostStatus(str, Enum):
 class CostTracker:
     """Stub cost tracker - Phase E will add full logic."""
     
-    def __init__(self, budget: float):
+    def __init__(self, budget: float) -> None:
         """Initialize tracker."""
         self.budget = budget
         self.current_cost = 0.0

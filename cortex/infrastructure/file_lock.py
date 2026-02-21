@@ -217,7 +217,7 @@ class FileLock:
 
 
 @contextmanager
-def file_lock(file_path: str, timeout: float = 5.0):
+def file_lock(file_path: str, timeout: float = 5.0) -> None:
     """
     Context manager for file locking.
     

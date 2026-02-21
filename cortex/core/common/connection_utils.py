@@ -268,8 +268,10 @@ def managed_connection(
             return cursor.lastrowid
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        """Wrap *func* with managed database connection."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
+            """Open a connection, pass cursor to *func*, and handle commit/rollback."""
             db_path = Path(database_path)
 
             with sqlite3.connect(str(db_path)) as conn:

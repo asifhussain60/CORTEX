@@ -127,7 +127,7 @@ class RepositoryFingerprinter:
     - Consistent hashing
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize repository fingerprinter."""
         self.analyzer = SimilarityAnalyzer()
         self._fingerprint_cache: Dict[str, RepositoryFingerprint] = {}

@@ -133,7 +133,7 @@ class EvidenceBundleGenerator:
     Captures evidence artifacts in <500ms and maintains integrity.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize evidence bundle generator.
         """

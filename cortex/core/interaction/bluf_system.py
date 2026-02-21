@@ -469,7 +469,7 @@ class AnalyticsOrchestrator:
     AC-BLUF-5-04: Recommend format improvements
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize AnalyticsOrchestrator."""
         self.format_usage: Dict[ResponseFormat, int] = {fmt: 0 for fmt in ResponseFormat}
         self.satisfaction_scores: Dict[ResponseFormat, List[float]] = {fmt: [] for fmt in ResponseFormat}

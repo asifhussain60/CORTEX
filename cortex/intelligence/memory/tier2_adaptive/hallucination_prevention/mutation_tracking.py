@@ -332,6 +332,7 @@ class VisionMutationTracker(MutationTracker):
         """
         # Remove timezone info for comparison (handle utcnow vs now mismatch)
         def to_naive(dt: datetime) -> datetime:
+            """Convert timezone-aware datetime to naive."""
             if dt.tzinfo is not None:
                 return dt.replace(tzinfo=None)
             return dt

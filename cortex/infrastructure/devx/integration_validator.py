@@ -97,7 +97,7 @@ class ValidationResult:
 class DependencyGraph:
     """Dependency graph for integration analysis."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize dependency graph."""
         self.nodes: Set[str] = set()
         self.edges: Dict[str, Set[str]] = {}
@@ -146,6 +146,7 @@ class DependencyGraph:
         cycles = []
 
         def dfs(node: str, path: List[str], visited: Set[str]) -> None:
+            """Perform depth-first search traversal."""
             if node in path:
                 cycle_start = path.index(node)
                 cycle = path[cycle_start:] + [node]
@@ -173,7 +174,7 @@ class DependencyGraph:
 class IntegrationValidator:
     """Validate integrations."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize integration validator."""
         self._components: Dict[str, type] = {}
         self._instances: Dict[str, Any] = {}

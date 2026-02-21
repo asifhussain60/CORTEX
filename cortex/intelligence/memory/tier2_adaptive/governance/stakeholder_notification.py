@@ -39,7 +39,7 @@ class NotificationManager:
         enabled: Whether notification system is enabled
     """
     
-    def __init__(self, enabled: bool = True):
+    def __init__(self, enabled: bool = True) -> None:
         """Initialize notification manager.
         
         Args:

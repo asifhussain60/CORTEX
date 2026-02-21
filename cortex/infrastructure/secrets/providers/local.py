@@ -17,6 +17,7 @@ class LocalSecretsProvider(ISecretsProvider):
         storage_path: Optional[str] = None,
         initial_secrets: Optional[Dict[str, str]] = None,
     ) -> None:
+        """Initialise local file-based secrets provider."""
         self._path = Path(storage_path) if storage_path else None
         self._store: Dict[str, str] = {}
         if initial_secrets:
@@ -32,16 +33,19 @@ class LocalSecretsProvider(ISecretsProvider):
             self._path.write_text(json.dumps(self._store, indent=2))
 
     def get_secret(self, key: str) -> str:
+        """Get secret."""
         if key not in self._store:
             raise SecretNotFoundError(f"Secret '{key}' not found")
         return self._store[key]
 
     def set_secret(self, key: str, value: str, **meta: Any) -> bool:
+        """Store or update a secret value."""
         self._store[key] = value
         self._persist()
         return True
 
     def delete_secret(self, key: str) -> bool:
+        """Delete secret."""
         if key not in self._store:
             return False
         del self._store[key]
@@ -49,9 +53,11 @@ class LocalSecretsProvider(ISecretsProvider):
         return True
 
     def list_secrets(self) -> List[str]:
+        """List secrets."""
         return list(self._store.keys())
 
     def rotate_secret(self, key: str) -> str:
+        """Rotate a secret and return the new value."""
         import secrets as _secrets
         if key not in self._store:
             raise SecretNotFoundError(f"Secret '{key}' not found")

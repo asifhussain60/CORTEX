@@ -26,6 +26,7 @@ class AICurator:
     )
 
     def __init__(self) -> None:
+        """Initialize instance."""
         self._config: Optional[Dict[str, Any]] = None
 
     def _load_config(self) -> Dict[str, Any]:

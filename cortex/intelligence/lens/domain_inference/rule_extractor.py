@@ -39,7 +39,7 @@ class RuleExtractor:
         # Returns: [{"description": "Minimum order value is $10", ...}]
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize rule extractor"""
         self.rule_patterns = {
             "format": r"(format|pattern|regex|contains|@|starts|ends|email|must contain)",

@@ -35,7 +35,8 @@ class WiringHarnessComponent:
         required: bool = False,
         initialization_code: Optional[str] = None,
         orchestrator_hook_type: Optional[str] = None,
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.component_id = component_id
         self.entry_point = entry_point
         self.priority = priority
@@ -212,7 +213,7 @@ class EnhancedWiringHarness:
         ),
     ]
 
-    def __init__(self, verbose: bool = True):
+    def __init__(self, verbose: bool = True) -> None:
         """Initialize enhanced wiring harness"""
         self.verbose = verbose
         self.logger = StructuredLogger("enhanced_wiring_harness") if StructuredLogger else None
@@ -369,7 +370,7 @@ class EnhancedWiringHarness:
 
         return results
 
-    def get_wired_component(self, component_id: str):
+    def get_wired_component(self, component_id: str) -> None:
         """Get a wired component by ID"""
         component = self.wired_components.get(component_id)
         return component.instance if component else None
@@ -390,7 +391,7 @@ class EnhancedWiringHarness:
         }
 
 
-async def auto_initialize_cortex():
+async def auto_initialize_cortex() -> None:
     """
     Main auto-initialization entry point
     Called automatically on startup to wire all components

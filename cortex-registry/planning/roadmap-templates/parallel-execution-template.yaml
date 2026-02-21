@@ -119,7 +119,7 @@ wave:
       
       artifacts:
         - "migrations/*.py"
-        - "scripts/seed_data.py"
+# [STALE-REF] - "scripts/seed_data.py"
     
     - id: "phase-backend-003"
       name: "Backend: Authentication Service (TDD)"

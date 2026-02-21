@@ -65,7 +65,7 @@ class TelemetryAggregator:
     IMPACT_SCORE_THRESHOLD_HIGH = 6.0
     IMPACT_SCORE_THRESHOLD_MEDIUM = 3.0
 
-    def __init__(self, time_window_hours: int = 24):
+    def __init__(self, time_window_hours: int = 24) -> None:
         """
         Initialize aggregator.
 

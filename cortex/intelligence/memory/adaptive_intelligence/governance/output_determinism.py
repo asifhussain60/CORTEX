@@ -54,7 +54,7 @@ class OutputDeterminismVerifier:
     consistently produce the same outputs.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the verifier."""
         self.execution_history: Dict[str, List[ExecutionRecord]] = {}
         self.analysis_results: Dict[str, DeterminismAnalysis] = {}

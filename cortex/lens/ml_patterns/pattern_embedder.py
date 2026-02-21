@@ -89,7 +89,7 @@ class PatternEmbedder:
         "cohesion_score": {"min": 0, "max": 1, "scale": 1},
     }
 
-    def __init__(self, embedding_dim: int = 64, seed: Optional[int] = 42):
+    def __init__(self, embedding_dim: int = 64, seed: Optional[int] = 42) -> None:
         """
         Initialize pattern embedder.
 
@@ -182,7 +182,7 @@ class EmbeddingModel:
         self,
         embedding_dim: int = 64,
         dropout: float = 0.1,
-    ):
+    ) -> None:
         """
         Initialize embedding model.
 

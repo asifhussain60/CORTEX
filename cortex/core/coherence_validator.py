@@ -1,4 +1,5 @@
 """coherence_validator.py"""
 
 class CoherenceValidator:
-    pass
+    """Validates coherence of orchestrator state and outputs."""
+

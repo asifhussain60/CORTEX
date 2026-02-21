@@ -206,7 +206,8 @@ class FaultIsolator:
         self,
         domains: Optional[List[FailureDomain]] = None,
         policy: Optional[IsolationPolicy] = None
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.domains = {d.name: d for d in (domains or FailureDomain.predefined_domains())}
         self.policy = policy or IsolationPolicy.default()
 

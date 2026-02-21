@@ -108,7 +108,7 @@ class ResponseOptimizer:
 
 """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize optimizer."""
         self.validator = ResponseFormatValidator()
         logger.info("ResponseOptimizer initialized")

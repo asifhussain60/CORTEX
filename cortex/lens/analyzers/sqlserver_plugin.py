@@ -47,7 +47,7 @@ class SQLServerPlugin(DatabaseCrawlerPlugin):
     Authority: Phase 19 Component #5
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize SQL Server plugin."""
         # Check pyodbc availability at initialization, not import time
         try:

@@ -44,7 +44,7 @@ class PromptCoherenceValidator:
             print(f"{issue.severity}: {issue.description}")
     """
 
-    def __init__(self, workspace_root: Path = None):
+    def __init__(self, workspace_root: Path = None) -> None:
         """Initialize validator with CORTEX workspace root."""
         self.workspace_root = workspace_root or Path("d:/PROJECTS/CORTEX")
         self.prompts_dir = self.workspace_root / ".github" / "prompts"

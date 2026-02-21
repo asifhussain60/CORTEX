@@ -46,7 +46,7 @@ class TurnContext:
         turns: Deque of TurnEntry objects (LRU eviction)
     """
 
-    def __init__(self, session_id: str, max_turns: int = 100):
+    def __init__(self, session_id: str, max_turns: int = 100) -> None:
         """
         Initialize turn context.
 

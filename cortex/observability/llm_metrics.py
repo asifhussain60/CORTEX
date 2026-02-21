@@ -15,28 +15,34 @@ except ImportError:
     PROMETHEUS_AVAILABLE = False
     # Fallback no-op metrics if prometheus not installed
     class Counter:
-        def __init__(self, *args, **kwargs):
-            pass
-        def labels(self, *args, **kwargs):
+        """No-op Prometheus Counter fallback."""
+        def __init__(self, *args, **kwargs) -> None:
+            """Initialise no-op counter."""
+        def labels(self, *args, **kwargs) -> "Counter":
+            """Return self for chaining."""
             return self
-        def inc(self, *args, **kwargs):
-            pass
+        def inc(self, *args, **kwargs) -> None:
+            """No-op increment."""
 
     class Histogram:
-        def __init__(self, *args, **kwargs):
-            pass
-        def labels(self, *args, **kwargs):
+        """No-op Prometheus Histogram fallback."""
+        def __init__(self, *args, **kwargs) -> None:
+            """Initialise no-op histogram."""
+        def labels(self, *args, **kwargs) -> "Histogram":
+            """Return self for chaining."""
             return self
-        def observe(self, *args, **kwargs):
-            pass
+        def observe(self, *args, **kwargs) -> None:
+            """No-op observe."""
 
     class Gauge:
-        def __init__(self, *args, **kwargs):
-            pass
-        def labels(self, *args, **kwargs):
+        """No-op Prometheus Gauge fallback."""
+        def __init__(self, *args, **kwargs) -> None:
+            """Initialise no-op gauge."""
+        def labels(self, *args, **kwargs) -> "Gauge":
+            """Return self for chaining."""
             return self
-        def set(self, *args, **kwargs):
-            pass
+        def set(self, *args, **kwargs) -> None:
+            """No-op set."""
 
 
 # LLM API call counter

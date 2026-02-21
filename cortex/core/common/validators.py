@@ -112,8 +112,10 @@ def required(
             return f"Hello, {name}"
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        """Wrap *func* with required-parameter validation."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
+            """Validate that the required parameter is present."""
             value = kwargs.get(param_name)
             if value is None:
                 error_msg = message or f"'{param_name}' is required"
@@ -144,8 +146,10 @@ def type_check(
             return count * 2
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        """Wrap *func* with type-check validation."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
+            """Validate the parameter type before calling *func*."""
             value = kwargs.get(param_name)
             if value is not None and not isinstance(value, expected_type):
                 error_msg = message or (
@@ -181,8 +185,10 @@ def range_check(
             pass
     """
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        """Wrap *func* with range-check validation."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
+            """Validate the parameter is within the allowed range."""
             value = kwargs.get(param_name)
             if value is not None:
                 if min_val is not None and value < min_val:
@@ -226,8 +232,10 @@ def regex_match(
         compiled = pattern
 
     def decorator(func: Callable[..., T]) -> Callable[..., T]:
+        """Wrap *func* with regex-match validation."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> T:
+            """Validate the parameter matches the required pattern."""
             value = kwargs.get(param_name)
             if value is not None and isinstance(value, str):
                 if not compiled.match(value):

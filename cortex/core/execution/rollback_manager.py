@@ -39,7 +39,7 @@ class RollbackManager:
     - Track checkpoint history
     """
     
-    def __init__(self, repo_path: Optional[Path] = None):
+    def __init__(self, repo_path: Optional[Path] = None) -> None:
         """
         Initialize rollback manager.
         

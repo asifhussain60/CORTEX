@@ -172,6 +172,7 @@ def core_032_enforce(func: Callable) -> Callable:
     """
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """Execute wrapped function with applied decoration."""
         result = func(*args, **kwargs)
 
         # Verify factory pattern was used
@@ -195,6 +196,7 @@ def core_033_enforce(func: Callable) -> Callable:
     """
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """Execute wrapped function with applied decoration."""
         result = func(*args, **kwargs)
 
         # Verify state persistence calls were made
@@ -218,6 +220,7 @@ def core_034_enforce(func: Callable) -> Callable:
     """
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """Execute wrapped function with applied decoration."""
         result = func(*args, **kwargs)
 
         # Verify audit logging calls were made
@@ -240,6 +243,7 @@ def core_035_enforce(func: Callable) -> Callable:
     """
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """Execute wrapped function with applied decoration."""
         result = func(*args, **kwargs)
 
         # Verify response header is present

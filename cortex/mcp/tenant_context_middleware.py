@@ -80,7 +80,7 @@ class TenantContextMiddleware:
         >>> enhanced = middleware.inject_context(tool_params, context)
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize tenant context middleware."""
         self._current_context: Optional[WorkspaceContext] = None
         logger.debug("TenantContextMiddleware initialized")

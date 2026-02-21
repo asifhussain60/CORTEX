@@ -33,7 +33,7 @@ class RegistryValidator:
         staleness_days: Days after which data considered stale (default: 30)
     """
     
-    def __init__(self, registry_path: Optional[Path] = None, staleness_days: int = 30):
+    def __init__(self, registry_path: Optional[Path] = None, staleness_days: int = 30) -> None:
         """
         Initialize registry validator.
         

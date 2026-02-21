@@ -61,6 +61,7 @@ class EvidenceCollector:
     """Collects evidence for compliance audits."""
 
     def __init__(self) -> None:
+        """Initialise evidence collector."""
         self._evidence: List[Dict[str, Any]] = []
 
     def collect(self, evidence_type: str, data: Any, source: str = "system") -> None:
@@ -91,6 +92,7 @@ class ComplianceAutomation:
     """Automates compliance checks and remediation."""
 
     def __init__(self) -> None:
+        """Initialise compliance automation pipeline."""
         self._reporter = ComplianceReporter()
         self._collector = EvidenceCollector()
 
@@ -113,6 +115,7 @@ class ComplianceDashboard:
     """Dashboard view of compliance posture."""
 
     def __init__(self, reporter: Optional[ComplianceReporter] = None) -> None:
+        """Initialise compliance dashboard."""
         self._reporter = reporter or ComplianceReporter()
 
     def get_summary(self, findings: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
@@ -137,6 +140,7 @@ class ComplianceOrchestrator:
     """Orchestrates the full compliance pipeline."""
 
     def __init__(self) -> None:
+        """Initialise compliance orchestrator."""
         self.reporter = ComplianceReporter()
         self.collector = EvidenceCollector()
         self.automation = ComplianceAutomation()

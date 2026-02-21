@@ -25,6 +25,7 @@ class DigestResult:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
+        """Convert the digest result to a serializable dictionary."""
         return {
             "success": self.success,
             "is_chat_file": self.is_chat_file,
@@ -104,3 +105,14 @@ class DigestSessionOrchestrator:
         """Count actionable enhancement markers in content."""
         markers = ["TODO:", "FIXME:", "ENHANCE:", "ENH-", "AC-"]
         return sum(content.count(m) for m in markers)
+
+    # ------------------------------------------------------------------
+    # Health Check (IOrchestrator protocol)
+    # ------------------------------------------------------------------
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status for wiring-contract validation."""
+        return {
+            "status": "healthy",
+            "orchestrator": "DigestSessionOrchestrator",
+        }

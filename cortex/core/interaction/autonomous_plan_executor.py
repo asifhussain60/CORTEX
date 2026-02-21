@@ -46,7 +46,7 @@ class AutonomousPlanExecutor:
         r"\bskip\s+dor\b",
     ]
 
-    def __init__(self, registry_path: Optional[Path] = None):
+    def __init__(self, registry_path: Optional[Path] = None) -> None:
         """Initialize executor with registry path.
 
         Args:

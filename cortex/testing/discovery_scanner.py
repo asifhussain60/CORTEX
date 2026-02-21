@@ -140,7 +140,7 @@ class DiscoveryScanner:
         'generated', '_archives', '_workspaces',
     })
 
-    def __init__(self, cortex_root: str = None):
+    def __init__(self, cortex_root: str = None) -> None:
         """Initialize scanner with CORTEX root path."""
         if cortex_root is None:
             cortex_root = str(Path(__file__).parent.parent.parent)

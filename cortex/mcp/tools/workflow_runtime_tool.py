@@ -139,7 +139,7 @@ class WorkflowRuntimeTool:
         ... })
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize workflow runtime tool."""
         self.name = "cortex_workflow_runtime"
         self.description = (

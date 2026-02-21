@@ -217,8 +217,10 @@ IntentCanonicalForm = CanonicalForm
 # Stub for test compatibility
 class ACIDExtraction:
     """ACID extraction for canonicalization."""
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.data = {}
     
-    def extract(self, data):
+    def extract(self, data) -> None:
+        """Extract canonical form from input."""
         return data

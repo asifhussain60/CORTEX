@@ -48,7 +48,7 @@ class WaveOrchestrationStrategy(ExecutionStrategy):
     and parallelization constraints.
     """
     
-    def __init__(self, config: Optional[WaveOrchestrationConfig] = None):
+    def __init__(self, config: Optional[WaveOrchestrationConfig] = None) -> None:
         """
         Initialize wave orchestration strategy.
         

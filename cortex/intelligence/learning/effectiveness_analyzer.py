@@ -94,7 +94,7 @@ class EffectivenessAnalyzer:
     AC-PHASE71-007: Pattern effectiveness scoring and tracking
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize effectiveness analyzer."""
         # Store all pattern applications
         self._applications: Dict[str, List[PatternApplication]] = {}

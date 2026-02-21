@@ -17,7 +17,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
-def create_audit_entry(conn, entry_id, ac_id, operation, previous_hash, entry_hash):
+def create_audit_entry(conn, entry_id, ac_id, operation, previous_hash, entry_hash) -> None:
     """Insert an audit entry directly"""
     cursor = conn.cursor()
     timestamp = datetime.now(timezone.utc).isoformat()

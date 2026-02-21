@@ -161,7 +161,7 @@ class RelationshipTraversalEngine(BaseIntelligenceEngine):
         "patch": re.compile(r"@\w+\.patch\s*\(\s*['\"]([^'\"]+)['\"]"),
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize RelationshipTraversal engine."""
         super().__init__(
             name="RelationshipTraversal",

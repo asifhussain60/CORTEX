@@ -66,7 +66,7 @@ class ProgressMetrics:
     current_status: DashboardStatus = DashboardStatus.STOPPED
     estimated_completion_time: Optional[datetime] = None
 
-    def add_snapshot(self, snapshot: ProgressSnapshot):
+    def add_snapshot(self, snapshot: ProgressSnapshot) -> None:
         """Add progress snapshot."""
         self.snapshots.append(snapshot)
 
@@ -96,7 +96,8 @@ class ProgressMetrics:
 class ProgressAggregator:
     """Aggregates progress from multiple sources."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialise ProgressAggregator."""
         self.progress_by_stage: Dict[str, ProgressSnapshot] = {}
         self.history: List[ProgressSnapshot] = []
         self.lock = None  # For thread-safe operations if needed
@@ -146,7 +147,7 @@ class ProgressAggregator:
         """Get progress for all stages."""
         return self.progress_by_stage.copy()
 
-    def clear_history(self):
+    def clear_history(self) -> None:
         """Clear progress history."""
         self.history.clear()
 
@@ -163,24 +164,25 @@ class DashboardService:
     Aggregates progress from multiple components.
     """
 
-    def __init__(self, aggregator: Optional[ProgressAggregator] = None):
+    def __init__(self, aggregator: Optional[ProgressAggregator] = None) -> None:
+        """Initialise DashboardService."""
         self.aggregator = aggregator or ProgressAggregator()
         self.metrics = ProgressMetrics()
         self.status = DashboardStatus.STOPPED
 
-    def start(self):
+    def start(self) -> None:
         """Start the dashboard."""
         self.status = DashboardStatus.RUNNING
         self.metrics.current_status = DashboardStatus.RUNNING
         logger.info("Dashboard started")
 
-    def pause(self):
+    def pause(self) -> None:
         """Pause the dashboard."""
         self.status = DashboardStatus.PAUSED
         self.metrics.current_status = DashboardStatus.PAUSED
         logger.info("Dashboard paused")
 
-    def stop(self):
+    def stop(self) -> None:
         """Stop the dashboard."""
         self.status = DashboardStatus.STOPPED
         self.metrics.current_status = DashboardStatus.STOPPED
@@ -193,7 +195,7 @@ class DashboardService:
         completed: int,
         in_progress: int,
         failed: int
-    ):
+    ) -> None:
         """Update progress for a stage."""
         if self.status == DashboardStatus.STOPPED:
             logger.warning("Cannot update progress: dashboard is stopped")
@@ -217,7 +219,7 @@ class DashboardService:
             "metrics": self.metrics.to_dict()
         }
 
-    def set_estimated_completion(self, completion_time: datetime):
+    def set_estimated_completion(self, completion_time: datetime) -> None:
         """Set estimated completion time."""
         self.metrics.estimated_completion_time = completion_time
         logger.info(f"Set estimated completion: {completion_time}")

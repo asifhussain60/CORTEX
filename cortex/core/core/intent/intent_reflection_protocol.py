@@ -125,7 +125,7 @@ class IntentReflectionEngine:
     """
     MAX_RECOMMENDATIONS = 50
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize reflection engine."""
         self.request_history: List[ReflectionRequest] = []
         self.response_history: List[ReflectionResponse] = []

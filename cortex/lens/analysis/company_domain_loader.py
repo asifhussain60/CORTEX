@@ -60,7 +60,7 @@ class CompanyDomainLoader:
         ...     print(f"PCI-DSS rules: {pci_domain.data.get('rules', [])}")
     """
 
-    def __init__(self, company_domains_path: Optional[Path] = None):
+    def __init__(self, company_domains_path: Optional[Path] = None) -> None:
         """
         Initialize CompanyDomainLoader.
 

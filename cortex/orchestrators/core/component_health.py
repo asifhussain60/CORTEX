@@ -97,7 +97,7 @@ class ComponentHealthTracker:
         'HEALTHY'
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize component health tracker."""
         self._components: Dict[str, ComponentHealth] = {}
     

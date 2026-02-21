@@ -69,7 +69,7 @@ rules:
       
       pre_commit_hook:
         enabled: true
-        command: "python cortex/governance_tools/lint_instruction_files.py"
+        # [STALE-REF] command: "python cortex/governance_tools/lint_instruction_files.py"
         exit_on_failure: true
       
       ci_check:

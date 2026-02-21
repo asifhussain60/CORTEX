@@ -38,7 +38,7 @@ class QueryOptimizer:
     for knowledge queries.
     """
 
-    def __init__(self, backends: Optional[Dict[str, Any]] = None, enable_caching: bool = True):
+    def __init__(self, backends: Optional[Dict[str, Any]] = None, enable_caching: bool = True) -> None:
         """Initialize queryoptimizer.
 
         Args:

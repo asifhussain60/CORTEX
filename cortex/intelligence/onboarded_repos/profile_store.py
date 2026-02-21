@@ -40,7 +40,7 @@ class ProfileStore:
         >>> loaded = store.load("KSESSIONS")
     """
     
-    def __init__(self, storage_path: Optional[Path] = None):
+    def __init__(self, storage_path: Optional[Path] = None) -> None:
         """
         Initialize ProfileStore.
         

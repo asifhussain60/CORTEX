@@ -94,7 +94,7 @@ class DatabaseAnalyzer:
         ...     print(f"{migration.version}: {migration.description}")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize DatabaseAnalyzer."""
         pass
 

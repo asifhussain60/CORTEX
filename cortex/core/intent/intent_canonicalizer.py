@@ -115,7 +115,7 @@ class IntentCanonicalizer:
         'ac_id': r'AC[-_]?ID\s+([A-Z]{2,3}-\d{3}-\d{2})',
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize IntentCanonicalizer."""
         pass
 

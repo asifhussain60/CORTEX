@@ -470,7 +470,7 @@ class ViolationReporter:
     - Context that triggered violation
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize violation reporter"""
         self.logger = EnhancedAuditLogger.instance()
 

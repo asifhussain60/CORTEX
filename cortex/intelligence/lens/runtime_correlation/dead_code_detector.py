@@ -33,7 +33,8 @@ class DeadCodeDetector:
         >>> recommendations = detector.generate_removal_recommendations(dead)
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.deprecated_patterns = [
             "eval()", "exec()", "string.atoi", "has_key", "__cmp__"
         ]

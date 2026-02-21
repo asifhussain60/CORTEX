@@ -253,6 +253,7 @@ class LazyModuleLoader:
         visited = set()
 
         def visit(name: str) -> None:
+            """Visit AST node during traversal."""
             if name in visited:
                 return
 

@@ -90,7 +90,7 @@ class ACDomainRegistry:
             cls._instance._initialized = False
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize registry (only once)."""
         if self._initialized:
             return
@@ -303,7 +303,7 @@ class ACDomainRegistry:
 class ACDomainLoader:
     """Loads AC-to-domain mappings from YAML file."""
 
-    def __init__(self, tier1_path: Path):
+    def __init__(self, tier1_path: Path) -> None:
         """
         Initialize loader.
 
@@ -370,7 +370,7 @@ class ACDomainLoader:
 class ACDomainPopulator:
     """High-level interface for AC-to-domain mapping population."""
 
-    def __init__(self, tier1_path: Path):
+    def __init__(self, tier1_path: Path) -> None:
         """
         Initialize populator.
 

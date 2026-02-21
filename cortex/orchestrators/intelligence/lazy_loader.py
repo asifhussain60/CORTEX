@@ -101,7 +101,7 @@ class IntentAgentMapper:
         },
     }
     
-    def __init__(self, agents_dir: Optional[Path] = None):
+    def __init__(self, agents_dir: Optional[Path] = None) -> None:
         """
         Initialize the mapper.
         

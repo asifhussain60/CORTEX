@@ -75,7 +75,7 @@ class OrchestratorFactory:
     - Safe instantiation order (topological sort)
     """
 
-    def __init__(self, wiring_file_path: str):
+    def __init__(self, wiring_file_path: str) -> None:
         """Initialize factory with wiring specification file"""
         self.wiring_file_path = wiring_file_path
         self.spec: Optional[WiringSpecification] = None
@@ -204,6 +204,7 @@ class OrchestratorFactory:
     def _create_event_handler(self, instance: Any, event_type: str) -> Callable:
         """Create event handler for orchestrator"""
         def handler(event: Any) -> None:
+            """Route *event* to the orchestrator method for *event_type*."""
             method_name = self._event_type_to_method(event_type)
             if hasattr(instance, method_name):
                 getattr(instance, method_name)(event)
@@ -278,7 +279,8 @@ class OrchestrationBootstrap:
     - Expose orchestrators via context
     """
 
-    def __init__(self, wiring_file_path: str):
+    def __init__(self, wiring_file_path: str) -> None:
+        """Initialize instance."""
         self.factory = OrchestratorFactory(wiring_file_path)
         self.context: Optional[OrchestrationContext] = None
 

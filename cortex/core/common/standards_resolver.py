@@ -67,7 +67,7 @@ class StandardsResolver:
         defaults_root: str = "cortex/defaults",
         cache_size: int = 100,
         cache_ttl: int = 3600,
-    ):
+    ) -> None:
         """
         Initialize standards resolver.
 
@@ -90,7 +90,7 @@ class StandardsResolver:
         # Repository profile (from Phase 28)
         self._profile = None
 
-    def load_profile(self, profile: Any):
+    def load_profile(self, profile: Any) -> None:
         """
         Load repository profile from Phase 28.
 
@@ -225,6 +225,6 @@ class StandardsResolver:
         # Add to cache
         self._cache[path] = (content, time.time())
 
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """Clear all cached standards."""
         self._cache.clear()

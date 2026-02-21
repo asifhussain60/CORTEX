@@ -61,7 +61,7 @@ class MetadataDrivenDiscovery:
         >>> # Returns: {agent_id: AgentToolMapping, ...}
     """
     
-    def __init__(self, agents_dir: str = ".github/agents/core"):
+    def __init__(self, agents_dir: str = ".github/agents/core") -> None:
         """
         Initialize metadata-driven discovery.
         

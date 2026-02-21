@@ -51,7 +51,7 @@ class InfrastructureDiscoveryTool:
     - Integration with LENS, Planning, Interaction orchestrators
     """
 
-    def __init__(self, cache_ttl_seconds: int = 300):
+    def __init__(self, cache_ttl_seconds: int = 300) -> None:
         """
         Initialize discovery tool.
 
@@ -206,7 +206,7 @@ class GitHubDiscoveryTool:
 
     def __init__(
         self, org: str, token: Optional[str] = None, mock_mode: bool = True
-    ):
+    ) -> None:
         """
         Initialize GitHub discovery tool.
 

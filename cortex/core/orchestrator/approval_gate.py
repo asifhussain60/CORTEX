@@ -146,7 +146,8 @@ class ApprovalGateLogic:
         Returns:
             Dictionary with crossing information
         """
-        def get_level(score):
+        def get_level(score: float) -> str:
+            """Map a complexity score to a named level."""
             if score <= 0.2:
                 return 'TRIVIAL'
             elif score <= 0.35:

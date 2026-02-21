@@ -88,7 +88,7 @@ class SecurityTestGenerator:
         include_injection_tests: bool = True,
         include_auth_tests: bool = True,
         include_validation_tests: bool = True,
-    ):
+    ) -> None:
         """Initialize SecurityTestGenerator with configuration."""
         self.include_injection_tests = include_injection_tests
         self.include_auth_tests = include_auth_tests

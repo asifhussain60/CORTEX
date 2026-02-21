@@ -68,7 +68,7 @@ class StartupValidator:
     # Docker-first: YAML config instead of SQLite
     REGISTRY_CONFIG = Path(__file__).parent.parent.parent / "cortex-registry" / "manifest.yaml"
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize validator."""
         self.cache_dir = self.CACHE_DIR
         self.cache_file = self.CACHE_FILE

@@ -130,7 +130,7 @@ class ProgressTrackerManager:
     _instance: Optional['ProgressTrackerManager'] = None
     _lock = threading.Lock()
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize progress tracker.
         """

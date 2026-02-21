@@ -64,7 +64,7 @@ class BaseIntelligenceEngine(ABC):
     6. Return AnalysisResult with standardized format
     """
 
-    def __init__(self, engine_name: str):
+    def __init__(self, engine_name: str) -> None:
         """
         Initialize intelligence engine.
 

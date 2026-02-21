@@ -31,7 +31,7 @@ class StatusUpdateHook:
         sla_seconds: Maximum update latency (default: 300s = 5 min)
     """
     
-    def __init__(self, registry_path: Optional[Path] = None, sla_seconds: int = 300):
+    def __init__(self, registry_path: Optional[Path] = None, sla_seconds: int = 300) -> None:
         """
         Initialize status update hook.
         

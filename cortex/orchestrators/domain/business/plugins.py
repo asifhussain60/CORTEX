@@ -56,7 +56,7 @@ class DomainPlugin(ABC):
 class DomainPluginRegistry:
     """Registry for domain plugins."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize registry."""
         self._plugins: Dict[str, DomainPlugin] = {}
         self._domain_plugins: Dict[str, List[str]] = {}

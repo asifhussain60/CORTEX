@@ -39,7 +39,7 @@ class Snapshot:
 class RecoveryManager:
     """Manage recovery operations."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize recovery manager."""
         self._snapshots: Dict[str, Snapshot] = {}
         self.current_version: Optional[str] = None

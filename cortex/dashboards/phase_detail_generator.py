@@ -42,7 +42,7 @@ class PhaseDetailPageGenerator:
     VERSION = "1.0.0"
     DEFAULT_TEMPLATE_NAME = "phase-detail.html"
 
-    def __init__(self, template_dir: Optional[Path] = None):
+    def __init__(self, template_dir: Optional[Path] = None) -> None:
         """
         Initialize generator with optional template directory.
 

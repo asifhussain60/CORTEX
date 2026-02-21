@@ -176,7 +176,7 @@ class IntentClassifier:
         ],
     }
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the classifier."""
         # Compile patterns for performance
         self._strong_compiled = {

@@ -81,7 +81,7 @@ class EnvironmentIntegrityAgent:
     - Non-critical dependencies missing
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize EnvironmentIntegrityAgent."""
         self.mcp_required_intents = [
             IntentType.IMPLEMENT,

@@ -13,7 +13,7 @@ pattern:
     - "Response formatting adapts orchestrator output to MCP response schema"
   participants:
     target: "Orchestrator API (Python methods)"
-    adapter: "MCP Tool (cortex/mcp/tools/*.py)"
+    # [STALE-REF] adapter: "MCP Tool (cortex/mcp/tools/*.py)"
     client: "AI Assistant (GitHub Copilot, Claude, etc.)"
   when_to_use:
     - "External interface protocol differs from internal API"

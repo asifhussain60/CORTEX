@@ -109,7 +109,7 @@ class IntelligentTestGenerator:
         self,
         min_value_score: float = 70.0,
         coverage_threshold: float = 80.0,
-    ):
+    ) -> None:
         """Initialize IntelligentTestGenerator with all components."""
         self.min_value_score = min_value_score
         self.coverage_threshold = coverage_threshold

@@ -33,7 +33,7 @@ class CommandResult:
 class PersonaCommandHandlers:
     """Handle /persona and /detail commands"""
 
-    def __init__(self, orchestrator: MasterOrchestrator):
+    def __init__(self, orchestrator: MasterOrchestrator) -> None:
         """
         Initialize handlers.
 

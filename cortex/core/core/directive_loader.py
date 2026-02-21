@@ -15,7 +15,8 @@ import yaml
 class DirectiveLoader:
     """Load and cache CORTEX directives with O(1) lookup"""
 
-    def __init__(self, registry_path: str = "cortex-registry/_cortex-master"):
+    def __init__(self, registry_path: str = "cortex-registry/_cortex-master") -> None:
+        """Initialize instance."""
         self.registry_path = Path(registry_path)
         self.index_path = self.registry_path / "meta" / "directive-index.yaml"
         self.schema_path = self.registry_path / "directives" / "schema.json"

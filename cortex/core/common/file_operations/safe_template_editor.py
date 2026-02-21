@@ -69,7 +69,7 @@ class SafeTemplateEditor:
             print(f"Failed: {result.error}")
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize SafeTemplateEditor."""
         self.backup_suffix = ".bak"
     

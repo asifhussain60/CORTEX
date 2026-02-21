@@ -21,13 +21,15 @@ class CommandParseResult:
         command: Optional[str] = None,
         args: Optional[Dict[str, Any]] = None,
         error: Optional[str] = None,
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.success = success
         self.command = command
         self.args = args or {}
         self.error = error
 
     def to_dict(self) -> Dict[str, Any]:
+        """Serialize parse result to a dictionary."""
         return {
             "success": self.success,
             "command": self.command,
@@ -45,13 +47,15 @@ class CommandResponse:
         message: str = "",
         state: Optional[Dict[str, Any]] = None,
         next_action: Optional[str] = None,
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.success = success
         self.message = message
         self.state = state or {}
         self.next_action = next_action
 
     def to_dict(self) -> Dict[str, Any]:
+        """Serialize command response to a dictionary."""
         return {
             "success": self.success,
             "message": self.message,
@@ -63,7 +67,7 @@ class CommandResponse:
 class CommandParser:
     """Parse and validate user commands"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize CommandParser"""
         self.valid_personas = [p.value for p in PersonaId]
         self.valid_depths = [d.value for d in DepthLevel]
@@ -181,7 +185,7 @@ class PersonaCommandHandler:
         self,
         orchestrator: MasterOrchestrator,
         store: Optional[PersonaStore] = None,
-    ):
+    ) -> None:
         """
         Initialize PersonaCommandHandler.
 
@@ -256,7 +260,7 @@ class DetailCommandHandler:
         self,
         orchestrator: MasterOrchestrator,
         store: Optional[PersonaStore] = None,
-    ):
+    ) -> None:
         """
         Initialize DetailCommandHandler.
 

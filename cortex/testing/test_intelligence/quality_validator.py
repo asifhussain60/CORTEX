@@ -65,7 +65,7 @@ class QualityValidator:
         r"TODO|FIXME|XXX",  # Unfinished tests
     ]
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize quality validator."""
         pass
     

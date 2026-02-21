@@ -70,7 +70,7 @@ class CompatibilityLayer:
     - Backward compatibility guarantees
     """
 
-    def __init__(self, mode: CompatibilityMode = CompatibilityMode.COMPATIBLE):
+    def __init__(self, mode: CompatibilityMode = CompatibilityMode.COMPATIBLE) -> None:
         """
         Initialize compatibility layer.
 

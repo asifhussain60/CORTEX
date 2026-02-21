@@ -65,7 +65,7 @@ class DebuggerOrchestrator(IOrchestrator):
         event_bus: EventBus,
         marker_injection_engine: Optional[Any] = None,
         auto_cleanup_manager: Optional[Any] = None
-    ):
+    ) -> None:
         """
         Initialize DebuggerOrchestrator.
         
@@ -357,17 +357,17 @@ class DebuggerOrchestrator(IOrchestrator):
         """Get orchestrator version."""
         return "1.0.0"
     
-    def initialize(self):
+    def initialize(self) -> Any:
         """Initialize orchestrator (already done in __init__)."""
         from cortex.core.core.result import Result
         return Result.success("DebuggerOrchestrator initialized")
     
-    def get_mode(self):
+    def get_mode(self) -> Any:
         """Get operation mode."""
         from cortex.core.core.interfaces.i_orchestrator import OperationMode
         return OperationMode.EXECUTION
     
-    def get_mcp_tools(self):
+    def get_mcp_tools(self) -> Any:
         """Get MCP tools exposed by this orchestrator."""
         from cortex.core.core.result import Result
         return Result.success({
@@ -385,13 +385,13 @@ class DebuggerOrchestrator(IOrchestrator):
             }
         })
     
-    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]):
+    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Any:
         """Execute operation with audit logging."""
         from cortex.core.core.result import Result
         result = self.execute(operation_name, parameters)
         return Result.success(result)
     
-    def get_audit_trail(self, limit: int = 100):
+    def get_audit_trail(self, limit: int = 100) -> Any:
         """Get audit trail."""
         from cortex.core.core.result import Result
         # EventBus-driven, audit trail tracked via EventBus events

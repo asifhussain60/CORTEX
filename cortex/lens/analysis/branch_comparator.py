@@ -127,7 +127,7 @@ class BranchComparator:
         repo_path: Optional[Path] = None,
         remote_adapter: Optional[RemoteGitAdapter] = None,
         remote_repo: Optional[str] = None,
-    ):
+    ) -> None:
         """
         Initialize BranchComparator.
 

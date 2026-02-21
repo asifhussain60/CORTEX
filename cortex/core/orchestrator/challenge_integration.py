@@ -58,7 +58,7 @@ class ChallengeIntegrationOrchestrator:
         self,
         generator: Optional[Any] = None,
         confidence_threshold: float = 0.30,
-    ):
+    ) -> None:
         """
         Initialize orchestrator.
 

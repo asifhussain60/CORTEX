@@ -41,7 +41,7 @@ class BaseIntelligenceEngine:
         description: str = "",
         cache_ttl: int = 300,
         enabled: bool = True
-    ):
+    ) -> None:
         """
         Initialize BaseIntelligenceEngine
 

@@ -34,7 +34,7 @@ class IntelligenceRoutingWiring:
     - Handle cascading routing
     """
 
-    def __init__(self, wiring_config_path: Optional[Path] = None):
+    def __init__(self, wiring_config_path: Optional[Path] = None) -> None:
         """
         Initialize intelligence routing wiring.
 

@@ -567,7 +567,7 @@ class CrawlerSpecGenerator:
 class CapabilityDiscoveryEngine:
     """Main engine for adaptive capability discovery."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize discovery engine."""
         self.fingerprint_analyzer = FingerprintAnalyzer()
         self.capability_mapper = CapabilityMapper()

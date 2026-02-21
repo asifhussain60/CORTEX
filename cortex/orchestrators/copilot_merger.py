@@ -35,6 +35,7 @@ class CopilotMerger:
     _CORTEX_SECTION_KEYWORDS = {"CORTEX", "TIER 0", "TIER 1", "Governance", "CORE"}
 
     def __init__(self, audit_enabled: bool = False) -> None:
+        """Initialize instance."""
         self.audit_enabled = audit_enabled
         self._audit: Optional[Any] = None
         if audit_enabled:

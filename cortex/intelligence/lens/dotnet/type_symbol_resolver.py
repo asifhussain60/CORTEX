@@ -30,7 +30,7 @@ class TypeSymbolResolver:
         >>> print(impls)  # ['User', 'Product']
     """
     
-    def __init__(self, semantic_models: List[Dict[str, Any]]):
+    def __init__(self, semantic_models: List[Dict[str, Any]]) -> None:
         """
         Initialize resolver with semantic models from Roslyn CLI.
         

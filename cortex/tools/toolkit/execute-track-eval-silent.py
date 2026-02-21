@@ -285,7 +285,7 @@ def generate_summary() -> str:
     return "\n".join(summary_lines)
 
 
-def main():
+def main() -> None:
     """Execute all track:eval phases silently."""
     print(f"▶ Executing TRACK:EVAL ({len(PHASES)} phases)...", file=sys.stderr)
 

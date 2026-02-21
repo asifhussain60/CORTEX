@@ -99,7 +99,7 @@ class CacheManager:
         max_size_mb: int = 100,
         default_ttl: int = 300,
         cleanup_interval: int = 60,
-    ):
+    ) -> None:
         """
         Initialize cache manager.
 
@@ -268,6 +268,7 @@ class CacheManager:
         """Start background cleanup thread for expired entries."""
 
         def cleanup_worker() -> None:
+            """Background worker for cache cleanup."""
             while self._running:
                 time.sleep(self._cleanup_interval)
                 with self._lock:

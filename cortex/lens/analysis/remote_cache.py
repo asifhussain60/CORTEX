@@ -88,7 +88,7 @@ class RemoteCache:
         cache_dir: Optional[Path] = None,
         max_size: int = 1024 * 1024 * 100,  # 100 MB default
         default_ttl: int = 3600,  # 1 hour default
-    ):
+    ) -> None:
         """Initialize remote cache.
 
         Args:

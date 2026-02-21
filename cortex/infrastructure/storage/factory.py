@@ -26,7 +26,7 @@ class StorageProviderFactory:
     _providers = {}
 
     @classmethod
-    def register_provider(cls, backend: str, provider_class):
+    def register_provider(cls, backend: str, provider_class) -> None:
         """Register a provider class for a backend type."""
         cls._providers[backend] = provider_class
 

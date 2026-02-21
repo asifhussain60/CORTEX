@@ -53,7 +53,8 @@ class AuditLogger:
 class HashChain:
     """Cryptographic hash chain for integrity"""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialise HashChain."""
         self.events = []
         self.hashes = []
         self.previous_hash = None
@@ -269,7 +270,8 @@ class ComplianceAuditTrail:
 class AuditTrailRetention:
     """Audit trail retention policy enforcement"""
 
-    def __init__(self, retention_days: int = 2555):
+    def __init__(self, retention_days: int = 2555) -> None:
+        """Initialise AuditTrailRetention."""
         self.retention_days = retention_days
         self.events = []
 
@@ -288,7 +290,8 @@ class AuditTrailRetention:
 class ComprehensiveAuditTrail:
     """Comprehensive audit trail with all features"""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialise ComprehensiveAuditTrail."""
         self.chain = HashChain()
 
     def log_event(self, user_id: str, action: str, secret: str = "") -> Dict[str, Any]:

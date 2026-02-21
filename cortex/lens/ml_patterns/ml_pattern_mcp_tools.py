@@ -35,7 +35,7 @@ class PatternSimilarityTool:
     Analyzes similarity between architectural patterns using embeddings.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize pattern similarity tool."""
         self.name = "cortex_pattern_similarity"
         self.embedder = PatternEmbedder()
@@ -181,7 +181,7 @@ class RepositoryClusteringTool:
     Clusters repositories based on architecture fingerprints and patterns.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize repository clustering tool."""
         self.name = "cortex_repository_clustering"
         self.fingerprinter = RepositoryFingerprinter()

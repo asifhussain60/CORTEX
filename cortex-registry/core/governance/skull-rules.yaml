@@ -569,7 +569,7 @@ rules:
         AC-DOC-003-01: Update CORTEX.prompt.md with Response Header section
     
     validation_script:
-      path: "scripts/validate_phase_deliverables.py"
+# [STALE-REF] path: "scripts/validate_phase_deliverables.py"
       required_checks:
         - files_to_create exist
         - files_to_modify exist
@@ -577,7 +577,7 @@ rules:
         - tier2 templates populated
     
     implementation:
-      pre_lock_check: "python scripts/validate_phase_deliverables.py --phase {PHASE_ID} --strict"
+# [STALE-REF] pre_lock_check: "python scripts/validate_phase_deliverables.py --phase {PHASE_ID} --strict"
       git_hook: "pre-commit"
       audit_logging: true
 
@@ -696,7 +696,7 @@ rules:
     forbidden_patterns:
       - "Root-level files (reports/my-file.md)"
       - "Root-level docs (docs/file.md)"
-      - "Root-level cortex modules (cortex/module.py)"
+      # [STALE-REF] # [STALE-REF] - "Root-level cortex modules (cortex/module.py)"
       - "Root-level brain files (cortex_intelligence/file.py)"
     
     required_patterns:
@@ -725,7 +725,7 @@ rules:
         - "PlanningOrchestrator.md (camelCase)"
     
     implementation:
-      validation_script: "scripts/validate-file-placement.py"
+# [STALE-REF] validation_script: "scripts/validate-file-placement.py"
       enforcement_point: "Pre-commit hook"
       audit_event: "FILE_PLACEMENT_VALIDATED"
       severity_on_bypass: "blocked"
@@ -782,7 +782,7 @@ rules:
     
     enforcement:
       runtime_mechanism: "Monkey-patch Path.write_text() for .md files"
-      test_suite: "cortex/tests/test_md_generation_blocker.py (16 tests)"
+      # [STALE-REF] # [STALE-REF] test_suite: "cortex/tests/test_md_generation_blocker.py (16 tests)"
       test_status: "✅ 16/16 PASSING"
       detection_scope:
         - "Phase completion handlers"
@@ -927,8 +927,8 @@ rules:
     protected_files:
       - "cortex/orchestrators/core/master_orchestrator.py:313-340"
       - "cortex/orchestrators/core/interaction_orchestrator.py:100-103"
-      - "cortex/orchestrators/core/challenge_engine.py"
-      - "cortex/mcp/cortex_tools.py:CORTEXChallengeTool"
+      # [STALE-REF] # [STALE-REF] - "cortex/orchestrators/core/challenge_engine.py"
+      # [STALE-REF] # [STALE-REF] - "cortex/mcp/cortex_tools.py:CORTEXChallengeTool"
     
     regression_detection:
       condition: "enable_challenges=False OR ChallengeEngine not imported"
@@ -1100,7 +1100,7 @@ rules:
       
       git_validation:
         check: "No files matching forbidden patterns in cortex/"
-        command: "git ls-files 'cortex/**/*_unified.py' 'cortex/**/*_refactored.py' 'cortex/**/*_v2.py'"
+        # [STALE-REF] # [STALE-REF] command: "git ls-files 'cortex/**/*_unified.py' 'cortex/**/*_refactored.py' 'cortex/**/*_v2.py'"
         expected_count: 0
     
     success_criteria:
@@ -1179,8 +1179,8 @@ rules:
         - "Log: RECONCILIATION_START → RECONCILIATION_NO_CHANGES"
     
     implementation:
-      event_store: "cortex/infrastructure/event_store.py"
-      deduplication: "cortex/event_listeners/deduplicator.py"
+      # [STALE-REF] # [STALE-REF] event_store: "cortex/infrastructure/event_store.py"
+      # [STALE-REF] # [STALE-REF] deduplication: "cortex/event_listeners/deduplicator.py"
       idempotent_handler: "@idempotent_event_handler decorator"
       audit_logging: "AC_EVENT_PROCESSED"
     
@@ -1312,7 +1312,7 @@ rules:
     
     enforcement:
       orchestrator: "PlanOrchestrator"
-      validator: "cortex/governance/validators/terminology_validator.py"
+      # [STALE-REF] # [STALE-REF] validator: "cortex/governance/validators/terminology_validator.py"
       git_hook: "pre-commit (warn only, don't block legacy files)"
       audit_logging: true
       audit_event: "TERMINOLOGY_HIERARCHY_VALIDATED"
@@ -1499,7 +1499,7 @@ rules:
       logging: "LENS_TIER_SELECTED (orchestrator_tier=X, lens_tier=Y)"
     
     implementation:
-      location: "cortex/orchestrators/lens_orchestrator_integration.py"
+      # [STALE-REF] # [STALE-REF] location: "cortex/orchestrators/lens_orchestrator_integration.py"
       method: "select_tier_for_orchestrator(orchestrator_tier, intent)"
       wiring_property: "orchestrator.tier (1-3)"
     
@@ -1606,7 +1606,7 @@ rules:
     
     implementation:
       orchestrator: "HolisticValidationOrchestrator"
-      location: "cortex/orchestrators/core/holistic_validation_orchestrator.py"
+      # [STALE-REF] # [STALE-REF] location: "cortex/orchestrators/core/holistic_validation_orchestrator.py"
       enforcement_agent: "EnvironmentIntegrityAgent"
       enforcement_point: "MasterOrchestrator.process_request() pre-execution gate"
       mcp_tool: "cortex_validate_holistically"
@@ -1693,7 +1693,7 @@ rules:
       - "p95 latency <300ms, p99 <500ms"
     
     implementation:
-      module: "cortex/orchestrators/context_crystallization.py"
+      # [STALE-REF] # [STALE-REF] module: "cortex/orchestrators/context_crystallization.py"
       timeout_config: "CCL_TIMEOUT_MS=500 (environment variable)"
       fallback: "Cold context load via IntentRouter"
     
@@ -1750,7 +1750,7 @@ rules:
     enforcement_point:
       class: "OrchestratorIntegrityValidator"
       method: "validate_mcp_tool_wiring()"
-      location: "cortex/orchestrators/audit/orchestrator_integrity_validator.py"
+      # [STALE-REF] # [STALE-REF] location: "cortex/orchestrators/audit/orchestrator_integrity_validator.py"
       
       health_check:
         - "Run during GitBackedRegistry.initialize()"
@@ -1776,7 +1776,7 @@ rules:
     implementation:
       validator: "OrchestratorIntegrityValidator"
       enforcement: "GitBackedRegistry.initialize()"
-      tests: "tests/unit/orchestrators/audit/test_mcp_tool_wiring.py"
+# [STALE-REF] tests: "tests/unit/orchestrators/audit/test_mcp_tool_wiring.py"
     
     tests:
       unit_tests:

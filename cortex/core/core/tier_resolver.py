@@ -30,7 +30,7 @@ class TierResolver:
     - Tier 2 (engineering standards) lowest precedence
     """
 
-    def __init__(self, registry: Optional[GovernanceRegistry] = None):
+    def __init__(self, registry: Optional[GovernanceRegistry] = None) -> None:
         """
         Initialize tier resolver.
 

@@ -29,7 +29,7 @@ class ContextAggregator:
     conversation history and enabling cross-turn references.
     """
 
-    def __init__(self, max_history_turns: int = 10):
+    def __init__(self, max_history_turns: int = 10) -> None:
         """
         Initialize context aggregator.
 

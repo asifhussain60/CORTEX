@@ -17,6 +17,7 @@ class DecisionJournal:
     """Records and retrieves architecture decisions as YAML files."""
 
     def __init__(self, journal_dir: "str | Path") -> None:
+        """Initialize instance."""
         self._dir = Path(journal_dir)
         self._dir.mkdir(parents=True, exist_ok=True)
 
@@ -33,6 +34,21 @@ class DecisionJournal:
         execution_outcome: Optional[str] = None,
         **kwargs: Any,
     ) -> str:
+        """Record a new decision to the journal.
+
+        Args:
+            decision: The decision text.
+            rationale: Why this decision was made.
+            alternatives: Alternative approaches considered.
+            impact: Expected impact of the decision.
+            challenge_verdict: Optional challenge gate result.
+            dor_approved: Optional Definition of Ready approval flag.
+            execution_outcome: Optional outcome after execution.
+            **kwargs: Additional metadata fields.
+
+        Returns:
+            The generated decision ID.
+        """
         if not decision:
             raise ValueError("'decision' field is required and cannot be empty")
 
@@ -60,6 +76,15 @@ class DecisionJournal:
         return decision_id
 
     def update_decision(self, decision_id: str, **updates: Any) -> bool:
+        """Update an existing decision with new fields.
+
+        Args:
+            decision_id: The ID of the decision to update.
+            **updates: Key-value pairs to merge into the decision.
+
+        Returns:
+            True if the decision was found and updated, False otherwise.
+        """
         file_path = self._dir / f"{decision_id}.yaml"
         if not file_path.exists():
             return False
@@ -71,12 +96,25 @@ class DecisionJournal:
     # ── Read ───────────────────────────────────────────────────────────────
 
     def load_decision(self, decision_id: str) -> Optional[Dict[str, Any]]:
+        """Load a single decision by its ID.
+
+        Args:
+            decision_id: The ID of the decision to load.
+
+        Returns:
+            The decision data dict, or None if not found.
+        """
         file_path = self._dir / f"{decision_id}.yaml"
         if not file_path.exists():
             return None
         return yaml.safe_load(file_path.read_text())
 
     def load_all_decisions(self) -> List[Dict[str, Any]]:
+        """Load all decisions from the journal directory.
+
+        Returns:
+            List of decision data dicts, sorted by filename.
+        """
         decisions = []
         for f in sorted(self._dir.glob("*.yaml")):
             try:
@@ -88,6 +126,14 @@ class DecisionJournal:
         return decisions
 
     def search_decisions(self, **criteria: Any) -> List[Dict[str, Any]]:
+        """Search decisions matching all given criteria.
+
+        Args:
+            **criteria: Key-value pairs to match against decision fields.
+
+        Returns:
+            List of decisions where all criteria match.
+        """
         results = []
         for decision in self.load_all_decisions():
             if all(decision.get(k) == v for k, v in criteria.items()):

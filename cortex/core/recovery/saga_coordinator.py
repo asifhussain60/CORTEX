@@ -223,7 +223,8 @@ class SagaCoordinator:
         storage_path: Optional[Path] = None,
         max_compensation_retries: int = 3,
         compensation_backoff_seconds: float = 1.0
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.storage_path = storage_path or Path.home() / ".cortex-runtime" / "sagas"
         self.storage_path.mkdir(parents=True, exist_ok=True)
         self.max_compensation_retries = max_compensation_retries

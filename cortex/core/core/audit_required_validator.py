@@ -95,7 +95,7 @@ class ACCompletionStatus:
 class AuditOperationsTracker:
     """Tracks AC-ID audit operations."""
 
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str) -> None:
         """
         Initialize tracker with database connection.
 
@@ -198,7 +198,7 @@ class ACCompletionAuditValidator:
         AuditOperationType.AC_COMPLETE.value
     ]
 
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str) -> None:
         """
         Initialize validator with database connection.
 
@@ -456,7 +456,7 @@ class AuditRequiredValidator:
     Does NOT perform mutations - only validation.
     """
 
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str) -> None:
         """
         Initialize validator with database connection.
 

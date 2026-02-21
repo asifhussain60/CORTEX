@@ -67,7 +67,7 @@ class BlindSpotDetector:
         self,
         min_coverage_threshold: float = 80.0,
         include_dead_code: bool = True
-    ):
+    ) -> None:
         """Initialize BlindSpotDetector with configuration."""
         if not 0 <= min_coverage_threshold <= 100:
             raise ValueError("Coverage threshold must be between 0 and 100")

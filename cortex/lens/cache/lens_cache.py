@@ -42,7 +42,7 @@ class CacheKey:
 class LENSCache:
     """Main cache manager interface."""
 
-    def __init__(self, backend_type: str = "memory", **kwargs):
+    def __init__(self, backend_type: str = "memory", **kwargs) -> None:
         """Initialize cache with specified backend.
 
         Args:

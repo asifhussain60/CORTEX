@@ -26,18 +26,22 @@ class ToolkitVerifyTool(ConsolidatedTool):
     
     @property
     def name(self) -> str:
+        """The unique tool name identifier."""
         return "toolkit_verify"
     
     @property
     def description(self) -> str:
+        """Human-readable description of the tool."""
         return "Verify CORTEX environment setup (auto-detects platform: windows, macos, linux)"
     
     @property
     def category(self) -> ToolCategory:
+        """The tool category for registry classification."""
         return ToolCategory.UTILITIES
     
     @property
     def parameters(self) -> list:
+        """List of parameters accepted by the tool."""
         return [
             ToolParameter(
                 name="platform",
@@ -51,6 +55,7 @@ class ToolkitVerifyTool(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> list:
+        """List of operation types this tool supports."""
         return ["auto", "windows", "macos", "linux"]
     
     def execute(self, platform: str = "auto", **kwargs) -> ToolResult:

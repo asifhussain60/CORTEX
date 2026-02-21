@@ -187,7 +187,7 @@ class IntentCanonicalizer:
 
     CONFIDENCE_THRESHOLD = 0.7
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the intent canonicalizer."""
         self._compile_patterns()
 

@@ -40,7 +40,7 @@ class TestProgressMonitor:
         progress_callback: Optional[Callable[[str], None]] = None,
         hang_timeout: int = 30,
         verbose: bool = True
-    ):
+    ) -> None:
         """Initialize test progress monitor.
 
         Args:

@@ -36,7 +36,7 @@ class RetryConfig:
     policy: RetryPolicy = RetryPolicy.EXPONENTIAL_BACKOFF
     retryable_exceptions: tuple = (Exception,)
 
-    def validate(self):
+    def validate(self) -> None:
         """Validate retry configuration."""
         if self.max_attempts < 1:
             raise ValueError("max_attempts must be >= 1")
@@ -67,7 +67,8 @@ class RetryResult:
 class RetryHandler:
     """Manages retry logic with various backoff strategies."""
 
-    def __init__(self, config: Optional[RetryConfig] = None):
+    def __init__(self, config: Optional[RetryConfig] = None) -> None:
+        """Initialize instance."""
         self.config = config or RetryConfig()
         self.config.validate()
         self.retry_history: list[tuple[int, float, Optional[Exception]]] = []
@@ -171,7 +172,7 @@ class RetryHandler:
         """Get retry history."""
         return self.retry_history.copy()
 
-    def clear_history(self):
+    def clear_history(self) -> None:
         """Clear retry history."""
         self.retry_history.clear()
 

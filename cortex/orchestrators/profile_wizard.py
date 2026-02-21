@@ -46,6 +46,7 @@ class ProfileWizard:
     }
 
     def __init__(self, base_path: Path) -> None:
+        """Initialize instance."""
         self.base_path = Path(base_path)
 
     # ── Detection ────────────────────────────────────────────────────

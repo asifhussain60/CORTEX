@@ -68,7 +68,7 @@ class FormatEnforcer:
     Enforces format standards with auto-correction.
     """
 
-    def __init__(self, level: EnforcementLevel = EnforcementLevel.MODERATE):
+    def __init__(self, level: EnforcementLevel = EnforcementLevel.MODERATE) -> None:
         """
         Initialize enforcer.
 
@@ -122,7 +122,7 @@ class FormatGate:
     DEFAULT_THRESHOLD = 0.7  # 70% quality minimum
     PRODUCTION_THRESHOLD = 0.85  # 85% for production
 
-    def __init__(self, production_mode: bool = False):
+    def __init__(self, production_mode: bool = False) -> None:
         """
         Initialize format gate.
 
@@ -167,7 +167,7 @@ class ResponseFormatIntegration:
     Coordinates validation, optimization, and enforcement across CORTEX.
     """
 
-    def __init__(self, enforcement_level: EnforcementLevel = EnforcementLevel.MODERATE):
+    def __init__(self, enforcement_level: EnforcementLevel = EnforcementLevel.MODERATE) -> None:
         """
         Initialize integration system.
 

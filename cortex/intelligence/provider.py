@@ -279,7 +279,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
                     cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize provider with intelligence sources."""
         # Prevent re-initialization of singleton
         if hasattr(self, '_initialized'):
@@ -590,7 +590,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
         """
         return self._session_profiles.get(session_id)
 
-    def get_turn_context(self, session_id: str):
+    def get_turn_context(self, session_id: str) -> None:
         """
         Get turn context for session.
 

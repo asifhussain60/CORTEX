@@ -133,7 +133,7 @@ class RepositoryRegistry:
                     cls._instance = instance
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize registry (only once)."""
         if self._initialized:
             return

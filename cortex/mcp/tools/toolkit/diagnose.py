@@ -26,18 +26,22 @@ class ToolkitDiagnoseTool(ConsolidatedTool):
     
     @property
     def name(self) -> str:
+        """The unique tool name identifier."""
         return "toolkit_diagnose"
     
     @property
     def description(self) -> str:
+        """Human-readable description of the tool."""
         return "Run comprehensive MCP diagnostics (full, mcp, venv, settings, tools)"
     
     @property
     def category(self) -> ToolCategory:
+        """The tool category for registry classification."""
         return ToolCategory.UTILITIES
     
     @property
     def parameters(self) -> list:
+        """List of parameters accepted by the tool."""
         return [
             ToolParameter(
                 name="operation",
@@ -51,6 +55,7 @@ class ToolkitDiagnoseTool(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> list:
+        """List of operation types this tool supports."""
         return ["full", "mcp", "venv", "settings", "tools"]
     
     def execute(self, operation: str = "full", **kwargs) -> ToolResult:

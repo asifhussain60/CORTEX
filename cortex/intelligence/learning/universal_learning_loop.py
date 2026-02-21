@@ -83,7 +83,7 @@ class UniversalLearningLoop:
         self,
         workspace_root: Optional[Path] = None,
         enable_logging: bool = True
-    ):
+    ) -> None:
         """
         Initialize universal learning loop.
 

@@ -11,6 +11,7 @@ class AWSSecretsProvider(ISecretsProvider):
     """Secrets provider backed by AWS Secrets Manager."""
 
     def __init__(self, region: str = "us-east-1", **kwargs: Any) -> None:
+        """Initialise AWS Secrets Manager provider."""
         self.region = region
         self._client: Optional[Any] = None
         self._kwargs = kwargs
@@ -25,6 +26,7 @@ class AWSSecretsProvider(ISecretsProvider):
             raise AuthError("boto3 is not installed") from exc
 
     def get_secret(self, key: str) -> str:
+        """Retrieve a secret value by key."""
         try:
             client = self._get_client()
             resp = client.get_secret_value(SecretId=key)
@@ -35,6 +37,7 @@ class AWSSecretsProvider(ISecretsProvider):
             raise
 
     def set_secret(self, key: str, value: str, **meta: Any) -> bool:
+        """Store or update a secret value."""
         client = self._get_client()
         try:
             client.put_secret_value(SecretId=key, SecretString=value)
@@ -43,11 +46,13 @@ class AWSSecretsProvider(ISecretsProvider):
         return True
 
     def delete_secret(self, key: str) -> bool:
+        """Delete a secret by key."""
         client = self._get_client()
         client.delete_secret(SecretId=key, ForceDeleteWithoutRecovery=True)
         return True
 
     def list_secrets(self) -> List[str]:
+        """List all available secret keys."""
         client = self._get_client()
         paginator = client.get_paginator("list_secrets")
         names: List[str] = []
@@ -56,6 +61,7 @@ class AWSSecretsProvider(ISecretsProvider):
         return names
 
     def rotate_secret(self, key: str) -> str:
+        """Rotate a secret and return the new value."""
         import secrets as _secrets
         new_val = _secrets.token_urlsafe(32)
         self.set_secret(key, new_val)

@@ -387,7 +387,7 @@ class ScoringModel(Enum):
 class ReviewTrigger:
     """Triggers for review based on confidence."""
     
-    def __init__(self, trigger_type: str, reason: str = "", recommended_action: str = ""):
+    def __init__(self, trigger_type: str, reason: str = "", recommended_action: str = "") -> None:
         """Initialize review trigger.
         
         Args:

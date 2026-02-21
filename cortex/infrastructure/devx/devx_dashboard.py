@@ -77,7 +77,7 @@ class LogEntry:
 class DevXDashboard:
     """Developer experience dashboard."""
 
-    def __init__(self, title: str = "CORTEX DevX Dashboard"):
+    def __init__(self, title: str = "CORTEX DevX Dashboard") -> None:
         """Initialize dashboard."""
         self.title = title
         self._hot_reload = None
@@ -231,7 +231,8 @@ class DevXDashboard:
 
         self._auto_update = True
 
-        def update_loop():
+        def update_loop() -> None:
+            """Run periodic update loop."""
             while self._auto_update:
                 self.get_metrics()
                 time.sleep(interval)

@@ -33,7 +33,7 @@ class DataMigrationOrchestrator:
     JSON_OUTPUT_ROOT = Path("cortex-registry/company/dashboards/data")
     BACKUP_ROOT = Path("cortex-registry/company/dashboards/legacy_backup")
 
-    def __init__(self, dry_run: bool = False):
+    def __init__(self, dry_run: bool = False) -> None:
         """
         Initialize orchestrator.
 

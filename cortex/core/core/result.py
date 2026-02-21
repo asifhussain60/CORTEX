@@ -49,15 +49,19 @@ class Ok(Generic[T]):
     value: T
 
     def is_ok(self) -> bool:
+        """Return True — this is a success result."""
         return True
 
     def is_err(self) -> bool:
+        """Return False — this is not an error."""
         return False
 
     def unwrap(self) -> T:
+        """Return the contained value."""
         return self.value
 
     def unwrap_or(self, default: T) -> T:
+        """Return the contained value, ignoring *default*."""
         return self.value
 
 
@@ -67,15 +71,19 @@ class Err:
     error: str
 
     def is_ok(self) -> bool:
+        """Return False — this is an error result."""
         return False
 
     def is_err(self) -> bool:
+        """Return True — this is an error."""
         return True
 
-    def unwrap(self):
+    def unwrap(self) -> "T":
+        """Raise ValueError — cannot unwrap an error."""
         raise ValueError(f"Called unwrap on Err: {self.error}")
 
-    def unwrap_or(self, default):
+    def unwrap_or(self, default: "T") -> "T":
+        """Return *default* since this is an error."""
         return default
 
     def unwrap_err(self) -> str:

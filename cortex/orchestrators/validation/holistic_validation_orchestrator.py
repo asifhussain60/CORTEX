@@ -92,7 +92,7 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin):
         confidence_scorer: Optional[Any] = None,
         checklist: Optional[Any] = None,
         confidence_threshold: float = 0.7
-    ):
+    ) -> None:
         """Initialize validation orchestrator.
         
         Args:

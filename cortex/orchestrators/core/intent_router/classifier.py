@@ -90,7 +90,7 @@ class IntentClassifier:
         metrics: Classification performance metrics
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize intent classifier."""
         self.keyword_mappings: Dict[IntentCategory, Set[str]] = self._build_keyword_mappings()
         self.signal_patterns: Dict[IntentSignal, re.Pattern] = self._compile_signal_patterns()

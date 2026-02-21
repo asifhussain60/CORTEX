@@ -39,7 +39,8 @@ class DIContainer:
     Manages instance creation, lazy initialization, and parameter override.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.singletons: Dict[str, Any] = {}
         self.factories: Dict[str, Callable[[], Any]] = {}
         self.parameters: Dict[str, DIParameter] = {}
@@ -136,7 +137,8 @@ class DIProvider:
     Integrates with OrchestratorFactory.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.container = DIContainer()
 
     def configure_standard_dependencies(self, event_bus: Any) -> None:

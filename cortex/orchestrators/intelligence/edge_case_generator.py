@@ -67,7 +67,7 @@ class EdgeCaseGenerator:
         include_boundary_tests: bool = True,
         include_null_tests: bool = True,
         include_overflow_tests: bool = True,
-    ):
+    ) -> None:
         """Initialize EdgeCaseGenerator with configuration."""
         self.include_boundary_tests = include_boundary_tests
         self.include_null_tests = include_null_tests

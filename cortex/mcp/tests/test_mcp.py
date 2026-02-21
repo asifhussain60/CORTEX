@@ -42,23 +42,24 @@ from cortex.mcp.server import MCPServer, MCPRequest, MCPResponse
 # ============================================================================
 
 @pytest.fixture
-def registry():
+def registry() -> None:
     """Fresh tool registry for each test."""
     return ToolRegistry()
 
 
 @pytest.fixture
-def server(registry):
+def server(registry) -> None:
     """MCP server with test registry."""
     return MCPServer(registry=registry)
 
 
 @pytest.fixture
-def sample_tool():
+def sample_tool() -> None:
     """Sample tool implementation for testing."""
     class SampleTool(Tool):
         @property
         def definition(self) -> ToolDefinition:
+            """Definition."""
             return ToolDefinition(
                 name="test_sample",
                 description="Test sample tool",
@@ -70,6 +71,7 @@ def sample_tool():
             )
         
         def execute(self, input: str = "", mode: str = "normal", **kwargs) -> ToolResult:
+            """Execute."""
             return ToolResult(
                 success=True,
                 data={"processed": input, "mode": mode},
@@ -85,11 +87,11 @@ def sample_tool():
 class TestToolConsolidation:
     """Tests verifying 98→24 tool consolidation."""
     
-    def test_production_tools_count_is_24(self):
+    def test_production_tools_count_is_24(self) -> None:
         """CRITICAL: Verify exactly 24 production tools defined."""
         assert len(PRODUCTION_TOOLS) == 24, f"Expected 24 tools, got {len(PRODUCTION_TOOLS)}"
     
-    def test_all_tool_categories_covered(self):
+    def test_all_tool_categories_covered(self) -> None:
         """Verify all business capabilities have tools."""
         categories_found = set()
         for tool_id, spec in PRODUCTION_TOOLS.items():
@@ -104,12 +106,12 @@ class TestToolConsolidation:
         }
         assert categories_found == expected
     
-    def test_no_duplicate_tool_names(self):
+    def test_no_duplicate_tool_names(self) -> None:
         """Verify all tool names are unique."""
         names = list(PRODUCTION_TOOLS.keys())
         assert len(names) == len(set(names)), "Duplicate tool names found"
     
-    def test_consolidated_tools_have_operations(self):
+    def test_consolidated_tools_have_operations(self) -> None:
         """Verify consolidated tools define their operations."""
         consolidated = [
             "cortex_request_lifecycle",
@@ -135,7 +137,7 @@ class TestToolConsolidation:
             assert spec is not None, f"Tool {tool_id} not found"
             assert len(spec.get("operations", [])) > 0, f"Tool {tool_id} should have operations"
     
-    def test_tool_naming_convention(self):
+    def test_tool_naming_convention(self) -> None:
         """All tools should follow cortex_* naming convention."""
         for tool_id in PRODUCTION_TOOLS:
             assert tool_id.startswith("cortex_"), f"Tool {tool_id} doesn't follow naming convention"
@@ -144,27 +146,27 @@ class TestToolConsolidation:
 class TestToolCategories:
     """Tests for tool category distribution."""
     
-    def test_core_tools_count(self):
+    def test_core_tools_count(self) -> None:
         """Verify 4 core request processing tools."""
         core = [t for t, s in PRODUCTION_TOOLS.items() if s["category"] == ToolCategory.CORE]
         assert len(core) == 4, f"Expected 4 core tools, got {len(core)}: {core}"
     
-    def test_intelligence_tools_count(self):
+    def test_intelligence_tools_count(self) -> None:
         """Verify 3 code intelligence tools."""
         intel = [t for t, s in PRODUCTION_TOOLS.items() if s["category"] == ToolCategory.INTELLIGENCE]
         assert len(intel) == 3, f"Expected 3 intelligence tools, got {len(intel)}: {intel}"
     
-    def test_governance_tools_count(self):
+    def test_governance_tools_count(self) -> None:
         """Verify 3 governance & compliance tools."""
         gov = [t for t, s in PRODUCTION_TOOLS.items() if s["category"] == ToolCategory.GOVERNANCE]
         assert len(gov) == 3, f"Expected 3 governance tools, got {len(gov)}: {gov}"
     
-    def test_operations_tools_count(self):
+    def test_operations_tools_count(self) -> None:
         """Verify 5 operations tools."""
         ops = [t for t, s in PRODUCTION_TOOLS.items() if s["category"] == ToolCategory.OPERATIONS]
         assert len(ops) == 5, f"Expected 5 operations tools, got {len(ops)}: {ops}"
     
-    def test_utilities_tools_count(self):
+    def test_utilities_tools_count(self) -> None:
         """Verify 9 utility tools."""
         utils = [t for t, s in PRODUCTION_TOOLS.items() if s["category"] == ToolCategory.UTILITIES]
         assert len(utils) == 9, f"Expected 9 utility tools, got {len(utils)}: {utils}"
@@ -177,11 +179,11 @@ class TestToolCategories:
 class TestToolRegistry:
     """Tests for tool registry functionality."""
     
-    def test_registry_auto_registers_production_tools(self, registry):
+    def test_registry_auto_registers_production_tools(self, registry) -> None:
         """Registry should auto-register all production tools."""
         assert registry.tool_count == 24
     
-    def test_registry_get_metadata(self, registry):
+    def test_registry_get_metadata(self, registry) -> None:
         """Get metadata for registered tool."""
         metadata = registry.get_metadata("cortex_lens")
         assert metadata is not None
@@ -189,13 +191,13 @@ class TestToolRegistry:
         assert metadata.category == ToolCategory.INTELLIGENCE
         assert len(metadata.operations) > 0
     
-    def test_registry_list_by_category(self, registry):
+    def test_registry_list_by_category(self, registry) -> None:
         """List tools by category."""
         core_tools = registry.list_by_category(ToolCategory.CORE)
         assert len(core_tools) == 4
         assert all(t.category == ToolCategory.CORE for t in core_tools)
     
-    def test_registry_to_mcp_schema(self, registry):
+    def test_registry_to_mcp_schema(self, registry) -> None:
         """Generate MCP-compliant schema."""
         schema = registry.to_mcp_schema()
         assert len(schema) == 24
@@ -207,7 +209,7 @@ class TestToolRegistry:
             assert "inputSchema" in tool_schema
             assert tool_schema["inputSchema"]["type"] == "object"
     
-    def test_register_custom_tool(self, registry, sample_tool):
+    def test_register_custom_tool(self, registry, sample_tool) -> None:
         """Register a custom tool implementation."""
         initial_count = registry.tool_count
         registry.register(sample_tool)
@@ -224,12 +226,12 @@ class TestToolRegistry:
 class TestMCPServer:
     """Tests for MCP server functionality."""
     
-    def test_server_initializes_with_24_tools(self, server):
+    def test_server_initializes_with_24_tools(self, server) -> None:
         """Server should have 24 tools on initialization."""
         tools = server.list_tools()
         assert len(tools) == 24
     
-    def test_list_tools_returns_mcp_schema(self, server):
+    def test_list_tools_returns_mcp_schema(self, server) -> None:
         """list_tools returns MCP-compliant schemas."""
         tools = server.list_tools()
         
@@ -238,25 +240,25 @@ class TestMCPServer:
             assert "description" in tool
             assert "inputSchema" in tool
     
-    def test_list_tools_by_category(self, server):
+    def test_list_tools_by_category(self, server) -> None:
         """Filter tools by category."""
         core = server.list_tools_by_category("core")
         assert len(core) == 4
         assert all(t["category"] == "core" for t in core)
     
-    def test_call_unknown_tool_returns_error(self, server):
+    def test_call_unknown_tool_returns_error(self, server) -> None:
         """Calling unknown tool returns error."""
         result = server.call_tool("unknown_tool")
         assert not result.success
         assert "Unknown tool" in result.error
     
-    def test_call_implemented_tool_succeeds(self, server):
+    def test_call_implemented_tool_succeeds(self, server) -> None:
         """Calling implemented tool returns success."""
         result = server.call_tool("cortex_lens", operation="analyze", target=".")
         assert result.success
         assert "lens" in result.data
     
-    def test_health_check(self, server):
+    def test_health_check(self, server) -> None:
         """Health check returns server status."""
         health = server.health_check()
         
@@ -273,7 +275,7 @@ class TestMCPServer:
 class TestJSONRPCProtocol:
     """Tests for JSON-RPC 2.0 compliance."""
     
-    def test_initialize_handshake(self, server):
+    def test_initialize_handshake(self, server) -> None:
         """Handle MCP initialization."""
         request = MCPRequest(
             method="initialize",
@@ -291,7 +293,7 @@ class TestJSONRPCProtocol:
         assert "protocolVersion" in response.result
         assert "capabilities" in response.result
     
-    def test_tools_list_method(self, server):
+    def test_tools_list_method(self, server) -> None:
         """Handle tools/list method."""
         request = MCPRequest(method="tools/list", id="list-1")
         response = server.handle_request(request)
@@ -300,7 +302,7 @@ class TestJSONRPCProtocol:
         assert response.error is None
         assert len(response.result) == 24
     
-    def test_tools_call_method(self, server):
+    def test_tools_call_method(self, server) -> None:
         """Handle tools/call method."""
         request = MCPRequest(
             method="tools/call",
@@ -316,7 +318,7 @@ class TestJSONRPCProtocol:
         # Will fail gracefully since not implemented
         assert "result" in dir(response) or "error" in dir(response)
     
-    def test_unknown_method_returns_error(self, server):
+    def test_unknown_method_returns_error(self, server) -> None:
         """Unknown method returns METHOD_NOT_FOUND error."""
         request = MCPRequest(method="unknown/method", id="err-1")
         response = server.handle_request(request)
@@ -325,7 +327,7 @@ class TestJSONRPCProtocol:
         assert response.error is not None
         assert response.error["code"] == MCPServer.METHOD_NOT_FOUND
     
-    def test_handle_json_parses_request(self, server):
+    def test_handle_json_parses_request(self, server) -> None:
         """Handle raw JSON request string."""
         json_request = json.dumps({
             "jsonrpc": "2.0",
@@ -339,7 +341,7 @@ class TestJSONRPCProtocol:
         assert response["id"] == "json-1"
         assert "result" in response
     
-    def test_handle_invalid_json_returns_parse_error(self, server):
+    def test_handle_invalid_json_returns_parse_error(self, server) -> None:
         """Invalid JSON returns PARSE_ERROR."""
         response_str = server.handle_json("not valid json")
         response = json.loads(response_str)
@@ -354,7 +356,7 @@ class TestJSONRPCProtocol:
 class TestToolBase:
     """Tests for Tool base classes."""
     
-    def test_tool_definition_to_schema(self):
+    def test_tool_definition_to_schema(self) -> None:
         """ToolDefinition generates correct MCP schema."""
         definition = ToolDefinition(
             name="test_tool",
@@ -374,7 +376,7 @@ class TestToolBase:
         assert "required_param" in schema["inputSchema"]["required"]
         assert "optional_param" not in schema["inputSchema"]["required"]
     
-    def test_tool_result_serialization(self):
+    def test_tool_result_serialization(self) -> None:
         """ToolResult serializes correctly."""
         result = ToolResult(
             success=True,
@@ -388,7 +390,7 @@ class TestToolBase:
         assert as_dict["data"]["key"] == "value"
         assert "timestamp" in as_dict
     
-    def test_tool_parameter_validation(self, sample_tool):
+    def test_tool_parameter_validation(self, sample_tool) -> None:
         """Tool validates required parameters."""
         # Missing required param
         error = sample_tool.validate_params()
@@ -399,34 +401,40 @@ class TestToolBase:
         error = sample_tool.validate_params(input="test")
         assert error is None
     
-    def test_consolidated_tool_operation_routing(self):
+    def test_consolidated_tool_operation_routing(self) -> None:
         """ConsolidatedTool routes to correct operation."""
         import asyncio
         
         class TestConsolidated(ConsolidatedTool):
             @property
             def name(self) -> str:
+                """Name."""
                 return "test_consolidated"
             
             @property
             def description(self) -> str:
+                """Description."""
                 return "Test consolidated tool"
             
             @property
             def category(self) -> ToolCategory:
+                """Category."""
                 return ToolCategory.OPERATIONS
             
             @property
-            def parameters(self):
+            def parameters(self) -> None:
+                """Parameters."""
                 return [
                     ToolParameter(name="operation", type="string", required=True),
                 ]
             
             @property
-            def supported_operations(self):
+            def supported_operations(self) -> None:
+                """Supported operations."""
                 return ["op1", "op2"]
             
             async def execute(self, **kwargs) -> ToolResult:
+                """Execute."""
                 operation = kwargs.get("operation", "")
                 if operation == "op1":
                     return ToolResult(success=True, data={"result": "op1_executed"})
@@ -459,7 +467,7 @@ class TestToolBase:
 class TestCrossPlatform:
     """Tests for cross-platform compatibility."""
     
-    def test_server_reports_platform_info(self, server):
+    def test_server_reports_platform_info(self, server) -> None:
         """Health check includes platform info."""
         health = server.health_check()
         
@@ -467,7 +475,7 @@ class TestCrossPlatform:
         assert "os" in health["platform"]
         assert "python_version" in health["platform"]
     
-    def test_paths_use_pathlib_or_os_path(self):
+    def test_paths_use_pathlib_or_os_path(self) -> None:
         """Verify path handling is cross-platform."""
         # Registry doesn't use hardcoded paths
         for tool_id, spec in PRODUCTION_TOOLS.items():
@@ -477,7 +485,7 @@ class TestCrossPlatform:
                     assert param["type"] == "string"
     
     @pytest.mark.parametrize("platform", ["darwin", "win32", "linux"])
-    def test_server_works_on_platform(self, platform, registry):
+    def test_server_works_on_platform(self, platform, registry) -> None:
         """Server initializes on different platforms."""
         with patch.object(sys, "platform", platform):
             server = MCPServer(registry=registry)
@@ -491,13 +499,13 @@ class TestCrossPlatform:
 class TestExtensibility:
     """Tests for extension patterns."""
     
-    def test_custom_tool_can_be_registered(self, registry, sample_tool):
+    def test_custom_tool_can_be_registered(self, registry, sample_tool) -> None:
         """Custom tools can be registered."""
         registry.register(sample_tool)
         retrieved = registry.get("test_sample")
         assert retrieved is sample_tool
     
-    def test_tool_operations_are_extensible(self):
+    def test_tool_operations_are_extensible(self) -> None:
         """Consolidated tools can have operations added."""
         spec = PRODUCTION_TOOLS["cortex_lens"]
         ops = spec["operations"]
@@ -506,7 +514,7 @@ class TestExtensibility:
         assert isinstance(ops, list)
         assert len(ops) >= 4  # At least: analyze, deep_analyze, ast, discover
     
-    def test_new_category_can_be_added(self):
+    def test_new_category_can_be_added(self) -> None:
         """ToolCategory enum is extensible via subclassing."""
         # Categories are defined in enum
         assert len(ToolCategory) == 5
@@ -522,7 +530,7 @@ class TestExtensibility:
 class TestPerformance:
     """Performance characteristic tests."""
     
-    def test_registry_initialization_is_fast(self):
+    def test_registry_initialization_is_fast(self) -> None:
         """Registry initializes in <100ms."""
         import time
         
@@ -532,7 +540,7 @@ class TestPerformance:
         
         assert elapsed < 0.1, f"Registry init took {elapsed:.3f}s (should be <0.1s)"
     
-    def test_list_tools_is_fast(self, server):
+    def test_list_tools_is_fast(self, server) -> None:
         """list_tools completes in <50ms."""
         import time
         
@@ -544,7 +552,7 @@ class TestPerformance:
         per_call = elapsed / 100
         assert per_call < 0.05, f"list_tools took {per_call:.3f}s per call"
     
-    def test_tool_lookup_is_fast(self, registry):
+    def test_tool_lookup_is_fast(self, registry) -> None:
         """Tool lookup is O(1)."""
         import time
         
@@ -564,7 +572,7 @@ class TestPerformance:
 class TestIntegration:
     """Integration tests for full workflows."""
     
-    def test_full_request_response_cycle(self, server):
+    def test_full_request_response_cycle(self, server) -> None:
         """Complete JSON-RPC request-response cycle."""
         # 1. Initialize
         init_request = json.dumps({
@@ -598,7 +606,7 @@ class TestIntegration:
         call_response = json.loads(server.handle_json(call_request))
         assert "result" in call_response or "error" in call_response
     
-    def test_tool_categories_align_with_business_capabilities(self, registry):
+    def test_tool_categories_align_with_business_capabilities(self, registry) -> None:
         """Tool categories map to distinct business capabilities."""
         capabilities = {
             ToolCategory.CORE: "Request Processing",
@@ -620,13 +628,13 @@ class TestIntegration:
 class TestRegression:
     """Tests to prevent known issues from recurring."""
     
-    def test_no_dev_only_tools_in_production(self):
+    def test_no_dev_only_tools_in_production(self) -> None:
         """Verify no dev-only tools (echo, sample, transform)."""
         dev_tools = ["echo_tool", "sample_tool", "transform_tool"]
         for dev_tool in dev_tools:
             assert dev_tool not in PRODUCTION_TOOLS, f"Dev tool {dev_tool} should not be in production"
     
-    def test_no_duplicate_functionality(self):
+    def test_no_duplicate_functionality(self) -> None:
         """No duplicate tools with different names."""
         descriptions = [spec["description"] for spec in PRODUCTION_TOOLS.values()]
         # Allow similar descriptions (they do different things)
@@ -635,13 +643,13 @@ class TestRegression:
         duplicates = len(descriptions) - len(unique)
         assert duplicates == 0, "Found duplicate tool descriptions"
     
-    def test_all_parameters_have_types(self):
+    def test_all_parameters_have_types(self) -> None:
         """All tool parameters must have types."""
         for tool_id, spec in PRODUCTION_TOOLS.items():
             for param in spec.get("parameters", []):
                 assert "type" in param, f"Parameter {param['name']} in {tool_id} missing type"
     
-    def test_all_consolidated_operations_are_in_enum(self):
+    def test_all_consolidated_operations_are_in_enum(self) -> None:
         """Consolidated tool operations match enum values."""
         for tool_id, spec in PRODUCTION_TOOLS.items():
             operations = spec.get("operations", [])

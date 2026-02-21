@@ -116,7 +116,7 @@ class DoRTracker:
     Generates statistics for RCA analysis.
     """
 
-    def __init__(self, session_id: Optional[str] = None):
+    def __init__(self, session_id: Optional[str] = None) -> None:
         """Initialize DoR tracker for session."""
         self.session_id = session_id or str(uuid.uuid4())[:12]
         self.turns: List[DoRTurn] = []

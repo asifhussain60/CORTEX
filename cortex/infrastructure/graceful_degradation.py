@@ -45,7 +45,8 @@ class FallbackResult:
 class FallbackStrategy:
     """Base class for fallback strategies."""
 
-    def __init__(self, name: str, degradation_level: DegradationLevel):
+    def __init__(self, name: str, degradation_level: DegradationLevel) -> None:
+        """Initialise FallbackStrategy."""
         self.name = name
         self.degradation_level = degradation_level
 
@@ -57,7 +58,8 @@ class FallbackStrategy:
 class CacheFallbackStrategy(FallbackStrategy):
     """Use cached data as fallback when primary operation fails."""
 
-    def __init__(self, cache: dict, degradation_level: DegradationLevel = DegradationLevel.DEGRADED):
+    def __init__(self, cache: dict, degradation_level: DegradationLevel = DegradationLevel.DEGRADED) -> None:
+        """Initialise CacheFallbackStrategy."""
         super().__init__("CacheFallback", degradation_level)
         self.cache = cache
 
@@ -81,7 +83,8 @@ class CacheFallbackStrategy(FallbackStrategy):
 class DefaultValueFallbackStrategy(FallbackStrategy):
     """Use default value as fallback."""
 
-    def __init__(self, default_value: Any, degradation_level: DegradationLevel = DegradationLevel.DEGRADED):
+    def __init__(self, default_value: Any, degradation_level: DegradationLevel = DegradationLevel.DEGRADED) -> None:
+        """Initialise DefaultValueFallbackStrategy."""
         super().__init__("DefaultValueFallback", degradation_level)
         self.default_value = default_value
 
@@ -102,13 +105,14 @@ class GracefulDegradationHandler:
     when components fail.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialise GracefulDegradationHandler."""
         self.fallback_strategies: dict[str, list[FallbackStrategy]] = {}
         self.current_degradation: DegradationLevel = DegradationLevel.FULL
         self.failure_count: dict[str, int] = {}
         self.failure_threshold: int = 3
 
-    def register_fallback(self, component: str, strategy: FallbackStrategy):
+    def register_fallback(self, component: str, strategy: FallbackStrategy) -> None:
         """Register a fallback strategy for a component."""
         if component not in self.fallback_strategies:
             self.fallback_strategies[component] = []
@@ -180,7 +184,7 @@ class GracefulDegradationHandler:
         """Get current degradation level."""
         return self.current_degradation
 
-    def reset(self):
+    def reset(self) -> None:
         """Reset degradation state."""
         self.current_degradation = DegradationLevel.FULL
         self.failure_count.clear()

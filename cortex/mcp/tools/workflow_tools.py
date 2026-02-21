@@ -56,10 +56,12 @@ class CortexWorkflow(ConsolidatedTool):
     
     @property
     def name(self) -> str:
+        """The unique tool name identifier."""
         return "cortex_workflow"
     
     @property
     def description(self) -> str:
+        """Human-readable description of the tool."""
         return (
             "Execute convergence-gated workflow templates with knowledge injection. "
             "Templates resolve differently for ARCHITECT vs PRODUCTION mode. "
@@ -68,10 +70,12 @@ class CortexWorkflow(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
+        """The tool category for registry classification."""
         return ToolCategory.OPERATIONS
     
     @property
     def parameters(self) -> List[ToolParameter]:
+        """List of parameters accepted by the tool."""
         return [
             ToolParameter(
                 name="operation",

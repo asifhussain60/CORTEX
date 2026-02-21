@@ -73,7 +73,7 @@ class LearningDashboard:
         report = dashboard.generate_report()
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize learning dashboard."""
         self.learning_loop: Optional[Any] = get_learning_loop()
         self.test_scorer: Optional[Any] = get_test_value_scorer()

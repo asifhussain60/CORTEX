@@ -241,7 +241,7 @@ class LENSContext:
 class LENSContextBuilder:
     """Builder for aggregating and synthesizing codebase context."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the context builder."""
         self._ast_findings: Optional[Dict[str, Any]] = None
         self._git_findings: Optional[Dict[str, Any]] = None

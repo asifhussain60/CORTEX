@@ -8,7 +8,7 @@ application hangs.
 import logging
 import threading
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -67,9 +67,9 @@ def safe_thread_join(
 
 
 def spawn_with_timeout_join(
-    target,
-    args=(),
-    kwargs=None,
+    target: Any,
+    args: tuple = (),
+    kwargs: Any = None,
     timeout_sec: float = DEFAULT_THREAD_TIMEOUT,
     daemon: bool = False,
     name: str = "unknown"

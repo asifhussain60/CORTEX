@@ -32,7 +32,7 @@ class GraphStorage:
         >>> neighbors = storage.query_neighbors(node_id, "imports", depth=1)
     """
     
-    def __init__(self, db_path: Path):
+    def __init__(self, db_path: Path) -> None:
         """
         Initialize graph storage.
         

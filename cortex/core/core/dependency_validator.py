@@ -77,7 +77,7 @@ class DependencyValidationStatus:
 class PhaseDependencyAnalyzer:
     """Analyzes phase dependencies and detects issues."""
 
-    def __init__(self, phase_tracker: Dict[str, Dict[str, Any]]):
+    def __init__(self, phase_tracker: Dict[str, Dict[str, Any]]) -> None:
         """
         Initialize analyzer with phase tracker.
 
@@ -250,6 +250,7 @@ class PhaseDependencyAnalyzer:
         rec_stack = set()
 
         def has_cycle(phase_id: str, path: List[str]) -> Optional[List[str]]:
+            """Detect a cycle starting from *phase_id* via DFS."""
             visited.add(phase_id)
             rec_stack.add(phase_id)
 
@@ -282,7 +283,7 @@ class PhaseDependencyAnalyzer:
 class DependencyModificationValidator:
     """Validates modifications to phase dependencies."""
 
-    def __init__(self, phase_tracker: Dict[str, Dict[str, Any]]):
+    def __init__(self, phase_tracker: Dict[str, Dict[str, Any]]) -> None:
         """
         Initialize validator with phase tracker.
 
@@ -539,7 +540,7 @@ class HolisticDependencyValidator:
     - No broken dependency chains
     """
 
-    def __init__(self, phase_tracker: Dict[str, Dict[str, Any]]):
+    def __init__(self, phase_tracker: Dict[str, Dict[str, Any]]) -> None:
         """
         Initialize validator.
 

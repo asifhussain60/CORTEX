@@ -32,7 +32,7 @@ class RepositoryWalker(AsyncRepositoryCrawler):
         config: Optional[CrawlerConfig] = None,
         include_patterns: Optional[list] = None,
         exclude_patterns: Optional[list] = None,
-    ):
+    ) -> None:
         """
         Initialize RepositoryWalker.
 

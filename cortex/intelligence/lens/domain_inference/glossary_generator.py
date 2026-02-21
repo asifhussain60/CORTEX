@@ -59,7 +59,7 @@ class GlossaryGenerator:
     - Naming patterns (0.2)
     """
     
-    def __init__(self, storage=None, domains=None):
+    def __init__(self, storage=None, domains=None) -> None:
         """
         Initialize glossary generator.
         

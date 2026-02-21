@@ -51,7 +51,8 @@ class EventSubscriptionRegistry:
     - Dependency-based subscription automation
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.subscriptions: Dict[str, List[EventSubscription]] = {}  # event_type -> [subscriptions]
         self.emissions: Dict[str, List[EventEmission]] = {}  # orchestrator_name -> [emissions]
         self.orchestrator_handlers: Dict[str, Dict[str, Callable]] = {}  # orch_name -> {event_type: handler}
@@ -174,7 +175,8 @@ class EventSubscriptionManager:
     Coordinates subscription registration with event bus and orchestrators.
     """
 
-    def __init__(self, event_bus: Any):
+    def __init__(self, event_bus: Any) -> None:
+        """Initialize instance."""
         self.event_bus = event_bus
         self.registry = EventSubscriptionRegistry()
         self.active_subscriptions: Set[str] = set()

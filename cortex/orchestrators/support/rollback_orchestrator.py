@@ -35,6 +35,7 @@ class CircuitBreaker:
     """
 
     def __init__(self, failure_threshold: int = 3) -> None:
+        """Initialize instance."""
         self._failure_threshold = failure_threshold
         self._failure_count: int = 0
         self._is_open: bool = False

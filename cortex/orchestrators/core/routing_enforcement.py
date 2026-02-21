@@ -34,7 +34,7 @@ class RoutingEnforcementEngine:
         confidence_threshold: float = 0.6,
         disambiguation_threshold: float = 0.7,
         blocking_enabled: bool = True
-    ):
+    ) -> None:
         """Initialize enforcement engine with configuration."""
         self.confidence_threshold = confidence_threshold
         self.disambiguation_threshold = disambiguation_threshold

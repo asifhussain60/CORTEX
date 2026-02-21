@@ -57,6 +57,7 @@ class GitHistoryScanner(SecretsScanner):
     """Scans git history for accidentally committed secrets."""
 
     def __init__(self, repo_path: str = ".") -> None:
+        """Initialize instance."""
         self.repo_path = repo_path
 
     def scan_commits(self, max_commits: int = 100) -> List[Dict[str, Any]]:
@@ -110,6 +111,7 @@ class PreCommitHookScanner(SecretsScanner):
     """Installs and manages pre-commit hooks for secrets scanning."""
 
     def __init__(self, repo_path: str = ".") -> None:
+        """Initialize instance."""
         self.repo_path = repo_path
 
     def install_hook(self) -> bool:

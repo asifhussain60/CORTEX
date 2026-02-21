@@ -31,7 +31,8 @@ class DuplicateViolation:
 class DuplicateDetector:
     """Detects duplicate implementations across CORTEX codebase."""
 
-    def __init__(self, workspace_root: Path):
+    def __init__(self, workspace_root: Path) -> None:
+        """Initialize instance."""
         self.workspace_root = workspace_root
         self.cortex_root = workspace_root / "cortex"
         self.violations: List[DuplicateViolation] = []
@@ -197,7 +198,7 @@ def detect_class_conflicts() -> List[DuplicateViolation]:
     return detector.detect_all_duplicates()
 
 
-def main():
+def main() -> None:
     """CLI entry point for duplicate detection."""
     import sys
 

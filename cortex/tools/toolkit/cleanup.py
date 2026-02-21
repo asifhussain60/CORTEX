@@ -79,7 +79,7 @@ class CleanupManager:
         self,
         workspace_root: Path,
         dry_run: bool = False
-    ):
+    ) -> None:
         """
         Initialize CleanupManager.
         

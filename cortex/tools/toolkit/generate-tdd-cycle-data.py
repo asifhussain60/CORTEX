@@ -277,7 +277,7 @@ class TDDCycleDataGenerator:
         }
 
 
-def main():
+def main() -> None:
     """Generate and output TDD cycle data."""
     generator = TDDCycleDataGenerator()
     data = generator.generate()

@@ -99,7 +99,8 @@ class ThresholdRule:
 class ThresholdMonitor:
     """Monitors metrics against thresholds."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.rules: Dict[str, ThresholdRule] = {}
         self.active_alerts: Dict[str, Alert] = {}
         self.alert_history: List[Alert] = []
@@ -175,7 +176,8 @@ class AlertManager:
     Coordinates threshold monitoring and alert dispatch.
     """
 
-    def __init__(self, monitor: Optional[ThresholdMonitor] = None):
+    def __init__(self, monitor: Optional[ThresholdMonitor] = None) -> None:
+        """Initialize instance."""
         self.monitor = monitor or ThresholdMonitor()
         self.handlers: List[Callable[[Alert], None]] = []
         self.muted_until: Dict[str, datetime] = {}

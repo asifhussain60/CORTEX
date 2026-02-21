@@ -53,7 +53,7 @@ class AuditPerformanceSLA:
         sla_targets: SLA thresholds by operation type
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize SLA tracker."""
         self.operations: List[Dict[str, Any]] = []
         self.sla_targets: Dict[str, int] = {

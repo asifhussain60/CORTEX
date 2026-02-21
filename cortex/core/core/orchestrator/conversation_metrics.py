@@ -40,7 +40,7 @@ class ConversationObservability:
         logger: Optional[logging.Logger] = None,
         enable_metrics: bool = True,
         enable_tracing: bool = True
-    ):
+    ) -> None:
         """
         Initialize observability.
 

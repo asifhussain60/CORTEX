@@ -12,7 +12,7 @@ AC-ID: E3-DEPENDENCY-MAPPER
 import logging
 import sys
 from dataclasses import dataclass, field
-from typing import List, Set
+from typing import Any, List, Set
 
 logger = logging.getLogger(__name__)
 
@@ -133,7 +133,7 @@ class DependencyMapper:
             if top_level not in STDLIB_MODULES:
                 self._third_party_cache.add(top_level)
 
-    def map_dependencies(self, parse_result) -> DependencyMap:
+    def map_dependencies(self, parse_result: Any) -> DependencyMap:
         """Map and classify all dependencies from parse result.
 
         Args:

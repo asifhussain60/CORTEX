@@ -55,7 +55,8 @@ class ContradictionReport:
 class CrossReferenceValidator:
     """Validates data integrity across registry files"""
     
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.reports: List[ContradictionReport] = []
         self.files_data: Dict[Path, Dict[str, Any]] = {}
     
@@ -263,6 +264,7 @@ class CrossReferenceValidator:
         
         # Check for circular dependencies
         def has_cycle(node: str, visited: Set[str], rec_stack: Set[str]) -> bool:
+            """Check if dependency graph contains cycles."""
             visited.add(node)
             rec_stack.add(node)
             

@@ -79,7 +79,7 @@ class PatternRegistry:
     AC-PHASE71-009: Pattern registration and detection
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize pattern registry."""
         self._patterns: Dict[str, RegisteredPattern] = {}
         self._pattern_count = 0

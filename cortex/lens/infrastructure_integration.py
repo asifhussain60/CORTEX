@@ -27,7 +27,7 @@ class InfrastructureLENSIntegration:
         >>> recommendation = lens_integration.recommend_package("logging", "production")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize LENS integration."""
         self.detector = CapabilityDetector()
         self.github_client = GitHubClient(org="company", mock_mode=True)

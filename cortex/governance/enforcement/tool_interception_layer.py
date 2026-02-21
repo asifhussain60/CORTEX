@@ -62,7 +62,7 @@ class ToolInterceptionLayer:
         IntentType.SETUP,
     }
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize interception layer"""
         self.bypass_attempts = 0
         self.mcp_availability_cache: Optional[bool] = None
@@ -216,7 +216,7 @@ Fix infrastructure. No bypasses allowed.
         # Step 5: Allowed
         return (True, "")
     
-    def log_bypass_attempt(self, intent: IntentType, tool: str, file: str):
+    def log_bypass_attempt(self, intent: IntentType, tool: str, file: str) -> None:
         """
         Log bypass attempt for audit trail.
         

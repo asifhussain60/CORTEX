@@ -1,4 +1,5 @@
 """compatibility_layer.py"""
 
 class CompatibilityLayer:
-    pass
+    """Provides backward-compatible interfaces for legacy callers."""
+

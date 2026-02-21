@@ -15,6 +15,7 @@ class FileRelocationEngine:
     """Detects placement violations and generates relocation plans for CORTEX files."""
 
     def __init__(self, workspace: Path) -> None:
+        """Initialize instance."""
         self.workspace = Path(workspace)
 
     # ── Detection ─────────────────────────────────────────────────────────────

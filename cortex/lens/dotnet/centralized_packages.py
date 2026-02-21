@@ -62,7 +62,7 @@ class CentralizedPackageManager:
     # Common MSBuild property patterns
     MSBUILD_PROPERTY_PATTERN = re.compile(r"\$\((\w+)\)")
 
-    def __init__(self, solution_root: Path):
+    def __init__(self, solution_root: Path) -> None:
         """Initialize manager with solution root.
 
         Args:
@@ -254,7 +254,8 @@ class CentralizedPackageManager:
         Returns:
             Value with variables resolved
         """
-        def replace_var(match):
+        def replace_var(match) -> None:
+            """Replace variable placeholder with value."""
             var_name = match.group(1)
             resolved = self.context.properties.get(var_name)
             return resolved if resolved is not None else match.group(0)

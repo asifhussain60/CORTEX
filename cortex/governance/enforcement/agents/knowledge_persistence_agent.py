@@ -76,7 +76,7 @@ class KnowledgePersistenceAgent:
     AC-PHASE71-013: Knowledge persistence enforcement
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Knowledge Persistence Agent."""
         self.validation_rules = [
             {

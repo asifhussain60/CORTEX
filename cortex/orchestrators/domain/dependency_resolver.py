@@ -203,6 +203,7 @@ class DependencyResolver(OrchestratorProtocolMixin):
         rec_stack = set()
         
         def has_cycle(phase_id: str, path: List[str]) -> Optional[List[str]]:
+            """Detect a cycle starting from *phase_id* via DFS."""
             visited.add(phase_id)
             rec_stack.add(phase_id)
             

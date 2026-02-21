@@ -54,7 +54,7 @@ class PatternExtractor:
     AC-PHASE71-004: Pattern extraction logic
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize pattern extractor."""
         # Orchestrator-specific extractors
         self._extractors = {

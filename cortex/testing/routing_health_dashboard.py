@@ -12,6 +12,7 @@ class DashboardDataGenerator:
     """Generates dashboard data from health checks."""
 
     def __init__(self) -> None:
+        """Initialize instance."""
         self.logger = EnhancedAuditLogger.instance()
         self.checker = RoutingHealthChecker()
 

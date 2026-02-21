@@ -65,7 +65,7 @@ class StalenessChecker:
     - CORE-012: Docstrings required ✅
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize StalenessChecker."""
         self.logger = logging.getLogger(f"{__name__}.StalenessChecker")
         self.tech_mapper = TechStackMapper()

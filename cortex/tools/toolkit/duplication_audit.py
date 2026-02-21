@@ -17,7 +17,8 @@ from typing import Dict, List, Set, Tuple
 class DuplicationAudit:
     """Comprehensive duplication detection engine."""
 
-    def __init__(self, root_path: str = "/Users/asifhussain/PROJECTS/CORTEX"):
+    def __init__(self, root_path: str = "/Users/asifhussain/PROJECTS/CORTEX") -> None:
+        """Initialize instance."""
         self.root = Path(root_path)
         self.cortex_dir = self.root / "cortex"
         # Phase 03 migration: deleted package dissolved into cortex/intelligence/
@@ -250,7 +251,7 @@ class UnifiedXXXComponent:
         return report
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     audit = DuplicationAudit()
     report = audit.run()

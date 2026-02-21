@@ -51,7 +51,7 @@ class EnhancedAuditLogger:
     _instance: Optional['EnhancedAuditLogger'] = None
     _lock = threading.Lock()
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize enhanced audit logger.
         """

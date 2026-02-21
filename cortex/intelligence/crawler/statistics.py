@@ -22,7 +22,7 @@ class PatternDistribution:
     Analyze frequency and co-occurrence of patterns across repositories.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize PatternDistribution."""
         self.pattern_counts: Dict[str, int] = defaultdict(int)
         self.repository_patterns: Dict[str, Set[str]] = defaultdict(set)
@@ -63,7 +63,7 @@ class ArchitectureProfiler:
     Build architecture signatures and calculate similarity between repositories.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize ArchitectureProfiler."""
         pass
 
@@ -137,7 +137,7 @@ class LearningModel:
     Build learning models from pattern observations for future predictions.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize LearningModel."""
         self.observations: List[str] = []
         self.pattern_frequency: Dict[str, int] = defaultdict(int)

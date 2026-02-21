@@ -179,7 +179,7 @@ manifest:
 
     - id: "P0-001"
       source: "tests/integration/test_plan_system_integration.py"
-      target: "tests/golden/integration/test_plan_system_integration.py"
+      target: "tests/integration/test_plan_system_integration.py"
       score: 110
       signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, COVERAGE_MATRIX]
       required_concerns: [QUALITY, CONTRACT]
@@ -189,7 +189,7 @@ manifest:
 
     - id: "P0-002"
       source: "tests/integration/workflows/test_architect_mode.py"
-      target: "tests/golden/integration/workflows/test_architect_mode.py"
+      target: "tests/integration/workflows/test_architect_mode.py"
       score: 110
       signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, COVERAGE_MATRIX]
       required_concerns: [QUALITY, CONTRACT]
@@ -198,8 +198,8 @@ manifest:
       migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
 
     - id: "P0-003"
-      source: "tests/e2e/test_mega_b_integration.py"
-      target: "tests/golden/e2e/test_mega_b_integration.py"
+      source: "tests/testing/test_mega_b_integration.py"
+      target: "tests/testing/test_mega_b_integration.py"
       score: 105
       signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, MCP]
       required_concerns: [SECURITY, CONTRACT]
@@ -209,7 +209,7 @@ manifest:
 
     - id: "P0-004"
       source: "tests/unit/orchestrators/workflow/test_post_phase_dedup.py"
-      target: "tests/golden/orchestrators/workflow/test_post_phase_dedup.py"
+      target: "tests/unit/orchestrators/workflow/test_post_phase_dedup.py"
       score: 105
       signals: [MASTER_ORCH, SECURITY, GOVERNANCE, AC_ID]
       required_concerns: [SECURITY, QUALITY]
@@ -219,7 +219,7 @@ manifest:
 
     - id: "P0-005"
       source: "tests/integration/deployment/test_exit_gate_deployment.py"
-      target: "tests/golden/integration/deployment/test_exit_gate_deployment.py"
+      target: "tests/integration/deployment/test_exit_gate_deployment.py"
       score: 105
       signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, MCP]
       required_concerns: [QUALITY, CONTRACT]
@@ -229,7 +229,7 @@ manifest:
 
     - id: "P0-006"
       source: "tests/unit/orchestrators/workflow/test_holistic_refactoring_sweep.py"
-      target: "tests/golden/orchestrators/workflow/test_holistic_refactoring_sweep.py"
+      target: "tests/unit/orchestrators/workflow/test_holistic_refactoring_sweep.py"
       score: 105
       signals: [MASTER_ORCH, SECURITY, GOVERNANCE, AC_ID]
       required_concerns: [SECURITY, QUALITY]
@@ -239,7 +239,7 @@ manifest:
 
     - id: "P0-007"
       source: "tests/unit/orchestrators/core/test_interaction_orchestrator.py"
-      target: "tests/golden/orchestrators/core/test_interaction_orchestrator.py"
+      target: "tests/unit/orchestrators/core/test_interaction_orchestrator.py"
       score: 105
       signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, MCP]
       required_concerns: [QUALITY, CONTRACT]
@@ -248,8 +248,8 @@ manifest:
       migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
 
     - id: "P0-008"
-      source: "tests/phase_53/test_s7_s9_integration_governance.py"
-      target: "tests/golden/phase_53/test_s7_s9_integration_governance.py"
+# [STALE-REF] source: "tests/phase_53/test_s7_s9_integration_governance.py"
+# [STALE-REF] target: "tests/golden/phase_53/test_s7_s9_integration_governance.py"
       score: 105
       signals: [MASTER_ORCH, GOVERNANCE, AC_ID, E2E, MCP]
       required_concerns: [QUALITY, CONTRACT]
@@ -258,8 +258,8 @@ manifest:
       migration_note: "Annotate manifest only. Physical move deferred to Phase 50."
 
     - id: "P0-009"
-      source: "tests/integration/intent_router/test_mode_routing_integration.py"
-      target: "tests/golden/intent_router/test_mode_routing_integration.py"
+# [STALE-REF] source: "tests/integration/intent_router/test_mode_routing_integration.py"
+# [STALE-REF] target: "tests/golden/intent_router/test_mode_routing_integration.py"
       score: 100
       signals: [SECURITY, AC_ID, E2E, COVERAGE_MATRIX, MCP]
       required_concerns: [SECURITY, CONTRACT]
@@ -269,7 +269,7 @@ manifest:
 
     - id: "P0-010"
       source: "tests/unit/remediation/test_remediation_verification.py"
-      target: "tests/golden/remediation/test_remediation_verification.py"
+      target: "tests/unit/remediation/test_remediation_verification.py"
       score: 100
       signals: [MASTER_ORCH, SECURITY, GOVERNANCE, E2E]
       required_concerns: [SECURITY, QUALITY]
@@ -279,7 +279,7 @@ manifest:
 
     - id: "P0-011"
       source: "tests/unit/brain/core/test_mandatory_checkpoints.py"
-      target: "tests/golden/brain/core/test_mandatory_checkpoints.py"
+      target: "tests/unit/brain/core/test_mandatory_checkpoints.py"
       score: 100
       signals: [MASTER_ORCH, SECURITY, GOVERNANCE, E2E]
       required_concerns: [SECURITY, QUALITY, CCL]
@@ -289,7 +289,7 @@ manifest:
 
     - id: "P0-012"
       source: "tests/integration/test_rephrase_mcp_integration.py"
-      target: "tests/golden/integration/test_rephrase_mcp_integration.py"
+      target: "tests/integration/test_rephrase_mcp_integration.py"
       score: 100
       signals: [MASTER_ORCH, SECURITY, GOVERNANCE, E2E]
       required_concerns: [SECURITY, QUALITY]
@@ -334,7 +334,7 @@ manifest:
         phase_assigned: "phase-50"
 
       - id: "P1-005"
-        source: "tests/unit/orchestrators/test_analysis_execution_orchestrators.py"
+# [STALE-REF] source: "tests/unit/orchestrators/test_analysis_execution_orchestrators.py"
         score: 90
         signals: [MASTER_ORCH, GOVERNANCE, E2E, MCP]
         required_concerns: [QUALITY, CONTRACT]
@@ -355,14 +355,14 @@ manifest:
         phase_assigned: "phase-50"
 
       - id: "P1-008"
-        source: "tests/unit/brain/analysis/test_config_analyzer.py"
+# [STALE-REF] source: "tests/unit/brain/analysis/test_config_analyzer.py"
         score: 90
         signals: [SECURITY, GOVERNANCE, AC_ID, COVERAGE_MATRIX]
         required_concerns: [SECURITY, QUALITY]
         phase_assigned: "phase-50"
 
       - id: "P1-009"
-        source: "tests/unit/brain/education/test_next_step_generator.py"
+# [STALE-REF] source: "tests/unit/brain/education/test_next_step_generator.py"
         score: 90
         signals: [MASTER_ORCH, GOVERNANCE, E2E, MCP]
         required_concerns: [QUALITY, CCL]

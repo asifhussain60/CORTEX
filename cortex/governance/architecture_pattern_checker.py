@@ -56,7 +56,7 @@ class ArchitecturePatternChecker:
     - EventBus: Message-based communication (CORE-041)
     """
     
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize architecture pattern checker.
         

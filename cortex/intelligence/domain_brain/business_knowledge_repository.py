@@ -39,7 +39,8 @@ def get_business_knowledge_repository() -> BusinessKnowledgeRepository:
 class _DefaultBusinessKnowledgeRepository(BusinessKnowledgeRepository):
     """Default business knowledge repository."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self._entries: Dict[str, BusinessKnowledgeEntry] = {}
 
     def add(self, entry: BusinessKnowledgeEntry) -> None:

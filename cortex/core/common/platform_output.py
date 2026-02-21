@@ -69,7 +69,7 @@ class PlatformOutputFormatter:
         OutputLevel.COMPLETE: "[DONE]",
     }
     
-    def __init__(self, force_ascii: Optional[bool] = None):
+    def __init__(self, force_ascii: Optional[bool] = None) -> None:
         """
         Initialize formatter with platform detection.
         

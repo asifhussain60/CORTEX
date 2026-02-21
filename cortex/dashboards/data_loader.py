@@ -63,7 +63,8 @@ class DataLoader:
     CACHE_TTL_MS = 5 * 60 * 1000  # 5 minutes
     MAX_CACHE_SIZE = 50  # Maximum cache entries before LRU cleanup
 
-    def __init__(self, data_dir: str = "cortex-registry/company/dashboards/data"):
+    def __init__(self, data_dir: str = "cortex-registry/company/dashboards/data") -> None:
+        """Initialize instance."""
         self.data_dir = Path(data_dir)
         self.cache: Dict[str, CacheEntry] = {}
         self.cache_hits = 0
@@ -193,7 +194,7 @@ class DataLoader:
             cache_ttl_ms=self.CACHE_TTL_MS
         )
 
-    def invalidate_cache(self, repository: Optional[str] = None):
+    def invalidate_cache(self, repository: Optional[str] = None) -> None:
         """
         Invalidate cache entries
 
@@ -236,7 +237,8 @@ class DataLoader:
 class DataSynchronizer:
     """Synchronize data across dashboard components"""
 
-    def __init__(self, loader: DataLoader):
+    def __init__(self, loader: DataLoader) -> None:
+        """Initialize instance."""
         self.loader = loader
         self.sync_history = []
 

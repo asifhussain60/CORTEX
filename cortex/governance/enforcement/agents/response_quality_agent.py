@@ -77,7 +77,7 @@ class ResponseQualityAgent(BaseEnforcementAgent):
     Never blocks production responses (telemetry only).
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize response quality agent."""
         super().__init__(
             agent_name="ResponseQualityAgent",

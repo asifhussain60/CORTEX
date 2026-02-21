@@ -19,7 +19,7 @@ class PatternEnforcer:
     Validates orchestrator compliance with defined patterns and audits violations.
     """
 
-    def __init__(self, registry_path: Optional[Path] = None):
+    def __init__(self, registry_path: Optional[Path] = None) -> None:
         """
         Initialize pattern enforcer.
 

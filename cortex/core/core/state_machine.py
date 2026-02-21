@@ -101,7 +101,7 @@ class StateMachine:
         PhaseState.COMPLETE: [],  # Terminal state
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize state machine.
         """

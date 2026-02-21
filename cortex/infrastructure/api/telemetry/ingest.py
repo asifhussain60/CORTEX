@@ -53,7 +53,7 @@ class TelemetryIngestEndpoint:
         r"(private[_-]?key|rsa[_-]?key)\s*[:=]",
     ]
 
-    def __init__(self, dedup_window_minutes: int = 60):
+    def __init__(self, dedup_window_minutes: int = 60) -> None:
         """
         Initialize telemetry ingest endpoint.
 

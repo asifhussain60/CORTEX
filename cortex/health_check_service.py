@@ -80,7 +80,7 @@ class HealthResponse:
 class HealthCheckService:
     """Service for health checking and readiness probes."""
 
-    def __init__(self, router: IntentRouter):
+    def __init__(self, router: IntentRouter) -> None:
         """Initialize health check service.
         
         Args:

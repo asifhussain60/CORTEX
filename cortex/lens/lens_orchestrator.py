@@ -127,7 +127,7 @@ class LENSOrchestrator:
         ast_analyzer: Optional[ASTAnalyzer] = None,
         comment_extractor: Optional[CommentExtractor] = None,
         polyglot_analyzer: Optional["PolyglotAnalyzer"] = None,
-    ):
+    ) -> None:
         """
         Initialize LENSOrchestrator.
 

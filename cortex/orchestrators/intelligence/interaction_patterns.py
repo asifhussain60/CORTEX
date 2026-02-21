@@ -117,7 +117,7 @@ class AgentToOrchestratorBridge:
     handling request formatting, error handling, and response standardization.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the bridge."""
         self._agent_cache: Dict[str, Any] = {}
     
@@ -228,7 +228,7 @@ class OrchestratorAgentInvoker:
     Orchestrators can inherit from this to get agent invocation capabilities.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the invoker."""
         self.agent_bridge = AgentToOrchestratorBridge()
     

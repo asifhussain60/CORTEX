@@ -34,7 +34,7 @@ class PhaseOrchestrator:
     - Report progress
     """
 
-    def __init__(self, cortex_root: Path):
+    def __init__(self, cortex_root: Path) -> None:
         """
         Initialize orchestrator.
 

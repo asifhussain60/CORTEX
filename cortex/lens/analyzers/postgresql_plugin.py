@@ -47,7 +47,7 @@ class PostgreSQLPlugin(DatabaseCrawlerPlugin):
     Authority: Phase 19 Component #6
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize PostgreSQL plugin."""
         # Check psycopg2 availability at initialization
         try:

@@ -29,7 +29,7 @@ from contextlib import contextmanager
 class PrometheusMetrics:
     """Prometheus metrics collector for IntentRouter."""
 
-    def __init__(self, service_name: str = "cortex-intentrouter"):
+    def __init__(self, service_name: str = "cortex-intentrouter") -> None:
         """Initialize metrics collector.
         
         Args:
@@ -257,8 +257,10 @@ class PrometheusMetrics:
             Decorator function
         """
         def decorator(func: Callable) -> Callable:
+            """Create decorated function wrapper."""
             @wraps(func)
-            def wrapper(*args, **kwargs):
+            def wrapper(*args, **kwargs) -> None:
+                """Execute wrapped function with applied decoration."""
                 start = time.perf_counter()
                 try:
                     result = func(*args, **kwargs)
@@ -279,7 +281,7 @@ class PrometheusMetrics:
 class TimingContext:
     """Context manager for timing operations."""
 
-    def __init__(self, metrics: PrometheusMetrics, metric_name: str, mode: str):
+    def __init__(self, metrics: PrometheusMetrics, metric_name: str, mode: str) -> None:
         """Initialize timing context.
         
         Args:

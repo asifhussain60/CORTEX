@@ -36,7 +36,7 @@ class IntentLearner:
         feedback_log: List of feedback entries
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize learner."""
         self.feedback_log: List[FeedbackEntry] = []
 

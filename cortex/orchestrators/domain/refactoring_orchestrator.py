@@ -273,5 +273,18 @@ class RefactoringOrchestrator:
 
         return total
 
+    # ------------------------------------------------------------------
+    # Health Check (IOrchestrator protocol)
+    # ------------------------------------------------------------------
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status for wiring-contract validation."""
+        return {
+            "status": "healthy",
+            "orchestrator": "RefactoringOrchestrator",
+            "adapters_registered": len(self._registry.get_all_adapters()),
+            "total_operations": self.get_total_operations_count(),
+        }
+
 
 # AC_COMPLETE: AC-PHASE24.6-002 ✅ RefactoringOrchestrator implementation complete

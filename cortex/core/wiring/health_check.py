@@ -178,7 +178,8 @@ class SystemHealthMonitor:
     - Comprehensive health report
     """
 
-    def __init__(self, orchestrators: Dict[str, Any], event_bus: Any = None):
+    def __init__(self, orchestrators: Dict[str, Any], event_bus: Any = None) -> None:
+        """Initialize instance."""
         self.orchestrators = orchestrators
         self.event_bus = event_bus
         self.last_report: Optional[SystemHealthReport] = None

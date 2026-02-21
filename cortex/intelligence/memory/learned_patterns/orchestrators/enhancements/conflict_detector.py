@@ -106,7 +106,7 @@ class ConflictReport:
 class ConflictDetector:
     """Detect conflicts before file operations."""
     
-    def __init__(self, repo_root: Path = Path(".")):
+    def __init__(self, repo_root: Path = Path(".")) -> None:
         """Initialize detector.
         
         Args:

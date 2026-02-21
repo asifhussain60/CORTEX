@@ -131,7 +131,7 @@ class OrchestratorTraceLogger:
                     cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize trace logger."""
         if hasattr(self, "_initialized") and self._initialized:
             return
@@ -404,7 +404,7 @@ class PerOrchestrationTraceWriter:
         logger_instance: Optional[OrchestratorTraceLogger],
         orchestrator_id: str,
         orchestrator_class: str,
-    ):
+    ) -> None:
         """Initialize per-orchestrator trace writer."""
         self.logger_instance = logger_instance
         self.orchestrator_id = orchestrator_id
@@ -548,7 +548,7 @@ class PerOrchestrationTraceWriter:
 class TraceFlushPolicy:
     """Configurable trace flush policy."""
 
-    def __init__(self, max_rows_per_table: int = 10000, flush_interval_hours: int = 24):
+    def __init__(self, max_rows_per_table: int = 10000, flush_interval_hours: int = 24) -> None:
         """Initialize flush policy."""
         self.max_rows_per_table = max_rows_per_table
         self.flush_interval = timedelta(hours=flush_interval_hours)

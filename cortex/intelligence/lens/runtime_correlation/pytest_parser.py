@@ -36,7 +36,8 @@ class PytestParser:
         >>> mappings = parser.extract_test_file_mapping(json_data)
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.test_file_pattern = re.compile(r"tests/(.+)/test_(.+)\.py")
         self.source_file_pattern = re.compile(r"test_(.+)")
         

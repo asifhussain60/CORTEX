@@ -34,7 +34,7 @@ class PhaseExecutorFactory:
     - Handle executor lifecycle
     """
 
-    def __init__(self, cortex_root: Path):
+    def __init__(self, cortex_root: Path) -> None:
         """
         Initialize factory.
 

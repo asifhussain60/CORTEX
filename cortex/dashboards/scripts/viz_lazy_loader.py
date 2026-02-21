@@ -128,7 +128,7 @@ class LazyModuleLoader:
         ```
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize lazy module loader."""
         self._loaded_modules: Set[str] = set()
 
@@ -187,7 +187,8 @@ class LazyModuleLoader:
         """
         resolved = set()
 
-        def resolve(name: str):
+        def resolve(name: str) -> None:
+            """Resolve lazy-loaded module."""
             if name in resolved:
                 return
 

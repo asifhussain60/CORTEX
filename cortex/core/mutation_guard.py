@@ -1,4 +1,5 @@
 """mutation_guard.py"""
 
 class MutationGuard:
-    pass
+    """Guards against unauthorized state mutations during execution."""
+

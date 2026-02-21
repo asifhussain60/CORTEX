@@ -131,7 +131,8 @@ class TestQualityAnalyzer(ABC):
 class QualityScorer:
     """Calculates quality scores for different test dimensions"""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.logger = logging.getLogger(f"{self.__class__.__module__}.{self.__class__.__name__}")
 
     def score_coverage(self, test_code: str, demand: TestDemand) -> float:
@@ -291,7 +292,8 @@ class QualityScorer:
 class BrittnessDetector:
     """Identifies patterns causing test fragility"""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.logger = logging.getLogger(f"{self.__class__.__module__}.{self.__class__.__name__}")
 
     def detect_magic_strings(self, test_code: str) -> List[BrittnessIssue]:
@@ -401,7 +403,8 @@ class BrittnessDetector:
 class InteractionOrchestratorQualityAnalyzer(TestQualityAnalyzer):
     """Quality analyzer specialized for InteractionOrchestrator tests"""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.scorer = QualityScorer()
         self.brittleness_detector = BrittnessDetector()
         self.logger = logging.getLogger(f"{self.__class__.__module__}.{self.__class__.__name__}")

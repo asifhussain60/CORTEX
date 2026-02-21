@@ -77,7 +77,7 @@ class ContextCacheLayer:
         max_entries: int = 1000,
         ttl_seconds: int = 600,
         max_size_bytes: int = 10 * 1024 * 1024  # 10 MB
-    ):
+    ) -> None:
         """
         Initialize cache layer.
 
@@ -143,7 +143,7 @@ class ContextCacheLayer:
 
             return entry["value"]
 
-    def set(self, key: str, value: Any, ttl: Optional[int] = None):
+    def set(self, key: str, value: Any, ttl: Optional[int] = None) -> None:
         """
         Set value in cache.
 
@@ -195,7 +195,7 @@ class ContextCacheLayer:
                 ttl
             )
 
-    def invalidate(self, key: str):
+    def invalidate(self, key: str) -> None:
         """
         Invalidate specific cache entry.
 
@@ -207,7 +207,7 @@ class ContextCacheLayer:
                 self._remove_entry(key)
                 logger.debug("Cache INVALIDATE (key=%s)", key)
 
-    def clear(self):
+    def clear(self) -> None:
         """Clear entire cache."""
         with self._lock:
             self._cache.clear()

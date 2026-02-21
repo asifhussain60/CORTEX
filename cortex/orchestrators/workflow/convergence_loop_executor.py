@@ -80,7 +80,7 @@ class ConvergenceLoopExecutor:
         ...     print(f"Service ready after {result.attempts} attempts")
     """
     
-    def __init__(self, config: Optional[ConvergenceConfig] = None):
+    def __init__(self, config: Optional[ConvergenceConfig] = None) -> None:
         """Initialize executor with configuration.
         
         Args:

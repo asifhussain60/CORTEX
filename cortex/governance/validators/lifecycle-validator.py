@@ -42,6 +42,7 @@ class LifecycleMetadataValidator:
     ]
 
     def __init__(self) -> None:
+        """Initialize instance."""
         self.errors: List[str] = []
         self.warnings: List[str] = []
 

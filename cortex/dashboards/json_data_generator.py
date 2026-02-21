@@ -26,7 +26,7 @@ class JSONDataGenerator:
     - Validation: Pydantic schema enforcement
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize generator"""
         self.schema_version = "3.0"
         logger.debug(f"JSONDataGenerator initialized (schema v{self.schema_version})")

@@ -49,7 +49,7 @@ class ArchitectureClassifier:
     - CQRS (Command Query Responsibility Segregation)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize ArchitectureClassifier with pattern signatures."""
         self.mvc_signatures = ["Model", "View", "Controller"]
         self.mvvm_signatures = ["Model", "ViewModel", "View"]

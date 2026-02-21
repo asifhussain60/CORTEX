@@ -30,7 +30,7 @@ class GovernanceTelemetry:
     - Trend analysis over time
     """
 
-    def __init__(self, log_dir: Optional[Path] = None):
+    def __init__(self, log_dir: Optional[Path] = None) -> None:
         """
         Initialize governance telemetry.
 

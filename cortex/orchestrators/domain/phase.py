@@ -46,7 +46,7 @@ class PhaseExecutionStrategy(ExecutionStrategy):
     Preserves all 12 AC markers from EnhancedPlanningOrchestrator.
     """
     
-    def __init__(self, config: Optional[PhaseExecutionConfig] = None):
+    def __init__(self, config: Optional[PhaseExecutionConfig] = None) -> None:
         """
         Initialize phase execution strategy.
         

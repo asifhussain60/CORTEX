@@ -27,6 +27,7 @@ except ImportError:
         """Minimal Ok wrapper when 'result' package is unavailable."""
 
         def __init__(self, v: Any) -> None:
+            """Initialize instance."""
             self.value = v
 
 
@@ -79,6 +80,7 @@ class EnhancedPlanningOrchestrator(IOrchestrator):
         return cls._instance
 
     def __init__(self) -> None:
+        """Initialize instance."""
         if getattr(self, "_initialised", False):
             return
         self._name: str = "EnhancedPlanningOrchestrator"
@@ -133,10 +135,12 @@ class EnhancedPlanningOrchestrator(IOrchestrator):
 
     @property
     def name(self) -> str:  # type: ignore[override]
+        """Return the orchestrator name."""
         return self._name
 
     @property
     def version(self) -> str:
+        """Return the orchestrator version."""
         return self._version
 
     def execute(self, request: Any) -> Any:

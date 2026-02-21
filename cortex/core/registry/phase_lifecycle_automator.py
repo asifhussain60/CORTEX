@@ -71,7 +71,7 @@ class PhaseLifecycleAutomator:
         self,
         registry_root: Optional[str] = None,
         cleanup_config: Optional[CleanupStageConfig] = None,
-    ):
+    ) -> None:
         """
         Initialize lifecycle automator.
         

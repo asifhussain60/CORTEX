@@ -48,7 +48,7 @@ class PatternDiscoveryScheduler:
         max_queue_size: int = 1000,
         max_concurrent_workers: int = 10,
         worker_timeout: float = 30.0,
-    ):
+    ) -> None:
         """
         Initialize PatternDiscoveryScheduler.
 

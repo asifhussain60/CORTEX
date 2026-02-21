@@ -278,7 +278,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
 
     _instance: Optional['MasterOrchestrator'] = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize MasterOrchestrator"""
         super().__init__()  # Initialize OrchestratorAuditMixin
         self.logger = EnhancedAuditLogger.instance()

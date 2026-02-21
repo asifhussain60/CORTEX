@@ -62,7 +62,7 @@ class DecisionTraceabilityLogger:
     - Decision outcome tracking
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize decision logger"""
         self._history: List[DecisionLog] = []
     

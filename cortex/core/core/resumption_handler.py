@@ -84,7 +84,7 @@ class ResumptionHandler:
     _instance = None
     _instance_lock = threading.Lock()
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize resumption handler (private - use instance() instead)."""
         self._resumptions: Dict[str, ResumptionRecord] = {}
         self._recovery_contexts: Dict[str, RecoveryContext] = {}

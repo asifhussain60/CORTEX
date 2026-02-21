@@ -51,7 +51,7 @@ class TypeScriptAdapter(LanguageAdapter):
         >>> print(f"Language: {result.language}")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize TypeScriptAdapter with tree-sitter parser (uses JavaScript parser)."""
         # New tree-sitter API (0.20+): pass language directly to Parser
         self.parser = Parser(ts_javascript.language())

@@ -60,7 +60,7 @@ class AutoInitializationSuite:
     Executes all initialization tasks without user interaction
     """
 
-    def __init__(self, verbose: bool = True):
+    def __init__(self, verbose: bool = True) -> None:
         """
         Initialize auto-initialization suite
 
@@ -682,7 +682,7 @@ class AutoInitializationSuite:
         print("\n" + "=" * 80 + "\n")
 
 
-async def main():
+async def main() -> None:
     """Main entry point for auto-initialization"""
     suite = AutoInitializationSuite(verbose=True)
     success = await suite.execute_full_initialization()

@@ -37,7 +37,7 @@ class TestDemandGenerator:
     Output: test-demand YAML files describing required test coverage
     """
     
-    def __init__(self, cortex_root: Path):
+    def __init__(self, cortex_root: Path) -> None:
         """
         Initialize test demand generator.
         

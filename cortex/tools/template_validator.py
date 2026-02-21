@@ -159,6 +159,7 @@ class RequiredFieldsRule(ValidationRule):
     REQUIRED_FIELDS = ['name', 'domain', 'version']
 
     def validate(self, template: Any, context: Dict[str, Any]) -> List[ValidationError]:
+        """Validate that all required fields are present in the template."""
         errors = []
         for field in self.REQUIRED_FIELDS:
             value = getattr(template, field, None) if hasattr(template, field) else template.get(field)
@@ -184,6 +185,7 @@ class NamingConventionRule(ValidationRule):
     NAME_PATTERN = re.compile(r'^[a-zA-Z][a-zA-Z0-9_-]*$')
 
     def validate(self, template: Any, context: Dict[str, Any]) -> List[ValidationError]:
+        """Validate that names follow naming conventions."""
         errors = []
         name = getattr(template, 'name', None) if hasattr(template, 'name') else template.get('name', '')
 
@@ -210,6 +212,7 @@ class VersionFormatRule(ValidationRule):
     VERSION_PATTERN = re.compile(r'^\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?$')
 
     def validate(self, template: Any, context: Dict[str, Any]) -> List[ValidationError]:
+        """Validate that version follows semantic versioning format."""
         errors = []
         version = getattr(template, 'version', None) if hasattr(template, 'version') else template.get('version', '')
 
@@ -235,6 +238,7 @@ class ParameterValidationRule(ValidationRule):
     VALID_TYPES = {'str', 'string', 'int', 'integer', 'float', 'number', 'bool', 'boolean', 'list', 'array', 'dict', 'object', 'any'}
 
     def validate(self, template: Any, context: Dict[str, Any]) -> List[ValidationError]:
+        """Validate parameter definitions for type and description."""
         errors = []
 
         # Get parameters section
@@ -280,6 +284,7 @@ class StageValidationRule(ValidationRule):
     description = "Validates stage definitions"
 
     def validate(self, template: Any, context: Dict[str, Any]) -> List[ValidationError]:
+        """Validate stage definitions for format, naming, and uniqueness."""
         errors = []
 
         # Get stages section
@@ -340,6 +345,7 @@ class HookValidationRule(ValidationRule):
     STANDARD_HOOKS = {'pre_execute', 'post_execute', 'on_success', 'on_error', 'on_failure'}
 
     def validate(self, template: Any, context: Dict[str, Any]) -> List[ValidationError]:
+        """Validate hook definitions against standard hooks."""
         errors = []
 
         # Get hooks section
@@ -374,6 +380,7 @@ class DependencyValidationRule(ValidationRule):
     level = ValidationLevel.WARNING
 
     def validate(self, template: Any, context: Dict[str, Any]) -> List[ValidationError]:
+        """Validate cross-references between template sections."""
         errors = []
 
         # Get sections
@@ -454,7 +461,7 @@ class TemplateValidator:
         DependencyValidationRule(),
     ]
 
-    def __init__(self, rules: Optional[List[ValidationRule]] = None):
+    def __init__(self, rules: Optional[List[ValidationRule]] = None) -> None:
         """
         Initialize validator.
 

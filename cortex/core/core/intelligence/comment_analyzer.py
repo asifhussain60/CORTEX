@@ -148,7 +148,7 @@ class SearchMatch:
 class CommentIndex:
     """Searchable index of comments."""
 
-    def __init__(self, items: List[Tuple[str, int, str]]):
+    def __init__(self, items: List[Tuple[str, int, str]]) -> None:
         """Initialize with items (text, line_number, context)."""
         self._items = items
 
@@ -231,7 +231,7 @@ class CommentAnalyzer:
     # Priority pattern
     PRIORITY_PATTERN = r"Priority:\s*(\w+)"
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the comment analyzer."""
         pass
 

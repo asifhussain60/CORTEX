@@ -59,7 +59,7 @@ class ChatFileDetector:
         weights: Scoring weights for different marker types
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize detector with patterns and weights."""
         self.patterns = self._compile_patterns()
         self.weights = {

@@ -48,7 +48,7 @@ class MultiModalIntentProcessor:
         metrics: Processing metrics dictionary
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize processor."""
         self.classifier = IntentClassifier()
         self.metrics: Dict[str, Any] = {

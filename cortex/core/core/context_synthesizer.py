@@ -77,7 +77,7 @@ class ContextSynthesizer:
         result = synthesizer.synthesize_all(content, "file.ext")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize synthesizer"""
         self.default_max_rules = 15
 
@@ -275,7 +275,8 @@ class ContextSynthesizer:
         """Extract rules from YAML data structure"""
         rules = []
 
-        def extract_recursive(obj, path=""):
+        def extract_recursive(obj: Any, path: str = "") -> None:
+            """Recursively walk *obj* collecting rule entries."""
             if isinstance(obj, dict):
                 # Check if this is a rule entry
                 if 'id' in obj:
@@ -302,6 +303,7 @@ class ContextSynthesizer:
     def _prioritize_rules(self, rules: List[str]) -> List[str]:
         """Sort rules by priority (P0 > P1 > P2 > P3)"""
         def priority_key(rule: str) -> int:
+            """Map priority label to sort order (lower = higher priority)."""
             if "P0" in rule:
                 return 0
             elif "P1" in rule:

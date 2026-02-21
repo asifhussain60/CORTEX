@@ -94,7 +94,7 @@ class ResourceTracker:
         self,
         leak_detection_enabled: bool = True,
         leak_check_interval_seconds: float = 60.0,
-    ):
+    ) -> None:
         """
         Initialize resource tracker.
 
@@ -354,7 +354,7 @@ class ResourceContext:
         resource_type: ResourceType,
         name: str,
         cleanup_func: Optional[Callable[[Any], None]] = None,
-    ):
+    ) -> None:
         """
         Initialize resource context.
 

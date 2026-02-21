@@ -28,7 +28,8 @@ class Pattern:
 class YAMLConverter:
     """Converts external docs to CORTEX YAML format."""
     
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.patterns: List[Pattern] = []
     
     def convert_markdown_section(self, content: str, domain: str) -> str:
@@ -105,7 +106,7 @@ references:
         return suggestions
 
 
-def print_help():
+def print_help() -> None:
     """Print usage help."""
     print("""
 CORTEX YAML Converter
@@ -123,7 +124,7 @@ Manual curation is required to ensure quality and accuracy.
 """)
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     if len(sys.argv) < 2:
         print_help()

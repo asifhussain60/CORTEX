@@ -94,7 +94,7 @@ class MLIntegration:
         self,
         model_name: str = "all-MiniLM-L6-v2",
         config: Optional[IntegrationConfig] = None,
-    ):
+    ) -> None:
         """
         Initialize ML integration.
 

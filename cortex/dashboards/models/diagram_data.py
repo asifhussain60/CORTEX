@@ -118,7 +118,7 @@ class MermaidDiagram(DiagramData):
     Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 4
     """
 
-    def __init__(self, title: str, content: str, metadata: Dict[str, Any]):
+    def __init__(self, title: str, content: str, metadata: Dict[str, Any]) -> None:
         """Initialize Mermaid diagram."""
         super().__init__(
             diagram_type=DiagramType.MERMAID,
@@ -153,7 +153,7 @@ class PlantUMLDiagram(DiagramData):
     Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 4
     """
 
-    def __init__(self, title: str, content: str, metadata: Dict[str, Any]):
+    def __init__(self, title: str, content: str, metadata: Dict[str, Any]) -> None:
         """Initialize PlantUML diagram."""
         super().__init__(
             diagram_type=DiagramType.PLANTUML,
@@ -189,7 +189,7 @@ class D3Diagram(DiagramData):
     Authority: LENS-MULTI-LANGUAGE-ENHANCEMENT.yaml Phase 5
     """
 
-    def __init__(self, title: str, content: str, metadata: Dict[str, Any]):
+    def __init__(self, title: str, content: str, metadata: Dict[str, Any]) -> None:
         """Initialize D3 diagram."""
         super().__init__(
             diagram_type=DiagramType.D3,

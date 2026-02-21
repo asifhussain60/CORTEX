@@ -66,7 +66,7 @@ class SemanticBlockLoader:
     - Ensures personality guidelines present
     """
 
-    def __init__(self, registry_path: Optional[Path] = None):
+    def __init__(self, registry_path: Optional[Path] = None) -> None:
         """Initialize loader with registry path."""
         if registry_path is None:
             # Find registry relative to this file
@@ -132,7 +132,7 @@ class SemanticBlockReasoner:
     - Validates assembly rules (constraint satisfaction)
     """
 
-    def __init__(self, loader: SemanticBlockLoader):
+    def __init__(self, loader: SemanticBlockLoader) -> None:
         """Initialize reasoner with loader."""
         self.loader = loader
         self.blocks = loader.load_blocks()
@@ -237,7 +237,7 @@ class SemanticBlockAssembler:
     - Renders for VSCode (rendering_standards)
     """
 
-    def __init__(self, loader: SemanticBlockLoader, reasoner: SemanticBlockReasoner):
+    def __init__(self, loader: SemanticBlockLoader, reasoner: SemanticBlockReasoner) -> None:
         """Initialize assembler with loader and reasoner."""
         self.loader = loader
         self.reasoner = reasoner

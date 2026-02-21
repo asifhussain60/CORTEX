@@ -42,7 +42,7 @@ class DetectionCalibrator:
         calibrator.learn_marker_weights(training_data, epochs=100)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize DetectionCalibrator with default state."""
         self.state = CalibrationState()
 

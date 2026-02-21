@@ -44,7 +44,8 @@ class HealthCheckResult:
 class DashboardServerTool:
     """MCP Tool for dashboard server management."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.dashboards_dir = Path(__file__).parent.parent.parent / "company" / "dashboards"
         self.log_file = Path("/tmp/dashboard_server.log")
         self.server_pid: Optional[int] = None
@@ -440,7 +441,7 @@ class DashboardServerTool:
             return False, f"❌ Error launching dashboard: {e}"
 
 
-def main():
+def main() -> None:
     """CLI entry point."""
     import argparse
 

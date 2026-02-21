@@ -21,7 +21,7 @@ class MemoryBackend(LENSCache):
     - TTL expiration: Entries automatically considered expired
     """
 
-    def __init__(self, max_entries: int = 1000, max_size_mb: int = 100):
+    def __init__(self, max_entries: int = 1000, max_size_mb: int = 100) -> None:
         """Initialize memory backend.
 
         Args:

@@ -26,7 +26,8 @@ class TelemetryConfiguration:
         enable_memory: bool = True,
         batch_size: int = 10,
         use_async: bool = True
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.enable_console = enable_console
         self.enable_memory = enable_memory
         self.batch_size = batch_size

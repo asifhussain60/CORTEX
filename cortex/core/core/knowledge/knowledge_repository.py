@@ -382,6 +382,7 @@ class KnowledgeRepository:
 
         # Sort by relevance (domain match weight + keyword match weight)
         def relevance_score(entry: KnowledgeEntry) -> float:
+            """Compute relevance score for *entry* based on domain/keyword matches."""
             score = 0.0
 
             # Domain match

@@ -141,7 +141,7 @@ class ClusteringEngine:
     - Optimal cluster detection (elbow method)
     """
 
-    def __init__(self, random_state: int = 42):
+    def __init__(self, random_state: int = 42) -> None:
         """
         Initialize clustering engine.
 

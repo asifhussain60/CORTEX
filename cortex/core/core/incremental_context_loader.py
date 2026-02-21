@@ -57,7 +57,7 @@ class IncrementalContextLoader:
                 IncrementalContextLoader (load 1-3 relevant files)
     """
 
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize loader with minimal footprint
 

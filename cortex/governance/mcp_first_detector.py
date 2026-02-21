@@ -54,7 +54,7 @@ class MCPFirstDetector:
     Description: MCP-FIRST violation detection implementation
     """
     
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize MCP-FIRST detector.
         

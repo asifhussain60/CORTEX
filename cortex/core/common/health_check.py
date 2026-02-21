@@ -213,8 +213,10 @@ def health_check(
             return response.status_code == 200
     """
     def decorator(func: Callable[..., bool]) -> Callable[..., bool]:
+        """Wrap *func* as a health-check probe."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> bool:
+            """Execute the health check and return False on failure."""
             try:
                 return func(*args, **kwargs)
             except Exception as e:

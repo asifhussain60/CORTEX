@@ -30,7 +30,7 @@ class RecommendationGate:
         similarity_threshold: Similarity score threshold (0.0-1.0)
     """
     
-    def __init__(self, registry_path: Optional[Path] = None, similarity_threshold: float = 0.3):
+    def __init__(self, registry_path: Optional[Path] = None, similarity_threshold: float = 0.3) -> None:
         """
         Initialize recommendation gate.
         

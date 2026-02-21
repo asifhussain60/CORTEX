@@ -167,7 +167,7 @@ class GitHistoryAnalyzer:
         remote_adapter: Optional[RemoteGitAdapter] = None,
         remote_repo: Optional[str] = None,
         remote_ref: str = "main",
-    ):
+    ) -> None:
         """
         Initialize GitHistoryAnalyzer.
 

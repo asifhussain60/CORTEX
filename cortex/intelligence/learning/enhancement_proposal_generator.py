@@ -84,7 +84,7 @@ class EnhancementProposalGenerator:
     - Confidence scoring based on evidence
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize generator with patterns and keywords."""
         self.patterns = self._compile_patterns()
         self.keywords = self._build_keyword_map()

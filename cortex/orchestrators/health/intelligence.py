@@ -64,7 +64,7 @@ class HealthIntelligence:
     - Smart recommendations
     """
     
-    def __init__(self, workspace_root: Path):
+    def __init__(self, workspace_root: Path) -> None:
         """Initialize health intelligence layer.
         
         Args:

@@ -143,7 +143,7 @@ class PromptCleanupOrchestrator:
         orchestrator.generate_report(results)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize cleanup orchestrator."""
         self.tasks = PROMPT_CLEANUP_TASKS
 
@@ -218,7 +218,7 @@ class PromptCleanupOrchestrator:
 # INTEGRATION WITH AUDIT WORKFLOW
 # ============================================================================
 
-def audit_trigger_cleanup():
+def audit_trigger_cleanup() -> None:
     """
     Trigger cleanup cycle during AUDIT operations.
 

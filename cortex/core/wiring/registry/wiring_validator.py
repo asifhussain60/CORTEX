@@ -129,6 +129,7 @@ class WiringValidator:
 
         # DFS cycle detection
         def has_cycle(node: str, visited: Set[str], rec_stack: Set[str], path: List[str]) -> bool:
+            """Detect circular dependency via DFS."""
             visited.add(node)
             rec_stack.add(node)
             path.append(node)

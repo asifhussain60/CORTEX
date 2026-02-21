@@ -51,7 +51,7 @@ class SessionParser:
             print(f"Detected chat with score {session.chat_score}")
     """
 
-    def __init__(self, detection_threshold: int = 5):
+    def __init__(self, detection_threshold: int = 5) -> None:
         """
         Initialize parser.
 

@@ -170,7 +170,7 @@ class IntelligenceRoutingEngine:
         IntentType.DIGEST: ["digest", "summarize", "extract", "consolidate", "learn"],
     }
 
-    def __init__(self, prompts_dir: Optional[Path] = None, agents_dir: Optional[Path] = None):
+    def __init__(self, prompts_dir: Optional[Path] = None, agents_dir: Optional[Path] = None) -> None:
         """
         Initialize routing engine.
 

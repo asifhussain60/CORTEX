@@ -88,6 +88,7 @@ class SecretsRollback:
     """Handles rollback of a failed migration."""
 
     def __init__(self) -> None:
+        """Initialize instance."""
         self._snapshot: Dict[str, str] = {}
 
     def snapshot(self, provider: ISecretsProvider) -> None:
@@ -167,6 +168,7 @@ class SecretsMigrationOrchestrator:
     """Full migration workflow: detect → snapshot → migrate → validate → rollback."""
 
     def __init__(self) -> None:
+        """Initialize instance."""
         self._migrator = SecretsMigrator()
         self._validator = SecretsValidator()
         self._rollback = SecretsRollback()

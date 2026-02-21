@@ -23,7 +23,8 @@ import yaml
 class ParseError(Exception):
     """Error during template parsing."""
 
-    def __init__(self, message: str, line: Optional[int] = None, column: Optional[int] = None):
+    def __init__(self, message: str, line: Optional[int] = None, column: Optional[int] = None) -> None:
+        """Initialize instance."""
         self.message = message
         self.line = line
         self.column = column
@@ -204,7 +205,7 @@ class TemplateParser:
         SectionType.ERROR_HANDLERS: set(),
     }
 
-    def __init__(self, strict: bool = False):
+    def __init__(self, strict: bool = False) -> None:
         """
         Initialize parser.
 
@@ -454,6 +455,7 @@ class TemplateParser:
         variables: Dict[str, Set[str]] = {}
 
         def extract_from_value(value: Any) -> None:
+            """Extract from value."""
             if isinstance(value, str):
                 # Find $variable and ${variable} patterns
                 matches = re.findall(r'\$\{?([a-zA-Z_][a-zA-Z0-9_.]*)\}?', value)

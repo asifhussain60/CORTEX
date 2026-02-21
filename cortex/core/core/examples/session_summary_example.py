@@ -16,7 +16,7 @@ from cortex.core.core.session_summary_generator import (
 )
 
 
-def autonomous_implementation_example():
+def autonomous_implementation_example() -> None:
     """
     Example of an orchestrator tracking stages and generating summary.
 
@@ -126,7 +126,7 @@ def autonomous_implementation_example():
         print("\n" + checkpoint)
 
 
-def high_token_usage_example():
+def high_token_usage_example() -> None:
     """
     Example when token budget is high (>85%).
 

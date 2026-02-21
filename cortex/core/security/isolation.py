@@ -39,7 +39,7 @@ class RepositoryIsolationError(Exception):
         attempted_path: Optional[str] = None,
         repo_boundary: Optional[str] = None,
         reason: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize isolation violation error.
 
         Args:
@@ -73,7 +73,7 @@ class IsolationChecker:
         >>> assert not checker.is_path_within_repo("/etc/passwd", repo_path)
     """
 
-    def __init__(self, resolve_symlinks: bool = True):
+    def __init__(self, resolve_symlinks: bool = True) -> None:
         """Initialize isolation checker.
 
         Args:

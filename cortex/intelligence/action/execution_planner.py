@@ -86,7 +86,7 @@ class ExecutionPlanner:
     AC-PHASE71-011: Execution planning
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize execution planner."""
         self._templates: Dict[str, Dict[str, Any]] = {}
         self._initialize_default_templates()

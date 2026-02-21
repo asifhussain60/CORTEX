@@ -100,7 +100,7 @@ class ComplianceMarker:
 class ComplianceMarkerRegistry:
     """Registry of compliance requirements by framework and category."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize compliance registry."""
         self._requirements: Dict[str, ComplianceRequirement] = {}
         self._init_requirements()
@@ -259,7 +259,7 @@ class ComplianceMarkerRegistry:
 class ComplianceMarkerService:
     """Service for creating and managing compliance markers."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize compliance marker service."""
         self.registry = ComplianceMarkerRegistry()
 

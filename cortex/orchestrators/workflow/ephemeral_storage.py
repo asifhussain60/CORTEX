@@ -66,7 +66,7 @@ class EphemeralStorage:
         # .temp/ automatically cleaned up after context
     """
     
-    def __init__(self, base_path: Optional[Path] = None):
+    def __init__(self, base_path: Optional[Path] = None) -> None:
         """Initialize ephemeral storage.
         
         Args:

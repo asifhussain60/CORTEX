@@ -97,7 +97,7 @@ class ValidationManager:
         self,
         workspace_root: Path,
         strict_mode: bool = False
-    ):
+    ) -> None:
         """
         Initialize ValidationManager.
         

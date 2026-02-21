@@ -28,7 +28,7 @@ class ArchitecturePatternSource(ABC):
     and classify architectural patterns.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize ArchitecturePatternSource."""
         self.source_name = "ArchitecturePatterns"
         self.supported_patterns = [

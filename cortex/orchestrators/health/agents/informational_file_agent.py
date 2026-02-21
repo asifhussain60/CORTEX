@@ -26,7 +26,7 @@ class InformationalFileAgent(BaseHealthAgent):
     Everything else is drift/sprawl requiring cleanup.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize informational file agent."""
         super().__init__(
             name="InformationalFileAgent",

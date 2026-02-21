@@ -88,7 +88,7 @@ class ToolDescriptionValidator:
     - Error handling documentation
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the validator."""
         self.registered_tools: Dict[str, ToolDescription] = {}
         self.validation_history: Dict[str, ValidationResult] = {}

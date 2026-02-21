@@ -55,7 +55,7 @@ class KnowledgeLevelDetector:
     - ADVANCED: "why", "optimize", "extend", "pattern", heavy technical terminology
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize detector with keyword mappings."""
         # Beginner signal keywords
         self._beginner_keywords: Set[str] = {

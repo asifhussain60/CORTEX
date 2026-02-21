@@ -202,7 +202,7 @@ class NativeToolGate:
             return HALT_EXECUTION
     """
     
-    def __init__(self, log_path: str = ".cortex-runtime/native-tool-bypass.log"):
+    def __init__(self, log_path: str = ".cortex-runtime/native-tool-bypass.log") -> None:
         """
         Initialize native tool gate.
         

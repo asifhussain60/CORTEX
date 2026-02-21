@@ -42,7 +42,7 @@ class MCPHealthChecker:
     canonical implementation with comprehensive validation.
     """
     
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize health checker.
         

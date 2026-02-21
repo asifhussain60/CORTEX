@@ -29,14 +29,15 @@ class Violation:
 class ViolationDetector(ast.NodeVisitor):
     """AST-based detector for CORE governance violations"""
 
-    def __init__(self, file_path: str, file_content: str):
+    def __init__(self, file_path: str, file_content: str) -> None:
+        """Initialise ViolationDetector."""
         self.file_path = file_path
         self.file_content = file_content
         self.lines = file_content.split('\n')
         self.violations: List[Violation] = []
         self.current_function = None
 
-    def visit_Try(self, node):
+    def visit_Try(self, node) -> None:
         """Detect bare except and bare except with pass violations"""
         for handler in node.handlers:
             if handler.type is None:  # bare except:
@@ -85,7 +86,7 @@ class ViolationDetector(ast.NodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_FunctionDef(self, node):
+    def visit_FunctionDef(self, node) -> None:
         """Detect functions without type hints and docstrings"""
         # Check for return type annotation (CORE-011)
         if node.returns is None:
@@ -118,7 +119,7 @@ class ViolationDetector(ast.NodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_ClassDef(self, node):
+    def visit_ClassDef(self, node) -> None:
         """Detect classes without docstrings"""
         # Check for docstring (CORE-012)
         docstring = ast.get_docstring(node)
@@ -163,7 +164,8 @@ class ViolationDetector(ast.NodeVisitor):
 class PreCommitViolationDetector:
     """Pre-commit hook detector for all CORE violations"""
 
-    def __init__(self, files_to_check: List[str]):
+    def __init__(self, files_to_check: List[str]) -> None:
+        """Initialise PreCommitViolationDetector."""
         self.files_to_check = files_to_check
         self.all_violations: Dict[str, List[Violation]] = {}
 
@@ -235,7 +237,7 @@ class PreCommitViolationDetector:
         return True
 
 
-def main():
+def main() -> None:
     """Main entry point for pre-commit hook"""
     import sys
 

@@ -39,7 +39,7 @@ class LanguageAdapter(ABC):
     """
 
     @abstractmethod
-    def parse_file(self, file_path: Path):
+    def parse_file(self, file_path: Path) -> None:
         """
         Parse a source file and return unified AST result.
 

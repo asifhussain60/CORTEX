@@ -213,6 +213,7 @@ class GraphValidator:
             rec_stack: Set[str] = set()
 
             def dfs(node: str, path: List[str]) -> None:
+                """Perform depth-first search traversal."""
                 visited.add(node)
                 rec_stack.add(node)
                 path.append(node)

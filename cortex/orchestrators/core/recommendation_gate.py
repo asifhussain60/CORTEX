@@ -209,6 +209,7 @@ class RecommendationGate:
             Float in [0.0, 1.0].
         """
         def tokenize(text: str) -> set:
+            """Split text into a set of lowercase word tokens."""
             return set(re.findall(r"[a-z]+", text.lower()))
 
         tokens_a = tokenize(text_a)

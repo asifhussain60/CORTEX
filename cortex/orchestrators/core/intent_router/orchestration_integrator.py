@@ -17,7 +17,7 @@ class OrchestrationIntegrator:
         orchestrator_registry: Dictionary mapping handler names to orchestrators
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize integrator."""
         self.orchestrator_registry: Dict[str, Any] = {}
 

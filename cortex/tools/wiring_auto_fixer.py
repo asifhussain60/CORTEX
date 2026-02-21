@@ -47,7 +47,7 @@ class WiringAutoFixer:
     4. Add missing __all__ exports
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize auto-fixer."""
         self.fix_results: List[FixResult] = []
 

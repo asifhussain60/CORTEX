@@ -250,6 +250,7 @@ class WindowsPathCompatibility:
         
         with self._lock:
             def replace_var(match: re.Match[str]) -> str:
+                """Replace variable placeholder with value."""
                 var_name = match.group(1)
                 value = os.environ.get(var_name)
                 return value if value else match.group(0)

@@ -29,7 +29,7 @@ class ResilienceConfig:
 class RuntimeResilienceManager:
     """Manage runtime resilience."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize resilience manager."""
         self.config = ResilienceConfig()
     

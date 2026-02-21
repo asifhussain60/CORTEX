@@ -81,7 +81,8 @@ class PhaseTemplate:
 class PhaseValidator:
     """Validates phase specifications against 50+ rules."""
     
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.errors: List[str] = []
         self.warnings: List[str] = []
     
@@ -212,7 +213,8 @@ class PhaseValidator:
 class PhaseCreator:
     """Phase creation orchestrator."""
     
-    def __init__(self, cortex_root: Optional[Path] = None):
+    def __init__(self, cortex_root: Optional[Path] = None) -> None:
+        """Initialize instance."""
         self.cortex_root = cortex_root or Path.cwd()
         self.registry_path = self.cortex_root / "cortex-registry" / "_cortex-master"
         self.templates_path = self.cortex_root / "cortex" / "templates" / "phases"
@@ -281,7 +283,7 @@ class Test{eid.replace("-", "")}:
 
 
 @click.group()
-def cli():
+def cli() -> None:
     """CORTEX Phase Creator CLI - ENH-084"""
     pass
 
@@ -293,7 +295,7 @@ def cli():
 @click.option('--title', required=True, help='Phase title')
 @click.option('--output', type=click.Path(), help='Output file path')
 @click.option('--interactive', is_flag=True, help='Interactive mode with prompts')
-def create(template: str, phase_id: str, title: str, output: Optional[str], interactive: bool):
+def create(template: str, phase_id: str, title: str, output: Optional[str], interactive: bool) -> None:
     """Create a new phase specification from template."""
     creator = PhaseCreator()
     
@@ -345,7 +347,7 @@ def create(template: str, phase_id: str, title: str, output: Optional[str], inte
 
 @cli.command()
 @click.argument('spec_file', type=click.Path(exists=True))
-def validate(spec_file: str):
+def validate(spec_file: str) -> None:
     """Validate a phase specification file."""
     creator = PhaseCreator()
     
@@ -365,7 +367,7 @@ def validate(spec_file: str):
 
 @cli.command()
 @click.argument('spec_file', type=click.Path(exists=True))
-def lint(spec_file: str):
+def lint(spec_file: str) -> None:
     """Run comprehensive linting on phase specification."""
     creator = PhaseCreator()
     

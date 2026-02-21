@@ -36,7 +36,7 @@ def orchestrator(
     version: str = "1.0",
     capabilities: Optional[List[str]] = None,
     description: Optional[str] = None
-):
+) -> Callable[[Type], Type]:
     """
     Decorator to mark a class as an orchestrator and auto-register it.
 
@@ -59,6 +59,7 @@ def orchestrator(
             ...
     """
     def decorator(cls: Type) -> Type:
+        """Register *cls* as an orchestrator and attach metadata."""
         # Register the orchestrator
         metadata = {
             "domain": domain,
@@ -80,7 +81,8 @@ def orchestrator(
         cls._orchestrator_registered = True
 
         @functools.wraps(cls)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            """Instantiate the orchestrator class."""
             return cls(*args, **kwargs)
 
         # Preserve original class attributes
@@ -123,7 +125,7 @@ def is_orchestrator(cls: Type) -> bool:
     return hasattr(cls, "_orchestrator_registered") and cls._orchestrator_registered
 
 
-def clear_orchestrator_registry():
+def clear_orchestrator_registry() -> None:
     """Clear all registered orchestrators (useful for testing)."""
     global _REGISTERED_ORCHESTRATORS
     _REGISTERED_ORCHESTRATORS.clear()

@@ -27,18 +27,22 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
     
     @property
     def name(self) -> str:
+        """The unique tool name identifier."""
         return "toolkit_analyze"
     
     @property
     def description(self) -> str:
+        """Human-readable description of the tool."""
         return "Analyze audit traces, performance metrics, and system health"
     
     @property
     def category(self) -> ToolCategory:
+        """The tool category for registry classification."""
         return ToolCategory.OPERATIONS
     
     @property
     def parameters(self) -> list:
+        """List of parameters accepted by the tool."""
         return [
             ToolParameter(
                 name="analysis_type",
@@ -59,6 +63,7 @@ class ToolkitAnalyzeTool(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> list:
+        """List of operation types this tool supports."""
         return ["traces", "performance", "usage", "health"]
     
     def execute(self, analysis_type: str = "traces", path: str = None, **kwargs) -> ToolResult:

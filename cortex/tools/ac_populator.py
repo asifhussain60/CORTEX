@@ -34,7 +34,7 @@ class ACPopulator:
         self,
         db: DatabaseManager,
         master_yaml_path: Optional[Path] = None
-    ):
+    ) -> None:
         """
         Initialize populator.
 

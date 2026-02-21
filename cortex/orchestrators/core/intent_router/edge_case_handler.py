@@ -36,7 +36,7 @@ class EdgeCaseResult:
 class EdgeCaseHandler:
     """Handles edge cases and boundary conditions in intent routing."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize edge case handler."""
         self.handlers: Dict[EdgeCaseType, Callable] = {}
         self.cases_handled: List[EdgeCaseResult] = []

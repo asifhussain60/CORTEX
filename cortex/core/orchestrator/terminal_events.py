@@ -117,7 +117,7 @@ class EventListener:
 class EventRegistry:
     """Registry pattern for managing event listeners."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize registry."""
         self.listeners: List[EventListener] = []
         self._event_log: List[TerminalEvent] = []
@@ -185,7 +185,7 @@ class _CallableListener(EventListener):
         self,
         event_type: Optional[type],
         handler: Callable[[TerminalEvent], bool],
-    ):
+    ) -> None:
         """Initialize callable listener."""
         self.event_type = event_type
         self.handler = handler

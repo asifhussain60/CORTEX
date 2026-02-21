@@ -89,7 +89,7 @@ class EnhancementGenerator:
 {implementation_hints}
 """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize EnhancementGenerator."""
         pass
 

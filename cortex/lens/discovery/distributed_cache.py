@@ -71,7 +71,7 @@ class FileCacheBackend:
         >>> data = backend.get("topology:v1")
     """
 
-    def __init__(self, cache_dir: Path):
+    def __init__(self, cache_dir: Path) -> None:
         """Initialize file cache backend.
 
         Args:
@@ -179,7 +179,7 @@ class RedisCacheBackend:
         >>> data = backend.get("topology:global")
     """
 
-    def __init__(self, host: str = "localhost", port: int = 6379, db: int = 0):
+    def __init__(self, host: str = "localhost", port: int = 6379, db: int = 0) -> None:
         """Initialize Redis cache backend.
 
         Args:
@@ -297,7 +297,7 @@ class DistributedCache:
         file_cache_dir: Optional[Path] = None,
         redis_host: str = "localhost",
         redis_port: int = 6379,
-    ):
+    ) -> None:
         """Initialize distributed cache.
 
         Args:

@@ -35,7 +35,8 @@ from typing import Any, Dict, List, Tuple
 class ZeroBreakingChangesVerifier:
     """Verify that business domain integration has zero breaking changes."""
 
-    def __init__(self, project_root: str):
+    def __init__(self, project_root: str) -> None:
+        """Initialize instance."""
         self.project_root = Path(project_root)
         self.verification_results: Dict[str, Any] = {}
         self.errors: List[str] = []
@@ -338,7 +339,7 @@ except ImportError:
         print("=" * 70 + "\n")
 
 
-def main():
+def main() -> None:
     """Run zero breaking changes verification."""
     # Use PROJECT_ROOT env var, or detect from script location
     project_root = os.getenv("PROJECT_ROOT")

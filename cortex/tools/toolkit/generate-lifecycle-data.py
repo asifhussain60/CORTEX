@@ -159,7 +159,7 @@ class LifecycleDataGenerator:
         }
 
 
-def main():
+def main() -> None:
     """Generate and output lifecycle data."""
     generator = LifecycleDataGenerator()
     data = generator.generate()

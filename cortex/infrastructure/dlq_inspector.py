@@ -85,7 +85,7 @@ class DLQInspector:
     event processing failures across orchestrators.
     """
     
-    def __init__(self, dlq_file: str):
+    def __init__(self, dlq_file: str) -> None:
         """
         Initialize DLQ inspector.
         

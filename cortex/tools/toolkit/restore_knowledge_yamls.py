@@ -73,7 +73,7 @@ YAML_FILES = {
     "cortex-brain/knowledge/ui-ux/ui-ux-best-practices.yaml": "cortex_intelligence/tier3/knowledge/DOCUMENTATION/ui-ux-best-practices.yaml",
 }
 
-def restore_yamls():
+def restore_yamls() -> None:
     """Restore all 35 Knowledge YAMLs from git commit
     
     AC_START: AC-ENH063-P0-002-001

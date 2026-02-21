@@ -14,7 +14,8 @@ from typing import Dict, List, Set
 class Core035Analyzer:
     """Analyze CORE-035 duplicates and generate remediation steps."""
 
-    def __init__(self, repo_root: str):
+    def __init__(self, repo_root: str) -> None:
+        """Initialize instance."""
         self.repo_root = Path(repo_root)
         self.duplicates = {
             'TemplateRegistry': [
@@ -127,7 +128,7 @@ class Core035Analyzer:
 
         return "\n".join(report)
 
-    def print_report(self):
+    def print_report(self) -> None:
         """Print the analysis report."""
         print(self.generate_report())
 

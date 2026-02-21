@@ -167,7 +167,7 @@ class Span:
 class TracerProvider:
     """Manages tracer instances and span collection."""
 
-    def __init__(self, service_name: str = "cortex-intentrouter"):
+    def __init__(self, service_name: str = "cortex-intentrouter") -> None:
         """Initialize tracer provider.
         
         Args:
@@ -274,7 +274,7 @@ class TracerProvider:
 class Tracer:
     """Tracer for creating and managing spans."""
 
-    def __init__(self, provider: TracerProvider, name: str):
+    def __init__(self, provider: TracerProvider, name: str) -> None:
         """Initialize tracer.
         
         Args:
@@ -331,8 +331,10 @@ class Tracer:
             Decorator function
         """
         def decorator(func: Callable) -> Callable:
+            """Create decorated function wrapper."""
             @wraps(func)
-            def wrapper(*args, **kwargs):
+            def wrapper(*args, **kwargs) -> None:
+                """Execute wrapped function with applied decoration."""
                 with self.span_context(name or func.__name__, kind):
                     return func(*args, **kwargs)
 
@@ -350,7 +352,7 @@ class SpanContextManager:
         name: str,
         kind: SpanKind,
         context: Optional[SpanContext],
-    ):
+    ) -> None:
         """Initialize span context manager.
         
         Args:
@@ -387,7 +389,7 @@ class SpanContextManager:
 class IntentRouterTracer:
     """Specialized tracer for IntentRouter with domain-specific spans."""
 
-    def __init__(self, provider: TracerProvider):
+    def __init__(self, provider: TracerProvider) -> None:
         """Initialize router tracer.
         
         Args:

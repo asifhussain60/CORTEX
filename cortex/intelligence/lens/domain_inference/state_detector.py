@@ -41,7 +41,7 @@ class StateDetector:
         # Returns: {"PLANNED": ["ACTIVE"], "ACTIVE": ["COMPLETED"]}
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize state detector"""
         self.state_patterns = [
             r'class\s+(\w+Status)\s*\(',  # FooStatus enum
@@ -326,7 +326,8 @@ class StateDetector:
         
         paths: List[List[str]] = []
         
-        def dfs(current: str, visited: Set[str], path: List[str]):
+        def dfs(current: str, visited: Set[str], path: List[str]) -> None:
+            """Perform depth-first search traversal."""
             if len(paths) >= max_paths:
                 return
             
@@ -401,7 +402,8 @@ class StateDetector:
         meaningful_initials = [s for s in initial_states if s not in isolated_states]
         reachable: Set[str] = set()
         
-        def mark_reachable(state: str):
+        def mark_reachable(state: str) -> None:
+            """Mark reachable nodes in the graph."""
             if state in reachable:
                 return
             reachable.add(state)

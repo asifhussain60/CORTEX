@@ -21,7 +21,7 @@ class DomainContext:
 class DomainContextManager:
     """Manager for domain contexts."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize context manager."""
         self._contexts: Dict[str, DomainContext] = {}
         self._scoped_data: Dict[str, Dict[str, Any]] = {}

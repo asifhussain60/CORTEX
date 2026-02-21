@@ -64,7 +64,7 @@ class LifecycleHookSystem:
         await system.trigger_completion(CompletionEvent.WAVE_COMPLETE, "wave-12")
     """
     
-    def __init__(self, vacuum_orchestrator: Optional[Any] = None):
+    def __init__(self, vacuum_orchestrator: Optional[Any] = None) -> None:
         """
         Initialize lifecycle hook system.
         

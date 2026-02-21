@@ -132,7 +132,7 @@ class MasterOrchestratorGateway:
         "AUDIT", "DESIGN", "PLAN", "ONBOARD", "DEBUG"
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize gateway with environment detection."""
         self._detector = EnvironmentDetector()
         self._environment = self._detector.detect_environment()

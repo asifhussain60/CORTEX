@@ -121,7 +121,7 @@ class MLSummarizer:
         self,
         model_name: str = "all-MiniLM-L6-v2",
         config: Optional[SummarizationConfig] = None,
-    ):
+    ) -> None:
         """
         Initialize ML summarizer.
 

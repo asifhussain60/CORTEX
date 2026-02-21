@@ -249,7 +249,7 @@ class IntentReflectionEngine:
             confidence=0.95,
         )
 
-    def approve(self, response_or_id) -> ReflectionResponse:
+    def approve(self, response_or_id: object) -> ReflectionResponse:
         """Manually approve a pending request.
 
         Args:
@@ -296,7 +296,7 @@ class IntentReflectionEngine:
             message=f"Request {request_id} not found",
         )
 
-    def reject(self, response_or_id, reason: str = "") -> ReflectionResponse:
+    def reject(self, response_or_id: object, reason: str = "") -> ReflectionResponse:
         """Manually reject a pending request.
 
         Args:
@@ -346,7 +346,7 @@ class IntentReflectionEngine:
             message=f"Request {request_id} not found",
         )
 
-    def request_clarification(self, response_or_id, question: str) -> ReflectionResponse:
+    def request_clarification(self, response_or_id: object, question: str) -> ReflectionResponse:
         """Request clarification for a pending request.
 
         Args:

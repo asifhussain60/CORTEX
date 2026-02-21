@@ -220,7 +220,7 @@ class ConfigAnalyzer:
         ),
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize ConfigAnalyzer."""
         self.findings: List[ConfigFinding] = []
 

@@ -50,7 +50,8 @@ class SecretsMigrationDetector:
         json_data = self._read_json(file_path)
         secrets = []
 
-        def scan_obj(obj, path=""):
+        def scan_obj(obj, path="") -> None:
+            """Scan object for security issues."""
             if isinstance(obj, dict):
                 for key, value in obj.items():
                     new_path = f"{path}.{key}" if path else key
@@ -313,7 +314,8 @@ class SecretsRollback:
 class SecretsMigrationOrchestrator:
     """Orchestrate complete migration workflow"""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.audit_trail = []
 
     def run_full_migration(self, provider) -> Dict[str, Any]:

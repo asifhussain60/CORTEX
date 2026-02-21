@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
 class DebugMCPTools:
     """MCP tools for debug marker management."""
     
-    def __init__(self, event_bus: EventBus, orchestrator: DebuggerOrchestrator):
+    def __init__(self, event_bus: EventBus, orchestrator: DebuggerOrchestrator) -> None:
         """
         Initialize DebugMCPTools.
         

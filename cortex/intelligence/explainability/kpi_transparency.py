@@ -57,7 +57,7 @@ class KPITransparencyEngine:
     - Human-readable explanations
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize transparency engine"""
         self._kpi_calculators = {
             "test_coverage": self._calculate_test_coverage,

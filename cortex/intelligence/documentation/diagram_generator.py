@@ -60,7 +60,7 @@ class DiagramGenerator:
         self,
         output_dir: Path,
         config: DiagramConfig,
-    ):
+    ) -> None:
         """
         Initialize diagram generator.
         

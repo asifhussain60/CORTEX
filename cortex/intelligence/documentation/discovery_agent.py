@@ -69,7 +69,7 @@ class DocumentationCleanupAgent:
         "DOCUMENTATION-REFACTORING-REPORT.md": "docs/_archive/",
     }
 
-    def __init__(self, project_root: Path = None, dry_run: bool = False, verbose: bool = False):
+    def __init__(self, project_root: Path = None, dry_run: bool = False, verbose: bool = False) -> None:
         """Initialize the agent."""
         self.project_root = project_root or Path.cwd()
         self.docs_root = self.project_root / "docs"
@@ -347,7 +347,7 @@ class DocumentationCleanupAgent:
             return False
 
 
-def main():
+def main() -> None:
     """Main entry point for the discovery agent."""
     parser = argparse.ArgumentParser(
         description="CORTEX Documentation Discovery & Cleanup Agent",

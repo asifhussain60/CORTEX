@@ -60,7 +60,8 @@ from cortex.core.result import Result
 class StateMachine:
     """State machine for managing AC and Phase states."""
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.ac_states: Dict[str, StateSnapshot] = {}
         self.phase_states: Dict[str, StateSnapshot] = {}
         self.transitions: List[StateTransition] = []

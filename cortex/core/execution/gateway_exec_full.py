@@ -152,7 +152,7 @@ class MasterGatewayExecutor:
         self,
         spec_registry: Optional[Any] = None,
         governance_registry: Optional[Any] = None,
-    ):
+    ) -> None:
         """Initialize executor with registries.
 
         Args:

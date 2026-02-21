@@ -73,7 +73,7 @@ class IntelligenceValidator:
             print(f"❌ Errors: {report.validation_errors}")
     """
 
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize validator.
 

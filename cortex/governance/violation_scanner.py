@@ -59,7 +59,7 @@ class ViolationScanner:
             print(f"{v.rule_id}: {v.message} (line {v.line_number})")
     """
 
-    def __init__(self, patterns_file: Optional[Path] = None):
+    def __init__(self, patterns_file: Optional[Path] = None) -> None:
         """
         Initialize ViolationScanner.
 

@@ -49,7 +49,7 @@ class TokenDistillationEngine:
     - Source: Module docstring + class names + function signatures
     """
 
-    def __init__(self, workspace_root: Path):
+    def __init__(self, workspace_root: Path) -> None:
         """
         Initialize distillation engine
 

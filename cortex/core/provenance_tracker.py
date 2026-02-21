@@ -1,4 +1,5 @@
 """provenance_tracker.py"""
 
 class ProvenanceTracker:
-    pass
+    """Tracks provenance of data and decisions across orchestrators."""
+

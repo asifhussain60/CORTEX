@@ -26,18 +26,22 @@ class ToolkitValidateTool(ConsolidatedTool):
     
     @property
     def name(self) -> str:
+        """The unique tool name identifier."""
         return "toolkit_validate"
     
     @property
     def description(self) -> str:
+        """Human-readable description of the tool."""
         return "Validate governance compliance and production readiness"
     
     @property
     def category(self) -> ToolCategory:
+        """The tool category for registry classification."""
         return ToolCategory.GOVERNANCE
     
     @property
     def parameters(self) -> list:
+        """List of parameters accepted by the tool."""
         return [
             ToolParameter(
                 name="validation_type",
@@ -58,6 +62,7 @@ class ToolkitValidateTool(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> list:
+        """List of operation types this tool supports."""
         return ["governance", "production", "security", "compliance", "all"]
     
     def execute(self, validation_type: str = "all", dry_run: bool = False, **kwargs) -> ToolResult:

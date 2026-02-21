@@ -114,7 +114,7 @@ def config_path() -> Path:
     return resolve_path("cortex-registry", "config")
 
 
-def reset_project_root():
+def reset_project_root() -> None:
     """Reset cached project root (for testing)."""
     global _PROJECT_ROOT
     _PROJECT_ROOT = None

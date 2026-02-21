@@ -75,7 +75,7 @@ class DomainOrchestratorRequirements:
 class TierContentLoader:
     """Loads YAML content from tier-specific folders"""
 
-    def __init__(self, cortex_intelligence_path: str):
+    def __init__(self, cortex_intelligence_path: str) -> None:
         """
         Initialize loader.
 
@@ -142,7 +142,7 @@ class TierContentLoader:
 class DomainRuleRegistry:
     """Central registry for domain-specific governance rules"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize registry"""
         self.rules: Dict[str, DomainRule] = {}
         self.by_domain: Dict[str, List[str]] = {}
@@ -234,7 +234,7 @@ class DomainRuleRegistry:
 class BrainPopulator:
     """Populates brain tiers with governance content"""
 
-    def __init__(self, cortex_intelligence_path: str):
+    def __init__(self, cortex_intelligence_path: str) -> None:
         """
         Initialize populator.
 

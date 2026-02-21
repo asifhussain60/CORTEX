@@ -28,7 +28,7 @@ class FilenameGovernanceAgent(BaseHealthAgent):
     - README.md, LICENSE (universal convention)
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize filename governance agent."""
         super().__init__(
             name="FilenameGovernanceAgent",

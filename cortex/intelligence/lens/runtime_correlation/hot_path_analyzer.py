@@ -33,7 +33,8 @@ class HotPathAnalyzer:
         >>> bottlenecks = analyzer.identify_performance_bottlenecks(data)
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.critical_modules = ["security", "auth", "core", "critical"]
     
     def identify_frequently_executed_paths(

@@ -35,7 +35,7 @@ class RedisBackend(LENSCache):
                  db: int = 0,
                  max_connections: int = 10,
                  socket_connect_timeout: int = 5,
-                 socket_keepalive: bool = True):
+                 socket_keepalive: bool = True) -> None:
         """Initialize Redis backend.
 
         Args:

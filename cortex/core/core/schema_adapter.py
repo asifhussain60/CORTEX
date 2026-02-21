@@ -72,7 +72,7 @@ class SchemaAdapter:
     - Schema standardization
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize schema adapter."""
         self._version_map = {
             "v1": "legacy",

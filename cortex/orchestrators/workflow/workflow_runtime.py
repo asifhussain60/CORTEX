@@ -135,7 +135,7 @@ class WorkflowRuntime:
         ```
     """
     
-    def __init__(self, template_path: Path):
+    def __init__(self, template_path: Path) -> None:
         """
         Initialize workflow runtime.
         

@@ -89,7 +89,7 @@ class KnowledgeSynthesizer:
     AC-PHASE71-008: Knowledge artifact generation
     """
 
-    def __init__(self, knowledge_root: Optional[Path] = None):
+    def __init__(self, knowledge_root: Optional[Path] = None) -> None:
         """
         Initialize knowledge synthesizer.
 

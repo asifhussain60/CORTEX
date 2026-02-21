@@ -44,7 +44,8 @@ INSTRUCTION_FILE_PATHS = [
 class InstructionFileLinter:
     """Lints instruction files for CORE-047 violations."""
 
-    def __init__(self, root_path: Path, auto_fix: bool = False):
+    def __init__(self, root_path: Path, auto_fix: bool = False) -> None:
+        """Initialize instance."""
         self.root_path = root_path
         self.auto_fix = auto_fix
         self.violations: List[Tuple[Path, List[Tuple[int, str, str]]]] = []
@@ -82,7 +83,7 @@ class InstructionFileLinter:
 
         return violations
 
-    def fix_file(self, file_path: Path, violations: List[Tuple[int, str, str]]):
+    def fix_file(self, file_path: Path, violations: List[Tuple[int, str, str]]) -> None:
         """Apply auto-fixes to a file."""
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
@@ -160,7 +161,7 @@ class InstructionFileLinter:
         return 1
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     auto_fix = '--fix' in sys.argv
 

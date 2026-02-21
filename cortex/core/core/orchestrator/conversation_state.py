@@ -46,7 +46,7 @@ class ConversationState:
 class ConversationStateManager:
     """Manages conversation state persistence to SQLite."""
 
-    def __init__(self, db_path: Optional[Path] = None):
+    def __init__(self, db_path: Optional[Path] = None) -> None:
         """
         Initialize state manager.
 

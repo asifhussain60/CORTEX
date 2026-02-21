@@ -50,7 +50,7 @@ class JavaAdapter(LanguageAdapter):
         >>> print(f"Language: {result.language}")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize JavaAdapter with tree-sitter parser (requires tree-sitter-java)."""
         try:
             import tree_sitter_java as ts_java

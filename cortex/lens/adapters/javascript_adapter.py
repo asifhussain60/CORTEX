@@ -49,7 +49,7 @@ class JavaScriptAdapter(LanguageAdapter):
         >>> print(f"Language: {result.language}")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize JavaScriptAdapter with tree-sitter parser."""
         # New tree-sitter API (0.20+): pass language directly to Parser
         self.parser = Parser(ts_javascript.language())
@@ -399,7 +399,8 @@ class JavaScriptAdapter(LanguageAdapter):
         """Collect parse errors from tree-sitter."""
         errors = []
 
-        def traverse(node: Node):
+        def traverse(node: Node) -> None:
+            """Traverse AST nodes recursively."""
             if node.is_error:
                 errors.append(f"Parse error at line {node.start_point[0] + 1}")
             for child in node.children:
@@ -412,7 +413,8 @@ class JavaScriptAdapter(LanguageAdapter):
         """Recursively find all nodes of a specific type."""
         nodes = []
 
-        def traverse(n: Node):
+        def traverse(n: Node) -> None:
+            """Traverse AST nodes recursively."""
             if n.type == node_type:
                 nodes.append(n)
             for child in n.children:

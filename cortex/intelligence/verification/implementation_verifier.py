@@ -93,7 +93,7 @@ class ImplementationVerifier:
     Authority: AC-EDUCATIONAL-INTERACTION-001, CORE-030
     """
 
-    def __init__(self, project_root: Optional[Path] = None):
+    def __init__(self, project_root: Optional[Path] = None) -> None:
         """
         Initialize Implementation Verifier.
 

@@ -31,7 +31,8 @@ class STSAnalysisResult:
 class STSAnalyzer:
     """Analyze STS applications for anti-patterns."""
     
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.anti_patterns = self._load_anti_patterns()
     
     def _load_anti_patterns(self) -> List[STSAntiPattern]:

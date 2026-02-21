@@ -77,7 +77,7 @@ class PhaseStateMachine:
         PhaseState.LOCKED: {PhaseState.LOCKED},  # Idempotent only
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize phase state machine."""
         self._phases: Dict[str, PhaseInfo] = {}
         self._lock = threading.RLock()

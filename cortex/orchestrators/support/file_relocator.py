@@ -15,6 +15,7 @@ class FileRelocator:
     """Relocates files with conflict resolution and optional git integration."""
 
     def __init__(self, conflict_strategy: str = "rename") -> None:
+        """Initialize instance."""
         self.conflict_strategy = conflict_strategy
         self.checkpoint_commit: Optional[str] = None
 

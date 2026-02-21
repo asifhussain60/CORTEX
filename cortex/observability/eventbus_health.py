@@ -73,7 +73,7 @@ class EventBusHealthMonitor:
         log_file: str,
         dlq_file: str,
         metrics_window_seconds: int = 300
-    ):
+    ) -> None:
         """
         Initialize EventBus health monitor.
         

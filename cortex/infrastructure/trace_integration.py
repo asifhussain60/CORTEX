@@ -45,7 +45,7 @@ class TraceContext:
         action: str,
         correlation_id: Optional[str] = None,
         request_id: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize trace context."""
         self.orchestrator_id = orchestrator_id
         self.orchestrator_class = orchestrator_class
@@ -122,8 +122,10 @@ def trace_orchestrator_action(
     """
 
     def decorator(func: F) -> F:
+        """Create decorated function wrapper."""
         @functools.wraps(func)
-        def wrapper(self, *args, **kwargs):
+        def wrapper(self, *args, **kwargs) -> None:
+            """Execute wrapped function with applied decoration."""
             # Determine action name
             trace_action = action_name or func.__name__.upper()
 

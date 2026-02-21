@@ -73,7 +73,7 @@ def serve(repo_name: Optional[str], port: int, no_browser: bool, host: str) -> N
     templates_dir = Path(__file__).parent.parent.parent / "visualization" / "templates"
 
     @app.get("/")
-    def root():
+    def root() -> None:
         """Serve main dashboard HTML."""
         if repo_name and repo_name.lower() == 'cortex':
             # Redirect to CORTEX repository view

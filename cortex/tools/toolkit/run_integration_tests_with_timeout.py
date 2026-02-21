@@ -95,7 +95,7 @@ def run_single_test(test_id: str, cwd: Path, timeout: int = 30) -> TestResult:
         return TestResult(test_id, "ERROR", duration, str(e))
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     import argparse
 

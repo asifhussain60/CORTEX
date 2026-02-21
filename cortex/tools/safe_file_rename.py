@@ -54,7 +54,7 @@ class SafeFileRenamer:
         >>> print(f"Updated {result.imports_updated} imports")
     """
 
-    def __init__(self, workspace_root: Path, dry_run: bool = False):
+    def __init__(self, workspace_root: Path, dry_run: bool = False) -> None:
         """Initialize safe file renamer.
 
         Args:

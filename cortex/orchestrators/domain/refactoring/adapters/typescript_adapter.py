@@ -484,6 +484,7 @@ class TypeScriptAdapter(RefactoringToolAdapter):
 
             # Sort imports (Node modules first, then relative)
             def import_key(imp: str) -> tuple:
+                """Return a sort key that groups imports by origin (node_modules vs relative)."""
                 if 'from ' in imp:
                     module = imp.split('from ')[1].strip().strip(';').strip('"').strip("'")
                 else:

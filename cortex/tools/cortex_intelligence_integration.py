@@ -20,7 +20,7 @@ class GovernanceRuleLoader:
     Rules are cached in memory for sub-100ms query performance.
     """
 
-    def __init__(self, governance_dir: Optional[Path] = None):
+    def __init__(self, governance_dir: Optional[Path] = None) -> None:
         """
         Initialize rule loader.
 
@@ -215,7 +215,7 @@ class ValidationEngine:
         phase: Optional[str] = None,
         ac_id: Optional[str] = None,
         strict: bool = False,
-    ):
+    ) -> None:
         """
         Initialize validation engine.
 

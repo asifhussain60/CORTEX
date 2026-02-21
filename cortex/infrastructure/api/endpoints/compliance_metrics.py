@@ -21,7 +21,7 @@ DB_PATH = os.path.join(
 )
 
 
-def get_db_connection():
+def get_db_connection() -> None:
     """Get SQLite database connection with timeout"""
     conn = sqlite3.connect(DB_PATH, timeout=10.0)
     conn.row_factory = sqlite3.Row

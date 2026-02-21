@@ -146,7 +146,7 @@ class OrchestratorScaffolder:
         result.write_all(Path("output"))
     """
 
-    def __init__(self, parser: Optional[TemplateParser] = None):
+    def __init__(self, parser: Optional[TemplateParser] = None) -> None:
         """
         Initialize scaffolder.
 

@@ -42,7 +42,7 @@ class SetupVerifier:
     for Windows, macOS, and Linux environments.
     """
     
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize setup verifier.
         

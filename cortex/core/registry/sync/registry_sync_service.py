@@ -30,7 +30,7 @@ class RegistrySyncService:
     registry files with completion status, timestamps, and metadata.
     """
     
-    def __init__(self, event_bus: EventBus, registry_path: str):
+    def __init__(self, event_bus: EventBus, registry_path: str) -> None:
         """
         Initialize registry sync service.
         

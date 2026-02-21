@@ -59,7 +59,7 @@ class GapAnalyzer:
         >>> print(report.markdown)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize gap analyzer with empty gaps list."""
         self.gaps: List[GapEntry] = []
 
@@ -72,7 +72,7 @@ class GapAnalyzer:
         subdomain: str,
         used_by: str,
         fallback_source: str,
-    ):
+    ) -> None:
         """
         Record a gap when company standard missing.
 
@@ -151,7 +151,7 @@ class GapAnalyzer:
             timestamp=datetime.now().isoformat(),
         )
 
-    def clear_gaps(self):
+    def clear_gaps(self) -> None:
         """Clear all recorded gaps."""
         self.gaps.clear()
         self._seen_gaps.clear()

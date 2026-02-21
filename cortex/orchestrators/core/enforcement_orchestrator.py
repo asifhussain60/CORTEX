@@ -106,7 +106,7 @@ class GovernanceEnforcementAgent:
     - CORE-035: Single canonical implementation
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize governance enforcement agent."""
         self.name = "GovernanceEnforcementAgent"
         self.rules = ["CORE-008", "CORE-011", "CORE-012", "CORE-013", "CORE-029", "CORE-030", "CORE-035"]
@@ -184,7 +184,7 @@ class SecurityCheckpointAgent:
     - CORE-027: Audit trail logging (AC_START → AC_EXECUTE → AC_COMPLETE)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize security checkpoint agent."""
         self.name = "SecurityCheckpointAgent"
         self.rules = ["CORE-026", "CORE-025", "CORE-027"]
@@ -243,7 +243,7 @@ class ComplianceValidationAgent:
     - Test coverage adequate
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize compliance validation agent."""
         self.name = "ComplianceValidationAgent"
 
@@ -303,7 +303,7 @@ class FileNamingEnforcementAgent:
     Authority: CORE-028 updated 2026-02-04 with plan file exception
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize file naming enforcement agent."""
         self.name = "FileNamingEnforcementAgent"
         self.rules = ["CORE-028"]
@@ -871,7 +871,7 @@ class DiscoveryEnforcementAgent:
     Authority: ENH-047 Pre-Execution Discovery Protocol
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize discovery enforcement agent."""
         self.name = "DiscoveryEnforcementAgent"
         self.rules = ["CORE-030", "CORE-035"]
@@ -1151,7 +1151,7 @@ class EnforcementOrchestrator(OrchestratorProtocolMixin):
             print(result.value.warnings)
     """
 
-    def __init__(self, governance_registry: Optional[GovernanceRegistry] = None):
+    def __init__(self, governance_registry: Optional[GovernanceRegistry] = None) -> None:
         """
         Initialize enforcement orchestrator with 8-agent system.
 

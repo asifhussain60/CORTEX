@@ -53,7 +53,7 @@ class ProgressTracker:
     - Execution history tracking
     """
     
-    def __init__(self, db_path: Optional[Path] = None):
+    def __init__(self, db_path: Optional[Path] = None) -> None:
         """
         Initialize progress tracker.
         

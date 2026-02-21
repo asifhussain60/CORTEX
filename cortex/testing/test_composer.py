@@ -48,7 +48,7 @@ class ComposedTest:
 class TestCodeComposer:
     """Composes realistic test code from demands."""
 
-    def __init__(self, framework: TestFramework = TestFramework.PYTEST):
+    def __init__(self, framework: TestFramework = TestFramework.PYTEST) -> None:
         """Initialize composer with framework selection."""
         self.framework = framework
 

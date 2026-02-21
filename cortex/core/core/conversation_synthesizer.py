@@ -120,7 +120,7 @@ class ContextSynthesizer:
         self,
         model_name: str = "all-MiniLM-L6-v2",
         config: Optional[CompressionConfig] = None,
-    ):
+    ) -> None:
         """
         Initialize context synthesizer.
 

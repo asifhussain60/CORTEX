@@ -29,7 +29,7 @@ class StatusUpdateHook:
     - Audit trail markers
     """
     
-    def __init__(self, registry_path: str = "cortex-registry/_cortex-master"):
+    def __init__(self, registry_path: str = "cortex-registry/_cortex-master") -> None:
         """
         Initialize status update hook.
         
@@ -71,7 +71,7 @@ class StatusUpdateHook:
         operation: str,
         status: str,
         details: Optional[Dict[str, Any]] = None
-    ):
+    ) -> None:
         """
         Update orchestrator completion status.
         
@@ -134,7 +134,7 @@ class StatusUpdateHook:
         stage_id: str,
         status: str,
         metrics: Optional[Dict[str, Any]] = None
-    ):
+    ) -> None:
         """
         Update phase/stage completion status.
         
@@ -289,7 +289,7 @@ def on_orchestrator_complete(
     operation: str,
     status: str,
     details: Optional[Dict[str, Any]] = None
-):
+) -> None:
     """
     Public API for orchestrator completion hook.
     
@@ -307,7 +307,7 @@ def on_phase_stage_complete(
     stage_id: str,
     status: str,
     metrics: Optional[Dict[str, Any]] = None
-):
+) -> None:
     """
     Public API for phase/stage completion hook.
     

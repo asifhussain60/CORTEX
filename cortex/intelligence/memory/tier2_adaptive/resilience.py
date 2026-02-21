@@ -556,7 +556,7 @@ class RetryPolicy:
         max_backoff_ms: int = 32000,
         backoff_multiplier: float = 2.0,
         use_jitter: bool = False,
-    ):
+    ) -> None:
         """
         Initialize retry policy.
         
@@ -603,7 +603,7 @@ class RetryPolicyBuilder:
     Allows chainable configuration of retry behavior.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize builder with default values."""
         self._max_retries = 3
         self._initial_backoff = 100
@@ -714,7 +714,7 @@ class RetryResult:
         total_time_ms: float,
         exception: Optional[Exception] = None,
         data: Any = None,
-    ):
+    ) -> None:
         """
         Initialize retry result.
         
@@ -778,7 +778,7 @@ class ExponentialBackoffRetry:
         max_retries: int = 3,
         initial_backoff_ms: int = 100,
         max_backoff_ms: int = 32000,
-    ):
+    ) -> None:
         """
         Initialize retry handler.
         
@@ -900,7 +900,7 @@ from cortex.models.canonical_enums import AlertSeverity, CircuitBreakerState
 class CircuitBreakerOpen(Exception):
     """Exception raised when circuit breaker is OPEN."""
     
-    def __init__(self, component_name: str = "unknown"):
+    def __init__(self, component_name: str = "unknown") -> None:
         """Initialize exception."""
         self.component_name = component_name
         super().__init__(f"Circuit breaker is OPEN for {component_name}")
@@ -909,7 +909,7 @@ class CircuitBreakerOpen(Exception):
 class CircuitBreakerMetrics:
     """Metrics for circuit breaker."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize metrics."""
         self.successful_calls: int = 0
         self.failed_calls: int = 0
@@ -935,7 +935,7 @@ class CircuitBreakerConfig:
         success_threshold: int = 2,
         timeout_seconds: float = 60,
         name: str = "circuit_breaker",
-    ):
+    ) -> None:
         """
         Initialize circuit breaker configuration.
         
@@ -964,7 +964,7 @@ class CircuitBreaker:
     - HALF_OPEN: Testing recovery, limited calls allowed
     """
     
-    def __init__(self, config: Optional[CircuitBreakerConfig] = None):
+    def __init__(self, config: Optional[CircuitBreakerConfig] = None) -> None:
         """
         Initialize circuit breaker.
         
@@ -1169,7 +1169,7 @@ class MetricValue:
         unit: MetricUnit,
         timestamp: Optional[datetime] = None,
         labels: Optional[Dict[str, Any]] = None,
-    ):
+    ) -> None:
         """Initialize metric value."""
         self.value = value
         self.unit = unit
@@ -1185,7 +1185,7 @@ class MetricExportConfig:
         endpoint: str = "http://localhost:9090",
         batch_size: int = 100,
         flush_interval_ms: int = 5000,
-    ):
+    ) -> None:
         """Initialize export configuration."""
         self.endpoint = endpoint
         self.batch_size = batch_size
@@ -1200,7 +1200,7 @@ class InstrumentationSpan:
         name: str,
         operation: str = "default",
         resource_name: str = "unknown",
-    ):
+    ) -> None:
         """Initialize instrumentation span."""
         self.name = name
         self.operation = operation
@@ -1235,7 +1235,7 @@ class MetricsCollector:
     and dimensional data for observability.
     """
     
-    def __init__(self, config: Optional[MetricExportConfig] = None):
+    def __init__(self, config: Optional[MetricExportConfig] = None) -> None:
         """Initialize metrics collector."""
         self.config = config or MetricExportConfig()
         self._metrics: Dict[str, Dict[str, Any]] = {}
@@ -1373,7 +1373,7 @@ class DashboardUpdate:
         update_type: DashboardUpdateType,
         value: Any,
         timestamp: Optional[datetime] = None,
-    ):
+    ) -> None:
         """Initialize dashboard update."""
         self.operation_id = operation_id
         self.update_type = update_type
@@ -1390,7 +1390,7 @@ class DashboardMetrics:
         progress: float = 0.0,
         status: str = "Idle",
         start_time: Optional[datetime] = None,
-    ):
+    ) -> None:
         """Initialize dashboard metrics."""
         self.operation_id = operation_id
         self.progress = max(0.0, min(1.0, progress))  # Bound 0.0-1.0
@@ -1408,7 +1408,7 @@ class RealTimeProgressDashboard:
     progress, status, errors, and alerts to subscribers.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize dashboard."""
         self._metrics: Dict[str, Dict[str, Any]] = {}
         self._subscribers: List[Any] = []
@@ -1636,7 +1636,7 @@ class Threshold:
         self,
         operator: ThresholdOperator,
         value: float,
-    ):
+    ) -> None:
         """Initialize threshold."""
         self.operator = operator
         self.value = value
@@ -1678,7 +1678,7 @@ class Alert:
         threshold: float,
         current_value: float,
         created_at: Optional[datetime] = None,
-    ):
+    ) -> None:
         """Initialize alert."""
         self.alert_id = alert_id
         self.metric_name = metric_name
@@ -1726,7 +1726,7 @@ class AlertManager:
     channels and alert lifecycle management.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize alert manager."""
         self._rules: Dict[str, List[Dict[str, Any]]] = {}
         self._active_alerts: List[Alert] = []

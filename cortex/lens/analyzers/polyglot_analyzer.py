@@ -85,7 +85,7 @@ class PolyglotAnalyzer:
         ```
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize polyglot analyzer with all language adapters."""
         self.python_analyzer = ASTAnalyzer()
 

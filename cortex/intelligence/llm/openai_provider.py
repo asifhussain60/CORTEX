@@ -40,7 +40,7 @@ class OpenAIProvider(ILLMProvider):
         api_key: Optional[str] = None,
         model: str = "gpt-4o-mini",
         base_url: Optional[str] = None
-    ):
+    ) -> None:
         """
         Initialize OpenAI provider.
 

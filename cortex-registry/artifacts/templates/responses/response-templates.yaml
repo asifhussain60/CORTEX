@@ -306,7 +306,7 @@ validation:
 
 testing:
   test_data_location: "tests/fixtures/response_templates/"
-  validation_script: "tests/unit/interaction/test_response_templates.py"
+# [STALE-REF] validation_script: "tests/unit/interaction/test_response_templates.py"
   
   test_cases:
     - template: "completion_report"

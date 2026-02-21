@@ -233,7 +233,7 @@ phases:
     lens_scan_completed: true
   completion_details:
     red_phase:
-      test_file: tests/unit/phases/refactor/test_phase_01_foundation.py
+# [STALE-REF] test_file: tests/unit/phases/refactor/test_phase_01_foundation.py
       test_classes: 10
       test_methods: 49
       status: "\u2705 ALL PASSING"
@@ -299,7 +299,7 @@ phases:
     lens_scan_completed: true
   completion_details:
     red_phase:
-      test_file: tests/unit/phases/refactor/test_phase_02_governance.py
+# [STALE-REF] test_file: tests/unit/phases/refactor/test_phase_02_governance.py
       test_classes: 9
       test_methods: 38
       status: "\u2705 ALL PASSING"
@@ -531,7 +531,7 @@ phases:
     lens_scan_completed: false
   completion_details:
     red_phase:
-      test_file: tests/golden/workflows/test_workflow_templates.py
+      test_file: tests/unit/orchestrators/test_workflow_templates.py
       test_classes: 3
       test_methods: 60
       status: "✅ 55 PASS, ✅ 5 FIXED (all now passing)"
@@ -656,7 +656,7 @@ phases:
     validation_loop_iterations: 1
     lens_scan_completed: false
     red_phase_summary:
-      test_file: tests/unit/phases/refactor/test_phase_07_test_consolidation.py
+# [STALE-REF] test_file: tests/unit/phases/refactor/test_phase_07_test_consolidation.py
       test_classes: 9
       test_methods: 41
       status: "\u2705 ALL 41 TESTS PASSING"
@@ -832,7 +832,7 @@ phases:
   - "D6: pytest.ini updated — -n auto + --dist loadscope enabled globally"
   - "D7: conftest.py updated — CortexXdistPlugin registered alongside legacy progress plugin"
   - "D8: .vscode/tasks.json — 6 tiered VS Code tasks (smoke/unit/integration/golden/full/debug)"
-  - "D9: tests/unit/testing/test_parallel_test_framework.py — 49 RED tests, all passing GREEN"
+# [STALE-REF] - "D9: tests/unit/testing/test_parallel_test_framework.py — 49 RED tests, all passing GREEN"
   - "D10: rich + pytest-sugar installed for enhanced terminal rendering"
   progress:
     started: '2026-02-20T05:00:00Z'
@@ -855,7 +855,7 @@ phases:
     lens_scan_completed: true
   completion_details:
     red_phase:
-      test_file: tests/unit/testing/test_parallel_test_framework.py
+# [STALE-REF] test_file: tests/unit/testing/test_parallel_test_framework.py
       test_classes: 6
       test_methods: 49
       status: "✅ 49/49 PASSING"
@@ -1145,16 +1145,16 @@ phases:
         target_spec: "cortex-architect.prompt.md § MCP Architecture — 23 MCP Tools"
       consolidations:
         - from: "cortex/mcp/tools/toolkit/ (health_check, mode_switch, status, etc.)"
-          to: "cortex/mcp/tools/cortex_health.py (mode parameter)"
+          # [STALE-REF] to: "cortex/mcp/tools/cortex_health.py (mode parameter)"
           rationale: "5 small toolkit tools → modes on one health tool"
         - from: "cortex/mcp/tools/multi_repo/ (6 files)"
-          to: "cortex/mcp/tools/cortex_onboard_repository.py (scope parameter)"
+          # [STALE-REF] to: "cortex/mcp/tools/cortex_onboard_repository.py (scope parameter)"
           rationale: "Multi-repo onboarding → scope=single|multi|org on canonical tool"
         - from: "cortex/mcp/tools/deployment/ (5 files)"
-          to: "cortex/mcp/tools/cortex_deploy.py (action parameter)"
+          # [STALE-REF] to: "cortex/mcp/tools/cortex_deploy.py (action parameter)"
           rationale: "Deploy/rollback/status → single cortex_deploy tool with action"
-        - from: "cortex/mcp/tools/cortex_challenge_integration.py"
-          to: "cortex/mcp/tools/cortex_challenge.py (integrated)"
+        # [STALE-REF] - from: "cortex/mcp/tools/cortex_challenge_integration.py"
+          # [STALE-REF] to: "cortex/mcp/tools/cortex_challenge.py (integrated)"
           rationale: "Merge challenge + integration into single tool"
     stale_dir_migration:
       description: >
@@ -1172,7 +1172,7 @@ phases:
           callers: ["tests/cortex_brain/test_phase_executor_framework.py"]
         - path: "cortex/registry/"
           current_role: "shim providing REGISTRY_ROOT path helper"
-          migration: "Absorb into cortex/core/registry.py (already exists in cortex/core/)"
+          # [STALE-REF] migration: "Absorb into cortex/core/registry.py (already exists in cortex/core/)"
           callers: ["cortex/bootstrap.py", "cortex/core/wiring/wiring_bootstrap.py"]
         - path: "cortex/wiring/"
           current_role: "shim re-exporting from cortex.core.wiring.wiring_bootstrap"

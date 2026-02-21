@@ -1,4 +1,5 @@
 """health_metrics.py"""
 
 class HealthMetrics:
-    pass
+    """Tracks and reports health metrics for CORTEX components."""
+

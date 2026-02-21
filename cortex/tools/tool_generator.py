@@ -115,7 +115,7 @@ class ToolGenerator:
             tool.write(Path("output"))
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the generator."""
         self._generators: Dict[ToolType, Callable] = {
             ToolType.CLI_COMMAND: self._generate_cli,

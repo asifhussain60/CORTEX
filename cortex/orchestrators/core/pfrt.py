@@ -62,7 +62,7 @@ class PreFlightRequestTransformer:
         "ENHANCE": ["enhance", "extend", "augment"],
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize PFRT with transformation state."""
         self.last_intent_hint: Optional[str] = None
         self.last_token_reduction: float = 0.0

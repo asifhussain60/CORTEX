@@ -63,7 +63,7 @@ class LLMOutputValidator:
         r"<|system|>",
     ]
 
-    def __init__(self, max_tokens: int = DEFAULT_MAX_TOKENS):
+    def __init__(self, max_tokens: int = DEFAULT_MAX_TOKENS) -> None:
         """
         Initialize validator.
 

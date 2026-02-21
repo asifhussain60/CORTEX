@@ -51,7 +51,8 @@ def dashboard_debug(func: Callable) -> Callable:
         ...     return {"status": "ok"}
     """
     @functools.wraps(func)
-    def wrapper(*args, **kwargs):
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """Log entry/exit and exceptions for *func*."""
         func_name = func.__name__
         _dashboard_logger.debug(f"→ ENTER {func_name}")
         _dashboard_logger.debug(f"  args: {_safe_repr(args)}")

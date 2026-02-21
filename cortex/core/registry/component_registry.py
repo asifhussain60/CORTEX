@@ -21,7 +21,8 @@ class ComponentRegistration:
 class ComponentRegistry:
     """Central registry for all CORTEX components."""
     
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.components: Dict[str, ComponentRegistration] = {}
         self.orchestrators: Dict[str, List[str]] = {
             "IntelligenceOrchestrator": [],

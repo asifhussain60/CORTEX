@@ -70,7 +70,7 @@ class GovernanceValidator:
     - scripts/validate_governance_alignment.py (CORE rules alignment)
     """
     
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize governance validator.
         

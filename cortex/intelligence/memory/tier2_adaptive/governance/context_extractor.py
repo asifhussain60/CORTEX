@@ -22,7 +22,7 @@ class GovernanceContext:
 class ContextExtractor:
     """Extracts governance context from operations"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize context extractor"""
         pass
 

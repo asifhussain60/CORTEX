@@ -146,7 +146,7 @@ class GovernanceDataGenerator:
         }
 
 
-def main():
+def main() -> None:
     """Generate and output governance data."""
     generator = GovernanceDataGenerator()
     data = generator.generate()

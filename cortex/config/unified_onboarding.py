@@ -101,7 +101,7 @@ class UnifiedOnboarding:
     Compatibility: 100% backward compatible with existing APIs
     """
 
-    def __init__(self, config: Optional[OnboardingConfig] = None):
+    def __init__(self, config: Optional[OnboardingConfig] = None) -> None:
         """Initialize unified onboarding system.
 
         Args:

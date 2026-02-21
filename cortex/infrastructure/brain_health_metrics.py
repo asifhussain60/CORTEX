@@ -33,7 +33,7 @@ class BrainHealthMetrics:
     Provides real-time observability of brain cohesion and health dimensions.
     """
 
-    def __init__(self, registry: CollectorRegistry = None):
+    def __init__(self, registry: CollectorRegistry = None) -> None:
         """
         Initialize Prometheus gauges for all health dimensions.
 

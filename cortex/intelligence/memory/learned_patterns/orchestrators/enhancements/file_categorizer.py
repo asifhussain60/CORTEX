@@ -202,7 +202,7 @@ class FileClassifier:
         },
     }
     
-    def __init__(self, repo_root: Path = Path(".")):
+    def __init__(self, repo_root: Path = Path(".")) -> None:
         """Initialize classifier.
         
         Args:

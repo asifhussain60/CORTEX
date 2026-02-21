@@ -51,8 +51,10 @@ def mcp_tool(
     """
 
     def decorator(func: F) -> F:
+        """Create decorated function wrapper."""
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+            """Execute wrapped function with applied decoration."""
             return func(*args, **kwargs)
 
         wrapper._mcp_tool_name = name  # type: ignore[attr-defined]

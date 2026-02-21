@@ -146,7 +146,7 @@ class InputValidator:
         "why": "query",
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize InputValidator"""
         self.logger = logging.getLogger(__name__)
         self.governance_registry = GovernanceRegistry.instance()
@@ -526,6 +526,7 @@ class InputValidator:
 
         # Check for cycles using DFS
         def has_cycle(node: str, visited: Set[str], rec_stack: Set[str]) -> bool:
+            """Detect a cycle starting from *node* via DFS."""
             visited.add(node)
             rec_stack.add(node)
 

@@ -249,7 +249,7 @@ def validate_tenant_context(ctx: Optional[TenantContext]) -> None:
         raise ValueError("TenantContext must have workspace_id and user_id")
 
 
-def require_permission(permission: str):
+def require_permission(permission: str) -> Any:
     """
     Decorator to enforce permission requirements on functions.
 
@@ -262,8 +262,10 @@ def require_permission(permission: str):
         ...     # This will only run if ctx.has_permission("write")
         ...     pass
     """
-    def decorator(func):
-        def wrapper(ctx: TenantContext, *args, **kwargs):
+    def decorator(func: Any) -> Any:
+        """Wrap *func* with permission enforcement."""
+        def wrapper(ctx: TenantContext, *args: Any, **kwargs: Any) -> Any:
+            """Check permission before calling *func*."""
             if ctx is None:
                 raise ValueError("TenantContext required")
 
@@ -282,7 +284,7 @@ def require_permission(permission: str):
     return decorator
 
 
-def require_admin(func):
+def require_admin(func: Any) -> Any:
     """
     Decorator to enforce admin permission on functions.
 

@@ -50,7 +50,7 @@ class CommandResult:
 class DocumentationCommand(ABC):
     """Base class for documentation CLI commands."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize command."""
         self.orchestrator = get_documentation_orchestrator()
 

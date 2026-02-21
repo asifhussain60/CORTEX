@@ -89,7 +89,7 @@ class ImpactAnalysisRenderer:
         ```
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize impact analysis renderer."""
         self._impact_cache: Dict[str, ChangeImpact] = {}
 

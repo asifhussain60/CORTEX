@@ -43,7 +43,7 @@ class GovernanceDiagnostic:
         rule_id: str,
         severity: DiagnosticSeverity,
         fix_suggestion: Optional[str] = None,
-    ):
+    ) -> None:
         """
         Initialize a diagnostic.
 
@@ -88,7 +88,7 @@ class GovernanceDiagnosticsProvider:
     Analyzes Python files and returns governance violations as diagnostics.
     """
 
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize diagnostics provider.
 
@@ -193,7 +193,7 @@ class VSCodeDiagnosticsServer:
     Listens for file analysis requests and returns diagnostics.
     """
 
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize diagnostics server.
 

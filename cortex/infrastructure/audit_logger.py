@@ -62,7 +62,8 @@ class CrossPlatformFileLock:
     Falls back to no-op if neither available.
     """
 
-    def __init__(self, lock_file: Path):
+    def __init__(self, lock_file: Path) -> None:
+        """Initialise CrossPlatformFileLock."""
         self.lock_file = lock_file
         self._file = None
         self._lock_type = self._detect_platform()
@@ -83,7 +84,7 @@ class CrossPlatformFileLock:
 
         return "none"
 
-    def acquire(self):
+    def acquire(self) -> None:
         """Acquire the lock."""
         self.lock_file.parent.mkdir(parents=True, exist_ok=True)
         self._file = open(self.lock_file, "w")
@@ -96,7 +97,7 @@ class CrossPlatformFileLock:
             fcntl.flock(self._file.fileno(), fcntl.LOCK_EX)
         # "none" - no locking available
 
-    def release(self):
+    def release(self) -> None:
         """Release the lock."""
         if self._file:
             if self._lock_type == "windows":
@@ -153,7 +154,7 @@ class EnhancedAuditLogger(IAuditLogger):
         component: str = "CORTEX",
         db_path: Optional[Path] = None,
         auto_init: bool = True
-    ):
+    ) -> None:
         """
         Initialize the audit logger.
 
@@ -251,7 +252,7 @@ class EnhancedAuditLogger(IAuditLogger):
 
         return hashlib.sha256(data.encode()).hexdigest()
 
-    def set_correlation_id(self, correlation_id: str):
+    def set_correlation_id(self, correlation_id: str) -> None:
         """Set correlation ID for subsequent log entries."""
         self._correlation_id = correlation_id
 
@@ -437,7 +438,7 @@ class EnhancedAuditLogger(IAuditLogger):
             return Err(f"Failed to verify chain: {e}")
 
     @classmethod
-    def reset(cls):
+    def reset(cls) -> None:
         """Reset singleton instance (for testing)."""
         cls._instance = None
 

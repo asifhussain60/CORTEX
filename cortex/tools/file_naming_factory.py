@@ -60,7 +60,7 @@ class FileNameFactory:
     SSOT: .cortex-runtime/standards/file-naming-config.yaml
     """
 
-    def __init__(self, config: Optional[FileNameConfig] = None):
+    def __init__(self, config: Optional[FileNameConfig] = None) -> None:
         """Initialize factory with config."""
         self.config = config or FileNameConfig()
         self._validate_config()

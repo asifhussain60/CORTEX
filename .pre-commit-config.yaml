@@ -97,3 +97,21 @@ repos:
         always_run: false
         stages: [commit]
 
+      - id: core-011-type-hints
+        name: CORE-011 - Type Hints on Public Functions
+        entry: python3 scripts/governance/core_011_type_hints.py
+        language: system
+        pass_filenames: false
+        always_run: false
+        stages: [commit]
+        files: ^cortex/.*\.py$
+
+      - id: core-012-docstrings
+        name: CORE-012 - Docstrings on Public APIs
+        entry: python3 scripts/governance/core_012_docstrings.py
+        language: system
+        pass_filenames: false
+        always_run: false
+        stages: [commit]
+        files: ^cortex/.*\.py$
+

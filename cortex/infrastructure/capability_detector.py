@@ -38,7 +38,7 @@ class CapabilityDetector:
         >>> capability = detector.has_capability("docker", EnvironmentType.PRODUCTION)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize capability detector."""
         self.scanner = InfrastructureScanner()
         self._capability_cache: Dict[str, Any] = {}

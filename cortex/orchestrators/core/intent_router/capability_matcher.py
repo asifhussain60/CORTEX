@@ -100,7 +100,7 @@ class CapabilityMatcher:
         },
     }
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize capability matcher."""
         self.capability_weights = {}
         self._build_capability_weights()

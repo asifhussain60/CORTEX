@@ -179,7 +179,7 @@ class TimeEstimator:
         "analysis_per_1000_loc": 0.5,  # Per 1000 lines of code
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize time estimator."""
         self._history: Dict[str, List[float]] = {}
         self._max_history = 10  # Keep last N measurements
@@ -280,7 +280,7 @@ class ProgressReporter:
         callback: Optional[ProgressCallback] = None,
         output_stream: Any = None,
         time_estimator: Optional[TimeEstimator] = None,
-    ):
+    ) -> None:
         """
         Initialize progress reporter.
 
@@ -644,7 +644,7 @@ def track_repository_onboarding(
     repo_name: str,
     style: ProgressStyle = ProgressStyle.DETAILED,
     callback: Optional[ProgressCallback] = None,
-):
+) -> Any:
     """
     Context manager for repository onboarding with progress tracking.
 
@@ -685,7 +685,7 @@ def track_environment_setup(
     environment_name: str = "Development",
     style: ProgressStyle = ProgressStyle.DETAILED,
     callback: Optional[ProgressCallback] = None,
-):
+) -> Any:
     """
     Context manager for environment setup with progress tracking.
 
@@ -723,7 +723,7 @@ def track_mcp_onboarding_v3(
     repo_name: str,
     style: ProgressStyle = ProgressStyle.DETAILED,
     callback: Optional[ProgressCallback] = None,
-):
+) -> Any:
     """
     Context manager for MCP V3 onboarding with progress tracking.
 

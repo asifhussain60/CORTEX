@@ -67,7 +67,7 @@ class EnhancedGovernanceAuditLogger:
     _instance: Optional['EnhancedGovernanceAuditLogger'] = None
     _lock = __import__('threading').Lock()
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize audit logger."""
         self.db_manager = GovernanceDatabaseManager.instance()
         self._logger = logging.getLogger(__name__)

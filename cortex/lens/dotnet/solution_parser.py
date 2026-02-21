@@ -241,7 +241,8 @@ class SolutionFileParser:
         visited = set()
         rec_stack = set()
 
-        def dfs(node, path):
+        def dfs(node, path) -> None:
+            """Perform depth-first search traversal."""
             visited.add(node)
             rec_stack.add(node)
             path = path + [node]

@@ -46,7 +46,7 @@ class TransactionTimeoutError(Exception):
 class SavepointContext:
     """Context manager for savepoint (nested transaction)."""
 
-    def __init__(self, connection: sqlite3.Connection, name: str):
+    def __init__(self, connection: sqlite3.Connection, name: str) -> None:
         """
         Initialize savepoint context.
 
@@ -86,7 +86,7 @@ class TransactionContext:
         timeout: float,
         read_only: bool,
         manager: "TransactionManager",
-    ):
+    ) -> None:
         """
         Initialize transaction context.
 
@@ -157,7 +157,7 @@ class TransactionContext:
         """Explicitly rollback transaction."""
         self._rollback()
 
-    def savepoint(self):
+    def savepoint(self) -> None:
         """
         Create nested transaction via savepoint.
 
@@ -204,7 +204,7 @@ class TransactionManager:
     Thread-safe for concurrent access.
     """
 
-    def __init__(self, db_path: str, config: Optional[TransactionConfig] = None):
+    def __init__(self, db_path: str, config: Optional[TransactionConfig] = None) -> None:
         """
         Initialize transaction manager.
 

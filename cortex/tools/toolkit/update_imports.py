@@ -49,7 +49,7 @@ class ImportUpdater:
         "tier3": {"tier0", "tier1", "tier2", "tier3"},  # tier3 can import all tiers
     }
 
-    def __init__(self, root_path: Path):
+    def __init__(self, root_path: Path) -> None:
         """Initialize importer with root path.
 
         Args:
@@ -228,7 +228,7 @@ class ImportUpdater:
         return False
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     root = Path(__file__).parent.parent
 

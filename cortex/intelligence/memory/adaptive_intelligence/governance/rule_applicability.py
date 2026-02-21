@@ -10,7 +10,7 @@ from typing import Dict, Any, List, Optional
 class RuleApplicabilityEngine:
     """Determines which rules are applicable to given contexts"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize applicability engine"""
         pass
 

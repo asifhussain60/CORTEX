@@ -12,6 +12,6 @@ Updates documentation to reflect new event-driven architecture and planning.
 # 3. cortex-designer.md: Document multi-layer coordination
 # 4. Enhancement history tracking
 
-def phase_8_complete():
+def phase_8_complete() -> None:
     """Phase 8: All prompts and agents updated to reflect new architecture."""
     pass

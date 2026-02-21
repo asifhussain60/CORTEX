@@ -146,6 +146,7 @@ class MSBuildDependencyResolver:
             }
 
             def get_layer(name: str) -> Optional[str]:
+                """Determine architectural layer for component."""
                 name_lower = name.lower()
                 for layer, keywords in layer_keywords.items():
                     if any(kw.lower() in name_lower for kw in keywords):
@@ -223,7 +224,8 @@ class MSBuildDependencyResolver:
         visited = set()
         rec_stack = set()
 
-        def dfs(node, path):
+        def dfs(node, path) -> None:
+            """Perform depth-first search traversal."""
             visited.add(node)
             rec_stack.add(node)
             path = path + [node]

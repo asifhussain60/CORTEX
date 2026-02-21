@@ -30,6 +30,7 @@ except ImportError:
         def __init__(self) -> None:
             self._registry: dict = {}
         def lookup(self, name: str) -> None:
+            """Look up an orchestrator by name from the registry."""
             return self._registry.get(name)
 
 

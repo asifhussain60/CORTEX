@@ -64,7 +64,7 @@ class ContradictionResolver:
     - Rollback capability
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize resolver with empty history"""
         self._history: List[Resolution] = []
         self._confidence_threshold = 0.7  # Threshold for auto-resolution

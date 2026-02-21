@@ -38,7 +38,7 @@ class ProductionReleaseManager:
     # Main/master branch names
     MAIN_BRANCHES = {"main", "master", "CORTEX"}
 
-    def __init__(self, repo_path: Path, audit_enabled: bool = False):
+    def __init__(self, repo_path: Path, audit_enabled: bool = False) -> None:
         """
         Initialize ProductionReleaseManager.
 

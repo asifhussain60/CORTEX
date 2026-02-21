@@ -203,7 +203,7 @@ class GovernanceContextAdapter:
     Adjusts rule weights and severity based on context.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize adapter with default configuration."""
         self._default_weights = self._load_default_weights()
         self._context_cache: Dict[str, Dict[str, Dict[str, Any]]] = {}

@@ -49,7 +49,7 @@ class ScopeManager:
         max_scope: Maximum allowed scope size
     """
     
-    def __init__(self, max_scope: int = 100):
+    def __init__(self, max_scope: int = 100) -> None:
         """Initialize scope manager.
         
         Args:

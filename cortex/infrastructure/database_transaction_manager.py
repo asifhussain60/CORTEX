@@ -74,7 +74,7 @@ class DatabaseTransactionManager:
     ```
     """
 
-    def __init__(self, db_path: str, timeout: float = 5.0):
+    def __init__(self, db_path: str, timeout: float = 5.0) -> None:
         """
         Initialize transaction manager.
 
@@ -102,7 +102,7 @@ class DatabaseTransactionManager:
         ac_id: str,
         operation_name: str,
         user: str = "builder"
-    ):
+    ) -> None:
         """
         Context manager for atomic operation + audit logging.
 
@@ -401,7 +401,7 @@ class DatabaseTransactionManager:
         )
 
     @contextmanager
-    def nested_operation(self, context: TransactionContext, name: str):
+    def nested_operation(self, context: TransactionContext, name: str) -> None:
         """
         Create a savepoint for nested operations within a transaction.
 
@@ -448,7 +448,7 @@ class StateAtomicityManager:
         "FAILED": set(),    # Terminal state
     }
 
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str) -> None:
         """Initialize state manager."""
         self.manager = DatabaseTransactionManager(db_path)
 

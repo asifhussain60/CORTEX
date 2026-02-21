@@ -176,7 +176,7 @@ class LearningExtractor:
         self,
         model_name: str = "all-MiniLM-L6-v2",
         config: Optional[ExtractionConfig] = None,
-    ):
+    ) -> None:
         """
         Initialize learning extractor.
 

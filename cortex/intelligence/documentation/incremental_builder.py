@@ -115,7 +115,7 @@ class IncrementalBuilder:
         self,
         source_dir: Path,
         output_dir: Path,
-    ):
+    ) -> None:
         """
         Initialize incremental builder.
         

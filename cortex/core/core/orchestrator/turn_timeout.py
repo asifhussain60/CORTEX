@@ -24,7 +24,8 @@ class TimeoutConfig:
 class TurnTimeoutError(Exception):
     """Raised when a turn exceeds its timeout."""
 
-    def __init__(self, turn_number: int, elapsed_seconds: float):
+    def __init__(self, turn_number: int, elapsed_seconds: float) -> None:
+        """Initialize instance."""
         self.turn_number = turn_number
         self.elapsed_seconds = elapsed_seconds
         super().__init__(
@@ -35,7 +36,8 @@ class TurnTimeoutError(Exception):
 class TurnCancelledError(Exception):
     """Raised when a turn is cancelled by user."""
 
-    def __init__(self, turn_number: int):
+    def __init__(self, turn_number: int) -> None:
+        """Initialize instance."""
         self.turn_number = turn_number
         super().__init__(f"Turn {turn_number} was cancelled by user")
 
@@ -51,7 +53,7 @@ class TurnTimeoutManager:
     - Audit trail for incomplete turns
     """
 
-    def __init__(self, config: Optional[TimeoutConfig] = None):
+    def __init__(self, config: Optional[TimeoutConfig] = None) -> None:
         """
         Initialize timeout manager.
 
@@ -151,7 +153,8 @@ class TurnTimeoutManager:
         timeout = timeout_override or self.config.timeout_seconds
         start_time = datetime.now()
 
-        async def wrapper():
+        async def wrapper() -> object:
+            """Async bridge for *func* to support asyncio timeout."""
             return func()
 
         try:
@@ -196,7 +199,7 @@ class TurnTimeoutManager:
 class TurnAuditLogger:
     """Logs incomplete turns for audit trail."""
 
-    def __init__(self, log_path: Optional[str] = None):
+    def __init__(self, log_path: Optional[str] = None) -> None:
         """
         Initialize audit logger.
 

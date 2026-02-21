@@ -36,7 +36,7 @@ class RoslynProcessManager:
         ...         manager.stop()
     """
 
-    def __init__(self, dotnet_path: Optional[str] = None):
+    def __init__(self, dotnet_path: Optional[str] = None) -> None:
         """
         Initialize RoslynProcessManager.
 

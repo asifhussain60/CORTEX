@@ -20,7 +20,7 @@ from cortex.infrastructure.security.secrets.secrets_provider import ISecretsProv
 class AzureKeyVaultProvider(ISecretsProvider):
     """Azure Key Vault provider for enterprise secrets management"""
 
-    def __init__(self, config: SecretsConfig):
+    def __init__(self, config: SecretsConfig) -> None:
         """
         Initialize Azure Key Vault provider.
 

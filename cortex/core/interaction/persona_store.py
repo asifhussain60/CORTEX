@@ -18,7 +18,7 @@ from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 class PersonaStore:
     """Persistent storage for user persona preferences"""
 
-    def __init__(self, storage_path: str = None):
+    def __init__(self, storage_path: str = None) -> None:
         """
         Initialize PersonaStore with storage path.
 

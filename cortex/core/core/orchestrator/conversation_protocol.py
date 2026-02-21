@@ -171,7 +171,7 @@ class ConversationProtocol:
         db_path: Optional[str] = None,  # AC-FIX-008-01: Allow test database injection
         adaptive_turn_limit: bool = True,  # AC-FUTURE-004: Enable adaptive limits
         memoization_enabled: bool = True,  # AC-FUTURE-006: Enable turn result caching
-    ):
+    ) -> None:
         """
         Initialize ConversationProtocol wrapper.
 

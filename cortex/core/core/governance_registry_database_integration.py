@@ -56,7 +56,7 @@ class GovernanceRegistryWithDatabaseBackend:
     _instance: Optional['GovernanceRegistryWithDatabaseBackend'] = None
     _lock = threading.Lock()
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize combined registry."""
         self._yaml_registry = GovernanceRegistry.instance()
         self._db_manager = GovernanceDatabaseManager.instance()

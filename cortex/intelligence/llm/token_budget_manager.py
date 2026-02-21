@@ -62,7 +62,7 @@ class TokenBudgetManager:
         per_request_limit: Optional[int] = None,
         per_user_daily_limit: Optional[int] = None,
         global_daily_limit: Optional[int] = None
-    ):
+    ) -> None:
         """
         Initialize token budget manager.
 

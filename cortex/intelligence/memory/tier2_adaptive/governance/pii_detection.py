@@ -41,7 +41,7 @@ class PIIDetector:
         patterns: Regex patterns for PII types
     """
     
-    def __init__(self, strict_mode: bool = True):
+    def __init__(self, strict_mode: bool = True) -> None:
         """Initialize PII detector.
         
         Args:

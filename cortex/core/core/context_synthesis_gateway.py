@@ -66,7 +66,7 @@ class ContextSynthesisGateway:
         initial_budget: int = 250,
         incremental_budget: int = 500,
         session_budget: int = 2000
-    ):
+    ) -> None:
         """
         Initialize context synthesis gateway
 
@@ -331,8 +331,8 @@ class ContextSynthesisGateway:
             return True
         return False
 
-    def clear_all_sessions(self):
-        """Clear all tracked sessions"""
+    def clear_all_sessions(self) -> None:
+        """Clear all tracked sessions."""
         self._sessions.clear()
         self._session_counter = 0
 

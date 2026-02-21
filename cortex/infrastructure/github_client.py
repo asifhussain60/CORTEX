@@ -162,7 +162,7 @@ class GitHubClient:
         org: str,
         token: Optional[str] = None,
         mock_mode: bool = False,
-    ):
+    ) -> None:
         """
         Initialize GitHub client.
 

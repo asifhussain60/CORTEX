@@ -36,6 +36,7 @@ _TOOLS_LOCK = threading.Lock()
 def register_tool(name: str) -> Callable:
     """Decorator to register a tool handler (thread-safe)."""
     def decorator(func: Callable) -> Callable:
+        """Create decorated function wrapper."""
         with _TOOLS_LOCK:
             _TOOLS[name] = func
         return func

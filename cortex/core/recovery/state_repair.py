@@ -199,7 +199,8 @@ class StateRepair:
         storage_path: Optional[Path] = None,
         hash_chain_manager: Optional[HashChainManager] = None,
         enable_auto_repair: bool = False
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.storage_path = storage_path or Path.home() / ".cortex-runtime" / "repairs"
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
@@ -341,6 +342,7 @@ class StateRepair:
         logger.info(f"Scheduled automatic repair every {interval_hours} hours")
 
         def repair_loop() -> None:
+            """Background loop that detects and repairs inconsistencies."""
             while self._scheduled_repair_active:
                 try:
                     inconsistencies = self.detect_inconsistencies()

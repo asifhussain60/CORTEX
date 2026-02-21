@@ -86,7 +86,7 @@ class TestScopeValidator:
             print(f"Misalignment: {result.recommendation}")
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize TestScopeValidator."""
         self.registry_path = Path("cortex-registry/_cortex-master")
         self.severity_matrix = {

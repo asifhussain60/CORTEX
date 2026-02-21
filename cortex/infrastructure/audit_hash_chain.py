@@ -39,7 +39,7 @@ class AuditHashChain:
     and automatic chain repair capabilities.
     """
 
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str) -> None:
         """
         Initialize audit hash chain.
 
@@ -217,7 +217,8 @@ class AuditHashChain:
 
         self._stop_verifier.clear()
 
-        def verifier():
+        def verifier() -> None:
+            """Verify audit hash chain integrity."""
             while not self._stop_verifier.wait(interval):
                 try:
                     self.verify_integrity()

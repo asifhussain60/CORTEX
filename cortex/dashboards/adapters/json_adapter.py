@@ -33,7 +33,7 @@ class JSONAdapter(DashboardDataAdapter):
     - Implementation Truth: Track usage via metadata.json
     """
 
-    def __init__(self, base_path: Path = None):
+    def __init__(self, base_path: Path = None) -> None:
         """
         Initialize JSON adapter.
 

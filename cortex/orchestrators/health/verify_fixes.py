@@ -16,7 +16,7 @@ CORTEX_ROOT = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(CORTEX_ROOT))
 
 
-def test_enum_categories_exist():
+def test_enum_categories_exist() -> None:
     """Verify PATH and CONFIGURATION enum categories exist."""
     from cortex.orchestrators.health.agents.base_agent import HealthIssueCategory
     
@@ -27,7 +27,7 @@ def test_enum_categories_exist():
     print("✅ Enum categories verified (PATH, CONFIGURATION)")
 
 
-def test_duplicate_file_removed():
+def test_duplicate_file_removed() -> None:
     """Verify run_vacuum.legacy.py duplicate was removed."""
     duplicate_file = CORTEX_ROOT / ".cortex" / "run_vacuum.legacy.py"
     
@@ -36,7 +36,7 @@ def test_duplicate_file_removed():
     print("✅ Duplicate file removed (.cortex-runtime/run_vacuum.legacy.py)")
 
 
-def test_config_file_exists():
+def test_config_file_exists() -> None:
     """Verify health_config.py exists with tuned settings."""
     config_file = CORTEX_ROOT / "cortex" / "orchestrators" / "health" / "health_config.py"
     
@@ -51,7 +51,7 @@ def test_config_file_exists():
     print("✅ Configuration file exists (health_config.py)")
 
 
-def test_duplicate_detection_excludes():
+def test_duplicate_detection_excludes() -> None:
     """Verify duplicate detection has proper exclusions."""
     from cortex.orchestrators.health.agents.duplicate_detection_agent import DuplicateDetectionAgent
     
@@ -64,7 +64,7 @@ def test_duplicate_detection_excludes():
     print("✅ Duplicate detection configured correctly")
 
 
-def test_path_integrity_old_paths():
+def test_path_integrity_old_paths() -> None:
     """Verify PathIntegrityAgent old_paths list is empty (no false positives)."""
     from cortex.orchestrators.health.agents.path_integrity_agent import PathIntegrityAgent
     
@@ -76,7 +76,7 @@ def test_path_integrity_old_paths():
     print("✅ PathIntegrityAgent old_paths cleared (no false positives)")
 
 
-def test_stub_detection_thresholds():
+def test_stub_detection_thresholds() -> None:
     """Verify stub detection has proper thresholds."""
     from cortex.orchestrators.health.agents.stub_detection_agent import StubDetectionAgent
     
@@ -89,7 +89,7 @@ def test_stub_detection_thresholds():
     print("✅ Stub detection thresholds correct (LOC=200, complexity=5)")
 
 
-def test_reports_module_exists():
+def test_reports_module_exists() -> None:
     """Verify reports module was created."""
     reports_dir = CORTEX_ROOT / "cortex" / "orchestrators" / "health" / "reports"
     
@@ -108,7 +108,7 @@ def test_reports_module_exists():
     print("✅ Reports module verified (HealthReport, HealthMetrics)")
 
 
-def test_readme_exists():
+def test_readme_exists() -> None:
     """Verify AGENT-README.md documentation exists."""
     readme = CORTEX_ROOT / "cortex" / "orchestrators" / "health" / "AGENT-README.md"
     
@@ -122,7 +122,7 @@ def test_readme_exists():
     print("✅ Documentation exists (AGENT-README.md)")
 
 
-def main():
+def main() -> None:
     """Run all verification tests."""
     print("\n" + "="*60)
     print("CORTEX Health Orchestrator Fix Verification")

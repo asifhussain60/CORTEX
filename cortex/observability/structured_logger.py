@@ -127,7 +127,7 @@ class StructuredLogger:
         enable_console: bool = True,
         enable_file: bool = False,
         file_path: Optional[str] = None,
-    ):
+    ) -> None:
         """Initialize structured logger.
         
         Args:

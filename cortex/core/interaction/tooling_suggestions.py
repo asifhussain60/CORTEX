@@ -42,7 +42,7 @@ class ToolingSuggestions:
         >>>     print(f"Use {tool.tool_name}: {tool.rationale}")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize tooling suggestions."""
         self.detector = CapabilityDetector()
         self.github_client = GitHubClient(org="company", mock_mode=True)

@@ -104,7 +104,7 @@ class SecretRedactor:
         ),
     ]
 
-    def __init__(self, custom_rules: Optional[List[RedactionRule]] = None):
+    def __init__(self, custom_rules: Optional[List[RedactionRule]] = None) -> None:
         """
         Initialize redactor with standard or custom rules.
 

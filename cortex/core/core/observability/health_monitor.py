@@ -254,6 +254,7 @@ class HealthMonitor:
         import signal
 
         def timeout_handler(signum: int, frame: Any) -> None:
+            """Signal handler that raises TimeoutError."""
             raise TimeoutError(f"Check exceeded {timeout_seconds}s timeout")
 
         # Set signal handler (Unix-like systems only)

@@ -135,7 +135,7 @@ class PhaseReadinessChecker:
     Validates governance, audit trail, tests, and documentation.
     """
 
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize readiness checker.
 

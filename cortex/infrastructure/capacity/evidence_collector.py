@@ -151,7 +151,7 @@ class EvidenceCollector:
     AC-CAP-001-04: Produce unified TaskEvidence object
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize EvidenceCollector."""
         self.lens_collector = LENSEvidenceCollector()
         self.git_collector = GitEvidenceCollector()

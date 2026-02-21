@@ -112,6 +112,7 @@ __all__ = ["GovernanceEnforcer", "GovernanceRule", "RuleSeverity", "EnforcementR
 # Stub for test compatibility
 class EnforcementResult:
     """Result of governance enforcement."""
-    def __init__(self, compliant: bool = True, violations: Optional[List[str]] = None):
+    def __init__(self, compliant: bool = True, violations: Optional[List[str]] = None) -> None:
+        """Initialize instance."""
         self.compliant = compliant
         self.violations = violations or []

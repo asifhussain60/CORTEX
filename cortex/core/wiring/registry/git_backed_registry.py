@@ -238,6 +238,7 @@ class GitBackedRegistry:
 
         # Check for circular dependencies
         def has_cycle(node: str, visited: set, rec_stack: set) -> bool:
+            """Detect circular dependency via DFS."""
             visited.add(node)
             rec_stack.add(node)
 

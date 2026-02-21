@@ -19,7 +19,7 @@ class RuleWeightCalculator:
     Adjusts CORE rule weights based on operational context.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize calculator with rule categorization."""
         self._rule_categories = self._categorize_rules()
 

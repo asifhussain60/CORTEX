@@ -82,7 +82,7 @@ class MetricsExporter(ABC):
         pass
 
     @abstractmethod
-    def shutdown(self):
+    def shutdown(self) -> None:
         """Shutdown exporter gracefully."""
         pass
 
@@ -100,7 +100,7 @@ class ConsoleMetricsExporter(MetricsExporter):
             logger.error(f"Failed to export metrics: {str(e)}")
             return False
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         """No-op for console exporter."""
         pass
 
@@ -108,7 +108,8 @@ class ConsoleMetricsExporter(MetricsExporter):
 class MemoryMetricsExporter(MetricsExporter):
     """Stores metrics in memory for testing."""
 
-    def __init__(self, max_batches: int = 100):
+    def __init__(self, max_batches: int = 100) -> None:
+        """Initialise MemoryMetricsExporter."""
         self.batches: List[MetricBatch] = []
         self.max_batches = max_batches
 
@@ -124,7 +125,7 @@ class MemoryMetricsExporter(MetricsExporter):
             logger.error(f"Failed to store metrics: {str(e)}")
             return False
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         """Clear memory."""
         self.batches.clear()
 
@@ -148,7 +149,7 @@ class TelemetryProvider:
         exporters: Optional[List[MetricsExporter]] = None,
         batch_size: int = 10,
         use_async: bool = True
-    ):
+    ) -> None:
         """
         Initialize telemetry provider.
 
@@ -169,7 +170,7 @@ class TelemetryProvider:
         if use_async:
             self._start_async_export()
 
-    def add_exporter(self, exporter: MetricsExporter):
+    def add_exporter(self, exporter: MetricsExporter) -> None:
         """Add a metrics exporter."""
         self.exporters.append(exporter)
         logger.info(f"Added exporter: {type(exporter).__name__}")
@@ -268,7 +269,7 @@ class TelemetryProvider:
 
         return success
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         """
         Shutdown telemetry provider gracefully.
 

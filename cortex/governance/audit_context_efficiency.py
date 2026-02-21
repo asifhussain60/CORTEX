@@ -21,7 +21,7 @@ from typing import Any, Dict, List
 class ContextEfficiencyAuditor:
     """Executes context efficiency audits against governance.db"""
 
-    def __init__(self, db_path: Path):
+    def __init__(self, db_path: Path) -> None:
         """
         Initialize auditor with database path
 
@@ -103,7 +103,7 @@ class ContextEfficiencyAuditor:
 
         return results
 
-    def print_results(self, results: List[Dict[str, Any]], query_name: str):
+    def print_results(self, results: List[Dict[str, Any]], query_name: str) -> None:
         """
         Print query results in formatted table
 
@@ -258,12 +258,12 @@ class ContextEfficiencyAuditor:
 
         print(f"\n{'═' * 80}\n")
 
-    def close(self):
+    def close(self) -> None:
         """Close database connection"""
         self.conn.close()
 
 
-def main():
+def main() -> None:
     """Main CLI entry point"""
     parser = argparse.ArgumentParser(
         description="Context Efficiency Audit Runner (ENH-046 Phase 1.6)",

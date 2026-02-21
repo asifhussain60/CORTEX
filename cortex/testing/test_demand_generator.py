@@ -314,7 +314,7 @@ class InteractionOrchestratorAnalyzer(DemandAnalyzer):
 class DemandRegistry:
     """Central registry for test demands - YAML-backed for version control."""
 
-    def __init__(self, registry_path: Optional[Path] = None):
+    def __init__(self, registry_path: Optional[Path] = None) -> None:
         """
         Initialize registry.
 
@@ -441,7 +441,7 @@ class DemandRegistry:
 class DemandValidator:
     """Validates test demands for completeness and realism."""
 
-    def __init__(self, registry: Optional[DemandRegistry] = None):
+    def __init__(self, registry: Optional[DemandRegistry] = None) -> None:
         """
         Initialize validator.
 

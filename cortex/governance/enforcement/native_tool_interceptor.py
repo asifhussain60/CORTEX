@@ -135,7 +135,7 @@ class NativeToolInterceptor:
         "cortex_lens_analyze": ToolCategory.MCP_TOOL,
     }
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize interceptor with MCP detector."""
         self.detector = MCPDetector()
     

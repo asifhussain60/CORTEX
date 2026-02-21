@@ -44,7 +44,7 @@ class HolisticContext:
 class HolisticContextBuilder:
     """AC-PHASE64-S3-001: Enhanced builder for 8-dimensional context synthesis."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize builder."""
         self._context: Dict[str, Any] = {}
 

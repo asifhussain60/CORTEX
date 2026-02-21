@@ -113,7 +113,7 @@ def _register_pre_op_gates() -> None:
 class HardeningStatus:
     """Status of hardening layer."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize."""
         self.contract_manager_ready = False
         self.drift_detector_running = False

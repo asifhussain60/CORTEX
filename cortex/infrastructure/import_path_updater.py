@@ -25,7 +25,7 @@ class ImportPathUpdater:
     - Full test suite passes
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the import path updater."""
         self.import_mappings: List[ImportMapping] = []
         self.files_with_imports: Dict[str, List[str]] = {}

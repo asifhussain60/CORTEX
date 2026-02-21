@@ -70,7 +70,7 @@ class CircuitBreakerConfig:
         if self.open_duration_seconds <= 0:
             raise ValueError("open_duration_seconds must be positive")
 
-    def validate(self):
+    def validate(self) -> None:
         """Legacy validation method."""
         self.__post_init__()
 
@@ -122,7 +122,7 @@ class CircuitBreaker:
         ...     result = fallback_value()
     """
 
-    def __init__(self, name: str, config: Optional[CircuitBreakerConfig] = None):
+    def __init__(self, name: str, config: Optional[CircuitBreakerConfig] = None) -> None:
         """
         Initialize circuit breaker.
 
@@ -444,7 +444,7 @@ class CircuitBreaker:
                 "rejected_calls": self.metrics.rejected_calls,
             }
 
-    def reset(self):
+    def reset(self) -> None:
         """
         Reset circuit breaker to initial state.
 
@@ -466,7 +466,7 @@ class CircuitBreaker:
             self.metrics = CircuitBreakerMetrics()
             logger.info(f"Circuit breaker '{self.name}' manually reset")
 
-    def force_state(self, state: CircuitState):
+    def force_state(self, state: CircuitState) -> None:
         """Force circuit to a specific state (for testing)."""
         with self._lock if hasattr(self, '_lock') else threading.RLock():
             self._state = state

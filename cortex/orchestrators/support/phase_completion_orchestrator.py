@@ -32,6 +32,11 @@ class PlanRegistrySyncOrchestrator:
     """Sync plan registry after phase completion (stub)."""
 
     def sync(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+        """Synchronize the plan registry after phase completion.
+
+        Returns:
+            Status dict indicating sync result.
+        """
         return {"status": "synced"}
 
 
@@ -39,6 +44,8 @@ class PlanRegistrySyncOrchestrator:
 
 @dataclass
 class CompletionResult:
+    """Result of a phase completion operation."""
+
     success: bool = False
     phase_updated: bool = False
     dashboard_regenerated: bool = False
@@ -60,6 +67,18 @@ class PhaseCompletionOrchestrator(OrchestratorProtocolMixin):
         dashboard_data_file: Optional["str | Path"] = None,
         enhancement_id: Optional[str] = None,
     ) -> CompletionResult:
+        """Complete a phase and synchronize all downstream artifacts.
+
+        Args:
+            phase_file: Path to the phase YAML file.
+            phase_key: Key identifying the phase in the registry.
+            index_file: Optional path to the phase index file.
+            dashboard_data_file: Optional path to dashboard data.
+            enhancement_id: Optional enhancement ticket ID.
+
+        Returns:
+            CompletionResult with sync status for each artifact.
+        """
         result = CompletionResult()
         phase_path = Path(phase_file)
 

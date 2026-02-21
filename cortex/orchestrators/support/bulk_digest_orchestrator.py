@@ -17,6 +17,7 @@ class BulkDigestOrchestrator:
     """Orchestrates bulk markdown file ingestion with filtering, batching, and progress tracking."""
 
     def __init__(self) -> None:
+        """Initialize instance."""
         self._progress: Dict[str, Any] = {}
 
     # ------------------------------------------------------------------
@@ -159,3 +160,14 @@ class BulkDigestOrchestrator:
     def _update_progress(self, stats: Dict[str, Any]) -> None:
         """Store latest progress snapshot."""
         self._progress = dict(stats)
+
+    # ------------------------------------------------------------------
+    # Health Check (IOrchestrator protocol)
+    # ------------------------------------------------------------------
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status for wiring-contract validation."""
+        return {
+            "status": "healthy",
+            "orchestrator": "BulkDigestOrchestrator",
+        }

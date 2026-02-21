@@ -171,7 +171,7 @@ class ContextMetricsCollector:
         ... )
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize context metrics collector."""
         self._active_syntheses: Dict[str, float] = {}
         self._session_metrics: Dict[str, List[ContextMetrics]] = {}

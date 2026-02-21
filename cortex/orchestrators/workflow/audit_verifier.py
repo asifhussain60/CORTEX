@@ -74,7 +74,7 @@ class AuditVerifier:
         >>> print(result.valid, result.missing_events)
     """
     
-    def __init__(self, template_path: str):
+    def __init__(self, template_path: str) -> None:
         """
         Initialize AuditVerifier with workflow template.
         

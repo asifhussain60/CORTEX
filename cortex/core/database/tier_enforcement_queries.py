@@ -7,4 +7,5 @@ class TierEnforcementQuery:
     """Query for tier enforcement."""
 
     def execute(self) -> List[Dict[str, Any]]:
+        """Execute the tier enforcement query and return results."""
         return []

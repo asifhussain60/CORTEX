@@ -289,7 +289,8 @@ class AgentConfiguration:
 class RulesRegistry:
     """Machine-readable rules registry (YAML-based)."""
 
-    def __init__(self, registry_path: Path):
+    def __init__(self, registry_path: Path) -> None:
+        """Initialise RulesRegistry."""
         self.registry_path = registry_path
         self._rules_cache: Dict[str, Any] = {}
         self._load_registry()
@@ -450,7 +451,8 @@ class AgentRulesInterpreter:
     Supports both CORTEX self-development and production repo contexts.
     """
 
-    def __init__(self, registry_path: Path):
+    def __init__(self, registry_path: Path) -> None:
+        """Initialise AgentRulesInterpreter."""
         self.registry_path = registry_path
         self.rules_registry = RulesRegistry(registry_path)
         self._violation_cache: Dict[str, List[RuleViolation]] = {}
@@ -632,7 +634,8 @@ class AgentRulesInterpreter:
 class OrchestratorInvocationHelper:
     """Helper to invoke orchestrators based on execution directives."""
 
-    def __init__(self, interpreter: AgentRulesInterpreter):
+    def __init__(self, interpreter: AgentRulesInterpreter) -> None:
+        """Initialise OrchestratorInvocationHelper."""
         self.interpreter = interpreter
 
     def invoke_for_directive(

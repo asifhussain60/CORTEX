@@ -135,7 +135,7 @@ class DependencyAnalyzer:
         ...         print(f"CRITICAL: {finding.message}")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize DependencyAnalyzer."""
         self._vulnerability_db: Dict[str, List[Vulnerability]] = {}
         self._license_db: Dict[str, str] = {}

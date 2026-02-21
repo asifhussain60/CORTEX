@@ -112,7 +112,8 @@ class TemplateBlock:
                 raise ValueError(f"Condition contains disallowed operation: {pattern}")
 
         # Replace context variables with their values (quoted for strings)
-        def replace_var(match):
+        def replace_var(match) -> None:
+            """Replace variable placeholder with value."""
             var_name = match.group(1)
             if var_name not in context:
                 return "False"  # Missing var = False
@@ -166,7 +167,8 @@ class TemplateBlock:
         import re
         pattern = r'\{\{\s*(\w+(?:\.\w+)*)\s*\}\}'
 
-        def replace(match):
+        def replace(match) -> None:
+            """Replace matched pattern in content."""
             path = match.group(1).split('.')
             value = context
             for key in path:
@@ -184,7 +186,8 @@ class ScaffolderTemplate(ABC):
 
     template_type: TemplateType = TemplateType.BASE
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialise ScaffolderTemplate."""
         self._variables: Dict[str, TemplateVariable] = {}
         self._blocks: Dict[str, TemplateBlock] = {}
         self._setup()

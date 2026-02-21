@@ -18,6 +18,7 @@ class ProfileVersioner:
     """
 
     def __init__(self, base_path: Path) -> None:
+        """Initialize instance."""
         self.base_path = Path(base_path)
         self._applied: Dict[str, Dict[str, Any]] = {}
         self._registry: Dict[str, List[Dict[str, Any]]] = {}

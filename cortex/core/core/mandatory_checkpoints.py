@@ -115,7 +115,7 @@ class MandatoryCheckpoints:
     # Severity thresholds
     MAX_VIOLATIONS = 3  # Block execution if >= 3 violations
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize checkpoints system."""
         self._audit_trails: List[AuditTrail] = []
         logger.info("Mandatory Checkpoints initialized")

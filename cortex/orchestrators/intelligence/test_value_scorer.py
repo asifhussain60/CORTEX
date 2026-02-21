@@ -113,7 +113,7 @@ class TestValueScorer:
         severity_weight: float = 0.4,
         likelihood_weight: float = 0.3,
         coverage_gap_weight: float = 0.3,
-    ):
+    ) -> None:
         """
         Initialize scorer with custom weights.
         

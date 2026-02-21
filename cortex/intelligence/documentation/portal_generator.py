@@ -107,7 +107,7 @@ class PortalGenerator:
         self,
         output_dir: Path,
         config: PortalConfig,
-    ):
+    ) -> None:
         """
         Initialize portal generator.
         

@@ -369,7 +369,7 @@ class LearningOrchestrator:
     AC-CAP-5-04: Recommend model adjustments
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize LearningOrchestrator."""
         self.learning_records: List[LearningRecord] = []
 

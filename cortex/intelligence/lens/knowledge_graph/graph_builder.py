@@ -30,7 +30,7 @@ class GraphBuilder:
         >>> print(f"{builder.node_count} nodes, {builder.edge_count} edges")
     """
     
-    def __init__(self, storage: GraphStorage):
+    def __init__(self, storage: GraphStorage) -> None:
         """
         Initialize graph builder.
         

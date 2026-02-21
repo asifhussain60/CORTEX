@@ -80,7 +80,7 @@ class FaultDetectionReporter:
     - Missing MCP tools
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize FaultDetectionReporter."""
         pass
 

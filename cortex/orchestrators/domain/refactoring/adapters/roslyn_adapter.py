@@ -62,7 +62,7 @@ class RoslynAdapter(RefactoringToolAdapter):
         "change_signature"
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize RoslynAdapter with process manager."""
         self._process_manager = RoslynProcessManager()
 

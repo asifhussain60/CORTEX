@@ -42,7 +42,7 @@ class HealthCheck:
         >>> assert status["status"] in ["healthy", "degraded", "unhealthy"]
     """
 
-    def __init__(self, cache_ttl_seconds: int = 30):
+    def __init__(self, cache_ttl_seconds: int = 30) -> None:
         """Initialize health checker.
 
         Args:
@@ -178,7 +178,7 @@ class ServiceDiscovery:
 
     DEFAULT_ENDPOINT = "http://127.0.0.1:8000"
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize service discovery."""
         self._lock = Lock()
         self._discovered_endpoint: Optional[str] = None
@@ -319,7 +319,7 @@ class PromptVersionConfig:
         >>> assert "current_version" in version_info
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize version config."""
         self._current_version = "1.0.0"
         self._compatible_versions = ["1.0.0"]

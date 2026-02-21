@@ -42,7 +42,7 @@ class VendorDetector:
         >>> print(f"Found {result['total_vendors']} vendors")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize VendorDetector with known vendor database."""
         self.known_vendors = self._load_known_vendors()
 

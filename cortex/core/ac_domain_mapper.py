@@ -1,4 +1,5 @@
 """ac_domain_mapper.py"""
 
 class ACDomainMapper:
-    pass
+    """Maps access-control domains to orchestrator capabilities."""
+

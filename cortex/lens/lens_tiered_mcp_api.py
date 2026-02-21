@@ -58,7 +58,7 @@ class StreamEvent:
 class LensCapability:
     """Represents a single LENS capability"""
 
-    def __init__(self, name: str, priority: int = 5, cost_ms: int = 100):
+    def __init__(self, name: str, priority: int = 5, cost_ms: int = 100) -> None:
         """
         Initialize a LENS capability.
 
@@ -80,7 +80,7 @@ class LensCapability:
 class LensCapabilityRegistry:
     """Registry of available LENS capabilities"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize capability registry with standard capabilities"""
         self.capabilities: Dict[str, LensCapability] = {}
         self._register_standard_capabilities()
@@ -135,7 +135,7 @@ class LensCapabilityRegistry:
 class LensQuickTier2:
     """Tier 2: Quick analysis (<200ms)"""
 
-    def __init__(self, cache_ttl_seconds: int = 300):
+    def __init__(self, cache_ttl_seconds: int = 300) -> None:
         """
         Initialize Tier 2 quick analyzer.
 
@@ -359,7 +359,7 @@ class LensQuickTier2:
 class LensTargetedTier3:
     """Tier 3: Targeted analysis with custom capabilities"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Tier 3 targeted analyzer"""
         self.registry = LensCapabilityRegistry()
 
@@ -607,7 +607,7 @@ class LensTargetedTier3:
 class LensStreamTier3:
     """Tier 3: Streaming analysis for large repositories"""
 
-    def __init__(self, batch_size: int = 10):
+    def __init__(self, batch_size: int = 10) -> None:
         """
         Initialize Tier 3 streaming analyzer.
 
@@ -622,7 +622,7 @@ class LensStreamTier3:
         self,
         file_paths: List[str],
         batch_size: int = 10,
-    ):
+    ) -> None:
         """
         Stream analysis results for batch of files.
 
@@ -689,7 +689,7 @@ class LensStreamTier3:
 class LensAnalyzerTier4:
     """Tier 4: Full analysis (S7 wired to LENSOrchestrator)"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Tier 4 full analyzer"""
         self.registry = LensCapabilityRegistry()
 
@@ -737,7 +737,7 @@ class LensAnalyzerTier4:
 class LensOrchestratorIntegration:
     """Integration with orchestrators (S7 wired to real tiers)"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize orchestrator integration"""
         self.tier2 = LensQuickTier2()
         self.tier3_targeted = LensTargetedTier3()

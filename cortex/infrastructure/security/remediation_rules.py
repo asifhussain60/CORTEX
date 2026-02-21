@@ -110,7 +110,7 @@ def get_expression_injection_rules() -> List[RemediationRule]:
 class RemediationRulesRegistry:
     """Central registry for remediation rules."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize rule registry."""
         self.rules: Dict[str, RemediationRule] = {}
         self._load_rules()

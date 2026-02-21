@@ -34,7 +34,7 @@ class ConversationContext:
     clarifications_asked: int = 0
     user_preferences: Dict[str, str] = field(default_factory=dict)
     
-    def add_request(self, request: str, intent: IntentType):
+    def add_request(self, request: str, intent: IntentType) -> None:
         """Add a request to history."""
         self.request_history.append(request)
         self.previous_intents.append(intent)
@@ -70,7 +70,7 @@ class ClarificationReducer:
     MEDIUM_CONFIDENCE_THRESHOLD = 0.60  # Use context to decide (lowered to reduce clarifications)
     LOW_CONFIDENCE_THRESHOLD = 0.35  # Always clarify (lowered to be more lenient)
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the reducer."""
         self.classifier = IntentClassifier()
         self.context = ConversationContext()
@@ -269,7 +269,7 @@ class ClarificationReducer:
         
         return self.context.clarifications_asked / total_requests
     
-    def reset_context(self):
+    def reset_context(self) -> None:
         """Reset conversation context."""
         self.context = ConversationContext()
 

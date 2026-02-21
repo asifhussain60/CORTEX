@@ -34,7 +34,7 @@ class Event:
 class EventBus:
     """Publish/subscribe event bus for feature changes with audit trail logging."""
 
-    def __init__(self, log_file: Optional[str] = None):
+    def __init__(self, log_file: Optional[str] = None) -> None:
         """
         Initialize event bus with optional event logging.
         
@@ -57,7 +57,7 @@ class EventBus:
             self.subscribers[event_type] = []
         self.subscribers[event_type].append(handler)
 
-    def publish(self, event, data=None):
+    def publish(self, event: object, data: object = None) -> None:
         """
         Publish event to subscribers with audit trail logging.
         

@@ -260,7 +260,7 @@ class HeaderConfigurationManager:
     _instance: Optional['HeaderConfigurationManager'] = None
     _config: Optional[HeaderConfiguration] = None
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize manager (singleton)."""
         self._loaded = False
 

@@ -49,7 +49,7 @@ class FallbackStrategy:
         cached_value: Optional[Any] = None,
         default_value: Optional[Any] = None,
         cache_timestamp: Optional[float] = None,
-    ):
+    ) -> None:
         """
         Initialize fallback strategy.
 
@@ -77,7 +77,7 @@ class DegradationManager:
     Thread-safe for concurrent access.
     """
 
-    def __init__(self, config: Optional[DegradationConfig] = None):
+    def __init__(self, config: Optional[DegradationConfig] = None) -> None:
         """
         Initialize degradation manager.
 

@@ -52,7 +52,7 @@ class ConversationalReflector:
         High confidence (92%)
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize conversational reflector."""
         # Intent templates (natural language)
         self.intent_templates = {

@@ -97,7 +97,7 @@ class ConfidenceScorer:
         "implementation_risk": 0.25,   # 25% from risk assessment
     }
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize confidence scorer."""
         self.threshold = self.CONFIDENCE_THRESHOLD
     

@@ -15,6 +15,7 @@ class CentralBrainOrchestrator:
     """Orchestrates shared brain state across multiple users."""
 
     def __init__(self) -> None:
+        """Initialize instance."""
         from cortex.infrastructure.shared_brain_store import SharedBrainStore
         self.shared_store: SharedBrainStore = SharedBrainStore()
         self._sessions: Dict[str, Dict[str, Any]] = {}

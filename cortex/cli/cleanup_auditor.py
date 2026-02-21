@@ -77,7 +77,7 @@ class AuditResult:
 class CleanupAuditor:
     """Performs systematic audit of completed phases and artifacts."""
     
-    def __init__(self, workspace_root: Path):
+    def __init__(self, workspace_root: Path) -> None:
         """Initialize auditor with workspace root."""
         self.workspace_root = workspace_root
         self.cortex_dir = workspace_root / "cortex"
@@ -372,7 +372,7 @@ class CleanupAuditor:
 
 
 @click.group()
-def cli():
+def cli() -> None:
     """WAVE-J: Cleanup Auditor CLI"""
     pass
 
@@ -381,7 +381,7 @@ def cli():
 @click.option("--workspace", type=click.Path(exists=True), default=".", help="Workspace root directory")
 @click.option("--format", type=click.Choice(["text", "yaml"]), default="text", help="Output format")
 @click.option("--output", type=click.Path(), help="Save report to file (optional)")
-def audit(workspace: str, format: str, output: Optional[str]):
+def audit(workspace: str, format: str, output: Optional[str]) -> None:
     """
     Audit workspace for completed phases and orphaned components.
     
@@ -409,7 +409,7 @@ def audit(workspace: str, format: str, output: Optional[str]):
 @cli.command()
 @click.option("--workspace", type=click.Path(exists=True), default=".", help="Workspace root directory")
 @click.option("--dry-run", is_flag=True, help="Show what would be done without executing")
-def migrate(workspace: str, dry_run: bool):
+def migrate(workspace: str, dry_run: bool) -> None:
     """
     Migrate completed phases from active/ to completed/ folder.
     

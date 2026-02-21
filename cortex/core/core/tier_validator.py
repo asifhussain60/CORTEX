@@ -69,7 +69,7 @@ class TierAccessValidator:
     - Audit logging
     """
 
-    def __init__(self, enforce_mode: bool = True):
+    def __init__(self, enforce_mode: bool = True) -> None:
         """
         Initialize validator.
 
@@ -352,7 +352,7 @@ class TierAccessEnforcer:
     - on_complete: Log any violations
     """
 
-    def __init__(self, validator: Optional[TierAccessValidator] = None):
+    def __init__(self, validator: Optional[TierAccessValidator] = None) -> None:
         """
         Initialize enforcer.
 

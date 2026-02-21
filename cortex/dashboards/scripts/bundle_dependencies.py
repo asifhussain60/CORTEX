@@ -103,7 +103,7 @@ class DependencyBundler:
         ```
     """
 
-    def __init__(self, vendor_dir: Optional[Path] = None):
+    def __init__(self, vendor_dir: Optional[Path] = None) -> None:
         """
         Initialize dependency bundler.
 

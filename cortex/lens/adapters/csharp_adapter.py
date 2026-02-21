@@ -51,7 +51,7 @@ class CSharpAdapter(LanguageAdapter):
         >>> print(f"Language: {result.language}")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize CSharpAdapter with tree-sitter parser.
         
         Handles both tree-sitter 0.20 (PyCapsule) and 0.21+ (Language) APIs.

@@ -38,7 +38,7 @@ class SimilarityChecker:
         is_dup = checker.is_duplicate(new_desc, existing_descs, threshold=0.7)
     """
 
-    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2") -> None:
         """
         Initialize SimilarityChecker.
 

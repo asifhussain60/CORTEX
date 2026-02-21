@@ -44,7 +44,7 @@ class IntentDisambiguator:
     CONFIDENCE_THRESHOLD = 0.7
     MIN_CONFIDENCE_GAP = 0.2
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize disambiguator."""
         self.total_disambiguations: int = 0
         self.ambiguous_cases: int = 0

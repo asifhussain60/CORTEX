@@ -453,13 +453,13 @@ workflow:
             git add \
               cortex/orchestrators/support/test_classifier_orchestrator.py \
               cortex/orchestrators/support/parallel_golden_runner.py \
-              cortex/mcp/tools/health_orchestrator_tool.py \
+              # [STALE-REF] cortex/mcp/tools/health_orchestrator_tool.py \
               cortex-registry/core/governance/skull-rules.yaml \
               cortex-registry/governance/test-promotion-manifest.yaml \
               cortex-registry/planning/phases/planned/phase-49-golden-test-promotion.yaml \
               cortex-registry/workflows/templates/governance/golden-test-promotion.yaml \
               tests/golden/orchestrators/support/test_classifier_golden.py \
-              tests/golden/orchestrators/support/test_parallel_runner_golden.py \
+# [STALE-REF] tests/golden/orchestrators/support/test_parallel_runner_golden.py \
               tests/golden/governance/test_core_055_golden.py
 
         - id: "T2"

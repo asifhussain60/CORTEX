@@ -73,7 +73,8 @@ class DecoratorMetadata:
         class_type: The orchestrator class
         **kwargs: Additional metadata fields
     """
-    def __init__(self, name: str, class_type: Any = None, **kwargs):
+    def __init__(self, name: str, class_type: Any = None, **kwargs) -> None:
+        """Initialize instance."""
         self.name = name
         self.class_type = class_type
         self.__dict__.update(kwargs)

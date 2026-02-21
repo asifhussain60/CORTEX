@@ -219,7 +219,7 @@ class InMemorySynapticNetwork(SynapticNetworkInterface):
     Used for testing and development. Production should use Neo4j.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize in-memory network."""
         self.nodes: Dict[str, SynapticNode] = {}
         self.connections: Dict[str, List[SynapticConnection]] = {}
@@ -341,7 +341,7 @@ class DependencySynapticNetwork:
     Tracks package dependencies, versions, and vulnerabilities.
     """
 
-    def __init__(self, backend: Optional[SynapticNetworkInterface] = None):
+    def __init__(self, backend: Optional[SynapticNetworkInterface] = None) -> None:
         """Initialize dependency network.
 
         Args:
@@ -488,7 +488,7 @@ class ComplianceSynapticNetwork:
     Tracks compliance requirements, violations, and mappings.
     """
 
-    def __init__(self, backend: Optional[SynapticNetworkInterface] = None):
+    def __init__(self, backend: Optional[SynapticNetworkInterface] = None) -> None:
         """Initialize compliance network.
 
         Args:
@@ -546,7 +546,7 @@ class ServiceTopologySynapticNetwork:
     Tracks service relationships, API contracts, and dependencies.
     """
 
-    def __init__(self, backend: Optional[SynapticNetworkInterface] = None):
+    def __init__(self, backend: Optional[SynapticNetworkInterface] = None) -> None:
         """Initialize service topology network.
 
         Args:

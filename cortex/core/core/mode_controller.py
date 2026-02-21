@@ -42,7 +42,7 @@ class ModeController:
     _instance: Optional['ModeController'] = None
     _lock = threading.Lock()
 
-    def __init__(self, mode: Optional[str] = None):
+    def __init__(self, mode: Optional[str] = None) -> None:
         """
         Initialize mode controller.
 

@@ -89,7 +89,8 @@ class LensNode(BaseModel):
 
     @field_validator("id")
     @classmethod
-    def id_not_empty(cls, v):
+    def id_not_empty(cls, v) -> None:
+        """Validate that ID field is not empty."""
         if not v:
             raise ValueError("Node ID cannot be empty")
         return v

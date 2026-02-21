@@ -116,7 +116,7 @@ def get_persona_tools_metadata() -> Dict[str, Any]:
 class WiringManager:
     """Manage wiring configuration for persona system"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize WiringManager"""
         self.agents = self._load_agents()
         self.tools = self._load_tools()

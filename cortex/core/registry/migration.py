@@ -51,7 +51,7 @@ class RegistryMigration:
         ...         validation = migration.validate_migration()
     """
     
-    def __init__(self, registry_root: Path = Path("cortex-registry")):
+    def __init__(self, registry_root: Path = Path("cortex-registry")) -> None:
         """
         Initialize migration tool.
         

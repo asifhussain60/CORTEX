@@ -78,7 +78,7 @@ class GovernanceEnforcer:
     # Audit trail tracking  # CONF-GATE-005
     TRACK_AUDIT_TRAIL = True
     
-    def __init__(self, enforcement_mode: str = 'STRICT'):
+    def __init__(self, enforcement_mode: str = 'STRICT') -> None:
         """
         Initialize governance enforcer.
         
@@ -344,7 +344,7 @@ class GovernanceEnforcer:
 class AuditLogger:
     """Integrates governance audit logging with existing system audit trail."""
     
-    def __init__(self, enforcer: GovernanceEnforcer):
+    def __init__(self, enforcer: GovernanceEnforcer) -> None:
         """Initialize audit logger."""
         self.enforcer = enforcer
         self.external_audit_trail: List[Dict[str, Any]] = []

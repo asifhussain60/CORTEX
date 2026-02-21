@@ -65,7 +65,7 @@ class Core035Enforcer:
         "wiring.yaml": "cortex/core/wiring/specifications/wiring.yaml",
     }
 
-    def __init__(self, cortex_root: Path, verbose: bool = False):
+    def __init__(self, cortex_root: Path, verbose: bool = False) -> None:
         """
         Initialize enforcer.
 

@@ -49,7 +49,7 @@ class AuditImmutability:
         enabled: Whether immutability enforcement is enabled
     """
     
-    def __init__(self, enabled: bool = True):
+    def __init__(self, enabled: bool = True) -> None:
         """Initialize immutability manager.
         
         Args:

@@ -46,7 +46,7 @@ class GraphQuery:
         )
     """
     
-    def __init__(self, storage: GraphStorage):
+    def __init__(self, storage: GraphStorage) -> None:
         """
         Initialize query engine.
         
@@ -326,8 +326,9 @@ class GraphQuery:
             current_id: int,
             visited: Set[int],
             path: List[Tuple[int, str]]
-        ):
+        ) -> None:
             # Stop if we found enough paths
+            """Perform depth-first search traversal."""
             if len(all_paths) >= max_paths:
                 return
             

@@ -22,7 +22,7 @@ class TestExecution:
     status: Optional[str] = None
     duration: float = 0.0
 
-    def complete(self, status: str):
+    def complete(self, status: str) -> None:
         """Mark test as complete."""
         self.end_time = time.time()
         self.status = status
@@ -32,7 +32,7 @@ class TestExecution:
 class CORTEXTestAuditPlugin:
     """Pytest plugin for CORTEX test performance auditing."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize plugin."""
         self.session_start_time = None
         self.test_executions: Dict[str, TestExecution] = {}
@@ -55,18 +55,18 @@ class CORTEXTestAuditPlugin:
 
         return logger
 
-    def pytest_sessionstart(self, session):
+    def pytest_sessionstart(self, session) -> None:
         """Track session start."""
         self.session_start_time = time.time()
         num_tests = session.config.hook.pytest_collection_modifyitems.get_hookimpls()
         self.logger.info("[TEST SESSION START]")
 
-    def pytest_runtest_setup(self, item):
+    def pytest_runtest_setup(self, item) -> None:
         """Track test setup."""
         test_id = item.nodeid
         self.test_executions[test_id] = TestExecution(test_id, time.time())
 
-    def pytest_runtest_logreport(self, report):
+    def pytest_runtest_logreport(self, report) -> None:
         """Track test completion."""
         if report.when != "call":
             return
@@ -100,7 +100,7 @@ class CORTEXTestAuditPlugin:
                 f"VERY SLOW: {test_id} took {execution.duration:.3f}s - INVESTIGATE"
             )
 
-    def pytest_sessionfinish(self, session, exitstatus):
+    def pytest_sessionfinish(self, session, exitstatus) -> None:
         """Generate session report."""
         if not self.session_start_time:
             return
@@ -141,6 +141,6 @@ class CORTEXTestAuditPlugin:
 cortex_test_audit_plugin = CORTEXTestAuditPlugin()
 
 
-def pytest_configure(config):
+def pytest_configure(config) -> None:
     """Register plugin with pytest."""
     config.pluginmanager.register(cortex_test_audit_plugin, name="cortex_test_audit")

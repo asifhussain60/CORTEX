@@ -126,7 +126,7 @@ class PatternMetadata:
 class CustomPatternRegistry:
     """Registry for managing custom pattern definitions."""
 
-    def __init__(self, registry_path: Optional[Path] = None):
+    def __init__(self, registry_path: Optional[Path] = None) -> None:
         """Initialize pattern registry.
 
         Args:

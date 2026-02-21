@@ -36,7 +36,7 @@ class ContextManager:
         contexts: Dictionary mapping session IDs to contexts
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize context manager."""
         self.contexts: Dict[str, ConversationContext] = {}
 

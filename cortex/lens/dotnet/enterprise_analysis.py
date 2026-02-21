@@ -47,7 +47,7 @@ class DatabaseProject:
 class DatabaseProjectAnalyzer:
     """Analyzes SQL Server database projects (.sqlproj)."""
 
-    def __init__(self, solution_root: Path):
+    def __init__(self, solution_root: Path) -> None:
         """Initialize analyzer."""
         self.solution_root = Path(solution_root)
         self.database_projects: Dict[str, DatabaseProject] = {}
@@ -178,7 +178,7 @@ class EntityFrameworkMigrationAnalyzer:
 
     MIGRATION_PATTERN = re.compile(r"(\d{14})_(.+)\.cs$")
 
-    def __init__(self, solution_root: Path):
+    def __init__(self, solution_root: Path) -> None:
         """Initialize analyzer."""
         self.solution_root = Path(solution_root)
         self.db_contexts: Dict[str, DbContext] = {}
@@ -282,7 +282,7 @@ class AzureDevOpsPipeline:
 class AzureDevOpsPipelineAnalyzer:
     """Analyzes Azure DevOps pipelines."""
 
-    def __init__(self, solution_root: Path):
+    def __init__(self, solution_root: Path) -> None:
         """Initialize analyzer."""
         self.solution_root = Path(solution_root)
         self.pipelines: Dict[str, AzureDevOpsPipeline] = {}
@@ -388,7 +388,7 @@ class WCFServiceAnalyzer:
     SERVICE_CONTRACT_PATTERN = re.compile(r"\[ServiceContract\]\s+public\s+interface\s+(\w+)")
     OPERATION_CONTRACT_PATTERN = re.compile(r"\[OperationContract\]\s+(\w+)\s+(\w+)\s*\(([^)]*)\)")
 
-    def __init__(self, solution_root: Path):
+    def __init__(self, solution_root: Path) -> None:
         """Initialize analyzer."""
         self.solution_root = Path(solution_root)
         self.services: Dict[str, WCFService] = {}
@@ -572,7 +572,7 @@ class DotNetRepositoryAnalysis:
 class DotNetRepositoryOnboardingIntegration:
     """Integrates .NET analyzers into repository onboarding."""
 
-    def __init__(self, solution_root: Path):
+    def __init__(self, solution_root: Path) -> None:
         """Initialize integration."""
         self.solution_root = Path(solution_root)
         self.analysis = DotNetRepositoryAnalysis()

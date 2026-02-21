@@ -33,7 +33,7 @@ class LENSAnalyzer:
     **DEPRECATED**: Use LENSOrchestrator instead.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize LENS Analyzer"""
         warnings.warn(
             "LENSAnalyzer is deprecated. Use LENSOrchestrator instead.",

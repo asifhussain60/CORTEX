@@ -114,7 +114,7 @@ class RuleBasedPlanner:
     
     DEFAULT_RULES_FILE = Path(".cortex-runtime/vacuum-rules.yaml")
     
-    def __init__(self, repo_root: Path = Path("."), rules_file: Optional[Path] = None):
+    def __init__(self, repo_root: Path = Path("."), rules_file: Optional[Path] = None) -> None:
         """Initialize planner.
         
         Args:

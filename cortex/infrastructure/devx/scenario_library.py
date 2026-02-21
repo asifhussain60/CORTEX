@@ -188,7 +188,7 @@ class ScenarioSnapshot:
 class ScenarioLibrary:
     """Library of test scenarios."""
 
-    def __init__(self, library_path: Optional[str] = None, auto_save: bool = True):
+    def __init__(self, library_path: Optional[str] = None, auto_save: bool = True) -> None:
         """Initialize scenario library.
 
         Args:

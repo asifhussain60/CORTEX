@@ -198,7 +198,7 @@ class WorkflowTemplateManager:
         tdd-cycle
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize template manager."""
         self._templates: Dict[str, Dict[str, Any]] = {
             "phase-execution": PHASE_EXECUTION_TEMPLATE,

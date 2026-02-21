@@ -116,7 +116,7 @@ class InfrastructureScanner:
         >>> capabilities = scanner.scan_environment(EnvironmentType.PRODUCTION)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize scanner."""
         self.discovery_config = {
             "endpoints": {

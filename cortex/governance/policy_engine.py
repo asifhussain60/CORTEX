@@ -190,7 +190,7 @@ class ComplianceReport:
 class PolicyEngine:
     """Engine for evaluating policies and compliance."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize policy engine."""
         self.policies: Dict[str, PolicyMetadata] = {}
         self._evaluation_history: List[ComplianceReport] = []

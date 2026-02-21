@@ -65,7 +65,7 @@ class OrchestratorInventoryAuditor:
     Generate inventory report (JSON + markdown).
     """
 
-    def __init__(self, cortex_root: Optional[Path] = None):
+    def __init__(self, cortex_root: Optional[Path] = None) -> None:
         """
         Initialize the auditor.
 

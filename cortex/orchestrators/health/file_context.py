@@ -46,6 +46,7 @@ class FileContext:
         all_files: List[Path],
         directories: List[Path],
     ) -> None:
+        """Initialize instance."""
         self.workspace_root = workspace_root
         self.all_files = all_files
         self.directories = directories

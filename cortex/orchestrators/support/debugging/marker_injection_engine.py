@@ -78,7 +78,7 @@ class MarkerInjectionEngine:
         "# === END MARKER ===\n"
     )
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize MarkerInjectionEngine with strategies."""
         self.strategies: Dict[str, AbstractInjectionStrategy] = {
             "test_failure": TestFailureStrategy(),

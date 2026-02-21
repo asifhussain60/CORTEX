@@ -98,3 +98,15 @@ class VacuumOrchestrator:
             "relocations": self.relocations,
             "status": "complete",
         }
+
+    # ------------------------------------------------------------------
+    # Health Check (IOrchestrator protocol)
+    # ------------------------------------------------------------------
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status for wiring-contract validation."""
+        return {
+            "status": "healthy",
+            "orchestrator": "VacuumOrchestrator",
+            "workspace_root": str(self.workspace_root),
+        }

@@ -83,7 +83,7 @@ class GovernanceEnforcer:
     All enforcement decisions are audit-logged.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize enforcer.
         """

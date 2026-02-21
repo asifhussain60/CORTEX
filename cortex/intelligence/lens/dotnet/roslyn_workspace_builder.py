@@ -31,7 +31,7 @@ class RoslynWorkspaceBuilder:
         >>> print(f"Loaded {len(result['projects'])} projects")
     """
     
-    def __init__(self, roslyn_cli_path: Optional[Path] = None):
+    def __init__(self, roslyn_cli_path: Optional[Path] = None) -> None:
         """
         Initialize Roslyn workspace builder.
         

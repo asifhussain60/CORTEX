@@ -145,7 +145,7 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
         >>> print(f"Route: {result.primary_agent_id} + {len(result.secondary_agents)} collaborators")
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize enhanced intent router."""
         self.capability_matcher = CapabilityMatcher()
         self.collaboration_coordinator = AgentCollaborationCoordinator()

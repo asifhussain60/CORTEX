@@ -156,7 +156,7 @@ class RepositoryAnalysisResult:
 class DashboardDataAggregator:
     """Aggregates repository analysis into comprehensive dashboard JSON."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize aggregator."""
         self.logger = logger
 

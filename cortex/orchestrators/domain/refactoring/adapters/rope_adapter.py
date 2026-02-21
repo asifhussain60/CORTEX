@@ -583,6 +583,7 @@ class RopeAdapter(RefactoringToolAdapter):
 
             # Sort imports (stdlib first, then third-party, then local)
             def import_key(imp: tuple) -> tuple:
+                """Return a sort key that groups imports by origin (stdlib/third-party/local)."""
                 import_type, name, _ = imp
                 # Rough heuristic: stdlib has short names, no dots at top level
                 parts = name.split('.')
@@ -783,7 +784,8 @@ class RopeAdapter(RefactoringToolAdapter):
             # Pattern: "...{}...".format(args)
             format_pattern = r'"([^"]*?)"\s*\.\s*format\((.*?)\)'
 
-            def replace_format(match):
+            def replace_format(match: "re.Match[str]") -> str:
+                """Replace a ``.format()`` call with an equivalent f-string."""
                 nonlocal conversions_made
                 string_part = match.group(1)
                 args_part = match.group(2)
@@ -805,7 +807,8 @@ class RopeAdapter(RefactoringToolAdapter):
             # Pattern: "...%s...%d..." % (args)
             percent_pattern = r'"([^"]*?)"\s*%\s*\((.*?)\)'
 
-            def replace_percent(match):
+            def replace_percent(match: "re.Match[str]") -> str:
+                """Replace a ``%``-format expression with an equivalent f-string."""
                 nonlocal conversions_made
                 string_part = match.group(1)
                 args_part = match.group(2)

@@ -58,7 +58,7 @@ class GitLabProvider(RemoteGitProvider):
         session: Requests session with auth
     """
 
-    def __init__(self, config: ProviderConfig):
+    def __init__(self, config: ProviderConfig) -> None:
         """
         Initialize GitLab provider.
 

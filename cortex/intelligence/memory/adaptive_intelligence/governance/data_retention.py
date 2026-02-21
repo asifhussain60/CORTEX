@@ -44,7 +44,7 @@ class DataRetentionPolicy:
 class RetentionManager:
     """Manage data retention policies."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize retention manager."""
         self.policies: Dict[str, DataRetentionPolicy] = {}
     

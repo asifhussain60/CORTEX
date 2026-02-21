@@ -105,7 +105,7 @@ class ParallelismCalculator:
         Speedup: 1.67x
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize calculator with resolver"""
         self.resolver = DependencyResolver()
     

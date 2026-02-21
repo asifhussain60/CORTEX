@@ -117,7 +117,7 @@ class RegistryIntelligenceAgent:
         self,
         workspace_root: Optional[Path] = None,
         enable_learning: bool = True
-    ):
+    ) -> None:
         """
         Initialize registry intelligence agent.
 

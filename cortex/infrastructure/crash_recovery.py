@@ -135,7 +135,8 @@ class WriteAheadLog:
         storage_path: Directory to store WAL files
     """
 
-    def __init__(self, storage_path: Path):
+    def __init__(self, storage_path: Path) -> None:
+        """Initialize instance."""
         self.storage_path = storage_path
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
@@ -245,7 +246,8 @@ class CrashRecovery:
         storage_path: Path,
         state_manager: StateManager,
         checkpoint_interval_operations: int = 1000
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.storage_path = storage_path
         self.storage_path.mkdir(parents=True, exist_ok=True)
 

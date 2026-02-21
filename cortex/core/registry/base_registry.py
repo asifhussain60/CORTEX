@@ -215,7 +215,7 @@ class BaseRegistry(Generic[T], ABC):
         with self._lock:
             return list(self._items.items())
 
-    def filter(self, predicate) -> List[Tuple[str, T]]:
+    def filter(self, predicate: Any) -> List[Tuple[str, T]]:
         """
         Filter items by predicate.
 

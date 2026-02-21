@@ -74,7 +74,7 @@ class TieredLogger:
     _instance: Optional['TieredLogger'] = None
     _lock = threading.Lock()
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize tiered logger.
         """

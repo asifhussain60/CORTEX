@@ -122,7 +122,7 @@ class GuidedWiringOrchestrator:
             print(f"Wiring failed: {result.issues}")
     """
 
-    def __init__(self, cortex_root: Optional[Path] = None, dry_run: bool = False):
+    def __init__(self, cortex_root: Optional[Path] = None, dry_run: bool = False) -> None:
         """Initialize GuidedWiringOrchestrator.
 
         Args:
@@ -576,7 +576,7 @@ if self.{self._to_snake_case(component_name)}:
         return name.lower()
 
 
-def main():
+def main() -> None:
     """CLI entry point for GuidedWiringOrchestrator."""
     import sys
 

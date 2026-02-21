@@ -50,7 +50,7 @@ class KnowledgeMerger:
     AC-PHASE71-005: Incremental knowledge updates with confidence scoring
     """
 
-    def __init__(self, workspace_root: Path):
+    def __init__(self, workspace_root: Path) -> None:
         """
         Initialize knowledge merger.
 

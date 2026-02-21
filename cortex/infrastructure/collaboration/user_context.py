@@ -243,6 +243,7 @@ def require_user_context(func: F) -> F:
     """
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """Execute wrapped function with applied decoration."""
         user = get_current_user()
         if not user.is_authenticated:
             raise PermissionError(
@@ -278,8 +279,10 @@ def require_role(*required_roles: str) -> Callable[[F], F]:
         >>> admin_only_function()  # Raises if user lacks admin/superuser role
     """
     def decorator(func: F) -> F:
+        """Create decorated function wrapper."""
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+            """Execute wrapped function with applied decoration."""
             user = get_current_user()
             if not user.has_any_role(*required_roles):
                 raise PermissionError(

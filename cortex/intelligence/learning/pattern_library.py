@@ -63,7 +63,7 @@ class PatternLibrary:
         self,
         registry_path: Optional[Path] = None,
         similarity_threshold: float = 0.3
-    ):
+    ) -> None:
         """
         Initialize pattern library.
         

@@ -46,7 +46,7 @@ class AntiPatternDetector(BasePatternDetector):
     - Performance: N+1 Queries, Memory Leaks
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize AntiPatternDetector with anti-pattern signatures."""
         self.anti_patterns = {
             "GodObject": {

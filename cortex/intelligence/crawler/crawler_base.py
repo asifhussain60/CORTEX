@@ -38,7 +38,7 @@ class AsyncRepositoryCrawler(ABC):
     with filtering, progress tracking, and cancellation support.
     """
 
-    def __init__(self, config: Optional[CrawlerConfig] = None):
+    def __init__(self, config: Optional[CrawlerConfig] = None) -> None:
         """
         Initialize AsyncRepositoryCrawler.
 

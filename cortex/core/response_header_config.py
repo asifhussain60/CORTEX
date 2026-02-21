@@ -170,8 +170,10 @@ __all__ = [
 # Stub for test compatibility
 class HeaderConfigLoader:
     """Load header configurations."""
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.configs = {}
 
-    def load(self, config_path):
+    def load(self, config_path: object) -> dict:
+        """Load header configuration from *config_path*."""
         return {}

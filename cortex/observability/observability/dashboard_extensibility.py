@@ -218,7 +218,7 @@ def enrich_batch_context(
 
 
 # Decorator for automatic dashboard enrichment
-def with_business_context(context_id_kwarg: str = "context_id"):
+def with_business_context(context_id_kwarg: str = "context_id") -> None:
     """
     Decorator to automatically enrich function results with business context.
 
@@ -227,9 +227,11 @@ def with_business_context(context_id_kwarg: str = "context_id"):
         def get_metrics(context_id=None):
             return metric_data
     """
-    def decorator(func):
+    def decorator(func) -> None:
+        """Create decorated function wrapper."""
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs) -> None:
+            """Execute wrapped function with applied decoration."""
             result = func(*args, **kwargs)
             context_id = kwargs.get(context_id_kwarg)
 

@@ -49,7 +49,7 @@ class TrackParallelizationStrategy(ExecutionStrategy):
     resource constraints and failure isolation.
     """
     
-    def __init__(self, config: Optional[TrackParallelizationConfig] = None):
+    def __init__(self, config: Optional[TrackParallelizationConfig] = None) -> None:
         """
         Initialize track parallelization strategy.
         

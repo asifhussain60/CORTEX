@@ -53,7 +53,7 @@ class Span:
 class ObservabilityInstrument:
     """Instruments code for observability with metrics and tracing."""
 
-    def __init__(self, service_name: str = "cortex"):
+    def __init__(self, service_name: str = "cortex") -> None:
         """Initialize observability instrument.
 
         Args:
@@ -163,7 +163,9 @@ class ObservabilityInstrument:
             Decorator function
         """
         def decorator(func: Callable) -> Callable:
+            """Wrap a function with span tracking."""
             def wrapper(*args: Any, **kwargs: Any) -> Any:
+                """Execute the wrapped function inside a traced span."""
                 span_id = self.start_span(operation)
                 try:
                     result = func(*args, **kwargs)

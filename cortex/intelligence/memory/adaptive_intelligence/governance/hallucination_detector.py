@@ -78,7 +78,7 @@ class HallucinationDetector:
     - Confidence scoring
     """
     
-    def __init__(self, confidence_threshold: float = 0.75):
+    def __init__(self, confidence_threshold: float = 0.75) -> None:
         """Initialize the detector.
         
         Args:

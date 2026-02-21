@@ -170,7 +170,7 @@ class HybridIntentRouter:
         semantic_threshold: float = 0.6,
         enable_semantic: bool = True,
         enable_llm_fallback: bool = False,  # Disabled by default (costly)
-    ):
+    ) -> None:
         """
         Initialize hybrid intent router.
 

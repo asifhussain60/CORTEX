@@ -42,7 +42,7 @@ class GovernanceAuditor:
         self, 
         repo_path: Optional[Path] = None,
         registry_path: Optional[Path] = None
-    ):
+    ) -> None:
         """
         Initialize governance auditor.
         

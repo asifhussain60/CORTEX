@@ -62,7 +62,7 @@ class EventReplayDebugger:
     distributed workflows, multi-cycle TDD, and orchestrator communication.
     """
     
-    def __init__(self, log_file: str):
+    def __init__(self, log_file: str) -> None:
         """
         Initialize event replay debugger.
         

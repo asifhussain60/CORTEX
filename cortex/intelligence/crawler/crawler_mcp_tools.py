@@ -78,7 +78,7 @@ class CrawlerCLI:
     Command-line interface for crawler operations.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize CrawlerCLI."""
         self.commands = {
             "crawl": self._crawl_command,

@@ -62,8 +62,8 @@ class TemplateEngineRegistry:
         return cls._instance
 
     @classmethod
-    def reset_instance(cls):
-        """Reset instance for testing"""
+    def reset_instance(cls) -> None:
+        """Reset instance for testing."""
         cls._instance = None
         cls._templates = {}
         cls._template_contents = {}
@@ -131,7 +131,7 @@ class TemplateEngine:
     - Conditional blocks: {%if condition%}...{%endif%}
     """
 
-    def __init__(self, template_dir: Optional[str] = None):
+    def __init__(self, template_dir: Optional[str] = None) -> None:
         """
         Initialize template engine.
 

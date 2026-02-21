@@ -88,7 +88,7 @@ class MSBuildProjectReferenceResolver:
         "infrastructure": ["infra", "config", "utils", "common"],
     }
 
-    def __init__(self, solution_root: Path):
+    def __init__(self, solution_root: Path) -> None:
         """Initialize resolver with solution root path.
 
         Args:

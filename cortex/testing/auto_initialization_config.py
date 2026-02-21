@@ -210,7 +210,7 @@ class AutoInitializationConfig:
         }
 
 
-def install_auto_initialization_hooks():
+def install_auto_initialization_hooks() -> None:
     """
     Install hooks into CORTEX system to enable auto-initialization
     Called once during system startup
@@ -228,20 +228,20 @@ def install_auto_initialization_hooks():
     print("   Configuration: ", AutoInitializationConfig.to_dict())
 
 
-def disable_auto_initialization():
+def disable_auto_initialization() -> None:
     """Disable auto-initialization (for testing/debugging)"""
     AutoInitializationConfig.ENABLED = False
     print("⚠️  Auto-initialization DISABLED")
 
 
-def enable_auto_initialization():
+def enable_auto_initialization() -> None:
     """Enable auto-initialization"""
     AutoInitializationConfig.ENABLED = True
     print("✅ Auto-initialization ENABLED")
 
 
 # Auto-initialization entry point called by CORTEX Total Recall prompt
-async def execute_auto_initialization():
+async def execute_auto_initialization() -> None:
     """
     Main auto-initialization entry point
     Called automatically by cortex-total-recall.prompt.md

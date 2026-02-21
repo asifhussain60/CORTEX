@@ -610,7 +610,7 @@ phase_status:
       implementation_files:
         - "cortex/orchestrators/support/test_classifier_orchestrator.py"
         - "cortex/orchestrators/support/parallel_golden_runner.py"
-        - "cortex/mcp/tools/health_orchestrator_tool.py (classify op added)"
+        # [STALE-REF] - "cortex/mcp/tools/health_orchestrator_tool.py (classify op added)"
       plan_artifacts:
         - "cortex-registry/planning/phases/planned/phase-49-golden-test-promotion.yaml"
         - "cortex-registry/governance/test-promotion-manifest.yaml"

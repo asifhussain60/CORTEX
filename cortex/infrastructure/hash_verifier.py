@@ -54,7 +54,7 @@ class HashVerifier:
     instantly detectable.
     """
 
-    def __init__(self, cache_size: int = 1000):
+    def __init__(self, cache_size: int = 1000) -> None:
         """
         Initialize hash verifier.
 
@@ -274,7 +274,7 @@ class HashVerifier:
             'verification_timestamp': datetime.now(timezone.utc).isoformat(),
         }
 
-    def cache_verification(self, key: str, result: bool):
+    def cache_verification(self, key: str, result: bool) -> None:
         """
         Cache verification result.
 
@@ -302,7 +302,7 @@ class HashVerifier:
         """
         return self._verification_cache.get(key)
 
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """Clear verification cache."""
         self._verification_cache.clear()
         self._cache_order.clear()

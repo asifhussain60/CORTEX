@@ -323,7 +323,7 @@ class IsolationCleanupManager:
             visited = set()
             order = []
             
-            def visit(name: str):
+            def visit(name: str) -> None:
                 """DFS visit without lock re-acquisition."""
                 if name in visited:
                     return
@@ -490,7 +490,8 @@ if __name__ == "__main__":
     print(f"Invalid scope 'invalid': {isolation.is_valid_fixture_scope('invalid')}")
     
     # Test cleanup handler registration
-    def cleanup():
+    def cleanup() -> None:
+        """Perform cleanup of resources."""
         print("Cleanup executed")
     
     print(f"Handler registered: {isolation.register_cleanup_handler(cleanup)}")

@@ -77,13 +77,13 @@ class DependencyGraph:
     adjacency: Dict[str, List[str]] = field(default_factory=dict)
     in_degree: Dict[str, int] = field(default_factory=dict)
 
-    def add_spec(self, spec: OrchestrationSpec):
+    def add_spec(self, spec: OrchestrationSpec) -> None:
         """Add orchestrator spec to graph."""
         self.specs[spec.name] = spec
         self.adjacency[spec.name] = spec.dependencies
         self.in_degree[spec.name] = 0
 
-    def compute_in_degrees(self):
+    def compute_in_degrees(self) -> None:
         """Compute in-degree for each node."""
         for name in self.specs:
             self.in_degree[name] = 0
@@ -190,7 +190,7 @@ class OrchestratorFactory:
         7. Audit trail logging (AC_START → AC_COMPLETE)
     """
 
-    def __init__(self, wiring_spec_path: str = "cortex/core/wiring/specifications/wiring.yaml"):
+    def __init__(self, wiring_spec_path: str = "cortex/core/wiring/specifications/wiring.yaml") -> None:
         """Initialize factory with wiring specification path."""
         self.wiring_spec_path = Path(wiring_spec_path)
         self.specs: Dict[str, OrchestrationSpec] = {}
@@ -432,7 +432,7 @@ class OrchestratorFactory:
 
         return health_results
 
-    def register_event_subscriptions(self):
+    def register_event_subscriptions(self) -> None:
         """
         Register event subscriptions from wiring specification.
 

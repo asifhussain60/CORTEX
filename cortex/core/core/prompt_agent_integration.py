@@ -87,7 +87,7 @@ class AgentLoader:
         "DESIGN": "ArchitectAgent",
     }
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize agent loader."""
         self._loaded_agents: Dict[str, Any] = {}
         logger.info("AgentLoader initialized")
@@ -221,7 +221,7 @@ class PromptAgentIntegration:
     and exit gate validation.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize integration system."""
         self.formatter = ResponseFormat()
         self.agent_loader = AgentLoader()

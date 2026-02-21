@@ -25,7 +25,7 @@ from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
-def governance_enforced(ac_id: str, phase: Optional[str] = None):
+def governance_enforced(ac_id: str, phase: Optional[str] = None) -> Callable:
     """
     Decorator: @governance_enforced
 
@@ -48,8 +48,10 @@ def governance_enforced(ac_id: str, phase: Optional[str] = None):
         Decorator function
     """
     def decorator(func: Callable) -> Callable:
+        """Wrap *func* with governance enforcement."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Result[Any]:
+            """Enforce governance rules before executing *func*."""
             # Initialize enforcer
             enforcer = GovernanceEnforcer()
 
@@ -78,7 +80,7 @@ def governance_enforced(ac_id: str, phase: Optional[str] = None):
 def audit_logged(
     ac_id: str,
     operation: str = "EXECUTE",
-):
+) -> Callable:
     """
     Decorator: @audit_logged
 
@@ -101,8 +103,10 @@ def audit_logged(
         Decorator function
     """
     def decorator(func: Callable) -> Callable:
+        """Wrap *func* with audit logging."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Result[Any]:
+            """Log the operation to the audit trail before/after *func*."""
             # Execute function
             try:
                 result = func(*args, **kwargs)
@@ -144,7 +148,7 @@ def governance_with_audit(
     ac_id: str,
     operation: str = "EXECUTE",
     phase: Optional[str] = None,
-):
+) -> Callable:
     """
     Composite decorator: @governance_with_audit
 
@@ -168,8 +172,10 @@ def governance_with_audit(
         Decorator function
     """
     def decorator(func: Callable) -> Callable:
+        """Wrap *func* with governance enforcement and audit logging."""
         @functools.wraps(func)
         def wrapper(*args, **kwargs) -> Result[Any]:
+            """Enforce governance and log audit before executing *func*."""
             # Initialize enforcer for governance check
             enforcer = GovernanceEnforcer()
 

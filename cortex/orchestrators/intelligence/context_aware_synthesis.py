@@ -58,7 +58,7 @@ class ContextAwareSynthesisGateway:
         repo_path: Path,
         company_path: Optional[Path] = None,
         config: Optional[SynthesisConfig] = None
-    ):
+    ) -> None:
         """
         Initialize synthesis gateway.
         

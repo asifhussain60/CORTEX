@@ -28,6 +28,7 @@ class ExpertRegistry:
     """Registry of domain experts with expertise area mapping."""
 
     def __init__(self, registry_path: Optional[str] = None) -> None:
+        """Initialise expert registry from YAML file."""
         self._path = Path(registry_path) if registry_path else _REGISTRY_PATH
         self._experts: Optional[List[Expert]] = None
 
@@ -50,18 +51,22 @@ class ExpertRegistry:
         return self._experts
 
     def get_all_experts(self) -> List[Expert]:
+        """Return all registered experts."""
         return self._load()
 
     def find_by_domain(self, domain: str) -> List[Expert]:
+        """Find experts by domain specialisation."""
         return [e for e in self._load() if domain in e.domains]
 
     def get_expert(self, expert_id: str) -> Optional[Expert]:
+        """Retrieve a single expert by ID."""
         for e in self._load():
             if e.id == expert_id:
                 return e
         return None
 
     def register(self, expert: Expert) -> bool:
+        """Register a new domain expert."""
         experts = self._load()
         experts.append(expert)
         self._experts = experts
@@ -78,5 +83,6 @@ class ExpertRegistry:
         return True
 
     def get_validation_workflow(self, expert_id: str) -> Optional[str]:
+        """Get the validation workflow for an expert."""
         expert = self.get_expert(expert_id)
         return expert.validation_workflow if expert else None

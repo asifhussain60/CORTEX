@@ -25,7 +25,8 @@ class YAMLValidator:
         "tags"
     ]
     
-    def __init__(self, knowledge_dir: Path):
+    def __init__(self, knowledge_dir: Path) -> None:
+        """Initialize instance."""
         self.knowledge_dir = knowledge_dir
         self.errors: List[str] = []
         self.warnings: List[str] = []
@@ -80,7 +81,7 @@ class YAMLValidator:
             self.errors.append(f"{yaml_file.name}: Validation error: {e}")
             return False
     
-    def validate_metadata(self, yaml_file: Path, data: Dict[str, Any]):
+    def validate_metadata(self, yaml_file: Path, data: Dict[str, Any]) -> None:
         """Validate metadata section."""
         if "metadata" not in data:
             self.errors.append(f"{yaml_file.name}: Missing 'metadata' section")
@@ -107,7 +108,7 @@ class YAMLValidator:
             elif len(metadata["tags"]) == 0:
                 self.warnings.append(f"{yaml_file.name}: metadata.tags is empty")
     
-    def validate_content(self, yaml_file: Path, data: Dict[str, Any]):
+    def validate_content(self, yaml_file: Path, data: Dict[str, Any]) -> None:
         """Validate main content sections."""
         # At least one of these sections should exist
         content_sections = ["patterns", "anti_patterns", "best_practices", "security_controls"]
@@ -117,7 +118,7 @@ class YAMLValidator:
         if not has_content:
             self.warnings.append(f"{yaml_file.name}: No content sections (patterns/anti_patterns/best_practices)")
     
-    def validate_references(self, yaml_file: Path, data: Dict[str, Any]):
+    def validate_references(self, yaml_file: Path, data: Dict[str, Any]) -> None:
         """Validate references section if present."""
         if "references" not in data:
             self.warnings.append(f"{yaml_file.name}: No references section")
@@ -141,7 +142,7 @@ class YAMLValidator:
                 self.errors.append(f"{yaml_file.name}: references[{idx}] URL must start with http(s)")
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     knowledge_dir = Path(__file__).parent.parent.parent / "knowledge" / "best-practices"
     

@@ -433,6 +433,7 @@ class ConfigurationDiscovery(DiscoveryPlugin):
 
         # Recursively search for URL-like values
         def search_urls(data: Any) -> None:
+            """Search for URLs in configuration."""
             if isinstance(data, dict):
                 for key, value in data.items():
                     if isinstance(value, str):

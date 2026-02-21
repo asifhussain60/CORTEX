@@ -58,7 +58,7 @@ class RecommendationGate:
         self,
         registry_path: str = "cortex-registry/_cortex-master",
         risk_threshold: float = 0.7
-    ):
+    ) -> None:
         """
         Initialize recommendation gate.
         

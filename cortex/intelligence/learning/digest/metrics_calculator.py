@@ -510,6 +510,7 @@ class MetricsCalculator:
             Dict with improvement percentages and verdict
         """
         def calc_improvement(current: float, baseline: float) -> float:
+            """Calculate improvement metrics."""
             if baseline == 0:
                 return 0.0
             return ((current - baseline) / baseline) * 100

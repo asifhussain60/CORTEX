@@ -35,10 +35,12 @@ class CortexGenerateTests(ConsolidatedTool):
     
     @property
     def name(self) -> str:
+        """The unique tool name identifier."""
         return "cortex_generate_tests"
     
     @property
     def description(self) -> str:
+        """Human-readable description of the tool."""
         return (
             "Generate intelligent test suites using multi-strategy analysis. "
             "Detects blind spots, edge cases, and security vulnerabilities. "
@@ -47,10 +49,12 @@ class CortexGenerateTests(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
+        """The tool category for registry classification."""
         return ToolCategory.OPERATIONS
     
     @property
     def parameters(self) -> List[ToolParameter]:
+        """List of parameters accepted by the tool."""
         return [
             ToolParameter(
                 name="target",

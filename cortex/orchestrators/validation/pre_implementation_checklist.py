@@ -91,7 +91,7 @@ class PreImplementationChecklist:
         ...         print(f"{category}: {result.issues}")
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize checklist with 12 category validators."""
         self.categories = [
             "security",

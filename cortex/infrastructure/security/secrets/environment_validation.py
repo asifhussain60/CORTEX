@@ -30,7 +30,7 @@ class EnvironmentValidator:
     - Custom: user-defined validator functions
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize validator."""
         self.validators: Dict[str, Callable] = {}
         self.required_vars: List[str] = []

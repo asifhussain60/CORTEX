@@ -36,7 +36,8 @@ class PlanningOrchestrator(IOrchestrator):
     - LENS-enriched planning
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize instance."""
         self.phases: Dict[str, PhaseNode] = {}
         self.lens_enabled = True
 

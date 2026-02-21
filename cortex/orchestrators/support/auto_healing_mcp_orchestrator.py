@@ -76,7 +76,7 @@ class AutoHealingMCPOrchestrator:
     6. Retry MCP availability check
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize orchestrator."""
         self.is_windows = platform.system() == "Windows"
         self.is_macos = platform.system() == "Darwin"

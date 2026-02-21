@@ -83,7 +83,7 @@ class MCPSelfHealing:
                 # Retry operation
     """
     
-    def __init__(self, registry_path: Optional[str] = None):
+    def __init__(self, registry_path: Optional[str] = None) -> None:
         """
         Initialize self-healing system.
         

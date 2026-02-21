@@ -47,7 +47,7 @@ class DistributedLock:
     _instance: Optional['DistributedLock'] = None
     _lock = threading.Lock()
 
-    def __init__(self, db_manager: Optional[DatabaseManager] = None):
+    def __init__(self, db_manager: Optional[DatabaseManager] = None) -> None:
         """
         Initialize lock manager.
 
@@ -161,7 +161,7 @@ class DistributedLock:
             return Err(f"Lock release failed: {str(e)}")
 
     @contextmanager
-    def lock(self, resource: str, timeout: float = 30.0):
+    def lock(self, resource: str, timeout: float = 30.0) -> Any:
         """
         Context manager for distributed locks.
 

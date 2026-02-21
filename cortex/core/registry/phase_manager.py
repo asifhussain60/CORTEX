@@ -64,7 +64,7 @@ class PhaseSyncStatus:
     dashboard_passed: bool
     failures: List[str]
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize with default values."""
         self.all_synced = False
         self.registry_passed = False
@@ -117,7 +117,7 @@ class PhaseManager:
     MEDIUM_ROI_THRESHOLD = 0.60
     LOW_ROI_THRESHOLD = 0.40
 
-    def __init__(self, registry_root: str = "cortex-registry/_cortex-master"):
+    def __init__(self, registry_root: str = "cortex-registry/_cortex-master") -> None:
         """
         Initialize PhaseManager.
 

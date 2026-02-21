@@ -99,7 +99,7 @@ class CheckpointManager:
     _lock = threading.Lock()
     _instance_lock = threading.Lock()
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize checkpoint manager (private - use instance() instead)."""
         self._checkpoints: Dict[str, Checkpoint] = {}
         self._operation_contexts: Dict[str, Dict[str, Any]] = {}

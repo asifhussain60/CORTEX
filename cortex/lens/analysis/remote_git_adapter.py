@@ -117,7 +117,7 @@ class RemoteGitProvider(ABC):
     remote repository analysis via LENS.
     """
 
-    def __init__(self, config: ProviderConfig):
+    def __init__(self, config: ProviderConfig) -> None:
         """
         Initialize provider with configuration.
 
@@ -285,7 +285,7 @@ class RemoteGitAdapter:
         ```
     """
 
-    def __init__(self, provider: RemoteGitProvider):
+    def __init__(self, provider: RemoteGitProvider) -> None:
         """
         Initialize adapter with provider.
 

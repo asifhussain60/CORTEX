@@ -16,7 +16,7 @@ from pathlib import Path
 import yaml
 
 
-async def kickoff_phase_57():
+async def kickoff_phase_57() -> bool:
     """
     Autonomous execution of Phase 57: Architectural Pattern Detection
     """

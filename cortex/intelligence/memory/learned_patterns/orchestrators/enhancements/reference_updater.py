@@ -93,7 +93,7 @@ class ReferenceScanner:
         "code_fence": r"```([a-zA-Z0-9_/-]+)```",
     }
     
-    def __init__(self, repo_root: Path = Path(".")):
+    def __init__(self, repo_root: Path = Path(".")) -> None:
         """Initialize scanner.
         
         Args:
@@ -221,7 +221,7 @@ class ReferenceScanner:
 class ReferenceUpdater:
     """Update all references when files are moved."""
     
-    def __init__(self, repo_root: Path = Path(".")):
+    def __init__(self, repo_root: Path = Path(".")) -> None:
         """Initialize updater.
         
         Args:

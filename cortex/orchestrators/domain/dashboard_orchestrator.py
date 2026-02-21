@@ -53,7 +53,7 @@ class DashboardOrchestrator(OrchestratorProtocolMixin, ABC):
     - TDDOrchestrator: Include in test suite
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize DashboardOrchestrator"""
         self.logger = logging.getLogger(__name__)
         self.cache: Dict[str, Path] = {}
@@ -304,7 +304,7 @@ def get_dashboard_orchestrator() -> DashboardOrchestrator:
     if _dashboard_orchestrator_instance is None:
         # Create concrete implementation
         class DashboardOrchestratorImpl(DashboardOrchestrator):
-            pass
+            """Concrete default implementation of DashboardOrchestrator."""
 
         _dashboard_orchestrator_instance = DashboardOrchestratorImpl()
 

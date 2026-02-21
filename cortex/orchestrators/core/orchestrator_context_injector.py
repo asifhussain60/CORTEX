@@ -56,6 +56,7 @@ def inject_orchestrator_context(func: Callable) -> Callable:
     """
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """Invoke the original function with injected orchestrator context."""
         # Stub - just call the original function
         return func(*args, **kwargs)
     

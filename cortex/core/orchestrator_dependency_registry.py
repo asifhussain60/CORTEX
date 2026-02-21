@@ -168,7 +168,7 @@ class OrchestratorDependencyRegistry:
     - Enabling orchestrator composition
     """
 
-    def __init__(self, storage_path: Optional[Path] = None):
+    def __init__(self, storage_path: Optional[Path] = None) -> None:
         """
         Initialize the dependency registry.
 
@@ -398,6 +398,7 @@ class OrchestratorDependencyRegistry:
         rec_stack = set()
 
         def dfs(node: str, path: List[str]) -> None:
+            """DFS traversal to detect circular dependencies."""
             visited.add(node)
             rec_stack.add(node)
             path.append(node)

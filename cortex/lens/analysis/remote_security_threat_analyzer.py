@@ -66,7 +66,7 @@ class RemoteSecurityThreatAnalyzer(SecurityThreatAnalyzer):
         >>> print(f"Risk Score: {result.risk_score}/10")
     """
 
-    def __init__(self, github_token: Optional[str] = None):
+    def __init__(self, github_token: Optional[str] = None) -> None:
         """
         Initialize RemoteSecurityThreatAnalyzer.
 

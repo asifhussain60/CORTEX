@@ -88,7 +88,7 @@ class FormattedResponse:
 class LENSResponseFormatter:
     """Formatter for comprehension responses."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the response formatter."""
         self.sort_challenges_by_severity = True
         self.sort_recommendations_by_priority = True

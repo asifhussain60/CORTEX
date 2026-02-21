@@ -59,7 +59,7 @@ class DeploymentConfig:
 class BlueGreenDeploymentManager:
     """Manage blue-green deployments."""
 
-    def __init__(self, config: DeploymentConfig):
+    def __init__(self, config: DeploymentConfig) -> None:
         """Initialize deployment manager.
 
         Args:

@@ -111,7 +111,7 @@ class ProvenanceTracker:
     - What evidence supports each AC-ID
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize provenance tracker."""
         self._provenance_entries: Dict[str, List[ProvenanceEntry]] = {}
         self._evidence_bundles: Dict[str, List[EvidenceBundle]] = {}

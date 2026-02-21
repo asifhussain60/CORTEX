@@ -146,7 +146,7 @@ class TopologyExporter:
         >>> exporter.export(topology, Path("topology.yaml"), ExportFormat.YAML)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize topology exporter."""
         self.mermaid_generator = MermaidGenerator()
         self.plantuml_generator = PlantUMLGenerator()

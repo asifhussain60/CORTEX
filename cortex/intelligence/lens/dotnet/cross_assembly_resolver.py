@@ -30,7 +30,7 @@ class CrossAssemblyResolver:
         >>> print(graph)  # {"Core": ["Infrastructure", "Domain"]}
     """
     
-    def __init__(self, solution_data: Dict[str, Any]):
+    def __init__(self, solution_data: Dict[str, Any]) -> None:
         """
         Initialize resolver with solution data.
         
@@ -149,7 +149,7 @@ class CrossAssemblyResolver:
         graph = self.build_assembly_graph()
         cycles = []
         
-        def dfs(node: str, path: List[str], visited: Set[str]):
+        def dfs(node: str, path: List[str], visited: Set[str]) -> None:
             """DFS to find cycles."""
             if node in visited:
                 # Found cycle

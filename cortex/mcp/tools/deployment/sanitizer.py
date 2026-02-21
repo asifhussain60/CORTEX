@@ -16,7 +16,7 @@ import sqlite3
 class Sanitizer:
     """Sanitize governance.db for deployment."""
     
-    def __init__(self, db_path: str = "cortex_intelligence/governance/governance.db"):
+    def __init__(self, db_path: str = "cortex_intelligence/governance/governance.db") -> None:
         """Initialize sanitizer.
         
         Args:

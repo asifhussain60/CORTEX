@@ -71,7 +71,7 @@ def prioritize_violations(violations: List) -> Dict[str, List[Dict]]:
     return prioritized
 
 
-def main():
+def main() -> None:
     """Generate naming migration inventory."""
     print("Scanning workspace for CORE-028 violations...")
 

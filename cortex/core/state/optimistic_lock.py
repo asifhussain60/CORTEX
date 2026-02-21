@@ -78,7 +78,7 @@ class OptimisticLockManager:
     Provides automatic retry and configurable merge strategies.
     """
 
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str) -> None:
         """
         Initialize optimistic lock manager.
 

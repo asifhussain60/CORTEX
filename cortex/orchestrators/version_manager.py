@@ -41,6 +41,7 @@ class VersionManager:
     PYPI_API = "https://pypi.org/pypi/cortex/json"
 
     def __init__(self, base_path: Path) -> None:
+        """Initialize instance."""
         self.base_path = Path(base_path)
 
     # ── Current version detection ────────────────────────────────────

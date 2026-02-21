@@ -29,6 +29,7 @@ class KnowledgeIndexer:
     """Maintains a SQLite index of knowledge entries."""
 
     def __init__(self, db_path: Optional[str] = None) -> None:
+        """Initialise knowledge indexer with SQLite backend."""
         if db_path:
             self._db_path = Path(db_path)
         else:
@@ -52,6 +53,7 @@ class KnowledgeIndexer:
             conn.commit()
 
     def index_entry(self, entry: IndexEntry) -> bool:
+        """Index a knowledge entry in the database."""
         with sqlite3.connect(str(self._db_path)) as conn:
             import json
             conn.execute("""
@@ -67,6 +69,7 @@ class KnowledgeIndexer:
         return True
 
     def search(self, query: str, domain: Optional[str] = None) -> List[IndexEntry]:
+        """Search indexed entries by query string and optional domain."""
         with sqlite3.connect(str(self._db_path)) as conn:
             import json
             if domain:
@@ -89,10 +92,13 @@ class KnowledgeIndexer:
             ]
 
     def get_by_ac_id(self, ac_id: str) -> List[IndexEntry]:
+        """Retrieve entries matching an AC identifier."""
         return self.search(ac_id)
 
     def get_by_domain(self, domain: str) -> List[IndexEntry]:
+        """Retrieve all entries for a domain."""
         return self.search("", domain=domain)
 
     def get_index_file(self) -> Path:
+        """Return the path to the SQLite index file."""
         return self._db_path

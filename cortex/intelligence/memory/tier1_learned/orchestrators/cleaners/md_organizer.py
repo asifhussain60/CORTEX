@@ -44,6 +44,7 @@ class MDOrganizerCleaner(CleanerInterface):
     """Specialized cleaner for Markdown files."""
 
     def __init__(self, config: Dict[str, Any]) -> None:
+        """Initialise MDOrganizerCleaner."""
         super().__init__(config)
         self._md_name = "MDOrganizerCleaner"
         self._md_version = "1.0.0"
@@ -55,14 +56,17 @@ class MDOrganizerCleaner(CleanerInterface):
 
     @property
     def name(self) -> str:
+        """The orchestrator name."""
         return self._md_name
 
     @property
     def version(self) -> str:
+        """The orchestrator version."""
         return self._md_version
 
     @property
     def domain(self) -> str:
+        """The orchestrator domain."""
         return self._md_domain
 
     def _scan_md_files(self) -> Dict[str, Path]:

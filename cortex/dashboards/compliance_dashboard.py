@@ -23,7 +23,7 @@ from cortex.mcp.tools.policy_tools import get_policy_mcp_tools
 class ComplianceDashboard:
     """Generator for compliance governance dashboard."""
 
-    def __init__(self, output_path: Path = None):
+    def __init__(self, output_path: Path = None) -> None:
         """Initialize dashboard generator.
 
         Args:

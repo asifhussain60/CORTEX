@@ -103,7 +103,7 @@ class DashboardGenerator:
         "LAST_UPDATED": "{{LAST_UPDATED}}",
     }
 
-    def __init__(self, registry_root: str = "cortex-registry/_cortex-master"):
+    def __init__(self, registry_root: str = "cortex-registry/_cortex-master") -> None:
         """
         Initialize DashboardGenerator.
 

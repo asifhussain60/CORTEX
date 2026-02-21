@@ -30,13 +30,13 @@ from cortex.infrastructure.pre_commit_validator import (
 class TestHealthCheckStage:
     """Stage 1: Quick health check (sub-200ms)"""
 
-    def test_health_check_returns_result(self):
+    def test_health_check_returns_result(self) -> None:
         """Health check should return a HealthCheckResult"""
         validator = PreCommitValidator()
         result = validator.quick_health_check()
         assert isinstance(result, HealthCheckResult)
 
-    def test_health_check_detects_wiring_error(self):
+    def test_health_check_detects_wiring_error(self) -> None:
         """Health check should detect wiring configuration errors"""
         validator = PreCommitValidator()
 
@@ -52,7 +52,7 @@ class TestHealthCheckStage:
 class TestWiringValidationStage:
     """Stage 2: Full wiring validation"""
 
-    def test_full_validation_returns_result(self):
+    def test_full_validation_returns_result(self) -> None:
         """Full validation should return a WiringValidationResult"""
         validator = PreCommitValidator()
         result = validator.full_wiring_validation()
@@ -62,7 +62,7 @@ class TestWiringValidationStage:
 class TestHybridSmartGate:
     """Hybrid gate logic"""
 
-    def test_hybrid_gate_allows_commit_on_healthy_status(self):
+    def test_hybrid_gate_allows_commit_on_healthy_status(self) -> None:
         """Hybrid gate should allow commit if health check passes"""
         validator = PreCommitValidator()
 
@@ -82,7 +82,7 @@ class TestHybridSmartGate:
 class TestPreCommitConfig:
     """YAML-based configuration"""
 
-    def test_config_loads_defaults(self):
+    def test_config_loads_defaults(self) -> None:
         """Config should load defaults when no YAML file exists"""
         config = PreCommitConfig.from_yaml('/nonexistent/path.yaml')
 
@@ -93,7 +93,7 @@ class TestPreCommitConfig:
 class TestAuditTrail:
     """CORE-027: Audit trail for pre-commit operations"""
 
-    def test_audit_logger_records_decisions(self):
+    def test_audit_logger_records_decisions(self) -> None:
         """Audit logger should record decisions"""
         with tempfile.NamedTemporaryFile(suffix='.jsonl', delete=False) as f:
             logger = PreCommitAuditLogger(log_path=f.name)

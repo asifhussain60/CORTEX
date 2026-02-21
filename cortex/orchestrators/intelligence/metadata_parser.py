@@ -64,7 +64,7 @@ class AgentMetadata:
 class AgentMetadataParser:
     """Parse and manage agent metadata from markdown files."""
     
-    def __init__(self, agents_dir: str = ".github/agents/core"):
+    def __init__(self, agents_dir: str = ".github/agents/core") -> None:
         """Initialize parser with agents directory."""
         self.agents_dir = agents_dir
         self._metadata_cache: Dict[str, AgentMetadata] = {}
@@ -294,7 +294,7 @@ class AgentMetadataParser:
         
         return None
     
-    def clear_cache(self):
+    def clear_cache(self) -> None:
         """Clear metadata cache."""
         self._metadata_cache.clear()
         self._cache_time.clear()

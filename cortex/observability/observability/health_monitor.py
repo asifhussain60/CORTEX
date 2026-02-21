@@ -54,7 +54,8 @@ class HealthCheck:
         name: str,
         component: str,
         timeout_seconds: float = 5.0
-    ):
+    ) -> None:
+        """Initialise HealthCheck."""
         self.name = name
         self.component = component
         self.timeout_seconds = timeout_seconds
@@ -67,7 +68,8 @@ class HealthCheck:
 class DatabaseHealthCheck(HealthCheck):
     """Health check for database connectivity."""
 
-    def __init__(self, db_connection=None):
+    def __init__(self, db_connection=None) -> None:
+        """Initialise DatabaseHealthCheck."""
         super().__init__("database_check", "database")
         self.db_connection = db_connection
 
@@ -113,7 +115,8 @@ class DatabaseHealthCheck(HealthCheck):
 class MemoryHealthCheck(HealthCheck):
     """Health check for memory usage."""
 
-    def __init__(self, threshold_percent: float = 80.0):
+    def __init__(self, threshold_percent: float = 80.0) -> None:
+        """Initialise MemoryHealthCheck."""
         super().__init__("memory_check", "memory")
         self.threshold_percent = threshold_percent
 
@@ -166,7 +169,8 @@ class MemoryHealthCheck(HealthCheck):
 class CPUHealthCheck(HealthCheck):
     """Health check for CPU usage."""
 
-    def __init__(self, threshold_percent: float = 85.0):
+    def __init__(self, threshold_percent: float = 85.0) -> None:
+        """Initialise CPUHealthCheck."""
         super().__init__("cpu_check", "cpu")
         self.threshold_percent = threshold_percent
 
@@ -215,7 +219,8 @@ class CPUHealthCheck(HealthCheck):
 class HealthMonitor:
     """Central health monitoring service."""
 
-    def __init__(self, check_interval_seconds: float = 30.0):
+    def __init__(self, check_interval_seconds: float = 30.0) -> None:
+        """Initialise HealthMonitor."""
         self.check_interval_seconds = check_interval_seconds
         self.checks: Dict[str, HealthCheck] = {}
         self.results: Dict[str, HealthCheckResult] = {}

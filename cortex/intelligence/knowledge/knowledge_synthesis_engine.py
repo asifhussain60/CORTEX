@@ -75,7 +75,7 @@ class SynthesizedInstruction:
 class KnowledgeSynthesisEngine:
     """Composes CORTEX + Company knowledge into final instructions."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize synthesis engine."""
         self._cache: Dict[str, SynthesizedInstruction] = {}
         # Phase 65 S1: Cache now stores (timestamp, practices) tuple

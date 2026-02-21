@@ -135,7 +135,7 @@ class GovernanceDashboardBuilder:
     Generates heatmaps, trends, and summaries for governance compliance.
     """
 
-    def __init__(self, workspace_root: Optional[Path] = None):
+    def __init__(self, workspace_root: Optional[Path] = None) -> None:
         """
         Initialize dashboard builder.
 

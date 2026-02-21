@@ -261,7 +261,7 @@ class MonolithAnalyzer:
 class DotNetLensAnalyzer:
     """Main LENS analyzer for .NET enterprise code."""
 
-    def __init__(self, semantic_mode: bool = False):
+    def __init__(self, semantic_mode: bool = False) -> None:
         """Initialize analyzer.
 
         Args:

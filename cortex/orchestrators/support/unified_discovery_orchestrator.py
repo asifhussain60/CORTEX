@@ -57,7 +57,7 @@ class UnifiedDiscoveryOrchestrator:
         ...     print(resource.title)
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize discovery registries and graphs."""
         self._resource_registry: Dict[str, Resource] = {}
         self._learning_paths: Dict[str, LearningPath] = {}

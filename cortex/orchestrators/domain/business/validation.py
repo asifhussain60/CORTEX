@@ -36,7 +36,7 @@ class ValidationRule:
 class DomainValidator:
     """Validator for domain operations."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize validator."""
         self._rules: Dict[str, List[ValidationRule]] = {}
         self._domain_compatibility: Dict[tuple, bool] = {}

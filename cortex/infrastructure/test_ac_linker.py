@@ -45,7 +45,7 @@ class TestACLinker:
     AC_ID_PATTERN = re.compile(r'AC-[A-Z]+-\d+-\d{2}')
     TEST_AC_PATTERN = re.compile(r'test_.*_([a-z]+)_(\d{3})')
 
-    def __init__(self, test_dir: Optional[Path] = None):
+    def __init__(self, test_dir: Optional[Path] = None) -> None:
         """
         Initialize linker.
 

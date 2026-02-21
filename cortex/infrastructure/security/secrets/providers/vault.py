@@ -20,7 +20,7 @@ from cortex.infrastructure.security.secrets.secrets_provider import ISecretsProv
 class VaultProvider(ISecretsProvider):
     """HashiCorp Vault provider for on-premise/hybrid secrets management"""
 
-    def __init__(self, config: SecretsConfig):
+    def __init__(self, config: SecretsConfig) -> None:
         """
         Initialize HashiCorp Vault provider.
 

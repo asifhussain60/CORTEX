@@ -38,7 +38,7 @@ class AnthropicProvider(ILLMProvider):
         self,
         api_key: Optional[str] = None,
         model: str = "claude-3-5-sonnet-20241022"
-    ):
+    ) -> None:
         """
         Initialize Anthropic provider.
 

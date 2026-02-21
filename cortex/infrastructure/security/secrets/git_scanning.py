@@ -357,7 +357,8 @@ class SecretsRemediator:
 class SecretsScanner:
     """Unified secrets scanning orchestrator"""
 
-    def __init__(self, exclude_paths: Optional[List[str]] = None, exclude_commits: Optional[List[str]] = None):
+    def __init__(self, exclude_paths: Optional[List[str]] = None, exclude_commits: Optional[List[str]] = None) -> None:
+        """Initialize instance."""
         self.exclude_paths = exclude_paths or []
         self.exclude_commits = exclude_commits or []
 

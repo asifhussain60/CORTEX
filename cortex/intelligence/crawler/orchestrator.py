@@ -36,7 +36,7 @@ class CrawlerOrchestrator:
     Orchestrates crawler lifecycle and coordinates components.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize CrawlerOrchestrator."""
         self.status = CrawlStatus.PENDING
         self.start_time: Optional[float] = None
@@ -121,7 +121,7 @@ class ProgressReporter:
     Track and report crawl progress.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize ProgressReporter."""
         self.progress_percent = 0
         self.files_processed = 0
@@ -162,7 +162,7 @@ class PersistenceManager:
     Manage caching and checkpoints for crawl resumption.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize PersistenceManager."""
         self.pattern_cache: Dict[str, Any] = {}
         self.checkpoint: Optional[Dict[str, Any]] = None

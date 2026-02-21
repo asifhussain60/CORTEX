@@ -126,7 +126,7 @@ class ScaffolderIntelligenceAdapter:
         self,
         registry_path: Optional[Path] = None,
         quality_threshold: float = 0.7
-    ):
+    ) -> None:
         """
         Initialize adapter with intelligence components.
         

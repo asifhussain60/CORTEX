@@ -145,7 +145,7 @@ TOOL_EXAMPLES = [
 class EnhancedOnboardingOrchestrator(KnowledgePersistenceMixin):
     """Orchestrator with knowledge persistence for repository onboarding."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize enhanced orchestrator."""
         KnowledgePersistenceMixin.__init__(self)
 

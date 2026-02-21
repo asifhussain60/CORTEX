@@ -1,4 +1,5 @@
 """resumption_handler.py"""
 
 class ResumptionHandler:
-    pass
+    """Handles session resumption after interruption or timeout."""
+

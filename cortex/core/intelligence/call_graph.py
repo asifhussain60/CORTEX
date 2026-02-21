@@ -13,7 +13,7 @@ AC-ID: E3-CALL-GRAPH-BUILDER
 import ast
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -152,7 +152,7 @@ class CallGraphBuilder:
         """Initialize call graph builder."""
         logger.info("CallGraphBuilder initialized")
 
-    def build(self, parse_result) -> CallGraph:
+    def build(self, parse_result: Any) -> CallGraph:
         """Build call graph from AST parse result.
 
         Args:

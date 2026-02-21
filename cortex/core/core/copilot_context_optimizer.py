@@ -25,7 +25,8 @@ from typing import Any, Dict, Optional
 class TokenBudgetExceededError(Exception):
     """Raised when context exceeds Copilot token budget"""
 
-    def __init__(self, actual_tokens: int, budget: int, message: str = ""):
+    def __init__(self, actual_tokens: int, budget: int, message: str = "") -> None:
+        """Initialize instance."""
         self.actual_tokens = actual_tokens
         self.budget = budget
         self.overflow = actual_tokens - budget
@@ -66,7 +67,7 @@ class CopilotContextOptimizer:
         compressed = optimizer.compress_orchestrator_output(output, "InteractionOrchestrator")
     """
 
-    def __init__(self, exit_budget: int = 20000, warn_threshold: float = 0.8):
+    def __init__(self, exit_budget: int = 20000, warn_threshold: float = 0.8) -> None:
         """
         Initialize optimizer.
 

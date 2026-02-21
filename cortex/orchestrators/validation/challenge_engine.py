@@ -90,7 +90,7 @@ class ChallengeEngine(OrchestratorProtocolMixin):
         "JWT Token-Based Authentication"
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize challenge engine."""
         self.intent_strategies = {
             "IMPLEMENT": self._generate_implement_alternatives,

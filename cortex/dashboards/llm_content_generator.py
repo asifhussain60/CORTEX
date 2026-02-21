@@ -95,7 +95,7 @@ class LLMContentGenerator:
         self,
         config: Optional[Dict[str, Any]] = None,
         enable_cache: bool = True
-    ):
+    ) -> None:
         """
         Initialize LLM content generator
 

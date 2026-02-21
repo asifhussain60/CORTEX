@@ -238,7 +238,7 @@ class MultiModelEstimationEngine:
     AC-CAP-2-04: Consensus produce 80% CI recommendations
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize MultiModelEstimationEngine."""
         self.pert = PERTEstimator()
         self.story_points = StoryPointEstimator()

@@ -89,7 +89,7 @@ class SilentExecutionGuard:
         - Progress tracking per stage
     """
     
-    def __init__(self, checkpoint_dir: Optional[Path] = None):
+    def __init__(self, checkpoint_dir: Optional[Path] = None) -> None:
         """
         Initialize SilentExecutionGuard.
         

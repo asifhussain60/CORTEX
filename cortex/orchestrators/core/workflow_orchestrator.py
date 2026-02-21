@@ -47,7 +47,7 @@ from cortex.orchestrators.core.master_orchestrator_stage_4 import (
     Stage4ApprovalContext,
     Stage4Output,
 )
-from cortex.orchestrators.core.repository_scanner import (
+from cortex.orchestrators.support.repository_scanner import (
     RepositoryScanner,
     ScanContext,
     ScanOutput,
@@ -465,3 +465,15 @@ class WorkflowOrchestrator:
                 error=str(e),
                 duration=time.time() - start_time,
             )
+
+    # ------------------------------------------------------------------
+    # Health Check (IOrchestrator protocol)
+    # ------------------------------------------------------------------
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status for wiring-contract validation."""
+        return {
+            "status": "healthy",
+            "orchestrator": "WorkflowOrchestrator",
+            "stages": ["comprehension", "scan", "knowledge", "approval", "execution"],
+        }

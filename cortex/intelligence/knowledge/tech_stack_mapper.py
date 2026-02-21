@@ -43,7 +43,7 @@ class TechStackMapper:
     - CORE-012: Docstrings required ✅
     """
 
-    def __init__(self, config_path: Optional[Path] = None):
+    def __init__(self, config_path: Optional[Path] = None) -> None:
         """
         Initialize TechStackMapper.
 

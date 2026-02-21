@@ -74,7 +74,8 @@ class RetentionPolicy:
         retention_days: int = 90,
         archive_after_days: int = 30,
         compress_after_days: int = 60
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.retention_days = retention_days
         self.archive_after_days = archive_after_days
         self.compress_after_days = compress_after_days
@@ -101,7 +102,8 @@ class AuditTrail:
         self,
         db_path: Optional[str] = None,
         retention_policy: Optional[RetentionPolicy] = None
-    ):
+    ) -> None:
+        """Initialize instance."""
         self.db_path = db_path or ":memory:"
         self.retention_policy = retention_policy or RetentionPolicy()
         self.events: List[AuditEvent] = []

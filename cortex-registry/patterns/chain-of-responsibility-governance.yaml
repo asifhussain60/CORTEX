@@ -23,5 +23,5 @@ pattern:
     - "Monolithic validation function with all rules inline"
     - "Skipping validators for 'quick' operations"
   references:
-    - "cortex/governance/enforcement_orchestrator.py"
+    # [STALE-REF] - "cortex/governance/enforcement_orchestrator.py"
     - "cortex-registry/core/specifications/governance-validation-gates.yaml"

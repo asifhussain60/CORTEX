@@ -79,7 +79,7 @@ class CrawlerTemplateGenerator:
         r'DELETE\s+FROM',
     ]
 
-    def __init__(self, template_dir: Optional[Path] = None):
+    def __init__(self, template_dir: Optional[Path] = None) -> None:
         """
         Initialize generator.
 
@@ -106,7 +106,7 @@ class CrawlerTemplateGenerator:
     # Template Loading
     # ==========================================================================
 
-    def load_template(self, template_name: str):
+    def load_template(self, template_name: str) -> None:
         """
         Load Jinja2 template.
 

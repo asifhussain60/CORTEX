@@ -42,7 +42,8 @@ class ValidationResult:
 class WiringValidator:
     """Validates wiring.yaml against actual implementations."""
 
-    def __init__(self, wiring_path: str = "cortex/core/wiring/specifications/wiring.yaml"):
+    def __init__(self, wiring_path: str = "cortex/core/wiring/specifications/wiring.yaml") -> None:
+        """Initialize instance."""
         self.wiring_path = wiring_path
         self.results: List[ValidationResult] = []
 
@@ -259,7 +260,7 @@ class WiringValidator:
         print()
 
 
-def main():
+def main() -> None:
     """Main entry point."""
     strict = "--strict" in sys.argv
 

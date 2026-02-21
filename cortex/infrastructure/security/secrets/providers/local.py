@@ -19,7 +19,7 @@ class LocalSecretsProvider(ISecretsProvider):
     Secrets are NOT persisted and ARE lost on process restart.
     """
 
-    def __init__(self, config: SecretsConfig):
+    def __init__(self, config: SecretsConfig) -> None:
         """
         Initialize local secrets provider.
 

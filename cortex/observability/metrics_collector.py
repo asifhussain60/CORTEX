@@ -45,6 +45,7 @@ class InMemoryStorage:
     """Simple in-memory storage backend."""
 
     def __init__(self) -> None:
+        """Initialize instance."""
         self._data: list[dict[str, Any]] = []
 
     def write(self, metrics: list[dict[str, Any]]) -> None:

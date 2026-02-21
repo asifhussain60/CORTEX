@@ -96,7 +96,7 @@ class ContextSynthesisGateway:
         token_budget: int = 20000,
         enable_cache: bool = True,
         fail_safe: bool = True
-    ):
+    ) -> None:
         """
         Initialize Context Synthesis Gateway.
 
@@ -361,7 +361,7 @@ class ContextSynthesisGateway:
         """
         return self._session_tokens.get(session_id, 0)
 
-    def reset_session(self, session_id: str):
+    def reset_session(self, session_id: str) -> None:
         """
         Reset cumulative token tracking for session.
 

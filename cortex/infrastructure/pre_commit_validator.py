@@ -218,7 +218,7 @@ class PreCommitAuditLogger:
     Docker-first: Logs to JSON file instead of SQLite database.
     """
 
-    def __init__(self, log_path: str = '.cortex-runtime/pre_commit_audit.jsonl'):
+    def __init__(self, log_path: str = '.cortex-runtime/pre_commit_audit.jsonl') -> None:
         """Initialize audit logger with JSON Lines file"""
         self.log_path = Path(log_path)
         self._ensure_log_file()
@@ -297,7 +297,7 @@ class PreCommitValidator:
     """
 
     def __init__(self, config: Optional[PreCommitConfig] = None,
-                 audit_logger: Optional[PreCommitAuditLogger] = None):
+                 audit_logger: Optional[PreCommitAuditLogger] = None) -> None:
         """Initialize validator"""
         self.config = config or PreCommitConfig.from_yaml()
         self.audit_logger = audit_logger or PreCommitAuditLogger()

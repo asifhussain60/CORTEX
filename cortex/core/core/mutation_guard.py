@@ -121,7 +121,7 @@ class ImmutabilityPolicy:
 class PhaseImmutabilityValidator:
     """Validates that locked phases cannot be modified."""
 
-    def __init__(self, phase_tracker: Dict[str, Any]):
+    def __init__(self, phase_tracker: Dict[str, Any]) -> None:
         """
         Initialize validator.
 
@@ -192,7 +192,7 @@ class PhaseImmutabilityValidator:
 class RuleImmutabilityValidator:
     """Validates that Tier 0 rules cannot be modified."""
 
-    def __init__(self, tier0_rules_path: str):
+    def __init__(self, tier0_rules_path: str) -> None:
         """
         Initialize validator.
 
@@ -272,7 +272,7 @@ class RuleImmutabilityValidator:
 class ACCompletenessValidator:
     """Validates AC-ID completeness requirements."""
 
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: str) -> None:
         """
         Initialize validator with database connection.
 
@@ -370,7 +370,7 @@ class MutationGuard:
         tier0_rules_path: str,
         db_path: str,
         policy: Optional[ImmutabilityPolicy] = None
-    ):
+    ) -> None:
         """
         Initialize MutationGuard.
 

@@ -1,4 +1,5 @@
 """mode_controller.py"""
 
 class ModeController:
-    pass
+    """Controls HEXA-MODE switching for orchestrator behavior."""
+

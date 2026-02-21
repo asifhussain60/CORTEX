@@ -54,7 +54,7 @@ class GlassmorphismTheme:
         self,
         output_dir: Path,
         config: ThemeConfig,
-    ):
+    ) -> None:
         """
         Initialize theme generator.
         

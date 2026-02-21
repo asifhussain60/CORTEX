@@ -117,7 +117,7 @@ class AgentCollaborationCoordinator:
         >>> print(f"Executed {len(result.execution_path)} agents successfully")
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize collaboration coordinator."""
         self._active_collaborations: Dict[str, CollaborationRequest] = {}
         self._agent_registry: Dict[str, Dict[str, Any]] = {}
