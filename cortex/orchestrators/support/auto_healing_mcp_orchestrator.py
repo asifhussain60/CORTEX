@@ -26,7 +26,7 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.models.canonical_enums import IntentType
 
@@ -506,6 +506,33 @@ class AutoHealingMCPOrchestrator:
         base_action += "\nFix log:\n" + "\n".join(f"  {line}" for line in diagnostic.fix_log)
         
         return base_action
+
+    # -------------------------------------------------------------------------
+    # Orchestration Protocol (IOrchestrator)
+    # -------------------------------------------------------------------------
+
+    def get_name(self) -> str:
+        """Return the canonical orchestrator name."""
+        return "AutoHealingMCPOrchestrator"
+
+    def get_version(self) -> str:
+        """Return the orchestrator version string."""
+        return "1.0.0"
+
+    def initialize(self) -> Any:
+        """Initialise the orchestrator (setup already done in ``__init__``)."""
+        try:
+            from cortex.core.core.result import Result  # type: ignore[import]
+            return Result.success("AutoHealingMCPOrchestrator initialized")
+        except ImportError:
+            return {"status": "ok", "orchestrator": self.get_name()}
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status for wiring-contract validation."""
+        return {
+            "status": "healthy",
+            "orchestrator": self.get_name(),
+        }
 
 
 # ============================================================================

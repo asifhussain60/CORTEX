@@ -108,6 +108,30 @@ provides:
       - VacuumOrchestrator
     priority: 160
 
+  - name: SweepCatalogueOrchestrator
+    category: SUPPORT
+    class: SweepCatalogueOrchestrator
+    description: "Durable sweep catalogue enforcing CORE-064 Sweep Completeness Contract — no partial sweeps across session boundaries"
+    entry_point: "cortex.orchestrators.support.sweep_catalogue_orchestrator:SweepCatalogueOrchestrator"
+    module: "cortex.orchestrators.support.sweep_catalogue_orchestrator"
+    features:
+      - open_catalogue
+      - mark_resolved
+      - assert_exhausted
+      - resume_open_catalogue
+      - approve_wont_fix
+      - audit_trail
+      - sqlite_wal_persistence
+    health_check: true
+    health_check_method: "health_check"
+    health_check_returns: ["healthy", "storage_dir", "note"]
+    governance_rule: "CORE-064"
+    storage: ".cortex-runtime/sweeps/{sweep_id}.db"
+    mcp_tool: "cortex_sweep_status (cortex/mcp/tools/sweep_status_tool.py)"
+    dependencies:
+      - MasterOrchestrator
+    priority: 155
+
   - name: VacuumOrchestrator
     category: HEALTH
     description: "Standalone + companion remediation engine — dual-mode (standalone scan or handoff consumer) with rollback support"
@@ -124,7 +148,7 @@ provides:
     health_check_method: "health_check"
     health_check_returns: ["status", "orchestrator", "workspace_root"]
     dependencies: []
-    priority: 155
+    priority: 150
 
 initialization_order: 30
 
@@ -135,6 +159,6 @@ conflict_resolution:
 metadata:
   maintained_by: "CORTEX Support Team"
   last_updated: "2026-02-21"
-  git_commit: "ac-wiring-support-002"
+  git_commit: "ac-wiring-support-003"
   status: "active"
-  change_summary: "Added HealthOrchestrator + VacuumOrchestrator (Phase 51 — health_check() L1 structural compliance)"
+  change_summary: "Added SweepCatalogueOrchestrator at priority 155 (Phase 16 — CORE-064 Sweep Completeness Contract)"

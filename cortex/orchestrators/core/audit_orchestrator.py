@@ -127,3 +127,46 @@ class AuditOrchestrator:
             "results": self.audit_results,
             "summary": {"passed": 0, "failed": 0},
         }
+
+    # -------------------------------------------------------------------------
+    # Orchestration Protocol (IOrchestrator)
+    # -------------------------------------------------------------------------
+
+    def get_name(self) -> str:
+        """Return the canonical orchestrator name.
+
+        Returns:
+            The string ``"AuditOrchestrator"``.
+        """
+        return "AuditOrchestrator"
+
+    def get_version(self) -> str:
+        """Return the orchestrator version string.
+
+        Returns:
+            Semantic version string.
+        """
+        return "1.0.0"
+
+    def initialize(self) -> Any:
+        """Initialise the orchestrator (setup already done in ``__init__``).
+
+        Returns:
+            A success result value.
+        """
+        try:
+            from cortex.core.core.result import Result  # type: ignore[import]
+            return Result.success("AuditOrchestrator initialized")
+        except ImportError:
+            return {"status": "ok", "orchestrator": self.get_name()}
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status for wiring-contract validation.
+
+        Returns:
+            Mapping with ``status`` and ``orchestrator`` keys.
+        """
+        return {
+            "status": "healthy",
+            "orchestrator": self.get_name(),
+        }

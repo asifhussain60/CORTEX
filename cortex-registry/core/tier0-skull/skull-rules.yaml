@@ -14,13 +14,13 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 54
+  rule_count: 56
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-02-11 - CORE-051 through CORE-054 added (ENH-001/002/003/004 from chat01.md remediation)"
-  version: "3.5"
-  consolidation_date: "2026-02-11"
-  consolidation_status: "Phase A Complete - 4 new CORE rules added for MCP + Governance optimization"
+  last_update: "2026-02-21 - CORE-055 (Golden Test Tier Contract) + CORE-064 (Sweep Completeness Contract) added"
+  version: "3.6"
+  consolidation_date: "2026-02-21"
+  consolidation_status: "Phase 16 - CORE-064 Sweep Completeness Contract registered (partial sweep prevention)"
   naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"
 
 categories:
@@ -1829,6 +1829,146 @@ rules:
       enables: "Phase 49 Golden Test Promotion Pipeline"
       blocks_until: "TestClassifierOrchestrator integrated into pre-commit hook"
     remediation_status: "✅ COMPLETE - Phase 49 — TestClassifierOrchestrator implemented"
+
+  # --------------------------------------------------------------------------
+  # CORE-064: Sweep Completeness Contract (Phase 16 — 2026-02-21)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-064
+    principle: "No Partial Sweeps — Exhaust the Full Catalogue"
+    category: quality_gates
+    severity: blocked
+    name: Sweep Completeness Contract
+    created: "2026-02-21"
+    phase_introduced: "phase-16"
+    description: |
+      AC_START: AC-P16-A-001
+      Every FIX, REFACTOR, and AUDIT-with-fix operation MUST open a durable
+      SweepCatalogue before routing and MUST NOT close the session (commit /
+      "done" signal) until every catalogued item is either RESOLVED or explicitly
+      approved as WONT-FIX with a justification and audit entry.
+
+      Root Cause Addressed:
+        Current pipeline fixes the top-N visible items per session but silently
+        drops the long tail when the session closes. Next session starts cold with
+        no memory of the outstanding backlog. CORE-064 closes this gap by making
+        the catalogue durable (SQLite WAL at .cortex-runtime/sweeps/{sweep_id}.db)
+        and by inserting blocking gates into MasterOrchestrator.
+
+      FORBIDDEN BEHAVIOURS:
+        - ❌ Closing a sweep (committing / signalling "done") when remaining > 0
+        - ❌ Opening a new sweep on the same scope without checking for an existing
+             open catalogue (prevents sweep-reset trick)
+        - ❌ Deleting .cortex-runtime/sweeps/*.db files (VacuumOrchestrator guard)
+        - ❌ Approving WONT-FIX without explicit justification + audit entry
+        - ❌ Partial sweeps where top-N items are fixed and the rest silently dropped
+
+      REQUIRED BEHAVIOURS:
+        - ✅ SweepCatalogueOrchestrator.open_catalogue() called at MasterOrchestrator
+             pre-routing gate for FIX, REFACTOR, AUDIT intents
+        - ✅ Catalogue scans ALL in-scope files (not a sample)
+        - ✅ Catalogue persisted to .cortex-runtime/sweeps/{sweep_id}.db (SQLite WAL)
+        - ✅ SweepCatalogueOrchestrator.assert_exhausted() called at post-execution gate
+        - ✅ BLOCK with numbered remaining-items list when open_count > 0
+        - ✅ resume_open_catalogue() checks file-hash fingerprint before resuming
+        - ✅ approve_wont_fix() requires non-empty justification + DoRApprovalGate approval
+        - ✅ VacuumOrchestrator skips .cortex-runtime/sweeps/ entirely (CORE-064 guard)
+        - ✅ HealthOrchestrator.health_check() validates SweepCatalogueOrchestrator L1 wiring
+      AC_COMPLETE: AC-P16-A-001 ✅
+
+    scope:
+      applies_to:
+        - "FIX intents — pre-routing gate opens catalogue, post-execution gate asserts exhausted"
+        - "REFACTOR intents — same gates as FIX"
+        - "AUDIT intents with fix flag — same gates"
+        - "SweepCatalogueOrchestrator — canonical owner of catalogue lifecycle"
+        - "MasterOrchestrator._pre_routing_gate() — open_catalogue() call-site"
+        - "MasterOrchestrator._finalize_operation() — assert_exhausted() call-site"
+        - "VacuumOrchestrator — must never delete .cortex-runtime/sweeps/*.db"
+
+      exempt:
+        - "QUERY intents — read-only, no catalogue needed"
+        - "DESIGN intents — analysis only, no fix execution"
+        - "PLAN intents — planning only"
+        - "REPHRASE intents — token optimisation only"
+        - "IMPLEMENT intents — TDD creates new items, not fixes existing catalogue"
+
+    enforcement_mechanism:
+      pre_routing_gate:
+        location: "MasterOrchestrator._pre_routing_gate()"
+        action: "Call SweepCatalogueOrchestrator.open_catalogue(intent, scope_files)"
+        trigger_intents: ["FIX", "REFACTOR", "AUDIT"]
+        on_existing_catalogue: "resume_open_catalogue() — show remaining count before proceeding"
+      post_execution_gate:
+        location: "MasterOrchestrator._finalize_operation()"
+        action: "Call SweepCatalogueOrchestrator.assert_exhausted(sweep_id)"
+        on_remaining_gt_zero: "BLOCK — surface numbered remaining-items list, refuse commit signal"
+        on_remaining_zero: "PASS — close catalogue, allow commit"
+      vacuum_guard:
+        location: "VacuumOrchestrator scan exclusions"
+        protected_path: ".cortex-runtime/sweeps/"
+        action: "Skip entirely — never delete, move, or archive sweep catalogue files"
+      health_check:
+        location: "HealthOrchestrator.health_check()"
+        action: "Import SweepCatalogueOrchestrator, verify health_check() callable"
+        key_returned: "sweep_catalogue_wired: bool"
+
+    wont_fix_protocol:
+      requires:
+        - "Non-empty justification string"
+        - "DoRApprovalGate.approve() confirmation"
+        - "AC_WONTFIX marker written to EnhancedAuditLogger"
+      forbidden:
+        - "Empty justification"
+        - "Bulk WONT-FIX without per-item justification"
+
+    storage:
+      path: ".cortex-runtime/sweeps/{sweep_id}.db"
+      format: "SQLite WAL (CORE-058 pattern)"
+      resume_guard: "File-hash fingerprint — invalidate if >20% scope files changed"
+      vacuum_exempt: true
+
+    mcp_exposure:
+      tool: "cortex_sweep_status"
+      location: "cortex/mcp/tools/sweep_status_tool.py"
+      returns: "open_items_count, sweep_id, next_items[] (top-5)"
+
+    implementation:
+      orchestrator: "SweepCatalogueOrchestrator"
+      location: "cortex/orchestrators/support/sweep_catalogue_orchestrator.py"
+      tier: "support"
+      priority: 155
+      wiring_file: "cortex-registry/core/specifications/support-orchestrator-wiring.yaml"
+
+    tests:
+      golden_test_file: "tests/golden/test_sweep_completeness_contract_truth.py"
+      golden_tests_target: 20
+      unit_tests:
+        - "test_open_catalogue_creates_sqlite_db_in_cortex_runtime"
+        - "test_open_catalogue_runs_full_enforcement_scan_on_scope"
+        - "test_mark_resolved_decrements_open_count"
+        - "test_assert_exhausted_returns_ok_when_all_resolved"
+        - "test_assert_exhausted_returns_err_with_remaining_list_when_open"
+        - "test_master_orchestrator_pre_routing_gate_opens_catalogue_for_fix_intent"
+        - "test_master_orchestrator_pre_routing_gate_opens_catalogue_for_refactor_intent"
+        - "test_master_orchestrator_finalize_blocks_when_remaining_greater_than_zero"
+        - "test_master_orchestrator_finalize_passes_when_remaining_zero"
+        - "test_core_064_registered_in_skull_rules_yaml"
+        - "test_catalogue_persists_across_session_boundary_via_sqlite"
+        - "test_resume_open_catalogue_returns_existing_manifest_for_same_scope"
+        - "test_resume_open_catalogue_invalidates_on_scope_file_hash_drift"
+        - "test_wont_fix_requires_justification_and_writes_audit_entry"
+        - "test_wont_fix_without_justification_raises_value_error"
+        - "test_cortex_sweep_status_tool_returns_open_items_count"
+        - "test_cortex_sweep_status_tool_raises_when_no_open_catalogue"
+        - "test_sweep_catalogue_orchestrator_health_check_returns_healthy"
+        - "test_sweep_catalogue_orchestrator_wired_in_support_wiring_yaml_at_priority_155"
+        - "test_end_to_end_fix_session_exhausts_catalogue_and_closes_cleanly"
+
+    governance_dependency:
+      requires: "CORE-008 (TDD), CORE-027 (Audit trail), CORE-048 (Holistic validation), CORE-058 (SQLite WAL)"
+      enables: "Phase 16 Sweep Completeness — no partial sweeps across session boundaries"
+      blocks_until: "SweepCatalogueOrchestrator implemented + MasterOrchestrator gates active"
+      remediation_status: "🔵 IN_PROGRESS — Phase 16 implementation pending"
 
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION

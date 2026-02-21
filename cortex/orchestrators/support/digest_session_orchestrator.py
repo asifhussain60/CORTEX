@@ -106,9 +106,26 @@ class DigestSessionOrchestrator:
         markers = ["TODO:", "FIXME:", "ENHANCE:", "ENH-", "AC-"]
         return sum(content.count(m) for m in markers)
 
+
     # ------------------------------------------------------------------
-    # Health Check (IOrchestrator protocol)
+    # Orchestration Protocol (IOrchestrator)
     # ------------------------------------------------------------------
+
+    def get_name(self) -> str:
+        """Return the canonical orchestrator name."""
+        return "DigestSessionOrchestrator"
+
+    def get_version(self) -> str:
+        """Return the orchestrator version string."""
+        return "1.0.0"
+
+    def initialize(self) -> Any:
+        """Initialise the orchestrator (setup already done in ``__init__``)."""
+        try:
+            from cortex.core.core.result import Result  # type: ignore[import]
+            return Result.success("DigestSessionOrchestrator initialized")
+        except ImportError:
+            return {"status": "ok", "orchestrator": self.get_name()}
 
     def health_check(self) -> Dict[str, Any]:
         """Return health status for wiring-contract validation."""
@@ -116,3 +133,4 @@ class DigestSessionOrchestrator:
             "status": "healthy",
             "orchestrator": "DigestSessionOrchestrator",
         }
+

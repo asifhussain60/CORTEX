@@ -1,13 +1,14 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-22 | ## About CORTEX
+**Updated:** 2026-02-21 | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **21 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
-- **26 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
-- **21 CORE Governance Rules** enforced at pre-commit, CI, and runtime
+- **22 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
+- **25 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
+- **22 CORE Governance Rules** enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
+- **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
 - **LENS Analysis** — workspace-aware code intelligence (Language → Examination → Navigation → Synthesis)
 - **1 Canonical Package** — all imports use `cortex.*` (no `cortex_intelligence`, `cortex_lens`, or `cortex.brain`)
 
@@ -18,11 +19,11 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrators | 21 wired in `cortex/orchestrators/` (6 core, 6 domain, 9 support) |
-| MCP Tools | 26 in `cortex/mcp/tools/` |
+| Orchestrators | 22 wired in `cortex/orchestrators/` (6 core, 6 domain, 10 support) |
+| MCP Tools | 25 in `cortex/mcp/tools/` |
 | Top-level Dirs | 16 canonical under `cortex/` |
-| Governance Rules | 21 active in `cortex-registry/core/` |
-| Test Suite | 15,145 tests (519 golden, 177 phase) |
+| Governance Rules | 22 active in `cortex-registry/core/` |
+| Test Suite | 15,145 tests (539 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 
 ---
@@ -69,6 +70,7 @@ CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manua
 | CORE-035 | Single canonical implementation — no duplicates |
 | CORE-048 | Holistic validation gate before IMPLEMENT/FIX/REFACTOR |
 | CORE-049 | Silent autonomous execution (progress bars only) |
+| CORE-064 | Sweep Completeness Contract — no partial sweeps; every FIX/REFACTOR/AUDIT must exhaust its full catalogue |
 
 **MCP Tool Authoring — `validate_orchestrator_context` guard:** All MCP tool functions that
 call `validate_orchestrator_context(orchestrator_context)` must guard the call:
@@ -95,8 +97,8 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (16 canonical dirs)
-  orchestrators/     ← 21 wired orchestrators across 3 tiers (core, domain, support)
-  mcp/tools/         ← 26 MCP tools
+  orchestrators/     ← 22 wired orchestrators across 3 tiers (core, domain, support)
+  mcp/tools/         ← 25 MCP tools
   core/              ← OrchestratorBase, FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis
@@ -123,6 +125,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | Refactor Plan | `cortex-registry/planning/cortex-refactor-master.yaml` |
 | BulkDigestOrchestrator | `cortex/orchestrators/support/bulk_digest_orchestrator.py` |
 | DigestSessionOrchestrator | `cortex/orchestrators/support/digest_session_orchestrator.py` |
+| SweepCatalogueOrchestrator | `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` |
 | MasterOrchestrationStage1 | `cortex/orchestrators/core/master_orchestrator_stage_1.py` |
 | MasterOrchestrationStage3 | `cortex/orchestrators/core/master_orchestrator_stage_3.py` |
 | MasterOrchestrationStage4 | `cortex/orchestrators/core/master_orchestrator_stage_4.py` |

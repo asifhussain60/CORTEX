@@ -123,9 +123,33 @@ User: "clean up markdown sprawl"
 | Component | Relationship |
 |-----------|--------------|
 | CORE-002 | Enforces "no markdown generation outside cortex-docs/" |
+| CORE-064 | Sweep Completeness Contract — open catalogues must be protected from deletion |
 | VacuumOrchestrator | Python implementation of cleanup logic |
 | cortex-architect | Calls vacuum agent for P3 cleanup tasks |
 
 ---
 
-*v1.0 — Specialized agent for markdown sprawl cleanup and archive management*
+## 🛡️ Sweep Catalogue Protection (CORE-064)
+
+**Critical guard added in Phase 16.** VacuumOrchestrator MUST NEVER delete or move
+files inside `.cortex-runtime/sweeps/`. These `.db` files are durable sweep catalogues
+tracking outstanding issues across sessions. Deleting them silently abandons the issue
+backlog — exactly the partial-sweep behaviour CORE-064 was designed to prevent.
+
+```yaml
+Protected paths (never vacuum):
+  - .cortex-runtime/sweeps/*.db       # open sweep catalogues
+  - .cortex-runtime/sweeps/*.db-wal   # SQLite WAL files
+  - .cortex-runtime/sweeps/*.db-shm   # SQLite shared memory
+
+Safe to vacuum:
+  - .cortex-runtime/logs/             # old log files (>30 days)
+  - .cortex-runtime/traces/           # old trace files (>30 days)
+```
+
+**Before any `.cortex-runtime/` cleanup:** call `cortex_sweep_status`. If an open catalogue
+exists, surface its `sweep_id` and `open_items_count` to the user before proceeding.
+
+---
+
+*v1.1 — Added CORE-064 Sweep Catalogue Protection guard (Phase 16, 2026-02-21)*

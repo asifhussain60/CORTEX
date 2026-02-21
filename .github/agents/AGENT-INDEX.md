@@ -31,11 +31,11 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Metric | Value |
 |--------|-------|
-| Orchestrators | 52 canonical across 10 domains |
-| MCP Tools | 24 production tools |
-| CORE Rules | 21 active governance rules |
+| Orchestrators | 22 wired across 10 domains (6 core, 6 domain, 10 support) |
+| MCP Tools | 25 production tools |
+| CORE Rules | 22 active governance rules (incl. CORE-064 Sweep Completeness) |
 | Package | `cortex` (single) |
-| Tests | 15,230 (486 golden, 177 phase) |
+| Tests | 15,230 (539 golden, 177 phase) |
 | Entry Point | MasterOrchestrator → IntentRouter → Domain Orchestrator |
 
 ---
@@ -75,6 +75,23 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **phase-creation-standards.md** | Standards for new phases |
 | **cleanup-audit-guide.md** | Cleanup procedure reference |
 | **STAGE-0-GOVERNANCE-AUDIT-SPEC.md** | Governance audit specification |
+
+---
+
+## Sweep Completeness Contract (CORE-064)
+
+**New in Phase 16.** Every FIX, REFACTOR, and AUDIT-with-fix session opens a durable
+`SweepCatalogue` before routing and is BLOCKED from completing until all catalogued items
+are resolved or explicitly approved as WONT-FIX.
+
+| Component | Location | Role |
+|-----------|----------|------|
+| `SweepCatalogueOrchestrator` | `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` | Opens, tracks, asserts catalogue |
+| `cortex_sweep_status` MCP tool | `cortex/mcp/tools/sweep_status_tool.py` | Surfaces open items to user |
+| CORE-064 | `cortex-registry/core/tier0-skull/skull-rules.yaml` | Governance rule — severity: blocked |
+
+**VacuumOrchestrator guard:** Never deletes `.cortex-runtime/sweeps/*.db` — open catalogue protection.  
+**HealthOrchestrator check:** Includes `SweepCatalogueOrchestrator` in L1 wiring validation.
 
 ---
 

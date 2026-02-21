@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-22 | **Architecture:** 21 Wired Orchestrators · 24 MCP Tools · 21 CORE Rules · 1 Package  
+**Updated:** 2026-02-21 | **Architecture:** 22 Wired Orchestrators · 25 MCP Tools · 22 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
@@ -32,10 +32,11 @@
 | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` |
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
-| MCP Tools (23) | `cortex/mcp/tools/` |
+| MCP Tools (25) | `cortex/mcp/tools/` |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
 | Intelligence Provider | `cortex/intelligence/provider.py` |
+| SweepCatalogueOrchestrator | `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` |
 
 **10 Orchestrator Domains:** core · domain · git · health · intelligence · strategies · support · synthesis · validation · workflow
 
@@ -76,6 +77,7 @@
 | CORE-048 | Holistic validation gate before IMPLEMENT/FIX/REFACTOR |
 | CORE-049 | Silent autonomous execution (progress bars only) |
 | CORE-050 | MCP tiered blocking (Tier 0: IMPLEMENT/FIX blocks without MCP) |
+| CORE-064 | Sweep Completeness Contract — no partial sweeps; every FIX/REFACTOR/AUDIT must exhaust its full issue catalogue |
 
 **Load full rules:** `cortex_load_core_rules` (MCP tool)
 
@@ -493,7 +495,7 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ---
 
-## ⚡ MCP TOOLS (24 Production)
+## ⚡ MCP TOOLS (25 Production)
 
 **Verification:** Call `cortex_sample_tool`. If it responds, MCP is active.
 **If unavailable:** Run `python3 -m cortex.mcp` then reload VS Code. (`python3 scripts/setup-mcp.py` for cross-platform config.)
@@ -509,12 +511,13 @@ Progress bar + stage bullet list. See templates SSOT.
 - `cortex_onboard_repository_v3` — Enhanced onboarding with LENS + SQLite
 - `cortex_refactor` — Semantic refactoring (Python, C#, TypeScript)
 - `cortex_audit_remediation_plan` — Auto-planning from audit results
-- `cortex_tools_catalog` — Discover all 24 tools
+- `cortex_tools_catalog` — Discover all 25 tools
 - `cortex_load_core_rules` — Load governance rules from registry
 - `cortex_check_dependency_drift` — requirements.txt vs installed packages
 - `cortex_query_governance` — Active violations count + P0 status
 - `cortex_capture_metrics` — Record TDD/debug/generation metrics
 - `cortex_fetch_work_items` — Company-pluggable ADO work item connector (Phase 15)
+- `cortex_sweep_status` — Read open sweep catalogue, surface remaining items (Phase 16 — CORE-064)
 
 ---
 
@@ -522,8 +525,8 @@ Progress bar + stage bullet list. See templates SSOT.
 
 | Type | Location |
 |------|----------|
-| Orchestrators (21 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (23) | `cortex/mcp/tools/` |
+| Orchestrators (22 wired) | `cortex/orchestrators/{domain}/` |
+| MCP Tools (25) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry/Rules | `cortex-registry/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |

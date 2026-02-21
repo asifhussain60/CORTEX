@@ -967,6 +967,126 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
             cls._instance = cls()
         return cls._instance
 
+    # ------------------------------------------------------------------
+    # CORE-064: Sweep Completeness Contract — Phase 16
+    # ------------------------------------------------------------------
+
+    @property
+    def _sweep_catalogue_orchestrator(self):
+        """Lazy-initialise SweepCatalogueOrchestrator (guard against ImportError)."""
+        if not hasattr(self, "_sweep_catalogue_orchestrator_instance"):
+            try:
+                from cortex.orchestrators.support.sweep_catalogue_orchestrator import (
+                    SweepCatalogueOrchestrator,
+                )
+                self._sweep_catalogue_orchestrator_instance = SweepCatalogueOrchestrator()
+            except ImportError:
+                self._sweep_catalogue_orchestrator_instance = None
+        return self._sweep_catalogue_orchestrator_instance
+
+    @_sweep_catalogue_orchestrator.setter
+    def _sweep_catalogue_orchestrator(self, value: object) -> None:
+        """Allow tests to inject a mock."""
+        self._sweep_catalogue_orchestrator_instance = value
+
+    def _pre_routing_gate(
+        self,
+        intent: str,
+        scope_files: Optional[List[str]] = None,
+    ) -> Optional[str]:
+        """CORE-064: Open (or resume) a durable SweepCatalogue before routing.
+
+        Called by execute_operation() for FIX, REFACTOR, and AUDIT intents.
+        Returns the sweep_id (str) if a catalogue was opened, else None.
+
+        Parameters
+        ----------
+        intent:
+            The classified intent string (e.g. "FIX", "REFACTOR", "AUDIT").
+        scope_files:
+            List of file paths in scope. Defaults to [] if not provided.
+        """
+        _CATALOGUE_INTENTS = {"FIX", "REFACTOR", "AUDIT"}
+        if intent.upper() not in _CATALOGUE_INTENTS:
+            return None
+
+        sco = self._sweep_catalogue_orchestrator
+        if sco is None:
+            # SweepCatalogueOrchestrator not yet available — log and continue (non-blocking init)
+            try:
+                self.logger.log_operation_complete(
+                    ac_id="AC-P16-D-001",
+                    operation="SWEEP_CATALOGUE_GATE",
+                    success=False,
+                    details={"note": "SweepCatalogueOrchestrator not available — skipping CORE-064 gate"},
+                )
+            except Exception:
+                pass
+            return None
+
+        scope = scope_files or []
+        sweep_id = sco.open_catalogue(intent=intent.upper(), scope_files=scope)
+        try:
+            self.logger.log_operation_complete(
+                ac_id="AC-P16-D-001",
+                operation="SWEEP_CATALOGUE_GATE",
+                success=True,
+                details={"sweep_id": sweep_id, "intent": intent, "scope_files": len(scope)},
+            )
+        except Exception:
+            pass
+        return sweep_id
+
+    def _finalize_operation(self, sweep_id: Optional[str] = None) -> None:
+        """CORE-064: Assert the sweep catalogue is exhausted before allowing completion.
+
+        Raises SweepIncompleteError if any items remain open in the catalogue.
+        Must be called at the end of every FIX / REFACTOR / AUDIT operation
+        that opened a catalogue via _pre_routing_gate().
+
+        Parameters
+        ----------
+        sweep_id:
+            The sweep_id returned by _pre_routing_gate(). No-op if None.
+        """
+        if sweep_id is None:
+            return
+
+        sco = self._sweep_catalogue_orchestrator
+        if sco is None:
+            return
+
+        result = sco.assert_exhausted(sweep_id)
+        if result.ok:
+            try:
+                self.logger.log_operation_complete(
+                    ac_id="AC-P16-D-002",
+                    operation="SWEEP_CATALOGUE_FINALIZE",
+                    success=True,
+                    details={"sweep_id": sweep_id, "status": "EXHAUSTED"},
+                )
+            except Exception:
+                pass
+            return
+
+        # Import here to avoid circular import at module level
+        from cortex.orchestrators.support.sweep_catalogue_orchestrator import SweepIncompleteError
+
+        try:
+            self.logger.log_operation_complete(
+                ac_id="AC-P16-D-002",
+                operation="SWEEP_CATALOGUE_FINALIZE",
+                success=False,
+                details={
+                    "sweep_id": sweep_id,
+                    "remaining": len(result.remaining),
+                    "status": "INCOMPLETE",
+                },
+            )
+        except Exception:
+            pass
+        raise SweepIncompleteError(sweep_id=sweep_id, remaining=result.remaining)
+
     def get_challenge_generator(self) -> ChallengeGenerator:
         """Get ChallengeGenerator for Stage 1 challenge detection.
 
