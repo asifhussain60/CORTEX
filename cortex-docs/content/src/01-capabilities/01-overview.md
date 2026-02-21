@@ -4,13 +4,13 @@
 title: CORTEX Capabilities — Complete Platform Inventory
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-21
 source_of_truth: cortex/ + cortex-registry/ + cortex-registry/planning/cortex-refactor-master.yaml
 format: diátaxis-explanation
 order: 1
 ---
 
-> **Notice:** All capabilities listed here are verified against the live codebase as of 20 February 2026. Counts, module paths, and orchestrator names are validated against running code. The 12-phase Cohesive Brain Refactor consolidated 3 packages → 1, 120 orchestrators → 52, and 59 directories → 16.
+> **Notice:** All capabilities listed here are verified against the live codebase as of 21 February 2026. Counts, module paths, and orchestrator names are validated against running code. The 12-phase Cohesive Brain Refactor consolidated 3 packages → 1, 120 orchestrators → 52, and 59 directories → 16.
 
 ---
 
@@ -20,7 +20,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | # | Domain | Brain Analogy | Key Metric |
 |---|--------|--------------|------------|
-| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 23 MCP tools, 16 canonical dirs |
+| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 24 MCP tools, 16 canonical dirs |
 | 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | 8 parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
 | 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 52 orchestrators, 10 domains |
@@ -33,7 +33,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | Capability | Domain | Implementation | Tests |
 |-----------|--------|---------------|-------|
-| MCP Gateway (23 tools) | Core | `cortex/mcp/tools/` | ✅ |
+| MCP Gateway (24 tools) | Core | `cortex/mcp/tools/` | ✅ |
 | Orchestrator Dispatch (52 classes) | Core | `cortex/orchestrators/` (10 domains) | ✅ |
 | OrchestratorBase Lifecycle | Core | `cortex/core/orchestrator_base.py` | ✅ |
 | FileFactory | Core | `cortex/core/file_factory.py` | ✅ |
@@ -55,6 +55,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | InfrastructureDetector | Extensibility | `cortex/intelligence/infrastructure/` | ✅ |
 | Workflow Templates | Extensibility | `cortex-registry/workflows/templates/` | ✅ |
 | Enterprise Patterns (9) | Extensibility | `cortex-registry/patterns/` | ✅ |
+| **WorkItemProvider (ADO/Jira/custom)** | **Extensibility** | `cortex/repositories/` + `cortex/mcp/tools/work_item_tool.py` | ✅ |
 
 ---
 
@@ -64,9 +65,9 @@ The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
 ### MCP Gateway (23 Tools)
 
-CORTEX exposes 23 canonical MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
+CORTEX exposes 24 canonical MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 
-**Business Leader:** "23 tools covering analysis, governance, onboarding, debugging, health checks, and workflow management — all accessible from the IDE without switching tools."
+**Business Leader:** "24 tools covering analysis, governance, onboarding, debugging, health checks, and workflow management — all accessible from the IDE without switching tools."
 
 **Product Owner:** "Each tool maps to a user capability. `cortex_onboard_repository` brings in a new codebase. `cortex_validate_compliance` checks rules. `cortex_score_tests` evaluates test quality."
 

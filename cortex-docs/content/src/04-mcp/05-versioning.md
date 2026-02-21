@@ -4,7 +4,7 @@
 title: MCP Versioning & Lifecycle
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-21
 source_of_truth: cortex/mcp/ + cortex-registry/planning/cortex-refactor-master.yaml
 order: 5
 ---
@@ -20,8 +20,8 @@ order: 5
 | MCP Version | v2 |
 | Protocol | JSON-RPC 2.0 |
 | Transport | stdio |
-| Canonical Tools | 23 |
-| Tool Files | 37 Python files |
+| Canonical Tools | 24 |
+| Tool Files | 38 Python files |
 | Tool Base Class | `ConsolidatedTool` |
 
 ---
@@ -44,9 +44,22 @@ The 12-phase Cohesive Brain Refactor consolidated tools:
 
 Phase 12 of the Cohesive Brain Refactor targets consolidation of tool files:
 
-- **Current:** 37 Python files across `tools/`, `deployment/`, `multi_repo/`, `toolkit/`
-- **Target:** Consolidate to 23 canonical files (one per tool)
+- **Current:** 38 Python files across `tools/`, `deployment/`, `multi_repo/`, `toolkit/`
+- **Target:** Consolidate to 24 canonical files (one per tool)
 - **Approach:** Merge specialized modules into their parent tools
+
+### Phase 15 — Work Item Provider (Added 2026-02-21)
+
+Phase 15 introduced the provider-agnostic work item integration layer:
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| `WorkItemProvider` Protocol | `cortex/repositories/work_item_provider.py` | Company-pluggable Protocol + `WorkItem` dataclass |
+| `ADOWorkItemProvider` | `cortex/repositories/ado/ado_provider.py` | Azure DevOps stub adapter |
+| `provider_factory` | `cortex/repositories/provider_factory.py` | `WORK_ITEM_SOURCE` env-driven factory |
+| `cortex_fetch_work_items` | `cortex/mcp/tools/work_item_tool.py` | MCP tool (24th canonical tool) |
+
+**AC-IDs:** AC-P15-001 through AC-P15-010 · **Golden tests:** `tests/golden/test_work_item_provider_truth.py`
 
 ---
 

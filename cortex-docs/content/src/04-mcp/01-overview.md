@@ -4,7 +4,7 @@
 title: MCP — Model Context Protocol Gateway
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-21
 source_of_truth: cortex/mcp/ + .vscode/settings.json
 order: 1
 ---
@@ -19,7 +19,7 @@ order: 1
 
 - **Transport:** stdio (development) — no manual server startup
 - **Protocol:** JSON-RPC 2.0
-- **Tools:** 23 canonical MCP tools
+- **Tools:** 24 canonical MCP tools
 - **Clients:** VS Code (Copilot Chat), Cursor, Claude Desktop
 
 ---
@@ -39,7 +39,7 @@ order: 1
         └── Dispatch to MCP tool function
         │
         ▼
-[23 Canonical MCP Tools]
+[24 Canonical MCP Tools]
         │
         ▼
 [Orchestrator Execution]
@@ -72,7 +72,7 @@ The MCP server auto-starts via `.vscode/settings.json`:
 
 **Business Leader:** "MCP is the invisible infrastructure. Teams don't manage servers — the IDE starts CORTEX automatically when the workspace opens."
 
-**Product Owner:** "23 tools available from any IDE that supports MCP. VS Code, Cursor, Claude Desktop — same tools, same experience."
+**Product Owner:** "24 tools available from any IDE that supports MCP. VS Code, Cursor, Claude Desktop — same tools, same experience."
 
 **Developer:** "I open VS Code, and CORTEX is ready. No `python3 -m cortex.mcp start` command. No Docker container. It's just there. I call tools directly from Copilot Chat."
 

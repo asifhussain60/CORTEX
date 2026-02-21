@@ -44,7 +44,7 @@ diagrams: ASCII service architecture, sequence diagrams
 
 | **CortexAuditDB** | `cortex/infrastructure/audit_db.py` | Unified SQLite with WAL mode — all audit trails |The Core Platform provides the foundational infrastructure enabling CORTEX's intelligent development capabilities. Organizations benefit from enterprise-grade service reliability, zero-downtime deployments, and comprehensive observability without custom infrastructure investment [Business Leaders]. Product teams gain consistent request processing, state management, and configuration control across all CORTEX features [Product Owners]. The platform implements service-oriented architecture with MCP Gateway, Tool Registry, State Management, Configuration Management, and Health Monitoring [Software Developers].
 
-| **MCP Server** | `cortex/mcp/` | Pylance-style stdio server, 23 canonical tools |
+| **MCP Server** | `cortex/mcp/` | Pylance-style stdio server, 24 canonical tools |
 
 | **Bootstrap** | `cortex/bootstrap.py` | System initialization, wiring, service discovery |**Core Platform Components:**
 
@@ -130,7 +130,7 @@ All orchestrators route audit data through `CortexAuditDB` (SQLite with WAL mode
 
 - **Request Queuing:** Async processing for long operations
 
-## MCP Server: 23 Canonical Tools
+## MCP Server: 24 Canonical Tools
 
 **State Management** — Tracking operation progress and recovery
 

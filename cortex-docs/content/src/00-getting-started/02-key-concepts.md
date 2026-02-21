@@ -4,7 +4,7 @@
 title: CORTEX Key Concepts — Terminology for New Readers
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-20
+last_verified: 2026-02-21
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 format: 10k-view
 order: 2
@@ -22,7 +22,7 @@ The communication standard connecting your IDE to CORTEX. Think of it as the **l
 **Live location:** `cortex/mcp/` — Pylance-style stdio server, auto-starts with VS Code.
 
 ### MCP Gateway
-The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **23 canonical MCP tools**.
+The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **24 canonical MCP tools**.
 
 **Daily example:** When you type a request in VS Code Copilot Chat, it enters through the MCP Gateway, which routes it to `cortex_process_request` or another appropriate tool.
 
@@ -161,6 +161,19 @@ YAML-defined workflow specifications stored in `cortex-registry/workflows/templa
 
 ### Enterprise Patterns
 9 architecture patterns registered in `cortex-registry/patterns/`: mediator, strategy, observer, factory, template-method, chain-of-responsibility, adapter, repository, command.
+
+### WorkItemProvider — Pluggable Ticketing Integration
+A `@runtime_checkable` Protocol that connects any ticketing system to CORTEX through a single MCP surface. Companies implement the three-method contract once; the `cortex_fetch_work_items` tool is identical regardless of which system sits behind it.
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| `WorkItemProvider` Protocol | `cortex/repositories/work_item_provider.py` | Integration contract |
+| `WorkItem` dataclass | `cortex/repositories/work_item_provider.py` | Canonical work item shape |
+| `ADOWorkItemProvider` | `cortex/repositories/ado/ado_provider.py` | Azure DevOps adapter |
+| `provider_factory` | `cortex/repositories/provider_factory.py` | `WORK_ITEM_SOURCE` env selector |
+| `cortex_fetch_work_items` | `cortex/mcp/tools/work_item_tool.py` | MCP entry point |
+
+**Daily example:** Set `WORK_ITEM_SOURCE=ado` in your deployment config. Call `cortex_fetch_work_items(project="MyProject")` to pull all user stories. The tool returns structured `WorkItem` dicts with `id`, `title`, `description`, `state`, `type`, `tags`, `url`, and `raw` (full ADO API response). See `04-mcp/06-work-item-integration.md` for the full guide.
 
 ---
 

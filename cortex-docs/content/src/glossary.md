@@ -4,7 +4,7 @@
 title: CORTEX Glossary — Terminology Reference
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-21
 source_of_truth: cortex/ (live codebase)
 order: 99
 ---
@@ -16,6 +16,10 @@ order: 99
 ## A
 
 **Action Tier** — Third intelligence tier. Executes plans produced by the Reasoning tier. Generates code, tests, and transformations. Location: `cortex/intelligence/action/`.
+
+**ADO (Azure DevOps)** — The default work item ticketing system integrated with CORTEX. Selected by setting `WORK_ITEM_SOURCE=ado`. Requires `ADO_ORG_URL`, `ADO_PAT`, and `ADO_PROJECT` environment variables. Adapter: `cortex/repositories/ado/ado_provider.py`.
+
+**ADOWorkItemProvider** — Concrete implementation of the `WorkItemProvider` Protocol for Azure DevOps. Exposes `fetch_user_stories`, `fetch_by_id`, and `health_check` methods backed by ADO REST API calls. Companies fill in the stub method bodies with their HTTP client and field mapping logic. Location: `cortex/repositories/ado/ado_provider.py`.
 
 **Audit Database (CortexAuditDB)** — SQLite WAL database storing all operation records with hash-chain integrity. Location: `.cortex-runtime/`. Module: `cortex/infrastructure/audit_db.py`.
 
@@ -41,9 +45,11 @@ order: 99
 
 **CORE Rules** — Governance rules identified by `CORE-nnn` IDs. 35 defined in `cortex-registry/core/governance/skull-rules.yaml`, 17 actively enforced.
 
-**CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution. An AI engineering framework with 52 orchestrators, 23 MCP tools, and 17 governance rules.
+**CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution. An AI engineering framework with 52 orchestrators, 24 MCP tools, and 17 governance rules.
 
 **cortex_process_request** — Mandatory MCP entry point. Routes ALL user requests through MasterOrchestrator 4-stage pipeline. Module: `cortex/mcp/tools/core.py`.
+
+**cortex_fetch_work_items** — MCP tool (Phase 15) for provider-agnostic work item access. Fetches user stories, bugs, and tasks from the configured ticketing system (ADO, Jira, custom). Provider is selected via `WORK_ITEM_SOURCE` env var. Module: `cortex/mcp/tools/work_item_tool.py`.
 
 ## D
 
@@ -95,7 +101,7 @@ order: 99
 
 **MasterOrchestrator** — Central entry point orchestrator. Runs 4-stage pipeline: Interaction → Intent → Intelligence → Execution. Location: `cortex/orchestrators/core/master_orchestrator.py`.
 
-**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 23 canonical tools exposed via stdio transport.
+**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 24 canonical tools exposed via stdio transport.
 
 ## O
 
@@ -149,8 +155,14 @@ order: 99
 
 **WorkflowEngine** — Executes workflow templates from `cortex-registry/workflows/`. Supports lifecycle and production template categories.
 
+**WorkItem** — Canonical dataclass representing a work item across all ticketing systems. Fields: `id`, `title`, `description`, `state`, `type`, `tags`, `url`, `raw`. The `raw` field carries the full unmodified API response so company-specific fields (Area Path, Sprint, Custom.* ADO fields, Jira components) survive intact. Module: `cortex/repositories/work_item_provider.py`.
+
+**WorkItemProvider** — `@runtime_checkable` Protocol defining the integration contract for all ticketing systems. Three required methods: `fetch_user_stories(project, **kwargs)`, `fetch_by_id(item_id)`, `health_check()`. Companies implement once; CORTEX routes through the same MCP surface regardless of backend. Module: `cortex/repositories/work_item_provider.py`.
+
+**WORK_ITEM_SOURCE** — Environment variable that selects the active `WorkItemProvider`. Default: `"ado"` (Azure DevOps). Factory: `cortex/repositories/provider_factory.py`.
+
 **Workflow Templates** — YAML-defined execution plans in `cortex-registry/workflows/templates/`. Categories: `lifecycle/` (development flow) and `production/` (deployment operations).
 
 ---
 
-*Verified against live CORTEX codebase · 20 February 2026*
+*Verified against live CORTEX codebase · 21 February 2026*

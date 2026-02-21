@@ -4,7 +4,7 @@
 title: CORTEX — Cognitive Real-Time Execution Platform
 type: overview
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-21
 source_of_truth: cortex/ + cortex-registry/planning/cortex-refactor-master.yaml
 format: one-pager
 order: 1
@@ -29,11 +29,11 @@ Think of it like the difference between a calculator and a brain. A calculator w
 ```
   ┌───────────────────────────────────────────────────────────────┐
   │                  CORTEX PLATFORM v1.0.0                       │
-  │                  1 Package · 52 Orchestrators · 23 MCP Tools  │
+  │                  1 Package · 52 Orchestrators · 24 MCP Tools  │
   │                                                               │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ MCP Gateway  │─▶│  Orchestration    │─▶│ Intelligence  │  │
-  │  │ 23 tools     │  │  10 domains       │  │ LENS + Brain  │  │
+  │  │ 24 tools     │  │  10 domains       │  │ LENS + Brain  │  │
   │  │ stdio/HTTP   │  │  52 orchestrators │  │ 8 analyzers   │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   │         │                   │                     │           │
@@ -52,7 +52,7 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 | Domain | What It Does | Key Metric |
 |--------|-------------|------------|
-| **🏗️ Core Platform** | MCP gateway, 52-orchestrator dispatch, state management, health monitoring | 23 MCP tools, Pylance-style stdio |
+| **🏗️ Core Platform** | MCP gateway, 52-orchestrator dispatch, state management, health monitoring | 24 MCP tools, Pylance-style stdio |
 | **🤖 Intelligence (LENS)** | 8-analyzer parallel code understanding — AST, Git, Security, Patterns, Metrics, and more | 300–800ms full analysis |
 | **🧠 Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repo | Confidence scored 0.0–1.0 |
 | **🎯 Decisioning** | Intent routing across 10+ intent types to 52 orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |

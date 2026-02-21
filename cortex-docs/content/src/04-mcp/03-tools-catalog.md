@@ -1,10 +1,10 @@
 # MCP Tools Catalog
 
 ---
-title: MCP Tools Catalog — 23 Canonical Tools
+title: MCP Tools Catalog — 24 Canonical Tools
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-20
+last_verified: 2026-02-21
 source_of_truth: cortex/mcp/tools/ (return "cortex_*" in name properties)
 order: 3
 ---
@@ -15,7 +15,7 @@ order: 3
 
 ## Overview
 
-23 canonical MCP tools organized across 6 categories. All tools are registered via `ConsolidatedTool` base class and exposed through JSON-RPC 2.0 stdio transport.
+24 canonical MCP tools organized across 7 categories. All tools are registered via `ConsolidatedTool` base class and exposed through JSON-RPC 2.0 stdio transport.
 
 **Entry point rule:** All user requests MUST route through `cortex_process_request`. Other tools are internal or auxiliary.
 
@@ -91,11 +91,35 @@ Verification, discovery, metrics, and education tools.
 |------|-------------|
 | `cortex_workflow` | Execute workflow templates — lifecycle and production workflows from `cortex-registry/workflows/`. |
 
+### Work Item Integration (1 tool) — `cortex/mcp/tools/work_item_tool.py`
+
+Provider-agnostic work item access for all ticketing systems (Azure DevOps, Jira, custom).
+
+| Tool | Description |
+|------|-------------|
+| `cortex_fetch_work_items` | Fetch work items (user stories, bugs, tasks) from the configured ticketing system. Provider is selected via `WORK_ITEM_SOURCE` env var (default: `"ado"`). Returns a list of `WorkItem` dicts with `id`, `title`, `description`, `state`, `type`, `tags`, `url`, and `raw` fields. Supports single-item fetch by `item_id` and provider-specific `filters` (e.g. sprint, state). |
+
+**Required parameters:**
+- `project` *(string, required)* — Project name or identifier in the source system.
+- `item_id` *(string, optional)* — When supplied, fetches a single work item by ID.
+- `filters` *(object, optional)* — Provider-specific filter dict (e.g. `{"sprint": "Sprint 42", "state": "Active"}`).
+
+**Environment variables (ADO provider):**
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `WORK_ITEM_SOURCE` | No (default: `"ado"`) | Provider selector |
+| `ADO_ORG_URL` | Yes | Azure DevOps org URL (e.g. `https://dev.azure.com/your-org`) |
+| `ADO_PAT` | Yes* | Personal Access Token (* empty for managed identity) |
+| `ADO_PROJECT` | Yes | Default project name |
+
+> **Architecture note:** `cortex_fetch_work_items` is **provider-agnostic**. The `ADOWorkItemProvider` (`cortex/repositories/ado/ado_provider.py`) implements the `WorkItemProvider` Protocol — companies replace the stub bodies with their ADO REST client calls. See `04-mcp/06-work-item-integration.md` for the full integration guide.
+
 ---
 
 ## Specialized Tool Modules (Phase 12 consolidation targets)
 
-In addition to the 23 canonical tools above, several specialized modules provide focused capabilities:
+In addition to the 24 canonical tools above, several specialized modules provide focused capabilities:
 
 ### Health Tools — `cortex/mcp/tools/health_check_tool.py` + `health_scan_tool.py`
 
@@ -184,12 +208,12 @@ All tools inherit from `ConsolidatedTool` (defined in `cortex/mcp/mcp_tool_base.
 
 ## Practical Examples
 
-**Business Leader:** "23 canonical tools, one entry point (`cortex_process_request`). Developers can't bypass governance — the architecture enforces it."
+**Business Leader:** "24 canonical tools, one entry point (`cortex_process_request`). Developers can't bypass governance — the architecture enforces it."
 
 **Product Owner:** "When planning a sprint, `cortex_plan` generates remediation plans from audit results with 4 execution modes. `cortex_onboard` gives a complete repository assessment in one call."
 
-**Developer:** "I call `cortex_process_request` with `operation: 'implement'` and my request. It routes through MasterOrchestrator, runs LENS analysis, classifies intent, enforces TDD, and returns structured output. I can also use `cortex_verify` to check my environment and `cortex_tools_catalog` to discover available tools."
+**Developer:** "I call `cortex_process_request` with `operation: 'implement'` and my request. It routes through MasterOrchestrator, runs LENS analysis, classifies intent, enforces TDD, and returns structured output. I can also use `cortex_verify` to check my environment and `cortex_tools_catalog` to discover available tools. For sprint work, I call `cortex_fetch_work_items` with my ADO project name to pull user stories directly into my development context."
 
 ---
 
-*Verified against `cortex/mcp/tools/` — 37 Python files, 23 canonical tool names · 20 February 2026*
+*Verified against `cortex/mcp/tools/` — 38 Python files, 24 canonical tool names · 21 February 2026*
