@@ -7,6 +7,7 @@ Author: CORTEX Framework
 
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 class DomainHandler(ABC):
@@ -260,7 +261,7 @@ class IntegrationHandler(DomainHandler):
         return isinstance(domains, list) and len(domains) >= 2
 
 
-class DomainOrchestrator:
+class DomainOrchestrator(OrchestratorProtocolMixin):
     """Main orchestrator for coordinating domain operations."""
 
     def __init__(self) -> None:

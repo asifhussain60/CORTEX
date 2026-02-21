@@ -17,16 +17,16 @@ class TestAzureKeyVaultProviderInterface:
     
     def test_azure_provider_implements_interface(self):
         """AzureKeyVaultProvider implements ISecretsProvider"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert issubclass(AzureKeyVaultProvider, ISecretsProvider)
     
     def test_azure_provider_requires_endpoint(self):
         """AzureKeyVaultProvider requires Key Vault URL endpoint"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import ConfigError
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import ConfigError
         
         config = SecretsConfig(
             provider_type="azure",
@@ -38,8 +38,8 @@ class TestAzureKeyVaultProviderInterface:
     
     def test_azure_provider_accepts_keyvault_uri(self):
         """AzureKeyVaultProvider accepts Key Vault URI as endpoint"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         vault_url = "https://my-vault.vault.azure.net/"
         config = SecretsConfig(
@@ -56,8 +56,8 @@ class TestAzureKeyVaultProviderRetrieval:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_get_retrieves_secret(self, mock_secret_client_class):
         """get(secret_id) retrieves secret from Key Vault"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         # Mock Azure SecretClient
         mock_client = MagicMock()
@@ -80,8 +80,8 @@ class TestAzureKeyVaultProviderRetrieval:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_get_handles_secret_versions(self, mock_secret_client_class):
         """get() can retrieve specific secret versions"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_secret_client_class.return_value = mock_client
@@ -107,8 +107,8 @@ class TestAzureKeyVaultProviderStorage:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_set_creates_secret(self, mock_secret_client_class):
         """set(secret_id, value) creates or updates secret"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_secret_client_class.return_value = mock_client
@@ -133,8 +133,8 @@ class TestAzureKeyVaultProviderStorage:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_set_with_tags(self, mock_secret_client_class):
         """set() can add tags for organization"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_secret_client_class.return_value = mock_client
@@ -158,8 +158,8 @@ class TestAzureKeyVaultProviderDeletion:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_delete_soft_deletes(self, mock_secret_client_class):
         """delete(secret_id) soft-deletes with 30-day recovery"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_secret_client_class.return_value = mock_client
@@ -182,8 +182,8 @@ class TestAzureKeyVaultProviderDeletion:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_purge_immediately(self, mock_secret_client_class):
         """delete() can purge immediately (hard delete)"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_secret_client_class.return_value = mock_client
@@ -206,8 +206,8 @@ class TestAzureKeyVaultProviderRotation:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_rotate_creates_new_version(self, mock_secret_client_class):
         """rotate(secret_id) creates new secret version"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         import uuid
         
         mock_client = MagicMock()
@@ -238,8 +238,8 @@ class TestAzureKeyVaultProviderRBAC:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_uses_managed_identity(self, mock_secret_client_class):
         """Provider uses managed identity for RBAC enforcement"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         # When using DefaultAzureCredential, it automatically uses managed identity
         mock_client = MagicMock()
@@ -258,9 +258,9 @@ class TestAzureKeyVaultProviderRBAC:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_respects_role_permissions(self, mock_secret_client_class):
         """Provider operations fail when lacking RBAC permissions"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import PermissionError as SecretsPermissionError
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import PermissionError as SecretsPermissionError
         from azure.core.exceptions import ClientAuthenticationError
         
         mock_client = MagicMock()
@@ -283,9 +283,9 @@ class TestAzureKeyVaultProviderErrorHandling:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_handles_not_found(self, mock_secret_client_class):
         """get() raises SecretNotFoundError for missing secrets"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import SecretNotFoundError
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import SecretNotFoundError
         from azure.core.exceptions import ResourceNotFoundError
         
         mock_client = MagicMock()
@@ -304,9 +304,9 @@ class TestAzureKeyVaultProviderErrorHandling:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_handles_authentication_error(self, mock_secret_client_class):
         """Auth errors are properly mapped"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import AuthError
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import AuthError
         from azure.core.exceptions import ClientAuthenticationError
         
         mock_client = MagicMock()
@@ -329,8 +329,8 @@ class TestAzureKeyVaultProviderList:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_list_secrets(self, mock_secret_client_class):
         """list() returns all secrets in vault"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_secret_client_class.return_value = mock_client
@@ -356,8 +356,8 @@ class TestAzureKeyVaultProviderList:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_azure_provider_list_with_prefix(self, mock_secret_client_class):
         """list(prefix) filters secrets by prefix"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_secret_client_class.return_value = mock_client
@@ -394,8 +394,8 @@ class TestAzureKeyVaultProviderIntegration:
     @patch('cortex.secrets.providers.azure.SecretClient')
     def test_full_secret_lifecycle(self, mock_secret_client_class):
         """Full workflow: create → retrieve → rotate → soft-delete"""
-        from cortex.secrets.providers.azure import AzureKeyVaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.azure import AzureKeyVaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_secret_client_class.return_value = mock_client

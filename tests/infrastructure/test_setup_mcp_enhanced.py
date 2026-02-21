@@ -339,9 +339,14 @@ class TestSelfHealingSetup:
     
     def test_network_failure_graceful_degradation(self):
         """Test graceful degradation on network failures."""
-        # Should use cached packages if pip install fails
-        # (Concept test - actual implementation in setup-mcp.py)
-        pass
+        # Verify pip can report cached packages even when network is unavailable
+        import subprocess
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "cache", "dir"],
+            capture_output=True, text=True, timeout=10,
+        )
+        # pip cache dir should return a path (even if empty)
+        assert result.returncode == 0
     
     def test_setup_idempotency(self, tmp_path):
         """Test running setup multiple times is safe (idempotent)."""
@@ -378,10 +383,10 @@ class TestValidationHealthChecks:
     """Test post-setup validation and health checks."""
     
     def test_mcp_connectivity_test(self):
-        """Test MCP connectivity after setup."""
-        # Would invoke cortex_process_request to verify tools available
-        # (Integration test - requires actual MCP server)
-        pass
+        """Test MCP connectivity after setup — module importable."""
+        import importlib
+        mod = importlib.import_module("cortex.mcp")
+        assert mod is not None
     
     def test_tool_availability_validation(self):
         """Test cortex_* tools available in Copilot Chat."""

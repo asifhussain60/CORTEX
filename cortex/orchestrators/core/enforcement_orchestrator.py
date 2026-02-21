@@ -34,6 +34,7 @@ from enum import Enum
 from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 
 logger = logging.getLogger(__name__)
@@ -1114,7 +1115,7 @@ class ExtendedGovernanceAgent:
 # ENFORCEMENT ORCHESTRATOR
 # ============================================================================
 
-class EnforcementOrchestrator:
+class EnforcementOrchestrator(OrchestratorProtocolMixin):
     """
     Pre-execution governance enforcement orchestrator with 8-agent system.
 

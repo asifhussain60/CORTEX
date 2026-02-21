@@ -1528,7 +1528,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
 
             # AC-AR-006-02: Bootstrap all orchestrators (Phase 3 Git-backed wiring)
             try:
-                from cortex.wiring import wiring_bootstrap_cortex, is_wired
+                from cortex.core.wiring import wiring_bootstrap_cortex, is_wired
                 if not is_wired():
                     registry = bootstrap_cortex()
                     self.logger.info(f"✅ Bootstrapped {len(registry.list_orchestrators())} orchestrators")
@@ -1564,7 +1564,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
             # Phase 3: Git-backed YAML wiring (no database, no autowiring stub)
             # Orchestrators configured via cortex/wiring/specifications/wiring.yaml
             try:
-                from cortex.wiring import get_cortex
+                from cortex.core.wiring import get_cortex
 
                 # Get wired orchestrators from Phase 3 registry
                 registry = get_cortex()
@@ -5086,7 +5086,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
         """
         try:
             # Import complexity router
-            from cortex.intent_router import WorkflowComplexityRouter, Intent as ComplexityIntent
+            from cortex.orchestrators.core.intent_router.workflow_gate import WorkflowComplexityRouter, Intent as ComplexityIntent
             from cortex.orchestrators.core.intent_router.workflow_gate import RoutingStrategy
             
             # Extract operation details

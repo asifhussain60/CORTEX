@@ -24,14 +24,14 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_is_abstract_protocol(self):
         """ISecretsProvider must be abstract base class"""
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, '__abstractmethods__')
         assert len(ISecretsProvider.__abstractmethods__) > 0
 
     def test_secrets_provider_has_get_method(self):
         """get(secret_id: str) retrieves secret by identifier"""
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'get')
         provider_method = getattr(ISecretsProvider, 'get')
@@ -39,7 +39,7 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_has_set_method(self):
         """set(secret_id: str, value: str, metadata: Dict) stores secret"""
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'set')
         provider_method = getattr(ISecretsProvider, 'set')
@@ -47,7 +47,7 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_has_rotate_method(self):
         """rotate(secret_id: str) triggers secret rotation"""
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'rotate')
         provider_method = getattr(ISecretsProvider, 'rotate')
@@ -55,7 +55,7 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_has_delete_method(self):
         """delete(secret_id: str) marks secret for deletion"""
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'delete')
         provider_method = getattr(ISecretsProvider, 'delete')
@@ -63,7 +63,7 @@ class TestISecretsProviderInterface:
 
     def test_secrets_provider_has_list_method(self):
         """list(prefix: str = '') returns all secrets matching prefix"""
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert hasattr(ISecretsProvider, 'list')
         provider_method = getattr(ISecretsProvider, 'list')
@@ -75,7 +75,7 @@ class TestSecretsConfig:
 
     def test_secrets_config_has_provider_type(self):
         """SecretsConfig.provider_type: str (aws|azure|vault|local)"""
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="aws")
         assert hasattr(config, 'provider_type')
@@ -83,7 +83,7 @@ class TestSecretsConfig:
 
     def test_secrets_config_has_endpoint(self):
         """SecretsConfig.endpoint: Optional[str] (URL/ARN)"""
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(
             provider_type="aws",
@@ -93,21 +93,21 @@ class TestSecretsConfig:
 
     def test_secrets_config_has_region(self):
         """SecretsConfig.region: Optional[str] (AWS region)"""
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="aws", region="us-west-2")
         assert config.region == "us-west-2"
 
     def test_secrets_config_has_auth_type(self):
         """SecretsConfig.auth_type: str (iam|managed_identity|approle|env)"""
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="aws", auth_type="iam")
         assert config.auth_type == "iam"
 
     def test_secrets_config_has_metadata(self):
         """SecretsConfig.metadata: Dict for provider-specific settings"""
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(
             provider_type="aws",
@@ -117,7 +117,7 @@ class TestSecretsConfig:
 
     def test_secrets_config_defaults(self):
         """SecretsConfig has sensible defaults"""
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="local")
         assert config.auth_type == "env"
@@ -129,15 +129,15 @@ class TestSecretsProviderFactory:
 
     def test_factory_function_exists(self):
         """get_secrets_provider(config) → ISecretsProvider"""
-        from cortex.secrets.factory import get_secrets_provider
+        from cortex.infrastructure.secrets.factory import get_secrets_provider
         
         assert callable(get_secrets_provider)
 
     def test_factory_returns_local_provider(self):
         """Factory returns LocalSecretsProvider for provider_type='local'"""
-        from cortex.secrets.factory import get_secrets_provider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.factory import get_secrets_provider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
         
         config = SecretsConfig(provider_type="local")
         provider = get_secrets_provider(config)
@@ -146,8 +146,8 @@ class TestSecretsProviderFactory:
 
     def test_factory_supports_aws_provider_type(self):
         """Factory recognizes provider_type='aws'"""
-        from cortex.secrets.factory import get_secrets_provider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.factory import get_secrets_provider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="aws", region="us-east-1")
         # Should not raise
@@ -156,8 +156,8 @@ class TestSecretsProviderFactory:
 
     def test_factory_supports_azure_provider_type(self):
         """Factory recognizes provider_type='azure'"""
-        from cortex.secrets.factory import get_secrets_provider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.factory import get_secrets_provider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="azure", endpoint="https://vault.azure.net")
         # Should not raise
@@ -166,8 +166,8 @@ class TestSecretsProviderFactory:
 
     def test_factory_supports_vault_provider_type(self):
         """Factory recognizes provider_type='vault'"""
-        from cortex.secrets.factory import get_secrets_provider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.factory import get_secrets_provider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="vault", endpoint="https://vault.company.com")
         # Should not raise
@@ -176,9 +176,9 @@ class TestSecretsProviderFactory:
 
     def test_factory_raises_on_unknown_provider(self):
         """Factory raises ConfigError for unknown provider_type"""
-        from cortex.secrets.factory import get_secrets_provider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import ConfigError
+        from cortex.infrastructure.secrets.factory import get_secrets_provider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import ConfigError
         
         # ConfigError should be raised during SecretsConfig creation
         with pytest.raises(ConfigError):
@@ -188,7 +188,7 @@ class TestSecretsProviderFactory:
     def test_factory_environment_based_selection(self):
         """Factory can select provider from SECRETS_PROVIDER env var"""
         import os
-        from cortex.secrets.factory import get_secrets_provider_from_env
+        from cortex.infrastructure.secrets.factory import get_secrets_provider_from_env
         
         with patch.dict(os.environ, {"SECRETS_PROVIDER": "local"}):
             provider = get_secrets_provider_from_env()
@@ -200,38 +200,38 @@ class TestSecretsProviderErrorHandling:
 
     def test_auth_error_raised_on_invalid_credentials(self):
         """AuthError raised when credentials invalid"""
-        from cortex.secrets.errors import AuthError
+        from cortex.infrastructure.secrets.errors import AuthError
         
         assert issubclass(AuthError, Exception)
 
     def test_config_error_for_missing_required_config(self):
         """ConfigError raised when required config missing"""
-        from cortex.secrets.errors import ConfigError
+        from cortex.infrastructure.secrets.errors import ConfigError
         
         assert issubclass(ConfigError, Exception)
 
     def test_secret_not_found_error(self):
         """SecretNotFoundError raised when secret doesn't exist"""
-        from cortex.secrets.errors import SecretNotFoundError
+        from cortex.infrastructure.secrets.errors import SecretNotFoundError
         
         assert issubclass(SecretNotFoundError, Exception)
 
     def test_permission_error_for_access_denied(self):
         """PermissionError raised when user lacks access"""
-        from cortex.secrets.errors import PermissionError as SecretsPermissionError
+        from cortex.infrastructure.secrets.errors import PermissionError as SecretsPermissionError
         
         assert issubclass(SecretsPermissionError, Exception)
 
     def test_storage_error_for_backend_failures(self):
         """StorageError raised for secrets backend issues"""
-        from cortex.secrets.errors import StorageError
+        from cortex.infrastructure.secrets.errors import StorageError
         
         assert issubclass(StorageError, Exception)
 
     def test_local_provider_auth_failure(self):
         """LocalSecretsProvider doesn't require .env - auth always succeeds locally"""
-        from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="local")
         provider = LocalSecretsProvider(config)
@@ -247,15 +247,15 @@ class TestLocalSecretsProvider:
 
     def test_local_provider_implements_interface(self):
         """LocalSecretsProvider implements ISecretsProvider"""
-        from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert issubclass(LocalSecretsProvider, ISecretsProvider)
 
     def test_local_provider_reads_from_env(self):
         """LocalSecretsProvider.get() reads from environment"""
-        from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         with patch.dict('os.environ', {'DB_PASSWORD': 'secret123'}):
             config = SecretsConfig(provider_type="local")
@@ -266,8 +266,8 @@ class TestLocalSecretsProvider:
 
     def test_local_provider_returns_none_for_missing_secret(self):
         """LocalSecretsProvider.get() returns None if not in environment"""
-        from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="local")
         provider = LocalSecretsProvider(config)
@@ -277,8 +277,8 @@ class TestLocalSecretsProvider:
 
     def test_local_provider_set_method(self):
         """LocalSecretsProvider.set() stores in memory"""
-        from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="local")
         provider = LocalSecretsProvider(config)
@@ -288,8 +288,8 @@ class TestLocalSecretsProvider:
 
     def test_local_provider_delete_method(self):
         """LocalSecretsProvider.delete() removes secret"""
-        from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="local")
         provider = LocalSecretsProvider(config)
@@ -301,8 +301,8 @@ class TestLocalSecretsProvider:
 
     def test_local_provider_list_method(self):
         """LocalSecretsProvider.list() returns all secrets"""
-        from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="local")
         provider = LocalSecretsProvider(config)
@@ -318,8 +318,8 @@ class TestLocalSecretsProvider:
 
     def test_local_provider_list_with_prefix(self):
         """LocalSecretsProvider.list(prefix) filters by prefix"""
-        from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="local")
         provider = LocalSecretsProvider(config)
@@ -335,8 +335,8 @@ class TestLocalSecretsProvider:
 
     def test_local_provider_rotate_method(self):
         """LocalSecretsProvider.rotate() updates secret version"""
-        from cortex.secrets.providers.local import LocalSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.local import LocalSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(provider_type="local")
         provider = LocalSecretsProvider(config)
@@ -354,8 +354,8 @@ class TestSecretsProviderIntegration:
 
     def test_factory_to_provider_workflow(self):
         """Full workflow: config → factory → provider → operations"""
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.factory import get_secrets_provider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.factory import get_secrets_provider
         
         config = SecretsConfig(provider_type="local")
         provider = get_secrets_provider(config)
@@ -367,8 +367,8 @@ class TestSecretsProviderIntegration:
 
     def test_provider_isolation(self):
         """Each provider instance maintains separate secrets"""
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.factory import get_secrets_provider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.factory import get_secrets_provider
         
         config1 = SecretsConfig(provider_type="local")
         config2 = SecretsConfig(provider_type="local")

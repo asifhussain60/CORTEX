@@ -23,15 +23,15 @@ import sys
 cortex_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(cortex_root))
 
-from cortex.phase_executors.phase_executor_base import (
+from cortex.orchestrators.core.phase_executors.phase_executor_base import (
     ExecutionResult,
     PhaseExecutorBase,
 )
-from cortex.phase_executors.phase_executor_factory import (
+from cortex.orchestrators.core.phase_executors.phase_executor_factory import (
     PhaseExecutorFactory,
     GenericPhaseExecutor,
 )
-from cortex.phase_executors.phase_orchestrator import PhaseOrchestrator
+from cortex.orchestrators.core.phase_executors.phase_orchestrator import PhaseOrchestrator
 
 
 class TestExecutionResult:

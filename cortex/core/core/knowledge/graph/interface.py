@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.api.health_endpoints import HealthStatus
+from cortex.infrastructure.api.health_endpoints import HealthStatus
 
 
 class GraphQueryError(Exception):

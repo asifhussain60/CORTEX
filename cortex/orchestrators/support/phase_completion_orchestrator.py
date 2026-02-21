@@ -13,6 +13,7 @@ from typing import Any, Dict, Optional
 from unittest.mock import MagicMock
 
 import yaml
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 # ── Helpers that can be patched in tests ─────────────────────────────────────
@@ -48,7 +49,7 @@ class CompletionResult:
 
 # ── Orchestrator ──────────────────────────────────────────────────────────────
 
-class PhaseCompletionOrchestrator:
+class PhaseCompletionOrchestrator(OrchestratorProtocolMixin):
     """Orchestrates post-phase-completion sync operations."""
 
     def complete_phase(

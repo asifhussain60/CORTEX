@@ -22,6 +22,8 @@ from typing import Dict, Any, List, Optional
 from datetime import datetime
 import logging
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 
 logger = logging.getLogger(__name__)
 
@@ -59,7 +61,7 @@ class ValidationResult:
 # HOLISTIC VALIDATION ORCHESTRATOR
 # ============================================================================
 
-class HolisticValidationOrchestrator:
+class HolisticValidationOrchestrator(OrchestratorProtocolMixin):
     """Orchestrate pre-implementation validation gate.
     
     Coordinates:

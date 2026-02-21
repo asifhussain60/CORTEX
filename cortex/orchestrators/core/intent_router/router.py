@@ -43,6 +43,8 @@ try:
 except ImportError:
     CanonicalIntentType = None
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 logger = logging.getLogger(__name__)
 
 
@@ -113,7 +115,7 @@ class IntentRoutingResult:
         return meta
 
 
-class EnhancedIntentRouter:
+class EnhancedIntentRouter(OrchestratorProtocolMixin):
     """
     IntentRouter v2 with capability-based agent selection.
 

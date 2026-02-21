@@ -7,6 +7,7 @@ with checkpoint creation, integrity verification, and reporting.
 import enum
 import logging
 from typing import Any, Dict, List, Optional
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 class RollbackStrategy(enum.Enum):
@@ -83,7 +84,7 @@ class RollbackEngine:
         }
 
 
-class RollbackOrchestrator:
+class RollbackOrchestrator(OrchestratorProtocolMixin):
     """Orchestrates safe rollback to previous versions.
 
     Provides checkpoint creation, integrity verification,

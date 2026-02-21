@@ -175,7 +175,7 @@ class TestProductionBootstrapValidation:
     def test_wiring_bootstrap_available(self) -> None:
         """Test wiring bootstrap is available for production startup."""
         try:
-            from cortex.wiring import wiring_bootstrap_cortex
+            from cortex.core.wiring import wiring_bootstrap_cortex
             assert callable(wiring_bootstrap_cortex), \
                 "wiring_bootstrap_cortex not callable"
         except ImportError as e:
@@ -246,7 +246,7 @@ class TestEnvironmentIntegrity:
         # This is the critical end-to-end test
         try:
             # Step 1: Import wiring
-            from cortex.wiring import wiring_bootstrap_cortex, is_wired
+            from cortex.core.wiring import wiring_bootstrap_cortex, is_wired
             
             # Step 2: Check if already wired
             wired_before = is_wired()
@@ -280,7 +280,7 @@ class TestBootstrapPerformance:
     def test_bootstrap_time_under_threshold(self) -> None:
         """Test bootstrap completes within acceptable time (< 5 seconds)."""
         import time
-        from cortex.wiring import wiring_bootstrap_cortex
+        from cortex.core.wiring import wiring_bootstrap_cortex
         
         start_time = time.time()
         registry = wiring_bootstrap_cortex()
@@ -298,7 +298,7 @@ class TestBootstrapPerformance:
         tracemalloc.start()
         
         # Bootstrap
-        from cortex.wiring import wiring_bootstrap_cortex
+        from cortex.core.wiring import wiring_bootstrap_cortex
         registry = wiring_bootstrap_cortex()
         
         # Get memory usage

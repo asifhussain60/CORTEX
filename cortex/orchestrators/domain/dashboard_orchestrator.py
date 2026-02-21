@@ -11,6 +11,7 @@ from dataclasses import asdict, dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 # ============================================================================
 # MODELS
@@ -31,7 +32,7 @@ class DashboardGenerationResult:
 # DASHBOARD ORCHESTRATOR
 # ============================================================================
 
-class DashboardOrchestrator(ABC):
+class DashboardOrchestrator(OrchestratorProtocolMixin, ABC):
     """
     DashboardOrchestrator - Generates and manages repository dashboards
 

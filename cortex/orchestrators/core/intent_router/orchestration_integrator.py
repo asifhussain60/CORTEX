@@ -46,7 +46,7 @@ class OrchestrationIntegrator:
         """
         try:
             # AC-CORE-035: Delegate to canonical GitBackedRegistry accessor
-            from cortex.wiring import get_cortex
+            from cortex.core.wiring import get_cortex
             registry = get_cortex()
             if registry:
                 return registry.get_orchestrator(handler_name)

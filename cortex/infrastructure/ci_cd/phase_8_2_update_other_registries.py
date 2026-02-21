@@ -14,8 +14,8 @@ updates = {
         ]
     },
     "DomainPluginRegistry": {
-        "from": "from cortex.domain_orchestrators.business.plugins import",
-        "to": "from cortex.domain_orchestrators.business.plugins import",
+        "from": "from cortex.orchestrators.domain.business.plugins import",
+        "to": "from cortex.orchestrators.domain.business.plugins import",
         "files": [
             "cortex/domain_orchestrators/business/__init__.py",
             "tests/unit/domain_orchestrators/test_domain_plugins_context.py",

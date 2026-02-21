@@ -25,7 +25,7 @@ class TestDashboardRoutesInitialization:
 
     def test_create_dashboard_router(self):
         """Test creating dashboard router instance."""
-        from cortex.api.endpoints.lens_dashboard_routes import create_dashboard_router
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import create_dashboard_router
         
         router = create_dashboard_router()
         
@@ -35,7 +35,7 @@ class TestDashboardRoutesInitialization:
 
     def test_router_prefix_is_correct(self):
         """Test router has correct API prefix."""
-        from cortex.api.endpoints.lens_dashboard_routes import create_dashboard_router
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import create_dashboard_router
         
         router = create_dashboard_router()
         
@@ -57,7 +57,7 @@ class TestAnalyzeRepositoryEndpoint:
 
     def test_analyze_repository_returns_dashboard_data(self, mock_repo_path: Path):
         """Test /api/dashboard/analyze returns complete dashboard data."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         result = analyze_repository(repo_path=str(mock_repo_path))
         
@@ -74,7 +74,7 @@ class TestAnalyzeRepositoryEndpoint:
 
     def test_analyze_repository_invalid_path_raises_404(self):
         """Test analyzing non-existent repository raises 404."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         # The function should raise HTTPException with status 404
         with pytest.raises(HTTPException) as exc_info:
@@ -84,7 +84,7 @@ class TestAnalyzeRepositoryEndpoint:
 
     def test_analyze_repository_cortex_detection(self, tmp_path: Path):
         """Test CORTEX repository is properly detected."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         # Create mock CORTEX repo with proper structure
         cortex_repo = tmp_path / "cortex-test"
@@ -103,7 +103,7 @@ class TestAnalyzeRepositoryEndpoint:
 
     def test_analyze_repository_includes_metadata(self, mock_repo_path: Path):
         """Test analysis includes metadata timestamps."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         result = analyze_repository(repo_path=str(mock_repo_path))
         
@@ -125,7 +125,7 @@ class TestTabDataEndpoint:
 
     def test_get_tab_data_overview(self, mock_repo_path: Path):
         """Test fetching overview tab data."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_tab_data
         
         result = get_tab_data(tab_id='overview', repo_path=str(mock_repo_path))
         
@@ -136,7 +136,7 @@ class TestTabDataEndpoint:
 
     def test_get_tab_data_dependencies(self, mock_repo_path: Path):
         """Test fetching dependencies tab data."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_tab_data
         
         result = get_tab_data(tab_id='dependencies', repo_path=str(mock_repo_path))
         
@@ -147,7 +147,7 @@ class TestTabDataEndpoint:
 
     def test_get_tab_data_invalid_tab_raises_404(self, mock_repo_path: Path):
         """Test fetching invalid tab raises 404."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_tab_data
         
         with pytest.raises(HTTPException) as exc_info:
             get_tab_data(tab_id='invalid_tab', repo_path=str(mock_repo_path))
@@ -156,7 +156,7 @@ class TestTabDataEndpoint:
 
     def test_get_tab_data_classes(self, mock_repo_path: Path):
         """Test fetching classes tab data."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_tab_data
         
         result = get_tab_data(tab_id='classes', repo_path=str(mock_repo_path))
         
@@ -167,7 +167,7 @@ class TestTabDataEndpoint:
 
     def test_get_tab_data_timeline(self, mock_repo_path: Path):
         """Test fetching timeline tab data."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_tab_data
         
         result = get_tab_data(tab_id='timeline', repo_path=str(mock_repo_path))
         
@@ -189,7 +189,7 @@ class TestOverlayDataEndpoint:
 
     def test_get_overlay_security(self, mock_repo_path: Path):
         """Test fetching security overlay data."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_overlay_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_overlay_data
         
         result = get_overlay_data(overlay_type='security', repo_path=str(mock_repo_path))
         
@@ -199,7 +199,7 @@ class TestOverlayDataEndpoint:
 
     def test_get_overlay_performance(self, mock_repo_path: Path):
         """Test fetching performance overlay data."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_overlay_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_overlay_data
         
         result = get_overlay_data(overlay_type='performance', repo_path=str(mock_repo_path))
         
@@ -209,7 +209,7 @@ class TestOverlayDataEndpoint:
 
     def test_get_overlay_compliance(self, mock_repo_path: Path):
         """Test fetching compliance overlay data."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_overlay_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_overlay_data
         
         result = get_overlay_data(overlay_type='compliance', repo_path=str(mock_repo_path))
         
@@ -224,7 +224,7 @@ class TestWebSocketSupport:
     @pytest.mark.slow
     async def test_websocket_connection_accepted(self):
         """Test WebSocket connection is accepted."""
-        from cortex.api.endpoints.lens_dashboard_routes import websocket_endpoint
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import websocket_endpoint
         from unittest.mock import AsyncMock
         
         # Create mock WebSocket
@@ -263,7 +263,7 @@ class TestWebSocketSupport:
     @pytest.mark.slow
     async def test_websocket_sends_updates(self):
         """Test WebSocket sends periodic updates."""
-        from cortex.api.endpoints.lens_dashboard_routes import websocket_endpoint
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import websocket_endpoint
         from unittest.mock import AsyncMock
         import asyncio
         
@@ -304,7 +304,7 @@ class TestCacheSupport:
     @pytest.mark.skip(reason="Caching disabled for MVP - timestamp differences cause spurious failures")
     def test_cache_invalidation_on_file_change(self, tmp_path: Path):
         """Test cache is invalidated when repository files change."""
-        from cortex.api.endpoints.lens_dashboard_routes import (
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import (
             analyze_repository,
             invalidate_cache
         )
@@ -330,7 +330,7 @@ class TestErrorHandling:
 
     def test_git_error_returns_partial_data(self, tmp_path: Path):
         """Test Git analysis errors return partial data."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         # Non-git repo
         repo = tmp_path / "no-git"
@@ -345,7 +345,7 @@ class TestErrorHandling:
 
     def test_permission_error_raises_403(self):
         """Test permission errors raise 403."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         with pytest.raises(HTTPException) as exc_info:
             analyze_repository(repo_path="/root/protected")
@@ -355,7 +355,7 @@ class TestErrorHandling:
 
     def test_timeout_error_returns_partial_results(self, tmp_path: Path):
         """Test analysis timeout returns partial results."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         repo = tmp_path / "test-repo"
         repo.mkdir()

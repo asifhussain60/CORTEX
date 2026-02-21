@@ -17,16 +17,16 @@ class TestAWSSecretsProviderInterface:
     
     def test_aws_provider_implements_interface(self):
         """AWSSecretsProvider implements ISecretsProvider"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert issubclass(AWSSecretsProvider, ISecretsProvider)
     
     def test_aws_provider_requires_region(self):
         """AWSSecretsProvider requires region in config"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import ConfigError
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import ConfigError
         
         config = SecretsConfig(provider_type="aws", region="us-east-1")
         # Should not raise
@@ -35,8 +35,8 @@ class TestAWSSecretsProviderInterface:
     
     def test_aws_provider_accepts_endpoint_arn(self):
         """AWSSecretsProvider can use ARN as endpoint"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         arn = "arn:aws:secretsmanager:us-east-1:123456789012:secret:my-secret-AbCdEf"
         config = SecretsConfig(
@@ -54,8 +54,8 @@ class TestAWSSecretsProviderRetrieval:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_get_retrieves_secret(self, mock_boto3):
         """get(secret_id) retrieves secret from AWS"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         # Mock AWS Secrets Manager response
         mock_client = MagicMock()
@@ -74,8 +74,8 @@ class TestAWSSecretsProviderRetrieval:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_get_with_arn(self, mock_boto3):
         """get() accepts ARN as secret identifier"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_boto3.client.return_value = mock_client
@@ -95,8 +95,8 @@ class TestAWSSecretsProviderRetrieval:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_get_handles_json_secrets(self, mock_boto3):
         """get() parses JSON secrets as dictionaries"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         import json
         
         mock_client = MagicMock()
@@ -121,8 +121,8 @@ class TestAWSSecretsProviderStorage:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_set_creates_secret(self, mock_boto3):
         """set(secret_id, value) creates or updates secret"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_boto3.client.return_value = mock_client
@@ -143,8 +143,8 @@ class TestAWSSecretsProviderStorage:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_set_with_kms_encryption(self, mock_boto3):
         """set() can specify KMS key for encryption"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_boto3.client.return_value = mock_client
@@ -165,8 +165,8 @@ class TestAWSSecretsProviderStorage:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_delete_secret(self, mock_boto3):
         """delete(secret_id) marks secret for deletion"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_boto3.client.return_value = mock_client
@@ -188,8 +188,8 @@ class TestAWSSecretsProviderRotation:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_rotate_generates_new_version(self, mock_boto3):
         """rotate(secret_id) generates new secret version"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_boto3.client.return_value = mock_client
@@ -208,8 +208,8 @@ class TestAWSSecretsProviderRotation:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_rotation_with_lambda(self, mock_boto3):
         """rotate() can trigger Lambda for custom rotation logic"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_boto3.client.return_value = mock_client
@@ -234,8 +234,8 @@ class TestAWSSecretsProviderAudit:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_logs_get_operations(self, mock_boto3):
         """get() operations are logged for audit trail"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_boto3.client.return_value = mock_client
@@ -254,8 +254,8 @@ class TestAWSSecretsProviderAudit:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_secret_versioning(self, mock_boto3):
         """Secret versions are tracked for audit trail"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_boto3.client.return_value = mock_client
@@ -282,9 +282,9 @@ class TestAWSSecretsProviderErrorHandling:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_handles_not_found_error(self, mock_boto3):
         """get() raises SecretNotFoundError for missing secrets"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import SecretNotFoundError
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import SecretNotFoundError
         from botocore.exceptions import ClientError
         
         mock_client = MagicMock()
@@ -303,9 +303,9 @@ class TestAWSSecretsProviderErrorHandling:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_aws_provider_handles_auth_error(self, mock_boto3):
         """get() raises AuthError on permission denied"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import AuthError, PermissionError as SecretsPermissionError
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import AuthError, PermissionError as SecretsPermissionError
         from botocore.exceptions import ClientError
         
         mock_client = MagicMock()
@@ -328,8 +328,8 @@ class TestAWSSecretsProviderIntegration:
     @patch('cortex.secrets.providers.aws.boto3')
     def test_full_secret_lifecycle(self, mock_boto3):
         """Full workflow: create → retrieve → rotate → delete"""
-        from cortex.secrets.providers.aws import AWSSecretsProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.aws import AWSSecretsProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_boto3.client.return_value = mock_client

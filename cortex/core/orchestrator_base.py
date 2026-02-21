@@ -282,3 +282,24 @@ class OrchestratorBase(ABC):
     def get_latest_result(self) -> Optional[ExecutionResult]:
         """Get the most recent execution result."""
         return self.execution_results[-1] if self.execution_results else None
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return orchestrator health status.
+
+        Returns:
+            Dict with 'status', 'orchestrator', 'uptime_requests', and 'last_success' keys.
+        """
+        total = len(self.execution_results)
+        successes = sum(1 for r in self.execution_results if r.success)
+        last_success = None
+        for r in reversed(self.execution_results):
+            if r.success:
+                last_success = True
+                break
+        return {
+            "status": "healthy",
+            "orchestrator": self.orchestrator_id,
+            "uptime_requests": total,
+            "success_count": successes,
+            "last_success": last_success,
+        }

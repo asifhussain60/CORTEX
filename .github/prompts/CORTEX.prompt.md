@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-02-20 | **Architecture:** 52 Orchestrators · 23 MCP Tools · 17 CORE Rules · 1 Package
+**Updated:** 2026-02-22 | **Architecture:** 21 Wired Orchestrators · 23 MCP Tools · 21 CORE Rules · 1 Package
 
 ---
 

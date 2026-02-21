@@ -8,6 +8,7 @@ import logging
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 class UpgradeStrategy(Enum):
@@ -78,7 +79,7 @@ class CircuitBreaker:
         self._open = False
 
 
-class UpgradeOrchestrator:
+class UpgradeOrchestrator(OrchestratorProtocolMixin):
     """Differential upgrade orchestrator with safety features."""
 
     def __init__(self) -> None:

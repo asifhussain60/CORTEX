@@ -15,7 +15,7 @@ class TestSecretsMigrationDetection:
     
     def test_detector_finds_hardcoded_secrets_in_config_files(self):
         """Detector identifies hardcoded secrets in config files"""
-        from cortex.secrets.migration import SecretsMigrationDetector
+        from cortex.infrastructure.secrets.migration import SecretsMigrationDetector
         
         detector = SecretsMigrationDetector()
         
@@ -34,7 +34,7 @@ class TestSecretsMigrationDetection:
     
     def test_detector_finds_secrets_in_json_configs(self):
         """Detector identifies secrets in JSON config files"""
-        from cortex.secrets.migration import SecretsMigrationDetector
+        from cortex.infrastructure.secrets.migration import SecretsMigrationDetector
         
         detector = SecretsMigrationDetector()
         
@@ -59,7 +59,7 @@ class TestSecretsMigrationDetection:
     
     def test_detector_finds_secrets_in_yaml_configs(self):
         """Detector identifies secrets in YAML config files"""
-        from cortex.secrets.migration import SecretsMigrationDetector
+        from cortex.infrastructure.secrets.migration import SecretsMigrationDetector
         
         detector = SecretsMigrationDetector()
         
@@ -81,7 +81,7 @@ class TestSecretsMigrationDetection:
     
     def test_detector_generates_migration_report(self):
         """Detector generates comprehensive migration report"""
-        from cortex.secrets.migration import SecretsMigrationDetector
+        from cortex.infrastructure.secrets.migration import SecretsMigrationDetector
         
         detector = SecretsMigrationDetector()
         
@@ -100,8 +100,8 @@ class TestSecretsMigrationExecution:
     
     def test_migrator_reads_secret_from_config(self):
         """Migrator reads secret value from config file"""
-        from cortex.secrets.migration import SecretsMigrator
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.migration import SecretsMigrator
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         migrator = SecretsMigrator()
         
@@ -114,8 +114,8 @@ class TestSecretsMigrationExecution:
     
     def test_migrator_stores_secret_in_vault(self):
         """Migrator stores secret value in Vault"""
-        from cortex.secrets.migration import SecretsMigrator
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.migration import SecretsMigrator
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         migrator = SecretsMigrator()
         
@@ -127,7 +127,7 @@ class TestSecretsMigrationExecution:
     
     def test_migrator_removes_secret_from_config(self):
         """Migrator removes secret from source config file"""
-        from cortex.secrets.migration import SecretsMigrator
+        from cortex.infrastructure.secrets.migration import SecretsMigrator
         
         migrator = SecretsMigrator()
         
@@ -138,7 +138,7 @@ class TestSecretsMigrationExecution:
     
     def test_migrator_replaces_with_vault_reference(self):
         """Migrator replaces hardcoded secret with Vault reference"""
-        from cortex.secrets.migration import SecretsMigrator
+        from cortex.infrastructure.secrets.migration import SecretsMigrator
         
         migrator = SecretsMigrator()
         
@@ -155,8 +155,8 @@ class TestSecretsMigrationExecution:
     
     def test_migrator_performs_bulk_migration(self):
         """Migrator performs bulk migration of multiple secrets"""
-        from cortex.secrets.migration import SecretsMigrator
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.migration import SecretsMigrator
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         migrator = SecretsMigrator()
         mock_provider = MagicMock(spec=ISecretsProvider)
@@ -178,8 +178,8 @@ class TestSecretsMigrationValidation:
     
     def test_validator_verifies_secret_stored_in_vault(self):
         """Validator confirms secret stored successfully in Vault"""
-        from cortex.secrets.migration import SecretsValidator
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.migration import SecretsValidator
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         validator = SecretsValidator()
         mock_provider = MagicMock(spec=ISecretsProvider)
@@ -191,7 +191,7 @@ class TestSecretsMigrationValidation:
     
     def test_validator_verifies_secret_removed_from_config(self):
         """Validator confirms secret removed from config file"""
-        from cortex.secrets.migration import SecretsValidator
+        from cortex.infrastructure.secrets.migration import SecretsValidator
         
         validator = SecretsValidator()
         
@@ -206,7 +206,7 @@ class TestSecretsMigrationValidation:
     
     def test_validator_checks_vault_reference_syntax(self):
         """Validator checks Vault reference syntax is correct"""
-        from cortex.secrets.migration import SecretsValidator
+        from cortex.infrastructure.secrets.migration import SecretsValidator
         
         validator = SecretsValidator()
         
@@ -222,7 +222,7 @@ class TestSecretsMigrationValidation:
     
     def test_validator_generates_validation_report(self):
         """Validator generates comprehensive validation report"""
-        from cortex.secrets.migration import SecretsValidator
+        from cortex.infrastructure.secrets.migration import SecretsValidator
         
         validator = SecretsValidator()
         
@@ -241,7 +241,7 @@ class TestSecretsMigrationRollback:
     
     def test_rollback_restores_original_config(self):
         """Rollback restores original configuration file"""
-        from cortex.secrets.migration import SecretsRollback
+        from cortex.infrastructure.secrets.migration import SecretsRollback
         
         rollback = SecretsRollback()
         
@@ -252,8 +252,8 @@ class TestSecretsMigrationRollback:
     
     def test_rollback_removes_secrets_from_vault(self):
         """Rollback removes newly stored secrets from Vault"""
-        from cortex.secrets.migration import SecretsRollback
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.migration import SecretsRollback
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         rollback = SecretsRollback()
         mock_provider = MagicMock(spec=ISecretsProvider)
@@ -267,7 +267,7 @@ class TestSecretsMigrationRollback:
     
     def test_rollback_handles_partial_failure(self):
         """Rollback handles partial migration failure"""
-        from cortex.secrets.migration import SecretsRollback
+        from cortex.infrastructure.secrets.migration import SecretsRollback
         
         rollback = SecretsRollback()
         
@@ -283,7 +283,7 @@ class TestSecretsMigrationRollback:
     
     def test_rollback_generates_rollback_report(self):
         """Rollback generates detailed report of rollback actions"""
-        from cortex.secrets.migration import SecretsRollback
+        from cortex.infrastructure.secrets.migration import SecretsRollback
         
         rollback = SecretsRollback()
         
@@ -301,8 +301,8 @@ class TestSecretsMigrationIntegration:
     
     def test_complete_migration_workflow(self):
         """Complete workflow: detect, validate, migrate, verify"""
-        from cortex.secrets.migration import SecretsMigrationOrchestrator
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.migration import SecretsMigrationOrchestrator
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         orchestrator = SecretsMigrationOrchestrator()
         mock_provider = MagicMock(spec=ISecretsProvider)
@@ -322,7 +322,7 @@ class TestSecretsMigrationIntegration:
     
     def test_migration_with_dry_run(self):
         """Migration supports dry-run mode without actual changes"""
-        from cortex.secrets.migration import SecretsMigrationOrchestrator
+        from cortex.infrastructure.secrets.migration import SecretsMigrationOrchestrator
         
         orchestrator = SecretsMigrationOrchestrator()
         
@@ -340,7 +340,7 @@ class TestSecretsMigrationIntegration:
     
     def test_migration_creates_audit_trail(self):
         """Migration creates immutable audit trail of all actions"""
-        from cortex.secrets.migration import SecretsMigrationOrchestrator
+        from cortex.infrastructure.secrets.migration import SecretsMigrationOrchestrator
         
         orchestrator = SecretsMigrationOrchestrator()
         

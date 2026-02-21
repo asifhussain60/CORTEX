@@ -36,7 +36,7 @@ class TestSecretsEncryption:
     # Test 1: Encrypt secret with AES-256-GCM
     def test_encrypt_secret_with_aes256gcm(self, tmp_path):
         """Test: Encrypt secret using AES-256-GCM"""
-        from cortex.secrets import encrypt_secret
+        from cortex.infrastructure.secrets import encrypt_secret
         
         secret = "my-api-key-12345"
         encrypted = encrypt_secret(secret, encryption="aes-256-gcm")
@@ -48,7 +48,7 @@ class TestSecretsEncryption:
     # Test 2: Decrypt secret with AES-256-GCM
     def test_decrypt_secret_with_aes256gcm(self, tmp_path):
         """Test: Decrypt secret using AES-256-GCM"""
-        from cortex.secrets import encrypt_secret, decrypt_secret
+        from cortex.infrastructure.secrets import encrypt_secret, decrypt_secret
         
         secret = "my-api-key-12345"
         encrypted = encrypt_secret(secret, encryption="aes-256-gcm")
@@ -59,7 +59,7 @@ class TestSecretsEncryption:
     # Test 3: Encryption key derivation (from master key)
     def test_key_derivation_from_master_key(self, tmp_path):
         """Test: Derive encryption key from master key"""
-        from cortex.secrets import derive_encryption_key
+        from cortex.infrastructure.secrets import derive_encryption_key
         
         master_key = "master-secret-key"
         derived_key, salt = derive_encryption_key(master_key)  # Returns tuple
@@ -71,7 +71,7 @@ class TestSecretsEncryption:
     # Test 4: Store encrypted secret in vault
     def test_store_encrypted_secret_in_vault(self, tmp_path):
         """Test: Store encrypted secret in vault"""
-        from cortex.secrets import store_secret
+        from cortex.infrastructure.secrets import store_secret
         
         vault_path = tmp_path / ".vault"
         secret = "my-api-key-12345"
@@ -86,7 +86,7 @@ class TestSecretsEncryption:
     # Test 5: Retrieve decrypted secret from vault
     def test_retrieve_decrypted_secret_from_vault(self, tmp_path):
         """Test: Retrieve decrypted secret from vault"""
-        from cortex.secrets import store_secret, get_secret
+        from cortex.infrastructure.secrets import store_secret, get_secret
         
         vault_path = tmp_path / ".vault"
         secret = "my-api-key-12345"
@@ -99,7 +99,7 @@ class TestSecretsEncryption:
     # Test 6: Encryption nonce (unique per encryption)
     def test_encryption_nonce_unique_per_encryption(self, tmp_path):
         """Test: Each encryption uses unique nonce"""
-        from cortex.secrets import encrypt_secret
+        from cortex.infrastructure.secrets import encrypt_secret
         
         secret = "my-api-key-12345"
         encrypted1 = encrypt_secret(secret)
@@ -110,7 +110,7 @@ class TestSecretsEncryption:
     # Test 7: Encryption integrity (tamper detection)
     def test_encryption_integrity_tamper_detection(self, tmp_path):
         """Test: Detect tampering with encrypted secret"""
-        from cortex.secrets import encrypt_secret, decrypt_secret
+        from cortex.infrastructure.secrets import encrypt_secret, decrypt_secret
         
         secret = "my-api-key-12345"
         encrypted = encrypt_secret(secret)
@@ -124,7 +124,7 @@ class TestSecretsEncryption:
     # Test 8: Master key from environment variable
     def test_master_key_from_environment_variable(self, tmp_path, monkeypatch):
         """Test: Load master key from CORTEX_MASTER_KEY env var"""
-        from cortex.secrets import get_master_key
+        from cortex.infrastructure.secrets import get_master_key
         
         monkeypatch.setenv("CORTEX_MASTER_KEY", "test-master-key-xyz")
         master_key = get_master_key()
@@ -134,7 +134,7 @@ class TestSecretsEncryption:
     # Test 9: Master key missing (graceful failure)
     def test_master_key_missing_graceful_failure(self, tmp_path, monkeypatch):
         """Test: Graceful failure when master key missing"""
-        from cortex.secrets import get_master_key
+        from cortex.infrastructure.secrets import get_master_key
         
         monkeypatch.delenv("CORTEX_MASTER_KEY", raising=False)
         
@@ -144,7 +144,7 @@ class TestSecretsEncryption:
     # Test 10: Encryption key rotation (re-encrypt with new key)
     def test_encryption_key_rotation(self, tmp_path):
         """Test: Re-encrypt secrets with new key"""
-        from cortex.secrets import store_secret, rotate_encryption_key
+        from cortex.infrastructure.secrets import store_secret, rotate_encryption_key
         
         vault_path = tmp_path / ".vault"
         store_secret("api_key", "secret-123", vault_path=vault_path)
@@ -159,7 +159,7 @@ class TestSecretsEncryption:
     # Test 11: Vault file permissions (0600)
     def test_vault_file_permissions_secure(self, tmp_path):
         """Test: Vault file has secure permissions (0600) - best effort"""
-        from cortex.secrets import store_secret
+        from cortex.infrastructure.secrets import store_secret
         import os
         
         vault_path = tmp_path / ".vault"
@@ -182,7 +182,7 @@ class TestSecretsEncryption:
     # Test 12: Vault backup before key rotation
     def test_vault_backup_before_key_rotation(self, tmp_path):
         """Test: Backup vault before key rotation"""
-        from cortex.secrets import store_secret, rotate_encryption_key
+        from cortex.infrastructure.secrets import store_secret, rotate_encryption_key
         
         vault_path = tmp_path / ".vault"
         store_secret("api_key", "secret-123", vault_path=vault_path)
@@ -196,7 +196,7 @@ class TestSecretsEncryption:
     # Test 13: Encryption algorithm metadata stored
     def test_encryption_algorithm_metadata_stored(self, tmp_path):
         """Test: Store encryption algorithm in metadata"""
-        from cortex.secrets import store_secret
+        from cortex.infrastructure.secrets import store_secret
         
         vault_path = tmp_path / ".vault"
         store_secret("api_key", "secret-123", vault_path=vault_path)
@@ -207,7 +207,7 @@ class TestSecretsEncryption:
     # Test 14: Secret versioning (track changes)
     def test_secret_versioning_track_changes(self, tmp_path):
         """Test: Version secrets (track updates)"""
-        from cortex.secrets import store_secret
+        from cortex.infrastructure.secrets import store_secret
         
         vault_path = tmp_path / ".vault"
         store_secret("api_key", "secret-v1", vault_path=vault_path)
@@ -219,7 +219,7 @@ class TestSecretsEncryption:
     # Test 15: List all secret keys (without values)
     def test_list_all_secret_keys_without_values(self, tmp_path):
         """Test: List all secret keys (metadata only)"""
-        from cortex.secrets import store_secret, list_secrets
+        from cortex.infrastructure.secrets import store_secret, list_secrets
         
         vault_path = tmp_path / ".vault"
         store_secret("api_key_1", "secret-1", vault_path=vault_path)
@@ -234,7 +234,7 @@ class TestSecretsEncryption:
     # Test 16: Delete secret (remove from vault)
     def test_delete_secret_remove_from_vault(self, tmp_path):
         """Test: Delete secret from vault"""
-        from cortex.secrets import store_secret, delete_secret, get_secret
+        from cortex.infrastructure.secrets import store_secret, delete_secret, get_secret
         
         vault_path = tmp_path / ".vault"
         store_secret("api_key", "secret-123", vault_path=vault_path)
@@ -247,7 +247,7 @@ class TestSecretsEncryption:
     # Test 17: Secret expiration (auto-delete after TTL)
     def test_secret_expiration_auto_delete_after_ttl(self, tmp_path):
         """Test: Secret auto-expires after TTL"""
-        from cortex.secrets import store_secret, get_secret
+        from cortex.infrastructure.secrets import store_secret, get_secret
         
         vault_path = tmp_path / ".vault"
         store_secret("temp_key", "secret-123", vault_path=vault_path, ttl=1)  # 1 second
@@ -260,7 +260,7 @@ class TestSecretsEncryption:
     # Test 18: Vault initialization (create if missing)
     def test_vault_initialization_create_if_missing(self, tmp_path):
         """Test: Create vault if it doesn't exist"""
-        from cortex.secrets import store_secret
+        from cortex.infrastructure.secrets import store_secret
         
         vault_path = tmp_path / ".vault"
         assert not vault_path.exists()
@@ -272,7 +272,7 @@ class TestSecretsEncryption:
     # Test 19: Concurrent access protection (file locking)
     def test_concurrent_access_protection_file_locking(self, tmp_path):
         """Test: File locking prevents concurrent writes"""
-        from cortex.secrets import store_secret
+        from cortex.infrastructure.secrets import store_secret
         import threading
         
         vault_path = tmp_path / ".vault"
@@ -301,7 +301,7 @@ class TestSecretsEncryption:
     # Test 20: Encryption performance (≤50ms per operation)
     def test_encryption_performance_50ms_per_operation(self, tmp_path):
         """Test: Encryption/decryption ≤50ms"""
-        from cortex.secrets import encrypt_secret, decrypt_secret
+        from cortex.infrastructure.secrets import encrypt_secret, decrypt_secret
         import time
         
         secret = "my-api-key-12345" * 100  # 1.5KB
@@ -325,7 +325,7 @@ class TestSecretsAuditTrail:
     # Test 21: Audit log entry on secret creation
     def test_audit_log_entry_on_secret_creation(self, tmp_path):
         """Test: Log when secret is created"""
-        from cortex.secrets import store_secret, get_audit_log
+        from cortex.infrastructure.secrets import store_secret, get_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -338,7 +338,7 @@ class TestSecretsAuditTrail:
     # Test 22: Audit log entry on secret read
     def test_audit_log_entry_on_secret_read(self, tmp_path):
         """Test: Log when secret is read"""
-        from cortex.secrets import store_secret, get_secret, get_audit_log
+        from cortex.infrastructure.secrets import store_secret, get_secret, get_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -352,7 +352,7 @@ class TestSecretsAuditTrail:
     # Test 23: Audit log entry on secret update
     def test_audit_log_entry_on_secret_update(self, tmp_path):
         """Test: Log when secret is updated"""
-        from cortex.secrets import store_secret, get_audit_log
+        from cortex.infrastructure.secrets import store_secret, get_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -367,7 +367,7 @@ class TestSecretsAuditTrail:
     # Test 24: Audit log entry on secret deletion
     def test_audit_log_entry_on_secret_deletion(self, tmp_path):
         """Test: Log when secret is deleted"""
-        from cortex.secrets import store_secret, delete_secret, get_audit_log
+        from cortex.infrastructure.secrets import store_secret, delete_secret, get_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -381,7 +381,7 @@ class TestSecretsAuditTrail:
     # Test 25: Audit log includes timestamp
     def test_audit_log_includes_timestamp(self, tmp_path):
         """Test: Audit entries have timestamp"""
-        from cortex.secrets import store_secret, get_audit_log
+        from cortex.infrastructure.secrets import store_secret, get_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -397,7 +397,7 @@ class TestSecretsAuditTrail:
     # Test 26: Audit log includes user/actor
     def test_audit_log_includes_user_actor(self, tmp_path, monkeypatch):
         """Test: Audit entries include user/actor"""
-        from cortex.secrets import store_secret, get_audit_log
+        from cortex.infrastructure.secrets import store_secret, get_audit_log
         
         monkeypatch.setenv("USER", "test-user")
         
@@ -414,7 +414,7 @@ class TestSecretsAuditTrail:
     # Test 27: Audit log includes source IP (optional)
     def test_audit_log_includes_source_ip_optional(self, tmp_path):
         """Test: Audit entries include source IP (if available)"""
-        from cortex.secrets import store_secret, get_audit_log
+        from cortex.infrastructure.secrets import store_secret, get_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -429,7 +429,7 @@ class TestSecretsAuditTrail:
     # Test 28: Audit log rotation (≥10MB or 90 days)
     def test_audit_log_rotation_10mb_or_90_days(self, tmp_path):
         """Test: Rotate audit log when ≥10MB or 90 days old"""
-        from cortex.secrets import store_secret, rotate_audit_log
+        from cortex.infrastructure.secrets import store_secret, rotate_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -447,7 +447,7 @@ class TestSecretsAuditTrail:
     # Test 29: Audit log append-only mode
     def test_audit_log_append_only_mode(self, tmp_path):
         """Test: Audit log is append-only (no modifications)"""
-        from cortex.secrets import store_secret
+        from cortex.infrastructure.secrets import store_secret
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -463,7 +463,7 @@ class TestSecretsAuditTrail:
     # Test 30: Audit log compression (gzip)
     def test_audit_log_compression_gzip(self, tmp_path):
         """Test: Compress rotated audit logs"""
-        from cortex.secrets import rotate_audit_log
+        from cortex.infrastructure.secrets import rotate_audit_log
         import gzip
         
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -484,7 +484,7 @@ class TestSecretsAuditTrail:
     # Test 31: Failed access attempts logged
     def test_failed_access_attempts_logged(self, tmp_path):
         """Test: Log failed secret access attempts"""
-        from cortex.secrets import get_secret, get_audit_log
+        from cortex.infrastructure.secrets import get_secret, get_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -501,7 +501,7 @@ class TestSecretsAuditTrail:
     # Test 32: Audit log tampering detection (checksum)
     def test_audit_log_tampering_detection_checksum(self, tmp_path):
         """Test: Detect audit log tampering via checksum"""
-        from cortex.secrets import store_secret, verify_audit_log
+        from cortex.infrastructure.secrets import store_secret, verify_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -518,7 +518,7 @@ class TestSecretsAuditTrail:
     # Test 33: Audit log query by date range
     def test_audit_log_query_by_date_range(self, tmp_path):
         """Test: Query audit log by date range"""
-        from cortex.secrets import store_secret, query_audit_log
+        from cortex.infrastructure.secrets import store_secret, query_audit_log
         from datetime import datetime, timedelta
         
         vault_path = tmp_path / ".vault"
@@ -537,7 +537,7 @@ class TestSecretsAuditTrail:
     # Test 34: Audit log query by user
     def test_audit_log_query_by_user(self, tmp_path, monkeypatch):
         """Test: Query audit log by user"""
-        from cortex.secrets import store_secret, query_audit_log
+        from cortex.infrastructure.secrets import store_secret, query_audit_log
         
         monkeypatch.setenv("USER", "test-user")
         
@@ -554,7 +554,7 @@ class TestSecretsAuditTrail:
     # Test 35: Audit log query by action type
     def test_audit_log_query_by_action_type(self, tmp_path):
         """Test: Query audit log by action type (CREATE/READ/UPDATE/DELETE)"""
-        from cortex.secrets import store_secret, query_audit_log
+        from cortex.infrastructure.secrets import store_secret, query_audit_log
         
         vault_path = tmp_path / ".vault"
         audit_log_path = tmp_path / ".vault.audit.log"
@@ -577,7 +577,7 @@ class TestSecretsRotation:
     # Test 36: Secret rotation schedule (90 days)
     def test_secret_rotation_schedule_90_days(self, tmp_path):
         """Test: Secrets rotate every 90 days"""
-        from cortex.secrets import store_secret, check_rotation_status
+        from cortex.infrastructure.secrets import store_secret, check_rotation_status
         
         vault_path = tmp_path / ".vault"
         store_secret("api_key", "secret-v1", vault_path=vault_path, rotation_days=90)
@@ -589,7 +589,7 @@ class TestSecretsRotation:
     # Test 37: Rotation warning (7 days before expiry)
     def test_rotation_warning_7_days_before_expiry(self, tmp_path):
         """Test: Warning when secret expires in ≤7 days"""
-        from cortex.secrets import store_secret, check_rotation_status
+        from cortex.infrastructure.secrets import store_secret, check_rotation_status
         from datetime import datetime, timedelta
         
         vault_path = tmp_path / ".vault"
@@ -610,7 +610,7 @@ class TestSecretsRotation:
     # Test 38: Automated rotation trigger
     def test_automated_rotation_trigger(self, tmp_path):
         """Test: Auto-rotate secret when due"""
-        from cortex.secrets import store_secret, rotate_secret
+        from cortex.infrastructure.secrets import store_secret, rotate_secret
         from datetime import datetime, timedelta
         
         vault_path = tmp_path / ".vault"
@@ -631,7 +631,7 @@ class TestSecretsRotation:
     # Test 39: Rotation notification (email/webhook)
     def test_rotation_notification_email_webhook(self, tmp_path):
         """Test: Send notification on rotation"""
-        from cortex.secrets import rotate_secret
+        from cortex.infrastructure.secrets import rotate_secret
         from unittest.mock import patch
         
         vault_path = tmp_path / ".vault"
@@ -646,7 +646,7 @@ class TestSecretsRotation:
     # Test 40: Rotation preserves secret versions (history)
     def test_rotation_preserves_secret_versions_history(self, tmp_path):
         """Test: Keep rotation history"""
-        from cortex.secrets import store_secret, rotate_secret, get_secret_history
+        from cortex.infrastructure.secrets import store_secret, rotate_secret, get_secret_history
         
         vault_path = tmp_path / ".vault"
         
@@ -664,7 +664,7 @@ class TestSecretsRotation:
     # Test 41: Rotation rollback (revert to previous version)
     def test_rotation_rollback_revert_to_previous_version(self, tmp_path):
         """Test: Rollback to previous secret version"""
-        from cortex.secrets import store_secret, rotate_secret, rollback_secret, get_secret
+        from cortex.infrastructure.secrets import store_secret, rotate_secret, rollback_secret, get_secret
         
         vault_path = tmp_path / ".vault"
         
@@ -679,7 +679,7 @@ class TestSecretsRotation:
     # Test 42: Rotation deadline enforcement (block access after expiry)
     def test_rotation_deadline_enforcement_block_access(self, tmp_path):
         """Test: Block access to expired secrets"""
-        from cortex.secrets import store_secret, get_secret
+        from cortex.infrastructure.secrets import store_secret, get_secret
         from datetime import datetime, timedelta
         
         vault_path = tmp_path / ".vault"
@@ -697,7 +697,7 @@ class TestSecretsRotation:
     # Test 43: Custom rotation schedule per secret
     def test_custom_rotation_schedule_per_secret(self, tmp_path):
         """Test: Different rotation schedules per secret"""
-        from cortex.secrets import store_secret, check_rotation_status
+        from cortex.infrastructure.secrets import store_secret, check_rotation_status
         
         vault_path = tmp_path / ".vault"
         
@@ -713,7 +713,7 @@ class TestSecretsRotation:
     # Test 44: Rotation grace period (7 days)
     def test_rotation_grace_period_7_days(self, tmp_path):
         """Test: Grace period after rotation deadline"""
-        from cortex.secrets import store_secret, get_secret
+        from cortex.infrastructure.secrets import store_secret, get_secret
         from datetime import datetime, timedelta
         
         vault_path = tmp_path / ".vault"
@@ -732,7 +732,7 @@ class TestSecretsRotation:
     # Test 45: Rotation metrics (track rotation rate)
     def test_rotation_metrics_track_rotation_rate(self, tmp_path):
         """Test: Track rotation success/failure metrics"""
-        from cortex.secrets import rotate_secret, get_rotation_metrics
+        from cortex.infrastructure.secrets import rotate_secret, get_rotation_metrics
         
         vault_path = tmp_path / ".vault"
         
@@ -746,7 +746,7 @@ class TestSecretsRotation:
     # Test 46: Rotation batching (rotate multiple secrets)
     def test_rotation_batching_rotate_multiple_secrets(self, tmp_path):
         """Test: Batch rotate multiple secrets"""
-        from cortex.secrets import store_secret, batch_rotate_secrets
+        from cortex.infrastructure.secrets import store_secret, batch_rotate_secrets
         
         vault_path = tmp_path / ".vault"
         
@@ -761,7 +761,7 @@ class TestSecretsRotation:
     # Test 47: Rotation dry-run mode (preview changes)
     def test_rotation_dry_run_mode_preview_changes(self, tmp_path):
         """Test: Dry-run rotation (no actual changes)"""
-        from cortex.secrets import rotate_secret, get_secret, store_secret
+        from cortex.infrastructure.secrets import rotate_secret, get_secret, store_secret
         
         vault_path = tmp_path / ".vault"
         
@@ -785,7 +785,7 @@ class TestLogSanitization:
     # Test 48: Sanitize log output (replace secrets with [REDACTED])
     def test_sanitize_log_output_replace_secrets_with_redacted(self, tmp_path):
         """Test: Replace secrets with [REDACTED] in logs"""
-        from cortex.secrets import sanitize_log_message
+        from cortex.infrastructure.secrets import sanitize_log_message
         
         message = "Using API key: my-api-key-12345"
         sanitized = sanitize_log_message(message, secret_patterns=["my-api-key-12345"])
@@ -795,7 +795,7 @@ class TestLogSanitization:
     # Test 49: Detect common secret patterns (API keys, tokens)
     def test_detect_common_secret_patterns_api_keys_tokens(self, tmp_path):
         """Test: Auto-detect common secret patterns"""
-        from cortex.secrets import sanitize_log_message
+        from cortex.infrastructure.secrets import sanitize_log_message
         
         message = "Token: sk-abc123def456 and API key: AIzaSyD-abc123"
         sanitized = sanitize_log_message(message, auto_detect=True)
@@ -807,7 +807,7 @@ class TestLogSanitization:
     # Test 50: Sanitize exception stack traces
     def test_sanitize_exception_stack_traces(self, tmp_path):
         """Test: Sanitize secrets in stack traces"""
-        from cortex.secrets import sanitize_exception
+        from cortex.infrastructure.secrets import sanitize_exception
         
         try:
             api_key = "my-secret-key-xyz"
@@ -821,7 +821,7 @@ class TestLogSanitization:
     # Test 51: Sanitize JSON payloads (nested secrets)
     def test_sanitize_json_payloads_nested_secrets(self, tmp_path):
         """Test: Sanitize secrets in JSON"""
-        from cortex.secrets import sanitize_json
+        from cortex.infrastructure.secrets import sanitize_json
         
         payload = {
             "user": "test-user",
@@ -840,7 +840,7 @@ class TestLogSanitization:
     # Test 52: Sanitize environment variables in logs
     def test_sanitize_environment_variables_in_logs(self, tmp_path, monkeypatch):
         """Test: Sanitize env vars in logs"""
-        from cortex.secrets import sanitize_log_message
+        from cortex.infrastructure.secrets import sanitize_log_message
         
         monkeypatch.setenv("SECRET_API_KEY", "my-secret-xyz")
         
@@ -853,7 +853,7 @@ class TestLogSanitization:
     # Test 53: Sanitize command-line arguments
     def test_sanitize_command_line_arguments(self, tmp_path):
         """Test: Sanitize secrets in command-line args"""
-        from cortex.secrets import sanitize_command_line
+        from cortex.infrastructure.secrets import sanitize_command_line
         
         cmd = ["python", "script.py", "--api-key=secret-123", "--user=test"]
         sanitized = sanitize_command_line(cmd, secret_flags=["--api-key"])
@@ -863,7 +863,7 @@ class TestLogSanitization:
     # Test 54: Sanitization performance (≤10ms per log line)
     def test_sanitization_performance_10ms_per_log_line(self, tmp_path):
         """Test: Sanitization ≤10ms per log line"""
-        from cortex.secrets import sanitize_log_message
+        from cortex.infrastructure.secrets import sanitize_log_message
         import time
         
         message = "API key: my-api-key-12345 " * 100  # Long message
@@ -877,7 +877,7 @@ class TestLogSanitization:
     # Test 55: Sanitization disabled in dev mode (optional)
     def test_sanitization_disabled_in_dev_mode_optional(self, tmp_path, monkeypatch):
         """Test: Disable sanitization in dev mode (opt-in)"""
-        from cortex.secrets import sanitize_log_message
+        from cortex.infrastructure.secrets import sanitize_log_message
         
         monkeypatch.setenv("CORTEX_ENV", "development")
         

@@ -16,24 +16,24 @@ class TestHealthcareOrchestratorBase:
     
     def test_healthcare_orchestrator_exists(self) -> None:
         """AC-PHX-008-02: Healthcare orchestrator class exists."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         assert HealthcareOrchestrator is not None
     
     def test_healthcare_orchestrator_inherits_base(self) -> None:
         """Healthcare orchestrator inherits from BusinessDomainOrchestrator."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
-        from cortex.domain_orchestrators.business.base import BusinessDomainOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.base import BusinessDomainOrchestrator
         assert issubclass(HealthcareOrchestrator, BusinessDomainOrchestrator)
     
     def test_healthcare_orchestrator_domain_property(self) -> None:
         """Healthcare orchestrator has correct domain property."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         assert orchestrator.domain == "healthcare"
     
     def test_healthcare_orchestrator_compliance_requirements(self) -> None:
         """Healthcare orchestrator specifies HIPAA compliance."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         assert hasattr(orchestrator, 'compliance_requirements')
         assert "HIPAA" in orchestrator.compliance_requirements
@@ -44,7 +44,7 @@ class TestHealthcarePatientDataHandling:
     
     def test_validate_patient_context(self) -> None:
         """Healthcare orchestrator validates patient context."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         valid_context = {
@@ -57,7 +57,7 @@ class TestHealthcarePatientDataHandling:
     
     def test_reject_unauthorized_access(self) -> None:
         """Healthcare orchestrator rejects unauthorized access."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         invalid_context = {
@@ -69,7 +69,7 @@ class TestHealthcarePatientDataHandling:
     
     def test_phi_data_encrypted(self) -> None:
         """PHI data is encrypted in transit and at rest."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         assert orchestrator.encryption_enabled is True
@@ -81,7 +81,7 @@ class TestHealthcareHIPAACompliance:
     
     def test_hipaa_audit_logging(self) -> None:
         """All PHI access is logged for HIPAA compliance."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         context = {
@@ -98,7 +98,7 @@ class TestHealthcareHIPAACompliance:
     
     def test_minimum_necessary_rule(self) -> None:
         """Only minimum necessary data is returned."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         context = {
@@ -115,7 +115,7 @@ class TestHealthcareHIPAACompliance:
     
     def test_access_authorization_levels(self) -> None:
         """Different roles have different access levels."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         access_levels = orchestrator.get_access_levels()
@@ -130,7 +130,7 @@ class TestHealthcareDataIntegration:
     
     def test_ehr_integration_available(self) -> None:
         """EHR system integration is available."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         integrations = orchestrator.available_integrations
@@ -138,7 +138,7 @@ class TestHealthcareDataIntegration:
     
     def test_lab_results_integration(self) -> None:
         """Lab results can be integrated."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         integrations = orchestrator.available_integrations
@@ -146,7 +146,7 @@ class TestHealthcareDataIntegration:
     
     def test_pharmacy_integration(self) -> None:
         """Pharmacy system integration is available."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         integrations = orchestrator.available_integrations
@@ -158,7 +158,7 @@ class TestHealthcareReportingCapabilities:
     
     def test_generate_patient_summary(self) -> None:
         """Can generate patient summary reports."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         report = orchestrator.generate_report(
@@ -172,7 +172,7 @@ class TestHealthcareReportingCapabilities:
     
     def test_generate_compliance_audit_report(self) -> None:
         """Can generate HIPAA compliance audit reports."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         report = orchestrator.generate_report(
@@ -190,13 +190,13 @@ class TestHealthcareOrchestratorMetadata:
     
     def test_orchestrator_id_format(self) -> None:
         """Orchestrator ID follows naming convention."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         assert orchestrator.orchestrator_id.startswith("healthcare-")
     
     def test_supported_operations(self) -> None:
         """Orchestrator lists supported operations."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         operations = orchestrator.supported_operations
@@ -206,7 +206,7 @@ class TestHealthcareOrchestratorMetadata:
     
     def test_tier_access_level(self) -> None:
         """Healthcare orchestrator has high tier access for PHI."""
-        from cortex.domain_orchestrators.business.healthcare import HealthcareOrchestrator
+        from cortex.orchestrators.domain.business.healthcare import HealthcareOrchestrator
         orchestrator = HealthcareOrchestrator()
         
         # Healthcare operations with PHI require highest tier

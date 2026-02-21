@@ -10,7 +10,7 @@
 version: "2.0.0"
 
 orchestrators:
-  # 7 core orchestrators (Tier 1)
+  # 6 core orchestrators (Tier 1)
   core:
     - name: "MasterOrchestrator"
       module: "cortex.orchestrators.core.master_orchestrator"
@@ -64,15 +64,6 @@ orchestrators:
       priority: 80
       dependencies: []
       capabilities: ["governance_enforcement", "rule_validation"]
-      health_check: "ping"
-
-    - name: "ArchitectureGuard"
-      module: "cortex.orchestrators.core.architecture_guard"
-      class: "ArchitectureGuard"
-      tier: 1
-      priority: 75
-      dependencies: []
-      capabilities: ["architecture_validation", "pattern_enforcement"]
       health_check: "ping"
 
   # 6 domain orchestrators (Tier 2)
@@ -131,17 +122,8 @@ orchestrators:
       capabilities: ["dependency_resolution", "import_analysis"]
       health_check: "ping"
 
-  # 13 support orchestrators (Tier 3)
+  # 9 support orchestrators (Tier 3)
   support:
-    - name: "SeleniumPlaywrightOrchestrator"
-      module: "cortex.orchestrators.migration.selenium_playwright_orchestrator"
-      class: "SeleniumPlaywrightOrchestrator"
-      tier: 3
-      priority: 50
-      dependencies: []
-      capabilities: ["migration_analysis", "code_transformation"]
-      health_check: "ping"
-
     - name: "DebuggerOrchestrator"
       module: "cortex.orchestrators.support.debugger_orchestrator"
       class: "DebuggerOrchestrator"
@@ -196,33 +178,6 @@ orchestrators:
       capabilities: ["rollback", "state_recovery"]
       health_check: "ping"
 
-    - name: "UnifiedAnalysisOrchestrator"
-      module: "cortex.orchestrators.support.unified_analysis_orchestrator"
-      class: "UnifiedAnalysisOrchestrator"
-      tier: 3
-      priority: 36
-      dependencies: ["MasterOrchestrator"]
-      capabilities: ["unified_analysis", "cross_domain_analysis"]
-      health_check: "ping"
-
-    - name: "UnifiedDiscoveryOrchestrator"
-      module: "cortex.orchestrators.support.unified_discovery_orchestrator"
-      class: "UnifiedDiscoveryOrchestrator"
-      tier: 3
-      priority: 35
-      dependencies: ["MasterOrchestrator"]
-      capabilities: ["discovery", "tool_catalog"]
-      health_check: "ping"
-
-    - name: "UnifiedQualityOrchestrator"
-      module: "cortex.orchestrators.support.unified_quality_orchestrator"
-      class: "UnifiedQualityOrchestrator"
-      tier: 3
-      priority: 34
-      dependencies: ["TDDOrchestrator"]
-      capabilities: ["quality_analysis", "coverage_tracking"]
-      health_check: "ping"
-
     - name: "PhaseCompletionOrchestrator"
       module: "cortex.orchestrators.support.phase_completion_orchestrator"
       class: "PhaseCompletionOrchestrator"
@@ -254,10 +209,6 @@ orchestrators:
 # ANALYZERS (Optional, from LENS)
 # =============================================================================
 analyzers:
-  - name: "ComplexityAnalyzer"
-    module: "cortex.lens.analyzers.complexity_analyzer"
-    class: "ComplexityAnalyzer"
-
   - name: "DependencyAnalyzer"
     module: "cortex.lens.analyzers.dependency_analyzer"
     class: "DependencyAnalyzer"

@@ -128,7 +128,7 @@ All `.github/` documentation MUST use these values:
 #### P1 — Wrong Counts / Versions
 | File | Current | Should Be |
 |------|---------|-----------|
-| {file} | "24 orchestrators" | "52 orchestrators" |
+| {file} | "24 orchestrators" | "21 wired orchestrators" |
 
 #### P2 — Template Duplicates
 | File | Issue |

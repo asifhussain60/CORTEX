@@ -9,12 +9,14 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 
 class RepositoryNotFoundError(FileNotFoundError):
     """Raised when the target repository path does not exist."""
 
 
-class RepositoryOnboardingOrchestrator:
+class RepositoryOnboardingOrchestrator(OrchestratorProtocolMixin):
     """Orchestrates the onboarding of an external repository into CORTEX."""
 
     def scan_repository(self, repo_path: "str | Path") -> Dict[str, Any]:
@@ -216,138 +218,3 @@ class RepositoryOnboardingOrchestrator:
                     deps.append(line.split("==")[0].split(">=")[0].strip())
 
         return deps
-
-
-
-class RepositoryOnboardingOrchestrator:
-    """Orchestrates the onboarding of an external repository into CORTEX."""
-
-    def scan_repository(self, repo_path: "str | Path") -> Dict[str, Any]:
-        """Scan repository structure and detect tech stack."""
-        root = Path(repo_path)
-        structure: Dict[str, Any] = {}
-        tech_stack: List[str] = []
-        languages: List[str] = []
-
-        if root.exists():
-            py_files = list(root.rglob("*.py"))
-            ts_files = list(root.rglob("*.ts"))
-            js_files = list(root.rglob("*.js"))
-            go_files = list(root.rglob("*.go"))
-            java_files = list(root.rglob("*.java"))
-
-            structure = {
-                "python_files": len(py_files),
-                "ts_files": len(ts_files),
-                "js_files": len(js_files),
-                "go_files": len(go_files),
-                "java_files": len(java_files),
-                "total_files": sum(
-                    len(f) for f in (py_files, ts_files, js_files, go_files, java_files)
-                ),
-            }
-
-            if py_files:
-                tech_stack.append("python")
-                languages.append("Python")
-            if ts_files:
-                tech_stack.append("typescript")
-                languages.append("TypeScript")
-            if js_files:
-                tech_stack.append("javascript")
-                languages.append("JavaScript")
-            if go_files:
-                tech_stack.append("go")
-                languages.append("Go")
-            if java_files:
-                tech_stack.append("java")
-                languages.append("Java")
-
-            # Detect frameworks
-            if (root / "requirements.txt").exists() or (root / "pyproject.toml").exists():
-                tech_stack.append("pip")
-            if (root / "package.json").exists():
-                tech_stack.append("npm")
-
-        return {
-            "status": "success",
-            "repo_path": str(repo_path),
-            "structure": structure,
-            "tech_stack": tech_stack,
-            "languages": languages,
-        }
-
-    def detect_company_domains(
-        self, repo_path: "str | Path"
-    ) -> Dict[str, Any]:
-        """Detect company domain structure from repository layout."""
-        root = Path(repo_path)
-        domains: List[str] = []
-
-        if root.exists():
-            for item in root.iterdir():
-                if item.is_dir() and not item.name.startswith("."):
-                    domains.append(item.name)
-
-        return {
-            "status": "success",
-            "domains": domains,
-            "count": len(domains),
-        }
-
-    def generate_profile(
-        self, scan_results: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Generate an onboarding profile from scan results."""
-        return {
-            "status": "success",
-            "profile": {
-                "tech_stack": scan_results.get("tech_stack", []),
-                "languages": scan_results.get("languages", []),
-                "structure": scan_results.get("structure", {}),
-                "onboarded": True,
-            },
-        }
-
-    def assess_security_baseline(
-        self, repo_path: "str | Path"
-    ) -> Dict[str, Any]:
-        """Assess basic security posture of the repository."""
-        root = Path(repo_path)
-        issues: List[str] = []
-
-        if root.exists():
-            # Check for common security indicators
-            if not (root / ".gitignore").exists():
-                issues.append("missing .gitignore")
-            for sensitive in ("secrets.py", "credentials.py", ".env"):
-                if (root / sensitive).exists():
-                    issues.append(f"potential sensitive file: {sensitive}")
-
-        return {
-            "status": "success",
-            "issues": issues,
-            "severity": "high" if any("credential" in i for i in issues) else "low",
-            "baseline_passed": len(issues) == 0,
-        }
-
-    def extract_standards(
-        self, repo_path: "str | Path"
-    ) -> Dict[str, Any]:
-        """Extract coding standards from the repository."""
-        root = Path(repo_path)
-        standards: List[str] = []
-
-        if root.exists():
-            if (root / "pyproject.toml").exists():
-                standards.append("pyproject.toml")
-            if (root / ".flake8").exists() or (root / "setup.cfg").exists():
-                standards.append("flake8")
-            if (root / ".eslintrc.json").exists() or (root / ".eslintrc.js").exists():
-                standards.append("eslint")
-
-        return {
-            "status": "success",
-            "standards": standards,
-            "count": len(standards),
-        }

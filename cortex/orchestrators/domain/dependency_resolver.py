@@ -10,6 +10,7 @@ Authority: Wave 8 Stage 3
 from dataclasses import dataclass
 from typing import Dict, List, Set, Optional
 from enum import Enum
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 class ResolutionStatus(Enum):
@@ -90,7 +91,7 @@ class ResolutionResult:
         }
 
 
-class DependencyResolver:
+class DependencyResolver(OrchestratorProtocolMixin):
     """
     Resolve phase dependencies using topological sort.
     

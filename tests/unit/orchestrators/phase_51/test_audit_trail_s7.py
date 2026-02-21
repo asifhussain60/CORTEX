@@ -16,7 +16,7 @@ class TestAuditTrailEventLogging:
     
     def test_audit_logger_records_secret_access(self):
         """Audit logger records when secrets are accessed"""
-        from cortex.secrets.audit_trail import AuditLogger
+        from cortex.infrastructure.secrets.audit_trail import AuditLogger
         
         logger = AuditLogger()
         
@@ -33,7 +33,7 @@ class TestAuditTrailEventLogging:
     
     def test_audit_logger_records_secret_modification(self):
         """Audit logger records secret modifications"""
-        from cortex.secrets.audit_trail import AuditLogger
+        from cortex.infrastructure.secrets.audit_trail import AuditLogger
         
         logger = AuditLogger()
         
@@ -49,7 +49,7 @@ class TestAuditTrailEventLogging:
     
     def test_audit_logger_records_authentication_events(self):
         """Audit logger records authentication attempts"""
-        from cortex.secrets.audit_trail import AuditLogger
+        from cortex.infrastructure.secrets.audit_trail import AuditLogger
         
         logger = AuditLogger()
         
@@ -66,7 +66,7 @@ class TestAuditTrailEventLogging:
     
     def test_audit_logger_records_authorization_failures(self):
         """Audit logger records unauthorized access attempts"""
-        from cortex.secrets.audit_trail import AuditLogger
+        from cortex.infrastructure.secrets.audit_trail import AuditLogger
         
         logger = AuditLogger()
         
@@ -86,7 +86,7 @@ class TestHashChaining:
     
     def test_hash_chain_creates_immutable_sequence(self):
         """Hash chain creates immutable sequence of events"""
-        from cortex.secrets.audit_trail import HashChain
+        from cortex.infrastructure.secrets.audit_trail import HashChain
         
         chain = HashChain()
         
@@ -101,7 +101,7 @@ class TestHashChaining:
     
     def test_hash_chain_includes_previous_hash(self):
         """Each hash includes hash of previous event"""
-        from cortex.secrets.audit_trail import HashChain
+        from cortex.infrastructure.secrets.audit_trail import HashChain
         
         chain = HashChain()
         
@@ -118,7 +118,7 @@ class TestHashChaining:
     
     def test_hash_chain_detects_tampering(self):
         """Hash chain detects if any event is tampered with"""
-        from cortex.secrets.audit_trail import HashChain
+        from cortex.infrastructure.secrets.audit_trail import HashChain
         
         chain = HashChain()
         
@@ -139,7 +139,7 @@ class TestHashChaining:
     
     def test_hash_chain_generates_proof_of_integrity(self):
         """Hash chain can generate proof of integrity"""
-        from cortex.secrets.audit_trail import HashChain
+        from cortex.infrastructure.secrets.audit_trail import HashChain
         
         chain = HashChain()
         
@@ -153,7 +153,7 @@ class TestHashChaining:
     
     def test_hash_chain_supports_merkle_tree_verification(self):
         """Hash chain supports Merkle tree verification"""
-        from cortex.secrets.audit_trail import HashChain
+        from cortex.infrastructure.secrets.audit_trail import HashChain
         
         chain = HashChain()
         
@@ -168,7 +168,7 @@ class TestHashChaining:
     
     def test_hash_chain_persists_to_storage(self):
         """Hash chain can be persisted to storage"""
-        from cortex.secrets.audit_trail import HashChain
+        from cortex.infrastructure.secrets.audit_trail import HashChain
         
         chain = HashChain()
         
@@ -186,7 +186,7 @@ class TestAuditTrailNonRepudiation:
     
     def test_audit_trail_includes_digital_signatures(self):
         """Audit trail entries include digital signatures"""
-        from cortex.secrets.audit_trail import AuditTrailWithSignatures
+        from cortex.infrastructure.secrets.audit_trail import AuditTrailWithSignatures
         
         trail = AuditTrailWithSignatures()
         
@@ -199,7 +199,7 @@ class TestAuditTrailNonRepudiation:
     
     def test_audit_trail_verifies_signatures(self):
         """Audit trail can verify event signatures"""
-        from cortex.secrets.audit_trail import AuditTrailWithSignatures
+        from cortex.infrastructure.secrets.audit_trail import AuditTrailWithSignatures
         
         trail = AuditTrailWithSignatures()
         
@@ -214,7 +214,7 @@ class TestAuditTrailNonRepudiation:
     
     def test_audit_trail_includes_user_identity(self):
         """Audit trail includes verified user identity"""
-        from cortex.secrets.audit_trail import AuditTrail
+        from cortex.infrastructure.secrets.audit_trail import AuditTrail
         
         trail = AuditTrail()
         
@@ -231,7 +231,7 @@ class TestAuditTrailNonRepudiation:
     
     def test_audit_trail_includes_cryptographic_proof(self):
         """Audit trail includes cryptographic proof of occurrence"""
-        from cortex.secrets.audit_trail import AuditTrail
+        from cortex.infrastructure.secrets.audit_trail import AuditTrail
         
         trail = AuditTrail()
         
@@ -254,7 +254,7 @@ class TestAuditTrailCompliance:
     
     def test_audit_trail_meets_sox_requirements(self):
         """Audit trail meets SOX requirements for immutability"""
-        from cortex.secrets.audit_trail import ComplianceAuditTrail
+        from cortex.infrastructure.secrets.audit_trail import ComplianceAuditTrail
         
         trail = ComplianceAuditTrail()
         
@@ -271,7 +271,7 @@ class TestAuditTrailCompliance:
     
     def test_audit_trail_meets_hipaa_requirements(self):
         """Audit trail meets HIPAA requirements for PHI access"""
-        from cortex.secrets.audit_trail import ComplianceAuditTrail
+        from cortex.infrastructure.secrets.audit_trail import ComplianceAuditTrail
         
         trail = ComplianceAuditTrail()
         
@@ -289,7 +289,7 @@ class TestAuditTrailCompliance:
     
     def test_audit_trail_meets_pci_requirements(self):
         """Audit trail meets PCI-DSS requirements for payment data"""
-        from cortex.secrets.audit_trail import ComplianceAuditTrail
+        from cortex.infrastructure.secrets.audit_trail import ComplianceAuditTrail
         
         trail = ComplianceAuditTrail()
         
@@ -306,7 +306,7 @@ class TestAuditTrailCompliance:
     
     def test_audit_trail_retention_policy(self):
         """Audit trail enforces data retention policies"""
-        from cortex.secrets.audit_trail import AuditTrailRetention
+        from cortex.infrastructure.secrets.audit_trail import AuditTrailRetention
         
         retention = AuditTrailRetention(retention_days=2555)  # 7 years for SOX
         
@@ -324,7 +324,7 @@ class TestAuditTrailIntegration:
     
     def test_complete_audit_trail_workflow(self):
         """Complete workflow: log, chain, sign, verify, comply"""
-        from cortex.secrets.audit_trail import ComprehensiveAuditTrail
+        from cortex.infrastructure.secrets.audit_trail import ComprehensiveAuditTrail
         
         trail = ComprehensiveAuditTrail()
         
@@ -339,7 +339,7 @@ class TestAuditTrailIntegration:
     
     def test_audit_trail_export_for_compliance_audit(self):
         """Audit trail can be exported for compliance audit"""
-        from cortex.secrets.audit_trail import AuditTrail
+        from cortex.infrastructure.secrets.audit_trail import AuditTrail
         
         trail = AuditTrail()
         
@@ -355,7 +355,7 @@ class TestAuditTrailIntegration:
     
     def test_audit_trail_generates_compliance_report(self):
         """Audit trail generates compliance report"""
-        from cortex.secrets.audit_trail import AuditTrail
+        from cortex.infrastructure.secrets.audit_trail import AuditTrail
         
         trail = AuditTrail()
         

@@ -63,8 +63,7 @@ class TestHolisticIntegrationComplex:
         # Assert execution completed
         assert result.execution_completed, "Full e2e pipeline should execute"
         
-        # Assert critical subsystems engaged (Phase 51 Week 4 baseline)
-        # Phase 52 will add: CCL, CompanyKnowledgeLoader, ThreatModelingEngine, HolisticValidationOrchestrator
+        # Assert critical subsystems engaged
         core_subsystems = [
             "MasterOrchestrator",
             "InteractionOrchestrator",  # Stage1ComprehensionStrategy wrapper
@@ -77,26 +76,13 @@ class TestHolisticIntegrationComplex:
             assert subsystem in result.components_engaged, \
                 f"{subsystem} should be engaged in full e2e flow (got: {result.components_engaged})"
         
-        # Phase 52 TODO: Assert Stage4 engagement shows actual domain orchestrator
         # Currently shows 'Stage4-Execution' instead of 'TDDOrchestrator'
-        # assert "TDDOrchestrator" in result.components_engaged
         
-        # Phase 52 TODO: CCL pre-warming tracking
-        # assert result.ccl_prewarmed
-        # assert result.performance_metrics.ccl_prewarming_duration <= 0.3
-        
-        # Phase 52 TODO: Company YAML loading
-        # assert len(result.company_yamls_loaded) >= 3
-        
-        # Phase 52 TODO: Governance rules tracking
-        # assert "CORE-008" in result.governance_rules_applied
         
         # Assert performance (baseline: execution completes within timeout)
         assert result.performance_metrics.meets_requirements("complex")
         
-        # Phase 52 TODO: Audit trail validation
         # Currently audit events are mocked out to bypass schema issues
-        # assert result.audit_events_matched
     
     # ========================================================================
     # S22: Complex security audit
@@ -123,21 +109,13 @@ class TestHolisticIntegrationComplex:
         # Assert execution completed
         assert result.execution_completed
         
-        # Phase 52 TODO: Security subsystems tracking
-        # assert "ThreatModelingEngine" in result.components_engaged
-        # assert "OWASPAnalyzer" in result.components_engaged or \
         #        "PCIDSSAnalyzer" in result.components_engaged
         
-        # Phase 52 TODO: LLM synthesis validation
-        # assert result.llm_snapshot is not None
-        # assert "executive" in result.llm_snapshot.content.lower() or \
         #        "summary" in result.llm_snapshot.content.lower()
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("complex")
         
-        # Phase 52 TODO: Audit trail validation
-        # assert result.audit_events_matched
     
     # ========================================================================
     # S23: Multi-domain knowledge synthesis
@@ -164,25 +142,15 @@ class TestHolisticIntegrationComplex:
         # Assert execution completed
         assert result.execution_completed
         
-        # Phase 52 TODO: Domain YAML loading
-        # assert len(result.company_yamls_loaded) >= 5, \
-        #     f"Expected 5+ domains, got {len(result.company_yamls_loaded)}"
         
         # Assert core components engaged
         assert "LENSOrchestrator" in result.components_engaged
-        # Phase 52 TODO: GitAnalyzer integration
-        # assert "GitAnalyzer" in result.components_engaged
         
-        # Phase 52 TODO: LLM synthesis with diagrams
-        # assert result.llm_snapshot is not None
-        # assert "mermaid" in result.llm_snapshot.structure_markers or \
         #        "```" in result.llm_snapshot.content
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("complex")
         
-        # Phase 52 TODO: Audit trail validation
-        # assert result.audit_events_matched
     
     # ========================================================================
     # S24: Regression prevention (Phase 48)
@@ -210,30 +178,10 @@ class TestHolisticIntegrationComplex:
         # Assert execution completed
         assert result.execution_completed
         
-        # Phase 52 TODO: Holistic validation subsystems
-        # assert "HolisticValidationOrchestrator" in result.components_engaged
-        # assert "DependencyGraphAnalyzer" in result.components_engaged
-        # assert "ChallengeEngine" in result.components_engaged
-        
-        # Phase 52 TODO: Validation verdict from audit events
-        # validation_events = [
-        #     e for e in result.actual_events
-        #     if e.get('activity') == 'VALIDATION_VERDICT'
-        # ]
-        # assert len(validation_events) > 0
-        
-        # Phase 52 TODO: Alternatives generated
-        # challenge_events = [
-        #     e for e in result.actual_events
-        #     if e.get('activity') == 'GENERATE_ALTERNATIVES'
-        # ]
-        # assert len(challenge_events) > 0
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("medium")
         
-        # Phase 52 TODO: Audit trail validation
-        # assert result.audit_events_matched
     
     # ========================================================================
     # S25: Adaptive onboarding
@@ -261,22 +209,14 @@ class TestHolisticIntegrationComplex:
         # Assert execution completed
         assert result.execution_completed
         
-        # Phase 52 TODO: Onboarding subsystems tracking
-        # assert "EnhancedOnboardingOrchestrator" in result.components_engaged or \
         #        "OnboardingProfiler" in result.components_engaged
         assert "LENSOrchestrator" in result.components_engaged
-        # Phase 52 TODO: CCL tracking
-        # assert "CCL" in result.components_engaged
         
-        # Phase 52 TODO: CCL pre-warming validation
-        # assert result.ccl_prewarmed
         
         # Assert performance (45s max for onboarding)
         assert result.performance_metrics.total_duration < 45.0, \
             f"Onboarding took {result.performance_metrics.total_duration}s, max 45s"
         
-        # Phase 52 TODO: Audit trail validation
-        # assert result.audit_events_matched
 
 # ============================================================================
 # Standalone test runner for development

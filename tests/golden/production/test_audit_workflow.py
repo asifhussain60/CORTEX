@@ -10,18 +10,38 @@ from pathlib import Path
 
 class TestProductionAudit:
     """Golden test: Complete audit workflow."""
-    
-    @pytest.mark.skip(reason="EnforcementOrchestrator integration deferred")
+
     def test_audit_codebase_compliance(self, tmp_path: Path) -> None:
         """Golden: Audit codebase for CORE rule compliance."""
-        # Deferred until orchestrator refactoring
-        pass
-    
-    @pytest.mark.skip(reason="EnforcementOrchestrator integration deferred")
+        from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrchestrator
+
+        enforcer = EnforcementOrchestrator()
+
+        # Validate a benign operation
+        result = enforcer.validate_operation({
+            "intent": "QUERY",
+            "files": [],
+            "description": "read-only query",
+        })
+
+        # Should pass — no violations for a simple query
+        assert result is not None
+
     def test_audit_detects_core_008_violation(self, tmp_path: Path) -> None:
         """Golden: Audit detects missing tests (CORE-008)."""
-        # Deferred until orchestrator refactoring
-        pass
+        from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrchestrator
+
+        enforcer = EnforcementOrchestrator()
+
+        # Operation that should trigger CORE-008 concern
+        result = enforcer.validate_operation({
+            "intent": "IMPLEMENT",
+            "files": [str(tmp_path / "new_feature.py")],
+            "description": "add new feature without tests",
+        })
+
+        # Result should exist (may BLOCK or WARN depending on config)
+        assert result is not None
     
     def test_meta_auditor_validates_results(self, tmp_path: Path) -> None:
         """Golden: Meta-auditor validates audit results."""

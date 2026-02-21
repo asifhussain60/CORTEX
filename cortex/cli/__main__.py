@@ -44,7 +44,7 @@ def cli() -> None:
 def status() -> None:
     """Show CORTEX system status."""
     try:
-        from cortex.wiring import get_registry
+        from cortex.core.wiring.registry import get_registry
 
         registry = get_registry()
         orchestrators = registry.list_orchestrators()

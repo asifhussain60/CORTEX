@@ -65,22 +65,11 @@ class TestHolisticIntegrationMedium:
         assert "InteractionOrchestrator" in result.components_engaged
         assert "LENSOrchestrator" in result.components_engaged
         assert "EnforcementOrchestrator" in result.components_engaged
-        # Phase 52 TODO: Stage4 should expose TDDOrchestrator (currently shows Stage4-Execution)
-        # assert "TDDOrchestrator" in result.components_engaged
         
-        # Phase 52 TODO: CCL pre-warming tracking
-        # assert result.ccl_prewarmed, "CCL should be pre-warmed"
-        
-        # Phase 52 TODO: Governance tracking
-        # assert len(result.governance_rules_applied) > 0
-        # assert "CORE-008" in result.governance_rules_applied
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("medium")
         
-        # Phase 52 TODO: Audit trail validation
-        # # Phase 52 TODO: Audit trail validation
- # assert result.audit_events_matched
     
     # ========================================================================
     # S12: Multi-domain best practices
@@ -106,34 +95,17 @@ class TestHolisticIntegrationMedium:
         # Assert execution completed
         assert result.execution_completed
         
-        # Phase 52 TODO: Company YAML loading
-        # assert len(result.company_yamls_loaded) >= 3, \
-        #     f"Expected 3+ YAMLs, got {len(result.company_yamls_loaded)}"
-        
-        # expected_yamls = [
-        #     "api-design-standards.yaml",
-        #     "security-standards.yaml",
-        #     "payment-security.yaml"
-        # ]
-        # for yaml_file in expected_yamls:
-        #     # assert yaml_file in result.company_yamls_loaded, \
-        #     #     f"{yaml_file} should be loaded"
         
         # Assert synthesis occurred
         synthesis_events = [
             e for e in result.actual_events
             if "Synthesis" in e.get('orchestrator_name', '')
         ]
-        # assert len(synthesis_events) > 0, "Synthesis should occur"
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("medium")
         
-        # Assert audit trail
-        # Phase 52 TODO: Audit trail validation
 
-        # assert result.audit_events_matched
-    
     # ========================================================================
     # S13: Challenge gate triggered (high-risk)
     # ========================================================================
@@ -159,25 +131,12 @@ class TestHolisticIntegrationMedium:
         assert result.execution_completed
         
         # Assert challenge gate triggered
-        # Phase 52 TODO: Audit event validation
-        # challenge_events = [
-        #     e for e in result.actual_events
-        #     if e.get('activity') == 'GENERATE_ALTERNATIVES'
-        # ]
-        # assert len(challenge_events) > 0, \
-        #     "Challenge gate should trigger for high-risk REFACTOR"
         
-        # Verify alternatives generated (from audit event output_results)
-        # Verify ROI scores present
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("medium")
         
-        # Assert audit trail
-        # Phase 52 TODO: Audit trail validation
 
-        # assert result.audit_events_matched
-    
     # ========================================================================
     # S14: Holistic validation gate
     # ========================================================================
@@ -202,25 +161,12 @@ class TestHolisticIntegrationMedium:
         assert result.execution_completed
         
         # Assert holistic validation engaged
-        # Phase 52 TODO: Holistic validation tracking
-        # assert "HolisticValidationOrchestrator" in result.components_engaged
-        # assert "DependencyGraphAnalyzer" in result.components_engaged
         
-        # Phase 52 TODO: Validation verdict from audit events
-        # validation_events = [
-        #     e for e in result.actual_events
-        #     if e.get('activity') == 'VALIDATION_VERDICT'
-        # ]
-        # # assert len(validation_events) > 0
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("medium")
         
-        # Phase 52 TODO: Audit trail validation
-        # Phase 52 TODO: Audit trail validation
 
-        # assert result.audit_events_matched
-    
     # ========================================================================
     # S15: LENS + Git history correlation
     # ========================================================================
@@ -247,27 +193,18 @@ class TestHolisticIntegrationMedium:
         
         # Assert LENS + Git engaged
         assert "LENSOrchestrator" in result.components_engaged
-        # Phase 52 TODO: GitAnalyzer tracking
 
-        # assert "GitAnalyzer" in result.components_engaged
         
         # Assert git history analyzed
         git_events = [
             e for e in result.actual_events
             if 'Git' in e.get('orchestrator_name', '')
         ]
-        # assert len(git_events) > 0, "Git analysis should occur"
         
-        # Verify churn hotspots, authors, reviewers in output
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("medium")
         
-        # Assert audit trail
-        # Phase 52 TODO: Audit trail validation
-
-        # assert result.audit_events_matched
-
 
 # ============================================================================
 # Placeholder tests for S16-S20 (Week 2 continuation)
@@ -296,10 +233,6 @@ class TestHolisticIntegrationMedium:
         # Assert execution completed
         assert result.execution_completed
         
-        # Phase 52 TODO: Threat modeling tracking
-        # assert "ThreatModelingEngine" in result.components_engaged
-        # assert "OWASPAnalyzer" in result.components_engaged or \
-        #        any("owasp" in c.lower() for c in result.components_engaged)
         
         # Assert comprehensive threat analysis in audit trail
         threat_events = [
@@ -308,16 +241,11 @@ class TestHolisticIntegrationMedium:
                'owasp' in e.get('activity', '').lower() or
                'security' in e.get('activity', '').lower()
         ]
-        # assert len(threat_events) >= 3, "Multiple OWASP checks should be performed"
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("medium")
         
-        # Assert audit trail
-        # Phase 52 TODO: Audit trail validation
 
-        # assert result.audit_events_matched
-    
     # ========================================================================
     # S17: LLM synthesis complex (5+ sources)
     # ========================================================================
@@ -341,33 +269,14 @@ class TestHolisticIntegrationMedium:
         # Assert execution completed
         assert result.execution_completed
         
-        # Phase 52 TODO: LLM synthesis subsystems not fully integrated yet
         # Assert all synthesis subsystems engaged
-        # # Phase 52 TODO: LLM synthesis tracking
- # assert "LLMSynthesisEngine" in result.components_engaged or \
-        #        any("llm" in c.lower() for c in result.components_engaged)
         assert "LENSOrchestrator" in result.components_engaged
-        # Phase 52 TODO: Company knowledge loader tracking
-        # # Phase 52 TODO: Company knowledge loader tracking
- # assert "CompanyKnowledgeLoader" in result.components_engaged
         
-        # Phase 52 TODO: Company YAML loading
-        # assert len(result.company_yamls_loaded) >= 3, \
-        #     f"Expected 3+ YAMLs, got {len(result.company_yamls_loaded)}"
-        
-        # Phase 52 TODO: LLM snapshot validation
-        # Phase 52 TODO: LLM snapshot validation
-        # # assert result.llm_snapshot is not None
-        # assert len(result.llm_snapshot.structure_markers) > 0
         
         # Assert performance
         assert result.performance_metrics.meets_requirements("medium")
         
-        # Assert audit trail
-        # Phase 52 TODO: Audit trail validation
 
-        # assert result.audit_events_matched
-    
     # ========================================================================
     # S18: Edge case (missing dependencies, degraded mode)
     # ========================================================================
@@ -412,13 +321,8 @@ class TestHolisticIntegrationMedium:
                'degraded' in e.get('activity', '').lower() or
                'fallback' in e.get('activity', '').lower()
         ]
-        # assert len(warning_events) > 0, "Degraded mode warnings should be logged"
         
-        # Assert audit trail
-        # Phase 52 TODO: Audit trail validation
 
-        # assert result.audit_events_matched
-    
     # ========================================================================
     # S19: Blind spot (circular dependency detection)
     # ========================================================================
@@ -440,9 +344,6 @@ class TestHolisticIntegrationMedium:
         # Assert execution completed
         assert result.execution_completed
         
-        # Phase 52 TODO: Architecture validation tracking
-        # assert "DependencyGraphAnalyzer" in result.components_engaged or \
-        #        "ArchitectureValidator" in result.components_engaged
         
         # Assert circular dependency warning in audit trail
         circular_dep_events = [
@@ -450,14 +351,8 @@ class TestHolisticIntegrationMedium:
             if 'circular' in e.get('activity', '').lower() or
                'dependency' in e.get('activity', '').lower()
         ]
-        # assert len(circular_dep_events) > 0, \
-        # "Circular dependency should be detected and logged"
         
-        # Assert audit trail
-        # Phase 52 TODO: Audit trail validation
 
-        # assert result.audit_events_matched
-    
     # ========================================================================
     # S20: Quality concern (test coverage <80%)
     # ========================================================================
@@ -496,14 +391,7 @@ class TestHolisticIntegrationMedium:
                'core-008' in str(e).lower() or
                'test' in e.get('activity', '').lower()
         ]
-        # assert len(blocked_events) > 0, \
-        # "CORE-008 enforcement should block request"
         
-        # Assert audit trail
-        # Phase 52 TODO: Audit trail validation
-
-        # assert result.audit_events_matched
-
 
 # ============================================================================
 # Standalone test runner for development

@@ -17,15 +17,15 @@ class TestVaultProviderInterface:
     
     def test_vault_provider_implements_interface(self):
         """VaultProvider implements ISecretsProvider"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.secrets_provider import ISecretsProvider
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
         
         assert issubclass(VaultProvider, ISecretsProvider)
     
     def test_vault_provider_requires_endpoint(self):
         """VaultProvider requires Vault server URL"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         config = SecretsConfig(
             provider_type="vault",
@@ -37,8 +37,8 @@ class TestVaultProviderInterface:
     
     def test_vault_provider_accepts_vault_addr(self):
         """VaultProvider accepts Vault server address"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         vault_addr = "https://vault.company.com:8200"
         config = SecretsConfig(
@@ -55,8 +55,8 @@ class TestVaultProviderRetrieval:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_get_retrieves_secret(self, mock_client_class):
         """get(secret_id) retrieves secret from Vault"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -76,8 +76,8 @@ class TestVaultProviderRetrieval:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_get_with_kv2_path(self, mock_client_class):
         """get() works with KV v2 mount paths"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -97,8 +97,8 @@ class TestVaultProviderRetrieval:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_get_handles_json_secrets(self, mock_client_class):
         """get() returns JSON secrets as strings"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -126,8 +126,8 @@ class TestVaultProviderStorage:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_set_creates_secret(self, mock_client_class):
         """set(secret_id, value) creates secret in Vault"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -145,8 +145,8 @@ class TestVaultProviderStorage:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_delete_secret(self, mock_client_class):
         """delete(secret_id) removes secret from Vault"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -168,8 +168,8 @@ class TestVaultProviderDynamicSecrets:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_dynamic_secret_generation(self, mock_client_class):
         """Vault can generate dynamic secrets (e.g., temporary DB credentials)"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -197,8 +197,8 @@ class TestVaultProviderDynamicSecrets:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_lease_renewal(self, mock_client_class):
         """Vault automatically renews dynamic secret leases"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -222,8 +222,8 @@ class TestVaultProviderAppRole:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_approle_authentication(self, mock_client_class):
         """Provider uses AppRole for authentication"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -245,8 +245,8 @@ class TestVaultProviderAppRole:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_approle_token_rotation(self, mock_client_class):
         """AppRole tokens are rotated automatically"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -274,8 +274,8 @@ class TestVaultProviderRotation:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_rotate_creates_new_version(self, mock_client_class):
         """rotate(secret_id) creates new secret version"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         import uuid
         
         mock_client = MagicMock()
@@ -304,9 +304,9 @@ class TestVaultProviderErrorHandling:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_handles_not_found(self, mock_client_class):
         """get() raises SecretNotFoundError for missing secrets"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import SecretNotFoundError
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import SecretNotFoundError
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -328,9 +328,9 @@ class TestVaultProviderErrorHandling:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_handles_auth_error(self, mock_client_class):
         """Auth errors are properly mapped"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
-        from cortex.secrets.errors import AuthError
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.errors import AuthError
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -355,8 +355,8 @@ class TestVaultProviderList:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_list_secrets(self, mock_client_class):
         """list() returns all secrets in path"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -379,8 +379,8 @@ class TestVaultProviderList:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_vault_provider_list_with_prefix(self, mock_client_class):
         """list(prefix) filters secrets"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client
@@ -407,8 +407,8 @@ class TestVaultProviderIntegration:
     @patch('cortex.secrets.providers.vault.hvac.Client')
     def test_full_secret_lifecycle(self, mock_client_class):
         """Full workflow: create → retrieve → rotate → delete"""
-        from cortex.secrets.providers.vault import VaultProvider
-        from cortex.secrets.config import SecretsConfig
+        from cortex.infrastructure.secrets.providers.vault import VaultProvider
+        from cortex.infrastructure.secrets.config import SecretsConfig
         
         mock_client = MagicMock()
         mock_client_class.return_value = mock_client

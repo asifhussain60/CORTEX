@@ -74,3 +74,18 @@ class IOrchestrator(ABC):
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
         """AC-AR-011-03: Get audit trail with hash chain."""
         pass
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return orchestrator health status.
+
+        Default implementation returns basic health info.
+        Subclasses may override to add custom checks.
+
+        Returns:
+            Dict with at least 'status', 'orchestrator', and 'version' keys.
+        """
+        return {
+            "status": "healthy",
+            "orchestrator": self.get_name(),
+            "version": self.get_version(),
+        }

@@ -24,7 +24,7 @@ def run_startup_validation_hook() -> bool:
 
     Called automatically on first import of cortex module.
     This is NOT the orchestrator wiring bootstrap - for that use:
-        from cortex.wiring import wiring_bootstrap_cortex
+        from cortex.core.wiring import wiring_bootstrap_cortex
 
     Returns:
         True if validation successful, False if critical issues detected.

@@ -130,7 +130,7 @@ class RoutingHealthChecker:
         """
         try:
             from cortex.orchestrators.core.intent_router import IntentRouter, IntentType
-            from cortex.wiring import get_registry
+            from cortex.core.wiring.registry import get_registry
 
             router = IntentRouter()
             registry = get_registry()

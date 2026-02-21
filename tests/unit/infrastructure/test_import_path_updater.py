@@ -41,8 +41,8 @@ class TestImportPathUpdate:
             "file1.py"
         )
         self.updater.add_import_mapping(
-            "from cortex.api import Y",
-            "from cortex.api.module import Y",
+            "from cortex.infrastructure.api import Y",
+            "from cortex.infrastructure.api.module import Y",
             "file2.py"
         )
         
@@ -52,7 +52,7 @@ class TestImportPathUpdate:
         """Test scanning file imports."""
         imports = [
             "from cortex.core import Orchestrator",
-            "from cortex.api import APIHandler",
+            "from cortex.infrastructure.api import APIHandler",
             "import sys"
         ]
         
@@ -80,7 +80,7 @@ class TestImportPathUpdate:
         """Test updating imports with multiple mappings."""
         imports = [
             "from cortex.core import Orchestrator",
-            "from cortex.api import APIHandler"
+            "from cortex.infrastructure.api import APIHandler"
         ]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
@@ -89,8 +89,8 @@ class TestImportPathUpdate:
             "src/main.py"
         )
         self.updater.add_import_mapping(
-            "from cortex.api import APIHandler",
-            "from cortex.api.handler import APIHandler",
+            "from cortex.infrastructure.api import APIHandler",
+            "from cortex.infrastructure.api.handler import APIHandler",
             "src/main.py"
         )
         
@@ -99,7 +99,7 @@ class TestImportPathUpdate:
         assert updated["src/main.py"][0] == \
                "from cortex.core.orchestrator import Orchestrator"
         assert updated["src/main.py"][1] == \
-               "from cortex.api.handler import APIHandler"
+               "from cortex.infrastructure.api.handler import APIHandler"
     
     def test_update_imports_unmapped_imports_preserved(self):
         """Test that unmapped imports are preserved."""
@@ -149,7 +149,7 @@ class TestImportPathUpdate:
         """Test complete valid migration check."""
         imports = [
             "from cortex.core import Orchestrator",
-            "from cortex.api import APIHandler"
+            "from cortex.infrastructure.api import APIHandler"
         ]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
@@ -158,8 +158,8 @@ class TestImportPathUpdate:
             "src/main.py"
         )
         self.updater.add_import_mapping(
-            "from cortex.api import APIHandler",
-            "from cortex.api.handler import APIHandler",
+            "from cortex.infrastructure.api import APIHandler",
+            "from cortex.infrastructure.api.handler import APIHandler",
             "src/main.py"
         )
         
@@ -200,7 +200,7 @@ class TestImportPathUpdate:
         """Test successful full validation."""
         imports = [
             "from cortex.core import Orchestrator",
-            "from cortex.api import APIHandler"
+            "from cortex.infrastructure.api import APIHandler"
         ]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
@@ -209,8 +209,8 @@ class TestImportPathUpdate:
             "src/main.py"
         )
         self.updater.add_import_mapping(
-            "from cortex.api import APIHandler",
-            "from cortex.api.handler import APIHandler",
+            "from cortex.infrastructure.api import APIHandler",
+            "from cortex.infrastructure.api.handler import APIHandler",
             "src/main.py"
         )
         
@@ -226,7 +226,7 @@ class TestImportPathUpdate:
         files_and_imports = {
             "src/main.py": [
                 "from cortex.core import Orchestrator",
-                "from cortex.api import APIHandler"
+                "from cortex.infrastructure.api import APIHandler"
             ],
             "src/worker.py": [
                 "from cortex.brain import Brain",
@@ -245,8 +245,8 @@ class TestImportPathUpdate:
             "src/main.py"
         )
         self.updater.add_import_mapping(
-            "from cortex.api import APIHandler",
-            "from cortex.api.handler import APIHandler",
+            "from cortex.infrastructure.api import APIHandler",
+            "from cortex.infrastructure.api.handler import APIHandler",
             "src/main.py"
         )
         self.updater.add_import_mapping(

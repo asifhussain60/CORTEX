@@ -17,6 +17,7 @@ from dataclasses import dataclass, field
 from typing import List, Dict, Any
 from enum import Enum
 import logging
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 logger = logging.getLogger(__name__)
@@ -68,7 +69,7 @@ class Challenge:
 # CHALLENGE ENGINE
 # ============================================================================
 
-class ChallengeEngine:
+class ChallengeEngine(OrchestratorProtocolMixin):
     """Generates alternative approaches for implementation requests.
     
     Flow:

@@ -216,7 +216,7 @@ make test-all      # Run all tests
 
 ```
 cortex/                    # Main CORTEX package
-  orchestrators/          # 52 orchestrators across 10 domains
+  orchestrators/          # 21 wired orchestrators across 3 tiers (core, domain, support)
   mcp/                    # MCP server & 23 tool registry
   governance/             # Enforcement agents & validators
   intelligence/           # Cognitive architecture (LENS, knowledge, memory)

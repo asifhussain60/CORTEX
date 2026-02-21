@@ -58,15 +58,38 @@ class TestMetaAuditorValidation:
 
 class TestMetaAuditorIntegration:
     """Golden test: Meta-auditor integrates with EnforcementOrchestrator."""
-    
-    @pytest.mark.skip(reason="EnforcementOrchestrator integration deferred to S2")
-    def test_enforcement_orchestrator_uses_meta_auditor(self) -> None:
-        """Golden: EnforcementOrchestrator invokes meta-auditor."""
-        # Integration test deferred until EnforcementOrchestrator updated
-        pass
-    
-    @pytest.mark.skip(reason="EnforcementOrchestrator integration deferred to S2")
+
+    def test_enforcement_result_validated_by_meta_auditor(self) -> None:
+        """Golden: EnforcementOrchestrator result validated by meta-auditor."""
+        from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrchestrator
+
+        enforcer = EnforcementOrchestrator()
+        agent = MetaAuditorAgent()
+
+        # Run enforcement on a benign operation
+        result = enforcer.validate_operation({
+            "intent": "QUERY",
+            "files": [],
+            "description": "simple query",
+        })
+
+        # Meta-auditor validates the enforcement output
+        audit_result = {"violations": []}
+        if result.is_err():
+            enforcement = result.err()
+            audit_result = {"violations": [{"rule": v, "file": "", "message": v} for v in enforcement.violations]}
+
+        validation = agent.validate_audit_result(audit_result)
+        assert validation is not None
+        assert hasattr(validation, "approved")
+
     def test_audit_pipeline_with_validation(self) -> None:
-        """Golden: Full audit pipeline with meta-auditor validation."""
-        # Integration test deferred until EnforcementOrchestrator updated
-        pass
+        """Golden: Full audit pipeline — validate then meta-audit."""
+        agent = MetaAuditorAgent()
+
+        # Simulate a clean audit result
+        audit_result = {"violations": []}
+        validation = agent.validate_audit_result(audit_result)
+
+        assert validation.has_false_positives is False
+        assert validation.approved is True

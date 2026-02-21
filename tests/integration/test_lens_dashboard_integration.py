@@ -24,7 +24,7 @@ class TestDashboardEndToEnd:
 
     def test_complete_dashboard_flow(self, tmp_path: Path):
         """Test complete flow from API to data generation."""
-        from cortex.api.endpoints.lens_dashboard_routes import create_dashboard_router, analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import create_dashboard_router, analyze_repository
         from fastapi import FastAPI
         
         # Create test repository
@@ -65,7 +65,7 @@ class TestDashboardEndToEnd:
 
     def test_cortex_repository_detection(self, tmp_path: Path):
         """Test CORTEX repository is correctly detected and gets 8 tabs."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         # Create CORTEX-like structure
         cortex_repo = tmp_path / "cortex-test"
@@ -87,7 +87,7 @@ class TestDashboardEndToEnd:
 
     def test_external_repository_gets_5_tabs(self, tmp_path: Path):
         """Test external repository gets only 5 universal tabs."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         # Create regular repository
         repo = tmp_path / "external-repo"
@@ -115,7 +115,7 @@ class TestRenderersIntegration:
 
     def test_complexity_renderer_integration(self, tmp_path: Path):
         """Test ComplexityRenderer integration via API."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_overlay_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_overlay_data
         
         repo = tmp_path / "test-repo"
         repo.mkdir()
@@ -138,7 +138,7 @@ def complex_function():
 
     def test_author_network_renderer_integration(self, tmp_path: Path):
         """Test AuthorNetworkRenderer integration via dependencies tab."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_tab_data
         
         repo = tmp_path / "test-repo"
         repo.mkdir()
@@ -161,7 +161,7 @@ def complex_function():
 
     def test_mermaid_renderer_integration(self, tmp_path: Path):
         """Test MermaidRenderer integration via classes tab."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_tab_data
         
         repo = tmp_path / "test-repo"
         repo.mkdir()
@@ -190,7 +190,7 @@ class TestLENSAnalyzersIntegration:
 
     def test_git_history_analyzer_integration(self, tmp_path: Path):
         """Test GitHistoryAnalyzer integration."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_tab_data
         
         repo = tmp_path / "test-repo"
         repo.mkdir()
@@ -213,7 +213,7 @@ class TestLENSAnalyzersIntegration:
 
     def test_ast_analyzer_integration(self, tmp_path: Path):
         """Test ASTAnalyzer integration."""
-        from cortex.api.endpoints.lens_dashboard_routes import get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import get_tab_data
         
         repo = tmp_path / "test-repo"
         repo.mkdir()
@@ -243,7 +243,7 @@ class TestPerformanceBenchmarks:
 
     def test_small_repository_performance(self, tmp_path: Path):
         """Test analysis completes quickly for small repos."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         repo = tmp_path / "small-repo"
         repo.mkdir()
@@ -262,7 +262,7 @@ class TestPerformanceBenchmarks:
 
     def test_medium_repository_performance(self, tmp_path: Path):
         """Test analysis completes reasonably for medium repos."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         repo = tmp_path / "medium-repo"
         repo.mkdir()
@@ -295,7 +295,7 @@ class TestErrorHandlingIntegration:
 
     def test_malformed_python_file_handling(self, tmp_path: Path):
         """Test graceful handling of malformed Python files."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         repo = tmp_path / "broken-repo"
         repo.mkdir()
@@ -311,7 +311,7 @@ class TestErrorHandlingIntegration:
 
     def test_non_git_repository_handling(self, tmp_path: Path):
         """Test handling of non-git repositories."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         repo = tmp_path / "no-git"
         repo.mkdir()
@@ -325,7 +325,7 @@ class TestErrorHandlingIntegration:
 
     def test_empty_repository_handling(self, tmp_path: Path):
         """Test handling of empty repositories."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         repo = tmp_path / "empty-repo"
         repo.mkdir()
@@ -402,7 +402,7 @@ class TestDataConsistency:
 
     def test_analyze_vs_tab_data_consistency(self, tmp_path: Path):
         """Test analyze endpoint and tab endpoint return consistent data."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository, get_tab_data
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository, get_tab_data
         
         repo = tmp_path / "test-repo"
         repo.mkdir()
@@ -425,7 +425,7 @@ class TestDataConsistency:
 
     def test_metadata_consistency(self, tmp_path: Path):
         """Test metadata is consistent across requests."""
-        from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+        from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
         
         repo = tmp_path / "test-repo"
         repo.mkdir()

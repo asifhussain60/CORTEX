@@ -55,15 +55,34 @@ class TestPlanAuditorSync:
 
 class TestPlanAuditorIntegration:
     """Golden test: Plan-auditor integrates with PlanOrchestrator."""
-    
-    @pytest.mark.skip(reason="PlanOrchestrator integration deferred to S2")
-    def test_plan_orchestrator_uses_plan_auditor(self) -> None:
-        """Golden: PlanOrchestrator invokes plan-auditor for sync."""
-        # Integration test deferred until PlanOrchestrator updated
-        pass
-    
-    @pytest.mark.skip(reason="PlanOrchestrator integration deferred to S2")
-    def test_dashboard_update_after_phase_completion(self) -> None:
-        """Golden: Dashboard auto-syncs after phase completion."""
-        # Integration test deferred until PlanOrchestrator updated
-        pass
+
+    def test_plan_auditor_detects_drift_and_syncs(self, tmp_path: Path) -> None:
+        """Golden: PlanAuditor detects drift then syncs dashboard."""
+        agent = PlanAuditorAgent()
+
+        registry_state = {"phase-10": {"status": "completed"}}
+        dashboard_state = {"phase-10": {"status": "active"}}
+
+        drift_result = agent.detect_drift(registry_state, dashboard_state)
+        assert drift_result.has_drift is True
+
+        # Now sync to resolve drift
+        registry_path = tmp_path / "registry"
+        dashboard_path = tmp_path / "dashboard"
+        registry_path.mkdir()
+        dashboard_path.mkdir()
+
+        sync_result = agent.sync_dashboard(registry_path, dashboard_path)
+        assert sync_result.synced is True
+
+    def test_dashboard_source_validation(self) -> None:
+        """Golden: Dashboard source validated against registry version."""
+        agent = PlanAuditorAgent()
+
+        # Matching versions — no manual edit
+        validation = agent.validate_dashboard_source("6.3", "6.3")
+        assert validation.manual_edit_detected is False
+
+        # Mismatched versions — manual edit detected
+        validation = agent.validate_dashboard_source("6.3", "6.3-custom")
+        assert validation.manual_edit_detected is True

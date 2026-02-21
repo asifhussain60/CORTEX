@@ -359,7 +359,6 @@ class HolisticIntegrationHarness(GoldenTestHarness):
         
         # ════════════════════════════════════════════════════════════════════
         # Post-execution: Enrich result from scenario declarations
-        # This bridges Phase 51 (harness) and Phase 52 (full wiring).
         # Expected components declared in the scenario YAML are added to
         # components_engaged when they logically apply.
         # ════════════════════════════════════════════════════════════════════

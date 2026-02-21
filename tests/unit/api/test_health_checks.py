@@ -12,7 +12,7 @@ from unittest.mock import Mock, patch, MagicMock
 from typing import Dict, List, Optional
 from datetime import datetime
 
-from cortex.api.health_endpoints import (
+from cortex.infrastructure.api.health_endpoints import (
     HealthStatus,
     ComponentHealth,
     HealthCheckResponse,

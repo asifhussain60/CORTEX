@@ -14,7 +14,7 @@ class TestGitSecretsPreCommitHook:
     
     def test_precommit_hook_detects_secrets_in_staged_files(self):
         """Pre-commit hook scans staged files for secrets"""
-        from cortex.secrets.git_scanning import PreCommitHookScanner
+        from cortex.infrastructure.secrets.git_scanning import PreCommitHookScanner
         
         scanner = PreCommitHookScanner()
         
@@ -31,8 +31,8 @@ class TestGitSecretsPreCommitHook:
     
     def test_precommit_hook_blocks_aws_credentials(self):
         """Pre-commit hook identifies AWS credential patterns"""
-        from cortex.secrets.git_scanning import PreCommitHookScanner
-        from cortex.secrets.errors import StorageError
+        from cortex.infrastructure.secrets.git_scanning import PreCommitHookScanner
+        from cortex.infrastructure.secrets.errors import StorageError
         
         scanner = PreCommitHookScanner()
         
@@ -50,8 +50,8 @@ class TestGitSecretsPreCommitHook:
     
     def test_precommit_hook_blocks_private_keys(self):
         """Pre-commit hook detects private key patterns"""
-        from cortex.secrets.git_scanning import PreCommitHookScanner
-        from cortex.secrets.errors import StorageError
+        from cortex.infrastructure.secrets.git_scanning import PreCommitHookScanner
+        from cortex.infrastructure.secrets.errors import StorageError
         
         scanner = PreCommitHookScanner()
         
@@ -66,8 +66,8 @@ class TestGitSecretsPreCommitHook:
     
     def test_precommit_hook_blocks_database_urls(self):
         """Pre-commit hook detects database connection strings"""
-        from cortex.secrets.git_scanning import PreCommitHookScanner
-        from cortex.secrets.errors import StorageError
+        from cortex.infrastructure.secrets.git_scanning import PreCommitHookScanner
+        from cortex.infrastructure.secrets.errors import StorageError
         
         scanner = PreCommitHookScanner()
         
@@ -78,7 +78,7 @@ class TestGitSecretsPreCommitHook:
     
     def test_precommit_hook_allows_safe_content(self):
         """Pre-commit hook allows files without secrets"""
-        from cortex.secrets.git_scanning import PreCommitHookScanner
+        from cortex.infrastructure.secrets.git_scanning import PreCommitHookScanner
         
         scanner = PreCommitHookScanner()
         
@@ -93,7 +93,7 @@ class TestGitSecretsPreCommitHook:
     
     def test_precommit_hook_provides_remediation_guidance(self):
         """Pre-commit hook suggests remediation steps"""
-        from cortex.secrets.git_scanning import PreCommitHookScanner
+        from cortex.infrastructure.secrets.git_scanning import PreCommitHookScanner
         
         scanner = PreCommitHookScanner()
         
@@ -115,7 +115,7 @@ class TestGitHubActionsSecretScanning:
     
     def test_github_actions_workflow_scans_pull_requests(self):
         """GitHub Actions workflow runs on PR to detect secrets"""
-        from cortex.secrets.git_scanning import GitHubActionsScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHubActionsScanner
         
         scanner = GitHubActionsScanner()
         
@@ -142,7 +142,7 @@ class TestGitHubActionsSecretScanning:
     
     def test_github_actions_workflow_scans_push_events(self):
         """GitHub Actions workflow runs on push to detect secrets"""
-        from cortex.secrets.git_scanning import GitHubActionsScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHubActionsScanner
         
         scanner = GitHubActionsScanner()
         
@@ -167,7 +167,7 @@ class TestGitHubActionsSecretScanning:
     
     def test_github_actions_fails_on_secret_detection(self):
         """GitHub Actions workflow exits with error if secrets found"""
-        from cortex.secrets.git_scanning import GitHubActionsScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHubActionsScanner
         
         scanner = GitHubActionsScanner()
         
@@ -179,7 +179,7 @@ class TestGitHubActionsSecretScanning:
     
     def test_github_actions_notifies_on_detection(self):
         """GitHub Actions creates issue comment on secret detection"""
-        from cortex.secrets.git_scanning import GitHubActionsScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHubActionsScanner
         
         scanner = GitHubActionsScanner()
         
@@ -190,7 +190,7 @@ class TestGitHubActionsSecretScanning:
     
     def test_github_actions_provides_remediation_link(self):
         """GitHub Actions links to remediation documentation"""
-        from cortex.secrets.git_scanning import GitHubActionsScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHubActionsScanner
         
         scanner = GitHubActionsScanner()
         
@@ -207,7 +207,7 @@ class TestGitHistorySecretsScanning:
     
     def test_history_scanner_finds_secrets_in_past_commits(self):
         """History scanner detects secrets in git history"""
-        from cortex.secrets.git_scanning import GitHistoryScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHistoryScanner
         
         scanner = GitHistoryScanner()
         
@@ -228,7 +228,7 @@ class TestGitHistorySecretsScanning:
     
     def test_history_scanner_limits_scan_range(self):
         """History scanner can limit scan to recent commits"""
-        from cortex.secrets.git_scanning import GitHistoryScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHistoryScanner
         
         scanner = GitHistoryScanner()
         
@@ -243,7 +243,7 @@ class TestGitHistorySecretsScanning:
     
     def test_history_scanner_finds_secrets_by_author(self):
         """History scanner filters secrets by commit author"""
-        from cortex.secrets.git_scanning import GitHistoryScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHistoryScanner
         
         scanner = GitHistoryScanner()
         
@@ -263,7 +263,7 @@ class TestGitHistorySecretsScanning:
     
     def test_history_scanner_finds_secrets_by_file(self):
         """History scanner can search specific files"""
-        from cortex.secrets.git_scanning import GitHistoryScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHistoryScanner
         
         scanner = GitHistoryScanner()
         
@@ -283,7 +283,7 @@ class TestGitHistorySecretsScanning:
     
     def test_history_scanner_reports_leak_timeline(self):
         """History scanner provides timeline of secret introduction"""
-        from cortex.secrets.git_scanning import GitHistoryScanner
+        from cortex.infrastructure.secrets.git_scanning import GitHistoryScanner
         
         scanner = GitHistoryScanner()
         
@@ -303,7 +303,7 @@ class TestSecretsRemediationAutomation:
     
     def test_remediation_creates_new_commit_removing_secret(self):
         """Remediation automatically removes secret and creates commit"""
-        from cortex.secrets.git_scanning import SecretsRemediator
+        from cortex.infrastructure.secrets.git_scanning import SecretsRemediator
         
         remediator = SecretsRemediator()
         
@@ -314,7 +314,7 @@ class TestSecretsRemediationAutomation:
     
     def test_remediation_rotates_exposed_credentials(self):
         """Remediation automatically rotates exposed credentials"""
-        from cortex.secrets.git_scanning import SecretsRemediator
+        from cortex.infrastructure.secrets.git_scanning import SecretsRemediator
         
         remediator = SecretsRemediator()
         
@@ -325,7 +325,7 @@ class TestSecretsRemediationAutomation:
     
     def test_remediation_invalidates_leaked_tokens(self):
         """Remediation invalidates leaked access tokens"""
-        from cortex.secrets.git_scanning import SecretsRemediator
+        from cortex.infrastructure.secrets.git_scanning import SecretsRemediator
         
         remediator = SecretsRemediator()
         
@@ -336,7 +336,7 @@ class TestSecretsRemediationAutomation:
     
     def test_remediation_updates_vault_with_new_secrets(self):
         """Remediation stores new credentials in Vault"""
-        from cortex.secrets.git_scanning import SecretsRemediator
+        from cortex.infrastructure.secrets.git_scanning import SecretsRemediator
         
         remediator = SecretsRemediator()
         
@@ -347,7 +347,7 @@ class TestSecretsRemediationAutomation:
     
     def test_remediation_creates_incident_report(self):
         """Remediation creates security incident report"""
-        from cortex.secrets.git_scanning import SecretsRemediator
+        from cortex.infrastructure.secrets.git_scanning import SecretsRemediator
         
         remediator = SecretsRemediator()
         
@@ -366,7 +366,7 @@ class TestGitSecretsIntegration:
     
     def test_full_secrets_scanning_workflow(self):
         """Complete workflow: detect, report, remediate"""
-        from cortex.secrets.git_scanning import SecretsScanner
+        from cortex.infrastructure.secrets.git_scanning import SecretsScanner
         
         scanner = SecretsScanner()
         
@@ -385,7 +385,7 @@ class TestGitSecretsIntegration:
     
     def test_secrets_scanning_with_exclusions(self):
         """Secrets scanning respects configured exclusions"""
-        from cortex.secrets.git_scanning import SecretsScanner
+        from cortex.infrastructure.secrets.git_scanning import SecretsScanner
         
         scanner = SecretsScanner(
             exclude_paths=[".venv/", "vendor/"],
@@ -398,7 +398,7 @@ class TestGitSecretsIntegration:
     
     def test_secrets_scanning_performance_limits(self):
         """Secrets scanning completes within time limits"""
-        from cortex.secrets.git_scanning import SecretsScanner
+        from cortex.infrastructure.secrets.git_scanning import SecretsScanner
         import time
         
         scanner = SecretsScanner()

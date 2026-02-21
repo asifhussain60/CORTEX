@@ -12,6 +12,7 @@ import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 @dataclass
@@ -47,7 +48,7 @@ class HealthReport:
         }
 
 
-class ToolchainValidator:
+class ToolchainValidator(OrchestratorProtocolMixin):
     """Validate that all required dev-tools are installed and functional.
 
     Args:

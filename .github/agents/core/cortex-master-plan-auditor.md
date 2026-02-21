@@ -73,11 +73,11 @@ maintainer: "Asif Hussain"
 | Phase 09 | v2.0.0 tag + release | ✅ COMPLETE |
 
 **Post-Refactor State:**
-- 52 orchestrators across 10 domains
+- 21 wired orchestrators across 3 tiers (core, domain, support)
 - 23 MCP tools in `cortex/mcp/tools/`
-- 17 CORE rules in `cortex-registry/core/`
+- 21 CORE rules in `cortex-registry/core/`
 - 1 package: `cortex`
-- 15,230 tests (486 golden, 177 phase)
+- 15,230 tests (519 golden, 177 phase)
 
 ---
 

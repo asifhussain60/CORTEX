@@ -1,12 +1,12 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-20 | ## About CORTEX
+**Updated:** 2026-02-22 | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **52 Canonical Orchestrators** across 10 domains (core, domain, git, health, intelligence, strategies, support, synthesis, validation, workflow)
+- **21 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
 - **23 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
-- **17 CORE Governance Rules** enforced at pre-commit, CI, and runtime
+- **21 CORE Governance Rules** enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **LENS Analysis** — workspace-aware code intelligence (Language → Examination → Navigation → Synthesis)
 - **1 Canonical Package** — all imports use `cortex.*` (no `cortex_intelligence`, `cortex_lens`, or `cortex.brain`)
@@ -18,11 +18,11 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrators | 52 classes in `cortex/orchestrators/` |
+| Orchestrators | 21 wired in `cortex/orchestrators/` (6 core, 6 domain, 9 support) |
 | MCP Tools | 23 in `cortex/mcp/tools/` |
 | Top-level Dirs | 16 canonical under `cortex/` |
-| Governance Rules | 17 active in `cortex-registry/core/` |
-| Test Suite | 15,145 tests (486 golden, 177 phase) |
+| Governance Rules | 21 active in `cortex-registry/core/` |
+| Test Suite | 15,145 tests (519 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 
 ---
@@ -95,7 +95,7 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (16 canonical dirs)
-  orchestrators/     ← 52 orchestrators across 10 domains
+  orchestrators/     ← 21 wired orchestrators across 3 tiers (core, domain, support)
   mcp/tools/         ← 23 MCP tools
   core/              ← OrchestratorBase, FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate

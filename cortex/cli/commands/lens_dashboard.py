@@ -53,7 +53,7 @@ def serve(repo_name: Optional[str], port: int, no_browser: bool, host: str) -> N
     import uvicorn
     from fastapi import FastAPI
 
-    from cortex.api.endpoints.lens_dashboard_routes import create_dashboard_router
+    from cortex.infrastructure.api.endpoints.lens_dashboard_routes import create_dashboard_router
 
     # Create FastAPI app
     app = FastAPI(
@@ -124,7 +124,7 @@ def generate(repo: str, output: str) -> None:
     """
     import json
 
-    from cortex.api.endpoints.lens_dashboard_routes import analyze_repository
+    from cortex.infrastructure.api.endpoints.lens_dashboard_routes import analyze_repository
 
     repo_path = Path(repo).resolve()
     output_path = Path(output)

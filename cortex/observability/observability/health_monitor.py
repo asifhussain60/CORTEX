@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
 
-from cortex.api.health_endpoints import HealthStatus
+from cortex.infrastructure.api.health_endpoints import HealthStatus
 
 logger = logging.getLogger(__name__)
 

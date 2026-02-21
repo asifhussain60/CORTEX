@@ -14,7 +14,7 @@ class TestComplianceReporting:
     
     def test_sox_compliance_report_generation(self):
         """Generate SOX compliance report"""
-        from cortex.secrets.compliance import ComplianceReporter
+        from cortex.infrastructure.secrets.compliance import ComplianceReporter
         
         reporter = ComplianceReporter()
         
@@ -29,7 +29,7 @@ class TestComplianceReporting:
     
     def test_hipaa_compliance_report_generation(self):
         """Generate HIPAA compliance report"""
-        from cortex.secrets.compliance import ComplianceReporter
+        from cortex.infrastructure.secrets.compliance import ComplianceReporter
         
         reporter = ComplianceReporter()
         
@@ -44,7 +44,7 @@ class TestComplianceReporting:
     
     def test_pci_compliance_report_generation(self):
         """Generate PCI-DSS compliance report"""
-        from cortex.secrets.compliance import ComplianceReporter
+        from cortex.infrastructure.secrets.compliance import ComplianceReporter
         
         reporter = ComplianceReporter()
         
@@ -59,7 +59,7 @@ class TestComplianceReporting:
     
     def test_compliance_report_includes_control_mapping(self):
         """Compliance report includes control-to-evidence mapping"""
-        from cortex.secrets.compliance import ComplianceReporter
+        from cortex.infrastructure.secrets.compliance import ComplianceReporter
         
         reporter = ComplianceReporter()
         
@@ -78,7 +78,7 @@ class TestEvidenceCollection:
     
     def test_evidence_collector_gathers_audit_logs(self):
         """Evidence collector gathers audit logs"""
-        from cortex.secrets.compliance import EvidenceCollector
+        from cortex.infrastructure.secrets.compliance import EvidenceCollector
         
         collector = EvidenceCollector()
         
@@ -91,7 +91,7 @@ class TestEvidenceCollection:
     
     def test_evidence_collector_gathers_access_logs(self):
         """Evidence collector gathers access logs"""
-        from cortex.secrets.compliance import EvidenceCollector
+        from cortex.infrastructure.secrets.compliance import EvidenceCollector
         
         collector = EvidenceCollector()
         
@@ -107,7 +107,7 @@ class TestEvidenceCollection:
     
     def test_evidence_collector_verifies_integrity_of_evidence(self):
         """Evidence collector verifies integrity of collected evidence"""
-        from cortex.secrets.compliance import EvidenceCollector
+        from cortex.infrastructure.secrets.compliance import EvidenceCollector
         
         collector = EvidenceCollector()
         
@@ -122,7 +122,7 @@ class TestEvidenceCollection:
     
     def test_evidence_collector_creates_evidence_chain_of_custody(self):
         """Evidence collector creates chain of custody"""
-        from cortex.secrets.compliance import EvidenceCollector
+        from cortex.infrastructure.secrets.compliance import EvidenceCollector
         
         collector = EvidenceCollector()
         
@@ -141,7 +141,7 @@ class TestAutomatedCertification:
     
     def test_certification_generator_creates_sox_certificate(self):
         """Certification generator creates SOX certificate"""
-        from cortex.secrets.compliance import CertificationGenerator
+        from cortex.infrastructure.secrets.compliance import CertificationGenerator
         
         gen = CertificationGenerator()
         
@@ -157,7 +157,7 @@ class TestAutomatedCertification:
     
     def test_certification_generator_creates_hipaa_certificate(self):
         """Certification generator creates HIPAA certificate"""
-        from cortex.secrets.compliance import CertificationGenerator
+        from cortex.infrastructure.secrets.compliance import CertificationGenerator
         
         gen = CertificationGenerator()
         
@@ -171,7 +171,7 @@ class TestAutomatedCertification:
     
     def test_certification_generator_creates_pci_certificate(self):
         """Certification generator creates PCI-DSS certificate"""
-        from cortex.secrets.compliance import CertificationGenerator
+        from cortex.infrastructure.secrets.compliance import CertificationGenerator
         
         gen = CertificationGenerator()
         
@@ -185,7 +185,7 @@ class TestAutomatedCertification:
     
     def test_certificate_includes_digital_signature(self):
         """Certificate includes digital signature"""
-        from cortex.secrets.compliance import CertificationGenerator
+        from cortex.infrastructure.secrets.compliance import CertificationGenerator
         
         gen = CertificationGenerator()
         
@@ -206,7 +206,7 @@ class TestComplianceDashboard:
     
     def test_dashboard_shows_compliance_status(self):
         """Dashboard shows current compliance status"""
-        from cortex.secrets.compliance import ComplianceDashboard
+        from cortex.infrastructure.secrets.compliance import ComplianceDashboard
         
         dashboard = ComplianceDashboard()
         
@@ -216,7 +216,7 @@ class TestComplianceDashboard:
     
     def test_dashboard_shows_control_results(self):
         """Dashboard shows control test results"""
-        from cortex.secrets.compliance import ComplianceDashboard
+        from cortex.infrastructure.secrets.compliance import ComplianceDashboard
         
         dashboard = ComplianceDashboard()
         
@@ -226,7 +226,7 @@ class TestComplianceDashboard:
     
     def test_dashboard_shows_open_findings(self):
         """Dashboard shows open audit findings"""
-        from cortex.secrets.compliance import ComplianceDashboard
+        from cortex.infrastructure.secrets.compliance import ComplianceDashboard
         
         dashboard = ComplianceDashboard()
         
@@ -236,7 +236,7 @@ class TestComplianceDashboard:
     
     def test_dashboard_tracks_remediation_progress(self):
         """Dashboard tracks remediation progress"""
-        from cortex.secrets.compliance import ComplianceDashboard
+        from cortex.infrastructure.secrets.compliance import ComplianceDashboard
         
         dashboard = ComplianceDashboard()
         
@@ -250,7 +250,7 @@ class TestComplianceAutomation:
     
     def test_automated_sox_certification_workflow(self):
         """Automated SOX certification workflow"""
-        from cortex.secrets.compliance import ComplianceAutomation
+        from cortex.infrastructure.secrets.compliance import ComplianceAutomation
         
         automation = ComplianceAutomation()
         
@@ -263,7 +263,7 @@ class TestComplianceAutomation:
     
     def test_automated_hipaa_audit_workflow(self):
         """Automated HIPAA audit workflow"""
-        from cortex.secrets.compliance import ComplianceAutomation
+        from cortex.infrastructure.secrets.compliance import ComplianceAutomation
         
         automation = ComplianceAutomation()
         
@@ -276,7 +276,7 @@ class TestComplianceAutomation:
     
     def test_automated_pci_assessment_workflow(self):
         """Automated PCI assessment workflow"""
-        from cortex.secrets.compliance import ComplianceAutomation
+        from cortex.infrastructure.secrets.compliance import ComplianceAutomation
         
         automation = ComplianceAutomation()
         
@@ -293,7 +293,7 @@ class TestComplianceIntegration:
     
     def test_complete_compliance_reporting_workflow(self):
         """Complete workflow: collect evidence, verify, report, certify"""
-        from cortex.secrets.compliance import ComplianceOrchestrator
+        from cortex.infrastructure.secrets.compliance import ComplianceOrchestrator
         
         orchestrator = ComplianceOrchestrator()
         
@@ -306,7 +306,7 @@ class TestComplianceIntegration:
     
     def test_compliance_reporting_with_export(self):
         """Compliance reporting with export capabilities"""
-        from cortex.secrets.compliance import ComplianceReporter
+        from cortex.infrastructure.secrets.compliance import ComplianceReporter
         
         reporter = ComplianceReporter()
         
@@ -324,7 +324,7 @@ class TestComplianceIntegration:
     
     def test_compliance_reporting_maintains_audit_trail(self):
         """Compliance reporting maintains its own audit trail"""
-        from cortex.secrets.compliance import ComplianceReporter
+        from cortex.infrastructure.secrets.compliance import ComplianceReporter
         
         reporter = ComplianceReporter()
         
@@ -339,7 +339,7 @@ class TestComplianceIntegration:
     
     def test_multi_standard_compliance_report(self):
         """Generate multi-standard compliance report"""
-        from cortex.secrets.compliance import ComplianceReporter
+        from cortex.infrastructure.secrets.compliance import ComplianceReporter
         
         reporter = ComplianceReporter()
         

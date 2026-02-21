@@ -15,7 +15,7 @@ from fastapi.testclient import TestClient
 from unittest.mock import Mock, patch, MagicMock
 from io import BytesIO
 
-from cortex.api.endpoints.lens_dashboard_routes import create_dashboard_router
+from cortex.infrastructure.api.endpoints.lens_dashboard_routes import create_dashboard_router
 
 
 class TestInteractiveFiltering:

@@ -569,7 +569,7 @@ jobs:
       - name: Regenerate CORTEX.prompt.md
         run: |
           python -c "
-          from cortex.ci_cd.production_release import ProductionReleaseManager
+          from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
           from pathlib import Path
           manager = ProductionReleaseManager(Path('.'))
           version = manager.get_current_version()

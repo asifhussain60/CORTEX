@@ -18,7 +18,7 @@ class TestProductionReleaseVersioning:
 
     def test_get_current_version_from_pyproject(self, tmp_path):
         """Should read current version from pyproject.toml."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         pyproject = tmp_path / "pyproject.toml"
         pyproject.write_text('[project]\nversion = "7.2.1"')
@@ -30,7 +30,7 @@ class TestProductionReleaseVersioning:
 
     def test_get_current_version_from_version_file(self, tmp_path):
         """Should read version from VERSION file if pyproject missing."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         version_file = tmp_path / "VERSION"
         version_file.write_text("7.3.0")
@@ -42,7 +42,7 @@ class TestProductionReleaseVersioning:
 
     def test_bump_patch_version(self):
         """Should bump patch version correctly."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(Path("."))
         new_version = manager.bump_version("7.2.1", "patch")
@@ -51,7 +51,7 @@ class TestProductionReleaseVersioning:
 
     def test_bump_minor_version(self):
         """Should bump minor version and reset patch."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(Path("."))
         new_version = manager.bump_version("7.2.5", "minor")
@@ -60,7 +60,7 @@ class TestProductionReleaseVersioning:
 
     def test_bump_major_version(self):
         """Should bump major version and reset minor/patch."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(Path("."))
         new_version = manager.bump_version("7.2.5", "major")
@@ -73,7 +73,7 @@ class TestProductionReleaseInstructionRegeneration:
 
     def test_regenerate_cortex_prompt_md(self, tmp_path):
         """Should regenerate CORTEX.prompt.md with fresh content."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         # Create old prompt file
         prompts_dir = tmp_path / ".github" / "prompts"
@@ -92,7 +92,7 @@ class TestProductionReleaseInstructionRegeneration:
 
     def test_regenerate_copilot_instruction_md(self, tmp_path):
         """Should regenerate copilot-instruction.md with fresh content."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         # Create old instruction file
         github_dir = tmp_path / ".github"
@@ -111,7 +111,7 @@ class TestProductionReleaseInstructionRegeneration:
 
     def test_delete_old_files_before_regeneration(self, tmp_path):
         """Should delete old files before regenerating."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         # Create old files
         github_dir = tmp_path / ".github"
@@ -136,7 +136,7 @@ class TestProductionReleaseGitOperations:
 
     def test_detect_main_branch(self, tmp_path):
         """Should detect if on main/master branch."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         
@@ -150,7 +150,7 @@ class TestProductionReleaseGitOperations:
 
     def test_create_release_tag(self, tmp_path):
         """Should create release tag with version."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         
@@ -164,7 +164,7 @@ class TestProductionReleaseGitOperations:
 
     def test_generate_changelog_entry(self, tmp_path):
         """Should generate changelog entry for release."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         
@@ -186,7 +186,7 @@ class TestProductionReleaseWorkflow:
 
     def test_full_release_workflow(self, tmp_path):
         """Should execute complete release workflow."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         # Setup project structure
         github_dir = tmp_path / ".github"
@@ -213,7 +213,7 @@ class TestProductionReleaseWorkflow:
 
     def test_release_blocked_on_non_main_branch(self, tmp_path):
         """Should block release on non-main branch."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         
@@ -227,7 +227,7 @@ class TestProductionReleaseWorkflow:
 
     def test_release_with_custom_version(self, tmp_path):
         """Should allow custom version override."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         github_dir = tmp_path / ".github"
         github_dir.mkdir(parents=True)
@@ -249,7 +249,7 @@ class TestProductionReleaseValidation:
 
     def test_validate_tests_pass(self, tmp_path):
         """Should validate all tests pass before release."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         
@@ -263,7 +263,7 @@ class TestProductionReleaseValidation:
 
     def test_block_release_if_tests_fail(self, tmp_path):
         """Should block release if tests fail."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         
@@ -276,7 +276,7 @@ class TestProductionReleaseValidation:
 
     def test_validate_no_uncommitted_changes(self, tmp_path):
         """Should validate no uncommitted changes exist."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         
@@ -293,7 +293,7 @@ class TestProductionReleaseGitHubWorkflow:
 
     def test_generate_release_workflow_yaml(self, tmp_path):
         """Should generate GitHub Actions release workflow."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         workflow = manager.generate_release_workflow()
@@ -306,7 +306,7 @@ class TestProductionReleaseGitHubWorkflow:
 
     def test_workflow_includes_instruction_regeneration(self, tmp_path):
         """Should include instruction file regeneration step."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         workflow = manager.generate_release_workflow()
@@ -315,7 +315,7 @@ class TestProductionReleaseGitHubWorkflow:
 
     def test_save_workflow_to_github_folder(self, tmp_path):
         """Should save workflow to .github/workflows."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         workflows_dir = tmp_path / ".github" / "workflows"
         workflows_dir.mkdir(parents=True)
@@ -332,7 +332,7 @@ class TestProductionReleaseAuditIntegration:
 
     def test_log_release_to_audit(self, tmp_path):
         """Should log release to audit trail."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path, audit_enabled=True)
         
@@ -345,7 +345,7 @@ class TestProductionReleaseAuditIntegration:
 
     def test_release_includes_ac_id(self, tmp_path):
         """Should include AC-ID in release metadata."""
-        from cortex.ci_cd.production_release import ProductionReleaseManager
+        from cortex.infrastructure.ci_cd.production_release import ProductionReleaseManager
         
         manager = ProductionReleaseManager(tmp_path)
         

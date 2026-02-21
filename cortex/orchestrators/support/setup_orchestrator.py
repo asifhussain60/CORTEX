@@ -8,6 +8,7 @@ import enum
 import logging
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 class ComplexityLevel(enum.Enum):
@@ -72,7 +73,7 @@ class SetupResult:
     details: Dict[str, Any] = field(default_factory=dict)
 
 
-class SetupOrchestrator:
+class SetupOrchestrator(OrchestratorProtocolMixin):
     """Orchestrates system initialization and environment setup.
 
     Attributes:

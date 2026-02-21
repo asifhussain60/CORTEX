@@ -3,15 +3,15 @@
 Business domain orchestration components.
 """
 
-from cortex.domain_orchestrators.business.context import (
+from cortex.orchestrators.domain.business.context import (
     DomainContext,
     DomainContextManager,
 )
-from cortex.domain_orchestrators.business.plugins import (
+from cortex.orchestrators.domain.business.plugins import (
     DomainPlugin,
     DomainPluginRegistry,
 )
-from cortex.domain_orchestrators.business.validation import (
+from cortex.orchestrators.domain.business.validation import (
     DomainValidator,
     ValidationResult,
     ValidationRule,

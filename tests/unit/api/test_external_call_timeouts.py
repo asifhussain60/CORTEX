@@ -16,7 +16,7 @@ from unittest.mock import AsyncMock, MagicMock, Mock, patch
 import httpx
 import pytest
 
-from cortex.api.external_service_client import ExternalServiceClient
+from cortex.infrastructure.api.external_service_client import ExternalServiceClient
 from cortex.infrastructure.circuit_breaker import CircuitBreaker, CircuitBreakerConfig
 from cortex.infrastructure.retry_strategy import RetryConfig, RetryStrategy
 
@@ -155,7 +155,7 @@ class TestHealthCheckEndpoints:
 
     def test_health_status_values(self) -> None:
         """Verify health status values exist."""
-        from cortex.api.health_endpoints import HealthStatus
+        from cortex.infrastructure.api.health_endpoints import HealthStatus
 
         # Execute & Verify
         assert HealthStatus.HEALTHY.value == "healthy"
@@ -164,7 +164,7 @@ class TestHealthCheckEndpoints:
 
     def test_component_health_structure(self) -> None:
         """Verify component health structure."""
-        from cortex.api.health_endpoints import ComponentHealth, HealthStatus
+        from cortex.infrastructure.api.health_endpoints import ComponentHealth, HealthStatus
 
         # Setup
         component = ComponentHealth(
