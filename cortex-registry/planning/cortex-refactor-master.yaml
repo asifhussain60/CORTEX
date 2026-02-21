@@ -13,22 +13,22 @@ metadata:
   completed_dir: cortex-registry/planning/phases/completed/cortex-refactor/
   status_authority: "THIS FILE \u2014 cortex-refactor-master.yaml"
   counters:
-    total_phases: 16
-    pending: 2
+    total_phases: 17
+    pending: 3
     in_progress: 0
     complete: 14
     deferred: 0
     failed: 0
   holistic_review:
-    reviewed: '2026-02-20T20:00:00Z'
+    reviewed: '2026-02-21T00:00:00Z'
     reviewer: AuditCoordinator
     p0_blockers_found: 0
     p0_blockers_resolved: 0
-    golden_tests: "486 passing / 0 failing"
+    golden_tests: "519 passing / 0 failing"
     phase_tests: "197 passing / 0 failing"
     quality_gate_tests: "49 passing / 0 failing"
     production_readiness_tests: "25 passing / 0 failing"
-    verdict: "⚠️ 14 PHASES COMPLETE — Phase 13 (Cohesive Brain Convergence) planned to resolve 18 structural discrepancies found in chat01.md audit."
+    verdict: "⚠️ 14 PHASES COMPLETE — Phase 15 (Work Item Provider) planned: ADO connector + company-pluggable Protocol, 15 golden tests (RED phase)."
 
 presentation:
   summary: |
@@ -1300,6 +1300,60 @@ phases:
     issues_resolved: 18
     validation_loop_iterations: 2
     lens_scan_completed: false
+
+- id: phase-15
+  title: "Work Item Provider — Company-Pluggable ADO Connector via MCP-First Protocol"
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-15-work-item-provider.yaml
+  status: planned
+  priority: P1
+  risk: low
+  dependencies:
+    - phase-13
+    - phase-12
+  description: >
+    Provider Protocol + env-driven factory + ADO stub + cortex_fetch_work_items MCP tool.
+    Zero new orchestrators. Zero wiring.yaml changes. Companies implement WorkItemProvider
+    once; CORTEX routes all ticketing systems through the same MCP surface.
+  source: "Copilot Chat 2026-02-21 — ADO connector design session"
+  golden_tests_target: 15
+  golden_tests_file: "tests/golden/test_work_item_provider_truth.py"
+  new_files:
+    - "cortex/repositories/work_item_provider.py"
+    - "cortex/repositories/provider_factory.py"
+    - "cortex/repositories/ado/__init__.py"
+    - "cortex/repositories/ado/ado_provider.py"
+    - "cortex/mcp/tools/work_item_tool.py"
+    - "tests/repositories/test_work_item_provider.py"
+    - "tests/golden/test_work_item_provider_truth.py"
+  acceptance_criteria:
+    - "AC-P15-001: WorkItemProvider Protocol importable from cortex.repositories.work_item_provider"
+    - "AC-P15-002: WorkItem has all 8 required fields (id, title, description, state, type, tags, url, raw)"
+    - "AC-P15-003: ADOWorkItemProvider satisfies Protocol"
+    - "AC-P15-004: Factory returns ADOWorkItemProvider when WORK_ITEM_SOURCE=ado"
+    - "AC-P15-005: Factory raises ValueError for unknown WORK_ITEM_SOURCE"
+    - "AC-P15-006: cortex_fetch_work_items MCP tool schema registered"
+    - "AC-P15-007: MCP tool raises ValueError when orchestrator_context is None"
+    - "AC-P15-008: MCP tool raises ValueError for non-MasterOrchestrator source"
+    - "AC-P15-009: WorkItem.raw preserves all company-specific fields unmodified"
+    - "AC-P15-010: ADOWorkItemProvider.health_check() returns bool"
+    - "AC-P15-011: 15 golden tests passing, 0 failing"
+    - "AC-P15-012: 519 existing golden tests remain passing (zero regression)"
+    - "AC-P15-013: All public APIs have type hints (CORE-011)"
+    - "AC-P15-014: All public APIs have docstrings (CORE-012)"
+    - "AC-P15-015: All new filenames are snake_case (CORE-028)"
+  progress:
+    started: "2026-02-21"
+    completed: null
+    current_stage: green_phase
+    stages_complete:
+      - "RED: 15 golden tests written (tests/golden/test_work_item_provider_truth.py)"
+      - "GREEN: all 5 implementation files created, 43 tests passing (15 golden + 28 unit)"
+    tests_written: 43
+    tests_passing: 43
+    coverage_pct: 0
+    commits: []
+    issues_found: 0
+    issues_resolved: 0
 
 lens_scans:
   history: []

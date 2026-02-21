@@ -1,0 +1,163 @@
+# =============================================================================
+# Phase 15 — Work Item Provider: ADO Connector + Company-Pluggable Protocol
+# =============================================================================
+# Authority: CORE-008 (TDD) · CORE-011 (type hints) · CORE-012 (docstrings)
+#            CORE-028 (snake_case) · CORE-035 (single canonical) · CORE-050 (MCP-first)
+# Status: planned
+# Created: 2026-02-21
+# =============================================================================
+
+id: phase-15
+title: "Work Item Provider — Company-Pluggable ADO Connector via MCP-First Protocol"
+status: planned
+priority: P1
+risk: low
+dependencies:
+  - phase-13   # structural integrity (21 wired orchestrators, canonical dirs)
+  - phase-12   # MCP consolidation (23 canonical tools)
+
+source: "Copilot Chat 2026-02-21 — ADO connector design session"
+design_intent: >
+  Implement a company-pluggable WorkItemProvider Protocol that exposes Azure DevOps
+  (and future ticketing systems) to CORTEX via a single MCP tool. Zero changes to
+  wiring.yaml or existing orchestrators. Companies supply one concrete implementation
+  class and one environment variable; CORTEX handles routing, governance, and MCP exposure.
+
+design_pillars:
+  extensibility:  "Protocol pattern — new providers (Jira, ServiceNow, custom) drop in without touching CORTEX"
+  scalability:    "Stateless provider calls; pagination built into Protocol contract"
+  accuracy:       "raw: dict passthrough preserves all company-specific ADO fields unmodified"
+  collaboration:  "WorkItem dataclass is the shared lingua franca across teams"
+  maintainability: "One Protocol, one factory, one MCP tool — minimal surface area"
+
+architecture:
+  pattern: "Strategy / Provider Protocol"
+  mcp_exposure: "cortex_fetch_work_items (1 new MCP tool)"
+  orchestrator_impact: "zero — DomainOrchestrator routes to MCP tool; no new orchestrator"
+  wiring_impact: "zero — no entries added to wiring.yaml"
+  new_files: 6
+  new_test_files: 2
+  golden_tests_target: 15
+
+file_map:
+  protocol_layer:
+    - path: "cortex/repositories/work_item_provider.py"
+      description: "WorkItemProvider Protocol + WorkItem dataclass (SSOT)"
+      exports: ["WorkItemProvider", "WorkItem"]
+
+  factory_layer:
+    - path: "cortex/repositories/provider_factory.py"
+      description: "Env-driven factory: reads WORK_ITEM_SOURCE → returns concrete provider"
+      exports: ["get_work_item_provider"]
+
+  ado_adapter:
+    - path: "cortex/repositories/ado/__init__.py"
+      description: "Package marker"
+    - path: "cortex/repositories/ado/ado_provider.py"
+      description: "ADOWorkItemProvider — concrete stub; companies fill HTTP + auth details"
+      exports: ["ADOWorkItemProvider"]
+
+  mcp_tool:
+    - path: "cortex/mcp/tools/work_item_tool.py"
+      description: "cortex_fetch_work_items MCP tool with validate_orchestrator_context guard"
+      exports: ["TOOL_SCHEMA", "cortex_fetch_work_items"]
+
+  tests:
+    - path: "tests/repositories/test_work_item_provider.py"
+      description: "Unit tests: Protocol contract, WorkItem dataclass, factory env routing"
+      test_count: 12
+    - path: "tests/golden/test_work_item_provider_truth.py"
+      description: "Golden truth tests: Protocol contract is immutable, factory routing, MCP guard"
+      test_count: 15
+      golden: true
+
+acceptance_criteria:
+  - "AC-P15-001: WorkItemProvider Protocol importable from cortex.repositories.work_item_provider"
+  - "AC-P15-002: WorkItem dataclass has id, title, description, state, type, tags, url, raw fields"
+  - "AC-P15-003: ADOWorkItemProvider implements all Protocol methods"
+  - "AC-P15-004: provider_factory.get_work_item_provider() returns ADOWorkItemProvider when WORK_ITEM_SOURCE=ado"
+  - "AC-P15-005: provider_factory raises ValueError for unknown WORK_ITEM_SOURCE"
+  - "AC-P15-006: cortex_fetch_work_items MCP tool schema registered in cortex/mcp/tools/__init__.py"
+  - "AC-P15-007: MCP tool raises ValueError when orchestrator_context is None (CORE-050)"
+  - "AC-P15-008: MCP tool raises ValueError when orchestrator_context source != MasterOrchestrator"
+  - "AC-P15-009: WorkItem.raw field preserves all original provider fields unmodified"
+  - "AC-P15-010: ADOWorkItemProvider.health_check() returns bool"
+  - "AC-P15-011: 15 golden tests passing, 0 failing"
+  - "AC-P15-012: 519 existing golden tests remain passing (zero regression)"
+  - "AC-P15-013: All new public APIs have type hints (CORE-011)"
+  - "AC-P15-014: All new public APIs have docstrings (CORE-012)"
+  - "AC-P15-015: All new filenames are snake_case (CORE-028)"
+
+tdd_sequence:
+  red_phase:
+    description: "Write all failing tests FIRST before any implementation (CORE-008)"
+    files:
+      - "tests/repositories/test_work_item_provider.py — 12 unit tests RED"
+      - "tests/golden/test_work_item_provider_truth.py — 15 golden tests RED"
+  green_phase:
+    description: "Implement minimum code to pass each test"
+    order:
+      - "cortex/repositories/work_item_provider.py (Protocol + dataclass)"
+      - "cortex/repositories/ado/ado_provider.py (concrete stub)"
+      - "cortex/repositories/provider_factory.py (factory)"
+      - "cortex/mcp/tools/work_item_tool.py (MCP tool)"
+  refactor_phase:
+    description: "Clean up with all tests passing; add docstrings, validate typing"
+
+regression_gate: "519 golden tests + all phase tests must remain passing after each step"
+
+enforcement_gates:
+  pre_commit:
+    - "No new entries in wiring.yaml (orchestrator count stays at 21)"
+    - "No direct HTTP calls in Protocol layer (only in concrete adapters)"
+    - "validate_orchestrator_context guard present in work_item_tool.py"
+    - "All public methods have type hints and docstrings"
+  ci:
+    - "15 golden tests passing in tests/golden/test_work_item_provider_truth.py"
+    - "519 total golden tests passing"
+    - "WORK_ITEM_SOURCE env var drives factory routing (no hardcoded vendor)"
+
+extensibility_contract:
+  adding_jira_provider:
+    steps:
+      - "Create cortex/repositories/jira/jira_provider.py implementing WorkItemProvider"
+      - "Add 'jira' case to provider_factory.py"
+      - "Set WORK_ITEM_SOURCE=jira in environment"
+    cortex_changes: "0 — no Protocol, MCP tool, or orchestrator changes required"
+
+  adding_custom_provider:
+    steps:
+      - "Create any_name_provider.py implementing WorkItemProvider Protocol"
+      - "Add case to provider_factory.py"
+      - "Set WORK_ITEM_SOURCE to matching key"
+    cortex_changes: "0"
+
+company_plug_in_guide:
+  required_implementation:
+    class: "WorkItemProvider (Protocol)"
+    methods:
+      - "fetch_user_stories(project: str, **kwargs) -> list[WorkItem]"
+      - "fetch_by_id(item_id: str) -> WorkItem"
+      - "health_check() -> bool"
+  configuration:
+    env_vars:
+      WORK_ITEM_SOURCE: "ado | jira | custom (selects provider)"
+      ADO_ORG_URL: "https://dev.azure.com/your-org (ADO only)"
+      ADO_PAT: "Personal Access Token or leave blank for managed identity (ADO only)"
+      ADO_PROJECT: "Default project name (ADO only)"
+  raw_field_contract: >
+    WorkItem.raw preserves the full unmodified API response dict.
+    Company-specific fields (Area Path, Sprint, Custom.* fields) are accessed
+    as item.raw["fields"]["Custom.YourField"]. CORTEX never parses raw.
+
+progress:
+  started: null
+  completed: null
+  current_stage: planned
+  stages_complete: []
+  tests_written: 0
+  tests_passing: 0
+  coverage_pct: 0
+  commits: []
+  issues_found: 0
+  issues_resolved: 0
