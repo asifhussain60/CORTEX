@@ -282,12 +282,16 @@ class TestRepositoryProfileLifecycle:
         # Write profile
         with open(profile_path, 'w') as f:
             yaml.dump(profile_data, f)
-        
-        # Cleanup - ensure artifact is removed before fixture teardown
+
+        # Verify file was written with correct structure before cleanup
+        assert profile_path.exists(), "Profile YAML file must exist after write"
+        with open(profile_path) as f:
+            loaded = yaml.safe_load(f)
+        assert loaded["repository"]["name"] == "test-repo", "Repository name must round-trip correctly"
+        assert "metadata" in loaded, "Profile must contain metadata section"
+
+        # Cleanup
         profile_path.unlink()
-        
-        # Verify file exists and is readable (test passed, now cleanup)
-        assert True, "Profile creation test placeholder"
     
     def test_profile_file_persistence(self, physical_test_context: PhysicalFileTestContext) -> None:
         """

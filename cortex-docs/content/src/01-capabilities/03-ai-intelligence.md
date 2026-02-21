@@ -284,7 +284,7 @@ class CodeSmell:
 ### Knowledge Structure
 
 ```
-cortex_intelligence/
+cortex/intelligence/
 ├── tier0/          # Core rules (immutable)
 │   ├── core-rules.yaml
 │   └── security-baseline.yaml
@@ -311,7 +311,7 @@ cortex_intelligence/
 ### Knowledge Query API
 
 ```python
-from cortex.brain.knowledge import KnowledgeRepository
+from cortex.intelligence.knowledge import KnowledgeRepository
 
 repo = KnowledgeRepository()
 

@@ -12,7 +12,7 @@
 ## 🚀 Recent Updates (2026-02-17)
 
 **Phase 103: Registry & Intelligence Consolidation** ✅ COMPLETE
-- ✅ **Brain Architecture**: `cortex_brain` → `cortex_intelligence` (cognitive alignment)
+- ✅ **Brain Architecture**: `cortex_brain` → `cortex/intelligence/` (cognitive alignment)
 - ✅ **Memory Hierarchy**: `tier0-3` → `memory/{core, tier1_learned, tier2_adaptive, tier3_scratch}`
 - ✅ **Registry Cleanup**: Eliminated `_cortex-master/` wrapper for semantic top-level structure
 - ✅ **Testing**: 235 golden tests passing (100% pass rate)
@@ -216,21 +216,16 @@ make test-all      # Run all tests
 
 ```
 cortex/                    # Main CORTEX package
-  orchestrators/          # 28 orchestrators (health, test, refactor, etc.)
-  mcp/                    # MCP server & tool registry
+  orchestrators/          # 52 orchestrators across 10 domains
+  mcp/                    # MCP server & 23 tool registry
   governance/             # Enforcement agents & validators
-  
-cortex_intelligence/      # Cognitive architecture (formerly cortex_brain)
-  memory/                 # Tiered knowledge hierarchy
-    core/                 # Immutable governance (tier 0)
-    tier1_learned/        # Validated patterns (tier 1)
-    tier2_adaptive/       # Evolving rules (tier 2)
-    tier3_scratch/        # Experimental (tier 3)
-  domain/                 # Domain logic
-  perception/             # Pattern detection
-  reasoning/              # Decision logic
-  action/                 # Execution logic
-  
+  intelligence/           # Cognitive architecture (LENS, knowledge, memory)
+    memory/               # Tiered knowledge hierarchy
+    domain/               # Domain logic
+    perception/           # Pattern detection
+    reasoning/            # Decision logic
+    action/               # Execution logic
+
 cortex-registry/          # Knowledge & governance registry
   core/                   # Governance rules, config, specifications
   artifacts/              # Templates, workflows
@@ -240,7 +235,7 @@ cortex-registry/          # Knowledge & governance registry
   archive/                # Migration guides & legacy files
 ```
 
-**Migration Note**: If you see references to `cortex_brain`, they should be updated to `cortex_intelligence`. See [Phase 103 Migration Guide](cortex-registry/archive/PHASE-103-MIGRATION-GUIDE.md) for details.
+**Migration Note**: References to `cortex_brain` or `cortex_intelligence` are stale — use `cortex.intelligence` or `cortex.orchestrators` per the canonical package structure.
 
 ### LENS Dashboard (Phase 14 - NEW ✨)
 

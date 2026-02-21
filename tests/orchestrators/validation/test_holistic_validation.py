@@ -220,7 +220,7 @@ class TestValidationLifecycle:
         # mock_challenge_engine.generate_alternatives.assert_called_once()
         # mock_confidence_scorer.score.assert_called_once()
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_high_confidence_validation_passes(self, sample_implement_request, mock_challenge_engine, mock_pre_implementation_checklist):
         """Test validation passes when confidence ≥ 0.7."""
@@ -244,7 +244,7 @@ class TestValidationLifecycle:
         # assert result.passed is True
         # assert result.confidence_score >= 0.7
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_low_confidence_validation_blocks(self, sample_implement_request, mock_challenge_engine, mock_pre_implementation_checklist):
         """Test validation blocks when confidence < 0.7."""
@@ -270,7 +270,7 @@ class TestValidationLifecycle:
         # assert result.confidence_score < 0.7
         # assert "Security concerns" in result.explanation
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
 
 
 # ============================================================================
@@ -334,7 +334,7 @@ class TestChecklistIntegration:
         # assert any("O(n^2)" in issue or "quadratic" in issue.lower() for issue in result.issues)
         # assert any("quicksort" in rec.lower() or "mergesort" in rec.lower() for rec in result.recommendations)
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_governance_check_validates_core_rules(self):
         """Test governance check validates CORE rules compliance."""
@@ -370,7 +370,7 @@ class TestChecklistIntegration:
         # result = orchestrator.run_checklist(sample_implement_request["context"])
         # assert not all(check.passed for check in result.values())
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
 
 
 # ============================================================================
@@ -393,7 +393,7 @@ class TestChallengeGeneration:
         #     sample_implement_request["context"]
         # )
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_challenges_include_pros_cons_effort(self, sample_implement_request, mock_challenge_engine):
         """Test each challenge includes pros, cons, effort, risk."""
@@ -409,7 +409,7 @@ class TestChallengeGeneration:
         #     assert "effort" in challenge
         #     assert "risk" in challenge
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_challenges_ranked_by_feasibility(self, sample_implement_request, mock_challenge_engine):
         """Test challenges ranked by feasibility (effort + risk)."""
@@ -422,7 +422,7 @@ class TestChallengeGeneration:
         # assert challenges[0]["risk"] == "LOW"
         # assert challenges[0]["effort"] == "2 hours"
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_fix_intent_generates_security_focused_alternatives(self, sample_fix_request, mock_challenge_engine):
         """Test FIX intent generates security-focused alternatives."""
@@ -440,7 +440,7 @@ class TestChallengeGeneration:
         # assert len(challenges) == 3
         # assert all("security" in str(c).lower() or "sql" in str(c).lower() for c in challenges)
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_refactor_intent_generates_architecture_alternatives(self, sample_refactor_request, mock_challenge_engine):
         """Test REFACTOR intent generates architecture-focused alternatives."""
@@ -458,7 +458,7 @@ class TestChallengeGeneration:
         # assert len(challenges) == 3
         # assert all("extract" in str(c).lower() or "refactor" in str(c).lower() or "pattern" in str(c).lower() for c in challenges)
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
 
 
 # ============================================================================
@@ -487,7 +487,7 @@ class TestConfidenceScoring:
         # assert 0.0 <= result.confidence_score <= 1.0
         # assert isinstance(result.confidence_score, float)
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_threshold_0_7_gates_execution(self, sample_implement_request, mock_challenge_engine, mock_pre_implementation_checklist):
         """Test confidence threshold of 0.7 gates execution."""
@@ -523,7 +523,7 @@ class TestConfidenceScoring:
         # )
         # assert result_block.passed is False
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_low_score_includes_actionable_explanation(self, sample_implement_request, mock_challenge_engine, mock_pre_implementation_checklist):
         """Test low-confidence scores include actionable explanation."""
@@ -559,7 +559,7 @@ class TestConfidenceScoring:
         # assert "Recommendations" in result.explanation
         # assert "parameterized" in result.explanation.lower()
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_confidence_correlates_with_checklist_results(self, sample_implement_request, mock_challenge_engine, mock_confidence_scorer):
         """Test confidence score correlates with checklist pass/fail."""
@@ -602,7 +602,7 @@ class TestConfidenceScoring:
         # )
         # assert result_fail.confidence_score < 0.7
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
     
     def test_edge_case_exactly_0_7_confidence_passes(self, sample_implement_request, mock_challenge_engine, mock_pre_implementation_checklist):
         """Test edge case: confidence = 0.7 exactly should pass."""
@@ -626,7 +626,7 @@ class TestConfidenceScoring:
         # assert result.passed is True  # >= 0.7 passes
         # assert result.confidence_score == 0.7
         
-        assert True  # Replace with actual test
+        pytest.skip("Not yet implemented — uncomment test body above")
 
 
 # AC_START: AC-PHASE48-S1-001 ✅ 20 tests created (RED phase)

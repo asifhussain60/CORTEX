@@ -51,7 +51,7 @@ class EventBus:
             log_path = Path(log_file)
             log_path.parent.mkdir(parents=True, exist_ok=True)
 
-    def subscribe(self, event_type, handler):
+    def subscribe(self, event_type: str, handler: Any) -> None:
         """Subscribe to event type."""
         if event_type not in self.subscribers:
             self.subscribers[event_type] = []
@@ -114,10 +114,10 @@ class EventBus:
             # Don't let logging errors break event delivery
             print(f"Warning: Event logging error: {e}")
 
-    def feature_enabled(self, feature_id):
+    def feature_enabled(self, feature_id: str) -> None:
         """Publish feature enabled event."""
         self.publish("feature_enabled", {"feature_id": feature_id})
 
-    def feature_disabled(self, feature_id):
+    def feature_disabled(self, feature_id: str) -> None:
         """Publish feature disabled event."""
         self.publish("feature_disabled", {"feature_id": feature_id})

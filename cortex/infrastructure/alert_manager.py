@@ -104,7 +104,7 @@ class ThresholdMonitor:
         self.active_alerts: Dict[str, Alert] = {}
         self.alert_history: List[Alert] = []
 
-    def register_rule(self, rule: ThresholdRule):
+    def register_rule(self, rule: ThresholdRule) -> None:
         """Register a threshold rule."""
         self.rules[rule.rule_id] = rule
         logger.info(f"Registered threshold rule: {rule.name}")
@@ -133,7 +133,7 @@ class ThresholdMonitor:
 
         return triggered_alerts
 
-    def resolve_alert(self, alert_id: str):
+    def resolve_alert(self, alert_id: str) -> None:
         """Resolve an alert."""
         if alert_id in self.active_alerts:
             alert = self.active_alerts[alert_id]
@@ -152,19 +152,19 @@ class ThresholdMonitor:
             return self.alert_history[-limit:]
         return self.alert_history.copy()
 
-    def disable_rule(self, rule_id: str):
+    def disable_rule(self, rule_id: str) -> None:
         """Disable a rule."""
         if rule_id in self.rules:
             self.rules[rule_id].enabled = False
             logger.info(f"Rule disabled: {rule_id}")
 
-    def enable_rule(self, rule_id: str):
+    def enable_rule(self, rule_id: str) -> None:
         """Enable a rule."""
         if rule_id in self.rules:
             self.rules[rule_id].enabled = True
             logger.info(f"Rule enabled: {rule_id}")
 
-    def clear_history(self):
+    def clear_history(self) -> None:
         """Clear alert history."""
         self.alert_history.clear()
 
@@ -180,12 +180,12 @@ class AlertManager:
         self.handlers: List[Callable[[Alert], None]] = []
         self.muted_until: Dict[str, datetime] = {}
 
-    def register_alert_handler(self, handler: Callable[[Alert], None]):
+    def register_alert_handler(self, handler: Callable[[Alert], None]) -> None:
         """Register a handler to process alerts."""
         self.handlers.append(handler)
         logger.info(f"Registered alert handler: {handler.__name__}")
 
-    def add_rule(self, rule: ThresholdRule):
+    def add_rule(self, rule: ThresholdRule) -> None:
         """Add a threshold rule."""
         self.monitor.register_rule(rule)
 
@@ -208,12 +208,12 @@ class AlertManager:
 
         return alerts
 
-    def mute_rule(self, rule_name: str, until: datetime):
+    def mute_rule(self, rule_name: str, until: datetime) -> None:
         """Mute alerts for a rule until specified time."""
         self.muted_until[rule_name] = until
         logger.info(f"Muted rule: {rule_name} until {until}")
 
-    def unmute_rule(self, rule_name: str):
+    def unmute_rule(self, rule_name: str) -> None:
         """Unmute alerts for a rule."""
         if rule_name in self.muted_until:
             del self.muted_until[rule_name]
@@ -234,6 +234,6 @@ class AlertManager:
         """Get all active alerts."""
         return self.monitor.get_active_alerts()
 
-    def resolve_alert(self, alert_id: str):
+    def resolve_alert(self, alert_id: str) -> None:
         """Resolve an alert."""
         self.monitor.resolve_alert(alert_id)

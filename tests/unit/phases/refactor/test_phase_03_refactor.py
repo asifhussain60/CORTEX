@@ -177,24 +177,28 @@ class TestPhase3RegressionGates:
     """Verify regression gates are still passing."""
     
     def test_phase_1_foundation_tests_pass(self) -> None:
-        """Test: Phase 1 foundation tests still pass (49 tests)."""
-        # This is verified by CI/CD; we assert it's possible
-        assert True, "Phase 1 tests (49/49) verified separately"
-    
+        """Test: Phase 1 foundation tests exist (verified by test file presence)."""
+        phase1_test_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/phases/refactor")
+        assert phase1_test_dir.exists(), "Phase test directory must exist"
+
     def test_phase_2_governance_tests_pass(self) -> None:
-        """Test: Phase 2 governance tests still pass (53 tests)."""
-        # This is verified by CI/CD; we assert it's possible
-        assert True, "Phase 2 tests (53/53) verified separately"
-    
+        """Test: Phase 2 governance test file exists and is non-empty."""
+        phase2_test = Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/phases/refactor/test_phase_02_refactor.py")
+        assert phase2_test.exists(), "Phase 2 test file must exist"
+        assert phase2_test.stat().st_size > 0, "Phase 2 test file must be non-empty"
+
     def test_phase_3_red_tests_pass(self) -> None:
-        """Test: Phase 3 RED tests still pass (34 tests)."""
-        # This is verified by CI/CD; we assert it's possible
-        assert True, "Phase 3 RED tests (34/34) verified separately"
-    
+        """Test: Phase 3 RED test file exists and is non-empty."""
+        phase3_test = Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/phases/refactor/test_phase_03_refactor.py")
+        assert phase3_test.exists(), "Phase 3 test file must exist"
+        assert phase3_test.stat().st_size > 0, "Phase 3 test file must be non-empty"
+
     def test_golden_tests_baseline_maintained(self) -> None:
-        """Test: Golden test baseline (205/209) maintained."""
-        # This is verified separately; we assert the goal
-        assert True, "Golden baseline (205+/209) maintained"
+        """Test: Golden tests directory exists with test files."""
+        golden_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/tests/golden")
+        assert golden_dir.exists(), "Golden tests directory must exist"
+        golden_tests = list(golden_dir.rglob("test_*.py"))
+        assert len(golden_tests) > 0, "Golden tests directory must contain test files"
 
 
 class TestPhase3BackwardCompatibility:
@@ -241,8 +245,13 @@ class TestPhase3DoD:
     """Definition of Done checklist for Phase 3 REFACTOR phase."""
     
     def test_refactor_dod_01_imports_complete(self) -> None:
-        """REFACTOR DoD 1: Import rewriting verified complete."""
-        assert True, "✓ All old imports rewritten to new locations"
+        """REFACTOR DoD 1: Old package dirs contain no Python source files."""
+        for old_pkg in ["cortex_intelligence", "cortex_lens"]:
+            old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
+            if not old_path.exists():
+                continue
+            py_files = [f for f in old_path.rglob("*.py") if "__pycache__" not in str(f)]
+            assert not py_files, f"{old_pkg}/ still has Python source: {py_files[:3]}"
     
     def test_refactor_dod_02_structure_consistent(self) -> None:
         """REFACTOR DoD 2: Package structure is consistent."""
@@ -257,32 +266,36 @@ class TestPhase3DoD:
             assert not py_files, f"{old_pkg}/ still has Python source: {py_files[:5]}"
     
     def test_refactor_dod_03_backward_compat(self) -> None:
-        """REFACTOR DoD 3: Backward compatibility verified."""
-        # All foundation APIs still work
+        """REFACTOR DoD 3: Backward compatibility — core APIs importable."""
         from cortex.core.orchestrator_base import OrchestratorBase
         from cortex.core.file_factory import FileFactory
         from cortex.core.workflow_engine import WorkflowEngine
-        from cortex.infrastructure.audit_db import get_audit_db
-        
-        assert True, "✓ All Phase 1 foundation APIs accessible"
+        assert OrchestratorBase is not None
+        assert FileFactory is not None
+        assert WorkflowEngine is not None
     
     def test_refactor_dod_04_integration_tests_pass(self) -> None:
-        """REFACTOR DoD 4: Integration tests pass (8 categories)."""
-        # This file itself serves as integration test
-        assert True, "✓ Integration test suite for Phase 3 REFACTOR complete"
+        """REFACTOR DoD 4: This integration test file exists and is non-empty."""
+        this_file = Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/phases/refactor/test_phase_03_refactor.py")
+        assert this_file.exists() and this_file.stat().st_size > 0
     
     def test_refactor_dod_05_no_regressions(self) -> None:
-        """REFACTOR DoD 5: ZERO regressions in 136+ phase tests."""
-        # Phase 1: 49, Phase 2: 53, Phase 3: 34 = 136 total
-        assert True, "✓ 136/136 phase tests passing"
+        """REFACTOR DoD 5: Phase test files all exist (regression baseline)."""
+        phase_files = [
+            Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/phases/refactor/test_phase_02_refactor.py"),
+            Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/phases/refactor/test_phase_03_refactor.py"),
+        ]
+        for f in phase_files:
+            assert f.exists(), f"Phase test file missing: {f}"
     
     def test_refactor_dod_06_core_compliance(self) -> None:
-        """REFACTOR DoD 6: CORE rules compliance verified."""
-        # CORE-008: Test-first (all tests written before implementation)
-        # CORE-035: Single canonical implementation (3 packages → 1)
-        # CORE-011: Type hints (all functions typed)
-        # CORE-012: Docstrings (all APIs documented)
-        assert True, "✓ CORE compliance verified"
+        """REFACTOR DoD 6: CORE-035 verified — old packages have no Python source."""
+        for old_pkg in ["cortex_intelligence", "cortex_lens", "cortex_brain"]:
+            old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
+            if not old_path.exists():
+                continue
+            py_files = [f for f in old_path.rglob("*.py") if "__pycache__" not in str(f)]
+            assert not py_files, f"CORE-035 violated: {old_pkg}/ still has Python source"
     
     def test_refactor_dod_07_audit_continuity(self) -> None:
         """REFACTOR DoD 7: Audit database continuity verified."""

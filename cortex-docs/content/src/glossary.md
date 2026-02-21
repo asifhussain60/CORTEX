@@ -115,7 +115,7 @@ class HolisticValidationGate:
 
 **Definition:** Comprehensive record of all governance-gated operations tracked via AC markers, timestamps, orchestrator decisions, and enforcement actions. Enables compliance verification, quality audits, and post-incident analysis.
 
-**Storage:** `cortex_intelligence/governance.db` (SQLite database) with indexed queries for fast retrieval
+**Storage:** `.cortex-runtime/governance.db` (SQLite database) with indexed queries for fast retrieval
 
 **Components:**
 - **AC Markers:** Start/complete timestamps with test results
@@ -145,7 +145,7 @@ class HolisticValidationGate:
 - **Tier 2:** Session context, recent learnings, project-specific patterns (7-day retention)
 - **Tier 3:** Volatile state, temporary caches, in-progress computations (session-scoped)
 
-**Storage Location:** `cortex_intelligence/` directory with subdirectories: `tier0/`, `tier1/`, `tier2/`, `tier3/`, `governance/`, `domain/`, `state/`
+**Storage Location:** `cortex/intelligence/` directory with subdirectories: `tier0/`, `tier1/`, `tier2/`, `tier3/`, `governance/`, `domain/`, `state/`
 
 **Access Pattern:** Orchestrators query highest tier first (0→1→2→3) for authority precedence. Domain Brain extends with company-specific knowledge.
 

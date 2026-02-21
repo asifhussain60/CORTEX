@@ -22,9 +22,11 @@ class ImportUpdater:
 
     # Mapping of old imports to new imports
     IMPORT_MAPPINGS: Dict[str, str] = {
-        # Brain modules
-        "from cortex_intelligence": "from cortex.brain",
-        "import cortex_intelligence": "import cortex.brain",
+        # Brain modules — canonical target is cortex.intelligence
+        "from cortex_intelligence": "from cortex.intelligence",
+        "import cortex_intelligence": "import cortex.intelligence",
+        "from cortex.brain": "from cortex.intelligence",
+        "import cortex.brain": "import cortex.intelligence",
 
         # Orchestrators
         "from orchestrators": "from cortex.orchestrators",

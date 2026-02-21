@@ -170,9 +170,10 @@ class TestPhase2Completion:
     """Test Phase 2 completion criteria."""
     
     def test_red_phase_complete(self) -> None:
-        """RED Phase: 38 tests defined and passing."""
-        # Verified by pytest run
-        assert True, "RED phase tests verified via pytest"
+        """RED Phase: Test file and test class structure exist and are importable."""
+        test_file = Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/phases/refactor/test_phase_02_refactor.py")
+        assert test_file.exists(), "Phase 02 RED test file must exist"
+        assert test_file.stat().st_size > 0, "Phase 02 test file must not be empty"
     
     def test_green_phase_complete(self) -> None:
         """GREEN Phase: 6 deliverables complete."""
@@ -190,8 +191,9 @@ class TestPhase2Completion:
     
     def test_refactor_phase_initiated(self) -> None:
         """REFACTOR Phase: Integration tests confirm readiness."""
-        # This test file (test_phase_02_refactor.py) is the refactor phase
-        assert True, "REFACTOR phase initiated via integration tests"
+        # Verified by presence of this test file and passing test suite
+        phase_file = Path("/Users/asifhussain/PROJECTS/CORTEX/tests/unit/phases/refactor/test_phase_02_refactor.py")
+        assert phase_file.exists(), "REFACTOR phase test file must exist"
 
 
 class TestPhase2ReadinessForPhase3:
