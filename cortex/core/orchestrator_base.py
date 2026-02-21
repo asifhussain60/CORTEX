@@ -60,6 +60,18 @@ class OrchestratorBase(ABC):
         start_time = datetime.now()
         result = None
 
+        # Universal activity log — START (CORE-049: silent, no opt-in required)
+        try:
+            from cortex.infrastructure.audit_db import get_audit_db, AuditEntry, EventType
+            get_audit_db().log_event(AuditEntry(
+                event_type=EventType.ORCHESTRATOR_START.value,
+                orchestrator_id=self.orchestrator_id,
+                status="started",
+                metadata={"class": type(self).__name__},
+            ))
+        except Exception:
+            pass  # audit must never block execution
+
         try:
             self.logger.debug(f"{self.orchestrator_id}: Entering SETUP phase")
             self.setup()
@@ -135,6 +147,18 @@ class OrchestratorBase(ABC):
         start_time = datetime.now()
         result = None
         exc_to_raise = None
+
+        # Universal activity log — START
+        try:
+            from cortex.infrastructure.audit_db import get_audit_db, AuditEntry, EventType
+            get_audit_db().log_event(AuditEntry(
+                event_type=EventType.ORCHESTRATOR_START.value,
+                orchestrator_id=self.orchestrator_id,
+                status="started",
+                metadata={"class": type(self).__name__, "via": "run"},
+            ))
+        except Exception:
+            pass  # audit must never block execution
 
         try:
             self.setup()
