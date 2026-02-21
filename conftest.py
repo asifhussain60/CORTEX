@@ -20,10 +20,9 @@ from pathlib import Path
 from cortex.infrastructure.trace_integration import enable_trace_for_tests, disable_trace_for_production
 from cortex.infrastructure.orchestrator_trace_logger import get_trace_logger, TraceFlushReason
 
-# Register CORTEX testing plugins — order matters:
-# 1. cortex_xdist_plugin: batch-aware parallel progress (supersedes legacy plugin)
-# 2. pytest_progress_plugin: retained for slow-test detection (complementary)
-# Phase 07b: pytest_quality_plugin registered dynamically in pytest_configure below
+# Register CORTEX testing plugins
+# cortex_xdist_plugin: batch-aware progress reporter (works sequentially — no xdist needed)
+# pytest_progress_plugin: retained for slow-test detection
 pytest_plugins = [
     "cortex.testing.plugins.cortex_xdist_plugin",
     "cortex.testing.pytest_progress_plugin",

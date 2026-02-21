@@ -1,30 +1,31 @@
 """
-CORTEX Test Runner — Cross-platform canonical test execution script.
+CORTEX Test Runner — Sequential batch execution with live terminal output.
 
-Replaces shell-only run-tests.sh logic with a Python implementation that
-runs identically on macOS, Linux, and Windows (native / WSL / Git Bash).
+All tests run sequentially in batches using CortexXdistPlugin for real-time
+progress output in both the terminal and VS Code Copilot Chat sessions.
 
-Uses CortexXdistPlugin (registered via conftest.py) for batch-aware parallel
-progress. Never adds -q or -o addopts= — those flags silence the batch reporter
-or wipe pytest.ini's xdist configuration.
+The batch reporter (registered via conftest.py) prints:
+  - Batch headers with test range and count
+  - Per-batch pass/fail/duration summaries
+  - ASCII progress bars
+  - Final aggregated summary table
 
 Usage:
     python3 scripts/run_tests.py                  # unit tests (default)
     python3 scripts/run_tests.py smoke             # smoke tests (<30s)
-    python3 scripts/run_tests.py unit              # unit tests (parallel)
+    python3 scripts/run_tests.py unit              # unit tests
     python3 scripts/run_tests.py fast              # fast subset
     python3 scripts/run_tests.py integration       # integration tests
-    python3 scripts/run_tests.py batch             # batch runner (canonical)
-    python3 scripts/run_tests.py all               # full suite
+    python3 scripts/run_tests.py golden            # golden tests
+    python3 scripts/run_tests.py batch             # full sequential batch run
+    python3 scripts/run_tests.py all               # full suite (all dirs)
     python3 scripts/run_tests.py file <path>       # single file
     python3 scripts/run_tests.py dir <path>        # single directory
 
 Environment:
     CORTEX_BATCH_SIZE    Tests per batch (default: 500)
-    CORTEX_TEST_WORKERS  Worker count override (default: auto)
 
 Authority: CORE-008 | CORE-011 | CORE-012 | CORE-028
-AC-ID: AC-TEST-PERF-001 | AC-TEST-PARALLEL-001
 """
 
 from __future__ import annotations
@@ -41,15 +42,14 @@ from typing import List, Optional
 PROJECT_ROOT: Path = Path(__file__).parent.parent.resolve()
 
 # ---------------------------------------------------------------------------
-# Defaults — mirrors run-tests.sh values
+# Defaults
 # ---------------------------------------------------------------------------
 _DEFAULT_TIMEOUT: int = 30
 _DEFAULT_MAXFAIL: int = 10
 _DEFAULT_BATCH_SIZE: int = 500
-_DEFAULT_WORKERS: str = "auto"
 
 # Directories always excluded to prevent collection failures.
-# Keep in sync with pytest.ini norecursedirs and run-tests.sh COMMON_IGNORES.
+# Keep in sync with pytest.ini norecursedirs.
 _COMMON_IGNORES: List[str] = [
     "--ignore=tests/documentation",
     "--ignore=tests/cortex",
@@ -77,19 +77,6 @@ def _env_int(key: str, default: int) -> int:
         return default
 
 
-def _env_str(key: str, default: str) -> str:
-    """Read a string environment variable with a safe default.
-
-    Args:
-        key: Environment variable name.
-        default: Value to use when the variable is absent.
-
-    Returns:
-        String value or default.
-    """
-    return os.environ.get(key, default)
-
-
 def _python() -> str:
     """Return the current Python executable path.
 
@@ -101,6 +88,9 @@ def _python() -> str:
 
 def _run(args: List[str], env: Optional[dict] = None) -> int:
     """Run a subprocess command from PROJECT_ROOT and return exit code.
+
+    Streams output in real-time to both terminal and VS Code Chat by
+    inheriting stdout/stderr from the parent process.
 
     Args:
         args: Command + argument list.
@@ -123,10 +113,10 @@ def _print_header(title: str) -> None:
     Args:
         title: Header text to display.
     """
-    sep = "━" * 58
+    sep = "\u2501" * 58
     print(f"\n{sep}")
-    print(f"  CORTEX Test Runner — {title}")
-    print(f"{sep}\n")
+    print(f"  CORTEX Test Runner \u2014 {title}")
+    print(f"{sep}\n", flush=True)
 
 
 def _print_result(code: int) -> None:
@@ -136,97 +126,135 @@ def _print_result(code: int) -> None:
         code: pytest exit code (0=pass, 5=no tests collected, other=fail).
     """
     if code == 0:
-        print("\n✅ All tests passed")
+        print("\n\u2705 All tests passed")
     elif code == 5:
-        print("\n⚠️  No tests collected")
+        print("\n\u26a0\ufe0f  No tests collected")
     else:
-        print(f"\n❌ Tests failed (exit code: {code})")
+        print(f"\n\u274c Tests failed (exit code: {code})")
 
 
-def _pytest_base(
+def _base_cmd(
     timeout: int = _DEFAULT_TIMEOUT,
     maxfail: int = _DEFAULT_MAXFAIL,
-    extra: Optional[List[str]] = None,
 ) -> List[str]:
-    """Build the base pytest command shared by all modes.
+    """Build the base pytest command for sequential batch execution.
+
+    Every mode shares these flags:
+      -p no:xdist         -- disable parallel workers
+      --tb=short          -- concise tracebacks
+      --timeout=N         -- prevent hanging tests
+      --maxfail=N         -- stop after N failures
+      --no-header         -- suppress default pytest header
+      --continue-on-collection-errors -- don't abort on import errors
+
+    The CortexXdistPlugin (registered in conftest.py) provides batch
+    progress output automatically via pytest hooks.
 
     Args:
         timeout: Per-test timeout in seconds.
         maxfail: Stop after this many failures.
-        extra: Additional pytest arguments appended after the base flags.
 
     Returns:
-        Full argument list starting with the Python executable.
+        Partial argument list starting with the Python executable.
     """
-    cmd = [
+    return [
         _python(), "-m", "pytest",
+        "-p", "no:xdist",
         f"--timeout={timeout}",
         f"--maxfail={maxfail}",
         "--tb=short",
         "--no-header",
+        "--continue-on-collection-errors",
     ]
-    cmd.extend(_COMMON_IGNORES)
-    if extra:
-        cmd.extend(extra)
-    return cmd
+
+
+def _run_batch(
+    test_dirs: List[str],
+    timeout: int = _DEFAULT_TIMEOUT,
+    maxfail: int = _DEFAULT_MAXFAIL,
+    markers: Optional[str] = None,
+    extra_ignores: bool = True,
+    verbose: bool = False,
+) -> int:
+    """Execute a sequential batch test run.
+
+    This is the single canonical method all modes call. It builds the
+    command, sets CORTEX_BATCH_SIZE, and streams output to terminal.
+
+    Args:
+        test_dirs: List of test directories/files to run.
+        timeout: Per-test timeout in seconds.
+        maxfail: Stop after this many failures.
+        markers: Optional pytest marker expression (e.g. 'smoke').
+        extra_ignores: Whether to add _COMMON_IGNORES.
+        verbose: Whether to add -v flag.
+
+    Returns:
+        pytest exit code.
+    """
+    cmd = _base_cmd(timeout=timeout, maxfail=maxfail)
+
+    if extra_ignores:
+        cmd.extend(_COMMON_IGNORES)
+
+    cmd.extend(test_dirs)
+
+    if markers:
+        cmd.extend(["-m", markers])
+
+    if verbose:
+        cmd.append("-v")
+
+    batch_size = _env_int("CORTEX_BATCH_SIZE", _DEFAULT_BATCH_SIZE)
+    env = {"CORTEX_BATCH_SIZE": str(batch_size)}
+
+    return _run(cmd, env=env)
 
 
 # ---------------------------------------------------------------------------
-# Mode implementations
+# Mode implementations -- all delegate to _run_batch
 # ---------------------------------------------------------------------------
 
 def run_smoke() -> int:
-    """Run smoke tests only — target <30s total wall time.
+    """Run smoke tests only -- target <30s total wall time.
 
     Returns:
         pytest exit code.
     """
     _print_header("Smoke Tests (<30s)")
-    workers = _env_str("CORTEX_TEST_WORKERS", _DEFAULT_WORKERS)
-    cmd = _pytest_base(timeout=5, maxfail=3, extra=[
-        "tests/unit/",
-        "-m", "smoke",
-        "-n", workers,
-        "--dist", "loadfile",
-    ])
-    code = _run(cmd)
+    code = _run_batch(
+        test_dirs=["tests/"],
+        timeout=5,
+        maxfail=3,
+        markers="smoke",
+    )
     _print_result(code)
     return code
 
 
 def run_unit() -> int:
-    """Run unit tests with full parallel execution via xdist.
+    """Run unit tests sequentially in batches.
 
     Returns:
         pytest exit code.
     """
-    _print_header("Unit Tests (parallel)")
-    workers = _env_str("CORTEX_TEST_WORKERS", _DEFAULT_WORKERS)
-    cmd = _pytest_base(extra=[
-        "tests/unit/",
-        "-n", workers,
-        "--dist", "loadscope",
-    ])
-    code = _run(cmd)
+    _print_header("Unit Tests (sequential batch)")
+    code = _run_batch(test_dirs=["tests/unit/"])
     _print_result(code)
     return code
 
 
 def run_fast() -> int:
-    """Run fast unit tests — exclude slow and integration markers.
+    """Run fast unit tests -- exclude slow and integration markers.
 
     Returns:
         pytest exit code.
     """
     _print_header("Fast Tests (no slow, no integration)")
-    workers = _env_str("CORTEX_TEST_WORKERS", _DEFAULT_WORKERS)
-    cmd = _pytest_base(extra=[
-        "tests/unit/",
-        "-m", "not slow and not integration",
-        "-n", workers,
-        "--dist", "loadscope",
-    ])
-    code = _run(cmd)
+    code = _run_batch(
+        test_dirs=["tests/unit/"],
+        markers="not slow and not integration",
+    )
     _print_result(code)
     return code
 
@@ -238,53 +266,61 @@ def run_integration() -> int:
         pytest exit code.
     """
     _print_header("Integration Tests")
-    cmd = _pytest_base(timeout=60, maxfail=5, extra=["tests/integration/"])
-    code = _run(cmd)
+    code = _run_batch(
+        test_dirs=["tests/integration/"],
+        timeout=60,
+        maxfail=5,
+    )
+    _print_result(code)
+    return code
+
+
+def run_golden() -> int:
+    """Run golden tests (expected output validation).
+
+    Returns:
+        pytest exit code.
+    """
+    _print_header("Golden Tests")
+    code = _run_batch(
+        test_dirs=["tests/golden/"],
+        extra_ignores=False,
+    )
     _print_result(code)
     return code
 
 
 def run_batch() -> int:
-    """Run tests via CortexXdistPlugin — the canonical CORTEX batch method.
-
-    Uses pytest.ini addopts (-n auto --dist loadscope) plus CortexXdistPlugin
-    for real batch boundaries, live pass/fail counts, and a final summary table.
-    CORTEX_BATCH_SIZE controls tests per batch (default: 500).
+    """Run full sequential batch -- the canonical CORTEX test method.
 
     Returns:
         pytest exit code.
     """
     batch_size = _env_int("CORTEX_BATCH_SIZE", _DEFAULT_BATCH_SIZE)
-    workers = _env_str("CORTEX_TEST_WORKERS", _DEFAULT_WORKERS)
-    _print_header("Batched Parallel Test Run (CortexXdistPlugin)")
-    print(f"Batch size: {batch_size} | Workers: {workers} | Dist: loadscope\n")
-
-    cmd = _pytest_base(extra=[
-        "tests/unit/",
-        "-n", workers,
-        "--dist", "loadscope",
-        "-v",
-    ])
-    env = {"CORTEX_BATCH_SIZE": str(batch_size)}
-    code = _run(cmd, env=env)
+    _print_header(f"Full Batch Run (batch_size={batch_size})")
+    code = _run_batch(
+        test_dirs=["tests/"],
+        timeout=60,
+        maxfail=50,
+        verbose=True,
+    )
     _print_result(code)
     return code
 
 
 def run_all() -> int:
-    """Run full suite — unit + integration with parallel execution.
+    """Run full suite -- all test directories sequentially.
 
     Returns:
         pytest exit code.
     """
-    _print_header("All Tests (unit + integration)")
-    workers = _env_str("CORTEX_TEST_WORKERS", _DEFAULT_WORKERS)
-    cmd = _pytest_base(timeout=60, extra=[
-        "tests/",
-        "-n", workers,
-        "--dist", "loadscope",
-    ])
-    code = _run(cmd)
+    _print_header("All Tests (full suite)")
+    code = _run_batch(
+        test_dirs=["tests/"],
+        timeout=60,
+        maxfail=100,
+        extra_ignores=False,
+    )
     _print_result(code)
     return code
 
@@ -299,8 +335,12 @@ def run_file(target: str) -> int:
         pytest exit code.
     """
     _print_header(f"Single File: {target}")
-    cmd = _pytest_base(timeout=60, extra=[target, "-v"])
-    code = _run(cmd)
+    code = _run_batch(
+        test_dirs=[target],
+        timeout=60,
+        extra_ignores=False,
+        verbose=True,
+    )
     _print_result(code)
     return code
 
@@ -315,8 +355,10 @@ def run_dir(target: str) -> int:
         pytest exit code.
     """
     _print_header(f"Directory: {target}")
-    cmd = _pytest_base(extra=[target])
-    code = _run(cmd)
+    code = _run_batch(
+        test_dirs=[target],
+        extra_ignores=False,
+    )
     _print_result(code)
     return code
 
@@ -330,6 +372,7 @@ _MODES = {
     "unit": run_unit,
     "fast": run_fast,
     "integration": run_integration,
+    "golden": run_golden,
     "batch": run_batch,
     "all": run_all,
 }
@@ -339,17 +382,17 @@ Usage: python3 scripts/run_tests.py [mode] [target]
 
 Modes:
   smoke        Smoke tests only (<30s total)
-  unit         Unit tests with parallel execution  [default]
+  unit         Unit tests (sequential batch)  [default]
   fast         Fast subset (no slow/integration markers)
   integration  Integration tests with 60s timeout
+  golden       Golden tests (expected output validation)
+  batch        Full sequential batch run (canonical)
+  all          Full suite (all test directories)
   file <path>  Run single test file
   dir <path>   Run tests in single directory
-  all          Full suite (unit + integration)
-  batch        Canonical CORTEX batch runner (CortexXdistPlugin)
 
 Environment:
   CORTEX_BATCH_SIZE     Tests per batch (default: 500)
-  CORTEX_TEST_WORKERS   Worker count override (default: auto)
 """
 
 
