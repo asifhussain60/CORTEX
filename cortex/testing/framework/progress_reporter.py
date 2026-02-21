@@ -168,3 +168,58 @@ class BatchProgressReporter:
             icon = "✅" if status == "done" else "🔵" if status == "running" else "⚪"
             lines.append(f"  {icon} {wid}: {status}")
         return "\n".join(lines)
+
+    # ------------------------------------------------------------------ #
+    # Chat-output builders — return strings for VS Code Copilot Chat
+    # ------------------------------------------------------------------ #
+
+    def build_chat_output(
+        self,
+        batch_num: int,
+        passed: int,
+        failed: int,
+        duration: float,
+    ) -> str:
+        """Build an inline ASCII progress string for VS Code Copilot Chat.
+
+        Unlike :meth:`on_batch_complete` (which writes to stderr/terminal),
+        this method returns a formatted string that MCP tools can embed
+        directly in their response body, making it visible in Chat.
+
+        Args:
+            batch_num: 1-based batch index.
+            passed: Number of tests that passed in this batch.
+            failed: Number of tests that failed in this batch.
+            duration: Wall-clock seconds for this batch.
+
+        Returns:
+            Single-line ASCII string, e.g.:
+            ``[████████░░░░]  67% · Batch 2/4 ✅ 450 passed  🔴 0 failed  ⏱ 3.1s``
+        """
+        self._batches.append((passed, failed, duration))
+        total_done = sum(p + f for p, f, _ in self._batches)
+        bar = self.render_progress_bar(done=total_done, total=self.total, width=20)
+        status_icon = "✅" if failed == 0 else "🔴"
+        return (
+            f"{bar} · Batch {batch_num}/{self.batch_count} "
+            f"{status_icon} {passed} passed  🔴 {failed} failed  ⏱ {duration:.1f}s"
+        )
+
+    def build_final_summary(self) -> str:
+        """Build an inline final summary string for VS Code Copilot Chat.
+
+        Returns:
+            Multi-line string summarising the entire run across all batches,
+            suitable for embedding in an MCP tool response.
+        """
+        total_passed = sum(p for p, _, _ in self._batches)
+        total_failed = sum(f for _, f, _ in self._batches)
+        total_time = time.monotonic() - self._start
+        overall = "✅ PASS" if total_failed == 0 else "🔴 FAIL"
+        bar = self.render_progress_bar(done=total_passed + total_failed, total=self.total, width=20)
+        return (
+            f"{bar}\n"
+            f"🏁 CORTEX Batch Run — {overall}\n"
+            f"   ✅ {total_passed} passed   🔴 {total_failed} failed   ⏱ {total_time:.1f}s total\n"
+            f"   📦 {len(self._batches)} batches"
+        )

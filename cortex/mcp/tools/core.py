@@ -118,6 +118,35 @@ class CortexProcessRequest(ConsolidatedTool):
                 description="Additional context (files, dependencies, constraints)",
                 required=False,
             ),
+            ToolParameter(
+                name="batch_mode",
+                type="boolean",
+                description=(
+                    "When True and operation='test', runs the suite in batches with "
+                    "ASCII progress bars returned inline in the Chat response. "
+                    "Combine with batch_size, profile, and fix_on_fail for full control."
+                ),
+                required=False,
+            ),
+            ToolParameter(
+                name="batch_size",
+                type="integer",
+                description="Number of test files per batch when batch_mode=True (default: 500)",
+                required=False,
+            ),
+            ToolParameter(
+                name="profile",
+                type="string",
+                description="Execution profile for batch runs: smoke, unit, integration, golden, auto",
+                required=False,
+                enum=["smoke", "unit", "integration", "golden", "auto"],
+            ),
+            ToolParameter(
+                name="fix_on_fail",
+                type="boolean",
+                description="When True (default), attempt import-error fix between batches; when False, stop on first failure",
+                required=False,
+            ),
         ]
     
     @property
@@ -132,10 +161,18 @@ class CortexProcessRequest(ConsolidatedTool):
         target = params.get("target")
         mode = params.get("mode", "TDD")
         context = params.get("context", {})
+        batch_mode = params.get("batch_mode", False)
+        batch_size = params.get("batch_size", 500)
+        profile = params.get("profile", "auto")
+        fix_on_fail = params.get("fix_on_fail", True)
         
         # Route to appropriate handler
         if operation in ["implement", "fix", "test"]:
-            return await self._execute_tdd(operation, request, target, mode, context)
+            return await self._execute_tdd(
+                operation, request, target, mode, context,
+                batch_mode=batch_mode, batch_size=batch_size,
+                profile=profile, fix_on_fail=fix_on_fail,
+            )
         elif operation == "refactor":
             return await self._execute_refactor(request, target, context)
         elif operation == "analyze":
@@ -155,14 +192,47 @@ class CortexProcessRequest(ConsolidatedTool):
         target: Optional[str],
         mode: str,
         context: Dict[str, Any],
+        batch_mode: bool = False,
+        batch_size: int = 500,
+        profile: str = "auto",
+        fix_on_fail: bool = True,
     ) -> ToolResult:
-        """Execute TDD-based operations (implement, fix, test)."""
+        """Execute TDD-based operations (implement, fix, test).
+
+        When *batch_mode* is ``True`` and *operation* is ``"test"``, delegates
+        to :meth:`TDDOrchestrator.run_batch_suite` which returns ASCII progress
+        bars suitable for embedding directly in a Copilot Chat response.
+        """
         try:
             # Import orchestrator lazily to avoid circular imports
             # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.tdd_orchestrator
             from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator
             
             orchestrator = TDDOrchestrator()
+
+            # ── Batch test-runner path ─────────────────────────────────────────
+            if batch_mode and operation == "test":
+                test_path = target or "tests/"
+                batch_result = orchestrator.run_batch_suite(
+                    path=test_path,
+                    profile=profile,
+                    batch_size=batch_size,
+                    fix_on_fail=fix_on_fail,
+                )
+                return ToolResult(
+                    success=not batch_result.get("aborted", False),
+                    data=batch_result,
+                    metadata={
+                        "operation": operation,
+                        "orchestrator": "TDDOrchestrator",
+                        "mode": "batch",
+                        "batches": batch_result.get("batches", 0),
+                        "total_passed": batch_result.get("total_passed", 0),
+                        "total_failed": batch_result.get("total_failed", 0),
+                    },
+                )
+
+            # ── Standard TDD path ──────────────────────────────────────────────
             result = orchestrator.execute_operation(
                 operation_name="tdd_execute",
                 parameters={

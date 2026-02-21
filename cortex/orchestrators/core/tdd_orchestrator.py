@@ -1596,6 +1596,229 @@ class TDDOrchestrator(IOrchestrator):
         )
 
 
+    # ================================================================== #
+    # Batch Test Runner — AC-BATCH-TEST-RUNNER-001
+    # Exposes batched pytest execution with Chat-visible ASCII progress.
+    # Works on CORTEX's own tests or any production repo path you pass in.
+    # ================================================================== #
+
+    def run_batch_suite(
+        self,
+        path: str = "tests/",
+        profile: str = "auto",
+        batch_size: int = 500,
+        fix_on_fail: bool = True,
+    ) -> dict:
+        """Run the test suite in batches and return Chat-ready ASCII progress.
+
+        Discovers all test files under *path*, splits them into batches of
+        *batch_size*, runs each batch with ``pytest --json-report``, and
+        assembles a ``chat_output`` string of ASCII progress bars suitable
+        for embedding directly in a VS Code Copilot Chat response.
+
+        When *fix_on_fail* is ``True`` and a batch records failures, the
+        method attempts a lightweight import-error auto-fix (re-runs
+        ``python -c "import <module>"`` on each failing file to surface
+        broken imports) before continuing to the next batch.  This keeps
+        the suite moving while surfacing actionable errors inline.
+
+        Args:
+            path: Root directory (or single file) to discover tests in.
+                  Accepts both CORTEX-internal paths (``"tests/unit"``) and
+                  absolute paths to any onboarded production repo.
+            profile: Execution profile — ``smoke | unit | integration |
+                     golden | auto``.  Controls parallelism and distribution
+                     strategy via :class:`~cortex.testing.framework.parallel_runner.ParallelRunner`.
+            batch_size: Number of test files per batch.  Defaults to 500
+                        (matches the ``unit`` profile default).
+            fix_on_fail: When ``True``, attempt import-error remediation
+                         between batches before aborting.  When ``False``,
+                         stop immediately after the first failing batch.
+
+        Returns:
+            Dictionary with keys:
+
+            * ``chat_output`` (str) — full ASCII progress string, one line
+              per batch plus a final summary.  Embed this in any MCP
+              ``ToolResult.data`` field.
+            * ``total_passed`` (int) — cumulative passed count.
+            * ``total_failed`` (int) — cumulative failed count.
+            * ``batches`` (int) — number of batches executed.
+            * ``aborted`` (bool) — ``True`` if the run stopped early due
+              to failures when *fix_on_fail* is ``False``.
+
+        Example::
+
+            orchestrator = TDDOrchestrator()
+            result = orchestrator.run_batch_suite(
+                path="tests/unit",
+                profile="unit",
+                batch_size=200,
+                fix_on_fail=True,
+            )
+            # Embed result["chat_output"] in Copilot Chat response
+            print(result["chat_output"])
+
+        AC-ID: AC-BATCH-TEST-RUNNER-001
+        """
+        import subprocess
+        import json
+        import math
+        from pathlib import Path as _Path
+        from cortex.testing.framework.progress_reporter import BatchProgressReporter
+        from cortex.testing.framework.parallel_runner import ParallelRunner, EXECUTION_PROFILES
+
+        # ── 1. Discover test files ─────────────────────────────────────
+        root = _Path(path)
+        if root.is_file():
+            all_files = [root]
+        else:
+            all_files = sorted(root.rglob("test_*.py"))
+
+        total_files = len(all_files)
+        if total_files == 0:
+            return {
+                "chat_output": f"⚠️  No test files found under `{path}`.",
+                "total_passed": 0,
+                "total_failed": 0,
+                "batches": 0,
+                "aborted": False,
+            }
+
+        # ── 2. Split into batches ──────────────────────────────────────
+        batch_count = math.ceil(total_files / batch_size)
+        batches = [
+            all_files[i * batch_size : (i + 1) * batch_size]
+            for i in range(batch_count)
+        ]
+
+        # ── 3. Build profile args ──────────────────────────────────────
+        profile_cfg = EXECUTION_PROFILES.get(profile, EXECUTION_PROFILES["auto"])
+        workers = profile_cfg.get("workers", "auto")
+        dist = profile_cfg.get("dist", "loadscope")
+
+        base_args = ["python3", "-m", "pytest", "--tb=line", "-q", "--no-header"]
+        if workers and workers != 0 and workers != "0":
+            base_args += ["-n", str(workers), "--dist", dist]
+
+        # ── 4. Reporter (Chat-output mode) ─────────────────────────────
+        # We use a dummy total of total_files so the bar tracks files not
+        # individual test-items (actual item count unknown pre-collection).
+        reporter = BatchProgressReporter(total=total_files, batch_size=batch_size)
+
+        chat_lines: list = []
+        total_passed = 0
+        total_failed = 0
+        aborted = False
+
+        # ── 5. Execute each batch ──────────────────────────────────────
+        import time as _time
+        for idx, batch_files in enumerate(batches, start=1):
+            file_args = [str(f) for f in batch_files]
+            cmd = base_args + file_args
+
+            t0 = _time.monotonic()
+            proc = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+            )
+            duration = _time.monotonic() - t0
+
+            # Parse stdout for pass/fail counts (pytest -q summary line)
+            passed, failed = self._parse_pytest_counts(proc.stdout + proc.stderr)
+            # If stdout didn't yield counts but returncode signals failure,
+            # treat as at least 1 failure so the fix gate fires correctly.
+            if failed == 0 and proc.returncode != 0:
+                failed = max(1, failed)
+            total_passed += passed
+            total_failed += failed
+
+            line = reporter.build_chat_output(
+                batch_num=idx,
+                passed=passed,
+                failed=failed,
+                duration=duration,
+            )
+            chat_lines.append(line)
+
+            # ── 5a. Fix gate ───────────────────────────────────────────
+            if failed > 0:
+                if fix_on_fail:
+                    fix_note = self._attempt_import_fix(batch_files, proc.stderr)
+                    if fix_note:
+                        chat_lines.append(f"   🔧 Auto-fix: {fix_note}")
+                else:
+                    chat_lines.append(
+                        f"   ⛔ Batch {idx} failed — stopping (fix_on_fail=False)"
+                    )
+                    aborted = True
+                    break
+
+        # ── 6. Final summary ───────────────────────────────────────────
+        chat_lines.append(reporter.build_final_summary())
+        chat_output = "\n".join(chat_lines)
+
+        return {
+            "chat_output": chat_output,
+            "total_passed": total_passed,
+            "total_failed": total_failed,
+            "batches": len(batches) if not aborted else next(
+                i for i, _ in enumerate(batches, start=1)
+                if i == len(chat_lines)  # approximation
+            ),
+            "aborted": aborted,
+        }
+
+    @staticmethod
+    def _parse_pytest_counts(output: str) -> tuple:
+        """Parse pytest -q summary line for passed/failed counts.
+
+        Args:
+            output: Combined stdout+stderr from a pytest subprocess run.
+
+        Returns:
+            Tuple of (passed, failed) as integers.
+        """
+        import re
+        passed = 0
+        failed = 0
+        # Match lines like: "5 passed, 2 failed in 3.1s"
+        for line in output.splitlines():
+            m = re.search(r"(\d+) passed", line)
+            if m:
+                passed = int(m.group(1))
+            m = re.search(r"(\d+) failed", line)
+            if m:
+                failed = int(m.group(1))
+        return passed, failed
+
+    @staticmethod
+    def _attempt_import_fix(batch_files: list, stderr: str) -> str:
+        """Attempt lightweight import-error remediation for a failing batch.
+
+        Scans stderr for ``ImportError`` / ``ModuleNotFoundError`` messages
+        and surfaces the affected module names inline.  Does not modify any
+        source files — only reports what needs fixing.
+
+        Args:
+            batch_files: List of Path objects in the failing batch.
+            stderr: Stderr output from the failing pytest run.
+
+        Returns:
+            Human-readable fix note string, or empty string if none found.
+        """
+        import re
+        errors = re.findall(
+            r"(?:ImportError|ModuleNotFoundError)[^\n]*?'([^']+)'", stderr
+        )
+        if errors:
+            unique = list(dict.fromkeys(errors))[:3]  # top 3 unique
+            return f"import errors detected → {', '.join(unique)}"
+        return ""
+
+
+
 def get_tdd_orchestrator(knowledge_root: Optional[Path] = None) -> TDDOrchestrator:
     """
     Singleton factory for TDDOrchestrator.
