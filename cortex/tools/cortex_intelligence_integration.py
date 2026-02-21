@@ -90,10 +90,21 @@ class GovernanceRuleLoader:
             self._domain_index[domain].append(rule_id)
 
     def _load_phase_enforcement(self, data: Dict[str, Any]) -> None:
-        """Load phase enforcement mappings."""
-        # This could be expanded to parse phase-enforcement-map.yaml
-        # For now, populate with basic structure
-        pass
+        """Load phase enforcement mappings from parsed YAML data."""
+        phases = data.get("phases") or data.get("phase_enforcement") or {}
+        if isinstance(phases, dict):
+            for phase_id, phase_data in phases.items():
+                if isinstance(phase_data, dict):
+                    rules = phase_data.get("rules") or phase_data.get("enforced_rules") or []
+                    if isinstance(rules, list):
+                        self._phase_index[str(phase_id)] = [str(r) for r in rules]
+        elif isinstance(phases, list):
+            for entry in phases:
+                if isinstance(entry, dict):
+                    phase_id = str(entry.get("phase_id") or entry.get("id") or "")
+                    rules = entry.get("rules") or entry.get("enforced_rules") or []
+                    if phase_id and isinstance(rules, list):
+                        self._phase_index[phase_id] = [str(r) for r in rules]
 
     def get_rule_by_id(self, rule_id: str) -> Optional[Dict[str, Any]]:
         """

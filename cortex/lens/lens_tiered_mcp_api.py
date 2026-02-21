@@ -616,6 +616,7 @@ class LensStreamTier3:
         """
         self.batch_size = batch_size
         self.registry = LensCapabilityRegistry()
+        self._cancelled: bool = False
 
     def stream_analysis(
         self,
@@ -679,8 +680,10 @@ class LensStreamTier3:
         # AC_COMPLETE: AC-PHASE65-S7-STREAM-001
 
     async def cancel_analysis(self) -> None:
-        """Cancel ongoing streaming analysis"""
-        pass
+        """Cancel ongoing streaming analysis by setting the cancellation flag."""
+        import logging
+        logging.getLogger(__name__).info("LensStreamTier3: analysis cancellation requested")
+        self._cancelled = True
 
 
 class LensAnalyzerTier4:

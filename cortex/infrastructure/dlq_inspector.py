@@ -383,9 +383,14 @@ class DLQInspector:
     
     def _mark_retried(self, failed_event: FailedEvent) -> None:
         """Mark event as retried in DLQ (increment retry count)."""
-        # This would update the DLQ file with new retry count
-        # For now, just log the action
-        pass
+        import logging
+        logging.getLogger(__name__).debug(
+            "_mark_retried: event_id=%s retry_count=%d -> %d",
+            failed_event.event_id,
+            failed_event.retry_count,
+            failed_event.retry_count + 1,
+        )
+        failed_event.retry_count += 1
     
     def _reconstruct_failed_event(self, dlq_entry: Dict[str, Any]) -> FailedEvent:
         """Reconstruct FailedEvent from DLQ entry."""

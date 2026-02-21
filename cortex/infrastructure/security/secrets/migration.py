@@ -16,8 +16,9 @@ class SecretsMigrationDetector:
         "db_url": r"(?:database[_-]?url|db[_-]?url)\s*[=:]\s*[\"']?([^\"'\s]+)[\"']?"
     }
 
-    def __init__(self):
-        pass
+    def __init__(self) -> None:
+        """Initialize detector."""
+        self._scan_count: int = 0
 
     def scan_config_file(self, file_path: str) -> List[Dict[str, Any]]:
         """Scan config file for hardcoded secrets"""
@@ -257,16 +258,25 @@ class SecretsValidator:
 class SecretsRollback:
     """Rollback failed migrations"""
 
-    def __init__(self):
-        pass
+    def __init__(self) -> None:
+        """Initialize rollback handler with audit logger."""
+        import logging
+        self._log = logging.getLogger(__name__)
 
     def restore_config_backup(self, file_path: str) -> None:
         """Restore config file from backup"""
         self._restore_backup(file_path)
 
     def _restore_backup(self, file_path: str) -> None:
-        """Restore backup"""
-        pass
+        """Restore config file from its .bak sibling if it exists."""
+        from pathlib import Path
+        backup_path = Path(file_path).with_suffix(Path(file_path).suffix + ".bak")
+        if backup_path.exists():
+            import shutil
+            shutil.copy2(str(backup_path), file_path)
+            self._log.info("Restored '%s' from backup '%s'", file_path, backup_path)
+        else:
+            self._log.warning("No backup found for '%s' — cannot restore", file_path)
 
     def remove_migrated_secrets(self, provider, secret_keys: List[str]) -> None:
         """Remove secrets from Vault"""
@@ -282,8 +292,12 @@ class SecretsRollback:
             self._rollback_item(item)
 
     def _rollback_item(self, item: Dict[str, str]) -> None:
-        """Rollback individual item"""
-        pass
+        """Rollback a single migration item — restore file from backup."""
+        file_path = item.get("file", "")
+        key = item.get("key", "")
+        self._log.warning("Rolling back item: file='%s', key='%s'", file_path, key)
+        if file_path:
+            self._restore_backup(file_path)
 
     def generate_rollback_report(self, secrets_restored: int, configs_restored: int, vault_deletions: int) -> Dict[str, Any]:
         """Generate rollback report"""

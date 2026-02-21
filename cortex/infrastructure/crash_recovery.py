@@ -273,9 +273,13 @@ class CrashRecovery:
             self.create_checkpoint()
 
     def commit(self) -> None:
-        """Mark current operation as committed."""
-        # In a real implementation, this would update the last WAL entry
-        pass
+        """Mark current operation as committed by writing a WAL commit marker."""
+        with self._lock:
+            self.wal.append(
+                operation="COMMIT",
+                data={"sequence": self.wal._current_sequence},
+                committed=True,
+            )
 
     def begin_operation(self, operation_id: str, operation_type: str) -> None:
         """Mark operation as in-flight.
