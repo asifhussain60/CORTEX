@@ -35,7 +35,7 @@ class CoverageMapper:
     
     def __init__(self) -> None:
         """Initialize instance."""
-        pass
+        self._initialized = True
     
     def parse_coverage_data(self, coverage_data: Dict[str, Any]) -> List[Dict[str, Any]]:
         """

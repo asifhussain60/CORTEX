@@ -67,7 +67,7 @@ class QualityValidator:
     
     def __init__(self) -> None:
         """Initialize quality validator."""
-        pass
+        self._initialized = True
     
     def validate_test_file(self, test_file: Path) -> List[QualityScore]:
         """

@@ -73,7 +73,7 @@ class RequestTransformer:
     
     def __init__(self) -> None:
         """Initialize request transformer."""
-        pass
+        self._initialized = True
     
     def transform(self, user_request: str) -> TransformedRequest:
         """

@@ -1,6 +1,10 @@
 """
 Coherence Validator — Phase 4 SDLC orchestrator component.
 
+CORE-035 Note: This file contains CrossLayerCoherenceValidator (Python↔JS validation),
+distinct from validation/coherence_validator.py which contains CoherenceValidator
+(post-edit structural validation). Same filename, different classes and scopes.
+
 Validates cross-layer coherence between Python and JavaScript/TypeScript
 boundaries — enum alignment, field naming conventions, API contract parity —
 before implementation begins, catching Phase 21-style mismatches at design time.

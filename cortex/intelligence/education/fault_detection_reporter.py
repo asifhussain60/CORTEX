@@ -82,7 +82,7 @@ class FaultDetectionReporter:
 
     def __init__(self) -> None:
         """Initialize FaultDetectionReporter."""
-        pass
+        self._initialized = True
 
     def detect_faults(
         self,

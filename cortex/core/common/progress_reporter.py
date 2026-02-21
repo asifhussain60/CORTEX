@@ -248,7 +248,7 @@ class ProgressCallback(Protocol):
         remaining: float,
     ) -> None:
         """Called on progress update."""
-        ...
+        raise NotImplementedError("__call__ not yet implemented")
 
 
 class ProgressReporter:

@@ -12,7 +12,7 @@ class ComplianceReporter:
 
     def __init__(self) -> None:
         """Initialize reporter."""
-        pass
+        self._initialized = True
 
     def generate_json_report(self, violations: List[ViolationReport]) -> str:
         """Generate JSON compliance report.

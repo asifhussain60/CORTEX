@@ -2149,7 +2149,7 @@ class IntentRouter(IOrchestrator):
             enable: Whether to enable response engine (default False)
         """
         # TODO: Implement response engine integration after Wave H-S4 validation
-        pass
+        raise NotImplementedError("_init_response_engine not yet implemented")
 
     def execute(self, parameters: Dict[str, Any]) -> Result[str]:
         """

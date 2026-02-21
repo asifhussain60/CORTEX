@@ -9,7 +9,7 @@ class DevxFormatter:
 
     def __init__(self) -> None:
         """Initialize formatter."""
-        pass
+        self._initialized = True
 
     def format_code(self, code: str) -> str:
         """Format Python code.

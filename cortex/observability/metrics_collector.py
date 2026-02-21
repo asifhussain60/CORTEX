@@ -34,11 +34,11 @@ class StorageBackend(Protocol):
 
     def write(self, metrics: list[dict[str, Any]]) -> None:
         """Write metrics to storage."""
-        ...
+        raise NotImplementedError("write not yet implemented")
 
     def read(self, metric_type: str, limit: int) -> list[dict[str, Any]]:
         """Read metrics from storage."""
-        ...
+        raise NotImplementedError("read not yet implemented")
 
 
 class InMemoryStorage:

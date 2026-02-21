@@ -145,15 +145,15 @@ class LockManager(Protocol):
 
     def get_all_locks(self) -> List[Dict[str, Any]]:
         """Get all active locks."""
-        ...
+        raise NotImplementedError("get_all_locks not yet implemented")
 
     def release_lock(self, lock_id: str, force: bool = False) -> None:
         """Release lock."""
-        ...
+        raise NotImplementedError("release_lock not yet implemented")
 
     def is_lock_held(self, lock_id: str) -> bool:
         """Check if lock is held."""
-        ...
+        raise NotImplementedError("is_lock_held not yet implemented")
 
 
 class OperationTracker(Protocol):
@@ -161,11 +161,11 @@ class OperationTracker(Protocol):
 
     def get_all_operations(self) -> List[Dict[str, Any]]:
         """Get all tracked operations."""
-        ...
+        raise NotImplementedError("get_all_operations not yet implemented")
 
     def mark_operation_failed(self, operation_id: str, reason: str) -> None:
         """Mark operation as failed."""
-        ...
+        raise NotImplementedError("mark_operation_failed not yet implemented")
 
 
 class OrphanedResourceCleaner:

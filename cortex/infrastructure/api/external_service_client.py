@@ -282,4 +282,4 @@ class ExternalServiceClient:
     def __exit__(self, *args: Any) -> None:
         """Context manager exit."""
         # Note: Can't use await in __exit__, so close in async context
-        pass
+        return None

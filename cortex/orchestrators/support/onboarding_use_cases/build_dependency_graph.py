@@ -40,7 +40,7 @@ class BuildDependencyGraphUseCase:
     
     def __init__(self) -> None:
         """Initialize dependency graph builder."""
-        pass
+        self._initialized = True
     
     def execute(self, repo_data: Dict[str, Any]) -> DependencyGraph:
         """

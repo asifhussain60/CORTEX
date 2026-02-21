@@ -99,7 +99,7 @@ class MCPToolScanner:
     
     def __init__(self) -> None:
         """Initialize the scanner."""
-        pass
+        self._initialized = True
     
     def scan_code(self, code: str, source_file: str = "<string>") -> List[ToolMetadata]:
         """

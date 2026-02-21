@@ -10,7 +10,7 @@ import hashlib
 class DomainBrainAPI:
     """Domain Brain API - Query and manage domain knowledge."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Domain Brain API."""
         self._domains: Dict[str, Any] = {}
         self._audit_log: List[Dict[str, Any]] = []
@@ -382,7 +382,7 @@ class ConsistencyValidator:
 class AuditLogger:
     """Audit logger for domain operations with hash chain integrity."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize audit logger."""
         self._log: List[Any] = []
         self._cache: Dict[str, Any] = {}

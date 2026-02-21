@@ -108,19 +108,19 @@ class CacheBackend(Protocol):
 
     def get(self, key: str) -> Optional[Dict[str, Any]]:
         """Retrieve cached value."""
-        ...
+        raise NotImplementedError("get not yet implemented")
 
     def set(self, key: str, value: Dict[str, Any], ttl_seconds: int) -> None:
         """Store value with TTL."""
-        ...
+        raise NotImplementedError("set not yet implemented")
 
     def delete(self, key: str) -> None:
         """Remove cached value."""
-        ...
+        raise NotImplementedError("delete not yet implemented")
 
     def clear(self) -> None:
         """Clear all cached values."""
-        ...
+        raise NotImplementedError("clear not yet implemented")
 
 
 class InMemoryCacheBackend:

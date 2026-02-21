@@ -96,7 +96,7 @@ class AgentProtocol(Protocol):
         Returns:
             Standardized agent response
         """
-        ...
+        raise NotImplementedError("execute not yet implemented")
     
     @property
     def name(self) -> str:

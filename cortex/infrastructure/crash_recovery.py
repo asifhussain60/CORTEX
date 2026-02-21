@@ -113,19 +113,19 @@ class StateManager(Protocol):
 
     def get_state_snapshot(self) -> Dict[str, Any]:
         """Get current state snapshot."""
-        ...
+        raise NotImplementedError("get_state_snapshot not yet implemented")
 
     def restore_state(self, snapshot: Dict[str, Any]) -> None:
         """Restore state from snapshot."""
-        ...
+        raise NotImplementedError("restore_state not yet implemented")
 
     def apply_operation(self, operation: str, data: Dict[str, Any]) -> None:
         """Apply operation to state."""
-        ...
+        raise NotImplementedError("apply_operation not yet implemented")
 
     def validate_state(self) -> bool:
         """Validate state consistency."""
-        ...
+        raise NotImplementedError("validate_state not yet implemented")
 
 
 class WriteAheadLog:

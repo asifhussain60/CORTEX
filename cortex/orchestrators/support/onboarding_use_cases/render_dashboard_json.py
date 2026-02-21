@@ -21,7 +21,7 @@ class RenderDashboardJSONUseCase:
     
     def __init__(self) -> None:
         """Initialize dashboard renderer."""
-        pass
+        self._initialized = True
     
     def execute(self, repo_data: Dict[str, Any]) -> Dict[str, Any]:
         """

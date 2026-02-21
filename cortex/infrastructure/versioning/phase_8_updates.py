@@ -14,4 +14,4 @@ Updates documentation to reflect new event-driven architecture and planning.
 
 def phase_8_complete() -> None:
     """Phase 8: All prompts and agents updated to reflect new architecture."""
-    pass
+    raise NotImplementedError("phase_8_complete not yet implemented")

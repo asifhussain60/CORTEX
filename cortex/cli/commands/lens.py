@@ -20,7 +20,7 @@ from cortex.lens import LENSOrchestrator
 @click.group()
 def lens() -> None:
     """LENS Remote Intelligence commands."""
-    pass
+    raise NotImplementedError("lens not yet implemented")
 
 
 @lens.command("analyze-remote")

@@ -250,7 +250,7 @@ def run_tests_with_progress(
     def progress_callback(message: str) -> None:
         """Callback for progress updates."""
         # Can be extended to log to file, send to monitoring service, etc.
-        pass
+        raise NotImplementedError("progress_callback not yet implemented")
 
     monitor = TestProgressMonitor(
         command=command,

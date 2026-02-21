@@ -53,6 +53,7 @@ except ImportError:
 
 # Constants
 DEBUG_DIR = ".cortex-debug"
+MARKER_PREFIX = "CORTEX_DEBUG_"
 
 
 class TechnologyStack(Enum):
@@ -176,7 +177,8 @@ class StackDetector:
 class LanguageAdapter:
     """Base class for language-specific adapters"""
 
-    def __init__(self, session_id: str, base_path: Path):
+    def __init__(self, session_id: str, base_path: Path) -> None:
+        """Initialize language adapter with session context and workspace root."""
         self.session_id = session_id
         self.base_path = base_path
         self.extensions: Set[str] = set()
@@ -208,7 +210,8 @@ class LanguageAdapter:
 class JavaScriptAdapter(LanguageAdapter):
     """JavaScript/TypeScript adapter"""
 
-    def __init__(self, session_id: str, base_path: Path):
+    def __init__(self, session_id: str, base_path: Path) -> None:
+        """Initialize JavaScript/TypeScript adapter with web framework exclusions."""
         super().__init__(session_id, base_path)
         self.extensions = {".js", ".jsx", ".ts", ".tsx", ".mjs", ".cjs", ".vue", ".svelte"}
         self.exclude_dirs = {"node_modules", "dist", "build", ".next", ".nuxt", "vendor", ".git"}
@@ -271,7 +274,8 @@ class JavaScriptAdapter(LanguageAdapter):
 class PythonAdapter(LanguageAdapter):
     """Python adapter"""
 
-    def __init__(self, session_id: str, base_path: Path):
+    def __init__(self, session_id: str, base_path: Path) -> None:
+        """Initialize Python adapter with Python-specific exclusions."""
         super().__init__(session_id, base_path)
         self.extensions = {".py"}
         self.exclude_dirs = {"__pycache__", ".venv", "venv", "env", ".tox", "dist", "build", ".git"}
@@ -324,7 +328,8 @@ class PythonAdapter(LanguageAdapter):
 class CSharpAdapter(LanguageAdapter):
     """C#/.NET adapter"""
 
-    def __init__(self, session_id: str, base_path: Path):
+    def __init__(self, session_id: str, base_path: Path) -> None:
+        """Initialize C#/.NET adapter with .NET build output exclusions."""
         super().__init__(session_id, base_path)
         self.extensions = {".cs"}
         self.exclude_dirs = {"bin", "obj", "packages", ".vs", ".git"}

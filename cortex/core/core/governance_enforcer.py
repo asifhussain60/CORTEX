@@ -87,7 +87,7 @@ class GovernanceEnforcer:
         """
         Initialize enforcer.
         """
-        pass  # No database needed
+        self._initialized = True
 
     # =========================================================================
     # Phase Lock Enforcement

@@ -233,7 +233,7 @@ class CommentAnalyzer:
 
     def __init__(self) -> None:
         """Initialize the comment analyzer."""
-        pass
+        self._initialized = True
 
     def analyze_file(self, file_path: Path) -> CommentAnalysisResult:
         """Analyze comments in a file.

@@ -65,7 +65,7 @@ class ArchitectureProfiler:
 
     def __init__(self) -> None:
         """Initialize ArchitectureProfiler."""
-        pass
+        self._initialized = True
 
     def build_signature(self, patterns: Dict[str, int]) -> Dict[str, float]:
         """

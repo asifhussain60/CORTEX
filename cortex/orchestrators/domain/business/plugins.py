@@ -41,7 +41,7 @@ class DomainPlugin(ABC):
         Args:
             context: Execution context
         """
-        pass
+        raise NotImplementedError("pre_execute not yet implemented")
 
     def post_execute(self, context: Dict[str, Any], result: Dict[str, Any]) -> None:
         """Hook executed after main execution.
@@ -50,7 +50,7 @@ class DomainPlugin(ABC):
             context: Execution context
             result: Execution result
         """
-        pass
+        raise NotImplementedError("post_execute not yet implemented")
 
 
 class DomainPluginRegistry:

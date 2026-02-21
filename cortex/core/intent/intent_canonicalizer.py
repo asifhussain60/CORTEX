@@ -117,7 +117,7 @@ class IntentCanonicalizer:
 
     def __init__(self) -> None:
         """Initialize IntentCanonicalizer."""
-        pass
+        self._initialized = True
 
     def canonicalize(
         self,

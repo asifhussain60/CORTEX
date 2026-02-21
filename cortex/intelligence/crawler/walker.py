@@ -171,7 +171,7 @@ class RepositoryWalker(AsyncRepositoryCrawler):
             file_path: Path to discovered file
             metadata: File metadata
         """
-        pass  # Minimal implementation - subclasses override
+        raise NotImplementedError("on_file_discovered not yet implemented")
 
 # AC_COMPLETE: AC-PHASE58-S1-003 ✅
 # Implementation: RepositoryWalker with filtering

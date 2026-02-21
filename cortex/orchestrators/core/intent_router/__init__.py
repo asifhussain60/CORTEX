@@ -28,6 +28,7 @@ except ImportError:
     class OrchestratorLookup:
         """Stub for backward compatibility."""
         def __init__(self) -> None:
+            """Initialize empty orchestrator registry."""
             self._registry: dict = {}
         def lookup(self, name: str) -> None:
             """Look up an orchestrator by name from the registry."""

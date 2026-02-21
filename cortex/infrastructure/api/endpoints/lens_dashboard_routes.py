@@ -424,7 +424,7 @@ def invalidate_cache(repo_path: str) -> None:
         repo_path: Absolute path to the repository
     """
     # Caching disabled for MVP
-    pass
+    raise NotImplementedError("invalidate_cache not yet implemented")
 
 
 # Tab Data Generators

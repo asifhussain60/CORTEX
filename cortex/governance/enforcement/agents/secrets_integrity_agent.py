@@ -69,7 +69,7 @@ class SecretsIntegrityAgent:
 
     def __init__(self) -> None:
         """Initialize SecretsIntegrityAgent."""
-        pass
+        self._initialized = True
 
     def validate_pre_flight(
         self,

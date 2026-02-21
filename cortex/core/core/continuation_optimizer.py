@@ -119,7 +119,7 @@ class ContinuationOptimizer:
 
     def __init__(self) -> None:
         """Initialize continuation optimizer."""
-        pass
+        self._initialized = True
 
     def audit_response(
         self,

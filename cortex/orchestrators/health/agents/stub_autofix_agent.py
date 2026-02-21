@@ -2,7 +2,7 @@
 
 Detects stub files (redirect wrappers) and automatically fixes them by:
 1. Deleting the stub file
-2. Updating all imports to point directly to cortex_intelligence
+2. Updating all imports to point directly to cortex.intelligence
 
 Author: CORTEX Framework
 Phase: PHASE-96

@@ -12,7 +12,7 @@ class RuleApplicabilityEngine:
 
     def __init__(self) -> None:
         """Initialize applicability engine"""
-        pass
+        self._initialized = True
 
     def get_applicable_rules(
         self, 

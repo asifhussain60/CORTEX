@@ -554,12 +554,12 @@ class CoreRulesVerifier:
     def _check_response_headers(self) -> None:
         """CORE-029: Response header mandatory (agent compliance check)."""
         # Policy check - assume compliant
-        pass
+        raise NotImplementedError("_check_response_headers not yet implemented")
     
     def _check_implementation_truth(self) -> None:
         """CORE-030: Implementation Truth (verify code, not docs)."""
         # Policy check - assume compliant
-        pass
+        raise NotImplementedError("_check_implementation_truth not yet implemented")
     
     def _check_single_canonical(self) -> None:
         """
@@ -570,12 +570,12 @@ class CoreRulesVerifier:
         """
         # This relies on duplicate_code_detector from Wave J
         # Assume compliant if no duplicates detected
-        pass
+        raise NotImplementedError("_check_single_canonical not yet implemented")
     
     def _check_industry_standards(self) -> None:
         """CORE-036: Industry standards compliance."""
         # Policy check - verified at runtime by orchestrators
-        pass
+        raise NotImplementedError("_check_industry_standards not yet implemented")
     
     def _check_no_file_paths_in_prompts(self) -> None:
         """
@@ -614,12 +614,12 @@ class CoreRulesVerifier:
     def _check_holistic_validation(self) -> None:
         """CORE-048: Holistic validation gate (Phase 48)."""
         # Policy check - verified by Phase 48 implementation
-        pass
+        raise NotImplementedError("_check_holistic_validation not yet implemented")
     
     def _check_silent_autonomous(self) -> None:
         """CORE-049: Silent autonomous execution."""
         # Policy check - verified by execution protocol
-        pass
+        raise NotImplementedError("_check_silent_autonomous not yet implemented")
 
 
 # AC_COMPLETE: AC-WAVE-K-002 ✅

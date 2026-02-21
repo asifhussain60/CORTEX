@@ -164,7 +164,7 @@ class APIAnalyzer:
 
     def __init__(self) -> None:
         """Initialize APIAnalyzer."""
-        pass
+        self._initialized = True
 
     def analyze_openapi_spec(
         self,

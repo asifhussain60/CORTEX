@@ -20,7 +20,7 @@ class UpdateLandingPageUseCase:
     
     def __init__(self) -> None:
         """Initialize landing page updater."""
-        pass
+        self._initialized = True
     
     def execute(
         self, 

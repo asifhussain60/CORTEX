@@ -323,7 +323,7 @@ class RelationshipEngine:
 
     def __init__(self) -> None:
         """Initialize the relationship engine."""
-        pass
+        self._initialized = True
 
     def analyze_file(self, file_path: Path) -> RelationshipAnalysisResult:
         """Analyze relationships in a file.

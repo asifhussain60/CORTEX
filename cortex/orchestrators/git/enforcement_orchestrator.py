@@ -1,6 +1,10 @@
 """
 EnforcementOrchestrator — Canonical pre-commit CORE rule enforcement.
 
+CORE-035 Note: This file contains PreCommitEnforcementOrchestrator (pre-commit hooks),
+distinct from core/enforcement_orchestrator.py which contains EnforcementOrchestrator
+(pre-execution governance). Same filename, different classes and responsibilities.
+
 Absorbs ALL checks previously scattered across .githooks/ shell scripts
 and GitHub Actions workflows into a single Python orchestrator:
 

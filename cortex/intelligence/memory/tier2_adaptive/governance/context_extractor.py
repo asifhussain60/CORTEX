@@ -24,7 +24,7 @@ class ContextExtractor:
 
     def __init__(self) -> None:
         """Initialize context extractor"""
-        pass
+        self._initialized = True
 
     def extract_context(self, operation_data: Dict[str, Any]) -> GovernanceContext:
         """Extract governance context from operation data"""

@@ -91,7 +91,7 @@ class EnhancementGenerator:
 
     def __init__(self) -> None:
         """Initialize EnhancementGenerator."""
-        pass
+        self._initialized = True
 
     def get_template(self) -> str:
         """Get YAML template."""

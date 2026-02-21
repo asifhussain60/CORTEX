@@ -70,7 +70,7 @@ class IntakeAdapter(Protocol):
         Returns:
             Adapted data.
         """
-        ...
+        raise NotImplementedError("adapt not yet implemented")
 
 
 class FilterStrategy(Protocol):
@@ -91,7 +91,7 @@ class FilterStrategy(Protocol):
         Returns:
             True if data passes filter, False otherwise.
         """
-        ...
+        raise NotImplementedError("filter not yet implemented")
 
 
 class RefinementRule(Protocol):
@@ -112,7 +112,7 @@ class RefinementRule(Protocol):
         Returns:
             Refined data.
         """
-        ...
+        raise NotImplementedError("refine not yet implemented")
 
 
 class OutputFormatter(Protocol):
@@ -133,7 +133,7 @@ class OutputFormatter(Protocol):
         Returns:
             Formatted data.
         """
-        ...
+        raise NotImplementedError("format not yet implemented")
 
 
 class Validator(Protocol):
@@ -154,7 +154,7 @@ class Validator(Protocol):
         Returns:
             True if data is valid, False otherwise.
         """
-        ...
+        raise NotImplementedError("validate not yet implemented")
 
 
 class BulkIngestionPipeline:

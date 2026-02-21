@@ -19,7 +19,8 @@ InMemoryCacheBackend = MemoryBackend
 # CacheStats placeholder (backward compatibility)
 class CacheStats:
     """Cache statistics tracker."""
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialize cache statistics counters to zero."""
         self.hits = 0
         self.misses = 0
         self.evictions = 0

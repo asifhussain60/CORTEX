@@ -102,7 +102,7 @@ class ConsoleMetricsExporter(MetricsExporter):
 
     def shutdown(self) -> None:
         """No-op for console exporter."""
-        pass
+        raise NotImplementedError("shutdown not yet implemented")
 
 
 class MemoryMetricsExporter(MetricsExporter):

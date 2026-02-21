@@ -86,7 +86,7 @@ class WorkItemProvider(Protocol):
         Returns:
             List of WorkItem instances. Empty list if none found.
         """
-        ...
+        raise NotImplementedError("fetch_user_stories not yet implemented")
 
     def fetch_by_id(self, item_id: str) -> WorkItem:
         """
@@ -101,7 +101,7 @@ class WorkItemProvider(Protocol):
         Raises:
             KeyError: If the item does not exist in the source system.
         """
-        ...
+        raise NotImplementedError("fetch_by_id not yet implemented")
 
     def health_check(self) -> bool:
         """
@@ -110,4 +110,4 @@ class WorkItemProvider(Protocol):
         Returns:
             True if the upstream system is reachable, False otherwise.
         """
-        ...
+        raise NotImplementedError("health_check not yet implemented")

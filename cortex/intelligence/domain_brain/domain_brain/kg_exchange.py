@@ -11,7 +11,7 @@ class KnowledgeExchange:
 
     def __init__(self) -> None:
         """Initialize the exchange protocol."""
-        pass
+        self._initialized = True
 
     def export_entities(self, entities: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Export entities for sharing."""

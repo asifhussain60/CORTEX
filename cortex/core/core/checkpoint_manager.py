@@ -126,7 +126,7 @@ class CheckpointManager:
     def _initialize_db(self) -> None:
         """Initialize checkpoint tables in database."""
         # Table will be created on first use
-        pass
+        raise NotImplementedError("_initialize_db not yet implemented")
 
     def create_checkpoint(
         self,

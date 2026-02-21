@@ -162,27 +162,27 @@ class HashChainManager(Protocol):
 
     def verify_integrity(self) -> bool:
         """Verify hash chain integrity."""
-        ...
+        raise NotImplementedError("verify_integrity not yet implemented")
 
     def get_break_location(self) -> tuple[str, str]:
         """Get location of hash chain break."""
-        ...
+        raise NotImplementedError("get_break_location not yet implemented")
 
     def rebuild_chain(self, from_block: Optional[str] = None) -> None:
         """Rebuild hash chain."""
-        ...
+        raise NotImplementedError("rebuild_chain not yet implemented")
 
     def create_backup(self) -> Dict[str, Any]:
         """Create backup of current state."""
-        ...
+        raise NotImplementedError("create_backup not yet implemented")
 
     def restore_backup(self, backup: Dict[str, Any]) -> None:
         """Restore from backup."""
-        ...
+        raise NotImplementedError("restore_backup not yet implemented")
 
     def get_state_snapshot(self) -> Dict[str, Any]:
         """Get current state snapshot."""
-        ...
+        raise NotImplementedError("get_state_snapshot not yet implemented")
 
 
 class StateRepair:
