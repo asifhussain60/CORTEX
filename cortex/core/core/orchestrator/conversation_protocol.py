@@ -20,7 +20,7 @@ from cortex.core.governance_pregate import PreGateDecision, get_governance_prega
 from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 from cortex.core.intelligence.call_graph import CallGraphBuilder
 from cortex.core.intelligence.dependency_mapper import DependencyMapper
-from cortex.core.core.intelligence.pattern_detector import PatternDetector
+from cortex.core.intelligence.pattern_detector import PatternDetector
 from cortex.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,

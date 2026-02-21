@@ -9,11 +9,11 @@ import pytest
 from unittest.mock import Mock, patch
 import time
 
-from cortex.intelligence.knowledge.synthesis.knowledge_synthesis_engine import (
+from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
     KnowledgeSynthesisEngine,
     get_synthesis_engine,
 )
-from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (
+from cortex.intelligence.knowledge.unified_intelligence_context import (
     UnifiedIntelligenceContext,
     LENSIntelligence,
     CompanyKnowledge,

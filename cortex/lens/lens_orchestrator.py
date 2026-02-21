@@ -166,7 +166,7 @@ class LENSOrchestrator:
         self.dependency_mapper = DependencyMapper()
 
         # Phase 43: PatternDetector for pattern findings (AC-PHASE43-005)
-        from cortex.core.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.intelligence.pattern_detector import PatternDetector
         self.pattern_detector = PatternDetector()
 
         # Phase 90: TechStackAnalyzer for tech stack detection (AC-PHASE90-S1-001)

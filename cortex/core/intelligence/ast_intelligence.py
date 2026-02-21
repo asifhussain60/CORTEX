@@ -33,6 +33,18 @@ class ParameterInfo:
     type_hint: Optional[str] = None
     default: Optional[str] = None
 
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary representation.
+
+        Returns:
+            Dictionary with parameter name, type_hint, and default.
+        """
+        return {
+            "name": self.name,
+            "type_hint": self.type_hint,
+            "default": self.default,
+        }
+
 
 @dataclass
 class FunctionInfo:
@@ -45,6 +57,9 @@ class FunctionInfo:
         docstring: Function docstring
         line_number: Line where function is defined
         decorators: List of decorator names
+        is_async: True if async function
+        is_method: True if method in a class
+        class_name: Parent class name if method
     """
     name: str
     parameters: List[ParameterInfo] = field(default_factory=list)
@@ -52,6 +67,27 @@ class FunctionInfo:
     docstring: Optional[str] = None
     line_number: int = 0
     decorators: List[str] = field(default_factory=list)
+    is_async: bool = False
+    is_method: bool = False
+    class_name: Optional[str] = None
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary representation.
+
+        Returns:
+            Dictionary with function info fields.
+        """
+        return {
+            "name": self.name,
+            "parameters": [p.to_dict() for p in self.parameters],
+            "return_type": self.return_type,
+            "docstring": self.docstring,
+            "decorators": self.decorators,
+            "line_number": self.line_number,
+            "is_async": self.is_async,
+            "is_method": self.is_method,
+            "class_name": self.class_name,
+        }
 
 
 @dataclass
@@ -74,6 +110,22 @@ class ClassInfo:
     docstring: Optional[str] = None
     line_number: int = 0
     decorators: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary representation.
+
+        Returns:
+            Dictionary with class info fields.
+        """
+        return {
+            "name": self.name,
+            "bases": self.bases,
+            "methods": [m.to_dict() for m in self.methods],
+            "docstring": self.docstring,
+            "decorators": self.decorators,
+            "line_number": self.line_number,
+            "class_variables": self.class_variables,
+        }
 
 
 @dataclass

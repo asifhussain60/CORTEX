@@ -25,7 +25,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.core.knowledge.change_detection import (
+from cortex.core.core.knowledge.change_detection import (
     AnomalyDetection,
     AnomalyType,
     ChangeDetectionService,

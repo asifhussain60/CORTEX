@@ -241,7 +241,7 @@ class DataProcessor:
         
         Pattern detection is part of comprehension. Verify it's logged.
         """
-        from cortex.core.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine(enable_cache=False)
         parse_result = engine.parse_file(str(sample_python_file))

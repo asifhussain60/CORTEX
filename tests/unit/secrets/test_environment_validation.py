@@ -12,11 +12,11 @@ import os
 from pathlib import Path
 import tempfile
 
-from cortex.infrastructure.security.secrets.environment_validation import (
+from cortex.infrastructure.secrets.environment_validation import (
     EnvironmentValidator,
     validate_secrets_environment,
 )
-from cortex.infrastructure.security.secrets.errors import SecretsError
+from cortex.infrastructure.secrets.errors import SecretsError
 
 
 # ============================================================================

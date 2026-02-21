@@ -35,7 +35,7 @@ from cortex.core.core.knowledge.router import (
     TechnicalAffinityCalculator,
     BusinessAffinityCalculator,
 )
-from cortex.core.knowledge import (
+from cortex.core.core.knowledge import (
     KnowledgeProvider,
     KnowledgeQueryResult,
 )

@@ -35,7 +35,7 @@ Performance Impact:
   - Cumulative savings: 8ms overhead vs 50ms+ saved per operation
 
 Example Usage:
-    from cortex.core.knowledge.router import IntelligentKnowledgeRouter
+    from cortex.core.core.knowledge.router import IntelligentKnowledgeRouter
 
     router = IntelligentKnowledgeRouter(
         tech_provider=knowledge_repo,
@@ -72,7 +72,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.core.knowledge import KnowledgeProvider, KnowledgeQueryResult
+from cortex.core.core.knowledge import KnowledgeProvider, KnowledgeQueryResult
 
 # =============================================================================
 # ENUMS AND DATA CLASSES

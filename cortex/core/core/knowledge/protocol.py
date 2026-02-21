@@ -25,8 +25,8 @@ Design Benefits:
   5. Extensible: New providers just implement the 6 methods
 
 Example Usage:
-    from cortex.core.knowledge import KnowledgeProvider
-    from cortex.core.knowledge import KnowledgeRepository
+    from cortex.core.core.knowledge import KnowledgeProvider
+    from cortex.core.core.knowledge import KnowledgeRepository
     from cortex.intelligence.domain_brain import BusinessKnowledgeRepository
 
     def process_with_provider(provider: KnowledgeProvider) -> None:
@@ -317,7 +317,7 @@ def is_knowledge_provider(obj: Any) -> bool:
         True if object implements KnowledgeProvider protocol, False otherwise.
 
     Examples:
-        >>> from cortex.core.knowledge import KnowledgeRepository
+        >>> from cortex.core.core.knowledge import KnowledgeRepository
         >>> repo = KnowledgeRepository()
         >>> assert is_knowledge_provider(repo)
 

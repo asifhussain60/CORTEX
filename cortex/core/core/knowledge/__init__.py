@@ -40,6 +40,11 @@ from .knowledge_repository import (
     KnowledgeRepository,
     get_knowledge_repository,
 )
+from .protocol import (
+    KnowledgeProvider,
+    KnowledgeQuery,
+    is_knowledge_provider,
+)
 
 __all__ = [
     # Knowledge Graph
@@ -55,6 +60,10 @@ __all__ = [
     "KnowledgeEntry",
     "KnowledgeQueryResult",
     "get_knowledge_repository",
+    # Knowledge Protocol
+    "KnowledgeProvider",
+    "KnowledgeQuery",
+    "is_knowledge_provider",
     # Company Knowledge Loader
     "CompanyKnowledgeLoader",
     "ComplianceMatch",

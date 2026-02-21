@@ -11,7 +11,7 @@ from cortex.intelligence.lens.knowledge_graph.ast_graph_builder import (
     ASTGraphRelationship,
 )
 from cortex.intelligence.lens.knowledge_graph.semantic_search import SemanticSearchEngine, SearchResult
-from cortex.core.core.intelligence.pattern_detector import PatternDetector, DetectedPattern
+from cortex.core.intelligence.pattern_detector import PatternDetector, DetectedPattern
 
 __all__ = [
     "ASTKnowledgeGraph",

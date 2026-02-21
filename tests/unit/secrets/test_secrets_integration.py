@@ -13,8 +13,8 @@ import os
 import tempfile
 from pathlib import Path
 
-from cortex.infrastructure.security.secrets.secrets_manager import SecretsManager
-from cortex.infrastructure.security.secrets.environment_validation import EnvironmentValidator
+from cortex.infrastructure.secrets.secrets_manager import SecretsManager
+from cortex.infrastructure.secrets.environment_validation import EnvironmentValidator
 from cortex.governance.enforcement.agents.secrets_integrity_agent import SecretsIntegrityAgent
 
 

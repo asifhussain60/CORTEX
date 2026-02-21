@@ -9,8 +9,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.core.core.intelligence.ast_intelligence import ASTIntelligenceEngine, ParseResult
-from cortex.core.core.intelligence.comment_analyzer import CommentAnalyzer
+from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine, ParseResult
+from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
 from cortex.core.core.intelligence_routing_engine import IntelligenceRoutingEngine
 
 

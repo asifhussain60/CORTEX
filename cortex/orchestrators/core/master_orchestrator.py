@@ -34,11 +34,11 @@ from cortex.core.core.state_manager import (
     StateManager,
     get_state_manager,
 )
-from cortex.intelligence.knowledge.synthesis.knowledge_synthesis_engine import (
+from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
     KnowledgeSynthesisEngine,
     get_synthesis_engine,
 )
-from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (
+from cortex.intelligence.knowledge.unified_intelligence_context import (
     UnifiedIntelligenceContext,
 )
 
@@ -1171,7 +1171,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
             # This allows IntentRouter to use citations in routing decision
             unified_context = None
             try:
-                from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (
+                from cortex.intelligence.knowledge.unified_intelligence_context import (
                     CompanyKnowledge,
                     LENSIntelligence,
                 )
@@ -1235,7 +1235,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                 lens_context = result.get("context", {}).get("lens_insights", {})
                 if lens_context and unified_context:
                     # Update LENS intelligence with fetched data
-                    from cortex.intelligence.knowledge.synthesis.unified_intelligence_context import (
+                    from cortex.intelligence.knowledge.unified_intelligence_context import (
                         CompanyKnowledge,
                         LENSIntelligence,
                     )

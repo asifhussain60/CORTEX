@@ -84,8 +84,8 @@ class Calculator:
     
     def test_detect_patterns(self, tmp_path: Path) -> None:
         """Golden: Detect design patterns in code."""
-        from cortex.core.core.intelligence.pattern_detector import PatternDetector
-        from cortex.core.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         detector = PatternDetector()
         ast_intel = ASTIntelligenceEngine()

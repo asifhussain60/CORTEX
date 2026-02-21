@@ -48,12 +48,12 @@ import time
 from enum import Enum
 from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.core.knowledge.router import (
+from cortex.core.core.knowledge.router import (
     IntelligentKnowledgeRouter,
     OperationType,
     RoutingStrategy,
 )
-from cortex.core.knowledge import KnowledgeProvider, KnowledgeQueryResult
+from cortex.core.core.knowledge import KnowledgeProvider, KnowledgeQueryResult
 
 
 class OperationContextMapper:

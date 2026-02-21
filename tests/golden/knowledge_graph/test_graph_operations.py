@@ -138,8 +138,8 @@ class TestArchitecturalPatterns:
         """Golden: Detect MVC-like structure in codebase (pattern detection placeholder)."""
         # Note: Real MVC pattern detection requires analyzing class relationships
         # across multiple files. For Phase 24, we verify basic pattern detection works.
-        from cortex.core.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from cortex.core.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         detector = PatternDetector()
@@ -157,8 +157,8 @@ class TestArchitecturalPatterns:
     
     def test_detect_singleton_pattern(self, tmp_path: Path) -> None:
         """Golden: Detect singleton pattern in code."""
-        from cortex.core.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from cortex.core.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         detector = PatternDetector()

@@ -1,6 +1,6 @@
 """Tests for analytics service."""
 import pytest
-from cortex.core.knowledge.analytics import AnalyticsService, MetricSnapshot
+from cortex.core.core.knowledge.analytics import AnalyticsService, MetricSnapshot
 
 @pytest.fixture
 def analytics_service():

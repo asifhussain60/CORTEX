@@ -1,7 +1,7 @@
 """Tests for versioning service."""
 import pytest
 from datetime import datetime
-from cortex.core.knowledge.versioning import VersioningService, KnowledgeVersion
+from cortex.core.core.knowledge.versioning import VersioningService, KnowledgeVersion
 
 @pytest.fixture
 def versioning_service():

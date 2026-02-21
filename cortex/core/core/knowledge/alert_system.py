@@ -23,7 +23,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional, Set
 
-from cortex.core.knowledge.change_detection import (
+from cortex.core.core.knowledge.change_detection import (
     AnomalyDetection,
     AnomalyType,
     SeverityLevel,
