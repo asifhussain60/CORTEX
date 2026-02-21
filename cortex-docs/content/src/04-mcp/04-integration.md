@@ -1,462 +1,182 @@
-# MCP Integration Guide
+# MCP Integration
 
 ---
-title: MCP Integration Guide - Connecting Clients to CORTEX
+title: MCP Integration — IDE & Client Setup
 type: how-to
-audience: [Product Owners, Software Developers]
-word_count: 1500
-last_verified: 2026-02-15
-source_of_truth: cortex/04-mcp/ + deployment/
-format: diátaxis-how-to
-voice: third-person-blended
-feature: Production ()
-integration_modes: [VS Code, HTTP, WebSocket, CLI]
+audience: [Software Developers, Product Owners]
+last_verified: 2026-02-20
+source_of_truth: .vscode/settings.json + cortex/mcp/
 order: 4
 ---
 
-> **Notice:** Integration patterns reflect production-tested configurations as of . Organizations may adapt integration approaches based on infrastructure requirements and security policies. VS Code integration represents primary deployment mode with auto-starting MCP server. HTTP integration represents Iteration 11 target architecture.
+> **Brain analogy:** Integration is how the spinal cord **connects to different body parts**. VS Code is the hands (primary workspace), Cursor is the eyes (visual focus), Claude Desktop is the voice (conversational interface). Each connects through the same spinal cord (MCP), same reflexes (tools), same brain (CORTEX).
 
 ---
 
-**Purpose:** Guide for integrating with CORTEX MCP — connecting new sensory organs to the nervous system  
-**Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-15
+## VS Code Integration (Primary)
 
----
+### Auto-Start Configuration
 
-## Table of Contents
+CORTEX uses **Pylance-style MCP** — the server starts automatically when the workspace opens.
 
-- [Overview](#overview)
-- [Client Setup](#client-setup)
-- [VS Code Integration](#vs-code-integration)
-- [Programmatic Integration](#programmatic-integration)
-- [Authentication](#authentication)
-- [Best Practices](#best-practices)
-- [Related Documents](#related-documents)
-
----
-
-## Overview
-
-### Brain Analogy: Connecting New Sensory Organs
-
-When evolution develops a new sensory organ — like the pit viper's heat-sensing pit or the platypus's electroreception — it must connect to the existing nervous system through standardized nerve pathways. The organ is novel, but the wiring protocol is conserved.
-
-Integrating with CORTEX MCP follows the same pattern: your client (the new sensory organ) connects through a standardized protocol (the nervous system), and CORTEX's 21 orchestrators process the signals regardless of their origin.
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                 INTEGRATION OPTIONS                              │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  VS Code + Copilot                                        │  │
-│  │  • Native MCP support                                     │  │
-│  │  • Automatic tool discovery                               │  │
-│  │  • Chat-based invocation                                  │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  HTTP Client                                              │  │
-│  │  • REST-like access                                       │  │
-│  │  • JSON-RPC over HTTP POST                                │  │
-│  │  • Synchronous requests                                   │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  WebSocket Client                                         │  │
-│  │  • Persistent connection                                  │  │
-│  │  • Bidirectional communication                            │  │
-│  │  • Real-time notifications                                │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  CLI Client                                               │  │
-│  │  • Command-line access                                    │  │
-│  │  • Script integration                                     │  │
-│  │  • Piped I/O                                              │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Client Setup
-
-### Prerequisites
-
-1. CORTEX MCP server running
-2. Network access to server (default: localhost:8000)
-3. API key (if authentication enabled)
-
-### Start Server
-
-```bash
-# Development
-python -m cortex.mcp.server
-
-# Production
-uvicorn cortex.mcp.server:app --host 0.0.0.0 --port 8000
-
-# With custom configuration
-CORTEX_PORT=9000 CORTEX_LOG_LEVEL=DEBUG python -m cortex.mcp.server
-```
-
-### Verify Connection
-
-```bash
-# Health check
-curl http://localhost:8000/health
-
-# Expected response
-{"status": "healthy", "orchestrators": 21, "tools": 26, "operations": 90}
-```
-
----
-
-## VS Code Integration
-
-### Configuration
-
-Add to `.vscode/settings.json`:
-
+`.vscode/settings.json`:
 ```json
 {
-    "github.copilot.chat.mcpServers": {
-        "cortex": {
-            "command": "python",
-            "args": ["-m", "cortex.mcp.server", "--stdio"],
-            "cwd": "${workspaceFolder}"
-        }
+  "github.copilot.chat.mcpServers": {
+    "cortex": {
+      "command": "python3",
+      "args": ["-m", "cortex.mcp"],
+      "transport": "stdio",
+      "cwd": "${workspaceFolder}"
     }
+  }
 }
 ```
 
-### Alternative: HTTP Server
+### Verification Steps
 
+1. Open VS Code in the CORTEX workspace
+2. Open Copilot Chat (Ctrl+Shift+I / Cmd+Shift+I)
+3. Type: "Call `cortex_sample_tool`"
+4. If it responds → MCP is active
+5. Type: "Call `cortex_tools_catalog`" → see all 23 tools
+
+### VS Code Tasks Integration
+
+CORTEX provides 9 pre-configured tasks in `.vscode/tasks.json`:
+
+| Task | Command |
+|------|---------|
+| Smoke Tests (Parallel) | `pytest tests/ -m smoke -n auto` |
+| Unit Tests (Parallel — loadscope) | `pytest tests/unit/ -n auto --dist loadscope` |
+| Integration Tests (4 workers) | `pytest tests/integration/ -n 4 --dist loadfile` |
+| Golden Tests (Serial) | `pytest tests/golden/ -p no:xdist` |
+| Full Parallel Suite | `pytest tests/ -n auto --dist loadscope` |
+| Debug (Serial — no xdist) | `pytest tests/ -p no:xdist --tb=long -v -s` |
+| Full Test Suite | `pytest tests/ -v --tb=short` |
+| Full Test Suite (Live) | `pytest tests/ -v --tb=short` (live output) |
+| Full Suite — No Stop on Fail | `pytest tests/ -v --continue-on-collection-errors` |
+
+---
+
+## Cursor Integration
+
+Cursor supports MCP servers natively. Same configuration:
+
+`.cursor/mcp.json`:
 ```json
 {
-    "github.copilot.chat.mcpServers": {
-        "cortex": {
-            "url": "http://localhost:8000/mcp"
-        }
+  "mcpServers": {
+    "cortex": {
+      "command": "python3",
+      "args": ["-m", "cortex.mcp"],
+      "transport": "stdio",
+      "cwd": "/path/to/CORTEX"
     }
+  }
 }
-```
-
-### Usage in Copilot Chat
-
-```
-# List available tools
-@cortex /tools
-
-# Analyze code
-@cortex analyze src/auth/service.py
-
-# Implement feature
-@cortex implement OAuth support in auth module
-
-# Audit codebase
-@cortex /audit
-```
-
-### Tool Invocation
-
-Copilot automatically discovers and invokes MCP tools:
-
-```
-User: Analyze the authentication module
-
-Copilot: [Invoking cortex_lens_analyze with target="src/auth/"]
-
-Analysis Results:
-- 5 Python files analyzed
-- 3 classes, 15 methods found
-- 2 security patterns detected
-...
 ```
 
 ---
 
-## Programmatic Integration
+## Claude Desktop Integration
 
-### Python Client
+Claude Desktop supports MCP through its settings:
+
+`claude_desktop_config.json`:
+```json
+{
+  "mcpServers": {
+    "cortex": {
+      "command": "python3",
+      "args": ["-m", "cortex.mcp"],
+      "transport": "stdio",
+      "cwd": "/path/to/CORTEX"
+    }
+  }
+}
+```
+
+---
+
+## Custom JSON-RPC Client
+
+Any application that speaks JSON-RPC 2.0 over stdio can connect:
 
 ```python
-import httpx
+import subprocess
 import json
-from typing import Any, Dict, Optional
 
-class CortexClient:
-    """CORTEX MCP client."""
-    
-    def __init__(
-        self,
-        base_url: str = "http://localhost:8000",
-        api_key: Optional[str] = None
-    ):
-        self.base_url = base_url
-        self.headers = {"Content-Type": "application/json"}
-        if api_key:
-            self.headers["Authorization"] = f"Bearer {api_key}"
-        self._request_id = 0
-    
-    def _next_id(self) -> int:
-        self._request_id += 1
-        return self._request_id
-    
-    async def call_tool(
-        self,
-        tool: str,
-        arguments: Dict[str, Any]
-    ) -> Dict[str, Any]:
-        """Call an MCP tool."""
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                f"{self.base_url}/mcp",
-                headers=self.headers,
-                json={
-                    "jsonrpc": "2.0",
-                    "method": "tools/call",
-                    "params": {
-                        "name": tool,
-                        "arguments": arguments
-                    },
-                    "id": self._next_id()
-                }
-            )
-            
-            result = response.json()
-            
-            if "error" in result:
-                raise CortexError(result["error"])
-            
-            return result["result"]
-    
-    async def list_tools(self) -> list:
-        """List available tools."""
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                f"{self.base_url}/mcp",
-                headers=self.headers,
-                json={
-                    "jsonrpc": "2.0",
-                    "method": "tools/list",
-                    "id": self._next_id()
-                }
-            )
-            return response.json()["result"]["tools"]
-
-# Usage
-async def main():
-    client = CortexClient()
-    
-    # List tools
-    tools = await client.list_tools()
-    print(f"Available tools: {len(tools)}")
-    
-    # Analyze code
-    result = await client.call_tool(
-        "cortex_lens_analyze",
-        {"target": "src/auth/service.py"}
-    )
-    print(result)
-```
-
-### TypeScript Client
-
-```typescript
-interface MCPRequest {
-    jsonrpc: "2.0";
-    method: string;
-    params?: Record<string, unknown>;
-    id: number;
-}
-
-interface MCPResponse {
-    jsonrpc: "2.0";
-    result?: unknown;
-    error?: {
-        code: number;
-        message: string;
-        data?: unknown;
-    };
-    id: number;
-}
-
-class CortexClient {
-    private baseUrl: string;
-    private requestId = 0;
-
-    constructor(baseUrl = "http://localhost:8000") {
-        this.baseUrl = baseUrl;
-    }
-
-    async callTool<T>(tool: string, args: Record<string, unknown>): Promise<T> {
-        const response = await fetch(`${this.baseUrl}/mcp`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                jsonrpc: "2.0",
-                method: "tools/call",
-                params: { name: tool, arguments: args },
-                id: ++this.requestId
-            } as MCPRequest)
-        });
-
-        const result: MCPResponse = await response.json();
-
-        if (result.error) {
-            throw new Error(result.error.message);
-        }
-
-        return result.result as T;
-    }
-
-    async listTools(): Promise<Array<{ name: string; description: string }>> {
-        const response = await fetch(`${this.baseUrl}/mcp`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                jsonrpc: "2.0",
-                method: "tools/list",
-                id: ++this.requestId
-            })
-        });
-
-        const result: MCPResponse = await response.json();
-        return (result.result as any).tools;
-    }
-}
-
-// Usage
-const client = new CortexClient();
-const tools = await client.listTools();
-console.log(`Available tools: ${tools.length}`);
-```
-
-### CLI Integration
-
-```bash
-#!/bin/bash
-# cortex-cli.sh
-
-CORTEX_URL="${CORTEX_URL:-http://localhost:8000}"
-
-cortex_call() {
-    local tool=$1
-    local args=$2
-    
-    curl -s -X POST "$CORTEX_URL/mcp" \
-        -H "Content-Type: application/json" \
-        -d "{
-            \"jsonrpc\": \"2.0\",
-            \"method\": \"tools/call\",
-            \"params\": {
-                \"name\": \"$tool\",
-                \"arguments\": $args
-            },
-            \"id\": 1
-        }" | jq '.result'
-}
-
-# Usage
-cortex_call "cortex_lens_analyze" '{"target": "src/app.py"}'
-```
-
----
-
-## Authentication
-
-### API Key Authentication
-
-```python
-# Server configuration
-CORTEX_API_KEY_REQUIRED=true
-CORTEX_API_KEYS=key1,key2,key3
-
-# Client usage
-client = CortexClient(api_key="your-api-key")
-```
-
-### Header Format
-
-```
-Authorization: Bearer <api-key>
-```
-
-### Request with Authentication
-
-```bash
-curl -X POST http://localhost:8000/mcp \
-    -H "Content-Type: application/json" \
-    -H "Authorization: Bearer your-api-key" \
-    -d '{"jsonrpc": "2.0", "method": "tools/list", "id": 1}'
-```
-
----
-
-## Best Practices
-
-### Error Handling
-
-```python
-class CortexError(Exception):
-    """CORTEX error."""
-    
-    def __init__(self, error: dict):
-        self.code = error["code"]
-        self.message = error["message"]
-        self.data = error.get("data")
-        super().__init__(self.message)
-
-async def safe_call(client, tool, args):
-    """Call tool with error handling."""
-    try:
-        return await client.call_tool(tool, args)
-    except CortexError as e:
-        if e.code == -32005:  # Rate limited
-            await asyncio.sleep(e.data.get("retry_after", 30))
-            return await client.call_tool(tool, args)
-        elif e.code == -32004:  # Governance violation
-            logger.error(f"Governance violation: {e.data}")
-            raise
-        else:
-            raise
-```
-
-### Retry Logic
-
-```python
-from tenacity import retry, stop_after_attempt, wait_exponential
-
-@retry(
-    stop=stop_after_attempt(3),
-    wait=wait_exponential(multiplier=1, min=1, max=10)
+# Start MCP server
+proc = subprocess.Popen(
+    ["python3", "-m", "cortex.mcp"],
+    stdin=subprocess.PIPE,
+    stdout=subprocess.PIPE,
+    stderr=subprocess.PIPE,
+    cwd="/path/to/CORTEX"
 )
-async def call_with_retry(client, tool, args):
-    """Call tool with automatic retry."""
-    return await client.call_tool(tool, args)
-```
 
-### Timeout Configuration
+# Send tools/list request
+request = {
+    "jsonrpc": "2.0",
+    "method": "tools/list",
+    "params": {},
+    "id": 1
+}
+proc.stdin.write(json.dumps(request).encode() + b"\n")
+proc.stdin.flush()
 
-```python
-async def call_with_timeout(client, tool, args, timeout=30):
-    """Call tool with timeout."""
-    async with httpx.AsyncClient(timeout=timeout) as http:
-        return await client.call_tool(tool, args)
+# Read response
+response = json.loads(proc.stdout.readline())
+# response["result"]["tools"] → list of 23 tools
 ```
 
 ---
 
-## Related Documents
+## Environment Requirements
 
-- [MCP Overview](overview.md) — Introduction
-- [MCP Protocol](protocol.md) — Protocol details
-- [Tools Catalog](tools-catalog.md) — All tools
+| Requirement | Version |
+|-------------|---------|
+| Python | 3.9+ |
+| VS Code | 1.85+ (for MCP support) |
+| Copilot | Latest (with MCP tool calling) |
+| Dependencies | `requirements.txt` (pip install -r) |
+
+### Quick Environment Check
+
+```bash
+# Verify Python version
+python3 --version  # Must be 3.9+
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Verify MCP server starts
+python3 -m cortex.mcp --help
+```
+
+Or use the MCP tool: `cortex_verify` — checks Python version, dependencies, and MCP connectivity.
 
 ---
 
-*Part of CORTEX Architecture Documentation — Updated 2026-02-13*
+## Troubleshooting
+
+| Problem | Cause | Solution |
+|---------|-------|----------|
+| "MCP server not found" | settings.json misconfigured | Verify `cwd` path and `command` |
+| Tools not appearing | Server failed to start | Check `python3 -m cortex.mcp` in terminal |
+| Import errors | Missing dependencies | Run `pip install -r requirements.txt` |
+| Slow startup | Large workspace scan | First launch scans workspace; subsequent launches are cached |
+| Tool timeout | Long-running operation | Some tools (LENS analysis, onboarding) can take 30-60s |
+
+---
+
+## Practical Examples
+
+**Product Owner:** "CORTEX works in VS Code, Cursor, and Claude Desktop with the same configuration. Teams choose their preferred IDE — the tools are identical."
+
+**Developer:** "I open VS Code and start coding. Copilot Chat has access to all 23 CORTEX tools. I can ask it to analyze code, run tests, check governance compliance, or onboard a new repo — all without leaving the editor."
+
+---
+
+*Verified against MCP integration configuration · 20 February 2026*

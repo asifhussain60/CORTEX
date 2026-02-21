@@ -1,500 +1,139 @@
 # Observability
 
 ---
-title: CORTEX Observability - Metrics, Logs, and Traces
-type: explanation
-audience: [Business Leaders, Product Owners, Software Developers]
-word_count: 1890
-last_verified: 2026-02-15
-source_of_truth: cortex/prometheus_metrics.py + cortex/opentelemetry_tracing.py + deployment/prometheus.yml
-format: diátaxis-explanation
-voice: third-person-neutral
-feature: Production ()
-diagrams: ASCII observability stack, Grafana dashboard layout
-order: 4
+title: Observability — Tracing, Metrics & Logging
+type: reference
+audience: [Software Developers, Product Owners]
+last_verified: 2026-02-20
+source_of_truth: cortex/infrastructure/ + cortex/observability/ + deployment/prometheus.yml
+order: 5
 ---
 
-> **Notice:** Observability implementation reflects production deployment patterns as of . Organizations may substitute equivalent tools (Prometheus → Datadog, Grafana → Kibana) while maintaining interface compatibility. OpenTelemetry ensures vendor portability.
+> **Brain analogy:** Observability is **proprioception** — the brain's awareness of its own body. You know where your hand is without looking at it. CORTEX knows its own state — latency, throughput, error rates — without external monitoring.
 
 ---
 
-## Executive Summary
+## Three Pillars
 
-CORTEX implements comprehensive observability through Prometheus metrics, structured logging, and OpenTelemetry distributed tracing. Organizations benefit from operational visibility reducing mean time to resolution (MTTR) by 70-85% compared to log-only monitoring [Business Leaders]. Product teams gain insight into user impact through service-level indicators (SLIs) and error rate tracking [Product Owners]. The observability stack captures 20+ metrics (request latency, cache hit rates, orchestrator timing), structured JSON logs with context propagation, and distributed traces across MCP boundaries [Software Developers].
+### 1. Tracing (OpenTelemetry)
 
-**Three Pillars of Observability:**
-- **Metrics** — Prometheus scrapes `/metrics` endpoint every 15s, captures P50/P95/P99 latencies, cache hit rates (60-85%), orchestrator count (20+), error rates (<0.5%)
-- **Logging** — Structlog emits JSON logs with correlation IDs, log levels (DEBUG/INFO/WARN/ERROR), contextual metadata (user_id, intent, orchestrator), searchable via Loki
-- **Tracing** — OpenTelemetry spans track request flow across MCP Gateway → IntentRouter → Orchestrator → Tools, visualized in Jaeger with flame graphs
+| Component | Module |
+|-----------|--------|
+| Provider | `cortex/infrastructure/telemetry_provider.py` |
+| Integration | `cortex/infrastructure/trace_integration.py` |
+| Tracing | `cortex/infrastructure/tracing.py` |
+| Trace Logger | `cortex/infrastructure/orchestrator_trace_logger.py` |
+| Top-level | `cortex/opentelemetry_tracing.py` |
 
-**Key Dashboards:**
-1. **System Health** — Request rate, error rate, P95 latency, cache hit rate (5-minute refresh)
-2. **Orchestrator Performance** — Execution time per orchestrator, success rate, hot orchestrators (real-time)
-3. **LENS Intelligence** — Analysis duration per analyzer (L→E→N→S), cache effectiveness, accuracy rates (95%+)
-4. **Business Metrics** — Daily active repos, top intents (IMPLEMENT 35%, ANALYZE 28%, FIX 22%), user engagement
+**What's traced:**
+- Every MCP tool call (tool name, duration, result)
+- Every orchestrator execution (intent type, routing, duration)
+- Every LENS analysis (analyzers invoked, synthesis time)
+- Every governance check (rule evaluated, pass/fail)
 
-**Alerting Thresholds:**
-- **CRITICAL** — Error rate >5% for 5min, P95 latency >100ms for 10min, cache hit rate <40% for 15min
-- **WARNING** — Error rate >1% for 10min, P95 latency >50ms for 15min, orchestrator failures >10/hour
-- **INFO** — Deployment events, configuration changes, auto-scaling triggers
+### 2. Metrics (Prometheus)
 
-**Performance Impact:** Metrics collection overhead <0.5ms per request, logging <0.2ms (async), tracing <1ms (sampled at 10%). Total observability overhead: <2ms (~5% of request latency).
+| Component | Module |
+|-----------|--------|
+| Metrics | `cortex/infrastructure/metrics_exporter.py` |
+| Brain Health | `cortex/infrastructure/brain_health_metrics.py` |
+| Prometheus | `cortex/infrastructure/infrastructure_prometheus.py` |
+| Config (dev) | `deployment/prometheus.yml` |
+| Config (prod) | `deployment/prometheus.prod.yml` |
+| Dashboards | `deployment/grafana-dashboards/` |
+| Top-level | `cortex/prometheus_metrics.py` |
 
----
+**Key metrics:**
+- `cortex_request_duration_seconds` — Request processing time
+- `cortex_tool_invocations_total` — MCP tool call count
+- `cortex_test_execution_seconds` — Test suite duration
+- `cortex_governance_violations_total` — Rule violation count
+- `cortex_lens_analysis_seconds` — LENS pipeline duration
+- `cortex_circuit_breaker_state` — Circuit breaker open/closed
 
-## Overview
+### 3. Logging (Structured)
 
-CORTEX implements the three pillars of observability (metrics, logs, traces) enabling teams to understand system behavior, diagnose issues, and optimize performance [Software Developers].
+| Component | Module |
+|-----------|--------|
+| Structured Logger | `cortex/infrastructure/structured_logger.py` |
+| Tiered Logger | `cortex/infrastructure/tiered_logger.py` |
+| Log Growth Monitor | `cortex/infrastructure/log_growth_monitor.py` |
+| Database Log Rotation | `cortex/infrastructure/database_log_rotation.py` |
+| Health Check Service | `cortex/health_check_service.py` |
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                 OBSERVABILITY STACK                              │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │                     CORTEX Services                      │   │
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐              │   │
-│  │  │ Metrics  │  │  Logs    │  │  Traces  │              │   │
-│  │  │ Exporter │  │ Emitter  │  │ Exporter │              │   │
-│  │  └────┬─────┘  └────┬─────┘  └────┬─────┘              │   │
-│  └───────┼─────────────┼─────────────┼─────────────────────┘   │
-│          │             │             │                          │
-│          ▼             ▼             ▼                          │
-│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐           │
-│  │  Prometheus  │ │    Loki      │ │    Jaeger    │           │
-│  │  (Metrics)   │ │   (Logs)     │ │  (Traces)    │           │
-│  └──────┬───────┘ └──────┬───────┘ └──────┬───────┘           │
-│         │                │                │                     │
-│         └────────────────┼────────────────┘                     │
-│                          │                                       │
-│                          ▼                                       │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │                      Grafana                             │   │
-│  │              (Unified Visualization)                     │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
+**Log tiers:**
+- `DEBUG` — Detailed execution flow
+- `INFO` — Key events (tool calls, orchestrator routing)
+- `WARNING` — Degraded state, retries
+- `ERROR` — Failures requiring attention
+- `CRITICAL` — System-level failures
 
 ---
 
-## Metrics
+## Observability Module
 
-### Prometheus Integration
-
-```python
-from prometheus_client import Counter, Histogram, Gauge, generate_latest
-
-# Request metrics
-REQUEST_COUNT = Counter(
-    'cortex_requests_total',
-    'Total requests',
-    ['method', 'endpoint', 'status']
-)
-
-REQUEST_LATENCY = Histogram(
-    'cortex_request_duration_seconds',
-    'Request latency',
-    ['method', 'endpoint'],
-    buckets=[0.01, 0.05, 0.1, 0.25, 0.5, 1.0, 2.5, 5.0, 10.0]
-)
-
-# Cache metrics
-CACHE_HITS = Counter(
-    'cortex_cache_hits_total',
-    'Cache hits',
-    ['cache_level']  # l1, l2, l3
-)
-
-CACHE_MISSES = Counter(
-    'cortex_cache_misses_total',
-    'Cache misses',
-    ['cache_level']
-)
-
-# Orchestrator metrics
-ORCHESTRATOR_COUNT = Gauge(
-    'cortex_orchestrators_registered',
-    'Number of registered orchestrators'
-)
-
-ORCHESTRATOR_LATENCY = Histogram(
-    'cortex_orchestrator_duration_seconds',
-    'Orchestrator execution time',
-    ['orchestrator', 'intent']
-)
-
-# LENS metrics
-LENS_ANALYSIS_TIME = Histogram(
-    'cortex_lens_analysis_seconds',
-    'LENS analysis duration',
-    ['analyzer']
-)
-
-# Middleware
-class MetricsMiddleware:
-    async def __call__(self, request, call_next):
-        start = time.time()
-        
-        response = await call_next(request)
-        
-        duration = time.time() - start
-        REQUEST_COUNT.labels(
-            method=request.method,
-            endpoint=request.url.path,
-            status=response.status_code
-        ).inc()
-        
-        REQUEST_LATENCY.labels(
-            method=request.method,
-            endpoint=request.url.path
-        ).observe(duration)
-        
-        return response
-```
-
-### Key Metrics
-
-| Metric | Type | Description |
-|--------|------|-------------|
-| `cortex_requests_total` | Counter | Total requests |
-| `cortex_request_duration_seconds` | Histogram | Request latency |
-| `cortex_cache_hits_total` | Counter | Cache hits |
-| `cortex_orchestrators_registered` | Gauge | Active orchestrators |
-| `cortex_lens_analysis_seconds` | Histogram | LENS analysis time |
-| `cortex_errors_total` | Counter | Error count |
-
-### Prometheus Configuration
-
-```yaml
-# prometheus.yml
-global:
-  scrape_interval: 15s
-  evaluation_interval: 15s
-
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets: ['alertmanager:9093']
-
-rule_files:
-  - /etc/prometheus/rules/*.yaml
-
-scrape_configs:
-  - job_name: 'cortex-mcp'
-    kubernetes_sd_configs:
-      - role: pod
-    relabel_configs:
-      - source_labels: [__meta_kubernetes_pod_label_app]
-        action: keep
-        regex: cortex-mcp
-    metrics_path: /metrics
-
-  - job_name: 'redis'
-    static_configs:
-      - targets: ['redis-exporter:9121']
-```
+| Component | Location |
+|-----------|----------|
+| Observability package | `cortex/observability/` |
+| Alert Manager | `cortex/infrastructure/alert_manager.py` |
+| Threshold Monitor | `cortex/infrastructure/threshold_monitor.py` |
+| Progress Tracker | `cortex/infrastructure/progress_tracker.py` |
+| Progress Aggregator | `cortex/infrastructure/progress_aggregator.py` |
 
 ---
 
-## Logging
+## Audit Trail
 
-### Structured Logging
+All operations are recorded in `CortexAuditDB` (SQLite WAL):
 
-```python
-import structlog
+| Component | Module |
+|-----------|--------|
+| Audit Database | `cortex/infrastructure/audit_db.py` |
+| Audit Logger | `cortex/infrastructure/audit_logger.py` |
+| Enhanced Audit | `cortex/infrastructure/enhanced_audit_logger.py` |
+| Hash Chain | `cortex/infrastructure/audit_hash_chain.py` |
+| Evidence Bundle | `cortex/infrastructure/evidence_bundle.py` |
+| Event Replay | `cortex/infrastructure/event_replay_debugger.py` |
 
-# Configure structlog
-structlog.configure(
-    processors=[
-        structlog.stdlib.filter_by_level,
-        structlog.contextvars.merge_contextvars,
-        structlog.processors.add_log_level,
-        structlog.processors.TimeStamper(fmt="iso"),
-        structlog.processors.StackInfoRenderer(),
-        structlog.processors.format_exc_info,
-        structlog.processors.JSONRenderer()
-    ],
-    wrapper_class=structlog.stdlib.BoundLogger,
-    context_class=dict,
-    logger_factory=structlog.stdlib.LoggerFactory(),
-    cache_logger_on_first_use=True,
-)
-
-logger = structlog.get_logger()
-
-# Usage
-async def handle_request(request: MCPRequest):
-    log = logger.bind(
-        request_id=request.id,
-        tool=request.tool,
-        client_id=request.client_id
-    )
-    
-    log.info("processing_request")
-    
-    try:
-        result = await process(request)
-        log.info("request_completed", status="success")
-        return result
-    except Exception as e:
-        log.error("request_failed", error=str(e), exc_info=True)
-        raise
-```
-
-### Log Format
-
-```json
-{
-    "timestamp": "2026-02-10T14:30:00.123456Z",
-    "level": "info",
-    "event": "processing_request",
-    "request_id": "req-12345",
-    "tool": "cortex_lens_analyze",
-    "client_id": "client-001",
-    "service": "cortex-mcp",
-    "pod": "cortex-mcp-abc123"
-}
-```
-
-### Log Levels
-
-| Level | Usage |
-|-------|-------|
-| DEBUG | Detailed debugging info |
-| INFO | Normal operations |
-| WARNING | Potential issues |
-| ERROR | Errors requiring attention |
-| CRITICAL | System failures |
+**Hash chain integrity:** Each audit entry includes a cryptographic hash of the previous entry, creating a tamper-evident chain.
 
 ---
 
-## Tracing
+## Resilience Observability
 
-### OpenTelemetry Integration
+Resilience patterns are observable through metrics and logs:
 
-```python
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.jaeger.thrift import JaegerExporter
-
-# Configure tracing
-trace.set_tracer_provider(TracerProvider())
-tracer = trace.get_tracer("cortex.mcp")
-
-# Jaeger exporter
-jaeger_exporter = JaegerExporter(
-    agent_host_name=os.environ.get("JAEGER_HOST", "jaeger"),
-    agent_port=int(os.environ.get("JAEGER_PORT", 6831)),
-)
-
-trace.get_tracer_provider().add_span_processor(
-    BatchSpanProcessor(jaeger_exporter)
-)
-
-# Usage
-async def handle_request(request: MCPRequest):
-    with tracer.start_as_current_span(
-        "handle_request",
-        attributes={
-            "request.id": request.id,
-            "request.tool": request.tool,
-        }
-    ) as span:
-        # Intent classification
-        with tracer.start_as_current_span("classify_intent"):
-            intent = await classify_intent(request)
-            span.set_attribute("intent", intent.value)
-        
-        # LENS analysis
-        with tracer.start_as_current_span("lens_analysis"):
-            context = await lens_analyze(request.target)
-        
-        # Orchestrator execution
-        with tracer.start_as_current_span("orchestrator_execution"):
-            result = await orchestrator.process(request, context)
-        
-        return result
-```
-
-### Trace Structure
-
-```
-├─ handle_request (root span)
-│  ├─ classify_intent
-│  ├─ lens_analysis
-│  │  ├─ git_analyzer
-│  │  ├─ ast_analyzer
-│  │  └─ comment_analyzer
-│  ├─ orchestrator_execution
-│  │  ├─ validation
-│  │  └─ execution
-│  └─ response_formatting
-```
+| Pattern | Module | Observable Signal |
+|---------|--------|-------------------|
+| Circuit Breaker | `circuit_breaker.py` | State transitions (closed → open → half-open) |
+| Retry Handler | `retry_handler.py` | Retry count, backoff duration |
+| Graceful Degradation | `graceful_degradation.py` | Degradation events |
+| Fault Isolation | `fault_isolator.py` | Isolated component count |
+| Bulkhead | `bulkhead_manager.py` | Resource partition utilization |
+| Rate Limiter | `rate_limiter.py` | Throttled requests |
+| DLQ Inspector | `dlq_inspector.py` | Dead letter queue depth |
 
 ---
 
-## Alerting
+## Grafana Dashboards
 
-### Alert Rules
+Pre-built dashboards in `deployment/grafana-dashboards/`:
 
-```yaml
-# alerts.yaml
-groups:
-  - name: cortex-alerts
-    rules:
-      # High error rate
-      - alert: HighErrorRate
-        expr: |
-          sum(rate(cortex_errors_total[5m])) 
-          / sum(rate(cortex_requests_total[5m])) > 0.05
-        for: 5m
-        labels:
-          severity: critical
-        annotations:
-          summary: "High error rate detected"
-          description: "Error rate is {{ $value | humanizePercentage }}"
-      
-      # High latency
-      - alert: HighLatency
-        expr: |
-          histogram_quantile(0.95, 
-            rate(cortex_request_duration_seconds_bucket[5m])
-          ) > 2.0
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: "High P95 latency"
-          description: "P95 latency is {{ $value | humanizeDuration }}"
-      
-      # Low cache hit rate
-      - alert: LowCacheHitRate
-        expr: |
-          sum(rate(cortex_cache_hits_total[5m]))
-          / (sum(rate(cortex_cache_hits_total[5m])) 
-             + sum(rate(cortex_cache_misses_total[5m]))) < 0.5
-        for: 10m
-        labels:
-          severity: warning
-        annotations:
-          summary: "Low cache hit rate"
-          description: "Cache hit rate is {{ $value | humanizePercentage }}"
-      
-      # Orchestrator unavailable
-      - alert: OrchestratorDown
-        expr: cortex_orchestrators_registered < 20
-        for: 2m
-        labels:
-          severity: critical
-        annotations:
-          summary: "Orchestrators unavailable"
-          description: "Only {{ $value }} orchestrators registered"
-```
-
-### Alert Routing
-
-```yaml
-# alertmanager.yml
-route:
-  receiver: 'default'
-  group_by: ['alertname', 'severity']
-  group_wait: 30s
-  group_interval: 5m
-  repeat_interval: 4h
-  routes:
-    - match:
-        severity: critical
-      receiver: 'pagerduty'
-    - match:
-        severity: warning
-      receiver: 'slack'
-
-receivers:
-  - name: 'default'
-    email_configs:
-      - to: 'ops@example.com'
-  
-  - name: 'pagerduty'
-    pagerduty_configs:
-      - service_key: '<key>'
-  
-  - name: 'slack'
-    slack_configs:
-      - api_url: '<webhook>'
-        channel: '#cortex-alerts'
-```
+- **System Overview** — Request rate, error rate, latency P50/P95/P99
+- **Orchestrator Health** — Per-orchestrator execution time and error rate
+- **Test Pipeline** — Test suite duration, pass rate, golden test status
+- **Governance** — Rule violations over time, compliance percentage
 
 ---
 
-## Dashboards
+## Practical Examples
 
-### Grafana Dashboard (JSON)
+**Business Leader:** "Every action is traceable. The audit trail is tamper-proof — hash-chain verification means nobody can edit history without detection."
 
-```json
-{
-  "title": "CORTEX Overview",
-  "panels": [
-    {
-      "title": "Request Rate",
-      "type": "graph",
-      "targets": [
-        {
-          "expr": "sum(rate(cortex_requests_total[5m]))",
-          "legendFormat": "Requests/sec"
-        }
-      ]
-    },
-    {
-      "title": "Latency Distribution",
-      "type": "heatmap",
-      "targets": [
-        {
-          "expr": "sum(rate(cortex_request_duration_seconds_bucket[5m])) by (le)"
-        }
-      ]
-    },
-    {
-      "title": "Error Rate",
-      "type": "gauge",
-      "targets": [
-        {
-          "expr": "sum(rate(cortex_errors_total[5m])) / sum(rate(cortex_requests_total[5m]))"
-        }
-      ]
-    },
-    {
-      "title": "Cache Hit Rate",
-      "type": "stat",
-      "targets": [
-        {
-          "expr": "sum(rate(cortex_cache_hits_total[5m])) / (sum(rate(cortex_cache_hits_total[5m])) + sum(rate(cortex_cache_misses_total[5m])))"
-        }
-      ]
-    }
-  ]
-}
-```
+**Product Owner:** "Grafana dashboards show real-time health. I can see test pass rates, governance compliance, and orchestrator performance at a glance."
 
-### Dashboard Categories
-
-| Dashboard | Purpose |
-|-----------|---------|
-| CORTEX Overview | High-level system health |
-| Request Latency | P50/P95/P99 latencies |
-| Error Analysis | Error rates by type |
-| Cache Performance | Hit rates, evictions |
-| Orchestrator Status | Registration, latency |
+**Developer:** "When something fails, I follow the trace — OpenTelemetry gives me the full call path from MCP tool call through orchestrator to LENS analysis. The structured logger shows exact parameters and return values."
 
 ---
 
-## Related Documents
-
-- [Infrastructure Overview](overview.md) — Architecture
-- [Deployment](deployment.md) — Deployment
-- [Scalability](scalability.md) — Scaling
-
----
-
-*Part of CORTEX Architecture Documentation*
+*Verified against `cortex/infrastructure/` and `deployment/` · 20 February 2026*

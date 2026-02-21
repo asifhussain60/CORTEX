@@ -1,370 +1,154 @@
-# MCP Versioning
+# MCP Versioning & Evolution
 
 ---
-title: MCP Versioning Strategy - Semantic Version Management
+title: MCP Versioning & Lifecycle
 type: reference
-audience: [Product Owners, Software Developers]
-word_count: 1200
-last_verified: 2026-02-15
-source_of_truth: cortex/04-mcp/versioning.py + cortex-registry/
-format: diátaxis-reference
-voice: third-person-neutral
-feature: Production ()
-version_schema: semantic (major.minor.patch)
+audience: [Software Developers, Product Owners]
+last_verified: 2026-02-20
+source_of_truth: cortex/mcp/ + cortex-registry/planning/cortex-refactor-master.yaml
 order: 5
 ---
 
-> **Notice:** Versioning strategy follows semantic versioning principles. Breaking changes are rare and well-announced. Deprecated tools continue to function during sunset periods (e.g., 2026-03-31 for 7 deprecated orchestrators). Organizations should monitor deprecation notices and plan migrations accordingly.
+> **Brain analogy:** Versioning is **neuroplasticity** — the brain's ability to reorganize itself over time. New reflexes are added, old ones refined, but the spinal cord (transport) stays the same. A baby's reflexes evolve into adult motor skills without replacing the nervous system.
 
 ---
 
-**Purpose:** Version management for CORTEX MCP tools — evolving the nervous system safely  
-**Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-15
+## Current Version
+
+| Property | Value |
+|----------|-------|
+| MCP Version | v2 |
+| Protocol | JSON-RPC 2.0 |
+| Transport | stdio |
+| Canonical Tools | 23 |
+| Tool Files | 37 Python files |
+| Tool Base Class | `ConsolidatedTool` |
 
 ---
 
-## Table of Contents
+## Version History
 
-- [Overview](#overview)
-- [Version Schema](#version-schema)
-- [Compatibility](#compatibility)
-- [Deprecation](#deprecation)
-- [Migration](#migration)
-- [Related Documents](#related-documents)
+### v1 → v2 Migration (Phase 03)
 
----
+The 12-phase Cohesive Brain Refactor consolidated tools:
 
-## Overview
+| Aspect | v1 | v2 |
+|--------|----|----|
+| Package | `cortex_intelligence`, `cortex_lens` (separate) | `cortex` (single canonical) |
+| Tool registration | Scattered across modules | `ConsolidatedTool` base class |
+| Transport | Mixed (HTTP + stdio) | stdio only |
+| Governance | Optional validation | Mandatory governance gates |
+| Entry point | Any tool directly | `cortex_process_request` mandatory |
 
-### Brain Analogy: Evolutionary Conservation
+### Phase 12 Consolidation (Planned)
 
-Evolution doesn't rewrite the nervous system with each generation — it **extends** it. The basic neurotransmitters (serotonin, dopamine) have been conserved for hundreds of millions of years. New capabilities are added through new receptor subtypes and new neural circuits, while old pathways remain functional.
+Phase 12 of the Cohesive Brain Refactor targets consolidation of tool files:
 
-CORTEX versions its MCP tools the same way. Breaking changes are rare and well-announced (like a major evolutionary transition). New capabilities are added as backward-compatible extensions. Deprecated tools continue to function during a sunset period, like vestigial structures that still work but are no longer primary.
-
-CORTEX uses semantic versioning for both the MCP protocol and individual tools.
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                   VERSION MANAGEMENT                             │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  Protocol Version                                         │  │
-│  │  • MCP specification version                              │  │
-│  │  • Format: YYYY-MM-DD (e.g., 2024-11-05)                 │  │
-│  │  • Negotiated during initialize                           │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  Server Version                                           │  │
-│  │  • CORTEX release version                                 │  │
-│  │  • Format: major.minor.patch                              │  │
-│  │  • Returned in serverInfo                                 │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐  │
-│  │  Tool Versions                                            │  │
-│  │  • Individual tool versions                               │  │
-│  │  • Format: major.minor.patch                              │  │
-│  │  • Independent of server version                          │  │
-│  └──────────────────────────────────────────────────────────┘  │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
+- **Current:** 37 Python files across `tools/`, `deployment/`, `multi_repo/`, `toolkit/`
+- **Target:** Consolidate to 23 canonical files (one per tool)
+- **Approach:** Merge specialized modules into their parent tools
 
 ---
 
-## Version Schema
+## Tool Naming Convention
 
-### Semantic Versioning
+All canonical MCP tools follow the pattern:
 
 ```
-{major}.{minor}.{patch}
-
-major: Breaking changes
-minor: New features (backward compatible)
-patch: Bug fixes (backward compatible)
-
-Examples:
-  1.0.0 → Initial release
-  1.1.0 → New parameter added
-  1.1.1 → Bug fix
-  2.0.0 → Breaking parameter change
+cortex_{domain}_{action}
 ```
 
-### Protocol Version
+| Pattern | Examples |
+|---------|----------|
+| `cortex_{action}` | `cortex_verify`, `cortex_ask`, `cortex_vacuum` |
+| `cortex_{domain}` | `cortex_governance`, `cortex_lens`, `cortex_workflow` |
+| `cortex_{domain}_{action}` | `cortex_process_request`, `cortex_validate_request`, `cortex_tools_catalog` |
 
-```json
-// Initialize request
-{
-    "jsonrpc": "2.0",
-    "method": "initialize",
-    "params": {
-        "protocolVersion": "2024-11-05",
-        "clientInfo": {
-            "name": "my-client",
-            "version": "1.0.0"
-        }
-    },
-    "id": 0
-}
+### Registration Rules
 
-// Initialize response
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "protocolVersion": "2024-11-05",
-        "serverInfo": {
-            "name": "cortex-mcp",
-            "version": "1.5.0"
-        }
-    },
-    "id": 0
-}
-```
-
-### Tool Versions
-
-```json
-// tools/list response
-{
-    "tools": [
-        {
-            "name": "cortex_lens_analyze",
-            "description": "...",
-            "version": "1.2.0",
-            "deprecated": false
-        },
-        {
-            "name": "cortex_ast_analyze",
-            "description": "...",
-            "version": "2.0.0",
-            "deprecated": false
-        }
-    ]
-}
-```
+1. Every tool **must** inherit from `ConsolidatedTool`
+2. Tool name **must** start with `cortex_`
+3. Tool name **must** be unique across all modules
+4. Tool **must** define `name`, `description`, `category`, `parameters`, `execute`
+5. Tool **must** record audit trail entries on execution
 
 ---
 
-## Compatibility
+## Adding New Tools
 
-### Compatibility Matrix
-
-| Client Version | Server 1.x | Server 2.x |
-|---------------|------------|------------|
-| 1.0.x | ✅ Full | ⚠️ Partial |
-| 1.1.x | ✅ Full | ⚠️ Partial |
-| 2.0.x | ⚠️ Partial | ✅ Full |
-
-### Checking Compatibility
+### Step 1: Create Tool Class
 
 ```python
-class VersionChecker:
-    """Check version compatibility."""
+# cortex/mcp/tools/my_new_tool.py
+from cortex.mcp.mcp_tool_base import ConsolidatedTool, ToolCategory, ToolParameter, ToolResult
+
+class CortexMyNewTool(ConsolidatedTool):
+    @property
+    def name(self) -> str:
+        return "cortex_my_new_tool"
     
-    def is_compatible(
-        self,
-        client_version: str,
-        server_version: str
-    ) -> tuple[bool, str]:
-        """
-        Check if client is compatible with server.
-        
-        Returns:
-            (is_compatible, message)
-        """
-        client = self._parse(client_version)
-        server = self._parse(server_version)
-        
-        # Same major version = compatible
-        if client[0] == server[0]:
-            return (True, "Compatible")
-        
-        # Client newer than server
-        if client[0] > server[0]:
-            return (
-                False,
-                f"Client {client_version} requires server {client[0]}.x"
-            )
-        
-        # Client older than server
-        return (
-            True,
-            f"Client {client_version} is older, consider upgrade"
-        )
+    @property
+    def description(self) -> str:
+        return "Description of what this tool does."
+    
+    @property
+    def category(self) -> ToolCategory:
+        return ToolCategory.UTILITY
+    
+    @property
+    def parameters(self) -> list[ToolParameter]:
+        return [
+            ToolParameter(
+                name="input",
+                type="string",
+                description="Input parameter",
+                required=True,
+            ),
+        ]
+    
+    async def execute(self, args: dict) -> ToolResult:
+        # Implementation
+        return ToolResult(content="Result")
 ```
 
-### Negotiation
+### Step 2: Register in `__init__.py`
 
 ```python
-async def negotiate_version(
-    client_version: str,
-    supported_versions: list[str]
-) -> str:
-    """Negotiate protocol version."""
-    # Parse client version
-    client_date = parse_date(client_version)
-    
-    # Find best match
-    for version in sorted(supported_versions, reverse=True):
-        server_date = parse_date(version)
-        if server_date <= client_date:
-            return version
-    
-    # Fall back to oldest supported
-    return supported_versions[-1]
+# cortex/mcp/tools/__init__.py
+from cortex.mcp.tools.my_new_tool import CortexMyNewTool
 ```
 
----
-
-## Deprecation
-
-### Deprecation Process
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                  DEPRECATION TIMELINE                            │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│   ──►  ──►  ──►  ──►  ──►  ──►    │
-│                      │                  │                        │
-│                      │                  └── Old tool removed     │
-│                      │                                           │
-│                      └── Tool deprecated, replacement available  │
-│                                                                  │
-│  Timeline:                                                       │
-│  • Deprecation announced at                                 │
-│  • Warning emitted at                                       │
-│  • Tool removed at  (minimum 2 minor versions)              │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Deprecation Markers
-
-```json
-// Deprecated tool in tools/list
-{
-    "name": "cortex_old_analyze",
-    "description": "Analyze code (DEPRECATED: use cortex_lens_analyze)",
-    "version": "1.0.0",
-    "deprecated": true,
-    "replacement": "cortex_lens_analyze",
-    "removalVersion": "3.0.0"
-}
-```
-
-### Deprecation Warnings
+### Step 3: Write Tests First (CORE-008)
 
 ```python
-class DeprecationHandler:
-    """Handle deprecated tool invocations."""
-    
-    async def handle_call(
-        self,
-        tool: Tool,
-        arguments: dict
-    ) -> ToolResult:
-        """Handle call with deprecation warning."""
-        metadata = self.registry.get_metadata(tool.name)
-        
-        if metadata.deprecated:
-            # Log warning
-            logger.warning(
-                f"Tool {tool.name} is deprecated, "
-                f"use {metadata.replacement} instead"
-            )
-            
-            # Add warning to result
-            result = await tool.execute(arguments)
-            result.warnings = result.warnings or []
-            result.warnings.append(
-                f"DEPRECATED: {tool.name} will be removed in "
-                f"v{metadata.removal_version}. "
-                f"Use {metadata.replacement} instead."
-            )
-            
-            return result
-        
-        return await tool.execute(arguments)
+# tests/mcp/test_my_new_tool.py
+def test_my_new_tool_name():
+    tool = CortexMyNewTool()
+    assert tool.name == "cortex_my_new_tool"
+
+def test_my_new_tool_execution():
+    tool = CortexMyNewTool()
+    result = await tool.execute({"input": "test"})
+    assert result.content is not None
 ```
 
 ---
 
-## Migration
+## Deprecation Policy
 
-### Migration Guides
-
-#### v1.x to v2.x
-
-**Breaking Changes:**
-
-| v1.x | v2.x | Action |
-|------|------|--------|
-| `cortex_analyze` | `cortex_lens_analyze` | Update tool name |
-| `path` parameter | `target` parameter | Rename parameter |
-| Sync responses | Async responses | Handle promises |
-
-**Migration Script:**
-
-```python
-# Migration helper
-def migrate_v1_to_v2(request: dict) -> dict:
-    """Migrate v1 request to v2 format."""
-    migrated = request.copy()
-    
-    # Rename tools
-    tool_renames = {
-        "cortex_analyze": "cortex_lens_analyze",
-        "cortex_audit_code": "cortex_audit",
-    }
-    
-    if migrated.get("name") in tool_renames:
-        migrated["name"] = tool_renames[migrated["name"]]
-    
-    # Rename parameters
-    args = migrated.get("arguments", {})
-    if "path" in args:
-        args["target"] = args.pop("path")
-    
-    return migrated
-```
-
-### Version Discovery
-
-```bash
-# Check server version
-curl http://localhost:8000/health
-# {"version": "2.1.0", ...}
-
-# List tools with versions
-curl -X POST http://localhost:8000/mcp \
-    -d '{"jsonrpc":"2.0","method":"tools/list","id":1}' \
-    | jq '.result.tools[] | {name, version, deprecated}'
-```
-
-### Upgrade Checklist
-
-- [ ] Review changelog for breaking changes
-- [ ] Update client version
-- [ ] Test with new server version
-- [ ] Update deprecated tool calls
-- [ ] Verify parameter changes
-- [ ] Update error handling for new codes
-- [ ] Run integration tests
-- [ ] Deploy updated client
+1. **Announce:** Mark tool with `@deprecated` decorator, add warning to description
+2. **Grace period:** Tool continues to work for 2 phases (approximately 4 weeks)
+3. **Remove:** Delete tool class, update `__init__.py`, remove from catalog
+4. **Audit:** Log all deprecated tool calls with migration guidance
 
 ---
 
-## Related Documents
+## Practical Examples
 
-- [MCP Overview](overview.md) — Introduction
-- [MCP Protocol](protocol.md) — Protocol details
-- [Integration Guide](integration.md) — Client integration
+**Product Owner:** "When we add a new capability, it becomes a new MCP tool. The naming convention makes tools discoverable — `cortex_` prefix, domain name, then action."
+
+**Developer:** "Adding a tool follows TDD. I write the test first (CORE-008), create the `ConsolidatedTool` subclass, register it in `__init__.py`, and it's immediately available in Copilot Chat."
 
 ---
 
-*Part of CORTEX Architecture Documentation — Updated 2026-02-13*
+*Verified against MCP tool base class and registration patterns · 20 February 2026*

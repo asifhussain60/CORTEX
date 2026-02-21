@@ -1,116 +1,229 @@
-# AI & Intelligence Capabilities
+# AI & Intelligence Capabilities# AI & Intelligence Capabilities
 
----
-title: CORTEX AI & Intelligence Architecture
-type: explanation
-audience: [Product Owners, Software Developers, Architects]
-word_count: 1800
-last_verified: 2026-02-15
-source_of_truth: cortex/02-lens/ + cortex/intelligence/ + cortex-registry/
-format: diátaxis-explanation
+
+
+------
+
+title: CORTEX AI & Intelligence — LENS + Brain Architecturetitle: CORTEX AI & Intelligence Architecture
+
+type: explanationtype: explanation
+
+audience: [Business Leaders, Product Owners, Software Developers]audience: [Product Owners, Software Developers, Architects]
+
+last_verified: 2026-02-20word_count: 1800
+
+source_of_truth: cortex/lens/ + cortex/intelligence/last_verified: 2026-02-15
+
+order: 3source_of_truth: cortex/02-lens/ + cortex/intelligence/ + cortex-registry/
+
+---format: diátaxis-explanation
+
 voice: third-person-blended
-related_diagrams: [c4-container.md, 07-diagrams/06-request-lifecycle.md]
+
+> **Brain analogy:** The Intelligence layer is CORTEX's **cerebral cortex** — the wrinkled outer layer responsible for all higher-order thinking. LENS is the sensory cortex (processing raw input), and the Brain tiers are the association cortex (making sense of it all).related_diagrams: [c4-container.md, 07-diagrams/06-request-lifecycle.md]
+
 order: 3
+
+------
+
+
+
+## Two Pillars of Intelligence> **Notice:** Intelligence capabilities represent system design intentions. Actual analysis accuracy, performance, and insights depend on codebase characteristics, language ecosystems, comment quality, and repository history. Organizations should validate intelligence outputs against their specific code patterns and development practices.
+
+
+
+### 1. LENS — The Sensory System---
+
+
+
+**L**anguage → **E**xamination → **N**avigation → **S**ynthesis## Overview: Multi-Layer Intelligence Architecture
+
+
+
+LENS (`cortex/lens/`) runs **8 specialized analyzers in parallel** against any codebase:CORTEX's AI and intelligence capabilities transform raw code repositories into actionable development insights through three interconnected systems [Business Leaders]. Product teams leverage these capabilities for architecture analysis, technical debt assessment, and dependency management across multi-language codebases [Product Owners]. The intelligence layer provides developers with real-time code understanding, pattern detection, security analysis, and contextual recommendations during implementation workflows [Software Developers].
+
+
+
+| Analyzer | Brain Equivalent | What It Detects | Speed |**Intelligence Architecture Layers:**
+
+|----------|-----------------|-----------------|-------|
+
+| **AST** | Visual cortex | Code structure, classes, functions, imports | <100ms |1. **LENS Engine** — Multi-analyzer code intelligence with parallel execution (8 core analyzers)
+
+| **Git History** | Episodic memory | Change frequency, hot spots, author patterns | <200ms |2. **Context Synthesis** — Unified intelligence aggregation across git history, AST structure, and domain patterns
+
+| **Comment** | Language center | Documentation gaps, TODO density | <50ms |3. **Knowledge Repository** — Git-backed knowledge base (45+ best practice YAMLs) with tier precedence (company > tier1 > tier0)
+
+| **Import** | Connectivity maps | Dependency graph, circular imports | <100ms |4. **Domain Intelligence** — Framework-specific analyzers (.NET/Roslyn, Angular, React, Vue, Python)
+
+| **Security** | Threat detection | SQL injection, XSS, credentials, CVEs | <200ms |5. **Context Crystallization Layer (Iteration 49)** — Async prefetch of rules, LENS state, and infrastructure detection
+
+| **Pattern** | Pattern recognition | Framework signatures, architecture styles | <150ms |
+
+| **Metrics** | Quantitative reasoning | Complexity, coupling, LOC | <100ms |These systems operate in concert to provide orchestrators with evidence-based context for test generation, implementation guidance, refactoring decisions, and architecture validation.
+
+| **Domain** | Contextual awareness | Business domain (finance, healthcare, etc.) | <100ms |
+
 ---
 
-> **Notice:** Intelligence capabilities represent system design intentions. Actual analysis accuracy, performance, and insights depend on codebase characteristics, language ecosystems, comment quality, and repository history. Organizations should validate intelligence outputs against their specific code patterns and development practices.
-
----
-
-## Overview: Multi-Layer Intelligence Architecture
-
-CORTEX's AI and intelligence capabilities transform raw code repositories into actionable development insights through three interconnected systems [Business Leaders]. Product teams leverage these capabilities for architecture analysis, technical debt assessment, and dependency management across multi-language codebases [Product Owners]. The intelligence layer provides developers with real-time code understanding, pattern detection, security analysis, and contextual recommendations during implementation workflows [Software Developers].
-
-**Intelligence Architecture Layers:**
-
-1. **LENS Engine** — Multi-analyzer code intelligence with parallel execution (8 core analyzers)
-2. **Context Synthesis** — Unified intelligence aggregation across git history, AST structure, and domain patterns
-3. **Knowledge Repository** — Git-backed knowledge base (45+ best practice YAMLs) with tier precedence (company > tier1 > tier0)
-4. **Domain Intelligence** — Framework-specific analyzers (.NET/Roslyn, Angular, React, Vue, Python)
-5. **Context Crystallization Layer (Iteration 49)** — Async prefetch of rules, LENS state, and infrastructure detection
-
-These systems operate in concert to provide orchestrators with evidence-based context for test generation, implementation guidance, refactoring decisions, and architecture validation.
-
----
+**Combined latency:** 300–800ms for a full 8-analyzer scan.
 
 ## LENS Intelligence Engine
 
+**Business Leader:** "Imagine every code change getting an automatic MRI — LENS scans 8 dimensions simultaneously and delivers a comprehensive health report in under a second."
+
 ### What is LENS?
+
+**Product Owner:** "I can see at a glance which modules are high-complexity, which have security findings, and which lack documentation. No manual review needed."
 
 LENS stands for **L**anguage → **E**xamination → **N**avigation → **S**ynthesis. Organizations benefit from this four-feature intelligence cycle that transforms code into structured understanding suitable for automated decision-making [Business Leaders]. The LENS pipeline processes code repositories through progressive stages of analysis, from lexical parsing to semantic synthesis [Software Developers].
 
+**Developer:** "I run `cortex_onboard_repository` and get AST structure, security scan, dependency graph, and complexity metrics — all in one pass. It's like having 8 specialized review tools consolidated into one."
+
 ```mermaid
-graph LR
+
+### 2. Brain Tiers — The Decision Systemgraph LR
+
     INPUT[Source Code] --> LANGUAGE[LANGUAGE Phase<br/>Parse & Tokenize]
-    LANGUAGE --> EXAMINATION[EXAMINATION Phase<br/>Analyze & Extract]
+
+After LENS processes the raw data, the Brain (`cortex/intelligence/`) makes sense of it:    LANGUAGE --> EXAMINATION[EXAMINATION Phase<br/>Analyze & Extract]
+
     EXAMINATION --> NAVIGATION[NAVIGATION Phase<br/>Traverse & Connect]
-    NAVIGATION --> SYNTHESIS[SYNTHESIS Phase<br/>Combine & Reason]
-    SYNTHESIS --> OUTPUT[Unified Intelligence]
-    
-    style INPUT fill:#0f3460,stroke:#16213e
-    style LANGUAGE fill:#533483,stroke:#8b5cf6
+
+| Tier | Module | Function |    NAVIGATION --> SYNTHESIS[SYNTHESIS Phase<br/>Combine & Reason]
+
+|------|--------|----------|    SYNTHESIS --> OUTPUT[Unified Intelligence]
+
+| **Perception** | `cortex/intelligence/perception/` | Matches LENS data against 9 enterprise patterns → confidence scores |    
+
+| **Reasoning** | `cortex/intelligence/reasoning/` | Selects best strategy from pattern matches → ranked recommendations |    style INPUT fill:#0f3460,stroke:#16213e
+
+| **Action** | `cortex/intelligence/action/` | Builds execution plan with TDD gates and rollback points |    style LANGUAGE fill:#533483,stroke:#8b5cf6
+
     style EXAMINATION fill:#1a5f7a,stroke:#06b6d4
-    style NAVIGATION fill:#2d4356,stroke:#64748b
+
+See `00-getting-started/04-brain-tier-architecture.md` for the deep dive.    style NAVIGATION fill:#2d4356,stroke:#64748b
+
     style SYNTHESIS fill:#e94560,stroke:#ff6b6b
-    style OUTPUT fill:#10b981,stroke:#059669
+
+---    style OUTPUT fill:#10b981,stroke:#059669
+
 ```
+
+## Intelligence Subsystems
 
 ### LENS Processing Phases
 
-| Feature | Purpose | Outputs | Typical Latency |
-|-------|---------|---------|-----------------|
-| **Language** | Lexical parsing and tokenization | AST, tokens, syntax structure | 50-150ms |
-| **Examination** | Pattern analysis and metric extraction | Complexity, dependencies, security patterns | 100-300ms |
-| **Navigation** | Relationship traversal and graph construction | Call graphs, data flow, dependency chains | 80-200ms |
-| **Synthesis** | Intelligence combination and reasoning | Unified context, recommendations, insights | 70-150ms |
+| Subsystem | Location | Purpose |
 
-**End-to-End Performance:** Organizations may experience LENS analysis completion within 300-800ms for typical files (100-500 LOC) with SQLite caching. Subsequent analyses of unchanged files complete in 50-150ms via cache hits. Cache hit rates typically achieve 60-70% in active development workflows.
+|-----------|----------|---------|| Feature | Purpose | Outputs | Typical Latency |
 
-### Core LENS Analyzers (8 Parallel Execution)
+| **Domain Brain** | `cortex/intelligence/domain_brain/` | Business-vertical intelligence (ecommerce, finance, healthcare) ||-------|---------|---------|-----------------|
 
-CORTEX employs eight specialized analyzers executing in parallel to provide comprehensive code intelligence:
+| **Learning** | `cortex/intelligence/learning/` | Pattern capture, confidence updates after each execution || **Language** | Lexical parsing and tokenization | AST, tokens, syntax structure | 50-150ms |
 
-```mermaid
-graph TB
-    SOURCE[Source Files] --> DISPATCH{Parallel Dispatch}
-    
-    DISPATCH --> AST[AST Analyzer<br/>Syntax Structure]
-    DISPATCH --> GIT[Git History Analyzer<br/>24h Context]
-    DISPATCH --> COMMENT[Comment Analyzer<br/>TODOs/FIXMEs/Docs]
-    DISPATCH --> IMPORT[Import Analyzer<br/>Dependencies]
-    DISPATCH --> SECURITY[Security Analyzer<br/>OWASP Patterns]
-    DISPATCH --> PATTERN[Pattern Analyzer<br/>Design Patterns]
-    DISPATCH --> METRICS[Metrics Analyzer<br/>Complexity/Coverage]
-    DISPATCH --> DOMAIN[Domain Analyzer<br/>Framework-Specific]
-    
-    AST --> AGGREGATE[Intelligence<br/>Aggregation]
-    GIT --> AGGREGATE
-    COMMENT --> AGGREGATE
-    IMPORT --> AGGREGATE
-    SECURITY --> AGGREGATE
-    PATTERN --> AGGREGATE
-    METRICS --> AGGREGATE
-    DOMAIN --> AGGREGATE
-    
-    AGGREGATE --> CACHE[SQLite Cache]
-    AGGREGATE --> OUTPUT[LENSContext<br/>Unified Intelligence]
-    
-    style DISPATCH fill:#e94560,stroke:#ff6b6b
-    style AGGREGATE fill:#1a5f7a,stroke:#06b6d4
+| **Knowledge** | `cortex/intelligence/knowledge/` | Knowledge synthesis from registry and learned patterns || **Examination** | Pattern analysis and metric extraction | Complexity, dependencies, security patterns | 100-300ms |
+
+| **Quality** | `cortex/intelligence/quality/` | Code quality assessment || **Navigation** | Relationship traversal and graph construction | Call graphs, data flow, dependency chains | 80-200ms |
+
+| **Governance** | `cortex/intelligence/governance/` | Intelligence-layer governance checks || **Synthesis** | Intelligence combination and reasoning | Unified context, recommendations, insights | 70-150ms |
+
+| **Infrastructure** | `cortex/intelligence/infrastructure/` | InfrastructureDetector for platforms, Docker, K8s |
+
+| **Observability** | `cortex/intelligence/observability/` | Intelligence metrics and monitoring |**End-to-End Performance:** Organizations may experience LENS analysis completion within 300-800ms for typical files (100-500 LOC) with SQLite caching. Subsequent analyses of unchanged files complete in 50-150ms via cache hits. Cache hit rates typically achieve 60-70% in active development workflows.
+
+
+
+---### Core LENS Analyzers (8 Parallel Execution)
+
+
+
+## How LENS and Brain Work TogetherCORTEX employs eight specialized analyzers executing in parallel to provide comprehensive code intelligence:
+
+
+
+``````mermaid
+
+[Source Code]graph TB
+
+      │    SOURCE[Source Files] --> DISPATCH{Parallel Dispatch}
+
+      ▼    
+
+[LENS: 8 Parallel Analyzers]  ← 300-800ms    DISPATCH --> AST[AST Analyzer<br/>Syntax Structure]
+
+      │    DISPATCH --> GIT[Git History Analyzer<br/>24h Context]
+
+      ├── AST structure    DISPATCH --> COMMENT[Comment Analyzer<br/>TODOs/FIXMEs/Docs]
+
+      ├── Security findings    DISPATCH --> IMPORT[Import Analyzer<br/>Dependencies]
+
+      ├── Complexity metrics    DISPATCH --> SECURITY[Security Analyzer<br/>OWASP Patterns]
+
+      ├── Dependency graph    DISPATCH --> PATTERN[Pattern Analyzer<br/>Design Patterns]
+
+      ├── Git hot spots    DISPATCH --> METRICS[Metrics Analyzer<br/>Complexity/Coverage]
+
+      ├── Documentation gaps    DISPATCH --> DOMAIN[Domain Analyzer<br/>Framework-Specific]
+
+      ├── Pattern signatures    
+
+      └── Domain context    AST --> AGGREGATE[Intelligence<br/>Aggregation]
+
+      │    GIT --> AGGREGATE
+
+      ▼    COMMENT --> AGGREGATE
+
+[Perception: Pattern Registry]  ← matches against 9 enterprise patterns    IMPORT --> AGGREGATE
+
+      │    SECURITY --> AGGREGATE
+
+      ▼    PATTERN --> AGGREGATE
+
+[Reasoning: Strategy Selector]  ← ranks strategies by success rate    METRICS --> AGGREGATE
+
+      │    DOMAIN --> AGGREGATE
+
+      ▼    
+
+[Action: Execution Planner]     ← builds plan with TDD gates + rollback    AGGREGATE --> CACHE[SQLite Cache]
+
+      │    AGGREGATE --> OUTPUT[LENSContext<br/>Unified Intelligence]
+
+      ▼    
+
+[Orchestrator Execution]        ← RED → GREEN → REFACTOR    style DISPATCH fill:#e94560,stroke:#ff6b6b
+
+```    style AGGREGATE fill:#1a5f7a,stroke:#06b6d4
+
     style CACHE fill:#2d4356,stroke:#64748b
-    style OUTPUT fill:#10b981,stroke:#059669
+
+---    style OUTPUT fill:#10b981,stroke:#059669
+
 ```
 
+## Practical Examples
+
 | Analyzer | Analysis Target | Key Outputs | Language Support |
-|----------|----------------|-------------|------------------|
+
+**Business Leader:** "When we onboard a new microservices project, LENS automatically detects the architecture pattern, identifies security gaps, and the Brain recommends the right testing strategy — based on what worked for similar projects before."|----------|----------------|-------------|------------------|
+
 | **AST Analyzer** | Syntax structure | Functions, classes, methods, parameters, return types, complexity metrics | Python, TypeScript, JavaScript, C#, Java |
-| **Git History Analyzer** | Version control (24h) | Recent commits, authors, file churn, hotspot detection, change frequency | Universal (git-agnostic) |
+
+**Product Owner:** "The intelligence layer told us our payment module has high cyclomatic complexity (27) and 3 security findings. I prioritised the fix sprint based on that data — not gut feeling."| **Git History Analyzer** | Version control (24h) | Recent commits, authors, file churn, hotspot detection, change frequency | Universal (git-agnostic) |
+
 | **Comment Analyzer** | Documentation | TODOs, FIXMEs, docstrings, inline comments, annotation extraction | Multi-language (regex + AST) |
-| **Import Analyzer** | Dependencies | Import statements, module usage, circular dependencies, unused imports | Python, TypeScript, JavaScript, C# |
+
+**Developer:** "I asked CORTEX to refactor the auth module. LENS found 4 circular imports and high coupling. Reasoning selected `refactor-extract-service` (92% success rate for microservice repos). Action built a 5-step plan with tests at each boundary."| **Import Analyzer** | Dependencies | Import statements, module usage, circular dependencies, unused imports | Python, TypeScript, JavaScript, C# |
+
 | **Security Analyzer** | OWASP patterns | SQL injection vectors, XSS vulnerabilities, authentication issues, secrets detection | Python, TypeScript, JavaScript |
-| **Pattern Analyzer** | Design patterns | Singleton, Factory, Observer, Strategy, adapter detection, anti-patterns | Python, TypeScript, C# |
+
+---| **Pattern Analyzer** | Design patterns | Singleton, Factory, Observer, Strategy, adapter detection, anti-patterns | Python, TypeScript, C# |
+
 | **Metrics Analyzer** | Quantitative metrics | Cyclomatic complexity, Halstead metrics, maintainability index, test coverage | Python, TypeScript, JavaScript |
-| **Domain Analyzer** | Framework specifics | .NET (Roslyn-based), Angular (component analysis), React (hook patterns), Vue | Framework-specific plugins |
+
+*All module paths verified against live codebase · 20 February 2026*| **Domain Analyzer** | Framework specifics | .NET (Roslyn-based), Angular (component analysis), React (hook patterns), Vue | Framework-specific plugins |
+
 
 **Analyzer Coordination Architecture:**
 

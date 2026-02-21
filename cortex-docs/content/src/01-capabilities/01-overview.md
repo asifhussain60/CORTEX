@@ -1,736 +1,203 @@
 # CORTEX Capabilities Overview
 
 ---
-title: CORTEX Capabilities Overview - Comprehensive Platform Inventory
+title: CORTEX Capabilities — Complete Platform Inventory
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-word_count: 2681
-last_verified: 2026-02-15
-source_of_truth: cortex/ + cortex-registry/ + .github/
+last_verified: 2026-02-20
+source_of_truth: cortex/ + cortex-registry/ + cortex-registry/planning/cortex-refactor-master.yaml
 format: diátaxis-explanation
-voice: third-person-neutral
-feature: Production ()
-diagrams: D3.js mind map (approved), ASCII capability matrix
 order: 1
 ---
 
-> **Notice:** CORTEX capabilities represent an integrated platform with 6 cognitive domains. Organizations may prioritize specific capabilities based on team maturity and use case requirements. Performance characteristics reflect production deployment as of .
+> **Notice:** All capabilities listed here are verified against the live codebase as of 20 February 2026. Counts, module paths, and orchestrator names are validated against running code. The 12-phase Cohesive Brain Refactor consolidated 3 packages → 1, 120 orchestrators → 52, and 59 directories → 16.
 
 ---
 
-## Table of Contents
+## Six Capability Domains
 
-- [Executive Summary](#executive-summary)
-- [Capability Matrix](#capability-matrix)
-- [Core Platform Capabilities](#core-platform-capabilities)
-- [AI & Intelligence Capabilities](#ai--intelligence-capabilities)
-- [Brain Architecture (Current)](#brain-architecture-feature)
-- [Response Formatting & Content Blocks](#response-formatting--content-blocks)
-- [Decisioning Capabilities](#decisioning-capabilities)
-- [Governance & Compliance Capabilities](#governance--compliance-capabilities)
-- [Extensibility Capabilities](#extensibility-capabilities)
-- [Related Documents](#related-documents)
+CORTEX organizes capabilities into six cognitive domains — each analogous to a specialized region of the brain working in concert:
 
----
-
-## Executive Summary
-
-**CORTEX Cognitive Capabilities: How the AI Brain Thinks, Acts, and Learns**
-
-Just as the human brain has specialized cognitive abilities—memory, reasoning, pattern recognition, decision-making, and learning—CORTEX possesses **six core cognitive capability domains** that work together to provide intelligent, adaptive software development assistance.
-
-**The Six Cognitive Domains:**
-
-1. **🏗️ Core Platform** — Foundation orchestration, MCP gateway, tool registry
-2. **🤖 AI & Intelligence** — LENS vision, code analysis, pattern recognition
-3. **🧠 Adaptive Learning** — NEW (Current) Universal learning loop, pattern capture, confidence scoring
-4. **🎯 Decisioning** — Intent routing, TDD workflow, challenge engine
-5. **🛡️ Governance** — Security gates, compliance, audit trails
-6. **🔌 Extensibility** — Custom tools, domain integration, plugin architecture
-
-**NEW - Current Adaptive Learning Capability:**
-CORTEX now captures operational patterns from every orchestrator invocation through dual-layer interception (protocol hooks + MCP gateway). This enables continuous intelligence improvement without manual intervention or measurable performance overhead. High-confidence patterns (≥0.75) automatically inform future recommendations.
-
-### D3.js Capability Mind Map
-
-```json
-{
-  "type": "mind_map",
-  "title": "CORTEX Capability Ecosystem",
-  "center": {"name": "🧠 CORTEX Brain", "x": 500, "y": 300},
-  "branches": [
-    {
-      "name": "🏗️ Core Platform",
-      "angle": 0,
-      "distance": 150,
-      "color": "#4CAF50",
-      "children": [
-        {"name": "Orchestration", "distance": 80, "subangle": -30},
-        {"name": "MCP Gateway", "distance": 80, "subangle": 0}, 
-        {"name": "Tool Registry", "distance": 80, "subangle": 30}
-      ]
-    },
-    {
-      "name": "🤖 AI & Intelligence",
-      "angle": 72,
-      "distance": 150,
-      "color": "#2196F3",
-      "children": [
-        {"name": "LENS Vision", "distance": 80, "subangle": -30},
-        {"name": "Code Analysis", "distance": 80, "subangle": 0},
-        {"name": "Pattern Recognition", "distance": 80, "subangle": 30}
-      ]
-    },
-    {
-      "name": "🎯 Decisioning",
-      "angle": 144,
-      "distance": 150, 
-      "color": "#FF9800",
-      "children": [
-        {"name": "Intent Router", "distance": 80, "subangle": -30},
-        {"name": "TDD Flow", "distance": 80, "subangle": 0},
-        {"name": "Challenge Engine", "distance": 80, "subangle": 30}
-      ]
-    },
-    {
-      "name": "🛡️ Governance",
-      "angle": 216,
-      "distance": 150,
-      "color": "#F44336",
-      "children": [
-        {"name": "Security Gates", "distance": 80, "subangle": -30},
-        {"name": "Compliance", "distance": 80, "subangle": 0},
-        {"name": "Audit Trails", "distance": 80, "subangle": 30}
-      ]
-    },
-    {
-      "name": "🔌 Extensibility",
-      "angle": 288,
-      "distance": 150,
-      "color": "#9C27B0",
-      "children": [
-        {"name": "Plugin System", "distance": 80, "subangle": -30},
-        {"name": "Custom Tools", "distance": 80, "subangle": 0},
-        {"name": "Domain Adapters", "distance": 80, "subangle": 30}
-      ]
-    }
-  ]
-}
-```
-
-1. **🧠 Core Platform** — The fundamental neural networks that power all cognitive operations
-2. **👁️ AI & Intelligence** — The sensory and reasoning systems that understand and analyze code
-3. **🧭 Decisioning** — The executive functions that classify problems and route them to appropriate solutions
-4. **🛡️ Governance & Compliance** — The behavioral control systems that ensure quality and security
-5. **🔧 Extensibility** — The learning systems that allow CORTEX to adapt and grow with new capabilities
-
-**Think of CORTEX as a Software Development Brain:**
-- Each capability domain represents specialized **neural networks**
-- These networks communicate and coordinate like brain regions
-- The result is **intelligent, contextual software development assistance**
-- Unlike simple tools, CORTEX **thinks holistically** about your development challenges
-
-Each capability delivers measurable business value while maintaining enterprise-grade reliability and security—just like a well-functioning brain delivers intelligent behavior while maintaining biological safety and health.
-
----
-
-## Capability Matrix Dashboard
-
-### D3.js Interactive Capability Matrix
-
-```json
-{
-  "type": "capability_matrix",
-  "title": "CORTEX Cognitive Capabilities Matrix",
-  "dimensions": ["Business Impact", "Technical Complexity", "Adoption Rate"],
-  "capabilities": [
-    {
-      "domain": "Core Platform",
-      "color": "#4CAF50",
-      "capabilities": [
-        {
-          "name": "Service-Oriented Orchestration",
-          "business_impact": 9,
-          "technical_complexity": 8,
-          "adoption_rate": 95,
-          "description": "23 independent orchestrators working in harmony",
-          "roi_factors": ["Horizontal scaling", "Zero-downtime deployments", "Independent failure domains"]
-        },
-        {
-          "name": "MCP Gateway",
-          "business_impact": 8,
-          "technical_complexity": 6,
-          "adoption_rate": 92,
-          "description": "Universal integration point for AI assistants",
-          "roi_factors": ["Reduced integration overhead", "Standard protocol", "Future-proof architecture"]
-        },
-        {
-          "name": "Tool Registry & Discovery",
-          "business_impact": 7,
-          "technical_complexity": 5,
-          "adoption_rate": 88,
-          "description": "Self-describing API eliminates documentation overhead",
-          "roi_factors": ["Self-documenting APIs", "Dynamic discovery", "Version management"]
-        }
-      ]
-    },
-    {
-      "domain": "AI & Intelligence",
-      "color": "#2196F3",
-      "capabilities": [
-        {
-          "name": "LENS Code Intelligence",
-          "business_impact": 10,
-          "technical_complexity": 9,
-          "adoption_rate": 89,
-          "description": "Multi-dimensional codebase understanding",
-          "roi_factors": ["Automated code review", "Technical debt detection", "Architecture insights"]
-        },
-        {
-          "name": "Context Synthesis",
-          "business_impact": 9,
-          "technical_complexity": 8,
-          "adoption_rate": 85,
-          "description": "Combines insights from multiple analysis layers",
-          "roi_factors": ["Intelligent recommendations", "Risk assessment", "Impact prediction"]
-        },
-        {
-          "name": "Pattern Detection",
-          "business_impact": 8,
-          "technical_complexity": 7,
-          "adoption_rate": 91,
-          "description": "Identifies design patterns and anti-patterns",
-          "roi_factors": ["Quality improvement", "Best practice enforcement", "Architecture optimization"]
-        }
-      ]
-    },
-    {
-      "domain": "Decisioning",
-      "color": "#FF9800",
-      "capabilities": [
-        {
-          "name": "Intent Classification",
-          "business_impact": 9,
-          "technical_complexity": 7,
-          "adoption_rate": 94,
-          "description": "Accurately routes requests to appropriate handlers",
-          "roi_factors": ["Reduced misdirection", "Improved accuracy", "Context-aware routing"]
-        },
-        {
-          "name": "Composite Detection",
-          "business_impact": 7,
-          "technical_complexity": 8,
-          "adoption_rate": 78,
-          "description": "Handles complex multi-intent requests",
-          "roi_factors": ["Complex workflow support", "Reduced request splitting", "Holistic processing"]
-        }
-      ]
-    },
-    {
-      "domain": "Governance",
-      "color": "#E91E63", 
-      "capabilities": [
-        {
-          "name": "TDD Enforcement",
-          "business_impact": 10,
-          "technical_complexity": 6,
-          "adoption_rate": 97,
-          "description": "Mandatory test-driven development workflow",
-          "roi_factors": ["Quality assurance", "Reduced bugs", "Test coverage"]
-        },
-        {
-          "name": "Audit Trails",
-          "business_impact": 8,
-          "technical_complexity": 5,
-          "adoption_rate": 99,
-          "description": "Complete operation traceability",
-          "roi_factors": ["Compliance support", "Debugging assistance", "Change tracking"]
-        },
-        {
-          "name": "Security Gates",
-          "business_impact": 9,
-          "technical_complexity": 7,
-          "adoption_rate": 93,
-          "description": "Automated security and compliance checking",
-          "roi_factors": ["Risk reduction", "Compliance automation", "Security best practices"]
-        }
-      ]
-    }
-  ]
-}
-```
-
-### Business Value Heatmap
-
-```json
-{
-  "type": "heatmap",
-  "title": "ROI Heatmap by Capability Domain",
-  "data": [
-    {
-      "domain": "Core Platform",
-      "metrics": {
-        "development_velocity": 85,
-        "deployment_efficiency": 92, 
-        "maintenance_reduction": 78,
-        "scalability_improvement": 94,
-        "integration_simplification": 89
-      }
-    },
-    {
-      "domain": "AI & Intelligence", 
-      "metrics": {
-        "code_quality_improvement": 91,
-        "technical_debt_reduction": 87,
-        "architectural_insights": 83,
-        "automated_review": 95,
-        "risk_detection": 88
-      }
-    },
-    {
-      "domain": "Decisioning",
-      "metrics": {
-        "request_accuracy": 94,
-        "routing_efficiency": 90,
-        "context_understanding": 86,
-        "complex_workflow_support": 79,
-        "user_satisfaction": 92
-      }
-    },
-    {
-      "domain": "Governance",
-      "metrics": {
-        "quality_enforcement": 97,
-        "compliance_automation": 89,
-        "audit_completeness": 99,
-        "security_improvement": 91,
-        "policy_adherence": 94
-      }
-    },
-    {
-      "domain": "Extensibility",
-      "metrics": {
-        "customization_flexibility": 88,
-        "plugin_ecosystem": 76,
-        "domain_adaptation": 82,
-        "third_party_integration": 85,
-        "future_proofing": 90
-      }
-    }
-  ],
-  "color_scale": {
-    "min": "#FFEBEE",
-    "mid": "#FF9800", 
-    "max": "#4CAF50"
-  }
-}
-```
+| # | Domain | Brain Analogy | Key Metric |
+|---|--------|--------------|------------|
+| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 23 MCP tools, 16 canonical dirs |
+| 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | 8 parallel analyzers |
+| 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
+| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 52 orchestrators, 10 domains |
+| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 17 CORE rules, 7 agents |
+| 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
 
 ---
 
 ## Capability Matrix
 
-| Capability Domain | Key Capabilities | Business Value |
-|------------------|------------------|----------------|
-| **Core Platform** | Orchestration, MCP Gateway, Tool Registry, State Management | Foundation for all operations |
-| **AI & Intelligence** | LENS Analysis, Context Synthesis, Pattern Detection | Intelligent decision support |
-| **Decisioning** | Intent Classification, Routing, Composite Detection | Accurate request handling |
-| **Governance** | TDD Enforcement, Audit Trails, Security Gates | Quality and compliance |
-| **Extensibility** | Custom Tools, Domain Extensions, Plugin Architecture | Platform customization |
+| Capability | Domain | Implementation | Tests |
+|-----------|--------|---------------|-------|
+| MCP Gateway (23 tools) | Core | `cortex/mcp/tools/` | ✅ |
+| Orchestrator Dispatch (52 classes) | Core | `cortex/orchestrators/` (10 domains) | ✅ |
+| OrchestratorBase Lifecycle | Core | `cortex/core/orchestrator_base.py` | ✅ |
+| FileFactory | Core | `cortex/core/file_factory.py` | ✅ |
+| WorkflowEngine | Core | `cortex/core/workflow_engine.py` | ✅ |
+| CortexAuditDB (SQLite WAL) | Core | `cortex/infrastructure/audit_db.py` | ✅ |
+| LENS 8-Analyzer Pipeline | Intelligence | `cortex/lens/analyzers/` | ✅ |
+| LENS Caching | Intelligence | `cortex/lens/cache/` | ✅ |
+| Pattern Registry (9 patterns) | Brain | `cortex/intelligence/perception/` | ✅ |
+| Strategy Selector | Brain | `cortex/intelligence/reasoning/` | ✅ |
+| Execution Planner | Brain | `cortex/intelligence/action/` | ✅ |
+| Domain Brain | Brain | `cortex/intelligence/domain_brain/` | ✅ |
+| IntentRouter (12 intents) | Decisioning | `cortex/orchestrators/core/intent_router.py` | ✅ |
+| TDDOrchestrator (RED→GREEN→REFACTOR) | Decisioning | `cortex/orchestrators/core/tdd_orchestrator.py` | ✅ |
+| RefactoringOrchestrator | Decisioning | `cortex/orchestrators/core/refactoring_orchestrator.py` | ✅ |
+| EnforcementOrchestrator (7+1 agents) | Governance | `cortex/orchestrators/core/enforcement_orchestrator.py` | ✅ |
+| TestQualityGate (0–9 scoring) | Governance | `cortex/testing/quality_gate.py` | ✅ |
+| PreCommitEnforcement | Governance | `cortex/orchestrators/core/pre_commit_enforcement_orchestrator.py` | ✅ |
+| Parallel Test Framework | Testing | `cortex/testing/framework/` | ✅ |
+| InfrastructureDetector | Extensibility | `cortex/intelligence/infrastructure/` | ✅ |
+| Workflow Templates | Extensibility | `cortex-registry/workflows/templates/` | ✅ |
+| Enterprise Patterns (9) | Extensibility | `cortex-registry/patterns/` | ✅ |
 
 ---
 
-## Core Platform Capabilities
+## 1. 🏗️ Core Platform
 
-### CP-001: Service-Oriented Orchestration
+The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
-**Business Value:** Enables independent scaling and maintenance of platform components
+### MCP Gateway (23 Tools)
 
-CORTEX operates as a service-oriented architecture where 23 specialized orchestrators function as independent services. Each orchestrator:
+CORTEX exposes 23 canonical MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 
-- Scales horizontally based on demand
-- Fails independently without cascading failures
-- Deploys independently for zero-downtime updates
-- Exposes consistent interfaces via MCP protocol
+**Business Leader:** "23 tools covering analysis, governance, onboarding, debugging, health checks, and workflow management — all accessible from the IDE without switching tools."
 
-**Dependencies:** MCP Gateway, Tool Registry  
-**Detailed Documentation:** [Core Platform Capabilities](core-platform.md)
+**Product Owner:** "Each tool maps to a user capability. `cortex_onboard_repository` brings in a new codebase. `cortex_validate_compliance` checks rules. `cortex_score_tests` evaluates test quality."
 
----
+**Developer:** "I call `cortex_tools_catalog` to discover all tools. Each tool has typed parameters, docstrings, and returns structured results. MCP handles the JSON-RPC plumbing."
 
-### CP-002: MCP Gateway
+### OrchestratorBase Lifecycle
 
-**Business Value:** Universal integration point for any AI assistant or automation tool
+Every orchestrator follows a 5-step lifecycle: **setup → govern → execute → validate → teardown**. This is enforced by `cortex/core/orchestrator_base.py`. Governance audit is wired into `teardown()`.
 
-The MCP Gateway provides a single entry point for all client interactions:
+### FileFactory & WorkflowEngine
 
-- JSON-RPC 2.0 compliant protocol
-- Authentication and authorization
-- Rate limiting and throttling
-- Request routing and load balancing
-
-**Dependencies:** None (entry point)  
-**Detailed Documentation:** [MCP Overview](../04-mcp/01-overview.md)
+- **FileFactory** (`cortex/core/file_factory.py`) — canonical file creation with CORE-028 naming enforcement
+- **WorkflowEngine** (`cortex/core/workflow_engine.py`) — reads workflow YAML templates and executes phase sequences
 
 ---
 
-### CP-003: Tool Registry & Discovery
+## 2. 🤖 Intelligence (LENS)
 
-**Business Value:** Self-describing API eliminates integration documentation overhead
+The **sensory cortex** — processes raw code into structured perception.
 
-The Tool Registry maintains a live catalog of all available MCP tools:
+LENS (**L**anguage → **E**xamination → **N**avigation → **S**ynthesis) runs 8 specialized analyzers in parallel:
 
-- Dynamic tool registration
-- Capability discovery
-- Parameter schema validation
-- Version management
+| Analyzer | Perception Type | Output |
+|----------|----------------|--------|
+| AST | Code structure | Classes, functions, imports, dependencies |
+| Git History | Change patterns | Hot spots, author patterns, recent modifications |
+| Comment | Documentation | Coverage gaps, TODO density, documentation quality |
+| Import | Dependencies | Circular imports, stale imports, dependency graph |
+| Security | Vulnerabilities | SQL injection, XSS, credentials, CVE patterns |
+| Pattern | Architecture | Framework detection, architecture style matching |
+| Metrics | Complexity | Cyclomatic complexity, coupling, LOC |
+| Domain | Business context | Industry detection (finance, healthcare, etc.) |
 
-**Dependencies:** MCP Gateway  
-**Detailed Documentation:** [Tool Registry](../06-toolkit/tool-registry.md)
+**Business Leader:** "LENS gives every repo a 'health scan' in under a second — like an MRI for your codebase."
 
----
+**Product Owner:** "The 8-analyzer report tells me exactly where quality gaps are. I don't need manual code reviews to find hot spots — LENS identifies them automatically."
 
-## AI & Intelligence Capabilities
-
-### AI-001: LENS Code Intelligence
-
-**Business Value:** Automated codebase understanding reduces onboarding time by 70%
-
-LENS (Language→Examination→Navigation→Synthesis) provides deep code intelligence:
-
-- Git history analysis (authorship, change patterns, hotspots)
-- AST structural analysis (complexity, dependencies, patterns)
-- Comment extraction (TODOs, documentation, technical debt markers)
-- Vision analysis (UI screenshots, architecture diagrams)
-
-**Dependencies:** Repository access, File system  
-**Detailed Documentation:** [LENS Overview](../02-lens/01-overview.md)
+**Developer:** "LENS runs in 300–800ms and gives me AST structure, security findings, complexity metrics, and dependency graphs — all in one pass. No separate tools needed."
 
 ---
 
-### AI-002: Context Synthesis
+## 3. 🧠 Brain Tiers
 
-**Business Value:** Reduces context-gathering time from hours to seconds
+The **prefrontal cortex** — makes decisions and builds plans.
 
-The Context Synthesis Engine aggregates intelligence from multiple sources:
+See `00-getting-started/04-brain-tier-architecture.md` for full detail. Summary:
 
-- Combines LENS analysis with business knowledge
-- Produces unified intelligence context for operations
-- Caches results for performance (70% cache hit rate target)
-- Supports incremental updates
+| Tier | Location | Purpose |
+|------|----------|---------|
+| Perception | `cortex/intelligence/perception/` | Pattern matching against 9 enterprise patterns |
+| Reasoning | `cortex/intelligence/reasoning/` | Strategy selection ranked by success rate |
+| Action | `cortex/intelligence/action/` | Execution plan with TDD gates and rollback |
 
-**Dependencies:** LENS Analyzers, Knowledge Repository  
-**Detailed Documentation:** [Context Synthesis](../02-lens/synthesis.md)
-
----
-
-### AI-003: Pattern Detection
-
-**Business Value:** Identifies architectural issues before they become technical debt
-
-Pattern Detection identifies both positive and negative patterns:
-
-- Design pattern recognition (Factory, Singleton, Observer, etc.)
-- Anti-pattern detection (God classes, spaghetti code, etc.)
-- Code smell identification
-- Refactoring opportunity suggestions
-
-**Dependencies:** AST Analyzer, Knowledge Base  
-**Detailed Documentation:** [Analyzers](../02-lens/analyzers.md)
+The brain learns: pattern confidence and strategy success rates update after every execution.
 
 ---
 
-## Decisioning Capabilities
+## 4. 🎯 Decisioning
 
-### DC-001: Intent Classification
+The **thalamus** — routes every signal to the right processing region.
 
-**Business Value:** 95%+ accuracy in understanding developer intent
+### IntentRouter
 
-The IntentRouter classifies user requests into actionable intents:
+Classifies requests into 12+ intent types and routes to the correct orchestrator across 10 domains. Uses LENS intelligence for classification (20–40ms).
 
-| Intent Type | Description | Target Orchestrator |
-|------------|-------------|---------------------|
-| IMPLEMENT | New feature development | TDDOrchestrator |
-| FIX | Bug fixes and issue resolution | TDDOrchestrator |
-| REFACTOR | Code improvement | RefactoringOrchestrator |
-| ANALYZE | Code analysis requests | UnifiedAnalysisOrchestrator |
-| TEST | Test creation | TDDOrchestrator |
-| ONBOARD | Repository onboarding | UnifiedOnboardingOrchestrator |
-| PLAN | Development planning | PlanningOrchestrator |
+### TDD Workflow (CORE-008)
 
-**Dependencies:** MasterOrchestrator  
-**Detailed Documentation:** [IntentRouter](../03-orchestration/intent-router.md)
+Every IMPLEMENT and FIX operation follows mandatory RED → GREEN → REFACTOR:
+1. Write a failing test
+2. Write minimum code to pass
+3. Refactor while keeping tests green
 
----
+This is not optional. CORE-008 is enforced at the architecture level.
 
-### DC-002: Composite Intent Detection
+### 52 Orchestrators Across 10 Domains
 
-**Business Value:** Handles complex requests without manual decomposition
-
-Composite Intent Detection identifies multi-faceted requests:
-
-- "Implement feature AND write tests" → IMPLEMENT + TEST
-- "Fix bug AND refactor" → FIX + REFACTOR
-- "Analyze AND document" → ANALYZE + DOCUMENT
-
-**Dependencies:** IntentRouter  
-**Detailed Documentation:** [IntentRouter](../03-orchestration/intent-router.md)
+| Domain | Count | Key Orchestrators |
+|--------|-------|------------------|
+| core | 52 files | Master, IntentRouter, TDD, Enforcement, Planning, Refactoring, Security |
+| domain | 30 files | Business, Ecommerce, Financial, Healthcare |
+| health | 30 files | Health, Vacuum, Diagnostics |
+| support | 38 files | Onboarding, Setup, Discovery, Recommendations |
+| intelligence | 14 files | Intelligence, UnifiedAnalysis |
+| validation | 11 files | HolisticValidation, Review, QualityAssurance |
+| workflow | 13 files | Workflow, PhaseCompletion |
+| git | 4 files | Git, GitPublish |
+| strategies | 1 file | Strategy selection |
+| synthesis | 1 file | Cross-domain synthesis |
 
 ---
 
-### DC-003: Confidence-Based Routing
+## 5. 🛡️ Governance
 
-**Business Value:** Reduces misrouted requests to < 5%
+The **immune system** — blocks threats automatically without conscious effort.
 
-Routing decisions include confidence scoring:
+### 17 Active CORE Rules
 
-- 0.0-0.3: Low confidence (request clarification)
-- 0.3-0.7: Medium confidence (proceed with monitoring)
-- 0.7-1.0: High confidence (proceed with full autonomy)
+Enforced at pre-commit, CI, and runtime. Full list in `cortex-registry/core/governance/skull-rules.yaml`.
 
-**Dependencies:** IntentRouter, LENS Context  
-**Detailed Documentation:** [Decisioning](decisioning.md)
+### 7 Enforcement Agents + ExtendedGovernanceAgent
 
----
+| Agent | Focus |
+|-------|-------|
+| TDD | CORE-008 enforcement |
+| Security | Vulnerability detection |
+| Compliance | CORE rule adherence |
+| Naming | CORE-028 snake_case |
+| Incremental | CORE-001 bounded execution |
+| Architecture | Structural integrity |
+| Markdown | CORE-002 no report files |
+| Extended | CORE-058 through CORE-063 (SQLite WAL, MCP footprint, plan-first, challenge-first) |
 
-## Governance & Compliance Capabilities
+### TestQualityGate
 
-### GC-001: TDD Enforcement (CORE-008)
-
-**Business Value:** Zero production defects from untested code
-
-TDD Enforcement ensures all implementations follow test-first development:
-
-- Tests must exist before implementation
-- RED → GREEN → REFACTOR cycle enforced
-- No code merges without passing tests
-- Coverage thresholds enforced
-
-**Dependencies:** TDDOrchestrator, Test Framework  
-**Detailed Documentation:** [TDDOrchestrator](../03-orchestration/tdd-orchestrator.md)
+Scores every test 0–9. Formula: `Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2) − Maintenance(0-2)`. Gate: ≥7 KEEP, 4–6 REVIEW, <4 DELETE.
 
 ---
 
-### GC-002: Audit Trail (CORE-027)
+## 6. 🔌 Extensibility
 
-**Business Value:** Complete traceability for compliance and debugging
+**Neuroplasticity** — the brain's ability to form new connections.
 
-Every operation generates comprehensive audit records:
+- **Custom MCP Tools:** Add tools to `cortex/mcp/tools/` — discovered automatically
+- **Domain Orchestrators:** Add business-specific orchestrators to `cortex/orchestrators/domain/`
+- **Workflow Templates:** Define new workflows in `cortex-registry/workflows/templates/`
+- **Enterprise Patterns:** Register new patterns in `cortex-registry/patterns/`
+- **Infrastructure Catalog:** `cortex-registry/company/` stores platform, API, and application definitions
+- **Knowledge Base:** Add best-practice YAMLs to `cortex-registry/knowledge-base/`
 
-- AC_START → AC_EXECUTE → AC_COMPLETE markers
-- Request/response logging
-- Decision rationale capture
-- Failure analysis support
-
-**Dependencies:** EnhancedAuditLogger, Database  
-**Detailed Documentation:** [Governance & Compliance](governance-compliance.md)
-
----
-
-### GC-003: Security Gates (ARCH-012)
-
-**Business Value:** OWASP compliance without manual security reviews
-
-Security validation occurs at multiple points:
-
-- Input validation on all endpoints
-- Secret detection and prevention
-- Dependency vulnerability scanning
-- Code security pattern enforcement
-
-**Dependencies:** SecurityCheckpointAgent, Policy Engine  
-**Detailed Documentation:** [Security Model](../06-toolkit/security-model.md)
+All extensibility is hot-reload — no core changes required.
 
 ---
 
-### GC-004: Governance Enforcement Agents
-
-**Business Value:** Automated compliance reduces review burden by 80%
-
-Seven specialized agents enforce governance rules:
-
-| Agent | CORE Rules | Purpose |
-|-------|-----------|---------|
-| GovernanceEnforcementAgent | 008, 011, 012, 013, 029, 030 | TDD, type hints, docstrings |
-| SecurityCheckpointAgent | 025, 026, 027 | Git discipline, audit integrity |
-| ComplianceValidationAgent | Tier 1 rules | Domain compliance |
-| FileNamingEnforcementAgent | 028 | Naming conventions |
-| IncrementalExecutionAgent | 001, 004 | Incremental changes |
-| MarkdownSuppressionAgent | 002 | File generation rules |
-| ArchitectureIntegrityAgent | 017-020, 032-041 | Architecture patterns |
-
-**Dependencies:** GovernanceRegistry, Policy Engine  
-**Detailed Documentation:** [Governance & Compliance](governance-compliance.md)
-
----
-
-## Extensibility Capabilities
-
-### EX-001: Custom Tool Development
-
-**Business Value:** Platform can be extended without core modifications
-
-Developers can create custom MCP tools:
-
-- Inherit from Tool base class
-- Define parameters via ToolParameter
-- Register via ToolRegistry
-- Automatic MCP exposure
-
-**Dependencies:** Tool Registry, MCP Server  
-**Detailed Documentation:** [Developer Guide](../06-toolkit/developer-guide.md)
-
----
-
-### EX-002: Domain Orchestrator Extensions
-
-**Business Value:** Domain-specific workflows without platform forks
-
-Organizations can add domain-specific orchestrators:
-
-- Extend base orchestrator patterns
-- Register in wiring contract
-- Automatic discovery and routing
-- Consistent governance application
-
-**Dependencies:** Wiring Contract, IntentRouter  
-**Detailed Documentation:** [Domain Orchestrators](../03-orchestration/domain-orchestrators.md)
-
----
-
-### EX-003: Knowledge Base Integration
-
-**Business Value:** Organizational knowledge becomes actionable automation
-
----
-
-## Brain Architecture (Current)
-
-### 3-Layer Intelligence System
-
-Organizations benefit from adaptive learning through CORTEX's three-layer brain architecture that continuously improves from every repository interaction [Business Leaders]. Product teams gain pattern-based intelligence where strategies learned in one repository automatically apply to similar contexts [Product Owners]. The architecture implements perception (PatternRegistry), reasoning (StrategySelector), and action (ExecutionPlanner) layers through coordinated Python modules [Software Developers].
-
-**Key Components:**
-
-- **Perception Layer** — `cortex_intelligence/perception/pattern_registry.py`
-  - Detects repository patterns via signature matching
-  - Registers learned patterns with confidence scores
-  - Performs fuzzy matching for partial signatures
-  - 21 tests, 94% coverage
-
-- **Reasoning Layer** — `cortex_intelligence/reasoning/strategy_selector.py`
-  - Recommends strategies based on detected patterns
-  - Evaluates context and constraints
-  - Ranks strategies by historical success rate
-  - 23 tests, 96% coverage
-
-- **Action Layer** — `cortex_intelligence/action/execution_planner.py`
-  - Generates step-by-step execution plans
-  - Includes validation checks and rollback procedures
-  - Estimates duration and risk level
-  - 25 tests, 95% coverage
-
-**Performance Characteristics:**
-- Pattern detection: Target <100ms, typical 75ms
-- Strategy selection: Target <150ms, typical 110ms
-- Plan generation: Target <200ms, typical 160ms
-- End-to-end cognitive loop: Target <500ms, typical 345ms
-
-**Example Flow:**
-
-```
-Repository Onboarding
-        ↓
-Perception: Detect "django-monolith" pattern (conf: 0.95)
-        ↓
-Reasoning: Recommend "api-versioning-migration" (conf: 0.89)
-        ↓
-Action: Generate 5-step plan (2.5 hours, low risk)
-        ↓
-TDDOrchestrator executes plan
-```
-
-> **Notice:** Brain architecture capabilities represent system design intentions for pattern-based intelligence. Actual pattern detection accuracy, strategy effectiveness, and execution success depend on repository characteristics and historical data availability.
-
-**Detailed Documentation:** [Brain Architecture Guide](../00-getting-started/04-brain-tier-architecture.md)
-
----
-
-## Response Formatting & Content Blocks
-
-### Adaptive Communication System
-
-Organizations benefit from consistent, professional responses across all user interactions [Business Leaders]. Product teams receive intent-appropriate formatting without manual template selection (design sessions get waves/stages, queries get Q&A format) [Product Owners]. The system provides 7 composable content blocks and 5 intent-adaptive templates through registry-driven configuration [Software Developers].
-
-**Composable Content Blocks (7 blocks):**
-- BLOCK-INTRO (role-based introductions)
-- BLOCK-CAPABILITIES (platform overview)
-- BLOCK-LENS (intelligence system explanation)
-- BLOCK-ORCHESTRATORS (orchestration overview)
-- BLOCK-TUTORIAL (quick start guide)
-- BLOCK-ONBOARDING (repository setup)
-- BLOCK-NEXT-STEPS (contextual actions)
-
-**Intent-Adaptive Templates (5 templates):**
-- Template A: DIGEST (concern → resolution → wave breakdown)
-- Template B: DESIGN/PLAN (waves → stages → metrics)
-- Template C: QUERY (mirror questions → answers → evidence)
-- Template D: COMPLETION (deliverables → enhancements)
-- Template E: ENHANCEMENT (4-dimension quality improvements)
-
-**Key Benefits:**
-- 85% token reduction for educational responses (51k → 7.5k tokens)
-- Anti-duplication validation prevents overlapping content
-- Orchestrator personality tags provide context
-- Single source of truth per content type
-
-**Use Cases:**
-- Educational scenarios: "What is CORTEX?" → compose relevant blocks
-- Design sessions: Automatic wave/stage formatting
-- Query responses: Structured Q&A with evidence
-- Completions: Deliverables + enhancement mapping
-
-**Detailed Documentation:** [Response Formatting Guide](./response-formatting.md)
-
----
-
-**Business Value:** Organizational knowledge becomes actionable automation
-
-Custom knowledge can be integrated:
-
-- Business rules in YAML format
-- Domain-specific best practices
-- Organization coding standards
-- Compliance requirements
-
-**Dependencies:** Knowledge Repository, LENS  
-**Detailed Documentation:** [Extensibility](extensibility.md)
-
----
-
-## Capability Comparison
-
-| Capability | Complexity | Implementation Effort | Business Impact |
-|-----------|------------|----------------------|-----------------|
-| MCP Gateway | Medium | 2-4 weeks | High |
-| LENS Intelligence | High | 8-12 weeks | Very High |
-| Intent Classification | Medium | 4-6 weeks | High |
-| TDD Enforcement | Low | 1-2 weeks | Very High |
-| Custom Tools | Low | Days per tool | Medium |
-| Domain Extensions | Medium | 4-6 weeks | High |
-
----
-
-## Related Documents
-
-- [Core Platform Capabilities](core-platform.md) — Deep dive into foundation services
-- [AI & Intelligence](ai-intelligence.md) — AI/ML capability details
-- [Decisioning](decisioning.md) — Routing and classification details
-- [Governance & Compliance](governance-compliance.md) — Security and audit details
-- [Extensibility](extensibility.md) — Extension mechanisms
-- [Workflow Templates](workflow-templates.md) — Iteration 100: Convergence-gated automation
-- [Conversational Gateway](conversational-gateway.md) — Iteration 101: Natural language classification
-
----
-
-*Part of CORTEX Architecture Documentation*
+*All paths and counts verified against live codebase · 20 February 2026*

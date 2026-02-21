@@ -1,104 +1,205 @@
-# Core Platform Capabilities
+# Core Platform Capabilities# Core Platform Capabilities
+
+
+
+------
+
+title: CORTEX Core Platform — Foundation Infrastructuretitle: CORTEX Core Platform - Foundation Infrastructure
+
+type: explanationtype: explanation
+
+audience: [Business Leaders, Product Owners, Software Developers]audience: [Software Developers, Architects, Product Owners]
+
+last_verified: 2026-02-20word_count: 2203
+
+source_of_truth: cortex/core/ + cortex/mcp/ + cortex/infrastructure/last_verified: 2026-02-15
+
+order: 2source_of_truth: cortex/api/ + cortex/core/ + cortex/config/ + cortex/observability/
+
+---format: diátaxis-explanation
+
+voice: third-person-neutral
+
+> **Brain analogy:** The Core Platform is the **brainstem** — the part of the brain that keeps everything alive. Breathing, heartbeat, basic reflexes. You don't think about it, but without it nothing else works. The Core Platform provides orchestration, MCP gateway, state management, and audit infrastructure that every other capability depends on.feature: Production ()
+
+diagrams: ASCII service architecture, sequence diagrams
+
+---order: 2
 
 ---
-title: CORTEX Core Platform - Foundation Infrastructure
-type: explanation
-audience: [Software Developers, Architects, Product Owners]
-word_count: 2203
-last_verified: 2026-02-15
-source_of_truth: cortex/api/ + cortex/core/ + cortex/config/ + cortex/observability/
-format: diátaxis-explanation
-voice: third-person-neutral
-feature: Production ()
-diagrams: ASCII service architecture, sequence diagrams
-order: 2
----
+
+## What's In the Core
 
 > **Notice:** Core Platform capabilities represent the foundational infrastructure upon which all CORTEX functionality is built. Organizations may customize configuration and deployment patterns while retaining standardized service interfaces. Performance characteristics reflect production deployment patterns as of .
 
----
+| Component | Location | Purpose |
 
-## Executive Summary
+|-----------|----------|---------|---
 
-The Core Platform provides the foundational infrastructure enabling CORTEX's intelligent development capabilities. Organizations benefit from enterprise-grade service reliability, zero-downtime deployments, and comprehensive observability without custom infrastructure investment [Business Leaders]. Product teams gain consistent request processing, state management, and configuration control across all CORTEX features [Product Owners]. The platform implements service-oriented architecture with MCP Gateway, Tool Registry, State Management, Configuration Management, and Health Monitoring [Software Developers].
+| **OrchestratorBase** | `cortex/core/orchestrator_base.py` | 5-step lifecycle: setup → govern → execute → validate → teardown |
 
-**Core Platform Components:**
-- **MCP Gateway** — Single entry point implementing Model Context Protocol (JSON-RPC 2.0)
+| **FileFactory** | `cortex/core/file_factory.py` | Canonical file creation with CORE-028 naming enforcement |## Executive Summary
+
+| **WorkflowEngine** | `cortex/core/workflow_engine.py` | Reads workflow YAML templates, executes phase sequences |
+
+| **CortexAuditDB** | `cortex/infrastructure/audit_db.py` | Unified SQLite with WAL mode — all audit trails |The Core Platform provides the foundational infrastructure enabling CORTEX's intelligent development capabilities. Organizations benefit from enterprise-grade service reliability, zero-downtime deployments, and comprehensive observability without custom infrastructure investment [Business Leaders]. Product teams gain consistent request processing, state management, and configuration control across all CORTEX features [Product Owners]. The platform implements service-oriented architecture with MCP Gateway, Tool Registry, State Management, Configuration Management, and Health Monitoring [Software Developers].
+
+| **MCP Server** | `cortex/mcp/` | Pylance-style stdio server, 23 canonical tools |
+
+| **Bootstrap** | `cortex/bootstrap.py` | System initialization, wiring, service discovery |**Core Platform Components:**
+
+| **Config** | `cortex/config/` | System configuration, feature flags |- **MCP Gateway** — Single entry point implementing Model Context Protocol (JSON-RPC 2.0)
+
 - **Service Router** — Intent-based routing to 20+ specialized orchestrators
-- **Tool Registry** — 10 MCP tools exposing 90+ operations with hot-reload capability
+
+---- **Tool Registry** — 10 MCP tools exposing 90+ operations with hot-reload capability
+
 - **State Management** — Operation tracking, checkpoint recovery, rollback support
-- **Configuration Management** — Layered config with env vars > files > wiring > defaults
+
+## OrchestratorBase: The Universal Lifecycle- **Configuration Management** — Layered config with env vars > files > wiring > defaults
+
 - **Health Monitoring** — Circuit breakers, health checks, Prometheus metrics integration
+
+Every one of the 52 orchestrators inherits from `OrchestratorBase` and follows this lifecycle:
 
 **Performance Targets:** Gateway latency P50: 5ms, P95: 15ms, P99: 25ms. Tool discovery <50ms. Health checks <100ms. State lookup <5ms.
 
----
+```
 
-## Table of Contents
+setup()     → Initialize resources, load configuration---
 
-- [Overview](#overview)
-- [Service-Oriented Architecture](#service-oriented-architecture)
-- [MCP Gateway](#mcp-gateway)
-- [Tool Registry](#tool-registry)
-- [State Management](#state-management)
-- [Configuration Management](#configuration-management)
+    ↓
+
+govern()    → Check governance rules (pre-execution gate)## Table of Contents
+
+    ↓
+
+execute()   → Perform the actual work- [Overview](#overview)
+
+    ↓- [Service-Oriented Architecture](#service-oriented-architecture)
+
+validate()  → Verify results against acceptance criteria- [MCP Gateway](#mcp-gateway)
+
+    ↓- [Tool Registry](#tool-registry)
+
+teardown()  → Audit trail recording, resource cleanup- [State Management](#state-management)
+
+```- [Configuration Management](#configuration-management)
+
 - [Health Monitoring](#health-monitoring)
-- [Related Documents](#related-documents)
 
----
+**Business Leader:** "Every operation follows the same lifecycle. Setup, governance check, execution, validation, audit. Consistency across 52 orchestrators."- [Related Documents](#related-documents)
 
-## Overview
 
-The Core Platform capabilities provide the foundation upon which all CORTEX functionality is built. Organizations deploy CORTEX as a coordinated system of services handling request reception, service coordination, state management, configuration, and health monitoring without requiring custom infrastructure development [Business Leaders].
 
-**Platform Responsibilities:**
+**Product Owner:** "I know that governance is checked before every execution — it's wired into the base class, not left to individual orchestrators to implement."---
 
-**Request Reception** — Accepting and validating incoming MCP requests (JSON-RPC 2.0)
+
+
+**Developer:** "I inherit from `OrchestratorBase`, implement `execute()`, and get governance gates + audit trails for free. The base class handles the lifecycle."## Overview
+
+
+
+---The Core Platform capabilities provide the foundation upon which all CORTEX functionality is built. Organizations deploy CORTEX as a coordinated system of services handling request reception, service coordination, state management, configuration, and health monitoring without requiring custom infrastructure development [Business Leaders].
+
+
+
+## CortexAuditDB: Unified Data Store**Platform Responsibilities:**
+
+
+
+All orchestrators route audit data through `CortexAuditDB` (SQLite with WAL mode). No ad-hoc `.db` files scattered across the codebase.**Request Reception** — Accepting and validating incoming MCP requests (JSON-RPC 2.0)
+
 - **Protocol Validation:** JSON-RPC 2.0 schema validation (5-10ms)
-- **Authentication:** API key validation Iteration 11 (JWT tokens)
-- **Rate Limiting:** 60 requests/minute default (configurable)
-- **Request Parsing:** Parameter extraction and type checking
 
-**Service Coordination** — Routing requests to appropriate handlers
-- **Intent Classification:** LENS-based routing (20-40ms)
+- **Location:** `.cortex-runtime/` (gitignored)- **Authentication:** API key validation Iteration 11 (JWT tokens)
+
+- **Mode:** WAL (Write-Ahead Logging) for concurrent read/write- **Rate Limiting:** 60 requests/minute default (configurable)
+
+- **CORE-058:** SQLite WAL mode is mandatory (enforced by ExtendedGovernanceAgent)- **Request Parsing:** Parameter extraction and type checking
+
+
+
+**Before refactor:** 10 scattered `.db` files across multiple directories.**Service Coordination** — Routing requests to appropriate handlers
+
+**After refactor:** All consolidated to `.cortex-runtime/` (Phase 09, FR7).- **Intent Classification:** LENS-based routing (20-40ms)
+
 - **Load Balancing:** Round-robin across orchestrator instances
-- **Circuit Breaking:** Fault isolation for failing services
+
+---- **Circuit Breaking:** Fault isolation for failing services
+
 - **Request Queuing:** Async processing for long operations
 
+## MCP Server: 23 Canonical Tools
+
 **State Management** — Tracking operation progress and recovery
-- **In-Memory State:** Fast access for short operations (<30s)
+
+The MCP server runs as a Pylance-style stdio process — auto-starts when VS Code opens the workspace. No manual startup.- **In-Memory State:** Fast access for short operations (<30s)
+
 - **Persistent State:** SQLite storage for long operations (>30s)
-- **Checkpoint System:** Recovery points for multi-step workflows
+
+**Key tools include:**- **Checkpoint System:** Recovery points for multi-step workflows
+
 - **Audit Trail:** AC markers + timestamps + orchestrator decisions
 
-**Configuration** — Managing runtime settings and feature flags
-- **Layered Config:** env vars > files > wiring > defaults
-- **Hot Reload:** Configuration changes without service restart
-- **Feature Flags:** Runtime capability toggling
-- **Secrets Management:** Environment variable isolation
+| Tool | Purpose |
 
-**Health Monitoring** — Ensuring system reliability and availability
-- **Health Endpoints:** `/health`, `/health/wiring`, `/health/orchestrators`
-- **Circuit Breakers:** Automatic fault isolation (3 failures → OPEN)
-- **Prometheus Metrics:** Request count, latency histograms, error rates
-- **Grafana Dashboards:** Real-time visualization (Iteration 11)
+|------|---------|**Configuration** — Managing runtime settings and feature flags
 
-**Architecture Principles:**
+| `cortex_process_request` | Main request processing entry point |- **Layered Config:** env vars > files > wiring > defaults
+
+| `cortex_tools_catalog` | Discover all available MCP tools |- **Hot Reload:** Configuration changes without service restart
+
+| `cortex_validate_compliance` | Check code against CORE governance rules |- **Feature Flags:** Runtime capability toggling
+
+| `cortex_onboard_repository` | LENS analysis + infrastructure catalog for new repos |- **Secrets Management:** Environment variable isolation
+
+| `cortex_score_tests` | TestQualityGate scoring (0–9) |
+
+| `cortex_verify_environment` | Health check: Python, deps, MCP connectivity |**Health Monitoring** — Ensuring system reliability and availability
+
+| `cortex_refactor` | Semantic refactoring operations |- **Health Endpoints:** `/health`, `/health/wiring`, `/health/orchestrators`
+
+| `cortex_challenge` | AI-driven challenge analysis |- **Circuit Breakers:** Automatic fault isolation (3 failures → OPEN)
+
+| `cortex_capture_metrics` | Record development metrics |- **Prometheus Metrics:** Request count, latency histograms, error rates
+
+| `cortex_vacuum` | Clean up markdown sprawl |- **Grafana Dashboards:** Real-time visualization (Iteration 11)
+
+
+
+See `04-mcp/03-tools-catalog.md` for the complete catalog.**Architecture Principles:**
+
 1. **Stateless Processing** — No session affinity required (horizontal scaling)
-2. **Container-First** — Docker-native design (Iteration 11)
+
+---2. **Container-First** — Docker-native design (Iteration 11)
+
 3. **Zero Database Runtime** — Git-backed config eliminates PostgreSQL/MongoDB
-4. **Dual Transport** — stdio (dev) + HTTP (prod Iteration 11)
+
+## Infrastructure Services4. **Dual Transport** — stdio (dev) + HTTP (prod Iteration 11)
+
 5. **Observability-First** — OpenTelemetry tracing built-in
 
----
+| Service | Location | Purpose |
 
-## Service-Oriented Architecture
+|---------|----------|---------|---
 
-### Architecture Pattern
+| **InfrastructureDetector** | `cortex/intelligence/infrastructure/` | Detects FastAPI, Docker, K8s, cloud configs |
 
-CORTEX implements a service-oriented architecture (SOA) where each orchestrator operates as an independent service. Organizations benefit from independent scaling, fault isolation, and zero-downtime deployments without monolithic dependencies [Business Leaders]. Product teams gain flexibility to update individual orchestrators without full system redeployments [Product Owners]. Each orchestrator exposes capabilities via standardized MCP tools with hot-reload support [Software Developers].
+| **Health Check** | `cortex/health_check_service.py` | System health monitoring |## Service-Oriented Architecture
 
-```
+| **OpenTelemetry** | `cortex/opentelemetry_tracing.py` | Distributed tracing |
+
+| **Prometheus** | `cortex/prometheus_metrics.py` | Metrics collection |### Architecture Pattern
+
+
+
+---CORTEX implements a service-oriented architecture (SOA) where each orchestrator operates as an independent service. Organizations benefit from independent scaling, fault isolation, and zero-downtime deployments without monolithic dependencies [Business Leaders]. Product teams gain flexibility to update individual orchestrators without full system redeployments [Product Owners]. Each orchestrator exposes capabilities via standardized MCP tools with hot-reload support [Software Developers].
+
+
+
+*All paths verified against live codebase · 20 February 2026*```
+
 ┌────────────────────────────────────────────────────────────────┐
 │                        MCP GATEWAY (PORT 8000)                  │
 │  ┌──────────────────────────────────────────────────────────┐ │

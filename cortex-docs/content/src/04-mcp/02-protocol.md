@@ -1,432 +1,138 @@
 # MCP Protocol
 
 ---
-title: MCP Protocol Specification - JSON-RPC 2.0 Implementation
+title: MCP Protocol & Transport
 type: reference
-audience: [Product Owners, Software Developers]
-word_count: 1400
-last_verified: 2026-02-15
-source_of_truth: cortex/04-mcp/server.py + deployment/
-format: diátaxis-reference
-voice: third-person-neutral
-feature: Production ()
-protocol_version: 2024-11-05
+audience: [Software Developers, Product Owners]
+last_verified: 2026-02-20
+source_of_truth: cortex/mcp/
 order: 2
 ---
 
-> **Notice:** MCP protocol implementation follows JSON-RPC 2.0 specification. Actual protocol performance, transport reliability, and error handling depend on network conditions, client implementation, and server configuration. Organizations should validate protocol compliance with their specific integration requirements.
+> **Brain analogy:** The spinal cord carries signals using specific nerve fiber types — some fast (motor), some slow (sensory). MCP works the same way: JSON-RPC 2.0 is the fiber standard, stdio is the fast motor pathway, and every message follows the same format.
 
 ---
 
-**Purpose:** Detailed MCP protocol specification — the electrochemical signaling standard of CORTEX  
-**Audience:** Product Owners, Software Developers  
-**Last Updated:** 2026-02-15
+## Protocol: JSON-RPC 2.0
 
----
-
-## Table of Contents
-
-- [Overview](#overview)
-- [JSON-RPC 2.0](#json-rpc-20)
-- [MCP Methods](#mcp-methods)
-- [Message Format](#message-format)
-- [Error Codes](#error-codes)
-- [Transport](#transport)
-- [Related Documents](#related-documents)
-
----
-
-## Overview
-
-### Brain Analogy: The Action Potential
-
-Neurons communicate through **action potentials** — standardized electrical signals that travel along axons at up to 120 m/s. Every action potential follows the same pattern: a depolarization wave, a threshold check, an all-or-nothing firing, and a refractory period. This standardization is what makes the nervous system reliable.
-
-CORTEX's MCP protocol is this action potential standard. Every message follows JSON-RPC 2.0 — a request fires, the server processes or rejects, and a response returns. The protocol layer ensures that every "nerve impulse" between client and server is well-formed, validated, and reliably delivered.
-
-CORTEX implements the Model Context Protocol using JSON-RPC 2.0 over stdio and HTTP transports.
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    MCP PROTOCOL STACK                            │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │  Application Layer                                       │   │
-│  │  • Tool invocation                                       │   │
-│  │  • Resource access                                       │   │
-│  │  • Prompt handling                                       │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                              │                                   │
-│                              ▼                                   │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │  Protocol Layer                                          │   │
-│  │  • JSON-RPC 2.0                                          │   │
-│  │  • Request/Response                                      │   │
-│  │  • Notifications                                         │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                              │                                   │
-│                              ▼                                   │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │  Transport Layer                                         │   │
-│  │  • HTTP POST                                             │   │
-│  │  • WebSocket                                             │   │
-│  │  • stdio (CLI)                                           │   │
-│  └─────────────────────────────────────────────────────────┘   │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## JSON-RPC 2.0
-
-### Specification
-
-MCP uses JSON-RPC 2.0 as defined in the [official specification](https://www.jsonrpc.org/specification).
-
-### Request Object
+Every MCP message follows JSON-RPC 2.0:
 
 ```json
+// Request (IDE → CORTEX)
 {
-    "jsonrpc": "2.0",
-    "method": "method_name",
-    "params": { ... },
-    "id": "unique-id"
+  "jsonrpc": "2.0",
+  "method": "tools/call",
+  "params": {
+    "name": "cortex_onboard_repository",
+    "arguments": {}
+  },
+  "id": 1
+}
+
+// Response (CORTEX → IDE)
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "content": [
+      { "type": "text", "text": "Repository onboarded successfully..." }
+    ]
+  },
+  "id": 1
 }
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `jsonrpc` | string | Yes | Must be "2.0" |
-| `method` | string | Yes | Method name |
-| `params` | object/array | No | Method parameters |
-| `id` | string/number | Yes* | Request identifier |
+### Message Types
 
-*Omit `id` for notifications (no response expected)
+| Type | Direction | Purpose |
+|------|-----------|---------|
+| `tools/list` | IDE → CORTEX | Discover available tools |
+| `tools/call` | IDE → CORTEX | Execute a specific tool |
+| `notifications` | CORTEX → IDE | Progress updates, status |
+| `errors` | CORTEX → IDE | Error codes with messages |
 
-### Response Object
+---
 
-```json
-{
-    "jsonrpc": "2.0",
-    "result": { ... },
-    "id": "unique-id"
-}
+## Transport: stdio
+
+CORTEX uses **stdio transport** (standard input/output):
+
+- **stdin:** IDE writes JSON-RPC requests
+- **stdout:** CORTEX writes JSON-RPC responses
+- **stderr:** Logging and diagnostics (never protocol data)
+
+### Why stdio?
+
+| Factor | stdio | HTTP |
+|--------|-------|------|
+| Startup | Instant (IDE spawns process) | Manual server start |
+| Latency | Sub-millisecond (in-process) | Network overhead |
+| Security | No exposed ports | Port binding required |
+| Lifecycle | IDE manages process | Separate process management |
+| Config | `.vscode/settings.json` | Environment variables |
+
+---
+
+## Lifecycle
+
 ```
-
-### Error Object
-
-```json
-{
-    "jsonrpc": "2.0",
-    "error": {
-        "code": -32600,
-        "message": "Invalid Request",
-        "data": { ... }
-    },
-    "id": "unique-id"
-}
+IDE Opens Workspace
+    │
+    ▼
+Read .vscode/settings.json
+    │
+    ▼
+Spawn: python3 -m cortex.mcp (stdio)
+    │
+    ▼
+MCP Server Initializes
+    │
+    ├── Register 23 tools
+    ├── Load governance rules
+    └── Ready for requests
+    │
+    ▼
+IDE Sends tools/list → Get tool catalog
+    │
+    ▼
+IDE Sends tools/call → Execute tool
+    │
+    ▼
+IDE Closes → Process terminates
 ```
 
 ---
 
-## MCP Methods
+## Error Handling
 
-### Tool Methods
+| Code | Meaning | Action |
+|------|---------|--------|
+| -32600 | Invalid request | Fix JSON format |
+| -32601 | Method not found | Check tool name |
+| -32602 | Invalid params | Check tool arguments |
+| -32603 | Internal error | Check CORTEX logs |
+| -32700 | Parse error | Fix JSON syntax |
 
-| Method | Purpose |
-|--------|---------|
-| `tools/list` | List available tools |
-| `tools/call` | Invoke a tool |
-
-### Resource Methods
-
-| Method | Purpose |
-|--------|---------|
-| `resources/list` | List resources |
-| `resources/read` | Read a resource |
-| `resources/subscribe` | Subscribe to changes |
-
-### Prompt Methods
-
-| Method | Purpose |
-|--------|---------|
-| `prompts/list` | List prompts |
-| `prompts/get` | Get a prompt |
-
-### Lifecycle Methods
-
-| Method | Purpose |
-|--------|---------|
-| `initialize` | Initialize connection |
-| `ping` | Health check |
-| `shutdown` | Graceful shutdown |
+All errors include structured messages with remediation guidance.
 
 ---
 
-## Message Format
+## Client Compatibility
 
-### tools/list
-
-**Request:**
-```json
-{
-    "jsonrpc": "2.0",
-    "method": "tools/list",
-    "id": 1
-}
-```
-
-**Response:**
-```json
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "tools": [
-            {
-                "name": "cortex_lens_analyze",
-                "description": "Perform comprehensive code analysis",
-                "inputSchema": {
-                    "type": "object",
-                    "properties": {
-                        "target": {
-                            "type": "string",
-                            "description": "File or directory to analyze"
-                        },
-                        "analyzers": {
-                            "type": "array",
-                            "items": {"type": "string"},
-                            "description": "Specific analyzers to use"
-                        }
-                    },
-                    "required": ["target"]
-                }
-            }
-        ]
-    },
-    "id": 1
-}
-```
-
-### tools/call
-
-**Request:**
-```json
-{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-        "name": "cortex_lens_analyze",
-        "arguments": {
-            "target": "src/auth/service.py",
-            "analyzers": ["git", "ast", "comments"]
-        }
-    },
-    "id": 2
-}
-```
-
-**Response (Success):**
-```json
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "content": [
-            {
-                "type": "text",
-                "text": "Analysis completed for src/auth/service.py"
-            }
-        ],
-        "isError": false,
-        "_meta": {
-            "audit_id": "AUDIT-2026-02-10-001",
-            "duration_ms": 150
-        }
-    },
-    "id": 2
-}
-```
-
-**Response (Error):**
-```json
-{
-    "jsonrpc": "2.0",
-    "error": {
-        "code": -32004,
-        "message": "Governance validation failed",
-        "data": {
-            "violations": [
-                {
-                    "rule": "CORE-008",
-                    "message": "Tests required before implementation",
-                    "severity": "error"
-                }
-            ]
-        }
-    },
-    "id": 2
-}
-```
-
-### initialize
-
-**Request:**
-```json
-{
-    "jsonrpc": "2.0",
-    "method": "initialize",
-    "params": {
-        "protocolVersion": "2024-11-05",
-        "capabilities": {
-            "tools": {},
-            "resources": {},
-            "prompts": {}
-        },
-        "clientInfo": {
-            "name": "vscode-copilot",
-            "version": "1.0.0"
-        }
-    },
-    "id": 0
-}
-```
-
-**Response:**
-```json
-{
-    "jsonrpc": "2.0",
-    "result": {
-        "protocolVersion": "2024-11-05",
-        "capabilities": {
-            "tools": {"listChanged": true},
-            "resources": {"subscribe": true, "listChanged": true},
-            "prompts": {"listChanged": true}
-        },
-        "serverInfo": {
-            "name": "cortex-mcp",
-            "version": "1.0.0"
-        }
-    },
-    "id": 0
-}
-```
+| Client | Transport | Status |
+|--------|-----------|--------|
+| VS Code (Copilot Chat) | stdio | ✅ Primary |
+| Cursor | stdio | ✅ Supported |
+| Claude Desktop | stdio | ✅ Supported |
+| Custom JSON-RPC client | stdio | ✅ Compatible |
 
 ---
 
-## Error Codes
+## Practical Examples
 
-### Standard JSON-RPC Errors
+**Product Owner:** "We chose stdio because it's zero-config. No servers to manage, no ports to configure, no Docker containers. The IDE handles everything."
 
-| Code | Message | Description |
-|------|---------|-------------|
-| -32700 | Parse error | Invalid JSON |
-| -32600 | Invalid Request | Invalid request object |
-| -32601 | Method not found | Unknown method |
-| -32602 | Invalid params | Invalid parameters |
-| -32603 | Internal error | Server error |
-
-### MCP-Specific Errors
-
-| Code | Message | Description |
-|------|---------|-------------|
-| -32001 | Tool not found | Unknown tool name |
-| -32002 | Resource not found | Unknown resource |
-| -32003 | Permission denied | Authorization failed |
-| -32004 | Governance violation | Rule violation |
-| -32005 | Rate limited | Too many requests |
-| -32006 | Timeout | Operation timeout |
-
-### Error Response Examples
-
-```json
-// Tool not found
-{
-    "jsonrpc": "2.0",
-    "error": {
-        "code": -32001,
-        "message": "Tool not found",
-        "data": {
-            "tool": "cortex_unknown_tool",
-            "available": ["cortex_lens_analyze", "cortex_process_request"]
-        }
-    },
-    "id": 1
-}
-
-// Rate limited
-{
-    "jsonrpc": "2.0",
-    "error": {
-        "code": -32005,
-        "message": "Rate limited",
-        "data": {
-            "retry_after": 30,
-            "limit": 60,
-            "window": "1m"
-        }
-    },
-    "id": 1
-}
-```
+**Developer:** "The MCP server starts when I open VS Code. I can see all 23 tools through `tools/list`. Each tool call is a single JSON-RPC round-trip."
 
 ---
 
-## Transport
-
-### HTTP Transport
-
-```
-POST /mcp HTTP/1.1
-Host: localhost:8000
-Content-Type: application/json
-Authorization: Bearer <token>
-
-{"jsonrpc": "2.0", "method": "tools/list", "id": 1}
-```
-
-### WebSocket Transport
-
-```javascript
-// Connect
-const ws = new WebSocket('ws://localhost:8000/04-mcp/ws');
-
-// Send request
-ws.send(JSON.stringify({
-    jsonrpc: "2.0",
-    method: "tools/call",
-    params: {
-        name: "cortex_lens_analyze",
-        arguments: { target: "src/app.py" }
-    },
-    id: 1
-}));
-
-// Receive response
-ws.onmessage = (event) => {
-    const response = JSON.parse(event.data);
-    console.log(response);
-};
-```
-
-### stdio Transport
-
-```bash
-# Start server in stdio mode
-python -m cortex.mcp.server --stdio
-
-# Send request via stdin
-echo '{"jsonrpc":"2.0","method":"tools/list","id":1}' | python -m cortex.mcp.server --stdio
-```
-
----
-
-## Related Documents
-
-- [MCP Overview](overview.md) — Introduction
-- [Tools Catalog](tools-catalog.md) — All tools
-- [Integration Guide](integration.md) — Client integration
-
----
-
-*Part of CORTEX Architecture Documentation — Updated 2026-02-13*
+*Verified against MCP protocol implementation · 20 February 2026*

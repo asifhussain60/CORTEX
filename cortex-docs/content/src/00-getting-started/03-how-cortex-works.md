@@ -4,33 +4,34 @@
 title: How CORTEX Works — End-to-End Request Lifecycle
 type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-18
-source_of_truth: cortex/__wiring_contract__.yaml + cortex/orchestrators/ + cortex/04-mcp/
+last_verified: 2026-02-20
+source_of_truth: cortex/orchestrators/core/ + cortex/mcp/ + cortex/lens/
 format: 10k-view
 order: 3
 ---
 
-> **Goal of this document:** Give you a clear mental model of what happens — step by step — from the moment you type a request to the moment CORTEX delivers a result. No prior knowledge of the internals is assumed.
+> **Goal:** Give you a clear mental model of what happens — step by step — from the moment you type a request to the moment CORTEX delivers a result.
 
 ---
 
 ## The Shortest Possible Summary
 
-You type a request in your IDE. CORTEX enriches it, classifies it, analyses your codebase, validates it against governance rules, builds an execution plan using its Brain, and delivers the result inline — all within seconds. Every step is observable and auditable.
+You type a request in your IDE. CORTEX enriches it, classifies it, analyses your codebase with 8 parallel analyzers, validates against 17 governance rules, builds an execution plan through Perception → Reasoning → Action, and delivers the result inline — all within seconds. Every step is observable and auditable.
 
 ---
 
-## The Mental Model: A Smart Factory Floor
+## The Mental Model: A Brain Processing a Stimulus
 
-Imagine a modern factory with a central control room and specialised production lines. When an order arrives:
+Imagine your brain receiving a complex instruction — "catch that ball":
 
-1. **Reception** checks the order is valid and enriches it with production context
-2. **Control Room** classifies the order and assigns it to the right production line
-3. **Quality Lab** scans the raw materials (your codebase) before work begins
-4. **Production Line** does the actual work, with quality checks at each station
-5. **Inspection** validates the output before it leaves the factory
+1. **Sensory Input** — your eyes and ears register the stimulus (→ MCP Gateway receives the request)
+2. **Thalamus** — routes the signal to the right brain region (→ IntentRouter classifies intent)
+3. **Sensory Cortex** — processes raw data into perception (→ LENS analyzes the codebase)
+4. **Prefrontal Cortex** — decides what to do (→ Brain Reasoning selects strategy)
+5. **Motor Cortex** — executes the plan (→ Orchestrator writes code via TDD)
+6. **Cerebellum** — checks coordination and balance (→ Governance Gate validates)
 
-CORTEX's pipeline maps directly onto this structure. The "factory" is your local machine; the "control room" is the MCP Gateway and orchestration layer; the "quality lab" is LENS; the "production line" is the TDD or Refactoring orchestrator; and "inspection" is the governance enforcement layer.
+Your brain does this in milliseconds. CORTEX does it in seconds — with full auditability.
 
 ---
 
@@ -38,213 +39,150 @@ CORTEX's pipeline maps directly onto this structure. The "factory" is your local
 
 ### Stage −1 · Request Pre-Processor (15–35ms)
 
-Before your request reaches any orchestrator, the **RequestRephraseOrchestrator** silently enriches it:
+Before your request reaches any orchestrator, the **RequestRephraseOrchestrator** (`cortex/orchestrators/core/request_rephrase_orchestrator.py`) silently enriches it:
 
 - Adds relevant governance context (which CORE rules apply)
 - Attaches a breaking-risk assessment
-- Surfaces any design pillar considerations
-- Flags if a Challenge Gate should be shown (high-risk changes)
+- Surfaces design pillar considerations
+- Flags if a Challenge Gate should trigger (high-risk changes)
 
-**You don't see this stage.** It happens automatically and ensures MasterOrchestrator always receives a self-documenting, fully-contextualised request.
+**You don't see this stage.** It happens automatically and ensures MasterOrchestrator always receives a fully-contextualised request.
+
+**Business Leader:** "Every request gets a risk assessment before anything happens — like a pre-flight safety check."
+**Product Owner:** "Governance context is injected automatically. I don't need to remind developers about rules."
+**Developer:** "My request gets enriched with relevant CORE rules. When I say 'fix the auth module', CORTEX already knows which governance standards apply."
 
 ---
 
 ### Stage 0 · MCP Gateway (5–15ms)
 
-Your enriched request arrives at the **MCP Gateway** over JSON-RPC 2.0 (stdio in development, HTTP on port 8000 in production). The gateway:
+Your enriched request arrives at the **MCP Gateway** (`cortex/mcp/`) over JSON-RPC 2.0 (stdio in development). The gateway:
 
-- Validates the JSON-RPC 2.0 schema
-- Authenticates the request (API key / JWT)
-- Applies rate limiting (60 req/min default)
-- Checks the **Native Tool Gate** (CORE-049) — blocks direct file operations for IMPLEMENT/FIX/REFACTOR intents, enforcing MCP-first architecture
+- Validates the JSON-RPC 2.0 message
+- Routes to the correct MCP tool (one of 23 canonical tools)
+- Enforces rate limiting
+- Checks the **Native Tool Gate** (CORE-049) — blocks direct file operations for IMPLEMENT/FIX/REFACTOR intents
 
-The gateway exposes **26 production MCP tools** (90+ operations) across five tiers. Most requests enter through `cortex_process_request`.
+**MCP server configuration** (`.vscode/settings.json`):
+```json
+{
+  "github.copilot.chat.mcpServers": {
+    "cortex": {
+      "command": "python3",
+      "args": ["-m", "cortex.mcp"],
+      "transport": "stdio",
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}
+```
 
 ---
 
 ### Stage 1 · Intent Classification (20–40ms)
 
-**IntentRouter** uses LENS intelligence to determine what the request is asking for. It recognises 12 intent types:
+**IntentRouter** (`cortex/orchestrators/core/intent_router.py`) uses LENS intelligence to determine what the request is asking for:
 
-| Intent | Description | Routed To |
-|--------|-------------|-----------|
-| IMPLEMENT | Build new functionality | TDD Orchestrator |
-| FIX | Repair a defect | TDD Orchestrator |
-| REFACTOR | Improve existing code | Refactoring Orchestrator |
-| ANALYZE | Understand the codebase | LENS Synthesis Orchestrator |
-| TEST | Generate or improve tests | TDD Orchestrator |
-| PLAN | Create a development plan | Planning Orchestrator |
-| AUDIT | Check compliance and quality | Audit Coordinator |
-| DESIGN | Architect a solution | Design Orchestrator |
-| DEBUG | Diagnose a problem | Debug Orchestrator |
-| DIGEST | Summarise a topic | Digest Coordinator |
-| QUERY | Look something up | Query Coordinator |
-| RECALL | Retrieve past context | Memory / Registry |
+| Intent | Routed To | Orchestrator Location |
+|--------|-----------|----------------------|
+| IMPLEMENT | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` |
+| FIX | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` |
+| REFACTOR | RefactoringOrchestrator | `cortex/orchestrators/core/refactoring_orchestrator.py` |
+| ANALYZE | LENS Synthesis | `cortex/orchestrators/synthesis/` |
+| PLAN | PlanningOrchestrator | `cortex/orchestrators/core/planning_orchestrator.py` |
+| AUDIT | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
+| DESIGN | Design Orchestrator | `cortex/orchestrators/core/` |
+| DEBUG | DebuggerOrchestrator | `cortex/orchestrators/core/debugger_orchestrator.py` |
+| INVESTIGATE | Intelligence Orchestrator | `cortex/orchestrators/intelligence/` |
+| QUERY | Domain routing | Context-dependent |
+| DIGEST | Digest Coordinator | `cortex/orchestrators/support/` |
+| REPHRASE | RequestRephraseOrchestrator | `cortex/orchestrators/core/request_rephrase_orchestrator.py` |
 
-If a request contains multiple intents (e.g., IMPLEMENT + TEST), composite intent detection handles both. Classification confidence must reach ≥0.7 for auto-execution; below 0.5, CORTEX asks for clarification.
+**Brain analogy:** IntentRouter is the **thalamus** — the relay station that receives all incoming signals and routes them to the correct specialized processing region.
 
 ---
 
-### Stage 2 · Intelligence Gathering: LENS (300–800ms)
+### Stage 2 · LENS Analysis (300–800ms)
 
-In parallel with intent classification, **LENS** (Language → Examination → Navigation → Synthesis) scans the relevant parts of your codebase using 8 specialised analyzers running concurrently:
+When the orchestrator needs to understand the codebase, **LENS** (`cortex/lens/`) runs **8 parallel analyzers**:
 
 | Analyzer | What It Detects |
-|----------|-----------------|
-| AST Analyzer | Syntax structure, code complexity, maintainability index |
-| Git History Analyzer | Change frequency, churn hotspots, author patterns (24h window) |
-| Security Analyzer | OWASP vulnerability patterns, hardcoded secrets, unsafe APIs |
-| Pattern Analyzer | Design patterns (Singleton, Factory, Observer), anti-patterns |
-| Metrics Analyzer | Cyclomatic complexity, Halstead metrics, test coverage |
-| Import Analyzer | Dependencies, circular imports, unused packages |
-| Comment Analyzer | TODOs, FIXMEs, documentation coverage |
-| Domain Analyzer | Framework-specific patterns (Django, React, .NET, Angular) |
+|----------|----------------|
+| **AST** | Code structure, classes, functions, imports |
+| **Git History** | Change frequency, recent modifications, author patterns |
+| **Comment** | Documentation coverage, TODO/FIXME density |
+| **Import** | Dependency graph, circular imports, stale imports |
+| **Security** | SQL injection, XSS, credential exposure, CVE patterns |
+| **Pattern** | Framework signatures, architecture styles |
+| **Metrics** | Cyclomatic complexity, lines of code, coupling |
+| **Domain** | Business domain detection (finance, healthcare, etc.) |
 
-Results are aggregated into a **`LENSContext`** object that the Brain's Perception tier uses to match patterns. SQLite caching means unchanged files are served in 50–150ms on repeat analysis (60–70% typical cache hit rate).
-
----
-
-### Stage 3 · Brain Processing (Perception → Reasoning → Action)
-
-The **Brain tier** converts raw LENS intelligence into a concrete execution plan. This is the cognitive core of CORTEX:
-
-**Perception** — Matches the `LENSContext` against the Pattern Registry. Finds known signatures (frameworks, architectural styles, testing patterns) and scores them by confidence.
-
-**Reasoning** — Takes confident matches and selects the best strategy. Weighs historical success rates, current context, and risk factors. Triggers the **Holistic Validation Gate** (CORE-048) which scores regression risk and, for high-risk changes, generates the Mandatory Challenge (presenting alternatives before proceeding).
-
-**Action** — Converts the chosen strategy into an ordered `ExecutionPlan` with TDD gates, validation checkpoints, and rollback steps at every stage.
-
-See `00-getting-started/brain-tier-architecture.md` for the full explanation.
+**Brain analogy:** These 8 analyzers are like the **8 sensory processing streams** in the brain — each specialized for one type of perception, all running simultaneously, producing a unified awareness.
 
 ---
 
-### Stage 4 · Governance Gate (Pre-execution, <150ms)
+### Stage 3 · Brain Intelligence (50–200ms)
 
-Before any file is modified, **EnforcementOrchestrator** runs 7 enforcement agents in parallel:
+The intelligence system (`cortex/intelligence/`) processes LENS data through three tiers:
 
-| Agent | Rules Enforced |
-|-------|---------------|
-| Governance Agent | TDD-first (CORE-008), documentation (CORE-027) |
-| Security Agent | Secrets detection, unsafe patterns |
-| Compliance Agent | Coverage thresholds, licence checks |
-| File Agent | Naming conventions (CORE-028), placement rules |
-| Architecture Agent | Structural integrity, layer separation |
-| Incremental Agent | Step-size limits (CORE-001) |
-| Markdown Agent | No report file sprawl (CORE-002) |
+1. **Perception** (`cortex/intelligence/perception/`) — matches repository signatures against known patterns (9 enterprise patterns in registry)
+2. **Reasoning** (`cortex/intelligence/reasoning/`) — selects the best strategy, weighted by historical success rates
+3. **Action** (`cortex/intelligence/action/`) — builds a step-by-step execution plan with TDD gates and rollback points
 
-Result is one of: **PASS** (execution continues), **WARNING** (execution continues with flag), or **BLOCKED** (execution halts, violation reported inline).
+**Product Owner:** "The Brain learns. Patterns from one repo inform recommendations in the next. Strategy success rates are tracked and ranked."
+
+---
+
+### Stage 4 · Governance Gate (<150ms)
+
+**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates **7 enforcement agents** plus the **ExtendedGovernanceAgent** (CORE-058 through CORE-063):
+
+- TDD Agent — enforces CORE-008 (test before code)
+- Security Agent — checks for vulnerabilities
+- Compliance Agent — validates CORE rule adherence
+- Naming Agent — enforces CORE-028 (snake_case)
+- Incremental Agent — enforces CORE-001 (bounded execution)
+- Architecture Agent — validates structural integrity
+- Markdown Agent — enforces CORE-002 (no report files)
+
+Result: **PASS**, **WARNING**, or **BLOCKED**. BLOCKED = operation stops immediately, no files changed.
 
 ---
 
 ### Stage 5 · Execution
 
-The appropriate orchestrator executes the `ExecutionPlan`. For an IMPLEMENT request this means:
+The designated orchestrator executes the plan. For IMPLEMENT/FIX:
 
-```
-For each feature unit:
-  1. Write failing test          ← RED   (committed, CI must fail)
-  2. Write minimal implementation ← GREEN (tests must now pass)
-  3. Refactor + verify           ← REFACTOR (no regressions)
-  4. Governance check            ← Gate before next unit
-```
+1. **RED** — TDDOrchestrator writes a failing test
+2. **GREEN** — Minimum code to pass the test
+3. **REFACTOR** — Improve code while keeping tests green
 
-For a REFACTOR request, the Refactoring Orchestrator uses semantic analysis (not text replacement) and validates that no observable behaviour changes.
+For REFACTOR: RefactoringOrchestrator performs semantic transformations with regression scoring.
+
+For ANALYZE: LENS produces a full 8-analyzer report delivered inline.
 
 ---
 
-### Stage 6 · Audit & Response
+### Stage 6 · Result Delivery
 
-After execution:
-
-- Every action is logged with AC_START → AC_COMPLETE markers
-- The audit trail is written to the Git-backed registry (immutable)
-- Results are delivered **inline** in your IDE — no `.md` or `.txt` report files are created (CORE-002)
-- For IMPLEMENT completions, a session summary with test counts and coverage metrics is shown
+Results are delivered **inline** per CORE-002. No `.md` or `.txt` files are created. The audit trail is recorded in CortexAuditDB (SQLite with WAL mode, stored in `.cortex-runtime/`).
 
 ---
 
-## Visualising the Full Pipeline
+## Complete Pipeline Summary
 
 ```
-Your IDE
-   │
-   │  JSON-RPC 2.0
-   ▼
-┌──────────────────────────────────────────────────────────────────┐
-│  Stage -1  RequestRephraseOrchestrator                           │
-│            + governance context + risk assessment (15–35ms)      │
-└──────────────────────────┬───────────────────────────────────────┘
-                           ▼
-┌──────────────────────────────────────────────────────────────────┐
-│  Stage 0   MCP Gateway                                           │
-│            schema validation · auth · rate limit · tool gate     │
-└──────────────────────────┬───────────────────────────────────────┘
-                           │
-              ┌────────────┴────────────┐
-              ▼                         ▼
-┌─────────────────────┐    ┌────────────────────────────────────┐
-│  Stage 1            │    │  Stage 2                            │
-│  IntentRouter       │    │  LENS (8 parallel analyzers)        │
-│  12 intent types    │    │  AST · Git · Security · Patterns    │
-│  (20–40ms)          │    │  Metrics · Import · Domain · Comment│
-└──────────┬──────────┘    └─────────────────┬──────────────────┘
-           └────────────────┬────────────────┘
-                            ▼
-┌──────────────────────────────────────────────────────────────────┐
-│  Stage 3   Brain                                                  │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐   │
-│  │  Perception  │→ │  Reasoning   │→ │  Action              │   │
-│  │  Pattern     │  │  Strategy    │  │  Execution Plan      │   │
-│  │  Registry    │  │  Selector    │  │  + TDD gates         │   │
-│  └──────────────┘  └──────────────┘  └──────────────────────┘   │
-└──────────────────────────┬───────────────────────────────────────┘
-                           ▼
-┌──────────────────────────────────────────────────────────────────┐
-│  Stage 4   Governance Gate (7 agents · 59 CORE rules · <150ms)  │
-└──────────────────────────┬───────────────────────────────────────┘
-                           ▼
-┌──────────────────────────────────────────────────────────────────┐
-│  Stage 5   Orchestrator Execution                                │
-│  TDD Orchestrator | Refactoring | Planning | Audit               │
-└──────────────────────────┬───────────────────────────────────────┘
-                           ▼
-┌──────────────────────────────────────────────────────────────────┐
-│  Stage 6   Audit Trail + Inline Result Delivery                  │
-└──────────────────────────────────────────────────────────────────┘
+[You] → IDE (VS Code / Cursor)
+  → [Stage -1] RequestRephraseOrchestrator (15-35ms)
+    → [Stage 0] MCP Gateway (5-15ms)
+      → [Stage 1] IntentRouter (20-40ms)
+        → [Stage 2] LENS 8-Analyzer Scan (300-800ms)
+          → [Stage 3] Brain: Perception → Reasoning → Action (50-200ms)
+            → [Stage 4] Governance Gate: 7 Agents (<150ms)
+              → [Stage 5] Orchestrator Execution (TDD / Refactor / Analysis)
+                → [Stage 6] Inline Result + Audit Trail
 ```
 
 ---
 
-## Frequently Asked Questions
-
-**Q: Do I need to configure anything to use CORTEX?**  
-The MCP server auto-starts when you invoke any `cortex_*` tool from your IDE — similar to how Pylance starts automatically in VS Code. No manual `python -m cortex.mcp.server` is required.
-
-**Q: What happens if CORTEX rejects my request?**  
-The governance layer returns the specific CORE rule that was violated and explains why. The most common rejection is missing a failing test before implementation (CORE-008). You can often resolve it immediately by following the inline guidance.
-
-**Q: Can CORTEX work on any codebase?**  
-LENS supports Python, TypeScript/JavaScript, C#/.NET, Angular, React, and Vue out of the box. Additional language adapters can be added through the Extensibility layer.
-
-**Q: Why does CORTEX sometimes ask me "are you sure?" before proceeding?**  
-The Reasoning tier's Holistic Validation Gate detected a regression risk score above the threshold for your change. It is presenting alternatives — the "Mandatory Challenge". You can type "proceed" to continue with your original approach or "use A" to take the recommended alternative.
-
-**Q: How does CORTEX get smarter over time?**  
-Every execution updates pattern success rates in the Brain's Perception tier. The Intelligence Layer (LENS + Pattern Learner) analyses the last 48 hours of git history to continuously adjust which patterns and strategies it recommends.
-
----
-
-## Where to Go Next
-
-| Topic | Document |
-|-------|----------|
-| The Brain tiers in depth | `00-getting-started/brain-tier-architecture.md` |
-| LENS analyzer details | `02-lens/01-overview.md` |
-| Orchestration architecture | `03-orchestration/01-overview.md` |
-| All 26 MCP tools | `04-mcp/tools-catalog.md` |
-| Governance rules reference | `01-capabilities/governance-compliance.md` |
-| Adding custom tools | `01-capabilities/extensibility.md` |
-
----
-
-*CORTEX  · February 2026 · Source of truth: `cortex/__wiring_contract__.yaml`*
+*All module paths verified against live codebase · 20 February 2026*
