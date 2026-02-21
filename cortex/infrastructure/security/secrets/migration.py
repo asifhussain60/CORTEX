@@ -105,8 +105,9 @@ class SecretsMigrationDetector:
 class SecretsMigrator:
     """Execute migration of secrets to Vault"""
 
-    def __init__(self):
-        pass
+    def __init__(self) -> None:
+        """Initialize migrator with empty state."""
+        self._migrated: list = []
 
     def read_secret(self, file_path: str, key: str) -> Optional[str]:
         """Read secret value from config file"""
@@ -124,17 +125,45 @@ class SecretsMigrator:
         """Remove secret from config file"""
         self._update_config_file(file_path, key, None)
 
-    def _update_config_file(self, file_path: str, key: str, value: Optional[str]) -> None:
-        """Update config file"""
-        pass
+    def _update_config_file(self, file_path: str, key: str, value: Any) -> None:
+        """Update or remove a key in a config file.
+
+        Args:
+            file_path: Path to the configuration file.
+            key: Configuration key to update.
+            value: New value; if ``None`` the key is removed.
+        """
+        import re as _re
+        from pathlib import Path
+        p = Path(file_path)
+        if not p.exists():
+            return
+        content = p.read_text()
+        if value is None:
+            # Remove the line containing the key
+            content = _re.sub(rf"(?m)^.*{_re.escape(key)}.*\n?", "", content)
+        else:
+            # Replace value in-line; fall back to append
+            pattern = _re.compile(rf'(?m)^({_re.escape(key)}\s*[=:]\s*).*$')
+            if pattern.search(content):
+                content = pattern.sub(rf'\g<1>{value}', content)
+            else:
+                content += f"\n{key}={value}\n"
+        p.write_text(content)
 
     def replace_with_vault_reference(self, file_path: str, key: str, vault_ref: str) -> None:
         """Replace hardcoded secret with Vault reference"""
         self._replace_in_config(file_path, key, vault_ref)
 
     def _replace_in_config(self, file_path: str, key: str, vault_ref: str) -> None:
-        """Replace in config"""
-        pass
+        """Replace a hardcoded secret value with a Vault reference.
+
+        Args:
+            file_path: Path to the configuration file.
+            key: Configuration key whose value should become a Vault reference.
+            vault_ref: Vault reference string (e.g. ``vault://path/to/secret``).
+        """
+        self._update_config_file(file_path, key, vault_ref)
 
     def execute_bulk_migration(self, provider, migration_plan: List[Dict[str, str]]) -> List[Dict[str, Any]]:
         """Execute bulk migration"""
@@ -173,8 +202,9 @@ class SecretsMigrator:
 class SecretsValidator:
     """Validate migrated secrets"""
 
-    def __init__(self):
-        pass
+    def __init__(self) -> None:
+        """Initialize validator."""
+        self._verified: list = []
 
     def verify_secret_in_vault(self, provider, secret_key: str) -> bool:
         """Verify secret exists in Vault"""

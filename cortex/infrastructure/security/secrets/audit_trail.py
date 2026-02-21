@@ -113,8 +113,23 @@ class HashChain:
         self._persist_to_storage()
 
     def _persist_to_storage(self) -> None:
-        """Persist to storage"""
-        pass
+        """Persist chain events to JSON file alongside the chain object.
+
+        Writes events and hashes as a JSON payload to
+        ``<chain_id>.audit.json`` if a ``storage_path`` attribute is set,
+        otherwise silently retains data in memory only.
+        """
+        storage_path = getattr(self, "storage_path", None)
+        if storage_path is None:
+            return
+        import json as _json
+        from pathlib import Path
+        payload = {
+            "events": self.events,
+            "hashes": self.hashes,
+            "previous_hash": self.previous_hash,
+        }
+        Path(storage_path).write_text(_json.dumps(payload, indent=2, default=str))
 
     def _get_stored_event(self, index: int) -> Dict[str, Any]:
         """Get stored event"""
@@ -182,29 +197,73 @@ class AuditTrail:
 class ComplianceAuditTrail:
     """Compliance-focused audit trail"""
 
+    def __init__(self) -> None:
+        """Initialize compliance audit trail with per-standard event buckets."""
+        self._sox_events: list = []
+        self._hipaa_events: list = []
+        self._pci_events: list = []
+
     def log_sox_event(self, user_id: str, action: str, data_affected: str = "") -> None:
-        """Log SOX-compliant event"""
-        pass
+        """Log SOX-compliant event.
+
+        Args:
+            user_id: Actor performing the action.
+            action: Description of the financial-data action.
+            data_affected: Identifier of affected data set.
+        """
+        self._sox_events.append({
+            "standard": "SOX",
+            "user_id": user_id,
+            "action": action,
+            "data_affected": data_affected,
+            "timestamp": datetime.now().isoformat(),
+        })
 
     def get_sox_compliant_events(self) -> List[Dict[str, Any]]:
         """Get SOX-compliant events"""
-        return []
+        return list(self._sox_events)
 
     def log_hipaa_event(self, user_id: str, action: str, patient_id: str = "", data_accessed: str = "") -> None:
-        """Log HIPAA-compliant event"""
-        pass
+        """Log HIPAA-compliant event.
+
+        Args:
+            user_id: Actor performing the action.
+            action: Description of the PHI-related action.
+            patient_id: Patient identifier (anonymised if required).
+            data_accessed: Description of data accessed.
+        """
+        self._hipaa_events.append({
+            "standard": "HIPAA",
+            "user_id": user_id,
+            "action": action,
+            "patient_id": patient_id,
+            "data_accessed": data_accessed,
+            "timestamp": datetime.now().isoformat(),
+        })
 
     def get_hipaa_compliant_events(self) -> List[Dict[str, Any]]:
         """Get HIPAA-compliant events"""
-        return []
+        return list(self._hipaa_events)
 
     def log_pci_event(self, user_id: str, action: str, transaction_id: str = "") -> None:
-        """Log PCI-DSS-compliant event"""
-        pass
+        """Log PCI-DSS-compliant event.
+
+        Args:
+            user_id: Actor performing the action.
+            action: Description of the cardholder-data action.
+            transaction_id: Payment transaction reference.
+        """
+        self._pci_events.append({
+            "standard": "PCI-DSS",
+            "user_id": user_id,
+            "action": action,
+            "transaction_id": transaction_id,
+            "timestamp": datetime.now().isoformat(),
+        })
 
     def get_pci_compliant_events(self) -> List[Dict[str, Any]]:
         """Get PCI-DSS-compliant events"""
-        return []
+        return list(self._pci_events)
 
 
 class AuditTrailRetention:

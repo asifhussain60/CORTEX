@@ -1,0 +1,268 @@
+---
+# Service Decomposition Workflow Template
+# FileFactory-validated: service-decomposition-workflow.yaml (CORE-028 ✅)
+# Authority: CORE-008 (TDD-first) · CORE-035 (no duplication) · CCL security-first
+# Composes: security-hardening · tdd-api-service · tdd-frontend-visual · migration-modernize · refactor-holistic-sweep
+
+workflow:
+  id: "lifecycle/service-decomposition-workflow"
+  name: "Service Decomposition Workflow"
+  version: "1.0.0"
+  category: "lifecycle"
+  description: |
+    Security-first, layer-gated strangler-fig progression for decomposing tightly-coupled systems.
+    Executes SECURITY_GATE → DATA_LAYER → API_LAYER → FRONTEND_LAYER → TEST_LAYER → HOLISTIC_SWEEP.
+    Security gate is a hard blocker — all downstream layers are skipped if gate fails.
+    Language adapters (Python/C#/TypeScript) are auto-selected per layer.
+    Scaffold mode active for non-Python targets: emits files + IDE instruction manifests.
+
+  metadata:
+    author: "CORTEX Phase 14"
+    created: "2026-02-20"
+    reusable_for:
+      - "Any layered legacy system (REST API + SPA frontend)"
+      - "_workspaces/sts/sample-apps/SampleLegacyApp"
+      - "_workspaces/sts/sample-apps/_Real/account-modernized"
+      - "_workspaces/sts/sample-apps/_Real/payment-processor-modernized"
+
+  # ── PARAMETERISED KNOWLEDGE CONTEXT ─────────────────────────────
+  knowledge_context:
+    architect_mode:
+      backend_language: "csharp"
+      frontend_language: "typescript"
+      test_framework_backend: "xunit"
+      test_framework_frontend: "jasmine"
+      orm: "entity_framework_core"
+      api_style: "REST (minimal-api to controller migration)"
+      security_standard: "OWASP Top 10 + CWE-89 (SQL injection)"
+      quality_gate_threshold: 7
+    production_mode:
+      backend_language: "{{backend_language}}"
+      frontend_language: "{{frontend_language}}"
+      test_framework_backend: "{{test_framework_backend}}"
+      test_framework_frontend: "{{test_framework_frontend}}"
+      orm: "{{orm}}"
+      api_style: "{{api_style}}"
+      security_standard: "{{security_standard}}"
+      quality_gate_threshold: "{{quality_gate_threshold}}"
+
+  # ── GLOBAL CONVERGENCE GATE ──────────────────────────────────────
+  convergence_gate:
+    max_cycles: 15
+    success_criteria:
+      all_layers_complete: true
+      security_gate_clean: true
+      tests_passing: true
+      quality_score_met: true
+    convergence_predicate: "security_clean and all_layers_done and test_pass and quality >= threshold"
+    backoff_strategy: "exponential"
+
+  # ── STEPS ────────────────────────────────────────────────────────
+  steps:
+
+    # STEP 0 — LENS baseline scan
+    - step_id: "lens_baseline"
+      name: "LENS Baseline Analysis"
+      orchestrator: "LENSOrchestrator"
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          baseline_captured: true
+        convergence_predicate: "lens_report_exists"
+      params:
+        scope: "full"
+        metrics: ["complexity", "duplication", "test_coverage", "security_issues", "sql_injection"]
+        output_keys: ["baseline_quality_score", "anti_patterns", "security_findings"]
+
+    # STEP 1 — SECURITY GATE (HARD BLOCKER)
+    - step_id: "security_gate"
+      name: "Security Gate — P0 Blocker (SQL Injection, Secrets, Stack Traces)"
+      orchestrator: "SecurityOrchestrator"
+      depends_on: ["lens_baseline"]
+      template_ref: "cortex-registry/workflows/templates/security/security-hardening.yaml"
+      blocking: true
+      convergence_gate:
+        max_cycles: 10
+        success_criteria:
+          sql_injection_clean: true
+          hardcoded_secrets_clean: true
+          stack_trace_exposure_clean: true
+        convergence_predicate: "sql_clean and secrets_clean and stack_trace_clean"
+        failure_action: "HALT — do not proceed to layer_1 until gate passes"
+      params:
+        language: "{{backend_language}}"
+        owasp_checks: ["A03_injection", "A02_cryptographic_failures", "A05_security_misconfiguration"]
+        auto_remediate: true
+        output_keys: ["security_report", "fixes_applied", "remaining_issues"]
+
+    # STEP 2 — DATA LAYER
+    - step_id: "layer_data_access"
+      name: "Layer 1 — Data Access (Repository Pattern + ORM)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["security_gate"]
+      template_ref: "cortex-registry/workflows/templates/tdd/tdd-api-service.yaml"
+      language_adapter: "{{backend_language}}_refactor_adapter"
+      scaffold_mode: "{{backend_language != 'python'}}"
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          repository_interface_exists: true
+          raw_sql_removed: true
+          async_patterns_applied: true
+          pagination_implemented: true
+        convergence_predicate: "interface_exists and raw_sql_count == 0 and has_async and has_pagination"
+      params:
+        tdd_phase: "RED"
+        layer: "data_access"
+        patterns: ["repository", "unit_of_work"]
+        orm: "{{orm}}"
+        scaffold_targets:
+          - name: "I{{entity}}Repository"
+            type: "interface"
+            methods: ["GetAll(skip, take)", "GetById(id)", "Create(dto)", "Update(id, dto)", "Delete(id)"]
+          - name: "{{entity}}Repository"
+            type: "class"
+            implements: "I{{entity}}Repository"
+          - name: "{{entity}}DbContext"
+            type: "dbcontext"
+        output_keys: ["scaffold_files", "test_results", "raw_sql_remaining"]
+
+    # STEP 3 — API LAYER
+    - step_id: "layer_api"
+      name: "Layer 2 — API (Controller + DTO separation + typed errors)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["layer_data_access"]
+      template_ref: "cortex-registry/workflows/templates/tdd/tdd-api-service.yaml"
+      language_adapter: "{{backend_language}}_refactor_adapter"
+      scaffold_mode: "{{backend_language != 'python'}}"
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          god_endpoint_removed: true
+          dto_separation_applied: true
+          typed_error_responses: true
+          correlation_id_present: true
+        convergence_predicate: "no_god_endpoint and dto_exists and typed_errors and correlation_id"
+      params:
+        tdd_phase: "RED"
+        layer: "api_controller"
+        api_style: "{{api_style}}"
+        scaffold_targets:
+          - name: "{{entity}}sController"
+            type: "controller"
+            routes: ["GET /{{entity_plural}}", "POST /{{entity_plural}}", "PUT /{{entity_plural}}/{id}", "DELETE /{{entity_plural}}/{id}"]
+          - name: "{{entity}}Dto"
+            type: "dto"
+            validation_attributes: ["[Required]", "[MaxLength(255)]", "[Range(1, int.MaxValue)]"]
+          - name: "ApiErrorResponse"
+            type: "response"
+            fields: ["CorrelationId", "Code", "Message", "Timestamp"]
+        output_keys: ["scaffold_files", "test_results", "god_endpoint_removed"]
+
+    # STEP 4 — FRONTEND LAYER
+    - step_id: "layer_frontend"
+      name: "Layer 3 — Frontend (Service extraction + typed models)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["layer_api"]
+      template_ref: "cortex-registry/workflows/templates/tdd/tdd-frontend-visual.yaml"
+      language_adapter: "typescript_refactor_adapter"
+      scaffold_mode: true
+      convergence_gate:
+        max_cycles: 6
+        success_criteria:
+          http_calls_in_component: false
+          typed_model_exists: true
+          error_handling_stream: true
+        convergence_predicate: "no_http_in_component and typed_model and error_observable"
+      params:
+        tdd_phase: "RED"
+        layer: "frontend_service"
+        framework: "angular"
+        scaffold_targets:
+          - name: "{{entity}}.service.ts"
+            type: "angular_service"
+            methods: ["getAll$(): Observable<{{entity}}[]>", "create$(dto): Observable<{{entity}}>", "update$(id, dto): Observable<void>", "delete$(id): Observable<void>"]
+            error_handling: "catchError → error$ BehaviorSubject"
+          - name: "{{entity}}.model.ts"
+            type: "interface"
+          - name: "{{entity}}s.component.ts"
+            type: "component"
+            delegates_to: "{{entity}}.service.ts"
+        output_keys: ["scaffold_files", "test_results", "any_type_usage"]
+
+    # STEP 5 — TEST REPLACEMENT
+    - step_id: "layer_tests"
+      name: "Layer 4 — Test Replacement (AAA, isolated, TestQualityGate ≥ 7)"
+      orchestrator: "TDDOrchestrator"
+      depends_on: ["layer_frontend"]
+      template_ref: "cortex-registry/workflows/templates/tdd/tdd-feature-implementation.yaml"
+      language_adapter: "{{backend_language}}_refactor_adapter"
+      convergence_gate:
+        max_cycles: 8
+        success_criteria:
+          broken_tests_removed: true
+          replacement_tests_quality: ">=7"
+          shared_state_eliminated: true
+          all_tests_pass: true
+        convergence_predicate: "no_broken_tests and quality_score >= 7 and all_pass"
+      params:
+        tdd_phase: "RED"
+        layer: "test_suite"
+        test_framework: "{{test_framework_backend}}"
+        quality_gate_threshold: "{{quality_gate_threshold}}"
+        isolation_strategy: "in_memory_db_per_test"
+        test_scenarios:
+          - "Get{{entity_plural}}_ReturnsPagedResults_WithDefaultPageSize"
+          - "Create{{entity}}_WithNullTitle_Returns400BadRequest"
+          - "Create{{entity}}_WithSqlInjectionPayload_IsRejected"
+          - "Delete{{entity}}_WithNonExistentId_Returns404NotFound"
+          - "Update{{entity}}_WithValidId_Returns200AndUpdatedEntity"
+        output_keys: ["test_files", "quality_scores", "test_results"]
+
+    # STEP 6 — HOLISTIC SWEEP
+    - step_id: "holistic_sweep"
+      name: "Layer 5 — Holistic Sweep (complexity, docs, final quality)"
+      orchestrator: "RefactoringOrchestrator"
+      depends_on: ["layer_tests"]
+      template_ref: "cortex-registry/workflows/templates/quality/refactor-holistic-sweep.yaml"
+      convergence_gate:
+        max_cycles: 5
+        success_criteria:
+          complexity_acceptable: true
+          documentation_complete: true
+          no_core_violations: true
+          security_clean: true
+        convergence_predicate: "complexity <= 10 and docs_complete and violations == 0 and security_clean"
+      params:
+        languages: ["{{backend_language}}", "{{frontend_language}}"]
+        complexity_target: 10
+        documentation_style:
+          csharp: "xml_doc"
+          typescript: "jsdoc"
+        output_keys: ["final_quality_score", "remaining_violations", "security_report"]
+
+    # STEP 7 — FINAL LENS VERIFICATION
+    - step_id: "lens_verification"
+      name: "LENS Final Verification — compare against baseline"
+      orchestrator: "LENSOrchestrator"
+      depends_on: ["holistic_sweep"]
+      convergence_gate:
+        max_cycles: 1
+        success_criteria:
+          quality_improved: true
+          security_issues_zero: true
+        convergence_predicate: "final_score > baseline_score and security_count == 0"
+      params:
+        compare_baseline: true
+        output_keys: ["improvement_percentage", "remaining_issues", "final_verdict"]
+
+  # ── SUCCESS CRITERIA (global) ────────────────────────────────────
+  success_criteria:
+    security_issues: "== 0"
+    test_quality_gate_score: ">= 7"
+    cyclomatic_complexity: "<= 10"
+    api_style: "REST (no god endpoints)"
+    god_component_http_calls: "== 0"
+    raw_sql_remaining: "== 0"
+    hardcoded_secrets: "== 0"
+    any_type_usage_frontend: "== 0"

@@ -41,12 +41,12 @@ class CortexGovernance(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_governance"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Execute governance actions including enforcement, blocking, "
             "remediation, and audit logging. Ensures CORE rule compliance."
@@ -54,12 +54,12 @@ class CortexGovernance(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.GOVERNANCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -90,7 +90,7 @@ class CortexGovernance(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["enforce", "query", "report", "approve", "block"]
     
     async def execute(self, **params) -> ToolResult:
@@ -216,12 +216,12 @@ class CortexValidate(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_validate"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Validate code against CORE governance rules with real rule checking. "
             "Supports compliance, security, venv, and environment validation."
@@ -229,12 +229,12 @@ class CortexValidate(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.GOVERNANCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -265,7 +265,7 @@ class CortexValidate(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["compliance", "security", "venv", "environment"]
     
     async def execute(self, **params) -> ToolResult:
@@ -394,12 +394,12 @@ class CortexLoad(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_load"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Load configurations and rules from YAML registry. "
             "Supports rules, modes, checklists, and format standards."
@@ -407,12 +407,12 @@ class CortexLoad(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.GOVERNANCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -438,7 +438,7 @@ class CortexLoad(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["rules", "modes", "checklist", "format"]
     
     async def execute(self, **params) -> ToolResult:
@@ -601,12 +601,12 @@ class CortexValidateRequest(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_validate_request"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Phase 48 holistic validation: Pre-implementation checklist + "
             "challenge generation + confidence scoring with 0.7 threshold gating. "
@@ -615,12 +615,12 @@ class CortexValidateRequest(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.GOVERNANCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="intent",
@@ -658,7 +658,7 @@ class CortexValidateRequest(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["validate", "quick", "challenges"]
     
     async def execute(self, **params) -> ToolResult:

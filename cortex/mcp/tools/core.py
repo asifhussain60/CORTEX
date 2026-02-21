@@ -63,12 +63,12 @@ class CortexProcessRequest(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_process_request"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "MANDATORY ENTRY POINT for all CORTEX operations. Routes ALL requests "
             "through MasterOrchestrator 4-stage pipeline (Interaction → Intent → "
@@ -79,12 +79,12 @@ class CortexProcessRequest(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.CORE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -151,7 +151,7 @@ class CortexProcessRequest(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return [op.value for op in ProcessRequestOperations]
     
     async def execute(self, **params) -> ToolResult:
@@ -372,12 +372,12 @@ class CortexChallenge(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_challenge"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Generate AI-driven challenges to user requests using LENS analysis. "
             "Ensures requirements completeness, edge case coverage, and security review."
@@ -385,12 +385,12 @@ class CortexChallenge(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.CORE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -422,7 +422,7 @@ class CortexChallenge(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["generate", "review", "validate"]
     
     async def execute(self, **params) -> ToolResult:
@@ -482,12 +482,12 @@ class CortexClassify(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_classify"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Classify user intent using LENS methodology. Returns intent type, "
             "confidence score, required orchestrators, and suggested approach."
@@ -495,12 +495,12 @@ class CortexClassify(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.CORE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -532,7 +532,7 @@ class CortexClassify(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["intent", "scope", "complexity"]
     
     async def execute(self, **params) -> ToolResult:
@@ -885,12 +885,12 @@ class CortexRequestLifecycle(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_request_lifecycle"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Manage full request lifecycle from creation to completion. "
             "Track status, updates, and history for audit trail."
@@ -898,12 +898,12 @@ class CortexRequestLifecycle(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.CORE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -928,7 +928,7 @@ class CortexRequestLifecycle(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["create", "update", "complete", "query", "history"]
     
     async def execute(self, **params) -> ToolResult:

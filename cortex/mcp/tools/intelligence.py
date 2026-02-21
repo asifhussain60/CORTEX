@@ -58,18 +58,23 @@ class CortexLens(ConsolidatedTool):
         if INTELLIGENCE_ORCHESTRATOR_AVAILABLE:
             try:
                 self._intelligence_orchestrator = IntelligenceOrchestrator()
-            except Exception:
-                # Graceful degradation if initialization fails
-                pass
+            except Exception as exc:  # noqa: BLE001
+                # Graceful degradation — log warning, continue with None orchestrator
+                import logging
+                logging.getLogger(__name__).warning(
+                    "IntelligenceOrchestrator init failed; LENS operating in degraded mode. "
+                    "Reason: %s",
+                    exc,
+                )
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_lens"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Unified code intelligence via LENS methodology. Supports analysis, "
             "semantic search, dependency graphs, duplicate detection, and AST analysis."
@@ -77,12 +82,12 @@ class CortexLens(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.INTELLIGENCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -114,7 +119,7 @@ class CortexLens(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["analyze", "search", "graph", "duplicates", "ast"]
     
     async def execute(self, **params) -> ToolResult:
@@ -403,12 +408,12 @@ class CortexKnowledge(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_knowledge"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Access CORTEX knowledge base. Search for domain knowledge, "
             "best practices, and identify knowledge gaps."
@@ -416,12 +421,12 @@ class CortexKnowledge(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.INTELLIGENCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -452,7 +457,7 @@ class CortexKnowledge(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["search", "domain", "best_practices", "gaps"]
     
     async def execute(self, **params) -> ToolResult:
@@ -531,12 +536,12 @@ class CortexGit(ConsolidatedTool):
     
     @property
     def name(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the name."""
         return "cortex_git"
     
     @property
     def description(self) -> str:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the description."""
         return (
             "Git history and context operations. Get commit history, blame, "
             "diffs, and 24-hour context for informed development."
@@ -544,12 +549,12 @@ class CortexGit(ConsolidatedTool):
     
     @property
     def category(self) -> ToolCategory:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the category."""
         return ToolCategory.INTELLIGENCE
     
     @property
     def parameters(self) -> List[ToolParameter]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the parameters."""
         return [
             ToolParameter(
                 name="operation",
@@ -580,7 +585,7 @@ class CortexGit(ConsolidatedTool):
     
     @property
     def supported_operations(self) -> List[str]:
-        """TODO: Add docstring (CORE-012)."""
+        """Return the supported operations."""
         return ["history", "blame", "diff", "context", "changes"]
     
     async def execute(self, **params) -> ToolResult:

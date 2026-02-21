@@ -201,7 +201,7 @@ class AssertionBuilder:
         self._current_name = field
 
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             if hasattr(self._target, field):
                 self._current_value = getattr(self._target, field)
                 return True
@@ -222,7 +222,7 @@ class AssertionBuilder:
         self._current_name = f"section_{section}"
 
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             if hasattr(self._target, 'get_section'):
                 sec = self._target.get_section(section)
                 if sec:
@@ -248,7 +248,7 @@ class AssertionBuilder:
     def equals(self, expected: Any) -> 'AssertionBuilder':
         """Assert current value equals expected."""
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             return self._current_value == expected
 
         self._assertions.append(Assertion(
@@ -261,7 +261,7 @@ class AssertionBuilder:
     def not_equals(self, expected: Any) -> 'AssertionBuilder':
         """Assert current value does not equal expected."""
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             return self._current_value != expected
 
         self._assertions.append(Assertion(
@@ -274,7 +274,7 @@ class AssertionBuilder:
     def is_not_none(self) -> 'AssertionBuilder':
         """Assert current value is not None."""
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             return self._current_value is not None
 
         self._assertions.append(Assertion(
@@ -287,7 +287,7 @@ class AssertionBuilder:
     def is_not_empty(self) -> 'AssertionBuilder':
         """Assert current value is not empty."""
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             if self._current_value is None:
                 return False
             if hasattr(self._current_value, '__len__'):
@@ -306,7 +306,7 @@ class AssertionBuilder:
     def contains(self, item: Any) -> 'AssertionBuilder':
         """Assert current value contains item."""
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             if isinstance(self._current_value, (list, tuple, set)):
                 return item in self._current_value
             elif isinstance(self._current_value, dict):
@@ -325,7 +325,7 @@ class AssertionBuilder:
     def has_length(self, length: int) -> 'AssertionBuilder':
         """Assert current value has specific length."""
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             if hasattr(self._current_value, '__len__'):
                 return len(self._current_value) == length
             return False
@@ -342,7 +342,7 @@ class AssertionBuilder:
         import re
 
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             if isinstance(self._current_value, str):
                 return bool(re.match(pattern, self._current_value))
             return False
@@ -357,7 +357,7 @@ class AssertionBuilder:
     def is_type(self, expected_type: type) -> 'AssertionBuilder':
         """Assert current value is of expected type."""
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             return isinstance(self._current_value, expected_type)
 
         self._assertions.append(Assertion(
@@ -370,7 +370,7 @@ class AssertionBuilder:
     def satisfies(self, condition: Callable[[Any], bool], message: str = "") -> 'AssertionBuilder':
         """Assert current value satisfies custom condition."""
         def check():
-            """TODO: Add docstring (CORE-012)."""
+            """Check."""
             return condition(self._current_value)
 
         self._assertions.append(Assertion(
@@ -809,14 +809,18 @@ def create_validation_test(
         TemplateTestCase
     """
     def setup():
-        """TODO: Add docstring (CORE-012)."""
+        """Setup."""
         from cortex.models.canonical_enums import TestStatus
         from cortex.tools.template_validator import TemplateValidator
         v = validator or TemplateValidator()
         return v.validate(template)
 
     def check_valid(result):
-        """TODO: Add docstring (CORE-012)."""
+        """Check valid.
+        
+        Args:
+            result: Parameter for result.
+        """
         return result.valid
 
     assertions = [

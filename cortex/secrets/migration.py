@@ -24,7 +24,16 @@ class SecretsMigrator:
         destination: ISecretsProvider,
         keys: Optional[List[str]] = None,
     ) -> MigrationResult:
-        """TODO: Add docstring (CORE-012)."""
+        """Migrate.
+        
+        Args:
+            source: Parameter for source.
+            destination: Parameter for destination.
+            keys: Parameter for keys.
+        
+        Returns:
+            MigrationResult result.
+        """
         result = MigrationResult()
         keys = keys or source.list_secrets()
         for key in keys:
@@ -43,7 +52,16 @@ class SecretsValidator:
     """Validates that secrets exist and meet policy requirements."""
 
     def validate_secret(self, provider: ISecretsProvider, key: str, policy: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """TODO: Add docstring (CORE-012)."""
+        """Validate secret.
+        
+        Args:
+            provider: Parameter for provider.
+            key: Parameter for key.
+            policy: Parameter for policy.
+        
+        Returns:
+            Dict[str, Any] result.
+        """
         try:
             value = provider.get_secret(key)
             issues: List[str] = []
@@ -55,7 +73,14 @@ class SecretsValidator:
             return {"key": key, "valid": False, "issues": [str(exc)]}
 
     def validate_all(self, provider: ISecretsProvider) -> List[Dict[str, Any]]:
-        """TODO: Add docstring (CORE-012)."""
+        """Validate all.
+        
+        Args:
+            provider: Parameter for provider.
+        
+        Returns:
+            List[Dict[str, Any]] result.
+        """
         return [self.validate_secret(provider, k) for k in provider.list_secrets()]
 
 
@@ -66,7 +91,11 @@ class SecretsRollback:
         self._snapshot: Dict[str, str] = {}
 
     def snapshot(self, provider: ISecretsProvider) -> None:
-        """TODO: Add docstring (CORE-012)."""
+        """Snapshot.
+        
+        Args:
+            provider: Parameter for provider.
+        """
         for key in provider.list_secrets():
             try:
                 self._snapshot[key] = provider.get_secret(key)
@@ -74,7 +103,14 @@ class SecretsRollback:
                 pass
 
     def rollback(self, provider: ISecretsProvider) -> bool:
-        """TODO: Add docstring (CORE-012)."""
+        """Rollback.
+        
+        Args:
+            provider: Parameter for provider.
+        
+        Returns:
+            bool result.
+        """
         for key, value in self._snapshot.items():
             try:
                 provider.set_secret(key, value)
@@ -91,7 +127,15 @@ class SecretsMigrationDetector:
         source: ISecretsProvider,
         destination: ISecretsProvider,
     ) -> bool:
-        """TODO: Add docstring (CORE-012)."""
+        """Needs migration.
+        
+        Args:
+            source: Parameter for source.
+            destination: Parameter for destination.
+        
+        Returns:
+            bool result.
+        """
         src_keys = set(source.list_secrets())
         dst_keys = set(destination.list_secrets())
         return len(src_keys - dst_keys) > 0
@@ -101,7 +145,15 @@ class SecretsMigrationDetector:
         source: ISecretsProvider,
         destination: ISecretsProvider,
     ) -> Dict[str, Any]:
-        """TODO: Add docstring (CORE-012)."""
+        """Diff.
+        
+        Args:
+            source: Parameter for source.
+            destination: Parameter for destination.
+        
+        Returns:
+            Dict[str, Any] result.
+        """
         src_keys = set(source.list_secrets())
         dst_keys = set(destination.list_secrets())
         return {
@@ -126,7 +178,16 @@ class SecretsMigrationOrchestrator:
         destination: ISecretsProvider,
         dry_run: bool = False,
     ) -> MigrationResult:
-        """TODO: Add docstring (CORE-012)."""
+        """Run.
+        
+        Args:
+            source: Parameter for source.
+            destination: Parameter for destination.
+            dry_run: Parameter for dry run.
+        
+        Returns:
+            MigrationResult result.
+        """
         if dry_run:
             diff = self._detector.diff(source, destination)
             return MigrationResult(

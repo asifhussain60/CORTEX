@@ -13,8 +13,8 @@ metadata:
   completed_dir: cortex-registry/planning/phases/completed/cortex-refactor/
   status_authority: "THIS FILE \u2014 cortex-refactor-master.yaml"
   counters:
-    total_phases: 13
-    pending: 0
+    total_phases: 15
+    pending: 3
     in_progress: 0
     complete: 12
     deferred: 0
@@ -28,7 +28,15 @@ metadata:
     phase_tests: "197 passing / 0 failing"
     quality_gate_tests: "49 passing / 0 failing"
     production_readiness_tests: "25 passing / 0 failing"
-    verdict: "✅ CLEAN — ALL 12 PHASES COMPLETE. CORTEX  production-ready."
+    verdict: "✅ CLEAN — ALL 12 PHASES COMPLETE. Phases 12–14 planned. 186 stubs outstanding (Phase 13). Service decomposition workflow template ready (Phase 14)."
+  open_items:
+    stub_violations: 186
+    stub_files: 18
+    functional_stubs: 3
+    docstring_stubs: 183
+    stub_authority: "phase-13-stub-elimination.yaml"
+    service_decomposition_workflow: "cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml"
+    service_decomposition_authority: "phase-14-service-decomposition.yaml"
 
 presentation:
   summary: |
@@ -1202,12 +1210,88 @@ phases:
     issues_found: 0
     issues_resolved: 0
 
+- id: phase-13
+  title: "Zero-Stub Enforcement — 186 stub instances → 0 (production-grade implementations)"
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-13-stub-elimination.yaml
+  status: planned
+  priority: P0
+  risk: medium
+  dependencies:
+    - phase-12
+  stub_summary:
+    total: 186
+    functional: 3
+    docstring: 183
+    files_affected: 18
+  deliverables:
+    - "D1: cortex/orchestrators/support/stub_remediation_enforcer.py — Audit check#2 plugin"
+    - "D2: cortex/mcp/tools/adapters/language_adapter_base.py — abstract LanguageAdapter protocol"
+    - "D3: cortex/mcp/tools/adapters/python_refactor_adapter.py — real Python organize/extract via AST"
+    - "D4: cortex/mcp/tools/adapters/csharp_refactor_adapter.py — C# scaffold emitter + Roslyn manifest"
+    - "D5: cortex/mcp/tools/adapters/typescript_refactor_adapter.py — Angular service extraction scaffold"
+    - "D6: cortex-registry/workflows/templates/lifecycle/stub-remediation-phase-spec.yaml — reusable template"
+    - "D7: All 183 TODO docstrings replaced with real docstrings (batch RED→GREEN, 5 batches)"
+    - "D8: 3 functional stubs fixed (cortex_refactor writes files; intelligence __init__ logs; AssertionBuilder builds)"
+    - "D9: Audit check#2 detects TODO docstring pattern + functional stub pattern"
+    - "D10: 5 RED test files passing GREEN, coverage ≥ 95%"
+    - "D11: cortex_validate_compliance confirms 0 CORE-012 violations"
+  acceptance_criteria:
+    - "AC-PHASE13-001: grep -rn 'TODO: Add docstring' cortex/ | wc -l == 0"
+    - "AC-PHASE13-002: cortex_refactor operation=organize on .py file produces real file diff"
+    - "AC-PHASE13-003: cortex_refactor C# operation returns scaffold manifest NOT silent changes=[]"
+    - "AC-PHASE13-004: Audit check#2 catches TODO docstring and reports P1 violation"
+    - "AC-PHASE13-005: 486 golden tests still passing after all 8 execution steps"
+    - "AC-PHASE13-006: cortex_validate_compliance returns 0 CORE-012 violations"
+    - "AC-PHASE13-007: AssertionBuilder.build() returns populated List[Assertion]"
+  tdd_mandate: "CORE-008 — RED test first for every step, no exceptions"
+  regression_gate: "15,303 collected tests must remain passing after each step"
+  progress:
+    started: null
+    completed: null
+    issues_resolved: 0
+
+- id: phase-14
+  title: "Service Decomposition — Security-first Strangler-Fig Workflow Template + Legacy System Refactor"
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-14-service-decomposition.yaml
+  status: planned
+  priority: P1
+  risk: medium
+  dependencies:
+    - phase-13
+  target: "_workspaces/sts/sample-apps/SampleLegacyApp"
+  reusable_for:
+    - "_workspaces/sts/sample-apps/_Real/account-modernized"
+    - "_workspaces/sts/sample-apps/_Real/payment-processor-modernized"
+  deliverables:
+    - "D1: cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml — security-gated 7-step strangler-fig workflow"
+    - "D2: cortex/orchestrators/domain/legacy_modernization_orchestrator.py — WorkflowEngine reader + adapter dispatcher"
+    - "D3: Security gate clears SQL injection + hardcoded credentials (P0 cleared)"
+    - "D4: C# scaffolds — ITaskRepository, TaskRepository, TaskDbContext, TasksController, TaskDto, ApiErrorResponse"
+    - "D5: TypeScript scaffolds — task.service.ts, task.model.ts, lean tasks.component.ts"
+    - "D6: 5 replacement xUnit tests (AAA, in-memory EF Core, TestQualityGate ≥ 7)"
+    - "D7: Holistic sweep — complexity ≤ 10, 0 CORE violations, 0 security findings"
+    - "D8: 2 RED test files passing GREEN, coverage ≥ 95%"
+  acceptance_criteria:
+    - "AC-PHASE14-001: legacy_modernization_orchestrator executes all 5 layers in dependency order"
+    - "AC-PHASE14-002: security_gate blocks layer_1 if SQL injection found"
+    - "AC-PHASE14-003: csharp_refactor_adapter emits ITaskRepository.cs with correct interface contract"
+    - "AC-PHASE14-004: typescript_refactor_adapter emits task.service.ts with typed Task model"
+    - "AC-PHASE14-005: All 5 replacement xUnit tests score ≥ 7 in TestQualityGate"
+    - "AC-PHASE14-006: cortex_process_request(intent=refactor, target=legacy_system) routes to LegacyModernizationOrchestrator"
+    - "AC-PHASE14-007: Workflow template parameterized — not hardcoded to a specific target"
+  tdd_mandate: "CORE-008 — RED test first for D2 and D8; C# scaffolds validated via xUnit suite D6"
+  regression_gate: "15,303 collected tests must remain passing"
+  progress:
+    started: null
+    completed: null
+    issues_resolved: 0
+
 lens_scans:
   history: []
 validation_loops:
   history: []
 completion:
-  status: phases_1_to_11_complete
+  status: phases_1_to_12_planned_13_14_registered
   completed_date: "2026-02-20"
   total_duration: "~32 hours across 12 phases (2026-02-19 to 2026-02-20)"
   final_test_count: 15303
@@ -1215,6 +1299,29 @@ completion:
   final_golden_tests: 486
   cortex_master_yaml_updated: true
   summary:
-    issues_identified: "Phase 10 TDD revealed 4 test/assertion issues (all resolved). Phase 11 gap analysis identified 8 gaps across 4 priority tiers. Phase 12 planned: MCP consolidation + stale dir cleanup."
+    issues_identified: "Phase 10 TDD revealed 4 test/assertion issues (all resolved). Phase 11 gap analysis identified 8 gaps across 4 priority tiers. Phase 12 planned: MCP consolidation + stale dir cleanup. Phase 13 planned: 186 stub elimination (3 functional + 183 docstring). Phase 14 planned: Service decomposition workflow template."
     solution_implemented: "25 production readiness tests across 6 domains: perf, security, chaos, DR, observability, regression. ENH-003: wiring harness + collection error fixed. ENH-001/002: phase-12 planned."
-    next_steps: "Execute phase-12: (1) MCP consolidation 38→23 tools, (2) stale dir migration 26→21 dirs"
+    next_steps: "Execute phase-12: (1) MCP consolidation 38→23 tools, (2) stale dir migration 26→21 dirs. Then phase-13: zero-stub enforcement. Then phase-14: service decomposition workflow."
+  registered_phases:
+    - id: phase-13
+      title: "Zero-Stub Enforcement"
+      spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-13-stub-elimination.yaml"
+      status: planned
+      stub_count: 186
+      functional_stubs: 3
+      docstring_stubs: 183
+      new_files:
+        - "cortex/orchestrators/support/stub_remediation_enforcer.py"
+        - "cortex/mcp/tools/adapters/language_adapter_base.py"
+        - "cortex/mcp/tools/adapters/python_refactor_adapter.py"
+        - "cortex/mcp/tools/adapters/csharp_refactor_adapter.py"
+        - "cortex/mcp/tools/adapters/typescript_refactor_adapter.py"
+        - "cortex-registry/workflows/templates/lifecycle/stub-remediation-phase-spec.yaml"
+    - id: phase-14
+      title: "Service Decomposition"
+      spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-14-service-decomposition.yaml"
+      status: planned
+      workflow_template: "cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml"
+      new_files:
+        - "cortex/orchestrators/domain/legacy_modernization_orchestrator.py"
+        - "cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml"
