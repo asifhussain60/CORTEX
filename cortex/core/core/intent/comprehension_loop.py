@@ -339,18 +339,18 @@ class BrainTierPusher:
 
     Maps comprehension content to brain tier destinations:
     - tier0: Governance rules (cortex-registry/core/tier0-skull/)
-    - tier1: Learned patterns (memory/learned_patterns/)
-    - tier2: Adaptive intelligence (memory/adaptive_intelligence/)
+    - tier1: Learned patterns (memory/tier1_learned/)
+    - tier2: Adaptive intelligence (memory/tier2_adaptive/)
     - tier3: Scratch space (memory/scratch_space/)
-    
-    Updated in Phase 47 Stage 3 to use new memory tier paths.
+
+    Updated to use canonical memory tier paths (CORE-035).
     """
 
     TIER_PATHS = {
         BrainTier.TIER_0: "cortex-registry/core/tier0-skull",
-        BrainTier.TIER_1: "cortex_intelligence/memory/learned_patterns",
-        BrainTier.TIER_2: "cortex_intelligence/memory/adaptive_intelligence",
-        BrainTier.TIER_3: "cortex_intelligence/memory/scratch_space",
+        BrainTier.TIER_1: "cortex/intelligence/memory/tier1_learned",
+        BrainTier.TIER_2: "cortex/intelligence/memory/tier2_adaptive",
+        BrainTier.TIER_3: "cortex/intelligence/memory/scratch_space",
     }
 
     def __init__(self, workspace_root: str = ".") -> None:

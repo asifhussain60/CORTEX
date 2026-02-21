@@ -33,7 +33,7 @@ class Core035Analyzer:
             ],
             'DomainPluginRegistry': [
                 'cortex/brain/domain_orchestrators/business/plugins.py',
-                'cortex/domain_orchestrators/business/plugins.py',
+                'cortex/orchestrators/domain/business/plugins.py',
             ],
             'GovernanceRegistry': [
                 'cortex/brain/core/governance_registry.py',
@@ -55,7 +55,7 @@ class Core035Analyzer:
             'TemplateRegistry': 'cortex/tools/scaffolder_templates.py',
             'OrchestratorDependencyRegistry': 'cortex/core/orchestrator_dependency_registry.py',
             'EventRegistry': 'cortex/core/orchestrator/terminal_events.py',
-            'DomainPluginRegistry': 'cortex/domain_orchestrators/business/plugins.py',
+            'DomainPluginRegistry': 'cortex/orchestrators/domain/business/plugins.py',
             'GovernanceRegistry': 'cortex/orchestrators/core/governance_registry.py',
             'OrchestratorRegistry': 'cortex/orchestrators/registry/__init__.py',
             'IGovernanceRegistry': 'cortex/brain/core/interfaces.py',

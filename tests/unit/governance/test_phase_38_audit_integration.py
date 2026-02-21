@@ -132,7 +132,7 @@ class TestCorctexArchitectAuditIntegration:
 
     def test_vacuum_orchestrator_uses_phase_38_tools(self):
         """Test: VacuumOrchestrator can use Phase 38 tools"""
-        from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
         from unittest.mock import MagicMock
         
         vacuum = MagicMock(spec=VacuumOrchestrator)

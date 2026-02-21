@@ -197,7 +197,7 @@ class TestVacuumOrchestratorBrainFlush:
 
     def test_vacuum_orchestrator_has_brain_flush_capability(self) -> None:
         """Test VacuumOrchestrator exposes brain flush capability."""
-        from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
         
         orchestrator = VacuumOrchestrator()
         
@@ -208,7 +208,7 @@ class TestVacuumOrchestratorBrainFlush:
 
     def test_vacuum_orchestrator_calls_brain_state_manager(self) -> None:
         """Test VacuumOrchestrator integrates with BrainStateManager."""
-        from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
         from unittest.mock import Mock, patch
         
         orchestrator = VacuumOrchestrator()
@@ -233,7 +233,7 @@ class TestVacuumOrchestratorBrainFlush:
 
     def test_vacuum_orchestrator_includes_brain_flush_in_cleanup_plan(self) -> None:
         """Test VacuumOrchestrator includes brain state flush in cleanup plans."""
-        from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
         
         orchestrator = VacuumOrchestrator()
         
@@ -256,7 +256,7 @@ class TestVacuumOrchestratorBrainFlush:
 
     def test_vacuum_orchestrator_reports_brain_flush_metrics(self) -> None:
         """Test VacuumOrchestrator reports brain flush metrics."""
-        from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
         from unittest.mock import Mock, patch
         
         orchestrator = VacuumOrchestrator()
@@ -281,7 +281,7 @@ class TestVacuumOrchestratorBrainFlush:
 
     def test_vacuum_orchestrator_handles_brain_flush_failures(self) -> None:
         """Test VacuumOrchestrator handles brain flush failures gracefully."""
-        from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
+        from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
         from unittest.mock import Mock, patch
         
         orchestrator = VacuumOrchestrator()

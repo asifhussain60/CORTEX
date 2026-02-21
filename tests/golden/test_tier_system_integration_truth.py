@@ -146,8 +146,8 @@ class TestTierValidationGates:
         ]
         
         required_memory_tiers = [
-            "cortex/intelligence/memory/learned_patterns",
-            "cortex/intelligence/memory/adaptive_intelligence",
+            "cortex/intelligence/memory/tier1_learned",
+            "cortex/intelligence/memory/tier2_adaptive",
             "cortex/intelligence/memory/scratch_space"
         ]
         
@@ -158,7 +158,7 @@ class TestTierValidationGates:
         # Should have at least memory tiers
         memory_existing = [p for p in required_memory_tiers 
                           if Path(p).exists() or 
-                          Path(p.replace("learned_patterns", "tier1_learned")).exists()]
+                          Path(p.replace("tier1_learned", "tier1_learned")).exists()]
         
         assert len(memory_existing) > 0 or len(existing) > 0, \
             "No tier directories found - structure not set up"
@@ -228,8 +228,8 @@ class TestEndToEndTierWorkflows:
             Path("cortex/intelligence/memory/tier1_learned").exists(),
             Path("cortex/intelligence/memory/tier2_adaptive").exists(),
             Path("cortex/intelligence/memory/tier3_scratch").exists(),
-            Path("cortex/intelligence/memory/learned_patterns").exists(),
-            Path("cortex/intelligence/memory/adaptive_intelligence").exists(),
+            Path("cortex/intelligence/memory/tier1_learned").exists(),
+            Path("cortex/intelligence/memory/tier2_adaptive").exists(),
             Path("cortex/intelligence/memory/scratch_space").exists()
         ])
         

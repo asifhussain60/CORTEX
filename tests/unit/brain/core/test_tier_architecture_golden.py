@@ -123,8 +123,8 @@ class TestMemoryTierMigration:
 
     def test_all_new_memory_directories_exist(self):
         """AC-PHASE47-S4-002: All new memory directories exist."""
-        learned_patterns = Path("cortex_intelligence/memory/learned_patterns")
-        adaptive_intelligence = Path("cortex_intelligence/memory/adaptive_intelligence")
+        learned_patterns = Path("cortex/intelligence/memory/tier1_learned")
+        adaptive_intelligence = Path("cortex/intelligence/memory/tier2_adaptive")
         scratch_space = Path("cortex_intelligence/memory/scratch_space")
         
         assert learned_patterns.exists() and learned_patterns.is_dir()
@@ -139,11 +139,11 @@ class TestMemoryTierMigration:
         
         if tier1_learned.exists():
             assert tier1_learned.is_symlink()
-            assert tier1_learned.resolve().name == "learned_patterns"
+            assert tier1_learned.resolve().name == "tier1_learned"
         
         if tier2_adaptive.exists():
             assert tier2_adaptive.is_symlink()
-            assert tier2_adaptive.resolve().name == "adaptive_intelligence"
+            assert tier2_adaptive.resolve().name == "tier2_adaptive"
         
         if tier3_scratch.exists():
             assert tier3_scratch.is_symlink()
@@ -182,8 +182,8 @@ class TestBrainTierPusherIntegration:
             
             # Verify paths
             assert pusher.TIER_PATHS[BrainTier.TIER_0] == "cortex-registry/core/tier0-skull"
-            assert "learned_patterns" in pusher.TIER_PATHS[BrainTier.TIER_1]
-            assert "adaptive_intelligence" in pusher.TIER_PATHS[BrainTier.TIER_2]
+            assert "tier1_learned" in pusher.TIER_PATHS[BrainTier.TIER_1]
+            assert "tier2_adaptive" in pusher.TIER_PATHS[BrainTier.TIER_2]
             assert "scratch_space" in pusher.TIER_PATHS[BrainTier.TIER_3]
             
             # Verify no old paths

@@ -75,8 +75,7 @@ class RegistryIntelligenceAgent:
         discoveries = []
         orchestrator_dirs = [
             self.workspace_root / "cortex" / "orchestrators",
-            self.workspace_root / "cortex" / "domain_orchestrators",
-            self.workspace_root / "cortex_intelligence" / "governance"
+            self.workspace_root / "cortex" / "governance",
         ]
 
         for directory in orchestrator_dirs:

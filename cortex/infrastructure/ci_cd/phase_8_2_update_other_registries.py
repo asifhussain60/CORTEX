@@ -17,7 +17,7 @@ updates = {
         "from": "from cortex.orchestrators.domain.business.plugins import",
         "to": "from cortex.orchestrators.domain.business.plugins import",
         "files": [
-            "cortex/domain_orchestrators/business/__init__.py",
+            "cortex/orchestrators/domain/business/__init__.py",
             "tests/unit/domain_orchestrators/test_domain_plugins_context.py",
         ]
     }

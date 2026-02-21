@@ -1,85 +1,70 @@
 """
-Phase 47 Stage 2: Memory Tier Clarification Tests
+Memory Tier Path Tests (CORE-035 canonical paths)
 
-RED phase tests for memory tier renaming:
-- tier1_learned/ → learned_patterns/
-- tier2_adaptive/ → adaptive_intelligence/
-- tier3_scratch/ → scratch_space/
+Validates canonical memory tier directory structure:
+- tier1_learned/   — learned patterns
+- tier2_adaptive/  — adaptive intelligence
+- scratch_space/   — scratch workspace
 
 Acceptance Criteria:
-- AC-PHASE47-S2-001: New directory structure exists
-- AC-PHASE47-S2-002: Old directories removed
-- AC-PHASE47-S2-003: BrainTierPusher uses new paths
-- AC-PHASE47-S2-004: TierLoader uses new paths
+- AC-PHASE47-S2-001: Canonical directory structure exists
+- AC-PHASE47-S2-002: Mirror directories removed
+- AC-PHASE47-S2-003: BrainTierPusher uses canonical paths
+- AC-PHASE47-S2-004: TierLoader uses canonical paths
 """
 
 import pytest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-# Test directory paths
-MEMORY_ROOT = Path("cortex_intelligence/memory")
-OLD_TIER1 = MEMORY_ROOT / "tier1_learned"
-OLD_TIER2 = MEMORY_ROOT / "tier2_adaptive"
-OLD_TIER3 = MEMORY_ROOT / "tier3_scratch"
+# Canonical directory paths
+MEMORY_ROOT = Path("cortex/intelligence/memory")
+TIER1_LEARNED = MEMORY_ROOT / "tier1_learned"
+TIER2_ADAPTIVE = MEMORY_ROOT / "tier2_adaptive"
+SCRATCH_SPACE = MEMORY_ROOT / "scratch_space"
 
-NEW_LEARNED = MEMORY_ROOT / "learned_patterns"
-NEW_ADAPTIVE = MEMORY_ROOT / "adaptive_intelligence"
-NEW_SCRATCH = MEMORY_ROOT / "scratch_space"
+# Mirror directories that should NOT exist (deleted in CORE-035 cleanup)
+MIRROR_LEARNED_PATTERNS = MEMORY_ROOT / "learned_patterns"
+MIRROR_ADAPTIVE_INTELLIGENCE = MEMORY_ROOT / "adaptive_intelligence"
 
 
 # =============================================================================
 # DIRECTORY STRUCTURE TESTS
 # =============================================================================
 class TestMemoryDirectoryStructure:
-    """Test new memory directory structure exists."""
+    """Test canonical memory directory structure exists."""
 
-    def test_learned_patterns_directory_exists(self):
-        """AC-PHASE47-S2-001: learned_patterns/ directory exists."""
-        assert NEW_LEARNED.exists(), f"{NEW_LEARNED} should exist"
-        assert NEW_LEARNED.is_dir(), f"{NEW_LEARNED} should be a directory"
+    def test_tier1_learned_directory_exists(self):
+        """AC-PHASE47-S2-001: tier1_learned/ directory exists."""
+        assert TIER1_LEARNED.exists(), f"{TIER1_LEARNED} should exist"
+        assert TIER1_LEARNED.is_dir(), f"{TIER1_LEARNED} should be a directory"
 
-    def test_adaptive_intelligence_directory_exists(self):
-        """AC-PHASE47-S2-001: adaptive_intelligence/ directory exists."""
-        assert NEW_ADAPTIVE.exists(), f"{NEW_ADAPTIVE} should exist"
-        assert NEW_ADAPTIVE.is_dir(), f"{NEW_ADAPTIVE} should be a directory"
+    def test_tier2_adaptive_directory_exists(self):
+        """AC-PHASE47-S2-001: tier2_adaptive/ directory exists."""
+        assert TIER2_ADAPTIVE.exists(), f"{TIER2_ADAPTIVE} should exist"
+        assert TIER2_ADAPTIVE.is_dir(), f"{TIER2_ADAPTIVE} should be a directory"
 
     def test_scratch_space_directory_exists(self):
         """AC-PHASE47-S2-001: scratch_space/ directory exists."""
-        assert NEW_SCRATCH.exists(), f"{NEW_SCRATCH} should exist"
-        assert NEW_SCRATCH.is_dir(), f"{NEW_SCRATCH} should be a directory"
+        assert SCRATCH_SPACE.exists(), f"{SCRATCH_SPACE} should exist"
+        assert SCRATCH_SPACE.is_dir(), f"{SCRATCH_SPACE} should be a directory"
 
-    def test_old_tier1_learned_removed(self):
-        """AC-PHASE47-S2-002: Old tier1_learned/ directory removed or symlinked."""
-        if OLD_TIER1.exists():
-            # If it exists, it should be a symlink to new location
-            assert OLD_TIER1.is_symlink(), f"{OLD_TIER1} should be symlink or removed"
-            if OLD_TIER1.is_symlink():
-                target = OLD_TIER1.resolve()
-                assert target == NEW_LEARNED.resolve(), f"Symlink should point to {NEW_LEARNED}"
+    def test_mirror_learned_patterns_removed(self):
+        """AC-PHASE47-S2-002: Mirror learned_patterns/ directory removed."""
+        assert not MIRROR_LEARNED_PATTERNS.exists(), \
+            f"{MIRROR_LEARNED_PATTERNS} should be deleted (mirror of {TIER1_LEARNED})"
 
-    def test_old_tier2_adaptive_removed(self):
-        """AC-PHASE47-S2-002: Old tier2_adaptive/ directory removed or symlinked."""
-        if OLD_TIER2.exists():
-            assert OLD_TIER2.is_symlink(), f"{OLD_TIER2} should be symlink or removed"
-            if OLD_TIER2.is_symlink():
-                target = OLD_TIER2.resolve()
-                assert target == NEW_ADAPTIVE.resolve(), f"Symlink should point to {NEW_ADAPTIVE}"
-
-    def test_old_tier3_scratch_removed(self):
-        """AC-PHASE47-S2-002: Old tier3_scratch/ directory removed or symlinked."""
-        if OLD_TIER3.exists():
-            assert OLD_TIER3.is_symlink(), f"{OLD_TIER3} should be symlink or removed"
-            if OLD_TIER3.is_symlink():
-                target = OLD_TIER3.resolve()
-                assert target == NEW_SCRATCH.resolve(), f"Symlink should point to {NEW_SCRATCH}"
+    def test_mirror_adaptive_intelligence_removed(self):
+        """AC-PHASE47-S2-002: Mirror adaptive_intelligence/ directory removed."""
+        assert not MIRROR_ADAPTIVE_INTELLIGENCE.exists(), \
+            f"{MIRROR_ADAPTIVE_INTELLIGENCE} should be deleted (mirror of {TIER2_ADAPTIVE})"
 
 
 # =============================================================================
 # BRAIN TIER PUSHER TESTS
 # =============================================================================
 class TestBrainTierPusherPaths:
-    """Test BrainTierPusher uses new memory paths."""
+    """Test BrainTierPusher uses canonical memory paths."""
 
     def test_brain_tier_pusher_module_exists(self):
         """BrainTierPusher module can be imported."""
@@ -89,45 +74,43 @@ class TestBrainTierPusherPaths:
         except ImportError as e:
             pytest.skip(f"BrainTierPusher not available: {e}")
 
-    def test_brain_tier_pusher_uses_learned_patterns_path(self):
-        """AC-PHASE47-S2-003: BrainTierPusher references learned_patterns/."""
+    def test_brain_tier_pusher_uses_tier1_learned_path(self):
+        """AC-PHASE47-S2-003: BrainTierPusher references tier1_learned/."""
         try:
             from cortex.core.core.tier_pusher import BrainTierPusher
-            
-            # Check if BrainTierPusher has path configuration
+
             pusher = BrainTierPusher()
-            
-            # Get tier1 path (should be learned_patterns now)
             tier1_path = getattr(pusher, "tier1_path", None) or \
                         getattr(pusher, "_tier1_path", None) or \
-                        getattr(pusher, "learned_patterns_path", None)
-            
+                        getattr(pusher, "tier1_learned_path", None)
+
             if tier1_path:
-                assert "learned_patterns" in str(tier1_path), \
-                    f"BrainTierPusher should use 'learned_patterns', got {tier1_path}"
-                assert "tier1_learned" not in str(tier1_path), \
-                    f"BrainTierPusher should not use old 'tier1_learned' path"
-                    
+                path_str = str(tier1_path)
+                assert "tier1_learned" in path_str, \
+                    f"BrainTierPusher should use 'tier1_learned', got {path_str}"
+                assert "learned_patterns" not in path_str, \
+                    f"BrainTierPusher should not use mirror 'learned_patterns' path"
+
         except ImportError:
             pytest.skip("BrainTierPusher not available")
 
-    def test_brain_tier_pusher_uses_adaptive_intelligence_path(self):
-        """AC-PHASE47-S2-003: BrainTierPusher references adaptive_intelligence/."""
+    def test_brain_tier_pusher_uses_tier2_adaptive_path(self):
+        """AC-PHASE47-S2-003: BrainTierPusher references tier2_adaptive/."""
         try:
             from cortex.core.core.tier_pusher import BrainTierPusher
-            
+
             pusher = BrainTierPusher()
-            
             tier2_path = getattr(pusher, "tier2_path", None) or \
                         getattr(pusher, "_tier2_path", None) or \
-                        getattr(pusher, "adaptive_intelligence_path", None)
-            
+                        getattr(pusher, "tier2_adaptive_path", None)
+
             if tier2_path:
-                assert "adaptive_intelligence" in str(tier2_path), \
-                    f"BrainTierPusher should use 'adaptive_intelligence', got {tier2_path}"
-                assert "tier2_adaptive" not in str(tier2_path), \
-                    f"BrainTierPusher should not use old 'tier2_adaptive' path"
-                    
+                path_str = str(tier2_path)
+                assert "tier2_adaptive" in path_str, \
+                    f"BrainTierPusher should use 'tier2_adaptive', got {path_str}"
+                assert "adaptive_intelligence" not in path_str, \
+                    f"BrainTierPusher should not use mirror 'adaptive_intelligence' path"
+
         except ImportError:
             pytest.skip("BrainTierPusher not available")
 
@@ -135,19 +118,19 @@ class TestBrainTierPusherPaths:
         """AC-PHASE47-S2-003: BrainTierPusher references scratch_space/."""
         try:
             from cortex.core.core.tier_pusher import BrainTierPusher
-            
+
             pusher = BrainTierPusher()
-            
             tier3_path = getattr(pusher, "tier3_path", None) or \
                         getattr(pusher, "_tier3_path", None) or \
                         getattr(pusher, "scratch_space_path", None)
-            
+
             if tier3_path:
-                assert "scratch_space" in str(tier3_path), \
-                    f"BrainTierPusher should use 'scratch_space', got {tier3_path}"
-                assert "tier3_scratch" not in str(tier3_path), \
+                path_str = str(tier3_path)
+                assert "scratch_space" in path_str, \
+                    f"BrainTierPusher should use 'scratch_space', got {path_str}"
+                assert "tier3_scratch" not in path_str, \
                     f"BrainTierPusher should not use old 'tier3_scratch' path"
-                    
+
         except ImportError:
             pytest.skip("BrainTierPusher not available")
 
@@ -156,7 +139,7 @@ class TestBrainTierPusherPaths:
 # TIER LOADER TESTS
 # =============================================================================
 class TestTierLoaderPaths:
-    """Test TierLoader uses new memory paths."""
+    """Test TierLoader uses canonical memory paths."""
 
     def test_tier_loader_module_exists(self):
         """TierLoader module can be imported."""
@@ -166,35 +149,29 @@ class TestTierLoaderPaths:
         except ImportError as e:
             pytest.skip(f"TierLoader not available: {e}")
 
-    def test_tier_loader_uses_new_paths(self):
-        """AC-PHASE47-S2-004: TierLoader references new memory paths."""
+    def test_tier_loader_uses_canonical_paths(self):
+        """AC-PHASE47-S2-004: TierLoader references canonical memory paths."""
         try:
             from cortex.core.core.tier_loader import TierLoader
-            
+
             loader = TierLoader()
-            
-            # Check configuration or paths
             config = getattr(loader, "config", None) or \
                     getattr(loader, "_config", None) or \
                     getattr(loader, "paths", None)
-            
+
             if config:
                 config_str = str(config)
-                
-                # Should have new paths
-                assert "learned_patterns" in config_str or \
-                       "adaptive_intelligence" in config_str or \
+                # Should use canonical paths
+                assert "tier1_learned" in config_str or \
+                       "tier2_adaptive" in config_str or \
                        "scratch_space" in config_str, \
-                       "TierLoader should use new memory path names"
-                
-                # Should NOT have old paths
-                assert "tier1_learned" not in config_str, \
-                       "TierLoader should not use old 'tier1_learned' path"
-                assert "tier2_adaptive" not in config_str, \
-                       "TierLoader should not use old 'tier2_adaptive' path"
-                assert "tier3_scratch" not in config_str, \
-                       "TierLoader should not use old 'tier3_scratch' path"
-                    
+                       "TierLoader should use canonical memory path names"
+                # Should NOT use mirror paths
+                assert "learned_patterns" not in config_str, \
+                       "TierLoader should not use mirror 'learned_patterns' path"
+                assert "adaptive_intelligence" not in config_str, \
+                       "TierLoader should not use mirror 'adaptive_intelligence' path"
+
         except ImportError:
             pytest.skip("TierLoader not available")
 
@@ -203,119 +180,104 @@ class TestTierLoaderPaths:
 # IMPORT PATH TESTS
 # =============================================================================
 class TestMemoryImportPaths:
-    """Test import paths updated to new structure."""
+    """Test canonical import paths work."""
 
-    def test_learned_patterns_can_be_imported(self):
-        """learned_patterns module can be imported."""
+    def test_tier1_learned_can_be_imported(self):
+        """tier1_learned module can be imported."""
         try:
-            import cortex_intelligence.memory.learned_patterns
-            assert cortex_intelligence.memory.learned_patterns is not None
+            import cortex.intelligence.memory.tier1_learned
+            assert cortex.intelligence.memory.tier1_learned is not None
         except ImportError:
-            pytest.skip("learned_patterns module not yet available")
+            pytest.skip("tier1_learned module not yet importable")
 
-    def test_adaptive_intelligence_can_be_imported(self):
-        """adaptive_intelligence module can be imported."""
+    def test_tier2_adaptive_can_be_imported(self):
+        """tier2_adaptive module can be imported."""
         try:
-            import cortex_intelligence.memory.adaptive_intelligence
-            assert cortex_intelligence.memory.adaptive_intelligence is not None
+            import cortex.intelligence.memory.tier2_adaptive
+            assert cortex.intelligence.memory.tier2_adaptive is not None
         except ImportError:
-            pytest.skip("adaptive_intelligence module not yet available")
+            pytest.skip("tier2_adaptive module not yet importable")
 
     def test_scratch_space_can_be_imported(self):
         """scratch_space module can be imported."""
         try:
-            import cortex_intelligence.memory.scratch_space
-            assert cortex_intelligence.memory.scratch_space is not None
+            import cortex.intelligence.memory.scratch_space
+            assert cortex.intelligence.memory.scratch_space is not None
         except ImportError:
-            pytest.skip("scratch_space module not yet available")
+            pytest.skip("scratch_space module not yet importable")
 
 
 # =============================================================================
-# MIGRATION COMPATIBILITY TESTS
+# MIGRATION GUARD TESTS
 # =============================================================================
-class TestMemoryMigrationCompatibility:
-    """Test backward compatibility during migration."""
+class TestMemoryMirrorGuard:
+    """Guard tests: ensure deleted mirror directories stay deleted."""
 
-    def test_old_imports_still_work_via_symlink(self):
-        """Old import paths still work (via symlink or alias)."""
-        # This test allows for graceful migration period
-        try:
-            import cortex_intelligence.memory.tier1_learned as old_tier1
-            import cortex_intelligence.memory.learned_patterns as new_learned
-            
-            # If both work, they should reference same module or symlinked
-            # (This allows gradual migration)
-            assert old_tier1 is not None
-            assert new_learned is not None
-            
-        except ImportError:
-            pytest.skip("Migration imports not yet available")
+    def test_no_learned_patterns_directory(self):
+        """Mirror directory learned_patterns/ must not be re-created."""
+        assert not MIRROR_LEARNED_PATTERNS.exists(), \
+            "Mirror directory learned_patterns/ was re-created — delete it"
 
-    def test_memory_root_init_updated(self):
-        """memory/__init__.py exports new module names."""
+    def test_no_adaptive_intelligence_directory(self):
+        """Mirror directory adaptive_intelligence/ must not be re-created."""
+        assert not MIRROR_ADAPTIVE_INTELLIGENCE.exists(), \
+            "Mirror directory adaptive_intelligence/ was re-created — delete it"
+
+    def test_comprehension_loop_uses_canonical_paths(self):
+        """BrainTierPusher.TIER_PATHS uses canonical cortex/ paths."""
         try:
-            import cortex_intelligence.memory as memory
-            
-            # Check if new names are available
-            has_new_names = (
-                hasattr(memory, "learned_patterns") or
-                hasattr(memory, "adaptive_intelligence") or
-                hasattr(memory, "scratch_space")
-            )
-            
-            if not has_new_names:
-                pytest.skip("New module names not yet exported in memory.__init__")
-                
+            from cortex.core.core.intent.comprehension_loop import BrainTierPusher
+            tier_paths = BrainTierPusher.TIER_PATHS
+
+            for tier, path in tier_paths.items():
+                assert "cortex_intelligence" not in path, \
+                    f"TIER_PATHS[{tier}] uses stale 'cortex_intelligence': {path}"
+                assert "learned_patterns" not in path, \
+                    f"TIER_PATHS[{tier}] uses deleted mirror 'learned_patterns': {path}"
+                assert "adaptive_intelligence" not in path, \
+                    f"TIER_PATHS[{tier}] uses deleted mirror 'adaptive_intelligence': {path}"
         except ImportError:
-            pytest.skip("memory module not available")
+            pytest.skip("BrainTierPusher not importable")
 
 
 # =============================================================================
 # GOLDEN TESTS - REAL WORLD SCENARIOS
 # =============================================================================
 class TestMemoryTierGoldenScenarios:
-    """Golden tests for memory tier migration."""
+    """Golden tests for memory tier operations."""
 
-    def test_knowledge_push_uses_learned_patterns(self):
-        """Golden Test 1: Knowledge push operation uses learned_patterns/."""
-        # Simulate knowledge push operation
+    def test_knowledge_push_uses_tier1_learned(self):
+        """Golden Test 1: Knowledge push uses tier1_learned/."""
         try:
             from cortex.core.core.tier_pusher import BrainTierPusher
-            
+
             pusher = BrainTierPusher()
-            
-            # Mock push operation
             test_data = {"rule": "CORE-001", "learned": True}
-            
+
             with patch.object(pusher, "_write_to_tier1", return_value=True) as mock_write:
-                # Attempt push (would fail if tier1_learned path used)
                 result = pusher.push_to_tier1(test_data)
-                
                 if mock_write.called:
-                    # Check call args for path
                     call_args = str(mock_write.call_args)
-                    assert "tier1_learned" not in call_args, \
-                        "Should not use old tier1_learned path"
-                        
+                    assert "learned_patterns" not in call_args, \
+                        "Should not use mirror learned_patterns path"
+
         except (ImportError, AttributeError):
             pytest.skip("BrainTierPusher.push_to_tier1 not available")
 
-    def test_adaptive_query_uses_adaptive_intelligence(self):
-        """Golden Test 2: Adaptive query uses adaptive_intelligence/."""
+    def test_adaptive_query_uses_tier2_adaptive(self):
+        """Golden Test 2: Adaptive query uses tier2_adaptive/."""
         try:
             from cortex.core.core.tier_loader import TierLoader
-            
+
             loader = TierLoader()
-            
-            # Mock load from tier2
+
             with patch.object(loader, "_load_from_tier2", return_value={}) as mock_load:
                 result = loader.load_from_tier2()
-                
                 if mock_load.called:
                     call_args = str(mock_load.call_args)
-                    assert "tier2_adaptive" not in call_args, \
-                        "Should not use old tier2_adaptive path"
-                        
+                    assert "adaptive_intelligence" not in call_args, \
+                        "Should not use mirror adaptive_intelligence path"
+
         except (ImportError, AttributeError):
             pytest.skip("TierLoader.load_from_tier2 not available")
 

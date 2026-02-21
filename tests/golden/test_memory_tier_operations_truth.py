@@ -181,8 +181,8 @@ class TestMemoryTierStructure:
         
         # Should have tier directories (old or new names)
         tier_dirs = [
-            "tier1_learned", "learned_patterns",
-            "tier2_adaptive", "adaptive_intelligence",
+            "tier1_learned", "tier1_learned",
+            "tier2_adaptive", "tier2_adaptive",
             "tier3_scratch", "scratch_space"
         ]
         
@@ -247,8 +247,8 @@ class TestTierFileWrites:
         
         # Create tier directories
         (workspace / "cortex-registry" / "core" / "tier0-skull").mkdir(parents=True)
-        (workspace / "cortex_intelligence" / "memory" / "learned_patterns").mkdir(parents=True)
-        (workspace / "cortex_intelligence" / "memory" / "adaptive_intelligence").mkdir(parents=True)
+        (workspace / "cortex_intelligence" / "memory" / "tier1_learned").mkdir(parents=True)
+        (workspace / "cortex_intelligence" / "memory" / "tier2_adaptive").mkdir(parents=True)
         (workspace / "cortex_intelligence" / "memory" / "scratch_space").mkdir(parents=True)
         
         return workspace
@@ -261,8 +261,8 @@ class TestTierFileWrites:
         # Override TIER_PATHS to use temp structure
         pusher.TIER_PATHS = {
             BrainTier.TIER0: "cortex-registry/core/tier0-skull",
-            BrainTier.TIER1: "cortex/intelligence/memory/learned_patterns",
-            BrainTier.TIER2: "cortex/intelligence/memory/adaptive_intelligence",
+            BrainTier.TIER1: "cortex/intelligence/memory/tier1_learned",
+            BrainTier.TIER2: "cortex/intelligence/memory/tier2_adaptive",
             BrainTier.TIER3: "cortex/intelligence/memory/scratch_space",
         }
         

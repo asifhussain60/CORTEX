@@ -44,10 +44,10 @@ class TestTierDirectoryStructure:
         memory_path = Path("cortex/intelligence/memory")
         
         # New clarified names (migrated from cortex_intelligence to cortex/intelligence)
-        assert (memory_path / "learned_patterns").exists() or \
+        assert (memory_path / "tier1_learned").exists() or \
                (memory_path / "tier1_learned").exists(), \
             "Learned patterns memory tier missing"
-        assert (memory_path / "adaptive_intelligence").exists() or \
+        assert (memory_path / "tier2_adaptive").exists() or \
                (memory_path / "tier2_adaptive").exists(), \
             "Adaptive intelligence memory tier missing"
         assert (memory_path / "scratch_space").exists() or \

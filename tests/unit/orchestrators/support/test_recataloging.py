@@ -36,7 +36,7 @@ orchestrators:
   
   support:
     - name: VacuumOrchestrator
-      module: cortex.orchestrators.support.vacuum_orchestrator
+      module: cortex.orchestrators.health.vacuum_orchestrator
       class: VacuumOrchestrator
 """)
         
@@ -80,7 +80,7 @@ phases:
         relocations = {
             "cortex.orchestrators.core.master_orchestrator": 
             "cortex.orchestrators.core.orchestrators.master_orchestrator",
-            "cortex.orchestrators.support.vacuum_orchestrator":
+            "cortex.orchestrators.health.vacuum_orchestrator":
             "cortex.orchestrators.support.utilities.vacuum_orchestrator"
         }
         
@@ -144,7 +144,7 @@ phases:
         main = tmp_path / "cortex" / "main.py"
         main.write_text("""
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
+from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
 """)
         
         import_updates = {
@@ -280,7 +280,7 @@ from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         main = tmp_path / "cortex" / "main.py"
         main.write_text("""
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.support.vacuum_orchestrator import VacuumOrchestrator
+from cortex.orchestrators.health.vacuum_orchestrator import VacuumOrchestrator
 """)
         
         # Update only one reference
