@@ -16,7 +16,7 @@ phase:
   description: |
     tests/ currently has 56 subdirectories and 1,139 test files. Many are:
     - Phase-named (phase_23, phase_49, etc.) — tied to historical implementation
-    - Duplicate directories (dashboard + dashboards, cortex + cortex_brain)
+    - Duplicate directories (dashboard + dashboards, cortex + cortex/intelligence)
     - Low-value tests (testing stubs, placeholder assertions)
 
     This phase restructures tests/ to mirror the new cortex/ structure exactly,
@@ -52,11 +52,11 @@ phase:
       duplicate_directories:
         - pair: ["tests/dashboard/", "tests/dashboards/"]
           action: "Merge into tests/dashboards/"
-        - pair: ["tests/cortex/", "tests/cortex_brain/"]
+        - pair: ["tests/cortex/", "tests/cortex/intelligence/"]
           action: "Merge into tests/core/"
-        - pair: ["tests/cortex_intelligence/", "tests/intelligence/"]
+        - pair: ["tests/cortex/intelligence/", "tests/intelligence/"]
           action: "Merge into tests/intelligence/"
-        - pair: ["tests/cortex_lens/", "tests/lens/"]
+        - pair: ["tests/cortex/lens/", "tests/lens/"]
           action: "Merge into tests/intelligence/lens/"
 
       well_structured:
@@ -150,13 +150,13 @@ phase:
       - dir: "tests/api/"
         reason: "API surface tests — keep"
       - dir: "tests/core/"
-        reason: "Core kernel tests — keep (absorbs cortex/, cortex_brain/, brain/)"
+        reason: "Core kernel tests — keep (absorbs cortex/, cortex/intelligence/, brain/)"
       - dir: "tests/governance/"
         reason: "Governance tests — keep"
       - dir: "tests/infrastructure/"
         reason: "Infrastructure tests — keep"
       - dir: "tests/intelligence/"
-        reason: "Intelligence tests — keep (absorbs cortex_intelligence/, cortex_lens/, lens/)"
+        reason: "Intelligence tests — keep (absorbs cortex/intelligence/, cortex/lens/, lens/)"
       - dir: "tests/mcp/"
         reason: "MCP tool tests — keep"
       - dir: "tests/models/"
@@ -191,15 +191,15 @@ phase:
     merge_then_keep:
       - from: "tests/dashboard/"
         into: "tests/dashboards/"
-      - from: "tests/cortex_brain/"
+      - from: "tests/cortex/intelligence/"
         into: "tests/core/"
       - from: "tests/cortex/"
         into: "tests/core/"
       - from: "tests/brain/"
         into: "tests/core/"
-      - from: "tests/cortex_intelligence/"
+      - from: "tests/cortex/intelligence/"
         into: "tests/intelligence/"
-      - from: "tests/cortex_lens/"
+      - from: "tests/cortex/lens/"
         into: "tests/intelligence/lens/"
       - from: "tests/lens/"
         into: "tests/intelligence/lens/"
@@ -298,13 +298,13 @@ phase:
       merges:
         - from: "tests/dashboard/"
           into: "tests/dashboards/"
-        - from: "tests/cortex_brain/"
+        - from: "tests/cortex/intelligence/"
           into: "tests/core/"
         - from: "tests/cortex/"
           into: "tests/core/"
-        - from: "tests/cortex_intelligence/"
+        - from: "tests/cortex/intelligence/"
           into: "tests/intelligence/"
-        - from: "tests/cortex_lens/"
+        - from: "tests/cortex/lens/"
           into: "tests/intelligence/lens/"
         - from: "tests/brain/"
           into: "tests/core/"
@@ -409,7 +409,7 @@ phase:
 
       - id: "VL-07-C2"
         name: "No duplicate test directories"
-        command: "python -c \"import os; dirs=os.listdir('tests/'); dupes=[d for d in ['dashboard','cortex_brain','cortex_intelligence','cortex_lens'] if d in dirs]; print('dupes:',dupes if dupes else 'none')\""
+        command: "python -c \"import os; dirs=os.listdir('tests/'); dupes=[d for d in ['dashboard','cortex/intelligence','cortex/intelligence','cortex/lens'] if d in dirs]; print('dupes:',dupes if dupes else 'none')\""
         pass_condition: "prints dupes: none"
         on_fail: "Merge duplicate test directories — tests/dashboard/ + tests/dashboards/ etc."
 

@@ -146,7 +146,7 @@ discrepancy_inventory:
 
     - id: "D-018"
       title: "Stale references in comments/docstrings"
-      evidence: "cortex_lens, cortex_intelligence in json_data_generator.py and tool utilities"
+      evidence: "cortex/lens, cortex/intelligence in json_data_generator.py and tool utilities"
       fix: "Update comments to reference cortex.intelligence, cortex.lens"
 
 # =============================================================================
@@ -267,7 +267,7 @@ execution_plan:
       - "E1: Update cortex-architect.prompt.md — CORE rules count from 17 → 33"
       - "E2: Update copilot-instructions.md — CORE rules count from 17 → 33"
       - "E3: Update copilot-instructions.md — directory count to match final"
-      - "E4: Clean all stale references in comments (cortex_lens, cortex_intelligence, cortex.brain)"
+      - "E4: Clean all stale references in comments (cortex/lens, cortex/intelligence, cortex.brain)"
       - "E5: Update wiring.yaml priority documentation"
       - "E6: Meta-audit: all prompts/agents aligned with final architecture"
     tdd_tests:
@@ -304,7 +304,7 @@ enforcement_gates:
     - "Directory count check: cortex/ top-level ≤ 16"
     - "No .old/.backup/DEPRECATED files in cortex/ or tests/"
     - "No 'legacy' in filenames"
-    - "No imports from deleted packages (cortex_intelligence, cortex_lens, cortex.brain)"
+    - "No imports from deleted packages (cortex/intelligence, cortex/lens, cortex.brain)"
   ci:
     - "Full golden suite: 486+ passing"
     - "Wiring L1 structural validation: 100% import success"

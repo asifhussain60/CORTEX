@@ -259,7 +259,7 @@ phase:
           - Generate design review checklists for PRs
           - Detect architectural drift from declared patterns
           - Produce design documentation from code (integrates documentation/)
-        builds_on: "cortex/documentation/ (9 files) + cortex_lens/knowledge_graph/"
+        builds_on: "cortex/documentation/ (9 files) + cortex/lens/knowledge_graph/"
         note: "Consolidates documentation discovery_agent + design concerns"
 
     other_active:

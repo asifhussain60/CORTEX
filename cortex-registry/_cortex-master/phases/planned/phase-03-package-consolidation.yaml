@@ -1,7 +1,7 @@
 # ==============================================================================
 # PHASE 03 — PACKAGE CONSOLIDATION: 3 Packages → 1
 # ==============================================================================
-# Purpose: Eliminate cortex_intelligence/ and cortex_lens/ top-level packages
+# Purpose: Eliminate cortex/intelligence/ and cortex/lens/ top-level packages
 # Gate: All imports resolve to cortex.*, all MCP tools respond, all tests pass
 # ==============================================================================
 
@@ -16,8 +16,8 @@ phase:
   description: |
     CORTEX currently has 3 top-level Python packages:
     1. cortex/ (1,288 files) — main package
-    2. cortex_intelligence/ (~50 files) — intelligence data + adaptive memory
-    3. cortex_lens/ (~30 files) — LENS analyzers, domain inference, .NET Roslyn
+    2. cortex/intelligence/ (~50 files) — intelligence data + adaptive memory
+    3. cortex/lens/ (~30 files) — LENS analyzers, domain inference, .NET Roslyn
 
     This creates import confusion, duplicate concept directories, and prevents
     CORTEX from operating as a single cohesive brain. This phase consolidates
@@ -27,8 +27,8 @@ phase:
   # CURRENT STATE AUDIT
   # ============================================================================
   current_state:
-    cortex_intelligence:
-      location: "cortex_intelligence/"
+    cortex/intelligence:
+      location: "cortex/intelligence/"
       file_count: ~50
       unique_capabilities:
         - "action/ — action dispatching"
@@ -55,8 +55,8 @@ phase:
         - "observability/ overlaps cortex/observability/"
         - "wiring/ overlaps cortex/wiring/"
 
-    cortex_lens:
-      location: "cortex_lens/"
+    cortex/lens:
+      location: "cortex/lens/"
       file_count: ~30
       unique_capabilities:
         - "analyzers/ — LENS analyzers"
@@ -74,93 +74,93 @@ phase:
   migrations:
 
     # --------------------------------------------------------------------------
-    # M1: cortex_intelligence → cortex/intelligence/
+    # M1: cortex/intelligence → cortex/intelligence/
     # --------------------------------------------------------------------------
     - id: "M1"
-      name: "Migrate cortex_intelligence to cortex/intelligence/"
+      name: "Migrate cortex/intelligence to cortex/intelligence/"
       steps:
         - action: "archive"
-          from: "cortex_intelligence/"
-          to: "_archive/cortex_intelligence/"
+          from: "cortex/intelligence/"
+          to: "_archive/cortex/intelligence/"
           note: "Full copy for rollback safety"
 
         - action: "migrate_code"
           mappings:
-            - from: "cortex_intelligence/action/"
+            - from: "cortex/intelligence/action/"
               to: "cortex/intelligence/action/"
-            - from: "cortex_intelligence/audit/"
+            - from: "cortex/intelligence/audit/"
               to: "cortex/intelligence/audit/"
-            - from: "cortex_intelligence/domain/"
+            - from: "cortex/intelligence/domain/"
               to: "cortex/intelligence/domain/"
-            - from: "cortex_intelligence/domain_brain/"
+            - from: "cortex/intelligence/domain_brain/"
               to: "cortex/intelligence/domain_brain/"
-            - from: "cortex_intelligence/governance/"
+            - from: "cortex/intelligence/governance/"
               to: "cortex/governance/state/"
               note: "Governance state goes to SSOT governance dir"
-            - from: "cortex_intelligence/intelligence/"
+            - from: "cortex/intelligence/intelligence/"
               to: "cortex/intelligence/engine/"
-            - from: "cortex_intelligence/memory/"
+            - from: "cortex/intelligence/memory/"
               to: "cortex/intelligence/memory/"
               note: "Largest unique capability — adaptive intelligence, learned patterns"
-            - from: "cortex_intelligence/observability/"
+            - from: "cortex/intelligence/observability/"
               to: "cortex/observability/intelligence/"
-            - from: "cortex_intelligence/perception/"
+            - from: "cortex/intelligence/perception/"
               to: "cortex/intelligence/perception/"
-            - from: "cortex_intelligence/quality/"
+            - from: "cortex/intelligence/quality/"
               to: "cortex/intelligence/quality/"
-            - from: "cortex_intelligence/reasoning/"
+            - from: "cortex/intelligence/reasoning/"
               to: "cortex/intelligence/reasoning/"
-            - from: "cortex_intelligence/state/"
+            - from: "cortex/intelligence/state/"
               to: "cortex/intelligence/state/"
-            - from: "cortex_intelligence/wiring/"
+            - from: "cortex/intelligence/wiring/"
               to: "cortex/intelligence/wiring/"
 
         - action: "migrate_data"
           mappings:
-            - from: "cortex_intelligence/governance.db"
+            - from: "cortex/intelligence/governance.db"
               to: ".cortex-runtime/governance.db"
               note: "Runtime data goes to runtime dir, not source"
-            - from: "cortex_intelligence/onboarded_repos/"
+            - from: "cortex/intelligence/onboarded_repos/"
               to: ".cortex-runtime/onboarded_repos/"
-            - from: "cortex_intelligence/releases/"
+            - from: "cortex/intelligence/releases/"
               to: ".cortex-runtime/releases/"
 
         - action: "rewrite_imports"
-          pattern: "cortex_intelligence."
+          pattern: "cortex/intelligence."
           replacement: "cortex.intelligence."
           scope: "all .py files in cortex/ and tests/"
 
     # --------------------------------------------------------------------------
-    # M2: cortex_lens → cortex/intelligence/lens/
+    # M2: cortex/lens → cortex/intelligence/lens/
     # --------------------------------------------------------------------------
     - id: "M2"
-      name: "Migrate cortex_lens to cortex/intelligence/lens/"
+      name: "Migrate cortex/lens to cortex/intelligence/lens/"
       steps:
         - action: "archive"
-          from: "cortex_lens/"
-          to: "_archive/cortex_lens/"
+          from: "cortex/lens/"
+          to: "_archive/cortex/lens/"
 
         - action: "migrate_code"
           mappings:
-            - from: "cortex_lens/analyzers/"
+            - from: "cortex/lens/analyzers/"
               to: "cortex/intelligence/lens/analyzers/"
-            - from: "cortex_lens/domain_inference/"
+            - from: "cortex/lens/domain_inference/"
               to: "cortex/intelligence/lens/domain_inference/"
-            - from: "cortex_lens/knowledge_graph/"
+            - from: "cortex/lens/knowledge_graph/"
               to: "cortex/intelligence/lens/knowledge_graph/"
-            - from: "cortex_lens/models/"
+            - from: "cortex/lens/models/"
               to: "cortex/intelligence/lens/models/"
-            - from: "cortex_lens/runtime_correlation/"
+            - from: "cortex/lens/runtime_correlation/"
               to: "cortex/intelligence/lens/runtime_correlation/"
 
         - action: "migrate_binary"
           mappings:
-            - from: "cortex_lens/dotnet/"
+            - from: "cortex/lens/dotnet/"
               to: "cortex/intelligence/lens/dotnet/"
               note: "Roslyn CLI binary — compiled .NET, not Python"
 
         - action: "rewrite_imports"
-          pattern: "cortex_lens."
+          pattern: "cortex/lens."
           replacement: "cortex.intelligence.lens."
           scope: "all .py files in cortex/ and tests/"
 
@@ -172,7 +172,7 @@ phase:
       description: |
         After M2, there will be two lens directories:
         - cortex/lens/ (62 files, original)
-        - cortex/intelligence/lens/ (from cortex_lens/)
+        - cortex/intelligence/lens/ (from cortex/lens/)
         Merge unique files, archive duplicates.
       steps:
         - action: "audit_duplicates"
@@ -188,7 +188,7 @@ phase:
 
         - action: "archive"
           from: "cortex/lens/"
-          to: "_archive/cortex_lens_original/"
+          to: "_archive/cortex/lens_original/"
           condition: "after merge validated"
 
         - action: "create_compatibility_shim"
@@ -204,7 +204,7 @@ phase:
       concept: "governance"
       locations:
         - "cortex/governance/ (35 files) — PRIMARY"
-        - "cortex_intelligence/governance/ — merge to cortex/governance/state/"
+        - "cortex/intelligence/governance/ — merge to cortex/governance/state/"
         - "cortex/core/governance/ — merge to cortex/governance/"
         - "cortex/knowledge/governance/ — YAML data, move to cortex-registry"
       action: "Consolidate to cortex/governance/ as SSOT"
@@ -213,7 +213,7 @@ phase:
       concept: "domain_brain"
       locations:
         - "cortex/domain_brain/ (13 files)"
-        - "cortex_intelligence/domain_brain/"
+        - "cortex/intelligence/domain_brain/"
         - "cortex/brain/domain_brain/"
       action: "Consolidate to cortex/intelligence/domain_brain/ as SSOT"
 
@@ -221,14 +221,14 @@ phase:
       concept: "wiring"
       locations:
         - "cortex/wiring/ (12 files) — PRIMARY"
-        - "cortex_intelligence/wiring/"
+        - "cortex/intelligence/wiring/"
       action: "Consolidate to cortex/wiring/ (or cortex/core/wiring/)"
 
     - type: "duplicate_directory"
       concept: "observability"
       locations:
         - "cortex/observability/ (7 files) — PRIMARY"
-        - "cortex_intelligence/observability/"
+        - "cortex/intelligence/observability/"
         - "cortex/orchestrators/observability/"
         - "cortex/brain/observability/"
         - "cortex/brain/core/observability/"
@@ -238,9 +238,9 @@ phase:
   # TEST MIGRATION
   # ============================================================================
   test_migrations:
-    - from: "tests/cortex_intelligence/"
+    - from: "tests/cortex/intelligence/"
       to: "tests/intelligence/"
-    - from: "tests/cortex_lens/"
+    - from: "tests/cortex/lens/"
       to: "tests/lens/"
 
   # ============================================================================
@@ -248,13 +248,13 @@ phase:
   # ============================================================================
   execution_sequence:
     - step: 1
-      name: "Archive cortex_intelligence/"
-      command: "cp -r cortex_intelligence/ _archive/cortex_intelligence/"
+      name: "Archive cortex/intelligence/"
+      command: "cp -r cortex/intelligence/ _archive/cortex/intelligence/"
       gate: "Archive exists, original untouched"
 
     - step: 2
-      name: "Archive cortex_lens/"
-      command: "cp -r cortex_lens/ _archive/cortex_lens/"
+      name: "Archive cortex/lens/"
+      command: "cp -r cortex/lens/ _archive/cortex/lens/"
       gate: "Archive exists, original untouched"
 
     - step: 3
@@ -267,35 +267,35 @@ phase:
         - "mkdir -p .cortex-runtime/{onboarded_repos,releases}"
 
     - step: 4
-      name: "Migrate cortex_intelligence/ code → cortex/intelligence/"
+      name: "Migrate cortex/intelligence/ code → cortex/intelligence/"
       description: "Move each subdir per the migration mapping in M1"
       gate: "All files in target, __init__.py files created"
 
     - step: 5
-      name: "Migrate cortex_intelligence/ data → .cortex-runtime/"
+      name: "Migrate cortex/intelligence/ data → .cortex-runtime/"
       description: "governance.db, onboarded_repos/, releases/ are runtime data"
       gate: "Data files in .cortex-runtime/"
 
     - step: 6
-      name: "Migrate cortex_lens/ code → cortex/intelligence/lens/"
+      name: "Migrate cortex/lens/ code → cortex/intelligence/lens/"
       description: "Move each subdir per the migration mapping in M2"
       gate: "All files in target"
 
     - step: 7
       name: "Delete inner duplicates"
       commands:
-        - "rm -rf cortex/cortex_intelligence/"
+        - "rm -rf cortex/cortex/intelligence/"
         - "rm -rf cortex/cortex-registry/"
       gate: "Inner duplicates gone"
 
     - step: 8
       name: "Rewrite ALL imports"
       commands:
-        - "find cortex/ tests/ -name '*.py' -exec sed -i '' 's/from cortex_intelligence\\./from cortex.intelligence./g' {} +"
-        - "find cortex/ tests/ -name '*.py' -exec sed -i '' 's/import cortex_intelligence\\./import cortex.intelligence./g' {} +"
-        - "find cortex/ tests/ -name '*.py' -exec sed -i '' 's/from cortex_lens\\./from cortex.intelligence.lens./g' {} +"
-        - "find cortex/ tests/ -name '*.py' -exec sed -i '' 's/import cortex_lens\\./import cortex.intelligence.lens./g' {} +"
-      gate: "Zero imports from cortex_intelligence or cortex_lens"
+        - "find cortex/ tests/ -name '*.py' -exec sed -i '' 's/from cortex/intelligence\\./from cortex.intelligence./g' {} +"
+        - "find cortex/ tests/ -name '*.py' -exec sed -i '' 's/import cortex/intelligence\\./import cortex.intelligence./g' {} +"
+        - "find cortex/ tests/ -name '*.py' -exec sed -i '' 's/from cortex/lens\\./from cortex.intelligence.lens./g' {} +"
+        - "find cortex/ tests/ -name '*.py' -exec sed -i '' 's/import cortex/lens\\./import cortex.intelligence.lens./g' {} +"
+      gate: "Zero imports from cortex/intelligence or cortex/lens"
 
     - step: 9
       name: "Consolidate cortex/lens/ (62 files) with cortex/intelligence/lens/"
@@ -304,7 +304,7 @@ phase:
 
     - step: 10
       name: "Import quarantine check"
-      command: "grep -r 'from cortex_intelligence\\|from cortex_lens\\|from _archive' cortex/ | wc -l"
+      command: "grep -r 'from cortex/intelligence\\|from cortex/lens\\|from _archive' cortex/ | wc -l"
       expected: "0"
 
     - step: 11
@@ -320,8 +320,8 @@ phase:
     - step: 13
       name: "Delete original source directories"
       commands:
-        - "rm -rf cortex_intelligence/"
-        - "rm -rf cortex_lens/"
+        - "rm -rf cortex/intelligence/"
+        - "rm -rf cortex/lens/"
       condition: "Only after step 11 and 12 pass"
 
     - step: 14
@@ -345,11 +345,11 @@ phase:
     coverage_minimum: 90
     description: |
       Phase 01 is complete when:
-      1. ZERO imports from cortex_intelligence or cortex_lens anywhere
+      1. ZERO imports from cortex/intelligence or cortex/lens anywhere
       2. All 28+ MCP tools respond correctly
       3. All golden tests pass
       4. Capability manifest checklist shows zero regressions
-      5. cortex_intelligence/ and cortex_lens/ are in _archive/ only
+      5. cortex/intelligence/ and cortex/lens/ are in _archive/ only
       6. Migration tracker updated
 
   # ============================================================================
@@ -370,28 +370,28 @@ phase:
 
     checks:
       - id: "VL-03-C1"
-        name: "Zero imports from cortex_intelligence"
-        command: "grep -r 'from cortex_intelligence\\|import cortex_intelligence' cortex/ | wc -l"
+        name: "Zero imports from cortex/intelligence"
+        command: "grep -r 'from cortex/intelligence\\|import cortex/intelligence' cortex/ | wc -l"
         pass_condition: "output is 0"
-        on_fail: "Re-run import rewriter on all files still referencing cortex_intelligence"
+        on_fail: "Re-run import rewriter on all files still referencing cortex/intelligence"
 
       - id: "VL-03-C2"
-        name: "Zero imports from cortex_lens"
-        command: "grep -r 'from cortex_lens\\|import cortex_lens' cortex/ | wc -l"
+        name: "Zero imports from cortex/lens"
+        command: "grep -r 'from cortex/lens\\|import cortex/lens' cortex/ | wc -l"
         pass_condition: "output is 0"
-        on_fail: "Re-run import rewriter on all files still referencing cortex_lens"
+        on_fail: "Re-run import rewriter on all files still referencing cortex/lens"
 
       - id: "VL-03-C3"
-        name: "cortex_intelligence/ is in _archive only"
-        command: "test ! -d cortex_intelligence/ && echo 'archived' || echo 'STILL EXISTS'"
+        name: "cortex/intelligence/ is in _archive only"
+        command: "test ! -d cortex/intelligence/ && echo 'archived' || echo 'STILL EXISTS'"
         pass_condition: "prints archived"
-        on_fail: "Move cortex_intelligence/ to _archive/cortex_intelligence/ — only after C1 passes"
+        on_fail: "Move cortex/intelligence/ to _archive/cortex/intelligence/ — only after C1 passes"
 
       - id: "VL-03-C4"
-        name: "cortex_lens/ is in _archive only"
-        command: "test ! -d cortex_lens/ && echo 'archived' || echo 'STILL EXISTS'"
+        name: "cortex/lens/ is in _archive only"
+        command: "test ! -d cortex/lens/ && echo 'archived' || echo 'STILL EXISTS'"
         pass_condition: "prints archived"
-        on_fail: "Move cortex_lens/ to _archive/cortex_lens/ — only after C2 passes"
+        on_fail: "Move cortex/lens/ to _archive/cortex/lens/ — only after C2 passes"
 
       - id: "VL-03-C5"
         name: "All MCP tools respond"

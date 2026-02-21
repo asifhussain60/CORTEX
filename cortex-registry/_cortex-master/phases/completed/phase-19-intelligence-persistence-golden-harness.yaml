@@ -35,7 +35,7 @@ key_deliverables:
 
 technical_components:
   - component: "IntelligencePersistence"
-    location: "cortex_intelligence/state/"
+    location: "cortex/intelligence/state/"
     database: "SQLite"
     tests: 12
     

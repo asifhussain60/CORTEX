@@ -19,7 +19,7 @@ phase:
   description: |
     Every governance rule in skull-rules.yaml must be reviewed against the
     refactored CORTEX architecture. Rules referencing dissolved packages
-    (cortex_intelligence, cortex_lens, cortex/brain/) must be updated.
+    (cortex/intelligence, cortex/lens, cortex/brain/) must be updated.
     Duplicate rules must be merged. New rules must be added for SQLite audit,
     MCP consolidation, SDLC coverage, workflow template compliance, and CCL
     enforcement. The governance duplicate file (cortex-registry/core/governance/
@@ -140,12 +140,12 @@ phase:
             enhancement: |
               Update setup verification to check:
               - CortexAuditDB is initialized (SQL-001)
-              - Cortex operates as single package (no cortex_intelligence imports)
+              - Cortex operates as single package (no cortex/intelligence imports)
               - Workflow engine has setup/teardown lifecycle
               - CCL governance crystal is loaded
             new_checks:
               - "CortexAuditDB.health_check() returns OK"
-              - "Zero imports from cortex_intelligence or cortex_lens"
+              - "Zero imports from cortex/intelligence or cortex/lens"
               - "WorkflowEngine.lifecycle_hooks_active == True"
               - "CCL.governance_crystal_loaded == True"
           
@@ -202,7 +202,7 @@ phase:
             name: "Implementation Truth Enforcement"
             enhancement: |
               Update verification commands to search cortex/ only (not
-              cortex_intelligence/ or cortex_lens/ which no longer exist).
+              cortex/intelligence/ or cortex/lens/ which no longer exist).
               Add SQLite audit trail verification as truth source.
             updated_protocol:
               - "grep_search scope: cortex/ only (single package)"
@@ -242,15 +242,15 @@ phase:
               Add post-refactor verification scope (cortex/ only).
             additional_forbidden_patterns:
               - "Duplicate governance files (skull-rules.yaml in 2+ locations)"
-              - "Inner package duplicates (cortex/cortex-registry/, cortex/cortex_intelligence/)"
+              - "Inner package duplicates (cortex/cortex-registry/, cortex/cortex/intelligence/)"
               - "Shadow test directories (cortex/tests/ vs tests/)"
-            verification_scope: "cortex/ only (cortex_intelligence/ and cortex_lens/ archived)"
+            verification_scope: "cortex/ only (cortex/intelligence/ and cortex/lens/ archived)"
           
           - rule_id: "CORE-038"
             name: "File Placement Policy"
             enhancement: |
               Update required_patterns to reflect consolidated package structure.
-              Remove references to cortex_intelligence/ paths.
+              Remove references to cortex/intelligence/ paths.
               Add cortex/orchestrators/ as the canonical orchestrator location.
             updated_patterns:
               required:
@@ -259,8 +259,8 @@ phase:
                 - "cortex/intelligence/{tier}/file.py"
                 - "cortex/governance/{domain}/file.py"
               removed:
-                - "cortex_intelligence/{tier}/{domain}/file.py (archived)"
-                - "cortex_lens/{module}/file.py (archived)"
+                - "cortex/intelligence/{tier}/{domain}/file.py (archived)"
+                - "cortex/lens/{module}/file.py (archived)"
           
           - rule_id: "CORE-040"
             name: "Documentation Lifecycle Management"
@@ -276,7 +276,7 @@ phase:
             name: "Intelligence-Architecture Tier Coupling"
             enhancement: |
               Update tier coupling to reference consolidated intelligence layer.
-              LENS analysis now lives in cortex/intelligence/ (not cortex_lens/).
+              LENS analysis now lives in cortex/intelligence/ (not cortex/lens/).
               Update wiring references.
           
           - rule_id: "CORE-052"
@@ -415,11 +415,11 @@ phase:
           severity: "blocked"
           description: |
             CORTEX operates as a SINGLE Python package (cortex/). No code may
-            import from cortex_intelligence/, cortex_lens/, or any other
+            import from cortex/intelligence/, cortex/lens/, or any other
             top-level package. The import quarantine check enforces this.
           enforcement:
-            - "grep -r 'from cortex_intelligence' cortex/ must return 0"
-            - "grep -r 'from cortex_lens' cortex/ must return 0"
+            - "grep -r 'from cortex/intelligence' cortex/ must return 0"
+            - "grep -r 'from cortex/lens' cortex/ must return 0"
             - "grep -r 'from _archive' cortex/ must return 0"
             - "pyproject.toml lists exactly one package: cortex"
           references: ["EA-001", "Phase 01 Package Consolidation"]
@@ -514,7 +514,7 @@ phase:
         
         - rule_id: "P1-003"
           name: "Registry Code Separation"
-          disposition: "ENHANCE — update to single package (cortex/ only, not cortex_intelligence/)"
+          disposition: "ENHANCE — update to single package (cortex/ only, not cortex/intelligence/)"
         
         - rule_id: "P1-004"
           name: "Deployment Safety Gate"
@@ -544,7 +544,7 @@ phase:
       new_tier1_rules:
         - rule_id: "P1-005"
           name: "Single Package Enforcement"
-          description: "No imports from cortex_intelligence/ or cortex_lens/"
+          description: "No imports from cortex/intelligence/ or cortex/lens/"
           core_rule_ref: "CORE-060"
         
         - rule_id: "P1-006"
@@ -669,7 +669,7 @@ phase:
         - "No duplicate rule_ids across all tiers"
         - "Every rule has: rule_id, name, severity, category, description"
         - "capability-manifest governance section matches rule inventory"
-        - "Zero references to archived packages (cortex_intelligence, cortex_lens)"
+        - "Zero references to archived packages (cortex/intelligence, cortex/lens)"
 
   # ============================================================================
   # EXIT GATE
@@ -683,7 +683,7 @@ phase:
       - "CCL GovernanceCrystal designed and tested (G5)"
       - "Post-alignment inventory verified (G6)"
       - "All YAML files parse cleanly"
-      - "Zero references to cortex_intelligence/ or cortex_lens/ in rules"
+      - "Zero references to cortex/intelligence/ or cortex/lens/ in rules"
       - "No duplicate rule_ids"
       - "capability-manifest governance section updated"
       - "AC-PERMANENT-FIX-* rules normalized to CORE-* IDs"
@@ -744,7 +744,7 @@ phase:
       5. CCL GovernanceCrystal designed and tested (G5)
       6. Post-alignment inventory verified (G6)
       7. All YAML files parse cleanly
-      8. Zero references to cortex_intelligence/ or cortex_lens/ in rules
+      8. Zero references to cortex/intelligence/ or cortex/lens/ in rules
       9. No duplicate rule_ids
       10. capability-manifest governance section updated
       11. AC-PERMANENT-FIX-* rules normalized to CORE-* IDs
@@ -789,7 +789,7 @@ phase:
 
       - id: "VL-02-C4"
         name: "Zero stale references to dissolved packages in rules"
-        command: "grep -r 'cortex_intelligence\\|cortex_lens\\|cortex\\.brain' cortex-registry/core/ | wc -l"
+        command: "grep -r 'cortex/intelligence\\|cortex/lens\\|cortex\\.brain' cortex-registry/core/ | wc -l"
         pass_condition: "output is 0"
         on_fail: "Update each stale rule reference to use new cortex.intelligence.* paths"
 

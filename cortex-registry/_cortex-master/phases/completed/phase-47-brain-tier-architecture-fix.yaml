@@ -38,7 +38,7 @@ overview:
     
     **Critical Issues:**
     1. **Missing Directory Structure**
-       - Code references cortex_intelligence/tier0/, tier1/, tier2/
+       - Code references cortex/intelligence/tier0/, tier1/, tier2/
        - Only memory/tier1_learned/, tier2_adaptive/, tier3_scratch/ exist
        - GovernanceRegistry looks for tier0/governance/core-rules.yaml (doesn't exist)
        - BrainTierPusher writes to non-existent tier0/tier1/tier2 directories
@@ -214,9 +214,9 @@ stages:
         description: |
           Update BrainTierPusher to use correct paths:
           - TIER0 → cortex-registry/core/tier0-skull/
-          - TIER1 → cortex_intelligence/memory/learned_patterns/
-          - TIER2 → cortex_intelligence/memory/adaptive_intelligence/
-          - TIER3 → cortex_intelligence/memory/scratch_space/
+          - TIER1 → cortex/intelligence/memory/learned_patterns/
+          - TIER2 → cortex/intelligence/memory/adaptive_intelligence/
+          - TIER3 → cortex/intelligence/memory/scratch_space/
           - Add path validation before writes
           - Test all tier push operations
         ac_ids: ["AC-PHASE105-S2-T2"]
@@ -358,7 +358,7 @@ stages:
 acceptance_criteria:
   - id: "AC-PHASE105-001"
     description: "Precedence.yaml matches TierResolver (tier0 > tier1 > tier2)"
-    validation: "grep 'tier0_overrides' cortex_intelligence/governance/precedence.yaml"
+    validation: "grep 'tier0_overrides' cortex/intelligence/governance/precedence.yaml"
     
   - id: "AC-PHASE105-002"
     description: "GovernanceRegistry.get_rule() method exists and works"
@@ -374,7 +374,7 @@ acceptance_criteria:
     
   - id: "AC-PHASE105-005"
     description: "Memory tiers renamed for clarity"
-    validation: "test -d cortex_intelligence/memory/learned_patterns && test -d cortex_intelligence/memory/adaptive_intelligence"
+    validation: "test -d cortex/intelligence/memory/learned_patterns && test -d cortex/intelligence/memory/adaptive_intelligence"
     
   - id: "AC-PHASE105-006"
     description: "BrainTierPusher writes to correct paths"
@@ -429,4 +429,4 @@ references:
   - "cortex/brain/core/tier_resolver.py"
   - "cortex/orchestrators/core/governance_registry.py"
   - "cortex/brain/core/intent/comprehension_loop.py (BrainTierPusher)"
-  - "cortex_intelligence/governance/precedence.yaml"
+  - "cortex/intelligence/governance/precedence.yaml"

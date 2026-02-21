@@ -196,7 +196,7 @@ workflow:
       validations:
         - "Every index.json has schema_version field"
         - "Every index.json has generated_at (UTC, not midnight)"
-        - "No writes to cortex_intelligence/"
+        - "No writes to cortex/intelligence/"
         - "No tmp* or test_* named files in production paths"
       on_fail: "Append warning, continue"
 
@@ -230,10 +230,10 @@ workflow:
   # Validation & Cleanup Rules
   # ---------------------------------------------------------------------------
   validation_rules:
-    - id: no_cortex_intelligence_writes
-      description: "Onboarding MUST NOT write to cortex_intelligence/"
+    - id: no_cortex/intelligence_writes
+      description: "Onboarding MUST NOT write to cortex/intelligence/"
       severity: P0
-      test: "test_no_write_to_cortex_intelligence"
+      test: "test_no_write_to_cortex/intelligence"
 
     - id: no_tmp_files_in_production
       description: "No tmp* or test_* files in any production artifact directory"

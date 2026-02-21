@@ -50,7 +50,7 @@ mcp_tools:
     - cortex_process_request
     - cortex_challenge
     - cortex_total_recall
-    - cortex_lens
+    - cortex/lens
     - cortex_git
     - cortex_governance
     - cortex_refactor
@@ -81,7 +81,7 @@ intent_routing_mcp:
     principles: ["SOLID", "Clean Code", "Design Patterns"]
     
   ANALYZE:
-    required_tool: cortex_lens
+    required_tool: cortex/lens
     operation: "unified_code_analysis"
     scope: "Code intelligence, metrics, duplication"
     
@@ -182,7 +182,7 @@ anti_patterns:
 migration:
   phase_1_audit:
     description: "Identify direct file operations"
-    tools: ["cortex_lens", "cortex_governance"]
+    tools: ["cortex/lens", "cortex_governance"]
     
   phase_2_rewrite:
     description: "Rewrite as MCP tools operations"

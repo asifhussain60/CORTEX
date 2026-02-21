@@ -1436,7 +1436,7 @@ deployment:
 # ==============================================================================
 
 file_placement:
-  cortex_lens:
+  cortex/lens:
     entry_points:
       - "cortex-lens/lens-dashboard.html"
       - "cortex-lens/domain-dashboard.html"

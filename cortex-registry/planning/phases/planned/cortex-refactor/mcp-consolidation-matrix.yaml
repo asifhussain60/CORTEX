@@ -83,14 +83,14 @@ consolidation:
     # ========================================================================
     
     - tool_id: "008-lens_analyze"
-      current_name: "cortex_lens_analyze"
+      current_name: "cortex/lens_analyze"
       category: "code_intelligence"
       status: "ACTIVE"
       reason: "Code-level workspace analysis (core capability)"
       operations: ["analyze", "detect_patterns", "generate_insights"]
       
     - tool_id: "009-brain_query"
-      current_name: "cortex_brain_query"
+      current_name: "cortex/intelligence_query"
       category: "reasoning"
       status: "ACTIVE"
       reason: "Domain brain knowledge synthesis"

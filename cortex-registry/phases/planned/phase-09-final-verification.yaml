@@ -101,8 +101,8 @@ phase:
       name: "Import Integrity Check"
       description: "Verify zero orphaned imports"
       checks:
-        - "No imports from cortex_intelligence (archived)"
-        - "No imports from cortex_lens (archived)"
+        - "No imports from cortex/intelligence (archived)"
+        - "No imports from cortex/lens (archived)"
         - "No imports from cortex.brain (archived)"
         - "No imports from _archive/"
         - "No circular imports"
@@ -183,7 +183,7 @@ phase:
       checks:
         database_consolidation:
           - "Only 3 .db files exist in .cortex-runtime/"
-          - "Zero .db files scattered in cortex/ or cortex_intelligence/"
+          - "Zero .db files scattered in cortex/ or cortex/intelligence/"
           - "All databases use WAL journal mode"
         activity_logging:
           - "Orchestrator execution creates audit record"
@@ -278,7 +278,7 @@ phase:
         - All 39 Tier 0 rules valid (no stale references)
         - GovernanceCrystal loads all 3 tiers within SLA (<50ms)
         - No duplicate rule files exist
-        - No rules reference cortex_intelligence/ or cortex_lens/
+        - No rules reference cortex/intelligence/ or cortex/lens/
         - AC-PERMANENT-FIX-* IDs fully normalized to CORE-*
         - CORE-039 absorbed into CORE-002 (no separate file)
         - 6 new rules (CORE-058 to CORE-063) enforced
@@ -288,7 +288,7 @@ phase:
           command: "find cortex-registry/ -name 'skull-rules.yaml' | wc -l"
           expected: 1
         - check: "No stale package references"
-          command: "grep -r 'cortex_intelligence\\|cortex_lens' cortex-registry/core/tier0-skull/skull-rules.yaml | wc -l"
+          command: "grep -r 'cortex/intelligence\\|cortex/lens' cortex-registry/core/tier0-skull/skull-rules.yaml | wc -l"
           expected: 0
         - check: "No AC-PERMANENT-FIX IDs"
           command: "grep 'AC-PERMANENT-FIX' cortex-registry/core/tier0-skull/skull-rules.yaml | wc -l"
@@ -360,7 +360,7 @@ phase:
       description: |
         Verify all scattered .db files are consolidated:
         1. Only 3 databases in .cortex-runtime/ (audit, traces, state)
-        2. Zero .db files in cortex/, cortex_intelligence/, or cortex/wiring/
+        2. Zero .db files in cortex/, cortex/intelligence/, or cortex/wiring/
         3. All raw sqlite3.connect() calls replaced with CortexAuditDB
         4. Retention policy YAML loaded and applied
         5. WAL mode confirmed on all databases
@@ -415,8 +415,8 @@ phase:
     - step: 3
       name: "V3 — Import Integrity Check"
       commands:
-        - "grep -r 'from cortex_intelligence' cortex/ | wc -l"
-        - "grep -r 'from cortex_lens' cortex/ | wc -l"
+        - "grep -r 'from cortex/intelligence' cortex/ | wc -l"
+        - "grep -r 'from cortex/lens' cortex/ | wc -l"
         - "grep -r 'from cortex.brain' cortex/ | wc -l"
         - "grep -r 'from _archive' cortex/ | wc -l"
       expected: "ALL return 0"
@@ -481,7 +481,7 @@ phase:
       name: "FR7 — SQLite Database Consolidation"
       description: "Verify zero scattered .db files, only 3 in .cortex-runtime/"
       commands:
-        - "find cortex/ cortex_intelligence/ -name '*.db' -type f 2>/dev/null | wc -l"
+        - "find cortex/ cortex/intelligence/ -name '*.db' -type f 2>/dev/null | wc -l"
         - "find .cortex-runtime/ -name '*.db' -type f | wc -l"
         - "grep -r 'sqlite3.connect' cortex/ --include='*.py' | grep -v audit_db.py | wc -l"
       expected: "0 scattered, 3 consolidated, 0 raw connections"
@@ -665,7 +665,7 @@ phase:
 
       - id: "VL-09-C4"
         name: "Zero imports from archived packages"
-        command: "grep -r 'from cortex_intelligence\\|from cortex_lens\\|from cortex\\.brain\\|from _archive' cortex/ | wc -l"
+        command: "grep -r 'from cortex/intelligence\\|from cortex/lens\\|from cortex\\.brain\\|from _archive' cortex/ | wc -l"
         pass_condition: "output is 0"
         on_fail: "Fix all remaining stale imports"
 

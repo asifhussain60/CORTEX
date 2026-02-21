@@ -66,7 +66,7 @@ overview:
        in cortex-registry/company/domains/{repository}/ with architecture, security, tech stack, and best 
        practices extracted from deep analysis.
     
-    2. **Enhances Intelligence Layers** — Every operation updates cortex_intelligence/ perception 
+    2. **Enhances Intelligence Layers** — Every operation updates cortex/intelligence/ perception 
        (pattern recognition), reasoning (strategy selection), and action (execution planning) 
        layers based on observed patterns and outcomes.
     
@@ -243,13 +243,13 @@ stages:
   - id: "S3"
     name: "Brain Intelligence Layer Enhancement"
     description: |
-      Enhance cortex_intelligence/ perception, reasoning, and action layers to support 
+      Enhance cortex/intelligence/ perception, reasoning, and action layers to support 
       pattern-based learning from every operation.
       
       Components:
-      - cortex_intelligence/perception/pattern_registry.py
-      - cortex_intelligence/reasoning/strategy_selector.py
-      - cortex_intelligence/action/execution_planner.py
+      - cortex/intelligence/perception/pattern_registry.py
+      - cortex/intelligence/reasoning/strategy_selector.py
+      - cortex/intelligence/action/execution_planner.py
       
       Perception Layer:
       - Register pattern signatures (e.g., "monolith with segments")
@@ -309,7 +309,7 @@ stages:
       1. LENS Classification (existing)
       2. Deep Analysis via MCP (cortex_onboard_repository)
       3. Knowledge Persistence (NEW) → cortex-registry/company/domains/{repo}/*.yaml
-      4. Brain Enhancement (NEW) → cortex_intelligence/ layer updates
+      4. Brain Enhancement (NEW) → cortex/intelligence/ layer updates
       5. Universal Learning Loop (NEW) → OBSERVE→ANALYZE→SYNTHESIZE→APPLY
       6. Report Generation (existing, enhanced with learning insights)
       
@@ -320,7 +320,7 @@ stages:
       
       MCP Tool Integration:
       - Use cortex_onboard_repository for deep analysis (not manual file reading)
-      - Use cortex_lens_analyze for code intelligence
+      - Use cortex/lens_analyze for code intelligence
       - Use cortex_git_history for recent changes context
       - Use cortex_detect_duplicates for pattern detection
       
@@ -416,7 +416,7 @@ stages:
               path: Repository path to onboard
               depth: Analysis depth (quick=5min, standard=15min, full=30min)
               generate_knowledge: Create cortex-registry/company/domains/ YAML artifacts
-              update_brain: Enhance cortex_intelligence/ intelligence layers
+              update_brain: Enhance cortex/intelligence/ intelligence layers
               persist_yamls: Save structured knowledge to disk
               engage_learning_loop: Run OBSERVE→ANALYZE→SYNTHESIZE→APPLY
           
@@ -569,7 +569,7 @@ integration_points:
     type: "mcp_tool"
     integration: "Add flags for knowledge persistence control"
   
-  - name: "cortex_intelligence"
+  - name: "cortex/intelligence"
     type: "intelligence"
     integration: "Register patterns and strategies from learning loop"
 

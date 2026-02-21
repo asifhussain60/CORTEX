@@ -156,13 +156,13 @@ stages:
       7. Output: AngularAnalysisResult with components/services/modules
       
     files_to_create:
-      - "cortex_lens/angular/typescript_parser.py"
-      - "cortex_lens/angular/decorator_extractor.py"
-      - "cortex_lens/angular/metadata_parser.py"
-      - "cortex_lens/models/angular_analysis_result.py"
-      - "tests/unit/cortex_lens/angular/test_typescript_parser.py"
-      - "tests/unit/cortex_lens/angular/test_decorator_extractor.py"
-      - "tests/integration/cortex_lens/test_angular_analysis_e2e.py"
+      - "cortex/lens/angular/typescript_parser.py"
+      - "cortex/lens/angular/decorator_extractor.py"
+      - "cortex/lens/angular/metadata_parser.py"
+      - "cortex/lens/models/angular_analysis_result.py"
+      - "tests/unit/cortex/lens/angular/test_typescript_parser.py"
+      - "tests/unit/cortex/lens/angular/test_decorator_extractor.py"
+      - "tests/integration/cortex/lens/test_angular_analysis_e2e.py"
       
     tests:
       - "test_parse_typescript_file_with_decorators"
@@ -219,14 +219,14 @@ stages:
       8. Output: AngularDIGraph with providers + injectors + hierarchy
       
     files_to_create:
-      - "cortex_lens/angular/di_graph_builder.py"
-      - "cortex_lens/angular/provider_resolver.py"
-      - "cortex_lens/angular/component_hierarchy_builder.py"
-      - "cortex_lens/angular/service_usage_analyzer.py"
-      - "cortex_lens/models/angular_di_graph.py"
-      - "tests/unit/cortex_lens/angular/test_di_graph_builder.py"
-      - "tests/unit/cortex_lens/angular/test_component_hierarchy.py"
-      - "tests/integration/cortex_lens/test_angular_di_e2e.py"
+      - "cortex/lens/angular/di_graph_builder.py"
+      - "cortex/lens/angular/provider_resolver.py"
+      - "cortex/lens/angular/component_hierarchy_builder.py"
+      - "cortex/lens/angular/service_usage_analyzer.py"
+      - "cortex/lens/models/angular_di_graph.py"
+      - "tests/unit/cortex/lens/angular/test_di_graph_builder.py"
+      - "tests/unit/cortex/lens/angular/test_component_hierarchy.py"
+      - "tests/integration/cortex/lens/test_angular_di_e2e.py"
       
     tests:
       - "test_build_di_graph_root_provider"
@@ -283,14 +283,14 @@ stages:
       8. Output: AngularRouteMap + APICallLineage
       
     files_to_create:
-      - "cortex_lens/angular/routing_parser.py"
-      - "cortex_lens/angular/http_client_tracer.py"
-      - "cortex_lens/angular/feature_area_identifier.py"
-      - "cortex_lens/angular/lineage_builder.py"
-      - "cortex_lens/models/angular_route_map.py"
-      - "tests/unit/cortex_lens/angular/test_routing_parser.py"
-      - "tests/unit/cortex_lens/angular/test_http_client_tracer.py"
-      - "tests/integration/cortex_lens/test_angular_lineage_e2e.py"
+      - "cortex/lens/angular/routing_parser.py"
+      - "cortex/lens/angular/http_client_tracer.py"
+      - "cortex/lens/angular/feature_area_identifier.py"
+      - "cortex/lens/angular/lineage_builder.py"
+      - "cortex/lens/models/angular_route_map.py"
+      - "tests/unit/cortex/lens/angular/test_routing_parser.py"
+      - "tests/unit/cortex/lens/angular/test_http_client_tracer.py"
+      - "tests/integration/cortex/lens/test_angular_lineage_e2e.py"
       
     tests:
       - "test_parse_routes_array"
@@ -347,12 +347,12 @@ stages:
       8. Output: Unified knowledge graph + MCP tool
       
     files_to_create:
-      - "cortex_lens/knowledge_graph/angular_node_builder.py"
-      - "cortex_lens/knowledge_graph/cross_stack_query.py"
+      - "cortex/lens/knowledge_graph/angular_node_builder.py"
+      - "cortex/lens/knowledge_graph/cross_stack_query.py"
       - "cortex/mcp/tools/angular_analyze_tool.py"
-      - "cortex_lens/angular/incremental_updater.py"
-      - "tests/unit/cortex_lens/knowledge_graph/test_angular_nodes.py"
-      - "tests/unit/cortex_lens/knowledge_graph/test_cross_stack_query.py"
+      - "cortex/lens/angular/incremental_updater.py"
+      - "tests/unit/cortex/lens/knowledge_graph/test_angular_nodes.py"
+      - "tests/unit/cortex/lens/knowledge_graph/test_cross_stack_query.py"
       - "tests/integration/cortex/mcp/test_angular_analyze_tool.py"
       
     tests:

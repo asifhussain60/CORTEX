@@ -81,7 +81,7 @@ priority_checks:
       
       - id: "P1-005"
         name: "Synthesis Duplication Prevention"
-        description: "No duplicate synthesis in domain_brain and cortex_intelligence"
+        description: "No duplicate synthesis in domain_brain and cortex/intelligence"
         tool: "cortex_verify_synthesis"
         evidence_required: "synthesis_analysis"
         severity: "high"
@@ -144,7 +144,7 @@ priority_checks:
       - id: "P1.5-001"
         name: "Brain Health Score"
         description: "Overall brain system health metrics"
-        tool: "cortex_intelligence_health"
+        tool: "cortex/intelligence_health"
         evidence_required: "health_metrics"
         severity: "high"
         blocking: false
@@ -179,7 +179,7 @@ priority_checks:
       
       - id: "P1.5-004"
         name: "Brain State Freshness"
-        description: "cortex_intelligence state not stale"
+        description: "cortex/intelligence state not stale"
         tool: "cortex_check_freshness"
         evidence_required: "freshness_timestamps"
         severity: "high"
@@ -200,7 +200,7 @@ priority_checks:
       - id: "P1.5-006"
         name: "LENS Health"
         description: "LENS analyzers operational and coverage adequate"
-        tool: "cortex_lens_health"
+        tool: "cortex/lens_health"
         evidence_required: "lens_metrics"
         severity: "medium"
         blocking: false
@@ -215,7 +215,7 @@ priority_checks:
       
       - id: "P1.5-008"
         name: "Memory Coherence"
-        description: "cortex_intelligence memory not fragmented"
+        description: "cortex/intelligence memory not fragmented"
         tool: "cortex_memory_check"
         evidence_required: "memory_coherence"
         severity: "medium"

@@ -411,7 +411,7 @@ stages:
             - KnowledgeSynthesisEngine (YAML + company knowledge)
             - ProfileStore (onboarded repo profiles)
             - KnowledgeQuerier (knowledge graph entities)
-            - SynthesisEngine from cortex_intelligence/tier3 (cross-domain)
+            - SynthesisEngine from cortex/intelligence/tier3 (cross-domain)
           
           Internal caching with single LENSCache instance (canonical).
           Budget-aware execution: caller specifies tier (quick/targeted/full).
@@ -747,7 +747,7 @@ stages:
       - id: "S8-T4"
         name: "E2E: Tiered MCP API with real file analysis"
         description: |
-          Test cortex_lens_quick, cortex_lens_targeted, cortex_lens_analyze 
+          Test cortex/lens_quick, cortex/lens_targeted, cortex/lens_analyze 
           MCP endpoints against a real Python file and verify non-stub 
           findings in response.
         test_file: "tests/integration/test_lens_intelligence_e2e.py"

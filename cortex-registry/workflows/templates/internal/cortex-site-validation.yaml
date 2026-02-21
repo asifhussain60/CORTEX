@@ -214,7 +214,7 @@ metadata:
     - DeploymentOrchestrator
   
   mcp_tools:
-    - cortex_lens_analyze
+    - cortex/lens_analyze
     - cortex_challenge
     - cortex_process_request
   

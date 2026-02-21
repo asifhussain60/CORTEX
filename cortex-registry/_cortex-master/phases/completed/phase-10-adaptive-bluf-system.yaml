@@ -232,17 +232,17 @@ phases:
         tests: "tests/orchestrators/interaction/test_bluf_template_engine.py"
         loc: 280
       
-      - file: "cortex_intelligence/tier2/response_templates/bluf_only.yaml"
+      - file: "cortex/intelligence/tier2/response_templates/bluf_only.yaml"
         description: "BLUF-only template (executive summary)"
         tests: "N/A (YAML template)"
         loc: 50
       
-      - file: "cortex_intelligence/tier2/response_templates/bluf_hybrid.yaml"
+      - file: "cortex/intelligence/tier2/response_templates/bluf_hybrid.yaml"
         description: "BLUF hybrid template (summary + decision factors + collapsible)"
         tests: "N/A (YAML template)"
         loc: 120
       
-      - file: "cortex_intelligence/tier2/response_templates/full_detail.yaml"
+      - file: "cortex/intelligence/tier2/response_templates/full_detail.yaml"
         description: "Full detail template (current format + BLUF header)"
         tests: "N/A (YAML template)"
         loc: 80
@@ -513,7 +513,7 @@ phases:
         tests: "tests/orchestrators/core/test_master_orchestrator.py"
         loc: "+50 lines"
       
-      - file: "cortex_intelligence/tier0/governance/response-header-enforcement.yaml"
+      - file: "cortex/intelligence/tier0/governance/response-header-enforcement.yaml"
         description: "Updated CORE-029 with BLUF requirement"
         tests: "N/A (governance rule)"
         loc: "+20 lines"

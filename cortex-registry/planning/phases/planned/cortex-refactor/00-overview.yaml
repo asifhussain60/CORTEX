@@ -303,7 +303,7 @@ refactor:
           - "cortex/tools/scaffolder_audit_logger.py (raw sqlite3)"
           - "cortex/tools/governance_dashboard.py (raw sqlite3)"
           - "cortex/tools/phase_readiness_checker.py (raw sqlite3)"
-          - "cortex/tools/cortex_intelligence_integration.py (raw sqlite3)"
+          - "cortex/tools/cortex/intelligence_integration.py (raw sqlite3)"
           - "cortex/tools/ac_populator.py (raw sqlite3)"
           - "cortex/wiring/registry/contract_validation_audit.db (ad-hoc)"
 
@@ -317,13 +317,13 @@ refactor:
           3. .cortex-runtime/cortex-state.db — conversations, state, onboarding data
         current_scattered_dbs:
           - ".cortex-runtime/traces/orchestrator-traces.db"
-          - "cortex_intelligence/governance.db"
-          - "cortex_intelligence/state/governance.db"
-          - "cortex_intelligence/state/conversations.db"
-          - "cortex_intelligence/intelligence/intelligence_audit.db"
-          - "cortex_intelligence/observability/observability_audit.db"
-          - "cortex_intelligence/quality/solid_audit.db"
-          - "cortex_intelligence/wiring/contract_validation_audit.db"
+          - "cortex/intelligence/governance.db"
+          - "cortex/intelligence/state/governance.db"
+          - "cortex/intelligence/state/conversations.db"
+          - "cortex/intelligence/intelligence/intelligence_audit.db"
+          - "cortex/intelligence/observability/observability_audit.db"
+          - "cortex/intelligence/quality/solid_audit.db"
+          - "cortex/intelligence/wiring/contract_validation_audit.db"
           - "cortex/wiring/registry/contract_validation_audit.db"
           - "cortex/orchestrators/intelligence/intelligence_audit.db"
 
@@ -638,7 +638,7 @@ refactor:
       - "No orphaned imports"
       - "Coverage >= 90%"
       - "Import quarantine check — zero imports from _archive/ paths"
-      - "No file in cortex/ imports from cortex_intelligence or cortex_lens"
+      - "No file in cortex/ imports from cortex/intelligence or cortex/lens"
 
     import_quarantine:
       description: |
@@ -682,7 +682,7 @@ refactor:
         resolution: "Phase 06 → cortex/governance/validation/"
       - dir: "cortex/cortex-registry/ (inner duplicate)"
         resolution: "Phase 03 → delete (data belongs in top-level cortex-registry/)"
-      - dir: "cortex/cortex_intelligence/ (inner duplicate)"
+      - dir: "cortex/cortex/intelligence/ (inner duplicate)"
         resolution: "Phase 03 → delete (empty or duplicate)"
       - dir: "cortex/tests/ (8 inner test files)"
         resolution: "Phase 07 → move to tests/"

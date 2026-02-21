@@ -3,7 +3,7 @@
 # =============================================================================
 # Purpose: Template for detailed governance violation reports
 # Domain: Governance
-# Inherits: Header from cortex_intelligence/tier0/response-headers.yaml
+# Inherits: Header from cortex-registry/artifacts/templates/responses/headers.yaml
 # =============================================================================
 
 metadata:
@@ -123,7 +123,7 @@ variables:
     
     - name: "rule_source"
       type: "string"
-      default: "cortex_intelligence/tier0/governance/core-rules.yaml"
+      default: "cortex/intelligence/tier0/governance/core-rules.yaml"
     
     - name: "rule_description"
       type: "string"
@@ -177,7 +177,7 @@ example:
     
     ### Rule Reference
     
-    **Source:** `cortex_intelligence/tier0/governance/core-rules.yaml`
+    **Source:** `cortex/intelligence/tier0/governance/core-rules.yaml`
     
     NO bare except. NO catching generic Exception. Use specific exception types
     and preserve error context.

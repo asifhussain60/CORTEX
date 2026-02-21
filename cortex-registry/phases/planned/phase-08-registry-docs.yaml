@@ -41,7 +41,7 @@ phase:
       description: |
         Remove or archive YAMLs that reference:
         - Deleted/archived orchestrators
-        - Old directory paths (cortex/brain/, cortex_intelligence/, etc.)
+        - Old directory paths (cortex/brain/, cortex/intelligence/, etc.)
         - Phase-specific artifacts that are no longer relevant
 
     - id: "R3"
@@ -116,7 +116,7 @@ phase:
           template: cortex-registry/workflows/templates/lifecycle/design-analysis.yaml
           mcp_tool: cortex_document
           modes: api_docs | readme | architecture_diagram | runbook | adr
-          builds_on: cortex/documentation/ (9 files) + cortex_lens/knowledge_graph/
+          builds_on: cortex/documentation/ (9 files) + cortex/lens/knowledge_graph/
 
       tdd_approach:
         red:
@@ -371,10 +371,10 @@ phase:
       description: |
         Search all YAMLs for references to deleted paths:
         - cortex/brain/
-        - cortex_intelligence/
-        - cortex_lens/
+        - cortex/intelligence/
+        - cortex/lens/
         - phase_38, phase_executors, phase_management
-      command: "grep -r 'cortex/brain\\|cortex_intelligence\\|cortex_lens' cortex-registry/ | wc -l"
+      command: "grep -r 'cortex/brain\\|cortex/intelligence\\|cortex/lens' cortex-registry/ | wc -l"
       expected: "0"
 
     - step: 4
@@ -553,7 +553,7 @@ phase:
 
       - id: "VL-08-C5"
         name: "Stale YAML references eliminated"
-        command: "grep -r 'cortex/brain/\\|cortex_intelligence/\\|cortex_lens/' cortex-registry/ | grep -v '.gitkeep' | wc -l"
+        command: "grep -r 'cortex/brain/\\|cortex/intelligence/\\|cortex/lens/' cortex-registry/ | grep -v '.gitkeep' | wc -l"
         pass_condition: "output is 0"
         on_fail: "Update each stale path reference to use new cortex/ canonical paths"
 

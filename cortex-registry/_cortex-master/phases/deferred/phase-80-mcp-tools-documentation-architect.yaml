@@ -272,7 +272,7 @@ integration:
     - name: "CORTEX Brain Knowledge Base"
       purpose: "Auto-populate tool metadata in tier3/knowledge/"
       generated_files:
-        - "cortex_intelligence/tier3/knowledge/mcp-tools-catalog.yaml"
+        - "cortex/intelligence/tier3/knowledge/mcp-tools-catalog.yaml"
         - "Metadata: intelligence_level, latency_profile, caching_strategy"
     
     - name: "Wiring Contract"

@@ -269,7 +269,7 @@ workflow:
 
         - id: "stale_refs"
           description: "Zero references to dissolved/renamed components from this phase"
-          tool: "grep -r '_archive\\|cortex_intelligence\\|cortex_lens' cortex/"
+          tool: "grep -r '_archive\\|cortex/intelligence\\|cortex/lens' cortex/"
           auto_fix: "Rewrite import to canonical cortex.* path"
 
         - id: "import_quarantine"

@@ -734,8 +734,8 @@ stages:
       
       - task: "Clean up orphaned data files"
         targets:
-          - "cortex_intelligence/state/old_*.json → Archive"
-          - "cortex_intelligence/onboarded_repos/deprecated_*.yaml → Delete"
+          - "cortex/intelligence/state/old_*.json → Archive"
+          - "cortex/intelligence/onboarded_repos/deprecated_*.yaml → Delete"
           - "docs/abandoned_*.md → Archive"
         acceptance_criteria:
           - "✅ Only active data files remain"

@@ -192,9 +192,9 @@ phase:
       rationale: "Inner copy of registry data is SSOT violation"
       action: "Move unique artifacts/knowledge-base to top-level, delete inner"
 
-    - from: "cortex/cortex_intelligence/ (inner empty duplicate)"
+    - from: "cortex/cortex/intelligence/ (inner empty duplicate)"
       to: "DELETE"
-      rationale: "Empty duplicate of top-level cortex_intelligence"
+      rationale: "Empty duplicate of top-level cortex/intelligence"
 
     - from: "cortex/tests/ (8 inner test files)"
       to: "tests/ (top-level)"
@@ -358,7 +358,7 @@ phase:
       name: "Delete inner duplicates"
       commands:
         - "rm -rf cortex/cortex-registry/"
-        - "rm -rf cortex/cortex_intelligence/"
+        - "rm -rf cortex/cortex/intelligence/"
       gate: "Inner duplicates gone"
 
     - step: 8
@@ -456,10 +456,10 @@ phase:
         on_fail: "Delete cortex/cortex-registry/ inner duplicate"
 
       - id: "VL-06-C5"
-        name: "cortex/cortex_intelligence/ inner duplicate deleted"
-        command: "test ! -d cortex/cortex_intelligence/ && echo 'deleted' || echo 'STILL EXISTS'"
+        name: "cortex/cortex/intelligence/ inner duplicate deleted"
+        command: "test ! -d cortex/cortex/intelligence/ && echo 'deleted' || echo 'STILL EXISTS'"
         pass_condition: "prints deleted"
-        on_fail: "Delete cortex/cortex_intelligence/ inner duplicate"
+        on_fail: "Delete cortex/cortex/intelligence/ inner duplicate"
 
       - id: "VL-06-C6"
         name: "All MCP tools still respond"

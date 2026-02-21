@@ -37,7 +37,7 @@ problem:
     - "cortex/orchestrators/core/master_orchestrator.py"
     - "cortex/orchestrators/core/interaction_orchestrator.py"
     - "cortex/models/plan_models.py (existing but not wired)"
-    - "cortex_intelligence/action/execution_planner.py (existing but not mandatory)"
+    - "cortex/intelligence/action/execution_planner.py (existing but not mandatory)"
 
 # ============================================================================
 # VIOLATIONS FOUND

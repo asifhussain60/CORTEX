@@ -119,7 +119,7 @@ class AutonomousExecutor:
     TOKEN_BUDGET_LIMIT = 750000  # 75% of 1M token budget
     CHECKPOINT_THRESHOLD = 0.75
     
-    def __init__(self, progress_tracker=None, rollback_manager=None) -> None:
+    def __init__(self, progress_tracker: object = None, rollback_manager: object = None) -> None:
         """
         Initialize autonomous executor.
         

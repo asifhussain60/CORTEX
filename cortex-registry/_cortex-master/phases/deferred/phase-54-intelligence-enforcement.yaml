@@ -111,7 +111,7 @@ stages:
           - "Register IntelligenceGate as first middleware (priority=0)"
           - "Execution order: IntelligenceGate → OnboardingGate → Tools"
           - "Verify injection for cortex_process_request"
-          - "Verify injection for cortex_lens_analyze"
+          - "Verify injection for cortex/lens_analyze"
           - "All 10 MCP tools receive unified_intelligence parameter"
       
       - task_id: "S1.T3"
@@ -274,7 +274,7 @@ stages:
           - "Add 'unified_intelligence: UnifiedIntelligenceContext' parameter"
           - "Optional parameter (backward compat)"
           - "Tools use context if provided (rich orchestrator instructions)"
-          - "Verify all 10 tools: cortex_process_request, cortex_lens_analyze, etc."
+          - "Verify all 10 tools: cortex_process_request, cortex/lens_analyze, etc."
     
     tests:
       - "tests/unit/mcp/test_decorator_intelligence_injection.py"

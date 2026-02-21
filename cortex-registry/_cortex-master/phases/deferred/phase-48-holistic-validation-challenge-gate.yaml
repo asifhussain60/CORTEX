@@ -22,14 +22,14 @@ overview:
     1. Registry holistic check missing — no cross-validation of orchestrators/components
     2. Regression prevention is reactive — checks happen AFTER implementation
     3. MasterOrchestrator governance not fully wired — enforcement via prompts only
-    4. cortex_intelligence underutilized — not used for CORTEX self-development
+    4. cortex/intelligence underutilized — not used for CORTEX self-development
     5. Challenge system not mandatory — suboptimal designs can proceed unchallenged
     
   expected_outcomes:
     - Zero regressions from implementation changes
     - All orchestrator dependencies tracked and validated
     - Mandatory challenge gate ensures alternatives considered
-    - cortex_intelligence provides context synthesis for CORTEX repo
+    - cortex/intelligence provides context synthesis for CORTEX repo
     - MCP-enforced governance (not prompt-reliant)
 
 roi_analysis:
@@ -113,20 +113,20 @@ stages:
       - "14/14 tests passing"
 
   - id: "S4"
-    name: "cortex_intelligence Self-Analysis Integration"
+    name: "cortex/intelligence Self-Analysis Integration"
     description: |
-      Enable cortex_intelligence to analyze CORTEX repository itself:
+      Enable cortex/intelligence to analyze CORTEX repository itself:
       - Add CORTEX as onboarded repo in brain
       - Context synthesis for CORTEX development
       - Knowledge tier utilization for self-improvement
     effort: "3 hours"
     test_count: 8
     deliverables:
-      - "cortex_intelligence/onboarded_repos/cortex_self.yaml"
+      - "cortex/intelligence/onboarded_repos/cortex_self.yaml"
       - "cortex/brain/self_analysis.py"
       - "tests/test_cortex_self_analysis.py"
     acceptance_criteria:
-      - "CORTEX repo onboarded in cortex_intelligence"
+      - "CORTEX repo onboarded in cortex/intelligence"
       - "Context synthesis available for CORTEX files"
       - "Knowledge tiers consulted for CORTEX development"
       - "8/8 tests passing"
@@ -184,7 +184,7 @@ dependencies:
     - "LENSOrchestrator"        # Analysis capabilities
   
   tools:
-    - "cortex_lens_analyze"     # Code analysis
+    - "cortex/lens_analyze"     # Code analysis
     - "cortex_detect_duplicates" # CORE-035 validation
     - "cortex_git_history"      # Change tracking
 

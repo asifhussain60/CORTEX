@@ -86,7 +86,7 @@ workflow:
           severity: "P2"
         - id: "H-004"
           name: "Wrong Path References"
-          description: "Stale import paths (cortex_brain → cortex_intelligence)"
+          description: "Stale import paths (cortex/intelligence → cortex/intelligence)"
           severity: "P0"
         - id: "H-005"
           name: "Duplicate Content"

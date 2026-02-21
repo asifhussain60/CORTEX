@@ -164,7 +164,7 @@ stages:
       
     implementation_notes: |
       Completed Components:
-      1. Roslyn CLI (cortex_lens/dotnet/roslyn_cli/) - C# → JSON extractor
+      1. Roslyn CLI (cortex/lens/dotnet/roslyn_cli/) - C# → JSON extractor
       2. RoslynWorkspaceBuilder (7/7 tests) - Solution/project loading
       3. TypeSymbolResolver (6/6 tests) - Interface implementations, base classes
       4. MethodSignatureAnalyzer (7/7 tests) - Signature extraction, public methods
@@ -194,19 +194,19 @@ stages:
       8. ✅ Hybrid mode: Merge syntax (Phase 55) + semantic (Roslyn)
       
     files_created:
-      - "cortex_lens/dotnet/roslyn_cli/RoslynSemanticExtractor.csproj"
-      - "cortex_lens/dotnet/roslyn_cli/Program.cs"
-      - "cortex_lens/dotnet/roslyn_workspace_builder.py"
-      - "cortex_lens/dotnet/type_symbol_resolver.py"
-      - "cortex_lens/dotnet/method_signature_analyzer.py"
-      - "cortex_lens/dotnet/attribute_data_extractor.py"
-      - "cortex_lens/dotnet/cross_assembly_resolver.py"
-      - "tests/unit/cortex_lens/dotnet/test_roslyn_workspace_builder.py"
-      - "tests/unit/cortex_lens/dotnet/test_type_symbol_resolver.py"
-      - "tests/unit/cortex_lens/dotnet/test_method_signature_analyzer.py"
-      - "tests/unit/cortex_lens/dotnet/test_attribute_data_extractor.py"
-      - "tests/unit/cortex_lens/dotnet/test_cross_assembly_resolver.py"
-      - "tests/integration/cortex_lens/test_dotnet_semantic_integration.py"
+      - "cortex/lens/dotnet/roslyn_cli/RoslynSemanticExtractor.csproj"
+      - "cortex/lens/dotnet/roslyn_cli/Program.cs"
+      - "cortex/lens/dotnet/roslyn_workspace_builder.py"
+      - "cortex/lens/dotnet/type_symbol_resolver.py"
+      - "cortex/lens/dotnet/method_signature_analyzer.py"
+      - "cortex/lens/dotnet/attribute_data_extractor.py"
+      - "cortex/lens/dotnet/cross_assembly_resolver.py"
+      - "tests/unit/cortex/lens/dotnet/test_roslyn_workspace_builder.py"
+      - "tests/unit/cortex/lens/dotnet/test_type_symbol_resolver.py"
+      - "tests/unit/cortex/lens/dotnet/test_method_signature_analyzer.py"
+      - "tests/unit/cortex/lens/dotnet/test_attribute_data_extractor.py"
+      - "tests/unit/cortex/lens/dotnet/test_cross_assembly_resolver.py"
+      - "tests/integration/cortex/lens/test_dotnet_semantic_integration.py"
       
     files_modified:
       - "cortex/lens/dotnet_analyzer.py (Phase 55 integration)"
@@ -268,14 +268,14 @@ stages:
       8. Output: DIContainerGraph with registrations + usage
       
     files_to_create:
-      - "cortex_lens/dotnet/di_analyzer.py"
-      - "cortex_lens/dotnet/di_extractors/dotnet_core.py"
-      - "cortex_lens/dotnet/di_extractors/ninject.py"
-      - "cortex_lens/dotnet/di_extractors/autofac.py"
-      - "cortex_lens/models/di_container_graph.py"
-      - "tests/unit/cortex_lens/dotnet/test_di_analyzer.py"
-      - "tests/unit/cortex_lens/dotnet/test_di_extractors.py"
-      - "tests/integration/cortex_lens/test_di_analysis_e2e.py"
+      - "cortex/lens/dotnet/di_analyzer.py"
+      - "cortex/lens/dotnet/di_extractors/dotnet_core.py"
+      - "cortex/lens/dotnet/di_extractors/ninject.py"
+      - "cortex/lens/dotnet/di_extractors/autofac.py"
+      - "cortex/lens/models/di_container_graph.py"
+      - "tests/unit/cortex/lens/dotnet/test_di_analyzer.py"
+      - "tests/unit/cortex/lens/dotnet/test_di_extractors.py"
+      - "tests/integration/cortex/lens/test_di_analysis_e2e.py"
       
     tests:
       - "test_extract_dotnet_core_registrations"
@@ -333,15 +333,15 @@ stages:
       8. Output: EFCoreLineageMap with full traceability
       
     files_to_create:
-      - "cortex_lens/dotnet/ef_core_analyzer.py"
-      - "cortex_lens/dotnet/dbcontext_inspector.py"
-      - "cortex_lens/dotnet/entity_mapper.py"
-      - "cortex_lens/dotnet/navigation_property_extractor.py"
-      - "cortex_lens/dotnet/dto_tracer.py"
-      - "cortex_lens/models/ef_lineage_map.py"
-      - "tests/unit/cortex_lens/dotnet/test_ef_core_analyzer.py"
-      - "tests/unit/cortex_lens/dotnet/test_entity_mapper.py"
-      - "tests/integration/cortex_lens/test_ef_lineage_e2e.py"
+      - "cortex/lens/dotnet/ef_core_analyzer.py"
+      - "cortex/lens/dotnet/dbcontext_inspector.py"
+      - "cortex/lens/dotnet/entity_mapper.py"
+      - "cortex/lens/dotnet/navigation_property_extractor.py"
+      - "cortex/lens/dotnet/dto_tracer.py"
+      - "cortex/lens/models/ef_lineage_map.py"
+      - "tests/unit/cortex/lens/dotnet/test_ef_core_analyzer.py"
+      - "tests/unit/cortex/lens/dotnet/test_entity_mapper.py"
+      - "tests/integration/cortex/lens/test_ef_lineage_e2e.py"
       
     tests:
       - "test_extract_dbset_properties"
@@ -398,12 +398,12 @@ stages:
       8. Output: Unified knowledge graph + MCP tool
       
     files_to_create:
-      - "cortex_lens/knowledge_graph/dotnet_node_builder.py"
-      - "cortex_lens/knowledge_graph/cross_language_query.py"
+      - "cortex/lens/knowledge_graph/dotnet_node_builder.py"
+      - "cortex/lens/knowledge_graph/cross_language_query.py"
       - "cortex/mcp/tools/dotnet_semantic_analyze_tool.py"
-      - "cortex_lens/dotnet/incremental_updater.py"
-      - "tests/unit/cortex_lens/knowledge_graph/test_dotnet_nodes.py"
-      - "tests/unit/cortex_lens/knowledge_graph/test_cross_language_query.py"
+      - "cortex/lens/dotnet/incremental_updater.py"
+      - "tests/unit/cortex/lens/knowledge_graph/test_dotnet_nodes.py"
+      - "tests/unit/cortex/lens/knowledge_graph/test_cross_language_query.py"
       - "tests/integration/cortex/mcp/test_dotnet_semantic_tool.py"
       
     tests:

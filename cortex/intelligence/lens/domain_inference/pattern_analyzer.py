@@ -42,7 +42,7 @@ class PatternAnalyzer:
         # Returns: "User" (the entity class)
     """
     
-    def __init__(self, storage=None) -> None:
+    def __init__(self, storage: object = None) -> None:
         """
         Initialize pattern analyzer.
         

@@ -20,9 +20,9 @@ consolidation:
     description: "3 top-level Python packages → 1 (cortex)"
     items:
       - id: "PKG-001"
-        concept: "cortex_intelligence"
+        concept: "cortex/intelligence"
         current_locations:
-          - path: "cortex_intelligence/"
+          - path: "cortex/intelligence/"
             files: "~45 files across 11 subdirs"
             subdirs:
               - "action/"
@@ -51,9 +51,9 @@ consolidation:
         status: "pending"
 
       - id: "PKG-002"
-        concept: "cortex_lens"
+        concept: "cortex/lens"
         current_locations:
-          - path: "cortex_lens/"
+          - path: "cortex/lens/"
             files: "~20 files across 6 subdirs"
             subdirs:
               - "analyzers/"
@@ -72,9 +72,9 @@ consolidation:
         status: "pending"
 
       - id: "PKG-003"
-        concept: "cortex/cortex_intelligence (inner duplicate)"
+        concept: "cortex/cortex/intelligence (inner duplicate)"
         current_locations:
-          - path: "cortex/cortex_intelligence/"
+          - path: "cortex/cortex/intelligence/"
         target: "DELETE (exact duplicate of top-level)"
         phase: "03"
         status: "pending"
@@ -109,13 +109,13 @@ consolidation:
           - path: "cortex/brain/tier1/governance/"
             role: "tier1 governance (brain)"
             action: "merge into cortex/governance/"
-          - path: "cortex_intelligence/governance/"
+          - path: "cortex/intelligence/governance/"
             role: "intelligence governance"
             action: "merge into cortex/governance/"
-          - path: "cortex_intelligence/memory/adaptive_intelligence/governance/"
+          - path: "cortex/intelligence/memory/adaptive_intelligence/governance/"
             role: "learned governance patterns"
             action: "merge into cortex/intelligence/memory/"
-          - path: "cortex_intelligence/memory/learned_patterns/governance/"
+          - path: "cortex/intelligence/memory/learned_patterns/governance/"
             role: "learned governance patterns"
             action: "merge into cortex/intelligence/memory/"
         target: "cortex/governance/ (ONE SSOT)"
@@ -133,7 +133,7 @@ consolidation:
           - path: "cortex/brain/lens/"
             role: "brain lens layer"
             action: "merge unique logic into cortex/intelligence/lens/"
-          - path: "cortex_lens/"
+          - path: "cortex/lens/"
             role: "standalone package"
             action: "migrate to cortex/intelligence/lens/"
         target: "cortex/intelligence/lens/ (ONE SSOT)"
@@ -151,7 +151,7 @@ consolidation:
           - path: "cortex/brain/domain_brain/"
             role: "brain domain brain"
             action: "merge unique logic into cortex/intelligence/domain_brain/"
-          - path: "cortex_intelligence/domain_brain/"
+          - path: "cortex/intelligence/domain_brain/"
             role: "intelligence domain brain"
             action: "merge unique logic into cortex/intelligence/domain_brain/"
         target: "cortex/intelligence/domain_brain/ (ONE SSOT)"
@@ -175,7 +175,7 @@ consolidation:
           - path: "cortex/brain/observability/"
             role: "brain observability"
             action: "merge into cortex/observability/"
-          - path: "cortex_intelligence/observability/"
+          - path: "cortex/intelligence/observability/"
             role: "intelligence observability"
             action: "merge into cortex/observability/"
         target: "cortex/observability/ (ONE SSOT)"
@@ -190,7 +190,7 @@ consolidation:
           - path: "cortex/wiring/"
             role: "primary wiring/DI"
             keep: true
-          - path: "cortex_intelligence/wiring/"
+          - path: "cortex/intelligence/wiring/"
             role: "intelligence wiring"
             action: "merge into cortex/wiring/"
         target: "cortex/core/ (composition root) or cortex/wiring/"

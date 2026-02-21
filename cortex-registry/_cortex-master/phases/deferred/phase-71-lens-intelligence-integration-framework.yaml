@@ -275,9 +275,9 @@ stages:
          - Fallback to embedded data if file missing
       
       4. Integration with LENS MCP tools
-         - cortex_lens_analyze → outputs manifest
-         - cortex_lens_repos → lists manifests
-         - cortex_lens_artifact_{name} → lazy-load specific artifact
+         - cortex/lens_analyze → outputs manifest
+         - cortex/lens_repos → lists manifests
+         - cortex/lens_artifact_{name} → lazy-load specific artifact
       
       5. Tests (45 total)
          - Manifest generation (10 tests)
@@ -379,9 +379,9 @@ technical_approach:
     
     Layer 4 (Consumption):
     ├── LENS MCP Tools (enhanced)
-    │   ├── cortex_lens_analyze (returns manifest)
-    │   ├── cortex_lens_artifact_{name} (lazy-load)
-    │   └── cortex_lens_repos (multi-repo registry)
+    │   ├── cortex/lens_analyze (returns manifest)
+    │   ├── cortex/lens_artifact_{name} (lazy-load)
+    │   └── cortex/lens_repos (multi-repo registry)
     
     Layer 5 (Visualization):
     ├── Dashboard (manifest-aware)

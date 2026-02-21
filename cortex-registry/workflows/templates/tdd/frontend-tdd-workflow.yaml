@@ -322,7 +322,7 @@ audit_requirements:
   
   governance_logging:
     enabled: true
-    destination: 'cortex_intelligence/governance/audit_log.jsonl'
+    destination: 'cortex/intelligence/governance/audit_log.jsonl'
 
 # ============================================================================
 # QUALITY REVIEW LOOPS (Multi-Path Validation)
@@ -485,7 +485,7 @@ success_metrics:
 integration:
   mcp_tools:
     - 'cortex_process_request'  # Main execution entry
-    - 'cortex_lens_analyze'      # Vision API access
+    - 'cortex/lens_analyze'      # Vision API access
     - 'cortex_challenge'         # Challenge generation
   
   orchestrators:

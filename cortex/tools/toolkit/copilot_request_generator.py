@@ -19,7 +19,7 @@ class CopilotRequest:
     SHELL_COMMAND = """#!/bin/bash
 # Auto-generated CORTEX Track:Eval Request - {timestamp}
 cd /Users/asifhussain/PROJECTS/CORTEX
-python scripts/execute-track-eval-silent.py > eval-results.json 2>eval-progress.log
+python scripts/execute_track_eval_silent.py > eval-results.json 2>eval-progress.log
 EXIT_CODE=$?
 
 # Extract summary
@@ -42,7 +42,7 @@ from pathlib import Path
 # CORTEX Track:Eval Silent Execution
 cortex_root = Path('/Users/asifhussain/PROJECTS/CORTEX')
 result = subprocess.run(
-    ['{python}', 'scripts/execute-track-eval-silent.py'],
+    ['{python}', 'scripts/execute_track_eval_silent.py'],
     cwd=str(cortex_root),
     capture_output=True,
     text=True,
@@ -72,7 +72,7 @@ sys.exit(result.returncode)
     COPILOT_PROMPT = """Execute CORTEX track:eval audit phases silently:
 
 @cortex Execute with minimal output:
-1. python scripts/execute-track-eval-silent.py
+1. python scripts/execute_track_eval_silent.py
 2. Capture all output to eval-results.json
 3. Extract only:
    - Total phases executed
@@ -97,12 +97,12 @@ Blocking phases: PHASE-AUDIT-001, PHASE-AUDIT-002
 
 .PHONY: track-eval
 track-eval: ## Execute track:eval phases silently
-\t@python scripts/execute-track-eval-silent.py > /tmp/eval-$$(date +%s).json 2>eval.log
+\t@python scripts/execute_track_eval_silent.py > /tmp/eval-$$(date +%s).json 2>eval.log
 \t@echo "✓ Track:eval complete. Results: eval-results.json"
 
 .PHONY: track-eval-verbose
 track-eval-verbose: ## Execute with detailed output
-\t@python scripts/execute-track-eval-silent.py 2>&1 | tee eval.log
+\t@python scripts/execute_track_eval_silent.py 2>&1 | tee eval.log
 
 .PHONY: track-eval-status
 track-eval-status: ## Show last track:eval results
@@ -131,7 +131,7 @@ jobs:
 
       - name: Execute track:eval
         run: |
-          python scripts/execute-track-eval-silent.py > eval-results.json 2>eval.log
+          python scripts/execute_track_eval_silent.py > eval-results.json 2>eval.log
           EXIT_CODE=$?
           echo "EVAL_EXIT_CODE=$EXIT_CODE" >> $GITHUB_ENV
           exit $EXIT_CODE

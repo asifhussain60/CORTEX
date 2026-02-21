@@ -156,15 +156,15 @@ stages:
       2. Parse Python imports via AST → build directed graph
       3. Apply pattern matchers:
          - MVC: *Controller → *Service → *Repository
-         - Layering: cortex/ → cortex_intelligence/ allowed, reverse blocked
+         - Layering: cortex/ → cortex/intelligence/ allowed, reverse blocked
       4. Detect violations: DFS for upward edges, cycle detection
       5. Output: ArchitectureReport with violations + suggestions
       
     files_to_create:
-      - "cortex_lens/analyzers/architecture_lens.py"
-      - "cortex_lens/models/architecture_report.py"
-      - "tests/unit/cortex_lens/analyzers/test_architecture_lens.py"
-      - "tests/integration/cortex_lens/test_architecture_analysis_e2e.py"
+      - "cortex/lens/analyzers/architecture_lens.py"
+      - "cortex/lens/models/architecture_report.py"
+      - "tests/unit/cortex/lens/analyzers/test_architecture_lens.py"
+      - "tests/integration/cortex/lens/test_architecture_analysis_e2e.py"
       
     tests:
       - "test_detect_mvc_pattern"
@@ -216,14 +216,14 @@ stages:
       5. MCP tool wrapper for Copilot Chat access
       
     files_to_create:
-      - "cortex_lens/knowledge_graph/graph_schema.py"
-      - "cortex_lens/knowledge_graph/graph_storage.py"
-      - "cortex_lens/knowledge_graph/graph_query.py"
-      - "cortex_lens/knowledge_graph/graph_builder.py"
+      - "cortex/lens/knowledge_graph/graph_schema.py"
+      - "cortex/lens/knowledge_graph/graph_storage.py"
+      - "cortex/lens/knowledge_graph/graph_query.py"
+      - "cortex/lens/knowledge_graph/graph_builder.py"
       - "cortex/mcp/tools/knowledge_graph_query_tool.py"
-      - "tests/unit/cortex_lens/knowledge_graph/test_graph_storage.py"
-      - "tests/unit/cortex_lens/knowledge_graph/test_graph_query.py"
-      - "tests/integration/cortex_lens/test_knowledge_graph_e2e.py"
+      - "tests/unit/cortex/lens/knowledge_graph/test_graph_storage.py"
+      - "tests/unit/cortex/lens/knowledge_graph/test_graph_query.py"
+      - "tests/integration/cortex/lens/test_knowledge_graph_e2e.py"
       - "tests/integration/cortex/mcp/test_knowledge_graph_query_tool.py"
       
     tests:
@@ -284,16 +284,16 @@ stages:
       5. Confidence scoring: weighted combination of signals
       
     files_to_create:
-      - "cortex_lens/domain_inference/pattern_analyzer.py"
-      - "cortex_lens/domain_inference/state_detector.py"
-      - "cortex_lens/domain_inference/rule_extractor.py"
-      - "cortex_lens/domain_inference/glossary_generator.py"
-      - "cortex_lens/domain_inference/bounded_context_mapper.py"
-      - "cortex_lens/models/domain_glossary.py"
-      - "tests/unit/cortex_lens/domain_inference/test_pattern_analyzer.py"
-      - "tests/unit/cortex_lens/domain_inference/test_state_detector.py"
-      - "tests/unit/cortex_lens/domain_inference/test_rule_extractor.py"
-      - "tests/integration/cortex_lens/test_domain_inference_e2e.py"
+      - "cortex/lens/domain_inference/pattern_analyzer.py"
+      - "cortex/lens/domain_inference/state_detector.py"
+      - "cortex/lens/domain_inference/rule_extractor.py"
+      - "cortex/lens/domain_inference/glossary_generator.py"
+      - "cortex/lens/domain_inference/bounded_context_mapper.py"
+      - "cortex/lens/models/domain_glossary.py"
+      - "tests/unit/cortex/lens/domain_inference/test_pattern_analyzer.py"
+      - "tests/unit/cortex/lens/domain_inference/test_state_detector.py"
+      - "tests/unit/cortex/lens/domain_inference/test_rule_extractor.py"
+      - "tests/integration/cortex/lens/test_domain_inference_e2e.py"
       
     tests:
       - "test_domain_clustering_by_prefix"
@@ -352,12 +352,12 @@ stages:
          - Cross-reference: no test coverage + no import edges = dead
       
     files_to_create:
-      - "cortex_lens/runtime_correlation/pytest_parser.py"
-      - "cortex_lens/runtime_correlation/coverage_mapper.py"
-      - "cortex_lens/runtime_correlation/hot_path_analyzer.py"
-      - "cortex_lens/runtime_correlation/dead_code_detector.py"
-      - "tests/unit/cortex_lens/runtime_correlation/test_pytest_parser.py"
-      - "tests/integration/cortex_lens/test_runtime_correlation_e2e.py"
+      - "cortex/lens/runtime_correlation/pytest_parser.py"
+      - "cortex/lens/runtime_correlation/coverage_mapper.py"
+      - "cortex/lens/runtime_correlation/hot_path_analyzer.py"
+      - "cortex/lens/runtime_correlation/dead_code_detector.py"
+      - "tests/unit/cortex/lens/runtime_correlation/test_pytest_parser.py"
+      - "tests/integration/cortex/lens/test_runtime_correlation_e2e.py"
       
     tests:
       - "test_pytest_json_parsing"
@@ -452,11 +452,11 @@ success_metrics:
 
 monitoring:
   metrics:
-    - "cortex_lens_graph_query_duration_seconds (histogram)"
-    - "cortex_lens_graph_build_duration_seconds (histogram)"
-    - "cortex_lens_graph_size_bytes (gauge)"
-    - "cortex_lens_domain_inference_precision (gauge)"
-    - "cortex_lens_architecture_violations_detected (counter)"
+    - "cortex/lens_graph_query_duration_seconds (histogram)"
+    - "cortex/lens_graph_build_duration_seconds (histogram)"
+    - "cortex/lens_graph_size_bytes (gauge)"
+    - "cortex/lens_domain_inference_precision (gauge)"
+    - "cortex/lens_architecture_violations_detected (counter)"
     
   alerts:
     - "Graph query p95 > 200ms → performance degradation"

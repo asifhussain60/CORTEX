@@ -159,14 +159,14 @@ stages:
       8. Output: RuntimeCallGraph with validated call paths
       
     files_to_create:
-      - "cortex_lens/runtime/otel_trace_ingestion.py"
-      - "cortex_lens/runtime/span_correlator.py"
-      - "cortex_lens/runtime/call_path_reconstructor.py"
-      - "cortex_lens/runtime/latency_analyzer.py"
-      - "cortex_lens/models/runtime_call_graph.py"
-      - "tests/unit/cortex_lens/runtime/test_otel_ingestion.py"
-      - "tests/unit/cortex_lens/runtime/test_span_correlation.py"
-      - "tests/integration/cortex_lens/test_runtime_correlation_e2e.py"
+      - "cortex/lens/runtime/otel_trace_ingestion.py"
+      - "cortex/lens/runtime/span_correlator.py"
+      - "cortex/lens/runtime/call_path_reconstructor.py"
+      - "cortex/lens/runtime/latency_analyzer.py"
+      - "cortex/lens/models/runtime_call_graph.py"
+      - "tests/unit/cortex/lens/runtime/test_otel_ingestion.py"
+      - "tests/unit/cortex/lens/runtime/test_span_correlation.py"
+      - "tests/integration/cortex/lens/test_runtime_correlation_e2e.py"
       
     tests:
       - "test_ingest_otel_trace_from_dotnet"
@@ -220,14 +220,14 @@ stages:
       7. Output: RuntimeDIReport with validation results
       
     files_to_create:
-      - "cortex_lens/runtime/dotnet_di_inspector.py"
-      - "cortex_lens/runtime/python_di_inspector.py"
-      - "cortex_lens/runtime/di_validator.py"
-      - "cortex_lens/runtime/dead_registration_detector.py"
-      - "cortex_lens/models/runtime_di_report.py"
-      - "tests/unit/cortex_lens/runtime/test_dotnet_di_inspection.py"
-      - "tests/unit/cortex_lens/runtime/test_di_validation.py"
-      - "tests/integration/cortex_lens/test_di_runtime_e2e.py"
+      - "cortex/lens/runtime/dotnet_di_inspector.py"
+      - "cortex/lens/runtime/python_di_inspector.py"
+      - "cortex/lens/runtime/di_validator.py"
+      - "cortex/lens/runtime/dead_registration_detector.py"
+      - "cortex/lens/models/runtime_di_report.py"
+      - "tests/unit/cortex/lens/runtime/test_dotnet_di_inspection.py"
+      - "tests/unit/cortex/lens/runtime/test_di_validation.py"
+      - "tests/integration/cortex/lens/test_di_runtime_e2e.py"
       
     tests:
       - "test_export_dotnet_core_registrations"
@@ -280,14 +280,14 @@ stages:
       7. Output: RuntimeQueryReport + TestCoverageReport
       
     files_to_create:
-      - "cortex_lens/runtime/sql_profiler.py"
-      - "cortex_lens/runtime/query_correlator.py"
-      - "cortex_lens/runtime/pytest_tracer.py"
-      - "cortex_lens/runtime/coverage_analyzer.py"
-      - "cortex_lens/models/runtime_query_report.py"
-      - "tests/unit/cortex_lens/runtime/test_sql_profiling.py"
-      - "tests/unit/cortex_lens/runtime/test_pytest_correlation.py"
-      - "tests/integration/cortex_lens/test_runtime_validation_e2e.py"
+      - "cortex/lens/runtime/sql_profiler.py"
+      - "cortex/lens/runtime/query_correlator.py"
+      - "cortex/lens/runtime/pytest_tracer.py"
+      - "cortex/lens/runtime/coverage_analyzer.py"
+      - "cortex/lens/models/runtime_query_report.py"
+      - "tests/unit/cortex/lens/runtime/test_sql_profiling.py"
+      - "tests/unit/cortex/lens/runtime/test_pytest_correlation.py"
+      - "tests/integration/cortex/lens/test_runtime_validation_e2e.py"
       
     tests:
       - "test_capture_sql_query_from_extended_events"
@@ -340,12 +340,12 @@ stages:
       7. Output: RuntimeValidationDashboard + MCP tool
       
     files_to_create:
-      - "cortex_lens/runtime/validation_dashboard.py"
-      - "cortex_lens/runtime/diff_analyzer.py"
-      - "cortex_lens/runtime/dead_code_reporter.py"
+      - "cortex/lens/runtime/validation_dashboard.py"
+      - "cortex/lens/runtime/diff_analyzer.py"
+      - "cortex/lens/runtime/dead_code_reporter.py"
       - "cortex/mcp/tools/runtime_validate_tool.py"
-      - "tests/unit/cortex_lens/runtime/test_validation_dashboard.py"
-      - "tests/unit/cortex_lens/runtime/test_diff_analyzer.py"
+      - "tests/unit/cortex/lens/runtime/test_validation_dashboard.py"
+      - "tests/unit/cortex/lens/runtime/test_diff_analyzer.py"
       - "tests/integration/cortex/mcp/test_runtime_validate_tool.py"
       
     tests:

@@ -222,8 +222,8 @@ stages:
     tests: 18
     effort: "1 day"
     acceptance_criteria:
-      - "Load tier0 rules from cortex_intelligence/tier0/"
-      - "Load tier1 defaults from cortex_intelligence/tier1/"
+      - "Load tier0 rules from cortex/intelligence/tier0/"
+      - "Load tier1 defaults from cortex/intelligence/tier1/"
       - "Load company rules from cortex-registry/company/"
       - "Precedence: Company > tier1 > tier0"
       - "Cache hit rate > 90% (repeated requests)"

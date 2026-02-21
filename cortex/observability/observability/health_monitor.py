@@ -68,7 +68,7 @@ class HealthCheck:
 class DatabaseHealthCheck(HealthCheck):
     """Health check for database connectivity."""
 
-    def __init__(self, db_connection=None) -> None:
+    def __init__(self, db_connection: object = None) -> None:
         """Initialise DatabaseHealthCheck."""
         super().__init__("database_check", "database")
         self.db_connection = db_connection

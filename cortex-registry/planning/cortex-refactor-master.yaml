@@ -67,7 +67,7 @@ presentation:
     
     key_findings:
       - All 9 core phases complete (Phase 01-08 + 08b); Phase 09 Final Verification active
-      - "✅ RESOLVED (2026-02-20): cortex_intelligence/ deleted — .db files → .cortex-runtime/"
+      - "✅ RESOLVED (2026-02-20): cortex/intelligence/ deleted — .db files → .cortex-runtime/"
       - "✅ RESOLVED (2026-02-20): 0 live stale imports (AST-verified; prior grep count was docstrings)"
       - "✅ RESOLVED (2026-02-20): test_phase_03_packages.py restored (23 tests passing)"
       - "✅ RESOLVED (2026-02-20): all golden tests passing (486/486)"
@@ -85,7 +85,7 @@ presentation:
     - dimension: "Code Quality"
       benefit: "Reduced from 59 to 16 top-level directories; 120 to 44 orchestrators; 3 to 1 package"
       risk: "Stale imports were present in active code (discovered in Phase 08)"
-      mitigation: "✅ RESOLVED — AST scan confirms 0 live stale imports; cortex_intelligence/ deleted"
+      mitigation: "✅ RESOLVED — AST scan confirms 0 live stale imports; cortex/intelligence/ deleted"
       confidence: "High"
     
     - dimension: "Testing & Validation"
@@ -128,7 +128,7 @@ presentation:
     immediate:
       - "✅ DONE (2026-02-20): Stale imports fixed — 0 live imports (AST-verified)"
       - "✅ DONE (2026-02-20): .db files consolidated → .cortex-runtime/ (FR7)"
-      - "✅ DONE (2026-02-20): cortex_intelligence/ directory deleted"
+      - "✅ DONE (2026-02-20): cortex/intelligence/ directory deleted"
       - "✅ DONE (2026-02-20): test_phase_03_packages.py restored — 486 golden + 172 phase tests passing"
       - "✅ DONE (2026-02-20): Phase 07b COMPLETE — TestQualityGate, MCP tool, pytest plugin, TDDOrchestrator wiring (49/49 tests)"
       - "✅ DONE (2026-02-20): Phase 10 COMPLETE — 25 production readiness tests passing (perf, security, chaos, DR, observability, regression)"
@@ -174,7 +174,7 @@ phases:
     last_lens_scan: '2026-02-20T15:30:00Z'
     last_validation_loop: '2026-02-20T15:30:00Z'
     regression_status: "✅ 486 golden passing, 177 phase tests passing, 0 failures (2026-02-20 Phase 09 COMPLETE)"
-    cortex_intelligence_cleanup: "✅ COMPLETE (2026-02-20T15:30:00Z) — cortex_intelligence/ deleted; 2 .db files → .cortex-runtime/"
+    cortex/intelligence_cleanup: "✅ COMPLETE (2026-02-20T15:30:00Z) — cortex/intelligence/ deleted; 2 .db files → .cortex-runtime/"
     stale_brain_imports: "✅ CLEAR — 0 live stale imports (AST-verified)"
     scattered_db_files: "✅ COMPLETE (2026-02-20T15:30:00Z) — all .db files consolidated to .cortex-runtime/ (FR7)"
     archive_deleted: "✅ COMPLETE (2026-02-20T15:30:00Z) — _archive/ permanently deleted (31MB freed, 694 files, VL-09-C5)"
@@ -340,8 +340,8 @@ phases:
   dependencies:
   - phase-02
   deliverables:
-  - "cortex_intelligence/ \u2192 archived to _archive/, unique logic migrated to cortex/intelligence/memory/"
-  - "cortex_lens/ \u2192 archived to _archive/, unique logic migrated to cortex/intelligence/lens/"
+  - "cortex/intelligence/ \u2192 archived to _archive/, unique logic migrated to cortex/intelligence/memory/"
+  - "cortex/lens/ \u2192 archived to _archive/, unique logic migrated to cortex/intelligence/lens/"
   - 'All imports rewritten: cortex.* only'
   - 'Import quarantine check passing: zero imports from _archive/'
   progress:
@@ -377,8 +377,8 @@ phases:
       imports_rewritten: 151
       status: "\u2705 ALL TESTS PASSING"
       migration_stats:
-      - "cortex_intelligence: 90 files \u2192 cortex/intelligence/"
-      - "cortex_lens: 28 files \u2192 cortex/intelligence/lens/"
+      - "cortex/intelligence: 90 files \u2192 cortex/intelligence/"
+      - "cortex/lens: 28 files \u2192 cortex/intelligence/lens/"
       - All 151 files with old imports rewritten
       - 'Archive backup: _archive/packages/'
     refactor_phase:
@@ -405,8 +405,8 @@ phases:
       - "\u2705 CORE-048: Governance gate enforcement (import quarantine)"
       import_quarantine:
       - 'Status: ZERO old imports in active code'
-      - 'cortex_intelligence: 0 active imports (archived)'
-      - 'cortex_lens: 0 active imports (archived)'
+      - 'cortex/intelligence: 0 active imports (archived)'
+      - 'cortex/lens: 0 active imports (archived)'
       - 'New pattern: cortex.intelligence.* and cortex.intelligence.lens.*'
 - id: phase-04
   title: "Brain Deduplication \u2014 Dissolve brain/ into proper domains"
@@ -575,7 +575,7 @@ phases:
   - 'Phase-named dirs archived: phase_38/, phase_executors/, phase_management/'
   - "cortex/ top-level dirs: 59 \u2192 16 canonical"
   - cortex/cortex-registry/ inner duplicate deleted
-  - cortex/cortex_intelligence/ inner duplicate deleted
+  - cortex/cortex/intelligence/ inner duplicate deleted
   - cortex/tests/ inner test files moved to tests/
   progress:
     started: '2026-02-19T18:00:00Z'
@@ -632,7 +632,7 @@ phases:
   deliverables:
   - '9 phase-named test dirs archived: phase_23, phase_49, phase_52, phase_53, phase_54_a,
     phase_55, phase_56, phase_56_a, phase_71'
-  - 'Duplicate test dirs merged: dashboard/ + dashboards/, cortex + cortex_brain/'
+  - 'Duplicate test dirs merged: dashboard/ + dashboards/, cortex + cortex/intelligence/'
   - Low-value tests archived to _archive/tests/low_value (100% preserved)
   - 'Test structure mirrors source: 27 canonical directories'
   - "Coverage maintained: 1,035 tests preserved across consolidation"
@@ -880,7 +880,7 @@ phases:
     validation_results:
       parallel_framework_tests: "49/49 ✅ GREEN"
       regression_check: "✅ 428 existing tests still passing with -n auto"
-      pre_existing_failures: "5 (Phase 03 cortex_intelligence stale dir — Phase 09 blocker)"
+      pre_existing_failures: "5 (Phase 03 cortex/intelligence stale dir — Phase 09 blocker)"
       new_failures: "0"
       core_compliance:
         - "✅ CORE-008: TDD — 49 RED tests written before all implementation"
@@ -898,9 +898,9 @@ phases:
   dependencies:
   - phase-08-registry-docs
   deliverables:
-  - 'V3: Fix 9 stale imports (cortex.brain, cortex_intelligence, cortex_lens) ✅ 0 live stale imports (AST-verified)'
+  - 'V3: Fix 9 stale imports (cortex.brain, cortex/intelligence, cortex/lens) ✅ 0 live stale imports (AST-verified)'
   - 'FR7: Consolidate 10 scattered .db files → .cortex-runtime/ ✅ COMPLETE'
-  - 'V3: Remove cortex_intelligence/ directory ✅ DELETED'
+  - 'V3: Remove cortex/intelligence/ directory ✅ DELETED'
   - 'V2: Full regression suite — 486 golden + 177 phase tests ✅ PASSING'
   - '_archive/ safely deleted (permanent) ✅ DELETED (2026-02-20T15:30:00Z)'
   - '18-point Definition of Done checklist complete ✅'
@@ -932,7 +932,7 @@ phases:
     vl_09_c3: "✅ 177/177 phase tests passing"
     vl_09_c4: "✅ 0 live stale imports (AST-verified)"
     vl_09_c5: "✅ _archive/ permanently deleted (2026-02-20T15:30:00Z)"
-    fr7: "✅ cortex_intelligence/ deleted, 2 .db files → .cortex-runtime/"
+    fr7: "✅ cortex/intelligence/ deleted, 2 .db files → .cortex-runtime/"
     vl_09_c10: "✅  tag created"
     archive_size_freed: "31MB"
     files_deleted: 694
@@ -1040,8 +1040,8 @@ phases:
         fix: "Route all SQLite access through cortex/infrastructure/audit_db.py CortexAuditDB"
         effort: M
       - id: "GAP-004"
-        description: "SQL-002: ObservabilityOrchestrator default db path writes to cortex_intelligence/ (gitignored)"
-        evidence: "Default path cortex_intelligence/observability/ recreates gitignored dir at runtime"
+        description: "SQL-002: ObservabilityOrchestrator default db path writes to cortex/intelligence/ (gitignored)"
+        evidence: "Default path cortex/intelligence/observability/ recreates gitignored dir at runtime"
         file: "cortex/orchestrators/core/observability_orchestrator.py"
         fix: "Change default to .cortex-runtime/observability/"
         effort: XS
@@ -1169,7 +1169,7 @@ phases:
         - path: "cortex/phase_executors/"
           current_role: "4 files — phase executor base + factory + orchestrator"
           migration: "Move to cortex/orchestrators/core/phase_executors/, update imports"
-          callers: ["tests/cortex_brain/test_phase_executor_framework.py"]
+          callers: ["tests/cortex/intelligence/test_phase_executor_framework.py"]
         - path: "cortex/registry/"
           current_role: "shim providing REGISTRY_ROOT path helper"
           # [STALE-REF] migration: "Absorb into cortex/core/registry.py (already exists in cortex/core/)"

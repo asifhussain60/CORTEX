@@ -48,7 +48,7 @@ class LogGrowthMonitor:
     GROWTH_RATE_WARNING = 50  # Growing > 50 MB per day
     GROWTH_RATE_CRITICAL = 100  # Growing > 100 MB per day
 
-    def __init__(self, db_path: str, alert_handler=None) -> None:
+    def __init__(self, db_path: str, alert_handler: object = None) -> None:
         """Initialize monitoring system.
 
         Args:

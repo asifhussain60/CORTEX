@@ -500,7 +500,7 @@ phase_status:
         - "Consolidated phases/ → planning/phases/"
         - "Updated 14 YAML path references"
         - "Zero _cortex-master references in active code"
-      note: "Originally phase-104. Track A (cortex_intelligence rename) already complete from Phase 47. Only Track B (_cortex-master consolidation) executed."
+      note: "Originally phase-104. Track A (cortex/intelligence rename) already complete from Phase 47. Only Track B (_cortex-master consolidation) executed."
 
   active: []
 
@@ -531,7 +531,7 @@ phase_status:
       branch: "CORTEX-GPT"
       estimated_phases: 10
       description: |
-        Transform CORTEX from fragmented packages (cortex/, cortex_intelligence/, cortex_lens/)
+        Transform CORTEX from fragmented packages (cortex/, cortex/intelligence/, cortex/lens/)
         into a single cohesive brain. 10-phase plan covering foundation safety net, governance
         alignment, package consolidation, brain deduplication, orchestrator rationalization,
         directory cleanup, test consolidation, registry/docs, final verification, and production

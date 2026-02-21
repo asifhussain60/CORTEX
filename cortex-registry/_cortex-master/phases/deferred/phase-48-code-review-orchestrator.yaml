@@ -142,7 +142,7 @@ architecture:
       - "TDDOrchestrator (fix generation with tests)"
     
     mcp_tools:
-      - "cortex_lens_analyze (unified code analysis)"
+      - "cortex/lens_analyze (unified code analysis)"
       - "cortex_git_history (commit context)"
       - "cortex_detect_duplicates (CORE-035 enforcement)"
       - "cortex_process_request (fix generation)"

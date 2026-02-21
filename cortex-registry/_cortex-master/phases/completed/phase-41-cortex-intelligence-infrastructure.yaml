@@ -29,12 +29,12 @@ key_deliverables:
 
 technical_components:
   - component: "IntelligenceInfrastructure"
-    location: "cortex_intelligence/"
+    location: "cortex/intelligence/"
     tests: 25
     optimization: "Performance enhanced"
     
   - component: "DistributedCoordination"
-    location: "cortex_intelligence/coordination/"
+    location: "cortex/intelligence/coordination/"
     tests: 18
     scalability: "Multi-node ready"
     

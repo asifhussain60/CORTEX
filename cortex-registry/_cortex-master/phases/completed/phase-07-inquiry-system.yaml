@@ -214,7 +214,7 @@ stage_1_mvp:
       
       step_3_file_paths:
         description: "Analyze file paths in evidence sources"
-        cortex_indicators: ["cortex/", "cortex_intelligence/", "_workspaces/"]
+        cortex_indicators: ["cortex/", "cortex/intelligence/", "_workspaces/"]
         user_indicators: ["src/", "app/", "lib/", custom paths]
         confidence: "High (85%)"
       
@@ -787,7 +787,7 @@ stage_2_docker:
           - "DB_URL=postgresql://postgres:5432/cortex_inquiry"
           - "CODE_INDEX_URL=http://code-index-service:8080"
         volumes:
-          - "cortex_intelligence/tier0:/app/cortex_intelligence/tier0:ro (CORE rules only)"
+          - "cortex/intelligence/tier0:/app/cortex/intelligence/tier0:ro (CORE rules only)"
       
       code_index_service:
         description: "Pre-built AST/Git analysis (updated on deploy)"
