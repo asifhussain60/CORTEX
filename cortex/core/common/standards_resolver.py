@@ -208,7 +208,7 @@ class StandardsResolver:
         except Exception:
             return None
 
-    def _add_to_cache(self, path: str, content: Dict[str, Any]):
+    def _add_to_cache(self, path: str, content: Dict[str, Any]) -> None:
         """
         Add to cache with LRU eviction.
 

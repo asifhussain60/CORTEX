@@ -1314,7 +1314,7 @@ class {class_name}:
         """Convert YAML type to Python type."""
         return yaml_type_to_python(type_str)
 
-    def _check_registry_for_duplicates(self, orchestrator_name: str):
+    def _check_registry_for_duplicates(self, orchestrator_name: str) -> None:
         """
         Check wiring registry for existing orchestrator implementations.
         
@@ -1453,4 +1453,3 @@ class {class_name}:
                 config=config,
             )
         # AC_COMPLETE: AC-WAVE2-S3-001 ✅
-

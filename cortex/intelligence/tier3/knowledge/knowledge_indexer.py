@@ -38,6 +38,7 @@ class KnowledgeIndexer:
         self._init_db()
 
     def _init_db(self) -> None:
+        """Init db."""
         with sqlite3.connect(str(self._db_path)) as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS entries (

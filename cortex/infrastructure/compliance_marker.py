@@ -105,7 +105,7 @@ class ComplianceMarkerRegistry:
         self._requirements: Dict[str, ComplianceRequirement] = {}
         self._init_requirements()
 
-    def _init_requirements(self):
+    def _init_requirements(self) -> None:
         """Initialize standard compliance requirements."""
 
         # SOC2 Requirements

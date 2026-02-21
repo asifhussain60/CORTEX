@@ -244,7 +244,7 @@ class MCPToolExecutor:
             return [r for r in self._execution_history if r.agent_id == agent_id]
         return self._execution_history.copy()
     
-    def _mock_execution(self, request: MCPExecutionRequest, start_time) -> MCPExecutionResult:
+    def _mock_execution(self, request: MCPExecutionRequest, start_time: Any) -> MCPExecutionResult:
         """
         Provide mock execution when handler not registered.
         
@@ -263,7 +263,7 @@ class MCPToolExecutor:
             duration_seconds=duration
         )
     
-    def _error_result(self, request: MCPExecutionRequest, error_msg: str, start_time) -> MCPExecutionResult:
+    def _error_result(self, request: MCPExecutionRequest, error_msg: str, start_time: Any) -> MCPExecutionResult:
         """Create error result."""
         duration = (datetime.now() - start_time).total_seconds()
         result = MCPExecutionResult(

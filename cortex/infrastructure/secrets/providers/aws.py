@@ -17,6 +17,7 @@ class AWSSecretsProvider(ISecretsProvider):
         self._kwargs = kwargs
 
     def _get_client(self) -> Any:
+        """Get client."""
         try:
             import boto3
             if self._client is None:

@@ -33,6 +33,7 @@ class ExpertRegistry:
         self._experts: Optional[List[Expert]] = None
 
     def _load(self) -> List[Expert]:
+        """Load."""
         if self._experts is None:
             if self._path.exists():
                 data = yaml.safe_load(self._path.read_text()) or {}

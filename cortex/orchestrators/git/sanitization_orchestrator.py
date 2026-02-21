@@ -536,7 +536,7 @@ class FileScannerEngine:
     # Internal
     # ------------------------------------------------------------------
 
-    def _walk(self, root: Path):
+    def _walk(self, root: Path) -> None:
         """Yield all eligible file paths under root.
 
         Args:

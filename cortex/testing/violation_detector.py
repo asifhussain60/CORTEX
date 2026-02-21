@@ -8,7 +8,7 @@ import logging
 import re
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -139,7 +139,7 @@ class ViolationDetector(ast.NodeVisitor):
         self.generic_visit(node)
 
     @staticmethod
-    def _get_exception_name(node) -> str:
+    def _get_exception_name(node: Any) -> str:
         """Extract exception name from AST node"""
         if isinstance(node, ast.Name):
             return node.id
@@ -197,7 +197,7 @@ class PreCommitViolationDetector:
         return self.all_violations
 
     @staticmethod
-    def _detect_tdd_violations(file_path: str, content: str, detector: ViolationDetector):
+    def _detect_tdd_violations(file_path: str, content: str, detector: ViolationDetector) -> None:
         """Detect CORE-008 violations (TDD patterns)"""
         # Check if test file has assertions
         if 'test_' in file_path or file_path.endswith('_test.py'):

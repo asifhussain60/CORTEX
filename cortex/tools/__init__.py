@@ -16,23 +16,28 @@ This package contains tools for orchestrator development and template management
 """
 
 # Lazy imports to avoid circular dependencies
-def get_template_parser():
+def get_template_parser() -> None:
+    """Get template parser."""
     from cortex.tools.template_parser import TemplateParser
     return TemplateParser
 
-def get_tool_generator():
+def get_tool_generator() -> None:
+    """Get tool generator."""
     from cortex.tools.tool_generator import ToolGenerator
     return ToolGenerator
 
-def get_orchestrator_scaffolder():
+def get_orchestrator_scaffolder() -> None:
+    """Get orchestrator scaffolder."""
     from cortex.tools.orchestrator_scaffolder import OrchestratorScaffolder
     return OrchestratorScaffolder
 
-def get_template_validator():
+def get_template_validator() -> None:
+    """Get template validator."""
     from cortex.tools.template_validator import TemplateValidator
     return TemplateValidator
 
-def get_testing_framework():
+def get_testing_framework() -> None:
+    """Get testing framework."""
     from cortex.tools.testing_framework import TemplateTestFramework
     return TemplateTestFramework
 

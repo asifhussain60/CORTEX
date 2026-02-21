@@ -53,6 +53,7 @@ class ImportReferenceFixer:
         original = content
 
         def _adjust(m: re.Match) -> str:
+            """Adjust."""
             dots = m.group(1)
             rest = m.group(2)
             new_count = max(1, len(dots) + depth_delta)
@@ -91,6 +92,7 @@ class ImportReferenceFixer:
         original = content
 
         def _adjust(m: re.Match) -> str:
+            """Adjust."""
             dots = m.group(1)
             rest = m.group(2)
             new_count = max(1, len(dots) + delta)

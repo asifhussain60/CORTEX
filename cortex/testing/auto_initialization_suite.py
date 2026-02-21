@@ -658,7 +658,7 @@ class AutoInitializationSuite:
                 duration_ms=(time.time() - start) * 1000
             )
 
-    def _print_summary(self):
+    def _print_summary(self) -> None:
         """Print summary of all initialization results"""
         print("\n" + "=" * 80)
         print("INITIALIZATION SUMMARY")

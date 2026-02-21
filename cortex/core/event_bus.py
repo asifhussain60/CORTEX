@@ -93,7 +93,7 @@ class EventBus:
                     # Don't let handler errors break event delivery
                     print(f"Warning: Event handler error for {event_type}: {e}")
     
-    def _log_event(self, event_type: str, payload: Dict[str, Any]):
+    def _log_event(self, event_type: str, payload: Dict[str, Any]) -> None:
         """
         Log event to audit trail file.
         

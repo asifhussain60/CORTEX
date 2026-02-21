@@ -214,7 +214,7 @@ class OrchestratorTraceLogger:
             self._trace_enabled = False
 
     @contextmanager
-    def _get_connection(self):
+    def _get_connection(self) -> None:
         """Get SQLite connection with proper cleanup."""
         conn = sqlite3.connect(str(self._db_path), timeout=10.0, check_same_thread=False)
         conn.row_factory = sqlite3.Row

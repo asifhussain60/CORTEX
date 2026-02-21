@@ -33,7 +33,7 @@ from cortex.core.result import Err, Ok, Result
 SecurityAuditor = None
 CrossRepoEnforcer = None
 
-def _load_security_components():
+def _load_security_components() -> None:
     """Lazy load security components."""
     global SecurityAuditor, CrossRepoEnforcer
     if SecurityAuditor is None:

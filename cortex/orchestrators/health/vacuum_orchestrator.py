@@ -592,4 +592,17 @@ class VacuumOrchestrator:
             )
 
 
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status of the VacuumOrchestrator.
+
+        Returns:
+            Mapping with ``status``, ``orchestrator``, and ``workspace_root`` keys.
+        """
+        return {
+            "status": "healthy",
+            "orchestrator": "VacuumOrchestrator",
+            "workspace_root": str(self.workspace_root),
+        }
+
+
 __all__ = ["VacuumOrchestrator"]

@@ -17,6 +17,7 @@ class AzureKeyVaultProvider(ISecretsProvider):
         self._kwargs = kwargs
 
     def _get_client(self) -> Any:
+        """Get client."""
         try:
             from azure.keyvault.secrets import SecretClient  # type: ignore
             from azure.identity import DefaultAzureCredential  # type: ignore

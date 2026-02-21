@@ -1,3 +1,4 @@
+from typing import Any
 """
 CORTEX MCP v2 - Tool Implementations
 
@@ -141,7 +142,7 @@ ALL_TOOLS = [
 ]
 
 
-def register_all_tools(registry) -> int:
+def register_all_tools(registry: Any) -> int:
     """
     Register all tool implementations with the registry.
     

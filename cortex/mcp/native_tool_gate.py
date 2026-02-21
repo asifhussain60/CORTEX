@@ -395,7 +395,7 @@ Fix infrastructure. No bypasses allowed.
         file: str,
         action: str,
         session_id: Optional[str] = None
-    ):
+    ) -> None:
         """
         Log bypass attempt to audit trail.
         

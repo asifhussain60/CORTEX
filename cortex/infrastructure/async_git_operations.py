@@ -81,7 +81,8 @@ class AsyncGitOperations:
             CircuitBreakerOpenError: If circuit breaker is open
         """
         # Wrap in circuit breaker for failure protection
-        async def _execute_git_command():
+        async def _execute_git_command() -> None:
+            """Execute git command."""
             logger.debug(f"Executing async git command: {' '.join(cmd)}")
             
             # Determine stdio parameters

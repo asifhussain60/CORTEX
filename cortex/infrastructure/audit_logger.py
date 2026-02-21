@@ -179,7 +179,7 @@ class EnhancedAuditLogger(IAuditLogger):
 
         self._initialized = True
 
-    def _init_database(self):
+    def _init_database(self) -> None:
         """Initialize SQLite database schema."""
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -226,7 +226,7 @@ class EnhancedAuditLogger(IAuditLogger):
                 self._previous_hash = row[0]
 
     @contextmanager
-    def _get_connection(self):
+    def _get_connection(self) -> None:
         """Get SQLite connection with proper cleanup."""
         conn = sqlite3.connect(str(self.db_path), timeout=30.0)
         conn.row_factory = sqlite3.Row

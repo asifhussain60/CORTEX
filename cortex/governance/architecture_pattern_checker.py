@@ -117,7 +117,7 @@ class ArchitecturePatternChecker:
             timestamp=datetime.now()
         )
     
-    def _check_tdd_pattern(self, scan_path: Path):
+    def _check_tdd_pattern(self, scan_path: Path) -> None:
         """
         Check TDD pattern compliance.
         
@@ -149,7 +149,7 @@ class ArchitecturePatternChecker:
                     detected_at=datetime.now()
                 ))
     
-    def _check_strategy_pattern(self, scan_path: Path):
+    def _check_strategy_pattern(self, scan_path: Path) -> None:
         """
         Check Strategy pattern compliance.
         
@@ -187,7 +187,7 @@ class ArchitecturePatternChecker:
                 # Skip files that can't be parsed
                 pass
     
-    def _check_eventbus_pattern(self, scan_path: Path):
+    def _check_eventbus_pattern(self, scan_path: Path) -> None:
         """
         Check EventBus pattern compliance (CORE-041).
         

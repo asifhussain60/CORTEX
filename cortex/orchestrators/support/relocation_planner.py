@@ -46,6 +46,7 @@ class RelocationPlanner:
         }
 
     def _classify_single(self, filename: str) -> str:
+        """Classify single."""
         for pattern, destination in _CLASSIFICATION_RULES:
             if pattern in filename:
                 return destination

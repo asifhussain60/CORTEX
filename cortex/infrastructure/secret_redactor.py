@@ -115,7 +115,7 @@ class SecretRedactor:
         self._compiled_rules: Dict[str, Pattern[str]] = {}
         self._compile_patterns()
 
-    def _compile_patterns(self):
+    def _compile_patterns(self) -> None:
         """Pre-compile all regex patterns for performance."""
         for rule in self.rules:
             if rule.enabled:

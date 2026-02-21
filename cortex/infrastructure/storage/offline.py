@@ -1,7 +1,7 @@
 """Offline mode provider with graceful degradation."""
 
 import time
-from typing import List, Optional
+from typing import Any, List, Optional
 
 from cortex.infrastructure.storage.storage_config import StorageConfig
 from cortex.infrastructure.storage.errors import NetworkError, StorageError
@@ -97,7 +97,7 @@ class OfflineModeProvider(IKnowledgeProvider):
         ]
         return any(keyword in error_str for keyword in network_keywords)
 
-    def _retry_operation(self, operation, *args, **kwargs):
+    def _retry_operation(self, operation: Any, *args, **kwargs) -> None:
         """
         Retry operation with exponential backoff.
 
@@ -156,7 +156,8 @@ class OfflineModeProvider(IKnowledgeProvider):
             NetworkError: If offline and no cache
             StorageError: On other errors
         """
-        def _read():
+        def _read() -> None:
+            """Read."""
             content = self.provider.read(path)
             # Cache for offline fallback
             self.local_cache[path] = content
@@ -180,7 +181,8 @@ class OfflineModeProvider(IKnowledgeProvider):
             path: File path
             content: Content to write
         """
-        def _write():
+        def _write() -> None:
+            """Write."""
             self.provider.write(path, content)
             self.local_cache[path] = content
 
@@ -236,7 +238,8 @@ class OfflineModeProvider(IKnowledgeProvider):
         Args:
             path: File path
         """
-        def _delete():
+        def _delete() -> None:
+            """Delete."""
             self.provider.delete(path)
             if path in self.local_cache:
                 del self.local_cache[path]

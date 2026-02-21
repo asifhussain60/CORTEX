@@ -181,7 +181,7 @@ class StatusUpdateHook:
         # Write back
         self._write_status(current)
     
-    def _write_status(self, status: Dict[str, Any]):
+    def _write_status(self, status: Dict[str, Any]) -> None:
         """
         Write status to file with validation.
         
@@ -198,7 +198,7 @@ class StatusUpdateHook:
         with open(self.status_file, 'w') as f:
             yaml.dump(status, f, default_flow_style=False, sort_keys=False)
     
-    def _trigger_dashboard_sync(self, orchestrator: str, operation: str, status: str):
+    def _trigger_dashboard_sync(self, orchestrator: str, operation: str, status: str) -> None:
         """
         Trigger dashboard synchronization.
         

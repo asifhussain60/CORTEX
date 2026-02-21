@@ -386,7 +386,7 @@ class ContextSynthesisGateway:
         context_str = str(sorted(context.items()))
         return f"{orchestrator}:{hash(context_str)}"
 
-    def _update_session_tokens(self, session_id: str, tokens: int):
+    def _update_session_tokens(self, session_id: str, tokens: int) -> None:
         """Update cumulative session token count."""
         current = self._session_tokens.get(session_id, 0)
         self._session_tokens[session_id] = current + tokens

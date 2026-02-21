@@ -215,19 +215,19 @@ def get_master_key() -> str:
 _vault_lock = threading.Lock()
 
 
-def _acquire_file_lock(file_handle):
+def _acquire_file_lock(file_handle: Any) -> None:
     """Acquire exclusive file lock (Unix only)"""
     if HAS_FCNTL:
         fcntl.flock(file_handle.fileno(), fcntl.LOCK_EX)
 
 
-def _release_file_lock(file_handle):
+def _release_file_lock(file_handle: Any) -> None:
     """Release file lock (Unix only)"""
     if HAS_FCNTL:
         fcntl.flock(file_handle.fileno(), fcntl.LOCK_UN)
 
 
-def _initialize_vault(vault_path: Path):
+def _initialize_vault(vault_path: Path) -> None:
     """Create empty vault if it doesn't exist"""
     if not vault_path.exists():
         vault_path.parent.mkdir(parents=True, exist_ok=True)
@@ -857,7 +857,8 @@ def sanitize_json(payload: Dict[str, Any], secret_keys: List[str]) -> Dict[str, 
     """Sanitize JSON payload (nested secrets)"""
     sanitized = payload.copy()
     
-    def _sanitize_dict(d: Dict[str, Any]):
+    def _sanitize_dict(d: Dict[str, Any]) -> None:
+        """Sanitize dict."""
         for key, value in d.items():
             if key in secret_keys:
                 d[key] = "[REDACTED]"

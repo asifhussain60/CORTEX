@@ -100,7 +100,7 @@ class ScaffolderAuditLogger:
         self.db_path = db_path
         self._ensure_audit_table()
     
-    def _ensure_audit_table(self):
+    def _ensure_audit_table(self) -> None:
         """Ensure audit table exists in governance.db."""
         with sqlite3.connect(str(self.db_path)) as conn:
             conn.execute("""
@@ -273,7 +273,7 @@ class ScaffolderAuditLogger:
         self._write_log(entry)
         return ac_marker
     
-    def _write_log(self, entry: AuditLogEntry):
+    def _write_log(self, entry: AuditLogEntry) -> None:
         """Write audit log entry to database."""
         with sqlite3.connect(str(self.db_path)) as conn:
             conn.execute(

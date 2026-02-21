@@ -177,7 +177,7 @@ class DataLoader:
             )
 
     def _cache_entry(self, repository: str, data: Dict[str, Any],
-                    loaded_at: datetime):
+                    loaded_at: datetime) -> None:
         """Store data in cache with LRU management"""
         # Check if cache is full
         if len(self.cache) >= self.MAX_CACHE_SIZE:

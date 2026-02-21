@@ -78,6 +78,7 @@ class ImportCoherenceValidator:
         circular_chains = []
 
         def has_cycle(node: str, visited: Set[str], rec_stack: Set[str]) -> bool:
+            """Has cycle."""
             visited.add(node)
             rec_stack.add(node)
 
@@ -255,7 +256,7 @@ class StateConsistencyValidator:
         """
         self.states[entity] = state.copy()
 
-    def add_invariant(self, invariant_func) -> None:
+    def add_invariant(self, invariant_func: Any) -> None:
         """Add state invariant check function.
 
         Args:
@@ -599,7 +600,7 @@ class OutputConsistencyChecker:
         self.inconsistencies: List[str] = []
         self.checks: List = []
 
-    def add_check(self, check_func) -> None:
+    def add_check(self, check_func: Any) -> None:
         """Add a consistency check function.
 
         Args:

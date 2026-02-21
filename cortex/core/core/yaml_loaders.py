@@ -359,7 +359,7 @@ class TierRulesLoader:
         # Lazily loaded database manager
         self._db_manager = None
 
-    def _get_db(self):
+    def _get_db(self) -> None:
         """Get database manager instance (lazy load).
 
         Returns:

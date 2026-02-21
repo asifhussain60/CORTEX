@@ -55,7 +55,7 @@ class StorageProviderFactory:
 
 
 # Register default providers (lazy import to avoid circular dependencies)
-def _register_default_providers():
+def _register_default_providers() -> None:
     """Register built-in providers."""
     try:
         from cortex.infrastructure.storage.providers.local import LocalFileSystemProvider

@@ -225,7 +225,7 @@ class TelemetryProvider:
 
         return True
 
-    def _start_async_export(self):
+    def _start_async_export(self) -> None:
         """
         Start async export thread.
 
@@ -240,7 +240,7 @@ class TelemetryProvider:
         self.export_thread.start()
         logger.info("Started async metrics exporter")
 
-    def _async_export_worker(self):
+    def _async_export_worker(self) -> None:
         """
         Worker thread for async metric export.
 

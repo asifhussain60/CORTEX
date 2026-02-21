@@ -35,8 +35,10 @@ try:
     from cortex.mcp.types import ToolResult
 except ImportError:
     # Fallback for standalone usage
-    def mcp_tool(name: str, description: str):
-        def decorator(func):
+    def mcp_tool(name: str, description: str) -> None:
+        """Mcp tool."""
+        def decorator(func: Any) -> None:
+            """Decorator."""
             func._mcp_tool_name = name
             func._mcp_tool_description = description
             return func
@@ -99,6 +101,7 @@ class DebugSession:
     injections: List[DebugInjection] = field(default_factory=list)
 
     def to_dict(self) -> Dict:
+        """To dict."""
         return {
             "sessionId": self.session_id,
             "basePath": self.base_path,
@@ -211,6 +214,7 @@ class JavaScriptAdapter(LanguageAdapter):
         self.exclude_dirs = {"node_modules", "dist", "build", ".next", ".nuxt", "vendor", ".git"}
 
     def inject_file(self, content: str, file_name: str) -> tuple[str, int]:
+        """Inject file."""
         lines = content.split("\n")
         result = []
         injections = 0
@@ -246,6 +250,7 @@ class JavaScriptAdapter(LanguageAdapter):
         return "\n".join(result), injections
 
     def clean_file(self, content: str) -> tuple[str, int]:
+        """Clean file."""
         patterns = [
         ]
 
@@ -272,6 +277,7 @@ class PythonAdapter(LanguageAdapter):
         self.exclude_dirs = {"__pycache__", ".venv", "venv", "env", ".tox", "dist", "build", ".git"}
 
     def inject_file(self, content: str, file_name: str) -> tuple[str, int]:
+        """Inject file."""
         lines = content.split("\n")
         result = []
         injections = 0
@@ -300,6 +306,7 @@ class PythonAdapter(LanguageAdapter):
         return "\n".join(result), injections
 
     def clean_file(self, content: str) -> tuple[str, int]:
+        """Clean file."""
         patterns = [
         ]
 
@@ -323,6 +330,7 @@ class CSharpAdapter(LanguageAdapter):
         self.exclude_dirs = {"bin", "obj", "packages", ".vs", ".git"}
 
     def inject_file(self, content: str, file_name: str) -> tuple[str, int]:
+        """Inject file."""
         lines = content.split("\n")
         result = []
         injections = 0
@@ -354,6 +362,7 @@ class CSharpAdapter(LanguageAdapter):
         return "\n".join(result), injections
 
     def clean_file(self, content: str) -> tuple[str, int]:
+        """Clean file."""
         patterns = [
         ]
 

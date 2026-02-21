@@ -71,7 +71,7 @@ class TurnTimeoutManager:
             # Unix-like systems support SIGINT
             signal.signal(signal.SIGINT, self._handle_cancellation)
 
-    def _handle_cancellation(self, signum, frame) -> None:
+    def _handle_cancellation(self, signum: Any, frame: Any) -> None:
         """Handle cancellation signal."""
         self._cancellation_requested = True
         print(f"\n[CANCELLATION REQUESTED for turn {self._current_turn_number}]")

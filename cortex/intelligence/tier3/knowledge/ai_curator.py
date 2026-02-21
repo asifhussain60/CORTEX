@@ -30,6 +30,7 @@ class AICurator:
         self._config: Optional[Dict[str, Any]] = None
 
     def _load_config(self) -> Dict[str, Any]:
+        """Load config."""
         if self._config is None:
             if self._CONFIG_PATH.exists():
                 self._config = yaml.safe_load(self._CONFIG_PATH.read_text()) or {}

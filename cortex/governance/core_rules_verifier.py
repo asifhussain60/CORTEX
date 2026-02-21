@@ -238,7 +238,7 @@ class CoreRulesVerifier:
             timestamp=datetime.now()
         )
     
-    def _check_markdown_suppression(self):
+    def _check_markdown_suppression(self) -> None:
         """
         CORE-002: No markdown file generation.
         
@@ -287,7 +287,7 @@ class CoreRulesVerifier:
         
         return False
     
-    def _check_tdd_mandatory(self):
+    def _check_tdd_mandatory(self) -> None:
         """
         CORE-008: Tests BEFORE code (TDD).
         
@@ -332,7 +332,7 @@ class CoreRulesVerifier:
         
         return None
     
-    def _check_type_hints(self):
+    def _check_type_hints(self) -> None:
         """
         CORE-011: Type hints mandatory.
         
@@ -385,7 +385,7 @@ class CoreRulesVerifier:
         
         return True
     
-    def _check_docstrings(self):
+    def _check_docstrings(self) -> None:
         """
         CORE-012: Google-style docstrings mandatory.
         
@@ -422,7 +422,7 @@ class CoreRulesVerifier:
             except Exception:
                 pass
     
-    def _check_no_bare_except(self):
+    def _check_no_bare_except(self) -> None:
         """
         CORE-013: No bare except clauses.
         
@@ -454,7 +454,7 @@ class CoreRulesVerifier:
             except Exception:
                 pass
     
-    def _check_git_checkpoints(self):
+    def _check_git_checkpoints(self) -> None:
         """
         CORE-026: Git checkpoint before major changes.
         
@@ -474,7 +474,7 @@ class CoreRulesVerifier:
             detected_at=datetime.now()
         ))
     
-    def _check_audit_trail(self):
+    def _check_audit_trail(self) -> None:
         """
         CORE-027: Audit trail (AC_START → AC_COMPLETE).
         
@@ -512,7 +512,7 @@ class CoreRulesVerifier:
             except Exception:
                 pass
     
-    def _check_file_naming(self):
+    def _check_file_naming(self) -> None:
         """
         CORE-028: File naming conventions.
         
@@ -551,17 +551,17 @@ class CoreRulesVerifier:
                     detected_at=datetime.now()
                 ))
     
-    def _check_response_headers(self):
+    def _check_response_headers(self) -> None:
         """CORE-029: Response header mandatory (agent compliance check)."""
         # Policy check - assume compliant
         pass
     
-    def _check_implementation_truth(self):
+    def _check_implementation_truth(self) -> None:
         """CORE-030: Implementation Truth (verify code, not docs)."""
         # Policy check - assume compliant
         pass
     
-    def _check_single_canonical(self):
+    def _check_single_canonical(self) -> None:
         """
         CORE-035: Single canonical implementation.
         
@@ -572,12 +572,12 @@ class CoreRulesVerifier:
         # Assume compliant if no duplicates detected
         pass
     
-    def _check_industry_standards(self):
+    def _check_industry_standards(self) -> None:
         """CORE-036: Industry standards compliance."""
         # Policy check - verified at runtime by orchestrators
         pass
     
-    def _check_no_file_paths_in_prompts(self):
+    def _check_no_file_paths_in_prompts(self) -> None:
         """
         CORE-047: Instruction files must not include file paths.
         
@@ -611,12 +611,12 @@ class CoreRulesVerifier:
                 except Exception:
                     pass
     
-    def _check_holistic_validation(self):
+    def _check_holistic_validation(self) -> None:
         """CORE-048: Holistic validation gate (Phase 48)."""
         # Policy check - verified by Phase 48 implementation
         pass
     
-    def _check_silent_autonomous(self):
+    def _check_silent_autonomous(self) -> None:
         """CORE-049: Silent autonomous execution."""
         # Policy check - verified by execution protocol
         pass

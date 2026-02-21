@@ -301,7 +301,7 @@ class GlossaryGenerator:
         
         return has_typed_attrs
     
-    def _extract_docstring(self, node) -> str:
+    def _extract_docstring(self, node: Any) -> str:
         """Extract docstring from AST node"""
         docstring = ast.get_docstring(node)
         return docstring if docstring else ""
@@ -455,4 +455,3 @@ class GlossaryGenerator:
             glossary.relationships.append(relationship)
         
         return glossary
-

@@ -213,7 +213,7 @@ class SafeTemplateEditor:
         
         return new_content
     
-    def _check_syntax(self, content: str, file_path: Path):
+    def _check_syntax(self, content: str, file_path: Path) -> None:
         """Check Python syntax of new content."""
         try:
             ast.parse(content)
@@ -222,7 +222,7 @@ class SafeTemplateEditor:
                 f"Syntax error in {file_path.name}: {e}"
             )
     
-    def _atomic_write(self, file_path: Path, content: str):
+    def _atomic_write(self, file_path: Path, content: str) -> None:
         """
         Write content atomically using temp file + rename.
         
@@ -269,7 +269,7 @@ class SafeTemplateEditor:
         
         return False
     
-    def _rollback(self, file_path: Path, backup_path: Path):
+    def _rollback(self, file_path: Path, backup_path: Path) -> None:
         """Rollback to backup on error."""
         if backup_path.exists():
             shutil.copy2(backup_path, file_path)

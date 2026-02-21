@@ -47,7 +47,7 @@ class RegistrySyncService:
         self.event_bus.subscribe("StageCompleted", self._handle_stage_completed)
         self.event_bus.subscribe("OperationCompleted", self._handle_operation_completed)
     
-    def _handle_phase_completed(self, event: Event):
+    def _handle_phase_completed(self, event: Event) -> None:
         """
         Handle PhaseCompleted event - update phase status to COMPLETE.
         
@@ -92,7 +92,7 @@ class RegistrySyncService:
             except Exception as e:
                 print(f"Warning: Failed to update phase {phase_id}: {e}")
     
-    def _handle_stage_completed(self, event: Event):
+    def _handle_stage_completed(self, event: Event) -> None:
         """
         Handle StageCompleted event - update stage status within phase.
         
@@ -137,7 +137,7 @@ class RegistrySyncService:
             except Exception as e:
                 print(f"Warning: Failed to update stage {stage_id}: {e}")
     
-    def _handle_operation_completed(self, event: Event):
+    def _handle_operation_completed(self, event: Event) -> None:
         """
         Handle OperationCompleted event - update enhancement status.
         
@@ -227,7 +227,7 @@ class RegistrySyncService:
         
         return None
     
-    def _create_backup(self, file_path: Path):
+    def _create_backup(self, file_path: Path) -> None:
         """
         Create backup of file before modification.
         

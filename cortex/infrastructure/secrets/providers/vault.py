@@ -24,6 +24,7 @@ class VaultProvider(ISecretsProvider):
         self._client: Optional[Any] = None
 
     def _get_client(self) -> Any:
+        """Get client."""
         try:
             import hvac  # type: ignore
             if self._client is None:

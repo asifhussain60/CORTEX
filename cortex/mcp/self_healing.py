@@ -447,7 +447,7 @@ class MCPSelfHealing:
             "duration_ms": duration_ms
         }
     
-    def _log_fix_event(self, log_entry: Dict[str, Any]):
+    def _log_fix_event(self, log_entry: Dict[str, Any]) -> None:
         """
         Write fix event to audit log.
         
@@ -512,7 +512,7 @@ class MCPSelfHealing:
         success: bool,
         duration_ms: int,
         error_message: Optional[str] = None
-    ):
+    ) -> None:
         """
         Log fix attempt for telemetry.
         

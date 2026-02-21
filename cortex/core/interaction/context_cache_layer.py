@@ -257,7 +257,7 @@ class ContextCacheLayer:
         logger.debug("Cache EVICT LRU (key=%s)", key)
         return True
 
-    def _remove_entry(self, key: str):
+    def _remove_entry(self, key: str) -> None:
         """Remove entry from cache."""
         if key in self._cache:
             entry = self._cache.pop(key)

@@ -234,7 +234,7 @@ class ContextEfficiencyAuditor:
 
         return status
 
-    def _print_verdict(self, health_status: Dict[str, Any]):
+    def _print_verdict(self, health_status: Dict[str, Any]) -> None:
         """Print final audit verdict"""
         print(f"\n{'═' * 80}")
         print("AUDIT VERDICT")

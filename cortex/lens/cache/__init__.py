@@ -24,7 +24,7 @@ class CacheStats:
         self.misses = 0
         self.evictions = 0
 
-def reset_lens_cache():
+def reset_lens_cache() -> None:
     """Reset singleton cache instance (testing utility)."""
     # Phase 65 S6: Reset canonical singleton
     import cortex.lens.cache.lens_cache as lens_cache_module

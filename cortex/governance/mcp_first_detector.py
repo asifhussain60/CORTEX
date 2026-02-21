@@ -172,7 +172,7 @@ class MCPFirstDetector:
         
         return violations
     
-    def _check_python_files(self, directory: Path):
+    def _check_python_files(self, directory: Path) -> None:
         """
         Check Python files for direct file operations.
         
@@ -208,7 +208,7 @@ class MCPFirstDetector:
                 # Skip files that can't be read
                 pass
     
-    def _check_orchestrators(self, directory: Path):
+    def _check_orchestrators(self, directory: Path) -> None:
         """
         Check orchestrator files for MCP routing compliance.
         

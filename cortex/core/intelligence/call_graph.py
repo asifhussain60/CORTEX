@@ -205,7 +205,7 @@ class CallGraphBuilder:
 
         return graph
 
-    def _build_class_hierarchy(self, parse_result) -> Dict[str, List[str]]:
+    def _build_class_hierarchy(self, parse_result: Any) -> Dict[str, List[str]]:
         """Build class inheritance hierarchy.
 
         Args:

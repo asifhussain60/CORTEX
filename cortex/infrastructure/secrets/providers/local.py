@@ -29,6 +29,7 @@ class LocalSecretsProvider(ISecretsProvider):
                 raise StorageError(f"Failed to load secrets from {self._path}: {exc}") from exc
 
     def _persist(self) -> None:
+        """Persist."""
         if self._path:
             self._path.write_text(json.dumps(self._store, indent=2))
 

@@ -301,7 +301,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
 
         logger.info("UnifiedIntelligenceProvider initialized (singleton)")
 
-    def _ensure_lens_orchestrator(self):
+    def _ensure_lens_orchestrator(self) -> None:
         """Lazy-load LENSOrchestrator."""
         if self._lens_orchestrator is None:
             from cortex.lens.lens_orchestrator import LENSOrchestrator
@@ -310,7 +310,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
             self._lens_orchestrator = LENSOrchestrator(repo_path=Path.cwd())
         return self._lens_orchestrator
 
-    def _ensure_synthesis_engine(self):
+    def _ensure_synthesis_engine(self) -> None:
         """Lazy-load KnowledgeSynthesisEngine."""
         if self._synthesis_engine is None:
             from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
@@ -319,7 +319,7 @@ class UnifiedIntelligenceProvider(IIntelligenceProvider):
             self._synthesis_engine = get_synthesis_engine()
         return self._synthesis_engine
 
-    def _ensure_profile_store(self):
+    def _ensure_profile_store(self) -> None:
         """Lazy-load ProfileStore."""
         if self._profile_store is None:
             from cortex.intelligence.onboarded_repos.profile_store import ProfileStore

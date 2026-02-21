@@ -105,7 +105,7 @@ class CapabilityMatcher:
         self.capability_weights = {}
         self._build_capability_weights()
     
-    def _build_capability_weights(self):
+    def _build_capability_weights(self) -> None:
         """Build consolidated capability weights from intent map."""
         for intent, capabilities in self.INTENT_CAPABILITY_MAP.items():
             for capability, (level, weight) in capabilities.items():

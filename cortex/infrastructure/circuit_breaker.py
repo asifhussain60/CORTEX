@@ -330,7 +330,7 @@ class CircuitBreaker:
         self._failure_count = 0
         self._consecutive_successes = 0
 
-    def _on_success(self):
+    def _on_success(self) -> None:
         """Handle successful call (legacy API)."""
         self.metrics.successful_calls += 1
         self.metrics.consecutive_failures = 0
@@ -342,7 +342,7 @@ class CircuitBreaker:
                 self._transition_to_closed()
                 logger.info(f"Circuit breaker '{self.name}' transitioning to CLOSED")
 
-    def _on_failure(self, reason: str):
+    def _on_failure(self, reason: str) -> None:
         """Handle failed call (legacy API)."""
         self.metrics.failed_calls += 1
         self.metrics.consecutive_failures += 1
@@ -379,7 +379,7 @@ class CircuitBreaker:
 
         return False
 
-    def _transition_to_closed(self):
+    def _transition_to_closed(self) -> None:
         """Transition circuit to closed state."""
         self.metrics.current_state = CircuitState.CLOSED
         self.metrics.state_change_timestamp = datetime.now(timezone.utc)
@@ -389,7 +389,7 @@ class CircuitBreaker:
         # Sync new API state
         self._state = CircuitState.CLOSED
 
-    def _transition_to_open(self):
+    def _transition_to_open(self) -> None:
         """Transition circuit to open state."""
         self.metrics.current_state = CircuitState.OPEN
         self.metrics.state_change_timestamp = datetime.now(timezone.utc)
@@ -399,7 +399,7 @@ class CircuitBreaker:
         if self._opened_at is None:
             self._opened_at = time.time()
 
-    def _transition_to_half_open(self):
+    def _transition_to_half_open(self) -> None:
         """Transition circuit to half-open state."""
         self.metrics.current_state = CircuitState.HALF_OPEN
         self.metrics.state_change_timestamp = datetime.now(timezone.utc)

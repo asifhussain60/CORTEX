@@ -210,7 +210,7 @@ class SilentExecutionGuard:
         except Exception as e:
             raise CheckpointFailedError(f"Failed to create checkpoint: {e}")
     
-    def _rollback(self, checkpoint_path: Path, files: List[str]):
+    def _rollback(self, checkpoint_path: Path, files: List[str]) -> None:
         """
         Rollback files from checkpoint.
         
@@ -226,7 +226,7 @@ class SilentExecutionGuard:
             if backup_file.exists():
                 shutil.copy2(backup_file, file_path_obj)
     
-    def _check_syntax(self, file_path: Path):
+    def _check_syntax(self, file_path: Path) -> None:
         """
         Check Python syntax of file.
         

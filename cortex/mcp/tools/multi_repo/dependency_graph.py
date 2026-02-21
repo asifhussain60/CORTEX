@@ -69,6 +69,7 @@ class DependencyGraph:
         cycles: List[List[str]] = []
 
         def _dfs(node: str, path: List[str]) -> None:
+            """Dfs."""
             visited.add(node)
             rec_stack.add(node)
             path.append(node)

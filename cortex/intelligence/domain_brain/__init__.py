@@ -47,6 +47,7 @@ class DomainBrainAPI:
         rec_stack = set()
 
         def has_cycle(entity_id: str, entities: Dict[str, Any]) -> bool:
+            """Has cycle."""
             visited.add(entity_id)
             rec_stack.add(entity_id)
 
@@ -352,6 +353,7 @@ class ConsistencyValidator:
         rec_stack = set()
 
         def has_cycle(entity_id: str) -> bool:
+            """Has cycle."""
             visited.add(entity_id)
             rec_stack.add(entity_id)
 

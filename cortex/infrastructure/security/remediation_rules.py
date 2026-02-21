@@ -115,7 +115,7 @@ class RemediationRulesRegistry:
         self.rules: Dict[str, RemediationRule] = {}
         self._load_rules()
 
-    def _load_rules(self):
+    def _load_rules(self) -> None:
         """Load all rules from rule providers."""
         all_rules = (
             get_github_actions_rules()

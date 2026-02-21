@@ -41,6 +41,7 @@ class FileRelocator:
         return True
 
     def _get_renamed(self, destination: str) -> str:
+        """Get renamed."""
         dst = Path(destination)
         stem = dst.stem
         suffix = dst.suffix

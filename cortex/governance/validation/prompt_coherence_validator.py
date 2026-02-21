@@ -80,7 +80,7 @@ class PromptCoherenceValidator:
 
         return self.issues
 
-    def _check_version_drift(self):
+    def _check_version_drift(self) -> None:
         """Detect version mismatches between prompts and agents."""
         architect_prompt = self.prompts_dir / "cortex-architect.prompt.md"
         auditor_agent = self.agents_dir / "cortex-auditor.md"
@@ -109,7 +109,7 @@ class PromptCoherenceValidator:
                 auto_fix="Sync versions in YAML frontmatter or markdown headers"
             ))
 
-    def _check_core_rule_consistency(self):
+    def _check_core_rule_consistency(self) -> None:
         """Verify CORE rules match across prompts and agents."""
         # Load CORE rules from both sources
         architect_rules = self._extract_core_rules(self.prompts_dir / "cortex-architect.prompt.md")
@@ -128,7 +128,7 @@ class PromptCoherenceValidator:
                 auto_fix="Add missing CORE rules to auditor P1 checklist"
             ))
 
-    def _check_mcp_enforcement(self):
+    def _check_mcp_enforcement(self) -> None:
         """Validate MCP-FIRST enforcement consistency."""
         architect_prompt = self.prompts_dir / "cortex-architect.prompt.md"
 
@@ -159,7 +159,7 @@ class PromptCoherenceValidator:
                 auto_fix="Add tool restriction matrix blocking create_file/replace_string_in_file for IMPLEMENT intents"
             ))
 
-    def _check_deprecated_orchestrators(self):
+    def _check_deprecated_orchestrators(self) -> None:
         """Find references to deprecated orchestrators (AC-PROMPT-CLEANUP-001)."""
         wiring_yaml = self.workspace_root / "cortex" / "__wiring_contract__.yaml"
 
@@ -193,7 +193,7 @@ class PromptCoherenceValidator:
                     auto_fix="Remove deprecated orchestrator references or add to wiring.yaml"
                 ))
 
-    def _check_duplicate_sections(self):
+    def _check_duplicate_sections(self) -> None:
         """Detect duplicate content across prompt files (AC-PROMPT-CLEANUP-005)."""
         prompt_files = list(self.prompts_dir.glob("*.md"))
 
@@ -220,7 +220,7 @@ class PromptCoherenceValidator:
                                 auto_fix="Extract to shared reference file or consolidate"
                             ))
 
-    def _check_audit_check_coverage(self):
+    def _check_audit_check_coverage(self) -> None:
         """Verify all P0-P3 checks are documented in both prompt and agent."""
         architect_checks = self._extract_audit_checks(self.prompts_dir / "cortex-architect.prompt.md")
         auditor_checks = self._extract_audit_checks(self.agents_dir / "cortex-auditor.md")

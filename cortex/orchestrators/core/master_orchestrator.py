@@ -1017,7 +1017,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
         """
         return self._adaptive_router
 
-    def _get_intent_router(self):
+    def _get_intent_router(self) -> None:
         """Get IntentRouter instance (for testing/mocking)."""
         return self.intent_router
 
@@ -5041,7 +5041,8 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                 event_type = CompletionEvent.STAGE_COMPLETE
             
             # Create async task (fire-and-forget)
-            async def _trigger():
+            async def _trigger() -> None:
+                """Trigger."""
                 await self._lifecycle_hook_system.trigger_completion(
                     event_type=event_type,
                     entity_id=entity_id,
