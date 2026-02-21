@@ -22,29 +22,24 @@ The communication standard connecting your IDE to CORTEX. Think of it as the **l
 **Live location:** `cortex/mcp/` — Pylance-style stdio server, auto-starts with VS Code.
 
 ### MCP Gateway
-The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **24 canonical MCP tools**.
+The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **25 canonical MCP tools**.
 
 **Daily example:** When you type a request in VS Code Copilot Chat, it enters through the MCP Gateway, which routes it to `cortex_process_request` or another appropriate tool.
 
 ### Orchestrator
-A specialized processing engine for one category of work. CORTEX has **52 orchestrator classes** across **10 domains**:
+A specialized processing engine for one category of work. CORTEX has **22 wired orchestrators** across **3 tiers**, all satisfying `IOrchestrator` protocol:
 
-| Domain | Key Orchestrators | Files |
-|--------|------------------|-------|
-| **core** | MasterOrchestrator, IntentRouter, TDDOrchestrator, EnforcementOrchestrator, PlanningOrchestrator, RefactoringOrchestrator | 52 |
-| **domain** | BusinessDomainOrchestrator, EcommerceOrchestrator, FinancialOrchestrator, HealthcareOrchestrator | 30 |
-| **health** | HealthOrchestrator, VacuumOrchestrator | 30 |
-| **intelligence** | IntelligenceOrchestrator, UnifiedAnalysisOrchestrator | 14 |
-| **support** | OnboardingOrchestrator, SetupOrchestrator, UnifiedDiscoveryOrchestrator | 38 |
-| **validation** | HolisticValidationOrchestrator, ReviewOrchestrator | 11 |
-| **workflow** | WorkflowOrchestrator, PhaseCompletionOrchestrator | 13 |
-| **git** | GitOrchestrator, GitPublishOrchestrator | 4 |
-| **strategies** | Strategy selection | 1 |
-| **synthesis** | Cross-domain synthesis | 1 |
+| Tier | Key Orchestrators | Count |
+|------|-----------------|-------|
+| **Core** | MasterOrchestrator, IntentRouter, TDDOrchestrator, EnforcementOrchestrator, WorkflowOrchestrator, ConversationOrchestrator, InteractionOrchestrator | 7 |
+| **Domain** | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator | 3 |
+| **Support** | OnboardingOrchestrator, SetupOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator, VacuumOrchestrator | 7 |
 
-**Brain analogy:** Each orchestrator is like a specialized brain region — the visual cortex processes images, the motor cortex controls movement, and Broca's area handles language. They're distinct but interconnected through the MasterOrchestrator (the thalamus).
+**SweepCatalogueOrchestrator** — Enforces CORE-064 (Sweep Completeness Contract). Every FIX/REFACTOR/AUDIT sweep is tracked in SQLite; no sweep can be abandoned mid-run without an explicit `approve_wont_fix` or `assert_exhausted` call.
 
-**Live location:** `cortex/orchestrators/{domain}/`
+**Brain analogy:** Each orchestrator is like a specialized brain region — the visual cortex processes images, the motor cortex controls movement. They're distinct but interconnected through the MasterOrchestrator (the thalamus).
+
+**Live location:** `cortex/orchestrators/{core,domain,support}/` | Wiring specs: `cortex-registry/core/specifications/`
 
 ### Git-Backed Registry (`cortex-registry/`)
 Instead of a database, CORTEX stores all configuration, governance rules, workflow templates, and knowledge in plain YAML files committed to Git. This means:
@@ -95,7 +90,7 @@ Used in pattern matching, intent classification, and strategy selection.
 ## Governance Concepts
 
 ### CORE Rule
-A numbered governance standard enforced automatically. There are **17 actively enforced CORE rules** (35 defined total in `cortex-registry/core/governance/skull-rules.yaml`). Critical examples:
+A numbered governance standard enforced automatically. There are **22 actively enforced CORE rules** (35 defined total in `cortex-registry/core/tier0-skull/skull-rules.yaml`). Critical examples:
 
 | Rule | Name | What It Does |
 |------|------|-------------|

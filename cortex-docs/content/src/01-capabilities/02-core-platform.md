@@ -44,7 +44,7 @@ diagrams: ASCII service architecture, sequence diagrams
 
 | **CortexAuditDB** | `cortex/infrastructure/audit_db.py` | Unified SQLite with WAL mode — all audit trails |The Core Platform provides the foundational infrastructure enabling CORTEX's intelligent development capabilities. Organizations benefit from enterprise-grade service reliability, zero-downtime deployments, and comprehensive observability without custom infrastructure investment [Business Leaders]. Product teams gain consistent request processing, state management, and configuration control across all CORTEX features [Product Owners]. The platform implements service-oriented architecture with MCP Gateway, Tool Registry, State Management, Configuration Management, and Health Monitoring [Software Developers].
 
-| **MCP Server** | `cortex/mcp/` | Pylance-style stdio server, 24 canonical tools |
+| **MCP Server** | `cortex/mcp/` | Pylance-style stdio server, 25 canonical tools |
 
 | **Bootstrap** | `cortex/bootstrap.py` | System initialization, wiring, service discovery |**Core Platform Components:**
 
@@ -60,7 +60,7 @@ diagrams: ASCII service architecture, sequence diagrams
 
 - **Health Monitoring** — Circuit breakers, health checks, Prometheus metrics integration
 
-Every one of the 52 orchestrators inherits from `OrchestratorBase` and follows this lifecycle:
+Every one of the 22 wired orchestrators inherits from `OrchestratorBase` and follows this lifecycle:
 
 **Performance Targets:** Gateway latency P50: 5ms, P95: 15ms, P99: 25ms. Tool discovery <50ms. Health checks <100ms. State lookup <5ms.
 
@@ -88,7 +88,7 @@ teardown()  → Audit trail recording, resource cleanup- [State Management](#sta
 
 - [Health Monitoring](#health-monitoring)
 
-**Business Leader:** "Every operation follows the same lifecycle. Setup, governance check, execution, validation, audit. Consistency across 52 orchestrators."- [Related Documents](#related-documents)
+**Business Leader:** "Every operation follows the same lifecycle. Setup, governance check, execution, validation, audit. Consistency across 22 wired orchestrators."- [Related Documents](#related-documents)
 
 
 

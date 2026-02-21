@@ -42,7 +42,7 @@ order: 2
 │    │ (12 intents)   │  │ Orch.   │  │ Orchestrators│           │
 │    └────────────────┘  └─────────┘  └──────────────┘           │
 │                                                                 │
-│    52 orchestrators across 10 domains                           │
+│    22 wired orchestrators across 3 tiers                           │
 └─────────────────────────────┼───────────────────────────────────┘
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
@@ -83,7 +83,7 @@ order: 2
 │                   REGISTRY (Configuration)                      │
 │                              │                                  │
 │    cortex-registry/                                             │
-│    ├── core/governance/   ← CORE rules (YAML)                  │
+│    ├── core/tier0-skull/ ← skull-rules.yaml (CORE rules, YAML) │
 │    ├── patterns/          ← 9 enterprise patterns               │
 │    ├── workflows/         ← Lifecycle + production templates    │
 │    ├── planning/          ← Refactor master plan                │
@@ -97,14 +97,14 @@ order: 2
 
 | Layer | Components | Location |
 |-------|------------|----------|
-| MCP Gateway | 23 tools | `cortex/mcp/tools/` |
-| Orchestration | 52 orchestrators, 10 domains | `cortex/orchestrators/` |
+| MCP Gateway | 25 tools | `cortex/mcp/tools/` |
+| Orchestration | 22 wired orchestrators, 3 tiers | `cortex/orchestrators/` |
 | Intelligence | 8 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
-| Governance | 17 rules, 8 agents | `cortex/governance/` + `cortex-registry/core/` |
+| Governance | 22 rules, 8 agents | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |
 | Registry | Rules, patterns, workflows | `cortex-registry/` |
-| Tests | 15,333 collected | `tests/` |
+| Tests | 15,328 collected | `tests/` |
 
 ---
 
-*Verified against live directory structure · 20 February 2026*
+*Verified against live directory structure · 21 February 2026*

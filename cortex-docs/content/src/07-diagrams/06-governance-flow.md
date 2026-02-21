@@ -36,7 +36,7 @@ order: 6
 │                                                │
 │  EnforcementOrchestrator                       │
 │  ┌──────────────────────────────────────────┐  │
-│  │ All 17 active CORE rules evaluated       │  │
+│  │ All 22 active CORE rules evaluated       │  │
 │  │ 8 enforcement agents execute             │  │
 │  │                                          │  │
 │  │ Agents:                                  │  │
@@ -115,4 +115,4 @@ order: 6
 
 ---
 
-*Verified against `cortex-registry/core/governance/skull-rules.yaml` · 20 February 2026*
+*Verified against `cortex-registry/core/tier0-skull/skull-rules.yaml` · 21 February 2026*

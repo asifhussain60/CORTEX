@@ -5,7 +5,7 @@ title: CORTEX Governance — Automated Rule Enforcement
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
 last_verified: 2026-02-20
-source_of_truth: cortex-registry/core/governance/skull-rules.yaml + cortex/orchestrators/core/enforcement_orchestrator.py
+source_of_truth: cortex-registry/core/tier0-skull/skull-rules.yaml + cortex/orchestrators/core/enforcement_orchestrator.py
 order: 5
 ---
 
@@ -25,9 +25,9 @@ CORTEX enforces governance at **three levels**:
 
 ---
 
-## 17 Active CORE Rules
+## 22 Active CORE Rules
 
-There are 35 CORE rules defined in `cortex-registry/core/governance/skull-rules.yaml`. Of these, **17 are actively enforced** via the EnforcementOrchestrator and ExtendedGovernanceAgent.
+There are 35 CORE rules defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. Of these, **22 are actively enforced** via the EnforcementOrchestrator and ExtendedGovernanceAgent.
 
 ### Critical Rules (Enforced on Every Operation)
 
@@ -99,9 +99,9 @@ Score = Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2) − Mai
 
 **MCP Tool:** `cortex_score_tests` — callable from production repos.
 
-**Business Leader:** "Test quality is quantified, not subjective. Every test has a score. We maintain 15,333 signal-dense tests, not 18,000 mixed-quality ones."
+**Business Leader:** "Test quality is quantified, not subjective. Every test has a score. We maintain 15,328 signal-dense tests, not 18,000 mixed-quality ones."
 
-**Product Owner:** "During the refactor, TestQualityGate identified 3,360 low-value tests (scoring <4). We archived them and kept the signal. 486 golden tests all score ≥7."
+**Product Owner:** "During the refactor, TestQualityGate identified 3,360 low-value tests (scoring <4). We archived them and kept the signal. 601 golden tests all score ≥7."
 
 **Developer:** "I run `cortex_score_tests` on my new test. If it scores below 7, TDDOrchestrator blocks the commit and tells me why — usually low detection coverage or high maintenance cost."
 
@@ -123,7 +123,7 @@ The trail is immutable and Git-versioned where applicable.
 
 ## Practical Examples
 
-**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to 17 CORE rules enforced automatically on every commit, 7 enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
+**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to 22 CORE rules enforced automatically on every commit, 7 enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
 
 **Product Owner:** "Last week a developer tried to commit a utility function without tests. CORE-008 blocked the commit automatically. The developer wrote the test, it passed, and the commit went through — all in 10 minutes."
 

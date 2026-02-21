@@ -10,7 +10,7 @@ format: one-pager
 order: 1
 ---
 
-> **What is CORTEX?** A production-grade AI engineering framework that combines cognitive intelligence, automated governance, and a 52-orchestrator execution engine to help engineering teams ship faster — with confidence.
+> **What is CORTEX?** A production-grade AI engineering framework that combines cognitive intelligence, automated governance, and a 22-orchestrator execution engine to help engineering teams ship faster — with confidence.
 
 ---
 
@@ -18,7 +18,7 @@ order: 1
 
 Traditional development tools answer questions. CORTEX **thinks alongside your team**.
 
-When a developer makes a request — "implement this feature", "fix this bug", "audit this code" — CORTEX doesn't hand back a snippet. It classifies intent, analyses the codebase with 8 parallel LENS analyzers, validates against 17 governance rules, generates tests first (mandatory), and executes a coordinated multi-step workflow through the appropriate orchestrator. Every action is observable, auditable, and reversible.
+When a developer makes a request — "implement this feature", "fix this bug", "audit this code" — CORTEX doesn't hand back a snippet. It classifies intent, analyses the codebase with 8 parallel LENS analyzers, validates against 22 governance rules, generates tests first (mandatory), and executes a coordinated multi-step workflow through the appropriate orchestrator. Every action is observable, auditable, and reversible.
 
 Think of it like the difference between a calculator and a brain. A calculator waits for instructions. A brain perceives the situation, reasons about the best approach, and acts — learning from every interaction.
 
@@ -29,19 +29,19 @@ Think of it like the difference between a calculator and a brain. A calculator w
 ```
   ┌───────────────────────────────────────────────────────────────┐
   │                  CORTEX PLATFORM v1.0.0                       │
-  │                  1 Package · 52 Orchestrators · 24 MCP Tools  │
+  │                  1 Package · 22 Orchestrators · 25 MCP Tools  │
   │                                                               │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ MCP Gateway  │─▶│  Orchestration    │─▶│ Intelligence  │  │
-  │  │ 24 tools     │  │  10 domains       │  │ LENS + Brain  │  │
-  │  │ stdio/HTTP   │  │  52 orchestrators │  │ 8 analyzers   │  │
+  │  │ 25 tools     │  │  3 tiers          │  │ LENS + Brain  │  │
+  │  │ stdio/HTTP   │  │  22 wired         │  │ 8 analyzers   │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   │         │                   │                     │           │
   │         ▼                   ▼                     ▼           │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ Governance   │  │  Testing          │  │ Git Registry  │  │
-  │  │ 17 CORE rules│  │  15,333 tests     │  │ YAML SSOT     │  │
-  │  │ 7 agents     │  │  pytest-xdist     │  │ 9 patterns    │  │
+  │  │ 22 CORE rules│  │  15,328 tests     │  │ YAML SSOT     │  │
+  │  │ CORE-064     │  │  601 golden       │  │ 9 patterns    │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   └───────────────────────────────────────────────────────────────┘
 ```
@@ -52,11 +52,11 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 | Domain | What It Does | Key Metric |
 |--------|-------------|------------|
-| **🏗️ Core Platform** | MCP gateway, 52-orchestrator dispatch, state management, health monitoring | 24 MCP tools, Pylance-style stdio |
+| **🏗️ Core Platform** | MCP gateway, 22-orchestrator dispatch, state management, health monitoring | 25 MCP tools, Pylance-style stdio |
 | **🤖 Intelligence (LENS)** | 8-analyzer parallel code understanding — AST, Git, Security, Patterns, Metrics, and more | 300–800ms full analysis |
 | **🧠 Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repo | Confidence scored 0.0–1.0 |
-| **🎯 Decisioning** | Intent routing across 10+ intent types to 52 orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
-| **🛡️ Governance** | Pre-commit + CI + runtime enforcement of 17 active CORE rules; immutable audit trail | 7 agents, <150ms validation |
+| **🎯 Decisioning** | Intent routing across 10+ intent types to 22 wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
+| **🛡️ Governance** | Pre-commit + CI + runtime enforcement of 22 active CORE rules; CORE-064 sweep completeness | 7 agents, <150ms validation |
 | **🔌 Extensibility** | Custom MCP tools, domain orchestrators, workflow templates, enterprise patterns | Hot-reload; zero core changes |
 
 ---
@@ -113,13 +113,15 @@ Every action runs through governance enforcement:
 2. **CI Pipeline** — Automated validation in continuous integration
 3. **Runtime Enforcement** — Rules checked during orchestrator execution
 
-17 active CORE rules are enforced automatically; the most critical include:
+22 active CORE rules are enforced automatically; the most critical include:
 - **CORE-008** — TDD mandatory (write failing test first, no exceptions)
 - **CORE-002** — All output inline (never create .md/.txt report files)
 - **CORE-011** — Type hints on all functions
 - **CORE-012** — Docstrings on all public APIs
 - **CORE-035** — Single canonical implementation (no duplicates)
 - **CORE-028** — File naming: snake_case only
+- **CORE-064** — Sweep Completeness Contract (no partial sweeps across session boundaries)
+- **CORE-055** — Golden Test Tier Contract (601 golden tests always pass)
 
 ---
 
@@ -142,8 +144,8 @@ Every action runs through governance enforcement:
 - **Transport:** stdio (development) / HTTP (production)
 - **Package:** 1 canonical Python package (`cortex`) — all imports use `cortex.*`
 - **Storage:** Git-backed registry — no PostgreSQL, no MongoDB required
-- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 15,333 tests
-- **Observability:** OpenTelemetry tracing, Prometheus metrics, Grafana dashboards
+- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 15,328 tests, 601 golden
+- **Observability:** OpenTelemetry tracing, Prometheus metrics, Grafana dashboards, SQLite audit log (`.cortex-runtime/audit.db`)
 - **Languages analyzed by LENS:** Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue
 
 ---
@@ -164,4 +166,4 @@ Every action runs through governance enforcement:
 
 ---
 
-*CORTEX v1.0.0 · February 2026 · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
+*CORTEX v1.0.0 · February 2026 · 22 wired orchestrators · 25 MCP tools · 22 CORE rules · 15,328 tests · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*

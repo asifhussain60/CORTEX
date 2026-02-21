@@ -1,11 +1,11 @@
 # Orchestration Overview
 
 ---
-title: CORTEX Orchestration — 52 Orchestrators Across 10 Domains
+title: CORTEX Orchestration — 22 Wired Orchestrators Across 3 Tiers
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
-source_of_truth: cortex/orchestrators/
+last_verified: 2026-02-21
+source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 order: 1
 ---
 
@@ -15,20 +15,15 @@ order: 1
 
 ## Architecture
 
-After the 12-phase Cohesive Brain Refactor (120 → 52 orchestrators), CORTEX has **52 canonical orchestrator classes** organized into **10 domains**:
+CORTEX has **22 wired orchestrators** across **3 tiers**, all satisfying the `IOrchestrator` protocol. The canonical wiring specification lives in `cortex-registry/core/specifications/`.
 
-| Domain | Files | Key Orchestrators |
-|--------|-------|------------------|
-| **core** | 52 | MasterOrchestrator, IntentRouter, TDDOrchestrator, EnforcementOrchestrator, PlanningOrchestrator, RefactoringOrchestrator, SecurityOrchestrator, InteractionOrchestrator, DebuggerOrchestrator |
-| **domain** | 30 | BusinessDomainOrchestrator, EcommerceOrchestrator, FinancialOrchestrator, HealthcareOrchestrator |
-| **health** | 30 | HealthOrchestrator, VacuumOrchestrator |
-| **intelligence** | 14 | IntelligenceOrchestrator, UnifiedAnalysisOrchestrator |
-| **support** | 38 | OnboardingOrchestrator, SetupOrchestrator, UnifiedDiscoveryOrchestrator, RepositoryOnboardingOrchestrator |
-| **validation** | 11 | HolisticValidationOrchestrator, ReviewOrchestrator, UnifiedQualityAssuranceOrchestrator |
-| **workflow** | 13 | WorkflowOrchestrator, PhaseCompletionOrchestrator, CortexMasterPlanOrchestrator |
-| **git** | 4 | GitOrchestrator, GitPublishOrchestrator |
-| **strategies** | 1 | Strategy selection coordination |
-| **synthesis** | 1 | Cross-domain synthesis |
+| Tier | Count | Key Orchestrators |
+|------|-------|-----------------|
+| **Core** (Tier 1) | 7 | MasterOrchestrator, IntentRouter, TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator, ConversationOrchestrator, InteractionOrchestrator |
+| **Domain** (Tier 2) | 3 | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator |
+| **Support** (Tier 3) | 7 | OnboardingOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator, VacuumOrchestrator |
+
+> **Note on total codebase:** `cortex/orchestrators/` contains many more classes (strategy implementations, mixin helpers, specialized sub-components). The **22 wired** are the canonical IOrchestrator-compliant entry points registered in the wiring specifications.
 
 ---
 
@@ -67,15 +62,15 @@ Every orchestrator follows the OrchestratorBase 5-step lifecycle:
 setup() → govern() → execute() → validate() → teardown()
 ```
 
-This ensures governance is checked before every execution and audit trails are recorded after every operation.
+Additionally, **`OrchestratorBase.execute()` and `run()`** auto-log `ORCHESTRATOR_START` and `ORCHESTRATOR_END` to `.cortex-runtime/audit.db` (SQLite WAL). This audit logging is non-blocking — a failure to log never prevents execution.
 
 ---
 
 ## Practical Examples
 
-**Business Leader:** "52 specialized orchestrators means every type of development work has a dedicated engine. No generic, one-size-fits-all processing."
+**Business Leader:** "22 specialized wired orchestrators means every type of development work has a dedicated engine. SweepCatalogueOrchestrator (CORE-064) ensures no long-running refactor sweep is ever abandoned between sessions."
 
-**Product Owner:** "I track which orchestrators are used most. TDDOrchestrator handles 40% of requests, RefactoringOrchestrator 25%, PlanningOrchestrator 15%. This tells me what my team does day-to-day."
+**Product Owner:** "I track which orchestrators are used most. TDDOrchestrator handles IMPLEMENT/FIX. RefactoringOrchestrator handles semantic code transformations — including Roslyn-powered C# rename by symbol name. PlanningOrchestrator manages sprint-level planning."
 
 **Developer:** "Each orchestrator has a clear responsibility. TDDOrchestrator handles RED→GREEN→REFACTOR. RefactoringOrchestrator handles semantic code transformations. I never wonder which one to use — IntentRouter decides."
 

@@ -23,7 +23,7 @@ order: 8
 | **Enterprise Patterns** | `cortex-registry/patterns/` | Used by Perception tier |
 | **Knowledge Base** | `cortex-registry/knowledge-base/` | Used by intelligence layer |
 | **Infrastructure Catalog** | `cortex-registry/company/` | Platform, API, application definitions |
-| **Governance Rules** | `cortex-registry/core/governance/` | Enforced by EnforcementOrchestrator |
+| **Governance Rules** | `cortex-registry/core/tier0-skull/` | Enforced by EnforcementOrchestrator |
 
 All extensions are **hot-reload** — no core code changes required.
 

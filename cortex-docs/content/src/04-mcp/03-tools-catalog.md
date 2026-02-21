@@ -1,7 +1,7 @@
 # MCP Tools Catalog
 
 ---
-title: MCP Tools Catalog — 24 Canonical Tools
+title: MCP Tools Catalog — 25 Canonical Tools
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
 last_verified: 2026-02-21
@@ -15,7 +15,7 @@ order: 3
 
 ## Overview
 
-24 canonical MCP tools organized across 7 categories. All tools are registered via `ConsolidatedTool` base class and exposed through JSON-RPC 2.0 stdio transport.
+25 canonical MCP tools organized across 7 categories. All tools are registered via `ConsolidatedTool` base class and exposed through JSON-RPC 2.0 stdio transport.
 
 **Entry point rule:** All user requests MUST route through `cortex_process_request`. Other tools are internal or auxiliary.
 
@@ -56,20 +56,20 @@ LENS analysis, knowledge access, and git operations.
 | `cortex_git` | Git-aware operations — history analysis, commit patterns, branch management. |
 | `cortex_generate_tests` | Generate test scaffolds from code analysis with TestQualityGate scoring. |
 
-### Operations (5 tools) — `cortex/mcp/tools/operations.py` + `master_plan_tool.py`
+### Operations (6 tools) — `cortex/mcp/tools/operations.py` + `master_plan_tool.py`
 
-Debug, refactor, plan, onboard, and dashboard operations.
+Debug, refactor, plan, onboard, dashboard, and master-plan operations.
 
 | Tool | Description |
 |------|-------------|
 | `cortex_debug` | Comprehensive debugging — capture logs, analyze issues, generate fix plans. |
-| `cortex_refactor` | Execute semantic refactoring operations (extract, rename, organize) across Python, C#, TypeScript/JavaScript. |
+| `cortex_refactor` | Execute semantic refactoring operations (extract, rename, organize) across Python, C#, TypeScript/JavaScript. Supports symbol rename by name (no byte offset required). |
 | `cortex_plan` | Generate structured remediation plans from audit results. 4 execution options: Autonomous, Interactive, Review, Cancel. |
 | `cortex_onboard` | Onboard repository with holistic LENS analysis + security assessment (P0/P1/P2). |
 | `cortex_dashboard` | Generate dashboard suite — landing page + per-repo dashboards with embedded data. |
 | `cortex_master_plan` | CortexMasterPlanOrchestrator exposure — strategic planning with phase tracking. |
 
-### Utilities (8 tools) — `cortex/mcp/tools/utilities.py`
+### Utilities (9 tools) — `cortex/mcp/tools/utilities.py`
 
 Verification, discovery, metrics, and education tools.
 
@@ -113,13 +113,19 @@ Provider-agnostic work item access for all ticketing systems (Azure DevOps, Jira
 | `ADO_PAT` | Yes* | Personal Access Token (* empty for managed identity) |
 | `ADO_PROJECT` | Yes | Default project name |
 
-> **Architecture note:** `cortex_fetch_work_items` is **provider-agnostic**. The `ADOWorkItemProvider` (`cortex/repositories/ado/ado_provider.py`) implements the `WorkItemProvider` Protocol — companies replace the stub bodies with their ADO REST client calls. See `04-mcp/06-work-item-integration.md` for the full integration guide.
+> **Architecture note:** `cortex_fetch_work_items` is **provider-agnostic**. The `ADOWorkItemProvider` (`cortex/repositories/ado/ado_provider.py`) implements the `WorkItemProvider` Protocol. See `04-mcp/06-work-item-integration.md` for the full integration guide.
+
+### Sweep Completeness (1 tool) — `cortex/mcp/tools/sweep_status_tool.py`
+
+| Tool | Description |
+|------|-------------|
+| `cortex_sweep_status` | CORE-064 Sweep Completeness Contract tool. Query sweep catalogue state — open sweeps, resolved items, assert exhaustion. Requires `sweep_id` or both `sweep_id` and `operation`. Storage: `.cortex-runtime/sweeps/{sweep_id}.db` (SQLite WAL). |
 
 ---
 
-## Specialized Tool Modules (Phase 12 consolidation targets)
+## Specialized Tool Modules
 
-In addition to the 24 canonical tools above, several specialized modules provide focused capabilities:
+In addition to the 25 canonical tools above, several supporting modules provide focused capabilities:
 
 ### Health Tools — `cortex/mcp/tools/health_check_tool.py` + `health_scan_tool.py`
 
@@ -146,10 +152,11 @@ In addition to the 24 canonical tools above, several specialized modules provide
 
 | Module | File | Purpose |
 |--------|------|---------|
+| Vacuum Execute | `vacuum_execute_tool.py` | Execute vacuum operations on stale artifacts (standalone function) |
+| Bulk Digest | `bulk_digest.py` | Bulk markdown ingestion and digest |
 | Task Complexity | `analyze_task_complexity.py` | Analyze task complexity before execution |
 | STS Analyzer | `sts_analyzer.py` | Semantic Text Similarity analysis |
 | Test Quality | `test_quality_tool.py` | TestQualityGate scoring (0–9) |
-| Vacuum Execute | `vacuum_execute_tool.py` | Execute vacuum operations on stale artifacts |
 | Workflow Runtime | `workflow_runtime_tool.py` | Runtime workflow execution engine |
 | Onboard Infrastructure | `onboard_infrastructure.py` | Infrastructure-specific onboarding |
 | Debug Tools | `debug_tools.py` | Debug session management (capture, analyze, fix) |
@@ -208,12 +215,13 @@ All tools inherit from `ConsolidatedTool` (defined in `cortex/mcp/mcp_tool_base.
 
 ## Practical Examples
 
-**Business Leader:** "24 canonical tools, one entry point (`cortex_process_request`). Developers can't bypass governance — the architecture enforces it."
+**Business Leader:** "25 canonical tools, one entry point (`cortex_process_request`). Developers can't bypass governance — the architecture enforces it."
 
-**Product Owner:** "When planning a sprint, `cortex_plan` generates remediation plans from audit results with 4 execution modes. `cortex_onboard` gives a complete repository assessment in one call."
+**Product Owner:** "When planning a sprint, `cortex_plan` generates remediation plans from audit results with 4 execution modes. `cortex_onboard` gives a complete repository assessment in one call. `cortex_sweep_status` tracks long-running refactor sweeps across sessions."
 
-**Developer:** "I call `cortex_process_request` with `operation: 'implement'` and my request. It routes through MasterOrchestrator, runs LENS analysis, classifies intent, enforces TDD, and returns structured output. I can also use `cortex_verify` to check my environment and `cortex_tools_catalog` to discover available tools. For sprint work, I call `cortex_fetch_work_items` with my ADO project name to pull user stories directly into my development context."
+**Developer:** "I call `cortex_process_request` with `operation: 'implement'` and my request. It routes through MasterOrchestrator, runs LENS analysis, classifies intent, enforces TDD, and returns structured output. `cortex_fetch_work_items` pulls ADO user stories directly into my context. `cortex_refactor` renames symbols by name — no byte offset needed."
 
 ---
 
-*Verified against `cortex/mcp/tools/` — 38 Python files, 24 canonical tool names · 21 February 2026*
+*Verified against `cortex/mcp/tools/` — 38 Python files, 25 canonical tool names (ALL_TOOLS: 35 class-based + cortex_sweep_status) · 21 February 2026*
+

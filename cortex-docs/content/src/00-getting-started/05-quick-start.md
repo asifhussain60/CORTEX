@@ -100,8 +100,8 @@ python3 -m pytest tests/ -n auto --dist loadscope --tb=short
 
 ```
 cortex/                   ← Python source (1 canonical package)
-  orchestrators/          ← 52 orchestrators across 10 domains
-  mcp/tools/              ← 24 MCP tools
+  orchestrators/          ← 22 wired orchestrators across 3 tiers
+  mcp/tools/              ← 25 MCP tools
   core/                   ← OrchestratorBase, FileFactory, WorkflowEngine
   testing/                ← Test framework, parallel runner, quality gate
   intelligence/           ← Brain: perception, reasoning, action, domain
@@ -110,13 +110,13 @@ cortex/                   ← Python source (1 canonical package)
   infrastructure/         ← CortexAuditDB, infrastructure detection
 
 cortex-registry/          ← YAML governance rules, patterns, plans
-  core/governance/        ← skull-rules.yaml (35 CORE rules)
+  core/tier0-skull/       ← skull-rules.yaml (35 CORE rules, 22 actively enforced)
   patterns/               ← 9 enterprise architecture patterns
   planning/               ← cortex-refactor-master.yaml
   workflows/              ← Workflow templates
 
 tests/                    ← All tests (mirrors cortex/ structure)
-  golden/                 ← 486 golden tests (must always pass)
+  golden/                 ← 601 golden tests (must always pass)
   unit/                   ← Unit tests (parallel)
   integration/            ← Integration tests
 
@@ -129,8 +129,8 @@ tests/                    ← All tests (mirrors cortex/ structure)
 
 When you opened VS Code:
 1. MCP server started automatically (Pylance-style stdio)
-2. 24 canonical tools became available in Copilot Chat
-3. CORTEX loaded governance rules from `cortex-registry/core/governance/skull-rules.yaml`
+2. 25 canonical tools became available in Copilot Chat
+3. CORTEX loaded governance rules from `cortex-registry/core/tier0-skull/skull-rules.yaml`
 4. The test framework registered the parallel runner and quality gate plugins
 
 When you ran a request:

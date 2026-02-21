@@ -43,9 +43,11 @@ order: 99
 
 **ConsolidatedTool** — Base class for all MCP tools. Provides consistent naming, parameter validation, execution, and audit trail. Module: `cortex/mcp/mcp_tool_base.py`.
 
-**CORE Rules** — Governance rules identified by `CORE-nnn` IDs. 35 defined in `cortex-registry/core/governance/skull-rules.yaml`, 17 actively enforced.
+**CORE-055** — Golden Test Tier Contract. 601 golden tests in `tests/golden/` must always pass. Zero regression allowed. Added 21 February 2026.
 
-**CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution. An AI engineering framework with 52 orchestrators, 24 MCP tools, and 17 governance rules.
+**CORE-064** — Sweep Completeness Contract. Every FIX/REFACTOR/AUDIT sweep must exhaust its full issue catalogue before closing. Enforced by `SweepCatalogueOrchestrator`. Added 21 February 2026.
+
+**CORE Rules** — Governance rules identified by `CORE-nnn` IDs. 35 defined in `cortex-registry/core/tier0-skull/skull-rules.yaml` (33 CORE-* + 2 AC-PERMANENT-FIX), 22 actively enforced.
 
 **cortex_process_request** — Mandatory MCP entry point. Routes ALL user requests through MasterOrchestrator 4-stage pipeline. Module: `cortex/mcp/tools/core.py`.
 
@@ -67,7 +69,7 @@ order: 99
 
 ## G
 
-**Golden Tests** — 486 tests that must ALWAYS pass. Run serially (`-p no:xdist`) for deterministic results. Location: `tests/golden/`.
+**Golden Tests** — 601 tests that must ALWAYS pass (CORE-055 Golden Test Tier Contract). Run with `pytest-xdist` parallel execution. Location: `tests/golden/`.
 
 **Governance Agents** — 8 specialized agents that enforce specific CORE rule categories: TestNaming, FileNaming, ImportValidation, TypeHint, Docstring, DuplicateDetection, SecurityScan, ExtendedGovernance.
 
@@ -101,11 +103,11 @@ order: 99
 
 **MasterOrchestrator** — Central entry point orchestrator. Runs 4-stage pipeline: Interaction → Intent → Intelligence → Execution. Location: `cortex/orchestrators/core/master_orchestrator.py`.
 
-**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 24 canonical tools exposed via stdio transport.
+**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 25 canonical tools exposed via stdio transport.
 
 ## O
 
-**OrchestratorBase** — Abstract base class for all 52 orchestrators. Provides lifecycle management, audit trail, and governance hooks. Module: `cortex/core/orchestrator_base.py`.
+**OrchestratorBase** — Abstract base class for all wired orchestrators. Provides lifecycle management, audit trail, governance hooks, and automatic SQLite activity logging in `execute()`/`run()`. Module: `cortex/core/orchestrator_base.py`.
 
 **OrchestratorEventBus** — Decoupled communication channel for inter-orchestrator messaging. Module: `cortex/infrastructure/orchestrator_event_bus.py`.
 
@@ -131,11 +133,17 @@ order: 99
 
 ## S
 
+**ScaffoldWriter** — Emits `ScaffoldFile` objects produced by WorkflowEngine steps to disk (`mkdir -p`). Allows downstream pipeline steps whose `depends_on` gate checks for files to proceed without halting mid-run. Added today (BadMonolith Gap G2). Module: `cortex/core/scaffold_writer.py`.
+
 **SecurityOrchestrator** — Orchestrator handling security analysis, vulnerability detection, and security gate enforcement. Location: `cortex/orchestrators/core/`.
 
-**skull-rules.yaml** — YAML file containing all 35 CORE governance rule definitions. Location: `cortex-registry/core/governance/skull-rules.yaml`.
+**skull-rules.yaml** — YAML file containing all 35 CORE governance rule definitions (33 CORE-* + 2 AC-PERMANENT-FIX). Location: `cortex-registry/core/tier0-skull/skull-rules.yaml`.
 
 **stdio Transport** — Standard input/output process communication. IDE writes JSON-RPC to stdin, CORTEX responds on stdout. No network ports required.
+
+**SweepCatalogueOrchestrator** — CORE-064 enforcement engine. Tracks open/resolved items in every FIX/REFACTOR/AUDIT sweep using SQLite WAL (`cortex-runtime/sweeps/{sweep_id}.db`). No partial sweep can close without `assert_exhausted()` or `approve_wont_fix()`. MCP tool: `cortex_sweep_status`. Location: `cortex/orchestrators/support/sweep_catalogue_orchestrator.py`.
+
+**Sweep Completeness Contract** — See CORE-064. Every sweep must exhaust its full catalogue before closing.
 
 **Synthesis** — LENS synthesis phase that merges results from all 8 analyzers into a unified intelligence report.
 
@@ -153,7 +161,7 @@ order: 99
 
 **WAL (Write-Ahead Logging)** — SQLite journaling mode used by CortexAuditDB. Enables concurrent reads during single-writer transactions.
 
-**WorkflowEngine** — Executes workflow templates from `cortex-registry/workflows/`. Supports lifecycle and production template categories.
+**WorkflowEngine** — Executes workflow templates from `cortex-registry/workflows/`. Exposes `load()` to parse YAML templates and `execute_step()` (SDO-compatible API) to run individual steps. Wired to `ScaffoldWriter` so scaffold artefacts are persisted to disk. Module: `cortex/core/workflow_engine.py`.
 
 **WorkItem** — Canonical dataclass representing a work item across all ticketing systems. Fields: `id`, `title`, `description`, `state`, `type`, `tags`, `url`, `raw`. The `raw` field carries the full unmodified API response so company-specific fields (Area Path, Sprint, Custom.* ADO fields, Jira components) survive intact. Module: `cortex/repositories/work_item_provider.py`.
 

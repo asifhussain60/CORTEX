@@ -19,7 +19,7 @@ order: 1
 |---|---------|---------|------------------|
 | 1 | [High-Level Architecture](02-high-level-architecture.md) | System overview — all major components | All |
 | 2 | [Request Flow](03-request-flow.md) | End-to-end request lifecycle | Developers, POs |
-| 3 | [Orchestrator Map](04-orchestrator-map.md) | 52 orchestrators across 10 domains | Developers |
+| 3 | [Orchestrator Map](04-orchestrator-map.md) | 22 wired orchestrators across 3 tiers | Developers |
 | 4 | [LENS Pipeline](05-lens-pipeline.md) | 8 analyzers → Synthesis | Developers |
 | 5 | [Governance Flow](06-governance-flow.md) | Rule enforcement lifecycle | All |
 | 6 | [MCP Transport](07-mcp-transport.md) | IDE ↔ CORTEX communication | Developers |

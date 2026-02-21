@@ -10,7 +10,7 @@ format: diátaxis-explanation
 order: 1
 ---
 
-> **Notice:** All capabilities listed here are verified against the live codebase as of 21 February 2026. Counts, module paths, and orchestrator names are validated against running code. The 12-phase Cohesive Brain Refactor consolidated 3 packages → 1, 120 orchestrators → 52, and 59 directories → 16.
+> **Notice:** All capabilities listed here are verified against the live codebase as of 21 February 2026. Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
 
 ---
 
@@ -20,11 +20,11 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | # | Domain | Brain Analogy | Key Metric |
 |---|--------|--------------|------------|
-| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 24 MCP tools, 16 canonical dirs |
+| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 25 MCP tools, 16 canonical dirs |
 | 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | 8 parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
-| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 52 orchestrators, 10 domains |
-| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 17 CORE rules, 7 agents |
+| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 22 wired orchestrators, 3 tiers |
+| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 22 CORE rules, CORE-064, CORE-055 |
 | 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
 
 ---
@@ -33,11 +33,13 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | Capability | Domain | Implementation | Tests |
 |-----------|--------|---------------|-------|
-| MCP Gateway (24 tools) | Core | `cortex/mcp/tools/` | ✅ |
-| Orchestrator Dispatch (52 classes) | Core | `cortex/orchestrators/` (10 domains) | ✅ |
+| MCP Gateway (25 tools) | Core | `cortex/mcp/tools/` | ✅ |
+| Orchestrator Dispatch (22 wired) | Core | `cortex/orchestrators/` (3 tiers) | ✅ |
 | OrchestratorBase Lifecycle | Core | `cortex/core/orchestrator_base.py` | ✅ |
+| SQLite Activity Log | Core | `.cortex-runtime/audit.db` (auto-logged in `execute()/run()`) | ✅ |
 | FileFactory | Core | `cortex/core/file_factory.py` | ✅ |
-| WorkflowEngine | Core | `cortex/core/workflow_engine.py` | ✅ |
+| WorkflowEngine (load + execute_step) | Core | `cortex/core/workflow_engine.py` | ✅ |
+| ScaffoldWriter | Core | `cortex/core/scaffold_writer.py` | ✅ |
 | CortexAuditDB (SQLite WAL) | Core | `cortex/infrastructure/audit_db.py` | ✅ |
 | LENS 8-Analyzer Pipeline | Intelligence | `cortex/lens/analyzers/` | ✅ |
 | LENS Caching | Intelligence | `cortex/lens/cache/` | ✅ |
@@ -47,8 +49,9 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | Domain Brain | Brain | `cortex/intelligence/domain_brain/` | ✅ |
 | IntentRouter (12 intents) | Decisioning | `cortex/orchestrators/core/intent_router.py` | ✅ |
 | TDDOrchestrator (RED→GREEN→REFACTOR) | Decisioning | `cortex/orchestrators/core/tdd_orchestrator.py` | ✅ |
-| RefactoringOrchestrator | Decisioning | `cortex/orchestrators/core/refactoring_orchestrator.py` | ✅ |
+| RefactoringOrchestrator (by-name Roslyn) | Decisioning | `cortex/orchestrators/domain/refactoring_orchestrator.py` | ✅ |
 | EnforcementOrchestrator (7+1 agents) | Governance | `cortex/orchestrators/core/enforcement_orchestrator.py` | ✅ |
+| SweepCatalogueOrchestrator (CORE-064) | Governance | `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` | ✅ |
 | TestQualityGate (0–9 scoring) | Governance | `cortex/testing/quality_gate.py` | ✅ |
 | PreCommitEnforcement | Governance | `cortex/orchestrators/core/pre_commit_enforcement_orchestrator.py` | ✅ |
 | Parallel Test Framework | Testing | `cortex/testing/framework/` | ✅ |
@@ -63,13 +66,13 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
-### MCP Gateway (23 Tools)
+### MCP Gateway (25 Tools)
 
-CORTEX exposes 24 canonical MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
+CORTEX exposes 25 canonical MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 
-**Business Leader:** "24 tools covering analysis, governance, onboarding, debugging, health checks, and workflow management — all accessible from the IDE without switching tools."
+**Business Leader:** "25 tools covering analysis, governance, onboarding, debugging, health checks, sweep management, and workflow — all accessible from the IDE without switching tools."
 
-**Product Owner:** "Each tool maps to a user capability. `cortex_onboard_repository` brings in a new codebase. `cortex_validate_compliance` checks rules. `cortex_score_tests` evaluates test quality."
+**Product Owner:** "Each tool maps to a user capability. `cortex_onboard` brings in a new codebase. `cortex_validate` checks rules. `cortex_sweep_status` tracks long-running refactor sweeps (CORE-064). `cortex_fetch_work_items` pulls ADO sprint work items."
 
 **Developer:** "I call `cortex_tools_catalog` to discover all tools. Each tool has typed parameters, docstrings, and returns structured results. MCP handles the JSON-RPC plumbing."
 
@@ -77,10 +80,13 @@ CORTEX exposes 24 canonical MCP tools via Pylance-style stdio server. The server
 
 Every orchestrator follows a 5-step lifecycle: **setup → govern → execute → validate → teardown**. This is enforced by `cortex/core/orchestrator_base.py`. Governance audit is wired into `teardown()`.
 
-### FileFactory & WorkflowEngine
+`execute()` and `run()` auto-log `ORCHESTRATOR_START`/`END` to `.cortex-runtime/audit.db` (SQLite WAL). Audit failures are non-blocking.
+
+### FileFactory, WorkflowEngine & ScaffoldWriter
 
 - **FileFactory** (`cortex/core/file_factory.py`) — canonical file creation with CORE-028 naming enforcement
-- **WorkflowEngine** (`cortex/core/workflow_engine.py`) — reads workflow YAML templates and executes phase sequences
+- **WorkflowEngine** (`cortex/core/workflow_engine.py`) — reads workflow YAML templates, exposes `load()` + `execute_step()` (SDO-compatible API)
+- **ScaffoldWriter** (`cortex/core/scaffold_writer.py`) — disk-emission of workflow `scaffold_files` so downstream pipeline steps whose `depends_on` gate checks for files can proceed without halting mid-run
 
 ---
 
@@ -131,7 +137,7 @@ The **thalamus** — routes every signal to the right processing region.
 
 ### IntentRouter
 
-Classifies requests into 12+ intent types and routes to the correct orchestrator across 10 domains. Uses LENS intelligence for classification (20–40ms).
+Classifies requests into 12+ intent types and routes to the correct wired orchestrator. Uses LENS intelligence for classification (20–40ms).
 
 ### TDD Workflow (CORE-008)
 
@@ -142,20 +148,15 @@ Every IMPLEMENT and FIX operation follows mandatory RED → GREEN → REFACTOR:
 
 This is not optional. CORE-008 is enforced at the architecture level.
 
-### 52 Orchestrators Across 10 Domains
+### 22 Wired Orchestrators Across 3 Tiers
 
-| Domain | Count | Key Orchestrators |
-|--------|-------|------------------|
-| core | 52 files | Master, IntentRouter, TDD, Enforcement, Planning, Refactoring, Security |
-| domain | 30 files | Business, Ecommerce, Financial, Healthcare |
-| health | 30 files | Health, Vacuum, Diagnostics |
-| support | 38 files | Onboarding, Setup, Discovery, Recommendations |
-| intelligence | 14 files | Intelligence, UnifiedAnalysis |
-| validation | 11 files | HolisticValidation, Review, QualityAssurance |
-| workflow | 13 files | Workflow, PhaseCompletion |
-| git | 4 files | Git, GitPublish |
-| strategies | 1 file | Strategy selection |
-| synthesis | 1 file | Cross-domain synthesis |
+| Tier | Count | Key Orchestrators |
+|------|-------|-----------------|
+| **Core** | 7 | MasterOrchestrator, IntentRouter, TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator, ConversationOrchestrator, InteractionOrchestrator |
+| **Domain** | 3 | RefactoringOrchestrator (Roslyn by-name), PlanningOrchestrator, DomainOrchestrator |
+| **Support** | 7 | OnboardingOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator (CORE-064), VacuumOrchestrator |
+
+> Wiring specs: `cortex-registry/core/specifications/`. Additional specialized sub-components exist in `cortex/orchestrators/` but are not IOrchestrator-wired entry points.
 
 ---
 
@@ -163,9 +164,13 @@ This is not optional. CORE-008 is enforced at the architecture level.
 
 The **immune system** — blocks threats automatically without conscious effort.
 
-### 17 Active CORE Rules
+### 22 Active CORE Rules
 
-Enforced at pre-commit, CI, and runtime. Full list in `cortex-registry/core/governance/skull-rules.yaml`.
+Enforced at pre-commit, CI, and runtime. Full list in `cortex-registry/core/tier0-skull/skull-rules.yaml`.
+
+Key rules added today:
+- **CORE-064** — Sweep Completeness Contract: every FIX/REFACTOR/AUDIT sweep exhausts its catalogue before closing
+- **CORE-055** — Golden Test Tier Contract: 601 golden tests always pass
 
 ### 7 Enforcement Agents + ExtendedGovernanceAgent
 
@@ -196,6 +201,7 @@ Scores every test 0–9. Formula: `Impact(0-3) + Likelihood(0-2) + Detection(0-2
 - **Enterprise Patterns:** Register new patterns in `cortex-registry/patterns/`
 - **Infrastructure Catalog:** `cortex-registry/company/` stores platform, API, and application definitions
 - **Knowledge Base:** Add best-practice YAMLs to `cortex-registry/knowledge-base/`
+- **ScaffoldWriter:** Emit workflow artefacts to disk for multi-step pipeline dependencies
 
 All extensibility is hot-reload — no core changes required.
 
