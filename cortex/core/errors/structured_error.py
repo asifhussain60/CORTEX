@@ -37,7 +37,7 @@ class RecoveryHint:
     additional_context: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def for_error_type(cls, error_type: ErrorType) -> "RecoveryHint":
+    def for_error_type(cls: object, error_type: ErrorType) -> "RecoveryHint":
         """Generate recovery hint for error type.
 
         Args:

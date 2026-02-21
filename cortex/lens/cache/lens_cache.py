@@ -104,8 +104,8 @@ class LENSCache:
 
     def generate_key(
         self,
-        file_path,  # Path or str
-        repo_path,  # Path or str
+        file_path: object,  # Path or str
+        repo_path: object,  # Path or str
         additional_context: Optional[Dict[str, Any]] = None,
     ) -> str:
         """Generate cache key for file analysis.

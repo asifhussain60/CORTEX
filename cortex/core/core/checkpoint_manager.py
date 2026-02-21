@@ -108,7 +108,7 @@ class CheckpointManager:
         self._max_retention_days = 7
 
     @classmethod
-    def instance(cls) -> "CheckpointManager":
+    def instance(cls: type) -> "CheckpointManager":
         """Get singleton instance (thread-safe)."""
         if cls._instance is None:
             with cls._instance_lock:
@@ -118,7 +118,7 @@ class CheckpointManager:
         return cls._instance
 
     @classmethod
-    def reset_instance(cls) -> None:
+    def reset_instance(cls: type) -> None:
         """Reset singleton (for testing)."""
         with cls._instance_lock:
             cls._instance = None

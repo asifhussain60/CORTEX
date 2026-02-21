@@ -109,7 +109,7 @@ class HealthMetrics:
         self._initialized = True
 
     @classmethod
-    def instance(cls) -> "HealthMetrics":
+    def instance(cls: type) -> "HealthMetrics":
         """Get singleton instance"""
         return cls()
 

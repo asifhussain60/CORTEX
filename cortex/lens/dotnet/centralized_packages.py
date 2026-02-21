@@ -254,7 +254,7 @@ class CentralizedPackageManager:
         Returns:
             Value with variables resolved
         """
-        def replace_var(match) -> None:
+        def replace_var(match: object) -> None:
             """Replace variable placeholder with value."""
             var_name = match.group(1)
             resolved = self.context.properties.get(var_name)

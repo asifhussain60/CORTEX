@@ -44,7 +44,7 @@ class ResponseValidator:
     ]
     
     @classmethod
-    def validate(cls, response_text: str) -> Tuple[bool, List[str]]:
+    def validate(cls: object, response_text: str) -> Tuple[bool, List[str]]:
         """
         Validate response for CORE-002 compliance.
         
@@ -77,7 +77,7 @@ class ResponseValidator:
         return (len(violations) == 0, violations)
     
     @classmethod
-    def transform_to_inline(cls, response_text: str) -> str:
+    def transform_to_inline(cls: object, response_text: str) -> str:
         """
         Transform response to use inline display instead of file creation.
         
@@ -140,7 +140,7 @@ class ResponseValidator:
         return transformed
     
     @classmethod
-    def enforce(cls, response_text: str, auto_transform: bool = True) -> Dict[str, any]:
+    def enforce(cls: object, response_text: str, auto_transform: bool = True) -> Dict[str, any]:
         """
         Enforce CORE-002 compliance on response.
         

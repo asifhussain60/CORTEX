@@ -224,7 +224,7 @@ class MSBuildDependencyResolver:
         visited = set()
         rec_stack = set()
 
-        def dfs(node, path) -> None:
+        def dfs(node: object, path: object) -> None:
             """Perform depth-first search traversal."""
             visited.add(node)
             rec_stack.add(node)

@@ -152,28 +152,28 @@ jobs:
 """
 
     @classmethod
-    def generate_shell(cls) -> None:
+    def generate_shell(cls: object) -> None:
         """Generate shell command."""
         return cls.SHELL_COMMAND.format(timestamp=datetime.now().isoformat())
 
     @classmethod
-    def generate_python(cls) -> None:
+    def generate_python(cls: object) -> None:
         """Generate Python code."""
         python_path = "python3"
         return cls.PYTHON_REQUEST.format(python=python_path)
 
     @classmethod
-    def generate_copilot_prompt(cls) -> None:
+    def generate_copilot_prompt(cls: object) -> None:
         """Generate Copilot prompt."""
         return cls.COPILOT_PROMPT
 
     @classmethod
-    def generate_makefile(cls) -> None:
+    def generate_makefile(cls: object) -> None:
         """Generate Makefile recipes."""
         return cls.MAKEFILE_RECIPE
 
     @classmethod
-    def generate_github_action(cls) -> None:
+    def generate_github_action(cls: object) -> None:
         """Generate GitHub Action."""
         return cls.GITHUB_ACTION
 

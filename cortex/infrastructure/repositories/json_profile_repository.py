@@ -43,7 +43,7 @@ class RepositoryProfile:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "RepositoryProfile":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "RepositoryProfile":
         """Create from dictionary (loaded from storage)."""
         data = data.copy()
         data["tier"] = ProfileTier(data["tier"])

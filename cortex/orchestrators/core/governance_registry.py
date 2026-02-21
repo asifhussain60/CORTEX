@@ -82,7 +82,7 @@ class GovernanceRegistry:
         self.initialize()
 
     @classmethod
-    def instance(cls) -> "GovernanceRegistry":
+    def instance(cls: object) -> "GovernanceRegistry":
         """Get singleton instance.
 
         Returns:
@@ -93,7 +93,7 @@ class GovernanceRegistry:
         return cls._instance
 
     @classmethod
-    def reset_instance(cls) -> None:
+    def reset_instance(cls: object) -> None:
         """Reset singleton instance (for testing)."""
         cls._instance = None
 

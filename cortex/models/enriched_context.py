@@ -67,7 +67,7 @@ class EnrichedContext:
         }
     
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "EnrichedContext":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "EnrichedContext":
         """Create EnrichedContext from dictionary."""
         return cls(
             lens_analysis=data.get("lens_analysis", {}),

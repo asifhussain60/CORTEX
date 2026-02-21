@@ -177,7 +177,7 @@ class GovernanceDatabaseManager:
         self._query_cache = QueryCache(maxsize=128)
 
     @classmethod
-    def instance(cls) -> "GovernanceDatabaseManager":
+    def instance(cls: type) -> "GovernanceDatabaseManager":
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:

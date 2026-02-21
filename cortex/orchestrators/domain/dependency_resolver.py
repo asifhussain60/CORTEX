@@ -40,7 +40,7 @@ class DependencyGraph:
                     )
     
     @classmethod
-    def from_dict(cls, data: Dict[str, List[str]]) -> "DependencyGraph":
+    def from_dict(cls: object, data: Dict[str, List[str]]) -> "DependencyGraph":
         """
         Create graph from dictionary.
         

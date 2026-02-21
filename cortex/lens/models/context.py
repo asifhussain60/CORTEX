@@ -69,7 +69,7 @@ class LENSContext:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'LENSContext':
+    def from_dict(cls: object, data: Dict[str, Any]) -> 'LENSContext':
         """Create from dictionary representation."""
         # Parse timestamp
         timestamp_str = data.get('timestamp')

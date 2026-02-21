@@ -39,8 +39,8 @@ class TierEnforcementDatabase:
         if db_path:
             self.db_path = db_path
         else:
-            # Use standard governance database location
-            path_result = resolve_path("cortex_intelligence", "state", "governance.db")
+            # Use standard governance database location (.cortex-runtime/governance.db)
+            path_result = resolve_path(".cortex-runtime/governance.db")
             self.db_path = path_result
 
         self.logger = logging.getLogger(__name__)

@@ -63,7 +63,7 @@ class UserContext:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def anonymous(cls) -> UserContext:
+    def anonymous(cls: object) -> UserContext:
         """
         Create an anonymous user context.
 
@@ -88,7 +88,7 @@ class UserContext:
         )
 
     @classmethod
-    def system(cls) -> UserContext:
+    def system(cls: object) -> UserContext:
         """
         Create a system user context.
 

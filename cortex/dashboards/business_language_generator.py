@@ -89,7 +89,7 @@ class CapabilitySet:
     ]
 
     @classmethod
-    def detect_capabilities(cls, functions: List[str] = None, classes: List[str] = None) -> List[str]:
+    def detect_capabilities(cls: object, functions: List[str] = None, classes: List[str] = None) -> List[str]:
         """
         Detect capabilities from function and class names.
 
@@ -208,7 +208,7 @@ class TechStackInfo:
     }
 
     @classmethod
-    def detect_tech_stack(cls, imports: List[str]) -> List[str]:
+    def detect_tech_stack(cls: object, imports: List[str]) -> List[str]:
         """
         Detect tech stack from import statements.
 
@@ -237,7 +237,7 @@ class ArchitecturePattern:
     """Identifies architecture patterns from file structure."""
 
     @classmethod
-    def detect_pattern(cls, files: List[str]) -> str:
+    def detect_pattern(cls: object, files: List[str]) -> str:
         """
         Detect architecture pattern from file paths.
 

@@ -37,7 +37,7 @@ class MCPRequest:
     id: Optional[str] = None
     
     @classmethod
-    def from_json(cls, data: str) -> "MCPRequest":
+    def from_json(cls: object, data: str) -> "MCPRequest":
         """Parse JSON-RPC request."""
         parsed = json.loads(data)
         return cls(

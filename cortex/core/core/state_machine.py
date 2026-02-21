@@ -111,7 +111,7 @@ class StateMachine:
         self._state_lock = threading.Lock()
 
     @classmethod
-    def instance(cls) -> 'StateMachine':
+    def instance(cls: type) -> 'StateMachine':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
@@ -120,7 +120,7 @@ class StateMachine:
         return cls._instance
 
     @classmethod
-    def reset_instance(cls) -> None:
+    def reset_instance(cls: type) -> None:
         """Reset singleton instance (for testing)."""
         with cls._lock:
             cls._instance = None

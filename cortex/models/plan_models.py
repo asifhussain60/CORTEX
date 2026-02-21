@@ -297,7 +297,7 @@ class PlanSpec(BaseModel):
 
     @field_validator("metadata")
     @classmethod
-    def validate_metadata(cls, v: PlanMetadata) -> PlanMetadata:
+    def validate_metadata(cls: object, v: PlanMetadata) -> PlanMetadata:
         """Validate metadata consistency."""
         if v.estimated_hours < 1:
             raise ValueError("estimated_hours must be >= 1")
@@ -307,7 +307,7 @@ class PlanSpec(BaseModel):
 
     @field_validator("stages")
     @classmethod
-    def validate_stages(cls, v: List[PlanStage]) -> List[PlanStage]:
+    def validate_stages(cls: object, v: List[PlanStage]) -> List[PlanStage]:
         """Validate stage dependencies are acyclic."""
         if not v:
             return v

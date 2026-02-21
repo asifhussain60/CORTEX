@@ -31,7 +31,7 @@ class LanguageType(Enum):
     JAVASCRIPT = "javascript"
 
     @classmethod
-    def from_extension(cls, extension: str) -> "LanguageType":
+    def from_extension(cls: object, extension: str) -> "LanguageType":
         """
         Derive language type from file extension.
 

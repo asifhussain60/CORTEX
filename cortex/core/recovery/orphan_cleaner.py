@@ -85,7 +85,7 @@ class CleanupStrategy:
     verify_liveness: bool = True
 
     @classmethod
-    def for_resource_type(cls, resource_type: ResourceType) -> "CleanupStrategy":
+    def for_resource_type(cls: object, resource_type: ResourceType) -> "CleanupStrategy":
         """Get cleanup strategy for resource type.
 
         Args:

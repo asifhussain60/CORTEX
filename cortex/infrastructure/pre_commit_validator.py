@@ -179,7 +179,7 @@ class PreCommitConfig:
     ])
 
     @classmethod
-    def from_yaml(cls, config_path: Optional[str] = None) -> 'PreCommitConfig':
+    def from_yaml(cls: object, config_path: Optional[str] = None) -> 'PreCommitConfig':
         """Load config from YAML file"""
         if config_path is None:
             config_path = '.cortex-runtime/pre-commit-config.yaml'

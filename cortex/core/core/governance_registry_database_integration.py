@@ -70,7 +70,7 @@ class GovernanceRegistryWithDatabaseBackend:
         self._cache_lock = threading.Lock()
 
     @classmethod
-    def instance(cls) -> 'GovernanceRegistryWithDatabaseBackend':
+    def instance(cls: type) -> 'GovernanceRegistryWithDatabaseBackend':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
@@ -79,7 +79,7 @@ class GovernanceRegistryWithDatabaseBackend:
         return cls._instance
 
     @classmethod
-    def reset_instance(cls) -> None:
+    def reset_instance(cls: type) -> None:
         """Reset singleton instance (for testing)."""
         with cls._lock:
             cls._instance = None

@@ -48,7 +48,7 @@ class WALEntry:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "WALEntry":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "WALEntry":
         """Deserialize entry."""
         data["timestamp"] = datetime.fromisoformat(data["timestamp"])
         return cls(**data)
@@ -76,13 +76,13 @@ class Checkpoint:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Checkpoint":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "Checkpoint":
         """Deserialize checkpoint."""
         data["timestamp"] = datetime.fromisoformat(data["timestamp"])
         return cls(**data)
 
     @classmethod
-    def from_file(cls, path: Path) -> "Checkpoint":
+    def from_file(cls: object, path: Path) -> "Checkpoint":
         """Load checkpoint from file."""
         data = json.loads(path.read_text())
         return cls.from_dict(data)

@@ -94,7 +94,7 @@ class ResumptionHandler:
         self._operation_handlers: Dict[str, Callable] = {}
 
     @classmethod
-    def instance(cls) -> "ResumptionHandler":
+    def instance(cls: type) -> "ResumptionHandler":
         """Get singleton instance (thread-safe)."""
         if cls._instance is None:
             with cls._instance_lock:
@@ -103,7 +103,7 @@ class ResumptionHandler:
         return cls._instance
 
     @classmethod
-    def reset_instance(cls) -> None:
+    def reset_instance(cls: type) -> None:
         """Reset singleton (for testing)."""
         with cls._instance_lock:
             cls._instance = None

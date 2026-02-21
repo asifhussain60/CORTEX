@@ -55,18 +55,18 @@ class CORTEXTestAuditPlugin:
 
         return logger
 
-    def pytest_sessionstart(self, session) -> None:
+    def pytest_sessionstart(self, session: object) -> None:
         """Track session start."""
         self.session_start_time = time.time()
         num_tests = session.config.hook.pytest_collection_modifyitems.get_hookimpls()
         self.logger.info("[TEST SESSION START]")
 
-    def pytest_runtest_setup(self, item) -> None:
+    def pytest_runtest_setup(self, item: object) -> None:
         """Track test setup."""
         test_id = item.nodeid
         self.test_executions[test_id] = TestExecution(test_id, time.time())
 
-    def pytest_runtest_logreport(self, report) -> None:
+    def pytest_runtest_logreport(self, report: object) -> None:
         """Track test completion."""
         if report.when != "call":
             return
@@ -100,7 +100,7 @@ class CORTEXTestAuditPlugin:
                 f"VERY SLOW: {test_id} took {execution.duration:.3f}s - INVESTIGATE"
             )
 
-    def pytest_sessionfinish(self, session, exitstatus) -> None:
+    def pytest_sessionfinish(self, session: object, exitstatus: object) -> None:
         """Generate session report."""
         if not self.session_start_time:
             return
@@ -141,6 +141,6 @@ class CORTEXTestAuditPlugin:
 cortex_test_audit_plugin = CORTEXTestAuditPlugin()
 
 
-def pytest_configure(config) -> None:
+def pytest_configure(config: object) -> None:
     """Register plugin with pytest."""
     config.pluginmanager.register(cortex_test_audit_plugin, name="cortex_test_audit")

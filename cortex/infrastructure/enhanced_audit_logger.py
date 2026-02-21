@@ -59,7 +59,7 @@ class EnhancedAuditLogger:
         self._initialized = False
 
     @classmethod
-    def instance(cls) -> 'EnhancedAuditLogger':
+    def instance(cls: object) -> 'EnhancedAuditLogger':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
@@ -68,7 +68,7 @@ class EnhancedAuditLogger:
         return cls._instance
 
     @classmethod
-    def reset_instance(cls) -> None:
+    def reset_instance(cls: object) -> None:
         """Reset singleton instance (for testing)."""
         with cls._lock:
             cls._instance = None

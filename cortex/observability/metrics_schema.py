@@ -34,7 +34,7 @@ class TDDMetric(BaseModel):
 
     @field_validator("phase")
     @classmethod
-    def validate_phase(cls, v: str) -> str:
+    def validate_phase(cls: object, v: str) -> str:
         """Validate TDD phase."""
         valid_phases = {"RED", "GREEN", "REFACTOR"}
         if v not in valid_phases:
@@ -71,7 +71,7 @@ class CodeGenMetric(BaseModel):
 
     @field_validator("target_type")
     @classmethod
-    def validate_target_type(cls, v: str) -> str:
+    def validate_target_type(cls: object, v: str) -> str:
         """Validate target type."""
         valid_types = {"orchestrator", "tool", "test", "component"}
         if v not in valid_types:
@@ -103,7 +103,7 @@ class MetricAggregation(BaseModel):
     time_range_end: Optional[datetime] = Field(default=None, description="End of time range")
 
     @classmethod
-    def from_tdd_metrics(cls, metrics: list[TDDMetric]) -> "MetricAggregation":
+    def from_tdd_metrics(cls: object, metrics: list[TDDMetric]) -> "MetricAggregation":
         """Create aggregation from TDD metrics."""
         if not metrics:
             return cls(metric_type="tdd", count=0, avg_duration_ms=0, p90_duration_ms=0, success_rate=0)
@@ -130,7 +130,7 @@ class MetricAggregation(BaseModel):
         )
 
     @classmethod
-    def from_debug_metrics(cls, metrics: list[DebugMetric]) -> "MetricAggregation":
+    def from_debug_metrics(cls: object, metrics: list[DebugMetric]) -> "MetricAggregation":
         """Create aggregation from debug metrics."""
         if not metrics:
             return cls(metric_type="debug", count=0, avg_duration_ms=0, p90_duration_ms=0, success_rate=0)
@@ -166,7 +166,7 @@ class EnhancementRecommendation(BaseModel):
 
     @field_validator("priority")
     @classmethod
-    def validate_priority(cls, v: str) -> str:
+    def validate_priority(cls: object, v: str) -> str:
         """Validate priority level."""
         valid_priorities = {"P0", "P1", "P2"}
         if v not in valid_priorities:

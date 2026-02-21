@@ -163,7 +163,7 @@ class ExecutionContext:
         }
     
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> ExecutionContext:
+    def from_dict(cls: object, data: Dict[str, Any]) -> ExecutionContext:
         """
         Create ExecutionContext from dictionary.
         

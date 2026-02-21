@@ -167,7 +167,7 @@ class UnifiedIntelligenceContext:
         return self.synthesis_result.violations.copy()
 
     @classmethod
-    def create_empty(cls, intent_type: str, file_path: Optional[str] = None) -> "UnifiedIntelligenceContext":
+    def create_empty(cls: object, intent_type: str, file_path: Optional[str] = None) -> "UnifiedIntelligenceContext":
         """
         Create empty context with no intelligence loaded.
 

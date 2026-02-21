@@ -38,7 +38,7 @@ class ProgressReporter:
         sys.stdout.write("[PYTEST] Test execution started\n")
         sys.stdout.flush()
 
-    def pytest_collection_finish(self, session) -> None:
+    def pytest_collection_finish(self, session: object) -> None:
         """Hook called after test collection."""
         self.test_count = len(session.items)
         sys.stdout.write(f"[PYTEST PROGRESS] Collected {self.test_count} tests\n")
@@ -68,7 +68,7 @@ class ProgressReporter:
                 )
                 sys.stdout.flush()
                 self.last_report_count = total
-    def pytest_terminal_summary(self, terminalreporter, exitstatus) -> None:
+    def pytest_terminal_summary(self, terminalreporter: object, exitstatus: object) -> None:
         """Hook called at end of test run."""
         elapsed = (datetime.now() - self.start_time).total_seconds()
         total = self.passed + self.failed + self.errors + self.skipped

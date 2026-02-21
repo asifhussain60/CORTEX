@@ -46,7 +46,7 @@ class DefenseOrchestrator:
     def register_layer(
         self,
         layer_id: int,
-        validator_func
+        validator_func: object
     ) -> None:
         """Register a defense layer.
 

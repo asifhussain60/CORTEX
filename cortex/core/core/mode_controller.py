@@ -61,7 +61,7 @@ class ModeController:
             self._mode = self._parse_mode(env_mode).unwrap_or(RuntimeMode.DEVELOPMENT)
 
     @classmethod
-    def instance(cls) -> 'ModeController':
+    def instance(cls: type) -> 'ModeController':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:
@@ -70,7 +70,7 @@ class ModeController:
         return cls._instance
 
     @classmethod
-    def reset_instance(cls) -> None:
+    def reset_instance(cls: type) -> None:
         """Reset singleton instance (for testing)."""
         with cls._lock:
             cls._instance = None

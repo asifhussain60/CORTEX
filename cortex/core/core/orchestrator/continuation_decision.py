@@ -106,7 +106,7 @@ class ContinuationDecision:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ContinuationDecision":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "ContinuationDecision":
         """
         Create ContinuationDecision from dictionary (JSON deserialization).
 

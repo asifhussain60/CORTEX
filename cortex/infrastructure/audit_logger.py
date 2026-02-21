@@ -49,7 +49,7 @@ class AuditLogEntry:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "AuditLogEntry":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "AuditLogEntry":
         """Create from dictionary."""
         return cls(**data)
 
@@ -438,7 +438,7 @@ class EnhancedAuditLogger(IAuditLogger):
             return Err(f"Failed to verify chain: {e}")
 
     @classmethod
-    def reset(cls) -> None:
+    def reset(cls: object) -> None:
         """Reset singleton instance (for testing)."""
         cls._instance = None
 

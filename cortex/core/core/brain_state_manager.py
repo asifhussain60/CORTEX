@@ -1,7 +1,7 @@
 """
 Brain State Manager: Flush & Reload Brain State
 
-Manages brain state persistence across cortex_intelligence/ directory:
+Manages brain state persistence across the CORTEX intelligence directory:
 - Flush current state to snapshot
 - Reload state from snapshot
 - State validation and integrity checks
@@ -84,14 +84,14 @@ class StateValidationError(Exception):
 class BrainStateManager:
     """Manages brain state flush and reload operations.
 
-    Provides thread-safe state persistence for cortex_intelligence/ directory:
+    Provides thread-safe state persistence for the CORTEX intelligence directory:
     - Flush state to timestamped snapshots
     - Reload state from snapshots with backup
     - Validate state integrity
     - Manage snapshot lifecycle
 
     Example:
-        >>> manager = BrainStateManager(brain_root=Path("cortex_intelligence"))
+        >>> manager = BrainStateManager(brain_root=Path(".cortex-runtime/intelligence"))
         >>> result = manager.flush_state()
         >>> if result.success:
         ...     reload_result = manager.reload_state(result.snapshot_path)
@@ -105,7 +105,7 @@ class BrainStateManager:
         """Initialize Brain State Manager.
 
         Args:
-            brain_root: Path to cortex_intelligence directory
+            brain_root: Path to CORTEX intelligence state directory
             validate: Whether to validate directory structure on init
 
         Raises:
@@ -499,7 +499,7 @@ if __name__ == "__main__":
     # Example usage
     logging.basicConfig(level=logging.INFO)
 
-    brain_root = Path("cortex_intelligence")
+    brain_root = Path(".cortex-runtime/intelligence")
     manager = BrainStateManager(brain_root=brain_root)
 
     # Flush state

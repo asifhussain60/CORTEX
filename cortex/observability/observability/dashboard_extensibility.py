@@ -227,7 +227,7 @@ def with_business_context(context_id_kwarg: str = "context_id") -> None:
         def get_metrics(context_id=None):
             return metric_data
     """
-    def decorator(func) -> None:
+    def decorator(func: object) -> None:
         """Create decorated function wrapper."""
         @wraps(func)
         def wrapper(*args, **kwargs) -> None:

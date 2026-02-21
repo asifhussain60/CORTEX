@@ -108,7 +108,7 @@ class RepositoryProfile(BaseModel):
     
     @field_validator('path')
     @classmethod
-    def validate_path_format(cls, v: str) -> str:
+    def validate_path_format(cls: object, v: str) -> str:
         """Validate that path is absolute."""
         if not Path(v).is_absolute():
             raise ValueError(f"Path must be absolute, got: {v}")
@@ -134,7 +134,7 @@ class RepositoryProfile(BaseModel):
         return yaml.dump(data, default_flow_style=False, sort_keys=False)
     
     @classmethod
-    def from_yaml(cls, yaml_content: str) -> RepositoryProfile:
+    def from_yaml(cls: object, yaml_content: str) -> RepositoryProfile:
         """
         Deserialize profile from YAML string.
         

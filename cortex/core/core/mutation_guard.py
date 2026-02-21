@@ -92,7 +92,7 @@ class ImmutabilityPolicy:
     require_holistic_validation: bool = True
 
     @classmethod
-    def strict_enforcement(cls) -> 'ImmutabilityPolicy':
+    def strict_enforcement(cls: type) -> 'ImmutabilityPolicy':
         """Create strict policy (no exceptions)."""
         return cls(
             locked_phase_modification_allowed=False,
@@ -103,7 +103,7 @@ class ImmutabilityPolicy:
         )
 
     @classmethod
-    def development_mode(cls) -> 'ImmutabilityPolicy':
+    def development_mode(cls: type) -> 'ImmutabilityPolicy':
         """Create development policy (allows some modifications for testing)."""
         return cls(
             locked_phase_modification_allowed=True,

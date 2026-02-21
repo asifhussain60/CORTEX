@@ -112,7 +112,7 @@ class TemplateBlock:
                 raise ValueError(f"Condition contains disallowed operation: {pattern}")
 
         # Replace context variables with their values (quoted for strings)
-        def replace_var(match) -> None:
+        def replace_var(match: re.Match) -> None:
             """Replace variable placeholder with value."""
             var_name = match.group(1)
             if var_name not in context:
@@ -167,7 +167,7 @@ class TemplateBlock:
         import re
         pattern = r'\{\{\s*(\w+(?:\.\w+)*)\s*\}\}'
 
-        def replace(match) -> None:
+        def replace(match: re.Match) -> None:
             """Replace matched pattern in content."""
             path = match.group(1).split('.')
             value = context
@@ -746,7 +746,7 @@ class TemplateRegistry:
     }
 
     @classmethod
-    def get(cls, template_type: TemplateType) -> ScaffolderTemplate:
+    def get(cls: type, template_type: TemplateType) -> ScaffolderTemplate:
         """Get a template instance by type."""
         template_class = cls._templates.get(template_type)
         if template_class:
@@ -754,11 +754,11 @@ class TemplateRegistry:
         raise ValueError(f"Unknown template type: {template_type}")
 
     @classmethod
-    def register(cls, template_type: TemplateType, template_class: type) -> None:
+    def register(cls: type, template_type: TemplateType, template_class: type) -> None:
         """Register a new template type."""
         cls._templates[template_type] = template_class
 
     @classmethod
-    def available_types(cls) -> List[TemplateType]:
+    def available_types(cls: type) -> List[TemplateType]:
         """Get list of available template types."""
         return list(cls._templates.keys())

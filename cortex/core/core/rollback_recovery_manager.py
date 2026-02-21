@@ -63,7 +63,7 @@ class RollbackRecoveryManager:
         self._standby_ready: bool = True
 
     @classmethod
-    def instance(cls) -> 'RollbackRecoveryManager':
+    def instance(cls: type) -> 'RollbackRecoveryManager':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:

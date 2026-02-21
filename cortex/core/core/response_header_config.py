@@ -265,7 +265,7 @@ class HeaderConfigurationManager:
         self._loaded = False
 
     @classmethod
-    def get_instance(cls) -> 'HeaderConfigurationManager':
+    def get_instance(cls: type) -> 'HeaderConfigurationManager':
         """Get singleton instance."""
         if cls._instance is None:
             cls._instance = cls()

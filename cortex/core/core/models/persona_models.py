@@ -59,7 +59,7 @@ class Persona(BaseModel):
     trigger_discovery: bool = False
 
     @validator('depth')
-    def validate_depth(cls, v: object) -> object:
+    def validate_depth(cls: type, v: object) -> object:
         """Validate depth is one of allowed values."""
         if v is not None:
             allowed = ["executive", "standard", "detailed", "full"]
@@ -70,7 +70,7 @@ class Persona(BaseModel):
         return v
 
     @validator('show_code')
-    def validate_show_code(cls, v: object) -> object:
+    def validate_show_code(cls: type, v: object) -> object:
         """Validate show_code is bool or allowed string."""
         if v is not None and not isinstance(v, bool):
             allowed = ["diagrams", "snippets", "relevant", "complete"]
@@ -91,7 +91,7 @@ class DepthLevel(BaseModel):
     metrics: str
 
     @validator('show_code')
-    def validate_show_code(cls, v: object) -> object:
+    def validate_show_code(cls: type, v: object) -> object:
         """Validate show_code is bool or allowed string."""
         if not isinstance(v, bool):
             allowed = ["snippets", "relevant", "complete"]
@@ -102,7 +102,7 @@ class DepthLevel(BaseModel):
         return v
 
     @validator('metrics')
-    def validate_metrics(cls, v: object) -> object:
+    def validate_metrics(cls: type, v: object) -> object:
         """Validate metrics level."""
         allowed = ["high_level", "relevant", "full", "all"]
         if v not in allowed:

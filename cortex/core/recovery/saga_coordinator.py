@@ -185,7 +185,7 @@ class SagaState:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "SagaState":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "SagaState":
         """Deserialize state from dictionary."""
         data["status"] = SagaStatus(data["status"])
         return cls(**data)

@@ -75,7 +75,7 @@ class LENSContext:
         return json.dumps(self.to_dict(), indent=2)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "LENSContext":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "LENSContext":
         """Create LENSContext from dictionary.
 
         Args:
@@ -97,7 +97,7 @@ class LENSContext:
         return context
 
     @classmethod
-    def from_json(cls, json_str: str) -> "LENSContext":
+    def from_json(cls: object, json_str: str) -> "LENSContext":
         """Create LENSContext from JSON string.
 
         Args:

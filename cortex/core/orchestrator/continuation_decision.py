@@ -98,7 +98,7 @@ class ContinuationDecision:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ContinuationDecision":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "ContinuationDecision":
         """Create ContinuationDecision from dictionary.
 
         Args:

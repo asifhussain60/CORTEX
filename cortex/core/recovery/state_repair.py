@@ -89,7 +89,7 @@ class RepairStrategy:
     requires_backup: bool = True
 
     @classmethod
-    def for_inconsistency(cls, inconsistency_type: InconsistencyType) -> "RepairStrategy":
+    def for_inconsistency(cls: object, inconsistency_type: InconsistencyType) -> "RepairStrategy":
         """Get repair strategy for inconsistency type.
 
         Args:

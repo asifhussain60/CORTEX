@@ -815,7 +815,7 @@ def create_validation_test(
         v = validator or TemplateValidator()
         return v.validate(template)
 
-    def check_valid(result) -> None:
+    def check_valid(result: object) -> None:
         """Check valid.
         
         Args:

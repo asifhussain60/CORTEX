@@ -45,7 +45,7 @@ class CleanupRule:
     enabled: bool = True          # Can disable rules
     
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> CleanupRule:
+    def from_dict(cls: object, data: Dict[str, Any]) -> CleanupRule:
         """Create rule from dictionary (e.g., loaded from YAML)."""
         return cls(
             name=data.get("name", "unnamed"),

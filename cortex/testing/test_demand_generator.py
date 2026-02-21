@@ -87,7 +87,7 @@ class TestDemand:
     created_at: str = field(default_factory=lambda: "2026-02-13")
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "TestDemand":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "TestDemand":
         """Load from dictionary (registry YAML)."""
         data["category"] = DemandCategory(data.get("category", "silent_operation"))
         data["validation_type"] = ValidationType(data.get("validation_type", "audit_log"))

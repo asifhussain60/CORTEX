@@ -327,7 +327,7 @@ class ContinuationReason(Enum):
     MAX_ROUNDS_REACHED = "max_rounds_reached"
 
     @classmethod
-    def from_string(cls, value: str) -> "ContinuationReason":
+    def from_string(cls: object, value: str) -> "ContinuationReason":
         """Create enum from string value (case-insensitive)."""
         value_lower = value.lower().replace("-", "_").replace(" ", "_")
         for member in cls:

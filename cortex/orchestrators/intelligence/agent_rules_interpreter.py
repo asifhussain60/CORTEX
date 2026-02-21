@@ -420,17 +420,17 @@ class AgentConfigRegistry:
     }
 
     @classmethod
-    def get_agent_config(cls, agent_id: str) -> Optional[AgentConfiguration]:
+    def get_agent_config(cls: object, agent_id: str) -> Optional[AgentConfiguration]:
         """Get agent configuration by ID."""
         return cls.AGENT_CONFIGS.get(agent_id)
 
     @classmethod
-    def get_agents_by_role(cls, role: AgentRole) -> List[AgentConfiguration]:
+    def get_agents_by_role(cls: object, role: AgentRole) -> List[AgentConfiguration]:
         """Get all agents with given role."""
         return [cfg for cfg in cls.AGENT_CONFIGS.values() if cfg.role == role]
 
     @classmethod
-    def get_agents_for_context(cls, context: ExecutionContext) -> List[AgentConfiguration]:
+    def get_agents_for_context(cls: object, context: ExecutionContext) -> List[AgentConfiguration]:
         """Get all agents applicable to given context."""
         return [cfg for cfg in cls.AGENT_CONFIGS.values() if context in cfg.context_requirements]
 

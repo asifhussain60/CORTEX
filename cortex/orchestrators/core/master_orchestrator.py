@@ -961,7 +961,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                 )
 
     @classmethod
-    def instance(cls) -> 'MasterOrchestrator':
+    def instance(cls: object) -> 'MasterOrchestrator':
         """Get singleton instance of MasterOrchestrator"""
         if cls._instance is None:
             cls._instance = cls()

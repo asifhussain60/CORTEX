@@ -73,7 +73,7 @@ class EnhancedGovernanceAuditLogger:
         self._logger = logging.getLogger(__name__)
 
     @classmethod
-    def instance(cls) -> 'EnhancedGovernanceAuditLogger':
+    def instance(cls: type) -> 'EnhancedGovernanceAuditLogger':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:

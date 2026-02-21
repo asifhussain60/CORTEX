@@ -55,7 +55,7 @@ class BuildCache:
             pass  # Silent failure for cache save
     
     @classmethod
-    def load(cls, cache_path: Path) -> BuildCache:
+    def load(cls: object, cache_path: Path) -> BuildCache:
         """
         Load cache from disk.
         

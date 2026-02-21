@@ -48,7 +48,7 @@ class ScenarioInput:
         }
 
     @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> "ScenarioInput":
+    def from_dict(cls: object, d: Dict[str, Any]) -> "ScenarioInput":
         """Create from dictionary."""
         return cls(
             data=d.get("data", {}),
@@ -107,7 +107,7 @@ class Scenario:
         }
 
     @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> "Scenario":
+    def from_dict(cls: object, d: Dict[str, Any]) -> "Scenario":
         """Create from dictionary."""
         input_data = None
         if d.get("input_data"):

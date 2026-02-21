@@ -128,7 +128,7 @@ class FileFactory:
         )
     
     @classmethod
-    def from_yaml(cls, config_path: Union[str, Path]) -> "FileFactory":
+    def from_yaml(cls: object, config_path: Union[str, Path]) -> "FileFactory":
         """Load FileFactory configuration from YAML file.
         
         Args:

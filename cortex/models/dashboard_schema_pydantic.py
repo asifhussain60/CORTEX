@@ -86,7 +86,7 @@ class Repository(BaseModel):
     last_analyzed_at: Optional[datetime] = Field(None, description="Last analysis timestamp")
 
     @validator('slug')
-    def slug_must_be_kebab_case(cls, v) -> None:
+    def slug_must_be_kebab_case(cls: object, v: object) -> None:
         """Enforce kebab-case for slug"""
         if not all(c.isalnum() or c == '-' for c in v):
             raise ValueError("slug must be alphanumeric with hyphens only")
@@ -178,7 +178,7 @@ class Dashboard(BaseModel):
     metadata: Optional[Dict[str, Any]] = Field(None, description="Generation metadata")
 
     @validator('schema_version')
-    def schema_version_must_be_v3(cls, v) -> None:
+    def schema_version_must_be_v3(cls: object, v: object) -> None:
         """Enforce schema version 3.0"""
         if v != "3.0":
             raise ValueError("schema_version must be '3.0'")

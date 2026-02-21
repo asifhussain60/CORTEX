@@ -184,7 +184,7 @@ class GraphNode:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> GraphNode:
+    def from_dict(cls: type, data: Dict[str, Any]) -> GraphNode:
         """Create node from dictionary."""
         return cls(
             id=data["id"],
@@ -239,7 +239,7 @@ class GraphEdge:
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> GraphEdge:
+    def from_dict(cls: type, data: Dict[str, Any]) -> GraphEdge:
         """Create edge from dictionary."""
         return cls(
             source_id=data["source_id"],
@@ -587,7 +587,7 @@ class KnowledgeGraph:
         return json.dumps(self.to_dict(), indent=2)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> KnowledgeGraph:
+    def from_dict(cls: type, data: Dict[str, Any]) -> KnowledgeGraph:
         """Reconstruct graph from dictionary."""
         graph = cls()
 
@@ -609,7 +609,7 @@ class KnowledgeGraph:
         return graph
 
     @classmethod
-    def from_json(cls, json_str: str) -> KnowledgeGraph:
+    def from_json(cls: type, json_str: str) -> KnowledgeGraph:
         """Deserialize graph from JSON string."""
         data = json.loads(json_str)
         return cls.from_dict(data)

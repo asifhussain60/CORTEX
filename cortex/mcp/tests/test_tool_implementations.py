@@ -66,7 +66,7 @@ from cortex.mcp.mcp_tool_base import ToolCategory, ToolResult
 # HELPER FUNCTIONS
 # =============================================================================
 
-def run_async(coro) -> None:
+def run_async(coro: object) -> None:
     """Helper to run async functions in tests."""
     try:
         loop = asyncio.get_running_loop()

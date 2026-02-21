@@ -221,6 +221,6 @@ class ACIDExtraction:
         """Initialize instance."""
         self.data = {}
     
-    def extract(self, data) -> None:
+    def extract(self, data: object) -> None:
         """Extract canonical form from input."""
         return data

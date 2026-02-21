@@ -195,7 +195,7 @@ class AutoInitializationConfig:
     LOG_FILE: str = "cortex_auto_initialization.log"
 
     @classmethod
-    def to_dict(cls) -> Dict[str, Any]:
+    def to_dict(cls: object) -> Dict[str, Any]:
         """Return configuration as dictionary"""
         return {
             "ENABLED": cls.ENABLED,

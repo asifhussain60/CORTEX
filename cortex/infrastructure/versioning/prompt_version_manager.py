@@ -152,7 +152,7 @@ class PromptVersionManager:
         self._version_history: List[VersionEntry] = []
 
     @classmethod
-    def get_instance(cls) -> "PromptVersionManager":
+    def get_instance(cls: object) -> "PromptVersionManager":
         """Get singleton instance.
 
         Returns:
@@ -165,7 +165,7 @@ class PromptVersionManager:
         return cls._instance
 
     @classmethod
-    def reset_singleton(cls) -> None:
+    def reset_singleton(cls: object) -> None:
         """Reset singleton instance for testing."""
         with cls._lock:
             cls._instance = None

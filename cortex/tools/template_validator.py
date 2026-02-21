@@ -101,7 +101,7 @@ class ComplianceReport:
 
     @classmethod
     def from_validation(
-        cls,
+        cls: type,
         template_name: str,
         result: ValidationResult,
     ) -> 'ComplianceReport':

@@ -24,7 +24,7 @@ class SecretsConfig:
     extra: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_env(cls) -> "SecretsConfig":
+    def from_env(cls: object) -> "SecretsConfig":
         """Build config from environment variables."""
         import os
         return cls(

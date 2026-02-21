@@ -55,14 +55,14 @@ class TemplateEngineRegistry:
         return cls._instance
 
     @classmethod
-    def instance(cls) -> 'TemplateEngineRegistry':
+    def instance(cls: type) -> 'TemplateEngineRegistry':
         """Get singleton instance"""
         if cls._instance is None:
             cls._instance = cls()
         return cls._instance
 
     @classmethod
-    def reset_instance(cls) -> None:
+    def reset_instance(cls: type) -> None:
         """Reset instance for testing."""
         cls._instance = None
         cls._templates = {}

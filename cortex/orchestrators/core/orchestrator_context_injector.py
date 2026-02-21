@@ -17,12 +17,12 @@ class OrchestratorMetadataRegistry:
     _registry: Dict[str, Dict[str, Any]] = {}
     
     @classmethod
-    def register(cls, orchestrator_id: str, metadata: Dict[str, Any]) -> None:
+    def register(cls: object, orchestrator_id: str, metadata: Dict[str, Any]) -> None:
         """Register orchestrator metadata."""
         cls._registry[orchestrator_id] = metadata
     
     @classmethod
-    def get(cls, orchestrator_id: str) -> Dict[str, Any]:
+    def get(cls: object, orchestrator_id: str) -> Dict[str, Any]:
         """Get orchestrator metadata."""
         return cls._registry.get(orchestrator_id, {})
 

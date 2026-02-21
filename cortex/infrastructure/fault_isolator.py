@@ -38,7 +38,7 @@ class FailureDomain:
     auto_disable_threshold: int = 5
 
     @classmethod
-    def predefined_domains(cls) -> List["FailureDomain"]:
+    def predefined_domains(cls: object) -> List["FailureDomain"]:
         """Get predefined failure domains.
 
         Returns:
@@ -185,7 +185,7 @@ class IsolationPolicy:
     health_check_interval_seconds: int = 60
 
     @classmethod
-    def default(cls) -> "IsolationPolicy":
+    def default(cls: object) -> "IsolationPolicy":
         """Get default isolation policy.
 
         Returns:

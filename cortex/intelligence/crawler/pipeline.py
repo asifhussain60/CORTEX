@@ -128,7 +128,7 @@ class BatchProcessor:
         Returns:
             List of results
         """
-        async def bounded_handler(item) -> None:
+        async def bounded_handler(item: object) -> None:
             """Handle events within bounded context."""
             async with self.semaphore:
                 try:

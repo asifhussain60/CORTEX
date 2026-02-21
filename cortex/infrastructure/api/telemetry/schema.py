@@ -76,7 +76,7 @@ class TelemetryEventSchema:
     ]
 
     @classmethod
-    def scrub_pii(cls, text: str) -> str:
+    def scrub_pii(cls: object, text: str) -> str:
         """
         Scrub personally identifiable information from text.
 
@@ -92,7 +92,7 @@ class TelemetryEventSchema:
         return scrubbed
 
     @classmethod
-    def compute_error_id(cls, error_message: str, environment_sig: str) -> str:
+    def compute_error_id(cls: object, error_message: str, environment_sig: str) -> str:
         """
         Compute deterministic error ID for deduplication.
 
@@ -107,7 +107,7 @@ class TelemetryEventSchema:
         return hashlib.sha256(combined.encode()).hexdigest()[:16]
 
     @classmethod
-    def validate_execution_event(cls, data: Dict[str, Any]) -> Dict[str, Any]:
+    def validate_execution_event(cls: object, data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Validate and sanitize execution event.
 
@@ -142,7 +142,7 @@ class TelemetryEventSchema:
         return data
 
     @classmethod
-    def validate_error_event(cls, data: Dict[str, Any]) -> Dict[str, Any]:
+    def validate_error_event(cls: object, data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Validate and sanitize error event.
 
@@ -181,7 +181,7 @@ class TelemetryEventSchema:
         return data
 
     @classmethod
-    def validate_performance_event(cls, data: Dict[str, Any]) -> Dict[str, Any]:
+    def validate_performance_event(cls: object, data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Validate and sanitize performance event.
 
@@ -212,7 +212,7 @@ class TelemetryEventSchema:
         return data
 
     @classmethod
-    def validate_feedback_event(cls, data: Dict[str, Any]) -> Dict[str, Any]:
+    def validate_feedback_event(cls: object, data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Validate and sanitize feedback event.
 
@@ -246,7 +246,7 @@ class TelemetryEventSchema:
         return data
 
     @classmethod
-    def validate_batch(cls, events: List[Dict[str, Any]]) -> tuple[List[Dict[str, Any]], List[str]]:
+    def validate_batch(cls: object, events: List[Dict[str, Any]]) -> tuple[List[Dict[str, Any]], List[str]]:
         """
         Validate a batch of mixed events.
 
@@ -285,7 +285,7 @@ class TelemetryEventSchema:
         return valid_events, errors
 
     @classmethod
-    def to_dict(cls, event: object) -> Dict[str, Any]:
+    def to_dict(cls: object, event: object) -> Dict[str, Any]:
         """Convert dataclass event to dict."""
         if isinstance(event, (ExecutionEvent, ErrorEvent, PerformanceEvent, FeedbackEvent)):
             return asdict(event)

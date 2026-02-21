@@ -96,7 +96,7 @@ class EnhancedPlanningOrchestrator(IOrchestrator):
         self._initialised = True
 
     @classmethod
-    def instance(cls) -> "EnhancedPlanningOrchestrator":
+    def instance(cls: object) -> "EnhancedPlanningOrchestrator":
         """Return the singleton instance."""
         return cls()
 

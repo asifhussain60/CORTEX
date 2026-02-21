@@ -51,7 +51,7 @@ class StartupValidationStatus:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "StartupValidationStatus":
+    def from_dict(cls: object, data: Dict[str, Any]) -> "StartupValidationStatus":
         """Create from dictionary."""
         return cls(**data)
 

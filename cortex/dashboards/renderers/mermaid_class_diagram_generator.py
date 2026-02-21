@@ -98,7 +98,7 @@ class ClassInfo:
     is_abstract: bool = False
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "ClassInfo":
+    def from_dict(cls: object, data: dict[str, Any]) -> "ClassInfo":
         """
         Create ClassInfo from dictionary.
 

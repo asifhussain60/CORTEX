@@ -29,7 +29,7 @@ class TimelineCommit:
     deletions: int
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "TimelineCommit":
+    def from_dict(cls: object, data: dict[str, Any]) -> "TimelineCommit":
         """
         Create TimelineCommit from dictionary.
 

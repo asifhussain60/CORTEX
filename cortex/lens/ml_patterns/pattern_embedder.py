@@ -237,7 +237,7 @@ class EmbeddingModel:
             pickle.dump(model_data, f)
 
     @classmethod
-    def load(cls, path: str) -> "EmbeddingModel":
+    def load(cls: object, path: str) -> "EmbeddingModel":
         """
         Load model from file.
 

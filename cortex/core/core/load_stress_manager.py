@@ -58,7 +58,7 @@ class LoadStressManager:
         self._cache_misses: int = 0
 
     @classmethod
-    def instance(cls) -> 'LoadStressManager':
+    def instance(cls: type) -> 'LoadStressManager':
         """Get singleton instance."""
         if cls._instance is None:
             with cls._lock:

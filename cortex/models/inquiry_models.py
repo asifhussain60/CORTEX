@@ -177,7 +177,7 @@ class AssembledContext:
 
     @classmethod
     def from_cache(
-        cls,
+        cls: type,
         cached_data: Dict[str, Any],
         repo_context: RepoContext,
     ) -> "AssembledContext":

@@ -57,7 +57,7 @@ class FileContext:
 
     @classmethod
     def build(
-        cls,
+        cls: type,
         workspace_root: Path,
         excluded_dirs: FrozenSet[str] | None = None,
     ) -> "FileContext":

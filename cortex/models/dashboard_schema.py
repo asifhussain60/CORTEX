@@ -48,7 +48,7 @@ class RepoMetadata:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "RepoMetadata":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "RepoMetadata":
         """Deserialize from dictionary."""
         return cls(**data)
 
@@ -91,7 +91,7 @@ class OverviewSection:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "OverviewSection":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "OverviewSection":
         """Deserialize from dictionary."""
         # Handle legacy data without new fields
         defaults = {
@@ -156,7 +156,7 @@ class MetricsSection:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "MetricsSection":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "MetricsSection":
         """Deserialize from dictionary."""
         # Handle legacy data without visualizations
         if "visualizations" not in data:
@@ -198,7 +198,7 @@ class SecurityVulnerability:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "SecurityVulnerability":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "SecurityVulnerability":
         """Deserialize from dictionary."""
         return cls(**data)
 
@@ -230,7 +230,7 @@ class SecuritySection:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "SecuritySection":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "SecuritySection":
         """Deserialize from dictionary."""
         vulns = [
             SecurityVulnerability.from_dict(v)
@@ -262,7 +262,7 @@ class PackageDependency:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "PackageDependency":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "PackageDependency":
         """Deserialize from dictionary."""
         return cls(**data)
 
@@ -298,7 +298,7 @@ class DependenciesSection:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "DependenciesSection":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "DependenciesSection":
         """Deserialize from dictionary."""
         packages = [
             PackageDependency.from_dict(p)
@@ -338,7 +338,7 @@ class CodeSmell:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "CodeSmell":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "CodeSmell":
         """Deserialize from dictionary."""
         return cls(**data)
 
@@ -370,7 +370,7 @@ class QualitySection:
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "QualitySection":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "QualitySection":
         """Deserialize from dictionary."""
         smells = [
             CodeSmell.from_dict(s)
@@ -412,7 +412,7 @@ class UseCase:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "UseCase":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "UseCase":
         """Deserialize from dictionary."""
         return cls(**data)
 
@@ -432,7 +432,7 @@ class LensSection:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "LensSection":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "LensSection":
         """Deserialize from dictionary."""
         return cls(**data)
 
@@ -452,7 +452,7 @@ class RefactoringSection:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "RefactoringSection":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "RefactoringSection":
         """Deserialize from dictionary."""
         return cls(**data)
 
@@ -492,7 +492,7 @@ class ArchitectureSection:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ArchitectureSection":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "ArchitectureSection":
         """Deserialize from dictionary."""
         # Handle legacy data without visualizations
         if "visualizations" not in data:
@@ -534,7 +534,7 @@ class DataQualitySection:
         return asdict(self)
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "DataQualitySection":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "DataQualitySection":
         """Deserialize from dictionary."""
         return cls(**data)
     # AC_COMPLETE: AC-DASHBOARD-9TAB-005 ✅ DataQualitySection added
@@ -636,7 +636,7 @@ class RepoDashboardModel:
 
     @classmethod
     @dashboard_debug
-    def from_dict(cls, data: Dict[str, Any]) -> "RepoDashboardModel":
+    def from_dict(cls: type, data: Dict[str, Any]) -> "RepoDashboardModel":
         """
         Deserialize from dictionary.
 
@@ -686,7 +686,7 @@ class RepoDashboardModel:
     # AC_COMPLETE: AC-DASHBOARD-9TAB-006 ✅ RepoDashboardModel v3.0 with 9 tabs + data_quality
 
     @classmethod
-    def from_json(cls, json_str: str) -> "RepoDashboardModel":
+    def from_json(cls: type, json_str: str) -> "RepoDashboardModel":
         """
         Deserialize from JSON string.
 

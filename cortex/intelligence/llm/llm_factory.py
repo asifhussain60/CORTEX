@@ -34,7 +34,7 @@ class LLMFactory:
 
     @classmethod
     def create_provider(
-        cls,
+        cls: type,
         provider_name: str,
         api_key: Optional[str] = None,
         model: Optional[str] = None,
@@ -84,7 +84,7 @@ class LLMFactory:
 
     @classmethod
     def create_default_provider(
-        cls,
+        cls: type,
         api_key: Optional[str] = None,
         model: Optional[str] = None
     ) -> ILLMProvider:
@@ -111,7 +111,7 @@ class LLMFactory:
         )
 
     @classmethod
-    def get_available_providers(cls) -> List[str]:
+    def get_available_providers(cls: object) -> List[str]:
         """
         Get list of available LLM providers.
 
@@ -131,7 +131,7 @@ class LLMFactory:
 
     @classmethod
     def register_provider(
-        cls,
+        cls: type,
         name: str,
         provider_class: type
     ) -> None:

@@ -23,7 +23,7 @@ class RepositoryProfile:
     compliance_level: str  # 'low', 'medium', 'high'
 
     @classmethod
-    def detect_from_repository(cls, repo_path: str) -> 'RepositoryProfile':
+    def detect_from_repository(cls: object, repo_path: str) -> 'RepositoryProfile':
         """
         Detect profile from repository characteristics.
 

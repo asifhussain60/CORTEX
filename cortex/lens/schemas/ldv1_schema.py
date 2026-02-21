@@ -89,7 +89,7 @@ class LensNode(BaseModel):
 
     @field_validator("id")
     @classmethod
-    def id_not_empty(cls, v) -> None:
+    def id_not_empty(cls: object, v: object) -> None:
         """Validate that ID field is not empty."""
         if not v:
             raise ValueError("Node ID cannot be empty")
@@ -160,7 +160,7 @@ class ArtifactManifest(BaseModel):
     artifacts: Dict[str, Dict[str, Any]]
 
     @classmethod
-    def create_default(cls) -> "ArtifactManifest":
+    def create_default(cls: object) -> "ArtifactManifest":
         """Create default manifest with all standard artifacts."""
         return cls(
             timestamp=datetime.now().isoformat(),

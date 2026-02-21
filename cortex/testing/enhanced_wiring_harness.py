@@ -230,7 +230,7 @@ class EnhancedWiringHarness:
         )
         return sorted(all_components, key=lambda c: (c.priority, c.category))
 
-    async def auto_wire_components(self, orchestrator=None) -> dict:
+    async def auto_wire_components(self, orchestrator: object=None) -> dict:
         """
         Automatically wire all components during initialization
 

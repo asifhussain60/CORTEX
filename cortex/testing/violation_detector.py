@@ -37,7 +37,7 @@ class ViolationDetector(ast.NodeVisitor):
         self.violations: List[Violation] = []
         self.current_function = None
 
-    def visit_Try(self, node) -> None:
+    def visit_Try(self, node: object) -> None:
         """Detect bare except and bare except with pass violations"""
         for handler in node.handlers:
             if handler.type is None:  # bare except:
@@ -86,7 +86,7 @@ class ViolationDetector(ast.NodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_FunctionDef(self, node) -> None:
+    def visit_FunctionDef(self, node: object) -> None:
         """Detect functions without type hints and docstrings"""
         # Check for return type annotation (CORE-011)
         if node.returns is None:
@@ -119,7 +119,7 @@ class ViolationDetector(ast.NodeVisitor):
 
         self.generic_visit(node)
 
-    def visit_ClassDef(self, node) -> None:
+    def visit_ClassDef(self, node: object) -> None:
         """Detect classes without docstrings"""
         # Check for docstring (CORE-012)
         docstring = ast.get_docstring(node)

@@ -26,7 +26,7 @@ class OrchestratorLookup:
         self._keyword_map: Dict[str, List[str]] = {}  # keyword -> [orchestrator_ids]
 
     @classmethod
-    def instance(cls) -> 'OrchestratorLookup':
+    def instance(cls: object) -> 'OrchestratorLookup':
         """Get singleton instance.
 
         Returns:

@@ -26,12 +26,12 @@ class StorageProviderFactory:
     _providers = {}
 
     @classmethod
-    def register_provider(cls, backend: str, provider_class) -> None:
+    def register_provider(cls: object, backend: str, provider_class: object) -> None:
         """Register a provider class for a backend type."""
         cls._providers[backend] = provider_class
 
     @classmethod
-    def get_provider(cls, config: StorageConfig) -> "IKnowledgeProvider":
+    def get_provider(cls: object, config: StorageConfig) -> "IKnowledgeProvider":
         """
         Create a provider instance for the given configuration.
 

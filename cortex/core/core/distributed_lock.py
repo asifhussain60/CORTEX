@@ -20,7 +20,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.database import DatabaseManager
@@ -59,7 +59,7 @@ class DistributedLock:
         self._local = threading.local()
 
     @classmethod
-    def instance(cls, db_manager: Optional[DatabaseManager] = None) -> 'DistributedLock':
+    def instance(cls: type, db_manager: Optional[DatabaseManager] = None) -> 'DistributedLock':
         """Get or create singleton instance."""
         if cls._instance is None:
             with cls._lock:

@@ -139,7 +139,7 @@ class TestScore:
     })
 
     @classmethod
-    def from_metrics(cls, test_name: str, metrics: TestMetrics) -> "TestScore":
+    def from_metrics(cls: object, test_name: str, metrics: TestMetrics) -> "TestScore":
         """Create TestScore from metrics."""
         # Calculate dimension scores
         coverage = metrics.get_coverage_score()
