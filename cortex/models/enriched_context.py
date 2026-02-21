@@ -1,5 +1,5 @@
 """
-Enriched Context Model - Superset of CrystallizedContext.
+Enriched Context Model - Unified Context for LENS + Tech Stack + Domain synthesis.
 
 Authority: Phase 90 Stage 3 - Context Synthesis Gateway
 Purpose: Unified context with LENS + Tech Stack + YAMLs + Domain + Architecture
@@ -17,10 +17,10 @@ from typing import Any, Dict, List, Optional
 class EnrichedContext:
     """
     Enriched context from Context-Aware Synthesis Gateway.
-    
-    Extends CrystallizedContext with tech stack intelligence and
-    knowledge YAML synthesis.
-    
+
+    Unified context model extending LENS intelligence with tech stack,
+    knowledge YAML synthesis, and domain patterns.
+
     Attributes:
         lens_analysis: LENS intelligence (git, AST, comments)
         tech_stack: Detected technology stack

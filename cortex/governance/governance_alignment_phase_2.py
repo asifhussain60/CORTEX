@@ -6,7 +6,7 @@ Deliverables:
 - G2: 36-rule alignment audit with consolidation
 - G3: Add 6 new CORE rules (CORE-058..063)
 - G4: Tier 1 & 2 alignment verification
-- G5: CCL GovernanceCrystal integration design
+- G5: Business expressibility governance design (CORE-061)
 - G6: Post-alignment governance inventory
 
 Authority: CORE-008 (TDD) | CORE-011 (type hints) | CORE-012 (docstrings)

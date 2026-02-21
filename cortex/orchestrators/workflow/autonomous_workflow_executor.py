@@ -71,7 +71,7 @@ class AutonomousWorkflowExecutor:
 
         Args:
             workflow: ResolvedWorkflow with knowledge-parameterized steps.
-            knowledge_context: CrystallizedContext from Phase 49 CCL.
+            knowledge_context: Enriched knowledge context for injection into steps.
             silent: If True, no user prompts during execution.
 
         Returns:
@@ -100,7 +100,7 @@ class AutonomousWorkflowExecutor:
 
         Args:
             workflow: ResolvedWorkflow with steps.
-            knowledge_context: CrystallizedContext for injection.
+            knowledge_context: Enriched knowledge context for step injection.
 
         Returns:
             Plan with stages including convergence gates.
@@ -134,7 +134,7 @@ class AutonomousWorkflowExecutor:
 
         Args:
             step: Workflow step with placeholders.
-            knowledge_context: CrystallizedContext with knowledge.
+            knowledge_context: Enriched context carrying knowledge payloads.
 
         Returns:
             Step with resolved placeholders.

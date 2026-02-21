@@ -985,7 +985,7 @@ class ExtendedGovernanceAgent:
     - CORE-058 (Tier 0): SQLite WAL mode mandatory for all audit databases
     - CORE-059 (Tier 1): MCP footprint auditing — every tool invocation must be logged
     - CORE-060 (Tier 1): SDLC brain governance — decisions must flow through SDLC Brain
-    - CORE-061 (Tier 1): CCL integration — business-critical ops must be CCL-expressible
+    - CORE-061 (Tier 1): Business expressibility — business-critical ops must have clear intent
     - CORE-062 (Tier 0): Plan-first execution — IMPLEMENT/FIX/REFACTOR require approved plan
     - CORE-063 (Tier 0): Challenge-first gate — SYSTEM-scope ops require challenge issuance
 
@@ -1062,8 +1062,8 @@ class ExtendedGovernanceAgent:
                     "verification. No direct execution without approval."
                 )
 
-        # ── CORE-061: CCL Integration (advisory) ───────────────────────────
-        # CCL is Tier-1 recommended; no hard block enforced at this layer
+        # ── CORE-061: Business Expressibility (advisory) ──────────────────
+        # Tier-1 recommended; no hard block enforced at this layer
 
         # ── CORE-062: Plan-First Execution ─────────────────────────────────
         operation_type = context.get("operation_type", "").upper()

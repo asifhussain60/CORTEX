@@ -58,6 +58,7 @@ class SweepIncompleteError(RuntimeError):
     """
 
     def __init__(self, sweep_id: str, remaining: List[Dict[str, Any]]) -> None:
+        """Initialise the sweep-incomplete error with the sweep ID and unresolved items list."""
         self.sweep_id = sweep_id
         self.remaining = remaining
 

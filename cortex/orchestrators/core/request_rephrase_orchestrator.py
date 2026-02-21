@@ -436,7 +436,7 @@ def format_rephrase_output(context: RephraseContext) -> str:
 class RequestRephraseOrchestrator:
     """Main orchestrator for request rephrase.
     
-    Stage -1: Async context pre-fetch (Phase 49 CCL)
+    Stage -1: Async context pre-fetch (LENS context synthesis)
     Stage 0: Synchronous governance audit (NEW)
       - CORE-002 file generation checks
       - Governance rule validation

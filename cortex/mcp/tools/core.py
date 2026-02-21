@@ -43,20 +43,20 @@ class ProcessRequestOperations(Enum):
 class CortexProcessRequest(ConsolidatedTool):
     """
     Main entry point for ALL CORTEX operations (MANDATORY).
-    
+
     Routes ALL requests through MasterOrchestrator 4-stage pipeline:
     1. Stage 1 (Interaction): Display DoR, await approval
-    2. Stage 2 (Intent): Classify intent, route to orchestrator  
-    3. Stage 3 (Intelligence): CCL async prefetch + LENS analysis
+    2. Stage 2 (Intent): Classify intent, route to orchestrator
+    3. Stage 3 (Intelligence): LENS analysis + context synthesis
     4. Stage 4 (Execution): Execute with TDD, governance, audit trail
-    
+
     Routes requests to appropriate orchestrators:
     - IMPLEMENT → TDDOrchestrator
-    - FIX → TDDOrchestrator  
+    - FIX → TDDOrchestrator
     - REFACTOR → RefactoringOrchestrator
     - ANALYZE → LENSSynthesis
     - TEST → TDDOrchestrator
-    
+
     ENFORCEMENT: This is the ONLY user-facing entry point.
     All other MCP tools are internal and validate orchestrator_context.
     """
@@ -73,7 +73,7 @@ class CortexProcessRequest(ConsolidatedTool):
             "MANDATORY ENTRY POINT for all CORTEX operations. Routes ALL requests "
             "through MasterOrchestrator 4-stage pipeline (Interaction → Intent → "
             "Intelligence → Execution) with TDD enforcement, security gates, "
-            "governance validation, CCL pre-warming, and complete audit trail. "
+            "governance validation, LENS context synthesis, and complete audit trail. "
             "Direct tool calls bypass orchestration and are rejected."
         )
     

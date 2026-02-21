@@ -90,7 +90,6 @@ _GOLDEN_PATH_RULES: list[tuple[str, list[TestConcern]]] = [
     ("cortex/orchestrators/",  [TestConcern.SECURITY, TestConcern.QUALITY, TestConcern.CCL]),
     ("cortex/mcp/tools/",      [TestConcern.SECURITY, TestConcern.CONTRACT]),
     ("cortex/governance/",     [TestConcern.SECURITY, TestConcern.QUALITY]),
-    ("cortex/brain/",          [TestConcern.CCL, TestConcern.QUALITY]),
     ("cortex/intelligence/",   [TestConcern.CCL, TestConcern.SECURITY]),
     ("cortex/domain_brain/",   [TestConcern.CCL]),
     ("cortex/agents/",         [TestConcern.SECURITY, TestConcern.CONTRACT]),

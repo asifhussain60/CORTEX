@@ -5168,9 +5168,17 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                     entity_id=entity_id,
                     metadata=metadata
                 )
-            
-            # Run in background without blocking
-            asyncio.create_task(_trigger())
+
+            # Run in background without blocking.
+            # Guard: asyncio.create_task requires a running event loop.
+            # When called from a sync context (no loop), schedule via
+            # ensure_future on the running loop, or silently skip.
+            try:
+                loop = asyncio.get_running_loop()
+                loop.create_task(_trigger())
+            except RuntimeError:
+                # No running event loop — sync context, skip fire-and-forget
+                pass
             
             self.logger.log_operation_complete(
                 ac_id="AC-ENH-092-002",

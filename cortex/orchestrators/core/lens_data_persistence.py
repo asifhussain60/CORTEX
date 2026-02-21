@@ -240,7 +240,7 @@ class LensDataPersistenceService:
         """Determine intelligent LENS scan depth based on intent.
 
         Avoids unnecessary deep scans. Only code-modifying intents
-        with high complexity warrant full CCL analysis.
+        with high complexity warrant full deep LENS analysis.
 
         Args:
             intent_type: Classified intent (IMPLEMENT/FIX/QUERY...).
