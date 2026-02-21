@@ -1,6 +1,6 @@
 # CORTEX Agent Index
 
-**Updated:** 2026-02-20 | **Purpose:** Lazy loading + intent-based agent selection  
+**Updated:** 2026-02-21 | **Purpose:** Lazy loading + intent-based agent selection  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---
@@ -80,19 +80,23 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 ## Intent → Agent Mapping
 
-| User Intent | Load These Agents |
-|-------------|-------------------|
-| **IMPLEMENT** | cortex.md + cortex-holistic-validator.md + cortex-executor.md |
-| **FIX** | cortex.md + cortex-holistic-validator.md + cortex-executor.md |
-| **REFACTOR** | cortex.md + cortex-holistic-validator.md |
-| **AUDIT** | cortex.md + cortex-architect.md + cortex-auditor.md |
-| **INVESTIGATE** | cortex.md + cortex-architect.md |
-| **QUERY** | cortex.md + cortex-interactive.md |
-| **DESIGN** | cortex.md + cortex-architect.md |
-| **PLAN** | cortex-architect.md + cortex-phase-resolver.md |
-| **DIGEST** | cortex-architect.md + cortex-digest.md |
-| **REPHRASE** | request-rephrase-orchestrator.md |
-| **SETUP** | cortex-environment-setup.md |
+| User Intent | Load These Agents | Token Cost |
+|-------------|-------------------|-----------|
+| **IMPLEMENT** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
+| **FIX** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
+| **REFACTOR** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
+| **AUDIT** | cortex.md + cortex-architect.md + cortex-auditor.md | ~8,000 |
+| **INVESTIGATE** | cortex.md + cortex-architect.md | ~6,000 |
+| **QUERY** | cortex.md + cortex-interactive.md | ~4,500 |
+| **DESIGN** | cortex.md + cortex-architect.md | ~6,000 |
+| **PLAN** | cortex-architect.md + cortex-phase-resolver.md | ~6,000 |
+| **DIGEST** | cortex-architect.md + cortex-digest.md | ~6,000 |
+| **REPHRASE** | request-rephrase-orchestrator.md | ~2,000 |
+| **SETUP** | cortex-environment-setup.md | ~2,000 |
+| **META-AUDIT** | cortex-meta-auditor.md + cortex-auditor.md | ~6,500 |
+| **WIRING/CI** | architecture-integrity-agent.md | ~5,000 |
+
+> **Default context:** `cortex-architect.prompt.md` only (~2,700 tokens). Load specialist agents on-demand per intent above.
 
 ---
 
