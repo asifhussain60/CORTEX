@@ -3,8 +3,8 @@
 # Purpose: Declarative registration of 5-6 domain orchestrators (CORE-031 compliance)
 
 module_name: domain_orchestrators
-version: "1.0.0"
-description: "Domain orchestrators: Refactoring, Planning, Domain, Conversation, SeleniumPlaywright"
+version: "1.1.0"
+description: "Domain orchestrators: Refactoring, Planning, Domain, Coherence, Upgrade"
 
 dependencies:
   - name: core_orchestrators
@@ -57,29 +57,6 @@ provides:
       - domain_events
     dependencies:
       - business_knowledge_repository
-    
-  - name: ConversationOrchestrator
-    category: DOMAIN
-    description: "Manages multi-turn conversations"
-    entry_point: "cortex.orchestrators.domain.conversation_orchestrator:ConversationOrchestrator"
-    features:
-      - context_management
-      - turn_processing
-      - history_tracking
-    dependencies:
-      - InteractionOrchestrator
-      - state_manager
-    
-  - name: SeleniumPlaywrightOrchestrator
-    category: DOMAIN
-    description: "Manages browser automation workflows"
-    entry_point: "cortex.orchestrators.domain.selenium_playwright_orchestrator:SeleniumPlaywrightOrchestrator"
-    features:
-      - selenium_integration
-      - playwright_integration
-      - browser_automation
-    dependencies:
-      - WorkflowOrchestrator
 
 initialization_order: 20
 
@@ -89,6 +66,7 @@ conflict_resolution:
 
 metadata:
   maintained_by: "CORTEX Domain Team"
-  last_updated: "2026-01-24"
-  git_commit: "ac-wiring-domain-001"
+  last_updated: "2026-02-21"
+  git_commit: "ac-wiring-domain-002"
   status: "active"
+  change_summary: "Removed unimplemented SeleniumPlaywrightOrchestrator; ConversationOrchestrator moved to core wiring spec (CORE-035)"

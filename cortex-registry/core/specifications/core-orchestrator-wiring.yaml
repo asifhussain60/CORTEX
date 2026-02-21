@@ -3,8 +3,8 @@
 # Purpose: Declarative registration of 6 core orchestrators (CORE-031 compliance)
 
 module_name: core_orchestrators
-version: "1.0.0"
-description: "Core orchestrators: Interaction, Intent Router, TDD, Workflow, Master, Autowiring"
+version: "1.1.0"
+description: "Core orchestrators: Interaction, Intent Router, TDD, Workflow, Master, Conversation, Enforcement"
 
 dependencies:
   - name: governance_registry
@@ -68,14 +68,28 @@ provides:
       - initialization
       - lifecycle_management
     
-  - name: AutowiringOrchestrator
+  - name: EnforcementOrchestrator
     category: CORE
-    description: "Manages declarative YAML-based wiring"
-    entry_point: "cortex.orchestrators.core.autowiring_orchestrator:AutowiringOrchestrator"
+    description: "Pre-execution governance and CORE rule enforcement"
+    entry_point: "cortex.orchestrators.core.enforcement_orchestrator:EnforcementOrchestrator"
     features:
-      - spec_discovery
-      - dependency_validation
-      - topological_sorting
+      - core_rule_validation
+      - pre_execution_gate
+      - compliance_checking
+    dependencies:
+      - governance_registry
+
+  - name: ConversationOrchestrator
+    category: CORE
+    description: "Manages multi-turn conversation state and turn processing"
+    entry_point: "cortex.orchestrators.core.conversation_orchestrator:ConversationOrchestrator"
+    features:
+      - context_management
+      - turn_processing
+      - history_tracking
+    dependencies:
+      - InteractionOrchestrator
+      - state_manager
 
 initialization_order: 10
 
@@ -85,6 +99,7 @@ conflict_resolution:
 
 metadata:
   maintained_by: "CORTEX Core Team"
-  last_updated: "2026-01-24"
-  git_commit: "ac-wiring-core-001"
+  last_updated: "2026-02-21"
+  git_commit: "ac-wiring-core-002"
   status: "active"
+  change_summary: "Removed unimplemented AutowiringOrchestrator; added EnforcementOrchestrator and ConversationOrchestrator at correct module paths (L1 validated)"

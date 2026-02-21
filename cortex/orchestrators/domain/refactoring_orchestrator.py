@@ -282,7 +282,7 @@ class RefactoringOrchestrator:
         return {
             "status": "healthy",
             "orchestrator": "RefactoringOrchestrator",
-            "adapters_registered": len(self._registry.get_all_adapters()),
+            "adapters_registered": self.registry.get_adapter_count(),
             "total_operations": self.get_total_operations_count(),
         }
 
