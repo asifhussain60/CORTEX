@@ -37,12 +37,47 @@ for path in tier_paths:
 
 def pytest_collection_modifyitems(session, config, items):
     """
-    Modify test collection to handle missing imports gracefully.
+    Auto-tag tests by tier based on directory structure.
     
-    This hook runs after test collection and marks tests with import errors
-    as skipped rather than failing collection.
+    Tier Strategy:
+    - smoke: golden/ tests + core orchestrator tests (fast, high-value)
+    - critical: unit/ tests for core/, orchestrators/, mcp/, governance/
+    - full: performance/, chaos/, regression/, manual/ (slow/specialized)
+    
+    Usage:
+        pytest -m smoke          # ~500 tests, <60s
+        pytest -m critical       # ~3000 tests, <3min
+        pytest -m "not full"     # skip perf/chaos only
     """
-    pass  # Items are already collected if we get here
+    smoke_paths = {"golden", "core", "mcp"}
+    critical_paths = {"orchestrators", "governance", "intelligence", "integration"}
+    full_paths = {"performance", "chaos", "regression", "manual"}
+    
+    for item in items:
+        # Get relative path parts
+        rel = str(item.fspath)
+        parts = rel.split("/")
+        
+        # Find the directory under tests/
+        test_idx = None
+        for i, p in enumerate(parts):
+            if p == "tests":
+                test_idx = i
+                break
+        if test_idx is None or test_idx + 1 >= len(parts):
+            continue
+        
+        top_dir = parts[test_idx + 1]
+        sub_dir = parts[test_idx + 2] if test_idx + 2 < len(parts) - 1 else ""
+        
+        # Auto-tag by tier
+        if top_dir in smoke_paths or sub_dir in smoke_paths:
+            item.add_marker(pytest.mark.smoke)
+            item.add_marker(pytest.mark.critical)
+        elif top_dir in full_paths:
+            item.add_marker(pytest.mark.full)
+        elif top_dir in critical_paths or sub_dir in critical_paths:
+            item.add_marker(pytest.mark.critical)
 
 
 def pytest_pycollect_makemodule(module_path, parent):

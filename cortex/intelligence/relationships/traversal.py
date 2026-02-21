@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
 from cortex.core.core.result import Err, Ok
+from cortex.intelligence.base import AnalysisResult
 from cortex.intelligence.base_engine import BaseIntelligenceEngine
 
 logger = logging.getLogger(__name__)
@@ -168,6 +169,29 @@ class RelationshipTraversalEngine(BaseIntelligenceEngine):
             description="Analyzes code relationships and builds dependency graphs",
             cache_ttl=600
         )
+        self.logger = logging.getLogger(__name__)
+        self.engine_name = self.name  # alias for AnalysisResult compatibility
+
+    def analyze(self, context: Any) -> AnalysisResult:
+        """
+        Analyze context and return AnalysisResult.
+
+        Wraps _execute to provide AnalysisResult interface for AnalysisContext callers.
+
+        Args:
+            context: AnalysisContext or dict context
+
+        Returns:
+            AnalysisResult with engine_name and data
+        """
+        try:
+            raw = self._execute(context)
+            if raw.is_ok():
+                return AnalysisResult(engine_name=self.name, data=raw.value)
+            else:
+                return AnalysisResult(engine_name=self.name, data={}, metadata={"error": raw.error})
+        except Exception as e:
+            return AnalysisResult(engine_name=self.name, data={}, metadata={"error": str(e)})
 
     def validate_context(self, context: Any) -> bool:
         """

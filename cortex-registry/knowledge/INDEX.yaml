@@ -1,0 +1,54 @@
+# CORTEX Knowledge Base INDEX
+# Authority: AC-PHASE65-S1-001
+# Maps intent types to applicable best-practice YAML files
+
+version: "1.0"
+created: "2026-02-09"
+
+testing-validation:
+  guides:
+    - path: "testing-validation/tdd-best-practices.yaml"
+      title: "TDD Best Practices"
+      keywords: ["tdd", "test", "implement", "red-green-refactor", "coverage"]
+
+backend-python:
+  guides:
+    - path: "backend-python/clean-code.yaml"
+      title: "Clean Code Practices"
+      keywords: ["clean", "implement", "refactor", "code quality", "naming"]
+    - path: "backend-python/code-review.yaml"
+      title: "Code Review Practices"
+      keywords: ["review", "fix", "analyze", "quality", "checklist"]
+    - path: "backend-python/refactoring.yaml"
+      title: "Refactoring Techniques"
+      keywords: ["refactor", "restructure", "clean", "solid"]
+
+security:
+  guides:
+    - path: "security/secure-coding-practices.yaml"
+      title: "Secure Coding Practices"
+      keywords: ["security", "implement", "fix", "owasp", "injection", "auth"]
+
+architecture:
+  guides:
+    - path: "architecture/engineering-design-patterns.yaml"
+      title: "Engineering Design Patterns"
+      keywords: ["pattern", "implement", "design", "architecture"]
+    - path: "architecture/engineering-solid-principles.yaml"
+      title: "SOLID Principles"
+      keywords: ["solid", "implement", "refactor", "principle"]
+    - path: "architecture/engineering-anti-patterns.yaml"
+      title: "Engineering Anti-Patterns"
+      keywords: ["anti-pattern", "fix", "refactor", "analyze", "avoid"]
+
+devops-infrastructure:
+  guides:
+    - path: "devops-infrastructure/monitoring-observability.yaml"
+      title: "Monitoring and Observability"
+      keywords: ["monitoring", "observability", "analyze", "metrics", "logging"]
+
+performance-optimization:
+  guides:
+    - path: "performance-optimization/profiling-analysis.yaml"
+      title: "Performance Profiling and Analysis"
+      keywords: ["performance", "profiling", "analyze", "optimize", "benchmark"]

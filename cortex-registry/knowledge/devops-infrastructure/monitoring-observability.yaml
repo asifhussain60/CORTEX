@@ -1,0 +1,36 @@
+# Monitoring and Observability
+# Authority: AC-PHASE65-S1-001
+
+title: "Monitoring and Observability Best Practices"
+category: "devops-infrastructure"
+version: "1.0"
+
+best_practices:
+  pillars:
+    metrics:
+      description: "Collect quantitative measurements (latency, error rate, throughput)"
+    logs:
+      description: "Emit structured logs with correlation IDs for traceability"
+    traces:
+      description: "Use distributed tracing to track requests across services"
+  alerting:
+    slo_driven:
+      description: "Define SLOs first; alert only when SLO burn rate is critical"
+    avoid_alert_fatigue:
+      description: "Suppress low-signal alerts; ensure every alert is actionable"
+    runbooks:
+      description: "Link alerts to runbooks describing investigation steps"
+  instrumentation:
+    four_golden_signals:
+      description: "Monitor latency, traffic, errors, and saturation for every service"
+    cardinality_management:
+      description: "Limit label cardinality in metrics to control storage costs"
+    health_endpoints:
+      description: "Expose /health and /ready endpoints for platform integration"
+  analysis:
+    baseline_performance:
+      description: "Establish performance baselines before optimising"
+    anomaly_detection:
+      description: "Use statistical analysis to detect abnormal patterns"
+    capacity_planning:
+      description: "Use historical trends to forecast and plan capacity"

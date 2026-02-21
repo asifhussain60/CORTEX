@@ -1,0 +1,226 @@
+/**
+ * CORTEX Dashboard - Glassmorphism Design System
+ *
+ * Consistent glassmorphism effects with 16px backdrop blur,
+ * gradient borders, shadow layering, and smooth transitions.
+ *
+ * Authority: DO-001-03 Glassmorphism Refinement
+ * Phase: PHASE-15-DASHBOARD-ENHANCEMENT
+ */
+
+/* === CSS Custom Properties === */
+:root {
+  --glass-blur: 16px;
+  --glass-bg: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-hover: rgba(255, 255, 255, 0.2);
+
+  /* CORTEX Brand Colors */
+  --color-cyan: #0ea5e9;
+  --color-emerald: #10b981;
+  --color-violet: #8b5cf6;
+
+  /* Transition System */
+  --transition-fast: 200ms ease;
+  --transition-normal: 250ms ease;
+  --transition-smooth: 300ms ease-in-out;
+
+  /* Shadow depths */
+  --shadow-depth-1: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-depth-2: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-depth-3: 0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
+/* === Glass Panel Base === */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-depth-1);
+  transition: all var(--transition-normal);
+}
+
+.glass-panel:hover {
+  border-color: var(--glass-border-hover);
+  transition: all var(--transition-fast);
+}
+
+/* === Glass Card Variants === */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-depth-1);
+  transition: box-shadow var(--transition-normal), border-color var(--transition-fast);
+}
+
+.glass-modal {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-depth-3);
+  transition: opacity var(--transition-smooth);
+}
+
+/* === Gradient Borders === */
+.glass-border-gradient {
+  border: 0;
+  border-image: linear-gradient(
+    135deg,
+    var(--color-cyan),
+    var(--color-emerald),
+    var(--color-violet)
+  ) 1;
+  border-image-slice: 1;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.gradient-border {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.gradient-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--color-cyan) 0%,
+    var(--color-emerald) 50%,
+    var(--color-violet) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* === Shadow Depth System (Z-Depth Levels) === */
+
+/* Depth 1 - Subtle lift */
+.glass-depth-1 {
+  box-shadow: var(--shadow-depth-1);
+  transition: box-shadow var(--transition-fast);
+}
+
+.glass-depth-1:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* Depth 2 - Medium elevation */
+.glass-depth-2 {
+  box-shadow: var(--shadow-depth-2);
+  transition: box-shadow var(--transition-normal);
+}
+
+.glass-depth-2:hover {
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+/* Depth 3 - High elevation */
+.glass-depth-3 {
+  box-shadow: var(--shadow-depth-3);
+  transition: box-shadow var(--transition-smooth);
+}
+
+.glass-depth-3:hover {
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
+}
+
+/* === Elevation Aliases === */
+.glass-elevation-1 {
+  box-shadow: var(--shadow-depth-1);
+  transition: box-shadow 200ms ease;
+}
+
+.glass-elevation-2 {
+  box-shadow: var(--shadow-depth-2);
+  transition: box-shadow 250ms ease;
+}
+
+.glass-elevation-3 {
+  box-shadow: var(--shadow-depth-3);
+  transition: box-shadow 300ms ease-in-out;
+}
+
+/* Z-axis depth aliases */
+.glass-z-1 {
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.glass-z-2 {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 8px 24px rgba(0, 0, 0, 0.25);
+  z-index: 2;
+}
+
+.glass-z-3 {
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 16px 48px rgba(0, 0, 0, 0.35);
+  z-index: 3;
+}
+
+/* === Glass Button === */
+.glass-btn {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  color: #f1f5f9;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--glass-border-hover);
+}
+
+/* === Glass Input === */
+.glass-input {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 0.5rem;
+  color: #f1f5f9;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.glass-input:focus {
+  border-color: var(--color-cyan);
+  background: rgba(255, 255, 255, 0.08);
+  outline: none;
+}
+
+/* === Animations === */
+@keyframes glassFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.glass-fade-in {
+  animation: glassFadeIn 250ms ease forwards;
+}

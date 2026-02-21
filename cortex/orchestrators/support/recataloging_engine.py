@@ -78,6 +78,53 @@ class RecataloingEngine:
             p.write_text(content)
         return {"references_updated": count}
 
+    def update_registry_references_with_rollback(
+        self, registry_path: str, file_relocations: Dict[str, str]
+    ) -> Dict[str, Any]:
+        """Update registry references with automatic rollback on broken ref detection.
+
+        Args:
+            registry_path: Path to the registry YAML file.
+            file_relocations: Mapping of old path → new path.
+
+        Returns:
+            Dict with 'success', 'references_updated', and optionally 'broken_references'.
+        """
+        p = Path(registry_path)
+        if not p.exists():
+            return {"success": False, "error": f"Registry not found: {registry_path}"}
+
+        # Snapshot original content for rollback
+        original_content = p.read_text()
+
+        try:
+            result = self.update_registry_references(registry_path, file_relocations)
+            broken = self.detect_broken_references(registry_path)
+
+            if broken:
+                # Roll back
+                p.write_text(original_content)
+                return {
+                    "success": False,
+                    "broken_references": broken,
+                    "rolled_back": True,
+                    "references_updated": 0,
+                }
+
+            return {
+                "success": True,
+                "broken_references": [],
+                "references_updated": result.get("references_updated", 0),
+            }
+
+        except Exception as exc:
+            # Roll back on any error
+            try:
+                p.write_text(original_content)
+            except Exception:
+                pass
+            return {"success": False, "error": str(exc)}
+
     # ── Imports ────────────────────────────────────────────────────────────────
 
     def update_imports(

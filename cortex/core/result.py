@@ -163,6 +163,14 @@ class Err(Generic[E], metaclass=_ResultMeta):
         """
         return default
 
+    def unwrap_err(self) -> E:
+        """Get error value.
+
+        Returns:
+            The contained error value.
+        """
+        return self.error
+
     def map(self, fn: Callable[[T], U]) -> "Err[E]":
         """Transform Ok value (no-op for Err).
 

@@ -1,3 +1,32 @@
+---
+agent_id: "cortex-interactive"
+version: "1.0"
+status: "active"
+layer: "core"
+capabilities:
+  - evidence_based_qa
+  - codebase_interrogation
+  - fact_verification
+  - conversational_exploration
+  - query_resolution
+modes_served:
+  - INTERACTIVE
+  - QUERY
+  - PRE-FLIGHT
+mcp_tools:
+  - cortex_ask
+  - cortex_total_recall
+  - cortex_verify_claim
+collaborators:
+  - cortex-architect
+  - cortex-auditor
+priority: "P1"
+token_cost_estimate: 2000
+created_date: "2026-02-20"
+last_updated: "2026-02-21"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Interactive Agent
 
 **Updated:** 2026-02-20 | ## Role

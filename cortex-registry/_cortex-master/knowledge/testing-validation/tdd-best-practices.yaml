@@ -1,0 +1,41 @@
+# TDD Best Practices
+# Authority: AC-PHASE65-S1-001
+
+title: "Test-Driven Development Best Practices"
+category: "testing-validation"
+version: "1.0"
+
+three_laws:
+  first_law:
+    statement: "Do not write production code until you have a failing test"
+    rationale: "Ensures all code is covered by tests"
+  second_law:
+    statement: "Write only enough test code to make the test fail"
+    rationale: "Keeps tests focused and minimal"
+  third_law:
+    statement: "Write only enough production code to make the failing test pass"
+    rationale: "Prevents gold-plating and over-engineering"
+
+best_practices:
+  test_design:
+    arrange_act_assert:
+      description: "Structure tests with Arrange-Act-Assert pattern for clarity"
+    single_responsibility:
+      description: "Each test verifies exactly one behaviour"
+    descriptive_naming:
+      description: "Test names describe what is being tested and expected outcome"
+    isolation:
+      description: "Tests must be independent and not share mutable state"
+    fast:
+      description: "Unit tests must run in milliseconds, not seconds"
+  workflow:
+    red_green_refactor:
+      description: "Follow Red-Green-Refactor cycle without skipping steps"
+    commit_on_green:
+      description: "Commit after each Green phase to create safe checkpoints"
+    coverage_gate:
+      description: "Maintain minimum 80% line coverage before merging"
+    mutation_testing:
+      description: "Use mutation testing to verify test quality, not just coverage"
+    test_pyramid:
+      description: "More unit tests than integration tests than end-to-end tests"

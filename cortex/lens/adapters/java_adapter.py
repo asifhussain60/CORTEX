@@ -54,10 +54,14 @@ class JavaAdapter(LanguageAdapter):
         """Initialize JavaAdapter with tree-sitter parser (requires tree-sitter-java)."""
         try:
             import tree_sitter_java as ts_java
-            self.language = Language(ts_java.language())
+            lang_obj = ts_java.language()
+            if isinstance(lang_obj, Language):
+                self.language = lang_obj
+            else:
+                self.language = Language(lang_obj)
             self.parser = Parser(self.language)
-        except ImportError:
-            # Fallback if Java not installed
+        except (ImportError, Exception):
+            # Fallback if Java not installed or version mismatch
             self.language = None
             self.parser = None
 
@@ -87,6 +91,10 @@ class JavaAdapter(LanguageAdapter):
         try:
             # Read file content
             source_code = file_path.read_bytes()
+
+            # Fallback to pattern-based if parser unavailable
+            if not self.parser:
+                return self._pattern_based_parse(file_path, source_code)
 
             # Parse with tree-sitter
             tree = self.parser.parse(source_code)
@@ -554,3 +562,156 @@ class JavaAdapter(LanguageAdapter):
             if child.type == child_type:
                 return child
         return None
+
+    def _pattern_based_parse(self, file_path: Path, source_code: bytes) -> PolyglotASTResult:
+        """
+        Fallback pattern-based Java parser when tree-sitter is unavailable.
+
+        Args:
+            file_path: Path to Java file
+            source_code: File content as bytes
+
+        Returns:
+            PolyglotASTResult with pattern-extracted elements
+        """
+        import re
+
+        text = source_code.decode('utf-8', errors='ignore')
+
+        # Extract package
+        package_match = re.search(r'package\s+([\w.]+)\s*;', text)
+        package = package_match.group(1) if package_match else None
+
+        # Extract import statements
+        imports = []
+        import_pattern = re.compile(r'import\s+([\w.]+(?:\.\*)?)\s*;')
+        for m in import_pattern.finditer(text):
+            import_name = m.group(1)
+            line_num = text[:m.start()].count('\n') + 1
+            imports.append(ImportInfo(
+                module=import_name,
+                names=[],
+                line=line_num,
+                alias=None,
+            ))
+
+        # Extract class blocks
+        classes = []
+        all_functions: List[FunctionInfo] = []
+
+        class_decl_pattern = re.compile(
+            r'(?:public|private|protected)?\s*'
+            r'(?:abstract|final|static)?\s*'
+            r'class\s+(\w+)[^{]*\{'
+        )
+
+        # Method pattern
+        method_pattern = re.compile(
+            r'(?:public|private|protected)\s+'
+            r'(?:static\s+|final\s+|synchronized\s+|abstract\s+)*'
+            r'(?:void|String|int|boolean|double|float|long|List<[^>]+>|[\w<>\[\]]+)\s+'
+            r'(\w+)\s*\('
+        )
+
+        # Constructor: "public ClassName(" with no return type
+        # Field pattern: "private List<String> users;"
+        field_pattern = re.compile(
+            r'(?:private|protected|public)\s+'
+            r'(?:static\s+|final\s+)*'
+            r'([\w<>\[\]]+)\s+(\w+)\s*;'
+        )
+
+        for class_match in class_decl_pattern.finditer(text):
+            class_name = class_match.group(1)
+            class_start = class_match.start()
+            line_start = text[:class_start].count('\n') + 1
+
+            # Find matching closing brace
+            brace_start = class_match.end() - 1
+            depth = 0
+            class_end = brace_start
+            for i in range(brace_start, len(text)):
+                if text[i] == '{':
+                    depth += 1
+                elif text[i] == '}':
+                    depth -= 1
+                    if depth == 0:
+                        class_end = i
+                        break
+
+            class_body = text[brace_start:class_end + 1]
+            line_end = text[:class_end].count('\n') + 1
+
+            # Extract methods
+            class_methods: List[FunctionInfo] = []
+            for m in method_pattern.finditer(class_body):
+                method_name = m.group(1)
+                if method_name in ['get', 'set']:
+                    continue
+                m_line = line_start + class_body[:m.start()].count('\n')
+                class_methods.append(FunctionInfo(
+                    name=method_name,
+                    line_start=m_line,
+                    line_end=m_line,
+                    parameters=[],
+                    return_type='unknown',
+                    decorators=[],
+                    is_async=False,
+                ))
+
+            # Extract constructor
+            ctor_pattern = re.compile(
+                r'(?:public|private|protected)\s+(' + re.escape(class_name) + r')\s*\('
+            )
+            for m in ctor_pattern.finditer(class_body):
+                m_line = line_start + class_body[:m.start()].count('\n')
+                class_methods.append(FunctionInfo(
+                    name=class_name,
+                    line_start=m_line,
+                    line_end=m_line,
+                    parameters=[],
+                    return_type='',
+                    decorators=[],
+                    is_async=False,
+                ))
+
+            # Extract fields
+            properties: List[Dict[str, Any]] = []
+            for m in field_pattern.finditer(class_body):
+                field_type = m.group(1)
+                field_name = m.group(2)
+                # Skip keywords that look like fields
+                if field_name not in ('class', 'interface', 'enum'):
+                    properties.append({"name": field_name, "type": field_type})
+
+            is_abstract = 'abstract' in text[class_start:class_match.end()]
+
+            classes.append(ClassInfo(
+                name=class_name,
+                line_start=line_start,
+                line_end=line_end,
+                methods=class_methods,
+                base_classes=[],
+                docstring="",
+                namespace=package,
+                is_abstract=is_abstract,
+                is_interface=False,
+                properties=properties,
+                attributes=[],
+            ))
+            all_functions.extend(class_methods)
+
+        return PolyglotASTResult(
+            file_path=file_path,
+            language=LanguageType.JAVA,
+            classes=classes,
+            functions=all_functions,
+            imports=imports,
+            raw_ast=None,
+            parse_errors=[],
+            metadata={
+                "package": package,
+                "fallback_mode": True,
+                "reason": "tree-sitter-java not available",
+            },
+        )

@@ -1,3 +1,31 @@
+---
+agent_id: "cortex-meta-auditor"
+version: "1.0"
+status: "active"
+layer: "core"
+capabilities:
+  - recursive_governance_validation
+  - agent_coherence_auditing
+  - prompt_consistency_checking
+  - architecture_integrity_validation
+  - cross_agent_dependency_analysis
+modes_served:
+  - META-AUDIT
+  - AUDIT
+  - QUERY
+mcp_tools:
+  - cortex_validate_compliance
+  - cortex_load_core_rules
+collaborators:
+  - cortex-auditor
+  - cortex-master-plan-auditor
+priority: "P0"
+token_cost_estimate: 3500
+created_date: "2026-02-20"
+last_updated: "2026-02-21"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Meta-Auditor Agent
 
 **Updated:** 2026-02-20 | **Role:** Meta-Level Governance Coherence Auditing  

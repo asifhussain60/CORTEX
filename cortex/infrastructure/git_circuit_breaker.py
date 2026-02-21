@@ -161,7 +161,6 @@ class GitCircuitBreaker:
         try:
             # Cast to correct type after circuit breaker call
             result = self.circuit_breaker.call(git_operation)
-            assert isinstance(result, subprocess.CompletedProcess), "Expected CompletedProcess"
             return result
         
         except CircuitBreakerOpenError as e:

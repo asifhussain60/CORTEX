@@ -363,14 +363,14 @@ class EnhancedIntentRouter:
             return IntentType.DIGEST
         elif re.search(r'investigate|root cause|why is|what causes|deep analysis|trace the|debug why|find the cause', text):
             return IntentType.INVESTIGATE
+        elif re.search(r'refactor|clean|improve|optimize|migrate|restructure|reorganize|rewrite|modernize', text) and not re.search(r'\bdesign\b|blueprint|system design', text):
+            return IntentType.REFACTOR
         elif re.search(r'\bdesign\b|architect|blueprint|system design', text):
             return IntentType.DESIGN
         elif re.search(r'implement|create|build|add|new', text):
             return IntentType.IMPLEMENT
         elif re.search(r'fix|bug|error|broken|debug|resolve|correct|patch|repair', text):
             return IntentType.FIX
-        elif re.search(r'refactor|clean|improve|optimize|migrate|restructure|reorganize', text):
-            return IntentType.REFACTOR
         elif re.search(r'plan|organize|roadmap', text):
             return IntentType.PLAN
         else:

@@ -1,3 +1,32 @@
+---
+agent_id: "cortex-master-plan-auditor"
+version: "1.0"
+status: "active"
+layer: "core"
+capabilities:
+  - phase_management
+  - plan_integrity_validation
+  - dependency_resolution
+  - roadmap_analysis
+  - phase_sequencing
+modes_served:
+  - PLAN
+  - AUDIT
+  - QUERY
+mcp_tools:
+  - cortex_audit_remediation_plan
+  - cortex_load_audit_checklist
+  - cortex_query_governance
+collaborators:
+  - cortex-phase-resolver
+  - cortex-meta-auditor
+priority: "P0"
+token_cost_estimate: 3000
+created_date: "2026-02-20"
+last_updated: "2026-02-21"
+maintainer: "Asif Hussain"
+---
+
 # CORTEX Master Plan Auditor
 
 **Updated:** 2026-02-20 | **Role:** Master Plan Integrity Validation  

@@ -1,0 +1,35 @@
+# Clean Code Practices
+# Authority: AC-PHASE65-S1-001
+
+title: "Clean Code Practices for Python"
+category: "backend-python"
+version: "1.0"
+
+best_practices:
+  naming:
+    meaningful_names:
+      description: "Use intention-revealing names; avoid abbreviations"
+    verb_functions:
+      description: "Function names should be verbs describing what they do"
+    noun_classes:
+      description: "Class names should be nouns representing domain concepts"
+  functions:
+    single_responsibility:
+      description: "Functions should do one thing and do it well"
+    small_functions:
+      description: "Functions should be small — ideally under 20 lines"
+    no_side_effects:
+      description: "Prefer pure functions without hidden side effects"
+    command_query_separation:
+      description: "Functions either change state or return data, not both"
+  structure:
+    dry_principle:
+      description: "Don't Repeat Yourself — extract duplicated logic"
+    yagni_principle:
+      description: "You Aren't Gonna Need It — don't build speculative features"
+    boy_scout_rule:
+      description: "Leave the code cleaner than you found it"
+    dependency_injection:
+      description: "Inject dependencies rather than instantiating them"
+    fail_fast:
+      description: "Validate inputs early and return/raise promptly"

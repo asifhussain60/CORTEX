@@ -563,89 +563,156 @@ class CSharpAdapter(LanguageAdapter):
     def _pattern_based_parse(self, file_path: Path, source_code: bytes) -> PolyglotASTResult:
         """
         Fallback pattern-based C# parser for tree-sitter version mismatch.
-        
+
         Uses regex patterns to extract basic structure when AST parsing unavailable.
-        
+
         Args:
             file_path: Path to C# file
             source_code: File content as bytes
-            
+
         Returns:
             PolyglotASTResult with pattern-extracted elements
         """
         import re
-        
+
         text = source_code.decode('utf-8', errors='ignore')
-        
-        # Extract classes using regex
-        classes = []
-        class_pattern = r'(?:public|internal|private|protected)?\s+(?:abstract|sealed|partial)?\s*class\s+(\w+)'
-        for match in re.finditer(class_pattern, text):
-            class_name = match.group(1)
-            line_num = text[:match.start()].count('\n') + 1
-            
-            classes.append(ClassInfo(
-                name=class_name,
-                line_start=line_num,
-                line_end=line_num,  # Approximate
-                methods=[],
-                base_classes=[],
-                docstring="",
-                is_abstract='abstract' in match.group(0),
-                attributes=[],
-            ))
-        
-        # Extract methods using regex
-        functions = []
-        # Match method declarations with return types (including Task<T>, List<T>, etc.)
-        method_pattern = r'(?:public|private|protected|internal)?\s+(?:static|async|virtual|override)?\s*(?:\w+(?:<[^>]+>)?)\s+(\w+)\s*\('
-        
-        # Also get all class names to filter out constructors
-        class_names = {c.name for c in classes}
-        
-        for match in re.finditer(method_pattern, text):
-            method_name = match.group(1)
-            # Skip property getters/setters and constructors (same name as class)
-            if method_name in ['get', 'set'] or method_name in class_names:
-                continue
-            
-            line_num = text[:match.start()].count('\n') + 1
-            
-            functions.append(FunctionInfo(
-                name=method_name,
-                line_start=line_num,
-                line_end=line_num,  # Approximate
-                parameters=[],
-                return_type='unknown',
-                decorators=[],
-                is_async='async' in match.group(0),
-            ))
-        
+
+        # Extract namespace
+        namespace_match = re.search(r'namespace\s+([\w.]+)', text)
+        namespace = namespace_match.group(1) if namespace_match else None
+
         # Extract using statements
         imports = []
         using_pattern = r'using\s+([\w.]+)\s*;'
         for match in re.finditer(using_pattern, text):
             import_name = match.group(1)
             line_num = text[:match.start()].count('\n') + 1
-            
             imports.append(ImportInfo(
                 module=import_name,
-                names=[],  # C# using statements don't have specific names
+                names=[],
                 line=line_num,
                 alias=None,
             ))
-        
-        # Extract namespace
-        namespace_match = re.search(r'namespace\s+([\w.]+)', text)
-        namespace = namespace_match.group(1) if namespace_match else None
-        
+
+        # Extract class blocks with their body content
+        classes = []
+        all_functions = []
+
+        # Pattern to find class declaration and capture class name and body
+        class_decl_pattern = re.compile(
+            r'(?:public|internal|private|protected)?\s*'
+            r'(?:abstract|sealed|partial)?\s*'
+            r'class\s+(\w+)[^{]*\{'
+        )
+
+        # Method/function pattern within class body (excluding property accessors)
+        member_method_pattern = re.compile(
+            r'(?:public|private|protected|internal)\s+'
+            r'(?:static\s+|async\s+|virtual\s+|override\s+|abstract\s+)*'
+            r'(?:void|string|int|bool|double|float|long|Task(?:<[^>]+>)?|List<[^>]+>|IEnumerable<[^>]+>|\w+(?:<[^>]+>)?)\s+'
+            r'(\w+)\s*\('
+        )
+
+        # Property pattern: "public string Name { get; set; }"
+        property_pattern = re.compile(
+            r'(?:public|private|protected|internal)\s+'
+            r'(?:static\s+|virtual\s+|override\s+)*'
+            r'(\w+(?:<[^>]+>)?)\s+(\w+)\s*\{[^}]*(?:get|set)[^}]*\}'
+        )
+
+        # Constructor pattern
+        constructor_pattern = re.compile(
+            r'(?:public|private|protected|internal)\s+(\w+)\s*\([^)]*\)\s*\{'
+        )
+
+        for class_match in class_decl_pattern.finditer(text):
+            class_name = class_match.group(1)
+            class_start = class_match.start()
+            line_start = text[:class_start].count('\n') + 1
+
+            # Find the matching closing brace for the class body
+            brace_start = class_match.end() - 1  # position of opening {
+            depth = 0
+            class_end = brace_start
+            for i in range(brace_start, len(text)):
+                if text[i] == '{':
+                    depth += 1
+                elif text[i] == '}':
+                    depth -= 1
+                    if depth == 0:
+                        class_end = i
+                        break
+
+            class_body = text[brace_start:class_end + 1]
+            line_end = text[:class_end].count('\n') + 1
+
+            # Extract methods in this class body
+            class_methods: List[FunctionInfo] = []
+            is_abstract = 'abstract' in text[class_start:class_match.end()]
+
+            # Match methods (non-constructor)
+            for m in member_method_pattern.finditer(class_body):
+                method_name = m.group(1)
+                if method_name in ['get', 'set', class_name]:
+                    continue
+                m_line = line_start + class_body[:m.start()].count('\n')
+                is_async = 'async' in m.group(0)
+                class_methods.append(FunctionInfo(
+                    name=method_name,
+                    line_start=m_line,
+                    line_end=m_line,
+                    parameters=[],
+                    return_type='unknown',
+                    decorators=[],
+                    is_async=is_async,
+                ))
+
+            # Match constructors
+            for m in constructor_pattern.finditer(class_body):
+                ctor_name = m.group(1)
+                if ctor_name == class_name:
+                    m_line = line_start + class_body[:m.start()].count('\n')
+                    class_methods.append(FunctionInfo(
+                        name=ctor_name,
+                        line_start=m_line,
+                        line_end=m_line,
+                        parameters=[],
+                        return_type='',
+                        decorators=[],
+                        is_async=False,
+                    ))
+
+            # Extract properties
+            properties: List[Dict[str, Any]] = []
+            for m in property_pattern.finditer(class_body):
+                prop_type = m.group(1)
+                prop_name = m.group(2)
+                properties.append({"name": prop_name, "type": prop_type})
+
+            classes.append(ClassInfo(
+                name=class_name,
+                line_start=line_start,
+                line_end=line_end,
+                methods=class_methods,
+                base_classes=[],
+                docstring="",
+                namespace=namespace,
+                is_abstract=is_abstract,
+                is_interface=False,
+                properties=properties,
+                attributes=[],
+            ))
+
+            # Also add to top-level functions (for standalone function listing)
+            all_functions.extend(class_methods)
+
         return PolyglotASTResult(
             file_path=file_path,
             language=LanguageType.CSHARP,
             classes=classes,
-            functions=functions,
+            functions=all_functions,
             imports=imports,
-            raw_ast=None,  # No AST available
+            raw_ast=None,
             parse_errors=[],
             metadata={
                 "namespace": namespace,

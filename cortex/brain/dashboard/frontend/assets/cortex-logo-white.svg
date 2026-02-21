@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 48" width="200" height="48" role="img" aria-label="CORTEX Logo (white)">
+  <title>CORTEX</title>
+  <!-- Hexagonal icon mark -->
+  <polygon points="24,4 40,13 40,31 24,40 8,31 8,13" fill="#0ea5e9" opacity="0.9"/>
+  <polygon points="24,10 36,17 36,31 24,38 12,31 12,17" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="24" y="28" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle" fill="#ffffff">C</text>
+  <!-- Wordmark — white for dark backgrounds -->
+  <text x="54" y="32" font-family="system-ui, -apple-system, sans-serif" font-size="20" font-weight="700" fill="#ffffff" letter-spacing="2">CORTEX</text>
+</svg>

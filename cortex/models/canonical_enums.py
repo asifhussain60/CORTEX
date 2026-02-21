@@ -115,6 +115,12 @@ class AuditAction(Enum):
 
 class AuditOperationType(Enum):
     """Type of operation being audited."""
+    # CRUD operations
+    CREATE = "create"
+    UPDATE = "update"
+    DELETE = "delete"
+    READ = "read"
+    # System operations
     USER_LOGIN = "user_login"
     DATA_ACCESS = "data_access"
     CONFIGURATION_CHANGE = "configuration_change"

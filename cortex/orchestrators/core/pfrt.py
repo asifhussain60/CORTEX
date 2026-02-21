@@ -202,7 +202,8 @@ class PreFlightRequestTransformer:
         for sentence in sentences[1:]:
             if any(
                 keyword in sentence.lower()
-                for keyword in ["ensure", "check", "verify", "validate", "without"]
+                for keyword in ["ensure", "check", "verify", "validate", "without",
+                                "mcp", "exposed", "must", "required", "tdd"]
             ):
                 constraints.append(sentence.strip())
         

@@ -29,7 +29,9 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ## MCP Architecture
 
-CORTEX uses **Pylance-style MCP** — the server auto-starts when VS Code opens the workspace. No manual startup required.
+CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manual server startup). The server auto-starts when VS Code opens the workspace via stdio transport.
+
+**MCP ARCHITECTURE:** Pylance-style stdio transport, auto-detected by VS Code Copilot Chat. Configuration lives in `.vscode/settings.json`.
 
 **Configuration** (`.vscode/settings.json`):
 ```json
@@ -45,7 +47,13 @@ CORTEX uses **Pylance-style MCP** — the server auto-starts when VS Code opens 
 }
 ```
 
-**Verification:** Call `cortex_sample_tool` in Copilot Chat. If it responds, MCP is active.
+**MCP Detection Methods — 3 ways to verify MCP is active:**
+
+- **Method 1 (Tool Registry):** Call `cortex_sample_tool` in Copilot Chat — if it responds, MCP is running. This checks the Tool Registry directly.
+- **Method 2 (Environment Variable / Settings):** Check `.vscode/settings.json` for `github.copilot.chat.mcpServers.cortex` key — if present, server is configured.
+- **Method 3 (Network Port / Process):** Run `python3 -m cortex.mcp` in terminal — if it starts without import errors, MCP server is healthy. Check port binding or process listing to verify.
+
+**Setup:** Run `python3 scripts/setup-mcp.py` for cross-platform MCP configuration (auto-detects Windows/macOS/Linux).
 
 ---
 
@@ -114,3 +122,29 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 - Security: `cortex-docs/security.md`
 - Architect Prompt: `.github/prompts/cortex-architect.prompt.md`
 - Response Templates: `.github/templates/cortex-response-templates.md`
+
+---
+
+## ⛔ Test Execution — MANDATORY RULES
+
+**CORTEX uses `CortexXdistPlugin` as the canonical batch runner. Never bypass it.**
+
+| ✅ DO — Canonical Methods | ❌ NEVER — Forbidden Patterns |
+|---|---|
+| `make test-batch` | `python3 -m pytest tests/ -x -q` |
+| `make test-all` | `pytest --tb=no -q` (silences batch reporter) |
+| `make test-fast` | `pytest -o addopts=` (wipes xdist config) |
+| `make test-smoke` | `pytest -x` alone (stops before batch summary) |
+| VS Code tasks (tasks.json) | Any command that adds `-q` or `-o addopts=` |
+| `python3 scripts/run_tests.py {mode}` *(cross-platform)* | Direct `python3 -m pytest` with flag overrides |
+| `./scripts/run-tests.sh {mode}` *(Unix only — delegates to run_tests.py)* | `.venv/bin/python -m pytest` (venv-path hard-codes Unix) |
+
+**Why:** `pytest.ini` enforces `-n auto --dist loadscope`. `conftest.py` registers `cortex_xdist_plugin`.
+Adding `-q` silences the batch reporter's stderr. Adding `-o addopts=` wipes xdist entirely.
+The batch plugin (`CORTEX_BATCH_SIZE=500`) provides live batch boundaries, pass/fail counts, and a final summary table — these are lost when raw pytest commands override the project config.
+
+**When running tests in a terminal, always use:**
+```
+make test-batch
+```
+or a VS Code task from `tasks.json`.

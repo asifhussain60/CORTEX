@@ -38,6 +38,24 @@ class VulnerabilitySeverity(Enum):
     LOW = "low"
     INFO = "info"
 
+    _order = ["INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
+
+    def __lt__(self, other: "VulnerabilitySeverity") -> bool:
+        order = ["INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        return order.index(self.name) < order.index(other.name)
+
+    def __le__(self, other: "VulnerabilitySeverity") -> bool:
+        order = ["INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        return order.index(self.name) <= order.index(other.name)
+
+    def __gt__(self, other: "VulnerabilitySeverity") -> bool:
+        order = ["INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        return order.index(self.name) > order.index(other.name)
+
+    def __ge__(self, other: "VulnerabilitySeverity") -> bool:
+        order = ["INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"]
+        return order.index(self.name) >= order.index(other.name)
+
 
 class LicenseCategory(Enum):
     """License category for compatibility."""
@@ -492,14 +510,13 @@ class DependencyAnalyzer:
 
     def _check_vulnerabilities(self, package: PackageInfo) -> List[Vulnerability]:
         """Check if package has known vulnerabilities."""
-        # Check local vulnerability database
-        vulns = self._vulnerability_db.get(package.name, [])
+        # If a vulnerability database is loaded, use only it (authoritative source)
+        if self._vulnerability_db:
+            db_vulns = self._vulnerability_db.get(package.name, [])
+            return db_vulns
 
-        # Also check against known vulnerable packages (hardcoded for common issues)
-        known_vulns = self._get_known_vulnerabilities(package)
-        vulns.extend(known_vulns)
-
-        return vulns
+        # Otherwise, fall back to hardcoded known vulnerabilities
+        return self._get_known_vulnerabilities(package)
 
     def _get_known_vulnerabilities(self, package: PackageInfo) -> List[Vulnerability]:
         """Get known vulnerabilities for common packages."""

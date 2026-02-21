@@ -32,20 +32,25 @@ validate-wiring:
 
 # Run wiring tests
 test:
-	@.venv/bin/python -m pytest tests/wiring -v --timeout=30
+	@python3 scripts/run_tests.py dir tests/wiring
 
 # Run all tests (with timeout + maxfail to prevent hanging)
+# Cross-platform: delegates to run_tests.py (works on macOS, Linux, Windows)
 test-all:
-	@.venv/bin/python -m pytest tests/ -v --timeout=30 --maxfail=10 --ignore=tests/documentation --ignore=tests/cortex --ignore=tests/golden --ignore=tests/e2e
+	@python3 scripts/run_tests.py all
 
-# Run fast unit tests (no slow/integration markers)
+# Run fast unit tests (no slow/integration markers) — uses CortexXdistPlugin batch runner
+# Unix:    ./scripts/run-tests.sh fast   (delegates to run_tests.py)
+# Windows: python3 scripts/run_tests.py fast
 test-fast:
-	@.venv/bin/python -m pytest tests/unit/ -q --timeout=15 --maxfail=10 -m "not slow and not integration"
+	@python3 scripts/run_tests.py fast
 
-# Run smoke tests (<30s total)
+# Run smoke tests (<30s total) — uses CortexXdistPlugin batch runner
 test-smoke:
-	@.venv/bin/python -m pytest tests/unit/ -q --timeout=5 --maxfail=3 -m "smoke"
+	@python3 scripts/run_tests.py smoke
 
-# Run tests directory-by-directory for incremental terminal feedback
+# Run tests using canonical CortexXdistPlugin batch runner (cross-platform)
+# Unix:    ./scripts/run-tests.sh batch  (delegates to run_tests.py)
+# Windows: python3 scripts/run_tests.py batch
 test-batch:
-	@./scripts/run-tests.sh batch
+	@python3 scripts/run_tests.py batch

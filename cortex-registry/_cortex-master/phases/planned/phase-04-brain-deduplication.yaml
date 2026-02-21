@@ -1,0 +1,478 @@
+# ==============================================================================
+# PHASE 04 — BRAIN DEDUPLICATION: Dissolve brain/ into proper domains
+# ==============================================================================
+# Purpose: Eliminate cortex/brain/ (261 files, 28 subdirs) duplication
+# Gate: All brain functionality preserved in proper domain locations
+# ==============================================================================
+
+phase:
+  id: "phase-04"
+  name: "Brain Deduplication — Dissolve brain/ into proper domains"
+  status: "pending"
+  priority: "P0"
+  estimated_effort: "5-7 days"
+  risk: "high"
+  depends_on: ["phase-03"]
+  description: |
+    cortex/brain/ is the largest source of duplication in CORTEX. It contains
+    261 files across 28 subdirectories, many of which mirror directories that
+    already exist at cortex/ root level. This phase dissolves brain/ by
+    migrating each subdirectory to its proper canonical location.
+
+    The key insight from git history: brain/ was the original "everything goes
+    here" package. Over phases 95-103, logic was partially extracted but brain/
+    was never fully cleaned. This phase completes that migration.
+
+  # ============================================================================
+  # BRAIN SUBDIRECTORY AUDIT
+  # ============================================================================
+  brain_audit:
+    total_files: 261
+    total_subdirs: 28
+    subdirectories:
+      - name: "brain/core/"
+        unique_files:
+          - "orchestrator_base.py (379 lines) — THE canonical base class"
+          - "master_orchestrator_gateway.py — gateway pattern"
+          - "brain_populator.py — YAML → brain state loader"
+          - "ac_domain_mapper.py — acceptance criteria mapper"
+        destination: "cortex/core/"
+        priority: "P0 — kernel classes"
+
+      - name: "brain/core/decorators/"
+        unique_files:
+          - "orchestrator_decorator.py"
+        destination: "cortex/core/decorators/"
+        note: "Duplicate exists at cortex/core/decorators/ — merge"
+
+      - name: "brain/core/interfaces/"
+        unique_files:
+          - "i_orchestrator.py"
+        destination: "cortex/core/interfaces/"
+
+      - name: "brain/core/knowledge/"
+        unique_files:
+          - "change_detection_integration.py"
+        destination: "cortex/intelligence/"
+
+      - name: "brain/governance/"
+        destination: "cortex/governance/"
+        action: "merge unique files, archive duplicates"
+
+      - name: "brain/lens/"
+        destination: "cortex/intelligence/lens/"
+        action: "merge unique files, archive duplicates"
+
+      - name: "brain/domain_brain/"
+        destination: "cortex/intelligence/domain_brain/"
+        action: "merge unique files (kg_sync_orchestrator.py is unique)"
+
+      - name: "brain/domain_orchestrators/"
+        unique_files:
+          - "business/business_base.py"
+          - "business/ecommerce.py"
+          - "business/financial.py"
+          - "business/healthcare.py"
+        destination: "cortex/orchestrators/domain/business/"
+        note: "Industry-specific orchestrators — valuable, keep"
+
+      - name: "brain/analysis/"
+        destination: "cortex/intelligence/analysis/"
+
+      - name: "brain/cli/"
+        destination: "cortex/cli/"
+        action: "merge with existing cortex/cli/"
+
+      - name: "brain/ci_cd/"
+        destination: "cortex/ci_cd/"
+        action: "merge with existing cortex/ci_cd/"
+
+      - name: "brain/dashboard/"
+        destination: "cortex/dashboards/"
+        action: "merge with existing"
+
+      - name: "brain/devx/"
+        unique_files:
+          - "hot_reload.py"
+        destination: "cortex/infrastructure/devx/"
+        note: "Duplicate at cortex/devx/hot_reload.py — pick one"
+
+      - name: "brain/discovery/"
+        destination: "cortex/intelligence/discovery/"
+
+      - name: "brain/education/"
+        unique_files:
+          - "fault_detection_reporter.py"
+        destination: "cortex/intelligence/"
+
+      - name: "brain/ide/"
+        destination: "cortex/infrastructure/ide/"
+
+      - name: "brain/intent_router/"
+        destination: "cortex/orchestrators/core/"
+        action: "merge with cortex/intent_router/ then into orchestrators/core/"
+
+      - name: "brain/knowledge/"
+        destination: "cortex/intelligence/"
+
+      - name: "brain/llm/"
+        destination: "cortex/infrastructure/llm/"
+
+      - name: "brain/nlp/"
+        destination: "cortex/intelligence/nlp/"
+
+      - name: "brain/observability/"
+        destination: "cortex/observability/"
+        action: "merge with existing"
+
+      - name: "brain/persistence/"
+        unique_files:
+          - "learning_loop_integration.py"
+        destination: "cortex/intelligence/learning/"
+
+      - name: "brain/production/"
+        destination: "cortex/infrastructure/"
+
+      - name: "brain/reports/"
+        destination: "cortex/observability/reports/"
+
+      - name: "brain/security/"
+        destination: "cortex/infrastructure/security/"
+        action: "merge with existing"
+
+      - name: "brain/state/"
+        destination: "cortex/intelligence/state/"
+
+      - name: "brain/templates/"
+        destination: "cortex/templates/"
+        action: "merge with existing"
+
+      - name: "brain/testing/"
+        destination: "cortex/testing/"
+        action: "merge with existing"
+
+      - name: "brain/tier1/"
+        destination: "cortex/intelligence/tier1/"
+        note: "Tier-based rules — may be YAML data for cortex-registry"
+
+      - name: "brain/tier2/"
+        destination: "cortex/intelligence/tier2/"
+
+      - name: "brain/verification/"
+        destination: "cortex/governance/verification/"
+
+      - name: "brain/audit-logs/"
+        destination: ".cortex-runtime/audit-logs/"
+        note: "Runtime data, not source code"
+
+  # ============================================================================
+  # CONSOLIDATION OPPORTUNITIES
+  # ============================================================================
+  consolidations:
+    - type: "orchestrator_base"
+      description: "brain/core/orchestrator_base.py is the SSOT — move to cortex/core/"
+      action: |
+        1. Move brain/core/orchestrator_base.py → cortex/core/orchestrator_base.py
+        2. Update all imports: cortex.brain.core.orchestrator_base → cortex.core.orchestrator_base
+        3. This is the single most important file in CORTEX — handle with care
+
+    - type: "decorator_merge"
+      from:
+        - "cortex/brain/core/decorators/orchestrator_decorator.py"
+        - "cortex/core/decorators/orchestrator_decorator.py"
+      to: "cortex/core/decorators/orchestrator_decorator.py"
+      action: "Diff, merge unique logic, archive duplicate"
+
+    - type: "hot_reload_merge"
+      from:
+        - "cortex/brain/devx/hot_reload.py"
+        - "cortex/devx/hot_reload.py"
+      to: "cortex/infrastructure/devx/hot_reload.py"
+      action: "Diff, keep the more complete one"
+
+    - type: "intent_router_merge"
+      from:
+        - "cortex/brain/intent_router/"
+        - "cortex/intent_router/ (19 files)"
+      to: "cortex/orchestrators/core/intent_router/"
+      action: "IntentRouter is a core orchestrator — belongs in orchestrators/core/"
+
+  # ============================================================================
+  # MIGRATION STEPS
+  # ============================================================================
+  migration_steps:
+    - step: 1
+      name: "Archive brain/"
+      action: "cp -r cortex/brain/ _archive/brain/"
+
+    - step: 2
+      name: "Migrate kernel classes (P0)"
+      files:
+        - "brain/core/orchestrator_base.py → cortex/core/orchestrator_base.py"
+        - "brain/core/master_orchestrator_gateway.py → cortex/core/master_orchestrator_gateway.py"
+        - "brain/core/brain_populator.py → cortex/core/brain_populator.py"
+        - "brain/core/interfaces/ → cortex/core/interfaces/"
+      gate: "All orchestrator tests pass"
+
+    - step: 3
+      name: "Migrate domain orchestrators"
+      files:
+        - "brain/domain_orchestrators/ → cortex/orchestrators/domain/business/"
+      gate: "Domain orchestrator tests pass"
+
+    - step: 4
+      name: "Migrate intelligence-related subdirs"
+      dirs:
+        - "brain/analysis/ → cortex/intelligence/analysis/"
+        - "brain/discovery/ → cortex/intelligence/discovery/"
+        - "brain/knowledge/ → cortex/intelligence/"
+        - "brain/nlp/ → cortex/intelligence/nlp/"
+        - "brain/state/ → cortex/intelligence/state/"
+        - "brain/persistence/ → cortex/intelligence/learning/"
+      gate: "Intelligence tests pass"
+
+    - step: 5
+      name: "Migrate infrastructure-related subdirs"
+      dirs:
+        - "brain/devx/ → cortex/infrastructure/devx/"
+        - "brain/ide/ → cortex/infrastructure/ide/"
+        - "brain/llm/ → cortex/infrastructure/llm/"
+        - "brain/production/ → cortex/infrastructure/"
+        - "brain/security/ → cortex/infrastructure/security/"
+      gate: "Infrastructure tests pass"
+
+    - step: 6
+      name: "Migrate remaining (merge into existing)"
+      dirs:
+        - "brain/governance/ → cortex/governance/"
+        - "brain/lens/ → cortex/intelligence/lens/"
+        - "brain/observability/ → cortex/observability/"
+        - "brain/cli/ → cortex/cli/"
+        - "brain/ci_cd/ → cortex/ci_cd/"
+        - "brain/testing/ → cortex/testing/"
+        - "brain/templates/ → cortex/templates/"
+      gate: "All tests pass"
+
+    - step: 7
+      name: "Rewrite all imports"
+      action: "sed -i '' 's/cortex\\.brain\\./cortex./g' across all .py files"
+      gate: "Zero import errors, all tests pass"
+
+    - step: 8
+      name: "Delete cortex/brain/"
+      condition: "All tests pass, capability manifest green"
+
+  # ============================================================================
+  # EXECUTION SEQUENCE (Step-by-step)
+  # ============================================================================
+  execution_sequence:
+    - step: 1
+      name: "Archive entire brain/"
+      command: "cp -r cortex/brain/ _archive/brain/"
+      gate: "Archive exists, 261 files preserved"
+
+    - step: 2
+      name: "Migrate kernel classes (P0 — highest priority)"
+      commands:
+        - "cp cortex/brain/core/orchestrator_base.py cortex/core/orchestrator_base.py"
+        - "cp cortex/brain/core/master_orchestrator_gateway.py cortex/core/master_orchestrator_gateway.py"
+        - "cp cortex/brain/core/brain_populator.py cortex/core/brain_populator.py"
+        - "cp -r cortex/brain/core/interfaces/ cortex/core/interfaces/"
+      gate: "pytest tests/ -k 'orchestrator_base or master_orchestrator' -v — PASS"
+
+    - step: 3
+      name: "Migrate domain orchestrators (business verticals)"
+      commands:
+        - "mkdir -p cortex/orchestrators/domain/business/"
+        - "cp -r cortex/brain/domain_orchestrators/business/ cortex/orchestrators/domain/business/"
+      gate: "Domain orchestrator tests pass"
+
+    - step: 4
+      name: "Migrate intelligence-related subdirs"
+      commands:
+        - "cp -r cortex/brain/analysis/ cortex/intelligence/analysis/"
+        - "cp -r cortex/brain/discovery/ cortex/intelligence/discovery/"
+        - "cp -r cortex/brain/knowledge/ cortex/intelligence/knowledge/"
+        - "cp -r cortex/brain/nlp/ cortex/intelligence/nlp/"
+        - "cp -r cortex/brain/state/ cortex/intelligence/state/"
+        - "cp -r cortex/brain/persistence/ cortex/intelligence/learning/"
+      gate: "pytest tests/ -k 'intelligence or analysis or discovery' -v — PASS"
+
+    - step: 5
+      name: "Migrate infrastructure-related subdirs"
+      commands:
+        - "mkdir -p cortex/infrastructure/{devx,ide,llm,security}"
+        - "cp -r cortex/brain/devx/ cortex/infrastructure/devx/"
+        - "cp -r cortex/brain/ide/ cortex/infrastructure/ide/"
+        - "cp -r cortex/brain/llm/ cortex/infrastructure/llm/"
+        - "cp -r cortex/brain/production/ cortex/infrastructure/production/"
+        - "cp -r cortex/brain/security/ cortex/infrastructure/security/"
+      gate: "pytest tests/ -k 'infrastructure or devx' -v — PASS"
+
+    - step: 6
+      name: "Merge brain subdirs into existing cortex dirs"
+      description: |
+        For each: diff against target, keep unique files, skip duplicates
+        brain/governance/ → cortex/governance/
+        brain/lens/ → cortex/intelligence/lens/
+        brain/observability/ → cortex/observability/
+        brain/cli/ → cortex/cli/
+        brain/ci_cd/ → cortex/ci_cd/
+        brain/testing/ → cortex/testing/
+        brain/templates/ → cortex/templates/
+        brain/tier1/ → cortex/governance/tier1/
+        brain/tier2/ → cortex/intelligence/tier2/
+        brain/verification/ → cortex/governance/verification/
+      gate: "pytest tests/ -v --tb=short — ALL pass"
+
+    - step: 7
+      name: "Move runtime data out of source"
+      commands:
+        - "mv cortex/brain/audit-logs/ .cortex-runtime/audit-logs/ 2>/dev/null || true"
+      gate: "No runtime data in cortex/"
+
+    - step: 8
+      name: "Rewrite all brain imports"
+      command: "find cortex/ tests/ -name '*.py' -exec sed -i '' 's/cortex\\.brain\\./cortex./g' {} +"
+      gate: "grep -r 'cortex\\.brain\\.' cortex/ | wc -l → 0"
+
+    - step: 9
+      name: "Import quarantine check"
+      command: "grep -r 'from cortex.brain\\|import cortex.brain\\|from _archive' cortex/ | wc -l"
+      expected: "0"
+
+    - step: 10
+      name: "Run full test suite"
+      command: "pytest tests/ -v --tb=short -q"
+      expected: "ALL tests pass"
+
+    - step: 11
+      name: "Run capability manifest regression gate"
+      command: "pytest tests/golden/regression/test_capability_manifest.py -v"
+      expected: "PASS"
+
+    - step: 12
+      name: "Delete cortex/brain/"
+      command: "rm -rf cortex/brain/"
+      condition: "Only after steps 10 and 11 pass"
+
+    - step: 13
+      name: "Commit Phase 02"
+      command: "git add -A && git commit -m 'refactor(phase-04): brain deduplication — dissolved 261 files into proper domains'"
+      tag: "cortex-refactor-phase-04"
+
+  # ============================================================================
+  # EXIT GATE
+  # ============================================================================
+  exit_gate:
+    all_tests_passing: true
+    capability_manifest_check: true
+    no_imports_from_brain: true
+    brain_directory_empty: true
+    coverage_minimum: 90
+    description: |
+      Phase 02 is complete when:
+      1. cortex/brain/ directory no longer exists (archived in _archive/)
+      2. ZERO imports referencing cortex.brain anywhere
+      3. All orchestrators still instantiate and execute
+      4. OrchestratorBase is in cortex/core/
+      5. All MCP tools respond
+      6. Capability manifest shows zero regressions
+
+  # ============================================================================
+  # VALIDATION LOOP — FINAL STAGE (MANDATORY)
+  # ============================================================================
+  # Authority: cortex-refactor-master.yaml § validation_loops
+  # This stage runs AFTER all deliverables are implemented.
+  # It loops until every exit gate check passes. Once clean, CORTEX
+  # autonomously begins Phase 05 without user intervention.
+  # ============================================================================
+  validation_loop:
+    stage_id: "VL-04"
+    phase: "phase-04"
+    next_phase: "phase-05"
+    next_phase_spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-05-orchestrator-rationalization.yaml"
+    max_iterations: 10
+    iteration_timeout_minutes: 60
+
+    checks:
+      - id: "VL-04-C1"
+        name: "cortex/brain/ directory no longer exists"
+        command: "test ! -d cortex/brain/ && echo 'archived' || echo 'STILL EXISTS'"
+        pass_condition: "prints archived"
+        on_fail: "Complete all brain/ migrations to proper domain dirs, then archive: mv cortex/brain/ _archive/brain/"
+
+      - id: "VL-04-C2"
+        name: "Zero imports from cortex.brain"
+        command: "grep -r 'from cortex\\.brain\\|import cortex\\.brain\\|from _archive' cortex/ | wc -l"
+        pass_condition: "output is 0"
+        on_fail: "Run import rewriter on all files still referencing cortex.brain"
+
+      - id: "VL-04-C3"
+        name: "OrchestratorBase in cortex/core/"
+        command: "python -c \"from cortex.core.orchestrator_base import OrchestratorBase; print('OrchestratorBase OK')\""
+        pass_condition: "prints OrchestratorBase OK"
+        on_fail: "Ensure brain/core/orchestrator_base.py was migrated to cortex/core/ and imports updated"
+
+      - id: "VL-04-C4"
+        name: "All active orchestrators instantiate"
+        command: "python -c \"from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator; from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator; from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrchestrator; print('core orchestrators OK')\""
+        pass_condition: "prints core orchestrators OK"
+        on_fail: "Fix import errors in affected orchestrators — update all brain.* references"
+
+      - id: "VL-04-C5"
+        name: "All MCP tools respond"
+        command: "python -c \"from cortex.mcp import list_tools; tools=list_tools(); assert len(tools)>=22,'<22 tools'; print(len(tools),'tools OK')\""
+        pass_condition: "prints N tools OK where N >= 22"
+        on_fail: "Debug MCP tool failures caused by broken brain/ imports"
+
+      - id: "VL-04-C6"
+        name: "All tests pass"
+        command: "pytest tests/ -v --tb=short -q --ignore=tests/performance"
+        pass_condition: "exit code 0, zero failures"
+        on_fail: "Fix tests broken by brain/ migration — update fixture imports"
+
+      - id: "VL-04-C7"
+        name: "Coverage ≥ 90%"
+        command: "pytest tests/ --cov=cortex --cov-report=term-missing -q | tail -3"
+        pass_condition: "coverage ≥ 90%"
+        on_fail: "Add tests for uncovered files migrated from brain/"
+
+      - id: "VL-04-C8"
+        name: "Capability manifest regression gate"
+        command: "pytest tests/golden/regression/test_capability_manifest.py -v --tb=short"
+        pass_condition: "exit code 0"
+        on_fail: "Fix capability regressions — no brain/ capability should be lost"
+
+    loop_behavior:
+      strategy: "conditional_retry"
+      description: |
+        1. Run all checks (VL-04-C1 through VL-04-C8) in sequence.
+        2. If ALL checks pass → loop exits CLEAN → proceed to autonomous_advance.
+        3. If ANY check fails:
+           a. Apply the on_fail remediation for each failing check.
+           b. Record iteration result in cortex-refactor-master.yaml validation_loops.history.
+           c. Increment iteration counter.
+           d. If iteration_count > max_iterations → HALT with P0 alert to user.
+           e. Otherwise → restart from check C1.
+        4. Never skip a check — all must pass in the same iteration.
+
+    autonomous_advance:
+      enabled: true
+      trigger: "All VL-04 checks pass in same iteration"
+      actions:
+        - action: "Update cortex-refactor-master.yaml"
+          changes:
+            - "phases[phase-04].status → complete"
+            - "phases[phase-04].progress.completed → ISO timestamp"
+            - "phases[phase-04].progress.validation_loop_iterations → N"
+            - "metadata.counters.pending -= 1"
+            - "metadata.counters.complete += 1"
+        - action: "Move phase spec to completed/"
+          command: "cp cortex-registry/planning/phases/planned/cortex-refactor/phase-04-brain-deduplication.yaml cortex-registry/planning/phases/completed/cortex-refactor/"
+        - action: "Git checkpoint"
+          command: "git add -A && git commit -m 'refactor(phase-04): COMPLETE — brain/ dissolved into proper domains, advancing to phase-05'"
+        - action: "Load and execute next phase"
+          spec: "cortex-registry/planning/phases/planned/cortex-refactor/phase-05-orchestrator-rationalization.yaml"
+          orchestrator: "CortexMasterPlanOrchestrator"
+          method: "execute_phase(phase_id='phase-05')"

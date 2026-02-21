@@ -130,8 +130,9 @@ class OptimalFolderStateValidator:
         """Generate a step-by-step remediation plan for violations."""
         steps = []
         # Sort: source files before test files (dependency ordering)
-        source_violations = [v for v in violations if "test" not in v["file"]]
-        test_violations = [v for v in violations if "test" in v["file"]]
+        # Use violation_type to distinguish (not path, which may contain "test" from temp dirs)
+        source_violations = [v for v in violations if "test" not in v.get("violation_type", "")]
+        test_violations = [v for v in violations if "test" in v.get("violation_type", "")]
         for v in source_violations + test_violations:
             src = v["file"]
             dst = v.get("suggested_location", "")

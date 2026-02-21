@@ -251,11 +251,17 @@ class TokenDistillationEngine:
         if classes:
             extracted.append(f"Classes: {', '.join(classes[:5])}")
 
-        # Extract function signatures (name + params only)
+        # Extract top-level function signatures (name + params only)
         functions = re.findall(r'^def\s+(\w+)\s*\((.*?)\)', content, re.MULTILINE)
         if functions:
             func_sigs = [f"{name}({params[:30]})" for name, params in functions[:5]]
             extracted.append(f"Functions: {', '.join(func_sigs)}")
+
+        # Extract method names (indented def) - only public methods, max 3
+        methods = re.findall(r'^\s+def\s+(\w+)\s*\(', content, re.MULTILINE)
+        public_methods = [m for m in methods if not m.startswith('_')][:3]
+        if public_methods:
+            extracted.append(f"Methods: {', '.join(public_methods)}")
 
         return '\n'.join(extracted)
 

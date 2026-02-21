@@ -1,0 +1,37 @@
+# Engineering Anti-Patterns
+# Authority: AC-PHASE65-S1-001
+
+title: "Engineering Anti-Patterns to Avoid"
+category: "architecture"
+version: "1.0"
+
+best_practices:
+  structural_anti_patterns:
+    god_object:
+      description: "Avoid God Objects that know too much or do too much"
+    spaghetti_code:
+      description: "Avoid tangled control flow; prefer linear, predictable execution"
+    lava_flow:
+      description: "Remove dead code rather than leaving it commented out"
+    golden_hammer:
+      description: "Avoid applying a single familiar pattern to every problem"
+    copy_paste_programming:
+      description: "Never copy-paste code; extract reusable abstractions instead"
+  process_anti_patterns:
+    big_ball_of_mud:
+      description: "Avoid incrementally growing an unstructured system; maintain clear architecture"
+    analysis_paralysis:
+      description: "Make decisions with available information; avoid indefinite planning"
+    premature_optimisation:
+      description: "Profile first; only optimise proven bottlenecks"
+  code_quality:
+    magic_numbers:
+      description: "Replace magic numbers and strings with named constants"
+    deep_nesting:
+      description: "Flatten deeply nested conditionals with early returns"
+    boolean_trap:
+      description: "Avoid boolean parameters; use enums or separate methods"
+    feature_envy:
+      description: "If a method uses mostly another class's data, move it there"
+    data_clumps:
+      description: "Combine frequently paired data items into a value object"

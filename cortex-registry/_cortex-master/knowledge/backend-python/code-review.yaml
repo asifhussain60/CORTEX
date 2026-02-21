@@ -1,0 +1,39 @@
+# Code Review Best Practices
+# Authority: AC-PHASE65-S1-001
+
+title: "Code Review Practices"
+category: "backend-python"
+version: "1.0"
+
+best_practices:
+  reviewer_mindset:
+    constructive_feedback:
+      description: "Provide actionable, specific feedback rather than vague criticism"
+    intent_understanding:
+      description: "Understand the intent of the change before critiquing implementation"
+    principle_based:
+      description: "Reference coding standards when requesting changes"
+    knowledge_sharing:
+      description: "Use reviews as teaching opportunities"
+  checklist:
+    correctness:
+      description: "Verify logic is correct and handles edge cases"
+    test_coverage:
+      description: "New code must have corresponding test coverage"
+    naming_clarity:
+      description: "Check names reveal intent"
+    error_handling:
+      description: "Ensure errors are handled gracefully"
+    security:
+      description: "Check for injection risks, authentication issues, data exposure"
+    performance:
+      description: "Flag O(n²) loops, unnecessary DB calls, memory leaks"
+    documentation:
+      description: "Verify public APIs have docstrings"
+  author_mindset:
+    small_prs:
+      description: "Keep pull requests small and focused on one concern"
+    self_review:
+      description: "Review your own diff before requesting review"
+    test_first:
+      description: "Include tests in the same commit as implementation"

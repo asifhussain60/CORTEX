@@ -1,11 +1,11 @@
 """CORE-028 file naming violation detector.
 
 Scans workspace for Python files violating CORE-028 naming policy:
-- Python files (.py) MUST use snake_case (underscores, not hyphens per PEP 8)
-- File names MUST be ≤ 50 characters (excluding extension)
+- Python files (.py) MUST use kebab-case (hyphens, not underscores)
+- File names MUST be ≤ 25 characters (excluding extension)
 - Provides fix suggestions for violations
 
-Phase 7.4, Task NAMING-001 (Updated for snake_case)
+Phase 7.4, Task NAMING-001
 AC-ID: NAMING-001
 """
 
@@ -19,8 +19,8 @@ from typing import Dict, List, Optional
 class ViolationType(enum.Enum):
     """Types of naming violations."""
 
-    HYPHEN = "hyphen"  # Uses hyphen instead of underscore (Python should use snake_case)
-    LENGTH = "length"  # Exceeds 50-character limit
+    UNDERSCORE = "underscore"  # Uses underscore instead of hyphen (should be kebab-case)
+    LENGTH = "length"          # Exceeds 25-character limit
 
 
 @dataclass
@@ -48,8 +48,8 @@ class NamingViolationDetector:
     """Detects CORE-028 naming policy violations in Python files.
 
     Scans workspace for:
-    1. Files using hyphens (should be snake_case per PEP 8)
-    2. Files exceeding 50-character limit
+    1. Files using underscores (should be kebab-case with hyphens)
+    2. Files exceeding 25-character limit
 
     Provides fix suggestions for each violation.
 
@@ -63,7 +63,7 @@ class NamingViolationDetector:
         >>> print(report)
     """
 
-    MAX_NAME_LENGTH = 50  # CORE-028 specification (excluding .py extension)
+    MAX_NAME_LENGTH = 25  # CORE-028 specification (excluding .py extension)
 
     def __init__(self, workspace_root: Path):
         """Initialize detector with workspace root.
@@ -76,6 +76,8 @@ class NamingViolationDetector:
 
     def scan_file(self, file_path: Path) -> List[Violation]:
         """Scan single file for naming violations.
+
+        Check order: UNDERSCORE first, then LENGTH (priority ordering).
 
         Args:
             file_path: Path to Python file to check
@@ -91,26 +93,27 @@ class NamingViolationDetector:
 
         file_name = file_path.stem  # Name without extension
 
-        # Check for hyphen violation (Python should use snake_case)
-        if "-" in file_name:
+        # Check for underscore violation (should be kebab-case)
+        if "_" in file_name:
             suggested = self.suggest_fix(file_path.name)
             violations.append(Violation(
                 file_path=file_path,
-                type=ViolationType.HYPHEN,
+                type=ViolationType.UNDERSCORE,
                 current_name=file_path.name,
                 suggested_fix=suggested,
-                reason=f"File uses hyphens (CORE-028 requires snake_case for Python): {file_path.name}",
+                reason=f"File uses underscores (CORE-028 requires kebab-case): {file_path.name}",
             ))
 
-        # Check for length violation
-        if len(file_name) > self.MAX_NAME_LENGTH:
+        # Check for length violation (use hyphenated name for length check)
+        hyphen_name = file_name.replace("_", "-")
+        if len(hyphen_name) > self.MAX_NAME_LENGTH:
             suggested = self.suggest_fix(file_path.name)
             violations.append(Violation(
                 file_path=file_path,
                 type=ViolationType.LENGTH,
                 current_name=file_path.name,
                 suggested_fix=suggested,
-                reason=f"File name exceeds {self.MAX_NAME_LENGTH} characters (CORE-028): {len(file_name)} chars",
+                reason=f"File name exceeds {self.MAX_NAME_LENGTH} characters (CORE-028): {len(hyphen_name)} chars",
             ))
 
         return violations
@@ -137,27 +140,27 @@ class NamingViolationDetector:
             file_name: Current file name (with extension)
 
         Returns:
-            Suggested compliant file name (snake_case)
+            Suggested compliant file name (kebab-case, ≤25 chars)
         """
         # Split name and extension
         name_parts = file_name.rsplit(".", 1)
         name = name_parts[0]
         ext = f".{name_parts[1]}" if len(name_parts) > 1 else ""
 
-        # Fix hyphens → underscores (convert to snake_case)
-        name = name.replace("-", "_")
+        # Fix underscores → hyphens (convert to kebab-case)
+        name = name.replace("_", "-")
 
         # Fix length (truncate if needed)
         if len(name) > self.MAX_NAME_LENGTH:
-            # Try to truncate at word boundary
+            # Try to truncate at word boundary (hyphen)
             truncated = name[:self.MAX_NAME_LENGTH]
 
             # If truncation cuts mid-word, remove last partial word
-            if "_" in truncated:
-                parts = truncated.split("_")
+            if "-" in truncated:
+                parts = truncated.split("-")
                 # Remove last part if it's incomplete
-                if len(truncated) == self.MAX_NAME_LENGTH and name[self.MAX_NAME_LENGTH] != "_":
-                    truncated = "_".join(parts[:-1])
+                if len(truncated) == self.MAX_NAME_LENGTH and name[self.MAX_NAME_LENGTH:self.MAX_NAME_LENGTH+1] != "-":
+                    truncated = "-".join(parts[:-1])
 
             name = truncated
 
@@ -186,7 +189,7 @@ class NamingViolationDetector:
         report_data = {
             "total_violations": len(self.violations),
             "violations_by_type": {
-                "hyphen": len([v for v in self.violations if v.type == ViolationType.HYPHEN]),
+                "underscore": len([v for v in self.violations if v.type == ViolationType.UNDERSCORE]),
                 "length": len([v for v in self.violations if v.type == ViolationType.LENGTH]),
             },
             "violations": [v.to_dict() for v in self.violations],
@@ -207,7 +210,7 @@ class NamingViolationDetector:
             "CORE-028 File Naming Violations",
             "=" * 80,
             f"\nTotal Violations: {len(self.violations)}",
-            f"  - Hyphen violations: {len([v for v in self.violations if v.type == ViolationType.HYPHEN])}",
+            f"  - Underscore violations: {len([v for v in self.violations if v.type == ViolationType.UNDERSCORE])}",
             f"  - Length violations: {len([v for v in self.violations if v.type == ViolationType.LENGTH])}",
             "\n" + "=" * 80,
             "Violations by File:",
