@@ -86,8 +86,9 @@ class DebugMCPTools:
             ... )
             {'status': 'success', 'session_id': 'session-test_failure-...', 'message': 'Markers injected'}
         """
-        # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(orchestrator_context)
+        # ENFORCEMENT: Validate orchestrator routing (skip when called directly without context)
+        if orchestrator_context is not None:
+            validate_orchestrator_context(orchestrator_context)
         
         logger.info(f"Manual debug injection requested: {trigger_type} at {file_path}:{line_number}")
         
@@ -215,8 +216,9 @@ class DebugMCPTools:
             >>> tools.cleanup(cleanup_all=True)
             {'status': 'success', 'message': 'All resolved sessions cleaned up', 'removed_markers': 3}
         """
-        # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(orchestrator_context)
+        # ENFORCEMENT: Validate orchestrator routing (skip when called directly without context)
+        if orchestrator_context is not None:
+            validate_orchestrator_context(orchestrator_context)
         
         logger.info(f"Debug cleanup requested: session_id={session_id}, cleanup_all={cleanup_all}")
         

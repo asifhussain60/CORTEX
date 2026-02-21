@@ -25,14 +25,14 @@ class GovernanceRuleLoader:
         Initialize rule loader.
 
         Args:
-            governance_dir: Path to cortex_intelligence/tier0/governance.
+            governance_dir: Path to cortex-registry/core governance files.
                           Defaults to standard location.
         """
         if governance_dir is None:
             # Standard location relative to project root
             governance_dir = (
                 Path(__file__).parent.parent.parent /
-                "cortex_intelligence/tier0/governance"
+                "cortex-registry/core"
             )
 
         self.governance_dir = governance_dir

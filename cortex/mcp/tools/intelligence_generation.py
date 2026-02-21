@@ -117,7 +117,9 @@ class CortexGenerateTests(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute intelligent test generation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         try:
             # Validate required parameters

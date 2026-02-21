@@ -11,7 +11,7 @@ Reason: Complex template system (ENH-082) superseded by simple solution.
 
 This file remains for backward compatibility but will not receive new features.
 
-AC-AR-009-01: Response templates loaded from cortex_intelligence/tier2/
+AC-AR-009-01: Response templates loaded from cortex-registry/artifacts/templates/
 AC-AR-009-02: Templates support variable substitution
 AC-AR-009-03: Template inheritance working
 """
@@ -136,15 +136,15 @@ class TemplateEngine:
         Initialize template engine.
 
         Args:
-            template_dir: Path to templates directory (default: cortex_intelligence/tier2/response-templates)
+            template_dir: Path to templates directory (default: cortex-registry/artifacts/templates/responses)
         """
         self.logger = EnhancedAuditLogger.instance()
         self.registry = TemplateEngineRegistry.instance()
 
-        # Default to cortex_intelligence/tier2/response-templates
+        # Default to cortex-registry/artifacts/templates/responses
         if template_dir is None:
             project_root = Path(__file__).parent.parent.parent
-            template_dir = str(project_root / "cortex_intelligence" / "tier2" / "response-templates")
+            template_dir = str(project_root / "cortex-registry" / "artifacts" / "templates" / "responses")
 
         self.template_dir = template_dir
 
@@ -152,7 +152,7 @@ class TemplateEngine:
         """
         Load templates from template directory.
 
-        AC-AR-009-01: Response templates loaded from cortex_intelligence/tier2/
+        AC-AR-009-01: Response templates loaded from cortex-registry/artifacts/templates/
 
         Returns:
             Ok with count of loaded templates or Err

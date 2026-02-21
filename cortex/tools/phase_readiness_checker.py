@@ -32,7 +32,7 @@ from typing import Any, Dict, List, Optional, Tuple
 # CORE-029: Response Header Enforcement (TIER 0 - IMMUTABLE)
 # ================================================================================
 # Per governance rules, all readiness check reports must include CORTEX header
-# Reference: cortex_intelligence/tier0/governance/response-header-enforcement.yaml
+# Reference: cortex-registry/core/governance/response-header-enforcement.yaml
 # ================================================================================
 
 class ResponseHeaderEnforcer:

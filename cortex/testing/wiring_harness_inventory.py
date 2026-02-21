@@ -199,7 +199,7 @@ class WiringHarnessInventory:
         "category": "orchestrator",
         "status": "WIRED",
         "phase": "AC-REM-011-02",
-        "description": "Test-driven development orchestrator with 35 best practices YAMLs from cortex_intelligence/tier3/knowledge/",
+        "description": "Test-driven development orchestrator with 35 best practices YAMLs from cortex/intelligence/knowledge/",
 
         "implementation_location": "cortex/orchestrators/core/tdd_orchestrator.py",
         "entry_point": "cortex.orchestrators.core.tdd_orchestrator.TDDOrchestrator",
@@ -268,14 +268,14 @@ class WiringHarnessInventory:
             "implementation": "COMPLETE",
             "testing": "42 tests PASSING (100%)",
             "wiring": "WIRED to MasterOrchestrator (AC-REM-011-02)",
-            "knowledge_integration": "35 YAMLs from cortex_intelligence/tier3/knowledge/ loaded",
+            "knowledge_integration": "35 YAMLs from cortex/intelligence/knowledge/ loaded",
             "documentation": "Google-style docstrings on all public APIs",
             "governance_compliance": "CORE-008, CORE-011, CORE-012, CORE-019 compliant"
         },
 
         "yaml_restoration_status": {
             "phase": "PHASE-REMEDIATION-07: TDD Knowledge Integration",
-            "yaml_location": "cortex_intelligence/tier3/knowledge/",
+            "yaml_location": "cortex/intelligence/knowledge/",
             "yaml_source": "Restored from git commit 6ad2094a5 (CORTEX-4.0 import)",
             "restoration_date": "2026-01-23",
             "yaml_count": 35,
@@ -285,8 +285,8 @@ class WiringHarnessInventory:
 
         "dependencies": {
             "KnowledgeGuidanceEngine": "cortex.core.core.knowledge_guidance_engine.KnowledgeGuidanceEngine",
-            "TDD_YAMLs": "cortex_intelligence/tier3/knowledge/TESTING-VALIDATION/*.yaml",
-            "Governance": "cortex_intelligence/tier0/governance/core-rules.yaml (CORE-008, CORE-019)"
+            "TDD_YAMLs": "cortex/intelligence/knowledge/TESTING-VALIDATION/*.yaml",
+            "Governance": "cortex-registry/core/tier0-skull/skull-rules.yaml (CORE-008, CORE-019)"
         },
 
         "integration_notes": "✅ WIRED: TDD Orchestrator fully integrated with 35 best practices YAMLs. Routes ALL implementation intents through TDD discipline enforcer per CORE-019. Provides RED/GREEN/REFACTOR workflow guidance with knowledge integration."

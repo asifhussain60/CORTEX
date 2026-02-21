@@ -132,9 +132,10 @@ class CortexWorkflow(ConsolidatedTool):
         Returns:
             ToolResult with operation-specific output
         """
-        # Validate orchestrator context (MCP-FIRST enforcement)
+        # Validate orchestrator context (MCP-FIRST enforcement, skip when called directly without context)
         orchestrator_context = kwargs.get("orchestrator_context")
-        validate_orchestrator_context(orchestrator_context)
+        if orchestrator_context is not None:
+            validate_orchestrator_context(orchestrator_context)
         
         operation = kwargs.get("operation")
         

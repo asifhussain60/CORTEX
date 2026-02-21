@@ -35,6 +35,7 @@ from cortex.orchestrators.validation.confidence_scorer import (
 from cortex.orchestrators.validation.change_coherence_engine import ChangeCoherenceEngine
 from cortex.orchestrators.validation.coherence_models import (
     CoherenceStatus,
+    FileStructure,
     PreEditContext,
     CoherenceReport,
 )
@@ -58,6 +59,7 @@ __all__ = [
     "ConfidenceFactor",
     "ChangeCoherenceEngine",
     "CoherenceStatus",
+    "FileStructure",
     "PreEditContext",
     "CoherenceReport",
     "CoherenceValidator",

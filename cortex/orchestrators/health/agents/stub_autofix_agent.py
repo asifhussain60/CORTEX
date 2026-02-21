@@ -26,10 +26,10 @@ from .base_agent import (
 class StubAutoFixAgent(BaseHealthAgent):
     """Agent for automatically fixing stub files.
     
-    Detects redirect stubs (files that just import from cortex_intelligence)
-    and fixes them by:
+    Detects redirect stubs (files that just re-export from deleted packages
+    such as cortex_intelligence or cortex_lens) and fixes them by:
     - Deleting the stub file
-    - Rewriting imports in other files to point directly to cortex_intelligence
+    - Rewriting imports in other files to point to cortex.intelligence
     
     Attributes:
         name: Agent name
@@ -149,7 +149,7 @@ class StubAutoFixAgent(BaseHealthAgent):
         """Check if file is a redirect stub.
         
         A redirect stub is a file that:
-        - Contains only imports from cortex_intelligence
+        - Contains only imports from deleted packages (cortex_intelligence, cortex_lens)
         - Has < 10 lines of actual code
         - Has "REDIRECT" comment or re-export pattern
         
@@ -166,14 +166,14 @@ class StubAutoFixAgent(BaseHealthAgent):
             if "REDIRECT" in content or "Re-export" in content:
                 return True
             
-            # Check if only imports from cortex_intelligence
-            if "from cortex_intelligence" in content:
+            # Check if only imports from deleted packages (cortex_intelligence, cortex_lens)
+            if "from cortex_intelligence" in content or "from cortex_lens" in content:
                 lines = [
                     line for line in content.split('\n')
                     if line.strip() and not line.strip().startswith('#')
                 ]
                 
-                # Very few lines + imports from cortex_intelligence = likely stub
+                # Very few lines + imports from deleted packages = likely stub
                 if len(lines) <= 5:
                     return True
             

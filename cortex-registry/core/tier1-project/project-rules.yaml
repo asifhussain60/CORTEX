@@ -53,7 +53,7 @@ rules:
     name: "Registry Code Separation"
     principle: "Separation of Concerns"
     description: >
-      Python code belongs in cortex/ (and cortex_intelligence/).
+      Python code belongs in cortex/ (and cortex/intelligence/).
       Metadata, rules, plans and configuration belong in cortex-registry/.
       Cross-contamination is forbidden.
     severity: "MEDIUM"

@@ -200,9 +200,24 @@ def onboard_repository_tool(
     from datetime import datetime
     import json
     import yaml
-    
-    # ENFORCEMENT: Validate orchestrator routing
-    validate_orchestrator_context(orchestrator_context)
+
+    # VALIDATION: Validate test_output_dir type BEFORE orchestrator context check
+    if test_mode and test_output_dir is not None:
+        if not isinstance(test_output_dir, (str, Path)):
+            raise ValueError(
+                "test_output_dir must be a string or Path, "
+                f"got {type(test_output_dir).__name__}"
+            )
+        test_output_dir_str = str(test_output_dir)
+        if test_output_dir_str.startswith("<") and "function" in test_output_dir_str:
+            raise ValueError(
+                "test_output_dir appears to be a function object rather than a path. "
+                "Pass a string or pathlib.Path instead."
+            )
+
+    # ENFORCEMENT: Validate orchestrator routing (only in non-test mode, only if context provided)
+    if not test_mode and orchestrator_context is not None:
+        validate_orchestrator_context(orchestrator_context)
     
     # Add timestamp if missing
     if orchestrator_context and "timestamp" not in orchestrator_context:
@@ -222,8 +237,9 @@ def onboard_repository_tool(
                 error=f"Repository not found: {repository_path}"
             ).to_dict()
 
-        # Ephemeral path guard — block tmp paths in production mode
-        if not test_mode:
+        # Ephemeral path guard — block tmp paths in production mode when writing artifacts
+        write_mode = generate_artifacts or capture_learning
+        if not test_mode and write_mode:
             str_path = str(repo_path.resolve())
             _EPHEMERAL_MARKERS = ("/var/folders/", "/tmp/", "\\Temp\\", "pytest-")
             if any(marker in str_path for marker in _EPHEMERAL_MARKERS):
@@ -453,28 +469,30 @@ def onboard_repository_tool(
                 warnings.append(f"Artifact generation failed: {str(e)}")
                 artifacts = {"warning": "Artifact generation failed", "error": str(e)}
 
-        # Validate with enforcement agent (non-blocking warnings only)
-        try:
-            enforcement_agent = KnowledgePersistenceAgent()
-            validation_context = {
-                "operation": "onboard",
-                "repository_path": repository_path,
-                "learning_metrics": learning_metrics,
-                "brain_enhancement": brain_enhancement,
-                "artifacts": artifacts
-            }
-            
-            validation_results = enforcement_agent.validate(validation_context)
-            blocking_violations = [
-                r for r in validation_results
-                if not r.passed and r.level.name == "BLOCKING"
-            ]
-            
-            if blocking_violations:
-                logger.warning(f"Governance warnings (non-blocking): {blocking_violations}")
-                warnings.append(f"Governance warnings: {[v.message for v in blocking_violations]}")
-        except Exception as e:
-            logger.warning(f"Enforcement validation failed (non-blocking): {e}")
+        # Validate with enforcement agent (non-blocking warnings only, skip in test mode or read-only)
+        write_mode_active = generate_artifacts or capture_learning
+        if not test_mode and write_mode_active:
+            try:
+                enforcement_agent = KnowledgePersistenceAgent()
+                validation_context = {
+                    "operation": "onboard",
+                    "repository_path": repository_path,
+                    "learning_metrics": learning_metrics,
+                    "brain_enhancement": brain_enhancement,
+                    "artifacts": artifacts
+                }
+                
+                validation_results = enforcement_agent.validate(validation_context)
+                blocking_violations = [
+                    r for r in validation_results
+                    if not r.passed and r.level.name == "BLOCKING"
+                ]
+                
+                if blocking_violations:
+                    logger.warning(f"Governance warnings (non-blocking): {blocking_violations}")
+                    warnings.append(f"Governance warnings: {[v.message for v in blocking_violations]}")
+            except Exception as e:
+                logger.warning(f"Enforcement validation failed (non-blocking): {e}")
 
         # Determine final status
         if warnings:

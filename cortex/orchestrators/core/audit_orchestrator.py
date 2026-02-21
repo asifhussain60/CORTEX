@@ -1,11 +1,16 @@
 """Audit Orchestrator for CORTEX audit mode.
 
 Orchestrates audit checks including Phase 38 P1.5 checks.
+Filesystem checks (#6 root clutter, #9 deprecated files) are delegated to
+HealthOrchestrator to avoid duplication (CORE-035).
 
-AC-PHASE38-034, AC-PHASE38-035
+AC-PHASE38-034, AC-PHASE38-035, AC-AUDIT-001, AC-AUDIT-002, AC-AUDIT-003
 """
 
+from pathlib import Path
 from typing import Any, Dict, List, Optional
+
+from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
 
 
 class AuditOrchestrator:
@@ -70,6 +75,46 @@ class AuditOrchestrator:
             "P1.5-009": {"status": "pass", "description": "Regression Safety Net"},
             "P1.5-010": {"status": "pass", "description": "File Placement Governance"},
         }
+
+    def check_root_clutter(self) -> List[Any]:
+        """Audit check #6 — detect files in root that belong in subfolders.
+
+        Delegates to :class:`HealthOrchestrator` (H-009 check) to avoid
+        reimplementing filesystem logic (CORE-035).
+
+        Returns:
+            List of H-009 IssueFile instances found by the health scan.
+
+        Raises:
+            ValueError: If *workspace_root* is not set.
+        """
+        if self.workspace_root is None:
+            raise ValueError(
+                "workspace_root must be set to run check_root_clutter"
+            )
+        health = HealthOrchestrator(Path(self.workspace_root))
+        scan_result = health.scan()
+        return [issue for issue in scan_result.issues if issue.check_id == "H-009"]
+
+    def check_deprecated_files(self) -> List[Any]:
+        """Audit check #9 — detect files with DEPRECATED markers.
+
+        Delegates to :class:`HealthOrchestrator` (H-006 check) to avoid
+        reimplementing filesystem logic (CORE-035).
+
+        Returns:
+            List of H-006 IssueFile instances found by the health scan.
+
+        Raises:
+            ValueError: If *workspace_root* is not set.
+        """
+        if self.workspace_root is None:
+            raise ValueError(
+                "workspace_root must be set to run check_deprecated_files"
+            )
+        health = HealthOrchestrator(Path(self.workspace_root))
+        scan_result = health.scan()
+        return [issue for issue in scan_result.issues if issue.check_id == "H-006"]
 
     def generate_report(self) -> Dict[str, Any]:
         """Generate audit report.

@@ -20,7 +20,8 @@ class DuplicationAudit:
     def __init__(self, root_path: str = "/Users/asifhussain/PROJECTS/CORTEX"):
         self.root = Path(root_path)
         self.cortex_dir = self.root / "cortex"
-        self.cortex_intelligence_dir = self.root / "cortex_intelligence"
+        # Phase 03 migration: deleted package dissolved into cortex/intelligence/
+        self.intelligence_dir = self.root / "cortex" / "intelligence"
 
         # Tracking structures
         self.class_implementations: Dict[str, List[Dict]] = defaultdict(list)
@@ -32,7 +33,7 @@ class DuplicationAudit:
         """Scan cortex directories for Python implementations."""
         print("🔍 SCANNING CODEBASE FOR IMPLEMENTATIONS...\n")
 
-        for py_dir in [self.cortex_dir, self.cortex_intelligence_dir]:
+        for py_dir in [self.cortex_dir]:
             if not py_dir.exists():
                 continue
 
@@ -217,7 +218,7 @@ class UnifiedXXXComponent:
         report.append("""
 1. BEFORE CODING (Implementation Truth - CORE-030):
    - Run this audit to detect existing implementations
-   - Check cortex/ and cortex_intelligence/ for your class/function name
+   - Check cortex/ (including cortex/intelligence/) for your class/function name
    - If found: use consolidation pattern instead of creating new
 
 2. DURING IMPLEMENTATION (CORE-035 Enforcement):

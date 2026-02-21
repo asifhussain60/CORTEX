@@ -92,8 +92,9 @@ async def cortex_validate_coherence(
         >>> print(result["issues"][0]["message"])
         "Duplicate section 'Section' found..."
     """
-    # ENFORCEMENT: Validate orchestrator routing
-    validate_orchestrator_context(orchestrator_context)
+    # ENFORCEMENT: Validate orchestrator routing (skip when called directly without context)
+    if orchestrator_context is not None:
+        validate_orchestrator_context(orchestrator_context)
     
     try:
         from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer

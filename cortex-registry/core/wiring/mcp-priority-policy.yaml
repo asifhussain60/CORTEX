@@ -3,9 +3,9 @@
 # Purpose: Define MCP-first principles and enforcement
 # Status: ACTIVE (Phase D - Agent Consolidation)
 
-version: "1.0"
+version: "1.1"
 created_at: 2026-02-09
-updated_at: 2026-02-09
+updated_at: 2026-02-21
 authority: "CORTEX Architecture Team"
 
 # MCP-First Principles
@@ -50,18 +50,17 @@ mcp_tools:
     - cortex_process_request
     - cortex_challenge
     - cortex_total_recall
-    - cortex_lens_analyze
-    - cortex_git_history
-    - cortex_ast_analyze
-    - cortex_detect_duplicates
+    - cortex_lens
+    - cortex_git
+    - cortex_governance
+    - cortex_refactor
     
   support_tools:
     - cortex_tools_catalog
-    - cortex_onboard_repository
-    - cortex_plan_setup
-    - cortex_plan_teardown
-    - cortex_plan_resolve
-    - cortex_plan_sync
+    - cortex_onboard
+    - cortex_plan
+    - cortex_validate
+    - cortex_verify
 
 # Intent-to-MCP Routing
 intent_routing_mcp:
@@ -82,7 +81,7 @@ intent_routing_mcp:
     principles: ["SOLID", "Clean Code", "Design Patterns"]
     
   ANALYZE:
-    required_tool: cortex_lens_analyze
+    required_tool: cortex_lens
     operation: "unified_code_analysis"
     scope: "Code intelligence, metrics, duplication"
     
@@ -97,7 +96,7 @@ intent_routing_mcp:
     phases: ["Discover", "Structure", "Validate"]
     
   ONBOARD:
-    required_tool: cortex_onboard_repository
+    required_tool: cortex_onboard
     operation: "repository_onboarding"
     scope: "Full repo scan + security baseline"
     
@@ -183,7 +182,7 @@ anti_patterns:
 migration:
   phase_1_audit:
     description: "Identify direct file operations"
-    tools: ["cortex_lens_analyze", "cortex_detect_duplicates"]
+    tools: ["cortex_lens", "cortex_governance"]
     
   phase_2_rewrite:
     description: "Rewrite as MCP tools operations"

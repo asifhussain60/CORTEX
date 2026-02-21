@@ -1,6 +1,6 @@
 ---
 agent_id: cortex-auditor
-version: "2.0"
+version: "2.1"
 status: active
 layer: core
 modes_served:
@@ -14,6 +14,7 @@ capabilities:
 mcp_tools:
   - cortex_validate_compliance
   - cortex_audit_remediation_plan
+  - cortex_vacuum
 priority: P0
 token_cost_estimate: 3000
 ---
@@ -29,4 +30,11 @@ token_cost_estimate: 3000
 - Empty stub identification
 - Duplicate orchestrator detection (CORE-035)
 - CORE rule violation scanning
+- Test-source mirror validation
+
+## Health Check Integration (GP50 — planned)
+
+`HealthOrchestrator.run_health_check()` will be wired into AUDIT mode as Check #11 once
+Phase 50 consolidation is complete. Until then, the 10-point checklist (static grep/AST)
+is the canonical AUDIT path. `cortex_vacuum` is available for markdown-cleanup sub-tasks.
 - Test-source mirror validation

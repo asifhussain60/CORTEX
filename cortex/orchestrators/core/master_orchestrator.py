@@ -167,7 +167,7 @@ except ImportError:
     IntelligentKnowledgeRouter = None
 
 # AC-REM-011-02: Import TDD Orchestrator for test-driven development workflow routing
-# Wires 35 best practices YAMLs from cortex_intelligence/tier3/knowledge/ into TDD discipline
+# Wires 35 best practices YAMLs from cortex/intelligence/knowledge/ into TDD discipline
 try:
     from cortex.orchestrators.core.tdd_orchestrator import (
         TDDOrchestrator,
@@ -424,7 +424,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
         )
 
         # AC-PHASE-2-5-WIRE-002: Initialize GracefulDegradationFramework for resilience
-        # Import from cortex_intelligence to avoid circular imports in cortex.brain.tier2
+        # Import locally to avoid circular imports at module level
         from cortex.intelligence.memory.tier2_adaptive.resilience import GracefulDegradationFramework
         self._graceful_degradation = GracefulDegradationFramework()
         self.logger.log_operation_complete(
@@ -568,9 +568,14 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
                             Returns low confidence (0.3) to signal degraded routing
                             rather than falsely claiming 0.8 confidence.
                             """
-                            backend = list(self.backends.values())[0] if self.backends else None
+                            if self.backends:
+                                key = list(self.backends.keys())[0]
+                                backend = self.backends[key]
+                            else:
+                                key = "fallback"
+                                backend = None
                             return backend, 0.3, {
-                                'selected_backend': 'fallback',
+                                'selected_backend': key,
                                 'confidence': 0.3,
                                 'degraded': True,
                                 'reason': 'One or both knowledge backends unavailable',

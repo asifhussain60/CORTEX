@@ -22,7 +22,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | MCP Tools | 23 in `cortex/mcp/tools/` |
 | Top-level Dirs | 16 canonical under `cortex/` |
 | Governance Rules | 17 active in `cortex-registry/core/` |
-| Test Suite | 15,230 tests (486 golden, 177 phase) |
+| Test Suite | 15,145 tests (486 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 
 ---
@@ -70,6 +70,15 @@ CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manua
 | CORE-048 | Holistic validation gate before IMPLEMENT/FIX/REFACTOR |
 | CORE-049 | Silent autonomous execution (progress bars only) |
 
+**MCP Tool Authoring — `validate_orchestrator_context` guard:** All MCP tool functions that
+call `validate_orchestrator_context(orchestrator_context)` must guard the call:
+```python
+if orchestrator_context is not None:
+    validate_orchestrator_context(orchestrator_context)
+```
+This allows direct test invocation without a `MasterOrchestrator` context while still
+enforcing routing in production (where context is always supplied).
+
 ---
 
 ## Workflow
@@ -112,6 +121,11 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | MCP Server | `cortex/mcp/` |
 | Refactor Plan | `cortex-registry/planning/cortex-refactor-master.yaml` |
+| BulkDigestOrchestrator | `cortex/orchestrators/support/bulk_digest_orchestrator.py` |
+| DigestSessionOrchestrator | `cortex/orchestrators/support/digest_session_orchestrator.py` |
+| MasterOrchestrationStage1 | `cortex/orchestrators/core/master_orchestrator_stage_1.py` |
+| MasterOrchestrationStage3 | `cortex/orchestrators/core/master_orchestrator_stage_3.py` |
+| MasterOrchestrationStage4 | `cortex/orchestrators/core/master_orchestrator_stage_4.py` |
 
 ---
 

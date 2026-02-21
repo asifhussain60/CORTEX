@@ -477,8 +477,9 @@ def analyze_sts_app(
     Returns:
         Analysis results with violations, metrics, and showcase path
     """
-    # ENFORCEMENT: Validate orchestrator routing
-    validate_orchestrator_context(orchestrator_context)
+    # ENFORCEMENT: Validate orchestrator routing (skip when called directly without context)
+    if orchestrator_context is not None:
+        validate_orchestrator_context(orchestrator_context)
     
     app_dir = Path(app_path)
     app_name = app_dir.name

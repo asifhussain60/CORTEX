@@ -17,7 +17,7 @@ class JSONDataGenerator:
     Generates dashboard.json from LENS analysis output.
 
     Transforms LENS data structure into dashboard JSON schema:
-    - Input: LENS repository analysis (from cortex_lens_analyze)
+    - Input: LENS repository analysis (from cortex_lens MCP tool)
     - Output: Structured dashboard JSON (for SPA rendering)
 
     Architecture:
@@ -36,7 +36,7 @@ class JSONDataGenerator:
         Generate dashboard JSON from LENS analysis.
 
         Args:
-            lens_data: Raw LENS analysis output from cortex_lens_analyze
+            lens_data: Raw LENS analysis output from cortex_lens MCP tool
 
         Returns:
             Structured dashboard data dictionary

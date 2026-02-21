@@ -106,6 +106,10 @@
 | 9 | **Deprecated file names** — `DEPRECATED-*`, `*.old`, `*.backup` in active dirs | `find -name "DEPRECATED*"` | ✅ Delete |
 | 10 | **Test-source mirror** — tests/ structure diverges from cortex/ structure | Dir comparison | 🟡 Report |
 
+> **⚠️ Health Check (GP50 — planned):** `HealthOrchestrator.run_health_check()` will become
+> Check #11 once Phase 50 consolidation is complete. AUDIT mode currently uses the 10-point
+> static checklist only. `/vacuum` invokes `cortex_vacuum` for markdown cleanup separately.
+
 **Output:** Inline violations table with severity (P0/P1/P2), file path, and remediation.
 
 **Audit-and-Fix flow:**

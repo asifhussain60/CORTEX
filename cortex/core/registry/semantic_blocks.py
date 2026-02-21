@@ -2,9 +2,9 @@
 Semantic Block Loader & Assembly Engine.
 
 Brain terminology (HIGH-LEVEL):
-- Perception: Load blocks from registry (cortex_intelligence perception)
-- Reasoning: Validate composition + anti-duplication (cortex_intelligence reasoning)
-- Action: Assemble + render blocks (cortex_intelligence action)
+- Perception: Load blocks from registry (cortex.intelligence perception)
+- Reasoning: Validate composition + anti-duplication (cortex.intelligence reasoning)
+- Action: Assemble + render blocks (cortex.intelligence action)
 
 Authority: ENH-089 | Production-ready block assembly with personality enforcement
 """
@@ -61,7 +61,7 @@ class SemanticBlockLoader:
     Perception layer: Load and validate semantic blocks from registry.
 
     Neurocognitive mapping:
-    - Discovers blocks from cortex_intelligence (distributed storage)
+    - Discovers blocks from cortex.intelligence (distributed storage)
     - Validates metadata completeness
     - Ensures personality guidelines present
     """

@@ -11,7 +11,11 @@ NEVER use hardcoded paths like:
 
 ALWAYS use:
 - get_project_root()
-- resolve_path("cortex_intelligence/tier0")
+- resolve_path("cortex", "intelligence")
+- cortex_intelligence_path()  ← canonical: cortex/intelligence/
+
+Note: cortex_intelligence/ was dissolved into cortex/intelligence/ (Phase 03).
+All tier-based paths now map to cortex-registry/ (governance) or cortex/intelligence/ (code).
 
 Author: Asif Hussain
 """
@@ -63,38 +67,51 @@ def resolve_path(*parts: str) -> Path:
     Resolve a path relative to project root.
 
     Args:
-        *parts: Path components (e.g., "cortex_intelligence", "tier0")
+        *parts: Path components (e.g., "cortex", "intelligence")
 
     Returns:
         Absolute Path object
 
     Example:
-        >>> resolve_path("cortex_intelligence", "tier0", "governance")
-        Path("/path/to/project/cortex_intelligence/tier0/governance")
+        >>> resolve_path("cortex", "intelligence")
+        Path("/path/to/project/cortex/intelligence")
     """
     return get_project_root().joinpath(*parts)
 
 
 def cortex_intelligence_path() -> Path:
-    """Get path to cortex_intelligence directory."""
-    return resolve_path("cortex_intelligence")
+    """Get path to cortex/intelligence directory (canonical since Phase 03)."""
+    return resolve_path("cortex", "intelligence")
 
 
 def tier_path(tier: int) -> Path:
-    """Get path to a specific tier directory."""
-    if tier not in (0, 1, 2, 3):
+    """Get path to cortex-registry governance tier directory.
+
+    Tier mapping (post Phase 03 migration):
+      0 → cortex-registry/core/tier0-skull/
+      1 → cortex-registry/core/tier1-project/
+      2 → cortex-registry/core/tier2-conventions/
+      3 → cortex-registry/knowledge-base/
+    """
+    tier_map = {
+        0: resolve_path("cortex-registry", "core", "tier0-skull"),
+        1: resolve_path("cortex-registry", "core", "tier1-project"),
+        2: resolve_path("cortex-registry", "core"),
+        3: resolve_path("cortex-registry", "knowledge-base"),
+    }
+    if tier not in tier_map:
         raise ValueError(f"Invalid tier: {tier}. Must be 0, 1, 2, or 3.")
-    return resolve_path("cortex_intelligence", f"tier{tier}")
+    return tier_map[tier]
 
 
 def audit_logs_path() -> Path:
     """Get path to audit logs directory."""
-    return resolve_path("cortex_intelligence", "audit-logs")
+    return resolve_path(".cortex-runtime", "logs")
 
 
 def config_path() -> Path:
     """Get path to config directory."""
-    return resolve_path("cortex_intelligence", "config")
+    return resolve_path("cortex-registry", "config")
 
 
 def reset_project_root():

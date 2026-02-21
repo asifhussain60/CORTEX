@@ -93,7 +93,9 @@ class CortexVerify(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute verify operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "environment")
         target = params.get("target")
@@ -230,7 +232,9 @@ class CortexAsk(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute ask operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "architecture")
         question = params.get("question", "")
@@ -311,7 +315,9 @@ class CortexVacuum(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute vacuum operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "scan")
         path = params.get("path", ".")
@@ -427,7 +433,9 @@ class CortexToolsCatalog(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute catalog operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "list")
         query = params.get("query")
@@ -570,7 +578,9 @@ class CortexTotalRecall(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute total recall operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "discover")
         feature = params.get("feature")
@@ -698,7 +708,9 @@ class CortexMetrics(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute metrics operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "query")
         metric_type = params.get("metric_type")
@@ -802,7 +814,9 @@ class CortexCheck(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute check operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "health")
         operation_id = params.get("operation_id")
@@ -909,7 +923,9 @@ class CortexVision(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute vision operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "analyze")
         image = params.get("image", "")
@@ -993,7 +1009,9 @@ class CortexOrchestrator(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute orchestrator operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "list")
         orchestrator = params.get("orchestrator")

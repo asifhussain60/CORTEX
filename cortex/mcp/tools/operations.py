@@ -99,7 +99,9 @@ class CortexDebug(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute debug operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "analyze")
         target = params.get("target")
@@ -310,7 +312,9 @@ class CortexRefactor(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute refactoring operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "organize")
         target = params.get("target", "")
@@ -452,7 +456,9 @@ class CortexPlan(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute plan operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "query")
         phase_id = params.get("phase_id")
@@ -587,7 +593,9 @@ class CortexOnboard(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute onboard operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "full")
         path = params.get("path", ".")
@@ -730,7 +738,9 @@ class CortexDashboard(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute dashboard operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "query")
         target = params.get("target")

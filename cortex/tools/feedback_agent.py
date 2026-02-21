@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 # Per governance rules, all agent responses must include CORTEX header with:
 # - Operation name, Author attribution, Phase, Orchestrator ID
 # - Prevents governance violations and ensures consistent response formatting
-# - Reference: cortex_intelligence/tier0/governance/response-header-enforcement.yaml
+# - Reference: cortex-registry/core/governance/response-header-enforcement.yaml
 # ================================================================================
 
 class ResponseHeaderEnforcer:

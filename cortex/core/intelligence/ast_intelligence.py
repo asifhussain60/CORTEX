@@ -62,6 +62,7 @@ class ClassInfo:
         name: Class name
         bases: List of base class names
         methods: List of methods
+        class_variables: List of class-level variable names
         docstring: Class docstring
         line_number: Line where class is defined
         decorators: List of decorator names
@@ -69,6 +70,7 @@ class ClassInfo:
     name: str
     bases: List[str] = field(default_factory=list)
     methods: List[FunctionInfo] = field(default_factory=list)
+    class_variables: List[str] = field(default_factory=list)
     docstring: Optional[str] = None
     line_number: int = 0
     decorators: List[str] = field(default_factory=list)
@@ -406,12 +408,20 @@ class ASTIntelligenceEngine:
             else:
                 bases.append(ast.unparse(base) if hasattr(ast, 'unparse') else "Base")
 
-        # Extract methods
+        # Extract methods and class-level variables
         methods = []
+        class_variables: List[str] = []
         for item in node.body:
             if isinstance(item, ast.FunctionDef):
                 method_info = self._extract_function_info(item)
                 methods.append(method_info)
+            elif isinstance(item, ast.Assign):
+                for target in item.targets:
+                    if isinstance(target, ast.Name):
+                        class_variables.append(target.id)
+            elif isinstance(item, ast.AnnAssign):
+                if isinstance(item.target, ast.Name):
+                    class_variables.append(item.target.id)
 
         # Extract decorators
         decorators = []
@@ -430,6 +440,7 @@ class ASTIntelligenceEngine:
             name=node.name,
             bases=bases,
             methods=methods,
+            class_variables=class_variables,
             docstring=ast.get_docstring(node),
             line_number=node.lineno,
             decorators=decorators,

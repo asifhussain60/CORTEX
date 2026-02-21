@@ -45,10 +45,10 @@ class CORTEXKnowledge:
     """
     CORTEX best practices from 45+ knowledge YAMLs.
 
-    Best practices, patterns, anti-patterns from cortex_intelligence/tier3/knowledge/.
+    Best practices, patterns, anti-patterns from cortex/intelligence/knowledge/.
     """
 
-    best_practices: Dict[str, Any]  # 45+ YAMLs from cortex_intelligence/tier3/knowledge/
+    best_practices: Dict[str, Any]  # 45+ YAMLs from cortex/intelligence/knowledge/
     applicable_patterns: List[str]  # Patterns matching current intent
     anti_patterns: List[str]  # Anti-patterns to avoid
     synthesis_metadata: Dict[str, Any]  # Which rules applied, conflicts resolved

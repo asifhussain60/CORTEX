@@ -1,0 +1,49 @@
+---
+# Phase 50 — CORTEX Health & Vacuum Consolidation
+# GP50-020: Canonical YAML at cortex-registry/planning/phases/planned/
+
+phase: 50
+title: "Health & Vacuum Orchestrator Consolidation"
+status: planned
+priority: P0
+created: "2026-02-20"
+
+description: >
+  Consolidate HealthOrchestrator and VacuumExecutor into canonical
+  support/ paths. Unify health scanning, vacuum orchestration, and
+  markdown-cleanup under a single HealthVacuumPipeline entry point.
+
+objectives:
+  - Canonical HealthOrchestrator lives in health/ and is importable (GP50-001)
+  - health/ HealthOrchestrator delegates filesystem walk to Phase-48 engine (GP50-002)
+  - health/ HealthOrchestrator.run_health_check() returns HealthReport (GP50-003)
+  - health/ HealthOrchestrator exposes unified scan() API (GP50-004)
+  - health/ HealthOrchestrator.scan() writes health-issues.yaml when asked (GP50-005)
+  - VacuumExecutor importable from canonical support/ path (GP50-006)
+  - VacuumExecutor.preview() returns list of planned operations (GP50-007)
+  - HealthVacuumPipeline importable from support/ path (GP50-008)
+  - CortexVacuumOrchestrate absorbs markdown-cleanup operation (GP50-009)
+  - cortex_vacuum_orchestrate 'markdown' operation delegated correctly (GP50-010)
+  - health_orchestrator_tool imports from _shared (CORE-035) (GP50-011)
+  - vacuum_orchestrator_tool imports from _shared (CORE-035) (GP50-012)
+  - MasterOrchestrator PLAN intent routes to CortexMasterPlanOrchestrator (GP50-013)
+  - domain CoherenceValidator re-exported from canonical coherence package (GP50-014)
+  - cortex-master.yaml phase-50 file path points to planning/phases/planned/ (GP50-015)
+  - ALL_TOOLS contains CortexMasterPlanTool (36 tools registered) (GP50-016)
+  - No empty orchestrator stub directories remain (GP50-017)
+  - health/ __init__.py re-exports HealthOrchestrator with DoD support (GP50-018)
+  - VacuumOrchestrator support wrapper re-exports from support/ (GP50-019)
+  - phase-50 canonical YAML exists at planning/phases/planned/ (GP50-020)
+
+acceptance_criteria:
+  - id: GP50-020
+    description: "Phase-50 YAML exists at cortex-registry/planning/phases/planned/"
+    status: passing
+
+dependencies:
+  - phase: 48
+    name: "Holistic Validation Gate"
+    status: complete
+  - phase: 49
+    name: "MCP Tool Consolidation"
+    status: planned

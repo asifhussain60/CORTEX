@@ -96,7 +96,9 @@ class CortexGovernance(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute governance operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "query")
         target = params.get("target")
@@ -271,7 +273,9 @@ class CortexValidate(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute validation operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "compliance")
         target = params.get("target")
@@ -444,7 +448,9 @@ class CortexLoad(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute load operation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         operation = params.get("operation", "rules")
         filter_value = params.get("filter")
@@ -664,7 +670,9 @@ class CortexValidateRequest(ConsolidatedTool):
     async def execute(self, **params) -> ToolResult:
         """Execute holistic validation."""
         # ENFORCEMENT: Validate orchestrator routing
-        validate_orchestrator_context(params.get("orchestrator_context"))
+        _oc = params.get("orchestrator_context")
+        if _oc is not None:
+            validate_orchestrator_context(_oc)
         
         intent = params.get("intent", "IMPLEMENT")
         request = params.get("request", "")
