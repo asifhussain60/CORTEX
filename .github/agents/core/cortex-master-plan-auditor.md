@@ -74,7 +74,7 @@ maintainer: "Asif Hussain"
 
 **Post-Refactor State:**
 - 21 wired orchestrators across 3 tiers (core, domain, support)
-- 23 MCP tools in `cortex/mcp/tools/`
+- 24 MCP tools in `cortex/mcp/tools/`
 - 21 CORE rules in `cortex-registry/core/`
 - 1 package: `cortex`
 - 15,230 tests (519 golden, 177 phase)

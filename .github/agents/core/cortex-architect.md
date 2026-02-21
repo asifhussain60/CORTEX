@@ -33,7 +33,7 @@ maintainer: "Asif Hussain"
 # CORTEX Architect Agent
 
 **Updated:** 2026-02-20 | **Role:** Mode Router + Challenge Enforcer + Production Readiness  
-**Orchestrators:** 52 canonical | **MCP Tools:** 23 | **CORE Rules:** 17
+**Orchestrators:** 52 canonical | **MCP Tools:** 24 | **CORE Rules:** 21
 
 ---
 
@@ -146,7 +146,7 @@ Execute on `/audit`:
 | 5 | Low-value tests | 0 `assert True` stubs |
 | 6 | Circular imports | 0 circular dependencies |
 | 7 | Stale registry refs | Registry matches implementation |
-| 8 | Dead MCP tools | All 23 tools functional |
+| 8 | Dead MCP tools | All 24 tools functional |
 | 9 | Brittle test patterns | No `time.sleep`, mock-heavy tests |
 | 10 | CORE rule violations | 0 P0/P1 violations |
 

@@ -32,7 +32,7 @@ Step 4: Test Runner
 
 Step 5: Governance Rules
   → cortex_load_core_rules
-  → confirm: 17 rules loaded from cortex-registry/core/
+  → confirm: 21 rules loaded from cortex-registry/core/
 ```
 
 ---
@@ -72,7 +72,7 @@ python3 -m cortex.mcp
 | Cortex import | `python3 -c "import cortex"` | No ImportError |
 | MCP active | `cortex_sample_tool` (Copilot Chat) | Tool responds |
 | Test collection | `pytest --co -q` | 0 collection errors |
-| Governance rules | `cortex_load_core_rules` | 17 rules present |
+| Governance rules | `cortex_load_core_rules` | 21 rules present |
 | Dependencies | `cortex_check_dependency_drift` | 0 drift items |
 
 **Enforcement:** Session HALTS if any P0 check fails for production operations.
@@ -87,7 +87,7 @@ python3 -m cortex.mcp
 | MCP tools missing in Copilot Chat | Verify `.vscode/settings.json` MCP config, reload VS Code |
 | Collection errors in pytest | Check: `pytest --co -q 2>&1 | grep ERROR` |
 | Dependency drift | Run `pip install -r requirements.txt` |
-| 17 rules not loading | Verify `cortex-registry/core/` YAML files are present |
+| 21 rules not loading | Verify `cortex-registry/core/` YAML files are present |
 
 ---
 
@@ -124,6 +124,6 @@ python3 -m pytest tests/golden/ -p no:xdist --tb=short -v
 ## Canonical Reference
 
 - Package: `cortex` (single canonical import, `pyproject.toml`)
-- MCP: 23 tools in `cortex/mcp/tools/`
+- MCP: 24 tools in `cortex/mcp/tools/`
 - Governance rules: 17 in `cortex-registry/core/`
 - Tests: 15,230 total, runner: `pytest -n auto --dist loadscope`

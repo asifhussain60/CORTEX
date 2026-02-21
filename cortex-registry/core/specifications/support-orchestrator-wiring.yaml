@@ -89,6 +89,43 @@ provides:
     dependencies:
       - MasterOrchestrator
 
+  - name: HealthOrchestrator
+    category: HEALTH
+    description: "Holistic repository health scanner — diagnoses filesystem, naming, duplicates, deprecated markers, markdown location"
+    entry_point: "cortex.orchestrators.health.health_orchestrator:HealthOrchestrator"
+    features:
+      - filesystem_integrity
+      - naming_compliance
+      - duplicate_detection
+      - deprecated_marker_detection
+      - markdown_location_check
+      - agent_registration
+      - handoff_generation
+    health_check: true
+    health_check_method: "health_check"
+    health_check_returns: ["status", "orchestrator", "workspace_root", "agents_registered", "enabled"]
+    dependencies:
+      - VacuumOrchestrator
+    priority: 160
+
+  - name: VacuumOrchestrator
+    category: HEALTH
+    description: "Standalone + companion remediation engine — dual-mode (standalone scan or handoff consumer) with rollback support"
+    entry_point: "cortex.orchestrators.health.vacuum_orchestrator:VacuumOrchestrator"
+    features:
+      - standalone_remediation
+      - companion_handoff_consumption
+      - file_rename
+      - file_delete
+      - file_relocate
+      - rollback_support
+      - dry_run_mode
+    health_check: true
+    health_check_method: "health_check"
+    health_check_returns: ["status", "orchestrator", "workspace_root"]
+    dependencies: []
+    priority: 155
+
 initialization_order: 30
 
 conflict_resolution:
@@ -97,6 +134,7 @@ conflict_resolution:
 
 metadata:
   maintained_by: "CORTEX Support Team"
-  last_updated: "2026-01-24"
-  git_commit: "ac-wiring-support-001"
+  last_updated: "2026-02-21"
+  git_commit: "ac-wiring-support-002"
   status: "active"
+  change_summary: "Added HealthOrchestrator + VacuumOrchestrator (Phase 51 — health_check() L1 structural compliance)"

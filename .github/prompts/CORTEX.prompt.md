@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-02-22 | **Architecture:** 21 Wired Orchestrators · 23 MCP Tools · 21 CORE Rules · 1 Package
+**Updated:** 2026-02-22 | **Architecture:** 21 Wired Orchestrators · 24 MCP Tools · 21 CORE Rules · 1 Package
 
 ---
 
@@ -9,7 +9,7 @@
 
 **Entry Point:** This prompt → MasterOrchestrator → 4-stage pipeline → MCP Tools  
 **Orchestrators:** 52 canonical across 10 domains in `cortex/orchestrators/`  
-**MCP Tools:** 23 in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
+**MCP Tools:** 24 in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
 
 ---
 
@@ -100,7 +100,7 @@ EnforcementOrchestrator validates CORE rules before every operation:
 | Type | Location |
 |------|----------|
 | Orchestrators (52) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (23) | `cortex/mcp/tools/` |
+| MCP Tools (24) | `cortex/mcp/tools/` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |

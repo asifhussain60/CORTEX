@@ -113,5 +113,5 @@ Requires 3+ session markers to classify input as a Copilot Chat session:
 
 - Package: `cortex` (single canonical import)
 - InteractionOrchestrator: `cortex/orchestrators/core/interaction_orchestrator.py`
-- MCP: 23 tools in `cortex/mcp/tools/`
+- MCP: 24 tools in `cortex/mcp/tools/`
 - Metrics: `cortex_capture_metrics` + `cortex_metrics_report`

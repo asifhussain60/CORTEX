@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-22 | **Architecture:** 21 Wired Orchestrators · 23 MCP Tools · 21 CORE Rules · 1 Package  
+**Updated:** 2026-02-22 | **Architecture:** 21 Wired Orchestrators · 24 MCP Tools · 21 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
@@ -173,11 +173,11 @@ Validate on every AUDIT and pre-IMPLEMENT:
 **Duplicate Priority Ranges (no conflicts allowed):**
 - Master = 10 | IntentRouter = 20 | Core = 30–99 | Domain = 100–149 | Support/Super = 150–199
 
-### Health Check Protocol (GP50 — Partially Active)
+### Health Check Protocol (GP50 — Active ✅)
 
-**Current:** `HealthCheckOrchestrator` in `cortex/orchestrators/health/` — query via `cortex_query_governance`.
-**Per-orchestrator endpoint:** `orchestrator.health_check()` returns `{status, uptime, request_count, latency_p99}`.
-**Full integration (Check #12):** Pending Phase 50 — `HealthOrchestrator.run_health_check()` will gate AUDIT mode.
+**Current:** `HealthOrchestrator` and `VacuumOrchestrator` in `cortex/orchestrators/health/` — both expose `health_check()` (L1 wiring compliance complete as of commit 2a624b0).
+**Per-orchestrator endpoint:** `orchestrator.health_check()` returns `{status, orchestrator, uptime_requests, success_count, last_success}`.
+**Integration (Check #12):** Active — `HealthOrchestrator.run_health_check()` gates AUDIT mode via registered agents. `VacuumOrchestrator.health_check()` added Phase 51 (P1-2 resolved: 6/6 orchestrators healthy).
 
 ```
 For each orchestrator in wiring contract:
@@ -364,7 +364,7 @@ Score the source content. If score ≥5 → auto-activate DIGEST. Score 3–4 �
 ### Validation Sequence
 
 ```
-1. Registry Check       → cortex_load_core_rules (17 rules, 0 violations required)
+1. Registry Check       → cortex_load_core_rules (21 rules, 0 violations required)
 2. Dependency Drift     → cortex_check_dependency_drift (0 drift items)
 3. Regression Risk      → pytest --cov on target module (≥80% coverage floor)
 4. Governance Drift     → cortex_query_governance (0 P0 violations = proceed)
@@ -376,7 +376,7 @@ Score the source content. If score ≥5 → auto-activate DIGEST. Score 3–4 �
 **PASS (risk ≤ 0.6):**
 ```
 ✅ Holistic Validation: PASS | Risk: 0.2 (LOW)
-Registry: 17 rules, 0 violations | Dependencies: aligned | Coverage: 87% | Governance: clean
+Registry: 21 rules, 0 violations | Dependencies: aligned | Coverage: 87% | Governance: clean
 → Proceed to implementation
 ```
 
@@ -391,7 +391,7 @@ Blocker: [specific issue] | Action: [remediation step]
 
 | Check | Tool | Threshold |
 |---|---|---|
-| CORE rules loaded | `cortex_load_core_rules` | 17 rules present |
+| CORE rules loaded | `cortex_load_core_rules` | 21 rules present |
 | Dependency drift | `cortex_check_dependency_drift` | 0 drift items |
 | Test coverage | `pytest --cov` | ≥80% on target module |
 | P0 violations | `cortex_query_governance` | 0 P0 violations |
@@ -427,7 +427,7 @@ Everything else → move to canonical location or delete.
 
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`)
-- No stale orchestrator counts (must say **21 wired orchestrators**, **23 MCP tools**, **21 CORE rules**)
+- No stale orchestrator counts (must say **21 wired orchestrators**, **24 MCP tools**, **21 CORE rules**)
 - No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
 - All agent files must match entries in `AGENT-INDEX.md`
@@ -438,7 +438,7 @@ Run `cortex-meta-auditor.md` checks when prompt or agent files are modified:
 | Check | Pass Criteria |
 |---|---|
 | Orchestrator count | All agents/prompts say "21 wired" |
-| MCP tool count | All say "23 production tools" |
+| MCP tool count | All say "24 production tools" |
 | CORE rules count | All say "21 active" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | Stale MCP tool names absent | No `cortex_process_request`, `cortex_lens_analyze`, `cortex_manage_todo` |
@@ -493,7 +493,7 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ---
 
-## ⚡ MCP TOOLS (23 Production)
+## ⚡ MCP TOOLS (24 Production)
 
 **Verification:** Call `cortex_sample_tool`. If it responds, MCP is active.
 **If unavailable:** Run `python3 -m cortex.mcp` then reload VS Code. (`python3 scripts/setup-mcp.py` for cross-platform config.)
@@ -509,11 +509,12 @@ Progress bar + stage bullet list. See templates SSOT.
 - `cortex_onboard_repository_v3` — Enhanced onboarding with LENS + SQLite
 - `cortex_refactor` — Semantic refactoring (Python, C#, TypeScript)
 - `cortex_audit_remediation_plan` — Auto-planning from audit results
-- `cortex_tools_catalog` — Discover all 23 tools
-- `cortex_load_core_rules` — Load 17 governance rules from registry
+- `cortex_tools_catalog` — Discover all 24 tools
+- `cortex_load_core_rules` — Load governance rules from registry
 - `cortex_check_dependency_drift` — requirements.txt vs installed packages
 - `cortex_query_governance` — Active violations count + P0 status
 - `cortex_capture_metrics` — Record TDD/debug/generation metrics
+- `cortex_fetch_work_items` — Company-pluggable ADO work item connector (Phase 15)
 
 ---
 

@@ -181,6 +181,24 @@ class HealthOrchestrator:
         result.recount()
         return result
 
+    def health_check(self) -> Dict[str, Any]:
+        """Return health status of the HealthOrchestrator.
+
+        Implements the L1 Structural Wiring Contract requirement:
+        all orchestrators must expose a callable ``health_check()`` method.
+
+        Returns:
+            Mapping with ``status``, ``orchestrator``, ``workspace_root``,
+            ``agents_registered``, and ``enabled`` keys.
+        """
+        return {
+            "status": "healthy",
+            "orchestrator": "HealthOrchestrator",
+            "workspace_root": str(self.workspace_root),
+            "agents_registered": len(self.agents),
+            "enabled": self.enabled,
+        }
+
     def write_handoff(self, result: ScanResult, path: Path) -> None:
         """Write a YAML handoff file for VacuumOrchestrator.
 
