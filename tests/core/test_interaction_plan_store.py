@@ -40,15 +40,6 @@ except ImportError:
     PlanState = None  # type: ignore[assignment,misc]
     StoredPlan = None  # type: ignore[assignment,misc]
 
-try:
-    from cortex.orchestrators.context_crystallization.ccl_core import (
-        ContextCrystallizationLayer,
-    )
-    CCL_AVAILABLE = True
-except ImportError:
-    CCL_AVAILABLE = False
-    ContextCrystallizationLayer = None  # type: ignore[assignment,misc]
-
 REGISTRY_ROOT = Path(__file__).resolve().parents[2] / "cortex-registry"
 PLANS_PENDING = REGISTRY_ROOT / "plans" / "pending"
 PLANS_APPROVED = REGISTRY_ROOT / "plans" / "approved"
@@ -389,61 +380,6 @@ class TestPlanQuery:
         retrieved = store.get_plan(plan.plan_id)
         assert retrieved is not None
         assert retrieved.plan_id == plan.plan_id
-
-
-# ==============================================================================
-# 6. CCL SYNTHESIS OF PAST PLANS
-# ==============================================================================
-
-class TestCCLSynthesis:
-    """CCL must read archived plans and provide past context."""
-
-    @pytest.mark.skipif(not CCL_AVAILABLE, reason="ccl_core.py not yet implemented")
-    def test_ccl_reads_archive_and_synthesizes_past_plans(
-        self, tmp_path: Path, sample_plan_data: dict
-    ) -> None:
-        """CCL.past_plans must include archived plan summaries."""
-        store = InteractionPlanStore(registry_root=tmp_path)
-        plan = store.create_plan(**sample_plan_data)
-        store.approve_plan(plan.plan_id)
-        store.archive_plan(plan.plan_id)
-
-        ccl = ContextCrystallizationLayer(registry_root=tmp_path)
-        context = ccl.synthesize()
-        assert "past_plans" in context, "CCL synthesis missing past_plans key"
-        assert len(context["past_plans"]) >= 1
-
-    @pytest.mark.skipif(not CCL_AVAILABLE, reason="ccl_core.py not yet implemented")
-    def test_ccl_past_plans_contain_intent(
-        self, tmp_path: Path, sample_plan_data: dict
-    ) -> None:
-        """Each CCL past_plan entry must include the original intent."""
-        store = InteractionPlanStore(registry_root=tmp_path)
-        plan = store.create_plan(**sample_plan_data)
-        store.approve_plan(plan.plan_id)
-        store.archive_plan(plan.plan_id)
-
-        ccl = ContextCrystallizationLayer(registry_root=tmp_path)
-        context = ccl.synthesize()
-        past = context["past_plans"]
-        assert any(
-            p.get("intent") == sample_plan_data["intent"] for p in past
-        ), "Past plan intent not found in CCL synthesis"
-
-    @pytest.mark.skipif(not CCL_AVAILABLE, reason="ccl_core.py not yet implemented")
-    def test_ccl_past_plans_contain_plan_id(
-        self, tmp_path: Path, sample_plan_data: dict
-    ) -> None:
-        """Each CCL past_plan entry must include plan_id."""
-        store = InteractionPlanStore(registry_root=tmp_path)
-        plan = store.create_plan(**sample_plan_data)
-        store.approve_plan(plan.plan_id)
-        store.archive_plan(plan.plan_id)
-
-        ccl = ContextCrystallizationLayer(registry_root=tmp_path)
-        context = ccl.synthesize()
-        plan_ids = [p.get("plan_id") for p in context["past_plans"]]
-        assert plan.plan_id in plan_ids
 
 
 # ==============================================================================

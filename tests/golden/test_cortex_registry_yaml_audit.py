@@ -30,7 +30,7 @@ P2 (Edge Cases - Blind Spots):
 
 These tests cover all cortex-registry subfolders:
 - core/governance, core/config, core/wiring, core/specifications
-- artifacts/templates, artifacts/workflows
+- artifacts/templates, workflows
 - integration/interaction, integration/patterns
 - planning/phases
 - knowledge-base
@@ -122,7 +122,9 @@ def registry_test_dir(tmp_path: Path) -> Path:
     (test_dir / "artifacts" / "templates" / "responses").mkdir(parents=True)
     (test_dir / "artifacts" / "templates" / "phases").mkdir(parents=True)
     (test_dir / "artifacts" / "templates" / "documentation").mkdir(parents=True)
-    (test_dir / "artifacts" / "workflows").mkdir(parents=True)
+    
+    # Create workflows structure (canonical — was artifacts/workflows)
+    (test_dir / "workflows").mkdir(parents=True)
     
     # Create integration structure
     (test_dir / "integration" / "interaction").mkdir(parents=True)
@@ -638,8 +640,8 @@ class TestArtifactsTemplatesYAML:
         )
 
 
-class TestArtifactsWorkflowsYAML:
-    """Tests for artifacts/workflows YAML files."""
+class TestWorkflowsYAML:
+    """Tests for workflows YAML files."""
     
     def test_create_workflow_yaml(
         self,
@@ -650,7 +652,7 @@ class TestArtifactsWorkflowsYAML:
         
         AC: AC-PHASE103-REG-007
         """
-        file_path = registry_test_dir / "artifacts" / "workflows" / "test-tdd-workflow.yaml"
+        file_path = registry_test_dir / "workflows" / "test-tdd-workflow.yaml"
         
         content = {
             "version": "1.0",
@@ -670,7 +672,7 @@ class TestArtifactsWorkflowsYAML:
             db_path=registry_audit_db,
             operation="CREATE",
             file_path=str(file_path),
-            registry_folder="artifacts/workflows",
+            registry_folder="workflows",
             status="SUCCESS",
             test_name="test_create_workflow_yaml",
         )
@@ -682,7 +684,7 @@ class TestArtifactsWorkflowsYAML:
             db_path=registry_audit_db,
             operation="READ",
             file_path=str(file_path),
-            registry_folder="artifacts/workflows",
+            registry_folder="workflows",
             status="SUCCESS",
             test_name="test_create_workflow_yaml",
         )
@@ -698,7 +700,7 @@ class TestArtifactsWorkflowsYAML:
             db_path=registry_audit_db,
             operation="PROCESS",
             file_path=str(file_path),
-            registry_folder="artifacts/workflows",
+            registry_folder="workflows",
             status="SUCCESS",
             details=f"Validated {processed['step_count']} steps",
             test_name="test_create_workflow_yaml",
@@ -711,7 +713,7 @@ class TestArtifactsWorkflowsYAML:
             db_path=registry_audit_db,
             operation="DELETE",
             file_path=str(file_path),
-            registry_folder="artifacts/workflows",
+            registry_folder="workflows",
             status="SUCCESS",
             test_name="test_create_workflow_yaml",
         )
@@ -1128,7 +1130,7 @@ class TestRegistryAuditEvidence:
             ("core/wiring", "test-wiring.yaml"),
             ("core/specifications", "test-spec.yaml"),
             ("artifacts/templates/responses", "test-resp.yaml"),
-            ("artifacts/workflows", "test-wf.yaml"),
+            ("workflows", "test-wf.yaml"),
             ("integration/interaction", "test-int.yaml"),
             ("integration/patterns", "test-pat.yaml"),
             ("planning/phases/planned", "test-phase.yaml"),

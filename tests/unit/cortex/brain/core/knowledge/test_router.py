@@ -1,5 +1,4 @@
 import pytest
-pytestmark = pytest.mark.skip(reason="Phase 38.0 remediation")
 
 # PHASE-21: AC-IKP-002-01 Router Tests
 """
