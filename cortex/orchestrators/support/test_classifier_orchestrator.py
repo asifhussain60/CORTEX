@@ -92,6 +92,9 @@ _GOLDEN_PATH_RULES: list[tuple[str, list[TestConcern]]] = [
     ("cortex/governance/",     [TestConcern.SECURITY, TestConcern.QUALITY]),
     ("cortex/intelligence/",   [TestConcern.CCL, TestConcern.SECURITY]),
     ("cortex/domain_brain/",   [TestConcern.CCL]),
+    # cortex/brain/ was the pre-consolidation path; retain GOLDEN classification
+    # so legacy paths continue to receive the same governance tier (CORE-064).
+    ("cortex/brain/",          [TestConcern.CCL, TestConcern.QUALITY]),
     ("cortex/agents/",         [TestConcern.SECURITY, TestConcern.CONTRACT]),
 ]
 
