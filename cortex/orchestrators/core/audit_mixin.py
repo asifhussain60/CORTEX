@@ -26,7 +26,7 @@ import sqlite3
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Generator, List, Optional
 from contextlib import contextmanager
 import time
 
@@ -245,7 +245,7 @@ class OrchestratorAuditMixin:
         activity: str,
         input_parameters: Optional[Dict[str, Any]] = None,
         workflow_stage: str = "EXECUTION",
-    ):
+    ) -> Generator[None, None, None]:
         """
         Context manager for automatic start/complete logging.
         

@@ -306,7 +306,7 @@ class CrossLayerOptimizer:
         visited = set()
         plan = []
         
-        def visit(node: str):
+        def visit(node: str) -> None:
             if node in visited:
                 return
             visited.add(node)
@@ -422,7 +422,7 @@ class CrossLayerOptimizer:
         try:
             import signal
             
-            def timeout_handler(signum, frame):
+            def timeout_handler(signum: int, frame: object) -> None:
                 raise TimeoutError("Operation timed out")
             
             # Set timeout if configured

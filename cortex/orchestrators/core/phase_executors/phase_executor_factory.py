@@ -18,7 +18,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, Optional, Type
 
-from cortex.orchestrators.core.phase_executors.phase_executor_base import PhaseExecutorBase
+from cortex.orchestrators.core.phase_executors.phase_executor_base import PhaseExecutorBase, ExecutionResult
 
 logger = logging.getLogger(__name__)
 
@@ -118,11 +118,9 @@ class GenericPhaseExecutor(PhaseExecutorBase):
     Uses phase specification YAML to guide execution.
     """
 
-    def execute(self):
+    def execute(self) -> ExecutionResult:
         """Execute all stages defined in phase spec."""
         import time
-
-        from cortex.orchestrators.core.phase_executors.phase_executor_base import ExecutionResult
 
         self.start_time = time.time()
         spec = self.load_phase_spec()

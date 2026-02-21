@@ -163,7 +163,7 @@ class ObservabilityInstrument:
             Decorator function
         """
         def decorator(func: Callable) -> Callable:
-            def wrapper(*args, **kwargs):
+            def wrapper(*args: Any, **kwargs: Any) -> Any:
                 span_id = self.start_span(operation)
                 try:
                     result = func(*args, **kwargs)

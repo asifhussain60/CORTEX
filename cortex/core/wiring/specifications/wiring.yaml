@@ -10,7 +10,7 @@
 version: "2.0.0"
 
 orchestrators:
-  # 6 core orchestrators (Tier 1)
+  # 7 core orchestrators (Tier 1)
   core:
     - name: "MasterOrchestrator"
       module: "cortex.orchestrators.core.master_orchestrator"
@@ -64,6 +64,15 @@ orchestrators:
       priority: 80
       dependencies: []
       capabilities: ["governance_enforcement", "rule_validation"]
+      health_check: "ping"
+
+    - name: "AuditOrchestrator"
+      module: "cortex.orchestrators.core.audit_orchestrator"
+      class: "AuditOrchestrator"
+      tier: 1
+      priority: 75
+      dependencies: ["MasterOrchestrator", "EnforcementOrchestrator"]
+      capabilities: ["production_readiness_audit", "compliance_scan", "10_point_audit"]
       health_check: "ping"
 
   # 6 domain orchestrators (Tier 2)
@@ -122,7 +131,7 @@ orchestrators:
       capabilities: ["dependency_resolution", "import_analysis"]
       health_check: "ping"
 
-  # 9 support orchestrators (Tier 3)
+  # 13 support orchestrators (Tier 3)
   support:
     - name: "DebuggerOrchestrator"
       module: "cortex.orchestrators.support.debugger_orchestrator"
@@ -203,6 +212,42 @@ orchestrators:
       priority: 30
       dependencies: ["MasterOrchestrator"]
       capabilities: ["upgrade_management", "version_migration"]
+      health_check: "ping"
+
+    - name: "BulkDigestOrchestrator"
+      module: "cortex.orchestrators.support.bulk_digest_orchestrator"
+      class: "BulkDigestOrchestrator"
+      tier: 3
+      priority: 25
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["bulk_digest", "knowledge_synthesis", "batch_summarization"]
+      health_check: "ping"
+
+    - name: "DigestSessionOrchestrator"
+      module: "cortex.orchestrators.support.digest_session_orchestrator"
+      class: "DigestSessionOrchestrator"
+      tier: 3
+      priority: 24
+      dependencies: ["BulkDigestOrchestrator"]
+      capabilities: ["digest_session", "incremental_digest"]
+      health_check: "ping"
+
+    - name: "VacuumOrchestrator"
+      module: "cortex.orchestrators.support.vacuum_orchestrator"
+      class: "VacuumOrchestrator"
+      tier: 3
+      priority: 23
+      dependencies: []
+      capabilities: ["markdown_cleanup", "dead_file_removal", "repo_hygiene"]
+      health_check: "ping"
+
+    - name: "AutoHealingMCPOrchestrator"
+      module: "cortex.orchestrators.support.auto_healing_mcp_orchestrator"
+      class: "AutoHealingMCPOrchestrator"
+      tier: 3
+      priority: 22
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["auto_healing", "mcp_diagnostics", "self_repair"]
       health_check: "ping"
 
 # =============================================================================

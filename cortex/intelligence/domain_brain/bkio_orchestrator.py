@@ -50,12 +50,25 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         self.conflicts_detected = 0
 
     def initialize(self) -> None:
-        """Initialize the orchestrator."""
-        pass
+        """Initialize the orchestrator, resetting counters and validating API."""
+        self.documents_processed = 0
+        self.documents_failed = 0
+        self.conflicts_detected = 0
+        if self.domain_brain_api is None:
+            import logging
+            logging.getLogger(__name__).warning(
+                "BKIOOrchestrator initialized without DomainBrainAPI — ingestion disabled"
+            )
 
     def shutdown(self) -> None:
-        """Shutdown the orchestrator."""
-        pass
+        """Shutdown the orchestrator, logging final ingestion stats."""
+        import logging
+        logging.getLogger(__name__).info(
+            "BKIOOrchestrator shutdown: processed=%d failed=%d conflicts=%d",
+            self.documents_processed,
+            self.documents_failed,
+            self.conflicts_detected,
+        )
 
     def validate_context(self) -> List[str]:
         """Validate orchestration context.
@@ -117,8 +130,14 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         return self.execute()
 
     def on_complete(self) -> None:
-        """Execute on orchestrator complete."""
-        pass
+        """Execute on orchestrator complete — log completion summary."""
+        import logging
+        logging.getLogger(__name__).info(
+            "BKIOOrchestrator complete: processed=%d failed=%d conflicts=%d",
+            self.documents_processed,
+            self.documents_failed,
+            self.conflicts_detected,
+        )
 
     def _process_document(self, doc: Dict[str, Any]) -> None:
         """Process a document.
@@ -284,12 +303,13 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         return type_map.get(type_str, EntityType.RESOURCE)
 
     def _log(self, message: str) -> None:
-        """Log a message.
+        """Log a message via standard logger.
 
         Args:
             message: Message to log.
         """
-        pass
+        import logging
+        logging.getLogger(__name__).debug("BKIO: %s", message)
 
 
 __all__ = ["BusinessKnowledgeIngestionOrchestrator", "DocumentFormat"]
