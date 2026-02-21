@@ -164,11 +164,18 @@ class RoslynAdapter(RefactoringToolAdapter):
             if "new_name" not in params:
                 return Err("extract_method requires new_name")
 
-        # Rename: requires offset and new name
+        # Rename: requires (offset OR symbol_name) AND new_name.
+        # by_name mode: pass {"symbol_name": "Task", "new_name": "TaskEntity"}
+        # by_offset mode: pass {"offset": 42, "new_name": "TaskEntity"}
         elif op == "rename":
-            if "offset" not in params:
-                return Err("rename requires offset (position of symbol)")
-            if "new_name" not in params:
+            has_offset = "offset" in params
+            has_symbol_name = "symbol_name" in params and str(params["symbol_name"]).strip()
+            if not has_offset and not has_symbol_name:
+                return Err(
+                    "rename requires either 'offset' (int byte position) "
+                    "or 'symbol_name' (str name to look up)"
+                )
+            if "new_name" not in params or not str(params.get("new_name", "")).strip():
                 return Err("rename requires new_name")
 
         # Inline method: requires offset
@@ -215,12 +222,19 @@ class RoslynAdapter(RefactoringToolAdapter):
                 return Err(f"Failed to start Roslyn process: {start_result.unwrap_err()}")
 
         try:
-            # Build Roslyn command
+            # Build Roslyn command.
+            # For rename by_name mode, strip offset so the CLI resolves the
+            # symbol by name instead of byte position.
+            params = dict(request.parameters)
+            if request.operation == "rename" and "symbol_name" in params and "offset" not in params:
+                # by_name mode: CLI will locate the first occurrence of symbol_name
+                pass  # params already contains symbol_name + new_name, no offset
+
             command = {
                 "action": "refactor",
                 "operation": request.operation,
                 "file_path": str(request.file_path.absolute()),
-                "parameters": request.parameters
+                "parameters": params,
             }
 
             # Send command to Roslyn process

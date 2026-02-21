@@ -109,6 +109,9 @@ public class RefactoringService
 
     /// <summary>
     /// Execute rename refactoring.
+    /// Supports two lookup modes:
+    ///   by_offset: {"offset": int, "new_name": string}
+    ///   by_name:   {"symbol_name": string, "new_name": string}
     /// </summary>
     private async Task<RefactorResponse> ExecuteRenameAsync(
         Document document, 
@@ -117,52 +120,75 @@ public class RefactoringService
     {
         try
         {
-            // Validate parameters
-            if (!parameters.TryGetValue("offset", out var offsetObj) || !int.TryParse(offsetObj.ToString(), out var offset))
-            {
-                return ErrorResponse("rename requires 'offset' parameter (int)");
-            }
-
             if (!parameters.TryGetValue("new_name", out var newNameObj) || string.IsNullOrWhiteSpace(newNameObj.ToString()))
             {
                 return ErrorResponse("rename requires 'new_name' parameter (string)");
             }
-
             var newName = newNameObj.ToString()!;
 
-            // Get semantic model
+            // Get semantic model and root (needed for both modes)
             var semanticModel = await document.GetSemanticModelAsync();
-            if (semanticModel == null)
-            {
-                return ErrorResponse("Failed to get semantic model");
-            }
-
-            // Find symbol at offset
             var root = await document.GetSyntaxRootAsync();
-            if (root == null)
+            if (semanticModel == null || root == null)
             {
-                return ErrorResponse("Failed to get syntax root");
+                return ErrorResponse("Failed to get semantic model or syntax root");
             }
 
-            var token = root.FindToken(offset);
-            var symbol = semanticModel.GetSymbolInfo(token.Parent!).Symbol
+            ISymbol? symbol = null;
+
+            // ── by_name mode ─────────────────────────────────────────────────
+            if (parameters.TryGetValue("symbol_name", out var symbolNameObj) &&
+                !string.IsNullOrWhiteSpace(symbolNameObj.ToString()))
+            {
+                var symbolName = symbolNameObj.ToString()!.Trim();
+
+                // Walk all named nodes and find the first declaration whose
+                // identifier text matches symbol_name.
+                foreach (var node in root.DescendantNodes())
+                {
+                    var declared = semanticModel.GetDeclaredSymbol(node);
+                    if (declared != null && declared.Name == symbolName)
+                    {
+                        symbol = declared;
+                        break;
+                    }
+                }
+
+                if (symbol == null)
+                {
+                    return ErrorResponse(
+                        $"No symbol named '{symbolName}' found in {Path.GetFileName(originalFilePath)}");
+                }
+            }
+            // ── by_offset mode (original behaviour) ──────────────────────────
+            else if (parameters.TryGetValue("offset", out var offsetObj) &&
+                     int.TryParse(offsetObj.ToString(), out var offset))
+            {
+                var token = root.FindToken(offset);
+                symbol = semanticModel.GetSymbolInfo(token.Parent!).Symbol
                       ?? semanticModel.GetDeclaredSymbol(token.Parent!);
 
-            if (symbol == null)
+                if (symbol == null)
+                {
+                    return ErrorResponse($"No symbol found at offset {offset}");
+                }
+            }
+            else
             {
-                return ErrorResponse($"No symbol found at offset {offset}");
+                return ErrorResponse(
+                    "rename requires either 'offset' (int) or 'symbol_name' (string) parameter");
             }
 
-            // Execute rename using Roslyn Renamer API
+            // ── execute rename ────────────────────────────────────────────────
             var solution = document.Project.Solution;
             var newSolution = await Renamer.RenameSymbolAsync(
-                solution, 
-                symbol, 
+                solution,
+                symbol,
                 newName,
                 default(Microsoft.CodeAnalysis.Options.OptionSet)
             );
 
-            // Apply changes
+            // Apply changes to disk
             var changes = newSolution.GetChanges(solution);
             var modifiedFiles = new List<string>();
 
@@ -172,20 +198,23 @@ public class RefactoringService
                 {
                     var newDoc = newSolution.GetDocument(docId);
                     var newText = await newDoc!.GetTextAsync();
-                    
-                    // Use original file path as fallback
                     var filePath = newDoc.FilePath ?? originalFilePath;
-
                     await File.WriteAllTextAsync(filePath, newText.ToString());
                     modifiedFiles.Add(filePath);
                 }
             }
 
+            var mode = parameters.ContainsKey("symbol_name") ? "by_name" : "by_offset";
             return new RefactorResponse
             {
                 Success = true,
                 ModifiedFiles = modifiedFiles,
-                Description = $"Renamed '{symbol.Name}' to '{newName}'"
+                Description = $"Renamed '{symbol.Name}' to '{newName}' ({mode})",
+                Metadata = new Dictionary<string, object>
+                {
+                    ["symbol_kind"] = symbol.Kind.ToString(),
+                    ["lookup_mode"] = mode,
+                },
             };
         }
         catch (Exception ex)
