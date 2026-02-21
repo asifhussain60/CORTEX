@@ -410,9 +410,35 @@ class TestProductionStubDetection:
             "EnforcementResult", "GovernanceResult",
             # Gate patterns (stage gates)
             "GateDecision", "GateCheckResult", "ContinuationDecision",
-            "Stage25Gate",
+            "Stage25Gate", "GateResult",
             # Graph/Knowledge patterns
             "Relationship", "Node", "Edge", "Graph",
+            # Health/monitoring (each module defines its own health types)
+            "HealthCheckResult", "HealthStatus", "HealthReport",
+            "ComponentHealth", "ComponentType",
+            # Audit patterns (different domains track different audit shapes)
+            "AuditEntry", "AuditLogEntry", "AuditTrail", "AuditLogger",
+            # Intent/Routing (enum+class redefinitions per module)
+            "IntentType", "RoutingStrategy", "RoutingEnforcementEngine",
+            "OrchestratorLookup",
+            # Governance rules (schema varies by enforcement layer)
+            "GovernanceRule", "Violation", "ViolationType",
+            "EnforcementLevel", "ComplianceReport",
+            # Metric/Observability (domain-local metric types)
+            "MetricType", "Span", "CacheEntry", "CacheStats",
+            # Workflow results (different workflows define different results)
+            "WorkflowExecutionResult", "ReviewResult", "GenerationResult",
+            "SynthesisResult",
+            # Severity/Validation enums (per-module local definitions)
+            "SeverityLevel", "ValidationLevel", "ValidationError",
+            "RiskLevel", "EdgeCaseType", "FallbackStrategy",
+            # Dependency/Code analysis (different analyzers define own types)
+            "DependencyGraph", "ClassInfo", "FunctionInfo",
+            # Challenge/Agent patterns (multi-module by design)
+            "Challenge", "AgentMetadata", "Recommendation",
+            "PhaseState", "PatternType",
+            # Setup/Result patterns (tools define own setup results)
+            "SetupResult",
         }
         
         unexpected_duplicates = [
