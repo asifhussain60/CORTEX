@@ -2448,28 +2448,28 @@ phases:
     lens_scan_completed: false
 
 - id: phase-22
-  title: "STS BadMonolith Refactoring — Multi-Technology Workflow Templates + Autonomous Execution"
-  spec_file: cortex-sts/CortexLabs/Refactored/cortex-registry/planning/phases/
-  status: in_progress
+  title: "STS BadMonolith v2 — Full CORTEX SDLC: Onboard → Plan → TDD → Workflow-Template Execution"
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-22-sts-badmonolith-v2.yaml
+  status: planned
   priority: P1
   risk: medium
   dependencies:
   - phase-17
-  source: Copilot Chat 2026-02-22 — SDLC documentation gap analysis + BadMonolith refactoring + chat01.md digest (HTML duplicate prevention, UnifiedWorkflowTemplateExecutor)
+  - phase-23
+  source: "Copilot Chat 2026-02-22 — User request: full CORTEX SDLC cycle on BadMonolith as production repo. Version 2 supersedes previous phase-22 (which targeted cortex-sts/CortexLabs/Refactored/). Output: cortex-sts/CortexLabs/FinTrack-v2/"
   description: |
-    End-to-end demonstration of CORTEX's onboarding pipeline applied to the CortexLabs FinTrack
-    BadMonolith (25 intentional code smells across 5 technologies: C#, TypeScript, HTML, CSS, JSON).
-    
-    **Expanded Scope from chat01.md Digest:**
-    - UnifiedWorkflowTemplateExecutor: Single orchestrator routes ALL template execution — templates
-      contain logic, NOT spawning new orchestrators (prevents orchestrator sprawl)
-    - HTML duplicate prevention: DOM-based validation gates via BeautifulSoup4 + Vision API regression
-    - Multi-technology workflow templates: 8 new templates covering C#, TypeScript, HTML, CSS
-    
-    Generates full SDLC documentation (requirements, design, ADRs, Mermaid diagrams, estimation)
-    BEFORE refactoring, then executes autonomous refactoring through 10 sub-phases.
-    All output contained within cortex-sts/CortexLabs/Refactored/ — zero CORTEX core changes.
-    Tech stack preserved: C# ASP.NET Core 8.0, vanilla TypeScript (no new libraries).
+    VERSION 2 — Full CORTEX SDLC applied to BadMonolith as a production repo.
+    Output target: cortex-sts/CortexLabs/FinTrack-v2/ (Refactored/ kept as v1 reference).
+
+    7-stage pipeline: Governance Audit → Onboarding (LENS + cortex_onboard_repository_v3)
+    → Requirements Engineering (YAML, reverse-engineered from code) → Architecture Design
+    (Clean Architecture, ADRs, Mermaid diagrams inline as YAML) → Estimation + Sub-Phase Plan
+    → Workflow-Template-Driven TDD Execution (6 sub-phases: 5A Security Gate, 5B Domain Model,
+    5C Service Decomposition, 5D TypeScript Strict, 5E Test Quality Gate, 5F Dead Code + Pagination)
+    → Holistic Sweep + Scorecard (≥85%) → Dashboard (before/after HTML).
+
+    All 9 existing workflow templates consumed — no new templates created (CORE-035).
+    Tech stack constraint: C# ASP.NET Core 8.0 + vanilla TypeScript — zero new libraries.
   gap_analysis:
     gaps_identified:
     - id: G1
