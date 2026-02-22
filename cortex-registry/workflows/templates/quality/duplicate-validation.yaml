@@ -1,0 +1,233 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Cross-Language Duplicate Validation Workflow
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Detect duplicate validation logic (SMELL-10: ValidateEmail exists in 3 places).
+#          Consolidate into single canonical implementation per CORE-035.
+# Authority: CORE-035 (Single Canonical Implementation), ADR-008, ADR-009
+# Source: BadMonolith analysis
+# Smells Addressed: SMELL-10 (BadMonolith — duplicate validation)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: quality/duplicate-validation
+name: Cross-Language Duplicate Validation Workflow
+category: quality
+version: 1.0.0
+priority: P2
+
+metadata:
+  author: CORTEX
+  created: '2026-02-22'
+  updated: '2026-02-22'
+  source: BadMonolith-analysis
+  smells_addressed: [SMELL-10]
+  technologies: [csharp, typescript, python]
+  rollback_on_failure: true
+  vision_api_integration: false
+  golden_test_required: true
+  core_rules: [CORE-035]
+
+# ── PLACEHOLDERS ────────────────────────────────────────────────────────────────
+placeholders:
+  target_languages: ["csharp", "typescript"]
+  source_dirs: "{{source_directories}}"
+  similarity_threshold: 0.85
+  validation_patterns:
+    - "Validate"
+    - "IsValid"
+    - "Check"
+    - "Verify"
+    - "Assert"
+
+# ── GATES ───────────────────────────────────────────────────────────────────────
+gates:
+  no_duplicates:
+    description: "No validation logic duplicated across files (>85% similarity)"
+    validation: "duplicate_pairs == 0"
+    blocking: true
+    
+  canonical_selected:
+    description: "Single canonical implementation selected for each validation type"
+    validation: "canonical_implementations_defined == true"
+    blocking: true
+    
+  callers_updated:
+    description: "All callers point to canonical implementation"
+    validation: "orphan_callers == 0"
+    blocking: true
+    
+  tests_passing:
+    description: "All tests pass after consolidation"
+    validation: "test_failures == 0"
+    blocking: true
+
+# ── STEPS ───────────────────────────────────────────────────────────────────────
+steps:
+  # Step 1: Scan for Validation Functions
+  - id: S1_VALIDATION_SCAN
+    name: Find All Validation Functions
+    action: semantic_analyze
+    description: |
+      Scan all source files for validation functions:
+      - Method names containing: Validate, IsValid, Check, Verify
+      - Return type: bool or validation result
+      - Parameter patterns: single input, returns pass/fail
+    parameters:
+      source_dirs: "{{source_dirs}}"
+      patterns: "{{validation_patterns}}"
+      languages: "{{target_languages}}"
+    gate: null
+    outputs:
+      - validation_functions
+      - validation_function_count
+      - validation_by_file
+      
+  # Step 2: Compute Semantic Hash
+  - id: S2_SEMANTIC_HASH
+    name: Compute Similarity Scores
+    action: semantic_analyze
+    description: |
+      Compute semantic similarity between validation functions:
+      - Normalize: remove comments, whitespace, variable names
+      - Hash: compute structural hash of logic
+      - Compare: find pairs with similarity >85%
+    parameters:
+      functions: "{{validation_functions}}"
+      algorithm: semantic_hash
+      normalization:
+        - remove_comments
+        - normalize_whitespace
+        - anonymize_variables
+      similarity_threshold: "{{similarity_threshold}}"
+    gate: null
+    outputs:
+      - similarity_matrix
+      - duplicate_pairs
+      - similarity_scores
+      
+  # Step 3: Select Canonical Implementation
+  - id: S3_SELECT_CANONICAL
+    name: Select Canonical Implementation
+    action: semantic_analyze
+    description: |
+      For each duplicate group, select canonical implementation:
+      - Prefer: most complete (handles edge cases)
+      - Prefer: best documented (has docstring)
+      - Prefer: most tested (has dedicated tests)
+      - Prefer: in shared/common location
+    parameters:
+      duplicate_pairs: "{{duplicate_pairs}}"
+      selection_criteria:
+        - completeness
+        - documentation
+        - test_coverage
+        - location_preference: ["shared", "common", "utils", "helpers"]
+    gate: canonical_selected
+    outputs:
+      - canonical_implementations
+      - implementations_to_remove
+      - consolidation_plan
+      
+  # Step 4: Generate Consolidation Plan
+  - id: S4_CONSOLIDATION_PLAN
+    name: Generate Consolidation Plan
+    action: semantic_analyze
+    description: |
+      Plan consolidation:
+      - Move canonical to shared location (if not already there)
+      - Update all callers to reference canonical
+      - Mark duplicates for removal
+    parameters:
+      canonical_implementations: "{{canonical_implementations}}"
+      implementations_to_remove: "{{implementations_to_remove}}"
+      shared_location: "shared/validation/"
+    gate: null
+    outputs:
+      - move_operations
+      - caller_updates
+      - deletion_plan
+      
+  # Step 5: Execute Moves
+  - id: S5_EXECUTE_MOVES
+    name: Move Canonical to Shared Location
+    action: refactor
+    description: |
+      Move canonical implementations to shared location:
+      - Create shared/validation/ directory if needed
+      - Move function/class
+      - Update exports/imports
+    parameters:
+      move_operations: "{{move_operations}}"
+      create_dirs: true
+    gate: null
+    rollback: true
+    
+  # Step 6: Update Callers
+  - id: S6_UPDATE_CALLERS
+    name: Update All Callers
+    action: refactor
+    description: |
+      Update all callers to reference canonical implementation:
+      - Rewrite imports
+      - Update function references
+      - Handle namespace changes
+    parameters:
+      caller_updates: "{{caller_updates}}"
+    gate: callers_updated
+    rollback: true
+    
+  # Step 7: Remove Duplicates
+  - id: S7_REMOVE_DUPLICATES
+    name: Remove Duplicate Implementations
+    action: refactor
+    description: |
+      Delete duplicate implementations:
+      - Remove function/class definitions
+      - Clean up unused imports
+      - Update file structure
+    parameters:
+      deletion_plan: "{{deletion_plan}}"
+    gate: no_duplicates
+    rollback: true
+    
+  # Step 8: Run Tests
+  - id: S8_RUN_TESTS
+    name: Validate Consolidation
+    action: run_tests
+    description: |
+      Run full test suite to confirm consolidation didn't break anything.
+    parameters:
+      command: "make test-batch"
+      coverage: true
+    gate: tests_passing
+    rollback: true
+
+# ── CONVERGENCE CRITERIA ────────────────────────────────────────────────────────
+convergence:
+  max_cycles: 3
+  success_criteria:
+    duplicate_pairs: 0
+    orphan_callers: 0
+    test_failures: 0
+  convergence_predicate: |
+    duplicate_pairs == 0 AND
+    orphan_callers == 0 AND
+    test_failures == 0
+
+# ── AUDIT TRACE ─────────────────────────────────────────────────────────────────
+audit:
+  log_level: INFO
+  trace_fields:
+    - timestamp
+    - step_id
+    - validation_type
+    - duplicate_count
+    - canonical_selected
+    - callers_updated
+    - test_result
+  acceptance_criteria:
+    - 'AC-DUP-001: All validation functions scanned'
+    - 'AC-DUP-002: Duplicate pairs identified (>85% similarity)'
+    - 'AC-DUP-003: Canonical implementation selected for each type'
+    - 'AC-DUP-004: All callers updated to canonical'
+    - 'AC-DUP-005: Duplicate implementations removed (CORE-035)'
+    - 'AC-DUP-006: All tests passing'

@@ -1,0 +1,187 @@
+# ============================================================================
+# PRIMITIVE: LENS AST Scan
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable)
+# Purpose: Language-agnostic AST analysis via LENS orchestrator
+# Reused by: csharp-refactor, csharp-security, typescript-refactor, dead-code-removal
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/analysis/lens-ast-scan'
+name: 'LENS AST Scan Primitive'
+tier: 'primitive'
+category: 'analysis'
+status: 'active'
+
+metadata:
+  description: |
+    Atomic template for Abstract Syntax Tree (AST) analysis across multiple languages.
+    Uses LENS orchestrator with language-specific adapters (Roslyn for C#, TypeScript
+    compiler API for TS, Python AST module for Python).
+  
+  tags:
+    - primitive
+    - analysis
+    - ast
+    - lens
+    - cross-language
+  
+  supported_languages:
+    - csharp
+    - typescript
+    - python
+    - javascript
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'LENSOrchestrator'
+      purpose: 'AST parsing and analysis coordination'
+      required: true
+  
+  mcp_tools:
+    - name: 'cortex_vision_analyze'
+      purpose: 'Code structure visualization (optional)'
+      required: false
+    
+    - name: 'cortex_validate_compliance'
+      purpose: 'CORE rule validation on parsed AST'
+      required: true
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'target_files'
+      type: 'List[Path]'
+      description: 'Files or directories to scan'
+    
+    - name: 'language'
+      type: 'str'
+      description: 'Target language (csharp|typescript|python|javascript)'
+      enum: ['csharp', 'typescript', 'python', 'javascript']
+  
+  optional:
+    - name: 'depth'
+      type: 'str'
+      description: 'Analysis depth (shallow|standard|deep)'
+      default: 'standard'
+      enum: ['shallow', 'standard', 'deep']
+    
+    - name: 'include_metrics'
+      type: 'bool'
+      description: 'Include complexity metrics (LOC, cyclomatic, cognitive)'
+      default: true
+    
+    - name: 'extract_dependencies'
+      type: 'bool'
+      description: 'Build dependency graph from imports/usings'
+      default: true
+
+# ============================================================================
+# EXECUTION
+# ============================================================================
+execution:
+  steps:
+    - step_id: 'AST_PARSE'
+      name: 'Parse source files into AST'
+      action: |
+        For each file in target_files:
+          1. Detect language from extension (.cs, .ts, .py, .js)
+          2. Invoke language-specific parser:
+             - C#: Roslyn SyntaxTree.ParseText()
+             - TypeScript: ts.createSourceFile()
+             - Python: ast.parse()
+          3. Store parsed AST in memory cache
+      outputs:
+        - 'parsed_ast_cache'
+    
+    - step_id: 'EXTRACT_SYMBOLS'
+      name: 'Extract classes, methods, functions'
+      action: |
+        Walk AST and extract:
+          - Classes/interfaces/enums with line ranges
+          - Methods/functions with parameter signatures
+          - Properties/fields with types
+          - Import/using statements
+      outputs:
+        - 'symbol_table.json'
+    
+    - step_id: 'COMPUTE_METRICS'
+      name: 'Calculate complexity metrics'
+      condition: '{{include_metrics}} == true'
+      action: |
+        For each symbol:
+          - LOC (lines of code, excluding comments/blanks)
+          - Cyclomatic complexity (branches + 1)
+          - Cognitive complexity (nesting depth weighted)
+          - Parameter count per method
+      outputs:
+        - 'complexity_metrics.json'
+    
+    - step_id: 'BUILD_DEPENDENCY_GRAPH'
+      name: 'Construct dependency relationships'
+      condition: '{{extract_dependencies}} == true'
+      action: |
+        From imports/usings:
+          - Internal dependencies (within project)
+          - External dependencies (packages/libraries)
+          - Circular dependency detection
+      outputs:
+        - 'dependency_graph.json'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'symbol_table'
+      path: '{{output_dir}}/symbol_table.json'
+      schema: |
+        {
+          "files": [{
+            "path": "string",
+            "language": "string",
+            "classes": [{"name": "string", "line_start": "int", "line_end": "int", "methods": [...]}],
+            "functions": [{"name": "string", "line_start": "int", "parameters": [...]}]
+          }]
+        }
+  
+  optional:
+    - name: 'complexity_metrics'
+      path: '{{output_dir}}/complexity_metrics.json'
+      condition: '{{include_metrics}} == true'
+    
+    - name: 'dependency_graph'
+      path: '{{output_dir}}/dependency_graph.json'
+      condition: '{{extract_dependencies}} == true'
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - 'All target files parsed without syntax errors'
+  - 'Symbol table contains ≥1 class or function per non-empty file'
+  - 'Dependency graph has no orphan nodes (if enabled)'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:LENS_AST_SCAN'
+    complete: 'AC_COMPLETE:LENS_AST_SCAN'
+    failure: 'AC_FAILURE:LENS_AST_SCAN'
+  
+  log_fields:
+    - 'files_scanned'
+    - 'symbols_extracted'
+    - 'complexity_avg'
+    - 'circular_dependencies_found'

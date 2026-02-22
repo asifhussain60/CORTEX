@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTrack - CortexLabs</title>
+    
+    <!-- ✅ SMELL-13 RESOLVED: Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' http://localhost:5000">
+    
+    <!-- ✅ SMELL-18 RESOLVED: Security headers via meta -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    
+    <!-- ✅ SMELL-21 RESOLVED: CSS extracted to separate file -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>🏦 FinTrack - Financial Tracker</h1>
+            <p class="version-tag">CortexLabs v1.0.0 — CORTEX Refactored</p>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs" role="navigation" aria-label="Main navigation">
+            <button class="nav-tab active" data-tab="dashboard" aria-selected="true">Dashboard</button>
+            <button class="nav-tab" data-tab="transactions" aria-selected="false">Transactions</button>
+            <button class="nav-tab" data-tab="accounts" aria-selected="false">Accounts</button>
+            <button class="nav-tab" data-tab="users" aria-selected="false">Users</button>
+            <button class="nav-tab" data-tab="reports" aria-selected="false">Reports</button>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <section id="tab-dashboard" class="tab-content active" role="tabpanel" aria-labelledby="dashboard-tab">
+            <h2>Financial Overview</h2>
+            <div id="dashboard-content" class="dashboard-grid">
+                <!-- Populated by Dashboard component -->
+            </div>
+        </section>
+
+        <!-- Transactions Tab -->
+        <section id="tab-transactions" class="tab-content" role="tabpanel" aria-labelledby="transactions-tab">
+            <h2>Transactions</h2>
+            <div class="form-section">
+                <h3>Add Transaction</h3>
+                <form id="add-transaction-form" class="inline-form">
+                    <input id="tx-desc" type="text" placeholder="Description" required aria-label="Description">
+                    <input id="tx-amount" type="number" step="0.01" min="0.01" placeholder="Amount" required aria-label="Amount">
+                    <input id="tx-category" type="text" placeholder="Category" aria-label="Category">
+                    <select id="tx-type" aria-label="Type">
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+            <div class="form-section">
+                <h3>Search</h3>
+                <form id="search-transaction-form" class="inline-form">
+                    <input id="search-category" type="text" placeholder="Category" aria-label="Search category">
+                    <input id="search-date" type="date" aria-label="From date">
+                    <button type="submit" class="btn btn-secondary">Search</button>
+                </form>
+            </div>
+            <div id="transactions-content">
+                <!-- Populated by TransactionList component -->
+            </div>
+        </section>
+
+        <!-- Accounts Tab -->
+        <section id="tab-accounts" class="tab-content" role="tabpanel" aria-labelledby="accounts-tab">
+            <h2>Accounts</h2>
+            <div class="form-section">
+                <h3>Transfer Money</h3>
+                <form id="transfer-form" class="inline-form">
+                    <input id="transfer-from" type="number" placeholder="From Account ID" required aria-label="From account">
+                    <input id="transfer-to" type="number" placeholder="To Account ID" required aria-label="To account">
+                    <input id="transfer-amount" type="number" step="0.01" min="0.01" placeholder="Amount" required aria-label="Amount">
+                    <button type="submit" class="btn btn-primary">Transfer</button>
+                </form>
+            </div>
+            <div id="accounts-content">
+                <!-- Populated by AccountList component -->
+            </div>
+        </section>
+
+        <!-- Users Tab -->
+        <section id="tab-users" class="tab-content" role="tabpanel" aria-labelledby="users-tab">
+            <h2>Users</h2>
+            <div id="users-content">
+                <!-- Populated by UserList component -->
+            </div>
+        </section>
+
+        <!-- Reports Tab -->
+        <section id="tab-reports" class="tab-content" role="tabpanel" aria-labelledby="reports-tab">
+            <h2>Reports</h2>
+            <div id="reports-content">
+                <!-- Populated by ReportList component -->
+            </div>
+        </section>
+
+        <!-- Status Bar -->
+        <footer class="status-bar">
+            <span id="status-message">Ready</span>
+            <span id="api-status" class="status-indicator"></span>
+        </footer>
+    </div>
+
+    <!-- ✅ Module-based TypeScript entry -->
+    <script type="module" src="main.js"></script>
+</body>
+</html>

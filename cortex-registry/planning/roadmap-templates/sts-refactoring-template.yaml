@@ -80,6 +80,29 @@ wave_2:
       exit_criteria:
         - "All existing tests pass"
         - "DI lifetimes consistent (no Singleton capturing Scoped)"
+      gates:
+        - id: "ENH-STS-01"
+          tool: "cortex_refactor"
+          operation: "gate"
+          description: "Functional completeness — no source endpoints silently dropped"
+          params:
+            source_items: "{source_items}"
+            target_items: "{target_items}"
+          pass_criteria: "gap_count == 0 OR ADR filed for each gap"
+        - id: "ENH-STS-05"
+          tool: "cortex_refactor"
+          operation: "gate"
+          description: "DI lifetime consistency — no AddSingleton<*Repository>"
+          params:
+            source_code: "{program_cs_content}"
+          pass_criteria: "clean == true (violation_count == 0)"
+        - id: "ENH-STS-07"
+          tool: "cortex_refactor"
+          operation: "gate"
+          description: "Health endpoint realness — must probe DB, not hardcode 'healthy'"
+          params:
+            source_code: "{health_endpoint_source}"
+          pass_criteria: "clean == true (violation_count == 0)"
 
     - phase_id: "STS-P-004"
       title: "Security Hardening"
@@ -91,7 +114,8 @@ wave_2:
         - "CORS: specific origins from config (not wildcard)"
         - "JWT: AddAuthentication wired + token generation complete"
         - "Error handling: RFC 7807 ProblemDetails (no stack trace to client)"
-        - "Rate limiting on login + payment endpoints"
+        - "Rate limiting on login + payment/transfer endpoints (AP-009)"
+        - "Real health endpoint with async DB probe — no hardcoded stub (AP-005)"
       gate:
         tool: "cortex_refactor"
         operation: "gate"
@@ -106,7 +130,8 @@ wave_2:
         - "ENH-STS-03 check_security_hardening: 0 P0 violations"
         - "BCrypt/Argon2 in use (weak_password_hash rule: no matches)"
         - "JWT middleware wired (incomplete_jwt rule: no match)"
-        - "Rate limiting middleware present on sensitive routes"
+        - "Rate limiting middleware present on sensitive routes (AP-009)"
+        - "ENH-STS-07 health endpoint: async DB probe present, no hardcoded 'healthy' stub (AP-005)"
 
     - phase_id: "STS-P-005"
       title: "Functional Completeness — All Source Endpoints Implemented"
@@ -133,6 +158,8 @@ wave_2:
         - "XxxServiceTests class for every XxxService class"
         - "Endpoint-level tests (routing, status codes, parameter binding)"
         - "Frontend test runner configured (if TypeScript service layer exists)"
+        - "AccountsController restored with TransferAsync (AP-002)"
+        - "AccountServiceTests covering transfer edge cases (insufficient funds, zero amount, same account)"
       gate:
         tool: "cortex_refactor"
         operation: "gate"
@@ -142,7 +169,8 @@ wave_2:
       exit_criteria:
         - "ENH-STS-04 check_test_coverage_density: complete == true"
         - "Minimum 8 tests per service class"
-        - "Frontend package.json has test script if service layer exists"
+        - "Frontend package.json has test script (vitest) if service layer exists (AP-008)"
+        - "TransferAsync tested for: valid transfer, insufficient funds, zero amount, same account, missing source, missing destination"
 
 # ── WAVE 3: CLOSE ─────────────────────────────────────────────────────────────
 wave_3:
@@ -212,3 +240,19 @@ anti_patterns:
     description: "Frontend has service layer but no test runner in package.json"
     severity: "P1"
     rule: "ENH-STS-04"
+  - id: "AP-009"
+    description: "No rate limiting on login/payment/transfer endpoints"
+    severity: "P1"
+    rule: "ENH-STS-03"
+  - id: "AP-010"
+    description: "CORTEX refactoring session leaves no genuine trace in orchestrator-traces.db"
+    severity: "P2"
+    rule: "ENH-STS-02"
+  - id: "AP-011"
+    description: "AddSingleton<*Repository> registered alongside AddScoped services — captive dependency"
+    severity: "P1"
+    rule: "ENH-STS-05"
+  - id: "AP-012"
+    description: "Health endpoint returns hardcoded 'healthy' without async DB probe"
+    severity: "P1"
+    rule: "ENH-STS-07"

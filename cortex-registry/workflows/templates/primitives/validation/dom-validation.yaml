@@ -1,0 +1,207 @@
+# ============================================================================
+# PRIMITIVE: DOM Validation
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable)
+# Purpose: HTML DOM well-formedness and structure validation
+# Reused by: html-refactor, css-extraction
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/validation/dom-validation'
+name: 'DOM Validation Primitive'
+tier: 'primitive'
+category: 'validation'
+status: 'active'
+
+metadata:
+  description: |
+    Atomic template for HTML DOM validation. Ensures well-formed HTML,
+    detects duplicate IDs, validates semantic structure, and prevents
+    the duplicate section issue identified in chat01.md.
+  
+  tags:
+    - primitive
+    - validation
+    - html
+    - dom
+    - beautifulsoup
+  
+  root_cause_addressed: 'chat01.md — HTML refactoring creates duplicate sections'
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'EnforcementOrchestrator'
+      purpose: 'CORE rule validation'
+      required: true
+  
+  mcp_tools:
+    - name: 'cortex_validate_compliance'
+      purpose: 'Governance rule checking'
+      required: true
+  
+  external_dependencies:
+    - name: 'beautifulsoup4'
+      version: '>=4.12.0'
+      purpose: 'HTML parsing'
+    
+    - name: 'lxml'
+      version: '>=4.9.0'
+      purpose: 'Fast XML/HTML parser backend'
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'html_file'
+      type: 'Path'
+      description: 'HTML file to validate'
+  
+  optional:
+    - name: 'check_duplicate_ids'
+      type: 'bool'
+      description: 'Flag duplicate id attributes'
+      default: true
+    
+    - name: 'check_unclosed_tags'
+      type: 'bool'
+      description: 'Detect unclosed HTML tags'
+      default: true
+    
+    - name: 'check_semantic_structure'
+      type: 'bool'
+      description: 'Validate semantic HTML5 structure (header, main, footer)'
+      default: true
+    
+    - name: 'duplicate_section_threshold'
+      type: 'float'
+      description: 'Semantic similarity threshold for duplicate section detection'
+      default: 0.85
+
+# ============================================================================
+# EXECUTION
+# ============================================================================
+execution:
+  steps:
+    - step_id: 'PARSE_HTML'
+      name: 'Parse HTML via BeautifulSoup4'
+      action: |
+        1. Read html_file content
+        2. Parse with BeautifulSoup4 using lxml parser
+        3. Detect and log any parsing warnings
+        4. Store parsed DOM tree in memory
+      outputs:
+        - 'dom_tree'
+        - 'parse_warnings'
+    
+    - step_id: 'CHECK_WELL_FORMEDNESS'
+      name: 'Validate HTML well-formedness'
+      action: |
+        Check for:
+          - Missing DOCTYPE declaration
+          - Missing <html>, <head>, <body> tags
+          - Unclosed tags (if check_unclosed_tags)
+          - Mismatched opening/closing tags
+      outputs:
+        - 'wellformedness_issues.json'
+    
+    - step_id: 'DETECT_DUPLICATE_IDS'
+      name: 'Find duplicate id attributes'
+      condition: '{{check_duplicate_ids}} == true'
+      action: |
+        1. Extract all elements with id attribute
+        2. Group by id value
+        3. Flag any id appearing more than once
+        4. Provide line numbers for each duplicate
+      outputs:
+        - 'duplicate_ids.json'
+    
+    - step_id: 'DETECT_DUPLICATE_SECTIONS'
+      name: 'Find semantically duplicate sections'
+      action: |
+        For all <section>, <div id="...">, <article> elements:
+          1. Extract text content + child structure
+          2. Compute semantic hash
+          3. Compare all pairs for similarity > threshold
+          4. Flag potential duplicates with confidence score
+      outputs:
+        - 'duplicate_sections.json'
+    
+    - step_id: 'VALIDATE_SEMANTIC_STRUCTURE'
+      name: 'Check HTML5 semantic structure'
+      condition: '{{check_semantic_structure}} == true'
+      action: |
+        Validate presence and order of:
+          - <header> (optional, max 1 per <body>)
+          - <nav> (recommended)
+          - <main> (required, exactly 1)
+          - <footer> (optional, max 1 per <body>)
+          - <article> / <section> nesting rules
+      outputs:
+        - 'semantic_issues.json'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'validation_report'
+      path: '{{output_dir}}/dom_validation_report.json'
+      schema: |
+        {
+          "file": "string",
+          "is_valid": "bool",
+          "issues": [{
+            "type": "string",
+            "severity": "P0|P1|P2",
+            "message": "string",
+            "line": "int",
+            "element": "string"
+          }],
+          "duplicate_ids": [...],
+          "duplicate_sections": [...],
+          "semantic_issues": [...]
+        }
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - 'HTML parses without fatal errors'
+  - 'Zero duplicate IDs detected'
+  - 'Zero duplicate sections with similarity > threshold'
+  - 'Semantic structure valid (if check enabled)'
+
+# ============================================================================
+# GOVERNANCE
+# ============================================================================
+governance:
+  rules_enforced:
+    - rule_id: 'CORE-035'
+      description: 'Single canonical implementation — no duplicate sections'
+    
+    - rule_id: 'CORE-048'
+      description: 'Holistic validation gate — validates DOM before edit'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:DOM_VALIDATION'
+    complete: 'AC_COMPLETE:DOM_VALIDATION'
+    failure: 'AC_FAILURE:DOM_VALIDATION'
+  
+  log_fields:
+    - 'file_path'
+    - 'is_valid'
+    - 'issue_count'
+    - 'duplicate_id_count'
+    - 'duplicate_section_count'

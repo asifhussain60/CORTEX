@@ -1,0 +1,290 @@
+# ============================================================================
+# PRIMITIVE: CSS Zero Inline Validation
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable)
+# Purpose: Enforce zero inline CSS rule — all styling in .css files or <style> blocks
+# Reused by: html-refactor, css-extraction, frontend-tdd
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/validation/css-zero-inline'
+name: 'CSS Zero Inline Validation Primitive'
+tier: 'primitive'
+category: 'validation'
+status: 'active'
+
+metadata:
+  description: |
+    Atomic template enforcing the CORTEX rule that zero inline CSS is allowed.
+    All styling must be in:
+      1. External .css files (preferred)
+      2. <style> blocks in HTML (acceptable)
+    
+    Inline style="" attributes are FORBIDDEN and will block the workflow.
+  
+  tags:
+    - primitive
+    - validation
+    - css
+    - zero-inline
+    - governance
+  
+  governance_rule: 'CORE-074: Zero Inline CSS'
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'EnforcementOrchestrator'
+      purpose: 'Governance rule validation'
+      required: true
+  
+  mcp_tools:
+    - name: 'cortex_validate_compliance'
+      purpose: 'Rule enforcement'
+      required: true
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'target_files'
+      type: 'List[Path]'
+      description: 'HTML/JSX/TSX files to scan for inline CSS'
+  
+  optional:
+    - name: 'allow_style_blocks'
+      type: 'bool'
+      description: 'Allow <style> blocks (true) or require external .css only (false)'
+      default: true
+    
+    - name: 'severity'
+      type: 'str'
+      description: 'Violation severity level'
+      default: 'blocked'
+      enum: ['warning', 'error', 'blocked']
+    
+    - name: 'auto_extract'
+      type: 'bool'
+      description: 'Automatically extract inline styles to external file'
+      default: false
+    
+    - name: 'extract_target'
+      type: 'Path'
+      description: 'Target .css file for extracted styles'
+      default: null
+
+# ============================================================================
+# EXECUTION
+# ============================================================================
+execution:
+  steps:
+    - step_id: 'SCAN_INLINE_STYLES'
+      name: 'Detect inline style="" attributes'
+      action: |
+        For each file in target_files:
+          1. Parse HTML/JSX/TSX content
+          2. Find all elements with style="" or style={{...}} attributes
+          3. Extract:
+             - Element tag name
+             - Line number
+             - Full style value
+             - Parent context (for class name generation)
+          4. Build violation report
+      outputs:
+        - 'inline_style_violations.json'
+    
+    - step_id: 'SCAN_STYLE_BLOCKS'
+      name: 'Inventory <style> blocks'
+      action: |
+        For each file in target_files:
+          1. Find all <style> and <style scoped> blocks
+          2. Extract:
+             - Line range (start, end)
+             - CSS content
+             - Scoped attribute presence
+          3. Flag if allow_style_blocks == false
+      outputs:
+        - 'style_block_inventory.json'
+    
+    - step_id: 'CHECK_EXTERNAL_CSS'
+      name: 'Verify external CSS linkage'
+      action: |
+        For each file in target_files:
+          1. Find all <link rel="stylesheet"> tags
+          2. Verify referenced .css files exist
+          3. Flag missing CSS files
+      outputs:
+        - 'external_css_links.json'
+    
+    - step_id: 'GENERATE_VIOLATIONS'
+      name: 'Compile violation report'
+      action: |
+        Merge findings:
+          - Inline style violations (always blocked)
+          - Style block violations (if allow_style_blocks == false)
+          - Missing CSS file warnings
+        
+        Assign severity per configured level.
+      outputs:
+        - 'css_violations.json'
+    
+    - step_id: 'AUTO_EXTRACT'
+      name: 'Extract inline styles to external CSS'
+      condition: '{{auto_extract}} == true AND violations_found'
+      action: |
+        For each inline style violation:
+          1. Generate unique class name (BEM: block__element--modifier)
+          2. Extract style rules to extract_target .css file
+          3. Replace style="" with class="" in source file
+          4. Re-validate after extraction
+      outputs:
+        - 'extraction_report.json'
+        - '{{extract_target}}'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'css_violations'
+      path: '{{output_dir}}/css_violations.json'
+      schema: |
+        {
+          "total_violations": "int",
+          "inline_style_count": "int",
+          "style_block_count": "int",
+          "files_scanned": "int",
+          "violations": [{
+            "file": "string",
+            "line": "int",
+            "element": "string",
+            "style_value": "string",
+            "severity": "warning|error|blocked",
+            "suggested_class": "string"
+          }]
+        }
+  
+  optional:
+    - name: 'extraction_report'
+      path: '{{output_dir}}/extraction_report.json'
+      condition: '{{auto_extract}} == true'
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - 'Zero inline style="" attributes detected'
+  - 'All <style> blocks are acceptable (if allow_style_blocks == true)'
+  - 'All external CSS files referenced exist'
+
+# ============================================================================
+# GOVERNANCE
+# ============================================================================
+governance:
+  rules_enforced:
+    - rule_id: 'CORE-074'
+      name: 'Zero Inline CSS'
+      description: |
+        All CSS must be in external .css files or <style> blocks.
+        Inline style="" attributes are forbidden.
+      severity: 'blocked'
+      enforcement_point: 'pre-commit, CI, workflow'
+      
+      forbidden_patterns:
+        - pattern: 'style="'
+          description: 'Inline style attribute'
+          languages: ['html', 'jsx', 'tsx']
+        
+        - pattern: 'style={{'
+          description: 'React inline style object'
+          languages: ['jsx', 'tsx']
+      
+      required_patterns:
+        - pattern: '<link rel="stylesheet"'
+          description: 'External CSS linkage'
+          min_count: 1
+      
+      acceptable_patterns:
+        - pattern: '<style>'
+          description: 'Style block (allowed when allow_style_blocks=true)'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:CSS_ZERO_INLINE'
+    complete: 'AC_COMPLETE:CSS_ZERO_INLINE'
+    failure: 'AC_FAILURE:CSS_ZERO_INLINE'
+  
+  log_fields:
+    - 'files_scanned'
+    - 'inline_violations'
+    - 'style_block_count'
+    - 'external_css_count'
+    - 'auto_extracted_count'
+
+# ============================================================================
+# GOLDEN TEST SPECIFICATION
+# ============================================================================
+golden_tests:
+  test_file: 'tests/golden/test_css_zero_inline_truth.py'
+  test_count: 12
+  test_cases:
+    - name: 'test_detects_inline_style_attribute'
+      input: '<div style="color: red;">text</div>'
+      expected: 'violation at line 1'
+    
+    - name: 'test_allows_style_block_when_enabled'
+      input: '<style>.foo { color: red; }</style>'
+      expected: 'no violation when allow_style_blocks=true'
+    
+    - name: 'test_blocks_style_block_when_disabled'
+      input: '<style>.foo { color: red; }</style>'
+      config: 'allow_style_blocks=false'
+      expected: 'violation at line 1'
+    
+    - name: 'test_detects_react_inline_style'
+      input: '<div style={{color: "red"}}>text</div>'
+      expected: 'violation at line 1'
+    
+    - name: 'test_allows_external_css_link'
+      input: '<link rel="stylesheet" href="styles.css">'
+      expected: 'no violation'
+    
+    - name: 'test_warns_missing_external_css'
+      input: '<link rel="stylesheet" href="nonexistent.css">'
+      expected: 'warning: referenced CSS file not found'
+    
+    - name: 'test_auto_extract_generates_class'
+      input: '<div style="color: red; font-size: 16px;">text</div>'
+      config: 'auto_extract=true'
+      expected: 'class="extracted-div--1" generated'
+    
+    - name: 'test_multiple_files_scanned'
+      input: ['file1.html', 'file2.html']
+      expected: 'files_scanned == 2'
+    
+    - name: 'test_audit_trace_markers_emitted'
+      expected: 'AC_START:CSS_ZERO_INLINE and AC_COMPLETE:CSS_ZERO_INLINE in log'
+    
+    - name: 'test_zero_violations_passes'
+      input: '<div class="styled">text</div>'
+      expected: 'success_criteria met'
+    
+    - name: 'test_violation_blocks_workflow'
+      input: '<div style="color: red;">text</div>'
+      config: 'severity=blocked'
+      expected: 'workflow aborted'
+    
+    - name: 'test_bem_class_naming'
+      input: '<button style="background: blue;">Click</button>'
+      config: 'auto_extract=true'
+      expected: 'class follows BEM convention'

@@ -1,0 +1,243 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Test Quality Enforcement Workflow
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Replace Assert.True(true) patterns (SMELL-12) with behavioral tests.
+#          Apply TestQualityGate scoring, delete tests scoring <4, flag 4-6 for review.
+# Authority: TestQualityGate, CORE-008 (TDD), ADR-009 (3-Layer Architecture)
+# Source: BadMonolith analysis — SomeTests.cs
+# Smells Addressed: SMELL-12 (BadMonolith — trivial tests)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: testing/test-quality-enforcement
+name: Test Quality Enforcement Workflow
+category: testing
+version: 1.0.0
+priority: P1
+
+metadata:
+  author: CORTEX
+  created: '2026-02-22'
+  updated: '2026-02-22'
+  source: BadMonolith-analysis
+  smells_addressed: [SMELL-12]
+  technologies: [csharp, typescript, python]
+  rollback_on_failure: true
+  vision_api_integration: false
+  golden_test_required: true
+  core_rules: [CORE-008]
+
+# ── PLACEHOLDERS ────────────────────────────────────────────────────────────────
+placeholders:
+  test_directories: "{{test_dirs}}"
+  source_directories: "{{source_dirs}}"
+  quality_gate:
+    keep_threshold: 7
+    review_threshold: 4
+    delete_threshold: 4
+  trivial_patterns:
+    - 'Assert\.True\s*\(\s*true\s*\)'
+    - 'Assert\.Pass\s*\(\s*\)'
+    - 'Assert\.That\s*\(\s*true\s*\)'
+    - 'expect\s*\(\s*true\s*\)\s*\.toBe\s*\(\s*true\s*\)'
+    - 'assert\s+True'
+    - '# TODO: implement test'
+
+# ── GATES ───────────────────────────────────────────────────────────────────────
+gates:
+  no_trivial_tests:
+    description: "No Assert.True(true) or equivalent trivial patterns"
+    validation: "trivial_test_count == 0"
+    blocking: true
+    
+  all_tests_scored:
+    description: "All tests have TestQualityGate score"
+    validation: "unscored_tests == 0"
+    blocking: true
+    
+  quality_gate_passed:
+    description: "All retained tests score >= 7"
+    validation: "min_retained_score >= 7"
+    blocking: true
+    
+  tests_passing:
+    description: "All tests pass after quality enforcement"
+    validation: "test_failures == 0"
+    blocking: true
+
+# ── STEPS ───────────────────────────────────────────────────────────────────────
+steps:
+  # Step 1: Trivial Test Scan
+  - id: S1_TRIVIAL_TEST_SCAN
+    name: Scan for Trivial Test Patterns
+    action: semantic_analyze
+    description: |
+      Find tests that assert obvious truths:
+      - Assert.True(true)
+      - Assert.Pass()
+      - expect(true).toBe(true)
+      - Empty test bodies
+      - TODO placeholders
+    parameters:
+      directories: "{{test_directories}}"
+      patterns: "{{trivial_patterns}}"
+      languages: [csharp, typescript, python]
+    gate: null
+    outputs:
+      - trivial_tests
+      - trivial_test_count
+      - trivial_by_file
+      
+  # Step 2: Quality Scoring
+  - id: S2_QUALITY_SCORING
+    name: Apply TestQualityGate Scoring
+    action: semantic_analyze
+    description: |
+      Score each test using TestQualityGate criteria:
+      - Behavioral assertion (not trivial): +3
+      - Tests actual behavior (not implementation): +2
+      - Clear arrange/act/assert structure: +1
+      - Meaningful test name: +1
+      - No excessive mocking: +1
+      - Edge case coverage: +1
+      - Error handling coverage: +1
+    parameters:
+      test_files: "{{test_directories}}"
+      scoring_criteria:
+        behavioral_assertion: 3
+        tests_behavior: 2
+        aaa_structure: 1
+        meaningful_name: 1
+        minimal_mocking: 1
+        edge_cases: 1
+        error_handling: 1
+      max_score: 10
+    gate: all_tests_scored
+    outputs:
+      - test_scores
+      - score_distribution
+      - tests_by_tier  # keep (>=7), review (4-6), delete (<4)
+      
+  # Step 3: Categorize Tests
+  - id: S3_CATEGORIZE_TESTS
+    name: Categorize by Quality Tier
+    action: semantic_analyze
+    description: |
+      Categorize tests based on score:
+      - KEEP (score >= 7): High-value, retain
+      - REVIEW (score 4-6): Needs improvement, flag for manual review
+      - DELETE (score < 4): Low-value, mark for deletion
+    parameters:
+      test_scores: "{{test_scores}}"
+      thresholds:
+        keep: "{{quality_gate.keep_threshold}}"
+        review: "{{quality_gate.review_threshold}}"
+        delete: "{{quality_gate.delete_threshold}}"
+    gate: null
+    outputs:
+      - tests_to_keep
+      - tests_to_review
+      - tests_to_delete
+      
+  # Step 4: Generate Behavioral Test Stubs
+  - id: S4_GENERATE_STUBS
+    name: Generate Behavioral Test Stubs
+    action: refactor
+    description: |
+      For tests marked DELETE, generate behavioral test stubs:
+      - Analyze corresponding source code
+      - Generate test methods that test actual behavior
+      - Include arrange/act/assert structure
+    parameters:
+      tests_to_replace: "{{tests_to_delete}}"
+      source_directories: "{{source_directories}}"
+      stub_template: behavioral
+    gate: null
+    outputs:
+      - generated_stubs
+      - stub_locations
+      
+  # Step 5: Delete Trivial Tests
+  - id: S5_DELETE_TRIVIAL
+    name: Delete Low-Value Tests
+    action: refactor
+    description: |
+      Delete tests scoring < 4:
+      - Remove test methods
+      - Clean up empty test classes
+      - Update test file imports
+    parameters:
+      tests_to_delete: "{{tests_to_delete}}"
+      preserve_file_if_has_other_tests: true
+    gate: null
+    rollback: true
+    
+  # Step 6: Insert Behavioral Stubs
+  - id: S6_INSERT_STUBS
+    name: Insert Behavioral Test Stubs
+    action: refactor
+    description: |
+      Insert generated behavioral test stubs:
+      - Add test methods to appropriate test classes
+      - Include TODO markers for implementation
+      - Add required imports
+    parameters:
+      stubs: "{{generated_stubs}}"
+      locations: "{{stub_locations}}"
+    gate: null
+    rollback: true
+    
+  # Step 7: Validate No Trivial Patterns
+  - id: S7_VALIDATE_NO_TRIVIAL
+    name: Validate Zero Trivial Patterns Remain
+    action: semantic_analyze
+    description: |
+      Re-scan all test files. Must have zero trivial patterns.
+    parameters:
+      directories: "{{test_directories}}"
+      patterns: "{{trivial_patterns}}"
+    gate: no_trivial_tests
+    rollback: true
+    
+  # Step 8: Run Tests
+  - id: S8_RUN_TESTS
+    name: Run Test Suite
+    action: run_tests
+    description: |
+      Run full test suite to ensure no breakage.
+      Note: Stub tests will be skipped (marked pending/TODO).
+    parameters:
+      command: "make test-batch"
+      exclude_pending: true
+    gate: tests_passing
+    rollback: true
+
+# ── CONVERGENCE CRITERIA ────────────────────────────────────────────────────────
+convergence:
+  max_cycles: 2
+  success_criteria:
+    trivial_test_count: 0
+    unscored_tests: 0
+    min_retained_score: 7
+    test_failures: 0
+  convergence_predicate: |
+    trivial_test_count == 0 AND
+    min_retained_score >= 7 AND
+    test_failures == 0
+
+# ── AUDIT TRACE ─────────────────────────────────────────────────────────────────
+audit:
+  log_level: INFO
+  trace_fields:
+    - timestamp
+    - step_id
+    - tests_scanned
+    - trivial_count
+    - tests_deleted
+    - stubs_generated
+    - test_result
+  acceptance_criteria:
+    - 'AC-TEST-001: All tests scanned and scored'
+    - 'AC-TEST-002: Zero Assert.True(true) patterns remain'
+    - 'AC-TEST-003: All retained tests score >= 7'
+    - 'AC-TEST-004: Behavioral stubs generated for deleted tests'
+    - 'AC-TEST-005: Test suite passing after enforcement'

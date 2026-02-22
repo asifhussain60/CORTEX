@@ -1,0 +1,229 @@
+# ============================================================================
+# PRIMITIVE: Semantic Edit
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable)
+# Purpose: CSS-selector-based editing (not line-based)
+# Reused by: html-refactor, css-extraction
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/execution/semantic-edit'
+name: 'Semantic Edit Primitive'
+tier: 'primitive'
+category: 'execution'
+status: 'active'
+
+metadata:
+  description: |
+    Atomic template for DOM-aware semantic editing. Instead of line-based
+    string replacement (which causes duplicate sections — chat01.md),
+    this primitive uses CSS selectors to target elements precisely.
+  
+  tags:
+    - primitive
+    - execution
+    - semantic
+    - css-selector
+    - dom
+  
+  root_cause_addressed: 'chat01.md — line-based edits create duplicates'
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'RefactoringOrchestrator'
+      purpose: 'Edit coordination and rollback'
+      required: true
+  
+  external_dependencies:
+    - name: 'beautifulsoup4'
+      version: '>=4.12.0'
+    
+    - name: 'lxml'
+      version: '>=4.9.0'
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'target_file'
+      type: 'Path'
+      description: 'File to edit'
+    
+    - name: 'selector'
+      type: 'str'
+      description: 'CSS selector to target element(s)'
+    
+    - name: 'operation'
+      type: 'str'
+      description: 'Edit operation type'
+      enum: ['replace_content', 'replace_element', 'add_class', 'remove_class', 'set_attribute', 'remove_attribute', 'append_child', 'prepend_child', 'remove_element']
+  
+  optional:
+    - name: 'new_content'
+      type: 'str'
+      description: 'New content for replace operations'
+      default: null
+    
+    - name: 'attribute_name'
+      type: 'str'
+      description: 'Attribute name for set/remove attribute operations'
+      default: null
+    
+    - name: 'attribute_value'
+      type: 'str'
+      description: 'Attribute value for set attribute operation'
+      default: null
+    
+    - name: 'class_name'
+      type: 'str'
+      description: 'Class name for add/remove class operations'
+      default: null
+    
+    - name: 'child_element'
+      type: 'str'
+      description: 'HTML for append/prepend child operations'
+      default: null
+    
+    - name: 'match_index'
+      type: 'int'
+      description: 'If selector matches multiple, edit only this index (0-based). null = all.'
+      default: null
+    
+    - name: 'create_backup'
+      type: 'bool'
+      description: 'Create .bak file before editing'
+      default: true
+
+# ============================================================================
+# EXECUTION
+# ============================================================================
+execution:
+  steps:
+    - step_id: 'PARSE_DOCUMENT'
+      name: 'Parse target file'
+      action: |
+        1. Read target_file content
+        2. Parse with BeautifulSoup4 (lxml parser)
+        3. Validate successful parse
+      outputs:
+        - 'dom_tree'
+    
+    - step_id: 'SELECT_ELEMENTS'
+      name: 'Find elements matching selector'
+      action: |
+        1. Execute CSS selector query
+        2. If match_index specified, filter to that element
+        3. Validate ≥1 element found (else abort)
+        4. Log matched element count
+      outputs:
+        - 'matched_elements'
+        - 'match_count'
+    
+    - step_id: 'CREATE_BACKUP'
+      name: 'Backup original file'
+      condition: '{{create_backup}} == true'
+      action: |
+        Copy target_file to target_file.bak
+      outputs:
+        - 'backup_path'
+    
+    - step_id: 'APPLY_EDIT'
+      name: 'Execute edit operation'
+      action: |
+        For each matched element, apply operation:
+          - replace_content: element.string = new_content
+          - replace_element: element.replace_with(parse(new_content))
+          - add_class: element['class'].append(class_name)
+          - remove_class: element['class'].remove(class_name)
+          - set_attribute: element[attribute_name] = attribute_value
+          - remove_attribute: del element[attribute_name]
+          - append_child: element.append(parse(child_element))
+          - prepend_child: element.insert(0, parse(child_element))
+          - remove_element: element.decompose()
+      outputs:
+        - 'edit_applied'
+        - 'elements_modified'
+    
+    - step_id: 'SERIALIZE_DOCUMENT'
+      name: 'Write modified document'
+      action: |
+        1. Serialize DOM back to HTML string
+        2. Preserve original formatting where possible
+        3. Write to target_file
+        4. Log byte count difference
+      outputs:
+        - 'bytes_changed'
+    
+    - step_id: 'VALIDATE_RESULT'
+      name: 'Re-parse and validate'
+      action: |
+        1. Re-parse written file
+        2. Confirm selector still matches expected count
+        3. Confirm no parse errors introduced
+      outputs:
+        - 'validation_passed'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'edit_report'
+      path: '{{output_dir}}/semantic_edit_report.json'
+      schema: |
+        {
+          "file": "string",
+          "selector": "string",
+          "operation": "string",
+          "elements_matched": "int",
+          "elements_modified": "int",
+          "bytes_before": "int",
+          "bytes_after": "int",
+          "backup_path": "string",
+          "validation_passed": "bool"
+        }
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - 'Selector matches ≥1 element'
+  - 'Edit operation succeeds without exception'
+  - 'Post-edit validation passes'
+  - 'No parse errors in modified document'
+
+# ============================================================================
+# ROLLBACK
+# ============================================================================
+rollback:
+  on_failure: 'restore_backup'
+  action: |
+    If any step fails:
+      1. Restore from backup_path
+      2. Delete backup file
+      3. Emit AC_ROLLBACK marker
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:SEMANTIC_EDIT'
+    complete: 'AC_COMPLETE:SEMANTIC_EDIT'
+    failure: 'AC_FAILURE:SEMANTIC_EDIT'
+    rollback: 'AC_ROLLBACK:SEMANTIC_EDIT'
+  
+  log_fields:
+    - 'file_path'
+    - 'selector'
+    - 'operation'
+    - 'elements_modified'
+    - 'bytes_changed'

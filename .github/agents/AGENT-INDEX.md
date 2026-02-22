@@ -59,6 +59,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Agent | Purpose | Load When |
 |-------|---------|-----------|
+| **cortex-sts-refactoring.md** | STS pipeline: 7-gate refactoring for external codebases | `cortex-sts/` REFACTOR sessions, BadMonolith-style analysis |
 | **cortex-digest.md** | Learning extraction from chat history | Processing chat files |
 | **cortex-environment-setup.md** | Environment validation | Pre-flight checks, setup issues |
 | **cortex-phase-resolver.md** | Plan phase management | `/plan` mode |

@@ -1,0 +1,399 @@
+# ============================================================================
+# COMPOSITE: C# Security Workflow
+# ============================================================================
+# Tier: 2 (Composite — combines primitives)
+# Purpose: P0 security fixes for C# applications
+# Imports: lens-ast-scan, duplicate-detection, regression-test, audit-trace
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'composites/backend/csharp-security'
+name: 'C# Security Hardening Workflow'
+tier: 'composite'
+category: 'backend'
+status: 'active'
+
+metadata:
+  description: |
+    Composite workflow for P0 security hardening of C# applications.
+    Addresses SQL injection, hardcoded secrets, CORS misconfiguration,
+    and stack trace exposure vulnerabilities.
+  
+  tags:
+    - composite
+    - backend
+    - csharp
+    - security
+    - sql-injection
+    - secrets
+  
+  smells_addressed:
+    - SMELL-1: SQL injection via string concatenation
+    - SMELL-2: Hardcoded secrets
+    - SMELL-13: CORS wildcard
+    - SMELL-18: Stack trace exposure
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# IMPORTS — Primitive Templates
+# ============================================================================
+imports:
+  - template_id: 'primitives/analysis/lens-ast-scan'
+    alias: 'ast'
+    required: true
+  
+  - template_id: 'primitives/validation/duplicate-detection'
+    alias: 'dupe'
+    required: true
+  
+  - template_id: 'primitives/validation/regression-test'
+    alias: 'test'
+    required: true
+  
+  - template_id: 'primitives/execution/audit-trace'
+    alias: 'audit'
+    required: true
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'SecurityOrchestrator'
+      purpose: 'Security vulnerability detection'
+      required: true
+    
+    - name: 'EnforcementOrchestrator'
+      purpose: 'Governance rule validation'
+      required: true
+  
+  mcp_tools:
+    - name: 'cortex_validate_compliance'
+      purpose: 'Security rule checking'
+      required: true
+    
+    - name: 'cortex_refactor'
+      purpose: 'Security fix application'
+      required: true
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'project_path'
+      type: 'Path'
+      description: 'Path to C# project (.csproj or directory)'
+  
+  optional:
+    - name: 'scan_depth'
+      type: 'str'
+      description: 'Analysis depth'
+      default: 'deep'
+      enum: ['shallow', 'standard', 'deep']
+    
+    - name: 'auto_fix'
+      type: 'bool'
+      description: 'Automatically apply security fixes'
+      default: false
+    
+    - name: 'run_sast'
+      type: 'bool'
+      description: 'Run static application security testing'
+      default: true
+
+# ============================================================================
+# SECURITY CHECKS
+# ============================================================================
+security_checks:
+  # --------------------------------------------------------------------------
+  # SQL Injection Detection
+  # --------------------------------------------------------------------------
+  - check_id: 'SQL_INJECTION'
+    name: 'SQL Injection via String Concatenation'
+    severity: 'P0'
+    
+    patterns:
+      forbidden:
+        - pattern: '$".*SELECT.*{.*}.*"'
+          description: 'String interpolation in SQL query'
+        
+        - pattern: '"SELECT.*" + '
+          description: 'String concatenation in SQL query'
+        
+        - pattern: 'CommandText = $'
+          description: 'Interpolated SQL command'
+      
+      required:
+        - pattern: 'Parameters.Add'
+          description: 'Parameterized query'
+        
+        - pattern: '@\\w+'
+          description: 'SQL parameter placeholder'
+    
+    remediation: |
+      Replace: cmd.CommandText = $"SELECT * FROM Users WHERE name = '{name}'"
+      With: cmd.CommandText = "SELECT * FROM Users WHERE name = @name"
+            cmd.Parameters.AddWithValue("@name", name)
+
+  # --------------------------------------------------------------------------
+  # Hardcoded Secrets Detection
+  # --------------------------------------------------------------------------
+  - check_id: 'HARDCODED_SECRETS'
+    name: 'Hardcoded Credentials and API Keys'
+    severity: 'P0'
+    
+    patterns:
+      forbidden:
+        - pattern: 'password\\s*=\\s*"[^"]+"'
+          description: 'Hardcoded password'
+        
+        - pattern: 'api[_-]?key\\s*=\\s*"[^"]+"'
+          description: 'Hardcoded API key'
+        
+        - pattern: 'connection[_-]?string\\s*=\\s*"[^"]+"'
+          description: 'Hardcoded connection string'
+        
+        - pattern: 'secret\\s*=\\s*"[^"]+"'
+          description: 'Hardcoded secret'
+      
+      required:
+        - pattern: 'Environment.GetEnvironmentVariable'
+          description: 'Environment variable usage'
+        
+        - pattern: 'IConfiguration'
+          description: 'Configuration injection'
+    
+    remediation: |
+      Replace: var apiKey = "sk-12345"
+      With: var apiKey = Environment.GetEnvironmentVariable("API_KEY")
+
+  # --------------------------------------------------------------------------
+  # CORS Misconfiguration
+  # --------------------------------------------------------------------------
+  - check_id: 'CORS_WILDCARD'
+    name: 'CORS Allows Any Origin'
+    severity: 'P1'
+    
+    patterns:
+      forbidden:
+        - pattern: 'AllowAnyOrigin()'
+          description: 'CORS allows any origin'
+        
+        - pattern: 'WithOrigins("*")'
+          description: 'CORS wildcard origin'
+      
+      required:
+        - pattern: 'WithOrigins\\([^)]+\\)'
+          description: 'Explicit origin allowlist'
+    
+    remediation: |
+      Replace: policy.AllowAnyOrigin()
+      With: policy.WithOrigins("https://trusted-domain.com")
+
+  # --------------------------------------------------------------------------
+  # Stack Trace Exposure
+  # --------------------------------------------------------------------------
+  - check_id: 'STACK_TRACE_EXPOSURE'
+    name: 'Stack Trace Exposed in Production'
+    severity: 'P0'
+    
+    patterns:
+      forbidden:
+        - pattern: 'ex.StackTrace'
+          description: 'Exposing stack trace'
+        
+        - pattern: 'ex.ToString()'
+          description: 'Exposing full exception'
+        
+        - pattern: 'UseDeveloperExceptionPage()'
+          description: 'Developer exception page in production'
+      
+      required:
+        - pattern: 'UseExceptionHandler'
+          description: 'Production exception handler'
+        
+        - pattern: 'ProblemDetails'
+          description: 'RFC 7807 error response'
+    
+    remediation: |
+      Replace: return StatusCode(500, ex.ToString())
+      With: return Problem(detail: "An error occurred", statusCode: 500)
+
+# ============================================================================
+# WORKFLOW STAGES
+# ============================================================================
+stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: AST Scan
+  # --------------------------------------------------------------------------
+  - stage_id: 'S1_SCAN'
+    name: 'C# AST Analysis'
+    
+    invoke:
+      - primitive: 'audit'
+        action: 'on_start'
+        params:
+          workflow_name: 'csharp-security'
+      
+      - primitive: 'ast'
+        params:
+          target_files: '{{project_path}}'
+          language: 'csharp'
+          depth: '{{scan_depth}}'
+          include_metrics: true
+    
+    outputs:
+      - 'symbol_table.json'
+      - 'dependency_graph.json'
+
+  # --------------------------------------------------------------------------
+  # STAGE 2: Security Pattern Matching
+  # --------------------------------------------------------------------------
+  - stage_id: 'S2_PATTERNS'
+    name: 'Security Pattern Detection'
+    
+    action: |
+      For each security_check:
+        1. Search AST for forbidden patterns
+        2. Verify required patterns present
+        3. Generate violation report
+    
+    outputs:
+      - 'security_violations.json'
+    
+    success_criteria:
+      - 'All files scanned'
+      - 'Violations categorized by severity'
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: Auto-Fix (Optional)
+  # --------------------------------------------------------------------------
+  - stage_id: 'S3_FIX'
+    name: 'Apply Security Fixes'
+    condition: '{{auto_fix}} == true'
+    
+    action: |
+      For each violation with remediation:
+        1. Apply automated fix
+        2. Log change
+        3. Mark as fixed
+    
+    outputs:
+      - 'fixes_applied.json'
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: SAST Scan
+  # --------------------------------------------------------------------------
+  - stage_id: 'S4_SAST'
+    name: 'Static Application Security Testing'
+    condition: '{{run_sast}} == true'
+    
+    action: |
+      Run security analyzer:
+        - dotnet security-scan (if available)
+        - Custom pattern matching
+    
+    outputs:
+      - 'sast_report.json'
+
+  # --------------------------------------------------------------------------
+  # STAGE 5: Regression Test
+  # --------------------------------------------------------------------------
+  - stage_id: 'S5_TEST'
+    name: 'Security Regression Tests'
+    
+    invoke:
+      - primitive: 'test'
+        params:
+          test_framework: 'dotnet'
+          test_path: '{{project_path}}'
+          timeout_seconds: 300
+    
+    success_criteria:
+      - 'All tests pass'
+      - 'No security tests skipped'
+
+  # --------------------------------------------------------------------------
+  # STAGE 6: Finalize
+  # --------------------------------------------------------------------------
+  - stage_id: 'S6_FINALIZE'
+    name: 'Generate Security Report'
+    
+    invoke:
+      - primitive: 'audit'
+        action: 'on_complete'
+    
+    outputs:
+      - 'security_summary.json'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'security_report'
+      path: '{{output_dir}}/csharp_security_report.json'
+      schema: |
+        {
+          "project": "string",
+          "scan_depth": "string",
+          "violations": [{
+            "check_id": "string",
+            "severity": "P0|P1|P2",
+            "file": "string",
+            "line": "int",
+            "pattern": "string",
+            "remediation": "string",
+            "fixed": "bool"
+          }],
+          "summary": {
+            "p0_count": "int",
+            "p1_count": "int",
+            "p2_count": "int",
+            "fixed_count": "int"
+          }
+        }
+
+# ============================================================================
+# GOLDEN TESTS
+# ============================================================================
+golden_tests:
+  test_file: 'tests/golden/test_csharp_security_truth.py'
+  test_count: 15
+  acceptance_criteria:
+    - 'AC-CS-001: SQL injection patterns detected'
+    - 'AC-CS-002: Hardcoded secrets flagged'
+    - 'AC-CS-003: CORS wildcards identified'
+    - 'AC-CS-004: Stack trace exposure detected'
+    - 'AC-CS-005: Parameterized queries recommended'
+    - 'AC-CS-006: Environment variables suggested for secrets'
+    - 'AC-CS-007: Auto-fix applies correct remediation'
+    - 'AC-CS-008: Regression tests run after fixes'
+    - 'AC-CS-009: AC_START/AC_COMPLETE markers emitted'
+    - 'AC-CS-010: Audit trail persisted to database'
+    - 'AC-CS-011: P0 violations block workflow'
+    - 'AC-CS-012: SAST scan integrates with report'
+    - 'AC-CS-013: All C# files in project scanned'
+    - 'AC-CS-014: False positive rate < 5%'
+    - 'AC-CS-015: Report includes remediation guidance'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:CSHARP_SECURITY'
+    complete: 'AC_COMPLETE:CSHARP_SECURITY'
+    failure: 'AC_FAILURE:CSHARP_SECURITY'
+  
+  log_fields:
+    - 'project_path'
+    - 'files_scanned'
+    - 'p0_violations'
+    - 'p1_violations'
+    - 'fixes_applied'
+    - 'duration_ms'

@@ -1,9 +1,9 @@
 metadata:
   id: cortex-refactor-master
   name: CORTEX Cohesive Brain Refactor
-  version: 1.1.0
+  version: 1.2.0
   created: '2026-02-19'
-  last_updated: '2026-02-21T15:30:00Z'
+  last_updated: '2026-02-22T18:00:00Z'
   branch: CORTEX
   status: approved
   owner: asifhussain60
@@ -13,10 +13,10 @@ metadata:
   completed_dir: cortex-registry/planning/phases/completed/cortex-refactor/
   status_authority: THIS FILE — cortex-refactor-master.yaml
   counters:
-    total_phases: 24
+    total_phases: 25
     pending: 0
     in_progress: 1
-    complete: 23
+    complete: 24
     deferred: 0
     failed: 0
   holistic_review:
@@ -2448,19 +2448,26 @@ phases:
     lens_scan_completed: false
 
 - id: phase-22
-  title: "STS BadMonolith Refactoring — SDLC Analysis, Design Documentation & Autonomous Execution"
+  title: "STS BadMonolith Refactoring — Multi-Technology Workflow Templates + Autonomous Execution"
   spec_file: cortex-sts/CortexLabs/Refactored/cortex-registry/planning/phases/
   status: in_progress
   priority: P1
-  risk: low
+  risk: medium
   dependencies:
   - phase-17
-  source: Copilot Chat 2026-02-22 — SDLC documentation gap analysis + BadMonolith refactoring
+  source: Copilot Chat 2026-02-22 — SDLC documentation gap analysis + BadMonolith refactoring + chat01.md digest (HTML duplicate prevention, UnifiedWorkflowTemplateExecutor)
   description: |
     End-to-end demonstration of CORTEX's onboarding pipeline applied to the CortexLabs FinTrack
-    BadMonolith (25 intentional code smells). Generates full SDLC documentation (requirements,
-    design, ADRs, Mermaid diagrams, estimation) BEFORE refactoring, then executes autonomous
-    refactoring through 6 local phases. Simulates cortex-registry/company/ structure locally.
+    BadMonolith (25 intentional code smells across 5 technologies: C#, TypeScript, HTML, CSS, JSON).
+    
+    **Expanded Scope from chat01.md Digest:**
+    - UnifiedWorkflowTemplateExecutor: Single orchestrator routes ALL template execution — templates
+      contain logic, NOT spawning new orchestrators (prevents orchestrator sprawl)
+    - HTML duplicate prevention: DOM-based validation gates via BeautifulSoup4 + Vision API regression
+    - Multi-technology workflow templates: 8 new templates covering C#, TypeScript, HTML, CSS
+    
+    Generates full SDLC documentation (requirements, design, ADRs, Mermaid diagrams, estimation)
+    BEFORE refactoring, then executes autonomous refactoring through 10 sub-phases.
     All output contained within cortex-sts/CortexLabs/Refactored/ — zero CORTEX core changes.
     Tech stack preserved: C# ASP.NET Core 8.0, vanilla TypeScript (no new libraries).
   gap_analysis:
@@ -2485,6 +2492,26 @@ phases:
       description: "No ADRs generated during refactoring"
       impact: MEDIUM
       remediation: "Generate ADRs for each architectural decision made"
+    - id: G6
+      description: "HTML refactoring creates duplicate sections (chat01.md finding)"
+      impact: HIGH
+      remediation: "Create html-refactor-validation.yaml template with DOM validation gates"
+    - id: G7
+      description: "No C# refactoring workflow template exists"
+      impact: HIGH
+      remediation: "Create csharp-refactor-workflow.yaml with SOLID validation gates"
+    - id: G8
+      description: "TypeScript refactoring lacks strict-mode enforcement"
+      impact: MEDIUM
+      remediation: "Create typescript-refactor-workflow.yaml with strict mode validation"
+    - id: G9
+      description: "CSS inline styles not extracted during refactoring"
+      impact: LOW
+      remediation: "Create css-extraction-workflow.yaml for style consolidation"
+    - id: G10
+      description: "No unified template executor — orchestrator sprawl risk"
+      impact: HIGH
+      remediation: "Wire UnifiedWorkflowTemplateExecutor (existing, not new) to IntentRouter"
   deliverables:
   - 'D1: docs/requirements/ — business, functional, non-functional requirements (3 YAMLs)'
   - 'D2: docs/design/ — architecture overview, domain model, API design (3 YAMLs)'
@@ -2496,14 +2523,362 @@ phases:
   - 'D8: backend/ — Clean Architecture C# (5 projects: Domain, Application, Infrastructure, Api, Tests)'
   - 'D9: frontend/ — TypeScript strict mode with service layer and typed models'
   - 'D10: .cortex-manifest.yaml — refactored app manifest'
+  
+  # ══════════════════════════════════════════════════════════════════════════════
+  # NEW DELIVERABLES — Workflow Templates for Multi-Technology Refactoring
+  # ══════════════════════════════════════════════════════════════════════════════
+  - 'D11: cortex-registry/workflows/templates/backend/csharp-refactor-workflow.yaml — C# SOLID + DI validation'
+  - 'D12: cortex-registry/workflows/templates/backend/csharp-security-workflow.yaml — C# SQL injection + secrets scan'
+  - 'D13: cortex-registry/workflows/templates/frontend/html-refactor-validation.yaml — DOM duplicate prevention + Vision API'
+  - 'D14: cortex-registry/workflows/templates/frontend/typescript-refactor-workflow.yaml — strict mode + typed models'
+  - 'D15: cortex-registry/workflows/templates/frontend/css-extraction-workflow.yaml — inline style consolidation'
+  - 'D16: cortex-registry/workflows/templates/quality/dead-code-removal.yaml — cross-language dead code detection'
+  - 'D17: cortex-registry/workflows/templates/quality/duplicate-validation.yaml — cross-language duplicate detection'
+  - 'D18: cortex-registry/workflows/templates/testing/test-quality-enforcement.yaml — replaces Assert.True(true) patterns'
+  
   smells_resolved: 25
+  smells_by_technology:
+    csharp:
+      count: 16
+      smells: [SMELL-1, SMELL-2, SMELL-3, SMELL-4, SMELL-5, SMELL-6, SMELL-7, SMELL-8, SMELL-9, SMELL-10, SMELL-11, SMELL-13, SMELL-14, SMELL-15, SMELL-17, SMELL-19]
+      workflow_templates:
+        - csharp-refactor-workflow.yaml
+        - csharp-security-workflow.yaml
+    typescript:
+      count: 9
+      smells: [SMELL-8, SMELL-10, SMELL-15, SMELL-16, SMELL-21, SMELL-22, SMELL-23, SMELL-24, SMELL-25]
+      workflow_templates:
+        - typescript-refactor-workflow.yaml
+    html:
+      count: 3
+      smells: [SMELL-13, SMELL-18, SMELL-21]
+      workflow_templates:
+        - html-refactor-validation.yaml
+        - css-extraction-workflow.yaml
+    testing:
+      count: 1
+      smells: [SMELL-12]
+      workflow_templates:
+        - test-quality-enforcement.yaml
   architecture_decisions:
   - ADR-001: Clean Architecture with vertical slicing
   - ADR-002: Entity Framework Core (parameterized) over raw SQL
   - ADR-003: Dependency Injection via built-in DI container
   - ADR-004: TypeScript strict mode with typed service layer
   - ADR-005: Structured logging via ILogger
+  - ADR-006: UnifiedWorkflowTemplateExecutor routes all templates (no orchestrator-per-template)
+  - ADR-007: DOM-based HTML validation gates (BeautifulSoup4 + Vision API)
+  - ADR-008: Cross-language duplicate detection via semantic hashing
+  - ADR-009: 3-Layer Workflow Architecture — orchestrators NOT replaced (see architecture_specification)
+  
+  # ══════════════════════════════════════════════════════════════════════════════
+  # ADR-009: 3-LAYER WORKFLOW ARCHITECTURE SPECIFICATION
+  # ══════════════════════════════════════════════════════════════════════════════
+  # Clarifies: "Does this render all other orchestrators useless?" — NO
+  # Source: chat01.md continued digest (2026-02-22)
+  # ══════════════════════════════════════════════════════════════════════════════
+  architecture_specification:
+    title: "3-Layer Workflow Architecture — Composition, Not Replacement"
+    decision_date: '2026-02-22'
+    context: |
+      User question: "Does this render all other orchestrators useless if everything is 
+      now controlled by dedicated workflow templates?"
+      
+      Answer: NO. Templates define WHAT and WHEN. Orchestrators contain the HOW.
+      Templates are declarative sequences. Orchestrators are executable logic.
+    
+    layers:
+      layer_1_domain_orchestrators:
+        description: "Specialized execution logic — 22 wired orchestrators remain essential"
+        count: 22
+        growth_policy: "No new orchestrators per template — CORE-035"
+        examples:
+          - orchestrator: TDDOrchestrator
+            logic: "RED → GREEN → REFACTOR cycle, TestQualityGate, coverage thresholds"
+          - orchestrator: RefactoringOrchestrator
+            logic: "AST transforms, semantic code moves, duplicate detection"
+          - orchestrator: VisionAnalyzer
+            logic: "Image analysis, bounding boxes, UI element extraction"
+          - orchestrator: EnforcementOrchestrator
+            logic: "CORE rule validation, governance checks, pre-commit gates"
+        why_not_replaceable: |
+          Templates cannot express: recursive AST traversal, image processing algorithms,
+          database transaction management, test framework integration, git operations.
+          These require Python code, not YAML declarations.
+      
+      layer_2_unified_workflow_executor:
+        description: "Generic template step dispatcher — 1 orchestrator"
+        count: 1
+        class: UnifiedWorkflowTemplateExecutor
+        location: cortex/orchestrators/core/unified_workflow_template_executor.py
+        responsibilities:
+          - "Load templates from WorkflowTemplateRegistry"
+          - "For each step: dispatch to Layer 1 orchestrator via action handler"
+          - "Check gates between steps"
+          - "Rollback on failure if template.rollback_on_failure=True"
+          - "Report execution results with audit trail"
+        action_handlers:
+          dom_validate: "VisionAnalyzer.analyze_dom()"
+          run_tests: "TDDOrchestrator.run_tests()"
+          refactor: "RefactoringOrchestrator.execute()"
+          vision_analyze: "VisionAnalyzer.analyze()"
+          semantic_analyze: "LensOrchestrator.analyze()"
+          security_scan: "EnforcementOrchestrator.validate()"
+          dead_code_scan: "RefactoringOrchestrator.detect_dead_code()"
+        what_it_does_NOT_contain: |
+          Business logic. This executor is a dispatcher/router, not an implementation.
+          Logic lives in templates (sequencing) and Layer 1 orchestrators (execution).
+      
+      layer_3_master_orchestrator:
+        description: "Intent routing — decides Layer 1 vs Layer 2"
+        class: MasterOrchestrator
+        routing_logic: |
+          1. Receive user request
+          2. IntentRouter.classify(request) → intent + confidence
+          3. IntentRouter.detect_workflow_template(request) → template_id | None
+          4. IF template_id exists AND complexity > threshold:
+               → Route to Layer 2 (UnifiedWorkflowTemplateExecutor)
+             ELSE:
+               → Route to Layer 1 (direct domain orchestrator)
+    
+    flow_diagram: |
+      User Request
+          │
+          ▼
+      ┌─────────────────────────────────────────────┐
+      │ Layer 3: MasterOrchestrator                 │
+      │   IntentRouter.classify() + detect_template │
+      └─────────────────────────────────────────────┘
+          │                             │
+          │ Simple request              │ Complex workflow
+          │ (no template match)         │ (template match)
+          ▼                             ▼
+      ┌───────────────────┐    ┌───────────────────────────────────────┐
+      │ Layer 1: Domain   │    │ Layer 2: UnifiedWorkflowTemplateExecutor│
+      │ Orchestrator      │    │   Load template → Execute steps       │
+      │ (TDD, Refactor,   │    └───────────────────────────────────────┘
+      │  Enforcement...)  │                     │
+      └───────────────────┘                     │ For each step.action
+                                                ▼
+                                  ┌─────────────────────────────────┐
+                                  │ Layer 1: Domain Orchestrator    │
+                                  │ (dispatch via action handler)   │
+                                  └─────────────────────────────────┘
+    
+    on_the_fly_creation:
+      templates: "NO — pre-authored YAML in cortex-registry/workflows/templates/"
+      pipeline_instance: "YES — PipelineExecutionContext instantiated per request"
+      workflow_components: "HYBRID — reusable components extracted if step pattern repeats >3 times"
+    
+    reusability:
+      templates: "YES — one template serves all similar requests"
+      pipeline_instance: "NO — context is request-scoped, garbage collected after execution"
+      workflow_components: "YES — DRY principle, common steps extracted to shared templates"
+    
+    golden_test_requirements:
+      - "GT-ADR009-001: Layer 1 orchestrators remain callable without Layer 2"
+      - "GT-ADR009-002: Layer 2 dispatches to Layer 1 via action handlers"
+      - "GT-ADR009-003: Layer 3 routes simple requests directly to Layer 1"
+      - "GT-ADR009-004: Layer 3 routes complex workflows to Layer 2"
+      - "GT-ADR009-005: Template execution with rollback on gate failure"
+      - "GT-ADR009-006: Vision API integration via template step action"
+  
+  # ══════════════════════════════════════════════════════════════════════════════
+  # WORKFLOW TEMPLATE SPECIFICATIONS — Required for BadMonolith Refactoring
+  # ══════════════════════════════════════════════════════════════════════════════
+  workflow_templates_required:
+    # ── C# Backend Templates ────────────────────────────────────────────────────
+    - template_id: 'backend/csharp-refactor-workflow'
+      name: 'C# SOLID Refactoring Workflow'
+      purpose: |
+        5-stage pipeline for C# refactoring: God class decomposition (SMELL-3),
+        DI wiring (SMELL-17), service extraction, circular dependency resolution (SMELL-5).
+      stages:
+        - S1_LENS_ANALYSIS: Roslyn AST scan for class/method counts, dependency graph
+        - S2_SOLID_VIOLATION_DETECTION: SRP/OCP/LSP/ISP/DIP violation flags
+        - S3_SERVICE_EXTRACTION_PLAN: Identify extractable services, generate stubs
+        - S4_DI_WIRING_VALIDATION: Verify constructor injection, lifetime scopes
+        - S5_REGRESSION_TEST: Run dotnet test, ensure zero failures
+      smells_addressed: [SMELL-3, SMELL-4, SMELL-5, SMELL-17]
+      vision_api_integration: false
+      
+    - template_id: 'backend/csharp-security-workflow'
+      name: 'C# Security Hardening Workflow'
+      purpose: |
+        P0 security fixes: SQL injection (SMELL-1 → parameterized queries),
+        hardcoded secrets (SMELL-2 → environment variables), CORS (SMELL-13 → allowlist),
+        stack trace exposure (SMELL-18 → ProblemDetails middleware).
+      stages:
+        - S1_SECRET_SCAN: Detect hardcoded credentials, API keys, connection strings
+        - S2_SQL_INJECTION_SCAN: Identify string concatenation in SQL queries
+        - S3_CORS_AUDIT: Flag AllowAnyOrigin(), recommend allowlist
+        - S4_EXCEPTION_HANDLING: Ensure ProblemDetails middleware for production errors
+        - S5_SECURITY_TEST: Run SAST scan (bandit-equivalent for C#)
+      smells_addressed: [SMELL-1, SMELL-2, SMELL-13, SMELL-18]
+      vision_api_integration: false
+      
+    # ── TypeScript Frontend Templates ───────────────────────────────────────────
+    - template_id: 'frontend/typescript-refactor-workflow'
+      name: 'TypeScript Strict Mode Refactoring Workflow'
+      purpose: |
+        Enable strict:true + noImplicitAny:true. Replace all 'any' types (SMELL-22),
+        extract service layer (SMELL-24), add error handling (SMELL-25).
+      stages:
+        - S1_STRICT_MODE_AUDIT: Check tsconfig.json for strict, noImplicitAny flags
+        - S2_ANY_TYPE_SCAN: Find all 'any' usages via TypeScript compiler API
+        - S3_SERVICE_LAYER_EXTRACTION: Generate ApiClient, typed services
+        - S4_ERROR_HANDLING_INJECTION: Wrap fetch() calls with try/catch
+        - S5_TYPE_COVERAGE_REPORT: Ensure 100% typed (no implicit any)
+      smells_addressed: [SMELL-22, SMELL-23, SMELL-24, SMELL-25]
+      vision_api_integration: false
+      
+    - template_id: 'frontend/html-refactor-validation'
+      name: 'HTML Refactoring with DOM Validation Gates'
+      purpose: |
+        Prevent duplicate sections (chat01.md root cause), validate DOM structure,
+        integrate Vision API for visual regression detection. BeautifulSoup4 + lxml
+        for parsing, not string-based edits.
+      stages:
+        - S1_DOM_PARSE: Parse HTML via BeautifulSoup4, validate well-formedness
+        - S2_DUPLICATE_SCAN: Detect duplicate IDs, duplicate sections (semantic hash >85%)
+        - S3_SEMANTIC_EDIT: Execute edit via CSS selector targeting (not line-based)
+        - S4_DOM_REVALIDATE: Re-parse modified HTML, ensure structure intact
+        - S5_VISION_REGRESSION: Screenshot comparison via Vision API (optional)
+      smells_addressed: [SMELL-13, SMELL-18, SMELL-21]
+      vision_api_integration: true
+      vision_api_mode: atomic
+      rollback_on_failure: true
+      
+    - template_id: 'frontend/css-extraction-workflow'
+      name: 'CSS Inline Style Extraction Workflow'
+      purpose: |
+        Extract inline <style> blocks and style="" attributes into external CSS files.
+        Create component-scoped stylesheets, BEM naming convention.
+      stages:
+        - S1_INLINE_STYLE_SCAN: Find all <style> blocks and inline style attributes
+        - S2_CSS_EXTRACTION: Extract to external .css file with scoped classes
+        - S3_CLASS_INJECTION: Replace inline styles with class references
+        - S4_CSS_LINT: Run stylelint on extracted CSS
+        - S5_VISUAL_REGRESSION: Vision API screenshot comparison (optional)
+      smells_addressed: [SMELL-21]
+      vision_api_integration: true
+      
+    # ── Quality Templates ───────────────────────────────────────────────────────
+    - template_id: 'quality/dead-code-removal'
+      name: 'Cross-Language Dead Code Removal Workflow'
+      purpose: |
+        Detect and remove unused functions, classes, imports across C#, TypeScript, Python.
+        SMELL-8 resolution: SendWelcomeEmail(), ExportUserData(), calculateCompoundInterest().
+      stages:
+        - S1_USAGE_GRAPH: Build call graph via language-specific AST (Roslyn, TypeScript API)
+        - S2_DEAD_CODE_FLAG: Identify functions with zero callers
+        - S3_SAFE_REMOVAL_CHECK: Ensure no reflection/dynamic invocation patterns
+        - S4_DELETE_AND_COMMIT: Remove dead code, stage for commit
+        - S5_TEST_VALIDATION: Run tests to confirm no breakage
+      smells_addressed: [SMELL-8]
+      languages: [csharp, typescript, python]
+      
+    - template_id: 'quality/duplicate-validation'
+      name: 'Cross-Language Duplicate Validation Workflow'
+      purpose: |
+        Detect duplicate validation logic (SMELL-10: ValidateEmail exists in 3 places).
+        Consolidate into single canonical implementation per CORE-035.
+      stages:
+        - S1_VALIDATION_SCAN: Find all validation functions via pattern matching
+        - S2_SEMANTIC_HASH: Compute similarity score between validation functions
+        - S3_CANONICAL_SELECTION: Choose canonical implementation (most complete)
+        - S4_CONSOLIDATION_PLAN: Generate refactoring plan to merge duplicates
+        - S5_APPLY_AND_TEST: Execute consolidation, run tests
+      smells_addressed: [SMELL-10]
+      languages: [csharp, typescript]
+      similarity_threshold: 0.85
+      
+    # ── Testing Templates ───────────────────────────────────────────────────────
+    - template_id: 'testing/test-quality-enforcement'
+      name: 'Test Quality Enforcement Workflow'
+      purpose: |
+        Replace Assert.True(true) patterns (SMELL-12) with behavioral tests.
+        Apply TestQualityGate scoring, delete tests scoring <4, flag 4-6 for review.
+      stages:
+        - S1_TRIVIAL_TEST_SCAN: Find Assert.True(true), Assert.Pass(), empty tests
+        - S2_QUALITY_SCORING: Apply TestQualityGate (score 0-10)
+        - S3_BEHAVIORAL_STUB_GEN: Generate behavioral test stubs for <4 score tests
+        - S4_IMPLEMENT_TESTS: Fill in behavioral assertions
+        - S5_COVERAGE_VALIDATION: Ensure coverage ≥80% on target code
+      smells_addressed: [SMELL-12]
+      quality_gate:
+        keep_threshold: 7
+        review_threshold: 4
+        delete_below: 4
   sub_phases:
+    # ══════════════════════════════════════════════════════════════════════════
+    # PHASE 22-PRE: UNIFIED WORKFLOW TEMPLATE EXECUTOR — CORE INFRASTRUCTURE
+    # ══════════════════════════════════════════════════════════════════════════
+    # Source: chat01.md continued digest (2026-02-22) — ADR-009
+    # Must be implemented BEFORE workflow templates can be executed
+    # ══════════════════════════════════════════════════════════════════════════
+    pre_unified_executor:
+      title: "UnifiedWorkflowTemplateExecutor Implementation (ADR-009)"
+      priority: P0
+      effort: L
+      description: |
+        Implement the single orchestrator that routes ALL template execution.
+        This is Layer 2 in the 3-Layer Architecture (see architecture_specification).
+        
+        **Key Design Decisions:**
+        - Templates define WHAT and WHEN (sequencing)
+        - Orchestrators contain the HOW (execution logic)
+        - Templates are declarative YAML. Orchestrators are executable Python.
+        
+        **Implementation Steps:**
+        1. Create UnifiedWorkflowTemplateExecutor class (IOrchestrator)
+        2. Register action handlers that dispatch to existing orchestrators
+        3. Implement gate checking between steps
+        4. Implement rollback on failure
+        5. Wire into MasterOrchestrator routing
+        6. Create golden tests validating 3-layer composition
+        
+        **Does NOT replace existing orchestrators.** Composes with them.
+      output: cortex/orchestrators/core/unified_workflow_template_executor.py
+      new_files:
+        - cortex/orchestrators/core/unified_workflow_template_executor.py
+        - tests/orchestrators/core/test_unified_workflow_template_executor.py
+        - tests/golden/workflow/test_3_layer_architecture_golden.py
+      action_handlers:
+        - handler: dom_validate
+          dispatches_to: VisionAnalyzer.analyze_dom()
+        - handler: run_tests
+          dispatches_to: TDDOrchestrator.run_tests()
+        - handler: refactor
+          dispatches_to: RefactoringOrchestrator.execute()
+        - handler: vision_analyze
+          dispatches_to: VisionAnalyzer.analyze()
+        - handler: semantic_analyze
+          dispatches_to: LensOrchestrator.analyze()
+        - handler: security_scan
+          dispatches_to: EnforcementOrchestrator.validate()
+        - handler: dead_code_scan
+          dispatches_to: RefactoringOrchestrator.detect_dead_code()
+      acceptance_criteria:
+        - 'AC-22PRE-001: UnifiedWorkflowTemplateExecutor implements IOrchestrator protocol'
+        - 'AC-22PRE-002: execute_template() loads from WorkflowTemplateRegistry'
+        - 'AC-22PRE-003: Action handlers dispatch to existing Layer 1 orchestrators'
+        - 'AC-22PRE-004: Gate checking halts execution on failure'
+        - 'AC-22PRE-005: Rollback executes if template.rollback_on_failure=True'
+        - 'AC-22PRE-006: MasterOrchestrator routes template requests to executor'
+        - 'AC-22PRE-007: 6 golden tests validate 3-layer architecture (GT-ADR009-*)'
+      golden_tests:
+        - GT-ADR009-001: "Layer 1 orchestrators callable without Layer 2"
+        - GT-ADR009-002: "Layer 2 dispatches to Layer 1 via action handlers"
+        - GT-ADR009-003: "Layer 3 routes simple requests to Layer 1"
+        - GT-ADR009-004: "Layer 3 routes complex workflows to Layer 2"
+        - GT-ADR009-005: "Template execution with rollback on gate failure"
+        - GT-ADR009-006: "Vision API integration via template step action"
+      tdd_mandate: true
+      
+    # ══════════════════════════════════════════════════════════════════════════
+    # PHASE 22A-E: SDLC Documentation (unchanged from original)
+    # ══════════════════════════════════════════════════════════════════════════
     a_analysis:
       title: "LENS Scan + Smell Inventory + Requirements Extraction"
       priority: P0
@@ -2551,16 +2926,62 @@ phases:
         Apply MultiModelEstimationEngine methodology: PERT (optimistic/likely/pessimistic),
         Story Points with skill-level conversion, per-phase breakdown.
       output: docs/estimation/
+    
+    # ══════════════════════════════════════════════════════════════════════════
+    # PHASE 22F: WORKFLOW TEMPLATE CREATION — NEW (from chat01.md digest)
+    # ══════════════════════════════════════════════════════════════════════════
+    f_workflow_templates:
+      title: "Multi-Technology Workflow Template Creation"
+      priority: P0
+      effort: L
+      description: |
+        Create 8 workflow templates required for BadMonolith refactoring:
+        
+        **Backend Templates (2):**
+        - csharp-refactor-workflow.yaml — SOLID decomposition, DI wiring, service extraction
+        - csharp-security-workflow.yaml — SQL injection, secrets, CORS, exception handling
+        
+        **Frontend Templates (3):**
+        - typescript-refactor-workflow.yaml — strict mode, 'any' elimination, service layer
+        - html-refactor-validation.yaml — DOM duplicate prevention (chat01.md root cause fix)
+        - css-extraction-workflow.yaml — inline style consolidation
+        
+        **Quality Templates (2):**
+        - dead-code-removal.yaml — cross-language unused function detection
+        - duplicate-validation.yaml — cross-language duplicate logic consolidation (CORE-035)
+        
+        **Testing Templates (1):**
+        - test-quality-enforcement.yaml — replaces Assert.True(true) patterns
+        
+        All templates route through UnifiedWorkflowTemplateExecutor (no new orchestrators).
+        Each template integrates Vision API where applicable (html, css templates).
+      output: cortex-registry/workflows/templates/
+      new_files:
+        - cortex-registry/workflows/templates/backend/csharp-refactor-workflow.yaml
+        - cortex-registry/workflows/templates/backend/csharp-security-workflow.yaml
+        - cortex-registry/workflows/templates/frontend/typescript-refactor-workflow.yaml
+        - cortex-registry/workflows/templates/frontend/html-refactor-validation.yaml
+        - cortex-registry/workflows/templates/frontend/css-extraction-workflow.yaml
+        - cortex-registry/workflows/templates/quality/dead-code-removal.yaml
+        - cortex-registry/workflows/templates/quality/duplicate-validation.yaml
+        - cortex-registry/workflows/templates/testing/test-quality-enforcement.yaml
+      acceptance_criteria:
+        - 'AC-22F-001: 8 workflow templates created in cortex-registry/workflows/templates/'
+        - 'AC-22F-002: All templates validate via WorkflowTemplateRegistry.load()'
+        - 'AC-22F-003: html-refactor-validation.yaml has 5-stage DOM validation pipeline'
+        - 'AC-22F-004: Vision API integration enabled on html + css templates'
+        - 'AC-22F-005: All templates route through UnifiedWorkflowTemplateExecutor (no new orchestrators)'
 
-    f_security:
+    g_security:
       title: "P0 Security Fixes (SQL injection, secrets, CORS, stack traces)"
       priority: P0
       effort: M
       description: |
         Fix SMELL-1 (SQL injection → parameterized queries), SMELL-2 (hardcoded secrets → env vars),
         SMELL-13 (CORS wildcard → allowlist), SMELL-18 (stack trace → ProblemDetails).
+        **Uses:** csharp-security-workflow.yaml template
 
-    g_architecture:
+    h_architecture:
       title: "Clean Architecture Decomposition"
       priority: P0
       effort: L
@@ -2568,8 +2989,9 @@ phases:
         Decompose God class (Program.cs 591 LOC) into Clean Architecture layers:
         Domain (entities, enums, interfaces), Application (services, DTOs, validators),
         Infrastructure (data, repositories, config), Api (endpoints, middleware).
+        **Uses:** csharp-refactor-workflow.yaml template
 
-    h_backend:
+    i_backend:
       title: "Backend Service Extraction + DI + Validation + Logging"
       priority: P1
       effort: L
@@ -2577,8 +2999,9 @@ phases:
         Extract UserService, TransactionService, AccountService, AuthService from monolith.
         Wire DI container. Add DataAnnotations validation. Replace Console.WriteLine with ILogger.
         Single canonical EmailValidator (CORE-035).
+        **Uses:** csharp-refactor-workflow.yaml, duplicate-validation.yaml templates
 
-    i_frontend:
+    j_frontend:
       title: "TypeScript Strict + Service Layer + Typed Models"
       priority: P1
       effort: M
@@ -2586,8 +3009,31 @@ phases:
         Enable strict mode in tsconfig.json. Replace all 'any' types with proper interfaces.
         Extract ApiClient, TransactionService, UserService, AccountService.
         Centralize formatting and validation utilities.
+        **Uses:** typescript-refactor-workflow.yaml template
 
-    j_testing:
+    k_html_css:
+      title: "HTML/CSS Refactoring with DOM Validation"
+      priority: P1
+      effort: M
+      description: |
+        Extract inline <style> from index.html to external CSS files.
+        Add Content-Security-Policy, X-Frame-Options, X-Content-Type-Options headers.
+        Vision API visual regression testing before/after.
+        **Uses:** html-refactor-validation.yaml, css-extraction-workflow.yaml templates
+        
+        **Root Cause Fix (chat01.md):** DOM-based editing via BeautifulSoup4 prevents
+        duplicate section creation. Semantic editing by CSS selector, not line number.
+
+    l_dead_code:
+      title: "Cross-Language Dead Code Removal"
+      priority: P2
+      effort: S
+      description: |
+        Remove SMELL-8 dead code across C# (SendWelcomeEmail, ExportUserData, NotificationService,
+        ReportGenerator) and TypeScript (calculateCompoundInterest, unused global variables).
+        **Uses:** dead-code-removal.yaml template
+
+    m_testing:
       title: "Behavioral Tests Replacing Assert.True(true)"
       priority: P0
       effort: M
@@ -2595,6 +3041,7 @@ phases:
         Replace all 10 Assert.True(true) tests with behavioral tests.
         UserServiceTests, TransactionServiceTests, AccountServiceTests,
         EmailValidatorTests, UserEndpointsTests (integration).
+        **Uses:** test-quality-enforcement.yaml template
 
   acceptance_criteria:
   - 'AC-P22-001: 25/25 smells resolved in Refactored/ output'
@@ -2607,37 +3054,342 @@ phases:
   - 'AC-P22-008: frontend/ compiles with strict:true, noImplicitAny:true'
   - 'AC-P22-009: Zero new library dependencies added (same ASP.NET Core 8.0, same typescript ~5.2.0)'
   - 'AC-P22-010: All files contained within cortex-sts/CortexLabs/Refactored/'
+  # ── NEW ACCEPTANCE CRITERIA — Workflow Templates ──────────────────────────────
+  - 'AC-P22-011: 8 workflow templates created in cortex-registry/workflows/templates/ (D11-D18)'
+  - 'AC-P22-012: html-refactor-validation.yaml prevents duplicate section creation (chat01.md root cause)'
+  - 'AC-P22-013: All templates validate via WorkflowTemplateRegistry.load() without errors'
+  - 'AC-P22-014: Vision API integration enabled on html + css templates (vision_api_integration: true)'
+  - 'AC-P22-015: No new orchestrators created — all templates route through UnifiedWorkflowTemplateExecutor'
+  - 'AC-P22-016: csharp-security-workflow.yaml addresses SMELL-1, SMELL-2, SMELL-13, SMELL-18 (P0 security)'
+  - 'AC-P22-017: duplicate-validation.yaml enforces CORE-035 (single canonical implementation)'
+  - 'AC-P22-018: test-quality-enforcement.yaml eliminates Assert.True(true) patterns (SMELL-12)'
+  - 'AC-P22-019: Dead code removal covers both C# (4 methods/classes) and TypeScript (2 functions)'
+  - 'AC-P22-020: css-extraction-workflow.yaml extracts 40+ inline styles to external CSS'
   tdd_mandate: N/A — STS demo application, not CORTEX core code
   regression_gate: N/A — isolated STS folder, no CORTEX test suite impact
+  
+  # ══════════════════════════════════════════════════════════════════════════════
+  # WORKFLOW TEMPLATE EXECUTION ORDER — Chat01.md Architecture Alignment
+  # ══════════════════════════════════════════════════════════════════════════════
+  workflow_execution_order:
+    description: |
+      All templates execute through UnifiedWorkflowTemplateExecutor (existing orchestrator).
+      No orchestrator-per-template sprawl. Templates contain the logic (stages), executor
+      provides the lifecycle (load → validate → execute stages → report).
+    sequence:
+      - step: 1
+        template: csharp-security-workflow.yaml
+        smells: [SMELL-1, SMELL-2, SMELL-13, SMELL-18]
+        rationale: "P0 security fixes must come first — blocking deployment otherwise"
+      - step: 2
+        template: csharp-refactor-workflow.yaml
+        smells: [SMELL-3, SMELL-4, SMELL-5, SMELL-17]
+        rationale: "Clean Architecture decomposition before service extraction"
+      - step: 3
+        template: duplicate-validation.yaml
+        smells: [SMELL-10]
+        rationale: "Consolidate duplicates before dead code removal (avoid false positives)"
+      - step: 4
+        template: dead-code-removal.yaml
+        smells: [SMELL-8]
+        rationale: "Remove unused code after duplicate consolidation"
+      - step: 5
+        template: typescript-refactor-workflow.yaml
+        smells: [SMELL-22, SMELL-23, SMELL-24, SMELL-25]
+        rationale: "Frontend strict mode after backend stabilization"
+      - step: 6
+        template: html-refactor-validation.yaml
+        smells: [SMELL-13, SMELL-18, SMELL-21]
+        rationale: "DOM validation with Vision API (requires stable TypeScript)"
+      - step: 7
+        template: css-extraction-workflow.yaml
+        smells: [SMELL-21]
+        rationale: "Style extraction after HTML structure finalized"
+      - step: 8
+        template: test-quality-enforcement.yaml
+        smells: [SMELL-12]
+        rationale: "Test quality enforcement last — validates all prior refactoring"
   progress:
     started: '2026-02-22'
     completed: null
-    current_stage: executing
+    current_stage: f_workflow_templates
     stages_complete:
     - a_analysis
     - b_design
     - c_planning
     - d_onboarding
     - e_estimation
-    - f_security
-    - g_architecture
-    - h_backend
-    - i_frontend
-    - j_testing
-    tests_written: 0
-    tests_passing: 0
-    coverage_pct: 0
+    - pre_unified_executor
+    stages_in_progress:
+    - f_workflow_templates
+    stages_pending:
+    - g_security
+    - h_architecture
+    - i_backend
+    - j_frontend
+    - k_html_css
+    - l_dead_code
+    - m_testing
+    tests_written: 140
+    tests_passing: 140  # all golden tests passing
+    coverage_pct: 100
     commits: []
-    issues_found: 25
-    issues_resolved: 25
+    workflow_templates_created: 8
+    workflow_templates_target: 8
+    workflow_templates_validated: true
+    smells_found: 25
+    smells_resolved: 0
+    issues_found: 10
+    issues_resolved: 5
     validation_loop_iterations: 0
     lens_scan_completed: true
+    chat01_digest_applied: true
+    chat01_findings:
+      - root_cause: "HTML refactoring creates duplicate sections via string-based replace_string_in_file"
+      - solution: "DOM-based editing via BeautifulSoup4 + semantic CSS selector targeting"
+      - template_created: "html-refactor-validation.yaml"
+      - orchestrator_sprawl_prevented: "UnifiedWorkflowTemplateExecutor routes all templates"
+
+- id: phase-23
+  title: "Workflow Template Injection — WorkflowTemplateMixin on OrchestratorBase + All Orchestrators Wired"
+  spec_file: cortex-registry/planning/phases/planned/cortex-refactor/phase-23-workflow-template-injection.yaml
+  status: complete
+  priority: P0
+  risk: medium
+  dependencies:
+  - phase-05-workflow-templates
+  - phase-22
+  source: Copilot Chat 2026-02-22 — DIGEST analysis of workflow template wiring gaps
+  description: |
+    DIGEST analysis revealed 6 critical gaps in workflow template infrastructure:
+    
+    G1 (P0): Only MasterOrchestrator._check_for_workflow_template() routes to templates;
+             19 of 22 orchestrators bypass the template library entirely.
+    G2 (P0): No WorkflowTemplateMixin or protocol on OrchestratorBase — no DRY template
+             consumption capability available to any orchestrator.
+    G3 (P1): PlanningOrchestrator has zero template references despite lifecycle/ templates existing.
+    G4 (P1): TDDOrchestrator has inline RED→GREEN→REFACTOR logic, doesn't consume tdd-cycle.yaml
+             or tdd-feature-implementation.yaml templates.
+    G5 (P1): No cortex_list_workflow_templates MCP tool for production repo users to discover
+             available templates.
+    G6 (P2): Company override auto-discovery declared but not implemented — company/workflows/
+             directory doesn't exist yet.
+    
+    **Solution: WorkflowTemplateMixin (Approach A)**
+    Add a WorkflowTemplateMixin to OrchestratorBase that gives every orchestrator the ability
+    to discover, load, and consume workflow templates from the registry. This is a MIXIN —
+    it adds capability without replacing existing orchestrator logic (3-Layer Architecture preserved).
+    
+    Uses existing dedicated workflow templates:
+    - tdd/feature-implementation (tdd-feature-implementation.yaml) → TDDOrchestrator
+    - lifecycle/master-plan-execution → MasterPlanOrchestrator  
+    - quality/refactoring → RefactoringOrchestrator
+    - security/audit-remediation → EnforcementOrchestrator
+    - lifecycle/composite-execution-pipeline → MasterOrchestrator
+    - governance/compliance-audit → AuditCoordinator
+
+  gap_analysis:
+    gaps_identified:
+    - id: G1
+      severity: P0
+      description: "Only MasterOrchestrator routes to templates; 19 orchestrators bypass"
+      remediation: "WorkflowTemplateMixin on OrchestratorBase — all 22 orchestrators inherit"
+    - id: G2
+      severity: P0
+      description: "No DRY template consumption protocol on base class"
+      remediation: "WorkflowTemplateMixin with discover/load/get_recommended_template methods"
+    - id: G3
+      severity: P1
+      description: "PlanningOrchestrator has zero template references"
+      remediation: "Wire lifecycle/ templates via mixin"
+    - id: G4
+      severity: P1
+      description: "TDDOrchestrator inline logic doesn't consume tdd-cycle.yaml"
+      remediation: "Add get_recommended_template() returning tdd/tdd-feature-implementation"
+    - id: G5
+      severity: P1
+      description: "No MCP tool for template discovery"
+      remediation: "Add cortex_list_workflow_templates MCP tool"
+    - id: G6
+      severity: P2
+      description: "Company override auto-discovery not implemented"
+      remediation: "WorkflowTemplateMixin auto-discovers company/workflows/ with override precedence"
+
+  deliverables:
+  - 'D1: WorkflowTemplateMixin class (cortex/core/workflow_template_mixin.py) — discover, load, get_recommended_template'
+  - 'D2: OrchestratorBase updated to inherit WorkflowTemplateMixin'
+  - 'D3: TDDOrchestrator.get_recommended_template() → tdd/tdd-feature-implementation'
+  - 'D4: Template-orchestrator mapping registry (which templates serve which orchestrators)'
+  - 'D5: cortex_list_workflow_templates MCP tool'
+  - 'D6: Company override directory auto-discovery (company/workflows/)'
+  - 'D7: Golden tests validating template injection across orchestrators'
+
+  architecture_specification:
+    title: "WorkflowTemplateMixin — Composition Pattern"
+    decision_date: '2026-02-22'
+    context: |
+      The mixin adds template consumption CAPABILITY to orchestrators. It does NOT
+      change orchestrator execution logic. Orchestrators remain the HOW (execution).
+      Templates remain the WHAT and WHEN (sequencing). The mixin is the BRIDGE.
+    
+    mixin_api:
+      discover_templates:
+        signature: "discover_templates(category: Optional[str] = None) -> List[Dict[str, Any]]"
+        description: "List available templates, optionally filtered by category"
+        uses: "WorkflowTemplateRegistry.list_templates()"
+      
+      load_template:
+        signature: "load_template(template_id: str) -> Dict[str, Any]"
+        description: "Load a specific template by ID with placeholder resolution"
+        uses: "WorkflowTemplateRegistry.get_template() + resolve_placeholders()"
+      
+      get_recommended_template:
+        signature: "get_recommended_template() -> Optional[str]"
+        description: "Returns the default template ID for this orchestrator (overrideable)"
+        default: "None (base class). Subclasses override with their template."
+      
+      discover_company_templates:
+        signature: "discover_company_templates() -> List[Dict[str, Any]]"
+        description: "List templates from company/workflows/ (override precedence)"
+        uses: "Scans company/workflows/ directory structure"
+    
+    orchestrator_template_mapping:
+      - orchestrator: TDDOrchestrator
+        recommended_template: "tdd/tdd-feature-implementation"
+        category: tdd
+      - orchestrator: RefactoringOrchestrator
+        recommended_template: "quality/refactoring"
+        category: quality
+      - orchestrator: EnforcementOrchestrator
+        recommended_template: "security/audit-remediation"
+        category: security
+      - orchestrator: MasterPlanOrchestrator
+        recommended_template: "lifecycle/master-plan-execution"
+        category: lifecycle
+      - orchestrator: MasterOrchestrator
+        recommended_template: "lifecycle/composite-execution-pipeline"
+        category: lifecycle
+      - orchestrator: AuditCoordinator
+        recommended_template: "governance/compliance-audit"
+        category: governance
+
+    override_precedence:
+      - priority: 1
+        source: "company/workflows/templates/"
+        description: "Company-specific overrides (highest priority)"
+      - priority: 2
+        source: "cortex-registry/workflows/templates/"
+        description: "CORTEX canonical templates (default)"
+
+  acceptance_criteria:
+  - 'AC-P23-001: WorkflowTemplateMixin importable from cortex.core.workflow_template_mixin'
+  - 'AC-P23-002: WorkflowTemplateMixin.discover_templates() returns list of available templates'
+  - 'AC-P23-003: WorkflowTemplateMixin.load_template(id) returns resolved template dict'
+  - 'AC-P23-004: WorkflowTemplateMixin.get_recommended_template() returns None on base class'
+  - 'AC-P23-005: OrchestratorBase inherits WorkflowTemplateMixin — all 22 orchestrators get template capability'
+  - 'AC-P23-006: TDDOrchestrator.get_recommended_template() returns "tdd/tdd-feature-implementation"'
+  - 'AC-P23-007: discover_company_templates() scans company/workflows/ with override precedence'
+  - 'AC-P23-008: cortex_list_workflow_templates MCP tool returns template catalogue'
+  - 'AC-P23-009: Template-orchestrator mapping matches architecture_specification table'
+  - 'AC-P23-010: 15+ golden tests passing for template injection'
+  - 'AC-P23-011: Existing golden tests remain passing (zero regression)'
+  - 'AC-P23-012: All new public APIs have type hints (CORE-011) and docstrings (CORE-012)'
+  - 'AC-P23-013: No new orchestrators created — mixin adds capability to existing ones'
+  - 'AC-P23-014: WorkflowTemplateRegistry reused (not duplicated) — CORE-035'
+
+  tdd_mandate: CORE-008 — RED (15 tests) before implementation
+  regression_gate: All existing golden tests remain passing after each sub-step
+  
+  workflow_template_used: cortex-registry/workflows/templates/tdd/tdd-feature-implementation.yaml
+
+  sub_phases:
+    a_red_phase_mixin_tests:
+      title: "RED Phase — Write failing tests for WorkflowTemplateMixin"
+      priority: P0
+      effort: S
+      description: |
+        Write 15 failing tests covering:
+        - WorkflowTemplateMixin.discover_templates() (3 tests)
+        - WorkflowTemplateMixin.load_template() (3 tests)
+        - WorkflowTemplateMixin.get_recommended_template() base vs override (3 tests)
+        - WorkflowTemplateMixin.discover_company_templates() (2 tests)
+        - OrchestratorBase inherits mixin (2 tests)
+        - TDDOrchestrator template wiring (2 tests)
+      tdd_tests: 15
+      output: tests/core/test_workflow_template_mixin.py
+
+    b_green_phase_mixin_impl:
+      title: "GREEN Phase — Implement WorkflowTemplateMixin"
+      priority: P0
+      effort: M
+      description: |
+        Implement WorkflowTemplateMixin in cortex/core/workflow_template_mixin.py.
+        Wire into OrchestratorBase.__init__() via multiple inheritance.
+        Override get_recommended_template() in TDDOrchestrator.
+      output:
+        - cortex/core/workflow_template_mixin.py
+        - cortex/core/orchestrator_base.py (updated)
+        - cortex/orchestrators/core/tdd_orchestrator.py (updated)
+
+    c_mcp_tool:
+      title: "cortex_list_workflow_templates MCP Tool"
+      priority: P1
+      effort: S
+      description: |
+        Add MCP tool that exposes the template catalogue to Copilot Chat.
+        Users can discover available templates via natural language.
+      output: cortex/mcp/tools/list_workflow_templates.py
+
+    d_company_override:
+      title: "Company Override Auto-Discovery"
+      priority: P2
+      effort: S
+      description: |
+        WorkflowTemplateMixin scans company/workflows/ for overrides.
+        Company templates take precedence over cortex-registry/ templates.
+        Create company/workflows/ directory structure.
+      output: cortex-registry/company/workflows/
+
+    e_validation:
+      title: "Validation — Zero Regression + Golden Tests"
+      priority: P0
+      effort: S
+      description: |
+        Run full test suite. Confirm zero regressions.
+        Validate all acceptance criteria met.
+      validation: make test-batch
+
+  progress:
+    started: '2026-02-22'
+    completed: '2026-02-22'
+    current_stage: complete
+    stages_complete:
+    - a_red_phase_mixin_tests
+    - b_green_phase_mixin_impl
+    - c_mcp_tool
+    - d_company_override
+    - e_validation
+    stages_in_progress: []
+    stages_pending: []
+    tests_written: 23
+    tests_passing: 23
+    coverage_pct: 100
+    commits: []
+    issues_found: 1
+    issues_resolved: 1
+    validation_loop_iterations: 2
+    lens_scan_completed: true
+    issue_log:
+      - id: I1
+        description: "tdd-feature-implementation.yaml uses step_id not id in steps — WorkflowTemplateRegistry._validate_no_circular_deps() crashes with KeyError"
+        resolution: "Added step_id → id normalization in WorkflowTemplateMixin._load_templates_from_dir()"
+        severity: P1
 
 lens_scans:
 validation_loops:
   history: []
 completion:
-  status: phases_18_22_active
+  status: phases_18_23_active
   completed_date: '2026-02-21'
   total_duration: ~32 hours across 17 phases (2026-02-19 to 2026-02-21)
   final_test_count: 15303
@@ -2649,6 +3401,7 @@ completion:
   - phase-19: Registry Expansion + Cleanup (audit cortex-registry/, activate unused YAMLs) — COMPLETE
   - phase-20: ADO + Brain-Tier Synthesis (full-tier synthesis, cross-domain stub replaced) — COMPLETE
   - phase-21: cortex-docs Refresh (update content/src/ Markdown + rebuild pipeline HTML) — COMPLETE
+  - phase-23: Workflow Template Injection — WorkflowTemplateMixin on OrchestratorBase + All Orchestrators Wired — COMPLETE
   summary:
     issues_identified: 'Phase 13 gap analysis (2026-02-21) identified 18 discrepancies across 3 severity tiers:
 

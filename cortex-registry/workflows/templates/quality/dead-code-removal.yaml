@@ -1,0 +1,245 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Cross-Language Dead Code Removal Workflow
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Detect and remove unused functions, classes, imports across C#, TypeScript, Python.
+#          SMELL-8 resolution: SendWelcomeEmail(), ExportUserData(), calculateCompoundInterest().
+# Authority: VacuumOrchestrator, ADR-009 (3-Layer Architecture)
+# Source: BadMonolith analysis
+# Smells Addressed: SMELL-8 (BadMonolith — dead code)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: quality/dead-code-removal
+name: Cross-Language Dead Code Removal Workflow
+category: quality
+version: 1.0.0
+priority: P2
+
+metadata:
+  author: CORTEX
+  created: '2026-02-22'
+  updated: '2026-02-22'
+  source: BadMonolith-analysis
+  smells_addressed: [SMELL-8]
+  technologies: [csharp, typescript, python]
+  rollback_on_failure: true
+  vision_api_integration: false
+  golden_test_required: true
+
+# ── PLACEHOLDERS ────────────────────────────────────────────────────────────────
+placeholders:
+  target_languages: ["csharp", "typescript", "python"]
+  source_dirs: "{{source_directories}}"
+  exclude_patterns:
+    - "test"
+    - "spec"
+    - "mock"
+    - "stub"
+  reflection_patterns:
+    - "GetMethod"
+    - "Invoke"
+    - "eval("
+    - "getattr"
+
+# ── GATES ───────────────────────────────────────────────────────────────────────
+gates:
+  no_dead_code:
+    description: "All detected dead code has been removed or justified"
+    validation: "dead_code_remaining == 0 OR all_justified == true"
+    blocking: true
+    
+  no_false_positives:
+    description: "Reflection/dynamic patterns manually reviewed"
+    validation: "reflection_patterns_reviewed == true"
+    blocking: false  # Advisory — requires manual review
+    
+  tests_passing:
+    description: "All tests pass after dead code removal"
+    validation: "test_failures == 0"
+    blocking: true
+
+# ── STEPS ───────────────────────────────────────────────────────────────────────
+steps:
+  # Step 1: Build Call Graph (C#)
+  - id: S1_CSHARP_CALL_GRAPH
+    name: Build C# Call Graph via Roslyn
+    action: semantic_analyze
+    description: |
+      Build call graph from C# source using Roslyn AST:
+      - Extract all method/class definitions
+      - Trace method invocations
+      - Build caller → callee relationships
+    parameters:
+      language: csharp
+      source_dirs: "{{source_dirs}}"
+      analyzer: roslyn
+      include_private: true
+      exclude_patterns: "{{exclude_patterns}}"
+    gate: null
+    outputs:
+      - csharp_call_graph
+      - csharp_definitions
+      - csharp_entry_points
+      
+  # Step 2: Build Call Graph (TypeScript)
+  - id: S2_TYPESCRIPT_CALL_GRAPH
+    name: Build TypeScript Call Graph
+    action: semantic_analyze
+    description: |
+      Build call graph from TypeScript source using TS Compiler API:
+      - Extract all function/class/method definitions
+      - Trace import/export relationships
+      - Build caller → callee relationships
+    parameters:
+      language: typescript
+      source_dirs: "{{source_dirs}}"
+      analyzer: typescript_compiler_api
+      include_private: true
+      exclude_patterns: "{{exclude_patterns}}"
+    gate: null
+    outputs:
+      - ts_call_graph
+      - ts_definitions
+      - ts_entry_points
+      
+  # Step 3: Build Call Graph (Python)
+  - id: S3_PYTHON_CALL_GRAPH
+    name: Build Python Call Graph
+    action: semantic_analyze
+    description: |
+      Build call graph from Python source using AST module:
+      - Extract all function/class/method definitions
+      - Trace function calls
+      - Build caller → callee relationships
+    parameters:
+      language: python
+      source_dirs: "{{source_dirs}}"
+      analyzer: python_ast
+      include_private: true
+      exclude_patterns: "{{exclude_patterns}}"
+    gate: null
+    outputs:
+      - python_call_graph
+      - python_definitions
+      - python_entry_points
+      
+  # Step 4: Identify Dead Code
+  - id: S4_IDENTIFY_DEAD_CODE
+    name: Identify Unreachable Code
+    action: semantic_analyze
+    description: |
+      Find functions/classes with zero callers:
+      - Not reachable from any entry point
+      - Not exported as public API
+      - Not referenced in tests (exclude test files from removal)
+    parameters:
+      call_graphs:
+        - "{{csharp_call_graph}}"
+        - "{{ts_call_graph}}"
+        - "{{python_call_graph}}"
+      entry_points:
+        - "{{csharp_entry_points}}"
+        - "{{ts_entry_points}}"
+        - "{{python_entry_points}}"
+      exclude_from_removal:
+        - entry_points
+        - public_api
+        - test_helpers
+    gate: null
+    outputs:
+      - dead_code_candidates
+      - dead_code_count
+      - dead_code_by_language
+      
+  # Step 5: Check for Reflection/Dynamic Invocation
+  - id: S5_REFLECTION_CHECK
+    name: Check for Reflection Patterns
+    action: semantic_analyze
+    description: |
+      Scan for reflection/dynamic invocation patterns that may call "dead" code:
+      - C#: GetMethod(), Invoke(), Activator.CreateInstance()
+      - TypeScript: eval(), Function(), dynamic property access
+      - Python: getattr(), __getattr__, exec()
+      
+      Flag for manual review — do NOT auto-delete.
+    parameters:
+      dead_code_candidates: "{{dead_code_candidates}}"
+      reflection_patterns: "{{reflection_patterns}}"
+    gate: no_false_positives
+    outputs:
+      - potential_false_positives
+      - reflection_usage_locations
+      
+  # Step 6: Generate Removal Plan
+  - id: S6_GENERATE_REMOVAL_PLAN
+    name: Generate Safe Removal Plan
+    action: semantic_analyze
+    description: |
+      Generate removal plan excluding:
+      - Functions called via reflection
+      - Public API endpoints
+      - Test helpers
+      - Documented intentional placeholders
+    parameters:
+      dead_code_candidates: "{{dead_code_candidates}}"
+      exclude: "{{potential_false_positives}}"
+      include_justification: true
+    gate: null
+    outputs:
+      - removal_plan
+      - safe_to_remove
+      - require_justification
+      
+  # Step 7: Execute Removal
+  - id: S7_EXECUTE_REMOVAL
+    name: Remove Dead Code
+    action: refactor
+    description: |
+      Delete confirmed dead code:
+      - Remove function/class definitions
+      - Remove associated imports
+      - Update file if empty after removal
+    parameters:
+      removal_plan: "{{removal_plan}}"
+      dry_run: false
+      backup: true
+    gate: null
+    rollback: true
+    
+  # Step 8: Run Tests
+  - id: S8_RUN_TESTS
+    name: Validate No Breakage
+    action: run_tests
+    description: |
+      Run full test suite to confirm dead code removal didn't break anything.
+    parameters:
+      command: "make test-batch"
+      coverage: true
+    gate: tests_passing
+    rollback: true
+
+# ── CONVERGENCE CRITERIA ────────────────────────────────────────────────────────
+convergence:
+  max_cycles: 2
+  success_criteria:
+    dead_code_remaining: 0
+    test_failures: 0
+  convergence_predicate: |
+    (dead_code_remaining == 0 OR all_justified == true) AND
+    test_failures == 0
+
+# ── AUDIT TRACE ─────────────────────────────────────────────────────────────────
+audit:
+  log_level: INFO
+  trace_fields:
+    - timestamp
+    - step_id
+    - language
+    - functions_analyzed
+    - dead_code_found
+    - dead_code_removed
+    - test_result
+  acceptance_criteria:
+    - 'AC-DEAD-001: All dead code identified across C#, TypeScript, Python'
+    - 'AC-DEAD-002: Reflection patterns reviewed for false positives'
+    - 'AC-DEAD-003: Dead code safely removed'
+    - 'AC-DEAD-004: All tests passing after removal'

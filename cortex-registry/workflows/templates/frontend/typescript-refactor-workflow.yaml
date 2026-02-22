@@ -1,0 +1,289 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# TypeScript Strict Mode Refactoring Workflow
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Enable strict:true + noImplicitAny:true. Replace all 'any' types (SMELL-22),
+#          extract service layer (SMELL-24), add error handling (SMELL-25).
+# Authority: ADR-004 (TypeScript strict mode), ADR-009 (3-Layer Architecture)
+# Source: BadMonolith analysis
+# Smells Addressed: SMELL-22, SMELL-23, SMELL-24, SMELL-25 (BadMonolith)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: frontend/typescript-refactor-workflow
+name: TypeScript Strict Mode Refactoring Workflow
+category: frontend
+version: 1.0.0
+priority: P1
+
+metadata:
+  author: CORTEX
+  created: '2026-02-22'
+  updated: '2026-02-22'
+  source: BadMonolith-analysis
+  smells_addressed: [SMELL-22, SMELL-23, SMELL-24, SMELL-25]
+  technologies: [typescript, javascript]
+  rollback_on_failure: true
+  vision_api_integration: false
+  golden_test_required: true
+
+# ── PLACEHOLDERS ────────────────────────────────────────────────────────────────
+placeholders:
+  target_tsconfig: "{{tsconfig_path}}"
+  source_files: "{{ts_files_glob}}"
+  output_services_dir: "{{services_output_dir}}"
+  output_models_dir: "{{models_output_dir}}"
+
+# ── GATES ───────────────────────────────────────────────────────────────────────
+gates:
+  strict_mode_enabled:
+    description: "tsconfig.json has strict:true and noImplicitAny:true"
+    validation: "strict_enabled == true AND no_implicit_any == true"
+    blocking: true
+    
+  zero_any_types:
+    description: "No 'any' type annotations in source files"
+    validation: "any_type_count == 0"
+    blocking: true
+    
+  service_layer_exists:
+    description: "API calls extracted to service layer"
+    validation: "fetch_in_components == 0"
+    blocking: true
+    
+  error_handling_complete:
+    description: "All API calls have try/catch error handling"
+    validation: "unhandled_fetch_count == 0"
+    blocking: true
+    
+  tests_passing:
+    description: "All TypeScript tests pass"
+    validation: "test_failures == 0"
+    blocking: true
+
+# ── STEPS ───────────────────────────────────────────────────────────────────────
+steps:
+  # Step 1: Strict Mode Audit
+  - id: S1_STRICT_MODE_AUDIT
+    name: Check tsconfig.json Strict Mode
+    action: semantic_analyze
+    description: |
+      Check tsconfig.json for strict mode settings:
+      - strict: true
+      - noImplicitAny: true
+      - strictNullChecks: true
+      - strictFunctionTypes: true
+    parameters:
+      file: "{{target_tsconfig}}"
+      check_fields:
+        - "compilerOptions.strict"
+        - "compilerOptions.noImplicitAny"
+        - "compilerOptions.strictNullChecks"
+        - "compilerOptions.strictFunctionTypes"
+    gate: null  # Check only
+    outputs:
+      - strict_enabled
+      - no_implicit_any
+      - strict_null_checks
+      - tsconfig_issues
+      
+  # Step 2: Any Type Scan
+  - id: S2_ANY_TYPE_SCAN
+    name: Find All 'any' Type Usages
+    action: semantic_analyze
+    description: |
+      Scan all TypeScript files for 'any' type annotations:
+      - Explicit: const x: any
+      - Function params: function foo(x: any)
+      - Return types: function bar(): any
+      - Type assertions: x as any
+    parameters:
+      files: "{{source_files}}"
+      patterns:
+        - ': any'
+        - ': any[]'
+        - 'as any'
+        - '<any>'
+      analyzer: typescript_compiler_api
+    gate: null
+    outputs:
+      - any_type_locations
+      - any_type_count
+      - inferred_types
+      
+  # Step 3: Service Layer Analysis
+  - id: S3_SERVICE_LAYER_ANALYSIS
+    name: Detect fetch() Calls in Components
+    action: semantic_analyze
+    description: |
+      Find fetch() calls directly in UI components.
+      These should be extracted to service layer.
+    parameters:
+      files: "{{source_files}}"
+      patterns:
+        - 'fetch\s*\('
+        - 'axios\.'
+        - 'XMLHttpRequest'
+      exclude_dirs:
+        - services/
+        - api/
+    gate: null
+    outputs:
+      - fetch_locations
+      - fetch_in_components
+      - extraction_candidates
+      
+  # Step 4: Error Handling Analysis
+  - id: S4_ERROR_HANDLING_ANALYSIS
+    name: Detect Unhandled API Calls
+    action: semantic_analyze
+    description: |
+      Find fetch() calls without try/catch or .catch():
+      - Unhandled promise rejections
+      - Missing error boundaries
+    parameters:
+      files: "{{source_files}}"
+      check_type: unhandled_promises
+      patterns:
+        - 'fetch\s*\([^)]*\)\s*(?!\.catch|\.then\([^)]*\)\s*\.catch)'
+        - 'await\s+fetch\s*\([^)]*\)\s*(?![^}]*catch)'
+    gate: null
+    outputs:
+      - unhandled_fetch_locations
+      - unhandled_fetch_count
+      
+  # Step 5: Enable Strict Mode
+  - id: S5_ENABLE_STRICT_MODE
+    name: Enable TypeScript Strict Mode
+    action: refactor
+    description: |
+      Update tsconfig.json to enable strict mode:
+      - Set strict: true
+      - Set noImplicitAny: true
+      - Set strictNullChecks: true
+    parameters:
+      file: "{{target_tsconfig}}"
+      updates:
+        compilerOptions:
+          strict: true
+          noImplicitAny: true
+          strictNullChecks: true
+          strictFunctionTypes: true
+    gate: strict_mode_enabled
+    rollback: true
+    
+  # Step 6: Replace Any Types
+  - id: S6_REPLACE_ANY_TYPES
+    name: Replace 'any' with Typed Definitions
+    action: refactor
+    description: |
+      Replace 'any' with inferred or explicit types:
+      - Use TypeScript compiler inference where possible
+      - Generate interface definitions for complex objects
+      - Add type imports from generated models
+    parameters:
+      locations: "{{any_type_locations}}"
+      inferred_types: "{{inferred_types}}"
+      generate_interfaces: true
+      output_dir: "{{output_models_dir}}"
+    gate: zero_any_types
+    rollback: true
+    outputs:
+      - generated_interfaces
+      - type_replacements
+      
+  # Step 7: Extract Service Layer
+  - id: S7_EXTRACT_SERVICE_LAYER
+    name: Extract API Calls to Service Layer
+    action: refactor
+    description: |
+      Move fetch() calls from components to service classes:
+      - Create ApiClient with typed methods
+      - Generate service classes per domain (UserService, TransactionService)
+      - Update component imports
+    parameters:
+      fetch_locations: "{{fetch_locations}}"
+      output_dir: "{{output_services_dir}}"
+      service_pattern: class_based
+      http_client: fetch  # or axios
+    gate: service_layer_exists
+    rollback: true
+    outputs:
+      - generated_services
+      - updated_components
+      
+  # Step 8: Add Error Handling
+  - id: S8_ADD_ERROR_HANDLING
+    name: Wrap API Calls with Error Handling
+    action: refactor
+    description: |
+      Add try/catch to all API calls:
+      - Wrap await fetch() in try/catch blocks
+      - Add .catch() to promise chains
+      - Generate error handling utilities
+    parameters:
+      locations: "{{unhandled_fetch_locations}}"
+      error_handler_pattern: typed_error
+      generate_utilities: true
+    gate: error_handling_complete
+    rollback: true
+    
+  # Step 9: Type Coverage Report
+  - id: S9_TYPE_COVERAGE
+    name: Generate Type Coverage Report
+    action: semantic_analyze
+    description: |
+      Generate TypeScript type coverage report:
+      - Percentage of typed vs untyped code
+      - Remaining implicit any warnings
+      - Strictness compliance score
+    parameters:
+      files: "{{source_files}}"
+      report_format: json
+      coverage_threshold: 100
+    gate: null
+    outputs:
+      - type_coverage_percentage
+      - remaining_warnings
+      - strictness_score
+      
+  # Step 10: Run Tests
+  - id: S10_RUN_TESTS
+    name: Run TypeScript Tests
+    action: run_tests
+    description: |
+      Run full TypeScript test suite after refactoring.
+    parameters:
+      command: "npm test"
+      coverage: true
+    gate: tests_passing
+    rollback: true
+
+# ── CONVERGENCE CRITERIA ────────────────────────────────────────────────────────
+convergence:
+  max_cycles: 5
+  success_criteria:
+    strict_enabled: true
+    any_type_count: 0
+    fetch_in_components: 0
+    unhandled_fetch_count: 0
+    test_failures: 0
+  convergence_predicate: |
+    strict_enabled == true AND
+    any_type_count == 0 AND
+    test_failures == 0
+
+# ── AUDIT TRACE ─────────────────────────────────────────────────────────────────
+audit:
+  log_level: INFO
+  trace_fields:
+    - timestamp
+    - step_id
+    - files_processed
+    - types_replaced
+    - services_generated
+    - test_result
+  acceptance_criteria:
+    - 'AC-TS-001: tsconfig.json has strict:true'
+    - 'AC-TS-002: Zero any type annotations in source'
+    - 'AC-TS-003: All API calls in service layer'
+    - 'AC-TS-004: All API calls have error handling'
+    - 'AC-TS-005: All tests passing'

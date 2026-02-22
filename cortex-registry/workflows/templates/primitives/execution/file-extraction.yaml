@@ -1,0 +1,204 @@
+# ============================================================================
+# PRIMITIVE: File Extraction
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable)
+# Purpose: Extract inline content to external files
+# Reused by: css-extraction, typescript-refactor (service extraction)
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/execution/file-extraction'
+name: 'File Extraction Primitive'
+tier: 'primitive'
+category: 'execution'
+status: 'active'
+
+metadata:
+  description: |
+    Atomic template for extracting inline content (CSS, JS, styles) to
+    external files. Generates proper file structure, adds import/link
+    statements, and removes inline content from source.
+  
+  tags:
+    - primitive
+    - execution
+    - extraction
+    - refactoring
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'RefactoringOrchestrator'
+      purpose: 'File manipulation coordination'
+      required: true
+  
+  mcp_tools:
+    - name: 'cortex_refactor'
+      purpose: 'Semantic refactoring operations'
+      required: true
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'source_file'
+      type: 'Path'
+      description: 'File containing inline content to extract'
+    
+    - name: 'extraction_type'
+      type: 'str'
+      description: 'Type of content to extract'
+      enum: ['css_style_block', 'css_inline_style', 'javascript_block', 'typescript_module']
+    
+    - name: 'target_file'
+      type: 'Path'
+      description: 'Destination file for extracted content'
+  
+  optional:
+    - name: 'selector'
+      type: 'str'
+      description: 'CSS selector for targeted extraction (HTML only)'
+      default: null
+    
+    - name: 'add_import'
+      type: 'bool'
+      description: 'Add link/import statement to source file'
+      default: true
+    
+    - name: 'naming_convention'
+      type: 'str'
+      description: 'Class naming convention for CSS extraction'
+      default: 'bem'
+      enum: ['bem', 'camelCase', 'kebab-case', 'auto']
+    
+    - name: 'preserve_comments'
+      type: 'bool'
+      description: 'Keep comments in extracted content'
+      default: true
+    
+    - name: 'minify'
+      type: 'bool'
+      description: 'Minify extracted content'
+      default: false
+
+# ============================================================================
+# EXECUTION
+# ============================================================================
+execution:
+  steps:
+    - step_id: 'PARSE_SOURCE'
+      name: 'Parse source file'
+      action: |
+        Based on extraction_type:
+          - css_style_block: Parse HTML, find <style> blocks
+          - css_inline_style: Parse HTML, find style="" attributes
+          - javascript_block: Parse HTML, find <script> blocks
+          - typescript_module: Parse TS, identify extractable modules
+      outputs:
+        - 'extraction_candidates'
+    
+    - step_id: 'EXTRACT_CONTENT'
+      name: 'Extract and transform content'
+      action: |
+        For css_inline_style:
+          1. Generate class name per naming_convention
+          2. Map style="" value to CSS rule
+          3. Build class → rule mapping
+        
+        For css_style_block:
+          1. Extract <style> content verbatim
+          2. Optionally minify
+        
+        For javascript_block / typescript_module:
+          1. Extract block content
+          2. Add export statements if needed
+      outputs:
+        - 'extracted_content'
+        - 'class_mapping.json'
+    
+    - step_id: 'WRITE_TARGET'
+      name: 'Write extracted content to target file'
+      action: |
+        1. Create target directory if needed
+        2. Write extracted content to target_file
+        3. Add header comment with extraction metadata
+      outputs:
+        - 'target_file_written'
+    
+    - step_id: 'UPDATE_SOURCE'
+      name: 'Update source file references'
+      action: |
+        For css_inline_style:
+          - Replace style="" with class=""
+        
+        For css_style_block:
+          - Remove <style> block
+          - Add <link rel="stylesheet" href="target_file">
+        
+        For javascript_block:
+          - Remove <script>...</script>
+          - Add <script src="target_file"></script>
+        
+        For typescript_module:
+          - Add import statement
+      outputs:
+        - 'source_file_updated'
+    
+    - step_id: 'VALIDATE_EXTRACTION'
+      name: 'Verify extraction integrity'
+      action: |
+        1. Parse target file (CSS/JS lint)
+        2. Verify source file still valid
+        3. Check import/link resolves
+      outputs:
+        - 'validation_passed'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'extraction_report'
+      path: '{{output_dir}}/extraction_report.json'
+      schema: |
+        {
+          "source_file": "string",
+          "target_file": "string",
+          "extraction_type": "string",
+          "items_extracted": "int",
+          "bytes_extracted": "int",
+          "class_mappings": [{"original": "string", "class_name": "string"}],
+          "import_added": "bool"
+        }
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - 'Target file created and valid'
+  - 'Source file updated without errors'
+  - 'Import/link statement added (if enabled)'
+  - 'No content loss during extraction'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:FILE_EXTRACTION'
+    complete: 'AC_COMPLETE:FILE_EXTRACTION'
+    failure: 'AC_FAILURE:FILE_EXTRACTION'
+  
+  log_fields:
+    - 'source_file'
+    - 'target_file'
+    - 'extraction_type'
+    - 'items_extracted'
+    - 'bytes_extracted'

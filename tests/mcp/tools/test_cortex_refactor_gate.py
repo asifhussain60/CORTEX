@@ -69,6 +69,8 @@ class TestCortexRefactorGateAdvertised:
             "session_id", "trace_action", "trace_metadata",  # ENH-STS-02
             "source_code", "language", "context_hints",       # ENH-STS-03
             "service_dir", "test_dir",                         # ENH-STS-04
+            "di_source_code",                                  # ENH-STS-05
+            "health_source_code",                              # ENH-STS-07
         }
         assert required_gate_params.issubset(param_names), (
             f"Missing gate params: {required_gate_params - param_names}"
@@ -104,16 +106,18 @@ class TestCortexRefactorGateSkipsWhenNoParams:
             "ENH-STS-02_session_trace",
             "ENH-STS-03_security_hardening",
             "ENH-STS-04_test_coverage_density",
+            "ENH-STS-05_di_lifetime_consistency",
+            "ENH-STS-07_health_endpoint_realness",
         ]:
             assert key in gate_results, f"Expected gate key missing: {key}"
             assert gate_results[key].get("skipped") is True
             assert "reason" in gate_results[key]
 
-    def test_gate_metadata_shows_four_gates_run(self) -> None:
-        """metadata.sts_gates_run == 4 regardless of skip status."""
+    def test_gate_metadata_shows_six_gates_run(self) -> None:
+        """metadata.sts_gates_run == 6 regardless of skip status."""
         tool = _make_tool()
         result = run(tool.execute(operation="gate", target="repo"))
-        assert result.metadata["sts_gates_run"] == 4
+        assert result.metadata["sts_gates_run"] == 6
         assert result.metadata["operation"] == "gate"
 
 
@@ -671,6 +675,312 @@ class TestCortexRefactorGateCombinedFinTrackScenario:
         assert result.data["overall_status"] == "BLOCK"
         assert result.data["p0_count"] >= 2
         assert result.success is False
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 8. ENH-STS-05 — DI Lifetime Consistency
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestCortexRefactorGateENHSTS05:
+    """ENH-STS-05: gate surfaces AddSingleton<*Repository> captive dependency."""
+
+    _SCOPED_REPOS = (
+        "builder.Services.AddScoped<IUserRepository, UserRepository>();\n"
+        "builder.Services.AddScoped<IAccountRepository, AccountRepository>();\n"
+        "builder.Services.AddScoped<IUserService, UserService>();\n"
+    )
+
+    _SINGLETON_REPO = (
+        "builder.Services.AddSingleton<IUserRepository, UserRepository>();\n"
+        "builder.Services.AddScoped<IUserService, UserService>();\n"
+    )
+
+    def test_sts05_pass_on_scoped_repositories(self) -> None:
+        """All AddScoped repos → clean=True → no violation."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            di_source_code=self._SCOPED_REPOS,
+        ))
+
+        di = result.data["gate_results"]["ENH-STS-05_di_lifetime_consistency"]
+        assert di["clean"] is True
+        assert di["violation_count"] == 0
+        assert result.data["overall_status"] == "PASS"
+
+    def test_sts05_warns_on_singleton_repository(self) -> None:
+        """AddSingleton<IUserRepository> → P1 violation → WARN status."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            di_source_code=self._SINGLETON_REPO,
+        ))
+
+        di = result.data["gate_results"]["ENH-STS-05_di_lifetime_consistency"]
+        assert di["clean"] is False
+        assert di["violation_count"] >= 1
+        rules = [v["rule"] for v in di["violations"]]
+        assert any("singleton_repository" in r for r in rules)
+
+    def test_sts05_p1_alone_produces_warn_not_block(self) -> None:
+        """ENH-STS-05 is P1 — alone must not set BLOCK status."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            di_source_code=self._SINGLETON_REPO,
+        ))
+
+        assert result.data["overall_status"] == "WARN"
+        assert result.data["p0_count"] == 0
+        assert result.success is True
+
+    def test_sts05_multiple_singleton_repos_all_counted(self) -> None:
+        """Three AddSingleton repos → violation_count == 3."""
+        tool = _make_tool()
+        di_code = (
+            "builder.Services.AddSingleton<IUserRepository, UserRepository>();\n"
+            "builder.Services.AddSingleton<IAccountRepository, AccountRepository>();\n"
+            "builder.Services.AddSingleton<ITransactionRepository, TransactionRepository>();\n"
+            "builder.Services.AddScoped<IUserService, UserService>();\n"
+        )
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            di_source_code=di_code,
+        ))
+
+        di = result.data["gate_results"]["ENH-STS-05_di_lifetime_consistency"]
+        assert di["violation_count"] == 3
+
+    def test_sts05_blocking_issue_cites_enh_sts_05(self) -> None:
+        """P1 message from ENH-STS-05 references the gate ID for traceability."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            di_source_code=self._SINGLETON_REPO,
+        ))
+
+        issues = result.data["blocking_issues"]
+        assert any("ENH-STS-05" in i for i in issues)
+
+    def test_sts05_transient_repository_passes(self) -> None:
+        """AddTransient<IRepo> is an acceptable lifetime — no violation."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            di_source_code=(
+                "builder.Services.AddTransient<IUserRepository, UserRepository>();\n"
+                "builder.Services.AddScoped<IUserService, UserService>();\n"
+            ),
+        ))
+
+        di = result.data["gate_results"]["ENH-STS-05_di_lifetime_consistency"]
+        assert di["clean"] is True
+
+    def test_sts05_skipped_when_di_source_code_absent(self) -> None:
+        """No di_source_code → ENH-STS-05 skipped with reason."""
+        tool = _make_tool()
+        result = run(tool.execute(operation="gate", target="repo"))
+
+        di = result.data["gate_results"]["ENH-STS-05_di_lifetime_consistency"]
+        assert di.get("skipped") is True
+        assert "reason" in di
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 9. ENH-STS-07 — Health Endpoint Realness
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestCortexRefactorGateENHSTS07:
+    """ENH-STS-07: gate surfaces hardcoded health endpoint stubs."""
+
+    _REAL_HEALTH = textwrap.dedent("""
+        app.MapGet("/health", async (IDbConnection db) => {
+            try {
+                await db.ExecuteScalarAsync("SELECT 1");
+                return Results.Ok(new { status = "healthy", db = "reachable" });
+            } catch (Exception ex) {
+                return Results.Json(new { status = "degraded", error = ex.Message },
+                    statusCode: 503);
+            }
+        });
+    """)
+
+    _HARDCODED_HEALTH = (
+        'app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));'
+    )
+
+    _BADMONOLITH_HEALTH = textwrap.dedent("""
+        // Health check endpoint - always returns OK even if DB is down
+        app.MapGet("/api/health", () => new { status = "healthy", timestamp = DateTime.UtcNow });
+    """)
+
+    def test_sts07_pass_on_real_db_probe(self) -> None:
+        """Async DB probe → clean=True → PASS."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            health_source_code=self._REAL_HEALTH,
+        ))
+
+        hlt = result.data["gate_results"]["ENH-STS-07_health_endpoint_realness"]
+        assert hlt["clean"] is True
+        assert hlt["violation_count"] == 0
+        assert result.data["overall_status"] == "PASS"
+
+    def test_sts07_warns_on_hardcoded_healthy_stub(self) -> None:
+        """Hardcoded 'healthy' without DB probe → P1 violation → WARN."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            health_source_code=self._HARDCODED_HEALTH,
+        ))
+
+        hlt = result.data["gate_results"]["ENH-STS-07_health_endpoint_realness"]
+        assert hlt["clean"] is False
+        assert hlt["violation_count"] >= 1
+
+    def test_sts07_catches_badmonolith_comment_pattern(self) -> None:
+        """'always returns OK even if DB is down' comment pattern → violation."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            health_source_code=self._BADMONOLITH_HEALTH,
+        ))
+
+        hlt = result.data["gate_results"]["ENH-STS-07_health_endpoint_realness"]
+        assert hlt["clean"] is False
+
+    def test_sts07_p1_alone_produces_warn_not_block(self) -> None:
+        """ENH-STS-07 is P1 — alone must not produce BLOCK status."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            health_source_code=self._HARDCODED_HEALTH,
+        ))
+
+        assert result.data["overall_status"] == "WARN"
+        assert result.data["p0_count"] == 0
+        assert result.success is True
+
+    def test_sts07_no_health_endpoint_is_clean(self) -> None:
+        """Source with no health route → gate inapplicable → clean=True."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            health_source_code='app.MapPost("/api/users", async (req) => { });',
+        ))
+
+        hlt = result.data["gate_results"]["ENH-STS-07_health_endpoint_realness"]
+        assert hlt["clean"] is True
+
+    def test_sts07_blocking_issue_cites_enh_sts_07(self) -> None:
+        """P1 message from ENH-STS-07 references the gate ID."""
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="repo",
+            health_source_code=self._HARDCODED_HEALTH,
+        ))
+
+        issues = result.data["blocking_issues"]
+        assert any("ENH-STS-07" in i for i in issues)
+
+    def test_sts07_skipped_when_health_source_absent(self) -> None:
+        """No health_source_code → ENH-STS-07 skipped with reason."""
+        tool = _make_tool()
+        result = run(tool.execute(operation="gate", target="repo"))
+
+        hlt = result.data["gate_results"]["ENH-STS-07_health_endpoint_realness"]
+        assert hlt.get("skipped") is True
+        assert "reason" in hlt
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 10. Full 6-gate FinTrack scenario — all gaps from the lesson ledger
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestCortexRefactorGateSixGateFinTrackScenario:
+    """Integration: simulate all 10 lesson-ledger gaps across the full 6-gate suite."""
+
+    def test_full_six_gate_run_detects_all_fintrack_gaps(self, tmp_path: Path) -> None:
+        """Running all 6 gates against the exact FinTrack anti-pattern set → BLOCK."""
+        svc_dir = tmp_path / "Services"
+        test_dir = tmp_path / "Tests" / "Services"
+        svc_dir.mkdir(parents=True)
+        test_dir.mkdir(parents=True)
+
+        # Only User+Transaction have tests; Account+Report are missing (AP-007)
+        for svc in ["UserService.cs", "TransactionService.cs", "AccountService.cs", "ReportService.cs"]:
+            (svc_dir / svc).write_text(f"class {svc.replace('.cs', '')} {{}}")
+        (test_dir / "UserServiceTests.cs").write_text("class UserServiceTests {}")
+        (test_dir / "TransactionServiceTests.cs").write_text("class TransactionServiceTests {}")
+
+        tool = _make_tool()
+        result = run(tool.execute(
+            operation="gate",
+            target="cortex-sts/CortexLabs/BadMonolith",
+            # ENH-STS-01: 4 endpoints dropped (AP-002)
+            source_items=[
+                "POST /api/accounts/transfer",
+                "GET /api/admin/stats",
+                "DELETE /api/admin/users/{id}",
+                "GET /api/analytics/summary",
+                "GET /api/users",
+            ],
+            target_items=["GET /api/users"],
+            # ENH-STS-03: SHA256 + incomplete JWT (AP-003, AP-004)
+            source_code="SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(password))",
+            language="csharp",
+            context_hints={"has_jwt_config": True, "has_jwt_middleware": False},
+            # ENH-STS-04: missing Account+Report test classes (AP-007)
+            service_dir=str(svc_dir),
+            test_dir=str(test_dir),
+            # ENH-STS-05: Singleton repo captive dependency (AP-006)
+            di_source_code=(
+                "builder.Services.AddSingleton<IUserRepository, UserRepository>();\n"
+                "builder.Services.AddScoped<IUserService, UserService>();\n"
+            ),
+            # ENH-STS-07: hardcoded health stub (AP-005)
+            health_source_code='app.MapGet("/health", () => Results.Ok(new { status = "healthy" }));',
+        ))
+
+        # P0s from ENH-STS-01 (dropped endpoints) + ENH-STS-03 (incomplete JWT)
+        assert result.data["overall_status"] == "BLOCK"
+        assert result.data["p0_count"] >= 2
+        assert result.success is False
+
+        # All 6 gate keys present in results
+        gate_keys = set(result.data["gate_results"].keys())
+        for expected_key in [
+            "ENH-STS-01_functional_completeness",
+            "ENH-STS-02_session_trace",
+            "ENH-STS-03_security_hardening",
+            "ENH-STS-04_test_coverage_density",
+            "ENH-STS-05_di_lifetime_consistency",
+            "ENH-STS-07_health_endpoint_realness",
+        ]:
+            assert expected_key in gate_keys, f"Gate missing from results: {expected_key}"
+
+    def test_six_gates_all_skipped_when_no_params(self) -> None:
+        """Zero params → all 6 gates skipped → PASS with zero violations."""
+        tool = _make_tool()
+        result = run(tool.execute(operation="gate", target="empty/repo"))
+
+        assert result.data["overall_status"] == "PASS"
+        assert result.data["p0_count"] == 0
+        assert result.data["total_violations"] == 0
+        assert result.metadata["sts_gates_run"] == 6
 
 
 # AC_COMPLETE: AC-ENH-STS-GATE-MCP-2026-02-22

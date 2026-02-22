@@ -1,0 +1,191 @@
+# ============================================================================
+# PRIMITIVE: Regression Test
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable)
+# Purpose: Run tests and assert zero failures
+# Reused by: All refactoring templates (final validation step)
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/validation/regression-test'
+name: 'Regression Test Primitive'
+tier: 'primitive'
+category: 'validation'
+status: 'active'
+
+metadata:
+  description: |
+    Atomic template for running test suites and asserting zero regressions.
+    Supports multiple test frameworks across languages (pytest, dotnet test,
+    jest, mocha). Blocks workflow if any tests fail.
+  
+  tags:
+    - primitive
+    - validation
+    - testing
+    - regression
+    - cross-language
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'TDDOrchestrator'
+      purpose: 'Test execution coordination'
+      required: true
+  
+  mcp_tools:
+    - name: 'cortex_validate_compliance'
+      purpose: 'Post-test governance check'
+      required: false
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'test_framework'
+      type: 'str'
+      description: 'Test framework to use'
+      enum: ['pytest', 'dotnet', 'jest', 'mocha', 'xunit', 'auto']
+    
+    - name: 'test_path'
+      type: 'Path'
+      description: 'Path to test files or directory'
+  
+  optional:
+    - name: 'baseline_count'
+      type: 'int'
+      description: 'Expected minimum passing test count'
+      default: null
+    
+    - name: 'fail_on_decrease'
+      type: 'bool'
+      description: 'Fail if passing count < baseline_count'
+      default: true
+    
+    - name: 'coverage_threshold'
+      type: 'float'
+      description: 'Minimum code coverage percentage (0-100)'
+      default: null
+    
+    - name: 'timeout_seconds'
+      type: 'int'
+      description: 'Maximum test execution time'
+      default: 300
+    
+    - name: 'parallel'
+      type: 'bool'
+      description: 'Run tests in parallel (if framework supports)'
+      default: true
+
+# ============================================================================
+# EXECUTION
+# ============================================================================
+execution:
+  steps:
+    - step_id: 'DETECT_FRAMEWORK'
+      name: 'Auto-detect test framework'
+      condition: '{{test_framework}} == "auto"'
+      action: |
+        Detect based on project files:
+          - pytest.ini / pyproject.toml → pytest
+          - *.csproj with xunit reference → dotnet test
+          - package.json with jest → jest
+          - package.json with mocha → mocha
+      outputs:
+        - 'detected_framework'
+    
+    - step_id: 'RUN_TESTS'
+      name: 'Execute test suite'
+      action: |
+        Build and execute test command:
+          - pytest: python3 -m pytest {{test_path}} -v --tb=short
+          - dotnet: dotnet test {{test_path}} --verbosity normal
+          - jest: npx jest {{test_path}} --verbose
+          - mocha: npx mocha {{test_path}}
+        
+        Capture:
+          - Exit code
+          - Stdout/stderr
+          - Test count (passed, failed, skipped)
+          - Execution time
+      outputs:
+        - 'test_results.json'
+        - 'test_output.log'
+    
+    - step_id: 'CHECK_COVERAGE'
+      name: 'Verify code coverage'
+      condition: '{{coverage_threshold}} != null'
+      action: |
+        Parse coverage report:
+          - pytest: --cov output
+          - dotnet: coverlet output
+          - jest: --coverage output
+        
+        Compare against threshold.
+      outputs:
+        - 'coverage_report.json'
+    
+    - step_id: 'COMPARE_BASELINE'
+      name: 'Compare against baseline count'
+      condition: '{{baseline_count}} != null'
+      action: |
+        If passing_count < baseline_count:
+          - Fail workflow if fail_on_decrease == true
+          - Log regression details
+      outputs:
+        - 'baseline_comparison.json'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'test_results'
+      path: '{{output_dir}}/test_results.json'
+      schema: |
+        {
+          "framework": "string",
+          "passed": "int",
+          "failed": "int",
+          "skipped": "int",
+          "total": "int",
+          "duration_seconds": "float",
+          "coverage_pct": "float",
+          "failures": [{
+            "test_name": "string",
+            "file": "string",
+            "error": "string"
+          }]
+        }
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - 'Test suite executes without timeout'
+  - 'Zero test failures'
+  - 'Coverage ≥ threshold (if specified)'
+  - 'Passing count ≥ baseline (if specified)'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:REGRESSION_TEST'
+    complete: 'AC_COMPLETE:REGRESSION_TEST'
+    failure: 'AC_FAILURE:REGRESSION_TEST'
+  
+  log_fields:
+    - 'framework'
+    - 'passed_count'
+    - 'failed_count'
+    - 'coverage_pct'
+    - 'duration_seconds'

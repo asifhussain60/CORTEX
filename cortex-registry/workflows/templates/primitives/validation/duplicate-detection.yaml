@@ -1,0 +1,186 @@
+# ============================================================================
+# PRIMITIVE: Duplicate Detection
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable)
+# Purpose: Semantic hash comparison for duplicate code/content detection
+# Reused by: csharp-refactor, typescript-refactor, html-refactor, quality/duplicate-validation
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/validation/duplicate-detection'
+name: 'Duplicate Detection Primitive'
+tier: 'primitive'
+category: 'validation'
+status: 'active'
+
+metadata:
+  description: |
+    Atomic template for cross-language duplicate detection using semantic hashing.
+    Identifies similar code blocks, functions, classes, and content sections
+    that violate CORE-035 (single canonical implementation).
+  
+  tags:
+    - primitive
+    - validation
+    - duplicate
+    - semantic-hash
+    - core-035
+  
+  governance_rule: 'CORE-035: Single Canonical Implementation'
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'EnforcementOrchestrator'
+      purpose: 'CORE-035 enforcement'
+      required: true
+  
+  mcp_tools:
+    - name: 'cortex_validate_compliance'
+      purpose: 'Governance rule checking'
+      required: true
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'target_files'
+      type: 'List[Path]'
+      description: 'Files to scan for duplicates'
+  
+  optional:
+    - name: 'similarity_threshold'
+      type: 'float'
+      description: 'Minimum similarity score to flag as duplicate (0.0-1.0)'
+      default: 0.85
+    
+    - name: 'min_lines'
+      type: 'int'
+      description: 'Minimum lines for a block to be considered'
+      default: 5
+    
+    - name: 'detection_scope'
+      type: 'str'
+      description: 'What to detect (functions|classes|blocks|all)'
+      default: 'all'
+      enum: ['functions', 'classes', 'blocks', 'all']
+    
+    - name: 'cross_file'
+      type: 'bool'
+      description: 'Detect duplicates across files (not just within)'
+      default: true
+
+# ============================================================================
+# EXECUTION
+# ============================================================================
+execution:
+  steps:
+    - step_id: 'EXTRACT_BLOCKS'
+      name: 'Extract code blocks for comparison'
+      action: |
+        Based on detection_scope:
+          - functions: Extract function/method bodies
+          - classes: Extract class definitions
+          - blocks: Extract any contiguous code blocks ≥ min_lines
+          - all: All of the above
+        
+        For each block, record:
+          - File path
+          - Line range (start, end)
+          - Block type (function/class/block)
+          - Normalized content (whitespace-agnostic)
+      outputs:
+        - 'extracted_blocks.json'
+    
+    - step_id: 'COMPUTE_HASHES'
+      name: 'Generate semantic hashes'
+      action: |
+        For each extracted block:
+          1. Normalize: remove comments, standardize whitespace
+          2. Tokenize: split into language-aware tokens
+          3. Compute hash: SimHash or MinHash for similarity
+          4. Store hash with metadata
+      outputs:
+        - 'block_hashes.json'
+    
+    - step_id: 'COMPARE_PAIRS'
+      name: 'Compare all block pairs'
+      action: |
+        For all pairs (optimized with LSH for large sets):
+          1. Compute similarity score
+          2. If score ≥ threshold, record as duplicate pair
+          3. Track bidirectional relationship
+        
+        Apply cross_file filter if configured.
+      outputs:
+        - 'duplicate_pairs.json'
+    
+    - step_id: 'CLUSTER_DUPLICATES'
+      name: 'Cluster related duplicates'
+      action: |
+        Group duplicate pairs into clusters:
+          - A ≈ B, B ≈ C → cluster {A, B, C}
+          - Select canonical (largest/most complete) per cluster
+          - Calculate consolidation impact (lines saved)
+      outputs:
+        - 'duplicate_clusters.json'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'duplicate_report'
+      path: '{{output_dir}}/duplicate_report.json'
+      schema: |
+        {
+          "total_duplicates": "int",
+          "clusters": [{
+            "cluster_id": "int",
+            "canonical": {"file": "string", "line_start": "int", "line_end": "int"},
+            "duplicates": [{"file": "string", "line_start": "int", "similarity": "float"}],
+            "lines_saved_if_consolidated": "int"
+          }],
+          "total_lines_recoverable": "int"
+        }
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - 'All files scanned without errors'
+  - 'Zero duplicates with similarity ≥ threshold (for pass)'
+  - 'All duplicates have consolidation recommendation'
+
+# ============================================================================
+# GOVERNANCE
+# ============================================================================
+governance:
+  rules_enforced:
+    - rule_id: 'CORE-035'
+      name: 'Single Canonical Implementation'
+      description: 'No duplicate implementations allowed'
+      severity: 'error'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:DUPLICATE_DETECTION'
+    complete: 'AC_COMPLETE:DUPLICATE_DETECTION'
+    failure: 'AC_FAILURE:DUPLICATE_DETECTION'
+  
+  log_fields:
+    - 'files_scanned'
+    - 'blocks_extracted'
+    - 'duplicate_pairs_found'
+    - 'clusters_formed'
+    - 'lines_recoverable'

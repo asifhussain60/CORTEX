@@ -1,0 +1,187 @@
+# ============================================================================
+# PRIMITIVE: LENS Vision Scan
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable)
+# Purpose: Vision API screenshot analysis for visual regression and UI mapping
+# Reused by: html-refactor, css-extraction, frontend-tdd
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/analysis/lens-vision-scan'
+name: 'LENS Vision Scan Primitive'
+tier: 'primitive'
+category: 'analysis'
+status: 'active'
+
+metadata:
+  description: |
+    Atomic template for screenshot-driven analysis via Vision API.
+    Captures baseline screenshots, extracts UI elements, maps to cortex-ids,
+    and enables visual regression detection.
+  
+  tags:
+    - primitive
+    - analysis
+    - vision-api
+    - screenshot
+    - visual-regression
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'LENSOrchestrator'
+      purpose: 'Vision API coordination'
+      required: true
+  
+  mcp_tools:
+    - name: 'cortex_vision_analyze'
+      purpose: 'Screenshot analysis and element extraction'
+      required: true
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'target_url'
+      type: 'str'
+      description: 'URL or file path to capture screenshot from'
+    
+    - name: 'analysis_mode'
+      type: 'str'
+      description: 'Analysis depth (quick|standard|atomic)'
+      enum: ['quick', 'standard', 'atomic']
+      default: 'standard'
+  
+  optional:
+    - name: 'viewport_width'
+      type: 'int'
+      description: 'Browser viewport width in pixels'
+      default: 1920
+    
+    - name: 'viewport_height'
+      type: 'int'
+      description: 'Browser viewport height in pixels'
+      default: 1080
+    
+    - name: 'extract_cortex_ids'
+      type: 'bool'
+      description: 'Map detected elements to cortex-id attributes'
+      default: true
+    
+    - name: 'baseline_screenshot'
+      type: 'Path'
+      description: 'Previous screenshot for regression comparison'
+      default: null
+
+# ============================================================================
+# EXECUTION
+# ============================================================================
+execution:
+  steps:
+    - step_id: 'CAPTURE_SCREENSHOT'
+      name: 'Capture current state screenshot'
+      action: |
+        1. Open target_url in headless browser (Playwright/Puppeteer)
+        2. Set viewport to viewport_width x viewport_height
+        3. Wait for page load (networkidle)
+        4. Capture full-page screenshot as PNG
+      outputs:
+        - 'current_screenshot.png'
+    
+    - step_id: 'VISION_ANALYSIS'
+      name: 'Analyze screenshot via Vision API'
+      action: |
+        Invoke cortex_vision_analyze with:
+          - image: current_screenshot.png
+          - mode: {{analysis_mode}}
+          - extract_elements: true
+          - extract_text: true
+        
+        Returns:
+          - Bounding boxes for all UI elements
+          - Text content and positions
+          - Element hierarchy
+      outputs:
+        - 'visual_analysis.json'
+        - 'bounding_boxes.json'
+    
+    - step_id: 'CORTEX_ID_MAPPING'
+      name: 'Map elements to cortex-id attributes'
+      condition: '{{extract_cortex_ids}} == true'
+      action: |
+        For each detected element:
+          1. Query DOM for element at bounding box coordinates
+          2. Extract data-cortex-id attribute if present
+          3. Build element → cortex-id mapping
+      outputs:
+        - 'cortex_id_mapping.json'
+    
+    - step_id: 'REGRESSION_COMPARISON'
+      name: 'Compare against baseline screenshot'
+      condition: '{{baseline_screenshot}} != null'
+      action: |
+        1. Load baseline_screenshot
+        2. Pixel-diff against current_screenshot
+        3. Calculate diff percentage
+        4. Highlight changed regions
+        5. Flag if diff > 10% of viewport
+      outputs:
+        - 'regression_diff.png'
+        - 'regression_report.json'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'visual_analysis'
+      path: '{{output_dir}}/visual_analysis.json'
+      schema: |
+        {
+          "elements": [{
+            "type": "string",
+            "bounding_box": {"x": "int", "y": "int", "width": "int", "height": "int"},
+            "text": "string",
+            "confidence": "float"
+          }],
+          "hierarchy": {...}
+        }
+  
+  optional:
+    - name: 'cortex_id_mapping'
+      path: '{{output_dir}}/cortex_id_mapping.json'
+      condition: '{{extract_cortex_ids}} == true'
+    
+    - name: 'regression_report'
+      path: '{{output_dir}}/regression_report.json'
+      condition: '{{baseline_screenshot}} != null'
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - 'Screenshot captured within 30 seconds'
+  - 'Vision API returns elements with confidence ≥ 0.8'
+  - 'Regression diff < 10% (if baseline provided)'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:LENS_VISION_SCAN'
+    complete: 'AC_COMPLETE:LENS_VISION_SCAN'
+    failure: 'AC_FAILURE:LENS_VISION_SCAN'
+  
+  log_fields:
+    - 'screenshot_path'
+    - 'elements_detected'
+    - 'cortex_ids_mapped'
+    - 'regression_diff_pct'

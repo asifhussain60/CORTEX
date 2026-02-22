@@ -1,0 +1,246 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# C# SOLID Refactoring Workflow
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: 5-stage pipeline for C# refactoring: God class decomposition (SMELL-3),
+#          DI wiring (SMELL-17), service extraction, circular dependency resolution (SMELL-5).
+# Authority: ADR-001 (Clean Architecture), ADR-009 (3-Layer Architecture)
+# Source: BadMonolith analysis + chat01.md digest
+# Smells Addressed: SMELL-3, SMELL-4, SMELL-5, SMELL-17 (BadMonolith)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: backend/csharp-refactor-workflow
+name: C# SOLID Refactoring Workflow
+category: backend
+version: 1.0.0
+priority: P1
+
+metadata:
+  author: CORTEX
+  created: '2026-02-22'
+  updated: '2026-02-22'
+  source: BadMonolith-analysis
+  smells_addressed: [SMELL-3, SMELL-4, SMELL-5, SMELL-17]
+  technologies: [csharp, dotnet]
+  rollback_on_failure: true
+  vision_api_integration: false
+  golden_test_required: true
+
+# ── PLACEHOLDERS ────────────────────────────────────────────────────────────────
+placeholders:
+  target_project: "{{csproj_path}}"
+  source_files: "{{cs_files_glob}}"
+  output_project_structure: "{{clean_architecture_output}}"
+  max_class_lines: 500
+  max_method_lines: 50
+  max_dependencies_per_class: 7
+
+# ── GATES ───────────────────────────────────────────────────────────────────────
+gates:
+  no_god_classes:
+    description: "No class exceeds 500 lines or 7 dependencies"
+    validation: "max_class_lines < 500 AND max_dependencies < 7"
+    blocking: true
+    
+  no_circular_dependencies:
+    description: "Dependency graph is acyclic"
+    validation: "circular_dependency_count == 0"
+    blocking: true
+    
+  di_wiring_complete:
+    description: "All services registered in DI container"
+    validation: "unregistered_services == 0"
+    blocking: true
+    
+  tests_passing:
+    description: "All unit tests pass after refactoring"
+    validation: "test_failures == 0"
+    blocking: true
+    
+  solid_compliance:
+    description: "No SOLID violations detected"
+    validation: "solid_violations == 0"
+    blocking: false  # Advisory — log warnings
+
+# ── STEPS ───────────────────────────────────────────────────────────────────────
+steps:
+  # Step 1: LENS Analysis (Roslyn AST)
+  - id: S1_LENS_ANALYSIS
+    name: Roslyn AST Scan
+    action: semantic_analyze
+    description: |
+      Analyze C# source via Roslyn AST:
+      - Class/method counts and line lengths
+      - Dependency graph (constructor injection analysis)
+      - Interface extraction candidates
+    parameters:
+      project: "{{target_project}}"
+      files: "{{source_files}}"
+      analyzer: roslyn
+      metrics:
+        - class_count
+        - method_count
+        - class_lines
+        - method_lines
+        - dependency_graph
+        - interface_count
+    gate: null
+    outputs:
+      - ast_analysis
+      - dependency_graph
+      - complexity_metrics
+      - god_class_candidates
+      
+  # Step 2: SOLID Violation Detection
+  - id: S2_SOLID_DETECTION
+    name: SOLID Violation Detection
+    action: semantic_analyze
+    description: |
+      Detect SOLID principle violations:
+      - SRP: Classes with >3 responsibilities
+      - OCP: Classes modified for every new feature
+      - LSP: Subclasses violating base contracts
+      - ISP: Fat interfaces (>7 methods)
+      - DIP: Direct instantiation instead of injection
+    parameters:
+      ast_analysis: "{{ast_analysis}}"
+      rules:
+        srp_max_responsibilities: 3
+        isp_max_methods: 7
+        dip_check_new_keyword: true
+    gate: solid_compliance
+    outputs:
+      - srp_violations
+      - ocp_violations
+      - lsp_violations
+      - isp_violations
+      - dip_violations
+      
+  # Step 3: Service Extraction Plan
+  - id: S3_SERVICE_EXTRACTION
+    name: Generate Service Extraction Plan
+    action: refactor
+    description: |
+      Identify extractable services from God classes:
+      - Group related methods by domain
+      - Generate interface definitions
+      - Create service class stubs
+    parameters:
+      god_classes: "{{god_class_candidates}}"
+      extraction_strategy: domain_grouping
+      output_structure: clean_architecture
+      projects:
+        - Domain
+        - Application
+        - Infrastructure
+        - Api
+    gate: null
+    outputs:
+      - extraction_plan
+      - interface_definitions
+      - service_stubs
+      
+  # Step 4: DI Wiring Validation
+  - id: S4_DI_WIRING
+    name: Dependency Injection Wiring
+    action: semantic_analyze
+    description: |
+      Verify all services are registered in DI container:
+      - Scan Program.cs / Startup.cs for AddScoped/AddTransient/AddSingleton
+      - Match registrations to interface definitions
+      - Generate missing registrations
+    parameters:
+      project: "{{target_project}}"
+      service_interfaces: "{{interface_definitions}}"
+      di_scan_patterns:
+        - "builder.Services.Add*"
+        - "services.Add*"
+        - "ConfigureServices"
+    gate: di_wiring_complete
+    outputs:
+      - registered_services
+      - unregistered_services
+      - di_registration_code
+      
+  # Step 5: Circular Dependency Resolution
+  - id: S5_CIRCULAR_DEPS
+    name: Circular Dependency Resolution
+    action: refactor
+    description: |
+      Detect and resolve circular dependencies:
+      - Build dependency graph from constructor injections
+      - Identify cycles using Tarjan's algorithm
+      - Suggest: interface extraction, mediator pattern, event-driven
+    parameters:
+      dependency_graph: "{{dependency_graph}}"
+      resolution_strategies:
+        - interface_extraction
+        - mediator_pattern
+        - event_driven_decoupling
+    gate: no_circular_dependencies
+    outputs:
+      - cycles_detected
+      - resolution_plan
+      - interfaces_to_extract
+      
+  # Step 6: Execute Refactoring
+  - id: S6_EXECUTE_REFACTOR
+    name: Execute Refactoring Plan
+    action: refactor
+    description: |
+      Apply refactoring transformations:
+      - Extract interfaces
+      - Move methods to new services
+      - Update DI registrations
+      - Update caller references
+    parameters:
+      extraction_plan: "{{extraction_plan}}"
+      di_registrations: "{{di_registration_code}}"
+      resolution_plan: "{{resolution_plan}}"
+      dry_run: false
+    gate: null
+    rollback: true
+    
+  # Step 7: Regression Test
+  - id: S7_REGRESSION_TEST
+    name: Run dotnet test
+    action: run_tests
+    description: |
+      Run full test suite after refactoring.
+      Must have zero failures to pass gate.
+    parameters:
+      project: "{{target_project}}"
+      command: "dotnet test --no-build"
+      coverage: true
+      coverage_threshold: 80
+    gate: tests_passing
+    rollback: true
+
+# ── CONVERGENCE CRITERIA ────────────────────────────────────────────────────────
+convergence:
+  max_cycles: 5
+  success_criteria:
+    god_classes: 0
+    circular_dependencies: 0
+    unregistered_services: 0
+    test_failures: 0
+  convergence_predicate: |
+    god_classes == 0 AND
+    circular_dependencies == 0 AND
+    test_failures == 0
+
+# ── AUDIT TRACE ─────────────────────────────────────────────────────────────────
+audit:
+  log_level: INFO
+  trace_fields:
+    - timestamp
+    - step_id
+    - classes_analyzed
+    - services_extracted
+    - di_registrations_added
+    - tests_passed
+  acceptance_criteria:
+    - 'AC-CSHARP-001: No class exceeds 500 lines'
+    - 'AC-CSHARP-002: No method exceeds 50 lines'
+    - 'AC-CSHARP-003: Zero circular dependencies'
+    - 'AC-CSHARP-004: All services registered in DI container'
+    - 'AC-CSHARP-005: All tests passing after refactoring'

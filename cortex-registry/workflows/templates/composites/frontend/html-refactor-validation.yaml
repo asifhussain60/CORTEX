@@ -1,0 +1,349 @@
+# ============================================================================
+# COMPOSITE: HTML Refactor Validation
+# ============================================================================
+# Tier: 2 (Composite — combines primitives)
+# Purpose: HTML refactoring with DOM validation, duplicate prevention, Vision API
+# Imports: dom-validation, css-zero-inline, semantic-edit, lens-vision-scan, audit-trace
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'composites/frontend/html-refactor-validation'
+name: 'HTML Refactoring with DOM Validation Gates'
+tier: 'composite'
+category: 'frontend'
+status: 'active'
+
+metadata:
+  description: |
+    Composite workflow for HTML refactoring that prevents the duplicate section
+    issue identified in chat01.md. Combines DOM validation, CSS zero-inline
+    enforcement, semantic editing, and Vision API regression testing.
+  
+  tags:
+    - composite
+    - frontend
+    - html
+    - refactoring
+    - vision-api
+  
+  root_cause_addressed: 'chat01.md — HTML refactoring creates duplicate sections'
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# IMPORTS — Primitive Templates
+# ============================================================================
+imports:
+  - template_id: 'primitives/validation/dom-validation'
+    alias: 'dom'
+    required: true
+  
+  - template_id: 'primitives/validation/css-zero-inline'
+    alias: 'css'
+    required: true
+  
+  - template_id: 'primitives/validation/duplicate-detection'
+    alias: 'dupe'
+    required: true
+  
+  - template_id: 'primitives/execution/semantic-edit'
+    alias: 'edit'
+    required: true
+  
+  - template_id: 'primitives/analysis/lens-vision-scan'
+    alias: 'vision'
+    required: false
+  
+  - template_id: 'primitives/execution/audit-trace'
+    alias: 'audit'
+    required: true
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'RefactoringOrchestrator'
+      purpose: 'Coordinates refactoring operations'
+      required: true
+    
+    - name: 'EnforcementOrchestrator'
+      purpose: 'Validates CORE rules'
+      required: true
+    
+    - name: 'LENSOrchestrator'
+      purpose: 'Vision API analysis'
+      required: false
+  
+  mcp_tools:
+    - name: 'cortex_vision_analyze'
+      purpose: 'Screenshot analysis for visual regression'
+      required: false
+    
+    - name: 'cortex_validate_compliance'
+      purpose: 'CORE rule validation'
+      required: true
+    
+    - name: 'cortex_refactor'
+      purpose: 'Semantic refactoring operations'
+      required: true
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'html_file'
+      type: 'Path'
+      description: 'HTML file to refactor'
+  
+  optional:
+    - name: 'enable_vision_regression'
+      type: 'bool'
+      description: 'Enable Vision API visual regression testing'
+      default: true
+    
+    - name: 'enforce_zero_inline_css'
+      type: 'bool'
+      description: 'Enforce zero inline CSS rule'
+      default: true
+    
+    - name: 'duplicate_threshold'
+      type: 'float'
+      description: 'Similarity threshold for duplicate section detection'
+      default: 0.85
+    
+    - name: 'auto_extract_styles'
+      type: 'bool'
+      description: 'Automatically extract inline styles to CSS file'
+      default: true
+    
+    - name: 'css_output_file'
+      type: 'Path'
+      description: 'Target file for extracted CSS'
+      default: null
+
+# ============================================================================
+# WORKFLOW STAGES
+# ============================================================================
+stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: Pre-Flight Validation
+  # --------------------------------------------------------------------------
+  - stage_id: 'S1_PREFLIGHT'
+    name: 'Pre-Flight DOM & CSS Validation'
+    description: 'Validate HTML structure and CSS compliance before any edits'
+    
+    invoke:
+      - primitive: 'audit'
+        action: 'on_start'
+        params:
+          workflow_name: 'html-refactor-validation'
+      
+      - primitive: 'dom'
+        params:
+          html_file: '{{html_file}}'
+          check_duplicate_ids: true
+          check_unclosed_tags: true
+          duplicate_section_threshold: '{{duplicate_threshold}}'
+      
+      - primitive: 'css'
+        condition: '{{enforce_zero_inline_css}} == true'
+        params:
+          target_files: ['{{html_file}}']
+          severity: 'blocked'
+          auto_extract: '{{auto_extract_styles}}'
+          extract_target: '{{css_output_file}}'
+    
+    success_criteria:
+      - 'DOM validation passes'
+      - 'Zero duplicate sections detected'
+      - 'CSS zero-inline rule satisfied (or auto-extracted)'
+    
+    on_failure: 'abort_workflow'
+
+  # --------------------------------------------------------------------------
+  # STAGE 2: Baseline Screenshot (Optional)
+  # --------------------------------------------------------------------------
+  - stage_id: 'S2_BASELINE'
+    name: 'Capture Baseline Screenshot'
+    description: 'Capture pre-edit screenshot for visual regression comparison'
+    condition: '{{enable_vision_regression}} == true'
+    
+    invoke:
+      - primitive: 'vision'
+        params:
+          target_url: 'file://{{html_file}}'
+          analysis_mode: 'standard'
+          extract_cortex_ids: true
+    
+    outputs:
+      - 'baseline_screenshot.png'
+      - 'baseline_analysis.json'
+    
+    success_criteria:
+      - 'Screenshot captured successfully'
+      - 'Element mapping extracted'
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: Semantic Edit Execution
+  # --------------------------------------------------------------------------
+  - stage_id: 'S3_EDIT'
+    name: 'Execute Semantic Edits'
+    description: 'Apply DOM-aware edits using CSS selectors (not line-based)'
+    
+    invoke:
+      - primitive: 'edit'
+        params:
+          target_file: '{{html_file}}'
+          selector: '{{edit_selector}}'
+          operation: '{{edit_operation}}'
+          new_content: '{{edit_content}}'
+          create_backup: true
+    
+    success_criteria:
+      - 'Edit applied successfully'
+      - 'Post-edit DOM validation passes'
+    
+    on_failure: 'rollback'
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: Post-Edit Validation
+  # --------------------------------------------------------------------------
+  - stage_id: 'S4_VALIDATE'
+    name: 'Post-Edit DOM Validation'
+    description: 'Re-validate DOM structure after edits'
+    
+    invoke:
+      - primitive: 'dom'
+        params:
+          html_file: '{{html_file}}'
+          check_duplicate_ids: true
+          check_unclosed_tags: true
+          duplicate_section_threshold: '{{duplicate_threshold}}'
+      
+      - primitive: 'dupe'
+        params:
+          target_files: ['{{html_file}}']
+          similarity_threshold: '{{duplicate_threshold}}'
+          detection_scope: 'blocks'
+    
+    success_criteria:
+      - 'No new duplicate sections introduced'
+      - 'DOM structure intact'
+      - 'No unclosed tags'
+    
+    on_failure: 'rollback'
+
+  # --------------------------------------------------------------------------
+  # STAGE 5: Visual Regression Check (Optional)
+  # --------------------------------------------------------------------------
+  - stage_id: 'S5_REGRESSION'
+    name: 'Visual Regression Check'
+    description: 'Compare post-edit screenshot against baseline'
+    condition: '{{enable_vision_regression}} == true'
+    
+    invoke:
+      - primitive: 'vision'
+        params:
+          target_url: 'file://{{html_file}}'
+          analysis_mode: 'standard'
+          baseline_screenshot: '{{output_dir}}/baseline_screenshot.png'
+    
+    success_criteria:
+      - 'Visual diff < 10% of viewport'
+      - 'No critical layout shifts detected'
+    
+    on_failure: 'warn_and_continue'
+
+  # --------------------------------------------------------------------------
+  # STAGE 6: Finalize
+  # --------------------------------------------------------------------------
+  - stage_id: 'S6_FINALIZE'
+    name: 'Finalize and Audit'
+    description: 'Complete workflow, emit audit markers'
+    
+    invoke:
+      - primitive: 'audit'
+        action: 'on_complete'
+    
+    cleanup:
+      - 'Remove backup files if success'
+      - 'Archive regression screenshots'
+
+# ============================================================================
+# ROLLBACK STRATEGY
+# ============================================================================
+rollback:
+  trigger: 'any_stage_failure'
+  actions:
+    - 'Restore from backup file'
+    - 'Emit AC_ROLLBACK marker'
+    - 'Log failure reason to audit.db'
+  
+  preserve:
+    - 'Backup files for debugging'
+    - 'Pre-failure screenshots'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'refactor_report'
+      path: '{{output_dir}}/html_refactor_report.json'
+      schema: |
+        {
+          "file": "string",
+          "stages_executed": "int",
+          "edits_applied": "int",
+          "duplicate_sections_before": "int",
+          "duplicate_sections_after": "int",
+          "css_violations_found": "int",
+          "css_violations_fixed": "int",
+          "visual_regression_pct": "float",
+          "status": "success|failed|rolled_back"
+        }
+
+# ============================================================================
+# GOLDEN TESTS
+# ============================================================================
+golden_tests:
+  test_file: 'tests/golden/test_html_refactor_validation_truth.py'
+  test_count: 15
+  acceptance_criteria:
+    - 'AC-HR-001: DOM validation primitive invoked at S1 and S4'
+    - 'AC-HR-002: CSS zero-inline primitive invoked when enforce_zero_inline_css=true'
+    - 'AC-HR-003: Duplicate detection blocks if similarity > threshold'
+    - 'AC-HR-004: Semantic edit uses CSS selector, not line number'
+    - 'AC-HR-005: Vision API captures baseline before edit'
+    - 'AC-HR-006: Visual regression comparison occurs at S5'
+    - 'AC-HR-007: Rollback restores backup on failure'
+    - 'AC-HR-008: AC_START marker emitted at workflow start'
+    - 'AC-HR-009: AC_COMPLETE marker emitted on success'
+    - 'AC-HR-010: AC_FAILURE marker emitted on error'
+    - 'AC-HR-011: AC_ROLLBACK marker emitted on rollback'
+    - 'AC-HR-012: Audit session persisted to .cortex-runtime/audit.db'
+    - 'AC-HR-013: Zero duplicate sections after successful refactor'
+    - 'AC-HR-014: Zero inline CSS after successful refactor'
+    - 'AC-HR-015: All stages logged with duration'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:HTML_REFACTOR_VALIDATION'
+    complete: 'AC_COMPLETE:HTML_REFACTOR_VALIDATION'
+    failure: 'AC_FAILURE:HTML_REFACTOR_VALIDATION'
+    rollback: 'AC_ROLLBACK:HTML_REFACTOR_VALIDATION'
+  
+  log_fields:
+    - 'html_file'
+    - 'edits_applied'
+    - 'duplicate_sections'
+    - 'css_violations'
+    - 'visual_regression_pct'
+    - 'duration_ms'

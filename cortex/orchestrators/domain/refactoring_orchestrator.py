@@ -668,6 +668,153 @@ class RefactoringOrchestrator:
         )
 
     # ------------------------------------------------------------------
+    # ENH-STS-05 — DI Lifetime Consistency Gate
+    # ------------------------------------------------------------------
+
+    # Regex: AddSingleton<*Repository*> — captive dependency when services are Scoped
+    _SINGLETON_REPO_PATTERN = (
+        r"AddSingleton\s*<\s*\w*Repository\w*\s*(?:,\s*\w+)?\s*>\s*\("
+    )
+
+    def check_di_lifetime_consistency(
+        self,
+        source_code: str,
+    ) -> Union[Ok[Dict[str, Any]], Err]:
+        """Detect captive dependency: Singleton repository registered alongside Scoped services.
+
+        Implements ENH-STS-05: in ASP.NET Core DI, a Singleton service that depends on
+        a Scoped service causes the Scoped object to be held for the application lifetime,
+        leaking state between requests. The pattern ``AddSingleton<IXxxRepository>`` is
+        always a violation when any service is ``AddScoped``.
+
+        Acceptable lifetimes for repositories: ``AddScoped`` or ``AddTransient``.
+
+        Args:
+            source_code: Raw C# source text (typically Program.cs / Startup.cs).
+
+        Returns:
+            Ok with report: {clean, violations, violation_count}
+            Err on unexpected failure.
+        """
+        import re as _re
+
+        try:
+            violations: List[Dict[str, Any]] = []
+
+            for match in _re.finditer(self._SINGLETON_REPO_PATTERN, source_code):
+                violations.append(
+                    {
+                        "rule": "singleton_repository",
+                        "severity": "P1",
+                        "description": (
+                            "Repository registered as Singleton — captive dependency when "
+                            "services are Scoped. Use AddScoped or AddTransient instead."
+                        ),
+                        "match": match.group(0)[:120],
+                    }
+                )
+
+            clean = len(violations) == 0
+            if violations:
+                logger.warning(
+                    f"DI lifetime consistency: {len(violations)} Singleton repository "
+                    f"registration(s) detected. Remediation: use AddScoped."
+                )
+
+            return Ok(
+                {
+                    "clean": clean,
+                    "violations": violations,
+                    "violation_count": len(violations),
+                }
+            )
+        except Exception as exc:
+            logger.error(f"check_di_lifetime_consistency failed: {exc}")
+            return Err(str(exc))
+
+    # ------------------------------------------------------------------
+    # ENH-STS-07 — Health Endpoint Realness Gate
+    # ------------------------------------------------------------------
+
+    # Regex: MapGet("/health" …) or MapGet("/api/health" …) followed by a lambda
+    # that immediately returns a hardcoded object without an async DB call.
+    _HEALTH_ROUTE_PATTERN = r'MapGet\s*\(\s*"[^"]*health[^"]*"\s*,'
+    _ASYNC_DB_PROBE_PATTERN = r"(?:await|async)[\s\S]{0,400}(?:SELECT\s+1|ExecuteScalar|OpenAsync|ExecuteAsync)"
+    _HARDCODED_HEALTHY_PATTERN = r'"healthy"'
+
+    def check_health_endpoint_realness(
+        self,
+        source_code: str,
+    ) -> Union[Ok[Dict[str, Any]], Err]:
+        """Verify health endpoints perform a live dependency probe, not a hardcoded stub.
+
+        Implements ENH-STS-07: health endpoints that always return ``{status:"healthy"}``
+        regardless of actual system state are functionally identical to the BadMonolith
+        original — they provide false confidence to orchestrators and load balancers.
+
+        A real health endpoint must:
+        1. Attempt a database call (``SELECT 1``, ``OpenAsync``, ``ExecuteScalarAsync``).
+        2. Return a 503 status on failure (not always 200).
+
+        Args:
+            source_code: Raw C# (or TypeScript) source text containing health endpoint.
+
+        Returns:
+            Ok with report: {clean, violations, violation_count}
+            Err on unexpected failure.
+        """
+        import re as _re
+
+        try:
+            violations: List[Dict[str, Any]] = []
+
+            # Only check files that contain a health endpoint mapping
+            if not _re.search(self._HEALTH_ROUTE_PATTERN, source_code, _re.IGNORECASE):
+                # No health endpoint in this file — gate is inapplicable
+                return Ok({"clean": True, "violations": [], "violation_count": 0})
+
+            # File has a health endpoint: check whether it performs a real DB probe
+            has_async_db_probe = bool(
+                _re.search(self._ASYNC_DB_PROBE_PATTERN, source_code, _re.DOTALL | _re.IGNORECASE)
+            )
+            has_hardcoded_healthy = bool(
+                _re.search(self._HARDCODED_HEALTHY_PATTERN, source_code)
+            )
+
+            if has_hardcoded_healthy and not has_async_db_probe:
+                violations.append(
+                    {
+                        "rule": "hardcoded_health_status",
+                        "severity": "P1",
+                        "description": (
+                            "Health endpoint returns a hardcoded 'healthy' status without "
+                            "performing a live dependency probe (SELECT 1 / OpenAsync). "
+                            "This is functionally identical to the original monolith. "
+                            "Add a real DB reachability check and return 503 on failure."
+                        ),
+                        "match": 'MapGet("/health", ...) → hardcoded "healthy" without DB probe',
+                    }
+                )
+
+            clean = len(violations) == 0
+            if violations:
+                logger.warning(
+                    "Health endpoint realness gate: hardcoded 'healthy' response detected "
+                    "without async DB probe. Remediation: add SELECT 1 + 503 on failure."
+                )
+
+            return Ok(
+                {
+                    "clean": clean,
+                    "violations": violations,
+                    "violation_count": len(violations),
+                }
+            )
+        except Exception as exc:
+            logger.error(f"check_health_endpoint_realness failed: {exc}")
+            return Err(str(exc))
+
+    # ------------------------------------------------------------------
     # Health Check (IOrchestrator protocol)
     # ------------------------------------------------------------------
 

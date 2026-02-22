@@ -1,0 +1,270 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# C# Security Hardening Workflow
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: P0 security fixes: SQL injection (SMELL-1 → parameterized queries),
+#          hardcoded secrets (SMELL-2 → environment variables), CORS (SMELL-13 → allowlist),
+#          stack trace exposure (SMELL-18 → ProblemDetails middleware).
+# Authority: CORE-035, ADR-009 (3-Layer Architecture)
+# Source: BadMonolith analysis — P0 security smells
+# Smells Addressed: SMELL-1, SMELL-2, SMELL-13, SMELL-18 (BadMonolith)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: backend/csharp-security-workflow
+name: C# Security Hardening Workflow
+category: backend
+version: 1.0.0
+priority: P0  # Security fixes are always P0
+
+metadata:
+  author: CORTEX
+  created: '2026-02-22'
+  updated: '2026-02-22'
+  source: BadMonolith-analysis
+  smells_addressed: [SMELL-1, SMELL-2, SMELL-13, SMELL-18]
+  technologies: [csharp, dotnet]
+  rollback_on_failure: true
+  vision_api_integration: false
+  golden_test_required: true
+  blocking_deployment: true
+
+# ── PLACEHOLDERS ────────────────────────────────────────────────────────────────
+placeholders:
+  target_project: "{{csproj_path}}"
+  source_files: "{{cs_files_glob}}"
+  config_files: "{{config_files_glob}}"
+  allowed_origins: "{{cors_allowed_origins}}"
+  secret_patterns:
+    - "password"
+    - "secret"
+    - "apikey"
+    - "connectionstring"
+    - "token"
+
+# ── GATES ───────────────────────────────────────────────────────────────────────
+gates:
+  no_sql_injection:
+    description: "No string concatenation in SQL queries"
+    validation: "sql_injection_count == 0"
+    blocking: true
+    
+  no_hardcoded_secrets:
+    description: "No secrets in source code or config files"
+    validation: "hardcoded_secret_count == 0"
+    blocking: true
+    
+  cors_restricted:
+    description: "No AllowAnyOrigin() — must use allowlist"
+    validation: "allow_any_origin_count == 0"
+    blocking: true
+    
+  no_stack_trace_exposure:
+    description: "Production errors use ProblemDetails, no stack traces"
+    validation: "stack_trace_exposure_count == 0"
+    blocking: true
+    
+  tests_passing:
+    description: "All security tests pass"
+    validation: "test_failures == 0"
+    blocking: true
+
+# ── STEPS ───────────────────────────────────────────────────────────────────────
+steps:
+  # Step 1: Secret Scan
+  - id: S1_SECRET_SCAN
+    name: Scan for Hardcoded Secrets
+    action: security_scan
+    description: |
+      Detect hardcoded credentials, API keys, connection strings.
+      Scan: source files (.cs), config files (appsettings.json, .env).
+      Patterns: password, secret, apikey, connectionstring, token.
+    parameters:
+      files: "{{source_files}}"
+      config_files: "{{config_files}}"
+      patterns: "{{secret_patterns}}"
+      scan_mode: deep
+      ignore_patterns:
+        - "// DEMO:"
+        - "// TEST:"
+    gate: null  # Scan only — gate applied after fix
+    outputs:
+      - hardcoded_secrets
+      - hardcoded_secret_count
+      - secret_locations
+      
+  # Step 2: SQL Injection Scan
+  - id: S2_SQL_INJECTION_SCAN
+    name: Detect SQL Injection Vulnerabilities
+    action: security_scan
+    description: |
+      Identify string concatenation in SQL queries:
+      - $"SELECT * FROM Users WHERE id = {userId}"
+      - "SELECT * FROM Users WHERE id = " + userId
+      Recommend: parameterized queries, Entity Framework.
+    parameters:
+      files: "{{source_files}}"
+      patterns:
+        - '$".*SELECT.*{.*}"'
+        - '".*SELECT.*" \+ '
+        - 'ExecuteSqlRaw\s*\(\s*\$"'
+        - 'FromSqlRaw\s*\(\s*\$"'
+    gate: null
+    outputs:
+      - sql_injection_locations
+      - sql_injection_count
+      - remediation_suggestions
+      
+  # Step 3: CORS Audit
+  - id: S3_CORS_AUDIT
+    name: Audit CORS Configuration
+    action: security_scan
+    description: |
+      Flag AllowAnyOrigin(), AllowAnyHeader(), AllowAnyMethod().
+      Recommend: explicit origin allowlist for production.
+    parameters:
+      files: "{{source_files}}"
+      patterns:
+        - "AllowAnyOrigin()"
+        - "AllowAnyHeader()"
+        - "AllowAnyMethod()"
+        - "SetIsOriginAllowed(_ => true)"
+    gate: null
+    outputs:
+      - cors_violations
+      - allow_any_origin_count
+      - cors_locations
+      
+  # Step 4: Exception Handling Audit
+  - id: S4_EXCEPTION_AUDIT
+    name: Detect Stack Trace Exposure
+    action: security_scan
+    description: |
+      Find patterns that expose stack traces in production:
+      - ex.ToString() in response
+      - ex.StackTrace in JSON
+      - app.UseDeveloperExceptionPage() without env check
+    parameters:
+      files: "{{source_files}}"
+      patterns:
+        - 'ex\.ToString\(\)'
+        - 'ex\.StackTrace'
+        - 'UseDeveloperExceptionPage\(\)'
+        - 'Exception\.Message.*response'
+    gate: null
+    outputs:
+      - stack_trace_exposures
+      - stack_trace_exposure_count
+      - exception_locations
+      
+  # Step 5: Fix SQL Injection
+  - id: S5_FIX_SQL_INJECTION
+    name: Convert to Parameterized Queries
+    action: refactor
+    description: |
+      Replace string-concatenated SQL with parameterized queries:
+      BEFORE: $"SELECT * FROM Users WHERE id = {userId}"
+      AFTER:  ctx.Users.FromSqlRaw("SELECT * FROM Users WHERE id = @p0", userId)
+    parameters:
+      locations: "{{sql_injection_locations}}"
+      refactor_strategy: parameterized_queries
+      prefer_ef_core: true
+    gate: no_sql_injection
+    rollback: true
+    
+  # Step 6: Fix Hardcoded Secrets
+  - id: S6_FIX_SECRETS
+    name: Move Secrets to Environment Variables
+    action: refactor
+    description: |
+      Replace hardcoded secrets with environment variable references:
+      BEFORE: var password = "MySecretPassword123";
+      AFTER:  var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
+      
+      Update appsettings.json to use ${ENV_VAR} syntax.
+    parameters:
+      locations: "{{secret_locations}}"
+      refactor_strategy: env_variables
+      generate_env_template: true
+    gate: no_hardcoded_secrets
+    rollback: true
+    outputs:
+      - env_template
+      - updated_config
+      
+  # Step 7: Fix CORS
+  - id: S7_FIX_CORS
+    name: Replace AllowAnyOrigin with Allowlist
+    action: refactor
+    description: |
+      Replace wildcard CORS with explicit origin allowlist:
+      BEFORE: builder.Services.AddCors(o => o.AddPolicy("p", p => p.AllowAnyOrigin()));
+      AFTER:  builder.Services.AddCors(o => o.AddPolicy("p", p => p.WithOrigins(allowedOrigins)));
+    parameters:
+      locations: "{{cors_locations}}"
+      allowed_origins: "{{allowed_origins}}"
+      refactor_strategy: explicit_allowlist
+    gate: cors_restricted
+    rollback: true
+    
+  # Step 8: Fix Exception Handling
+  - id: S8_FIX_EXCEPTIONS
+    name: Implement ProblemDetails Middleware
+    action: refactor
+    description: |
+      Replace stack trace exposure with ProblemDetails:
+      - Add UseExceptionHandler with ProblemDetails factory
+      - Wrap DeveloperExceptionPage in IsDevelopment() check
+      - Replace ex.ToString() with structured error response
+    parameters:
+      locations: "{{exception_locations}}"
+      middleware_pattern: problem_details
+      development_check: true
+    gate: no_stack_trace_exposure
+    rollback: true
+    
+  # Step 9: Security Test
+  - id: S9_SECURITY_TEST
+    name: Run Security Tests
+    action: run_tests
+    description: |
+      Run security-focused tests:
+      - SQL injection prevention tests
+      - CORS policy tests
+      - Authentication/authorization tests
+    parameters:
+      project: "{{target_project}}"
+      command: "dotnet test --filter Category=Security"
+      coverage: true
+    gate: tests_passing
+    rollback: true
+
+# ── CONVERGENCE CRITERIA ────────────────────────────────────────────────────────
+convergence:
+  max_cycles: 3
+  success_criteria:
+    sql_injection_count: 0
+    hardcoded_secret_count: 0
+    allow_any_origin_count: 0
+    stack_trace_exposure_count: 0
+    test_failures: 0
+  convergence_predicate: |
+    sql_injection_count == 0 AND
+    hardcoded_secret_count == 0 AND
+    allow_any_origin_count == 0 AND
+    stack_trace_exposure_count == 0
+
+# ── AUDIT TRACE ─────────────────────────────────────────────────────────────────
+audit:
+  log_level: INFO
+  trace_fields:
+    - timestamp
+    - step_id
+    - vulnerability_type
+    - location
+    - remediation_applied
+    - test_result
+  acceptance_criteria:
+    - 'AC-SEC-001: Zero SQL injection vulnerabilities'
+    - 'AC-SEC-002: Zero hardcoded secrets in source or config'
+    - 'AC-SEC-003: CORS restricted to explicit origin allowlist'
+    - 'AC-SEC-004: No stack traces exposed in production errors'
+    - 'AC-SEC-005: All security tests passing'

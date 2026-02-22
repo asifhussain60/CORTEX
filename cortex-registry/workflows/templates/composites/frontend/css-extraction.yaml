@@ -1,0 +1,335 @@
+# ============================================================================
+# COMPOSITE: CSS Extraction Workflow
+# ============================================================================
+# Tier: 2 (Composite — combines primitives)
+# Purpose: Extract inline styles to external CSS files with zero-inline enforcement
+# Imports: css-zero-inline, file-extraction, dom-validation, lens-vision-scan, audit-trace
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'composites/frontend/css-extraction'
+name: 'CSS Extraction with Zero-Inline Enforcement'
+tier: 'composite'
+category: 'frontend'
+status: 'active'
+
+metadata:
+  description: |
+    Composite workflow for extracting all inline CSS to external files.
+    Enforces CORE-074 (Zero Inline CSS) and integrates Vision API for
+    visual regression verification after extraction.
+  
+  tags:
+    - composite
+    - frontend
+    - css
+    - extraction
+    - zero-inline
+  
+  governance_rule: 'CORE-074: Zero Inline CSS'
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# IMPORTS — Primitive Templates
+# ============================================================================
+imports:
+  - template_id: 'primitives/validation/css-zero-inline'
+    alias: 'css'
+    required: true
+  
+  - template_id: 'primitives/validation/dom-validation'
+    alias: 'dom'
+    required: true
+  
+  - template_id: 'primitives/execution/file-extraction'
+    alias: 'extract'
+    required: true
+  
+  - template_id: 'primitives/analysis/lens-vision-scan'
+    alias: 'vision'
+    required: false
+  
+  - template_id: 'primitives/execution/audit-trace'
+    alias: 'audit'
+    required: true
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'RefactoringOrchestrator'
+      purpose: 'File extraction coordination'
+      required: true
+    
+    - name: 'EnforcementOrchestrator'
+      purpose: 'CORE-074 enforcement'
+      required: true
+  
+  mcp_tools:
+    - name: 'cortex_refactor'
+      purpose: 'Semantic refactoring'
+      required: true
+    
+    - name: 'cortex_vision_analyze'
+      purpose: 'Visual regression'
+      required: false
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'source_files'
+      type: 'List[Path]'
+      description: 'HTML files to process'
+    
+    - name: 'css_output_dir'
+      type: 'Path'
+      description: 'Directory for extracted CSS files'
+  
+  optional:
+    - name: 'naming_convention'
+      type: 'str'
+      description: 'CSS class naming convention'
+      default: 'bem'
+      enum: ['bem', 'camelCase', 'kebab-case']
+    
+    - name: 'consolidate_to_single_file'
+      type: 'bool'
+      description: 'Combine all extracted CSS into one file'
+      default: false
+    
+    - name: 'enable_vision_regression'
+      type: 'bool'
+      description: 'Enable visual regression testing'
+      default: true
+    
+    - name: 'minify_output'
+      type: 'bool'
+      description: 'Minify extracted CSS'
+      default: false
+
+# ============================================================================
+# WORKFLOW STAGES
+# ============================================================================
+stages:
+  # --------------------------------------------------------------------------
+  # STAGE 1: Inventory & Baseline
+  # --------------------------------------------------------------------------
+  - stage_id: 'S1_INVENTORY'
+    name: 'CSS Violation Inventory'
+    description: 'Scan all source files for inline CSS violations'
+    
+    invoke:
+      - primitive: 'audit'
+        action: 'on_start'
+        params:
+          workflow_name: 'css-extraction'
+      
+      - primitive: 'css'
+        params:
+          target_files: '{{source_files}}'
+          severity: 'error'
+          auto_extract: false
+    
+    outputs:
+      - 'inline_style_inventory.json'
+      - 'style_block_inventory.json'
+    
+    success_criteria:
+      - 'All files scanned'
+      - 'Violation count established'
+
+  # --------------------------------------------------------------------------
+  # STAGE 2: Baseline Screenshots
+  # --------------------------------------------------------------------------
+  - stage_id: 'S2_BASELINE'
+    name: 'Capture Baseline Screenshots'
+    condition: '{{enable_vision_regression}} == true'
+    
+    invoke:
+      - primitive: 'vision'
+        for_each: '{{source_files}}'
+        params:
+          target_url: 'file://{{item}}'
+          analysis_mode: 'standard'
+    
+    outputs:
+      - 'baselines/'
+
+  # --------------------------------------------------------------------------
+  # STAGE 3: Style Block Extraction
+  # --------------------------------------------------------------------------
+  - stage_id: 'S3_STYLE_BLOCKS'
+    name: 'Extract <style> Blocks'
+    description: 'Extract <style> blocks to external CSS files'
+    
+    invoke:
+      - primitive: 'extract'
+        for_each: '{{source_files}}'
+        params:
+          source_file: '{{item}}'
+          extraction_type: 'css_style_block'
+          target_file: '{{css_output_dir}}/{{item.stem}}.css'
+          add_import: true
+          minify: '{{minify_output}}'
+    
+    success_criteria:
+      - 'All <style> blocks extracted'
+      - '<link> tags added to source files'
+
+  # --------------------------------------------------------------------------
+  # STAGE 4: Inline Style Extraction
+  # --------------------------------------------------------------------------
+  - stage_id: 'S4_INLINE_STYLES'
+    name: 'Extract Inline style="" Attributes'
+    description: 'Convert inline styles to CSS classes'
+    
+    invoke:
+      - primitive: 'extract'
+        for_each: '{{source_files}}'
+        params:
+          source_file: '{{item}}'
+          extraction_type: 'css_inline_style'
+          target_file: '{{css_output_dir}}/{{item.stem}}.css'
+          naming_convention: '{{naming_convention}}'
+          add_import: true
+    
+    success_criteria:
+      - 'All inline styles converted to classes'
+      - 'Class names follow naming convention'
+
+  # --------------------------------------------------------------------------
+  # STAGE 5: Consolidation (Optional)
+  # --------------------------------------------------------------------------
+  - stage_id: 'S5_CONSOLIDATE'
+    name: 'Consolidate CSS Files'
+    condition: '{{consolidate_to_single_file}} == true'
+    
+    action: |
+      1. Read all extracted CSS files
+      2. Merge into single styles.css
+      3. Update all <link> tags to point to consolidated file
+      4. Delete individual CSS files
+    
+    outputs:
+      - '{{css_output_dir}}/styles.css'
+
+  # --------------------------------------------------------------------------
+  # STAGE 6: Zero-Inline Verification
+  # --------------------------------------------------------------------------
+  - stage_id: 'S6_VERIFY'
+    name: 'Verify Zero Inline CSS'
+    description: 'Confirm all inline CSS has been extracted'
+    
+    invoke:
+      - primitive: 'css'
+        params:
+          target_files: '{{source_files}}'
+          severity: 'blocked'
+          auto_extract: false
+      
+      - primitive: 'dom'
+        for_each: '{{source_files}}'
+        params:
+          html_file: '{{item}}'
+    
+    success_criteria:
+      - 'Zero inline style violations'
+      - 'All HTML files still valid'
+    
+    on_failure: 'abort_workflow'
+
+  # --------------------------------------------------------------------------
+  # STAGE 7: Visual Regression
+  # --------------------------------------------------------------------------
+  - stage_id: 'S7_REGRESSION'
+    name: 'Visual Regression Verification'
+    condition: '{{enable_vision_regression}} == true'
+    
+    invoke:
+      - primitive: 'vision'
+        for_each: '{{source_files}}'
+        params:
+          target_url: 'file://{{item}}'
+          analysis_mode: 'standard'
+          baseline_screenshot: '{{output_dir}}/baselines/{{item.stem}}_baseline.png'
+    
+    success_criteria:
+      - 'Visual diff < 5% for each file'
+      - 'No layout regressions'
+
+  # --------------------------------------------------------------------------
+  # STAGE 8: Finalize
+  # --------------------------------------------------------------------------
+  - stage_id: 'S8_FINALIZE'
+    name: 'Finalize and Report'
+    
+    invoke:
+      - primitive: 'audit'
+        action: 'on_complete'
+    
+    outputs:
+      - 'extraction_summary.json'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'extraction_report'
+      path: '{{output_dir}}/css_extraction_report.json'
+      schema: |
+        {
+          "files_processed": "int",
+          "style_blocks_extracted": "int",
+          "inline_styles_extracted": "int",
+          "classes_generated": "int",
+          "css_files_created": "int",
+          "bytes_extracted": "int",
+          "visual_regression_results": [{
+            "file": "string",
+            "diff_pct": "float",
+            "passed": "bool"
+          }]
+        }
+
+# ============================================================================
+# GOLDEN TESTS
+# ============================================================================
+golden_tests:
+  test_file: 'tests/golden/test_css_extraction_truth.py'
+  test_count: 12
+  acceptance_criteria:
+    - 'AC-CE-001: All <style> blocks extracted to external files'
+    - 'AC-CE-002: All style="" attributes converted to class=""'
+    - 'AC-CE-003: Generated class names follow BEM convention'
+    - 'AC-CE-004: <link rel="stylesheet"> added for each extracted file'
+    - 'AC-CE-005: Zero inline CSS violations after extraction'
+    - 'AC-CE-006: HTML files remain valid after extraction'
+    - 'AC-CE-007: Visual regression diff < 5%'
+    - 'AC-CE-008: Consolidation merges all CSS if enabled'
+    - 'AC-CE-009: AC_START/AC_COMPLETE markers in audit log'
+    - 'AC-CE-010: Extraction report includes byte counts'
+    - 'AC-CE-011: Minification applied if enabled'
+    - 'AC-CE-012: Rollback restores original on failure'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:CSS_EXTRACTION'
+    complete: 'AC_COMPLETE:CSS_EXTRACTION'
+    failure: 'AC_FAILURE:CSS_EXTRACTION'
+  
+  log_fields:
+    - 'files_processed'
+    - 'style_blocks_extracted'
+    - 'inline_styles_extracted'
+    - 'classes_generated'
+    - 'duration_ms'

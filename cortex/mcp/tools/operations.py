@@ -370,6 +370,26 @@ class CortexRefactor(ConsolidatedTool):
                 description="ENH-STS-04: Path to directory containing test classes",
                 required=False,
             ),
+            # ENH-STS-05 — DI Lifetime Consistency
+            ToolParameter(
+                name="di_source_code",
+                type="string",
+                description=(
+                    "ENH-STS-05: C# DI registration source (Program.cs / Startup.cs) "
+                    "to scan for AddSingleton<*Repository> captive dependency violations"
+                ),
+                required=False,
+            ),
+            # ENH-STS-07 — Health Endpoint Realness
+            ToolParameter(
+                name="health_source_code",
+                type="string",
+                description=(
+                    "ENH-STS-07: Source containing health endpoint mapping to validate "
+                    "that it performs a live DB probe rather than returning a hardcoded stub"
+                ),
+                required=False,
+            ),
         ]
 
     @property
@@ -607,6 +627,84 @@ class CortexRefactor(ConsolidatedTool):
                 "reason": "service_dir and test_dir both required",
             }
 
+        # ── ENH-STS-05: DI Lifetime Consistency ──────────────────────────────
+        di_source_code = params.get("di_source_code")
+        if di_source_code is not None:
+            di_violations = []
+            try:
+                from cortex.orchestrators.domain.refactoring_orchestrator import (
+                    RefactoringOrchestrator,
+                )
+                orch = RefactoringOrchestrator()
+                di_result = orch.check_di_lifetime_consistency(source_code=di_source_code)
+                if di_result.is_ok():
+                    di_report = di_result.unwrap()
+                    di_violations = di_report.get("violations", [])
+                    if not di_report.get("clean", True):
+                        total_violations += di_report.get("violation_count", 0)
+                        blocking_issues.append(
+                            f"ENH-STS-05: {di_report.get('violation_count', 0)} "
+                            "AddSingleton<*Repository> captive dependency violation(s)"
+                        )
+                    gate_results["ENH-STS-05_di_lifetime_consistency"] = {
+                        "clean": di_report.get("clean", True),
+                        "violation_count": di_report.get("violation_count", 0),
+                        "violations": di_violations,
+                    }
+                else:
+                    gate_results["ENH-STS-05_di_lifetime_consistency"] = {
+                        "skipped": True,
+                        "reason": f"check_di_lifetime_consistency error: {di_result.unwrap_err()}",
+                    }
+            except Exception as exc:
+                gate_results["ENH-STS-05_di_lifetime_consistency"] = {
+                    "skipped": True,
+                    "reason": f"ENH-STS-05 gate error: {exc}",
+                }
+        else:
+            gate_results["ENH-STS-05_di_lifetime_consistency"] = {
+                "skipped": True,
+                "reason": "di_source_code not provided",
+            }
+
+        # ── ENH-STS-07: Health Endpoint Realness ─────────────────────────────
+        health_source_code = params.get("health_source_code")
+        if health_source_code is not None:
+            try:
+                from cortex.orchestrators.domain.refactoring_orchestrator import (
+                    RefactoringOrchestrator,
+                )
+                orch = RefactoringOrchestrator()
+                health_result = orch.check_health_endpoint_realness(source_code=health_source_code)
+                if health_result.is_ok():
+                    health_report = health_result.unwrap()
+                    if not health_report.get("clean", True):
+                        total_violations += health_report.get("violation_count", 0)
+                        blocking_issues.append(
+                            f"ENH-STS-07: health endpoint returns hardcoded stub — "
+                            "add a real DB probe and 503 on failure"
+                        )
+                    gate_results["ENH-STS-07_health_endpoint_realness"] = {
+                        "clean": health_report.get("clean", True),
+                        "violation_count": health_report.get("violation_count", 0),
+                        "violations": health_report.get("violations", []),
+                    }
+                else:
+                    gate_results["ENH-STS-07_health_endpoint_realness"] = {
+                        "skipped": True,
+                        "reason": f"check_health_endpoint_realness error: {health_result.unwrap_err()}",
+                    }
+            except Exception as exc:
+                gate_results["ENH-STS-07_health_endpoint_realness"] = {
+                    "skipped": True,
+                    "reason": f"ENH-STS-07 gate error: {exc}",
+                }
+        else:
+            gate_results["ENH-STS-07_health_endpoint_realness"] = {
+                "skipped": True,
+                "reason": "health_source_code not provided",
+            }
+
         # ── Overall status ────────────────────────────────────────────────────
         if p0_count > 0:
             overall_status = "BLOCK"
@@ -627,7 +725,7 @@ class CortexRefactor(ConsolidatedTool):
                 "gate_results": gate_results,
                 "blocking_issues": blocking_issues,
             },
-            metadata={"operation": "gate", "sts_gates_run": 4},
+            metadata={"operation": "gate", "sts_gates_run": 6},
         )
 
 

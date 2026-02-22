@@ -1,0 +1,260 @@
+# ============================================================================
+# PRIMITIVE: Audit Trace
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable)
+# Purpose: Emit AC_START/AC_COMPLETE markers for governance audit trail
+# Reused by: ALL workflow templates (mandatory import)
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/execution/audit-trace'
+name: 'Audit Trace Primitive'
+tier: 'primitive'
+category: 'execution'
+status: 'active'
+
+metadata:
+  description: |
+    Atomic template for emitting governance audit trace markers.
+    Every workflow execution must import this primitive to ensure
+    AC_START and AC_COMPLETE markers are properly recorded for
+    compliance verification and golden test validation.
+  
+  tags:
+    - primitive
+    - execution
+    - audit
+    - governance
+    - ac-markers
+  
+  governance_rule: 'CORE-027: Audit Trail Required'
+  
+  mandatory: true
+  
+  author: 'CORTEX Architecture Team'
+  created: '2026-02-22'
+
+# ============================================================================
+# REQUIRED CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'EnforcementOrchestrator'
+      purpose: 'Audit trail coordination'
+      required: true
+  
+  services:
+    - name: 'EnhancedAuditLogger'
+      purpose: 'SQLite audit log persistence'
+      required: true
+      location: 'cortex/governance/audit_logger.py'
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'workflow_id'
+      type: 'str'
+      description: 'Unique identifier for this workflow execution'
+    
+    - name: 'workflow_name'
+      type: 'str'
+      description: 'Human-readable workflow name'
+  
+  optional:
+    - name: 'parent_workflow_id'
+      type: 'str'
+      description: 'ID of parent workflow (for nested/composed workflows)'
+      default: null
+    
+    - name: 'scope_files'
+      type: 'List[Path]'
+      description: 'Files in scope for this workflow'
+      default: []
+    
+    - name: 'metadata'
+      type: 'Dict'
+      description: 'Additional metadata to log'
+      default: {}
+    
+    - name: 'persist_to_db'
+      type: 'bool'
+      description: 'Write to .cortex-runtime/audit.db (SQLite)'
+      default: true
+
+# ============================================================================
+# MARKERS
+# ============================================================================
+markers:
+  standard:
+    - name: 'AC_START'
+      description: 'Workflow execution started'
+      format: 'AC_START:{workflow_id}:{workflow_name}'
+      example: 'AC_START:WF-20260222-001:html-refactor-validation'
+    
+    - name: 'AC_COMPLETE'
+      description: 'Workflow execution completed successfully'
+      format: 'AC_COMPLETE:{workflow_id}:{workflow_name}:{duration_ms}'
+      example: 'AC_COMPLETE:WF-20260222-001:html-refactor-validation:1234'
+    
+    - name: 'AC_FAILURE'
+      description: 'Workflow execution failed'
+      format: 'AC_FAILURE:{workflow_id}:{workflow_name}:{error_code}'
+      example: 'AC_FAILURE:WF-20260222-001:html-refactor-validation:DOM_PARSE_ERROR'
+  
+  extended:
+    - name: 'AC_STAGE_START'
+      description: 'Individual stage started'
+      format: 'AC_STAGE_START:{workflow_id}:{stage_id}'
+    
+    - name: 'AC_STAGE_COMPLETE'
+      description: 'Individual stage completed'
+      format: 'AC_STAGE_COMPLETE:{workflow_id}:{stage_id}:{status}'
+    
+    - name: 'AC_ROLLBACK'
+      description: 'Workflow rolled back due to failure'
+      format: 'AC_ROLLBACK:{workflow_id}:{workflow_name}:{reason}'
+    
+    - name: 'AC_WONTFIX'
+      description: 'Issue intentionally not fixed (with justification)'
+      format: 'AC_WONTFIX:{workflow_id}:{issue_id}:{justification}'
+
+# ============================================================================
+# EXECUTION
+# ============================================================================
+execution:
+  on_start:
+    - step_id: 'EMIT_START_MARKER'
+      action: |
+        1. Generate workflow_id if not provided (UUID)
+        2. Record start timestamp
+        3. Emit AC_START marker to logger
+        4. If persist_to_db, write to audit.db
+      outputs:
+        - 'start_timestamp'
+        - 'workflow_id'
+  
+  on_stage_transition:
+    - step_id: 'EMIT_STAGE_MARKERS'
+      action: |
+        1. Emit AC_STAGE_COMPLETE for previous stage
+        2. Emit AC_STAGE_START for next stage
+        3. Update audit.db with stage progress
+  
+  on_complete:
+    - step_id: 'EMIT_COMPLETE_MARKER'
+      action: |
+        1. Calculate duration_ms
+        2. Emit AC_COMPLETE marker
+        3. Update audit.db with final status
+        4. Close audit session
+      outputs:
+        - 'duration_ms'
+        - 'final_status'
+  
+  on_failure:
+    - step_id: 'EMIT_FAILURE_MARKER'
+      action: |
+        1. Capture error details
+        2. Emit AC_FAILURE marker with error_code
+        3. Update audit.db with failure reason
+        4. Trigger rollback if configured
+      outputs:
+        - 'error_code'
+        - 'error_message'
+        - 'stack_trace'
+
+# ============================================================================
+# DATABASE SCHEMA
+# ============================================================================
+database:
+  location: '.cortex-runtime/audit.db'
+  mode: 'WAL'
+  
+  tables:
+    workflow_executions:
+      columns:
+        - 'id TEXT PRIMARY KEY'
+        - 'workflow_name TEXT NOT NULL'
+        - 'parent_id TEXT'
+        - 'start_time TEXT NOT NULL'
+        - 'end_time TEXT'
+        - 'status TEXT CHECK(status IN ("running", "complete", "failed", "rolled_back"))'
+        - 'duration_ms INTEGER'
+        - 'scope_files TEXT'
+        - 'metadata TEXT'
+        - 'error_code TEXT'
+        - 'error_message TEXT'
+    
+    stage_executions:
+      columns:
+        - 'id TEXT PRIMARY KEY'
+        - 'workflow_id TEXT NOT NULL REFERENCES workflow_executions(id)'
+        - 'stage_id TEXT NOT NULL'
+        - 'start_time TEXT NOT NULL'
+        - 'end_time TEXT'
+        - 'status TEXT'
+        - 'outputs TEXT'
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'audit_session'
+      schema: |
+        {
+          "workflow_id": "string",
+          "workflow_name": "string",
+          "start_time": "ISO8601",
+          "end_time": "ISO8601",
+          "duration_ms": "int",
+          "status": "complete|failed|rolled_back",
+          "stages": [{
+            "stage_id": "string",
+            "status": "string",
+            "duration_ms": "int"
+          }],
+          "markers_emitted": ["AC_START", "AC_STAGE_*", "AC_COMPLETE"]
+        }
+
+# ============================================================================
+# GOLDEN TEST INTEGRATION
+# ============================================================================
+golden_test_support:
+  description: |
+    All golden tests should verify AC markers are present in audit log.
+    Test pattern: assert "AC_COMPLETE:{workflow_id}" in audit_log
+  
+  verification_queries:
+    - name: 'workflow_completed'
+      sql: |
+        SELECT COUNT(*) FROM workflow_executions 
+        WHERE id = ? AND status = 'complete'
+    
+    - name: 'all_stages_passed'
+      sql: |
+        SELECT COUNT(*) FROM stage_executions 
+        WHERE workflow_id = ? AND status != 'complete'
+    
+    - name: 'no_orphan_starts'
+      sql: |
+        SELECT COUNT(*) FROM workflow_executions 
+        WHERE status = 'running' AND start_time < datetime('now', '-1 hour')
+
+# ============================================================================
+# AUDIT TRACE (META)
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  markers:
+    start: 'AC_START:AUDIT_TRACE_PRIMITIVE'
+    complete: 'AC_COMPLETE:AUDIT_TRACE_PRIMITIVE'
+  
+  log_fields:
+    - 'workflow_id'
+    - 'workflow_name'
+    - 'duration_ms'
+    - 'status'
+    - 'stages_executed'

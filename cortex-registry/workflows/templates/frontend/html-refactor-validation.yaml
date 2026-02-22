@@ -1,0 +1,207 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# HTML Refactoring with DOM Validation Gates
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Prevent duplicate sections (chat01.md root cause), validate DOM structure,
+#          integrate Vision API for visual regression detection. BeautifulSoup4 + lxml
+#          for parsing, not string-based edits.
+# Authority: ADR-007, ADR-009 (3-Layer Architecture)
+# Source: chat01.md digest (2026-02-22)
+# Smells Addressed: SMELL-13, SMELL-18, SMELL-21 (BadMonolith)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: frontend/html-refactor-validation
+name: HTML Refactoring with DOM Validation Gates
+category: frontend
+version: 1.0.0
+priority: P1
+
+metadata:
+  author: CORTEX
+  created: '2026-02-22'
+  updated: '2026-02-22'
+  source: chat01.md-digest
+  smells_addressed: [SMELL-13, SMELL-18, SMELL-21]
+  technologies: [html, css]
+  rollback_on_failure: true
+  vision_api_integration: true
+  vision_api_mode: atomic
+
+# ── PLACEHOLDERS ────────────────────────────────────────────────────────────────
+placeholders:
+  target_file: "{{target_html_file}}"
+  baseline_screenshot: "{{baseline_screenshot_path}}"
+  max_duplicate_similarity: 0.85
+  max_layout_shift_percentage: 10
+  css_selector_scope: "body"
+
+# ── GATES ───────────────────────────────────────────────────────────────────────
+gates:
+  dom_wellformed:
+    description: "HTML must parse without errors (BeautifulSoup4)"
+    validation: "parser.errors == 0"
+    blocking: true
+    
+  no_duplicate_ids:
+    description: "No duplicate element IDs in document"
+    validation: "len(duplicate_ids) == 0"
+    blocking: true
+    
+  no_duplicate_sections:
+    description: "No sections with >85% similarity"
+    validation: "max(section_similarity) < 0.85"
+    blocking: true
+    
+  visual_regression:
+    description: "Layout shift <10% compared to baseline"
+    validation: "layout_shift_percentage < 10"
+    blocking: false  # Advisory — manual review for >10%
+
+# ── STEPS ───────────────────────────────────────────────────────────────────────
+steps:
+  # Step 1: Baseline Vision Capture
+  - id: S1_BASELINE_VISION
+    name: Capture Baseline Screenshot
+    action: vision_analyze
+    description: |
+      Capture pre-edit screenshot for visual regression comparison.
+      Uses Vision API with ATOMIC depth for pixel-level accuracy.
+    parameters:
+      image_path: "{{target_file}}"
+      depth: ATOMIC
+      extract_cortex_ids: true
+      output_path: "{{baseline_screenshot}}"
+    gate: null  # No gate — baseline capture
+    rollback: false
+    
+  # Step 2: DOM Parse & Validate
+  - id: S2_DOM_PARSE
+    name: Parse HTML via BeautifulSoup4
+    action: dom_validate
+    description: |
+      Parse HTML document using BeautifulSoup4 + lxml parser.
+      Detect: unclosed tags, malformed attributes, encoding issues.
+    parameters:
+      file_path: "{{target_file}}"
+      parser: lxml
+      strict_mode: true
+    gate: dom_wellformed
+    rollback: false
+    outputs:
+      - dom_tree
+      - parse_errors
+      - element_count
+    
+  # Step 3: Duplicate ID Scan
+  - id: S3_DUPLICATE_ID_SCAN
+    name: Detect Duplicate Element IDs
+    action: dom_validate
+    description: |
+      Scan all elements with 'id' attribute. Flag duplicates.
+      Duplicate IDs cause JavaScript querySelector failures.
+    parameters:
+      file_path: "{{target_file}}"
+      check_type: duplicate_ids
+    gate: no_duplicate_ids
+    rollback: false
+    outputs:
+      - duplicate_ids
+      - total_ids
+      
+  # Step 4: Duplicate Section Scan (Semantic Hash)
+  - id: S4_DUPLICATE_SECTION_SCAN
+    name: Detect Duplicate Content Sections
+    action: semantic_analyze
+    description: |
+      Compute semantic hash for each <section>, <div id="...">, <article>.
+      Flag pairs with similarity >85% (configurable).
+      Root cause fix for chat01.md duplicate creation.
+    parameters:
+      file_path: "{{target_file}}"
+      element_types: [section, article, "div[id]", main, aside, nav]
+      similarity_threshold: "{{max_duplicate_similarity}}"
+      hash_algorithm: semantic_content
+    gate: no_duplicate_sections
+    rollback: false
+    outputs:
+      - duplicate_pairs
+      - section_hashes
+      - max_similarity
+      
+  # Step 5: Semantic Edit (CSS Selector Based)
+  - id: S5_SEMANTIC_EDIT
+    name: Execute DOM Edit via CSS Selector
+    action: dom_edit
+    description: |
+      Edit DOM using CSS selector targeting — NOT line-based string replace.
+      BeautifulSoup4 modifies tree, then serializes back to HTML.
+      Preserves indentation, comments, and structure.
+    parameters:
+      file_path: "{{target_file}}"
+      edit_mode: css_selector
+      selector: "{{edit_selector}}"
+      operation: "{{edit_operation}}"  # insert, replace, delete, modify_attribute
+      content: "{{edit_content}}"
+    gate: null  # Gate checked after edit
+    rollback: true  # Rollback if next gate fails
+    
+  # Step 6: Post-Edit DOM Revalidation
+  - id: S6_DOM_REVALIDATE
+    name: Re-Parse and Validate Modified HTML
+    action: dom_validate
+    description: |
+      Re-parse modified HTML. Ensure structure intact after edit.
+      Must pass all 3 structural gates: wellformed, no duplicate IDs, no duplicate sections.
+    parameters:
+      file_path: "{{target_file}}"
+      parser: lxml
+      strict_mode: true
+    gates:
+      - dom_wellformed
+      - no_duplicate_ids
+      - no_duplicate_sections
+    rollback: true
+    
+  # Step 7: Visual Regression Check (Optional)
+  - id: S7_VISION_REGRESSION
+    name: Visual Regression via Vision API
+    action: vision_analyze
+    description: |
+      Compare post-edit screenshot to baseline.
+      Flag layout shifts >10% of viewport for manual review.
+      Uses Vision API bounding box comparison.
+    parameters:
+      image_path: "{{target_file}}"
+      depth: ATOMIC
+      compare_to: "{{baseline_screenshot}}"
+      max_shift_percentage: "{{max_layout_shift_percentage}}"
+    gate: visual_regression
+    rollback: false  # Advisory gate — log warning, don't fail
+    optional: true
+
+# ── CONVERGENCE CRITERIA ────────────────────────────────────────────────────────
+convergence:
+  max_cycles: 3
+  success_criteria:
+    dom_errors: 0
+    duplicate_ids: 0
+    duplicate_sections: 0
+    layout_shift_below_threshold: true
+  convergence_predicate: |
+    dom_errors == 0 AND
+    len(duplicate_ids) == 0 AND
+    max(section_similarity) < 0.85
+
+# ── AUDIT TRACE ─────────────────────────────────────────────────────────────────
+audit:
+  log_level: INFO
+  trace_fields:
+    - timestamp
+    - step_id
+    - action
+    - gate_result
+    - duration_ms
+  acceptance_criteria:
+    - 'AC-HTML-001: HTML parses without errors'
+    - 'AC-HTML-002: Zero duplicate element IDs'
+    - 'AC-HTML-003: Zero duplicate content sections (>85% similarity)'
+    - 'AC-HTML-004: Visual regression <10% layout shift'

@@ -15,6 +15,8 @@ from enum import Enum
 import inspect
 import logging
 
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+
 
 class LifecycleStage(Enum):
     """Orchestrator lifecycle stages."""
@@ -45,8 +47,8 @@ class GovernanceDecision:
     challenges: List[Dict[str, str]] = field(default_factory=list)
 
 
-class OrchestratorBase(ABC):
-    """Base class for all orchestrators with 5-step lifecycle."""
+class OrchestratorBase(WorkflowTemplateMixin, ABC):
+    """Base class for all orchestrators with 5-step lifecycle and workflow template capability."""
 
     def __init__(self, orchestrator_id: str = "unnamed") -> None:
         """Initialize orchestrator."""

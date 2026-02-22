@@ -349,6 +349,20 @@ class TDDOrchestrator(IOrchestrator):
         """
         return "TDDOrchestrator"
 
+    def get_recommended_template(self) -> Optional[str]:
+        """
+        Get the recommended workflow template for TDD operations.
+
+        Returns the canonical TDD feature implementation template which defines
+        the full RED → GREEN → REFACTOR cycle with convergence gates.
+
+        Returns:
+            Template ID string: 'tdd/feature-implementation'
+
+        Phase: 23 — Workflow Template Injection (AC-P23-006)
+        """
+        return "tdd/feature-implementation"
+
     def get_version(self) -> str:
         """
         Get orchestrator version.

@@ -1,0 +1,220 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CSS Zero Inline Workflow — Extract ALL Inline Styles
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Enforce zero inline CSS rule. All styling must be in CSS files or
+#          <style> blocks — no style="" attributes allowed.
+# Authority: CORE-073 (CSS Zero Inline), ADR-009 (3-Layer Architecture)
+# Source: chat01.md continued digest (2026-02-22)
+# Smells Addressed: SMELL-21 (BadMonolith — inline styles)
+# ══════════════════════════════════════════════════════════════════════════════
+
+id: frontend/css-zero-inline-workflow
+name: CSS Zero Inline — Extract All Inline Styles
+category: frontend
+version: 1.0.0
+priority: P1
+
+metadata:
+  author: CORTEX
+  created: '2026-02-22'
+  updated: '2026-02-22'
+  source: chat01.md-continued-digest
+  smells_addressed: [SMELL-21]
+  technologies: [html, css]
+  rollback_on_failure: true
+  vision_api_integration: true
+  golden_test_required: true
+
+# ── PLACEHOLDERS ────────────────────────────────────────────────────────────────
+placeholders:
+  target_html_files: "{{html_files_glob}}"
+  output_css_file: "{{extracted_css_path}}"
+  class_prefix: "cortex-extracted"
+  baseline_screenshot: "{{baseline_screenshot_path}}"
+
+# ── GATES ───────────────────────────────────────────────────────────────────────
+gates:
+  zero_inline_styles:
+    description: "No style='' attributes remain in any HTML file"
+    validation: "inline_style_count == 0"
+    blocking: true
+    
+  css_valid:
+    description: "Extracted CSS passes stylelint validation"
+    validation: "stylelint_errors == 0"
+    blocking: true
+    
+  visual_regression:
+    description: "Visual appearance unchanged after extraction"
+    validation: "layout_shift_percentage < 5"
+    blocking: false  # Advisory — manual review if exceeded
+
+# ── STEPS ───────────────────────────────────────────────────────────────────────
+steps:
+  # Step 1: Baseline Vision Capture
+  - id: S1_BASELINE_CAPTURE
+    name: Capture Pre-Extraction Screenshots
+    action: vision_analyze
+    description: |
+      Capture screenshots of all target HTML files for visual regression.
+    parameters:
+      files: "{{target_html_files}}"
+      depth: STANDARD
+      output_dir: ".cortex-runtime/screenshots/baseline/"
+    gate: null
+    rollback: false
+    
+  # Step 2: Inline Style Scan
+  - id: S2_INLINE_STYLE_SCAN
+    name: Scan for Inline Styles
+    action: dom_validate
+    description: |
+      Find all elements with style="" attribute.
+      Extract: element tag, selector path, style content.
+    parameters:
+      files: "{{target_html_files}}"
+      check_type: inline_styles
+      output_format: extraction_map
+    gate: null  # Scan only — no gate
+    outputs:
+      - inline_style_elements
+      - inline_style_count
+      - style_content_map
+    
+  # Step 3: Style Block Scan
+  - id: S3_STYLE_BLOCK_SCAN
+    name: Scan for <style> Blocks
+    action: dom_validate
+    description: |
+      Detect <style> blocks in <head> and <body>.
+      Recommend consolidation to external CSS file.
+    parameters:
+      files: "{{target_html_files}}"
+      check_type: style_blocks
+    outputs:
+      - style_blocks
+      - style_block_count
+      - consolidation_candidates
+      
+  # Step 4: Generate CSS Extraction Plan
+  - id: S4_EXTRACTION_PLAN
+    name: Generate CSS Extraction Plan
+    action: semantic_analyze
+    description: |
+      Analyze inline styles and generate extraction plan:
+      - Group similar styles into reusable classes
+      - Generate BEM-compliant class names
+      - Create CSS file structure
+    parameters:
+      inline_styles: "{{style_content_map}}"
+      naming_convention: BEM
+      class_prefix: "{{class_prefix}}"
+      deduplication: true
+    outputs:
+      - extraction_plan
+      - css_classes
+      - element_class_map
+      
+  # Step 5: Create External CSS File
+  - id: S5_CREATE_CSS_FILE
+    name: Create External CSS File
+    action: file_create
+    description: |
+      Generate external CSS file with extracted styles.
+      Apply stylelint validation.
+    parameters:
+      output_path: "{{output_css_file}}"
+      content: "{{css_classes}}"
+      format: css
+      lint: stylelint
+    gate: css_valid
+    rollback: true
+    
+  # Step 6: Replace Inline Styles with Classes
+  - id: S6_REPLACE_INLINE_STYLES
+    name: Replace Inline Styles with Class References
+    action: dom_edit
+    description: |
+      For each element with inline style:
+      - Remove style="" attribute
+      - Add class="cortex-extracted-XXX" reference
+      Uses CSS selector targeting, not string replace.
+    parameters:
+      files: "{{target_html_files}}"
+      edit_mode: css_selector
+      replacements: "{{element_class_map}}"
+      remove_attribute: style
+      add_attribute: class
+    gate: null
+    rollback: true
+    
+  # Step 7: Link CSS File in HTML
+  - id: S7_LINK_CSS
+    name: Add CSS Link to HTML <head>
+    action: dom_edit
+    description: |
+      Insert <link rel="stylesheet" href="..."> in <head> of each HTML file.
+      Skip if link already exists.
+    parameters:
+      files: "{{target_html_files}}"
+      edit_mode: insert
+      selector: "head"
+      position: before_closing
+      content: '<link rel="stylesheet" href="{{output_css_file}}">'
+      skip_if_exists: true
+    gate: null
+    rollback: true
+    
+  # Step 8: Validate Zero Inline Styles
+  - id: S8_VALIDATE_ZERO_INLINE
+    name: Validate Zero Inline Styles Remain
+    action: dom_validate
+    description: |
+      Re-scan all HTML files. Must have zero style="" attributes.
+      Blocking gate — workflow fails if any inline styles remain.
+    parameters:
+      files: "{{target_html_files}}"
+      check_type: inline_styles
+    gate: zero_inline_styles
+    rollback: true
+    
+  # Step 9: Visual Regression Check
+  - id: S9_VISUAL_REGRESSION
+    name: Visual Regression Comparison
+    action: vision_analyze
+    description: |
+      Compare post-extraction screenshots to baseline.
+      Flag layout shifts >5% for manual review.
+    parameters:
+      files: "{{target_html_files}}"
+      depth: STANDARD
+      compare_to: ".cortex-runtime/screenshots/baseline/"
+      max_shift_percentage: 5
+    gate: visual_regression
+    optional: true
+
+# ── CONVERGENCE CRITERIA ────────────────────────────────────────────────────────
+convergence:
+  max_cycles: 2
+  success_criteria:
+    inline_style_count: 0
+    stylelint_errors: 0
+    css_file_created: true
+  convergence_predicate: |
+    inline_style_count == 0 AND
+    stylelint_errors == 0
+
+# ── AUDIT TRACE ─────────────────────────────────────────────────────────────────
+audit:
+  log_level: INFO
+  trace_fields:
+    - timestamp
+    - step_id
+    - files_processed
+    - styles_extracted
+    - classes_generated
+  acceptance_criteria:
+    - 'AC-CSS-001: Zero inline style="" attributes remain'
+    - 'AC-CSS-002: All styles consolidated to external CSS file'
+    - 'AC-CSS-003: CSS passes stylelint validation'
+    - 'AC-CSS-004: Visual appearance unchanged (<5% layout shift)'
