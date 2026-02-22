@@ -72,9 +72,9 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
     },
     
     # =========================================================================
-    # TIER 2: CODE INTELLIGENCE (3 tools)
+    # TIER 2: CODE INTELLIGENCE (4 tools)
     # =========================================================================
-    "cortex.lens": {
+    "cortex_lens": {
         "description": "Unified code intelligence: analysis, AST parsing, pattern discovery, duplicate detection.",
         "category": ToolCategory.INTELLIGENCE,
         "parameters": [
@@ -121,14 +121,15 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
     # TIER 3: GOVERNANCE & COMPLIANCE (4 tools)
     # =========================================================================
     "cortex_governance": {
-        "description": "Governance operations: query rules, execute checks, analyze impact, generate reports.",
+        "description": "Governance operations: query rules, execute checks, analyze impact, generate reports, Stage 0 audit.",
         "category": ToolCategory.GOVERNANCE,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["query", "execute", "analyze_impact", "report", "remediation_plan"], "description": "Governance operation"},
+            {"name": "operation", "type": "string", "required": True, "enum": ["query", "execute", "analyze_impact", "report", "remediation_plan", "stage0_audit"], "description": "Governance operation"},
             {"name": "target", "type": "string", "required": False, "description": "Target path or rule ID"},
             {"name": "context", "type": "object", "required": False, "description": "Operation context"},
+            {"name": "request", "type": "string", "required": False, "description": "User request for stage0_audit operation"},
         ],
-        "operations": ["query", "execute", "analyze_impact", "report", "remediation_plan"],
+        "operations": ["query", "execute", "analyze_impact", "report", "remediation_plan", "stage0_audit"],
     },
     "cortex_validate": {
         "description": "Validation operations: compliance, architecture, holistic, environment, rules.",
@@ -281,13 +282,15 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         "operations": ["capture", "report"],
     },
     "cortex_check": {
-        "description": "System checks: dependency drift, status check, health check.",
+        "description": "System checks: dependency drift, status check, health check, orchestrator health monitoring.",
         "category": ToolCategory.UTILITIES,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["dependencies", "status", "health"], "description": "Check type"},
+            {"name": "operation", "type": "string", "required": True, "enum": ["dependencies", "status", "health", "orchestrator_health"], "description": "Check type"},
             {"name": "operation_id", "type": "string", "required": False, "description": "Operation ID for status check"},
+            {"name": "orchestrator", "type": "string", "required": False, "description": "Specific orchestrator name for health check"},
+            {"name": "parallel", "type": "boolean", "required": False, "description": "Check all orchestrators in parallel (default: true)"},
         ],
-        "operations": ["dependencies", "status", "health"],
+        "operations": ["dependencies", "status", "health", "orchestrator_health"],
     },
     "cortex_vision": {
         "description": "Vision API for UI analysis, URL extraction, and structural mapping.",
@@ -300,14 +303,14 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         "operations": ["analyze", "ui", "extract"],
     },
     "cortex_orchestrator": {
-        "description": "Orchestrator management: list, status, invoke.",
+        "description": "Orchestrator management: list, status, invoke, health_check for all 22 wired orchestrators.",
         "category": ToolCategory.UTILITIES,
         "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["list", "status", "invoke"], "description": "Orchestrator operation"},
-            {"name": "orchestrator", "type": "string", "required": False, "description": "Orchestrator name for status/invoke"},
+            {"name": "operation", "type": "string", "required": True, "enum": ["list", "status", "invoke", "health_check"], "description": "Orchestrator operation"},
+            {"name": "orchestrator", "type": "string", "required": False, "description": "Orchestrator name for status/invoke/health_check"},
             {"name": "params", "type": "object", "required": False, "description": "Parameters for orchestrator invocation"},
         ],
-        "operations": ["list", "status", "invoke"],
+        "operations": ["list", "status", "invoke", "health_check"],
     },
 }
 

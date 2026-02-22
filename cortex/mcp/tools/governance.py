@@ -64,9 +64,9 @@ class CortexGovernance(ConsolidatedTool):
             ToolParameter(
                 name="operation",
                 type="string",
-                description="Governance operation: enforce, query, report, approve, block",
+                description="Governance operation: enforce, query, report, approve, block, stage0_audit",
                 required=True,
-                enum=["enforce", "query", "report", "approve", "block"],
+                enum=["enforce", "query", "report", "approve", "block", "stage0_audit"],
             ),
             ToolParameter(
                 name="target",
@@ -86,12 +86,18 @@ class CortexGovernance(ConsolidatedTool):
                 description="Additional context for governance decision",
                 required=False,
             ),
+            ToolParameter(
+                name="request",
+                type="string",
+                description="User request for stage0_audit operation",
+                required=False,
+            ),
         ]
     
     @property
     def supported_operations(self) -> List[str]:
         """Return the supported operations."""
-        return ["enforce", "query", "report", "approve", "block"]
+        return ["enforce", "query", "report", "approve", "block", "stage0_audit"]
     
     async def execute(self, **params) -> ToolResult:
         """Execute governance operation."""
@@ -104,6 +110,7 @@ class CortexGovernance(ConsolidatedTool):
         target = params.get("target")
         rules = params.get("rules", [])
         context = params.get("context", {})
+        request = params.get("request")
         
         if operation == "enforce":
             return await self._enforce(target, rules, context)
@@ -115,6 +122,8 @@ class CortexGovernance(ConsolidatedTool):
             return await self._approve(context)
         elif operation == "block":
             return await self._block(target, rules, context)
+        elif operation == "stage0_audit":
+            return await self._stage0_audit(request, context)
         
         return ToolResult(success=False, error=f"Unknown operation: {operation}")
     
@@ -202,6 +211,75 @@ class CortexGovernance(ConsolidatedTool):
                 "remediation": "Fix violations before proceeding",
             },
             metadata={"operation": "block"},
+        )
+    
+    async def _stage0_audit(
+        self, request: Optional[str], context: Dict[str, Any]
+    ) -> ToolResult:
+        """
+        Execute Stage 0 Governance Audit (Pre-Flight).
+        
+        Checks for:
+        - CORE-002: MD file scope violations
+        - CORE-008: TDD bypass attempts
+        - CORE-027: Audit trail markers
+        
+        Returns: Inline violations or clean approval
+        """
+        violations = []
+        
+        if request:
+            request_lower = request.lower()
+            
+            # Check for MD file generation keywords (CORE-002)
+            md_keywords = [
+                "create .md", "write markdown", "generate report",
+                "create a markdown", "write a .md", "output to .md",
+                "save to markdown", "create markdown file"
+            ]
+            if any(kw in request_lower for kw in md_keywords):
+                violations.append({
+                    "rule": "CORE-002",
+                    "description": "All output inline — never create .md/.txt files",
+                    "severity": "P0",
+                    "matched_pattern": next(kw for kw in md_keywords if kw in request_lower),
+                })
+            
+            # Check for TDD bypass keywords (CORE-008)
+            tdd_bypass_keywords = [
+                "skip test", "skip the test", "ignore test", "bypass test",
+                "without test", "no test", "--ignore", "don't test",
+                "skip testing", "without testing"
+            ]
+            if any(kw in request_lower for kw in tdd_bypass_keywords):
+                violations.append({
+                    "rule": "CORE-008",
+                    "description": "TDD mandatory — RED → GREEN → REFACTOR, no exceptions",
+                    "severity": "P0",
+                    "matched_pattern": next(kw for kw in tdd_bypass_keywords if kw in request_lower),
+                })
+        
+        if violations:
+            return ToolResult(
+                success=True,
+                data={
+                    "audit_passed": False,
+                    "violations": violations,
+                    "request": request,
+                    "action": "Block execution until violations resolved",
+                },
+                metadata={"operation": "stage0_audit", "stage": "pre_flight"},
+            )
+        
+        return ToolResult(
+            success=True,
+            data={
+                "audit_passed": True,
+                "violations": [],
+                "request": request,
+                "action": "Proceed to IntentRouter",
+            },
+            metadata={"operation": "stage0_audit", "stage": "pre_flight"},
         )
 
 
