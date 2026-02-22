@@ -188,6 +188,11 @@ class CortexMasterPlanTool(ConsolidatedTool):
         return ToolCategory.OPERATIONS
 
     @property
+    def supported_operations(self) -> List[str]:
+        """Return the list of operations this tool supports (ConsolidatedTool contract)."""
+        return ["create", "sync", "next_sequence", "load_template"]
+
+    @property
     def parameters(self) -> List[ToolParameter]:
         """Return parameter schema for MCP introspection."""
         return [
@@ -231,24 +236,24 @@ class CortexMasterPlanTool(ConsolidatedTool):
             ),
         ]
 
-    def execute(self, params: Dict[str, Any]) -> ToolResult:
+    async def execute(self, **kwargs: Any) -> ToolResult:
         """Execute the cortex_master_plan operation.
 
         Args:
-            params: Dict containing 'operation' plus operation-specific keys.
+            **kwargs: Must include 'operation' plus operation-specific keys.
 
         Returns:
             ToolResult with success/failure and operation data.
         """
         try:
-            operation = params.get("operation")
+            operation = kwargs.get("operation")
             if not operation:
                 return ToolResult(
                     success=False,
                     error="Missing required parameter: operation",
                 )
-            kwargs = {k: v for k, v in params.items() if k != "operation"}
-            result = cortex_master_plan(operation, **kwargs)
+            op_kwargs = {k: v for k, v in kwargs.items() if k != "operation"}
+            result = cortex_master_plan(operation, **op_kwargs)
             return ToolResult(success=True, data=result)
         except (ValueError, PhaseLifecycleError) as exc:
             logger.warning("CortexMasterPlanTool error: %s", exc)
