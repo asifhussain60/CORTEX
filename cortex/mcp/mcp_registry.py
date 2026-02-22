@@ -1,16 +1,16 @@
 """
 MCP Tool Registry: Production Tool Definitions.
 
-This module defines the COMPLETE set of production tools (26 tools).
+This module defines the COMPLETE set of production tools (24 tools).
 No more, no fewer. Every tool serves a specific business capability.
 
 Tool Count Strategy:
-    - 98 tools (legacy) → 26 tools (v2)
-    - 73% reduction achieved through:
-      1. Consolidation by business capability
-      2. Operation parameters instead of separate tools
-      3. Removal of dev-only tools
-      4. Elimination of duplicates
+    - 98 tools (legacy) → 24 tools (v3)
+    - Removed deprecated tools: cortex_process_request, cortex_lens
+    - Consolidation by business capability
+    - Operation parameters instead of separate tools
+    - Removal of dev-only tools
+    - Elimination of duplicates
 """
 
 from dataclasses import dataclass, field
@@ -21,25 +21,15 @@ from cortex.mcp.mcp_tool_base import Tool, ToolDefinition, ToolCategory, ToolPar
 
 
 # ============================================================================
-# PRODUCTION TOOL DEFINITIONS (26 Tools)
+# PRODUCTION TOOL DEFINITIONS (24 Tools)
+# Removed: cortex_process_request (deprecated), cortex_lens (deleted per architect spec)
 # ============================================================================
 
 PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
     # =========================================================================
-    # TIER 1: CORE REQUEST PROCESSING (4 tools)
+    # TIER 1: CORE REQUEST PROCESSING (3 tools)
+    # Note: cortex_process_request removed — deprecated per architect prompt
     # =========================================================================
-    "cortex_process_request": {
-        "description": "Main entry point for all CORTEX requests. Routes to appropriate orchestrators based on intent classification.",
-        "category": ToolCategory.CORE,
-        "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["implement", "fix", "refactor", "analyze", "test"], "description": "Operation type"},
-            {"name": "request", "type": "string", "required": True, "description": "User request text"},
-            {"name": "target", "type": "string", "required": False, "description": "Target file, module, or scope"},
-            {"name": "mode", "type": "string", "required": False, "enum": ["TDD", "fast", "strict"], "description": "Execution mode"},
-            {"name": "context", "type": "object", "required": False, "description": "Additional context"},
-        ],
-        "operations": ["implement", "fix", "refactor", "analyze", "test"],
-    },
     "cortex_challenge": {
         "description": "Generate challenges and alternatives for proposed approaches. Implements disagreement detection.",
         "category": ToolCategory.CORE,
@@ -72,18 +62,9 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
     },
     
     # =========================================================================
-    # TIER 2: CODE INTELLIGENCE (4 tools)
+    # TIER 2: CODE INTELLIGENCE (3 tools)
+    # Note: cortex_lens removed — deleted tool per architect prompt; use cortex/lens/ module directly
     # =========================================================================
-    "cortex_lens": {
-        "description": "Unified code intelligence: analysis, AST parsing, pattern discovery, duplicate detection.",
-        "category": ToolCategory.INTELLIGENCE,
-        "parameters": [
-            {"name": "operation", "type": "string", "required": True, "enum": ["analyze", "search", "graph", "duplicates", "ast"], "description": "Analysis operation"},
-            {"name": "target", "type": "string", "required": True, "description": "File or directory path"},
-            {"name": "options", "type": "object", "required": False, "description": "Operation-specific options (e.g., depth: shallow/standard/deep)"},
-        ],
-        "operations": ["analyze", "search", "graph", "duplicates", "ast"],
-    },
     "cortex_knowledge": {
         "description": "Knowledge base operations: search, domain analysis, best practices, gap detection.",
         "category": ToolCategory.INTELLIGENCE,

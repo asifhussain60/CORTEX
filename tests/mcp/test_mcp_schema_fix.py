@@ -17,7 +17,7 @@ class TestMCPSchemaGeneration:
         registry = get_registry()
         schemas = registry.to_mcp_schema()
         
-        assert len(schemas) == 26, "Should have 26 tool schemas"
+        assert len(schemas) == 24, "Should have 24 tool schemas (removed: cortex_process_request, cortex_lens)"
         
         for schema in schemas:
             assert "name" in schema, f"Schema missing 'name': {schema}"
@@ -44,9 +44,11 @@ class TestMCPSchemaGeneration:
             category = schema["category"]
             category_counts[category] = category_counts.get(category, 0) + 1
         
-        # Expected distribution (based on PRODUCTION_TOOLS)
-        assert category_counts.get("core") == 4, "Should have 4 core tools"
-        assert category_counts.get("intelligence") == 4, "Should have 4 intelligence tools"
+        # Expected distribution (based on PRODUCTION_TOOLS after removing deprecated tools)
+        # cortex_process_request removed → core: 4→3
+        # cortex_lens removed → intelligence: 4→3
+        assert category_counts.get("core") == 3, "Should have 3 core tools (cortex_process_request removed)"
+        assert category_counts.get("intelligence") == 3, "Should have 3 intelligence tools (cortex_lens removed)"
         assert category_counts.get("governance") == 4, "Should have 4 governance tools"
         assert category_counts.get("operations") == 5, "Should have 5 operations tools"
         assert category_counts.get("utilities") == 9, "Should have 9 utilities tools"
@@ -61,11 +63,10 @@ class TestMCPSchemaGeneration:
         
         assert len(consolidated_tools) > 0, "Should have consolidated tools with operations"
         
-        # Verify cortex_lens has operations
-        lens_schema = next((s for s in schemas if s["name"] == "cortex_lens"), None)
-        assert lens_schema is not None, "cortex_lens should exist"
-        assert "operations" in lens_schema, "cortex_lens should have operations field"
-        assert len(lens_schema["operations"]) == 5, "cortex_lens should have 5 operations"
+        # Verify cortex_git has operations (cortex_lens was removed — deprecated)
+        git_schema = next((s for s in schemas if s["name"] == "cortex_git"), None)
+        assert git_schema is not None, "cortex_git should exist"
+        assert "operations" in git_schema, "cortex_git should have operations field"
     
     def test_schema_json_serializable(self):
         """Verify schemas can be serialized to JSON."""
@@ -80,7 +81,7 @@ class TestMCPSchemaGeneration:
         
         # Should be able to parse back
         parsed = json.loads(json_output)
-        assert len(parsed) == 26
+        assert len(parsed) == 24  # 24 tools after removing cortex_process_request + cortex_lens
     
     def test_core_tools_have_correct_category(self):
         """Verify core tools are marked as core category."""
@@ -88,7 +89,7 @@ class TestMCPSchemaGeneration:
         schemas = registry.to_mcp_schema()
         
         core_tool_names = [
-            "cortex_process_request",
+            # cortex_process_request removed — deprecated per architect spec
             "cortex_challenge",
             "cortex_classify",
             "cortex_request_lifecycle"
@@ -106,7 +107,8 @@ class TestMCPSchemaGeneration:
         registry = get_registry()
         schemas = registry.to_mcp_schema()
         
-        intelligence_tool_names = ["cortex_lens", "cortex_knowledge", "cortex_git"]
+        # cortex_lens removed — deleted per architect spec; remaining intelligence tools:
+        intelligence_tool_names = ["cortex_knowledge", "cortex_git", "cortex_generate_tests"]
         
         for tool_name in intelligence_tool_names:
             schema = next((s for s in schemas if s["name"] == tool_name), None)

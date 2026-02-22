@@ -2116,6 +2116,10 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplate
         Returns:
             Result with challenge (if disagreement) or execution result
         """
+        import time as _time
+        _ac_id = f"AC-MASTER-PROCESS-{int(_time.time() * 1000)}"
+        # AC_START: {_ac_id}
+        _ac_start_ms = _time.monotonic() * 1000
         try:
             # AC-PHASE-35-001: PRE-FLIGHT - Detect autonomous continuation
             # R1: Continuation detection, R3: Skip verbose status, R4: Single decision gate
@@ -2219,6 +2223,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplate
                 )
 
         except Exception as e:
+            # AC_COMPLETE: {_ac_id} ❌ process_user_request failed
             return Err(f"Failed to process user request: {str(e)}")
 
     def execute_operation(
@@ -2269,6 +2274,10 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplate
             ... else:
             ...     print(f"Error: {result.error}")
         """
+        import time as _time
+        _exec_ac_id = f"AC-MASTER-EXEC-{int(_time.time() * 1000)}"
+        # AC_START: {_exec_ac_id}
+        _exec_start_ms = _time.monotonic() * 1000
         try:
             # ═══════════════════════════════════════════════════════════════════════
             # AC-PHASE-50-001: PLAN INTENT FAST-PATH
@@ -2528,6 +2537,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplate
             
         except Exception as pipeline_err:
             # Catch any unexpected errors in strategy pipeline
+            # AC_COMPLETE: {_exec_ac_id} ❌ execute_operation pipeline error
             self.logger.log_operation_complete(
                 ac_id="ENH-087-TRACK-1.3",
                 operation="4_STAGE_PIPELINE_ERROR",

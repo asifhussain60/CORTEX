@@ -14,11 +14,11 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 56
+  rule_count: 35
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-02-21 - CORE-055 (Golden Test Tier Contract) + CORE-064 (Sweep Completeness Contract) added"
-  version: "3.6"
+  last_update: "2026-02-22 - rule_count corrected to 35 active CORE rules (was stale at 56)"
+  version: "3.7"
   consolidation_date: "2026-02-21"
   consolidation_status: "Phase 16 - CORE-064 Sweep Completeness Contract registered (partial sweep prevention)"
   naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"
