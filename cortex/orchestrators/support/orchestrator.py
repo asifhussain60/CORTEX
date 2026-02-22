@@ -247,6 +247,24 @@ class OnboardingOrchestrator:
         """
         return self.audit_log
 
+    def health_check(self) -> Dict[str, Any]:
+        """
+        Check health status of OnboardingOrchestrator.
+
+        Returns:
+            Dict with status, total_journeys, active_journeys, completed_journeys.
+        """
+        active_count = sum(1 for j in self.journeys.values() if j.state == JourneyState.IN_PROGRESS)
+        completed_count = sum(1 for j in self.journeys.values() if j.state == JourneyState.COMPLETED)
+        return {
+            "status": "healthy",
+            "orchestrator": "OnboardingOrchestrator",
+            "total_journeys": len(self.journeys),
+            "active_journeys": active_count,
+            "completed_journeys": completed_count,
+            "audit_log_entries": len(self.audit_log),
+        }
+
     def _log_event(
         self,
         event_type: str,

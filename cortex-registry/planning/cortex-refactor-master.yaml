@@ -13,10 +13,10 @@ metadata:
   completed_dir: cortex-registry/planning/phases/completed/cortex-refactor/
   status_authority: THIS FILE — cortex-refactor-master.yaml
   counters:
-    total_phases: 23
-    pending: 2
-    in_progress: 0
-    complete: 21
+    total_phases: 24
+    pending: 0
+    in_progress: 1
+    complete: 23
     deferred: 0
     failed: 0
   holistic_review:

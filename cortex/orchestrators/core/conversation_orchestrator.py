@@ -71,3 +71,21 @@ class ConversationOrchestrator:
         """Cancel the current conversation."""
         self.is_cancelled = True
         return True
+
+    def health_check(self) -> Dict[str, Any]:
+        """
+        Check health status of ConversationOrchestrator.
+
+        Returns:
+            Dict with status, session_id, conversation_turn_count, is_cancelled.
+        """
+        elapsed_seconds = (datetime.now() - self.created_at).total_seconds()
+        return {
+            "status": "cancelled" if self.is_cancelled else ("healthy" if elapsed_seconds < self.timeout_seconds else "timeout"),
+            "orchestrator": "ConversationOrchestrator",
+            "session_id": self.session_id,
+            "conversation_turn_count": len(self.conversation_history),
+            "is_cancelled": self.is_cancelled,
+            "elapsed_seconds": elapsed_seconds,
+            "timeout_seconds": self.timeout_seconds,
+        }
