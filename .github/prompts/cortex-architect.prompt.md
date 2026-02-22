@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-21 | **Architecture:** 22 Wired Orchestrators · 25 MCP Tools · 22 CORE Rules · 1 Package  
+**Updated:** 2026-02-21 | **Architecture:** 22 Wired Orchestrators · 25 MCP Tools · 35 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
@@ -464,7 +464,7 @@ Everything else → move to canonical location or delete.
 
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`)
-- No stale orchestrator counts (must say **22 wired orchestrators**, **25 MCP tools**, **22 CORE rules**)
+- No stale orchestrator counts (must say **22 wired orchestrators**, **25 MCP tools**, **35 CORE rules**)
 - No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
 - All agent files must match entries in `AGENT-INDEX.md`
@@ -476,7 +476,7 @@ Run `cortex-meta-auditor.md` checks when prompt or agent files are modified:
 |---|---|
 | Orchestrator count | All agents/prompts say "22 wired" |
 | MCP tool count | All say "25 production tools" |
-| CORE rules count | All say "22 active" |
+| CORE rules count | All say "35 active" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | Stale MCP tool names absent | No `cortex_process_request`, `cortex_lens_analyze`, `cortex_manage_todo` |
 

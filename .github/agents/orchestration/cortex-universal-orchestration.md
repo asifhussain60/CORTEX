@@ -133,7 +133,7 @@ USER REQUEST → STAGE 1: Interaction → STAGE 2: Intent → STAGE 3: Intellige
 
 ---
 
-## 🛡️ Governance Rules (22 Active)
+## 🛡️ Governance Rules (35 CORE Active)
 
 | Rule | Stage | Enforcement |
 |------|-------|-------------|

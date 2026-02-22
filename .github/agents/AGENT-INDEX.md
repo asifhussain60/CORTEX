@@ -33,7 +33,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 |--------|-------|
 | Orchestrators | 22 wired across 10 domains (6 core, 6 domain, 10 support) |
 | MCP Tools | 25 production tools |
-| CORE Rules | 22 active governance rules (incl. CORE-064 Sweep Completeness) |
+| CORE Rules | 35 active CORE governance rules (+ 2 AC rules, incl. CORE-064 Sweep Completeness) |
 | Package | `cortex` (single) |
 | Tests | 15,230 (539 golden, 177 phase) |
 | Entry Point | MasterOrchestrator → IntentRouter → Domain Orchestrator |

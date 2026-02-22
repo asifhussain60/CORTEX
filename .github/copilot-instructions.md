@@ -6,7 +6,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 - **22 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
 - **25 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
-- **22 CORE Governance Rules** enforced at pre-commit, CI, and runtime
+- **35 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
 - **LENS Analysis** — workspace-aware code intelligence (Language → Examination → Navigation → Synthesis)
@@ -22,7 +22,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Orchestrators | 22 wired in `cortex/orchestrators/` (6 core, 6 domain, 10 support) |
 | MCP Tools | 25 in `cortex/mcp/tools/` |
 | Top-level Dirs | 16 canonical under `cortex/` |
-| Governance Rules | 22 active in `cortex-registry/core/` |
+| Governance Rules | 35 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
 | Test Suite | 15,145 tests (539 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 

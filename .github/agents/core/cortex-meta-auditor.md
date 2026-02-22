@@ -63,7 +63,7 @@ Unlike `cortex-auditor.md` (which audits source code), this agent audits **docum
 |---|-------|---------------|
 | 1 | Orchestrator count | All agents say "22 wired" |
 | 2 | MCP tool count | All agents say "25 production tools" |
-| 3 | CORE rules count | All agents say "22 active" |
+| 3 | CORE rules count | All agents say "35 active" |
 | 4 | Package name | All agents say `cortex` (no `cortex_intelligence`, `cortex_lens`) |
 | 5 | Deleted paths | No refs to `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | 6 | Stale MCP tools | No refs to `cortex_process_request`, `cortex_lens_analyze`, `cortex_manage_todo` |
@@ -106,7 +106,7 @@ All `.github/` documentation MUST use these values:
 |--------|----------------|
 | Orchestrators | **22 wired** across 10 domains |
 | MCP Tools | **25 production tools** |
-| CORE Rules | **22 active** |
+| CORE Rules | **35 active** |
 | Package | **`cortex`** (single) |
 | Tests | **15,230** (486 golden, 177 phase) |
 
