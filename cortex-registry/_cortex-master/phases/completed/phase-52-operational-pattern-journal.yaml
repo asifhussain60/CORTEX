@@ -1,0 +1,305 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CORTEX Phase 52 — Operational Pattern Journal (OPJ)
+# ══════════════════════════════════════════════════════════════════════════════
+# Authority: cortex-architect.prompt.md § DESIGN MODE + § IMPLEMENT MODE
+# CORE Rules: CORE-002, CORE-008, CORE-011, CORE-012, CORE-028, CORE-035, CORE-048, CORE-064
+# Governance: skull-rules.yaml (tier0)
+# Registry target: cortex-registry/integration/patterns/ (EXISTING — activated)
+# ══════════════════════════════════════════════════════════════════════════════
+
+phase:
+  id: "phase-52"
+  title: "Operational Pattern Journal — Cross-Orchestrator Success/Failure Intelligence"
+  version: "1.0.0"
+  status: "completed"
+  priority: P1
+  created: "2026-02-22"
+  completed: "2026-02-22"
+  actual_duration: "1 session"
+  author: "Asif Hussain"
+  ac_session_id: "AC-OPJ-PHASE52"
+
+  description: |
+    Activates the Operational Pattern Journal (OPJ) — a living, append-only YAML journal
+    inside cortex-registry/integration/patterns/ that records what worked, what failed, and
+    why across ALL 22 wired operational orchestrators.
+
+    Every orchestrator consults the OPJ BEFORE executing (to avoid repeating past mistakes)
+    and writes to it AFTER executing (success or failure with root cause). Over time the OPJ
+    becomes CORTEX's institutional memory — making every subsequent operation smarter.
+
+    This is NOT digest/ingest specific. It is a universal intelligence layer applied at the
+    OrchestratorBase level via a zero-disruption OPJMixin.
+
+  vision: |
+    "CORTEX should get smarter with every operation. Success patterns get promoted and reused.
+    Failure patterns get avoided and resolved. The journal is the long-term memory of the
+    framework — not buried in runtime DBs, but visible, queryable YAML inside cortex-registry."
+
+  # ── ARCHITECTURAL DECISION ─────────────────────────────────────────────────
+  architecture:
+    registry_location: "cortex-registry/integration/patterns/"
+    sub_structure:
+      - "cortex-registry/integration/patterns/_registry.yaml"   # master index (auto-maintained)
+      - "cortex-registry/integration/patterns/success/"          # per-orchestrator success YAML
+      - "cortex-registry/integration/patterns/failure/"          # per-orchestrator failure YAML
+    no_new_top_level_dirs: true
+    scalability_design:
+      sharding: "one YAML file per orchestrator (prevents monolithic file growth)"
+      index: "_registry.yaml as inverted index — full scan only on explicit query"
+      confidence_decay: "entries older than 90 days auto-demoted in _registry.yaml"
+      deduplication: "reuses PatternLibrary similarity threshold (0.3) — already built"
+      schema_enforcement: "every entry requires outcome, confidence, orchestrator, operation"
+
+  # ── EXISTING INFRASTRUCTURE REUSED ────────────────────────────────────────
+  reuses:
+    - component: "cortex/intelligence/learning/pattern_library.py"
+      role: "PatternLibrary.store() for deduplication — already wired to integration/patterns/"
+    - component: "cortex/intelligence/learning/effectiveness_analyzer.py"
+      role: "EffectivenessAnalyzer for confidence scoring — reused as-is"
+    - component: "cortex/intelligence/learning/universal_learning_loop.py"
+      role: "UniversalLearningLoop as orchestration layer — OPJ feeds it directly"
+    - component: "cortex-registry/integration/patterns/"
+      role: "Target directory — already exists, currently empty (.gitkeep)"
+
+  # ── DELIVERABLES ───────────────────────────────────────────────────────────
+  deliverables:
+    - id: "D1"
+      title: "OPJ Registry Schema"
+      file: "cortex-registry/integration/patterns/_registry.yaml"
+      type: "yaml"
+      description: "Master index with inverted lookup by orchestrator + operation type. Auto-updated by OPJWriter."
+
+    - id: "D2"
+      title: "OPJWriter"
+      file: "cortex/intelligence/learning/opj_writer.py"
+      type: "python"
+      methods:
+        - "record_success(orchestrator, operation, context, resolution, confidence) → None"
+        - "record_failure(orchestrator, operation, error, attempted_fix, confidence) → None"
+        - "_update_registry(entry) → None  # private — updates _registry.yaml index"
+      writes_to:
+        - "cortex-registry/integration/patterns/success/{orchestrator_snake_case}.yaml"
+        - "cortex-registry/integration/patterns/failure/{orchestrator_snake_case}.yaml"
+        - "cortex-registry/integration/patterns/_registry.yaml"
+
+    - id: "D3"
+      title: "OPJReader"
+      file: "cortex/intelligence/learning/opj_reader.py"
+      type: "python"
+      methods:
+        - "query_patterns(orchestrator, operation, limit=5) → List[OPJEntry]"
+        - "query_failures(orchestrator, operation, limit=5) → List[OPJEntry]"
+        - "query_successes(orchestrator, operation, limit=5) → List[OPJEntry]"
+      reads_from:
+        - "cortex-registry/integration/patterns/_registry.yaml  # index lookup first"
+        - "cortex-registry/integration/patterns/success/{name}.yaml"
+        - "cortex-registry/integration/patterns/failure/{name}.yaml"
+
+    - id: "D4"
+      title: "OPJMixin"
+      file: "cortex/intelligence/learning/opj_mixin.py"
+      type: "python"
+      description: "Zero-disruption drop-in mixin for all orchestrators. Provides _opj_consult() and _opj_record_*(). No base class changes."
+      methods:
+        - "_opj_consult(operation) → List[OPJEntry]  # call BEFORE execution"
+        - "_opj_record_success(operation, context, resolution) → None"
+        - "_opj_record_failure(operation, error, attempted_fix) → None"
+
+    - id: "D5"
+      title: "MCP Tool: cortex_query_opj"
+      file: "cortex/mcp/tools/opj_tool.py"
+      type: "python"
+      description: "MCP-first exposure of OPJ. Allows Copilot Chat to query: 'What failed last time DigestSessionOrchestrator processed markdown?'"
+      params: "orchestrator (str), operation (str), outcome_filter (success|failure|all), limit (int=5)"
+
+    - id: "D6"
+      title: "Wire OPJMixin into 3 high-impact orchestrators"
+      orchestrators:
+        - "cortex/orchestrators/support/digest_session_orchestrator.py"
+        - "cortex/orchestrators/core/tdd_orchestrator.py"
+        - "cortex/orchestrators/core/enforcement_orchestrator.py"
+      description: "Pilot wiring — validates OPJMixin integration pattern before rolling to all 22."
+
+    - id: "D7"
+      title: "OPJ Index Update in cortex-registry/knowledge/INDEX.yaml"
+      file: "cortex-registry/knowledge/INDEX.yaml"
+      type: "yaml"
+      description: "Register OPJ as queryable knowledge source under new 'operational-patterns' domain."
+
+  # ── STAGES (TDD-FIRST per CORE-008) ────────────────────────────────────────
+  stages:
+
+    - stage_id: "A"
+      title: "Schema + Writer + Reader (RED → GREEN → REFACTOR)"
+      description: |
+        Write failing tests first (CORE-008). Implement OPJWriter, OPJReader,
+        and _registry.yaml schema. Tests validate YAML writes, index updates,
+        deduplication, and confidence decay logic.
+      tdd_sequence:
+        red:
+          - "tests/intelligence/test_opj_writer.py — record_success(), record_failure(), _update_registry()"
+          - "tests/intelligence/test_opj_reader.py — query_patterns(), failure/success filtering"
+          - "tests/intelligence/test_opj_registry_schema.py — schema validation, decay, sharding"
+        green:
+          - "cortex/intelligence/learning/opj_writer.py"
+          - "cortex/intelligence/learning/opj_reader.py"
+          - "cortex-registry/integration/patterns/_registry.yaml (initial schema)"
+        refactor:
+          - "Extract OPJEntry dataclass to shared opj_models.py"
+          - "Validate CORE-035: single canonical implementation (no duplicate with PatternLibrary)"
+      exit_criteria:
+        - "All RED tests pass GREEN"
+        - "cortex-registry/integration/patterns/success/ and failure/ sub-dirs created"
+        - "_registry.yaml contains valid schema with version, created_at, entries[]"
+        - "record_success() + record_failure() write valid YAML to correct shard file"
+        - "query_patterns() returns ranked results from _registry.yaml index"
+
+    - stage_id: "B"
+      title: "OPJMixin + 3 Orchestrator Pilot Wiring"
+      description: |
+        Build OPJMixin and wire into DigestSessionOrchestrator, TDDOrchestrator,
+        EnforcementOrchestrator. Zero-disruption: existing tests must stay green.
+      tdd_sequence:
+        red:
+          - "tests/intelligence/test_opj_mixin.py — _opj_consult(), _opj_record_success(), _opj_record_failure()"
+          - "tests/orchestrators/support/test_digest_opj_integration.py"
+          - "tests/orchestrators/core/test_tdd_opj_integration.py"
+          - "tests/orchestrators/core/test_enforcement_opj_integration.py"
+        green:
+          - "cortex/intelligence/learning/opj_mixin.py"
+          - "Add OPJMixin to DigestSessionOrchestrator (import + class declaration)"
+          - "Add OPJMixin to TDDOrchestrator"
+          - "Add OPJMixin to EnforcementOrchestrator"
+        refactor:
+          - "Confirm existing orchestrator tests still pass (zero regression)"
+      exit_criteria:
+        - "OPJMixin integrates with no base class changes"
+        - "DigestSessionOrchestrator writes success/failure pattern on each run"
+        - "TDDOrchestrator writes RED/GREEN/REFACTOR cycle patterns"
+        - "EnforcementOrchestrator writes governance violation patterns"
+        - "Existing test suite: zero regressions"
+
+    - stage_id: "C"
+      title: "MCP Tool cortex_query_opj + Knowledge INDEX registration"
+      description: |
+        Expose OPJ through MCP (CORE-050 MCP-first). Register as queryable knowledge domain.
+        Tool count becomes 26.
+      tdd_sequence:
+        red:
+          - "tests/mcp/test_opj_tool.py — all params, outcome_filter, limit, empty journal"
+        green:
+          - "cortex/mcp/tools/opj_tool.py"
+          - "cortex-registry/knowledge/INDEX.yaml — add operational-patterns domain"
+        refactor:
+          - "Update cortex/mcp/__init__.py tool registry"
+          - "Update cortex-master.yaml mcp.tool_count: 25 → 26"
+      exit_criteria:
+        - "cortex_query_opj(orchestrator='DigestSessionOrchestrator', operation='process', outcome_filter='failure') returns results"
+        - "cortex_query_opj with empty journal returns [] without error"
+        - "knowledge/INDEX.yaml updated with operational-patterns"
+        - "MCP tool count updated to 26"
+
+    - stage_id: "D"
+      title: "Smoke Validation + cortex-master.yaml sync"
+      description: |
+        Run smoke test suite. Validate OPJ entries accumulate from pilot orchestrators.
+        Update cortex-master.yaml to reflect phase completion.
+      actions:
+        - "Run: make test-smoke"
+        - "Manually trigger DigestSessionOrchestrator to confirm OPJ write"
+        - "Query cortex_query_opj to confirm roundtrip"
+        - "Update cortex-master.yaml: phase-52 → completed"
+        - "Update architecture.mcp_tools: 25 → 26"
+      exit_criteria:
+        - "Smoke tests pass"
+        - "cortex-registry/integration/patterns/ contains at least 1 real entry"
+        - "_registry.yaml index updated"
+        - "cortex-master.yaml synced"
+
+  # ── OPJ ENTRY SCHEMA (canonical) ──────────────────────────────────────────
+  opj_entry_schema:
+    required_fields:
+      - "entry_id: str  # OPJ-{ORCHESTRATOR}-{YYYYMMDDHHMMSS}"
+      - "orchestrator: str"
+      - "operation: str"
+      - "outcome: success | failure"
+      - "confidence: float  # 0.0-1.0"
+      - "timestamp: ISO8601"
+    success_fields:
+      - "resolution: str  # what made it succeed"
+      - "context: dict  # key inputs that mattered"
+      - "pattern_reuse_count: int  # how many times this pattern helped"
+    failure_fields:
+      - "error: str  # what went wrong"
+      - "attempted_fix: str  # what was tried"
+      - "root_cause: str  # why it failed"
+      - "avoid_in_future: str  # actionable avoidance rule"
+    decay:
+      enabled: true
+      half_life_days: 90
+      minimum_confidence: 0.1
+      promotion_threshold: 0.8  # auto-promote to knowledge/INDEX.yaml
+
+  # ── ROLLOUT PLAN (all 22 orchestrators) ───────────────────────────────────
+  rollout_plan:
+    pilot:
+      orchestrators: ["DigestSessionOrchestrator", "TDDOrchestrator", "EnforcementOrchestrator"]
+      phase: "phase-52 (this phase)"
+    wave_2:
+      orchestrators:
+        - "BulkDigestOrchestrator"
+        - "MasterOrchestrator"
+        - "IntentRouter"
+        - "VacuumOrchestrator"
+        - "HealthOrchestrator"
+      phase: "phase-53 (follow-on)"
+    wave_3:
+      orchestrators: "remaining 14 orchestrators"
+      phase: "phase-54 (follow-on)"
+      note: "After wave_2 validates pattern, wire via single PR with test coverage per orchestrator"
+
+  # ── GOVERNANCE ────────────────────────────────────────────────────────────
+  governance:
+    rules_applied:
+      - "CORE-002: No .md/.txt report files — all OPJ output is YAML only"
+      - "CORE-008: TDD mandatory — 4 test files written before any implementation"
+      - "CORE-011: Type hints on all OPJWriter, OPJReader, OPJMixin methods"
+      - "CORE-012: Docstrings on all public APIs"
+      - "CORE-028: snake_case — opj_writer.py, opj_reader.py, opj_mixin.py, opj_tool.py"
+      - "CORE-035: OPJMixin supersedes duplicate OrchestratorLearningMixin impls"
+      - "CORE-048: Holistic validation gate before any implementation begins"
+      - "CORE-049: Silent autonomous execution (progress bars only)"
+      - "CORE-064: Sweep completeness — all 4 deliverable groups addressed"
+    new_governance_rule_proposed:
+      id: "CORE-065"
+      principle: "Operational Pattern Consultation"
+      description: |
+        All operational orchestrators MUST consult the OPJ before executing a
+        previously-attempted operation. Failure to consult is a P2 governance
+        violation. Writing to OPJ after execution is mandatory (P1 violation if omitted).
+      severity: blocked
+      enforcement: "EnforcementOrchestrator + OPJMixin guard"
+      status: "proposed — to be registered in skull-rules.yaml upon phase-52 completion"
+
+  # ── SHARPEN-THE-SAW INTEGRATION ───────────────────────────────────────────
+  sharpen_the_saw:
+    pb_sts_001_application: |
+      PB-STS-001 Run 2 onward: Stage 1 LENS analysis consults OPJ for prior
+      GAP-001 (C# parser gap) before attempting analyze_sts_app. If OPJ returns
+      the known failure pattern, the stage automatically applies the documented
+      workaround (manifest-based smell enumeration) without re-discovering the gap.
+    cross_playbook_benefit: |
+      Any future playbook that runs analyze_sts_app on a C# repo will receive
+      the OPJ warning at Stage 1, preventing the false-negative from corrupting
+      the baseline score. The saw is sharper for every subsequent run.
+
+  # ── DEFINITION OF DONE ────────────────────────────────────────────────────
+  definition_of_done:
+    - "Stage A complete: OPJWriter + OPJReader + schema — all tests GREEN"
+    - "Stage B complete: OPJMixin wired to 3 pilot orchestrators — zero regressions"
+    - "Stage C complete: cortex_query_opj MCP tool live — tool count = 26"
+    - "Stage D complete: smoke tests pass + real OPJ entries in cortex-registry"
+    - "cortex-master.yaml updated: phase-52 status → completed"
+    - "CORE-065 proposed rule documented in skull-rules.yaml"
+    - "PB-STS-001 playbook updated: OPJ consultation step in Stage 1 gap handling"

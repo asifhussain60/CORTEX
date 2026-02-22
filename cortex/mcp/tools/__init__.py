@@ -2,7 +2,7 @@ from typing import Any
 """
 CORTEX MCP v2 - Tool Implementations
 
-35 production tools organized by category:
+36 production tools organized by category:
 - Core (4): process_request, challenge, classify, request_lifecycle
 - Intelligence (4): lens, knowledge, git, generate_tests
 - Governance (4): governance, validate, load, validate_request (Phase 48)
@@ -10,12 +10,14 @@ CORTEX MCP v2 - Tool Implementations
 - Utilities (11): verify, ask, vacuum, tools_catalog, total_recall, metrics, check, vision, orchestrator,
                   health_orchestrate, vacuum_orchestrate (Phase 48)
 - Toolkit (5): diagnose, verify_env, cleanup, validate_gov, analyze (Phase 90)
+- OPJ (1): cortex_query_opj (Phase 52) — Operational Pattern Journal
 
 AC_START: AC-WAVE100-S2-006
 AC_START: AC-P90-S7-001
 AC_START: AC-P48-MCP-001
 AC_START: AC-P50-MCP-001
 AC_START: PB-STS-001-RUN-2-SCAFFOLD-TOOL
+AC_START: AC-OPJ-PHASE52-MCP
 """
 
 # Core tools
@@ -96,6 +98,9 @@ from cortex.mcp.tools.test_quality_tool import CortexScoreTests
 
 # Phase 23 — Workflow template discovery tool (function-based)
 from cortex.mcp.tools.list_workflow_templates import cortex_list_workflow_templates
+
+# Phase 52 — Operational Pattern Journal MCP tool (function-based)
+from cortex.mcp.tools.opj_tool import cortex_query_opj
 
 
 # All tool classes for registration
@@ -224,6 +229,8 @@ __all__ = [
     "CortexScoreTests",
     # WorkflowTemplates (Phase 23)
     "cortex_list_workflow_templates",
+    # OPJ (Phase 52)
+    "cortex_query_opj",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",
@@ -233,3 +240,4 @@ __all__ = [
 # AC_COMPLETE: AC-P90-S7-001 ✅ 5 toolkit tools integrated
 # AC_COMPLETE: AC-P48-MCP-001 ✅ 2 health-vacuum MCP tools registered
 # AC_COMPLETE: AC-P50-MCP-001 ✅ CortexMasterPlanTool registered
+# AC_COMPLETE: AC-OPJ-PHASE52-MCP ✅ cortex_query_opj registered (MCP tool #26)

@@ -44,9 +44,12 @@ import logging
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
 
 import yaml
+
+if TYPE_CHECKING:
+    from cortex.orchestrators.intelligence.agent_rules_interpreter import ExecutionDirective
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
@@ -64,6 +67,7 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringRequest,
 )
+from cortex.intelligence.learning.opj_mixin import OPJMixin  # Phase 52: OPJ intelligence
 
 # Phase 43: Import RefactoringOrchestrator for REFACTOR phase wiring
 # NOTE: Consolidated in Wave 7, import removed
@@ -258,7 +262,7 @@ class TDDKnowledgeLoader:
         return practices
 
 
-class TDDOrchestrator(IOrchestrator):
+class TDDOrchestrator(OPJMixin, IOrchestrator):
     """
     TDD Orchestrator V2 - Refactored with IOrchestrator interface.
 
@@ -550,7 +554,7 @@ class TDDOrchestrator(IOrchestrator):
 
     def execute_with_directive(
         self,
-        directive: 'ExecutionDirective',
+        directive: ExecutionDirective,
         context: Dict[str, Any]
     ) -> Result:
         """
@@ -790,6 +794,11 @@ class TDDOrchestrator(IOrchestrator):
             # AC-PHASE24-005: Pre-execution brittleness scan (non-blocking)
             self._run_pre_execution_brittleness_scan(context)
 
+            # Phase 52: Consult OPJ before execution — apply learned lessons
+            _opj_prior = self._opj_consult(operation="tdd_execute")
+            if _opj_prior:
+                logger.debug("TDDOrchestrator: %d prior OPJ patterns found", len(_opj_prior))
+
             # MCP-GATE ENFORCEMENT: Block direct chat invocations
             invocation_source = context.get("source", "unknown")
             if invocation_source != "mcp_gateway":
@@ -862,9 +871,28 @@ class TDDOrchestrator(IOrchestrator):
                     "TDD Domain Logic"
                 ]
             })
+            # Phase 52: Record success pattern
+            self._opj_record_success(
+                operation="tdd_execute",
+                context={"module_path": context.get("module_path", ""), "phase": tdd_phase.value},
+                resolution=f"TDD phase {tdd_phase.value} completed for {context.get('module_path', 'unknown')}",
+                confidence=0.85,
+            )
+            return Ok({  # already returned above — OPJ record is non-blocking fire-and-forget
+                "orchestrator": "TDDOrchestrator",
+                "tdd_phase": tdd_phase.value,
+                "lens_context_used": lens_context is not None,
+            })
 
         except Exception as e:
             logger.error(f"TDD domain logic failed: {e}", exc_info=True)
+            # Phase 52: Record failure pattern
+            self._opj_record_failure(
+                operation="tdd_execute",
+                error=str(e),
+                attempted_fix="see stack trace",
+                confidence=0.8,
+            )
             return Err(f"TDD execution error: {str(e)}")
 
     def _determine_tdd_phase(self, user_request: str) -> TDDPhase:

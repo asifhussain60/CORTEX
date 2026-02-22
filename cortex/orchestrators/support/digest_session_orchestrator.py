@@ -3,6 +3,8 @@ DigestSessionOrchestrator — processes a single markdown/chat session file.
 
 Classifies content, extracts enhancements, and returns a structured result.
 CORTEX canonical support orchestrator (CORE-035).
+
+OPJ Integration (Phase 52): consults OPJ before processing, records outcome after.
 """
 
 from __future__ import annotations
@@ -10,6 +12,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Optional
+
+from cortex.intelligence.learning.opj_mixin import OPJMixin
 
 
 @dataclass
@@ -36,7 +40,7 @@ class DigestResult:
         }
 
 
-class DigestSessionOrchestrator:
+class DigestSessionOrchestrator(OPJMixin):
     """Orchestrates ingestion of a single markdown/chat session file."""
 
     def digest_session(self, file_path: str) -> DigestResult:
@@ -61,6 +65,12 @@ class DigestSessionOrchestrator:
         try:
             content = path.read_text(encoding="utf-8", errors="replace")
         except Exception as exc:
+            self._opj_record_failure(
+                operation="digest_session",
+                error=str(exc),
+                attempted_fix="read with errors='replace' — failed",
+                root_cause="File unreadable",
+            )
             return DigestResult(
                 success=False,
                 file_path=file_path,
@@ -71,13 +81,20 @@ class DigestSessionOrchestrator:
         confidence = self._compute_confidence(content, is_chat)
         enhancements = self._count_enhancements(content)
 
-        return DigestResult(
+        result = DigestResult(
             success=True,
             is_chat_file=is_chat,
             confidence_score=confidence,
             enhancements_found=enhancements,
             file_path=file_path,
         )
+        self._opj_record_success(
+            operation="digest_session",
+            context={"file": file_path, "is_chat": is_chat},
+            resolution=f"classified {'chat' if is_chat else 'doc'} confidence={confidence:.2f} enhancements={enhancements}",
+            confidence=min(confidence / 10.0, 1.0),
+        )
+        return result
 
     # ------------------------------------------------------------------
     # Private helpers

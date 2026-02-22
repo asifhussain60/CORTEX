@@ -37,6 +37,7 @@ from cortex.core.result import Err, Ok, Result
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
+from cortex.intelligence.learning.opj_mixin import OPJMixin  # Phase 52: OPJ intelligence
 
 logger = logging.getLogger(__name__)
 
@@ -1116,7 +1117,7 @@ class ExtendedGovernanceAgent:
 # ENFORCEMENT ORCHESTRATOR
 # ============================================================================
 
-class EnforcementOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin):
+class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTemplateMixin):
     """
     Pre-execution governance enforcement orchestrator with 8-agent system.
 
@@ -1304,6 +1305,14 @@ class EnforcementOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin):
                     "blocked": True,
                 }
             )
+            # Phase 52: Record governance violation pattern
+            self._opj_record_failure(
+                operation="validate_operation",
+                error=f"{len(all_violations)} governance violation(s): {'; '.join(all_violations[:2])}",
+                attempted_fix="see violation details",
+                confidence=0.9,
+                avoid_in_future=f"Ensure operation satisfies: {'; '.join(all_violations[:2])}",
+            )
             return Err(enforcement_result)
 
         elif all_warnings:
@@ -1321,7 +1330,13 @@ class EnforcementOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin):
                 "blocked": False,
             }
         )
-
+        # Phase 52: Record compliance success pattern
+        self._opj_record_success(
+            operation="validate_operation",
+            context={"intent": intent, "agent_count": len(self.agents)},
+            resolution=f"All {len(self.agents)} agents passed in {round(execution_time_ms, 1)}ms",
+            confidence=0.85,
+        )
         return Ok(enforcement_result)
 
     def _format_governance_rule_with_book(self, rule_id: str) -> str:

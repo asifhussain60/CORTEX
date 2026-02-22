@@ -1,0 +1,181 @@
+"""
+OPJMixin — zero-disruption drop-in for all operational orchestrators.
+
+Provides three methods that orchestrators call:
+  _opj_init(registry_root)       — optional explicit init (lazy-safe if skipped)
+  _opj_consult(operation)        — call BEFORE execution; returns prior patterns
+  _opj_record_success(...)       — call AFTER successful execution
+  _opj_record_failure(...)       — call AFTER failed execution
+
+Usage::
+
+    class MyOrchestrator(OPJMixin, OrchestratorBase):
+        def __init__(self):
+            super().__init__()
+            self._opj_init()   # optional — auto-inits on first use if skipped
+
+        def execute(self, request):
+            prior = self._opj_consult("execute")  # consult before
+            result = self._do_work(request)
+            if result.success:
+                self._opj_record_success("execute", context={...}, resolution="...")
+            else:
+                self._opj_record_failure("execute", error="...", attempted_fix="...")
+            return result
+
+AC-ID: AC-OPJ-PHASE52-MIXIN
+CORE: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (single canonical)
+"""
+
+from __future__ import annotations
+
+import logging
+import re
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+logger = logging.getLogger(__name__)
+
+_WORKSPACE_ROOT = Path(__file__).resolve().parents[4]
+_DEFAULT_REGISTRY = _WORKSPACE_ROOT / "cortex-registry"
+
+
+def _snake(name: str) -> str:
+    """Convert CamelCase or arbitrary string to snake_case (handles consecutive caps e.g. TDDOrchestrator)."""
+    s = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", name)
+    s = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s)
+    return re.sub(r"[^a-z0-9]+", "_", s.lower()).strip("_")
+
+
+class OPJMixin:
+    """
+    Mixin that adds Operational Pattern Journal (OPJ) capabilities to any orchestrator.
+
+    Thread-safe. Minimal overhead (<10ms per call). No base class changes required.
+    Lazy-safe: all methods work even if _opj_init() is never called.
+    """
+
+    _opj_writer: Optional[Any] = None
+    _opj_reader: Optional[Any] = None
+    _opj_registry_root: Optional[Path] = None
+
+    # ── Initialisation ──────────────────────────────────────────────────────
+
+    def _opj_init(self, registry_root: Optional[Path] = None) -> None:
+        """
+        Explicitly initialise OPJ components.
+
+        Args:
+            registry_root: Path to patterns/ directory. Defaults to canonical location.
+                           Pass tmp_path in tests for isolation.
+        """
+        root = Path(registry_root) if registry_root else _DEFAULT_REGISTRY
+        self._opj_registry_root = root
+        from cortex.intelligence.learning.opj_writer import OPJWriter
+        from cortex.intelligence.learning.opj_reader import OPJReader
+
+        self._opj_writer = OPJWriter(registry_root=root)
+        self._opj_reader = OPJReader(registry_root=root)
+
+    def _opj_ensure_init(self) -> None:
+        """Lazy-initialise OPJ components on first use."""
+        if self._opj_writer is None:
+            self._opj_init()
+
+    def _opj_orchestrator_name(self) -> str:
+        """Return the orchestrator name: `name` attr → class.__name__ fallback."""
+        return getattr(self, "name", None) or self.__class__.__name__
+
+    # ── Public OPJ API ──────────────────────────────────────────────────────
+
+    def _opj_consult(self, operation: str, limit: int = 5) -> List[Dict[str, Any]]:
+        """
+        Consult the OPJ for prior patterns before executing an operation.
+
+        Call this BEFORE execution. Returns failure patterns first (ranked by
+        confidence desc) so the orchestrator can avoid known mistakes.
+
+        Args:
+            operation: The operation about to be executed.
+            limit: Maximum number of patterns to return.
+
+        Returns:
+            List of OPJ entry dicts, or [] if journal is empty or unavailable.
+        """
+        try:
+            self._opj_ensure_init()
+            orchestrator = self._opj_orchestrator_name()
+            return self._opj_reader.query_patterns(  # type: ignore[union-attr]
+                orchestrator=orchestrator,
+                operation=operation,
+                limit=limit,
+            )
+        except Exception as exc:
+            logger.debug("OPJMixin._opj_consult: non-fatal error — %s", exc)
+            return []
+
+    def _opj_record_success(
+        self,
+        operation: str,
+        context: Dict[str, Any],
+        resolution: str,
+        confidence: float = 0.8,
+    ) -> None:
+        """
+        Record a successful operation to the OPJ.
+
+        Call this AFTER a successful execution.
+
+        Args:
+            operation: The operation that succeeded.
+            context: Key input values that contributed to success.
+            resolution: Human-readable description of what made it work.
+            confidence: Confidence score 0.0–1.0 (default 0.8).
+        """
+        try:
+            self._opj_ensure_init()
+            self._opj_writer.record_success(  # type: ignore[union-attr]
+                orchestrator=self._opj_orchestrator_name(),
+                operation=operation,
+                context=context,
+                resolution=resolution,
+                confidence=confidence,
+            )
+        except Exception as exc:
+            logger.warning("OPJMixin._opj_record_success: non-fatal error — %s", exc)
+
+    def _opj_record_failure(
+        self,
+        operation: str,
+        error: str,
+        attempted_fix: str = "",
+        confidence: float = 0.7,
+        root_cause: Optional[str] = None,
+        avoid_in_future: Optional[str] = None,
+    ) -> None:
+        """
+        Record a failed operation to the OPJ.
+
+        Call this AFTER a failed execution.
+
+        Args:
+            operation: The operation that failed.
+            error: What went wrong.
+            attempted_fix: What was tried.
+            confidence: Confidence in the failure pattern 0.0–1.0 (default 0.7).
+            root_cause: Why it failed (optional).
+            avoid_in_future: Actionable avoidance rule (optional).
+        """
+        try:
+            self._opj_ensure_init()
+            self._opj_writer.record_failure(  # type: ignore[union-attr]
+                orchestrator=self._opj_orchestrator_name(),
+                operation=operation,
+                error=error,
+                attempted_fix=attempted_fix,
+                confidence=confidence,
+                root_cause=root_cause,
+                avoid_in_future=avoid_in_future,
+            )
+        except Exception as exc:
+            logger.warning("OPJMixin._opj_record_failure: non-fatal error — %s", exc)

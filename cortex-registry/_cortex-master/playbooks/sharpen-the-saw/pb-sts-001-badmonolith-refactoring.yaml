@@ -13,7 +13,7 @@
 # no file-write bypasses, no terminal shortcuts. This is not a constraint to
 # work around — it IS the point.
 #
-# SHARPEN-THE-SAW INTEGRATION
+  # ── SHARPEN-THE-SAW INTEGRATION
 # ────────────────────────────
 # This playbook is part of the CORTEX "sharpen the saw" philosophy:
 # executing via MCP surfaces tool capability gaps. Each gap discovered
@@ -27,10 +27,22 @@
 #   4. Continue execution with the available workaround
 #   5. The playbook is not "done" until every stage completes through MCP
 #
+# OPJ INTEGRATION (Phase 52)
+# ──────────────────────────
+# From Run 2 onward, this playbook leverages the Operational Pattern Journal (OPJ):
+#   cortex-registry/integration/patterns/ (success/ + failure/ + _registry.yaml)
+#
+# Before each stage: cortex_query_opj surfaces prior failure patterns so known
+# gaps (e.g. GAP-001 C# parser) are avoided without re-discovery.
+# After each stage:  the stage outcome (success or failure) is written to OPJ
+# so future runs — and future playbooks — benefit from institutional memory.
+#
+# MCP tool: cortex_query_opj(orchestrator, operation, outcome_filter, limit)
+# Phase reference: cortex-registry/_cortex-master/phases/planned/phase-52-operational-pattern-journal.yaml
+#
 # Run 1 (2026-02-22): 6 gaps found, 1 fixed inline (GAP-002 master_plan regression)
-# ══════════════════════════════════════════════════════════════════════════════
-
-playbook:
+# Run 2+: OPJ pre-consult at each stage prevents re-discovering known gaps
+# ══════════════════════════════════════════════════════════════════════════════playbook:
   id: "pb-sts-001"
   title: "BadMonolith End-to-End Refactoring — CORTEX SDLC Showcase"
   version: "1.0.0"
@@ -97,6 +109,8 @@ playbook:
       gaps_discovered: 6
       gaps_fixed: 1   # GAP-002 cortex_master_plan regression fixed inline
       gaps_backlogged: 5
+      opj_used: false  # Phase 52 not yet complete — gaps discovered manually
+      opj_seeded: false  # known_failure_patterns_to_seed awaiting Phase 52 completion
       tool_calls:
         stage_1: ["onboard_repository_tool ✅", "analyze_sts_app ⚠(C# gap GAP-001)"]
         stage_2: ["cortex_master_plan(create) ✅", "cortex_health_check ✅"]
@@ -185,9 +199,34 @@ playbook:
       params: "source_contexts, merge_strategy"
       status: "✅ WORKS"
       notes: "Context merging across stages functional."
+    cortex_query_opj:
+      module: "cortex.mcp.tools.opj_tool"
+      params: "orchestrator (str), operation (str), outcome_filter (success|failure|all), limit (int=5)"
+      status: "⚪ PENDING — available from Phase 52 completion"
+      phase_ref: "phase-52-operational-pattern-journal.yaml"
+      notes: |
+        Queries Operational Pattern Journal before each stage. Returns prior success/failure
+        patterns so known gaps (e.g. GAP-001 C# parser) are surfaced automatically.
+        Not yet available in Run 1. Wire into Run 2 Stage 1 pre-hook once Phase 52 ships.
+      run_2_usage:
+        stage_1_pre: "cortex_query_opj(orchestrator='LENSOrchestrator', operation='analyze_csharp', outcome_filter='failure', limit=3)"
+        stage_2_pre: "cortex_query_opj(orchestrator='EnforcementOrchestrator', operation='holistic_gate', outcome_filter='all', limit=5)"
+        stage_3_pre: "cortex_query_opj(orchestrator='SecurityOrchestrator', operation='security_gate', outcome_filter='failure', limit=3)"
+        all_stages_post: "cortex_query_opj records stage outcome after exit_criteria evaluated"
 
   # ── STAGES (8-Stage Orchestrator Chain) ────────────────────────────────────
   stages:
+
+    # ── OPJ PRE-HOOK (ALL STAGES — from Run 2 onward) ─────────────────────
+    # When Phase 52 is complete, insert this before each stage's mcp_tools list:
+    #   - tool: "cortex_query_opj"
+    #     call: "cortex_query_opj(orchestrator='<StageOrchestrator>', operation='<stage_operation>', outcome_filter='failure', limit=3)"
+    #     purpose: "Surface prior failure patterns before execution — avoid repeating known mistakes"
+    # And insert this after each stage's exit_criteria:
+    #   opj_post_hook:
+    #     on_success: "cortex_query_opj records success pattern with resolution + context"
+    #     on_failure: "cortex_query_opj records failure pattern with error + attempted_fix + avoid_in_future"
+    # Phase 52 reference: cortex-registry/_cortex-master/phases/planned/phase-52-operational-pattern-journal.yaml
 
     # ── STAGE 1: LENS BASELINE ─────────────────────────────────────────────
     - stage_id: 1
@@ -635,3 +674,83 @@ playbook:
     - file: "_cortex-master/phases/planned/phase-25-sts-badmonolith-v2.yaml"
       reason: "Skeletal 28-line stub promoted to full playbook with 8 stages"
       date: "2026-02-22"
+
+  # ── OPJ INTEGRATION (Phase 52) ─────────────────────────────────────────────
+  opj_integration:
+    status: "pending — available when phase-52 is complete"
+    phase_ref: "cortex-registry/_cortex-master/phases/planned/phase-52-operational-pattern-journal.yaml"
+    registry_path: "cortex-registry/integration/patterns/"
+    mcp_tool: "cortex_query_opj"
+    description: |
+      The Operational Pattern Journal (OPJ) makes PB-STS-001 smarter on every run.
+      Known gaps (GAP-001 C# parser, GAP-003 sweep_open, GAP-006 health_score) are
+      stored as failure patterns. Run 2 onward: each stage pre-consults the OPJ
+      before executing, receiving structured failure patterns with workarounds.
+      Stage outcomes are written back to OPJ after exit_criteria evaluation.
+
+    known_failure_patterns_to_seed:
+      - entry_id: "OPJ-LENS-GAP001"
+        orchestrator: "LENSOrchestrator"
+        operation: "analyze_csharp_typescript"
+        outcome: "failure"
+        error: "analyze_sts_app returns violations=[] for C#/TS — Python AST only"
+        attempted_fix: "analyze_sts_app(pattern_types=['security'])"
+        root_cause: "PatternDetector._detect_ast_patterns() calls ast.parse() — Python only"
+        avoid_in_future: "Use .cortex-manifest.yaml for C# smell enumeration. Do not rely on analyze_sts_app for non-Python repos."
+        gap_ref: "GAP-001"
+        confidence: 0.95
+
+      - entry_id: "OPJ-MASTER-GAP002"
+        orchestrator: "MasterOrchestrator"
+        operation: "next_sequence"
+        outcome: "failure"
+        error: "AttributeError: 'str' object has no attribute 'get' — phases dict not handled"
+        attempted_fix: "cortex_master_plan(operation='create') used as session tracker instead"
+        root_cause: "cortex_master_plan next_sequence expected list but got structured dict"
+        avoid_in_future: "Use operation='create' for session tracking. next_sequence fixed 2026-02-22 (verify before use)."
+        gap_ref: "GAP-002 (FIXED)"
+        confidence: 0.9
+
+      - entry_id: "OPJ-SWEEP-GAP003"
+        orchestrator: "SweepCatalogueOrchestrator"
+        operation: "open_sweep_session"
+        outcome: "failure"
+        error: "No cortex_sweep_open MCP tool exists — cortex_sweep_status is reader-only"
+        attempted_fix: "cortex_master_plan(operation='create') used as session proxy"
+        root_cause: "MCP surface gap — sweep session lifecycle not exposed as MCP tool"
+        avoid_in_future: "Use cortex_master_plan(create) for session tracking until ENH-MCP-SWEEP-OPEN ships."
+        gap_ref: "GAP-003"
+        confidence: 0.95
+
+      - entry_id: "OPJ-HEALTH-GAP006"
+        orchestrator: "HealthOrchestrator"
+        operation: "health_score_normalisation"
+        outcome: "failure"
+        error: "cortex_health_check returns health_score=0.0 regardless of agent results"
+        attempted_fix: "Used agent_results.issues for comparison instead of health_score"
+        root_cause: "Normalisation bug in health_check_tool — score not calculated from agent_results"
+        avoid_in_future: "Ignore health_score field. Use agent_results[*].issues for real health data."
+        gap_ref: "GAP-006"
+        confidence: 0.9
+
+    run_2_pre_hooks:
+      stage_1:
+        before: "cortex_query_opj(orchestrator='LENSOrchestrator', operation='analyze_csharp_typescript', outcome_filter='failure', limit=3)"
+        expected_result: "Returns OPJ-LENS-GAP001 — C# parser gap with workaround"
+        action: "Apply workaround immediately: use .cortex-manifest.yaml, skip analyze_sts_app for smell enumeration"
+      stage_2:
+        before: "cortex_query_opj(orchestrator='SweepCatalogueOrchestrator', operation='open_sweep_session', outcome_filter='failure', limit=3)"
+        expected_result: "Returns OPJ-SWEEP-GAP003 — use cortex_master_plan(create) as proxy"
+      stage_7:
+        before: "cortex_query_opj(orchestrator='MasterOrchestrator', operation='next_sequence', outcome_filter='failure', limit=2)"
+        expected_result: "Returns OPJ-MASTER-GAP002 — confirmed fixed 2026-02-22"
+      stage_8:
+        before: "cortex_query_opj(orchestrator='HealthOrchestrator', operation='health_score_normalisation', outcome_filter='failure', limit=2)"
+        expected_result: "Returns OPJ-HEALTH-GAP006 — use agent_results.issues not health_score"
+
+    seeding_instruction: |
+      On Phase 52 completion, seed the above entries into OPJ by calling:
+        OPJWriter().record_failure(**entry)
+      for each known_failure_patterns_to_seed entry. This bootstraps the OPJ
+      with Run 1 institutional knowledge before Run 2 begins.
+      Alternatively, run: cortex_query_opj with seed=True param (Phase 52 D3 feature).

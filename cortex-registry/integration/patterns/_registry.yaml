@@ -1,0 +1,33 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CORTEX Operational Pattern Journal — Master Registry Index
+# ══════════════════════════════════════════════════════════════════════════════
+# Authority: phase-52-operational-pattern-journal.yaml
+# Location: cortex-registry/integration/patterns/_registry.yaml
+# Purpose: Inverted index of all OPJ entries. Maintained by OPJWriter.
+#          Full scan only on explicit query — use this index for fast lookup.
+# CORE: CORE-002 (YAML only, no .md/.txt), CORE-035 (single canonical)
+# ══════════════════════════════════════════════════════════════════════════════
+
+schema_version: "1.0"
+created_at: "2026-02-22T00:00:00Z"
+updated_at: "2026-02-22T00:00:00Z"
+total_entries: 0
+description: "Master index of all Operational Pattern Journal entries across all orchestrators."
+
+decay:
+  enabled: true
+  half_life_days: 90
+  minimum_confidence: 0.1
+  promotion_threshold: 0.8  # auto-promote to knowledge/INDEX.yaml upon reaching this confidence
+
+index:
+  # Structure:
+  # <orchestrator_snake_case>:
+  #   <operation>:
+  #     success: [entry_id, ...]
+  #     failure: [entry_id, ...]
+  # Example:
+  # digest_session_orchestrator:
+  #   process:
+  #     success: ["OPJ-DSO-20260222120000"]
+  #     failure: ["OPJ-DSO-20260222130000"]
