@@ -1,0 +1,214 @@
+# STS Refactoring Session Roadmap Template
+# Software Transformation Session (STS) — phase-by-phase execution plan
+# Authority: cortex-architect.prompt.md § REFACTOR MODE
+# ENH gates: ENH-STS-01 (functional completeness), ENH-STS-02 (traceability),
+#             ENH-STS-03 (security hardening), ENH-STS-04 (test coverage density)
+# CORE rules: CORE-008 (TDD), CORE-064 (Sweep Completeness), CORE-002 (no md/txt reports)
+#
+# Usage: copy this template, fill in project-specific values, commit to
+#        cortex-registry/planning/phases/{project-id}-sts.yaml
+
+registry_version: "2.0"
+template_type: "sts-refactoring"
+target_audience: "CORTEX Architect + RefactoringOrchestrator"
+
+metadata:
+  created: "YYYY-MM-DD"
+  project_id: "STS-{PROJECT}"
+  source_repo: "path/to/BadMonolith"
+  target_repo: "path/to/Refactored"
+  session_id: null  # populated at AC_START — uuid4
+
+# ── WAVE 1: PRE-FLIGHT ────────────────────────────────────────────────────────
+wave_1:
+  wave_id: "WAVE-1-PREFLIGHT"
+  title: "Pre-Flight: Baseline + Smell Catalogue"
+  description: "Enumerate source capabilities, catalogue all smells, open audit session."
+  status: "planned"
+
+  phases:
+    - phase_id: "STS-P-001"
+      title: "Enumerate Source Endpoints + Functions"
+      effort_hours: 2
+      depends_on: []
+      deliverables:
+        - "source_items: list of all public endpoints and public functions in source codebase"
+        - "smell_catalogue: all identified code smells with severity (P0/P1/P2)"
+      gate:
+        tool: "cortex_refactor"
+        operation: "gate"
+        params:
+          trace_action: "AC_START"
+          session_id: "{session_id}"
+          trace_metadata:
+            smells_catalogued: "{smell_count}"
+      exit_criteria:
+        - "source_items list committed to session context"
+        - "AC_START written to orchestrator-traces.db with real source_repo path"
+
+    - phase_id: "STS-P-002"
+      title: "Holistic Validation Gate (CORE-048)"
+      effort_hours: 1
+      depends_on: ["STS-P-001"]
+      deliverables:
+        - "Holistic validation verdict: PASS or BLOCK"
+      gate:
+        tool: "cortex_validate_compliance"
+        params:
+          mode: "REFACTOR"
+      exit_criteria:
+        - "Holistic validation: PASS (risk ≤ 0.6)"
+
+# ── WAVE 2: EXECUTION ─────────────────────────────────────────────────────────
+wave_2:
+  wave_id: "WAVE-2-EXECUTE"
+  title: "Execute: Architecture + Security + Tests"
+  description: "Ordered refactoring execution. Each phase must leave all tests green."
+  status: "planned"
+
+  phases:
+    - phase_id: "STS-P-003"
+      title: "Architecture Decomposition"
+      effort_hours: 8
+      depends_on: ["STS-P-002"]
+      deliverables:
+        - "God class decomposed into domain-separated modules"
+        - "Repository pattern with interfaces"
+        - "DI wiring: consistent lifetimes (Scoped preferred)"
+        - "API versioning applied"
+      tdd_required: true
+      exit_criteria:
+        - "All existing tests pass"
+        - "DI lifetimes consistent (no Singleton capturing Scoped)"
+
+    - phase_id: "STS-P-004"
+      title: "Security Hardening"
+      effort_hours: 4
+      depends_on: ["STS-P-003"]
+      deliverables:
+        - "All SQL injection → parameterized queries"
+        - "Password hashing: BCrypt/Argon2 (not SHA256/MD5)"
+        - "CORS: specific origins from config (not wildcard)"
+        - "JWT: AddAuthentication wired + token generation complete"
+        - "Error handling: RFC 7807 ProblemDetails (no stack trace to client)"
+        - "Rate limiting on login + payment endpoints"
+      gate:
+        tool: "cortex_refactor"
+        operation: "gate"
+        params:
+          language: "{language}"
+          context_hints:
+            has_jwt_config: true
+            has_jwt_middleware: false     # must become true after this phase
+            has_sensitive_endpoints: true
+            has_rate_limiting: false      # must become true after this phase
+      exit_criteria:
+        - "ENH-STS-03 check_security_hardening: 0 P0 violations"
+        - "BCrypt/Argon2 in use (weak_password_hash rule: no matches)"
+        - "JWT middleware wired (incomplete_jwt rule: no match)"
+        - "Rate limiting middleware present on sensitive routes"
+
+    - phase_id: "STS-P-005"
+      title: "Functional Completeness — All Source Endpoints Implemented"
+      effort_hours: 4
+      depends_on: ["STS-P-004"]
+      deliverables:
+        - "Every endpoint in source_items present in target (including transfer, admin, analytics)"
+        - "Dropped endpoints either reimplemented securely or justified via ADR"
+      gate:
+        tool: "cortex_refactor"
+        operation: "gate"
+        params:
+          source_items: "{source_items}"
+          target_items: "{target_items}"
+      exit_criteria:
+        - "ENH-STS-01 check_functional_completeness: gap_count == 0 OR ADR filed for each gap"
+
+    - phase_id: "STS-P-006"
+      title: "Test Coverage Density"
+      effort_hours: 6
+      depends_on: ["STS-P-005"]
+      tdd_required: true
+      deliverables:
+        - "XxxServiceTests class for every XxxService class"
+        - "Endpoint-level tests (routing, status codes, parameter binding)"
+        - "Frontend test runner configured (if TypeScript service layer exists)"
+      gate:
+        tool: "cortex_refactor"
+        operation: "gate"
+        params:
+          service_dir: "{service_dir}"
+          test_dir: "{test_dir}"
+      exit_criteria:
+        - "ENH-STS-04 check_test_coverage_density: complete == true"
+        - "Minimum 8 tests per service class"
+        - "Frontend package.json has test script if service layer exists"
+
+# ── WAVE 3: CLOSE ─────────────────────────────────────────────────────────────
+wave_3:
+  wave_id: "WAVE-3-CLOSE"
+  title: "Close: Scorecard + AC_COMPLETE"
+  description: "Generate scorecard, write real AC_COMPLETE, verify zero regressions."
+  status: "planned"
+
+  phases:
+    - phase_id: "STS-P-007"
+      title: "Scorecard + AC_COMPLETE"
+      effort_hours: 1
+      depends_on: ["STS-P-006"]
+      deliverables:
+        - "Weighted scorecard inline (architecture/security/testing/docs/frontend/traceability)"
+        - "AC_COMPLETE written to orchestrator-traces.db with real source_repo/target_repo paths"
+        - "trace_metadata includes: smells_addressed, files_created, test_count_after, security_p0_after"
+      gate:
+        tool: "cortex_refactor"
+        operation: "gate"
+        params:
+          trace_action: "AC_COMPLETE"
+          session_id: "{session_id}"
+          trace_metadata:
+            smells_addressed: "{smell_count}"
+            files_created: "{file_count}"
+            test_count_before: "{test_count_before}"
+            test_count_after: "{test_count_after}"
+            security_p0_before: "{p0_before}"
+            security_p0_after: 0
+      exit_criteria:
+        - "ENH-STS-02: AC_COMPLETE written with actual source_repo (not 'source/repo' placeholder)"
+        - "orchestrator.generate_scorecard() displayed inline"
+        - "All tests pass (python3 scripts/run_tests.py batch)"
+
+# ── CRITICAL: Anti-Patterns (BLOCK if any of these occur) ────────────────────
+anti_patterns:
+  - id: "AP-001"
+    description: "AC_COMPLETE written with 'source/repo' placeholder — synthetic trace"
+    severity: "P0"
+    rule: "CORE-064"
+  - id: "AP-002"
+    description: "Endpoints dropped without ADR — functional regression"
+    severity: "P0"
+    rule: "ENH-STS-01"
+  - id: "AP-003"
+    description: "SHA256/MD5 used for password hashing — weak crypto"
+    severity: "P0"
+    rule: "ENH-STS-03"
+  - id: "AP-004"
+    description: "JWT config present in appsettings but no AddAuthentication wired"
+    severity: "P0"
+    rule: "ENH-STS-03"
+  - id: "AP-005"
+    description: "Health endpoint returns hardcoded 'healthy' — no live dependency probe"
+    severity: "P1"
+    rule: "REFACTOR-quality"
+  - id: "AP-006"
+    description: "AddSingleton repositories + AddScoped services — captive dependency"
+    severity: "P1"
+    rule: "REFACTOR-di-consistency"
+  - id: "AP-007"
+    description: "No test class for XxxService — coverage density gap"
+    severity: "P1"
+    rule: "ENH-STS-04"
+  - id: "AP-008"
+    description: "Frontend has service layer but no test runner in package.json"
+    severity: "P1"
+    rule: "ENH-STS-04"
