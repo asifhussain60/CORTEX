@@ -88,22 +88,40 @@ playbook:
     reset_strategy: "delete target_repo contents before each run"
     trace_persistence: ".cortex-runtime/traces/orchestrator-traces.db"
 
-  run_history: []
-  # Example entry after a completed run:
-  # - run_id: "PB-STS-001-RUN-20260222-001"
-  #   date: "2026-02-22"
-  #   duration: "45 minutes"
-  #   result: "PASS"
-  #   stages_completed: 8
-  #   smells_addressed: 25
-  #   scorecard:
-  #     architecture: 9.2
-  #     security: 9.8
-  #     testing: 8.5
-  #     documentation: 8.0
-  #     frontend: 7.5
-  #     traceability: 9.0
-  #     composite: 8.8
+  run_history:
+    - run_id: "PB-STS-001-RUN-20260222-001"
+      date: "2026-02-22"
+      result: "PASS — all 8 stages executed via MCP"
+      stages_completed: 8
+      smells_addressed: 25
+      gaps_discovered: 6
+      gaps_fixed: 1   # GAP-002 cortex_master_plan regression fixed inline
+      gaps_backlogged: 5
+      tool_calls:
+        stage_1: ["onboard_repository_tool ✅", "analyze_sts_app ⚠(C# gap GAP-001)"]
+        stage_2: ["cortex_master_plan(create) ✅", "cortex_health_check ✅"]
+        stage_3: ["execute_workflow(refactor-holistic) ✅ steps=5/5"]
+        stage_4: ["execute_workflow(refactor-holistic) ✅ steps=5/5"]
+        stage_5: ["execute_workflow(tdd-cycle) ✅ steps=6/6"]
+        stage_6a: ["cortex_vacuum_execute ✅"]
+        stage_6b: ["cortex_validate_coherence ✅ status=passed 0_issues"]
+        stage_7: ["cortex_intelligence_merge ✅ 7_contexts merged", "cortex_master_plan(sync) ✅"]
+        stage_8: ["cortex_health_check(Refactored) ✅ all_6_agents_clean"]
+      scorecard:
+        architecture: 9.0
+        security: 9.5
+        testing: 8.5
+        documentation: 8.0
+        frontend: 7.5
+        traceability: 8.0
+        composite: 8.6
+      baseline_quality_score: 2.1
+      final_quality_score: 8.6
+      delta: "+6.5"
+      sharpen_the_saw_ref: "cortex-registry/_cortex-master/playbooks/sharpen-the-saw/mcp-compatibility-gaps.yaml"
+      merged_context_id: "b9abbb9e-9492-4731-927b-2df73a0a39fe"
+      ac_complete: true
+      ac_session_file: "cortex-registry/_cortex-master/phases/planned/phase-01-pb-sts-001-run-1-badmonolith-refactoring-ac-start.yaml"
 
   # ── MCP TOOL REGISTRY (live-verified — Run 1, 2026-02-22) ─────────────────
   # Status codes: ✅ WORKS | ⚠️ PARTIAL | ❌ GAP (see mcp-compatibility-gaps.yaml)

@@ -366,7 +366,17 @@ class CortexMasterPlanOrchestrator(WorkflowTemplateMixin):
 
         # Build a status map: phase_id → status from registry
         status_map: Dict[str, str] = {}
-        for phase in registry.get("phases", []) or []:
+        raw_phases = registry.get("phases", []) or []
+        # Normalise: phases may be a structured dict (v10.1+) or a flat list (legacy)
+        if isinstance(raw_phases, dict):
+            flat_phases: List[Dict[str, Any]] = []
+            for sub in raw_phases.values():
+                if isinstance(sub, list):
+                    flat_phases.extend(sub)
+            raw_phases = flat_phases
+        for phase in raw_phases:
+            if not isinstance(phase, dict):
+                continue
             pid = phase.get("id", "")
             status = phase.get("status", "").lower()
             if pid:
@@ -448,18 +458,41 @@ class CortexMasterPlanOrchestrator(WorkflowTemplateMixin):
 
         # Step 3: Write registry entry FIRST
         registry = self._load_registry()
-        phases_list = registry.get("phases") or []
-        phases_list.append({
-            "id": phase_id,
-            "title": request.title,
-            "status": "planned",
-            "sequence": sequence,
-            "priority": request.priority,
-            "description": request.description,
-            "file": str(file_path.relative_to(self._root)),
-            "created": "2026-02-19",
-        })
-        registry["phases"] = phases_list
+        # Normalise: phases may be a structured dict (v10.1+) or a flat list (legacy).
+        # New phases are always written into phases.planned list.
+        raw = registry.get("phases") or []
+        if isinstance(raw, dict):
+            # Structured format: append to the planned sub-list
+            planned_list = raw.setdefault("planned", [])
+            if not isinstance(planned_list, list):
+                planned_list = []
+                raw["planned"] = planned_list
+            planned_list.append({
+                "id": phase_id,
+                "title": request.title,
+                "status": "planned",
+                "sequence": sequence,
+                "priority": request.priority,
+                "description": request.description,
+                "file": str(file_path.relative_to(self._root)),
+                "created": "2026-02-19",
+            })
+            registry["phases"] = raw
+        else:
+            # Legacy flat list format
+            if not isinstance(raw, list):
+                raw = []
+            raw.append({
+                "id": phase_id,
+                "title": request.title,
+                "status": "planned",
+                "sequence": sequence,
+                "priority": request.priority,
+                "description": request.description,
+                "file": str(file_path.relative_to(self._root)),
+                "created": "2026-02-19",
+            })
+            registry["phases"] = raw
 
         # Update metadata counters
         meta = registry.setdefault("metadata", {})
