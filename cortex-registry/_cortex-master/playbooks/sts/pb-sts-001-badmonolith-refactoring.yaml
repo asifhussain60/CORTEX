@@ -1,0 +1,430 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CORTEX Playbook — PB-STS-001: BadMonolith End-to-End Refactoring
+# ══════════════════════════════════════════════════════════════════════════════
+# Authority: cortex-architect.prompt.md § REFACTOR MODE + § DESIGN MODE
+# Supersedes: phase-25-sts-badmonolith-v2.yaml (skeletal stub)
+# CORE Rules: CORE-008 (TDD), CORE-035 (no duplication), CORE-048 (holistic gate),
+#             CORE-064 (sweep completeness)
+# ══════════════════════════════════════════════════════════════════════════════
+
+playbook:
+  id: "pb-sts-001"
+  title: "BadMonolith End-to-End Refactoring — CORTEX SDLC Showcase"
+  version: "1.0.0"
+  category: "sts"
+  repeatable: true
+  status: "ready"
+  created: "2026-02-22"
+  priority: P2
+  risk: low
+
+  description: |
+    Full end-to-end CORTEX SDLC showcase using CortexLabs/STS BadMonolith as the
+    target application. Exercises the complete orchestrator chain — from LENS baseline
+    analysis through security hardening, architecture decomposition, TDD coverage,
+    functional completeness gates, scorecard generation, and dashboard output.
+    
+    Purpose:
+    - Validate all 22 wired orchestrators function in an integrated pipeline
+    - Demonstrate CORTEX refactoring capabilities for leadership POC demos
+    - Serve as repeatable training exercise for new team members
+    - Regression-test the CORTEX toolchain itself after framework changes
+
+  # ── TARGET APPLICATION ─────────────────────────────────────────────────────
+  target:
+    source_repo: "cortex-sts/CortexLabs/BadMonolith"
+    target_repo: "cortex-sts/CortexLabs/Refactored"
+    manifest: "cortex-sts/CortexLabs/BadMonolith/.cortex-manifest.yaml"
+    tech_stack:
+      backend: "C# / ASP.NET Core 8.0"
+      frontend: "TypeScript (vanilla)"
+      database: "SQLite (in-process)"
+      testing: "xUnit + vitest"
+    smell_count: 25
+    smell_breakdown:
+      security: 4    # SMELL-1, 2, 13, 18
+      solid: 7       # SMELL-3, 4, 5, 16, 17, 21, 23, 24
+      quality: 9     # SMELL-7, 8, 9, 10, 11, 15, 19, 20, 22, 25
+      performance: 2 # SMELL-6, 14
+      testing: 1     # SMELL-12
+
+  # ── LINKED TEMPLATES ───────────────────────────────────────────────────────
+  templates:
+    workflow: "cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml"
+    roadmap: "cortex-registry/planning/roadmap-templates/sts-refactoring-template.yaml"
+    tdd_backend: "cortex-registry/workflows/templates/tdd/tdd-api-service.yaml"
+    tdd_frontend: "cortex-registry/workflows/templates/tdd/frontend-tdd-workflow.yaml"
+    security: "cortex-registry/workflows/templates/security/security-hardening.yaml"
+
+  # ── REPEATABILITY ──────────────────────────────────────────────────────────
+  repeatability:
+    enabled: true
+    isolation: "each run operates on a fresh copy of source_repo → target_repo"
+    run_id_format: "PB-STS-001-RUN-{YYYYMMDD}-{sequence}"
+    max_concurrent_runs: 1
+    reset_strategy: "delete target_repo contents before each run"
+    trace_persistence: ".cortex-runtime/traces/orchestrator-traces.db"
+
+  run_history: []
+  # Example entry after a completed run:
+  # - run_id: "PB-STS-001-RUN-20260222-001"
+  #   date: "2026-02-22"
+  #   duration: "45 minutes"
+  #   result: "PASS"
+  #   stages_completed: 8
+  #   smells_addressed: 25
+  #   scorecard:
+  #     architecture: 9.2
+  #     security: 9.8
+  #     testing: 8.5
+  #     documentation: 8.0
+  #     frontend: 7.5
+  #     traceability: 9.0
+  #     composite: 8.8
+
+  # ── STAGES (8-Stage Orchestrator Chain) ────────────────────────────────────
+  stages:
+
+    # ── STAGE 1: LENS BASELINE ─────────────────────────────────────────────
+    - stage_id: 1
+      title: "LENS Baseline Analysis"
+      orchestrator: "LENSOrchestrator"
+      mcp_tools:
+        - "cortex_onboard_repository_v3"
+      description: |
+        Full LENS scan of BadMonolith — captures complexity, duplication,
+        test coverage, dependency graph, and security surface metrics.
+        Produces baseline_quality_score for before/after comparison.
+      inputs:
+        - "source_repo path"
+        - ".cortex-manifest.yaml"
+      outputs:
+        - "baseline_quality_score"
+        - "anti_patterns[]"
+        - "security_findings[]"
+        - "dependency_graph"
+        - "complexity_metrics"
+      convergence_gate:
+        max_cycles: 1
+        predicate: "lens_report_exists AND baseline_score_captured"
+      exit_criteria:
+        - "LENS report generated with all 5 metric categories"
+        - "Baseline quality score persisted to session context"
+        - "All 25 smells cross-referenced with manifest"
+
+    # ── STAGE 2: SMELL CATALOGUE + HOLISTIC GATE ───────────────────────────
+    - stage_id: 2
+      title: "Smell Catalogue & Holistic Validation Gate"
+      orchestrator: "EnforcementOrchestrator"
+      mcp_tools:
+        - "cortex_validate_compliance"
+        - "cortex_check_dependency_drift"
+        - "cortex_query_governance"
+      description: |
+        Enumerate all source endpoints and public functions (source_items).
+        Catalogue all 25 smells with severity. Run CORE-048 holistic validation.
+        Opens AC_START audit session.
+      inputs:
+        - "LENS baseline from Stage 1"
+        - ".cortex-manifest.yaml smells[]"
+      outputs:
+        - "source_items[]"
+        - "smell_catalogue (25 items with severity)"
+        - "holistic_validation_verdict (PASS/BLOCK)"
+        - "session_id (AC_START)"
+      convergence_gate:
+        max_cycles: 3
+        predicate: "source_items_enumerated AND holistic_verdict == PASS"
+        failure_action: "BLOCK — resolve P0 governance violations before proceeding"
+      exit_criteria:
+        - "source_items list captured (all public endpoints + functions)"
+        - "Holistic validation: PASS (risk ≤ 0.6)"
+        - "AC_START written to orchestrator-traces.db"
+        - "CORE-048 validation clean"
+
+    # ── STAGE 3: SECURITY GATE (HARD BLOCKER) ──────────────────────────────
+    - stage_id: 3
+      title: "Security Gate — P0 Blocker"
+      orchestrator: "SecurityOrchestrator"
+      mcp_tools:
+        - "cortex_refactor"
+      template_ref: "cortex-registry/workflows/templates/security/security-hardening.yaml"
+      blocking: true
+      description: |
+        Address all 4 P0 security smells FIRST. This is a hard blocker —
+        no downstream stages execute until security gate passes.
+        Covers: SQL injection (SMELL-1), hardcoded secrets (SMELL-2),
+        CORS wildcard (SMELL-13), stack trace exposure (SMELL-18).
+      inputs:
+        - "security_findings from Stage 1"
+        - "SMELL-1, SMELL-2, SMELL-13, SMELL-18"
+      outputs:
+        - "security_report"
+        - "fixes_applied[]"
+        - "remaining_p0_issues (must be 0)"
+      smells_addressed:
+        - "SMELL-1: SQL injection → parameterized queries"
+        - "SMELL-2: Hardcoded secrets → user-secrets / env config"
+        - "SMELL-13: CORS wildcard → specific origins from config"
+        - "SMELL-18: Stack trace exposure → RFC 7807 ProblemDetails"
+      convergence_gate:
+        max_cycles: 10
+        predicate: "sql_clean AND secrets_clean AND cors_clean AND stack_trace_clean"
+        failure_action: "HALT — do not proceed to Stage 4"
+      exit_criteria:
+        - "0 P0 security violations remaining"
+        - "BCrypt/Argon2 for password hashing (not SHA256/MD5)"
+        - "JWT AddAuthentication wired + token generation"
+        - "Rate limiting on login + payment endpoints"
+        - "Real health endpoint with async DB probe"
+
+    # ── STAGE 4: ARCHITECTURE DECOMPOSITION ────────────────────────────────
+    - stage_id: 4
+      title: "Architecture Decomposition — God Class Elimination"
+      orchestrator: "RefactoringOrchestrator"
+      mcp_tools:
+        - "cortex_refactor"
+      template_ref: "cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml"
+      description: |
+        Decompose the monolith into clean domain modules using the
+        service-decomposition-workflow. Extract: AccountService,
+        TransactionService, UserService, AnalyticsService.
+        Apply Repository pattern with DI (Scoped lifetime).
+      inputs:
+        - "source_items from Stage 2"
+        - "anti_patterns from Stage 1"
+      outputs:
+        - "target_items[] (extracted services)"
+        - "di_wiring_manifest"
+        - "domain_module_map"
+      smells_addressed:
+        - "SMELL-3: God class → domain-separated modules"
+        - "SMELL-4: Business logic in controllers → service layer"
+        - "SMELL-5: Circular dependencies → clean DI graph"
+        - "SMELL-16: Global mutable state → scoped services"
+        - "SMELL-17: No DI → AddScoped registration"
+        - "SMELL-21: God component (frontend) → component extraction"
+        - "SMELL-23: Business logic in UI → service layer"
+        - "SMELL-24: No service layer → API client abstraction"
+      convergence_gate:
+        max_cycles: 5
+        predicate: "god_class_eliminated AND di_consistent AND all_tests_green"
+      exit_criteria:
+        - "Program.cs < 100 lines (was 1000+)"
+        - "DI lifetimes consistent (Scoped, no Singleton capturing Scoped)"
+        - "API versioning applied"
+        - "All existing tests still pass"
+
+    # ── STAGE 5: TDD COVERAGE ──────────────────────────────────────────────
+    - stage_id: 5
+      title: "TDD Coverage — RED/GREEN/REFACTOR"
+      orchestrator: "TDDOrchestrator"
+      mcp_tools:
+        - "cortex_refactor"
+        - "cortex_capture_metrics"
+      template_ref: "cortex-registry/workflows/templates/tdd/tdd-api-service.yaml"
+      description: |
+        Write failing tests FIRST (CORE-008), then implement minimum code
+        to pass. Cover all extracted services with dedicated test classes.
+        Frontend test runner configured with vitest.
+      inputs:
+        - "target_items from Stage 4"
+        - "domain_module_map"
+      outputs:
+        - "test_count_after"
+        - "coverage_percentage"
+        - "tdd_metrics"
+      smells_addressed:
+        - "SMELL-12: Assert.True(true) → real assertions with business logic"
+        - "SMELL-25: No error handling → tested error paths"
+        - "SMELL-6: No pagination → paginated query tests"
+        - "SMELL-9: No API versioning → versioned endpoint tests"
+        - "SMELL-19: Missing model validation → validated model tests"
+        - "SMELL-22: any types → typed interface tests"
+      convergence_gate:
+        max_cycles: 5
+        predicate: "all_services_have_tests AND coverage >= 80"
+      exit_criteria:
+        - "XxxServiceTests class for every XxxService"
+        - "Minimum 8 tests per service class"
+        - "Frontend package.json has vitest test script"
+        - "TransferAsync tested: valid, insufficient funds, zero amount, same account"
+        - "Coverage ≥ 80%"
+
+    # ── STAGE 6: FUNCTIONAL COMPLETENESS GATE ──────────────────────────────
+    - stage_id: 6
+      title: "Functional Completeness Gate"
+      orchestrator: "RefactoringOrchestrator"
+      mcp_tools:
+        - "cortex_refactor"
+        - "cortex_validate_compliance"
+      description: |
+        Verify every endpoint in source_items exists in target_items.
+        No endpoints silently dropped. Gaps require ADR justification.
+        Clean up remaining quality smells.
+      inputs:
+        - "source_items from Stage 2"
+        - "target_items from Stage 4"
+      outputs:
+        - "completeness_verdict (PASS/FAIL)"
+        - "gap_count (must be 0 or ADR-justified)"
+      smells_addressed:
+        - "SMELL-7: Mixed naming → consistent conventions"
+        - "SMELL-8: Dead code → VacuumOrchestrator cleanup"
+        - "SMELL-10: Duplicate validation → single source"
+        - "SMELL-11: Console.WriteLine → structured logging"
+        - "SMELL-14: No retry → circuit breaker pattern"
+        - "SMELL-15: Magic numbers → named constants"
+        - "SMELL-20: No audit fields → CreatedAt, ModifiedBy, Version"
+      convergence_gate:
+        max_cycles: 3
+        predicate: "gap_count == 0 OR all_gaps_adr_justified"
+        failure_action: "BLOCK — implement missing endpoints or file ADR"
+      exit_criteria:
+        - "ENH-STS-01: gap_count == 0 or ADR filed per gap"
+        - "All 25 smells addressed or ADR-justified"
+        - "CORE-064 sweep completeness: no partial sweeps"
+
+    # ── STAGE 7: SCORECARD + TRACEABILITY ──────────────────────────────────
+    - stage_id: 7
+      title: "Scorecard Generation & AC_COMPLETE"
+      orchestrator: "MasterOrchestrator"
+      mcp_tools:
+        - "cortex_capture_metrics"
+        - "cortex_validate_compliance"
+      description: |
+        Generate weighted scorecard (architecture/security/testing/docs/
+        frontend/traceability). Write AC_COMPLETE to traces.db with real
+        source_repo path (not placeholder). Verify zero regressions.
+      inputs:
+        - "All stage outputs"
+        - "session_id from Stage 2"
+      outputs:
+        - "scorecard (6-dimension weighted)"
+        - "AC_COMPLETE trace record"
+        - "final_test_results"
+      scorecard_weights:
+        architecture: 25
+        security: 25
+        testing: 20
+        documentation: 15
+        frontend: 10
+        traceability: 5
+      convergence_gate:
+        max_cycles: 1
+        predicate: "scorecard_generated AND ac_complete_written AND all_tests_pass"
+      exit_criteria:
+        - "Scorecard displayed inline (CORE-002)"
+        - "AC_COMPLETE written with real source_repo (not placeholder)"
+        - "ENH-STS-02: trace_metadata includes smells_addressed, files_created, test_count"
+        - "All tests pass"
+
+    # ── STAGE 8: DASHBOARD GENERATION ──────────────────────────────────────
+    - stage_id: 8
+      title: "Before/After Dashboard"
+      orchestrator: "DashboardOrchestrator"
+      mcp_tools:
+        - "cortex_generate_repo_dashboard"
+      description: |
+        Generate before/after dashboard comparing baseline (Stage 1) to
+        final state. Output to cortex-sts/CortexLabs/.analysis/ for
+        leadership review.
+      inputs:
+        - "baseline_quality_score from Stage 1"
+        - "scorecard from Stage 7"
+        - "all smell resolutions"
+      outputs:
+        - "dashboard HTML (before/after comparison)"
+        - "smell resolution summary"
+      convergence_gate:
+        max_cycles: 1
+        predicate: "dashboard_generated"
+      exit_criteria:
+        - "Dashboard HTML generated in .analysis/"
+        - "Before/after quality delta visible"
+        - "All 25 smells mapped to resolution status"
+
+  # ── ORCHESTRATOR COVERAGE MAP ──────────────────────────────────────────────
+  orchestrator_coverage:
+    core_tier:
+      - orchestrator: "MasterOrchestrator"
+        stage: 7
+        role: "Pipeline coordination + scorecard"
+      - orchestrator: "IntentRouter"
+        stage: "all"
+        role: "Intent classification per stage"
+      - orchestrator: "TDDOrchestrator"
+        stage: 5
+        role: "RED/GREEN/REFACTOR cycle"
+      - orchestrator: "EnforcementOrchestrator"
+        stage: 2
+        role: "CORE rule validation + holistic gate"
+    domain_tier:
+      - orchestrator: "RefactoringOrchestrator"
+        stage: [4, 6]
+        role: "Architecture decomposition + completeness"
+      - orchestrator: "SecurityOrchestrator"
+        stage: 3
+        role: "P0 security gate"
+      - orchestrator: "DashboardOrchestrator"
+        stage: 8
+        role: "Before/after visualization"
+    support_tier:
+      - orchestrator: "LENSOrchestrator"
+        stage: 1
+        role: "Baseline analysis"
+      - orchestrator: "SweepCatalogueOrchestrator"
+        stage: 6
+        role: "CORE-064 sweep completeness"
+      - orchestrator: "VacuumOrchestrator"
+        stage: 6
+        role: "Dead code cleanup"
+
+  # ── ANTI-PATTERNS (BLOCK if any occur) ─────────────────────────────────────
+  anti_patterns:
+    - id: "AP-001"
+      description: "AC_COMPLETE with placeholder source_repo"
+      severity: "P0"
+      rule: "CORE-064"
+    - id: "AP-002"
+      description: "Endpoints dropped without ADR"
+      severity: "P0"
+      rule: "ENH-STS-01"
+    - id: "AP-003"
+      description: "SHA256/MD5 for password hashing"
+      severity: "P0"
+      rule: "ENH-STS-03"
+    - id: "AP-004"
+      description: "JWT config present but no AddAuthentication wired"
+      severity: "P0"
+      rule: "ENH-STS-03"
+    - id: "AP-005"
+      description: "Health endpoint returns hardcoded 'healthy'"
+      severity: "P1"
+      rule: "REFACTOR-quality"
+    - id: "AP-006"
+      description: "AddSingleton repos + AddScoped services (captive dependency)"
+      severity: "P1"
+      rule: "REFACTOR-di-consistency"
+    - id: "AP-007"
+      description: "No test class for XxxService"
+      severity: "P1"
+      rule: "ENH-STS-04"
+    - id: "AP-008"
+      description: "Frontend has service layer but no test runner"
+      severity: "P1"
+      rule: "ENH-STS-04"
+    - id: "AP-009"
+      description: "No rate limiting on login/payment endpoints"
+      severity: "P1"
+      rule: "ENH-STS-03"
+    - id: "AP-010"
+      description: "No genuine trace in orchestrator-traces.db"
+      severity: "P2"
+      rule: "ENH-STS-02"
+
+  # ── SUPERSESSION ───────────────────────────────────────────────────────────
+  supersedes:
+    - file: "_cortex-master/phases/planned/phase-25-sts-badmonolith-v2.yaml"
+      reason: "Skeletal 28-line stub promoted to full playbook with 8 stages"
+      date: "2026-02-22"
