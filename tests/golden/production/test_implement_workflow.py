@@ -237,7 +237,7 @@ __all__ = ['Entity']
         assert len(statements) <= 1, "Stub should have minimal code"
         
         # Check for redirect pattern
-        assert "REDIRECT" in code or "from cortex_intelligence" in code, "Redirect stub pattern detected"
+        assert "REDIRECT" in code or "from cortex.intelligence" in code, "Redirect stub pattern detected"
         
     def test_prevent_stub_without_tests(self, tmp_path: Path) -> None:
         """Golden: Prevent stubs without test coverage.

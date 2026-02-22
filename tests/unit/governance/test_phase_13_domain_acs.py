@@ -28,7 +28,7 @@ class TestBD00101DomainRegistrySchema:
         """Get domain registry file."""
         registry_path = (
             Path(__file__).parent.parent.parent.parent / 
-            "cortex_intelligence" / "tier3" / "domain-registry.yaml"
+            "cortex.intelligence" / "tier3" / "domain-registry.yaml"
         )
         assert registry_path.exists(), f"Registry file not found: {registry_path}"
         return registry_path
@@ -108,7 +108,7 @@ class TestBD00102DomainDocumentation:
         """Get domain documentation file."""
         readme_path = (
             Path(__file__).parent.parent.parent.parent / 
-            "cortex_intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md"
+            "cortex.intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md"
         )
         assert readme_path.exists(), f"README not found: {readme_path}"
         return readme_path
@@ -234,8 +234,8 @@ class TestBD00301ZeroBreakingChanges:
     def domain_files(self):
         """Get domain-related new files."""
         return [
-            Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "tier3" / "domain-registry.yaml",
-            Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md",
+            Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "tier3" / "domain-registry.yaml",
+            Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md",
             Path(__file__).parent.parent.parent.parent / "src" / "observability" / "dashboard_extensibility.py",
         ]
     
@@ -259,7 +259,7 @@ class TestBD00301ZeroBreakingChanges:
         # Key existing configs should be present
         key_configs = [
             Path(__file__).parent.parent.parent.parent / ".github" / "roadmap" / "cortex-master.yaml",
-            Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "tier0" / "response-headers.yaml",
+            Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "tier0" / "response-headers.yaml",
         ]
         for config in key_configs:
             # Just verify they're still there (not deleted)
@@ -271,7 +271,7 @@ class TestBD00301ZeroBreakingChanges:
         # Domain integration should be optional
         readme_file = (
             Path(__file__).parent.parent.parent.parent / 
-            "cortex_intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md"
+            "cortex.intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md"
         )
         if readme_file.exists():
             content = readme_file.read_text()
@@ -298,7 +298,7 @@ class TestBD00301ZeroBreakingChanges:
             Path(__file__).parent.parent.parent.parent / "docs" / "phases" / "phase-13.yaml",
             Path(__file__).parent.parent.parent.parent / ".github" / "roadmap" / "phases" / "phase-13.yaml",
             Path(__file__).parent.parent.parent.parent / "_workspaces" / "roadmap" / "phases" / "PHASE-E-TDD-IMPLEMENTATION.yaml",
-            Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "tier3" / "domain-registry.yaml",
+            Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "tier3" / "domain-registry.yaml",
         ]
         existing = sum(1 for f in phase_files if f.exists())
         assert existing > 0, "Phase documentation missing"
@@ -307,7 +307,7 @@ class TestBD00301ZeroBreakingChanges:
         """Test 7: No deprecations or removals."""
         # This is verified by test 2 (no modifications)
         # Additional check: key governance components exist
-        governance_dir = Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "tier0" / "governance"
+        governance_dir = Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "tier0" / "governance"
         if governance_dir.exists():
             files = list(governance_dir.glob("*"))
             assert len(files) > 0, "Governance files missing"
@@ -320,7 +320,7 @@ class TestPhase13DomainIntegration:
         """Test domain registry can be loaded."""
         registry_file = (
             Path(__file__).parent.parent.parent.parent / 
-            "cortex_intelligence" / "tier3" / "domain-registry.yaml"
+            "cortex.intelligence" / "tier3" / "domain-registry.yaml"
         )
         with open(registry_file) as f:
             data = yaml.safe_load(f)
@@ -330,7 +330,7 @@ class TestPhase13DomainIntegration:
         """Test documentation properly references registry."""
         readme_file = (
             Path(__file__).parent.parent.parent.parent / 
-            "cortex_intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md"
+            "cortex.intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md"
         )
         content = readme_file.read_text()
         assert "domain-registry" in content.lower() or "registry" in content.lower(), \
@@ -353,8 +353,8 @@ class TestPhase13DomainIntegration:
     def test_all_domain_acs_files_present(self):
         """Test all required domain AC files exist."""
         required_files = [
-            Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "tier3" / "domain-registry.yaml",
-            Path(__file__).parent.parent.parent.parent / "cortex_intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md",
+            Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "tier3" / "domain-registry.yaml",
+            Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md",
             Path(__file__).parent.parent.parent.parent / "src" / "observability" / "dashboard_extensibility.py",
         ]
         
@@ -365,7 +365,7 @@ class TestPhase13DomainIntegration:
         """Test documentation is production-ready."""
         readme_file = (
             Path(__file__).parent.parent.parent.parent / 
-            "cortex_intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md"
+            "cortex.intelligence" / "tier3" / "README-DOMAIN-INTEGRATION.md"
         )
         content = readme_file.read_text()
         

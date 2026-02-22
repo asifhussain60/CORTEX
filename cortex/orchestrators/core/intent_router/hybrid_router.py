@@ -96,7 +96,7 @@ INTENT_CONFIG: Dict[str, Dict[str, Any]] = {
             "evaluate", "assess", "check", "audit", "explore", "lens", "scan"
         ],
         "orchestrator": "LENSOrchestrator",
-        "mcp_tool": "cortex_lens_analyze",
+        "mcp_tool": "cortex.lens_analyze",
         "semantic_hints": ["code review", "investigate issue", "examine structure"],
     },
     "TEST": {

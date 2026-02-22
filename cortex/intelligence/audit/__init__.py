@@ -1,5 +1,5 @@
 """
-__init__.py for cortex_intelligence/audit package.
+__init__.py for cortex/intelligence/audit package.
 
 Authority: AC-GOLDEN-E2E-015
 """

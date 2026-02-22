@@ -34,7 +34,7 @@ class ToolCategory(Enum):
     FILE_READ = "FILE_READ"  # read_file, grep_search, semantic_search
     EXECUTION = "EXECUTION"  # run_in_terminal (file ops only)
     DISCOVERY = "DISCOVERY"  # file_search, list_dir
-    MCP_TOOL = "MCP_TOOL"  # cortex_process_request, cortex_lens_analyze
+    MCP_TOOL = "MCP_TOOL"  # cortex_process_request, cortex.lens_analyze
 
 
 @dataclass
@@ -132,7 +132,7 @@ class NativeToolInterceptor:
         "file_search": ToolCategory.DISCOVERY,
         "list_dir": ToolCategory.DISCOVERY,
         "cortex_process_request": ToolCategory.MCP_TOOL,
-        "cortex_lens_analyze": ToolCategory.MCP_TOOL,
+        "cortex.lens_analyze": ToolCategory.MCP_TOOL,
     }
     
     def __init__(self) -> None:

@@ -57,8 +57,8 @@ class TestBrainTierPusherPaths:
         for tier, path_str in pusher.TIER_PATHS.items():
             # Path should either:
             # 1. Be in cortex-registry/core/ (governance)
-            # 2. Be in cortex_intelligence/memory/ (memory)
-            # 3. NOT be in cortex_intelligence/tier0, tier1, tier2 (unless they exist)
+            # 2. Be in cortex/intelligence/memory/ (memory)
+            # 3. NOT be in cortex/intelligence/tier0, tier1, tier2 (unless they exist)
             
             if "cortex/intelligence/tier" in path_str:
                 # This is the problematic pattern
@@ -68,7 +68,7 @@ class TestBrainTierPusherPaths:
                 if not path.exists() and "memory" not in str(path):
                     pytest.fail(
                         f"BrainTierPusher tier {tier} uses non-existent path: {path_str}\n"
-                        f"Should use cortex-registry/core/ or cortex_intelligence/memory/"
+                        f"Should use cortex-registry/core/ or cortex/intelligence/memory/"
                     )
 
     def test_tier0_uses_registry_path(self):
@@ -193,8 +193,8 @@ class TestMemoryTierStructure:
             f"No memory tier directories found in {memory_path}"
 
     def test_memory_tiers_not_at_intelligence_root(self):
-        """tier0, tier1, tier2 should NOT be at cortex_intelligence root."""
-        intel_path = Path("cortex_intelligence")
+        """tier0, tier1, tier2 should NOT be at cortex.intelligence root."""
+        intel_path = Path("cortex.intelligence")
         
         # These should NOT exist (old broken structure)
         bad_paths = [
@@ -211,7 +211,7 @@ class TestMemoryTierStructure:
                 if py_files:
                     pytest.fail(
                         f"Found old tier structure at {bad_path} with Python source files: {py_files[:5]}. "
-                        f"Should be in cortex-registry/core/ or cortex_intelligence/memory/"
+                        f"Should be in cortex-registry/core/ or cortex/intelligence/memory/"
                     )
 
     def test_memory_and_governance_separate(self):
@@ -247,9 +247,9 @@ class TestTierFileWrites:
         
         # Create tier directories
         (workspace / "cortex-registry" / "core" / "tier0-skull").mkdir(parents=True)
-        (workspace / "cortex_intelligence" / "memory" / "tier1_learned").mkdir(parents=True)
-        (workspace / "cortex_intelligence" / "memory" / "tier2_adaptive").mkdir(parents=True)
-        (workspace / "cortex_intelligence" / "memory" / "scratch_space").mkdir(parents=True)
+        (workspace / "cortex.intelligence" / "memory" / "tier1_learned").mkdir(parents=True)
+        (workspace / "cortex.intelligence" / "memory" / "tier2_adaptive").mkdir(parents=True)
+        (workspace / "cortex.intelligence" / "memory" / "scratch_space").mkdir(parents=True)
         
         return workspace
 

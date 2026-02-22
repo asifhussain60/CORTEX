@@ -31,8 +31,8 @@ class BuildArtifactCleaner(CleanerInterface):
     # Target directories to scan for build artifacts
     TARGET_DIRS: List[str] = [
         "cortex",
-        "cortex_intelligence",
-        "cortex_lens",
+        "cortex.intelligence",
+        "cortex.lens",
     ]
     
     # Build directories that can be entirely removed

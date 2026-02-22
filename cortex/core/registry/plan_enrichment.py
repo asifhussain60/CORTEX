@@ -222,7 +222,7 @@ class CodeLensEnricher:
             Dictionary with code analysis data
         """
         # Placeholder for actual code analysis
-        # In production, would use cortex_lens_analyze
+        # In production, would use cortex.lens_analyze
         return {
             "complexity_scores": {},
             "dependency_map": {},

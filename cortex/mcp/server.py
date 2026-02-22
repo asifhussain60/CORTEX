@@ -88,7 +88,7 @@ class MCPServer:
         
         # Programmatic invocation
         server = MCPServer()
-        result = server.call_tool("cortex_lens", operation="analyze", target=".")
+        result = server.call_tool("cortex.lens", operation="analyze", target=".")
     """
     
     # JSON-RPC error codes

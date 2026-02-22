@@ -36,7 +36,7 @@ class TestPhase38AuditIntegration:
         # Check that all 10 MCP tools are available
         required_tools = [
             "cortex_process_request",
-            "cortex_lens_analyze",
+            "cortex.lens_analyze",
             "cortex_challenge",
             "cortex_total_recall",
             "cortex_git_history",
@@ -67,7 +67,7 @@ class TestPhase38AuditIntegration:
         # Check deployment configurations
         saas_configs = {
             "mcp_server": "http://localhost:8000",
-            "cortex_intelligence": "enabled",
+            "cortex.intelligence": "enabled",
             "infrastructure_discovery": "enabled",
             "plan_enrichment": "enabled",
         }

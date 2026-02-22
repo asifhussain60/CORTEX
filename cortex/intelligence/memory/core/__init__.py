@@ -30,12 +30,12 @@ __all__ = [
 def __getattr__(name: str):
     """Lazy load TIER 0 modules."""
     tier0_modules = {
-        'governance': 'cortex_intelligence.memory.core.governance',
-        'path_abstraction': 'cortex_intelligence.memory.core.path_abstraction',
-        'import_resolver': 'cortex_intelligence.memory.core.import_resolver',
-        'linux_path_compat': 'cortex_intelligence.memory.core.linux_path_compat',
-        'macos_path_compat': 'cortex_intelligence.memory.core.macos_path_compat',
-        'windows_path_compat': 'cortex_intelligence.memory.core.windows_path_compat',
+        'governance': 'cortex.intelligence.memory.core.governance',
+        'path_abstraction': 'cortex.intelligence.memory.core.path_abstraction',
+        'import_resolver': 'cortex.intelligence.memory.core.import_resolver',
+        'linux_path_compat': 'cortex.intelligence.memory.core.linux_path_compat',
+        'macos_path_compat': 'cortex.intelligence.memory.core.macos_path_compat',
+        'windows_path_compat': 'cortex.intelligence.memory.core.windows_path_compat',
     }
     
     if name in tier0_modules:
@@ -44,4 +44,4 @@ def __getattr__(name: str):
             return importlib.import_module(tier0_modules[name])
         except ImportError:
             pass
-    raise AttributeError(f"module 'cortex_intelligence.memory.core' has no attribute '{name}'")
+    raise AttributeError(f"module 'cortex.intelligence.memory.core' has no attribute '{name}'")

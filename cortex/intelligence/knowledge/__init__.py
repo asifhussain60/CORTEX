@@ -21,7 +21,7 @@ Examples::
     with open(guides_dir / "python-backend.yaml") as f:
         guide = yaml.safe_load(f)
 
-Authority: cortex_intelligence/tier3/knowledge/
+Authority: cortex/intelligence/tier3/knowledge/
 Version: 2.1
 Updated: 2026-01-28
 """

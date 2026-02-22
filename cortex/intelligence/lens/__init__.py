@@ -8,7 +8,7 @@ Unified code analysis engine supporting:
 - Domain-driven inference and pattern detection
 - Runtime correlation with execution traces
 
-Authority: Phase 3 - Package Consolidation (formerly cortex_lens)
+Authority: Phase 3 - Package Consolidation (formerly cortex.lens)
 """
 
 try:

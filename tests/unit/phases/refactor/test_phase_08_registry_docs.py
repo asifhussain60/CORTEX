@@ -58,7 +58,7 @@ class TestPhase08RegistryAudit:
         """SPEC: Identify and remove/archive stale YAMLs referencing deleted components"""
         stale_patterns = [
             "cortex/brain/",  # Archived in Phase 06
-            "cortex_intelligence/",  # Archived in Phase 06
+            "cortex/intelligence/",  # Archived in Phase 06
             "phase_*",  # Phase-specific artifacts
             "cortex-registry/",  # Inner duplicate (now in cortex/core/)
         ]
@@ -115,7 +115,7 @@ class TestPhase08RegistryAudit:
     def test_red_wiring_specs_reference_new_structure(self):
         """SPEC: All wiring specs updated to reference canonical cortex/ structure"""
         validation_pattern = {
-            "forbidden_paths": ["cortex/brain/", "cortex_intelligence/"],
+            "forbidden_paths": ["cortex/brain/", "cortex/intelligence/"],
             "canonical_packages": [
                 "cortex/core/",
                 "cortex/orchestrators/",

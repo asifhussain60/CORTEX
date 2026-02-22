@@ -303,7 +303,7 @@ class DuplicateDetectionAgent(BaseHealthAgent):
                 
                 if len(unique_hashes) > 1:
                     # Check if files are in completely separate package hierarchies
-                    # (e.g., cortex/wiring/ vs cortex_intelligence/ is OK)
+                    # (e.g., cortex/wiring/ vs cortex/intelligence/ is OK)
                     paths = [str(f.relative_to(workspace_root)) for f in files]
                     root_packages = set(p.split('\\')[0] if '\\' in p else p.split('/')[0] for p in paths)
                     

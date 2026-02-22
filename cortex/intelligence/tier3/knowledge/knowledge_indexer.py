@@ -10,7 +10,7 @@ from typing import Any, Dict, List, Optional
 
 _KNOWLEDGE_DIR = (
     Path(__file__).parent.parent.parent.parent.parent.parent
-    / "cortex_intelligence" / "tier3" / "knowledge"
+    / "cortex.intelligence" / "tier3" / "knowledge"
 )
 
 

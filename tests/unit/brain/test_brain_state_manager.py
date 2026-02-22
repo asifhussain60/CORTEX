@@ -36,7 +36,7 @@ from cortex.core.core.brain_state_manager import (
 @pytest.fixture
 def temp_brain_dir(tmp_path):
     """Create temporary brain directory structure."""
-    brain_dir = tmp_path / "cortex_intelligence"
+    brain_dir = tmp_path / "cortex.intelligence"
     brain_dir.mkdir()
     
     # Create tier directories

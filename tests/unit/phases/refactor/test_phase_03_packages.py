@@ -14,7 +14,7 @@ Phase 03 TDD Sequence:
 CORE-008 Evidence:
     - 34 tests written BEFORE any migration code
     - All tests initially failed (import resolution errors)
-    - GREEN phase made them pass by migrating cortex_intelligence/ and cortex_lens/
+    - GREEN phase made them pass by migrating cortex/intelligence/ and cortex.lens/
 
 Status: ALL PASSING ✅ (Phase 03 complete — 2026-02-19T16:05:00Z)
 """
@@ -37,11 +37,11 @@ class TestPackageMigrationPreconditions:
         assert Path("/Users/asifhussain/PROJECTS/CORTEX/cortex").exists()
 
     def test_canonical_intelligence_target_exists(self) -> None:
-        """cortex/intelligence/ must exist as migration target for cortex_intelligence/."""
+        """cortex/intelligence/ must exist as migration target for cortex/intelligence/."""
         assert Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence").exists()
 
     def test_canonical_lens_target_exists(self) -> None:
-        """cortex/intelligence/lens/ must exist as migration target for cortex_lens/."""
+        """cortex/intelligence/lens/ must exist as migration target for cortex.lens/."""
         assert Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence/lens").exists()
 
     def test_archive_directory_exists(self) -> None:
@@ -59,7 +59,7 @@ class TestPackageMigrationPreconditions:
     def test_cortex_intelligence_backup_archived(self) -> None:
         """Phase 09 COMPLETE: Migration confirmed — cortex/intelligence/ is the canonical location.
 
-        Phase 03 backed up cortex_intelligence/ to _archive/packages/cortex_intelligence_backup/.
+        Phase 03 backed up cortex/intelligence/ to _archive/packages/cortex_intelligence_backup/.
         Phase 09 deleted _archive/ after full regression verification.
         The post-Phase-09 invariant: cortex/intelligence/ is the single source of truth.
         """
@@ -70,7 +70,7 @@ class TestPackageMigrationPreconditions:
     def test_cortex_lens_backup_archived(self) -> None:
         """Phase 09 COMPLETE: Migration confirmed — cortex/intelligence/lens/ is canonical.
 
-        Phase 03 backed up cortex_lens/ to _archive/packages/cortex_lens_backup/.
+        Phase 03 backed up cortex.lens/ to _archive/packages/cortex.lens_backup/.
         Phase 09 deleted _archive/. The canonical location is cortex/intelligence/lens/.
         """
         canon = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence/lens")
@@ -82,26 +82,26 @@ class TestOldPackagesGone:
     """Old package directories must not contain tracked Python source files after migration."""
 
     def test_cortex_intelligence_directory_gone(self) -> None:
-        """cortex_intelligence/ must not contain any Python source files at root.
+        """cortex/intelligence/ must not contain any Python source files at root.
 
         The directory may still exist on disk due to runtime artifacts (.db files)
         created by test execution — these are gitignored. The invariant is: zero
         tracked Python source files remain.
         """
-        ci_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_intelligence")
+        ci_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence")
         if not ci_path.exists():
             return  # Best case — directory fully gone
         # If dir exists, it must only contain runtime artifacts (no .py source files)
         py_files = [f for f in ci_path.rglob("*.py") if "__pycache__" not in str(f)]
         assert not py_files, (
-            f"cortex_intelligence/ contains {len(py_files)} Python source files — "
+            f"cortex/intelligence/ contains {len(py_files)} Python source files — "
             f"these should have been migrated to cortex/intelligence/: {py_files[:5]}"
         )
 
     def test_cortex_lens_directory_gone(self) -> None:
-        """cortex_lens/ at root must not exist — archived to _archive/packages/."""
-        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_lens").exists(), (
-            "cortex_lens/ must be removed from root. "
+        """cortex.lens/ at root must not exist — archived to _archive/packages/."""
+        assert not Path("/Users/asifhussain/PROJECTS/CORTEX/cortex.lens").exists(), (
+            "cortex.lens/ must be removed from root. "
             "Content was migrated to cortex/intelligence/lens/ and backed up to _archive/packages/"
         )
 
@@ -125,21 +125,21 @@ class TestImportQuarantine:
         return found
 
     def test_no_live_cortex_intelligence_imports(self) -> None:
-        """Zero 'from cortex_intelligence' or 'import cortex_intelligence' in active code."""
-        found = self._scan_active_imports(r"^(from|import)\s+cortex_intelligence")
+        """Zero 'from cortex.intelligence' or 'import cortex.intelligence' in active code."""
+        found = self._scan_active_imports(r"^(from|import)\s+cortex.intelligence")
         assert not found, (
-            f"Found {len(found)} files with stale cortex_intelligence imports: {found[:5]}"
+            f"Found {len(found)} files with stale cortex.intelligence imports: {found[:5]}"
         )
 
     def test_no_live_cortex_lens_imports(self) -> None:
-        """Zero 'from cortex_lens' or 'import cortex_lens' in active code."""
-        found = self._scan_active_imports(r"^(from|import)\s+cortex_lens")
+        """Zero 'from cortex.lens' or 'import cortex.lens' in active code."""
+        found = self._scan_active_imports(r"^(from|import)\s+cortex.lens")
         assert not found, (
-            f"Found {len(found)} files with stale cortex_lens imports: {found[:5]}"
+            f"Found {len(found)} files with stale cortex.lens imports: {found[:5]}"
         )
 
     def test_no_live_cortex_brain_imports(self) -> None:
-        """Zero 'from cortex.brain' or 'import cortex.brain' in active code."""
+        """Zero 'from cortex.brain' or 'import cortex.intelligence' in active code."""
         found = self._scan_active_imports(r"^(from|import)\s+cortex\.brain")
         assert not found, (
             f"Found {len(found)} files with stale cortex.brain imports: {found[:5]}"
@@ -167,7 +167,7 @@ class TestCanonicalStructureIntegrity:
         # These are the forbidden extra package roots — no .py source allowed
         forbidden = [
             root / "cortex_intelligence",
-            root / "cortex_lens",
+            root / "cortex.lens",
         ]
         for path in forbidden:
             if not path.exists():
@@ -203,16 +203,16 @@ class TestPhase3MigrationStats:
         py_files = list(intelligence.rglob("*.py"))
         assert len(py_files) >= 80, (
             f"Expected ≥80 files in cortex/intelligence/, found {len(py_files)}. "
-            "Phase 03 migrated 90 files from cortex_intelligence/"
+            "Phase 03 migrated 90 files from cortex/intelligence/"
         )
 
     def test_lens_file_count_reasonable(self) -> None:
-        """cortex/intelligence/lens/ should contain ≥ 20 Python files (28 migrated from cortex_lens)."""
+        """cortex/intelligence/lens/ should contain ≥ 20 Python files (28 migrated from cortex.lens)."""
         lens = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence/lens")
         py_files = list(lens.rglob("*.py"))
         assert len(py_files) >= 20, (
             f"Expected ≥20 files in cortex/intelligence/lens/, found {len(py_files)}. "
-            "Phase 03 migrated 28 files from cortex_lens/"
+            "Phase 03 migrated 28 files from cortex.lens/"
         )
 
     def test_archive_packages_backup_size(self) -> None:
@@ -225,7 +225,7 @@ class TestPhase3MigrationStats:
         intel = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence")
         lens = intel / "lens"
         assert intel.exists(), "cortex/intelligence/ must exist (Phase 03 migration target)"
-        assert lens.exists(), "cortex/intelligence/lens/ must exist (cortex_lens migration target)"
+        assert lens.exists(), "cortex/intelligence/lens/ must exist (cortex.lens migration target)"
         # Verify _archive/ is gone — Phase 09 exit condition
         assert not Path("/Users/asifhussain/PROJECTS/CORTEX/_archive").exists(), (
             "_archive/ must be deleted — Phase 09 Final Verification completed 2026-02-20"
@@ -244,7 +244,7 @@ class TestPhase3CoreCompliance:
     def test_core_035_single_package(self) -> None:
         """CORE-035: Single canonical implementation — only cortex/ package has Python source."""
         root = Path("/Users/asifhussain/PROJECTS/CORTEX")
-        for old_pkg in ["cortex_intelligence", "cortex_lens"]:
+        for old_pkg in ["cortex_intelligence", "cortex.lens"]:
             old_path = root / old_pkg
             if not old_path.exists():
                 continue  # Fully removed — pass

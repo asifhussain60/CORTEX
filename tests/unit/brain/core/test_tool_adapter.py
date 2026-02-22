@@ -128,7 +128,7 @@ class TestMCPToolAdapter:
     
     def test_is_available_returns_bool(self, adapter):
         """Test is_available method."""
-        result = adapter.is_available("cortex_lens_analyze")
+        result = adapter.is_available("cortex.lens_analyze")
         assert isinstance(result, bool)
 
 

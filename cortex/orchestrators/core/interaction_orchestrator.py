@@ -521,7 +521,7 @@ class InteractionOrchestrator(IOrchestrator):
                 if candidate.exists():
                     return candidate
                 # Try common source directories
-                for src_dir in ["cortex", "cortex_intelligence", "src", "tests"]:
+                for src_dir in ["cortex", "cortex.intelligence", "src", "tests"]:
                     candidate = repo_path / src_dir / cleaned
                     if candidate.exists():
                         return candidate

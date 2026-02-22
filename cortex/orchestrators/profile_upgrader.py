@@ -26,7 +26,7 @@ class ProfileUpgrader:
     def __init__(self, base_path: Path) -> None:
         """Initialize instance."""
         self.base_path = Path(base_path)
-        self._tier1_dir = self.base_path / "cortex_intelligence" / "tier1"
+        self._tier1_dir = self.base_path / "cortex.intelligence" / "tier1"
         self._backup_dir = self.base_path / ".cortex-runtime" / "profile-backups"
         self._inherited: Dict[str, Dict[str, Any]] = {}
 

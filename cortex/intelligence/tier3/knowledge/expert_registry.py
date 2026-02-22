@@ -10,7 +10,7 @@ import yaml
 
 _REGISTRY_PATH = (
     Path(__file__).parent.parent.parent.parent.parent.parent
-    / "cortex_intelligence" / "tier3" / "knowledge" / "expert-registry.yaml"
+    / "cortex.intelligence" / "tier3" / "knowledge" / "expert-registry.yaml"
 )
 
 

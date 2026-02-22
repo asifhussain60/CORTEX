@@ -324,7 +324,7 @@ def file_tool():
         """Test filtering tools by name pattern."""
         # Arrange
         tools = [
-            ToolMetadata(name="cortex_lens", description="", version="1.0"),
+            ToolMetadata(name="cortex.lens", description="", version="1.0"),
             ToolMetadata(name="cortex_git", description="", version="1.0"),
             ToolMetadata(name="other_tool", description="", version="1.0"),
         ]
@@ -358,7 +358,7 @@ def file_tool():
         """Test retrieving specific tool by exact name."""
         # Arrange
         tools = [
-            ToolMetadata(name="cortex_lens", description="", version="1.0"),
+            ToolMetadata(name="cortex.lens", description="", version="1.0"),
             ToolMetadata(name="cortex_git", description="", version="1.0"),
         ]
         scanner = MCPToolScanner()

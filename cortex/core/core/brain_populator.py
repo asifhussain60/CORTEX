@@ -80,7 +80,7 @@ class TierContentLoader:
         Initialize loader.
 
         Args:
-            cortex_intelligence_path: Path to cortex_intelligence folder
+            cortex_intelligence_path: Path to cortex/intelligence folder
         """
         self.cortex_intelligence_path = Path(cortex_intelligence_path)
         self.logger = logging.getLogger(f"{__name__}.TierContentLoader")
@@ -239,7 +239,7 @@ class BrainPopulator:
         Initialize populator.
 
         Args:
-            cortex_intelligence_path: Path to cortex_intelligence folder
+            cortex_intelligence_path: Path to cortex/intelligence folder
         """
         self.loader = TierContentLoader(cortex_intelligence_path)
         self.registry = DomainRuleRegistry()

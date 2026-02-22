@@ -179,7 +179,7 @@ class TestClassifierOrchestrator:
         """
         # Drop leading 'cortex/' if present
         stripped = module_path
-        for prefix in ("cortex/", "cortex_intelligence/", "cortex_lens/"):
+        for prefix in ("cortex/", "cortex/intelligence/", "cortex.lens/"):
             if stripped.startswith(prefix):
                 stripped = stripped[len(prefix):]
                 break

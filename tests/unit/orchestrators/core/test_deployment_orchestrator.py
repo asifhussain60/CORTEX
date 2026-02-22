@@ -69,7 +69,7 @@ def mock_workspace(tmp_path):
     
     # Create necessary directories
     (workspace_root / "cortex").mkdir()
-    (workspace_root / "cortex_intelligence").mkdir()
+    (workspace_root / "cortex.intelligence").mkdir()
     (workspace_root / "tests").mkdir()
     (workspace_root / "deployment").mkdir()
     (workspace_root / ".github" / "prompts").mkdir(parents=True)

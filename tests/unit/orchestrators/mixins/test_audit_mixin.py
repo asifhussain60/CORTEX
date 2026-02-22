@@ -56,7 +56,7 @@ class TestOrchestratorAuditMixin:
         db_path = tmp_path / "test_audit.db"
         
         # Apply schema - navigate from tests/unit/orchestrators/mixins to project root
-        schema_path = Path(__file__).parent.parent.parent.parent.parent / "cortex_intelligence" / "audit" / "schema.sql"
+        schema_path = Path(__file__).parent.parent.parent.parent.parent / "cortex.intelligence" / "audit" / "schema.sql"
         
         conn = sqlite3.connect(str(db_path))
         with open(schema_path, 'r') as f:

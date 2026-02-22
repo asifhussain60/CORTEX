@@ -32,7 +32,7 @@ class TestMCPToolDetection:
         
         core_tools = [
             'cortex_process_request',
-            'cortex_lens_analyze',
+            'cortex.lens_analyze',
             'cortex_challenge',
             'cortex_total_recall',
             'cortex_onboard_repository',
@@ -78,7 +78,7 @@ class TestMCPToolDetection:
         # Unified orchestrator tools (Track 3 consolidation)
         unified_tools = [
             'cortex_onboard_repository',  # UnifiedOnboardingOrchestrator
-            'cortex_lens_analyze',  # UnifiedAnalysisOrchestrator
+            'cortex.lens_analyze',  # UnifiedAnalysisOrchestrator
             'cortex_challenge',  # UnifiedQualityAssuranceOrchestrator
             'cortex_discover',  # UnifiedDiscoveryOrchestrator
         ]

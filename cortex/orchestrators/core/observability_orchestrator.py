@@ -60,7 +60,7 @@ class ObservabilityOrchestrator:
         self._metrics: Dict[str, float] = {}
         self._spans: List[Span] = []
         
-        # SQLite audit logging — stored under .cortex-runtime/ (not gitignored cortex_intelligence/)
+        # SQLite audit logging — stored under .cortex-runtime/ (not gitignored cortex/intelligence/)
         if audit_db_path:
             self.audit_db_path = audit_db_path
         else:

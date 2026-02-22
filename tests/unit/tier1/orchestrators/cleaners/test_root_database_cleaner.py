@@ -80,7 +80,7 @@ class TestRootDatabaseCleanerAnalysis:
     def test_analyze_ignores_subdirectory_db_files(self, cleaner, temp_repo) -> None:
         """Test that analyze() ignores .db files in subdirectories."""
         # Create .db in subdirectory (should be ignored)
-        subdir = temp_repo / "cortex_intelligence"
+        subdir = temp_repo / "cortex.intelligence"
         subdir.mkdir()
         (subdir / "governance.db").write_text("test data")
         

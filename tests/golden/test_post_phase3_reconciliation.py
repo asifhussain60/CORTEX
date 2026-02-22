@@ -8,7 +8,7 @@ Scope:
   - Path reconciliation (old _archive + new cortex/intelligence)
   - YAML artifact import audit (cortex_registry, deployment, etc.)
   - Governance crystal mappings (CCL still accurate)
-  - Import quarantine verification (no cortex_intelligence in active code)
+  - Import quarantine verification (no cortex.intelligence in active code)
   - Tool registry updates (MCP tools reference cortex.intelligence paths)
 
 Authority: CORE-008 (TDD), CORE-035 (single canonical), CORE-002 (no markdown gen)
@@ -52,7 +52,7 @@ class TestPathReconciliation:
         active_path = Path("cortex/intelligence")
         assert active_path.exists(), f"Active path {active_path} must exist"
         assert (active_path / "__init__.py").exists(), "cortex/intelligence/__init__.py must exist"
-        # Verify subdirectories from old cortex_intelligence migrated
+        # Verify subdirectories from old cortex.intelligence migrated
         assert (active_path / "memory").exists(), "cortex/intelligence/memory must exist (migrated)"
         assert (active_path / "reasoning").exists(), "cortex/intelligence/reasoning must exist (migrated)"
     
@@ -61,7 +61,7 @@ class TestPathReconciliation:
         active_path = Path("cortex/intelligence/lens")
         assert active_path.exists(), f"Active path {active_path} must exist"
         assert (active_path / "__init__.py").exists(), "cortex/intelligence/lens/__init__.py must exist"
-        # Verify subdirectories from old cortex_lens migrated
+        # Verify subdirectories from old cortex.lens migrated
         assert (active_path / "knowledge_graph").exists(), "cortex/intelligence/lens/knowledge_graph must exist (migrated)"
 
 
@@ -91,7 +91,7 @@ class TestYAMLArtifactAudit:
                 if line.strip().startswith('#'):
                     continue
                 # Check for active code references (not just doc/planning mentions)
-                if re.search(r'(path|location|module|import|source):\s*.*cortex_intelligence(?!_backup)', line, re.IGNORECASE):
+                if re.search(r'(path|location|module|import|source):\s*.*cortex.intelligence(?!_backup)', line, re.IGNORECASE):
                     stale_active_references.append(f"{yaml_file.name}:{i}: {line.strip()}")
         
         # We allow historical references in planning YAMLs, but not in active configs
@@ -109,7 +109,7 @@ class TestYAMLArtifactAudit:
             content = config_file.read_text(errors='ignore')
             # Should not have old package names in paths or imports
             assert "cortex_intelligence" not in content or "cortex_intelligence_backup" in content, \
-                f"{config_file} references cortex_intelligence (should use cortex.intelligence)"
+                f"{config_file} references cortex.intelligence (should use cortex_intelligence)"
     
     def test_governance_registry_inventory_has_no_dangling_references(self):
         """Governance inventory must have no references to deleted/archived packages."""
@@ -171,7 +171,7 @@ class TestImportQuarantineVerification:
     """Verify old package import patterns completely eliminated from active code."""
     
     def test_no_cortex_intelligence_imports_in_active_code(self):
-        """Active cortex/ code must not import from cortex_intelligence (now cortex.intelligence)."""
+        """Active cortex/ code must not import from cortex.intelligence (now cortex_intelligence)."""
         cortex_path = Path("cortex")
         python_files = list(cortex_path.rglob("*.py"))
         
@@ -180,13 +180,13 @@ class TestImportQuarantineVerification:
             content = py_file.read_text(errors='ignore')
             lines = content.split('\n')
             for i, line in enumerate(lines, 1):
-                if re.match(r"^\s*(from|import)\s+cortex_intelligence\b", line):
+                if re.match(r"^\s*(from|import)\s+cortex.intelligence\b", line):
                     violations.append(f"{py_file}:{i}: {line.strip()}")
         
-        assert len(violations) == 0, f"Found active cortex_intelligence imports (should be cortex.intelligence):\n" + "\n".join(violations)
+        assert len(violations) == 0, f"Found active cortex.intelligence imports (should be cortex_intelligence):\n" + "\n".join(violations)
     
     def test_no_cortex_lens_imports_in_active_code(self):
-        """Active cortex/ code must not import from cortex_lens (now cortex.intelligence.lens)."""
+        """Active cortex/ code must not import from cortex.lens (now cortex.intelligence.lens)."""
         cortex_path = Path("cortex")
         python_files = list(cortex_path.rglob("*.py"))
         
@@ -195,10 +195,10 @@ class TestImportQuarantineVerification:
             content = py_file.read_text(errors='ignore')
             lines = content.split('\n')
             for i, line in enumerate(lines, 1):
-                if re.match(r"^\s*(from|import)\s+cortex_lens\b", line):
+                if re.match(r"^\s*(from|import)\s+cortex.lens\b", line):
                     violations.append(f"{py_file}:{i}: {line.strip()}")
         
-        assert len(violations) == 0, f"Found active cortex_lens imports (should be cortex.intelligence.lens):\n" + "\n".join(violations)
+        assert len(violations) == 0, f"Found active cortex.lens imports (should be cortex.intelligence.lens):\n" + "\n".join(violations)
     
     def test_all_active_imports_follow_cortex_namespace_pattern(self):
         """All new imports must follow cortex.* pattern (single canonical namespace)."""
@@ -245,7 +245,7 @@ class TestToolRegistryUpdates:
         stale_refs = []
         for tool_name, tool_config in tools.items():
             source = tool_config.get('source_module', '')
-            if "cortex_intelligence" in source or "cortex_lens" in source:
+            if "cortex_intelligence" in source or "cortex.lens" in source:
                 if "_backup" not in source:
                     stale_refs.append(f"{tool_name}: {source}")
         
@@ -265,7 +265,7 @@ class TestToolRegistryUpdates:
             target = consolidation.get('target_tool', '')
             target_module = consolidation.get('target_module', '')
             
-            assert "cortex.intelligence" in target_module or target_module.startswith("cortex/"), \
+            assert "cortex_intelligence" in target_module or target_module.startswith("cortex/"), \
                 f"Alias '{old_tool}' → '{target}' points to invalid module: {target_module}"
 
 

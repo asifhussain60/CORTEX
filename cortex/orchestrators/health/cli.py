@@ -71,8 +71,8 @@ def main() -> int:
     parser.add_argument(
         "--db-path",
         type=Path,
-        default=Path("cortex_intelligence/governance.db"),
-        help="Dashboard database path (default: cortex_intelligence/governance.db)",
+        default=Path("cortex/intelligence/governance.db"),
+        help="Dashboard database path (default: cortex/intelligence/governance.db)",
     )
     
     parser.add_argument(

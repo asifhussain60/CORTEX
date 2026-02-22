@@ -1,7 +1,7 @@
 """
 Phase 63: LENS Tiered MCP API - GREEN Phase Implementation Tests
 
-Full test suite for cortex_lens_quick, cortex_lens_targeted, cortex_lens_stream,
+Full test suite for cortex.lens_quick, cortex.lens_targeted, cortex.lens_stream,
 and Tier 4 backward compatibility.
 """
 

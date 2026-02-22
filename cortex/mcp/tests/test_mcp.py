@@ -115,7 +115,7 @@ class TestToolConsolidation:
         """Verify consolidated tools define their operations."""
         consolidated = [
             "cortex_request_lifecycle",
-            "cortex_lens",
+            "cortex.lens",
             "cortex_knowledge",
             "cortex_git",
             "cortex_governance",
@@ -185,9 +185,9 @@ class TestToolRegistry:
     
     def test_registry_get_metadata(self, registry: "ToolRegistry") -> None:
         """Get metadata for registered tool."""
-        metadata = registry.get_metadata("cortex_lens")
+        metadata = registry.get_metadata("cortex.lens")
         assert metadata is not None
-        assert metadata.id == "cortex_lens"
+        assert metadata.id == "cortex.lens"
         assert metadata.category == ToolCategory.INTELLIGENCE
         assert len(metadata.operations) > 0
     
@@ -254,7 +254,7 @@ class TestMCPServer:
     
     def test_call_implemented_tool_succeeds(self, server: "MCPServer") -> None:
         """Calling implemented tool returns success."""
-        result = server.call_tool("cortex_lens", operation="analyze", target=".")
+        result = server.call_tool("cortex.lens", operation="analyze", target=".")
         assert result.success
         assert "lens" in result.data
     
@@ -307,7 +307,7 @@ class TestJSONRPCProtocol:
         request = MCPRequest(
             method="tools/call",
             params={
-                "name": "cortex_lens",
+                "name": "cortex.lens",
                 "arguments": {"operation": "analyze", "target": "."},
             },
             id="call-1",
@@ -507,7 +507,7 @@ class TestExtensibility:
     
     def test_tool_operations_are_extensible(self) -> None:
         """Consolidated tools can have operations added."""
-        spec = PRODUCTION_TOOLS["cortex_lens"]
+        spec = PRODUCTION_TOOLS["cortex.lens"]
         ops = spec["operations"]
         
         # Could add new operations without changing tool count
@@ -558,7 +558,7 @@ class TestPerformance:
         
         start = time.time()
         for _ in range(1000):
-            registry.get_metadata("cortex_lens")
+            registry.get_metadata("cortex.lens")
         elapsed = time.time() - start
         
         per_call = elapsed / 1000

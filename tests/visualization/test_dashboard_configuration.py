@@ -74,7 +74,7 @@ class TestDashboardConfiguration:
     def test_get_tabs_for_cortex_repository(self, tmp_path: Path) -> None:
         """Test getting tabs for CORTEX repository (8 tabs total)."""
         # Arrange: Create CORTEX marker
-        (tmp_path / "cortex_intelligence").mkdir()
+        (tmp_path / "cortex.intelligence").mkdir()
         config = DashboardConfiguration()
         
         # Act
@@ -90,7 +90,7 @@ class TestDashboardConfiguration:
     def test_universal_tabs_come_first(self, tmp_path: Path) -> None:
         """Test that universal tabs (1-5) come before CORTEX tabs (6-8)."""
         # Arrange
-        (tmp_path / "cortex_intelligence").mkdir()
+        (tmp_path / "cortex.intelligence").mkdir()
         config = DashboardConfiguration()
         
         # Act
@@ -160,7 +160,7 @@ class TestDashboardConfiguration:
     def test_is_tab_applicable_cortex_to_cortex(self, tmp_path: Path) -> None:
         """Test CORTEX tab IS applicable to CORTEX repo."""
         # Arrange
-        (tmp_path / "cortex_intelligence").mkdir()
+        (tmp_path / "cortex.intelligence").mkdir()
         config = DashboardConfiguration()
         
         # Act
@@ -172,7 +172,7 @@ class TestDashboardConfiguration:
     def test_tab_ordering_consistency(self, tmp_path: Path) -> None:
         """Test tab ordering is consistent across calls."""
         # Arrange
-        (tmp_path / "cortex_intelligence").mkdir()
+        (tmp_path / "cortex.intelligence").mkdir()
         config = DashboardConfiguration()
         
         # Act

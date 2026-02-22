@@ -105,7 +105,7 @@ class GovernanceRegistry:
         """
         Initialize registry by loading tier 0 rules from YAML.
 
-        Loads CORE rules from ``cortex_intelligence/tier0/governance/core-rules.yaml``.
+        Loads CORE rules from ``cortex/intelligence/tier0/governance/core-rules.yaml``.
         Falls back to a minimal built-in set if the file is missing.
 
         Returns:
@@ -128,7 +128,7 @@ class GovernanceRegistry:
         """Load tier 0 rules from the governance YAML file."""
         yaml_path = (
             Path(__file__).resolve().parent.parent.parent.parent
-            / "cortex_intelligence"
+            / "cortex.intelligence"
             / "tier0"
             / "governance"
             / "core-rules.yaml"

@@ -38,7 +38,7 @@ class ImportStrategy:
         Resolve an import name to a file path.
         
         Args:
-            name: Module or package name (e.g., 'os', 'cortex_intelligence.memory.core')
+            name: Module or package name (e.g., 'os', 'cortex.intelligence.memory.core')
             
         Returns:
             Path to the module/package, or None if not found
@@ -115,7 +115,7 @@ class FilesystemSearchStrategy(ImportStrategy):
         Search for module/package in filesystem.
         
         Args:
-            name: Module name to resolve (e.g., 'cortex_intelligence.memory.core')
+            name: Module name to resolve (e.g., 'cortex.intelligence.memory.core')
             
         Returns:
             Path to module file, or None if not found
@@ -162,12 +162,12 @@ class ImportResolver:
     
     Example:
         >>> resolver = ImportResolver()
-        >>> path = resolver.resolve("cortex_intelligence.memory.core")
+        >>> path = resolver.resolve("cortex.intelligence.memory.core")
         >>> print(path)
-        PosixPath('/path/to/cortex_intelligence/tier0')
+        PosixPath('/path/to/cortex/intelligence/tier0')
         
         >>> resolver.add_path(Path("/custom/modules"))
-        >>> resolver.is_package("cortex_intelligence")
+        >>> resolver.is_package("cortex.intelligence")
         True
     """
     
@@ -217,7 +217,7 @@ class ImportResolver:
         strategies in order. Results are cached for performance.
         
         Args:
-            name: Module or package name (e.g., 'cortex_intelligence', 'json', 'os.path')
+            name: Module or package name (e.g., 'cortex.intelligence', 'json', 'os.path')
             
         Returns:
             Path to the module/package, or None if not found.
@@ -261,7 +261,7 @@ class ImportResolver:
         
         Args:
             name: Relative import name (e.g., '.module', '..tier1.subpkg')
-            context: Package context for resolution (e.g., 'cortex_intelligence.memory.core')
+            context: Package context for resolution (e.g., 'cortex.intelligence.memory.core')
             
         Returns:
             Path to the module/package, or None if not found.
@@ -271,7 +271,7 @@ class ImportResolver:
             
         Example:
             >>> resolver = ImportResolver()
-            >>> path = resolver.resolve_relative(".submodule", "cortex_intelligence.memory.core")
+            >>> path = resolver.resolve_relative(".submodule", "cortex.intelligence.memory.core")
             >>> path is not None
             True
         """
@@ -317,7 +317,7 @@ class ImportResolver:
             
         Example:
             >>> resolver = ImportResolver()
-            >>> resolver.is_package("cortex_intelligence")
+            >>> resolver.is_package("cortex.intelligence")
             True
             >>> resolver.is_package("json")
             True  # json is a package in Python 3.9+

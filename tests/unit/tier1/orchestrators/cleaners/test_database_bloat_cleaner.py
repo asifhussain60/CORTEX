@@ -40,8 +40,8 @@ def workspace(tmp_path: Path) -> Path:
     Returns:
         Path to workspace root.
     """
-    (tmp_path / "cortex_intelligence" / "state").mkdir(parents=True)
-    (tmp_path / "cortex_intelligence" / "intelligence").mkdir(parents=True)
+    (tmp_path / "cortex.intelligence" / "state").mkdir(parents=True)
+    (tmp_path / "cortex.intelligence" / "intelligence").mkdir(parents=True)
     (tmp_path / ".cortex-runtime" / "traces").mkdir(parents=True)
     (tmp_path / "cortex" / "wiring" / "registry").mkdir(parents=True)
     return tmp_path
@@ -143,7 +143,7 @@ class TestAnalyze:
         self, cleaner: DatabaseBloatCleaner, workspace: Path
     ) -> None:
         """Healthy database should produce minimal or no actions."""
-        db_path = workspace / "cortex_intelligence" / "state" / "healthy.db"
+        db_path = workspace / "cortex.intelligence" / "state" / "healthy.db"
         schema = "CREATE TABLE test_data (id INTEGER PRIMARY KEY, value TEXT, ts TEXT)"
         _create_db(db_path, schema, rows=5)
 
@@ -155,7 +155,7 @@ class TestAnalyze:
         self, cleaner: DatabaseBloatCleaner, workspace: Path
     ) -> None:
         """Should detect WAL/SHM orphan files."""
-        db_dir = workspace / "cortex_intelligence" / "state"
+        db_dir = workspace / "cortex.intelligence" / "state"
         (db_dir / "test.db-wal").write_bytes(b"\x00" * 50)
         (db_dir / "test.db-shm").write_bytes(b"\x00" * 50)
 
@@ -173,7 +173,7 @@ class TestAnalyze:
         """Should detect duplicate databases with same schema."""
         schema = "CREATE TABLE test_data (id INTEGER PRIMARY KEY, value TEXT, ts TEXT)"
 
-        db1 = workspace / "cortex_intelligence" / "intelligence" / "audit.db"
+        db1 = workspace / "cortex.intelligence" / "intelligence" / "audit.db"
         _create_db(db1, schema, rows=10)
 
         dup_dir = workspace / "cortex" / "orchestrators" / "intelligence"
@@ -202,7 +202,7 @@ class TestExecute:
         self, cleaner: DatabaseBloatCleaner, workspace: Path
     ) -> None:
         """VACUUM action should succeed on valid database."""
-        db_path = workspace / "cortex_intelligence" / "state" / "to_vacuum.db"
+        db_path = workspace / "cortex.intelligence" / "state" / "to_vacuum.db"
         schema = "CREATE TABLE test_data (id INTEGER PRIMARY KEY, value TEXT, ts TEXT)"
         _create_db(db_path, schema, rows=5)
 
@@ -220,7 +220,7 @@ class TestExecute:
         self, cleaner: DatabaseBloatCleaner, workspace: Path
     ) -> None:
         """WAL checkpoint action should succeed."""
-        db_path = workspace / "cortex_intelligence" / "state" / "wal_db.db"
+        db_path = workspace / "cortex.intelligence" / "state" / "wal_db.db"
         conn = sqlite3.connect(str(db_path))
         conn.execute("PRAGMA journal_mode=WAL;")
         conn.execute("CREATE TABLE t (id INTEGER PRIMARY KEY)")
@@ -241,7 +241,7 @@ class TestExecute:
         self, cleaner: DatabaseBloatCleaner, workspace: Path
     ) -> None:
         """Orphan WAL/SHM files should be deleted."""
-        orphan = workspace / "cortex_intelligence" / "state" / "old.db-wal"
+        orphan = workspace / "cortex.intelligence" / "state" / "old.db-wal"
         orphan.write_bytes(b"\x00" * 50)
 
         plan: Dict[str, Any] = {
@@ -258,7 +258,7 @@ class TestExecute:
         self, dry_run_cleaner: DatabaseBloatCleaner, workspace: Path
     ) -> None:
         """Dry run should not modify any files."""
-        orphan = workspace / "cortex_intelligence" / "state" / "keep.db-wal"
+        orphan = workspace / "cortex.intelligence" / "state" / "keep.db-wal"
         orphan.write_bytes(b"\x00" * 50)
 
         plan: Dict[str, Any] = {
@@ -316,7 +316,7 @@ class TestRetentionPurge:
         self, cleaner: DatabaseBloatCleaner, workspace: Path
     ) -> None:
         """Should delete rows older than retention threshold."""
-        db_path = workspace / "cortex_intelligence" / "state" / "retention.db"
+        db_path = workspace / "cortex.intelligence" / "state" / "retention.db"
         conn = sqlite3.connect(str(db_path))
         conn.execute(
             "CREATE TABLE logs (id INTEGER PRIMARY KEY, data TEXT, timestamp TEXT)"
@@ -365,7 +365,7 @@ class TestTeardown:
         self, cleaner: DatabaseBloatCleaner, workspace: Path
     ) -> None:
         """After analyze+execute, no connections should be leaked."""
-        db_path = workspace / "cortex_intelligence" / "state" / "leak_test.db"
+        db_path = workspace / "cortex.intelligence" / "state" / "leak_test.db"
         schema = "CREATE TABLE test_data (id INTEGER PRIMARY KEY, value TEXT, ts TEXT)"
         _create_db(db_path, schema, rows=5)
 

@@ -1,8 +1,8 @@
 """
 Phase 63: LENS Tiered MCP API - Implementation
 
-Implements cortex_lens_quick (Tier 2), cortex_lens_targeted (Tier 3),
-cortex_lens_stream (Tier 3) with backward compatibility for cortex_lens_analyze (Tier 4).
+Implements cortex.lens_quick (Tier 2), cortex.lens_targeted (Tier 3),
+cortex.lens_stream (Tier 3) with backward compatibility for cortex.lens_analyze (Tier 4).
 
 AC_START: AC-PHASE63-001
 """

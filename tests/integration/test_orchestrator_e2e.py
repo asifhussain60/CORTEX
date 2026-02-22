@@ -341,7 +341,7 @@ class TestMCPConsolidationLive:
         
         orchestrator_paths = list(Path("cortex/orchestrators").rglob("*.py"))
         
-        old_patterns = ["cortex_intelligence/", "cortex_lens/", "_archive/"]
+        old_patterns = ["cortex/intelligence/", "cortex.lens/", "_archive/"]
         violations = []
         
         for py_file in orchestrator_paths[:5]:  # Sample first 5

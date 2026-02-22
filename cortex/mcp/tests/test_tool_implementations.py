@@ -249,12 +249,12 @@ class TestCortexRequestLifecycle:
 # =============================================================================
 
 class TestCortexLens:
-    """Tests for cortex_lens tool."""
+    """Tests for cortex.lens tool."""
     
     def test_tool_name(self) -> None:
         """Test tool name."""
         tool = CortexLens()
-        assert tool.name == "cortex_lens"
+        assert tool.name == "cortex.lens"
     
     def test_tool_category(self) -> None:
         """Test tool category."""

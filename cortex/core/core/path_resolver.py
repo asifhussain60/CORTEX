@@ -12,9 +12,9 @@ NEVER use hardcoded paths like:
 ALWAYS use:
 - get_project_root()
 - resolve_path("cortex", "intelligence")
-- cortex_intelligence_path()  ← canonical: cortex/intelligence/
+- cortex.intelligence_path()  ← canonical: cortex/intelligence/
 
-Note: cortex_intelligence/ was dissolved into cortex/intelligence/ (Phase 03).
+Note: cortex/intelligence/ was dissolved into cortex/intelligence/ (Phase 03).
 All tier-based paths now map to cortex-registry/ (governance) or cortex/intelligence/ (code).
 
 Author: Asif Hussain

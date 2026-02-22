@@ -40,7 +40,7 @@ class TestCompanyOverrideTruth:
         """Initialize loader with temp project root."""
         # Create directory structure
         (tmp_path / "cortex-registry" / "company" / "domains").mkdir(parents=True)
-        (tmp_path / "cortex_intelligence" / "tier3" / "knowledge").mkdir(parents=True)
+        (tmp_path / "cortex.intelligence" / "tier3" / "knowledge").mkdir(parents=True)
         
         return CompanyKnowledgeLoader(project_root=str(tmp_path))
     
@@ -50,7 +50,7 @@ class TestCompanyOverrideTruth:
         # Create directory structure
         company_dir = tmp_path / "cortex-registry" / "company" / "domains" / "acme-corp"
         company_dir.mkdir(parents=True)
-        cortex_dir = tmp_path / "cortex_intelligence" / "tier3" / "knowledge"
+        cortex_dir = tmp_path / "cortex.intelligence" / "tier3" / "knowledge"
         cortex_dir.mkdir(parents=True)
         
         loader = CompanyKnowledgeLoader(
@@ -123,7 +123,7 @@ class TestKnowledgePrecedence:
     def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
         """Initialize loader."""
         (tmp_path / "cortex-registry" / "company" / "domains").mkdir(parents=True)
-        (tmp_path / "cortex_intelligence" / "tier3" / "knowledge").mkdir(parents=True)
+        (tmp_path / "cortex.intelligence" / "tier3" / "knowledge").mkdir(parents=True)
         return CompanyKnowledgeLoader(project_root=str(tmp_path))
     
     def test_deep_merge_preserves_nested_data(self, loader: CompanyKnowledgeLoader):
@@ -204,7 +204,7 @@ class TestLayerMetrics:
     def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
         """Initialize loader."""
         (tmp_path / "cortex-registry" / "company" / "domains").mkdir(parents=True)
-        (tmp_path / "cortex_intelligence" / "tier3" / "knowledge").mkdir(parents=True)
+        (tmp_path / "cortex.intelligence" / "tier3" / "knowledge").mkdir(parents=True)
         return CompanyKnowledgeLoader(project_root=str(tmp_path))
     
     def test_metrics_tracking(self, loader: CompanyKnowledgeLoader):
@@ -240,7 +240,7 @@ class TestComplianceDetection:
     def loader(self, tmp_path: Path) -> CompanyKnowledgeLoader:
         """Initialize loader."""
         (tmp_path / "cortex-registry" / "company" / "domains").mkdir(parents=True)
-        (tmp_path / "cortex_intelligence" / "tier3" / "knowledge").mkdir(parents=True)
+        (tmp_path / "cortex.intelligence" / "tier3" / "knowledge").mkdir(parents=True)
         return CompanyKnowledgeLoader(project_root=str(tmp_path))
     
     def test_detect_pci_dss_patterns(self, loader: CompanyKnowledgeLoader):

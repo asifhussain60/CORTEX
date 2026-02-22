@@ -60,7 +60,7 @@ def check_staged_files() -> Tuple[bool, List[str]]:
     for file_path in staged_files:
         if file_path.suffix == ".db":
             if file_path.parent == Path("."):
-                violations.append(f"❌ Database in root: {file_path} (move to cortex_intelligence/)")
+                violations.append(f"❌ Database in root: {file_path} (move to cortex/intelligence/)")
     
     return len(violations) == 0, violations
 

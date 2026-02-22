@@ -29,7 +29,7 @@ from cortex.mcp.tools.onboard_repository import (
 
 CORTEX_PATH = Path("/Users/asifhussain/PROJECTS/CORTEX")
 EXTERNAL_KSESSIONS_PATH = Path("/Users/asifhussain/PROJECTS/KSESSIONS")
-GOVERNANCE_DB_PATH = CORTEX_PATH / "cortex_intelligence" / "governance.db"
+GOVERNANCE_DB_PATH = CORTEX_PATH / "cortex.intelligence" / "governance.db"
 
 
 # ============================================================================

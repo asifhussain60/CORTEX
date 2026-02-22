@@ -140,7 +140,7 @@ class TestMCPEndToEndTruth:
         """Verify MCPResponse serializes correctly."""
         # Create response
         response = ServerMCPResponse(
-            result={"tools": ["cortex_lens", "cortex_audit"]},
+            result={"tools": ["cortex.lens", "cortex_audit"]},
             id="req-002"
         )
         

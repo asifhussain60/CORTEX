@@ -54,7 +54,7 @@ class TestDatabaseHealthAgent:
     def test_check_small_database_no_issues(self, tmp_path: Path) -> None:
         """Test check with small database reports no issues."""
         # Create small database
-        db_path = tmp_path / "cortex_intelligence" / "governance.db"
+        db_path = tmp_path / "cortex.intelligence" / "governance.db"
         db_path.parent.mkdir(parents=True)
         
         conn = sqlite3.connect(str(db_path))
@@ -73,7 +73,7 @@ class TestDatabaseHealthAgent:
     def test_check_bloated_database(self, tmp_path: Path) -> None:
         """Test check detects bloated database."""
         # Create database that exceeds threshold
-        db_path = tmp_path / "cortex_intelligence" / "bloated.db"
+        db_path = tmp_path / "cortex.intelligence" / "bloated.db"
         db_path.parent.mkdir(parents=True)
         
         conn = sqlite3.connect(str(db_path))
@@ -96,7 +96,7 @@ class TestDatabaseHealthAgent:
     def test_check_wal_bloat(self, tmp_path: Path) -> None:
         """Test check detects WAL journal bloat."""
         # Create database with large WAL file
-        db_path = tmp_path / "cortex_intelligence" / "wal_test.db"
+        db_path = tmp_path / "cortex.intelligence" / "wal_test.db"
         db_path.parent.mkdir(parents=True)
         
         # Enable WAL mode
@@ -125,7 +125,7 @@ class TestDatabaseHealthAgent:
     
     def test_check_auto_vacuum_disabled(self, tmp_path: Path) -> None:
         """Test check detects disabled auto-vacuum."""
-        db_path = tmp_path / "cortex_intelligence" / "no_vacuum.db"
+        db_path = tmp_path / "cortex.intelligence" / "no_vacuum.db"
         db_path.parent.mkdir(parents=True)
         
         conn = sqlite3.connect(str(db_path))
@@ -177,7 +177,7 @@ class TestDatabaseHealthAgent:
     
     def test_check_result_metadata(self, tmp_path: Path) -> None:
         """Test check result includes metadata."""
-        db_path = tmp_path / "cortex_intelligence" / "governance.db"
+        db_path = tmp_path / "cortex.intelligence" / "governance.db"
         db_path.parent.mkdir(parents=True)
         
         conn = sqlite3.connect(str(db_path))

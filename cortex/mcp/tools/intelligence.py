@@ -2,7 +2,7 @@
 CORTEX MCP v2 - Intelligence Tools
 
 Code analysis, knowledge search, and git history:
-- cortex_lens: Unified code intelligence (analyze, search, graph)
+- cortex.lens: Unified code intelligence (analyze, search, graph)
 - cortex_knowledge: Knowledge base operations
 - cortex_git: Git history and context
 
@@ -70,7 +70,7 @@ class CortexLens(ConsolidatedTool):
     @property
     def name(self) -> str:
         """Return the name."""
-        return "cortex_lens"
+        return "cortex.lens"
     
     @property
     def description(self) -> str:

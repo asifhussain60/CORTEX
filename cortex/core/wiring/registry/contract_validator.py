@@ -64,7 +64,7 @@ class ContractValidator:
         Args:
             audit_db: Path to SQLite audit database
         """
-        # Store in .cortex-runtime/ to avoid gitignored cortex_intelligence/ directory
+        # Store in .cortex-runtime/ to avoid gitignored cortex/intelligence/ directory
         if audit_db:
             self.audit_db = audit_db
         else:

@@ -40,7 +40,7 @@ def temp_workspace() -> Path:
 @pytest.fixture
 def knowledge_store_with_data(temp_workspace: Path):
     """Create KnowledgeStore with sample data."""
-    from cortex.brain.persistence.knowledge_store import KnowledgeStore
+    from cortex.intelligence.persistence.knowledge_store import KnowledgeStore
     
     db_path = temp_workspace / "knowledge.db"
     store = KnowledgeStore(db_path=db_path)
@@ -68,7 +68,7 @@ def knowledge_store_with_data(temp_workspace: Path):
 @pytest.fixture
 def learning_loop_with_store(temp_workspace: Path, knowledge_store_with_data):
     """Create learning loop with knowledge store."""
-    from cortex.brain.persistence.learning_loop_integration import LearningLoopIntegration
+    from cortex.intelligence.persistence.learning_loop_integration import LearningLoopIntegration
     
     integration = LearningLoopIntegration(
         workspace_root=temp_workspace,
@@ -356,8 +356,8 @@ def test_golden_pattern_frequency_tracking_cross_session(temp_workspace: Path):
     
     AC: AC-PHASE27-S2-G06 (Golden Test - Cross-Session Frequency)
     """
-    from cortex.brain.persistence.knowledge_store import KnowledgeStore
-    from cortex.brain.persistence.learning_loop_integration import LearningLoopIntegration
+    from cortex.intelligence.persistence.knowledge_store import KnowledgeStore
+    from cortex.intelligence.persistence.learning_loop_integration import LearningLoopIntegration
     
     db_path = temp_workspace / "knowledge.db"
     

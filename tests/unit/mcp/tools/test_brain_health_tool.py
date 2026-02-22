@@ -38,7 +38,7 @@ class TestBrainHealthMCPTool:
         """Test tool definition structure."""
         definition = tool.definition
         
-        assert definition.name == "cortex_intelligence_health"
+        assert definition.name == "cortex.intelligence_health"
         assert "brain health" in definition.description.lower()
         assert len(definition.parameters) == 2
         assert definition.metadata["category"] == "observability"
@@ -117,7 +117,7 @@ class TestBrainHealthMCPTool:
             'alerts': []
         }
         
-        mock_metrics = "# HELP cortex_intelligence_cache_staleness_ratio\\ncortex_intelligence_cache_staleness_ratio 0.15"
+        mock_metrics = "# HELP cortex.intelligence_cache_staleness_ratio\\ncortex.intelligence_cache_staleness_ratio 0.15"
         
         with patch('cortex.orchestrators.support.brain_health_orchestrator.BrainHealthOrchestrator') as mock_orch:
             mock_instance = MagicMock()
@@ -129,7 +129,7 @@ class TestBrainHealthMCPTool:
         
         assert result['status'] == 'success'
         assert result['format'] == 'prometheus'
-        assert 'cortex_intelligence_' in result['metrics']
+        assert 'cortex.intelligence_' in result['metrics']
 
     def test_execute_with_recommendations(self, tool: 'BrainHealthTool') -> None:
         """Test execution includes recommendations when alerts present."""

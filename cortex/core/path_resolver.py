@@ -61,12 +61,12 @@ def get_cortex_module_path() -> Path:
 
 
 def get_cortex_intelligence_path() -> Path:
-    """Get path to cortex_intelligence module.
+    """Get path to cortex/intelligence module.
 
     Returns:
-        Path to cortex_intelligence package.
+        Path to cortex/intelligence package.
     """
-    return get_project_root() / "cortex_intelligence"
+    return get_project_root() / "cortex" / "intelligence"
 
 
 def get_config_path() -> Path:
@@ -109,7 +109,7 @@ __all__ = [
     "get_project_root",
     "resolve_path",
     "get_cortex_module_path",
-    "get_cortex_intelligence_path",
+    "get_cortex.intelligence_path",
     "get_config_path",
     "get_data_path",
     "get_tests_path",

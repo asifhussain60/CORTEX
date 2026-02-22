@@ -10,7 +10,7 @@ hands work to the vacuum pipeline.
 Detected patterns
 -----------------
 CONSOLIDATE  — folder duplicated at a lower level inside cortex/
-               (e.g. cortex/cortex_intelligence vs root cortex_intelligence)
+               (e.g. cortex/cortex.intelligence vs root cortex.intelligence)
 DELETE       — tracked stray folders whose content belongs nowhere and
                has zero external imports (e.g. cortex/reports, cortex/sts)
 RELOCATE     — file/folder that lives inside cortex/ but has no Python importers
@@ -95,7 +95,7 @@ class InventoryFinding:
 #: Folders inside cortex/ that duplicate a root-level package.
 #: key = relative path inside cortex/, value = canonical root path.
 _DUPLICATE_INSIDE_CORTEX: Dict[str, str] = {
-    "cortex_intelligence": "cortex_intelligence",
+    "cortex.intelligence": "cortex.intelligence",
     "cortex-registry": "cortex-registry",
 }
 

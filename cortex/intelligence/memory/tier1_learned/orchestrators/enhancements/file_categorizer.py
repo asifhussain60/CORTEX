@@ -129,7 +129,7 @@ class FileClassifier:
         FileCategory.SYSTEM_CODE: {
             "patterns": [r"\.py$", r"\.pyx$"],
             "confidence": 0.8,
-            "folder_filters": ["cortex/", "cortex_lens/", "cortex_intelligence/"],
+            "folder_filters": ["cortex/", "cortex.lens/", "cortex/intelligence/"],
         },
         FileCategory.TESTING: {
             "patterns": [r"^test_.*\.py$", r".*_test\.py$", r"conftest\.py$"],
@@ -177,7 +177,7 @@ class FileClassifier:
             "confidence": 0.75,
         },
         FileCategory.SYSTEM_CONFIG: {
-            "patterns": [r"cortex_intelligence.*config", r"vacuum.*config", r"phase.*config"],
+            "patterns": [r"cortex.intelligence.*config", r"vacuum.*config", r"phase.*config"],
             "confidence": 0.8,
         },
         FileCategory.COMPANY_DATA: {

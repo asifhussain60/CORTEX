@@ -275,7 +275,7 @@ class TestGovernanceNonBreakingDesign:
         # Should import without issues
         try:
             import cortex.core.core.knowledge.graph
-            import cortex.brain
+            import cortex.intelligence
 
             success = True
         except ImportError:

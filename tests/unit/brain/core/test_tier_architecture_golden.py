@@ -95,7 +95,7 @@ class TestEndToEndTierPrecedence:
 
     def test_precedence_yaml_configuration_valid(self):
         """AC-PHASE47-S4-001: precedence.yaml reflects tier0 > tier1 > tier2."""
-        precedence_path = Path("cortex_intelligence/governance/precedence.yaml")
+        precedence_path = Path("cortex/intelligence/governance/precedence.yaml")
         
         if not precedence_path.exists():
             pytest.skip("precedence.yaml not found")
@@ -125,7 +125,7 @@ class TestMemoryTierMigration:
         """AC-PHASE47-S4-002: All new memory directories exist."""
         learned_patterns = Path("cortex/intelligence/memory/tier1_learned")
         adaptive_intelligence = Path("cortex/intelligence/memory/tier2_adaptive")
-        scratch_space = Path("cortex_intelligence/memory/scratch_space")
+        scratch_space = Path("cortex/intelligence/memory/scratch_space")
         
         assert learned_patterns.exists() and learned_patterns.is_dir()
         assert adaptive_intelligence.exists() and adaptive_intelligence.is_dir()
@@ -133,9 +133,9 @@ class TestMemoryTierMigration:
 
     def test_backward_compatibility_symlinks_exist(self):
         """AC-PHASE47-S4-002: Backward compatibility symlinks exist."""
-        tier1_learned = Path("cortex_intelligence/memory/tier1_learned")
-        tier2_adaptive = Path("cortex_intelligence/memory/tier2_adaptive")
-        tier3_scratch = Path("cortex_intelligence/memory/tier3_scratch")
+        tier1_learned = Path("cortex/intelligence/memory/tier1_learned")
+        tier2_adaptive = Path("cortex/intelligence/memory/tier2_adaptive")
+        tier3_scratch = Path("cortex/intelligence/memory/tier3_scratch")
         
         if tier1_learned.exists():
             assert tier1_learned.is_symlink()
@@ -153,14 +153,14 @@ class TestMemoryTierMigration:
         """AC-PHASE47-S4-002: Both old and new import paths work."""
         # Test new paths
         try:
-            import cortex_intelligence.memory.learned_patterns as new_learned
+            import cortex.intelligence.memory.learned_patterns as new_learned
             assert new_learned is not None
         except ImportError:
             pytest.skip("learned_patterns import not available")
         
         # Test old path (via symlink)
         try:
-            import cortex_intelligence.memory.tier1_learned as old_tier1
+            import cortex.intelligence.memory.tier1_learned as old_tier1
             assert old_tier1 is not None
         except ImportError:
             pytest.skip("tier1_learned import not available")

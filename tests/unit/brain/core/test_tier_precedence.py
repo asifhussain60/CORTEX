@@ -38,7 +38,7 @@ class TestPrecedenceModel:
 
     def test_precedence_yaml_has_correct_order(self):
         """AC-PHASE47-S1-001: precedence.yaml declares tier0 > tier1 > tier2."""
-        precedence_path = Path("cortex_intelligence/governance/precedence.yaml")
+        precedence_path = Path("cortex/intelligence/governance/precedence.yaml")
         
         if not precedence_path.exists():
             pytest.skip("precedence.yaml not found")
@@ -54,7 +54,7 @@ class TestPrecedenceModel:
 
     def test_precedence_order_list_is_correct(self):
         """Precedence order list should be [tier0, tier1, tier2] with tier0 first."""
-        precedence_path = Path("cortex_intelligence/governance/precedence.yaml")
+        precedence_path = Path("cortex/intelligence/governance/precedence.yaml")
         
         if not precedence_path.exists():
             pytest.skip("precedence.yaml not found")
@@ -282,7 +282,7 @@ class TestTierPrecedenceIntegration:
         # This is an integration test that will verify the full chain:
         # precedence.yaml → GovernanceRegistry.get_rule() → TierResolver
         
-        precedence_path = Path("cortex_intelligence/governance/precedence.yaml")
+        precedence_path = Path("cortex/intelligence/governance/precedence.yaml")
         if not precedence_path.exists():
             pytest.skip("precedence.yaml not found")
         
@@ -398,7 +398,7 @@ class TestTierPrecedenceGoldenScenarios:
 
     def test_precedence_yaml_explanation_matches_implementation(self):
         """Golden Test 4: precedence.yaml explanation aligns with implementation."""
-        precedence_path = Path("cortex_intelligence/governance/precedence.yaml")
+        precedence_path = Path("cortex/intelligence/governance/precedence.yaml")
         if not precedence_path.exists():
             pytest.skip("precedence.yaml not found")
         

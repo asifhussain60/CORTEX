@@ -31,7 +31,7 @@ class Sanitizer:
 
     def __init__(
         self,
-        db_path: str = "cortex_intelligence/governance/governance.db",
+        db_path: str = "cortex/intelligence/governance/governance.db",
     ) -> None:
         """Initialize sanitizer.
 

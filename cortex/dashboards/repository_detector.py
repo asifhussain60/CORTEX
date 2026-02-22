@@ -9,7 +9,7 @@ This enables adaptive dashboard configuration:
 - External repository: Show 5 tabs (universal only)
 
 Detection Markers:
-- cortex_intelligence/ directory
+- cortex/intelligence/ directory
 - cortex/orchestrators/ directory
 - .github/prompts/CORTEX.prompt.md file
 - cortex/wiring/specifications/wiring.yaml file
@@ -30,7 +30,7 @@ class CortexFeatures:
     Detected CORTEX-specific features in a repository.
 
     Attributes:
-        has_cortex_intelligence: Whether cortex_intelligence/ directory exists
+        has_cortex_intelligence: Whether cortex/intelligence/ directory exists
         has_orchestrators: Whether cortex/orchestrators/ directory exists
         has_prompt_file: Whether .github/prompts/CORTEX.prompt.md exists
         has_wiring: Whether cortex/wiring/specifications/wiring.yaml exists
@@ -101,7 +101,7 @@ class RepositoryDetector:
         markers = self.get_cortex_markers()
 
         return CortexFeatures(
-            has_cortex_intelligence=markers[0].exists(),      # cortex_intelligence/
+            has_cortex_intelligence=markers[0].exists(),      # cortex/intelligence/
             has_orchestrators=markers[1].exists(),     # cortex/orchestrators/
             has_prompt_file=markers[2].exists(),       # CORTEX.prompt.md
             has_wiring=markers[3].exists(),            # wiring.yaml
@@ -115,7 +115,7 @@ class RepositoryDetector:
             List of Path objects representing CORTEX-specific markers
         """
         return [
-            self.repo_path / "cortex_intelligence",
+            self.repo_path / "cortex" / "intelligence",
             self.repo_path / "cortex" / "orchestrators",
             self.repo_path / ".github" / "prompts" / "CORTEX.prompt.md",
             self.repo_path / "cortex" / "wiring" / "specifications" / "wiring.yaml",

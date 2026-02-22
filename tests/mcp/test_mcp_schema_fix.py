@@ -61,11 +61,11 @@ class TestMCPSchemaGeneration:
         
         assert len(consolidated_tools) > 0, "Should have consolidated tools with operations"
         
-        # Verify cortex_lens has operations
-        lens_schema = next((s for s in schemas if s["name"] == "cortex_lens"), None)
-        assert lens_schema is not None, "cortex_lens should exist"
-        assert "operations" in lens_schema, "cortex_lens should have operations field"
-        assert len(lens_schema["operations"]) == 5, "cortex_lens should have 5 operations"
+        # Verify cortex.lens has operations
+        lens_schema = next((s for s in schemas if s["name"] == "cortex.lens"), None)
+        assert lens_schema is not None, "cortex.lens should exist"
+        assert "operations" in lens_schema, "cortex.lens should have operations field"
+        assert len(lens_schema["operations"]) == 5, "cortex.lens should have 5 operations"
     
     def test_schema_json_serializable(self):
         """Verify schemas can be serialized to JSON."""
@@ -106,7 +106,7 @@ class TestMCPSchemaGeneration:
         registry = get_registry()
         schemas = registry.to_mcp_schema()
         
-        intelligence_tool_names = ["cortex_lens", "cortex_knowledge", "cortex_git"]
+        intelligence_tool_names = ["cortex.lens", "cortex_knowledge", "cortex_git"]
         
         for tool_name in intelligence_tool_names:
             schema = next((s for s in schemas if s["name"] == tool_name), None)

@@ -36,7 +36,7 @@ PHASE_56_AUDIT_ALIGNMENT: List[AuditCheckMapping] = [
     AuditCheckMapping(
         success_criterion="Zero circular dependencies (verified)",
         audit_check="P1 — Wiring Integrity: Circular Dependencies",
-        detection_tool="cortex_intelligence_health",
+        detection_tool="cortex.intelligence_health",
         gate_level="Gate 2 (Pre-Execution)",
         coverage="FULL"
     ),

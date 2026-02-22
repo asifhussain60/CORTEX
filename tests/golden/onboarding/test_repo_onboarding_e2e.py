@@ -339,7 +339,7 @@ class TestOnboardingFileGeneration:
     def test_no_write_to_cortex_intelligence(
         self, minimal_repo: Path, test_output_dir: Path
     ) -> None:
-        """Golden: Onboarding must NOT write to cortex_intelligence/."""
+        """Golden: Onboarding must NOT write to cortex/intelligence/."""
         ci_dir = CORTEX_PATH / "cortex_intelligence" / "onboarded_repos"
         before = set(ci_dir.glob("*")) if ci_dir.exists() else set()
 

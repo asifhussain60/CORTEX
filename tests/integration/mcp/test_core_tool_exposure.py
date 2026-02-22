@@ -55,7 +55,7 @@ def test_core_mcp_tools_exposed():
     required_tools = {
         'cortex_process_request',  # Main request processing
         'cortex_challenge',         # Challenge generation
-        'cortex_lens_analyze',      # LENS analysis
+        'cortex.lens_analyze',      # LENS analysis
         'cortex_total_recall',      # Feature discovery
     }
     

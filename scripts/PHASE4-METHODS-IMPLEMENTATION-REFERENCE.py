@@ -197,7 +197,7 @@ class ToolResponseHandler:
         """Format MCP tool response with semantic header.
         
         Args:
-            tool_name: Name of tool (e.g., "cortex_lens_analyze")
+            tool_name: Name of tool (e.g., "cortex.lens_analyze")
             result: Tool result data
             status: Status string
             metrics: Optional metrics dictionary
@@ -278,12 +278,12 @@ def process_request(self, request):
 
 # Example 2: In MCP tool
 """
-def cortex_lens_analyze(file_path: str) -> str:
+def cortex.lens_analyze(file_path: str) -> str:
     handler = ToolResponseHandler()
     result = analyze_file(file_path)
     
     return handler.format_tool_response(
-        tool_name="cortex_lens_analyze",
+        tool_name="cortex.lens_analyze",
         result=result,
         status="Complete",
         metrics={"files_analyzed": 1, "issues_found": 3}

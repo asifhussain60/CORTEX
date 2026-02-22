@@ -27,7 +27,7 @@ class StubAutoFixAgent(BaseHealthAgent):
     """Agent for automatically fixing stub files.
     
     Detects redirect stubs (files that just re-export from deleted packages
-    such as cortex_intelligence or cortex_lens) and fixes them by:
+    such as cortex.intelligence or cortex.lens) and fixes them by:
     - Deleting the stub file
     - Rewriting imports in other files to point to cortex.intelligence
     
@@ -149,7 +149,7 @@ class StubAutoFixAgent(BaseHealthAgent):
         """Check if file is a redirect stub.
         
         A redirect stub is a file that:
-        - Contains only imports from deleted packages (cortex_intelligence, cortex_lens)
+        - Contains only imports from deleted packages (cortex.intelligence, cortex.lens)
         - Has < 10 lines of actual code
         - Has "REDIRECT" comment or re-export pattern
         
@@ -166,8 +166,8 @@ class StubAutoFixAgent(BaseHealthAgent):
             if "REDIRECT" in content or "Re-export" in content:
                 return True
             
-            # Check if only imports from deleted packages (cortex_intelligence, cortex_lens)
-            if "from cortex_intelligence" in content or "from cortex_lens" in content:
+            # Check if only imports from deleted packages (cortex.intelligence, cortex.lens)
+            if "from cortex.intelligence" in content or "from cortex.lens" in content:
                 lines = [
                     line for line in content.split('\n')
                     if line.strip() and not line.strip().startswith('#')
@@ -189,7 +189,7 @@ class StubAutoFixAgent(BaseHealthAgent):
             stub_file: Stub file path
         
         Returns:
-            Target module name (e.g., 'cortex_intelligence.domain.models')
+            Target module name (e.g., 'cortex.intelligence.domain.models')
         """
         try:
             content = stub_file.read_text()
@@ -199,7 +199,7 @@ class StubAutoFixAgent(BaseHealthAgent):
             
             for node in ast.walk(tree):
                 if isinstance(node, ast.ImportFrom):
-                    if node.module and node.module.startswith("cortex_intelligence"):
+                    if node.module and node.module.startswith("cortex.intelligence"):
                         return node.module
             
             return None

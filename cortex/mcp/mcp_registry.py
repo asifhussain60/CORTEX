@@ -74,7 +74,7 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
     # =========================================================================
     # TIER 2: CODE INTELLIGENCE (3 tools)
     # =========================================================================
-    "cortex_lens": {
+    "cortex.lens": {
         "description": "Unified code intelligence: analysis, AST parsing, pattern discovery, duplicate detection.",
         "category": ToolCategory.INTELLIGENCE,
         "parameters": [

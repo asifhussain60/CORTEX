@@ -43,7 +43,7 @@ class TestTierDirectoryStructure:
         """Memory tiers must exist in cortex/intelligence (Phase 3 consolidation)."""
         memory_path = Path("cortex/intelligence/memory")
         
-        # New clarified names (migrated from cortex_intelligence to cortex/intelligence)
+        # New clarified names (migrated from cortex.intelligence to cortex/intelligence)
         assert (memory_path / "tier1_learned").exists() or \
                (memory_path / "tier1_learned").exists(), \
             "Learned patterns memory tier missing"
@@ -208,11 +208,11 @@ class TestBrainTierPusherPaths:
             path = Path(path_str)
             
             # The path should either exist OR be createable
-            # (we don't want paths like cortex_intelligence/tier0/ which don't exist)
+            # (we don't want paths like cortex/intelligence/tier0/ which don't exist)
             parent = path.parent
             
-            # If it references cortex_intelligence/tierX, parent should exist
-            if "cortex_intelligence" in str(path) and "tier" in path.name:
+            # If it references cortex/intelligence/tierX, parent should exist
+            if "cortex.intelligence" in str(path) and "tier" in path.name:
                 # This is suspicious - should be in memory/ or registry/
                 if not path.exists():
                     pytest.fail(
@@ -238,7 +238,7 @@ class TestTierSystemSeparation:
             "Governance tiers should be in cortex-registry/core/"
 
     def test_memory_tiers_in_intelligence(self):
-        """Memory tiers should be in cortex_intelligence/memory."""
+        """Memory tiers should be in cortex/intelligence/memory."""
         memory_path = Path("cortex/intelligence/memory")
         
         assert memory_path.exists(), \
@@ -250,7 +250,7 @@ class TestTierSystemSeparation:
                                       'adaptive' in d.name or 'scratch' in d.name)]
         
         assert len(tier_dirs) > 0, \
-            "Memory tiers missing in cortex_intelligence/memory/"
+            "Memory tiers missing in cortex/intelligence/memory/"
 
     def test_no_tier_mixing(self):
         """Governance and memory tier files should not be mixed."""
@@ -274,7 +274,7 @@ class TestTierArchitectureDocumentation:
     """Validate tier architecture is documented correctly."""
 
     def test_tier_system_documented_in_init(self):
-        """cortex_intelligence.__init__.py should document tier system."""
+        """cortex.intelligence.__init__.py should document tier system."""
         init_file = Path("cortex/intelligence/__init__.py")
         
         if init_file.exists():
@@ -282,7 +282,7 @@ class TestTierArchitectureDocumentation:
             
             # Should mention tier system
             assert "tier" in content.lower() or "TIER" in content, \
-                "Tier system not documented in cortex_intelligence.__init__.py"
+                "Tier system not documented in cortex.intelligence.__init__.py"
 
     def test_precedence_yaml_has_explanation(self):
         """precedence.yaml should have clear explanation."""

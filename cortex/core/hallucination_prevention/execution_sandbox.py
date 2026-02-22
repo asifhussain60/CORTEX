@@ -1,4 +1,4 @@
-"""REDIRECT: execution_sandbox → cortex_intelligence.memory.tier2_adaptive.hallucination_prevention.execution_sandbox
+"""REDIRECT: execution_sandbox → cortex.intelligence.memory.tier2_adaptive.hallucination_prevention.execution_sandbox
 
 Author: CORTEX Framework
 

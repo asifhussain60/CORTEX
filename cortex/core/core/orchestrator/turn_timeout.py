@@ -209,7 +209,7 @@ class TurnAuditLogger:
         from pathlib import Path
 
         if log_path is None:
-            log_path = Path(__file__).parent.parent.parent.parent.parent / "cortex_intelligence" / "state" / "incomplete_turns.log"
+            log_path = Path(__file__).parent.parent.parent.parent.parent / "cortex.intelligence" / "state" / "incomplete_turns.log"
 
         self.log_path = Path(log_path)
         self.log_path.parent.mkdir(parents=True, exist_ok=True)

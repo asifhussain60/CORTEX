@@ -78,7 +78,7 @@ class CircularDependencyAnalyzer:
             # Filter to only CORTEX imports
             cortex_imports = {
                 imp for imp in imports 
-                if imp in ["cortex", "cortex_intelligence"]
+                if imp in ["cortex", "cortex.intelligence"]
             }
             
             if module_path not in self.import_graph:

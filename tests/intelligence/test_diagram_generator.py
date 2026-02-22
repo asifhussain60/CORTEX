@@ -169,7 +169,7 @@ class TestMCPFlowDiagrams:
         # When: Generate with tool flow
         tools = [
             "cortex_process_request",
-            "cortex_lens_analyze",
+            "cortex.lens_analyze",
             "cortex_challenge",
         ]
         

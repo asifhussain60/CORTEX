@@ -1,11 +1,11 @@
-"""Hallucination Prevention REDIRECT to cortex_intelligence.memory.tier2_adaptive.
+"""Hallucination Prevention REDIRECT to cortex.intelligence.memory.tier2_adaptive.
 
 Author: CORTEX Framework
 
 NOTE: Wrapped imports - tier2 modules may have incomplete definitions
 """
 
-# All hallucination prevention logic is in cortex_intelligence/tier2/hallucination_prevention/
+# All hallucination prevention logic is in cortex/intelligence/tier2/hallucination_prevention/
 try:
     from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention.boundary_rules import *  # noqa: F401, F403
 except (ImportError, NameError):

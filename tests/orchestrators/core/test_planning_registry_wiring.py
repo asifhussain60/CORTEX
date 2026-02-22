@@ -21,7 +21,7 @@ class TestPlanningRegistryWiring:
     def setup(self) -> Dict[str, Any]:
         """Setup registry wiring."""
         return {
-            "registry_db": "cortex_intelligence/state/orchestrator_registry.db",
+            "registry_db": "cortex/intelligence/state/orchestrator_registry.db",
             "planning_config": "cortex-registry/master/planning_orchestrator_config.yaml",
         }
 

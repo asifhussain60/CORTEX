@@ -78,7 +78,7 @@ class BrainArchitecture:
 class BrainArchitectureRenderer:
     """Renderer for CORTEX brain architecture visualizations.
 
-    This renderer analyzes the cortex_intelligence/ directory structure and
+    This renderer analyzes the cortex/intelligence/ directory structure and
     orchestrator registry to generate comprehensive brain architecture
     visualizations showing the 4-tier system and orchestrator constellation.
     """
@@ -99,7 +99,7 @@ class BrainArchitectureRenderer:
         """Analyze CORTEX brain directory structure.
 
         Args:
-            cortex_intelligence_path: Path to cortex_intelligence/ directory
+            cortex_intelligence_path: Path to cortex/intelligence/ directory
 
         Returns:
             BrainArchitecture: Complete brain architecture data
@@ -123,7 +123,7 @@ class BrainArchitectureRenderer:
         """Analyze tier directories.
 
         Args:
-            cortex_intelligence_path: Path to cortex_intelligence/ directory
+            cortex_intelligence_path: Path to cortex/intelligence/ directory
 
         Returns:
             List[TierInfo]: List of tier information
@@ -131,7 +131,7 @@ class BrainArchitectureRenderer:
         tiers = []
 
         for tier_num, tier_name in self.tier_names.items():
-            tier_path = cortex_intelligence_path / f"tier{tier_num}"
+            tier_path = cortex.intelligence_path / f"tier{tier_num}"
 
             if not tier_path.exists():
                 continue

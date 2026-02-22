@@ -45,10 +45,10 @@ __all__ = [
 def __getattr__(name: str):
     """Lazy load TIER 1 modules."""
     tier1_modules = {
-        'orchestrators': 'cortex_intelligence.memory.tier1_learned.orchestrators',
-        'brains': 'cortex_intelligence.memory.tier1_learned.brains',
-        'intelligence': 'cortex_intelligence.memory.tier1_learned.intelligence',
-        'adapters': 'cortex_intelligence.memory.tier1_learned.adapters',
+        'orchestrators': 'cortex.intelligence.memory.tier1_learned.orchestrators',
+        'brains': 'cortex.intelligence.memory.tier1_learned.brains',
+        'intelligence': 'cortex.intelligence.memory.tier1_learned.intelligence',
+        'adapters': 'cortex.intelligence.memory.tier1_learned.adapters',
     }
     
     if name in tier1_modules:
@@ -57,4 +57,4 @@ def __getattr__(name: str):
             return importlib.import_module(tier1_modules[name])
         except ImportError:
             pass
-    raise AttributeError(f"module 'cortex_intelligence.memory.tier1_learned' has no attribute '{name}'")
+    raise AttributeError(f"module 'cortex.intelligence.memory.tier1_learned' has no attribute '{name}'")

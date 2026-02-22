@@ -1,8 +1,8 @@
 """
-GAP-004 RED: ObservabilityOrchestrator default db path must not write to cortex_intelligence/.
+GAP-004 RED: ObservabilityOrchestrator default db path must not write to cortex/intelligence/.
 
 Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
-GAP-004: SQL-002 — default db path recreates gitignored cortex_intelligence/ directory.
+GAP-004: SQL-002 — default db path recreates gitignored cortex/intelligence/ directory.
 """
 
 import pytest
@@ -11,10 +11,10 @@ from unittest.mock import patch
 
 
 class TestObservabilityOrchestratorDbPath:
-    """GAP-004: Default audit db path must be under .cortex-runtime/, not cortex_intelligence/."""
+    """GAP-004: Default audit db path must be under .cortex-runtime/, not cortex/intelligence/."""
 
     def test_default_db_path_not_cortex_intelligence(self) -> None:
-        """Default audit_db_path must NOT be inside cortex_intelligence/ (gitignored dir)."""
+        """Default audit_db_path must NOT be inside cortex/intelligence/ (gitignored dir)."""
         from cortex.orchestrators.core.observability_orchestrator import (
             ObservabilityOrchestrator,
         )
@@ -36,7 +36,7 @@ class TestObservabilityOrchestratorDbPath:
                     service_name="test", audit_db_path=Path(tmp_path)
                 )
                 assert "cortex_intelligence" not in str(orch2.audit_db_path), (
-                    f"audit_db_path uses gitignored cortex_intelligence/: {orch2.audit_db_path}"
+                    f"audit_db_path uses gitignored cortex/intelligence/: {orch2.audit_db_path}"
                 )
             finally:
                 os.unlink(tmp_path)
@@ -67,7 +67,7 @@ class TestObservabilityOrchestratorDbPath:
                 path_calls = re.findall(r'Path\("([^"]+)"\)', src)
                 for p in path_calls:
                     assert "cortex_intelligence" not in p, (
-                        f"ObservabilityOrchestrator.__init__ Path call still uses cortex_intelligence/: Path('{p}')"
+                        f"ObservabilityOrchestrator.__init__ Path call still uses cortex/intelligence/: Path('{p}')"
                     )
 
     def test_observability_orchestrator_importable(self) -> None:

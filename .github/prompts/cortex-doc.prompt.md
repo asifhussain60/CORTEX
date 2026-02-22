@@ -164,7 +164,7 @@ class DiagramGenerationOrchestrator:
             ("circuit-breaker-state-machine.mmd", "stateDiagram", "Resilience pattern"),
             ("master-orchestrator-sequence.mmd", "sequenceDiagram", "Execution protocol"),
             ("tdd-workflow-phases.mmd", "flowchart", "RED → GREEN → REFACTOR"),
-            ("governance-rule-categories.mmd", "graph", "29 CORE rules pyramid"),
+            ("governance-rule-categories.mmd", "graph", "22 CORE rules pyramid"),
         ]
         
         # D3.js (4 diagrams)
@@ -472,7 +472,7 @@ diagrams:
     type: flowchart
     
   - governance-rule-categories.mmd
-    purpose: 29 CORE rules organized by category
+    purpose: 22 CORE rules organized by category
     type: graph
 
 generation_command: |

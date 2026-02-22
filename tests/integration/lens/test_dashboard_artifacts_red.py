@@ -41,7 +41,7 @@ class TestDashboardArtifactFileCreation:
         Behavioral Contract: Dashboard artifacts MUST be created as physical files.
 
         Expected behavior:
-        - Artifact file created in cortex_intelligence/dashboards/ directory
+        - Artifact file created in cortex/intelligence/dashboards/ directory
         - File created with naming convention: {analysis_id}-dashboard.json
         - File contains valid JSON structure
         - File timestamp tracks creation time
@@ -57,7 +57,7 @@ class TestDashboardArtifactFileCreation:
         Behavioral Contract: Dashboard artifacts MUST follow consistent directory structure.
 
         Expected behavior:
-        - cortex_intelligence/dashboards/ root directory
+        - cortex/intelligence/dashboards/ root directory
         - Subdirectories: active/, archived/, staging/
         - Each artifact in appropriate subdirectory based on status
         - Directory structure auto-created on first write

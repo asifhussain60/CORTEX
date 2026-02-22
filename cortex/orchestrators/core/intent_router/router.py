@@ -404,7 +404,7 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
         defaults = [
             {"agent_id": "cortex-tdd-orchestrator", "capabilities": ["testing", "tdd", "implementation"], "mcp_tools": ["cortex_process_request"], "priority": "P0"},
             {"agent_id": "cortex-auditor", "capabilities": ["auditing", "compliance", "governance"], "mcp_tools": ["cortex_audit_codebase"], "priority": "P0"},
-            {"agent_id": "cortex-lens-orchestrator", "capabilities": ["analysis", "code_review"], "mcp_tools": ["cortex_lens_analyze"], "priority": "P1"},
+            {"agent_id": "cortex-lens-orchestrator", "capabilities": ["analysis", "code_review"], "mcp_tools": ["cortex.lens_analyze"], "priority": "P1"},
             {"agent_id": "cortex-planner", "capabilities": ["planning", "roadmap"], "mcp_tools": ["cortex_plan"], "priority": "P1"},
             {"agent_id": "cortex-debugger", "capabilities": ["debugging", "fix"], "mcp_tools": ["cortex_debug"], "priority": "P1"},
             {"agent_id": "cortex-refactorer", "capabilities": ["refactoring", "optimization"], "mcp_tools": ["cortex_refactor"], "priority": "P2"},

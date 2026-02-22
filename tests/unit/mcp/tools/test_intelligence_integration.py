@@ -3,7 +3,7 @@ Test Intelligence Integration: MCP Tools → Intelligence Orchestrator → Brain
 
 AC_START: AC-INTELLIGENCE-INTEGRATION-001
 Root Cause: MCP tools have stub implementations that don't invoke intelligence layers.
-Fix: Wire cortex_lens MCP tool to IntelligenceOrchestrator with audit logging.
+Fix: Wire cortex.lens MCP tool to IntelligenceOrchestrator with audit logging.
 
 Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
@@ -86,7 +86,7 @@ class Calculator:
         orchestrator_context: Dict[str, Any],
         temp_audit_db: Path,
     ) -> None:
-        """Test: cortex_lens analyze operation invokes IntelligenceOrchestrator."""
+        """Test: cortex.lens analyze operation invokes IntelligenceOrchestrator."""
         # Arrange: Wire orchestrator into tool
         cortex_lens_tool._intelligence_orchestrator = intelligence_orchestrator
 
@@ -280,7 +280,7 @@ class Calculator:
         # This test documents current state
 
     # ========================================================================
-    # Integration with cortex_intelligence layers
+    # Integration with cortex.intelligence layers
     # ========================================================================
 
     @pytest.mark.asyncio

@@ -58,7 +58,7 @@ def temp_db_path():
 @pytest.fixture
 def capability_registry(temp_db_path):
     """Create AgentCapabilityRegistry for testing."""
-    from cortex.brain.persistence.agent_capability_registry import AgentCapabilityRegistry
+    from cortex.intelligence.persistence.agent_capability_registry import AgentCapabilityRegistry
     
     registry = AgentCapabilityRegistry(db_path=temp_db_path)
     yield registry
@@ -68,7 +68,7 @@ def capability_registry(temp_db_path):
 @pytest.fixture
 def discovery_service(capability_registry):
     """Create AgentDiscoveryService with registry."""
-    from cortex.brain.persistence.agent_discovery_service import AgentDiscoveryService
+    from cortex.intelligence.persistence.agent_discovery_service import AgentDiscoveryService
     
     service = AgentDiscoveryService(capability_registry)
     yield service
@@ -77,7 +77,7 @@ def discovery_service(capability_registry):
 @pytest.fixture
 def handoff_protocol(capability_registry, discovery_service, temp_db_path):
     """Create AgentHandoffProtocol with all dependencies."""
-    from cortex.brain.persistence.agent_handoff_protocol import AgentHandoffProtocol
+    from cortex.intelligence.persistence.agent_handoff_protocol import AgentHandoffProtocol
     
     protocol = AgentHandoffProtocol(
         capability_registry=capability_registry,
@@ -454,7 +454,7 @@ def test_golden_cross_session_capability_learning(capability_registry, temp_db_p
     capability_registry.close()
     
     # Session 2: Reopen
-    from cortex.brain.persistence.agent_capability_registry import AgentCapabilityRegistry
+    from cortex.intelligence.persistence.agent_capability_registry import AgentCapabilityRegistry
     
     registry2 = AgentCapabilityRegistry(db_path=temp_db_path)
     

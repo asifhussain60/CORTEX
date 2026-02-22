@@ -230,8 +230,8 @@ class TestMemoryMirrorGuard:
             tier_paths = BrainTierPusher.TIER_PATHS
 
             for tier, path in tier_paths.items():
-                assert "cortex_intelligence" not in path, \
-                    f"TIER_PATHS[{tier}] uses stale 'cortex_intelligence': {path}"
+                assert "cortex.intelligence" not in path, \
+                    f"TIER_PATHS[{tier}] uses stale 'cortex.intelligence': {path}"
                 assert "learned_patterns" not in path, \
                     f"TIER_PATHS[{tier}] uses deleted mirror 'learned_patterns': {path}"
                 assert "adaptive_intelligence" not in path, \

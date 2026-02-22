@@ -2,8 +2,8 @@
 CORTEX Intelligence Layer.
 
 Unified intelligence package consolidating:
-- cortex_intelligence: Tier-based adaptive intelligence (perception, reasoning, action)
-- cortex_lens: Multi-language code analysis and LENS architecture
+- cortex.intelligence: Tier-based adaptive intelligence (perception, reasoning, action)
+- cortex.lens: Multi-language code analysis and LENS architecture
 - cortex.intelligence: Deep computation engines (AST, git, relationships, patterns)
 
 Authority: Phase 3 - Package Consolidation
@@ -27,7 +27,7 @@ try:
 except ImportError:
     pass
 
-# Tier-based intelligence (formerly cortex_intelligence)
+# Tier-based intelligence (formerly cortex.intelligence)
 def __getattr__(name: str):
     """Lazy load intelligence tier modules."""
     if name in ('tier0', 'tier1', 'tier2', 'state', 'releases', 'memory', 'perception', 'reasoning', 'action', 'domain', 'domain_brain', 'governance', 'observability', 'onboarded_repos', 'quality', 'audit', 'intelligence', 'wiring'):

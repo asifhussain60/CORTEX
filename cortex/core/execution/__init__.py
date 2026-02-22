@@ -11,6 +11,6 @@ Key Components:
 - models/: Dataclasses for spec structures
 - gateway.py: MasterGateway entry point (implemented in Phase 3)
 
-Authority: cortex_intelligence/tier0/governance/core-040-execution-spec-mandate.yaml
+Authority: cortex/intelligence/tier0/governance/core-040-execution-spec-mandate.yaml
 """
 

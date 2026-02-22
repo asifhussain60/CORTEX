@@ -20,7 +20,7 @@ Scenarios:
   GP50-016  ALL_TOOLS contains CortexMasterPlanTool (36 tools registered)
   GP50-017  no empty orchestrator stub directories remain
   GP50-018  health/ __init__.py re-exports HealthOrchestrator with DoD support
-  GP50-019  VacuumOrchestrator support wrapper re-exports from support/ not cortex_intelligence
+  GP50-019  VacuumOrchestrator support wrapper re-exports from support/ not cortex.intelligence
   GP50-020  phase-50 canonical YAML exists at planning/phases/planned/
 
 Authority: Phase 50 | CORE-008 | CORE-035 | CORE-028

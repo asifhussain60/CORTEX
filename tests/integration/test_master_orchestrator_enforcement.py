@@ -104,7 +104,7 @@ class TestMasterOrchestratorEnforcement:
         """Verify MCPServer.call_tool() actually injects orchestrator_context."""
         # Use a tool that would fail without context
         result = self.server.call_tool(
-            "cortex_lens",
+            "cortex.lens",
             operation="analyze",
             target="cortex/"
         )
@@ -162,7 +162,7 @@ class TestMasterOrchestratorEnforcement:
     
     @pytest.mark.parametrize("tool_name,params", [
         # Intelligence tools (3)
-        ("cortex_lens", {"operation": "analyze", "target": "cortex/"}),
+        ("cortex.lens", {"operation": "analyze", "target": "cortex/"}),
         ("cortex_knowledge", {"operation": "search", "query": "test"}),
         ("cortex_git", {"operation": "history", "limit": 5}),
         

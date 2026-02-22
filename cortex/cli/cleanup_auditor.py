@@ -81,7 +81,7 @@ class CleanupAuditor:
         """Initialize auditor with workspace root."""
         self.workspace_root = workspace_root
         self.cortex_dir = workspace_root / "cortex"
-        self.cortex_intelligence_dir = workspace_root / "cortex_intelligence"
+        self.cortex.intelligence_dir = workspace_root / "cortex.intelligence"
         self.registry_dir = workspace_root / "cortex-registry" / "_cortex-master"
         self.active_phases_dir = self.registry_dir / "phases" / "active"
         self.completed_phases_dir = self.registry_dir / "phases" / "completed"
@@ -258,11 +258,11 @@ class CleanupAuditor:
                 result.deprecated_files.append(artifact)
                 result.cleanup_savings_kb += artifact.size_bytes // 1024
         
-        # Step 4: Scan cortex_intelligence/ directory (if exists)
-        if self.cortex_intelligence_dir.exists():
-            click.echo("Scanning cortex_intelligence/ directory...")
+        # Step 4: Scan cortex/intelligence/ directory (if exists)
+        if self.cortex.intelligence_dir.exists():
+            click.echo("Scanning cortex/intelligence/ directory...")
             
-            for py_file in self.cortex_intelligence_dir.rglob("*.py"):
+            for py_file in self.cortex.intelligence_dir.rglob("*.py"):
                 if "__pycache__" in str(py_file) or "__init__.py" == py_file.name:
                     continue
                 

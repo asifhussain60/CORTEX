@@ -4,7 +4,7 @@ Phase 3 REFACTOR Tests — Package Consolidation Integration Verification.
 Authority: CORE-008 (Test-First Development)
 
 This module verifies the REFACTOR phase of Phase 3 Package Consolidation:
-- Import rewriting completeness (cortex_intelligence → cortex.intelligence, cortex_lens → cortex.intelligence.lens)
+- Import rewriting completeness (cortex.intelligence → cortex_intelligence, cortex.lens → cortex.intelligence.lens)
 - Package structure consistency (no orphaned files, clean hierarchy)
 - Backward compatibility (existing APIs unchanged)
 - Regression testing (136+ tests still passing)
@@ -19,7 +19,7 @@ class TestPhase3ImportRewriting:
     """Verify all imports have been correctly rewritten."""
     
     def test_no_cortex_intelligence_imports_remain(self) -> None:
-        """Test: ZERO 'from cortex_intelligence' imports exist in cortex/ and tests/."""
+        """Test: ZERO 'from cortex.intelligence' imports exist in cortex/ and tests/."""
         result = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex")
         assert result.exists(), "cortex/ must exist"
         
@@ -31,13 +31,13 @@ class TestPhase3ImportRewriting:
             with open(py_file, "r") as f:
                 content = f.read()
                 # Only check for actual imports, not comments
-                if re.search(r'^(from|import)\s+cortex_intelligence', content, re.MULTILINE):
+                if re.search(r'^(from|import)\s+cortex.intelligence', content, re.MULTILINE):
                     found_old.append(str(py_file))
         
-        assert not found_old, f"Found {len(found_old)} files with cortex_intelligence imports: {found_old[:5]}"
+        assert not found_old, f"Found {len(found_old)} files with cortex.intelligence imports: {found_old[:5]}"
     
     def test_no_cortex_lens_imports_remain(self) -> None:
-        """Test: ZERO 'from cortex_lens' imports exist in cortex/ and tests/."""
+        """Test: ZERO 'from cortex.lens' imports exist in cortex/ and tests/."""
         result = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex")
         assert result.exists(), "cortex/ must exist"
         
@@ -49,10 +49,10 @@ class TestPhase3ImportRewriting:
             with open(py_file, "r") as f:
                 content = f.read()
                 # Only check for actual imports, not comments
-                if re.search(r'^(from|import)\s+cortex_lens', content, re.MULTILINE):
+                if re.search(r'^(from|import)\s+cortex.lens', content, re.MULTILINE):
                     found_old.append(str(py_file))
         
-        assert not found_old, f"Found {len(found_old)} files with cortex_lens imports: {found_old[:5]}"
+        assert not found_old, f"Found {len(found_old)} files with cortex.lens imports: {found_old[:5]}"
     
     def test_new_cortex_intelligence_imports_present(self) -> None:
         """Test: NEW 'from cortex.intelligence' imports are present."""
@@ -91,23 +91,23 @@ class TestPhase3PackageStructure:
     """Verify package structure is consistent after consolidation."""
     
     def test_cortex_intelligence_directory_gone(self) -> None:
-        """Test: Old cortex_intelligence/ has no Python source files.
+        """Test: Old cortex/intelligence/ has no Python source files.
 
         The directory may still exist on disk due to runtime .db artifacts
         (gitignored), but zero Python source files must remain.
         """
-        old_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_intelligence")
+        old_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex.intelligence")
         if not old_path.exists():
             return  # Fully removed — pass
         py_files = [f for f in old_path.rglob("*.py") if "__pycache__" not in str(f)]
         assert not py_files, (
-            f"Old cortex_intelligence/ still contains Python source: {py_files[:5]}"
+            f"Old cortex/intelligence/ still contains Python source: {py_files[:5]}"
         )
     
     def test_cortex_lens_directory_gone(self) -> None:
-        """Test: Old cortex_lens/ directory does not exist."""
-        old_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_lens")
-        assert not old_path.exists(), "Old cortex_lens/ must be archived"
+        """Test: Old cortex.lens/ directory does not exist."""
+        old_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex.lens")
+        assert not old_path.exists(), "Old cortex.lens/ must be archived"
     
     def test_archive_backup_exists(self) -> None:
         """Phase 09 COMPLETE (2026-02-20): _archive/ permanently deleted.
@@ -129,7 +129,7 @@ class TestPhase3PackageStructure:
         assert lens.exists(), "cortex/intelligence/lens/ must exist (Phase 03 migration destination)"
     
     def test_cortex_intelligence_subdirs_merged(self) -> None:
-        """Test: All cortex_intelligence subdirs are in cortex/intelligence/."""
+        """Test: All cortex.intelligence subdirs are in cortex/intelligence/."""
         target = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence")
         assert target.exists(), "cortex/intelligence/ must exist"
         
@@ -148,7 +148,7 @@ class TestPhase3PackageStructure:
                     f"Critical subdir {subdir} must exist"
     
     def test_cortex_lens_subdirs_in_intelligence_lens(self) -> None:
-        """Test: All cortex_lens subdirs are in cortex/intelligence/lens/."""
+        """Test: All cortex.lens subdirs are in cortex/intelligence/lens/."""
         target = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence/lens")
         assert target.exists(), "cortex/intelligence/lens/ must exist"
         
@@ -246,7 +246,7 @@ class TestPhase3DoD:
     
     def test_refactor_dod_01_imports_complete(self) -> None:
         """REFACTOR DoD 1: Old package dirs contain no Python source files."""
-        for old_pkg in ["cortex_intelligence", "cortex_lens"]:
+        for old_pkg in ["cortex_intelligence", "cortex.lens"]:
             old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
             if not old_path.exists():
                 continue
@@ -258,7 +258,7 @@ class TestPhase3DoD:
         assert Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence").exists()
         assert Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence/lens").exists()
         # Old packages must have no Python source (runtime .db artifacts are OK)
-        for old_pkg in ["cortex_intelligence", "cortex_lens"]:
+        for old_pkg in ["cortex_intelligence", "cortex.lens"]:
             old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
             if not old_path.exists():
                 continue
@@ -290,7 +290,7 @@ class TestPhase3DoD:
     
     def test_refactor_dod_06_core_compliance(self) -> None:
         """REFACTOR DoD 6: CORE-035 verified — old packages have no Python source."""
-        for old_pkg in ["cortex_intelligence", "cortex_lens", "cortex_brain"]:
+        for old_pkg in ["cortex_intelligence", "cortex.lens", "cortex_brain"]:
             old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
             if not old_path.exists():
                 continue
@@ -329,7 +329,7 @@ class TestPhase3DoD:
         assert lens.exists(), "cortex/intelligence/lens/ must exist (Phase 03 migration target)"
 
         # Old packages must still be gone (no Python source — runtime .db artifacts OK)
-        for old_pkg in ["cortex_intelligence", "cortex_lens"]:
+        for old_pkg in ["cortex_intelligence", "cortex.lens"]:
             old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
             if not old_path.exists():
                 continue
@@ -351,13 +351,13 @@ class TestPhase3CoreCompliance:
     
     def test_core_035_single_canonical(self) -> None:
         """CORE-035: Single canonical implementation."""
-        # 3 packages (cortex_intelligence, cortex_lens, cortex/intelligence)
+        # 3 packages (cortex_intelligence, cortex.lens, cortex/intelligence)
         # consolidated → 1 canonical package (cortex/intelligence)
         
         intelligence_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex/intelligence")
         assert intelligence_path.exists(), "Single canonical cortex/intelligence must exist"
         # Old packages must have no Python source (runtime .db artifacts are OK)
-        for old_pkg in ["cortex_intelligence", "cortex_lens"]:
+        for old_pkg in ["cortex_intelligence", "cortex.lens"]:
             old_path = Path(f"/Users/asifhussain/PROJECTS/CORTEX/{old_pkg}")
             if not old_path.exists():
                 continue

@@ -728,10 +728,10 @@ class TestRegressionParity:
         import re
         # Match only actual Python import statements (at line start, ignoring comments)
         stale_import_patterns = [
-            re.compile(r"^(?!#)\s*import\s+cortex_intelligence\b"),
-            re.compile(r"^(?!#)\s*from\s+cortex_intelligence\b"),
-            re.compile(r"^(?!#)\s*import\s+cortex_lens\b"),
-            re.compile(r"^(?!#)\s*from\s+cortex_lens\b"),
+            re.compile(r"^(?!#)\s*import\s+cortex.intelligence\b"),
+            re.compile(r"^(?!#)\s*from\s+cortex.intelligence\b"),
+            re.compile(r"^(?!#)\s*import\s+cortex.lens\b"),
+            re.compile(r"^(?!#)\s*from\s+cortex.lens\b"),
             re.compile(r"^(?!#)\s*from\s+cortex\.brain\b"),
             re.compile(r"^(?!#)\s*import\s+cortex\.brain\b"),
         ]
@@ -776,8 +776,8 @@ class TestDisasterRecovery:
                 # Ignore test fixtures and sample repos
                 if "fixtures" in str(db_file) or "sample-repos" in str(db_file):
                     continue
-                # Ignore gitignored runtime artifact directories (e.g. cortex_intelligence/)
-                if "cortex_intelligence" in str(db_file) or "cortex_lens" in str(db_file):
+                # Ignore gitignored runtime artifact directories (e.g. cortex/intelligence/)
+                if "cortex.intelligence" in str(db_file) or "cortex.lens" in str(db_file):
                     continue
                 stray_dbs.append(db_file.relative_to(REPO_ROOT))
         assert len(stray_dbs) == 0, (

@@ -30,7 +30,7 @@ def mock_master_orchestrator():
         "intent": "IMPLEMENT",
         "orchestrator": "TDDOrchestrator",
         "business_wisdom": ["CORE-008: TDD-first", "CORE-011: Type hints"],
-        "tool_docs": ["cortex_process_request", "cortex_lens_analyze"]
+        "tool_docs": ["cortex_process_request", "cortex.lens_analyze"]
     })
     return orchestrator
 
@@ -58,7 +58,7 @@ def mock_mcp_tool_scanner():
             "auth_level": "internal"
         },
         {
-            "name": "cortex_lens_analyze",
+            "name": "cortex.lens_analyze",
             "description": "Unified code intelligence",
             "parameters": {"scope": "str"},
             "auth_level": "internal"

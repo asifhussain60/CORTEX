@@ -284,7 +284,7 @@ class TestBypassPrevention:
         """Test MCP tools are always allowed for any intent."""
         mcp_tools = [
             "cortex_process_request",
-            "cortex_lens_analyze",
+            "cortex.lens_analyze",
             "cortex_validate_environment",
         ]
         

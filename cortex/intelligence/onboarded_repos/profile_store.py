@@ -46,12 +46,12 @@ class ProfileStore:
         
         Args:
             storage_path: Directory for profile storage
-                         (default: cortex_intelligence/onboarded_repos/)
+                         (default: cortex/intelligence/onboarded_repos/)
         """
         if storage_path is None:
-            # Default to cortex_intelligence/onboarded_repos/
+            # Default to cortex/intelligence/onboarded_repos/
             project_root = Path(__file__).parent.parent.parent
-            storage_path = project_root / "cortex_intelligence" / "onboarded_repos"
+            storage_path = project_root / "cortex.intelligence" / "onboarded_repos"
         
         self.storage_path = Path(storage_path)
         self.storage_path.mkdir(parents=True, exist_ok=True)

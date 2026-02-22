@@ -33,7 +33,7 @@ def verify_registry_template_locked(registry_path: Optional[Path] = None) -> Tup
         Tuple[bool, str]: (is_valid, message)
     """
     if registry_path is None:
-        registry_path = Path(__file__).parents[3] / "cortex_intelligence" / "memory" / "core" / "repo-registry.yaml"
+        registry_path = Path(__file__).parents[3] / "cortex.intelligence" / "memory" / "core" / "repo-registry.yaml"
     
     if not registry_path.exists():
         return False, f"Registry file not found: {registry_path}"
@@ -65,7 +65,7 @@ def verify_orchestrator_wiring(registry_path: Path | None = None, min_wired: int
         Tuple[bool, str]: (is_valid, message)
     """
     if registry_path is None:
-        registry_path = Path(__file__).parents[3] / "cortex_intelligence" / "memory" / "core" / "repo-registry.yaml"
+        registry_path = Path(__file__).parents[3] / "cortex.intelligence" / "memory" / "core" / "repo-registry.yaml"
     
     if not registry_path.exists():
         return False, f"Registry file not found: {registry_path}"
@@ -100,7 +100,7 @@ def verify_wiring_status_section(registry_path: Path | None = None) -> Tuple[boo
         Tuple[bool, str]: (is_valid, message)
     """
     if registry_path is None:
-        registry_path = Path(__file__).parents[3] / "cortex_intelligence" / "memory" / "core" / "repo-registry.yaml"
+        registry_path = Path(__file__).parents[3] / "cortex.intelligence" / "memory" / "core" / "repo-registry.yaml"
     
     if not registry_path.exists():
         return False, f"Registry file not found: {registry_path}"

@@ -22,7 +22,7 @@ class AICurator:
 
     _CONFIG_PATH = (
         Path(__file__).parent.parent.parent.parent.parent.parent
-        / "cortex_intelligence" / "tier3" / "knowledge" / "curation-config.yaml"
+        / "cortex.intelligence" / "tier3" / "knowledge" / "curation-config.yaml"
     )
 
     def __init__(self) -> None:

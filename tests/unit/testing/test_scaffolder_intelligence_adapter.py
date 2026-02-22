@@ -81,7 +81,7 @@ class TestAdapterInitialization:
         # AC_START: AC-WAVE2-S1-ADAPTER-001-T02
         adapter = ScaffolderIntelligenceAdapter()
         
-        assert adapter.registry_path == Path("cortex_intelligence/tier0/test_demands")
+        assert adapter.registry_path == Path("cortex/intelligence/tier0/test_demands")
         assert adapter.quality_threshold == 0.7
         # AC_COMPLETE: AC-WAVE2-S1-ADAPTER-001-T02
     

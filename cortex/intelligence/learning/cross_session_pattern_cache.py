@@ -86,11 +86,11 @@ class CrossSessionPatternCache:
         Initialize pattern cache.
         
         Args:
-            cache_dir: Directory for cache file. Defaults to cortex_intelligence/state/
+            cache_dir: Directory for cache file. Defaults to cortex/intelligence/state/
         """
         if cache_dir is None:
-            # Default to cortex_intelligence/state/
-            self.cache_dir = Path(__file__).parent.parent.parent / "cortex_intelligence" / "state"
+            # Default to cortex/intelligence/state/
+            self.cache_dir = Path(__file__).parent.parent.parent / "cortex.intelligence" / "state"
         else:
             self.cache_dir = Path(cache_dir)
         

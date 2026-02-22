@@ -27,7 +27,7 @@ collect_ignore = [
 project_root = Path(__file__).parent
 tier_paths = [
     str(project_root),  # For cortex imports
-    str(project_root / "cortex_intelligence"),  # For tier0, tier1, tier2 imports
+    str(project_root / "cortex.intelligence"),  # For tier0, tier1, tier2 imports
 ]
 
 for path in tier_paths:

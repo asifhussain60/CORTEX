@@ -17,13 +17,13 @@ class TestStubAutoFixAgent:
         """Golden: Detect redirect stub pattern.
         
         Validates stub detection logic — agent detects files with REDIRECT
-        comment or files that only re-export from cortex_intelligence.
+        comment or files that only re-export from cortex.intelligence.
         """
         # Create a redirect stub (agent detects REDIRECT marker)
         stub_file = tmp_path / "wrapper.py"
         stub_file.write_text("""
-# REDIRECT: Points to cortex_intelligence implementation
-from cortex_intelligence.domain.models import Entity
+# REDIRECT: Points to cortex.intelligence implementation
+from cortex.intelligence.domain.models import Entity
 
 __all__ = ['Entity']
 """)
@@ -35,19 +35,19 @@ __all__ = ['Entity']
         # Validate detection
         assert result.issue_count == 1, "Should detect 1 stub"
         assert "wrapper.py" in str(result.issues[0].file_path)
-        assert "cortex_intelligence.domain.models" in result.issues[0].description
+        assert "cortex.intelligence.domain.models" in result.issues[0].description
     
     def test_extract_target_module(self, tmp_path: Path) -> None:
         """Golden: Extract target module from stub.
         
         Validates target module extraction — agent parses ast.ImportFrom
-        nodes looking for cortex_intelligence.* module prefixes.
+        nodes looking for cortex.intelligence.* module prefixes.
         """
-        # Create stub with clear target (must use cortex_intelligence prefix)
+        # Create stub with clear target (must use cortex.intelligence prefix)
         stub_file = tmp_path / "api.py"
         stub_file.write_text("""
-from cortex_intelligence.domain_brain.domain_brain_models import EntityType
-from cortex_intelligence.domain_brain.domain_brain_models import Conflict
+from cortex.intelligence.domain_brain.domain_brain_models import EntityType
+from cortex.intelligence.domain_brain.domain_brain_models import Conflict
 
 __all__ = ['EntityType', 'Conflict']
 """)
@@ -57,7 +57,7 @@ __all__ = ['EntityType', 'Conflict']
         target = agent._extract_target_module(stub_file)
         
         # Validate extraction
-        assert target == "cortex_intelligence.domain_brain.domain_brain_models", "Should extract correct target"
+        assert target == "cortex.intelligence.domain_brain.domain_brain_models", "Should extract correct target"
     
     def test_auto_fix_dry_run(self, tmp_path: Path) -> None:
         """Golden: Dry run mode doesn't modify files.

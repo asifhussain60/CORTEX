@@ -51,7 +51,7 @@ class ToolMetadata:
     Metadata extracted from @mcp_tool decorator.
     
     Attributes:
-        name: Tool name (e.g., "cortex_lens")
+        name: Tool name (e.g., "cortex.lens")
         description: Short description from decorator
         version: Tool version (e.g., "1.0")
         auth_level: Authentication level (public/admin/internal)
@@ -245,7 +245,7 @@ class MCPToolScanner:
         Example:
             >>> scanner = MCPToolScanner()
             >>> tools = scanner.scan_directory(Path("cortex/mcp/tools"))
-            >>> lens_tool = scanner.get_tool_by_name(tools, "cortex_lens")
+            >>> lens_tool = scanner.get_tool_by_name(tools, "cortex.lens")
         """
         for tool in tools:
             if tool.name == name:

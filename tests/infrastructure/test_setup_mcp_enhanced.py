@@ -393,7 +393,7 @@ class TestValidationHealthChecks:
         # Expected tools
         expected_tools = [
             "cortex_process_request",
-            "cortex_lens_analyze",
+            "cortex.lens_analyze",
             "cortex_challenge",
             "cortex_detect_duplicates",
         ]

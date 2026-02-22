@@ -314,7 +314,7 @@ def main() -> None:
     """Main entry point."""
     db_path = (
         Path(__file__).parent.parent
-        / "cortex_intelligence"
+        / "cortex.intelligence"
         / "state"
         / "governance.db"
     )

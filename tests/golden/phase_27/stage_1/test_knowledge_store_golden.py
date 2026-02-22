@@ -39,7 +39,7 @@ def temp_db_path() -> Path:
 @pytest.fixture
 def knowledge_store(temp_db_path: Path):
     """Create KnowledgeStore instance with temp database."""
-    from cortex.brain.persistence.knowledge_store import KnowledgeStore
+    from cortex.intelligence.persistence.knowledge_store import KnowledgeStore
     
     store = KnowledgeStore(db_path=temp_db_path)
     yield store
@@ -63,7 +63,7 @@ def test_golden_cross_session_knowledge_persistence(temp_db_path: Path):
     
     AC: AC-PHASE27-S1-G01 (Golden Test - Cross-Session)
     """
-    from cortex.brain.persistence.knowledge_store import KnowledgeStore
+    from cortex.intelligence.persistence.knowledge_store import KnowledgeStore
     
     # SESSION 1: Store knowledge
     session_1_id = str(uuid4())
@@ -382,7 +382,7 @@ def test_golden_concurrent_session_safety(temp_db_path: Path):
     
     AC: AC-PHASE27-S1-G06 (Golden Test - Concurrency)
     """
-    from cortex.brain.persistence.knowledge_store import KnowledgeStore
+    from cortex.intelligence.persistence.knowledge_store import KnowledgeStore
     import concurrent.futures
     
     def store_repo_knowledge(repo_num: int, db_path: Path) -> str:
@@ -443,7 +443,7 @@ def test_golden_knowledge_cleanup_archival(temp_db_path: Path):
     
     AC: AC-PHASE27-S1-G07 (Golden Test - Archival)
     """
-    from cortex.brain.persistence.knowledge_store import KnowledgeStore
+    from cortex.intelligence.persistence.knowledge_store import KnowledgeStore
     from datetime import datetime, timedelta
     
     knowledge_store = KnowledgeStore(db_path=temp_db_path)

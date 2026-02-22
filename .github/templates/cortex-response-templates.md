@@ -453,7 +453,7 @@ Think of me as a **full-stack development partner** — I handle implementation,
 
 | Capability | What Happens | Why It Matters |
 |-----------|-------------|---------------|
-| **🔨 Implementation** | TDD-first code generation (28 orchestrators) | Production quality, no shortcuts |
+| **🔨 Implementation** | TDD-first code generation (22 orchestrators) | Production quality, no shortcuts |
 | **🔍 Intelligence** | 4-layer LENS analysis (git, AST, comments, patterns) | Smart decisions from real evidence |
 | **🛡️ Governance** | 4-layer defense (P0-P3 checks, 7 agents) | Zero security surprises, audit trail |
 | **📐 Planning** | Phase breakdown with dependency tracking | Realistic timelines, smart parallelization |
@@ -1466,7 +1466,7 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 **Branch:** CORTEX  
 **Context:** exposure_auditor.py ✅
 
-**Next:** Implement tool_spec_generator.py (46 orchestrators)
+**Next:** Implement tool_spec_generator.py (22 orchestrators)
 
 **Command:** `/implement tool_spec_generator`
 ```

@@ -264,7 +264,7 @@ class TestIncrementalUpdateLogic:
         
         # Create mock tools with proper name attribute
         mock_tool_lens = Mock()
-        mock_tool_lens.name = "cortex_lens"
+        mock_tool_lens.name = "cortex.lens"
         mock_tool_git = Mock()
         mock_tool_git.name = "cortex_git"
         
@@ -282,22 +282,22 @@ class TestIncrementalUpdateLogic:
         
         # Assert
         assert len(tools_to_update) == 2
-        assert tools_to_update[0].name == "cortex_lens"
+        assert tools_to_update[0].name == "cortex.lens"
         assert tools_to_update[1].name == "cortex_git"
     
     def test_skip_unchanged_tools(self) -> None:
         """Test that unchanged tools are skipped."""
         # Arrange
         detector = GitAwareDeltaDetector()
-        all_tools = ["cortex_lens", "cortex_git", "cortex_ast"]
-        changed_tools = ["cortex_lens"]
+        all_tools = ["cortex.lens", "cortex_git", "cortex_ast"]
+        changed_tools = ["cortex.lens"]
         
         # Act
         tools_to_update = detector.filter_changed_tools(all_tools, changed_tools)
         
         # Assert
         assert len(tools_to_update) == 1
-        assert tools_to_update[0] == "cortex_lens"
+        assert tools_to_update[0] == "cortex.lens"
     
     def test_handle_deleted_tools(self) -> None:
         """Test handling of deleted tools."""

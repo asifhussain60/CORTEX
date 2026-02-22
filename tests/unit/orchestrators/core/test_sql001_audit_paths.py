@@ -14,10 +14,10 @@ import os
 
 
 class TestIntelligenceOrchestratorAuditPath:
-    """SQL-001: IntelligenceOrchestrator must write to .cortex-runtime/, not cortex_intelligence/."""
+    """SQL-001: IntelligenceOrchestrator must write to .cortex-runtime/, not cortex/intelligence/."""
 
     def test_default_audit_path_not_cortex_intelligence(self) -> None:
-        """Default audit_db_path must NOT reference cortex_intelligence/ directory."""
+        """Default audit_db_path must NOT reference cortex/intelligence/ directory."""
         from cortex.orchestrators.intelligence.intelligence_orchestrator import (
             IntelligenceOrchestrator,
         )
@@ -47,10 +47,10 @@ class TestIntelligenceOrchestratorAuditPath:
 
 
 class TestContractValidatorAuditPath:
-    """SQL-001: ContractValidator must write to .cortex-runtime/, not cortex_intelligence/wiring/."""
+    """SQL-001: ContractValidator must write to .cortex-runtime/, not cortex/intelligence/wiring/."""
 
     def test_default_audit_path_not_cortex_intelligence(self) -> None:
-        """ContractValidator default audit_db path must NOT be inside cortex_intelligence/."""
+        """ContractValidator default audit_db path must NOT be inside cortex/intelligence/."""
         from cortex.core.wiring.registry.contract_validator import ContractValidator
 
         src = inspect.getsource(ContractValidator.__init__)

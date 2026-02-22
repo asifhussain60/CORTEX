@@ -1,14 +1,14 @@
 # ============================================================================
-# Golden Tests: cortex_intelligence YAML Audit with SQLite Evidence
+# Golden Tests: cortex.intelligence YAML Audit with SQLite Evidence
 # ============================================================================
 # Authority: Phase 103 - Registry & Intelligence Consolidation
-# Purpose: Test CREATE, READ, PROCESS, DELETE of YAML files in cortex_intelligence
+# Purpose: Test CREATE, READ, PROCESS, DELETE of YAML files in cortex.intelligence
 # Created: 2026-02-17
 # Updated: 2026-02-17 - Added P0/P1/P2 coverage, edge cases, blind spots
 # ============================================================================
 
 """
-Golden Tests for cortex_intelligence YAML Files with SQLite Audit.
+Golden Tests for cortex.intelligence YAML Files with SQLite Audit.
 
 TEST COVERAGE MATRIX:
 =====================
@@ -57,7 +57,7 @@ def intelligence_audit_db(tmp_path: Path) -> Generator[Path, None, None]:
     Yields:
         Path to audit database
     """
-    db_path = tmp_path / "cortex_intelligence_audit.db"
+    db_path = tmp_path / "cortex.intelligence_audit.db"
     
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
@@ -96,12 +96,12 @@ def intelligence_audit_db(tmp_path: Path) -> Generator[Path, None, None]:
 
 @pytest.fixture
 def intelligence_test_dir(tmp_path: Path) -> Path:
-    """Create test directory structure mirroring cortex_intelligence.
+    """Create test directory structure mirroring cortex.intelligence.
     
     Returns:
         Path to test directory with new tier naming
     """
-    test_dir = tmp_path / "cortex_intelligence"
+    test_dir = tmp_path / "cortex.intelligence"
     
     # Create memory hierarchy with NEW NAMING
     (test_dir / "memory" / "core").mkdir(parents=True)

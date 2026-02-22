@@ -321,7 +321,7 @@ def onboard_repository_tool(
                 registry_kb = base_dir / "cortex-registry" / "knowledge-base" / "repositories"
                 registry_ast = base_dir / "cortex-registry" / "artifacts" / "ast-graphs"
                 
-                # Create all directories (NO cortex_intelligence writes)
+                # Create all directories (NO cortex.intelligence writes)
                 repo_artifacts_dir.mkdir(parents=True, exist_ok=True)
                 registry_kb.mkdir(parents=True, exist_ok=True)
                 registry_ast.mkdir(parents=True, exist_ok=True)
@@ -407,7 +407,7 @@ def onboard_repository_tool(
                 logger.info(f"Generated legacy AST: {ast_path_legacy}")
                 files_generated.append(str(ast_path_legacy))
                 
-                # Generate profile JSON in cortex-registry (NOT cortex_intelligence)
+                # Generate profile JSON in cortex-registry (NOT cortex.intelligence)
                 profile_path = repo_artifacts_dir / "profile.json"
                 profile_data = {
                     "schema_version": SCHEMA_VERSION,

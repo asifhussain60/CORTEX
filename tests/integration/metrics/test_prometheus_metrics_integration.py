@@ -122,8 +122,8 @@ class TestHistogramMetrics:
 
     def test_record_mcp_tool_execution_error(self, metrics):
         """Test MCP tool execution recording (error)."""
-        metrics.record_mcp_tool_execution(0.100, "cortex_lens_analyze", False)
-        key = "cortex_lens_analyze_error"
+        metrics.record_mcp_tool_execution(0.100, "cortex.lens_analyze", False)
+        key = "cortex.lens_analyze_error"
         assert key in metrics._metrics["mcp_tool_execution_duration_seconds"]["values"]
         assert 0.100 in metrics._metrics["mcp_tool_execution_duration_seconds"]["values"][key]
 

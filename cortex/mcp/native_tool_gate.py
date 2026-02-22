@@ -109,7 +109,7 @@ ALLOWED_READ_ONLY_TOOLS = {
 # MCP tools required for code modifications
 REQUIRED_MCP_TOOLS = {
     "cortex_process_request",
-    "cortex_lens_analyze",
+    "cortex.lens_analyze",
 }
 
 
