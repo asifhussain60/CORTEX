@@ -156,7 +156,7 @@ phases:
 playbooks:
 - id: pb-sts-001
   title: BadMonolith End-to-End Refactoring — CORTEX SDLC Showcase
-  file: _cortex-master/playbooks/sts/pb-sts-001-badmonolith-refactoring.yaml
+  file: _cortex-master/playbooks/sharpen-the-saw/pb-sts-001-badmonolith-refactoring.yaml
   category: sts
   repeatable: true
   status: ready
