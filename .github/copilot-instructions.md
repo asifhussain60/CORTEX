@@ -1,6 +1,6 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-21 | ## About CORTEX
+**Updated:** 2026-02-22 | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
@@ -120,6 +120,8 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | IntentRouter | `cortex/orchestrators/core/intent_router.py` |
 | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` |
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
+| HealthOrchestrator | `cortex/orchestrators/health/health_orchestrator.py` |
+| VacuumOrchestrator | `cortex/orchestrators/health/vacuum_orchestrator.py` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | MCP Server | `cortex/mcp/` |
 | Refactor Plan | `cortex-registry/planning/cortex-refactor-master.yaml` |
@@ -129,6 +131,59 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | MasterOrchestrationStage1 | `cortex/orchestrators/core/master_orchestrator_stage_1.py` |
 | MasterOrchestrationStage3 | `cortex/orchestrators/core/master_orchestrator_stage_3.py` |
 | MasterOrchestrationStage4 | `cortex/orchestrators/core/master_orchestrator_stage_4.py` |
+
+---
+
+## Cross-Cutting Intelligence (Universal — All Orchestrators)
+
+**Every orchestrator invocation must emit AC markers** — this is a CORE requirement, not optional:
+
+```python
+# AC_START: AC-{DOMAIN}-{TIMESTAMP}  ← open session
+# ... orchestrator logic ...
+# AC_COMPLETE: AC-{DOMAIN}-{TIMESTAMP} ✅  ← close session
+```
+
+**Persistence target:** `.cortex-runtime/traces/orchestrator-traces.db`
+**Enforced by:** `EnforcementOrchestrator` pre-commit hook + `cortex_validate_compliance`
+**Audited by:** Check #7 in the 13-Point Production Readiness Audit (`/audit fix`)
+
+**AC Marker Rules:**
+- `AC_START` at entry point of every public orchestrator method
+- `AC_COMPLETE` on success with ✅ + timing (ms)
+- `AC_COMPLETE` on failure with ❌ + error classification
+- No orphaned `AC_START` without matching `AC_COMPLETE` (governance violation)
+
+---
+
+## ⚡ Quick Command Reference
+
+| Command | What It Does | Stages |
+|---------|-------------|--------|
+| **`/audit fix`** | **Full production-readiness scan + autonomous fix** | 9 stages (see below) |
+| `/audit` | Scan only, no auto-fix | Stages 1–6 |
+| `/vacuum` | Markdown sprawl + root clutter cleanup | Stage 5 only |
+| `/health` | All 22 orchestrator health endpoints | Stage 4 only |
+| `/digest {path}` | Intelligent content ingestion (3-pipeline) | — |
+| `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
+| `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
+
+### `/audit fix` — 9-Stage Pipeline (canonical single command for production readiness)
+
+```
+Stage 1: Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
+Stage 2: 13-Point Production Scan           (cortex-auditor.md Checks #1–#13)
+Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
+Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
+Stage 5: Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 10 checks)
+Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
+Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
+Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
+```
+
+**Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
+**Activity log:** `.cortex-runtime/traces/orchestrator-traces.db` (AC markers per stage).
 
 ---
 

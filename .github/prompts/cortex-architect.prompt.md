@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-21 | **Architecture:** 22 Wired Orchestrators · 25 MCP Tools · 35 CORE Rules · 1 Package  
+**Updated:** 2026-02-22 | **Architecture:** 22 Wired Orchestrators · 25 MCP Tools · 35 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
@@ -134,13 +134,35 @@ cortex_load_core_rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 | DIGEST | 📚 | "summarize", "digest", "ingest" | DigestCoordinator | 🔵 | `cortex-digest.md` |
 | INVESTIGATE | 🔬 | "investigate", "analyze", "root cause" | InvestigationOrchestrator | ✅ | `cortex-architect.md` |
 | REPHRASE | 💬 | "rephrase" | RequestRephraseOrchestrator | ⚪ | — |
+| VACUUM | 🧹 | "/vacuum", "clean up", "markdown sprawl" | VacuumOrchestrator | ⚪ | `cortex-vacuum.md` |
+| HEALTH | 🩺 | "/health", "health check", "orchestrator status" | HealthOrchestrator | ⚪ | `cortex-auditor.md` |
+| DEBUG | 🐛 | "debug", "trace", "diagnose" | DebugOrchestrator | ✅ | `cortex-debugger.md` |
 
 ---
-## � AUDIT MODE — Production Readiness Scanner
+## 🔎 AUDIT MODE — Production Readiness Scanner
 
-**Trigger:** `/audit`, `/audit full`, "scan for issues", "check repo health"
+**Trigger:** `/audit`, `/audit fix`, `/audit full`, "scan for issues", "check repo health"
 
-**10-Point Production Readiness Audit:**
+### `/audit fix` — Single Production-Readiness Command (Canonical)
+
+**Use this.** Not `/audit` alone. `/audit fix` is the complete integrated pipeline.
+
+```
+Stage 1: Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
+Stage 2: 13-Point Production Scan           (Checks #1–#13, see table below)
+Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
+Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
+Stage 5: Vacuum Cleanup                     (VacuumOrchestrator via cortex_vacuum)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 10 checks)
+Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
+Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
+Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch → .cortex-runtime/traces/)
+```
+
+**Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
+**Activity log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
+
+### 13-Point Production Readiness Audit
 
 | # | Check | Tool/Method | Auto-Fix |
 |---|-------|-------------|----------|
@@ -150,12 +172,15 @@ cortex_load_core_rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 | 4 | **Low-value tests** — tests that assert `True`, mock everything, or test nothing | TestQualityGate score <4 | ✅ Delete |
 | 5 | **Broken file references** — YAML/docs pointing to moved/deleted files | Path resolution check | ✅ Update paths |
 | 6 | **Root-level clutter** — scripts, logs, temp files outside canonical dirs | `find . -maxdepth 1` scan | ✅ Move or delete |
-| 7 | **CORE rule violations** — missing type hints, docstrings, snake_case | `cortex_validate_compliance` | ✅ Add missing |
+| 7 | **CORE rule violations** — missing type hints, docstrings, snake_case + missing AC markers | `cortex_validate_compliance` | ✅ Add missing |
 | 8 | **Scattered .db/.log files** — outside `.cortex-runtime/` | `find -name "*.db"` | ✅ Consolidate |
 | 9 | **Deprecated file names** — `DEPRECATED-*`, `*.old`, `*.backup` in active dirs | `find -name "DEPRECATED*"` | ✅ Delete |
 | 10 | **Test-source mirror** — tests/ structure diverges from cortex/ structure | Dir comparison | 🟡 Report |
+| 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
+| 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
+| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (10 checks) | ✅ Update inline |
 
-### Wiring Contract Validation (Check #11 — Active)
+### Wiring Contract Validation (Stage 3)
 
 **Authority:** `architecture-integrity-agent.md` | **Source:** `cortex-registry/core/specifications/` (`orchestration-master-wiring.yaml`, `core-orchestrator-wiring.yaml`, `domain-orchestrator-wiring.yaml`, `support-orchestrator-wiring.yaml`)
 
@@ -175,28 +200,19 @@ Validate on every AUDIT and pre-IMPLEMENT:
 **Duplicate Priority Ranges (no conflicts allowed):**
 - Master = 10 | IntentRouter = 20 | Core = 30–99 | Domain = 100–149 | Support/Super = 150–199
 
-### Health Check Protocol (GP50 — Active ✅)
+### Health Check Protocol (Stage 4 — Active ✅)
 
 **Current:** `HealthOrchestrator` and `VacuumOrchestrator` in `cortex/orchestrators/health/` — both expose `health_check()` (L1 wiring compliance complete as of commit 2a624b0).
 **Per-orchestrator endpoint:** `orchestrator.health_check()` returns `{status, orchestrator, uptime_requests, success_count, last_success}`.
-**Integration (Check #12):** Active — `HealthOrchestrator.run_health_check()` gates AUDIT mode via registered agents. `VacuumOrchestrator.health_check()` added Phase 51 (P1-2 resolved: 6/6 orchestrators healthy).
 
 ```
-For each orchestrator in wiring contract:
+For each orchestrator in wiring contract (22 total):
   → Call health_check()
   → Assert status in ["healthy", "degraded"]  (not "unavailable")
   → Assert latency_p99 within domain envelope:
       core: <200ms | domain: <500ms | support: <1s
   → Circuit breaker: 3 consecutive failures → mark degraded → activate fallback
 ```
-
-**Output:** Inline violations table with severity (P0/P1/P2), file path, and remediation.
-
-**Audit-and-Fix flow:**
-1. Run all 10 checks + wiring contract validation → produce violations table
-2. Auto-fix eligible issues (confidence >90%)
-3. Re-run checks → confirm zero violations
-4. Run `python3 scripts/run_tests.py batch` → confirm zero regressions
 
 ---
 
@@ -515,18 +531,57 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ---
 
+## 🌐 CROSS-CUTTING INTELLIGENCE (Universal — All Orchestrators)
+
+**Every orchestrator invocation must emit AC markers.** This is CORE enforcement, not optional.
+
+```python
+# AC_START: AC-{DOMAIN}-{TIMESTAMP}  ← open session
+# ... orchestrator logic ...
+# AC_COMPLETE: AC-{DOMAIN}-{TIMESTAMP} ✅  ← close session (with ms timing)
+```
+
+**Persistence target:** `.cortex-runtime/traces/orchestrator-traces.db`
+**Enforced by:** `EnforcementOrchestrator` pre-commit + `cortex_validate_compliance` (Check #7)
+**Audited by:** Check #13 in the 13-Point Production Readiness Audit
+
+**AC Marker Rules:**
+- `AC_START` at entry point of every public orchestrator method
+- `AC_COMPLETE` on success with ✅ + timing (ms)
+- `AC_COMPLETE` on failure with ❌ + error classification
+- Orphaned `AC_START` without matching `AC_COMPLETE` = P0 governance violation
+- Audit session markers: `AC_STAGE_{N}_COMPLETE` per stage in `/audit fix`
+
+---
+
 ## 🔧 QUICK COMMANDS
 
-| Command | Action |
-|---------|--------|
-| `/audit` | 10-point + wiring contract readiness scan |
-| `/audit fix` | Scan + auto-remediate all fixable issues |
-| `/vacuum` | Clean markdown sprawl, dead files |
-| `/digest {path}` | Intelligent content ingestion (3-pipeline) |
-| `/onboard {repo}` | LENS analysis + dashboard |
-| `/challenge {request}` | Generate alternatives |
-| `/recall {feature}` | Feature discovery |
-| `/health` | Query all orchestrator health endpoints |
+| Command | What It Does | Stages |
+|---------|-------------|--------|
+| **`/audit fix`** | **Full production-readiness scan + autonomous fix** | 9 stages |
+| `/audit` | Scan only, no auto-fix | Stages 1–6 |
+| `/vacuum` | Markdown sprawl + root clutter cleanup | Stage 5 only |
+| `/health` | All 22 orchestrator health endpoints | Stage 4 only |
+| `/digest {path}` | Intelligent content ingestion (3-pipeline) | — |
+| `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
+| `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
+| `/recall {feature}` | Feature discovery | — |
+
+### `/audit fix` — 9-Stage Pipeline Detail
+
+```
+Stage 1: Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
+Stage 2: 13-Point Production Scan           (cortex-auditor.md Checks #1–#13)
+Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
+Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
+Stage 5: Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 10 checks)
+Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
+Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
+Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
+```
+
+**Activity log:** `.cortex-runtime/traces/orchestrator-traces.db` (AC markers per stage).
 
 ---
 
@@ -582,8 +637,10 @@ Progress bar + stage bullet list. See templates SSOT.
 4. Audit clean (no P0/P1 violations — `cortex_validate_compliance`)
 5. Documentation updated (inline docstrings — CORE-012)
 6. Master plan updated (if roadmap affected)
-7. No stale references introduced (meta-audit check passes)
-8. Health endpoints responsive (all orchestrators in wiring contract healthy)
+7. No stale references introduced (meta-audit check #13 passes)
+8. Health endpoints responsive (all 22 orchestrators healthy — check #11)
+9. Markdown sprawl clean (vacuum check #12 passes)
+10. AC markers present in all touched orchestrator methods → `.cortex-runtime/traces/`
 
 ---
 
@@ -591,7 +648,8 @@ Progress bar + stage bullet list. See templates SSOT.
 
 | Intent | Load Agent | Token Cost |
 |---|---|---|
-| AUDIT | `cortex-auditor.md` | ~3,000 |
+| AUDIT | `cortex-auditor.md` | ~3,500 |
+| AUDIT FIX | `cortex-auditor.md` + `architecture-integrity-agent.md` + `cortex-meta-auditor.md` | ~12,000 |
 | IMPLEMENT/FIX | `cortex-executor.md` + `cortex-holistic-validator.md` | ~4,500 |
 | REFACTOR | `cortex-executor.md` | ~2,500 |
 | DESIGN/INVESTIGATE | `cortex-architect.md` | ~2,500 |
@@ -600,6 +658,9 @@ Progress bar + stage bullet list. See templates SSOT.
 | DIGEST | `cortex-digest.md` | ~2,000 |
 | META-AUDIT | `cortex-meta-auditor.md` | ~3,500 |
 | WIRING/CI | `architecture-integrity-agent.md` | ~5,000 |
+| VACUUM | `cortex-vacuum.md` | ~2,000 |
+| DEBUG | `cortex-debugger.md` | ~4,500 |
+| HEALTH | `cortex-auditor.md` (Check #11) | ~3,500 |
 
 **Default:** Load this prompt only (~2,700 tokens). Specialist agents on-demand only.
 

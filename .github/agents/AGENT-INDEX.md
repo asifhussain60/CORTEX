@@ -104,6 +104,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **FIX** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
 | **REFACTOR** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
 | **AUDIT** | cortex.md + cortex-architect.md + cortex-auditor.md | ~8,000 |
+| **AUDIT FIX** | cortex.md + cortex-auditor.md + architecture-integrity-agent.md + cortex-meta-auditor.md | ~12,000 |
 | **INVESTIGATE** | cortex.md + cortex-architect.md | ~6,000 |
 | **QUERY** | cortex.md + cortex-interactive.md | ~4,500 |
 | **DESIGN** | cortex.md + cortex-architect.md | ~6,000 |
@@ -113,8 +114,30 @@ are resolved or explicitly approved as WONT-FIX.
 | **SETUP** | cortex-environment-setup.md | ~2,000 |
 | **META-AUDIT** | cortex-meta-auditor.md + cortex-auditor.md | ~6,500 |
 | **WIRING/CI** | architecture-integrity-agent.md | ~5,000 |
+| **VACUUM** | cortex-vacuum.md | ~2,000 |
+| **DEBUG** | cortex-debugger.md + cortex-auditor.md | ~4,500 |
+| **HEALTH** | cortex-auditor.md (Check #11) | ~3,500 |
 
 > **Default context:** `cortex-architect.prompt.md` only (~2,700 tokens). Load specialist agents on-demand per intent above.
+
+### `/audit fix` Pipeline (Canonical Production-Readiness Command)
+
+**Single command → 9 integrated stages — no duplication, all wired components:**
+
+```
+/audit fix
+  Stage 1: Stage 0 Governance Pre-Flight      → STAGE-0-GOVERNANCE-AUDIT-SPEC.md
+  Stage 2: 13-Point Production Scan           → cortex-auditor.md (Checks #1–#10)
+  Stage 3: Wiring Contract Validation         → architecture-integrity-agent.md (L1→L3)
+  Stage 4: Orchestrator Health (all 22)       → HealthOrchestrator.run_health_check()
+  Stage 5: Vacuum Cleanup                     → VacuumOrchestrator + cortex_vacuum
+  Stage 6: Prompt/Agent Meta-Audit            → cortex-meta-auditor.md (10 checks)
+  Stage 7: Auto-Fix confidence >90%           → autonomous remediation
+  Stage 8: Re-validate → zero-violation gate  → 0 P0, 0 P1 required
+  Stage 9: Tests + AC_COMPLETE                → python3 scripts/run_tests.py batch
+```
+
+**Activity Log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
 
 ---
 
