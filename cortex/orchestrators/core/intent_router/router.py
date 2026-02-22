@@ -182,8 +182,36 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
             gate_result = self._evaluate_complexity_gate(original_dict)
             gate_result["routing_source"] = "complexity_gate"
 
+            # Use CapabilityMatcher for intent-aware agent selection
+            available_agents = self._get_all_available_agents()
+            if available_agents:
+                try:
+                    agent_rankings = self.capability_matcher.match_capabilities(
+                        intent=intent,
+                        user_request=request.user_query,
+                        available_agents=available_agents,
+                    )
+                    agent_id = agent_rankings.primary_agent_id
+                    reasoning = agent_rankings.reasoning
+                    confidence = agent_rankings.confidence
+                except Exception:
+                    agent_id = "cortex-tdd-orchestrator"
+                    reasoning = "Fallback: capability matching failed for dict input"
+                    confidence = 0.5
+            else:
+                agent_id = "cortex-tdd-orchestrator"
+                reasoning = "Fallback: no agents available for matching"
+                confidence = 0.5
+
+            # Override with workflow template if complexity gate triggers
+            if gate_result.get("template_id"):
+                agent_id = f"WorkflowTemplate:{gate_result['template_id']}"
+                intent_name = intent.value.lower() if hasattr(intent, 'value') else str(intent).lower()
+                reasoning = f"Complexity-gated {intent_name} workflow template routing"
+                confidence = 0.85
+
             fallback_context = AgentContext(
-                agent_id="cortex-tdd-orchestrator",
+                agent_id=agent_id,
                 request_id=request.request_id,
                 user_request=request.user_query,
                 intent=intent.value
@@ -193,14 +221,6 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
                 if key in original_dict:
                     fallback_context.extracted_data[key] = original_dict[key]
 
-            intent_name = intent.value.lower() if hasattr(intent, 'value') else str(intent).lower()
-            reasoning = f"Complexity-gated {intent_name} routing from dict input"
-
-            agent_id = gate_result.get("template_id") or "cortex-tdd-orchestrator"
-            if gate_result.get("template_id"):
-                agent_id = f"WorkflowTemplate:{gate_result['template_id']}"
-                reasoning = f"Complexity-gated {intent_name} workflow template routing"
-
             return IntentRoutingResult(
                 request_id=request.request_id,
                 primary_agent_id=agent_id,
@@ -208,7 +228,7 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
                 collaboration_pattern=CollaborationPattern.SEQUENTIAL,
                 mcp_tools=["cortex_process_request"],
                 context=fallback_context,
-                confidence=0.85,
+                confidence=confidence,
                 reasoning=reasoning,
                 _routed_intent=intent,
                 timestamp=datetime.now().isoformat(),
@@ -357,22 +377,23 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
         """Detect intent type from a dict-based request using keyword matching."""
         text = f"{d.get('operation', '')} {d.get('description', '')} {d.get('user_request', '')}".lower()
         # GAP-005: Check specific modes before generic fallbacks (priority order)
+        # Most specific intents first, then broader ones
         if re.search(r'rephrase|reword|token.optim|compact this|make this concise', text):
             return IntentType.REPHRASE
-        elif re.search(r'audit|scan repo|production readiness|health check|check repo|repo health', text):
-            return IntentType.AUDIT
         elif re.search(r'digest|summarize|summary|what happened|recap|tldr', text):
             return IntentType.DIGEST
         elif re.search(r'investigate|root cause|why is|what causes|deep analysis|trace the|debug why|find the cause', text):
             return IntentType.INVESTIGATE
-        elif re.search(r'refactor|clean|improve|optimize|migrate|restructure|reorganize|rewrite|modernize', text) and not re.search(r'\bdesign\b|blueprint|system design', text):
-            return IntentType.REFACTOR
         elif re.search(r'\bdesign\b|architect|blueprint|system design', text):
             return IntentType.DESIGN
-        elif re.search(r'implement|create|build|add|new', text):
-            return IntentType.IMPLEMENT
+        elif re.search(r'refactor|clean|improve|optimize|migrate|restructure|reorganize|rewrite|modernize', text):
+            return IntentType.REFACTOR
         elif re.search(r'fix|bug|error|broken|debug|resolve|correct|patch|repair', text):
             return IntentType.FIX
+        elif re.search(r'audit|scan repo|production readiness|health check|check repo|repo health', text):
+            return IntentType.AUDIT
+        elif re.search(r'implement|create|build|add|new', text):
+            return IntentType.IMPLEMENT
         elif re.search(r'plan|organize|roadmap', text):
             return IntentType.PLAN
         else:
@@ -400,18 +421,153 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
         return result
 
     def _register_default_agents(self) -> None:
-        """Register default agents for capability matching."""
+        """Register default agents with capabilities aligned to INTENT_CAPABILITY_MAP."""
         defaults = [
-            {"agent_id": "cortex-tdd-orchestrator", "capabilities": ["testing", "tdd", "implementation"], "mcp_tools": ["cortex_process_request"], "priority": "P0"},
-            {"agent_id": "cortex-auditor", "capabilities": ["auditing", "compliance", "governance"], "mcp_tools": ["cortex_audit_codebase"], "priority": "P0"},
-            {"agent_id": "cortex-lens-orchestrator", "capabilities": ["analysis", "code_review"], "mcp_tools": ["cortex.lens_analyze"], "priority": "P1"},
-            {"agent_id": "cortex-planner", "capabilities": ["planning", "roadmap"], "mcp_tools": ["cortex_plan"], "priority": "P1"},
-            {"agent_id": "cortex-debugger", "capabilities": ["debugging", "fix"], "mcp_tools": ["cortex_debug"], "priority": "P1"},
-            {"agent_id": "cortex-refactorer", "capabilities": ["refactoring", "optimization"], "mcp_tools": ["cortex_refactor"], "priority": "P2"},
-            {"agent_id": "cortex-architect", "capabilities": ["architecture", "design"], "mcp_tools": ["cortex_design_proposal"], "priority": "P2"},
-            {"agent_id": "cortex-knowledge", "capabilities": ["knowledge", "documentation"], "mcp_tools": ["cortex_knowledge"], "priority": "P2"},
+            {
+                "agent_id": "cortex-tdd-orchestrator",
+                "capabilities": [
+                    "testing_integration", "tdd", "implementation",
+                    "code_generation", "test_coverage_analysis",
+                ],
+                "mcp_tools": ["cortex_process_request"],
+                "priority": "P0",
+            },
+            {
+                "agent_id": "cortex-auditor",
+                "capabilities": [
+                    "codebase_health_scanning", "security_validation",
+                    "governance_compliance_checking", "auditing", "compliance",
+                ],
+                "mcp_tools": ["cortex_audit_codebase"],
+                "priority": "P0",
+            },
+            {
+                "agent_id": "cortex-lens-orchestrator",
+                "capabilities": [
+                    "code_analysis", "architecture_analysis",
+                    "performance_analysis", "analysis", "code_review",
+                ],
+                "mcp_tools": ["cortex.lens_analyze"],
+                "priority": "P1",
+            },
+            {
+                "agent_id": "cortex-planner",
+                "capabilities": [
+                    "phase_management", "planning", "resource_allocation",
+                    "roadmap",
+                ],
+                "mcp_tools": ["cortex_plan"],
+                "priority": "P1",
+            },
+            {
+                "agent_id": "cortex-debugger",
+                "capabilities": [
+                    "bug_fixing", "debugging", "test_coverage_analysis",
+                    "fix",
+                ],
+                "mcp_tools": ["cortex_debug"],
+                "priority": "P1",
+            },
+            {
+                "agent_id": "cortex-refactorer",
+                "capabilities": [
+                    "code_refactoring", "architecture_analysis",
+                    "performance_optimization", "refactoring", "optimization",
+                ],
+                "mcp_tools": ["cortex_refactor"],
+                "priority": "P2",
+            },
+            {
+                "agent_id": "cortex-architect",
+                "capabilities": [
+                    "challenge_generation", "architecture_analysis",
+                    "alternative_proposal_generation", "design_pattern_analysis",
+                    "architecture", "design",
+                ],
+                "mcp_tools": ["cortex_design_proposal"],
+                "priority": "P2",
+            },
+            {
+                "agent_id": "cortex-knowledge",
+                "capabilities": [
+                    "knowledge_retrieval", "pattern_recognition",
+                    "knowledge", "documentation",
+                ],
+                "mcp_tools": ["cortex_knowledge"],
+                "priority": "P2",
+            },
         ]
         self.register_agents(defaults)
+
+    def _format_routing_message_with_books(self, rule_id: str) -> str:
+        """Format routing message enriched with book references.
+
+        Uses BusinessWisdomFormatter to add book citations to governance rules.
+        Falls back to raw rule_id if formatter is unavailable or raises.
+
+        Args:
+            rule_id: CORE rule identifier (e.g. "CORE-008").
+
+        Returns:
+            Enriched markdown string or raw rule_id on error.
+        """
+        try:
+            from cortex.core.interaction.business_wisdom_formatter import (
+                BusinessWisdomFormatter,
+            )
+
+            formatter = BusinessWisdomFormatter()
+            return formatter.format_governance_with_books(
+                rule_ids=[rule_id],
+                max_display=1,
+                include_icon=False,
+            )
+        except Exception:
+            return rule_id
+
+    def classify_intent_with_workflow_suggestion(
+        self, context: Dict[str, Any]
+    ) -> Tuple[str, Optional[str]]:
+        """Classify intent and suggest a workflow template if applicable.
+
+        Examines attachments and keywords to recommend specialised
+        workflow templates (e.g. frontend-visual TDD, API service, security).
+
+        Args:
+            context: Dict with ``description``, ``intent``, optional
+                ``attachments`` and ``keywords``.
+
+        Returns:
+            Tuple of (intent_string, template_id_or_None).
+        """
+        intent = context.get("intent", "IMPLEMENT")
+        attachments = context.get("attachments", [])
+        keywords = context.get("keywords", [])
+        description = context.get("description", "").lower()
+
+        # Visual context → frontend-visual template
+        has_visual = any(
+            a.get("type", "").startswith("image/") for a in attachments
+        )
+        if has_visual:
+            return intent, "tdd/frontend-visual"
+
+        # Keyword-based template selection
+        keyword_set = {k.lower() for k in keywords}
+        desc_keywords = set(description.split())
+
+        if intent == "AUDIT" and (
+            "security" in keyword_set or "security" in desc_keywords
+        ):
+            return intent, "security/compliance-audit"
+
+        if intent == "IMPLEMENT":
+            if "api" in keyword_set or "endpoint" in keyword_set:
+                return intent, "tdd/api-service"
+            # Generic feature implementation
+            return intent, "tdd/feature-implementation"
+
+        return intent, None
 
     def _fallback_routing(self, request: IntentRoutingRequest) -> IntentRoutingResult:
         """Provide fallback routing when primary routing fails."""

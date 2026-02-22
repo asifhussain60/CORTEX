@@ -132,7 +132,7 @@ class CapabilityMatcher:
         """
         # Get required capabilities for this intent
         required_caps = self.INTENT_CAPABILITY_MAP.get(intent)
-        if not required_caps is None:
+        if required_caps is None:
             required_caps = {}
         
         # Score each agent
