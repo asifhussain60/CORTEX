@@ -1,0 +1,269 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CORTEX STS Manifest — CortexLabs BadMonolith
+# ══════════════════════════════════════════════════════════════════════════════
+# Purpose: Maps every intentional code smell to the CORTEX capability that fixes it.
+# Used by: cortex_analyze_sts_app MCP tool, leadership POC demos
+# Authority: cortex-sts/CortexLabs/BadMonolith/README.md
+# ══════════════════════════════════════════════════════════════════════════════
+
+app:
+  name: "CortexLabs FinTrack"
+  description: "Fictional financial tracker — intentionally broken for CORTEX STS analysis"
+  version: "0.0.1"
+  tech_stack:
+    backend: "C# / ASP.NET Core 8.0"
+    frontend: "TypeScript (vanilla — no framework)"
+    database: "SQLite (in-process)"
+    testing: "xUnit"
+
+smells:
+  # ── SECURITY ──────────────────────────────────────────────────────────────
+  - id: SMELL-1
+    category: Security
+    name: "SQL injection via string concatenation"
+    files:
+      - backend/Program.cs
+      - backend/Services/Services.cs
+    cortex_tool: SecurityOrchestrator
+    severity: P0
+
+  - id: SMELL-2
+    category: Security
+    name: "Hardcoded secrets in appsettings.json and source code"
+    files:
+      - backend/appsettings.json
+      - backend/Program.cs
+      - backend/Services/Services.cs
+    cortex_tool: EnforcementOrchestrator
+    severity: P0
+
+  - id: SMELL-13
+    category: Security
+    name: "CORS wildcard — AllowAnyOrigin()"
+    files:
+      - backend/Program.cs
+    cortex_tool: SecurityAdvisorMixin
+    severity: P1
+
+  - id: SMELL-18
+    category: Security
+    name: "Stack trace exposure + information disclosure"
+    files:
+      - backend/Program.cs
+      - frontend/src/app.ts
+    cortex_tool: SecurityOrchestrator
+    severity: P0
+
+  # ── SOLID VIOLATIONS ──────────────────────────────────────────────────────
+  - id: SMELL-3
+    category: SOLID
+    name: "God class — Program.cs handles 6+ domains in one file"
+    files:
+      - backend/Program.cs
+    cortex_tool: ServiceDecompositionOrchestrator
+    severity: P1
+
+  - id: SMELL-4
+    category: SOLID
+    name: "Business logic embedded in controller endpoints"
+    files:
+      - backend/Program.cs
+    cortex_tool: RefactoringOrchestrator
+    severity: P1
+
+  - id: SMELL-5
+    category: SOLID
+    name: "Circular dependency between services"
+    files:
+      - backend/Services/Services.cs
+    cortex_tool: "LENS dependency graph"
+    severity: P1
+
+  - id: SMELL-16
+    category: SOLID
+    name: "Global mutable state via static AppCache"
+    files:
+      - backend/Models/Models.cs
+      - backend/Program.cs
+      - frontend/src/app.ts
+    cortex_tool: cortex_refactor
+    severity: P1
+
+  - id: SMELL-17
+    category: SOLID
+    name: "No dependency injection — direct instantiation"
+    files:
+      - backend/Program.cs
+      - backend/Services/Services.cs
+    cortex_tool: RefactoringOrchestrator
+    severity: P1
+
+  - id: SMELL-21
+    category: SOLID
+    name: "God component — all UI logic in single file"
+    files:
+      - frontend/src/app.ts
+    cortex_tool: cortex_refactor
+    severity: P1
+
+  - id: SMELL-23
+    category: SOLID
+    name: "Business logic in UI layer"
+    files:
+      - frontend/src/app.ts
+    cortex_tool: RefactoringOrchestrator
+    severity: P1
+
+  - id: SMELL-24
+    category: SOLID
+    name: "No service layer — direct fetch() in UI code"
+    files:
+      - frontend/src/app.ts
+    cortex_tool: ServiceDecompositionOrchestrator
+    severity: P2
+
+  # ── QUALITY ───────────────────────────────────────────────────────────────
+  - id: SMELL-7
+    category: Quality
+    name: "Mixed naming conventions (PascalCase + camelCase + snake_case)"
+    files:
+      - backend/Models/Models.cs
+      - frontend/src/models.ts
+    cortex_tool: "CORE-028 enforcement"
+    severity: P2
+
+  - id: SMELL-8
+    category: Quality
+    name: "Dead code — unused methods and classes"
+    files:
+      - backend/Program.cs
+      - backend/Services/Services.cs
+      - frontend/src/app.ts
+    cortex_tool: VacuumOrchestrator
+    severity: P2
+
+  - id: SMELL-9
+    category: Quality
+    name: "No API versioning"
+    files:
+      - backend/Program.cs
+    cortex_tool: PlanningOrchestrator
+    severity: P2
+
+  - id: SMELL-10
+    category: Quality
+    name: "Duplicate validation logic in multiple locations"
+    files:
+      - backend/Program.cs
+      - backend/Services/Services.cs
+      - frontend/src/app.ts
+    cortex_tool: "CORE-035 duplicate detection"
+    severity: P2
+
+  - id: SMELL-11
+    category: Quality
+    name: "No structured logging — Console.WriteLine everywhere"
+    files:
+      - backend/Program.cs
+      - backend/Services/Services.cs
+    cortex_tool: ObservabilityOrchestrator
+    severity: P2
+
+  - id: SMELL-15
+    category: Quality
+    name: "Magic numbers and strings throughout"
+    files:
+      - backend/Program.cs
+      - backend/Services/Services.cs
+      - frontend/src/app.ts
+    cortex_tool: "CORTEX complexity scanner"
+    severity: P2
+
+  - id: SMELL-19
+    category: Quality
+    name: "Missing model validation attributes"
+    files:
+      - backend/Models/Models.cs
+    cortex_tool: TDDOrchestrator
+    severity: P2
+
+  - id: SMELL-20
+    category: Quality
+    name: "No audit fields (CreatedAt, ModifiedBy, Version)"
+    files:
+      - backend/Models/Models.cs
+    cortex_tool: cortex_onboard_repository_v3
+    severity: P2
+
+  - id: SMELL-22
+    category: Quality
+    name: "'any' types everywhere — no TypeScript safety"
+    files:
+      - frontend/src/app.ts
+      - frontend/src/models.ts
+    cortex_tool: "cortex_refactor TypeScript adapter"
+    severity: P2
+
+  - id: SMELL-25
+    category: Quality
+    name: "No error handling on API calls"
+    files:
+      - frontend/src/app.ts
+    cortex_tool: TDDOrchestrator
+    severity: P1
+
+  # ── PERFORMANCE ───────────────────────────────────────────────────────────
+  - id: SMELL-6
+    category: Performance
+    name: "No pagination — unbounded queries"
+    files:
+      - backend/Program.cs
+      - backend/Services/Services.cs
+    cortex_tool: TDDOrchestrator
+    severity: P1
+
+  - id: SMELL-14
+    category: Performance
+    name: "No retry/circuit breaker pattern"
+    files:
+      - backend/Services/Services.cs
+    cortex_tool: LegacyModernizationOrchestrator
+    severity: P2
+
+  # ── TESTING ───────────────────────────────────────────────────────────────
+  - id: SMELL-12
+    category: Testing
+    name: "Tests that Assert.True(true) — zero value tests"
+    files:
+      - backend/Tests/SomeTests.cs
+    cortex_tool: TestQualityGate
+    severity: P1
+
+# ── DEMO FLOW ─────────────────────────────────────────────────────────────
+demo:
+  estimated_time: "30 minutes"
+  steps:
+    - tool: cortex_onboard_repository_v3
+      target: "cortex-sts/CortexLabs/BadMonolith"
+      description: "LENS scan all files — produces smell inventory"
+
+    - tool: cortex_analyze_sts_app
+      target: "cortex-sts/CortexLabs/BadMonolith"
+      description: "61-pattern STS analysis — surfaces all 25 smells"
+
+    - tool: cortex_audit_remediation_plan
+      description: "Generate remediation plan with 4 execution options"
+
+    - tool: TDDOrchestrator
+      description: "RED tests for top P0 smells (SQL injection, secrets)"
+
+    - tool: SecurityOrchestrator
+      description: "Fix SQL injection + hardcoded secrets (GREEN)"
+
+    - tool: RefactoringOrchestrator
+      description: "SOLID violations — extract services, remove God class"
+
+    - tool: cortex_generate_repo_dashboard
+      description: "Before/after dashboard for leadership"
+
+  output_directory: "cortex-sts/CortexLabs/Refactored/"

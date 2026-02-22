@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FinTrack - CortexLabs</title>
+    <!-- ❌ SMELL-13: No Content-Security-Policy meta tag -->
+    <!-- ❌ SMELL-18: No X-Frame-Options, no X-Content-Type-Options -->
+    <style>
+        /* ❌ SMELL-21: All styles inline in a single file — no CSS architecture */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f9f9f9; }
+        .app-container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #333; }
+        .nav-tabs { margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; }
+        .nav-tabs button { padding: 10px 20px; margin-right: 5px; cursor: pointer; border: 1px solid #ccc; background: #fff; border-radius: 4px 4px 0 0; }
+        .nav-tabs button.active { background-color: #007bff; color: white; border-color: #007bff; }
+        .tab-content { display: none; padding: 20px; background: white; border: 1px solid #ddd; border-radius: 0 4px 4px 4px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
+        .stat-card { padding: 20px; border: 1px solid #ddd; border-radius: 8px; text-align: center; }
+        .stat-card h3 { margin: 0 0 10px 0; color: #666; font-size: 14px; }
+        .amount { font-size: 24px; font-weight: bold; color: #2c3e50; }
+        .expense { color: #e74c3c; }
+        .negative { color: #e74c3c; }
+        .healthy { color: #27ae60; font-weight: bold; }
+        .warning { color: #f39c12; font-weight: bold; }
+        .critical { color: #e74c3c; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { background: #f5f5f5; padding: 10px; text-align: left; border-bottom: 2px solid #ddd; }
+        td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+        input, select { padding: 8px 12px; margin-right: 8px; margin-bottom: 8px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 8px 16px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .form-section { margin-bottom: 20px; padding: 15px; border: 1px solid #eee; border-radius: 4px; background: #fafafa; }
+        .form-section h3 { margin-top: 0; }
+        .bar { height: 20px; background: #007bff; margin: 3px 0; border-radius: 3px; }
+        .status-bar { margin-top: 30px; padding: 10px; background: #f5f5f5; font-size: 12px; color: #999; border-radius: 4px; }
+        pre { background: #f5f5f5; padding: 15px; overflow: auto; border-radius: 4px; font-size: 12px; }
+        .report-card { padding: 15px; border: 1px solid #eee; margin-bottom: 10px; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <h1>🏦 FinTrack - Financial Tracker</h1>
+        <p style="color: #999; font-size: 12px;">CortexLabs Internal Application v0.0.1</p>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="active" data-tab="dashboard" onclick="switchTab('dashboard')">Dashboard</button>
+            <button data-tab="transactions" onclick="switchTab('transactions')">Transactions</button>
+            <button data-tab="accounts" onclick="switchTab('accounts')">Accounts</button>
+            <button data-tab="users" onclick="switchTab('users')">Users</button>
+            <button data-tab="reports" onclick="switchTab('reports')">Reports</button>
+            <button data-tab="admin" onclick="switchTab('admin')">Admin</button>
+        </div>
+
+        <!-- Dashboard Tab -->
+        <div id="tab-dashboard" class="tab-content" style="display: block;">
+            <h2>Financial Overview</h2>
+            <div id="dashboard-content">Loading...</div>
+        </div>
+
+        <!-- Transactions Tab -->
+        <div id="tab-transactions" class="tab-content">
+            <h2>Transactions</h2>
+            <div class="form-section">
+                <h3>Add Transaction</h3>
+                <input id="tx-desc" placeholder="Description" />
+                <input id="tx-amount" type="number" placeholder="Amount" />
+                <input id="tx-category" placeholder="Category" />
+                <select id="tx-type">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+                <button onclick="addTransaction()">Add</button>
+            </div>
+            <div class="form-section">
+                <h3>Search</h3>
+                <input id="search-category" placeholder="Category" />
+                <input id="search-date" placeholder="From date (yyyy-mm-dd)" />
+                <button onclick="searchTransactions()">Search</button>
+            </div>
+            <div id="transactions-content">Loading...</div>
+        </div>
+
+        <!-- Accounts Tab -->
+        <div id="tab-accounts" class="tab-content">
+            <h2>Accounts</h2>
+            <div class="form-section">
+                <h3>Transfer Money</h3>
+                <input id="transfer-from" type="number" placeholder="From Account ID" />
+                <input id="transfer-to" type="number" placeholder="To Account ID" />
+                <input id="transfer-amount" type="number" placeholder="Amount" />
+                <button onclick="transferMoney()">Transfer</button>
+            </div>
+            <div id="accounts-content">Loading...</div>
+        </div>
+
+        <!-- Users Tab -->
+        <div id="tab-users" class="tab-content">
+            <h2>Users</h2>
+            <div class="form-section">
+                <input id="search-username" placeholder="Search username" />
+                <button onclick="searchUsers()">Search</button>
+            </div>
+            <div id="users-content">Loading...</div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="tab-reports" class="tab-content">
+            <h2>Reports</h2>
+            <div class="form-section">
+                <select id="report-type">
+                    <option value="monthly">Monthly</option>
+                    <option value="annual">Annual</option>
+                    <option value="tax">Tax</option>
+                </select>
+                <button onclick="generateReport()">Generate Report</button>
+            </div>
+            <div id="reports-content">Loading...</div>
+        </div>
+
+        <!-- Admin Tab — ❌ SMELL-18: No auth check, anyone can see admin panel -->
+        <div id="tab-admin" class="tab-content">
+            <h2>Admin Panel</h2>
+            <button onclick="loadAdminStats()">Refresh Stats</button>
+            <div id="admin-content">Click refresh to load admin stats...</div>
+        </div>
+
+        <!-- Status Bar -->
+        <div id="status-bar" class="status-bar">Initializing...</div>
+    </div>
+
+    <!-- ❌ SMELL-21: Single script file — no module system, no lazy loading -->
+    <script src="dist/app.js"></script>
+</body>
+</html>
