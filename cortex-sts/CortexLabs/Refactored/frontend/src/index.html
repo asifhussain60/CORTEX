@@ -1,10 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>FinTrack — Refactored</title></head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' http://localhost:5000" />
+  <title>FinTrack — Refactored</title>
+  <!-- ✅ SMELL-18 FIXED: CSP header present; no inline event handlers -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: system-ui, sans-serif; background: #f5f7fa; color: #333; }
+    header { background: #1a1a2e; color: #fff; padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; }
+    header h1 { font-size: 1.4rem; }
+    .nav-tabs { display: flex; gap: 0.5rem; padding: 1rem 2rem 0; background: #fff; border-bottom: 2px solid #e0e0e0; }
+    .nav-tabs button { padding: 0.5rem 1.25rem; border: none; background: none; cursor: pointer; border-bottom: 2px solid transparent; font-size: 0.95rem; }
+    .nav-tabs button.active { border-bottom-color: #1a1a2e; font-weight: 600; }
+    #error-banner { display: none; background: #fee; color: #c00; padding: 0.75rem 2rem; border-left: 4px solid #c00; }
+    main { padding: 2rem; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .card { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 0.6rem 1rem; text-align: left; border-bottom: 1px solid #eee; }
+    th { font-size: 0.85rem; text-transform: uppercase; color: #666; }
+    button.btn { padding: 0.45rem 1rem; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; }
+    button.btn-primary { background: #1a1a2e; color: #fff; }
+    button.btn-danger { background: #e53935; color: #fff; }
+    input, select { padding: 0.45rem 0.75rem; border: 1px solid #ccc; border-radius: 4px; font-size: 0.9rem; }
+    label { font-size: 0.85rem; color: #555; }
+    .form-row { display: flex; gap: 0.75rem; align-items: flex-end; flex-wrap: wrap; }
+    #login-panel { max-width: 360px; margin: 4rem auto; }
+    #login-panel h2 { margin-bottom: 1rem; }
+    #login-panel .form-row { flex-direction: column; }
+  </style>
+</head>
 <body>
-  <h1>FinTrack</h1>
-  <div id="health-status">Loading...</div>
-  <div id="analytics-summary"></div>
-  <script type="module" src="/src/app.ts"></script>
+  <!-- ✅ SMELL-21 FIXED: No onclick="..." inline handlers — all via addEventListener in app.ts -->
+
+  <!-- Login Panel (shown when not authenticated) -->
+  <div id="login-panel" class="card" style="display:none;">
+    <h2>FinTrack Login</h2>
+    <div class="form-row">
+      <label for="login-username">Username</label>
+      <input id="login-username" type="text" autocomplete="username" placeholder="username" />
+      <label for="login-password">Password</label>
+      <input id="login-password" type="password" autocomplete="current-password" placeholder="password" />
+      <button id="login-btn" class="btn btn-primary">Sign In</button>
+    </div>
+    <p id="login-error" style="color:#c00;margin-top:0.5rem;display:none;"></p>
+  </div>
+
+  <!-- Main App (shown after login) -->
+  <div id="app" style="display:none;">
+    <header>
+      <h1>🏦 FinTrack</h1>
+      <span id="user-info" style="margin-left:auto;font-size:0.85rem;opacity:0.8;"></span>
+      <button id="logout-btn" class="btn" style="background:#fff3;color:#fff;margin-left:1rem;">Logout</button>
+    </header>
+
+    <div id="error-banner" role="alert" aria-live="polite"></div>
+
+    <nav class="nav-tabs" role="tablist" aria-label="Application tabs">
+      <button data-tab="dashboard" class="active" role="tab" aria-selected="true"  aria-controls="tab-dashboard">Dashboard</button>
+      <button data-tab="transactions"               role="tab" aria-selected="false" aria-controls="tab-transactions">Transactions</button>
+      <button data-tab="accounts"                   role="tab" aria-selected="false" aria-controls="tab-accounts">Accounts</button>
+      <button data-tab="reports"                    role="tab" aria-selected="false" aria-controls="tab-reports">Reports</button>
+      <button data-tab="users"                      role="tab" aria-selected="false" aria-controls="tab-users">Users</button>
+    </nav>
+
+    <main>
+      <!-- Dashboard Tab -->
+      <section id="tab-dashboard" class="tab-content active" role="tabpanel">
+        <div id="dashboard-content"></div>
+      </section>
+
+      <!-- Transactions Tab -->
+      <section id="tab-transactions" class="tab-content" role="tabpanel">
+        <div class="card">
+          <h3 style="margin-bottom:1rem;">Add Transaction</h3>
+          <div class="form-row">
+            <div>
+              <label for="tx-amount">Amount</label><br/>
+              <input id="tx-amount" type="number" step="0.01" min="0.01" placeholder="0.00" style="width:130px;" />
+            </div>
+            <div>
+              <label for="tx-type">Type</label><br/>
+              <select id="tx-type">
+                <option value="Income">Income</option>
+                <option value="Expense">Expense</option>
+                <option value="Transfer">Transfer</option>
+              </select>
+            </div>
+            <div>
+              <label for="tx-category">Category</label><br/>
+              <select id="tx-category">
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="LargePurchase">Large Purchase</option>
+                <option value="MediumPurchase">Medium Purchase</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="tx-description">Description</label><br/>
+              <input id="tx-description" type="text" placeholder="Description" style="width:200px;" />
+            </div>
+            <button id="add-transaction-btn" class="btn btn-primary" style="align-self:flex-end;">Add</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:1rem;">Search Transactions</h3>
+          <div class="form-row">
+            <div>
+              <label for="search-category">Category</label><br/>
+              <select id="search-category">
+                <option value="">All Categories</option>
+                <option value="Food">Food</option>
+                <option value="Transport">Transport</option>
+                <option value="Entertainment">Entertainment</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Healthcare">Healthcare</option>
+                <option value="LargePurchase">Large Purchase</option>
+                <option value="MediumPurchase">Medium Purchase</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="search-date">From Date</label><br/>
+              <input id="search-date" type="date" />
+            </div>
+            <button id="search-tx-btn" class="btn btn-primary" style="align-self:flex-end;">Search</button>
+          </div>
+        </div>
+        <div id="transactions-content"></div>
+      </section>
+
+      <!-- Accounts Tab -->
+      <section id="tab-accounts" class="tab-content" role="tabpanel">
+        <div class="card">
+          <h3 style="margin-bottom:1rem;">Transfer Funds</h3>
+          <div class="form-row">
+            <div>
+              <label for="transfer-from">From Account ID</label><br/>
+              <input id="transfer-from" type="number" min="1" placeholder="From ID" style="width:120px;" />
+            </div>
+            <div>
+              <label for="transfer-to">To Account ID</label><br/>
+              <input id="transfer-to" type="number" min="1" placeholder="To ID" style="width:120px;" />
+            </div>
+            <div>
+              <label for="transfer-amount">Amount</label><br/>
+              <input id="transfer-amount" type="number" step="0.01" min="0.01" placeholder="0.00" style="width:130px;" />
+            </div>
+            <button id="transfer-btn" class="btn btn-primary" style="align-self:flex-end;">Transfer</button>
+          </div>
+        </div>
+        <div id="accounts-content"></div>
+      </section>
+
+      <!-- Reports Tab -->
+      <section id="tab-reports" class="tab-content" role="tabpanel">
+        <div class="card">
+          <h3 style="margin-bottom:1rem;">Generate Report</h3>
+          <div class="form-row">
+            <div>
+              <label for="report-type">Report Type</label><br/>
+              <select id="report-type">
+                <option value="Monthly">Monthly</option>
+                <option value="Annual">Annual</option>
+                <option value="Tax">Tax</option>
+                <option value="Custom">Custom</option>
+              </select>
+            </div>
+            <button id="generate-report-btn" class="btn btn-primary" style="align-self:flex-end;">Generate</button>
+          </div>
+        </div>
+        <div id="reports-content"></div>
+      </section>
+
+      <!-- Users Tab (admin only) -->
+      <section id="tab-users" class="tab-content" role="tabpanel">
+        <div id="users-content"></div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
