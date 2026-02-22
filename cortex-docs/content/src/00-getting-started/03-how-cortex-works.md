@@ -135,7 +135,7 @@ The intelligence system (`cortex/intelligence/`) processes LENS data through thr
 
 ### Stage 4 · Governance Gate (<150ms)
 
-**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates **7 enforcement agents** plus the **ExtendedGovernanceAgent** (CORE-058 through CORE-063):
+**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates **10 enforcement agents**:
 
 - TDD Agent — enforces CORE-008 (test before code)
 - Security Agent — checks for vulnerabilities

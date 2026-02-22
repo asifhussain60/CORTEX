@@ -238,7 +238,7 @@ See `04-mcp/03-tools-catalog.md` for the complete catalog.**Architecture Princip
 
 | Category | Count | Purpose | Examples | Resource Profile |
 |----------|-------|---------|----------|------------------|
-| **Core** | 8 | Central coordination | MasterOrchestrator (pre-flight), IntentRouter (LENS classification), TDDOrchestrator (RED-GREEN-REFACTOR), EnforcementOrchestrator (7 agents) | CPU-intensive (validation cycles) |
+| **Core** | 6 | Central coordination | MasterOrchestrator (pre-flight), IntentRouter (LENS classification), TDDOrchestrator (RED-GREEN-REFACTOR), EnforcementOrchestrator (10 agents) | CPU-intensive (validation cycles) |
 | **Domain** | 6 | Domain-specific logic | RefactoringOrchestrator (code improvement), PlanningOrchestrator (feature lifecycle), ConversationOrchestrator (multi-turn) | Memory-intensive (context storage) |
 | **Support** | 6+ | Support functions | OnboardingOrchestrator (repo scanning), ToolDiscoveryOrchestrator (capability mapping), RecommendationGate (REJ-* validation) | I/O-intensive (git operations) |
 

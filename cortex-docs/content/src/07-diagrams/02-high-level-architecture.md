@@ -100,10 +100,10 @@ order: 2
 | MCP Gateway | 25 tools | `cortex/mcp/tools/` |
 | Orchestration | 22 wired orchestrators, 3 tiers | `cortex/orchestrators/` |
 | Intelligence | 8 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
-| Governance | 22 rules, 8 agents | `cortex/governance/` + `cortex-registry/core/` |
+| Governance | 35 rules (22 enforced), 10 agents | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |
 | Registry | Rules, patterns, workflows | `cortex-registry/` |
-| Tests | 15,328 collected | `tests/` |
+| Tests | 15,663 collected | `tests/` |
 
 ---
 

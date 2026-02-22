@@ -4,13 +4,13 @@
 title: CORTEX Architecture Overview
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-21
+last_verified: 2026-02-22
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 format: diátaxis-explanation
 voice: third-person-blended
 ---
 
-> **Notice:** This documentation represents CORTEX as verified against live code on 21 February 2026. All metrics, module paths, and counts are validated against the running codebase. Every `cortex_intelligence/`, `cortex_lens/`, and `cortex.brain` reference has been eliminated — those packages were dissolved during the Cohesive Brain Refactor.
+> **Notice:** This documentation represents CORTEX as verified against live code on 22 February 2026. All metrics, module paths, and counts are validated against the running codebase. Every `cortex_intelligence/`, `cortex_lens/`, and `cortex.brain` reference has been eliminated — those packages were dissolved during the Cohesive Brain Refactor.
 
 ---
 
@@ -29,7 +29,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-## System Metrics (21 Feb 2026 — Live)
+## System Metrics (22 Feb 2026 — Live)
 
 | Metric | Value | Status |
 |--------|-------|--------|
@@ -38,8 +38,8 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | **MCP Tools** | 25 canonical | ✅ Pylance-style stdio server |
 | **Top-level Dirs** | 16 canonical under `cortex/` | ✅ 59→16 cleanup complete |
 | **Governance Rules** | 22 active (35 defined, 33 CORE-*) | ✅ Enforced at pre-commit + CI + runtime |
-| **Test Suite** | 15,328 tests collected | ✅ 601 golden, 177 phase tests |
-| **Golden Tests** | 601 collected (CORE-055 contract) | ✅ Zero regression |
+| **Test Suite** | 15,663 tests collected | ✅ 696 golden, 177 phase tests |
+| **Golden Tests** | 696 collected (CORE-055 contract) | ✅ Zero regression |
 | **Parallel Testing** | pytest-xdist (`-n auto --dist loadscope`) | ✅ CortexXdistPlugin batch runner |
 | **Enterprise Patterns** | 9 patterns in registry | ✅ mediator, strategy, observer, factory, etc. |
 | **Sweep Completeness** | CORE-064 enforced via SweepCatalogueOrchestrator | ✅ No partial sweeps across sessions |
@@ -63,8 +63,8 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
   │         ▼                   │                     │           │
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │
   │  │ Governance  │   │  Testing         │   │ Registry      │  │
-  │  │ 22 rules    │   │  15,328 tests    │   │ Git-backed    │  │
-  │  │ CORE-064    │   │  601 golden      │   │ YAML SSOT     │  │
+  │  │ 22 rules    │   │  15,663 tests    │   │ Git-backed    │  │
+  │  │ CORE-064    │   │  696 golden      │   │ YAML SSOT     │  │
   │  └─────────────┘   └──────────────────┘   └───────────────┘  │
   └───────────────────────────────────────────────────────────────┘
 ```
@@ -89,7 +89,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | **WorkflowEngine.load() + execute_step()** | SDO-compatible API in `cortex/core/workflow_engine.py` — all 8 BadMonolith steps execute end-to-end |
 | **Roslyn by-name rename** | `RoslynAdapter` + `RefactoringService.cs` accept `symbol_name` key (no byte offset required) — Gap G3 |
 | **CORE-064** | Sweep Completeness Contract — `SweepCatalogueOrchestrator` prevents partial sweeps across session boundaries |
-| **CORE-055** | Golden Test Tier Contract — 601 golden tests always pass; zero regression allowed |
+| **CORE-055** | Golden Test Tier Contract — 696 golden tests always pass; zero regression allowed |
 | **cortex_sweep_status** | MCP tool for CORE-064 sweep catalogue query/management |
 | **cortex_fetch_work_items** | Phase 15 — provider-agnostic ADO/Jira/custom work item access via MCP |
 | **SQLite Activity Log** | `OrchestratorBase.execute()/run()` auto-logs to `.cortex-runtime/audit.db` (never blocks execution) |
@@ -118,5 +118,5 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-*CORTEX v1.0.0 · 21 February 2026 · 22 wired orchestrators · 25 MCP tools · 22 CORE rules · 15,328 tests · 601 golden · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
+*CORTEX v1.0.0 · 22 February 2026 · 22 wired orchestrators · 25 MCP tools · 22 CORE rules · 15,663 tests · 696 golden · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
 

@@ -43,7 +43,7 @@ order: 99
 
 **ConsolidatedTool** — Base class for all MCP tools. Provides consistent naming, parameter validation, execution, and audit trail. Module: `cortex/mcp/mcp_tool_base.py`.
 
-**CORE-055** — Golden Test Tier Contract. 601 golden tests in `tests/golden/` must always pass. Zero regression allowed. Added 21 February 2026.
+**CORE-055** — Golden Test Tier Contract. 696 golden tests in `tests/golden/` must always pass. Zero regression allowed. Added 21 February 2026.
 
 **CORE-064** — Sweep Completeness Contract. Every FIX/REFACTOR/AUDIT sweep must exhaust its full issue catalogue before closing. Enforced by `SweepCatalogueOrchestrator`. Added 21 February 2026.
 
@@ -61,7 +61,7 @@ order: 99
 
 ## E
 
-**EnforcementOrchestrator** — Orchestrator that validates code against CORE governance rules. Coordinates 8 enforcement agents. Location: `cortex/orchestrators/core/`.
+**EnforcementOrchestrator** — Orchestrator that validates code against CORE governance rules. Coordinates 10 enforcement agents. Location: `cortex/orchestrators/core/`.
 
 **Evidence Bundle** — Collection of audit records, test results, and governance checks packaged as compliance proof. Module: `cortex/infrastructure/evidence_bundle.py`.
 
@@ -69,7 +69,7 @@ order: 99
 
 ## G
 
-**Golden Tests** — 601 tests that must ALWAYS pass (CORE-055 Golden Test Tier Contract). Run with `pytest-xdist` parallel execution. Location: `tests/golden/`.
+**Golden Tests** — 696 tests that must ALWAYS pass (CORE-055 Golden Test Tier Contract). Run with `pytest-xdist` parallel execution. Location: `tests/golden/`.
 
 **Governance Agents** — 8 specialized agents that enforce specific CORE rule categories: TestNaming, FileNaming, ImportValidation, TypeHint, Docstring, DuplicateDetection, SecurityScan, ExtendedGovernance.
 

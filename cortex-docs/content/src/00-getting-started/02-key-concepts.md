@@ -104,9 +104,9 @@ A numbered governance standard enforced automatically. There are **22 actively e
 | CORE-049 | Silent Execution | Progress bars only, no verbose chatter |
 
 ### Enforcement Agents
-Seven specialized agents within EnforcementOrchestrator that check different categories of CORE rules before any code-mutating operation. A gate result is PASS, WARNING, or BLOCKED.
+Ten specialized agents within EnforcementOrchestrator that check different categories of CORE rules before any code-mutating operation. A gate result is PASS, WARNING, or BLOCKED.
 
-**Daily example:** You ask CORTEX to implement a feature. Before any code is written, 7 agents check TDD enforcement, type hints, file naming, architecture integrity, and more. If any check fails as BLOCKED, the operation stops immediately — no files changed.
+**Daily example:** You ask CORTEX to implement a feature. Before any code is written, 10 agents check TDD enforcement, type hints, file naming, architecture integrity, and more. If any check fails as BLOCKED, the operation stops immediately — no files changed.
 
 ### TestQualityGate
 A scoring system that rates every test 0–9 based on Impact, Likelihood, Detection, Efficiency, and Maintenance cost. Tests scoring ≥7 are KEEP, 4–6 are REVIEW, <4 are DELETE.

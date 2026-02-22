@@ -22,7 +22,7 @@ LENS analyzer output directly informs governance enforcement:
 | Metrics | CORE-001 (Incremental) | Excessive complexity flagged |
 | Comment | CORE-012 (Docstrings) | Documentation coverage below threshold |
 
-The EnforcementOrchestrator's 7 agents consume LENS data to make enforcement decisions. Without LENS, governance would be static rule-checking. With LENS, it's **intelligence-driven**.
+The EnforcementOrchestrator's 10 agents consume LENS data to make enforcement decisions. Without LENS, governance would be static rule-checking. With LENS, it's **intelligence-driven**.
 
 **Brain analogy:** LENS is the perception feeding the immune system. Your immune system needs to "see" the threat (via antibodies binding to antigens) before it can mount a response. LENS provides the "sight" for governance enforcement.
 

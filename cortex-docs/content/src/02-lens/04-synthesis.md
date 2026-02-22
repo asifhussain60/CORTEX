@@ -42,7 +42,7 @@ Sources loaded per tier:
 
 | Source | Quick | Targeted | Full |
 |--------|-------|----------|------|
-| CORE rules (22) | ✅ | ✅ | ✅ |
+| CORE rules (22 active, 35 defined) | ✅ | ✅ | ✅ |
 | company/domains/*.yaml | ✅ | ✅ | ✅ |
 | knowledge-base/profiles/{domain}.yaml | — | ✅ | ✅ |
 | patterns/*.yaml (9 canonical patterns) | — | ✅ | ✅ |

@@ -19,7 +19,7 @@ CORTEX enforces governance at **three levels**:
 
 | Level | When | How |
 |-------|------|-----|
-| **Pre-Commit** | Before code enters Git | EnforcementOrchestrator + 7 agents |
+| **Pre-Commit** | Before code enters Git | EnforcementOrchestrator + 10 agents |
 | **CI Pipeline** | During continuous integration | Automated validation in CI |
 | **Runtime** | During orchestrator execution | Governance gate in OrchestratorBase lifecycle |
 
@@ -60,20 +60,22 @@ Added during Phase 02 (Governance Alignment) through Phase 16 (Sweep Completenes
 
 ---
 
-## 7 Enforcement Agents + 1 Extended
+## 10 Enforcement Agents
 
-**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates 8 agents:
+**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates 10 agents:
 
 | Agent | Focus | Key Rules |
 |-------|-------|-----------|
-| **TDD Agent** | Test-first enforcement | CORE-008, CORE-019 |
-| **Security Agent** | Vulnerability detection | CORE-013, credential scan |
-| **Compliance Agent** | General CORE rule adherence | CORE-002, CORE-028 |
-| **Naming Agent** | File and variable naming | CORE-028 (snake_case) |
-| **Incremental Agent** | Bounded execution | CORE-001 |
-| **Architecture Agent** | Structural integrity | CORE-035 (single canonical) |
-| **Markdown Agent** | Report file prevention | CORE-002 |
-| **ExtendedGovernanceAgent** | New rules (Phase 11) | CORE-058 through CORE-063 |
+| **GovernanceEnforcementAgent** | CORE rule adherence | CORE-002, CORE-028 |
+| **SecurityCheckpointAgent** | Vulnerability detection | CORE-013, credential scan |
+| **ComplianceValidationAgent** | Compliance checks | CORE compliance |
+| **FileNamingEnforcementAgent** | File naming | CORE-028 (snake_case) |
+| **IncrementalExecutionAgent** | Bounded execution | CORE-001, CORE-004 |
+| **MarkdownSuppressionAgent** | Report file prevention | CORE-002 |
+| **ArchitectureIntegrityAgent** | Structural integrity | CORE-017 through CORE-020, CORE-032, CORE-034 |
+| **DiscoveryEnforcementAgent** | Discovery compliance | CORE-030, CORE-035 |
+| **ResponseContentValidationAgent** | Response-level gate | CORE-002 response variant |
+| **ExtendedGovernanceAgent** | New rules | CORE-058 through CORE-063 |
 
 **Gate results:**
 - **PASS** — operation proceeds
@@ -100,9 +102,9 @@ Score = Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2) − Mai
 
 **MCP Tool:** `cortex_score_tests` — callable from production repos.
 
-**Business Leader:** "Test quality is quantified, not subjective. Every test has a score. We maintain 15,328 signal-dense tests, not 18,000 mixed-quality ones."
+**Business Leader:** "Test quality is quantified, not subjective. Every test has a score. We maintain 15,663 signal-dense tests, not 18,000 mixed-quality ones."
 
-**Product Owner:** "During the refactor, TestQualityGate identified 3,360 low-value tests (scoring <4). We archived them and kept the signal. 601 golden tests all score ≥7."
+**Product Owner:** "During the refactor, TestQualityGate identified 3,360 low-value tests (scoring <4). We archived them and kept the signal. 696 golden tests all score ≥7."
 
 **Developer:** "I run `cortex_score_tests` on my new test. If it scores below 7, TDDOrchestrator blocks the commit and tells me why — usually low detection coverage or high maintenance cost."
 
@@ -124,7 +126,7 @@ The trail is immutable and Git-versioned where applicable.
 
 ## Practical Examples
 
-**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to 22 CORE rules enforced automatically on every commit, 8 enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
+**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to 22 CORE rules enforced automatically on every commit, 10 enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
 
 **Product Owner:** "Last week a developer tried to commit a utility function without tests. CORE-008 blocked the commit automatically. The developer wrote the test, it passed, and the commit went through — all in 10 minutes."
 

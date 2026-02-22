@@ -49,7 +49,7 @@ order: 8
                     │
                     ▼
 ┌─── Stage 4: Governance Gate (<150ms) ────────────────────────────┐
-│  7 agents check:                                                  │
+│  10 agents check:                                                  │
 │  ✅ TDD Agent: test-first required (CORE-008)                    │
 │  ✅ Security Agent: hardcoded secret flagged (CORE-013)          │
 │  ✅ Naming Agent: snake_case verified (CORE-028)                 │

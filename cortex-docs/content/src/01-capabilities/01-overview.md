@@ -24,7 +24,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | 8 parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
 | 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 22 wired orchestrators, 3 tiers |
-| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 22 CORE rules, CORE-064, CORE-055 |
+| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 35 CORE rules (22 enforced), CORE-064, CORE-055 |
 | 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
 
 ---
@@ -50,7 +50,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | IntentRouter (12 intents) | Decisioning | `cortex/orchestrators/core/intent_router.py` | ✅ |
 | TDDOrchestrator (RED→GREEN→REFACTOR) | Decisioning | `cortex/orchestrators/core/tdd_orchestrator.py` | ✅ |
 | RefactoringOrchestrator (by-name Roslyn) | Decisioning | `cortex/orchestrators/domain/refactoring_orchestrator.py` | ✅ |
-| EnforcementOrchestrator (7+1 agents) | Governance | `cortex/orchestrators/core/enforcement_orchestrator.py` | ✅ |
+| EnforcementOrchestrator (10 agents) | Governance | `cortex/orchestrators/core/enforcement_orchestrator.py` | ✅ |
 | SweepCatalogueOrchestrator (CORE-064) | Governance | `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` | ✅ |
 | TestQualityGate (0–9 scoring) | Governance | `cortex/testing/quality_gate.py` | ✅ |
 | PreCommitEnforcement | Governance | `cortex/orchestrators/core/pre_commit_enforcement_orchestrator.py` | ✅ |
@@ -152,9 +152,9 @@ This is not optional. CORE-008 is enforced at the architecture level.
 
 | Tier | Count | Key Orchestrators |
 |------|-------|-----------------|
-| **Core** | 7 | MasterOrchestrator, IntentRouter, TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator, ConversationOrchestrator, InteractionOrchestrator |
-| **Domain** | 3 | RefactoringOrchestrator (Roslyn by-name), PlanningOrchestrator, DomainOrchestrator |
-| **Support** | 7 | OnboardingOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator (CORE-064), VacuumOrchestrator |
+| **Core** | 6 | MasterOrchestrator, IntentRouter, TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator, ConversationOrchestrator |
+| **Domain** | 6 | RefactoringOrchestrator (Roslyn by-name), PlanningOrchestrator, DomainOrchestrator, DashboardOrchestrator, RefactoringOrchestrator, CortexDocsOrchestrator |
+| **Support** | 10 | OnboardingOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator (CORE-064), VacuumOrchestrator, BulkDigestOrchestrator, DigestSessionOrchestrator, UnifiedDiscoveryOrchestrator |
 
 > Wiring specs: `cortex-registry/core/specifications/`. Additional specialized sub-components exist in `cortex/orchestrators/` but are not IOrchestrator-wired entry points.
 
@@ -170,20 +170,22 @@ Enforced at pre-commit, CI, and runtime. Full list in `cortex-registry/core/tier
 
 Key rules added today:
 - **CORE-064** — Sweep Completeness Contract: every FIX/REFACTOR/AUDIT sweep exhausts its catalogue before closing
-- **CORE-055** — Golden Test Tier Contract: 601 golden tests always pass
+- **CORE-055** — Golden Test Tier Contract: 696 golden tests always pass
 
-### 7 Enforcement Agents + ExtendedGovernanceAgent
+### 10 Enforcement Agents
 
 | Agent | Focus |
 |-------|-------|
-| TDD | CORE-008 enforcement |
-| Security | Vulnerability detection |
-| Compliance | CORE rule adherence |
-| Naming | CORE-028 snake_case |
-| Incremental | CORE-001 bounded execution |
-| Architecture | Structural integrity |
-| Markdown | CORE-002 no report files |
-| Extended | CORE-058 through CORE-063 (SQLite WAL, MCP footprint, plan-first, challenge-first) |
+| GovernanceEnforcement | CORE rule adherence |
+| SecurityCheckpoint | Vulnerability detection |
+| ComplianceValidation | Compliance checks |
+| FileNamingEnforcement | CORE-028 snake_case |
+| IncrementalExecution | CORE-001 bounded execution |
+| MarkdownSuppression | CORE-002 no report files |
+| ArchitectureIntegrity | Structural integrity |
+| DiscoveryEnforcement | CORE-030, CORE-035 |
+| ResponseContentValidation | CORE-002 response-level gate |
+| ExtendedGovernance | CORE-058 through CORE-063 |
 
 ### TestQualityGate
 
@@ -207,4 +209,4 @@ All extensibility is hot-reload — no core changes required.
 
 ---
 
-*All paths and counts verified against live codebase · 20 February 2026*
+*All paths and counts verified against live codebase · 22 February 2026*

@@ -34,12 +34,17 @@ Every CORTEX response follows this structure:
 
 ---
 
-### 📋 Intent Classification
-| Field     | Value                    |
-|-----------|--------------------------|
-| Intent    | {IMPLEMENT/FIX/ANALYZE}  |
-| Handler   | {OrchestratorClass}      |
-| Confidence| {score}                  |
+**Here's what CORTEX heard:**
+
+You've asked CORTEX to {one-line summary}:
+
+1. **{Action}** — {plain-language description of what will happen}
+2. **{Action}** — {plain-language description}
+3. **{Action}** — {plain-language description, including any assumptions}
+
+**CORTEX's confidence in this understanding:** 🟢 High
+
+> ✅ This looks right? Type `proceed`. Need to correct something? Do it now before CORTEX acts.
 
 ---
 
@@ -52,6 +57,8 @@ Every CORTEX response follows this structure:
 - Governance: {PASS/WARNING}
 - Duration: {time}
 ```
+
+**Why plain language instead of a table?** The intent reflection block is written for you — not for the system. You should be able to read it in 10 seconds and immediately know whether CORTEX understood your request correctly. If anything is wrong, correct it before typing `proceed`.
 
 ---
 
@@ -70,10 +77,8 @@ Templates are read by the WorkflowEngine (`cortex/core/workflow_engine.py`) and 
 
 ## Practical Examples
 
-**Product Owner:** "Every response I see follows the same format — intent classification, content, summary. I always know what orchestrator handled it, what tests passed, and what governance checks ran."
+**Product Owner:** "Every response starts by telling me in plain language what CORTEX is about to do. I can read it in ten seconds, confirm it's right, and type `proceed` — or correct it before anything runs. Then the actual content follows in the same session."
 
-**Developer:** "Responses are inline (CORE-002). I never need to hunt for a generated report file. Everything appears directly in my IDE."
+**Developer:** "Responses are inline (CORE-002). There's no generated report file to hunt for. CORTEX mirrors my intent back in plain English, I confirm, and execution begins — all right here in VS Code."
 
----
-
-*Verified against response template standards · 20 February 2026*
+*Verified against response template standards · 22 February 2026*

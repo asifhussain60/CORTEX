@@ -116,7 +116,7 @@ cortex-registry/          ← YAML governance rules, patterns, plans
   workflows/              ← Workflow templates
 
 tests/                    ← All tests (mirrors cortex/ structure)
-  golden/                 ← 601 golden tests (must always pass)
+  golden/                 ← 696 golden tests (must always pass)
   unit/                   ← Unit tests (parallel)
   integration/            ← Integration tests
 

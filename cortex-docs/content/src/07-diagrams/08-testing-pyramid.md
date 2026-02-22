@@ -36,7 +36,7 @@ order: 8
    ╱          Smoke Tests (subset)             ╲
   ╱─────────────────────────────────────────────╲
 
-  Total: 15,328 tests collected
+  Total: 15,663 tests collected
 ```
 
 ## Execution Strategy
@@ -107,7 +107,7 @@ tests/
 ├── cli/                  ← CLI interface tests
 ├── core/                 ← Core module tests
 ├── domain_orchestrators/ ← Domain orchestrator tests
-├── golden/               ← 601 golden tests (regression-proof)
+├── golden/               ← 696 golden tests (regression-proof)
 ├── governance/           ← Governance rule tests
 ├── infrastructure/       ← Infrastructure layer tests
 ├── integration/          ← Cross-component integration tests
