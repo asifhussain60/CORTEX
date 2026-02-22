@@ -1,11 +1,12 @@
 // FIX SMELL-3 (analytics extracted from god class), SMELL-4, SMELL-6, SMELL-15
+using CortexLabs.FinTrack.Application.Interfaces;
 using CortexLabs.FinTrack.Domain.Entities;
 using CortexLabs.FinTrack.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace CortexLabs.FinTrack.Application.Services;
 
-public class AnalyticsService
+public class AnalyticsService : IAnalyticsService
 {
     private readonly ITransactionRepository _txRepo;
     private readonly ILogger<AnalyticsService> _logger;

@@ -1,11 +1,12 @@
 // FIX SMELL-3,4,5,6,8,11,15,17
 using Microsoft.Extensions.Logging;
+using CortexLabs.FinTrack.Application.Interfaces;
 using CortexLabs.FinTrack.Domain.Entities;
 using CortexLabs.FinTrack.Domain.Interfaces;
 
 namespace CortexLabs.FinTrack.Application.Services;
 
-public class TransactionService
+public class TransactionService : ITransactionService
 {
     private readonly ITransactionRepository _repo;
     private readonly ILogger<TransactionService> _logger;

@@ -815,6 +815,167 @@ class RefactoringOrchestrator:
             return Err(str(exc))
 
     # ------------------------------------------------------------------
+    # ENH-STS-08 — Dual-Structure Duplicate Detection Gate (CORE-035)
+    # ------------------------------------------------------------------
+    #
+    # Root cause: PB-STS-001 Run 1 produced TWO parallel backend implementations
+    # inside Refactored/backend/ — a flat single-project layout (backend/*.cs)
+    # AND a multi-project src/ layout (backend/src/**/*.cs) — both committed.
+    # The .sln referenced only src/; the flat files were orphan code never compiled.
+    # CORE-035 (single canonical implementation) was violated. This gate detects
+    # and blocks commit of dual-structure output before it reaches the repo.
+
+    _SOLUTION_FILE_EXTENSIONS = frozenset({".sln"})
+    _PROJECT_FILE_EXTENSIONS = frozenset({".csproj", ".fsproj", ".vbproj"})
+    _PACKAGE_FILE_NAMES = frozenset({"package.json", "pyproject.toml", "Cargo.toml", "go.mod"})
+
+    def check_dual_structure(
+        self,
+        target_root: Path,
+    ) -> Union[Ok[Dict[str, Any]], Err]:
+        """Detect parallel duplicate directory structures in a refactored target.
+
+        Implements ENH-STS-08 / CORE-035: prevents the pattern where two
+        incompatible implementations of the same codebase coexist in the same
+        output folder — a common failure mode when orchestration scaffolds a
+        first-pass flat layout then a second-pass multi-project layout without
+        cleaning up the first.
+
+        A dual-structure violation is flagged when ALL of the following hold:
+        1. A ``.sln`` (or multi-project manifest) is found in ``target_root``.
+        2. The .sln references a ``src/`` (or similar) sub-directory.
+        3. Sibling source files (``.cs``, ``.ts``, ``.py``) exist at the SAME
+           directory level as the ``.sln`` file, outside any ``src/`` sub-tree
+           (i.e., the flat layout was not cleaned up).
+
+        Args:
+            target_root: Path to the refactored output directory to inspect.
+
+        Returns:
+            Ok with report: {clean, violations, violation_count, sln_path,
+                             orphan_files, recommendation}
+            Err if target_root does not exist or is not a directory.
+        """
+        if not target_root.exists():
+            return Err(f"target_root does not exist: {target_root}")
+        if not target_root.is_dir():
+            return Err(f"target_root is not a directory: {target_root}")
+
+        violations: List[Dict[str, Any]] = []
+
+        # Find all solution files one level deep (avoid deep recursion across src/)
+        sln_files = list(target_root.rglob("*.sln"))
+
+        for sln_path in sln_files:
+            sln_dir = sln_path.parent
+
+            # Read the .sln to discover which sub-directories it references
+            try:
+                sln_text = sln_path.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                continue
+
+            import re as _re
+
+            # Extract project paths from .sln (e.g., src\API\Foo.csproj)
+            referenced_roots: set = set()
+            for m in _re.finditer(r'"([^"]+\.csproj)"', sln_text):
+                first_segment = Path(m.group(1).replace("\\", "/")).parts[0]
+                referenced_roots.add(first_segment)
+
+            if not referenced_roots:
+                # No project references found — cannot determine structure
+                continue
+
+            # Collect source files at the SLN directory level (flat layout)
+            flat_source_extensions = {".cs", ".ts", ".py", ".fs", ".vb"}
+            flat_files = [
+                f for f in sln_dir.iterdir()
+                if f.is_file() and f.suffix in flat_source_extensions
+            ]
+
+            # Detect flat-layout project files (e.g. a root-level .csproj)
+            flat_proj_files = [
+                f for f in sln_dir.iterdir()
+                if f.is_file() and f.suffix in self._PROJECT_FILE_EXTENSIONS
+            ]
+
+            # Determine if there are sub-directories NOT referenced by the .sln
+            all_subdirs = {d.name for d in sln_dir.iterdir() if d.is_dir()}
+            unreferenced_source_dirs = all_subdirs - referenced_roots - {"tests", "test", ".git"}
+
+            # A dual structure exists if:
+            # - flat source files sit alongside the .sln AND
+            # - at least one .sln-referenced sub-directory exists (src/ layout)
+            has_flat_sources = bool(flat_files or flat_proj_files)
+            has_structured_sources = any(
+                (sln_dir / ref).is_dir() for ref in referenced_roots
+            )
+
+            # Check for directories with the same logical purpose (e.g. Api/ and src/API/)
+            known_domain_dirs = {"Api", "Application", "Domain", "Infrastructure"}
+            flat_domain_dirs = known_domain_dirs & {d.name for d in sln_dir.iterdir() if d.is_dir()}
+            structured_domain_dirs = set()
+            for ref in referenced_roots:
+                ref_path = sln_dir / ref
+                if ref_path.is_dir():
+                    for child in ref_path.iterdir():
+                        if child.is_dir() and child.name in known_domain_dirs:
+                            structured_domain_dirs.add(child.name)
+
+            duplicate_domains = flat_domain_dirs & structured_domain_dirs
+
+            if (has_flat_sources or duplicate_domains) and has_structured_sources:
+                orphans = [str(f.relative_to(target_root)) for f in flat_files + flat_proj_files]
+                orphans += [
+                    str((sln_dir / d).relative_to(target_root))
+                    for d in duplicate_domains
+                ]
+
+                violations.append(
+                    {
+                        "rule": "dual_structure",
+                        "severity": "P0",
+                        "sln_path": str(sln_path.relative_to(target_root)),
+                        "sln_references": sorted(referenced_roots),
+                        "orphan_files_or_dirs": orphans,
+                        "duplicate_domain_dirs": sorted(duplicate_domains),
+                        "description": (
+                            "CORE-035 violation: two parallel implementations detected. "
+                            f"The .sln references {sorted(referenced_roots)} but flat-layout "
+                            f"source files/dirs also exist at the same level. "
+                            "Delete the orphan flat layout — only the .sln-referenced "
+                            "structure is canonical."
+                        ),
+                        "recommendation": (
+                            f"Delete all files/dirs at {sln_dir}/ that are NOT in "
+                            f"{sorted(referenced_roots | {'tests', 'test', sln_path.name})}."
+                        ),
+                    }
+                )
+
+        clean = len(violations) == 0
+        if violations:
+            logger.error(
+                "Dual-structure gate (CORE-035): %d violation(s) detected in %s. "
+                "Delete orphan flat layout before committing.",
+                len(violations), target_root,
+            )
+        else:
+            logger.info(
+                "Dual-structure gate passed: single canonical structure in %s", target_root
+            )
+
+        return Ok(
+            {
+                "clean": clean,
+                "violations": violations,
+                "violation_count": len(violations),
+                "target_root": str(target_root),
+            }
+        )
+
+    # ------------------------------------------------------------------
     # Health Check (IOrchestrator protocol)
     # ------------------------------------------------------------------
 

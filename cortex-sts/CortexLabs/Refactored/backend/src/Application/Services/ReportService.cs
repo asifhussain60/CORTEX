@@ -1,11 +1,12 @@
 // FIX SMELL-3 (report logic extracted), SMELL-15 (enum replaces magic strings)
+using CortexLabs.FinTrack.Application.Interfaces;
 using CortexLabs.FinTrack.Domain.Entities;
 using CortexLabs.FinTrack.Domain.Interfaces;
 using Microsoft.Extensions.Logging;
 
 namespace CortexLabs.FinTrack.Application.Services;
 
-public class ReportService
+public class ReportService : IReportService
 {
     private readonly IUserRepository _userRepo;
     private readonly ILogger<ReportService> _logger;

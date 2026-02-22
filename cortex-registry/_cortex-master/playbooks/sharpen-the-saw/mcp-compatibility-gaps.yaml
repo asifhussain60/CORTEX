@@ -144,6 +144,20 @@ document:
         stage_3: "execute_workflow(template_name='refactor-holistic', variables={operation: 'security'})"
         stage_4: "execute_workflow(template_name='refactor-holistic', variables={operation: 'decompose'})"
         stage_5: "execute_workflow(template_name='tdd-cycle', variables={module_name: ..., test_file: ..., impl_file: ...})"
+      fix_applied:
+        date: "2026-02-23"
+        file: "cortex/orchestrators/workflow/workflow_templates.py"
+        method: "_load_registry_templates"
+        description: >
+          WorkflowTemplateManager.__init__ now accepts optional registry_root (Path).
+          New _load_registry_templates(root) method scans cortex-registry/workflows/templates/**/*.yaml
+          via rglob, parses each YAML, and registers discovered templates. Built-in templates
+          (phase-execution, tdd-cycle, refactor-holistic) take precedence on name collision.
+          Invalid YAML files are silently skipped. _REGISTRY_TEMPLATES_ROOT constant points to
+          cortex-registry/workflows/templates/ relative to the package root.
+        tests: "tests/orchestrators/workflow/test_workflow_template_discovery.py (22 tests, TDD-first GREEN)"
+        backlog_ref: "ENH-MCP-WORKFLOW-001"
+        status: "FIXED ✅"
       enhancement_required:
         title: "Extend workflow_runtime_tool to load templates from cortex-registry/workflows/templates/"
         effort: "S"
@@ -230,49 +244,61 @@ document:
       title: "C# and TypeScript adapters for sts_analyzer PatternDetector"
       priority: P1
       effort: M
+      status: open
     - id: "ENH-MCP-SWEEP-001"
       title: "cortex_sweep_open MCP tool (counterpart to cortex_sweep_status)"
       priority: P1
       effort: S
+      status: open
     - id: "ENH-MCP-WORKFLOW-001"
       title: "execute_workflow: scan cortex-registry/workflows/templates/ for dynamic templates"
       priority: P1
       effort: S
+      status: "FIXED ✅ — WorkflowTemplateManager._load_registry_templates() implemented 2026-02-23; 22 TDD tests GREEN"
     - id: "ENH-MCP-MASTER-PLAN-001"
       title: "cortex_master_plan: add scorecard, dashboard, holistic_gate operations"
       priority: P1
       effort: M
+      status: open
     - id: "ENH-MCP-HEALTH-001"
       title: "cortex_health_check: fix health_score normalisation"
       priority: P2
       effort: S
+      status: open
+    - id: "ENH-STS-08"
+      title: "RefactoringOrchestrator.check_dual_structure() — CORE-035 directory-level gate"
+      priority: P0
+      effort: S
+      status: "FIXED ✅ — check_dual_structure() implemented 2026-02-23; 18 TDD tests GREEN; wired into Stage 4 + Stage 6 exit_criteria"
 
-    - gap_id: "GAP-007"
-      title: "No MCP tool could write non-Python source files to disk"
-      severity: P0
-      stage_affected: [3, 4, 5]
-      tool: "(none — missing tool)"
-      expected: >
-        Playbook stages 3-5 (security fixes, architecture decomposition, TDD scaffolding)
-        write C#, TypeScript, and YAML files to cortex-sts/CortexLabs/Refactored/.
-        This MUST happen via MCP to satisfy the MCP-only execution policy.
-      actual: >
-        No MCP tool in the registry could write arbitrary files to disk.
-        CortexRefactor.execute() returns stubs (changes: [], references_updated: 0).
-        execute_workflow steps simulate orchestrator execution but produce no files.
-        FileFactory.create_file() exists in cortex.core but has no MCP wrapper.
-      impact: "Stages 3-5 would produce zero output files — playbook cannot deliver refactored codebase via MCP"
-      fix_applied:
-        date: "2026-02-22"
-        tool: "cortex_scaffold_files (CortexScaffoldFiles)"
-        file: "cortex/mcp/tools/scaffold_files_tool.py"
-        tests: "tests/mcp/test_scaffold_files_tool.py (17 tests, TDD-first)"
-        description: >
-          New MCP tool cortex_scaffold_files(root, files, overwrite, dry_run, session_id)
-          writes arbitrary-language source files via Path.write_text() with mkdir -p.
-          Registered in cortex.mcp.tools (ops count: 34 → 35).
-          CORE-008 compliant: tests written RED-first before implementation.
-        status: "FIXED ✅ — 17 tests GREEN"
+  # ── GAP-007 (structural note — filed after Run 2) ──────────────────────────
+  gap_007:
+    gap_id: "GAP-007"
+    title: "No MCP tool could write non-Python source files to disk"
+    severity: P0
+    stage_affected: [3, 4, 5]
+    tool: "(none — missing tool)"
+    expected: >
+      Playbook stages 3-5 (security fixes, architecture decomposition, TDD scaffolding)
+      write C#, TypeScript, and YAML files to cortex-sts/CortexLabs/Refactored/.
+      This MUST happen via MCP to satisfy the MCP-only execution policy.
+    actual: >
+      No MCP tool in the registry could write arbitrary files to disk.
+      CortexRefactor.execute() returns stubs (changes: [], references_updated: 0).
+      execute_workflow steps simulate orchestrator execution but produce no files.
+      FileFactory.create_file() exists in cortex.core but has no MCP wrapper.
+    impact: "Stages 3-5 would produce zero output files — playbook cannot deliver refactored codebase via MCP"
+    fix_applied:
+      date: "2026-02-22"
+      tool: "cortex_scaffold_files (CortexScaffoldFiles)"
+      file: "cortex/mcp/tools/scaffold_files_tool.py"
+      tests: "tests/mcp/test_scaffold_files_tool.py (17 tests, TDD-first)"
+      description: >
+        New MCP tool cortex_scaffold_files(root, files, overwrite, dry_run, session_id)
+        writes arbitrary-language source files via Path.write_text() with mkdir -p.
+        Registered in cortex.mcp.tools (ops count: 34 → 35).
+        CORE-008 compliant: tests written RED-first before implementation.
+      status: "FIXED ✅ — 17 tests GREEN"
 
   # ── RUN RECORD ─────────────────────────────────────────────────────────────
   run_records:
@@ -304,3 +330,34 @@ document:
         Run 2 pre-execution: GAP-007 discovered (no MCP tool wrote non-Python files).
         cortex_scaffold_files implemented TDD-first (17 tests GREEN).
         Registered in cortex.mcp.tools. Now proceeding to actual C# scaffolding via MCP.
+
+    - run_id: "PB-STS-001-RUN-20260223-003"
+      date: "2026-02-23"
+      gaps_found: 2
+      gaps_fixed_immediately: 2
+      gaps_backlogged: 0
+      post_mortem_score: "80.5/100"
+      defects_identified: 5
+      defects_fixed_now: 2
+      outcome: >
+        Post-mortem (80.5/100) identified 5 defects from Run 2 output:
+          DEFECT-1 (P0): Dual backend structure (flat + src/) — CORE-035 violation.
+          DEFECT-2 (P0): Test/service constructor contract mismatch.
+          DEFECT-3 (P1): Missing JwtSettings:Secret in flat appsettings.json.
+          DEFECT-4 (P1): AnalyticsService.GetSummaryAsync() signature mismatch.
+          DEFECT-5 (P1): src/API/Program.cs registers concrete types, not interfaces.
+
+        Fixes implemented (ENH-STS-08 + ENH-MCP-WORKFLOW-001):
+          - GAP-004 FIXED: WorkflowTemplateManager._load_registry_templates() added;
+            now dynamically discovers all *.yaml in cortex-registry/workflows/templates/;
+            22 TDD tests GREEN. (ENH-MCP-WORKFLOW-001)
+          - ENH-STS-08 FIXED: RefactoringOrchestrator.check_dual_structure() implemented;
+            P0 gate detects parallel flat + src/ structures; 18 TDD tests GREEN.
+
+        Playbook hardened:
+          - AP-011 anti-pattern added (dual-structure root cause + remediation chain).
+          - Stage 4 exit_criteria: RESET GATE + DUAL-STRUCTURE GATE added.
+          - Stage 5 exit_criteria: CONTRACT GATE (constructor + method signatures) added.
+          - Stage 6 exit_criteria: DUAL-STRUCTURE GATE (check_dual_structure) added.
+
+        Saw is sharper: 40 new tests, 2 new orchestrator capabilities, 1 playbook updated.

@@ -1,11 +1,12 @@
 // FIX SMELL-4 (business logic in service), SMELL-11 (ILogger), SMELL-17 (DI)
 using Microsoft.Extensions.Logging;
+using CortexLabs.FinTrack.Application.Interfaces;
 using CortexLabs.FinTrack.Domain.Entities;
 using CortexLabs.FinTrack.Domain.Interfaces;
 
 namespace CortexLabs.FinTrack.Application.Services;
 
-public class AccountService
+public class AccountService : IAccountService
 {
     private readonly IAccountRepository _repo;
     private readonly ILogger<AccountService> _logger;

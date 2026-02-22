@@ -3,12 +3,13 @@
 // SMELL-10 (duplicate validation removed), SMELL-11 (ILogger),
 // SMELL-17 (DI constructor injection)
 using Microsoft.Extensions.Logging;
+using CortexLabs.FinTrack.Application.Interfaces;
 using CortexLabs.FinTrack.Domain.Entities;
 using CortexLabs.FinTrack.Domain.Interfaces;
 
 namespace CortexLabs.FinTrack.Application.Services;
 
-public class UserService
+public class UserService : IUserService
 {
     private readonly IUserRepository _repo;
     private readonly ILogger<UserService> _logger;
