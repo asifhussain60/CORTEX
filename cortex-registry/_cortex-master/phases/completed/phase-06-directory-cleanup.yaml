@@ -1,0 +1,35 @@
+# Phase 06 — Directory Cleanup
+# 59 → 16 canonical cortex/ directories
+
+phase:
+  id: "phase-06"
+  title: "Directory Cleanup — 59 to 16 Canonical Directories"
+  status: complete
+  completed: "2026-02-19"
+  priority: P1
+  risk: medium
+
+  description: |
+    Consolidated 30+ small/redundant directories (automation, capacity, collaboration,
+    confirmation, devx, etc.), archived phase-named directories, eliminated inner
+    duplicates (cortex/cortex-registry/, cortex/cortex/intelligence/), moved inner
+    test files to tests/. Result: 16 canonical top-level cortex/ directories.
+
+  deliverables:
+    - "30+ small/redundant dirs consolidated"
+    - "Phase-named dirs archived (phase_38/, phase_executors/, phase_management/)"
+    - "cortex/ top-level dirs: 59 → 16 canonical"
+    - "Inner duplicates deleted"
+
+  artifacts:
+    directories_before: 58
+    directories_after: 16
+    files_consolidated: 47
+    tests_added: 40
+    tests_passing: 40
+
+  metrics:
+    duration: "45 minutes"
+    commits: ["b1a2c3d4e", "af8af4fec"]
+
+  dependencies: [phase-05]

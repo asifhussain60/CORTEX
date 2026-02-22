@@ -1,0 +1,34 @@
+# Phase 12 — Production Readiness
+# Chaos testing, SLAs, security hardening, observability
+
+phase:
+  id: "phase-12"
+  title: "Production Readiness — Hardening, Chaos Testing, SLAs & Go-Live"
+  status: complete
+  completed: "2026-02-20"
+  priority: P1
+  risk: medium
+
+  description: |
+    Performance benchmarks (orchestrator import <500ms, SQLite query <10ms),
+    chaos testing (exception handling, WAL atomicity, timeout resilience),
+    security hardening (SQL injection audit, credential scan, bandit SAST),
+    disaster recovery verification, observability setup (StructuredLogger,
+    Prometheus, OpenTelemetry), and regression parity validation.
+
+  deliverables:
+    - "Performance benchmarks verified"
+    - "Chaos testing: exception handling, WAL atomicity, timeout resilience"
+    - "Security hardening: SQL injection audit, credential scan, bandit SAST"
+    - "Disaster recovery: WAL hot-backup <1s RTO"
+    - "Observability: StructuredLogger, Prometheus, OpenTelemetry"
+    - "Regression parity: MCP tools, orchestrators, governance, FileFactory"
+
+  artifacts:
+    tests_added: 25
+    tests_passing: 25
+
+  metrics:
+    duration: "2 hours"
+
+  dependencies: [phase-11]

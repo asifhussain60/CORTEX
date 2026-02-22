@@ -1,0 +1,35 @@
+# Phase 21 — ADO + Brain-Tier Synthesis
+# Full-tier sprint context, real KG query, cross-domain completion
+
+phase:
+  id: "phase-21"
+  title: "ADO + Brain-Tier Synthesis — Full-Tier Sprint Context"
+  status: complete
+  completed: "2026-02-21"
+  priority: P1
+  risk: medium
+
+  description: |
+    Made intelligence pipeline production-quality: ADOContextMapper extracts
+    structured sprint context (sprint_name, stories, counts) from WorkItem.raw.
+    KGIndexer.index_registry_yaml() indexes entities from knowledge-base YAMLs.
+    KGInference.infer_related_rules() provides relationship traversal.
+    End-to-end golden test confirms full() returns populated synthesis context.
+
+  deliverables:
+    - "ADOContextMapper — cortex/intelligence/knowledge/ado_context_mapper.py"
+    - "KGIndexer.index_registry_yaml() — idempotent entity indexing"
+    - "KGInference.infer_related_rules() — heuristic traversal"
+    - "full() tier wired: ADO + KG + cross-domain synthesis"
+    - "10 golden + 13 unit tests"
+
+  artifacts:
+    files_created:
+      - cortex/intelligence/knowledge/ado_context_mapper.py
+    tests_added: 23
+    tests_passing: 23
+
+  metrics:
+    duration: "~2 hours"
+
+  dependencies: [phase-19, phase-20]

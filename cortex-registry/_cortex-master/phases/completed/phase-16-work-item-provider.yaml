@@ -1,0 +1,37 @@
+# Phase 16 — Work Item Provider
+# Company-pluggable ADO connector via MCP-first protocol
+
+phase:
+  id: "phase-16"
+  title: "Work Item Provider — Company-Pluggable ADO Connector"
+  status: complete
+  completed: "2026-02-21"
+  priority: P1
+  risk: low
+
+  description: |
+    Implemented WorkItemProvider Protocol with env-driven factory and ADO stub.
+    Created cortex_fetch_work_items MCP tool. Zero new orchestrators, zero wiring
+    changes. Companies implement WorkItemProvider once; CORTEX routes all ticketing
+    systems through the same MCP surface.
+
+  deliverables:
+    - "WorkItemProvider Protocol — cortex/repositories/work_item_provider.py"
+    - "ProviderFactory — cortex/repositories/provider_factory.py"
+    - "ADOWorkItemProvider — cortex/repositories/ado/ado_provider.py"
+    - "cortex_fetch_work_items MCP tool — cortex/mcp/tools/work_item_tool.py"
+    - "15 golden tests + 28 unit tests"
+
+  artifacts:
+    files_created:
+      - cortex/repositories/work_item_provider.py
+      - cortex/repositories/provider_factory.py
+      - cortex/repositories/ado/ado_provider.py
+      - cortex/mcp/tools/work_item_tool.py
+    tests_added: 43
+    tests_passing: 43
+
+  metrics:
+    duration: "~2 hours"
+
+  dependencies: [phase-15]

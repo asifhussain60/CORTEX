@@ -1,0 +1,24 @@
+# Phase 25 — STS BadMonolith v2
+# Second-generation refactoring showcase for CortexLabs/STS
+
+phase:
+  id: "phase-25"
+  title: "STS BadMonolith v2 — Second-Generation Refactoring Showcase"
+  status: in-progress
+  started: "2026-02-22"
+  priority: P2
+  risk: low
+
+  description: |
+    Rebuild CortexLabs/STS BadMonolith as a second-generation showcase for CORTEX
+    refactoring capabilities. Applies the complete CORTEX toolchain (LENS analysis,
+    FileFactory, TDDOrchestrator, WorkflowTemplateMixin) to decompose the monolith
+    into clean domain modules with full governance compliance.
+
+  deliverables:
+    - "STS BadMonolith decomposed via CORTEX LENS analysis"
+    - "Domain extraction using FileFactory naming compliance"
+    - "Full TDD coverage on extracted modules"
+    - "Showcase documentation for cortex-docs"
+
+  dependencies: [phase-24]

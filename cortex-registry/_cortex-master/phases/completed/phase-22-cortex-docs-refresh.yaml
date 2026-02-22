@@ -1,0 +1,36 @@
+# Phase 22 — cortex-docs Refresh
+# Update content to post-refactor architecture, rebuild pipeline HTML
+
+phase:
+  id: "phase-22"
+  title: "cortex-docs Refresh — Post-Refactor Architecture Update"
+  status: complete
+  completed: "2026-02-21"
+  priority: P2
+  risk: low
+
+  description: |
+    Updated all stale cortex-docs content: corrected component counts (orchestrators,
+    MCP tools, CORE rules), added TechStackAnalyzer to LENS overview, updated brain
+    tier architecture docs, added UnifiedIntelligenceProvider documentation,
+    created new pages for company domain synthesis, SweepCatalogueOrchestrator,
+    and ADO integration. Updated Mermaid diagrams. Rebuilt pipeline HTML.
+
+  deliverables:
+    - "LENS overview: 8 → 9 analyzers (TechStackAnalyzer)"
+    - "CORE rules count: 17 → 22 in governance docs"
+    - "Orchestrator count: 22 in all orchestration docs"
+    - "MCP tool count: 25 in all MCP docs"
+    - "3 new doc pages (company-domain-synthesis, sweep-catalogue, ado-integration)"
+    - "Mermaid diagrams updated"
+
+  artifacts:
+    files_created:
+      - cortex-docs/content/src/02-lens/05-company-domain-synthesis.md
+      - cortex-docs/content/src/03-orchestration/sweep-catalogue.md
+      - cortex-docs/content/src/05-infrastructure/ado-integration.md
+
+  metrics:
+    duration: "~3 hours"
+
+  dependencies: [phase-20, phase-21]
