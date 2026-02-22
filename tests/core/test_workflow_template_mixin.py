@@ -229,3 +229,173 @@ class TestTemplateOrchestratorMapping:
         mapping = WorkflowTemplateMixin.TEMPLATE_ORCHESTRATOR_MAP
         assert "TDDOrchestrator" in mapping
         assert mapping["TDDOrchestrator"] == "tdd/feature-implementation"
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PHASE 23 COMPLETION: ORCHESTRATOR TEMPLATE WIRING TESTS
+# All orchestrators in TEMPLATE_ORCHESTRATOR_MAP must have get_recommended_template()
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+class TestSecurityOrchestratorTemplateWiring:
+    """AC-P23-010: SecurityOrchestrator wired with WorkflowTemplateMixin."""
+
+    def test_security_orchestrator_has_mixin(self) -> None:
+        """SecurityOrchestrator class inherits WorkflowTemplateMixin."""
+        from cortex.orchestrators.core.security_orchestrator import SecurityOrchestrator
+        from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+        assert issubclass(SecurityOrchestrator, WorkflowTemplateMixin)
+
+    def test_security_orchestrator_recommended_template(self) -> None:
+        """SecurityOrchestrator.get_recommended_template() returns security template."""
+        from cortex.orchestrators.core.security_orchestrator import SecurityOrchestrator
+        orch = SecurityOrchestrator()
+        result = orch.get_recommended_template()
+        assert result == "security/security-hardening"
+
+
+class TestPlanningOrchestratorTemplateWiring:
+    """AC-P23-011: PlanningOrchestrator wired with WorkflowTemplateMixin."""
+
+    def test_planning_orchestrator_has_mixin(self) -> None:
+        """PlanningOrchestrator class inherits WorkflowTemplateMixin."""
+        from cortex.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
+        from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+        assert issubclass(PlanningOrchestrator, WorkflowTemplateMixin)
+
+    def test_planning_orchestrator_recommended_template(self) -> None:
+        """PlanningOrchestrator.get_recommended_template() returns lifecycle template."""
+        from cortex.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
+        orch = PlanningOrchestrator()
+        result = orch.get_recommended_template()
+        assert result == "lifecycle/master-plan-execution"
+
+
+class TestEnforcementOrchestratorTemplateWiring:
+    """AC-P23-012: EnforcementOrchestrator wired with WorkflowTemplateMixin."""
+
+    def test_enforcement_orchestrator_has_mixin(self) -> None:
+        """EnforcementOrchestrator class inherits WorkflowTemplateMixin."""
+        from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrchestrator
+        from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+        assert issubclass(EnforcementOrchestrator, WorkflowTemplateMixin)
+
+    def test_enforcement_orchestrator_recommended_template(self) -> None:
+        """EnforcementOrchestrator.get_recommended_template() returns compliance template."""
+        from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrchestrator
+        orch = EnforcementOrchestrator()
+        result = orch.get_recommended_template()
+        assert result == "security/compliance-audit"
+
+
+class TestDebuggerOrchestratorTemplateWiring:
+    """AC-P23-013: DebuggerOrchestrator wired with WorkflowTemplateMixin."""
+
+    def test_debugger_orchestrator_has_mixin(self) -> None:
+        """DebuggerOrchestrator class inherits WorkflowTemplateMixin."""
+        from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
+        from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+        assert issubclass(DebuggerOrchestrator, WorkflowTemplateMixin)
+
+    def test_debugger_orchestrator_recommended_template(self) -> None:
+        """DebuggerOrchestrator.get_recommended_template() returns quality template."""
+        from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
+        from cortex.core.event_bus import EventBus
+        orch = DebuggerOrchestrator(event_bus=EventBus())
+        result = orch.get_recommended_template()
+        assert result == "quality/dead-code-removal"
+
+
+class TestMasterPlanOrchestratorTemplateWiring:
+    """AC-P23-014: CortexMasterPlanOrchestrator wired with WorkflowTemplateMixin."""
+
+    def test_master_plan_orchestrator_has_mixin(self) -> None:
+        """CortexMasterPlanOrchestrator class inherits WorkflowTemplateMixin."""
+        from cortex.orchestrators.core.master_plan_orchestrator import CortexMasterPlanOrchestrator
+        from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+        assert issubclass(CortexMasterPlanOrchestrator, WorkflowTemplateMixin)
+
+    def test_master_plan_orchestrator_recommended_template(self) -> None:
+        """CortexMasterPlanOrchestrator.get_recommended_template() returns lifecycle template."""
+        from cortex.orchestrators.core.master_plan_orchestrator import CortexMasterPlanOrchestrator
+        orch = CortexMasterPlanOrchestrator()
+        result = orch.get_recommended_template()
+        assert result == "lifecycle/master-plan-execution"
+
+
+class TestEnhancedPlanningOrchestratorTemplateWiring:
+    """AC-P23-015: EnhancedPlanningOrchestrator wired with WorkflowTemplateMixin."""
+
+    def test_enhanced_planning_orchestrator_has_mixin(self) -> None:
+        """EnhancedPlanningOrchestrator class inherits WorkflowTemplateMixin."""
+        from cortex.orchestrators.domain.enhanced_planning_orchestrator import EnhancedPlanningOrchestrator
+        from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+        assert issubclass(EnhancedPlanningOrchestrator, WorkflowTemplateMixin)
+
+    def test_enhanced_planning_orchestrator_recommended_template(self) -> None:
+        """EnhancedPlanningOrchestrator.get_recommended_template() returns lifecycle template."""
+        from cortex.orchestrators.domain.enhanced_planning_orchestrator import EnhancedPlanningOrchestrator
+        orch = EnhancedPlanningOrchestrator()
+        result = orch.get_recommended_template()
+        assert result == "lifecycle/master-plan-execution"
+
+
+class TestMasterOrchestratorTemplateWiring:
+    """AC-P23-016: MasterOrchestrator wired with WorkflowTemplateMixin."""
+
+    def test_master_orchestrator_has_mixin(self) -> None:
+        """MasterOrchestrator class inherits WorkflowTemplateMixin."""
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+        assert issubclass(MasterOrchestrator, WorkflowTemplateMixin)
+
+    def test_master_orchestrator_recommended_template(self) -> None:
+        """MasterOrchestrator.get_recommended_template() returns lifecycle template."""
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        orch = MasterOrchestrator()
+        result = orch.get_recommended_template()
+        assert result == "lifecycle/composite-execution-pipeline"
+
+
+class TestInteractionOrchestratorTemplateWiring:
+    """AC-P23-017: InteractionOrchestrator wired with WorkflowTemplateMixin."""
+
+    def test_interaction_orchestrator_has_mixin(self) -> None:
+        """InteractionOrchestrator class inherits WorkflowTemplateMixin."""
+        from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+        from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+        assert issubclass(InteractionOrchestrator, WorkflowTemplateMixin)
+
+    def test_interaction_orchestrator_recommended_template(self) -> None:
+        """InteractionOrchestrator.get_recommended_template() returns request-execution template."""
+        from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+        from unittest.mock import MagicMock
+        orch = InteractionOrchestrator(conversation_protocol=MagicMock())
+        result = orch.get_recommended_template()
+        assert result == "request-execution/plan-gate"
+
+
+class TestAllMappedOrchestratorsHaveOverride:
+    """AC-P23-018: Every orchestrator in TEMPLATE_ORCHESTRATOR_MAP has get_recommended_template()."""
+
+    def test_all_mapped_orchestrators_return_expected_template(self) -> None:
+        """Each mapped orchestrator returns its expected template ID."""
+        from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+        mapping = WorkflowTemplateMixin.TEMPLATE_ORCHESTRATOR_MAP
+        # Verify the map has all expected entries
+        expected_orchestrators = {
+            "TDDOrchestrator",
+            "RefactoringOrchestrator",
+            "EnforcementOrchestrator",
+            "MasterPlanOrchestrator",
+            "MasterOrchestrator",
+            "AuditCoordinator",
+            "PlanningOrchestrator",
+            "InteractionOrchestrator",
+            "SecurityOrchestrator",
+            "DebuggerOrchestrator",
+        }
+        assert expected_orchestrators.issubset(set(mapping.keys())), (
+            f"Missing orchestrators in TEMPLATE_ORCHESTRATOR_MAP: "
+            f"{expected_orchestrators - set(mapping.keys())}"
+        )

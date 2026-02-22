@@ -90,6 +90,9 @@ from cortex.mcp.tools.git_orchestrator_tool import CortexGitPush
 # Phase 07b — Canonical test quality gate MCP tool
 from cortex.mcp.tools.test_quality_tool import CortexScoreTests
 
+# Phase 23 — Workflow template discovery tool (function-based)
+from cortex.mcp.tools.list_workflow_templates import cortex_list_workflow_templates
+
 
 # All tool classes for registration
 ALL_TOOLS = [
@@ -213,6 +216,8 @@ __all__ = [
     "CortexGitPush",
     # TestQualityGate (Phase 07b)
     "CortexScoreTests",
+    # WorkflowTemplates (Phase 23)
+    "cortex_list_workflow_templates",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",

@@ -46,11 +46,15 @@ class WorkflowTemplateMixin:
     # ══════════════════════════════════════════════════════════════════════════
     TEMPLATE_ORCHESTRATOR_MAP: Dict[str, str] = {
         "TDDOrchestrator": "tdd/feature-implementation",
-        "RefactoringOrchestrator": "quality/refactoring",
-        "EnforcementOrchestrator": "security/audit-remediation",
+        "RefactoringOrchestrator": "refactor/holistic-sweep",
+        "EnforcementOrchestrator": "security/compliance-audit",
         "MasterPlanOrchestrator": "lifecycle/master-plan-execution",
         "MasterOrchestrator": "lifecycle/composite-execution-pipeline",
-        "AuditCoordinator": "governance/compliance-audit",
+        "AuditCoordinator": "security/compliance-audit",
+        "PlanningOrchestrator": "lifecycle/master-plan-execution",
+        "InteractionOrchestrator": "request-execution/plan-gate",
+        "SecurityOrchestrator": "security/security-hardening",
+        "DebuggerOrchestrator": "quality/dead-code-removal",
     }
 
     _registry: Optional[WorkflowTemplateRegistry] = None

@@ -15,6 +15,7 @@ from typing import Any, Dict, List, Optional
 from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import PhaseStatus, IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 
 @dataclass
@@ -27,7 +28,7 @@ class PhaseNode:
     status: str = "planned"
 
 
-class PlanningOrchestrator(IOrchestrator):
+class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     """
     Orchestrates multi-phase planning with:
     - Predecessor/dependency analysis
@@ -49,6 +50,10 @@ class PlanningOrchestrator(IOrchestrator):
     def get_name(self) -> str:
         """Get orchestrator name."""
         return "PlanningOrchestrator"
+
+    def get_recommended_template(self) -> str:
+        """Get the recommended workflow template for planning operations."""
+        return "lifecycle/master-plan-execution"
 
     def get_version(self) -> str:
         """Get orchestrator version."""

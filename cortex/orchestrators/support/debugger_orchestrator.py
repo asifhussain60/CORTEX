@@ -25,6 +25,7 @@ import logging
 from cortex.core.event_bus import EventBus, Event
 from cortex.models.canonical_enums import IntentType
 from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 
 logger = logging.getLogger(__name__)
@@ -40,7 +41,7 @@ class DebugSession:
     status: str  # active | resolved | stale
 
 
-class DebuggerOrchestrator(IOrchestrator):
+class DebuggerOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     """
     Orchestrates automatic debug marker injection via EventBus.
     
@@ -352,7 +353,11 @@ class DebuggerOrchestrator(IOrchestrator):
     def get_name(self) -> str:
         """Get orchestrator name."""
         return "DebuggerOrchestrator"
-    
+
+    def get_recommended_template(self) -> str:
+        """Get the recommended workflow template for debug operations."""
+        return "quality/dead-code-removal"
+
     def get_version(self) -> str:
         """Get orchestrator version."""
         return "1.0.0"

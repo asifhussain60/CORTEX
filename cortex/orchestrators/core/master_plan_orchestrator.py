@@ -28,6 +28,8 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+
 logger = logging.getLogger(__name__)
 
 # Valid priority values per CORTEX governance
@@ -120,7 +122,7 @@ class RegistrySyncResult:
 # ============================================================================
 
 
-class CortexMasterPlanOrchestrator:
+class CortexMasterPlanOrchestrator(WorkflowTemplateMixin):
     """Owns the complete CORTEX phase lifecycle for the CORTEX repository.
 
     This is the single canonical implementation (CORE-035) responsible for:
@@ -160,6 +162,14 @@ class CortexMasterPlanOrchestrator:
         self._workflow_template_dir = self._root / _WORKFLOW_TEMPLATE_DIR
 
         self._validate_structure()
+
+    # -------------------------------------------------------------------------
+    # Workflow Template Integration
+    # -------------------------------------------------------------------------
+
+    def get_recommended_template(self) -> str:
+        """Get the recommended workflow template for master plan operations."""
+        return "lifecycle/master-plan-execution"
 
     # -------------------------------------------------------------------------
     # PRIVATE: Validation

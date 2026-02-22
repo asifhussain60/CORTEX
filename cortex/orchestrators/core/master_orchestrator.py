@@ -261,8 +261,11 @@ from cortex.models.orchestrator_metadata import OrchestratorMetadata
 # AC-GOLDEN-E2E-017: Import OrchestratorAuditMixin for structured audit logging
 from cortex.orchestrators.core.audit_mixin import OrchestratorAuditMixin
 
+# Phase 23: Import WorkflowTemplateMixin for template consumption capability
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
-class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
+
+class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplateMixin):
     """
     MasterOrchestrator - Coordinates all domain orchestrators.
 
@@ -1588,6 +1591,14 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin):
             >>> assert name == "MasterOrchestrator"
         """
         return "MasterOrchestrator"
+
+    def get_recommended_template(self) -> Optional[str]:
+        """Return the recommended workflow template for MasterOrchestrator.
+
+        Returns:
+            Template ID for composite execution pipeline.
+        """
+        return "lifecycle/composite-execution-pipeline"
 
     def get_version(self) -> str:
         """Get orchestrator version.

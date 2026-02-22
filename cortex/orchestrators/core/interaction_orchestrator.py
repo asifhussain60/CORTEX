@@ -28,8 +28,11 @@ from cortex.core.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.trace_integration import trace_orchestrator_action
 
+# Phase 23: Import WorkflowTemplateMixin for template consumption capability
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
-class InteractionOrchestrator(IOrchestrator):
+
+class InteractionOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     """
     Stage 1 orchestrator: LENS-powered comprehension on every turn.
 
@@ -98,6 +101,14 @@ class InteractionOrchestrator(IOrchestrator):
             'InteractionOrchestrator' identifier string.
         """
         return "InteractionOrchestrator"
+
+    def get_recommended_template(self) -> Optional[str]:
+        """Return the recommended workflow template for InteractionOrchestrator.
+
+        Returns:
+            Template ID for request execution plan gate.
+        """
+        return "request-execution/plan-gate"
 
     def get_version(self) -> str:
         """Get orchestrator version.

@@ -19,6 +19,7 @@ from cortex.orchestrators.domain.planning_orchestrator import (  # noqa: F401
 )
 
 from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 try:
     from result import Ok  # type: ignore[import]
@@ -60,7 +61,7 @@ class RiskLevel(enum.Enum):
     CRITICAL = "critical"
 
 
-class EnhancedPlanningOrchestrator(IOrchestrator):
+class EnhancedPlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     """Thread-safe singleton planning orchestrator (Phase 3+).
 
     Wraps :class:`PlanningOrchestrator` and adds enum-based phase-state
@@ -105,6 +106,10 @@ class EnhancedPlanningOrchestrator(IOrchestrator):
     def get_name(self) -> str:
         """Return orchestrator name."""
         return self._name
+
+    def get_recommended_template(self) -> str:
+        """Get the recommended workflow template for enhanced planning operations."""
+        return "lifecycle/master-plan-execution"
 
     def get_version(self) -> str:
         """Return orchestrator version."""

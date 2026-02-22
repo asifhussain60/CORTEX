@@ -18,6 +18,8 @@ import hashlib
 import logging
 import re
 import uuid
+
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -235,7 +237,7 @@ DEFAULT_CONFIG_CHECKS = [
 # SECURITY ORCHESTRATOR
 # ============================================================================
 
-class SecurityOrchestrator(IOrchestrator):
+class SecurityOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     """
     Pre-DoR security gate orchestrator.
 
@@ -289,6 +291,10 @@ class SecurityOrchestrator(IOrchestrator):
     def get_name(self) -> str:
         """Get orchestrator name."""
         return "SecurityOrchestrator"
+
+    def get_recommended_template(self) -> str:
+        """Get the recommended workflow template for security operations."""
+        return "security/security-hardening"
 
     def get_version(self) -> str:
         """Get orchestrator version."""
