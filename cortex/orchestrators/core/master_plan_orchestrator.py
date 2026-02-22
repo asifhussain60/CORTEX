@@ -250,15 +250,31 @@ class CortexMasterPlanOrchestrator(WorkflowTemplateMixin):
         Anomalous phases (sequence > total sequential count by a wide margin) are
         excluded from sequence computation to prevent phase-100-style anomalies.
 
+        Handles two cortex-master.yaml formats:
+        - Legacy flat list:  phases: [{id: ..., sequence: 1}, ...]
+        - Structured dict:   phases: {completed: [...], planned: [...], deferred: [...]}
+          (introduced in cortex-master.yaml v10.1 — 2026-02-22)
+
         Args:
             registry: Parsed registry dict.
 
         Returns:
             List of phase dicts sorted by sequence ascending.
         """
-        phases = registry.get("phases", []) or []
+        raw = registry.get("phases", []) or []
+
+        # Normalise: if phases is a dict (structured format), flatten all sub-lists
+        if isinstance(raw, dict):
+            phase_list: List[Dict[str, Any]] = []
+            for sub in raw.values():
+                if isinstance(sub, list):
+                    phase_list.extend(sub)
+            raw = phase_list
+
         valid = []
-        for p in phases:
+        for p in raw:
+            if not isinstance(p, dict):
+                continue  # skip non-dict entries (e.g. plain strings)
             seq = p.get("sequence")
             if isinstance(seq, int) and seq > 0:
                 valid.append(p)

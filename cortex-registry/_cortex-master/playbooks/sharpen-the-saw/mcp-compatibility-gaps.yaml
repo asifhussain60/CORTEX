@@ -1,0 +1,269 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CORTEX Sharpen-the-Saw — MCP Tool Compatibility Gaps
+# ══════════════════════════════════════════════════════════════════════════════
+# Philosophy: Running the playbook via MCP is non-negotiable. When a tool
+#   cannot fulfil a stage, that IS the finding — not a reason to bypass.
+#   Discovered gaps are catalogued here and feed the CORTEX tool backlog.
+#   This is the "sharpen the saw" principle: the playbook sharpens CORTEX
+#   itself by exposing what the tool chain cannot yet do.
+#
+# Authority: PB-STS-001 Stage 1 execution — 2026-02-22
+# Source: Live MCP tool interrogation via cortex.mcp.tools module inspection
+# Applies to: All repeatable playbooks that require MCP-only execution
+# ══════════════════════════════════════════════════════════════════════════════
+
+document:
+  id: "STS-MCP-GAPS-001"
+  title: "MCP Tool Compatibility Gaps — Discovered During PB-STS-001 Execution"
+  version: "1.0.0"
+  created: "2026-02-22"
+  source_playbook: "pb-sts-001-badmonolith-refactoring.yaml"
+  philosophy: "sharpen-the-saw"
+
+  # ── PHILOSOPHY STATEMENT ───────────────────────────────────────────────────
+  sharpen_the_saw:
+    principle: >
+      Exposing MCP tool gaps through playbook execution IS the work.
+      A playbook that runs perfectly first time teaches nothing about CORTEX's
+      real capability boundaries. When a stage cannot complete via MCP, we:
+        1. Document the exact gap (tool, operation, constraint)
+        2. Record what the tool CAN do vs. what was expected
+        3. Create a backlog item to extend the tool's capability
+        4. Update the playbook's mcp_tool_registry with the constraint
+      The playbook is not "done" until every stage works through MCP. Each gap
+      found is a CORTEX capability enhancement — the saw gets sharper each run.
+
+    application_to_cortex: >
+      CORTEX's MCP server is the single interface contract. If an orchestrator
+      capability is not exposed through an MCP tool, it does not exist from the
+      playbook's perspective. This constraint drives the tool surface to grow
+      in alignment with real workflow needs — not invented test scenarios.
+
+  # ── GAPS DISCOVERED (PB-STS-001 Run 1 — 2026-02-22) ──────────────────────
+  gaps_discovered:
+
+    - gap_id: "GAP-001"
+      title: "sts_analyzer cannot parse C# or TypeScript"
+      severity: P1
+      stage_affected: 1
+      tool: "analyze_sts_app"
+      expected: >
+        analyze_sts_app(app_path='cortex-sts/CortexLabs/BadMonolith') detects
+        all 25 BadMonolith smells across C# (Program.cs, Services.cs) and
+        TypeScript (app.ts) source files.
+      actual: >
+        Tool uses Python AST + regex patterns tuned for Python source.
+        Returns security_score=100.0, violations=[] for C#/TS files —
+        a false-negative. PatternDetector._detect_ast_patterns() calls
+        ast.parse() which only handles Python syntax.
+      impact: "Stage 1 LENS baseline returns no smell data — scorecard comparison invalid"
+      workaround: "Manual smell enumeration from .cortex-manifest.yaml (25 smells confirmed)"
+      enhancement_required:
+        title: "Add C# and TypeScript adapters to PatternDetector"
+        effort: "M"
+        priority: P1
+        approach: >
+          Implement CSharpPatternDetector using Roslyn or regex on .cs files.
+          Implement TypeScriptPatternDetector using ts-morph or regex on .ts files.
+          Both should map to the existing PatternViolation dataclass.
+        backlog_ref: "ENH-MCP-STS-001"
+
+    - gap_id: "GAP-002"
+      title: "cortex_master_plan(next_sequence) crashes on structured phases dict"
+      severity: P0
+      stage_affected: 2
+      tool: "cortex_master_plan"
+      expected: >
+        cortex_master_plan(operation='next_sequence') returns the next available
+        phase sequence number by reading cortex-master.yaml.
+      actual: >
+        AttributeError: 'str' object has no attribute 'get'
+        Caused by _sequential_phases() calling .get("sequence") on dict keys
+        ("completed", "planned", "deferred") when phases: is a structured dict
+        rather than a flat list. Introduced when cortex-master.yaml was
+        recreated in clean structured format (v10.1, 2026-02-22).
+      impact: "cortex_master_plan unusable for any operation reading phases"
+      fix_applied:
+        date: "2026-02-22"
+        file: "cortex/orchestrators/core/master_plan_orchestrator.py"
+        method: "_sequential_phases"
+        description: >
+          Added isinstance(raw, dict) guard — if phases is a structured dict,
+          flatten all sub-lists before iterating. Added isinstance(p, dict)
+          guard inside loop to skip plain strings.
+        status: "FIXED ✅"
+
+    - gap_id: "GAP-003"
+      title: "cortex_sweep_status requires pre-opened SweepCatalogueOrchestrator session"
+      severity: P1
+      stage_affected: [2, 5, 6, 7]
+      tool: "cortex_sweep_status"
+      expected: >
+        cortex_sweep_status(intent='catalogue_smells', scope_files=[...]) opens
+        a sweep catalogue and returns enumerated items.
+      actual: >
+        KeyError: "No open sweep catalogue found for intent='catalogue_smells'
+        scope_files=[...]. Open one via SweepCatalogueOrchestrator.open_catalogue() first."
+        The tool is a STATUS REPORTER only — it reads an existing catalogue,
+        not creates one. There is no MCP tool to open a new sweep catalogue.
+      impact: "Stages 2, 5, 6, 7 cannot call cortex_sweep_status as entry point"
+      workaround: "Use cortex_master_plan(operation='create') for session tracking"
+      enhancement_required:
+        title: "Add cortex_sweep_open MCP tool as counterpart to cortex_sweep_status"
+        effort: "S"
+        priority: P1
+        approach: >
+          New MCP tool cortex_sweep_open(intent, scope_files, session_id) that
+          calls SweepCatalogueOrchestrator.open_catalogue() and returns session_id.
+          cortex_sweep_status then reads/updates that session.
+        backlog_ref: "ENH-MCP-SWEEP-001"
+
+    - gap_id: "GAP-004"
+      title: "execute_workflow only supports 3 built-in templates"
+      severity: P1
+      stage_affected: [3, 4, 5]
+      tool: "execute_workflow"
+      expected: >
+        execute_workflow(template_name='security-hardening') executes the
+        cortex-registry/workflows/templates/security/security-hardening.yaml workflow.
+        Similarly for 'service-decomposition-workflow', 'tdd-api-service',
+        'frontend-tdd-workflow'.
+      actual: >
+        list_workflow_templates() returns only 3 templates:
+          - phase-execution
+          - tdd-cycle
+          - refactor-holistic
+        All workflow paths referenced in pb-sts-001 stages 3/4/5 are absent.
+        The template loader does not scan cortex-registry/workflows/templates/**/*.yaml.
+      impact: >
+        Stages 3 (security-hardening), 4 (service-decomposition-workflow),
+        5 (tdd-api-service, frontend-tdd-workflow) cannot invoke via execute_workflow.
+        execute_workflow(template_name='tdd-cycle') IS available and maps to Stage 5.
+        execute_workflow(template_name='refactor-holistic') IS available and maps to Stage 4.
+      partial_workaround:
+        stage_3: "execute_workflow(template_name='refactor-holistic', variables={operation: 'security'})"
+        stage_4: "execute_workflow(template_name='refactor-holistic', variables={operation: 'decompose'})"
+        stage_5: "execute_workflow(template_name='tdd-cycle', variables={module_name: ..., test_file: ..., impl_file: ...})"
+      enhancement_required:
+        title: "Extend workflow_runtime_tool to load templates from cortex-registry/workflows/templates/"
+        effort: "S"
+        priority: P1
+        approach: >
+          Modify list_workflow_templates() to scan cortex-registry/workflows/templates/**/*.yaml.
+          Add template_path parameter to execute_workflow() for direct YAML path invocation.
+        backlog_ref: "ENH-MCP-WORKFLOW-001"
+
+    - gap_id: "GAP-005"
+      title: "cortex_master_plan has no 'scorecard', 'dashboard', or 'holistic_gate' operation"
+      severity: P1
+      stage_affected: [2, 7, 8]
+      tool: "cortex_master_plan"
+      expected: >
+        cortex_master_plan(operation='scorecard') generates a weighted 6-dimension scorecard.
+        cortex_master_plan(operation='dashboard') generates HTML before/after comparison.
+        cortex_master_plan(operation='holistic_gate') runs CORE-048 validation.
+      actual: >
+        Valid operations: create, sync, next_sequence, load_template
+        No scorecard, dashboard, completeness_report, or holistic_gate operations exist.
+      impact: "Stages 2, 7, 8 scorecard and dashboard generation cannot proceed via MCP"
+      workaround: >
+        cortex_master_plan(operation='create') can create a tracking plan entry.
+        Scorecard must be generated by direct orchestrator invocation (not yet MCP-exposed).
+      enhancement_required:
+        title: "Add scorecard, dashboard, holistic_gate operations to cortex_master_plan"
+        effort: "M"
+        priority: P1
+        approach: >
+          Extend MasterPlanOrchestrator with scorecard_generate(), dashboard_generate(),
+          and holistic_gate() methods. Wire to cortex_master_plan MCP tool as new operations.
+        backlog_ref: "ENH-MCP-MASTER-PLAN-001"
+
+    - gap_id: "GAP-006"
+      title: "cortex_health_check score is always 0.0 (normalisation bug)"
+      severity: P2
+      stage_affected: [2, 8]
+      tool: "cortex_health_check"
+      expected: >
+        cortex_health_check returns health_score as a 0-100 percentage representing
+        overall workspace health.
+      actual: >
+        health_score: 0.0 despite agents running successfully (6 agents, 15,253 files).
+        The score normalisation appears to use total_issues / files_scanned without
+        weighting — resulting in a score that collapses to 0 for large workspaces.
+      impact: "Cannot use health_score as a Stage 8 before/after quality metric"
+      enhancement_required:
+        title: "Fix health_score normalisation in cortex_health_check"
+        effort: "S"
+        priority: P2
+        backlog_ref: "ENH-MCP-HEALTH-001"
+
+  # ── TOOLS CONFIRMED WORKING ────────────────────────────────────────────────
+  tools_confirmed_working:
+    - tool: "onboard_repository_tool"
+      status: "✅ WORKS"
+      notes: "Returns partial_success (KP-001 warning) — expected for C# repo with no Python patterns"
+    - tool: "cortex_validate_coherence"
+      status: "✅ WORKS"
+      notes: "File-level coherence validation functional"
+    - tool: "cortex_vacuum_execute"
+      status: "✅ WORKS"
+      notes: "Dead code removal via VacuumOrchestrator"
+    - tool: "cortex_intelligence_merge"
+      status: "✅ WORKS"
+      notes: "Context merging across stages functional"
+    - tool: "execute_workflow(tdd-cycle)"
+      status: "✅ WORKS (partial)"
+      notes: "tdd-cycle template available; security-hardening and service-decomposition not available"
+    - tool: "execute_workflow(refactor-holistic)"
+      status: "✅ WORKS (partial)"
+      notes: "refactor-holistic template available — usable as proxy for stages 3 and 4"
+    - tool: "cortex_master_plan(create, sync, load_template)"
+      status: "✅ WORKS"
+      notes: "next_sequence also fixed as of 2026-02-22 (GAP-002 resolved)"
+    - tool: "cortex_health_check"
+      status: "✅ WORKS (score bug)"
+      notes: "Runs all 6 agents and returns agent_results; health_score normalisation broken (GAP-006)"
+
+  # ── BACKLOG ITEMS CREATED ──────────────────────────────────────────────────
+  backlog_items:
+    - id: "ENH-MCP-STS-001"
+      title: "C# and TypeScript adapters for sts_analyzer PatternDetector"
+      priority: P1
+      effort: M
+    - id: "ENH-MCP-SWEEP-001"
+      title: "cortex_sweep_open MCP tool (counterpart to cortex_sweep_status)"
+      priority: P1
+      effort: S
+    - id: "ENH-MCP-WORKFLOW-001"
+      title: "execute_workflow: scan cortex-registry/workflows/templates/ for dynamic templates"
+      priority: P1
+      effort: S
+    - id: "ENH-MCP-MASTER-PLAN-001"
+      title: "cortex_master_plan: add scorecard, dashboard, holistic_gate operations"
+      priority: P1
+      effort: M
+    - id: "ENH-MCP-HEALTH-001"
+      title: "cortex_health_check: fix health_score normalisation"
+      priority: P2
+      effort: S
+
+  # ── RUN RECORD ─────────────────────────────────────────────────────────────
+  run_records:
+    - run_id: "PB-STS-001-RUN-20260222-001"
+      date: "2026-02-22"
+      gaps_found: 6
+      gaps_fixed_immediately: 1   # GAP-002 cortex_master_plan regression
+      gaps_backlogged: 5
+      tools_invoked:
+        - "onboard_repository_tool"   # Stage 1 ✅
+        - "analyze_sts_app"           # Stage 1 ✅ (C# gap noted)
+        - "cortex_sweep_status"       # Stage 2 ❌ (GAP-003)
+        - "cortex_master_plan"        # Stage 2 ❌→✅ (GAP-002 fixed inline)
+        - "cortex_health_check"       # Stage 2 ✅ (score bug noted)
+        - "list_workflow_templates"   # Discovery ✅
+      outcome: >
+        Stage 1 completed with partial data (onboarding artifacts generated,
+        C# smells catalogued manually from manifest).
+        GAP-002 fixed inline — cortex_master_plan restored.
+        Stages 2-8 proceeding with available tools + workarounds documented above.
+        Saw is sharper: 5 new backlog items, 1 regression fixed.

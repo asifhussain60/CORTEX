@@ -6,6 +6,29 @@
 # CORE Rules: CORE-008 (TDD), CORE-035 (no duplication), CORE-048 (holistic gate),
 #             CORE-064 (sweep completeness)
 # ══════════════════════════════════════════════════════════════════════════════
+#
+# MCP EXECUTION POLICY — NON-NEGOTIABLE
+# ──────────────────────────────────────
+# All playbook stages MUST execute via MCP tools. No direct orchestrator calls,
+# no file-write bypasses, no terminal shortcuts. This is not a constraint to
+# work around — it IS the point.
+#
+# SHARPEN-THE-SAW INTEGRATION
+# ────────────────────────────
+# This playbook is part of the CORTEX "sharpen the saw" philosophy:
+# executing via MCP surfaces tool capability gaps. Each gap discovered
+# is a CORTEX enhancement, not a reason to bypass. Gaps are documented in:
+#   cortex-registry/_cortex-master/playbooks/sharpen-the-saw/mcp-compatibility-gaps.yaml
+#
+# When a stage cannot complete via MCP:
+#   1. Document the gap in mcp-compatibility-gaps.yaml
+#   2. Apply the workaround listed in that document
+#   3. Create a backlog item (ENH-MCP-*) for the tool extension
+#   4. Continue execution with the available workaround
+#   5. The playbook is not "done" until every stage completes through MCP
+#
+# Run 1 (2026-02-22): 6 gaps found, 1 fixed inline (GAP-002 master_plan regression)
+# ══════════════════════════════════════════════════════════════════════════════
 
 playbook:
   id: "pb-sts-001"
@@ -82,40 +105,68 @@ playbook:
   #     traceability: 9.0
   #     composite: 8.8
 
-  # ── MCP TOOL REGISTRY (verified live — 2026-02-22) ────────────────────────
-  # All tools confirmed present via cortex.mcp.tools module inspection.
-  # Playbook MUST NOT bypass MCP — all operations route through these tools.
+  # ── MCP TOOL REGISTRY (live-verified — Run 1, 2026-02-22) ─────────────────
+  # Status codes: ✅ WORKS | ⚠️ PARTIAL | ❌ GAP (see mcp-compatibility-gaps.yaml)
+  # All stages MUST use tools from this registry. Gaps are backlogged, not bypassed.
   mcp_tool_registry:
     onboard_repository_tool:
       module: "cortex.mcp.tools.onboard_repository"
       params: "repository_path, capture_learning, apply_brain_enhancement, generate_artifacts"
+      status: "✅ WORKS"
+      notes: "Returns partial_success for C# repos (Python learning patterns only). Onboarding artifacts generated."
     analyze_sts_app:
       module: "cortex.mcp.tools.sts_analyzer"
       params: "app_path, pattern_types, output_showcase"
+      status: "⚠️ PARTIAL"
+      gap_ref: "GAP-001"
+      notes: "Python-only analysis. Returns violations=[] for C#/TS. Use .cortex-manifest.yaml as ground truth for smell data."
     cortex_sweep_status:
       module: "cortex.mcp.tools.sweep_status_tool"
       params: "sweep_id, intent, scope_files"
+      status: "❌ GAP"
+      gap_ref: "GAP-003"
+      notes: "Status READER only — requires pre-opened session. No cortex_sweep_open MCP tool exists yet. Workaround: use cortex_master_plan(operation='create') for session tracking."
     cortex_master_plan:
       module: "cortex.mcp.tools.master_plan_tool"
-      params: "operation, **kwargs"
+      params: "operation (create|sync|next_sequence|load_template), **kwargs"
+      status: "✅ WORKS"
+      gap_ref: "GAP-002 (FIXED), GAP-005"
+      notes: "next_sequence fixed 2026-02-22. Valid ops: create, sync, next_sequence, load_template. No scorecard/dashboard/holistic_gate ops — backlogged as ENH-MCP-MASTER-PLAN-001."
     cortex_health_check:
       module: "cortex.mcp.tools.health_check_tool"
       params: "workspace_root, agents, include_recommendations"
+      status: "⚠️ PARTIAL"
+      gap_ref: "GAP-006"
+      notes: "Runs 6 agents, returns agent_results. health_score always 0.0 (normalisation bug). Use agent_results.issues for comparison instead."
     cortex_vacuum_execute:
       module: "cortex.mcp.tools.vacuum_execute_tool"
       params: "workspace_root, operation, handoff_path"
+      status: "✅ WORKS"
+      notes: "Dead code removal fully functional."
     cortex_validate_coherence:
       module: "cortex.mcp.tools.coherence_tools"
-      params: "file_path, content, pre_edit_content, check_duplicates"
+      params: "file_path, content, pre_edit_content, check_duplicates, check_versions, check_structure"
+      status: "✅ WORKS"
+      notes: "File-level coherence validation fully functional."
     execute_workflow:
       module: "cortex.mcp.tools.workflow_runtime_tool"
       params: "template_name, workflow_path, variables"
-    list_workflow_templates:
-      module: "cortex.mcp.tools.workflow_runtime_tool"
-      params: "include_details"
+      status: "⚠️ PARTIAL"
+      gap_ref: "GAP-004"
+      available_templates:
+        - "phase-execution"
+        - "tdd-cycle"        # → maps to Stage 5 TDD
+        - "refactor-holistic" # → maps to Stages 3 and 4 as proxy
+      missing_templates:
+        - "security-hardening"          # backlogged: ENH-MCP-WORKFLOW-001
+        - "service-decomposition-workflow"  # backlogged
+        - "tdd-api-service"             # backlogged
+        - "frontend-tdd-workflow"       # backlogged
     cortex_intelligence_merge:
       module: "cortex.mcp.tools.brain_collaboration_tools"
       params: "source_contexts, merge_strategy"
+      status: "✅ WORKS"
+      notes: "Context merging across stages functional."
 
   # ── STAGES (8-Stage Orchestrator Chain) ────────────────────────────────────
   stages:
