@@ -1,0 +1,51 @@
+{
+  "nodes": [
+    {
+      "id": "file_0",
+      "type": "file",
+      "name": "app.ts",
+      "path": "frontend/src/app.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_1",
+      "type": "file",
+      "name": "models.ts",
+      "path": "frontend/src/models.ts",
+      "extension": ".ts"
+    },
+    {
+      "id": "file_2",
+      "type": "file",
+      "name": "Program.cs",
+      "path": "backend/Program.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_3",
+      "type": "file",
+      "name": "SomeTests.cs",
+      "path": "backend/Tests/SomeTests.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_4",
+      "type": "file",
+      "name": "Models.cs",
+      "path": "backend/Models/Models.cs",
+      "extension": ".cs"
+    },
+    {
+      "id": "file_5",
+      "type": "file",
+      "name": "Services.cs",
+      "path": "backend/Services/Services.cs",
+      "extension": ".cs"
+    }
+  ],
+  "relationships": [],
+  "metadata": {
+    "repository": "cortex-sts/CortexLabs/BadMonolith",
+    "generated_at": "2026-02-22T19:25:51.567845"
+  }
+}

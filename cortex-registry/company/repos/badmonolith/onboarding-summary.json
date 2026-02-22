@@ -1,0 +1,61 @@
+{
+  "schema_version": "2.0.0",
+  "repository_name": "BadMonolith",
+  "repository_path": "cortex-sts/CortexLabs/BadMonolith",
+  "onboarded_at": "2026-02-22T19:25:51.567845",
+  "status": "success",
+  "file_count": 6,
+  "tabs": [
+    {
+      "id": "01_overview",
+      "label": "Overview",
+      "file": "index.json"
+    },
+    {
+      "id": "02_architecture",
+      "label": "Architecture",
+      "file": "index.json"
+    },
+    {
+      "id": "03_governance",
+      "label": "Governance",
+      "file": "index.json"
+    },
+    {
+      "id": "04_testing",
+      "label": "Testing",
+      "file": "index.json"
+    },
+    {
+      "id": "05_dependencies",
+      "label": "Dependencies",
+      "file": "index.json"
+    },
+    {
+      "id": "06_security",
+      "label": "Security",
+      "file": "index.json"
+    },
+    {
+      "id": "07_metrics",
+      "label": "Metrics",
+      "file": "index.json"
+    },
+    {
+      "id": "08_knowledge",
+      "label": "Knowledge",
+      "file": "index.json"
+    },
+    {
+      "id": "09_dev_workflow",
+      "label": "Dev Workflow",
+      "file": "index.json"
+    }
+  ],
+  "artifacts": {
+    "yaml": "repository.yaml",
+    "ast_graph": "ast-graph.json",
+    "profile": "profile.json"
+  },
+  "warnings": []
+}

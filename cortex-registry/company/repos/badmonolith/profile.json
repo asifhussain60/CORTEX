@@ -1,0 +1,28 @@
+{
+  "schema_version": "2.0.0",
+  "name": "BadMonolith",
+  "path": "cortex-sts/CortexLabs/BadMonolith",
+  "onboarded_at": "2026-02-22T19:25:51.567845",
+  "analysis": {
+    "status": "success",
+    "repository_path": "cortex-sts/CortexLabs/BadMonolith",
+    "architecture_type": "unknown",
+    "patterns_detected": []
+  },
+  "learning_metrics": {
+    "total_learnings": 1,
+    "by_orchestrator": {
+      "OnboardingOrchestrator": 1
+    },
+    "cached_learnings": 1,
+    "cache_keys": [
+      "OnboardingOrchestrator:onboarding:cortex-sts/CortexLabs/BadMonolith"
+    ]
+  },
+  "brain_enhancement": {},
+  "artifacts": {
+    "yaml_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/company/repos/badmonolith/repository.yaml",
+    "ast_graph_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-registry/company/repos/badmonolith/ast-graph.json",
+    "node_count": 6
+  }
+}
