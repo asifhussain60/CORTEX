@@ -60,6 +60,7 @@ This document contains ALL response formatting standards in one place:
 |---------|---------|-------------------|
 | § Copilot Chat Rendering Rules | How to render correctly | Every response |
 | § User Response Template — Golden Format | 5-section structure for all work responses | AUDIT, DESIGN, PLAN, QUERY, IMPLEMENT (pre-approval) |
+| § Intent Reflection Block (BLOCK-INTENT-REFLECTION) | Business-language intent mirror before execution | Every request before `proceed` gate |
 | § Composable Content Blocks | Educational/onboarding block templates | "Who are you?", "What can you do?", tutorials |
 | § Silent Autonomous Mode — Golden Template | Progress bars for autonomous execution | After `proceed` / `implement` / `yes` |
 | § Query Response Templates | Q&A format for knowledge questions | "How does X work?", "Explain Y" |
@@ -68,6 +69,104 @@ This document contains ALL response formatting standards in one place:
 | § Response Templates by Mode | Intent-based template selection | Routing decisions |
 | § Anti-Patterns | What to NEVER do | Code review, self-audit |
 | § Quality Checklist | Pre-send validation | Before every response |
+
+---
+
+## 🪞 INTENT REFLECTION BLOCK — BLOCK-INTENT-REFLECTION (SSOT)
+
+**Authority:** CORE-032 (Mandatory Intent Classification) + CORE-048 (Holistic Validation Gate)
+**Scope:** ALL requests — rendered once, immediately after the response header, before any work begins
+**Rule:** This block REPLACES all tabular `### 📋 Intent Classification` tables. All prompts and agents MUST pointer-reference this section — never duplicate the pattern.
+**Rendering:** Inline in Copilot Chat. First-person business language. No technical field names exposed to the user.
+
+### Purpose
+
+The Intent Reflection Block mirrors CORTEX's understanding of the user's request back in plain business language — giving the user a clear opportunity to correct any misunderstanding before CORTEX acts. It replaces the former technical table (`Intent / Handler / Confidence / Scope / Impact / Target / Rules / Workflow`) with a human-readable summary that is faster to read and easier to verify.
+
+### Design Rules
+
+| Rule | Requirement |
+|------|-------------|
+| **Tone** | First-person, business language — "You've asked CORTEX to…" |
+| **Length** | 3–6 numbered items maximum — one clear action per item |
+| **Confidence signal** | Always end with a 🟢 / 🟡 / 🔴 confidence line |
+| **Approval prompt** | Always end with the standard blockquote approval line |
+| **No jargon** | Do not expose internal field names (Handler, Scope, Rules, AC markers) |
+| **Specificity** | Name the actual files, plans, properties, or systems being touched |
+| **Tensions** | If CORTEX detected a design tension, surface it in plain language inside the numbered list |
+
+### Confidence Signal Values
+
+| Signal | When to Use |
+|--------|-------------|
+| 🟢 High | Intent is unambiguous — all action items clearly derived from the request |
+| 🟡 Medium | One or more items are inferred — CORTEX made a reasonable assumption |
+| 🔴 Low | Significant ambiguity — CORTEX may be misunderstanding the request |
+
+### Template (CANONICAL — use verbatim, fill in `{placeholders}`)
+
+```markdown
+**Here's what CORTEX heard:**
+
+You've asked CORTEX to {one-line summary of the overall request}:
+
+1. **{Action label}** — {plain-language description of what will happen, naming specific files/systems/plans if applicable}
+2. **{Action label}** — {plain-language description}
+3. **{Action label}** — {plain-language description}
+4. **{Action label}** — {plain-language description — include any design tensions or assumptions inline here}
+
+**CORTEX's confidence in this understanding:** {🟢 High | 🟡 Medium | 🔴 Low}
+
+> ✅ This looks right? Type `proceed`. Need to correct something? Do it now before CORTEX acts.
+```
+
+### Rendering Rules (Copilot Chat)
+
+- ✅ Render as **live markdown** directly in the chat response — never inside a fenced code block
+- ✅ Bold the action label on each numbered item (e.g. `**Review holistically**`)
+- ✅ One blank line between the numbered list and the confidence line
+- ✅ The blockquote approval line (`> ✅ This looks right?...`) renders as a distinct visual block — do not convert to a bullet
+- ✅ Place this block immediately after the `---` separator in the response header, before `## 📋 Summary`
+- ❌ Do NOT wrap the block in a `### 📋 Intent Classification` heading
+- ❌ Do NOT use a markdown table for the intent fields
+- ❌ Do NOT expose internal orchestrator names, CORE rule IDs, or handler class names in this block
+
+### Full Rendered Example
+
+```markdown
+## 🎨 CORTEX Design
+**Author:** Asif Hussain | **Orchestrator:** DesignCoordinator ✅
+
+---
+
+**Here's what CORTEX heard:**
+
+You've asked CORTEX to review and enhance Phase 25 of the BadMonolith refactoring plan as a
+full end-to-end quality benchmark:
+
+1. **Review holistically** — treat this phase as a live SDLC test exercising LENS synthesis and
+   all orchestrators through a dedicated workflow template.
+2. **Enhance for gaps** — identify and fill anything missing relative to CORTEX best practices.
+3. **Make it repeatable** — add a `repeatable` property to `cortex-master.yaml` and introduce a
+   new folder structure with its own sequencing for plans of this type.
+4. **Challenge-first** — audit existing capabilities, find the architectural fit, then deliver
+   a single best recommendation that balances the ask against any design tensions.
+
+**CORTEX's confidence in this understanding:** 🟢 High
+
+> ✅ This looks right? Type `proceed`. Need to correct something? Do it now before CORTEX acts.
+
+---
+```
+
+### When to Use BLOCK-INTENT-REFLECTION
+
+| Scenario | Use This Block? |
+|----------|----------------|
+| Any IMPLEMENT / FIX / REFACTOR / DESIGN / PLAN / AUDIT request | ✅ Always |
+| Simple one-line QUERY ("what does X do?") | ⚪ Skip — answer directly |
+| DIGEST / REPHRASE operations | ⚪ Skip — intent is self-evident |
+| After `proceed` (autonomous execution phase) | ❌ Never — show progress bar only |
 
 ---
 
@@ -1544,6 +1643,8 @@ Use 5-section format at **full density** — with H3 sub-sections, comparison ta
 Before sending any response, verify:
 
 - [ ] Response header present with correct orchestrator
+- [ ] **BLOCK-INTENT-REFLECTION rendered** before any work content (first-person, business language, no technical table) — see § Intent Reflection Block
+- [ ] Confidence signal present (🟢 / 🟡 / 🔴) with approval blockquote
 - [ ] Status icons used correctly (🟢=done, ⚪=planned)
 - [ ] **Stage status uses Markdown bullet lists** (`- {icon} S{N}: ...`) — **NEVER `├─ └─` tree characters**
 - [ ] **Linear narrative flow: Context → Analysis → Action → Result (no repetition)**

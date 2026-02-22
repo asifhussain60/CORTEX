@@ -59,18 +59,31 @@ User Request → MasterOrchestrator.coordinate_operation()
 | REPHRASE | RequestRephraseOrchestrator | "rephrase" |
 
 ### DoR Display (Mandatory before execution)
-```
-### 📋 Intent Classification
-| Field | Value |
-|-------|-------|
-| **Intent** | {IMPLEMENT/FIX/etc} |
-| **Orchestrator** | {TDDOrchestrator/etc} ✅ |
-| **Scope** | {affected components} |
-| **Risk** | {LOW/MEDIUM/HIGH} |
-| **Tests** | {required test count} |
 
-**Approval:** Type "proceed" to execute
-```
+Before any IMPLEMENT / FIX / REFACTOR / DESIGN / PLAN / AUDIT operation, render BLOCK-INTENT-REFLECTION
+from `.github/templates/cortex-response-templates.md` § Intent Reflection Block.
+
+**Pattern (first-person, business language — no technical table):**
+
+**Here's what CORTEX heard:**
+
+You've asked CORTEX to {one-line summary of the overall request}:
+
+1. **{Action label}** — {plain-language description naming specific files/systems/plans}
+2. **{Action label}** — {plain-language description}
+3. **{Action label}** — {plain-language description — include any assumptions or tensions inline}
+
+**CORTEX's confidence in this understanding:** {🟢 High | 🟡 Medium | 🔴 Low}
+
+> ✅ This looks right? Type `proceed`. Need to correct something? Do it now before CORTEX acts.
+
+**Rules:**
+- ✅ Render as live markdown — never inside a fenced code block
+- ✅ First-person tone: "You've asked CORTEX to…"
+- ✅ Name specific files, plans, and systems — not vague descriptions
+- ✅ 3–6 numbered items maximum
+- ❌ No markdown table (no `| Field | Value |` rows)
+- ❌ No internal field names (Handler, Scope, Rules, AC markers) exposed to user
 
 ---
 

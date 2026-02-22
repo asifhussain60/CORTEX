@@ -40,24 +40,23 @@
 
 This prompt implements a **unified one-shot execution** model:
 
-**Step 1: Intent Classification**
-```markdown
-### 📋 Intent Classification
+**Step 1: Intent Reflection**
 
-| Field | Value |
-|-------|-------|
-| **Intent** | `DOCUMENT - FRESH GENERATION` |
-| **Handler** | `DocumentationOrchestrator` |
-| **Confidence** | 🟢 High (95%) |
-| **Scope** | `SYSTEM` |
-| **Impact** | � High (Regenerates entire docs/) |
-| **Target** | `docs/`, `_workspaces/reports/` |
-| **Rules** | CORE-012, CORE-027 |
-| **Workflow** | 8-Phase end-to-end pipeline (no stopping) |
+Render BLOCK-INTENT-REFLECTION from `.github/templates/cortex-response-templates.md`
+§ Intent Reflection Block — plain business language, no technical table.
 
----
-**⏳ Awaiting approval to proceed with complete fresh documentation generation...**
-```
+**Here's what CORTEX heard:**
+
+You've asked CORTEX to perform a full fresh generation of the documentation site:
+
+1. **Scan and discover** — analyse the codebase to inventory all orchestrators, MCP tools, and governance rules that need documentation coverage.
+2. **Generate all content** — produce complete markdown documentation across all sections, fresh from source.
+3. **Build and validate** — compile the site in strict mode (zero warnings, zero errors) and verify every internal link resolves.
+4. **Commit and publish** — stage all output, commit with a conventional message, and push to the current branch.
+
+**CORTEX's confidence in this understanding:** 🟢 High
+
+> ✅ This looks right? Type `proceed`. Need to correct something? Do it now before CORTEX acts.
 
 **Step 2: Wait for User Approval**
 - Accept: "proceed", "yes", "approve", "go ahead", "do it"
@@ -1142,21 +1141,22 @@ After running `/doc-maintenance`, the following are created:
    - Generate cleanup report
    
 2. **Review Phase** (User approval required)
-   ```markdown
-   ### 📋 Intent Classification
-   | Field | Value |
-   |-------|-------|
-   | **Intent** | `DOCUMENT - CLEANUP` |
-   | **Handler** | `DocumentationCleanupOrchestrator` |
-   | **Confidence** | 🟢 High (95%) |
-   | **Scope** | `SYSTEM` |
-   | **Impact** | 🟡 Medium (Archive/remove docs) |
-   | **Affected Files** | 23 files (2.4 MB) |
-   | **Rules** | CORE-012, CORE-027 |
-   
-   ---
-   **⏳ Awaiting approval to proceed with cleanup...**
-   ```
+
+   Render BLOCK-INTENT-REFLECTION from `.github/templates/cortex-response-templates.md`
+   § Intent Reflection Block — plain business language, no technical table.
+
+   **Here's what CORTEX heard:**
+
+   You've asked CORTEX to clean up the documentation folder:
+
+   1. **Identify redundancies** — find duplicate, orphaned, and obsolete files across the docs tree ({n} files, {size} MB estimated).
+   2. **Archive safely** — move redundant content to `_archive/` rather than deleting, preserving git history.
+   3. **Validate the result** — confirm the site still builds cleanly after cleanup.
+   4. **Commit the changes** — stage and commit all archived/removed files with a conventional message.
+
+   **CORTEX's confidence in this understanding:** 🟢 High
+
+   > ✅ This looks right? Type `proceed`. Need to correct something? Do it now before CORTEX acts.
 
 3. **Execution Phase** (After approval)
    - Archive redundant files
