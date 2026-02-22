@@ -1,0 +1,217 @@
+# CORTEX Enhancement Proposal
+# Source: DIGEST — cortex-sts/CortexLabs/.analysis/01-review.md
+# Created: 2026-02-22
+# Pipeline: 1 (Chat Session — CORTEX self-analysis of STS refactoring)
+
+id: "ENH-STS-REFACTOR-GAPS-2026-02-22"
+title: "Strengthen CORTEX REFACTOR Mode: Completeness, Traceability & Security Hardening"
+status: "pending"
+priority: P1
+created: "2026-02-22"
+source: "Post-audit analysis of BadMonolith → CortexLabs/Refactored (score: 82/100)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CONTEXT
+# ─────────────────────────────────────────────────────────────────────────────
+context: >
+  A structured audit of CORTEX's first STS (Sample Tech Stack) refactoring revealed
+  an 82/100 score — strong on architecture, security, and SDLC docs, but with 10 gaps
+  across functional completeness, test coverage depth, security hardening, and
+  traceability. The audit found zero CORTEX trace in .cortex-runtime SQLite, a dropped
+  /accounts/transfer endpoint, incomplete JWT auth, and SHA256 used for passwords.
+  This proposal translates those gaps into concrete CORTEX capability enhancements.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ENHANCEMENTS (ordered by impact)
+# ─────────────────────────────────────────────────────────────────────────────
+enhancements:
+
+  - id: "ENH-STS-01"
+    title: "Functional Completeness Gate in REFACTOR workflow"
+    priority: P0
+    category: "workflow"
+    problem: >
+      /api/accounts/transfer and /api/admin/stats were silently dropped — functional
+      regression during refactoring with no ADR justification.
+    solution: >
+      Add a mandatory pre-completion step to RefactoringOrchestrator:
+      enumerate all public endpoints/functions in source → diff against target →
+      for each missing item: require either implementation OR an ADR entry stating
+      intentional removal. Block AC_COMPLETE if unresolved gaps exist.
+    files_affected:
+      - "cortex/orchestrators/domain/refactoring_orchestrator.py"
+      - "cortex-registry/core/specifications/domain-orchestrator-wiring.yaml"
+    acceptance_criteria:
+      - "RefactoringOrchestrator._check_functional_completeness() method exists"
+      - "Method diffs source endpoint list vs target endpoint list"
+      - "Raises FunctionalRegressionError if endpoints dropped without ADR"
+      - "Unit test: test_refactoring_functional_completeness_gate passes"
+
+  - id: "ENH-STS-02"
+    title: "REFACTOR session traceability — write AC_START/AC_COMPLETE to orchestrator-traces.db"
+    priority: P0
+    category: "traceability"
+    problem: >
+      The entire BadMonolith → Refactored session left zero records in
+      .cortex-runtime/traces/orchestrator-traces.db. CORTEX cannot audit its own work.
+    solution: >
+      RefactoringOrchestrator must call TracingService at session boundaries:
+        AC_START: {session_id, source_repo, target_repo, timestamp, smells_catalogued}
+        AC_COMPLETE: {session_id, smells_addressed, files_created, test_delta,
+                      security_p0_before, security_p0_after, score}
+      Use the existing trace_master table schema.
+    files_affected:
+      - "cortex/orchestrators/domain/refactoring_orchestrator.py"
+      - "cortex/core/tracing_service.py (or equivalent)"
+    acceptance_criteria:
+      - "After a REFACTOR run, trace_master contains AC_START + AC_COMPLETE rows"
+      - "Rows include source_repo, smells_catalogued, test_count_delta fields"
+      - "test_refactoring_writes_audit_trace passes"
+
+  - id: "ENH-STS-03"
+    title: "Security hardening checklist — BCrypt enforcement + rate limiting"
+    priority: P1
+    category: "security"
+    problem: >
+      CORTEX accepted SHA256+salt for passwords (acknowledged as weak in its own comment)
+      and left rate limiting as 'planned'. For financial/auth workloads these are P1 gaps.
+    solution: >
+      Add to REFACTOR security gate (post-LENS scan):
+      1. Detect any SHA256/MD5 usage in authentication context → flag as P1, suggest BCrypt/Argon2
+      2. Detect login/payment endpoints without rate limiting middleware → flag as P1
+      3. Detect JWT config in appsettings without corresponding middleware → flag as P0
+      Surface these in the REFACTOR pre-completion checklist output.
+    files_affected:
+      - "cortex/governance/rules/ (new rule: CORE-SEC-001 password hashing)"
+      - "cortex/orchestrators/domain/refactoring_orchestrator.py"
+    acceptance_criteria:
+      - "LENS scan identifies SHA256 in auth context and surfaces P1 violation"
+      - "LENS scan identifies JWT config without middleware and surfaces P0 violation"
+      - "test_security_hardening_checks_in_refactor passes"
+
+  - id: "ENH-STS-04"
+    title: "Test coverage density enforcement in REFACTOR completion gate"
+    priority: P1
+    category: "testing"
+    problem: >
+      25 tests for 2,200 LOC / 5-project solution. AccountService and ReportService
+      had zero coverage. No frontend tests. CORTEX did not enforce its own coverage floor.
+    solution: >
+      RefactoringOrchestrator completion gate must verify:
+      1. Every class in {target}/Application/Services/ has a matching Tests/Services/{Name}Tests file
+      2. Test count >= 25 per 1,000 LOC (configurable via .cortex-manifest.yaml)
+      3. If frontend service layer exists → assert test runner configured in package.json
+      Block AC_COMPLETE if any check fails, with specific gap report inline.
+    files_affected:
+      - "cortex/orchestrators/domain/refactoring_orchestrator.py"
+      - "cortex-registry/knowledge/testing-validation/tdd-best-practices.yaml"
+    acceptance_criteria:
+      - "Completion gate enumerates service classes and cross-checks test files"
+      - "Reports missing test classes by name (not just coverage %) "
+      - "Frontend test runner check works for TypeScript (Jest/Vitest detection)"
+      - "test_coverage_density_gate passes"
+
+  - id: "ENH-STS-05"
+    title: "Multi-language REFACTOR support — C# + TypeScript parity with Python"
+    priority: P1
+    category: "capability"
+    problem: >
+      CORTEX's LENS and governance rules are Python-centric. The C# refactoring was
+      done without Roslyn-aware analysis, no .editorconfig generation, no NuGet
+      dependency awareness. TypeScript refactoring lacked tsconfig.json enforcement.
+    solution: >
+      Extend cortex_refactor MCP tool for C#:
+      1. Detect .csproj files → activate C# LENS adapter
+      2. Generate .editorconfig with C# naming rules matching CORTEX conventions
+      3. Generate Directory.Build.props with StyleCop.Analyzers
+      4. Check NuGet packages for known-weak dependencies (SHA256 for auth, etc.)
+      Extend for TypeScript:
+      1. Detect tsconfig.json → assert strict:true, noImplicitAny:true
+      2. Detect package.json → assert test runner present (jest/vitest)
+    files_affected:
+      - "cortex/mcp/tools/refactor_tool.py"
+      - "cortex/lens/ (C# adapter)"
+    acceptance_criteria:
+      - "cortex_refactor detects C# project and applies C#-specific checks"
+      - "cortex_refactor generates .editorconfig for C# targets"
+      - "cortex_refactor flags strict:false in TypeScript as P1"
+      - "test_csharp_refactor_adapter passes"
+
+  - id: "ENH-STS-06"
+    title: "STS scoring model — automated scorecard after every REFACTOR"
+    priority: P2
+    category: "metrics"
+    problem: >
+      The 82/100 score was produced manually by an audit session after the fact.
+      CORTEX should auto-generate this scorecard at REFACTOR completion so each
+      session is immediately measurable.
+    solution: >
+      Add STS Scorecard generation to RefactoringOrchestrator._generate_scorecard():
+        categories: [architecture, security, testing, documentation, frontend, traceability]
+        weights: [0.25, 0.25, 0.20, 0.15, 0.10, 0.05]
+        output: inline table in Chat Session (CORE-002: not a .md file)
+        persist: write to orchestrator-traces.db as trace_refactor_scorecard row
+    files_affected:
+      - "cortex/orchestrators/domain/refactoring_orchestrator.py"
+      - "cortex-registry/knowledge/architecture/refactoring-quality-standards.yaml"
+    acceptance_criteria:
+      - "RefactoringOrchestrator._generate_scorecard() method exists"
+      - "Scorecard table displayed inline at REFACTOR completion"
+      - "Scorecard row persisted to orchestrator-traces.db"
+      - "test_scorecard_generation passes"
+
+  - id: "ENH-STS-07"
+    title: "REFACTOR prompt — add Completeness Checklist section to cortex-architect.prompt.md"
+    priority: P2
+    category: "prompt"
+    problem: >
+      The REFACTOR MODE section in the architect prompt only has 5 steps (Baseline,
+      LENS scan, Plan, Execute, Verify). It has no functional completeness check,
+      no security hardening checklist, and no traceability step.
+    solution: >
+      Augment the REFACTOR MODE section with:
+      Step 0: Functional completeness baseline — enumerate source endpoints/functions
+      Step 5 (between Execute and Verify): Security hardening gate (BCrypt, rate limit, JWT)
+      Step 6 (new): Write AC_START/AC_COMPLETE to trace DB
+      Step 7 (new): Generate inline scorecard
+      Also add the completeness_checklist from refactoring-quality-standards.yaml
+      as a collapsible reference block.
+    files_affected:
+      - ".github/prompts/cortex-architect.prompt.md"
+    acceptance_criteria:
+      - "REFACTOR MODE section has 7 steps (was 5)"
+      - "Functional completeness check present as Step 0"
+      - "Traceability step present as Step 6"
+      - "Scorecard step present as Step 7"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# IMPLEMENTATION ORDER
+# ─────────────────────────────────────────────────────────────────────────────
+implementation_order:
+  phase_1_traceability:
+    items: ["ENH-STS-02"]
+    rationale: "Traceability first — we cannot measure improvement without audit trail"
+    effort: "2h"
+
+  phase_2_completeness_gates:
+    items: ["ENH-STS-01", "ENH-STS-04"]
+    rationale: "Prevent functional regression and thin tests in next STS run"
+    effort: "4h"
+
+  phase_3_security_hardening:
+    items: ["ENH-STS-03"]
+    rationale: "Close P1 security detection gaps"
+    effort: "3h"
+
+  phase_4_multilang_and_scoring:
+    items: ["ENH-STS-05", "ENH-STS-06"]
+    rationale: "Capability expansion and continuous improvement loop"
+    effort: "6h"
+
+  phase_5_prompt_update:
+    items: ["ENH-STS-07"]
+    rationale: "Bake improvements into CORTEX default behaviour"
+    effort: "1h"
+
+total_estimated_effort: "16h"
+expected_score_improvement: "82 → 94+ on next STS refactoring run"

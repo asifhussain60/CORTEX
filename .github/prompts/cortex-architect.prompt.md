@@ -248,17 +248,38 @@ For each orchestrator in wiring contract:
 **Trigger:** "refactor", "improve", "optimize", "consolidate", "clean up"
 
 **Sequence:**
+0. **Functional baseline** — enumerate all public endpoints/functions in source; store list for completeness gate
 1. **Baseline** — run full test suite, record passing count
 2. **LENS scan** — complexity, duplication, architecture drift
 3. **Plan** — present refactoring strategy with risk assessment
 4. **Execute** — incremental changes, run tests after each step
-5. **Verify** — test count ≥ baseline, zero new failures
+5. **Security hardening gate** — verify: BCrypt/Argon2 (not SHA256) for passwords; rate limiting on login/payment endpoints; JWT config → middleware complete; no P0 security gaps
+6. **Traceability** — call `orchestrator.write_refactor_session_trace(AC_COMPLETE, ...)` to persist session record to `.cortex-runtime/traces/orchestrator-traces.db`
+7. **Scorecard + Verify** — call `orchestrator.generate_scorecard(scores)` → display inline weighted table; assert test count ≥ baseline, zero new failures
+
+**Functional Completeness Gate (Step 0 → Step 7):**
+After Execute, call `orchestrator.check_functional_completeness(source_items, target_items)`.
+If `complete=False`: surface gaps inline and require either implementation or ADR justification before AC_COMPLETE.
 
 **Refactoring Checks:**
 - Dead code elimination (unreachable functions, unused imports)
 - Duplicate consolidation (CORE-035)
 - Complexity reduction (functions >50 lines, classes >500 lines)
 - Import cleanup (circular dependencies, stale references)
+- DI lifetime consistency (Scoped preferred; no Singleton capturing Scoped)
+- Test class coverage (every service class → matching XxxTests class)
+- Frontend test runner present if service layer exists
+
+**Scorecard Weights (auto-applied in Step 7):**
+
+| Category | Weight |
+|---|---|
+| Architecture | 25% |
+| Security | 25% |
+| Testing | 20% |
+| Documentation | 15% |
+| Frontend | 10% |
+| Traceability | 5% |
 
 ---
 

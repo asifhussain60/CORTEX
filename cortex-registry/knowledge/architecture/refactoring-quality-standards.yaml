@@ -1,0 +1,191 @@
+# CORTEX Knowledge — Refactoring Quality Standards
+# Source: DIGEST of cortex-sts/CortexLabs/.analysis/01-review.md
+# Digested: 2026-02-22
+# Pipeline: 1 (Chat Session — CORTEX self-analysis)
+# Authority: ENH-DIGEST-2026-02-22
+
+title: "Refactoring Quality Standards — Lessons from BadMonolith Audit"
+category: "architecture"
+domain: "refactoring"
+version: "1.0"
+source_session: "cortex-sts/CortexLabs/.analysis/01-review.md"
+score: 82  # out of 100 — first STS refactoring pass
+
+# ─────────────────────────────────────────────────────────────────────────────
+# WHAT WORKED WELL (patterns to replicate)
+# ─────────────────────────────────────────────────────────────────────────────
+strengths:
+  architectural_decomposition:
+    description: >
+      CORTEX correctly decomposed a 591-LOC God Class into 5 Clean Architecture
+      projects (Api, Application, Domain, Infrastructure, Tests). The entry point
+      shrank to ~55 LOC with no domain logic. All 25 code smells were catalogued
+      and addressed systematically via .cortex-manifest.yaml.
+    replicable_pattern: "catalogue smells first → address in priority order → verify each"
+    key_artifacts:
+      - ".cortex-manifest.yaml with 25 catalogued smells"
+      - "5-project Clean Architecture backend"
+      - "repository interface + implementation separation"
+
+  security_remediation:
+    description: >
+      All 5 P0 vulnerabilities eliminated: SQL injection (parameterized queries),
+      hardcoded secrets (env-var placeholders), CORS wildcard (config-driven origins),
+      stack-trace exposure (RFC 7807 ProblemDetails middleware), and plaintext passwords
+      (SHA256+salt). XSS addressed via escapeHtml() utility and CSP meta tag.
+    replicable_pattern: "P0 → P1 → P2 priority order; never ship with P0 open"
+
+  sdlc_documentation_generation:
+    description: >
+      CORTEX generated a complete SDLC artifact suite rarely produced by refactoring
+      tools: requirements YAML (business + functional + non-functional), design YAMLs,
+      5 ADRs, 5 architecture diagrams, 8 before/after comparison docs with Mermaid.
+    replicable_pattern: "requirements → design → estimation → comparison → ADR per major decision"
+
+  typescript_strict_mode:
+    description: >
+      Upgraded from strict:false + 22 'any' usages to strict:true + 0 'any'.
+      Typed interfaces for all models. ApiClient with retry and typed error class.
+    replicable_pattern: "enforce strict:true as first TypeScript refactoring step"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAPS IDENTIFIED (anti-patterns to avoid)
+# ─────────────────────────────────────────────────────────────────────────────
+gaps:
+  functional_regression:
+    severity: P0
+    description: >
+      The /api/accounts/transfer endpoint (present in BadMonolith, called from
+      transferMoney() in frontend) was silently dropped in the Refactored version.
+      Admin stats endpoints (/api/admin/stats, DELETE /api/admin/users/{id}) were
+      also dropped. Business capabilities must never regress during refactoring.
+    rule: "REFACTOR MUST NOT reduce endpoint surface area without explicit ADR"
+    detection: "diff source endpoint list vs target endpoint list before completing"
+    fix: >
+      Add a functional completeness check to the REFACTOR workflow:
+      enumerate all endpoints/features in source → verify each is present in target
+      OR documented as intentionally removed with ADR justification.
+
+  incomplete_auth_implementation:
+    severity: P0
+    description: >
+      appsettings.json contained JWT config (Secret, ExpiryMinutes) but no JWT
+      middleware, token generation, or [Authorize] attributes were implemented.
+      Login endpoint returned UserDto without a token — structurally broken auth.
+    rule: "Never leave partially-wired security infrastructure; complete or remove"
+    fix: "Either implement JWT fully (middleware + generation + [Authorize]) or remove config placeholder"
+
+  weak_password_hashing:
+    severity: P1
+    description: >
+      SHA256 + 16-char salt used for password hashing with a comment acknowledging
+      BCrypt/Argon2 would be better. SHA256 is too fast for passwords — brute-force
+      feasible. One NuGet package (BCrypt.Net-Next) would have solved this correctly.
+    rule: "Never use general-purpose hash functions (SHA256/MD5) for passwords"
+    fix: "Use BCrypt.Net-Next or Argon2 (Isopoh.Cryptography.Argon2)"
+
+  test_coverage_thin:
+    severity: P1
+    description: >
+      25 tests for ~2,200 LOC / 5-project solution. AccountService and ReportService
+      had zero tests. No endpoint-level tests. No frontend TypeScript tests. Target
+      for a mature Clean Architecture project: 60-80+ tests minimum.
+    rule: "Every service class must have a corresponding XxxTests class"
+    detection: "for each class in Application/Services → assert matching Tests/Services/XxxTests exists"
+    thresholds:
+      minimum_test_count_per_1000_loc: 25
+      service_class_coverage: "100% of service classes must have test classes"
+      frontend_tests: "required when services layer exists"
+
+  no_rate_limiting:
+    severity: P1
+    description: >
+      Financial APIs require rate limiting to prevent credential stuffing and abuse.
+      The security comparison doc noted this as 'planned (not yet added)' — it should
+      be implemented, not planned.
+    fix: "Add ASP.NET Core rate limiting middleware (built-in since .NET 7)"
+
+  di_lifetime_inconsistency:
+    severity: P2
+    description: >
+      Repositories registered as Singleton, services as Scoped. While safe when
+      repositories hold only a connection string, it violates ASP.NET Core conventions
+      and creates a 'captive dependency' smell.
+    rule: "Scoped services must not depend on Transient; Singletons must not depend on Scoped"
+    fix: "Register all repositories and services as Scoped"
+
+  no_traceability:
+    severity: P1
+    description: >
+      No CORTEX audit trail in .cortex-runtime SQLite for the refactoring session.
+      orchestrator-traces.db had only TEST_ACTION entries from unit tests (Feb 20).
+      intelligence_audit.db had 94 PARSE rows for server.py only.
+      The entire BadMonolith → Refactored transformation left no CORTEX trace.
+    rule: "All REFACTOR operations must persist session record to orchestrator-traces.db"
+    fix: >
+      RefactoringOrchestrator must write AC_START / AC_COMPLETE entries with:
+      source_repo, target_repo, smells_catalogued, smells_addressed, files_created,
+      test_count_before, test_count_after, security_p0_before, security_p0_after
+
+  no_editorconfig:
+    severity: P2
+    description: >
+      No .editorconfig or Roslyn analyzer config. Clean Architecture projects need
+      static enforcement of the naming/quality rules CORTEX enforces at refactor time.
+    fix: "Generate .editorconfig + Directory.Build.props with StyleCop.Analyzers"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# REFACTORING COMPLETENESS CHECKLIST (derived from gap analysis)
+# Apply this checklist to every REFACTOR operation BEFORE marking complete
+# ─────────────────────────────────────────────────────────────────────────────
+completeness_checklist:
+  functional:
+    - "[ ] All source endpoints enumerated and mapped to target endpoints"
+    - "[ ] Any dropped endpoint has an ADR justification"
+    - "[ ] Transfer/payment operations preserved if present in source"
+    - "[ ] Admin/health endpoints preserved or replaced with equivalent"
+
+  security:
+    - "[ ] No P0 vulnerabilities remain (SQL injection, hardcoded secrets, stack trace exposure)"
+    - "[ ] Password hashing uses BCrypt/Argon2 — NOT SHA256/MD5"
+    - "[ ] Auth infrastructure is COMPLETE: middleware + token gen + [Authorize] attributes"
+    - "[ ] Rate limiting applied to sensitive endpoints (login, payment, admin)"
+    - "[ ] CORS origins config-driven, not wildcard"
+
+  testing:
+    - "[ ] Every service class has a matching test class"
+    - "[ ] Every repository interface has at least 1 integration test"
+    - "[ ] Endpoint-level tests verify routing, status codes, error responses"
+    - "[ ] Frontend service layer has unit tests with mock fetch"
+    - "[ ] Test count >= 25 per 1,000 LOC"
+
+  architecture:
+    - "[ ] DI lifetimes consistent (repositories and services both Scoped)"
+    - "[ ] No Singleton capturing Scoped dependencies"
+    - "[ ] .editorconfig present with language-appropriate rules"
+    - "[ ] Database migration strategy documented in ADR"
+
+  traceability:
+    - "[ ] AC_START written to orchestrator-traces.db at session start"
+    - "[ ] AC_COMPLETE written with smell counts, file counts, test delta, security delta"
+    - "[ ] .cortex-manifest.yaml updated in target with REFACTORED status"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SCORING MODEL (reuse for future STS audits)
+# ─────────────────────────────────────────────────────────────────────────────
+scoring_model:
+  categories:
+    architecture:    { weight: 0.25, max: 10 }
+    security:        { weight: 0.25, max: 10 }
+    testing:         { weight: 0.20, max: 10 }
+    documentation:   { weight: 0.15, max: 10 }
+    frontend:        { weight: 0.10, max: 10 }
+    traceability:    { weight: 0.05, max: 10 }
+  baseline_2026_02_22:
+    architecture:    9
+    security:        8
+    testing:         6
+    documentation:   9
+    frontend:        8
+    traceability:    3
+    weighted_total:  82

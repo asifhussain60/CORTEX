@@ -40,6 +40,9 @@ architecture:
     - path: "architecture/engineering-anti-patterns.yaml"
       title: "Engineering Anti-Patterns"
       keywords: ["anti-pattern", "fix", "refactor", "analyze", "avoid"]
+    - path: "architecture/refactoring-quality-standards.yaml"
+      title: "Refactoring Quality Standards"
+      keywords: ["refactor", "completeness", "traceability", "sts", "monolith", "clean-architecture", "scoring"]
 
 devops-infrastructure:
   guides:
