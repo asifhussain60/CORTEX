@@ -247,6 +247,33 @@ document:
       priority: P2
       effort: S
 
+    - gap_id: "GAP-007"
+      title: "No MCP tool could write non-Python source files to disk"
+      severity: P0
+      stage_affected: [3, 4, 5]
+      tool: "(none — missing tool)"
+      expected: >
+        Playbook stages 3-5 (security fixes, architecture decomposition, TDD scaffolding)
+        write C#, TypeScript, and YAML files to cortex-sts/CortexLabs/Refactored/.
+        This MUST happen via MCP to satisfy the MCP-only execution policy.
+      actual: >
+        No MCP tool in the registry could write arbitrary files to disk.
+        CortexRefactor.execute() returns stubs (changes: [], references_updated: 0).
+        execute_workflow steps simulate orchestrator execution but produce no files.
+        FileFactory.create_file() exists in cortex.core but has no MCP wrapper.
+      impact: "Stages 3-5 would produce zero output files — playbook cannot deliver refactored codebase via MCP"
+      fix_applied:
+        date: "2026-02-22"
+        tool: "cortex_scaffold_files (CortexScaffoldFiles)"
+        file: "cortex/mcp/tools/scaffold_files_tool.py"
+        tests: "tests/mcp/test_scaffold_files_tool.py (17 tests, TDD-first)"
+        description: >
+          New MCP tool cortex_scaffold_files(root, files, overwrite, dry_run, session_id)
+          writes arbitrary-language source files via Path.write_text() with mkdir -p.
+          Registered in cortex.mcp.tools (ops count: 34 → 35).
+          CORE-008 compliant: tests written RED-first before implementation.
+        status: "FIXED ✅ — 17 tests GREEN"
+
   # ── RUN RECORD ─────────────────────────────────────────────────────────────
   run_records:
     - run_id: "PB-STS-001-RUN-20260222-001"
@@ -267,3 +294,13 @@ document:
         GAP-002 fixed inline — cortex_master_plan restored.
         Stages 2-8 proceeding with available tools + workarounds documented above.
         Saw is sharper: 5 new backlog items, 1 regression fixed.
+
+    - run_id: "PB-STS-001-RUN-20260222-002"
+      date: "2026-02-22"
+      gaps_found: 1
+      gaps_fixed_immediately: 1   # GAP-007 cortex_scaffold_files built TDD-first
+      gaps_backlogged: 0
+      outcome: >
+        Run 2 pre-execution: GAP-007 discovered (no MCP tool wrote non-Python files).
+        cortex_scaffold_files implemented TDD-first (17 tests GREEN).
+        Registered in cortex.mcp.tools. Now proceeding to actual C# scaffolding via MCP.

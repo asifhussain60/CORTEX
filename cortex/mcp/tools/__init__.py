@@ -2,11 +2,11 @@ from typing import Any
 """
 CORTEX MCP v2 - Tool Implementations
 
-34 production tools organized by category:
+35 production tools organized by category:
 - Core (4): process_request, challenge, classify, request_lifecycle
 - Intelligence (4): lens, knowledge, git, generate_tests
 - Governance (4): governance, validate, load, validate_request (Phase 48)
-- Operations (6): debug, refactor, plan, onboard, dashboard, master_plan (Phase 50)
+- Operations (7): debug, refactor, plan, onboard, dashboard, master_plan (Phase 50), scaffold_files (PB-STS-001)
 - Utilities (11): verify, ask, vacuum, tools_catalog, total_recall, metrics, check, vision, orchestrator,
                   health_orchestrate, vacuum_orchestrate (Phase 48)
 - Toolkit (5): diagnose, verify_env, cleanup, validate_gov, analyze (Phase 90)
@@ -15,6 +15,7 @@ AC_START: AC-WAVE100-S2-006
 AC_START: AC-P90-S7-001
 AC_START: AC-P48-MCP-001
 AC_START: AC-P50-MCP-001
+AC_START: PB-STS-001-RUN-2-SCAFFOLD-TOOL
 """
 
 # Core tools
@@ -54,6 +55,9 @@ from cortex.mcp.tools.operations import (
 from cortex.mcp.tools.workflow_tools import (
     CortexWorkflow,  # Phase 100 Stage 2
 )
+
+# Scaffold files tool (PB-STS-001 Run 2 — GAP-007 resolution)
+from cortex.mcp.tools.scaffold_files_tool import CortexScaffoldFiles
 
 # Utility tools
 from cortex.mcp.tools.utilities import (
@@ -118,6 +122,7 @@ ALL_TOOLS = [
     CortexOnboard,
     CortexDashboard,
     CortexWorkflow,  # Phase 100 Stage 2
+    CortexScaffoldFiles,  # PB-STS-001 Run 2 — GAP-007 resolution
     # Utilities (9)
     CortexVerify,
     CortexAsk,
@@ -190,6 +195,7 @@ __all__ = [
     "CortexOnboard",
     "CortexDashboard",
     "CortexWorkflow",
+    "CortexScaffoldFiles",  # PB-STS-001 Run 2 — GAP-007 resolution
     # Utilities
     "CortexVerify",
     "CortexAsk",
