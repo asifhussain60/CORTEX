@@ -73,9 +73,9 @@ maintainer: "Asif Hussain"
 | Phase 09 | v2.0.0 tag + release | ✅ COMPLETE |
 
 **Post-Refactor State:**
-- 21 wired orchestrators across 3 tiers (core, domain, support)
-- 24 MCP tools in `cortex/mcp/tools/`
-- 21 CORE rules in `cortex-registry/core/`
+- 22 wired orchestrators across 3 tiers (core, domain, support)
+- 25 MCP tools in `cortex/mcp/tools/`
+- 22 CORE rules in `cortex-registry/core/`
 - 1 package: `cortex`
 - 15,230 tests (519 golden, 177 phase)
 
@@ -132,9 +132,9 @@ find cortex/mcp/tools -name "*.py" | grep -v "__init__\|test" | wc -l
 #### Registry Alignment
 | Check | Result |
 |-------|--------|
-| Orchestrators | 52 found ✅ |
-| MCP Tools | 23 found ✅ |
-| CORE Rules | 17 found ✅ |
+| Orchestrators | 22 found ✅ |
+| MCP Tools | 25 found ✅ |
+| CORE Rules | 22 found ✅ |
 | Package | `cortex` ✅ |
 
 **Plan Integrity:** ✅ Clean

@@ -131,7 +131,7 @@ cortex_load_core_rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 | DESIGN | 🎨 | "architect", "design", "structure" | DesignCoordinator | ⚪ | `cortex-architect.md` |
 | PLAN | 📋 | "plan", "phase", "roadmap" | PlanningCoordinator | ⚪ | `cortex-phase-resolver.md` |
 | QUERY | 📖 | "explain", "how", "what", "why" | QueryCoordinator | ⚪ | `cortex-interactive.md` |
-| DIGEST | 📚 | "summarize", "digest" | DigestCoordinator | ⚪ | `cortex-digest.md` |
+| DIGEST | 📚 | "summarize", "digest", "ingest" | DigestCoordinator | 🔵 | `cortex-digest.md` |
 | INVESTIGATE | 🔬 | "investigate", "analyze", "root cause" | InvestigationOrchestrator | ✅ | `cortex-architect.md` |
 | REPHRASE | 💬 | "rephrase" | RequestRephraseOrchestrator | ⚪ | — |
 
@@ -312,24 +312,37 @@ For each orchestrator in wiring contract:
 
 ---
 
-## 📚 DIGEST MODE — Knowledge Synthesis
+## 📚 DIGEST MODE — Intelligent Content Ingestion
 
-**Trigger:** "summarize", "digest", "what happened", "recap"
+**Trigger:** "summarize", "digest", "ingest", "learn from", "extract from", "what happened"
 
-**Output:** Progressive disclosure — summary first, details on request.
+**Usage:** `/digest {file_or_folder_path}`
+
+**3-Pipeline Architecture:**
+
+| Pipeline | Detection | LENS | Output |
+|----------|-----------|------|--------|
+| **1: Chat Session** | Marker score ≥ 4 (User/Assistant turns, tool calls, AC codes) | OFF | Drifts, patterns, tool usage, enhancement proposals |
+| **2: Repo Content** | File extension (.py, .yaml, .json) + repo paths | ON | Domain knowledge, best practices, anti-patterns |
+| **3: External Knowledge** | No CORTEX markers, no repo paths | OFF | Structured YAML knowledge artifacts |
+
+**Registry Persistence:** Extracted knowledge routes to `cortex-registry/knowledge/` by domain (architecture, backend-python, security, testing-validation, devops-infrastructure, performance-optimization). Enhancement proposals route to `cortex-registry/plans/pending/`.
+
+**Agent:** `cortex-digest.md` (full 3-pipeline spec)
 
 ### DIGEST Marker Scoring (Auto-Activation)
 
-Score the source content. If score ≥5 → auto-activate DIGEST. Score 3–4 → ask user. <3 → skip.
+Score the source content. If score ≥ 5 → Pipeline 1 (Chat). Score 3–4 → ask user. < 3 → Pipeline 2 or 3.
 
 | Marker | Points |
 |---|---|
+| User/Assistant turns | +2 |
 | AC code (`AC-*`) | +2 |
+| CORTEX headers / badges | +1 |
 | Phase reference | +1 |
 | Test count (`X/Y` format) | +1 |
 | Progress bar | +1 |
-| CORTEX badge (🤖🧠) | +1 |
-| Timestamp | +1 |
+| Tool call markers | +1 |
 | Git hash | +1 |
 
 ---
@@ -346,7 +359,8 @@ Score the source content. If score ≥5 → auto-activate DIGEST. Score 3–4 �
 
 **LENS Auto-Fetch** (triggered at routing time):
 - ✅ IMPLEMENT, FIX, REFACTOR, INVESTIGATE, AUDIT — full LENS context fetched
-- ⚪ PLAN, DESIGN, QUERY, DIGEST, REPHRASE — LENS NOT triggered (no code analysis needed)
+- 🔵 DIGEST — LENS conditional (Pipeline 2 repo content only)
+- ⚪ PLAN, DESIGN, QUERY, REPHRASE — LENS NOT triggered (no code analysis needed)
 
 **Intelligence Tiers (UnifiedIntelligenceProvider):**
 
@@ -366,7 +380,7 @@ Score the source content. If score ≥5 → auto-activate DIGEST. Score 3–4 �
 ### Validation Sequence
 
 ```
-1. Registry Check       → cortex_load_core_rules (21 rules, 0 violations required)
+1. Registry Check       → cortex_load_core_rules (22 rules, 0 violations required)
 2. Dependency Drift     → cortex_check_dependency_drift (0 drift items)
 3. Regression Risk      → pytest --cov on target module (≥80% coverage floor)
 4. Governance Drift     → cortex_query_governance (0 P0 violations = proceed)
@@ -378,7 +392,7 @@ Score the source content. If score ≥5 → auto-activate DIGEST. Score 3–4 �
 **PASS (risk ≤ 0.6):**
 ```
 ✅ Holistic Validation: PASS | Risk: 0.2 (LOW)
-Registry: 21 rules, 0 violations | Dependencies: aligned | Coverage: 87% | Governance: clean
+Registry: 22 rules, 0 violations | Dependencies: aligned | Coverage: 87% | Governance: clean
 → Proceed to implementation
 ```
 
@@ -393,7 +407,7 @@ Blocker: [specific issue] | Action: [remediation step]
 
 | Check | Tool | Threshold |
 |---|---|---|
-| CORE rules loaded | `cortex_load_core_rules` | 21 rules present |
+| CORE rules loaded | `cortex_load_core_rules` | 22 rules present |
 | Dependency drift | `cortex_check_dependency_drift` | 0 drift items |
 | Test coverage | `pytest --cov` | ≥80% on target module |
 | P0 violations | `cortex_query_governance` | 0 P0 violations |
@@ -429,7 +443,7 @@ Everything else → move to canonical location or delete.
 
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`)
-- No stale orchestrator counts (must say **21 wired orchestrators**, **24 MCP tools**, **21 CORE rules**)
+- No stale orchestrator counts (must say **22 wired orchestrators**, **25 MCP tools**, **22 CORE rules**)
 - No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
 - All agent files must match entries in `AGENT-INDEX.md`
@@ -439,9 +453,9 @@ Run `cortex-meta-auditor.md` checks when prompt or agent files are modified:
 
 | Check | Pass Criteria |
 |---|---|
-| Orchestrator count | All agents/prompts say "21 wired" |
-| MCP tool count | All say "24 production tools" |
-| CORE rules count | All say "21 active" |
+| Orchestrator count | All agents/prompts say "22 wired" |
+| MCP tool count | All say "25 production tools" |
+| CORE rules count | All say "22 active" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | Stale MCP tool names absent | No `cortex_process_request`, `cortex_lens_analyze`, `cortex_manage_todo` |
 
@@ -487,7 +501,7 @@ Progress bar + stage bullet list. See templates SSOT.
 | `/audit` | 10-point + wiring contract readiness scan |
 | `/audit fix` | Scan + auto-remediate all fixable issues |
 | `/vacuum` | Clean markdown sprawl, dead files |
-| `/digest {topic}` | Synthesize knowledge |
+| `/digest {path}` | Intelligent content ingestion (3-pipeline) |
 | `/onboard {repo}` | LENS analysis + dashboard |
 | `/challenge {request}` | Generate alternatives |
 | `/recall {feature}` | Feature discovery |

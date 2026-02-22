@@ -18,7 +18,7 @@ Triggered by **CORE-048** (holistic validation gate) before any code change.
 
 ```
 1. Registry Check
-   → cortex_load_core_rules (21 rules from cortex-registry/core/)
+   → cortex_load_core_rules (22 rules from cortex-registry/core/)
 
 2. Dependency Analysis
    → cortex_check_dependency_drift
@@ -46,7 +46,7 @@ Triggered by **CORE-048** (holistic validation gate) before any code change.
 ## ✅ Holistic Validation: PASS
 
 Risk Score: 0.2 (LOW)
-Registry: 21 rules loaded, 0 violations
+Registry: 22 rules loaded, 0 violations
 Dependencies: aligned
 Regression coverage: 87%
 Governance: clean
@@ -71,7 +71,7 @@ Action required: [remediation step]
 
 | Check | Tool / Command | Threshold |
 |---|---|---|
-| CORE rules loaded | `cortex_load_core_rules` | 21 rules present |
+| CORE rules loaded | `cortex_load_core_rules` | 22 rules present |
 | Dependency drift | `cortex_check_dependency_drift` | 0 drift items |
 | Test coverage | `pytest --cov` | ≥ 80% on target module |
 | P0 violations | `cortex_query_governance` | 0 P0 violations |
@@ -107,7 +107,7 @@ Action required: [remediation step]
 ## Canonical Reference
 
 - Package: `cortex` (single canonical import)
-- Orchestrators: 52 classes in `cortex/orchestrators/` (10 domains)
-- MCP Tools: 24 in `cortex/mcp/tools/`
-- Governance rules: 21 active in `cortex-registry/core/`
+- Orchestrators: 22 wired in `cortex/orchestrators/` (10 domains)
+- MCP Tools: 25 in `cortex/mcp/tools/`
+- Governance rules: 22 active in `cortex-registry/core/`
 - Tests: 15,230 total (486 golden, 177 phase)

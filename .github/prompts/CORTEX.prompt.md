@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-02-22 | **Architecture:** 21 Wired Orchestrators · 24 MCP Tools · 21 CORE Rules · 1 Package
+**Updated:** 2026-02-22 | **Architecture:** 22 Wired Orchestrators · 25 MCP Tools · 22 CORE Rules · 1 Package
 
 ---
 
@@ -8,8 +8,8 @@
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
 **Entry Point:** This prompt → MasterOrchestrator → 4-stage pipeline → MCP Tools  
-**Orchestrators:** 52 canonical across 10 domains in `cortex/orchestrators/`  
-**MCP Tools:** 24 in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
+**Orchestrators:** 22 wired across 10 domains in `cortex/orchestrators/`  
+**MCP Tools:** 25 in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
 
 ---
 
@@ -54,7 +54,7 @@ User Request → MasterOrchestrator.coordinate_operation()
 | QUERY | QueryCoordinator | "explain", "how", "what" |
 | DESIGN | DesignCoordinator | "architect", "design" |
 | PLAN | PlanningCoordinator | "plan", "phase" |
-| DIGEST | DigestCoordinator | "summarize", "digest" |
+| DIGEST | DigestCoordinator | "summarize", "digest", "ingest" |
 | INVESTIGATE | InvestigationOrchestrator | "investigate", "root cause" |
 | REPHRASE | RequestRephraseOrchestrator | "rephrase" |
 
@@ -99,8 +99,8 @@ EnforcementOrchestrator validates CORE rules before every operation:
 
 | Type | Location |
 |------|----------|
-| Orchestrators (52) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (24) | `cortex/mcp/tools/` |
+| Orchestrators (22 wired) | `cortex/orchestrators/{domain}/` |
+| MCP Tools (25) | `cortex/mcp/tools/` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |
@@ -118,7 +118,7 @@ EnforcementOrchestrator validates CORE rules before every operation:
 | `/audit` | 10-point production readiness scan |
 | `/audit fix` | Scan + auto-remediate |
 | `/vacuum` | Clean dead files |
-| `/digest {topic}` | Knowledge synthesis |
+| `/digest {path}` | Intelligent content ingestion (3-pipeline) |
 | `/onboard {repo}` | LENS analysis + dashboard |
 | `/challenge {req}` | Generate alternatives |
 | `/recall {feature}` | Feature discovery |

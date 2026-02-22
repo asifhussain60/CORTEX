@@ -1,6 +1,8 @@
 # CORTEX Prompts
 
-**Updated:** 2026-02-20 | ---
+**Updated:** 2026-02-22
+
+---
 
 ## 📁 Directory Structure
 
@@ -9,16 +11,15 @@
 | File | Status | Size | Purpose |
 |------|--------|------|---------|
 | `cortex-architect.prompt.md` | ✅ ACTIVE | 580 lines | Senior AI architect for IMPLEMENT/FIX/REFACTOR |
-| `cortex.prompt.md` | ✅ ACTIVE | 350 lines | Master orchestrator for all request routing |
+| `CORTEX.prompt.md` | ✅ ACTIVE | 350 lines | Master orchestrator for all request routing |
 | `README.md` | — | — | This file |
 
 ### `reference/` — Supporting Documentation
 
 | File | Purpose |
 |------|---------|
-| `mcp-setup-guide.md` | Quick MCP setup reference (Pylance-style architecture) |
-| `execution-modes.md` | HEPTA-MODE detailed reference |
-| `mcp-integration-guide.md` | Comprehensive MCP setup & troubleshooting |
+| `chat03-lessons-learned.yaml` | Chat session lessons learned |
+| `phase-0-5-dashboard.md` | Phase 0-5 dashboard reference |
 
 ### `../.github/templates/` — Response Templates
 
@@ -26,7 +27,6 @@
 |------|---------|
 | `cortex-response-templates.md` | **SSOT** for all response formatting — templates, blocks, rendering rules, personality |
 | `chat-vs-terminal-guide.md` | Chat vs Terminal output guide |
-| `chat-vs-terminal-quick-ref.md` | Quick reference for chat/terminal decisions |
 
 ---
 

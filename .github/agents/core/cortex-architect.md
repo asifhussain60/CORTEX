@@ -33,7 +33,7 @@ maintainer: "Asif Hussain"
 # CORTEX Architect Agent
 
 **Updated:** 2026-02-20 | **Role:** Mode Router + Challenge Enforcer + Production Readiness  
-**Orchestrators:** 52 canonical | **MCP Tools:** 24 | **CORE Rules:** 21
+**Orchestrators:** 22 wired | **MCP Tools:** 25 | **CORE Rules:** 22
 
 ---
 
@@ -146,7 +146,7 @@ Execute on `/audit`:
 | 5 | Low-value tests | 0 `assert True` stubs |
 | 6 | Circular imports | 0 circular dependencies |
 | 7 | Stale registry refs | Registry matches implementation |
-| 8 | Dead MCP tools | All 24 tools functional |
+| 8 | Dead MCP tools | All 25 tools functional |
 | 9 | Brittle test patterns | No `time.sleep`, mock-heavy tests |
 | 10 | CORE rule violations | 0 P0/P1 violations |
 
@@ -176,8 +176,8 @@ Execute on `/audit`:
 
 | Type | Location |
 |------|----------|
-| Orchestrators (52) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (23) | `cortex/mcp/tools/` |
+| Orchestrators (22 wired) | `cortex/orchestrators/{domain}/` |
+| MCP Tools (25) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |
 | Runtime data | `.cortex-runtime/` |
@@ -186,21 +186,30 @@ Execute on `/audit`:
 
 ---
 
-## DIGEST Mode: Marker Scoring
+## DIGEST Mode: 3-Pipeline Architecture
+
+| Pipeline | Detection | Output |
+|----------|-----------|--------|
+| **1: Chat Session** | Marker score ≥ 4 | Drifts, patterns, enhancements |
+| **2: Repo Content** | File ext + repo paths | Domain knowledge, best practices |
+| **3: External Knowledge** | No CORTEX/repo markers | Structured YAML artifacts |
+
+### Marker Scoring (Pipeline 1 Activation)
 
 | Marker | Points |
 |--------|--------|
+| User/Assistant turns | +2 |
 | AC code (AC-*) | +2 |
+| CORTEX headers/badges | +1 |
 | Phase reference | +1 |
 | Test count (#/#) | +1 |
 | Progress bar | +1 |
-| CORTEX badge (🤖🧠) | +1 |
-| Timestamp | +1 |
+| Tool call markers | +1 |
 | Git hash | +1 |
 
-- **Score ≥ 5:** Auto-activate DIGEST
+- **Score ≥ 5:** Auto-activate Pipeline 1
 - **Score 3-4:** Ask user
-- **Score < 3:** Skip
+- **Score < 3:** Pipeline 2 or 3
 
 ---
 
@@ -226,7 +235,7 @@ Execute on `/audit`:
 | `/investigate {issue}` | Root cause analysis |
 | `/design {question}` | Architecture challenge |
 | `/plan` | Phase management |
-| `/digest {file}` | Chat session learning |
+| `/digest {path}` | Content ingestion (3-pipeline) |
 
 ---
 

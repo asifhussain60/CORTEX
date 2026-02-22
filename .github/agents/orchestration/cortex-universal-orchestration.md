@@ -9,8 +9,8 @@
 **Single source of truth** for how CORTEX orchestrators work together across ALL modes.
 
 **Architecture (Post-Refactor):**
-- 21 wired orchestrators in `cortex/orchestrators/` (3 tiers: core, domain, support)
-- 24 MCP tools in `cortex/mcp/tools/`
+- 22 wired orchestrators in `cortex/orchestrators/` (3 tiers: core, domain, support)
+- 25 MCP tools in `cortex/mcp/tools/`
 - 1 package: `cortex` (no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---
@@ -50,10 +50,10 @@ USER REQUEST → STAGE 1: Interaction → STAGE 2: Intent → STAGE 3: Intellige
 | plan, phase, roadmap | PLAN | PlanningCoordinator |
 | design, architect, structure | DESIGN | DesignCoordinator |
 | explain, how, what, why | QUERY | QueryCoordinator |
-| summarize, digest | DIGEST | DigestCoordinator |
+| summarize, digest, ingest | DIGEST | DigestCoordinator |
 | rephrase | REPHRASE | RequestRephraseOrchestrator |
 
-**LENS Auto-Fetch:** Triggered for IMPLEMENT, FIX, REFACTOR, INVESTIGATE, AUDIT (code analysis needed). NOT triggered for PLAN, DESIGN, QUERY, DIGEST, REPHRASE.
+**LENS Auto-Fetch:** Triggered for IMPLEMENT, FIX, REFACTOR, INVESTIGATE, AUDIT (code analysis needed). DIGEST conditional (Pipeline 2 repo content only). NOT triggered for PLAN, DESIGN, QUERY, REPHRASE.
 
 ---
 
@@ -114,7 +114,7 @@ USER REQUEST → STAGE 1: Interaction → STAGE 2: Intent → STAGE 3: Intellige
 
 ---
 
-## 🔧 MCP Tool Mapping (23 Tools)
+## 🔧 MCP Tool Mapping (25 Tools)
 
 | Tool | Purpose |
 |------|---------|
@@ -133,7 +133,7 @@ USER REQUEST → STAGE 1: Interaction → STAGE 2: Intent → STAGE 3: Intellige
 
 ---
 
-## �️ Governance Rules (17 Active)
+## 🛡️ Governance Rules (22 Active)
 
 | Rule | Stage | Enforcement |
 |------|-------|-------------|

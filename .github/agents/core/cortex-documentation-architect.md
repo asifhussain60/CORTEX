@@ -110,8 +110,8 @@
 
 | Gap | Required Content | Target Location | Approach |
 |-----|-----------------|-----------------|----------|
-| **Brain Tier 0/1/2/3** | Directory structure, tier precedence, module purposes, governance flow | `capabilities/brain-tiers.md` | High-level architecture explanation using accessible metaphors. NO internal Python details. |
-| **Phase 49 CCL** | Async prefetch concept, SLA targets, fallback strategy, benefits | `capabilities/phase-49-crystallization.md` | User-facing capability description with evidence-backed performance metrics. |
+| **Orchestrator Tiers** | Directory structure, tier precedence, module purposes, governance flow | `capabilities/orchestrator-tiers.md` | High-level architecture explanation using accessible metaphors. NO internal Python details. |
+| **LENS Intelligence** | LENS analysis pipeline, 4-phase process, integration points | `capabilities/lens-intelligence.md` | User-facing capability description with evidence-backed performance metrics. |
 | **7 Enforcement Agents** | Agent roles, validation focus, integration points | `capabilities/enforcement-agents.md` | Conceptual overview of pre-execution gate with agent responsibilities. |
 
 ### P1 Gaps (Important - Incomplete Coverage)
@@ -169,18 +169,17 @@ graph TD
 [Continue with user-facing description, NO Python implementation details]
 ```
 
-**Example (Phase 49 CCL - Correct Approach):**
+**Example (LENS Intelligence — Correct Approach):**
 
 ```markdown
-# Context Optimization Architecture (Phase 49)
+# LENS Intelligence Pipeline
 
-Organizations may benefit from reduced request processing latency through the Context Crystallization Layer (CCL) capability...
+Organizations may benefit from improved code analysis quality through the LENS (Language → Examination → Navigation → Synthesis) capability...
 
 **Performance Characteristics (Internal Testing):**
-- Target service level: 300ms prefetch completion
-- Fallback maximum: 500ms
-- Average observed: 245ms (82% within target)
-- Net latency improvement potential: -85ms avg
+- Quick tier: <200ms (cached rules only)
+- Targeted tier: <2s (LENS + relevant YAMLs)
+- Full tier: <10s (LENS + knowledge graph + profiles)
 
 > **Notice:** Performance measurements reflect internal testing environments.
 > Production results depend on hardware specifications, network latency,
