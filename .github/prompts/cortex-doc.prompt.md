@@ -104,16 +104,27 @@ class DiscoveryOrchestrator:
         results: List[MCPToolMetadata]
         
     def scan_governance(self):
-        """Find all CORE rules."""
-        scan: cortex_brain/tier0/governance/
+        """Find all CORE rules. CANONICAL PATH: cortex-registry/core/ (NOT cortex_brain/)"""
+        scan: cortex-registry/core/          # ✅ CANONICAL — cortex_brain/ is DELETED
         results: List[GovernanceRule]
+
+    def scan_sts_sample_apps(self):
+        """Find all STS sample apps and their API specifications."""
+        scan: _workspaces/sts/sample-apps/_Real/
+        detect:
+          - account-modernized/: Account.FundingInvoices.* projects
+          - payment-processor-modernized/: PaymentProcessor.TransactionInvoices.* projects
+          - account-api-specs/: OpenAPI YAML/JSON + Mermaid .mmd diagrams
+          - payment-api-specs/: OpenAPI YAML/JSON + Mermaid .mmd diagrams
+        results: List[STSSampleAppMetadata]
     
     def generate_inventory(self):
         """Create component catalog."""
         return ComponentInventory(
             orchestrators=self.scan_orchestrators(),
             mcp_tools=self.scan_mcp_tools(),
-            governance_rules=self.scan_governance()
+            governance_rules=self.scan_governance(),
+            sts_apps=self.scan_sts_sample_apps()
         )
 
 print("✅ PHASE 1: DISCOVERY COMPLETE")
@@ -431,9 +442,9 @@ extract:
 
 ### Governance Discovery
 ```yaml
-scan: cortex_brain/tier0/governance/
+scan: cortex-registry/core/          # ✅ CANONICAL PATH (cortex_brain/ is DELETED — never reference it)
 detect:
-  - CORE rules in YAML
+  - CORE rules in YAML (tier0-skull/skull-rules.yaml, tier1-core/core-rules.yaml, etc.)
   - Enforcement points
 extract:
   - Rule ID, description
@@ -442,7 +453,102 @@ extract:
 
 ---
 
-## 🎨 Diagram Generation System
+## �️ STS Sample Application Documentation
+
+### Scope
+
+The **Software Transformation Studio (STS)** sample apps live at `_workspaces/sts/sample-apps/_Real/`.
+When documenting STS workspaces, this agent applies the following rules:
+
+**Canonical STS Structure:**
+```
+_workspaces/sts/sample-apps/_Real/
+├── README.md                        ← Top-level STS index (REQUIRED)
+├── account-modernized/
+│   └── README.md                    ← App architecture + API reference (REQUIRED)
+├── payment-processor-modernized/
+│   └── README.md                    ← App architecture + API reference (REQUIRED)
+├── account-api-specs/
+│   ├── README.md                    ← Spec index with table of contents (REQUIRED)
+│   └── specifications/*/diagrams/  ← .mmd diagram files
+├── payment-api-specs/
+│   ├── README.md                    ← Spec index with table of contents (REQUIRED)
+│   └── specifications/*/diagrams/  ← .mmd diagram files
+└── sts-architecture-d3.html        ← D3.js interactive dependency graph (REQUIRED)
+```
+
+### STS `.mmd` Diagram Standards
+
+**CRITICAL syntax rules for all `.mmd` files in STS:**
+
+```yaml
+sequence_diagrams:
+  keyword: participant     # ✅ CORRECT
+  never: user              # ❌ INVALID — breaks Mermaid rendering
+  required_participants: [Client, Controller, Service, Repository, Database]
+  use_alt_block: true      # For conditional paths (balance check, peg logic)
+  use_loop_block: true     # For batch operations (for each subaccountId)
+  endpoint_format: "HTTP METHOD /api/v1/path"  # Not "Execute" or "API Invoked"
+
+flowchart_diagrams:
+  start_label: "HTTP METHOD /api/v1/path"   # ✅ Not "API Invoked"
+  node_labels: full_english                  # ✅ No truncated labels (no "InvoiceAmount_less")
+  decision_labels: plain_condition           # ✅ "invoiceAmount > 0?" not "Condition: InvoiceAmount LTE 0"
+  error_nodes: include_http_status_codes     # ✅ "400 Bad Request: reason"
+  success_nodes: include_http_status_codes   # ✅ "201 Created: ResponseDto"
+
+dependency_diagrams:
+  type: classDiagram                         # ✅ Use classDiagram not component diagram
+  show_interfaces: true                      # IService, IRepository interfaces
+  show_methods: true                         # Key public methods with return types
+  show_relationships: implements|depends_on  # <|.. for implements, --> for depends on
+  clean_architecture: true                   # Controller → Interface ← Implementation
+```
+
+### STS D3.js Interactive Diagram
+
+Every STS workspace MUST include a `sts-architecture-d3.html` file providing an interactive
+force-directed graph of the full clean-architecture dependency map across both domains:
+
+```yaml
+d3_diagram_requirements:
+  file: sts-architecture-d3.html
+  type: force-directed graph
+  layers:
+    - API: controllers (blue #63c7ff)
+    - Core: service interfaces, repo interfaces, UoW (green #7ee787)
+    - Infrastructure: EF Core repos, mock repos, DataLayerRouter (orange #ffa657)
+    - Entity: domain entities (purple #d2a8ff)
+    - Azure: Azure Key Vault, App Configuration, Application Insights (amber #f0883e)
+  features:
+    - Layer filter buttons (show/hide by layer)
+    - Tooltip on hover (node description, tags, methods)
+    - Drag nodes to rearrange
+    - Zoom/pan (D3 zoom behavior)
+    - Arrow markers per layer color
+    - Glow filter for visual depth
+  style: dark glassmorphism (#0d1117 background, rgba glass panels)
+```
+
+### STS Documentation Quality Gates
+
+Before marking STS docs complete, verify:
+
+| Check | Requirement |
+|---|---|
+| `README.md` exists | Every subdirectory has a README |
+| `.mmd` syntax valid | No `user` keyword in sequenceDiagram — only `participant` |
+| Truncated labels fixed | No `InvoiceAmount_less`, `stringIsNullOrEmptyc`, etc. |
+| HTTP codes present | Error/success nodes include status codes |
+| D3.js diagram present | `sts-architecture-d3.html` exists with all layers |
+| Entities documented | Domain model diagrams use classDiagram with fields |
+| HIPAA noted | PHI entity fields and audit trail marked |
+| Canary rollout shown | DataLayerRouter + feature flag pattern documented |
+| WCF origin mapped | Legacy class → REST endpoint mapping table present |
+
+---
+
+## �🎨 Diagram Generation System
 
 ### Diagram Types & Locations
 

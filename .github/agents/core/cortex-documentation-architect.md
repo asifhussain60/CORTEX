@@ -96,7 +96,62 @@
 - **This Agent:** Content extraction + Diátaxis + role narratives → content.json
 - **Builder Agent:** content.json → HTML templates → docs/ site
 
-**Orchestrator:** `CortexDocsOrchestrator` (cortex/orchestrators/internal/cortex_docs_orchestrator.py)
+**Orchestrator:** `DocumentationOrchestrator` — path TBD by wiring contract (check `cortex-registry/core/specifications/` before referencing a specific path; `cortex/orchestrators/internal/` is not a canonical wired tier).
+
+⛔ **Deleted Paths — NEVER Reference:**
+- `cortex_brain/` — dissolved; governance rules are at `cortex-registry/core/`
+- `cortex_intelligence/` — deleted; use `cortex/intelligence/`
+- `cortex_lens/` — deleted; use `cortex/lens/`
+- `cortex/orchestrators/internal/` — not a canonical tier; wired orchestrators are in `core/`, `domain/`, `support/`
+
+---
+
+## 🏗️ STS Sample App Documentation Scope
+
+This agent is authoritative for documentation of STS sample applications in `_workspaces/sts/`.
+
+### STS Workspace Layout
+```
+_workspaces/sts/sample-apps/_Real/
+├── README.md                        ← Index: both apps, tech stack, architecture overview
+├── account-modernized/
+│   └── README.md                    ← Entities, API reference, architecture diagram, canary rollout
+├── payment-processor-modernized/
+│   └── README.md                    ← Entities, API reference, architecture diagram, test suite
+├── account-api-specs/
+│   ├── README.md                    ← Spec index + diagram rendering instructions
+│   └── specifications/*/diagrams/
+│       ├── sequence.mmd             ← MUST use `participant` (NOT `user`)
+│       ├── flowchart.mmd            ← MUST use full labels, HTTP status codes, real endpoint paths
+│       └── dependency.mmd           ← MUST be classDiagram with interfaces + implementations
+├── payment-api-specs/
+│   ├── README.md
+│   └── specifications/*/diagrams/  ← Same rules as account-api-specs
+└── sts-architecture-d3.html        ← D3.js force-directed graph (all layers, filter buttons, tooltip)
+```
+
+### STS `.mmd` Validation Rules
+
+**This agent MUST validate all `.mmd` files against these rules before marking docs complete:**
+
+| Rule | Check | Fix |
+|---|---|---|
+| `sequenceDiagram` keyword | `participant` only — NEVER `user` | Replace `user X` → `participant X` |
+| Endpoint labels | Start node shows actual HTTP endpoint | Replace `API Invoked` → `POST /api/v1/path` |
+| Node label truncation | No `_less`, `Contains`, abbreviated names | Expand to full readable English |
+| Error nodes | Include HTTP status code | `400 Bad Request: reason` |
+| flowchart conditions | Human-readable | `invoiceAmount > 0?` not `InvoiceAmount LTE 0` |
+| classDiagram interfaces | Show interface + implementation | `IService <|.. ServiceImpl : implements` |
+| alt/loop blocks | Sequence uses `alt` for conditionals | Add `alt Balance below peg / else` block |
+
+### STS D3.js Diagram Requirements
+
+Every STS workspace root MUST contain `sts-architecture-d3.html`:
+- **Type:** D3.js v7 force-directed graph
+- **Layers:** API (blue), Core (green), Infrastructure (orange), Entity (purple), Azure (amber)
+- **Features:** Filter buttons per layer, hover tooltip with node description, drag, zoom/pan
+- **Style:** Dark glassmorphism (`#0d1117` background)
+- **Content:** All Controllers, Service Interfaces, Repository Interfaces, Domain Entities, Azure Services
 
 ---
 

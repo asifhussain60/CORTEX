@@ -1,8 +1,19 @@
 sequenceDiagram
-    user Client
-    user Updater_CreatePaymentTransactionInvoices
+    participant Client
+    participant TransactionInvoiceController
+    participant TransactionInvoiceService
+    participant AccountCategoryRepository
+    participant Database
 
-    Client->>+Updater_CreatePaymentTransactionInvoices: Execute
-    Updater_CreatePaymentTransactionInvoices->>Updater_CreatePaymentTransactionInvoices: stringIsNullOrEmptycashInOutId
-    Updater_CreatePaymentTransactionInvoices->>Updater_CreatePaymentTransactionInvoices: HasParameters
-    Updater_CreatePaymentTransactionInvoices-->>-Client: Success
+    Client->>+TransactionInvoiceController: POST /api/v1/transaction-invoices/batch
+    TransactionInvoiceController->>TransactionInvoiceController: Validate cashInOutId not empty
+    TransactionInvoiceController->>TransactionInvoiceController: Validate accountCategoryIds not empty
+    TransactionInvoiceController->>+TransactionInvoiceService: CreateBatchAsync(dto)
+    loop For each accountCategoryId
+        TransactionInvoiceService->>+AccountCategoryRepository: GetByIdAsync(accountCategoryId)
+        AccountCategoryRepository-->>-TransactionInvoiceService: AccountCategory entity
+        TransactionInvoiceService->>+Database: INSERT TransactionInvoice
+        Database-->>-TransactionInvoiceService: invoiceId
+    end
+    TransactionInvoiceService-->>-TransactionInvoiceController: BatchTransactionInvoiceResultDto
+    TransactionInvoiceController-->>-Client: 201 Created { successCount, failureCount, failedAccountCategories }

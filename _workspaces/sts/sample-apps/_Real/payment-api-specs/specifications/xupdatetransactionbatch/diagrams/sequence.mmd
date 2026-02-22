@@ -1,14 +1,21 @@
 sequenceDiagram
-    user Client
-    user XUpdateTransactionBatch
-    user Database
+    participant Client
+    participant TransactionBatchController
+    participant TransactionBatchService
+    participant TransactionBatchRepository
+    participant CashInOutRepository
+    participant Database
 
-    Client->>+XUpdateTransactionBatch: Execute
-    XUpdateTransactionBatch->>XUpdateTransactionBatch: Validate Inputs
-    XUpdateTransactionBatch->>XUpdateTransactionBatch: transactionBatch_equals_null
-    XUpdateTransactionBatch->>XUpdateTransactionBatch: stringIsNullOrEmptyTransactionCash
-    XUpdateTransactionBatch->>+Database: SELECT TransactionBatch
-    Database-->>-XUpdateTransactionBatch: Result
-    XUpdateTransactionBatch->>+Database: SELECT CashInOut
-    Database-->>-XUpdateTransactionBatch: Result
-    XUpdateTransactionBatch-->>-Client: Success
+    Client->>+TransactionBatchController: PUT /api/v1/transaction-batches/{batchId}
+    TransactionBatchController->>TransactionBatchController: Validate batchId not null
+    TransactionBatchController->>TransactionBatchController: Validate cashInOutId not empty
+    TransactionBatchController->>+TransactionBatchService: UpdateBatchAsync(batchId, dto)
+    TransactionBatchService->>+TransactionBatchRepository: GetByIdAsync(batchId)
+    TransactionBatchRepository-->>-TransactionBatchService: TransactionBatch entity
+    TransactionBatchService->>TransactionBatchService: Validate batch status allows update
+    TransactionBatchService->>+CashInOutRepository: GetByIdAsync(cashInOutId)
+    CashInOutRepository-->>-TransactionBatchService: CashInOut entity
+    TransactionBatchService->>+Database: UPDATE TransactionBatch SET Status, UpdatedDate
+    Database-->>-TransactionBatchService: Rows affected
+    TransactionBatchService-->>-TransactionBatchController: UpdatedBatchDto
+    TransactionBatchController-->>-Client: 200 OK { batchId, status, updatedDate }

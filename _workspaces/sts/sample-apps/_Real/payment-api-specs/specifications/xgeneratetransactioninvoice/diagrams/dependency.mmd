@@ -1,12 +1,37 @@
 classDiagram
-    class XGenerateTransactionInvoice {
-        +Execute
+    class TransactionInvoiceController {
+        +GenerateInvoiceAsync(request) Task~GenerateResultDto~
+        +GetInvoiceById(id) Task~TransactionInvoiceResponse~
     }
-    class IoC
-    XGenerateTransactionInvoice --> IoC
-    class Utilities
-    XGenerateTransactionInvoice --> Utilities
-    class Abstractions
-    XGenerateTransactionInvoice --> Abstractions
-    class Paragon
-    XGenerateTransactionInvoice --> Paragon
+    class ITransactionInvoiceService {
+        +GenerateAsync(request) Task~GenerateTransactionInvoiceResponse~
+    }
+    class TransactionInvoiceService {
+        +GenerateAsync(request) Task~GenerateTransactionInvoiceResponse~
+    }
+    class IAccountCategoryRepository {
+        +GetByIdAsync(id) Task~AccountCategory~
+    }
+    class ICashInOutRepository {
+        +AddAsync(entity) Task~CashInOut~
+    }
+    class IUnitOfWork {
+        +SaveChangesAsync() Task~int~
+    }
+    class AccountCategory {
+        +AccountCategoryId string
+        +Balance decimal
+        +Status string
+    }
+    class CashInOut {
+        +TransactionId string
+        +Amount decimal
+        +TransactionType string
+    }
+    TransactionInvoiceController --> ITransactionInvoiceService : depends on
+    ITransactionInvoiceService <|.. TransactionInvoiceService : implements
+    TransactionInvoiceService --> IAccountCategoryRepository : depends on
+    TransactionInvoiceService --> ICashInOutRepository : depends on
+    TransactionInvoiceService --> IUnitOfWork : depends on
+    IAccountCategoryRepository ..> AccountCategory : returns
+    ICashInOutRepository ..> CashInOut : returns

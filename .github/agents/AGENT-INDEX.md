@@ -164,15 +164,37 @@ IF BLOCK → Show remediation, require override
 
 ---
 
+## STS Documentation Intent
+
+| User Intent | Load These Agents | Token Cost |
+|-------------|-------------------|-----------|
+| **DOCUMENT (STS)** | cortex-documentation-architect.md | ~4,500 |
+| **DOCUMENT (CORTEX)** | cortex-documentation-architect.md + cortex-gitpages-builder.md | ~8,000 |
+
+**STS Trigger Phrases:** "document STS", "review STS", "STS sample app docs", "account-modernized README", "payment-processor README", "fix mmd diagrams", "STS architecture diagram"
+
+**STS Documentation Authority:** `cortex-doc.prompt.md` (Section: 🏗️ STS Sample Application Documentation) + `cortex-documentation-architect.md` (Section: 🏗️ STS Sample App Documentation Scope)
+
+**STS `.mmd` Quality Gate (run before marking complete):**
+- `participant` keyword only in sequenceDiagram (never `user`)
+- Start nodes use actual HTTP endpoints (not "API Invoked" / "Execute")
+- No truncated labels (`_less`, `Conta`, `Emptyc`, etc.)
+- Error nodes include HTTP status codes
+- D3.js interactive diagram present at workspace root
+
+---
+
 ## ⛔ Deleted Constructs (Never Reference)
 
 - `cortex/brain/` — dissolved into `cortex/orchestrators/`
 - `cortex_intelligence/` — merged into `cortex/intelligence/`
 - `cortex_lens/` — merged into `cortex/lens/`
+- `cortex_brain/` — dissolved; governance rules are at `cortex-registry/core/`
 - `_archive/` — permanently deleted
 - Phase 49 CCL / CrystallizedContext — removed
 - `cortex_process_request` — replaced by specific MCP tools
 - `cortex_lens_analyze` — replaced by `cortex_onboard_repository_v3`
+- `cortex/orchestrators/internal/` — not a canonical wired tier
 
 ---
 

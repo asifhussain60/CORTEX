@@ -1,8 +1,20 @@
 sequenceDiagram
     participant Client
-    participant Updater_CreateRAFundingInvoices
+    participant FundingInvoiceController
+    participant FundingInvoiceService
+    participant FundingBatchRepository
+    participant SubaccountRepository
+    participant Database
 
-    Client->>+Updater_CreateRAFundingInvoices: Execute
-    Updater_CreateRAFundingInvoices->>Updater_CreateRAFundingInvoices: stringIsNullOrEmptycashInOutId
-    Updater_CreateRAFundingInvoices->>Updater_CreateRAFundingInvoices: HasParameters
-    Updater_CreateRAFundingInvoices-->>-Client: Success
+    Client->>+FundingInvoiceController: POST /api/v1/funding-invoices/batch
+    FundingInvoiceController->>FundingInvoiceController: Validate cashInOutId not empty
+    FundingInvoiceController->>FundingInvoiceController: Validate subaccount list not empty
+    FundingInvoiceController->>+FundingInvoiceService: CreateBatchInvoicesAsync(dto)
+    loop For each subaccountId
+        FundingInvoiceService->>+SubaccountRepository: GetByIdAsync(subaccountId)
+        SubaccountRepository-->>-FundingInvoiceService: Subaccount entity
+        FundingInvoiceService->>+Database: INSERT FundingInvoice
+        Database-->>-FundingInvoiceService: invoiceId
+    end
+    FundingInvoiceService-->>-FundingInvoiceController: BatchInvoiceResultDto (success/failure counts)
+    FundingInvoiceController-->>-Client: 201 Created { successCount, failureCount, failedSubaccounts }

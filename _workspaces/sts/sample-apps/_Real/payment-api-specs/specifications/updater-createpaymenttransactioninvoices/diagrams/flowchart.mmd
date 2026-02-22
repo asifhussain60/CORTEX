@@ -1,15 +1,25 @@
 flowchart TD
-    Start([API Invoked]) --> Validate
-    Validate[Validate Inputs] --> Process
-    Process --> Check1{Condition: string.IsNullOrEmptycashI}
-    Check1 -->|Yes| Rule1[stringIsNullOrEmptyc]
-    Check1 -->|No| Next1[Continue]
-    Next1 --> Check2{Condition: !HasParameters}
-    Check2 -->|Yes| Rule2[HasParameters]
-    Check2 -->|No| Next2[Continue]
-    Next2 --> Check3{Condition: !ParameterValues.Contains}
-    Check3 -->|Yes| Rule3[ParameterValuesConta]
-    Check3 -->|No| Next3[Continue]
-    Next3 --> Complete
-    Complete([Operation Complete])
-    Complete --> End([End])
+    Start([POST /api/v1/transaction-invoices/batch]) --> CheckCash
+    CheckCash{cashInOutId not empty?}
+    CheckCash -->|No| ErrCash[400 Bad Request: cashInOutId required]
+    CheckCash -->|Yes| CheckParams
+    CheckParams{accountCategoryIds provided?}
+    CheckParams -->|No| ErrParams[400 Bad Request: accountCategoryIds required]
+    CheckParams -->|Yes| ValidateValues
+    ValidateValues{All IDs valid format?}
+    ValidateValues -->|No| ErrValues[400 Bad Request: invalid accountCategoryId format]
+    ValidateValues -->|Yes| Process
+    Process[Begin Batch Processing]
+    Process --> Loop{For each accountCategoryId}
+    Loop --> Lookup[Lookup AccountCategory in DB]
+    Lookup --> Found{Found?}
+    Found -->|No| RecordFail[Record failure: account not found]
+    Found -->|Yes| Insert[INSERT TransactionInvoice]
+    Insert --> RecordSuccess[Record success with invoiceId]
+    RecordFail --> Loop
+    RecordSuccess --> Loop
+    Loop --> Complete([201 Created: BatchTransactionInvoiceResultDto])
+    ErrCash --> End([End])
+    ErrParams --> End
+    ErrValues --> End
+    Complete --> End

@@ -1,15 +1,25 @@
 flowchart TD
-    Start([API Invoked]) --> Validate
-    Validate[Validate Inputs] --> Process
-    Process --> Check1{Condition: string.IsNullOrEmptycashI}
-    Check1 -->|Yes| Rule1[stringIsNullOrEmptyc]
-    Check1 -->|No| Next1[Continue]
-    Next1 --> Check2{Condition: !HasParameters}
-    Check2 -->|Yes| Rule2[HasParameters]
-    Check2 -->|No| Next2[Continue]
-    Next2 --> Check3{Condition: !ParameterValues.Contains}
-    Check3 -->|Yes| Rule3[ParameterValuesConta]
-    Check3 -->|No| Next3[Continue]
-    Next3 --> Complete
-    Complete([Operation Complete])
-    Complete --> End([End])
+    Start([POST /api/v1/funding-invoices/batch]) --> ValidateCash
+    ValidateCash{cashInOutId empty?}
+    ValidateCash -->|Yes| ErrCash[400 Bad Request: cashInOutId required]
+    ValidateCash -->|No| ValidateParams
+    ValidateParams{subaccountIds provided?}
+    ValidateParams -->|No| ErrParams[400 Bad Request: subaccount list required]
+    ValidateParams -->|Yes| ValidateValues
+    ValidateValues{All values valid?}
+    ValidateValues -->|No| ErrValues[400 Bad Request: invalid parameter values]
+    ValidateValues -->|Yes| Process
+    Process[Begin Batch Processing]
+    Process --> Loop{For each subaccountId}
+    Loop --> Lookup[Lookup Subaccount in DB]
+    Lookup --> Found{Subaccount found?}
+    Found -->|No| RecordFail[Record failure for subaccountId]
+    Found -->|Yes| Insert[INSERT FundingInvoice]
+    Insert --> RecordSuccess[Record success with invoiceId]
+    RecordFail --> Loop
+    RecordSuccess --> Loop
+    Loop --> Complete([201 Created: BatchInvoiceResultDto])
+    ErrCash --> End([End])
+    ErrParams --> End
+    ErrValues --> End
+    Complete --> End

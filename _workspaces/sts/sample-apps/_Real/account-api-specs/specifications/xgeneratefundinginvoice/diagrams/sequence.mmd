@@ -1,12 +1,24 @@
 sequenceDiagram
     participant Client
-    participant XGenerateFundingInvoice
+    participant FundingInvoiceController
+    participant FundingInvoiceService
+    participant SubaccountRepository
     participant Database
 
-    Client->>+XGenerateFundingInvoice: Execute
-    XGenerateFundingInvoice->>XGenerateFundingInvoice: Validate Inputs
-    XGenerateFundingInvoice->>XGenerateFundingInvoice: InvoiceAmount_less_equal_0
-    XGenerateFundingInvoice->>XGenerateFundingInvoice: InvoiceDate_less_DateTime
-    XGenerateFundingInvoice->>+Database: SELECT Subaccount
-    Database-->>-XGenerateFundingInvoice: Result
-    XGenerateFundingInvoice-->>-Client: Success
+    Client->>+FundingInvoiceController: POST /api/v1/funding-invoices/generate
+    FundingInvoiceController->>FundingInvoiceController: Validate invoiceAmount > 0
+    FundingInvoiceController->>FundingInvoiceController: Validate invoiceDate >= today
+    FundingInvoiceController->>FundingInvoiceController: Validate subaccountId not empty
+    FundingInvoiceController->>+FundingInvoiceService: GenerateFundingInvoiceAsync(dto)
+    FundingInvoiceService->>+SubaccountRepository: GetByIdAsync(subaccountId)
+    SubaccountRepository-->>-FundingInvoiceService: Subaccount (balance, status)
+    FundingInvoiceService->>FundingInvoiceService: balance < invoiceAmount (peg check)?
+    alt Balance below peg amount
+        FundingInvoiceService->>+Database: INSERT FundingInvoice + CashInOut
+        Database-->>-FundingInvoiceService: invoiceId, cashInOutId
+        FundingInvoiceService-->>FundingInvoiceController: GenerateFundingInvoiceResultDto (created=true)
+        FundingInvoiceController-->>Client: 200 OK { result: "invoice created", invoiceId }
+    else Balance at or above peg
+        FundingInvoiceService-->>FundingInvoiceController: GenerateFundingInvoiceResultDto (created=false)
+        FundingInvoiceController-->>-Client: 200 OK { result: "not needed" }
+    end

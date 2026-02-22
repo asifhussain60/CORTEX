@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STS Domain Architecture — Interactive D3.js</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0d1117;
+    color: #e6edf3;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+  }
+  header {
+    padding: 20px 32px;
+    background: rgba(22,27,34,0.9);
+    border-bottom: 1px solid rgba(99,199,255,0.15);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  header h1 { font-size: 1.3rem; color: #63c7ff; font-weight: 600; }
+  header p { font-size: 0.85rem; color: #8b949e; }
+  .badge {
+    background: rgba(99,199,255,0.1);
+    border: 1px solid rgba(99,199,255,0.3);
+    color: #63c7ff;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+  }
+  #controls {
+    display: flex;
+    gap: 10px;
+    padding: 16px 32px;
+    background: rgba(22,27,34,0.6);
+    border-bottom: 1px solid rgba(99,199,255,0.08);
+    flex-wrap: wrap;
+  }
+  .ctrl-btn {
+    background: rgba(99,199,255,0.08);
+    border: 1px solid rgba(99,199,255,0.25);
+    color: #63c7ff;
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+  }
+  .ctrl-btn:hover, .ctrl-btn.active {
+    background: rgba(99,199,255,0.2);
+    border-color: #63c7ff;
+  }
+  #tooltip {
+    position: fixed;
+    background: rgba(13,17,23,0.95);
+    border: 1px solid rgba(99,199,255,0.3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    max-width: 280px;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  }
+  #tooltip h4 { color: #63c7ff; margin-bottom: 6px; font-size: 0.85rem; }
+  #tooltip p { color: #8b949e; line-height: 1.5; }
+  #tooltip .tag { 
+    display: inline-block;
+    background: rgba(99,199,255,0.1);
+    border-radius: 4px;
+    padding: 1px 6px;
+    font-size: 0.7rem;
+    color: #63c7ff;
+    margin: 2px 2px 0 0;
+  }
+  #canvas { width: 100%; height: calc(100vh - 130px); }
+  .node circle {
+    stroke-width: 2;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .node:hover circle { filter: brightness(1.3); }
+  .node text {
+    font-size: 11px;
+    fill: #e6edf3;
+    pointer-events: none;
+    text-anchor: middle;
+  }
+  .link {
+    fill: none;
+    stroke-width: 1.5;
+    stroke-opacity: 0.5;
+  }
+  .link-label {
+    font-size: 9px;
+    fill: #8b949e;
+    pointer-events: none;
+  }
+  #legend {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(13,17,23,0.9);
+    border: 1px solid rgba(99,199,255,0.2);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 0.75rem;
+  }
+  #legend h5 { color: #63c7ff; margin-bottom: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; margin: 4px 0; }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>STS Domain Architecture</h1>
+    <p>WCF → .NET 8 REST Modernization — Interactive dependency map</p>
+  </div>
+  <span class="badge">D3.js Force Graph</span>
+  <span class="badge">CORTEX STS</span>
+</header>
+
+<div id="controls">
+  <button class="ctrl-btn active" onclick="showAll()">All Layers</button>
+  <button class="ctrl-btn" onclick="filterLayer('API')">API Layer</button>
+  <button class="ctrl-btn" onclick="filterLayer('Core')">Core Layer</button>
+  <button class="ctrl-btn" onclick="filterLayer('Infrastructure')">Infrastructure</button>
+  <button class="ctrl-btn" onclick="filterLayer('Entity')">Domain Entities</button>
+  <button class="ctrl-btn" onclick="filterLayer('Azure')">Azure Services</button>
+</div>
+
+<svg id="canvas"></svg>
+<div id="tooltip"></div>
+
+<div id="legend">
+  <h5>Layer Legend</h5>
+  <div class="legend-item"><div class="legend-dot" style="background:#63c7ff"></div> API Controllers</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#7ee787"></div> Core Services</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#ffa657"></div> Infrastructure</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#d2a8ff"></div> Domain Entities</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#f0883e"></div> Azure Services</div>
+  <div class="legend-item"><div class="legend-dot" style="background:#58a6ff"></div> Interfaces</div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+const nodes = [
+  // API Layer
+  { id: "FundingInvoiceController", layer: "API", desc: "REST controller for funding invoice operations. Routes: POST /funding-invoices, POST /funding-invoices/generate, POST /funding-invoices/batch, GET /funding-invoices/{id}", tags: ["Controller", "ASP.NET Core", "Account Domain"] },
+  { id: "FundingBatchController", layer: "API", desc: "REST controller for funding batch operations. Routes: PUT /funding-batches/{id}, GET /funding-batches/{id}", tags: ["Controller", "ASP.NET Core"] },
+  { id: "TransactionInvoiceController", layer: "API", desc: "REST controller for transaction invoice operations. Routes: POST /transaction-invoices/generate, POST /transaction-invoices/batch", tags: ["Controller", "ASP.NET Core", "Payment Domain"] },
+  { id: "TransactionBatchController", layer: "API", desc: "REST controller for transaction batch operations. Routes: PUT /transaction-batches/{id}", tags: ["Controller", "ASP.NET Core"] },
+
+  // Core Interfaces
+  { id: "IFundingInvoiceService", layer: "Core", desc: "Service interface: CreateAsync, GenerateAsync, CreateBatchAsync, CreateBatchInvoicesAsync, GenerateFundingInvoiceAsync, GetByIdAsync, GetByBatchIdAsync, GetBySubaccountIdAsync", tags: ["Interface", "Core"] },
+  { id: "IFundingBatchService", layer: "Core", desc: "Service interface for funding batch lifecycle management", tags: ["Interface", "Core"] },
+  { id: "ITransactionInvoiceService", layer: "Core", desc: "Service interface: CreateAsync, GenerateAsync, CreateBatchAsync — mirrors IFundingInvoiceService for Payment domain", tags: ["Interface", "Core"] },
+  { id: "ITransactionBatchService", layer: "Core", desc: "Service interface for transaction batch lifecycle management", tags: ["Interface", "Core"] },
+  { id: "ISubaccountRepository", layer: "Core", desc: "Repository interface for Subaccount entity CRUD and balance queries", tags: ["Interface", "Repository"] },
+  { id: "IFundingInvoiceRepository", layer: "Core", desc: "Repository interface for FundingInvoice entity persistence", tags: ["Interface", "Repository"] },
+  { id: "IFundingBatchRepository", layer: "Core", desc: "Repository interface for FundingBatch entity persistence", tags: ["Interface", "Repository"] },
+  { id: "IAccountCategoryRepository", layer: "Core", desc: "Repository interface for AccountCategory entity CRUD and balance queries", tags: ["Interface", "Repository"] },
+  { id: "ITransactionInvoiceRepository", layer: "Core", desc: "Repository interface for TransactionInvoice entity persistence", tags: ["Interface", "Repository"] },
+  { id: "ICashInOutRepository", layer: "Core", desc: "Repository interface for CashInOut transaction records", tags: ["Interface", "Repository"] },
+  { id: "IUnitOfWork", layer: "Core", desc: "Unit of Work pattern: SaveChangesAsync, BeginTransactionAsync, CommitAsync, RollbackAsync", tags: ["Interface", "Pattern"] },
+  { id: "IFeatureFlagService", layer: "Core", desc: "Feature flag abstraction for canary rollout control", tags: ["Interface", "Core"] },
+  { id: "IEncryptionService", layer: "Core", desc: "PHI encryption abstraction (HIPAA compliance)", tags: ["Interface", "Security"] },
+  { id: "IMetricsCollector", layer: "Core", desc: "Metrics abstraction: RecordLatency, RecordError, RecordThroughput", tags: ["Interface", "Observability"] },
+
+  // Domain Entities
+  { id: "FundingInvoice", layer: "Entity", desc: "Entity: InvoiceId, BatchId, SubaccountId, InvoiceNumber, Amount, Status (Pending/Approved/Rejected/Paid), InvoiceDate, DueDate, CreatedBy, CreatedDate [HIPAA audited]", tags: ["Entity", "Account Domain"] },
+  { id: "FundingBatch", layer: "Entity", desc: "Entity: BatchId, BatchNumber, BatchDate, Status (Open/Closed/Pending/Completed), TotalAmount, InvoiceCount [HIPAA audited]", tags: ["Entity", "Account Domain"] },
+  { id: "Subaccount", layer: "Entity", desc: "Entity: SubaccountId, AccountNumber, AccountType (HSA/FSA/HRA), MemberId (PHI), Balance, Status (Active/Inactive/Suspended/Closed), OpenedDate [HIPAA audited]", tags: ["Entity", "Account Domain", "PHI"] },
+  { id: "CashInOut", layer: "Entity", desc: "Entity: TransactionId, BatchId, TransactionType (CashIn/CashOut/Adjustment/Reversal), Amount, TransactionDate, Status (Pending/Completed/Failed/Reversed) [HIPAA audited]", tags: ["Entity", "Shared"] },
+  { id: "AccountCategory", layer: "Entity", desc: "Entity: AccountCategoryId, AccountNumber, CategoryType, Balance, Status — Payment domain equivalent of Subaccount", tags: ["Entity", "Payment Domain"] },
+  { id: "TransactionInvoice", layer: "Entity", desc: "Entity: InvoiceId, BatchId, AccountCategoryId, InvoiceNumber, Amount, Status — Payment domain equivalent of FundingInvoice", tags: ["Entity", "Payment Domain"] },
+  { id: "TransactionBatch", layer: "Entity", desc: "Entity: BatchId, BatchNumber, BatchDate, Status, TotalAmount, InvoiceCount — Payment domain equivalent of FundingBatch", tags: ["Entity", "Payment Domain"] },
+
+  // Infrastructure
+  { id: "DataLayerRouter", layer: "Infrastructure", desc: "Canary router: delegates to Mock repositories (flag OFF) or EF Core repositories (flag ON). Enables progressive 0→10→25→50→100% rollout.", tags: ["Infrastructure", "Canary"] },
+  { id: "EFCoreFundingInvoiceRepo", layer: "Infrastructure", desc: "EF Core implementation of IFundingInvoiceRepository — production data layer", tags: ["Infrastructure", "EF Core"] },
+  { id: "MockFundingInvoiceRepo", layer: "Infrastructure", desc: "In-memory mock implementation for development and canary baseline", tags: ["Infrastructure", "Mock"] },
+  { id: "SchemaContractValidator", layer: "Infrastructure", desc: "Validates modernized REST API schema matches legacy WCF contract — ensures zero regression during cutover", tags: ["Infrastructure", "Validation"] },
+  { id: "AutomatedRollbackService", layer: "Infrastructure", desc: "Monitors Application Insights metrics; auto-reverts feature flag if error rate or P99 latency exceeds threshold", tags: ["Infrastructure", "Reliability"] },
+
+  // Azure Services
+  { id: "AzureKeyVault", layer: "Azure", desc: "PHI field encryption service — AES-256 encryption keys managed in Azure Key Vault. Used by DataEncryptionMiddleware and IEncryptionService.", tags: ["Azure", "Security", "HIPAA"] },
+  { id: "AzureAppConfiguration", layer: "Azure", desc: "Feature flag store for canary rollout control. Drives DataLayerRouter decisions. Supports emergency rollback via flag toggle.", tags: ["Azure", "Feature Flags"] },
+  { id: "ApplicationInsights", layer: "Azure", desc: "Telemetry: API latency, error rates, throughput metrics. Feeds AutomatedRollbackService thresholds.", tags: ["Azure", "Observability"] },
+];
+
+const links = [
+  // Controllers → Interfaces
+  { source: "FundingInvoiceController", target: "IFundingInvoiceService", label: "uses" },
+  { source: "FundingBatchController", target: "IFundingBatchService", label: "uses" },
+  { source: "TransactionInvoiceController", target: "ITransactionInvoiceService", label: "uses" },
+  { source: "TransactionBatchController", target: "ITransactionBatchService", label: "uses" },
+  // Services → Repo Interfaces
+  { source: "IFundingInvoiceService", target: "IFundingInvoiceRepository", label: "" },
+  { source: "IFundingInvoiceService", target: "ISubaccountRepository", label: "" },
+  { source: "IFundingInvoiceService", target: "ICashInOutRepository", label: "" },
+  { source: "IFundingInvoiceService", target: "IUnitOfWork", label: "" },
+  { source: "IFundingBatchService", target: "IFundingBatchRepository", label: "" },
+  { source: "ITransactionInvoiceService", target: "ITransactionInvoiceRepository", label: "" },
+  { source: "ITransactionInvoiceService", target: "IAccountCategoryRepository", label: "" },
+  { source: "ITransactionInvoiceService", target: "ICashInOutRepository", label: "" },
+  // Services → Core
+  { source: "IFundingInvoiceService", target: "IFeatureFlagService", label: "" },
+  { source: "ITransactionInvoiceService", target: "IFeatureFlagService", label: "" },
+  // Infrastructure
+  { source: "DataLayerRouter", target: "EFCoreFundingInvoiceRepo", label: "→ prod" },
+  { source: "DataLayerRouter", target: "MockFundingInvoiceRepo", label: "→ mock" },
+  { source: "DataLayerRouter", target: "AzureAppConfiguration", label: "reads flag" },
+  { source: "AutomatedRollbackService", target: "ApplicationInsights", label: "monitors" },
+  { source: "AutomatedRollbackService", target: "AzureAppConfiguration", label: "reverts" },
+  // Entities
+  { source: "IFundingInvoiceRepository", target: "FundingInvoice", label: "" },
+  { source: "IFundingBatchRepository", target: "FundingBatch", label: "" },
+  { source: "ISubaccountRepository", target: "Subaccount", label: "" },
+  { source: "ICashInOutRepository", target: "CashInOut", label: "" },
+  { source: "IAccountCategoryRepository", target: "AccountCategory", label: "" },
+  { source: "ITransactionInvoiceRepository", target: "TransactionInvoice", label: "" },
+  { source: "IEncryptionService", target: "AzureKeyVault", label: "delegates" },
+  { source: "IMetricsCollector", target: "ApplicationInsights", label: "emits to" },
+];
+
+const colorMap = {
+  API: "#63c7ff",
+  Core: "#7ee787",
+  Infrastructure: "#ffa657",
+  Entity: "#d2a8ff",
+  Azure: "#f0883e",
+};
+
+const linkColorMap = {
+  API: "#63c7ff44",
+  Core: "#7ee78744",
+  Infrastructure: "#ffa65744",
+  Entity: "#d2a8ff44",
+  Azure: "#f0883e44",
+};
+
+const svg = d3.select("#canvas");
+const tooltip = d3.select("#tooltip");
+let simulation, linkSel, nodeSel, currentFilter = null;
+
+function init() {
+  svg.selectAll("*").remove();
+  const W = svg.node().clientWidth;
+  const H = svg.node().clientHeight;
+
+  const defs = svg.append("defs");
+  // Glow filter
+  const filter = defs.append("filter").attr("id","glow");
+  filter.append("feGaussianBlur").attr("stdDeviation","2.5").attr("result","coloredBlur");
+  const feMerge = filter.append("feMerge");
+  feMerge.append("feMergeNode").attr("in","coloredBlur");
+  feMerge.append("feMergeNode").attr("in","SourceGraphic");
+
+  // Arrow markers
+  Object.entries(colorMap).forEach(([layer, color]) => {
+    defs.append("marker")
+      .attr("id", `arrow-${layer}`)
+      .attr("viewBox","0 -5 10 10")
+      .attr("refX",20).attr("refY",0)
+      .attr("markerWidth",6).attr("markerHeight",6)
+      .attr("orient","auto")
+      .append("path")
+      .attr("d","M0,-5L10,0L0,5")
+      .attr("fill", color)
+      .attr("opacity", 0.6);
+  });
+
+  const g = svg.append("g").attr("class","main");
+  svg.call(d3.zoom().scaleExtent([0.3, 3]).on("zoom", e => g.attr("transform", e.transform)));
+
+  const visibleNodes = currentFilter ? nodes.filter(n => n.layer === currentFilter || n.layer === "Core") : nodes;
+  const visibleIds = new Set(visibleNodes.map(n => n.id));
+  const visibleLinks = links.filter(l => visibleIds.has(l.source) && visibleIds.has(l.target));
+
+  simulation = d3.forceSimulation(visibleNodes)
+    .force("link", d3.forceLink(visibleLinks).id(d => d.id).distance(120).strength(0.4))
+    .force("charge", d3.forceManyBody().strength(-300))
+    .force("center", d3.forceCenter(W/2, H/2))
+    .force("collision", d3.forceCollide(50));
+
+  linkSel = g.append("g").selectAll("line").data(visibleLinks).join("line")
+    .attr("class","link")
+    .attr("stroke", d => {
+      const src = visibleNodes.find(n => n.id === (d.source.id || d.source));
+      return colorMap[src?.layer] + "55" || "#8b949e44";
+    })
+    .attr("marker-end", d => {
+      const src = visibleNodes.find(n => n.id === (d.source.id || d.source));
+      return `url(#arrow-${src?.layer || 'Core'})`;
+    });
+
+  const linkLabels = g.append("g").selectAll("text").data(visibleLinks.filter(l => l.label)).join("text")
+    .attr("class","link-label")
+    .text(d => d.label);
+
+  nodeSel = g.append("g").selectAll("g").data(visibleNodes).join("g")
+    .attr("class","node")
+    .call(d3.drag()
+      .on("start", (e,d) => { if(!e.active) simulation.alphaTarget(0.3).restart(); d.fx=d.x; d.fy=d.y; })
+      .on("drag", (e,d) => { d.fx=e.x; d.fy=e.y; })
+      .on("end", (e,d) => { if(!e.active) simulation.alphaTarget(0); d.fx=null; d.fy=null; }))
+    .on("mouseover", (event, d) => {
+      tooltip.style("opacity", 1)
+        .style("left", (event.clientX+16)+"px")
+        .style("top", (event.clientY-10)+"px")
+        .html(`<h4>${d.id}</h4><p>${d.desc}</p><div style="margin-top:8px">${d.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>`);
+    })
+    .on("mousemove", (event) => {
+      tooltip.style("left", (event.clientX+16)+"px").style("top", (event.clientY-10)+"px");
+    })
+    .on("mouseout", () => tooltip.style("opacity", 0));
+
+  nodeSel.append("circle")
+    .attr("r", d => d.layer === "Entity" ? 18 : d.layer === "Azure" ? 22 : 24)
+    .attr("fill", d => colorMap[d.layer] + "22")
+    .attr("stroke", d => colorMap[d.layer])
+    .attr("filter","url(#glow)");
+
+  nodeSel.append("text")
+    .attr("dy","0.35em")
+    .text(d => d.id.length > 22 ? d.id.substring(0,20)+"…" : d.id)
+    .attr("fill", d => colorMap[d.layer]);
+
+  simulation.on("tick", () => {
+    linkSel.attr("x1",d=>d.source.x).attr("y1",d=>d.source.y)
+           .attr("x2",d=>d.target.x).attr("y2",d=>d.target.y);
+    linkLabels.attr("x",d=>(d.source.x+d.target.x)/2).attr("y",d=>(d.source.y+d.target.y)/2);
+    nodeSel.attr("transform",d=>`translate(${d.x},${d.y})`);
+  });
+}
+
+function showAll() {
+  currentFilter = null;
+  document.querySelectorAll(".ctrl-btn").forEach(b => b.classList.remove("active"));
+  event.target.classList.add("active");
+  init();
+}
+
+function filterLayer(layer) {
+  currentFilter = layer;
+  document.querySelectorAll(".ctrl-btn").forEach(b => b.classList.remove("active"));
+  event.target.classList.add("active");
+  init();
+}
+
+window.addEventListener("resize", init);
+init();
+</script>
+</body>
+</html>

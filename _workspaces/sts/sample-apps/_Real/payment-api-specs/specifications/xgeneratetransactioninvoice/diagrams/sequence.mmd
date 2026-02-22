@@ -1,12 +1,19 @@
 sequenceDiagram
-    user Client
-    user XGenerateTransactionInvoice
-    user Database
+    participant Client
+    participant XGenerateTransactionInvoice
+    participant Database
 
-    Client->>+XGenerateTransactionInvoice: Execute
-    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: Validate Inputs
-    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: InvoiceAmount_less_equal_0
-    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: InvoiceDate_less_DateTime
-    XGenerateTransactionInvoice->>+Database: SELECT AccountCategory
-    Database-->>-XGenerateTransactionInvoice: Result
-    XGenerateTransactionInvoice-->>-Client: Success
+    Client->>+XGenerateTransactionInvoice: POST /api/v1/transaction-invoices/generate
+    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: Validate InvoiceAmount > 0
+    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: Validate InvoiceDate >= Today
+    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: Validate AccountCategoryId not empty
+    XGenerateTransactionInvoice->>+Database: SELECT AccountCategory WHERE Id = @id
+    Database-->>-XGenerateTransactionInvoice: AccountCategory (balance, peg)
+    XGenerateTransactionInvoice->>XGenerateTransactionInvoice: Check balance < peg amount?
+    alt Balance below peg
+        XGenerateTransactionInvoice->>+Database: INSERT TransactionInvoice + CashInOut
+        Database-->>-XGenerateTransactionInvoice: Saved (invoiceId, cashInOutId)
+        XGenerateTransactionInvoice-->>Client: 200 OK { result: "invoice created", invoiceId }
+    else Balance at or above peg
+        XGenerateTransactionInvoice-->>Client: 200 OK { result: "not needed" }
+    end

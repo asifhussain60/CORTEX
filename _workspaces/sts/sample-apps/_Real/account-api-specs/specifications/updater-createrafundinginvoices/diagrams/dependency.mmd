@@ -1,10 +1,43 @@
 classDiagram
-    class Updater_CreateRAFundingInvoices {
-        +Run
+    class FundingInvoiceController {
+        +CreateBatchInvoicesAsync(dto) Task~BatchInvoiceResultDto~
+        +GetInvoiceById(id) Task~FundingInvoiceResponse~
     }
-    class Constants
-    Updater_CreateRAFundingInvoices --> Constants
-    class Utilities
-    Updater_CreateRAFundingInvoices --> Utilities
-    class Components
-    Updater_CreateRAFundingInvoices --> Components
+    class IFundingInvoiceService {
+        +CreateBatchInvoicesAsync(dto) Task~BatchInvoiceResultDto~
+        +CreateAsync(request) Task~FundingInvoiceResponse~
+    }
+    class FundingInvoiceService {
+        +CreateBatchInvoicesAsync(dto) Task~BatchInvoiceResultDto~
+        +CreateAsync(request) Task~FundingInvoiceResponse~
+    }
+    class ISubaccountRepository {
+        +GetByIdAsync(id) Task~Subaccount~
+    }
+    class IFundingBatchRepository {
+        +GetByIdAsync(id) Task~FundingBatch~
+    }
+    class IUnitOfWork {
+        +SaveChangesAsync() Task~int~
+        +BeginTransactionAsync() Task
+    }
+    class Subaccount {
+        +SubaccountId string
+        +Balance decimal
+        +AccountType string
+        +Status string
+    }
+    class FundingInvoice {
+        +InvoiceId string
+        +BatchId string
+        +SubaccountId string
+        +Amount decimal
+        +Status string
+    }
+    FundingInvoiceController --> IFundingInvoiceService : depends on
+    IFundingInvoiceService <|.. FundingInvoiceService : implements
+    FundingInvoiceService --> ISubaccountRepository : depends on
+    FundingInvoiceService --> IFundingBatchRepository : depends on
+    FundingInvoiceService --> IUnitOfWork : depends on
+    ISubaccountRepository ..> Subaccount : returns
+    FundingInvoiceService ..> FundingInvoice : creates
