@@ -86,6 +86,17 @@ prohibited_patterns:
   - "^test$"                      # bare "test" (must be test_something)
   - "^TODO"                       # TODO prefix
   - "^FIXME"                      # FIXME prefix
+  # CORTEX-internal terms — must never leak into user-facing filenames
+  - "phase"                       # internal phasing terminology
+  - "sts"                         # internal STS terminology
+  - "skull"                       # internal governance tier name
+  - "tier0"                       # internal governance tier name
+  - "ccl"                         # legacy crystallized context
+  - "crystallized"                # legacy crystallized context
+  - "brain"                       # legacy brain module
+  - "hexa"                        # internal hexa-mode terminology
+  - "cortex_internal"             # explicit internal marker
+  - "wiring_spec"                 # internal wiring specification
 
 # File type rules
 file_types:

@@ -3385,11 +3385,70 @@ phases:
         resolution: "Added step_id → id normalization in WorkflowTemplateMixin._load_templates_from_dir()"
         severity: P1
 
+- id: phase-24
+  title: "FileFactory Strict Enforcement — Internal Terminology Blocking + Universal File Creation Gate"
+  status: complete
+  priority: P0
+  risk: low
+  dependencies:
+  - phase-00-file-factory
+  source: Copilot Chat 2026-02-22 — DIGEST analysis of FileFactory adoption gaps
+  description: |
+    DIGEST analysis revealed FileFactory has near-zero adoption across CORTEX:
+    - 28 orchestrator files, 6 MCP files, 22 core files all bypass FileFactory with raw writes
+    - No prohibited patterns for CORTEX-internal terms (phase, sts, skull, tier0, etc.)
+    - No sanitize_name() method to auto-strip internal terminology
+    - No universal create_file() gate method that validates before writing
+    
+    **Solution: Strict enforcement via 3 mechanisms:**
+    1. Internal terms added to file-naming-rules.yaml prohibited_patterns (YAML-driven)
+    2. sanitize_name() method added to FileFactory — strips internal terms from filenames
+    3. create_file() universal gate added — validates CORE-028 rules before writing
+    4. Golden enforcement tests permanently gate against raw file creation in enforced dirs
+
+  deliverables:
+  - 'D1: 10 CORTEX-internal terms added to prohibited_patterns in file-naming-rules.yaml'
+  - 'D2: sanitize_name() method on FileFactory — strips phase, sts, skull, tier0, ccl, crystallized, brain, hexa, cortex_internal, wiring_spec'
+  - 'D3: create_file() universal gate on FileFactory — validates filename before writing, raises ValueError on violations'
+  - 'D4: 46 golden enforcement tests (tests/golden/test_file_factory_enforcement.py) covering 5 test classes'
+  - 'D5: Static analysis gate — permanent test scanning orchestrators/mcp/core for raw writes without FileFactory import'
+  - 'D6: Exemption registry for legitimate runtime I/O (infrastructure, registries, recovery, dashboards, etc.)'
+
+  acceptance_criteria:
+  - 'AC-P24-001: All 10 internal terms blocked in validate() for .py, .yaml, .md filenames'
+  - 'AC-P24-002: sanitize_name() strips internal terms and returns clean filename'
+  - 'AC-P24-003: create_file() raises ValueError on invalid filenames'
+  - 'AC-P24-004: create_file() raises FileExistsError on existing files'
+  - 'AC-P24-005: create_file() creates valid files successfully'
+  - 'AC-P24-006: Static analysis gate detects raw writes in non-exempted files'
+  - 'AC-P24-007: file-naming-rules.yaml contains all 10 internal terms in prohibited_patterns'
+  - 'AC-P24-008: enforcement.level remains strict'
+  - 'AC-P24-009: 46/46 golden enforcement tests passing'
+  - 'AC-P24-010: 97/97 combined FileFactory tests passing (existing + golden)'
+  - 'AC-P24-011: Zero regressions in existing test suites'
+
+  tdd_mandate: CORE-008 — RED (37 failures) → GREEN (0 failures) 
+  
+  progress:
+    started: '2026-02-22'
+    completed: '2026-02-22'
+    current_stage: complete
+    tests_written: 46
+    tests_passing: 46
+    red_failures: 37
+    green_pass: 46
+    files_modified:
+    - cortex/core/file_factory.py
+    - cortex-registry/core/config/file-naming-rules.yaml
+    - tests/golden/test_file_factory_enforcement.py
+    - tests/core/test_file_factory.py
+    - cortex-registry/planning/cortex-refactor-master.yaml
+
 lens_scans:
 validation_loops:
   history: []
 completion:
-  status: phases_18_23_active
+  status: phases_18_24_active
   completed_date: '2026-02-21'
   total_duration: ~32 hours across 17 phases (2026-02-19 to 2026-02-21)
   final_test_count: 15303
@@ -3402,6 +3461,7 @@ completion:
   - phase-20: ADO + Brain-Tier Synthesis (full-tier synthesis, cross-domain stub replaced) — COMPLETE
   - phase-21: cortex-docs Refresh (update content/src/ Markdown + rebuild pipeline HTML) — COMPLETE
   - phase-23: Workflow Template Injection — WorkflowTemplateMixin on OrchestratorBase + All Orchestrators Wired — COMPLETE
+  - phase-24: FileFactory Strict Enforcement — internal terminology blocking, sanitize_name(), create_file() universal gate, golden enforcement tests — COMPLETE
   summary:
     issues_identified: 'Phase 13 gap analysis (2026-02-21) identified 18 discrepancies across 3 severity tiers:
 

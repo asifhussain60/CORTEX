@@ -205,10 +205,13 @@ class TestYamlMarkdownNaming:
         assert not result.is_valid
 
     def test_plan_yaml_in_cortex_registry(self, factory: Any) -> None:
-        """Plan YAMLs in cortex-registry follow kebab-case."""
+        """Plan YAMLs with internal terms ('phase') are now blocked (Phase 24)."""
         result = factory.yaml_plan("phase-00-foundation")
         assert result.filename == "phase-00-foundation.yaml"
-        assert result.is_valid
+        # Phase 24: 'phase' is now a prohibited internal term
+        assert not result.is_valid, (
+            "'phase' is a CORTEX-internal term and must be blocked per Phase 24"
+        )
 
 
 # ==============================================================================

@@ -555,6 +555,110 @@ class FileFactory:
         return violations
     
     # ========================================================================
+    # SANITIZATION — Strip CORTEX-internal terms from filenames
+    # ========================================================================
+
+    def sanitize_name(self, filename: str) -> str:
+        """Sanitize filename by removing CORTEX-internal terminology.
+
+        Strips prohibited internal terms (phase, sts, skull, tier0, ccl,
+        crystallized, brain, hexa, cortex_internal, wiring_spec) from
+        filenames while preserving valid structure.
+
+        Args:
+            filename: Filename to sanitize.
+
+        Returns:
+            Cleaned filename with internal terms removed. If the result
+            would be empty or just an extension, returns original filename.
+        """
+        ext = Path(filename).suffix
+        stem = Path(filename).stem
+
+        # Internal terms to strip (subset of prohibited_patterns that are
+        # literal terms, not regex anchors like ^enhanced_)
+        internal_terms = [
+            "phase", "sts", "skull", "tier0", "ccl",
+            "crystallized", "brain", "hexa", "cortex_internal",
+            "wiring_spec",
+        ]
+
+        # Determine separator (underscore for .py, hyphen for yaml/md/sh)
+        if ext == ".py":
+            sep = "_"
+        else:
+            sep = "-"
+
+        # Split stem into parts
+        parts = re.split(r"[_\-]+", stem)
+
+        # Filter out parts that match internal terms
+        cleaned_parts = [
+            p for p in parts
+            if p.lower() not in internal_terms
+            # Also strip numeric-only parts that follow removed terms
+            # e.g., "phase_03_orchestrator" → remove "phase", keep "03" only
+            # if adjacent to kept parts
+        ]
+
+        # Strip leading/trailing numeric parts left orphaned
+        while cleaned_parts and cleaned_parts[0].isdigit():
+            cleaned_parts.pop(0)
+
+        if not cleaned_parts:
+            # All parts were internal terms — return original
+            return filename
+
+        result = sep.join(cleaned_parts) + ext
+        return result
+
+    # ========================================================================
+    # UNIVERSAL FILE CREATION GATE
+    # ========================================================================
+
+    def create_file(
+        self,
+        path: Union[str, Path],
+        content: str = "",
+        file_type: str = "py",
+    ) -> None:
+        """Universal gated file creation — validates before writing.
+
+        This is THE single entry point for all CORTEX file creation.
+        Validates filename against CORE-028 rules, prohibited patterns,
+        and internal terminology before writing.
+
+        Args:
+            path: File path to create.
+            content: File content to write.
+            file_type: File type hint (py, yaml, md, sh).
+
+        Raises:
+            ValueError: If filename fails validation (prohibited pattern,
+                internal term, format violation).
+            FileExistsError: If file already exists.
+        """
+        path = Path(path) if isinstance(path, str) else path
+
+        if path.exists():
+            raise FileExistsError(f"File already exists: {path}")
+
+        # Validate the filename
+        result = self.validate(path.name)
+        if not result.is_valid:
+            raise ValueError(
+                f"Filename '{path.name}' violates CORE-028 naming rules: "
+                f"{'; '.join(result.violations)}"
+                + (f" — suggestion: {result.suggestion}" if result.suggestion else "")
+            )
+
+        # Create parent directories
+        path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Write content
+        path.write_text(content)
+
+    # ========================================================================
     # FILE CREATION — Standard template-based file generation
     # ========================================================================
     
