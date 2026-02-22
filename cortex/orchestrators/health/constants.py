@@ -94,6 +94,33 @@ ALLOWED_MARKDOWN_PREFIXES: FrozenSet[str] = frozenset({
 })
 """Markdown files whose stem (uppercase) starts with these are allowed in root."""
 
+PROTECTED_DIRS: FrozenSet[str] = frozenset({
+    ".github",
+    "cortex-docs",
+    "cortex-registry",
+    "cortex-sts",
+    "_workspaces",
+    "scripts",
+    "deployment",
+    "tests",
+    "docs",
+})
+"""Directories that VacuumOrchestrator must never touch — no renames, deletes,
+relocations, or markdown archival inside these trees.
+
+Includes:
+- ``.github``        — agents, prompts, copilot instructions, CI
+- ``cortex-docs``    — user-facing HTML documentation
+- ``cortex-registry``— YAML governance rules and registry
+- ``cortex-sts``     — STS (Sample Target System) sample apps for LENS/Digest
+- ``_workspaces``    — approved orchestrator dashboard, STS analysis artefacts,
+                       chat session logs; intentional workspace area
+- ``scripts``        — cross-platform runner scripts
+- ``deployment``     — Docker/K8s/Prometheus/Nginx configs
+- ``tests``          — test mirror tree
+- ``docs``           — generic docs directories
+"""
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Naming conventions  (CORE-028)
 # ─────────────────────────────────────────────────────────────────────────────
@@ -132,6 +159,7 @@ __all__ = [
     "PROTECTED_FILES",
     "PROTECTED_ROOT_EXTENSIONS",
     "ALLOWED_MARKDOWN_PREFIXES",
+    "PROTECTED_DIRS",
     "KEBAB_MAX_LEN",
     "PYTHON_EXTENSIONS",
     "NON_PYTHON_EXTENSIONS",

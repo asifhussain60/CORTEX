@@ -31,6 +31,7 @@ import yaml
 from .constants import (
     ALLOWED_MARKDOWN_PREFIXES,
     ARCHIVE_DIR,
+    PROTECTED_DIRS,
     PROTECTED_FILES,
     PYTHON_EXTENSIONS,
 )
@@ -471,7 +472,11 @@ class VacuumOrchestrator:
     def _plan_naming_fixes(
         self, ctx: FileContext
     ) -> List[Dict[str, Any]]:
-        """Plan naming-convention fixes."""
+        """Plan naming-convention fixes.
+
+        Skips files inside PROTECTED_DIRS (e.g. ``_workspaces``, ``.github``,
+        ``cortex-sts``) where non-standard naming is intentional.
+        """
         ops: List[Dict[str, Any]] = []
         exempt = {"__init__.py", "__main__.py", "conftest.py", "Makefile",
                   "Dockerfile", "Pipfile", ".gitignore", ".gitattributes",
@@ -479,6 +484,13 @@ class VacuumOrchestrator:
         for f in ctx.all_files:
             if f.name in exempt:
                 continue
+            # Never rename inside protected directories
+            try:
+                rel = f.relative_to(self.workspace_root)
+                if rel.parts and rel.parts[0] in PROTECTED_DIRS:
+                    continue
+            except ValueError:
+                pass
             violation = classify_naming_violation(f.name)
             if violation:
                 ops.append({
@@ -514,12 +526,23 @@ class VacuumOrchestrator:
     def _plan_empty_cleanup(
         self, ctx: FileContext
     ) -> List[Dict[str, Any]]:
-        """Plan empty-file deletions."""
+        """Plan empty-file deletions.
+
+        Skips files inside PROTECTED_DIRS — e.g. ``_workspaces`` contains
+        ``.gitkeep`` markers and legitimate zero-byte placeholders.
+        """
         exempt = {"__init__.py", ".gitkeep", "conftest.py"}
         ops: List[Dict[str, Any]] = []
         for f in ctx.all_files:
             if f.name in exempt:
                 continue
+            # Never delete inside protected directories
+            try:
+                rel = f.relative_to(self.workspace_root)
+                if rel.parts and rel.parts[0] in PROTECTED_DIRS:
+                    continue
+            except ValueError:
+                pass
             try:
                 if f.stat().st_size == 0:
                     ops.append({"type": "delete", "source": f})
@@ -530,29 +553,49 @@ class VacuumOrchestrator:
     def _plan_orphan_cleanup(
         self, ctx: FileContext
     ) -> List[Dict[str, Any]]:
-        """Plan orphaned-directory removal."""
+        """Plan orphaned-directory removal.
+
+        Skips directories inside PROTECTED_DIRS — ``_workspaces`` and
+        ``cortex-sts`` intentionally contain subdirectory structures without
+        Python files.
+        """
         dirs_with_files = {f.parent for f in ctx.all_files}
         ops: List[Dict[str, Any]] = []
         for d in ctx.directories:
-            if d not in dirs_with_files and d != self.workspace_root:
-                ops.append({"type": "rmdir", "source": d})
+            if d in dirs_with_files or d == self.workspace_root:
+                continue
+            # Never rmdir inside protected directories
+            try:
+                rel = d.relative_to(self.workspace_root)
+                if rel.parts and rel.parts[0] in PROTECTED_DIRS:
+                    continue
+            except ValueError:
+                pass
+            ops.append({"type": "rmdir", "source": d})
         return ops
 
     def _plan_markdown_archive(
         self, ctx: FileContext
     ) -> List[Dict[str, Any]]:
-        """Plan stale-markdown archival."""
+        """Plan stale-markdown archival.
+
+        Skips files inside PROTECTED_DIRS (.github, cortex-docs, cortex-registry,
+        etc.) to avoid archiving legitimate agent/prompt/spec markdown files.
+        """
         doc_dirs = {"docs", "cortex-docs", "documentation"}
         ops: List[Dict[str, Any]] = []
         for f in ctx.all_files:
             if f.suffix != ".md":
                 continue
             rel = f.relative_to(self.workspace_root)
+            # Root-level protected names
             if len(rel.parts) == 1:
                 stem = f.stem.upper()
                 if any(stem.startswith(p) for p in ALLOWED_MARKDOWN_PREFIXES):
                     continue
-            if rel.parts[0] in doc_dirs:
+            # Never touch files inside protected top-level dirs
+            top_dir = rel.parts[0] if rel.parts else ""
+            if top_dir in PROTECTED_DIRS or top_dir in doc_dirs:
                 continue
             ops.append({
                 "type": "relocate",
