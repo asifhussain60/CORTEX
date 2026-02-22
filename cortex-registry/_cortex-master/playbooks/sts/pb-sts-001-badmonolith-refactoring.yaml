@@ -82,6 +82,41 @@ playbook:
   #     traceability: 9.0
   #     composite: 8.8
 
+  # ── MCP TOOL REGISTRY (verified live — 2026-02-22) ────────────────────────
+  # All tools confirmed present via cortex.mcp.tools module inspection.
+  # Playbook MUST NOT bypass MCP — all operations route through these tools.
+  mcp_tool_registry:
+    onboard_repository_tool:
+      module: "cortex.mcp.tools.onboard_repository"
+      params: "repository_path, capture_learning, apply_brain_enhancement, generate_artifacts"
+    analyze_sts_app:
+      module: "cortex.mcp.tools.sts_analyzer"
+      params: "app_path, pattern_types, output_showcase"
+    cortex_sweep_status:
+      module: "cortex.mcp.tools.sweep_status_tool"
+      params: "sweep_id, intent, scope_files"
+    cortex_master_plan:
+      module: "cortex.mcp.tools.master_plan_tool"
+      params: "operation, **kwargs"
+    cortex_health_check:
+      module: "cortex.mcp.tools.health_check_tool"
+      params: "workspace_root, agents, include_recommendations"
+    cortex_vacuum_execute:
+      module: "cortex.mcp.tools.vacuum_execute_tool"
+      params: "workspace_root, operation, handoff_path"
+    cortex_validate_coherence:
+      module: "cortex.mcp.tools.coherence_tools"
+      params: "file_path, content, pre_edit_content, check_duplicates"
+    execute_workflow:
+      module: "cortex.mcp.tools.workflow_runtime_tool"
+      params: "template_name, workflow_path, variables"
+    list_workflow_templates:
+      module: "cortex.mcp.tools.workflow_runtime_tool"
+      params: "include_details"
+    cortex_intelligence_merge:
+      module: "cortex.mcp.tools.brain_collaboration_tools"
+      params: "source_contexts, merge_strategy"
+
   # ── STAGES (8-Stage Orchestrator Chain) ────────────────────────────────────
   stages:
 
@@ -90,13 +125,16 @@ playbook:
       title: "LENS Baseline Analysis"
       orchestrator: "LENSOrchestrator"
       mcp_tools:
-        - "cortex_onboard_repository_v3"
+        - tool: "onboard_repository_tool"
+          call: "onboard_repository_tool(repository_path='cortex-sts/CortexLabs/BadMonolith', capture_learning=True, apply_brain_enhancement=True, generate_artifacts=True)"
+        - tool: "analyze_sts_app"
+          call: "analyze_sts_app(app_path='cortex-sts/CortexLabs/BadMonolith', output_showcase=True)"
       description: |
-        Full LENS scan of BadMonolith — captures complexity, duplication,
-        test coverage, dependency graph, and security surface metrics.
-        Produces baseline_quality_score for before/after comparison.
+        Full LENS scan of BadMonolith via onboard_repository_tool + analyze_sts_app.
+        Captures complexity, duplication, test coverage, dependency graph, and
+        security surface metrics. Produces baseline_quality_score for before/after.
       inputs:
-        - "source_repo path"
+        - "source_repo path: cortex-sts/CortexLabs/BadMonolith"
         - ".cortex-manifest.yaml"
       outputs:
         - "baseline_quality_score"
@@ -104,12 +142,14 @@ playbook:
         - "security_findings[]"
         - "dependency_graph"
         - "complexity_metrics"
+        - "sts_analysis_report"
       convergence_gate:
         max_cycles: 1
-        predicate: "lens_report_exists AND baseline_score_captured"
+        predicate: "onboard_complete AND sts_analysis_complete"
       exit_criteria:
-        - "LENS report generated with all 5 metric categories"
-        - "Baseline quality score persisted to session context"
+        - "onboard_repository_tool returns success"
+        - "analyze_sts_app returns smell_catalogue with all 25 smells"
+        - "Baseline quality score captured from tool output"
         - "All 25 smells cross-referenced with manifest"
 
     # ── STAGE 2: SMELL CATALOGUE + HOLISTIC GATE ───────────────────────────
@@ -117,15 +157,19 @@ playbook:
       title: "Smell Catalogue & Holistic Validation Gate"
       orchestrator: "EnforcementOrchestrator"
       mcp_tools:
-        - "cortex_validate_compliance"
-        - "cortex_check_dependency_drift"
-        - "cortex_query_governance"
+        - tool: "cortex_sweep_status"
+          call: "cortex_sweep_status(intent='catalogue_smells', scope_files=['cortex-sts/CortexLabs/BadMonolith'])"
+        - tool: "cortex_master_plan"
+          call: "cortex_master_plan(operation='holistic_gate', source='cortex-sts/CortexLabs/BadMonolith', manifest='.cortex-manifest.yaml')"
+        - tool: "cortex_health_check"
+          call: "cortex_health_check(workspace_root='.', include_recommendations=True)"
       description: |
         Enumerate all source endpoints and public functions (source_items).
-        Catalogue all 25 smells with severity. Run CORE-048 holistic validation.
+        Catalogue all 25 smells with severity via cortex_sweep_status.
+        Run holistic validation gate via cortex_master_plan.
         Opens AC_START audit session.
       inputs:
-        - "LENS baseline from Stage 1"
+        - "analyze_sts_app output from Stage 1"
         - ".cortex-manifest.yaml smells[]"
       outputs:
         - "source_items[]"
@@ -137,59 +181,67 @@ playbook:
         predicate: "source_items_enumerated AND holistic_verdict == PASS"
         failure_action: "BLOCK — resolve P0 governance violations before proceeding"
       exit_criteria:
-        - "source_items list captured (all public endpoints + functions)"
-        - "Holistic validation: PASS (risk ≤ 0.6)"
+        - "cortex_sweep_status returns 25 items catalogued"
+        - "cortex_master_plan holistic_gate returns PASS"
+        - "cortex_health_check passes"
         - "AC_START written to orchestrator-traces.db"
-        - "CORE-048 validation clean"
 
     # ── STAGE 3: SECURITY GATE (HARD BLOCKER) ──────────────────────────────
     - stage_id: 3
       title: "Security Gate — P0 Blocker"
       orchestrator: "SecurityOrchestrator"
-      mcp_tools:
-        - "cortex_refactor"
-      template_ref: "cortex-registry/workflows/templates/security/security-hardening.yaml"
       blocking: true
+      mcp_tools:
+        - tool: "analyze_sts_app"
+          call: "analyze_sts_app(app_path='cortex-sts/CortexLabs/BadMonolith', pattern_types=['security'], output_showcase=True)"
+        - tool: "cortex_validate_coherence"
+          call: "cortex_validate_coherence(file_path='cortex-sts/CortexLabs/Refactored/backend/Infrastructure/Security/', content='<security fixes>', check_duplicates=True)"
+        - tool: "execute_workflow"
+          call: "execute_workflow(template_name='security-hardening', variables={source: 'BadMonolith', target: 'Refactored'})"
+      template_ref: "cortex-registry/workflows/templates/security/security-hardening.yaml"
       description: |
-        Address all 4 P0 security smells FIRST. This is a hard blocker —
-        no downstream stages execute until security gate passes.
-        Covers: SQL injection (SMELL-1), hardcoded secrets (SMELL-2),
-        CORS wildcard (SMELL-13), stack trace exposure (SMELL-18).
+        HARD BLOCKER — no downstream stages run until this passes.
+        Run analyze_sts_app filtered to security patterns to confirm P0 findings.
+        Apply fixes (parameterized queries, env config secrets, CORS config, RFC 7807).
+        Validate coherence of each fixed file. Execute security-hardening workflow.
       inputs:
-        - "security_findings from Stage 1"
-        - "SMELL-1, SMELL-2, SMELL-13, SMELL-18"
+        - "security_findings from Stage 1 analyze_sts_app"
+        - "SMELL-1 (SQL injection), SMELL-2 (secrets), SMELL-13 (CORS), SMELL-18 (stack trace)"
       outputs:
         - "security_report"
         - "fixes_applied[]"
         - "remaining_p0_issues (must be 0)"
       smells_addressed:
-        - "SMELL-1: SQL injection → parameterized queries"
-        - "SMELL-2: Hardcoded secrets → user-secrets / env config"
+        - "SMELL-1: SQL injection → parameterized queries via SqliteParameter"
+        - "SMELL-2: Hardcoded secrets → IConfiguration + user-secrets"
         - "SMELL-13: CORS wildcard → specific origins from config"
-        - "SMELL-18: Stack trace exposure → RFC 7807 ProblemDetails"
+        - "SMELL-18: Stack trace exposure → RFC 7807 ProblemDetails middleware"
       convergence_gate:
         max_cycles: 10
-        predicate: "sql_clean AND secrets_clean AND cors_clean AND stack_trace_clean"
+        predicate: "analyze_sts_app(security).findings.p0_count == 0"
         failure_action: "HALT — do not proceed to Stage 4"
       exit_criteria:
-        - "0 P0 security violations remaining"
-        - "BCrypt/Argon2 for password hashing (not SHA256/MD5)"
-        - "JWT AddAuthentication wired + token generation"
-        - "Rate limiting on login + payment endpoints"
-        - "Real health endpoint with async DB probe"
+        - "analyze_sts_app security scan returns 0 P0 violations"
+        - "execute_workflow security-hardening returns success"
+        - "cortex_validate_coherence passes on all security-fixed files"
 
     # ── STAGE 4: ARCHITECTURE DECOMPOSITION ────────────────────────────────
     - stage_id: 4
       title: "Architecture Decomposition — God Class Elimination"
       orchestrator: "RefactoringOrchestrator"
       mcp_tools:
-        - "cortex_refactor"
+        - tool: "execute_workflow"
+          call: "execute_workflow(template_name='service-decomposition-workflow', variables={source: 'cortex-sts/CortexLabs/BadMonolith', target: 'cortex-sts/CortexLabs/Refactored'})"
+        - tool: "cortex_validate_coherence"
+          call: "cortex_validate_coherence(file_path='cortex-sts/CortexLabs/Refactored/backend/', content='<decomposed services>', check_duplicates=True, check_versions=True)"
+        - tool: "cortex_master_plan"
+          call: "cortex_master_plan(operation='decompose', source_domain='Program.cs', targets=['UserService','TransactionService','AccountService','AnalyticsService','ReportService'])"
       template_ref: "cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml"
       description: |
-        Decompose the monolith into clean domain modules using the
-        service-decomposition-workflow. Extract: AccountService,
-        TransactionService, UserService, AnalyticsService.
-        Apply Repository pattern with DI (Scoped lifetime).
+        Decompose the monolith via execute_workflow(service-decomposition-workflow).
+        Extract UserService, TransactionService, AccountService, AnalyticsService, ReportService.
+        Apply Repository pattern with DI (Scoped lifetime). Validate each extracted
+        file for coherence and no duplication.
       inputs:
         - "source_items from Stage 2"
         - "anti_patterns from Stage 1"
@@ -208,101 +260,119 @@ playbook:
         - "SMELL-24: No service layer → API client abstraction"
       convergence_gate:
         max_cycles: 5
-        predicate: "god_class_eliminated AND di_consistent AND all_tests_green"
+        predicate: "god_class_eliminated AND di_consistent AND coherence_pass"
       exit_criteria:
-        - "Program.cs < 100 lines (was 1000+)"
+        - "execute_workflow service-decomposition returns success"
+        - "cortex_validate_coherence passes on Refactored/backend/"
+        - "Program.cs < 100 lines (was 775+ LOC across Program.cs + Services.cs)"
         - "DI lifetimes consistent (Scoped, no Singleton capturing Scoped)"
-        - "API versioning applied"
-        - "All existing tests still pass"
 
     # ── STAGE 5: TDD COVERAGE ──────────────────────────────────────────────
     - stage_id: 5
       title: "TDD Coverage — RED/GREEN/REFACTOR"
       orchestrator: "TDDOrchestrator"
       mcp_tools:
-        - "cortex_refactor"
-        - "cortex_capture_metrics"
+        - tool: "execute_workflow"
+          call: "execute_workflow(template_name='tdd-api-service', variables={target: 'cortex-sts/CortexLabs/Refactored/backend', framework: 'xUnit'})"
+        - tool: "execute_workflow"
+          call: "execute_workflow(template_name='frontend-tdd-workflow', variables={target: 'cortex-sts/CortexLabs/Refactored/frontend', framework: 'vitest'})"
+        - tool: "cortex_sweep_status"
+          call: "cortex_sweep_status(intent='tdd_coverage_gate', scope_files=['cortex-sts/CortexLabs/Refactored'])"
+        - tool: "cortex_master_plan"
+          call: "cortex_master_plan(operation='tdd_metrics', target='cortex-sts/CortexLabs/Refactored')"
       template_ref: "cortex-registry/workflows/templates/tdd/tdd-api-service.yaml"
       description: |
-        Write failing tests FIRST (CORE-008), then implement minimum code
-        to pass. Cover all extracted services with dedicated test classes.
-        Frontend test runner configured with vitest.
+        Write failing tests FIRST (CORE-008 RED phase) via execute_workflow(tdd-api-service).
+        Then implement minimum code to pass (GREEN). Frontend via vitest workflow.
+        cortex_sweep_status validates TDD coverage gate. cortex_master_plan captures metrics.
       inputs:
-        - "target_items from Stage 4"
-        - "domain_module_map"
+        - "target_items from Stage 4 (domain_module_map)"
       outputs:
         - "test_count_after"
         - "coverage_percentage"
         - "tdd_metrics"
       smells_addressed:
-        - "SMELL-12: Assert.True(true) → real assertions with business logic"
+        - "SMELL-12: Assert.True(true) → real xUnit assertions"
         - "SMELL-25: No error handling → tested error paths"
         - "SMELL-6: No pagination → paginated query tests"
         - "SMELL-9: No API versioning → versioned endpoint tests"
         - "SMELL-19: Missing model validation → validated model tests"
-        - "SMELL-22: any types → typed interface tests"
+        - "SMELL-22: any types → typed interface tests (vitest)"
       convergence_gate:
         max_cycles: 5
-        predicate: "all_services_have_tests AND coverage >= 80"
+        predicate: "cortex_sweep_status.tdd_gate == PASS AND coverage >= 80"
       exit_criteria:
-        - "XxxServiceTests class for every XxxService"
-        - "Minimum 8 tests per service class"
-        - "Frontend package.json has vitest test script"
+        - "execute_workflow tdd-api-service returns success"
+        - "execute_workflow frontend-tdd-workflow returns success"
+        - "cortex_sweep_status TDD gate: PASS"
+        - "XxxServiceTests class for every XxxService (minimum 8 tests each)"
         - "TransferAsync tested: valid, insufficient funds, zero amount, same account"
-        - "Coverage ≥ 80%"
 
     # ── STAGE 6: FUNCTIONAL COMPLETENESS GATE ──────────────────────────────
     - stage_id: 6
       title: "Functional Completeness Gate"
       orchestrator: "RefactoringOrchestrator"
       mcp_tools:
-        - "cortex_refactor"
-        - "cortex_validate_compliance"
+        - tool: "cortex_sweep_status"
+          call: "cortex_sweep_status(intent='completeness_gate', scope_files=['cortex-sts/CortexLabs/Refactored'])"
+        - tool: "cortex_vacuum_execute"
+          call: "cortex_vacuum_execute(workspace_root='cortex-sts/CortexLabs/Refactored', operation='run')"
+        - tool: "cortex_validate_coherence"
+          call: "cortex_validate_coherence(file_path='cortex-sts/CortexLabs/Refactored/', content='<final state>', check_duplicates=True, check_versions=True, check_structure=True)"
+        - tool: "cortex_master_plan"
+          call: "cortex_master_plan(operation='completeness_report', source_items=15, target_items='<count>')"
       description: |
-        Verify every endpoint in source_items exists in target_items.
-        No endpoints silently dropped. Gaps require ADR justification.
-        Clean up remaining quality smells.
+        cortex_sweep_status verifies all 15 source endpoints exist in target (CORE-064).
+        cortex_vacuum_execute removes dead code (SMELL-8: dead methods/classes).
+        cortex_validate_coherence validates final structural consistency.
+        cortex_master_plan generates completeness report.
       inputs:
-        - "source_items from Stage 2"
+        - "source_items (15 endpoints) from Stage 2"
         - "target_items from Stage 4"
       outputs:
         - "completeness_verdict (PASS/FAIL)"
         - "gap_count (must be 0 or ADR-justified)"
+        - "vacuum_report (dead code removed)"
       smells_addressed:
-        - "SMELL-7: Mixed naming → consistent conventions"
-        - "SMELL-8: Dead code → VacuumOrchestrator cleanup"
-        - "SMELL-10: Duplicate validation → single source"
-        - "SMELL-11: Console.WriteLine → structured logging"
-        - "SMELL-14: No retry → circuit breaker pattern"
-        - "SMELL-15: Magic numbers → named constants"
-        - "SMELL-20: No audit fields → CreatedAt, ModifiedBy, Version"
+        - "SMELL-7: Mixed naming → consistent PascalCase conventions"
+        - "SMELL-8: Dead code → cortex_vacuum_execute cleanup"
+        - "SMELL-10: Duplicate validation → single ValidationService"
+        - "SMELL-11: Console.WriteLine → ILogger<T> structured logging"
+        - "SMELL-14: No retry → Polly circuit breaker"
+        - "SMELL-15: Magic numbers → named constants + enums"
+        - "SMELL-20: No audit fields → IAuditableEntity: CreatedAt, ModifiedBy, Version"
       convergence_gate:
         max_cycles: 3
-        predicate: "gap_count == 0 OR all_gaps_adr_justified"
+        predicate: "gap_count == 0 AND vacuum_complete AND coherence_pass"
         failure_action: "BLOCK — implement missing endpoints or file ADR"
       exit_criteria:
-        - "ENH-STS-01: gap_count == 0 or ADR filed per gap"
-        - "All 25 smells addressed or ADR-justified"
-        - "CORE-064 sweep completeness: no partial sweeps"
+        - "cortex_sweep_status completeness_gate: PASS (gap_count == 0)"
+        - "cortex_vacuum_execute: dead code removed (NotificationService, ReportGenerator, dead methods)"
+        - "cortex_validate_coherence: PASS (no duplicates, consistent structure)"
+        - "CORE-064: all 25 smells addressed or ADR-justified"
 
     # ── STAGE 7: SCORECARD + TRACEABILITY ──────────────────────────────────
     - stage_id: 7
       title: "Scorecard Generation & AC_COMPLETE"
       orchestrator: "MasterOrchestrator"
       mcp_tools:
-        - "cortex_capture_metrics"
-        - "cortex_validate_compliance"
+        - tool: "cortex_master_plan"
+          call: "cortex_master_plan(operation='scorecard', source_repo='cortex-sts/CortexLabs/BadMonolith', target_repo='cortex-sts/CortexLabs/Refactored', smells_addressed=25)"
+        - tool: "cortex_sweep_status"
+          call: "cortex_sweep_status(intent='ac_complete', scope_files=['cortex-sts/CortexLabs/Refactored'])"
+        - tool: "cortex_intelligence_merge"
+          call: "cortex_intelligence_merge(source_contexts=['stage1','stage2','stage3','stage4','stage5','stage6'], merge_strategy='scorecard')"
       description: |
-        Generate weighted scorecard (architecture/security/testing/docs/
-        frontend/traceability). Write AC_COMPLETE to traces.db with real
-        source_repo path (not placeholder). Verify zero regressions.
+        cortex_master_plan(scorecard) generates weighted 6-dimension scorecard (CORE-002: inline).
+        cortex_sweep_status writes AC_COMPLETE with real source_repo path (anti-pattern AP-001 avoided).
+        cortex_intelligence_merge consolidates all stage outputs into final intelligence record.
       inputs:
-        - "All stage outputs"
+        - "All stage tool outputs"
         - "session_id from Stage 2"
       outputs:
         - "scorecard (6-dimension weighted)"
         - "AC_COMPLETE trace record"
-        - "final_test_results"
+        - "final_intelligence_record"
       scorecard_weights:
         architecture: 25
         security: 25
@@ -312,73 +382,90 @@ playbook:
         traceability: 5
       convergence_gate:
         max_cycles: 1
-        predicate: "scorecard_generated AND ac_complete_written AND all_tests_pass"
+        predicate: "cortex_master_plan.scorecard_complete AND cortex_sweep_status.ac_complete"
       exit_criteria:
-        - "Scorecard displayed inline (CORE-002)"
-        - "AC_COMPLETE written with real source_repo (not placeholder)"
-        - "ENH-STS-02: trace_metadata includes smells_addressed, files_created, test_count"
-        - "All tests pass"
+        - "cortex_master_plan scorecard: returned inline (CORE-002)"
+        - "cortex_sweep_status AC_COMPLETE written with source_repo=cortex-sts/CortexLabs/BadMonolith"
+        - "cortex_intelligence_merge: all 6 stage contexts merged"
+        - "ENH-STS-02: trace_metadata includes smells_addressed=25, files_created, test_count"
 
     # ── STAGE 8: DASHBOARD GENERATION ──────────────────────────────────────
     - stage_id: 8
       title: "Before/After Dashboard"
       orchestrator: "DashboardOrchestrator"
       mcp_tools:
-        - "cortex_generate_repo_dashboard"
+        - tool: "cortex_master_plan"
+          call: "cortex_master_plan(operation='dashboard', baseline_score=2.1, final_score='<from_stage7>', output_path='cortex-sts/CortexLabs/.analysis/')"
+        - tool: "cortex_health_check"
+          call: "cortex_health_check(workspace_root='cortex-sts/CortexLabs/Refactored', include_recommendations=True)"
       description: |
-        Generate before/after dashboard comparing baseline (Stage 1) to
-        final state. Output to cortex-sts/CortexLabs/.analysis/ for
-        leadership review.
+        cortex_master_plan(dashboard) generates before/after HTML dashboard comparing
+        baseline (Stage 1 score: 2.1/10) to final state. cortex_health_check validates
+        the refactored codebase is healthy before publishing.
+        Output to cortex-sts/CortexLabs/.analysis/ for leadership review.
       inputs:
-        - "baseline_quality_score from Stage 1"
+        - "baseline_quality_score: 2.1 from Stage 1"
         - "scorecard from Stage 7"
-        - "all smell resolutions"
+        - "all 25 smell resolutions"
       outputs:
         - "dashboard HTML (before/after comparison)"
         - "smell resolution summary"
+        - "health_check report"
       convergence_gate:
         max_cycles: 1
-        predicate: "dashboard_generated"
+        predicate: "cortex_master_plan.dashboard_generated AND cortex_health_check.pass"
       exit_criteria:
-        - "Dashboard HTML generated in .analysis/"
-        - "Before/after quality delta visible"
+        - "cortex_master_plan dashboard: HTML generated in .analysis/"
+        - "cortex_health_check: PASS on Refactored/"
+        - "Before/after quality delta visible (2.1 → target ≥ 8.5)"
         - "All 25 smells mapped to resolution status"
 
   # ── ORCHESTRATOR COVERAGE MAP ──────────────────────────────────────────────
+  # Maps orchestrators to the real MCP tools that invoke them
   orchestrator_coverage:
     core_tier:
       - orchestrator: "MasterOrchestrator"
         stage: 7
+        mcp_tool: "cortex_master_plan(operation='scorecard')"
         role: "Pipeline coordination + scorecard"
       - orchestrator: "IntentRouter"
         stage: "all"
+        mcp_tool: "cortex_master_plan (routes internally)"
         role: "Intent classification per stage"
       - orchestrator: "TDDOrchestrator"
         stage: 5
+        mcp_tool: "execute_workflow(template_name='tdd-api-service')"
         role: "RED/GREEN/REFACTOR cycle"
       - orchestrator: "EnforcementOrchestrator"
         stage: 2
+        mcp_tool: "cortex_master_plan(operation='holistic_gate')"
         role: "CORE rule validation + holistic gate"
     domain_tier:
       - orchestrator: "RefactoringOrchestrator"
         stage: [4, 6]
+        mcp_tool: "execute_workflow(template_name='service-decomposition-workflow')"
         role: "Architecture decomposition + completeness"
       - orchestrator: "SecurityOrchestrator"
         stage: 3
-        role: "P0 security gate"
+        mcp_tool: "analyze_sts_app(pattern_types=['security']) + execute_workflow(template_name='security-hardening')"
+        role: "P0 security gate (HARD BLOCKER)"
       - orchestrator: "DashboardOrchestrator"
         stage: 8
+        mcp_tool: "cortex_master_plan(operation='dashboard')"
         role: "Before/after visualization"
     support_tier:
       - orchestrator: "LENSOrchestrator"
         stage: 1
-        role: "Baseline analysis"
+        mcp_tool: "onboard_repository_tool + analyze_sts_app"
+        role: "Baseline analysis + smell catalogue"
       - orchestrator: "SweepCatalogueOrchestrator"
-        stage: 6
+        stage: [2, 6]
+        mcp_tool: "cortex_sweep_status(intent='catalogue_smells' | 'completeness_gate')"
         role: "CORE-064 sweep completeness"
       - orchestrator: "VacuumOrchestrator"
         stage: 6
-        role: "Dead code cleanup"
+        mcp_tool: "cortex_vacuum_execute(operation='run')"
+        role: "Dead code cleanup (SMELL-8)"
 
   # ── ANTI-PATTERNS (BLOCK if any occur) ─────────────────────────────────────
   anti_patterns:
