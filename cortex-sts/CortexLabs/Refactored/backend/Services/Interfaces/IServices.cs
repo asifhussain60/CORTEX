@@ -38,6 +38,25 @@ public interface IValidationService
     ValidationResult ValidateUser(CreateUserDto dto);
 }
 
+public interface IAuthService
+{
+    Task<AuthTokenDto> LoginAsync(string username, string password);
+    Task<AuthTokenDto> RefreshTokenAsync(string refreshToken);
+}
+
+public interface IReportService
+{
+    Task<IEnumerable<ReportDto>> GetAllAsync(int page = 1, int pageSize = 20);
+    Task<ReportDto?> GetByIdAsync(int id);
+    Task<ReportDto> GenerateAsync(GenerateReportDto dto);
+}
+
+public interface IAnalyticsService
+{
+    Task<AnalyticsSummaryDto> GetSummaryAsync(int? userId = null);
+    Task<IEnumerable<CategoryBreakdown>> GetCategoryBreakdownAsync(int? userId = null, DateTime? fromDate = null);
+}
+
 // DTOs
 public record UserDto(int Id, string UserName, string Email, string Role, bool IsActive);
 public record CreateUserDto(string UserName, string Email, string Password, string Role = "user");
