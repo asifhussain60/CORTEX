@@ -158,6 +158,114 @@ class VacuumOrchestrator:
             results.append(self._execute_op(op, dry_run=dry_run))
         return results
 
+    def run_runtime_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:
+        """Delete stale files and empty directories inside ``.cortex-runtime/``.
+
+        Targets:
+        - ``*.log`` files at ``.cortex-runtime/`` root (``setup.log``, ``mcp-self-healing.log``)
+        - ``reports/*.json`` — stale readiness snapshots
+        - ``sessions/*.md`` — stale session markdown (CORE-002)
+        - ``archived-docs/**`` — all files (already processed artefacts)
+        - Empty subdirectories that accumulate over time (``sweeps/``, ``telemetry/``,
+          ``vacuum_cache/``, ``locks/``)
+
+        Preserved (never touched):
+        - ``traces/*.db``, ``wiring/*.db``, ``intelligence/*.db``, ``audit.db*``
+          — live SQLite audit trail (CORE persistence target)
+        - ``health_cache/*.json`` — active agent cache
+        - ``setup-mcp.py`` — MCP configuration script
+
+        Args:
+            dry_run: When ``True``, plan operations but do not execute them.
+
+        Returns:
+            List of :class:`OperationResult` describing each planned or executed action.
+        """
+        runtime_root = self.workspace_root / ".cortex-runtime"
+        if not runtime_root.exists():
+            return []
+
+        # Files that must never be deleted regardless of extension
+        _KEEP_FILES: frozenset[str] = frozenset({
+            "setup-mcp.py",
+            "audit.db",
+            "audit.db-shm",
+            "audit.db-wal",
+        })
+
+        # Subdirectories whose files are always preserved
+        _KEEP_SUBDIRS: frozenset[str] = frozenset({
+            "traces",
+            "wiring",
+            "intelligence",
+            "health_cache",
+        })
+
+        results: List[OperationResult] = []
+
+        # ── 1. Root-level *.log files ──────────────────────────────────────
+        for log_file in runtime_root.glob("*.log"):
+            if log_file.name in _KEEP_FILES:
+                continue
+            if dry_run:
+                results.append(OperationResult(op_type="delete", source=log_file, success=True, dry_run=True))
+            else:
+                results.append(self.delete_file(log_file))
+
+        # ── 2. reports/*.json — stale readiness snapshots ─────────────────
+        reports_dir = runtime_root / "reports"
+        if reports_dir.exists():
+            for report_file in reports_dir.glob("*.json"):
+                if dry_run:
+                    results.append(OperationResult(op_type="delete", source=report_file, success=True, dry_run=True))
+                else:
+                    results.append(self.delete_file(report_file))
+
+        # ── 3. sessions/*.md — stale session markdown ──────────────────────
+        sessions_dir = runtime_root / "sessions"
+        if sessions_dir.exists():
+            for session_file in sessions_dir.glob("*.md"):
+                if dry_run:
+                    results.append(OperationResult(op_type="delete", source=session_file, success=True, dry_run=True))
+                else:
+                    results.append(self.delete_file(session_file))
+
+        # ── 4. archived-docs/** — processed archive artefacts ─────────────
+        archived_dir = runtime_root / "archived-docs"
+        if archived_dir.exists():
+            for artefact in sorted(archived_dir.rglob("*")):
+                if artefact.is_file():
+                    if dry_run:
+                        results.append(OperationResult(op_type="delete", source=artefact, success=True, dry_run=True))
+                    else:
+                        results.append(self.delete_file(artefact))
+
+        # ── 5. Empty subdirectories (leaf → parent order) ──────────────────
+        # Collect all subdirs, skip protected ones, remove empty ones bottom-up
+        all_subdirs = sorted(
+            (d for d in runtime_root.rglob("*") if d.is_dir()),
+            key=lambda d: len(d.parts),
+            reverse=True,  # deepest first → safe bottom-up removal
+        )
+        for subdir in all_subdirs:
+            try:
+                top_level_name = subdir.relative_to(runtime_root).parts[0]
+            except (ValueError, IndexError):
+                continue
+            if top_level_name in _KEEP_SUBDIRS:
+                continue
+            # Only remove if empty right now (previous iterations may have cleared contents)
+            try:
+                if not any(subdir.iterdir()):
+                    if dry_run:
+                        results.append(OperationResult(op_type="rmdir", source=subdir, success=True, dry_run=True))
+                    else:
+                        results.append(self.delete_directory(subdir))
+            except OSError:
+                pass
+
+        return results
+
     def run_empty_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:
         """Standalone: delete empty files and orphaned dirs.
 

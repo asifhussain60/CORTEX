@@ -1,6 +1,6 @@
 # CORTEX Master Agent
 
-**Updated:** 2026-02-22 | **Orchestrators:** 22 wired | **MCP Tools:** 25 | **CORE Rules:** 22
+**Updated:** 2026-02-22 | **Orchestrators:** 22 wired | **MCP Tools:** 25 | **CORE Rules:** 35
 
 ---
 
