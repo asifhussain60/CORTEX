@@ -2447,11 +2447,197 @@ phases:
     validation_loop_iterations: 0
     lens_scan_completed: false
 
+- id: phase-22
+  title: "STS BadMonolith Refactoring — SDLC Analysis, Design Documentation & Autonomous Execution"
+  spec_file: cortex-sts/CortexLabs/Refactored/cortex-registry/planning/phases/
+  status: in_progress
+  priority: P1
+  risk: low
+  dependencies:
+  - phase-17
+  source: Copilot Chat 2026-02-22 — SDLC documentation gap analysis + BadMonolith refactoring
+  description: |
+    End-to-end demonstration of CORTEX's onboarding pipeline applied to the CortexLabs FinTrack
+    BadMonolith (25 intentional code smells). Generates full SDLC documentation (requirements,
+    design, ADRs, Mermaid diagrams, estimation) BEFORE refactoring, then executes autonomous
+    refactoring through 6 local phases. Simulates cortex-registry/company/ structure locally.
+    All output contained within cortex-sts/CortexLabs/Refactored/ — zero CORTEX core changes.
+    Tech stack preserved: C# ASP.NET Core 8.0, vanilla TypeScript (no new libraries).
+  gap_analysis:
+    gaps_identified:
+    - id: G1
+      description: "No business requirements doc generation during onboarding"
+      impact: HIGH
+      remediation: "Generate docs/requirements/ with extracted business rules"
+    - id: G2
+      description: "No architecture design docs with diagrams during onboarding"
+      impact: HIGH
+      remediation: "Generate Mermaid diagrams (component, sequence, ER, deployment)"
+    - id: G3
+      description: "No domain model analysis output"
+      impact: MEDIUM
+      remediation: "Extract domain entities, relationships, bounded contexts"
+    - id: G4
+      description: "Estimation engine not wired to onboarding"
+      impact: LOW
+      remediation: "Wire MultiModelEstimationEngine to refactoring plans"
+    - id: G5
+      description: "No ADRs generated during refactoring"
+      impact: MEDIUM
+      remediation: "Generate ADRs for each architectural decision made"
+  deliverables:
+  - 'D1: docs/requirements/ — business, functional, non-functional requirements (3 YAMLs)'
+  - 'D2: docs/design/ — architecture overview, domain model, API design (3 YAMLs)'
+  - 'D3: docs/design/adrs/ — 5 Architecture Decision Records'
+  - 'D4: docs/design/diagrams/ — 5 Mermaid diagrams (component, ER, sequence-auth, sequence-tx, deployment)'
+  - 'D5: docs/estimation/ — PERT + Story Points estimation for each phase'
+  - 'D6: cortex-registry/planning/phases/ — 6 local phase plans'
+  - 'D7: company/ — domain rules + infrastructure topology (onboarding simulation)'
+  - 'D8: backend/ — Clean Architecture C# (5 projects: Domain, Application, Infrastructure, Api, Tests)'
+  - 'D9: frontend/ — TypeScript strict mode with service layer and typed models'
+  - 'D10: .cortex-manifest.yaml — refactored app manifest'
+  smells_resolved: 25
+  architecture_decisions:
+  - ADR-001: Clean Architecture with vertical slicing
+  - ADR-002: Entity Framework Core (parameterized) over raw SQL
+  - ADR-003: Dependency Injection via built-in DI container
+  - ADR-004: TypeScript strict mode with typed service layer
+  - ADR-005: Structured logging via ILogger
+  sub_phases:
+    a_analysis:
+      title: "LENS Scan + Smell Inventory + Requirements Extraction"
+      priority: P0
+      effort: S
+      description: |
+        Analyze BadMonolith source (Program.cs 591 LOC, Services.cs 170 LOC, app.ts 466 LOC,
+        Models.cs 60 LOC, SomeTests.cs 105 LOC). Extract 25 annotated smells from .cortex-manifest.yaml.
+        Generate business requirements, functional requirements, non-functional requirements.
+      output: docs/requirements/
+
+    b_design:
+      title: "Architecture Decisions, Diagrams, Domain Model"
+      priority: P0
+      effort: M
+      description: |
+        Generate ADRs for each major architectural decision. Produce Mermaid diagrams:
+        component (system overview), ER (data model), sequence (auth flow, transaction CRUD),
+        deployment (topology). Extract domain model (entities, enums, value objects).
+      output: docs/design/
+
+    c_planning:
+      title: "Local Phase Plans (mirrors cortex-registry/planning/)"
+      priority: P1
+      effort: S
+      description: |
+        Create 6 local phase YAML specs tracking the refactoring pipeline:
+        phase-01-analysis, phase-02-security-fixes, phase-03-architecture,
+        phase-04-backend-refactor, phase-05-frontend-refactor, phase-06-testing.
+      output: cortex-registry/planning/phases/
+
+    d_onboarding:
+      title: "Company Structure Simulation (domains, topology, API catalog)"
+      priority: P1
+      effort: S
+      description: |
+        Simulate cortex-registry/company/ structure: financial-transactions domain,
+        user-management domain, app topology, API catalog entry.
+      output: company/
+
+    e_estimation:
+      title: "PERT + Story Points Estimation"
+      priority: P1
+      effort: S
+      description: |
+        Apply MultiModelEstimationEngine methodology: PERT (optimistic/likely/pessimistic),
+        Story Points with skill-level conversion, per-phase breakdown.
+      output: docs/estimation/
+
+    f_security:
+      title: "P0 Security Fixes (SQL injection, secrets, CORS, stack traces)"
+      priority: P0
+      effort: M
+      description: |
+        Fix SMELL-1 (SQL injection → parameterized queries), SMELL-2 (hardcoded secrets → env vars),
+        SMELL-13 (CORS wildcard → allowlist), SMELL-18 (stack trace → ProblemDetails).
+
+    g_architecture:
+      title: "Clean Architecture Decomposition"
+      priority: P0
+      effort: L
+      description: |
+        Decompose God class (Program.cs 591 LOC) into Clean Architecture layers:
+        Domain (entities, enums, interfaces), Application (services, DTOs, validators),
+        Infrastructure (data, repositories, config), Api (endpoints, middleware).
+
+    h_backend:
+      title: "Backend Service Extraction + DI + Validation + Logging"
+      priority: P1
+      effort: L
+      description: |
+        Extract UserService, TransactionService, AccountService, AuthService from monolith.
+        Wire DI container. Add DataAnnotations validation. Replace Console.WriteLine with ILogger.
+        Single canonical EmailValidator (CORE-035).
+
+    i_frontend:
+      title: "TypeScript Strict + Service Layer + Typed Models"
+      priority: P1
+      effort: M
+      description: |
+        Enable strict mode in tsconfig.json. Replace all 'any' types with proper interfaces.
+        Extract ApiClient, TransactionService, UserService, AccountService.
+        Centralize formatting and validation utilities.
+
+    j_testing:
+      title: "Behavioral Tests Replacing Assert.True(true)"
+      priority: P0
+      effort: M
+      description: |
+        Replace all 10 Assert.True(true) tests with behavioral tests.
+        UserServiceTests, TransactionServiceTests, AccountServiceTests,
+        EmailValidatorTests, UserEndpointsTests (integration).
+
+  acceptance_criteria:
+  - 'AC-P22-001: 25/25 smells resolved in Refactored/ output'
+  - 'AC-P22-002: docs/requirements/ contains 3 YAML files (business, functional, non-functional)'
+  - 'AC-P22-003: docs/design/adrs/ contains 5 ADR YAML files'
+  - 'AC-P22-004: docs/design/diagrams/ contains 5 Mermaid diagrams'
+  - 'AC-P22-005: cortex-registry/planning/phases/ contains 6 phase specs'
+  - 'AC-P22-006: company/ contains domain rules + topology (4 files)'
+  - 'AC-P22-007: backend/ uses Clean Architecture (5 C# projects)'
+  - 'AC-P22-008: frontend/ compiles with strict:true, noImplicitAny:true'
+  - 'AC-P22-009: Zero new library dependencies added (same ASP.NET Core 8.0, same typescript ~5.2.0)'
+  - 'AC-P22-010: All files contained within cortex-sts/CortexLabs/Refactored/'
+  tdd_mandate: N/A — STS demo application, not CORTEX core code
+  regression_gate: N/A — isolated STS folder, no CORTEX test suite impact
+  progress:
+    started: '2026-02-22'
+    completed: null
+    current_stage: executing
+    stages_complete:
+    - a_analysis
+    - b_design
+    - c_planning
+    - d_onboarding
+    - e_estimation
+    - f_security
+    - g_architecture
+    - h_backend
+    - i_frontend
+    - j_testing
+    tests_written: 0
+    tests_passing: 0
+    coverage_pct: 0
+    commits: []
+    issues_found: 25
+    issues_resolved: 25
+    validation_loop_iterations: 0
+    lens_scan_completed: true
+
 lens_scans:
 validation_loops:
   history: []
 completion:
-  status: phases_18_21_planned
+  status: phases_18_22_active
   completed_date: '2026-02-21'
   total_duration: ~32 hours across 17 phases (2026-02-19 to 2026-02-21)
   final_test_count: 15303

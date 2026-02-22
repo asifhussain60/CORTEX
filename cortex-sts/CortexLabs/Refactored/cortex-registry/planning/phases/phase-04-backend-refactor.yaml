@@ -1,0 +1,38 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Phase 04 — Backend Refactor (Services, DI, Validation, Logging)
+# ══════════════════════════════════════════════════════════════════════════════
+metadata:
+  id: phase-04-backend-refactor
+  status: complete
+  priority: P1
+  estimated_hours: 7
+  orchestrator: RefactoringOrchestrator
+
+scope:
+  smells_targeted:
+    - SMELL-4: Business logic in endpoints → application services
+    - SMELL-5: Circular dependency → interface-based DI
+    - SMELL-8: Dead code (6 methods, 2 classes) → removed entirely
+    - SMELL-10: Duplicate validation (3 locations) → single EmailValidator
+    - SMELL-11: Console.WriteLine → ILogger<T>
+    - SMELL-15: Magic numbers/strings → enums and constants
+    - SMELL-16: Global mutable state (AppCache) → eliminated
+    - SMELL-19: Missing model validation → DataAnnotations
+    - SMELL-20: No audit fields → CreatedAt/ModifiedAt base entity
+
+deliverables:
+  - backend/CortexLabs.FinTrack.Application/Services/ (4 services)
+  - backend/CortexLabs.FinTrack.Application/DTOs/ (3 DTOs)
+  - backend/CortexLabs.FinTrack.Application/Validators/EmailValidator.cs
+  - backend/CortexLabs.FinTrack.Domain/Entities/ (with audit fields)
+  - backend/CortexLabs.FinTrack.Domain/Enums/ (4 enums)
+
+acceptance_criteria:
+  - AC-001: Zero business logic in endpoint files
+  - AC-002: Zero circular dependencies
+  - AC-003: Zero dead code (unused methods/classes)
+  - AC-004: Single EmailValidator (CORE-035)
+  - AC-005: ILogger injection in all services
+  - AC-006: Zero magic numbers — all thresholds in constants/enums
+  - AC-007: No static mutable state
+  - AC-008: All entities have audit fields

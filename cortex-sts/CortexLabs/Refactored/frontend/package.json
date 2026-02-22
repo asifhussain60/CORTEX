@@ -1,0 +1,12 @@
+{
+  "name": "cortexlabs-fintrack-frontend",
+  "version": "2.0.0",
+  "description": "CortexLabs FinTrack — Refactored vanilla TypeScript frontend",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "devDependencies": {
+    "typescript": "~5.2.0"
+  }
+}

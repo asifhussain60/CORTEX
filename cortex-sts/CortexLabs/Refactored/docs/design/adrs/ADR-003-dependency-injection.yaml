@@ -1,0 +1,41 @@
+# ADR-003: Dependency Injection via Built-in DI Container
+# Status: Accepted | Date: 2026-02-22
+
+decision:
+  title: "Use ASP.NET Core built-in DI container for all service resolution"
+  status: accepted
+  date: 2026-02-22
+  deciders: [CORTEX RefactoringOrchestrator]
+
+context: |
+  BadMonolith directly instantiates services with 'new' (SMELL-17):
+  - var userService = new UserService();
+  - var transactionService = new TransactionService();
+  This creates a circular dependency (SMELL-5) and prevents testing with mocks.
+
+decision_description: |
+  Register all services in ASP.NET Core's built-in IServiceCollection.
+  Use constructor injection everywhere. Define interfaces in Domain layer,
+  implementations in Application/Infrastructure layers. DI container resolves
+  the dependency graph — no manual wiring.
+
+alternatives_considered:
+  - name: "Autofac"
+    pros: "More features (property injection, interceptors)"
+    cons: "External NuGet dependency"
+    rejected_because: "Built-in DI is sufficient for this application size"
+
+  - name: "Service Locator pattern"
+    pros: "Quick to implement"
+    cons: "Anti-pattern — hides dependencies, hard to test"
+    rejected_because: "Violates Dependency Inversion Principle"
+
+consequences:
+  positive:
+    - "Eliminates circular dependency (SMELL-5) via interface abstraction"
+    - "Enables unit testing with mocked dependencies"
+    - "No external dependencies — uses built-in container"
+    - "Lifetime management (Scoped for DB, Singleton for config)"
+  negative:
+    - "All dependencies must be declared in constructors (more explicit)"
+  mitigated_by: "Explicitness is a feature — dependencies are visible and testable"

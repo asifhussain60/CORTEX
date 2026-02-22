@@ -1,0 +1,44 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Phase 06 — Testing (Behavioral Tests Replacing Assert.True)
+# ══════════════════════════════════════════════════════════════════════════════
+metadata:
+  id: phase-06-testing
+  status: complete
+  priority: P0
+  estimated_hours: 5
+  orchestrator: TDDOrchestrator
+
+scope:
+  smells_targeted:
+    - SMELL-12: Assert.True(true) → behavioral assertions
+    - Empty test classes → real test coverage
+    - Skipped tests → either fix or remove
+    - Integration test masquerading as unit test → proper separation
+
+  badmonolith_tests_replaced:
+    - "Test1() → Assert.True(true) — DELETED"
+    - "UserService_Should_Work() → Assert.True(1==1) — REPLACED with real service tests"
+    - "Transaction_Has_Properties() → only checks new() — REPLACED with behavior test"
+    - "Account_Balance_Test() → no assertions — REPLACED with balance logic test"
+    - "Should_Validate_Email_Format() → ignores result — REPLACED with parameterized tests"
+    - "Legacy_Import_Test() → tests deleted feature — DELETED"
+    - "Another_User_Test() → exact duplicate — DELETED"
+    - "Transaction_Categorization_Works() → tests the mock — REPLACED with real categorization test"
+    - "AccountTests class → empty — REPLACED with real tests"
+    - "ReportTests → all skipped — REPLACED with working tests"
+    - "DatabaseTests → catches and ignores all errors — DELETED"
+
+deliverables:
+  - backend/CortexLabs.FinTrack.Tests/Services/UserServiceTests.cs
+  - backend/CortexLabs.FinTrack.Tests/Services/TransactionServiceTests.cs
+  - backend/CortexLabs.FinTrack.Tests/Services/AccountServiceTests.cs
+  - backend/CortexLabs.FinTrack.Tests/Validators/EmailValidatorTests.cs
+  - backend/CortexLabs.FinTrack.Tests/Endpoints/UserEndpointsTests.cs
+
+acceptance_criteria:
+  - AC-001: Zero Assert.True(true) in any test
+  - AC-002: Zero empty test classes
+  - AC-003: Zero skipped tests
+  - AC-004: All tests assert on actual behavior
+  - AC-005: Test quality gate score >= 7 per test
+  - AC-006: Parameterized tests for validation logic

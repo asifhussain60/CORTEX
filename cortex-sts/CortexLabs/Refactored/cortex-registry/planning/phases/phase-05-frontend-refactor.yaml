@@ -1,0 +1,32 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Phase 05 — Frontend Refactor (TypeScript Strict, Service Layer, Types)
+# ══════════════════════════════════════════════════════════════════════════════
+metadata:
+  id: phase-05-frontend-refactor
+  status: complete
+  priority: P1
+  estimated_hours: 5.5
+  orchestrator: RefactoringOrchestrator
+
+scope:
+  smells_targeted:
+    - SMELL-21: God component (466 LOC app.ts) → thin app + services
+    - SMELL-22: 'any' types everywhere → proper interfaces
+    - SMELL-23: Business logic in UI → service layer
+    - SMELL-24: Direct fetch in components → ApiClient abstraction
+    - SMELL-25: No error handling → try/catch + user feedback
+
+deliverables:
+  - frontend/tsconfig.json (strict: true)
+  - frontend/src/models/ (4 typed interfaces)
+  - frontend/src/services/ (4 service files + ApiClient)
+  - frontend/src/utils/ (currency formatter, validators)
+  - frontend/src/app.ts (thin — delegates to services)
+
+acceptance_criteria:
+  - AC-001: tsconfig strict mode enabled (strict: true, noImplicitAny: true)
+  - AC-002: Zero 'any' types in production code
+  - AC-003: Zero business logic in app.ts (all in services/)
+  - AC-004: All API calls go through ApiClient
+  - AC-005: All API calls have error handling (try/catch)
+  - AC-006: Zero new npm dependencies

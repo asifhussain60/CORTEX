@@ -1,0 +1,29 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Phase 02 — Security Fixes (P0 — SQL Injection, Secrets, CORS, Stack Traces)
+# ══════════════════════════════════════════════════════════════════════════════
+metadata:
+  id: phase-02-security-fixes
+  status: complete
+  priority: P0
+  estimated_hours: 6
+  orchestrator: SecurityOrchestrator
+
+scope:
+  smells_targeted:
+    - SMELL-1: SQL injection (7 instances) → parameterized queries
+    - SMELL-2: Hardcoded secrets (6 entries) → environment variable references
+    - SMELL-13: CORS wildcard → configured allowlist
+    - SMELL-18: Stack trace exposure (5 locations) → ProblemDetails middleware
+
+deliverables:
+  - backend/CortexLabs.FinTrack.Infrastructure/Repositories/ (parameterized queries)
+  - backend/CortexLabs.FinTrack.Api/appsettings.json (placeholder secrets)
+  - backend/CortexLabs.FinTrack.Api/Middleware/ErrorHandlingMiddleware.cs
+  - backend/CortexLabs.FinTrack.Api/Program.cs (CORS config)
+
+acceptance_criteria:
+  - AC-001: Zero string concatenation in SQL queries
+  - AC-002: Zero hardcoded secrets in source code
+  - AC-003: CORS uses configured allowlist (no wildcard)
+  - AC-004: No stack traces in any API error response
+  - AC-005: Passwords hashed (not plaintext)

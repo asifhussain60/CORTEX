@@ -1,0 +1,41 @@
+# ADR-005: Structured Logging via ILogger
+# Status: Accepted | Date: 2026-02-22
+
+decision:
+  title: "Replace Console.WriteLine with ILogger structured logging"
+  status: accepted
+  date: 2026-02-22
+  deciders: [CORTEX ObservabilityOrchestrator]
+
+context: |
+  BadMonolith uses Console.WriteLine in 8 locations (SMELL-11):
+  - UserService.SendWelcomeEmail(), TransactionService.ArchiveOldTransactions(),
+  - NotificationService (3 methods), global error handler, admin delete, login audit.
+  No correlation IDs, no log levels, no structured key-value pairs.
+
+decision_description: |
+  Inject ILogger<T> via DI into all services. Use structured log templates
+  with named parameters. Add RequestLoggingMiddleware for correlation IDs.
+  Use built-in ASP.NET Core logging (Microsoft.Extensions.Logging) — no external
+  packages required.
+
+alternatives_considered:
+  - name: "Serilog with Seq sink"
+    pros: "Rich structured logging, centralized search"
+    cons: "Adds Serilog NuGet packages"
+    rejected_because: "Constraint: no new library dependencies"
+
+  - name: "NLog"
+    pros: "Mature, flexible configuration"
+    cons: "Adds NuGet dependency"
+    rejected_because: "Same constraint — using built-in only"
+
+consequences:
+  positive:
+    - "Structured logs with log levels (Information, Warning, Error)"
+    - "Correlation IDs for request tracing"
+    - "Zero external dependencies — built into ASP.NET Core"
+    - "Replaceable — can add Serilog sink later without code changes"
+  negative:
+    - "Default console sink is plain text (not JSON)"
+  mitigated_by: "Structured templates still queryable; JSON formatter available in-box"

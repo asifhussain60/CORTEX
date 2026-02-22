@@ -1,0 +1,48 @@
+# ADR-004: TypeScript Strict Mode with Typed Service Layer
+# Status: Accepted | Date: 2026-02-22
+
+decision:
+  title: "Enable TypeScript strict mode and replace all 'any' types with interfaces"
+  status: accepted
+  date: 2026-02-22
+  deciders: [CORTEX RefactoringOrchestrator]
+
+context: |
+  BadMonolith frontend uses 'any' types everywhere (SMELL-22):
+  - type Transaction = any; type User = any; type Account = any;
+  - All function parameters typed as 'any'
+  - tsconfig.json has strict: false, noImplicitAny: false
+  Additionally, all business logic and API calls are in a single 466-LOC app.ts
+  (SMELL-21, SMELL-23, SMELL-24).
+
+decision_description: |
+  Enable strict mode in tsconfig.json. Define proper TypeScript interfaces for all
+  domain models. Extract service layer (ApiClient, TransactionService, UserService,
+  AccountService) to separate files. Keep vanilla TypeScript — no Angular, React,
+  or other framework libraries.
+
+alternatives_considered:
+  - name: "Migrate to Angular"
+    pros: "Full framework with DI, routing, components"
+    cons: "Massive scope change; adds 100+ npm dependencies; won't compile without install"
+    rejected_because: "Constraint: no new libraries that won't compile"
+
+  - name: "Migrate to React"
+    pros: "Component model, virtual DOM"
+    cons: "Same constraint — adds new dependencies"
+    rejected_because: "Same constraint"
+
+  - name: "Keep loose types but add JSDoc"
+    pros: "Minimal change"
+    cons: "Doesn't fix runtime type errors; no compiler enforcement"
+    rejected_because: "Doesn't resolve SMELL-22 — 'any' types remain"
+
+consequences:
+  positive:
+    - "Compiler catches type errors at build time"
+    - "IDE autocompletion and refactoring support"
+    - "Service layer enables reuse and testability"
+    - "Zero new dependencies"
+  negative:
+    - "More files (models/, services/, utils/)"
+  mitigated_by: "Clear directory structure makes navigation intuitive"

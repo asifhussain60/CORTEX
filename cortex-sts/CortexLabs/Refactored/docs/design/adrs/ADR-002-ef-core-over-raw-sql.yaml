@@ -1,0 +1,39 @@
+# ADR-002: Parameterized Queries over Raw SQL String Concatenation
+# Status: Accepted | Date: 2026-02-22
+
+decision:
+  title: "Use parameterized SQLite queries instead of string concatenation"
+  status: accepted
+  date: 2026-02-22
+  deciders: [CORTEX SecurityOrchestrator]
+
+context: |
+  BadMonolith has 7 SQL injection vulnerabilities (SMELL-1) via string concatenation:
+  - User search, user creation, transaction search, transaction insert,
+  - Account transfer, report generation, auth login.
+  Attacker can bypass authentication with: ' OR '1'='1
+
+decision_description: |
+  Replace all raw SQL string concatenation with parameterized queries using
+  SqliteCommand.Parameters.AddWithValue(). Keep SQLite as the database engine
+  (no new dependencies). Infrastructure layer encapsulates all data access.
+
+alternatives_considered:
+  - name: "Entity Framework Core"
+    pros: "ORM eliminates SQL entirely, migrations, LINQ queries"
+    cons: "Adds NuGet dependency (Microsoft.EntityFrameworkCore.Sqlite)"
+    rejected_because: "Constraint: no new libraries; parameterized queries achieve same security"
+
+  - name: "Dapper micro-ORM"
+    pros: "Lightweight, parameterized by default"
+    cons: "Adds NuGet dependency"
+    rejected_because: "Same constraint — keeping existing Microsoft.Data.Sqlite only"
+
+consequences:
+  positive:
+    - "Eliminates all 7 SQL injection vulnerabilities"
+    - "Zero new dependencies"
+    - "Performance equivalent to raw SQL"
+  negative:
+    - "More verbose than ORM — manual mapping required"
+  mitigated_by: "Repository pattern encapsulates all queries in one location"

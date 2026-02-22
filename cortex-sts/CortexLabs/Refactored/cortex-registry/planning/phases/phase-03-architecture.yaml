@@ -1,0 +1,29 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# Phase 03 — Architecture (Clean Architecture Decomposition)
+# ══════════════════════════════════════════════════════════════════════════════
+metadata:
+  id: phase-03-architecture
+  status: complete
+  priority: P0
+  estimated_hours: 10
+  orchestrator: RefactoringOrchestrator
+
+scope:
+  smells_targeted:
+    - SMELL-3: God class (591 LOC Program.cs) → 6 endpoint files + middleware
+    - SMELL-9: No API versioning → /api/v1/ prefix
+    - SMELL-17: No DI → builder.Services registration
+
+deliverables:
+  - backend/CortexLabs.FinTrack.sln
+  - backend/CortexLabs.FinTrack.Domain/ (entities, enums, interfaces)
+  - backend/CortexLabs.FinTrack.Application/ (services, DTOs, validators)
+  - backend/CortexLabs.FinTrack.Infrastructure/ (data, repositories, config)
+  - backend/CortexLabs.FinTrack.Api/ (endpoints, middleware, Program.cs)
+
+acceptance_criteria:
+  - AC-001: 5 separate C# projects with correct dependencies
+  - AC-002: Domain project has zero external package references
+  - AC-003: All endpoints versioned (/api/v1/)
+  - AC-004: DI container registers all services
+  - AC-005: Program.cs < 60 LOC (DI + middleware only)
