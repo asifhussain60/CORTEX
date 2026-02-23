@@ -1,12 +1,12 @@
-version: '10.6'
+version: '10.7'
 updated: '2026-02-23'
 maintainer: CORTEX Architecture Team
 metadata:
-  version: '10.6'
+  version: '10.7'
   last_updated: '2026-02-23T00:00:00Z'
-  total_phases: 56
+  total_phases: 57
   active: 0
-  completed: 56
+  completed: 57
   playbooks: 1
   planned: 0
 architecture:
@@ -36,6 +36,8 @@ entry_points:
   - 🟢 838 GOLDEN TESTS COLLECTED — 0 FAILURES (2026-02-23)
   - 🟢 Playbook PB-STS-001 created — repeatable BadMonolith E2E refactoring
   - 🟢 Phase 52 COMPLETE — Operational Pattern Journal (cross-orchestrator learning)
+  - 🟢 Phase 55 COMPLETE — TemplateComposer (dynamic workflow composition from primitives)
+  - 🟢 Phase 56 COMPLETE — CORE-064 Structural Sweep Enforcement (sweep envelope injection at composition time, SweepCompositionEnforcementAgent #11, 35/35 CORE rules covered)
   - MCP tool count: 24 production tools live (cortex_query_opj integrated into cortex_knowledge) ✅
   - CORE-065 proposed: Operational Pattern Consultation rulertex/core/file_factory.py
   workflow_engine: cortex/core/workflow_engine.py
@@ -270,6 +272,53 @@ phases:
       - tests/orchestrators/workflow/test_template_composer.py (16 tests)
       - cortex/orchestrators/core/intent_router/workflow_gate.py (modified — composer fallback)
       - cortex-registry/workflows/templates/composites/README.md
+  completed_late_additions_phase_56:
+  - id: phase-56
+    title: "CORE-064 Structural Sweep Enforcement — Sweep Catalogue Injection at Composition Time"
+    status: COMPLETE
+    priority: P0
+    file: _cortex-master/phases/completed/phase-56-sweep-composition-enforcement.yaml
+    created: '2026-02-23'
+    completed: '2026-02-23'
+    governance_authority: CORE-064
+    metrics:
+      tests_added: 21
+      test_coverage: sweep envelope injection + enforcement agent
+      new_files: 3
+      modified_files: 3
+      enforcement_agent: SweepCompositionEnforcementAgent (agent #11)
+      core_rule_coverage: "35/35 (100%)"
+    description: |
+      Permanent architectural fix for partial sweep problem.
+      Root cause: TemplateComposer injected convergence_gate as declarative
+      metadata only — no runtime SweepCatalogue was opened/asserted.
+      Fix: FIX/REFACTOR/AUDIT composed workflows receive a mandatory
+      sweep envelope at composition time (sweep_catalogue_open step[0],
+      sweep_catalogue_assert_exhausted step[-1] with blocking=True).
+      OPERATION_CATEGORY_MAP updated to prepend "governance" for sweep ops.
+      SweepCompositionEnforcementAgent added as agent #11 to
+      EnforcementOrchestrator — validates structural contract pre-execution.
+      Two canonical governance primitives added to registry.
+      Zero regression — additive only.
+    deliverables:
+      - cortex/orchestrators/workflow/template_composer.py (OPERATION_CATEGORY_MAP + sweep injection in compose())
+      - cortex/orchestrators/core/enforcement_orchestrator.py (SweepCompositionEnforcementAgent + wired as agent #11)
+      - cortex-registry/workflows/templates/primitives/governance/sweep-catalogue-open.yaml (new primitive)
+      - cortex-registry/workflows/templates/primitives/governance/sweep-catalogue-close.yaml (new primitive)
+      - tests/orchestrators/workflow/test_template_composer.py (21 new RED→GREEN tests, classes TestSweepCatalogueInjection + TestSweepCompositionEnforcementAgent)
+    architectural_fit:
+      pattern: "Structural governance injection at composition time"
+      complements:
+        - SweepCatalogueOrchestrator (runtime catalogue tracking)
+        - detect-fix-rescan-loop primitive (convergence loop)
+        - MasterOrchestrator._pre_routing_gate (session open)
+        - MasterOrchestrator._finalize_operation (session close)
+      enforcement_chain:
+        - "EnforcementOrchestrator agent #11 — pre-execution composition check"
+        - "TemplateComposer.compose() — structural injection at composition"
+        - "SweepCatalogueOrchestrator.assert_exhausted() — runtime blocking gate"
+      zero_regression: true
+      additive_only: true
   deferred:
   - phase-31
   - phase-34

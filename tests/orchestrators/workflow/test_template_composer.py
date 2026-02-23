@@ -226,8 +226,12 @@ class TestTemplateComposer:
         )
 
         assert result is not None
-        first_step_category = result["steps"][0].get("source_category", "")
-        assert first_step_category == "analysis"
+        # Phase 56: refactor injects sweep_catalogue_open at step[0] (CORE-064).
+        # Analysis is still present — it is just no longer the first step.
+        step_categories = [s.get("source_category", "") for s in result["steps"]]
+        assert "analysis" in step_categories, (
+            "Composed refactor template must include an analysis step"
+        )
 
     def test_compose_includes_validation_step(self, tmp_path: Path) -> None:
         """Composed templates should always end with a validation step."""
@@ -807,4 +811,311 @@ class TestPrimitiveScorerUnit:
         )
 
 
+
 # AC_COMPLETE: AC-PHASE55-S1-001 ✅ RED phase tests written
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# PHASE 56: Sweep Catalogue Injection — CORE-064 structural enforcement
+# AC_START: AC-PHASE56-S1-001
+# Phase: 56 | Stage: 1 | Priority: P0
+# Description: RED phase — CORE-064 sweep envelope injected at compose time
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+class TestSweepCatalogueInjection:
+    """Tests that TemplateComposer injects sweep envelope for FIX/REFACTOR/AUDIT operations."""
+
+    # ------------------------------------------------------------------
+    # Helper
+    # ------------------------------------------------------------------
+
+    def _make_primitives_dir(self, tmp_path: Path) -> Path:
+        """Create a minimal primitives directory with one primitive per needed category."""
+        for cat in ("governance", "analysis", "execution", "validation"):
+            cat_dir = tmp_path / cat
+            cat_dir.mkdir(parents=True, exist_ok=True)
+            steps = [{"id": f"{cat}-step", "action": f"{cat}.run"}]
+            (cat_dir / f"{cat}-prim.yaml").write_text(
+                f"template_id: 'primitives/{cat}/{cat}-prim'\n"
+                f"name: '{cat} Primitive'\n"
+                f"tier: 'primitive'\n"
+                f"category: '{cat}'\n"
+                f"status: 'active'\n"
+                f"steps:\n"
+                f"  - id: {cat}-step\n"
+                f"    action: {cat}.run\n"
+            )
+        return tmp_path
+
+    # ------------------------------------------------------------------
+    # Sweep envelope injection — fix / refactor / audit
+    # ------------------------------------------------------------------
+
+    def test_fix_composed_template_has_sweep_open_as_first_step(self, tmp_path: Path) -> None:
+        """Composed FIX template must have sweep_catalogue_open as step[0] (CORE-064)."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="fix", description="Fix broken imports")
+        assert result is not None
+        assert result["steps"][0]["id"] == "sweep_catalogue_open", (
+            "First step must be sweep_catalogue_open for CORE-064 enforcement"
+        )
+        assert result["steps"][0]["source_category"] == "governance"
+
+    def test_fix_composed_template_has_sweep_close_as_last_step(self, tmp_path: Path) -> None:
+        """Composed FIX template must have sweep_catalogue_assert_exhausted as step[-1] (CORE-064)."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="fix", description="Fix broken imports")
+        assert result is not None
+        assert result["steps"][-1]["id"] == "sweep_catalogue_assert_exhausted", (
+            "Last step must be sweep_catalogue_assert_exhausted for CORE-064 enforcement"
+        )
+        assert result["steps"][-1]["blocking"] is True
+
+    def test_refactor_composed_template_has_sweep_envelope(self, tmp_path: Path) -> None:
+        """Composed REFACTOR template must have sweep open+close envelope (CORE-064)."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="refactor", description="Refactor auth module")
+        assert result is not None
+        step_ids = [s["id"] for s in result["steps"]]
+        assert step_ids[0] == "sweep_catalogue_open"
+        assert step_ids[-1] == "sweep_catalogue_assert_exhausted"
+
+    def test_audit_composed_template_has_sweep_envelope(self, tmp_path: Path) -> None:
+        """Composed AUDIT template must have sweep open+close envelope (CORE-064)."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="audit", description="Full production audit")
+        assert result is not None
+        step_ids = [s["id"] for s in result["steps"]]
+        assert step_ids[0] == "sweep_catalogue_open"
+        assert step_ids[-1] == "sweep_catalogue_assert_exhausted"
+
+    def test_implement_composed_template_has_no_sweep_envelope(self, tmp_path: Path) -> None:
+        """Composed IMPLEMENT template must NOT have sweep envelope (not a sweep operation)."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="implement", description="Build new feature")
+        assert result is not None
+        step_ids = [s["id"] for s in result["steps"]]
+        assert "sweep_catalogue_open" not in step_ids, (
+            "IMPLEMENT must not get sweep envelope — it is not a sweep operation"
+        )
+        assert "sweep_catalogue_assert_exhausted" not in step_ids
+
+    def test_analyze_composed_template_has_no_sweep_envelope(self, tmp_path: Path) -> None:
+        """Composed ANALYZE template must NOT have sweep envelope."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="analyze", description="Analyze codebase")
+        assert result is not None
+        step_ids = [s["id"] for s in result["steps"]]
+        assert "sweep_catalogue_open" not in step_ids
+        assert "sweep_catalogue_assert_exhausted" not in step_ids
+
+    # ------------------------------------------------------------------
+    # Metadata correctness
+    # ------------------------------------------------------------------
+
+    def test_sweep_open_step_has_required_metadata_fields(self, tmp_path: Path) -> None:
+        """Sweep open step must carry action, args, source_category, source_primitive."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="fix", description="Fix tests")
+        assert result is not None
+        open_step = result["steps"][0]
+        assert open_step["action"] == "SweepCatalogueOrchestrator.open_catalogue"
+        assert "args" in open_step
+        assert open_step["args"]["intent"] == "FIX"
+        assert open_step["source_primitive"] == "core-064-sweep-open"
+
+    def test_sweep_close_step_has_required_metadata_fields(self, tmp_path: Path) -> None:
+        """Sweep close step must carry action, blocking flag, source_primitive."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="refactor", description="Refactor tests")
+        assert result is not None
+        close_step = result["steps"][-1]
+        assert close_step["action"] == "SweepCatalogueOrchestrator.assert_exhausted"
+        assert close_step["blocking"] is True
+        assert close_step["source_primitive"] == "core-064-sweep-close"
+
+    def test_template_metadata_records_sweep_enforced_flag(self, tmp_path: Path) -> None:
+        """Composed FIX template metadata must set sweep_enforced=True (CORE-064)."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="fix", description="Fix missing types")
+        assert result is not None
+        assert result["metadata"].get("sweep_enforced") is True
+        assert result["metadata"].get("core_064_compliant") is True
+
+    def test_template_metadata_sweep_enforced_false_for_implement(self, tmp_path: Path) -> None:
+        """Composed IMPLEMENT template metadata must set sweep_enforced=False."""
+        from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
+        pdir = self._make_primitives_dir(tmp_path)
+        composer = TemplateComposer(primitives_dir=pdir)
+        result = composer.compose(operation_type="implement", description="Build feature")
+        assert result is not None
+        assert result["metadata"].get("sweep_enforced") is False
+
+    # ------------------------------------------------------------------
+    # Governance category presence in OPERATION_CATEGORY_MAP
+    # ------------------------------------------------------------------
+
+    def test_fix_category_map_includes_governance(self) -> None:
+        """OPERATION_CATEGORY_MAP['fix'] must include 'governance' as first category."""
+        from cortex.orchestrators.workflow.template_composer import OPERATION_CATEGORY_MAP
+
+        assert "governance" in OPERATION_CATEGORY_MAP["fix"], (
+            "CORE-064: 'governance' must be first in fix category map"
+        )
+        assert OPERATION_CATEGORY_MAP["fix"][0] == "governance"
+
+    def test_refactor_category_map_includes_governance(self) -> None:
+        """OPERATION_CATEGORY_MAP['refactor'] must include 'governance' as first category."""
+        from cortex.orchestrators.workflow.template_composer import OPERATION_CATEGORY_MAP
+
+        assert "governance" in OPERATION_CATEGORY_MAP["refactor"]
+        assert OPERATION_CATEGORY_MAP["refactor"][0] == "governance"
+
+    def test_audit_category_map_includes_governance(self) -> None:
+        """OPERATION_CATEGORY_MAP['audit'] must include 'governance' as first category."""
+        from cortex.orchestrators.workflow.template_composer import OPERATION_CATEGORY_MAP
+
+        assert "governance" in OPERATION_CATEGORY_MAP.get("audit", [])
+        assert OPERATION_CATEGORY_MAP["audit"][0] == "governance"
+
+    def test_implement_category_map_excludes_governance(self) -> None:
+        """OPERATION_CATEGORY_MAP['implement'] must NOT include 'governance' category."""
+        from cortex.orchestrators.workflow.template_composer import OPERATION_CATEGORY_MAP
+
+        assert "governance" not in OPERATION_CATEGORY_MAP["implement"]
+
+
+class TestSweepCompositionEnforcementAgent:
+    """Tests for SweepCompositionEnforcementAgent added to EnforcementOrchestrator."""
+
+    def test_composed_fix_template_without_sweep_open_is_blocked(self) -> None:
+        """Composed FIX template lacking sweep_catalogue_open step must be BLOCKED (CORE-064)."""
+        from cortex.orchestrators.core.enforcement_orchestrator import (
+            SweepCompositionEnforcementAgent,
+            EnforcementLevel,
+        )
+
+        agent = SweepCompositionEnforcementAgent()
+        bad_template = {
+            "steps": [
+                {"id": "analysis-step", "action": "lens.scan"},
+                {"id": "execution-step", "action": "edit.run"},
+            ],
+            "metadata": {"operation_type": "fix"},
+        }
+        result = agent.validate({"composed_template": bad_template, "operation_type": "FIX"})
+        assert result.level == EnforcementLevel.BLOCKED
+        assert any("CORE-064" in v for v in result.violations)
+
+    def test_composed_fix_template_without_sweep_close_is_blocked(self) -> None:
+        """Composed FIX template lacking sweep_catalogue_assert_exhausted must be BLOCKED."""
+        from cortex.orchestrators.core.enforcement_orchestrator import (
+            SweepCompositionEnforcementAgent,
+            EnforcementLevel,
+        )
+
+        agent = SweepCompositionEnforcementAgent()
+        bad_template = {
+            "steps": [
+                {"id": "sweep_catalogue_open", "action": "SweepCatalogueOrchestrator.open_catalogue"},
+                {"id": "execution-step", "action": "edit.run"},
+                # missing sweep_catalogue_assert_exhausted at [-1]
+            ],
+            "metadata": {"operation_type": "fix"},
+        }
+        result = agent.validate({"composed_template": bad_template, "operation_type": "FIX"})
+        assert result.level == EnforcementLevel.BLOCKED
+        assert any("CORE-064" in v for v in result.violations)
+
+    def test_composed_fix_template_with_full_envelope_passes(self) -> None:
+        """Composed FIX template with correct sweep envelope must PASS."""
+        from cortex.orchestrators.core.enforcement_orchestrator import (
+            SweepCompositionEnforcementAgent,
+            EnforcementLevel,
+        )
+
+        agent = SweepCompositionEnforcementAgent()
+        good_template = {
+            "steps": [
+                {"id": "sweep_catalogue_open", "action": "SweepCatalogueOrchestrator.open_catalogue", "blocking": False},
+                {"id": "analysis-step", "action": "lens.scan"},
+                {"id": "sweep_catalogue_assert_exhausted", "action": "SweepCatalogueOrchestrator.assert_exhausted", "blocking": True},
+            ],
+            "metadata": {"operation_type": "fix", "sweep_enforced": True},
+        }
+        result = agent.validate({"composed_template": good_template, "operation_type": "FIX"})
+        assert result.level == EnforcementLevel.PASS
+
+    def test_implement_template_without_envelope_passes(self) -> None:
+        """IMPLEMENT composed template without sweep envelope must PASS (not a sweep op)."""
+        from cortex.orchestrators.core.enforcement_orchestrator import (
+            SweepCompositionEnforcementAgent,
+            EnforcementLevel,
+        )
+
+        agent = SweepCompositionEnforcementAgent()
+        implement_template = {
+            "steps": [
+                {"id": "analysis-step", "action": "lens.scan"},
+                {"id": "execution-step", "action": "tdd.run"},
+            ],
+            "metadata": {"operation_type": "implement", "sweep_enforced": False},
+        }
+        result = agent.validate({"composed_template": implement_template, "operation_type": "IMPLEMENT"})
+        assert result.level == EnforcementLevel.PASS
+
+    def test_no_composed_template_in_context_is_skipped(self) -> None:
+        """When no composed_template present, agent must PASS (non-composed path)."""
+        from cortex.orchestrators.core.enforcement_orchestrator import (
+            SweepCompositionEnforcementAgent,
+            EnforcementLevel,
+        )
+
+        agent = SweepCompositionEnforcementAgent()
+        result = agent.validate({"operation_type": "FIX"})
+        assert result.level == EnforcementLevel.PASS
+
+    def test_agent_is_registered_in_enforcement_orchestrator(self) -> None:
+        """SweepCompositionEnforcementAgent must be present in EnforcementOrchestrator.agents."""
+        from cortex.orchestrators.core.enforcement_orchestrator import (
+            EnforcementOrchestrator,
+            SweepCompositionEnforcementAgent,
+        )
+
+        eo = EnforcementOrchestrator()
+        agent_types = [type(a).__name__ for a in eo.agents]
+        assert "SweepCompositionEnforcementAgent" in agent_types, (
+            "SweepCompositionEnforcementAgent must be wired into EnforcementOrchestrator"
+        )
+
+
+# AC_COMPLETE: AC-PHASE56-S1-001 ✅ RED phase tests written (Phase 56)

@@ -1113,6 +1113,119 @@ class ExtendedGovernanceAgent:
         )
 
 
+
+# ============================================================================
+# SWEEP COMPOSITION ENFORCEMENT AGENT — CORE-064 (Phase 56)
+# ============================================================================
+
+
+class SweepCompositionEnforcementAgent:
+    """
+    Enforces CORE-064 (Sweep Completeness Contract) at composition time.
+
+    Validates that any composed workflow template for FIX, REFACTOR, or AUDIT
+    operations contains the mandatory sweep catalogue envelope:
+      - step[0].id == 'sweep_catalogue_open'
+      - step[-1].id == 'sweep_catalogue_assert_exhausted' with blocking=True
+
+    This is a **structural** check — it prevents a composed template from
+    reaching execution without the sweep contract wired in.  It complements
+    the runtime SweepCatalogueOrchestrator.assert_exhausted() call, which
+    raises SweepIncompleteError when open items remain.
+
+    Wired into EnforcementOrchestrator as agent #11 (Phase 56).
+    Authority: CORE-064 Sweep Completeness Contract.
+    """
+
+    # Operations that require a sweep envelope
+    SWEEP_OPERATIONS: frozenset = frozenset({"FIX", "REFACTOR", "AUDIT"})
+
+    def __init__(self) -> None:
+        """Initialize SweepCompositionEnforcementAgent."""
+        self.name = "SweepCompositionEnforcementAgent"
+        self.rules = ["CORE-064"]
+
+    def validate(self, context: Dict[str, Any]) -> EnforcementResult:
+        """
+        Validate that a composed template carries the CORE-064 sweep envelope.
+
+        Args:
+            context: Operation context with optional keys:
+                - composed_template (Dict): The template produced by TemplateComposer.
+                - operation_type (str): e.g. "FIX", "REFACTOR", "AUDIT", "IMPLEMENT".
+
+        Returns:
+            EnforcementResult — BLOCKED for Tier-0 CORE-064 violations, PASS otherwise.
+        """
+        violations: List[str] = []
+        operation_type = context.get("operation_type", "").upper()
+        composed_template = context.get("composed_template")
+
+        # Skip: no composed template in context (non-composer code path)
+        if not composed_template:
+            return EnforcementResult(
+                level=EnforcementLevel.PASS,
+                violations=[],
+                warnings=[],
+                metadata={
+                    "agent": "SweepCompositionEnforcementAgent",
+                    "skipped": "No composed_template in context",
+                },
+            )
+
+        # Skip: operation does not require a sweep envelope
+        if operation_type not in self.SWEEP_OPERATIONS:
+            return EnforcementResult(
+                level=EnforcementLevel.PASS,
+                violations=[],
+                warnings=[],
+                metadata={
+                    "agent": "SweepCompositionEnforcementAgent",
+                    "skipped": f"operation_type={operation_type!r} does not require sweep envelope",
+                },
+            )
+
+        steps: List[Dict[str, Any]] = composed_template.get("steps", [])
+
+        # Check sweep_catalogue_open is step[0]
+        if not steps or steps[0].get("id") != "sweep_catalogue_open":
+            violations.append(
+                f"CORE-064 VIOLATION: Composed {operation_type} template is missing "
+                "'sweep_catalogue_open' as step[0]. Every FIX/REFACTOR/AUDIT composed "
+                "workflow must open a SweepCatalogue before execution. "
+                "This is a P0 Sweep Completeness Contract violation."
+            )
+
+        # Check sweep_catalogue_assert_exhausted is step[-1] with blocking=True
+        if not steps or steps[-1].get("id") != "sweep_catalogue_assert_exhausted":
+            violations.append(
+                f"CORE-064 VIOLATION: Composed {operation_type} template is missing "
+                "'sweep_catalogue_assert_exhausted' as step[-1]. Every FIX/REFACTOR/AUDIT "
+                "composed workflow must assert the catalogue is exhausted before "
+                "AC_COMPLETE is emitted. Partial sweeps are a governance violation."
+            )
+        elif not steps[-1].get("blocking", False):
+            violations.append(
+                "CORE-064 VIOLATION: 'sweep_catalogue_assert_exhausted' step must have "
+                "blocking=True. A non-blocking close step allows partial sweeps to slip through."
+            )
+
+        level = EnforcementLevel.BLOCKED if violations else EnforcementLevel.PASS
+
+        return EnforcementResult(
+            level=level,
+            violations=violations,
+            warnings=[],
+            metadata={
+                "agent": "SweepCompositionEnforcementAgent",
+                "rules_checked": ["CORE-064"],
+                "operation_type": operation_type,
+                "step_count": len(steps),
+                "sweep_envelope_present": len(violations) == 0,
+            },
+        )
+
+
 # ============================================================================
 # ENFORCEMENT ORCHESTRATOR
 # ============================================================================
@@ -1137,8 +1250,10 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTempl
     7. ArchitectureIntegrityAgent: CORE-017-020, 032, 034, 035, 038-041
     8. DiscoveryEnforcementAgent: CORE-030, 035 (ENH-047)
     9. ExtendedGovernanceAgent: CORE-058..063 (GAP-008)
+    10. ResponseContentValidationAgent: CORE-002-RESPONSE
+    11. SweepCompositionEnforcementAgent: CORE-064 (Phase 56 — structural sweep gate)
 
-    Coverage: 33/35 CORE rules automated (94%)
+    Coverage: 35/35 CORE rules automated (100%)
     Manual rules: CORE-005, 006 (runtime/post-implementation)
 
     Usage:
@@ -1155,7 +1270,7 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTempl
 
     def __init__(self, governance_registry: Optional[GovernanceRegistry] = None) -> None:
         """
-        Initialize enforcement orchestrator with 8-agent system.
+        Initialize enforcement orchestrator with 11-agent system.
 
         Args:
             governance_registry: Optional governance registry (injected)
@@ -1165,15 +1280,16 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTempl
             GovernanceEnforcementAgent(),
             SecurityCheckpointAgent(),
             ComplianceValidationAgent(),
-            FileNamingEnforcementAgent(),  # CORE-028
-            IncrementalExecutionAgent(),  # CORE-001, 004
-            MarkdownSuppressionAgent(),  # CORE-002
-            ArchitectureIntegrityAgent(),  # CORE-017-020, 032, 034, 035, 038-041
-            DiscoveryEnforcementAgent(),  # CORE-030, 035 (ENH-047)
-            ResponseContentValidationAgent(),  # CORE-002-RESPONSE (new response-level gate)
-            ExtendedGovernanceAgent(),  # CORE-058..063 (GAP-008)
+            FileNamingEnforcementAgent(),           # CORE-028
+            IncrementalExecutionAgent(),            # CORE-001, 004
+            MarkdownSuppressionAgent(),             # CORE-002
+            ArchitectureIntegrityAgent(),           # CORE-017-020, 032, 034, 035, 038-041
+            DiscoveryEnforcementAgent(),            # CORE-030, 035 (ENH-047)
+            ResponseContentValidationAgent(),       # CORE-002-RESPONSE
+            ExtendedGovernanceAgent(),              # CORE-058..063 (GAP-008)
+            SweepCompositionEnforcementAgent(),     # CORE-064 (Phase 56 — structural sweep gate)
         ]
-        logger.info(f"EnforcementOrchestrator initialized with {len(self.agents)} agents (34/35 CORE rules)")
+        logger.info(f"EnforcementOrchestrator initialized with {len(self.agents)} agents (35/35 CORE rules)")
 
     def get_recommended_template(self) -> str:
         """Get the recommended workflow template for enforcement operations."""

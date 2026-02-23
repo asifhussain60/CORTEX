@@ -9,6 +9,12 @@ cortex-registry/workflows/templates/composites/ for future reuse.
 Key principle: COMPOSE from validated blocks, never GENERATE arbitrary YAML.
 This eliminates hallucination risk while enabling dynamic coverage.
 
+Phase 56 addition: CORE-064 Sweep Completeness Contract enforcement.
+FIX / REFACTOR / AUDIT operations receive a mandatory sweep catalogue
+envelope — sweep_catalogue_open (step[0]) and
+sweep_catalogue_assert_exhausted (step[-1]) — at composition time,
+making the contract structural rather than advisory.
+
 AC_START: AC-PHASE55-S2-001
 Phase: 55 | Stage: 2 | Priority: P1
 Description: GREEN phase — TemplateComposer implementation
@@ -31,10 +37,15 @@ logger = logging.getLogger(__name__)
 
 # Maps operation types to the ordered sequence of primitive categories needed.
 # Every composed workflow follows: analysis → execution → validation.
+#
+# CORE-064 (Phase 56): FIX / REFACTOR / AUDIT prepend "governance" as the
+# mandatory first category so the sweep catalogue open/close envelope is
+# injected structurally — not as advisory metadata.
 OPERATION_CATEGORY_MAP: Dict[str, List[str]] = {
     "implement": ["analysis", "execution", "validation"],
-    "fix": ["analysis", "execution", "validation"],
-    "refactor": ["analysis", "execution", "validation"],
+    "fix":      ["governance", "analysis", "execution", "validation"],
+    "refactor": ["governance", "analysis", "execution", "validation"],
+    "audit":    ["governance", "analysis", "execution", "validation"],
     "migrate": ["analysis", "execution", "validation"],
     "test": ["analysis", "validation"],
     "security": ["analysis", "validation"],
@@ -42,6 +53,9 @@ OPERATION_CATEGORY_MAP: Dict[str, List[str]] = {
     "deploy": ["execution", "validation"],
     "document": ["analysis", "execution"],
 }
+
+# Operations that require a sweep catalogue envelope (CORE-064).
+SWEEP_REQUIRED_OPERATIONS: frozenset = frozenset({"fix", "refactor", "audit"})
 
 # Default category sequence for unknown operation types
 DEFAULT_CATEGORIES: List[str] = ["analysis", "execution", "validation"]
@@ -207,6 +221,10 @@ class TemplateComposer:
         # Select best primitive for each required category
         steps: List[Dict[str, Any]] = []
         for cat in categories:
+            # Governance category is handled via sweep envelope injection below —
+            # skip it here so ordinary governance YAML primitives are not needed.
+            if cat == "governance":
+                continue
             cat_primitives = [p for p in all_primitives if p.get("category") == cat]
             if cat_primitives:
                 # Select best-fit primitive for this category and operation type
@@ -233,6 +251,42 @@ class TemplateComposer:
             )
             return None
 
+        # ── CORE-064: Sweep Catalogue Envelope (Phase 56) ──────────────────
+        # FIX / REFACTOR / AUDIT operations receive a mandatory sweep envelope.
+        # The open step is prepended and the close step is appended so the
+        # contract is *structural* — enforced at composition time, not runtime.
+        op_lower = operation_type.lower()
+        sweep_enforced = op_lower in SWEEP_REQUIRED_OPERATIONS
+        if sweep_enforced:
+            sweep_open_step: Dict[str, Any] = {
+                "id": "sweep_catalogue_open",
+                "action": "SweepCatalogueOrchestrator.open_catalogue",
+                "args": {
+                    "intent": operation_type.upper(),
+                    "scope_files": "__resolved_at_runtime__",
+                },
+                "blocking": False,
+                "source_category": "governance",
+                "source_primitive": "core-064-sweep-open",
+                "governance_rule": "CORE-064",
+            }
+            sweep_close_step: Dict[str, Any] = {
+                "id": "sweep_catalogue_assert_exhausted",
+                "action": "SweepCatalogueOrchestrator.assert_exhausted",
+                "args": {
+                    "sweep_id": "__from_sweep_catalogue_open__",
+                },
+                "blocking": True,  # Raises SweepIncompleteError if items remain
+                "source_category": "governance",
+                "source_primitive": "core-064-sweep-close",
+                "governance_rule": "CORE-064",
+            }
+            steps = [sweep_open_step] + steps + [sweep_close_step]
+            logger.info(
+                "CORE-064: Sweep catalogue envelope injected for operation=%s",
+                operation_type,
+            )
+
         # Generate unique ID from operation + description
         template_id = self._generate_id(operation_type, description)
 
@@ -256,14 +310,17 @@ class TemplateComposer:
                 "description": description,
                 "primitive_categories": categories,
                 "composed": True,
+                "sweep_enforced": sweep_enforced,
+                "core_064_compliant": sweep_enforced,
             },
         }
 
         logger.info(
-            "Composed template '%s' from %d primitives (%d steps)",
+            "Composed template '%s' from %d primitives (%d steps, sweep_enforced=%s)",
             template_id,
             len(categories),
             len(steps),
+            sweep_enforced,
         )
 
         return template
@@ -397,3 +454,4 @@ class TemplateComposer:
 
 
 # AC_COMPLETE: AC-PHASE55-S2-001 ✅ TemplateComposer implemented (GREEN phase)
+# AC_COMPLETE: AC-PHASE56-S2-001 ✅ CORE-064 sweep envelope injection implemented (Phase 56 GREEN)

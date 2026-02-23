@@ -1,0 +1,71 @@
+# ============================================================================
+# PRIMITIVE: Sweep Catalogue Close — CORE-064 Sweep Completeness Contract
+# ============================================================================
+# Tier:      1 (Primitive — atomic, reusable, parameterised)
+# Category:  governance
+# Authority: CORE-064 (Sweep Completeness Contract)
+# Phase:     56 — Structural Sweep Enforcement
+#
+# Purpose:
+#   Asserts that ALL issues registered in the SweepCatalogue have been
+#   resolved before AC_COMPLETE is emitted.  This is the hard-blocking exit
+#   gate that enforces CORE-064.  Raises SweepIncompleteError if any
+#   open items remain.  Paired with sweep-catalogue-open.yaml.
+#
+# Reused by:
+#   - Any composed workflow produced by TemplateComposer for fix/refactor/audit
+#   - audit/audit-fix-pipeline (Stages 7–8, after convergence loop exits)
+#
+# Wiring:
+#   TemplateComposer injects this step at index -1 of every sweep-required
+#   composed template.  SweepCompositionEnforcementAgent (EnforcementOrchestrator
+#   agent #11) validates its presence AND blocking=True before execution is
+#   permitted.
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/governance/sweep-catalogue-close'
+name: 'Sweep Catalogue Assert Exhausted'
+tier: 'primitive'
+category: 'governance'
+status: 'active'
+
+metadata:
+  description: |
+    Calls SweepCatalogueOrchestrator.assert_exhausted(sweep_id).
+    If remaining > 0: raises SweepIncompleteError (P0 governance violation).
+    If remaining == 0: emits AC_COMPLETE with ✅ and closes the catalogue.
+    The sweep_id is received from sweep-catalogue-open.yaml output binding.
+  governance_rules:
+    - 'CORE-064: Sweep Completeness Contract — no AC_COMPLETE until catalogue exhausted'
+    - 'CORE-002: All output inline — SweepIncompleteError surfaces remaining items in chat'
+    - 'CORE-049: Silent on clean pass — no noise when all items resolved'
+  tags:
+    - governance
+    - sweep-catalogue
+    - core-064
+    - primitive
+    - blocking
+  author: 'CORTEX Architecture'
+  created: '2026-02-23'
+  phase: 56
+
+steps:
+  - id: sweep_catalogue_assert_exhausted
+    action: 'SweepCatalogueOrchestrator.assert_exhausted'
+    args:
+      sweep_id: '__from_sweep_catalogue_open__'   # bound from sweep_catalogue_open output
+    blocking: true          # MUST be true — non-blocking close is a CORE-064 violation
+    on_failure: 'raise'     # SweepIncompleteError propagates — blocks AC_COMPLETE
+    source_primitive: 'core-064-sweep-close'
+    governance_rule: 'CORE-064'
+    success_emits: 'AC_COMPLETE: AC-SWEEP-{sweep_id} ✅'
+    failure_emits: 'AC_COMPLETE: AC-SWEEP-{sweep_id} ❌ {remaining_count} items unresolved'
+
+cortex_tooling:
+  orchestrators:
+    primary: 'SweepCatalogueOrchestrator'
+    priority: 155
+    method: 'assert_exhausted'
+  sqlite_db_pattern: '.cortex-runtime/sweeps/{sweep_id}.db'
+  error_type: 'SweepIncompleteError'
