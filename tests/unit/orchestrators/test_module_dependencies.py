@@ -38,7 +38,7 @@ MODULE_CATEGORIES = {
     ],
     "governance": [
         "cortex.orchestrators.core.governance_registry",
-        "cortex.core.core.state_manager",
+        "cortex.core.state_manager",
     ],
     "infrastructure": [
         "cortex.infrastructure.enhanced_audit_logger",

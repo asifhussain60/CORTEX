@@ -309,8 +309,8 @@ class OrchestratorBase(WorkflowTemplateMixin, ABC):
 
 # ---------------------------------------------------------------------------
 # Phase 62-A merge: OrchestrationStatus / OrchestrationContext / OrchestrationResult
-# These were canonical in cortex.core.core.orchestrator_base; promoted here
-# so all callers can import from cortex.core.orchestrator_base (CORE-035).
+# These were promoted from the eliminated cortex/core/core/ double-nesting layer.
+# All callers import from cortex.core.orchestrator_base (CORE-035).
 # ---------------------------------------------------------------------------
 
 import uuid as _uuid  # noqa: E402

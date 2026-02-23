@@ -75,7 +75,7 @@ class TestEnvironmentDetection:
             is_copilot_available=False,
             is_development=False,
             cortex_root=Path("/tmp/cortex"),
-            tool_adapter_class="cortex.core.core.tool_adapter.MCPToolAdapter",
+            tool_adapter_class="cortex.core.tool_adapter.MCPToolAdapter",
         )
         
         assert config.environment_type == EnvironmentType.MCP_SERVER
@@ -89,7 +89,7 @@ class TestEnvironmentDetection:
             is_copilot_available=True,
             is_development=False,
             cortex_root=Path("/tmp/cortex"),
-            tool_adapter_class="cortex.core.core.tool_adapter.CopilotToolAdapter",
+            tool_adapter_class="cortex.core.tool_adapter.CopilotToolAdapter",
         )
         
         assert "Copilot" in str(config)

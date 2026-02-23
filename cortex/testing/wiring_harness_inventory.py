@@ -153,7 +153,7 @@ class WiringHarnessInventory:
         test_pass_rate=1.0,
         test_files=["tests/unit/orchestrators/test_holistic_context_builder.py"],
         implementation_location="cortex/orchestrators/core/holistic_context_builder.py",
-        entry_point="cortex.core.core.orchestrator.holistic_context_builder.HolisticContextBuilder",
+        entry_point="cortex.core.orchestrator.holistic_context_builder.HolisticContextBuilder",
         initialization_code="builder = HolisticContextBuilder()",
         usage_pattern="context = builder.build(intent, analysis, challenges, recommendations)",
         orchestrator_hook_type="stage_3_synthesis",
@@ -177,7 +177,7 @@ class WiringHarnessInventory:
         initialization_code="response_gen = TurnResponseWithChallenges(holistic_builder)",
         usage_pattern="response = response_gen.generate_turn_response(turn_context, challenges)",
         dependencies=[
-            WiredComponentDependency("HolisticContextBuilder", "cortex.core.core.orchestrator.holistic_context_builder.HolisticContextBuilder")
+            WiredComponentDependency("HolisticContextBuilder", "cortex.core.orchestrator.holistic_context_builder.HolisticContextBuilder")
         ],
         orchestrator_hook_type="stage_4_execution_response",
         integration_point="MasterOrchestrator.stage_4_execution() → response building",
@@ -284,7 +284,7 @@ class WiringHarnessInventory:
         },
 
         "dependencies": {
-            "KnowledgeGuidanceEngine": "cortex.core.core.knowledge_guidance_engine.KnowledgeGuidanceEngine",
+            "KnowledgeGuidanceEngine": "cortex.core.knowledge_guidance_engine.KnowledgeGuidanceEngine",
             "TDD_YAMLs": "cortex/intelligence/knowledge/TESTING-VALIDATION/*.yaml",
             "Governance": "cortex-registry/core/tier0-skull/skull-rules.yaml (CORE-008, CORE-019)"
         },
@@ -398,10 +398,10 @@ class WiringHarnessInventory:
 
         "dependencies": {
             "TDDOrchestrator": "cortex.orchestrators.core.tdd_orchestrator.TDDOrchestrator",
-            "ConversationProtocol": "cortex.core.core.orchestrator.conversation_protocol.ConversationProtocol (optional)",
-            "EventRegistry": "cortex.core.core.orchestrator.terminal_events.EventRegistry",
-            "ContinuationDecision": "cortex.core.core.orchestrator.continuation_decision.ContinuationDecision",
-            "Terminal Events": "cortex.core.core.orchestrator.terminal_events (PhaseCompleted, ErrorOccurred, TokenLimit, etc)",
+            "ConversationProtocol": "cortex.core.orchestrator.conversation_protocol.ConversationProtocol (optional)",
+            "EventRegistry": "cortex.core.orchestrator.terminal_events.EventRegistry",
+            "ContinuationDecision": "cortex.core.orchestrator.continuation_decision.ContinuationDecision",
+            "Terminal Events": "cortex.core.orchestrator.terminal_events (PhaseCompleted, ErrorOccurred, TokenLimit, etc)",
             "Result Type": "cortex.core.result (Ok, Err for error handling)"
         },
 
@@ -531,7 +531,7 @@ class WiringHarnessInventory:
         test_pass_rate=1.0,
         test_files=["tests/unit/brain/test_conversation_protocol.py"],
         implementation_location="cortex/orchestrators/core/conversation_protocol.py",
-        entry_point="cortex.core.core.orchestrator.conversation_protocol.ConversationProtocol",
+        entry_point="cortex.core.orchestrator.conversation_protocol.ConversationProtocol",
         initialization_code="protocol = ConversationProtocol()",
         usage_pattern="result = protocol.execute_turn(round_context)",
         orchestrator_hook_type="stage_1_comprehension",
@@ -552,7 +552,7 @@ class WiringHarnessInventory:
         test_pass_rate=1.0,
         test_files=["tests/unit/orchestrators/test_continuation_decision.py"],
         implementation_location="cortex/orchestrators/core/continuation_decision.py",
-        entry_point="cortex.core.core.orchestrator.continuation_decision.ContinuationDecision",
+        entry_point="cortex.core.orchestrator.continuation_decision.ContinuationDecision",
         initialization_code="decision = ContinuationDecision(should_continue=True, reason='more_analysis_needed')",
         usage_pattern="if decision.should_continue: protocol.execute_turn(next_context)",
         orchestrator_hook_type="stage_4_execution",
@@ -571,7 +571,7 @@ class WiringHarnessInventory:
         test_pass_rate=1.0,
         test_files=["tests/unit/orchestrators/test_terminal_event_registry.py"],
         implementation_location="cortex/orchestrators/core/terminal_event_registry.py",
-        entry_point="cortex.core.core.orchestrator.terminal_event_registry.TerminalEventRegistry",
+        entry_point="cortex.core.orchestrator.terminal_events.TerminalEventRegistry",
         initialization_code="registry = TerminalEventRegistry()\nregistry.on('operation_complete', handler_fn)",
         usage_pattern="registry.fire('operation_complete', context)",
         orchestrator_hook_type="event_system",
@@ -704,7 +704,7 @@ class WiringHarnessInventory:
         test_pass_rate=1.0,
         test_files=["tests/unit/knowledge/test_unified_service.py"],
         implementation_location="cortex/intelligence/unified_service.py",
-        entry_point="cortex.core.core.knowledge.unified_service.UnifiedKnowledgeService",
+        entry_point="cortex.core.knowledge.unified_service.UnifiedKnowledgeService",
         initialization_code="service = UnifiedKnowledgeService()",
         usage_pattern="insights = service.get_insights_for_context(context)",
         orchestrator_hook_type="stage_3_knowledge_integration",
@@ -748,7 +748,7 @@ class WiringHarnessInventory:
         test_pass_rate=0.9,
         test_files=["tests/unit/intent_router/test_intelligent_knowledge_router.py"],
         implementation_location="cortex/intelligence/router.py",
-        entry_point="cortex.core.core.knowledge.router.IntelligentKnowledgeRouter",
+        entry_point="cortex.core.knowledge.router.IntelligentKnowledgeRouter",
         initialization_code="router = IntelligentKnowledgeRouter(knowledge_repo=knowledge_service)",
         usage_pattern="orchestrator = router.select_orchestrator(intent, domain_context)",
         orchestrator_hook_type="stage_2_routing",
@@ -794,7 +794,7 @@ class WiringHarnessInventory:
         test_pass_rate=1.0,
         test_files=["tests/unit/governance/test_governance_intelligence.py"],
         implementation_location="cortex/governance/governance_intelligence.py",
-        entry_point="cortex.core.core.governance_intelligence.GovernanceIntelligence",
+        entry_point="cortex.core.governance_intelligence.GovernanceIntelligence",
         initialization_code="intelligence = GovernanceIntelligence()",
         usage_pattern="context = intelligence.analyze_operation(operation_type='IMPLEMENT', domain='healthcare')",
         orchestrator_hook_type="stage_3_knowledge_integration",
@@ -814,7 +814,7 @@ class WiringHarnessInventory:
         test_pass_rate=1.0,
         test_files=["tests/unit/governance/test_tier_composer.py"],
         implementation_location="cortex/orchestrators/core/tier_composer.py",
-        entry_point="cortex.core.core.tier_composer.TierComposer",
+        entry_point="cortex.core.tier_composer.TierComposer",
         initialization_code="composer = TierComposer()",
         usage_pattern="rules = composer.compose_rules(tier0=True, tier1_domains=['security'], tier2_contexts=['production'])",
         orchestrator_hook_type="stage_3_knowledge_integration",

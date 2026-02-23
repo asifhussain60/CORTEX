@@ -121,7 +121,7 @@ class TestMasterOrchestratorGateway:
     @pytest.fixture
     def gateway(self, mock_environment_detector, mock_tool_adapter):
         """Create gateway with mocked dependencies."""
-        with patch('cortex.core.core.master_orchestrator_gateway.EnvironmentDetector', return_value=mock_environment_detector):
+        with patch('cortex.core.master_orchestrator_gateway.EnvironmentDetector', return_value=mock_environment_detector):
             gateway = MasterOrchestratorGateway()
             gateway._adapter = mock_tool_adapter
             return gateway
@@ -191,7 +191,7 @@ class TestGatewayRouting:
     @pytest.fixture
     def gateway_mcp(self):
         """Gateway in MCP environment."""
-        with patch('cortex.core.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
+        with patch('cortex.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
             mock_instance = mock_detector.return_value
             mock_instance.detect_environment.return_value = EnvironmentType.MCP_SERVER
             mock_instance.is_mcp_available.return_value = True
@@ -200,7 +200,7 @@ class TestGatewayRouting:
     @pytest.fixture
     def gateway_copilot(self):
         """Gateway in Copilot environment."""
-        with patch('cortex.core.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
+        with patch('cortex.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
             mock_instance = mock_detector.return_value
             mock_instance.detect_environment.return_value = EnvironmentType.COPILOT
             mock_instance.is_mcp_available.return_value = False
@@ -245,7 +245,7 @@ class TestGatewayErrorHandling:
     @pytest.fixture
     def gateway(self):
         """Create gateway for error testing."""
-        with patch('cortex.core.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
+        with patch('cortex.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
             mock_instance = mock_detector.return_value
             mock_instance.detect_environment.return_value = EnvironmentType.DEVELOPMENT
             return MasterOrchestratorGateway()
@@ -308,7 +308,7 @@ class TestGatewayIntegration:
     
     def test_end_to_end_mcp_request(self):
         """Test complete request flow in MCP environment."""
-        with patch('cortex.core.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
+        with patch('cortex.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
             mock_instance = mock_detector.return_value
             mock_instance.detect_environment.return_value = EnvironmentType.MCP_SERVER
             mock_instance.is_mcp_available.return_value = True
@@ -341,7 +341,7 @@ class TestGatewayIntegration:
     
     def test_dor_blocks_low_confidence_requests(self):
         """Test DoR blocks requests below confidence threshold."""
-        with patch('cortex.core.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
+        with patch('cortex.core.master_orchestrator_gateway.EnvironmentDetector') as mock_detector:
             mock_instance = mock_detector.return_value
             mock_instance.detect_environment.return_value = EnvironmentType.MCP_SERVER
             

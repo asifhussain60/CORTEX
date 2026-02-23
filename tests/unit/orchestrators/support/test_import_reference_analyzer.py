@@ -53,7 +53,7 @@ import cortex.mcp.tools as mcp_tools
         # Assert
         assert len(refs) == 2
         assert refs[0]["type"] == "absolute"
-        assert refs[0]["module"] == "cortex.core.core.orchestrator_base"
+        assert refs[0]["module"] == "cortex.core.orchestrator_base"
     
     def test_analyze_relative_imports(self, tmp_path):
         """

@@ -2,9 +2,9 @@
 Protocols module - Re-exports from protocol.py for compatibility.
 
 This module exists for backwards compatibility with imports expecting
-`cortex.core.core.knowledge.protocols` (plural).
+`cortex.core.knowledge.protocols` (plural).
 
-The canonical definitions are in `cortex.core.core.knowledge.protocol` (singular).
+The canonical definitions are in `cortex.core.knowledge.protocol` (singular).
 """
 
 from cortex.core.knowledge.protocol import (

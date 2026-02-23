@@ -139,14 +139,14 @@ class EnhancedWiringHarness:
         ),
         WiringHarnessComponent(
             component_id="UNWIRED-GOVERNANCE-001",
-            entry_point="cortex.core.core.governance_intelligence.GovernanceIntelligence",
+            entry_point="cortex.core.governance_intelligence.GovernanceIntelligence",
             priority=1,
             category="HIGH",
             required=True,
         ),
         WiringHarnessComponent(
             component_id="UNWIRED-TIER-001",
-            entry_point="cortex.core.core.tier_composer.TierComposer",
+            entry_point="cortex.core.tier_composer.TierComposer",
             priority=1,
             category="HIGH",
             required=True,
