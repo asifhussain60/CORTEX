@@ -133,6 +133,9 @@ class MasterOrchestrationStage4:
         if context is None:
             return Err("Stage4ApprovalContext must not be None")
 
+        import time as _time_mod
+        _ac_id = f"AC-STAGE4-{int(_time_mod.time() * 1000)}"
+        # AC_START: {_ac_id}
         try:
             # Extract metadata from Stage 3 output
             stage3 = context.stage3_output
@@ -234,11 +237,12 @@ class MasterOrchestrationStage4:
                 confidence,
                 gates_passed,
             )
-
+            # AC_COMPLETE: {_ac_id} ✅
             return Ok(output)
 
         except Exception as exc:  # noqa: BLE001
             self.logger.error("Stage4 error: %s", exc)
+            # AC_COMPLETE: {_ac_id} ❌
             return Err(str(exc))
 
     def get_approval_history(self) -> List[Dict[str, Any]]:

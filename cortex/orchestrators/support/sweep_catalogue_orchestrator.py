@@ -257,6 +257,9 @@ class SweepCatalogueOrchestrator:
             logger.info("Resuming existing sweep catalogue %s (%d files)", existing, len(scope_files))
             return existing
 
+        import time as _time_mod
+        _ac_id = f"AC-SWEEP-{int(_time_mod.time() * 1000)}"
+        # AC_START: {_ac_id}
         sweep_id = f"sweep-{uuid.uuid4().hex[:12]}"
         now = time.time()
         hash_json = json.dumps(self._file_hashes(scope_files))
@@ -271,6 +274,7 @@ class SweepCatalogueOrchestrator:
         conn.close()
 
         logger.info("Opened new sweep catalogue %s (%s · %d files)", sweep_id, intent, len(scope_files))
+        # AC_COMPLETE: {_ac_id} ✅
         return sweep_id
 
     def resume_open_catalogue(self, intent: str, scope_files: List[str]) -> str:

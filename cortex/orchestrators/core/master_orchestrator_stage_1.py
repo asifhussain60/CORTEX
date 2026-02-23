@@ -95,6 +95,9 @@ class MasterOrchestrationStage1:
                 confidence_score=0.0,
             )
 
+        import time as _time_mod
+        _ac_id = f"AC-STAGE1-{int(_time_mod.time() * 1000)}"
+        # AC_START: {_ac_id}
         request = context.request or ""
         operation = self._classify_operation(request)
         keywords = self._extract_keywords(request)
@@ -114,6 +117,7 @@ class MasterOrchestrationStage1:
             {"request": request, "operation": operation, "confidence": confidence}
         )
         self.logger.debug("Stage1: comprehended request=%r op=%s", request, operation)
+        # AC_COMPLETE: {_ac_id} ✅
         return output
 
     def get_comprehension_history(self) -> List[Dict[str, Any]]:

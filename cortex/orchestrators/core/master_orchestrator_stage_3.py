@@ -96,6 +96,9 @@ class MasterOrchestrationStage3:
         if context is None:
             return Err("Stage3KnowledgeContext must not be None")
 
+        import time as _time_mod
+        _ac_id = f"AC-STAGE3-{int(_time_mod.time() * 1000)}"
+        # AC_START: {_ac_id}
         try:
             graph = self._build_knowledge_graph(context)
             recommendations = self._build_recommendations(context, graph)
@@ -124,10 +127,12 @@ class MasterOrchestrationStage3:
                 context.domain,
                 confidence,
             )
+            # AC_COMPLETE: {_ac_id} ✅
             return Ok(output)
 
         except Exception as exc:  # noqa: BLE001
             self.logger.error("Stage3 error: %s", exc)
+            # AC_COMPLETE: {_ac_id} ❌
             return Err(str(exc))
 
     def get_knowledge_history(self) -> List[Dict[str, Any]]:

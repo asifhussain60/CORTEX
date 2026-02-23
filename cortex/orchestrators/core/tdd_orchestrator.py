@@ -478,6 +478,9 @@ class TDDOrchestrator(OPJMixin, WorkflowTemplateMixin, IOrchestrator):
         - "tdd_multi_cycle": Multi-cycle TDD (ENH-088)
         - "tdd_guidance": Get knowledge guidance
         """
+        import time as _time
+        _ac_id = f"AC-TDD-{int(_time.time() * 1000)}"
+        # AC_START: {_ac_id}
         try:
             logger.info(f"TDDOrchestrator executing operation: {operation_name}")
 
@@ -525,7 +528,12 @@ class TDDOrchestrator(OPJMixin, WorkflowTemplateMixin, IOrchestrator):
 
         except Exception as e:
             logger.error(f"Operation {operation_name} failed: {str(e)}")
+            # AC_COMPLETE: {_ac_id} ❌ execute_operation failed
             return Err(f"Operation failed: {str(e)}")
+
+        finally:
+            # AC_COMPLETE: {_ac_id} ✅
+            pass
 
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
         """

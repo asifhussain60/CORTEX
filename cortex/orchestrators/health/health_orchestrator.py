@@ -145,7 +145,11 @@ class HealthOrchestrator:
             HealthReport with agent results.
         """
         report = HealthReport(workspace_root=self.workspace_root)
+        import time as _time
+        _ac_id = f"AC-HEALTH-{int(_time.time() * 1000)}"
+        # AC_START: {_ac_id}
         if not self.enabled:
+            # AC_COMPLETE: {_ac_id} ✅ (disabled)
             return report
 
         for agent in self.agents:
@@ -159,6 +163,7 @@ class HealthOrchestrator:
             except Exception as exc:  # noqa: BLE001
                 logger.warning("Agent %s failed: %s", agent.name, exc)
 
+        # AC_COMPLETE: {_ac_id} ✅
         return report
 
     # ── public API ───────────────────────────────────────────────────────

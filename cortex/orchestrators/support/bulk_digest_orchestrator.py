@@ -38,6 +38,9 @@ class BulkDigestOrchestrator:
         continue_on_error: bool = True,
     ) -> Dict[str, Any]:
         """Process all matching files in *directory* and return aggregated stats."""
+        import time as _time_mod
+        _ac_id = f"AC-DIGEST-{int(_time_mod.time() * 1000)}"
+        # AC_START: {_ac_id}
         start = time.monotonic()
         exclude_patterns = exclude_patterns or []
 
@@ -82,6 +85,7 @@ class BulkDigestOrchestrator:
 
         stats["processing_time_seconds"] = round(time.monotonic() - start, 3)
         self._update_progress(stats)
+        # AC_COMPLETE: {_ac_id} ✅
         return stats
 
     # ------------------------------------------------------------------

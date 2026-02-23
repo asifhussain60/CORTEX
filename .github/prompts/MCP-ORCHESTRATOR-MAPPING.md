@@ -21,9 +21,9 @@ CORTEX exposes **22 wired orchestrators** via **37 consolidated MCP tools**. Thi
 
 | Orchestrator | MCP Tool | Operation | Use Case |
 |--------------|----------|-----------|----------|
-| **MasterOrchestrator** | `cortex_process_request` | `operation="implement"` | Main entry point for all requests |
+| **MasterOrchestrator** | `cortex_orchestrator` | `operation="implement"` | Main entry point for all requests |
 | **IntentRouter** | `cortex_classify` | `operation="intent"` | Classify user intent |
-| **TDDOrchestrator** | `cortex_process_request` | `operation="test"` | Test-driven development workflow |
+| **TDDOrchestrator** | `cortex_orchestrator` | `operation="test"` | Test-driven development workflow |
 | **EnforcementOrchestrator** | `cortex_governance` | `operation="execute"` | Pre-execution governance gate |
 | **WorkflowOrchestrator** | `cortex_workflow` | `operation="execute"` | Multi-step workflow coordination |
 | **ConversationOrchestrator** | `cortex_orchestrator` | `operation="invoke"` | Multi-turn conversation state |
@@ -31,7 +31,7 @@ CORTEX exposes **22 wired orchestrators** via **37 consolidated MCP tools**. Thi
 **Example Usage:**
 ```json
 {
-  "tool": "cortex_process_request",
+  "tool": "cortex_orchestrator",
   "parameters": {
     "operation": "implement",
     "request": "Add authentication to user service",
@@ -48,7 +48,7 @@ CORTEX exposes **22 wired orchestrators** via **37 consolidated MCP tools**. Thi
 |--------------|----------|-----------|----------|
 | **RefactoringOrchestrator** | `cortex_refactor` | `operation="extract"` | Code refactoring (extract, rename, move) |
 | **PlanningOrchestrator** | `cortex_plan` | `operation="create"` | Phase planning and roadmap |
-| **DomainOrchestrator** | `cortex_process_request` | `operation="analyze"` | Domain-specific analysis |
+| **DomainOrchestrator** | `cortex_orchestrator` | `operation="analyze"` | Domain-specific analysis |
 | **DashboardOrchestrator** | `cortex_dashboard` | `operation="generate"` | Dashboard generation (HTML/JSON) |
 | **EnhancedPlanningOrchestrator** | `cortex_plan` | `operation="update"` | Enhanced planning with dependencies |
 | **ServiceDecompositionOrchestrator** | `cortex_orchestrator` | `operation="invoke"` | Service decomposition strategies |
@@ -233,7 +233,7 @@ Check health of all or specific orchestrators:
 
 | Category | Count | Tools |
 |----------|-------|-------|
-| **CORE** | 4 | `cortex_process_request`, `cortex_challenge`, `cortex_classify`, `cortex_request_lifecycle` |
+| **CORE** | 4 | `cortex_orchestrator`, `cortex_challenge`, `cortex_classify`, `cortex_request_lifecycle` |
 | **INTELLIGENCE** | 4 | `cortex_lens`, `cortex_knowledge`, `cortex_git`, `cortex_generate_tests` |
 | **GOVERNANCE** | 4 | `cortex_governance`, `cortex_validate`, `cortex_load`, `cortex_validate_request` |
 | **OPERATIONS** | 6 | `cortex_debug`, `cortex_refactor`, `cortex_plan`, `cortex_onboard`, `cortex_dashboard`, `cortex_workflow` |
@@ -250,7 +250,7 @@ Check health of all or specific orchestrators:
 - ✅ **Orchestrator Discovery:** `cortex_orchestrator` (operation="list") exposes all 22 orchestrators
 - ✅ **Health Monitoring:** `cortex_check` (operation="orchestrator_health") for system status
 - ✅ **Governance Gate:** `cortex_governance` (operation="stage0_audit") validates requests pre-flight
-- ✅ **TDD Workflow:** `cortex_process_request` (operation="test") for test-driven development
+- ✅ **TDD Workflow:** `cortex_orchestrator` (operation="test") for test-driven development
 - ✅ **Refactoring:** `cortex_refactor` with 5 operations (extract, rename, move, inline, organize)
 - ✅ **Repository Onboarding:** `cortex_onboard` (operation="full") for LENS + security scan
 - ✅ **Dashboard Generation:** `cortex_dashboard` (operation="generate") for repo dashboards

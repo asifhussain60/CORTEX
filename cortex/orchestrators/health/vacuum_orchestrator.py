@@ -83,6 +83,9 @@ class VacuumOrchestrator:
             :class:`VacuumReport` with all operation outcomes.
         """
         report = VacuumReport(dry_run=dry_run)
+        import time as _time
+        _ac_id = f"AC-VACUUM-{int(_time.time() * 1000)}"
+        # AC_START: {_ac_id}
         ctx = FileContext.build(self.workspace_root)
 
         # Naming fixes
@@ -111,6 +114,7 @@ class VacuumOrchestrator:
             report.operations.append(result)
 
         report.recount()
+        # AC_COMPLETE: {_ac_id} ✅
         return report
 
     def run_root_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:

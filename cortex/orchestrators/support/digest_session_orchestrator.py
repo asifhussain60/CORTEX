@@ -54,8 +54,12 @@ class DigestSessionOrchestrator(OPJMixin):
             :class:`DigestResult` with classification and enhancement counts.
         """
         path = Path(file_path)
+        import time as _time_mod
+        _ac_id = f"AC-DSESSION-{int(_time_mod.time() * 1000)}"
+        # AC_START: {_ac_id}
 
         if not path.exists():
+            # AC_COMPLETE: {_ac_id} ❌ file not found
             return DigestResult(
                 success=False,
                 file_path=file_path,
@@ -94,6 +98,7 @@ class DigestSessionOrchestrator(OPJMixin):
             resolution=f"classified {'chat' if is_chat else 'doc'} confidence={confidence:.2f} enhancements={enhancements}",
             confidence=min(confidence / 10.0, 1.0),
         )
+        # AC_COMPLETE: {_ac_id} ✅
         return result
 
     # ------------------------------------------------------------------

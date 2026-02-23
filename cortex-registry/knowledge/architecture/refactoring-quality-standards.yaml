@@ -8,7 +8,7 @@ title: "Refactoring Quality Standards — Lessons from BadMonolith Audit"
 category: "architecture"
 domain: "refactoring"
 version: "1.0"
-source_session: "cortex-sts/CortexLabs/.analysis/01-review.md"
+source_session: "cortex-sts/CortexLabs/Refactored"
 score: 82  # out of 100 — first STS refactoring pass
 
 # ─────────────────────────────────────────────────────────────────────────────
