@@ -23,7 +23,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | MCP Tools | 24 in `cortex/mcp/tools/` |
 | Top-level Dirs | 16 canonical under `cortex/` |
 | Governance Rules | 35 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
-| Test Suite | 15,145 tests (539 golden, 177 phase) |
+| Test Suite | 15,230 tests (486 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 
 ---
@@ -146,13 +146,15 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 
 **Persistence target:** `.cortex-runtime/traces/orchestrator-traces.db`
 **Enforced by:** `EnforcementOrchestrator` pre-commit hook + `cortex_validate` (op: `compliance`)
-**Audited by:** Check #7 in the 13-Point Production Readiness Audit (`/audit fix`)
+**Audited by:** Check #19 (SQLite activity log health) in the 19-Point Production Readiness Audit (`/audit fix`)
 
 **AC Marker Rules:**
 - `AC_START` at entry point of every public orchestrator method
 - `AC_COMPLETE` on success with ✅ + timing (ms)
 - `AC_COMPLETE` on failure with ❌ + error classification
-- No orphaned `AC_START` without matching `AC_COMPLETE` (governance violation)
+- No orphaned `AC_START` without matching `AC_COMPLETE` (P0 governance violation — Check #19 and Meta-Audit Check #23)
+
+**SQLite Activity Logging:** Every audit stage, orchestrator invocation, and convergence loop cycle writes to `.cortex-runtime/traces/orchestrator-traces.db`. Schema: `audit_sessions` (1 row per `/audit fix` run), `audit_stage_log` (1 row per stage), `audit_violations` (1 row per violation — queryable for recurring P0 pattern detection), `workflow_cycles` (1 row per detect-fix-rescan iteration), `workflow_runs` (1 row per loop invocation). DB is cleaned up on every Stage 9 exit (30-day retention + VACUUM). Pattern detection surfaces recurring P0s that appear in ≥3 sessions. Guard: `CORTEX_DISABLE_DB_CLEANUP=true` to skip cleanup (CI environments).
 
 ---
 
@@ -172,19 +174,23 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 ### `/audit fix` — 9-Stage Pipeline (canonical single command for production readiness)
 
 ```
-Stage 1: Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 2: 17-Point Production Scan           (cortex-auditor.md Checks #1–#17)
-Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
-Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
-Stage 5: Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
-Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 22 checks)
-Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
-Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
-Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
+Stage -1: Environment Readiness          (UpgradeOrchestrator.validate_requirements() — preflight)
+Stage 0:  Inflight Upgrade + Pre-Flight  (git fetch origin/main check + STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
+Stage 1:  Stage 0 Governance Pre-Flight  (STAGE-0-GOVERNANCE-AUDIT-SPEC.md full spec)
+Stage 2:  19-Point Production Scan       (cortex-auditor.md Checks #1–#19, includes SQLite health)
+Stage 3:  Wiring Contract Validation     (architecture-integrity-agent.md, L1→L3)
+Stage 4:  Orchestrator Health (all 22)   (HealthOrchestrator.run_health_check())
+Stage 5:  Vacuum Cleanup                 (VacuumOrchestrator + cortex_vacuum)
+Stage 6:  Prompt/Agent Meta-Audit        (cortex-meta-auditor.md, 23 checks)
+Stage 7–8: Auto-Fix Convergence Loop    (detect-fix-rescan-loop primitive — loops until 0 P0/P1)
+Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py batch → SQLite cleanup)
 ```
 
 **Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
-**Activity log:** `.cortex-runtime/traces/orchestrator-traces.db` (AC markers per stage).
+**Activity log:** `.cortex-runtime/traces/orchestrator-traces.db` (full schema: `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs`).
+**Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
+**Workflow template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
+**Loop primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
 
 ---
 

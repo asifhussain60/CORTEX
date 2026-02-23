@@ -83,6 +83,7 @@ Unlike `cortex-auditor.md` (which audits source code), this agent audits **docum
 | 20 | Windows compatibility gate | (a) No new hardcoded `/`-separator string paths added to `cortex/` source without `pathlib.Path` or `os.path`; (b) No new `os.system()` shell calls without platform guard; (c) `scripts/setup-mcp.py` uses `sys.executable` for MCP command; (d) `tasks.json` has both Unix and Windows-compatible task variants — run `grep -c "Windows" .vscode/tasks.json` (must be ≥ 1); any violation is P1 |
 | 21 | Cross-platform runtime safety | After every `/audit fix`, verify: (a) no new hardcoded POSIX paths in `cortex/` source; (b) no new `os.system()` calls without Windows fallback; (c) `cortex/mcp/__main__.py` startup has no Unix-only assumptions (`os.getenv('HOME')` without `USERPROFILE` fallback, `Path('~')` without `.expanduser()`); (d) `pytest-xdist` multiprocessing start method compatible with Windows `spawn` strategy; any violation is P1 |
 | 22 | Requirements file integrity | After every `/audit fix`, verify: (a) `requirements.txt` has no duplicate package entries (auto-detectable via line scan — `grep -c "jsonschema==" requirements.txt` must return 1); (b) no package appears with both pinned (`==`) and minimum (`>=`) constraints; (c) `[PREFLIGHT CRITICAL]` marker comment blocks are preserved and accurate — new preflight-critical dependencies must carry annotation; any violation is P1 |
+| 23 | **SQLite activity log health** | `orchestrator-traces.db` passes `PRAGMA integrity_check` (result = `ok`); no orphaned AC_START rows (workflow_cycles or audit_stage_log rows with `status != "pass"` and `started_at < now - 1 hour`); file size < 50 MB; `audit_sessions` has ≥1 row with `exit_status = "clean"` in last 7 days; cleanup policy (`VACUUM`) ran on last session exit. **Severity mapping:** Missing DB file = P1 (logging pipeline uninitialised). Orphaned AC_START > 1 hour = P0 (broken cross-cutting intelligence). DB size > 50 MB = P1 (bloat). No clean session in 7 days = P1 (audit pipeline not running). **Auto-fix:** invoke `sqlite-health-sweep` instantiation of `detect-fix-rescan-loop` primitive (prune + VACUUM loop). **Detect command:** `python3 -c "import sqlite3,os; db='.cortex-runtime/traces/orchestrator-traces.db'; print('MISSING' if not os.path.exists(db) else sqlite3.connect(db).execute('PRAGMA integrity_check').fetchone()[0])"` |
 
 ---
 
@@ -125,6 +126,11 @@ All `.github/` documentation MUST use these values:
 | CORE Rules | **35 active** (+ 2 AC rules = 37 total) |
 | Package | **`cortex`** (single) |
 | Tests | **15,230** (486 golden, 177 phase) |
+| Audit Checks | **19-Point** production readiness (Checks #1–#19) |
+| Meta-Audit Checks | **23 checks** |
+| Workflow Primitive | `primitives/validation/detect-fix-rescan-loop` |
+| SQLite DB | `.cortex-runtime/traces/orchestrator-traces.db` |
+| SQLite Tables | `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs` |
 
 ---
 

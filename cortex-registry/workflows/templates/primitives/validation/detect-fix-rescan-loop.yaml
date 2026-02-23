@@ -1,0 +1,612 @@
+# ============================================================================
+# PRIMITIVE: Detect → Fix → Rescan Convergence Loop
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable, parameterized)
+# Purpose: Generic convergence loop that rescans a target scope after every
+#          fix until the success predicate evaluates true or max_cycles is hit.
+#          Replaces all one-shot scan-and-fix patterns with a guaranteed-clean
+#          exit gate. Every iteration emits AC markers to SQLite traces.
+#
+# Design pillar: CORE-064 (Sweep Completeness Contract) — no partial sweeps.
+#   A fix run that exits before the predicate is true is a governance violation.
+#
+# Reused by:
+#   - audit/audit-fix-pipeline (Stages 7–8)
+#   - maintenance/health-vacuum-unified-pipeline
+#   - quality/duplicate-validation
+#   - quality/quality-uplift
+#   - governance/request-execution-plan-gate
+#   - any orchestrator that runs detect → remediate → verify sequences
+#
+# SQLite Activity Logging:
+#   Every cycle writes a row to .cortex-runtime/traces/orchestrator-traces.db
+#   table: workflow_cycles(run_id, template_id, cycle_num, issues_before,
+#          issues_after, predicate_result, duration_ms, timestamp)
+#   Cleanup policy: rows older than retention_days are vacuumed on loop exit.
+# ============================================================================
+
+version: '2.0.0'
+template_id: 'primitives/validation/detect-fix-rescan-loop'
+name: 'Detect → Fix → Rescan Convergence Loop'
+tier: 'primitive'
+category: 'validation'
+status: 'active'
+
+metadata:
+  description: |
+    Generic convergence loop primitive. Caller supplies:
+      - detect_step: what to scan and what counts as an issue
+      - fix_step: how to remediate each issue
+      - success_predicate: boolean expression over scan output variables
+      - scope: files, directories, or logical domains to scan
+
+    The loop runs detect → fix → rescan until success_predicate is true
+    or max_cycles is exhausted, then emits a final SQLite audit row and
+    surfaces any remaining issues inline (CORE-002 — no report files).
+
+    Backoff strategy prevents tight infinite loops on pathological inputs:
+      linear: wait_ms = base_wait_ms * cycle
+      exponential: wait_ms = base_wait_ms * (2 ** cycle)
+      none: no delay (default for fast in-process checks)
+
+  governance_rules:
+    - 'CORE-064: Sweep Completeness Contract — loop must exhaust full catalogue'
+    - 'CORE-035: Single canonical implementation — no per-check loop duplicates'
+    - 'CORE-002: All output inline — no .md/.txt report files created'
+    - 'CORE-049: Silent unless violations found — zero noise on clean pass'
+
+  tags:
+    - primitive
+    - convergence-loop
+    - detect-fix-rescan
+    - sqlite-logging
+    - audit
+    - core-064
+
+  author: 'CORTEX Architecture'
+  created: '2026-02-23'
+  version_history:
+    - version: '1.0.0'
+      date: '2026-02-23'
+      note: 'Initial primitive — extracted from health-vacuum and audit-fix patterns'
+    - version: '2.0.0'
+      date: '2026-02-23'
+      note: 'Added SQLite per-cycle logging, retention-based cleanup, bloat prevention'
+
+# ============================================================================
+# CORTEX TOOLING
+# ============================================================================
+cortex_tooling:
+  orchestrators:
+    - name: 'EnforcementOrchestrator'
+      purpose: 'CORE-064 sweep completeness enforcement'
+      required: true
+    - name: 'HealthOrchestrator'
+      purpose: 'Health check integration (when used in audit context)'
+      required: false
+  mcp_tools:
+    - name: 'cortex_validate'
+      op: 'compliance'
+      purpose: 'Governance rule checking on each scan cycle'
+      required: true
+    - name: 'cortex_metrics'
+      op: 'capture'
+      purpose: 'Per-cycle metrics capture to SQLite'
+      required: true
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required:
+    - name: 'detect_step'
+      type: 'StepDefinition'
+      description: |
+        Step definition for the detect phase. Must produce:
+          issues_found (int): count of detected issues
+          issue_list (List[Issue]): structured list for fix_step consumption
+        Example:
+          orchestrator: EnforcementOrchestrator
+          action: scan_codebase
+          params: {scope: "cortex/", rule_ids: ["CORE-007", "CORE-011"]}
+
+    - name: 'fix_step'
+      type: 'StepDefinition'
+      description: |
+        Step definition for the fix phase. Receives issue_list from detect_step.
+        Must produce:
+          issues_fixed (int): count of issues successfully remediated
+          fix_log (List[FixRecord]): what was changed and where
+        Example:
+          orchestrator: EnforcementOrchestrator
+          action: auto_remediate
+          params: {confidence_threshold: 0.90}
+
+    - name: 'success_predicate'
+      type: 'str'
+      description: |
+        Boolean expression evaluated after each rescan. Loop exits when true.
+        Available variables from detect_step output:
+          issues_found, issue_list, scan_errors, scan_duration_ms
+        Available variables from fix_step output:
+          issues_fixed, fix_log, fix_errors
+        Available loop variables:
+          cycle (int), total_fixed (int), total_scanned (int)
+        Examples:
+          "issues_found == 0"
+          "issues_found == 0 and scan_errors == 0"
+          "p0_count == 0 and p1_count == 0"
+
+  optional:
+    - name: 'scope'
+      type: 'Union[List[Path], str]'
+      description: 'Files, directories, or glob patterns to scan. Passed to detect_step.'
+      default: '.'
+
+    - name: 'max_cycles'
+      type: 'int'
+      description: 'Hard ceiling on iterations. Prevents infinite loops on unfixable issues.'
+      default: 5
+      constraints: 'min=1, max=20'
+
+    - name: 'backoff_strategy'
+      type: 'str'
+      description: 'Delay strategy between cycles to prevent resource contention.'
+      default: 'none'
+      enum: ['none', 'linear', 'exponential']
+
+    - name: 'base_wait_ms'
+      type: 'int'
+      description: 'Base wait in ms (only used when backoff_strategy != none).'
+      default: 500
+
+    - name: 'fix_confidence_threshold'
+      type: 'float'
+      description: 'Minimum confidence score for autonomous fix (0.0–1.0). Issues below threshold are surfaced for manual review.'
+      default: 0.90
+
+    - name: 'sqlite_db_path'
+      type: 'Path'
+      description: 'SQLite DB for per-cycle activity logging.'
+      default: '.cortex-runtime/traces/orchestrator-traces.db'
+
+    - name: 'retention_days'
+      type: 'int'
+      description: 'How many days of cycle rows to retain in SQLite before cleanup vacuum. Prevents DB bloat.'
+      default: 30
+      constraints: 'min=7, max=365'
+
+    - name: 'emit_ac_markers'
+      type: 'bool'
+      description: 'Emit AC_START/AC_COMPLETE markers per cycle (CORTEX cross-cutting intelligence requirement).'
+      default: true
+
+    - name: 'silent_on_clean'
+      type: 'bool'
+      description: 'Suppress all output if success_predicate is true on cycle 1 (CORE-049).'
+      default: true
+
+    - name: 'label'
+      type: 'str'
+      description: 'Human-readable label for this loop instance (shown in progress and AC markers).'
+      default: 'detect-fix-rescan'
+
+# ============================================================================
+# SQLITE SCHEMA
+# ============================================================================
+sqlite_schema:
+  database: '{{sqlite_db_path}}'
+  tables:
+    workflow_cycles:
+      description: 'Per-cycle record for every detect-fix-rescan iteration.'
+      ddl: |
+        CREATE TABLE IF NOT EXISTS workflow_cycles (
+            id              INTEGER PRIMARY KEY AUTOINCREMENT,
+            run_id          TEXT NOT NULL,        -- UUID for this loop invocation
+            template_id     TEXT NOT NULL,        -- e.g. "primitives/validation/detect-fix-rescan-loop"
+            label           TEXT NOT NULL,        -- human label from params
+            cycle_num       INTEGER NOT NULL,     -- 1-based cycle index
+            issues_before   INTEGER NOT NULL,     -- issues_found at detect phase
+            issues_after    INTEGER NOT NULL,     -- issues_found after fix + rescan
+            issues_fixed    INTEGER NOT NULL,     -- issues_fixed from fix_step
+            predicate_result INTEGER NOT NULL,   -- 1=true (loop exit), 0=false (continue)
+            fix_log_json    TEXT,                 -- JSON-serialized fix_log
+            scan_errors     INTEGER DEFAULT 0,
+            fix_errors      INTEGER DEFAULT 0,
+            duration_ms     INTEGER NOT NULL,
+            timestamp       TEXT NOT NULL         -- ISO-8601 UTC
+        );
+
+    workflow_runs:
+      description: 'One row per complete loop invocation (all cycles aggregated).'
+      ddl: |
+        CREATE TABLE IF NOT EXISTS workflow_runs (
+            run_id          TEXT PRIMARY KEY,
+            template_id     TEXT NOT NULL,
+            label           TEXT NOT NULL,
+            caller          TEXT,                 -- orchestrator or agent that invoked
+            total_cycles    INTEGER NOT NULL,
+            total_issues_fixed INTEGER NOT NULL,
+            final_predicate INTEGER NOT NULL,     -- 1=clean exit, 0=max_cycles hit
+            exit_reason     TEXT NOT NULL,        -- "predicate_true" | "max_cycles" | "error"
+            started_at      TEXT NOT NULL,
+            completed_at    TEXT NOT NULL,
+            duration_ms     INTEGER NOT NULL
+        );
+
+  cleanup_policy:
+    description: |
+      Run AFTER every loop exit to prevent SQLite bloat. Two-phase:
+        1. DELETE rows older than retention_days from workflow_cycles.
+        2. VACUUM the database to reclaim freed pages.
+      Cleanup is silent (CORE-049) and runs inside the AC_COMPLETE boundary.
+      The workflow_runs table is pruned separately: keep last 90 days regardless
+      of retention_days setting (runs are lightweight — one row per invocation).
+    workflow_cycles_prune: |
+      DELETE FROM workflow_cycles
+      WHERE timestamp < datetime('now', '-{{retention_days}} days');
+    workflow_runs_prune: |
+      DELETE FROM workflow_runs
+      WHERE completed_at < datetime('now', '-90 days');
+    post_prune_vacuum: 'VACUUM;'
+    trigger: 'on_loop_exit'
+    guard: 'CORTEX_DISABLE_DB_CLEANUP != "true"'
+
+# ============================================================================
+# EXECUTION LOGIC
+# ============================================================================
+execution:
+  pre_loop:
+    - step_id: 'INIT_RUN'
+      name: 'Initialise run context'
+      action: |
+        1. Generate run_id = UUID4()
+        2. Ensure sqlite_db_path parent directory exists:
+             Path(sqlite_db_path).parent.mkdir(parents=True, exist_ok=True)
+        3. Apply DDL for workflow_cycles and workflow_runs if tables absent
+        4. Record started_at = datetime.utcnow().isoformat()
+        5. If emit_ac_markers: emit  AC_START: AC-{label.upper()}-{run_id[:8]}
+      outputs:
+        - run_id
+        - started_at
+
+  loop_body:
+    description: |
+      Repeat detect → fix → rescan until success_predicate == True
+      or cycle_num > max_cycles.
+
+    - step_id: 'DETECT'
+      name: 'Detect issues (cycle {{cycle_num}})'
+      action: |
+        cycle_start_ms = now_ms()
+        Execute detect_step with scope={{scope}}
+        Record: issues_found, issue_list, scan_errors, scan_duration_ms
+      convergence_gate:
+        success_criteria:
+          scan_complete: true
+        convergence_predicate: 'scan_complete and scan_errors == 0'
+        max_cycles: 2  # inner retry for transient scan failures
+      outputs:
+        - issues_found
+        - issue_list
+        - scan_errors
+        - scan_duration_ms
+
+    - step_id: 'EVALUATE_PREDICATE_EARLY'
+      name: 'Check if already clean (skip fix on cycle 1 if clean)'
+      action: |
+        Evaluate success_predicate with current detect outputs.
+        If true AND cycle_num == 1 AND silent_on_clean:
+          → Emit nothing (CORE-049 — silent on clean)
+          → Write workflow_cycles row: issues_before=0, issues_after=0,
+            issues_fixed=0, predicate_result=1, duration_ms, timestamp
+          → Write workflow_runs row: exit_reason="predicate_true"
+          → Run cleanup_policy
+          → Emit AC_COMPLETE: AC-{label.upper()}-{run_id[:8]} ✅ (0ms clean)
+          → EXIT loop
+
+    - step_id: 'FIX'
+      name: 'Remediate issues (cycle {{cycle_num}})'
+      depends_on: ['DETECT']
+      action: |
+        For each issue in issue_list:
+          If issue.confidence >= fix_confidence_threshold:
+            Execute fix_step.action on issue
+            Record fix outcome in fix_log
+          Else:
+            Mark issue as manual_review_required
+            Add to low_confidence_issues list (surfaced after loop exit)
+        Record: issues_fixed, fix_log, fix_errors
+      outputs:
+        - issues_fixed
+        - fix_log
+        - fix_errors
+        - low_confidence_issues
+
+    - step_id: 'RESCAN'
+      name: 'Rescan after fix (cycle {{cycle_num}})'
+      depends_on: ['FIX']
+      action: |
+        Re-execute detect_step with same scope={{scope}}
+        This is the canonical re-validate pass — not a shortcut.
+        Record: issues_found (post-fix), scan_errors (post-fix)
+      outputs:
+        - issues_found      # updated — post-fix count
+        - issue_list        # updated — residual issues
+        - scan_errors
+
+    - step_id: 'LOG_CYCLE'
+      name: 'Write SQLite cycle row'
+      depends_on: ['RESCAN']
+      action: |
+        Insert into workflow_cycles:
+          run_id, template_id, label, cycle_num,
+          issues_before = (issues_found from DETECT step),
+          issues_after  = (issues_found from RESCAN step),
+          issues_fixed, predicate_result = evaluate(success_predicate),
+          fix_log_json  = json.dumps(fix_log),
+          scan_errors, fix_errors,
+          duration_ms   = now_ms() - cycle_start_ms,
+          timestamp     = datetime.utcnow().isoformat()
+
+    - step_id: 'EVALUATE_PREDICATE'
+      name: 'Check convergence gate'
+      depends_on: ['LOG_CYCLE']
+      action: |
+        If evaluate(success_predicate) == True:
+          → exit_reason = "predicate_true"
+          → BREAK loop
+        Elif cycle_num >= max_cycles:
+          → exit_reason = "max_cycles"
+          → BREAK loop (surface remaining issues inline)
+        Else:
+          → Apply backoff_strategy delay
+          → Increment cycle_num
+          → CONTINUE loop
+
+  post_loop:
+    - step_id: 'WRITE_RUN_ROW'
+      name: 'Write SQLite run summary row'
+      action: |
+        Insert into workflow_runs:
+          run_id, template_id, label,
+          caller = invoking orchestrator name,
+          total_cycles = cycle_num,
+          total_issues_fixed = SUM(issues_fixed across all cycles),
+          final_predicate = evaluate(success_predicate),
+          exit_reason,
+          started_at,
+          completed_at = datetime.utcnow().isoformat(),
+          duration_ms = now_ms() - run_start_ms
+
+    - step_id: 'SURFACE_RESIDUAL'
+      name: 'Surface any unresolved issues inline'
+      action: |
+        If exit_reason == "max_cycles" AND issues_found > 0:
+          Emit inline (not to file — CORE-002):
+            "⚠️ {label}: {issues_found} issue(s) remain after {max_cycles} cycles.
+             Manual review required for: {issue_list[:5]} ..."
+        If low_confidence_issues:
+          Emit inline:
+            "🔍 {label}: {len(low_confidence_issues)} issue(s) below confidence
+             threshold ({fix_confidence_threshold}) — manual action needed."
+
+    - step_id: 'CLEANUP_DB'
+      name: 'SQLite retention cleanup (prevent bloat)'
+      action: |
+        If CORTEX_DISABLE_DB_CLEANUP != "true":
+          Execute workflow_cycles_prune SQL
+          Execute workflow_runs_prune SQL
+          Execute VACUUM
+          Silent on success (CORE-049)
+          On error: emit single inline warning, do NOT halt — cleanup failure
+          is non-fatal. Next run will attempt cleanup again.
+
+    - step_id: 'EMIT_COMPLETE'
+      name: 'Emit AC_COMPLETE marker'
+      action: |
+        If emit_ac_markers:
+          If final_predicate == True:
+            Emit: AC_COMPLETE: AC-{label.upper()}-{run_id[:8]} ✅
+                  ({total_cycles} cycle(s), {total_issues_fixed} fixed,
+                   {duration_ms}ms)
+          Else:
+            Emit: AC_COMPLETE: AC-{label.upper()}-{run_id[:8]} ❌
+                  (max_cycles={max_cycles} hit, {issues_found} unresolved)
+
+# ============================================================================
+# OUTPUTS
+# ============================================================================
+outputs:
+  primary:
+    - name: 'run_id'
+      type: 'str'
+      description: 'UUID for this loop run. Use to query workflow_cycles in SQLite.'
+
+    - name: 'final_predicate'
+      type: 'bool'
+      description: 'True = loop exited clean. False = max_cycles exhausted.'
+
+    - name: 'total_cycles'
+      type: 'int'
+      description: 'Number of detect-fix-rescan iterations executed.'
+
+    - name: 'total_issues_fixed'
+      type: 'int'
+      description: 'Cumulative issues fixed across all cycles.'
+
+    - name: 'exit_reason'
+      type: 'str'
+      description: '"predicate_true" | "max_cycles" | "error"'
+
+    - name: 'low_confidence_issues'
+      type: 'List[Issue]'
+      description: 'Issues that could not be auto-fixed due to low confidence score.'
+
+# ============================================================================
+# SUCCESS CRITERIA
+# ============================================================================
+success_criteria:
+  - 'success_predicate evaluates true on loop exit (final_predicate == True)'
+  - 'SQLite cycle rows written for every iteration'
+  - 'workflow_runs row written on exit'
+  - 'Retention cleanup executed without error'
+  - 'AC_COMPLETE emitted with correct ✅ or ❌ marker'
+
+# ============================================================================
+# USAGE EXAMPLES
+# ============================================================================
+usage_examples:
+  audit_fix_stage_7_8:
+    description: 'Wire into /audit fix Stages 7–8 (auto-fix + re-validate loop)'
+    instantiation: |
+      detect_step:
+        orchestrator: EnforcementOrchestrator
+        action: run_17_point_audit
+        params:
+          scope: ['cortex/', '.github/']
+          checks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+      fix_step:
+        orchestrator: EnforcementOrchestrator
+        action: auto_remediate
+        params:
+          confidence_threshold: 0.90
+      success_predicate: "p0_count == 0 and p1_count == 0"
+      max_cycles: 5
+      backoff_strategy: linear
+      base_wait_ms: 1000
+      label: "audit-fix-convergence"
+      retention_days: 30
+
+  mcp_tool_drift_sweep:
+    description: 'Sweep stale MCP tool names from .github/ until zero remain'
+    instantiation: |
+      detect_step:
+        action: grep_stale_tool_names
+        params:
+          scope: ['.github/agents/', '.github/prompts/']
+          patterns: ['cortex_sample_tool', 'cortex_validate_compliance',
+                     'cortex_load_core_rules', 'cortex_query_governance',
+                     'cortex_check_dependency_drift', 'cortex_capture_metrics',
+                     'cortex_onboard_repository_v3', 'cortex_audit_remediation_plan']
+      fix_step:
+        action: replace_stale_tool_names
+        params:
+          replacements:
+            cortex_sample_tool: "cortex_verify (op: mcp)"
+            cortex_validate_compliance: "cortex_validate (op: compliance)"
+            cortex_load_core_rules: "cortex_load (op: rules)"
+            cortex_query_governance: "cortex_governance (op: query)"
+            cortex_check_dependency_drift: "cortex_check (op: dependencies)"
+            cortex_capture_metrics: "cortex_metrics (op: capture)"
+            cortex_onboard_repository_v3: "cortex_onboard (op: full)"
+            cortex_audit_remediation_plan: "cortex_governance (op: remediation_plan)"
+      success_predicate: "issues_found == 0"
+      max_cycles: 3
+      label: "mcp-tool-drift-sweep"
+
+  requirements_preflight_repair:
+    description: 'Detect missing packages, pip install, rescan until all satisfied'
+    instantiation: |
+      detect_step:
+        action: check_requirements_txt_against_installed
+        params:
+          requirements_file: 'requirements.txt'
+          check_preflight_critical: true
+      fix_step:
+        action: run_pip_install
+        params:
+          command: ['pip', 'install', '-r', 'requirements.txt']
+      success_predicate: "missing_count == 0 and pip_check_errors == 0"
+      max_cycles: 3
+      label: "requirements-preflight"
+      retention_days: 14
+
+  sqlite_activity_log_health:
+    description: 'Verify SQLite DB health, detect bloat, prune and vacuum until clean'
+    instantiation: |
+      detect_step:
+        action: check_sqlite_db_health
+        params:
+          db_path: '.cortex-runtime/traces/orchestrator-traces.db'
+          bloat_threshold_mb: 50
+          orphaned_ac_threshold: 10
+      fix_step:
+        action: prune_and_vacuum_sqlite
+        params:
+          retention_days: 30
+          vacuum_on_fix: true
+      success_predicate: "db_size_mb < 50 and orphaned_ac_count == 0 and integrity_ok"
+      max_cycles: 3
+      label: "sqlite-health-sweep"
+      retention_days: 30
+
+# ============================================================================
+# INTEGRATION MAP — where this primitive is used
+# ============================================================================
+integration_map:
+  audit_fix_pipeline:
+    file: 'cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml'
+    stages: ['Stage 7 (Auto-Fix)', 'Stage 8 (Re-validate)']
+    replaces: 'one-shot remediation pattern'
+
+  health_vacuum_unified:
+    file: 'cortex-registry/workflows/templates/maintenance/health-vacuum-unified-pipeline.yaml'
+    stages: ['convergence_gate (pipeline-level)']
+    note: 'health-vacuum already has convergence gate — wire this primitive for consistent SQLite logging'
+
+  cleanup_deduplication:
+    file: 'cortex-registry/workflows/templates/maintenance/cleanup-deduplication.yaml'
+    stages: ['duplicate_scan → extract_common_code']
+    note: 'Parameterise with duplicate_count == 0 as success_predicate'
+
+  meta_auditor_checks:
+    file: '.github/agents/core/cortex-meta-auditor.md'
+    checks: ['Check #13 MCP drift', 'Check #14 rule count', 'Check #22 requirements']
+    note: 'Each check family becomes a detect-fix-rescan-loop invocation during /audit fix'
+
+  requirements_preflight:
+    file: 'cortex/orchestrators/support/upgrade_orchestrator.py'
+    method: 'validate_requirements()'
+    note: 'Preflight gate wraps detect-fix-rescan-loop with max_cycles=3'
+
+# ============================================================================
+# GOVERNANCE
+# ============================================================================
+governance:
+  rules_enforced:
+    - rule_id: 'CORE-064'
+      name: 'Sweep Completeness Contract'
+      description: 'Loop exhausts full issue catalogue — no partial sweeps'
+      severity: 'P0'
+    - rule_id: 'CORE-035'
+      name: 'Single Canonical Implementation'
+      description: 'One generic primitive — not one loop per check'
+      severity: 'P0'
+    - rule_id: 'CORE-002'
+      name: 'All output inline'
+      description: 'No .md/.txt report files — surface violations inline only'
+      severity: 'P0'
+    - rule_id: 'CORE-049'
+      name: 'Silent autonomous execution'
+      description: 'No output on clean pass (silent_on_clean=true default)'
+      severity: 'P1'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  emit_markers: true
+  persistence: '.cortex-runtime/traces/orchestrator-traces.db'
+  markers:
+    loop_start:    'AC_START: AC-{label.upper()}-{run_id[:8]}'
+    cycle_complete: 'AC_STAGE_{cycle_num}_COMPLETE: {issues_before}→{issues_after}'
+    loop_clean:    'AC_COMPLETE: AC-{label.upper()}-{run_id[:8]} ✅'
+    loop_partial:  'AC_COMPLETE: AC-{label.upper()}-{run_id[:8]} ❌ ({issues_found} unresolved)'
+  log_fields:
+    - run_id
+    - total_cycles
+    - total_issues_fixed
+    - final_predicate
+    - exit_reason
+    - duration_ms

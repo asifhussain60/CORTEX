@@ -1,0 +1,243 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CORTEX Phase 53 — Convergence Loop Wiring & MCP Tool Name Remediation
+# ══════════════════════════════════════════════════════════════════════════════
+# Authority: cortex-architect.prompt.md § AUDIT MODE + § REFACTOR MODE
+# CORE Rules: CORE-002, CORE-008, CORE-035, CORE-048, CORE-064
+# Governance: skull-rules.yaml (tier0)
+# Primitive: cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml
+# ══════════════════════════════════════════════════════════════════════════════
+
+phase:
+  id: "phase-53"
+  title: "Convergence Loop Wiring — Template Consolidation & MCP Name Remediation"
+  version: "1.0.0"
+  status: "planned"
+  priority: P1
+  created: "2026-02-23"
+  author: "Asif Hussain"
+  ac_session_id: "AC-P53-CONVERGENCE-WIRING"
+
+  description: |
+    Wires the existing `detect-fix-rescan-loop` primitive (Phase 52 deliverable, now live)
+    into the 7 workflow templates that still use ad-hoc convergence_gate blocks — a CORE-035
+    (single canonical implementation) violation. Also fixes 8 stale `cortex_validate_compliance`
+    MCP tool name references (Check #14 P1 violations) across workflow primitives.
+
+    NO new primitives, NO new languages, NO new directories.
+    The primitive already exists. This phase plugs existing templates into it.
+
+  rationale: |
+    DIGEST of chat01.md (2026-02-23 session) surfaced:
+      - detect-fix-rescan-loop.yaml primitive DELIVERED (chat01 session 1) ✅
+      - audit-fix-pipeline.yaml DELIVERED ✅
+      - PART 15 in audit-fix.md DELIVERED ✅
+      - Check #19 (SQLite health) in cortex-auditor.md DELIVERED ✅
+      - Check #23 in cortex-meta-auditor.md DELIVERED ✅
+
+    Remaining gap: 7 templates with isolated convergence_gate blocks that
+    duplicate loop logic instead of consuming the primitive — violating CORE-035.
+    8 stale `cortex_validate_compliance` references violate Check #14 (MCP name registry alignment).
+
+    Over-engineering check: The cross-language-lint-convergence recommendation from
+    chat01 session 2 (Roslyn + TypeScript + Python unified primitive) was REJECTED.
+    CORTEX is Python-only. No C# or TypeScript source in active scope. Zero current
+    value vs added complexity. Stripped from scope.
+
+  scope:
+    in_scope:
+      - Wire 7 ad-hoc convergence_gate templates to use the detect-fix-rescan-loop primitive
+      - Fix 8 stale cortex_validate_compliance → cortex_validate (op=compliance) references
+      - Update cortex-master.yaml with this phase entry
+    out_of_scope:
+      - New workflow primitives (CORE-035 — primitive already exists)
+      - Cross-language lint integration (Roslyn, TypeScript — no active C# or TS in CORTEX)
+      - New Python code (templates are YAML specs — no Python TDD cycle required)
+      - SQLite schema changes (schema complete from Phase 52 / chat01 session 1)
+
+  # ── ARCHITECTURE FIT ──────────────────────────────────────────────────────
+  architecture:
+    pattern: "Template Consumer Wiring — no new abstractions"
+    zero_new_dirs: true
+    zero_new_python_files: true
+    zero_new_primitives: true
+    existing_primitive: "cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml"
+
+  # ── ISSUE CATALOGUE (CORE-064 — FULL CATALOGUE REQUIRED) ─────────────────
+  issue_catalogue:
+
+    p1_mcp_name_violations:
+      description: "8 files with stale cortex_validate_compliance (Check #14)"
+      rule: CORE-035 / Check-14
+      severity: P1
+      fix: "Replace cortex_validate_compliance → cortex_validate with op: compliance"
+      files:
+        - path: "cortex-registry/workflows/templates/primitives/analysis/lens-ast-scan.yaml"
+          current: "cortex_validate_compliance"
+          target: "cortex_validate"
+          op: "compliance"
+        - path: "cortex-registry/workflows/templates/primitives/validation/regression-test.yaml"
+          current: "cortex_validate_compliance"
+          target: "cortex_validate"
+          op: "compliance"
+        - path: "cortex-registry/workflows/templates/primitives/validation/dom-validation.yaml"
+          current: "cortex_validate_compliance"
+          target: "cortex_validate"
+          op: "compliance"
+        - path: "cortex-registry/workflows/templates/primitives/validation/duplicate-detection.yaml"
+          current: "cortex_validate_compliance"
+          target: "cortex_validate"
+          op: "compliance"
+        - path: "cortex-registry/workflows/templates/primitives/validation/css-zero-inline.yaml"
+          current: "cortex_validate_compliance"
+          target: "cortex_validate"
+          op: "compliance"
+        - path: "cortex-registry/workflows/templates/composites/backend/csharp-refactor.yaml"
+          current: "cortex_validate_compliance"
+          target: "cortex_validate"
+          op: "compliance"
+        - path: "cortex-registry/workflows/templates/composites/backend/csharp-security.yaml"
+          current: "cortex_validate_compliance"
+          target: "cortex_validate"
+          op: "compliance"
+        - path: "cortex-registry/workflows/templates/composites/frontend/html-refactor-validation.yaml"
+          current: "cortex_validate_compliance"
+          target: "cortex_validate"
+          op: "compliance"
+
+    p1_template_wiring:
+      description: "7 templates with ad-hoc convergence_gate — CORE-035 violation"
+      rule: CORE-035
+      severity: P1
+      fix: "Replace isolated convergence_gate block with detect-fix-rescan-loop primitive reference"
+      templates:
+        - path: "cortex-registry/workflows/templates/quality/refactor-holistic-sweep.yaml"
+          current_pattern: "convergence_gate max_cycles:8"
+          change: "Replace with loop_primitive reference + parameter mapping"
+        - path: "cortex-registry/workflows/templates/maintenance/cleanup-deduplication.yaml"
+          current_pattern: "convergence_gate max_cycles:5"
+          change: "Replace with loop_primitive reference + parameter mapping"
+        - path: "cortex-registry/workflows/templates/frontend/typescript-refactor-workflow.yaml"
+          current_pattern: "max_cycles:5 + convergence_predicate"
+          change: "Replace with loop_primitive reference + parameter mapping"
+        - path: "cortex-registry/workflows/templates/lifecycle/migration-modernize.yaml"
+          current_pattern: "convergence_gate max_cycles:12"
+          change: "Replace with loop_primitive reference + parameter mapping"
+        - path: "cortex-registry/workflows/templates/testing/test-quality-enforcement.yaml"
+          current_pattern: "max_cycles:2 + convergence_predicate"
+          change: "Replace with loop_primitive reference + parameter mapping"
+        - path: "cortex-registry/workflows/templates/lifecycle/legacy-rescue.yaml"
+          current_pattern: "max_cycles:10"
+          change: "Replace with loop_primitive reference + parameter mapping"
+        - path: "cortex-registry/workflows/templates/quality/dead-code-removal.yaml"
+          current_pattern: "3 blocking gates, one-shot (no loop)"
+          change: "Wrap final gate in detect-fix-rescan-loop primitive"
+
+  # ── STAGES ────────────────────────────────────────────────────────────────
+  stages:
+    - id: "A"
+      title: "P1 MCP Tool Name Remediation"
+      description: |
+        Fix 8 stale cortex_validate_compliance references → cortex_validate (op: compliance).
+        One targeted string replacement per file. Check #14 violation eliminated.
+      tools_used:
+        - grep to confirm all occurrences
+        - replace_string_in_file (1 replacement per file)
+      exit_gate: "grep -rn cortex_validate_compliance cortex-registry/workflows/ returns 0 matches"
+
+    - id: "B"
+      title: "Template Convergence Gate Wiring (7 templates)"
+      description: |
+        Replace isolated convergence_gate blocks in 7 templates with a reference to the
+        detect-fix-rescan-loop primitive. Each template gets a loop_primitive block that
+        maps its existing parameters (max_cycles, success_predicate, detect_step, fix_step)
+        to the canonical primitive interface.
+      tools_used:
+        - replace_string_in_file (targeted block replacement per template)
+      exit_gate: |
+        grep -rn "convergence_gate:" cortex-registry/workflows/templates/ |
+        grep -v "detect-fix-rescan-loop" | wc -l → must be 0
+
+    - id: "C"
+      title: "cortex-master.yaml Update"
+      description: |
+        Register this phase (phase-53) in cortex-master.yaml:
+          - Add to phases.completed list
+          - Update metadata.total_phases (53 → 54)
+          - Update summary.total_phases and completed counts
+          - Update production_readiness.latest_phase
+          - Update verification.last_verified
+      exit_gate: "grep -c 'phase-53' cortex-master.yaml → at least 2 matches (completed + summary)"
+
+    - id: "D"
+      title: "Verification"
+      description: |
+        Confirm zero stale MCP names and zero isolated convergence gates remain.
+        No Python tests required (YAML-only changes).
+        Run smoke tests to confirm zero Python regression.
+      exit_gate: |
+        1. grep -rn cortex_validate_compliance cortex-registry/workflows/ → 0 matches
+        2. All convergence_gate blocks → primitive references (confirmed)
+        3. make test-smoke → 0 failures
+
+  # ── DELIVERABLES ──────────────────────────────────────────────────────────
+  deliverables:
+    - id: "D1"
+      title: "8 MCP tool name fixes"
+      type: "yaml-edit"
+      description: "cortex_validate_compliance → cortex_validate (op: compliance) in 8 YAML templates"
+      check14_violations_eliminated: 8
+
+    - id: "D2"
+      title: "7 template convergence gate rewrites"
+      type: "yaml-edit"
+      description: |
+        refactor-holistic-sweep, cleanup-deduplication, typescript-refactor-workflow,
+        migration-modernize, test-quality-enforcement, legacy-rescue, dead-code-removal
+        all reference detect-fix-rescan-loop primitive instead of duplicating gate logic.
+      core035_violations_eliminated: 7
+
+    - id: "D3"
+      title: "cortex-master.yaml phase-53 registration"
+      type: "yaml-edit"
+      description: "Phase entry, metadata counters, summary, production_readiness all updated"
+
+  # ── ANTI-PATTERNS (WHAT THIS PHASE DOES NOT DO) ──────────────────────────
+  anti_patterns:
+    - "Does NOT create cross-language-lint-convergence.yaml (over-engineering — CORTEX is Python-only)"
+    - "Does NOT add Roslyn or TypeScript language adapters"
+    - "Does NOT create new Python files (no new TDD cycle)"
+    - "Does NOT create new directories"
+    - "Does NOT modify detect-fix-rescan-loop.yaml itself (it is already complete)"
+    - "Does NOT modify the SQLite schema (complete from chat01 session 1)"
+
+  # ── GOVERNANCE ────────────────────────────────────────────────────────────
+  governance:
+    core_rules_enforced:
+      - "CORE-002: All output inline (no .md/.txt report files)"
+      - "CORE-035: Single canonical implementation (primitive replaces duplicates)"
+      - "CORE-048: Holistic validation gate before execution"
+      - "CORE-064: Sweep completeness — all 15 issues (8 MCP + 7 template) fixed, none skipped"
+    ac_markers_required: true
+    sqlite_logging: ".cortex-runtime/traces/orchestrator-traces.db"
+
+  # ── SUCCESS CRITERIA ──────────────────────────────────────────────────────
+  success_criteria:
+    - "grep -rn cortex_validate_compliance cortex-registry/workflows/ → 0 matches"
+    - "All 7 ad-hoc convergence_gate blocks → loop_primitive references"
+    - "cortex-master.yaml updated: phase-53 in completed list, counters incremented"
+    - "make test-smoke → green (zero regression)"
+    - "Check #14 violations: 8 → 0"
+    - "CORE-035 violations (duplicate convergence logic): 7 → 0"
+
+  # ── RISK ASSESSMENT ───────────────────────────────────────────────────────
+  risk:
+    overall: "LOW"
+    regression_risk: "MINIMAL — YAML-only changes, no Python code modified"
+    rationale: |
+      All changes are string replacements in YAML workflow specification files.
+      These files are read by the WorkflowEngine at runtime — they are not imported
+      or parsed during test collection. Smoke tests confirm zero Python-level regression.
+    mitigations:
+      - "Stage A verified by grep exit gate before Stage B begins"
+      - "Stage B uses targeted block replacement (not file rewrite)"
+      - "Stage D confirms all exit gates before AC_COMPLETE"

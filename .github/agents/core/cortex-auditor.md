@@ -2,8 +2,26 @@
 agent_id: cortex-auditor
 version: "3.0"
 status: active
-layer: core
-modes_served:
+l## Capabilities
+
+- 19-point production readiness audit (10 code + 9 integrated checks)
+- Stale import detection and remediation
+- Empty stub identification
+- Duplicate orchestrator detection (CORE-035)
+- CORE rule violation scanning
+- Test-source mirror validation
+- Orchestrator health endpoint validation (Check #11 — Active ✅)
+- Vacuum markdown sprawl cleanup (Check #12 — Active ✅)
+- Prompt/agent meta-audit coherence (Check #13 — Active ✅)
+- MCP tool name registry alignment (Check #14 — Active ✅)
+- Governance YAML SSOT enforcement (Check #15 — Active ✅)
+- Knowledge synthesis wiring (Check #16 — Active ✅)
+- LENS pipeline health (Check #17 — Active ✅)
+- Requirements preflight completeness (Check #18 — Active ✅)
+- SQLite activity log health (Check #19 — Active ✅)
+- **Convergence loop guarantee** — Stages 7–8 loop until 0 P0/P1 (CORE-064)
+- **SQLite full activity logging** — every stage, cycle, and violation persisted
+- **Bloat prevention** — 30-day retention + VACUUM on every Stage 9 exits_served:
   - AUDIT
   - INVESTIGATE
 capabilities:
@@ -35,15 +53,27 @@ token_cost_estimate: 3500
 **9-Stage Integrated Pipeline (zero duplication — uses wired components):**
 
 ```
-Stage 1: Stage 0 Governance Pre-Flight  (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 2: 17-Point Production Readiness  (Checks #1–#17, see table below)
-Stage 3: Wiring Contract Validation     (architecture-integrity-agent.md, L1→L3)
-Stage 4: Orchestrator Health Check      (HealthOrchestrator.run_health_check(), all 22)
-Stage 5: Vacuum — Markdown + Clutter   (VacuumOrchestrator via cortex_vacuum)
-Stage 6: Meta-Audit — Prompt Coherence (cortex-meta-auditor.md, 22 checks)
-Stage 7: Auto-Fix (confidence >90%)     (autonomous remediation)
-Stage 8: Re-validate → zero-violation   (gate: 0 P0, 0 P1 remaining)
-Stage 9: Run tests + AC_COMPLETE        (python3 scripts/run_tests.py batch → .cortex-runtime/traces/)
+Stage -1: Environment Readiness          (UpgradeOrchestrator.validate_requirements() — preflight gate)
+Stage 0:  Inflight Upgrade + Pre-Flight  (STAGE-0-GOVERNANCE-AUDIT-SPEC.md + upgrade detection)
+Stage 1:  Stage 0 Governance Pre-Flight  (STAGE-0-GOVERNANCE-AUDIT-SPEC.md full spec)
+Stage 2:  19-Point Production Readiness  (Checks #1–#19, see table below — adds SQLite health)
+Stage 3:  Wiring Contract Validation     (architecture-integrity-agent.md, L1→L3)
+Stage 4:  Orchestrator Health Check      (HealthOrchestrator.run_health_check(), all 22)
+Stage 5:  Vacuum — Markdown + Clutter   (VacuumOrchestrator via cortex_vacuum)
+Stage 6:  Meta-Audit — Prompt Coherence (cortex-meta-auditor.md, 23 checks)
+Stage 7–8: Auto-Fix Convergence Loop    (detect-fix-rescan-loop primitive — loops until 0 P0/P1)
+Stage 9:  Run tests + AC_COMPLETE        (python3 scripts/run_tests.py batch → SQLite cleanup)
+```
+
+**Stage 7–8 Convergence Loop (replaces one-shot fix + re-validate):**
+```
+Primitive: cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml
+  ├── detect_step:       EnforcementOrchestrator.run_full_audit (Checks #1–#19)
+  ├── fix_step:          EnforcementOrchestrator.auto_remediate (confidence >= 0.90)
+  ├── success_predicate: p0_count == 0 and p1_count == 0
+  ├── max_cycles:        5 | backoff: linear (1000ms base)
+  ├── SQLite:            workflow_cycles + workflow_runs per cycle
+  └── Exit:              predicate_true → Stage 9 | max_cycles → surface inline, block Stage 9
 ```
 
 ## Capabilities
@@ -62,7 +92,7 @@ Stage 9: Run tests + AC_COMPLETE        (python3 scripts/run_tests.py batch → 
 - Knowledge synthesis wiring (Check #16 — Active ✅)
 - LENS pipeline health (Check #17 — Active ✅)
 
-## 17-Point Production Readiness Audit
+## 19-Point Production Readiness Audit
 
 | # | Check | Tool/Method | Auto-Fix |
 |---|-------|-------------|----------|
@@ -78,11 +108,13 @@ Stage 9: Run tests + AC_COMPLETE        (python3 scripts/run_tests.py batch → 
 | 10 | **Test-source mirror** — `tests/` diverges from `cortex/` | Dir comparison | 🟡 Report |
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
-| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (17 checks) | ✅ Update inline |
+| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (23 checks) | ✅ Update inline |
 | 14 | **MCP tool name registry alignment** — every prompt/agent tool reference must match `mcp_registry.py` registered IDs; detect consolidated-name drift where old tool names survive in docs after registry consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
 | 15 | **Governance YAML SSOT enforcement** — only `skull-rules.yaml` in `cortex-registry/core/tier0-skull/` is canonical source; `core-rules.yaml` in `cortex-registry/governance/` is secondary — detect count divergence | `grep -c "^- id:" cortex-registry/core/tier0-skull/skull-rules.yaml` | 🟡 Report divergence as P1 |
 | 16 | **Knowledge synthesis wiring** — registry knowledge YAMLs in `cortex-registry/knowledge/` are loadable and have no dead references to deleted knowledge files | Path resolution on all YAML `source:` fields | ✅ Update paths |
 | 17 | **LENS pipeline health** — 8 analyzers importable from `cortex/lens/`; golden tests green in `tests/golden/test_lens_full_pipeline_truth.py` | `python3 -c "from cortex.lens import *"` + pytest | ✅ Activate fallback |
+| 18 | **Requirements preflight completeness** — `requirements.txt` has no duplicate entries, no conflicting version constraints, every `[PREFLIGHT CRITICAL]` package installed in active venv | Duplicate line scan + `pip check` | ✅ Remove duplicate, pip install |
+| 19 | **SQLite activity log health** — `orchestrator-traces.db` passes `integrity_check`, no orphaned `AC_START` rows > 1 hour old, file size < 50 MB, `workflow_cycles` has rows in last 24h (proves logging pipeline active) | `PRAGMA integrity_check` + orphan query + size check | ✅ Prune + VACUUM via detect-fix-rescan-loop |
 
 ## Health Check Protocol (Check #11 — Active ✅)
 
@@ -99,7 +131,36 @@ For each orchestrator in wiring contract (22 total):
 
 ## Cross-Cutting Activity Log
 
-Every stage emits AC markers persisted to `.cortex-runtime/traces/orchestrator-traces.db`:
-- `AC_START: AC-AUDIT-{timestamp}` — audit session open
-- Per-stage completion: `AC_STAGE_{N}_COMPLETE`
-- `AC_COMPLETE: AC-AUDIT-{timestamp} ✅` — zero violations confirmed + test pass
+Every stage emits AC markers and writes rows to `.cortex-runtime/traces/orchestrator-traces.db`:
+
+**AC Markers:**
+- `AC_START: AC-AUDIT-{session_id}` — audit session open
+- Per-stage: `AC_STAGE_{N}_COMPLETE: {issues_found}→{issues_after}` (Stages 0–6, 9)
+- Per convergence cycle: logged to `workflow_cycles` table (Stages 7–8)
+- `AC_COMPLETE: AC-AUDIT-{session_id} ✅` — zero P0/P1 confirmed + tests pass
+- `AC_COMPLETE: AC-AUDIT-{session_id} ❌` — unresolved issues (blocks completion)
+
+**SQLite Schema (`.cortex-runtime/traces/orchestrator-traces.db`):**
+
+| Table | Rows | Purpose |
+|-------|------|---------|
+| `audit_sessions` | 1 per `/audit fix` run | Trigger, branch, SHA, exit status, p0/p1 counts, test result |
+| `audit_stage_log` | 1 per stage per run | Stage num/label, orchestrator, duration, status, violations JSON |
+| `audit_violations` | 1 per violation found | Severity, rule_id, file, description, auto_fixed flag — queryable for pattern detection |
+| `workflow_cycles` | 1 per convergence loop iteration | issues_before/after, predicate_result, fix_log — from detect-fix-rescan-loop primitive |
+| `workflow_runs` | 1 per loop invocation | Aggregate across all cycles: total_fixed, exit_reason, duration |
+
+**Cleanup Policy (Stage 9 exit, prevents DB bloat):**
+- Prune `audit_violations`, `audit_stage_log`: rows for sessions older than 30 days, keeping last 20 sessions
+- Prune `audit_sessions`: older than 30 days, minimum 20 sessions retained
+- Prune `workflow_cycles`: rows older than 30 days
+- `VACUUM` — reclaim freed pages (runs after all DELETEs, not inside a transaction)
+- Silent on success (CORE-049). On failure: single inline warning, non-fatal.
+- Guard: `CORTEX_DISABLE_DB_CLEANUP=true` to skip (CI environments)
+
+**Pattern Detection (after cleanup, before AC_COMPLETE):**
+Query `audit_violations` for P0 violations appearing in ≥3 sessions without auto-fix.
+If found: emit inline — recurring systemic issues require architectural fix.
+
+**Workflow Template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
+**Convergence Loop Primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`

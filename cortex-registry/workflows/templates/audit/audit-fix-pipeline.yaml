@@ -1,0 +1,648 @@
+# ============================================================================
+# WORKFLOW: /audit fix — 9-Stage Production Readiness Pipeline
+# ============================================================================
+# Authority: CORE-064 (Sweep Completeness Contract)
+# Version: 2.0.0
+# Created: 2026-02-23
+# Supersedes: inline pipeline definition in cortex-auditor.md (1.x)
+#
+# Key upgrade over 1.x:
+#   Stages 7–8 (auto-fix + re-validate) are now driven by the
+#   detect-fix-rescan-loop primitive — guaranteeing convergence to zero
+#   violations rather than a single-pass attempt.
+#   All stage activity is logged to SQLite with per-cycle granularity.
+#   SQLite DB is cleaned up on pipeline exit to prevent bloat.
+#
+# CORE Rules enforced:
+#   CORE-002: All output inline — no generated report files
+#   CORE-008: TDD — any new code introduced by auto-fix gets a test
+#   CORE-035: Single canonical implementation — no duplicate auditors
+#   CORE-049: Silent on clean pass — no noise when production-ready
+#   CORE-064: Full sweep — pipeline never exits with unresolved P0/P1
+# ============================================================================
+
+workflow:
+  id: 'audit/audit-fix-pipeline'
+  name: '/audit fix — 9-Stage Production Readiness Pipeline'
+  version: '2.0.0'
+  category: 'audit'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-23'
+    trigger_command: '/audit fix'
+    modes_served: ['AUDIT', 'FIX']
+    orchestrators_used:
+      - AuditCoordinator
+      - HealthOrchestrator
+      - VacuumOrchestrator
+      - EnforcementOrchestrator
+      - MetaAuditor
+    mcp_tools_used:
+      - cortex_validate (op: compliance)
+      - cortex_governance (op: query)
+      - cortex_vacuum
+      - cortex_load (op: rules)
+      - cortex_metrics (op: capture)
+
+  # ==========================================================================
+  # PIPELINE-LEVEL CONVERGENCE GATE
+  # Governs Stages 7–8 rescan loop. Exits when zero P0 and zero P1 remain
+  # across the full 17-point audit (Checks #1–#18 inclusive).
+  # ==========================================================================
+  pipeline_convergence:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
+    label: 'audit-fix-convergence'
+    max_cycles: 5
+    backoff_strategy: 'linear'
+    base_wait_ms: 1000
+    fix_confidence_threshold: 0.90
+    success_predicate: 'p0_count == 0 and p1_count == 0'
+    sqlite_db_path: '.cortex-runtime/traces/orchestrator-traces.db'
+    retention_days: 30
+    silent_on_clean: true
+    emit_ac_markers: true
+
+  # ==========================================================================
+  # SQLITE ACTIVITY LOGGING — pipeline-level schema additions
+  # ==========================================================================
+  sqlite_logging:
+    database: '.cortex-runtime/traces/orchestrator-traces.db'
+
+    tables:
+      audit_sessions:
+        description: 'One row per /audit fix invocation. Parent of all stage rows.'
+        ddl: |
+          CREATE TABLE IF NOT EXISTS audit_sessions (
+              session_id      TEXT PRIMARY KEY,    -- UUID
+              trigger         TEXT NOT NULL,       -- "/audit fix" | "/audit" | "scheduled"
+              branch          TEXT,                -- git branch at time of run
+              origin_sha      TEXT,                -- git HEAD SHA
+              started_at      TEXT NOT NULL,
+              completed_at    TEXT,
+              exit_status     TEXT,                -- "clean" | "violations_remain" | "error"
+              p0_count_final  INTEGER DEFAULT 0,
+              p1_count_final  INTEGER DEFAULT 0,
+              p2_count_final  INTEGER DEFAULT 0,
+              total_fixed     INTEGER DEFAULT 0,
+              stages_run      TEXT,                -- JSON array of stage IDs executed
+              test_result     TEXT                 -- "pass" | "fail" | "skipped"
+          );
+
+      audit_stage_log:
+        description: 'One row per stage execution within an audit session.'
+        ddl: |
+          CREATE TABLE IF NOT EXISTS audit_stage_log (
+              id              INTEGER PRIMARY KEY AUTOINCREMENT,
+              session_id      TEXT NOT NULL REFERENCES audit_sessions(session_id),
+              stage_num       INTEGER NOT NULL,    -- 0 (preflight) through 9
+              stage_label     TEXT NOT NULL,
+              orchestrator    TEXT,
+              started_at      TEXT NOT NULL,
+              completed_at    TEXT,
+              duration_ms     INTEGER,
+              status          TEXT NOT NULL,       -- "pass" | "fail" | "skip" | "error"
+              issues_found    INTEGER DEFAULT 0,
+              issues_fixed    INTEGER DEFAULT 0,
+              violations_json TEXT,                -- JSON array of P0/P1/P2 violations
+              ac_marker       TEXT                 -- AC_STAGE_N_COMPLETE marker emitted
+          );
+
+      audit_violations:
+        description: 'Individual violations found across all sessions — queryable for pattern detection.'
+        ddl: |
+          CREATE TABLE IF NOT EXISTS audit_violations (
+              id              INTEGER PRIMARY KEY AUTOINCREMENT,
+              session_id      TEXT NOT NULL REFERENCES audit_sessions(session_id),
+              stage_num       INTEGER NOT NULL,
+              check_num       INTEGER,             -- 1–18 from 17-point audit
+              severity        TEXT NOT NULL,       -- "P0" | "P1" | "P2"
+              rule_id         TEXT,                -- e.g. "CORE-035"
+              file_path       TEXT,
+              description     TEXT NOT NULL,
+              auto_fixed      INTEGER DEFAULT 0,   -- 1=fixed autonomously, 0=manual
+              fix_description TEXT,
+              detected_at     TEXT NOT NULL
+          );
+
+    cleanup_policy:
+      description: |
+        Runs after every pipeline exit (Stage 9 AC_COMPLETE boundary).
+        Retains the most recent audit_sessions regardless of age (max 100 rows).
+        Prunes audit_stage_log and audit_violations for sessions older than
+        retention_days. Prunes workflow_cycles from the convergence loop.
+        VACUUM runs last to compact the database file.
+        Guard: CORTEX_DISABLE_DB_CLEANUP != "true"
+      statements:
+        - |
+          DELETE FROM audit_violations
+          WHERE session_id NOT IN (
+            SELECT session_id FROM audit_sessions
+            WHERE started_at >= datetime('now', '-30 days')
+          );
+        - |
+          DELETE FROM audit_stage_log
+          WHERE session_id NOT IN (
+            SELECT session_id FROM audit_sessions
+            WHERE started_at >= datetime('now', '-30 days')
+          );
+        - |
+          DELETE FROM audit_sessions
+          WHERE started_at < datetime('now', '-30 days')
+          AND session_id NOT IN (
+            SELECT session_id FROM audit_sessions
+            ORDER BY started_at DESC LIMIT 20
+          );
+        - 'VACUUM;'
+      trigger: 'post_stage_9'
+      failure_mode: 'warn_inline_non_fatal'
+
+    pattern_detection:
+      description: |
+        After cleanup, query for recurring P0 violations that appear in
+        ≥3 consecutive audit sessions — these are systemic issues requiring
+        architectural fix, not point remediation. Surface inline if found.
+      query: |
+        SELECT rule_id, file_path, description, COUNT(*) as recurrence_count
+        FROM audit_violations
+        WHERE severity = 'P0' AND auto_fixed = 0
+        GROUP BY rule_id, file_path, description
+        HAVING recurrence_count >= 3
+        ORDER BY recurrence_count DESC;
+      on_result: |
+        If rows returned:
+          Emit inline: "⚠️ CORTEX detected {count} recurring P0 pattern(s) across
+          multiple audit sessions — these require architectural fix, not point
+          remediation: {violation_list}"
+
+  # ==========================================================================
+  # STAGES
+  # ==========================================================================
+  stages:
+
+    # -------------------------------------------------------------------------
+    # Stage -1: Environment Readiness (Preflight)
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_minus_1'
+      stage_num: -1
+      name: 'Environment Readiness — Requirements Preflight Gate'
+      orchestrator: 'UpgradeOrchestrator'
+      method: 'validate_requirements()'
+      guard: 'CORTEX_SKIP_PREFLIGHT != "true"'
+      description: |
+        Runs before Stage 0. Validates:
+          1. Active interpreter is project .venv (sys.executable contains ".venv")
+          2. requirements.txt exists and parses cleanly
+          3. All [PREFLIGHT CRITICAL] packages installed and version-satisfied
+          4. No duplicate entries in requirements.txt
+          5. pip check passes (no broken dependency chains)
+        On P0: halt pipeline. Offer autonomous pip install -r requirements.txt
+        then rescan. If repair fails: surface exact failures inline and halt.
+
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
+        label: 'requirements-preflight'
+        detect_step:
+          action: 'check_requirements_txt_against_installed'
+          params:
+            requirements_file: 'requirements.txt'
+            check_preflight_critical: true
+            run_pip_check: true
+        fix_step:
+          action: 'run_pip_install'
+          params:
+            command: ['pip', 'install', '-r', 'requirements.txt']
+        success_predicate: 'missing_count == 0 and pip_check_errors == 0'
+        max_cycles: 3
+        retention_days: 14
+        silent_on_clean: true
+
+      sqlite_logging:
+        table: 'audit_stage_log'
+        stage_label: 'requirements-preflight'
+
+    # -------------------------------------------------------------------------
+    # Stage 0: Inflight Upgrade + Governance Pre-Flight
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_0'
+      stage_num: 0
+      name: 'Stage 0 — Governance Pre-Flight + Inflight Upgrade'
+      agent: 'STAGE-0-GOVERNANCE-AUDIT-SPEC.md'
+      orchestrator: 'MasterOrchestrator → UpgradeOrchestrator'
+      description: |
+        Inflight upgrade detection (CORE-049 — silent if no new commits):
+          git rev-list --count HEAD..origin/main
+          If > 0: fetch → merge (admin folders protected) → continue
+        Governance pre-flight:
+          Load skull-rules.yaml (37 rules: 35 CORE + 2 AC)
+          Verify GovernanceRegistry loads from canonical path
+          Verify EnforcementOrchestrator pre-commit hook is wired
+      sqlite_logging:
+        table: 'audit_stage_log'
+        stage_label: 'governance-preflight'
+
+    # -------------------------------------------------------------------------
+    # Stage 1: Stage 0 Governance Pre-Flight (canonical spec)
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_1'
+      stage_num: 1
+      name: 'Stage 1 — Stage 0 Governance Pre-Flight (full spec)'
+      agent: 'STAGE-0-GOVERNANCE-AUDIT-SPEC.md'
+      description: 'Full Stage 0 spec execution including AC marker validation.'
+      sqlite_logging:
+        table: 'audit_stage_log'
+        stage_label: 'stage-0-governance'
+
+    # -------------------------------------------------------------------------
+    # Stage 2: 17-Point Production Readiness Scan
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_2'
+      stage_num: 2
+      name: 'Stage 2 — 17-Point Production Readiness Scan (Checks #1–#18)'
+      orchestrator: 'EnforcementOrchestrator'
+      checks:
+        - num: 1
+          label: 'Stale imports'
+          scope: 'cortex/'
+          tool: 'grep + AST'
+          severity: 'P0'
+        - num: 2
+          label: 'Empty stubs'
+          scope: 'cortex/'
+          tool: 'AST scan'
+          severity: 'P1'
+        - num: 3
+          label: 'Duplicate orchestrators'
+          scope: 'cortex/orchestrators/'
+          tool: 'diff analysis'
+          severity: 'P0'
+        - num: 4
+          label: 'Low-value tests'
+          scope: 'tests/'
+          tool: 'TestQualityGate'
+          severity: 'P1'
+        - num: 5
+          label: 'Broken file references'
+          scope: ['cortex-registry/', '.github/']
+          tool: 'Path resolution'
+          severity: 'P1'
+        - num: 6
+          label: 'Root-level clutter'
+          scope: '.'
+          tool: 'find -maxdepth 1'
+          severity: 'P2'
+        - num: 7
+          label: 'CORE rule violations'
+          scope: 'cortex/'
+          tool: 'cortex_validate op=compliance'
+          severity: 'P0'
+        - num: 8
+          label: 'Scattered .db/.log files outside .cortex-runtime/'
+          scope: '.'
+          tool: 'find -name "*.db"'
+          severity: 'P1'
+        - num: 9
+          label: 'Deprecated file names'
+          scope: '.'
+          tool: 'find -name "DEPRECATED*"'
+          severity: 'P2'
+        - num: 10
+          label: 'Test-source mirror divergence'
+          scope: ['tests/', 'cortex/']
+          tool: 'Dir comparison'
+          severity: 'P1'
+        - num: 11
+          label: 'Orchestrator health — all 22'
+          scope: 'cortex/orchestrators/'
+          tool: 'HealthOrchestrator.run_health_check()'
+          severity: 'P0'
+        - num: 12
+          label: 'Markdown sprawl'
+          scope: '.'
+          tool: 'VacuumOrchestrator'
+          severity: 'P1'
+        - num: 13
+          label: 'Prompt/agent coherence'
+          scope: ['.github/agents/', '.github/prompts/']
+          tool: 'cortex-meta-auditor.md (22 checks)'
+          severity: 'P1'
+        - num: 14
+          label: 'MCP tool name registry alignment'
+          scope: ['.github/agents/', '.github/prompts/']
+          tool: 'grep stale tool names'
+          severity: 'P1'
+        - num: 15
+          label: 'Governance YAML SSOT enforcement'
+          scope: 'cortex-registry/'
+          tool: 'skull-rules.yaml vs core-rules.yaml count'
+          severity: 'P1'
+        - num: 16
+          label: 'Knowledge synthesis wiring'
+          scope: 'cortex-registry/knowledge/'
+          tool: 'Path resolution on YAML source fields'
+          severity: 'P1'
+        - num: 17
+          label: 'LENS pipeline health — 8 analyzers'
+          scope: 'cortex/lens/'
+          tool: 'python3 -c "from cortex.lens import *" + pytest golden'
+          severity: 'P0'
+        - num: 18
+          label: 'Requirements preflight completeness'
+          scope: 'requirements.txt'
+          tool: 'duplicate entry scan + pip check'
+          severity: 'P1'
+        - num: 19
+          label: 'SQLite activity log health'
+          scope: '.cortex-runtime/traces/orchestrator-traces.db'
+          tool: 'sqlite3 integrity_check + bloat scan'
+          severity: 'P1'
+          description: |
+            Verify orchestrator-traces.db:
+              (a) File exists and passes sqlite3 integrity_check
+              (b) No orphaned AC_START rows without matching AC_COMPLETE
+                  in workflow_cycles or audit_stage_log
+              (c) DB file size < bloat_threshold_mb (default 50 MB)
+              (d) workflow_cycles table has rows for last 24h (proves
+                  logging pipeline is active, not silently broken)
+            Auto-fix: run detect-fix-rescan-loop with sqlite-health-sweep
+            instantiation (see primitive usage_examples). If DB is corrupt,
+            backup as orchestrator-traces.db.corrupt.{timestamp} and
+            reinitialise schema fresh — data loss is acceptable over
+            a broken trace pipeline.
+
+      sqlite_logging:
+        table: 'audit_stage_log'
+        violations_table: 'audit_violations'
+        stage_label: 'production-readiness-scan'
+
+    # -------------------------------------------------------------------------
+    # Stage 3: Wiring Contract Validation
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_3'
+      stage_num: 3
+      name: 'Stage 3 — Wiring Contract Validation (L1→L3)'
+      agent: 'architecture-integrity-agent.md'
+      description: |
+        L1: All 22 orchestrators importable from their module paths
+        L2: IOrchestrator protocol satisfied (health_check, execute, rollback)
+        L3: Cross-orchestrator dependency graph has no circular imports
+        All 4 wiring spec YAMLs in cortex-registry/core/specifications/
+        validated for importable module paths.
+      sqlite_logging:
+        table: 'audit_stage_log'
+        stage_label: 'wiring-contract-validation'
+
+    # -------------------------------------------------------------------------
+    # Stage 4: Orchestrator Health Check (all 22)
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_4'
+      stage_num: 4
+      name: 'Stage 4 — Orchestrator Health (all 22)'
+      orchestrator: 'HealthOrchestrator'
+      method: 'run_health_check()'
+      description: |
+        For each orchestrator: call health_check(), assert status in
+        ["healthy","degraded"], assert latency_p99 within domain envelope.
+        Circuit breaker: 3 failures → mark degraded → activate fallback.
+      sqlite_logging:
+        table: 'audit_stage_log'
+        stage_label: 'orchestrator-health'
+
+    # -------------------------------------------------------------------------
+    # Stage 5: Vacuum — Markdown + Clutter
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_5'
+      stage_num: 5
+      name: 'Stage 5 — Vacuum Cleanup'
+      orchestrator: 'VacuumOrchestrator'
+      mcp_tool: 'cortex_vacuum'
+      sqlite_logging:
+        table: 'audit_stage_log'
+        stage_label: 'vacuum-cleanup'
+
+    # -------------------------------------------------------------------------
+    # Stage 6: Meta-Audit — Prompt/Agent Coherence (22 checks)
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_6'
+      stage_num: 6
+      name: 'Stage 6 — Meta-Audit (22 checks)'
+      agent: 'cortex-meta-auditor.md'
+      description: |
+        Runs all 22 meta-audit checks. Checks #13–#22 include:
+          #13 MCP tool name alignment
+          #14 Governance rule count alignment
+          #15 Knowledge YAML wiring
+          #16 LENS synthesis health
+          #17 AC marker / trace DB health
+          #18 Upgrade manifest health + protected_paths present
+          #19 DoR paragraph enforcement
+          #20 Windows compatibility gate
+          #21 Cross-platform runtime safety
+          #22 Requirements file integrity
+      sqlite_logging:
+        table: 'audit_stage_log'
+        violations_table: 'audit_violations'
+        stage_label: 'meta-audit'
+
+    # -------------------------------------------------------------------------
+    # Stage 7 + 8: Auto-Fix Convergence Loop (detect-fix-rescan primitive)
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_7_8'
+      stage_num: '7-8'
+      name: 'Stage 7–8 — Auto-Fix Convergence Loop (until zero P0/P1)'
+      primitive: 'primitives/validation/detect-fix-rescan-loop'
+      description: |
+        Replaces the former one-shot "Stage 7: auto-fix" + "Stage 8: re-validate"
+        with a convergence loop that guarantees zero P0/P1 on exit (CORE-064).
+
+        Loop contract:
+          DETECT:  Re-run full 17-point audit (Checks #1–#19) on scope
+          FIX:     Auto-remediate issues where confidence >= 0.90
+          RESCAN:  Re-run audit to count remaining violations
+          REPEAT:  Until p0_count == 0 and p1_count == 0, or max_cycles hit
+
+        On max_cycles exhausted with unresolved P0/P1:
+          → Surface inline (CORE-002, never to file)
+          → Block Stage 9 (no tests + AC_COMPLETE on a dirty audit)
+
+      convergence_loop:
+        instantiation: 'usage_examples.audit_fix_stage_7_8'
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
+        label: 'audit-fix-convergence'
+        detect_step:
+          orchestrator: 'EnforcementOrchestrator'
+          action: 'run_full_audit'
+          params:
+            checks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+            scope: ['cortex/', '.github/', 'cortex-registry/', 'requirements.txt',
+                    '.cortex-runtime/traces/orchestrator-traces.db']
+        fix_step:
+          orchestrator: 'EnforcementOrchestrator'
+          action: 'auto_remediate'
+          params:
+            confidence_threshold: 0.90
+        success_predicate: 'p0_count == 0 and p1_count == 0'
+        max_cycles: 5
+        backoff_strategy: 'linear'
+        base_wait_ms: 1000
+        retention_days: 30
+        emit_ac_markers: true
+
+      sqlite_logging:
+        table: 'workflow_cycles'
+        run_table: 'workflow_runs'
+        parent_session_table: 'audit_sessions'
+        stage_label: 'auto-fix-convergence-loop'
+
+    # -------------------------------------------------------------------------
+    # Stage 9: Run Tests + AC_COMPLETE
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_9'
+      stage_num: 9
+      name: 'Stage 9 — Run Tests + AC_COMPLETE'
+      description: |
+        Run: python3 scripts/run_tests.py batch
+        Gate: 0 new failures vs baseline.json
+        On pass:
+          → Write audit_sessions.exit_status = "clean"
+          → Write audit_sessions.test_result = "pass"
+          → Run sqlite cleanup_policy (prune + VACUUM)
+          → Run pattern_detection query — surface recurring P0s if found
+          → Emit: AC_COMPLETE: AC-AUDIT-{session_id[:8]} ✅
+        On fail:
+          → Write audit_sessions.exit_status = "violations_remain"
+          → Write audit_sessions.test_result = "fail"
+          → Block AC_COMPLETE — surface failures inline
+          → Do NOT run cleanup (preserve evidence for debugging)
+      sqlite_logging:
+        table: 'audit_stage_log'
+        session_table: 'audit_sessions'
+        stage_label: 'tests-ac-complete'
+      post_run:
+        cleanup: 'cleanup_policy'
+        pattern_detection: 'pattern_detection'
+
+  # ==========================================================================
+  # CHECK #19 DETAIL — SQLite Activity Log Health
+  # ==========================================================================
+  sqlite_health_check:
+    description: |
+      Standalone check, also wired as Check #19 in Stage 2 and Check #23 in
+      cortex-meta-auditor.md. Detects and fixes SQLite DB issues using the
+      detect-fix-rescan-loop primitive.
+
+    detect_actions:
+      integrity_check:
+        command: "SELECT * FROM pragma_integrity_check();"
+        pass_criteria: "result == 'ok'"
+        severity: 'P0'
+
+      orphaned_ac_markers:
+        description: |
+          Find workflow_cycles rows where predicate_result = 0 AND
+          completed_at IS NULL AND started_at < now - 1 hour.
+          These are orphaned AC_START without AC_COMPLETE — P0 per CORE.
+        query: |
+          SELECT id, run_id, label, cycle_num, timestamp
+          FROM workflow_cycles
+          WHERE predicate_result = 0
+            AND timestamp < datetime('now', '-1 hour')
+          ORDER BY timestamp ASC;
+        auto_fix: |
+          UPDATE workflow_cycles
+          SET predicate_result = -1,  -- -1 = orphaned (sentinel)
+              fix_log_json = '{"orphan_closed_by": "audit-fix-pipeline", "reason": "no_ac_complete"}'
+          WHERE id IN (SELECT id FROM orphaned_rows);
+
+      bloat_detection:
+        description: 'Check DB file size. Flag if > bloat_threshold_mb.'
+        bloat_threshold_mb: 50
+        size_query: "SELECT page_count * page_size as size FROM pragma_page_count(), pragma_page_size();"
+        auto_fix: 'Run cleanup_policy immediately (prune + VACUUM)'
+
+      row_age_distribution:
+        description: 'Verify oldest workflow_cycles row is within retention window.'
+        query: |
+          SELECT MIN(timestamp) as oldest, MAX(timestamp) as newest,
+                 COUNT(*) as total_rows
+          FROM workflow_cycles;
+        warning_threshold_days: 60
+        action: 'If oldest > warning_threshold_days: surface advisory (non-blocking)'
+
+    fix_actions:
+      prune_old_cycles:
+        sql: "DELETE FROM workflow_cycles WHERE timestamp < datetime('now', '-{{retention_days}} days');"
+
+      prune_old_violations:
+        sql: "DELETE FROM audit_violations WHERE detected_at < datetime('now', '-{{retention_days}} days');"
+
+      prune_old_sessions:
+        sql: |
+          DELETE FROM audit_sessions
+          WHERE started_at < datetime('now', '-30 days')
+          AND session_id NOT IN (
+            SELECT session_id FROM audit_sessions
+            ORDER BY started_at DESC LIMIT 20
+          );
+
+      vacuum:
+        sql: 'VACUUM;'
+        note: 'Must run AFTER all DELETE statements — VACUUM inside transaction is invalid.'
+
+    rescan_success_predicate: 'integrity_ok and db_size_mb < 50 and orphaned_ac_count == 0'
+
+# ============================================================================
+# INTEGRATION MAP
+# ============================================================================
+integration_map:
+  agent_auditor:
+    file: '.github/agents/core/cortex-auditor.md'
+    note: 'cortex-auditor.md Stages 7–8 reference this template for convergence loop'
+
+  agent_meta_auditor:
+    file: '.github/agents/core/cortex-meta-auditor.md'
+    note: 'Check #23 SQLite activity log health wired to sqlite_health_check section'
+
+  orchestrator_master:
+    file: 'cortex/orchestrators/core/master_orchestrator.py'
+    note: 'MasterOrchestrator.run() calls Stage -1 (validate_requirements) then Stage 0'
+
+  orchestrator_upgrade:
+    file: 'cortex/orchestrators/support/upgrade_orchestrator.py'
+    note: 'validate_requirements() wraps detect-fix-rescan-loop for preflight'
+
+  audit_fix_prompt:
+    file: '_workspaces/prompts/audit-fix.md'
+    note: 'PART 15 wires this template into all 14 existing parts'
+
+  capabilities_manifest:
+    file: 'cortex-registry/core/capabilities-manifest.yaml'
+    key: 'workflows.audit_fix'
+    note: 'Register this template so MasterOrchestrator can self-diagnose audit drift'
+
+# ============================================================================
+# GOVERNANCE
+# ============================================================================
+governance:
+  rules_enforced:
+    - rule_id: 'CORE-002'
+      severity: 'P0'
+    - rule_id: 'CORE-008'
+      severity: 'P0'
+    - rule_id: 'CORE-035'
+      severity: 'P0'
+    - rule_id: 'CORE-049'
+      severity: 'P1'
+    - rule_id: 'CORE-064'
+      severity: 'P0'
+
+# ============================================================================
+# AUDIT TRACE
+# ============================================================================
+audit_trace:
+  persistence: '.cortex-runtime/traces/orchestrator-traces.db'
+  session_marker_pattern: 'AC-AUDIT-{session_id[:8]}'
+  stage_marker_pattern: 'AC_STAGE_{stage_num}_COMPLETE'
+  complete_on_clean: 'AC_COMPLETE: AC-AUDIT-{session_id[:8]} ✅'
+  complete_on_partial: 'AC_COMPLETE: AC-AUDIT-{session_id[:8]} ❌ ({issues} unresolved)'

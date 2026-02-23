@@ -191,3 +191,105 @@ After all edits, run `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|
 - Run `python3 -c "import yaml, pydantic, jsonschema, websockets, fastapi, uvicorn, pytest" 2>&1 || echo "PREFLIGHT CRITICAL packages missing"` to spot-check the most critical preflight packages are importable.
 - Run `grep -rn "validate_requirements\|CORTEX_SKIP_PREFLIGHT" cortex/orchestrators/` to confirm the preflight gate is wired into both `MasterOrchestrator` and `UpgradeOrchestrator`.
 - Run `grep -n "\[PREFLIGHT CRITICAL\]" requirements.txt | wc -l` to verify preflight annotation coverage is consistent with the known critical package groups.
+
+---
+
+**PART 15 — DETECT → FIX → RESCAN CONVERGENCE LOOPS + SQLITE FULL ACTIVITY LOGGING (P0):**
+
+**The problem with PARTS 1–14 as written:** Every part describes a one-pass sweep — scan, fix, done. Under CORE-064 (Sweep Completeness Contract), a fix run that exits before the success predicate is true is a governance violation. A single auto-fix pass is insufficient because: (a) fixes can introduce new issues, (b) some issues only appear after others are resolved, (c) there is no verified clean-state guarantee on exit.
+
+**Solution — Generic `detect-fix-rescan-loop` primitive:** A single reusable YAML primitive at `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml` that any check, stage, or orchestrator can instantiate with three parameters: `detect_step`, `fix_step`, and `success_predicate`. The loop runs detect → fix → rescan until the predicate is true or `max_cycles` is exhausted. All activity is logged to SQLite with per-cycle granularity. The primitive is the canonical implementation of CORE-064 for all sweep operations — no per-check loop duplicates (CORE-035).
+
+**Solution — `audit/audit-fix-pipeline.yaml` workflow template:** A formal YAML workflow template at `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml` that upgrades the `/audit fix` 9-stage pipeline: Stages 7–8 (auto-fix + re-validate) are replaced by a single convergence loop instantiation. Stage 2 adds Check #19 (SQLite activity log health). The template defines the full SQLite schema for audit-level activity logging and the cleanup policy that prevents DB bloat.
+
+**What to wire across existing PARTS:**
+
+**Stages 7–8 upgrade (replaces one-shot fix pattern across all PARTS):**
+Every `auto-fix` action described in PARTS 1–14 is now governed by the `detect-fix-rescan-loop` primitive rather than a single-pass execution. Concretely:
+- **PART 1 (MCP tool drift):** The stale-name grep-and-replace loop uses the `mcp-tool-drift-sweep` instantiation from the primitive's `usage_examples`. Loop exits when `issues_found == 0` across all `.github/agents/` and `.github/prompts/` files.
+- **PART 2 (meta-auditor checks):** Each meta-audit check family (tool names, rule counts, knowledge wiring, LENS health) becomes an individual loop invocation. All 22 meta-audit checks must pass on rescan before Stage 6 exits.
+- **PART 5 (governance enforcement):** The stale `cortex_process_request` sweep uses the loop with `success_predicate: "stale_refs_found == 0"` across all 5 source files cited.
+- **PART 6 (LENS + knowledge wiring):** The import verification loop runs until `import_errors == 0 and knowledge_domains_loaded == 6`.
+- **PART 9 (upgrade pipeline):** The post-merge `/audit fix` call is itself the full convergence loop — the upgrade is not committed until Stage 9 passes with `p0_count == 0 and p1_count == 0`.
+- **PART 14 (requirements preflight):** The pip install repair loop uses the `requirements-preflight-repair` instantiation — rescans until `missing_count == 0 and pip_check_errors == 0`, max 3 cycles.
+
+**New Check #19 — SQLite Activity Log Health (P1, wired into Stage 2 and Stage 6):**
+Add to the 17-Point Audit as Check #19 and to `cortex-meta-auditor.md` as Check #23:
+
+| # | Check | Tool/Method | Severity | Auto-Fix |
+|---|-------|-------------|----------|----------|
+| 19 | **SQLite activity log health** — `orchestrator-traces.db` passes `integrity_check`, no orphaned `AC_START` rows (AC_START without matching AC_COMPLETE older than 1 hour), file size < 50 MB, workflow_cycles has rows in last 24h | `sqlite3 integrity_check` + orphan query + size check | P1 | ✅ Prune + VACUUM via loop |
+
+**SQLite schema additions (wire into `cortex/orchestrators/support/upgrade_orchestrator.py` and `cortex/orchestrators/core/master_orchestrator.py`):**
+
+Three new tables in `.cortex-runtime/traces/orchestrator-traces.db`:
+
+1. **`audit_sessions`** — one row per `/audit fix` invocation. Fields: `session_id` (UUID), `trigger`, `branch`, `origin_sha`, `started_at`, `completed_at`, `exit_status` (`"clean"` | `"violations_remain"` | `"error"`), `p0_count_final`, `p1_count_final`, `p2_count_final`, `total_fixed`, `stages_run` (JSON), `test_result`.
+
+2. **`audit_stage_log`** — one row per stage execution within an audit session. Fields: `id`, `session_id` (FK → audit_sessions), `stage_num` (-1 through 9), `stage_label`, `orchestrator`, `started_at`, `completed_at`, `duration_ms`, `status` (`"pass"` | `"fail"` | `"skip"` | `"error"`), `issues_found`, `issues_fixed`, `violations_json`, `ac_marker`.
+
+3. **`audit_violations`** — individual violations across all sessions, queryable for pattern detection. Fields: `id`, `session_id` (FK), `stage_num`, `check_num` (1–19), `severity`, `rule_id`, `file_path`, `description`, `auto_fixed` (0/1), `fix_description`, `detected_at`.
+
+These tables extend (not replace) the existing `workflow_cycles` and `workflow_runs` tables defined in the primitive. All DDL uses `CREATE TABLE IF NOT EXISTS` — zero regression on existing data.
+
+**SQLite bloat prevention — mandatory cleanup policy:**
+Wire into Stage 9 (`post_stage_9` trigger), guarded by `CORTEX_DISABLE_DB_CLEANUP != "true"`:
+1. `DELETE FROM audit_violations WHERE detected_at < datetime('now', '-30 days')` — keeping only the 20 most recent sessions regardless
+2. `DELETE FROM audit_stage_log WHERE session_id NOT IN (SELECT session_id FROM audit_sessions ORDER BY started_at DESC LIMIT 20)`
+3. `DELETE FROM audit_sessions WHERE started_at < datetime('now', '-30 days') AND session_id NOT IN (SELECT session_id FROM audit_sessions ORDER BY started_at DESC LIMIT 20)`
+4. `DELETE FROM workflow_cycles WHERE timestamp < datetime('now', '-30 days')`
+5. `VACUUM;` — reclaim freed pages, run AFTER all DELETEs (not inside a transaction)
+Cleanup is **silent** on success (CORE-049). On cleanup failure: emit single inline warning, do NOT halt — cleanup failure is non-fatal. Log failure to `audit_stage_log` with `status = "warn"`.
+
+**Pattern detection query (runs after cleanup, before AC_COMPLETE):**
+```sql
+SELECT rule_id, file_path, description, COUNT(*) as recurrence_count
+FROM audit_violations
+WHERE severity = 'P0' AND auto_fixed = 0
+GROUP BY rule_id, file_path, description
+HAVING recurrence_count >= 3
+ORDER BY recurrence_count DESC;
+```
+If rows returned: emit inline — "⚠️ CORTEX detected {count} recurring P0 pattern(s) across multiple audit sessions — these require architectural fix, not point remediation." This closes the feedback loop described in PART 7 (traces DB queryable for regression pattern detection).
+
+**Other areas to integrate the convergence loop (beyond /audit fix):**
+
+| Area | Primitive Instantiation | Success Predicate |
+|------|------------------------|-------------------|
+| `maintenance/health-vacuum-unified-pipeline.yaml` | Wrap existing convergence_gate with `detect-fix-rescan-loop` to add SQLite per-cycle logging | `issues_found == issues_fixed AND test_failures == 0` |
+| `quality/duplicate-validation.yaml` | Replace one-shot duplicate scan with loop | `duplicate_count == 0` |
+| `maintenance/cleanup-deduplication.yaml` | Already has convergence_gate — add `sqlite_db_path` param for logging | `duplicate_count == 0 and all_tests_pass` |
+| `cortex/orchestrators/support/upgrade_orchestrator.py` `validate_requirements()` | `requirements-preflight-repair` instantiation | `missing_count == 0 and pip_check_errors == 0` |
+| `cortex/orchestrators/health/health_orchestrator.py` | Wrap `run_health_check()` for degraded orchestrators in a retry loop | `all_healthy == true OR all_degraded_have_fallback` |
+| `cortex-meta-auditor.md` Check #13 (MCP drift) | `mcp-tool-drift-sweep` instantiation | `stale_names_found == 0` |
+| DIGEST mode `DigestSessionOrchestrator` | Wrap three-tier write in loop that verifies all tiers written atomically | `tier0_written and tier1_written and tier2_written` |
+
+**Update `cortex-meta-auditor.md` — add Check #23:**
+| # | Check | Pass Criteria |
+|---|-------|---------------|
+| 23 | **SQLite activity log health** | `orchestrator-traces.db` passes `integrity_check`; no orphaned AC_START rows > 1 hour old in `workflow_cycles` or `audit_stage_log`; file size < 50 MB; `audit_sessions` has at least one row with `exit_status = "clean"` in the last 7 days (proves audit pipeline ran successfully); cleanup policy (`VACUUM`) ran on last session exit. Absence of the file is P1 (logging pipeline not initialised). Orphaned AC_START is P0. |
+
+**Update `cortex-auditor.md` — upgrade Stages 7–8 description:**
+Replace the current "Stage 7: Auto-Fix (confidence >90%)" + "Stage 8: Re-validate → zero-violation gate" with:
+```
+Stage 7–8: Auto-Fix Convergence Loop (detect-fix-rescan-loop primitive)
+  ├── Primitive: cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml
+  ├── detect_step: EnforcementOrchestrator.run_full_audit (Checks #1–#19)
+  ├── fix_step: EnforcementOrchestrator.auto_remediate (confidence >= 0.90)
+  ├── success_predicate: p0_count == 0 and p1_count == 0
+  ├── max_cycles: 5 | backoff: linear (1000ms base)
+  ├── SQLite: workflow_cycles + workflow_runs per cycle; audit_sessions on exit
+  └── Exit: predicate_true → Stage 9 | max_cycles hit → surface inline, block Stage 9
+```
+
+**Update `copilot-instructions.md` — add SQLite logging reference:**
+Under the Cross-Cutting Intelligence section, add: "**SQLite Activity Logging:** Every audit stage, orchestrator invocation, and convergence loop cycle writes to `.cortex-runtime/traces/orchestrator-traces.db`. Schema: `audit_sessions` (per `/audit fix` run), `audit_stage_log` (per stage), `audit_violations` (per violation), `workflow_cycles` (per detect-fix-rescan iteration), `workflow_runs` (per loop invocation). DB is cleaned up on every Stage 9 exit (30-day retention, VACUUM). Pattern detection runs post-cleanup to surface recurring P0s. Guard: `CORTEX_DISABLE_DB_CLEANUP=true` to skip cleanup."
+
+**Verification for PART 15:**
+- Run `python3 -c "import sqlite3; conn = sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db'); print([t[0] for t in conn.execute(\"SELECT name FROM sqlite_master WHERE type='table'\").fetchall()])"` — must list `workflow_cycles`, `workflow_runs`, `audit_sessions`, `audit_stage_log`, `audit_violations`.
+- Run `python3 -c "import sqlite3; conn = sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db'); print(conn.execute('PRAGMA integrity_check').fetchone())"` — must return `('ok',)`.
+- Verify `detect-fix-rescan-loop.yaml` exists at `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`.
+- Verify `audit-fix-pipeline.yaml` exists at `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`.
+- Run `grep -n "detect-fix-rescan-loop\|convergence_loop\|detect_step\|success_predicate" cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml` — must return matches for all four terms.
+- Verify `CORTEX_DISABLE_DB_CLEANUP` is documented in `.vscode/settings.json` as an optional override.
+- Run `grep -rn "audit_sessions\|audit_stage_log\|audit_violations" cortex/orchestrators/` to confirm schema DDL is wired into the orchestrator layer (not just in YAML templates).
