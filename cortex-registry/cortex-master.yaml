@@ -236,7 +236,11 @@ phases:
     scorecard_composite: 8.6
     scorecard_delta: "+6.5"
   planned: []
-  deferred: []
+  deferred:
+  - phase-31
+  - phase-34
+  - phase-91
+  - phase-92
 playbooks:
 - id: pb-sts-001
   title: BadMonolith End-to-End Refactoring — CORTEX SDLC Showcase
@@ -882,8 +886,19 @@ execution_order:
     test_baseline: 838 golden tests passing, 0 failures
     documentation: 94% coverage
     governance: CORE-055 live — 27/30 CORE rules automated
-    phase_numbering: Sequential 01-51 COMPLETE (v10.1 — 2026-02-22)
+    phase_numbering: Sequential 01-53 COMPLETE (v10.4 — 2026-02-23)
   next_phases:
+  - id: cortex-refactor
+    title: CORTEX Cohesive Brain Refactor (10 Phases)
+    status: APPROVED
+    priority: P0
+    file: cortex-registry/planning/phases/planned/cortex-refactor/
+    created: '2026-02-19'
+    description: |
+      Transform CORTEX from fragmented packages into a single cohesive brain.
+      10-phase plan: foundation safety net, governance alignment, package consolidation,
+      brain deduplication, orchestrator rationalization, directory cleanup,
+      test consolidation, registry/docs, final verification, production readiness.
   - id: phase-52
     title: "Operational Pattern Journal — Cross-Orchestrator Success/Failure Intelligence"
     status: COMPLETE

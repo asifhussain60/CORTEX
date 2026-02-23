@@ -1,0 +1,90 @@
+# ==============================================================================
+# Phase 08 — Registry & Docs Alignment
+# CORTEX Cohesive Brain Refactor — Phase 08 of 10
+# ==============================================================================
+# Status: planned
+# Priority: P1
+# Estimated Effort: 1 hour
+# ==============================================================================
+
+phase:
+  id: phase-08-registry-docs
+  title: Registry & Docs Alignment
+  sequence: 8
+  of: 10
+  plan: cortex-refactor
+  status: planned
+  priority: P1
+  estimated_effort: 1 hour
+  depends_on: phase-07-test-consolidation
+  created: '2026-02-23'
+
+  description: |
+    Final alignment pass on cortex-registry/ YAML files and cortex-docs/ HTML/CSS
+    documentation. Ensure all registry files reflect the post-refactor canonical state.
+
+    Key targets:
+    - cortex-master.yaml: verify summary, phase counts, verification fields are current
+    - cortex-registry/ workflow templates: verify no stale MCP tool references remain
+    - cortex-docs/: verify architecture docs reflect cortex.* canonical package
+    - .github/copilot-instructions.md: verify metrics are current
+
+  stages:
+  - id: A
+    name: cortex-master.yaml Final Audit
+    type: audit
+    description: |
+      Run Python-based structural audit of cortex-master.yaml.
+      Verify: version, last_updated, total_phases, completed count, summary.
+    actions:
+    - action: parse_and_audit
+      description: Parse cortex-master.yaml and verify key fields are current
+      command: python3 scripts/validate_governance_alignment.py --summary 2>&1 | tail -10
+      note: Checks version, last_updated, total_phases, summary.completed, verification fields
+
+  - id: B
+    name: Workflow Template MCP Reference Scan
+    type: audit
+    description: |
+      Scan all workflow YAML templates for any remaining stale MCP tool names.
+      Phase 53 fixed cortex_validate_compliance → cortex_validate.
+      This stage verifies no other stale names remain.
+    actions:
+    - action: scan_stale_mcp_refs
+      command: grep -r 'cortex_validate_compliance\|cortex_enforce\|cortex_audit_checklist' cortex-registry/workflows/ --include='*.yaml' | wc -l
+      expected: "0"
+
+  - id: C
+    name: cortex-docs Architecture Alignment
+    type: verification
+    description: |
+      Verify cortex-docs/ references to package names are up to date.
+      CORE-002: output inline — do NOT create new .md/.txt files.
+    actions:
+    - action: check_docs_refs
+      command: grep -r 'cortex_intelligence\|cortex\.brain' cortex-docs/ 2>/dev/null | wc -l
+      expected: "0 or documented exceptions"
+
+  - id: D
+    name: copilot-instructions.md Verification
+    type: verification
+    description: |
+      Verify .github/copilot-instructions.md metrics are current.
+      Key fields: orchestrators (22), MCP tools (24), CORE rules (35), test count.
+    actions:
+    - action: check_orchestrator_count
+      command: grep 'Orchestrators' .github/copilot-instructions.md | head -3
+    - action: check_mcp_count
+      command: grep 'MCP Tools' .github/copilot-instructions.md | head -3
+
+  - id: E
+    name: Registry Alignment Commit
+    type: git
+    commit_message: "docs(registry): Phase 08 registry & docs alignment — post-refactor canonical state"
+    gate: only_if_changes_made
+
+  success_criteria:
+  - cortex-master.yaml version, summary, verification fields all current
+  - Zero stale MCP tool names in workflow templates
+  - cortex-docs/ refs reflect cortex.* canonical package
+  - copilot-instructions.md metrics accurate

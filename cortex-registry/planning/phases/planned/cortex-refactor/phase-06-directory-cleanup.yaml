@@ -1,0 +1,104 @@
+# ==============================================================================
+# Phase 06 — Directory Cleanup
+# CORTEX Cohesive Brain Refactor — Phase 06 of 10
+# ==============================================================================
+# Status: planned
+# Priority: P0
+# Estimated Effort: 30 minutes
+# ==============================================================================
+
+phase:
+  id: phase-06-directory-cleanup
+  title: Directory Cleanup
+  sequence: 6
+  of: 10
+  plan: cortex-refactor
+  status: planned
+  priority: P0
+  estimated_effort: 30 minutes
+  depends_on: phase-05-orchestrator-rationalization
+  created: '2026-02-23'
+
+  description: |
+    Final directory hygiene pass. After Phase 01 (ghost dir deletion) and Phases 04-05,
+    this phase verifies the 16 canonical cortex/ directories are clean and no
+    orphaned empty directories remain.
+
+    Also verifies the cortex-registry/ directory structure matches the
+    registry_structure list in cortex-master.yaml.
+
+    This is a VERIFICATION + CLEANUP phase — minimal changes expected.
+
+  canonical_directories:
+    cortex_subdirs:
+    - cli/
+    - config/
+    - core/
+    - dashboards/
+    - governance/
+    - infrastructure/
+    - intelligence/
+    - knowledge/
+    - lens/
+    - mcp/
+    - models/
+    - observability/
+    - orchestrators/
+    - repositories/
+    - templates/
+    - testing/
+    - tools/
+    total: 17
+    note: cortex.intelligence/ was ghost (Phase 01), now 16 remain + tools/ = 17
+
+  stages:
+  - id: A
+    name: Scan for Empty Directories
+    type: audit
+    description: |
+      Find all empty directories under cortex/ that should not exist.
+    actions:
+    - action: find_empty_dirs
+      command: find cortex/ -type d -empty | grep -v __pycache__ | grep -v .git
+      expected: empty output (no empty dirs after Phase 01)
+
+  - id: B
+    name: Verify 16 Canonical Dirs Present
+    type: verification
+    description: |
+      Confirm all 16 canonical cortex/ subdirectories exist.
+    actions:
+    - action: verify_canonical_dirs
+      command: ls cortex/
+      expected: all 16 canonical dirs present
+
+  - id: C
+    name: Registry Structure Verification
+    type: verification
+    description: |
+      Verify cortex-registry/ structure matches registry_structure in cortex-master.yaml.
+    actions:
+    - action: verify_registry_structure
+      description: Check cortex-master.yaml registry_structure entries exist on disk
+      command: python3 scripts/validate_governance_alignment.py --registry-structure 2>&1 | tail -5
+      expected: "Missing registry dirs: NONE"
+
+  - id: D
+    name: Cleanup Any Found Issues
+    type: cleanup
+    description: |
+      Remove any stale empty directories found in Stage A.
+      Update cortex-master.yaml registry_structure if Stage C finds gaps.
+    gate: only_execute_if_issues_found
+
+  - id: E
+    name: Directory Cleanup Commit
+    type: git
+    commit_message: "fix(dirs): Phase 06 directory cleanup — remove empty dirs, verify 16 canonical"
+    gate: only_if_changes_made
+
+  success_criteria:
+  - No empty directories under cortex/ (except __pycache__ which is gitignored)
+  - All 16 canonical cortex/ subdirectories present
+  - cortex-registry/ structure matches registry_structure list
+  - cortex-master.yaml parses cleanly

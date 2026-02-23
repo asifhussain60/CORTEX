@@ -1,0 +1,129 @@
+# ==============================================================================
+# CORTEX Cohesive Brain Refactor — 10-Phase Plan Overview
+# ==============================================================================
+# Status: APPROVED
+# Branch: CORTEX-GPT
+# Created: 2026-02-19
+# Last Updated: 2026-02-23
+# ==============================================================================
+
+plan:
+  id: cortex-refactor
+  title: CORTEX Cohesive Brain Refactor
+  subtitle: Transform fragmented packages into a single cohesive brain
+  version: "1.0.0"
+  status: APPROVED
+  branch: CORTEX-GPT
+  created: '2026-02-19'
+  last_updated: '2026-02-23'
+  governance:
+    core_rules:
+    - CORE-002  # All output inline — no .md/.txt report files
+    - CORE-008  # TDD mandatory — tests before implementation
+    - CORE-011  # Type hints on all functions
+    - CORE-012  # Docstrings on all public APIs
+    - CORE-028  # snake_case naming
+    - CORE-035  # Single canonical implementation
+    - CORE-048  # Holistic validation gate
+    - CORE-049  # Silent autonomous execution
+    - CORE-064  # Sweep Completeness Contract
+
+  description: |
+    Transform CORTEX from its historical fragmented state (multiple stale references
+    to cortex_intelligence, cortex.brain, cortex/brain paths) into a single cohesive
+    canonical package structure under cortex.*.
+
+    This 10-phase plan establishes a safety net first (Phase 01), validates governance
+    alignment (Phase 02), then systematically resolves each layer of technical debt —
+    package consolidation, brain deduplication, orchestrator rationalization, directory
+    cleanup, test consolidation, registry/docs alignment, final verification, and
+    production readiness certification.
+
+    All changes are YAML-registry and documentation-level unless explicitly specified.
+    No live Python code changes without a corresponding failing test (CORE-008).
+
+  scope:
+    in_scope:
+    - Ghost directory cleanup (cortex/cortex.intelligence/)
+    - Stale string references in docstrings and comments (17 Python files)
+    - Stale path references in 26 test files (comments/history markers)
+    - cortex-registry YAML consistency sweep
+    - cortex-docs documentation alignment
+    out_of_scope:
+    - Runtime-breaking import changes (already resolved in Phases 01-14)
+    - New feature development (not a refactor concern)
+    - Test suite restructuring (Phase 07 is registry-only)
+
+  phases:
+  - id: phase-01-foundation
+    title: Foundation Safety Net
+    file: phase-01-foundation.yaml
+    estimated_effort: 2 hours
+    priority: P0
+
+  - id: phase-02-governance-alignment
+    title: Governance Alignment
+    file: phase-02-governance-alignment.yaml
+    estimated_effort: 1 hour
+    priority: P1
+
+  - id: phase-03-package-consolidation
+    title: Package Consolidation Verification
+    file: phase-03-package-consolidation.yaml
+    estimated_effort: 1 hour
+    priority: P1
+
+  - id: phase-04-brain-deduplication
+    title: Brain Deduplication Sweep
+    file: phase-04-brain-deduplication.yaml
+    estimated_effort: 2 hours
+    priority: P1
+
+  - id: phase-05-orchestrator-rationalization
+    title: Orchestrator Rationalization
+    file: phase-05-orchestrator-rationalization.yaml
+    estimated_effort: 1 hour
+    priority: P2
+
+  - id: phase-06-directory-cleanup
+    title: Directory Cleanup
+    file: phase-06-directory-cleanup.yaml
+    estimated_effort: 30 minutes
+    priority: P0
+
+  - id: phase-07-test-consolidation
+    title: Test Reference Consolidation
+    file: phase-07-test-consolidation.yaml
+    estimated_effort: 1 hour
+    priority: P2
+
+  - id: phase-08-registry-docs
+    title: Registry & Docs Alignment
+    file: phase-08-registry-docs.yaml
+    estimated_effort: 1 hour
+    priority: P1
+
+  - id: phase-09-final-verification
+    title: Final Verification
+    file: phase-09-final-verification.yaml
+    estimated_effort: 30 minutes
+    priority: P0
+
+  - id: phase-10-production-readiness
+    title: Production Readiness Certification
+    file: phase-10-production-readiness.yaml
+    estimated_effort: 30 minutes
+    priority: P0
+
+  support_files:
+  - 00-overview.yaml          # This file
+  - capability-manifest.yaml  # Zero-regression capability gate
+  - consolidation-matrix.yaml # Mapping of stale refs → canonical targets
+
+  success_criteria:
+    zero_ghost_dirs: true
+    zero_stale_refs_in_active_code: true
+    all_tests_pass: true
+    golden_test_baseline: 838
+    yaml_parse_clean: true
+    cortex_master_consistent: true

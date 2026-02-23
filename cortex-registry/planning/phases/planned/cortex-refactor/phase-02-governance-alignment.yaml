@@ -1,0 +1,79 @@
+# ==============================================================================
+# Phase 02 — Governance Alignment
+# CORTEX Cohesive Brain Refactor — Phase 02 of 10
+# ==============================================================================
+# Status: planned
+# Priority: P1
+# Estimated Effort: 1 hour
+# ==============================================================================
+
+phase:
+  id: phase-02-governance-alignment
+  title: Governance Alignment
+  sequence: 2
+  of: 10
+  plan: cortex-refactor
+  status: planned
+  priority: P1
+  estimated_effort: 1 hour
+  depends_on: phase-01-foundation
+  created: '2026-02-23'
+
+  description: |
+    Validate that all 35 CORE governance rules remain compliant after Phase 01.
+    Scan for any governance rule violations introduced during the refactor baseline
+    and resolve them before proceeding to code-touching phases.
+
+    This phase is YAML-and-registry only — no Python code changes.
+
+  stages:
+  - id: A
+    name: CORE Rule Compliance Scan
+    type: audit
+    description: |
+      Run full CORE rule compliance scan via cortex_validate MCP tool.
+      Identify any P0/P1 violations present in the current baseline.
+    actions:
+    - action: run_compliance_scan
+      mcp_tool: cortex_validate
+      op: compliance
+      record: p0_count, p1_count, violation_list
+    - action: check_core_028_naming
+      description: Verify all new files in cortex-refactor/ use snake_case
+      command: ls cortex-registry/planning/phases/planned/cortex-refactor/
+      expected: all_snake_case
+
+  - id: B
+    name: Resolve P0 Violations
+    type: fix
+    description: |
+      Fix any P0 violations found in Stage A.
+      Apply CORE-064 Sweep Completeness: exhaust ALL P0 issues, not just the first.
+    gate: p0_count_must_be_zero_after_stage_B
+
+  - id: C
+    name: Registry Consistency Verification
+    type: verification
+    description: |
+      Verify cortex-master.yaml is fully consistent with the live phase files.
+      Cross-check: phases.completed list matches files in _cortex-master/phases/completed/.
+    actions:
+    - action: verify_yaml_parse
+      command: python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))"
+    - action: verify_phase_files_exist
+      description: Every phase in phases.completed has a corresponding file
+      command: python3 scripts/validate_governance_alignment.py 2>&1 | tail -3
+      note: Checks that all phase file refs in cortex-master.yaml resolve to real files
+
+  - id: D
+    name: Governance Alignment Commit
+    type: git
+    description: Commit any governance fixes from this phase.
+    commit_message: "fix(governance): Phase 02 governance alignment — CORE rule compliance"
+
+  success_criteria:
+  - P0 violations: 0
+  - P1 violations: 0 (or documented with accepted risk)
+  - cortex-master.yaml parses cleanly
+  - All cortex-refactor/ files use snake_case naming (CORE-028)
+  - 35 CORE rules all present in cortex-registry/core/tier0-skull/

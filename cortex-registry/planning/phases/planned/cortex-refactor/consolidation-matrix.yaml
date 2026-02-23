@@ -1,0 +1,147 @@
+# ==============================================================================
+# CORTEX Consolidation Matrix — Stale Reference → Canonical Target Mapping
+# ==============================================================================
+# Authority: cortex-refactor plan, Phase 03/04/07
+# Purpose: Maps all stale references to their canonical replacements
+# Status: ACTIVE — updated 2026-02-23
+# CORE-002: This file is the output — no separate .md/.txt report files
+# ==============================================================================
+
+matrix:
+  id: consolidation-matrix
+  version: "1.0.0"
+  last_updated: "2026-02-23"
+  status: active
+
+  # ============================================================================
+  # PACKAGE REFERENCES (Import-level — already resolved)
+  # ============================================================================
+  package_refs:
+    status: COMPLETE (resolved in Phases 01-14 of original refactor)
+    mappings:
+    - stale: cortex_intelligence
+      canonical: cortex
+      type: package_name
+      status: resolved
+      resolved_in: phase-03 (original)
+      note: No active imports of cortex_intelligence remain in cortex/ package
+
+    - stale: cortex.brain
+      canonical: cortex.orchestrators
+      type: module_path
+      status: resolved
+      resolved_in: phase-04 (original)
+      note: brain/ directory dissolved into proper domains
+
+    - stale: cortex_lens
+      canonical: cortex.lens
+      type: package_name
+      status: resolved
+      resolved_in: phase-03 (original)
+      note: lens is now a module within cortex package
+
+  # ============================================================================
+  # STRING REFERENCES (Docstrings, comments, variable names — Phase 04 target)
+  # ============================================================================
+  string_refs:
+    status: PENDING (Phase 04 implementation)
+    estimated_files:
+      cortex_python: 17
+      test_files: 26
+      total: 43
+
+    mappings:
+    - stale: cortex_intelligence  (in variable names)
+      canonical: intelligence
+      type: variable_name
+      examples:
+      - 'cortex_intelligence_path → intelligence_path'
+      - 'cortex_intelligence_module → intelligence_module'
+      phase: phase-04
+
+    - stale: 'cortex.brain (in docstrings)'
+      canonical: cortex.orchestrators
+      type: docstring_text
+      examples:
+      - 'from cortex.brain import... → from cortex.orchestrators import...'
+      phase: phase-04
+
+    - stale: 'cortex/brain (in path comments)'
+      canonical: 'cortex/intelligence OR cortex/orchestrators'
+      type: path_comment
+      context_dependent: true
+      examples:
+      - '# moved from cortex/brain/ → # moved from cortex/intelligence/'
+      phase: 'phase-04 (cortex/) + phase-07 (tests/)'
+
+    - stale: 'cortex/brain (in test file comments)'
+      canonical: 'cortex/intelligence OR cortex/orchestrators'
+      type: test_comment
+      phase: phase-07
+
+  # ============================================================================
+  # DIRECTORY REFERENCES (Ghost dirs — Phase 01/06 target)
+  # ============================================================================
+  directory_refs:
+    mappings:
+    - stale: cortex/cortex.intelligence/
+      canonical: 'DELETED (empty ghost dir)'
+      type: ghost_directory
+      status: Phase 01 target
+      risk: ZERO (empty — nothing imports from it)
+      content: onboarded_repos/ (also empty)
+
+  # ============================================================================
+  # MCP TOOL REFERENCES (Registry YAML — Phase 53 resolved)
+  # ============================================================================
+  mcp_refs:
+    status: COMPLETE (resolved in Phase 53)
+    mappings:
+    - stale: cortex_validate_compliance
+      canonical: 'cortex_validate (op: compliance)'
+      type: mcp_tool_name
+      status: resolved
+      resolved_in: phase-53
+      occurrences_fixed: 8
+
+    - stale: convergence_gate
+      canonical: convergence_loop
+      type: workflow_template_field
+      status: resolved
+      resolved_in: phase-53
+      occurrences_fixed: 109
+
+  # ============================================================================
+  # REGISTRY YAML REFERENCES (cortex-master.yaml — ongoing)
+  # ============================================================================
+  registry_refs:
+    mappings:
+    - field: execution_order.current_state.phase_numbering
+      stale: Sequential 01-51 COMPLETE (v10.1 — 2026-02-22)
+      canonical: Sequential 01-53 COMPLETE (v10.4 — 2026-02-23)
+      status: resolved (2026-02-23)
+
+    - field: phases.deferred
+      stale: "[]  (empty list — inconsistent with phase_status.deferred)"
+      canonical: "[phase-31, phase-34, phase-91, phase-92]"
+      status: resolved (2026-02-23)
+
+    - field: execution_order.next_phases
+      stale: "phase-52/53 listed as upcoming (already complete)"
+      canonical: "cortex-refactor listed first as APPROVED next work"
+      status: resolved (2026-02-23)
+
+  # ============================================================================
+  # SUMMARY
+  # ============================================================================
+  summary:
+    total_stale_refs: 43
+    resolved:
+      package_imports: all
+      mcp_tool_names: 8
+      workflow_fields: 109
+      registry_yaml: 3
+    pending:
+      docstring_variable_refs: 17 python files (Phase 04)
+      test_comment_refs: 26 test files (Phase 07)
+    completion_percentage: 60  # after Phase 53 + registry fixes

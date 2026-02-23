@@ -1,0 +1,116 @@
+# ==============================================================================
+# Phase 04 — Brain Deduplication Sweep
+# CORTEX Cohesive Brain Refactor — Phase 04 of 10
+# ==============================================================================
+# Status: planned
+# Priority: P1
+# Estimated Effort: 2 hours
+# CORE-008: Tests before implementation
+# ==============================================================================
+
+phase:
+  id: phase-04-brain-deduplication
+  title: Brain Deduplication Sweep
+  sequence: 4
+  of: 10
+  plan: cortex-refactor
+  status: planned
+  priority: P1
+  estimated_effort: 2 hours
+  depends_on: phase-03-package-consolidation
+  created: '2026-02-23'
+
+  description: |
+    Sweep and fix all stale string references to cortex_intelligence, cortex.brain,
+    and cortex/brain found in Phase 03 inventory. These are docstrings, variable names,
+    and comments — NOT broken imports.
+
+    Scope (from Phase 03 inventory, as of 2026-02-23):
+    - 17 Python files in cortex/ with stale string references
+    - 26 test files with historical path comments
+
+    CORE-064 Sweep Completeness: must exhaust ALL identified files, not a subset.
+    CORE-008: Write a test first that validates the sweep is complete.
+
+  tdd_approach:
+    red_test: |
+      Write test_brain_dedup_sweep.py that:
+      1. Finds all Python files in cortex/ and tests/ that contain
+         'cortex_intelligence', 'cortex.brain', or 'cortex/brain'
+      2. Asserts count == 0
+      This test FAILS before the sweep (expected — RED phase).
+    green_implementation: |
+      Update the 17+26 files to remove stale references.
+      Variable names like 'cortex_intelligence_path' → 'intelligence_path'
+      Docstring references → updated to reflect cortex.intelligence module.
+    refactor: |
+      Verify no logic changed — only string content in non-runtime paths.
+
+  stages:
+  - id: A
+    name: Write Failing Test (RED)
+    type: tdd_red
+    description: |
+      Write tests/unit/test_brain_dedup_sweep.py that asserts zero stale refs.
+    test_file: tests/unit/test_brain_dedup_sweep.py
+    test_names:
+    - test_no_stale_cortex_intelligence_refs_in_cortex_package
+    - test_no_stale_cortex_brain_refs_in_cortex_package
+    - test_no_stale_cortex_brain_path_refs_in_tests
+
+  - id: B
+    name: Sweep cortex/ Python Files (GREEN)
+    type: implementation
+    description: |
+      Update the 17 cortex/ Python files identified in Phase 03.
+      Changes are docstring/comment/variable-name only — no logic changes.
+    scope:
+      file_count: 17
+      patterns_to_fix:
+      - cortex_intelligence  →  intelligence (in variable names)
+      - cortex.brain  →  cortex.orchestrators (in docstrings)
+      - cortex/brain  →  cortex/intelligence (in path comments)
+    constraint: |
+      MUST NOT change any runtime logic. grep -n for each target file before/after.
+      git diff must show only docstring/comment changes.
+
+  - id: C
+    name: Sweep tests/ Comment References (GREEN continued)
+    type: implementation
+    description: |
+      Update the 26 test files with historical path comments.
+      These are migration history comments, not functional code.
+    scope:
+      file_count: 26
+      patterns: cortex/brain references in comments/docstrings
+
+  - id: D
+    name: Verify Tests Pass (GREEN gate)
+    type: verification
+    description: |
+      Run the sweep test from Stage A — it should now PASS.
+      Also run full smoke suite to confirm zero regressions.
+    actions:
+    - action: run_sweep_test
+      command: python3 -m pytest tests/unit/test_brain_dedup_sweep.py -v
+      gate: all_pass
+    - action: run_smoke_tests
+      command: python3 scripts/run_tests.py smoke
+      gate: zero_failures
+
+  - id: E
+    name: Commit (REFACTOR complete)
+    type: git
+    commit_message: "refactor(brain): sweep stale cortex_intelligence/cortex.brain refs from docstrings (17 Python + 26 test files)"
+
+  success_criteria:
+  - Zero stale cortex_intelligence refs in cortex/ Python files
+  - Zero stale cortex.brain/cortex/brain refs in cortex/ Python files
+  - test_brain_dedup_sweep.py passes (all assertions)
+  - Smoke tests pass (≥1237, 0 failed)
+  - git diff shows only docstring/comment/variable-name changes
+
+  known_risks:
+  - risk: Variable name change breaks test assertion
+    likelihood: low
+    mitigation: Run tests before and after each file change

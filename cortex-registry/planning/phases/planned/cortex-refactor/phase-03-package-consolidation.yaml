@@ -1,0 +1,89 @@
+# ==============================================================================
+# Phase 03 — Package Consolidation Verification
+# CORTEX Cohesive Brain Refactor — Phase 03 of 10
+# ==============================================================================
+# Status: planned
+# Priority: P1
+# Estimated Effort: 1 hour
+# ==============================================================================
+
+phase:
+  id: phase-03-package-consolidation
+  title: Package Consolidation Verification
+  sequence: 3
+  of: 10
+  plan: cortex-refactor
+  status: planned
+  priority: P1
+  estimated_effort: 1 hour
+  depends_on: phase-02-governance-alignment
+  created: '2026-02-23'
+
+  description: |
+    Verify that package consolidation from historical phases (Phases 01-14 of the
+    original refactor) is complete and stable. The cortex package is the single
+    canonical package — no cortex_intelligence, cortex_lens, cortex.brain packages.
+
+    This phase is VERIFICATION-ONLY. It does not change code.
+    It documents the current state and identifies any remaining consolidation gaps.
+
+  context:
+    historical_state: cortex/, cortex/intelligence/, cortex/lens/ (3 packages)
+    target_state: cortex/ only (1 canonical package)
+    completed_in: Phases 01-14 (original refactor, 2026-02)
+    this_phase: Verify completion, document any remaining gaps
+
+  stages:
+  - id: A
+    name: Import Canonical Verification
+    type: verification
+    description: |
+      Verify that all imports use cortex.* and no legacy package names exist.
+    actions:
+    - action: check_no_cortex_intelligence_imports
+      command: grep -r 'from cortex_intelligence\|import cortex_intelligence' cortex/ --include='*.py' | grep -v '__pycache__'
+      expected: empty (0 results)
+    - action: check_no_cortex_brain_imports
+      command: grep -r 'from cortex\.brain\|import cortex\.brain' cortex/ --include='*.py' | grep -v '__pycache__'
+      expected: empty (0 results)
+    - action: check_no_cortex_lens_package
+      description: cortex.lens is a module, not a separate package — verify structure
+      command: python3 -c "from cortex.lens import lens_analysis; print('OK')" 2>/dev/null || echo "lens is absorbed"
+    - action: verify_single_package
+      command: python3 -c "import cortex; print(cortex.__file__)"
+      expected: points to cortex/__init__.py
+
+  - id: B
+    name: Stale String Reference Inventory
+    type: inventory
+    description: |
+      Inventory all files with stale string references (NOT imports — those are clean).
+      These are docstrings, variable names, comments that reference old package paths.
+      Target for Phase 04 (brain deduplication sweep).
+    actions:
+    - action: inventory_docstring_refs
+      command: grep -rn 'cortex_intelligence\|cortex\.brain\|cortex/brain' cortex/ --include='*.py' | grep -v '__pycache__'
+      record: stale_ref_inventory
+      note: These are all expected to be docstrings/comments — NOT broken imports
+    - action: inventory_test_refs
+      command: grep -rn 'cortex_intelligence\|cortex/brain\|cortex\.brain' tests/ --include='*.py' | grep -v '__pycache__' | wc -l
+      record: test_stale_ref_count
+
+  - id: C
+    name: Consolidation Gap Report
+    type: reporting
+    description: |
+      Produce inline summary of consolidation status.
+      CORE-002: output inline — no .md/.txt files created.
+    output_format: inline_yaml_comment
+    fields:
+    - import_health: all_clean
+    - docstring_stale_refs: count_from_stage_B
+    - test_comment_refs: count_from_stage_B
+    - consolidation_status: COMPLETE (imports) / PENDING (docstrings — Phase 04)
+
+  success_criteria:
+  - Zero broken imports from legacy package names
+  - Stale ref inventory documented inline
+  - No new files created (CORE-002)
+  - Single cortex package confirmed
