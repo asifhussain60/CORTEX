@@ -93,7 +93,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         min_match_confidence:   Minimum confidence for IAFD matches (0.0-1.0).
         min_rename_confidence:  Minimum confidence for renames (0.0-1.0).
         normalize_filenames:    Apply normalization (action→Does, proper case, remove numbers).
-        auto_organize:          Move files to studio folders.
+        auto_organize:          Move files to studio folders (disabled by default). Files are renamed in-place; set to ``True`` to move to studio subfolders.
         use_iafd:               Query IAFD for enriched metadata.
         metadata_hints:         User-provided metadata overrides (e.g., {"studio": "Wicked"}).
         plex_accessor:          Plex metadata accessor (auto-created if None).
@@ -108,7 +108,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         min_match_confidence: float = 0.75,
         min_rename_confidence: float = 0.80,
         normalize_filenames: bool = True,
-        auto_organize: bool = True,
+        auto_organize: bool = False,
         use_iafd: bool = True,
         metadata_hints: Optional[Dict] = None,
         plex_accessor: Optional[PlexMetadataAccessor] = None,

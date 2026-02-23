@@ -703,7 +703,7 @@ def cortex_plex_workflow_full(
     use_iafd: bool = True,
     normalize_filenames: bool = True,
     min_match_confidence: float = 0.75,
-    auto_organize: bool = True,
+    auto_organize: bool = False,
     metadata_hints: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
@@ -727,7 +727,7 @@ def cortex_plex_workflow_full(
         use_iafd: Query IAFD for enriched metadata.
         normalize_filenames: Normalize: "action"→"Does", proper case, remove numbers.
         min_match_confidence: Minimum confidence for IAFD matches (0.0-1.0).
-        auto_organize: Move files to studio folders.
+        auto_organize: Move files to studio folders (disabled by default — files stay in original location). Set to ``True`` to enable folder organization.
         metadata_hints: User-provided metadata overrides (e.g., ``{"studio": "Wicked"}``)
 
     Returns:
