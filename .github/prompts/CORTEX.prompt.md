@@ -163,6 +163,7 @@ EnforcementOrchestrator validates CORE rules before every operation:
 |---------|--------|
 | `/audit` | 17-point production readiness scan |
 | `/audit fix` | Scan + auto-remediate |
+| `/upgrade` | Check origin/main, merge if ahead, run audit fix |
 | `/vacuum` | Clean dead files |
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) |
 | `/onboard {repo}` | LENS analysis + dashboard |

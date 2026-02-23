@@ -78,6 +78,8 @@ Unlike `cortex-auditor.md` (which audits source code), this agent audits **docum
 | 15 | Knowledge YAML wiring | Verify `cortex-registry/knowledge/` domain YAMLs (`architecture/`, `backend-python/`, `security/`, `testing-validation/`, `devops-infrastructure/`, `performance-optimization/`) are referenced and loadable by `KnowledgeSynthesisEngine` at `cortex/intelligence/knowledge/knowledge_synthesis_engine.py` |
 | 16 | LENS synthesis health | Verify 8 LENS analyzers importable from `cortex/lens/` and golden tests in `tests/golden/` passing — run `python3 -c "from cortex.lens import *"` |
 | 17 | Success/failure pattern learning | Verify `.cortex-runtime/traces/orchestrator-traces.db` captures AC markers per orchestrator invocation; audit sessions queryable for regression pattern detection — orphaned `AC_START` without `AC_COMPLETE` is a P0 violation |
+| 18 | Upgrade manifest health | `.cortex-runtime/traces/upgrade-manifest.json` must exist and last entry must have `audit_result: pass`; missing file or last result `fail` → P1 warning — run `python3 -c "import json,os; d=json.load(open('.cortex-runtime/traces/upgrade-manifest.json')); ups=d.get('upgrades',[]); print('OK' if not ups or ups[-1]['audit_result']=='pass' else 'FAIL')"` |
+| 19 | DoR paragraph enforcement | No `\| Field \|` or `\| Handler \|` table patterns inside DoR/intent reflection sections in any agent file — DoR must be a numbered paragraph list with confidence indicator and proceed gate; table in DoR context is a P1 violation — run `grep -n "| Field \|| Handler |" .github/agents/core/*.md` |
 
 ---
 

@@ -40,7 +40,7 @@ Stage 2: 17-Point Production Readiness  (Checks #1–#17, see table below)
 Stage 3: Wiring Contract Validation     (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health Check      (HealthOrchestrator.run_health_check(), all 22)
 Stage 5: Vacuum — Markdown + Clutter   (VacuumOrchestrator via cortex_vacuum)
-Stage 6: Meta-Audit — Prompt Coherence (cortex-meta-auditor.md, 12 checks)
+Stage 6: Meta-Audit — Prompt Coherence (cortex-meta-auditor.md, 17 checks)
 Stage 7: Auto-Fix (confidence >90%)     (autonomous remediation)
 Stage 8: Re-validate → zero-violation   (gate: 0 P0, 0 P1 remaining)
 Stage 9: Run tests + AC_COMPLETE        (python3 scripts/run_tests.py batch → .cortex-runtime/traces/)
@@ -78,7 +78,7 @@ Stage 9: Run tests + AC_COMPLETE        (python3 scripts/run_tests.py batch → 
 | 10 | **Test-source mirror** — `tests/` diverges from `cortex/` | Dir comparison | 🟡 Report |
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
-| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (12 checks) | ✅ Update inline |
+| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (17 checks) | ✅ Update inline |
 | 14 | **MCP tool name registry alignment** — every prompt/agent tool reference must match `mcp_registry.py` registered IDs; detect consolidated-name drift where old tool names survive in docs after registry consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
 | 15 | **Governance YAML SSOT enforcement** — only `skull-rules.yaml` in `cortex-registry/core/tier0-skull/` is canonical source; `core-rules.yaml` in `cortex-registry/governance/` is secondary — detect count divergence | `grep -c "^- id:" cortex-registry/core/tier0-skull/skull-rules.yaml` | 🟡 Report divergence as P1 |
 | 16 | **Knowledge synthesis wiring** — registry knowledge YAMLs in `cortex-registry/knowledge/` are loadable and have no dead references to deleted knowledge files | Path resolution on all YAML `source:` fields | ✅ Update paths |

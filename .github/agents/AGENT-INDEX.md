@@ -113,6 +113,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **REPHRASE** | request-rephrase-orchestrator.md | ~2,000 |
 | **SETUP** | cortex-environment-setup.md | ~2,000 |
 | **META-AUDIT** | cortex-meta-auditor.md + cortex-auditor.md | ~6,500 |
+| **UPGRADE** | cortex-environment-setup.md + cortex-auditor.md | ~5,500 |
 | **WIRING/CI** | architecture-integrity-agent.md | ~5,000 |
 | **VACUUM** | cortex-vacuum.md | ~2,000 |
 | **DEBUG** | cortex-debugger.md + cortex-auditor.md | ~4,500 |
@@ -127,11 +128,11 @@ are resolved or explicitly approved as WONT-FIX.
 ```
 /audit fix
   Stage 1: Stage 0 Governance Pre-Flight      → STAGE-0-GOVERNANCE-AUDIT-SPEC.md
-  Stage 2: 14-Point Production Scan           → cortex-auditor.md (Checks #1–#14)
+  Stage 2: 17-Point Production Scan           → cortex-auditor.md (Checks #1–#17)
   Stage 3: Wiring Contract Validation         → architecture-integrity-agent.md (L1→L3)
   Stage 4: Orchestrator Health (all 22)       → HealthOrchestrator.run_health_check()
   Stage 5: Vacuum Cleanup                     → VacuumOrchestrator + cortex_vacuum
-  Stage 6: Prompt/Agent Meta-Audit            → cortex-meta-auditor.md (12 checks)
+  Stage 6: Prompt/Agent Meta-Audit            → cortex-meta-auditor.md (17 checks)
   Stage 7: Auto-Fix confidence >90%           → autonomous remediation
   Stage 8: Re-validate → zero-violation gate  → 0 P0, 0 P1 required
   Stage 9: Tests + AC_COMPLETE                → python3 scripts/run_tests.py batch
