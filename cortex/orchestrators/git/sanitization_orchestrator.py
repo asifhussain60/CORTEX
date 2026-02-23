@@ -23,6 +23,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -559,7 +561,7 @@ class FileScannerEngine:
 # ---------------------------------------------------------------------------
 
 
-class SanitizationOrchestrator:
+class SanitizationOrchestrator(OrchestratorProtocolMixin):
     """Coordinates the full scan → morph → validate → audit pipeline.
 
     Usage::

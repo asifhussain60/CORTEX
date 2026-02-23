@@ -33,6 +33,7 @@ from cortex.orchestrators.git.enforcement_orchestrator import (
     EnforcementOrchestrator,
     EnforcementReport,
 )
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 logger = logging.getLogger(__name__)
 
@@ -77,7 +78,7 @@ class GitOrchestratorResult:
 # ---------------------------------------------------------------------------
 
 
-class GitOrchestrator:
+class GitOrchestrator(OrchestratorProtocolMixin):
     """Canonical orchestrator for git operations in CORTEX.
 
     Runs three sequential stages:

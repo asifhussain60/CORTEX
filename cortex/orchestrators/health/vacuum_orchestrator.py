@@ -38,6 +38,7 @@ from .constants import (
 from .file_context import FileContext
 from .models import IssueFile, IssueSeverity, OperationResult, ScanResult, VacuumReport
 from .naming import classify_naming_violation, is_screaming, to_kebab_case, to_snake_case
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 # GAP-57-08: Wire tier1_learned cleaners (Phase 57-f)
 try:
@@ -71,7 +72,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class VacuumOrchestrator:
+class VacuumOrchestrator(OrchestratorProtocolMixin):
     """Standalone + companion remediation engine.
 
     Usage (standalone)::

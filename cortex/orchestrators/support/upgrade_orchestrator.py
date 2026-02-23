@@ -19,6 +19,7 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.file_factory import get_file_factory
 
 
 class UpgradeStrategy(Enum):
@@ -402,5 +403,6 @@ class UpgradeOrchestrator(OrchestratorProtocolMixin):
 
         data["upgrades"].append(entry)
         data["last_check"] = entry["timestamp"]
-        manifest_path.write_text(json.dumps(data, indent=2))
+        ff = get_file_factory()
+        ff.create_file(manifest_path, json.dumps(data, indent=2))
 

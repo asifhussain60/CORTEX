@@ -46,11 +46,12 @@ from .naming import (
     to_kebab_case,
 )
 from .reports.health_report import HealthReport
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 logger = logging.getLogger(__name__)
 
 
-class HealthOrchestrator:
+class HealthOrchestrator(OrchestratorProtocolMixin):
     """Holistic repository health scanner.
 
     Usage::

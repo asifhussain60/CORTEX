@@ -14,6 +14,8 @@ from typing import Any, Dict, List, Optional
 import time
 import logging
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 logger = logging.getLogger(__name__)
 
 
@@ -86,7 +88,7 @@ class HTMLGenerationReport:
     errors: List[str] = field(default_factory=list)
 
 
-class CortexDocsOrchestrator:
+class CortexDocsOrchestrator(OrchestratorProtocolMixin):
     """
     Orchestrates end-to-end documentation site generation.
     

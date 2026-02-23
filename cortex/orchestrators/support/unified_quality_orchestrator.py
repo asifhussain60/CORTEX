@@ -31,9 +31,10 @@ from cortex.orchestrators.support.quality_models import (
     QualityAssuranceReport,
     RejectionEntry,
 )
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
-class UnifiedQualityAssuranceOrchestrator:
+class UnifiedQualityAssuranceOrchestrator(OrchestratorProtocolMixin):
     """
     Unified quality assurance orchestrator.
 

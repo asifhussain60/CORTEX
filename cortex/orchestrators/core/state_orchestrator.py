@@ -37,6 +37,7 @@ from typing import Any, Dict, List, Optional
 from cortex.core.core.brain_state_manager import BrainStateManager
 from cortex.core.core.checkpoint_manager import CheckpointManager
 from cortex.core.core.orchestrator.conversation_state import ConversationStateManager
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 logger = logging.getLogger(__name__)
 
@@ -96,7 +97,7 @@ class StateOperationResult:
     checkpoint_id: Optional[str] = None
 
 
-class StateOrchestrator:
+class StateOrchestrator(OrchestratorProtocolMixin):
     """Unified state management orchestrator with SQLite audit trail.
     
     Consolidates:

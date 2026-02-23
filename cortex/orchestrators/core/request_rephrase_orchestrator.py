@@ -22,6 +22,8 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
 from enum import Enum
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 
 class IntentType(Enum):
     """User intent classification."""
@@ -433,7 +435,7 @@ def format_rephrase_output(context: RephraseContext) -> str:
     return "\n".join(output)
 
 
-class RequestRephraseOrchestrator:
+class RequestRephraseOrchestrator(OrchestratorProtocolMixin):
     """Main orchestrator for request rephrase.
     
     Stage -1: Async context pre-fetch (LENS context synthesis)

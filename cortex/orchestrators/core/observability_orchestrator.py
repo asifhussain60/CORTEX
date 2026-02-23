@@ -10,6 +10,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 
 @dataclass
 class Span:
@@ -32,7 +34,7 @@ class Alert:
     resolved: bool = False
 
 
-class ObservabilityOrchestrator:
+class ObservabilityOrchestrator(OrchestratorProtocolMixin):
     """Unified observability: metrics + tracing + alerts + SQLite audit.
     
     Consolidates:

@@ -7,8 +7,10 @@ AC-PHASE38-007: Central Brain Health
 
 from typing import Any, Dict, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
-class BrainHealthOrchestrator:
+
+class BrainHealthOrchestrator(OrchestratorProtocolMixin):
     """Monitors health of CORTEX brain components.
 
     Checks:

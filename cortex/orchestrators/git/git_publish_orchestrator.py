@@ -18,6 +18,8 @@ import subprocess
 from dataclasses import dataclass, field
 from typing import List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 logger = logging.getLogger(__name__)
 
 
@@ -63,7 +65,7 @@ class PublishResult:
 # ---------------------------------------------------------------------------
 
 
-class GitPublishOrchestrator:
+class GitPublishOrchestrator(OrchestratorProtocolMixin):
     """Stages, commits, and optionally pushes sanitized code to the configured remote.
 
     By default **push is disabled** (``auto_push=False``).  The caller must

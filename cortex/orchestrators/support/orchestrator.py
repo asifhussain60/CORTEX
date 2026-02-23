@@ -25,6 +25,7 @@ class JourneyState(str, Enum):
 
 
 from cortex.core.core.result import Err, Ok, Result
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 @dataclass
@@ -74,7 +75,7 @@ class JourneyProgress:
     total_activities: int
 
 
-class OnboardingOrchestrator:
+class OnboardingOrchestrator(OrchestratorProtocolMixin):
     """Orchestrate user onboarding journeys.
 
     Manages the creation, progression, and completion of user onboarding

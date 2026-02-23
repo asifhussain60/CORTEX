@@ -29,6 +29,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.models.canonical_enums import IntentType
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 @dataclass
@@ -57,7 +58,7 @@ class HealingResult:
     action_required: Optional[str] = None  # If manual step needed
 
 
-class AutoHealingMCPOrchestrator:
+class AutoHealingMCPOrchestrator(OrchestratorProtocolMixin):
     """
     Orchestrates auto-healing when MCP unavailable.
     

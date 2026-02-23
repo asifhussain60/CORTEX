@@ -48,6 +48,13 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
 )
 from cortex.orchestrators.domain.refactoring.refactoring_registry import RefactoringToolRegistry
 
+# F10: Governance gate — lazy import to avoid circular deps
+try:
+    from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrchestrator as _EnforcementOrchestrator
+    _ENFORCEMENT_AVAILABLE = True
+except ImportError:
+    _ENFORCEMENT_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -247,6 +254,25 @@ class RefactoringOrchestrator(WorkflowTemplateMixin, IOrchestrator):
             ... )
             >>> result = orchestrator.execute_refactoring(request)
         """
+        # F10: Governance gate — validate before executing refactoring (CORE-048)
+        if _ENFORCEMENT_AVAILABLE:
+            try:
+                _enforcer = _EnforcementOrchestrator()
+                _gate = _enforcer.validate_operation({
+                    "intent": "REFACTOR",
+                    "target_file": str(request.file_path),
+                    "operation": request.operation,
+                })
+                if _gate.is_err():
+                    _result = _gate.unwrap_err()
+                    logger.warning(
+                        "Governance gate blocked refactoring: %s",
+                        getattr(_result, "violations", _result),
+                    )
+                    return Err(f"Governance gate violation: {getattr(_result, 'violations', _result)}")
+            except Exception as _gov_exc:  # pragma: no cover
+                logger.warning("Governance gate check failed (non-blocking): %s", _gov_exc)
+
         # Map JavaScript to TypeScript adapter (since TypeScript handles both)
         language = request.language
         if language == RefactoringLanguage.JAVASCRIPT:

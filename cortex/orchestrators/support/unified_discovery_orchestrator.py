@@ -30,9 +30,10 @@ from cortex.orchestrators.support.discovery_models import (
     DiscoveryResult,
     CapabilityInfo,
 )
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
-class UnifiedDiscoveryOrchestrator:
+class UnifiedDiscoveryOrchestrator(OrchestratorProtocolMixin):
     """
     Unified discovery orchestrator.
 

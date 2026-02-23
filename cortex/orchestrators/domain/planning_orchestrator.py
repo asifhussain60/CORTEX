@@ -20,6 +20,13 @@ from cortex.models.canonical_enums import PhaseStatus, IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
+# F10: Governance gate — lazy import to avoid circular deps
+try:
+    from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrchestrator as _EnforcementOrchestrator
+    _ENFORCEMENT_AVAILABLE = True
+except ImportError:
+    _ENFORCEMENT_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -167,6 +174,28 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
         _ts = int(time.time() * 1000)
         logger.info(f"AC_START: AC-PLANNING-{_ts}")
         try:
+            # F10: Governance gate — validate before executing planning (CORE-048)
+            if _ENFORCEMENT_AVAILABLE:
+                try:
+                    _enforcer = _EnforcementOrchestrator()
+                    _gate = _enforcer.validate_operation({
+                        "intent": "PLAN",
+                        "operation": "plan_phases",
+                        "context": request,
+                    })
+                    if _gate.is_err():
+                        _result = _gate.unwrap_err()
+                        logger.warning(
+                            "Governance gate blocked planning: %s",
+                            getattr(_result, "violations", _result),
+                        )
+                        return {
+                            "status": "GOVERNANCE_BLOCKED",
+                            "violations": getattr(_result, "violations", str(_result)),
+                        }
+                except Exception as _gov_exc:  # pragma: no cover
+                    logger.warning("Governance gate check failed (non-blocking): %s", _gov_exc)
+
             phases_data = request.get("phases", [])
             phases = []
             for p in phases_data:

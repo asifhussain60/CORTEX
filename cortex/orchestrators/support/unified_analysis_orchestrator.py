@@ -23,13 +23,14 @@ from cortex.orchestrators.support.analysis_models import (
     ToolInfo,
     DependencyGraph,
 )
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 # ============================================================================
 # UnifiedAnalysisOrchestrator
 # ============================================================================
 
-class UnifiedAnalysisOrchestrator:
+class UnifiedAnalysisOrchestrator(OrchestratorProtocolMixin):
     """
     Unified orchestrator for code analysis and tool discovery.
     

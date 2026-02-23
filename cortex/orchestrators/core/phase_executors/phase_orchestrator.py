@@ -19,10 +19,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 logger = logging.getLogger(__name__)
 
 
-class PhaseOrchestrator:
+class PhaseOrchestrator(OrchestratorProtocolMixin):
     """
     Orchestrates execution of one or more phases.
 

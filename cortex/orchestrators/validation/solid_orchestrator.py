@@ -18,9 +18,10 @@ from cortex.orchestrators.core.solid_analyzers import (
     DRYAnalyzer,
     SolidViolation,
 )
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
-class SOLIDOrchestrator:
+class SOLIDOrchestrator(OrchestratorProtocolMixin):
     """Unified SOLID compliance: SRP + OCP + LSP + ISP + DIP + DRY.
     
     Consolidates:

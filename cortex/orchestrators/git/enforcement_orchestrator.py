@@ -34,6 +34,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 logger = logging.getLogger(__name__)
 
 
@@ -258,7 +260,7 @@ def _check_mcp_policy(staged_files: List[str], repo_path: str) -> CheckResult:
 # ---------------------------------------------------------------------------
 
 
-class PreCommitEnforcementOrchestrator:
+class PreCommitEnforcementOrchestrator(OrchestratorProtocolMixin):
     """Runs all pre-commit CORE rule enforcement checks in-process.
 
     Replaces the following shell hooks and GitHub Actions:

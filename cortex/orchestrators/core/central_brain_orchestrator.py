@@ -10,8 +10,10 @@ from __future__ import annotations
 import uuid
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
-class CentralBrainOrchestrator:
+
+class CentralBrainOrchestrator(OrchestratorProtocolMixin):
     """Orchestrates shared brain state across multiple users."""
 
     def __init__(self) -> None:
