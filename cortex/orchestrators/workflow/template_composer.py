@@ -209,9 +209,14 @@ class TemplateComposer:
         for cat in categories:
             cat_primitives = [p for p in all_primitives if p.get("category") == cat]
             if cat_primitives:
-                # Select first matching primitive (sorted by scan order)
-                selected = cat_primitives[0]
-                prim_steps = selected.get("steps", [])
+                # Select best-fit primitive for this category and operation type
+                selected = self._select_best_primitive(cat_primitives, operation_type)
+                # Primitives store steps under execution.steps (canonical schema).
+                # Fall back to root-level steps for composed/test primitives.
+                prim_steps = (
+                    selected.get("execution", {}).get("steps", None)
+                    or selected.get("steps", [])
+                )
                 for step in prim_steps:
                     enriched_step = dict(step)
                     enriched_step["source_category"] = cat
@@ -300,6 +305,81 @@ class TemplateComposer:
 
         logger.info("Persisted composed template to %s", file_path)
         return file_path
+
+    def _select_best_primitive(
+        self,
+        candidates: List[Dict[str, Any]],
+        operation_type: str,
+    ) -> Dict[str, Any]:
+        """Select the most relevant primitive from a list of category matches.
+
+        Scoring heuristic (higher = better fit):
+        - +2  primitive name or template_id contains the operation type keyword
+        - +1  primitive tags contain the operation type keyword
+        - +1  primitive tags contain an op-aligned keyword synonym
+              (e.g., tag "refactoring" scores for op "refactor")
+        - -1  primitive name contains a keyword from an unrelated domain
+              (e.g., "css" or "dom" when operation is "refactor")
+        - -1  primitive tags contain a keyword from an unrelated domain
+
+        Falls back to the first candidate when all scores are equal.
+
+        Args:
+            candidates: Non-empty list of primitive dicts for the same category.
+            operation_type: The current operation type (e.g., 'refactor').
+
+        Returns:
+            The best-fit primitive dictionary.
+        """
+        # Keywords that indicate a primitive is unrelated to this operation type.
+        _UNRELATED_KEYWORDS: Dict[str, List[str]] = {
+            "refactor": ["css", "dom", "html", "css-selector", "zero-inline"],
+            "fix": ["css", "dom", "css-selector", "zero-inline"],
+            "implement": ["css", "dom", "css-selector"],
+            "security": ["ast"],
+            "test": [],
+            "analyze": ["css", "dom"],
+        }
+        # Tag synonyms that align with an operation type even if the op word
+        # is not literally present in the tag string.
+        _OP_SYNONYMS: Dict[str, List[str]] = {
+            "refactor": ["refactoring", "restructure", "reorganise", "reorganize"],
+            "fix": ["bugfix", "repair", "remediation"],
+            "implement": ["implementation", "build", "create"],
+            "test": ["testing", "regression", "validation"],
+            "security": ["vulnerability", "threat", "audit"],
+            "analyze": ["analysis", "inspection", "scan"],
+            "deploy": ["deployment", "release", "publish"],
+        }
+
+        op = operation_type.lower()
+        noise = _UNRELATED_KEYWORDS.get(op, [])
+        synonyms = _OP_SYNONYMS.get(op, [])
+
+        def _score(primitive: Dict[str, Any]) -> int:
+            name = (primitive.get("name") or primitive.get("template_id") or "").lower()
+            tags: List[str] = [t.lower() for t in primitive.get("metadata", {}).get("tags", [])]
+            score = 0
+            # Name match
+            if op in name:
+                score += 2
+            # Tag exact match
+            if any(op in tag for tag in tags):
+                score += 1
+            # Tag synonym match
+            if any(syn in tag for syn in synonyms for tag in tags):
+                score += 1
+            # Name noise penalty
+            for kw in noise:
+                if kw in name:
+                    score -= 1
+            # Tag noise penalty
+            for kw in noise:
+                if any(kw in tag for tag in tags):
+                    score -= 1
+            return score
+
+        return max(candidates, key=_score)
 
     def _generate_id(self, operation_type: str, description: str) -> str:
         """Generate a unique template ID from operation type and description.

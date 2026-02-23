@@ -271,10 +271,8 @@ execution:
         - started_at
 
   loop_body:
-    description: |
-      Repeat detect → fix → rescan until success_predicate == True
-      or cycle_num > max_cycles.
-
+    description: "Repeat detect → fix → rescan until success_predicate == True or cycle_num > max_cycles."
+    steps:
     - step_id: 'DETECT'
       name: 'Detect issues (cycle {{cycle_num}})'
       action: |

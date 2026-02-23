@@ -24,6 +24,8 @@ from typing import Any, Dict, List, Optional, Union
 
 import yaml
 
+from cortex.orchestrators.workflow.template_composer import TemplateComposer
+
 
 # AC_START: AC-PHASE100-002
 # Description: WorkflowTemplateRegistry with convergence gates
@@ -79,10 +81,31 @@ class WorkflowTemplateRegistry:
     Detects ARCHITECT vs PRODUCTION mode for context-aware template resolution.
     """
 
-    def __init__(self) -> None:
-        """Initialize template registry."""
+    def __init__(
+        self,
+        primitives_dir: Optional[Path] = None,
+        composites_dir: Optional[Path] = None,
+    ) -> None:
+        """Initialize template registry.
+
+        Args:
+            primitives_dir: Optional path to primitives directory. When supplied,
+                ``get_template()`` will invoke :class:`TemplateComposer` as a
+                fallback for unknown template IDs instead of raising immediately.
+            composites_dir: Optional path to composites directory. When supplied
+                alongside *primitives_dir*, composed fallback templates are
+                persisted as YAML for future reuse.
+        """
         self._templates: Dict[str, WorkflowTemplate] = {}
         self._mode: Optional[str] = None
+        self._composer: Optional[TemplateComposer] = (
+            TemplateComposer(
+                primitives_dir=primitives_dir,
+                composites_dir=composites_dir,
+            )
+            if primitives_dir is not None
+            else None
+        )
 
     def detect_mode(self) -> str:
         """
@@ -151,6 +174,10 @@ class WorkflowTemplateRegistry:
             TemplateNotFoundError: If template not found.
         """
         if template_id not in self._templates:
+            # Attempt TemplateComposer fallback before raising.
+            composed = self._try_compose(template_id)
+            if composed is not None:
+                return composed
             raise TemplateNotFoundError(
                 f"Template not found: {template_id}. "
                 f"Available templates: {list(self._templates.keys())}"
@@ -166,6 +193,86 @@ class WorkflowTemplateRegistry:
             "source": template.source,
             "metadata": template.metadata,
         }
+
+    # ------------------------------------------------------------------
+    # Internal: TemplateComposer fallback
+    # ------------------------------------------------------------------
+
+    def _parse_operation_from_id(self, template_id: str) -> str:
+        """Extract operation type from a template ID path segment.
+
+        Convention: ``"{namespace}/{operation_type}-{description}"``
+        The first token after the last ``/``, split on ``-``, is the operation.
+
+        Examples:
+            ``"custom/refactor-legacy-auth"``  → ``"refactor"``
+            ``"custom/fix-broken-imports"``    → ``"fix"``
+            ``"custom/deploy-to-staging"``     → ``"deploy"``
+
+        Args:
+            template_id: Template identifier string.
+
+        Returns:
+            Parsed operation type, lower-cased. Defaults to ``"implement"``.
+        """
+        slug = template_id.rsplit("/", 1)[-1]  # last path segment
+        operation = slug.split("-")[0].lower()  # first token before first '-'
+        return operation or "implement"
+
+    def _try_compose(self, template_id: str) -> Optional[Dict[str, Any]]:
+        """Attempt to compose a template via TemplateComposer for an unknown ID.
+
+        Parses the operation type from *template_id*, delegates to the wired
+        :class:`TemplateComposer`, auto-registers the result so subsequent
+        ``get_template()`` calls are served from cache, and persists the YAML
+        when a composites directory is configured.
+
+        Args:
+            template_id: The unresolved template identifier.
+
+        Returns:
+            Composed template dict, or ``None`` if no composer is wired or
+            the composer produced no result (empty primitives).
+        """
+        if self._composer is None:
+            return None
+
+        operation_type = self._parse_operation_from_id(template_id)
+        description = template_id.rsplit("/", 1)[-1]  # use slug as description
+
+        composed = self._composer.compose(
+            operation_type=operation_type,
+            description=description,
+        )
+
+        if composed is None:
+            return None
+
+        # Persist composed YAML (no-op when composites_dir not set)
+        self._composer.persist(composed)
+
+        # Auto-register so repeat calls are served from cache.
+        # Override the composer-generated id with the requested template_id so
+        # that cache-hits return a consistent id.
+        composed_registered = dict(composed)
+        composed_registered["id"] = template_id
+        self.register_template(
+            {
+                "id": template_id,
+                "name": composed["name"],
+                "category": composed.get("category", "composed"),
+                "steps": composed.get("steps", []),
+                "source": "composer",
+                "metadata": composed.get("metadata", {}),
+            },
+            override=False,
+        )
+
+        # Return the full composed dict with the requested id so all callers
+        # see a consistent id regardless of whether this is the first or a
+        # cache-hit call.
+        composed_registered["metadata"] = dict(composed.get("metadata", {}))
+        return composed_registered
 
     def list_templates(self, category: Optional[str] = None) -> List[Dict[str, Any]]:
         """
@@ -362,14 +469,19 @@ class WorkflowTemplateRegistry:
         if not steps:
             return
 
-        # Build dependency graph
-        step_ids = {step["id"] for step in steps}
+        # Build dependency graph — steps use either 'id' or 'step_id' key
+        def _get_id(step: Dict[str, Any]) -> Optional[str]:
+            return step.get("id") or step.get("step_id")
+
+        step_ids = {_get_id(s) for s in steps if _get_id(s)}
         dependencies: Dict[str, List[str]] = {}
 
         for step in steps:
-            step_id = step["id"]
+            sid = _get_id(step)
+            if sid is None:
+                continue
             depends_on = step.get("depends_on", [])
-            dependencies[step_id] = [
+            dependencies[sid] = [
                 dep for dep in depends_on if dep in step_ids
             ]
 

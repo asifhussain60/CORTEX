@@ -5,6 +5,10 @@ AC_START: AC-PHASE54A-S3-001
 Description: Single MVP template for dashboard rendering
 Authority: phase-54-A-incremental-onboarding-refactor.yaml, S3 task
 Approach: Minimal viable product - 1 template, not full library
+
+CORE-035 compliance: DashboardTemplateRenderer inherits from the canonical
+TemplateRenderer (cortex.templates.template_renderer) so there is a single
+Jinja2 env setup path in the codebase.
 """
 
 from pathlib import Path
@@ -13,11 +17,16 @@ from typing import Any, Dict, Optional
 import jinja2
 
 from cortex.core.core.result import Err, Ok, Result
+from cortex.templates.template_renderer import TemplateRenderer
 
 
-class DashboardTemplateRenderer:
+class DashboardTemplateRenderer(TemplateRenderer):
     """
     Jinja2 template renderer for dashboard HTML generation.
+
+    Extends the canonical :class:`~cortex.templates.template_renderer.TemplateRenderer`
+    with file-system template loading, dashboard-specific Jinja2 filters, and
+    domain helpers for rendering ``onboarding_dashboard.html.j2``.
 
     MVP approach:
     - Single template: onboarding_dashboard.html.j2
@@ -30,15 +39,21 @@ class DashboardTemplateRenderer:
         Initialize renderer.
 
         Args:
-            template_dir: Directory containing templates (default: cortex/templates/dashboards/)
+            template_dir: Directory containing templates
+                (default: cortex/templates/dashboards/)
         """
+        # Initialise the canonical string-renderer env (BaseLoader, autoescape)
+        super().__init__()
+
         if template_dir is None:
             template_dir = Path(__file__).parent / "dashboards"
 
         self.template_dir = Path(template_dir)
         self.template_dir.mkdir(parents=True, exist_ok=True)
 
-        # Setup Jinja2 environment
+        # Replace the BaseLoader env with a FileSystemLoader env so that
+        # get_template() can load .html.j2 files from disk.  We carry over the
+        # same autoescape / trim / lstrip settings as the parent.
         self.env = jinja2.Environment(
             loader=jinja2.FileSystemLoader(str(self.template_dir)),
             autoescape=jinja2.select_autoescape(['html', 'xml']),

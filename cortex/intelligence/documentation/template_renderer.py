@@ -3,6 +3,12 @@ Jinja2 template rendering engine for CORTEX documentation site.
 
 Renders glassmorphism-themed HTML from content.json using role-based templates.
 
+CORE-035 note: This renderer (DocsTemplateRenderer) is intentionally separate
+from cortex.templates.TemplateRenderer because it is file-system-based, role-aware,
+and purpose-built for the cortex-docs HTML site — not a general string renderer.
+The legacy class name ``TemplateRenderer`` is preserved as a module-level alias
+for backwards compatibility with existing imports and tests.
+
 AC_START: AC-PHASE98-S2-T3
 """
 
@@ -48,7 +54,7 @@ class NavigationItem:
     active: bool = False
 
 
-class TemplateRenderer:
+class DocsTemplateRenderer:
     """
     Renders CORTEX documentation site from templates.
     
@@ -321,3 +327,11 @@ class TemplateRenderer:
 
 
 # AC_COMPLETE: AC-PHASE98-S2-T3
+
+# ---------------------------------------------------------------------------
+# Backwards-compatibility alias (CORE-035)
+# ---------------------------------------------------------------------------
+# The class was originally named TemplateRenderer.  All existing imports of
+# ``from cortex.intelligence.documentation.template_renderer import TemplateRenderer``
+# continue to resolve without modification.
+TemplateRenderer = DocsTemplateRenderer
