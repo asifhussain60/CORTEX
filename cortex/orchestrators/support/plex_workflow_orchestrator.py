@@ -121,6 +121,11 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         self.scanner = VideoLibraryScanner(root=root)
         self.filename_analyzer = FilenameAnalyzer(studio_context=studio_filter)
 
+    @staticmethod
+    def _get_filename(vfile: VideoLibraryFile) -> str:
+        """Get full filename (stem + extension)."""
+        return f"{vfile.filename_stem}{vfile.extension}"
+
     def run_full_workflow(self) -> WorkflowResult:
         """
         Execute complete end-to-end workflow.
@@ -254,11 +259,13 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
 
             for vf in files:
                 try:
-                    sanitization = self.filename_analyzer.analyze(vf.filename)
+                    filename = self._get_filename(vf)
+                    sanitization = self.filename_analyzer.analyze(filename)
                     if sanitization.detected_studio or sanitization.artists:
                         identified_count += 1
                 except Exception as e:
-                    logger.debug(f"Could not identify {vf.filename}: {e}")
+                    filename = self._get_filename(vf)
+                    logger.debug(f"Could not identify {filename}: {e}")
                     continue
 
             result.files_identified = identified_count
@@ -302,7 +309,8 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
 
                     if not metadata:
                         # Try filename analysis to extract performers
-                        analysis = self.filename_analyzer.analyze(vf.filename)
+                        filename = self._get_filename(vf)
+                        analysis = self.filename_analyzer.analyze(filename)
                         if analysis.artists:
                             metadata = self.iafd_accessor.search_by_performers(
                                 analysis.artists
@@ -313,9 +321,10 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
                         and metadata.confidence >= self.min_match_confidence
                     ):
                         matched_count += 1
+                        filename = self._get_filename(vf)
                         iafd_results.append(
                             {
-                                "file": vf.filename,
+                                "file": filename,
                                 "title": metadata.title,
                                 "performers": metadata.performers,
                                 "confidence": metadata.confidence,
@@ -323,7 +332,8 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
                         )
 
                 except Exception as e:
-                    logger.debug(f"IAFD match failed for {vf.filename}: {e}")
+                    filename = self._get_filename(vf)
+                    logger.debug(f"IAFD match failed for {filename}: {e}")
                     continue
 
             result.files_matched = matched_count
@@ -362,7 +372,8 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
 
             for vf in files:
                 try:
-                    analysis = self.filename_analyzer.analyze(vf.filename)
+                    filename = self._get_filename(vf)
+                    analysis = self.filename_analyzer.analyze(filename)
 
                     # Only rename if confidence is high enough
                     if (
@@ -374,12 +385,13 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
 
                         if not self.dry_run:
                             vf.path.rename(new_path)
-                            logger.info(f"Renamed: {vf.filename} → {new_name}")
+                            logger.info(f"Renamed: {filename} → {new_name}")
 
                         renamed_count += 1
 
                 except Exception as e:
-                    logger.debug(f"Rename failed for {vf.filename}: {e}")
+                    filename = self._get_filename(vf)
+                    logger.debug(f"Rename failed for {filename}: {e}")
                     continue
 
             result.files_renamed = renamed_count
@@ -413,12 +425,13 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
 
             for vf in files:
                 try:
+                    filename = self._get_filename(vf)
                     writer = TagWriterFactory.for_file(vf.path)
                     if not writer:
                         continue
 
                     # Build tag fields
-                    analysis = self.filename_analyzer.analyze(vf.filename)
+                    analysis = self.filename_analyzer.analyze(filename)
 
                     fields = TagFields(
                         title=analysis.sanitized_filename or vf.filename_stem,
@@ -438,7 +451,8 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
                         tagged_count += 1
 
                 except Exception as e:
-                    logger.debug(f"Tagging failed for {vf.filename}: {e}")
+                    filename = self._get_filename(vf)
+                    logger.debug(f"Tagging failed for {filename}: {e}")
                     continue
 
             result.files_tagged = tagged_count
@@ -487,7 +501,8 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
                         organized_count += 1
 
                 except Exception as e:
-                    logger.debug(f"Organization failed for {vf.filename}: {e}")
+                    filename = self._get_filename(vf)
+                    logger.debug(f"Organization failed for {filename}: {e}")
                     continue
 
             result.files_organized = organized_count
