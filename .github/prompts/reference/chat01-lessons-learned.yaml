@@ -1,0 +1,185 @@
+---
+metadata:
+  id: chat01-lessons-learned
+  title: "Chat01 Execution Review — Phase 54 cortex-refactor"
+  version: 1.0.0
+  date: "2026-02-23"
+  authority: CORTEX Digest Mode Analysis
+  scope: "10-phase cortex-refactor execution (Phase 54)"
+  purpose: "Extract patterns, identify drifts, and improve prompt/audit alignment"
+  owner: DigestCoordinator
+
+# ============================================================================
+# SECTION 1: EXECUTION SUMMARY
+# ============================================================================
+
+execution_summary:
+  phase: 54
+  title: "cortex-refactor — ghost dir removal & path canonicalization"
+  phases_executed: 10
+  commits:
+    - hash: "03ff83e71"
+      scope: "Phase 54 main — source + registry"
+      files_changed: 33
+    - hash: "29d19a79c"
+      scope: "P2 cleanup — test fixtures"
+      files_changed: 8
+  test_baseline:
+    before: { passed: 1237, failed: 0, skipped: 309 }
+    after: { passed: 1237, failed: 0, skipped: 305 }
+  total_files_changed: 41
+  insertions: 76
+  deletions: 95
+
+# ============================================================================
+# SECTION 2: KEY PATTERNS & LESSONS
+# ============================================================================
+
+patterns:
+
+  # Pattern 1: Ghost Directory Detection
+  ghost_directory_pattern:
+    issue: |
+      cortex/cortex.intelligence/ existed as a filesystem artifact — a directory
+      with a dot in the name, not a Python package. It was empty but referenced in
+      20+ source files as a path for db/state files. Prompts and docs didn't flag
+      this as a deleted path.
+    lesson: |
+      Add ghost directory detection as an explicit audit check (#18). Scan for 
+      any directory under cortex/ with dots in the name that isn't a valid package.
+      Update all deleted-paths lists in prompts when ghost dirs are discovered.
+    improvement:
+      audit_check: "Check #18 — Ghost directory detection"
+      command: 'find cortex/ -maxdepth 1 -name "*.*" -type d'
+      auto_fix: "Delete directory + repoint path references"
+
+  # Pattern 2: Audit Point Count Drift
+  audit_count_drift:
+    issue: |
+      copilot-instructions.md said "19-Point Production Scan" while 
+      cortex-architect.prompt.md said "17-Point". Meta-auditor check count
+      also drifted (23 vs 22). MCP tool count drifted (37 in 
+      MCP-ORCHESTRATOR-MAPPING.md vs 24 everywhere else).
+    lesson: |
+      SSOT for counts must be enforced via meta-audit. When adding new audit
+      checks, ALL prompt files must be updated in the same commit. Add
+      specific meta-audit checks for count alignment.
+    improvement:
+      meta_audit_checks_added:
+        - "Audit check count — all prompts say '19-Point'"
+        - "Meta-audit check count — all prompts say '23 checks'"
+        - "MCP tool count — all prompts say '24 production tools'"
+
+  # Pattern 3: Runtime Data Path Convention
+  runtime_data_paths:
+    issue: |
+      20+ source files referenced cortex.intelligence/state/ or 
+      cortex.intelligence/onboarded_repos/ for db and state files.
+      The canonical location is .cortex-runtime/ but this was never 
+      explicit in prompts or audit checks.
+    lesson: |
+      Make .cortex-runtime/ the explicit canonical location for ALL
+      runtime data in prompt deleted-paths sections. Add explicit
+      rule: "all .db, .log, state files → .cortex-runtime/"
+    improvement:
+      prompt_update: "Added to deleted paths: 'never cortex.intelligence/state/'"
+      audit_check: "Check #8 already covers scattered .db files"
+
+  # Pattern 4: Test Fixture Path Coupling
+  test_fixture_coupling:
+    issue: |
+      Test fixtures in 8+ files created tmp_path directories matching 
+      the old ghost directory path (cortex.intelligence/). When source
+      code paths were updated, tests broke because fixtures didn't match.
+    lesson: |
+      When changing canonical paths in source, always sweep test fixtures
+      in the same commit. Use SweepCatalogueOrchestrator to track the
+      full catalogue of path references.
+    improvement:
+      sweep_contract: "CORE-064 applied — all test fixture paths updated"
+
+  # Pattern 5: Convergence Loop in Audit Pipeline
+  convergence_loop:
+    issue: |
+      The original architect prompt had Stage 7 as "Auto-Fix confidence >90%"
+      and Stage 8 as "Re-validate → zero-violation gate" — implying a single
+      pass. copilot-instructions.md correctly described a convergence loop
+      (detect-fix-rescan until 0 P0/P1).
+    lesson: |
+      The /audit fix pipeline must use a convergence loop, not a single pass.
+      Prompts must describe "Stages 7–8" as a loop, referencing CORE-064.
+    improvement:
+      prompt_update: "Updated both prompts to say 'Auto-Fix Convergence Loop'"
+
+# ============================================================================
+# SECTION 3: DRIFT FIXES APPLIED
+# ============================================================================
+
+drift_fixes:
+  cortex_architect_prompt:
+    - section: "Deleted paths"
+      change: "Added cortex/cortex.intelligence/ and runtime data path rule"
+    - section: "AUDIT MODE — /audit fix pipeline"
+      change: "Aligned to 9-stage with Stage -1 and Stage 0, convergence loop"
+    - section: "17-Point → 19-Point Audit"
+      change: "Added Check #18 (ghost dirs) and #19 (SQLite health)"
+    - section: "FIX MODE"
+      change: "Added CORE-064 sweep gate (step 7) and SweepCatalogueOrchestrator"
+    - section: "Meta-Audit table"
+      change: "Added audit count, meta-audit count, ghost dir, runtime data checks"
+    - section: "Prompt/Agent Cleanliness"
+      change: "Added cortex/cortex.intelligence/ and runtime data path rules"
+    - section: "Quick Commands /audit fix detail"
+      change: "Aligned 9-stage format with convergence loop"
+
+  cortex_prompt:
+    - section: "/audit command"
+      change: "17-point → 19-point, /audit fix description updated"
+    - section: "Deleted paths"
+      change: "Added cortex/cortex.intelligence/"
+
+  mcp_orchestrator_mapping:
+    - section: "Tool count"
+      change: "37 tools → 24 production tools (aligned with mcp_registry.py)"
+    - section: "Tool Category Matrix"
+      change: "Removed stale TOOLKIT and SPECIALIZED categories"
+    - section: "Updated date"
+      change: "2026-02-22 → 2026-02-23"
+
+  prompts_readme:
+    - section: "File listing"
+      change: "Added cortex-doc.prompt.md, MCP-ORCHESTRATOR-MAPPING.md, MCP-SETUP-GUIDE.md"
+    - section: "Updated date"
+      change: "2026-02-22 → 2026-02-23"
+
+# ============================================================================
+# SECTION 4: ENHANCEMENT PROPOSALS
+# ============================================================================
+
+enhancement_proposals:
+
+  - id: ENH-CHAT01-001
+    title: "Automated prompt count alignment check"
+    description: |
+      Add a CI check that greps all .prompt.md files for numeric claims
+      (orchestrator count, tool count, rule count, audit check count) 
+      and asserts they match the canonical values in mcp_registry.py
+      and cortex-master.yaml.
+    priority: P2
+    effort: 1h
+
+  - id: ENH-CHAT01-002
+    title: "Ghost directory pre-commit hook"
+    description: |
+      Add pre-commit check: find cortex/ -maxdepth 1 -name "*.*" -type d
+      and fail if any non-package directories exist.
+    priority: P2
+    effort: 30m
+
+  - id: ENH-CHAT01-003
+    title: "Runtime data path linter"
+    description: |
+      Lint all .py files for Path("cortex.intelligence") or 
+      Path("cortex.brain") patterns and auto-fix to .cortex-runtime/.
+    priority: P3
+    effort: 1h

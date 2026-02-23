@@ -153,7 +153,7 @@ EnforcementOrchestrator validates CORE rules before every operation:
 | Docs | `cortex-docs/` (HTML/CSS only) |
 | Prompts | `.github/prompts/` |
 
-**⛔ Never reference:** `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/`
+**⛔ Never reference:** `cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/`
 
 ---
 
@@ -161,8 +161,8 @@ EnforcementOrchestrator validates CORE rules before every operation:
 
 | Command | Action |
 |---------|--------|
-| `/audit` | 17-point production readiness scan |
-| `/audit fix` | Scan + auto-remediate |
+| `/audit` | 19-point production readiness scan |
+| `/audit fix` | Scan + auto-remediate (9 stages, convergence loop) |
 | `/upgrade` | Check origin/main, merge if ahead, run audit fix |
 | `/vacuum` | Clean dead files |
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) |

@@ -1,6 +1,6 @@
 # CORTEX Prompts
 
-**Updated:** 2026-02-22
+**Updated:** 2026-02-23
 
 ---
 
@@ -10,15 +10,19 @@
 
 | File | Status | Size | Purpose |
 |------|--------|------|---------|
-| `cortex-architect.prompt.md` | ✅ ACTIVE | 580 lines | Senior AI architect for IMPLEMENT/FIX/REFACTOR |
-| `CORTEX.prompt.md` | ✅ ACTIVE | 350 lines | Master orchestrator for all request routing |
+| `cortex-architect.prompt.md` | ✅ ACTIVE | ~700 lines | Senior AI architect for IMPLEMENT/FIX/REFACTOR/AUDIT |
+| `CORTEX.prompt.md` | ✅ ACTIVE | ~200 lines | Master orchestrator for all request routing |
+| `cortex-doc.prompt.md` | ✅ ACTIVE | ~1,370 lines | Documentation orchestration (discovery → generation → build) |
+| `MCP-ORCHESTRATOR-MAPPING.md` | ✅ ACTIVE | ~300 lines | Orchestrator → MCP tool mapping for SaaS/external repos |
+| `MCP-SETUP-GUIDE.md` | ✅ ACTIVE | ~120 lines | Pylance-style MCP setup (stdio, auto-starts) |
 | `README.md` | — | — | This file |
 
 ### `reference/` — Supporting Documentation
 
 | File | Purpose |
 |------|---------|
-| `chat03-lessons-learned.yaml` | Chat session lessons learned |
+| `chat01-lessons-learned.yaml` | Phase 54 cortex-refactor — ghost dir removal, audit alignment |
+| `chat03-lessons-learned.yaml` | Chat session lessons learned — tolerance bands, config auto-loading |
 | `phase-0-5-dashboard.md` | Phase 0-5 dashboard reference |
 
 ### `../.github/templates/` — Response Templates

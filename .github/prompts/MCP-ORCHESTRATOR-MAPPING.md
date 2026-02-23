@@ -1,12 +1,12 @@
 # MCP Orchestrator Mapping Guide
-**Updated:** 2026-02-22 | **Phase:** Production Readiness  
+**Updated:** 2026-02-23 | **Phase:** Production Readiness  
 **Authority:** CORTEX Architect | **Scope:** External Repos + SaaS Deployment
 
 ---
 
 ## 📋 Overview
 
-CORTEX exposes **22 wired orchestrators** via **37 consolidated MCP tools**. This guide maps orchestrators to their MCP entry points for external repository integration and SaaS deployment.
+CORTEX exposes **22 wired orchestrators** via **24 production MCP tools**. This guide maps orchestrators to their MCP entry points for external repository integration and SaaS deployment.
 
 **Architecture Principle:** 1 orchestrator ≠ 1 MCP tool. Instead, orchestrators are exposed via:
 - **Direct MCP tools** for primary workflows (TDD, Refactor, Plan)
@@ -229,17 +229,15 @@ Check health of all or specific orchestrators:
 
 ## 📊 Tool Category Matrix
 
-### **37 Production MCP Tools**
+### **24 Production MCP Tools**
 
 | Category | Count | Tools |
 |----------|-------|-------|
-| **CORE** | 4 | `cortex_orchestrator`, `cortex_challenge`, `cortex_classify`, `cortex_request_lifecycle` |
+| **CORE** | 3 | `cortex_orchestrator`, `cortex_challenge`, `cortex_classify` |
 | **INTELLIGENCE** | 4 | `cortex_lens`, `cortex_knowledge`, `cortex_git`, `cortex_generate_tests` |
 | **GOVERNANCE** | 4 | `cortex_governance`, `cortex_validate`, `cortex_load`, `cortex_validate_request` |
 | **OPERATIONS** | 6 | `cortex_debug`, `cortex_refactor`, `cortex_plan`, `cortex_onboard`, `cortex_dashboard`, `cortex_workflow` |
-| **UTILITIES** | 9 | `cortex_verify`, `cortex_ask`, `cortex_vacuum`, `cortex_tools_catalog`, `cortex_total_recall`, `cortex_metrics`, `cortex_check`, `cortex_vision`, `cortex_orchestrator` |
-| **TOOLKIT** | 5 | `toolkit_diagnose`, `toolkit_verify`, `toolkit_cleanup`, `toolkit_validate`, `toolkit_analyze` |
-| **SPECIALIZED** | 5 | `cortex_health_scan`, `cortex_vacuum_execute`, `cortex_master_plan`, `cortex_git_push`, `cortex_score_tests` |
+| **UTILITIES** | 7 | `cortex_verify`, `cortex_ask`, `cortex_vacuum`, `cortex_tools_catalog`, `cortex_total_recall`, `cortex_metrics`, `cortex_check` |
 
 ---
 
@@ -267,14 +265,14 @@ Check health of all or specific orchestrators:
 }
 ```
 
-**Returns:** All 37 production tools with descriptions, parameters, and operations.
+**Returns:** All 24 production tools with descriptions, parameters, and operations.
 
 ---
 
 ## 🔗 References
 
-- **MCP Registry:** `cortex/mcp/mcp_registry.py` (480 lines, 37 tool definitions)
-- **Tool Implementations:** `cortex/mcp/tools/` (9 modules, 34 classes)
+- **MCP Registry:** `cortex/mcp/mcp_registry.py` (24 tool definitions)
+- **Tool Implementations:** `cortex/mcp/tools/` 
 - **Wiring Specs:** `cortex-registry/core/specifications/` (4 YAML files)
 - **Architect Prompt:** `.github/prompts/cortex-architect.prompt.md`
 - **Setup Guide:** `.github/prompts/MCP-SETUP-GUIDE.md`
@@ -283,14 +281,14 @@ Check health of all or specific orchestrators:
 
 ## ✅ Validation
 
-All 37 tools registered and tested:
+All 24 tools registered and tested:
 - `python3 -m cortex.mcp` — Server starts without import errors
 - `cortex_verify` (op: `mcp`) — MCP detection test passes
 - `.vscode/settings.json` — Pylance-style stdio transport configured
 
-**No tool sprawl:** 75% reduction from 98 legacy tools → 37 production tools.
+**No tool sprawl:** 75% reduction from 98 legacy tools → 24 production tools.
 
 ---
 
 **AC_START:** AC-MCP-PROD-001  
-**Authority:** CORTEX Architect | **Updated:** 2026-02-22
+**Authority:** CORTEX Architect | **Updated:** 2026-02-23
