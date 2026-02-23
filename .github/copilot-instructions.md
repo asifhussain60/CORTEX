@@ -164,6 +164,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | `/audit` | Scan only, no auto-fix | Stages 1–6 |
 | `/vacuum` | Markdown sprawl + root clutter cleanup | Stage 5 only |
 | `/health` | All 22 orchestrator health endpoints | Stage 4 only |
+| `/upgrade` | Check origin/main, merge if ahead, run audit fix | Inflight upgrade |
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) | — |
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
@@ -172,11 +173,11 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 
 ```
 Stage 1: Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 2: 14-Point Production Scan           (cortex-auditor.md Checks #1–#14)
+Stage 2: 17-Point Production Scan           (cortex-auditor.md Checks #1–#17)
 Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
 Stage 5: Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
-Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 12 checks)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 17 checks)
 Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
 Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
 Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)

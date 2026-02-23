@@ -32,5 +32,162 @@ Add the following instruction block to both `CORTEX.prompt.md` (under MCP sectio
 **PART 10 — INTENT REFLECTION: PARAGRAPH FORMAT ENFORCEMENT (P0):**
 Fix the DoR (Definition of Ready) display in `cortex-architect.md` — the agent currently renders intent reflection as a flow diagram with `→` arrows and `[DESIGN/IMPLEMENT]` labels (lines 75–85) which exposes internal architecture names and uses table-like structure. Replace this with the paragraph pattern already canonical in `CORTEX.prompt.md` §DoR Display: "**Here's what CORTEX heard:** You've asked CORTEX to {one-line summary}: 1. **{Action}** — {plain description}..." with CORTEX confidence indicator and `proceed` gate. Apply the same correction to any agent or prompt file that currently renders intent reflection using markdown tables (`| Field | Value |` rows), code fences, or bullet-point lists of internal field names (Handler, Scope, Rules, AC markers). Specifically audit and fix: `cortex-architect.md` lines 75–110 (replace flow diagram with paragraph DoR), `cortex-universal-orchestration.md` (verify DoR format is paragraph not table), and `STAGE-0-GOVERNANCE-AUDIT-SPEC.md` (verify Stage 0 output is single paragraph with inline violations, no separate table for each check). Add to `cortex-meta-auditor.md` Check #19 — DoR paragraph enforcement (scan all agent files for `| Field |` or `| Handler |` patterns inside DoR/intent reflection sections; any such table in a DoR context is a P1 violation — DoR must always be a numbered paragraph list with confidence indicator and proceed gate). This check runs automatically during every `/audit fix` Stage 6 meta-audit.
 
+**PART 11 — PREFLIGHT UPGRADE EXCLUSIONS: ADMIN-ONLY FOLDER PROTECTION (P0):**
+The inflight upgrade pipeline defined in PART 9 must explicitly exclude the following folders from the git merge operation — these folders are admin-specific, user-customized, or deployment-environment-specific and must NEVER be overwritten by remote `origin/main` content without explicit user approval:
+
+**Protected admin-only folders (never merged from origin/main):**
+- `cortex-docs/` — published documentation site (HTML/CSS/JS); user controls all content; remote updates would overwrite site-specific customizations
+- `_workspaces/` — session-specific workspace files, chat histories (`.chats/`), and workspace-scoped prompts (`_workspaces/prompts/`); entirely user-local, never in remote main
+- `cortex-doc.prompt.md` and its related agents (`cortex-documentation-architect.md`, `cortex-gitpages-builder.md`, `cortex-storyteller.md`) — documentation-system prompts that are admin-configured per deployment; these are tightly coupled to the user's `cortex-docs/` site structure and must not be blindly replaced by framework updates
+- `cortex-sts/` — sample tenant system (CortexLabs BadMonolith/Refactored) used exclusively for demonstration and admin analysis; contains user-specific analysis artifacts
+
+**Implementation in `UpgradeOrchestrator.check_upstream_and_merge()`:** Before executing `git merge origin/main --no-ff`, configure git sparse-checkout or use `git merge --no-commit` followed by selective `git checkout HEAD -- <excluded_folder>` to restore each protected path to its pre-merge local state. Specifically:
+```
+git merge origin/main --no-ff --no-commit
+git checkout HEAD -- cortex-docs/
+git checkout HEAD -- _workspaces/
+git checkout HEAD -- cortex-sts/
+git checkout HEAD -- .github/prompts/cortex-doc.prompt.md
+git checkout HEAD -- .github/agents/core/cortex-documentation-architect.md
+git checkout HEAD -- .github/agents/core/cortex-gitpages-builder.md
+git checkout HEAD -- .github/agents/core/cortex-storyteller.md
+git commit -m "chore: inflight upgrade from origin/main — {timestamp} (admin folders preserved)"
+```
+Write the protected folder list to `.cortex-runtime/traces/upgrade-manifest.json` under a `protected_paths` key so every upgrade log shows which paths were excluded. Add a `CORTEX_UPGRADE_EXCLUDE_PATHS` environment variable (comma-separated) that allows users to add further exclusions without code changes. Update `cortex-meta-auditor.md` Check #18 to also verify `protected_paths` is present in the upgrade manifest entry — absence is a P1 violation indicating the exclusion guard was not applied. Add explicit instruction to `cortex-environment-setup.md`: "Admin folders (`cortex-docs/`, `_workspaces/`, `cortex-sts/`, documentation agents) are NEVER overwritten by automated upgrades — they are user-sovereign."
+
+---
+
+**PART 12 — DIGEST MODE: VSCODE COPILOT CHAT SESSION PATTERN LEARNING (P0):**
+Enhance the DIGEST mode pipeline across all prompts, agents, and orchestrators to extract, synthesize, and wire success and failure patterns specifically from **VS Code GitHub Copilot Chat Session conversation markdown files** (files matching `_workspaces/.chats/*.md`, `*.chat.md`, or any markdown with Pipeline 1 score ≥ 4).
+
+**What to extract from chat session markdowns:**
+- **Success patterns** — libraries that imported cleanly, tests that passed, files that were correctly created/modified, terminal commands that returned exit code 0, MCP tool invocations that produced valid output, orchestrator code paths that completed with `AC_COMPLETE ✅`
+- **Failure patterns** — import errors, test failures (FAILED/ERROR markers), terminal commands that errored, files that did not exist at expected paths, stale tool names that were called but 404'd, governance violations raised during the session, MCP tool calls with empty/error output, orphaned `AC_START` markers without `AC_COMPLETE`
+- **Drift indicators** — any correction made mid-session (user said "that's wrong" or "try again"), any file path that was searched for and not found, any tool that was invoked multiple times because first invocations failed, any reference to a deleted construct (`cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `cortex_process_request`)
+
+**Synthesis targets — wire extracted patterns across all orchestrator brain tiers:**
+- **Tier 0 (Governance):** Any failure pattern that matches a CORE rule violation is written to `cortex-registry/governance/session-learnings/` as a YAML enforcement directive — next time CORTEX encounters the same pattern, it blocks proactively rather than reacting to the failure. Example: "GovernanceRegistry loading from deleted path" → add a pre-flight check that verifies skull-rules.yaml path exists before initializing.
+- **Tier 1 (Domain Knowledge):** Success patterns for libraries, test strategies, file organization, and terminal commands are written to `cortex-registry/knowledge/{domain}/session-patterns.yaml` under a `chat_session_learnings` key. These feed directly into KnowledgeSynthesisEngine's domain knowledge base.
+- **Tier 2 (Intelligence):** Failure patterns (repeated tool calls, import errors, path mismatches) are written to `cortex-registry/knowledge-base/anti-patterns/chat-session-failures.yaml` and feed into the LENS analysis pipeline — when LENS detects similar code structures or file references in future sessions, it surfaces a proactive warning: "CORTEX noticed: Previous session failed at this import — suggested action: verify canonical path first."
+- **Cross-tier wiring:** The `DigestSessionOrchestrator` at `cortex/orchestrators/support/digest_session_orchestrator.py` must emit AC markers for each pattern extracted and route to all three tiers atomically — no partial writes. If tier-0 governance write succeeds but tier-1 knowledge write fails, roll back tier-0 to avoid partial brain state.
+
+**Enhanced `cortex-digest.md` agent updates:**
+- Add `chat_session_vscode_copilot` as a fourth explicit content sub-type under Pipeline 1, with dedicated extraction logic for VS Code Copilot format markers: `asifhussain60:` (user), `GitHub Copilot:` (assistant), `Ran terminal command:`, `Read `, `Ran \`{tool_name}\``, `Completed with input:`, `Using "Replace String in File"`, `Created `, `Using "edit_notebook_file"` — each of these has a weighted score contribution
+- Add extraction of **library/package success/failure** from terminal output blocks — when `pip install X` or `import X` appears followed by an error or success indicator, record `{library: X, status: success/failure, context: {domain}}` to `cortex-registry/knowledge/backend-python/library-compatibility.yaml`
+- Add extraction of **test count deltas** — when a session shows test counts changing (e.g., "799 passed" → "801 passed"), record the delta with the file paths modified in that session segment as a `{change_set, test_delta, files_modified}` entry to `cortex-registry/metrics/test-progression.yaml`
+- Add extraction of **file path corrections** — when a file is searched for at path A but found at path B (or not found at all), record `{searched_path: A, actual_path: B, resolved: true/false}` to `cortex-registry/knowledge-base/path-corrections.yaml` — this prevents CORTEX from repeating the same wrong-path lookup
+- Ensure DIGEST never repeats failures: before processing a new chat session, check `cortex-registry/knowledge-base/anti-patterns/chat-session-failures.yaml` for known failure patterns in the session content — if a failure is pre-known, surface it as a proactive warning inline before any implementation begins
+
+**Update to `cortex-architect.prompt.md` under DIGEST mode documentation:** "DIGEST on VS Code Copilot Chat sessions (`_workspaces/.chats/*.md`) extracts success/failure patterns and wires them into all 3 brain tiers — Governance (Tier 0), Domain Knowledge (Tier 1), LENS Intelligence (Tier 2). Failures are never repeated: known anti-patterns are surfaced proactively. Success patterns become the default path."
+
+**Update contribution scoring table in `cortex-digest.md`:** Add new rows:
+- Chat session: success pattern extracted and wired to knowledge base → +3
+- Chat session: failure pattern extracted and wired to anti-pattern registry → +3
+- Chat session: library compatibility recorded (success or failure) → +1
+- Chat session: path correction recorded → +2
+- Chat session: test count delta recorded with change set → +2
+
+---
+
+**PART 13 — CROSS-PLATFORM COMPATIBILITY: WINDOWS (PRIMARY) + macOS (SECONDARY) (P1):**
+CORTEX production readiness must include 100% functional parity across both Windows (primary target) and macOS (secondary target). Add a cross-platform compatibility check to every stage of the `/audit fix` pipeline.
+
+**Cross-platform audit checks to add:**
+
+**Stage 2 additions (17-Point Production Scan — Check #18: Cross-Platform Path Compatibility):**
+- Scan all Python source files in `cortex/` for hardcoded POSIX-only path separators (`/`-separated string literals that are not inside `Path()` constructors or `os.path` calls) — flag as P1 violation; all paths must use `pathlib.Path` or `os.path.join` for cross-platform safety
+- Scan for `os.system()`, `subprocess` calls with shell strings that use `&&`, `||`, `;`, or Unix-only commands (`rm -rf`, `ls -la`, `find`, `grep`, `chmod`, `chown`) without Windows equivalents — flag each as P1; these must be wrapped in a platform check (`platform.system() == 'Windows'`) or replaced with `pathlib`, `shutil`, or `os` equivalents
+- Scan `scripts/` for shell scripts (`.sh` files) that have no Windows counterpart (`.bat` or `.ps1`) — `run-tests.sh` must have `run-tests.bat` or `run-tests.ps1`; `setup-mcp.py` is already cross-platform (Python) — verify it actually works on Windows by checking for Unix-only code paths
+- Scan `Makefile` targets for Unix-only commands — the Makefile is inherently Unix, so verify all Makefile commands have equivalent VS Code Task (`tasks.json`) entries for Windows users who cannot use `make`
+- Verify `requirements.txt` has no platform-specific packages that will fail on Windows (e.g., packages with `sys_platform = 'linux'` or `darwin` markers without Windows fallbacks)
+- Verify `.vscode/settings.json` MCP server config uses `python3` which may not exist on Windows — add a Windows-compatible alternative: `"windows": {"command": "python", "args": ["-m", "cortex.mcp"]}` alongside the existing `python3` entry
+
+**Stage 6 additions (Meta-Audit Check #20: Windows Compatibility Gate):**
+- Verify `cortex/mcp/__main__.py` startup sequence has no Unix-only assumptions (e.g., `os.getenv('HOME')` without Windows `USERPROFILE` fallback, `Path('~')` without `.expanduser()`, signal handlers that only work on Unix)
+- Verify `cortex/orchestrators/support/upgrade_orchestrator.py` `check_upstream_and_merge()` uses `subprocess.run()` with explicit list args (not shell strings) and no Unix-specific git shell piping
+- Verify `cortex/testing/` parallel test runner is compatible with Windows (`pytest-xdist` works on Windows, but `multiprocessing` start method differs — Windows uses `spawn` not `fork`, verify no code assumes `fork`)
+- Verify `.cortex-runtime/` directory creation code uses `Path.mkdir(parents=True, exist_ok=True)` not `os.makedirs` with Unix-only permission flags
+
+**New `tasks.json` entries for Windows-first users:**
+Wire the following tasks into `.vscode/tasks.json` alongside existing entries, using `cmd.exe` compatible commands for Windows:
+- `CORTEX: Smoke Tests (Windows)` — `python -m pytest tests/ -m smoke -n auto --dist loadscope`
+- `CORTEX: Full Batch Run (Windows)` — `python scripts\run_tests.py batch`
+- `CORTEX: Setup MCP (Windows)` — `python scripts\setup-mcp.py`
+
+**`setup-mcp.py` Windows verification:** Verify `scripts/setup-mcp.py` auto-detects Windows and writes the correct `.vscode/settings.json` MCP entry with `"command": "python"` (not `python3`) and `"args": ["-m", "cortex.mcp"]`. If not, update the script to use `sys.executable` (the currently-running Python interpreter's absolute path) as the MCP command value — this is the most cross-platform reliable approach for both Windows and macOS.
+
+**`cortex-environment-setup.md` agent update:** Add a dedicated "Windows Setup" section documenting: Python 3.9+ via Windows Store or python.org installer (not WSL), VS Code with Python extension, git for Windows (Git Bash or native), and the MCP server command difference (`python` not `python3` on standard Windows Python installs). Note: WSL is supported as a secondary Windows environment but not the primary target — all CORTEX paths must work natively without WSL.
+
+**Update `copilot-instructions.md` under Test Execution rules:** Add a Windows-specific note: "On Windows, replace `python3` with `python` and replace `./scripts/run-tests.sh` with `python scripts\run_tests.py {mode}`. All `make` commands have VS Code Task equivalents in `tasks.json` for Windows-first users."
+
+**`cortex-meta-auditor.md` Check #21 — Cross-platform runtime safety:** After every `/audit fix`, verify: (a) no new hardcoded `/`-separator string paths added to `cortex/` source; (b) no new `os.system()` shell calls added without platform guard; (c) `scripts/setup-mcp.py` still uses `sys.executable` for MCP command; (d) `tasks.json` has both Unix and Windows-compatible task variants. Any violation is P1.
+
+---
+
+**PART 14 — PREFLIGHT REQUIREMENTS VALIDATION: FULL `requirements.txt` INSTALLATION GATE (P0):**
+CORTEX must be fully operationally ready before any orchestrator, MCP tool, or governance rule executes. The single most common silent failure mode is a partially-installed or stale virtual environment where packages listed in `requirements.txt` are missing, outdated, or in conflict. Add a comprehensive requirements validation check to the preflight pipeline that runs as the very first action — before Stage 0 governance pre-flight, before inflight upgrade detection (PART 9), and before any MCP tool is invoked.
+
+**What to check — `requirements.txt` preflight gate (Stage −1: Environment Readiness):**
+
+1. **Virtual environment activation** — verify the Python interpreter currently in use matches the project `.venv` (i.e., `sys.executable` path contains `.venv`). If the system Python is active instead of the project venv, emit P0 violation: "CORTEX is running outside the project virtual environment — run `source .venv/bin/activate` (macOS/Linux) or `.venv\Scripts\activate` (Windows) before proceeding." Surface the exact `sys.executable` path inline so the user can verify.
+
+2. **`requirements.txt` existence and parse** — verify `requirements.txt` exists at the workspace root. Parse every non-comment, non-blank line to extract `{package_name, version_spec}` pairs. Lines with `==` (pinned), `>=` (minimum), or no version (unpinned) must all be represented. Skip lines beginning with `#` or containing only whitespace. Count the total parsed packages and emit inline: "Parsed N packages from requirements.txt."
+
+3. **Installed package comparison via `pip list --format=json`** — run `pip list --format=json` (or `python -m pip list --format=json`) and compare the installed package list against the parsed `requirements.txt`. For each `requirements.txt` entry:
+   - **Missing** (not installed at all) → P0 violation: "Package `{name}` is required but not installed — run `pip install -r requirements.txt`"
+   - **Version mismatch for pinned (`==`) packages** → P1 violation: "Package `{name}` is pinned to `{pinned}` but `{installed}` is installed — environment may be stale"
+   - **Version below minimum for `>=` packages** → P1 violation: "Package `{name}` requires `>={minimum}` but `{installed}` is installed"
+   - **Present and satisfied** → ✅ pass (no output, silent per CORE-049)
+
+4. **[PREFLIGHT] and [PREFLIGHT CRITICAL] packages — zero-tolerance** — packages annotated with `[PREFLIGHT]` or `[PREFLIGHT CRITICAL]` in `requirements.txt` comments are non-negotiable blockers. If ANY such package is missing or mismatched, halt the entire CORTEX session with a P0 hard-stop: "CORTEX cannot start — preflight-critical package `{name}` is not satisfied. Fix with: `pip install -r requirements.txt`". Do not proceed to Stage 0 or any subsequent stage. The full list of [PREFLIGHT CRITICAL] groups from `requirements.txt` is: core dependencies (`pyyaml`, `pydantic`, `jsonschema`), MCP protocol (`websockets`, `aiofiles`, `httptools`, `wsproto`), API & web framework (`fastapi`, `uvicorn`, `jinja2`), HTTP clients (`httpx`, `requests`), testing (`pytest`, `pytest-cov`, `pytest-asyncio`, `pytest-timeout`, `pytest-xdist`, `hypothesis`), code quality (`black`, `isort`, `mypy`), and infrastructure utilities (`python-dotenv`, `click`, `psutil`, `dependency-injector`, `prometheus-client`, `structlog`, `python-json-logger`, `greenlet`, `gevent`).
+
+5. **Duplicate entry detection in `requirements.txt`** — scan for packages listed more than once (e.g., `jsonschema==4.21.1` appears twice in the current file). Flag each duplicate as a P1 violation: "Duplicate entry for `{name}` in requirements.txt at lines {L1} and {L2} — remove one to prevent ambiguity." Auto-fix by keeping the first occurrence and removing the duplicate, then emit: "Auto-fixed: removed duplicate `{name}` entry."
+
+6. **Conflicting version constraints** — detect cases where the same package appears with conflicting constraints (e.g., `scikit-learn>=1.3.0` on one line and `scikit-learn==1.3.2` on another). Flag as P1: "Conflicting version constraints for `{name}`: `{spec1}` vs `{spec2}` — consolidate to a single pinned version."
+
+7. **Optional package availability check** — for packages marked `[OPTIONAL]`, do not block execution if missing, but emit a single grouped advisory at the end of the preflight check: "Optional packages not installed (non-blocking): {list}. Install with `pip install {packages}` to enable {feature}." Group by feature category (LLM providers, ML/NLP, AST parsing) using the comment headers from `requirements.txt`.
+
+8. **Dependency drift detection** — compare `requirements.txt` against the output of `pip list --format=json` for packages that are installed but NOT in `requirements.txt` (i.e., unlisted transitive or manually installed packages that may conflict). Flag any installed package whose name matches a `requirements.txt` package name but at a different major version as a P1 drift warning. Do not flag purely transitive dependencies.
+
+9. **`pip check` validation** — run `python -m pip check` to detect broken dependency chains (a package is installed but one of its own dependencies is missing or incompatible). Any output from `pip check` is a P1 violation: "Dependency chain broken: {pip check output} — run `pip install -r requirements.txt --upgrade` to repair."
+
+10. **Post-fix verification loop** — if the preflight gate surfaces any P0 violations, offer autonomous fix: "CORTEX will now run `pip install -r requirements.txt` to repair the environment." Execute `pip install -r requirements.txt` silently, then re-run checks 3 and 9. If all P0 violations are cleared after the install, emit: "Environment repaired ✅ — proceeding to Stage 0." If violations persist after the install attempt, surface the specific remaining failures and halt: "Environment repair failed — manual intervention required."
+
+**Implementation targets — wire the requirements validation across the CORTEX system:**
+
+- **`cortex/orchestrators/support/upgrade_orchestrator.py`** — add a `validate_requirements()` method that encapsulates steps 1–9 above, callable both standalone and as Stage −1 of the upgrade pipeline. This method must emit `AC_START` / `AC_COMPLETE` markers and write results to `.cortex-runtime/traces/orchestrator-traces.db`.
+
+- **`cortex/orchestrators/core/master_orchestrator.py`** — call `UpgradeOrchestrator.validate_requirements()` at the top of `MasterOrchestrator.run()` (before Stage 0), guarded by a `CORTEX_SKIP_PREFLIGHT=false` environment variable so it can be disabled for CI environments that manage their own dependency installation.
+
+- **`cortex-environment-setup.md` agent** — add a "Requirements Validation" section: "Before any CORTEX operation, the preflight gate checks that every `[PREFLIGHT]` package in `requirements.txt` is installed in the active virtual environment. Missing packages trigger an automatic `pip install -r requirements.txt`. The check is silent if all packages are satisfied (CORE-049)."
+
+- **`cortex-architect.prompt.md`** — update Stage 0 description to prefix: "**Stage −1 (Environment Readiness):** Requirements preflight gate — validate `.venv` activation, all `[PREFLIGHT CRITICAL]` packages present and version-satisfied, no `pip check` failures. Blocks Stage 0 if any P0 violation found."
+
+- **`cortex-auditor.md` 17-Point Audit** — add **Check #18: Requirements preflight completeness** — verify `requirements.txt` has no duplicate entries, no conflicting version constraints, and every `[PREFLIGHT]`-annotated package is installed in the active venv. Duplicate entries and conflicts are P1; missing `[PREFLIGHT CRITICAL]` packages are P0.
+
+- **`cortex-meta-auditor.md`** — add **Check #22: Requirements file integrity** — after every `/audit fix`, verify: (a) `requirements.txt` has no duplicate package entries (auto-detectable via line scan); (b) no package appears with both pinned (`==`) and minimum (`>=`) constraints in the same file; (c) `[PREFLIGHT CRITICAL]` marker comment blocks are preserved and accurate — if a new preflight-critical dependency is added to source code, its `requirements.txt` entry must carry the `[PREFLIGHT CRITICAL]` annotation. Any violation is P1.
+
+- **`copilot-instructions.md` PREFLIGHT CHECK REQUIREMENTS section** — update to reference the automated gate: "CORTEX auto-validates `requirements.txt` at session start via `UpgradeOrchestrator.validate_requirements()`. If the environment is incomplete, CORTEX will attempt `pip install -r requirements.txt` autonomously before proceeding. To skip (CI/CD): set `CORTEX_SKIP_PREFLIGHT=true`."
+
+**Auto-fix for the known duplicate in the current `requirements.txt`:** The entry `jsonschema==4.21.1` currently appears twice (lines ~80 and ~84, both with `# AC_START: AC-MCP-FIX-003` blocks). As part of this PART 14 sweep, remove the duplicate occurrence — keep the first instance with its `AC_START`/`AC_COMPLETE` block, delete the second identical block entirely.
+
+---
+
 **VERIFICATION:**
 After all edits, run `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules\|cortex_query_governance\|cortex_check_dependency_drift\|cortex_onboard_repository_v3\|cortex_audit_remediation_plan\|cortex_capture_metrics\|25 tools\|25 MCP" .github/` to verify zero stale references remain in prompts and agents. Run `grep -rn "22 rules" .github/agents/` to verify governance rule count drift is eliminated. Run `python3 -c "from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator; o = UpgradeOrchestrator(); print(hasattr(o, 'check_upstream_and_merge'))"` to verify the upgrade method is wired. Run `python3 scripts/run_tests.py golden` and `python3 scripts/run_tests.py smoke` to confirm zero regressions. Verify MCP server starts with exactly 24 tools via `python3 -m cortex.mcp`. Verify `upgrade-manifest.json` structure is writable at `.cortex-runtime/traces/`. All output inline per CORE-002 — no report files created.
+
+**Additional verification for PARTS 11–13:**
+- Run `grep -rn "cortex-docs\|_workspaces\|cortex-sts" cortex/orchestrators/support/upgrade_orchestrator.py` to verify protected paths are wired in the upgrade orchestrator.
+- Run `grep -rn "protected_paths" .cortex-runtime/traces/upgrade-manifest.json 2>/dev/null || echo "upgrade-manifest.json not yet created — verify on next /upgrade run"`.
+- Run `grep -rn "chat_session_vscode_copilot\|library-compatibility\|path-corrections\|anti-patterns" .github/agents/core/cortex-digest.md` to verify DIGEST enhancements are present.
+- Run `grep -rn "os\.system\b" cortex/ --include="*.py"` to verify no new Unix-only shell calls exist in source.
+- Run `grep -rn "\"python3\"" .vscode/settings.json` and confirm a Windows-compatible `python` alternative or `sys.executable` reference is also present in `scripts/setup-mcp.py`.
+- Verify `tasks.json` contains Windows-compatible task variants by running `grep -c "Windows" .vscode/tasks.json`.
+
+**Additional verification for PART 14:**
+- Run `python3 -c "from cortex.orchestrators.support.upgrade_orchestrator import UpgradeOrchestrator; o = UpgradeOrchestrator(); print(hasattr(o, 'validate_requirements'))"` to verify the requirements validation method is wired.
+- Run `python3 -m pip check` to verify no broken dependency chains exist in the active environment.
+- Run `grep -c "jsonschema==4.21.1" requirements.txt` — must return `1` (not `2`); confirms the known duplicate entry has been removed.
+- Run `python3 -c "import yaml, pydantic, jsonschema, websockets, fastapi, uvicorn, pytest" 2>&1 || echo "PREFLIGHT CRITICAL packages missing"` to spot-check the most critical preflight packages are importable.
+- Run `grep -rn "validate_requirements\|CORTEX_SKIP_PREFLIGHT" cortex/orchestrators/` to confirm the preflight gate is wired into both `MasterOrchestrator` and `UpgradeOrchestrator`.
+- Run `grep -n "\[PREFLIGHT CRITICAL\]" requirements.txt | wc -l` to verify preflight annotation coverage is consistent with the known critical package groups.

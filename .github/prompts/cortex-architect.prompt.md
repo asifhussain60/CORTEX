@@ -89,9 +89,12 @@
 **Implemented in:** `RequestRephraseOrchestrator._run_stage_0_audit()`
 **Spec authority:** `.github/agents/core/STAGE-0-GOVERNANCE-AUDIT-SPEC.md`
 
+### Inflight Upgrade Protocol (runs before Stage 0)
+At session start, check `git rev-list --count HEAD..origin/main`. If > 0: fetch → merge `origin/main` (non-FF) → run `/audit fix` → continue. If merge fails: abort → surface conflicts inline → request user guidance. Upgrade manifest: `.cortex-runtime/traces/upgrade-manifest.json`. Silent unless upgrade detected (CORE-049). Guarded by `CORTEX_AUTO_UPGRADE=true` (default). Callable via `UpgradeOrchestrator.check_upstream_and_merge()`.
+
 ### Pipeline Position
 ```
-User Request → [STAGE 0: Governance Audit] → IntentRouter → MasterOrchestrator → Execution
+[Inflight Upgrade Check] → [STAGE 0: Governance Audit] → IntentRouter → MasterOrchestrator → Execution
 ```
 
 ### Stage 0 Checks
@@ -153,7 +156,7 @@ Stage 2: 17-Point Production Scan           (Checks #1–#17, see table below)
 Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
 Stage 5: Vacuum Cleanup                     (VacuumOrchestrator via cortex_vacuum)
-Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 12 checks)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 17 checks)
 Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
 Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
 Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch → .cortex-runtime/traces/)
@@ -178,7 +181,7 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch �
 | 10 | **Test-source mirror** — tests/ structure diverges from cortex/ structure | Dir comparison | 🟡 Report |
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
-| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (12 checks) | ✅ Update inline |
+| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (17 checks) | ✅ Update inline |
 | 14 | **Response header drift** — prompts missing `**Author:** Asif Hussain \| **Orchestrator:** {Name} ✅` or using wrong product name (`CORTEX` vs `CORTEX Architect`) | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` — must match SSOT in `cortex-response-templates.md` § Response Header | ✅ Restore canonical header line in prompt |
 | 15 | **MCP tool name registry alignment** — every prompt/agent tool reference must match `mcp_registry.py` registered IDs; detect consolidated-name drift where old tool names survive in docs after registry consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
 | 16 | **Knowledge synthesis wiring** — registry knowledge YAMLs in `cortex-registry/knowledge/` are loadable and have no dead references to deleted knowledge files | Path resolution on all YAML `source:` fields | ✅ Update paths |
@@ -490,7 +493,7 @@ Everything else → move to canonical location or delete.
 - All agent files must match entries in `AGENT-INDEX.md`
 
 ### Meta-Audit (Prompt/Agent Coherence)
-Run `cortex-meta-auditor.md` checks when prompt or agent files are modified:
+Run `cortex-meta-auditor.md` checks (17 total) when prompt or agent files are modified:
 
 | Check | Pass Criteria |
 |---|---|
@@ -577,6 +580,7 @@ Progress bar + stage bullet list. See templates SSOT.
 | `/audit` | Scan only, no auto-fix | Stages 1–6 |
 | `/vacuum` | Markdown sprawl + root clutter cleanup | Stage 5 only |
 | `/health` | All 22 orchestrator health endpoints | Stage 4 only |
+| `/upgrade` | Check origin/main, merge if ahead, run audit fix | Inflight upgrade |
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) | — |
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
@@ -590,7 +594,7 @@ Stage 2: 17-Point Production Scan           (cortex-auditor.md Checks #1–#17)
 Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
 Stage 5: Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
-Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 12 checks)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 17 checks)
 Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
 Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
 Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
