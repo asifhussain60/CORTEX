@@ -89,3 +89,16 @@ class IOrchestrator(ABC):
             "orchestrator": self.get_name(),
             "version": self.get_version(),
         }
+
+    def get_recommended_template(self) -> Optional[str]:
+        """Return the recommended workflow template ID for this orchestrator.
+
+        G4 Fix: Added to IOrchestrator so all orchestrators declare their
+        canonical template. Base returns None; orchestrators override to
+        return their domain-specific template ID from
+        cortex-registry/workflows/templates/.
+
+        Returns:
+            Template ID string, or None if no template is recommended.
+        """
+        return None

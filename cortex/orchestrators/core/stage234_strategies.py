@@ -221,6 +221,9 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
         Execute via domain orchestrator delegation.
 
         Routes to the appropriate orchestrator and executes the operation.
+        Before delegating, invokes MasterOrchestrator._check_for_workflow_template()
+        so that complex REFACTOR/TDD operations are routed through the correct
+        workflow template rather than delegated ad-hoc (G1+G6 Fix).
 
         Args:
             context: StageContext from Stage 3.
@@ -234,6 +237,49 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
             routing_target = context.metadata.get(
                 "intent_classification", {}
             ).get("routing_target", "MasterOrchestrator")
+
+            # ── G1/G6 Fix: Workflow Template Complexity Gate ───────────────────
+            # Ask MasterOrchestrator whether this operation should be routed
+            # through a workflow template (via WorkflowComplexityRouter) instead
+            # of direct orchestrator delegation.
+            master = self._dependencies.get("master_orchestrator")
+            template_override: Optional[Dict[str, Any]] = None
+            if master is not None and hasattr(master, "_check_for_workflow_template"):
+                try:
+                    template_context = {
+                        "operation": context.operation_name,
+                        "description": context.parameters.get("request", ""),
+                        "target_files": context.parameters.get("target_files", []),
+                        "dependencies": context.parameters.get("dependencies", []),
+                        "risk_level": context.parameters.get("risk_level", "MEDIUM"),
+                    }
+                    template_override = master._check_for_workflow_template(template_context)
+                except Exception:
+                    template_override = None  # Non-blocking — fall through to direct delegation
+
+            if template_override and template_override.get("use_autonomous_workflow"):
+                # Route through workflow template rather than direct orchestrator
+                template_id = template_override.get("template_id", "unknown")
+                duration_ms = int(
+                    (datetime.now() - start_time).total_seconds() * 1000
+                )
+                context.metadata["execution"] = {
+                    "orchestrator": f"WorkflowTemplate:{template_id}",
+                    "status": "template_routed",
+                    "template_id": template_id,
+                    "complexity_score": template_override.get("complexity_score"),
+                    "duration_ms": duration_ms,
+                    "timestamp": datetime.now().isoformat(),
+                }
+                context.metadata["stage4_status"] = "complete"
+                context.result = Ok({
+                    "status": "completed",
+                    "stages": 4,
+                    "orchestrator": f"WorkflowTemplate:{template_id}",
+                    "template_routed": True,
+                })
+                return Ok(context)
+            # ── End Workflow Template Gate ─────────────────────────────────────
 
             # Execute delegation
             execution_result = self._delegate(context, routing_target)

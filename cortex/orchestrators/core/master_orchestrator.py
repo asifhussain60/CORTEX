@@ -2339,6 +2339,8 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplate
                 "domain_orchestrators": self.domain_orchestrators,
                 "tdd_orchestrator": getattr(self, "tdd_orchestrator", None),
                 "logger": self.logger,
+                # G1/G6 Fix: expose self so Stage4 can call _check_for_workflow_template
+                "master_orchestrator": self,
             }
             
             # ═══════════════════════════════════════════════════════════════════════

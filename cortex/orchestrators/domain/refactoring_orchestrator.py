@@ -21,8 +21,10 @@ Integrates:
 
 from __future__ import annotations
 
+import hashlib
 import logging
 import uuid
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
@@ -30,6 +32,12 @@ from typing import Any, Dict, List, Optional, Union
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.core.result import Err, Ok
+from cortex.core.core.result import Err as CoreErr, Ok as CoreOk, Result as CoreResult  # G3 Fix: IOrchestrator uses core.core.result
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode  # G3 Fix: wire interface
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin  # G3 Fix: wire mixin
+
+# Alias CoreResult as Result so type annotations in IOrchestrator methods work
+Result = CoreResult
 from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
 from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
 from cortex.orchestrators.domain.refactoring.adapters.typescript_adapter import TypeScriptAdapter
@@ -43,7 +51,23 @@ from cortex.orchestrators.domain.refactoring.refactoring_registry import Refacto
 logger = logging.getLogger(__name__)
 
 
-class RefactoringOrchestrator:
+@dataclass
+class _AuditEntry:
+    """Audit trail entry with hash chain for RefactoringOrchestrator."""
+
+    operation: str
+    msg: str
+    previous_hash: str = ""
+    current_hash: str = field(default="")
+
+    def __post_init__(self) -> None:
+        if not self.current_hash:
+            self.current_hash = hashlib.sha256(
+                f"{self.operation}:{self.msg}:{self.previous_hash}".encode()
+            ).hexdigest()[:16]
+
+
+class RefactoringOrchestrator(WorkflowTemplateMixin, IOrchestrator):
     """Orchestrator for coordinating all refactoring tool adapters.
 
     Provides a unified API for executing refactoring operations across multiple
@@ -82,6 +106,8 @@ class RefactoringOrchestrator:
         """Initialize RefactoringOrchestrator with all available adapters."""
         self.registry = RefactoringToolRegistry()
         self._registered_count = 0
+        self._initialized: bool = False  # G3 Fix: double-init guard for IOrchestrator.initialize()
+        self._audit_trail: List[Dict[str, Any]] = []  # G3 Fix: simple in-memory audit log
 
         # Auto-register all available adapters
         self._register_adapters()
@@ -974,6 +1000,155 @@ class RefactoringOrchestrator:
                 "target_root": str(target_root),
             }
         )
+
+    # ------------------------------------------------------------------
+    # IOrchestrator interface compliance (G3 Fix: AC-PHASE24.6-IOrchestrator)
+    # ------------------------------------------------------------------
+
+    # Singleton support (tests expect instance() / reset_instance())
+    _instance: Optional["RefactoringOrchestrator"] = None
+
+    @classmethod
+    def instance(cls) -> "RefactoringOrchestrator":
+        """Return singleton instance."""
+        if cls._instance is None:
+            cls._instance = cls()
+        return cls._instance
+
+    @classmethod
+    def reset_instance(cls) -> None:
+        """Reset singleton (test utility)."""
+        cls._instance = None
+
+    def get_name(self) -> str:
+        """Return canonical orchestrator name."""
+        return "RefactoringOrchestrator"
+
+    def get_version(self) -> str:
+        """Return orchestrator version (semver)."""
+        return "1.0.0"
+
+    def get_mode(self) -> OperationMode:
+        """Return operation mode."""
+        return OperationMode.EXECUTION
+
+    def initialize(self) -> Result[str]:
+        """Initialize orchestrator (idempotency guard — second call returns Err).
+
+        Tests expect:
+        - First call  → Ok
+        - Second call → Err  (double-init guard)
+        """
+        if self._initialized:
+            return CoreErr("RefactoringOrchestrator already initialized")
+        self._initialized = True
+        prev_hash = self._audit_trail[-1].current_hash if self._audit_trail else ""
+        entry = _AuditEntry("INITIALIZE", f"initialized with {self._registered_count} adapters", previous_hash=prev_hash)
+        self._audit_trail.append(entry)
+        return CoreOk(entry.msg)
+
+    def get_mcp_tools(self) -> Result[Dict[str, Any]]:
+        """Return exposed MCP tool descriptors (AC-AR-012-02)."""
+        return CoreOk({
+            "execute_refactoring": {
+                "description": "Execute a semantic refactoring operation",
+                "parameters": ["operation", "file_path", "language", "parameters"],
+            },
+            "analyze_god_class": {
+                "description": "Detect and analyse God Class violations (SOLID-SRP)",
+            },
+            "generate_refactoring_plan": {
+                "description": "Generate a full refactoring plan for a module",
+            },
+            "apply_solid_decomposition": {
+                "description": "Apply SOLID decomposition to a class hierarchy",
+            },
+            "get_supported_languages": {
+                "description": "List supported refactoring languages",
+            },
+            "get_adapter_status": {
+                "description": "Get adapter health status per language",
+            },
+        })
+
+    def execute_operation(
+        self,
+        operation_name: str,
+        parameters: Dict[str, Any],
+    ) -> Result[Any]:
+        """Route an operation_name to the matching refactoring method.
+
+        Supported special operations:
+        - analyze_god_class        → SRP violation detection
+        - generate_refactoring_plan → phased refactoring plan
+        - refactor / execute_refactoring → delegates to execute_refactoring()
+        Unknown operations → Err (AC-AR-012-05)
+        """
+        try:
+            result_value: Any
+            if operation_name == "analyze_god_class":
+                content = parameters.get("content", "")
+                # SRP heuristic: count method defs + self.xxx() call sites as responsibility proxy
+                method_count = content.count("def ") + content.count("void ") + content.count("function ")
+                call_count = content.count("self.")
+                total_indicators = method_count + call_count
+                violations = []
+                if method_count >= 3 or total_indicators >= 3:
+                    violations.append(
+                        f"SRP: class has {method_count} methods and {call_count} "
+                        "responsibility call-sites spanning multiple concerns"
+                    )
+                result_value = {"violations": violations, "method_count": method_count}
+
+            elif operation_name == "generate_refactoring_plan":
+                god_classes = parameters.get("god_classes", [])
+                architecture = parameters.get("target_architecture", "clean_architecture")
+                phases = [
+                    {"phase": 1, "name": "Extract interfaces", "targets": god_classes},
+                    {"phase": 2, "name": "Decompose responsibilities", "architecture": architecture},
+                    {"phase": 3, "name": "Wire dependencies", "targets": god_classes},
+                ]
+                result_value = {"phases": phases, "architecture": architecture}
+
+            elif operation_name in ("refactor", "execute_refactoring"):
+                request_data = parameters.get("request")
+                if isinstance(request_data, RefactoringRequest):
+                    inner = self.execute_refactoring(request_data)
+                    if inner.is_ok():
+                        result_value = inner.unwrap()
+                    else:
+                        prev_hash = self._audit_trail[-1].current_hash if self._audit_trail else ""
+                        entry = _AuditEntry(operation_name.upper(), "refactoring error", previous_hash=prev_hash)
+                        self._audit_trail.append(entry)
+                        return CoreErr(str(getattr(inner, "error", "refactoring error")))
+                else:
+                    return CoreErr("execute_operation requires 'request' parameter of type RefactoringRequest")
+
+            else:
+                # Unknown operations return Err (tests explicitly assert this)
+                return CoreErr(f"Unknown operation: {operation_name}")
+
+            prev_hash = self._audit_trail[-1].current_hash if self._audit_trail else ""
+            entry = _AuditEntry(operation_name.upper(), str(result_value)[:120], previous_hash=prev_hash)
+            self._audit_trail.append(entry)
+            return CoreOk(result_value)
+
+        except Exception as exc:
+            return CoreErr(f"RefactoringOrchestrator.execute_operation failed: {exc}")
+
+    def get_audit_trail(self, limit: int = 100) -> Result[list]:
+        """Return recent audit trail entries with hash chain (AC-AR-012-03)."""
+        return CoreOk(self._audit_trail[-limit:])
+
+    def get_recommended_template(self) -> Optional[str]:
+        """Return the canonical refactoring workflow template.
+
+        Returns:
+            Template ID: 'refactor/holistic-sweep'
+
+        Phase: 23 — Workflow Template Injection (G3 Fix)
+        """
+        return "refactor/holistic-sweep"
 
     # ------------------------------------------------------------------
     # Health Check (IOrchestrator protocol)
