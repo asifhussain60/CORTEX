@@ -14,9 +14,9 @@ modes_served:
   - AUDIT
   - QUERY
 mcp_tools:
-  - cortex_audit_remediation_plan
+  - cortex_governance
   - cortex_load_audit_checklist
-  - cortex_query_governance
+  - cortex_governance
 collaborators:
   - cortex-phase-resolver
   - cortex-meta-auditor
@@ -39,7 +39,7 @@ maintainer: "Asif Hussain"
 **CORTEX Master Plan Auditor** — validates the integrity of the master plan, phase dependencies, and registry alignment against the post-refactor architecture.
 
 **Package:** `cortex` (single canonical)  
-**MCP Tools:** `cortex_load_core_rules`, `cortex_query_governance`  
+**MCP Tools:** `cortex_load` (op: `rules`), `cortex_governance` (op: `query`)  
 **Registry:** `cortex-registry/planning/cortex-refactor-master.yaml`
 
 ---

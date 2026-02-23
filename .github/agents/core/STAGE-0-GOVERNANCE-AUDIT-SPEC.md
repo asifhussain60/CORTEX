@@ -234,7 +234,7 @@ Orchestrator: TDDOrchestrator (when violations cleared)
 
 **MCP Tool Chain:**
 ```
-cortex_load_core_rules (governance context)
+cortex_load (op: rules) [governance context]
     ↓ (internal)
 MasterOrchestrator.__init__
     ↓ (internal)

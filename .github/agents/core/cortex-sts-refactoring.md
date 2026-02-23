@@ -18,8 +18,8 @@ capabilities:
   - refactoring_scorecard
 mcp_tools:
   - cortex_refactor
-  - cortex_validate_compliance
-  - cortex_audit_remediation_plan
+  - cortex_validate
+  - cortex_governance
 priority: P0
 token_cost_estimate: 3500
 ---
@@ -285,7 +285,7 @@ Wave 3: Close
 | AP-009 | No rate limiting on login/transfer endpoints | P1 — WARN |
 | AP-010 | LENS `intelligence_audit.db` has zero STS file analysis rows | P2 — INFO |
 
-P0 violations → `cortex_audit_remediation_plan` BLOCK gate.
+P0 violations → `cortex_governance` (op: `remediation_plan`) BLOCK gate.
 P1 violations → proceed with mandatory inline remediation plan.
 
 ---

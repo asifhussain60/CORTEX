@@ -15,7 +15,7 @@
 
 ## 🔌 MCP (P0 — MANDATORY)
 
-**Verification:** Call `cortex_sample_tool`. If it responds, MCP is active.
+**Verification:** Call `cortex_verify` (op: `mcp`). If it responds, MCP is active.
 
 **Tiered Blocking (CORE-050):**
 - **Tier 0 (BLOCK):** IMPLEMENT, FIX, REFACTOR, AUDIT
@@ -161,7 +161,7 @@ EnforcementOrchestrator validates CORE rules before every operation:
 
 | Command | Action |
 |---------|--------|
-| `/audit` | 10-point production readiness scan |
+| `/audit` | 17-point production readiness scan |
 | `/audit fix` | Scan + auto-remediate |
 | `/vacuum` | Clean dead files |
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) |

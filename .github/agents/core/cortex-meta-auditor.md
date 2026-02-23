@@ -14,8 +14,8 @@ modes_served:
   - AUDIT
   - QUERY
 mcp_tools:
-  - cortex_validate_compliance
-  - cortex_load_core_rules
+  - cortex_validate
+  - cortex_load
 collaborators:
   - cortex-auditor
   - cortex-master-plan-auditor
@@ -38,7 +38,7 @@ maintainer: "Asif Hussain"
 **CORTEX Meta-Auditor** — audits the auditors. Validates that agent files, prompts, and governance rules are internally consistent and aligned with the post-refactor architecture.
 
 **Package:** `cortex` (single canonical)  
-**MCP Tools:** `cortex_validate_compliance`, `cortex_load_core_rules`  
+**MCP Tools:** `cortex_validate` (op: `compliance`), `cortex_load` (op: `rules`)  
 **Scope:** `.github/agents/`, `.github/prompts/`, `.github/templates/`, `cortex-registry/`
 
 ---
@@ -73,6 +73,11 @@ Unlike `cortex-auditor.md` (which audits source code), this agent audits **docum
 | 10 | CORE rule IDs | Rules cited in agents exist in `cortex-registry/core/` |
 | 11 | Response header — CORTEX.prompt.md | Format section present; header template reads `## {icon} CORTEX {mode}` followed by `**Author:** Asif Hussain \| **Orchestrator:** {OrchestratorName} ✅` — detect with `grep -n "Author.*Asif" .github/prompts/CORTEX.prompt.md` |
 | 12 | Response header — cortex-architect.prompt.md | Format section present; header template reads `## {icon} CORTEX Architect {mode}` followed by `**Author:** Asif Hussain \| **Orchestrator:** {OrchestratorName} ✅` — detect with `grep -n "Author.*Asif" .github/prompts/cortex-architect.prompt.md` |
+| 13 | MCP tool name alignment | All tool names referenced in agent/prompt files match registered IDs from `cortex/mcp/mcp_registry.py`; detect operation-based consolidation drift where old tool names survive in docs after registry consolidation (e.g., `cortex_sample_tool`, `cortex_validate_compliance`, `cortex_load_core_rules`, `cortex_query_governance`) |
+| 14 | Governance rule count alignment | Agents referencing CORE rule counts must match `skull-rules.yaml` canonical count: 35 CORE + 2 AC (37 total) — detect "22 rules" or "35 rules" without AC qualifier as drift |
+| 15 | Knowledge YAML wiring | Verify `cortex-registry/knowledge/` domain YAMLs (`architecture/`, `backend-python/`, `security/`, `testing-validation/`, `devops-infrastructure/`, `performance-optimization/`) are referenced and loadable by `KnowledgeSynthesisEngine` at `cortex/intelligence/knowledge/knowledge_synthesis_engine.py` |
+| 16 | LENS synthesis health | Verify 8 LENS analyzers importable from `cortex/lens/` and golden tests in `tests/golden/` passing — run `python3 -c "from cortex.lens import *"` |
+| 17 | Success/failure pattern learning | Verify `.cortex-runtime/traces/orchestrator-traces.db` captures AC markers per orchestrator invocation; audit sessions queryable for regression pattern detection — orphaned `AC_START` without `AC_COMPLETE` is a P0 violation |
 
 ---
 
@@ -112,7 +117,7 @@ All `.github/` documentation MUST use these values:
 |--------|----------------|
 | Orchestrators | **22 wired** across 10 domains |
 | MCP Tools | **24 production tools** |
-| CORE Rules | **35 active** |
+| CORE Rules | **35 active** (+ 2 AC rules = 37 total) |
 | Package | **`cortex`** (single) |
 | Tests | **15,230** (486 golden, 177 phase) |
 
@@ -178,7 +183,17 @@ cortex_manage_todo
 cortex_digest_session
 cortex_verify_environment (as primary MCP tool)
 cortex_git_history (as primary MCP tool)
+cortex_sample_tool (replaced by cortex_verify op=mcp)
+cortex_validate_compliance (replaced by cortex_validate op=compliance)
+cortex_load_core_rules (replaced by cortex_load op=rules)
+cortex_query_governance (replaced by cortex_governance op=query)
+cortex_check_dependency_drift (replaced by cortex_check op=dependencies)
+cortex_capture_metrics (replaced by cortex_metrics op=capture)
+cortex_onboard_repository_v3 (replaced by cortex_onboard op=full)
+cortex_audit_remediation_plan (replaced by cortex_governance op=remediation_plan)
 "24 orchestrators" / "28 MCP tools" / "120 orchestrators"
+"25 tools" / "25 MCP tools"
+"22 rules" (must say "35 CORE rules" or "35 active")
 ```
 
 ---

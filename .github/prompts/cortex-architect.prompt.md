@@ -79,7 +79,7 @@
 | CORE-050 | MCP tiered blocking (Tier 0: IMPLEMENT/FIX blocks without MCP) |
 | CORE-064 | Sweep Completeness Contract — no partial sweeps; every FIX/REFACTOR/AUDIT must exhaust its full issue catalogue |
 
-**Load full rules:** `cortex_load_core_rules` (MCP tool)
+**Load full rules:** `cortex_load` (op: `rules`) (MCP tool)
 
 ---
 
@@ -114,7 +114,7 @@ User Request → [STAGE 0: Governance Audit] → IntentRouter → MasterOrchestr
 
 ### MCP Tool Chain
 ```
-cortex_load_core_rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
+cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
     → IntentRouter.route() → Orchestrator execution
 ```
 
@@ -149,11 +149,11 @@ cortex_load_core_rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 
 ```
 Stage 1: Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 2: 14-Point Production Scan           (Checks #1–#14, see table below)
+Stage 2: 17-Point Production Scan           (Checks #1–#17, see table below)
 Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
 Stage 5: Vacuum Cleanup                     (VacuumOrchestrator via cortex_vacuum)
-Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 10 checks)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 12 checks)
 Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
 Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
 Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch → .cortex-runtime/traces/)
@@ -162,7 +162,7 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch �
 **Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
 **Activity log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
 
-### 13-Point Production Readiness Audit
+### 17-Point Production Readiness Audit
 
 | # | Check | Tool/Method | Auto-Fix |
 |---|-------|-------------|----------|
@@ -172,14 +172,17 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch �
 | 4 | **Low-value tests** — tests that assert `True`, mock everything, or test nothing | TestQualityGate score <4 | ✅ Delete |
 | 5 | **Broken file references** — YAML/docs pointing to moved/deleted files | Path resolution check | ✅ Update paths |
 | 6 | **Root-level clutter** — scripts, logs, temp files outside canonical dirs | `find . -maxdepth 1` scan | ✅ Move or delete |
-| 7 | **CORE rule violations** — missing type hints, docstrings, snake_case + missing AC markers | `cortex_validate_compliance` | ✅ Add missing |
+| 7 | **CORE rule violations** — missing type hints, docstrings, snake_case + missing AC markers | `cortex_validate` op=`compliance` | ✅ Add missing |
 | 8 | **Scattered .db/.log files** — outside `.cortex-runtime/` | `find -name "*.db"` | ✅ Consolidate |
 | 9 | **Deprecated file names** — `DEPRECATED-*`, `*.old`, `*.backup` in active dirs | `find -name "DEPRECATED*"` | ✅ Delete |
 | 10 | **Test-source mirror** — tests/ structure diverges from cortex/ structure | Dir comparison | 🟡 Report |
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
-| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (10 checks) | ✅ Update inline |
+| 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (12 checks) | ✅ Update inline |
 | 14 | **Response header drift** — prompts missing `**Author:** Asif Hussain \| **Orchestrator:** {Name} ✅` or using wrong product name (`CORTEX` vs `CORTEX Architect`) | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` — must match SSOT in `cortex-response-templates.md` § Response Header | ✅ Restore canonical header line in prompt |
+| 15 | **MCP tool name registry alignment** — every prompt/agent tool reference must match `mcp_registry.py` registered IDs; detect consolidated-name drift where old tool names survive in docs after registry consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
+| 16 | **Knowledge synthesis wiring** — registry knowledge YAMLs in `cortex-registry/knowledge/` are loadable and have no dead references to deleted knowledge files | Path resolution on all YAML `source:` fields | ✅ Update paths |
+| 17 | **LENS pipeline health** — 8 analyzers importable from `cortex/lens/`; golden tests green in `tests/golden/test_lens_full_pipeline_truth.py` | `python3 -c "from cortex.lens import *"` + pytest | ✅ Activate fallback |
 
 ### Wiring Contract Validation (Stage 3)
 
@@ -227,7 +230,7 @@ For each orchestrator in wiring contract (22 total):
 3. **RED** — write failing tests FIRST (CORE-008, no exceptions)
 4. **GREEN** — implement minimum code to pass tests
 5. **REFACTOR** — clean up with all tests passing
-6. **Validate** — `python3 scripts/run_tests.py batch` + `cortex_validate_compliance`
+6. **Validate** — `python3 scripts/run_tests.py batch` + `cortex_validate` op=`compliance`
 7. **Commit** — conventional commit message
 
 **Challenge Gate Format:**
@@ -418,10 +421,10 @@ Score the source content. If score ≥ 5 → Pipeline 1 (Chat). Score 3–4 → 
 ### Validation Sequence
 
 ```
-1. Registry Check       → cortex_load_core_rules (22 rules, 0 violations required)
-2. Dependency Drift     → cortex_check_dependency_drift (0 drift items)
+1. Registry Check       → cortex_load op=rules (35 rules, 0 violations required)
+2. Dependency Drift     → cortex_check op=dependencies (0 drift items)
 3. Regression Risk      → pytest --cov on target module (≥80% coverage floor)
-4. Governance Drift     → cortex_query_governance (0 P0 violations = proceed)
+4. Governance Drift     → cortex_governance op=query (0 P0 violations = proceed)
 5. Challenge Gate       → Present risk assessment if score > 0.6 (explicit approval required)
 ```
 
@@ -430,7 +433,7 @@ Score the source content. If score ≥ 5 → Pipeline 1 (Chat). Score 3–4 → 
 **PASS (risk ≤ 0.6):**
 ```
 ✅ Holistic Validation: PASS | Risk: 0.2 (LOW)
-Registry: 22 rules, 0 violations | Dependencies: aligned | Coverage: 87% | Governance: clean
+Registry: 35 rules, 0 violations | Dependencies: aligned | Coverage: 87% | Governance: clean
 → Proceed to implementation
 ```
 
@@ -445,10 +448,10 @@ Blocker: [specific issue] | Action: [remediation step]
 
 | Check | Tool | Threshold |
 |---|---|---|
-| CORE rules loaded | `cortex_load_core_rules` | 22 rules present |
-| Dependency drift | `cortex_check_dependency_drift` | 0 drift items |
+| CORE rules loaded | `cortex_load` op=`rules` | 35 rules present |
+| Dependency drift | `cortex_check` op=`dependencies` | 0 drift items |
 | Test coverage | `pytest --cov` | ≥80% on target module |
-| P0 violations | `cortex_query_governance` | 0 P0 violations |
+| P0 violations | `cortex_governance` op=`query` | 0 P0 violations |
 | File naming | scan `cortex/` | snake_case (CORE-028) |
 | Canonical duplicates | wiring contract diff | 0 duplicates (CORE-035) |
 | Type hints | static analysis | 100% public APIs (CORE-011) |
@@ -532,6 +535,9 @@ Progress bar + stage bullet list. See templates SSOT.
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
 - ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
+- ✅ **Templates are composable blocks** — assemble from SSOT at `.github/templates/cortex-response-templates.md` at runtime, never duplicate inline
+- ✅ **Business language** — explain governance violations in plain terms: e.g., "You're trying to write code without tests first — CORTEX requires a failing test before any implementation" (not just "CORE-008 violation")
+- ✅ **Surface edge cases via LENS** in the Analysis section using: "CORTEX noticed: {finding} — this matters because {impact} — suggested action: {step}"
 - ❌ NO narration ("I'll now search...", "Let me check...")
 - ❌ NO `**Orchestrator:** {Name} ✅` without the `**Author:** Asif Hussain |` prefix — partial header is a P1 violation
 
@@ -549,8 +555,8 @@ Progress bar + stage bullet list. See templates SSOT.
 ```
 
 **Persistence target:** `.cortex-runtime/traces/orchestrator-traces.db`
-**Enforced by:** `EnforcementOrchestrator` pre-commit + `cortex_validate_compliance` (Check #7)
-**Audited by:** Check #13 in the 13-Point Production Readiness Audit
+**Enforced by:** `EnforcementOrchestrator` pre-commit + `cortex_validate` op=`compliance` (Check #7)
+**Audited by:** Check #13 in the 17-Point Production Readiness Audit
 
 **AC Marker Rules:**
 - `AC_START` at entry point of every public orchestrator method
@@ -558,6 +564,8 @@ Progress bar + stage bullet list. See templates SSOT.
 - `AC_COMPLETE` on failure with ❌ + error classification
 - Orphaned `AC_START` without matching `AC_COMPLETE` = P0 governance violation
 - Audit session markers: `AC_STAGE_{N}_COMPLETE` per stage in `/audit fix`
+
+**Pattern Learning:** MasterOrchestrator queries previous audit sessions from `.cortex-runtime/traces/orchestrator-traces.db` to detect recurring failure patterns. Same P0 appearing across multiple audits = systemic issue requiring architectural fix, not point remediation. The `capabilities-manifest.yaml` in `cortex-registry/core/` is version-stamped after each successful `/audit fix` run to track capability evolution.
 
 ---
 
@@ -578,11 +586,11 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ```
 Stage 1: Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 2: 14-Point Production Scan           (cortex-auditor.md Checks #1–#14)
+Stage 2: 17-Point Production Scan           (cortex-auditor.md Checks #1–#17)
 Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
 Stage 5: Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
-Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 10 checks)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 12 checks)
 Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
 Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
 Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
@@ -594,7 +602,7 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
 
 ## ⚡ MCP TOOLS (24 Production)
 
-**Verification:** Call `cortex_sample_tool`. If it responds, MCP is active.
+**Verification:** Call `cortex_verify` (operation: `mcp`). If it responds, MCP is active.
 **If unavailable:** Run `python3 -m cortex.mcp` then reload VS Code. (`python3 scripts/setup-mcp.py` for cross-platform config.)
 
 **Tiered Blocking (CORE-050):**
@@ -602,19 +610,19 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
 - **Tier 1 (WARN):** QUERY, DIGEST, DESIGN, PLAN — warn if unavailable
 - **Tier 2 (SILENT):** REPHRASE — no MCP needed
 
-**Key Tools:**
-- `cortex_sample_tool` — MCP health check (verify server active)
-- `cortex_validate_compliance` — CORE rules check
-- `cortex_onboard_repository_v3` — Enhanced onboarding with LENS + SQLite
+**Key Tools (24 production — operation-based):**
+- `cortex_verify` (op: `mcp`) — MCP health check (verify server active)
+- `cortex_validate` (op: `compliance`) — CORE rules check
+- `cortex_onboard` (op: `full`) — Enhanced onboarding with LENS + SQLite
 - `cortex_refactor` — Semantic refactoring (Python, C#, TypeScript)
-- `cortex_audit_remediation_plan` — Auto-planning from audit results
+- `cortex_governance` (op: `remediation_plan`) — Auto-planning from audit results
 - `cortex_tools_catalog` — Discover all 24 tools
-- `cortex_load_core_rules` — Load governance rules from registry
-- `cortex_check_dependency_drift` — requirements.txt vs installed packages
-- `cortex_query_governance` — Active violations count + P0 status
-- `cortex_capture_metrics` — Record TDD/debug/generation metrics
-- `cortex_fetch_work_items` — Company-pluggable ADO work item connector (Phase 15)
-- `cortex_sweep_status` — Read open sweep catalogue, surface remaining items (Phase 16 — CORE-064)
+- `cortex_load` (op: `rules`) — Load governance rules from registry
+- `cortex_check` (op: `dependencies`) — requirements.txt vs installed packages
+- `cortex_governance` (op: `query`) — Active violations count + P0 status
+- `cortex_metrics` (op: `capture`) — Record TDD/debug/generation metrics
+- `cortex_knowledge` (op: `search`) — Knowledge base search + domain analysis
+- `cortex_git` — Git history analysis, blame, diff, context extraction
 
 ---
 
@@ -641,7 +649,7 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
 1. All tests passing (`python3 scripts/run_tests.py batch` — coverage ≥ 95%)
 2. Registry synchronized (if phase affected)
 3. Wiring contract validated (L1 structural check — 0 blocking failures)
-4. Audit clean (no P0/P1 violations — `cortex_validate_compliance`)
+4. Audit clean (no P0/P1 violations — `cortex_validate` op=`compliance`)
 5. Documentation updated (inline docstrings — CORE-012)
 6. Master plan updated (if roadmap affected)
 7. No stale references introduced (meta-audit check #13 passes)

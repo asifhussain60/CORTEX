@@ -19,7 +19,7 @@ Triggered by **IMPLEMENT** or **FIX** intent from `IntentRouter`.
 | Test exists | Failing test in `tests/` mirrors `cortex/` structure |
 | Scope clear | Single orchestrator / function / module targeted |
 | CORE-048 | Holistic validator PASSED (no BLOCK verdict pending) |
-| MCP | `cortex_sample_tool` responds (MCP active) |
+| MCP | `cortex_verify` (op: `mcp`) responds (MCP active) |
 
 If DoR fails → escalate to `cortex-holistic-validator.md` before proceeding.
 

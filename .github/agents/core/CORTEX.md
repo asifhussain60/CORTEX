@@ -6,7 +6,7 @@
 
 ## 🚨 MCP REQUIRED (BLOCKING PRE-FLIGHT)
 
-**Verification:** Call `cortex_sample_tool` in Copilot Chat. If it responds, MCP is active.
+**Verification:** Call `cortex_verify` (op: `mcp`) in Copilot Chat. If it responds, MCP is active.
 
 **If MCP unavailable:** Run `python3 -m cortex.mcp` then reload VS Code.
 
@@ -28,7 +28,7 @@
 
 ```
 1. User Request
-2. MCP Pre-flight (verify cortex_sample_tool)
+2. MCP Pre-flight (verify cortex_verify op=mcp)
 3. IntentRouter Classification
 4. Challenge Gate (if risk > 0.4)
 5. DoR Display (MANDATORY)
@@ -60,15 +60,15 @@
 
 | Tool | Purpose |
 |------|---------|
-| `cortex_sample_tool` | MCP health check |
-| `cortex_validate_compliance` | CORE rules scanning |
-| `cortex_onboard_repository_v3` | Repository onboarding + LENS |
+| `cortex_verify` (op: `mcp`) | MCP health check |
+| `cortex_validate` (op: `compliance`) | CORE rules scanning |
+| `cortex_onboard` (op: `full`) | Repository onboarding + LENS |
 | `cortex_refactor` | Semantic refactoring |
-| `cortex_audit_remediation_plan` | Auto-planning from audit |
+| `cortex_governance` (op: `remediation_plan`) | Auto-planning from audit |
 | `cortex_tools_catalog` | Tool discovery |
-| `cortex_load_core_rules` | Load governance rules |
-| `cortex_capture_metrics` | Record metrics |
-| `cortex_query_governance` | Query governance state |
+| `cortex_load` (op: `rules`) | Load governance rules |
+| `cortex_metrics` (op: `capture`) | Record metrics |
+| `cortex_governance` (op: `query`) | Query governance state |
 | `cortex_vision_analyze` | Image analysis |
 
 ---
@@ -92,7 +92,7 @@
 
 | Command | Action |
 |---------|--------|
-| `/audit` | 10-point production readiness scan |
+| `/audit` | 17-point production readiness scan |
 | `/audit fix` | Scan + auto-remediate |
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing via TDD |

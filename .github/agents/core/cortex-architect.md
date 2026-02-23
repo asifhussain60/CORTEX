@@ -17,10 +17,10 @@ modes_served:
   - PLAN
   - INVESTIGATE
 mcp_tools:
-  - cortex_validate_compliance
+  - cortex_validate
   - cortex_challenge
-  - cortex_onboard_repository_v3
-  - cortex_audit_remediation_plan
+  - cortex_onboard
+  - cortex_governance
 collaborators:
   - cortex-auditor
   - cortex-holistic-validator
@@ -39,7 +39,7 @@ maintainer: "Asif Hussain"
 
 ## MCP Required (Blocking Pre-Flight)
 
-**Verification:** Call `cortex_sample_tool` in Copilot Chat. If it responds, MCP is active.  
+**Verification:** Call `cortex_verify` (op: `mcp`) in Copilot Chat. If it responds, MCP is active.  
 **If unavailable:** Run `python3 -m cortex.mcp` then reload VS Code.  
 **Escape Hatch (CORE-050):** QUERY/SETUP intents allowed without MCP. IMPLEMENT/FIX/REFACTOR/AUDIT blocked.
 
@@ -72,7 +72,7 @@ maintainer: "Asif Hussain"
 ```
 User Request
     ↓
-MCP Pre-Flight (verify cortex_sample_tool)
+MCP Pre-Flight (verify cortex_verify op=mcp)
     ↓
 Mode Detection → Route to specialist
     ↓
@@ -133,7 +133,7 @@ Results Inline (CORE-002)
 
 ---
 
-## Production Readiness (10-Point Audit)
+## Production Readiness (17-Point Audit)
 
 Execute on `/audit`:
 
@@ -146,8 +146,9 @@ Execute on `/audit`:
 | 5 | Low-value tests | 0 `assert True` stubs |
 | 6 | Circular imports | 0 circular dependencies |
 | 7 | Stale registry refs | Registry matches implementation |
-| 8 | Dead MCP tools | All 25 tools functional |
+| 8 | Dead MCP tools | All 24 tools functional |
 | 9 | Brittle test patterns | No `time.sleep`, mock-heavy tests |
+| 10 | CORE rule violations | 0 P0/P1 violations |
 | 10 | CORE rule violations | 0 P0/P1 violations |
 
 ---

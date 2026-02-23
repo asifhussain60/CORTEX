@@ -114,20 +114,20 @@ USER REQUEST → STAGE 1: Interaction → STAGE 2: Intent → STAGE 3: Intellige
 
 ---
 
-## 🔧 MCP Tool Mapping (25 Tools)
+## 🔧 MCP Tool Mapping (24 Tools)
 
 | Tool | Purpose |
 |------|---------|
-| `cortex_sample_tool` | MCP health check |
-| `cortex_validate_compliance` | CORE rules scanning |
-| `cortex_onboard_repository_v3` | Repository onboarding + LENS |
+| `cortex_verify` (op: `mcp`) | MCP health check |
+| `cortex_validate` (op: `compliance`) | CORE rules scanning |
+| `cortex_onboard` (op: `full`) | Repository onboarding + LENS |
 | `cortex_refactor` | Semantic refactoring |
-| `cortex_audit_remediation_plan` | Auto-planning from audit |
+| `cortex_governance` (op: `remediation_plan`) | Auto-planning from audit |
 | `cortex_tools_catalog` | Discover all tools |
-| `cortex_load_core_rules` | Load governance rules |
-| `cortex_capture_metrics` | Record TDD/debug metrics |
+| `cortex_load` (op: `rules`) | Load governance rules |
+| `cortex_metrics` (op: `capture`) | Record TDD/debug metrics |
 | `cortex_vision_analyze` | Image analysis |
-| `cortex_query_governance` | Query governance state |
+| `cortex_governance` (op: `query`) | Query governance state |
 
 **Full catalog:** Call `cortex_tools_catalog` via MCP.
 

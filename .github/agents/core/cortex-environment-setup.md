@@ -23,7 +23,7 @@ Step 2: Package Install
   → confirm: import cortex succeeds
 
 Step 3: MCP P0 Gate
-  → cortex_sample_tool responds in Copilot Chat
+  → cortex_verify (op: mcp) responds in Copilot Chat
   → if no response → MCP not active → see MCP Config below
 
 Step 4: Test Runner
@@ -31,8 +31,8 @@ Step 4: Test Runner
   → confirm: collection passes with no errors
 
 Step 5: Governance Rules
-  → cortex_load_core_rules
-  → confirm: 22 rules loaded from cortex-registry/core/
+  → cortex_load (op: rules)
+  → confirm: 35 rules loaded from cortex-registry/core/tier0-skull/skull-rules.yaml
 ```
 
 ---
@@ -54,7 +54,7 @@ MCP auto-starts with VS Code via `.vscode/settings.json`:
 }
 ```
 
-**Verify MCP:** Call `cortex_sample_tool` in Copilot Chat. If it responds → MCP active.
+**Verify MCP:** Call `cortex_verify` (op: `mcp`) in Copilot Chat. If it responds → MCP active.
 
 **Manual start (escape hatch):**
 ```bash
@@ -70,10 +70,10 @@ python3 -m cortex.mcp
 | Python version | `python3 --version` | >= 3.9 |
 | Package install | `pip install -e ".[dev]"` | No errors |
 | Cortex import | `python3 -c "import cortex"` | No ImportError |
-| MCP active | `cortex_sample_tool` (Copilot Chat) | Tool responds |
+| MCP active | `cortex_verify` (op: `mcp`) (Copilot Chat) | Tool responds |
 | Test collection | `pytest --co -q` | 0 collection errors |
-| Governance rules | `cortex_load_core_rules` | 22 rules present |
-| Dependencies | `cortex_check_dependency_drift` | 0 drift items |
+| Governance rules | `cortex_load` (op: `rules`) | 35 rules present |
+| Dependencies | `cortex_check` (op: `dependencies`) | 0 drift items |
 
 **Enforcement:** Session HALTS if any P0 check fails for production operations.
 
@@ -87,7 +87,7 @@ python3 -m cortex.mcp
 | MCP tools missing in Copilot Chat | Verify `.vscode/settings.json` MCP config, reload VS Code |
 | Collection errors in pytest | Check: `pytest --co -q 2>&1 | grep ERROR` |
 | Dependency drift | Run `pip install -r requirements.txt` |
-| 22 rules not loading | Verify `cortex-registry/core/` YAML files are present |
+| 22 rules not loading | Verify `cortex-registry/core/tier0-skull/skull-rules.yaml` is present |
 
 ---
 
@@ -124,6 +124,6 @@ python3 -m pytest tests/golden/ -p no:xdist --tb=short -v
 ## Canonical Reference
 
 - Package: `cortex` (single canonical import, `pyproject.toml`)
-- MCP: 25 tools in `cortex/mcp/tools/`
-- Governance rules: 22 in `cortex-registry/core/`
+- MCP: 24 tools in `cortex/mcp/tools/`
+- Governance rules: 35 CORE + 2 AC in `cortex-registry/core/tier0-skull/skull-rules.yaml`
 - Tests: 15,230 total, runner: `pytest -n auto --dist loadscope`

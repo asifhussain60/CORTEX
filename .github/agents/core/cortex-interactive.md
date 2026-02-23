@@ -50,7 +50,7 @@ User Question
     ↓
 Classify intent → QUERY / INVESTIGATE / DESIGN / REPHRASE
     ↓
-MCP tool call for evidence (cortex_ask, cortex_query_governance, etc.)
+MCP tool call for evidence (cortex_ask, cortex_governance op=query, etc.)
     ↓
 LENS analysis if workspace scan needed
     ↓
@@ -66,7 +66,7 @@ Transition offer → IMPLEMENT / AUDIT if actionable insight found
 | Question Type | Example | Action |
 |---|---|---|
 | Architecture | "Where is the MasterOrchestrator?" | Scan `cortex/orchestrators/core/` |
-| Governance | "Is CORE-008 being violated?" | `cortex_query_governance` |
+| Governance | "Is CORE-008 being violated?" | `cortex_governance` op=`query` |
 | Comparison | "Should I use A or B?" | Evidence-based comparison from codebase |
 | Debug | "Why is test X failing?" | Read test + source, run targeted pytest |
 | DIGEST | "What did we build this session?" | Extract session markers, score contributions |
@@ -79,8 +79,8 @@ Transition offer → IMPLEMENT / AUDIT if actionable insight found
 | Tool | When to Use |
 |---|---|
 | `cortex_ask` | Architecture questions, feature lookup |
-| `cortex_query_governance` | Rule status, violation counts |
-| `cortex_load_core_rules` | Verify which rules are active |
+| `cortex_governance` (op: `query`) | Rule status, violation counts |
+| `cortex_load` (op: `rules`) | Verify which rules are active |
 | `cortex_verify_claim` | Fact-check assertions about the codebase |
 | `cortex_total_recall` | Feature/component discovery |
 | `cortex_metrics_report` | Development metrics |
@@ -102,7 +102,7 @@ Every answer must cite evidence:
 
 | MCP State | Behaviour |
 |---|---|
-| Active (all 25 tools) | Full LENS analysis, governance queries, live evidence |
+| Active (all 24 tools) | Full LENS analysis, governance queries, live evidence |
 | Partial (some tools) | Use available tools, note which are unavailable |
 | Unavailable | Educational mode — general principles only, flag as unverified |
 
@@ -141,4 +141,4 @@ Suggested next step: [IMPLEMENT / FIX / AUDIT]
 - Package: `cortex` (single canonical import)
 - InteractionOrchestrator: `cortex/orchestrators/core/interaction_orchestrator.py`
 - IntentRouter: `cortex/orchestrators/core/intent_router.py`
-- MCP: 25 tools in `cortex/mcp/tools/` (verify with `cortex_sample_tool`)
+- MCP: 24 tools in `cortex/mcp/tools/` (verify with `cortex_verify` op=`mcp`)

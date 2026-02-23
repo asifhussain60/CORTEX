@@ -50,7 +50,7 @@ CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manua
 
 **MCP Detection Methods — 3 ways to verify MCP is active:**
 
-- **Method 1 (Tool Registry):** Call `cortex_sample_tool` in Copilot Chat — if it responds, MCP is running. This checks the Tool Registry directly.
+- **Method 1 (Tool Registry):** Call `cortex_verify` (op: `mcp`) in Copilot Chat — if it responds, MCP is running. This checks the Tool Registry directly.
 - **Method 2 (Environment Variable / Settings):** Check `.vscode/settings.json` for `github.copilot.chat.mcpServers.cortex` key — if present, server is configured.
 - **Method 3 (Network Port / Process):** Run `python3 -m cortex.mcp` in terminal — if it starts without import errors, MCP server is healthy. Check port binding or process listing to verify.
 
@@ -145,7 +145,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 ```
 
 **Persistence target:** `.cortex-runtime/traces/orchestrator-traces.db`
-**Enforced by:** `EnforcementOrchestrator` pre-commit hook + `cortex_validate_compliance`
+**Enforced by:** `EnforcementOrchestrator` pre-commit hook + `cortex_validate` (op: `compliance`)
 **Audited by:** Check #7 in the 13-Point Production Readiness Audit (`/audit fix`)
 
 **AC Marker Rules:**
@@ -176,7 +176,7 @@ Stage 2: 14-Point Production Scan           (cortex-auditor.md Checks #1–#14)
 Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
 Stage 5: Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
-Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 10 checks)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 12 checks)
 Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
 Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
 Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)

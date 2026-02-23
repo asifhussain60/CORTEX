@@ -93,10 +93,10 @@ Setup logs are written to `.cortex-runtime/setup.log` on first run.
 
 | Tool | Description |
 |---|---|
-| `cortex_onboard_repository` | LENS analysis + governance scoring |
-| `cortex_validate_compliance` | CORE rule scanning |
-| `cortex_query_governance` | Query governance state |
-| `cortex_capture_metrics` | Record TDD + debug metrics |
+| `cortex_onboard` (op: `full`) | LENS analysis + governance scoring |
+| `cortex_validate` (op: `compliance`) | CORE rule scanning |
+| `cortex_governance` (op: `query`) | Query governance state |
+| `cortex_metrics` (op: `capture`) | Record TDD + debug metrics |
 | `cortex_refactor` | Semantic refactoring operations |
 
 ---
