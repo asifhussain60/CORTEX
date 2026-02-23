@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from cortex.intelligence.learning.opj_mixin import OPJMixin
+from cortex.core.result import Ok, Result
 
 
 @dataclass
@@ -145,11 +146,7 @@ class DigestSessionOrchestrator(OPJMixin):
 
     def initialize(self) -> Any:
         """Initialise the orchestrator (setup already done in ``__init__``)."""
-        try:
-            from cortex.core.result import Result  # type: ignore[import]
-            return Result.success("DigestSessionOrchestrator initialized")
-        except ImportError:
-            return {"status": "ok", "orchestrator": self.get_name()}
+        return Ok("DigestSessionOrchestrator initialized")
 
     def health_check(self) -> Dict[str, Any]:
         """Return health status for wiring-contract validation."""

@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.result import Ok, Result
 
 # Phase 58-C: DomainBrain wiring (decision-making orchestrator)
 try:
@@ -189,11 +190,7 @@ class AuditOrchestrator(OrchestratorProtocolMixin):
         Returns:
             A success result value.
         """
-        try:
-            from cortex.core.result import Result  # type: ignore[import]
-            return Result.success("AuditOrchestrator initialized")
-        except ImportError:
-            return {"status": "ok", "orchestrator": self.get_name()}
+        return Ok("AuditOrchestrator initialized")
 
     def health_check(self) -> Dict[str, Any]:
         """Return health status for wiring-contract validation.

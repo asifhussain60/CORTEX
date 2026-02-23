@@ -19,6 +19,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict
 
+from cortex.core.result import Ok, Result
 from cortex.orchestrators.health.vacuum_orchestrator import (
     VacuumOrchestrator as _HealthVacuumOrchestrator,
 )
@@ -75,11 +76,7 @@ class VacuumOrchestrator(_HealthVacuumOrchestrator):
         Returns:
             A :class:`~cortex.core.result.Result` success value.
         """
-        try:
-            from cortex.core.result import Result  # type: ignore[import]
-            return Result.success("VacuumOrchestrator initialized")
-        except ImportError:
-            return {"status": "ok", "orchestrator": self.get_name()}
+        return Ok("VacuumOrchestrator initialized")
 
     def health_check(self) -> Dict[str, Any]:
         """Return health status of this orchestrator.

@@ -20,6 +20,7 @@ from cortex.models.canonical_enums import PhaseStatus, IntentType
 # Phase 59-b: Use canonical IOrchestrator/OperationMode path (GAP-59-04)
 from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.dependency_guard import soft_import
 
 # F10: Governance gate — lazy import to avoid circular deps
 try:
@@ -53,7 +54,13 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     def __init__(self) -> None:
         """Initialize instance."""
         self.phases: Dict[str, PhaseNode] = {}
-        self.lens_enabled = True
+        # LENS orchestrator — loaded once via soft_import (observable fallback, CORE-049)
+        self._lens_orchestrator = soft_import(
+            "cortex.intelligence.lens.lens_orchestrator",
+            attr="LENSOrchestrator",
+            fallback=None,
+            feature_name="LENS Analysis (PlanningOrchestrator)",
+        )
 
     # =========================================================================
     # IOrchestrator Interface Implementation (WAVE-7-CLEANUP)
@@ -120,7 +127,25 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
             if operation_name == "plan_phases":
                 phases_data = parameters.get("phases", [])
                 phases = [PhaseNode(**p) for p in phases_data]
-                result = self.plan_phases(phases)
+                # P1-1 fix: invoke LENS analysis on target scope before plan generation
+                lens_context: Optional[Dict[str, Any]] = None
+                target_scope = parameters.get("scope_path") or parameters.get("scope")
+                if self._lens_orchestrator is not None and target_scope:
+                    try:
+                        lens_instance = self._lens_orchestrator()
+                        lens_context = lens_instance.analyze_directory(str(target_scope))
+                        logger.info(
+                            "PlanningOrchestrator: LENS analysis complete for scope '%s'",
+                            target_scope,
+                        )
+                    except Exception as lens_exc:  # noqa: BLE001
+                        logger.warning(
+                            "PlanningOrchestrator: LENS analysis failed for scope '%s' — %s. "
+                            "Continuing without LENS enrichment.",
+                            target_scope,
+                            lens_exc,
+                        )
+                result = self.plan_phases(phases, lens_context=lens_context)
                 return Ok(result)
             elif operation_name == "analyze_dependencies":
                 result = self.analyze_dependencies()
@@ -235,12 +260,19 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
             logger.info(f"AC_COMPLETE: AC-PLANNING-{_ts} ❌ {type(exc).__name__} ({_elapsed}ms)")
             raise
 
-    def plan_phases(self, phases: List[PhaseNode]) -> Dict[str, Any]:
+    def plan_phases(
+        self,
+        phases: List[PhaseNode],
+        lens_context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         """
         Orchestrate phase planning with dependency ordering.
 
         Args:
             phases: List of PhaseNode objects to plan
+            lens_context: Optional LENS analysis result for the target scope.
+                          When provided, enriches the plan result with
+                          LENS-derived complexity and risk signals.
 
         Returns:
             Planning result with ordered phases and total effort
@@ -254,11 +286,15 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
         ordered = self._topological_sort()
         total_effort = sum(p.effort_hours for p in phases)
 
-        return {
+        plan: Dict[str, Any] = {
             "phases": [p.phase_id for p in ordered],
             "total_effort": total_effort,
             "phase_count": len(phases),
         }
+        if lens_context:
+            plan["lens_enriched"] = True
+            plan["lens_summary"] = lens_context.get("summary", {})
+        return plan
 
     def analyze_dependencies(self) -> Dict[str, List[str]]:
         """

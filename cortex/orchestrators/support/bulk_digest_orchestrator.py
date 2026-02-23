@@ -13,6 +13,7 @@ from typing import Any, Dict, List, Optional
 from unittest.mock import MagicMock
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.result import Ok, Result
 
 
 class BulkDigestOrchestrator(OrchestratorProtocolMixin):
@@ -186,11 +187,7 @@ class BulkDigestOrchestrator(OrchestratorProtocolMixin):
 
     def initialize(self) -> Any:
         """Initialise the orchestrator (setup already done in ``__init__``)."""
-        try:
-            from cortex.core.result import Result  # type: ignore[import]
-            return Result.success("BulkDigestOrchestrator initialized")
-        except ImportError:
-            return {"status": "ok", "orchestrator": self.get_name()}
+        return Ok("BulkDigestOrchestrator initialized")
 
     def health_check(self) -> Dict[str, Any]:
         """Return health status for wiring-contract validation."""

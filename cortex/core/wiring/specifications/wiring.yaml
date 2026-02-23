@@ -252,8 +252,42 @@ orchestrators:
 
 # =============================================================================
 # TIER 4 — Extended Orchestrators (Phase 59-f: GAP-59-09 Registration)
-# Previously unregistered tiers: git, intelligence, synthesis, workflow
+# Previously unregistered tiers: git, intelligence, synthesis, workflow,
+# validation (security/solid), strategies
 # =============================================================================
+  # ── Validation (extended) ─────────────────────────────────────────────────
+  validation_extended:
+    - name: "SecurityVulnerabilityOrchestrator"
+      module: "cortex.orchestrators.validation.security_vulnerability_orchestrator"
+      class: "SecurityVulnerabilityOrchestrator"
+      tier: 4
+      priority: 35
+      dependencies: ["EnforcementOrchestrator"]
+      capabilities: ["security_scan", "vulnerability_detection", "cve_remediation"]
+      health_check: "ping"
+      registration_phase: "59-g"
+
+    - name: "SOLIDOrchestrator"
+      module: "cortex.orchestrators.validation.solid_orchestrator"
+      class: "SOLIDOrchestrator"
+      tier: 4
+      priority: 34
+      dependencies: []
+      capabilities: ["solid_compliance", "srp_check", "ocp_check", "dry_check"]
+      health_check: "ping"
+      registration_phase: "59-g"
+
+  # ── Strategies (re-export shim — canonical in core) ───────────────────────
+  strategies:
+    - name: "StageExecutionStrategy"
+      module: "cortex.orchestrators.strategies.stage_execution_strategy"
+      class: "StageExecutionStrategy"
+      tier: 4
+      priority: 33
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["stage_routing", "execution_strategy_selection"]
+      health_check: "ping"
+      registration_phase: "59-g"
   # ── Git Tier ────────────────────────────────────────────────────────────
   git:
     - name: "GitOrchestrator"
