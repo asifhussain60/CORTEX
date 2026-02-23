@@ -15,7 +15,8 @@ workflow:
     phase: "100"
     stage: "5"
 
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 8
     success_criteria:
       api_contract_valid: true
@@ -40,7 +41,8 @@ workflow:
     - step_id: "contract_definition"
       name: "Define API Contract (OpenAPI)"
       orchestrator: "TDDOrchestrator"
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           contract_defined: true
@@ -55,7 +57,8 @@ workflow:
       name: "Write Contract Tests"
       orchestrator: "TDDOrchestrator"
       depends_on: ["contract_definition"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           contract_tests_written: true
@@ -69,7 +72,8 @@ workflow:
       name: "Implement API Endpoints"
       orchestrator: "TDDOrchestrator"
       depends_on: ["contract_tests"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
         success_criteria:
           all_tests_pass: true
@@ -84,7 +88,8 @@ workflow:
       name: "Security Vulnerability Scan"
       orchestrator: "TDDOrchestrator"
       depends_on: ["endpoint_implementation"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           critical_vulnerabilities: 0
@@ -98,7 +103,8 @@ workflow:
       name: "API Integration Tests"
       orchestrator: "TDDOrchestrator"
       depends_on: ["security_scan"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 4
         success_criteria:
           integration_tests_pass: true

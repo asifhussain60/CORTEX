@@ -15,7 +15,8 @@ workflow:
     phase: "100"
     stage: "5"
 
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 12
     success_criteria:
       complexity_target_met: true
@@ -38,7 +39,8 @@ workflow:
     - step_id: "complexity_analysis"
       name: "Analyze Code Complexity"
       orchestrator: "LENSSynthesis"
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           analysis_complete: true
@@ -51,7 +53,8 @@ workflow:
       name: "Reduce Code Complexity"
       orchestrator: "RefactoringOrchestrator"
       depends_on: ["complexity_analysis"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 10
         success_criteria:
           complexity_target_met: true
@@ -65,7 +68,8 @@ workflow:
       name: "Detect Code Duplication"
       orchestrator: "LENSSynthesis"
       depends_on: ["complexity_reduction"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           duplicates_found: true
@@ -78,7 +82,8 @@ workflow:
       name: "Eliminate Code Duplication"
       orchestrator: "RefactoringOrchestrator"
       depends_on: ["duplication_detection"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
         success_criteria:
           duplicates_eliminated: true
@@ -91,7 +96,8 @@ workflow:
       name: "Increase Test Coverage"
       orchestrator: "TDDOrchestrator"
       depends_on: ["duplication_elimination"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 6
         success_criteria:
           coverage_target_met: true

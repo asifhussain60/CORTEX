@@ -15,7 +15,8 @@ workflow:
     phase: "100"
     stage: "5"
 
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 12
     success_criteria:
       legacy_tests_still_pass: true
@@ -40,7 +41,8 @@ workflow:
     - step_id: "migration_planning"
       name: "Plan Migration Chunks"
       orchestrator: "PlanningOrchestrator"
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           chunks_identified: true
@@ -53,7 +55,8 @@ workflow:
       name: "Create Git Checkpoint"
       orchestrator: "TDDOrchestrator"
       depends_on: ["migration_planning"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           checkpoint_created: true
@@ -65,7 +68,8 @@ workflow:
       name: "Verify Legacy Tests Pass"
       orchestrator: "TDDOrchestrator"
       depends_on: ["checkpoint_creation"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           all_legacy_tests_pass: true
@@ -78,7 +82,8 @@ workflow:
       name: "Migrate One Chunk"
       orchestrator: "RefactoringOrchestrator"
       depends_on: ["legacy_tests_baseline"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 10
         success_criteria:
           chunk_migrated: true
@@ -93,7 +98,8 @@ workflow:
       name: "Verify Both Old and New Code"
       orchestrator: "TDDOrchestrator"
       depends_on: ["incremental_migration"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           legacy_tests_pass: true

@@ -60,7 +60,8 @@ workflow:
       infrastructure: "cortex-registry/company/infrastructure/topology.yaml"
 
   # ── CONVERGENCE GATE (global) ────────────────────────────────────
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 20
     success_criteria:
       all_tests_pass: true
@@ -117,7 +118,8 @@ workflow:
       name: "LENS Baseline Analysis"
       orchestrator: "LENSOrchestrator"
       description: "Full codebase scan to establish quality and security baseline."
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           baseline_captured: true
@@ -134,7 +136,8 @@ workflow:
       depends_on: ["lens_baseline"]
       template_ref: "cortex-registry/workflows/templates/security/threat-model-analysis.yaml"
       description: "Identify attack surface, classify threats, produce mitigation plan."
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
         success_criteria:
           threat_model_complete: true
@@ -152,7 +155,8 @@ workflow:
       template_ref: "cortex-registry/workflows/templates/security/security-hardening.yaml"
       blocking: true
       description: "Fix all critical and high security issues. Hard blocker — no downstream work until clean."
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 10
         success_criteria:
           critical_vulnerabilities: 0
@@ -173,7 +177,8 @@ workflow:
       depends_on: ["security_hardening"]
       template_ref: "cortex-registry/workflows/templates/lifecycle/legacy-rescue.yaml"
       description: "Rescue poorly structured codebase: scan, classify, fix, test, verify."
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 10
         success_criteria:
           critical_issues_fixed: true
@@ -190,7 +195,8 @@ workflow:
       depends_on: ["codebase_rescue"]
       template_ref: "cortex-registry/workflows/templates/tdd/tdd-feature-implementation.yaml"
       description: "Implement features using strict TDD cycle with convergence gates."
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
         success_criteria:
           all_tests_pass: true
@@ -209,7 +215,8 @@ workflow:
       depends_on: ["tdd_implementation"]
       template_ref: "cortex-registry/workflows/templates/tdd/test-strategy-matrix.yaml"
       description: "Enforce multi-tier testing: unit → integration → security → smoke → regression → golden."
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 12
         success_criteria:
           all_tiers_pass: true
@@ -228,7 +235,8 @@ workflow:
       depends_on: ["test_strategy_enforcement"]
       template_ref: "cortex-registry/workflows/templates/quality/quality-code-uplift.yaml"
       description: "Systematic code quality improvement with convergence gates."
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 12
         success_criteria:
           complexity_acceptable: true
@@ -247,7 +255,8 @@ workflow:
       depends_on: ["quality_uplift"]
       template_ref: "cortex-registry/workflows/templates/quality/refactor-holistic-sweep.yaml"
       description: "Final holistic code quality pass across entire codebase."
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
         success_criteria:
           quality_improved: true
@@ -264,7 +273,8 @@ workflow:
       orchestrator: "LENSOrchestrator"
       depends_on: ["holistic_sweep"]
       description: "Re-scan codebase and compare against Step 0 baseline. Verify all targets met."
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           quality_improved: true

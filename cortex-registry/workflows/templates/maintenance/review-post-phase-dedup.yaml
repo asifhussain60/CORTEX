@@ -16,7 +16,8 @@ workflow:
     stage: "5"
     epilogue: true
 
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 3
     success_criteria:
       no_new_duplicates: true
@@ -37,7 +38,8 @@ workflow:
     - step_id: "baseline_comparison"
       name: "Compare Against Phase Start"
       orchestrator: "LENSSynthesis"
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           comparison_complete: true
@@ -50,7 +52,8 @@ workflow:
       name: "Fix New Duplicates"
       orchestrator: "RefactoringOrchestrator"
       depends_on: ["baseline_comparison"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           new_duplicates_eliminated: true

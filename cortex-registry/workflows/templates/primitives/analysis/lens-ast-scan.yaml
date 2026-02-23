@@ -49,7 +49,8 @@ cortex_tooling:
       purpose: 'Code structure visualization (optional)'
       required: false
     
-    - name: 'cortex_validate_compliance'
+    - name: 'cortex_validate'
+      op: compliance
       purpose: 'CORE rule validation on parsed AST'
       required: true
 

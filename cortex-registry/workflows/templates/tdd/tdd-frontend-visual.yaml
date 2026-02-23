@@ -15,7 +15,8 @@ workflow:
     phase: "100"
     stage: "5"
 
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 6
     success_criteria:
       visual_diff_zero: true
@@ -39,7 +40,8 @@ workflow:
     - step_id: "visual_baseline"
       name: "Capture Visual Baseline"
       orchestrator: "TDDOrchestrator"
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           screenshots_captured: true
@@ -53,7 +55,8 @@ workflow:
       name: "Implement Component"
       orchestrator: "TDDOrchestrator"
       depends_on: ["visual_baseline"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 6
         success_criteria:
           visual_match: true
@@ -67,7 +70,8 @@ workflow:
       name: "Accessibility Validation"
       orchestrator: "TDDOrchestrator"
       depends_on: ["component_implementation"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 4
         success_criteria:
           a11y_violations: 0
@@ -80,7 +84,8 @@ workflow:
       name: "Responsive Design Testing"
       orchestrator: "TDDOrchestrator"
       depends_on: ["a11y_validation"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           all_viewports_pass: true

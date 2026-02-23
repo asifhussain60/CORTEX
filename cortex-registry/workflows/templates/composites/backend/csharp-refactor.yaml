@@ -74,7 +74,8 @@ cortex_tooling:
       purpose: 'Semantic refactoring operations'
       required: true
     
-    - name: 'cortex_validate_compliance'
+    - name: 'cortex_validate'
+      op: compliance
       purpose: 'CORE rule validation'
       required: true
 

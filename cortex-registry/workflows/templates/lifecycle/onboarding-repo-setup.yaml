@@ -15,7 +15,8 @@ workflow:
     phase: "100"
     stage: "5"
 
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 3
     success_criteria:
       profile_sections_complete: true
@@ -37,7 +38,8 @@ workflow:
     - step_id: "tech_stack_detection"
       name: "Detect Tech Stack"
       orchestrator: "RepositoryOnboardingOrchestrator"
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           tech_stack_detected: true
@@ -49,7 +51,8 @@ workflow:
       name: "Generate Repository Profile"
       orchestrator: "RepositoryOnboardingOrchestrator"
       depends_on: ["tech_stack_detection"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           profile_sections_complete: true
@@ -62,7 +65,8 @@ workflow:
       name: "Security Baseline Scan"
       orchestrator: "TDDOrchestrator"
       depends_on: ["profile_generation"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           p0_issues: 0
@@ -76,7 +80,8 @@ workflow:
       name: "Verify Onboarding Complete"
       orchestrator: "RepositoryOnboardingOrchestrator"
       depends_on: ["security_baseline_scan"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           onboarding_complete: true

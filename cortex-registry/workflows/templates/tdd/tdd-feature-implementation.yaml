@@ -16,7 +16,8 @@ workflow:
     stage: "5"
 
   # Convergence gate: Step loops until success criteria met
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 8
     success_criteria:
       all_tests_pass: true
@@ -42,7 +43,8 @@ workflow:
     - step_id: "red_phase"
       name: "RED Phase - Write Failing Tests"
       orchestrator: "TDDOrchestrator"
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           tests_written: true
@@ -57,7 +59,8 @@ workflow:
       name: "GREEN Phase - Make Tests Pass"
       orchestrator: "TDDOrchestrator"
       depends_on: ["red_phase"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
         success_criteria:
           all_tests_pass: true
@@ -72,7 +75,8 @@ workflow:
       name: "REFACTOR Phase - Improve Code Quality"
       orchestrator: "RefactoringOrchestrator"
       depends_on: ["green_phase"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           tests_still_pass: true
@@ -86,7 +90,8 @@ workflow:
       name: "Final Verification"
       orchestrator: "EnforcementOrchestrator"
       depends_on: ["refactor_phase"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           coverage_target_met: true

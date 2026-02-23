@@ -15,7 +15,8 @@ workflow:
     phase: "100"
     stage: "5"
 
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 10
     success_criteria:
       critical_issues: 0
@@ -38,7 +39,8 @@ workflow:
     - step_id: "vulnerability_scan"
       name: "Dependency Vulnerability Scan"
       orchestrator: "TDDOrchestrator"
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           critical_vulns: 0
@@ -52,7 +54,8 @@ workflow:
       name: "Static Code Security Analysis"
       orchestrator: "TDDOrchestrator"
       depends_on: ["vulnerability_scan"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
         success_criteria:
           critical_issues: 0
@@ -67,7 +70,8 @@ workflow:
       name: "Secrets and Credentials Scan"
       orchestrator: "TDDOrchestrator"
       depends_on: ["code_security_scan"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           secrets_found: 0
@@ -80,7 +84,8 @@ workflow:
       name: "Compliance Standards Check"
       orchestrator: "EnforcementOrchestrator"
       depends_on: ["secrets_scan"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           compliance_score_met: true

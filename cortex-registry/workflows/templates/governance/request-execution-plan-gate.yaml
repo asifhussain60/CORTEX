@@ -34,7 +34,8 @@ workflow:
   # ---------------------------------------------------------------------------
   # Convergence gate: Loop until all criteria met
   # ---------------------------------------------------------------------------
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 10
     success_criteria:
       all_tests_pass: true
@@ -101,7 +102,8 @@ workflow:
       description: >
         Run LENS analysis at intelligent depth. Classify intent.
         Determine if plan gate is needed.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           lens_context_available: true
@@ -124,7 +126,8 @@ workflow:
         Create InteractionPlan with TDD steps, risk scoring,
         and LENS context. Return to user for approval.
         Skip for read-only intents (QUERY, ANALYZE, etc).
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           plan_created: true
@@ -158,7 +161,8 @@ workflow:
       description: >
         Write failing tests based on plan steps.
         CORE-008 mandatory.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           tests_written: true
@@ -175,7 +179,8 @@ workflow:
       depends_on: ["tdd_red"]
       description: >
         Implement minimum code to make all tests pass.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
         success_criteria:
           all_tests_pass: true
@@ -193,7 +198,8 @@ workflow:
       description: >
         Improve code quality while keeping tests green.
         Intelligent loop — stop when no more improvements found.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           tests_still_pass: true
@@ -211,7 +217,8 @@ workflow:
       description: >
         Validate all changes against CORE rules.
         Loop until zero violations.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           zero_violations: true
@@ -228,7 +235,8 @@ workflow:
       description: >
         Remove dead code, duplicates, and orphaned files.
         Intelligent loop — scans changed files only.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           no_duplicates: true
@@ -247,7 +255,8 @@ workflow:
       description: >
         Append final LENS analysis to company registry.
         Creates timestamped JSON and appends to repo history.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           dashboard_file_written: true
@@ -267,7 +276,8 @@ workflow:
       description: >
         Run full test suite one final time.
         Zero tolerance for regressions.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           all_tests_pass: true

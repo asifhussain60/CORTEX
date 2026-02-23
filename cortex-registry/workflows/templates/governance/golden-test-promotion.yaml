@@ -161,7 +161,8 @@ workflow:
   # ---------------------------------------------------------------------------
   # GLOBAL CONVERGENCE GATE
   # ---------------------------------------------------------------------------
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 5
     on_max_exceeded: "HALT_AND_REPORT"
     backoff_strategy: "linear_2s"
@@ -192,7 +193,8 @@ workflow:
         Returns TestDecision: tier, concerns, target_folder, markers, coverage_floor.
         If tier == STANDARD: use standard TDD, not this template.
         If tier == GOLDEN: continue to step 2.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           classification_returned: true
@@ -224,7 +226,8 @@ workflow:
           - @pytest.mark.golden on all test classes
           - @pytest.mark.{concern} on concern-specific test classes
         All tests MUST be failing (RED) before proceeding.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           test_file_exists: true
@@ -252,7 +255,8 @@ workflow:
       name: "GREEN — Implement Until Tests Pass"
       orchestrator: "TDDOrchestrator"
       depends_on: ["red_phase"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 8
         success_criteria:
           all_new_tests_pass: true
@@ -273,7 +277,8 @@ workflow:
         Streams real-time progress box to VS Code terminal.
         Aggregates results across workers.
         On any worker failure: other workers continue (no early exit).
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           all_workers_complete: true
@@ -292,7 +297,8 @@ workflow:
       name: "REFACTOR — Code Quality Pass"
       orchestrator: "RefactoringOrchestrator"
       depends_on: ["parallel_run"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           all_tests_still_pass: true
@@ -327,7 +333,8 @@ workflow:
 
         This loop governs Copilot: Copilot receives targeted fix instructions
         per failing condition rather than a full re-run. CORTEX controls the loop.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           dod_1_all_golden_pass: true
@@ -423,7 +430,8 @@ workflow:
         - Missing AC-ID → violation
         - Missing concern markers → violation
         Report violations inline. Fix before proceeding.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           core_055_violations: 0
@@ -440,7 +448,8 @@ workflow:
       name: "Teardown — Git Commit & Registry Update"
       orchestrator: "BootstrapOrchestrator"
       depends_on: ["core_055_check"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 1
         success_criteria:
           git_committed: true

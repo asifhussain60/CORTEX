@@ -52,7 +52,8 @@ workflow:
   # ===========================================================================
   # CONVERGENCE GATE (Pipeline-Level)
   # ===========================================================================
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 3
     success_criteria:
       issues_resolved: true

@@ -39,7 +39,8 @@ cortex_tooling:
       required: true
   
   mcp_tools:
-    - name: 'cortex_validate_compliance'
+    - name: 'cortex_validate'
+      op: compliance
       purpose: 'Post-test governance check'
       required: false
 

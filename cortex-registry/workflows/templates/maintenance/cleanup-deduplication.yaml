@@ -15,7 +15,8 @@ workflow:
     phase: "100"
     stage: "5"
 
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 5
     success_criteria:
       duplicate_count: 0
@@ -37,7 +38,8 @@ workflow:
     - step_id: "duplicate_scan"
       name: "Scan for Duplicate Code"
       orchestrator: "LENSSynthesis"
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           scan_complete: true
@@ -50,7 +52,8 @@ workflow:
       name: "Extract Shared Modules"
       orchestrator: "RefactoringOrchestrator"
       depends_on: ["duplicate_scan"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5
         success_criteria:
           duplicates_eliminated: true
@@ -64,7 +67,8 @@ workflow:
       name: "Verify No Regressions"
       orchestrator: "TDDOrchestrator"
       depends_on: ["extract_common_code"]
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           all_tests_pass: true

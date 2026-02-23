@@ -40,7 +40,8 @@ workflow:
       were modified during the phase.
 
   # ── CONVERGENCE GATE ──────────────────────────────────────────────
-  convergence_gate:
+  convergence_loop:
+    primitive: 'primitives/validation/detect-fix-rescan-loop'
     max_cycles: 6
     success_criteria:
       all_tests_pass: true
@@ -78,7 +79,8 @@ workflow:
       description: |
         Run linting and static analysis on all files modified during the
         preceding phase. Fix auto-fixable issues. Report remaining violations.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           lint_errors: 0
@@ -99,7 +101,8 @@ workflow:
       description: |
         Detect duplicate code introduced during the phase. Flag pairs with
         similarity > threshold for consolidation. Auto-merge where safe.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           duplicate_pairs: 0
@@ -119,7 +122,8 @@ workflow:
       description: |
         Remove unused imports, dead code, empty stubs, and deprecated
         references from modified files.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           dead_code_removed: true
@@ -137,7 +141,8 @@ workflow:
       description: |
         Apply cross-cutting refactoring: consistent naming, extract shared
         patterns, reduce coupling between modified modules.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 4
         success_criteria:
           quality_improved: true
@@ -157,7 +162,8 @@ workflow:
       description: |
         Re-scan all modified files to ensure no security regressions were
         introduced by refactoring or cleanup operations.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 3
         success_criteria:
           no_new_vulnerabilities: true
@@ -176,7 +182,8 @@ workflow:
       description: |
         Run full test suite to confirm zero regressions from all epilogue
         operations. This is the final gate before marking the phase complete.
-      convergence_gate:
+      convergence_loop:
+        primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 2
         success_criteria:
           all_tests_pass: true
