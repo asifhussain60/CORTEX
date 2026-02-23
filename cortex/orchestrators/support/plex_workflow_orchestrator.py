@@ -46,6 +46,13 @@ from cortex.tools.media.iafd_metadata_accessor import IAFDAccessor, IAFDMetadata
 from cortex.tools.media.plex_metadata_accessor import PlexMetadataAccessor, PlexMetadata
 from cortex.tools.media.tag_writer import TagWriterFactory, TagFields
 from cortex.tools.media.video_library_scanner import VideoLibraryScanner, VideoLibraryFile
+from cortex.tools.media.duplicate_detector import DuplicateDetector, DuplicateCheckResult
+from cortex.tools.media.restore_manager import RestoreManager, Snapshot
+from cortex.tools.media.llm_semantic_renamer import (
+    LLMSemanticRenamer,
+    RenameProposal,
+    LLMProvider,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -110,6 +117,11 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         normalize_filenames: bool = True,
         auto_organize: bool = False,
         use_iafd: bool = True,
+        use_llm_semantic: bool = False,
+        llm_api_key: Optional[str] = None,
+        llm_provider: LLMProvider = LLMProvider.OPENAI,
+        enable_duplicate_detection: bool = True,
+        enable_snapshots: bool = True,
         metadata_hints: Optional[Dict] = None,
         plex_accessor: Optional[PlexMetadataAccessor] = None,
         iafd_accessor: Optional[IAFDAccessor] = None,
@@ -124,15 +136,31 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         self.normalize_filenames = normalize_filenames
         self.auto_organize = auto_organize
         self.use_iafd = use_iafd
+        self.use_llm_semantic = use_llm_semantic
+        self.enable_duplicate_detection = enable_duplicate_detection
+        self.enable_snapshots = enable_snapshots
         self.metadata_hints = metadata_hints or {}
 
         # Initialize accessors
         self.plex_accessor = plex_accessor or PlexMetadataAccessor()
         self.iafd_accessor = iafd_accessor or IAFDAccessor(use_cache=True)
 
+        # Initialize new components
+        self.duplicate_detector = DuplicateDetector(root=root) if enable_duplicate_detection else None
+        self.restore_manager = RestoreManager(
+            db_path=Path(".cortex-runtime/backups/plex-snapshots.db")
+        ) if enable_snapshots else None
+        self.llm_renamer = LLMSemanticRenamer(
+            provider=llm_provider,
+            api_key=llm_api_key,
+            min_confidence=min_rename_confidence,
+            enable_fallback=True,
+        ) if use_llm_semantic else None
+
         # Runtime state
         self.scanned_files: List[VideoLibraryFile] = []
         self.extracted_metadata: Dict[str, ExtractedMetadata] = {}
+        self.current_snapshot: Optional[Snapshot] = None
         
         # Generic extractors and normalizers (no sanitization)
         self.metadata_extractor = GenericMetadataExtractor()
@@ -167,6 +195,15 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         )
 
         try:
+            # Step 0: CREATE SNAPSHOT (if enabled)
+            if self.enable_snapshots and not self.dry_run and self.restore_manager:
+                logger.info("STEP 0: Creating pre-operation snapshot...")
+                self.current_snapshot = self.restore_manager.create_snapshot(
+                    root=self.root,
+                    description=f"Pre-workflow snapshot {datetime.now().isoformat()}",
+                )
+                logger.info(f"Snapshot {self.current_snapshot.snapshot_id} created")
+
             # Step 1: SCAN
             logger.info("STEP 1: Scanning library...")
             step1 = self._run_step_scan(result)
@@ -175,6 +212,14 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
             if not step1.status == "success":
                 result.errors.append(f"Scan failed: {step1.error}")
                 raise RuntimeError(f"Scan failed: {step1.error}")
+
+            # Step 1.5: BUILD DUPLICATE INDEX (if enabled)
+            if self.enable_duplicate_detection and self.duplicate_detector:
+                logger.info("STEP 1.5: Building duplicate index...")
+                self.duplicate_detector.scan()
+                duplicates = self.duplicate_detector.find_duplicates()
+                if duplicates:
+                    logger.warning(f"Found {len(duplicates)} duplicate groups")
 
             # Step 2: IDENTIFY
             logger.info("STEP 2: Identifying files...")
@@ -187,7 +232,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
                 step3 = self._run_step_match(result)
                 result.step_results.append(step3)
 
-            # Step 4: RENAME
+            # Step 4: RENAME (with hybrid LLM/rule-based logic)
             logger.info("STEP 4: Proposing renames...")
             step4 = self._run_step_rename(result)
             result.step_results.append(step4)
@@ -217,6 +262,15 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
             logger.error(f"Workflow failed: {exc}")
             result.errors.append(str(exc))
             result.duration_seconds = time.time() - start_time
+
+            # Rollback on failure if snapshot exists
+            if self.current_snapshot and self.restore_manager and not self.dry_run:
+                logger.info(f"Rolling back to snapshot {self.current_snapshot.snapshot_id}...")
+                rollback_result = self.restore_manager.rollback(self.current_snapshot.snapshot_id)
+                if rollback_result.status.value == "success":
+                    logger.info(f"Rollback successful: {rollback_result.files_restored} files restored")
+                else:
+                    logger.error(f"Rollback failed: {rollback_result.error}")
 
             return result
 
@@ -376,7 +430,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         return step
 
     def _run_step_rename(self, result: WorkflowResult) -> WorkflowStep:
-        """Apply filename normalization (action→Does, proper case, remove numbers)."""
+        """Apply filename normalization with hybrid LLM/rule-based logic."""
         import time
 
         start = time.time()
@@ -386,6 +440,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
             files = self.scanned_files  # Use cached scanned files
 
             renamed_count = 0
+            rename_proposals: Dict[Path, Path] = {}
 
             for vf in files:
                 try:
@@ -394,6 +449,77 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
                     # Skip renaming if normalization disabled
                     if not self.normalize_filenames:
                         continue
+
+                    current_path = vf.full_path
+                    proposed_name = None
+
+                    # HYBRID ROUTING: Try LLM first if enabled, fallback to rules
+                    if self.use_llm_semantic and self.llm_renamer:
+                        # Try LLM semantic renaming
+                        proposal = self.llm_renamer.propose_rename_with_fallback(filename)
+                        if proposal and proposal.confidence >= self.min_rename_confidence:
+                            proposed_name = proposal.proposed_name
+                            logger.info(
+                                f"LLM rename: {filename} → {proposed_name} "
+                                f"(confidence: {proposal.confidence:.2f})"
+                            )
+                    
+                    # Fallback to rule-based if LLM not enabled or low confidence
+                    if not proposed_name:
+                        proposed_name = self.filename_normalizer.normalize(filename)
+                        logger.debug(f"Rule-based rename: {filename} → {proposed_name}")
+
+                    # Check if rename needed
+                    if proposed_name == filename:
+                        continue
+
+                    proposed_path = current_path.parent / proposed_name
+
+                    # Check for collision if duplicate detection enabled
+                    if self.enable_duplicate_detection and self.duplicate_detector:
+                        check_result = self.duplicate_detector.check_rename(
+                            current_path=current_path,
+                            proposed_path=proposed_path,
+                        )
+
+                        if not check_result.is_safe:
+                            logger.warning(
+                                f"Collision detected: {filename} → {proposed_name}. "
+                                f"Using alternative: {check_result.suggested_alternative.name}"
+                            )
+                            proposed_path = check_result.suggested_alternative
+
+                    rename_proposals[current_path] = proposed_path
+
+                except Exception as e:
+                    logger.error(f"Rename proposal failed for {filename}: {e}")
+                    continue
+
+            # Apply renames if not dry-run
+            if not self.dry_run:
+                for current, proposed in rename_proposals.items():
+                    try:
+                        current.rename(proposed)
+                        renamed_count += 1
+                        logger.info(f"Renamed: {current.name} → {proposed.name}")
+                    except Exception as e:
+                        logger.error(f"Rename failed: {current.name} → {e}")
+
+            result.files_renamed = renamed_count if not self.dry_run else len(rename_proposals)
+
+            step.status = "success"
+            step.details["proposed_count"] = len(rename_proposals)
+            step.details["renamed_count"] = renamed_count
+            step.details["llm_used"] = self.use_llm_semantic
+            step.details["duplicate_checks"] = self.enable_duplicate_detection
+
+        except Exception as exc:
+            step.status = "failed"
+            step.error = str(exc)
+            logger.error(f"Rename step failed: {exc}")
+
+        step.duration_ms = (time.time() - start) * 1000
+        return step
                     
                     # Apply normalization
                     normalized_name = self.filename_normalizer.normalize(

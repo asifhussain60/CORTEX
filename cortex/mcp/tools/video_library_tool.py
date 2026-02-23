@@ -952,4 +952,136 @@ def cortex_plex_workflow_iafd_match(
         }
 
 
+def cortex_plex_semantic_rename(
+    root_path: str = "G:\\FLICKS\\Wicked",
+    use_llm: bool = True,
+    llm_provider: str = "openai",
+    llm_api_key: Optional[str] = None,
+    min_confidence: float = 0.85,
+    enable_duplicate_detection: bool = True,
+    enable_snapshots: bool = True,
+    dry_run: bool = True,
+) -> Dict[str, Any]:
+    """
+    Semantic filename renaming with LLM intelligence and collision prevention.
+
+    Enhances Plex workflow with:
+    - LLM-powered semantic renaming (GPT-4 or Claude)
+    - SHA256-based duplicate detection
+    - SQLite snapshot + rollback capability
+    - Hybrid LLM/rule-based routing
+
+    Example: "Chad Alva does Jojo Kiss.mp4" → "Chad Does Jojo.mp4"
+
+    Args:
+        root_path: Directory to process (default: ``G:\\FLICKS\\Wicked``).
+        use_llm: Enable LLM semantic renaming (default: True).
+        llm_provider: LLM provider (``openai`` or ``anthropic``).
+        llm_api_key: API key for LLM provider (required if ``use_llm=True``).
+        min_confidence: Minimum confidence for automated renames (0.0-1.0).
+        enable_duplicate_detection: SHA256 collision prevention (default: True).
+        enable_snapshots: SQLite snapshot before operations (default: True).
+        dry_run: Preview mode (no filesystem modifications).
+
+    Returns:
+        Dict with keys:
+        - `success`: Operation completed without fatal errors.
+        - `total_files`: Files discovered.
+        - `files_renamed`: Files actually renamed (0 if dry_run=True).
+        - `proposals_count`: Rename proposals generated.
+        - `duplicates_detected`: Collision count.
+        - `snapshot_id`: Snapshot ID for rollback (if enabled).
+        - `llm_used`: Whether LLM was used.
+        - `duration_seconds`: Total time.
+
+    Example::
+
+        # Preview with LLM
+        result = cortex_plex_semantic_rename(
+            root_path="G:\\FLICKS\\Wicked",
+            use_llm=True,
+            llm_api_key="sk-...",
+            dry_run=True
+        )
+        print(f"Proposals: {result['proposals_count']}")
+
+        # Apply changes
+        result = cortex_plex_semantic_rename(
+            root_path="G:\\FLICKS\\Wicked",
+            use_llm=True,
+            llm_api_key="sk-...",
+            dry_run=False
+        )
+    """
+    from cortex.orchestrators.support.plex_workflow_orchestrator import (
+        PlexWorkflowOrchestrator,
+    )
+    from cortex.tools.media.llm_semantic_renamer import LLMProvider
+
+    try:
+        root = Path(root_path)
+
+        # Map provider string to enum
+        provider_map = {
+            "openai": LLMProvider.OPENAI,
+            "anthropic": LLMProvider.ANTHROPIC,
+        }
+        provider = provider_map.get(llm_provider.lower(), LLMProvider.OPENAI)
+
+        # Initialize orchestrator with enhanced features
+        orchestrator = PlexWorkflowOrchestrator(
+            root=root,
+            dry_run=dry_run,
+            normalize_filenames=True,
+            use_llm_semantic=use_llm,
+            llm_api_key=llm_api_key,
+            llm_provider=provider,
+            min_rename_confidence=min_confidence,
+            enable_duplicate_detection=enable_duplicate_detection,
+            enable_snapshots=enable_snapshots,
+            auto_organize=False,  # Rename in-place
+            use_iafd=False,  # Skip IAFD for speed
+        )
+
+        # Run workflow
+        result = orchestrator.run_full_workflow()
+
+        return {
+            "success": result.success,
+            "total_files": result.total_files,
+            "files_renamed": result.files_renamed,
+            "proposals_count": sum(
+                step.details.get("proposed_count", 0)
+                for step in result.step_results
+            ),
+            "duplicates_detected": 0,  # TODO: Extract from duplicate detector
+            "snapshot_id": (
+                orchestrator.current_snapshot.snapshot_id
+                if orchestrator.current_snapshot
+                else None
+            ),
+            "llm_used": use_llm,
+            "dry_run": dry_run,
+            "duration_seconds": round(result.duration_seconds, 2),
+            "steps": [
+                {
+                    "name": step.name,
+                    "status": step.status,
+                    "duration_ms": round(step.duration_ms, 0),
+                }
+                for step in result.step_results
+            ],
+            "errors": result.errors,
+            "warnings": result.warnings,
+        }
+
+    except Exception as exc:  # noqa: BLE001
+        return {
+            "success": False,
+            "error": str(exc),
+            "total_files": 0,
+            "files_renamed": 0,
+        }
+
+
 # AC_COMPLETE: AC-VIDEO-MCP-2026-02-23-004 ✅
