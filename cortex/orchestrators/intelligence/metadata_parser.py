@@ -1,4 +1,4 @@
-# AC_START: AC-PHASE81-S2-001
+# AC_START: AC-INTEL-METADATA-20260223T000000Z
 """
 Agent Metadata Parser
 Parses YAML front-matter from agent markdown files for programmatic discovery.
@@ -334,7 +334,7 @@ def get_mode_agent_mapping() -> Dict[str, List[AgentMetadata]]:
     return _parser.get_mode_agent_mapping()
 
 
-# AC_COMPLETE: AC-PHASE81-S2-001 ✅
+# AC_COMPLETE: AC-INTEL-METADATA-20260223T000000Z ✅
 # Module: cortex/agents/metadata_parser.py
 # Functions: 10 (discovery + validation)
 # Performance: <50ms for capability lookup, <100ms for mode discovery

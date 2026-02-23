@@ -1,0 +1,110 @@
+# =============================================================================
+# CORTEX Primitive — Dependency Guard Migration
+# =============================================================================
+# Authority:  Phase 59-g — Structured DependencyWarning
+# Version:    1.0.0
+# Created:    2026-02-23
+# CORE Rules: CORE-035, CORE-049
+#
+# Purpose:    Primitive workflow for migrating bare 'except ImportError' blocks
+#             in cortex.* internal imports to structured soft_import() calls.
+#             External library guards (yaml, prometheus, opentelemetry) are
+#             explicitly excluded — this is ONLY for cortex.* internal imports.
+# =============================================================================
+
+primitive:
+  id: "primitives/governance/dependency-guard-migration"
+  name: "Dependency Guard Migration"
+  version: "1.0.0"
+  category: "governance"
+  reusable: true
+
+  description: |
+    Replaces bare 'except ImportError: pass' blocks for cortex.* internal imports
+    with structured soft_import() calls that emit observable logger.warning messages.
+
+    This primitive is reusable across phases whenever new ImportError blocks
+    accumulate. Run it as part of any REFACTOR sub-phase touching import patterns.
+
+  inputs:
+    scope:
+      type: string
+      description: "Directory scope to scan (default: cortex/)"
+      default: "cortex/"
+    filter:
+      type: string
+      description: "Import prefix to target (default: cortex — internal only)"
+      default: "cortex"
+    dry_run:
+      type: bool
+      description: "Report only, no modifications"
+      default: false
+
+  steps:
+    - id: "DGM-1"
+      name: "Catalogue all ImportError blocks"
+      action: scan
+      command: "grep -rn 'except ImportError' {scope} --include='*.py' | grep -v __pycache__"
+      store_as: "ALL_IMPORT_ERROR_BLOCKS"
+
+    - id: "DGM-2"
+      name: "Classify internal vs external"
+      action: classify
+      description: |
+        For each block in ALL_IMPORT_ERROR_BLOCKS:
+        - Look back 1-5 lines to find the import statement
+        - If 'import cortex.' or 'from cortex.' → classify as INTERNAL
+        - Otherwise → classify as EXTERNAL (do not touch)
+      output:
+        internal: "INTERNAL_BLOCKS"
+        external: "EXTERNAL_BLOCKS"
+
+    - id: "DGM-3"
+      name: "Report external blocks (no action)"
+      action: report
+      input: "EXTERNAL_BLOCKS"
+      message: "External library guards (preserved as-is): {count} blocks"
+
+    - id: "DGM-4"
+      name: "Migrate internal blocks to soft_import()"
+      action: migrate
+      input: "INTERNAL_BLOCKS"
+      dry_run: "{dry_run}"
+      pattern: |
+        # BEFORE:
+        try:
+            from cortex.{module} import {symbol}
+        except ImportError:
+            pass  # or {symbol} = None
+
+        # AFTER:
+        from cortex.core.dependency_guard import soft_import as _soft_import
+        {symbol} = _soft_import(
+            "cortex.{module}",
+            attr="{symbol}",
+            fallback=None,
+            feature_name="{symbol} capability",
+        )
+
+    - id: "DGM-5"
+      name: "Verify no bare ImportError: pass remains for cortex.* imports"
+      action: verify
+      command: "grep -rn 'except ImportError: pass' {scope} --include='*.py' | grep -v __pycache__ | wc -l"
+      expected: "0"
+      on_failure: "BLOCK — bare ImportError:pass blocks remain for internal imports"
+
+  outputs:
+    blocks_migrated:
+      type: int
+      description: "Number of ImportError blocks converted to soft_import()"
+    blocks_preserved:
+      type: int
+      description: "Number of external ImportError blocks preserved"
+    files_modified:
+      type: list
+      description: "Files that had internal import guards migrated"
+
+  rollback:
+    description: "Revert: git checkout {files_modified}"
+    automatic: false
+    requires_human: true

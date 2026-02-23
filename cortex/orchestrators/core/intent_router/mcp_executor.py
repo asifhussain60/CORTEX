@@ -1,5 +1,5 @@
-# AC_START: AC-PHASE81-S3-P3-001
-# AC_ENHANCED: AC-PHASE81-S3-P4-001 (Metadata-driven tool discovery)
+# AC_START: AC-ROUTER-MCPEXEC-20260223T000000Z
+# AC_ENHANCED: AC-ROUTER-METADATA-20260223T000000Z (Metadata-driven tool discovery)
 """
 MCP Tool Executor for Agent Collaboration Workflows
 
@@ -278,4 +278,4 @@ class MCPToolExecutor:
         return result
 
 
-# AC_COMPLETE: AC-PHASE81-S3-P3-001 ✅ MCP Tool Executor Module
+# AC_COMPLETE: AC-ROUTER-MCPEXEC-20260223T000000Z ✅ MCP Tool Executor Module

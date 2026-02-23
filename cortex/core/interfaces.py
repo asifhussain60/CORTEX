@@ -9,19 +9,13 @@ Author: CORTEX Framework
 """
 
 from abc import ABC, abstractmethod
-from enum import Enum
 from typing import Any, Dict, Optional, Protocol, runtime_checkable
 
-
-class OperationMode(Enum):
-    """Execution modes for orchestrators."""
-
-    NORMAL = "normal"
-    DEBUG = "debug"
-    STRICT = "strict"
-    ADAPTIVE = "adaptive"
-    PLANNING = "planning"
-
+# Phase 59-b: Single canonical OperationMode — imported from cortex.core.core.interfaces.i_orchestrator
+from cortex.core.core.interfaces.i_orchestrator import (  # noqa: F401
+    IOrchestrator,
+    OperationMode,
+)
 
 class ExecutionContext:
     """Execution context for orchestrator operations.
@@ -35,7 +29,7 @@ class ExecutionContext:
 
     def __init__(
         self,
-        mode: OperationMode = OperationMode.NORMAL,
+        mode: OperationMode = OperationMode.PLANNING,
         timeout: float = 300.0,
         max_retries: int = 3,
         metadata: Optional[Dict[str, Any]] = None,
@@ -43,7 +37,7 @@ class ExecutionContext:
         """Initialize execution context.
 
         Args:
-            mode: Operation mode (default: NORMAL).
+            mode: Operation mode (default: PLANNING).
             timeout: Timeout in seconds (default: 300).
             max_retries: Maximum retries (default: 3).
             metadata: Optional metadata dictionary.
@@ -67,19 +61,14 @@ class ExecutionContext:
         }
 
 
-# ============================================================================
-# CORE-035: Single Canonical Implementation
-# Re-export IOrchestrator from canonical location
-# ============================================================================
-from cortex.core.interfaces.i_orchestrator import (  # noqa: F401, E501
-    IOrchestrator,
-)
-from cortex.core.interfaces.i_orchestrator import (
-    OperationMode as OrchestratorOperationMode,
-)
 
-# Keep local OperationMode for backward compatibility
-# (Different from IOrchestrator's OperationMode)
+# ============================================================================
+# CORE-035: Single Canonical Implementation — IOrchestrator and OperationMode
+# already imported at top of file from cortex.core.core.interfaces.i_orchestrator
+# ============================================================================
+
+# Backward-compat alias (retained for any caller using OrchestratorOperationMode)
+OrchestratorOperationMode = OperationMode
 
 
 class IExecutor(ABC):

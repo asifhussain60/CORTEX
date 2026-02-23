@@ -251,6 +251,118 @@ orchestrators:
       health_check: "ping"
 
 # =============================================================================
+# TIER 4 — Extended Orchestrators (Phase 59-f: GAP-59-09 Registration)
+# Previously unregistered tiers: git, intelligence, synthesis, workflow
+# =============================================================================
+  # ── Git Tier ────────────────────────────────────────────────────────────
+  git:
+    - name: "GitOrchestrator"
+      module: "cortex.orchestrators.git.git_orchestrator"
+      class: "GitOrchestrator"
+      tier: 4
+      priority: 30
+      dependencies: []
+      capabilities: ["git_operations", "branch_management", "commit_creation"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "GitPublishOrchestrator"
+      module: "cortex.orchestrators.git.git_publish_orchestrator"
+      class: "GitPublishOrchestrator"
+      tier: 4
+      priority: 31
+      dependencies: ["GitOrchestrator"]
+      capabilities: ["publish", "push_to_remote", "release_tagging"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "PreCommitEnforcementOrchestrator"
+      module: "cortex.orchestrators.git.enforcement_orchestrator"
+      class: "PreCommitEnforcementOrchestrator"
+      tier: 4
+      priority: 32
+      dependencies: ["EnforcementOrchestrator"]
+      capabilities: ["pre_commit_hook", "git_governance", "commit_blocking"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+  # ── Intelligence Tier ────────────────────────────────────────────────────
+  intelligence:
+    - name: "IntelligenceOrchestrator"
+      module: "cortex.orchestrators.intelligence.intelligence_orchestrator"
+      class: "IntelligenceOrchestrator"
+      tier: 4
+      priority: 40
+      dependencies: []
+      capabilities: ["intelligence_routing", "domain_classification", "lens_dispatch"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "MetaAuditorAgent"
+      module: "cortex.orchestrators.intelligence.meta_auditor_agent"
+      class: "MetaAuditorAgent"
+      tier: 4
+      priority: 41
+      dependencies: ["IntelligenceOrchestrator"]
+      capabilities: ["meta_audit", "23_point_audit", "prompt_agent_validation"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+  # ── Synthesis Tier ───────────────────────────────────────────────────────
+  synthesis:
+    - name: "ContextAwareSynthesisGateway"
+      module: "cortex.orchestrators.synthesis.context_aware_synthesis"
+      class: "ContextAwareSynthesisGateway"
+      tier: 4
+      priority: 50
+      dependencies: []
+      capabilities: ["context_synthesis", "unified_intelligence_context", "knowledge_fusion"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+  # ── Workflow Tier ────────────────────────────────────────────────────────
+  workflow:
+    - name: "WorkflowComposer"
+      module: "cortex.orchestrators.workflow.workflow_composer"
+      class: "WorkflowComposer"
+      tier: 4
+      priority: 60
+      dependencies: []
+      capabilities: ["workflow_composition", "step_sequencing", "pipeline_assembly"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "ConvergenceLoopExecutor"
+      module: "cortex.orchestrators.workflow.convergence_loop_executor"
+      class: "ConvergenceLoopExecutor"
+      tier: 4
+      priority: 61
+      dependencies: ["WorkflowComposer"]
+      capabilities: ["convergence_loop", "detect_fix_rescan", "p0_p1_elimination"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "HolisticRefactoringSweep"
+      module: "cortex.orchestrators.workflow.holistic_refactoring_sweep"
+      class: "HolisticRefactoringSweep"
+      tier: 4
+      priority: 62
+      dependencies: ["WorkflowComposer"]
+      capabilities: ["holistic_sweep", "full_repo_refactor", "sweep_catalogue_driven"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+    - name: "AutonomousWorkflowExecutor"
+      module: "cortex.orchestrators.workflow.autonomous_workflow_executor"
+      class: "AutonomousWorkflowExecutor"
+      tier: 4
+      priority: 63
+      dependencies: ["WorkflowComposer", "ConvergenceLoopExecutor"]
+      capabilities: ["autonomous_execution", "zero_human_intervention", "self_directing"]
+      health_check: "ping"
+      registration_phase: "59-f"
+
+# =============================================================================
 # ANALYZERS (Optional, from LENS)
 # =============================================================================
 analyzers:

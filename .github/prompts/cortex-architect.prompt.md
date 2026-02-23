@@ -31,7 +31,8 @@
 | IntentRouter | `cortex/orchestrators/core/intent_router.py` |
 | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` |
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
-| OrchestratorBase | `cortex/core/orchestrator_base.py` |
+| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base, Phase 58) |
+| OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
 | MCP Tools (24) | `cortex/mcp/tools/` |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |

@@ -1,4 +1,4 @@
-# AC_START: AC-PHASE81-S3-001
+# AC_START: AC-ROUTER-CAPABILITY-20260223T000000Z
 """
 Capability Matching Algorithm for IntentRouter
 Intelligent agent selection based on capability overlap and priority.
@@ -328,7 +328,7 @@ def match_intent_to_agents(
     return matcher.match_capabilities(intent_type, user_request, available_agents)
 
 
-# AC_COMPLETE: AC-PHASE81-S3-001 ✅
+# AC_COMPLETE: AC-ROUTER-CAPABILITY-20260223T000000Z ✅
 # Module: cortex/intent_router/capability_matcher.py
 # Functions: Match intent to agents with 95%+ accuracy
 # Performance: <100ms matching time

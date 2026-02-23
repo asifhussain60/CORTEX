@@ -99,7 +99,7 @@ enforcing routing in production (where context is always supplied).
 cortex/              ← Python source (16 canonical dirs)
   orchestrators/     ← 17 wired orchestrators across 3 tiers (7 core, 3 domain, 7 support)
   mcp/tools/         ← 26 MCP tools (28 total — 2 deprecated)
-  core/              ← OrchestratorBase, FileFactory, WorkflowEngine
+  core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis
   governance/        ← Rule enforcement, compliance
@@ -122,7 +122,8 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | HealthOrchestrator | `cortex/orchestrators/health/health_orchestrator.py` |
 | VacuumOrchestrator | `cortex/orchestrators/health/vacuum_orchestrator.py` |
-| OrchestratorBase | `cortex/core/orchestrator_base.py` |
+| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base — Phase 58, used by all 17 wired orchestrators) |
+| OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
 | MCP Server | `cortex/mcp/` |
 | Refactor Plan | `cortex-registry/planning/cortex-refactor-master.yaml` |
 | BulkDigestOrchestrator | `cortex/orchestrators/support/bulk_digest_orchestrator.py` |

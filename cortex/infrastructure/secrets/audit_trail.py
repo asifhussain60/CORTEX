@@ -9,15 +9,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 
-@dataclass
-class AuditEntry:
-    timestamp: str
-    action: str
-    key: str
-    actor: str
-    success: bool
-    metadata: Dict[str, Any] = field(default_factory=dict)
-    signature: Optional[str] = None
+# Phase 59-a: AuditEntry consolidated into cortex.core.audit_models (CORE-035)
+from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
 class AuditLogger:
@@ -41,12 +34,11 @@ class AuditLogger:
             AuditEntry result.
         """
         entry = AuditEntry(
-            timestamp=datetime.utcnow().isoformat(),
             action=action,
             key=key,
             actor=actor,
             success=success,
-            metadata=meta,
+            details=meta,  # metadata → details
         )
         self._entries.append(entry)
         if self._path:

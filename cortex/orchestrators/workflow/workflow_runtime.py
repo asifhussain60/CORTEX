@@ -4,7 +4,7 @@ WorkflowRuntime — Phase 45 Stage 1.
 Template-based workflow execution runtime with hydration and step sequencing.
 Provides foundation for executing structured workflows from YAML templates.
 
-AC_START: AC-PHASE45-S1-002
+AC_START: AC-WORKFLOW-RUNTIME-20260223T000000Z
 Phase: 45 | Stage: 1 | Priority: P0
 Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
@@ -293,4 +293,4 @@ class WorkflowRuntime:
         return result
 
 
-# AC_COMPLETE: AC-PHASE45-S1-002 ✅ WorkflowRuntime class implemented
+# AC_COMPLETE: AC-WORKFLOW-RUNTIME-20260223T000000Z ✅ WorkflowRuntime class implemented

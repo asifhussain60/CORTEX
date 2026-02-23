@@ -66,15 +66,8 @@ class SecretMetadata:
     ttl: Optional[int] = None  # Seconds
 
 
-@dataclass
-class AuditEntry:
-    """Audit log entry"""
-    timestamp: str
-    action: str
-    key: str
-    user: str
-    source_ip: Optional[str] = None
-    success: bool = True
+# Phase 59-a: AuditEntry consolidated into cortex.core.audit_models (CORE-035)
+from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
 # ============================================================================
@@ -672,10 +665,9 @@ def _log_audit_entry(
     audit_log_path = vault_path.with_suffix(".audit.log")
     
     entry = AuditEntry(
-        timestamp=datetime.now().isoformat(),
         action=action,
         key=key,
-        user=os.getenv("USER", "unknown"),
+        actor=os.getenv("USER", "unknown"),  # user → actor
         source_ip=source_ip,
         success=success
     )

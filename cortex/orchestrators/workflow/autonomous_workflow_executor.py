@@ -21,7 +21,7 @@ from cortex.orchestrators.workflow.step_state_machine import (
 )
 
 
-# AC_START: AC-PHASE100-003
+# AC_START: AC-WORKFLOW-AUTONOMOUS-20260223T000000Z
 # Description: AutonomousWorkflowExecutor bridge
 
 
@@ -299,4 +299,4 @@ class AutonomousWorkflowExecutor:
         return max_cycles
 
 
-# AC_COMPLETE: AC-PHASE100-003 ✅ AutonomousWorkflowExecutor implemented (GREEN phase)
+# AC_COMPLETE: AC-WORKFLOW-AUTONOMOUS-20260223T000000Z ✅ AutonomousWorkflowExecutor implemented (GREEN phase)

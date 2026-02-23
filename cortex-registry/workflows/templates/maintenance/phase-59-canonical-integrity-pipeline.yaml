@@ -1,0 +1,503 @@
+# =============================================================================
+# CORTEX Phase 59 — Canonical Integrity Pipeline
+# =============================================================================
+# Authority:  Phase 59 — Canonical Integrity Sweep (extends Phase 58)
+# Version:    1.0.0
+# Created:    2026-02-23
+# CORE Rules: CORE-002, CORE-008, CORE-028, CORE-035, CORE-048, CORE-064
+#
+# Purpose:    8-sub-phase pipeline to eliminate CORE-035 canonical definition
+#             sprawl, align documentation with code truth, complete Phase 58
+#             cross-cutting activation, and holistically vacuum legacy artifacts.
+#
+# Architecture:
+#   Group A: 59-a (AuditEntry consolidation)       ← FIRST
+#   Group B: 59-b + 59-d + 59-g (parallel)         ← Result/OperationMode + ghost dir + DependencyGuard
+#   Group C: 59-c + 59-e + 59-f (parallel)         ← Docs + cross-cutting + wiring
+#   Group D: 59-h (vacuum + tier1 + AC markers)     ← LAST
+# =============================================================================
+
+workflow:
+  id: "maintenance/phase-59-canonical-integrity-pipeline"
+  name: "Phase 59 — Canonical Integrity Pipeline"
+  version: "1.0.0"
+  category: "maintenance"
+  description: |
+    Four-group, 8-sub-phase pipeline closing all 12 confirmed P0/P1/P2 gaps
+    from the copilot-review-02.md independent assessment (2026-02-23).
+
+    Extends Phase 58 (OrchestratorProtocolMixin cross-cutting hooks) by eliminating
+    the canonical definition sprawl those hooks exposed.
+
+    Every sub-phase follows RED → GREEN → REFACTOR (CORE-008).
+    CORE-064 Sweep Completeness Contract: all 12 GAP-59-* items must close.
+
+  metadata:
+    author: "CORTEX Architect — Asif Hussain"
+    created: "2026-02-23"
+    phase: "59"
+    extends: "phase-58"
+    authority: "CORE-002, CORE-008, CORE-028, CORE-035, CORE-048, CORE-064"
+    sweep_catalogue_id: "SWEEP-59-CANONICAL-INTEGRITY"
+    gap_count: 12
+    supersedes: []
+
+  # ===========================================================================
+  # HOLISTIC VALIDATION PRE-FLIGHT (CORE-048)
+  # ===========================================================================
+  pre_flight:
+    primitive: "primitives/governance/holistic-validation-gate"
+    checks:
+      - id: "PF-1"
+        name: "Baseline test count"
+        command: "python3 scripts/run_tests.py smoke --count-only"
+        store_as: "BASELINE_TEST_COUNT"
+        blocking: true
+
+      - id: "PF-2"
+        name: "Verify 9 AuditEntry duplicates exist (confirms gap open)"
+        command: "grep -rn 'class AuditEntry' cortex/ --include='*.py' | grep -v __pycache__ | wc -l"
+        expected: "9"
+        blocking: false  # advisory — confirms we're fixing the right thing
+
+      - id: "PF-3"
+        name: "Verify dual OperationMode exists (confirms gap open)"
+        command: "grep -rn 'class OperationMode' cortex/ --include='*.py' | grep -v __pycache__ | wc -l"
+        expected: "2"
+        blocking: false
+
+      - id: "PF-4"
+        name: "CORE rules loaded"
+        tool: "cortex_load_core_rules"
+        expected_rule_count: 35
+        blocking: true
+
+      - id: "PF-5"
+        name: "Governance P0 violations = 0 before start"
+        tool: "cortex_query_governance"
+        filter: "severity: P0"
+        expected: 0
+        blocking: true  # cannot start with existing P0 violations
+
+  # ===========================================================================
+  # GROUP A — MUST RUN FIRST
+  # ===========================================================================
+  group_a:
+    parallel: false
+    description: "AuditEntry canonical consolidation — establishes pattern for group B"
+
+    steps:
+      - id: "59-a"
+        sub_phase: "59-a"
+        name: "Canonical AuditEntry — Single Definition"
+        priority: P0
+        gaps: [GAP-59-01]
+        tdd:
+          RED:
+            - action: write_test
+              file: "tests/core/test_audit_models_canonical.py"
+              tests:
+                - "test_audit_entry_is_single_canonical_definition"
+                - "test_audit_entry_superset_of_all_variants"
+                - "test_all_9_files_import_from_canonical"
+                - "test_no_duplicate_audit_entry_class_in_codebase"
+            - action: run_tests
+              expect: FAIL  # RED phase — tests must fail before implementation
+          GREEN:
+            - action: create_file
+              file: "cortex/core/audit_models.py"
+              description: "Canonical AuditEntry dataclass (superset of all 9 variants)"
+            - action: modify_file
+              files:
+                - "cortex/core/intent/intent_reflection_protocol.py"
+                - "cortex/governance/audit_navigator.py"
+                - "cortex/infrastructure/enhanced_audit_logger.py"
+                - "cortex/infrastructure/secrets/audit_trail.py"
+                - "cortex/infrastructure/secrets/management.py"
+                - "cortex/intelligence/domain_brain/api.py"
+                - "cortex/intelligence/domain_brain/audit_log_manager.py"
+                - "cortex/intelligence/domain_brain/domain_brain_models.py"
+              change: "Replace AuditEntry class definition with: from cortex.core.audit_models import AuditEntry"
+            - action: run_tests
+              expect: PASS  # GREEN phase
+          REFACTOR:
+            - action: modify_file
+              file: "cortex/core/audit_models.py"
+              change: "Add __all__ export list, add to cortex/__init__.py public surface"
+            - action: update_registry
+              file: "cortex-registry/core/governance/violation_patterns.yaml"
+              change: "Add pattern: duplicate_audit_entry — blocks class AuditEntry outside cortex/core/audit_models.py"
+            - action: run_tests
+              expect: PASS
+
+        ac_markers:
+          start: "AC_START: AC-AUDIT-MODELS-{timestamp}"
+          complete: "AC_COMPLETE: AC-AUDIT-MODELS-{timestamp} ✅"
+          failure: "AC_COMPLETE: AC-AUDIT-MODELS-{timestamp} ❌ CORE-035-VIOLATION"
+
+  # ===========================================================================
+  # GROUP B — PARALLEL AFTER GROUP A
+  # ===========================================================================
+  group_b:
+    parallel: true
+    description: "Result/OperationMode unification + ghost dir + DependencyGuard"
+    depends_on: [group_a]
+
+    steps:
+      - id: "59-b"
+        sub_phase: "59-b"
+        name: "Canonical Result/Ok/Err + Single OperationMode + Unified IOrchestrator Path"
+        priority: P0
+        gaps: [GAP-59-02, GAP-59-03, GAP-59-04]
+        tdd:
+          RED:
+            - action: write_test
+              file: "tests/core/test_canonical_result_type.py"
+              tests:
+                - "test_ok_from_core_result_equals_ok_from_core_core_result"
+                - "test_err_from_core_result_equals_err_from_core_core_result"
+                - "test_result_is_single_class_not_two"
+            - action: write_test
+              file: "tests/core/test_canonical_operation_mode.py"
+              tests:
+                - "test_operation_mode_has_single_definition"
+                - "test_planning_orchestrator_uses_canonical_operation_mode"
+                - "test_no_duplicate_operation_mode_importable"
+            - action: run_tests
+              expect: FAIL
+          GREEN:
+            - action: modify_file
+              file: "cortex/core/core/result.py"
+              change: "Replace full implementation with 5-line re-export from cortex.core.result"
+            - action: modify_file
+              file: "cortex/core/interfaces.py"
+              change: "Delete OperationMode class definition; import from cortex.core.core.interfaces.i_orchestrator"
+            - action: modify_file
+              file: "cortex/orchestrators/domain/refactoring_orchestrator.py"
+              change: "Remove CoreErr/CoreOk aliases; use single cortex.core.result import"
+            - action: modify_file
+              file: "cortex/orchestrators/domain/planning_orchestrator.py"
+              change: "Update to canonical import: cortex.core.core.interfaces.i_orchestrator"
+            - action: run_tests
+              expect: PASS
+          REFACTOR:
+            - action: scan_and_fix
+              pattern: "from cortex.core.core.result import"
+              files: "cortex/"
+              change: "Rewrite to cortex.core.result import (9 affected files)"
+            - action: run_tests
+              expect: PASS
+
+        ac_markers:
+          start: "AC_START: AC-CANONICAL-TYPES-{timestamp}"
+          complete: "AC_COMPLETE: AC-CANONICAL-TYPES-{timestamp} ✅"
+
+      - id: "59-d"
+        sub_phase: "59-d"
+        name: "Ghost Directory Elimination — cortex/knowledge/ Activation"
+        priority: P1
+        gaps: [GAP-59-07]
+        tdd:
+          RED:
+            - action: write_test
+              file: "tests/knowledge/test_knowledge_registry_proxy.py"
+              tests:
+                - "test_cortex_knowledge_module_importable"
+                - "test_knowledge_registry_proxy_loads_yaml_from_registry"
+                - "test_knowledge_module_not_empty"
+            - action: run_tests
+              expect: FAIL
+          GREEN:
+            - action: create_file
+              file: "cortex/knowledge/__init__.py"
+              description: "KnowledgeRegistryProxy — loads cortex-registry/knowledge/*.yaml"
+            - action: create_file
+              file: "cortex/knowledge/best-practices/__init__.py"
+              description: "Best practices sub-module with CORTEX domain practices"
+            - action: run_tests
+              expect: PASS
+          REFACTOR:
+            - action: link_to_engine
+              description: "Register KnowledgeRegistryProxy in cortex/__init__.py public surface"
+
+        ac_markers:
+          start: "AC_START: AC-KNOWLEDGE-PROXY-{timestamp}"
+          complete: "AC_COMPLETE: AC-KNOWLEDGE-PROXY-{timestamp} ✅"
+
+      - id: "59-g"
+        sub_phase: "59-g"
+        name: "Structured DependencyWarning — Replace Silent ImportError Fallbacks"
+        priority: P2
+        gaps: [GAP-59-10]
+        tdd:
+          RED:
+            - action: write_test
+              file: "tests/core/test_dependency_guard.py"
+              tests:
+                - "test_soft_import_returns_module_when_available"
+                - "test_soft_import_returns_fallback_when_unavailable"
+                - "test_soft_import_emits_structured_warning_on_failure"
+                - "test_soft_import_warning_includes_module_name"
+            - action: run_tests
+              expect: FAIL
+          GREEN:
+            - action: create_file
+              file: "cortex/core/dependency_guard.py"
+              description: "soft_import(module_path, fallback, warn, feature_name) utility"
+            - action: scan_and_migrate
+              pattern: "except ImportError"
+              scope: "cortex/orchestrators/"
+              filter: "cortex.* internal imports only"
+              change: "Replace bare except ImportError blocks with soft_import() calls"
+            - action: run_tests
+              expect: PASS
+          REFACTOR:
+            - action: validate
+              command: "grep -rn 'except ImportError: pass' cortex/orchestrators/"
+              expected_count: 0
+
+        ac_markers:
+          start: "AC_START: AC-DEPENDENCY-GUARD-{timestamp}"
+          complete: "AC_COMPLETE: AC-DEPENDENCY-GUARD-{timestamp} ✅"
+
+  # ===========================================================================
+  # GROUP C — PARALLEL AFTER GROUP B
+  # ===========================================================================
+  group_c:
+    parallel: true
+    description: "Documentation truth + cross-cutting activation + wiring completeness"
+    depends_on: [group_b]
+
+    steps:
+      - id: "59-c"
+        sub_phase: "59-c"
+        name: "Documentation Truth — OrchestratorBase + Tier Architecture"
+        priority: P0
+        gaps: [GAP-59-05, GAP-59-06]
+        tdd:
+          RED:
+            - action: write_test
+              file: "tests/golden/test_documentation_truth.py"
+              tests:
+                - "test_no_docs_claim_orchestratorbase_as_universal_base"
+                - "test_no_docs_claim_exactly_3_orchestrator_tiers"
+                - "test_docs_reference_orchestratorprotocolmixin_as_primary_base"
+            - action: run_tests
+              expect: FAIL  # docs still contain false claims at RED phase
+          GREEN:
+            - action: scan_and_fix
+              scope: "cortex-docs/.content/"
+              pattern: "inherits from `OrchestratorBase`"
+              replacement: "extends `OrchestratorProtocolMixin`"
+            - action: scan_and_fix
+              scope: "cortex-docs/.content/"
+              pattern: "3 tiers"
+              replacement: "3 canonical tiers (core, domain, support) + 4 specialised tiers (health, git, validation, workflow)"
+            - action: update_files
+              files:
+                - ".github/agents/core/cortex-architect.md"
+                - ".github/agents/core/CORTEX.md"
+                - ".github/agents/core/cortex-holistic-validator.md"
+                - ".github/agents/core/cortex-documentation-architect.md"
+                - ".github/agents/AGENT-INDEX.md"
+              change: "Align OrchestratorBase + tier count claims to code truth"
+            - action: run_tests
+              expect: PASS
+          REFACTOR:
+            - action: run_meta_audit
+              spec: ".github/agents/core/cortex-meta-auditor.md"
+              checks: 23
+              expected: PASS
+
+        ac_markers:
+          start: "AC_START: AC-DOC-TRUTH-{timestamp}"
+          complete: "AC_COMPLETE: AC-DOC-TRUTH-{timestamp} ✅"
+
+      - id: "59-e"
+        sub_phase: "59-e"
+        name: "Genuine Cross-Cutting Activation — PlanningOrchestrator + Hook Bypass Fix"
+        priority: P1
+        gaps: [GAP-59-08, GAP-59-08b]
+        tdd:
+          RED:
+            - action: write_test
+              file: "tests/core/test_cross_cutting_enforced_decorator.py"
+              tests:
+                - "test_decorator_calls_activate_hooks_before_execute"
+                - "test_decorator_calls_activate_hooks_after_execute"
+                - "test_domain_orchestrators_cannot_bypass_hooks"
+            - action: write_test
+              file: "tests/orchestrators/domain/test_planning_lens_activation.py"
+              tests:
+                - "test_planning_orchestrator_calls_lens_analyze"
+                - "test_planning_orchestrator_enriches_plan_with_lens_findings"
+            - action: run_tests
+              expect: FAIL
+          GREEN:
+            - action: modify_file
+              file: "cortex/core/orchestrator_protocol_mixin.py"
+              change: "Add @cross_cutting_enforced decorator that wraps execute_operation overrides"
+            - action: modify_file
+              file: "cortex/orchestrators/domain/planning_orchestrator.py"
+              change: "Add genuine LENSOrchestrator.analyze_directory() call in process() with graceful degradation"
+            - action: run_tests
+              expect: PASS
+          REFACTOR:
+            - action: validate
+              description: "Confirm all domain orchestrators cannot bypass hooks via override"
+            - action: run_tests
+              full_suite: true
+              expect: PASS
+
+        ac_markers:
+          start: "AC_START: AC-CROSS-CUTTING-{timestamp}"
+          complete: "AC_COMPLETE: AC-CROSS-CUTTING-{timestamp} ✅"
+
+      - id: "59-f"
+        sub_phase: "59-f"
+        name: "Wiring Registry Completeness — Register 4 Undocumented Tiers"
+        priority: P1
+        gaps: [GAP-59-09]
+        tdd:
+          RED:
+            - action: write_test
+              file: "tests/core/test_wiring_registry_completeness.py"
+              tests:
+                - "test_all_orchestrator_subdirs_have_wiring_entries"
+                - "test_git_orchestrator_registered_in_wiring"
+                - "test_intelligence_orchestrator_registered_in_wiring"
+                - "test_no_priority_conflicts_across_tiers"
+            - action: run_tests
+              expect: FAIL
+          GREEN:
+            - action: modify_file
+              file: "cortex/core/wiring/specifications/wiring.yaml"
+              change: "Add tier 4 section with GitOrchestrator, IntelligenceOrchestrator, SanitizationOrchestrator, GitPublishOrchestrator, PreCommitEnforcementOrchestrator; priorities 200-299"
+            - action: modify_file
+              file: "cortex-registry/core/capabilities-manifest.yaml"
+              change: "Update orchestrator totals to reflect wiring.yaml truth"
+            - action: run_tests
+              expect: PASS
+          REFACTOR:
+            - action: run_wiring_validation
+              level: L1
+              expected: PASS_ALL
+
+        ac_markers:
+          start: "AC_START: AC-WIRING-REGISTRY-{timestamp}"
+          complete: "AC_COMPLETE: AC-WIRING-REGISTRY-{timestamp} ✅"
+
+  # ===========================================================================
+  # GROUP D — FINAL: HOLISTIC VACUUM + TIER1 + AC MARKERS
+  # ===========================================================================
+  group_d:
+    parallel: false
+    description: "Holistic vacuum — full cleanup, tier1 alignment, AC standardisation"
+    depends_on: [group_c]
+
+    steps:
+      - id: "59-h"
+        sub_phase: "59-h"
+        name: "Holistic Vacuum — tier1_learned + AC Markers + Legacy Cleanup"
+        priority: P2
+        gaps: [GAP-59-11, GAP-59-12]
+        tdd:
+          RED:
+            - action: write_test
+              file: "tests/intelligence/memory/test_knowledge_retention_store.py"
+              tests:
+                - "test_knowledge_retention_store_persists_session_insights"
+                - "test_knowledge_retention_store_loads_prior_insights"
+            - action: write_test
+              file: "tests/core/test_ac_marker_format.py"
+              tests:
+                - "test_no_phase_numbered_ac_markers_in_active_orchestrators"
+                - "test_ac_markers_use_domain_timestamp_format"
+            - action: run_tests
+              expect: FAIL
+          GREEN:
+            - action: create_file
+              file: "cortex/intelligence/memory/tier1_learned/knowledge_retention_store.py"
+              description: "KnowledgeRetentionStore: persist + recall cross-session insights"
+            - action: migrate_ac_markers
+              pattern: "AC-PHASE[0-9]+\\.[0-9]+-[0-9]+"
+              replacement_format: "AC-{DOMAIN}-{ISO_TIMESTAMP}"
+              scope: "cortex/orchestrators/"
+            - action: run_vacuum
+              orchestrator: "VacuumOrchestrator"
+              targets:
+                - "DEPRECATED-* files in active directories"
+                - "Empty __init__.py with only # placeholder content"
+                - ".md files outside .github/, cortex-docs/, README.md"
+                - "Orphaned .db files outside .cortex-runtime/"
+            - action: run_tests
+              expect: PASS
+          REFACTOR:
+            - action: wire_retention_store
+              description: "Register KnowledgeRetentionStore in MasterOrchestrator post-session hook"
+            - action: create_retroactive_record
+              file: "cortex-registry/planning/phases/completed/phase-58-cross-cutting-protocol.yaml"
+              description: "Retroactive completion record for Phase 58 (previously undocumented)"
+            - action: run_tests
+              full_suite: true
+              expect: PASS
+
+        ac_markers:
+          start: "AC_START: AC-VACUUM-TIER1-{timestamp}"
+          complete: "AC_COMPLETE: AC-VACUUM-TIER1-{timestamp} ✅"
+
+  # ===========================================================================
+  # CONVERGENCE LOOP (CORE-064)
+  # ===========================================================================
+  convergence_loop:
+    primitive: "primitives/validation/detect-fix-rescan-loop"
+    max_cycles: 5
+    success_criteria:
+      all_gaps_closed: true
+      p0_count: 0
+      p1_count: 0
+      test_regressions: 0
+      duplicate_audit_entry: 1      # exactly one definition
+      duplicate_operation_mode: 1   # exactly one definition
+      duplicate_result_class: 1     # exactly one definition
+      orchestrator_base_lie_in_docs: 0
+    on_cycle_failure:
+      action: "rescan and re-fix before next cycle"
+      log_to: ".cortex-runtime/traces/orchestrator-traces.db"
+
+  # ===========================================================================
+  # POST-COMPLETION ACTIONS
+  # ===========================================================================
+  post_completion:
+    - action: "run_full_test_suite"
+      command: "make test-batch"
+      expect: "≥ BASELINE_TEST_COUNT tests passing, 0 new failures"
+
+    - action: "move_plan_yaml"
+      from: "cortex-registry/planning/phases/planned/phase-59-canonical-integrity-sweep.yaml"
+      to:   "cortex-registry/planning/phases/completed/phase-59-canonical-integrity-sweep.yaml"
+
+    - action: "update_capabilities_manifest"
+      file: "cortex-registry/core/capabilities-manifest.yaml"
+      fields:
+        last_audit_fix: "{TODAY}"
+        phase_59_completed: true
+        canonical_audit_entry: "cortex.core.audit_models.AuditEntry"
+        canonical_result: "cortex.core.result.Result"
+        canonical_operation_mode: "cortex.core.core.interfaces.i_orchestrator.OperationMode"
+        wired_orchestrator_tiers: 7
+
+    - action: "emit_final_ac"
+      marker: "AC_COMPLETE: AC-PHASE59-PIPELINE-{timestamp} ✅ — 12/12 gaps closed"
+
+    - action: "write_to_sqlite"
+      db: ".cortex-runtime/traces/orchestrator-traces.db"
+      table: "audit_sessions"
+      data:
+        phase: "59"
+        gaps_total: 12
+        gaps_closed: 12
+        new_tests: 30
+        files_modified: 35
+        files_deleted: 15
+        new_files: 10

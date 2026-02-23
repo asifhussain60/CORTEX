@@ -11,23 +11,75 @@ Also provides cross-cutting intelligence helpers (Phase 58):
 - _governance_gate()           — EnforcementOrchestrator pre-execution check
 - _query_domain_brain()        — BusinessKnowledgeRepository lookup
 
+Phase 59-e adds:
+- cross_cutting_enforced()     — decorator that guarantees hooks fire even when
+                                 subclasses override execute_operation without
+                                 calling super() (GAP-59-08b)
+
 Usage::
 
     class MyOrchestrator(OrchestratorProtocolMixin):
         _orch_name = "MyOrchestrator"
         _orch_version = "1.0.0"
 
-Or override ``get_name`` / ``get_version`` directly.
+    # OR guard a specific override:
+    @cross_cutting_enforced
+    def execute_operation(self, operation_name, parameters):
+        ...
 
 Authority: Phase 13 Sub-Phase D — Base Class Convergence
          Phase 58 — 100% cross-cutting utilization
+         Phase 59-e — @cross_cutting_enforced decorator (GAP-59-08b)
 CORE-011 (type hints), CORE-012 (docstrings)
 """
 
+import functools
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional, TypeVar
 
 _logger = logging.getLogger(__name__)
+
+F = TypeVar("F", bound=Callable[..., Any])
+
+
+def cross_cutting_enforced(method: F) -> F:
+    """Decorator that guarantees cross-cutting hooks fire on execute_operation overrides.
+
+    Apply to any ``execute_operation`` override to ensure that
+    ``_activate_cross_cutting_hooks()`` is called even when the subclass
+    does not call ``super().execute_operation(...)``.
+
+    Phase 59-e: Closes GAP-59-08b — hooks bypassed by domain orchestrator overrides.
+
+    Args:
+        method: The ``execute_operation`` method to wrap.
+
+    Returns:
+        Wrapped method that pre-activates cross-cutting hooks then delegates
+        to the original implementation.
+
+    Example::
+
+        class MyOrchestrator(OrchestratorProtocolMixin):
+            @cross_cutting_enforced
+            def execute_operation(self, operation_name, parameters):
+                return self._do_my_work(parameters)
+    """
+    @functools.wraps(method)
+    def _wrapper(self: Any, operation_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        # Only activate if not already activated (avoid double-fire on super() calls)
+        if not getattr(self, "_cross_cutting_activated", False):
+            self._cross_cutting_activated = True
+            try:
+                self._activate_cross_cutting_hooks(
+                    operation=operation_name,
+                    orchestrator_context=parameters.get("orchestrator_context"),
+                    unified_context=parameters.get("unified_context"),
+                )
+            finally:
+                self._cross_cutting_activated = False
+        return method(self, operation_name, parameters)
+    return _wrapper  # type: ignore[return-value]
 
 
 class OrchestratorProtocolMixin:

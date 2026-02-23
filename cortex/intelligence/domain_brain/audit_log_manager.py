@@ -10,17 +10,8 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 
 
-@dataclass
-class AuditEntry:
-    """Audit entry for tracking operations."""
-
-    entry_id: str
-    operation_type: str
-    domain: str
-    user: str
-    message: str
-    timestamp: datetime = field(default_factory=datetime.utcnow)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+# Phase 59-a: AuditEntry consolidated into cortex.core.audit_models (CORE-035)
+from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
 @dataclass
@@ -85,11 +76,11 @@ class AuditLogManager:
         """
         entry = AuditEntry(
             entry_id=entry_id,
-            operation_type=str(operation_type),
+            operation=str(operation_type),  # operation_type → operation
             domain=domain,
-            user=user,
+            actor=user,  # user → actor
             message=message,
-            metadata=metadata or {},
+            details=metadata or {},  # metadata → details
         )
         self.hot_entries.append(entry)
 
@@ -204,9 +195,9 @@ class AuditLogManager:
             for update in range(updates_per_day):
                 entry = AuditEntry(
                     entry_id=f"sim_{day}_{update}",
-                    operation_type="AC_EXECUTE",
+                    operation="AC_EXECUTE",  # operation_type → operation
                     domain=f"domain_{day % 10}",
-                    user="simulator",
+                    actor="simulator",  # user → actor
                     message="Simulated update",
                     timestamp=date,
                 )

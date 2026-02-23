@@ -4,7 +4,7 @@ PreFlightRequestTransformer (PFRT) - Stage 0 Orchestration Layer.
 Transforms verbose, repetitive user requests into crystallized single-paragraph
 intents optimized for MasterOrchestrator processing.
 
-AC_START: AC-PHASE95-001
+AC_START: AC-CORE-PFRT-20260223T000000Z
 Description: Pre-Flight Request Transformer - Stage 0 orchestration layer
 """
 
@@ -291,4 +291,4 @@ class PreFlightRequestTransformer:
         return words / 0.75
 
 
-# AC_COMPLETE: AC-PHASE95-001 ✅ PFRT Engine implementation
+# AC_COMPLETE: AC-CORE-PFRT-20260223T000000Z ✅ PFRT Engine implementation

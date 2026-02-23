@@ -4,7 +4,7 @@ CORTEX Documentation Site Orchestrator.
 Wires discovery → extraction → rendering → validation → deployment pipeline
 for automated documentation site generation from Markdown content.
 
-AC_START: AC-PHASE98-S1-T1
+AC_START: AC-SUPPORT-DOCS-20260223T000000Z
 """
 
 from dataclasses import dataclass, field
@@ -328,4 +328,4 @@ def get_cortex_docs_orchestrator() -> CortexDocsOrchestrator:
     return CortexDocsOrchestrator()
 
 
-# AC_COMPLETE: AC-PHASE98-S1-T1
+# AC_COMPLETE: AC-SUPPORT-DOCS-20260223T000000Z

@@ -1,9 +1,9 @@
 """
 RefactoringOrchestrator - Unified API for all refactoring tool adapters.
 
-AC_START: AC-PHASE24.6-002
+AC_START: AC-REFACTOR-20260223T000000Z
 Description: Orchestrator for coordinating all refactoring tool adapters
-Authority: Phase 24.6 - Orchestration + MCP Exposure
+Authority: Phase 24.6 - Orchestration + MCP Exposure (legacy: AC-PHASE24.6-002)
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-027 (audit)
 
 Coordinates:
@@ -29,15 +29,15 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-# Phase 51: Enhanced response template with semantic color coding
-# REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
-from cortex.core.result import Err, Ok
-from cortex.core.core.result import Err as CoreErr, Ok as CoreOk, Result as CoreResult  # G3 Fix: IOrchestrator uses core.core.result
-from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode  # G3 Fix: wire interface
-from cortex.core.workflow_template_mixin import WorkflowTemplateMixin  # G3 Fix: wire mixin
+# Phase 59-b: Single canonical Result — cortex.core.core.result now re-exports cortex.core.result (CORE-035)
+from cortex.core.result import Err, Ok, Result
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
-# Alias CoreResult as Result so type annotations in IOrchestrator methods work
-Result = CoreResult
+# Backward-compat aliases (no-op now that both paths are identical)
+CoreOk = Ok
+CoreErr = Err
+CoreResult = Result
 from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
 from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
 from cortex.orchestrators.domain.refactoring.adapters.typescript_adapter import TypeScriptAdapter
@@ -1225,4 +1225,4 @@ class RefactoringOrchestrator(WorkflowTemplateMixin, IOrchestrator):
         }
 
 
-# AC_COMPLETE: AC-PHASE24.6-002 ✅ RefactoringOrchestrator implementation complete
+# AC_COMPLETE: AC-REFACTOR-20260223T000000Z ✅ RefactoringOrchestrator implementation complete

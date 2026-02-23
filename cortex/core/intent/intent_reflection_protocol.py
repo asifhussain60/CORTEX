@@ -48,42 +48,8 @@ class ReflectionRequest:
     timestamp: str = ""
 
 
-@dataclass
-class AuditEntry:
-    """Audit log entry for tracking intent reflection operations."""
-
-    operation: str
-    timestamp: str
-    details: Dict[str, Any] = field(default_factory=dict)
-
-    def get(self, key: str, default: Any = None) -> Any:
-        """Get attribute with dict-like access."""
-        if key == "operation":
-            return self.operation
-        elif key == "timestamp":
-            return self.timestamp
-        elif key == "details":
-            return self.details
-        return default
-
-    def __getitem__(self, key: str):
-        """Dict-like subscript access."""
-        result = self.get(key)
-        if result is None:
-            raise KeyError(key)
-        return result
-
-    def __contains__(self, key: str) -> bool:
-        """Dict-like 'in' operator support."""
-        return key in ["operation", "timestamp", "details"]
-
-    def __iter__(self):
-        """Make iterable over keys."""
-        return iter(["operation", "timestamp", "details"])
-
-    def __hash__(self):
-        """Make AuditEntry hashable for use in sets/dicts."""
-        return hash((self.operation, self.timestamp))
+# Phase 59-a: AuditEntry consolidated into cortex.core.audit_models (CORE-035)
+from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
 @dataclass

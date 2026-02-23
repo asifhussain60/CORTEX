@@ -26,25 +26,8 @@ class EventType(Enum):
     ERROR_OCCURRED = "error_occurred"
 
 
-@dataclass
-class AuditEntry:
-    """Single audit log entry."""
-    
-    id: Optional[int] = None
-    timestamp: Optional[datetime] = None
-    event_type: str = ""
-    orchestrator_id: str = ""
-    status: str = ""
-    duration_ms: int = 0
-    error_message: Optional[str] = None
-    metadata: Dict[str, Any] = None
-    
-    def __post_init__(self) -> None:
-        """Post-init processing."""
-        if self.metadata is None:
-            self.metadata = {}
-        if self.timestamp is None:
-            self.timestamp = datetime.now()
+# Phase 59-a: AuditEntry consolidated into cortex.core.audit_models (CORE-035)
+from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
 class CortexAuditDB:
@@ -230,14 +213,14 @@ class CortexAuditDB:
         entries = []
         for row in results:
             entry = AuditEntry(
-                id=row[0],
+                entry_id=str(row[0]) if row[0] is not None else "",
                 timestamp=datetime.fromisoformat(row[1]) if row[1] else None,
-                event_type=row[2],
+                operation=row[2],  # event_type → operation
                 orchestrator_id=row[3],
                 status=row[4],
                 duration_ms=row[5],
                 error_message=row[6],
-                metadata=json.loads(row[7]) if row[7] else {},
+                details=json.loads(row[7]) if row[7] else {},  # metadata → details
             )
             entries.append(entry)
         

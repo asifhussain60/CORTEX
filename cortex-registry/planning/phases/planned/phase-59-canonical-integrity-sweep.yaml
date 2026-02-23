@@ -1,0 +1,665 @@
+id: phase-59
+title: "Canonical Integrity Sweep — CORE-035 Violations, Documentation Truth, Cross-Cutting Activation & Holistic Vacuum"
+version: "1.0"
+created: "2026-02-23"
+status: PLANNED
+priority: P0
+extends: phase-58
+predecessor: phase-57
+governance_authority:
+  - CORE-002  # All output inline — never create .md/.txt report files
+  - CORE-008  # TDD mandatory — RED → GREEN → REFACTOR
+  - CORE-011  # Type hints on all functions
+  - CORE-012  # Docstrings on all public APIs
+  - CORE-028  # File naming: snake_case only
+  - CORE-035  # Single canonical implementation — no duplicates
+  - CORE-048  # Holistic validation gate before IMPLEMENT/FIX/REFACTOR
+  - CORE-049  # Silent autonomous execution
+  - CORE-064  # Sweep Completeness Contract — no partial sweeps
+sweep_catalogue_id: SWEEP-59-CANONICAL-INTEGRITY
+workflow_template: cortex-registry/workflows/templates/maintenance/phase-59-canonical-integrity-pipeline.yaml
+
+# ─────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────
+background: |
+  Phase 57 remediated intelligence wiring (9 gaps). Phase 58 extended
+  OrchestratorProtocolMixin with cross-cutting hooks (LENS, KnSynth, GovGate, DomainBrain).
+  Phase 58 delivered 66 modified source files and 10 new test files.
+
+  Independent copilot-review-02.md (2026-02-23) found 9 critical failures, 5 gaps,
+  and confirmed 7 strengths. ALL CORE-035 violations were verified by live code
+  inspection. This phase closes every confirmed open issue as a single CORE-064 sweep.
+
+  Phase 59 extends Phase 58 holistically — it does NOT undo Phase 58 work;
+  it builds on it by eliminating the canonical definition sprawl and documentation
+  drift that Phase 58's protocol work exposed.
+
+# ─────────────────────────────────────────────────────────────────
+# VERIFIED OPEN ISSUES — Full Sweep Catalogue
+# ─────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── P0: CORE-035 Canonical Definition Violations ─────────────
+
+  - id: GAP-59-01
+    title: "9 duplicate AuditEntry class definitions — CORE-035"
+    severity: P0
+    rule: CORE-035
+    evidence: |
+      class AuditEntry found in 9 files:
+        cortex/core/intent/intent_reflection_protocol.py:52
+        cortex/governance/audit_navigator.py:9
+        cortex/infrastructure/audit_db.py:30  ← PRIMARY
+        cortex/infrastructure/enhanced_audit_logger.py:28
+        cortex/infrastructure/secrets/audit_trail.py:13
+        cortex/infrastructure/secrets/management.py:70
+        cortex/intelligence/domain_brain/api.py:13
+        cortex/intelligence/domain_brain/audit_log_manager.py:14
+        cortex/intelligence/domain_brain/domain_brain_models.py:281
+    sub_phase: 59-a
+    status: OPEN
+
+  - id: GAP-59-02
+    title: "Dual Result/Ok/Err class families — CORE-035"
+    severity: P0
+    rule: CORE-035
+    evidence: |
+      cortex/core/result.py — primary (Generic[E], _ResultMeta metaclass)
+      cortex/core/core/result.py — secondary (ResultMeta, ABCMeta pattern)
+      RefactoringOrchestrator line 34-35: imports BOTH simultaneously
+        from cortex.core.result import Err, Ok
+        from cortex.core.core.result import Err as CoreErr, Ok as CoreOk, Result as CoreResult
+      Additional consumers of cortex.core.core.result: 9 files in cortex/
+    sub_phase: 59-b
+    status: OPEN
+
+  - id: GAP-59-03
+    title: "Dual OperationMode enum — CORE-035"
+    severity: P0
+    rule: CORE-035
+    evidence: |
+      cortex/core/core/interfaces/i_orchestrator.py:19
+        OperationMode: PLANNING, EXECUTION, VALIDATION, RECOVERY, EDUCATIONAL
+      cortex/core/interfaces.py:16
+        OperationMode: NORMAL, DEBUG, STRICT, ADAPTIVE, PLANNING
+      Both are imported across orchestrators. Cross-type assignment breaks type-checking.
+    sub_phase: 59-b
+    status: OPEN
+
+  - id: GAP-59-04
+    title: "Three competing IOrchestrator import paths — CORE-035"
+    severity: P0
+    rule: CORE-035
+    evidence: |
+      Path A: cortex.core.core.interfaces.i_orchestrator  ← canonical definition
+      Path B: cortex.core.interfaces.i_orchestrator        ← re-export shim
+      Path C: cortex.core.interfaces                       ← meta re-export
+      PlanningOrchestrator uses Path B; all core orchestrators use Path A.
+      cortex/core/core/interfaces/__init__.py imports from Path B → circular re-export.
+    sub_phase: 59-b
+    status: OPEN
+
+  # ── P0: Documentation Truth Failures ─────────────────────────
+
+  - id: GAP-59-05
+    title: "Documentation claims all 17 orchestrators use OrchestratorBase — FALSE"
+    severity: P0
+    rule: CORE-002
+    evidence: |
+      cortex-docs/.content/01-capabilities/02-core-platform.md:63
+        "Every one of the 17 wired orchestrators inherits from OrchestratorBase"
+      Reality: 0 of the 17 wired orchestrators extend OrchestratorBase as primary base.
+      Actual base: OrchestratorProtocolMixin (45 orchestrators) or IOrchestrator.
+      OrchestratorBase used only by: ServiceDecompositionOrchestrator, BKIO (non-wired).
+      Docs repeat this claim in: 9 .content/ files, 5 .github/agents/ files.
+    sub_phase: 59-c
+    status: OPEN
+
+  - id: GAP-59-06
+    title: "Documentation claims 3-tier architecture; 10 subdirectory tiers exist"
+    severity: P0
+    rule: CORE-002
+    evidence: |
+      Documented: core / domain / support  (3 tiers)
+      Actual:     core / domain / support / health / git / intelligence /
+                  strategies / synthesis / validation / workflow  (10 subdirs)
+      40 Python files in undocumented tiers not in wiring.yaml.
+      Canonical orchestrators in git/ and validation/ are production-grade.
+    sub_phase: 59-c
+    status: OPEN
+
+  - id: GAP-59-07
+    title: "cortex/knowledge/ ghost directory — 0 files, listed in architecture"
+    severity: P1
+    rule: CORE-035
+    evidence: |
+      find cortex/knowledge/ -type f = 0 results
+      cortex/knowledge/best-practices/ is an empty folder
+      Directory is listed in architecture documentation as canonical top-level dir.
+    sub_phase: 59-d
+    status: OPEN
+
+  # ── P1: Cross-Cutting Activation Gaps ────────────────────────
+
+  - id: GAP-59-08
+    title: "PlanningOrchestrator: lens_enabled=True but zero LENS invocation"
+    severity: P1
+    rule: CORE-035
+    evidence: |
+      cortex/orchestrators/domain/planning_orchestrator.py:55
+        self.lens_enabled = True
+      _extract_lens_context() only reads forwarded dict — never calls LENSOrchestrator.
+      PlanningOrchestrator.process() does not call _activate_cross_cutting_hooks().
+    sub_phase: 59-e
+    status: OPEN
+
+  - id: GAP-59-08b
+    title: "execute_operation override bypass: domain orchestrators skip Phase 58 hooks"
+    severity: P1
+    rule: CORE-035
+    evidence: |
+      OrchestratorProtocolMixin.execute_operation() activates cross-cutting hooks.
+      Domain orchestrators override execute_operation directly without calling super().
+      Result: 100% hook bypass for all domain-tier operations.
+    sub_phase: 59-e
+    status: OPEN
+
+  # ── P1: Wiring Registry Gaps ─────────────────────────────────
+
+  - id: GAP-59-09
+    title: "40 production orchestrator files in 4 unregistered tiers (git, intelligence, synthesis, workflow)"
+    severity: P1
+    rule: CORE-035
+    evidence: |
+      find cortex/orchestrators/{intelligence,synthesis,workflow,git}/ -name "*.py" | wc -l = 40
+      wiring.yaml tier: 1/2/3 — no entries for these tiers.
+      Includes: GitOrchestrator, IntelligenceOrchestrator, SanitizationOrchestrator,
+      PreCommitEnforcementOrchestrator, GitPublishOrchestrator — all production-grade.
+    sub_phase: 59-f
+    status: OPEN
+
+  # ── P2: Vacuum & Legacy Cleanup ──────────────────────────────
+
+  - id: GAP-59-10
+    title: "151 except ImportError blocks — operator-invisible capability degradation"
+    severity: P2
+    rule: CORE-049
+    evidence: |
+      grep -rn 'except ImportError' cortex/ | wc -l = 151
+      Phase 57-e (GAP-57-07) targeted this but count has risen from 144 → 151.
+      New blocks introduced in Phase 58 work without structured DependencyWarning.
+    sub_phase: 59-g
+    status: OPEN
+
+  - id: GAP-59-11
+    title: "tier1_learned purpose mismatch — cleaners misidentified as cognitive memory"
+    severity: P2
+    rule: CORE-012
+    evidence: |
+      cortex/intelligence/memory/tier1_learned/ contains 26 .py files of vacuum cleaners
+      (markdown_sprawl.py, root_artifacts.py, orphaned_test.py, etc.)
+      These are cleaning utilities — not "learned cognitive memory" as architecture claims.
+      tier1_learned/governance/ and tier1_learned/templates/ have stub-only content.
+    sub_phase: 59-h
+    status: OPEN
+
+  - id: GAP-59-12
+    title: "Stale AC phase markers — phase-numbered identifiers in audit trail"
+    severity: P2
+    rule: CORE-012
+    evidence: |
+      cortex/orchestrators/domain/refactoring_orchestrator.py: AC_START: AC-PHASE24.6-002
+      AC identifiers tied to completed phases become ambiguous in forensic SQLite queries.
+      Standard should be: AC-{DOMAIN}-{ISO-TIMESTAMP} format.
+    sub_phase: 59-h
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────
+# SUB-PHASE STRUCTURE — 8 sub-phases, dependency-ordered
+# ─────────────────────────────────────────────────────────────────
+sub_phases:
+
+  - id: 59-a
+    title: "Canonical AuditEntry — Single Definition (CORE-035 P0)"
+    priority: P0
+    gaps_closed: [GAP-59-01]
+    sequence: 1
+    estimated_duration: "90 minutes"
+    approach: |
+      Create cortex/core/audit_models.py as the single canonical AuditEntry dataclass.
+      It must be a superset of all 9 variant definitions (union of all fields).
+      Replace each of the 9 duplicate definitions with a re-export pointing to canonical.
+      EnforcementOrchestrator pre-commit hook blocks new AuditEntry definitions
+      outside cortex/core/audit_models.py (add to violation_patterns.yaml).
+    tdd_sequence:
+      RED:
+        - "tests/core/test_audit_models_canonical.py"
+        - "test_audit_entry_is_single_canonical_definition()"
+        - "test_audit_entry_superset_of_all_variants()"
+        - "test_all_9_files_import_from_canonical()"
+        - "test_no_duplicate_audit_entry_class_in_codebase()"
+      GREEN:
+        - "Create cortex/core/audit_models.py with AuditEntry dataclass"
+        - "Fields: session_id, orchestrator, operation, status, timestamp, duration_ms, details, error, phase"
+        - "Replace 8 duplicate definitions with: from cortex.core.audit_models import AuditEntry"
+        - "Keep cortex/infrastructure/audit_db.py as primary — it re-exports canonical"
+      REFACTOR:
+        - "Validate all callers still work via re-exports"
+        - "Add AuditEntry to cortex/__init__.py public surface"
+    deliverables:
+      - "cortex/core/audit_models.py (NEW — canonical AuditEntry + re-exports)"
+      - "8 files modified to import from canonical"
+      - "tests/core/test_audit_models_canonical.py (4 new tests)"
+      - "cortex-registry/core/governance/violation_patterns.yaml (new rule: no duplicate AuditEntry)"
+    acceptance_criteria:
+      - "grep -rn 'class AuditEntry' cortex/ returns exactly 1 result"
+      - "All 9 former locations import from cortex.core.audit_models"
+      - "All existing tests that use AuditEntry still pass"
+
+  - id: 59-b
+    title: "Canonical Result/Ok/Err + Single OperationMode + Unified IOrchestrator Path"
+    priority: P0
+    gaps_closed: [GAP-59-02, GAP-59-03, GAP-59-04]
+    sequence: 2
+    estimated_duration: "2 hours"
+    approach: |
+      These 3 gaps share a root cause: cortex/core/core/ is a legacy double-nesting
+      artifact that hosts canonical interfaces alongside cortex/core/*.
+      
+      Fix strategy (bounded — no structural flattening):
+      1. cortex/core/core/result.py → pure re-export of cortex.core.result (3 lines)
+      2. cortex/core/interfaces.py → re-export OperationMode from canonical i_orchestrator
+         DELETE the duplicate OperationMode enum definition
+      3. cortex/core/interfaces/i_orchestrator.py already re-exports from canonical
+         Make cortex/core/core/interfaces/__init__.py consistent (already points at cortex.core.interfaces.i_orchestrator)
+      4. Fix PlanningOrchestrator to use cortex.core.core.interfaces.i_orchestrator (canonical path A)
+      5. Fix RefactoringOrchestrator to remove CoreErr/CoreOk dual-import aliases
+    tdd_sequence:
+      RED:
+        - "tests/core/test_canonical_result_type.py"
+        - "test_ok_from_core_result_equals_ok_from_core_core_result()"
+        - "test_err_from_core_result_equals_err_from_core_core_result()"
+        - "test_result_is_single_class_not_two()"
+        - "tests/core/test_canonical_operation_mode.py"
+        - "test_operation_mode_has_single_definition()"
+        - "test_planning_orchestrator_uses_canonical_operation_mode()"
+        - "test_no_duplicate_operation_mode_importable()"
+      GREEN:
+        - "cortex/core/core/result.py → from cortex.core.result import Result, Ok, Err, __all__"
+        - "cortex/core/interfaces.py → delete OperationMode class, import from i_orchestrator"
+        - "cortex/orchestrators/domain/planning_orchestrator.py → use cortex.core.core.interfaces.i_orchestrator"
+        - "cortex/orchestrators/domain/refactoring_orchestrator.py → remove CoreErr/CoreOk aliases"
+        - "Replace all cortex.core.core.result import uses with cortex.core.result (9 files)"
+      REFACTOR:
+        - "Verify isinstance checks still pass across both former import paths"
+        - "Run full test suite — zero new failures permitted"
+    deliverables:
+      - "cortex/core/core/result.py (re-export wrapper — 5 lines)"
+      - "cortex/core/interfaces.py (OperationMode removed, re-exported)"
+      - "cortex/orchestrators/domain/refactoring_orchestrator.py (dual-import removed)"
+      - "cortex/orchestrators/domain/planning_orchestrator.py (canonical import path)"
+      - "9 files updated to cortex.core.result import"
+      - "tests/core/test_canonical_result_type.py (3 new tests)"
+      - "tests/core/test_canonical_operation_mode.py (3 new tests)"
+    acceptance_criteria:
+      - "grep -rn 'class Result\\b' cortex/ returns exactly 1 definition"
+      - "grep -rn 'class OperationMode' cortex/ returns exactly 1 definition"
+      - "from cortex.core.result import Ok; from cortex.core.core.result import Ok as Ok2; assert Ok is Ok2"
+      - "RefactoringOrchestrator has zero CoreErr/CoreOk alias imports"
+
+  - id: 59-c
+    title: "Documentation Truth Alignment — OrchestratorBase + Tier Architecture"
+    priority: P0
+    gaps_closed: [GAP-59-05, GAP-59-06]
+    sequence: 3
+    estimated_duration: "60 minutes"
+    approach: |
+      The documentation lie about OrchestratorBase is a CORE-002 violation with
+      downstream trust cost. Fix: update all affected docs to state the true base
+      (OrchestratorProtocolMixin) without removing OrchestratorBase from the
+      architecture (it still exists for specialised use).
+
+      Tier architecture: update from "3-tier" to "7-tier" (the 3 canonical + 4 specialised).
+      Do NOT fabricate a new official count — use the wiring.yaml structure as SSOT.
+
+      Files to update: cortex-docs/.content/ (9 files), .github/agents/ (5 files),
+      .github/copilot-instructions.md, .github/prompts/cortex-architect.prompt.md.
+    tdd_sequence:
+      RED:
+        - "tests/golden/test_documentation_truth.py"
+        - "test_no_docs_claim_orchestratorbase_as_universal_base()"
+        - "test_no_docs_claim_exactly_3_orchestrator_tiers()"
+        - "test_docs_reference_orchestratorprotocolmixin_as_primary_base()"
+      GREEN:
+        - "Replace 'inherits from OrchestratorBase' → 'extends OrchestratorProtocolMixin' in all .content/ files"
+        - "Update tier count claims: '3 tiers (core, domain, support) + 4 specialised (health, git, validation, workflow)'"
+        - "Update orchestrator count in prompts/instructions to reflect wiring.yaml truth"
+        - "Update .github/copilot-instructions.md tier description"
+        - "Update .github/prompts/cortex-architect.prompt.md Execution Modes section"
+      REFACTOR:
+        - "Run cortex-meta-auditor.md 23-point check against updated files"
+        - "Verify all SSOT references are consistent"
+    deliverables:
+      - "cortex-docs/.content/01-capabilities/02-core-platform.md (OrchestratorBase claim fixed)"
+      - "8 other .content/ files updated"
+      - "5 .github/agents/ files updated"
+      - ".github/copilot-instructions.md (tier description updated)"
+      - "tests/golden/test_documentation_truth.py (3 golden tests)"
+    acceptance_criteria:
+      - "grep -rn 'inherits from OrchestratorBase' cortex-docs/ returns 0 results"
+      - "grep -rn 'OrchestratorProtocolMixin' cortex-docs/ returns ≥5 results"
+      - "All 3 golden tests pass"
+      - "cortex-meta-auditor checks green (no tier count violations)"
+
+  - id: 59-d
+    title: "Ghost Directory Elimination — cortex/knowledge/ Vacuum"
+    priority: P1
+    gaps_closed: [GAP-59-07]
+    sequence: 4
+    estimated_duration: "30 minutes"
+    approach: |
+      cortex/knowledge/ is empty (0 files). Two options:
+      A) Give it a purpose: cortex/knowledge/__init__.py that re-exports from
+         cortex-registry/knowledge/ via a KnowledgeRegistry loader class.
+      B) Delete it and remove from architecture diagrams.
+
+      Decision: Option A — preserves the import namespace, makes cortex.knowledge
+      a legitimate module that proxies the registry. This avoids breaking any
+      future code that imports from cortex.knowledge.*.
+    tdd_sequence:
+      RED:
+        - "tests/knowledge/test_knowledge_registry_proxy.py"
+        - "test_cortex_knowledge_module_importable()"
+        - "test_knowledge_registry_proxy_loads_yaml_from_registry()"
+        - "test_knowledge_module_not_empty()"
+      GREEN:
+        - "Create cortex/knowledge/__init__.py with KnowledgeRegistryProxy"
+        - "KnowledgeRegistryProxy.load() reads cortex-registry/knowledge/*.yaml"
+        - "Expose: cortex.knowledge.get_domain_practices(domain) -> List[str]"
+        - "Populate cortex/knowledge/best-practices/__init__.py as a sub-module"
+      REFACTOR:
+        - "Link KnowledgeRegistryProxy to KnowledgeSynthesisEngine (Phase 57-a path)"
+        - "Register cortex.knowledge in cortex/__init__.py public surface"
+    deliverables:
+      - "cortex/knowledge/__init__.py (NEW — KnowledgeRegistryProxy)"
+      - "cortex/knowledge/best-practices/__init__.py (NEW — sub-module stub with content)"
+      - "tests/knowledge/test_knowledge_registry_proxy.py (3 new tests)"
+    acceptance_criteria:
+      - "from cortex.knowledge import KnowledgeRegistryProxy succeeds"
+      - "KnowledgeRegistryProxy().load() returns non-empty dict"
+      - "find cortex/knowledge/ -type f returns ≥2 files"
+
+  - id: 59-e
+    title: "Genuine Cross-Cutting Activation — PlanningOrchestrator + Hook Bypass Fix"
+    priority: P1
+    gaps_closed: [GAP-59-08, GAP-59-08b]
+    sequence: 5
+    estimated_duration: "2 hours"
+    approach: |
+      Phase 58 added _activate_cross_cutting_hooks() to OrchestratorProtocolMixin.
+      But domain orchestrators override execute_operation WITHOUT calling super(),
+      so all Phase 58 hooks are bypassed in practice.
+
+      Fix A: Add @cross_cutting_enforced decorator in OrchestratorProtocolMixin
+      that wraps execute_operation overrides — injecting pre/post hook calls
+      without requiring per-orchestrator super() calls.
+
+      Fix B: PlanningOrchestrator — add genuine LENSOrchestrator.analyze_directory()
+      call in process() before plan generation. Use lazy import + graceful degradation.
+      This is additive (10 lines) and does not change plan logic.
+    tdd_sequence:
+      RED:
+        - "tests/core/test_cross_cutting_enforced_decorator.py"
+        - "test_decorator_calls_activate_hooks_before_execute()"
+        - "test_decorator_calls_activate_hooks_after_execute()"
+        - "test_domain_orchestrators_cannot_bypass_hooks()"
+        - "tests/orchestrators/domain/test_planning_lens_activation.py"
+        - "test_planning_orchestrator_calls_lens_analyze()"
+        - "test_planning_orchestrator_enriches_plan_with_lens_findings()"
+      GREEN:
+        - "Add @cross_cutting_enforced decorator to OrchestratorProtocolMixin"
+        - "Decorator: wraps any override of execute_operation with pre/post hook activation"
+        - "Apply decorator to all domain orchestrators (additive — no logic change)"
+        - "PlanningOrchestrator.process(): add try/except lens_orchestrator.analyze_directory(scope)"
+        - "If LENS unavailable: log degradation warning + continue with existing plan logic"
+      REFACTOR:
+        - "Extract lens enrichment into _enrich_plan_with_lens(plan, lens_ctx) helper"
+        - "Ensure all existing planning tests still pass"
+    deliverables:
+      - "cortex/core/orchestrator_protocol_mixin.py (@cross_cutting_enforced decorator)"
+      - "cortex/orchestrators/domain/planning_orchestrator.py (genuine LENS call)"
+      - "tests/core/test_cross_cutting_enforced_decorator.py (3 new tests)"
+      - "tests/orchestrators/domain/test_planning_lens_activation.py (2 new tests)"
+    acceptance_criteria:
+      - "@cross_cutting_enforced decorator defined and importable from cortex.core.orchestrator_protocol_mixin"
+      - "PlanningOrchestrator.process() invokes LENS (or logs graceful degradation)"
+      - "grep -n 'lens_orchestrator\\|LENSOrchestrator' planning_orchestrator.py returns ≥1 hit"
+      - "All existing planning + mixin tests pass"
+
+  - id: 59-f
+    title: "Wiring Registry Completeness — Register 4 Undocumented Tiers"
+    priority: P1
+    gaps_closed: [GAP-59-09]
+    sequence: 6
+    estimated_duration: "45 minutes"
+    approach: |
+      Register git/, intelligence/, validation/, workflow/ tiers in wiring.yaml
+      as tier 4 (specialised) with lower priority range (200-299).
+      Also update capabilities-manifest.yaml to reflect true orchestrator count.
+      Register key orchestrators: GitOrchestrator, IntelligenceOrchestrator,
+      SanitizationOrchestrator, PreCommitEnforcementOrchestrator,
+      GitPublishOrchestrator, HolisticValidationOrchestrator (already partially registered).
+    tdd_sequence:
+      RED:
+        - "tests/core/test_wiring_registry_completeness.py"
+        - "test_all_orchestrator_subdirs_have_wiring_entries()"
+        - "test_git_orchestrator_registered_in_wiring()"
+        - "test_intelligence_orchestrator_registered_in_wiring()"
+        - "test_no_priority_conflicts_across_tiers()"
+      GREEN:
+        - "Add tier 4 section to cortex/core/wiring/specifications/wiring.yaml"
+        - "Register GitOrchestrator, SanitizationOrchestrator, GitPublishOrchestrator (git)"
+        - "Register IntelligenceOrchestrator (intelligence)"
+        - "Register HolisticValidationOrchestrator, ChallengeEngine (validation — already partial)"
+        - "Update capabilities-manifest.yaml: total orchestrator count to reflect reality"
+        - "Update .github/copilot-instructions.md orchestrator count"
+      REFACTOR:
+        - "Run wiring contract validation (Stage 3 L1 check) — all must pass"
+        - "Verify priority ranges: tier4 = 200-299 (no conflicts with tier1-3)"
+    deliverables:
+      - "cortex/core/wiring/specifications/wiring.yaml (tier 4 entries added)"
+      - "cortex-registry/core/capabilities-manifest.yaml (counts updated)"
+      - "tests/core/test_wiring_registry_completeness.py (4 new tests)"
+    acceptance_criteria:
+      - "wiring.yaml contains entries for GitOrchestrator, IntelligenceOrchestrator"
+      - "All tier 4 entries have unique priority values in 200-299 range"
+      - "L1 wiring validation passes for all tier 4 entries"
+      - "No priority conflicts with existing tier 1-3 entries"
+
+  - id: 59-g
+    title: "Structured DependencyWarning — Replace Silent ImportError Fallbacks"
+    priority: P2
+    gaps_closed: [GAP-59-10]
+    sequence: 7
+    estimated_duration: "90 minutes"
+    approach: |
+      Phase 57-e targeted 144 ImportError blocks; count rose to 151 in Phase 58.
+      Introduce cortex.core.dependency_guard.soft_import(module, fallback, warn=True)
+      utility. This gives a single structured entry point for optional imports with
+      observable degradation logging. Migrate all cortex.* internal import guards to
+      use soft_import(). External library guards (yaml, prometheus_client, etc.)
+      remain as-is — they are legitimate optional-dependency patterns.
+    tdd_sequence:
+      RED:
+        - "tests/core/test_dependency_guard.py"
+        - "test_soft_import_returns_module_when_available()"
+        - "test_soft_import_returns_fallback_when_unavailable()"
+        - "test_soft_import_emits_structured_warning_on_failure()"
+        - "test_soft_import_warning_includes_module_name()"
+      GREEN:
+        - "Create cortex/core/dependency_guard.py with soft_import() function"
+        - "soft_import(module_path, fallback=None, warn=True, feature_name=None) -> Any"
+        - "On ImportError: logger.warning(f'[DEGRADED] {feature_name or module_path} unavailable — using fallback')"
+        - "Migrate all cortex.* ImportError blocks in orchestrators/ to soft_import()"
+      REFACTOR:
+        - "Validate external library guards (yaml, opentelemetry, prometheus) remain unchanged"
+        - "Add soft_import to cortex/__init__.py public surface"
+        - "Verify smoke tests pass — degradation is now observable, not silent"
+    deliverables:
+      - "cortex/core/dependency_guard.py (NEW)"
+      - "N orchestrator files updated to use soft_import()"
+      - "tests/core/test_dependency_guard.py (4 new tests)"
+    acceptance_criteria:
+      - "soft_import importable from cortex.core.dependency_guard"
+      - "soft_import with unavailable cortex.* module emits logger.warning"
+      - "grep -rn 'except ImportError: pass' cortex/orchestrators/ returns 0 results"
+      - "All smoke tests pass"
+
+  - id: 59-h
+    title: "tier1_learned Alignment + AC Marker Standardisation + Holistic Vacuum"
+    priority: P2
+    gaps_closed: [GAP-59-11, GAP-59-12]
+    sequence: 8
+    estimated_duration: "2 hours"
+    approach: |
+      tier1_learned: Rename the cleaners/ subdirectory to cleaners/ and add a
+      KnowledgeRetentionStore in tier1_learned/ that persists cross-session learnings.
+      This reconciles the implementation (cleaners) with the architecture intent (memory).
+
+      AC markers: standardise all phase-numbered AC identifiers to
+      AC-{DOMAIN}-{ISO-TIMESTAMP} format. Phase-numbered markers like AC-PHASE24.6-002
+      are forensically ambiguous. A migration script will reformat existing markers.
+
+      Holistic Vacuum (CORE-064 completion gate):
+        - Remove deprecated DEPRECATED-* files found during sweep
+        - Clean .md files outside canonical locations discovered during doc fix (59-c)
+        - Remove empty __init__.py files with only # placeholder content
+        - Clean orphaned .db files outside .cortex-runtime/ if any
+    tdd_sequence:
+      RED:
+        - "tests/intelligence/memory/test_knowledge_retention_store.py"
+        - "test_knowledge_retention_store_persists_session_insights()"
+        - "test_knowledge_retention_store_loads_prior_insights()"
+        - "tests/core/test_ac_marker_format.py"
+        - "test_no_phase_numbered_ac_markers_in_active_orchestrators()"
+        - "test_ac_markers_use_domain_timestamp_format()"
+      GREEN:
+        - "Create cortex/intelligence/memory/tier1_learned/knowledge_retention_store.py"
+        - "KnowledgeRetentionStore: persist(session_id, insights: Dict) → .cortex-runtime/memory/tier1/"
+        - "KnowledgeRetentionStore: recall(domain) → List[Dict]"
+        - "Run migration: reformat AC-PHASE*.* markers to AC-{DOMAIN}-{TIMESTAMP}"
+        - "Run vacuum: find + delete DEPRECATED-* files, empty __init__.py placeholders"
+      REFACTOR:
+        - "Wire KnowledgeRetentionStore into MasterOrchestrator post-session hook"
+        - "Validate all existing tier1 cleaner tests still pass"
+        - "Run VacuumOrchestrator full scan to confirm 0 remaining clutter"
+    deliverables:
+      - "cortex/intelligence/memory/tier1_learned/knowledge_retention_store.py (NEW)"
+      - "tests/intelligence/memory/test_knowledge_retention_store.py (2 new tests)"
+      - "tests/core/test_ac_marker_format.py (2 new tests)"
+      - "N deprecated/empty files deleted (tracked in vacuum manifest)"
+      - "cortex-registry/planning/phases/completed/phase-58-cross-cutting-protocol.yaml (retroactive completion record)"
+    acceptance_criteria:
+      - "KnowledgeRetentionStore importable and functional"
+      - "grep -rn 'AC-PHASE[0-9]' cortex/orchestrators/ returns 0 results"
+      - "VacuumOrchestrator scan: 0 DEPRECATED-* files in active dirs"
+      - "All 8 gap statuses: CLOSED"
+
+# ─────────────────────────────────────────────────────────────────
+# EXECUTION SEQUENCE (dependency-ordered)
+# ─────────────────────────────────────────────────────────────────
+execution_order:
+  - "59-a (AuditEntry) → FIRST: no dependencies, highest CORE-035 impact, sets pattern for 59-b"
+  - "59-b (Result/OperationMode/IOrchestrator) → after 59-a: shares CORE-035 consolidation pattern"
+  - "59-c (Documentation) → after 59-b: doc truth requires code truth to be established first"
+  - "59-d (Knowledge ghost dir) → independent: can parallel with 59-c"
+  - "59-e (Cross-cutting activation) → after 59-b: decorator uses canonical OperationMode"
+  - "59-f (Wiring registry) → after 59-c: tier count doc must match wiring.yaml additions"
+  - "59-g (DependencyGuard) → independent: can parallel with 59-e and 59-f"
+  - "59-h (Vacuum + tier1 + AC) → LAST: holistic cleanup after all code fixes"
+
+parallel_groups:
+  - group: A
+    phases: [59-a]
+    note: "Run first — unblocks group B"
+  - group: B
+    phases: [59-b, 59-d, 59-g]
+    note: "Run in parallel after 59-a"
+  - group: C
+    phases: [59-c, 59-e, 59-f]
+    note: "Run after group B completes"
+  - group: D
+    phases: [59-h]
+    note: "Run last — holistic sweep and vacuum"
+
+# ─────────────────────────────────────────────────────────────────
+# AGGREGATE DELIVERY METRICS
+# ─────────────────────────────────────────────────────────────────
+estimated_metrics:
+  new_tests: 30         # 4 + 6 + 3 + 3 + 5 + 4 + 4 + 4 + retroactive phase-58 record
+  files_modified: ~35   # core, orchestrators, docs, wiring
+  new_files: ~10        # audit_models.py, dependency_guard.py, knowledge/__init__.py, KnowledgeRetentionStore, tests
+  files_deleted: ~15    # DEPRECATED-*, empty __init__.py stubs, legacy duplicates
+  total_duration: "~10 hours"
+  risk: LOW-MEDIUM      # Code changes are consolidation/re-export (low risk);
+                        # doc changes are factual alignment (zero code risk);
+                        # decorator addition is additive (medium — mixin is widely used)
+
+# ─────────────────────────────────────────────────────────────────
+# GOVERNANCE COMPLIANCE GATES
+# ─────────────────────────────────────────────────────────────────
+compliance_gates:
+  before_implement:
+    - "CORE-048 holistic validation: 0 P0 violations in scan"
+    - "cortex_load op=rules: all 35 CORE rules loaded"
+    - "Baseline test count recorded"
+  per_sub_phase:
+    - "RED phase test written and FAILING before any implementation"
+    - "GREEN phase: minimum code to pass RED tests only"
+    - "REFACTOR phase: full test suite must pass (no new failures)"
+  completion_gate:
+    - "All 12 GAP-59-* items status == CLOSED"
+    - "grep -rn 'class AuditEntry' cortex/ == 1 result"
+    - "grep -rn 'class OperationMode' cortex/ == 1 result"
+    - "grep -rn 'class Result\\b' cortex/ == 1 result"
+    - "grep -rn 'inherits from OrchestratorBase' cortex-docs/ == 0 results"
+    - "make test-batch: zero new test failures vs baseline"
+    - "VacuumOrchestrator: 0 DEPRECATED-* files in active dirs"
+
+# ─────────────────────────────────────────────────────────────────
+# WORKFLOW & LOOP TEMPLATE REFERENCES
+# ─────────────────────────────────────────────────────────────────
+workflow_template: cortex-registry/workflows/templates/maintenance/phase-59-canonical-integrity-pipeline.yaml
+sweep_workflow: cortex-registry/workflows/templates/governance/phase-59-sweep-catalogue.yaml
+convergence_gate:
+  primitive: cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml
+  exit_condition: "all 12 GAP-59-* items status == CLOSED AND make test-batch green"
+  max_cycles: 5
+  blocking: true
+
+# ─────────────────────────────────────────────────────────────────
+# RETROSPECTIVE — WHAT PHASE 58 DELIVERED (verified)
+# ─────────────────────────────────────────────────────────────────
+phase_58_delivered:
+  status: COMPLETED_UNDOCUMENTED
+  note: |
+    Phase 58 has no formal YAML plan but its deliverables are verifiable from
+    filesystem timestamps vs phase-57 YAML creation date.
+  files_modified: 66
+  new_tests: 10
+  key_deliverables:
+    - "OrchestratorProtocolMixin: _activate_cross_cutting_hooks(), _governance_gate(), _query_domain_brain()"
+    - "KnowledgeSynthesisEngine: INDEX path fix applied"
+    - "tier3_scratch: connector created"
+    - "StrategySelector: wired to reasoning pipeline"
+    - "master_orchestrator_stage_2.py: extended"
+    - "IntentRouter: StrategySelector integration"
+    - "ReviewOrchestrator + TestClassifierOrchestrator: OrchestratorProtocolMixin added"
+  gaps_phase_58_left_open:
+    - "OrchestratorBase documentation lie (F1) — Phase 59 59-c closes"
+    - "9 AuditEntry duplicates (F3) — Phase 59 59-a closes"
+    - "Dual Result families (F5) — Phase 59 59-b closes"
+    - "Dual OperationMode (F2/F3) — Phase 59 59-b closes"
+    - "Hook bypass pattern (F6/GAP-59-08b) — Phase 59 59-e closes"
+    - "151 ImportError blocks (F7) — Phase 59 59-g closes"

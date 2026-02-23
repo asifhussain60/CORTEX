@@ -1,4 +1,4 @@
-# AC_START: AC-PHASE81-S3-P4-001
+# AC_START: AC-ROUTER-METADATA-20260223T000000Z
 """
 Metadata-Driven MCP Tool Discovery
 
@@ -344,4 +344,4 @@ class MetadataDrivenDiscovery:
         return sorted(tool_usage, key=lambda x: x[1], reverse=True)[:top_n]
 
 
-# AC_COMPLETE: AC-PHASE81-S3-P4-001 ✅ Metadata-Driven Discovery Module
+# AC_COMPLETE: AC-ROUTER-METADATA-20260223T000000Z ✅ Metadata-Driven Discovery Module

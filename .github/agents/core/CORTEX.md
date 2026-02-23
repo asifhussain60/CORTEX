@@ -121,7 +121,8 @@
 |------|----------|
 | Orchestrators (17 wired) | `cortex/orchestrators/{domain}/` |
 | MCP Tools (26 active) | `cortex/mcp/tools/` |
-| OrchestratorBase | `cortex/core/orchestrator_base.py` |
+| OrchestratorProtocolMixin (primary base, Phase 58) | `cortex/core/orchestrator_protocol_mixin.py` |
+| OrchestratorBase (legacy — 2 orchestrators only) | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |
 | Runtime data | `.cortex-runtime/` |

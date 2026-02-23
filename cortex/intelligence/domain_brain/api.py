@@ -9,23 +9,8 @@ from cortex.intelligence.domain_brain.domain_brain_models import EntityType
 from cortex.intelligence.domain_brain.domain_brain_models import Conflict
 
 
-@dataclass
-class AuditEntry:
-    """Audit entry for tracking operations."""
-
-    entry_id: str
-    operation: str
-    timestamp: datetime = field(default_factory=datetime.now)
-    details: Dict[str, Any] = field(default_factory=dict)
-
-    def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary."""
-        return {
-            "entry_id": self.entry_id,
-            "operation": self.operation,
-            "timestamp": self.timestamp.isoformat() if self.timestamp else None,
-            "details": self.details
-        }
+# Phase 59-a: AuditEntry consolidated into cortex.core.audit_models (CORE-035)
+from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
 class AuditLogger:

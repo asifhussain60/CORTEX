@@ -5,14 +5,8 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 
-@dataclass
-class AuditEntry:
-    """Audit entry for the navigator (distinct from EnhancedAuditLogger's AuditEntry)."""
-    timestamp: str
-    entity_type: str
-    entity_id: str
-    action: str
-    actor: str
+# Phase 59-a: AuditEntry consolidated into cortex.core.audit_models (CORE-035)
+from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
 class AuditNavigator:
@@ -38,11 +32,10 @@ class AuditNavigator:
             actor: Actor performing action
         """
         entry = AuditEntry(
-            timestamp=datetime.now(timezone.utc).isoformat(),
             entity_type=entity_type,
             entity_id=entity_id,
             action=action,
-            actor=actor
+            actor=actor,
         )
         self.audit_log.append(entry)
 

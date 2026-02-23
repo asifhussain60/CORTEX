@@ -17,7 +17,8 @@ from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import PhaseStatus, IntentType
-from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+# Phase 59-b: Use canonical IOrchestrator/OperationMode path (GAP-59-04)
+from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 # F10: Governance gate — lazy import to avoid circular deps

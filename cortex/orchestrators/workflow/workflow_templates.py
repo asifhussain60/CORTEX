@@ -3,7 +3,7 @@ Workflow Templates — Phase 45 Stage 3.
 
 Pre-defined workflow templates for common CORTEX operations.
 
-AC_START: AC-PHASE45-S3-003
+AC_START: AC-WORKFLOW-TEMPLATES-20260223T000000Z
 Phase: 45 | Stage: 3 | Priority: P0
 Description: GREEN phase implementation for workflow templates
 Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
@@ -336,5 +336,5 @@ class WorkflowTemplateManager:
 
 
 # =============================================================================
-# AC_COMPLETE: AC-PHASE45-S3-003 (GREEN phase implementation)
+# AC_COMPLETE: AC-WORKFLOW-TEMPLATES-20260223T000000Z (GREEN phase implementation)
 # =============================================================================

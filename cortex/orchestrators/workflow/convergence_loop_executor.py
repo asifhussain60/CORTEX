@@ -3,7 +3,7 @@ ConvergenceLoopExecutor — Phase 45 Stage 2.
 
 Retry logic with exponential backoff and convergence detection.
 
-AC_START: AC-PHASE45-S2-002
+AC_START: AC-WORKFLOW-CONVERGENCE-20260223T000000Z
 Phase: 45 | Stage: 2 | Priority: P0
 Description: GREEN phase implementation for ConvergenceLoopExecutor
 Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
@@ -192,5 +192,5 @@ class ConvergenceLoopExecutor:
 
 
 # =============================================================================
-# AC_COMPLETE: AC-PHASE45-S2-002 (GREEN phase implementation)
+# AC_COMPLETE: AC-WORKFLOW-CONVERGENCE-20260223T000000Z (GREEN phase implementation)
 # =============================================================================

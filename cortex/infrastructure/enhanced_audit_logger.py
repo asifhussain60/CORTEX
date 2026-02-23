@@ -24,17 +24,8 @@ from typing import Any, Dict, List, Optional
 from cortex.core.core.result import Err, Ok, Result
 
 
-@dataclass
-class AuditEntry:
-    """Represents an audit log entry in the chain."""
-    entry_id: int
-    timestamp: str
-    ac_id: str
-    operation: str
-    status: str  # PENDING, COMPLETED, FAILED
-    details: Dict[str, Any]
-    entry_hash: str
-    previous_hash: str
+# Phase 59-a: AuditEntry consolidated into cortex.core.audit_models (CORE-035)
+from cortex.core.audit_models import AuditEntry  # noqa: F401 — re-export
 
 
 class EnhancedAuditLogger:

@@ -1,4 +1,4 @@
-# AC_START: AC-PHASE81-S3-003
+# AC_START: AC-ROUTER-20260223T000000Z
 # =============================================================================
 # DEPRECATED: Enhanced IntentRouter (Phase 81)
 # =============================================================================
@@ -595,4 +595,4 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
         )
 
 
-# AC_COMPLETE: AC-PHASE81-S3-003
+# AC_COMPLETE: AC-ROUTER-20260223T000000Z

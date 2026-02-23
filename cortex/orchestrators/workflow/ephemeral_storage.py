@@ -3,7 +3,7 @@ EphemeralStorage — Phase 45 Stage 3.
 
 .temp/ directory management with auto-cleanup.
 
-AC_START: AC-PHASE45-S3-002
+AC_START: AC-WORKFLOW-EPHEMERAL-20260223T000000Z
 Phase: 45 | Stage: 3 | Priority: P0
 Description: GREEN phase implementation for ephemeral storage
 Requirements: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
@@ -136,5 +136,5 @@ class EphemeralStorage:
 
 
 # =============================================================================
-# AC_COMPLETE: AC-PHASE45-S3-002 (GREEN phase implementation)
+# AC_COMPLETE: AC-WORKFLOW-EPHEMERAL-20260223T000000Z (GREEN phase implementation)
 # =============================================================================

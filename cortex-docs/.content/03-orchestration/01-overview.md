@@ -56,13 +56,21 @@ CORTEX has **17 wired orchestrators** across **3 tiers**, all satisfying the `IO
 
 ## Universal Lifecycle
 
-Every orchestrator follows the OrchestratorBase 5-step lifecycle:
+Every orchestrator satisfies the `IOrchestrator` protocol via `OrchestratorProtocolMixin` (Phase 58).
+The standard 5-step lifecycle is:
 
 ```
 setup() → govern() → execute() → validate() → teardown()
 ```
 
-Additionally, **`OrchestratorBase.execute()` and `run()`** auto-log `ORCHESTRATOR_START` and `ORCHESTRATOR_END` to `.cortex-runtime/audit.db` (SQLite WAL). This audit logging is non-blocking — a failure to log never prevents execution.
+Additionally, **`OrchestratorProtocolMixin.execute_operation()`** auto-activates cross-cutting
+hooks (LENS, KnowledgeSynthesis, GovernanceGate) and `execute()` / `run()` auto-log
+`ORCHESTRATOR_START` and `ORCHESTRATOR_END` to `.cortex-runtime/audit.db` (SQLite WAL).
+This audit logging is non-blocking — a failure to log never prevents execution.
+
+> **Note:** The primary base is `OrchestratorProtocolMixin` (Phase 58), not `OrchestratorBase`.
+> `OrchestratorBase` exists in `cortex/core/orchestrator_base.py` but is only used by 2 legacy
+> orchestrators. All 17 wired orchestrators use `IOrchestrator` + `OrchestratorProtocolMixin`.
 
 ---
 

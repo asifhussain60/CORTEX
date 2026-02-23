@@ -222,6 +222,37 @@ patterns:
         regex: "# Alternative implementation|# Another approach"
         message: "Multiple implementations in same file"
 
+      # Phase 59 additions — canonical definition enforcement
+      - id: "CORE-035-P59-01"
+        type: "duplicate_audit_entry"
+        regex: "^class AuditEntry"
+        message: "Duplicate AuditEntry class definition. Canonical: cortex.core.audit_models.AuditEntry. Use: from cortex.core.audit_models import AuditEntry"
+        allowed_in: ["cortex/core/audit_models.py"]
+        severity: CRITICAL
+        phase_added: "59-a"
+
+      - id: "CORE-035-P59-02"
+        type: "duplicate_operation_mode"
+        regex: "^class OperationMode"
+        message: "Duplicate OperationMode enum. Canonical: cortex.core.core.interfaces.i_orchestrator.OperationMode. Use re-export pattern."
+        allowed_in: ["cortex/core/core/interfaces/i_orchestrator.py"]
+        severity: CRITICAL
+        phase_added: "59-b"
+
+      - id: "CORE-035-P59-03"
+        type: "silent_import_error"
+        regex: "except ImportError:\\s*\\n\\s*pass\\s*$"
+        message: "Silent ImportError fallback. Use soft_import() from cortex.core.dependency_guard for observable degradation."
+        severity: WARNING
+        phase_added: "59-g"
+
+      - id: "CORE-035-P59-04"
+        type: "stale_ac_phase_marker"
+        regex: "AC-PHASE[0-9]+\\.[0-9]+-[0-9]+"
+        message: "Phase-numbered AC marker is forensically ambiguous post-completion. Use format: AC-{DOMAIN}-{ISO-TIMESTAMP}"
+        severity: WARNING
+        phase_added: "59-h"
+
 # AST-specific checks (not regex-based)
 ast_checks:
   missing_type_hints:
@@ -251,7 +282,7 @@ ast_checks:
 
 # Pattern statistics
 statistics:
-  total_patterns: 47
+  total_patterns: 51
   by_rule:
     CORE-002: 8
     CORE-008: 6
@@ -259,7 +290,9 @@ statistics:
     CORE-012: 6
     CORE-013: 4
     CORE-028: 8
-    CORE-035: 5
+    CORE-035: 9  # +4 from Phase 59 (canonical definition enforcement)
   by_severity:
-    CRITICAL: 18
-    WARNING: 24
+    CRITICAL: 20  # +2 (duplicate_audit_entry, duplicate_operation_mode)
+    WARNING: 26   # +2 (silent_import_error, stale_ac_phase_marker)
+  last_updated: "2026-02-23"
+  phase_59_additions: 4
