@@ -344,7 +344,7 @@ class TestExecuteTurn:
         from cortex.orchestrators.core.interaction_orchestrator import (
             InteractionOrchestrator,
         )
-        from cortex.core.core.result import Ok
+        from cortex.core.result import Ok
 
         mock_protocol = MagicMock()
         orch = InteractionOrchestrator(conversation_protocol=mock_protocol)

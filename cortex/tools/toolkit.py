@@ -26,7 +26,7 @@ import threading
 from typing import Any, Callable, Dict, List, Optional
 
 from cortex.core.core.path_resolver import get_project_root
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 
 # REM-CRIT-004: Thread-safe tool registry with lock
 _TOOLS: Dict[str, Callable] = {}

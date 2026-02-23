@@ -21,7 +21,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 
 
 @dataclass

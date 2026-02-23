@@ -12,7 +12,7 @@ AC_START: AC-P1-STAGE234-001
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 from cortex.orchestrators.strategies.stage_execution_strategy import (
     StageContext,
     StageExecutionStrategy,

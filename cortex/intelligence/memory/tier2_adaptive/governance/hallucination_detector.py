@@ -66,7 +66,7 @@ class HallucinationDetectionResult:
     reasoning_steps: List[str] = field(default_factory=list)
 
 
-from cortex.core.core.result import Result
+from cortex.core.result import Result
 
 
 class HallucinationDetector:

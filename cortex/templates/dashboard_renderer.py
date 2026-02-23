@@ -16,7 +16,7 @@ from typing import Any, Dict, Optional
 
 import jinja2
 
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 from cortex.templates.template_renderer import TemplateRenderer
 
 

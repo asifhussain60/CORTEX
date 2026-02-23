@@ -12,7 +12,7 @@ from __future__ import annotations
 import logging
 from typing import Dict, List, Union
 
-from cortex.core.core.result import Err, Ok
+from cortex.core.result import Err, Ok
 from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
 from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
 

@@ -33,7 +33,7 @@ Think of it like the difference between a calculator and a brain. A calculator w
   │                                                               │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ MCP Gateway  │─▶│  Orchestration    │─▶│ Intelligence  │  │
-  │  │ 26 tools     │  │  3 tiers          │  │ LENS + Brain  │  │
+  │  │ 26 tools     │  │  3 canonical tiers│  │ LENS + Brain  │  │
   │  │ stdio/HTTP   │  │  17 wired         │  │ 8 analyzers   │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   │         │                   │                     │           │

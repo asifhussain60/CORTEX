@@ -24,7 +24,7 @@ import sqlite3
 from typing import Any, Dict, List, Optional
 
 from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.trace_integration import trace_orchestrator_action
 

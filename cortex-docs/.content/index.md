@@ -23,7 +23,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 **What makes it different from other dev tools:**
 
 - Traditional tools answer questions. CORTEX **orchestrates entire workflows** — from intent classification through TDD enforcement to code delivery.
-- One canonical Python package (`cortex`), 17 wired orchestrators across 3 tiers, 26 MCP tools, 35 active CORE rules governance rules.
+- One canonical Python package (`cortex`), 17 wired orchestrators across 3 canonical tiers (10 total directories), 26 MCP tools, 35 active CORE rules governance rules.
 - TDD is not optional. CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX request. No exceptions.
 - Everything is Git-backed. No PostgreSQL, no MongoDB — just YAML files in `cortex-registry/` versioned alongside your code.
 
@@ -57,7 +57,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │
   │  │ MCP Gateway │──▶│  Orchestration   │──▶│ Intelligence  │  │
   │  │ 26 tools    │   │  17 wired        │   │ LENS + Brain  │  │
-  │  └─────────────┘   │  3 tiers         │   │ 8 analyzers   │  │
+  │  └─────────────┘   │  3 canonical tiers│   │ 8 analyzers   │  │
   │         │          └──────────────────┘   └───────────────┘  │
   │         ▼                   │                     │           │
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │

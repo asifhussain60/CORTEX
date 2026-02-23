@@ -50,7 +50,7 @@ class TestSeleniumPlaywrightOrchestratorInterface:
         from cortex.orchestrators.migration.selenium_playwright_orchestrator import (
             SeleniumPlaywrightOrchestrator
         )
-        from cortex.core.core.result import Result
+        from cortex.core.result import Result
         
         orchestrator = SeleniumPlaywrightOrchestrator()
         result = orchestrator.initialize()

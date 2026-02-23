@@ -187,7 +187,7 @@ class BulkDigestOrchestrator(OrchestratorProtocolMixin):
     def initialize(self) -> Any:
         """Initialise the orchestrator (setup already done in ``__init__``)."""
         try:
-            from cortex.core.core.result import Result  # type: ignore[import]
+            from cortex.core.result import Result  # type: ignore[import]
             return Result.success("BulkDigestOrchestrator initialized")
         except ImportError:
             return {"status": "ok", "orchestrator": self.get_name()}

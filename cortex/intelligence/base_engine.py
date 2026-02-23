@@ -8,7 +8,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, Union
 
-from cortex.core.core.result import Err, Ok
+from cortex.core.result import Err, Ok
 
 
 @dataclass

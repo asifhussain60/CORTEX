@@ -23,7 +23,7 @@ from datetime import datetime, timezone
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional
 
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import AlertPriority
 
 

@@ -29,7 +29,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-# Phase 59-b: Single canonical Result — cortex.core.core.result now re-exports cortex.core.result (CORE-035)
+# CORE-035: Single canonical Result — cortex.core.result is the sole definition (cortex.core.core.result deleted Phase 59-b)
 from cortex.core.result import Err, Ok, Result
 from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin

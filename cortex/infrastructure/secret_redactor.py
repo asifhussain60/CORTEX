@@ -18,7 +18,7 @@ import re
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Pattern, Set
 
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 
 
 @dataclass

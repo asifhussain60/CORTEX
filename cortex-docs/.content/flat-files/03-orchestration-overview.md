@@ -15,7 +15,7 @@ order: 1
 
 ## Architecture
 
-CORTEX has **17 wired orchestrators** across **3 tiers**, all satisfying the `IOrchestrator` protocol. The canonical wiring specification lives in `cortex-registry/core/specifications/`.
+CORTEX has **17 wired orchestrators** across **3 canonical tiers** (10 total directories), all satisfying the `IOrchestrator``IOrchestrator` protocol. The canonical wiring specification lives in `cortex-registry/core/specifications/`.
 
 | Tier | Count | Key Orchestrators |
 |------|-------|-----------------|
@@ -56,13 +56,13 @@ CORTEX has **17 wired orchestrators** across **3 tiers**, all satisfying the `IO
 
 ## Universal Lifecycle
 
-Every orchestrator follows the OrchestratorBase 5-step lifecycle:
+Every orchestrator satisfies `IOrchestrator` + `OrchestratorProtocolMixin` (Phase 58) and follows the 5-step lifecycle:
 
 ```
 setup() → govern() → execute() → validate() → teardown()
 ```
 
-Additionally, **`OrchestratorBase.execute()` and `run()`** auto-log `ORCHESTRATOR_START` and `ORCHESTRATOR_END` to `.cortex-runtime/audit.db` (SQLite WAL). This audit logging is non-blocking — a failure to log never prevents execution.
+Additionally, **`OrchestratorProtocolMixin._activate_cross_cutting_hooks()`** auto-logs `ORCHESTRATOR_START` and `ORCHESTRATOR_END` to `.cortex-runtime/audit.db` (SQLite WAL). This audit logging is non-blocking — a failure to log never prevents execution.
 
 ---
 

@@ -376,7 +376,7 @@ class DebuggerOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowTem
     
     def initialize(self) -> Any:
         """Initialize orchestrator (already done in __init__)."""
-        from cortex.core.core.result import Result
+        from cortex.core.result import Result
         return Result.success("DebuggerOrchestrator initialized")
     
     def get_mode(self) -> Any:
@@ -386,7 +386,7 @@ class DebuggerOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowTem
     
     def get_mcp_tools(self) -> Any:
         """Get MCP tools exposed by this orchestrator."""
-        from cortex.core.core.result import Result
+        from cortex.core.result import Result
         return Result.success({
             "cortex_debug_auto_inject": {
                 "description": "Auto-inject debug markers on event",
@@ -410,13 +410,13 @@ class DebuggerOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowTem
             orchestrator_context=parameters.get("orchestrator_context"),
             unified_context=parameters.get("unified_context"),
         )
-        from cortex.core.core.result import Result
+        from cortex.core.result import Result
         result = self.execute(operation_name, parameters)
         return Result.success(result)
     
     def get_audit_trail(self, limit: int = 100) -> Any:
         """Get audit trail."""
-        from cortex.core.core.result import Result
+        from cortex.core.result import Result
         # EventBus-driven, audit trail tracked via EventBus events
         return Result.success([])
     

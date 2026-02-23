@@ -15,7 +15,7 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringResult
 )
-from cortex.core.core.result import Ok, Err
+from cortex.core.result import Ok, Err
 
 
 class TestRoslynAdapterInitialization:

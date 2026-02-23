@@ -73,10 +73,10 @@ class VacuumOrchestrator(_HealthVacuumOrchestrator):
         """Initialise the orchestrator (setup already done in ``__init__``).
 
         Returns:
-            A :class:`~cortex.core.core.result.Result` success value.
+            A :class:`~cortex.core.result.Result` success value.
         """
         try:
-            from cortex.core.core.result import Result  # type: ignore[import]
+            from cortex.core.result import Result  # type: ignore[import]
             return Result.success("VacuumOrchestrator initialized")
         except ImportError:
             return {"status": "ok", "orchestrator": self.get_name()}

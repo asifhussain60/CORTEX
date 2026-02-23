@@ -75,7 +75,7 @@ class ToolDescription:
     error_handling: List[str] = field(default_factory=list)
 
 
-from cortex.core.core.result import Result
+from cortex.core.result import Result
 
 
 class ToolDescriptionValidator:

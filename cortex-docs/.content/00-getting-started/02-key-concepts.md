@@ -27,7 +27,7 @@ The front door of CORTEX. Every request arrives here first. The gateway validate
 **Daily example:** When you type a request in VS Code Copilot Chat, it enters through the MCP Gateway, which routes it to `cortex_process_request` or another appropriate tool.
 
 ### Orchestrator
-A specialized processing engine for one category of work. CORTEX has **17 wired orchestrators** across **3 tiers**, all satisfying `IOrchestrator` protocol:
+A specialized processing engine for one category of work. CORTEX has **17 wired orchestrators** across **3 canonical tiers** (10 total directories), all satisfying `IOrchestrator``IOrchestrator` protocol:
 
 | Tier | Key Orchestrators | Count |
 |------|-----------------|-------|

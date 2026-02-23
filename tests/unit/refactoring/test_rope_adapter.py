@@ -14,7 +14,7 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict
 
-from cortex.core.core.result import Ok, Err
+from cortex.core.result import Ok, Err
 from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage, RefactoringRequest
 
 

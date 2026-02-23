@@ -6,7 +6,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
-from cortex.core.core.result import Err, Ok
+from cortex.core.result import Err, Ok
 
 
 @dataclass

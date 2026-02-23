@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 from cortex.orchestrators.strategies.stage_execution_strategy import (
     StageContext,
     StageExecutionStrategy,

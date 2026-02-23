@@ -44,7 +44,7 @@ class DeterminismAnalysis:
     variance_percentage: float = 0.0
 
 
-from cortex.core.core.result import Result
+from cortex.core.result import Result
 
 
 class OutputDeterminismVerifier:

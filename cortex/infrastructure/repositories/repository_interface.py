@@ -10,7 +10,7 @@ Pattern: Strategy pattern, enables multiple storage backends
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 
-from cortex.core.core.result import Result
+from cortex.core.result import Result
 
 from .json_profile_repository import ProfileTier, RepositoryProfile
 

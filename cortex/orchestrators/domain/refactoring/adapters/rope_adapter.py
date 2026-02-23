@@ -23,7 +23,7 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from cortex.core.core.result import Err, Ok
+from cortex.core.result import Err, Ok
 from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
 from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,

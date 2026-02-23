@@ -15,7 +15,7 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.core.core.result import Result, Ok, Err
+from cortex.core.result import Result, Ok, Err
 
 
 # Test fixtures and mock data

@@ -190,7 +190,7 @@ class AuditOrchestrator(OrchestratorProtocolMixin):
             A success result value.
         """
         try:
-            from cortex.core.core.result import Result  # type: ignore[import]
+            from cortex.core.result import Result  # type: ignore[import]
             return Result.success("AuditOrchestrator initialized")
         except ImportError:
             return {"status": "ok", "orchestrator": self.get_name()}

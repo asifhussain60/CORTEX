@@ -50,7 +50,7 @@ class SanitizationResult:
     methods_applied: List[SanitizationMethod] = field(default_factory=list)
 
 
-from cortex.core.core.result import Result
+from cortex.core.result import Result
 
 
 class PromptInjectionSanitizer:

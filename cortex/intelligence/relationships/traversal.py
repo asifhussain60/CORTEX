@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-from cortex.core.core.result import Err, Ok
+from cortex.core.result import Err, Ok
 from cortex.intelligence.base import AnalysisResult
 from cortex.intelligence.base_engine import BaseIntelligenceEngine
 

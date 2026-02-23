@@ -12,7 +12,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import List, Union
 
-from cortex.core.core.result import Err, Ok
+from cortex.core.result import Err, Ok
 from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringRequest,

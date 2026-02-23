@@ -24,7 +24,7 @@ class JourneyState(str, Enum):
     COMPLETED = "completed"
 
 
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 

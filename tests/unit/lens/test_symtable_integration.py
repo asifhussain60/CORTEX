@@ -19,7 +19,7 @@ import time
 from pathlib import Path
 from typing import Dict, Any, List
 
-from cortex.core.core.result import Ok, Err
+from cortex.core.result import Ok, Err
 from cortex.lens.analyzers.ast_analyzer import ASTAnalyzer
 
 

@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional
 import yaml
 
 from cortex.core.core.interfaces import GovernanceRule
-from cortex.core.core.result import Err, Ok, Result
+from cortex.core.result import Err, Ok, Result
 
 logger = logging.getLogger(__name__)
 

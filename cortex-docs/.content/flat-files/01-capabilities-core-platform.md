@@ -60,7 +60,7 @@ diagrams: ASCII service architecture, sequence diagrams
 
 - **Health Monitoring** — Circuit breakers, health checks, Prometheus metrics integration
 
-Every one of the 17 wired orchestrators inherits from `OrchestratorBase` and follows this lifecycle:
+Every one of the 17 wired orchestrators uses `OrchestratorProtocolMixin` (Phase 58) + `IOrchestrator` protocol and follows this lifecycle:
 
 **Performance Targets:** Gateway latency P50: 5ms, P95: 15ms, P99: 25ms. Tool discovery <50ms. Health checks <100ms. State lookup <5ms.
 
@@ -96,7 +96,7 @@ teardown()  → Audit trail recording, resource cleanup- [State Management](#sta
 
 
 
-**Developer:** "I inherit from `OrchestratorBase`, implement `execute()`, and get governance gates + audit trails for free. The base class handles the lifecycle."## Overview
+**Developer:** "I implement `IOrchestrator` + `OrchestratorProtocolMixin`, override `execute()`, and get governance gates + audit trails for free. The mixin handles the lifecycle."## Overview
 
 
 
