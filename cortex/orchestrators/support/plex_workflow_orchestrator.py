@@ -117,6 +117,9 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         self.plex_accessor = plex_accessor or PlexMetadataAccessor()
         self.iafd_accessor = iafd_accessor or IAFDAccessor(use_cache=True)
 
+        # Runtime state
+        self.scanned_files: List[VideoLibraryFile] = []
+        
         # Scanners and analyzers
         self.scanner = VideoLibraryScanner(root=root)
         self.filename_analyzer = FilenameAnalyzer(studio_context=studio_filter)
@@ -136,7 +139,6 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         import time
 
         start_time = time.time()
-        ac_session = self.emit_ac_start("PLEX-FULL-WORKFLOW")
 
         result = WorkflowResult(
             success=False,
@@ -147,7 +149,6 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
             files_renamed=0,
             files_tagged=0,
             files_organized=0,
-            ac_session_id=ac_session,
         )
 
         try:
@@ -195,15 +196,12 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
             result.success = True
             result.duration_seconds = time.time() - start_time
 
-            self.emit_ac_complete(ac_session, success=True)
-
             return result
 
         except Exception as exc:
             logger.error(f"Workflow failed: {exc}")
             result.errors.append(str(exc))
             result.duration_seconds = time.time() - start_time
-            self.emit_ac_complete(ac_session, success=False, error=str(exc))
 
             return result
 
@@ -216,9 +214,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
 
         try:
             files = self.scanner.scan()
-
-            if self.studio_filter:
-                files = [f for f in files if f.studio == self.studio_filter]
+            self.scanned_files = files  # Cache for use in subsequent steps
 
             result.total_files = len(files)
             result.files_scanned = len(files)
@@ -250,17 +246,22 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         step = WorkflowStep(name="IDENTIFY", status="running")
 
         try:
-            files = self.scanner.scan()
-
-            if self.studio_filter:
-                files = [f for f in files if f.studio == self.studio_filter]
-
+            files = self.scanned_files  # Use cached scanned files
             identified_count = 0
+            filtered_files = []
 
             for vf in files:
                 try:
                     filename = self._get_filename(vf)
                     sanitization = self.filename_analyzer.analyze(filename)
+                    
+                    # Apply studio filter if specified
+                    if self.studio_filter:
+                        if sanitization.detected_studio != self.studio_filter:
+                            continue  # Skip files not matching studio filter
+                    
+                    filtered_files.append(vf)
+                    
                     if sanitization.detected_studio or sanitization.artists:
                         identified_count += 1
                 except Exception as e:
@@ -268,6 +269,9 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
                     logger.debug(f"Could not identify {filename}: {e}")
                     continue
 
+            # Update cached files to only include filtered ones
+            self.scanned_files = filtered_files
+            result.files_scanned = len(filtered_files)
             result.files_identified = identified_count
 
             step.status = "success"
@@ -294,10 +298,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         step = WorkflowStep(name="MATCH", status="running")
 
         try:
-            files = self.scanner.scan()
-
-            if self.studio_filter:
-                files = [f for f in files if f.studio == self.studio_filter]
+            files = self.scanned_files  # Use cached scanned files
 
             matched_count = 0
             iafd_results = []
@@ -363,10 +364,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         step = WorkflowStep(name="RENAME", status="running")
 
         try:
-            files = self.scanner.scan()
-
-            if self.studio_filter:
-                files = [f for f in files if f.studio == self.studio_filter]
+            files = self.scanned_files  # Use cached scanned files
 
             renamed_count = 0
 
@@ -416,10 +414,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         step = WorkflowStep(name="TAG", status="running")
 
         try:
-            files = self.scanner.scan()
-
-            if self.studio_filter:
-                files = [f for f in files if f.studio == self.studio_filter]
+            files = self.scanned_files  # Use cached scanned files
 
             tagged_count = 0
 
@@ -478,18 +473,18 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         step = WorkflowStep(name="ORGANIZE", status="running")
 
         try:
-            files = self.scanner.scan()
-
-            if self.studio_filter:
-                files = [f for f in files if f.studio == self.studio_filter]
+            files = self.scanned_files  # Use cached scanned files
 
             organized_count = 0
 
             for vf in files:
                 try:
-                    studio_folder = self.root / (
-                        vf.studio or self.studio_filter or "Unknown"
-                    )
+                    # Get studio name from filename analysis
+                    filename = self._get_filename(vf)
+                    analysis = self.filename_analyzer.analyze(filename)
+                    studio_name = analysis.detected_studio or self.studio_filter or "Unknown"
+                    
+                    studio_folder = self.root / studio_name
 
                     if vf.path.parent != studio_folder:
                         if not self.dry_run:
