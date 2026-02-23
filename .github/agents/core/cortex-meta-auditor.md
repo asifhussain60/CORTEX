@@ -71,6 +71,8 @@ Unlike `cortex-auditor.md` (which audits source code), this agent audits **docum
 | 8 | Agent existence | agent-index.md lists only existing agent files |
 | 9 | Template SSOT | `cortex-response-templates.md` is single source, others don't duplicate |
 | 10 | CORE rule IDs | Rules cited in agents exist in `cortex-registry/core/` |
+| 11 | Response header — CORTEX.prompt.md | Format section present; header template reads `## {icon} CORTEX {mode}` followed by `**Author:** Asif Hussain \| **Orchestrator:** {OrchestratorName} ✅` — detect with `grep -n "Author.*Asif" .github/prompts/CORTEX.prompt.md` |
+| 12 | Response header — cortex-architect.prompt.md | Format section present; header template reads `## {icon} CORTEX Architect {mode}` followed by `**Author:** Asif Hussain \| **Orchestrator:** {OrchestratorName} ✅` — detect with `grep -n "Author.*Asif" .github/prompts/cortex-architect.prompt.md` |
 
 ---
 
@@ -94,6 +96,10 @@ ls .github/agents/core/DEPRECATED* .github/agents/core/deprecated* 2>/dev/null
 
 # Check agent-index.md lists valid files
 # Compare agent-index.md entries vs actual files in .github/agents/core/
+
+# Check #11/#12 — response header SSOT drift (must return at least 1 match per file)
+grep -n "Author.*Asif" .github/prompts/CORTEX.prompt.md
+grep -n "Author.*Asif" .github/prompts/cortex-architect.prompt.md
 ```
 
 ---

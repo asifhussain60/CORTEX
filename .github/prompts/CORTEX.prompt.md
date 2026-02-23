@@ -108,6 +108,39 @@ EnforcementOrchestrator validates CORE rules before every operation:
 
 ---
 
+## 🏗️ RESPONSE FORMAT
+
+**SSOT:** `.github/templates/cortex-response-templates.md`
+
+### User-Facing (5-Section Golden Format)
+```
+## {icon} CORTEX {mode}
+**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+
+---
+
+## 📋 Summary — {1-2 sentences, answer first}
+## 🔍 Analysis — {findings, trade-offs, tables}
+## 💡 Recommendation — {ONE primary, numbered steps}
+## ⚖️ Benefits & Risks — {comparison table, skip for simple requests}
+## 🎯 Next Steps — {immediate numbered + later bullets}
+
+### ⚡ If you type `proceed`, CORTEX will:
+- {Specific action — name exact file/function}
+- {Specific action — test written or command run}
+```
+
+### Rules
+- ✅ ONE header per response, never repeated — `## {icon} CORTEX {mode}` then `**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅` then `---`
+- ✅ Author line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
+- ✅ ALL output inline (CORE-002)
+- ✅ ≤60 second read time
+- ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
+- ❌ NO `**Orchestrator:** {Name} ✅` without the `**Author:** Asif Hussain |` prefix — partial header is a P1 violation
+- ❌ NO narration ("I'll now search...", "Let me check...")
+
+---
+
 ## 📁 FILE PLACEMENT
 
 | Type | Location |

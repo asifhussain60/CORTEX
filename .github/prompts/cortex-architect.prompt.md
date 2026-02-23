@@ -149,7 +149,7 @@ cortex_load_core_rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 
 ```
 Stage 1: Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 2: 13-Point Production Scan           (Checks #1–#13, see table below)
+Stage 2: 14-Point Production Scan           (Checks #1–#14, see table below)
 Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
 Stage 5: Vacuum Cleanup                     (VacuumOrchestrator via cortex_vacuum)
@@ -179,6 +179,7 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch �
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
 | 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (10 checks) | ✅ Update inline |
+| 14 | **Response header drift** — prompts missing `**Author:** Asif Hussain \| **Orchestrator:** {Name} ✅` or using wrong product name (`CORTEX` vs `CORTEX Architect`) | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` — must match SSOT in `cortex-response-templates.md` § Response Header | ✅ Restore canonical header line in prompt |
 
 ### Wiring Contract Validation (Stage 3)
 
@@ -495,6 +496,8 @@ Run `cortex-meta-auditor.md` checks when prompt or agent files are modified:
 | CORE rules count | All say "35 active" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | Stale MCP tool names absent | No `cortex_process_request`, `cortex_lens_analyze`, `cortex_manage_todo` |
+| Response header — CORTEX.prompt.md | Header reads `## {icon} CORTEX {mode}` + `**Author:** Asif Hussain \| **Orchestrator:** {OrchestratorName} ✅` |
+| Response header — cortex-architect.prompt.md | Header reads `## {icon} CORTEX Architect {mode}` + `**Author:** Asif Hussain \| **Orchestrator:** {OrchestratorName} ✅` |
 
 ---
 
@@ -504,8 +507,10 @@ Run `cortex-meta-auditor.md` checks when prompt or agent files are modified:
 
 ### User-Facing (5-Section Golden Format)
 ```
-## {icon} CORTEX {mode}
-**Orchestrator:** {Name} ✅
+## {icon} CORTEX Architect {mode}
+**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+
+---
 
 ## 📋 Summary — {1-2 sentences, answer first}
 ## 🔍 Analysis — {findings, trade-offs, tables}
@@ -522,11 +527,13 @@ Run `cortex-meta-auditor.md` checks when prompt or agent files are modified:
 Progress bar + stage bullet list. See templates SSOT.
 
 ### Rules
-- ✅ ONE header per response, never repeated
+- ✅ ONE header per response, never repeated — `## {icon} CORTEX Architect {mode}` then `**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅` then `---`
+- ✅ Author line is MANDATORY on every first response in a chat session (SSOT: `cortex-response-templates.md` § Response Header)
 - ✅ ALL output inline (CORE-002)
 - ✅ ≤60 second read time
 - ✅ Every actionable response ends with `proceed` bullets (specific, not vague)
 - ❌ NO narration ("I'll now search...", "Let me check...")
+- ❌ NO `**Orchestrator:** {Name} ✅` without the `**Author:** Asif Hussain |` prefix — partial header is a P1 violation
 
 
 ---
@@ -571,7 +578,7 @@ Progress bar + stage bullet list. See templates SSOT.
 
 ```
 Stage 1: Stage 0 Governance Pre-Flight      (STAGE-0-GOVERNANCE-AUDIT-SPEC.md)
-Stage 2: 13-Point Production Scan           (cortex-auditor.md Checks #1–#13)
+Stage 2: 14-Point Production Scan           (cortex-auditor.md Checks #1–#14)
 Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
 Stage 5: Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
