@@ -1,0 +1,88 @@
+id: phase-55
+title: "TemplateComposer — Dynamic Workflow Composition from Primitives"
+status: COMPLETE
+priority: P1
+created: '2026-02-23'
+completed: '2026-02-23'
+author: Asif Hussain
+estimated_duration: 4 hours
+actual_duration: 1 hour
+
+description: |
+  Closes the gap where WorkflowComplexityRouter silently falls back to
+  tdd/feature-implementation when no template matches a novel operation type.
+
+  Adds a TemplateComposer that assembles new workflow templates by composing
+  pre-validated primitive building blocks from cortex-registry/workflows/templates/.
+  Composed templates are validated, injected with convergence gates, and persisted
+  to cortex-registry/workflows/templates/composites/ for future reuse.
+
+  Key principle: COMPOSE from validated blocks, never GENERATE arbitrary YAML.
+  This eliminates hallucination risk while enabling dynamic coverage.
+
+consolidation_audit:
+  result: NO_CONSOLIDATION_NEEDED
+  date: '2026-02-23'
+  components_audited: 9
+  details: |
+    WorkflowTemplateRegistry (storage) — distinct from WorkflowTemplateManager (discovery)
+    WorkflowTemplateMixin (orchestrator bridge) — distinct from WorkflowComposer (execution)
+    WorkflowRuntime (hydration) — distinct from AutonomousWorkflowExecutor (autonomous bridge)
+    StepStateMachine (FSM control) — distinct from ConvergenceLoopExecutor (retry control)
+    WorkflowComplexityRouter (routing) — unique, no overlap
+    All components satisfy CORE-035 (single canonical implementation)
+
+architecture:
+  new_files:
+    - cortex/orchestrators/workflow/template_composer.py
+    - tests/orchestrators/workflow/test_template_composer.py
+    - cortex-registry/workflows/templates/composites/README.md
+  modified_files:
+    - cortex/orchestrators/core/intent_router/workflow_gate.py
+  no_new_orchestrators: true
+  no_new_mcp_tools: true
+  mcp_exposure: existing cortex_list_workflow_templates
+  regression_risk: zero (additive fallback path only)
+
+stages:
+  - id: stage-1
+    title: "RED — Write failing tests for TemplateComposer"
+    description: |
+      TDD-first: test primitive scanning, composition assembly,
+      convergence gate injection, and persistence.
+    deliverables:
+      - tests/orchestrators/workflow/test_template_composer.py
+
+  - id: stage-2
+    title: "GREEN — Implement TemplateComposer"
+    description: |
+      Implement PrimitiveScanner, CompositionEngine, CompositionValidator.
+      Single file: cortex/orchestrators/workflow/template_composer.py
+    deliverables:
+      - cortex/orchestrators/workflow/template_composer.py
+
+  - id: stage-3
+    title: "WIRE — Integrate into WorkflowComplexityRouter"
+    description: |
+      Wire TemplateComposer into _select_template() as fallback
+      before the hard-coded default. Non-breaking change.
+    deliverables:
+      - cortex/orchestrators/core/intent_router/workflow_gate.py (modified)
+
+  - id: stage-4
+    title: "REFACTOR + AC_COMPLETE"
+    description: |
+      Run full test suite via make test-batch. Clean up. Mark AC_COMPLETE.
+    deliverables:
+      - All tests green
+      - cortex-master.yaml updated to COMPLETE
+
+governance:
+  rules_applied:
+    - CORE-002 (all output inline)
+    - CORE-008 (TDD mandatory)
+    - CORE-011 (type hints)
+    - CORE-012 (docstrings)
+    - CORE-028 (snake_case)
+    - CORE-035 (single canonical)
+    - CORE-064 (sweep completeness)

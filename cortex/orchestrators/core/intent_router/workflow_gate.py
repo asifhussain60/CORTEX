@@ -189,7 +189,17 @@ class WorkflowComplexityRouter:
         return orchestrator_map.get(operation_type, "MasterOrchestrator")
     
     def _select_template(self, intent: Intent) -> str:
-        """Select appropriate workflow template."""
+        """Select appropriate workflow template.
+
+        Uses static mapping first, then falls back to TemplateComposer for
+        dynamic composition from validated primitives (Phase 55).
+
+        Args:
+            intent: Parsed user intent with operation details.
+
+        Returns:
+            Template ID string (static match or composed).
+        """
         operation_type = intent.operation_type.lower()
         
         template_map = {
@@ -201,4 +211,33 @@ class WorkflowComplexityRouter:
             "deploy": "deployment/production-release",
         }
         
-        return template_map.get(operation_type, "tdd/feature-implementation")
+        # Static match — fast path
+        if operation_type in template_map:
+            return template_map[operation_type]
+
+        # Phase 55: Dynamic composition from primitives (fallback)
+        try:
+            from cortex.orchestrators.workflow.template_composer import TemplateComposer
+            from pathlib import Path
+
+            primitives_dir = Path("cortex-registry/workflows/templates/primitives")
+            composites_dir = Path("cortex-registry/workflows/templates/composites")
+
+            if primitives_dir.exists():
+                composer = TemplateComposer(
+                    primitives_dir=primitives_dir,
+                    composites_dir=composites_dir,
+                )
+                description = intent.metadata.get("description", operation_type)
+                composed = composer.compose(
+                    operation_type=operation_type,
+                    description=str(description),
+                )
+                if composed is not None:
+                    composer.persist(composed)
+                    return composed["id"]
+        except Exception:
+            pass  # Non-blocking — fall through to default
+
+        # Ultimate fallback
+        return "tdd/feature-implementation"

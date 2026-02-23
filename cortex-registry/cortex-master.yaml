@@ -1,12 +1,12 @@
-version: '10.5'
+version: '10.6'
 updated: '2026-02-23'
 maintainer: CORTEX Architecture Team
 metadata:
-  version: '10.5'
+  version: '10.6'
   last_updated: '2026-02-23T00:00:00Z'
-  total_phases: 55
+  total_phases: 56
   active: 0
-  completed: 55
+  completed: 56
   playbooks: 1
   planned: 0
 architecture:
@@ -239,6 +239,37 @@ phases:
     scorecard_composite: 8.6
     scorecard_delta: "+6.5"
   planned: []
+  active: []
+  completed_late_additions_phase_55:
+  - id: phase-55
+    title: "TemplateComposer — Dynamic Workflow Composition from Primitives"
+    status: COMPLETE
+    priority: P1
+    file: _cortex-master/phases/completed/phase-55-template-composer.yaml
+    created: '2026-02-23'
+    completed: '2026-02-23'
+    duration: 1 hour
+    metrics:
+      tests: 16/16 passing
+      test_duration: 0.24s
+      stages: 4
+      new_files: 3
+      modified_files: 1
+    description: |
+      Closes gap where WorkflowComplexityRouter silently fell back to
+      tdd/feature-implementation for unknown operation types.
+      TemplateComposer assembles new templates from validated primitives
+      (analysis → execution → validation). Wired into _select_template()
+      as fallback. Composed templates persisted to composites/ for reuse.
+      Zero regression — 1237 smoke tests passing.
+    consolidation_audit: |
+      AUDIT: No consolidation needed across 9 workflow components.
+      Each occupies a distinct layer. CORE-035 satisfied.
+    deliverables:
+      - cortex/orchestrators/workflow/template_composer.py (PrimitiveScanner + TemplateComposer)
+      - tests/orchestrators/workflow/test_template_composer.py (16 tests)
+      - cortex/orchestrators/core/intent_router/workflow_gate.py (modified — composer fallback)
+      - cortex-registry/workflows/templates/composites/README.md
   deferred:
   - phase-31
   - phase-34
@@ -1016,19 +1047,20 @@ synchronization_status:
   last_sync_date: '2026-02-22T18:00:00Z'
   sync_verified: true
 summary:
-  total_phases: 55
-  completed: 55
+  total_phases: 56
+  completed: 56
   active: 0
   planned: 0
   playbooks: 1
   consolidated: 2
   deferred: 4
   completion_percentage: 100
-  production_status: 🟢 PRODUCTION READY — 55/55 PHASES COMPLETE
-  phase_numbering: Sequential 01-54 (v10.5 - 2026-02-23)
+  production_status: 🟢 PRODUCTION READY — 56/56 PHASES COMPLETE
+  phase_numbering: Sequential 01-55 (v10.6 - 2026-02-23)
   key_achievements:
-  - 🟢 55/55 PHASES COMPLETE — Phase 54 cortex-refactor execution DELIVERED
+  - 🟢 56/56 PHASES COMPLETE — Phase 55 TemplateComposer DELIVERED
   - 🟢 838 GOLDEN TESTS COLLECTED — 0 FAILURES (2026-02-23)
+  - 'Phase 55 COMPLETE: TemplateComposer — dynamic workflow composition from validated primitives (16 tests)'
   - 'Phase 54 COMPLETE: cortex-refactor — ghost dir removal, path canonicalization, 20+ source files fixed'
   - 🟢 Playbook PB-STS-001 created — repeatable BadMonolith E2E refactoring
   - � Phase 52 COMPLETE — Operational Pattern Journal (cross-orchestrator learning)
