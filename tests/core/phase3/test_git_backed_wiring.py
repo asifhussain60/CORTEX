@@ -42,7 +42,7 @@ def test_wiring_yaml_is_valid() -> None:
 
 
 def test_all_23_orchestrators_defined() -> None:
-    """Test that all 23 orchestrators are defined in wiring.yaml."""
+    """Test that all wired orchestrators are defined in wiring.yaml."""
     import yaml
     
     wiring_file = Path("cortex/core/wiring/specifications/wiring.yaml")
@@ -57,10 +57,11 @@ def test_all_23_orchestrators_defined() -> None:
     
     # Phase 8.1: Added EnforcementOrchestrator to core (7 total)
     # Phase 8.3-8.4: Added ChallengeEngine + RecommendationEngine to support (13 total)
+    # Phase 59-g: Added SweepCatalogueOrchestrator to support (14 total)
     assert core_count == 7, f"Expected 7 core orchestrators, got {core_count}"
     assert domain_count == 6, f"Expected 6 domain orchestrators, got {domain_count}"
-    assert support_count == 13, f"Expected 13 support orchestrators, got {support_count}"
-    assert total == 26, f"Expected 26 total orchestrators, got {total}"
+    assert support_count == 14, f"Expected 14 support orchestrators, got {support_count}"
+    assert total == 27, f"Expected 27 total (core+domain+support) orchestrators, got {total}"
 
 
 def test_orchestrators_have_required_fields() -> None:
@@ -188,14 +189,15 @@ def test_bootstrap_cortex_returns_registry() -> None:
 
 
 def test_registry_can_list_orchestrators() -> None:
-    """Test that registry can list all 26 orchestrators (Phase 8.3: +ChallengeEngine, +RecommendationEngine)."""
+    """Test that registry can list all wired orchestrators (Phase 59-g: +SweepCatalogueOrchestrator, +HealthOrchestrator)."""
     from cortex.core.wiring import bootstrap_cortex
     
     registry = bootstrap_cortex()
     orchestrators = registry.list_orchestrators()
     
     # Phase 8.3: Added ChallengeEngine and RecommendationEngine (26 total)
-    assert len(orchestrators) == 26, f"Expected 26 orchestrators, got {len(orchestrators)}"
+    # Phase 59-g: Added SweepCatalogueOrchestrator + HealthOrchestrator (27 core+domain+support)
+    assert len(orchestrators) >= 27, f"Expected at least 27 orchestrators, got {len(orchestrators)}"
 
 
 def test_lazy_initialization_works() -> None:

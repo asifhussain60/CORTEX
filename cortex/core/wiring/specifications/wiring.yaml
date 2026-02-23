@@ -250,6 +250,28 @@ orchestrators:
       capabilities: ["auto_healing", "mcp_diagnostics", "self_repair"]
       health_check: "ping"
 
+    - name: "SweepCatalogueOrchestrator"
+      module: "cortex.orchestrators.support.sweep_catalogue_orchestrator"
+      class: "SweepCatalogueOrchestrator"
+      tier: 3
+      priority: 21
+      dependencies: ["MasterOrchestrator"]
+      capabilities: ["sweep_catalogue", "issue_tracking", "fix_verification"]
+      health_check: "ping"
+      registration_phase: "59-g"
+
+  # ── Health tier ───────────────────────────────────────────────────────────
+  health:
+    - name: "HealthOrchestrator"
+      module: "cortex.orchestrators.health.health_orchestrator"
+      class: "HealthOrchestrator"
+      tier: 3
+      priority: 20
+      dependencies: []
+      capabilities: ["health_check", "orchestrator_ping", "system_health"]
+      health_check: "ping"
+      registration_phase: "59-g"
+
 # =============================================================================
 # TIER 4 — Extended Orchestrators (Phase 59-f: GAP-59-09 Registration)
 # Previously unregistered tiers: git, intelligence, synthesis, workflow,
