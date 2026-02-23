@@ -1,16 +1,21 @@
 """
 cortex/mcp/tools/video_library_tool.py
 
-MCP tool for video library scanning and organization.
+MCP tool for video library scanning and comprehensive Plex workflow.
 
-Exposes VideoLibraryOrchestrator operations via MCP interface:
+Exposes VideoLibraryOrchestrator + PlexWorkflowOrchestrator operations:
+
+**Quick Operations:**
 - `scan` — Discover and index all videos with PLEX metadata
 - `preview_renames` — Show proposed renames without applying
 - `apply_renames` — Execute filesystem renames with confidence filtering
 - `update_metadata` — Sync PLEX metadata back to file tags
 - `sanitize_filenames` — Intelligent filename sanitization with studio detection
-- `analyze_backlog` — Analyze _backlog folder for sanitization candidates
 - `extract_metadata` — Extract studio, artists, tags for Plex organization
+
+**Comprehensive Workflow:**
+- `plex_workflow_full` — End-to-end scan → identify → match → rename → tag → organize
+- `plex_workflow_iafd_match` — Match library against IAFD and retrieve enriched metadata
 
 AC_START: AC-VIDEO-MCP-2026-02-23-004
 """
@@ -688,6 +693,256 @@ def cortex_extract_metadata(
             "success": False,
             "error": str(exc),
             "filename": filename,
+        }
+
+
+def cortex_plex_workflow_full(
+    root_path: str = "G:\\FLICKS",
+    studio_filter: Optional[str] = None,
+    dry_run: bool = True,
+    use_iafd: bool = True,
+    min_match_confidence: float = 0.75,
+    min_rename_confidence: float = 0.80,
+    auto_organize: bool = True,
+) -> Dict[str, Any]:
+    """
+    Execute complete Plex workflow (scan → identify → match → rename → tag → organize).
+
+    Comprehensive end-to-end workflow that orchestrates all video library operations:
+    1. **SCAN** — Discover videos in directory
+    2. **IDENTIFY** — Extract metadata from filenames (studio, performers)
+    3. **MATCH** — Query IAFD for enriched metadata
+    4. **RENAME** — Sanitize filenames with confidence filtering
+    5. **TAG** — Write enriched Plex metadata to file tags
+    6. **ORGANIZE** — Move files to studio-specific folders
+    7. **VERIFY** — Validate workflow results
+
+    Args:
+        root_path: Root directory (default: ``G:\\FLICKS``).
+        studio_filter: Limit to specific studio (e.g., ``Wicked``).
+        dry_run: Preview mode (show what would happen, don't modify).
+        use_iafd: Query IAFD for enriched metadata.
+        min_match_confidence: Minimum confidence for IAFD matches (0.0-1.0).
+        min_rename_confidence: Minimum confidence for renames (0.0-1.0).
+        auto_organize: Move files to studio folders.
+
+    Returns:
+        Dict with keys:
+        - `success`: Workflow completed successfully.
+        - `total_files`: Files discovered.
+        - `files_scanned`: Files successfully scanned.
+        - `files_identified`: Files with detected metadata.
+        - `files_matched`: Files matched against IAFD.
+        - `files_renamed`: Files renamed.
+        - `files_tagged`: Files tagged with metadata.
+        - `files_organized`: Files organized to studio folders.
+        - `steps`: List of step results with status and timing.
+        - `errors`: List of errors encountered.
+        - `warnings`: List of warnings.
+        - `duration_seconds`: Total workflow time.
+
+    Example::
+
+        result = cortex_plex_workflow_full(
+            root_path="G:\\\\FLICKS\\\\Wicked",
+            studio_filter="Wicked",
+            dry_run=True,
+            use_iafd=True
+        )
+        print(f"Scanned: {result['total_files']} files")
+        print(f"Renamed: {result['files_renamed']} files")
+        print(f"Tagged: {result['files_tagged']} files")
+    """
+    from cortex.orchestrators.support.plex_workflow_orchestrator import (
+        PlexWorkflowOrchestrator,
+    )
+    from cortex.tools.media.iafd_metadata_accessor import IAFDAccessor
+    from cortex.tools.media.plex_metadata_accessor import PlexMetadataAccessor
+
+    try:
+        root = Path(root_path)
+
+        # Initialize orchestrator with accessors
+        plex_accessor = PlexMetadataAccessor()
+        iafd_accessor = IAFDAccessor(use_cache=True) if use_iafd else None
+
+        orchestrator = PlexWorkflowOrchestrator(
+            root=root,
+            studio_filter=studio_filter,
+            dry_run=dry_run,
+            min_match_confidence=min_match_confidence,
+            min_rename_confidence=min_rename_confidence,
+            auto_organize=auto_organize,
+            use_iafd=use_iafd,
+            plex_accessor=plex_accessor,
+            iafd_accessor=iafd_accessor,
+        )
+
+        # Run full workflow
+        workflow_result = orchestrator.run_full_workflow()
+
+        # Format step results for output
+        steps = [
+            {
+                "name": step.name,
+                "status": step.status,
+                "duration_ms": round(step.duration_ms, 2),
+                "error": step.error,
+                "details": step.details,
+            }
+            for step in workflow_result.step_results
+        ]
+
+        return {
+            "success": workflow_result.success,
+            "total_files": workflow_result.total_files,
+            "files_scanned": workflow_result.files_scanned,
+            "files_identified": workflow_result.files_identified,
+            "files_matched": workflow_result.files_matched,
+            "files_renamed": workflow_result.files_renamed,
+            "files_tagged": workflow_result.files_tagged,
+            "files_organized": workflow_result.files_organized,
+            "steps": steps,
+            "errors": workflow_result.errors,
+            "warnings": workflow_result.warnings,
+            "duration_seconds": round(workflow_result.duration_seconds, 2),
+            "dry_run": dry_run,
+            "ac_session_id": workflow_result.ac_session_id,
+        }
+
+    except Exception as exc:  # noqa: BLE001
+        return {
+            "success": False,
+            "error": str(exc),
+            "total_files": 0,
+            "files_scanned": 0,
+            "files_renamed": 0,
+            "files_tagged": 0,
+        }
+
+
+def cortex_plex_workflow_iafd_match(
+    root_path: str = "G:\\FLICKS",
+    studio_filter: Optional[str] = None,
+    limit_results: int = 50,
+    min_confidence: float = 0.75,
+) -> Dict[str, Any]:
+    """
+    Match video library against IAFD database and retrieve enriched metadata.
+
+    Queries IAFD (Internet Adult Film Database) by title and performers
+    to retrieve enriched metadata including:
+    - Scene titles and descriptions
+    - Performer names and links
+    - Directors and production companies
+    - Release dates
+    - Runtime and resolution
+
+    Args:
+        root_path: Root directory (default: ``G:\\FLICKS``).
+        studio_filter: Filter to specific studio.
+        limit_results: Maximum results to display.
+        min_confidence: Minimum match confidence (0.0-1.0).
+
+    Returns:
+        Dict with keys:
+        - `success`: Operation completed.
+        - `total_files`: Files discovered.
+        - `matched`: Number of successful matches.
+        - `match_rate`: Percentage of files matched.
+        - `matches`: List of successful matches with metadata.
+        - `unmatched`: List of files that could not be matched.
+        - `duration_seconds`: Query time.
+
+    Example::
+
+        matches = cortex_plex_workflow_iafd_match(
+            root_path="G:\\\\FLICKS\\\\Wicked",
+            studio_filter="Wicked",
+            min_confidence=0.80
+        )
+        for match in matches['matches']:
+            print(f"{match['filename']} → {match['title']}")
+            print(f"  Performers: {', '.join(match['performers'])}")
+            print(f"  Confidence: {match['confidence']:.0%}")
+    """
+    from cortex.tools.media.filename_sanitizer import FilenameAnalyzer
+    from cortex.tools.media.iafd_metadata_accessor import IAFDAccessor
+    from cortex.tools.media.video_library_scanner import VideoLibraryScanner
+
+    try:
+        root = Path(root_path)
+        import time
+
+        start_time = time.time()
+
+        # Scan library
+        scanner = VideoLibraryScanner(root=root)
+        files = scanner.scan()
+
+        if studio_filter:
+            files = [f for f in files if f.studio == studio_filter]
+
+        # Initialize IAFD accessor
+        iafd_accessor = IAFDAccessor(use_cache=True)
+        analyzer = FilenameAnalyzer(studio_context=studio_filter)
+
+        matches = []
+        unmatched = []
+
+        for vf in files:
+            try:
+                # Try title match first
+                metadata = iafd_accessor.search_by_title(vf.filename_stem)
+
+                if not metadata:
+                    # Try performer match
+                    analysis = analyzer.analyze(vf.filename)
+                    if analysis.artists:
+                        metadata = iafd_accessor.search_by_performers(
+                            analysis.artists
+                        )
+
+                if metadata and metadata.confidence >= min_confidence:
+                    matches.append(
+                        {
+                            "filename": vf.filename,
+                            "title": metadata.title,
+                            "performers": metadata.performers,
+                            "directors": metadata.directors,
+                            "production_company": metadata.production_company,
+                            "release_date": metadata.release_date,
+                            "confidence": round(metadata.confidence, 2),
+                            "iafd_url": metadata.iafd_url,
+                        }
+                    )
+                else:
+                    unmatched.append(vf.filename)
+
+            except Exception as e:
+                unmatched.append(vf.filename)
+                continue
+
+        match_rate = len(matches) / len(files) if files else 0
+
+        return {
+            "success": True,
+            "total_files": len(files),
+            "matched": len(matches),
+            "match_rate": round(match_rate, 2),
+            "matches": matches[:limit_results],
+            "unmatched": unmatched[:limit_results],
+            "duration_seconds": round(time.time() - start_time, 2),
+            "limited_to": len(matches) > limit_results,
+        }
+
+    except Exception as exc:  # noqa: BLE001
+        return {
+            "success": False,
+            "error": str(exc),
+            "total_files": 0,
+            "matched": 0,
+            "matches": [],
         }
 
 
