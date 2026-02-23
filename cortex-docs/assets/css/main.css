@@ -1894,78 +1894,147 @@ footer,
 }
 
 /* ============================================
-   PERSONA TILES - Role-Based Value Cards
+   PERSONA SECTION - Role-Based Value Cards (Compact 2×2 Grid)
    ============================================ */
-.persona-tiles-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--spacing-lg);
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 var(--spacing-md);
+
+/* Section wrapper — matches site max-width with consistent side margins */
+.persona-section {
+    max-width: 1100px;
+    margin: 2.5rem auto;
+    padding: 0 2rem;
+    box-sizing: border-box;
 }
 
-.persona-tile {
-    background: linear-gradient(145deg, rgba(26, 31, 58, 0.9), rgba(10, 14, 39, 0.95));
-    border: 1px solid var(--glass-border);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-xl);
+/* Section heading */
+.persona-section-header {
     text-align: center;
-    transition: all var(--transition-base);
+    margin-bottom: 1.25rem;
+}
+
+.persona-section-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 0.3rem;
+    letter-spacing: 0.02em;
+}
+
+.persona-section-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* ── 2×2 grid: always two columns on desktop ── */
+.persona-tiles-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+/* Card base — override glass-card-clickable base padding/margin */
+.persona-tile {
+    background: linear-gradient(145deg, rgba(26, 31, 58, 0.88), rgba(10, 14, 39, 0.94));
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem !important;
+    margin-bottom: 0 !important;
+    text-align: center;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
 }
 
-.persona-tile::before {
-    content: '';
+/* Coloured top-edge accent stripe */
+.persona-tile-accent {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    height: 3px;
+    border-radius: 14px 14px 0 0;
+    pointer-events: none;
 }
 
-.persona-tile-leadership::before {
+.persona-tile-leadership .persona-tile-accent {
     background: linear-gradient(90deg, #ffa500, #ff6b00);
 }
 
-.persona-tile-product::before {
+.persona-tile-product .persona-tile-accent {
     background: linear-gradient(90deg, #00d4ff, #00a0cc);
 }
 
-.persona-tile-engineer::before {
+.persona-tile-engineer .persona-tile-accent {
     background: linear-gradient(90deg, #7b61ff, #5a3fd4);
 }
 
+.persona-tile-visitor .persona-tile-accent {
+    background: linear-gradient(90deg, #34d399, #10b981);
+}
+
+/* Hover elevation */
 .persona-tile:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg), var(--glow);
-    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 22px rgba(0, 212, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.persona-tile-visitor:hover {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4), 0 0 22px rgba(52, 211, 153, 0.12);
+}
+
+/* Card header row: icon + title + tagline in a tight horizontal cluster */
+.persona-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    text-align: left;
 }
 
 .persona-icon {
-    font-size: 3rem;
-    margin-bottom: var(--spacing-md);
-    display: block;
+    font-size: 1.75rem;
     line-height: 1;
+    flex-shrink: 0;
+    /* override any old block/margin rules */
+    display: block;
+    margin-bottom: 0;
+}
+
+.persona-card-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
 }
 
 .persona-title {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
     color: var(--text-primary);
-    margin-bottom: var(--spacing-sm);
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .persona-tagline {
-    font-size: 0.95rem;
+    font-size: 0.75rem;
     color: var(--accent-primary);
     font-weight: 600;
-    margin-bottom: var(--spacing-lg);
     font-style: italic;
+    margin: 0;
 }
 
+/* Per-card tagline accent colours */
+.persona-tile-leadership .persona-tagline { color: #ffa500; }
+.persona-tile-product   .persona-tagline { color: #00d4ff; }
+.persona-tile-engineer  .persona-tagline { color: #9b86ff; }
+.persona-tile-visitor   .persona-tagline { color: #34d399; }
+
+/* Benefit list — compact */
 .persona-benefits {
     list-style: none;
     padding: 0;
@@ -1974,12 +2043,12 @@ footer,
 }
 
 .persona-benefits li {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
-    padding: var(--spacing-sm) 0;
-    padding-left: 1.5rem;
+    padding: 0.42rem 0 0.42rem 1.25rem;
     position: relative;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    line-height: 1.45;
 }
 
 .persona-benefits li:last-child {
@@ -1990,27 +2059,46 @@ footer,
     content: '✓';
     position: absolute;
     left: 0;
-    color: var(--success);
-    font-weight: bold;
+    top: 0.3rem;
+    color: var(--success, #22c55e);
+    font-weight: 700;
+    font-size: 0.75rem;
 }
 
-/* Persona Tiles Responsive */
-@media (max-width: 900px) {
-    .persona-tiles-container {
+/* Per-card check colours */
+.persona-tile-leadership .persona-benefits li::before { color: #ffa500; }
+.persona-tile-product   .persona-benefits li::before { color: #00d4ff; }
+.persona-tile-engineer  .persona-benefits li::before { color: #9b86ff; }
+.persona-tile-visitor   .persona-benefits li::before { color: #34d399; }
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 600px) {
+    .persona-section {
+        padding: 0 1rem;
+    }
+
+    .persona-tiles-grid {
         grid-template-columns: 1fr;
-        max-width: 500px;
+        gap: 0.75rem;
+    }
+
+    .persona-section-title {
+        font-size: 1.2rem;
     }
 }
 
-@media (min-width: 901px) and (max-width: 1100px) {
-    .persona-tiles-container {
-        grid-template-columns: repeat(2, 1fr);
+@media (min-width: 601px) and (max-width: 860px) {
+    .persona-section {
+        padding: 0 1.25rem;
     }
-    
-    .persona-tile:last-child {
-        grid-column: 1 / -1;
-        max-width: 50%;
-        margin: 0 auto;
+
+    .persona-tiles-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .persona-tile {
+        padding: 0.9rem 1rem;
     }
 }
 
@@ -6489,6 +6577,11 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .level0-content-card {
     padding: 2rem;
     text-align: left;
+}
+
+/* Prevent empty flex space at the bottom of level0 panels */
+.level0-content-card .flex-1 {
+    flex: 0 0 auto;
 }
 
 /* Level 0 Card Header */
@@ -11658,7 +11751,7 @@ code[style*="color:"][style*="background:"] {
     }
     
     /* Ensure persona tiles are responsive */
-    .persona-tiles-container {
+    .persona-tiles-grid {
         grid-template-columns: 1fr !important;
     }
     

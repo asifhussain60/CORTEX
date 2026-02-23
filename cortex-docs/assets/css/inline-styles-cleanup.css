@@ -521,3 +521,13 @@ textarea,
         max-width: 100%;
     }
 }
+
+/* ============================================================================
+   HERO SECTION — REMOVE BOTTOM PADDING
+   Targets section#hero-section.hero.level0-hero-section (both panels)
+   Overrides .hero { padding: 6rem 2rem 4rem } from main.css
+   ========================================================================= */
+#hero-section.hero,
+.level0-hero-section.hero {
+    padding-bottom: 0;
+}
