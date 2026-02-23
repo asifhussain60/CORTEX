@@ -113,8 +113,11 @@ Includes:
 - ``cortex-docs``    — user-facing HTML documentation
 - ``cortex-registry``— YAML governance rules and registry
 - ``cortex-sts``     — STS (Sample Target System) sample apps for LENS/Digest
-- ``_workspaces``    — approved orchestrator dashboard, STS analysis artefacts,
-                       chat session logs; intentional workspace area
+- ``_workspaces``    — intentional workspace area; ALL subfolders are protected:
+                         • ``approved-orchestrator-view/`` — approved orchestrator dashboard
+                         • ``recommend/``                  — copilot review artefacts (permanent)
+                         • ``prompts/``                    — workspace-scoped prompt overrides
+                         • ``.chats/``                     — chat session logs
 - ``scripts``        — cross-platform runner scripts
 - ``deployment``     — Docker/K8s/Prometheus/Nginx configs
 - ``tests``          — test mirror tree

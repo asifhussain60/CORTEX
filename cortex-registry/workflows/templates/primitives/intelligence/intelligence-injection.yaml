@@ -1,0 +1,307 @@
+# ==============================================================================
+# PRIMITIVE: Intelligence Injection
+# ==============================================================================
+# Tier:      1 (Primitive — atomic, reusable, parameterised)
+# Category:  intelligence
+# Authority: Phase 57 — Intelligence Propagation Plan
+# Governance: CORE-035 (single canonical) · CORE-049 (silent execution)
+#             CORE-011 (type hints) · CORE-012 (docstrings)
+#
+# Purpose:
+#   Injects LENS analysis and UnifiedIntelligenceContext into the execution
+#   scope of any orchestrator that inherits IntelligenceMixin. This primitive
+#   is the standard wiring point so every composed REFACTOR / FIX / AUDIT
+#   workflow receives intelligence context automatically — by convention, not
+#   by per-orchestrator manual wiring.
+#
+# Design:
+#   - Mirrors audit-trace.yaml (mandatory import pattern)
+#   - Degradation policy: warn_and_continue (never blocks execution)
+#   - AC markers emitted to SQLite audit log and IntelligenceMixin._ac_log
+#   - TemplateComposer injects at index 1 (after sweep-catalogue-open)
+#     for all REFACTOR / FIX / AUDIT composed workflows
+#
+# Reused by:
+#   - quality/refactor-holistic-sweep.yaml
+#   - quality/dead-code-removal.yaml
+#   - audit/audit-fix-pipeline.yaml (Stages 2–6 intelligence gate)
+#   - Any composed REFACTOR / FIX / AUDIT workflow via TemplateComposer
+#
+# Wiring:
+#   TemplateComposer injects this step at index 1 of every intelligence-
+#   required composed template. EnforcementOrchestrator agent validates
+#   its presence before REFACTOR/FIX execution is permitted.
+# ==============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/intelligence/intelligence-injection'
+name: 'Intelligence Injection Primitive'
+tier: '1'
+category: 'intelligence'
+status: 'active'
+
+degradation_policy: 'warn_and_continue'
+
+metadata:
+  description: |
+    Atomic primitive that injects LENS analysis and unified knowledge synthesis
+    context into any orchestrator inheriting IntelligenceMixin before the main
+    execution body runs. Provides every composed workflow with AST complexity
+    findings, git-history dependency insights, and knowledge best-practices —
+    turning static rule enforcement into dynamic advisory guidance.
+
+    Degradation: if LENS or KnowledgeSynthesisEngine is unavailable, the
+    primitive emits a P2 warning and continues (never blocks execution).
+    The target orchestrator receives {"degraded": true} in place of real findings.
+
+  governance_rules:
+    - 'CORE-035: Single canonical implementation — this primitive IS the
+       intelligence wiring point; individual orchestrators must not re-implement
+       LENS imports themselves'
+    - 'CORE-049: Silent on clean pass — no noise when intelligence is available'
+    - 'CORE-064: Sweep Completeness — paired with sweep-catalogue-open.yaml
+       so every FIX/REFACTOR session has full intelligence before cataloguing'
+
+  tags:
+    - primitive
+    - intelligence
+    - lens
+    - knowledge-synthesis
+    - unified-context
+    - cross-cutting
+
+  mandatory_for_modes:
+    - REFACTOR
+    - FIX
+    - AUDIT
+    - IMPLEMENT
+
+  author: 'CORTEX Architecture'
+  created: '2026-02-23'
+  phase: 57
+
+# ==============================================================================
+# REQUIRED CORTEX TOOLING
+# ==============================================================================
+cortex_tooling:
+  mixin:
+    name: 'IntelligenceMixin'
+    module: 'cortex.core.intelligence_mixin'
+    purpose: 'Provides get_lens_context, inject_unified_context, query_knowledge'
+    required: true
+
+  orchestrators:
+    - name: 'LENSOrchestrator'
+      module: 'cortex.lens.lens_orchestrator'
+      purpose: 'AST analysis, git history, complexity metrics'
+      required: false
+      degradation: 'warn_and_continue'
+
+    - name: 'KnowledgeSynthesisEngine'
+      module: 'cortex.intelligence.knowledge.knowledge_synthesis_engine'
+      purpose: 'Domain best-practice knowledge query'
+      required: false
+      degradation: 'warn_and_continue'
+
+  mcp_tools:
+    - name: 'cortex_validate'
+      op: 'compliance'
+      purpose: 'CORE rule validation on LENS output'
+      required: false
+
+# ==============================================================================
+# PARAMETERS
+# ==============================================================================
+parameters:
+  required:
+    - name: 'target_files'
+      type: 'List[Path]'
+      description: 'Files or directories in scope for this workflow execution'
+
+    - name: 'operation_type'
+      type: 'str'
+      description: 'Intent mode (REFACTOR | FIX | AUDIT | IMPLEMENT)'
+      enum: ['REFACTOR', 'FIX', 'AUDIT', 'IMPLEMENT']
+
+  optional:
+    - name: 'lens_depth'
+      type: 'str'
+      description: 'LENS analysis depth'
+      default: 'standard'
+      enum: ['shallow', 'standard', 'deep']
+
+    - name: 'knowledge_domains'
+      type: 'List[str]'
+      description: 'Knowledge domains to query (architecture, testing, security, etc.)'
+      default: ['architecture', 'testing']
+
+    - name: 'max_knowledge_results'
+      type: 'int'
+      description: 'Max knowledge artifacts per domain query'
+      default: 5
+
+    - name: 'inject_into_orchestrator'
+      type: 'bool'
+      description: 'Whether to call inject_unified_context on the target orchestrator'
+      default: true
+
+# ==============================================================================
+# EXECUTION STEPS
+# ==============================================================================
+execution:
+  steps:
+    - step_id: 'LENS_SCAN'
+      name: 'LENS AST & git analysis'
+      action: |
+        1. Call IntelligenceMixin.get_lens_context(target_files, depth=lens_depth)
+        2. Store result in scope as lens_context
+        3. If degraded: emit P2 warning, set lens_context = {"degraded": true}
+        4. Emit AC_START:INTEL_INJECT + AC_COMPLETE:LENS_SCAN to _ac_log
+      outputs:
+        - 'lens_context'
+      on_failure: 'degrade_and_continue'
+
+    - step_id: 'KNOWLEDGE_QUERY'
+      name: 'Knowledge synthesis for active domains'
+      action: |
+        For each domain in knowledge_domains:
+          1. Call IntelligenceMixin.query_knowledge(domain, query=operation_type)
+          2. Collect artifacts into knowledge_artifacts list
+          3. If degraded: emit P2 warning, continue with empty artifacts
+        Emit AC_COMPLETE:KNOWLEDGE_QUERY
+      outputs:
+        - 'knowledge_artifacts'
+      on_failure: 'degrade_and_continue'
+
+    - step_id: 'CONTEXT_ASSEMBLY'
+      name: 'Assemble UnifiedIntelligenceContext'
+      action: |
+        1. Build unified_context dict:
+           {
+             "intent": operation_type,
+             "lens_findings": lens_context,
+             "knowledge_artifacts": knowledge_artifacts,
+             "synthesis_id": "SYN-{timestamp}",
+             "degraded": lens_context.get("degraded", False)
+           }
+        2. If inject_into_orchestrator: call orchestrator.inject_unified_context(unified_context)
+        3. Store unified_context in workflow scope for downstream steps
+      outputs:
+        - 'unified_context'
+      on_failure: 'abort'
+
+# ==============================================================================
+# OUTPUTS
+# ==============================================================================
+outputs:
+  primary:
+    - name: 'unified_context'
+      description: 'Assembled intelligence context for downstream orchestrator steps'
+      schema: |
+        {
+          "intent": "REFACTOR | FIX | AUDIT | IMPLEMENT",
+          "lens_findings": {
+            "files_scanned": "int",
+            "complexity_avg": "float",
+            "symbols": [...],
+            "dependency_graph": {...},
+            "degraded": "bool"
+          },
+          "knowledge_artifacts": [
+            {"domain": "str", "rule": "str", "guidance": "str"}
+          ],
+          "synthesis_id": "SYN-{timestamp}",
+          "degraded": "bool"
+        }
+
+  secondary:
+    - name: 'lens_context'
+      description: 'Raw LENS analysis output (available for workflow steps)'
+
+    - name: 'knowledge_artifacts'
+      description: 'List of knowledge entries from KnowledgeSynthesisEngine'
+
+# ==============================================================================
+# SUCCESS CRITERIA
+# ==============================================================================
+success_criteria:
+  - 'unified_context dict is populated with at minimum {"intent": ..., "synthesis_id": ...}'
+  - 'No unhandled exceptions raised (degraded mode is a valid success state)'
+  - 'AC_START and AC_COMPLETE markers present in IntelligenceMixin._ac_log'
+  - 'No AC_START without matching AC_COMPLETE (orphan detection — Check #19)'
+
+# ==============================================================================
+# DEGRADATION MATRIX
+# ==============================================================================
+degradation_matrix:
+  lens_unavailable:
+    severity: 'P2'
+    action: 'warn_and_continue'
+    output: '{"degraded": true, "reason": "LENSOrchestrator unavailable"}'
+    log: 'P2 [INTEL-INJECT] LENS degraded — proceeding without AST analysis'
+
+  knowledge_unavailable:
+    severity: 'P2'
+    action: 'warn_and_continue'
+    output: '{"degraded": true, "knowledge_artifacts": []}'
+    log: 'P2 [INTEL-INJECT] KnowledgeSynthesisEngine degraded — proceeding without knowledge'
+
+  both_unavailable:
+    severity: 'P2'
+    action: 'warn_and_continue'
+    output: '{"degraded": true, "reason": "Full intelligence subsystem unavailable"}'
+    log: 'P2 [INTEL-INJECT] Full intelligence subsystem degraded — workflow proceeds with minimal context'
+
+# ==============================================================================
+# AUDIT TRACE
+# ==============================================================================
+audit_trace:
+  emit_markers: true
+  mandatory: true
+
+  markers:
+    start: 'AC_START:INTEL_INJECT:{workflow_id}'
+    complete: 'AC_COMPLETE:INTEL_INJECT:{workflow_id}:{duration_ms}ms'
+    failure: 'AC_FAILURE:INTEL_INJECT:{workflow_id}:{error_code}'
+    lens_complete: 'AC_COMPLETE:LENS_SCAN:{files_scanned}files'
+    knowledge_complete: 'AC_COMPLETE:KNOWLEDGE_QUERY:{domains_queried}domains'
+
+  log_fields:
+    - 'workflow_id'
+    - 'operation_type'
+    - 'files_scanned'
+    - 'lens_degraded'
+    - 'knowledge_degraded'
+    - 'synthesis_id'
+    - 'duration_ms'
+
+  sqlite_db: '.cortex-runtime/traces/orchestrator-traces.db'
+  table: 'workflow_runs'
+
+# ==============================================================================
+# GOLDEN TEST INTEGRATION
+# ==============================================================================
+golden_test_contract:
+  test_file: 'tests/golden/test_intelligence_propagation_truth.py'
+  semantic_ids:
+    - 'GOL-IPC-001'  # IntelligenceMixin importable
+    - 'GOL-IPC-002'  # Behaviour (lens, inject, query)
+    - 'GOL-IPC-003'  # Protocol compliance (5 bare orchestrators)
+    - 'GOL-IPC-008'  # SQLite AC audit trail
+    - 'GOL-IPC-009'  # This primitive YAML structure
+    - 'GOL-IPC-010'  # No-regression on existing orchestrators
+    - 'GOL-IPC-011'  # E2E unified context forwarding
+
+  verification_queries:
+    - name: 'intel_inject_completed'
+      sql: |
+        SELECT COUNT(*) FROM workflow_runs
+        WHERE workflow_id = ? AND status = 'complete'
+          AND metadata LIKE '%INTEL_INJECT%'
+
+    - name: 'no_orphan_ac_starts'
+      sql: |
+        SELECT COUNT(*) FROM workflow_runs
+        WHERE status = 'running'
+          AND start_time < datetime('now', '-5 minutes')
+          AND metadata LIKE '%INTEL_INJECT%'

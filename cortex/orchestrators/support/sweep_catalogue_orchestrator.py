@@ -26,6 +26,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 logger = logging.getLogger(__name__)
 
 # ---------------------------------------------------------------------------
@@ -114,7 +116,7 @@ CREATE TABLE IF NOT EXISTS audit_log (
 """
 
 
-class SweepCatalogueOrchestrator:
+class SweepCatalogueOrchestrator(OrchestratorProtocolMixin):
     """Durable sweep catalogue — CORE-064 enforcement component.
 
     Methods
@@ -141,6 +143,9 @@ class SweepCatalogueOrchestrator:
 
     # Support tier priority (CORE-035 + wiring spec)
     PRIORITY: int = 155
+
+    _orch_name = "SweepCatalogueOrchestrator"
+    _orch_version = "1.0.0"
 
     def __init__(self) -> None:
         """Initialise instance; no arguments required."""
@@ -449,12 +454,15 @@ class SweepCatalogueOrchestrator:
             conn.close()
             test_db.unlink(missing_ok=True)
             return {
+                "status": "healthy",
                 "healthy": True,
                 "storage_dir": str(sweeps_dir),
                 "note": "SweepCatalogueOrchestrator operational (CORE-064)",
+                "orchestrator": self.get_name(),
             }
         except Exception as exc:  # noqa: BLE001
             return {
+                "status": "unhealthy",
                 "healthy": False,
                 "error": str(exc),
                 "note": "SweepCatalogueOrchestrator health check failed",

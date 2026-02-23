@@ -73,6 +73,7 @@ class BuildArtifactCleaner(CleanerInterface):
         ".venv",
         "venv",
         "env",
+        "_workspaces",  # all subfolders: approved-orchestrator-view/, recommend/, prompts/, .chats/
     }
     
     def __init__(self, config: Dict[str, Any]) -> None:

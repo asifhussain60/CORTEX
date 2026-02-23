@@ -12,9 +12,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from unittest.mock import MagicMock
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
-class BulkDigestOrchestrator:
+
+class BulkDigestOrchestrator(OrchestratorProtocolMixin):
     """Orchestrates bulk markdown file ingestion with filtering, batching, and progress tracking."""
+
+    _orch_name = "BulkDigestOrchestrator"
+    _orch_version = "1.0.0"
 
     def __init__(self) -> None:
         """Initialize instance."""

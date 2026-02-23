@@ -23,12 +23,17 @@
 |----------|---------|--------|
 | Root | `PHASE-*.md`, `*-SUMMARY.md`, `*-REPORT.md`, `*-PROGRESS.md` | Archive → `cortex-docs/archive/phases/` |
 | `tests/` | `*.md` (except test docstrings) | Archive → `cortex-docs/archive/testing/` |
-| `_workspaces/` | `*.md` | Review → Archive outdated |
+| `_workspaces/` | `*.md` | **SKIP — entire tree is exempt** (see Exempt list below) |
 | `company/_archive/` | All contents | Low priority (already archived) |
 
 **Exempt from Cleanup:**
 - `README.md` (root and subdirectories)
 - `.github/**/*.md` (GitHub config, agents, prompts)
+- `_workspaces/**` — **entire tree is permanently exempt** (all subfolders and all files):
+  - `_workspaces/recommend/` — copilot review artefacts (permanent record)
+  - `_workspaces/approved-orchestrator-view/` — approved orchestrator dashboard
+  - `_workspaces/prompts/` — workspace-scoped prompt overrides
+  - `_workspaces/.chats/` — chat session logs
 
 **Special Rules for cortex-docs/:**
 - **ALLOWED:** HTML files, static assets (CSS/JS/images), config files (.nojekyll, robots.txt, .bat)
@@ -112,7 +117,7 @@ User: "clean up markdown sprawl"
 
 - ✅ Root folder: Only README.md, essential config files
 - ✅ `tests/`: No markdown except inline docstrings
-- ✅ `_workspaces/`: Only active workspace docs
+- ✅ `_workspaces/`: Only active workspace docs; `recommend/`, `approved-orchestrator-view/`, `prompts/` subdirs are **permanently exempt** from cleanup
 - ✅ All archived files in `cortex-docs/archive/` with timestamps
 - ✅ No broken links in remaining documentation
 

@@ -52,6 +52,7 @@ from cortex.orchestrators.support.repository_scanner import (
     ScanContext,
     ScanOutput,
 )
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 # ============================================================================
 # Data Classes
@@ -98,7 +99,7 @@ class WorkflowExecutionResult:
 # 5-Stage Workflow Orchestrator
 # ============================================================================
 
-class WorkflowOrchestrator:
+class WorkflowOrchestrator(OrchestratorProtocolMixin):
     """
     Coordinates complete 5-stage Master Orchestrator workflow.
 
@@ -122,6 +123,9 @@ class WorkflowOrchestrator:
         )
         result = orchestrator.execute_workflow(context)
     """
+
+    _orch_name = "WorkflowOrchestrator"
+    _orch_version = "1.0.0"
 
     def __init__(self, workspace_root: Path) -> None:
         """

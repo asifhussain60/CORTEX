@@ -8,11 +8,16 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
-class ConversationOrchestrator:
+
+class ConversationOrchestrator(OrchestratorProtocolMixin):
     """
     Manages multi-turn conversations with state persistence and cancellation.
     """
+
+    _orch_name = "ConversationOrchestrator"
+    _orch_version = "1.0.0"
 
     def __init__(self, timeout_seconds: float = 300.0) -> None:
         """Initialize the conversation orchestrator."""

@@ -4,8 +4,8 @@
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **22 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
-- **24 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
+- **17 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
+- **26 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
 - **35 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
@@ -19,11 +19,11 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrators | 22 wired in `cortex/orchestrators/` (6 core, 6 domain, 10 support) |
+| Orchestrators | 17 wired in `cortex/orchestrators/` (7 core, 3 domain, 7 support) |
 | MCP Tools | 24 in `cortex/mcp/tools/` |
 | Top-level Dirs | 16 canonical under `cortex/` |
 | Governance Rules | 35 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
-| Test Suite | 15,230 tests (486 golden, 177 phase) |
+| Test Suite | 15,739 tests (486 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 
 ---
@@ -97,8 +97,8 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (16 canonical dirs)
-  orchestrators/     ← 22 wired orchestrators across 3 tiers (core, domain, support)
-  mcp/tools/         ← 24 MCP tools
+  orchestrators/     ← 17 wired orchestrators across 3 tiers (7 core, 3 domain, 7 support)
+  mcp/tools/         ← 26 MCP tools (28 total — 2 deprecated)
   core/              ← OrchestratorBase, FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis

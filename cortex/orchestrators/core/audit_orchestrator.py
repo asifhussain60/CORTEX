@@ -11,9 +11,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
-class AuditOrchestrator:
+class AuditOrchestrator(OrchestratorProtocolMixin):
     """Orchestrates CORTEX AUDIT mode checks.
 
     Executes P0/P1/P2/P3 checks and produces audit reports.
@@ -23,6 +24,9 @@ class AuditOrchestrator:
         >>> auditor = AuditOrchestrator()
         >>> result = auditor.audit(mode="HEXA")
     """
+
+    _orch_name = "AuditOrchestrator"
+    _orch_version = "1.0.0"
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
         """Initialize audit orchestrator.
