@@ -14,7 +14,7 @@ from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
 from typing import List, Dict, Any
 
-from cortex.core.core.mandatory_checkpoints import (
+from cortex.core.mandatory_checkpoints import (
     MandatoryCheckpoints,
     CheckpointResult,
     ViolationReport,
@@ -333,7 +333,7 @@ class TestCheckpointIntegration:
     
     def test_checkpoints_integrate_with_gateway(self):
         """Test checkpoints work with master orchestrator gateway."""
-        from cortex.core.core.master_orchestrator_gateway import MasterOrchestratorGateway, GatewayRequest
+        from cortex.core.master_orchestrator_gateway import MasterOrchestratorGateway, GatewayRequest
         
         checkpoints = MandatoryCheckpoints()
         

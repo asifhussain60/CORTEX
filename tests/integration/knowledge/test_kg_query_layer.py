@@ -6,8 +6,8 @@ rule inference, and SQLite fallback mechanisms.
 
 import pytest
 from typing import Dict, List, Any, Optional
-from cortex.core.core.knowledge.graph.interface import IGraphAdapter, GraphQueryError
-from cortex.core.core.knowledge.graph.mock_adapter import MockGraphAdapter
+from cortex.core.knowledge.graph.interface import IGraphAdapter, GraphQueryError
+from cortex.core.knowledge.graph.mock_adapter import MockGraphAdapter
 from cortex.intelligence.domain_brain.domain_brain.kg_query_layer import (
     SemanticQueryBuilder,
     GraphTraversal,

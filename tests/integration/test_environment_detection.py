@@ -10,14 +10,14 @@ import pytest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-from cortex.core.core.environment_detector import (
+from cortex.core.environment_detector import (
     EnvironmentDetector,
     EnvironmentType,
     EnvironmentConfig,
     detect_environment,
     get_environment_detector,
 )
-from cortex.core.core.tool_adapter import (
+from cortex.core.tool_adapter import (
     IToolAdapter,
     MCPToolAdapter,
     CopilotToolAdapter,

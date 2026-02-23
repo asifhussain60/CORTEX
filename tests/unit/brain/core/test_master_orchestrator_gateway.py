@@ -13,7 +13,7 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 from typing import Dict, Any
 
-from cortex.core.core.master_orchestrator_gateway import (
+from cortex.core.master_orchestrator_gateway import (
     MasterOrchestratorGateway,
     GatewayRequest,
     GatewayResponse,
@@ -21,8 +21,8 @@ from cortex.core.core.master_orchestrator_gateway import (
     DoRConfidence,
     GatewayError,
 )
-from cortex.core.core.environment_detector import EnvironmentType
-from cortex.core.core.tool_adapter import IToolAdapter
+from cortex.core.environment_detector import EnvironmentType
+from cortex.core.tool_adapter import IToolAdapter
 
 
 class TestGatewayDataclasses:

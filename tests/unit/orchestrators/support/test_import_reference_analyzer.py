@@ -40,7 +40,7 @@ from cortex.orchestrators import MasterOrchestrator
         AC-044-S3-05: Handles absolute imports
         """
         test_code = """
-from cortex.core.core.orchestrator_base import OrchestratorBase
+from cortex.core.orchestrator_base import OrchestratorBase
 import cortex.mcp.tools as mcp_tools
         """
         

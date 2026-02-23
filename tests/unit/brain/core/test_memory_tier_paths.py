@@ -69,7 +69,7 @@ class TestBrainTierPusherPaths:
     def test_brain_tier_pusher_module_exists(self):
         """BrainTierPusher module can be imported."""
         try:
-            from cortex.core.core.tier_pusher import BrainTierPusher
+            from cortex.core.tier_pusher import BrainTierPusher
             assert BrainTierPusher is not None
         except ImportError as e:
             pytest.skip(f"BrainTierPusher not available: {e}")
@@ -77,7 +77,7 @@ class TestBrainTierPusherPaths:
     def test_brain_tier_pusher_uses_tier1_learned_path(self):
         """AC-PHASE47-S2-003: BrainTierPusher references tier1_learned/."""
         try:
-            from cortex.core.core.tier_pusher import BrainTierPusher
+            from cortex.core.tier_pusher import BrainTierPusher
 
             pusher = BrainTierPusher()
             tier1_path = getattr(pusher, "tier1_path", None) or \
@@ -97,7 +97,7 @@ class TestBrainTierPusherPaths:
     def test_brain_tier_pusher_uses_tier2_adaptive_path(self):
         """AC-PHASE47-S2-003: BrainTierPusher references tier2_adaptive/."""
         try:
-            from cortex.core.core.tier_pusher import BrainTierPusher
+            from cortex.core.tier_pusher import BrainTierPusher
 
             pusher = BrainTierPusher()
             tier2_path = getattr(pusher, "tier2_path", None) or \
@@ -117,7 +117,7 @@ class TestBrainTierPusherPaths:
     def test_brain_tier_pusher_uses_scratch_space_path(self):
         """AC-PHASE47-S2-003: BrainTierPusher references scratch_space/."""
         try:
-            from cortex.core.core.tier_pusher import BrainTierPusher
+            from cortex.core.tier_pusher import BrainTierPusher
 
             pusher = BrainTierPusher()
             tier3_path = getattr(pusher, "tier3_path", None) or \
@@ -144,7 +144,7 @@ class TestTierLoaderPaths:
     def test_tier_loader_module_exists(self):
         """TierLoader module can be imported."""
         try:
-            from cortex.core.core.tier_loader import TierLoader
+            from cortex.core.tier_loader import TierLoader
             assert TierLoader is not None
         except ImportError as e:
             pytest.skip(f"TierLoader not available: {e}")
@@ -152,7 +152,7 @@ class TestTierLoaderPaths:
     def test_tier_loader_uses_canonical_paths(self):
         """AC-PHASE47-S2-004: TierLoader references canonical memory paths."""
         try:
-            from cortex.core.core.tier_loader import TierLoader
+            from cortex.core.tier_loader import TierLoader
 
             loader = TierLoader()
             config = getattr(loader, "config", None) or \
@@ -226,7 +226,7 @@ class TestMemoryMirrorGuard:
     def test_comprehension_loop_uses_canonical_paths(self):
         """BrainTierPusher.TIER_PATHS uses canonical cortex/ paths."""
         try:
-            from cortex.core.core.intent.comprehension_loop import BrainTierPusher
+            from cortex.core.intent.comprehension_loop import BrainTierPusher
             tier_paths = BrainTierPusher.TIER_PATHS
 
             for tier, path in tier_paths.items():
@@ -249,7 +249,7 @@ class TestMemoryTierGoldenScenarios:
     def test_knowledge_push_uses_tier1_learned(self):
         """Golden Test 1: Knowledge push uses tier1_learned/."""
         try:
-            from cortex.core.core.tier_pusher import BrainTierPusher
+            from cortex.core.tier_pusher import BrainTierPusher
 
             pusher = BrainTierPusher()
             test_data = {"rule": "CORE-001", "learned": True}
@@ -267,7 +267,7 @@ class TestMemoryTierGoldenScenarios:
     def test_adaptive_query_uses_tier2_adaptive(self):
         """Golden Test 2: Adaptive query uses tier2_adaptive/."""
         try:
-            from cortex.core.core.tier_loader import TierLoader
+            from cortex.core.tier_loader import TierLoader
 
             loader = TierLoader()
 

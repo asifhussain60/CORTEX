@@ -13,7 +13,7 @@ from typing import Any, Dict, List, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine, ParseResult
 from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
-from cortex.core.core.intelligence_routing_engine import IntelligenceRoutingEngine
+from cortex.core.intelligence_routing_engine import IntelligenceRoutingEngine
 
 logger = logging.getLogger(__name__)
 
@@ -176,7 +176,7 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin):
             Routing decision with target and confidence
         """
         # IntelligenceRoutingEngine.route expects IntentType enum and request string
-        from cortex.core.core.intelligence_routing_engine import IntentType
+        from cortex.core.intelligence_routing_engine import IntentType
 
         # Phase 58 — cross-cutting hooks
         self._activate_cross_cutting_hooks(

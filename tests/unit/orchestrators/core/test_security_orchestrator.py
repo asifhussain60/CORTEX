@@ -116,7 +116,7 @@ class TestSecurityOrchestratorInit:
 
     def test_implements_iorchestrator(self, security_orchestrator) -> None:
         """Verify orchestrator implements IOrchestrator interface."""
-        from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
+        from cortex.core.interfaces.i_orchestrator import IOrchestrator
         assert isinstance(security_orchestrator, IOrchestrator)
 
     def test_get_name_returns_string(self, security_orchestrator) -> None:

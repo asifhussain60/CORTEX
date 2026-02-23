@@ -20,7 +20,7 @@ class TestSeleniumPlaywrightOrchestratorInterface:
         from cortex.orchestrators.migration.selenium_playwright_orchestrator import (
             SeleniumPlaywrightOrchestrator
         )
-        from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
+        from cortex.core.interfaces.i_orchestrator import IOrchestrator
         
         orchestrator = SeleniumPlaywrightOrchestrator()
         assert isinstance(orchestrator, IOrchestrator)
@@ -61,7 +61,7 @@ class TestSeleniumPlaywrightOrchestratorInterface:
         from cortex.orchestrators.migration.selenium_playwright_orchestrator import (
             SeleniumPlaywrightOrchestrator
         )
-        from cortex.core.core.interfaces.i_orchestrator import OperationMode
+        from cortex.core.interfaces.i_orchestrator import OperationMode
         
         orchestrator = SeleniumPlaywrightOrchestrator()
         mode = orchestrator.get_mode()

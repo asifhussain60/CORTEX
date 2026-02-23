@@ -9,7 +9,7 @@ import logging
 from unittest.mock import Mock
 import time
 
-from cortex.core.core.orchestrator.conversation_metrics import (
+from cortex.core.orchestrator.conversation_metrics import (
     ConversationObservability,
     ConversationMetrics,
 )

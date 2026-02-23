@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-from cortex.core.core.orchestrator_base import OrchestrationContext, OrchestratorBase
+from cortex.core.orchestrator_base import OrchestrationContext, OrchestratorBase
 from cortex.intelligence.domain_brain.api import Domain, DomainBrainAPI, Entity
 from cortex.intelligence.domain_brain.domain_brain_models import EntityType
 

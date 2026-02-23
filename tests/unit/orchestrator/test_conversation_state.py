@@ -10,7 +10,7 @@ from pathlib import Path
 from uuid import UUID
 import tempfile
 
-from cortex.core.core.orchestrator.conversation_state import (
+from cortex.core.orchestrator.conversation_state import (
     ConversationState,
     ConversationStateManager,
     TurnRecord,

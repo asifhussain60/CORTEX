@@ -1,7 +1,104 @@
-"""IOrchestrator Interface - Re-export from canonical location.
-
-Canonical location: cortex.core.core.interfaces.i_orchestrator
 """
-from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+Orchestrator Interface - Reference Architecture (AC-AR-011)
 
-__all__ = ["IOrchestrator", "OperationMode"]
+Defines contract for orchestrators:
+- PlanningOrchestrator registered in OrchestratorRegistry (AC-AR-011-01)
+- PlanningOrchestrator exposed as MCP tools (AC-AR-011-02)
+- All operations audit-logged with hash chain (AC-AR-011-03)
+
+Author: Asif Hussain
+"""
+
+from abc import ABC, abstractmethod
+from enum import Enum, auto
+from typing import Any, Dict, Optional
+
+from cortex.core.result import Result
+
+
+class OperationMode(Enum):
+    """Orchestration modes."""
+    PLANNING = auto()
+    EXECUTION = auto()
+    VALIDATION = auto()
+    RECOVERY = auto()
+    EDUCATIONAL = auto()  # Phase 22: ASK Mode
+
+
+class IOrchestrator(ABC):
+    """
+    Interface contract for all orchestrators.
+
+    Guarantees:
+    - Registry integration
+    - MCP tool exposure
+    - Audit logging
+    - Result pattern compliance
+    """
+
+    @abstractmethod
+    def get_name(self) -> str:
+        """Get orchestrator name."""
+        pass
+
+    @abstractmethod
+    def get_version(self) -> str:
+        """Get orchestrator version."""
+        pass
+
+    @abstractmethod
+    def initialize(self) -> Result[str]:
+        """Initialize orchestrator."""
+        pass
+
+    @abstractmethod
+    def get_mode(self) -> OperationMode:
+        """Get current operation mode."""
+        pass
+
+    @abstractmethod
+    def get_mcp_tools(self) -> Result[Dict[str, Any]]:
+        """AC-AR-011-02: Get exposed MCP tools."""
+        pass
+
+    @abstractmethod
+    def execute_operation(
+        self,
+        operation_name: str,
+        parameters: Dict[str, Any],
+    ) -> Result[Any]:
+        """Execute operation with audit logging."""
+        pass
+
+    @abstractmethod
+    def get_audit_trail(self, limit: int = 100) -> Result[list]:
+        """AC-AR-011-03: Get audit trail with hash chain."""
+        pass
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return orchestrator health status.
+
+        Default implementation returns basic health info.
+        Subclasses may override to add custom checks.
+
+        Returns:
+            Dict with at least 'status', 'orchestrator', and 'version' keys.
+        """
+        return {
+            "status": "healthy",
+            "orchestrator": self.get_name(),
+            "version": self.get_version(),
+        }
+
+    def get_recommended_template(self) -> Optional[str]:
+        """Return the recommended workflow template ID for this orchestrator.
+
+        G4 Fix: Added to IOrchestrator so all orchestrators declare their
+        canonical template. Base returns None; orchestrators override to
+        return their domain-specific template ID from
+        cortex-registry/workflows/templates/.
+
+        Returns:
+            Template ID string, or None if no template is recommended.
+        """
+        return None

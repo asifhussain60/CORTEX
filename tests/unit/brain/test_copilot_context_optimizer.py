@@ -18,7 +18,7 @@ from unittest.mock import Mock, patch, MagicMock
 
 # Import will fail initially (RED phase) - implementation comes after
 try:
-    from cortex.core.core.copilot_context_optimizer import (
+    from cortex.core.copilot_context_optimizer import (
         CopilotContextOptimizer,
         OptimizedContext,
         TokenBudgetExceededError,

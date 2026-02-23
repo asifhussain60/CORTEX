@@ -12,7 +12,7 @@ Authority: Phase 29 Stage 1 specification
 import pytest
 from typing import List, Dict, Any
 
-from cortex.core.core.response_format_validator import (
+from cortex.core.response_format_validator import (
     ResponseFormatValidator,
     FormatViolation,
     ViolationSeverity,

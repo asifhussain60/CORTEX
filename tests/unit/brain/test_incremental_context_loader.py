@@ -18,7 +18,7 @@ class TestIncrementalContextLoader:
     @pytest.fixture
     def loader(self):
         """Create loader instance for testing"""
-        from cortex.core.core.incremental_context_loader import IncrementalContextLoader
+        from cortex.core.incremental_context_loader import IncrementalContextLoader
         return IncrementalContextLoader()
     
     @pytest.fixture
@@ -249,7 +249,7 @@ class TestIncrementalContextLoaderIntegration:
     @pytest.fixture
     def loader_with_workspace(self, tmp_path):
         """Create loader with temporary workspace"""
-        from cortex.core.core.incremental_context_loader import IncrementalContextLoader
+        from cortex.core.incremental_context_loader import IncrementalContextLoader
         
         # Create mock workspace structure
         agents_dir = tmp_path / ".github" / "agents" / "core"

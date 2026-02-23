@@ -6,7 +6,7 @@ AC-PHASE38.0-TOKEN-001: Continuation optimizer tests
 
 import pytest
 from pathlib import Path
-from cortex.core.core.continuation_optimizer import (
+from cortex.core.continuation_optimizer import (
     ContinuationOptimizer,
     ContinuationAuditResult,
     TokenWastePattern,

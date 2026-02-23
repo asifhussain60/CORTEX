@@ -30,8 +30,8 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from cortex.core.core.context_synthesizer import ContextSynthesizer
-from cortex.core.core.copilot_context_optimizer import CopilotContextOptimizer
+from cortex.core.context_synthesizer import ContextSynthesizer
+from cortex.core.copilot_context_optimizer import CopilotContextOptimizer
 from cortex.core.interaction.context_cache_layer import ContextCacheLayer
 from cortex.core.interaction.context_metrics_collector import ContextMetricsCollector
 

@@ -21,8 +21,8 @@ from typing import Dict, List
 import yaml
 
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
-from cortex.core.core.tier_resolver import TierResolver
-from cortex.core.core.intent.comprehension_loop import BrainTierPusher
+from cortex.core.tier_resolver import TierResolver
+from cortex.core.intent.comprehension_loop import BrainTierPusher
 
 
 class TestTierDirectoryStructure:

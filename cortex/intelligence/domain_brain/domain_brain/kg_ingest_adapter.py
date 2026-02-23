@@ -6,7 +6,7 @@ and edges for ingestion into the KG system.
 
 from typing import Any, Dict, List, Optional
 
-from cortex.core.core.knowledge.graph.interface import (
+from cortex.core.knowledge.graph.interface import (
     EntityNode,
     GraphQueryError,
     IGraphAdapter,

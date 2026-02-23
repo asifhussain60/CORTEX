@@ -25,12 +25,12 @@ import pytest
 from dataclasses import asdict
 from typing import Any, Dict, List, Optional
 
-from cortex.core.core.knowledge import (
+from cortex.core.knowledge import (
     KnowledgeProvider,
     KnowledgeQuery,
     KnowledgeQueryResult,
 )
-from cortex.core.core.knowledge.protocol import is_knowledge_provider
+from cortex.core.knowledge.protocol import is_knowledge_provider
 
 
 # =============================================================================

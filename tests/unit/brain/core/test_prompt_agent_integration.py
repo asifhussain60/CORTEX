@@ -14,7 +14,7 @@ from unittest.mock import Mock, patch, MagicMock
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex.core.core.prompt_agent_integration import (
+from cortex.core.prompt_agent_integration import (
     PromptAgentIntegration,
     ResponseFormat,
     AgentLoader,

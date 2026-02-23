@@ -52,7 +52,10 @@ class TestSingleResultFamily:
         )
 
     def test_ok_from_core_core_result_is_same_class_as_core_result(self) -> None:
-        """Ok from cortex.core.core.result must be the same object as from cortex.core.result."""
+        """Ok from cortex.core.result must be the same object as from cortex.core.result."""
+        secondary_path = CORTEX_ROOT / "core" / "core" / "result.py"
+        if not secondary_path.exists():
+            pytest.skip("cortex/core/core/ eliminated (Phase 62-A) — test obsolete")
         primary = importlib.import_module("cortex.core.result")
         secondary = importlib.import_module("cortex.core.core.result")
         assert primary.Ok is secondary.Ok, (
@@ -102,7 +105,7 @@ class TestSingleOperationMode:
         ]
         assert "OperationMode" not in class_names, (
             "GAP-59-03 | cortex/core/interfaces.py still defines its own OperationMode. "
-            "Delete the class and re-export from cortex.core.core.interfaces.i_orchestrator."
+            "Delete the class and re-export from cortex.core.interfaces.i_orchestrator."
         )
 
     def test_single_operation_mode_definition_in_codebase(self) -> None:
@@ -123,13 +126,13 @@ class TestSingleOperationMode:
         # Must be in the canonical location
         assert "i_orchestrator.py" in matches[0], (
             f"GAP-59-03 | The single OperationMode must be in "
-            f"cortex/core/core/interfaces/i_orchestrator.py, not: {matches[0]}"
+            f"cortex/core/interfaces/i_orchestrator.py, not: {matches[0]}"
         )
 
     def test_operation_mode_importable_from_canonical(self) -> None:
-        """OperationMode must be importable from cortex.core.core.interfaces.i_orchestrator."""
+        """OperationMode must be importable from cortex.core.interfaces.i_orchestrator."""
         try:
-            from cortex.core.core.interfaces.i_orchestrator import OperationMode
+            from cortex.core.interfaces.i_orchestrator import OperationMode
         except ImportError as exc:
             pytest.fail(
                 f"GAP-59-03 | Cannot import OperationMode from canonical path: {exc}"
@@ -150,25 +153,24 @@ class TestSingleOperationMode:
 class TestSingleIOrchestatorPath:
     """59-b-T3: IOrchestrator must be imported from one canonical path only."""
 
-    CANONICAL_IORCH_PATH = "cortex.core.core.interfaces.i_orchestrator"
+    CANONICAL_IORCH_PATH = "cortex.core.interfaces.i_orchestrator"
     LEGACY_PATHS = [
-        "cortex.core.interfaces",
         "cortex.core.core.interfaces",
     ]
 
     def test_planning_orchestrator_uses_canonical_import(self) -> None:
-        """PlanningOrchestrator must import from canonical cortex.core.core.interfaces.i_orchestrator."""
+        """PlanningOrchestrator must import from canonical cortex.core.interfaces.i_orchestrator."""
         planning_path = (
             CORTEX_ROOT / "orchestrators" / "domain" / "planning_orchestrator.py"
         )
         if not planning_path.exists():
             pytest.skip("planning_orchestrator.py not found")
         content = planning_path.read_text(encoding="utf-8")
-        assert "from cortex.core.core.interfaces.i_orchestrator" in content or \
-               "from cortex.core.core.interfaces import" in content, (
-            "GAP-59-04 | planning_orchestrator.py does not import from canonical "
-            "cortex.core.core.interfaces.i_orchestrator path."
-        )
+        assert "from cortex.core.interfaces.i_orchestrator" in content or \
+               "from cortex.core.interfaces import" in content, (
+                   "GAP-59-04 | planning_orchestrator.py does not import from canonical "
+                   "cortex.core.interfaces.i_orchestrator path."
+               )
 
     def test_no_file_imports_iorchestrator_from_bare_interfaces(self) -> None:
         """No cortex.* file should import IOrchestrator from cortex.core.interfaces (bare)."""

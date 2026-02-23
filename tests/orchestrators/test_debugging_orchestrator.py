@@ -585,7 +585,7 @@ class TestDebuggingOrchestrator:
     
     def test_orchestrator_implements_i_orchestrator(self):
         """Orchestrator implements IOrchestrator interface."""
-        from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
+        from cortex.core.interfaces.i_orchestrator import IOrchestrator
         
         orchestrator = DebuggingOrchestrator()
         

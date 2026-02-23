@@ -7,7 +7,7 @@ Authority: CORE-008 (TDD) | Phase 49
 
 import pytest
 from pathlib import Path
-from cortex.core.core.intelligence_routing_engine import (
+from cortex.core.intelligence_routing_engine import (
     IntelligenceRoutingEngine,
     IntentType,
     PromptMetadata,
@@ -16,7 +16,7 @@ from cortex.core.core.intelligence_routing_engine import (
     AgentCategory,
     RoutingDecision,
 )
-from cortex.core.core.intelligence_routing_wiring import (
+from cortex.core.intelligence_routing_wiring import (
     IntelligenceRoutingWiring,
 )
 

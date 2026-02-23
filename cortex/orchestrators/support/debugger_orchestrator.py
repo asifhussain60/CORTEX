@@ -25,7 +25,7 @@ import time
 
 from cortex.core.event_bus import EventBus, Event
 from cortex.models.canonical_enums import IntentType
-from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
+from cortex.core.interfaces.i_orchestrator import IOrchestrator
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
@@ -381,7 +381,7 @@ class DebuggerOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowTem
     
     def get_mode(self) -> Any:
         """Get operation mode."""
-        from cortex.core.core.interfaces.i_orchestrator import OperationMode
+        from cortex.core.interfaces.i_orchestrator import OperationMode
         return OperationMode.EXECUTION
     
     def get_mcp_tools(self) -> Any:

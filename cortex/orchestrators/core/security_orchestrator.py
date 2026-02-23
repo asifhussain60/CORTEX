@@ -28,7 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
-from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.result import Err, Ok, Result
 
 # Lazy imports to avoid dependency issues

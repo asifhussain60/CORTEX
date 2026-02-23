@@ -1,140 +1,473 @@
-"""Governance Pre-Gate - Pre-execution governance validation.
+"""
+Governance Pre-Execution Gates (AC-FIX-002-01).
 
-Validates operations against governance rules before execution.
+Implements pre-execution governance validation to prevent unauthorized
+orchestrator operations BEFORE they execute (not after).
 
-Author: CORTEX Framework
+ISSUE ADDRESSED:
+- FINDING-002: Governance validation was post-execution (reactive logging only)
+- FIX: Pre-execution gates (proactive prevention) before orchestrator execution
+
+Key Components:
+1. GovernancePregate: Abstract interface for pre-execution checks
+2. PreGateDecision: Result of pre-gate evaluation
+3. ResourceQuotaGate: Checks token quota availability
+4. AuthorizationGate: Checks actor authorization
+5. TierAccessGate: Checks tier access declarations
+
+Governance Rules Enforced:
+- CORE-017: Strict Governance Enforcement (gates prevent execution)
+- CORE-027: Audit Trail Per Turn (all gate decisions logged)
+- AR-001-03: Tier 0 Immutability (enforced per-turn)
+
+Author: Asif Hussain
 """
 
-from dataclasses import dataclass
-from enum import Enum
-from typing import Any, Dict, Optional
+import logging
+import threading
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, Dict, List, Optional
 
+from cortex.core.result import Err, Ok, Result
 
-class PreGateDecision(Enum):
-    """Pre-gate validation decisions."""
-
-    ALLOW = "allow"
-    DENY = "deny"
-    REQUIRE_APPROVAL = "require_approval"
-    LOG_ONLY = "log_only"
-
+# ============================================================================
+# PRE-GATE DECISION STRUCTURE
+# ============================================================================
 
 @dataclass
-class PreGateResult:
-    """Result of pre-gate validation.
+class PreGateDecision:
+    """
+    Result of a pre-gate evaluation.
 
-    Attributes:
-        decision: PreGateDecision.
-        reason: Explanation for decision.
-        violations: List of rule violations.
+    Represents the decision whether an operation is allowed to proceed
+    based on governance validation checks.
     """
 
-    decision: PreGateDecision
+    allowed: bool
+    """Whether the operation is allowed to proceed."""
+
     reason: str
-    violations: list[str] = None
+    """Human-readable explanation of the decision."""
+
+    violation_type: Optional[str] = None
+    """Type of violation if blockedUnion[RESOURCE_QUOTA, AUTHORIZATION] | TIER_ACCESS | None."""
+
+    audit_context: Dict[str, Any] = field(default_factory=dict)
+    """Context for audit logging (timestamp, actor_id, checks_performed, etc.)."""
 
     def __post_init__(self) -> None:
-        """Initialize violations list."""
-        if self.violations is None:
-            self.violations = []
+        """Initialize audit context with defaults."""
+        if not self.audit_context:
+            self.audit_context = {}
 
-    def is_allowed(self) -> bool:
-        """Check if operation is allowed.
+        # Always include timestamp
+        if "timestamp" not in self.audit_context:
+            self.audit_context["timestamp"] = datetime.utcnow().isoformat()
 
-        Returns:
-            True if decision is ALLOW.
-        """
-        return self.decision == PreGateDecision.ALLOW
+        # If blocked, set violation_type if not provided
+        if not self.allowed and not self.violation_type:
+            self.violation_type = "UNKNOWN"
 
 
-class GovernancePreGate:
-    """Pre-execution governance validation."""
+# ============================================================================
+# GOVERNANCE PREGATE INTERFACE
+# ============================================================================
+
+class GovernancePregate(ABC):
+    """
+    Abstract base class for pre-execution governance gates.
+
+    Pre-gates validate that operations are authorized to proceed BEFORE
+    the orchestrator executes them. This prevents unauthorized operations
+    from executing (proactive prevention) rather than just logging violations
+    (reactive detection).
+
+    Implementing classes should override the abstract methods to provide
+    specific validation logic.
+    """
 
     def __init__(self) -> None:
-        """Initialize pre-gate validator."""
-        self.rules: Dict[str, Any] = {}
+        """Initialize base pre-gate."""
+        self._logger = logging.getLogger(self.__class__.__name__)
+        self._lock = threading.RLock()
 
-    def register_rule(self, rule_id: str, rule: Dict[str, Any]) -> None:
-        """Register a governance rule.
-
-        Args:
-            rule_id: Unique rule identifier.
-            rule: Rule definition.
+    @abstractmethod
+    def check_resource_quota(
+        self,
+        operation_id: str,
+        estimated_token_cost: int,
+        context: Optional[Dict[str, Any]] = None
+    ) -> PreGateDecision:
         """
-        self.rules[rule_id] = rule
+        Check if operation has sufficient resource quota.
 
-    def validate(
-        self, operation: str, context: Dict[str, Any]
-    ) -> PreGateResult:
-        """Validate operation against governance rules.
+        Validates that the operation's estimated token cost doesn't exceed
+        available quota for the current session/actor.
 
         Args:
-            operation: Operation to validate.
-            context: Operation context.
+            operation_id: Unique identifier for the operation
+            estimated_token_cost: Estimated tokens needed for operation
+            context: Optional context (actor_id, session_id, etc.)
 
         Returns:
-            PreGateResult with validation decision.
+            PreGateDecision with allowed=True or False, with reason
         """
-        violations = []
+        pass
 
-        # Check basic rules
-        if not operation:
-            violations.append("Operation name cannot be empty")
+    @abstractmethod
+    def check_authorization(
+        self,
+        operation_id: str,
+        actor_id: str,
+        target_resource: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> PreGateDecision:
+        """
+        Check if actor is authorized for the operation.
 
-        if not isinstance(context, dict):
-            violations.append("Context must be a dictionary")
+        Validates that the actor has necessary permissions to perform
+        the operation on the target resource.
 
-        # Apply registered rules
-        for rule_id, rule in self.rules.items():
-            if not self._check_rule(rule, operation, context):
-                violations.append(f"Rule {rule_id} violated")
+        Args:
+            operation_id: Unique identifier for the operation
+            actor_id: Identifier of the actor (user, system, etc.)
+            target_resource: Resource the operation targets
+            context: Optional context for authorization check
 
-        if violations:
-            return PreGateResult(
-                decision=PreGateDecision.DENY,
-                reason=f"{len(violations)} rules violated",
-                violations=violations,
+        Returns:
+            PreGateDecision with allowed=True or False, with reason
+        """
+        pass
+
+    @abstractmethod
+    def check_tier_access(
+        self,
+        tier_id: str,
+        operation_id: str,
+        declared_access: Optional[List[str]] = None,
+        context: Optional[Dict[str, Any]] = None
+    ) -> PreGateDecision:
+        """
+        Check if operation is authorized to access the tier.
+
+        Validates that:
+        1. TIER-0 rules cannot be modified (immutability)
+        2. Operation only accesses tiers it declared in context
+        3. Access respects tier hierarchy (0 > 1 > 2)
+
+        Args:
+            tier_id: Tier being accessed (TIER-0, TIER-1, TIER-2)
+            operation_id: Operation requesting access
+            declared_access: List of tiers operation declared it needs
+            context: Optional context
+
+        Returns:
+            PreGateDecision with allowed=True or False, with reason
+        """
+        pass
+
+    def evaluate_all_gates(
+        self,
+        operation_id: str,
+        actor_id: str,
+        target_resource: str,
+        estimated_token_cost: int = 1000,
+        tier_access: Optional[List[str]] = None,
+        context: Optional[Dict[str, Any]] = None
+    ) -> PreGateDecision:
+        """
+        Evaluate all pre-gates for an operation.
+
+        Runs all three gate checks and returns combined decision.
+        If ANY gate blocks, operation is blocked.
+
+        Args:
+            operation_id: Operation identifier
+            actor_id: Actor identifier
+            target_resource: Target resource
+            estimated_token_cost: Estimated token cost
+            tier_access: Declared tier access
+            context: Optional context
+
+        Returns:
+            PreGateDecision allowing or blocking operation
+        """
+        with self._lock:
+            audit_context = {
+                "timestamp": datetime.utcnow().isoformat(),
+                "actor_id": actor_id,
+                "operation_id": operation_id,
+                "target_resource": target_resource,
+                "checks_performed": [],
+                "all_passed": True
+            }
+
+            # Check 1: Resource quota
+            quota_decision = self.check_resource_quota(
+                operation_id,
+                estimated_token_cost,
+                context
+            )
+            audit_context["checks_performed"].append("RESOURCE_QUOTA")
+            if not quota_decision.allowed:
+                audit_context["all_passed"] = False
+                audit_context["quota_violation"] = quota_decision.reason
+                return PreGateDecision(
+                    allowed=False,
+                    reason=quota_decision.reason,
+                    violation_type="RESOURCE_QUOTA",
+                    audit_context=audit_context
+                )
+
+            # Check 2: Authorization
+            auth_decision = self.check_authorization(
+                operation_id,
+                actor_id,
+                target_resource,
+                context
+            )
+            audit_context["checks_performed"].append("AUTHORIZATION")
+            if not auth_decision.allowed:
+                audit_context["all_passed"] = False
+                audit_context["authorization_violation"] = auth_decision.reason
+                return PreGateDecision(
+                    allowed=False,
+                    reason=auth_decision.reason,
+                    violation_type="AUTHORIZATION",
+                    audit_context=audit_context
+                )
+
+            # Check 3: Tier access
+            if tier_access:
+                for tier in tier_access:
+                    tier_decision = self.check_tier_access(
+                        tier,
+                        operation_id,
+                        tier_access,
+                        context
+                    )
+                    audit_context["checks_performed"].append(f"TIER_ACCESS:{tier}")
+                    if not tier_decision.allowed:
+                        audit_context["all_passed"] = False
+                        audit_context["tier_violation"] = tier_decision.reason
+                        return PreGateDecision(
+                            allowed=False,
+                            reason=tier_decision.reason,
+                            violation_type="TIER_ACCESS",
+                            audit_context=audit_context
+                        )
+
+            # All gates passed
+            audit_context["decision"] = "ALLOWED"
+            return PreGateDecision(
+                allowed=True,
+                reason="All pre-execution gates passed",
+                violation_type=None,
+                audit_context=audit_context
             )
 
-        return PreGateResult(
-            decision=PreGateDecision.ALLOW,
-            reason="All governance rules satisfied",
-        )
 
-    def _check_rule(
-        self, rule: Dict[str, Any], operation: str, context: Dict[str, Any]
-    ) -> bool:
-        """Check if a specific rule is satisfied.
+# ============================================================================
+# CONCRETE GATE IMPLEMENTATIONS
+# ============================================================================
+
+class DefaultGovernancePregate(GovernancePregate):
+    """
+    Default implementation of governance pre-gate.
+
+    Provides basic gate implementations with configurable quotas and
+    authorization rules.
+    """
+
+    def __init__(self, max_token_quota: int = 100000) -> None:
+        """
+        Initialize default pre-gate.
 
         Args:
-            rule: Rule definition.
-            operation: Operation name.
-            context: Operation context.
-
-        Returns:
-            True if rule is satisfied.
+            max_token_quota: Maximum tokens allowed per session
         """
-        # Basic implementation - can be extended
-        required_fields = rule.get("required_fields", [])
-        for field in required_fields:
-            if field not in context:
-                return False
-        return True
+        super().__init__()
+        self.max_token_quota = max_token_quota
+        self.used_tokens: Dict[str, int] = {}
+        self._auth_rules: Dict[str, List[str]] = {}
+        self._tier0_immutable = True
+
+    def check_resource_quota(
+        self,
+        operation_id: str,
+        estimated_token_cost: int,
+        context: Optional[Dict[str, Any]] = None
+    ) -> PreGateDecision:
+        """Check resource quota."""
+        actor_id = context.get("actor_id", "unknown") if context else "unknown"
+
+        # Get used tokens for this actor
+        used = self.used_tokens.get(actor_id, 0)
+        available = self.max_token_quota - used
+
+        if estimated_token_cost > available:
+            return PreGateDecision(
+                allowed=False,
+                reason=f"Quota exceeded: {estimated_token_cost} tokens requested, "
+                       f"{available} available (used {used}/{self.max_token_quota})",
+                violation_type="RESOURCE_QUOTA",
+                audit_context={
+                    "actor_id": actor_id,
+                    "tokens_requested": estimated_token_cost,
+                    "tokens_available": available,
+                    "tokens_used": used
+                }
+            )
+
+        # Deduct tokens
+        self.used_tokens[actor_id] = used + estimated_token_cost
+
+        return PreGateDecision(
+            allowed=True,
+            reason=f"Quota check passed: {estimated_token_cost} tokens "
+                   f"available ({available - estimated_token_cost} remaining)",
+            audit_context={
+                "actor_id": actor_id,
+                "tokens_requested": estimated_token_cost,
+                "tokens_available": available,
+                "tokens_after": available - estimated_token_cost
+            }
+        )
+
+    def check_authorization(
+        self,
+        operation_id: str,
+        actor_id: str,
+        target_resource: str,
+        context: Optional[Dict[str, Any]] = None
+    ) -> PreGateDecision:
+        """Check actor authorization."""
+        # Check if actor has declared access to target resource
+        if actor_id not in self._auth_rules:
+            # No explicit rules = allow by default (can be overridden)
+            return PreGateDecision(
+                allowed=True,
+                reason=f"Actor {actor_id} authorized for {target_resource}",
+                audit_context={
+                    "actor_id": actor_id,
+                    "target_resource": target_resource,
+                    "check": "default_allow"
+                }
+            )
+
+        allowed_resources = self._auth_rules[actor_id]
+        if target_resource not in allowed_resources:
+            return PreGateDecision(
+                allowed=False,
+                reason=f"Actor {actor_id} not authorized for {target_resource}",
+                violation_type="AUTHORIZATION",
+                audit_context={
+                    "actor_id": actor_id,
+                    "target_resource": target_resource,
+                    "allowed_resources": allowed_resources
+                }
+            )
+
+        return PreGateDecision(
+            allowed=True,
+            reason=f"Actor {actor_id} authorized for {target_resource}",
+            audit_context={
+                "actor_id": actor_id,
+                "target_resource": target_resource,
+                "check": "explicit_allow"
+            }
+        )
+
+    def check_tier_access(
+        self,
+        tier_id: str,
+        operation_id: str,
+        declared_access: Optional[List[str]] = None,
+        context: Optional[Dict[str, Any]] = None
+    ) -> PreGateDecision:
+        """Check tier access."""
+        # TIER-0 is immutable - no modifications allowed
+        if tier_id == "TIER-0" and context and context.get("is_modification", False):
+            return PreGateDecision(
+                allowed=False,
+                reason="TIER-0 rules are immutable - modification not allowed",
+                violation_type="TIER_ACCESS",
+                audit_context={
+                    "tier_id": tier_id,
+                    "operation_id": operation_id,
+                    "violation": "tier0_immutability"
+                }
+            )
+
+        # Check if tier was declared
+        if declared_access and tier_id not in declared_access:
+            return PreGateDecision(
+                allowed=False,
+                reason=f"Operation did not declare access to {tier_id} "
+                       f"(declared: {declared_access})",
+                violation_type="TIER_ACCESS",
+                audit_context={
+                    "tier_id": tier_id,
+                    "operation_id": operation_id,
+                    "declared_access": declared_access
+                }
+            )
+
+        return PreGateDecision(
+            allowed=True,
+            reason=f"Tier access check passed for {tier_id}",
+            audit_context={
+                "tier_id": tier_id,
+                "operation_id": operation_id,
+                "check": "tier_access_allowed"
+            }
+        )
+
+    def set_authorization_rule(self, actor_id: str, allowed_resources: List[str]) -> None:
+        """Set authorization rules for an actor."""
+        with self._lock:
+            self._auth_rules[actor_id] = allowed_resources
+
+    def reset_quota(self, actor_id: str) -> None:
+        """Reset token quota for an actor."""
+        with self._lock:
+            self.used_tokens[actor_id] = 0
 
 
-def get_governance_pregate() -> GovernancePreGate:
-    """Get or create governance pre-gate instance.
+# ============================================================================
+# SINGLETON ACCESS
+# ============================================================================
+
+_pregate_instance: Optional[GovernancePregate] = None
+_pregate_lock = threading.RLock()
+
+
+def get_governance_pregate() -> GovernancePregate:
+    """
+    Get the singleton GovernancePregate instance.
 
     Returns:
-        GovernancePreGate singleton instance.
+        GovernancePregate: Singleton pre-gate instance
     """
-    # Singleton pattern
-    if not hasattr(get_governance_pregate, "_instance"):
-        get_governance_pregate._instance = GovernancePreGate()
-    return get_governance_pregate._instance
+    global _pregate_instance
+
+    if _pregate_instance is None:
+        with _pregate_lock:
+            if _pregate_instance is None:
+                _pregate_instance = DefaultGovernancePregate()
+
+    return _pregate_instance
 
 
-__all__ = ["GovernancePreGate", "PreGateResult", "PreGateDecision", "get_governance_pregate", "GovernancePregate"]
+def set_governance_pregate(pregate: GovernancePregate) -> None:
+    """
+    Set the singleton GovernancePregate instance (for testing).
 
-# Alias for compatibility
-GovernancePregate = GovernancePreGate
+    Args:
+        pregate: GovernancePregate instance to use
+    """
+    global _pregate_instance
+    with _pregate_lock:
+        _pregate_instance = pregate

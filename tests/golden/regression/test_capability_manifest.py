@@ -325,7 +325,7 @@ class TestIntelligenceLive:
     def test_response_optimizer_exists(self) -> None:
         """ResponseOptimizer must be importable (EA-010 dependency)."""
         try:
-            from cortex.core.core.response_optimizer import ResponseOptimizer
+            from cortex.core.response_optimizer import ResponseOptimizer
             assert ResponseOptimizer is not None
         except ImportError:
             pytest.fail("ResponseOptimizer not importable — needed for EA-010")

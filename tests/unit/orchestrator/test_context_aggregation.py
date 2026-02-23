@@ -7,7 +7,7 @@ AC-CONV-001-02: Context Aggregation and Carryover (10 tests)
 import pytest
 from datetime import datetime
 
-from cortex.core.core.orchestrator.context_aggregator import (
+from cortex.core.orchestrator.context_aggregator import (
     ContextAggregator,
     TurnContext,
 )

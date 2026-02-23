@@ -13,7 +13,7 @@ from pathlib import Path
 from unittest.mock import patch, MagicMock
 from typing import Dict, Any
 
-from cortex.core.core.knowledge.company_knowledge_loader import (
+from cortex.core.knowledge.company_knowledge_loader import (
     CompanyKnowledgeLoader,
     ComplianceMatch,
     KnowledgeLayer,

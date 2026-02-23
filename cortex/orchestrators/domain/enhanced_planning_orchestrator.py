@@ -18,7 +18,7 @@ from cortex.orchestrators.domain.planning_orchestrator import (  # noqa: F401
     PlanningOrchestrator,
 )
 
-from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 try:

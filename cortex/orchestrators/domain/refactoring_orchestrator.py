@@ -31,7 +31,7 @@ from typing import Any, Dict, List, Optional, Union
 
 # CORE-035: Single canonical Result — cortex.core.result is the sole definition (cortex.core.core.result deleted Phase 59-b)
 from cortex.core.result import Err, Ok, Result
-from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 # Backward-compat aliases (no-op now that both paths are identical)

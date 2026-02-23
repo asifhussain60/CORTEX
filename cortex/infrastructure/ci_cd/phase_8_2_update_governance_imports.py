@@ -52,7 +52,7 @@ for file_path in files_to_update:
 
         # Replace import statement
         content = content.replace(
-            "from cortex.core.core.governance_registry import",
+            "from cortex.core.governance_registry import",
             "from cortex.orchestrators.core.governance_registry import"
         )
 

@@ -23,7 +23,7 @@ try:
         GovernanceRegistry,
         GovernanceRule,
     )
-    from cortex.core.core.tier_resolver import TierResolver
+    from cortex.core.tier_resolver import TierResolver
 except ImportError:
     GovernanceRegistry = None
     GovernanceRule = None
@@ -95,7 +95,7 @@ class TestGovernanceRegistryGetRule:
         registry = GovernanceRegistry()
         
         # Mock tier0 rule (highest precedence)
-        from cortex.core.core.interfaces import GovernanceRule as GovRule
+        from cortex.core.interfaces import GovernanceRule as GovRule
         tier0_rule = GovRule(
             rule_id="TEST-001",
             name="Test Rule Tier 0",
@@ -310,7 +310,7 @@ class TestTierPrecedenceGoldenScenarios:
         registry = GovernanceRegistry()
         
         # Simulate SKULL rule exists (e.g., CORE-001)
-        from cortex.core.core.interfaces import GovernanceRule as GovRule
+        from cortex.core.interfaces import GovernanceRule as GovRule
         skull_rule = GovRule(
             rule_id="CORE-001",
             name="TDD Required",

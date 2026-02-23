@@ -25,7 +25,7 @@ References:
 import pytest
 from typing import List
 
-from cortex.core.core.knowledge.router import (
+from cortex.core.knowledge.router import (
     IntelligentKnowledgeRouter,
     OperationType,
     RoutingStrategy,
@@ -34,7 +34,7 @@ from cortex.core.core.knowledge.router import (
     TechnicalAffinityCalculator,
     BusinessAffinityCalculator,
 )
-from cortex.core.core.knowledge import (
+from cortex.core.knowledge import (
     KnowledgeProvider,
     KnowledgeQueryResult,
 )
@@ -335,7 +335,7 @@ def test_query_tech_returns_results(router):
 def test_query_tech_empty_when_not_routed(router):
     """Test query_tech returns empty result when not routed."""
     # Create decision where we don't route to tech
-    from cortex.core.core.knowledge.router import RoutingDecision
+    from cortex.core.knowledge.router import RoutingDecision
     decision = RoutingDecision(
         strategy=RoutingStrategy.BUSINESS_ONLY,
         route_to_tech=False,
@@ -362,7 +362,7 @@ def test_query_business_returns_results(router):
 
 def test_query_business_empty_when_not_routed(router):
     """Test query_business returns empty result when not routed."""
-    from cortex.core.core.knowledge.router import RoutingDecision
+    from cortex.core.knowledge.router import RoutingDecision
     decision = RoutingDecision(
         strategy=RoutingStrategy.TECH_ONLY,
         route_to_tech=True,

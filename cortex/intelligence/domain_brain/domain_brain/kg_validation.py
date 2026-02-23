@@ -9,7 +9,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Set
 
-from cortex.core.core.knowledge.graph.interface import (
+from cortex.core.knowledge.graph.interface import (
     EntityNode,
     HealthStatus,
     IGraphAdapter,

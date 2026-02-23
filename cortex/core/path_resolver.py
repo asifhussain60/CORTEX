@@ -1,117 +1,120 @@
-"""Path Resolver - Utilities for resolving project and module paths.
+"""
+Path Resolver - Cross-Platform Path Resolution
 
-Provides functions to resolve paths within the CORTEX project structure
-and locate modules, configurations, and resources.
+Provides portable path resolution without hardcoded paths.
+All path operations should go through this module.
 
-Author: CORTEX Framework
+NEVER use hardcoded paths like:
+- /Users/<username>/Projects/...
+- /home/<username>/...
+- C:\\Users\\<username>\\...
+
+ALWAYS use:
+- get_project_root()
+- resolve_path("cortex", "intelligence")
+- cortex.intelligence_path()  ← canonical: cortex/intelligence/
+
+Note: cortex/intelligence/ was dissolved into cortex/intelligence/ (Phase 03).
+All tier-based paths now map to cortex-registry/ (governance) or cortex/intelligence/ (code).
+
+Author: Asif Hussain
 """
 
+import os
 from pathlib import Path
 from typing import Optional
 
+_PROJECT_ROOT: Optional[Path] = None
+
 
 def get_project_root() -> Path:
-    """Get the CORTEX project root directory.
+    """
+    Get the project root directory.
+
+    Resolution order:
+    1. CORTEX_ROOT environment variable
+    2. Git root (if in git repo)
+    3. Current working directory
 
     Returns:
-        Path to project root.
+        Path to project root
     """
-    # Look for cortex-registry/core/config/system-configuration.yaml or setup.py to identify root
-    current = Path(__file__).parent
+    global _PROJECT_ROOT
 
-    while current != current.parent:
-        if (current / "cortex" / "config" / "cortex-config.yaml").exists() or \
-           (current / "cortex-config.yaml").exists() or \
-           (current / "setup.py").exists():
-            return current
-        current = current.parent
+    if _PROJECT_ROOT is not None:
+        return _PROJECT_ROOT
 
-    # Fallback to current file's parent directory's parent (cortex/core -> project root)
-    return Path(__file__).parent.parent.parent
+    # Check environment variable first
+    env_root = os.environ.get("CORTEX_ROOT")
+    if env_root:
+        _PROJECT_ROOT = Path(env_root)
+        return _PROJECT_ROOT
+
+    # Try to find git root
+    current = Path.cwd()
+    for parent in [current] + list(current.parents):
+        if (parent / ".git").exists():
+            _PROJECT_ROOT = parent
+            return _PROJECT_ROOT
+
+    # Fall back to current directory
+    _PROJECT_ROOT = Path.cwd()
+    return _PROJECT_ROOT
 
 
-def resolve_path(path_str: str, relative_to: Optional[Path] = None) -> Path:
-    """Resolve a path string to an absolute Path.
+def resolve_path(*parts: str) -> Path:
+    """
+    Resolve a path relative to project root.
 
     Args:
-        path_str: Path string (can be absolute or relative).
-        relative_to: Base path for relative resolution (defaults to project root).
+        *parts: Path components (e.g., "cortex", "intelligence")
 
     Returns:
-        Resolved absolute Path.
+        Absolute Path object
+
+    Example:
+        >>> resolve_path("cortex", "intelligence")
+        Path("/path/to/project/cortex/intelligence")
     """
-    if relative_to is None:
-        relative_to = get_project_root()
-
-    path = Path(path_str)
-
-    if path.is_absolute():
-        return path
-    else:
-        return relative_to / path
+    return get_project_root().joinpath(*parts)
 
 
-def get_cortex_module_path() -> Path:
-    """Get path to cortex module.
+def cortex_intelligence_path() -> Path:
+    """Get path to cortex/intelligence directory (canonical since Phase 03)."""
+    return resolve_path("cortex", "intelligence")
 
-    Returns:
-        Path to cortex package.
+
+def tier_path(tier: int) -> Path:
+    """Get path to cortex-registry governance tier directory.
+
+    Tier mapping (post Phase 03 migration):
+      0 → cortex-registry/core/tier0-skull/
+      1 → cortex-registry/core/tier1-project/
+      2 → cortex-registry/core/tier2-conventions/
+      3 → cortex-registry/knowledge-base/
     """
-    return get_project_root() / "cortex"
+    tier_map = {
+        0: resolve_path("cortex-registry", "core", "tier0-skull"),
+        1: resolve_path("cortex-registry", "core", "tier1-project"),
+        2: resolve_path("cortex-registry", "core"),
+        3: resolve_path("cortex-registry", "knowledge-base"),
+    }
+    if tier not in tier_map:
+        raise ValueError(f"Invalid tier: {tier}. Must be 0, 1, 2, or 3.")
+    return tier_map[tier]
 
 
-def get_cortex_intelligence_path() -> Path:
-    """Get path to cortex/intelligence module.
-
-    Returns:
-        Path to cortex/intelligence package.
-    """
-    return get_project_root() / "cortex" / "intelligence"
+def audit_logs_path() -> Path:
+    """Get path to audit logs directory."""
+    return resolve_path(".cortex-runtime", "logs")
 
 
-def get_config_path() -> Path:
-    """Get path to configuration directory.
-
-    Returns:
-        Path to config directory.
-    """
-    return get_project_root() / "config"
+def config_path() -> Path:
+    """Get path to config directory."""
+    return resolve_path("cortex-registry", "config")
 
 
-def get_data_path() -> Path:
-    """Get path to data directory.
-
-    Returns:
-        Path to data directory.
-    """
-    return get_project_root() / "data"
-
-
-def get_tests_path() -> Path:
-    """Get path to tests directory.
-
-    Returns:
-        Path to tests directory.
-    """
-    return get_project_root() / "tests"
-
-
-def get_docs_path() -> Path:
-    """Get path to docs directory.
-
-    Returns:
-        Path to docs directory.
-    """
-    return get_project_root() / "docs"
-
-
-__all__ = [
-    "get_project_root",
-    "resolve_path",
-    "get_cortex_module_path",
-    "get_cortex_intelligence_path",
-    "get_config_path",
-    "get_data_path",
-    "get_tests_path",
-    "get_docs_path",
-]
+def reset_project_root() -> None:
+    """Reset cached project root (for testing)."""
+    global _PROJECT_ROOT
+    _PROJECT_ROOT = None

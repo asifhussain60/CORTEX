@@ -305,3 +305,97 @@ class OrchestratorBase(WorkflowTemplateMixin, ABC):
             "success_count": successes,
             "last_success": last_success,
         }
+
+
+# ---------------------------------------------------------------------------
+# Phase 62-A merge: OrchestrationStatus / OrchestrationContext / OrchestrationResult
+# These were canonical in cortex.core.core.orchestrator_base; promoted here
+# so all callers can import from cortex.core.orchestrator_base (CORE-035).
+# ---------------------------------------------------------------------------
+
+import uuid as _uuid  # noqa: E402
+
+
+class OrchestrationStatus(Enum):
+    """Orchestrator execution status."""
+    INITIALIZED = "initialized"
+    VALIDATING = "validating"
+    EXECUTING = "executing"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    HALTED = "halted"
+
+
+@dataclass
+class OrchestrationContext:
+    """Context passed to orchestrator during execution."""
+
+    orchestrator_id: str
+    orchestrator_name: str
+    execution_id: str = field(default_factory=lambda: str(_uuid.uuid4()))
+
+    # Governance context
+    tier_access: "set[int]" = field(default_factory=lambda: {0, 1, 2, 3})
+    required_rules: "list[str]" = field(default_factory=list)
+
+    # Execution parameters
+    parameters: "dict[str, Any]" = field(default_factory=dict)
+    environment: str = "development"  # development | staging | production
+
+    # Audit trail
+    start_time: "Optional[datetime]" = None
+    end_time: "Optional[datetime]" = None
+    audit_enabled: bool = True
+
+    # Status tracking
+    status: OrchestrationStatus = field(default=None)  # type: ignore[assignment]
+    progress_percent: int = 0
+
+    # Error handling
+    error_message: "Optional[str]" = None
+    error_code: "Optional[str]" = None
+
+    def __post_init__(self) -> None:
+        """Validate context on creation."""
+        if not self.orchestrator_id or not self.orchestrator_name:
+            raise ValueError("orchestrator_id and orchestrator_name are required")
+        if not self.execution_id:
+            self.execution_id = str(_uuid.uuid4())
+        if self.start_time is None:
+            self.start_time = datetime.utcnow()
+        if self.status is None:
+            self.status = OrchestrationStatus.INITIALIZED
+
+
+@dataclass
+class OrchestrationResult:
+    """Result returned by orchestrator."""
+
+    orchestrator_id: str
+    execution_id: str
+    status: OrchestrationStatus
+    output: Any = None
+
+    # Success metrics
+    success: bool = False
+    message: str = ""
+
+    # Error handling
+    error_code: "Optional[str]" = None
+
+    # Governance compliance
+    rules_evaluated: int = 0
+    rules_passed: int = 0
+    violations: "list[str]" = field(default_factory=list)
+
+    # Audit trail
+    audit_entries_count: int = 0
+    hash_chain_valid: bool = False
+
+    # Timing
+    start_time: "Optional[datetime]" = None
+    end_time: "Optional[datetime]" = None
+    duration_seconds: float = 0.0
+
+    # Evidence
+    evidence_bundle_id: "Optional[str]" = None

@@ -13,7 +13,7 @@ import pytest
 from unittest.mock import Mock
 import numpy as np
 
-from cortex.core.core.conversation_synthesizer import (
+from cortex.core.conversation_synthesizer import (
     ContextSynthesizer,
     ContinuityScore,
     ContextWindow,

@@ -8,7 +8,7 @@ Rule: CORE-008 (TDD First)
 import pytest
 import os
 from unittest.mock import Mock, patch
-from cortex.core.core.response_header_injector import ResponseHeaderInjector
+from cortex.core.response_header_injector import ResponseHeaderInjector
 from cortex.observability.visibility_controller import (
     OrchestratorContext,
     IntelligenceFlags,

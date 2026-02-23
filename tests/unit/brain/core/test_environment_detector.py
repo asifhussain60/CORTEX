@@ -14,7 +14,7 @@ from unittest.mock import Mock, patch, MagicMock
 import os
 from pathlib import Path
 
-from cortex.core.core.environment_detector import (
+from cortex.core.environment_detector import (
     EnvironmentType,
     EnvironmentDetector,
     EnvironmentConfig,

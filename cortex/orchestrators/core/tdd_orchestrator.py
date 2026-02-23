@@ -53,7 +53,7 @@ if TYPE_CHECKING:
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
-from cortex.core.core.knowledge_guidance_engine import (
+from cortex.core.knowledge_guidance_engine import (
     KnowledgeGuidanceEngine,
     ModuleGuidance,
 )
@@ -62,7 +62,7 @@ from cortex.core.core.knowledge_guidance_engine import (
 from cortex.core.common.standards_resolver import StandardsResolver
 from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import IntentType
-from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin  # G2 Fix: wire mixin
 from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,

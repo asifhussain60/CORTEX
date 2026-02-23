@@ -20,7 +20,7 @@ class TestImportReferenceFixer:
         test_file = tmp_path / "test_module.py"
         test_file.write_text("""
 from cortex.orchestrators.core import MasterOrchestrator
-from cortex.core.core.orchestrator_base import OrchestratorBase
+from cortex.core.orchestrator_base import OrchestratorBase
 import cortex.mcp.tools.learning
         """)
         

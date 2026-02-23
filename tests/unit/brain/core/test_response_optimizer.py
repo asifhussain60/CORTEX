@@ -12,7 +12,7 @@ Authority: Phase 29 Stage 2 specification
 import pytest
 from typing import List, Dict, Any
 
-from cortex.core.core.response_optimizer import (
+from cortex.core.response_optimizer import (
     ResponseOptimizer,
     OptimizationResult,
     Correction,

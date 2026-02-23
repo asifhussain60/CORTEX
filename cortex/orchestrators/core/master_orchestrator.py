@@ -25,11 +25,11 @@ from typing import Any, Dict, List, Optional, Tuple
 
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
-from cortex.core.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.core.core.knowledge.knowledge_repository import KnowledgeRepository
-from cortex.core.core.response_header_config import HeaderConfigurationManager
-from cortex.core.core.response_header_injector import ResponseHeaderInjector
-from cortex.core.core.state_manager import (
+from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.knowledge.knowledge_repository import KnowledgeRepository
+from cortex.core.response_header_config import HeaderConfigurationManager
+from cortex.core.response_header_injector import ResponseHeaderInjector
+from cortex.core.state_manager import (
     OperationState,
     StateManager,
     get_state_manager,
@@ -73,7 +73,7 @@ from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention import B
 # AC-PHASE-2-5-WIRE-003: Import AdaptiveRouter for intelligent task routing
 # Use IntelligentKnowledgeRouter as the canonical implementation
 try:
-    from cortex.core.core.knowledge.router import (
+    from cortex.core.knowledge.router import (
         IntelligentKnowledgeRouter as AdaptiveRouter,
     )
 except ImportError:
@@ -163,7 +163,7 @@ except ImportError:
 
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
 try:
-    from cortex.core.core.knowledge.router import IntelligentKnowledgeRouter
+    from cortex.core.knowledge.router import IntelligentKnowledgeRouter
 except ImportError:
     # Fallback if module not accessible
     IntelligentKnowledgeRouter = None
@@ -242,10 +242,10 @@ except ImportError:
 # AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Import InteractionOrchestrator with challenge system
 # Stage 1 comprehension with LENS-powered challenge generation
 try:
-    from cortex.core.core.orchestrator.conversation_protocol import (
+    from cortex.core.orchestrator.conversation_protocol import (
         ConversationProtocol,
     )
-    from cortex.core.core.orchestrator.round_context import RoundContext
+    from cortex.core.orchestrator.round_context import RoundContext
     from cortex.orchestrators.core.interaction_orchestrator import (
         InteractionOrchestrator,
     )
@@ -633,7 +633,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplate
         # Import here to avoid circular import issues
         self.interaction_orchestrator_with_challenges: Optional[Any] = None
         try:
-            from cortex.core.core.orchestrator.conversation_protocol import (
+            from cortex.core.orchestrator.conversation_protocol import (
                 ConversationProtocol as ConvProtocol,
             )
             from cortex.orchestrators.core.interaction_orchestrator import (
@@ -2332,7 +2332,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplate
             try:
                 from pathlib import Path
 
-                from cortex.core.core.context_synthesis_gateway import create_exit_gate
+                from cortex.core.context_synthesis_gateway import create_exit_gate
 
                 # Create EXIT GATE
                 workspace_root = Path.cwd()
