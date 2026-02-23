@@ -42,8 +42,8 @@ All extensions are **hot-reload** — no core code changes required.
 ## Adding a Domain Orchestrator
 
 1. Create `cortex/orchestrators/domain/your_domain/your_orchestrator.py`
-2. Inherit from `OrchestratorBase`
-3. Implement `execute()` — governance gates come free from the base class
+2. Inherit from `OrchestratorProtocolMixin` (primary base, Phase 58) — or `IOrchestrator` directly
+3. Implement `execute_operation()` — cross-cutting hooks (LENS, KnSynth, GovGate) fire automatically via `_activate_cross_cutting_hooks()`
 4. Register in the wiring contract
 5. Write tests first (CORE-008)
 

@@ -56,7 +56,7 @@ diagrams: ASCII service architecture, sequence diagrams
 
 - **State Management** — Operation tracking, checkpoint recovery, rollback support
 
-## OrchestratorBase: The Universal Lifecycle- **Configuration Management** — Layered config with env vars > files > wiring > defaults
+## OrchestratorProtocolMixin: The Universal Protocol (Phase 58)- **Configuration Management** — Layered config with env vars > files > wiring > defaults
 
 - **Health Monitoring** — Circuit breakers, health checks, Prometheus metrics integration
 
@@ -96,7 +96,7 @@ teardown()  → Audit trail recording, resource cleanup- [State Management](#sta
 
 
 
-**Developer:** "I implement `IOrchestrator` + `OrchestratorProtocolMixin`, override `execute()`, and get governance gates + audit trails for free. The mixin handles the lifecycle."## Overview
+**Developer:** "I implement `IOrchestrator` via `OrchestratorProtocolMixin`, override `execute()`, and get governance gates + audit trails + cross-cutting LENS intelligence for free. The mixin handles the lifecycle."## Overview
 
 
 
