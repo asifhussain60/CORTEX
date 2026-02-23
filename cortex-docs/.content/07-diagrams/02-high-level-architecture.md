@@ -4,7 +4,7 @@
 title: High-Level Architecture Diagram
 type: diagram
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-23
 source_of_truth: cortex/ directory structure
 order: 2
 ---
@@ -23,9 +23,9 @@ order: 2
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
 │                    MCP GATEWAY                                  │
-│              cortex/mcp/ — 23 tools                             │
+│              cortex/mcp/ — 26 active tools                      │
 │                              │                                  │
-│         cortex_process_request (mandatory entry)                │
+│         cortex_request_lifecycle (primary entry point)          │
 └─────────────────────────────┼───────────────────────────────────┘
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
@@ -42,7 +42,7 @@ order: 2
 │    │ (12 intents)   │  │ Orch.   │  │ Orchestrators│           │
 │    └────────────────┘  └─────────┘  └──────────────┘           │
 │                                                                 │
-│    22 wired orchestrators across 3 tiers                           │
+│    17 wired orchestrators: 7 core · 3 domain · 7 support        │
 └─────────────────────────────┼───────────────────────────────────┘
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
@@ -61,8 +61,8 @@ order: 2
 │                   GOVERNANCE LAYER                              │
 │                              │                                  │
 │    ┌──────────────┐    ┌─────┴──────┐    ┌───────────────┐      │
-│    │ 17 Active    │    │ 8 Enforce- │    │   Audit DB    │      │
-│    │ CORE Rules   │    │ ment Agents│    │  (SQLite WAL) │      │
+│    │ 35 Active    │    │Enforcement │    │   Audit DB    │      │
+│    │ CORE Rules   │    │ Agents     │    │  (SQLite WAL) │      │
 │    └──────────────┘    └───────────┘    └───────────────┘      │
 │                                                                 │
 │    cortex/governance/ + cortex-registry/core/                   │
@@ -97,14 +97,14 @@ order: 2
 
 | Layer | Components | Location |
 |-------|------------|----------|
-| MCP Gateway | 25 tools | `cortex/mcp/tools/` |
-| Orchestration | 22 wired orchestrators, 3 tiers | `cortex/orchestrators/` |
+| MCP Gateway | **26 active tools** (28 total — 2 deprecated) | `cortex/mcp/tools/` |
+| Orchestration | **17 wired** orchestrators (7 core, 3 domain, 7 support) | `cortex/orchestrators/` |
 | Intelligence | 8 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
-| Governance | 35 rules (22 enforced), 10 agents | `cortex/governance/` + `cortex-registry/core/` |
+| Governance | **35 CORE rules** | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |
 | Registry | Rules, patterns, workflows | `cortex-registry/` |
-| Tests | 15,663 collected | `tests/` |
+| Tests | **15,739** collected | `tests/` |
 
 ---
 
-*Verified against live directory structure · 21 February 2026*
+*Verified against live directory structure · 23 February 2026*

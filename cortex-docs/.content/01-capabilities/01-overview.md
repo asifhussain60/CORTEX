@@ -4,13 +4,13 @@
 title: CORTEX Capabilities — Complete Platform Inventory
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-21
+last_verified: 2026-02-23
 source_of_truth: cortex/ + cortex-registry/ + cortex-registry/planning/cortex-refactor-master.yaml
 format: diátaxis-explanation
 order: 1
 ---
 
-> **Notice:** All capabilities listed here are verified against the live codebase as of 21 February 2026. Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
+> **Notice:** All capabilities listed here are verified against the live codebase as of 23 February 2026. Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
 
 ---
 
@@ -20,11 +20,11 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | # | Domain | Brain Analogy | Key Metric |
 |---|--------|--------------|------------|
-| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 25 MCP tools, 16 canonical dirs |
+| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 26 MCP tools, 16 canonical dirs |
 | 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | 8 parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
-| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 22 wired orchestrators, 3 tiers |
-| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 35 CORE rules (22 enforced), CORE-064, CORE-055 |
+| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 17 wired orchestrators, 3 tiers |
+| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 35 CORE rules, CORE-064, CORE-055 |
 | 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
 
 ---
@@ -33,8 +33,8 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | Capability | Domain | Implementation | Tests |
 |-----------|--------|---------------|-------|
-| MCP Gateway (25 tools) | Core | `cortex/mcp/tools/` | ✅ |
-| Orchestrator Dispatch (22 wired) | Core | `cortex/orchestrators/` (3 tiers) | ✅ |
+| MCP Gateway (26 active tools) | Core | `cortex/mcp/tools/` | ✅ |
+| Orchestrator Dispatch (17 wired) | Core | `cortex/orchestrators/` (3 tiers: 7 core, 3 domain, 7 support) | ✅ |
 | OrchestratorBase Lifecycle | Core | `cortex/core/orchestrator_base.py` | ✅ |
 | SQLite Activity Log | Core | `.cortex-runtime/audit.db` (auto-logged in `execute()/run()`) | ✅ |
 | FileFactory | Core | `cortex/core/file_factory.py` | ✅ |
@@ -68,13 +68,13 @@ The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
 ### MCP Gateway (25 Tools)
 
-CORTEX exposes 25 canonical MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
+CORTEX exposes 26 active MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 
-**Business Leader:** "25 tools covering analysis, governance, onboarding, debugging, health checks, sweep management, and workflow — all accessible from the IDE without switching tools."
+**Business Leader:** "26 tools covering analysis, governance, onboarding, debugging, health checks, sweep management, and workflow — all accessible from the IDE without switching tools."
 
 **Product Owner:** "Each tool maps to a user capability. `cortex_onboard` brings in a new codebase. `cortex_validate` checks rules. `cortex_sweep_status` tracks long-running refactor sweeps (CORE-064). `cortex_fetch_work_items` pulls ADO sprint work items."
 
-**Developer:** "I call `cortex_tools_catalog` to discover all tools. Each tool has typed parameters, docstrings, and returns structured results. MCP handles the JSON-RPC plumbing."
+**Developer:** "I call `cortex_tools_catalog` to discover all 26 tools. Each tool has typed parameters, docstrings, and returns structured results. MCP handles the JSON-RPC plumbing."
 
 ### OrchestratorBase Lifecycle
 
@@ -209,4 +209,4 @@ All extensibility is hot-reload — no core changes required.
 
 ---
 
-*All paths and counts verified against live codebase · 22 February 2026*
+*All paths and counts verified against live codebase · 23 February 2026*

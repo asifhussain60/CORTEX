@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-23 | **Architecture:** 22 Wired Orchestrators · 24 MCP Tools · 35 CORE Rules · 1 Package  
+**Updated:** 2026-02-23 | **Architecture:** 17 Wired Orchestrators · 26 MCP Tools · 35 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
@@ -500,7 +500,7 @@ Everything else → move to canonical location or delete.
 
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`)
-- No stale orchestrator counts (must say **22 wired orchestrators**, **24 MCP tools**, **35 CORE rules**)
+- No stale orchestrator counts (must say **17 wired orchestrators**, **26 MCP tools**, **35 CORE rules**)
 - No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - No references to `cortex.intelligence/state/` as runtime data path (canonical: `.cortex-runtime/`)
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
@@ -511,8 +511,8 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 
 | Check | Pass Criteria |
 |---|---|
-| Orchestrator count | All agents/prompts say "22 wired" |
-| MCP tool count | All say "24 production tools" |
+| Orchestrator count | All agents/prompts say "17 wired" |
+| MCP tool count | All say "26 active tools" |
 | CORE rules count | All say "35 active" |
 | Audit check count | All say "19-Point Production Readiness Audit" |
 | Meta-audit check count | All say "23 checks" |
@@ -634,13 +634,13 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py batch
 - **Tier 1 (WARN):** QUERY, DIGEST, DESIGN, PLAN — warn if unavailable
 - **Tier 2 (SILENT):** REPHRASE — no MCP needed
 
-**Key Tools (24 production — operation-based):**
+**Key Tools (26 active — operation-based):**
 - `cortex_verify` (op: `mcp`) — MCP health check (verify server active)
 - `cortex_validate` (op: `compliance`) — CORE rules check
 - `cortex_onboard` (op: `full`) — Enhanced onboarding with LENS + SQLite
 - `cortex_refactor` — Semantic refactoring (Python, C#, TypeScript)
 - `cortex_governance` (op: `remediation_plan`) — Auto-planning from audit results
-- `cortex_tools_catalog` — Discover all 24 tools
+- `cortex_tools_catalog` — Discover all 26 tools
 - `cortex_load` (op: `rules`) — Load governance rules from registry
 - `cortex_check` (op: `dependencies`) — requirements.txt vs installed packages
 - `cortex_governance` (op: `query`) — Active violations count + P0 status
@@ -654,7 +654,7 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py batch
 
 | Type | Location |
 |------|----------|
-| Orchestrators (22 wired) | `cortex/orchestrators/{domain}/` |
+| Orchestrators (17 wired) | `cortex/orchestrators/{domain}/` |
 | MCP Tools (24) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry/Rules | `cortex-registry/` |

@@ -1,12 +1,12 @@
 # CORTEX Documentation Architect Agent
 
-**Version:** 6.0 | **Updated:** 2026-02-17 | **Role:** Comprehensive Documentation Lifecycle Management | **Authority:** Phase 74 + ENH-064 + Phase 8 Stage 5 + cortex-doc.prompt.md v5.1 + Chat01 Digest Integration ✅ | **Content Philosophy:** Rendering-Ready Only ✅
+**Version:** 6.1 | **Updated:** 2026-02-23 | **Role:** Comprehensive Documentation Lifecycle Management | **Authority:** Phase 74 + ENH-064 + Phase 8 Stage 5 + cortex-doc.prompt.md v6.0 + Chat01 Digest Integration ✅ | **Content Philosophy:** Rendering-Ready Only ✅
 
 ---
 
 ## 🚨 Content Philosophy (Chat01 Approved)
 
-**For *.md files in `cortex-docs/content/src/`, this agent generates ONLY rendering-ready content:**
+**For `*.md` files in `cortex-docs/.content/`, this agent generates ONLY rendering-ready content:**
 
 **❌ NEVER Include (Unnecessary Technical Data):**
 - Internal Python implementation details (private methods, class internals)
@@ -93,8 +93,33 @@
 - `cortex_doc_qualify_claims` — Replace subjective claims with evidence-backed metrics
 
 **Integration:** Works with `cortex-gitpages-builder.md` for HTML site generation
-- **This Agent:** Content extraction + Diátaxis + role narratives → content.json
-- **Builder Agent:** content.json → HTML templates → docs/ site
+- **This Agent:** Content extraction + Diátaxis + role narratives → `cortex-docs/.content/` markdown files
+- **Builder Agent:** `cortex-docs/.content/` markdown → HTML templates → `cortex-docs/` site
+
+**Content Path (canonical):** `cortex-docs/.content/` — NOT `cortex-docs/content/src/` or `docs/`
+
+```
+cortex-docs/.content/
+├── index.md
+├── glossary.md
+├── 00-getting-started/
+├── 01-capabilities/    (8 files)
+├── 02-lens/
+├── 03-orchestration/   (10 files — 17 wired orchestrators: 7 core, 3 domain, 7 support)
+├── 04-mcp/             (6 files — 26 active tools)
+├── 05-infrastructure/
+└── 07-diagrams/        (9 files — 6 Mermaid + 3 overview)
+```
+
+**Live Metrics (verified 2026-02-23):**
+
+| Metric | Value | Source |
+|--------|-------|--------|
+| Wired Orchestrators | **17** (7 core, 3 domain, 7 support) | `cortex-registry/core/specifications/*-wiring.yaml` |
+| Active MCP Tools | **26** (28 total — 2 deprecated) | `cortex/mcp/tools/*.get_name()` |
+| CORE Governance Rules | **35** | `cortex-registry/core/tier0-skull/` + `tier1-core/` |
+| Tests | **15,739** collected | `python3 -m pytest --co -q` |
+| Package | `cortex` (single canonical) | `cortex/__init__.py` |
 
 **Orchestrator:** `DocumentationOrchestrator` — path TBD by wiring contract (check `cortex-registry/core/specifications/` before referencing a specific path; `cortex/orchestrators/internal/` is not a canonical wired tier).
 
@@ -165,17 +190,18 @@ Every STS workspace root MUST contain `sts-architecture-d3.html`:
 
 | Gap | Required Content | Target Location | Approach |
 |-----|-----------------|-----------------|----------|
-| **Orchestrator Tiers** | Directory structure, tier precedence, module purposes, governance flow | `capabilities/orchestrator-tiers.md` | High-level architecture explanation using accessible metaphors. NO internal Python details. |
-| **LENS Intelligence** | LENS analysis pipeline, 4-phase process, integration points | `capabilities/lens-intelligence.md` | User-facing capability description with evidence-backed performance metrics. |
-| **7 Enforcement Agents** | Agent roles, validation focus, integration points | `capabilities/enforcement-agents.md` | Conceptual overview of pre-execution gate with agent responsibilities. |
+| **Orchestrator Tiers** | Directory structure, tier precedence, module purposes, governance flow | `cortex-docs/.content/01-capabilities/orchestrator-tiers.md` | High-level architecture explanation using accessible metaphors. NO internal Python details. Reflect actual 17-orchestrator count (7 core, 3 domain, 7 support). |
+| **LENS Intelligence** | LENS analysis pipeline, 4-phase process, integration points | `cortex-docs/.content/02-lens/lens-intelligence.md` | User-facing capability description with evidence-backed performance metrics. |
+| **Enforcement Agents** | Agent roles, validation focus, integration points | `cortex-docs/.content/01-capabilities/enforcement-agents.md` | Conceptual overview of pre-execution gate with agent responsibilities. |
 
 ### P1 Gaps (Important - Incomplete Coverage)
 
 | Gap | Required Content | Target Location | Approach |
 |-----|-----------------|-----------------|----------|
-| **Challenge Engine** | Counter-proposal generation, disagreement protocol | `capabilities/challenge-engine.md` | User experience perspective on how challenges improve code quality. |
-| **SQLite Schema** | High-level audit trail concept (NOT detailed schema) | `glossary.md` expansion | Brief explanation of what's tracked for governance, not table definitions. |
-| **Orchestrator Deep-Dives** | Top 5 orchestrator capabilities (TDD, Refactoring, Git, Deployment, Health) | Individual files in `orchestration/` | User-facing capabilities only, not internal implementation. |
+| **Challenge Engine** | Counter-proposal generation, disagreement protocol | `cortex-docs/.content/01-capabilities/challenge-engine.md` | User experience perspective on how challenges improve code quality. |
+| **SQLite Audit Trail** | High-level audit trail concept (NOT detailed schema) | `cortex-docs/.content/glossary.md` expansion | Brief explanation of what's tracked for governance, not table definitions. |
+| **Orchestrator Deep-Dives** | Top 5 orchestrator capabilities (TDD, Refactoring, Health, Sweep, Upgrade) | `cortex-docs/.content/03-orchestration/` individual files | User-facing capabilities only, not internal implementation. |
+| **MCP Tool Catalog** | All 26 active tools with descriptions and parameters | `cortex-docs/.content/04-mcp/03-tools-catalog.md` | Update tool count from 24/25 → 26; remove deprecated cortex_process_request/cortex_validate_request entries. |
 
 ### Content Generation Rules for Gap Remediation
 

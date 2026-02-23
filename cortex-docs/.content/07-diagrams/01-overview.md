@@ -4,7 +4,7 @@
 title: Architecture Diagrams
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-23
 source_of_truth: cortex/ (live architecture)
 order: 1
 ---
@@ -19,12 +19,25 @@ order: 1
 |---|---------|---------|------------------|
 | 1 | [High-Level Architecture](02-high-level-architecture.md) | System overview — all major components | All |
 | 2 | [Request Flow](03-request-flow.md) | End-to-end request lifecycle | Developers, POs |
-| 3 | [Orchestrator Map](04-orchestrator-map.md) | 22 wired orchestrators across 3 tiers | Developers |
+| 3 | [Orchestrator Map](04-orchestrator-map.md) | 17 wired orchestrators across 3 tiers (7 core, 3 domain, 7 support) | Developers |
 | 4 | [LENS Pipeline](05-lens-pipeline.md) | 8 analyzers → Synthesis | Developers |
-| 5 | [Governance Flow](06-governance-flow.md) | Rule enforcement lifecycle | All |
-| 6 | [MCP Transport](07-mcp-transport.md) | IDE ↔ CORTEX communication | Developers |
-| 7 | [Testing Pyramid](08-testing-pyramid.md) | Test tiers and execution | Developers, POs |
+| 5 | [Governance Flow](06-governance-flow.md) | 35 CORE rule enforcement lifecycle | All |
+| 6 | [MCP Transport](07-mcp-transport.md) | IDE ↔ CORTEX communication (26 tools) | Developers |
+| 7 | [Testing Pyramid](08-testing-pyramid.md) | Test tiers and execution (15,739 tests) | Developers, POs |
 | 8 | [Brain Tier Model](09-brain-tier-model.md) | Intelligence tiers (Perception → Reasoning → Action) | All |
+
+---
+
+## D3.js Interactive Diagrams
+
+Located in `cortex-docs/assets/diagrams/d3/`:
+
+| File | Type | Description |
+|------|------|-------------|
+| `governance-pyramid.html` | Sunburst | Interactive 35-rule governance pyramid |
+| `request-lifecycle-sankey.html` | Sankey | 17-orchestrator request flow |
+| `tdd-knowledge-cycle.html` | Circular flow | RED → GREEN → REFACTOR cycle |
+| `orchestrator-tier-map.html` | Layered | 3-tier orchestrator architecture |
 
 ---
 
@@ -43,4 +56,4 @@ All diagrams use ASCII art for universal compatibility (no external rendering to
 
 ---
 
-*Verified against live CORTEX architecture · 20 February 2026*
+*Verified against live CORTEX architecture · 23 February 2026*

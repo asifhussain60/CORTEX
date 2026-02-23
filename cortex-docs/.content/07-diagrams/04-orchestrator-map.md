@@ -1,11 +1,11 @@
 # Orchestrator Map
 
 ---
-title: 22 Wired Orchestrators Across 3 Tiers
+title: 17 Wired Orchestrators Across 3 Tiers
 type: diagram
 audience: [Software Developers]
-last_verified: 2026-02-21
-source_of_truth: cortex/orchestrators/
+last_verified: 2026-02-23
+source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/*-wiring.yaml
 order: 4
 ---
 
@@ -24,7 +24,7 @@ cortex/orchestrators/
 
 ```
 OrchestratorBase (cortex/core/orchestrator_base.py)
-    │  All 22 wired orchestrators inherit from this base
+    │  17 wired orchestrators satisfy the IOrchestrator protocol
     │  Auto-logs every execute()/run() call to .cortex-runtime/audit.db (SQLite WAL)
     │
     ├── CORE TIER (7 wired)
@@ -77,4 +77,4 @@ Communication uses the **OrchestratorEventBus** (`cortex/infrastructure/orchestr
 
 ---
 
-*Verified against `cortex/orchestrators/` directory · 20 February 2026*
+*Verified against `cortex/orchestrators/` directory + wiring YAML · 23 February 2026*

@@ -1,5 +1,5 @@
 # CORTEX Documentation - Automated Discovery, Generation & Cleanup
-**Authority:** cortex-impl-map.yaml | **Status:** ✅ PRODUCTION READY
+**Authority:** cortex-impl-map.yaml | **Updated:** 2026-02-23 | **Status:** ✅ PRODUCTION READY
 
 ---
 
@@ -93,17 +93,44 @@ class DiscoveryOrchestrator:
     """Scan codebase for undocumented components."""
     
     def scan_orchestrators(self):
-        """Find all orchestrator classes."""
+        """Find all wired orchestrator classes.
+        
+        Canonical wiring contract (as of 2026-02-23):
+          - Core (7):   InteractionOrchestrator, IntentRouter, TDDOrchestrator,
+                        WorkflowOrchestrator, MasterOrchestrator, EnforcementOrchestrator,
+                        ConversationOrchestrator
+          - Domain (3): RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator
+          - Support (7): OnboardingOrchestrator, UpgradeOrchestrator, RollbackOrchestrator,
+                         SetupOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator,
+                         VacuumOrchestrator
+          TOTAL WIRED: 17 (source: cortex-registry/core/specifications/*-wiring.yaml)
+        """
         scan: cortex/orchestrators/
+        source_of_truth: cortex-registry/core/specifications/  # wiring YAML files
         results: List[OrchestratorMetadata]
         
     def scan_mcp_tools(self):
-        """Find all MCP tool decorators."""
+        """Find all MCP tool implementations.
+        
+        Active canonical tools (26 as of 2026-02-23 — verified via get_name() returns):
+          cortex_ask, cortex_challenge, cortex_check, cortex_classify, cortex_dashboard,
+          cortex_debug, cortex_generate_tests, cortex_git, cortex_governance, cortex_knowledge,
+          cortex_load, cortex_master_plan, cortex_metrics, cortex_onboard, cortex_orchestrator,
+          cortex_plan, cortex_refactor, cortex_request_lifecycle, cortex_scaffold_files,
+          cortex_tools_catalog, cortex_total_recall, cortex_vacuum, cortex_validate,
+          cortex_verify, cortex_vision, cortex_workflow
+          (cortex_process_request + cortex_validate_request are deprecated — not counted)
+        """
         scan: cortex/mcp/tools/
         results: List[MCPToolMetadata]
         
     def scan_governance(self):
-        """Find all CORE rules. CANONICAL PATH: cortex-registry/core/ (NOT cortex_brain/)"""
+        """Find all CORE rules. CANONICAL PATH: cortex-registry/core/ (NOT cortex_brain/)
+        
+        35 CORE rules active as of 2026-02-23:
+          - tier0-skull/skull-rules.yaml  (immutable skull-tier P0 rules)
+          - tier1-core/core-rules.yaml    (CORE-002 through CORE-064)
+        """
         scan: cortex-registry/core/          # ✅ CANONICAL — cortex_brain/ is DELETED
         results: List[GovernanceRule]
 
@@ -151,13 +178,15 @@ print("✅ PHASE 2: GENERATION COMPLETE")
 ```
 
 **Generated files:**
-- `docs/00-README.md` - Main entry point
-- `docs/01-getting-started/` - Installation, quickstart (3 files)
-- `docs/02-architecture/` - Brain tiers, orchestrators, infrastructure (4 files)
-- `docs/03-api-reference/` - Orchestrators, MCP tools, governance (3 sections)
-- `docs/04-guides/` - How-to guides (5+ files)
-- `docs/05-tutorials/` - Step-by-step tutorials (4+ files)
-- `docs/06-reference/` - API reference, glossary, rules (3+ files)
+- `cortex-docs/.content/index.md` - Main entry point
+- `cortex-docs/.content/00-getting-started/` - Installation, quickstart
+- `cortex-docs/.content/01-capabilities/` - Platform capabilities (8 files)
+- `cortex-docs/.content/02-lens/` - LENS intelligence pipeline
+- `cortex-docs/.content/03-orchestration/` - 17 wired orchestrators across 3 tiers (10 files)
+- `cortex-docs/.content/04-mcp/` - 26 MCP tools catalog (6 files)
+- `cortex-docs/.content/05-infrastructure/` - Deployment, observability
+- `cortex-docs/.content/07-diagrams/` - Architecture diagrams (9 files)
+- `cortex-docs/.content/glossary.md` - Terminology reference
 
 ### Phase 4: DIAGRAMS (Generate all visualizations)
 ```python
@@ -167,22 +196,22 @@ class DiagramGenerationOrchestrator:
     def generate_all_diagrams(self):
         """Generate 10 diagrams total."""
         
-        # Mermaid (6 diagrams)
+        # Mermaid (6 diagrams) — stored in cortex-docs/.content/07-diagrams/
         mermaid = [
             ("approval-gate-decision-tree.mmd", "flowchart", "Complexity scoring flow"),
             ("error-recovery-paths.mmd", "flowchart", "Error handling recovery"),
             ("circuit-breaker-state-machine.mmd", "stateDiagram", "Resilience pattern"),
-            ("master-orchestrator-sequence.mmd", "sequenceDiagram", "Execution protocol"),
+            ("master-orchestrator-sequence.mmd", "sequenceDiagram", "17-orchestrator execution protocol"),
             ("tdd-workflow-phases.mmd", "flowchart", "RED → GREEN → REFACTOR"),
             ("governance-rule-categories.mmd", "graph", "35 CORE rules pyramid"),
         ]
         
-        # D3.js (4 diagrams)
+        # D3.js (4 diagrams) — stored in cortex-docs/assets/diagrams/d3/
         d3js = [
-            ("governance-pyramid.html", "sunburst", "Interactive governance pyramid"),
-            ("request-lifecycle-sankey.html", "sankey", "Request flow diagram"),
+            ("governance-pyramid.html", "sunburst", "Interactive 35-rule governance pyramid"),
+            ("request-lifecycle-sankey.html", "sankey", "17-orchestrator request flow diagram"),
             ("tdd-knowledge-cycle.html", "circular", "TDD workflow cycle"),
-            ("domain-brain-architecture.html", "layered", "Domain brain layers"),
+            ("orchestrator-tier-map.html", "layered", "3-tier orchestrator architecture (7 core, 3 domain, 7 support)"),
         ]
         
         return {
@@ -194,16 +223,16 @@ print("✅ PHASE 3: DIAGRAMS COMPLETE")
 ```
 
 **Generated diagrams:**
-- `docs/02-architecture/_diagrams/approval-gate-decision-tree.mmd`
-- `docs/02-architecture/_diagrams/error-recovery-paths.mmd`
-- `docs/02-architecture/_diagrams/circuit-breaker-state-machine.mmd`
-- `docs/02-architecture/_diagrams/master-orchestrator-sequence.mmd`
-- `docs/02-architecture/_diagrams/tdd-workflow-phases.mmd`
-- `docs/02-architecture/_diagrams/governance-rule-categories.mmd`
-- `docs/_diagrams/d3/governance-pyramid.html` (+ data generator)
-- `docs/_diagrams/d3/request-lifecycle-sankey.html` (+ data generator)
-- `docs/_diagrams/d3/tdd-knowledge-cycle.html`
-- `docs/_diagrams/d3/domain-brain-architecture.html`
+- `cortex-docs/.content/07-diagrams/approval-gate-decision-tree.mmd`
+- `cortex-docs/.content/07-diagrams/error-recovery-paths.mmd`
+- `cortex-docs/.content/07-diagrams/circuit-breaker-state-machine.mmd`
+- `cortex-docs/.content/07-diagrams/master-orchestrator-sequence.mmd`
+- `cortex-docs/.content/07-diagrams/tdd-workflow-phases.mmd`
+- `cortex-docs/.content/07-diagrams/governance-rule-categories.mmd`
+- `cortex-docs/assets/diagrams/d3/governance-pyramid.html`
+- `cortex-docs/assets/diagrams/d3/request-lifecycle-sankey.html`
+- `cortex-docs/assets/diagrams/d3/tdd-knowledge-cycle.html`
+- `cortex-docs/assets/diagrams/d3/orchestrator-tier-map.html`
 
 ### Phase 4: BUILD (mkdocs --strict)
 ```bash
@@ -552,7 +581,7 @@ Before marking STS docs complete, verify:
 ### Diagram Types & Locations
 
 #### Mermaid Diagrams (Static, Version-Controlled)
-**Location:** `docs/04-architecture/_diagrams/`
+**Location:** `cortex-docs/.content/07-diagrams/`
 
 ```yaml
 diagrams:
@@ -586,7 +615,7 @@ generation_command: |
 ```
 
 #### D3.js Visualizations (Interactive, Dynamic)
-**Location:** `docs/_diagrams/d3/`
+**Location:** `cortex-docs/assets/diagrams/d3/`
 
 ```yaml
 visualizations:
@@ -1097,26 +1126,26 @@ END
 After running `/doc-maintenance`, the following are created:
 
 ### Documentation Files
-- `docs/04-architecture/` - Core architecture docs
-- `docs/02-orchestrators/` - Orchestrator documentation
-- `docs/01-cortex-brain/` - Brain tier documentation
-- `docs/06-tutorials/` - Tutorials with diagrams
+- `cortex-docs/.content/01-capabilities/` - Core capabilities docs (8 files)
+- `cortex-docs/.content/03-orchestration/` - Orchestrator documentation (10 files, 17 wired orchestrators)
+- `cortex-docs/.content/02-lens/` - LENS intelligence pipeline
+- `cortex-docs/.content/07-diagrams/` - Architecture diagrams (9 files)
 
 ### Diagram Files
 
-**Mermaid (Static):**
-- `docs/04-architecture/_diagrams/approval-gate-decision-tree.mmd`
-- `docs/04-architecture/_diagrams/error-recovery-paths.mmd`
-- `docs/04-architecture/_diagrams/circuit-breaker-state-machine.mmd`
-- `docs/02-orchestrators/diagrams/master-orchestrator-sequence.mmd`
-- `docs/04-architecture/_diagrams/tdd-workflow-phases.mmd`
-- `docs/04-architecture/_diagrams/governance-rule-categories.mmd`
+**Mermaid (Static — `cortex-docs/.content/07-diagrams/`):**
+- `cortex-docs/.content/07-diagrams/approval-gate-decision-tree.mmd`
+- `cortex-docs/.content/07-diagrams/error-recovery-paths.mmd`
+- `cortex-docs/.content/07-diagrams/circuit-breaker-state-machine.mmd`
+- `cortex-docs/.content/07-diagrams/master-orchestrator-sequence.mmd`
+- `cortex-docs/.content/07-diagrams/tdd-workflow-phases.mmd`
+- `cortex-docs/.content/07-diagrams/governance-rule-categories.mmd`
 
-**D3.js (Interactive):**
-- `docs/_diagrams/d3/governance-pyramid.html` + data generator
-- `docs/_diagrams/d3/request-lifecycle-sankey.html` + data generator
-- `docs/_diagrams/d3/tdd-knowledge-cycle.html`
-- `docs/_diagrams/d3/domain-brain-architecture.html`
+**D3.js (Interactive — `cortex-docs/assets/diagrams/d3/`):**
+- `cortex-docs/assets/diagrams/d3/governance-pyramid.html`
+- `cortex-docs/assets/diagrams/d3/request-lifecycle-sankey.html`
+- `cortex-docs/assets/diagrams/d3/tdd-knowledge-cycle.html`
+- `cortex-docs/assets/diagrams/d3/orchestrator-tier-map.html`
 
 ### Reports
 - `docs/04-architecture/DIAGRAM-VISUALIZATION-RECOMMENDATIONS.md`

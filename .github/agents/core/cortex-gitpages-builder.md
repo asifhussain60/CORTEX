@@ -1,6 +1,6 @@
 # CORTEX GitPages Builder Agent
 
-**Updated:** 2026-02-16 | **Role:** HTML Site Generation & Deployment | **Authority:** Data-Driven Static HTML5 Architecture (Phase 1) | **Integration:** cortex-docs/ directory
+**Updated:** 2026-02-23 | **Role:** HTML Site Generation & Deployment | **Authority:** Data-Driven Static HTML5 Architecture (Phase 1) | **Integration:** cortex-docs/ directory
 
 ---
 
@@ -10,12 +10,21 @@
 
 **Design Authority:** cortex-docs/ARCHITECTURE-RECOMMENDATION.md (2026-02-16)
 - **Architecture:** Data-Driven Static HTML5 (no TypeScript, no SPA)
-- **Content Source:** cortex-docs/content/src/*.md (45 markdown files)
+- **Content Source:** `cortex-docs/.content/` (canonical — NOT `cortex-docs/content/src/`)
 - **Data Layer:** cortex-docs/assets/data/content.json (JSON extraction)
 - **Views:** cortex-docs/views/*.html (3 role-specific views)
 - **Entry Point:** cortex-docs/index.html (role selector panel)
 - **Theme:** Glassmorphism v4.0 (cyan #00d4ff, purple #7b61ff, emerald #10b981)
 - **Deployment:** GitHub Pages via cortex-docs/ directory
+
+**Live Metrics (verified 2026-02-23):**
+
+| Metric | Value |
+|--------|-------|
+| Wired Orchestrators | **17** (7 core, 3 domain, 7 support) |
+| Active MCP Tools | **26** (28 total — 2 deprecated) |
+| CORE Rules | **35** |
+| Tests | **15,739** |
 
 **Key Capabilities:**
 - JSON content extraction from markdown files
@@ -29,31 +38,43 @@
 ```
 cortex-docs/
 ├── index.html                 # Role selector (3-persona panel)
+├── index-role-selector.html   # Alternate role selector entry
 ├── views/
 │   ├── business-leader.html   # Filtered view for Business Leaders
 │   ├── product-owner.html     # Filtered view for POs
 │   └── software-engineer.html # Filtered view for Engineers
 ├── assets/
 │   ├── data/
-│   │   └── content.json       # JSON data store (2.5MB, 44 files)
+│   │   └── content.json       # JSON data store (extracted from .content/)
+│   ├── diagrams/
+│   │   └── d3/                # D3.js interactive diagrams (4 files)
 │   ├── css/
 │   │   └── glassmorphism.css  # Theme (glassmorphism v4.0)
 │   └── js/
 │       └── content-loader.js  # Client-side JSON → DOM rendering
-├── content/
-│   └── src/                   # Source markdown (45 files, 9 categories)
+├── .content/                  # ← CANONICAL content source (markdown)
+│   ├── index.md
+│   ├── glossary.md
+│   ├── 00-getting-started/
+│   ├── 01-capabilities/       (8 files)
+│   ├── 02-lens/
+│   ├── 03-orchestration/      (10 files)
+│   ├── 04-mcp/                (6 files)
+│   ├── 05-infrastructure/
+│   └── 07-diagrams/           (9 files)
 └── pipeline/
-    └── extract-json.py        # JSON extraction script
+    └── extract-json.py        # JSON extraction script (.content/ → content.json)
 ```
 
 **Workflow Trigger:**
 ```yaml
 trigger:
-  path: cortex-docs/content/src/*.md
+  path: cortex-docs/.content/**/*.md   # ← canonical content source path
   action: extract_json → commit content.json
 
 manual_refresh:
   command: python cortex-docs/pipeline/extract-json.py
+  input:  cortex-docs/.content/
   output: cortex-docs/assets/data/content.json
   auto_commit: true
 ```
@@ -73,20 +94,21 @@ manual_refresh:
 │         ├─ Applies Diátaxis framework                        │
 │         ├─ Generates role narratives (3 personas)            │
 │         ├─ Prepares diagrams (Mermaid → SVG)                │
-│         └─ Outputs: content.json                             │
+│         └─ Outputs: cortex-docs/.content/*.md               │
 │                                                              │
 │         ↓                                                    │
 │                                                              │
 │  cortex-gitpages-builder.md (THIS AGENT)                     │
 │  (Presentation generation)                                   │
 │         │                                                    │
-│         ├─ Loads content.json                                │
+│         ├─ Reads cortex-docs/.content/*.md                   │
+│         ├─ Runs pipeline/extract-json.py → content.json      │
 │         ├─ Applies glassmorphism templates                   │
 │         ├─ Generates 3 role landing pages                    │
-│         ├─ Generates 15 child pages                          │
+│         ├─ Generates child pages                             │
 │         ├─ Embeds D3.js visualizations                       │
 │         ├─ Optimizes assets (minify)                         │
-│         └─ Outputs: docs/ (GitHub Pages ready)              │
+│         └─ Outputs: cortex-docs/ (GitHub Pages ready)       │
 │                                                              │
 │         ↓                                                    │
 │                                                              │

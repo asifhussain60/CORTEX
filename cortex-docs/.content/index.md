@@ -4,13 +4,13 @@
 title: CORTEX Architecture Overview
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-22
+last_verified: 2026-02-23
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 format: diátaxis-explanation
 voice: third-person-blended
 ---
 
-> **Notice:** This documentation represents CORTEX as verified against live code on 22 February 2026. All metrics, module paths, and counts are validated against the running codebase. Every `cortex_intelligence/`, `cortex_lens/`, and `cortex.brain` reference has been eliminated — those packages were dissolved during the Cohesive Brain Refactor.
+> **Notice:** This documentation represents CORTEX as verified against live code on 23 February 2026. All metrics, module paths, and counts are validated against the running codebase. Every `cortex_intelligence/`, `cortex_lens/`, and `cortex.brain` reference has been eliminated — those packages were dissolved during the Cohesive Brain Refactor.
 
 ---
 
@@ -23,23 +23,22 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 **What makes it different from other dev tools:**
 
 - Traditional tools answer questions. CORTEX **orchestrates entire workflows** — from intent classification through TDD enforcement to code delivery.
-- One canonical Python package (`cortex`), 22 wired orchestrators across 3 tiers, 25 MCP tools, 22 enforced governance rules.
+- One canonical Python package (`cortex`), 17 wired orchestrators across 3 tiers, 26 MCP tools, 35 active CORE rules governance rules.
 - TDD is not optional. CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX request. No exceptions.
 - Everything is Git-backed. No PostgreSQL, no MongoDB — just YAML files in `cortex-registry/` versioned alongside your code.
 
 ---
 
-## System Metrics (22 Feb 2026 — Live)
+## System Metrics (23 Feb 2026 — Live)
 
 | Metric | Value | Status |
 |--------|-------|--------|
 | **Package** | 1 canonical (`cortex`) | ✅ 3→1 consolidation complete |
-| **Orchestrators** | 22 wired (6 core, 6 domain, 10 support) | ✅ IOrchestrator protocol enforced |
-| **MCP Tools** | 25 canonical | ✅ Pylance-style stdio server |
+| **Orchestrators** | 17 wired (7 core, 3 domain, 7 support) | ✅ IOrchestrator protocol enforced |
+| **MCP Tools** | 26 active (28 total — 2 deprecated) | ✅ Pylance-style stdio server |
 | **Top-level Dirs** | 16 canonical under `cortex/` | ✅ 59→16 cleanup complete |
-| **Governance Rules** | 22 active (35 defined, 33 CORE-*) | ✅ Enforced at pre-commit + CI + runtime |
-| **Test Suite** | 15,663 tests collected | ✅ 696 golden, 177 phase tests |
-| **Golden Tests** | 696 collected (CORE-055 contract) | ✅ Zero regression |
+| **Governance Rules** | 35 active CORE rules | ✅ Enforced at pre-commit + CI + runtime |
+| **Test Suite** | 15,739 tests collected | ✅ Parallel xdist batch runner |
 | **Parallel Testing** | pytest-xdist (`-n auto --dist loadscope`) | ✅ CortexXdistPlugin batch runner |
 | **Enterprise Patterns** | 9 patterns in registry | ✅ mediator, strategy, observer, factory, etc. |
 | **Sweep Completeness** | CORE-064 enforced via SweepCatalogueOrchestrator | ✅ No partial sweeps across sessions |
@@ -53,18 +52,18 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 ```
   ┌───────────────────────────────────────────────────────────────┐
   │                     CORTEX PLATFORM v1.0.0                    │
-  │             1 Package · 22 Orchestrators · 25 MCP Tools       │
+  │             1 Package · 17 Orchestrators · 26 MCP Tools       │
   │                                                               │
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │
   │  │ MCP Gateway │──▶│  Orchestration   │──▶│ Intelligence  │  │
-  │  │ 25 tools    │   │  22 wired        │   │ LENS + Brain  │  │
+  │  │ 26 tools    │   │  17 wired        │   │ LENS + Brain  │  │
   │  └─────────────┘   │  3 tiers         │   │ 8 analyzers   │  │
   │         │          └──────────────────┘   └───────────────┘  │
   │         ▼                   │                     │           │
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │
   │  │ Governance  │   │  Testing         │   │ Registry      │  │
-  │  │ 22 rules    │   │  15,663 tests    │   │ Git-backed    │  │
-  │  │ CORE-064    │   │  696 golden      │   │ YAML SSOT     │  │
+  │  │ 35 rules    │   │  15,739 tests    │   │ Git-backed    │  │
+  │  │ CORE-064    │   │  xdist batch     │   │ YAML SSOT     │  │
   │  └─────────────┘   └──────────────────┘   └───────────────┘  │
   └───────────────────────────────────────────────────────────────┘
 ```
@@ -118,5 +117,5 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-*CORTEX v1.0.0 · 22 February 2026 · 22 wired orchestrators · 25 MCP tools · 22 CORE rules · 15,663 tests · 696 golden · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
+*CORTEX v1.0.0 · 23 February 2026 · 17 wired orchestrators · 26 MCP tools · 35 CORE rules · 15,739 tests · 696 golden · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
 

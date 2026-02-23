@@ -36,7 +36,7 @@ order: 8
    ╱          Smoke Tests (subset)             ╲
   ╱─────────────────────────────────────────────╲
 
-  Total: 15,663 tests collected
+  Total: 15,739 tests collected
 ```
 
 ## Execution Strategy

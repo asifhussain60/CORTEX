@@ -9,8 +9,8 @@
 **Single source of truth** for how CORTEX orchestrators work together across ALL modes.
 
 **Architecture (Post-Refactor):**
-- 22 wired orchestrators in `cortex/orchestrators/` (3 tiers: core, domain, support)
-- 24 MCP tools in `cortex/mcp/tools/`
+- 17 wired orchestrators in `cortex/orchestrators/` (3 tiers: core, domain, support)
+- 26 MCP tools in `cortex/mcp/tools/`
 - 1 package: `cortex` (no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---
@@ -81,7 +81,7 @@ USER REQUEST → STAGE 1: Interaction → STAGE 2: Intent → STAGE 3: Intellige
 **Coordinator:** `MasterOrchestrator`  
 **Location:** `cortex/orchestrators/core/master_orchestrator.py`
 
-### Domain Orchestrators (10 domains)
+### Domain Orchestrators (3 tiers)
 
 | Domain | Location | Key Orchestrators |
 |--------|----------|-------------------|

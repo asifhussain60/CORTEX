@@ -15,7 +15,7 @@ order: 1
 
 ## Architecture
 
-CORTEX has **22 wired orchestrators** across **3 tiers**, all satisfying the `IOrchestrator` protocol. The canonical wiring specification lives in `cortex-registry/core/specifications/`.
+CORTEX has **17 wired orchestrators** across **3 tiers**, all satisfying the `IOrchestrator` protocol. The canonical wiring specification lives in `cortex-registry/core/specifications/`.
 
 | Tier | Count | Key Orchestrators |
 |------|-------|-----------------|
@@ -23,7 +23,7 @@ CORTEX has **22 wired orchestrators** across **3 tiers**, all satisfying the `IO
 | **Domain** (Tier 2) | 3 | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator |
 | **Support** (Tier 3) | 7 | OnboardingOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator, VacuumOrchestrator |
 
-> **Note on total codebase:** `cortex/orchestrators/` contains many more classes (strategy implementations, mixin helpers, specialized sub-components). The **22 wired** are the canonical IOrchestrator-compliant entry points registered in the wiring specifications.
+> **Note on total codebase:** `cortex/orchestrators/` contains many more classes (strategy implementations, mixin helpers, specialized sub-components). The **17 wired** are the canonical IOrchestrator-compliant entry points registered in the wiring specifications.
 
 ---
 

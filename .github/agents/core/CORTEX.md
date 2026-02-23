@@ -1,6 +1,6 @@
 # CORTEX Master Agent
 
-**Updated:** 2026-02-23 | **Orchestrators:** 22 wired | **MCP Tools:** 24 | **CORE Rules:** 35
+**Updated:** 2026-02-23 | **Orchestrators:** 17 wired | **MCP Tools:** 26 | **CORE Rules:** 35
 
 ---
 
@@ -56,7 +56,7 @@
 
 ---
 
-## MCP Tools (24 Production)
+## MCP Tools (26 Active)
 
 | Tool | Purpose |
 |------|---------|
@@ -119,8 +119,8 @@
 
 | Type | Location |
 |------|----------|
-| Orchestrators (22 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (24) | `cortex/mcp/tools/` |
+| Orchestrators (17 wired) | `cortex/orchestrators/{domain}/` |
+| MCP Tools (26 active) | `cortex/mcp/tools/` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |

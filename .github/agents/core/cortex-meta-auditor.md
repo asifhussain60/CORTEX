@@ -61,8 +61,8 @@ Unlike `cortex-auditor.md` (which audits source code), this agent audits **docum
 
 | # | Check | Pass Criteria |
 |---|-------|---------------|
-| 1 | Orchestrator count | All agents say "22 wired" |
-| 2 | MCP tool count | All agents say "24 production tools" |
+| 1 | Orchestrator count | All agents say "17 wired" |
+| 2 | MCP tool count | All agents say "26 active tools" |
 | 3 | CORE rules count | All agents say "35 active" |
 | 4 | Package name | All agents say `cortex` (no `cortex_intelligence`, `cortex_lens`) |
 | 5 | Deleted paths | No refs to `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
@@ -121,11 +121,11 @@ All `.github/` documentation MUST use these values:
 
 | Metric | Canonical Value |
 |--------|----------------|
-| Orchestrators | **22 wired** across 10 domains |
-| MCP Tools | **24 production tools** |
+| Orchestrators | **17 wired** across 3 tiers |
+| MCP Tools | **26 active tools** |
 | CORE Rules | **35 active** (+ 2 AC rules = 37 total) |
 | Package | **`cortex`** (single) |
-| Tests | **15,230** (486 golden, 177 phase) |
+| Tests | **15,739** (486 golden, 177 phase) |
 | Audit Checks | **19-Point** production readiness (Checks #1–#19) |
 | Meta-Audit Checks | **23 checks** |
 | Workflow Primitive | `primitives/validation/detect-fix-rescan-loop` |
@@ -150,7 +150,7 @@ All `.github/` documentation MUST use these values:
 #### P1 — Wrong Counts / Versions
 | File | Current | Should Be |
 |------|---------|-----------|
-| {file} | "52 orchestrators" | "22 wired orchestrators" |
+| {file} | "52 orchestrators" | "17 wired orchestrators" |
 
 #### P2 — Template Duplicates
 | File | Issue |
@@ -203,7 +203,7 @@ cortex_capture_metrics (replaced by cortex_metrics op=capture)
 cortex_onboard_repository_v3 (replaced by cortex_onboard op=full)
 cortex_audit_remediation_plan (replaced by cortex_governance op=remediation_plan)
 "24 orchestrators" / "28 MCP tools" / "120 orchestrators"
-"25 tools" / "25 MCP tools"
+"25 tools" / "25 MCP tools" / "24 MCP tools" (all stale — canonical is 26 active tools)
 "22 rules" (must say "35 CORE rules" or "35 active")
 ```
 

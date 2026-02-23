@@ -81,4 +81,4 @@ Templates are read by the WorkflowEngine (`cortex/core/workflow_engine.py`) and 
 
 **Developer:** "Responses are inline (CORE-002). There's no generated report file to hunt for. CORTEX mirrors my intent back in plain English, I confirm, and execution begins — all right here in VS Code."
 
-*Verified against response template standards · 22 February 2026*
+*Verified against response template standards · 23 February 2026*

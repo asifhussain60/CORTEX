@@ -26,7 +26,7 @@ order: 4
        ▼
 [Stage 2: Unit Tests (Parallel)]
        │ pytest -n auto --dist loadscope
-       │ 15,663 tests across all tiers
+       │ 15,739 tests across all tiers
        │
        ▼
 [Stage 3: Golden Tests (Serial)]

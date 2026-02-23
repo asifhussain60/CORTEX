@@ -107,7 +107,7 @@ Action required: [remediation step]
 ## Canonical Reference
 
 - Package: `cortex` (single canonical import)
-- Orchestrators: 22 wired in `cortex/orchestrators/` (10 domains)
+- Orchestrators: 17 wired in `cortex/orchestrators/` (3 tiers)
 - MCP Tools: 24 in `cortex/mcp/tools/`
 - Governance rules: 35 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules)
-- Tests: 15,230 total (486 golden, 177 phase)
+- Tests: 15,739 total (486 golden, 177 phase)
