@@ -953,13 +953,15 @@ def cortex_plex_workflow_iafd_match(
 
 
 def cortex_plex_semantic_rename(
-    root_path: str = "G:\\FLICKS\\Wicked",
+    root_path: str = "G:\\FLICKS",
+    studio_filter: Optional[str] = None,
     use_llm: bool = True,
     llm_provider: str = "openai",
     llm_api_key: Optional[str] = None,
     min_confidence: float = 0.85,
     enable_duplicate_detection: bool = True,
     enable_snapshots: bool = True,
+    discover_studios: bool = True,
     dry_run: bool = True,
 ) -> Dict[str, Any]:
     """
@@ -970,17 +972,20 @@ def cortex_plex_semantic_rename(
     - SHA256-based duplicate detection
     - SQLite snapshot + rollback capability
     - Hybrid LLM/rule-based routing
+    - Auto-discovery of all studios in library
 
     Example: "Chad Alva does Jojo Kiss.mp4" → "Chad Does Jojo.mp4"
 
     Args:
-        root_path: Directory to process (default: ``G:\\FLICKS\\Wicked``).
+        root_path: Directory to process (default: ``G:\\FLICKS``, scans all subdirectories).
+        studio_filter: Limit to specific studio (e.g., ``"Wicked"``), or None for all studios.
         use_llm: Enable LLM semantic renaming (default: True).
         llm_provider: LLM provider (``openai`` or ``anthropic``).
         llm_api_key: API key for LLM provider (required if ``use_llm=True``).
         min_confidence: Minimum confidence for automated renames (0.0-1.0).
         enable_duplicate_detection: SHA256 collision prevention (default: True).
         enable_snapshots: SQLite snapshot before operations (default: True).
+        discover_studios: Auto-discover all studios in root_path (default: True).
         dry_run: Preview mode (no filesystem modifications).
 
     Returns:
@@ -990,24 +995,28 @@ def cortex_plex_semantic_rename(
         - `files_renamed`: Files actually renamed (0 if dry_run=True).
         - `proposals_count`: Rename proposals generated.
         - `duplicates_detected`: Collision count.
+        - `studios_discovered`: List of studios found in library.
         - `snapshot_id`: Snapshot ID for rollback (if enabled).
         - `llm_used`: Whether LLM was used.
         - `duration_seconds`: Total time.
 
     Example::
 
-        # Preview with LLM
+        # Discover all studios and preview renames
         result = cortex_plex_semantic_rename(
-            root_path="G:\\FLICKS\\Wicked",
+            root_path="G:\\FLICKS",
+            discover_studios=True,
             use_llm=True,
             llm_api_key="sk-...",
             dry_run=True
         )
+        print(f"Studios: {result['studios_discovered']}")
         print(f"Proposals: {result['proposals_count']}")
 
-        # Apply changes
+        # Apply changes to specific studio
         result = cortex_plex_semantic_rename(
-            root_path="G:\\FLICKS\\Wicked",
+            root_path="G:\\FLICKS",
+            studio_filter="Wicked",
             use_llm=True,
             llm_api_key="sk-...",
             dry_run=False
@@ -1021,6 +1030,17 @@ def cortex_plex_semantic_rename(
     try:
         root = Path(root_path)
 
+        # Discover all studios if requested
+        studios_discovered = []
+        if discover_studios:
+            from cortex.tools.media.video_library_scanner import VideoLibraryScanner
+            scanner = VideoLibraryScanner(root=root)
+            files = scanner.scan()
+            # Extract unique studios from discovered files
+            studios_set = {f.studio for f in files if f.studio}
+            studios_discovered = sorted(studios_set)
+            logger.info(f"Discovered {len(studios_discovered)} studios: {studios_discovered}")
+
         # Map provider string to enum
         provider_map = {
             "openai": LLMProvider.OPENAI,
@@ -1031,6 +1051,7 @@ def cortex_plex_semantic_rename(
         # Initialize orchestrator with enhanced features
         orchestrator = PlexWorkflowOrchestrator(
             root=root,
+            studio_filter=studio_filter,
             dry_run=dry_run,
             normalize_filenames=True,
             use_llm_semantic=use_llm,
@@ -1055,6 +1076,8 @@ def cortex_plex_semantic_rename(
                 for step in result.step_results
             ),
             "duplicates_detected": 0,  # TODO: Extract from duplicate detector
+            "studios_discovered": studios_discovered,
+            "studio_filter": studio_filter,
             "snapshot_id": (
                 orchestrator.current_snapshot.snapshot_id
                 if orchestrator.current_snapshot

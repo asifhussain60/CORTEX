@@ -1,13 +1,14 @@
 """
 Plex Semantic Rename — Usage Example
 
-Demonstrates the new LLM-powered semantic renaming workflow for G:\FLICKS\Wicked.
+Demonstrates LLM-powered semantic renaming for ANY studio in G:\\FLICKS\\.
 
 This script showcases:
 1. LLM semantic understanding ("Chad Alva does Jojo Kiss" → "Chad Does Jojo")
-2. Duplicate detection and collision prevention
-3. SQLite snapshot + rollback capability
-4. Hybrid LLM/rule-based routing
+2. Studio auto-discovery (scans all subdirectories)
+3. Duplicate detection and collision prevention
+4. SQLite snapshot + rollback capability
+5. Hybrid LLM/rule-based routing
 
 **Two Modes:**
 - **IN_CONTEXT (VS Code):** Uses current GitHub Copilot conversation (no API key needed)
@@ -30,20 +31,24 @@ def main_in_context():
     Run semantic rename in VS Code with GitHub Copilot (IN_CONTEXT mode).
     
     This mode uses the current conversation context - no API keys needed!
+    Discovers all studios in G:\\FLICKS automatically.
     """
     print("=" * 80)
     print("PLEX SEMANTIC RENAME — IN_CONTEXT MODE (VS Code Copilot)")
     print("=" * 80)
     print()
     print("🤖 Using current GitHub Copilot conversation (no API key required)")
+    print("🔍 Auto-discovering all studios in G:\\FLICKS")
     print()
     
-    # STEP 1: Preview with in-context LLM
-    print("STEP 1: PREVIEW (DRY RUN)")
+    # STEP 1: Preview with in-context LLM (all studios)
+    print("STEP 1: PREVIEW (DRY RUN - ALL STUDIOS)")
     print("-" * 80)
     
     result = cortex_plex_semantic_rename(
-        root_path="G:\\FLICKS\\Wicked",
+        root_path="G:\\FLICKS",
+        studio_filter=None,  # Process ALL studios
+        discover_studios=True,  # Auto-discover studio directories
         use_llm=True,
         llm_provider="in_context",  # 🎯 Use VS Code Copilot conversation
         llm_api_key=None,  # Not needed for in-context mode
@@ -55,6 +60,7 @@ def main_in_context():
     
     print(f"✅ Success: {result['success']}")
     print(f"📁 Total files: {result['total_files']}")
+    print(f"🏢 Studios discovered: {', '.join(result.get('studios_discovered', []))}")
     print(f"📝 Rename proposals: {result['proposals_count']}")
     print(f"🤖 Mode: IN_CONTEXT (GitHub Copilot)")
     print(f"⏱️  Duration: {result['duration_seconds']}s")
@@ -72,7 +78,14 @@ def main_in_context():
         print(f"  {icon} {step['name']}: {step['status']} ({step['duration_ms']}ms)")
     print()
     
-    # STEP 2: Apply changes
+    # STEP 2: Optionally filter to specific studio
+    studio_filter = None
+    if result.get('studios_discovered'):
+        user_studio = input(f"Apply to specific studio? (leave blank for all, or choose: {', '.join(result['studios_discovered'])}): ")
+        if user_studio.strip():
+            studio_filter = user_studio.strip()
+    
+    # STEP 3: Apply changes
     user_input = input("Apply rename proposals? (yes/no): ")
     
     if user_input.lower() != "yes":
@@ -80,7 +93,9 @@ def main_in_context():
         return
     
     result_apply = cortex_plex_semantic_rename(
-        root_path="G:\\FLICKS\\Wicked",
+        root_path="G:\\FLICKS",
+        studio_filter=studio_filter,
+        discover_studios=False,  # Already discovered
         use_llm=True,
         llm_provider="in_context",
         llm_api_key=None,
@@ -91,6 +106,7 @@ def main_in_context():
     )
     
     print(f"✅ Success: {result_apply['success']}")
+    print(f"🏢 Studio filter: {result_apply.get('studio_filter', 'All')}")
     print(f"📝 Files renamed: {result_apply['files_renamed']}")
     print(f"📸 Snapshot ID: {result_apply['snapshot_id']} (for rollback)")
     print()
@@ -111,6 +127,7 @@ def main_standalone():
     Run semantic rename with external API (STANDALONE mode).
     
     Requires OPENAI_API_KEY or ANTHROPIC_API_KEY environment variable.
+    Discovers all studios in G:\\FLICKS automatically.
     """
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
@@ -119,10 +136,13 @@ def main_standalone():
     print("=" * 80)
     print("PLEX SEMANTIC RENAME — STANDALONE MODE (External API)")
     print("=" * 80)
+    print("🔍 Auto-discovering all studios in G:\\FLICKS")
     print()
     
     result = cortex_plex_semantic_rename(
-        root_path="G:\\FLICKS\\Wicked",
+        root_path="G:\\FLICKS",
+        studio_filter=None,  # Process ALL studios
+        discover_studios=True,  # Auto-discover studio directories
         use_llm=True if api_key else False,
         llm_provider="openai",  # or "anthropic"
         llm_api_key=api_key,
@@ -134,6 +154,7 @@ def main_standalone():
     
     print(f"✅ Success: {result['success']}")
     print(f"📁 Total files: {result['total_files']}")
+    print(f"🏢 Studios discovered: {', '.join(result.get('studios_discovered', []))}")
     print(f"📝 Rename proposals: {result['proposals_count']}")
     print(f"🤖 LLM used: {result['llm_used']}")
     print()
