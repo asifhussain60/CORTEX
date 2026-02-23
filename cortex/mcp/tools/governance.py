@@ -671,7 +671,7 @@ class CortexValidateRequest(ConsolidatedTool):
     3. Calculates confidence score (0.0-1.0)
     4. Gates execution at 0.7 threshold
     
-    Integrates with cortex_process_request workflow to ensure high-quality implementations.
+    Integrates with MasterOrchestrator workflow to ensure high-quality implementations.
     
     Operations:
     - validate: Full validation with all stages

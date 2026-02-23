@@ -570,11 +570,11 @@ def handle_mcp_tool_error(
     
     Example:
         try:
-            result = cortex_process_request(operation="implement", target="file.py")
+            result = cortex_request_lifecycle(operation="create", request="implement feature")
         except Exception as e:
-            handle_mcp_tool_error(e, "cortex_process_request", {
-                "operation": "implement",
-                "target": "file.py"
+            handle_mcp_tool_error(e, "cortex_request_lifecycle", {
+                "operation": "create",
+                "request": "implement feature"
             })
             # Then retry operation
     """

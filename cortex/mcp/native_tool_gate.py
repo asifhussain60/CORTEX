@@ -108,8 +108,8 @@ ALLOWED_READ_ONLY_TOOLS = {
 
 # MCP tools required for code modifications
 REQUIRED_MCP_TOOLS = {
-    "cortex_process_request",
-    "cortex.lens_analyze",
+    "cortex_request_lifecycle",
+    "cortex_classify",
 }
 
 
@@ -335,11 +335,9 @@ to route through MCP tools for:
 
 Use MCP tool instead:
 ```python
-cortex_process_request(
-    operation="{intent.value.lower()}",
-    target="{file}",
-    request="<your request>",
-    mode="TDD"
+cortex_request_lifecycle(
+    operation="create",
+    request="<your request>"
 )
 ```
 

@@ -14,13 +14,13 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 54
+  rule_count: 35
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-02-11 - CORE-051 through CORE-054 added (ENH-001/002/003/004 from chat01.md remediation)"
-  version: "3.5"
-  consolidation_date: "2026-02-11"
-  consolidation_status: "Phase A Complete - 4 new CORE rules added for MCP + Governance optimization"
+  last_update: "2026-02-23 - rule_count corrected to 35; canonical SSOT is cortex-registry/core/tier0-skull/skull-rules.yaml"
+  version: "3.7"
+  consolidation_date: "2026-02-23"
+  consolidation_status: "Aligned with skull-rules.yaml — canonical SSOT for governance"
   naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"
 
 categories:

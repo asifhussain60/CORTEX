@@ -488,7 +488,7 @@ with router_tracer.trace_routing_request(context) as span:
         # ... collaboration logic ...
     
     # Sub-span: MCP tool execution
-    with router_tracer.trace_mcp_tool_execution("cortex_process_request") as tool_span:
+    with router_tracer.trace_mcp_tool_execution("cortex_request_lifecycle") as tool_span:
         tool_span.set_attribute("tool_status", "success")
         # ... tool execution ...
 

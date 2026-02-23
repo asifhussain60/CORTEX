@@ -171,7 +171,13 @@ class TestImportQuarantineVerification:
     """Verify old package import patterns completely eliminated from active code."""
     
     def test_no_cortex_intelligence_imports_in_active_code(self):
-        """Active cortex/ code must not import from cortex.intelligence (now cortex_intelligence)."""
+        """Active cortex/ code MUST import from cortex.intelligence (canonical package).
+
+        Phase 03 migrated cortex_intelligence → cortex/intelligence/.
+        The canonical import is `from cortex.intelligence...` (single package).
+        The deleted package was `cortex_intelligence` (underscore, separate package).
+        This test verifies no imports from the DELETED `cortex_intelligence` package.
+        """
         cortex_path = Path("cortex")
         python_files = list(cortex_path.rglob("*.py"))
         
@@ -180,13 +186,20 @@ class TestImportQuarantineVerification:
             content = py_file.read_text(errors='ignore')
             lines = content.split('\n')
             for i, line in enumerate(lines, 1):
-                if re.match(r"^\s*(from|import)\s+cortex.intelligence\b", line):
+                # Flag imports from deleted cortex_intelligence (underscore) package
+                if re.match(r"^\s*(from|import)\s+cortex_intelligence\b", line):
                     violations.append(f"{py_file}:{i}: {line.strip()}")
         
-        assert len(violations) == 0, f"Found active cortex.intelligence imports (should be cortex_intelligence):\n" + "\n".join(violations)
+        assert len(violations) == 0, f"Found deleted cortex_intelligence imports:\n" + "\n".join(violations)
     
     def test_no_cortex_lens_imports_in_active_code(self):
-        """Active cortex/ code must not import from cortex.lens (now cortex.intelligence.lens)."""
+        """Active cortex/ code MUST import from cortex.lens (canonical package).
+
+        Phase 03 migrated cortex_lens → cortex/lens/.
+        The canonical import is `from cortex.lens...` (single package).
+        The deleted package was `cortex_lens` (underscore, separate package).
+        This test verifies no imports from the DELETED `cortex_lens` package.
+        """
         cortex_path = Path("cortex")
         python_files = list(cortex_path.rglob("*.py"))
         
@@ -195,10 +208,11 @@ class TestImportQuarantineVerification:
             content = py_file.read_text(errors='ignore')
             lines = content.split('\n')
             for i, line in enumerate(lines, 1):
-                if re.match(r"^\s*(from|import)\s+cortex.lens\b", line):
+                # Flag imports from deleted cortex_lens (underscore) package
+                if re.match(r"^\s*(from|import)\s+cortex_lens\b", line):
                     violations.append(f"{py_file}:{i}: {line.strip()}")
         
-        assert len(violations) == 0, f"Found active cortex.lens imports (should be cortex.intelligence.lens):\n" + "\n".join(violations)
+        assert len(violations) == 0, f"Found deleted cortex_lens imports:\n" + "\n".join(violations)
     
     def test_all_active_imports_follow_cortex_namespace_pattern(self):
         """All new imports must follow cortex.* pattern (single canonical namespace)."""

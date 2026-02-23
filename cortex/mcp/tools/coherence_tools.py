@@ -11,7 +11,7 @@ Purpose:
     - cortex_validate_coherence: Validate file coherence
     
 ENFORCEMENT: All tools MUST validate orchestrator_context.
-Only MasterOrchestrator can invoke directly (via cortex_process_request entry point).
+Only MasterOrchestrator can invoke directly (via cortex_request_lifecycle).
 """
 
 from __future__ import annotations

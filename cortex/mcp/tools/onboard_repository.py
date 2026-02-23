@@ -11,7 +11,7 @@ Enhanced MCP tool that includes:
 - Comprehensive error handling
 
 ENFORCEMENT: All tools MUST validate orchestrator_context.
-Only MasterOrchestrator can invoke directly (via cortex_process_request entry point).
+Only MasterOrchestrator can invoke directly (via cortex_request_lifecycle).
 
 Author: GitHub Copilot
 Date: 2026-02-14

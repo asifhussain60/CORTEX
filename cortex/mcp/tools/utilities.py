@@ -13,7 +13,7 @@ Support functions and helpers:
 - cortex_orchestrator: Orchestrator management
 
 ENFORCEMENT: All tools MUST validate orchestrator_context.
-Only MasterOrchestrator can invoke directly (via cortex_process_request entry point).
+Only MasterOrchestrator can invoke directly (via cortex_request_lifecycle).
 
 AC_START: AC-WAVE100-S2-005
 """

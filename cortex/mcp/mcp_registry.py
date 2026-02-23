@@ -363,7 +363,7 @@ class ToolRegistry:
         try:
             from cortex.mcp.tools import register_all_tools
             count = register_all_tools(self)
-            self.logger.info(f"Registered {count} tool implementations")
+            self.logger.info(f"Registered {count} internal tool implementations for {len(self._tools)} public tools")
         except ImportError as e:
             self.logger.warning(f"Could not import tool implementations: {e}")
         except Exception as e:

@@ -1,15 +1,18 @@
 """
 CORTEX MCP v2 - Core Tools
 
-The 4 primary entry points for all CORTEX operations:
-- cortex_process_request: Main request router (MANDATORY ENTRY POINT)
+The 3 primary entry points for all CORTEX operations:
 - cortex_challenge: AI-driven challenge generation
 - cortex_classify: Intent classification (LENS)
 - cortex_request_lifecycle: Full request lifecycle management
 
 ARCHITECTURAL REQUIREMENT (P0):
-ALL requests MUST route through MasterOrchestrator via cortex_process_request.
+ALL requests MUST route through MasterOrchestrator.
 Direct tool invocations bypass governance gates and are rejected.
+
+Note: cortex_process_request was deprecated in WAVE-100. CortexProcessRequest
+class is retained for backward-compatible test coverage only — it is NOT
+registered in the 24-tool production registry.
 
 AC_START: AC-WAVE100-S2-001
 AC_START: AC-MASTERORCH-ROUTING-001 (enforcement implementation)
@@ -32,7 +35,7 @@ class MCPBypassError(Exception):
 
 
 class ProcessRequestOperations(Enum):
-    """Operations for cortex_process_request tool."""
+    """Operations for CortexProcessRequest (deprecated — not in production registry)."""
     IMPLEMENT = "implement"
     FIX = "fix"
     REFACTOR = "refactor"
@@ -42,13 +45,11 @@ class ProcessRequestOperations(Enum):
 
 class CortexProcessRequest(ConsolidatedTool):
     """
-    Main entry point for ALL CORTEX operations (MANDATORY).
+    Legacy request router (deprecated in WAVE-100 — NOT in production registry).
 
-    Routes ALL requests through MasterOrchestrator 4-stage pipeline:
-    1. Stage 1 (Interaction): Display DoR, await approval
-    2. Stage 2 (Intent): Classify intent, route to orchestrator
-    3. Stage 3 (Intelligence): LENS analysis + context synthesis
-    4. Stage 4 (Execution): Execute with TDD, governance, audit trail
+    Was the main entry point before WAVE-100 consolidation. Retained for
+    backward-compatible test coverage. The production routing path now uses
+    cortex_request_lifecycle + cortex_classify + MasterOrchestrator directly.
 
     Routes requests to appropriate orchestrators:
     - IMPLEMENT → TDDOrchestrator
@@ -56,9 +57,6 @@ class CortexProcessRequest(ConsolidatedTool):
     - REFACTOR → RefactoringOrchestrator
     - ANALYZE → LENSSynthesis
     - TEST → TDDOrchestrator
-
-    ENFORCEMENT: This is the ONLY user-facing entry point.
-    All other MCP tools are internal and validate orchestrator_context.
     """
     
     @property

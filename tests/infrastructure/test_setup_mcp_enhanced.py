@@ -390,12 +390,12 @@ class TestValidationHealthChecks:
     
     def test_tool_availability_validation(self):
         """Test cortex_* tools available in Copilot Chat."""
-        # Expected tools
+        # Expected tools (24 production tools — WAVE-100 consolidation)
         expected_tools = [
-            "cortex_process_request",
-            "cortex.lens_analyze",
             "cortex_challenge",
-            "cortex_detect_duplicates",
+            "cortex_classify",
+            "cortex_request_lifecycle",
+            "cortex_knowledge",
         ]
         
         # Would query MCP server for tool list

@@ -113,10 +113,10 @@ class TestToolRestrictionMatrix:
         
         assert allowed is True
     
-    def test_cortex_process_request_required_for_implement(self):
-        """RED: cortex_process_request required for IMPLEMENT intent."""
+    def test_cortex_request_lifecycle_required_for_implement(self):
+        """RED: cortex_request_lifecycle required for IMPLEMENT intent."""
         allowed = check_tool_allowed_for_intent(
-            tool_name="cortex_process_request",
+            tool_name="cortex_request_lifecycle",
             intent=IntentType.IMPLEMENT,
             target_file="cortex/module.py"
         )
@@ -183,7 +183,7 @@ class TestErrorResponses:
         
         assert "create_file" in error
         assert "IMPLEMENT" in error
-        assert "cortex_process_request" in error
+        assert "cortex_request_lifecycle" in error
         assert "cortex/module.py" in error
     
     def test_error_includes_mcp_setup_instructions(self):

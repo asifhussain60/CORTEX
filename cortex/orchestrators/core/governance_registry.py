@@ -125,14 +125,18 @@ class GovernanceRegistry:
             return Ok(None)
 
     def _load_tier0_from_yaml(self) -> None:
-        """Load tier 0 rules from the governance YAML file."""
+        """Load tier 0 rules from the governance YAML file.
+
+        Canonical source: cortex-registry/core/tier0-skull/skull-rules.yaml
+        Fallback: cortex-registry/governance/core-rules.yaml
+        """
+        repo_root = Path(__file__).resolve().parent.parent.parent.parent
         yaml_path = (
-            Path(__file__).resolve().parent.parent.parent.parent
-            / "cortex.intelligence"
-            / "tier0"
-            / "governance"
-            / "core-rules.yaml"
+            repo_root / "cortex-registry" / "core" / "tier0-skull" / "skull-rules.yaml"
         )
+        if not yaml_path.exists():
+            # Fallback to governance/ copy
+            yaml_path = repo_root / "cortex-registry" / "governance" / "core-rules.yaml"
         if not yaml_path.exists():
             raise FileNotFoundError(f"Tier 0 YAML not found: {yaml_path}")
 

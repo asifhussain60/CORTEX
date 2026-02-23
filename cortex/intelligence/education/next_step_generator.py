@@ -83,7 +83,7 @@ class NextStepGenerator:
             "TDDOrchestrator": ["Test-Driven Development", "EnforcementOrchestrator", "Testing Strategy"],
             "LENSOrchestrator": ["Code Analysis", "AST Parsing", "LENS Protocol"],
             "ChallengeEngine": ["InteractionOrchestrator", "Innovation Framework", "Disagreement Detection"],
-            "MCP Tools": ["cortex_ask", "cortex_process_request", "MCP Server"],
+            "MCP Tools": ["cortex_ask", "cortex_request_lifecycle", "MCP Server"],
             "cortex_ask": ["EducationalOrchestrator", "TruthVerificationEngine", "ASK Mode"],
             "Orchestrators": ["MasterOrchestrator", "Wiring Configuration", "IOrchestrator Interface"],
             "Wiring": ["wiring.yaml", "Orchestrator Registration", "GitBackedRegistry"],

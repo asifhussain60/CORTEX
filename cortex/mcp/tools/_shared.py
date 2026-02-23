@@ -14,8 +14,8 @@ def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
     Validate that a request originates from MasterOrchestrator.
 
     All MCP tools are restricted to requests routed through the
-    MasterOrchestrator (cortex_process_request entry point). This
-    function enforces that invariant at every tool boundary.
+    MasterOrchestrator pipeline. This function enforces that invariant
+    at every tool boundary.
 
     Args:
         context: Orchestrator context dict expected to contain a
@@ -33,12 +33,12 @@ def validate_orchestrator_context(context: Optional[Dict[str, Any]]) -> None:
     if not context:
         raise ValueError(
             "BLOCKED: Missing orchestrator_context. All requests MUST route "
-            "through MasterOrchestrator via cortex_process_request entry point."
+            "through MasterOrchestrator via cortex_request_lifecycle entry point."
         )
 
     source = context.get("source")
     if source != "MasterOrchestrator":
         raise ValueError(
             f"BLOCKED: Request from '{source}'. Only MasterOrchestrator can "
-            "invoke MCP tools directly. Use cortex_process_request entry point."
+            "invoke MCP tools directly. Use cortex_request_lifecycle entry point."
         )
