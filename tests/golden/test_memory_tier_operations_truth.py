@@ -193,8 +193,8 @@ class TestMemoryTierStructure:
             f"No memory tier directories found in {memory_path}"
 
     def test_memory_tiers_not_at_intelligence_root(self):
-        """tier0, tier1, tier2 should NOT be at cortex.intelligence root."""
-        intel_path = Path("cortex.intelligence")
+        """tier0, tier1, tier2 should NOT be at cortex/intelligence root."""
+        intel_path = Path("cortex") / "intelligence"
         
         # These should NOT exist (old broken structure)
         bad_paths = [
@@ -247,9 +247,9 @@ class TestTierFileWrites:
         
         # Create tier directories
         (workspace / "cortex-registry" / "core" / "tier0-skull").mkdir(parents=True)
-        (workspace / "cortex.intelligence" / "memory" / "tier1_learned").mkdir(parents=True)
-        (workspace / "cortex.intelligence" / "memory" / "tier2_adaptive").mkdir(parents=True)
-        (workspace / "cortex.intelligence" / "memory" / "scratch_space").mkdir(parents=True)
+        (workspace / "cortex" / "intelligence" / "memory" / "tier1_learned").mkdir(parents=True)
+        (workspace / "cortex" / "intelligence" / "memory" / "tier2_adaptive").mkdir(parents=True)
+        (workspace / "cortex" / "intelligence" / "memory" / "scratch_space").mkdir(parents=True)
         
         return workspace
 

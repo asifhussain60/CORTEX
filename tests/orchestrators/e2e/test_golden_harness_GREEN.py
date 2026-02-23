@@ -56,7 +56,7 @@ class TestGoldenTestHarnessGREEN:
         db_path = tmp_path / "test_audit.db"
         
         # Apply schema
-        schema_path = Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "audit" / "schema.sql"
+        schema_path = Path(__file__).parent.parent.parent.parent / ".cortex-runtime" / "audit" / "schema.sql"
         
         import sqlite3
         conn = sqlite3.connect(str(db_path))
@@ -171,7 +171,7 @@ class TestGoldenTestHarnessIntegration:
         """Production governance.db should have orchestrator_audit_events table."""
         import sqlite3
         
-        db_path = Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "governance.db"
+        db_path = Path(__file__).parent.parent.parent.parent / ".cortex-runtime" / "state" / "governance.db"
         
         if not db_path.exists():
             pytest.skip("Production database not found")
@@ -189,7 +189,7 @@ class TestGoldenTestHarnessIntegration:
         """Production database should have golden test audit trail view."""
         import sqlite3
         
-        db_path = Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "governance.db"
+        db_path = Path(__file__).parent.parent.parent.parent / ".cortex-runtime" / "state" / "governance.db"
         
         if not db_path.exists():
             pytest.skip("Production database not found")

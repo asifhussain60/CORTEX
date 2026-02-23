@@ -85,7 +85,7 @@ class GoldenTestHarness:
         """
         if db_path is None:
             project_root = Path(__file__).parent.parent.parent.parent
-            db_path = project_root / "cortex.intelligence" / "governance.db"
+            db_path = project_root / ".cortex-runtime" / "state" / "governance.db"
         
         self.db_path = db_path
         self.scenarios_dir = Path(__file__).parent / "scenarios"

@@ -24,7 +24,7 @@ class TestGoldenTestHarnessRED:
         db_path = tmp_path / "test_audit.db"
         
         # Apply schema
-        schema_path = Path(__file__).parent.parent.parent.parent / "cortex.intelligence" / "audit" / "schema.sql"
+        schema_path = Path(__file__).parent.parent.parent.parent / ".cortex-runtime" / "audit" / "schema.sql"
         
         import sqlite3
         conn = sqlite3.connect(str(db_path))
