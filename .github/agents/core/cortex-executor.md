@@ -38,8 +38,23 @@ REFACTOR Phase → clean up, type hints (CORE-011), docstrings (CORE-012)
     ↓
 Validate → pytest tests/ -n auto --dist loadscope
     ↓
+Sweep Gate → CORE-064: SweepCatalogueOrchestrator scans for same issue class — fix ALL N instances
+    ↓
 Completion Report (inline — CORE-002)
 ```
+
+---
+
+## Sweep Completeness (CORE-064)
+
+When fixing a bug, scan for the same pattern across the codebase. If the same issue class appears in N files, fix all N — not just the reported one. The `SweepCatalogueOrchestrator` (`cortex/orchestrators/support/sweep_catalogue_orchestrator.py`) tracks the full issue catalogue per FIX session and **blocks `AC_COMPLETE` until the catalogue is exhausted**.
+
+**Pattern:** Same root cause → same fix → all affected files in one atomic commit.
+
+**Sweep Gate blocks if:**
+- Remaining instances of the same issue class exist in `cortex/` or `tests/`
+- `AC_START` without matching `AC_COMPLETE` (orphaned markers — P0 governance violation)
+- Any P0/P1 introduced by the fix
 
 ---
 
@@ -53,6 +68,7 @@ Completion Report (inline — CORE-002)
 | CORE-012 | Docstrings on all public APIs |
 | CORE-028 | File naming: snake_case only |
 | CORE-035 | Single canonical implementation — no duplicates |
+| CORE-064 | Sweep Completeness — no partial sweeps; fix all N instances of same issue class |
 
 ---
 

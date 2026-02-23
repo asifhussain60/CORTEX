@@ -1,27 +1,8 @@
 ---
 agent_id: cortex-auditor
-version: "3.0"
+version: "3.1"
 status: active
-l## Capabilities
-
-- 19-point production readiness audit (10 code + 9 integrated checks)
-- Stale import detection and remediation
-- Empty stub identification
-- Duplicate orchestrator detection (CORE-035)
-- CORE rule violation scanning
-- Test-source mirror validation
-- Orchestrator health endpoint validation (Check #11 — Active ✅)
-- Vacuum markdown sprawl cleanup (Check #12 — Active ✅)
-- Prompt/agent meta-audit coherence (Check #13 — Active ✅)
-- MCP tool name registry alignment (Check #14 — Active ✅)
-- Governance YAML SSOT enforcement (Check #15 — Active ✅)
-- Knowledge synthesis wiring (Check #16 — Active ✅)
-- LENS pipeline health (Check #17 — Active ✅)
-- Requirements preflight completeness (Check #18 — Active ✅)
-- SQLite activity log health (Check #19 — Active ✅)
-- **Convergence loop guarantee** — Stages 7–8 loop until 0 P0/P1 (CORE-064)
-- **SQLite full activity logging** — every stage, cycle, and violation persisted
-- **Bloat prevention** — 30-day retention + VACUUM on every Stage 9 exits_served:
+intents_served:
   - AUDIT
   - INVESTIGATE
 capabilities:
@@ -37,14 +18,34 @@ mcp_tools:
   - cortex_governance
   - cortex_vacuum
   - cortex_load
-  - cortex_governance
 priority: P0
 token_cost_estimate: 3500
 ---
 
 # CORTEX Auditor
 
-**Updated:** 2026-02-22 | **Purpose:** Production readiness scanning, health checks, governance compliance, and autonomous remediation.
+**Updated:** 2026-02-23 | **Purpose:** Production readiness scanning, health checks, governance compliance, and autonomous remediation.
+
+## Capabilities
+
+- 19-point production readiness audit (10 code + 9 integrated checks)
+- Stale import detection and remediation
+- Empty stub identification
+- Duplicate orchestrator detection (CORE-035)
+- CORE rule violation scanning
+- Test-source mirror validation
+- Orchestrator health endpoint validation (Check #11 — Active ✅)
+- Vacuum markdown sprawl cleanup (Check #12 — Active ✅)
+- Prompt/agent meta-audit coherence (Check #13 — Active ✅)
+- Response header drift detection (Check #14 — Active ✅)
+- MCP tool name registry alignment (Check #15 — Active ✅)
+- Knowledge synthesis wiring (Check #16 — Active ✅)
+- LENS pipeline health (Check #17 — Active ✅)
+- Ghost directory detection (Check #18 — Active ✅)
+- SQLite activity log health (Check #19 — Active ✅)
+- **Convergence loop guarantee** — Stages 7–8 loop until 0 P0/P1 (CORE-064)
+- **SQLite full activity logging** — every stage, cycle, and violation persisted
+- **Bloat prevention** — 30-day retention + VACUUM on every Stage 9 exit
 
 ## `/audit fix` — Single Production-Readiness Command
 
@@ -96,25 +97,25 @@ Primitive: cortex-registry/workflows/templates/primitives/validation/detect-fix-
 
 | # | Check | Tool/Method | Auto-Fix |
 |---|-------|-------------|----------|
-| 1 | **Stale imports** — deleted packages (`cortex_intelligence`, `cortex_lens`, `cortex.brain`) | `grep -rn` + AST | ✅ Rewrite |
-| 2 | **Empty stubs** — `pass`/`...` only, no logic | AST scan | ✅ Delete or implement |
-| 3 | **Duplicate orchestrators** — >85% similarity (CORE-035) | diff analysis | ✅ Merge canonical |
-| 4 | **Low-value tests** — assert True, mock everything | TestQualityGate <4 | ✅ Delete |
-| 5 | **Broken file references** — YAML/docs → moved/deleted files | Path resolution | ✅ Update paths |
-| 6 | **Root-level clutter** — outside canonical dirs | `find . -maxdepth 1` | ✅ Move/delete |
-| 7 | **CORE rule violations** — missing type hints, docstrings, snake_case | `cortex_validate` op=`compliance` | ✅ Add missing |
+| 1 | **Stale imports** — references to deleted packages (`cortex_intelligence`, `cortex_lens`, `cortex.brain`) | `grep -rn` + AST verify | ✅ Rewrite imports |
+| 2 | **Empty stubs** — files with only `pass` or `...` in functions, no real logic | AST scan for stub bodies | ✅ Delete or implement |
+| 3 | **Duplicate orchestrators** — >85% similarity across files (CORE-035) | `cortex_detect_duplicates` / diff | ✅ Merge canonical |
+| 4 | **Low-value tests** — tests that assert `True`, mock everything, or test nothing | TestQualityGate score <4 | ✅ Delete |
+| 5 | **Broken file references** — YAML/docs pointing to moved/deleted files | Path resolution check | ✅ Update paths |
+| 6 | **Root-level clutter** — scripts, logs, temp files outside canonical dirs | `find . -maxdepth 1` scan | ✅ Move or delete |
+| 7 | **CORE rule violations** — missing type hints, docstrings, snake_case + missing AC markers | `cortex_validate` op=`compliance` | ✅ Add missing |
 | 8 | **Scattered .db/.log files** — outside `.cortex-runtime/` | `find -name "*.db"` | ✅ Consolidate |
-| 9 | **Deprecated file names** — `DEPRECATED-*`, `*.old`, `*.backup` | `find -name "DEPRECATED*"` | ✅ Delete |
-| 10 | **Test-source mirror** — `tests/` diverges from `cortex/` | Dir comparison | 🟡 Report |
+| 9 | **Deprecated file names** — `DEPRECATED-*`, `*.old`, `*.backup` in active dirs | `find -name "DEPRECATED*"` | ✅ Delete |
+| 10 | **Test-source mirror** — tests/ structure diverges from cortex/ structure | Dir comparison | 🟡 Report |
 | 11 | **Orchestrator health** — all 22 respond healthy, latency within envelope | `HealthOrchestrator.run_health_check()` | ✅ Activate fallback |
 | 12 | **Markdown sprawl** — `.md` files outside `.github/`, `cortex-docs/`, `README.md` | `VacuumOrchestrator` | ✅ Archive/delete |
 | 13 | **Prompt/agent coherence** — stale counts, deleted paths, SSOT violations | `cortex-meta-auditor.md` (23 checks) | ✅ Update inline |
-| 14 | **MCP tool name registry alignment** — every prompt/agent tool reference must match `mcp_registry.py` registered IDs; detect consolidated-name drift where old tool names survive in docs after registry consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
-| 15 | **Governance YAML SSOT enforcement** — only `skull-rules.yaml` in `cortex-registry/core/tier0-skull/` is canonical source; `core-rules.yaml` in `cortex-registry/governance/` is secondary — detect count divergence | `grep -c "^- id:" cortex-registry/core/tier0-skull/skull-rules.yaml` | 🟡 Report divergence as P1 |
+| 14 | **Response header drift** — prompts missing `**Author:** Asif Hussain \| **Orchestrator:** {Name} ✅` or using wrong product name (`CORTEX` vs `CORTEX Architect`) | `grep -n "Author.*Asif" .github/prompts/*.prompt.md` — must match SSOT in `cortex-response-templates.md` § Response Header | ✅ Restore canonical header line in prompt |
+| 15 | **MCP tool name registry alignment** — every prompt/agent tool reference must match `mcp_registry.py` registered IDs; detect consolidated-name drift where old tool names survive in docs after registry consolidation | `grep -rn "cortex_sample_tool\|cortex_validate_compliance\|cortex_load_core_rules" .github/` | ✅ Update to operation-based names |
 | 16 | **Knowledge synthesis wiring** — registry knowledge YAMLs in `cortex-registry/knowledge/` are loadable and have no dead references to deleted knowledge files | Path resolution on all YAML `source:` fields | ✅ Update paths |
 | 17 | **LENS pipeline health** — 8 analyzers importable from `cortex/lens/`; golden tests green in `tests/golden/test_lens_full_pipeline_truth.py` | `python3 -c "from cortex.lens import *"` + pytest | ✅ Activate fallback |
-| 18 | **Requirements preflight completeness** — `requirements.txt` has no duplicate entries, no conflicting version constraints, every `[PREFLIGHT CRITICAL]` package installed in active venv | Duplicate line scan + `pip check` | ✅ Remove duplicate, pip install |
-| 19 | **SQLite activity log health** — `orchestrator-traces.db` passes `integrity_check`, no orphaned `AC_START` rows > 1 hour old, file size < 50 MB, `workflow_cycles` has rows in last 24h (proves logging pipeline active) | `PRAGMA integrity_check` + orphan query + size check | ✅ Prune + VACUUM via detect-fix-rescan-loop |
+| 18 | **Ghost directory detection** — filesystem artifacts with dots in name (`cortex.intelligence/`, `cortex.brain/`) outside canonical structure | `find cortex/ -maxdepth 1 -name "*.*" -type d` | ✅ Delete |
+| 19 | **SQLite activity log health** — `.cortex-runtime/traces/orchestrator-traces.db` schema valid, no orphaned `AC_START` without `AC_COMPLETE`, 30-day retention enforced | `sqlite3` schema check + orphan query | ✅ Cleanup + VACUUM |
 
 ## Health Check Protocol (Check #11 — Active ✅)
 
