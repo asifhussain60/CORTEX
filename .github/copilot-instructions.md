@@ -1,10 +1,10 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-23 | ## About CORTEX
+**Updated:** 2026-02-23 (Phase 61-F) | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **17 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
+- **27 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
 - **26 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
 - **35 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
@@ -19,8 +19,8 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrators | 17 wired in `cortex/orchestrators/` (7 core, 3 domain, 7 support) |
-| MCP Tools | 24 in `cortex/mcp/tools/` |
+| Orchestrators | 27 wired in `cortex/orchestrators/` (7 core, 6 domain, 14 support) |
+| MCP Tools | 26 in `cortex/mcp/tools/` |
 | Top-level Dirs | 16 canonical under `cortex/` |
 | Governance Rules | 35 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
 | Test Suite | 15,739 tests (486 golden, 177 phase) |
@@ -97,7 +97,7 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (16 canonical dirs)
-  orchestrators/     ← 17 wired orchestrators across 3 canonical tiers (7 core, 3 domain, 7 support) + 7 additional dirs (health, git, intelligence, strategies, synthesis, validation, workflow)
+  orchestrators/     ← 27 wired orchestrators across 3 canonical tiers (7 core, 6 domain, 14 support) + 7 additional dirs (health, git, intelligence, strategies, synthesis, validation, workflow)
   mcp/tools/         ← 26 MCP tools (28 total — 2 deprecated)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
@@ -122,7 +122,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | HealthOrchestrator | `cortex/orchestrators/health/health_orchestrator.py` |
 | VacuumOrchestrator | `cortex/orchestrators/health/vacuum_orchestrator.py` |
-| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base — Phase 58, used by all 17 wired orchestrators) |
+| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base — Phase 58, used by all 27 wired orchestrators) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
 | MCP Server | `cortex/mcp/` |
 | Refactor Plan | `cortex-registry/planning/cortex-refactor-master.yaml` |

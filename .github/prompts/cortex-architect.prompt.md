@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-23 | **Architecture:** 17 Wired Orchestrators · 26 MCP Tools · 35 CORE Rules · 1 Package  
+**Updated:** 2026-02-23 (Phase 61-F) | **Architecture:** 27 Wired Orchestrators · 26 MCP Tools · 35 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
@@ -33,7 +33,7 @@
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base, Phase 58) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
-| MCP Tools (24) | `cortex/mcp/tools/` |
+| MCP Tools (26) | `cortex/mcp/tools/` |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
 | Intelligence Provider | `cortex/intelligence/provider.py` |
@@ -501,8 +501,7 @@ Everything else → move to canonical location or delete.
 
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`)
-- No stale orchestrator counts (must say **17 wired orchestrators**, **26 MCP tools**, **35 CORE rules**)
-- No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
+- No stale orchestrator counts (must say **27 wired orchestrators**, **26 MCP tools**, **35 CORE rules**)- No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - No references to `cortex.intelligence/state/` as runtime data path (canonical: `.cortex-runtime/`)
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
 - All agent files must match entries in `AGENT-INDEX.md`
@@ -512,7 +511,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 
 | Check | Pass Criteria |
 |---|---|
-| Orchestrator count | All agents/prompts say "17 wired" |
+| Orchestrator count | All agents/prompts say "27 wired" |
 | MCP tool count | All say "26 active tools" |
 | CORE rules count | All say "35 active" |
 | Audit check count | All say "19-Point Production Readiness Audit" |
@@ -655,8 +654,8 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py batch
 
 | Type | Location |
 |------|----------|
-| Orchestrators (17 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (24) | `cortex/mcp/tools/` |
+| Orchestrators (27 wired) | `cortex/orchestrators/{domain}/` |
+| MCP Tools (26) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry/Rules | `cortex-registry/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
