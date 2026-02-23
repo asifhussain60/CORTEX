@@ -177,7 +177,7 @@ Stage 2: 17-Point Production Scan           (cortex-auditor.md Checks #1–#17)
 Stage 3: Wiring Contract Validation         (architecture-integrity-agent.md, L1→L3)
 Stage 4: Orchestrator Health (all 22)       (HealthOrchestrator.run_health_check())
 Stage 5: Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
-Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 17 checks)
+Stage 6: Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 22 checks)
 Stage 7: Auto-Fix confidence >90%           (autonomous remediation)
 Stage 8: Re-validate → zero-violation gate  (0 P0, 0 P1 required to pass)
 Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
@@ -221,3 +221,15 @@ The batch plugin (`CORTEX_BATCH_SIZE=500`) provides live batch boundaries, pass/
 make test-batch
 ```
 or a VS Code task from `tasks.json`.
+
+**Windows users:** Replace `python3` with `python` and replace `./scripts/run-tests.sh {mode}` with `python scripts\run_tests.py {mode}`. All `make` commands have VS Code Task equivalents in `tasks.json` for Windows-first users who cannot use `make`.
+
+---
+
+## ✅ Preflight Requirements Validation
+
+CORTEX auto-validates `requirements.txt` at session start via `UpgradeOrchestrator.validate_requirements()`. If the environment is incomplete, CORTEX will attempt `pip install -r requirements.txt` autonomously before proceeding.
+
+- **Silent if all packages satisfied** (CORE-049)
+- **P0 hard-stop** if any `[PREFLIGHT CRITICAL]` package is missing
+- **To skip** (CI/CD): set `CORTEX_SKIP_PREFLIGHT=true`

@@ -89,11 +89,6 @@ pydantic==2.5.2            # Data validation with type hints (Python 3.9+) [PREF
 jsonschema==4.21.1         # JSON Schema validation for governance rules [PREFLIGHT]
 # AC_COMPLETE: AC-MCP-FIX-003 ✅ jsonschema added for governance validation
 
-# AC_START: AC-MCP-FIX-003
-# Description: Add missing dependencies (jsonschema for pattern registry, governance engine)
-jsonschema==4.21.1         # JSON Schema validation for governance rules [PREFLIGHT]
-# AC_COMPLETE: AC-MCP-FIX-003 ✅ jsonschema added for governance validation
-
 # ============================================================================
 # MCP PROTOCOL & IPC [PREFLIGHT CRITICAL]
 # ============================================================================

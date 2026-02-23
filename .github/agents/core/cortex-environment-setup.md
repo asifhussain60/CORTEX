@@ -87,7 +87,7 @@ python3 -m cortex.mcp
 | MCP tools missing in Copilot Chat | Verify `.vscode/settings.json` MCP config, reload VS Code |
 | Collection errors in pytest | Check: `pytest --co -q 2>&1 | grep ERROR` |
 | Dependency drift | Run `pip install -r requirements.txt` |
-| 22 rules not loading | Verify `cortex-registry/core/tier0-skull/skull-rules.yaml` is present |
+| 35 rules not loading | Verify `cortex-registry/core/tier0-skull/skull-rules.yaml` is present |
 
 ---
 
@@ -109,7 +109,70 @@ python3 -m pytest tests/golden/ -p no:xdist --tb=short -v
 
 ---
 
-## ⛔ Deleted Constructs — Never Reference
+## Requirements Validation (Automated Preflight Gate)
+
+Before any CORTEX operation, `UpgradeOrchestrator.validate_requirements()` checks that every `[PREFLIGHT]` and `[PREFLIGHT CRITICAL]` package in `requirements.txt` is installed in the active virtual environment.
+
+- **Missing packages** → P0 violation → automatic `pip install -r requirements.txt` attempted
+- **Version mismatches** (pinned `==`) → P1 warning → environment may be stale
+- **Broken dependency chains** (`pip check` failures) → P1 violation
+- **Silent if all packages satisfied** (CORE-049)
+
+To skip (CI/CD environments): set `CORTEX_SKIP_PREFLIGHT=true`.
+
+---
+
+## Windows Setup
+
+CORTEX runs natively on Windows without WSL. WSL is supported as a secondary environment but not the primary target — all CORTEX paths work natively.
+
+**Requirements:**
+- Python 3.9+ via [python.org](https://python.org) installer or Windows Store (not WSL)
+- VS Code with Python extension (`ms-python.python`)
+- Git for Windows ([git-scm.com](https://git-scm.com))
+
+**MCP server on Windows** — use `python` (not `python3`) in `.vscode/settings.json`:
+```json
+{
+  "github.copilot.chat.mcpServers": {
+    "cortex": {
+      "command": "python",
+      "args": ["-m", "cortex.mcp"],
+      "transport": "stdio",
+      "cwd": "${workspaceFolder}"
+    }
+  }
+}
+```
+`scripts/setup-mcp.py` auto-detects the OS and uses `sys.executable` (the current interpreter path) as the MCP command — run `python scripts\setup-mcp.py` to configure automatically.
+
+**Windows test commands** (use `python` instead of `python3`, backslash paths):
+```cmd
+python scripts\run_tests.py batch
+python scripts\run_tests.py smoke
+python -m pytest tests/ -n auto --dist loadscope --tb=short
+```
+All `make` commands have equivalent VS Code Task entries in `tasks.json` for Windows users who cannot run `make`.
+
+---
+
+## 🔒 Admin-Sovereign Folders (Never Overwritten by Upgrades)
+
+The following folders are user-sovereign and are **never overwritten** by automated inflight upgrades (`check_upstream_and_merge()`):
+
+| Folder | Reason |
+|--------|--------|
+| `cortex-docs/` | Published documentation site — user controls all HTML/CSS content |
+| `_workspaces/` | Session-specific workspace files, chat histories, local prompts |
+| `cortex-sts/` | Sample tenant system — admin-specific analysis artifacts |
+| `.github/prompts/cortex-doc.prompt.md` | Documentation system prompt — admin-configured per deployment |
+| `.github/agents/core/cortex-documentation-architect.md` | Tightly coupled to user's cortex-docs/ site structure |
+| `.github/agents/core/cortex-gitpages-builder.md` | Tightly coupled to user's cortex-docs/ site structure |
+| `.github/agents/core/cortex-storyteller.md` | Tightly coupled to user's cortex-docs/ site structure |
+
+To add further exclusions without code changes, set `CORTEX_UPGRADE_EXCLUDE_PATHS` to a comma-separated list of additional paths.
+
+---
 
 - `cortex/brain/` — dissolved post-refactor
 - `cortex_intelligence/` — merged into `cortex/intelligence/`
