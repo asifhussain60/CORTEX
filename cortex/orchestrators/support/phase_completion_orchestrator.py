@@ -28,8 +28,15 @@ def update_enhancement_history(*args: Any, **kwargs: Any) -> bool:
     return True
 
 
-class PlanRegistrySyncOrchestrator:
-    """Sync plan registry after phase completion (stub)."""
+class PlanRegistrySyncOrchestrator(OrchestratorProtocolMixin):
+    """Sync plan registry after phase completion.
+
+    Wiring-contract compliant stub — inherits health_check, get_name,
+    and cross-cutting hooks from OrchestratorProtocolMixin (Phase 58).
+    """
+
+    _orch_name: str = "PlanRegistrySyncOrchestrator"
+    _orch_version: str = "1.0.0"
 
     def sync(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         """Synchronize the plan registry after phase completion.

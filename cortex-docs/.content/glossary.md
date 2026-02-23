@@ -107,7 +107,7 @@ order: 99
 
 ## O
 
-**OrchestratorBase** — Abstract base class for all wired orchestrators. Provides lifecycle management, audit trail, governance hooks, and automatic SQLite activity logging in `execute()`/`run()`. Module: `cortex/core/orchestrator_base.py`.
+**OrchestratorBase** — Legacy abstract base class used by 2 orchestrators only (`ServiceDecompositionOrchestrator`, `BusinessKnowledgeIngestionOrchestrator`). The primary base for all 17 wired orchestrators is `OrchestratorProtocolMixin` (Phase 58) + `IOrchestrator` protocol. Module: `cortex/core/orchestrator_base.py`.
 
 **OrchestratorEventBus** — Decoupled communication channel for inter-orchestrator messaging. Module: `cortex/infrastructure/orchestrator_event_bus.py`.
 
