@@ -107,7 +107,7 @@ order: 99
 
 ## O
 
-**OrchestratorBase** — Legacy abstract base class used by 2 orchestrators only (`ServiceDecompositionOrchestrator`, `BusinessKnowledgeIngestionOrchestrator`). The primary base for all 17 wired orchestrators is `OrchestratorProtocolMixin` (Phase 58) + `IOrchestrator` protocol. Module: `cortex/core/orchestrator_base.py`.
+**OrchestratorBase** — Legacy abstract base class used by 2 orchestrators only (`ServiceDecompositionOrchestrator`, `BusinessKnowledgeIngestionOrchestrator`). The primary base for all 27 wired orchestrators is `OrchestratorProtocolMixin` (Phase 58) + `IOrchestrator` protocol. Module: `cortex/core/orchestrator_base.py`.
 
 **OrchestratorEventBus** — Decoupled communication channel for inter-orchestrator messaging. Module: `cortex/infrastructure/orchestrator_event_bus.py`.
 

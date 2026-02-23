@@ -266,8 +266,13 @@ from cortex.orchestrators.core.audit_mixin import OrchestratorAuditMixin
 # Phase 23: Import WorkflowTemplateMixin for template consumption capability
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
+# Phase 58 / P0-fix: OrchestratorProtocolMixin supplies _activate_cross_cutting_hooks,
+# _extract_lens_context, _consume_unified_context, and _governance_gate to MasterOrchestrator.
+# Required by holistic golden tests (S21-S25) and CORE-048 compliance.
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
-class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplateMixin):
+
+class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorAuditMixin, WorkflowTemplateMixin):
     """
     MasterOrchestrator - Coordinates all domain orchestrators.
 

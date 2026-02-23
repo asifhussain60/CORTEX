@@ -42,7 +42,7 @@ order: 2
 │    │ (12 intents)   │  │ Orch.   │  │ Orchestrators│           │
 │    └────────────────┘  └─────────┘  └──────────────┘           │
 │                                                                 │
-│    17 wired orchestrators: 7 core · 3 domain · 7 support        │
+│    27 wired orchestrators: 7 core · 6 domain · 14 support       │
 └─────────────────────────────┼───────────────────────────────────┘
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
@@ -98,7 +98,7 @@ order: 2
 | Layer | Components | Location |
 |-------|------------|----------|
 | MCP Gateway | **26 active tools** (28 total — 2 deprecated) | `cortex/mcp/tools/` |
-| Orchestration | **17 wired** orchestrators (7 core, 3 domain, 7 support) | `cortex/orchestrators/` |
+| Orchestration | **27 wired** orchestrators (7 core, 6 domain, 14 support) | `cortex/orchestrators/` |
 | Intelligence | 8 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
 | Governance | **35 CORE rules** | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |

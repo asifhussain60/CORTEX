@@ -16,7 +16,7 @@ order: 3
 
 ## The Shortest Possible Summary
 
-You type a request in your IDE. CORTEX enriches it, classifies it, analyses your codebase with 8 parallel analyzers, validates against 17 governance rules, builds an execution plan through Perception → Reasoning → Action, and delivers the result inline — all within seconds. Every step is observable and auditable.
+You type a request in your IDE. CORTEX enriches it, classifies it, analyses your codebase with 8 parallel analyzers, validates against 35 governance rules, builds an execution plan through Perception → Reasoning → Action, and delivers the result inline — all within seconds. Every step is observable and auditable.
 
 ---
 

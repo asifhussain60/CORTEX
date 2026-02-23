@@ -27,13 +27,13 @@ The front door of CORTEX. Every request arrives here first. The gateway validate
 **Daily example:** When you type a request in VS Code Copilot Chat, it enters through the MCP Gateway, which routes it to `cortex_process_request` or another appropriate tool.
 
 ### Orchestrator
-A specialized processing engine for one category of work. CORTEX has **17 wired orchestrators** across **3 canonical tiers** (10 total directories), all satisfying `IOrchestrator``IOrchestrator` protocol:
+A specialized processing engine for one category of work. CORTEX has **27 wired orchestrators** across **3 canonical tiers** (10 total directories), all satisfying `IOrchestrator` protocol:
 
 | Tier | Key Orchestrators | Count |
 |------|-----------------|-------|
 | **Core** | MasterOrchestrator, IntentRouter, TDDOrchestrator, EnforcementOrchestrator, WorkflowOrchestrator, ConversationOrchestrator, InteractionOrchestrator | 7 |
-| **Domain** | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator | 3 |
-| **Support** | OnboardingOrchestrator, SetupOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator, VacuumOrchestrator | 7 |
+| **Domain** | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator, DashboardOrchestrator, ServiceDecompositionOrchestrator, LegacyModernizationOrchestrator | 6 |
+| **Support** | OnboardingOrchestrator, SetupOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator, VacuumOrchestrator, BulkDigestOrchestrator, DigestSessionOrchestrator, DebuggerOrchestrator, UnifiedDiscoveryOrchestrator, UnifiedQualityOrchestrator, AutoHealingMCPOrchestrator, CortexDocsOrchestrator | 14 |
 
 **SweepCatalogueOrchestrator** — Enforces CORE-064 (Sweep Completeness Contract). Every FIX/REFACTOR/AUDIT sweep is tracked in SQLite; no sweep can be abandoned mid-run without an explicit `approve_wont_fix` or `assert_exhausted` call.
 

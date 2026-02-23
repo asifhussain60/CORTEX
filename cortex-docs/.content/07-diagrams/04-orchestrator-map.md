@@ -24,7 +24,7 @@ cortex/orchestrators/
 
 ```
 OrchestratorBase (cortex/core/orchestrator_base.py)
-    │  17 wired orchestrators satisfy the IOrchestrator protocol
+    │  27 wired orchestrators satisfy the IOrchestrator protocol
     │  Auto-logs every execute()/run() call to .cortex-runtime/audit.db (SQLite WAL)
     │
     ├── CORE TIER (7 wired)
@@ -36,19 +36,29 @@ OrchestratorBase (cortex/core/orchestrator_base.py)
     │   ├── ConversationOrchestrator    ← Multi-turn conversation management
     │   └── InteractionOrchestrator     ← User interaction flows
     │
-    ├── DOMAIN TIER (3 wired)
+    ├── DOMAIN TIER (6 wired)
     │   ├── RefactoringOrchestrator     ← Semantic refactoring (Roslyn by-name rename)
     │   ├── PlanningOrchestrator        ← Plan-first execution (CORE-048)
-    │   └── DomainOrchestrator          ← Domain-specific business logic
+    │   ├── DomainOrchestrator          ← Domain-specific business logic
+    │   ├── DashboardOrchestrator       ← Dashboard generation
+    │   ├── ServiceDecompositionOrchestrator ← Service decomposition
+    │   └── LegacyModernizationOrchestrator  ← Legacy modernization
     │
-    └── SUPPORT TIER (7 wired)
+    └── SUPPORT TIER (14 wired)
         ├── OnboardingOrchestrator      ← Repository onboarding (LENS analysis)
         ├── UpgradeOrchestrator         ← Upgrade lifecycle management
         ├── RollbackOrchestrator        ← Rollback & recovery
         ├── SetupOrchestrator           ← Environment setup
         ├── HealthOrchestrator          ← System health monitoring
         ├── SweepCatalogueOrchestrator  ← CORE-064 sweep completeness (SQLite WAL)
-        └── VacuumOrchestrator          ← Markdown sprawl cleanup
+        ├── VacuumOrchestrator          ← Markdown sprawl cleanup
+        ├── BulkDigestOrchestrator      ← Bulk content ingestion
+        ├── DigestSessionOrchestrator   ← Digest session management
+        ├── DebuggerOrchestrator        ← Debug session coordination
+        ├── UnifiedDiscoveryOrchestrator ← Repository discovery
+        ├── UnifiedQualityOrchestrator  ← Quality gate enforcement
+        ├── AutoHealingMCPOrchestrator  ← MCP auto-healing
+        └── CortexDocsOrchestrator      ← Documentation generation
 ```
 
 ## Cross-Orchestrator Communication

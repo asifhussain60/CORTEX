@@ -100,7 +100,7 @@ python3 -m pytest tests/ -n auto --dist loadscope --tb=short
 
 ```
 cortex/                   ← Python source (1 canonical package)
-  orchestrators/          ← 17 wired orchestrators across 3 canonical tiers (10 total directories)
+  orchestrators/          ← 27 wired orchestrators across 3 canonical tiers (10 total directories)
   mcp/tools/              ← 26 MCP tools
   core/                   ← OrchestratorBase, FileFactory, WorkflowEngine
   testing/                ← Test framework, parallel runner, quality gate

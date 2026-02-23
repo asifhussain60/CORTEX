@@ -15,15 +15,15 @@ order: 1
 
 ## Architecture
 
-CORTEX has **17 wired orchestrators** across **3 canonical tiers** (10 total directories), all satisfying the `IOrchestrator``IOrchestrator` protocol. The canonical wiring specification lives in `cortex-registry/core/specifications/`.
+CORTEX has **27 wired orchestrators** across **3 canonical tiers** (10 total directories), all satisfying the `IOrchestrator``IOrchestrator` protocol. The canonical wiring specification lives in `cortex-registry/core/specifications/`.
 
 | Tier | Count | Key Orchestrators |
 |------|-------|-----------------|
 | **Core** (Tier 1) | 7 | MasterOrchestrator, IntentRouter, TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator, ConversationOrchestrator, InteractionOrchestrator |
-| **Domain** (Tier 2) | 3 | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator |
-| **Support** (Tier 3) | 7 | OnboardingOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator, VacuumOrchestrator |
+| **Domain** (Tier 2) | 6 | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator, DashboardOrchestrator, ServiceDecompositionOrchestrator, LegacyModernizationOrchestrator |
+| **Support** (Tier 3) | 14 | OnboardingOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, SetupOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator, VacuumOrchestrator, BulkDigestOrchestrator, DigestSessionOrchestrator, DebuggerOrchestrator, UnifiedDiscoveryOrchestrator, UnifiedQualityOrchestrator, AutoHealingMCPOrchestrator, CortexDocsOrchestrator |
 
-> **Note on total codebase:** `cortex/orchestrators/` contains many more classes (strategy implementations, mixin helpers, specialized sub-components). The **17 wired** are the canonical IOrchestrator-compliant entry points registered in the wiring specifications.
+> **Note on total codebase:** `cortex/orchestrators/` contains many more classes (strategy implementations, mixin helpers, specialized sub-components). The **27 wired** are the canonical IOrchestrator-compliant entry points registered in the wiring specifications.
 
 ---
 
@@ -70,7 +70,7 @@ This audit logging is non-blocking — a failure to log never prevents execution
 
 > **Note:** The primary base is `OrchestratorProtocolMixin` (Phase 58), not `OrchestratorBase`.
 > `OrchestratorBase` exists in `cortex/core/orchestrator_base.py` but is only used by 2 legacy
-> orchestrators. All 17 wired orchestrators use `IOrchestrator` + `OrchestratorProtocolMixin`.
+> orchestrators. All 27 wired orchestrators use `IOrchestrator` + `OrchestratorProtocolMixin`.
 
 ---
 

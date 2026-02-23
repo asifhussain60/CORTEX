@@ -23,7 +23,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 26 MCP tools, 16 canonical dirs |
 | 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | 8 parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
-| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 17 wired orchestrators, 3 canonical tiers (10 total dirs) |
+| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 27 wired orchestrators, 3 canonical tiers (10 total dirs) |
 | 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 35 CORE rules, CORE-064, CORE-055 |
 | 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
 
@@ -34,7 +34,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | Capability | Domain | Implementation | Tests |
 |-----------|--------|---------------|-------|
 | MCP Gateway (26 active tools) | Core | `cortex/mcp/tools/` | ✅ |
-| Orchestrator Dispatch (17 wired) | Core | `cortex/orchestrators/` (3 canonical tiers: 7 core, 3 domain, 7 support (+ 7 support dirs: health, git, intelligence, strategies, synthesis, validation, workflow)) | ✅ |
+| Orchestrator Dispatch (27 wired) | Core | `cortex/orchestrators/` (3 canonical tiers: 7 core, 6 domain, 14 support (+ dirs: health, git, intelligence, strategies, synthesis, validation, workflow)) | ✅ |
 | OrchestratorBase Lifecycle | Core | `cortex/core/orchestrator_base.py` | ✅ |
 | SQLite Activity Log | Core | `.cortex-runtime/audit.db` (auto-logged in `execute()/run()`) | ✅ |
 | FileFactory | Core | `cortex/core/file_factory.py` | ✅ |

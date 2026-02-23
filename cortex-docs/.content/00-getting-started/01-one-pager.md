@@ -34,7 +34,7 @@ Think of it like the difference between a calculator and a brain. A calculator w
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ MCP Gateway  │─▶│  Orchestration    │─▶│ Intelligence  │  │
   │  │ 26 tools     │  │  3 canonical tiers│  │ LENS + Brain  │  │
-  │  │ stdio/HTTP   │  │  17 wired         │  │ 8 analyzers   │  │
+  │  │ stdio/HTTP   │  │  27 wired         │  │ 8 analyzers   │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   │         │                   │                     │           │
   │         ▼                   ▼                     ▼           │
@@ -55,7 +55,7 @@ Think of it like the difference between a calculator and a brain. A calculator w
 | **🏗️ Core Platform** | MCP gateway, 22-orchestrator dispatch, state management, health monitoring | 26 MCP tools, Pylance-style stdio |
 | **🤖 Intelligence (LENS)** | 8-analyzer parallel code understanding — AST, Git, Security, Patterns, Metrics, and more | 300–800ms full analysis |
 | **🧠 Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repo | Confidence scored 0.0–1.0 |
-| **🎯 Decisioning** | Intent routing across 10+ intent types to 17 wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
+| **🎯 Decisioning** | Intent routing across 10+ intent types to 27 wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
 | **🛡️ Governance** | Pre-commit + CI + runtime enforcement of 22 active CORE rules; CORE-064 sweep completeness | 10 agents, <150ms validation |
 | **🔌 Extensibility** | Custom MCP tools, domain orchestrators, workflow templates, enterprise patterns | Hot-reload; zero core changes |
 
@@ -166,4 +166,4 @@ Every action runs through governance enforcement:
 
 ---
 
-*CORTEX v1.0.0 · February 2026 · 17 wired orchestrators · 26 MCP tools · 35 CORE rules · 15,739 tests · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
+*CORTEX v1.0.0 · February 2026 · 27 wired orchestrators · 26 MCP tools · 35 CORE rules · 15,739 tests · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*

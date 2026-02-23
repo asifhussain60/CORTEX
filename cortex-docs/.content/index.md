@@ -23,7 +23,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 **What makes it different from other dev tools:**
 
 - Traditional tools answer questions. CORTEX **orchestrates entire workflows** — from intent classification through TDD enforcement to code delivery.
-- One canonical Python package (`cortex`), 17 wired orchestrators across 3 canonical tiers (10 total directories), 26 MCP tools, 35 active CORE rules governance rules.
+- One canonical Python package (`cortex`), 27 wired orchestrators across 3 canonical tiers (10 total directories), 26 MCP tools, 35 active CORE rules governance rules.
 - TDD is not optional. CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX request. No exceptions.
 - Everything is Git-backed. No PostgreSQL, no MongoDB — just YAML files in `cortex-registry/` versioned alongside your code.
 
@@ -34,7 +34,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value | Status |
 |--------|-------|--------|
 | **Package** | 1 canonical (`cortex`) | ✅ 3→1 consolidation complete |
-| **Orchestrators** | 17 wired (7 core, 3 domain, 7 support) | ✅ IOrchestrator protocol enforced |
+| **Orchestrators** | 27 wired (7 core, 6 domain, 14 support) | ✅ IOrchestrator protocol enforced |
 | **MCP Tools** | 26 active (28 total — 2 deprecated) | ✅ Pylance-style stdio server |
 | **Top-level Dirs** | 16 canonical under `cortex/` | ✅ 59→16 cleanup complete |
 | **Governance Rules** | 35 active CORE rules | ✅ Enforced at pre-commit + CI + runtime |
@@ -52,11 +52,11 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 ```
   ┌───────────────────────────────────────────────────────────────┐
   │                     CORTEX PLATFORM v1.0.0                    │
-  │             1 Package · 17 Orchestrators · 26 MCP Tools       │
+  │             1 Package · 27 Orchestrators · 26 MCP Tools       │
   │                                                               │
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │
   │  │ MCP Gateway │──▶│  Orchestration   │──▶│ Intelligence  │  │
-  │  │ 26 tools    │   │  17 wired        │   │ LENS + Brain  │  │
+  │  │ 26 tools    │   │  27 wired        │   │ LENS + Brain  │  │
   │  └─────────────┘   │  3 canonical tiers│   │ 8 analyzers   │  │
   │         │          └──────────────────┘   └───────────────┘  │
   │         ▼                   │                     │           │
@@ -72,7 +72,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ### Practical Daily Experience
 
-**Business Leader:** "I see a platform where 17 governance rules are automatically enforced on every commit across all teams. Test quality is scored 0–9 and anything below 7 gets flagged. Zero governance violations reach production — the system blocks them at the gate."
+**Business Leader:** "I see a platform where 35 governance rules are automatically enforced on every commit across all teams. Test quality is scored 0–9 and anything below 7 gets flagged. Zero governance violations reach production — the system blocks them at the gate."
 
 **Product Owner:** "When I request a feature, I know TDD is enforced — not by policy, but by the system. The TDDOrchestrator writes the failing test first, then implements. I can pull sprint work items from ADO directly into developer context via `cortex_fetch_work_items`. I never chase test coverage; it's automatic."
 
@@ -117,5 +117,5 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-*CORTEX v1.0.0 · 23 February 2026 · 17 wired orchestrators · 26 MCP tools · 35 CORE rules · 15,739 tests · 696 golden · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
+*CORTEX v1.0.0 · 23 February 2026 · 27 wired orchestrators · 26 MCP tools · 35 CORE rules · 15,739 tests · 696 golden · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
 
