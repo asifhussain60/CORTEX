@@ -520,43 +520,6 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
 
         step.duration_ms = (time.time() - start) * 1000
         return step
-                    
-                    # Apply normalization
-                    normalized_name = self.filename_normalizer.normalize(
-                        filename,
-                        replace_action=True,
-                        proper_case=True,
-                        remove_numbers=True
-                    )
-                    
-                    # Only rename if it actually changed
-                    if normalized_name != filename:
-                        new_path = vf.path.parent / normalized_name
-
-                        if not self.dry_run:
-                            vf.path.rename(new_path)
-                            logger.info(f"Renamed: {filename} → {normalized_name}")
-
-                        renamed_count += 1
-
-                except Exception as e:
-                    filename = self._get_filename(vf)
-                    logger.debug(f"Rename failed for {filename}: {e}")
-                    continue
-
-            result.files_renamed = renamed_count
-
-            step.status = "success"
-            step.details["renamed_count"] = renamed_count
-            step.details["dry_run"] = self.dry_run
-
-        except Exception as exc:
-            step.status = "failed"
-            step.error = str(exc)
-            logger.error(f"Rename failed: {exc}")
-
-        step.duration_ms = (time.time() - start) * 1000
-        return step
 
     def _run_step_tag(self, result: WorkflowResult) -> WorkflowStep:
         """Write extracted metadata tags to files."""
