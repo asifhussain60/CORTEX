@@ -48,6 +48,18 @@ from cortex.orchestrators.core.orchestrator_lookup import OrchestratorLookup
 
 # WORKFLOW-COMPLEXITY-GATE-001: Complexity-based routing
 from cortex.orchestrators.core.intent_router import WorkflowComplexityRouter, Intent as ComplexityIntent
+
+# GAP-57-09: Wire StrategySelector into routing confidence calculation (Phase 57-f)
+try:
+    from cortex.intelligence.reasoning.strategy_selector import StrategySelector as _StrategySelector
+    _routing_strategy_selector = _StrategySelector()
+except ImportError:
+    import logging as _logging
+    _logging.getLogger(__name__).warning(
+        "Optional cortex dependency unavailable: "
+        "cortex.intelligence.reasoning.strategy_selector — feature degraded"
+    )
+    _routing_strategy_selector = None  # type: ignore[assignment]
 from cortex.governance import GoldenHammerRules
 
 # Registry Intelligence Integration

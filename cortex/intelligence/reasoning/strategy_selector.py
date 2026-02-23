@@ -372,6 +372,40 @@ class StrategySelector:
 
         return mitigations
 
+    def select(
+        self,
+        intent: str,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> str:
+        """Select the best strategy for a given intent.
+
+        GAP-57-09: Simple facade for IntentRouter routing-confidence calculation.
+        Returns the top-ranked strategy ID or a default based on intent.
+
+        Args:
+            intent: Intent string (IMPLEMENT, FIX, REFACTOR, …).
+            context: Optional context dict passed from IntentRouter.
+
+        Returns:
+            Strategy ID string (non-empty, never raises).
+
+        Authority: AC-PHASE57-F-001
+        """
+        ctx = context or {}
+        # Enrich context with intent so _match_context can use it
+        ctx_with_intent = {**ctx, "intent": intent}
+        recommendations = self.select_strategies(ctx_with_intent)
+        if recommendations:
+            return recommendations[0].strategy_id
+        # Default strategy per intent
+        defaults = {
+            "IMPLEMENT": "tdd_first",
+            "FIX": "minimal_change",
+            "REFACTOR": "incremental",
+            "AUDIT": "exhaustive_scan",
+        }
+        return defaults.get(intent.upper(), "direct_execution")
+
 
 # Singleton accessor
 _selector_instance: Optional[StrategySelector] = None

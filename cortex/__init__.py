@@ -30,7 +30,10 @@ from cortex.core.wiring import (
 try:
     from cortex.core.bootstrap import _bootstrap_success
 except ImportError:
-    pass
+    import logging as _bootstrap_logger
+    _bootstrap_logger.getLogger(__name__).warning(
+        "Optional cortex dependency unavailable: cortex.core.bootstrap — feature degraded"
+    )
 
 # Package metadata + wiring API
 __all__ = [

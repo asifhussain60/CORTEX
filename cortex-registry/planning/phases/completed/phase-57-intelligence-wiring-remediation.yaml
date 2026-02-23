@@ -1,0 +1,411 @@
+id: phase-57
+title: "Intelligence Wiring Remediation — 9-Issue Sweep (chat01.md Verified Gaps)"
+version: "1.0"
+created: "2026-02-23"
+status: COMPLETED
+priority: P0
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-011  # Type hints
+  - CORE-012  # Docstrings
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep Completeness Contract — ALL 9 gaps, no partial
+sweep_catalogue_id: SWEEP-57-INTELLIGENCE-WIRING
+
+# ─────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────
+background: |
+  Verified against live implementation (2026-02-23) via code inspection.
+  chat01.md identified 14 findings. 5 were fixed in prior work (AuditOrchestrator,
+  BulkDigestOrchestrator, SweepCatalogueOrchestrator, WorkflowOrchestrator,
+  ConversationOrchestrator — all now inherit OrchestratorProtocolMixin).
+  9 gaps remain confirmed-open. Phase 57 closes all 9 in CORE-064 sweep order.
+
+# ─────────────────────────────────────────────────────────────────
+# VERIFIED OPEN ISSUES (sweep catalogue)
+# ─────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: GAP-57-01
+    title: "Knowledge INDEX.yaml path hardcoded to wrong location"
+    severity: P0
+    file: cortex/intelligence/knowledge/knowledge_synthesis_engine.py
+    line: 226
+    evidence: |
+      Hardcoded: cortex-registry/_cortex-master/knowledge/INDEX.yaml
+      Actual:    cortex-registry/knowledge/INDEX.yaml
+    runtime_symptom: "INDEX.yaml not found ... using CORE rules only (10 rules loaded instead of 40+)"
+    phase: phase-57-a
+    status: CLOSED
+
+  - id: GAP-57-02
+    title: "TestClassifierOrchestrator bare class — no OrchestratorProtocolMixin"
+    severity: P1
+    file: cortex/orchestrators/support/test_classifier_orchestrator.py
+    line: 112
+    evidence: "class TestClassifierOrchestrator: — no inheritance, no get_name(), no health_check()"
+    phase: phase-57-b
+    status: CLOSED
+
+  - id: GAP-57-03
+    title: "ReviewOrchestrator bare class — no OrchestratorProtocolMixin"
+    severity: P1
+    file: cortex/orchestrators/core/review_orchestrator.py
+    line: 44
+    evidence: "class ReviewOrchestrator: — no inheritance, has manual health_check() but not via mixin"
+    phase: phase-57-b
+    status: CLOSED
+
+  - id: GAP-57-04
+    title: "IntelligenceOrchestrator disconnected from cortex.lens and cortex.intelligence"
+    severity: P1
+    file: cortex/orchestrators/intelligence/intelligence_orchestrator.py
+    evidence: |
+      Uses ASTIntelligenceEngine, CommentAnalyzer, IntelligenceRoutingEngine directly.
+      Zero imports from cortex.lens or cortex.intelligence module APIs.
+      No OrchestratorProtocolMixin.
+    phase: phase-57-c
+    status: CLOSED
+
+  - id: GAP-57-05
+    title: "Domain orchestrators zero LENS imports (RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator, DashboardOrchestrator)"
+    severity: P1
+    files:
+      - cortex/orchestrators/domain/refactoring_orchestrator.py
+      - cortex/orchestrators/domain/planning_orchestrator.py
+      - cortex/orchestrators/domain/domain_orchestrator.py
+      - cortex/orchestrators/domain/dashboard_orchestrator.py
+    evidence: "grep confirms zero from cortex.lens or from cortex.intelligence in domain/ tier"
+    phase: phase-57-c
+    status: CLOSED
+
+  - id: GAP-57-06
+    title: "AC markers missing in planning_orchestrator.py and domain_orchestrator.py"
+    severity: P1
+    files:
+      - cortex/orchestrators/domain/planning_orchestrator.py
+      - cortex/orchestrators/domain/domain_orchestrator.py
+    evidence: "grep AC_START|AC_COMPLETE returns empty for both files"
+    phase: phase-57-d
+    status: CLOSED
+
+  - id: GAP-57-07
+    title: "144 silent ImportError catches — silent capability degradation"
+    severity: P2
+    scope: cortex/ — all files
+    evidence: "grep -rn 'except ImportError' cortex/ | wc -l = 144"
+    approach: |
+      Cannot remove all — many are legitimate optional-dependency guards.
+      Target: add logger.warning() to every bare 'except ImportError: pass' block
+      so degradation is observable. Do NOT convert to hard fails (breaks optional deps).
+    phase: phase-57-e
+    status: CLOSED
+
+  - id: GAP-57-08
+    title: "Memory tier1 and tier3 unwired — zero orchestrator imports"
+    severity: P2
+    files:
+      - cortex/intelligence/memory/tier1_learned/ (cleaners — unused)
+      - cortex/intelligence/memory/tier3_scratch/ (unused)
+    evidence: |
+      Only tier2_adaptive imported in orchestrators (master_orchestrator.py lines 71, 431).
+      tier1_learned cleaners (root_artifacts, markdown_sprawl, build_artifact,
+      root_database_cleaner, orphaned_test) exist but no orchestrator consumes them.
+    phase: phase-57-f
+    status: CLOSED
+
+  - id: GAP-57-09
+    title: "Reasoning engine stub — strategy_selector.py referenced nowhere in orchestrators"
+    severity: P2
+    file: cortex/intelligence/reasoning/strategy_selector.py
+    evidence: |
+      Only 1 import: knowledge_persistence_mixin.py (not an orchestrator).
+      Zero orchestrator invocations of StrategySelector.
+    phase: phase-57-f
+    status: CLOSED
+
+# ─────────────────────────────────────────────────────────────────
+# PHASE STRUCTURE — 6 sub-phases, sequenced by dependency
+# ─────────────────────────────────────────────────────────────────
+sub_phases:
+
+  - id: phase-57-a
+    title: "Knowledge INDEX Path Fix (P0 — Silent Degradation Bug)"
+    priority: P0
+    gaps_closed: [GAP-57-01]
+    estimated_duration: "30 minutes"
+    sequence: 1
+    tdd_sequence:
+      RED:
+        - "tests/intelligence/knowledge/test_knowledge_synthesis_engine.py"
+        - "Add: test_index_yaml_resolves_to_correct_path()"
+        - "Add: test_synthesis_loads_more_than_10_practices()"
+        - "Add: test_synthesis_does_not_log_index_not_found()"
+      GREEN:
+        - "Fix hardcoded path in knowledge_synthesis_engine.py line 226"
+        - "Change: cortex-registry/_cortex-master/knowledge/INDEX.yaml"
+        - "To:     cortex-registry/knowledge/INDEX.yaml"
+      REFACTOR:
+        - "Extract path to class constant KNOWLEDGE_INDEX_PATH"
+        - "Add integration test asserting >10 practices loaded for IMPLEMENT intent"
+    deliverables:
+      - "cortex/intelligence/knowledge/knowledge_synthesis_engine.py (path fix + constant)"
+      - "tests/intelligence/knowledge/test_knowledge_synthesis_path.py (3 new tests)"
+    acceptance_criteria:
+      - "KnowledgeSynthesisEngine._load_cortex_best_practices('IMPLEMENT') returns >10 practices"
+      - "No 'INDEX.yaml not found' log warning at runtime"
+      - "All existing synthesis tests still pass"
+
+  - id: phase-57-b
+    title: "Protocol Compliance — TestClassifierOrchestrator + ReviewOrchestrator"
+    priority: P1
+    gaps_closed: [GAP-57-02, GAP-57-03]
+    estimated_duration: "45 minutes"
+    sequence: 2
+    tdd_sequence:
+      RED:
+        - "tests/orchestrators/support/test_test_classifier_protocol.py"
+        - "Add: test_test_classifier_inherits_protocol_mixin()"
+        - "Add: test_test_classifier_get_name_returns_string()"
+        - "Add: test_test_classifier_health_check_returns_dict()"
+        - "tests/orchestrators/core/test_review_orchestrator_protocol.py"
+        - "Add: test_review_orchestrator_inherits_protocol_mixin()"
+        - "Add: test_review_orchestrator_get_name_returns_string()"
+        - "Add: test_review_orchestrator_health_check_via_mixin()"
+      GREEN:
+        - "Add OrchestratorProtocolMixin to TestClassifierOrchestrator"
+        - "Add get_name() -> 'TestClassifierOrchestrator'"
+        - "Add get_version() -> '1.0.0'"
+        - "Add initialize() returning health dict"
+        - "Migrate ReviewOrchestrator.health_check() to use OrchestratorProtocolMixin"
+        - "Add get_name(), get_version(), initialize() to ReviewOrchestrator"
+      REFACTOR:
+        - "Ensure ReviewOrchestrator.health_check() delegates to mixin pattern (no duplication)"
+    deliverables:
+      - "cortex/orchestrators/support/test_classifier_orchestrator.py (protocol mixin added)"
+      - "cortex/orchestrators/core/review_orchestrator.py (protocol mixin added)"
+      - "tests/orchestrators/support/test_test_classifier_protocol.py (3 new tests)"
+      - "tests/orchestrators/core/test_review_orchestrator_protocol.py (3 new tests)"
+    acceptance_criteria:
+      - "isinstance(TestClassifierOrchestrator(), OrchestratorProtocolMixin) == True"
+      - "isinstance(ReviewOrchestrator(), OrchestratorProtocolMixin) == True"
+      - "Both get_name() return non-empty strings"
+      - "Both health_check() return {status, orchestrator} dicts"
+      - "All existing classify() and review() tests still pass"
+
+  - id: phase-57-c
+    title: "LENS Wiring — IntelligenceOrchestrator + Domain Tier"
+    priority: P1
+    gaps_closed: [GAP-57-04, GAP-57-05]
+    estimated_duration: "2 hours"
+    sequence: 3
+    approach: |
+      LENS integration uses lazy-import pattern (guarded try/except ImportError → logger.warning)
+      to avoid breaking orchestrators if cortex.lens unavailable. Existing MasterOrchestrator
+      pattern at lines 2632 and 431 is the canonical model — replicate it.
+      Domain orchestrators receive LENS context via orchestrator_context dict already
+      forwarded from IntentRouter. The fix is to CONSUME that context, not re-fetch.
+    tdd_sequence:
+      RED:
+        - "tests/orchestrators/intelligence/test_intelligence_orchestrator_lens.py"
+        - "Add: test_intelligence_orchestrator_accepts_lens_context()"
+        - "Add: test_intelligence_orchestrator_inherits_protocol_mixin()"
+        - "Add: test_intelligence_orchestrator_enriches_result_with_lens()"
+        - "tests/orchestrators/domain/test_domain_lens_consumption.py"
+        - "Add: test_refactoring_orchestrator_consumes_lens_context()"
+        - "Add: test_planning_orchestrator_consumes_lens_context()"
+      GREEN:
+        - "IntelligenceOrchestrator: add OrchestratorProtocolMixin"
+        - "IntelligenceOrchestrator: add analyze_with_context(request, lens_context=None)"
+        - "IntelligenceOrchestrator: lazy-import LENSOrchestrator; if lens_context provided, merge"
+        - "RefactoringOrchestrator: extract lens_context from orchestrator_context kwarg"
+        - "PlanningOrchestrator: extract lens_context from orchestrator_context kwarg"
+        - "DomainOrchestrator: extract lens_context from orchestrator_context kwarg"
+        - "DashboardOrchestrator: already has AC markers — add lens_context extraction"
+      REFACTOR:
+        - "Extract lens_context extraction to shared _extract_lens_context(context) helper"
+        - "Add to OrchestratorProtocolMixin as default implementation"
+    deliverables:
+      - "cortex/orchestrators/intelligence/intelligence_orchestrator.py (protocol + lens)"
+      - "cortex/orchestrators/domain/refactoring_orchestrator.py (lens consumption)"
+      - "cortex/orchestrators/domain/planning_orchestrator.py (lens consumption)"
+      - "cortex/orchestrators/domain/domain_orchestrator.py (lens consumption)"
+      - "cortex/core/orchestrator_protocol_mixin.py (_extract_lens_context helper)"
+      - "tests/orchestrators/intelligence/test_intelligence_orchestrator_lens.py"
+      - "tests/orchestrators/domain/test_domain_lens_consumption.py"
+    acceptance_criteria:
+      - "IntelligenceOrchestrator inherits OrchestratorProtocolMixin"
+      - "All 4 domain orchestrators have _extract_lens_context() calls"
+      - "Lens context forwarded when present (not required — graceful degradation)"
+      - "Zero new ImportError hard failures introduced"
+
+  - id: phase-57-d
+    title: "AC Marker Coverage — planning_orchestrator + domain_orchestrator"
+    priority: P1
+    gaps_closed: [GAP-57-06]
+    estimated_duration: "30 minutes"
+    sequence: 4
+    tdd_sequence:
+      RED:
+        - "tests/orchestrators/domain/test_domain_ac_markers.py"
+        - "Add: test_planning_orchestrator_emits_ac_start()"
+        - "Add: test_planning_orchestrator_emits_ac_complete_on_success()"
+        - "Add: test_domain_orchestrator_emits_ac_start()"
+        - "Add: test_domain_orchestrator_emits_ac_complete_on_success()"
+      GREEN:
+        - "Add AC_START at entry of PlanningOrchestrator public methods"
+        - "Add AC_COMPLETE on success path with ✅ + timing"
+        - "Add AC_COMPLETE on failure path with ❌ + error class"
+        - "Add AC_START at entry of DomainOrchestrator public methods"
+        - "Add AC_COMPLETE on success/failure paths"
+      REFACTOR:
+        - "Use self.logger.info(f'AC_START: AC-DOMAIN-{timestamp}') pattern (consistent with dashboard_orchestrator.py)"
+    deliverables:
+      - "cortex/orchestrators/domain/planning_orchestrator.py (AC markers added)"
+      - "cortex/orchestrators/domain/domain_orchestrator.py (AC markers added)"
+      - "tests/orchestrators/domain/test_domain_ac_markers.py (4 new tests)"
+    acceptance_criteria:
+      - "grep AC_START planning_orchestrator.py returns ≥1 hit"
+      - "grep AC_COMPLETE domain_orchestrator.py returns ≥2 hits (success + failure)"
+      - "All existing domain orchestrator tests still pass"
+
+  - id: phase-57-e
+    title: "Silent ImportError — Observable Degradation Logging"
+    priority: P2
+    gaps_closed: [GAP-57-07]
+    estimated_duration: "1 hour"
+    sequence: 5
+    approach: |
+      144 bare 'except ImportError: pass' blocks create invisible capability loss.
+      Fix: replace bare 'pass' with logger.warning() in every block where the
+      import failure silently disables a CORTEX feature.
+      Legitimate optional guards (third-party libs: yaml, prometheus_client, etc.)
+      are RETAINED as-is — only internal cortex.* import failures get warnings.
+      Use SweepCatalogueOrchestrator to catalogue all 144, classify each as
+      'internal' vs 'external', then sweep internal ones only.
+    tdd_sequence:
+      RED:
+        - "tests/core/test_import_error_observability.py"
+        - "Add: test_internal_import_failures_are_logged()"
+        - "Add: test_external_import_failures_remain_silent()"
+      GREEN:
+        - "Run: grep -rn 'except ImportError' cortex/ to get full catalogue"
+        - "Classify each: cortex.* import → internal, everything else → external"
+        - "For each internal: replace 'pass' with logger.warning(f'Optional dependency unavailable: {module} — feature degraded')"
+      REFACTOR:
+        - "Extract warning template to shared constant IMPORT_DEGRADATION_MSG"
+    deliverables:
+      - "N files modified (all internal cortex.* ImportError guards)"
+      - "tests/core/test_import_error_observability.py"
+    acceptance_criteria:
+      - "Zero bare 'except ImportError: pass' blocks for cortex.* imports"
+      - "All external library guards remain silent (no regression)"
+      - "Smoke tests still pass"
+
+  - id: phase-57-f
+    title: "Memory Tier Wiring + Reasoning Engine Activation"
+    priority: P2
+    gaps_closed: [GAP-57-08, GAP-57-09]
+    estimated_duration: "2 hours"
+    sequence: 6
+    approach: |
+      tier1_learned cleaners (root_artifacts, markdown_sprawl, build_artifact,
+      root_database_cleaner, orphaned_test) are the canonical implementation of
+      VacuumOrchestrator's cleaning logic — they should be imported and called
+      by VacuumOrchestrator rather than reimplementing inline.
+      StrategySelector in reasoning/ should be consumed by at least:
+      - IntentRouter (strategy selection for routing decisions)
+      - PlanningOrchestrator (strategy selection for plan type)
+      tier3_scratch: wire to .cortex-runtime/scratch/ as ephemeral working memory.
+    tdd_sequence:
+      RED:
+        - "tests/orchestrators/health/test_vacuum_tier1_wiring.py"
+        - "Add: test_vacuum_orchestrator_uses_tier1_cleaners()"
+        - "Add: test_tier1_root_artifacts_cleaner_invoked()"
+        - "tests/orchestrators/core/test_intent_router_strategy_selector.py"
+        - "Add: test_intent_router_uses_strategy_selector()"
+        - "Add: test_strategy_selector_returns_valid_strategy()"
+      GREEN:
+        - "VacuumOrchestrator: import tier1_learned cleaners by category"
+        - "Wire markdown_sprawl cleaner for .md file remediation"
+        - "Wire root_artifacts cleaner for root-level clutter"
+        - "IntentRouter: import StrategySelector; use for routing confidence calculation"
+        - "PlanningOrchestrator: import StrategySelector; use for plan_type selection"
+        - "tier3_scratch: create scratch_space connector pointing to .cortex-runtime/scratch/"
+      REFACTOR:
+        - "Validate all existing VacuumOrchestrator tests still pass after cleaner wiring"
+        - "Ensure StrategySelector integration is additive (no existing routing logic changed)"
+    deliverables:
+      - "cortex/orchestrators/health/vacuum_orchestrator.py (tier1 cleaner imports)"
+      - "cortex/orchestrators/core/intent_router.py (StrategySelector integration)"
+      - "cortex/orchestrators/domain/planning_orchestrator.py (StrategySelector)"
+      - "cortex/intelligence/memory/tier3_scratch/__init__.py (scratch connector)"
+      - "tests/orchestrators/health/test_vacuum_tier1_wiring.py"
+      - "tests/orchestrators/core/test_intent_router_strategy_selector.py"
+    acceptance_criteria:
+      - "VacuumOrchestrator imports at least 2 tier1_learned cleaners"
+      - "StrategySelector imported and invoked by IntentRouter"
+      - "tier3_scratch has a __init__.py with scratch_space path connector"
+      - "All existing vacuum and intent router tests still pass"
+
+# ─────────────────────────────────────────────────────────────────
+# EXECUTION SEQUENCE
+# ─────────────────────────────────────────────────────────────────
+execution_order:
+  - "57-a: INDEX path (P0) — unblocks synthesis quality for all subsequent phases"
+  - "57-b: Protocol compliance — completes the wired-bare sweep started in Phase 13"
+  - "57-c: LENS wiring — depends on 57-b (IntelligenceOrchestrator needs mixin first)"
+  - "57-d: AC markers — independent, can run parallel with 57-c"
+  - "57-e: ImportError sweep — independent, run after 57-a to use full synthesis"
+  - "57-f: Memory + reasoning — lowest risk, runs last"
+
+dependencies:
+  - "57-a must complete before 57-c (synthesis quality needed for LENS integration tests)"
+  - "57-b must complete before 57-c (IntelligenceOrchestrator needs OrchestratorProtocolMixin)"
+  - "57-d and 57-e are independent — can parallel with 57-c"
+  - "57-f is fully independent — parallel with 57-d and 57-e"
+
+# ─────────────────────────────────────────────────────────────────
+# AGGREGATE METRICS (estimated)
+# ─────────────────────────────────────────────────────────────────
+estimated_metrics:
+  new_tests: 25  # 3 + 6 + 5 + 4 + 2 + 4 + 2 (across 6 sub-phases)
+  files_modified: ~14
+  new_files: ~8
+  total_duration: "~7 hours"
+  risk: LOW  # All additive — no existing logic removed
+
+# ─────────────────────────────────────────────────────────────────
+# WORKFLOW TEMPLATE REFERENCE
+# ─────────────────────────────────────────────────────────────────
+workflow_template: cortex-registry/workflows/templates/governance/sweep-catalogue-open.yaml
+convergence_gate:
+  primitive: cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml
+  exit_condition: "all 9 GAP-57-* items status == CLOSED"
+  blocking: true
+
+# ─────────────────────────────────────────────────────────────────
+# ALREADY FIXED (reference — do not re-implement)
+# ─────────────────────────────────────────────────────────────────
+already_fixed_prior_phases:
+  - orchestrator: AuditOrchestrator
+    fix: "OrchestratorProtocolMixin added (Phase 13)"
+    verified: true
+  - orchestrator: BulkDigestOrchestrator
+    fix: "OrchestratorProtocolMixin added"
+    verified: true
+  - orchestrator: SweepCatalogueOrchestrator
+    fix: "OrchestratorProtocolMixin added"
+    verified: true
+  - orchestrator: WorkflowOrchestrator
+    fix: "OrchestratorProtocolMixin added"
+    verified: true
+  - orchestrator: ConversationOrchestrator
+    fix: "OrchestratorProtocolMixin added"
+    verified: true
+  - finding: "unified_context forwarded to IntentRouter"
+    fix: "route_with_lens_auto_fetch(unified_intelligence=unified_context) — live object"
+    verified: true
+  - finding: "LENS imports in core tier"
+    fix: "stage1_comprehension_strategy.py, master_orchestrator.py, interaction_orchestrator.py"
+    verified: true

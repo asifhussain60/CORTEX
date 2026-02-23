@@ -154,7 +154,7 @@ class EnvironmentDetector:
             logger.debug("MCP detected: cortex.mcp.server importable")
             return True
         except ImportError:
-            pass
+            import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.mcp — feature degraded")
 
         return False
 

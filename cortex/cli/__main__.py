@@ -147,7 +147,7 @@ try:
     from cortex.cli.commands.onboard import onboard
     cli.add_command(onboard)
 except ImportError:
-    pass  # Graceful fallback if dependencies not available
+    import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.cli.commands.onboard — feature degraded")
 
 
 def main() -> None:

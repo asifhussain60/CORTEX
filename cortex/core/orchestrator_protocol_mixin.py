@@ -89,3 +89,30 @@ class OrchestratorProtocolMixin:
             "orchestrator": self.get_name(),
             "version": self.get_version(),
         }
+
+    # ------------------------------------------------------------------
+    # LENS context extraction (GAP-57-05 — Phase 57-c)
+    # ------------------------------------------------------------------
+
+    def _extract_lens_context(
+        self,
+        orchestrator_context: Optional[Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        """Extract LENS intelligence context from orchestrator_context dict.
+
+        Domain orchestrators receive LENS context forwarded by IntentRouter
+        inside ``orchestrator_context["lens_context"]``. This helper centralises
+        the extraction so every domain orchestrator gets the same behaviour.
+
+        Args:
+            orchestrator_context: The full context dict passed by IntentRouter.
+                                  May be None (graceful degradation).
+
+        Returns:
+            The ``lens_context`` sub-dict when present, otherwise ``None``.
+
+        Authority: AC-PHASE57-C-001 (Phase 57-c LENS wiring)
+        """
+        if orchestrator_context is None:
+            return None
+        return orchestrator_context.get("lens_context")

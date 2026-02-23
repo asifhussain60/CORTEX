@@ -61,19 +61,19 @@ def _register_default_providers() -> None:
         from cortex.infrastructure.storage.providers.local import LocalFileSystemProvider
         StorageProviderFactory.register_provider("local", LocalFileSystemProvider)
     except ImportError:
-        pass
+        import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.infrastructure.storage.providers.local — feature degraded")
 
     try:
         from cortex.infrastructure.storage.providers.s3 import S3StorageProvider
         StorageProviderFactory.register_provider("s3", S3StorageProvider)
     except ImportError:
-        pass
+        import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.infrastructure.storage.providers.s3 — feature degraded")
 
     try:
         from cortex.infrastructure.storage.providers.azure import AzureBlobProvider
         StorageProviderFactory.register_provider("azure", AzureBlobProvider)
     except ImportError:
-        pass
+        import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.infrastructure.storage.providers.azure — feature degraded")
 
 
 _register_default_providers()

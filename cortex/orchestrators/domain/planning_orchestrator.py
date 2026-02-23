@@ -5,8 +5,11 @@ AC-ID: AC-PHASE70-S2-002
 Status: TDD Implementation (tests drive development)
 
 AC-WAVE-7-CLEANUP-S3-001: Added IOrchestrator interface compliance
+AC-PHASE57-D-001: AC markers added (GAP-57-06)
 """
 
+import logging
+import time
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
@@ -16,6 +19,8 @@ from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import PhaseStatus, IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -129,6 +134,26 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     # End IOrchestrator Interface Implementation
     # =========================================================================
 
+    def _extract_lens_context(
+        self,
+        orchestrator_context: Optional[Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        """Extract LENS intelligence context from orchestrator_context dict.
+
+        GAP-57-05: Consume lens_context forwarded by IntentRouter.
+
+        Args:
+            orchestrator_context: Full context dict from IntentRouter. May be None.
+
+        Returns:
+            The ``lens_context`` sub-dict when present, otherwise ``None``.
+
+        Authority: AC-PHASE57-C-001
+        """
+        if orchestrator_context is None:
+            return None
+        return orchestrator_context.get("lens_context")
+
     def process(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
         Main planning orchestration entry point.
@@ -139,30 +164,40 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
         Returns:
             Orchestrated plan with risk/effort/timeline
         """
-        phases_data = request.get("phases", [])
-        phases = []
-        for p in phases_data:
-            if isinstance(p, PhaseNode):
-                phases.append(p)
-            elif isinstance(p, dict):
-                phases.append(PhaseNode(**p))
+        _ts = int(time.time() * 1000)
+        logger.info(f"AC_START: AC-PLANNING-{_ts}")
+        try:
+            phases_data = request.get("phases", [])
+            phases = []
+            for p in phases_data:
+                if isinstance(p, PhaseNode):
+                    phases.append(p)
+                elif isinstance(p, dict):
+                    phases.append(PhaseNode(**p))
 
-        if phases:
-            plan_result = self.plan_phases(phases)
-        else:
-            plan_result = {"phases": list(self.phases.values()), "total_effort": 0}
+            if phases:
+                plan_result = self.plan_phases(phases)
+            else:
+                plan_result = {"phases": list(self.phases.values()), "total_effort": 0}
 
-        dependencies = self.analyze_dependencies()
-        critical_path = self.calculate_critical_path()
-        risks = self.assess_risks()
+            dependencies = self.analyze_dependencies()
+            critical_path = self.calculate_critical_path()
+            risks = self.assess_risks()
 
-        return {
-            "status": PhaseStatus.PLANNED,
-            "plan": plan_result,
-            "critical_path": critical_path,
-            "risks": risks,
-            "dependencies": dependencies,
-        }
+            result = {
+                "status": PhaseStatus.NOT_STARTED,
+                "plan": plan_result,
+                "critical_path": critical_path,
+                "risks": risks,
+                "dependencies": dependencies,
+            }
+            _elapsed = int(time.time() * 1000) - _ts
+            logger.info(f"AC_COMPLETE: AC-PLANNING-{_ts} ✅ ({_elapsed}ms)")
+            return result
+        except Exception as exc:
+            _elapsed = int(time.time() * 1000) - _ts
+            logger.info(f"AC_COMPLETE: AC-PLANNING-{_ts} ❌ {type(exc).__name__} ({_elapsed}ms)")
+            raise
 
     def plan_phases(self, phases: List[PhaseNode]) -> Dict[str, Any]:
         """

@@ -52,7 +52,7 @@ def cortex_list_workflow_templates(
             from cortex.mcp.tools._shared import validate_orchestrator_context
             validate_orchestrator_context(orchestrator_context)
         except ImportError:
-            pass
+            import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.mcp.tools._shared — feature degraded")
 
     try:
         from cortex.core.workflow_template_mixin import WorkflowTemplateMixin

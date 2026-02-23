@@ -75,6 +75,14 @@ class SynthesizedInstruction:
 class KnowledgeSynthesisEngine:
     """Composes CORTEX + Company knowledge into final instructions."""
 
+    # GAP-57-01: canonical path constant — use this everywhere, never hardcode
+    KNOWLEDGE_INDEX_PATH: str = str(
+        Path(__file__).parent.parent.parent.parent
+        / "cortex-registry"
+        / "knowledge"
+        / "INDEX.yaml"
+    )
+
     def __init__(self) -> None:
         """Initialize synthesis engine."""
         self._cache: Dict[str, SynthesizedInstruction] = {}
@@ -222,8 +230,8 @@ class KnowledgeSynthesisEngine:
         practices = {}
 
         try:
-            # Load INDEX.yaml from registry
-            index_path = Path(__file__).parent.parent.parent.parent / "cortex-registry" / "_cortex-master" / "knowledge" / "INDEX.yaml"
+            # Load INDEX.yaml from registry (GAP-57-01: canonical path fix)
+            index_path = Path(self.KNOWLEDGE_INDEX_PATH)
 
             if not index_path.exists():
                 logger.warning(f"INDEX.yaml not found at {index_path}, using CORE rules only")

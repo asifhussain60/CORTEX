@@ -3,11 +3,16 @@
 Implements domain orchestration patterns for multi-domain support.
 
 Author: CORTEX Framework
+AC-PHASE57-D-001: AC markers added (GAP-57-06)
 """
 
+import logging
+import time
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
+logger = logging.getLogger(__name__)
 
 
 class DomainHandler(ABC):
@@ -264,9 +269,32 @@ class IntegrationHandler(DomainHandler):
 class DomainOrchestrator(OrchestratorProtocolMixin):
     """Main orchestrator for coordinating domain operations."""
 
+    _orch_name = "DomainOrchestrator"
+    _orch_version = "1.0.0"
+
     def __init__(self) -> None:
         """Initialize orchestrator."""
         self.registry = DomainRegistry()
+
+    def _extract_lens_context(
+        self,
+        orchestrator_context: Optional[Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        """Extract LENS intelligence context from orchestrator_context dict.
+
+        GAP-57-05: Consume lens_context forwarded by IntentRouter.
+
+        Args:
+            orchestrator_context: Full context dict from IntentRouter. May be None.
+
+        Returns:
+            The ``lens_context`` sub-dict when present, otherwise ``None``.
+
+        Authority: AC-PHASE57-C-001
+        """
+        if orchestrator_context is None:
+            return None
+        return orchestrator_context.get("lens_context")
 
     def execute(self, domain_id: str, operation: str, params: Dict[str, Any]) -> Dict[str, Any]:
         """Execute domain operation.
@@ -279,14 +307,30 @@ class DomainOrchestrator(OrchestratorProtocolMixin):
         Returns:
             Operation result
         """
-        handler = self.registry.get_handler(operation)
-        if not handler:
-            return {"status": "error", "message": f"Unknown operation: {operation}"}
+        _ts = int(time.time() * 1000)
+        logger.info(f"AC_START: AC-DOMAIN-{_ts}")
+        try:
+            handler = self.registry.get_handler(operation)
+            if not handler:
+                result = {"status": "error", "message": f"Unknown operation: {operation}"}
+                _elapsed = int(time.time() * 1000) - _ts
+                logger.info(f"AC_COMPLETE: AC-DOMAIN-{_ts} ❌ UnknownOperation ({_elapsed}ms)")
+                return result
 
-        if not handler.validate(params):
-            return {"status": "error", "message": "Invalid parameters for operation"}
+            if not handler.validate(params):
+                result = {"status": "error", "message": "Invalid parameters for operation"}
+                _elapsed = int(time.time() * 1000) - _ts
+                logger.info(f"AC_COMPLETE: AC-DOMAIN-{_ts} ❌ InvalidParams ({_elapsed}ms)")
+                return result
 
-        return handler.execute(params)
+            result = handler.execute(params)
+            _elapsed = int(time.time() * 1000) - _ts
+            logger.info(f"AC_COMPLETE: AC-DOMAIN-{_ts} ✅ ({_elapsed}ms)")
+            return result
+        except Exception as exc:
+            _elapsed = int(time.time() * 1000) - _ts
+            logger.info(f"AC_COMPLETE: AC-DOMAIN-{_ts} ❌ {type(exc).__name__} ({_elapsed}ms)")
+            raise
 
 
 __all__ = [

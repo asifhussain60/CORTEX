@@ -116,6 +116,27 @@ class RefactoringOrchestrator(WorkflowTemplateMixin, IOrchestrator):
             f"RefactoringOrchestrator initialized with {self._registered_count} adapters"
         )
 
+    def _extract_lens_context(
+        self,
+        orchestrator_context: Optional[Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        """Extract LENS intelligence context from orchestrator_context dict.
+
+        GAP-57-05: Domain orchestrators must consume lens_context forwarded by
+        IntentRouter inside orchestrator_context["lens_context"].
+
+        Args:
+            orchestrator_context: Full context dict from IntentRouter. May be None.
+
+        Returns:
+            The ``lens_context`` sub-dict when present, otherwise ``None``.
+
+        Authority: AC-PHASE57-C-001
+        """
+        if orchestrator_context is None:
+            return None
+        return orchestrator_context.get("lens_context")
+
     def _register_adapters(self) -> None:
         """Register all available refactoring tool adapters.
 

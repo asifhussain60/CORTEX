@@ -39,6 +39,35 @@ from .file_context import FileContext
 from .models import IssueFile, IssueSeverity, OperationResult, ScanResult, VacuumReport
 from .naming import classify_naming_violation, is_screaming, to_kebab_case, to_snake_case
 
+# GAP-57-08: Wire tier1_learned cleaners (Phase 57-f)
+try:
+    from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.root_artifacts import (
+        RootArtifactsCleaner,
+    )
+    _tier1_root_artifacts = RootArtifactsCleaner
+except ImportError:
+    import logging as _logging
+    _logging.getLogger(__name__).warning(
+        "Optional cortex dependency unavailable: "
+        "cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.root_artifacts"
+        " — feature degraded"
+    )
+    _tier1_root_artifacts = None  # type: ignore[assignment]
+
+try:
+    from cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.markdown_sprawl import (
+        MarkdownSprawlCleaner,
+    )
+    _tier1_markdown_sprawl = MarkdownSprawlCleaner
+except ImportError:
+    import logging as _logging
+    _logging.getLogger(__name__).warning(
+        "Optional cortex dependency unavailable: "
+        "cortex.intelligence.memory.tier1_learned.orchestrators.cleaners.markdown_sprawl"
+        " — feature degraded"
+    )
+    _tier1_markdown_sprawl = None  # type: ignore[assignment]
+
 logger = logging.getLogger(__name__)
 
 

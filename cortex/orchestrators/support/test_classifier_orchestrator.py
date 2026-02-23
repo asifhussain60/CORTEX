@@ -22,6 +22,8 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import List
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 
 # =============================================================================
 # ENUMS
@@ -109,7 +111,7 @@ _GOLDEN_REQUIRED_MARKERS: list[str] = ["AC-ID:", "# P0", "# P1"]
 # ORCHESTRATOR
 # =============================================================================
 
-class TestClassifierOrchestrator:
+class TestClassifierOrchestrator(OrchestratorProtocolMixin):
     """Deterministic, stateless classifier: module path → TestDecision.
 
     Pure read-only. No network I/O, no disk I/O, no ML inference.
@@ -125,6 +127,9 @@ class TestClassifierOrchestrator:
         # decision.coverage_floor == 95
         # TestConcern.SECURITY in decision.concerns
     """
+
+    _orch_name = "TestClassifierOrchestrator"
+    _orch_version = "1.0.0"
 
     def classify(self, module_path: str) -> TestDecision:
         """Classify a module path and return a full TestDecision.

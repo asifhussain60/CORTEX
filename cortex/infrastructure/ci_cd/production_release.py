@@ -55,7 +55,7 @@ class ProductionReleaseManager:
                 from cortex.orchestrators.shared_audit_trail import SharedAuditTrail
                 self._audit = SharedAuditTrail()
             except ImportError:
-                pass
+                import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.orchestrators.shared_audit_trail — feature degraded")
 
     def get_current_version(self) -> str:
         """

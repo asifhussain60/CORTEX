@@ -210,14 +210,14 @@ def get_database_crawler_plugin(database_type: str) -> Optional[DatabaseCrawlerP
         plugins["sqlserver"] = SQLServerPlugin
         plugins["mssql"] = SQLServerPlugin
     except ImportError:
-        pass  # Plugin not yet implemented
+        import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.lens.analyzers.sqlserver_plugin — feature degraded")
 
     try:
         from cortex.lens.analyzers.postgresql_plugin import PostgreSQLPlugin
         plugins["postgresql"] = PostgreSQLPlugin
         plugins["postgres"] = PostgreSQLPlugin
     except ImportError:
-        pass  # Plugin not yet implemented
+        import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.lens.analyzers.postgresql_plugin — feature degraded")
 
     plugin_class = plugins.get(database_type.lower())
     if plugin_class:

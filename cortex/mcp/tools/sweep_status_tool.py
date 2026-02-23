@@ -73,7 +73,7 @@ def cortex_sweep_status(
                     "orchestrator_context must be a MasterOrchestrator instance"
                 )
         except ImportError:
-            pass  # Guard is best-effort; don't fail if MO not importable
+            import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.orchestrators.core.master_orchestrator — feature degraded")
 
     try:
         from cortex.orchestrators.support.sweep_catalogue_orchestrator import (

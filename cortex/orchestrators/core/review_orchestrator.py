@@ -13,6 +13,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 
 @dataclass
 class ReviewResult:
@@ -41,7 +43,7 @@ class ReviewResult:
         }
 
 
-class ReviewOrchestrator:
+class ReviewOrchestrator(OrchestratorProtocolMixin):
     """
     Executes the final review gate at the end of each SDLC phase.
 
@@ -51,6 +53,9 @@ class ReviewOrchestrator:
         - Commit quality (meaningful commits, TDD evidence)
         - Security gates (for CRITICAL complexity tasks)
     """
+
+    _orch_name = "ReviewOrchestrator"
+    _orch_version = "1.0.0"
 
     def execute_final_review(
         self,

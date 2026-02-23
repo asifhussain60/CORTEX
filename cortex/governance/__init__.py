@@ -21,8 +21,7 @@ try:
         ValidationResult,
     )
 except ImportError:
-    # Graceful fallback if module not yet fully initialized
-    pass
+    import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.governance.filename_factory — feature degraded")
 
 try:
     from cortex.governance.golden_hammer_rules import (
@@ -30,8 +29,7 @@ try:
         GoldenHammerViolation,
     )
 except ImportError:
-    # Graceful fallback if golden hammer rules not available
-    pass
+    import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.governance.golden_hammer_rules — feature degraded")
 
 __all__ = [
     "FilenameFactory",

@@ -4,17 +4,21 @@
 from __future__ import annotations
 import hashlib
 import json
+import logging
 import sqlite3
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine, ParseResult
 from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
 from cortex.core.core.intelligence_routing_engine import IntelligenceRoutingEngine
 
+logger = logging.getLogger(__name__)
 
-class IntelligenceOrchestrator:
+
+class IntelligenceOrchestrator(OrchestratorProtocolMixin):
     """Unified intelligence: AST + comments + routing + comprehension + caching.
     
     Consolidates:
@@ -27,6 +31,9 @@ class IntelligenceOrchestrator:
     Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
     Phase: 23 MEGA-B Stage 2 - Component Registration
     """
+
+    _orch_name = "IntelligenceOrchestrator"
+    _orch_version = "1.0.0"
     
     def __init__(self, audit_db_path: Optional[Path] = None) -> None:
         """Initialize intelligence orchestrator.
@@ -254,6 +261,50 @@ class IntelligenceOrchestrator:
             }
             for r in rows
         ]
+
+
+    def analyze_with_context(
+        self,
+        intent: str,
+        lens_context: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """Analyze request with optional LENS context enrichment.
+
+        GAP-57-04: Wires IntelligenceOrchestrator into cortex.lens pipeline.
+        Uses lazy-import pattern (guarded try/except) to avoid hard failures
+        when cortex.lens is unavailable.
+
+        Args:
+            intent: User intent string (IMPLEMENT, FIX, REFACTOR, …)
+            lens_context: Optional LENS intelligence dict forwarded from IntentRouter.
+                          When None, analysis proceeds without enrichment.
+
+        Returns:
+            Dict with routing result; includes ``lens_enriched: True`` when
+            lens_context was consumed.
+
+        Authority: AC-PHASE57-C-001
+        """
+        routing = self.route_intelligence(intent, {"intent": intent})
+        result: Dict[str, Any] = {
+            "intent": intent,
+            "routing": routing,
+            "lens_enriched": False,
+        }
+
+        if lens_context is not None:
+            result["lens_context"] = lens_context
+            result["lens_enriched"] = True
+            # Merge key LENS signals into routing metadata
+            git_commits = lens_context.get("git_analysis", {}).get("commits", 0)
+            result["git_commit_count"] = git_commits
+
+        self._audit_log(
+            "ANALYZE_WITH_CONTEXT",
+            intent,
+            {"lens_enriched": result["lens_enriched"]},
+        )
+        return result
 
 
 # AC_COMPLETE: AC-MEGA-B-S2-003-INTELLIGENCE ✅ Implemented

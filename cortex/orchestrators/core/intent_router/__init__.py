@@ -1,5 +1,7 @@
 """Intent Router - Complexity-Gated Workflow Routing."""
 
+import logging
+
 from cortex.orchestrators.core.intent_router.workflow_gate import (
     WorkflowComplexityRouter,
     Intent,
@@ -8,12 +10,29 @@ from cortex.orchestrators.core.intent_router.workflow_gate import (
     ComplexityThreshold,
 )
 
+# GAP-57-09: Wire StrategySelector into IntentRouter for routing confidence (Phase 57-f)
+try:
+    from cortex.intelligence.reasoning.strategy_selector import StrategySelector
+    _strategy_selector = StrategySelector()
+except ImportError:
+    logging.getLogger(__name__).warning(
+        "Optional cortex dependency unavailable: "
+        "cortex.intelligence.reasoning.strategy_selector — feature degraded"
+    )
+    StrategySelector = None  # type: ignore[assignment,misc]
+    _strategy_selector = None
+
 try:
     from cortex.orchestrators.core.intent_router.router import EnhancedIntentRouter  # type: ignore
     # Alias for backward compat — callers using IntentRouter get the enhanced version
     IntentRouter = EnhancedIntentRouter
 except ImportError:
-    pass
+    logging.getLogger(__name__).warning(
+        "Optional cortex dependency unavailable: "
+        "cortex.orchestrators.core.intent_router.router — feature degraded"
+    )
+    IntentRouter = None  # type: ignore[assignment]
+    EnhancedIntentRouter = None  # type: ignore[assignment]
 
 try:
     from cortex.orchestrators.core.intent_router.routing_enforcement import RoutingEnforcementEngine  # type: ignore
@@ -50,5 +69,6 @@ __all__ = [
     "EnhancedIntentRouter",
     "OrchestratorLookup",
     "RoutingEnforcementEngine",
+    "StrategySelector",
     "get_registry_intelligence_agent",
 ]

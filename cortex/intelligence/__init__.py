@@ -25,7 +25,7 @@ try:
         "AnalysisResult",
     ]
 except ImportError:
-    pass
+    import logging as _logging; _logging.getLogger(__name__).warning("Optional cortex dependency unavailable: cortex.intelligence.base — feature degraded")
 
 # Tier-based intelligence (formerly cortex.intelligence)
 def __getattr__(name: str):

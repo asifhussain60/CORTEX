@@ -1,14 +1,21 @@
-version: '10.7'
+version: '10.8'
 updated: '2026-02-23'
 maintainer: CORTEX Architecture Team
 metadata:
-  version: '10.7'
+  version: '10.8'
   last_updated: '2026-02-23T00:00:00Z'
-  total_phases: 57
+  total_phases: 58
   active: 0
   completed: 57
   playbooks: 1
-  planned: 0
+  planned: 1
+  planned_phases:
+    - id: phase-57
+      title: "Intelligence Wiring Remediation — 9-Issue Sweep"
+      priority: P0
+      sweep_id: SWEEP-57-INTELLIGENCE-WIRING
+      gaps: 9
+      sub_phases: 6
 architecture:
   package: cortex
   canonical_dirs: 16
@@ -32,12 +39,22 @@ entry_points:
   enforcement_orchestrator: cortex/orchestrators/core/enforcement_orchestrator.py
   orchestrator_base: cortex/core/orchestrator_base.py
   file_fact  key_achievements:
-  - 🟢 54/54 PHASES COMPLETE — Phase 53 Convergence Loop Wiring DELIVERED
+  - 🟢 57/57 PHASES COMPLETE — Phase 56 CORE-064 Structural Sweep Enforcement DELIVERED
+  - 🟡 Phase 57 PLANNED — Intelligence Wiring Remediation (9 verified gaps, SWEEP-57)
   - 🟢 838 GOLDEN TESTS COLLECTED — 0 FAILURES (2026-02-23)
   - 🟢 Playbook PB-STS-001 created — repeatable BadMonolith E2E refactoring
   - 🟢 Phase 52 COMPLETE — Operational Pattern Journal (cross-orchestrator learning)
   - 🟢 Phase 55 COMPLETE — TemplateComposer (dynamic workflow composition from primitives)
   - 🟢 Phase 56 COMPLETE — CORE-064 Structural Sweep Enforcement (sweep envelope injection at composition time, SweepCompositionEnforcementAgent #11, 35/35 CORE rules covered)
+  - 🔴 GAP-57-01 OPEN — KnowledgeSynthesisEngine INDEX path wrong (10 rules loaded instead of 40+)
+  - 🔴 GAP-57-02 OPEN — TestClassifierOrchestrator bare class (no OrchestratorProtocolMixin)
+  - 🔴 GAP-57-03 OPEN — ReviewOrchestrator bare class (no OrchestratorProtocolMixin)
+  - 🔴 GAP-57-04 OPEN — IntelligenceOrchestrator disconnected from cortex.lens
+  - 🔴 GAP-57-05 OPEN — Domain orchestrators zero LENS imports
+  - 🔴 GAP-57-06 OPEN — AC markers missing in planning_orchestrator and domain_orchestrator
+  - 🔴 GAP-57-07 OPEN — 144 silent ImportError catches (no observable degradation)
+  - 🔴 GAP-57-08 OPEN — Memory tier1/tier3 unwired
+  - 🔴 GAP-57-09 OPEN — Reasoning engine stub (StrategySelector referenced nowhere)
   - MCP tool count: 24 production tools live (cortex_query_opj integrated into cortex_knowledge) ✅
   - CORE-065 proposed: Operational Pattern Consultation rulertex/core/file_factory.py
   workflow_engine: cortex/core/workflow_engine.py
@@ -240,7 +257,47 @@ phases:
     run_id: PB-STS-001-RUN-20260222-001
     scorecard_composite: 8.6
     scorecard_delta: "+6.5"
-  planned: []
+  planned:
+  - id: phase-57
+    title: "Intelligence Wiring Remediation — 9-Issue Sweep (SWEEP-57-INTELLIGENCE-WIRING)"
+    priority: P0
+    file: planning/phases/planned/phase-57-intelligence-wiring-remediation.yaml
+    created: '2026-02-23'
+    estimated_duration: "~7 hours"
+    governance_authority: CORE-064
+    sweep_catalogue_id: SWEEP-57-INTELLIGENCE-WIRING
+    gaps_count: 9
+    sub_phases:
+      - id: phase-57-a
+        title: "Knowledge INDEX Path Fix"
+        priority: P0
+        gap: GAP-57-01
+        status: OPEN
+      - id: phase-57-b
+        title: "Protocol Compliance — TestClassifier + ReviewOrchestrator"
+        priority: P1
+        gaps: [GAP-57-02, GAP-57-03]
+        status: OPEN
+      - id: phase-57-c
+        title: "LENS Wiring — IntelligenceOrchestrator + Domain Tier"
+        priority: P1
+        gaps: [GAP-57-04, GAP-57-05]
+        status: OPEN
+      - id: phase-57-d
+        title: "AC Marker Coverage"
+        priority: P1
+        gap: GAP-57-06
+        status: OPEN
+      - id: phase-57-e
+        title: "Silent ImportError Observable Degradation"
+        priority: P2
+        gap: GAP-57-07
+        status: OPEN
+      - id: phase-57-f
+        title: "Memory Tier Wiring + Reasoning Engine Activation"
+        priority: P2
+        gaps: [GAP-57-08, GAP-57-09]
+        status: OPEN
   active: []
   completed_late_additions_phase_55:
   - id: phase-55
@@ -1042,12 +1099,18 @@ execution_order:
     completion_date: 2026-02-23 (actual)
     confidence: 100% (838 golden tests passing)
 production_readiness:
-  status: 🟢 PRODUCTION READY — 55 PHASES COMPLETE
-  overall_score: 100%
+  status: "� 57/57 COMPLETE — Phase 57 Intelligence Wiring Remediation PLANNED"
+  overall_score: 98%
   deployment_date: 2026-02-19 00:00 UTC
   deployment_type: Zero-downtime rolling update
-  latest_phase: Phase 54 complete (2026-02-23) — CORTEX Cohesive Brain Refactor (ghost dir removal, path canonicalization)
-  next_milestone: All 55 phases DELIVERED — system at 100% production readiness
+  latest_phase: Phase 56 complete (2026-02-23) — CORE-064 Structural Sweep Enforcement
+  next_milestone: "Phase 57 — Intelligence Wiring Remediation (9 gaps, SWEEP-57-INTELLIGENCE-WIRING)"
+  open_p0_issues:
+    - id: GAP-57-01
+      title: "KnowledgeSynthesisEngine INDEX path hardcoded to wrong location — 10 rules loaded instead of 40+"
+      file: cortex/intelligence/knowledge/knowledge_synthesis_engine.py
+      line: 226
+      phase: phase-57-a
   mega_phases_completed:
   - phase: MEGA-E
     label: Stabilization & Duplicate Elimination
@@ -1096,23 +1159,30 @@ synchronization_status:
   last_sync_date: '2026-02-22T18:00:00Z'
   sync_verified: true
 summary:
-  total_phases: 56
-  completed: 56
+  total_phases: 58
+  completed: 57
   active: 0
-  planned: 0
+  planned: 1
   playbooks: 1
   consolidated: 2
   deferred: 4
-  completion_percentage: 100
-  production_status: 🟢 PRODUCTION READY — 56/56 PHASES COMPLETE
-  phase_numbering: Sequential 01-55 (v10.6 - 2026-02-23)
+  completion_percentage: 98
+  production_status: "🟡 57/57 COMPLETE — Phase 57 Intelligence Wiring PLANNED (9 open gaps)"
+  phase_numbering: Sequential 01-56 complete + phase-57 planned (v10.8 - 2026-02-23)
+  open_gaps:
+    count: 9
+    sweep_id: SWEEP-57-INTELLIGENCE-WIRING
+    p0: 1
+    p1: 5
+    p2: 3
+    phase_file: planning/phases/planned/phase-57-intelligence-wiring-remediation.yaml
   key_achievements:
   - 🟢 56/56 PHASES COMPLETE — Phase 55 TemplateComposer DELIVERED
   - 🟢 838 GOLDEN TESTS COLLECTED — 0 FAILURES (2026-02-23)
   - 'Phase 55 COMPLETE: TemplateComposer — dynamic workflow composition from validated primitives (16 tests)'
   - 'Phase 54 COMPLETE: cortex-refactor — ghost dir removal, path canonicalization, 20+ source files fixed'
   - 🟢 Playbook PB-STS-001 created — repeatable BadMonolith E2E refactoring
-  - � Phase 52 COMPLETE — Operational Pattern Journal (cross-orchestrator learning)
+  - 🟢 Phase 52 COMPLETE — Operational Pattern Journal (cross-orchestrator learning)
   - MCP tool count: 24 production tools live (cortex_query_opj integrated into cortex_knowledge) ✅
   - CORE-065 proposed: Operational Pattern Consultation rule
   - OPJ wired into DigestSessionOrchestrator, TDDOrchestrator, EnforcementOrchestrator
