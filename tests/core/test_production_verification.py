@@ -446,8 +446,10 @@ class TestProductionStubDetection:
             # - RefactoringResult: sweep result vs domain refactoring model
             # - CoherenceReport: coherence validator vs validation models
             # - CheckResult: git enforcement vs pre-implementation checklist
+            # - Pattern: discovery_models (learning path entity) vs flush_manager
+            #             (knowledge-base pattern dataclass) — semantically distinct
             "ScanResult", "VacuumOrchestrator", "WorkflowStep",
-            "RefactoringResult", "CoherenceReport", "CheckResult",
+            "RefactoringResult", "CoherenceReport", "CheckResult", "Pattern",
             # Infrastructure domain-local types (each sub-domain defines its own)
             "DatabaseMetrics", "TraceContext", "DegradationLevel",
             "RetryConfig", "RetryStrategy", "LogLevel", "LogEntry",

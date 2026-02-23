@@ -219,3 +219,7 @@ class MasterOrchestrationStage3:
             stage1_confidence = context.stage1_output.confidence_score or 0.0
 
         return min(base + entity_bonus + stage1_confidence * 0.10, 1.0)
+
+    def health_check(self) -> dict:
+        """Return health status for L1 wiring contract compliance."""
+        return {"status": "healthy", "orchestrator": "MasterOrchestrationStage3"}

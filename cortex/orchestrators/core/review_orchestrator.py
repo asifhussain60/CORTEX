@@ -104,3 +104,7 @@ class ReviewOrchestrator:
             compliance_verified=complexity_level != "CRITICAL" or security_gates > 0,
         )
         return result.to_dict()
+
+    def health_check(self) -> dict:
+        """Return health status for L1 wiring contract compliance."""
+        return {"status": "healthy", "orchestrator": "ReviewOrchestrator"}

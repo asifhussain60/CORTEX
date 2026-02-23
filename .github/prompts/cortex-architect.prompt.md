@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-22 | **Architecture:** 22 Wired Orchestrators · 25 MCP Tools · 35 CORE Rules · 1 Package  
+**Updated:** 2026-02-23 | **Architecture:** 22 Wired Orchestrators · 24 MCP Tools · 35 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
@@ -32,7 +32,7 @@
 | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` |
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
-| MCP Tools (25) | `cortex/mcp/tools/` |
+| MCP Tools (24) | `cortex/mcp/tools/` |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
 | Intelligence Provider | `cortex/intelligence/provider.py` |
@@ -480,7 +480,7 @@ Everything else → move to canonical location or delete.
 
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`)
-- No stale orchestrator counts (must say **22 wired orchestrators**, **25 MCP tools**, **35 CORE rules**)
+- No stale orchestrator counts (must say **22 wired orchestrators**, **24 MCP tools**, **35 CORE rules**)
 - No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
 - All agent files must match entries in `AGENT-INDEX.md`
@@ -491,7 +491,7 @@ Run `cortex-meta-auditor.md` checks when prompt or agent files are modified:
 | Check | Pass Criteria |
 |---|---|
 | Orchestrator count | All agents/prompts say "22 wired" |
-| MCP tool count | All say "25 production tools" |
+| MCP tool count | All say "24 production tools" |
 | CORE rules count | All say "35 active" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
 | Stale MCP tool names absent | No `cortex_process_request`, `cortex_lens_analyze`, `cortex_manage_todo` |
@@ -585,7 +585,7 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
 
 ---
 
-## ⚡ MCP TOOLS (25 Production)
+## ⚡ MCP TOOLS (24 Production)
 
 **Verification:** Call `cortex_sample_tool`. If it responds, MCP is active.
 **If unavailable:** Run `python3 -m cortex.mcp` then reload VS Code. (`python3 scripts/setup-mcp.py` for cross-platform config.)
@@ -601,7 +601,7 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
 - `cortex_onboard_repository_v3` — Enhanced onboarding with LENS + SQLite
 - `cortex_refactor` — Semantic refactoring (Python, C#, TypeScript)
 - `cortex_audit_remediation_plan` — Auto-planning from audit results
-- `cortex_tools_catalog` — Discover all 25 tools
+- `cortex_tools_catalog` — Discover all 24 tools
 - `cortex_load_core_rules` — Load governance rules from registry
 - `cortex_check_dependency_drift` — requirements.txt vs installed packages
 - `cortex_query_governance` — Active violations count + P0 status
@@ -616,7 +616,7 @@ Stage 9: Tests + AC_COMPLETE               (python3 scripts/run_tests.py batch)
 | Type | Location |
 |------|----------|
 | Orchestrators (22 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (25) | `cortex/mcp/tools/` |
+| MCP Tools (24) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry/Rules | `cortex-registry/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |

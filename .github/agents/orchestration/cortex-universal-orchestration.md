@@ -10,7 +10,7 @@
 
 **Architecture (Post-Refactor):**
 - 22 wired orchestrators in `cortex/orchestrators/` (3 tiers: core, domain, support)
-- 25 MCP tools in `cortex/mcp/tools/`
+- 24 MCP tools in `cortex/mcp/tools/`
 - 1 package: `cortex` (no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---

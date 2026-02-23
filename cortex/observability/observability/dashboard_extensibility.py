@@ -82,9 +82,9 @@ def get_cache_status() -> Dict[str, Any]:
 
 def invalidate_cache() -> None:
     """Manually invalidate the business context cache."""
+    global CACHE_TIMESTAMP
     with CACHE_LOCK:
         BUSINESS_CONTEXT_CACHE.clear()
-        global CACHE_TIMESTAMP
         CACHE_TIMESTAMP = None
         logger.info("Business context cache invalidated")
 
@@ -102,6 +102,7 @@ def get_business_context(context_id: str) -> Optional[Dict[str, Any]]:
     Returns:
         Dictionary with business context, or None if unavailable
     """
+    global CACHE_TIMESTAMP
     if not DOMAIN_EXTENSION_ENABLED:
         return None
 
@@ -125,7 +126,6 @@ def get_business_context(context_id: str) -> Optional[Dict[str, Any]]:
         if context:
             with CACHE_LOCK:
                 BUSINESS_CONTEXT_CACHE[context_id] = context
-                global CACHE_TIMESTAMP
                 CACHE_TIMESTAMP = datetime.utcnow()
             return context
 

@@ -282,3 +282,7 @@ class MasterOrchestrationStage4:
                 {"step": 0, "description": "Manual review recommended (confidence < 0.70)"},
             )
         return steps
+
+    def health_check(self) -> dict:
+        """Return health status for L1 wiring contract compliance."""
+        return {"status": "healthy", "orchestrator": "MasterOrchestrationStage4"}

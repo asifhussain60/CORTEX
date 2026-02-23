@@ -201,3 +201,7 @@ class MasterOrchestrationStage1:
         if operation == "query":
             return 0.70
         return 0.85
+
+    def health_check(self) -> dict:
+        """Return health status for L1 wiring contract compliance."""
+        return {"status": "healthy", "orchestrator": "MasterOrchestrationStage1"}

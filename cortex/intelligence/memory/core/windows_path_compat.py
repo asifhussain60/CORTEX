@@ -66,6 +66,11 @@ class WindowsPathCompatibility:
     
     # Long path threshold (260 characters for traditional Windows paths)
     _LONG_PATH_THRESHOLD = 260
+
+    # Windows extended-length path prefix (\\?\) and UNC variant (\\?\UNC\)
+    # Built via concatenation to avoid SyntaxWarning on \? in string literals.
+    _LONG_PATH_PREFIX: str = "\\\\" + "?\\"
+    _LONG_PATH_UNC_PREFIX: str = "\\\\" + "?\\" + "UNC\\"
     
     def __init__(self) -> None:
         """
@@ -288,7 +293,7 @@ class WindowsPathCompatibility:
         """
         Handle long paths exceeding Windows 260-character limit.
         
-        On Windows, paths longer than 260 characters need the \\\\?\ prefix
+        On Windows, paths longer than 260 characters need the \\\\?\\ prefix
         to be supported by the filesystem. This method can add that prefix
         or return normalized long paths.
         
@@ -306,13 +311,13 @@ class WindowsPathCompatibility:
             
             # If path is longer than threshold and not already prefixed
             if len(normalized) > self._LONG_PATH_THRESHOLD:
-                if not normalized.startswith('\\\\?\\'):
+                if not normalized.startswith(self._LONG_PATH_PREFIX):
                     # For absolute paths, add the long path prefix
                     if normalized[1:3] == ':\\':
-                        return '\\\\?\\' + normalized
+                        return self._LONG_PATH_PREFIX + normalized
                     elif normalized.startswith('\\\\'):
-                        # UNC path: use \\\\?\UNC\ format
-                        return '\\\\?\\UNC\\' + normalized[2:]
+                        # UNC path: use \\?\UNC\ format
+                        return self._LONG_PATH_UNC_PREFIX + normalized[2:]
             
             return normalized
     
