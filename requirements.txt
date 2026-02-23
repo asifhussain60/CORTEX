@@ -100,6 +100,9 @@ jsonschema==4.21.1         # JSON Schema validation for governance rules [PREFLI
 # Note: CORTEX uses custom JSON-RPC 2.0 implementation (cortex/mcp/protocol.py)
 # Reason: Official mcp SDK requires Python 3.10+; we support 3.9+
 
+# Media tag processing
+mutagen>=1.47.0            # Read/write audio+video metadata tags (MP3, MP4, FLAC, OGG…) [OPTIONAL]
+
 # WebSocket and async communication
 websockets==12.0           # WebSocket protocol (MCP server communication) [PREFLIGHT]
 aiofiles==23.2.0           # Async file I/O for streaming responses [PREFLIGHT]
