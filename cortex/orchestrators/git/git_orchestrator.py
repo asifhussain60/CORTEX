@@ -208,6 +208,20 @@ class GitOrchestrator:
             audit_summary=san_result.audit_trail.summary(),
         )
 
+    def health_check(self) -> dict:
+        """Return orchestrator health status (L1 wiring compliance).
+
+        Returns:
+            Dict with status, orchestrator name, and configuration flags.
+        """
+        return {
+            "status": "healthy",
+            "orchestrator": "GitOrchestrator",
+            "remote": self.publisher.remote if hasattr(self.publisher, 'remote') else "origin",
+            "sanitize_dry_run": self._sanitize_dry_run,
+            "auto_push": self._auto_push,
+        }
+
 
 __all__ = [
     "GitOrchestratorError",

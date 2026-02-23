@@ -128,13 +128,14 @@ class KnowledgeGuidanceEngine:
 
         Args:
             knowledge_root: Root path to knowledge repository.
-                           Defaults to cortex/knowledge/
+                           Defaults to cortex-registry/knowledge/
 
         Raises:
             ValueError: If knowledge repository cannot be found
         """
         if knowledge_root is None:
-            knowledge_root = Path(__file__).parent.parent.parent / "knowledge"
+            # Canonical location: cortex-registry/knowledge/ (not cortex/knowledge/)
+            knowledge_root = Path(__file__).parent.parent.parent.parent / "cortex-registry" / "knowledge"
 
         if not knowledge_root.exists():
             raise ValueError(f"Knowledge repository not found: {knowledge_root}")
@@ -155,7 +156,7 @@ class KnowledgeGuidanceEngine:
         # Load TIER 0 rules (cortex-registry/core/tier0-skull/)
         tier0_path = brain_root / "core" / "tier0-skull" / "skull-rules.yaml"
         if tier0_path.exists():
-            with open(tier0_path, 'r') as f:
+            with open(tier0_path, 'r', encoding='utf-8') as f:
                 tier0_content = yaml.safe_load(f) or {}
                 self.tier_0_rules = tier0_content.get("rules", {})
 
@@ -164,7 +165,7 @@ class KnowledgeGuidanceEngine:
         if tier1_gov.exists():
             for yaml_file in tier1_gov.glob("*.yaml"):
                 try:
-                    with open(yaml_file, 'r') as f:
+                    with open(yaml_file, 'r', encoding='utf-8') as f:
                         content = yaml.safe_load(f) or {}
                     domain = content.get("domain", yaml_file.stem)
                     for rule in content.get("rules", []):
@@ -185,7 +186,7 @@ class KnowledgeGuidanceEngine:
         if tier2_gov.exists():
             for yaml_file in tier2_gov.glob("*.yaml"):
                 try:
-                    with open(yaml_file, 'r') as f:
+                    with open(yaml_file, 'r', encoding='utf-8') as f:
                         content = yaml.safe_load(f) or {}
                     context = content.get("context", yaml_file.stem)
                     for rule in content.get("rules", []):
@@ -537,7 +538,7 @@ class KnowledgeGuidanceEngine:
             domain_file = domain_override_root / f"{domain}-policy.yaml"
             if domain_file.exists():
                 try:
-                    with open(domain_file, 'r') as f:
+                    with open(domain_file, 'r', encoding='utf-8') as f:
                         domain_content = yaml.safe_load(f) or {}
                         guidance.domain_rules = domain_content.get("rules", [])
                         guidance.guidance_entries.append(
@@ -578,7 +579,7 @@ class KnowledgeGuidanceEngine:
         if tier3_knowledge_root.exists():
             for yaml_file in tier3_knowledge_root.glob("*.yaml"):
                 try:
-                    with open(yaml_file, 'r') as f:
+                    with open(yaml_file, 'r', encoding='utf-8') as f:
                         content = yaml.safe_load(f) or {}
                     # Extract patterns if the YAML has them
                     patterns = content.get("patterns", content.get("cross_domain_patterns", []))

@@ -313,6 +313,20 @@ class CortexDocsOrchestrator:
         # Deployment logic here
         return {"status": "success", "deployed": True}
 
+    def health_check(self) -> dict:
+        """Return orchestrator health status (L1 wiring compliance).
+
+        Returns:
+            Dict with status, orchestrator name, and pipeline configuration.
+        """
+        return {
+            "status": "healthy",
+            "orchestrator": "CortexDocsOrchestrator",
+            "content_root": str(self.content_root),
+            "output_root": str(self.output_root),
+            "dry_run": self.dry_run,
+        }
+
 
 def get_cortex_docs_orchestrator() -> CortexDocsOrchestrator:
     """

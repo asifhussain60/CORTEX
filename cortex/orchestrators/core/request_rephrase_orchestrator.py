@@ -539,6 +539,19 @@ class RequestRephraseOrchestrator:
         # Auto-run for all other intents
         return True
 
+    def health_check(self) -> dict:
+        """Return orchestrator health status (L1 wiring compliance).
+
+        Returns:
+            Dict with status, orchestrator name, and key feature flags.
+        """
+        return {
+            "status": "healthy",
+            "orchestrator": "RequestRephraseOrchestrator",
+            "stage_0_audit": True,
+            "challenge_protocol": True,
+        }
+
 
 def _run_stage_0_audit(request: str, intent: str, scope: str, governance_rules: List[str]) -> List[str]:
     """
