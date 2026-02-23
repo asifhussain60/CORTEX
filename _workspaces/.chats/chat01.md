@@ -2629,4 +2629,844 @@ Both test groups are **pre-existing failures** — they fail identically before 
 
 Ran terminal command: python3 scripts/run_tests.py smoke 2>&1 | tail -5
 
+**1365 passed, 0 failed** ✅. Commit Phase 58-B: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && git add -A && git commit -m "feat(phase-58b): 21 zero-import duplicate files converted to re-export shims
+
+Phase 58-B: Cross-package duplicate elimination pass 1
+- cortex/core/decorators/governance_decorator.py → core/core/decorators/
+- cortex/core/database.py → infrastructure/database
+- cortex/core/coherence_validator.py → orchestrators/validation/
+- cortex/lens/core.py → mcp/tools/core
+- cortex/lens/ml_patterns/dashboard_generator.py → core/registry/
+- cortex/core/confirmation/governance.py → mcp/tools/governance
+- cortex/core/common/health_check.py → core/wiring/
+- cortex/observability/observability/health_monitor.py → core/registry/
+- cortex/orchestrators/health/intelligence.py → mcp/tools/intelligence
+- cortex/lens/orchestrator.py → orchestrators/support/
+- cortex/intelligence/crawler/orchestrator.py → orchestrators/support/
+- cortex/core/bootstrap/orchestrator_factory.py → core/wiring/
+- cortex/intelligence/crawler/pipeline.py → orchestrators/health/
+- cortex/infrastructure/progress_tracker.py → core/execution/
+- cortex/infrastructure/security/rate_limiter.py → infrastructure/rate_limiter
+- cortex/governance/enforcement/recommendation_gate.py → orchestrators/core/
+- cortex/orchestrators/support/rollback_orchestrator.py → infrastructure/deployment/
+- cortex/core/registry/status_update_hook.py → infrastructure/automation/
+- cortex/testing/sts/sts_analyzer.py → mcp/tools/sts_analyzer
+- cortex/governance/validation/wiring_validator.py → core/wiring/registry/
+Smoke gate: 1365 passed / 0 failed ✅
+CORE-035: canonical implementations preserved, duplicates shimmed" 2>&1 | tail -4
+
+Now Phase 58-C: duplicate groups where BOTH files have imports (harder — need to pick canonical and update callers). Let me measure the remaining duplicates: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 -c "
+import os, subprocess
+from collections import defaultdict
+
+name_to_paths = defaultdict(list)
+for root, dirs, files in os.walk('cortex'):
+    dirs[:] = [d for d in dirs if d not in ('__pycache__','.git','bin','obj','node_modules','adapters','roslyn-cli')]
+    for f in files:
+        if f.endswith('.py') and not f.startswith('__'):
+            name_to_paths[f].append(os.path.join(root, f))
+
+dups = {k:v for k,v in name_to_paths.items() if len(v)>1}
+print(f'Remaining duplicate groups: {len(dups)}')
+print(f'Extra files: {sum(len(v)-1 for v in dups.values())}')
+" 2>/dev/null
+
+Same count because we shimmed (not deleted) the files — they still exist as files. The plan counts actual implementations vs shims. Let me count **real implementations** (non-shim files) in the duplicate groups: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 -c "
+import os
+from collections import defaultdict
+
+name_to_paths = defaultdict(list)
+for root, dirs, files in os.walk('cortex'):
+    dirs[:] = [d for d in dirs if d not in ('__pycache__','.git','bin','obj','node_modules','adapters','roslyn-cli')]
+    for f in files:
+        if f.endswith('.py') and not f.startswith('__'):
+            name_to_paths[f].append(os.path.join(root, f))
+
+shim_count = 0
+real_dup_groups = 0
+real_dup_files = 0
+for name, paths in name_to_paths.items():
+    if len(paths) < 2: continue
+    reals = []
+    for p in paths:
+        try:
+            content = open(p).read()
+            is_shim = '# COMPAT' in content or 'COMPAT shim' in content or 'Phase 58' in content[:300]
+            if not is_shim:
+                reals.append(p)
+        except: pass
+    if len(reals) > 1:
+        real_dup_groups += 1
+        real_dup_files += len(reals) - 1
+    elif len(reals) == 0:
+        pass  # all shimmed
+    
+print(f'Groups with multiple REAL implementations: {real_dup_groups}')
+print(f'Excess real implementation files: {real_dup_files}')
+" 2>/dev/null
+
+65 groups still have 2+ real implementations. Now move to **Phase 59** — focus on the highest-leverage work: measuring and cataloguing the orchestrator classes. The plan targets 124→22. Let me understand the landscape: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 -c "
+import os, ast, subprocess
+from collections import defaultdict
+
+orch_classes = []
+for root, dirs, files in os.walk('cortex/orchestrators'):
+    dirs[:] = [d for d in dirs if d not in ('__pycache__','bin','obj','roslyn-cli','adapters')]
+    for f in files:
+        if not f.endswith('.py'): continue
+        path = os.path.join(root, f)
+        try:
+            src = open(path).read()
+            tree = ast.parse(src)
+            for node in tree.body:
+                if isinstance(node, ast.ClassDef) and 'Orchestrator' in node.name:
+                    bases = [b.attr if isinstance(b, ast.Attribute) else b.id if isinstance(b, ast.Name) else '?' for b in node.bases]
+                    orch_classes.append((node.name, path, bases))
+        except: pass
+
+by_dir = defaultdict(list)
+for name, path, bases in orch_classes:
+    tier = path.split('cortex/orchestrators/')[-1].split('/')[0]
+    by_dir[tier].append((name, bases))
+
+print(f'Total Orchestrator classes: {len(orch_classes)}')
+print()
+for tier, classes in sorted(by_dir.items(), key=lambda x: -len(x[1])):
+    print(f'{tier}: {len(classes)} classes')
+    for name, bases in classes[:5]:
+        print(f'  {name}({', '.join(bases)})')
+    if len(classes) > 5:
+        print(f'  ... +{len(classes)-5} more')
+" 2>/dev/null
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import os, ast
+from collections import defaultdict
+
+orch_classes = []
+for root, dirs, files in os.walk('cortex/orchestrators'):
+    dirs[:] = [d for d in dirs if d not in ('__pycache__','bin','obj','roslyn-cli','adapters')]
+    for f in files:
+        if not f.endswith('.py'): continue
+        path = os.path.join(root, f)
+        try:
+            src = open(path).read()
+            tree = ast.parse(src)
+            for node in tree.body:
+                if isinstance(node, ast.ClassDef) and 'Orchestrator' in node.name:
+                    bases = [b.attr if isinstance(b, ast.Attribute) else (b.id if isinstance(b, ast.Name) else '?') for b in node.bases]
+                    orch_classes.append((node.name, path, bases))
+        except: pass
+
+by_dir = defaultdict(list)
+for name, path, bases in orch_classes:
+    tier = path.split('cortex/orchestrators/')[-1].split('/')[0]
+    by_dir[tier].append((name, bases))
+
+print(f'Total Orchestrator classes in orchestrators/: {len(orch_classes)}')
+print()
+for tier, classes in sorted(by_dir.items(), key=lambda x: -len(x[1])):
+    print(f'{tier}: {len(classes)} classes')
+    for name, bases in classes[:4]:
+        print(f'  {name}({", ".join(bases)})')
+    if len(classes) > 4:
+        print(f'  ... +{len(classes)-4} more')
+PYEOF
+
+Summarized conversation history
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import os, ast
+from collections import defaultdict
+
+# All orchestrator classes INCLUDING outside orchestrators/ dir
+all_orch = []
+for root, dirs, files in os.walk('cortex'):
+    dirs[:] = [d for d in dirs if d not in ('__pycache__',)]
+    for f in files:
+        if not f.endswith('.py'): continue
+        path = os.path.join(root, f)
+        try:
+            src = open(path).read()
+            tree = ast.parse(src)
+            for node in tree.body:
+                if isinstance(node, ast.ClassDef) and 'Orchestrator' in node.name:
+                    bases = [b.attr if isinstance(b, ast.Attribute) else (b.id if isinstance(b, ast.Name) else '?') for b in node.bases]
+                    all_orch.append((node.name, path, bases))
+        except: pass
+
+print(f'Total Orchestrator classes in cortex/: {len(all_orch)}')
+
+# Now find wired orchestrators from wiring.yaml
+import yaml
+with open('cortex/core/wiring/specifications/wiring.yaml') as f:
+    wiring = yaml.safe_load(f)
+
+wired_names = set()
+if isinstance(wiring, dict):
+    for key, val in wiring.items():
+        if isinstance(val, dict) and 'class' in val:
+            wired_names.add(val['class'].split('.')[-1])
+        elif isinstance(val, list):
+            for item in val:
+                if isinstance(item, dict) and 'class' in item:
+                    wired_names.add(item['class'].split('.')[-1])
+
+print(f'Wired orchestrators: {len(wired_names)}')
+print(f'Wired names: {sorted(wired_names)}')
+
+# Classify each orchestrator class
+wired = []
+unwired_real = []  # has real implementation (not just a shim)
+shims = []
+
+for name, path, bases in all_orch:
+    if name in wired_names:
+        wired.append((name, path))
+    else:
+        src = open(path).read().strip()
+        is_shim = 'COMPAT shim' in src or (len(src) < 300 and 'from cortex.' in src and 'import' in src)
+        if is_shim:
+            shims.append((name, path))
+        else:
+            unwired_real.append((name, path, bases))
+
+print(f'\nWired (in wiring.yaml): {len(wired)}')
+print(f'Shims (compat): {len(shims)}')
+print(f'Unwired real implementations: {len(unwired_real)}')
+print()
+print('Unwired real orchestrator classes:')
+for name, path, bases in unwired_real:
+    print(f'  {name} in {path}')
+PYEOF
+
+Good — the wiring.yaml lookup uses `DependencyAnalyzer` as the only match because the class names in wiring.yaml are stored differently. Let me check the actual wiring format and also get the canonical 17-orchestrator list from the architecture docs: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import yaml
+
+with open('cortex/core/wiring/specifications/wiring.yaml') as f:
+    wiring = yaml.safe_load(f)
+
+# Explore structure
+print(f'Type: {type(wiring)}')
+if isinstance(wiring, dict):
+    print(f'Top-level keys: {list(wiring.keys())[:20]}')
+    for k in list(wiring.keys())[:3]:
+        print(f'\n{k}: {wiring[k]}')
+elif isinstance(wiring, list):
+    print(f'Items: {len(wiring)}')
+    for item in wiring[:3]:
+        print(item)
+PYEOF
+
+Now I have a clear picture. Let me do a complete Phase 59 analysis and then proceed with the work: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import yaml, ast, os
+from collections import defaultdict
+
+with open('cortex/core/wiring/specifications/wiring.yaml') as f:
+    wiring = yaml.safe_load(f)
+
+# Extract all wired class names and their canonical modules
+wired_classes = {}
+for tier_key, entries in wiring.get('orchestrators', {}).items():
+    if isinstance(entries, list):
+        for e in entries:
+            wired_classes[e['class']] = e['module']
+
+print(f'Wired canonical orchestrators: {len(wired_classes)}')
+for name, mod in sorted(wired_classes.items()):
+    print(f'  {name} → {mod}')
+PYEOF
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import yaml, ast, os
+
+with open('cortex/core/wiring/specifications/wiring.yaml') as f:
+    wiring = yaml.safe_load(f)
+
+wired_classes = set()
+for tier_key, entries in wiring.get('orchestrators', {}).items():
+    if isinstance(entries, list):
+        for e in entries:
+            wired_classes.add(e['class'])
+
+# Also add health orchestrator (referenced in copilot-instructions.md as wired)
+extra_canonical = {
+    'HealthOrchestrator',  # wired by convention per instructions
+    'SweepCatalogueOrchestrator',  # referenced as key entry point
+    'MasterOrchestratorStage2',  # referenced as key entry point  
+    # These are base classes / protocols — not orchestrators to eliminate
+    'OrchestratorProtocolMixin',
+    'OrchestratorBase',
+    'IOrchestrator',
+    # Enums / models — not orchestrator implementations
+    'OrchestratorCategory',
+    'OrchestratorConfig',
+    'OrchestratorMetadata',
+    'OrchestratorInfo',
+    'OrchestratorMetric',
+    'OrchestratorContext',
+    'OrchestratorEvent',
+    'OrchestratorComplexityLevel',
+    'OrchestratorCapability',
+    'OrchestratorProfile',
+    'OrchestratorDependencyRegistry',
+    'OrchestratorEventBus',
+    'OrchestratorTraceLogger',
+    'OrchestratorMetadataRegistry',
+    'OrchestratorCoverage',
+    'OrchestratorSpec',
+    'OrchestratorLookup',
+    # Error types
+    'GitOrchestratorError',
+    'GitOrchestratorResult',
+    # Test fixtures
+    'TestCortexOrchestrator',
+    'InteractionOrchestratorAnalyzer',
+    'InteractionOrchestratorQualityAnalyzer',
+    # Adapters/bridges — support infrastructure
+    'AgentToOrchestratorBridge',
+    'OrchestratorAgentInvoker',
+    'OrchestratorInvocationHelper',
+    'OrchestratorLearningMixin',
+    'CachedLENSOrchestrator',
+    'LensOrchestratorIntegration',
+    'LENSOrchestrator',
+    # Tools (not orchestrators proper)
+    'GuidedWiringOrchestrator',
+    'OrchestratorInventoryAuditor',
+    'OrchestratorScaffolder',
+    'OrchestratorTemplate',
+    'OrchestratorFactory',
+    'LazyOrchestrator',
+    'OrchestratorDiscovery',
+}
+
+all_in_cortex = []
+for root, dirs, files in os.walk('cortex'):
+    dirs[:] = [d for d in dirs if d not in ('__pycache__',)]
+    for f in files:
+        if not f.endswith('.py'): continue
+        path = os.path.join(root, f)
+        try:
+            src = open(path).read()
+            tree = ast.parse(src)
+            for node in tree.body:
+                if isinstance(node, ast.ClassDef) and 'Orchestrator' in node.name:
+                    bases = [b.attr if isinstance(b, ast.Attribute) else (b.id if isinstance(b, ast.Name) else '?') for b in node.bases]
+                    is_shim = 'COMPAT shim' in src or (len(src) < 300 and 'from cortex.' in src)
+                    all_in_cortex.append((node.name, path, bases, is_shim))
+        except: pass
+
+truly_unwired = []
+for name, path, bases, is_shim in all_in_cortex:
+    if name in wired_classes: continue
+    if name in extra_canonical: continue
+    if is_shim: continue
+    truly_unwired.append((name, path, bases))
+
+print(f'Total Orchestrator classes: {len(all_in_cortex)}')
+print(f'Wired in wiring.yaml: {len(wired_classes)}')
+print(f'Canonical/infrastructure (skip): {len(extra_canonical)}')
+print(f'Truly unwired real Orchestrator classes: {len(truly_unwired)}')
+print()
+for name, path, bases in truly_unwired:
+    print(f'  {name} ({", ".join(bases)})  — {path}')
+PYEOF
+
+Now I have the full picture. Let me categorize these 45 "unwired" orchestrators into groups and determine the safe action for each: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import subprocess, ast, os
+
+# For each unwired orchestrator, check if it has external callers (tests + prod code)
+candidates = [
+    ('WorkflowOrchestrator', 'cortex/orchestrators/core/workflow_orchestrator.py'),
+    ('ReviewOrchestrator', 'cortex/orchestrators/core/review_orchestrator.py'),
+    ('ConversationOrchestrator', 'cortex/orchestrators/core/conversation_orchestrator.py'),
+    ('CentralBrainOrchestrator', 'cortex/orchestrators/core/central_brain_orchestrator.py'),
+    ('CortexMasterPlanOrchestrator', 'cortex/orchestrators/core/master_plan_orchestrator.py'),
+    ('RequestRephraseOrchestrator', 'cortex/orchestrators/core/request_rephrase_orchestrator.py'),
+    ('StateOrchestrator', 'cortex/orchestrators/core/state_orchestrator.py'),
+    ('ObservabilityOrchestrator', 'cortex/orchestrators/core/observability_orchestrator.py'),
+    ('BrainHealthOrchestrator', 'cortex/orchestrators/core/brain_health_orchestrator.py'),
+    ('UnifiedDiscoveryOrchestrator', 'cortex/orchestrators/support/unified_discovery_orchestrator.py'),
+    ('TestClassifierOrchestrator', 'cortex/orchestrators/support/test_classifier_orchestrator.py'),
+    ('OnboardingOrchestrator', 'cortex/orchestrators/support/orchestrator.py'),
+    ('UnifiedAnalysisOrchestrator', 'cortex/orchestrators/support/unified_analysis_orchestrator.py'),
+    ('CortexDocsOrchestrator', 'cortex/orchestrators/support/cortex_docs_orchestrator.py'),
+    ('UnifiedQualityAssuranceOrchestrator', 'cortex/orchestrators/support/unified_quality_orchestrator.py'),
+    ('RefactoringOrchestrator', 'cortex/orchestrators/domain/refactoring_orchestrator.py'),
+    ('ServiceDecompositionOrchestrator', 'cortex/orchestrators/domain/service_decomposition_orchestrator.py'),
+    ('SanitizationOrchestrator', 'cortex/orchestrators/git/sanitization_orchestrator.py'),
+    ('PlanRegistrySyncOrchestrator', 'cortex/orchestrators/support/phase_completion_orchestrator.py'),
+]
+
+print(f'{"Class":<45} {"Test callers":>12} {"Prod callers":>12}')
+print('-'*72)
+for name, path in candidates:
+    r_test = subprocess.run(['grep', '-r', '--include=*.py', '-l', name, 'tests/'], capture_output=True, text=True)
+    r_prod = subprocess.run(['grep', '-r', '--include=*.py', '-l', name, 'cortex/'], capture_output=True, text=True)
+    test_files = [f for f in r_test.stdout.strip().split('\n') if f and f != path]
+    prod_files = [f for f in r_prod.stdout.strip().split('\n') if f and f != path]
+    print(f'{name:<45} {len(test_files):>12} {len(prod_files):>12}')
+PYEOF
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import subprocess
+
+# Check the business domain + infrastructure orchestrators
+infra_candidates = [
+    ('FinancialOrchestrator', 'cortex/orchestrators/domain/business/financial.py'),
+    ('HealthcareOrchestrator', 'cortex/orchestrators/domain/business/healthcare.py'),
+    ('EcommerceOrchestrator', 'cortex/orchestrators/domain/business/ecommerce.py'),
+    ('BusinessDomainOrchestrator', 'cortex/orchestrators/domain/business/base.py'),
+    ('PhaseOrchestrator', 'cortex/orchestrators/core/phase_executors/phase_orchestrator.py'),
+    ('OrchestratorAuditMixin', 'cortex/orchestrators/core/audit_mixin.py'),
+    ('DataMigrationOrchestrator', 'cortex/dashboards/data_migration_orchestrator.py'),
+    ('RegressionSafetyOrchestrator', 'cortex/governance/regression_safety_orchestrator.py'),
+    ('GovernanceAlignmentOrchestrator', 'cortex/governance/governance_alignment_phase_2.py'),
+    ('PromptCleanupOrchestrator', 'cortex/governance/validation/prompt_cleanup_cycle.py'),
+    ('DefenseOrchestrator', 'cortex/infrastructure/security/defense_orchestrator.py'),
+    ('ComplianceOrchestrator', 'cortex/infrastructure/secrets/compliance.py'),
+    ('SecretsMigrationOrchestrator', 'cortex/infrastructure/secrets/migration.py'),
+    ('LearningOrchestrator', 'cortex/infrastructure/capacity/capacity_planning_orchestrators.py'),
+    ('MultiRegionOrchestrator', 'cortex/infrastructure/deployment/multi_region_orchestrator.py'),
+    ('HotReloadOrchestrator', 'cortex/infrastructure/devx/hot_reload.py'),
+]
+
+print(f'{"Class":<45} {"Test":>6} {"Prod":>6}')
+print('-'*60)
+for name, path in infra_candidates:
+    r_test = subprocess.run(['grep', '-r', '--include=*.py', '-l', name, 'tests/'], capture_output=True, text=True)
+    r_prod = subprocess.run(['grep', '-r', '--include=*.py', '-l', name, 'cortex/'], capture_output=True, text=True)
+    test_files = [f for f in r_test.stdout.strip().split('\n') if f and f != path]
+    prod_files = [f for f in r_prod.stdout.strip().split('\n') if f and f != path]
+    print(f'{name:<45} {len(test_files):>6} {len(prod_files):>6}')
+PYEOF
+
+Phase 59 analysis is complete. The key insight: the truly "redundant" orchestrators are those in core that duplicate wired orchestrators functionality or have very few callers. But since these classes have test callers, eliminating them would break tests. 
+
+The Phase 59 goal per the master plan is not mass-deletion but **adding wiring entries** for the orchestrators that should be wired, and **adding `HealthOrchestrator` + `SweepCatalogueOrchestrator`** to the wiring registry. Let me check the master plan: 
+
+Ran terminal command: grep -A 30 'phase_59\|Phase 59\|phase-59' cortex-registry/cortex-master.yaml | head -60
+
+Ran terminal command: grep -A 80 'canonical_22_keepers' cortex-registry/cortex-master.yaml | head -100
+
+Ran terminal command: grep -A 160 'canonical_22_keepers' cortex-registry/cortex-master.yaml | tail -80
+
+Now I have the full Phase 59 specification. The plan is ambitious but we need to stay safe (smoke gate = 1365). Let me execute the safest Track A deletions first — zero-caller classes: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import subprocess, os
+
+# Track A: candidates with 0 test callers AND 0 prod callers (truly zero-import)
+track_a = [
+    ('DataMigrationOrchestrator', 'cortex/dashboards/data_migration_orchestrator.py', 'whole_file'),
+    ('MultiRegionOrchestrator', 'cortex/infrastructure/deployment/multi_region_orchestrator.py', 'whole_file'),
+    ('LearningOrchestrator', 'cortex/infrastructure/capacity/capacity_planning_orchestrators.py', 'class_only'),
+    ('PromptCleanupOrchestrator', 'cortex/governance/validation/prompt_cleanup_cycle.py', 'class_only'),
+    ('GovernanceAlignmentOrchestrator', 'cortex/governance/governance_alignment_phase_2.py', 'class_only'),
+]
+
+for name, path, action in track_a:
+    r_test = subprocess.run(['grep', '-r', '--include=*.py', '-l', name, 'tests/'], capture_output=True, text=True)
+    r_prod = subprocess.run(['grep', '-r', '--include=*.py', '-l', name, 'cortex/'], capture_output=True, text=True)
+    test_files = [f for f in r_test.stdout.strip().split('\n') if f and f != path]
+    prod_files = [f for f in r_prod.stdout.strip().split('\n') if f and f != path]
+    print(f'{name}: test={len(test_files)}, prod={len(prod_files)} → action={action}')
+    if test_files: print(f'  test: {test_files}')
+    if prod_files: print(f'  prod: {prod_files}')
+PYEOF
+
+Ran terminal command: grep -n 'MultiRegionOrchestrator' tests/integration/deployment/test_rollback_automation.py
+
+Ran terminal command: grep -n 'GovernanceAlignmentOrchestrator' tests/regression/test_cumulative_regression.py
+
+Ran terminal command: python3 -m pytest tests/regression/test_cumulative_regression.py -k "GovernanceAlignment" -p no:xdist --tb=short -q 2>&1 | head -20
+
+Ran terminal command: python3 -m pytest tests/integration/deployment/test_rollback_automation.py -p no:xdist --tb=short -q 2>&1 | tail -10
+
+MultiRegionOrchestrator has real live tests passing. Skip it for Track A. Now let me safely delete the truly zero-caller files and handle the business domain orchestrators: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+# Verify business domain orchestrators (Financial, Healthcare, Ecommerce)
+import subprocess
+
+for name in ['FinancialOrchestrator', 'HealthcareOrchestrator', 'EcommerceOrchestrator']:
+    r_test = subprocess.run(['grep', '-r', '--include=*.py', '-l', name, 'tests/'], capture_output=True, text=True)
+    r_prod = subprocess.run(['grep', '-r', '--include=*.py', '-l', name, 'cortex/'], capture_output=True, text=True)
+    test_files = [f for f in r_test.stdout.strip().split('\n') if f]
+    prod_files = [f for f in r_prod.stdout.strip().split('\n') if f]
+    print(f'{name}: test={test_files}, prod={prod_files}')
+PYEOF
+
+Ran terminal command: python3 -m pytest tests/unit/domain_orchestrators/ -p no:xdist --tb=short -q 2>&1 | tail -10
+
+The business domain tests are live tests in the smoke suite. The Phase 59 Track A plan says delete them AND their test files together. But those tests are PASSING and part of the 1365 baseline — deleting them will lower the count. That's acceptable per the plan ("delete both — not a regression, no external dependency").
+
+Let me proceed with Track A — deleting the truly zero-external-caller files:
+
+**Track A Step 1:** Delete `DataMigrationOrchestrator` (0 callers): 
+
+Ran terminal command: cat cortex/dashboards/data_migration_orchestrator.py | head -30
+
+Ran terminal command: grep -r 'data_migration_orchestrator\|DataMigrationOrchestrator' cortex/ tests/ 2>/dev/null | grep -v '.py:' | head -5; grep -rn 'data_migration_orchestrator\|DataMigrationOrchestrator' cortex/ tests/ 2>/dev/null | grep -v 'cortex/dashboards/data_migration_orchestrator.py' | head -10
+
+Zero external references. Safe to delete. Now let me execute the full Track A batch: 
+
+Ran terminal command: rm -f cortex/dashboards/data_migration_orchestrator.py && echo "Deleted: DataMigrationOrchestrator"
+
+Now Track A: the business domain trio (Ecommerce, Healthcare, Financial) — delete both implementation and their dedicated test files per the plan: 
+
+Ran terminal command: wc -l cortex/orchestrators/domain/business/ecommerce.py cortex/orchestrators/domain/business/healthcare.py cortex/orchestrators/domain/business/financial.py && echo "---" && head -5 cortex/orchestrators/domain/business/ecommerce.py
+
+Ran terminal command: grep -n 'BusinessDomainOrchestrator\|from cortex' cortex/orchestrators/domain/business/ecommerce.py | head -10
+
+Ran terminal command: grep -n 'EcommerceOrchestrator\|HealthcareOrchestrator\|FinancialOrchestrator' cortex/orchestrators/domain/business/__init__.py 2>/dev/null || echo "No __init__.py references"
+
+Ran terminal command: rm -f cortex/orchestrators/domain/business/ecommerce.py cortex/orchestrators/domain/business/healthcare.py cortex/orchestrators/domain/business/financial.py && rm -f tests/unit/domain_orchestrators/test_ecommerce_orchestrator.py tests/unit/domain_orchestrators/test_healthcare_orchestrator.py tests/unit/domain_orchestrators/test_financial_orchestrator.py && echo "Track A: Deleted 6 files (3 impls + 3 tests)"
+
+Now Track A: `LearningOrchestrator` (class_only — has 0 callers, remove class from file but keep file for other content): 
+
+Ran terminal command: grep -n 'class.*Orchestrator\|def \|^class ' cortex/infrastructure/capacity/capacity_planning_orchestrators.py | head -20
+
+Ran terminal command: wc -l cortex/infrastructure/capacity/capacity_planning_orchestrators.py && tail -20 cortex/infrastructure/capacity/capacity_planning_orchestrators.py
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/infrastructure/capacity/capacity_planning_orchestrators.py#350-350), lines 350 to 370
+
+Ran terminal command: grep -rn 'LearningOrchestrator\|capacity_planning_orchestrators' cortex/ tests/ 2>/dev/null | grep -v 'cortex/infrastructure/capacity/capacity_planning_orchestrators.py'
+
+Zero external callers for the entire file — can delete the whole file safely: 
+
+Ran terminal command: rm -f cortex/infrastructure/capacity/capacity_planning_orchestrators.py && echo "Deleted: capacity_planning_orchestrators.py"
+
+Now handle `PromptCleanupOrchestrator` (0 callers, class_only): 
+
+Ran terminal command: grep -n '^class \|^def ' cortex/governance/validation/prompt_cleanup_cycle.py | head -20
+
+Ran terminal command: grep -rn 'prompt_cleanup_cycle\|PromptCleanupOrchestrator\|CleanupPriority\|CleanupTask\|audit_trigger_cleanup' cortex/ tests/ 2>/dev/null | grep -v 'cortex/governance/validation/prompt_cleanup_cycle.py'
+
+Ran terminal command: rm -f cortex/governance/validation/prompt_cleanup_cycle.py && echo "Deleted: prompt_cleanup_cycle.py"
+
+Now `GovernanceAlignmentOrchestrator` — 1 test caller (regression test that uses `pytest.skip` on failure — very safe to handle): 
+
+Ran terminal command: grep -n '^class \|^def ' cortex/governance/governance_alignment_phase_2.py | head -20
+
+Ran terminal command: grep -rn 'governance_alignment_phase_2\|GovernanceAlignmentOrchestrator\|GovernanceRule\|execute_phase_2' cortex/ tests/ 2>/dev/null | grep -v 'cortex/governance/governance_alignment_phase_2.py'
+
+`GovernanceRule` is a very common name in the codebase — but the grep earlier confirmed that the specific `governance_alignment_phase_2` module only has 1 caller (the regression test with a `pytest.skip`). The `GovernanceRule` matches are different classes in different files. 
+
+The regression test wraps the import in try/except with pytest.skip, so deleting the file is safe. Let me delete the whole module: 
+
+Ran terminal command: rm -f cortex/governance/governance_alignment_phase_2.py && echo "Deleted: governance_alignment_phase_2.py"
+
+Now check `HotReloadOrchestrator` (1 test caller) and `SyncOrchestrator`: 
+
+Ran terminal command: grep -n 'HotReloadOrchestrator' tests/$(grep -rn 'HotReloadOrchestrator' tests/ --include=*.py -l 2>/dev/null | head -1) 2>/dev/null | head -5; echo "---"; grep -rn 'kg_sync_orchestrator\|SyncOrchestrator' cortex/ tests/ --include=*.py 2>/dev/null | grep -v 'cortex/intelligence/domain_brain/domain_brain/kg_sync_orchestrator.py'
+
+Ran terminal command: grep -rn 'HotReloadOrchestrator' tests/ 2>/dev/null | head -5 && echo "---" && grep -rn 'SyncOrchestrator\|kg_sync_orchestrator' cortex/ tests/ 2>/dev/null | grep -v 'kg_sync_orchestrator.py' | head -10
+
+Ran terminal command: python3 -m pytest tests/unit/devx/test_hot_reload.py -p no:xdist --tb=short -q 2>&1 | tail -5
+
+Some HotReload tests already fail — likely pre-existing. Let me skip HotReload for now (it has real live tests) and focus on the truly zero-caller clean deletions. Let me now run the smoke gate to validate our Track A deletions so far: 
+
+Ran terminal command: python3 scripts/run_tests.py smoke 2>&1 | tail -15
+
+**1365 passed — smoke gate green** ✅. The business domain deletions lowered the deselected count (13423 → 13369 = 54 deselected tests removed as expected for the 3 test files deleted), but the smoke gate is still solid.
+
+Now let me proceed to **Track B — Merge pairs**. The highest-value merge is `VacuumOrchestrator` (health/ variant vs support/ canonical). Let me check it: 
+
+Ran terminal command: grep -rn 'orchestrators.health.vacuum\|from cortex.orchestrators.health import.*[Vv]acuum\|orchestrators/health/vacuum' cortex/ tests/ 2>/dev/null | head -10
+
+The vacuum_orchestrator.py is already a shim that re-exports from `cortex.orchestrators.health.vacuum_orchestrator`. The health/ version is the canonical. This is already properly done. Track B VacuumOrchestrator merge is complete.
+
+Now let me do Track B: **SweepCatalogueOrchestrator** — add it to wiring.yaml (it's a key entry point per the instructions but missing from wiring) and **HealthOrchestrator**: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import yaml
+
+with open('cortex/core/wiring/specifications/wiring.yaml') as f:
+    wiring = yaml.safe_load(f)
+
+# Check what's in support tier
+for e in wiring['orchestrators'].get('support', []):
+    print(e['name'])
+PYEOF
+
+`SweepCatalogueOrchestrator` and `HealthOrchestrator` are not yet wired. Let me add them: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/core/wiring/specifications/wiring.yaml#1-1), lines 1 to 30
+
+Ran terminal command: grep -n 'HealthOrchestrator\|health_orchestrator\|SweepCatalogue' cortex/core/wiring/specifications/wiring.yaml
+
+Ran terminal command: grep -n 'AutoHealingMCPOrchestrator' cortex/core/wiring/specifications/wiring.yaml
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex/core/wiring/specifications/wiring.yaml#244-244), lines 244 to 270
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now let me check which tests validate the wiring.yaml to ensure our new entries with `registration_phase: "59-g"` are valid: 
+
+Ran terminal command: python3 -m pytest tests/ -k "wiring" -p no:xdist --tb=short -q 2>&1 | tail -15
+
+Ran terminal command: python3 -m pytest tests/core/phase3/test_git_backed_wiring.py::test_all_23_orchestrators_defined -p no:xdist --tb=long -q 2>&1 | tail -30
+
+The test expects exactly 13 support orchestrators — we added `SweepCatalogueOrchestrator` which made it 14. This test needs updating since we're legitimately adding a new wired orchestrator. Let me check the test and update it: 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/core/phase3/test_git_backed_wiring.py#45-45), lines 45 to 80
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now let me check the other failing wiring tests: 
+
+Ran terminal command: python3 -m pytest tests/core/phase3/test_git_backed_wiring.py::test_registry_can_list_orchestrators tests/regression/test_phase_38_safety.py::TestPreCommitRegressionHook::test_hook_validates_wiring_yaml_integrity tests/unit/ci_cd/test_core_035_enforcement.py::TestCore035Enforcement::test_wiring_yaml_is_single_source_of_truth -p no:xdist --tb=short -q 2>&1 | tail -30
+
+Ran terminal command: python3 -m pytest tests/unit/ci_cd/test_core_035_enforcement.py::TestCore035Enforcement::test_wiring_yaml_is_single_source_of_truth -p no:xdist --tb=long -q 2>&1 | grep -A5 'assert\|FAILED\|assert False'
+
+Ran terminal command: git stash && python3 -m pytest tests/unit/ci_cd/test_core_035_enforcement.py::TestCore035Enforcement::test_wiring_yaml_is_single_source_of_truth tests/regression/test_phase_38_safety.py::TestPreCommitRegressionHook::test_hook_validates_wiring_yaml_integrity -p no:xdist --tb=line -q 2>&1 | tail -10 && git stash pop
+
+Both `test_wiring_yaml_is_single_source_of_truth` and `test_hook_validates_wiring_yaml_integrity` are **pre-existing failures**. Now fix only `test_registry_can_list_orchestrators` (count: 26 → 27): 
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/core/phase3/test_git_backed_wiring.py#185-185), lines 185 to 210
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now check the `test_audit_db_universal_wiring` failure: 
+
+Ran terminal command: python3 -m pytest tests/unit/infrastructure/test_audit_db_universal_wiring.py::TestAuditDbUniversalWiring::test_execute_logs_orchestrator_start -p no:xdist --tb=short -q 2>&1 | tail -20
+
+Ran terminal command: git stash && python3 -m pytest tests/unit/infrastructure/test_audit_db_universal_wiring.py::TestAuditDbUniversalWiring::test_execute_logs_orchestrator_start -p no:xdist --tb=line -q 2>&1 | tail -5 && git stash pop
+
+Pre-existing failure confirmed. Now run the smoke gate to validate everything: 
+
+Ran terminal command: python3 scripts/run_tests.py smoke 2>&1 | tail -8
+
+**1365 passed — smoke gate green** ✅. Now commit Phase 59-A and proceed to Track C: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && git add -A && git commit -m "feat(phase-59a): Track A zero-import orchestrator deletion + wiring registration
+
+Phase 59-A Track A — deleted 5 zero-external-import orchestrator files:
+- cortex/dashboards/data_migration_orchestrator.py (DataMigrationOrchestrator — 0 callers)
+- cortex/orchestrators/domain/business/ecommerce.py + healthcare.py + financial.py (0 external callers)
+- cortex/governance/governance_alignment_phase_2.py (GovernanceAlignmentOrchestrator — try/skip test only)
+- cortex/governance/validation/prompt_cleanup_cycle.py (PromptCleanupOrchestrator — 0 callers)
+- cortex/infrastructure/capacity/capacity_planning_orchestrators.py (LearningOrchestrator — 0 callers)
+
+Also deleted 3 paired test files (per Phase 59 plan):
+- tests/unit/domain_orchestrators/test_{ecommerce,financial,healthcare}_orchestrator.py
+
+Phase 59-A wiring registration:
+- Added SweepCatalogueOrchestrator to wiring.yaml support tier (registration_phase: 59-g)
+- Added HealthOrchestrator to wiring.yaml health tier (registration_phase: 59-g)
+- Updated test_git_backed_wiring.py counts: support 13→14, total 26→27
+
+Smoke gate: 1365 passed ✅ (unchanged — deleted tests were isolated)"
+
+Now **Phase 59-B Track B** — merge `SweepCatalogueOrchestrator` into the support tier (it's already there), handle the duplicate `VacuumOrchestrator` in `orchestrators/health/`: 
+
+Ran terminal command: head -10 cortex/orchestrators/health/vacuum_orchestrator.py && echo "---" && head -10 cortex/orchestrators/support/vacuum_orchestrator.py
+
+The VacuumOrchestrator in `orchestrators/support/` is already a proper shim to the health/ canonical. The wiring.yaml points to support, which re-exports from health. This is already clean.
+
+Let me now move to **Phase 59-C: Track C** — handle the `CortexDocsOrchestrator` (0 external callers besides its test): 
+
+Ran terminal command: python3 -m pytest tests/unit/orchestrators/support/ -p no:xdist --tb=line -q 2>&1 | tail -5
+
+Ran terminal command: git stash && python3 -m pytest tests/unit/orchestrators/support/ -p no:xdist --tb=line -q 2>&1 | tail -5 && git stash pop
+
+Ran terminal command: git checkout cortex/orchestrators/core/master_orchestrator.py && git stash pop
+
+Pre-existing failures confirmed. The support orchestrator test failures are pre-existing. Now let me handle **Phase 59-B: CortexDocsOrchestrator** (Track C — docs are static HTML, no need for an orchestrator): 
+
+Ran terminal command: grep -rn 'CortexDocsOrchestrator\|cortex_docs_orchestrator' cortex/ tests/ 2>/dev/null | grep -v 'cortex/orchestrators/support/cortex_docs_orchestrator.py'
+
+`CortexDocsOrchestrator` has a dedicated test file with 13 tests. That's a real test — leave it for now, it's not zero-import. Let's focus on **Phase 60: cortex/core flatten** which is a cleaner win.
+
+Let me assess the current core directory structure for Phase 60: 
+
+Ran terminal command: find cortex/core -maxdepth 1 -type d | sort && echo "---" && find cortex/core -maxdepth 1 -type d | wc -l
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import os, subprocess
+
+subdirs = ['cortex/core/adapters', 'cortex/core/bootstrap', 'cortex/core/common', 
+           'cortex/core/config', 'cortex/core/confirmation', 'cortex/core/database',
+           'cortex/core/decorators', 'cortex/core/discovery', 'cortex/core/errors',
+           'cortex/core/execution', 'cortex/core/governance', 'cortex/core/hallucination_prevention',
+           'cortex/core/intelligence', 'cortex/core/intent', 'cortex/core/interaction',
+           'cortex/core/interfaces', 'cortex/core/orchestrator', 'cortex/core/parsing',
+           'cortex/core/recovery', 'cortex/core/registry', 'cortex/core/resilience',
+           'cortex/core/safety', 'cortex/core/security', 'cortex/core/state']
+
+print(f'{"Dir":<40} {"Files":>6} {"External callers":>16}')
+print('-'*65)
+for d in subdirs:
+    # Count py files
+    py_files = [f for f in os.listdir(d) if f.endswith('.py')] if os.path.isdir(d) else []
+    # Check if dir name is used in imports
+    dirname = d.split('/')[-1]
+    r = subprocess.run(['grep', '-rn', f'cortex.core.{dirname}', 'cortex/', 'tests/'], capture_output=True, text=True)
+    callers = len([l for l in r.stdout.strip().split('\n') if l and d not in l])
+    print(f'{d:<40} {len(py_files):>6} {callers:>16}')
+PYEOF
+
+Good analysis. The Phase 60 target (27→8 canonical dirs) needs careful planning. The 8 canonical dirs per the plan are: `bootstrap`, `interfaces`, `wiring`, `governance`, `intelligence`, `interaction`, `schemas`, `state`. 
+
+The high-external-caller dirs (`registry`=107, `orchestrator`=97, `intelligence`=88, `interaction`=77, `intent`=51, `execution`=25, `hallucination_prevention`=13, `security`=33) are risky to flatten. The zero-external-caller dirs are safe to flatten: `adapters`(0), `confirmation`(0), `database`(0), `parsing`(0).
+
+Let me handle the **zero-caller subdirs** that are already shims: 
+
+Ran terminal command: ls cortex/core/adapters/ && echo "---" && cat cortex/core/adapters/__init__.py 2>/dev/null | head -5 && echo "---" && ls cortex/core/parsing/ && echo "---" && cat cortex/core/parsing/__init__.py 2>/dev/null | head -5
+
+Ran terminal command: grep -rn 'cortex.core.adapters\|core/adapters\|cortex\.core\.parsing\|core/parsing' cortex/ tests/ 2>/dev/null | grep -v '__pycache__' | head -10
+
+Ran terminal command: grep -rn 'ParseResult\|create_failure\|create_success\|execution_context_adapter' cortex/ tests/ 2>/dev/null | grep -v '__pycache__' | grep -v 'cortex/core/parsing/' | grep -v 'cortex/core/adapters/' | head -15
+
+The `ParseResult` in ast_intelligence.py is a different class from `cortex.core.parsing.ParseResult`. The `cortex.core.parsing` module has zero external callers — it's only self-referenced. But Phase 60 should focus on the most impactful changes. Let me be strategic.
+
+The zero-external-caller dirs (`adapters`, `confirmation`, `database`, `parsing`) with only 1-2 files each are perfect candidates for Phase 60 cleanup. But rather than doing full Phase 60 now (complex), let me first **update the cortex-master.yaml** and **commit Phase 59 progress**, then do Phase 60.
+
+Let me also handle **Phase 59's wiring.yaml registration_phase fix** — our new entries need to use `"59-g"` format (check the test that validates this): 
+
+Ran terminal command: python3 -m pytest tests/ -k "tier4\|registration_phase\|59-f\|59-g" -p no:xdist --tb=short -q 2>&1 | tail -15
+
+Ran terminal command: grep -rn 'test_all_tier4\|registration_phase' tests/ 2>/dev/null | grep -v '__pycache__' | head -10
+
+Ran terminal command: python3 -m pytest tests/core/test_wiring_tier4.py -p no:xdist --tb=short -q 2>&1 | tail -15
+
+The tier4 test only validates entries with `registration_phase: "59-f"` — our new `"59-g"` entries are in `support` and `health` tiers (Tier 3), so they're not scanned by this test. All 28 passed ✅.
+
+Now let me look at the **Phase 61: Registry cleanup** — delete the `_cortex-master/` directory with 30 stale YAMLs: 
+
+Ran terminal command: ls cortex-registry/_cortex-master/ | head -20 && echo "---" && ls cortex-registry/_cortex-master/ | wc -l
+
+Ran terminal command: find cortex-registry/_cortex-master -type f | wc -l && echo "---" && find cortex-registry/_cortex-master -type f | head -20
+
+Ran terminal command: grep -rn '_cortex-master' cortex/ tests/ cortex-registry/ 2>/dev/null | grep -v '_cortex-master/' | grep -v '__pycache__' | head -10
+
+The `_cortex-master/` directory is actively referenced by `yaml_loaders.py`, `directive_loader.py`, `cortex_master_dashboard_generator.py`, and `phase_lifecycle_automator.py`. It's **not safe to delete**. Phase 61 needs to update those callers first. Skip this for now.
+
+Let me focus on completing Phase 60 with the safe zero-caller subdirs in core. Let me do the **confirming deletions** and update the master registry:
+
+First, let's tackle the adapters (1 file, 0 callers) and confirmation (2 files, 0 external callers) and database (2 files, 0 external callers): 
+
+Ran terminal command: cat cortex/core/adapters/execution_context_adapter.py | head -20
+
+Ran terminal command: grep -rn 'execution_context_adapter\|ExecutionContextAdapter' cortex/ tests/ 2>/dev/null | grep -v '__pycache__' | grep -v 'cortex/core/adapters/'
+
+Ran terminal command: cat cortex/core/confirmation/governance.py && echo "---" && ls cortex/core/database/
+
+Ran terminal command: grep -rn 'cortex.core.database\|from cortex.core import.*database\|core/database' cortex/ tests/ 2>/dev/null | grep -v '__pycache__' | grep -v 'cortex/core/database' | head -5
+
+All zero external callers. However, database contains `tier_enforcement_queries.py` (database queries) and the database.py was already shimmed to `cortex.infrastructure.database`. The database subdirectory is a different thing. Let me check what tests reference these subdirectories: 
+
+Ran terminal command: grep -rn 'tier_enforcement_queries\|TierEnforcement' cortex/ tests/ 2>/dev/null | grep -v '__pycache__' | head -10
+
+Another duplicate! tier_enforcement_queries.py and tier_enforcement_queries.py — but both have zero external callers. Let me skip Phase 60 subdirectory flattening for now since it risks breaking internal `__init__.py` chains, and instead **complete the cortex-master.yaml update** and do Phase 61 (registry cleanup):
+
+Let me count the current state and update the registry: 
+
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'PYEOF'
+import os, ast
+
+# Count all orchestrator classes
+all_orch = []
+for root, dirs, files in os.walk('cortex'):
+    dirs[:] = [d for d in dirs if d not in ('__pycache__',)]
+    for f in files:
+        if not f.endswith('.py'): continue
+        path = os.path.join(root, f)
+        try:
+            src = open(path).read()
+            tree = ast.parse(src)
+            for node in tree.body:
+                if isinstance(node, ast.ClassDef) and 'Orchestrator' in node.name:
+                    all_orch.append((node.name, path))
+        except: pass
+
+print(f'Total Orchestrator classes: {len(all_orch)}')
+
+# Count core/core files
+core_core = sum(1 for root, dirs, files in os.walk('cortex/core/core') for f in files if f.endswith('.py'))
+print(f'core/core Python files: {core_core}')
+
+# Count YAML files in registry
+yamls = sum(1 for root, dirs, files in os.walk('cortex-registry') for f in files if f.endswith('.yaml'))
+print(f'Registry YAML files: {yamls}')
+
+# Count total Python files
+py_files = sum(1 for root, dirs, files in os.walk('cortex') for f in files if f.endswith('.py'))
+print(f'Total Python files in cortex/: {py_files}')
+
+# Count cortex/core subdirs
+core_subdirs = [d for d in os.listdir('cortex/core') if os.path.isdir(os.path.join('cortex/core', d))]
+print(f'cortex/core subdirs: {len(core_subdirs)}')
+PYEOF
+
+Good — we've already reduced orchestrator classes from 119 → 112 (7 reduced in Phase 59-A). Now update the master registry: 
+
+Ran terminal command: grep -n 'production_status\|completion_percentage\|completed:\|planned:\|Phase 58-A\|Phase 58-B\|Phase 59\|Phase 60\|Phase 61' cortex-registry/cortex-master.yaml | head -20
+
+Ran terminal command: grep -n 'production_status\|completion_percentage' cortex-registry/cortex-master.yaml
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/cortex-master.yaml#1860-1860), lines 1860 to 1875
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now let me also update the Phase 59 status in the master YAML: 
+
+Ran terminal command: grep -n 'phase-59\|phase-58' cortex-registry/cortex-master.yaml | head -10
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/cortex-master.yaml#240-240), lines 240 to 260
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/cortex-master.yaml#275-275), lines 275 to 285
+
+Now let me look at Phase 59 status section to update it: 
+
+Ran terminal command: grep -n 'PHASE 59\|phase-59.*COMPLETE\|phase-59.*IN PROGRESS\|phase-59.*OPEN' cortex-registry/cortex-master.yaml | head -10
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/cortex-master.yaml#284-284), lines 284 to 320
+
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-registry/cortex-master.yaml#320-320), lines 320 to 380
+
+Now update the Phase 59 status to reflect Phase 59-A completion: 
+
+Using "Replace String in File"
+
+
+```
+
+```
+Now let's run the final smoke gate and commit the registry update: 
+
+Ran terminal command: python3 scripts/run_tests.py smoke 2>&1 | tail -5
+
 Made changes.
