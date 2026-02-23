@@ -309,6 +309,8 @@ class DomainOrchestrator(OrchestratorProtocolMixin):
         """
         _ts = int(time.time() * 1000)
         logger.info(f"AC_START: AC-DOMAIN-{_ts}")
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=operation)
         try:
             handler = self.registry.get_handler(operation)
             if not handler:

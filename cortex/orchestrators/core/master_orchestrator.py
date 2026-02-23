@@ -2035,6 +2035,12 @@ class MasterOrchestrator(IOrchestrator, OrchestratorAuditMixin, WorkflowTemplate
         _exec_ac_id = f"AC-MASTER-EXEC-{int(_time.time() * 1000)}"
         # AC_START: {_exec_ac_id}
         _exec_start_ms = _time.monotonic() * 1000
+        # Phase 58 — cross-cutting hooks (LENS + KnSynth + GovGate)
+        self._activate_cross_cutting_hooks(
+            operation=operation_name,
+            orchestrator_context=parameters.get("orchestrator_context"),
+            unified_context=parameters.get("unified_context"),
+        )
         try:
             # ═══════════════════════════════════════════════════════════════════════
             # AC-PHASE-50-001: PLAN INTENT FAST-PATH

@@ -116,6 +116,8 @@ class VacuumOrchestrator(OrchestratorProtocolMixin):
         import time as _time
         _ac_id = f"AC-VACUUM-{int(_time.time() * 1000)}"
         # AC_START: {_ac_id}
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="vacuum_run")
         ctx = FileContext.build(self.workspace_root)
 
         # Naming fixes

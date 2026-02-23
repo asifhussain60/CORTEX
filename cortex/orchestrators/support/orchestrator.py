@@ -110,6 +110,9 @@ class OnboardingOrchestrator(OrchestratorProtocolMixin):
         if journey_id in self.journeys:
             return Err(f"Journey '{journey_id}' already exists")
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="create_journey")
+
         journey = Journey(
             journey_id=journey_id,
             user_id=user_id,

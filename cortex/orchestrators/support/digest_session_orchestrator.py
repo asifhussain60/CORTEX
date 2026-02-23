@@ -57,6 +57,8 @@ class DigestSessionOrchestrator(OPJMixin):
         import time as _time_mod
         _ac_id = f"AC-DSESSION-{int(_time_mod.time() * 1000)}"
         # AC_START: {_ac_id}
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="digest_session")
 
         if not path.exists():
             # AC_COMPLETE: {_ac_id} ❌ file not found

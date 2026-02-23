@@ -150,6 +150,8 @@ class GitOrchestrator(OrchestratorProtocolMixin):
             GitOrchestratorError: When enforcement, sanitization, or publish fails.
         """
         logger.info("GitOrchestrator.execute → repo=%s branch=%s", repo_path, branch)
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"git_commit_{branch}")
 
         # ── Stage 1: Enforcement ──────────────────────────────────────────
         logger.info("Stage 1/3: Enforcement checks")

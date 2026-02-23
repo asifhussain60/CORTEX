@@ -142,6 +142,8 @@ class TestClassifierOrchestrator(OrchestratorProtocolMixin):
             TestDecision: Fully populated decision record. Never raises.
         """
         normalised = module_path.replace("\\", "/")
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="classify_test")
 
         for prefix, concerns in _GOLDEN_PATH_RULES:
             if normalised.startswith(prefix) or f"/{prefix.lstrip('/')}" in normalised:

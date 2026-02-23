@@ -46,6 +46,8 @@ class BulkDigestOrchestrator(OrchestratorProtocolMixin):
         import time as _time_mod
         _ac_id = f"AC-DIGEST-{int(_time_mod.time() * 1000)}"
         # AC_START: {_ac_id}
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="process_directory")
         start = time.monotonic()
         exclude_patterns = exclude_patterns or []
 

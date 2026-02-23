@@ -55,6 +55,14 @@ try:
 except ImportError:
     _ENFORCEMENT_AVAILABLE = False
 
+# Phase 58-C: tier3_scratch — execution scratch space for refactoring sessions
+try:
+    from cortex.intelligence.memory.tier3_scratch import (  # type: ignore[import]
+        get_scratch_space_path as _refactor_get_scratch_path,
+    )
+except Exception:
+    _refactor_get_scratch_path = None  # type: ignore[assignment]
+
 logger = logging.getLogger(__name__)
 
 
@@ -1131,6 +1139,12 @@ class RefactoringOrchestrator(WorkflowTemplateMixin, IOrchestrator):
         - refactor / execute_refactoring → delegates to execute_refactoring()
         Unknown operations → Err (AC-AR-012-05)
         """
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=operation_name,
+            orchestrator_context=parameters.get("orchestrator_context"),
+            unified_context=parameters.get("unified_context"),
+        )
         try:
             result_value: Any
             if operation_name == "analyze_god_class":

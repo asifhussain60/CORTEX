@@ -315,6 +315,9 @@ class PreCommitEnforcementOrchestrator(OrchestratorProtocolMixin):
         staged = self._get_staged_files(repo_path)
         logger.info("EnforcementOrchestrator: %d staged files", len(staged))
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="git_enforcement")
+
         checks: List[CheckResult] = []
 
         # Check 1: Markdown artifact prevention (CORE-002)

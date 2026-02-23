@@ -454,7 +454,7 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin):
         intent = parse_primary_intent(request)
         scope = extract_scope(request)
         confidence = measure_confidence(request)
-        
+
         # Step 2: Governance rules
         governance_rules = lookup_governance_rules(intent, scope)
         
@@ -540,6 +540,21 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin):
         
         # Auto-run for all other intents
         return True
+
+    def execute_rephrase(self, request: str) -> "RephraseContext":
+        """Instance wrapper for analyze() that activates cross-cutting hooks.
+
+        Phase 58 — allows OrchestratorProtocolMixin hooks to run on instance.
+
+        Args:
+            request: User request string.
+
+        Returns:
+            RephraseContext from the full rephrase pipeline.
+        """
+        # Phase 58 — cross-cutting hooks (instance method)
+        self._activate_cross_cutting_hooks(operation="execute_rephrase")
+        return self.__class__.analyze(request)
 
 
 def _run_stage_0_audit(request: str, intent: str, scope: str, governance_rules: List[str]) -> List[str]:

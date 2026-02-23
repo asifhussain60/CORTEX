@@ -54,9 +54,18 @@ from cortex.orchestrators.support.repository_scanner import (
 )
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
-# ============================================================================
-# Data Classes
-# ============================================================================
+# Phase 58-C: DomainBrain + Memory tier3 wiring (decision-making orchestrator)
+try:
+    from cortex.intelligence.domain_brain import DomainBrainAPI as _WfDomainBrainAPI  # type: ignore[attr-defined]
+except Exception:
+    _WfDomainBrainAPI = None  # type: ignore[assignment,misc]
+
+try:
+    from cortex.intelligence.memory.tier3_scratch import (  # type: ignore[import]
+        get_scratch_space_path as _wf_get_scratch_path,
+    )
+except Exception:
+    _wf_get_scratch_path = None  # type: ignore[assignment]
 
 @dataclass
 class WorkflowStageResult:
@@ -157,6 +166,12 @@ class WorkflowOrchestrator(OrchestratorProtocolMixin):
             WorkflowExecutionResult with detailed execution metrics
         """
         ac_id = "AC-PROD-004-02"
+
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=context.operation,
+            orchestrator_context=getattr(context, "orchestrator_context", None),
+        )
 
         self.logger.log_operation_start(
             ac_id=ac_id,

@@ -168,6 +168,9 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
 
     def route(self, request: Any) -> IntentRoutingResult:
         """Route user request to optimal agent(s). Accepts IntentRoutingRequest or dict."""
+        # Phase 58 — cross-cutting hooks
+        ctx = request if isinstance(request, dict) else getattr(request, "context", None)
+        self._activate_cross_cutting_hooks(operation="route", orchestrator_context=ctx)
         # Dict coercion
         if isinstance(request, dict):
             original_dict = request

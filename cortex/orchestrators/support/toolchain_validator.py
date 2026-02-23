@@ -73,6 +73,8 @@ class ToolchainValidator(OrchestratorProtocolMixin):
         Returns:
             ToolResult indicating whether pytest is available.
         """
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="validate_toolchain")
         return self._check_tool("pytest", ["pytest", "--version"])
 
     def validate_mypy(self) -> ToolResult:

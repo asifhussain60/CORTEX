@@ -109,6 +109,12 @@ class UnifiedQualityAssuranceOrchestrator(OrchestratorProtocolMixin):
         if context is not None and not isinstance(context, dict):
             raise TypeError("Context must be dict or None")
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=f"quality_check_{recommendation_type}",
+            orchestrator_context=context,
+        )
+
         affected_files = affected_files or []
 
         # AC_START: AC-GROUP-C-001

@@ -31,6 +31,11 @@ class CentralBrainOrchestrator(OrchestratorProtocolMixin):
         scope: str = "project",
     ) -> str:
         """Share context data for a user. Returns context_id."""
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation="share_context",
+            orchestrator_context=context_data,
+        )
         context_id = str(uuid.uuid4())
         self._shared_contexts[context_id] = {
             "owner": user_id,

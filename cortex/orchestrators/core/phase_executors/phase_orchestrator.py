@@ -58,6 +58,8 @@ class PhaseOrchestrator(OrchestratorProtocolMixin):
             True if all phases succeeded, False otherwise.
         """
         logger.info(f"Starting phase sequence: {', '.join(phase_ids)}")
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="execute_phase_sequence")
 
         for idx, phase_id in enumerate(phase_ids, 1):
             print(f"\n{'━'*70}")

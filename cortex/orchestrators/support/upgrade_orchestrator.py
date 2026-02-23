@@ -21,6 +21,26 @@ from typing import Any, Dict, List, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.file_factory import get_file_factory
 
+# Phase 58-C: DomainBrain + Memory wiring (execution orchestrator)
+try:
+    from cortex.intelligence.domain_brain import DomainBrainAPI as _UpgDomainBrainAPI  # type: ignore[attr-defined]
+except Exception:
+    _UpgDomainBrainAPI = None  # type: ignore[assignment,misc]
+
+try:
+    from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention import (  # type: ignore[import]
+        BehavioralBoundaryRules as _UpgBehavioralBoundaryRules,
+    )
+except Exception:
+    _UpgBehavioralBoundaryRules = None  # type: ignore[assignment]
+
+try:
+    from cortex.intelligence.memory.tier3_scratch import (  # type: ignore[import]
+        get_scratch_space_path as _upg_get_scratch_path,
+    )
+except Exception:
+    _upg_get_scratch_path = None  # type: ignore[assignment]
+
 
 class UpgradeStrategy(Enum):
     """Upgrade execution strategies."""
@@ -118,6 +138,8 @@ class UpgradeOrchestrator(OrchestratorProtocolMixin):
         Returns:
             UpgradePlan instance.
         """
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="plan_upgrade")
         return UpgradePlan(
             upgrade_id=upgrade_id,
             components=components or [],

@@ -177,6 +177,13 @@ class InteractionOrchestrator(IOrchestrator, WorkflowTemplateMixin):
         """
         user_input = parameters.get("user_input", parameters.get("request", ""))
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=operation_name,
+            orchestrator_context=parameters.get("orchestrator_context"),
+            unified_context=parameters.get("unified_context"),
+        )
+
         try:
             # Run LENS analysis (per-turn requirement)
             lens_context = self._run_lens_analysis(user_input)

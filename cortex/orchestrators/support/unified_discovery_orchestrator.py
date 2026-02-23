@@ -99,6 +99,8 @@ class UnifiedDiscoveryOrchestrator(OrchestratorProtocolMixin):
             raise ValueError("Query must be non-empty string")
 
         # AC_START: AC-GROUP-D-001
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"discover_{discovery_type.value if hasattr(discovery_type, 'value') else discovery_type}")
         # Search resources
         matches: List[Resource] = []
         query_terms = query.lower().split()

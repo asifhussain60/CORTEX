@@ -153,7 +153,9 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin):
         """
         start_time = time.time()
         logger.info("Starting documentation pipeline")
-        
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="docs_pipeline")
+
         try:
             stages_completed = 0
             

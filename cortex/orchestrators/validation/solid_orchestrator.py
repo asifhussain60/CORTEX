@@ -20,8 +20,11 @@ from cortex.orchestrators.core.solid_analyzers import (
 )
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
-
-class SOLIDOrchestrator(OrchestratorProtocolMixin):
+# Phase 58-C: DomainBrain wiring (validation decision-making orchestrator)
+try:
+    from cortex.intelligence.domain_brain import DomainBrainAPI as _SolidDomainBrainAPI  # type: ignore[attr-defined]
+except Exception:
+    _SolidDomainBrainAPI = None  # type: ignore[assignment,misc]
     """Unified SOLID compliance: SRP + OCP + LSP + ISP + DIP + DRY.
     
     Consolidates:
@@ -162,6 +165,8 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin):
         Returns:
             Dictionary mapping principle to violations
         """
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="analyze_solid")
         return {
             "srp": self.analyze_srp(file_path),
             "ocp": self.analyze_ocp(file_path),

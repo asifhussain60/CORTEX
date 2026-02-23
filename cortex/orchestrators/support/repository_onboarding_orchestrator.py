@@ -5,11 +5,15 @@ Phase 28.2: Repository scanning, profile generation, and domain detection.
 """
 from __future__ import annotations
 
+import logging
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
+logger = logging.getLogger(__name__)
 
 
 class RepositoryNotFoundError(FileNotFoundError):
@@ -21,45 +25,58 @@ class RepositoryOnboardingOrchestrator(OrchestratorProtocolMixin):
 
     def scan_repository(self, repo_path: "str | Path") -> Dict[str, Any]:
         """Scan repository structure and detect tech stack."""
-        root = Path(repo_path)
-        if not root.exists():
-            raise RepositoryNotFoundError(f"Repository not found: {repo_path}")
+        _ts = int(time.time() * 1000)
+        logger.info("AC_START: AC-ONBOARD-%d", _ts)
+        _t0 = time.perf_counter()
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="scan_repository")
+        try:
+            root = Path(repo_path)
+            if not root.exists():
+                raise RepositoryNotFoundError(f"Repository not found: {repo_path}")
 
-        py_files = list(root.rglob("*.py"))
-        ts_files = list(root.rglob("*.ts"))
-        js_files = list(root.rglob("*.js"))
-        go_files = list(root.rglob("*.go"))
-        java_files = list(root.rglob("*.java"))
+            py_files = list(root.rglob("*.py"))
+            ts_files = list(root.rglob("*.ts"))
+            js_files = list(root.rglob("*.js"))
+            go_files = list(root.rglob("*.go"))
+            java_files = list(root.rglob("*.java"))
 
-        structure = {
-            "python_files": len(py_files),
-            "ts_files": len(ts_files),
-            "js_files": len(js_files),
-            "go_files": len(go_files),
-            "java_files": len(java_files),
-            "total_files": sum(
-                len(f) for f in (py_files, ts_files, js_files, go_files, java_files)
-            ),
-        }
+            structure = {
+                "python_files": len(py_files),
+                "ts_files": len(ts_files),
+                "js_files": len(js_files),
+                "go_files": len(go_files),
+                "java_files": len(java_files),
+                "total_files": sum(
+                    len(f) for f in (py_files, ts_files, js_files, go_files, java_files)
+                ),
+            }
 
-        tech_stack: List[str] = []
-        if py_files:
-            tech_stack.append("python")
-        if ts_files:
-            tech_stack.append("typescript")
-        if js_files:
-            tech_stack.append("javascript")
-        if go_files:
-            tech_stack.append("go")
-        if java_files:
-            tech_stack.append("java")
+            tech_stack: List[str] = []
+            if py_files:
+                tech_stack.append("python")
+            if ts_files:
+                tech_stack.append("typescript")
+            if js_files:
+                tech_stack.append("javascript")
+            if go_files:
+                tech_stack.append("go")
+            if java_files:
+                tech_stack.append("java")
 
-        return {
-            "status": "success",
-            "repo_path": str(repo_path),
-            "structure": structure,
-            "tech_stack": tech_stack,
-        }
+            result = {
+                "status": "success",
+                "repo_path": str(repo_path),
+                "structure": structure,
+                "tech_stack": tech_stack,
+            }
+            _elapsed = int((time.perf_counter() - _t0) * 1000)
+            logger.info("AC_COMPLETE: AC-ONBOARD-%d ✅ (%dms)", _ts, _elapsed)
+            return result
+        except Exception as exc:
+            _elapsed = int((time.perf_counter() - _t0) * 1000)
+            logger.info("AC_COMPLETE: AC-ONBOARD-%d ❌ %s (%dms)", _ts, type(exc).__name__, _elapsed)
+            raise
 
     def detect_company_domains(
         self, repo_path: "str | Path"

@@ -177,7 +177,13 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin):
         """
         # IntelligenceRoutingEngine.route expects IntentType enum and request string
         from cortex.core.core.intelligence_routing_engine import IntentType
-        
+
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=intent,
+            orchestrator_context=context,
+        )
+
         # Convert string intent to enum
         try:
             intent_enum = IntentType[intent.upper()]

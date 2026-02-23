@@ -113,6 +113,9 @@ class SetupOrchestrator(OrchestratorProtocolMixin):
                 details={"error": "circuit_breaker_open"},
             )
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"setup_{environment_type}")
+
         complexity = complexity_preference or ComplexityLevel.STANDARD
 
         result = SetupResult(

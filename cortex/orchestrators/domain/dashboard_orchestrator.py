@@ -13,6 +13,12 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
+# Phase 58-C: DomainBrain wiring (decision-making orchestrator)
+try:
+    from cortex.intelligence.domain_brain import DomainBrainAPI as _DashDomainBrainAPI  # type: ignore[attr-defined]
+except Exception:
+    _DashDomainBrainAPI = None  # type: ignore[assignment,misc]
+
 # ============================================================================
 # MODELS
 # ============================================================================
@@ -151,6 +157,9 @@ class DashboardOrchestrator(OrchestratorProtocolMixin, ABC):
 
         repo_name = repo_path.name.lower()
         ac_id = f"AC-PHASE53.3-{datetime.now().strftime('%Y%m%d%H%M%S')}"
+
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="generate_dashboard")
 
         try:
             # Log AC_START

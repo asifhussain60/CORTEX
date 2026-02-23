@@ -143,7 +143,13 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin):
             raise ValueError(
                 f"Validation only applies to IMPLEMENT/FIX/REFACTOR, got {intent}"
             )
-        
+
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=intent,
+            orchestrator_context=context,
+        )
+
         logger.info(f"Starting validation for {intent} request: {request[:50]}...")
         
         # Stage 1: Run checklist

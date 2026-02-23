@@ -121,6 +121,8 @@ class DependencyResolver(OrchestratorProtocolMixin):
             ResolutionResult with execution order or error details
         """
         # Check for missing dependencies first
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="resolve_dependencies")
         missing = self._check_missing_dependencies(graph)
         if missing:
             return ResolutionResult(

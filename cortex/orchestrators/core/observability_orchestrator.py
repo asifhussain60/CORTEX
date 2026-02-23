@@ -116,6 +116,8 @@ class ObservabilityOrchestrator(OrchestratorProtocolMixin):
         """
         self._metrics[name] = value
         # Would integrate with PrometheusMetrics here
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"record_metric_{metric_type}")
         self._audit_log("RECORD_METRIC", name, {"value": value, "type": metric_type})
     
     def start_span(self, operation_name: str, attributes: Optional[Dict[str, Any]] = None) -> Span:

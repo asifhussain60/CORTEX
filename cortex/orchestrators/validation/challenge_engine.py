@@ -109,6 +109,8 @@ class ChallengeEngine(OrchestratorProtocolMixin):
             Challenge with 3 ranked alternatives and recommendation
         """
         # Select generation strategy based on intent
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"challenge_{intent.lower()}")
         generator = self.intent_strategies.get(
             intent,
             self._generate_default_alternatives

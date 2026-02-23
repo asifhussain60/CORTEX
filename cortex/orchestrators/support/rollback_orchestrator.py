@@ -122,6 +122,9 @@ class RollbackOrchestrator(OrchestratorProtocolMixin):
             self.logger.error("Circuit breaker is open — rollback blocked")
             return {"status": "blocked", "reason": "circuit_breaker_open"}
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"rollback_{strategy.value}")
+
         plan: Dict[str, Any] = {
             "reason": reason,
             "strategy": strategy.value,

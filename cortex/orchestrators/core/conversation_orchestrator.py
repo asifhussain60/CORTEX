@@ -41,6 +41,12 @@ class ConversationOrchestrator(OrchestratorProtocolMixin):
         if self.is_cancelled:
             return {"error": "Conversation is cancelled"}
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation="process_turn",
+            orchestrator_context=request.get("context"),
+        )
+
         turn_number = request.get("turn_number", len(self.conversation_history) + 1)
         user_input = request.get("user_input", "")
         context = request.get("context", {})

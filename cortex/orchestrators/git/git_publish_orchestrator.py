@@ -141,6 +141,8 @@ class GitPublishOrchestrator(OrchestratorProtocolMixin):
         """
         should_push = auto_push if auto_push is not None else self._auto_push
         stage_paths = paths or ["."]
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"git_publish_{branch}")
         try:
             # Stage 1: git add
             add_cmd = ["git", "add"] + stage_paths

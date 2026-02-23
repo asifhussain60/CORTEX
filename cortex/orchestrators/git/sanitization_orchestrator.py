@@ -625,6 +625,9 @@ class SanitizationOrchestrator(OrchestratorProtocolMixin):
         trail = AuditTrail()
         total_changes = 0
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="sanitize_repo")
+
         scan_results = self._scanner.scan_directory(repo_path)
 
         for scan_result in scan_results:

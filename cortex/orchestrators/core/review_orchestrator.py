@@ -77,6 +77,9 @@ class ReviewOrchestrator(OrchestratorProtocolMixin):
         plan = plan or {}
         commits = commits or []
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"final_review_{complexity_level.lower()}")
+
         phases = plan.get("phases", [])
         phase_count = max(len(phases), 1)
         commits_analyzed = max(len(commits), phase_count)

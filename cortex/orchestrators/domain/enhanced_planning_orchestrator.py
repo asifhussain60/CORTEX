@@ -132,6 +132,12 @@ class EnhancedPlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
 
     def execute_operation(self, operation: str, context: Any = None, **kwargs: Any) -> Any:
         """Execute a planning operation."""
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=operation,
+            orchestrator_context=context if isinstance(context, dict) else None,
+            unified_context=kwargs.get("unified_context"),
+        )
         return Ok({"status": "ok", "operation": operation})
 
     def get_audit_trail(self, limit: int = 100) -> Any:

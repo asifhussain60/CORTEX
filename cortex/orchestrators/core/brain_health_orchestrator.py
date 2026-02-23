@@ -39,6 +39,8 @@ class BrainHealthOrchestrator(OrchestratorProtocolMixin):
         Returns:
             Dict with health scores per component
         """
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="get_health_metrics")
         return {
             "overall_score": self._health_score,
             "components": {

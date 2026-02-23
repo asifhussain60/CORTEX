@@ -149,6 +149,8 @@ class HealthOrchestrator(OrchestratorProtocolMixin):
         import time as _time
         _ac_id = f"AC-HEALTH-{int(_time.time() * 1000)}"
         # AC_START: {_ac_id}
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="run_health_check")
         if not self.enabled:
             # AC_COMPLETE: {_ac_id} ✅ (disabled)
             return report

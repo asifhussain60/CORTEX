@@ -215,7 +215,9 @@ class StateOrchestrator(OrchestratorProtocolMixin):
             StateOperationResult with snapshot path and trace metadata
         """
         start_time = time.time()
-        
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="flush_state")
+
         try:
             # Delegate to BrainStateManager
             flush_result = self.brain_manager.flush_state()

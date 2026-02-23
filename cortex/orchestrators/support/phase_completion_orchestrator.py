@@ -82,6 +82,9 @@ class PhaseCompletionOrchestrator(OrchestratorProtocolMixin):
         result = CompletionResult()
         phase_path = Path(phase_file)
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="complete_phase")
+
         # ── Validate ────────────────────────────────────────────────────────
         if not phase_path.exists():
             result.error = "phase file not found"

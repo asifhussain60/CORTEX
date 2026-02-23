@@ -7,11 +7,29 @@ HealthOrchestrator to avoid duplication (CORE-035).
 AC-PHASE38-034, AC-PHASE38-035, AC-AUDIT-001, AC-AUDIT-002, AC-AUDIT-003
 """
 
+import logging
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
+# Phase 58-C: DomainBrain wiring (decision-making orchestrator)
+try:
+    from cortex.intelligence.domain_brain import DomainBrainAPI as _AuditDomainBrainAPI  # type: ignore[attr-defined]
+except Exception:
+    _AuditDomainBrainAPI = None  # type: ignore[assignment,misc]
+
+# Phase 58-C: Memory tier2 — hallucination prevention during audit
+try:
+    from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention import (  # type: ignore[import]
+        BehavioralBoundaryRules as _AuditBehavioralBoundaryRules,
+    )
+except Exception:
+    _AuditBehavioralBoundaryRules = None  # type: ignore[assignment]
+
+logger = logging.getLogger(__name__)
 
 
 class AuditOrchestrator(OrchestratorProtocolMixin):
@@ -46,11 +64,24 @@ class AuditOrchestrator(OrchestratorProtocolMixin):
         Returns:
             Audit results dict with check scores
         """
-        return {
-            "mode": mode,
-            "status": "complete",
-            "checks": self.audit_results,
-        }
+        _ts = int(time.time() * 1000)
+        logger.info("AC_START: AC-AUDIT-%d", _ts)
+        _t0 = time.perf_counter()
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="audit")
+        try:
+            result = {
+                "mode": mode,
+                "status": "complete",
+                "checks": self.audit_results,
+            }
+            _elapsed = int((time.perf_counter() - _t0) * 1000)
+            logger.info("AC_COMPLETE: AC-AUDIT-%d ✅ (%dms)", _ts, _elapsed)
+            return result
+        except Exception as exc:
+            _elapsed = int((time.perf_counter() - _t0) * 1000)
+            logger.info("AC_COMPLETE: AC-AUDIT-%d ❌ %s (%dms)", _ts, type(exc).__name__, _elapsed)
+            raise
 
     def should_pass(self, audit_output: Dict[str, Any]) -> bool:
         """Determine if audit output indicates pass.

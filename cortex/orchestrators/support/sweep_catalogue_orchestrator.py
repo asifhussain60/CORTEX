@@ -265,6 +265,8 @@ class SweepCatalogueOrchestrator(OrchestratorProtocolMixin):
         import time as _time_mod
         _ac_id = f"AC-SWEEP-{int(_time_mod.time() * 1000)}"
         # AC_START: {_ac_id}
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"sweep_{intent.lower()}")
         sweep_id = f"sweep-{uuid.uuid4().hex[:12]}"
         now = time.time()
         hash_json = json.dumps(self._file_hashes(scope_files))

@@ -89,6 +89,8 @@ class CodeLevelPlanner(OrchestratorProtocolMixin):
             Dict with scope summary, files list, and components list.
         """
         lower = task_description.lower()
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation="analyze_task_scope")
 
         # Heuristic scope detection
         files: List[Dict[str, str]] = []

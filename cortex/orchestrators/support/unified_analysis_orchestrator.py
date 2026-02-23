@@ -75,6 +75,9 @@ class UnifiedAnalysisOrchestrator(OrchestratorProtocolMixin):
                 f"Valid options: {list(self._analysis_strategies.keys())}"
             )
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"analyze_{analysis_type}")
+
         return self._analysis_strategies[analysis_type](code)
 
     def discover_tools(self, query: str) -> List[ToolInfo]:

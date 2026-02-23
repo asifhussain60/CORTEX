@@ -39,6 +39,19 @@ from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.intelligence.learning.opj_mixin import OPJMixin  # Phase 52: OPJ intelligence
 
+# Phase 58-C: DomainBrain + Memory wiring (decision-making orchestrator)
+try:
+    from cortex.intelligence.domain_brain import DomainBrainAPI as _EnfDomainBrainAPI  # type: ignore[attr-defined]
+except Exception:
+    _EnfDomainBrainAPI = None  # type: ignore[assignment,misc]
+
+try:
+    from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention import (  # type: ignore[import]
+        BehavioralBoundaryRules as _EnfBehavioralBoundaryRules,
+    )
+except Exception:
+    _EnfBehavioralBoundaryRules = None  # type: ignore[assignment]
+
 logger = logging.getLogger(__name__)
 
 # Import telemetry (Phase 4)
@@ -1323,6 +1336,10 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTempl
         all_violations = []
         all_warnings = []
         highest_level = EnforcementLevel.PASS
+
+        # Phase 58 — cross-cutting hooks: LENS + KnSynth only (GovGate skipped — this IS the gate)
+        lens_ctx = self._extract_lens_context(operation.get("orchestrator_context"))
+        self._consume_unified_context(operation.get("unified_context"))
 
         # Get telemetry instance if available
         telemetry = get_telemetry() if TELEMETRY_AVAILABLE else None

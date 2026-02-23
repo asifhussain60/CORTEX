@@ -70,9 +70,25 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
 )
 from cortex.intelligence.learning.opj_mixin import OPJMixin  # Phase 52: OPJ intelligence
 
-# Phase 43: Import RefactoringOrchestrator for REFACTOR phase wiring
-# NOTE: Consolidated in Wave 7, import removed
-# from cortex.orchestrators.domain.refactoring.orchestrator import RefactoringOrchestrator
+# Phase 58-C: DomainBrain + Memory tier wiring (decision-making orchestrator)
+try:
+    from cortex.intelligence.domain_brain import DomainBrainAPI as _DomainBrainAPI  # type: ignore[attr-defined]
+except Exception:
+    _DomainBrainAPI = None  # type: ignore[assignment,misc]
+
+try:
+    from cortex.intelligence.memory.tier2_adaptive.hallucination_prevention import (  # type: ignore[import]
+        BehavioralBoundaryRules as _TDDBehavioralBoundaryRules,
+    )
+except Exception:
+    _TDDBehavioralBoundaryRules = None  # type: ignore[assignment]
+
+try:
+    from cortex.intelligence.memory.tier3_scratch import (  # type: ignore[import]
+        get_scratch_space_path as _tdd_get_scratch_path,
+    )
+except Exception:
+    _tdd_get_scratch_path = None  # type: ignore[assignment]
 
 logger = logging.getLogger(__name__)
 
@@ -481,6 +497,12 @@ class TDDOrchestrator(OPJMixin, WorkflowTemplateMixin, IOrchestrator):
         import time as _time
         _ac_id = f"AC-TDD-{int(_time.time() * 1000)}"
         # AC_START: {_ac_id}
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=operation_name,
+            orchestrator_context=parameters.get("orchestrator_context"),
+            unified_context=parameters.get("unified_context"),
+        )
         try:
             logger.info(f"TDDOrchestrator executing operation: {operation_name}")
 

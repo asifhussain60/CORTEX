@@ -109,6 +109,12 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
         parameters: Dict[str, Any],
     ) -> Result[Any]:
         """Execute operation with audit logging."""
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=operation_name,
+            orchestrator_context=parameters.get("orchestrator_context"),
+            unified_context=parameters.get("unified_context"),
+        )
         try:
             if operation_name == "plan_phases":
                 phases_data = parameters.get("phases", [])

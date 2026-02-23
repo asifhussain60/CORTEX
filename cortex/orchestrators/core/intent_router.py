@@ -2252,6 +2252,12 @@ class IntentRouter(IOrchestrator):
         Raises:
             ValueError: If operation_name is not recognized
         """
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=operation_name,
+            orchestrator_context=parameters.get("orchestrator_context"),
+            unified_context=parameters.get("unified_context"),
+        )
         try:
             if operation_name == "analyze_and_route":
                 return self.execute(parameters)

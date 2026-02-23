@@ -106,6 +106,8 @@ class AutoHealingMCPOrchestrator(OrchestratorProtocolMixin):
             HealingResult with success status and diagnostics
         """
         # Step 1: Diagnose root cause
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(operation=f"heal_{intent.value if hasattr(intent, 'value') else intent}")
         diagnostic = self._diagnose_mcp_failure()
         
         if not diagnostic.issue_found:

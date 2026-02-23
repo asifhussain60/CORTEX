@@ -21,10 +21,12 @@ from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 from datetime import datetime
 import logging
+import time
 
 from cortex.core.event_bus import EventBus, Event
 from cortex.models.canonical_enums import IntentType
 from cortex.core.core.interfaces.i_orchestrator import IOrchestrator
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 
@@ -41,7 +43,7 @@ class DebugSession:
     status: str  # active | resolved | stale
 
 
-class DebuggerOrchestrator(IOrchestrator, WorkflowTemplateMixin):
+class DebuggerOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowTemplateMixin):
     """
     Orchestrates automatic debug marker injection via EventBus.
     
@@ -128,50 +130,60 @@ class DebuggerOrchestrator(IOrchestrator, WorkflowTemplateMixin):
         logger.info(f"TEST_FAILURE received: {payload.get('test_name')}")
         logger.debug(f"Failure location: {payload.get('file_path')}:{payload.get('line_number')}")
         
-        # Generate session ID
-        session_id = self._generate_session_id("test_failure")
-        
-        # Extract payload data
-        test_name = payload.get("test_name", "unknown")
-        file_path = payload.get("file_path", "")
-        line_number = payload.get("line_number", 0)
-        failure_reason = payload.get("failure_reason", "")
-        
-        # Create debug session
-        session = DebugSession(
-            session_id=session_id,
-            trigger_event="TEST_FAILURE",
-            file_paths=[file_path],
-            created_at=datetime.now(),
-            status="active"
-        )
-        self.active_sessions[session_id] = session
-        
-        # Inject markers (if engine available)
-        if self.marker_injection_engine:
-            self.marker_injection_engine.inject(
-                strategy="test_failure",
+        _ts = int(time.time() * 1000)
+        logger.info("AC_START: AC-DEBUGGER-%d", _ts)
+        _t0 = time.perf_counter()
+        try:
+            # Generate session ID
+            session_id = self._generate_session_id("test_failure")
+
+            # Extract payload data
+            test_name = payload.get("test_name", "unknown")
+            file_path = payload.get("file_path", "")
+            line_number = payload.get("line_number", 0)
+            failure_reason = payload.get("failure_reason", "")
+
+            # Create debug session
+            session = DebugSession(
                 session_id=session_id,
-                file_path=file_path,
-                line_number=line_number,
-                context={
-                    "test_name": test_name,
-                    "failure_reason": failure_reason
-                }
+                trigger_event="TEST_FAILURE",
+                file_paths=[file_path],
+                created_at=datetime.now(),
+                status="active"
             )
-        
-        # Emit DEBUG_MARKERS_INJECTED event
-        self.event_bus.publish(Event(
-            type="DEBUG_MARKERS_INJECTED",
-            payload={
-                "session_id": session_id,
-                "file_paths": [file_path],
-                "marker_count": 1,
-                "trigger": "TEST_FAILURE"
-            }
-        ))
-        
-        logger.info(f"Debug session {session_id} created and markers injected")
+            self.active_sessions[session_id] = session
+
+            # Inject markers (if engine available)
+            if self.marker_injection_engine:
+                self.marker_injection_engine.inject(
+                    strategy="test_failure",
+                    session_id=session_id,
+                    file_path=file_path,
+                    line_number=line_number,
+                    context={
+                        "test_name": test_name,
+                        "failure_reason": failure_reason
+                    }
+                )
+
+            # Emit DEBUG_MARKERS_INJECTED event
+            self.event_bus.publish(Event(
+                type="DEBUG_MARKERS_INJECTED",
+                payload={
+                    "session_id": session_id,
+                    "file_paths": [file_path],
+                    "marker_count": 1,
+                    "trigger": "TEST_FAILURE"
+                }
+            ))
+
+            _elapsed = int((time.perf_counter() - _t0) * 1000)
+            logger.info("AC_COMPLETE: AC-DEBUGGER-%d ✅ (%dms)", _ts, _elapsed)
+            logger.info(f"Debug session {session_id} created and markers injected")
+        except Exception as exc:
+            _elapsed = int((time.perf_counter() - _t0) * 1000)
+            logger.info("AC_COMPLETE: AC-DEBUGGER-%d ❌ %s (%dms)", _ts, type(exc).__name__, _elapsed)
+            raise
     
     def handle_refactor_regression(self, event: Event) -> None:
         """
@@ -392,6 +404,12 @@ class DebuggerOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     
     def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Any:
         """Execute operation with audit logging."""
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation=operation_name,
+            orchestrator_context=parameters.get("orchestrator_context"),
+            unified_context=parameters.get("unified_context"),
+        )
         from cortex.core.core.result import Result
         result = self.execute(operation_name, parameters)
         return Result.success(result)
