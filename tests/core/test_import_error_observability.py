@@ -81,6 +81,7 @@ def _collect_bare_internal_import_errors(src_dir: Path) -> list[dict]:
 class TestImportErrorObservability:
     """GAP-57-07: bare 'except ImportError: pass' for cortex.* imports must be logged."""
 
+    @pytest.mark.timeout(90)  # AST-walks 1,346 files — needs >30s global default under xdist load
     def test_internal_import_failures_are_logged(self) -> None:
         """Zero bare 'except ImportError: pass' blocks for cortex.* imports after fix."""
         violations = _collect_bare_internal_import_errors(CORTEX_SRC)
@@ -95,6 +96,7 @@ class TestImportErrorObservability:
                 "Replace 'pass' with logger.warning(f'Optional dependency unavailable: ...')"
             )
 
+    @pytest.mark.timeout(90)  # AST-walks 1,346 files — needs >30s global default under xdist load
     def test_external_import_failures_remain_silent(self) -> None:
         """External library import guards must stay as bare pass (no regression)."""
         # This is a lint/audit check — external guards are intentionally silent.

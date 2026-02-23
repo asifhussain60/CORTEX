@@ -28,6 +28,8 @@ class BusinessDomainOrchestrator(OrchestratorProtocolMixin, ABC):
         """
         self.domain_name = domain_name
         self._context: Dict[str, Any] = {}
+        # Phase 58 contract: activate cross-cutting hooks (LENS + KnSynth + GovGate)
+        self._activate_cross_cutting_hooks(operation="init")
 
     # ── OrchestratorProtocolMixin override ───────────────────
     def get_name(self) -> str:

@@ -25,8 +25,11 @@ try:
     from cortex.intelligence.domain_brain import DomainBrainAPI as _SolidDomainBrainAPI  # type: ignore[attr-defined]
 except Exception:
     _SolidDomainBrainAPI = None  # type: ignore[assignment,misc]
+
+
+class SOLIDOrchestrator(OrchestratorProtocolMixin):
     """Unified SOLID compliance: SRP + OCP + LSP + ISP + DIP + DRY.
-    
+
     Consolidates:
     - SRPAnalyzer (Single Responsibility Principle)
     - OCPAnalyzer (Open/Closed Principle)
@@ -34,7 +37,7 @@ except Exception:
     - DIPAnalyzer (Dependency Inversion Principle)
     - DRYAnalyzer (Don't Repeat Yourself)
     - LSPAnalyzer (Liskov Substitution - future)
-    
+
     Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
     Phase: 23 MEGA-B Stage 2 - Component Registration
     """

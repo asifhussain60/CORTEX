@@ -265,7 +265,7 @@ orchestrators:
       dependencies: ["EnforcementOrchestrator"]
       capabilities: ["security_scan", "vulnerability_detection", "cve_remediation"]
       health_check: "ping"
-      registration_phase: "59-g"
+      registration_phase: "59-f"
 
     - name: "SOLIDOrchestrator"
       module: "cortex.orchestrators.validation.solid_orchestrator"
@@ -275,7 +275,7 @@ orchestrators:
       dependencies: []
       capabilities: ["solid_compliance", "srp_check", "ocp_check", "dry_check"]
       health_check: "ping"
-      registration_phase: "59-g"
+      registration_phase: "59-f"
 
   # ── Strategies (re-export shim — canonical in core) ───────────────────────
   strategies:
@@ -287,7 +287,7 @@ orchestrators:
       dependencies: ["MasterOrchestrator"]
       capabilities: ["stage_routing", "execution_strategy_selection"]
       health_check: "ping"
-      registration_phase: "59-g"
+      registration_phase: "59-f"
   # ── Git Tier ────────────────────────────────────────────────────────────
   git:
     - name: "GitOrchestrator"
