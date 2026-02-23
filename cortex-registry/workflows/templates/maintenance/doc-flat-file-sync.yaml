@@ -1,0 +1,375 @@
+# =============================================================================
+# CORTEX Documentation Flat-File Sync — Workflow Template
+# =============================================================================
+# Authority: cortex-documentation-architect.md v6.2 + cortex-doc.prompt.md
+# Version: 1.0.0
+# Created: 2026-02-23
+# CORE Rules: CORE-002, CORE-028, CORE-035, CORE-049, CORE-064
+#
+# Purpose: Synchronise cortex-docs/.content/<category>/ files into a
+#   single flat directory at cortex-docs/.content/flat-files/, applying
+#   the canonical naming convention:
+#
+#     nn-{foldername}-{descriptive-name}.md
+#
+#   Where:
+#     nn             = two-digit numeric prefix taken from the SOURCE FOLDER
+#                      (e.g. "03" from "03-orchestration/") — same for every
+#                      file in that folder
+#     {foldername}   = folder name stripped of its own nn- prefix
+#                      (e.g. "orchestration" from "03-orchestration/")
+#     {descriptive}  = original filename stripped of its own nn- prefix
+#                      (e.g. "master-orchestrator" from "02-master-orchestrator.md")
+#
+#   Example:
+#     03-orchestration/02-master-orchestrator.md
+#       → flat-files/03-orchestration-master-orchestrator.md
+#
+# Trigger: Runs automatically as the final step of every documentation
+#   refresh cycle (Phase 2: GENERATION and any incremental update).
+#
+# Scope:
+#   Included  — all numbered category folders under .content/
+#               (00-getting-started, 01-capabilities, 02-lens,
+#                03-orchestration, 04-mcp, 05-infrastructure, 07-diagrams)
+#   Excluded  — root-level files (index.md, glossary.md)
+#   Excluded  — flat-files/ itself (no recursive mirroring)
+#   Excluded  — .gitkeep, .DS_Store, non-.md files
+#
+# Sync semantics:
+#   COPY    — flat file is created/overwritten from source (never primary)
+#   PRUNE   — stale flat files whose source no longer exists are deleted
+#   NO EDIT — flat-files/ is NEVER edited directly; always edit source first
+# =============================================================================
+
+workflow:
+  id: "maintenance/doc-flat-file-sync"
+  name: "Documentation Flat-File Sync"
+  version: "1.0.0"
+  category: "maintenance"
+  description: |
+    Mirrors every file in cortex-docs/.content/<nn-category>/ folders into
+    cortex-docs/.content/flat-files/ using the naming convention:
+
+      nn-{foldername}-{descriptive-name}.md
+
+    Runs as the terminal step of every documentation refresh so flat-files/
+    is always in sync with the authoritative .content/ tree.
+
+    Naming convention (immutable):
+      • nn            = source folder numeric prefix (e.g. "03")
+      • {foldername}  = source folder name minus nn- prefix (e.g. "orchestration")
+      • {descriptive} = source filename minus its own nn- prefix
+                        (e.g. "master-orchestrator" from "02-master-orchestrator.md")
+
+    Flat-file ordering guarantee:
+      Files sort correctly by nn prefix when listed alphabetically, producing
+      category groups that mirror the source folder sequence. Within each nn
+      group, files sort by their descriptive name (alphabetical), which
+      approximates the original within-folder order for most naming schemes.
+
+  metadata:
+    author: "CORTEX Architect"
+    created: "2026-02-23"
+    authority: "cortex-documentation-architect.md v6.2"
+    core_rules: ["CORE-002", "CORE-028", "CORE-035", "CORE-049", "CORE-064"]
+    integrated_with:
+      - "cortex-doc.prompt.md Phase 2: GENERATION"
+      - "cortex-doc.prompt.md Phase 7: POST-CLEANUP"
+
+  # ===========================================================================
+  # CONFIGURATION
+  # ===========================================================================
+  config:
+    content_root: "cortex-docs/.content"
+    flat_files_dir: "cortex-docs/.content/flat-files"
+    included_folder_pattern: "^\\d{2}-"       # Folders starting with nn-
+    excluded_folders:
+      - "flat-files"                           # Never recurse into output dir
+    excluded_files:
+      - ".gitkeep"
+      - ".DS_Store"
+    file_extension: ".md"
+
+  # ===========================================================================
+  # NAMING CONVENTION (canonical — never deviate)
+  # ===========================================================================
+  naming_convention:
+    pattern: "nn-{foldername}-{descriptive-name}.md"
+    rules:
+      nn:
+        source: "source folder numeric prefix"
+        example: "'03' from '03-orchestration/'"
+        extraction: "folder_name.split('-')[0]"         # First segment before '-'
+      foldername:
+        source: "source folder name minus nn- prefix"
+        example: "'orchestration' from '03-orchestration'"
+        extraction: "folder_name.split('-', 1)[1]"      # Everything after first '-'
+      descriptive_name:
+        source: "source filename minus its own nn- prefix"
+        example: "'master-orchestrator' from '02-master-orchestrator.md'"
+        extraction: "filename.split('-', 1)[1].replace('.md', '')"
+    full_example:
+      source: "03-orchestration/02-master-orchestrator.md"
+      flat:   "03-orchestration-master-orchestrator.md"
+
+  # ===========================================================================
+  # COMPLETE FLAT-FILE CATALOGUE (verified 2026-02-23)
+  # ===========================================================================
+  catalogue:
+    - folder: "00-getting-started"
+      nn: "00"
+      files:
+        - source: "01-one-pager.md"
+          flat:   "00-getting-started-one-pager.md"
+        - source: "02-key-concepts.md"
+          flat:   "00-getting-started-key-concepts.md"
+        - source: "03-how-cortex-works.md"
+          flat:   "00-getting-started-how-cortex-works.md"
+        - source: "04-brain-tier-architecture.md"
+          flat:   "00-getting-started-brain-tier-architecture.md"
+        - source: "05-quick-start.md"
+          flat:   "00-getting-started-quick-start.md"
+
+    - folder: "01-capabilities"
+      nn: "01"
+      files:
+        - source: "01-overview.md"
+          flat:   "01-capabilities-overview.md"
+        - source: "02-core-platform.md"
+          flat:   "01-capabilities-core-platform.md"
+        - source: "03-ai-intelligence.md"
+          flat:   "01-capabilities-ai-intelligence.md"
+        - source: "04-decisioning.md"
+          flat:   "01-capabilities-decisioning.md"
+        - source: "05-governance-compliance.md"
+          flat:   "01-capabilities-governance-compliance.md"
+        - source: "06-response-formatting.md"
+          flat:   "01-capabilities-response-formatting.md"
+        - source: "07-workflow-templates.md"
+          flat:   "01-capabilities-workflow-templates.md"
+        - source: "08-extensibility.md"
+          flat:   "01-capabilities-extensibility.md"
+
+    - folder: "02-lens"
+      nn: "02"
+      notes: "Two files share the 05- prefix in source (caching + company-domain-synthesis) — both sync correctly, descriptive names are distinct"
+      files:
+        - source: "01-overview.md"
+          flat:   "02-lens-overview.md"
+        - source: "02-architecture.md"
+          flat:   "02-lens-architecture.md"
+        - source: "03-analyzers.md"
+          flat:   "02-lens-analyzers.md"
+        - source: "04-synthesis.md"
+          flat:   "02-lens-synthesis.md"
+        - source: "05-caching.md"
+          flat:   "02-lens-caching.md"
+        - source: "05-company-domain-synthesis.md"
+          flat:   "02-lens-company-domain-synthesis.md"
+        - source: "06-governance-integration.md"
+          flat:   "02-lens-governance-integration.md"
+
+    - folder: "03-orchestration"
+      nn: "03"
+      files:
+        - source: "01-overview.md"
+          flat:   "03-orchestration-overview.md"
+        - source: "02-master-orchestrator.md"
+          flat:   "03-orchestration-master-orchestrator.md"
+        - source: "03-intent-router.md"
+          flat:   "03-orchestration-intent-router.md"
+        - source: "04-tdd-orchestrator.md"
+          flat:   "03-orchestration-tdd-orchestrator.md"
+        - source: "05-domain-orchestrators.md"
+          flat:   "03-orchestration-domain-orchestrators.md"
+        - source: "06-cross-orchestrator.md"
+          flat:   "03-orchestration-cross-orchestrator.md"
+        - source: "07-request-rephrase.md"
+          flat:   "03-orchestration-request-rephrase.md"
+        - source: "08-end-to-end-flow.md"
+          flat:   "03-orchestration-end-to-end-flow.md"
+        - source: "09-security-orchestrator.md"
+          flat:   "03-orchestration-security-orchestrator.md"
+        - source: "10-sweep-catalogue.md"
+          flat:   "03-orchestration-sweep-catalogue.md"
+
+    - folder: "04-mcp"
+      nn: "04"
+      files:
+        - source: "01-overview.md"
+          flat:   "04-mcp-overview.md"
+        - source: "02-protocol.md"
+          flat:   "04-mcp-protocol.md"
+        - source: "03-tools-catalog.md"
+          flat:   "04-mcp-tools-catalog.md"
+        - source: "04-integration.md"
+          flat:   "04-mcp-integration.md"
+        - source: "05-versioning.md"
+          flat:   "04-mcp-versioning.md"
+        - source: "06-work-item-integration.md"
+          flat:   "04-mcp-work-item-integration.md"
+
+    - folder: "05-infrastructure"
+      nn: "05"
+      files:
+        - source: "01-overview.md"
+          flat:   "05-infrastructure-overview.md"
+        - source: "02-tech-stack.md"
+          flat:   "05-infrastructure-tech-stack.md"
+        - source: "03-deployment.md"
+          flat:   "05-infrastructure-deployment.md"
+        - source: "04-ci-cd.md"
+          flat:   "05-infrastructure-ci-cd.md"
+        - source: "05-observability.md"
+          flat:   "05-infrastructure-observability.md"
+        - source: "06-scalability.md"
+          flat:   "05-infrastructure-scalability.md"
+        - source: "07-ado-integration.md"
+          flat:   "05-infrastructure-ado-integration.md"
+
+    - folder: "07-diagrams"
+      nn: "07"
+      files:
+        - source: "01-overview.md"
+          flat:   "07-diagrams-overview.md"
+        - source: "02-high-level-architecture.md"
+          flat:   "07-diagrams-high-level-architecture.md"
+        - source: "03-request-flow.md"
+          flat:   "07-diagrams-request-flow.md"
+        - source: "04-orchestrator-map.md"
+          flat:   "07-diagrams-orchestrator-map.md"
+        - source: "05-lens-pipeline.md"
+          flat:   "07-diagrams-lens-pipeline.md"
+        - source: "06-governance-flow.md"
+          flat:   "07-diagrams-governance-flow.md"
+        - source: "07-mcp-transport.md"
+          flat:   "07-diagrams-mcp-transport.md"
+        - source: "08-testing-pyramid.md"
+          flat:   "07-diagrams-testing-pyramid.md"
+        - source: "09-brain-tier-model.md"
+          flat:   "07-diagrams-brain-tier-model.md"
+
+  # ===========================================================================
+  # STEPS
+  # ===========================================================================
+  steps:
+    - step_id: "scan_source_folders"
+      name: "Scan .content/ for numbered category folders"
+      description: |
+        Walk cortex-docs/.content/ one level deep.
+        Collect every folder whose name matches ^\\d{2}- (e.g. 03-orchestration).
+        Exclude flat-files/ itself.
+      action: "filesystem_scan"
+      params:
+        root: "{{config.content_root}}"
+        depth: 1
+        folder_pattern: "{{config.included_folder_pattern}}"
+        exclude: "{{config.excluded_folders}}"
+      output: "source_folders"
+
+    - step_id: "build_flat_file_manifest"
+      name: "Derive flat filenames from source catalogue"
+      description: |
+        For each source folder and each .md file within it, compute
+        the flat filename using the naming convention:
+          nn  = folder prefix (e.g. "03")
+          foldername = folder name minus nn- (e.g. "orchestration")
+          descriptive = filename minus its own nn- prefix (e.g. "master-orchestrator")
+          result = nn-foldername-descriptive.md
+      depends_on: ["scan_source_folders"]
+      action: "transform"
+      params:
+        input: "{{source_folders}}"
+        transform: |
+          for folder in source_folders:
+            nn, foldername = folder.split('-', 1)     # "03", "orchestration"
+            for file in folder.list_md_files():
+              descriptive = file.split('-', 1)[1].replace('.md', '')
+              yield {
+                "source": f"{folder}/{file}",
+                "flat":   f"{nn}-{foldername}-{descriptive}.md"
+              }
+      output: "flat_manifest"
+
+    - step_id: "copy_to_flat_files"
+      name: "Copy/overwrite source files into flat-files/"
+      description: |
+        For each entry in flat_manifest, copy source → flat-files/{flat}.
+        Always overwrite — flat-files/ is a derived mirror, never a primary source.
+      depends_on: ["build_flat_file_manifest"]
+      action: "file_copy"
+      params:
+        manifest: "{{flat_manifest}}"
+        source_root: "{{config.content_root}}"
+        dest_dir: "{{config.flat_files_dir}}"
+        overwrite: true
+      output: "copied_files"
+
+    - step_id: "prune_stale_flat_files"
+      name: "Delete flat files whose source no longer exists"
+      description: |
+        Scan flat-files/ for any .md files NOT present in flat_manifest.
+        These are stale copies left behind by renamed or deleted source files.
+        Delete them to keep flat-files/ a clean mirror.
+      depends_on: ["copy_to_flat_files"]
+      action: "prune"
+      params:
+        scan_dir: "{{config.flat_files_dir}}"
+        keep_set: "{{flat_manifest.flat_names}}"
+        exclude: "{{config.excluded_files}}"
+      output: "pruned_files"
+
+    - step_id: "validate_sync"
+      name: "Validate flat-files/ is complete and correct"
+      description: |
+        Assert: count(flat-files/*.md) == count(flat_manifest entries).
+        Assert: every flat filename matches pattern nn-foldername-descriptive.md.
+        Assert: no file in flat-files/ exists that is not in flat_manifest.
+      depends_on: ["prune_stale_flat_files"]
+      action: "validate"
+      params:
+        expected_count: "{{flat_manifest.count}}"
+        flat_dir: "{{config.flat_files_dir}}"
+        name_pattern: "^\\d{2}-[a-z0-9-]+-[a-z0-9-]+\\.md$"
+      success_criteria:
+        count_match: true
+        no_pattern_violations: true
+        no_extra_files: true
+      output: "validation_result"
+
+  # ===========================================================================
+  # GOVERNANCE
+  # ===========================================================================
+  governance:
+    core_002: "flat-files/ is NEVER committed as a .md report file — it is generated output"
+    core_028: "All flat filenames are kebab-case (enforced by naming convention)"
+    core_035: "flat-files/ is the single canonical flat mirror — no duplicates outside it"
+    core_049: "Sync runs silently during refresh; output: copy count + prune count only"
+    core_064: "Sweep completeness: ALL source .md files in ALL numbered folders are synced"
+
+  # ===========================================================================
+  # ERROR HANDLING
+  # ===========================================================================
+  error_handling:
+    source_file_unreadable:
+      action: "log_warning_and_skip"
+      message: "Cannot read {{source}} — skipping flat sync for this file"
+    flat_dir_missing:
+      action: "create_directory"
+      path: "{{config.flat_files_dir}}"
+    validation_failed:
+      action: "surface_inline"
+      message: "Flat-file sync incomplete: {{validation_result.errors}}"
+      block_commit: true
+
+  # ===========================================================================
+  # OUTPUT / REPORTING (CORE-049: silent, inline only)
+  # ===========================================================================
+  output:
+    format: "inline_summary"
+    template: |
+      📄 Flat-File Sync Complete
+        Copied:  {{copied_files.count}} files → cortex-docs/.content/flat-files/
+        Pruned:  {{pruned_files.count}} stale files removed
+        Total:   {{validation_result.count}} flat files (matches source catalogue)

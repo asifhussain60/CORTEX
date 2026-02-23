@@ -108,8 +108,115 @@ cortex-docs/.content/
 ├── 03-orchestration/   (10 files — 17 wired orchestrators: 7 core, 3 domain, 7 support)
 ├── 04-mcp/             (6 files — 26 active tools)
 ├── 05-infrastructure/
-└── 07-diagrams/        (9 files — 6 Mermaid + 3 overview)
+├── 07-diagrams/        (9 files — 6 Mermaid + 3 overview)
+└── flat-files/         (derived mirror — auto-generated, never edited directly)
 ```
+
+---
+
+## 🗂️ Flat-File Output Layer
+
+**Canonical path:** `cortex-docs/.content/flat-files/`
+**Workflow template:** `cortex-registry/workflows/templates/maintenance/doc-flat-file-sync.yaml`
+**Trigger:** Terminal step of every documentation refresh (Phase 2: GENERATION + any incremental update)
+
+### Purpose
+
+Provides a single flat directory containing every categorised `.content/` file, named so that:
+- Files **group by category** when sorted alphabetically (via the leading `nn` prefix)
+- Files are **individually addressable** by a human-readable descriptive name
+- The structure is **LLM-friendly** — no folder traversal needed to load all doc files
+
+### Naming Convention (immutable)
+
+```
+nn-{foldername}-{descriptive-name}.md
+```
+
+| Segment | Source | Example |
+|---|---|---|
+| `nn` | Numeric prefix of the **source folder** (same for all files in folder) | `03` from `03-orchestration/` |
+| `{foldername}` | Source folder name **minus its own `nn-` prefix** | `orchestration` |
+| `{descriptive-name}` | Source filename **minus its own `nn-` prefix** | `master-orchestrator` from `02-master-orchestrator.md` |
+
+**Full example:** `03-orchestration/02-master-orchestrator.md` → `03-orchestration-master-orchestrator.md`
+
+### Complete Flat-File Catalogue (verified 2026-02-23)
+
+| Source | Flat File |
+|---|---|
+| `00-getting-started/01-one-pager.md` | `00-getting-started-one-pager.md` |
+| `00-getting-started/02-key-concepts.md` | `00-getting-started-key-concepts.md` |
+| `00-getting-started/03-how-cortex-works.md` | `00-getting-started-how-cortex-works.md` |
+| `00-getting-started/04-brain-tier-architecture.md` | `00-getting-started-brain-tier-architecture.md` |
+| `00-getting-started/05-quick-start.md` | `00-getting-started-quick-start.md` |
+| `01-capabilities/01-overview.md` | `01-capabilities-overview.md` |
+| `01-capabilities/02-core-platform.md` | `01-capabilities-core-platform.md` |
+| `01-capabilities/03-ai-intelligence.md` | `01-capabilities-ai-intelligence.md` |
+| `01-capabilities/04-decisioning.md` | `01-capabilities-decisioning.md` |
+| `01-capabilities/05-governance-compliance.md` | `01-capabilities-governance-compliance.md` |
+| `01-capabilities/06-response-formatting.md` | `01-capabilities-response-formatting.md` |
+| `01-capabilities/07-workflow-templates.md` | `01-capabilities-workflow-templates.md` |
+| `01-capabilities/08-extensibility.md` | `01-capabilities-extensibility.md` |
+| `02-lens/01-overview.md` | `02-lens-overview.md` |
+| `02-lens/02-architecture.md` | `02-lens-architecture.md` |
+| `02-lens/03-analyzers.md` | `02-lens-analyzers.md` |
+| `02-lens/04-synthesis.md` | `02-lens-synthesis.md` |
+| `02-lens/05-caching.md` | `02-lens-caching.md` |
+| `02-lens/05-company-domain-synthesis.md` | `02-lens-company-domain-synthesis.md` |
+| `02-lens/06-governance-integration.md` | `02-lens-governance-integration.md` |
+| `03-orchestration/01-overview.md` | `03-orchestration-overview.md` |
+| `03-orchestration/02-master-orchestrator.md` | `03-orchestration-master-orchestrator.md` |
+| `03-orchestration/03-intent-router.md` | `03-orchestration-intent-router.md` |
+| `03-orchestration/04-tdd-orchestrator.md` | `03-orchestration-tdd-orchestrator.md` |
+| `03-orchestration/05-domain-orchestrators.md` | `03-orchestration-domain-orchestrators.md` |
+| `03-orchestration/06-cross-orchestrator.md` | `03-orchestration-cross-orchestrator.md` |
+| `03-orchestration/07-request-rephrase.md` | `03-orchestration-request-rephrase.md` |
+| `03-orchestration/08-end-to-end-flow.md` | `03-orchestration-end-to-end-flow.md` |
+| `03-orchestration/09-security-orchestrator.md` | `03-orchestration-security-orchestrator.md` |
+| `03-orchestration/10-sweep-catalogue.md` | `03-orchestration-sweep-catalogue.md` |
+| `04-mcp/01-overview.md` | `04-mcp-overview.md` |
+| `04-mcp/02-protocol.md` | `04-mcp-protocol.md` |
+| `04-mcp/03-tools-catalog.md` | `04-mcp-tools-catalog.md` |
+| `04-mcp/04-integration.md` | `04-mcp-integration.md` |
+| `04-mcp/05-versioning.md` | `04-mcp-versioning.md` |
+| `04-mcp/06-work-item-integration.md` | `04-mcp-work-item-integration.md` |
+| `05-infrastructure/01-overview.md` | `05-infrastructure-overview.md` |
+| `05-infrastructure/02-tech-stack.md` | `05-infrastructure-tech-stack.md` |
+| `05-infrastructure/03-deployment.md` | `05-infrastructure-deployment.md` |
+| `05-infrastructure/04-ci-cd.md` | `05-infrastructure-ci-cd.md` |
+| `05-infrastructure/05-observability.md` | `05-infrastructure-observability.md` |
+| `05-infrastructure/06-scalability.md` | `05-infrastructure-scalability.md` |
+| `05-infrastructure/07-ado-integration.md` | `05-infrastructure-ado-integration.md` |
+| `07-diagrams/01-overview.md` | `07-diagrams-overview.md` |
+| `07-diagrams/02-high-level-architecture.md` | `07-diagrams-high-level-architecture.md` |
+| `07-diagrams/03-request-flow.md` | `07-diagrams-request-flow.md` |
+| `07-diagrams/04-orchestrator-map.md` | `07-diagrams-orchestrator-map.md` |
+| `07-diagrams/05-lens-pipeline.md` | `07-diagrams-lens-pipeline.md` |
+| `07-diagrams/06-governance-flow.md` | `07-diagrams-governance-flow.md` |
+| `07-diagrams/07-mcp-transport.md` | `07-diagrams-mcp-transport.md` |
+| `07-diagrams/08-testing-pyramid.md` | `07-diagrams-testing-pyramid.md` |
+| `07-diagrams/09-brain-tier-model.md` | `07-diagrams-brain-tier-model.md` |
+
+### Sync Rules
+
+| Rule | Detail |
+|---|---|
+| **Mirror only** | `flat-files/` is always derived from source — never edit flat files directly |
+| **Always overwrite** | On each refresh, flat files are overwritten from source (no merge) |
+| **Prune stale** | Flat files whose source was renamed or deleted are removed automatically |
+| **Excluded from flat** | `index.md`, `glossary.md` (no folder `nn`); `flat-files/` itself |
+| **CORE-064** | ALL files in ALL numbered folders are synced — no partial runs |
+| **CORE-028** | All flat filenames are kebab-case (enforced by convention) |
+| **CORE-002** | flat-files/ is generated output — never create `.md` reports about it |
+
+### Integration Points
+
+**Invoked by:** Phase 2 (GENERATION) as final sub-step, and Phase 7 (POST-CLEANUP) for prune pass
+**Workflow template:** `cortex-registry/workflows/templates/maintenance/doc-flat-file-sync.yaml`
+**Validation gate:** count(flat-files/*.md) must equal count(catalogue entries) before Phase 2 marks ✅
+
+---
 
 **Live Metrics (verified 2026-02-23):**
 

@@ -188,6 +188,94 @@ print("✅ PHASE 2: GENERATION COMPLETE")
 - `cortex-docs/.content/07-diagrams/` - Architecture diagrams (9 files)
 - `cortex-docs/.content/glossary.md` - Terminology reference
 
+### Phase 2b: FLAT-FILE SYNC (Mirror .content/ into flat-files/)
+
+**Workflow template:** `cortex-registry/workflows/templates/maintenance/doc-flat-file-sync.yaml`
+
+Runs immediately after every GENERATION pass. Mirrors all `.content/<nn-category>/` files
+into `cortex-docs/.content/flat-files/` using the canonical naming convention:
+
+```
+nn-{foldername}-{descriptive-name}.md
+```
+
+| Segment | Derivation | Example |
+|---|---|---|
+| `nn` | Source folder numeric prefix | `03` from `03-orchestration/` |
+| `{foldername}` | Folder name minus `nn-` prefix | `orchestration` |
+| `{descriptive-name}` | Filename minus its own `nn-` prefix | `master-orchestrator` from `02-master-orchestrator.md` |
+
+**Example mapping:** `03-orchestration/02-master-orchestrator.md` → `03-orchestration-master-orchestrator.md`
+
+```python
+class FlatFileSyncOrchestrator:
+    """Mirror .content/ category folders into flat-files/ with canonical naming."""
+
+    CONTENT_ROOT = Path("cortex-docs/.content")
+    FLAT_DIR = Path("cortex-docs/.content/flat-files")
+    EXCLUDED_FOLDERS = {"flat-files"}
+
+    def sync(self) -> dict:
+        """Run full copy + prune cycle. Returns {copied, pruned, total} counts."""
+        manifest = self._build_manifest()
+        copied = self._copy_files(manifest)
+        pruned = self._prune_stale(manifest)
+        self._validate(manifest)
+        return {"copied": copied, "pruned": pruned, "total": len(manifest)}
+
+    def _build_manifest(self) -> list[dict]:
+        """Derive flat filenames from all numbered category folders."""
+        manifest = []
+        for folder in sorted(self.CONTENT_ROOT.iterdir()):
+            if not folder.is_dir():
+                continue
+            if folder.name in self.EXCLUDED_FOLDERS:
+                continue
+            if not folder.name[0].isdigit():     # skip non-nn- folders
+                continue
+            nn, foldername = folder.name.split("-", 1)   # "03", "orchestration"
+            for src in sorted(folder.glob("*.md")):
+                descriptive = src.name.split("-", 1)[1].replace(".md", "")
+                flat_name = f"{nn}-{foldername}-{descriptive}.md"
+                manifest.append({"source": src, "flat": self.FLAT_DIR / flat_name})
+        return manifest
+
+    def _copy_files(self, manifest: list[dict]) -> int:
+        """Copy/overwrite source → flat. Returns count copied."""
+        self.FLAT_DIR.mkdir(parents=True, exist_ok=True)
+        for entry in manifest:
+            entry["flat"].write_text(entry["source"].read_text(encoding="utf-8"),
+                                     encoding="utf-8")
+        return len(manifest)
+
+    def _prune_stale(self, manifest: list[dict]) -> int:
+        """Delete flat files not in current manifest. Returns count pruned."""
+        keep = {e["flat"].name for e in manifest}
+        pruned = 0
+        for existing in self.FLAT_DIR.glob("*.md"):
+            if existing.name not in keep:
+                existing.unlink()
+                pruned += 1
+        return pruned
+
+    def _validate(self, manifest: list[dict]) -> None:
+        """Assert flat-files/ count matches manifest. Block on mismatch."""
+        actual = len(list(self.FLAT_DIR.glob("*.md")))
+        expected = len(manifest)
+        if actual != expected:
+            raise RuntimeError(
+                f"Flat-file sync validation failed: expected {expected}, found {actual}"
+            )
+
+print("✅ PHASE 2b: FLAT-FILE SYNC COMPLETE")
+```
+
+**Governance:**
+- `flat-files/` is a **derived mirror** — never edit flat files directly; always edit the source
+- CORE-064: ALL source files in ALL numbered folders are synced (no partial runs)
+- CORE-028: All flat filenames are kebab-case (enforced by naming convention)
+- CORE-002: `flat-files/` is generated output — never create `.md` report files about it
+
 ### Phase 4: DIAGRAMS (Generate all visualizations)
 ```python
 class DiagramGenerationOrchestrator:
@@ -362,7 +450,7 @@ echo "✅ PHASE 6: REPORTING COMPLETE"
 echo "📊 Report: $report_dir/$report"
 ```
 
-### Phase 7: POST-CLEANUP (Remove legacy files)
+### Phase 7: POST-CLEANUP (Remove legacy files + prune flat-files/)
 ```bash
 #!/bin/bash
 
@@ -390,24 +478,39 @@ fi
 echo "✅ PHASE 7: POST-CLEANUP COMPLETE"
 ```
 
+**Phase 7b: Flat-file prune pass** — runs immediately after legacy cleanup.
+Invokes `FlatFileSyncOrchestrator.sync()` (workflow: `maintenance/doc-flat-file-sync`)
+to prune any stale `flat-files/` entries left behind by renamed or deleted source files.
+This is a prune-only pass — no new copies are written (Phase 2b handles that).
+
+```python
+# Phase 7b: prune stale flat-files/ entries
+syncer = FlatFileSyncOrchestrator()
+result = syncer.sync()   # copy=0 expected; prune removes orphans
+print(f"📄 Flat-file prune: {result['pruned']} stale files removed")
+print("✅ PHASE 7b: FLAT-FILE PRUNE COMPLETE")
+```
+
 ### Phase 8: GIT-COMMIT (Final commit with all changes)
 ```bash
 #!/bin/bash
 
 echo "📦 PHASE 8: Final Git Commit"
 
-# Commit all changes (fresh docs, diagrams, cleanup, and report)
+# Commit all changes (fresh docs, diagrams, cleanup, flat-files, and report)
 git commit -m "docs: fresh generation - $(date +%Y-%m-%d)
 
 Fresh documentation generation pipeline complete:
-- Phase 1: Discovery (scan codebase)
-- Phase 2: Generation (create markdown)
-- Phase 3: Diagrams (6 Mermaid + 4 D3.js)
-- Phase 4: Build (--strict, zero warnings/errors)
-- Phase 5: Validation (all links verified)
-- Phase 6: Reporting (completion summary)
-- Phase 7: Post-cleanup (remove legacy files)
-- Phase 8: Git commit (all changes committed)
+- Phase 1:  Discovery (scan codebase)
+- Phase 2:  Generation (create markdown)
+- Phase 2b: Flat-file sync (nn-{folder}-{name}.md mirror in flat-files/)
+- Phase 3:  Diagrams (6 Mermaid + 4 D3.js)
+- Phase 4:  Build (--strict, zero warnings/errors)
+- Phase 5:  Validation (all links verified)
+- Phase 6:  Reporting (completion summary)
+- Phase 7:  Post-cleanup (remove legacy files)
+- Phase 7b: Flat-file prune (remove stale flat-files/ entries)
+- Phase 8:  Git commit (all changes committed)
 
 Site ready: docs/_build/site/
 Serve with: mkdocs serve"
@@ -426,14 +529,16 @@ When user types "proceed":
 1. ✅ AC_START logged with operation ID
 2. ✅ Phase 1: DISCOVERY executes (scan codebase)
 3. ✅ Phase 2: GENERATION executes (create all markdown)
-4. ✅ Phase 3: DIAGRAMS executes (10 diagrams total)
-5. ✅ Phase 4: BUILD executes (mkdocs --strict)
-6. ✅ Phase 5: VALIDATION executes (link checks)
-7. ✅ Phase 6: REPORTING executes (completion summary)
-8. ✅ Phase 7: POST-CLEANUP executes (remove legacy files)
-9. ✅ Phase 8: GIT-COMMIT executes (final commit + push)
-10. ✅ AC_COMPLETE logged with result
-11. ✅ Final summary displayed to user
+4. ✅ Phase 2b: FLAT-FILE SYNC executes (mirror all .content/nn-*/  → flat-files/ using `nn-{foldername}-{descriptive}.md`)
+5. ✅ Phase 3: DIAGRAMS executes (10 diagrams total)
+6. ✅ Phase 4: BUILD executes (mkdocs --strict)
+7. ✅ Phase 5: VALIDATION executes (link checks)
+8. ✅ Phase 6: REPORTING executes (completion summary)
+9. ✅ Phase 7: POST-CLEANUP executes (remove legacy files)
+10. ✅ Phase 7b: FLAT-FILE PRUNE executes (remove stale flat-files/ entries)
+11. ✅ Phase 8: GIT-COMMIT executes (final commit + push)
+12. ✅ AC_COMPLETE logged with result
+13. ✅ Final summary displayed to user
 
 **NO STOPPING, NO CHOICES, NO PAUSES** — Fully automated end-to-end pipeline
 
