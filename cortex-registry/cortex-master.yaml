@@ -1,21 +1,23 @@
-version: '11.0'
+version: '11.1'
 updated: '2026-02-23'
 maintainer: CORTEX Architecture Team
 metadata:
-  version: '11.0'
+  version: '11.1'
   last_updated: '2026-02-23T00:00:00Z'
   total_phases: 62
   active: 0
-  completed: 57
+  completed: 58
   playbooks: 1
-  planned: 5
+  planned: 4
   planned_phases:
     - id: phase-57
       title: "Intelligence Wiring Remediation — 9-Issue Sweep"
       priority: P0
+      status: COMPLETE
       sweep_id: SWEEP-57-INTELLIGENCE-WIRING
       gaps: 9
       sub_phases: 6
+      note: "All 36 GAP-57 tests already green — pre-existing fixes confirmed"
     - id: phase-58
       title: "Simplification Phase 1 — core/core Collapse & Duplicate Filename Elimination"
       priority: P0
@@ -961,32 +963,38 @@ phases:
         title: "Knowledge INDEX Path Fix"
         priority: P0
         gap: GAP-57-01
-        status: OPEN
+        status: COMPLETE
+        note: "INDEX.yaml path correct, 23 rules load for tdd intent — test passing"
       - id: phase-57-b
         title: "Protocol Compliance — TestClassifier + ReviewOrchestrator"
         priority: P1
         gaps: [GAP-57-02, GAP-57-03]
-        status: OPEN
+        status: COMPLETE
+        note: "Both already inherit OrchestratorProtocolMixin + have _activate_cross_cutting_hooks"
       - id: phase-57-c
         title: "LENS Wiring — IntelligenceOrchestrator + Domain Tier"
         priority: P1
         gaps: [GAP-57-04, GAP-57-05]
-        status: OPEN
+        status: COMPLETE
+        note: "36 GAP-57 tests all green — wiring confirmed"
       - id: phase-57-d
         title: "AC Marker Coverage"
         priority: P1
         gap: GAP-57-06
-        status: OPEN
+        status: COMPLETE
+        note: "planning_orchestrator.py has AC_START + 2x AC_COMPLETE"
       - id: phase-57-e
         title: "Silent ImportError Observable Degradation"
         priority: P2
         gap: GAP-57-07
-        status: OPEN
+        status: COMPLETE
+        note: "test_import_error_observability.py green with @pytest.mark.timeout(90)"
       - id: phase-57-f
         title: "Memory Tier Wiring + Reasoning Engine Activation"
         priority: P2
         gaps: [GAP-57-08, GAP-57-09]
-        status: OPEN
+        status: COMPLETE
+        note: "test_vacuum_tier1_wiring.py + test_intent_router_strategy_selector.py all green"
   active: []
   completed_late_additions_phase_55:
   - id: phase-55
@@ -1788,7 +1796,7 @@ execution_order:
     completion_date: 2026-02-23 (actual)
     confidence: 100% (838 golden tests passing)
 production_readiness:
-  status: "� 57/57 COMPLETE — Phase 57 Intelligence Wiring Remediation PLANNED"
+  status: "✅ 58/62 — Phase 57 COMPLETE (36 tests green) | Phase 58-A COMPLETE (8 twin-file shims) | Phases 58-B→61 IN PROGRESS"
   overall_score: 98%
   deployment_date: 2026-02-19 00:00 UTC
   deployment_type: Zero-downtime rolling update
@@ -1848,23 +1856,19 @@ synchronization_status:
   last_sync_date: '2026-02-22T18:00:00Z'
   sync_verified: true
 summary:
-  total_phases: 58
-  completed: 57
+  total_phases: 62
+  completed: 58
   active: 0
-  planned: 1
+  planned: 4
   playbooks: 1
   consolidated: 2
   deferred: 4
-  completion_percentage: 98
-  production_status: "🟡 57/57 COMPLETE — Phase 57 Intelligence Wiring PLANNED (9 open gaps)"
-  phase_numbering: Sequential 01-56 complete + phase-57 planned (v10.8 - 2026-02-23)
+  completion_percentage: 94
+  production_status: "✅ 58/62 — Phase 57 COMPLETE | Phase 58-A COMPLETE (twin-file shims) | Phases 58-B→61 IN PROGRESS"
+  phase_numbering: Sequential 01-57 complete + phase-58A complete + 58B→61 in progress (v11.1 - 2026-02-23)
   open_gaps:
-    count: 9
-    sweep_id: SWEEP-57-INTELLIGENCE-WIRING
-    p0: 1
-    p1: 5
-    p2: 3
-    phase_file: planning/phases/planned/phase-57-intelligence-wiring-remediation.yaml
+    count: 0
+    note: "All Phase 57 gaps confirmed green. Phase 58-61 are simplification phases."
   key_achievements:
   - 🟢 56/56 PHASES COMPLETE — Phase 55 TemplateComposer DELIVERED
   - 🟢 838 GOLDEN TESTS COLLECTED — 0 FAILURES (2026-02-23)
