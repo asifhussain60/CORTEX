@@ -701,30 +701,34 @@ def cortex_plex_workflow_full(
     studio_filter: Optional[str] = None,
     dry_run: bool = True,
     use_iafd: bool = True,
+    normalize_filenames: bool = True,
     min_match_confidence: float = 0.75,
-    min_rename_confidence: float = 0.80,
     auto_organize: bool = True,
+    metadata_hints: Optional[Dict[str, Any]] = None,
 ) -> Dict[str, Any]:
     """
-    Execute complete Plex workflow (scan → identify → match → rename → tag → organize).
+    Execute complete Plex workflow — generic for all studios (no sanitization).
 
     Comprehensive end-to-end workflow that orchestrates all video library operations:
     1. **SCAN** — Discover videos in directory
     2. **IDENTIFY** — Extract metadata from filenames (studio, performers)
     3. **MATCH** — Query IAFD for enriched metadata
-    4. **RENAME** — Sanitize filenames with confidence filtering
+    4. **RENAME** — Normalize filenames (action→Does, proper case, remove numbers)
     5. **TAG** — Write enriched Plex metadata to file tags
     6. **ORGANIZE** — Move files to studio-specific folders
     7. **VERIFY** — Validate workflow results
+
+    Works with ANY studio/naming convention. No filename sanitization — preserves meaningful names.
 
     Args:
         root_path: Root directory (default: ``G:\\FLICKS``).
         studio_filter: Limit to specific studio (e.g., ``Wicked``).
         dry_run: Preview mode (show what would happen, don't modify).
         use_iafd: Query IAFD for enriched metadata.
+        normalize_filenames: Normalize: "action"→"Does", proper case, remove numbers.
         min_match_confidence: Minimum confidence for IAFD matches (0.0-1.0).
-        min_rename_confidence: Minimum confidence for renames (0.0-1.0).
         auto_organize: Move files to studio folders.
+        metadata_hints: User-provided metadata overrides (e.g., ``{"studio": "Wicked"}``)
 
     Returns:
         Dict with keys:
@@ -747,7 +751,8 @@ def cortex_plex_workflow_full(
             root_path="G:\\\\FLICKS\\\\Wicked",
             studio_filter="Wicked",
             dry_run=True,
-            use_iafd=True
+            normalize_filenames=True,
+            use_iafd=False
         )
         print(f"Scanned: {result['total_files']} files")
         print(f"Renamed: {result['files_renamed']} files")
@@ -771,9 +776,10 @@ def cortex_plex_workflow_full(
             studio_filter=studio_filter,
             dry_run=dry_run,
             min_match_confidence=min_match_confidence,
-            min_rename_confidence=min_rename_confidence,
+            normalize_filenames=normalize_filenames,
             auto_organize=auto_organize,
             use_iafd=use_iafd,
+            metadata_hints=metadata_hints or {},
             plex_accessor=plex_accessor,
             iafd_accessor=iafd_accessor,
         )

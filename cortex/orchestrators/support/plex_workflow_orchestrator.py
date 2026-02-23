@@ -1,28 +1,31 @@
 """
 cortex/orchestrators/support/plex_workflow_orchestrator.py
 
-Comprehensive Plex video library workflow orchestrator.
+Comprehensive Plex video library workflow orchestrator — generic for all studios.
 
 Manages end-to-end pipeline:
 1. **SCAN** — Discover video files in directory
-2. **IDENTIFY** — Extract metadata from filenames (studio, performers, etc.)
+2. **IDENTIFY** — Extract metadata from filenames (performers, studio hints, etc.)
 3. **MATCH** — Query IAFD and Plex for enriched metadata
-4. **RENAME** — Sanitize and standardize filenames
+4. **RENAME** — Normalize filenames (action→Does, proper case, remove numbers)
 5. **TAG** — Write enriched metadata to file tags
 6. **ORGANIZE** — Move files to studio-specific folders
 7. **VERIFY** — Validate Plex library consistency
 
+Generic for any studio/naming convention. No sanitization — preserves meaningful names.
+
 Wires all tools into a single coordinated workflow with:
 - Confidence thresholds for automated operations
 - Dry-run support for preview
+- User-provided metadata hints (override extracted data)
+- Optional filename normalization
 - Rollback on errors
-- AC compliance markers for audit trails
 
 CORE-011: All functions have type hints.
 CORE-012: All public APIs have docstrings.
 CORE-028: snake_case naming.
 
-AC_START: AC-PLEX-WORKFLOW-2026-02-23-001
+AC_START: AC-PLEX-WORKFLOW-GENERIC-2026-02-23
 """
 
 from __future__ import annotations
@@ -30,11 +33,15 @@ from __future__ import annotations
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 from datetime import datetime
 
 from cortex.core.orchestrator_base import OrchestratorBase
-from cortex.tools.media.filename_sanitizer import FilenameAnalyzer, SanitizationResult
+from cortex.tools.media.generic_metadata_extractor import (
+    GenericMetadataExtractor,
+    FilenameNormalizer,
+    ExtractedMetadata,
+)
 from cortex.tools.media.iafd_metadata_accessor import IAFDAccessor, IAFDMetadata
 from cortex.tools.media.plex_metadata_accessor import PlexMetadataAccessor, PlexMetadata
 from cortex.tools.media.tag_writer import TagWriterFactory, TagFields
@@ -75,20 +82,22 @@ class WorkflowResult:
 
 class PlexWorkflowOrchestrator(OrchestratorBase):
     """
-    Comprehensive Plex video library workflow orchestrator.
+    Comprehensive Plex video library workflow orchestrator — generic for all studios.
 
-    Coordinates all steps from scanning to verification.
+    Coordinates all steps from scanning to verification. Works with any naming convention.
 
     Attributes:
-        root:               Root library directory.
-        studio_filter:      Limit to specific studio (optional).
-        dry_run:            Preview mode (no modifications).
-        min_match_confidence: Minimum confidence for IAFD matches (0.0-1.0).
-        min_rename_confidence: Minimum confidence for renames (0.0-1.0).
-        auto_organize:      Move files to studio folders.
-        use_iafd:           Query IAFD for enriched metadata.
-        plex_accessor:      Plex metadata accessor (auto-created if None).
-        iafd_accessor:      IAFD metadata accessor (auto-created if None).
+        root:                   Root library directory.
+        studio_filter:          Limit to specific studio (optional, applied via filename analysis).
+        dry_run:                Preview mode (no modifications).
+        min_match_confidence:   Minimum confidence for IAFD matches (0.0-1.0).
+        min_rename_confidence:  Minimum confidence for renames (0.0-1.0).
+        normalize_filenames:    Apply normalization (action→Does, proper case, remove numbers).
+        auto_organize:          Move files to studio folders.
+        use_iafd:               Query IAFD for enriched metadata.
+        metadata_hints:         User-provided metadata overrides (e.g., {"studio": "Wicked"}).
+        plex_accessor:          Plex metadata accessor (auto-created if None).
+        iafd_accessor:          IAFD metadata accessor (auto-created if None).
     """
 
     def __init__(
@@ -98,8 +107,10 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         dry_run: bool = True,
         min_match_confidence: float = 0.75,
         min_rename_confidence: float = 0.80,
+        normalize_filenames: bool = True,
         auto_organize: bool = True,
         use_iafd: bool = True,
+        metadata_hints: Optional[Dict] = None,
         plex_accessor: Optional[PlexMetadataAccessor] = None,
         iafd_accessor: Optional[IAFDAccessor] = None,
     ) -> None:
@@ -110,8 +121,10 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         self.dry_run = dry_run
         self.min_match_confidence = min_match_confidence
         self.min_rename_confidence = min_rename_confidence
+        self.normalize_filenames = normalize_filenames
         self.auto_organize = auto_organize
         self.use_iafd = use_iafd
+        self.metadata_hints = metadata_hints or {}
 
         # Initialize accessors
         self.plex_accessor = plex_accessor or PlexMetadataAccessor()
@@ -119,10 +132,12 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
 
         # Runtime state
         self.scanned_files: List[VideoLibraryFile] = []
+        self.extracted_metadata: Dict[str, ExtractedMetadata] = {}
         
-        # Scanners and analyzers
+        # Generic extractors and normalizers (no sanitization)
+        self.metadata_extractor = GenericMetadataExtractor()
+        self.filename_normalizer = FilenameNormalizer()
         self.scanner = VideoLibraryScanner(root=root)
-        self.filename_analyzer = FilenameAnalyzer(studio_context=studio_filter)
 
     @staticmethod
     def _get_filename(vfile: VideoLibraryFile) -> str:
@@ -239,7 +254,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         return step
 
     def _run_step_identify(self, result: WorkflowResult) -> WorkflowStep:
-        """Identify metadata from filenames."""
+        """Identify metadata from filenames using generic extractor."""
         import time
 
         start = time.time()
@@ -253,16 +268,20 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
             for vf in files:
                 try:
                     filename = self._get_filename(vf)
-                    sanitization = self.filename_analyzer.analyze(filename)
+                    # Extract metadata without sanitization
+                    metadata = self.metadata_extractor.extract(filename)
+                    self.extracted_metadata[filename] = metadata
                     
-                    # Apply studio filter if specified
+                    # Apply studio filter if specified (from metadata extraction or hints)
+                    studio = metadata.studio or self.metadata_hints.get("studio")
                     if self.studio_filter:
-                        if sanitization.detected_studio != self.studio_filter:
+                        if studio and studio.lower() != self.studio_filter.lower():
                             continue  # Skip files not matching studio filter
                     
                     filtered_files.append(vf)
                     
-                    if sanitization.detected_studio or sanitization.artists:
+                    # Count as identified if performers or meaningful metadata extracted
+                    if metadata.performers or metadata.title or metadata.confidence > 0.3:
                         identified_count += 1
                 except Exception as e:
                     filename = self._get_filename(vf)
@@ -357,7 +376,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         return step
 
     def _run_step_rename(self, result: WorkflowResult) -> WorkflowStep:
-        """Propose and apply renames."""
+        """Apply filename normalization (action→Does, proper case, remove numbers)."""
         import time
 
         start = time.time()
@@ -371,19 +390,26 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
             for vf in files:
                 try:
                     filename = self._get_filename(vf)
-                    analysis = self.filename_analyzer.analyze(filename)
-
-                    # Only rename if confidence is high enough
-                    if (
-                        analysis.needs_rename
-                        and analysis.confidence >= self.min_rename_confidence
-                    ):
-                        new_name = analysis.sanitized_filename
-                        new_path = vf.path.parent / new_name
+                    
+                    # Skip renaming if normalization disabled
+                    if not self.normalize_filenames:
+                        continue
+                    
+                    # Apply normalization
+                    normalized_name = self.filename_normalizer.normalize(
+                        filename,
+                        replace_action=True,
+                        proper_case=True,
+                        remove_numbers=True
+                    )
+                    
+                    # Only rename if it actually changed
+                    if normalized_name != filename:
+                        new_path = vf.path.parent / normalized_name
 
                         if not self.dry_run:
                             vf.path.rename(new_path)
-                            logger.info(f"Renamed: {filename} → {new_name}")
+                            logger.info(f"Renamed: {filename} → {normalized_name}")
 
                         renamed_count += 1
 
@@ -407,7 +433,7 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
         return step
 
     def _run_step_tag(self, result: WorkflowResult) -> WorkflowStep:
-        """Write metadata tags to files."""
+        """Write extracted metadata tags to files."""
         import time
 
         start = time.time()
@@ -425,15 +451,24 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
                     if not writer:
                         continue
 
-                    # Build tag fields
-                    analysis = self.filename_analyzer.analyze(filename)
+                    # Get extracted metadata
+                    metadata = self.extracted_metadata.get(filename)
+                    if not metadata:
+                        logger.debug(f"No extracted metadata for {filename}")
+                        continue
+
+                    # Build tag fields from extracted metadata
+                    title = metadata.title or vf.filename_stem
+                    artists = ", ".join(metadata.performers) if metadata.performers else None
+                    studio = metadata.studio or self.metadata_hints.get("studio") or self.studio_filter
+                    comment = f"Performers: {artists}" if artists else f"Studio: {studio}"
 
                     fields = TagFields(
-                        title=analysis.sanitized_filename or vf.filename_stem,
-                        artist=", ".join(analysis.artists) if analysis.artists else None,
-                        album=self.studio_filter or analysis.detected_studio,
+                        title=title,
+                        artist=artists,
+                        album=studio,
                         genre="Adult",
-                        comment=f"Studio: {analysis.detected_studio or self.studio_filter}",
+                        comment=comment,
                     )
 
                     if not self.dry_run:
@@ -479,10 +514,12 @@ class PlexWorkflowOrchestrator(OrchestratorBase):
 
             for vf in files:
                 try:
-                    # Get studio name from filename analysis
+                    # Get studio name from extracted metadata or hints
                     filename = self._get_filename(vf)
-                    analysis = self.filename_analyzer.analyze(filename)
-                    studio_name = analysis.detected_studio or self.studio_filter or "Unknown"
+                    metadata = self.extracted_metadata.get(filename)
+                    studio_name = (
+                        metadata.studio if metadata else None
+                    ) or self.metadata_hints.get("studio") or self.studio_filter or "Unknown"
                     
                     studio_folder = self.root / studio_name
 
