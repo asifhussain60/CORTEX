@@ -3,8 +3,7 @@
 This module was a Phase 56-A backward compatibility stub.
 No production consumers depend on it.
 
-**DEPRECATED in Phase 65 S6**: Use cortex.lens.orchestrator.LENSOrchestrator
-or cortex.brain.engines.base_intelligence_engine.BaseIntelligenceEngine instead.
+**DEPRECATED in Phase 65 S6**: Use cortex.lens.orchestrator.LENSOrchestrator instead.
 
 AC_START: Phase 56-A S1 backward compatibility stub (DEPRECATED)
 AC_DEPRECATION: Phase 65 S6-T3 (2026-02-09)
@@ -19,8 +18,7 @@ __deprecated__ = True  # Marker for test detection
 # Issue deprecation warning on import
 warnings.warn(
     "cortex.lens.core is deprecated as of Phase 65 S6. "
-    "Use cortex.lens.orchestrator.LENSOrchestrator or "
-    "cortex.brain.engines.base_intelligence_engine.BaseIntelligenceEngine instead.",
+    "Use cortex.lens.orchestrator.LENSOrchestrator instead.",
     DeprecationWarning,
     stacklevel=2
 )

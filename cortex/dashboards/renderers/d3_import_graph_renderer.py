@@ -38,11 +38,11 @@ class D3ImportGraphRenderer:
 
         graph_data = {
             "nodes": [
-                {"id": "cortex.brain.module", "type": "module", "is_external": False},
+                {"id": "cortex.intelligence.module", "type": "module", "is_external": False},
                 {"id": "pandas", "type": "module", "is_external": True},
             ],
             "edges": [
-                {"source": "cortex.brain.module", "target": "pandas"},
+                {"source": "cortex.intelligence.module", "target": "pandas"},
             ],
         }
 
