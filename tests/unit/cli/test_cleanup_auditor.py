@@ -33,7 +33,7 @@ def temp_workspace():
     
     # Create directory structure
     (workspace / "cortex").mkdir()
-    (workspace / "cortex.intelligence").mkdir()
+    (workspace / "cortex" / "intelligence").mkdir(parents=True)
     (workspace / "cortex-registry" / "_cortex-master" / "phases" / "active").mkdir(parents=True)
     (workspace / "cortex-registry" / "_cortex-master" / "phases" / "completed").mkdir(parents=True)
     
@@ -184,7 +184,7 @@ class TestCleanupAuditor:
         """CleanupAuditor initializes with correct paths."""
         assert auditor.workspace_root == temp_workspace
         assert auditor.cortex_dir == temp_workspace / "cortex"
-        assert auditor.cortex.intelligence_dir == temp_workspace / "cortex.intelligence"
+        assert auditor.intelligence_dir == temp_workspace / "cortex" / "intelligence"
         assert auditor.registry_dir == temp_workspace / "cortex-registry" / "_cortex-master"
     
     def test_audit_completed_phases(self, auditor):

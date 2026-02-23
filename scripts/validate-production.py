@@ -118,7 +118,7 @@ class CORTEXProductionValidator:
         
         # Core directories
         required_dirs = [
-            "cortex", "cortex.intelligence", "tests", "deployment"
+            "cortex", "cortex/intelligence", "tests", "deployment"
         ]
         
         for dir_name in required_dirs:

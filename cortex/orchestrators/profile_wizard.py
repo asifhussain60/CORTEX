@@ -159,7 +159,7 @@ class ProfileWizard:
         base = next((p for p in self._PROFILES if p["name"] == profile), None)
         rules = base["rules"] if base else []
 
-        tier1_dir = self.base_path / "cortex.intelligence" / "tier1"
+        tier1_dir = self.base_path / "cortex" / "intelligence" / "tier1"
         tier1_dir.mkdir(parents=True, exist_ok=True)
 
         rules_file = tier1_dir / "domain-rules.yaml"

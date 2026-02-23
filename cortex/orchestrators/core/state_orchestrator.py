@@ -108,7 +108,7 @@ class StateOrchestrator:
     
     Example:
         >>> orchestrator = StateOrchestrator(
-        ...     brain_root=Path("cortex.intelligence"),
+        ...     brain_root=Path("cortex/intelligence"),
         ...     audit_db_path=Path("audit.db")
         ... )
         >>> result = orchestrator.flush_state()

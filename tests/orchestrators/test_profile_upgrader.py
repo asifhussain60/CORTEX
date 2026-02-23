@@ -17,7 +17,7 @@ class TestProfileUpgraderUpgrade:
         from cortex.orchestrators.profile_upgrader import ProfileUpgrader
         
         # Create existing tier1 with customizations
-        tier1_dir = tmp_path / "cortex.intelligence" / "tier1"
+        tier1_dir = tmp_path / "cortex" / "intelligence" / "tier1"
         tier1_dir.mkdir(parents=True)
         (tier1_dir / "domain-rules.yaml").write_text("""
 profile: finops-v1.0
@@ -67,7 +67,7 @@ class TestProfileUpgraderRollback:
         from cortex.orchestrators.profile_upgrader import ProfileUpgrader
         
         # Create backup-able state
-        tier1_dir = tmp_path / "cortex.intelligence" / "tier1"
+        tier1_dir = tmp_path / "cortex" / "intelligence" / "tier1"
         tier1_dir.mkdir(parents=True)
         (tier1_dir / "domain-rules.yaml").write_text("original: content")
         
@@ -127,7 +127,7 @@ class TestProfileUpgraderBackup:
         from cortex.orchestrators.profile_upgrader import ProfileUpgrader
         
         # Create existing rules
-        tier1_dir = tmp_path / "cortex.intelligence" / "tier1"
+        tier1_dir = tmp_path / "cortex" / "intelligence" / "tier1"
         tier1_dir.mkdir(parents=True)
         (tier1_dir / "domain-rules.yaml").write_text("rules: []\n")
         
@@ -144,7 +144,7 @@ class TestProfileUpgraderBackup:
         from cortex.orchestrators.profile_upgrader import ProfileUpgrader
         
         # Create existing rules
-        tier1_dir = tmp_path / "cortex.intelligence" / "tier1"
+        tier1_dir = tmp_path / "cortex" / "intelligence" / "tier1"
         tier1_dir.mkdir(parents=True)
         (tier1_dir / "domain-rules.yaml").write_text("rules: []\n")
         

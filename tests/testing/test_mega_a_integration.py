@@ -74,7 +74,7 @@ def temp_workspace():
     with tempfile.TemporaryDirectory() as tmpdir:
         workspace = Path(tmpdir)
         (workspace / "cortex-registry" / "company" / "domains").mkdir(parents=True)
-        (workspace / "cortex.intelligence" / "state").mkdir(parents=True)
+        (workspace / ".cortex-runtime" / "state").mkdir(parents=True)
         yield workspace
 
 

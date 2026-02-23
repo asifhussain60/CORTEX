@@ -109,7 +109,7 @@ __all__ = [
     "get_project_root",
     "resolve_path",
     "get_cortex_module_path",
-    "get_cortex.intelligence_path",
+    "get_cortex_intelligence_path",
     "get_config_path",
     "get_data_path",
     "get_tests_path",

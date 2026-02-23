@@ -84,7 +84,7 @@ VERSION_CLEANUP = {
 # Test Coverage Configuration
 TEST_COVERAGE = {
     "require_tests": True,
-    "source_dirs": ["cortex", "cortex.intelligence", "cortex.lens"],
+    "source_dirs": ["cortex"],
     "test_dirs": ["tests"],
     "exclude_patterns": [
         "*/_archives/*",

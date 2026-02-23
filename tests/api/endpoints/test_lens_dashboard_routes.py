@@ -89,9 +89,9 @@ class TestAnalyzeRepositoryEndpoint:
         # Create mock CORTEX repo with proper structure
         cortex_repo = tmp_path / "cortex-test"
         cortex_repo.mkdir()
-        (cortex_repo / "cortex.intelligence").mkdir()
         cortex_dir = cortex_repo / "cortex"
         cortex_dir.mkdir()
+        (cortex_dir / "intelligence").mkdir()
         (cortex_dir / "orchestrators").mkdir()  # Required by RepositoryDetector
         
         result = analyze_repository(repo_path=str(cortex_repo))

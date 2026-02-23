@@ -56,9 +56,9 @@ class OrchestratorAuditMixin:
     def _get_audit_db_path(self) -> Path:
         """Get path to audit database (governance.db)."""
         if self._audit_db_path is None:
-            # Default to cortex/intelligence/governance.db
+            # Default to .cortex-runtime/state/governance.db
             project_root = Path(__file__).parent.parent.parent.parent
-            self._audit_db_path = project_root / "cortex.intelligence" / "governance.db"
+            self._audit_db_path = project_root / ".cortex-runtime" / "state" / "governance.db"
         return self._audit_db_path
     
     def _get_session_id(self) -> str:

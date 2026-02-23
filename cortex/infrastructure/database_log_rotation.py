@@ -313,8 +313,8 @@ class DatabaseLogRotationPolicy:
 def main() -> None:
     """Main entry point."""
     db_path = (
-        Path(__file__).parent.parent
-        / "cortex.intelligence"
+        Path(__file__).parent.parent.parent
+        / ".cortex-runtime"
         / "state"
         / "governance.db"
     )

@@ -172,7 +172,7 @@ def validate_filepath(path: str, file_type: str) -> Dict[str, Any]:
     - NO files at repository root (except whitelist)
     - .md files only in docs/{subfolder}/ or reports/{subfolder}/
     - .py files only in cortex/{module}/, cortex/intelligence/{module}/, or tests/
-    - cortex.intelligence files follow tier structure
+    - cortex/intelligence files follow tier structure
 
     Args:
         path: Full file path to validate
