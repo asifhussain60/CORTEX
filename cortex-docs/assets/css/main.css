@@ -1933,6 +1933,13 @@ footer,
 }
 
 /* Card base — override glass-card-clickable base padding/margin */
+a.persona-tile {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+}
+
 .persona-tile {
     background: linear-gradient(145deg, rgba(26, 31, 58, 0.88), rgba(10, 14, 39, 0.94));
     border: 1px solid var(--glass-border);

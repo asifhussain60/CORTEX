@@ -1,0 +1,172 @@
+/**
+ * CORTEX Design System — Core Variables
+ * Single source of truth for all design tokens
+ * 
+ * Author: Asif Hussain
+ * Version: 5.0.0
+ * Standard: glassmorphism-design-standard v5.0
+ */
+
+:root {
+    /* ============================================
+       COLOR PALETTE — Dark Mode
+       ============================================ */
+    --bg-primary: #0a0e27;
+    --bg-secondary: #1a1f3a;
+    --bg-tertiary: #131831;
+    
+    /* Glass Backgrounds */
+    --glass-bg: rgba(26, 31, 58, 0.7);
+    --glass-bg-low: rgba(26, 31, 58, 0.5);
+    --glass-bg-high: rgba(26, 31, 58, 0.85);
+    --glass-bg-hover: rgba(26, 31, 58, 0.8);
+    --glass-bg-active: rgba(26, 31, 58, 0.9);
+    --glass-bg-deep: rgba(10, 14, 39, 0.6);
+    --glass-bg-deep-strong: rgba(10, 14, 39, 0.85);
+    --glass-bg-light-subtle: rgba(255, 255, 255, 0.05);
+    --glass-bg-light-medium: rgba(255, 255, 255, 0.1);
+    
+    /* Borders */
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-border-hover: rgba(255, 255, 255, 0.2);
+    --glass-border-active: rgba(255, 255, 255, 0.3);
+    --glass-border-accent: rgba(0, 212, 255, 0.3);
+    
+    /* ============================================
+       ACCENT COLORS
+       ============================================ */
+    --accent-primary: #00d4ff;
+    --accent-secondary: #7b61ff;
+    --accent-emerald: #10b981;
+    --accent-amber: #f59e0b;
+    --accent-rose: #f43f5e;
+    
+    /* Accent with opacity */
+    --accent-primary-10: rgba(0, 212, 255, 0.1);
+    --accent-primary-20: rgba(0, 212, 255, 0.2);
+    --accent-primary-30: rgba(0, 212, 255, 0.3);
+    --accent-secondary-10: rgba(123, 97, 255, 0.1);
+    --accent-secondary-20: rgba(123, 97, 255, 0.2);
+    --accent-emerald-10: rgba(16, 185, 129, 0.1);
+    
+    /* ============================================
+       TEXT COLORS
+       ============================================ */
+    --text-primary: #ffffff;
+    --text-secondary: #a0a6c0;
+    --text-muted: #6b7280;
+    --text-accent: var(--accent-primary);
+    --text-link: var(--accent-primary);
+    --text-link-hover: #33dfff;
+    
+    /* ============================================
+       STATUS COLORS
+       ============================================ */
+    --success: #00ff88;
+    --success-bg: rgba(0, 255, 136, 0.1);
+    --warning: #ffa500;
+    --warning-bg: rgba(255, 165, 0, 0.1);
+    --danger: #ff4444;
+    --danger-bg: rgba(239, 68, 68, 0.1);
+    --info: #3b82f6;
+    --info-bg: rgba(59, 130, 246, 0.1);
+    
+    /* ============================================
+       ORCHESTRATOR TIER COLORS
+       ============================================ */
+    --orch-core: #7b61ff;
+    --orch-domain: #00d4ff;
+    --orch-support: #10b981;
+    
+    /* ============================================
+       BLUR VALUES — 3 Tiers
+       ============================================ */
+    --glass-blur-sm: 10px;
+    --glass-blur-md: 20px;
+    --glass-blur-lg: 30px;
+    
+    /* ============================================
+       SHADOWS & EFFECTS
+       ============================================ */
+    --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.37);
+    --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+    --shadow-glow-purple: 0 0 20px rgba(123, 97, 255, 0.3);
+    --shadow-card-hover: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 212, 255, 0.2);
+    
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-mono: 'Cascadia Code', 'JetBrains Mono', 'Fira Code', monospace;
+    
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 2rem;
+    --font-size-4xl: 2.5rem;
+    --font-size-5xl: 3rem;
+    
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+    
+    /* ============================================
+       SPACING
+       ============================================ */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    
+    /* ============================================
+       BORDER RADIUS
+       ============================================ */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+    
+    /* ============================================
+       TRANSITIONS
+       ============================================ */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    --transition-spring: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    /* ============================================
+       BREAKPOINTS (for reference in JS)
+       ============================================ */
+    --bp-mobile: 320px;
+    --bp-tablet: 768px;
+    --bp-desktop: 1024px;
+    --bp-large: 1440px;
+    
+    /* ============================================
+       Z-INDEX LAYERS
+       ============================================ */
+    --z-base: 1;
+    --z-card: 10;
+    --z-nav: 100;
+    --z-modal: 1000;
+    --z-overlay: 10000;
+}

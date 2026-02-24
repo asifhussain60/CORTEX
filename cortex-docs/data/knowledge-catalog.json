@@ -1,0 +1,82 @@
+{
+  "meta": {
+    "generated": "2026-02-24",
+    "source": "cortex-registry/knowledge/",
+    "version": "1.0.0",
+    "description": "Catalog of knowledge domains sourced from CORTEX governance YAMLs"
+  },
+  "domains": [
+    {
+      "id": "tdd-best-practices",
+      "title": "TDD Best Practices",
+      "icon": "🧪",
+      "description": "Test-Driven Development methodology — RED-GREEN-REFACTOR cycle, test isolation, coverage thresholds",
+      "source": "cortex-registry/knowledge/tdd-best-practices/",
+      "coreRules": ["CORE-008"],
+      "tracks": ["beginner", "intermediate"],
+      "topicCount": 12,
+      "tags": ["testing", "tdd", "quality"]
+    },
+    {
+      "id": "architecture-best-practices",
+      "title": "Architecture Best Practices",
+      "icon": "🏗️",
+      "description": "Layered architecture, Clean Architecture, SOLID principles, dependency management",
+      "source": "cortex-registry/knowledge/architecture-best-practices/",
+      "coreRules": ["CORE-035", "CORE-048"],
+      "tracks": ["intermediate", "advanced"],
+      "topicCount": 15,
+      "tags": ["architecture", "design", "patterns"]
+    },
+    {
+      "id": "engineering-design-patterns",
+      "title": "Engineering Design Patterns",
+      "icon": "🔧",
+      "description": "GoF patterns, enterprise patterns, anti-patterns — with Python examples",
+      "source": "cortex-registry/knowledge/engineering-design-patterns/",
+      "coreRules": ["CORE-035"],
+      "tracks": ["intermediate"],
+      "topicCount": 18,
+      "tags": ["patterns", "oop", "design"]
+    },
+    {
+      "id": "owasp-top10",
+      "title": "OWASP Top 10 Security",
+      "icon": "🛡️",
+      "description": "Web application security risks — injection, broken auth, XSS, CSRF, and remediations",
+      "source": "cortex-registry/knowledge/owasp-top10/",
+      "coreRules": [],
+      "tracks": ["intermediate", "advanced"],
+      "topicCount": 10,
+      "tags": ["security", "owasp", "web"]
+    },
+    {
+      "id": "monitoring-observability",
+      "title": "Monitoring & Observability",
+      "icon": "📊",
+      "description": "Three pillars (logs, metrics, traces), Prometheus, Grafana, OpenTelemetry, SRE practices",
+      "source": "cortex-registry/knowledge/monitoring-observability/",
+      "coreRules": [],
+      "tracks": ["advanced"],
+      "topicCount": 12,
+      "tags": ["monitoring", "observability", "sre"]
+    },
+    {
+      "id": "cicd-hardening",
+      "title": "CI/CD Hardening",
+      "icon": "🔒",
+      "description": "Pipeline security, SAST/DAST, supply chain integrity, deployment strategies",
+      "source": "cortex-registry/knowledge/cicd-hardening/",
+      "coreRules": ["CORE-048"],
+      "tracks": ["advanced"],
+      "topicCount": 10,
+      "tags": ["cicd", "devops", "security"]
+    }
+  ],
+  "stats": {
+    "totalDomains": 6,
+    "totalTopics": 77,
+    "coreRulesReferenced": 4,
+    "tracksAvailable": 3
+  }
+}

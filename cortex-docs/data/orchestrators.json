@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "generated": "2026-02-24",
+    "source": "cortex/orchestrators/",
+    "version": "1.0.0",
+    "total": 27
+  },
+  "tiers": {
+    "core": {
+      "label": "Core Orchestrators",
+      "description": "Central control plane — intent routing, TDD enforcement, governance, master orchestration",
+      "count": 7,
+      "orchestrators": [
+        { "id": "master", "name": "MasterOrchestrator", "path": "cortex/orchestrators/core/master_orchestrator.py", "description": "Top-level orchestration — routes intents, manages stages, coordinates all other orchestrators" },
+        { "id": "intent-router", "name": "IntentRouter", "path": "cortex/orchestrators/core/intent_router.py", "description": "Classifies user intent and routes to the appropriate orchestrator" },
+        { "id": "tdd", "name": "TDDOrchestrator", "path": "cortex/orchestrators/core/tdd_orchestrator.py", "description": "Enforces RED-GREEN-REFACTOR cycle — CORE-008 compliance" },
+        { "id": "enforcement", "name": "EnforcementOrchestrator", "path": "cortex/orchestrators/core/enforcement_orchestrator.py", "description": "Pre-commit governance — validates CORE rules, blocks violations" },
+        { "id": "stage-1", "name": "MasterOrchestrationStage1", "path": "cortex/orchestrators/core/master_orchestrator_stage_1.py", "description": "Stage 1 orchestration — governance pre-flight" },
+        { "id": "stage-3", "name": "MasterOrchestrationStage3", "path": "cortex/orchestrators/core/master_orchestrator_stage_3.py", "description": "Stage 3 orchestration — wiring contract validation" },
+        { "id": "stage-4", "name": "MasterOrchestrationStage4", "path": "cortex/orchestrators/core/master_orchestrator_stage_4.py", "description": "Stage 4 orchestration — orchestrator health checks" }
+      ]
+    },
+    "domain": {
+      "label": "Domain Orchestrators",
+      "description": "Specialized capabilities — LENS analysis, Azure DevOps, refactoring, knowledge synthesis",
+      "count": 6,
+      "orchestrators": [
+        { "id": "lens", "name": "LensOrchestrator", "description": "LENS code intelligence — AST analysis, Git history, pattern detection" },
+        { "id": "azure-devops", "name": "AzureDevOpsOrchestrator", "description": "Azure DevOps integration — work items, pipelines, boards sync" },
+        { "id": "refactor", "name": "RefactorOrchestrator", "description": "Intelligent refactoring — duplication detection, code smell remediation" },
+        { "id": "knowledge", "name": "KnowledgeSynthesisOrchestrator", "description": "Knowledge synthesis from YAML registries into actionable intelligence" },
+        { "id": "challenge", "name": "ChallengeOrchestrator", "description": "Generate ≥2 alternatives with trade-off analysis for any request" },
+        { "id": "onboard", "name": "OnboardOrchestrator", "description": "Repository onboarding — LENS analysis + SQLite dashboard generation" }
+      ]
+    },
+    "support": {
+      "label": "Support Orchestrators",
+      "description": "Infrastructure — health checks, vacuum cleanup, upgrades, digest, sweep catalogues",
+      "count": 14,
+      "orchestrators": [
+        { "id": "health", "name": "HealthOrchestrator", "description": "All 22 orchestrator health endpoints — production readiness validation" },
+        { "id": "vacuum", "name": "VacuumOrchestrator", "description": "Markdown sprawl + root clutter cleanup" },
+        { "id": "upgrade", "name": "UpgradeOrchestrator", "description": "Check origin/main, merge if ahead, validate requirements" },
+        { "id": "bulk-digest", "name": "BulkDigestOrchestrator", "description": "Batch content ingestion with 3-pipeline processing" },
+        { "id": "digest-session", "name": "DigestSessionOrchestrator", "description": "Single session content digestion" },
+        { "id": "sweep-catalogue", "name": "SweepCatalogueOrchestrator", "description": "CORE-064 sweep completeness — exhaustive issue cataloguing" },
+        { "id": "git", "name": "GitOrchestrator", "description": "Git operations — branching, committing, conflict resolution" },
+        { "id": "testing", "name": "TestOrchestrator", "description": "Test execution coordination — batch runner, quality gates" },
+        { "id": "compliance", "name": "ComplianceOrchestrator", "description": "CORE rule compliance validation and reporting" },
+        { "id": "evidence", "name": "EvidenceOrchestrator", "description": "Evidence bundle generation with hash-chain audit" },
+        { "id": "documentation", "name": "DocumentationOrchestrator", "description": "Documentation generation and validation" },
+        { "id": "security", "name": "SecurityOrchestrator", "description": "Security scanning — CWE patterns, dependency audit" },
+        { "id": "metrics", "name": "MetricsOrchestrator", "description": "Prometheus metrics collection and dashboard updates" },
+        { "id": "workflow", "name": "WorkflowOrchestrator", "description": "YAML workflow template execution engine" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "generated": "2026-02-24",
+    "source": "cortex-docs/learning/",
+    "version": "1.0.0"
+  },
+  "tracks": [
+    {
+      "id": "beginner",
+      "title": "Beginner — Start Right",
+      "icon": "🌱",
+      "color": "#34d399",
+      "duration": "8 weeks",
+      "modules": 12,
+      "path": "learning/beginner/index.html",
+      "description": "Python, pytest, TDD, Clean Code, Git — the foundation every engineer needs.",
+      "prerequisites": [],
+      "sections": [
+        { "title": "Weeks 1–2: Python & TDD", "modules": ["Python Foundations", "pytest Basics", "TDD RED-GREEN-REFACTOR"] },
+        { "title": "Weeks 3–4: Clean Code", "modules": ["Clean Code Principles", "Type Hints & Docstrings", "Code Review Essentials"] },
+        { "title": "Weeks 5–6: Git & Collaboration", "modules": ["Git Fundamentals", "Branching Strategies", "CI Basics"] },
+        { "title": "Weeks 7–8: First Project", "modules": ["Project Planning", "Build a CLI Tool", "Capstone Review"] }
+      ]
+    },
+    {
+      "id": "intermediate",
+      "title": "Intermediate — Build With Confidence",
+      "icon": "🔧",
+      "color": "#60a5fa",
+      "duration": "10 weeks",
+      "modules": 15,
+      "path": "learning/intermediate/index.html",
+      "description": "Architecture patterns, SOLID principles, OWASP security, API design.",
+      "prerequisites": ["beginner"],
+      "sections": [
+        { "title": "Weeks 1–3: Architecture Patterns", "modules": ["Layered Architecture", "Clean Architecture", "Repository & Unit of Work"] },
+        { "title": "Weeks 3–5: SOLID Principles", "modules": ["SRP", "OCP/LSP", "ISP/DIP"] },
+        { "title": "Weeks 5–7: Security Fundamentals", "modules": ["OWASP Top 10", "Input Validation", "Auth & AuthZ"] },
+        { "title": "Weeks 8–10: API Design", "modules": ["RESTful Design", "OpenAPI Specs", "Microservices Intro", "Design Patterns", "Error Handling", "Capstone"] }
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "Advanced — Engineer at Scale",
+      "icon": "🚀",
+      "color": "#f472b6",
+      "duration": "12 weeks",
+      "modules": 18,
+      "path": "learning/advanced/index.html",
+      "description": "Distributed systems, observability, CI/CD hardening, engineering leadership.",
+      "prerequisites": ["beginner", "intermediate"],
+      "sections": [
+        { "title": "Weeks 1–3: Distributed Systems", "modules": ["CAP Theorem", "Event-Driven Architecture", "Consensus Protocols", "Distributed Caching"] },
+        { "title": "Weeks 4–6: Observability", "modules": ["Three Pillars", "Prometheus & Grafana", "Distributed Tracing", "SLOs & Error Budgets"] },
+        { "title": "Weeks 7–9: CI/CD Hardening", "modules": ["Pipeline Architecture", "Security in Pipeline", "Deployment Strategies", "Infrastructure as Code"] },
+        { "title": "Weeks 10–12: Leadership", "modules": ["ADRs", "Code Review Excellence", "Tech Debt Management", "Incident Response", "System Design", "Capstone"] }
+      ]
+    }
+  ]
+}
