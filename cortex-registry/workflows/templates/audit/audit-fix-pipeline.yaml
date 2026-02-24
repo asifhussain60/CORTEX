@@ -555,6 +555,11 @@ workflow:
           → Surface inline (CORE-002, never to file)
           → Block Stage 9 (no tests + AC_COMPLETE on a dirty audit)
 
+      convergence_gate:                            # GAP-67-04: convergence gate wired (Phase 67-D)
+        max_cycles: 5
+        convergence_predicate: "p0_count == 0 and p1_count == 0"
+        check_operation: validate_p0_count
+
       convergence_loop:
         instantiation: 'usage_examples.audit_fix_stage_7_8'
         primitive: 'primitives/validation/detect-fix-rescan-loop'

@@ -75,6 +75,10 @@ workflow:
       name: "REFACTOR Phase - Improve Code Quality"
       orchestrator: "RefactoringOrchestrator"
       depends_on: ["green_phase"]
+      convergence_gate:                            # GAP-67-04: convergence gate wired (Phase 67-D)
+        max_cycles: 3
+        convergence_predicate: "all_tests_pass and complexity_reduced"
+        check_operation: validate_tests_green
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'
         max_cycles: 5

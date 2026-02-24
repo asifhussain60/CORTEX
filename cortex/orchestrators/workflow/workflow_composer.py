@@ -146,10 +146,15 @@ class WorkflowComposer:
 
         # Parse steps
         for step_data in workflow["steps"]:
+            # Phase 67-D: merge convergence_gate into parameters so
+            # _execute_with_convergence() can read gate.max_cycles from template
+            params = dict(step_data.get("parameters", {}))
+            if "convergence_gate" in step_data:
+                params["convergence_gate"] = step_data["convergence_gate"]
             step = WorkflowStep(
                 step_id=step_data.get("step_id", "unknown"),
                 orchestrator_name=step_data.get("orchestrator", ""),
-                parameters=step_data.get("parameters", {}),
+                parameters=params,
                 description=step_data.get("description"),
             )
             self._steps.append(step)
