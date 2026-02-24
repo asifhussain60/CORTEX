@@ -362,65 +362,72 @@ phase_59:
     - "IntentRouter routing table updated to reflect 22 canonical orchestrators"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PHASE 60 — cortex/core FLATTEN (27 subdirs → 8 canonical)
+# PHASE 60 — DUPLICATE FILENAME RESOLUTION (deferred from Phase 58-f)
 # ─────────────────────────────────────────────────────────────────────────────
 phase_60:
   id: phase-60
-  title: "Simplification Phase 3 — cortex/core Flatten (27 dirs→8 canonical)"
+  title: "Simplification Phase 3 — Duplicate Filename Resolution (15 groups)"
   priority: P1
-  status: OPEN
+  status: IN_PROGRESS
   governance_authority: "CORE-035, CORE-064"
   duration_estimate: "1 week"
   prerequisite: "Phase 58 + Phase 59 complete"
   sweep_id: SWEEP-60-CORE-FLATTEN
-  regression_gate: "838 golden tests must pass after every sub-phase"
+  regression_gate: "1420 smoke tests must pass after every batch"
 
-  current_state: "27 subdirectories in cortex/core/ + 32 top-level .py files"
+  note: |
+    Original phase-60 goal (cortex/core flatten 27 subdirs → 8 canonical) was
+    superseded by Phase 68 (COMPLETE 2026-02-24, 27→15 canonical subdirs).
+    Phase 60 re-scoped to: resolve 15 remaining CORE-035 duplicate filename groups
+    from Phase 58-f deferred catalogue. 7 of 15 groups resolved via rename + compat
+    shim in commit 52aab3572 (2026-02-24).
 
-  target_structure:
-    cortex_core:
-      - "__init__.py"
-      - "orchestrator.py  ← OrchestratorProtocolMixin + OrchestratorBase (merged)"
-      - "result.py        ← Ok/Err (canonical, unchanged)"
-      - "audit.py         ← AuditEntry + AuditModels (canonical, unchanged)"
-      - "governance.py    ← enforcement rules + rule_evaluator + governance_pregate"
-      - "registry.py      ← MultiTenantRegistry + FeatureRegistry (merged)"
-      - "workflow.py      ← WorkflowEngine + WorkflowTemplateMixin (merged)"
-      - "interfaces.py    ← IOrchestrator (single path, no subdirectory)"
-      - "models.py        ← shared data classes"
-      - "common/          ← keep (exceptions, validators, file_utils, progress_reporter)"
-      - "security/        ← keep (rate_limiter, auth)"
-      - "database/        ← keep (SQLite tier enforcement)"
+  current_state: "15 duplicate filename groups → 7 resolved, 8 justifiably retained"
 
-  directories_to_dissolve:
-    - "cortex/core/adapters/ → merge into cortex/core/common/"
-    - "cortex/core/bootstrap/ → merge into cortex/core/__init__.py"
-    - "cortex/core/config/ → merge into cortex/core/models.py"
-    - "cortex/core/confirmation/ → merge into cortex/core/governance.py"
-    - "cortex/core/decorators/ → merge into cortex/core/governance.py"
-    - "cortex/core/discovery/ → move to cortex/mcp/"
-    - "cortex/core/errors/ → merge into cortex/core/common/"
-    - "cortex/core/execution/ → move to cortex/orchestrators/workflow/"
-    - "cortex/core/governance/ → merge into cortex/core/governance.py"
-    - "cortex/core/hallucination_prevention/ → move to cortex/intelligence/"
-    - "cortex/core/intelligence/ → move to cortex/intelligence/"
-    - "cortex/core/intent/ → move to cortex/orchestrators/core/intent_router/"
-    - "cortex/core/interaction/ → merge into cortex/orchestrators/core/"
-    - "cortex/core/orchestrator/ → merge into cortex/core/orchestrator.py"
-    - "cortex/core/parsing/ → move to cortex/intelligence/"
-    - "cortex/core/recovery/ → merge into cortex/core/common/"
-    - "cortex/core/registry/ → merge into cortex/core/registry.py"
-    - "cortex/core/resilience/ → move to cortex/infrastructure/"
-    - "cortex/core/safety/ → merge into cortex/core/governance.py"
-    - "cortex/core/schemas/ → merge into cortex/core/models.py"
-    - "cortex/core/state/ → merge into cortex/orchestrators/core/"
-    - "cortex/core/wiring/ → merge into cortex/core/registry.py"
+  resolved_batch_2026_02_24:
+    commit: "52aab3572"
+    groups_resolved: 7
+    actions:
+      - "cleaners/base.py → cleaner_base.py (compat shim: 90-day retention)"
+      - "cleaners/interface.py → cleaner_interface.py (compat shim)"
+      - "cleaners/registry.py → cleaner_registry.py (compat shim)"
+      - "domain_brain/optimistic_lock.py → domain_brain_optimistic_lock.py"
+      - "intelligence/capability_matcher.py → intelligence_capability_matcher.py"
+      - "orchestrators/workflow/audit_verifier.py → workflow_audit_verifier.py"
+      - "cortex/core/context_cache_layer.py → core_context_cache_layer.py"
+    regression_gate: "0 new failures (pre-existing failures unchanged)"
+
+  retained_with_justification:
+    - name: "azure.py"
+      paths: ["secrets/providers/", "storage/providers/"]
+      reason: "Different domains — secret management vs storage backend; different APIs"
+    - name: "errors.py"
+      paths: ["secrets/", "storage/"]
+      reason: "Different error hierarchies for different subsystems"
+    - name: "factory.py"
+      paths: ["secrets/", "storage/"]
+      reason: "Different factory patterns for different subsystems"
+    - name: "local.py"
+      paths: ["secrets/providers/", "storage/providers/"]
+      reason: "Different local backend implementations"
+    - name: "vacuum_orchestrator.py"
+      paths: ["orchestrators/health/", "orchestrators/support/"]
+      reason: "support/ is protocol adapter (98L) → health/ canonical (795L). Intentional wiring."
+    - name: "core.py"
+      paths: ["mcp/tools/", "lens/"]
+      reason: "lens/core.py is Phase 65 deprecated shim (18L) → mcp/tools/core.py (1040L)"
+    - name: "coherence_validator.py"
+      paths: ["orchestrators/domain/", "orchestrators/validation/"]
+      reason: "Different validator SRPs — domain coherence vs structural validation"
+    - name: "__main__.py"
+      paths: ["cli/", "mcp/"]
+      reason: "Both legitimate entry points for different CLI surfaces"
 
   exit_criteria:
-    - "cortex/core/ has exactly 8 canonical items (3 files + 5 dirs)"
-    - "Zero directories named hallucination_prevention, wiring, safety, schemas, parsing"
-    - "838 golden tests passing"
-    - "OrchestratorProtocolMixin importable from cortex.core.orchestrator"
+    - "All 15 duplicate filename groups documented with decision (7 resolved, 8 retained)"
+    - "0 new test failures introduced by Phase 60 renames"
+    - "Compat shims in place with 90-day retention expiry 2026-05-24"
+    - "Phase 61 cleanup: shims deleted after 90-day retention window"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PHASE 61 — REGISTRY CLEANUP & LEGACY FILE PURGE
