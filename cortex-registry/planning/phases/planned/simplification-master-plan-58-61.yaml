@@ -172,10 +172,38 @@ phase_58:
 
     - id: phase-58-f
       title: "Duplicate filename elimination — 90 groups, 96 extra files"
-      status: OPEN
+      status: IN_PROGRESS
+      started: "2026-02-24"
       duration: "4 hours"
       method: "grep import count determines canonical; lower count = delete candidate"
       files_deleted_estimate: 96
+      progress:
+        batch_1_complete: "2026-02-24"
+        batch_1_deleted: 6
+        batch_1_commit: "6970e390a"
+        batch_1_files:
+          - "cortex/core/coherence_validator.py (shim → orchestrators/validation/)"
+          - "cortex/core/registry/status_update_hook.py (shim → infrastructure/automation/)"
+          - "cortex/governance/validation/wiring_validator.py (shim → core/wiring/registry/)"
+          - "cortex/intelligence/crawler/pipeline.py (shim → orchestrators/health/)"
+          - "cortex/lens/ml_patterns/dashboard_generator.py (shim → core/registry/)"
+          - "cortex/orchestrators/domain/business/base.py (zero-import abstract base)"
+        regression_gate: "1420 smoke PASSED after batch 1"
+        remaining_groups: 57
+        remaining_extra_files: 63
+        deferred_pairs:
+          - "context_cache_layer (root vs interaction/) — different APIs, merge in Phase 60"
+          - "context_synthesis_gateway (root vs interaction/) — different APIs (create_exit_gate vs get_gateway)"
+          - "toolkit_tools.py (mcp/ vs mcp/tools/) — different tools exposed, both needed"
+          - "vacuum_orchestrator (health/ vs support/) — support/ is deliberate protocol adapter"
+          - "rollback_orchestrator (infrastructure/ vs support/) — support/ is deliberate compat shim"
+          - "stage_execution_strategy (core/ vs strategies/) — strategies/ is deliberate re-export"
+        next_batch_candidates:
+          - "cortex/infrastructure/audit_verifier.py vs cortex/orchestrators/workflow/audit_verifier.py"
+          - "cortex/lens/cache.py vs cortex/infrastructure/storage/cache.py"
+          - "cortex/intelligence/capability_matcher.py vs cortex/orchestrators/core/intent_router/capability_matcher.py"
+          - "cortex/intelligence/domain_brain/optimistic_lock.py vs cortex/core/common/optimistic_lock.py"
+          - "cortex/cli/commands/lens_dashboard.py vs cortex/cli/lens_dashboard.py"
 
   exit_criteria:
     - "cortex/core/core/ directory deleted (0 files)"
