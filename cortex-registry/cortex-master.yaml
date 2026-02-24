@@ -139,7 +139,7 @@ phase_detail_files:
     sweep_id: SWEEP-58-61-SIMPLIFICATION
     phases: [58, 59, 60, 61]
     file: "cortex-registry/planning/phases/planned/simplification-master-plan-58-61.yaml"
-    note: "Phase 60 IN_PROGRESS: 7/15 duplicate groups resolved (commit 52aab3572). 8 retained with justification. Compat shims expire 2026-05-24."
+    note: "Phase 60 COMPLETE: 7/15 duplicate groups resolved (commit 52aab3572), 8 retained with justification. Smoke: 1416 passed ✅ (commit b2c9c6f8a). Compat shims expire 2026-05-24. Phase 61 pending."
 
   - id: phase-57
     title: "Intelligence Wiring Remediation — 9-Issue Sweep"
