@@ -189,8 +189,28 @@ phase_58:
           - "cortex/lens/ml_patterns/dashboard_generator.py (shim → core/registry/)"
           - "cortex/orchestrators/domain/business/base.py (zero-import abstract base)"
         regression_gate: "1420 smoke PASSED after batch 1"
-        remaining_groups: 57
-        remaining_extra_files: 63
+        batch_2_complete: "2026-02-24"
+        batch_2_deleted: 8
+        batch_2_commit: "a91381fb2"
+        batch_2_files:
+          - "cortex/core/database.py (shim → infrastructure/database)"
+          - "cortex/core/common/health_check.py (shim → core/wiring/health_check)"
+          - "cortex/observability/observability/health_monitor.py (shim → core/registry/)"
+          - "cortex/intelligence/crawler/orchestrator.py (shim → orchestrators/support/)"
+          - "cortex/infrastructure/progress_tracker.py (shim → core/execution/)"
+          - "cortex/infrastructure/security/rate_limiter.py (shim → infrastructure/)"
+          - "cortex/testing/sts/sts_analyzer.py (shim → mcp/tools/)"
+          - "cortex/intelligence/crawler/cli.py (re-export, 0 callers)"
+        batch_3_complete: "2026-02-24"
+        batch_3_deleted: 3
+        batch_3_commit: "a91381fb2"
+        batch_3_files:
+          - "cortex/infrastructure/devx/pytest_progress_plugin.py (older 100L copy vs testing/ 122L canonical)"
+          - "cortex/governance/enforcement/recommendation_gate.py (shim → orchestrators/core/)"
+          - "cortex/orchestrators/health/intelligence.py (shim → mcp/tools/intelligence)"
+        remaining_groups: 52
+        remaining_extra_files: 52
+        regression_gate_batch23: "1420 smoke PASSED after batches 2+3"
         deferred_pairs:
           - "context_cache_layer (root vs interaction/) — different APIs, merge in Phase 60"
           - "context_synthesis_gateway (root vs interaction/) — different APIs (create_exit_gate vs get_gateway)"
@@ -198,6 +218,9 @@ phase_58:
           - "vacuum_orchestrator (health/ vs support/) — support/ is deliberate protocol adapter"
           - "rollback_orchestrator (infrastructure/ vs support/) — support/ is deliberate compat shim"
           - "stage_execution_strategy (core/ vs strategies/) — strategies/ is deliberate re-export"
+          - "intelligence/lens/lens/pipeline.py vs orchestrators/health/pipeline.py — both have live callers, Phase 60"
+          - "domain_brain/domain_brain/intent_classifier.py vs intelligence/intent_classifier.py — both live"
+          - "orchestrators/version_manager.py vs domain_brain/version_manager.py — both live"
         next_batch_candidates:
           - "cortex/infrastructure/audit_verifier.py vs cortex/orchestrators/workflow/audit_verifier.py"
           - "cortex/lens/cache.py vs cortex/infrastructure/storage/cache.py"
