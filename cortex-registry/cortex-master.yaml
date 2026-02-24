@@ -30,11 +30,11 @@ metadata:
     - id: phase-67
       title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
       priority: P1
-      status: PLANNED
+      status: COMPLETE
       sweep_id: SWEEP-67-WORKFLOW-RUNTIME-WIRING
       gaps: 6
       sub_phases: 6
-      file: "cortex-registry/_cortex-master/phases/planned/phase-67-workflow-engine-runtime-wiring.yaml"
+      file: "cortex-registry/_cortex-master/phases/completed/phase-67-workflow-engine-runtime-wiring.yaml"
       note: "Wires 3 isolated workflow primitives into coherent E2E path. StepHandlerRegistry replaces stub. convergence_gate added to audit-fix + TDD templates."
     - id: phase-66
       title: "Cross-Cutting Intelligence Matrix — Neural Wiring Layer"
@@ -54,11 +54,11 @@ phase_detail_files:
   - id: phase-67
     title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-67-WORKFLOW-RUNTIME-WIRING
     gaps: 6
     sub_phases: 6
-    file: "cortex-registry/_cortex-master/phases/planned/phase-67-workflow-engine-runtime-wiring.yaml"
+    file: "cortex-registry/_cortex-master/phases/completed/phase-67-workflow-engine-runtime-wiring.yaml"
     note: "NOT a rewrite — surgical wiring fix. 234 baseline workflow tests provide regression net."
 
   - id: phase-66

@@ -1,0 +1,520 @@
+id: phase-67
+title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E Integration"
+priority: P1
+status: PLANNED
+created: "2026-02-24"
+sweep_id: SWEEP-67-WORKFLOW-RUNTIME-WIRING
+phase_prerequisites:
+  - phase-64  # golden tests provide regression safety net (177 workflow tests)
+  - phase-65  # enterprise hardening (safe_import, mixin rollout) before deep engine rewrites
+
+# ============================================================
+# LANDSCAPE AUDIT SUMMARY
+# Full audit performed in Phase 64 session 8.
+# ============================================================
+
+landscape_findings:
+  summary: >-
+    CORTEX workflow layer has 3 components that exist in isolation and are
+    NOT end-to-end wired. The YAML template execution flow is broken:
+    WorkflowEngine._execute_step() is a pure stub; WorkflowComposer uses
+    wrong StepStateMachine constructor kwargs; no YAML template defines
+    convergence_gate blocks; ConvergenceLoopExecutor is never called from
+    either engine. The primitives (StepStateMachine, ConvergenceLoopExecutor)
+    are individually correct but disconnected.
+
+  broken_components:
+    - component: "cortex/core/workflow_engine.py"
+      class: WorkflowEngine
+      issue: "_execute_step() is a pure stub — returns {'status': 'complete'} with zero dispatch"
+      severity: P0
+      lines: "200-280 (approximately)"
+      evidence: "operation = step.get('operation', 'noop') → no handler registry, no dispatch"
+      risk_if_unchanged: "WorkflowEngine.execute_workflow() silently succeeds on all templates but does nothing"
+
+    - component: "cortex/orchestrators/workflow/workflow_composer.py"
+      class: WorkflowComposer
+      issue: "_execute_with_convergence() calls StepStateMachine with wrong kwargs"
+      severity: P1
+      lines: "~358"
+      evidence: "fsm = StepStateMachine(step=step.parameters, neuron=None) — valid params are step_id, convergence_config"
+      risk_if_unchanged: "convergence_mode=True path always crashes silently; convergence_mode=False is default so no user-visible failure today"
+
+    - component: "cortex/orchestrators/workflow/autonomous_workflow_executor.py"
+      class: AutonomousWorkflowExecutor
+      issue: "Also imports StepStateMachine with wrong usage pattern"
+      severity: P2
+      risk_if_unchanged: "Secondary bridge broken; real autonomous execution path dead"
+
+    - component: "cortex-registry/workflows/templates/**/*.yaml"
+      issue: "Zero templates define convergence_gate blocks"
+      severity: P1
+      evidence: "grep -r convergence_gate cortex-registry/workflows/templates/ → 0 matches"
+      risk_if_unchanged: "_execute_with_convergence() code path never exercised even after kwargs fix"
+
+    - component: "cortex-registry/cortex-master.yaml"
+      issue: "1022 lines — P0 THIN INDEX CONTRACT VIOLATION (limit: 500)"
+      severity: P0
+      risk_if_unchanged: "Context exhaustion, un-reviewable diffs, YAML parse performance degradation"
+
+  working_components:
+    - "cortex/orchestrators/workflow/step_state_machine.py — FSM correct, transitions wired (11 unit + 15 golden tests GREEN)"
+    - "cortex/orchestrators/workflow/convergence_loop_executor.py — exponential backoff loop correct (9 golden tests GREEN)"
+    - "cortex/orchestrators/workflow/workflow_composer.py:compose() — YAML loading + step parsing correct"
+    - "cortex/orchestrators/workflow/workflow_composer.py:_execute_standard() — works when orchestrator registry populated"
+
+  regression_safety_net:
+    test_count: 177
+    suite: "tests/orchestrators/workflow/"
+    additional:
+      - "tests/unit/orchestrators/workflow/ — 20 tests"
+      - "tests/integration/test_e2e_workflow.py — 7 tests"
+      - "tests/golden/workflow/test_workflow_runtime_golden.py — 30 tests (Phase 64-C)"
+    assessment: >-
+      All 177 + 20 + 7 + 30 = 234 workflow tests are currently GREEN.
+      convergence_mode=False is the production default in WorkflowComposer —
+      fixing the convergence_mode=True path carries near-zero regression risk.
+      WorkflowEngine._execute_step() is a stub today; any real dispatch is additive.
+
+  verdict: >-
+    NOT TOO LATE. Fixes are additive (handler registry behind flag, kwargs correction
+    behind existing convergence_mode=True gate, YAML template additions are non-breaking).
+    234 tests provide a solid regression safety net. Proceed with phased sub-phase plan.
+
+# ============================================================
+# GAP CATALOGUE
+# ============================================================
+
+gap_catalogue:
+  - id: GAP-67-01
+    title: "WorkflowEngine._execute_step() is a pure stub — no dispatch to handlers"
+    severity: P0
+    file: "cortex/core/workflow_engine.py"
+    detail: >-
+      _execute_step() reads operation = step.get('operation', 'noop') then returns
+      {"status": "complete"} unconditionally. No handler registry, no orchestrator lookup,
+      no actual work performed. execute_workflow() appears to succeed on all templates
+      but is completely hollow. Must be replaced with a step_handler_registry pattern
+      that dispatches to registered callables by operation name.
+    tdd_sequence:
+      - "RED: test_execute_step_dispatches_to_handler — verify operation 'noop' calls noop_handler"
+      - "RED: test_execute_step_raises_on_unknown_operation — verify KeyError or StepError"
+      - "RED: test_execute_step_returns_step_result — verify result schema {status, output, timing_ms}"
+      - "GREEN: implement step_handler_registry dict in WorkflowEngine.__init__()"
+      - "GREEN: implement _execute_step() dispatch: handler = self._registry[op]; return handler(step)"
+      - "REFACTOR: extract StepHandlerRegistry as injectable dependency for testability"
+    status: OPEN
+
+  - id: GAP-67-02
+    title: "WorkflowComposer._execute_with_convergence() wrong StepStateMachine constructor kwargs"
+    severity: P1
+    file: "cortex/orchestrators/workflow/workflow_composer.py"
+    detail: >-
+      Line ~358: StepStateMachine(step=step.parameters, convergence_config=..., neuron=None).
+      Valid constructor signature: StepStateMachine(step_id: str, convergence_config: dict).
+      'step' and 'neuron' are not valid params. This dead code path crashes when
+      convergence_mode=True. Fix: StepStateMachine(step_id=step.step_id, convergence_config=convergence_config).
+    tdd_sequence:
+      - "RED: test_execute_with_convergence_creates_fsm — verify StepStateMachine instantiated with step_id"
+      - "RED: test_execute_with_convergence_calls_convergence_loop — verify ConvergenceLoopExecutor.execute() called"
+      - "GREEN: fix StepStateMachine(step_id=step.step_id, convergence_config=convergence_config)"
+      - "GREEN: wire ConvergenceLoopExecutor.execute(fn=execute_step_fn, check_convergence=fsm.check)"
+      - "REFACTOR: add ConvergenceResult dataclass with {converged, iterations, final_state}"
+    status: OPEN
+
+  - id: GAP-67-03
+    title: "AutonomousWorkflowExecutor uses wrong StepStateMachine usage pattern"
+    severity: P2
+    file: "cortex/orchestrators/workflow/autonomous_workflow_executor.py"
+    detail: >-
+      Secondary bridge class; also uses StepStateMachine with wrong kwargs.
+      Fix in same pass as GAP-67-02 to maintain consistency.
+    tdd_sequence:
+      - "RED: test_autonomous_executor_creates_fsm_per_step — verify correct step_id kwarg"
+      - "GREEN: align constructor call to match StepStateMachine.__init__ signature"
+    status: OPEN
+
+  - id: GAP-67-04
+    title: "Zero YAML templates define convergence_gate blocks"
+    severity: P1
+    file: "cortex-registry/workflows/templates/"
+    detail: >-
+      grep -r convergence_gate cortex-registry/workflows/templates/ → 0 matches.
+      The convergence_mode=True code path in WorkflowComposer._execute_with_convergence()
+      is never exercised in production because no template triggers it.
+      Must add convergence_gate to at least 2 canonical templates to validate the E2E path.
+      Target templates: audit-fix-pipeline.yaml (Stage 7-8 convergence loop) and
+      tdd-feature-implementation.yaml (TDD RED→GREEN→REFACTOR loop).
+    tdd_sequence:
+      - "RED: test_convergence_gate_schema_in_template — verify template has convergence_gate block"
+      - "RED: test_execute_with_convergence_mode_true_reaches_fsm — integration test"
+      - "GREEN: add convergence_gate: {max_iterations: 5, check_operation: 'validate_p0_count'} to audit-fix-pipeline.yaml steps 7-8"
+      - "GREEN: add convergence_gate: {max_iterations: 3, check_operation: 'validate_tests_green'} to tdd-feature-implementation.yaml refactor step"
+      - "REFACTOR: add convergence_gate JSON schema to template validator"
+    status: OPEN
+
+  - id: GAP-67-05
+    title: "ConvergenceLoopExecutor never called from WorkflowEngine or WorkflowComposer"
+    severity: P1
+    file: "cortex/orchestrators/workflow/workflow_composer.py"
+    detail: >-
+      ConvergenceLoopExecutor exists and works correctly but is an orphan —
+      never invoked from any execution path. After GAP-67-02 fix, wire it as
+      the convergence gate in _execute_with_convergence():
+      loop = ConvergenceLoopExecutor(config=step.convergence_gate_config)
+      result = loop.execute(fn=step_executor, check_convergence=fsm.check)
+    tdd_sequence:
+      - "RED: test_convergence_loop_executor_wired_in_composer — verify loop.execute() called when convergence_mode=True"
+      - "GREEN: instantiate ConvergenceLoopExecutor in _execute_with_convergence() and pass fsm.check as check_convergence"
+      - "REFACTOR: ConvergenceLoopExecutor.execute() result maps to WorkflowStepResult"
+    status: OPEN
+
+  - id: GAP-67-06
+    title: "cortex-master.yaml exceeds THIN INDEX CONTRACT (1022 lines > 500 limit)"
+    severity: P0
+    file: "cortex-registry/cortex-master.yaml"
+    detail: >-
+      THIN INDEX CONTRACT (CORE policy): cortex-master.yaml must be ≤ 500 lines (alarm at 400).
+      Current: 1022 lines. Prohibited inline content found: phases list with full detail,
+      gap_catalogue inline in metadata, inline notes exceeding 3 lines.
+      Must extract inline phase detail to dedicated files under
+      cortex-registry/_cortex-master/phases/ and cortex-registry/planning/phases/.
+    tdd_sequence:
+      - "AUDIT: identify all sections > 3 lines that belong in dedicated phase files"
+      - "EXTRACT: move metadata.planned_phases detail to phase file references only"
+      - "EXTRACT: move any inline gap_catalogue or tdd_sequence to phase files"
+      - "VERIFY: wc -l cortex-registry/cortex-master.yaml → must be ≤ 500"
+      - "VALIDATE: python3 -c 'import yaml; yaml.safe_load(open(\"cortex-registry/cortex-master.yaml\"))'"
+    status: OPEN
+
+# ============================================================
+# SUB-PHASES
+# ============================================================
+
+sub_phases:
+
+  - id: "67-A"
+    title: "Pre-Migration Baseline + cortex-master.yaml Remediation (GAP-67-06)"
+    priority: P0
+    estimated_tests: 0  # verification only, no new tests
+    dependencies: []
+    sequence:
+      - "Run baseline: python3 scripts/run_tests.py smoke → record passed count"
+      - "Run: python3 -m pytest tests/orchestrators/workflow/ → must be 177 GREEN"
+      - "Run: python3 -m pytest tests/unit/orchestrators/workflow/ → must be 20 GREEN"
+      - "Run: python3 -m pytest tests/integration/test_e2e_workflow.py → must be 7 GREEN"
+      - "Run: python3 -m pytest tests/golden/workflow/ → must be 30 GREEN"
+      - "Thin cortex-master.yaml: extract metadata.planned_phases detail to file references only"
+      - "Verify: wc -l cortex-registry/cortex-master.yaml ≤ 500"
+      - "Validate YAML: python3 -c 'import yaml; yaml.safe_load(open(...))'"
+      - "Commit: chore(phase-67-A): remediate cortex-master.yaml THIN INDEX CONTRACT + pre-migration baseline"
+    acceptance_criteria:
+      - "cortex-master.yaml ≤ 500 lines"
+      - "All 234 baseline workflow tests GREEN"
+      - "YAML syntax valid"
+    status: PLANNED
+
+  - id: "67-B"
+    title: "Fix WorkflowComposer._execute_with_convergence() kwargs (GAP-67-02, GAP-67-03)"
+    priority: P1
+    estimated_tests: 6
+    dependencies: ["67-A"]
+    sequence:
+      - "Write RED tests: test_execute_with_convergence_creates_fsm (wrong kwargs now → TypeError)"
+      - "Write RED tests: test_autonomous_executor_creates_fsm_per_step"
+      - "Fix workflow_composer.py line ~358: StepStateMachine(step_id=step.step_id, convergence_config=convergence_config)"
+      - "Fix autonomous_workflow_executor.py: align StepStateMachine call signature"
+      - "Run: python3 -m pytest tests/orchestrators/workflow/ → must remain 177 GREEN"
+      - "Confirm new 6 tests GREEN"
+      - "Commit: fix(phase-67-B): correct StepStateMachine constructor kwargs in WorkflowComposer + AutonomousWorkflowExecutor"
+    acceptance_criteria:
+      - "StepStateMachine(step_id=..., convergence_config=...) used correctly in both files"
+      - "6 new tests GREEN"
+      - "Zero regression in existing 234 tests"
+    status: PLANNED
+
+  - id: "67-C"
+    title: "Wire ConvergenceLoopExecutor into WorkflowComposer (GAP-67-05)"
+    priority: P1
+    estimated_tests: 5
+    dependencies: ["67-B"]
+    sequence:
+      - "Write RED test: test_convergence_loop_executor_wired_in_composer"
+      - "Write RED test: test_convergence_result_has_correct_schema"
+      - "Implement: instantiate ConvergenceLoopExecutor in _execute_with_convergence() with fsm.check as check_convergence"
+      - "Map ConvergenceLoopExecutor result to WorkflowStepResult fields"
+      - "Run: python3 -m pytest tests/orchestrators/workflow/ → 177+ GREEN"
+      - "Commit: feat(phase-67-C): wire ConvergenceLoopExecutor as convergence gate in WorkflowComposer"
+    acceptance_criteria:
+      - "ConvergenceLoopExecutor.execute() called when convergence_mode=True"
+      - "5 new tests GREEN"
+      - "Zero regression"
+    status: PLANNED
+
+  - id: "67-D"
+    title: "Add convergence_gate blocks to canonical YAML templates (GAP-67-04)"
+    priority: P1
+    estimated_tests: 6
+    dependencies: ["67-C"]
+    sequence:
+      - "Write RED test: test_convergence_gate_schema_in_audit_fix_template"
+      - "Write RED test: test_convergence_gate_schema_in_tdd_template"
+      - "Add convergence_gate to audit-fix-pipeline.yaml steps (Stage 7-8)"
+      - "Add convergence_gate to tdd-feature-implementation.yaml refactor step"
+      - "Write integration RED test: test_execute_with_convergence_mode_true_reaches_fsm"
+      - "Implement convergence_gate JSON schema validator in template loader"
+      - "Run: python3 -m pytest tests/golden/workflow/ → 30+ GREEN"
+      - "Commit: feat(phase-67-D): add convergence_gate blocks to audit-fix and TDD templates"
+    acceptance_criteria:
+      - "audit-fix-pipeline.yaml and tdd-feature-implementation.yaml both have convergence_gate"
+      - "Template validator rejects templates with malformed convergence_gate"
+      - "6 new tests GREEN"
+      - "Zero regression"
+    status: PLANNED
+
+  - id: "67-E"
+    title: "Implement WorkflowEngine step handler registry (GAP-67-01)"
+    priority: P1
+    estimated_tests: 10
+    dependencies: ["67-D"]
+    sequence:
+      - "Write RED tests: test_execute_step_dispatches_to_handler (noop, validate, execute_orchestrator)"
+      - "Write RED tests: test_execute_step_raises_on_unknown_operation"
+      - "Write RED tests: test_execute_step_returns_step_result_schema"
+      - "Write RED tests: test_register_step_handler_is_callable"
+      - "Implement StepHandlerRegistry: {op_name: callable} dict in WorkflowEngine.__init__()"
+      - "Implement built-in handlers: noop_handler, orchestrator_dispatch_handler, validate_handler"
+      - "Replace _execute_step() stub with registry dispatch: handler = self._registry.get(op); result = handler(step, context)"
+      - "Wire ConvergenceLoopExecutor into execute_workflow() for convergence_gate steps"
+      - "Run: python3 -m pytest tests/orchestrators/workflow/ → 177+ GREEN"
+      - "Run: python3 scripts/run_tests.py smoke → must match baseline"
+      - "Commit: feat(phase-67-E): implement WorkflowEngine step handler registry (replace stub)"
+    acceptance_criteria:
+      - "_execute_step() dispatches to registered handlers by operation name"
+      - "Built-in handlers: noop, orchestrator_dispatch, validate"
+      - "Unknown operation raises StepError (not silent failure)"
+      - "10 new tests GREEN"
+      - "Zero regression in all 234 baseline tests"
+    status: PLANNED
+
+  - id: "67-F"
+    title: "E2E Integration Smoke + Post-Migration Verification"
+    priority: P0
+    estimated_tests: 5
+    dependencies: ["67-E"]
+    sequence:
+      - "Write E2E test: test_workflow_engine_executes_real_template_end_to_end"
+      - "Write E2E test: test_workflow_composer_with_convergence_mode_executes_successfully"
+      - "Write E2E test: test_workflow_composer_standard_mode_executes_successfully"
+      - "Run WorkflowComposer(tpl).execute(convergence_mode=False) with populated registry → verify success=True"
+      - "Run WorkflowComposer(tpl).execute(convergence_mode=True) with convergence_gate template → verify success=True"
+      - "Run: python3 -m pytest tests/orchestrators/workflow/ → ≥ 177 GREEN (no regression)"
+      - "Run: python3 -m pytest tests/golden/workflow/ → ≥ 30 GREEN"
+      - "Run: python3 -m pytest tests/integration/test_e2e_workflow.py → ≥ 7 GREEN"
+      - "Run: python3 scripts/run_tests.py smoke → must match or exceed baseline"
+      - "Verify: wc -l cortex-registry/cortex-master.yaml ≤ 500 (post-migration check)"
+      - "Commit: feat(phase-67-F): E2E integration smoke + post-migration verification COMPLETE"
+    acceptance_criteria:
+      - "WorkflowComposer(tpl).execute(convergence_mode=False) → success=True for at least 1 real template"
+      - "WorkflowComposer(tpl).execute(convergence_mode=True) → success=True for convergence_gate template"
+      - "All 234 baseline tests + 26 new Phase 67 tests GREEN"
+      - "cortex-master.yaml ≤ 500 lines (confirmed post-migration)"
+      - "5 new E2E tests GREEN"
+      - "Smoke gate passes"
+    status: PLANNED
+
+# ============================================================
+# PRE-MIGRATION CHECKLIST (run before any code changes)
+# ============================================================
+
+pre_migration_checks:
+  description: >-
+    Run ALL of these before touching any production code.
+    Record the pass counts as your regression baseline.
+  checks:
+    - id: PRE-01
+      command: "python3 scripts/run_tests.py smoke"
+      expected: "≥ 1388 passed (record exact count)"
+      purpose: "Full smoke gate baseline"
+
+    - id: PRE-02
+      command: "python3 -m pytest tests/orchestrators/workflow/ --tb=no -q"
+      expected: "177 passed"
+      purpose: "Workflow orchestrator suite baseline"
+
+    - id: PRE-03
+      command: "python3 -m pytest tests/unit/orchestrators/workflow/ --tb=no -q"
+      expected: "≥ 20 passed"
+      purpose: "Workflow unit test baseline"
+
+    - id: PRE-04
+      command: "python3 -m pytest tests/integration/test_e2e_workflow.py --tb=no -q"
+      expected: "7 passed"
+      purpose: "E2E workflow integration baseline"
+
+    - id: PRE-05
+      command: "python3 -m pytest tests/golden/workflow/ --tb=no -q"
+      expected: "30 passed"
+      purpose: "Workflow golden test baseline (Phase 64-C)"
+
+    - id: PRE-06
+      command: "wc -l cortex-registry/cortex-master.yaml"
+      expected: "record exact count (currently 1022 — P0 violation)"
+      purpose: "Confirm P0 line count violation before remediation"
+
+    - id: PRE-07
+      command: "python3 -c \"from cortex.orchestrators.workflow.step_state_machine import StepStateMachine; import inspect; print(inspect.signature(StepStateMachine.__init__))\""
+      expected: "prints (self, step_id, convergence_config) — confirm correct constructor signature"
+      purpose: "Lock down StepStateMachine constructor for GAP-67-02 fix"
+
+    - id: PRE-08
+      command: "python3 -c \"from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer; import inspect; src = inspect.getsource(WorkflowComposer._execute_with_convergence); print(src[:400])\""
+      expected: "shows wrong kwargs: step=step.parameters, neuron=None"
+      purpose: "Confirm GAP-67-02 exists before fix"
+
+# ============================================================
+# POST-MIGRATION CHECKLIST (run after each sub-phase commit)
+# ============================================================
+
+post_migration_checks:
+  description: >-
+    Run after EACH sub-phase commit. All must pass before proceeding to next sub-phase.
+  checks:
+    - id: POST-01
+      command: "python3 -m pytest tests/orchestrators/workflow/ --tb=no -q"
+      expected: "≥ 177 passed (no regression)"
+      purpose: "Workflow orchestrator suite — no regression"
+
+    - id: POST-02
+      command: "python3 -m pytest tests/golden/workflow/ --tb=no -q"
+      expected: "≥ 30 passed (no regression)"
+      purpose: "Golden test suite — no regression"
+
+    - id: POST-03
+      command: "python3 -m pytest tests/integration/test_e2e_workflow.py --tb=no -q"
+      expected: "≥ 7 passed (no regression)"
+      purpose: "Integration suite — no regression"
+
+    - id: POST-04
+      command: "python3 scripts/run_tests.py smoke"
+      expected: "≥ baseline smoke count (no regression)"
+      purpose: "Full smoke gate — final gate before commit"
+
+    - id: POST-05
+      command: "wc -l cortex-registry/cortex-master.yaml"
+      expected: "≤ 500 lines (after 67-A)"
+      purpose: "THIN INDEX CONTRACT compliance"
+
+    - id: POST-06
+      command: "python3 -c \"from cortex.core.workflow_engine import WorkflowEngine; e = WorkflowEngine(); print(hasattr(e, '_registry'))\""
+      expected: "True (after 67-E)"
+      purpose: "Confirm StepHandlerRegistry wired into WorkflowEngine"
+
+    - id: POST-07
+      command: >-
+        python3 -c "
+        from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer
+        import pathlib
+        tpl = str(pathlib.Path('cortex-registry/workflows/templates/tdd/tdd-feature-implementation.yaml').resolve())
+        wc = WorkflowComposer(template_path=tpl)
+        result = wc.execute(convergence_mode=False)
+        print('success:', result.get('success', False))
+        "
+      expected: "success: True (after 67-F)"
+      purpose: "End-to-end real template execution passes"
+
+# ============================================================
+# RISK ASSESSMENT
+# ============================================================
+
+risk_assessment:
+  overall: LOW-MEDIUM
+  verdict: "Proceed — fix is additive, not rearchitecture"
+  reasoning: >-
+    convergence_mode=False is the production default in WorkflowComposer —
+    fixing convergence_mode=True path is pure additive (zero risk to existing callers).
+    WorkflowEngine._execute_step() is currently a stub that silently succeeds —
+    replacing with real dispatch is additive (currently no real callers depend on the stub return value).
+    234 workflow tests provide a comprehensive regression safety net.
+    No new orchestrators. No API surface changes. No schema changes to existing YAML templates
+    (adding convergence_gate is additive/optional).
+
+  risks:
+    - risk: "WorkflowEngine._execute_step() replacement may surface previously hidden stub-reliant tests"
+      mitigation: "Run PRE-02 baseline first; any newly-failing test was already broken (just silently)"
+      severity: LOW
+
+    - risk: "Adding convergence_gate to audit-fix-pipeline.yaml may change Stage 7-8 behavior in CI"
+      mitigation: "Add convergence_gate as optional block; keep existing stages unchanged; gate only activates when max_iterations > 0"
+      severity: LOW
+
+    - risk: "cortex-master.yaml thinning may accidentally delete active phase entries"
+      mitigation: "Only extract inline detail to files that already exist; never delete an id: pointer row"
+      severity: MEDIUM — handled by extract-only strategy
+
+  is_it_too_late: >-
+    No. The primitives are fully functional and tested in isolation.
+    The architecture is correct (YAML declarative spec + Python FSM execution).
+    The gap is purely wiring — constructor kwargs and dispatch registry.
+    These are surgical fixes, not a rewrite.
+
+# ============================================================
+# TOTAL TEST COUNT PROJECTION
+# ============================================================
+
+test_projection:
+  baseline_workflow_tests: 234
+  new_tests_phase_67:
+    67-B: 6
+    67-C: 5
+    67-D: 6
+    67-E: 10
+    67-F: 5
+  total_new_tests: 32
+  projected_workflow_tests_post_67: 266
+  projected_smoke_gate_target: "≥ baseline (no regression)"
+
+# ============================================================
+# ACCEPTANCE CRITERIA (PHASE-LEVEL)
+# ============================================================
+
+acceptance_criteria:
+  - id: AC-67-01
+    description: "WorkflowEngine._execute_step() dispatches to registered handler by operation name"
+    gate: "python3 -m pytest tests/unit/orchestrators/workflow/test_workflow_engine_step_dispatch.py"
+    status: OPEN
+
+  - id: AC-67-02
+    description: "WorkflowComposer._execute_with_convergence() uses StepStateMachine(step_id=..., convergence_config=...)"
+    gate: "python3 -m pytest tests/orchestrators/workflow/test_workflow_composer_convergence.py"
+    status: OPEN
+
+  - id: AC-67-03
+    description: "ConvergenceLoopExecutor.execute() called when convergence_mode=True"
+    gate: "python3 -m pytest tests/orchestrators/workflow/test_convergence_loop_wired.py"
+    status: OPEN
+
+  - id: AC-67-04
+    description: "audit-fix-pipeline.yaml and tdd-feature-implementation.yaml have convergence_gate blocks"
+    gate: "grep convergence_gate cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml"
+    status: OPEN
+
+  - id: AC-67-05
+    description: "cortex-master.yaml ≤ 500 lines, YAML valid"
+    gate: "wc -l cortex-registry/cortex-master.yaml && python3 -c 'import yaml; yaml.safe_load(open(\"cortex-registry/cortex-master.yaml\"))'"
+    status: OPEN
+
+  - id: AC-67-06
+    description: "WorkflowComposer(tpl).execute(convergence_mode=False) → success=True for real template"
+    gate: "python3 -m pytest tests/integration/test_e2e_workflow.py -k real_template"
+    status: OPEN
+
+  - id: AC-67-07
+    description: "Zero regression — all 234 baseline workflow tests still GREEN post-phase-67"
+    gate: "python3 -m pytest tests/orchestrators/workflow/ tests/golden/workflow/ tests/integration/test_e2e_workflow.py"
+    status: OPEN
+
+  - id: AC-67-08
+    description: "Smoke gate passes at or above pre-migration baseline"
+    gate: "python3 scripts/run_tests.py smoke"
+    status: OPEN
