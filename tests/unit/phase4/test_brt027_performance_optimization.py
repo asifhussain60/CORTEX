@@ -230,8 +230,15 @@ class ConnectionPoolOptimizer:
             return self._idle_connections
 
 
+# DEPRECATED: Use cortex.toolkit.batch.BatchProcessor instead (CORE-035)
+# This class remains for backwards compatibility with existing tests only.
+# All new code should import from cortex.toolkit.batch
 class BatchProcessor:
-    """Processes operations in batches for efficiency."""
+    """Processes operations in batches for efficiency.
+    
+    DEPRECATED: Import from cortex.toolkit.batch.BatchProcessor instead.
+    This duplicate implementation violates CORE-035.
+    """
     
     def __init__(self, batch_size: int = 100, timeout_ms: int = 5000):
         self.batch_size = batch_size

@@ -102,6 +102,14 @@ from cortex.mcp.tools.list_workflow_templates import cortex_list_workflow_templa
 # Phase 52 — Operational Pattern Journal MCP tool (function-based)
 from cortex.mcp.tools.opj_tool import cortex_query_opj
 
+# Toolkit consolidation tools (Phase 63 — Toolkit integration)
+from cortex.mcp.tools.toolkit_tools import (
+    cortex_scan,
+    cortex_batch_transform,
+    cortex_enrich,
+    cortex_workflow,
+)
+
 
 # All tool classes for registration
 ALL_TOOLS = [
@@ -166,6 +174,8 @@ def register_all_tools(registry: Any) -> int:
         Number of tools registered
     """
     count = 0
+    
+    # Register class-based tools
     for tool_class in ALL_TOOLS:
         try:
             tool = tool_class()
@@ -174,6 +184,42 @@ def register_all_tools(registry: Any) -> int:
         except Exception as e:
             import logging
             logging.getLogger(__name__).warning(f"Failed to register {tool_class.__name__}: {e}")
+    
+    # Register function-based toolkit tools (Phase 63)
+    from cortex.mcp.mcp_tool_base import Tool, ToolDefinition, ToolCategory, ToolParameter
+    
+    function_tools = [
+        ("cortex_scan", cortex_scan),
+        ("cortex_batch_transform", cortex_batch_transform),
+        ("cortex_enrich", cortex_enrich),
+        ("cortex_workflow", cortex_workflow),
+    ]
+    
+    for tool_name, tool_func in function_tools:
+        try:
+            # Create a Tool wrapper for function-based tools
+            class FunctionTool(Tool):
+                def __init__(self, name: str, func: Any):
+                    self.func = func
+                    super().__init__(
+                        ToolDefinition(
+                            name=name,
+                            description=func.__doc__ or f"Toolkit tool: {name}",
+                            category=ToolCategory.OPERATIONS,
+                            parameters=[],
+                        )
+                    )
+                
+                def execute(self, **kwargs: Any) -> Any:
+                    return self.func(**kwargs)
+            
+            tool = FunctionTool(tool_name, tool_func)
+            registry.register(tool)
+            count += 1
+        except Exception as e:
+            import logging
+            logging.getLogger(__name__).warning(f"Failed to register function tool {tool_name}: {e}")
+    
     return count
 
 

@@ -201,6 +201,52 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
     },
     
     # =========================================================================
+    # TIER 5: TOOLKIT OPERATIONS (4 tools) — NEW
+    # =========================================================================
+    "cortex_scan": {
+        "description": "Hierarchical file scanning with organization detection. Supports custom extensions and pluggable adapters.",
+        "category": ToolCategory.OPERATIONS,
+        "parameters": [
+            {"name": "root_path", "type": "string", "required": True, "description": "Root directory to scan"},
+            {"name": "extensions", "type": "array", "required": False, "description": "File extensions to scan (e.g., ['.py', '.yaml'])"},
+            {"name": "organization_adapter", "type": "string", "required": False, "enum": ["media", "code", "docs"], "description": "Organization detection adapter"},
+        ],
+        "operations": [],
+    },
+    "cortex_batch_transform": {
+        "description": "Batch processing with configurable triggers (size/timeout). Applies transformation operations to items.",
+        "category": ToolCategory.OPERATIONS,
+        "parameters": [
+            {"name": "items", "type": "array", "required": True, "description": "Items to batch process"},
+            {"name": "batch_size", "type": "number", "required": False, "description": "Trigger flush after N items (default: 100)"},
+            {"name": "timeout_ms", "type": "number", "required": False, "description": "Trigger flush after N ms (default: 5000)"},
+            {"name": "operation", "type": "string", "required": False, "enum": ["identity", "uppercase", "sanitize"], "description": "Transformation operation"},
+        ],
+        "operations": ["identity", "uppercase", "sanitize"],
+    },
+    "cortex_enrich": {
+        "description": "Content enrichment via domain adapters. Applies morph rules, organization detection, and external source integration.",
+        "category": ToolCategory.OPERATIONS,
+        "parameters": [
+            {"name": "content", "type": "string", "required": True, "description": "Content to enrich (filename, text, etc.)"},
+            {"name": "domain", "type": "string", "required": False, "enum": ["media", "code", "docs"], "description": "Domain adapter type (default: 'media')"},
+            {"name": "enrichment_sources", "type": "array", "required": False, "description": "External sources to query (e.g., ['iafd', 'tmdb'])"},
+        ],
+        "operations": [],
+    },
+    "cortex_workflow": {
+        "description": "Generic workflow orchestration. Chains toolkit operations (scan → batch → enrich) into reusable pipelines.",
+        "category": ToolCategory.OPERATIONS,
+        "parameters": [
+            {"name": "workflow_type", "type": "string", "required": False, "enum": ["scan_batch_enrich", "batch_transform"], "description": "Workflow template (default: 'scan_batch_enrich')"},
+            {"name": "root_path", "type": "string", "required": False, "description": "Root path for scan operation"},
+            {"name": "batch_size", "type": "number", "required": False, "description": "Batch size (default: 100)"},
+            {"name": "domain", "type": "string", "required": False, "enum": ["media", "code", "docs"], "description": "Domain adapter (default: 'media')"},
+        ],
+        "operations": ["scan_batch_enrich", "batch_transform"],
+    },
+    
+    # =========================================================================
     # TIER 5: UTILITIES (9 tools - kept separate for clarity)
     # =========================================================================
     "cortex_verify": {

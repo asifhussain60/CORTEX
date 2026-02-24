@@ -16,6 +16,7 @@ from typing import Any, Dict, Optional
 from cortex.intelligence.learning.opj_mixin import OPJMixin
 from cortex.core.result import Ok, Result
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
+from cortex.toolkit.batch import BatchProcessor, BatchTrigger  # Toolkit consolidation
 
 
 @dataclass
