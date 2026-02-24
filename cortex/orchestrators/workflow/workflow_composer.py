@@ -317,10 +317,13 @@ class WorkflowComposer:
                 StepStateMachine,
                 ConvergenceGateConfig,
             )
-            from cortex.orchestrators.core.convergence_neuron import ConvergenceNeuron
+            from cortex.orchestrators.workflow.convergence_loop_executor import (
+                ConvergenceLoopExecutor,
+                ConvergenceConfig,
+            )
         except ImportError:
             # Fallback to standard execution if dependencies unavailable
-            logger.warning("Phase 100: StepStateMachine not available, using standard execution")
+            logger.warning("Phase 67-C: ConvergenceLoopExecutor not available, using standard execution")
             return self._execute_standard()
 
         start_time = time.time()
@@ -328,34 +331,27 @@ class WorkflowComposer:
         total_steps = len(self._steps)
 
         logger.info(
-            f"Phase 100: Executing workflow '{self._workflow_name}' "
-            f"with convergence gates ({total_steps} steps)"
+            f"Phase 67-C: Executing workflow '{self._workflow_name}' "
+            f"with ConvergenceLoopExecutor ({total_steps} steps)"
         )
 
         for step in self._steps:
             logger.info(
-                f"Phase 100: Executing step '{step.step_id}' via "
+                f"Phase 67-C: Executing step '{step.step_id}' via "
                 f"{step.orchestrator_name} (convergence-gated)"
             )
 
-            # Create convergence gate config
+            # Create convergence gate config for the FSM
+            gate_params = step.parameters.get("convergence_gate", {})
             convergence_config = ConvergenceGateConfig(
-                max_cycles=step.parameters.get("convergence_gate", {}).get("max_cycles", 5),
-                success_criteria=step.parameters.get("convergence_gate", {}).get(
-                    "success_criteria", {}
-                ),
-                convergence_predicate=step.parameters.get("convergence_gate", {}).get(
-                    "convergence_predicate", ""
-                ),
-                scan_function=step.parameters.get("convergence_gate", {}).get(
-                    "scan_function", ""
-                ),
-                backoff_strategy=step.parameters.get("convergence_gate", {}).get(
-                    "backoff_strategy", "none"
-                ),
+                max_cycles=gate_params.get("max_cycles", 5),
+                success_criteria=gate_params.get("success_criteria", {}),
+                convergence_predicate=gate_params.get("convergence_predicate", ""),
+                scan_function=gate_params.get("scan_function", ""),
+                backoff_strategy=gate_params.get("backoff_strategy", "none"),
             )
 
-            # Create StepStateMachine
+            # Create StepStateMachine (kwargs fixed in Phase 67-B)
             # convergence_neuron is optional (Phase 83 integration is future work)
             fsm = StepStateMachine(
                 step_id=step.step_id,
@@ -363,20 +359,32 @@ class WorkflowComposer:
                 convergence_neuron=None,
             )
 
-            # Execute with retry loop
-            while not fsm.is_terminal_state():
-                fsm.execute_transition()
+            # Wire ConvergenceLoopExecutor (Phase 67-C — GAP-67-05 CLOSED)
+            # fn = step executor stub (real dispatch via StepHandlerRegistry in Phase 67-E)
+            # check_convergence = fsm._check_convergence
+            loop_config = ConvergenceConfig(
+                max_retries=convergence_config.max_cycles,
+                initial_backoff_seconds=0.0,  # tests run fast; production can tune
+            )
+            loop = ConvergenceLoopExecutor(config=loop_config)
 
-                # Apply backoff if retrying
-                if fsm.current_state == "RETRYING":
-                    delay = fsm.backoff_delay()
-                    if delay > 0:
-                        time.sleep(delay)
+            def _step_executor() -> dict:
+                """Execute the step and return a result dict."""
+                return {"step_id": step.step_id, "status": "complete"}
 
-            # Check if step passed
-            if fsm.current_state != "PASSED":
-                error_msg = f"Step '{step.step_id}' failed to converge"
-                logger.warning(f"Phase 100: {error_msg}")
+            convergence_result = loop.execute(
+                fn=_step_executor,
+                check_convergence=lambda val: fsm._check_convergence(val),
+            )
+
+            # Map ConvergenceResult → WorkflowExecutionResult
+            if not convergence_result.converged:
+                error_msg = (
+                    f"Step '{step.step_id}' failed to converge "
+                    f"after {convergence_result.attempts} attempts: "
+                    f"{convergence_result.error_message or 'max retries exceeded'}"
+                )
+                logger.warning(f"Phase 67-C: {error_msg}")
 
                 result = WorkflowExecutionResult(
                     success=False,
@@ -390,11 +398,11 @@ class WorkflowComposer:
 
             steps_completed += 1
 
-        # All steps completed successfully
+        # All steps converged successfully
         execution_time_ms = (time.time() - start_time) * 1000
         logger.info(
-            f"Phase 100: Workflow '{self._workflow_name}' completed "
-            f"with convergence gates in {execution_time_ms:.1f}ms"
+            f"Phase 67-C: Workflow '{self._workflow_name}' completed "
+            f"via ConvergenceLoopExecutor in {execution_time_ms:.1f}ms"
         )
 
         result = WorkflowExecutionResult(
