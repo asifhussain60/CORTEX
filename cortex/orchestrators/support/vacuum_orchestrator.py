@@ -19,6 +19,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.result import Ok, Result
 from cortex.orchestrators.health.vacuum_orchestrator import (
     VacuumOrchestrator as _HealthVacuumOrchestrator,
@@ -73,9 +74,12 @@ class VacuumOrchestrator(_HealthVacuumOrchestrator):
     def initialize(self) -> Any:
         """Initialise the orchestrator (setup already done in ``__init__``).
 
+        Activates cross-cutting hooks (CORE-058 Phase 58 contract).
+
         Returns:
             A :class:`~cortex.core.result.Result` success value.
         """
+        self._activate_cross_cutting_hooks(operation="initialize")
         return Ok("VacuumOrchestrator initialized")
 
     def health_check(self) -> Dict[str, Any]:

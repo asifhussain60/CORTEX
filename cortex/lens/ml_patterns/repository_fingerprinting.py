@@ -1,4 +1,3 @@
-# AC_START: AC-PHASE59-S3-002
 # Repository Fingerprinting for Fast Architecture Comparison
 # Purpose: Create lightweight fingerprints for efficient repository clustering
 
@@ -14,7 +13,6 @@ Key Features:
 - Batch fingerprint generation
 - Fast similarity comparison
 """
-
 import hashlib
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
@@ -22,7 +20,6 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 
 from cortex.lens.ml_patterns.similarity_clustering import SimilarityAnalyzer
-
 
 @dataclass
 class FingerprintComponent:
@@ -35,7 +32,6 @@ class FingerprintComponent:
         size: Component size in lines of code
         modularity: Modularity score [0-1]
     """
-
     name: str
     complexity: float
     size: float
@@ -47,7 +43,6 @@ class FingerprintComponent:
             [self.complexity, self.size / 10000, self.modularity],
             dtype=np.float32,
         )
-
 
 @dataclass
 class RepositoryFingerprint:
@@ -61,7 +56,6 @@ class RepositoryFingerprint:
         total_modularity: Overall modularity score [0-1]
         timestamp: When fingerprint was generated
     """
-
     repository_id: str
     components: List[FingerprintComponent]
     total_complexity: float
@@ -115,7 +109,6 @@ class RepositoryFingerprint:
             "timestamp": self.timestamp,
         }
 
-
 class RepositoryFingerprinter:
     """
     Generates and manages repository fingerprints.
@@ -126,7 +119,6 @@ class RepositoryFingerprinter:
     - Batch processing
     - Consistent hashing
     """
-
     def __init__(self) -> None:
         """Initialize repository fingerprinter."""
         self.analyzer = SimilarityAnalyzer()
@@ -305,6 +297,5 @@ class RepositoryFingerprinter:
         similarities.sort(key=lambda x: x[1], reverse=True)
 
         return similarities
-
 
 # AC_COMPLETE: AC-PHASE59-S3-002 ✅ Repository Fingerprinting Implementation

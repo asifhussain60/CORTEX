@@ -1,12 +1,8 @@
 """
 Registry for managing refactoring tool adapters.
 
-AC_START: AC-PHASE24.1.1-006
-Description: Adapter registry for tool discovery and routing
-Authority: Phase 24 - External Refactoring Tools Integration
 Compliance: CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (single canonical)
 """
-
 from __future__ import annotations
 
 import logging
@@ -17,7 +13,6 @@ from cortex.orchestrators.domain.refactoring.adapters.adapter_base import Refact
 from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringLanguage
 
 logger = logging.getLogger(__name__)
-
 
 class RefactoringToolRegistry:
     """Registry for managing and discovering refactoring tool adapters.
@@ -38,7 +33,6 @@ class RefactoringToolRegistry:
         >>> adapter = registry.get_adapter(RefactoringLanguage.PYTHON).unwrap()
         >>> operations = adapter.get_supported_operations()
     """
-
     def __init__(self) -> None:
         """Initialize empty registry."""
         self._adapters: Dict[RefactoringLanguage, RefactoringToolAdapter] = {}
@@ -152,6 +146,5 @@ class RefactoringToolRegistry:
         operations = adapter.get_supported_operations()
 
         return Ok(operations)
-
 
 # AC_COMPLETE: AC-PHASE24.1.1-006 ✅

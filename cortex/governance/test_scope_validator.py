@@ -1,7 +1,6 @@
 """
 Test Scope Validator - Ensures tests align with feature status.
 
-AC_START: AC-DIGEST-CHAT01-002
 Purpose: Prevent test-feature misalignment
 Learning: chat01 showed dashboard tests ran for deferred documentation site
 Solution: Auto-detect misalignment during /audit and pre-commit
@@ -17,13 +16,11 @@ Integration:
 - Pre-commit hook: Check changed files
 - Phase completion gate: Verify alignment
 """
-
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
 from typing import List, Optional
 import yaml
-
 
 class FeatureStatus(Enum):
     """Feature/phase status."""
@@ -34,14 +31,12 @@ class FeatureStatus(Enum):
     COMPLETED = "completed"
     PLANNED = "planned"
 
-
 class TestStatus(Enum):
     """Test execution status."""
     RUNNING = "running"
     SKIPPED = "skipped"
     DEFERRED = "deferred"
     MIXED = "mixed"
-
 
 @dataclass
 class TestScopeMismatch:
@@ -53,7 +48,6 @@ class TestScopeMismatch:
     severity: str  # HIGH, MEDIUM, LOW
     recommendation: str
 
-
 @dataclass
 class ValidationResult:
     """Result of test scope validation."""
@@ -62,7 +56,6 @@ class ValidationResult:
     severity: Optional[str] = None
     recommendation: Optional[str] = None
     summary: Optional[str] = None
-
 
 class TestScopeValidator:
     """
@@ -390,7 +383,6 @@ class TestScopeValidator:
                 return yaml.safe_load(f)
         except Exception:
             return None
-
 
 # AC_COMPLETE: AC-DIGEST-CHAT01-002 ✅
 # Implementation covers:

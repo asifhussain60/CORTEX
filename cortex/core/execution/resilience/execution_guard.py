@@ -1,7 +1,6 @@
 """
 Silent Execution Guard - Checkpoint-based resilience.
 
-AC_START: AC-DIGEST-CHAT01-003
 Purpose: Add resilience to silent autonomous execution
 Learning: chat01 template corruption broke multiple stages, needed manual intervention
 Solution: Checkpoint → Execute → Verify → Rollback on failure
@@ -34,7 +33,6 @@ Example:
     else:
         print(f"Operation failed, rolled back: {result.error}")
 """
-
 import ast
 import shutil
 import tempfile
@@ -43,16 +41,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, List, Optional
 
-
 class CheckpointFailedError(Exception):
     """Raised when checkpoint creation fails."""
     pass
 
-
 class RollbackError(Exception):
     """Raised when rollback fails."""
     pass
-
 
 @dataclass
 class ExecutionResult:
@@ -64,7 +59,6 @@ class ExecutionResult:
     rolled_back: bool = False
     error: Optional[str] = None
     error_type: Optional[str] = None
-
 
 class SilentExecutionGuard:
     """
@@ -262,7 +256,6 @@ class SilentExecutionGuard:
             return False
         
         return False
-
 
 # AC_COMPLETE: AC-DIGEST-CHAT01-003 ✅
 # Implementation covers:

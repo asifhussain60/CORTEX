@@ -1,12 +1,10 @@
 """
 Plan viewer data generation and HTML support.
 
-AC_START: AC-PLAN-SYSTEM-S4-002
 Purpose: Glassmorphism plan-viewer.html SPA data layer (Stage 4)
 Authority: phase-45-enhanced-planning-system.yaml § Stage 4
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
-
 import json
 import logging
 from datetime import datetime
@@ -18,7 +16,6 @@ from pydantic import BaseModel, Field
 # ============================================================================
 # DATA MODELS FOR FRONTEND
 # ============================================================================
-
 
 class PlanJsonSchema(BaseModel):
     """JSON schema for frontend consumption of plan data.
@@ -34,7 +31,6 @@ class PlanJsonSchema(BaseModel):
         created: ISO 8601 creation timestamp
         completed: ISO 8601 completion timestamp (if applicable)
     """
-
     plan_id: str = Field(..., description="Unique plan identifier")
     title: str = Field(..., description="Plan title")
     status: str = Field(..., description="Plan status")
@@ -42,7 +38,6 @@ class PlanJsonSchema(BaseModel):
     roi_score: float = Field(..., ge=0.0, le=1.0, description="ROI score")
     created: str = Field(..., description="Creation timestamp (ISO 8601)")
     completed: Optional[str] = Field(None, description="Completion timestamp (ISO 8601)")
-
 
 class MetricsCardData(BaseModel):
     """Metrics card data for dashboard visualization.
@@ -55,12 +50,10 @@ class MetricsCardData(BaseModel):
         completed_plans: Number of completed plans
         average_roi: Average ROI across all plans
     """
-
     total_plans: int = Field(..., description="Total plans")
     active_plans: int = Field(..., description="Active plans")
     completed_plans: int = Field(..., description="Completed plans")
     average_roi: float = Field(..., ge=0.0, le=1.0, description="Average ROI")
-
 
 class PlanViewerSchema(BaseModel):
     """Top-level schema for plan viewer data file.
@@ -72,16 +65,13 @@ class PlanViewerSchema(BaseModel):
         metrics: Metrics card data
         generated_at: Timestamp when data was generated
     """
-
     plans: List[PlanJsonSchema] = Field(..., description="Plan list")
     metrics: MetricsCardData = Field(..., description="Metrics cards")
     generated_at: str = Field(..., description="Generation timestamp (ISO 8601)")
 
-
 # ============================================================================
 # VIEWER DATA GENERATOR
 # ============================================================================
-
 
 class PlanViewerDataGenerator:
     """Generates JSON data for plan viewer frontend.
@@ -90,7 +80,6 @@ class PlanViewerDataGenerator:
     for display in the plan-viewer.html SPA. Includes metrics calculation
     and file writing.
     """
-
     def __init__(self) -> None:
         """Initialize plan viewer data generator."""
         self.logger = logging.getLogger(__name__)
@@ -171,11 +160,9 @@ class PlanViewerDataGenerator:
 
         self.logger.info(f"Wrote plan viewer JSON to {output_path}")
 
-
 # ============================================================================
 # HTML GENERATOR
 # ============================================================================
-
 
 class PlanViewerHtmlGenerator:
     """Generates plan-viewer.html SPA page.
@@ -183,7 +170,6 @@ class PlanViewerHtmlGenerator:
     Creates a glassmorphism-styled HTML page that loads plans.json
     and displays plans with metrics, search, and filtering.
     """
-
     def __init__(self) -> None:
         """Initialize HTML generator."""
         self.logger = logging.getLogger(__name__)
@@ -662,6 +648,5 @@ class PlanViewerHtmlGenerator:
             f.write(html_content)
 
         self.logger.info(f"Wrote plan viewer HTML to {output_path}")
-
 
 # AC_COMPLETE: AC-PLAN-SYSTEM-S4-002 ✅ Stage 4 viewer generator implemented

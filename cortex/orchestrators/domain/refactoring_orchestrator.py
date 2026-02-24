@@ -1,9 +1,6 @@
 """
 RefactoringOrchestrator - Unified API for all refactoring tool adapters.
 
-AC_START: AC-REFACTOR-20260223T000000Z
-Description: Orchestrator for coordinating all refactoring tool adapters
-Authority: Phase 24.6 - Orchestration + MCP Exposure (legacy: AC-PHASE24.6-002)
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-027 (audit)
 
 Coordinates:
@@ -18,7 +15,6 @@ Integrates:
     - TypeScript/JavaScript - 5 operations
     Total: 24 operations across 3 languages
 """
-
 from __future__ import annotations
 
 import hashlib
@@ -66,11 +62,9 @@ except Exception:
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class _AuditEntry:
     """Audit trail entry with hash chain for RefactoringOrchestrator."""
-
     operation: str
     msg: str
     previous_hash: str = ""
@@ -81,7 +75,6 @@ class _AuditEntry:
             self.current_hash = hashlib.sha256(
                 f"{self.operation}:{self.msg}:{self.previous_hash}".encode()
             ).hexdigest()[:16]
-
 
 class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, IOrchestrator):
     """Orchestrator for coordinating all refactoring tool adapters.
@@ -117,7 +110,6 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, 
         ... )
         >>> result = orchestrator.execute_refactoring(request)
     """
-
     def __init__(self) -> None:
         """Initialize RefactoringOrchestrator with all available adapters."""
         self.registry = RefactoringToolRegistry()
@@ -1256,6 +1248,5 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, 
             "adapters_registered": self.registry.get_adapter_count(),
             "total_operations": self.get_total_operations_count(),
         }
-
 
 # AC_COMPLETE: AC-REFACTOR-20260223T000000Z ✅ RefactoringOrchestrator implementation complete

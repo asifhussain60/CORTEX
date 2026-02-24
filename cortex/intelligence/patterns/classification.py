@@ -1,14 +1,9 @@
-# AC_START: AC-PHASE57-S3-002
-# Description: Architecture Classification Engine
-# Authority: CORE-008 TDD, CORE-011 type hints, CORE-012 docstrings
-# Stage: S3 - GREEN phase implementation
 
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
 from cortex.intelligence.patterns.pattern_base import PatternMatch
-
 
 class ArchitectureType(Enum):
     """Architecture pattern types."""
@@ -20,7 +15,6 @@ class ArchitectureType(Enum):
     EVENT_DRIVEN = "EventDriven"
     CQRS = "CQRS"
     UNKNOWN = "Unknown"
-
 
 @dataclass
 class ArchitectureClassification:
@@ -35,7 +29,6 @@ class ArchitectureClassification:
         if not 0.0 <= self.confidence <= 1.0:
             raise ValueError(f"Confidence must be 0.0-1.0, got {self.confidence}")
 
-
 class ArchitectureClassifier:
     """
     Classify architecture types based on detected patterns.
@@ -48,7 +41,6 @@ class ArchitectureClassifier:
     - Event-Driven
     - CQRS (Command Query Responsibility Segregation)
     """
-
     def __init__(self) -> None:
         """Initialize ArchitectureClassifier with pattern signatures."""
         self.mvc_signatures = ["Model", "View", "Controller"]

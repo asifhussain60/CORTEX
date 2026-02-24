@@ -1,8 +1,6 @@
 """
 Policy Engine for Compliance and Governance
 
-AC_START: AC-PHASE60.0-S2-001
-Authority: phase-60-enterprise-pattern-registry.yaml Stage 2
 Purpose: Implement policy evaluation and compliance checking
          - Policy definition and registration
          - Rule-based policy evaluation
@@ -11,7 +9,6 @@ Purpose: Implement policy evaluation and compliance checking
 
 Tests Target: 12 tests (policy loading, rule evaluation, compliance checking)
 """
-
 import json
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
@@ -32,14 +29,12 @@ class PolicyLevel(Enum):
     WARNING = "warning"    # Should comply
     ADVISORY = "advisory"  # Consider complying
 
-
 class ComplianceStatus(Enum):
     """Compliance status for evaluated items."""
     COMPLIANT = "compliant"
     NON_COMPLIANT = "non_compliant"
     WARNING = "warning"
     UNKNOWN = "unknown"
-
 
 class RuleOperator(Enum):
     """Operators for rule conditions."""
@@ -52,7 +47,6 @@ class RuleOperator(Enum):
     IN = "in"
     NOT_IN = "not_in"
     REGEX = "regex"
-
 
 # ============================================================================
 # Data Classes
@@ -109,7 +103,6 @@ class PolicyRule:
         except Exception as e:
             return False, f"Error evaluating rule {self.id}: {str(e)}"
 
-
 @dataclass
 class PolicyMetadata:
     """Metadata for a compliance policy."""
@@ -147,7 +140,6 @@ class PolicyMetadata:
                 rule_dict['operator'] = rule_dict['operator'].value
         return data
 
-
 @dataclass
 class ComplianceViolation:
     """A compliance violation found during evaluation."""
@@ -157,7 +149,6 @@ class ComplianceViolation:
     severity: str
     data: Dict[str, Any]
     timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
-
 
 @dataclass
 class ComplianceReport:
@@ -182,14 +173,12 @@ class ComplianceReport:
             'score': self.score
         }
 
-
 # ============================================================================
 # Policy Engine
 # ============================================================================
 
 class PolicyEngine:
     """Engine for evaluating policies and compliance."""
-
     def __init__(self) -> None:
         """Initialize policy engine."""
         self.policies: Dict[str, PolicyMetadata] = {}
@@ -345,7 +334,6 @@ class PolicyEngine:
         if policy_id:
             return [r for r in self._evaluation_history if r.policy_id == policy_id]
         return self._evaluation_history
-
 
 # AC_COMPLETE: AC-PHASE60.0-S2-001 ✅
 # ✅ PolicyEngine with rule evaluation

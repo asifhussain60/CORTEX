@@ -1,7 +1,6 @@
 """
 Contract Validator for Orchestrator Wiring.
 
-AC_START: AC-MEGA-B-S2-005
 4-layer validation: signature, return type, audit logging, cross-layer consistency.
 Blocks contract violations with SQLite audit trail.
 """
@@ -14,20 +13,16 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-
 class ValidationLevel(Enum):
     """Validation severity levels."""
-
     INFO = "info"
     WARNING = "warning"
     ERROR = "error"
     CRITICAL = "critical"
 
-
 @dataclass
 class ContractViolation:
     """Contract violation details."""
-
     orchestrator: str
     method: str
     level: ValidationLevel
@@ -36,15 +31,12 @@ class ContractViolation:
     actual: Any
     timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
 
-
 @dataclass
 class ValidationResult:
     """Validation result with violations."""
-
     is_valid: bool
     violations: List[ContractViolation] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class ContractValidator:
     """
@@ -56,7 +48,6 @@ class ContractValidator:
     - Layer 3: Audit logging validation
     - Layer 4: Cross-layer consistency validation
     """
-
     def __init__(self, audit_db: Optional[Path] = None) -> None:
         """
         Initialize ContractValidator.

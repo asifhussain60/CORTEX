@@ -1,4 +1,3 @@
-# AC_START: AC-ROUTER-MCPEXEC-20260223T000000Z
 # AC_ENHANCED: AC-ROUTER-METADATA-20260223T000000Z (Metadata-driven tool discovery)
 """
 MCP Tool Executor for Agent Collaboration Workflows
@@ -11,7 +10,6 @@ Authority: Phase 81 S3 Part 3 - MCP Tool Integration
          + Phase 81 S3 Part 4 - Metadata-Driven Discovery
 Version: 2.0 (with metadata integration)
 """
-
 from typing import Optional, Dict, List, Any, TYPE_CHECKING
 from dataclasses import dataclass
 import logging
@@ -22,7 +20,6 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class MCPExecutionRequest:
     """Request for MCP tool execution."""
@@ -31,7 +28,6 @@ class MCPExecutionRequest:
     tool_parameters: Dict[str, Any]
     request_id: str
     timeout_seconds: int = 30
-
 
 @dataclass
 class MCPExecutionResult:
@@ -48,7 +44,6 @@ class MCPExecutionResult:
         """Set timestamp if not provided."""
         if not self.execution_timestamp:
             self.execution_timestamp = datetime.now().isoformat()
-
 
 class MCPToolExecutor:
     """
@@ -276,6 +271,5 @@ class MCPToolExecutor:
         )
         self._execution_history.append(result)
         return result
-
 
 # AC_COMPLETE: AC-ROUTER-MCPEXEC-20260223T000000Z ✅ MCP Tool Executor Module

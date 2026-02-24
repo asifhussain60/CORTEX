@@ -6,9 +6,9 @@ metadata:
   last_updated: '2026-02-24T00:00:00Z'
   total_phases: 65
   active: 0
-  completed: 63
+  completed: 65
   playbooks: 1
-  planned: 8
+  planned: 6
   governance_rules_total: 37
   planned_phases:
     - id: phase-67
@@ -19,24 +19,24 @@ metadata:
     - id: phase-65
       title: "Enterprise Hardening — MCP Auth + 151 ImportError Sweep"
       priority: P0
-      status: PLANNED
+      status: COMPLETE
       sweep_id: SWEEP-65-ENTERPRISE-HARDENING
       gaps: 5
       sub_phases: 3
-      file: "cortex-registry/_cortex-master/phases/planned/phase-65-enterprise-hardening.yaml"
-      note: "Implements RED scaffolds from Phase 64: MCP server tenant auth wiring, safe_import() for 151 silent ImportError, 24 orchestrators without mixin, 4 undocumented tiers in wiring.yaml. Target: 8.5/10."
+      file: "cortex-registry/_cortex-master/phases/completed/phase-65-enterprise-hardening.yaml"
+      note: "REVIEW-GAP-01/02/03/04 CLOSED. REVIEW-GAP-05 carry-forward to Phase 67-A. 42+9 golden tests GREEN."
     - id: phase-64
       title: "Unified Brain Golden Coverage — 10-Gap E2E Trace Test Renaissance"
       priority: P0
-      status: PLANNED
+      status: COMPLETE
       sweep_id: SWEEP-64-UNIFIED-BRAIN-GOLDEN
       gaps: 12
       sub_phases: 7
       governance_rules_added: [CORE-065, CORE-066]
       workflow_templates_added: ["holistic-file-review-gate", "copilot-chat-response-template"]
       sessions: 8
-      file: "cortex-registry/_cortex-master/phases/planned/phase-64-unified-brain-golden-coverage.yaml"
-      note: "10 golden gaps + 2 review gaps. 7 sub-phases across 8 sessions. CORE-065 (holistic file review gate, P0) + CORE-066 (response template binding, P1) added. Zero new orchestrators."
+      file: "cortex-registry/_cortex-master/phases/completed/phase-64-unified-brain-golden-coverage.yaml"
+      note: "All 7 sub-phases COMPLETE. 73 new golden tests GREEN. 2 RED scaffolds for Phase 65. AC-64-COMPLETE ✅"
     - id: phase-63
       title: "Golden Test Renaissance — Trace-Verified E2E + Scorer + Simplification"
       priority: P0
@@ -110,24 +110,19 @@ phase_detail_files:
   - id: phase-65
     title: "Enterprise Hardening — MCP Auth + 151 ImportError Sweep"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-65-ENTERPRISE-HARDENING
     gaps: 5
     sub_phases: 3
-    file: "cortex-registry/_cortex-master/phases/planned/phase-65-enterprise-hardening.yaml"
-    note: >-
-      Implements RED scaffolds committed in Phase 64-F.
-      MCP server tenant auth (wire tenant_context_middleware into server.py),
-      151 silent ImportError → safe_import() + DependencyWarning sweep,
-      24 orchestrators without OrchestratorProtocolMixin rollout,
-      4 undocumented tiers registered in wiring.yaml.
-      Phase 65 prerequisites: Phase 64 COMPLETE, all RED scaffolds passing RED.
+    file: "cortex-registry/_cortex-master/phases/completed/phase-65-enterprise-hardening.yaml"
+    note: "REVIEW-GAP-01/02/03/04 CLOSED (pre-wired). REVIEW-GAP-05 carry-forward Phase 67-A. All golden tests GREEN."
 
   # ── PHASE 64 ─────────────────────────────────────────────────────────────
   - id: phase-64
     title: "Unified Brain Golden Coverage — 10-Gap E2E Trace Test Renaissance"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
+    completed: "2026-02-24"
     sweep_id: SWEEP-64-UNIFIED-BRAIN-GOLDEN
     gaps: 12
     sub_phases: 7
@@ -136,13 +131,12 @@ phase_detail_files:
     workflow_templates_added:
       - "cortex-registry/workflows/templates/governance/holistic-file-review-gate.yaml"
       - "cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml"
-    file: "cortex-registry/_cortex-master/phases/planned/phase-64-unified-brain-golden-coverage.yaml"
+    file: "cortex-registry/_cortex-master/phases/completed/phase-64-unified-brain-golden-coverage.yaml"
     note: >-
-      8-session autonomous execution plan. CORE-065: Holistic File Review Contract
-      (BEFORE/AFTER file inventory gate, prevents partial sweeps at file-scope level).
-      CORE-066: Response Template Binding (canonical VSCode Copilot Chat format for all
-      14 modes + 26 MCP tools). 10 golden gaps + 2 review-gaps as RED scaffolds for Phase 65.
-      Start: "implement Phase 64 sub-phase 64-G" | Resume: "resume sweep SWEEP-64"
+      All 7 sub-phases COMPLETE (64-A/B/C/D/E/F/G). 73 new golden tests GREEN, 2 xfail RED scaffolds
+      for Phase 65. CORE-065 (holistic file review gate) + CORE-066 (response template binding).
+      Phase 65 RED scaffolds committed: mixin rollout + ImportError sweep. AC-64-COMPLETE ✅
+    lifecycle_template: "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
 
   # ── PHASE 63 ─────────────────────────────────────────────────────────────
   - id: phase-63

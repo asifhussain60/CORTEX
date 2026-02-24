@@ -1,14 +1,8 @@
 """
 Naming utility functions for tool and orchestrator generation.
 
-AC_START: AC-AUDIT-2026-02-12-002
-Fix: CORE-035 violation - Extract duplicate naming utilities
-Resolution: Centralize _to_class_name and _to_module_name functions
-Used by: tool_generator.py, orchestrator_scaffolder.py
 """
-
 import re
-
 
 def to_class_name(name: str) -> str:
     """
@@ -30,7 +24,6 @@ def to_class_name(name: str) -> str:
     """
     parts = re.split(r'[-_\s]+', name)
     return ''.join(part.capitalize() for part in parts)
-
 
 def to_module_name(name: str) -> str:
     """
@@ -55,7 +48,6 @@ def to_module_name(name: str) -> str:
     # Convert to lowercase and replace separators
     name = re.sub(r'[-\s]+', '_', name.lower())
     return name
-
 
 def yaml_type_to_python(type_str: str) -> str:
     """
@@ -90,6 +82,5 @@ def yaml_type_to_python(type_str: str) -> str:
         'object': 'Dict[str, Any]',
     }
     return type_map.get(type_str.lower(), 'Any')
-
 
 # AC_COMPLETE: AC-AUDIT-2026-02-12-002 ✅

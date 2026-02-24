@@ -1,5 +1,3 @@
-# AC_START: AC-WAVEB-001
-# Description: Structured JSON logging for CORTEX (ENH-063 Phase 3)
 # Wave: B, Phase: 3, Part: 1
 # TDD Cycle: RED→GREEN→REFACTOR
 
@@ -23,7 +21,6 @@ Features:
 Authority: ENH-063 Phase 3 (Production Architecture Remediation)
 Governance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
-
 import json
 import logging
 import threading
@@ -34,7 +31,6 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, Optional, Union
 
-
 # ============================================================================
 # CONTEXT VARIABLES (Thread-Safe Request Context)
 # ============================================================================
@@ -43,16 +39,13 @@ _request_context: ContextVar[Dict[str, Any]] = ContextVar(
     "request_context", default={}
 )
 
-
 class LogLevel(str, Enum):
     """Log severity levels."""
-
     DEBUG = "DEBUG"
     INFO = "INFO"
     WARNING = "WARNING"
     ERROR = "ERROR"
     CRITICAL = "CRITICAL"
-
 
 @dataclass
 class LogContext:
@@ -78,7 +71,6 @@ class LogContext:
     service_name: str = "cortex"
     environment: str = "development"
     version: str = "1.0.0"
-
 
 @dataclass
 class StructuredLogRecord:
@@ -109,7 +101,6 @@ class StructuredLogRecord:
     duration_ms: Optional[float] = None
     memory_mb: Optional[float] = None
 
-
 class StructuredLogger:
     """JSON structured logger with context propagation.
     
@@ -119,7 +110,6 @@ class StructuredLogger:
         ...     logger.info("Request processed", user_id="user456")
         {"timestamp": "2026-02-12T14:00:00Z", "level": "INFO", ...}
     """
-
     def __init__(
         self,
         name: str,
@@ -307,7 +297,6 @@ class StructuredLogger:
         """
         return _request_context.get({})
 
-
 def get_logger(
     name: str,
     min_level: LogLevel = LogLevel.INFO,
@@ -334,6 +323,5 @@ def get_logger(
         enable_file=enable_file,
         file_path=file_path,
     )
-
 
 # AC_COMPLETE: AC-WAVEB-001 ✅ Structured logging framework complete

@@ -1,8 +1,6 @@
 """
 Compliance Governance Dashboard
 
-AC_START: AC-PHASE60.0-S3-002
-Authority: phase-60-enterprise-pattern-registry.yaml Stage 3
 Purpose: Provide governance dashboard for compliance tracking
          - Dashboard generation (HTML)
          - Compliance metrics and visualization
@@ -11,7 +9,6 @@ Purpose: Provide governance dashboard for compliance tracking
 
 Tests Target: 8 tests
 """
-
 import json
 from datetime import datetime
 from pathlib import Path
@@ -19,10 +16,8 @@ from typing import Any, Dict, List
 
 from cortex.mcp.tools.policy_tools import get_policy_mcp_tools
 
-
 class ComplianceDashboard:
     """Generator for compliance governance dashboard."""
-
     def __init__(self, output_path: Path = None) -> None:
         """Initialize dashboard generator.
 
@@ -105,7 +100,6 @@ class ComplianceDashboard:
         Returns:
             HTML string
         """
-
         # Policy cards HTML
         policy_cards = ""
         for policy in policies:
@@ -119,7 +113,6 @@ class ComplianceDashboard:
                 <p class="policy-frameworks">Frameworks: {', '.join(policy.get('frameworks', []))}</p>
             </div>
             """
-
         # Recent reports HTML
         recent_reports = ""
         for report in reports[:10]:  # Show latest 10
@@ -135,7 +128,6 @@ class ComplianceDashboard:
                 <td>{report.get('evaluated_at', 'N/A')[:10]}</td>
             </tr>
             """
-
         # Generate full HTML
         html = f"""
         <!DOCTYPE html>
@@ -374,7 +366,6 @@ class ComplianceDashboard:
         </body>
         </html>
         """
-
         return html
 
     def _get_level_color(self, level: str) -> str:
@@ -392,7 +383,6 @@ class ComplianceDashboard:
             'advisory': '#3b82f6',    # Blue
         }
         return colors.get(level.lower(), '#6b7280')
-
 
 # AC_COMPLETE: AC-PHASE60.0-S3-002 ✅
 # ✅ Compliance governance dashboard HTML generation

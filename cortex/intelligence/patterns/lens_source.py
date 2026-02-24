@@ -1,14 +1,9 @@
-# AC_START: AC-PHASE57-S5-002
-# Description: LENS Source for Architecture Pattern Analysis
-# Authority: CORE-008 TDD, CORE-011 type hints, CORE-012 docstrings
-# Stage: S5 - GREEN phase implementation
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
 from cortex.intelligence.patterns.pattern_base import PatternMatch
-
 
 @dataclass
 class LENSAnalysisResult:
@@ -19,7 +14,6 @@ class LENSAnalysisResult:
     confidence: float
     insights: List[str]
 
-
 class ArchitecturePatternSource(ABC):
     """
     LENS source for architecture pattern detection and classification.
@@ -27,7 +21,6 @@ class ArchitecturePatternSource(ABC):
     Integrates with LENS orchestration to analyze code structure
     and classify architectural patterns.
     """
-
     def __init__(self) -> None:
         """Initialize ArchitecturePatternSource."""
         self.source_name = "ArchitecturePatterns"

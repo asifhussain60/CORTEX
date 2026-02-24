@@ -1,18 +1,12 @@
 """
 Pattern Library - Storage and Retrieval Layer
 
-AC_START: AC-WAVE-CHAT01-S1-001
-Description: Pattern storage with registry persistence and deduplication
-Authority: CORE-008 TDD, CORE-011 type hints, CORE-012 docstrings
-Stage: S1 - Pattern library implementation
-
 Provides:
 1. PatternLibrary class (CRUD operations)
 2. YAML persistence to cortex-registry/integration/patterns/
 3. Pattern deduplication (similarity threshold 0.3)
 4. Pattern retrieval by type/orchestrator/confidence
 """
-
 from __future__ import annotations
 
 import logging
@@ -27,7 +21,6 @@ from enum import Enum
 from cortex.intelligence.learning.pattern_extractor import ExtractedPattern, PatternType
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class StoredPattern:
@@ -44,7 +37,6 @@ class StoredPattern:
     last_seen_at: str
     occurrence_count: int
     tags: List[str]
-
 
 class PatternLibrary:
     """
@@ -342,10 +334,8 @@ class PatternLibrary:
             except Exception as e:
                 logger.error(f"Failed to write {filepath}: {e}")
 
-
 # Singleton instance
 _pattern_library: Optional[PatternLibrary] = None
-
 
 def get_pattern_library() -> PatternLibrary:
     """Get singleton pattern library instance."""
@@ -353,7 +343,6 @@ def get_pattern_library() -> PatternLibrary:
     if _pattern_library is None:
         _pattern_library = PatternLibrary()
     return _pattern_library
-
 
 # AC_COMPLETE: AC-WAVE-CHAT01-S1-001 ✅
 # Implementation: PatternLibrary with YAML persistence and deduplication

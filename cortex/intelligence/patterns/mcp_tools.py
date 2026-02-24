@@ -1,7 +1,3 @@
-# AC_START: AC-PHASE57-S5-003
-# Description: MCP Tools for Architecture Pattern Detection
-# Authority: CORE-008 TDD, MCP-FIRST, CORE-011 type hints
-# Stage: S5 - GREEN phase implementation
 
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List
@@ -11,14 +7,12 @@ from cortex.intelligence.patterns.pattern_base import PatternMatch
 from cortex.intelligence.patterns.catalog import PatternCatalog
 from cortex.intelligence.patterns.classification import ArchitectureClassifier
 
-
 @dataclass
 class MCPToolResult:
     """Result from MCP tool execution."""
     success: bool
     data: Dict[str, Any]
     errors: List[str]
-
 
 def cortex_detect_patterns() -> Callable:
     """
@@ -49,7 +43,6 @@ def cortex_detect_patterns() -> Callable:
         }
 
     return tool_impl
-
 
 def cortex_classify_architecture() -> Callable:
     """
@@ -92,7 +85,6 @@ def cortex_classify_architecture() -> Callable:
 
     return tool_impl
 
-
 def cortex_detect_anti_patterns() -> Callable:
     """
     MCP Tool: Detect anti-patterns (code smells).
@@ -129,7 +121,6 @@ def cortex_detect_anti_patterns() -> Callable:
         }
 
     return tool_impl
-
 
 def register_mcp_tools(registry: Dict[str, Callable]) -> None:
     """

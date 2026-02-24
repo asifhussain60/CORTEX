@@ -1,4 +1,3 @@
-# AC_START: AC-PHASE-06-S1-001
 """
 Business Wisdom Formatter - Display governance rules with book references.
 
@@ -32,11 +31,9 @@ Governance:
 Author: Asif Hussain
 Date: 2026-02-13
 """
-
 from typing import Any, Dict, List, Optional
 
 from cortex.tools.cortex_intelligence_integration import GovernanceRuleLoader
-
 
 class BusinessWisdomFormatter:
     """
@@ -210,6 +207,5 @@ class BusinessWisdomFormatter:
             rules,
             key=lambda r: severity_order.get(r.get("severity", ""), 2)
         )
-
 
 # AC_COMPLETE: AC-PHASE-06-S1-001 ✅

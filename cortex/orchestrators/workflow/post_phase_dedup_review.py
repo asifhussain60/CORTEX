@@ -1,7 +1,6 @@
 """
 PostPhaseDeduplicationReview - Auto-Injected Convergence Loop (Phase 100 Stage 7).
 
-AC_START: AC-PHASE100-S7-002
 Purpose: LENS-based post-phase deduplication with convergence gate
 Authority: phase-100-workflow-template-library.yaml § Stage 7
 Compliance: CORE-008 (TDD), CORE-035 (LENS detection), CORE-049 (silent execution)
@@ -12,13 +11,11 @@ Features:
 - StepStateMachine FSM for retry lifecycle
 - Auto-injection by MasterOrchestrator (user doesn't request)
 """
-
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from enum import Enum
-
 
 class ReviewState(Enum):
     """Review execution states."""
@@ -27,7 +24,6 @@ class ReviewState(Enum):
     RESOLVING = "resolving"
     CONVERGED = "converged"
     FAILED = "failed"
-
 
 @dataclass
 class DuplicateDetection:
@@ -59,7 +55,6 @@ class DuplicateDetection:
             f"is_new={self.is_new})"
         )
 
-
 @dataclass
 class DuplicateResolution:
     """
@@ -75,7 +70,6 @@ class DuplicateResolution:
     files_updated: int
     lines_reduced: int
     extraction_method: str = "refactoring_orchestrator"
-
 
 @dataclass
 class ReviewResult:
@@ -96,7 +90,6 @@ class ReviewResult:
     resolutions: List[DuplicateResolution] = field(default_factory=list)
     audit_trail: List[Dict[str, Any]] = field(default_factory=list)
     error_message: Optional[str] = None
-
 
 class PostPhaseDeduplicationReview:
     """
@@ -347,6 +340,5 @@ class PostPhaseDeduplicationReview:
             **kwargs
         }
         self.audit_trail.append(event)
-
 
 # AC_COMPLETE: AC-PHASE100-S7-002 ✅ Implementation complete

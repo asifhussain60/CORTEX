@@ -1,20 +1,15 @@
 """
 LENS integration for infrastructure-aware recommendations.
 
-AC_START: AC-INFRA-LENS-S5-001
-Authority: phase-46 Stage 5 - Orchestrator Integration: LENS
-Description: Wire infrastructure awareness into LENS for recommendations.
              - Recommend internal packages over external dependencies
              - Block vulnerable dependencies via Dependabot alerts
              - Security gates for CVE detection
 """
-
 from typing import Any, Dict, List, Optional
 
 from cortex.infrastructure.capability_detector import CapabilityDetector
 from cortex.infrastructure.github_client import GitHubClient
 from cortex.infrastructure.infrastructure_scanner import EnvironmentType
-
 
 class InfrastructureLENSIntegration:
     """
@@ -26,7 +21,6 @@ class InfrastructureLENSIntegration:
         >>> lens_integration = InfrastructureLENSIntegration()
         >>> recommendation = lens_integration.recommend_package("logging", "production")
     """
-
     def __init__(self) -> None:
         """Initialize LENS integration."""
         self.detector = CapabilityDetector()
@@ -207,7 +201,6 @@ class InfrastructureLENSIntegration:
             if not passed
             else "Security gate PASS: No critical vulnerabilities",
         }
-
 
 # AC_COMPLETE: AC-INFRA-LENS-S5-001 ✅
 # - LENS recommends internal packages over external

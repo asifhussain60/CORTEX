@@ -1,4 +1,3 @@
-# AC_START: AC-MEGA-B-S2-001
 """
 MCP Tool Scanner - Extract metadata from @mcp_tool decorators.
 
@@ -37,13 +36,11 @@ Governance:
 Author: Asif Hussain
 Date: 2026-02-16
 """
-
 import ast
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-
 
 @dataclass
 class ToolMetadata:
@@ -68,7 +65,6 @@ class ToolMetadata:
     detailed_description: str = ""
     source_file: str = ""
     line_number: int = 0
-
 
 class MCPToolScanner:
     """

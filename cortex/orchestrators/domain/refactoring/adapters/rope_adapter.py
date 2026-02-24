@@ -1,7 +1,6 @@
 """
 RopeAdapter - Python semantic refactoring via Rope library.
 
-AC_START: AC-PHASE24.1.2-002
 AC_UPDATE: AC-PHASE24.3-002
 Description: Enhanced Rope adapter with 6 new Python refactoring operations
 Authority: Phase 24.3 - Python-Side Refactoring Operations
@@ -16,7 +15,6 @@ New Operations (Phase 24.3):
 
 Rope Documentation: https://github.com/python-rope/rope
 """
-
 from __future__ import annotations
 
 import logging
@@ -32,7 +30,6 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
 )
 
 logger = logging.getLogger(__name__)
-
 
 class RopeAdapter(RefactoringToolAdapter):
     """Adapter for Python semantic refactoring using Rope library.
@@ -63,7 +60,6 @@ class RopeAdapter(RefactoringToolAdapter):
         >>> if result.is_ok():
         ...     print(result.unwrap().description)
     """
-
     # Supported operations mapping
     _OPERATIONS = [
         "extract_method",
@@ -856,7 +852,6 @@ class RopeAdapter(RefactoringToolAdapter):
                 logger.debug("Closed Rope project")
             except Exception as e:
                 logger.warning(f"Error closing Rope project: {e}")
-
 
 # AC_COMPLETE: AC-PHASE24.1.2-002 ✅ (Original)
 # AC_COMPLETE: AC-PHASE24.3-002 ✅ 9/9 tests passing

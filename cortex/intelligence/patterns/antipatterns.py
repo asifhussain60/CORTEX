@@ -1,7 +1,3 @@
-# AC_START: AC-PHASE57-S4-002
-# Description: Anti-Pattern Detection Engine
-# Authority: CORE-008 TDD, CORE-011 type hints, CORE-012 docstrings
-# Stage: S4 - GREEN phase implementation
 
 from dataclasses import dataclass
 from enum import Enum
@@ -14,7 +10,6 @@ from cortex.intelligence.patterns.pattern_base import (
     PatternMatch,
 )
 
-
 class AntiPatternType(Enum):
     """Anti-pattern categories (code smells)."""
     STRUCTURAL = "Structural"
@@ -22,7 +17,6 @@ class AntiPatternType(Enum):
     ENTERPRISE = "Enterprise"
     THREAD_SAFETY = "ThreadSafety"
     PERFORMANCE = "Performance"
-
 
 @dataclass
 class AntiPatternInfo:
@@ -32,7 +26,6 @@ class AntiPatternInfo:
     description: str
     severity: float  # 0.0-1.0
     indicators: List[str]
-
 
 class AntiPatternDetector(BasePatternDetector):
     """
@@ -45,7 +38,6 @@ class AntiPatternDetector(BasePatternDetector):
     - Thread Safety: Race Conditions, Deadlocks
     - Performance: N+1 Queries, Memory Leaks
     """
-
     def __init__(self) -> None:
         """Initialize AntiPatternDetector with anti-pattern signatures."""
         self.anti_patterns = {

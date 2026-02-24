@@ -1,7 +1,3 @@
-# AC_START: AC-PHASE82.S3-HEALTH-CHECKS
-# Description: Health check and readiness probe endpoints for IntentRouter
-# Phase: 82, Stage: 3, Part: 1 (Health Checks & Readiness Probes)
-# TDD Cycle: RED phase - comprehensive health check suite
 
 """
 Health Check & Readiness Probe Implementation for IntentRouter
@@ -22,7 +18,6 @@ Standards:
 Author: CORTEX/TDD-Orchestrator
 Governance: CORE-008 (TDD-first), CORE-011 (type hints), CORE-012 (docstrings)
 """
-
 import time
 from dataclasses import dataclass
 from enum import Enum
@@ -36,7 +31,6 @@ from cortex.orchestrators.core.intent_router import IntentRouter, RoutingDecisio
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
 
-
 @dataclass
 class IntentRoutingRequest:
     """Compatibility wrapper for health check tests."""
@@ -44,19 +38,15 @@ class IntentRoutingRequest:
     query: str
     context: Optional[Dict[str, Any]] = None
 
-
 class HealthStatus(Enum):
     """Health status enumeration."""
-
     HEALTHY = "healthy"
     DEGRADED = "degraded"
     UNHEALTHY = "unhealthy"
 
-
 @dataclass
 class ComponentHealth:
     """Health status of a single component."""
-
     name: str
     status: HealthStatus
     response_time_ms: float
@@ -64,11 +54,9 @@ class ComponentHealth:
     details: Optional[Dict[str, Any]] = None
     error: Optional[str] = None
 
-
 @dataclass
 class HealthResponse:
     """Complete health check response."""
-
     status: HealthStatus
     timestamp: str
     response_time_ms: float
@@ -76,10 +64,8 @@ class HealthResponse:
     uptime_seconds: float
     version: str = "1.0"
 
-
 class HealthCheckService:
     """Service for health checking and readiness probes."""
-
     def __init__(self, router: IntentRouter) -> None:
         """Initialize health check service.
         
@@ -372,7 +358,6 @@ class HealthCheckService:
             ],
         }
 
-
 # Example Flask/FastAPI integration (pseudocode)
 """
 # Flask integration example:
@@ -405,7 +390,6 @@ def deep_readiness_endpoint():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000)
 """
-
 # AC_COMPLETE: AC-PHASE82.S3-HEALTH-CHECKS ✅
 # Implementation complete: Health check service with 3 endpoints
 # Coverage: /health, /ready, /ready/deep with <100ms response time

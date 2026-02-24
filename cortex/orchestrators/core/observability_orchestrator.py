@@ -1,6 +1,4 @@
-# AC_START: AC-MEGA-B-S2-002-OBSERVABILITY
 """ObservabilityOrchestrator - Unified metrics, alerts, tracing with SQLite audit."""
-
 from __future__ import annotations
 import sqlite3
 import time
@@ -12,7 +10,6 @@ from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
-
 @dataclass
 class Span:
     """Simplified span for tracing."""
@@ -21,7 +18,6 @@ class Span:
     start_time: float
     duration_ms: float = 0.0
     status: str = "UNSET"
-
 
 @dataclass
 class Alert:
@@ -32,7 +28,6 @@ class Alert:
     source: str
     timestamp: datetime
     resolved: bool = False
-
 
 class ObservabilityOrchestrator(OrchestratorProtocolMixin):
     """Unified observability: metrics + tracing + alerts + SQLite audit.
@@ -260,6 +255,5 @@ class ObservabilityOrchestrator(OrchestratorProtocolMixin):
             }
             for r in rows
         ]
-
 
 # AC_COMPLETE: AC-MEGA-B-S2-002-OBSERVABILITY ✅ Implemented

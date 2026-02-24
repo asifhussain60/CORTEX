@@ -1,6 +1,3 @@
-# AC_START: AC-MEGA-B-S3-002
-# Description: STS Analyzer MCP Tool Implementation
-# Phase: 23 MEGA-B, Stage: 3, Component: cortex_analyze_sts_app
 
 """
 STS Analyzer MCP Tool
@@ -11,7 +8,6 @@ performance, testing, and documentation. Generates metrics and HTML showcase.
 ENFORCEMENT: All tools MUST validate orchestrator_context.
 Only MasterOrchestrator can invoke directly (via cortex_process_request entry point).
 """
-
 import sqlite3
 from pathlib import Path
 from typing import Dict, Any, List, Optional
@@ -21,8 +17,6 @@ from datetime import datetime
 import json
 import ast
 import re
-
-
 
 @dataclass
 class PatternViolation:
@@ -36,7 +30,6 @@ class PatternViolation:
     description: str
     fix_suggestion: str
     confidence: float  # 0.0-1.0
-
 
 class PatternDetector:
     """Detects STS anti-patterns in code."""
@@ -275,7 +268,6 @@ class PatternDetector:
         finally:
             conn.close()
 
-
 class MetricsCalculator:
     """Calculates transformation metrics from violations."""
     
@@ -358,7 +350,6 @@ class MetricsCalculator:
             "complexity_grade": grade,
             "total_quality_issues": len(quality_violations)
         }
-
 
 class ShowcaseGenerator:
     """Generates HTML showcase with metrics dashboard."""
@@ -456,7 +447,6 @@ class ShowcaseGenerator:
         
         Path(output_path).write_text(html, encoding='utf-8')
 
-
 def analyze_sts_app(
     app_path: str,
     pattern_types: Optional[List[str]] = None,
@@ -518,6 +508,5 @@ def analyze_sts_app(
         result["showcase_path"] = showcase_path
     
     return result
-
 
 # AC_COMPLETE: AC-MEGA-B-S3-002 ✅ STS Analyzer Implementation Complete

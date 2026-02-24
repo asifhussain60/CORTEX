@@ -1,12 +1,8 @@
 """
 Environment-specific capability detection for CORTEX orchestrators.
 
-AC_START: AC-INFRA-CAPABILITY-S3-002
-Authority: phase-46 Stage 3 - Capability Detector
-Description: Detects available capabilities in each environment and merges
              with cortex-registry/company/domains/infrastructure best practices (PRECEDENCE).
 """
-
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
@@ -15,15 +11,12 @@ from cortex.infrastructure.infrastructure_scanner import (
     InfrastructureScanner,
 )
 
-
 @dataclass
 class CapabilityGap:
     """Capability gap between environments."""
-
     capability_type: str  # "api", "tool", "service"
     name: str
     missing_in: List[str]  # List of environment names
-
 
 class CapabilityDetector:
     """
@@ -37,7 +30,6 @@ class CapabilityDetector:
         >>> gaps = detector.detect_capability_gaps()
         >>> capability = detector.has_capability("docker", EnvironmentType.PRODUCTION)
     """
-
     def __init__(self) -> None:
         """Initialize capability detector."""
         self.scanner = InfrastructureScanner()
@@ -253,7 +245,6 @@ class CapabilityDetector:
             "env2_only": list(all_caps2 - all_caps1),
             "common": list(all_caps1 & all_caps2),
         }
-
 
 # AC_COMPLETE: AC-INFRA-CAPABILITY-S3-002 ✅
 # - Environment-specific capability detection

@@ -1,12 +1,8 @@
 """
 JSON Profile Repository - Data Access Pattern (Phase 54-A S2)
 
-AC_START: AC-PHASE54A-S2-001
-Description: Repository abstraction for repository profiles with CRUD operations
-Authority: phase-54-A-incremental-onboarding-refactor.yaml, S2 task
 Pattern: Data Access Object (DAO), enabling future SQLite/API migration
 """
-
 import json
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
@@ -16,14 +12,12 @@ from typing import Any, Dict, List, Optional
 
 from cortex.core.result import Err, Ok, Result
 
-
 class ProfileTier(Enum):
     """Repository profile tier levels (TIER-0/1/2/3)."""
     TIER_0 = "tier-0"  # Critical
     TIER_1 = "tier-1"  # High
     TIER_2 = "tier-2"  # Medium
     TIER_3 = "tier-3"  # Low
-
 
 @dataclass
 class RepositoryProfile:
@@ -49,7 +43,6 @@ class RepositoryProfile:
         data["tier"] = ProfileTier(data["tier"])
         return cls(**data)
 
-
 class JSONProfileRepository:
     """
     Repository pattern for repository profiles.
@@ -65,7 +58,6 @@ class JSONProfileRepository:
     - Redis (caching)
     - S3 (cloud storage)
     """
-
     def __init__(self, storage_path: Path) -> None:
         """
         Initialize repository.
@@ -430,6 +422,5 @@ class JSONProfileRepository:
             True if exists, False otherwise.
         """
         return (self.storage_path / f"{repo_name}.json").exists()
-
 
 # AC_COMPLETE: AC-PHASE54A-S2-001 ✅

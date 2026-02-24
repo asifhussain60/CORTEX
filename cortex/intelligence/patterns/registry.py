@@ -1,8 +1,6 @@
 """
 Custom Pattern Registry for Enterprise Pattern Definitions
 
-AC_START: AC-PHASE60.0-S1-001
-Authority: phase-60-enterprise-pattern-registry.yaml Stage 1
 Purpose: Enable users to define and manage custom architectural patterns via YAML/JSON
          - Pattern definition schema validation
          - Registry loading and caching
@@ -11,7 +9,6 @@ Purpose: Enable users to define and manage custom architectural patterns via YAM
 
 Tests Target: 12 tests (pattern loading, schema validation, registry operations)
 """
-
 import hashlib
 import json
 from dataclasses import asdict, dataclass, field
@@ -37,13 +34,11 @@ class PatternCategory(Enum):
     ENTERPRISE = "enterprise"
     CUSTOM = "custom"
 
-
 class DetectionRuleType(Enum):
     """Types of detection rules."""
     AST = "ast"
     SEMANTIC = "semantic"
     STRUCTURAL = "structural"
-
 
 # ============================================================================
 # Data Classes
@@ -63,7 +58,6 @@ class DetectionRule:
             raise ValueError(
                 f"Confidence threshold must be between 0 and 1, got {self.confidence_threshold}"
             )
-
 
 @dataclass
 class PatternMetadata:
@@ -118,14 +112,12 @@ class PatternMetadata:
         data = json.dumps(self.to_dict(), sort_keys=True)
         return hashlib.sha256(data.encode()).hexdigest()[:16]
 
-
 # ============================================================================
 # Custom Pattern Registry
 # ============================================================================
 
 class CustomPatternRegistry:
     """Registry for managing custom pattern definitions."""
-
     def __init__(self, registry_path: Optional[Path] = None) -> None:
         """Initialize pattern registry.
 
@@ -373,7 +365,6 @@ class CustomPatternRegistry:
             author=data.get('author', ''),
             version=data.get('version', '1.0')
         )
-
 
 # AC_COMPLETE: AC-PHASE60.0-S1-001 ✅
 # ✅ Pattern registry with YAML/JSON loading

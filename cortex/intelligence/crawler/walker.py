@@ -1,7 +1,3 @@
-# AC_START: AC-PHASE58-S1-003
-# Description: RepositoryWalker Concrete Implementation
-# Authority: CORE-008 TDD, CORE-011 type hints
-# Stage: S1 - GREEN phase implementation
 
 import asyncio
 import fnmatch
@@ -15,7 +11,6 @@ from cortex.intelligence.crawler.crawler_base import (
     FileMetadata,
 )
 
-
 class RepositoryWalker(AsyncRepositoryCrawler):
     """
     Concrete implementation of AsyncRepositoryCrawler.
@@ -26,7 +21,6 @@ class RepositoryWalker(AsyncRepositoryCrawler):
     - Concurrent task management
     - Error resilience
     """
-
     def __init__(
         self,
         config: Optional[CrawlerConfig] = None,

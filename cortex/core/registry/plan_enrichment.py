@@ -1,12 +1,10 @@
 """
 LENS-powered plan enrichment pipeline.
 
-AC_START: AC-PLAN-SYSTEM-S3-002
 Purpose: Multi-source enrichment pipeline for plans (Stage 3)
 Authority: phase-45-enhanced-planning-system.yaml § Stage 3
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-041 (event-driven)
 """
-
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -17,7 +15,6 @@ from cortex.models.plan_models import PlanSpec
 # ============================================================================
 # ENRICHMENT DATA STRUCTURES
 # ============================================================================
-
 
 @dataclass
 class GitEnrichment:
@@ -31,12 +28,10 @@ class GitEnrichment:
         change_velocity: Rate of change (low/medium/high)
         commits_30_days: Number of commits in last 30 days
     """
-
     recent_files: List[str] = field(default_factory=list)
     recent_authors: List[str] = field(default_factory=list)
     change_velocity: str = "low"
     commits_30_days: int = 0
-
 
 @dataclass
 class CodeEnrichment:
@@ -49,11 +44,9 @@ class CodeEnrichment:
         dependency_map: File dependencies
         risk_areas: Identified risky code sections
     """
-
     complexity_scores: Dict[str, float] = field(default_factory=dict)
     dependency_map: Dict[str, List[str]] = field(default_factory=dict)
     risk_areas: List[str] = field(default_factory=list)
-
 
 @dataclass
 class PolicyEnrichment:
@@ -65,10 +58,8 @@ class PolicyEnrichment:
         compliance_checklist: Required compliance items (GDPR, SOC2, etc.)
         policy_references: Policy document references
     """
-
     compliance_checklist: List[str] = field(default_factory=list)
     policy_references: List[str] = field(default_factory=list)
-
 
 @dataclass
 class BestPracticesEnrichment:
@@ -80,10 +71,8 @@ class BestPracticesEnrichment:
         recommended_patterns: Suggested design patterns
         anti_patterns_to_avoid: Anti-patterns to avoid
     """
-
     recommended_patterns: List[str] = field(default_factory=list)
     anti_patterns_to_avoid: List[str] = field(default_factory=list)
-
 
 @dataclass
 class DomainEnrichment:
@@ -95,10 +84,8 @@ class DomainEnrichment:
         domain_terminology: Domain-specific terms and definitions
         related_concepts: Related domain concepts
     """
-
     domain_terminology: List[str] = field(default_factory=list)
     related_concepts: List[str] = field(default_factory=list)
-
 
 @dataclass
 class EnrichedPlanSpec:
@@ -115,7 +102,6 @@ class EnrichedPlanSpec:
         domain_context: Domain brain enrichment
         enriched_at: Timestamp when enrichment completed
     """
-
     plan: PlanSpec
     git_context: GitEnrichment = field(default_factory=GitEnrichment)
     code_context: CodeEnrichment = field(default_factory=CodeEnrichment)
@@ -126,18 +112,15 @@ class EnrichedPlanSpec:
     domain_context: DomainEnrichment = field(default_factory=DomainEnrichment)
     enriched_at: datetime = field(default_factory=datetime.utcnow)
 
-
 # ============================================================================
 # ENRICHER IMPLEMENTATIONS
 # ============================================================================
-
 
 class GitLensEnricher:
     """Enriches plans with git history context.
 
     Sources: Git log, file history, author commits
     """
-
     def __init__(self) -> None:
         """Initialize GitLensEnricher."""
         self.logger = logging.getLogger(__name__)
@@ -181,13 +164,11 @@ class GitLensEnricher:
             "commits_30_days": 0,
         }
 
-
 class CodeLensEnricher:
     """Enriches plans with code analysis context.
 
     Sources: AST analysis, complexity metrics, dependencies
     """
-
     def __init__(self) -> None:
         """Initialize CodeLensEnricher."""
         self.logger = logging.getLogger(__name__)
@@ -229,13 +210,11 @@ class CodeLensEnricher:
             "risk_areas": [],
         }
 
-
 class PolicyEnricher:
     """Enriches plans with company policy context.
 
     Sources: Company domains, governance rules, compliance requirements
     """
-
     def __init__(self) -> None:
         """Initialize PolicyEnricher."""
         self.logger = logging.getLogger(__name__)
@@ -275,13 +254,11 @@ class PolicyEnricher:
             "policy_references": [],
         }
 
-
 class BestPracticesEnricher:
     """Enriches plans with best practices knowledge.
 
     Sources: CORTEX knowledge base, design patterns, anti-patterns
     """
-
     def __init__(self) -> None:
         """Initialize BestPracticesEnricher."""
         self.logger = logging.getLogger(__name__)
@@ -321,13 +298,11 @@ class BestPracticesEnricher:
             "anti_patterns_to_avoid": [],
         }
 
-
 class DomainEnricher:
     """Enriches plans with domain brain context.
 
     Sources: Domain brain, terminology, related concepts
     """
-
     def __init__(self) -> None:
         """Initialize DomainEnricher."""
         self.logger = logging.getLogger(__name__)
@@ -367,11 +342,9 @@ class DomainEnricher:
             "related_concepts": [],
         }
 
-
 # ============================================================================
 # ENRICHMENT PIPELINE
 # ============================================================================
-
 
 class PlanEnrichmentPipeline:
     """Composable pipeline for multi-source plan enrichment.
@@ -381,7 +354,6 @@ class PlanEnrichmentPipeline:
 
     CORE-041: Event-driven architecture pattern.
     """
-
     def __init__(self) -> None:
         """Initialize enrichment pipeline with default enrichers."""
         self.enrichers: List[Any] = [
@@ -461,6 +433,5 @@ class PlanEnrichmentPipeline:
 
         self.logger.info(f"Plan enrichment completed for {plan.metadata.phase_id}")
         return enriched
-
 
 # AC_COMPLETE: AC-PLAN-SYSTEM-S3-002 ✅ Stage 3 enrichment pipeline implemented

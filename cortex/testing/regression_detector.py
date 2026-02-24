@@ -1,5 +1,4 @@
 """
-AC_START: AC-PHASE38.0-012
 Regression Detector - Stage 3 Implementation
 
 Detects performance regressions by comparing against baseline.
@@ -7,20 +6,17 @@ Thresholds: latency +10%, memory +15%, test_time +20%.
 
 Authority: Phase 38.0 Stage 3 - Remediation & Baseline Restoration
 """
-
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Optional, Tuple
 
 from cortex.testing.baseline_metrics_collector import PerformanceMetrics
 
-
 class RegressionSeverity(Enum):
     """Severity of detected regression."""
     NONE = "none"
     WARNING = "warning"
     CRITICAL = "critical"
-
 
 @dataclass
 class RegressionResult:
@@ -30,14 +26,12 @@ class RegressionResult:
     regressions: List[str]
     metrics_comparison: Dict[str, Tuple[float, float, float]]  # metric: (baseline, current, % change)
 
-
 class RegressionDetector:
     """
     Detects performance regressions against baseline.
 
     AC-PHASE38.0-012: Configurable thresholds for latency, memory, test time.
     """
-
     def __init__(
         self,
         latency_threshold_percent: float = 10.0,
@@ -153,7 +147,6 @@ class RegressionDetector:
             regressions=regressions,
             metrics_comparison=comparisons
         )
-
 
 # AC_COMPLETE: AC-PHASE38.0-012 ✅
 # Implementation: RegressionDetector fully implemented

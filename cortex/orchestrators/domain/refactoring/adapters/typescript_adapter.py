@@ -1,9 +1,6 @@
 """
 TypeScriptAdapter - TypeScript/JavaScript semantic refactoring via TypeScript Language Service.
 
-AC_START: AC-PHASE24.4-002
-Description: TypeScript Language Service adapter for TS/JS refactoring operations
-Authority: Phase 24.4 - TypeScript/JavaScript Refactoring Operations
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-027 (audit)
 
 Operations:
@@ -15,7 +12,6 @@ Operations:
 
 TypeScript Language Service: https://github.com/microsoft/TypeScript/wiki/Using-the-Language-Service-API
 """
-
 from __future__ import annotations
 
 import json
@@ -34,7 +30,6 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
 )
 
 logger = logging.getLogger(__name__)
-
 
 class TypeScriptAdapter(RefactoringToolAdapter):
     """Adapter for TypeScript/JavaScript semantic refactoring using TypeScript Language Service.
@@ -64,7 +59,6 @@ class TypeScriptAdapter(RefactoringToolAdapter):
         >>> if result.is_ok():
         ...     print(result.unwrap().description)
     """
-
     # Supported operations mapping
     _OPERATIONS = [
         "extract_function",
@@ -617,6 +611,5 @@ class TypeScriptAdapter(RefactoringToolAdapter):
         except Exception as e:
             logger.error(f"Rename failed: {e}")
             return Err(f"Rename failed: {str(e)}")
-
 
 # AC_COMPLETE: AC-PHASE24.4-002 ✅ TypeScript/JavaScript adapter implementation complete

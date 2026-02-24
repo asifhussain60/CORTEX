@@ -1,13 +1,9 @@
 """
 MCP tools for infrastructure discovery and GitHub integration.
 
-AC_START: AC-INFRA-MCP-TOOLS-S4-001
-Authority: phase-46 Stage 4 - MCP Tools
-Description: Exposes infrastructure discovery via MCP tools with orchestrator integration.
              - cortex_discover_infrastructure: Main discovery tool (all infrastructure)
              - cortex_github_discover: GitHub ecosystem queries (packages, actions, etc.)
 """
-
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
@@ -19,26 +15,21 @@ from cortex.infrastructure.infrastructure_scanner import (
     InfrastructureScanner,
 )
 
-
 @dataclass
 class DiscoveryRequest:
     """Infrastructure discovery request."""
-
     capability: str  # "apis", "tools", "services", or specific name
     environment: str  # "development", "staging", "production"
     include_gaps: bool = False
     include_details: bool = False
 
-
 @dataclass
 class GitHubDiscoveryRequest:
     """GitHub discovery request."""
-
     query_type: str  # "packages", "actions", "environments", "alerts", "deployments"
     repo: Optional[str] = None
     environment: Optional[str] = None
     state: Optional[str] = None  # For alerts
-
 
 class InfrastructureDiscoveryTool:
     """
@@ -50,7 +41,6 @@ class InfrastructureDiscoveryTool:
     - Fallback to static data on failures
     - Integration with LENS, Planning, Interaction orchestrators
     """
-
     def __init__(self, cache_ttl_seconds: int = 300) -> None:
         """
         Initialize discovery tool.
@@ -191,7 +181,6 @@ class InfrastructureDiscoveryTool:
             },
         }
 
-
 class GitHubDiscoveryTool:
     """
     MCP tool for GitHub ecosystem discovery.
@@ -203,7 +192,6 @@ class GitHubDiscoveryTool:
     - Environment deployment tracking
     - Dependabot security alert integration
     """
-
     def __init__(
         self, org: str, token: Optional[str] = None, mock_mode: bool = True
     ) -> None:
@@ -377,7 +365,6 @@ class GitHubDiscoveryTool:
                 "required": ["query_type"],
             },
         }
-
 
 # AC_COMPLETE: AC-INFRA-MCP-TOOLS-S4-001 ✅
 # - cortex_discover_infrastructure MCP tool implementation

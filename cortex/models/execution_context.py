@@ -1,8 +1,6 @@
 """
 Canonical ExecutionContext - Single Source of Truth
 
-AC_START: AC-WAVE-P-REM-002-001
-Authority: WAVE-P Stage 2 - ExecutionContext Unification
 Priority: P0-CRITICAL
 CORE Compliance:
 - CORE-035: Single canonical implementation (replaces 6 definitions)
@@ -33,7 +31,6 @@ Design:
 - Type-safe via dataclass
 - Audit logging integration
 """
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -42,7 +39,6 @@ from datetime import datetime
 
 # Import canonical IntentType (CORE-035: Single implementation)
 from cortex.models.canonical_enums import IntentType
-
 
 @dataclass
 class ExecutionContext:
@@ -193,7 +189,6 @@ class ExecutionContext:
             f"operation={self.operation_id}, intent={self.intent.value}, "
             f"events={len(self.audit_trail)})"
         )
-
 
 # AC_COMPLETE: AC-WAVE-P-REM-002-001 ✅ Canonical ExecutionContext created
 # Next: Create migration script for 6 old definitions

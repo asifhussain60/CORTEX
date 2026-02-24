@@ -1,8 +1,6 @@
 """
 Holistic Integration Harness — Production Testing Infrastructure.
 
-AC_START: AC-64-A-IMPL-001
-
 Authority: Phase 64 sub-phase 64-A — GAP-64-08
 Closes: AC-64-08-A, AC-64-08-B, AC-64-08-C
 
@@ -29,13 +27,11 @@ Schema expected (tmp_path or real db):
 
 Author: Asif Hussain
 """
-
 import sqlite3
 from pathlib import Path
 from typing import List, Optional
 
 # AC_START: AC-64-A-IMPL-001
-
 
 class HolisticIntegrationHarness:
     """
@@ -53,7 +49,6 @@ class HolisticIntegrationHarness:
     For full holistic integration scenarios (S01–S25), combine with
     the fixture harness in tests/golden/holistic_integration/fixtures/.
     """
-
     # ------------------------------------------------------------------
     # AC-64-08-A: assert_trace_chain — real SQLite query
     # ------------------------------------------------------------------
@@ -179,6 +174,5 @@ class HolisticIntegrationHarness:
             )
         finally:
             conn.close()
-
 
 # AC_COMPLETE: AC-64-A-IMPL-001 ✅ HolisticIntegrationHarness implemented (Phase 64-A GREEN)

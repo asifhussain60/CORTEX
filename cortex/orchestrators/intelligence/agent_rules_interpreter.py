@@ -1,9 +1,6 @@
 """
 Agent Rules Interpreter - Bridges Markdown Agents and Machine-Readable Rules
 
-AC_START: AC-INTEL-AGENTRULES-20260223T000000Z
-Description: Phase 51 - Rules-Driven Agent Facade Architecture
-Authority: CORTEX-CORE-051 (Agent Refactoring for Dual-Mode Extensibility)
 Purpose: Interpret agent behavioral instructions from YAML rules registry,
          enabling both CORTEX self-development and production repo contexts
          without duplication or coupling.
@@ -47,7 +44,6 @@ Example Usage:
   for directive in directives:
       orchestrator.execute(directive)  # Route to appropriate orchestrator
 """
-
 from __future__ import annotations
 
 import json
@@ -66,7 +62,6 @@ from cortex.core.result import Err, Ok
 # Phase 51: Simple logger for MVP (upgrade to EnhancedAuditLogger in Phase 52)
 logger = logging.getLogger("cortex.agents.rules_interpreter")
 logger.setLevel(logging.DEBUG)
-
 
 # ============================================================================
 # ENUMS & TYPES
@@ -103,7 +98,6 @@ class ExecutionContext(str, Enum):
     CORTEX_INTERNAL = "cortex_internal"  # CORTEX self-development
     PRODUCTION_REPO = "production_repo"  # User's production repository
     HYBRID = "hybrid"                     # Both contexts
-
 
 class RuleEnforcementLevel(str, Enum):
     """
@@ -158,7 +152,6 @@ class RuleEnforcementLevel(str, Enum):
     WARNING = "WARNING"            # Log warning, continue
     RUNTIME = "RUNTIME"            # Monitor during execution
     PRINCIPLE = "PRINCIPLE"        # Aspirational, no enforcement
-
 
 class AgentRole(str, Enum):
     """
@@ -227,7 +220,6 @@ class AgentRole(str, Enum):
     PLAN_ORCHESTRATOR = "plan_orchestrator"  # Phase management
     MCP_GATEWAY = "mcp_gateway"    # MCP tool routing
 
-
 # ============================================================================
 # DATA MODELS
 # ============================================================================
@@ -239,7 +231,6 @@ class RuleConstraint:
     value: str  # The actual constraint pattern/value
     description: Optional[str] = None
 
-
 @dataclass
 class RuleViolation:
     """Represents a detected rule violation."""
@@ -250,7 +241,6 @@ class RuleViolation:
     remediation: str
     detected_at: datetime = field(default_factory=datetime.now)
     audit_trail_id: Optional[str] = None
-
 
 @dataclass
 class ExecutionDirective:
@@ -266,7 +256,6 @@ class ExecutionDirective:
     fallback_behavior: Optional[str] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-
 @dataclass
 class AgentConfiguration:
     """Configuration for an agent with its associated rules."""
@@ -281,14 +270,12 @@ class AgentConfiguration:
     version: str
     last_updated: datetime
 
-
 # ============================================================================
 # RULES REGISTRY
 # ============================================================================
 
 class RulesRegistry:
     """Machine-readable rules registry (YAML-based)."""
-
     def __init__(self, registry_path: Path) -> None:
         """Initialise RulesRegistry."""
         self.registry_path = registry_path
@@ -329,14 +316,12 @@ class RulesRegistry:
         """Get all rules with given enforcement level."""
         return [r for r in self._rules_cache.values() if r.get("enforcement") == level.value]
 
-
 # ============================================================================
 # AGENT CONFIGURATION REGISTRY
 # ============================================================================
 
 class AgentConfigRegistry:
     """Registry of agent configurations and their rule associations."""
-
     AGENT_CONFIGS: Dict[str, AgentConfiguration] = {
         # Phase 51: Initial 5 agents migrated to rules-driven approach
         "cortex-architect": AgentConfiguration(
@@ -434,7 +419,6 @@ class AgentConfigRegistry:
         """Get all agents applicable to given context."""
         return [cfg for cfg in cls.AGENT_CONFIGS.values() if context in cfg.context_requirements]
 
-
 # ============================================================================
 # AGENT RULES INTERPRETER (MAIN)
 # ============================================================================
@@ -450,7 +434,6 @@ class AgentRulesInterpreter:
 
     Supports both CORTEX self-development and production repo contexts.
     """
-
     def __init__(self, registry_path: Path) -> None:
         """Initialise AgentRulesInterpreter."""
         self.registry_path = registry_path
@@ -476,7 +459,6 @@ class AgentRulesInterpreter:
         Returns:
             ExecutionDirective with rules, constraints, and orchestrator routing
         """
-
         # Load agent configuration
         agent_config = AgentConfigRegistry.get_agent_config(agent_id)
         if not agent_config:
@@ -626,14 +608,12 @@ class AgentRulesInterpreter:
         """Get remediation guidance from rule."""
         return rule.get("remediation_guidance", "Fix per rule specification")
 
-
 # ============================================================================
 # ORCHESTRATOR INTEGRATION HELPER
 # ============================================================================
 
 class OrchestratorInvocationHelper:
     """Helper to invoke orchestrators based on execution directives."""
-
     def __init__(self, interpreter: AgentRulesInterpreter) -> None:
         """Initialise OrchestratorInvocationHelper."""
         self.interpreter = interpreter
@@ -648,7 +628,6 @@ class OrchestratorInvocationHelper:
         This is the integration point between agent interpretation
         and actual orchestrator execution.
         """
-
         orchestrator_name = directive.target_orchestrator
 
         if not orchestrator_name:
@@ -666,6 +645,5 @@ class OrchestratorInvocationHelper:
         # Placeholder: actual implementation routes to MasterOrchestrator
         # which dispatches to specific orchestrator
         return Ok({"status": "pending", "orchestrator": orchestrator_name})
-
 
 # AC_COMPLETE: AC-INTEL-AGENTRULES-20260223T000000Z ✅ Foundation complete (89 lines of logic, 400 LOC total with docs)

@@ -1,6 +1,3 @@
-# AC_START: AC-P84-S3-T2-001
-# Description: AuditVerifier implementation — event chain validation neuron
-# Authority: CORE-008 TDD GREEN phase, Phase 84 Stage 3
 
 """
 AuditVerifier - Event Chain Validation Neuron (Phase 84 S3).
@@ -19,7 +16,6 @@ Integration:
 Author: Asif Hussain
 Date: 2026-02-14
 """
-
 from __future__ import annotations
 
 import logging
@@ -30,7 +26,6 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 
 logger = logging.getLogger(__name__)
-
 
 # ============================================================================
 # DATA STRUCTURES
@@ -43,7 +38,6 @@ class EventRecord:
     timestamp: datetime
     metadata: Dict[str, Any]
 
-
 @dataclass
 class ValidationResult:
     """Result of event chain validation."""
@@ -52,7 +46,6 @@ class ValidationResult:
     out_of_order_events: List[str]
     unexpected_events: List[str]
     message: str
-
 
 # ============================================================================
 # AUDIT VERIFIER
@@ -226,7 +219,6 @@ class AuditVerifier:
         logger.info(f"Audit complete: {message}")
         
         return result
-
 
 # AC_COMPLETE: AC-P84-S3-T2-001 ✅
 # Implementation: AuditVerifier (~220 LOC)

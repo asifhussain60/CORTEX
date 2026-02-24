@@ -1,7 +1,3 @@
-# AC_START: AC-PHASE82.S3-OTEL-TRACING
-# Description: OpenTelemetry distributed tracing integration
-# Phase: 82, Stage: 3, Part: 3 (OpenTelemetry Tracing)
-# TDD Cycle: Complete (RED→GREEN→REFACTOR)
 
 """
 OpenTelemetry Distributed Tracing for IntentRouter
@@ -19,7 +15,6 @@ Features:
 Author: CORTEX/TDD-Orchestrator
 Governance: CORE-008 (TDD-first), CORE-011 (type hints), CORE-012 (docstrings)
 """
-
 from typing import Optional, Dict, Any, Callable
 from dataclasses import dataclass, field
 from enum import Enum
@@ -30,29 +25,23 @@ from datetime import datetime
 from functools import wraps
 from contextlib import contextmanager
 
-
 class SpanKind(Enum):
     """OpenTelemetry span kinds."""
-
     INTERNAL = "INTERNAL"
     SERVER = "SERVER"
     CLIENT = "CLIENT"
     PRODUCER = "PRODUCER"
     CONSUMER = "CONSUMER"
 
-
 class SpanStatus(Enum):
     """OpenTelemetry span status."""
-
     UNSET = "UNSET"
     OK = "OK"
     ERROR = "ERROR"
 
-
 @dataclass
 class SpanContext:
     """Trace context for distributed tracing."""
-
     trace_id: str = field(default_factory=lambda: uuid.uuid4().hex)
     span_id: str = field(default_factory=lambda: uuid.uuid4().hex)
     parent_span_id: Optional[str] = None
@@ -89,11 +78,9 @@ class SpanContext:
                 )
         return SpanContext()
 
-
 @dataclass
 class Span:
     """Represents an OpenTelemetry span."""
-
     span_id: str
     trace_id: str
     parent_span_id: Optional[str]
@@ -163,10 +150,8 @@ class Span:
             "error": self.error,
         }
 
-
 class TracerProvider:
     """Manages tracer instances and span collection."""
-
     def __init__(self, service_name: str = "cortex-intentrouter") -> None:
         """Initialize tracer provider.
         
@@ -270,10 +255,8 @@ class TracerProvider:
             "spans": [s.to_dict() for s in spans],
         }
 
-
 class Tracer:
     """Tracer for creating and managing spans."""
-
     def __init__(self, provider: TracerProvider, name: str) -> None:
         """Initialize tracer.
         
@@ -342,10 +325,8 @@ class Tracer:
 
         return decorator
 
-
 class SpanContextManager:
     """Context manager for span lifecycle."""
-
     def __init__(
         self,
         tracer: Tracer,
@@ -385,10 +366,8 @@ class SpanContextManager:
 
         return False
 
-
 class IntentRouterTracer:
     """Specialized tracer for IntentRouter with domain-specific spans."""
-
     def __init__(self, provider: TracerProvider) -> None:
         """Initialize router tracer.
         
@@ -462,7 +441,6 @@ class IntentRouterTracer:
         """
         return self.tracer.span_context(f"cache_{operation}", SpanKind.INTERNAL, context)
 
-
 # Example usage patterns:
 """
 # Initialize tracing
@@ -496,7 +474,6 @@ with router_tracer.trace_routing_request(context) as span:
 exported = provider.export_trace(context.trace_id)
 print(json.dumps(exported, indent=2))
 """
-
 # AC_COMPLETE: AC-PHASE82.S3-OTEL-TRACING ✅
 # OpenTelemetry distributed tracing implementation complete
 # Ready for production deployment with span export capabilities

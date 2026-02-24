@@ -19,18 +19,9 @@ from cortex.orchestrators.domain.planning_orchestrator import (  # noqa: F401
 )
 
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
-from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
-
-try:
-    from result import Ok  # type: ignore[import]
-except ImportError:
-    class Ok:  # type: ignore[no-redef]
-        """Minimal Ok wrapper when 'result' package is unavailable."""
-
-        def __init__(self, v: Any) -> None:
-            """Initialize instance."""
-            self.value = v
+from cortex.core.result import Ok  # CORE-035: canonical result type (Phase 59 GAP-59-02)
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 
 class PhaseState(enum.Enum):

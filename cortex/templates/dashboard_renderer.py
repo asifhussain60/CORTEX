@@ -1,16 +1,12 @@
 """
 Jinja2 Template Renderer - MVP Implementation (Phase 54-A S3)
 
-AC_START: AC-PHASE54A-S3-001
-Description: Single MVP template for dashboard rendering
-Authority: phase-54-A-incremental-onboarding-refactor.yaml, S3 task
 Approach: Minimal viable product - 1 template, not full library
 
 CORE-035 compliance: DashboardTemplateRenderer inherits from the canonical
 TemplateRenderer (cortex.templates.template_renderer) so there is a single
 Jinja2 env setup path in the codebase.
 """
-
 from pathlib import Path
 from typing import Any, Dict, Optional
 
@@ -18,7 +14,6 @@ import jinja2
 
 from cortex.core.result import Err, Ok, Result
 from cortex.templates.template_renderer import TemplateRenderer
-
 
 class DashboardTemplateRenderer(TemplateRenderer):
     """
@@ -33,7 +28,6 @@ class DashboardTemplateRenderer(TemplateRenderer):
     - Focus on dashboard rendering, not templating library
     - Enables future template library expansion
     """
-
     def __init__(self, template_dir: Optional[Path] = None) -> None:
         """
         Initialize renderer.
@@ -175,6 +169,5 @@ class DashboardTemplateRenderer(TemplateRenderer):
             "P2": "#FFD93D",  # Yellow
         }
         return colors.get(severity, "#888888")
-
 
 # AC_COMPLETE: AC-PHASE54A-S3-001 ✅

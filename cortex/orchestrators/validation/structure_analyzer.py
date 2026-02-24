@@ -1,9 +1,6 @@
 """
 Structure Analyzer - Detect file structure (sections, headers, versions).
 
-AC_START: AC-ENH-101-005
-Description: StructureAnalyzer for detecting file structure elements
-Authority: ENH-101 Stage S2 - File Structure Detection
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 
 Purpose:
@@ -12,7 +9,6 @@ Purpose:
     - Version markers (header, footer, inline)
     - Structural hierarchy and nesting
 """
-
 from __future__ import annotations
 
 import logging
@@ -30,7 +26,6 @@ from cortex.orchestrators.validation.coherence_models import (
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class StructureMetrics:
     """Metrics about file structure.
@@ -46,7 +41,6 @@ class StructureMetrics:
     max_depth: int = 0
     avg_section_length: float = 0.0
     total_lines: int = 0
-
 
 class StructureAnalyzer:
     """Analyzer for detecting file structure and organization.
@@ -534,6 +528,5 @@ class StructureAnalyzer:
             metadata["updated"] = date_match.group(1)
         
         return metadata
-
 
 # AC_COMPLETE: AC-ENH-101-005 ✅ StructureAnalyzer implementation

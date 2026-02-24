@@ -1,7 +1,6 @@
 """
 Safe Template Editor - CORE-057 Compliance.
 
-AC_START: AC-DIGEST-CHAT01-001
 Purpose: Prevent template corruption in Python files with Jinja2 templates
 Learning: chat01 showed replace_string_in_file unreliable (8+ fix attempts)
 
@@ -13,7 +12,6 @@ Features:
 - Import verification
 - Multi-line template preservation
 """
-
 import ast
 import re
 import shutil
@@ -23,16 +21,13 @@ from pathlib import Path
 from typing import Optional
 import importlib.util
 
-
 class TemplateCorruptionError(Exception):
     """Raised when template corruption detected."""
     pass
 
-
 class TemplateSyntaxError(Exception):
     """Raised when template has invalid syntax."""
     pass
-
 
 @dataclass
 class EditResult:
@@ -43,7 +38,6 @@ class EditResult:
     write_method: str = "atomic"
     import_check_passed: bool = False
     error: Optional[str] = None
-
 
 class SafeTemplateEditor:
     """
@@ -273,7 +267,6 @@ class SafeTemplateEditor:
         """Rollback to backup on error."""
         if backup_path.exists():
             shutil.copy2(backup_path, file_path)
-
 
 # AC_COMPLETE: AC-DIGEST-CHAT01-001 ✅
 # Implementation covers all chat01 failure scenarios:

@@ -1,4 +1,3 @@
-# AC_START: AC-PHASE59-S1-002
 # Pattern Embedding Model for ML-based similarity analysis
 # Purpose: Extract features and generate embeddings for architectural patterns
 
@@ -10,7 +9,6 @@ This module provides:
 2. PatternEmbedder: Feature normalization and embedding generation
 3. EmbeddingModel: Neural network-based embedding model
 """
-
 import json
 import pickle
 from dataclasses import dataclass
@@ -18,7 +16,6 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import numpy as np
-
 
 @dataclass
 class PatternFeatures:
@@ -33,7 +30,6 @@ class PatternFeatures:
         coupling_score: Coupling metric [0-1]
         cohesion_score: Cohesion metric [0-1]
     """
-
     pattern_type: str
     lines_of_code: float
     cyclomatic_complexity: float
@@ -69,7 +65,6 @@ class PatternFeatures:
             "cohesion_score": self.cohesion_score,
         }
 
-
 class PatternEmbedder:
     """
     Generates embeddings from pattern features.
@@ -79,7 +74,6 @@ class PatternEmbedder:
     - Statistical embedding generation
     - Embedding dimension control
     """
-
     # Feature statistics for normalization (learnable)
     FEATURE_STATS = {
         "lines_of_code": {"min": 0, "max": 50000, "scale": 50000},
@@ -170,14 +164,12 @@ class PatternEmbedder:
 
         return embedding.astype(np.float32)
 
-
 class EmbeddingModel:
     """
     ML-based embedding model using neural network.
 
     Provides trainable embeddings via optional neural network.
     """
-
     def __init__(
         self,
         embedding_dim: int = 64,
@@ -254,6 +246,5 @@ class EmbeddingModel:
             embedding_dim=model_data["embedding_dim"],
             dropout=model_data["dropout"],
         )
-
 
 # AC_COMPLETE: AC-PHASE59-S1-002 ✅ Pattern Embedding Implementation

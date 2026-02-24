@@ -1,9 +1,6 @@
 """
 Coherence Validator - Validate post-edit coherence.
 
-AC_START: AC-ENH-101-009
-Description: CoherenceValidator for post-edit validation
-Authority: ENH-101 Stage S4 - Post-Edit Validation
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 
 Purpose:
@@ -13,7 +10,6 @@ Purpose:
     - Structure preserved
     - Best practice compliance
 """
-
 from __future__ import annotations
 
 import logging
@@ -35,7 +31,6 @@ from cortex.orchestrators.validation.structure_analyzer import StructureAnalyzer
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class CoherenceIssue:
     """A specific coherence issue found.
@@ -54,7 +49,6 @@ class CoherenceIssue:
     location: str = ""
     suggestion: str = ""
 
-
 @dataclass
 class ValidationConfig:
     """Configuration for validation.
@@ -70,7 +64,6 @@ class ValidationConfig:
     check_versions: bool = True
     check_structure: bool = True
     similarity_threshold: float = 0.8
-
 
 class CoherenceValidator:
     """Validator for post-edit coherence checking.
@@ -361,6 +354,5 @@ class CoherenceValidator:
                 ))
         
         return issues
-
 
 # AC_COMPLETE: AC-ENH-101-009 ✅ CoherenceValidator implementation

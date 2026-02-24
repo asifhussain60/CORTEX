@@ -1,18 +1,13 @@
 """
 CORE Rules Verifier - Automated compliance checking for 30 CORE rules.
 
-AC_START: AC-WAVE-K-001
-Description: Architecture alignment verification
-Authority: cortex-registry/_cortex-master/AUTONOMOUS-WAVES-H-O-EXECUTION-GUIDE.md
 """
-
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
 import re
 import ast
-
 
 @dataclass
 class RuleViolation:
@@ -24,7 +19,6 @@ class RuleViolation:
     description: str
     severity: str
     detected_at: datetime
-
 
 @dataclass
 class ComplianceReport:
@@ -39,7 +33,6 @@ class ComplianceReport:
     def is_compliant(self) -> bool:
         """Check if 100% compliant."""
         return len(self.violations) == 0
-
 
 class CoreRulesVerifier:
     """
@@ -620,6 +613,5 @@ class CoreRulesVerifier:
         """CORE-049: Silent autonomous execution."""
         # Policy check - verified by execution protocol
         raise NotImplementedError("_check_silent_autonomous not yet implemented")
-
 
 # AC_COMPLETE: AC-WAVE-K-002 ✅

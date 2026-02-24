@@ -1,27 +1,20 @@
 """
 TTL cache manager for infrastructure discovery with invalidation strategies.
 
-AC_START: AC-INFRA-CACHE-S1-001
-Authority: phase-46 Stage 1 - Infrastructure Registry Foundation
-Description: Cache manager supporting TTL expiry, manual invalidation, pattern-based
              invalidation, and thread-safe operations with metrics tracking.
 """
-
 import threading
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, Optional, Set
 
-
 class InvalidationStrategy(str, Enum):
     """Cache invalidation strategies."""
-
     TTL = "ttl"
     MANUAL = "manual"
     PATTERN = "pattern"
     LRU = "lru"
-
 
 @dataclass
 class CacheEntry:
@@ -36,7 +29,6 @@ class CacheEntry:
         last_accessed: Last access timestamp
         access_count: Number of accesses
     """
-
     key: str
     value: Any
     ttl_seconds: int
@@ -53,11 +45,9 @@ class CacheEntry:
         self.access_count += 1
         self.last_accessed = time.time()
 
-
 @dataclass
 class CacheMetrics:
     """Cache performance metrics."""
-
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -73,7 +63,6 @@ class CacheMetrics:
     def miss_rate(self) -> float:
         """Calculate cache miss rate (0-1)."""
         return 1.0 - self.hit_rate
-
 
 class CacheManager:
     """
@@ -93,7 +82,6 @@ class CacheManager:
         >>> value = cache.get('package:requests')
         >>> cache.invalidate_pattern('package:*')
     """
-
     def __init__(
         self,
         max_size_mb: int = 100,
@@ -266,7 +254,6 @@ class CacheManager:
 
     def _start_cleanup_thread(self) -> None:
         """Start background cleanup thread for expired entries."""
-
         def cleanup_worker() -> None:
             """Background worker for cache cleanup."""
             while self._running:
@@ -284,7 +271,6 @@ class CacheManager:
         self._running = False
         if self._cleanup_thread:
             self._cleanup_thread.join(timeout=1)
-
 
 # AC_COMPLETE: AC-INFRA-CACHE-S1-001 ✅
 # - TTL cache with configurable timeouts per key

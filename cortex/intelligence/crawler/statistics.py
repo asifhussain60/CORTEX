@@ -1,13 +1,8 @@
-# AC_START: AC-PHASE58-S3-002
-# Description: Pattern Statistics & Distribution Analysis
-# Authority: CORE-008 TDD, CORE-011 type hints
-# Stage: S3 - GREEN phase implementation
 
 import math
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Set, Tuple
-
 
 @dataclass
 class ArchitectureFingerprint:
@@ -16,12 +11,10 @@ class ArchitectureFingerprint:
     confidence: float
     hash_value: str = ""
 
-
 class PatternDistribution:
     """
     Analyze frequency and co-occurrence of patterns across repositories.
     """
-
     def __init__(self) -> None:
         """Initialize PatternDistribution."""
         self.pattern_counts: Dict[str, int] = defaultdict(int)
@@ -57,12 +50,10 @@ class PatternDistribution:
             "frequency": dict(self.pattern_counts),
         }
 
-
 class ArchitectureProfiler:
     """
     Build architecture signatures and calculate similarity between repositories.
     """
-
     def __init__(self) -> None:
         """Initialize ArchitectureProfiler."""
         self._initialized = True
@@ -131,12 +122,10 @@ class ArchitectureProfiler:
             for pattern, count in pattern_repos.items()
         }
 
-
 class LearningModel:
     """
     Build learning models from pattern observations for future predictions.
     """
-
     def __init__(self) -> None:
         """Initialize LearningModel."""
         self.observations: List[str] = []

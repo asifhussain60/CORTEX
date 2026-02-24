@@ -1,31 +1,23 @@
 """
 Core infrastructure discovery logic for APIs, tooling, and services.
 
-AC_START: AC-INFRA-SCANNER-S3-001
-Authority: phase-46 Stage 3 - Infrastructure Scanner
-Description: Discovers APIs, tools, services from health checks and registries.
              Performs environment-specific capability detection and merges with
              cortex-registry/company/domains/infrastructure best practices (PRECEDENCE).
 """
-
 import json
 from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
-
 class EnvironmentType(str, Enum):
     """Supported environments."""
-
     DEVELOPMENT = "development"
     STAGING = "staging"
     PRODUCTION = "production"
 
-
 @dataclass
 class APICapability:
     """API capability descriptor."""
-
     name: str
     version: str
     endpoint: str
@@ -34,22 +26,18 @@ class APICapability:
     authentication: Optional[str] = None
     rate_limit_rpm: Optional[int] = None
 
-
 @dataclass
 class ToolCapability:
     """Tooling capability descriptor."""
-
     name: str
     version: str
     environment: EnvironmentType
     installed: bool
     location: Optional[str] = None
 
-
 @dataclass
 class ServiceCapability:
     """Service capability descriptor."""
-
     name: str
     version: str
     environment: EnvironmentType
@@ -57,11 +45,9 @@ class ServiceCapability:
     endpoint: Optional[str] = None
     dependencies: List[str] = None
 
-
 @dataclass
 class EnvironmentCapabilities:
     """All capabilities for an environment."""
-
     environment: EnvironmentType
     apis: List[APICapability]
     tools: List[ToolCapability]
@@ -103,7 +89,6 @@ class EnvironmentCapabilities:
             ],
         }
 
-
 class InfrastructureScanner:
     """
     Infrastructure discovery scanner for APIs, tools, and services.
@@ -115,7 +100,6 @@ class InfrastructureScanner:
         >>> scanner = InfrastructureScanner()
         >>> capabilities = scanner.scan_environment(EnvironmentType.PRODUCTION)
     """
-
     def __init__(self) -> None:
         """Initialize scanner."""
         self.discovery_config = {
@@ -368,7 +352,6 @@ class InfrastructureScanner:
                 EnvironmentType.DEVELOPMENT
             ),
         }
-
 
 # AC_COMPLETE: AC-INFRA-SCANNER-S3-001 ✅
 # - Infrastructure scanning for APIs, tools, services

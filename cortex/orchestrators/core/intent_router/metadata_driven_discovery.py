@@ -1,4 +1,3 @@
-# AC_START: AC-ROUTER-METADATA-20260223T000000Z
 """
 Metadata-Driven MCP Tool Discovery
 
@@ -9,7 +8,6 @@ Module: cortex/intent_router/metadata_driven_discovery.py
 Authority: Phase 81 S3 Part 4 - Metadata Parser Integration
 Version: 1.0
 """
-
 from typing import Optional, Dict, List, Set, Any
 from dataclasses import dataclass, field
 import logging
@@ -19,7 +17,6 @@ from cortex.orchestrators.intelligence.metadata_parser import AgentMetadataParse
 from cortex.orchestrators.core.intent_router.mcp_executor import MCPToolExecutor
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class AgentToolMapping:
@@ -38,7 +35,6 @@ class AgentToolMapping:
     def has_tool(self, tool_name: str) -> bool:
         """Check if agent has specific tool."""
         return tool_name in self.mcp_tools
-
 
 class MetadataDrivenDiscovery:
     """
@@ -342,6 +338,5 @@ class MetadataDrivenDiscovery:
             for tool, agents in self._tool_agent_map.items()
         ]
         return sorted(tool_usage, key=lambda x: x[1], reverse=True)[:top_n]
-
 
 # AC_COMPLETE: AC-ROUTER-METADATA-20260223T000000Z ✅ Metadata-Driven Discovery Module

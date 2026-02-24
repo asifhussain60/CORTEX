@@ -1,12 +1,8 @@
 """
 Repository Interface - Abstract Base for Repository Pattern
 
-AC_START: AC-PHASE54A-S2-INTERFACE
-Description: Abstract interface for repository implementations
-Authority: phase-54-A-incremental-onboarding-refactor.yaml
 Pattern: Strategy pattern, enables multiple storage backends
 """
-
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 
@@ -14,10 +10,8 @@ from cortex.core.result import Result
 
 from .json_profile_repository import ProfileTier, RepositoryProfile
 
-
 class RepositoryInterface(ABC):
     """Abstract repository interface for profile storage."""
-
     @abstractmethod
     def create(self, profile: RepositoryProfile) -> Result[RepositoryProfile]:
         """Create new profile."""
@@ -62,6 +56,5 @@ class RepositoryInterface(ABC):
     def clear(self) -> Result[None]:
         """Clear all profiles."""
         pass
-
 
 # AC_COMPLETE: AC-PHASE54A-S2-INTERFACE ✅

@@ -1,10 +1,7 @@
 """
-AC_START: AC-PROMPT-CLEANUP-001
-Description: PromptCoherenceValidator - Detect drift between agent capabilities and prompt documentation.
 Author: Asif Hussain
 Phase: 56 - LENS/Intelligence Hybrid Architecture + Audit Enhancement
 """
-
 import re
 from dataclasses import dataclass
 from difflib import SequenceMatcher
@@ -12,7 +9,6 @@ from pathlib import Path
 from typing import Dict, List, Optional
 
 import yaml
-
 
 @dataclass
 class CoherenceIssue:
@@ -23,7 +19,6 @@ class CoherenceIssue:
     description: str
     evidence: str
     auto_fix: Optional[str] = None
-
 
 class PromptCoherenceValidator:
     """
@@ -43,7 +38,6 @@ class PromptCoherenceValidator:
         for issue in issues:
             print(f"{issue.severity}: {issue.description}")
     """
-
     def __init__(self, workspace_root: Path = None) -> None:
         """Initialize validator with CORTEX workspace root."""
         self.workspace_root = workspace_root or Path("d:/PROJECTS/CORTEX")
@@ -293,6 +287,5 @@ class PromptCoherenceValidator:
                     checks.add(parts[1])
 
         return checks
-
 
 # AC_COMPLETE: AC-PROMPT-CLEANUP-001 ✅ PromptCoherenceValidator implemented with 6 validation checks

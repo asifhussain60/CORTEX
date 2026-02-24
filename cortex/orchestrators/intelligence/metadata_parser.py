@@ -1,4 +1,3 @@
-# AC_START: AC-INTEL-METADATA-20260223T000000Z
 """
 Agent Metadata Parser
 Parses YAML front-matter from agent markdown files for programmatic discovery.
@@ -7,7 +6,6 @@ Module: cortex/agents/metadata_parser.py
 Authority: Phase 81 S2 - Agent Metadata Standardization
 Version: 1.0
 """
-
 import os
 import re
 import yaml
@@ -16,7 +14,6 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from functools import lru_cache
 from datetime import datetime
-
 
 @dataclass
 class AgentMetadata:
@@ -59,7 +56,6 @@ class AgentMetadata:
         if self.token_cost_estimate < 500 or self.token_cost_estimate > 20000:
             return False
         return True
-
 
 class AgentMetadataParser:
     """Parse and manage agent metadata from markdown files."""
@@ -299,40 +295,32 @@ class AgentMetadataParser:
         self._metadata_cache.clear()
         self._cache_time.clear()
 
-
 # Public API for discovery
 _parser = AgentMetadataParser()
-
 
 def get_agents_by_capability(capability: str) -> List[AgentMetadata]:
     """Get all agents providing a capability."""
     return _parser.get_agents_by_capability(capability)
 
-
 def get_agents_by_mode(mode: str) -> List[AgentMetadata]:
     """Get all agents serving a mode."""
     return _parser.get_agents_by_mode(mode)
-
 
 def get_agents_by_layer(layer: str) -> List[AgentMetadata]:
     """Get all agents in a layer."""
     return _parser.get_agents_by_layer(layer)
 
-
 def get_agent_collaborators(agent_id: str) -> List[AgentMetadata]:
     """Get collaborators for an agent."""
     return _parser.get_agent_collaborators(agent_id)
-
 
 def validate_all_metadata() -> Tuple[int, int, List[str]]:
     """Validate all agent metadata."""
     return _parser.validate_all_metadata()
 
-
 def get_mode_agent_mapping() -> Dict[str, List[AgentMetadata]]:
     """Get mode to agents mapping."""
     return _parser.get_mode_agent_mapping()
-
 
 # AC_COMPLETE: AC-INTEL-METADATA-20260223T000000Z ✅
 # Module: cortex/agents/metadata_parser.py

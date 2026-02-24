@@ -1,12 +1,8 @@
 """
 Base adapter interface for external refactoring tools.
 
-AC_START: AC-PHASE24.1.1-004
-Description: Abstract base class for refactoring tool adapters
-Authority: Phase 24 - External Refactoring Tools Integration
 Compliance: CORE-011 (type hints), CORE-012 (docstrings)
 """
-
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -18,7 +14,6 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringRequest,
     RefactoringResult,
 )
-
 
 class RefactoringToolAdapter(ABC):
     """Abstract base class for external refactoring tool adapters.
@@ -53,7 +48,6 @@ class RefactoringToolAdapter(ABC):
         ...
         ...     # ... implement other methods
     """
-
     @abstractmethod
     def get_supported_operations(self) -> List[str]:
         """Return list of supported refactoring operations.
@@ -125,6 +119,5 @@ class RefactoringToolAdapter(ABC):
             - Parameters are valid for operation
         """
         pass
-
 
 # AC_COMPLETE: AC-PHASE24.1.1-004 ✅

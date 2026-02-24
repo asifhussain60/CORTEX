@@ -1,14 +1,10 @@
 """
 InteractionOrchestrator integration for tooling suggestions.
 
-AC_START: AC-INFRA-INTERACTION-S6-002
-Authority: phase-46 Stage 6 - Orchestrator Integration: Interaction
-Description: Wire infrastructure awareness into InteractionOrchestrator.
              - Suggest available tooling for user tasks
              - Recommend reusable GitHub Actions
              - Environment-specific tool suggestions
 """
-
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 
@@ -16,18 +12,15 @@ from cortex.infrastructure.capability_detector import CapabilityDetector
 from cortex.infrastructure.github_client import GitHubClient
 from cortex.infrastructure.infrastructure_scanner import EnvironmentType
 
-
 @dataclass
 class ToolSuggestion:
     """Tool suggestion for user task."""
-
     tool_name: str
     availability: str  # "available", "partially_available", "unavailable"
     environments: List[str]
     version: Optional[str] = None
     rationale: Optional[str] = None
     alternatives: Optional[List[str]] = None
-
 
 class ToolingSuggestions:
     """
@@ -41,7 +34,6 @@ class ToolingSuggestions:
         >>> for tool in tools:
         >>>     print(f"Use {tool.tool_name}: {tool.rationale}")
     """
-
     def __init__(self) -> None:
         """Initialize tooling suggestions."""
         self.detector = CapabilityDetector()
@@ -253,7 +245,6 @@ class ToolingSuggestions:
             "tools_by_environment": tool_env_map,
             "actions": [action.name for action in actions],
         }
-
 
 # AC_COMPLETE: AC-INFRA-INTERACTION-S6-002 ✅
 # - Tool suggestions for user tasks

@@ -1,4 +1,3 @@
-# AC_START: AC-MEGA-B-S2-002
 """
 Git-Aware Delta Detector - Incremental doc updates via git diff analysis.
 
@@ -37,13 +36,11 @@ Governance:
 Author: Asif Hussain
 Date: 2026-02-16
 """
-
 import re
 import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, List, Optional, Tuple
-
 
 @dataclass
 class ChangedFile:
@@ -60,7 +57,6 @@ class ChangedFile:
     status: str
     old_path: Optional[str] = None
     diff_content: str = ""
-
 
 class GitAwareDeltaDetector:
     """

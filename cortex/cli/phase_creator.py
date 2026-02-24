@@ -1,15 +1,11 @@
 """
 Phase Creator CLI Tool
 
-AC_START: AC-WAVE-I-001
-Description: ENH-084 - Standard Phase Creation Practices CLI tool
-Authority: WAVE-6-COMPREHENSIVE-CLEANUP-REFACTORING.yaml
 Testing: tests/unit/cli/test_phase_creator.py
 
 Creates standardized phase specifications from templates with validation.
 Ensures all phases follow wave-based structure and cleanup requirements.
 """
-
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -17,7 +13,6 @@ from typing import Any, Dict, List, Optional
 
 import click
 import yaml
-
 
 class PhaseTemplate:
     """Phase specification templates."""
@@ -76,7 +71,6 @@ class PhaseTemplate:
         "test_target": 15,
         "commits_expected": 2
     }
-
 
 class PhaseValidator:
     """Validates phase specifications against 50+ rules."""
@@ -209,7 +203,6 @@ class PhaseValidator:
         
         return "\n".join(lines)
 
-
 class PhaseCreator:
     """Phase creation orchestrator."""
     
@@ -264,10 +257,8 @@ AC_START: AC-{eid}-TEST-001
 Description: Test suite for {eid}
 Authority: {eid} specification
 """
-
 import pytest
 from pathlib import Path
-
 
 class Test{eid.replace("-", "")}:
     """Tests for {eid}."""
@@ -276,17 +267,14 @@ class Test{eid.replace("-", "")}:
         """Placeholder test - replace with actual tests."""
         assert True
 
-
 # AC_COMPLETE: AC-{eid}-TEST-001 ✅
 '''
         return stub
-
 
 @click.group()
 def cli() -> None:
     """CORTEX Phase Creator CLI - ENH-084"""
     pass
-
 
 @cli.command()
 @click.option('--template', type=click.Choice(['standard', 'enhancement', 'wave']), 
@@ -344,7 +332,6 @@ def create(template: str, phase_id: str, title: str, output: Optional[str], inte
         test_stub_path.write_text(test_stub)
         click.echo(f"✅ Test stub created: {test_stub_path}")
 
-
 @cli.command()
 @click.argument('spec_file', type=click.Path(exists=True))
 def validate(spec_file: str) -> None:
@@ -363,7 +350,6 @@ def validate(spec_file: str) -> None:
     else:
         click.echo(creator.validator.get_report())
         sys.exit(1)
-
 
 @cli.command()
 @click.argument('spec_file', type=click.Path(exists=True))
@@ -388,9 +374,7 @@ def lint(spec_file: str) -> None:
         click.echo(creator.validator.get_report())
         sys.exit(1)
 
-
 if __name__ == '__main__':
     cli()
-
 
 # AC_COMPLETE: AC-WAVE-I-001 ✅ Phase Creator CLI tool complete

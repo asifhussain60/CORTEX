@@ -1,4 +1,3 @@
-# AC_START: AC-ROUTER-20260223T000000Z
 # =============================================================================
 # DEPRECATED: Enhanced IntentRouter (Phase 81)
 # =============================================================================
@@ -22,7 +21,6 @@ Module: cortex/intent_router/router_v2.py
 Authority: Phase 81 S3 - IntentRouter Capability-Based Routing
 Version: 2.0
 """
-
 from typing import Optional, Dict, List, Tuple, Any
 from dataclasses import dataclass, field
 from enum import Enum
@@ -47,7 +45,6 @@ from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class IntentRoutingRequest:
     """Request for intent routing."""
@@ -56,7 +53,6 @@ class IntentRoutingRequest:
     intent: IntentType
     confidence: float
     context: Optional[Dict[str, Any]] = None
-
 
 @dataclass
 class IntentRoutingResult:
@@ -114,7 +110,6 @@ class IntentRoutingResult:
                 meta.update(self.context.phase_state)
         return meta
 
-
 class EnhancedIntentRouter(OrchestratorProtocolMixin):
     """
     IntentRouter v2 with capability-based agent selection.
@@ -144,7 +139,6 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
         >>> result = router.route(routing_req)
         >>> print(f"Route: {result.primary_agent_id} + {len(result.secondary_agents)} collaborators")
     """
-
     def __init__(self) -> None:
         """Initialize enhanced intent router."""
         self.capability_matcher = CapabilityMatcher()
@@ -593,6 +587,5 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
             _routed_intent=request.intent,
             timestamp=datetime.now().isoformat(),
         )
-
 
 # AC_COMPLETE: AC-ROUTER-20260223T000000Z

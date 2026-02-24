@@ -1,7 +1,6 @@
 """
 HolisticRefactoringSweep - Auto-Injected Workflow Epilogue (Phase 100 Stage 8).
 
-AC_START: AC-PHASE100-S8-002
 Purpose: Holistic refactoring sweep across ALL workflow-modified files
 Authority: phase-100-workflow-template-library.yaml § Stage 8
 Compliance: CORE-008 (TDD), CORE-035 (RefactoringOrchestrator), CORE-049 (silent execution)
@@ -13,13 +12,11 @@ Features:
 - Ensures holistic coherence (no local optima from individual phases)
 - Auto-injection by MasterOrchestrator as final epilogue
 """
-
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from enum import Enum
-
 
 class SweepState(Enum):
     """Sweep execution states."""
@@ -29,7 +26,6 @@ class SweepState(Enum):
     REFACTORING = "refactoring"
     CONVERGED = "converged"
     FAILED = "failed"
-
 
 @dataclass
 class LENSScoreSnapshot:
@@ -49,7 +45,6 @@ class LENSScoreSnapshot:
     duplication: float
     timestamp: float
 
-
 @dataclass
 class RefactoringResult:
     """
@@ -63,7 +58,6 @@ class RefactoringResult:
     files_refactored: int
     patterns_applied: List[str]
     tests_pass: bool
-
 
 @dataclass
 class SweepResult:
@@ -88,7 +82,6 @@ class SweepResult:
     files_refactored: int = 0
     audit_trail: List[Dict[str, Any]] = field(default_factory=list)
     error_message: Optional[str] = None
-
 
 class HolisticRefactoringSweep:
     """
@@ -358,6 +351,5 @@ class HolisticRefactoringSweep:
             **kwargs
         }
         self.audit_trail.append(event)
-
 
 # AC_COMPLETE: AC-PHASE100-S8-002 ✅ Implementation complete

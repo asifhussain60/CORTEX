@@ -1,19 +1,14 @@
 """
 Data models for refactoring operations.
 
-AC_START: AC-PHASE24.1.1-003
-Description: Core data models for refactoring requests and results
-Authority: Phase 24 - External Refactoring Tools Integration
 Compliance: CORE-011 (type hints), CORE-012 (docstrings)
 """
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-
 
 class RefactoringLanguage(Enum):
     """Supported programming languages for refactoring.
@@ -25,7 +20,6 @@ class RefactoringLanguage(Enum):
     TYPESCRIPT = "typescript"
     JAVASCRIPT = "javascript"
     JAVA = "java"
-
 
 @dataclass
 class RefactoringRequest:
@@ -49,7 +43,6 @@ class RefactoringRequest:
     file_path: Path
     language: RefactoringLanguage
     parameters: Dict[str, Any]
-
 
 @dataclass
 class RefactoringResult:
@@ -77,6 +70,5 @@ class RefactoringResult:
     warnings: List[str] = field(default_factory=list)
     errors: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 # AC_COMPLETE: AC-PHASE24.1.1-003 ✅

@@ -1,6 +1,4 @@
-# AC_START: AC-MEGA-B-S2-004-SOLID
 """SOLIDOrchestrator - Unified SOLID compliance checking with SQLite audit."""
-
 from __future__ import annotations
 import json
 import sqlite3
@@ -25,7 +23,6 @@ try:
     from cortex.intelligence.domain_brain import DomainBrainAPI as _SolidDomainBrainAPI  # type: ignore[attr-defined]
 except Exception:
     _SolidDomainBrainAPI = None  # type: ignore[assignment,misc]
-
 
 class SOLIDOrchestrator(OrchestratorProtocolMixin):
     """Unified SOLID compliance: SRP + OCP + LSP + ISP + DIP + DRY.
@@ -233,6 +230,5 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin):
             }
             for r in rows
         ]
-
 
 # AC_COMPLETE: AC-MEGA-B-S2-004-SOLID ✅ Implemented

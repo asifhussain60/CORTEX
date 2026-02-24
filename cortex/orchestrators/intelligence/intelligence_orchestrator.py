@@ -1,6 +1,4 @@
-# AC_START: AC-MEGA-B-S2-003-INTELLIGENCE
 """IntelligenceOrchestrator - Unified code intelligence with SQLite audit."""
-
 from __future__ import annotations
 import hashlib
 import json
@@ -17,7 +15,6 @@ from cortex.core.intelligence_routing_engine import IntelligenceRoutingEngine
 
 logger = logging.getLogger(__name__)
 
-
 class IntelligenceOrchestrator(OrchestratorProtocolMixin):
     """Unified intelligence: AST + comments + routing + comprehension + caching.
     
@@ -31,7 +28,6 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin):
     Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
     Phase: 23 MEGA-B Stage 2 - Component Registration
     """
-
     _orch_name = "IntelligenceOrchestrator"
     _orch_version = "1.0.0"
     
@@ -268,7 +264,6 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin):
             for r in rows
         ]
 
-
     def analyze_with_context(
         self,
         intent: str,
@@ -311,6 +306,5 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin):
             {"lens_enriched": result["lens_enriched"]},
         )
         return result
-
 
 # AC_COMPLETE: AC-MEGA-B-S2-003-INTELLIGENCE ✅ Implemented

@@ -1,8 +1,6 @@
 """
 Unified Registry - Single Canonical Registry Base for CORTEX
 
-AC_START: AC-WAVE-P-REM-001-002
-Authority: WAVE-P Stage 1 - Registry Consolidation (GREEN Phase)
 Priority: P0-CRITICAL
 CORE Compliance:
 - CORE-008: TDD (tests written first ✅)
@@ -33,7 +31,6 @@ Usage:
     registry.register("key1", my_entity)
     entity = registry.get("key1")
 """
-
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -44,7 +41,6 @@ from datetime import datetime
 
 # Type variable for generic registry
 T = TypeVar('T')
-
 
 class UnifiedRegistry(Generic[T], ABC):
     """
@@ -283,7 +279,6 @@ class UnifiedRegistry(Generic[T], ABC):
             ...     return entity.age >= 18 and entity.email is not None
         """
         pass
-
 
 # AC_COMPLETE: AC-WAVE-P-REM-001-002 ✅ UnifiedRegistry implemented
 # Next: Run tests to verify GREEN phase

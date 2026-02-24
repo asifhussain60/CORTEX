@@ -1,10 +1,5 @@
-# AC_START: AC-PHASE58-S5-002
-# Description: MCP Tools & CLI for Crawler
-# Authority: CORE-008 TDD, MCP-FIRST
-# Stage: S5 - GREEN phase implementation
 
 from typing import Any, Callable, Dict, List
-
 
 def cortex_discover_patterns() -> Callable:
     """
@@ -33,7 +28,6 @@ def cortex_discover_patterns() -> Callable:
 
     return tool_impl
 
-
 def cortex_analyze_repository() -> Callable:
     """
     MCP Tool: Analyze repository architecture.
@@ -61,7 +55,6 @@ def cortex_analyze_repository() -> Callable:
 
     return tool_impl
 
-
 def register_mcp_tools(registry: Dict[str, Callable]) -> None:
     """
     Register MCP tools with orchestrator.
@@ -72,12 +65,10 @@ def register_mcp_tools(registry: Dict[str, Callable]) -> None:
     registry["cortex_discover_patterns"] = cortex_discover_patterns()
     registry["cortex_analyze_repository"] = cortex_analyze_repository()
 
-
 class CrawlerCLI:
     """
     Command-line interface for crawler operations.
     """
-
     def __init__(self) -> None:
         """Initialize CrawlerCLI."""
         self.commands = {

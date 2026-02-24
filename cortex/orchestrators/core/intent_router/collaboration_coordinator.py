@@ -1,4 +1,3 @@
-# AC_START: AC-ROUTER-COLLAB-20260223T000000Z
 """
 Agent Collaboration Coordinator for Multi-Agent Workflows
 
@@ -9,7 +8,6 @@ Module: cortex/intent_router/collaboration_coordinator.py
 Authority: Phase 81 S3 - IntentRouter Capability-Based Routing
 Version: 1.0
 """
-
 from typing import List, Dict, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from enum import Enum
@@ -21,14 +19,12 @@ from cortex.orchestrators.core.intent_router.mcp_executor import MCPToolExecutor
 
 logger = logging.getLogger(__name__)
 
-
 class CollaborationPattern(str, Enum):
     """Collaboration patterns between agents."""
     SEQUENTIAL = "sequential"  # Agent A → Agent B → Agent C (linear)
     PARALLEL = "parallel"  # Agent A || Agent B || Agent C (concurrent)
     HIERARCHICAL = "hierarchical"  # Resolver → Auditor → Executor (layers)
     FEEDBACK_LOOP = "feedback_loop"  # A → B → A (iterative refinement)
-
 
 @dataclass
 class AgentContext:
@@ -56,7 +52,6 @@ class AgentContext:
         """Check if LENS analysis exists in cache."""
         return key in self.lens_cache
 
-
 @dataclass
 class CollaborationRequest:
     """Request for agent collaboration."""
@@ -72,7 +67,6 @@ class CollaborationRequest:
         """Add secondary agent to collaboration chain."""
         if agent_id not in self.secondary_agents:
             self.secondary_agents.append(agent_id)
-
 
 @dataclass
 class CollaborationResult:
@@ -93,7 +87,6 @@ class CollaborationResult:
             self.combined_output[agent_id] = {}
         self.combined_output[agent_id].update(output)
         logger.debug(f"Agent output merged: {agent_id}")
-
 
 class AgentCollaborationCoordinator:
     """
@@ -464,6 +457,5 @@ class AgentCollaborationCoordinator:
         
         # In production, would compare output deltas across iterations
         return False  # Placeholder
-
 
 # AC_COMPLETE: AC-ROUTER-COLLAB-20260223T000000Z ✅ Agent Collaboration Coordinator

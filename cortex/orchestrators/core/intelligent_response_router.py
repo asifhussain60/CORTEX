@@ -1,4 +1,3 @@
-# AC_START: AC-WAVE-4-S1-002
 """
 Intelligent Response Router - ENH-087 Track 2.
 
@@ -9,7 +8,6 @@ Module: cortex/orchestrators/routing/intelligent_response_router.py
 Authority: WAVE-4 Stage 1 - ENH-087 Track 2
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 """
-
 from __future__ import annotations
 
 import logging
@@ -18,7 +16,6 @@ from typing import Dict, Any, List, Optional
 from difflib import SequenceMatcher
 
 logger = logging.getLogger(__name__)
-
 
 @dataclass
 class RoutingContext:
@@ -37,7 +34,6 @@ class RoutingContext:
     complexity: int
     user_preferences: Dict[str, Any]
 
-
 @dataclass
 class ContextAnalysisResult:
     """Result of context analysis.
@@ -55,7 +51,6 @@ class ContextAnalysisResult:
     metadata: Dict[str, Any]
     warnings: List[str]
 
-
 @dataclass
 class PatternMatchResult:
     """Result of pattern matching.
@@ -72,7 +67,6 @@ class PatternMatchResult:
     confidence: float
     metadata: Dict[str, Any]
     warnings: List[str]
-
 
 @dataclass
 class TemplateSelectionResult:
@@ -94,7 +88,6 @@ class TemplateSelectionResult:
     is_fallback: bool
     confidence: float
     metadata: Dict[str, Any] = field(default_factory=dict)
-
 
 class IntelligentResponseRouter:
     """Intelligent response router with context analysis and pattern matching.
@@ -124,7 +117,6 @@ class IntelligentResponseRouter:
         >>> pattern = router.match_patterns(result)
         >>> template = router.select_template(pattern)
     """
-
     # Pattern definitions for matching
     PATTERNS = {
         "implement_feature": ["implement", "create", "add", "build"],
@@ -454,6 +446,5 @@ class IntelligentResponseRouter:
             confidence=0.5,
             metadata={"fallback_reason": "no_patterns_matched"},
         )
-
 
 # AC_COMPLETE: AC-WAVE-4-S1-002 (Implementation complete - GREEN phase)

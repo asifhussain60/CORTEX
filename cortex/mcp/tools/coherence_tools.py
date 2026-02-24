@@ -1,9 +1,6 @@
 """
 MCP Tools for Change Coherence Engine.
 
-AC_START: AC-ENH-101-011
-Description: MCP tool cortex_validate_coherence
-Authority: ENH-101 Stage S5 - MCP Integration
 Compliance: MCP-FIRST architecture
 
 Purpose:
@@ -13,7 +10,6 @@ Purpose:
 ENFORCEMENT: All tools MUST validate orchestrator_context.
 Only MasterOrchestrator can invoke directly (via cortex_request_lifecycle).
 """
-
 from __future__ import annotations
 
 import logging
@@ -29,8 +25,6 @@ from cortex.orchestrators.validation import (
 )
 
 logger = logging.getLogger(__name__)
-
-
 
 async def cortex_validate_coherence(
     file_path: str,
@@ -243,7 +237,6 @@ async def cortex_validate_coherence(
             "summary": f"Error: {str(e)}",
         }
 
-
 # MCP Tool Registration
 MCP_TOOLS = [
     {
@@ -285,6 +278,5 @@ MCP_TOOLS = [
         "handler": cortex_validate_coherence,
     },
 ]
-
 
 # AC_COMPLETE: AC-ENH-101-011 ✅ MCP tool cortex_validate_coherence

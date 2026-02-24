@@ -1,6 +1,3 @@
-# AC_START: AC-PHASE58-S1-005
-# Description: Crawler Package Initialization
-# Authority: CORE-008, CORE-011
 
 from .crawler_base import AsyncRepositoryCrawler, CrawlerConfig, FileMetadata
 from .scheduler import PatternDiscoveryScheduler, WorkItem, WorkItemStatus

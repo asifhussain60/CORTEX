@@ -1,5 +1,3 @@
-# AC_START: AC-PHASE55-S1-dotnet_lens
-# Description: Phase 55 S1 - .NET Enterprise LENS Enhancement
 # Author: Asif Hussain
 # Date: 2026-02-08
 # Phase: 55, Stage 1
@@ -9,17 +7,14 @@
 
 S1 Foundation: Solution file parsing, project structure analysis.
 """
-
 import re
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
-
 class ProjectType(Enum):
     """Project type classification."""
-
     CONSOLE = "Console"
     WEB_API = "WebAPI"
     MVC = "MVC"
@@ -28,10 +23,8 @@ class ProjectType(Enum):
     TEST = "Test"
     UNKNOWN = "Unknown"
 
-
 class DotNetVersion(Enum):
     """Supported .NET versions."""
-
     FRAMEWORK_4_8 = "net48"
     CORE_3_1 = "netcoreapp3.1"
     NET_5 = "net5.0"
@@ -40,21 +33,17 @@ class DotNetVersion(Enum):
     NET_8 = "net8.0"
     UNKNOWN = "unknown"
 
-
 @dataclass
 class NuGetPackage:
     """NuGet package reference."""
-
     name: str
     version: str
     framework_targets: List[str] = field(default_factory=list)
     is_development_dependency: bool = False
 
-
 @dataclass
 class DotNetProject:
     """Representation of a .NET project."""
-
     name: str
     path: str
     project_type: ProjectType
@@ -64,21 +53,17 @@ class DotNetProject:
     output_path: Optional[str] = None
     assembly_name: Optional[str] = None
 
-
 @dataclass
 class DotNetSolution:
     """Representation of a .NET solution."""
-
     name: str
     path: str
     projects: List[DotNetProject] = field(default_factory=list)
     folders: Dict[str, List[str]] = field(default_factory=dict)
     platform_target: Optional[str] = None
 
-
 class SolutionFileParser:
     """Parse .NET solution (.sln) files."""
-
     # Regex patterns for .sln parsing
     PROJECT_PATTERN = r'Project\("([^"]*)"\)\s*=\s*"([^"]*)",\s*"([^"]*)",\s*"([^"]*)"\s*EndProject'
     GLOBAL_SECTION_PATTERN = r"GlobalSection\((\w+)\)\s*=\s*(\w+)(.*?)EndGlobalSection"
@@ -136,10 +121,8 @@ class SolutionFileParser:
 
         return guid_map.get(type_guid, ProjectType.UNKNOWN)
 
-
 class ProjectFileParser:
     """Parse .NET project (.csproj, .vbproj) files."""
-
     @staticmethod
     def parse_csproj(file_content: str) -> Optional[DotNetProject]:
         """Parse .csproj file.
@@ -203,10 +186,8 @@ class ProjectFileParser:
 
         return framework_map.get(framework_str, DotNetVersion.UNKNOWN)
 
-
 class MonolithAnalyzer:
     """Analyze .NET monolith for layer structure."""
-
     @staticmethod
     def analyze_solution(solution: DotNetSolution) -> Dict[str, Any]:
         """Analyze monolith structure.
@@ -257,10 +238,8 @@ class MonolithAnalyzer:
         # AC_COMPLETE: AC-PHASE55-S1-monolith_analysis
         return analysis
 
-
 class DotNetLensAnalyzer:
     """Main LENS analyzer for .NET enterprise code."""
-
     def __init__(self, semantic_mode: bool = False) -> None:
         """Initialize analyzer.
 

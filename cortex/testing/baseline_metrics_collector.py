@@ -1,5 +1,4 @@
 """
-AC_START: AC-PHASE38.0-011
 Baseline Metrics Collector - Stage 3 Implementation
 
 Captures performance baseline for regression detection.
@@ -8,7 +7,6 @@ Metrics: test execution time, orchestrator latency, memory usage, cache hit rate
 Authority: Phase 38.0 Stage 3 - Remediation & Baseline Restoration
 TDD: Tests BEFORE code (CORE-008)
 """
-
 import json
 import statistics
 import time
@@ -23,7 +21,6 @@ try:
 except ImportError:
     PSUTIL_AVAILABLE = False
 
-
 @dataclass
 class PerformanceMetrics:
     """Performance metrics snapshot."""
@@ -36,14 +33,12 @@ class PerformanceMetrics:
     total_tests: int
     test_durations: List[float]
 
-
 class BaselineMetricsCollector:
     """
     Collects baseline performance metrics for regression detection.
 
     AC-PHASE38.0-011: Captures test execution, orchestrator latency, memory, cache metrics.
     """
-
     def __init__(self, cortex_root: Optional[Path] = None) -> None:
         """
         Initialize metrics collector.
@@ -249,7 +244,6 @@ class BaselineMetricsCollector:
                         self.record_test_duration(duration)
                 except (ValueError, IndexError):
                     continue
-
 
 # AC_COMPLETE: AC-PHASE38.0-011 ✅
 # Implementation: BaselineMetricsCollector fully implemented

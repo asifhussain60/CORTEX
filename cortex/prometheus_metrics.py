@@ -1,7 +1,3 @@
-# AC_START: AC-PHASE82.S3-PROMETHEUS-METRICS
-# Description: Prometheus metrics integration for IntentRouter monitoring
-# Phase: 82, Stage: 3, Part: 2 (Metrics & Monitoring)
-# TDD Cycle: Complete (RED→GREEN→REFACTOR)
 
 """
 Prometheus Metrics Integration for IntentRouter Production Monitoring
@@ -19,16 +15,13 @@ Metrics Exposed:
 Author: CORTEX/TDD-Orchestrator
 Governance: CORE-008 (TDD-first), CORE-011 (type hints), CORE-012 (docstrings)
 """
-
 from typing import Dict, Any, Callable
 from functools import wraps
 import time
 from contextlib import contextmanager
 
-
 class PrometheusMetrics:
     """Prometheus metrics collector for IntentRouter."""
-
     def __init__(self, service_name: str = "cortex-intentrouter") -> None:
         """Initialize metrics collector.
         
@@ -277,10 +270,8 @@ class PrometheusMetrics:
 
         return decorator
 
-
 class TimingContext:
     """Context manager for timing operations."""
-
     def __init__(self, metrics: PrometheusMetrics, metric_name: str, mode: str) -> None:
         """Initialize timing context.
         
@@ -316,7 +307,6 @@ class TimingContext:
 
         return False
 
-
 # Example FastAPI/Flask integration:
 """
 from flask import Flask, Response
@@ -347,7 +337,6 @@ def route_request(request_data):
         metrics.record_routing_error(mode, 'routing_failed')
         return {'error': 'routing failed'}, 500
 """
-
 # AC_COMPLETE: AC-PHASE82.S3-PROMETHEUS-METRICS ✅
 # Prometheus metrics implementation complete with 6 core metrics
 # All metrics tested and ready for production monitoring

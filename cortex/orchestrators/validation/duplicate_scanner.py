@@ -1,9 +1,6 @@
 """
 Duplicate Scanner - Find duplicate/similar content.
 
-AC_START: AC-ENH-101-006
-Description: DuplicateScanner for detecting duplicate content
-Authority: ENH-101 Stage S3 - Similarity Detection
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 
 Purpose:
@@ -12,7 +9,6 @@ Purpose:
     - Near-duplicates (configurable similarity threshold)
     - Consolidation suggestions
 """
-
 from __future__ import annotations
 
 import logging
@@ -29,7 +25,6 @@ from cortex.orchestrators.validation.coherence_models import (
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class ConsolidationSuggestion:
     """Suggestion for consolidating duplicate content.
@@ -45,7 +40,6 @@ class ConsolidationSuggestion:
     recommended_location: int  # Line number
     action: str
     rationale: str
-
 
 @dataclass
 class ScanResult:
@@ -72,7 +66,6 @@ class ScanResult:
     def total_count(self) -> int:
         """Total number of duplicates found."""
         return len(self.all_duplicates)
-
 
 class DuplicateScanner:
     """Scanner for detecting duplicate and similar content.
@@ -369,6 +362,5 @@ class DuplicateScanner:
             ))
         
         return suggestions
-
 
 # AC_COMPLETE: AC-ENH-101-006 ✅ DuplicateScanner implementation

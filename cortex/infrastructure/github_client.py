@@ -1,14 +1,10 @@
 """
 GitHub GraphQL/REST API client with rate limiting and caching.
 
-AC_START: AC-INFRA-GITHUB-S2-001
-Authority: phase-46 Stage 2 - GitHub API Client
-Description: GitHub API wrapper supporting GraphQL queries for packages, actions,
              environments, and REST API for Dependabot alerts, deployment status.
              Includes rate limit handling, caching, response normalization, and
              secure token management (environment variables only).
 """
-
 import json
 import os
 import time
@@ -23,19 +19,15 @@ except ImportError:
     Github = None  # type: ignore
     GithubException = None  # type: ignore
 
-
 class GitHubScope(str, Enum):
     """GitHub API scopes required."""
-
     READ_PACKAGES = "read:packages"
     READ_ORG = "read:org"
     REPO_STATUS = "repo:status"
 
-
 @dataclass
 class GitHubPackage:
     """GitHub package metadata."""
-
     name: str
     version: str
     description: Optional[str]
@@ -49,11 +41,9 @@ class GitHubPackage:
         """Convert to dictionary."""
         return asdict(self)
 
-
 @dataclass
 class GitHubAction:
     """GitHub reusable action metadata."""
-
     name: str
     path: str
     description: Optional[str]
@@ -65,11 +55,9 @@ class GitHubAction:
         """Convert to dictionary."""
         return asdict(self)
 
-
 @dataclass
 class GitHubEnvironment:
     """GitHub deployment environment."""
-
     name: str
     repo: str
     owner: str
@@ -81,11 +69,9 @@ class GitHubEnvironment:
         """Convert to dictionary."""
         return asdict(self)
 
-
 @dataclass
 class DependabotAlert:
     """Dependabot security alert."""
-
     id: int
     package: str
     severity: str  # "critical", "high", "moderate", "low"
@@ -99,11 +85,9 @@ class DependabotAlert:
         """Convert to dictionary."""
         return asdict(self)
 
-
 @dataclass
 class GitHubDeployment:
     """GitHub deployment status."""
-
     id: int
     environment: str
     ref: str
@@ -118,11 +102,9 @@ class GitHubDeployment:
         """Convert to dictionary."""
         return asdict(self)
 
-
 @dataclass
 class RateLimitInfo:
     """GitHub API rate limit information."""
-
     limit: int
     remaining: int
     reset_timestamp: int
@@ -136,7 +118,6 @@ class RateLimitInfo:
     def reset_in_seconds(self) -> int:
         """Get seconds until reset."""
         return max(0, self.reset_timestamp - int(time.time()))
-
 
 class GitHubClient:
     """
@@ -156,7 +137,6 @@ class GitHubClient:
         >>> actions = client.get_reusable_actions()
         >>> alerts = client.get_dependabot_alerts("repo-name")
     """
-
     def __init__(
         self,
         org: str,
@@ -538,7 +518,6 @@ class GitHubClient:
             return {scope.value: True for scope in GitHubScope}
         except Exception as e:
             raise RuntimeError(f"Failed to verify token scopes: {e}")
-
 
 # AC_COMPLETE: AC-INFRA-GITHUB-S2-001 ✅
 # - GraphQL queries for packages, actions, environments

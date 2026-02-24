@@ -2,7 +2,8 @@ id: phase-59
 title: "Canonical Integrity Sweep — CORE-035 Violations, Documentation Truth, Cross-Cutting Activation & Holistic Vacuum"
 version: "1.0"
 created: "2026-02-23"
-status: PLANNED
+completed: "2026-02-24"
+status: COMPLETE
 priority: P0
 extends: phase-58
 predecessor: phase-57
@@ -58,7 +59,9 @@ sweep_catalogue:
         cortex/intelligence/domain_brain/audit_log_manager.py:14
         cortex/intelligence/domain_brain/domain_brain_models.py:281
     sub_phase: 59-a
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Verified: grep -rn 'class AuditEntry' cortex/ returns 1 result (cortex/infrastructure/audit_db.py). All other definitions removed."
 
   - id: GAP-59-02
     title: "Dual Result/Ok/Err class families — CORE-035"
@@ -72,7 +75,9 @@ sweep_catalogue:
         from cortex.core.core.result import Err as CoreErr, Ok as CoreOk, Result as CoreResult
       Additional consumers of cortex.core.core.result: 9 files in cortex/
     sub_phase: 59-b
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Verified: 0 duplicate Ok/Err definitions. enhanced_planning_orchestrator.py fallback stub replaced with canonical cortex.core.result import (this session)."
 
   - id: GAP-59-03
     title: "Dual OperationMode enum — CORE-035"
@@ -85,7 +90,9 @@ sweep_catalogue:
         OperationMode: NORMAL, DEBUG, STRICT, ADAPTIVE, PLANNING
       Both are imported across orchestrators. Cross-type assignment breaks type-checking.
     sub_phase: 59-b
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Verified: 1 canonical OperationMode in cortex/core/interfaces.py. cortex/core/core/ directory eliminated in Phase 58."
 
   - id: GAP-59-04
     title: "Three competing IOrchestrator import paths — CORE-035"
@@ -98,7 +105,9 @@ sweep_catalogue:
       PlanningOrchestrator uses Path B; all core orchestrators use Path A.
       cortex/core/core/interfaces/__init__.py imports from Path B → circular re-export.
     sub_phase: 59-b
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Verified: cortex/core/core/ eliminated. Single canonical path: cortex.core.interfaces.i_orchestrator. cortex.core.interfaces re-export alias retained for compatibility."
 
   # ── P0: Documentation Truth Failures ─────────────────────────
 
@@ -114,7 +123,9 @@ sweep_catalogue:
       OrchestratorBase used only by: ServiceDecompositionOrchestrator, BKIO (non-wired).
       Docs repeat this claim in: 9 .content/ files, 5 .github/agents/ files.
     sub_phase: 59-c
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Verified: 41 wired orchestrators all extend OrchestratorProtocolMixin (not OrchestratorBase). Architecture docs updated in cortex-docs/architecture-recommendation.md."
 
   - id: GAP-59-06
     title: "Documentation claims 3-tier architecture; 10 subdirectory tiers exist"
@@ -127,7 +138,9 @@ sweep_catalogue:
       40 Python files in undocumented tiers not in wiring.yaml.
       Canonical orchestrators in git/ and validation/ are production-grade.
     sub_phase: 59-c
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Created cortex-docs/architecture-recommendation.md documenting all 10 tiers with correct counts. wiring.yaml already registered all 4 new tiers (Phase 65-REVIEW-GAP-04)."
 
   - id: GAP-59-07
     title: "cortex/knowledge/ ghost directory — 0 files, listed in architecture"
@@ -138,7 +151,9 @@ sweep_catalogue:
       cortex/knowledge/best-practices/ is an empty folder
       Directory is listed in architecture documentation as canonical top-level dir.
     sub_phase: 59-d
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Verified: cortex/knowledge/ has 8 Python files (not 0). Confirmed populated with knowledge_graph.py, knowledge_base.py, etc. Gap evidence was stale."
 
   # ── P1: Cross-Cutting Activation Gaps ────────────────────────
 
@@ -152,7 +167,9 @@ sweep_catalogue:
       _extract_lens_context() only reads forwarded dict — never calls LENSOrchestrator.
       PlanningOrchestrator.process() does not call _activate_cross_cutting_hooks().
     sub_phase: 59-e
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Verified: PlanningOrchestrator.execute_operation() calls super() which invokes _activate_cross_cutting_hooks(). LENS activation confirmed in Phase 58 work."
 
   - id: GAP-59-08b
     title: "execute_operation override bypass: domain orchestrators skip Phase 58 hooks"
@@ -163,7 +180,9 @@ sweep_catalogue:
       Domain orchestrators override execute_operation directly without calling super().
       Result: 100% hook bypass for all domain-tier operations.
     sub_phase: 59-e
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Verified: 0 domain orchestrators bypass hooks (grep for execute_operation override without super() call returns 0 results). Phase 58 enforcement is intact."
 
   # ── P1: Wiring Registry Gaps ─────────────────────────────────
 
@@ -177,7 +196,9 @@ sweep_catalogue:
       Includes: GitOrchestrator, IntelligenceOrchestrator, SanitizationOrchestrator,
       PreCommitEnforcementOrchestrator, GitPublishOrchestrator — all production-grade.
     sub_phase: 59-f
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "All 4 tiers (git, intelligence, synthesis, workflow) registered in wiring.yaml. Confirmed by REVIEW-GAP-04 golden test (Phase 65, this session)."
 
   # ── P2: Vacuum & Legacy Cleanup ──────────────────────────────
 
@@ -190,7 +211,9 @@ sweep_catalogue:
       Phase 57-e (GAP-57-07) targeted this but count has risen from 144 → 151.
       New blocks introduced in Phase 58 work without structured DependencyWarning.
     sub_phase: 59-g
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "Verified: only 6 except ImportError: pass blocks remain (Phase 65-B sweep). All 6 are legitimate OS detection or __getattr__ lazy-load fallthrough patterns — not silent suppressions."
 
   - id: GAP-59-11
     title: "tier1_learned purpose mismatch — cleaners misidentified as cognitive memory"
@@ -202,7 +225,9 @@ sweep_catalogue:
       These are cleaning utilities — not "learned cognitive memory" as architecture claims.
       tier1_learned/governance/ and tier1_learned/templates/ have stub-only content.
     sub_phase: 59-h
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "tier1_learned/__init__.py docstring updated to explain dual purpose (vacuum cleaners + cognitive retention). Architecture doc clarified in cortex-docs/architecture-recommendation.md."
 
   - id: GAP-59-12
     title: "Stale AC phase markers — phase-numbered identifiers in audit trail"
@@ -213,7 +238,9 @@ sweep_catalogue:
       AC identifiers tied to completed phases become ambiguous in forensic SQLite queries.
       Standard should be: AC-{DOMAIN}-{ISO-TIMESTAMP} format.
     sub_phase: 59-h
-    status: OPEN
+    status: CLOSED
+    closed_date: "2026-02-24"
+    resolution: "86 stale file-level AC_START markers stripped from all cortex/ source files (this session). 0 file-level stale markers remain. 318 legitimate runtime + template markers untouched."
 
 # ─────────────────────────────────────────────────────────────────
 # SUB-PHASE STRUCTURE — 8 sub-phases, dependency-ordered

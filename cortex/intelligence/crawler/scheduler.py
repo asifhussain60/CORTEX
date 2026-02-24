@@ -1,14 +1,9 @@
-# AC_START: AC-PHASE58-S1-004
-# Description: PatternDiscoveryScheduler Queue Management
-# Authority: CORE-008 TDD, CORE-011 type hints
-# Stage: S1 - GREEN phase implementation
 
 import asyncio
 import time
 from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
-
 
 class WorkItemStatus(Enum):
     """Work item status."""
@@ -17,7 +12,6 @@ class WorkItemStatus(Enum):
     COMPLETED = "completed"
     FAILED = "failed"
     CANCELLED = "cancelled"
-
 
 @dataclass
 class WorkItem:
@@ -30,7 +24,6 @@ class WorkItem:
     completed_at: Optional[float] = None
     error: Optional[str] = None
 
-
 class PatternDiscoveryScheduler:
     """
     Manages work queue for pattern discovery pipeline.
@@ -42,7 +35,6 @@ class PatternDiscoveryScheduler:
     - Concurrent task distribution
     - Cancellation support
     """
-
     def __init__(
         self,
         max_queue_size: int = 1000,

@@ -1,4 +1,3 @@
-# AC_START: AC-PHASE59-S2-002
 # Similarity Metrics & Clustering Engine (Phase 59, Stage 2)
 # Purpose: Implement cosine similarity, hierarchical clustering, DBSCAN, K-means
 
@@ -10,7 +9,6 @@ Provides:
 2. ClusteringEngine: Hierarchical clustering, K-means, DBSCAN
 3. ClusterResult: Structured clustering output with metadata
 """
-
 import warnings
 from dataclasses import dataclass
 from typing import Optional, Tuple
@@ -22,7 +20,6 @@ from sklearn.cluster import DBSCAN, KMeans
 from sklearn.metrics import silhouette_samples, silhouette_score
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
-
 
 @dataclass
 class ClusterResult:
@@ -40,7 +37,6 @@ class ClusterResult:
     n_clusters: int
     silhouette_score: Optional[float] = None
 
-
 class SimilarityAnalyzer:
     """
     Computes similarity metrics between pattern embeddings.
@@ -50,7 +46,6 @@ class SimilarityAnalyzer:
     - Euclidean distance
     - Similarity/distance matrices
     """
-
     def cosine_similarity(self, emb1: np.ndarray, emb2: np.ndarray) -> float:
         """
         Calculate cosine similarity between two embeddings.
@@ -129,7 +124,6 @@ class SimilarityAnalyzer:
 
         return dist_matrix
 
-
 class ClusteringEngine:
     """
     Performs clustering on pattern embeddings.
@@ -140,7 +134,6 @@ class ClusteringEngine:
     - DBSCAN (density-based)
     - Optimal cluster detection (elbow method)
     """
-
     def __init__(self, random_state: int = 42) -> None:
         """
         Initialize clustering engine.
@@ -341,6 +334,5 @@ class ClusteringEngine:
             return int(elbow_idx + 1)  # +1 because range starts at 1
 
         return int(2)
-
 
 # AC_COMPLETE: AC-PHASE59-S2-002 ✅ Clustering Engine Implementation

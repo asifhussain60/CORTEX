@@ -2,18 +2,13 @@
 MCP-FIRST Violation Detector - Ensures all IMPLEMENT/FIX/REFACTOR operations
 route through MCP tools instead of direct file operations.
 
-AC_START: AC-WAVE-K-004
-Description: MCP-FIRST architecture compliance verification
-Authority: copilot-instructions.md § COPILOT NATIVE TOOL RESTRICTIONS
 """
-
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Set
 import ast
 import re
-
 
 @dataclass
 class MCPViolation:
@@ -25,7 +20,6 @@ class MCPViolation:
     description: str
     detected_at: datetime
     severity: str = "P0"  # MCP-FIRST is always critical
-
 
 @dataclass
 class MCPComplianceReport:
@@ -39,7 +33,6 @@ class MCPComplianceReport:
     def is_compliant(self) -> bool:
         """Check if 100% MCP-FIRST compliant."""
         return len(self.violations) == 0
-
 
 class MCPFirstDetector:
     """
@@ -348,6 +341,5 @@ class MCPFirstDetector:
             summary[vtype] = summary.get(vtype, 0) + 1
         
         return summary
-
 
 # AC_COMPLETE: AC-WAVE-K-005 ✅

@@ -1,14 +1,9 @@
-# AC_START: AC-PHASE58-S1-002
-# Description: AsyncRepositoryCrawler Base Class
-# Authority: CORE-008 TDD, CORE-011 type hints, CORE-012 docstrings
-# Stage: S1 - GREEN phase implementation
 
 import asyncio
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
-
 
 @dataclass
 class CrawlerConfig:
@@ -19,7 +14,6 @@ class CrawlerConfig:
     timeout_seconds: float = 30.0
     enable_gitignore: bool = True
 
-
 @dataclass
 class FileMetadata:
     """Metadata about discovered file."""
@@ -29,7 +23,6 @@ class FileMetadata:
     file_type: str
     discovered_at: float = 0.0
 
-
 class AsyncRepositoryCrawler(ABC):
     """
     Abstract base class for async repository crawlers.
@@ -37,7 +30,6 @@ class AsyncRepositoryCrawler(ABC):
     Provides foundation for non-blocking file system traversal
     with filtering, progress tracking, and cancellation support.
     """
-
     def __init__(self, config: Optional[CrawlerConfig] = None) -> None:
         """
         Initialize AsyncRepositoryCrawler.

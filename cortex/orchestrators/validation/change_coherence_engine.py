@@ -1,9 +1,6 @@
 """
 Change Coherence Engine - Core orchestrator for holistic edit validation.
 
-AC_START: AC-ENH-101-004
-Description: Main ChangeCoherenceEngine with pre_edit/post_edit methods
-Authority: ENH-101 - Holistic edit validation system
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
 
 Purpose:
@@ -11,7 +8,6 @@ Purpose:
     1. PRE-EDIT: Load full file context + detect existing structure
     2. POST-EDIT: Validate coherence + best practice compliance
 """
-
 from __future__ import annotations
 
 import logging
@@ -36,7 +32,6 @@ from cortex.orchestrators.validation.coherence_models import (
 
 logger = logging.getLogger(__name__)
 
-
 @dataclass
 class ConflictCheckResult:
     """Result of checking a proposed change for conflicts.
@@ -50,7 +45,6 @@ class ConflictCheckResult:
     has_conflict: bool
     conflict_reason: str = ""
     conflicting_sections: List[Section] = field(default_factory=list)
-
 
 class ChangeCoherenceEngine:
     """Orchestrator ensuring file modifications maintain coherence.
@@ -714,6 +708,5 @@ class ChangeCoherenceEngine:
             )
         
         return recommendations
-
 
 # AC_COMPLETE: AC-ENH-101-004 ✅ ChangeCoherenceEngine implementation

@@ -1,4 +1,3 @@
-# AC_START: AC-PHASE59-S4-002
 # MCP Tools & Dashboard for ML Pattern Similarity & Clustering
 # Purpose: Expose pattern analysis and repository clustering via MCP
 
@@ -10,7 +9,6 @@ Provides:
 2. cortex_repository_clustering - Cluster repositories
 3. Dashboard generator for visualization
 """
-
 import json
 from dataclasses import asdict
 from typing import Any, Dict, List, Optional
@@ -27,14 +25,12 @@ from cortex.lens.ml_patterns.similarity_clustering import (
     SimilarityAnalyzer,
 )
 
-
 class PatternSimilarityTool:
     """
     MCP Tool: cortex_pattern_similarity
 
     Analyzes similarity between architectural patterns using embeddings.
     """
-
     def __init__(self) -> None:
         """Initialize pattern similarity tool."""
         self.name = "cortex_pattern_similarity"
@@ -173,14 +169,12 @@ class PatternSimilarityTool:
             "status": "success",
         }
 
-
 class RepositoryClusteringTool:
     """
     MCP Tool: cortex_repository_clustering
 
     Clusters repositories based on architecture fingerprints and patterns.
     """
-
     def __init__(self) -> None:
         """Initialize repository clustering tool."""
         self.name = "cortex_repository_clustering"
@@ -289,6 +283,5 @@ class RepositoryClusteringTool:
                 "error": str(e),
                 "status": "failed",
             }
-
 
 # AC_COMPLETE: AC-PHASE59-S4-002 ✅ MCP Tools Implementation

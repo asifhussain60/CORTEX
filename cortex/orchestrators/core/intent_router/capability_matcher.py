@@ -1,4 +1,3 @@
-# AC_START: AC-ROUTER-CAPABILITY-20260223T000000Z
 """
 Capability Matching Algorithm for IntentRouter
 Intelligent agent selection based on capability overlap and priority.
@@ -7,12 +6,10 @@ Module: cortex/intent_router/capability_matcher.py
 Authority: Phase 81 S3 - IntentRouter Capability-Based Routing
 Version: 1.0
 """
-
 from typing import List, Dict, Tuple, Optional
 from dataclasses import dataclass
 from enum import Enum
 import math
-
 
 class IntentType(Enum):
     """User intent types."""
@@ -29,7 +26,6 @@ class IntentType(Enum):
     REPHRASE = "REPHRASE"
     INVESTIGATE = "INVESTIGATE"
 
-
 @dataclass
 class CapabilityScore:
     """Score for a single capability match."""
@@ -39,7 +35,6 @@ class CapabilityScore:
     weight: float  # 0.0 to 1.0
     score: float  # Computed score
     confidence: float  # 0.0 to 1.0
-
 
 @dataclass
 class AgentRankings:
@@ -52,7 +47,6 @@ class AgentRankings:
     total_agents_evaluated: int
     confidence: float  # Overall confidence in selection
     reasoning: str
-
 
 class CapabilityMatcher:
     """Match user requirements to agents based on capabilities."""
@@ -301,7 +295,6 @@ class CapabilityMatcher:
             f"Agent prioritized for: {list(required_caps.keys())[0] if required_caps else 'general purpose'}"
         )
 
-
 # Public API
 def match_intent_to_agents(
     intent: str,
@@ -326,7 +319,6 @@ def match_intent_to_agents(
     
     matcher = CapabilityMatcher()
     return matcher.match_capabilities(intent_type, user_request, available_agents)
-
 
 # AC_COMPLETE: AC-ROUTER-CAPABILITY-20260223T000000Z ✅
 # Module: cortex/intent_router/capability_matcher.py
