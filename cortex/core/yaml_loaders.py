@@ -507,7 +507,9 @@ def get_loader(yaml_type: str, registry_path: Path) -> BaseYAMLLoader:
         YAMLLoadError: If loader initialization fails
     """
     loaders = {
-        "core_rules": (CoreRulesLoader, "core/governance/skull-rules.yaml"),
+        # GAP-69-04: updated from "core/governance/skull-rules.yaml" (duplicate, CORE-035 violation)
+        #            to canonical SSOT: "core/tier0-skull/skull-rules.yaml"
+        "core_rules": (CoreRulesLoader, "core/tier0-skull/skull-rules.yaml"),
         "audit_checklist": (AuditChecklistLoader, "governance/audit-checklist.yaml"),
         "modes": (ModesLoader, "meta/modes.yaml"),
         "response_format": (ResponseFormatLoader, "meta/response-format.yaml"),

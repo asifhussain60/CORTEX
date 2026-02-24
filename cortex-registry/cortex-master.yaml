@@ -60,6 +60,16 @@ metadata:
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
+  - id: phase-69
+    title: "Review02 Remediation Sweep — Infrastructure Hygiene (6 GAPs)"
+    priority: P1
+    status: COMPLETE
+    sweep_id: SWEEP-69-REVIEW02
+    gaps: 6
+    sub_phases: 6
+    file: "cortex-registry/planning/phases/completed/phase-69-review02-remediation.yaml"
+    note: "6 GAPs CLOSED: SIGTERM handler, pytest conflict, scikit-learn dedup, skull-rules CORE-035 dup (4 consumers), README badges/links, chaos tests (14 tests GREEN)."
+
   - id: phase-toolkit-consolidation
     title: "Toolkit Consolidation — Generic File Intelligence (HierarchicalScanner + BatchProcessor)"
     priority: P0
@@ -320,14 +330,14 @@ verification:
   last_verified: '2026-02-24T18:00:00Z'
 
 summary:
-  total_phases: 69
-  completed: 68
+  total_phases: 70
+  completed: 69
   active: 0
   in_progress: 0
   planned: 1
   playbooks: 1
-  completion_percentage: 98
-  production_status: "✅ 68/69 phases COMPLETE — Phase 61 closed 2026-02-24 | Simplification sweep 58-61 fully exhausted (CORE-064) | cortex/core flattened 27→15 subdirs | phase-toolkit-consolidation PLANNED (P0)"
+  completion_percentage: 99
+  production_status: "✅ 69/70 phases COMPLETE — Phase 69 closed 2026-02-24 | Review02 remediation sweep exhausted (CORE-064) | 6 GAPs closed | phase-toolkit-consolidation PLANNED (P0)"
   open_gaps:
     count: 5
     note: "SWEEP-TOOLKIT-001: 5 GAPs OPEN in phase-toolkit-consolidation (GAP-001 to GAP-005). All other sweeps closed. _cortex-master/ retained by ADR. COMPAT shims expire 2026-05-24."

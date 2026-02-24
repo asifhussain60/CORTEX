@@ -32,8 +32,5 @@ ban-relative-imports = "all"
 known-first-party = ["cortex_intelligence", "cortex"]
 force-sort-within-sections = true
 
-[tool.pytest.ini_options]
-testpaths = ["tests"]
-python_files = ["test_*.py"]
-python_classes = ["Test*"]
-python_functions = ["test_*"]
+# NOTE: pytest configuration is canonical in pytest.ini — do NOT duplicate here.
+# [tool.pytest.ini_options] removed (conflicted with pytest.ini testpaths) — GAP-69-02 fix.

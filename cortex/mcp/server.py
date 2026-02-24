@@ -11,6 +11,7 @@ Implements JSON-RPC 2.0 compliant MCP protocol with:
 
 import json
 import logging
+import signal
 import sys
 import time
 import asyncio
@@ -353,12 +354,25 @@ class MCPServer:
     def run_stdio(self) -> None:
         """
         Run server using stdio transport.
-        
+
         This is the primary mode for VS Code Copilot integration.
         Reads JSON-RPC requests from stdin, writes responses to stdout.
+
+        Handles SIGTERM gracefully (GAP-69-03): drains the current line before
+        exit so in-flight K8s rolling-update requests are not lost.
         """
         self.logger.info("MCP Server v2 starting (stdio transport)")
-        
+
+        # GAP-69-03: SIGTERM handler — graceful shutdown for K8s rolling updates.
+        # Sets _shutdown flag; the read loop exits cleanly after the current line.
+        self._shutdown = False
+
+        def _handle_sigterm(signum: int, frame: object) -> None:  # noqa: ANN001
+            self.logger.info("SIGTERM received — initiating graceful shutdown")
+            self._shutdown = True
+
+        signal.signal(signal.SIGTERM, _handle_sigterm)
+
         # Print startup banner
         print(json.dumps({
             "type": "startup",
@@ -366,18 +380,17 @@ class MCPServer:
             "version": "2.0.0",
             "tools": self.registry.tool_count,
         }), file=sys.stderr, flush=True)
-        
-        while True:
+
+        while not self._shutdown:
             try:
                 # Read line from stdin
                 line = sys.stdin.readline()
                 if not line:
                     break
-                
+
                 line = line.strip()
                 if not line:
                     continue
-                
                 # Process request
                 response = self.handle_json(line)
                 

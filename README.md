@@ -2,11 +2,11 @@
 
 **CO**gnitive **R**eal-**T**ime **EX**ecution System — AI-powered development orchestrator.
 
-[![Architecture: MCP-First Service-Oriented](https://img.shields.io/badge/Architecture-MCP--First%20Service--Oriented-blue)](docs/04-architecture/mcp-architecture.md)
-[![Orchestrators: 28](https://img.shields.io/badge/Orchestrators-28-green)](docs/02-orchestrators/)
-[![MCP Tools: 24](https://img.shields.io/badge/MCP%20Tools-24-orange)](docs/11-mcp-tools/)
+[![Architecture: MCP-First Service-Oriented](https://img.shields.io/badge/Architecture-MCP--First%20Service--Oriented-blue)](cortex-docs/ARCHITECTURE-RECOMMENDATION.md)
+[![Orchestrators: 27](https://img.shields.io/badge/Orchestrators-27-green)](cortex-docs/index.html)
+[![MCP Tools: 38](https://img.shields.io/badge/MCP%20Tools-38-orange)](cortex-docs/index.html)
 [![Python: 3.9+](https://img.shields.io/badge/Python-3.9+-blue)](https://python.org)
-[![Tests: 15,633 Passing](https://img.shields.io/badge/Tests-15,633%20Passing-success)]()
+[![Tests: 1,420 Smoke Passing](https://img.shields.io/badge/Tests-1%2C420%20Smoke%20Passing-success)]()
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-success)](cortex-registry/CORTEX-STATUS-2026-02-14.yaml)
 
 ## 🚀 Recent Updates (2026-02-17)
@@ -26,11 +26,11 @@
 
 **Architecture:** MCP-First SaaS (Pylance-style auto-start)  
 **Governance:** 0 P0 violations | 26/30 CORE rules automated (87%)  
-**Quality:** 15,633 tests passing | Production-ready
+**Quality:** 1,420 smoke tests passing | Production-ready
 
 ## 🏗️ Architecture: MCP-First Service-Oriented Design
 
-**CORTEX operates as a MCP-First architecture** where all 28 orchestrators are exposed as MCP (Model Context Protocol) tools.
+**CORTEX operates as a MCP-First architecture** where all 27 orchestrators are exposed as MCP (Model Context Protocol) tools.
 
 ### MCP Architecture: Pylance-Style (ENH-066)
 
@@ -74,7 +74,7 @@
 - ✅ **Dynamic Discovery:** Tools register at runtime, enabling hot-reload
 - ✅ **Service Isolation:** No direct imports, protocol-driven communication
 
-**Learn More:** [MCP Architecture Documentation](docs/04-architecture/mcp-architecture.md)
+**Learn More:** [MCP Architecture Documentation](cortex-docs/ARCHITECTURE-RECOMMENDATION.md)
 
 ## Quick Start
 
@@ -202,22 +202,18 @@ make test-all      # Run all tests
 
 ## Documentation
 
-- **[START HERE](docs/START-HERE.md)** - New to CORTEX? Begin here
-- **[Getting Started](docs/03-getting-started/)** - Installation & setup
-- **[CORTEX Intelligence](docs/01-cortex-brain/)** - Governance & cognitive architecture (formerly "Brain")
-- **[Orchestrators](docs/02-orchestrators/)** - 28 specialized coordinators
-- **[LENS Protocol](docs/05-lens-protocol/)** - Code intelligence system
-- **[LENS Dashboard](docs/11-lens-dashboard/)** - Visual intelligence (NEW ✨)
-- **[Architecture](docs/04-architecture/)** - System design
-- **[API Reference](docs/06-api-reference/)** - Complete API docs
-- **[MCP Tools](docs/11-mcp-tools/)** - Model Context Protocol integration
+- **[Architecture](cortex-docs/ARCHITECTURE-RECOMMENDATION.md)** - System design & MCP architecture
+- **[Security](cortex-docs/security.md)** - Security model
+- **[CORTEX Docs](cortex-docs/index.html)** - Full documentation portal
+- **[Orchestrators](cortex-docs/index.html)** - 27 specialized coordinators
+- **[MCP Tools](cortex-docs/index.html)** - 38 Model Context Protocol tools
 
 ### Core Package Structure
 
 ```
 cortex/                    # Main CORTEX package
-  orchestrators/          # 21 wired orchestrators across 3 tiers (core, domain, support)
-  mcp/                    # MCP server & 23 tool registry
+  orchestrators/          # 27 wired orchestrators across 3 tiers (core, domain, support)
+  mcp/                    # MCP server & 38 registered tools
   governance/             # Enforcement agents & validators
   intelligence/           # Cognitive architecture (LENS, knowledge, memory)
     memory/               # Tiered knowledge hierarchy
@@ -260,7 +256,7 @@ cortex dashboard list
 - 🚀 Self-contained SPA (no external CDN)
 - ⚡ Alpine.js reactive UI
 
-See **[LENS Dashboard Documentation](docs/11-lens-dashboard/)** for details.
+See **[CORTEX Docs](cortex-docs/index.html)** for details.
 
 ## License
 

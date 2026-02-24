@@ -228,7 +228,7 @@ convergence_principles:
       One canonical rule source (Tier 0 SKULL rules), no duplicates.
       All lower tiers inherit Tier 0 requirements.
     implementation:
-      - Canonical location: cortex-registry/core/governance/skull-rules.yaml
+      - Canonical location: cortex-registry/core/tier0-skull/skull-rules.yaml  # GAP-69-04: updated from core/governance/ (CORE-035 duplicate eliminated)
       - No duplicate copies in other locations
       - Version control: git ensures single source
 

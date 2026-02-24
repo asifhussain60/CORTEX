@@ -131,7 +131,7 @@ anthropic>=0.21.0          # Anthropic Claude 3 (Opus, Sonnet, Haiku) [OPTIONAL]
 # Required for semantic deduplication and ML-based summarization
 
 sentence-transformers>=2.2.0  # Sentence embeddings for semantic similarity [OPTIONAL]
-scikit-learn>=1.3.0           # Cosine similarity, clustering algorithms [OPTIONAL]
+# scikit-learn pinned once below in DATA SCIENCE section (scikit-learn==1.3.2) — CORE-035: single declaration
 torch>=2.0.0                  # PyTorch for transformer models (CPU) [OPTIONAL]
 transformers>=4.30.0          # HuggingFace transformers (BART, T5 for Phase 36) [OPTIONAL]
 

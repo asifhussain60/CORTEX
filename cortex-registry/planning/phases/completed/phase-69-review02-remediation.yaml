@@ -1,0 +1,253 @@
+# CORTEX Phase Plan — Phase 69: Review02 Remediation Sweep
+# Created: 2026-02-24 | Status: COMPLETE
+# Governance: master-plan-phase-lifecycle.yaml checkpoint-create + checkpoint-complete
+# Template: cortex-registry/planning/phases/_template.yaml
+
+id: "phase-69"
+title: "Review02 Remediation Sweep — Infrastructure Hygiene (6 GAPs)"
+version: "1.0"
+created: "2026-02-24"
+status: COMPLETE
+priority: P1
+governance_authority:
+  - CORE-002  # Output inline — no .md/.txt report files
+  - CORE-008  # TDD mandatory
+  - CORE-035  # Single canonical implementation — no duplicates
+  - CORE-064  # Sweep Completeness Contract — exhausted in full
+sweep_catalogue_id: "SWEEP-69-REVIEW02"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: _workspaces/recommend/copilot-review02.md (independent static analysis, 2026-02-24)
+  Overall repo score at entry: 6.8 / 10
+  Findings independently verified against live codebase before acting.
+  User scoping: Docker excluded (CORTEX = MCP + SaaS), MCP auth deferred.
+  6 confirmed infrastructure hygiene gaps acted upon.
+  Baseline smoke tests: 1,420 passing.
+  Git branch: CORTEX
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE — all 6 gaps, all CLOSED (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-69-01"
+    title: "SIGTERM not handled in MCP server run_stdio()"
+    severity: P1
+    source: "copilot-review02.md §7 — Signal Handling"
+    evidence: |
+      cortex/mcp/server.py run_stdio(): only KeyboardInterrupt handled.
+      No signal.signal(signal.SIGTERM, ...) registration.
+      Process killed by container orchestrators (kubernetes, systemd) would
+      drop in-flight JSON-RPC requests without graceful shutdown.
+    action_ref: "phase-69-a"
+    status: CLOSED
+    fix: |
+      Added import signal, _shutdown = False flag, _handle_sigterm() handler,
+      and changed while True: → while not self._shutdown:
+      File: cortex/mcp/server.py
+
+  - id: "GAP-69-02"
+    title: "[tool.pytest.ini_options] in pyproject.toml conflicts with pytest.ini"
+    severity: P1
+    source: "copilot-review02.md §5 — Configuration Conflict"
+    evidence: |
+      pyproject.toml [tool.pytest.ini_options]: testpaths = ["tests"]
+      pytest.ini testpaths: tests cortex/tests cortex/infrastructure/tests
+      pytest.ini takes precedence but the conflict causes confusion and
+      potential breakage if pyproject.toml is ever parsed first.
+    action_ref: "phase-69-b"
+    status: CLOSED
+    fix: |
+      Removed [tool.pytest.ini_options] block from pyproject.toml entirely.
+      Added comment: "pytest config canonical in pytest.ini — do NOT duplicate here."
+      File: pyproject.toml
+
+  - id: "GAP-69-03"
+    title: "scikit-learn declared twice in requirements.txt (CORE-035 violation)"
+    severity: P2
+    source: "copilot-review02.md §3 — Dependency Hygiene"
+    evidence: |
+      requirements.txt line 134: scikit-learn>=1.3.0  (open range, Core ML section)
+      requirements.txt line 158: scikit-learn==1.3.2  (pinned, Data Science section)
+      Two declarations — CORE-035 single canonical implementation violation.
+      Flexible range at line 134 could allow version drift in CI environments.
+    action_ref: "phase-69-c"
+    status: CLOSED
+    fix: |
+      Replaced line 134 with comment pointing to canonical pin at line 158.
+      scikit-learn==1.3.2 (Data Science section) is now the sole declaration.
+      File: requirements.txt
+
+  - id: "GAP-69-04"
+    title: "cortex-registry/core/governance/skull-rules.yaml is a 1,814-line CORE-035 duplicate"
+    severity: P0
+    source: "copilot-review02.md §2 — Governance File Duplication"
+    evidence: |
+      cortex-registry/core/tier0-skull/skull-rules.yaml — canonical SSOT (2,169 lines)
+      cortex-registry/core/governance/skull-rules.yaml — near-duplicate (1,814 lines)
+      4 consumers of the old path:
+        1. cortex/core/yaml_loaders.py line 510 ("core_rules" loader)
+        2. cortex-registry/core/ccl-governance-crystal.yaml line 231
+        3. cortex-registry/workflows/templates/governance/golden-test-promotion.yaml line 377
+        4. cortex-registry/workflows/templates/governance/golden-test-promotion.yaml line 466
+    action_ref: "phase-69-d"
+    status: CLOSED
+    fix: |
+      1. Replaced governance/skull-rules.yaml with ~20-line redirect stub (CORE-035 + GAP-69-04 cite)
+      2. yaml_loaders.py "core_rules" path → "core/tier0-skull/skull-rules.yaml"
+      3. ccl-governance-crystal.yaml line 231 → updated to tier0-skull path
+      4. golden-test-promotion.yaml lines 377 + 466 → updated to tier0-skull path
+
+  - id: "GAP-69-05"
+    title: "README.md badges stale and all docs/ links broken"
+    severity: P2
+    source: "copilot-review02.md §1 — Documentation Currency"
+    evidence: |
+      Badge: Orchestrators-28 (actual: 27 wired per copilot-instructions.md)
+      Badge: MCP Tools-24 (actual: 38 per copilot-instructions.md)
+      Badge: Tests-15,633 (actual: 1,420 smoke baseline per deployment)
+      Badge link: docs/04-architecture/mcp-architecture.md (docs/ dir does not exist)
+      All Documentation section links point to docs/XX-* (non-existent)
+      Correct location: cortex-docs/ (confirmed present in repo root)
+    action_ref: "phase-69-e"
+    status: CLOSED
+    fix: |
+      Updated badges: Orchestrators-27, MCP Tools-38, Tests-1,420 Smoke Passing
+      Badge links and Documentation section links → cortex-docs/ equivalents
+      File: README.md
+
+  - id: "GAP-69-06"
+    title: "Chaos tests defined in scenarios.yaml but zero Python implementations"
+    severity: P1
+    source: "copilot-review02.md §11 — Test Coverage Gaps"
+    evidence: |
+      tests/chaos/scenarios.yaml: 5 scenarios defined (status: DEFINED)
+        - database_connection_failure (severity: high)
+        - external_service_timeout (severity: high)
+        - memory_pressure (severity: medium)
+        - cpu_spike (severity: medium)
+        - network_partition (severity: high)
+      tests/chaos/ directory: only scenarios.yaml, zero .py files
+      CI e2e.yml references chaos tests that do not exist → pipeline gap
+    action_ref: "phase-69-f"
+    status: CLOSED
+    fix: |
+      Created tests/chaos/__init__.py (package marker)
+      Created tests/chaos/test_chaos_scenarios.py:
+        14 tests, 5 scenario classes, all using CircuitBreaker from
+        cortex.infrastructure.circuit_breaker.
+      All 14 tests GREEN (verified: 14 passed in 0.64s)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-69-a"
+    title: "SIGTERM handler in MCP server"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-69-01"]
+    governance_authority: "CORE-008"
+    regression_gate: "make test-batch — zero new failures"
+    acceptance_criteria:
+      - "signal.signal(signal.SIGTERM, handler) registered in run_stdio()"
+      - "while True: changed to while not self._shutdown:"
+      - "In-flight request loop exits cleanly on SIGTERM"
+
+  - id: "phase-69-b"
+    title: "Remove conflicting [tool.pytest.ini_options] from pyproject.toml"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-69-02"]
+    governance_authority: "CORE-035"
+    regression_gate: "make test-smoke — 1,420 passing"
+    acceptance_criteria:
+      - "[tool.pytest.ini_options] block removed from pyproject.toml"
+      - "Comment added explaining pytest.ini is canonical"
+      - "pytest.ini testpaths unchanged and authoritative"
+
+  - id: "phase-69-c"
+    title: "Deduplicate scikit-learn in requirements.txt"
+    priority: P2
+    status: COMPLETE
+    gap_refs: ["GAP-69-03"]
+    governance_authority: "CORE-035"
+    regression_gate: "pip install -r requirements.txt (no conflict)"
+    acceptance_criteria:
+      - "Single scikit-learn==1.3.2 declaration remains"
+      - "Duplicate >=1.3.0 line replaced with explanatory comment"
+
+  - id: "phase-69-d"
+    title: "Eliminate skull-rules.yaml CORE-035 duplicate and update all 4 consumers"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-69-04"]
+    governance_authority: "CORE-035, CORE-064"
+    regression_gate: "make test-batch — zero new failures"
+    acceptance_criteria:
+      - "cortex-registry/core/governance/skull-rules.yaml replaced with redirect stub"
+      - "yaml_loaders.py 'core_rules' path → tier0-skull/skull-rules.yaml"
+      - "ccl-governance-crystal.yaml line 231 → tier0-skull path"
+      - "golden-test-promotion.yaml lines 377+466 → tier0-skull path"
+      - "All 4 consumers updated (CORE-064: no partial sweep)"
+
+  - id: "phase-69-e"
+    title: "Fix README.md badges and docs/ links"
+    priority: P2
+    status: COMPLETE
+    gap_refs: ["GAP-69-05"]
+    governance_authority: "CORE-002"
+    acceptance_criteria:
+      - "Orchestrators badge = 27 (wired count)"
+      - "MCP Tools badge = 38 (registered count)"
+      - "Tests badge = 1,420 Smoke Passing (actual baseline)"
+      - "All docs/ links replaced with cortex-docs/ equivalents"
+
+  - id: "phase-69-f"
+    title: "Implement chaos test Python files from scenarios.yaml"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-69-06"]
+    governance_authority: "CORE-008"
+    regression_gate: "pytest tests/chaos/test_chaos_scenarios.py — 14 passed"
+    acceptance_criteria:
+      - "tests/chaos/__init__.py created"
+      - "tests/chaos/test_chaos_scenarios.py created with 5 classes (14 tests)"
+      - "All 5 scenarios from scenarios.yaml covered"
+      - "All 14 tests GREEN"
+      - "Uses cortex.infrastructure.circuit_breaker (real production code, no mocks)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-69-REVIEW02-20260224"
+  complete: "AC_COMPLETE: AC-69-REVIEW02-20260224 ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPLETION SECTION
+# ─────────────────────────────────────────────────────────────────────────────
+metrics_at_completion:
+  score: "6.8 / 10 → 7.6 / 10 (estimated, infrastructure hygiene restored)"
+  smoke_tests: "1,420 passed, 0 new failures"
+  chaos_tests: "14 passed, 0 failed"
+  gaps_closed: "6 / 6 (CORE-064 satisfied)"
+  files_modified:
+    - cortex/mcp/server.py
+    - pyproject.toml
+    - requirements.txt
+    - cortex-registry/core/governance/skull-rules.yaml
+    - cortex/core/yaml_loaders.py
+    - cortex-registry/core/ccl-governance-crystal.yaml
+    - cortex-registry/workflows/templates/governance/golden-test-promotion.yaml
+    - README.md
+  files_created:
+    - tests/chaos/__init__.py
+    - tests/chaos/test_chaos_scenarios.py
+    - cortex-registry/planning/phases/completed/phase-69-review02-remediation.yaml
+  deferred:
+    - Docker/Dockerfile — CORTEX is MCP + SaaS; not container-deployed (user decision)
+    - MCP Authentication (TenantContextMiddleware) — already wired; deeper auth deferred
+  completed_date: "2026-02-24"

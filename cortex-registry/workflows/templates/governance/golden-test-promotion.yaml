@@ -374,7 +374,7 @@ workflow:
 
         - id: "DOD-3"
           name: "CORE-055 rule present in skull-rules.yaml"
-          check: "grep -c 'rule_id: CORE-055' cortex-registry/core/governance/skull-rules.yaml"
+          check: "grep -c 'rule_id: CORE-055' cortex-registry/core/tier0-skull/skull-rules.yaml"  # GAP-69-04: updated from core/governance/ (CORE-035)
           pass_pattern: "1"
           on_fail:
             instruction: "Append CORE-055 block to skull-rules.yaml"
@@ -463,7 +463,7 @@ workflow:
               cortex/orchestrators/support/test_classifier_orchestrator.py \
               cortex/orchestrators/support/parallel_golden_runner.py \
               # [STALE-REF] cortex/mcp/tools/health_orchestrator_tool.py \
-              cortex-registry/core/governance/skull-rules.yaml \
+              cortex-registry/core/tier0-skull/skull-rules.yaml \  # GAP-69-04: updated from core/governance/ (CORE-035)
               cortex-registry/governance/test-promotion-manifest.yaml \
               cortex-registry/planning/phases/planned/phase-49-golden-test-promotion.yaml \
               cortex-registry/workflows/templates/governance/golden-test-promotion.yaml \
