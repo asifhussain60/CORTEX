@@ -1,11 +1,11 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-24 (Phase 63 — THIN INDEX CONTRACT) | ## About CORTEX
+**Updated:** 2026-02-24 (Phase 66/67 COMPLETE — all 67 phases done) | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
 - **27 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
-- **26 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
+- **38 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
 - **35 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
@@ -20,10 +20,10 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 |---|---|
 | Package | `cortex` (single canonical) |
 | Orchestrators | 27 wired in `cortex/orchestrators/` (7 core, 6 domain, 14 support) |
-| MCP Tools | 26 in `cortex/mcp/tools/` |
+| MCP Tools | 38 in `cortex/mcp/tools/` |
 | Top-level Dirs | 16 canonical under `cortex/` |
 | Governance Rules | 35 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
-| Test Suite | 15,739 tests (486 golden, 177 phase) |
+| Test Suite | 16,259 tests (486 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 
 ---
