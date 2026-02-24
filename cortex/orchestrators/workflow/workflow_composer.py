@@ -356,12 +356,11 @@ class WorkflowComposer:
             )
 
             # Create StepStateMachine
-            # ConvergenceNeuron requires scan_function and target_predicate
-            # For now, pass None (Phase 100 integration of Phase 83 neuron is future work)
+            # convergence_neuron is optional (Phase 83 integration is future work)
             fsm = StepStateMachine(
-                step=step.parameters,
+                step_id=step.step_id,
                 convergence_config=convergence_config,
-                neuron=None,
+                convergence_neuron=None,
             )
 
             # Execute with retry loop
