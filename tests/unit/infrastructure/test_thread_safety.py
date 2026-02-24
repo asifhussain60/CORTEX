@@ -7,7 +7,7 @@ Validates that all thread operations have timeout protection.
 import pytest
 import threading
 import time
-from cortex.core.resilience.thread_safety import (
+from cortex.core.common.thread_safety import (
     safe_thread_join,
     spawn_with_timeout_join,
     scan_file_for_bare_joins,

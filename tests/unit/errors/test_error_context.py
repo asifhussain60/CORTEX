@@ -6,7 +6,7 @@ from unittest.mock import Mock, patch
 from datetime import datetime
 import uuid
 
-from cortex.core.errors.structured_error import (
+from cortex.core.common.structured_error import (
     StructuredError,
     ErrorType,
     CausalityChain,

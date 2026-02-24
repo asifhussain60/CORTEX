@@ -12,7 +12,7 @@ import time
 import tempfile
 import json
 
-from cortex.core.recovery.saga_coordinator import (
+from cortex.core.common.saga_coordinator import (
     SagaCoordinator,
     SagaStep,
     SagaState,

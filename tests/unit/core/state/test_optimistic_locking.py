@@ -16,7 +16,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import List, Optional
 
-from cortex.core.state.optimistic_lock import (
+from cortex.core.common.optimistic_lock import (
     OptimisticLockManager,
     VersionedRow,
     ConflictError,

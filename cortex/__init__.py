@@ -24,15 +24,13 @@ from cortex.core.wiring import (
     is_wired,
 )
 
-# AC-PERMANENT-FIX-015: Run mandatory startup validation on import
-# This ensures all critical issues are detected and auto-remediated
-# before any orchestrator code executes
+# Phase 68-C: cortex.core.bootstrap dir removed — import _bootstrap_success directly
 try:
-    from cortex.core.bootstrap import _bootstrap_success
+    from cortex.bootstrap import _bootstrap_success
 except ImportError:
     import logging as _bootstrap_logger
     _bootstrap_logger.getLogger(__name__).warning(
-        "Optional cortex dependency unavailable: cortex.core.bootstrap — feature degraded"
+        "Optional cortex dependency unavailable: cortex.bootstrap — feature degraded"
     )
 
 # Package metadata + wiring API

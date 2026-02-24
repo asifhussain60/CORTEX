@@ -6,7 +6,7 @@ Validates timeout configuration for different environments.
 
 import pytest
 import os
-from cortex.core.config.timeout_profiles import (
+from cortex.core.common.timeout_profiles import (
     TimeoutProfile,
     get_environment,
     get_profile,

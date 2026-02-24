@@ -6,7 +6,7 @@ Validates safety checks for LLM responses.
 
 import pytest
 import json
-from cortex.core.safety.output_validator import (
+from cortex.core.common.output_validator import (
     LLMOutputValidator,
     ValidationSeverity,
     validate_llm_output,

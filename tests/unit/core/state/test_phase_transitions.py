@@ -12,7 +12,7 @@ import pytest
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-from cortex.core.state.phase_state_machine import (
+from cortex.core.common.phase_state_machine import (
     PhaseStateMachine,
     PhaseState,
     InvalidTransitionError,
