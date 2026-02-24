@@ -202,12 +202,20 @@ multi_session_execution_plan:
 sub_phases:
   - id: 64-A
     title: "Trace-Verified Harness Upgrade (Real SQLite)"
+    status: COMPLETE
+    completed: "2026-02-24"
     closes_gaps: [GAP-64-08]
-    deliverable: "holistic_integration_harness.py gains assert_trace_chain() querying real SQLite"
+    deliverable: |
+      cortex/testing/holistic_integration_harness.py ✅
+        - assert_trace_chain(db_path, expected_events, validate_order=False) — AC-64-08-A
+        - assert_no_orphan_ac_starts(db_path, session_id=None) — AC-64-08-C
+      tests/golden/integration/test_holistic_integration_simple.py ✅ 19 tests GREEN — AC-64-08-B
     tdd_sequence:
-      - "RED: test AC_64_08_A fails — assert_trace_chain() missing"
-      - "GREEN: implement assert_trace_chain() in harness"
-      - "REFACTOR: S01–S10 scenarios use real trace assertions"
+      - "RED: test AC_64_08_A fails — assert_trace_chain() missing ✅"
+      - "GREEN: implement assert_trace_chain() in harness ✅"
+      - "GREEN: implement assert_no_orphan_ac_starts() in harness ✅"
+      - "REFACTOR: S01–S10 scenarios use real trace assertions ✅ (19/19 passing)"
+    smoke_gate: "625 passed, 46 skipped, 0 failures"
 
   - id: 64-B
     title: "Stage 0 + 13-Mode Full-Chain Matrix"
@@ -474,17 +482,17 @@ gap_catalogue:
       HolisticIntegrationHarness never queries real SQLite. Trace assertions are aspirational.
     acceptance_criteria:
       - id: AC-64-08-A
-        status: OPEN
+        status: CLOSED
         test_file: "cortex/testing/holistic_integration_harness.py"
         test_name: "assert_trace_chain (method)"
         assertion: "method queries real orchestrator-traces.db (tmp_path fixture), asserts each event present in order"
       - id: AC-64-08-B
-        status: OPEN
+        status: CLOSED
         test_file: "tests/golden/integration/test_holistic_integration_simple.py"
         test_name: "test_S01_through_S10_with_real_trace_assertions"
         assertion: "S01–S10 use real trace assertions (not mocked), all 10 pass"
       - id: AC-64-08-C
-        status: OPEN
+        status: CLOSED
         test_file: "cortex/testing/holistic_integration_harness.py"
         test_name: "assert_no_orphan_ac_starts (method)"
         assertion: "harness fails test if any AC_START in session has no matching AC_COMPLETE"
