@@ -1,16 +1,25 @@
-version: '13.1'
+version: '13.2'
 updated: '2026-02-24'
 maintainer: CORTEX Architecture Team
 metadata:
-  version: '13.1'
+  version: '13.2'
   last_updated: '2026-02-24T00:00:00Z'
   total_phases: 65
   active: 0
   completed: 65
   playbooks: 1
-  planned: 6
+  planned: 7
   governance_rules_total: 37
   planned_phases:
+    - id: phase-66
+      title: "Cross-Cutting Intelligence Matrix — Neural Wiring Layer"
+      priority: P0
+      status: PLANNED
+      sweep_id: SWEEP-66-INTELLIGENCE-MATRIX
+      gaps: 19
+      sub_phases: 3
+      file: "cortex-registry/_cortex-master/phases/planned/phase-66-intelligence-matrix-neural-wiring.yaml"
+      note: "Wires all 5 P0-CRITICAL + 12 P1-HIGH + 2 P2-MEDIUM intelligence matrix gaps across 7 dimensions. Coverage target: 9.5% → ≥50%."
     - id: phase-67
       title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
       priority: P1
@@ -105,6 +114,17 @@ phase_detail_files:
       cortex-master.yaml P0 line-count violation (1022L) remediated in sub-phase 67-A.
       Prerequisites: Phase 64 COMPLETE. 234 baseline workflow tests provide regression net.
       NOT a rewrite — surgical wiring fix. convergence_mode=False default unchanged.
+
+  # ── PHASE 66 ─────────────────────────────────────────────────────────────
+  - id: phase-66
+    title: "Cross-Cutting Intelligence Matrix — Neural Wiring Layer"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-66-INTELLIGENCE-MATRIX
+    gaps: 19
+    sub_phases: 3
+    file: "cortex-registry/_cortex-master/phases/planned/phase-66-intelligence-matrix-neural-wiring.yaml"
+    note: "Wires 5 P0-CRITICAL + 12 P1-HIGH + 2 P2-MEDIUM matrix gaps. Coverage 9.5% → ≥50%. cortex_intelligence_matrix MCP tool is the gate."
 
   # ── PHASE 65 ─────────────────────────────────────────────────────────────
   - id: phase-65
