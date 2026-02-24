@@ -207,7 +207,7 @@ class TestArchitectureDocumentation:
         from cortex.intelligence.domain_brain.conflict_resolver import ConflictResolver
         from cortex.intelligence.domain_brain.orphan_detector import ReferenceValidator
         from cortex.intelligence.domain_brain.optimistic_lock import OptimisticLockManager
-        from cortex.intelligence.domain_brain.version_manager import VersionedDomainManager
+        from cortex.intelligence.domain_brain.domain_brain_version_manager import VersionedDomainManager
 
         # All edge case implementations should exist
         edge_cases = [

@@ -19,7 +19,7 @@ import re
 from pathlib import Path
 from typing import Dict, Any
 
-from cortex.dashboards.spa.models import (
+from cortex.dashboards.spa.spa_models import (
     RepoManifestEntry,
     RepoDashboardData,
     DashboardSuiteConfig,

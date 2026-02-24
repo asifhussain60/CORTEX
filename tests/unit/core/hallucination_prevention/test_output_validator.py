@@ -8,7 +8,7 @@ to prevent injection attacks and hallucinations.
 """
 
 import pytest
-from cortex.core.hallucination_prevention.output_validator import (
+from cortex.core.hallucination_prevention.hp_output_validator import (
     LLMOutputValidator,
     ValidationLevel,
     OutputValidationError,

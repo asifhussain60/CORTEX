@@ -4519,7 +4519,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
         Route user intent through LENS pipeline.
         """
         try:
-            from cortex.intelligence.lens.lens.pipeline import LENSPipeline
+            from cortex.intelligence.lens.lens.lens_pipeline import LENSPipeline
 
             pipeline = LENSPipeline()
             result = pipeline.execute(context)

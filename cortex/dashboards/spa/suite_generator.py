@@ -22,7 +22,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.dashboards.spa.models import (
+from cortex.dashboards.spa.spa_models import (
     DashboardSuiteConfig,
     RepoDashboardData,
     RepoManifestEntry,

@@ -10,7 +10,7 @@ from cortex.dashboards.spa.dependency_bundler import (
     DependencyBundler,
     bundle_dependencies,
 )
-from cortex.dashboards.spa.models import (
+from cortex.dashboards.spa.spa_models import (
     ArchitectureLayer,
     DashboardSuiteConfig,
     DependencyInfo,
