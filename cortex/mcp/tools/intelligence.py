@@ -730,7 +730,7 @@ class CortexIntelligenceMatrix(ConsolidatedTool):
     @property
     def category(self) -> ToolCategory:
         """Return the tool category."""
-        return ToolCategory.OPERATIONS
+        return ToolCategory.INTELLIGENCE
 
     @property
     def parameters(self) -> List[ToolParameter]:

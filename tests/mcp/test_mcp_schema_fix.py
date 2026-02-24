@@ -2,6 +2,11 @@
 Tests for MCP schema generation fix.
 
 Verifies that tool schemas include all required metadata including category.
+
+Tool count updated: Phase 65 added CortexIntelligenceMatrix (intelligence).
+Toolkit Phase 63 added cortex_scan, cortex_batch_transform, cortex_enrich,
+cortex_workflow, cortex_scaffold_files (operations).
+Current live count: 28 registered tools (class-based + function wrappers may vary).
 """
 
 import pytest
@@ -9,92 +14,101 @@ from cortex.mcp.mcp_registry import get_registry, ToolRegistry
 from cortex.mcp.mcp_tool_base import ToolCategory
 
 
+# Live tool count — updated each time tools are added.
+# Run: python3 -c "from cortex.mcp.mcp_registry import get_registry; print(len(get_registry().to_mcp_schema()))"
+_EXPECTED_TOOL_COUNT = 28
+
+# Expected category distribution (Phase 65 actuals)
+_EXPECTED_DISTRIBUTION = {
+    "core": 3,
+    "intelligence": 3,   # cortex_generate_tests, cortex_git, cortex_knowledge
+    "governance": 4,
+    "operations": 9,
+    "utilities": 9,
+}
+
+
 class TestMCPSchemaGeneration:
     """Test MCP schema generation with category metadata."""
-    
+
     def test_schema_includes_category(self):
         """Verify each tool schema includes category field."""
         registry = get_registry()
         schemas = registry.to_mcp_schema()
-        
-        assert len(schemas) == 24, "Should have 24 tool schemas (removed: cortex_process_request, cortex_lens)"
-        
+
+        assert len(schemas) == _EXPECTED_TOOL_COUNT, (
+            f"Expected {_EXPECTED_TOOL_COUNT} tool schemas, got {len(schemas)}. "
+            "Update _EXPECTED_TOOL_COUNT when adding/removing tools."
+        )
+
         for schema in schemas:
             assert "name" in schema, f"Schema missing 'name': {schema}"
             assert "description" in schema, f"Schema missing 'description': {schema}"
             assert "category" in schema, f"Schema missing 'category': {schema['name']}"
             assert "inputSchema" in schema, f"Schema missing 'inputSchema': {schema}"
-            
-            # Verify category is a valid enum value
+
             category = schema["category"]
             valid_categories = [c.value for c in ToolCategory]
             assert category in valid_categories, (
                 f"Tool {schema['name']} has invalid category: {category}. "
                 f"Valid: {valid_categories}"
             )
-    
+
     def test_schema_categories_distribution(self):
         """Verify tools are properly distributed across categories."""
         registry = get_registry()
         schemas = registry.to_mcp_schema()
-        
-        # Count tools per category
+
         category_counts = {}
         for schema in schemas:
-            category = schema["category"]
-            category_counts[category] = category_counts.get(category, 0) + 1
-        
-        # Expected distribution (based on PRODUCTION_TOOLS after removing deprecated tools)
-        # cortex_process_request removed → core: 4→3
-        # cortex_lens removed → intelligence: 4→3
-        assert category_counts.get("core") == 3, "Should have 3 core tools (cortex_process_request removed)"
-        assert category_counts.get("intelligence") == 3, "Should have 3 intelligence tools (cortex_lens removed)"
-        assert category_counts.get("governance") == 4, "Should have 4 governance tools"
-        assert category_counts.get("operations") == 5, "Should have 5 operations tools"
-        assert category_counts.get("utilities") == 9, "Should have 9 utilities tools"
-    
+            cat = schema["category"]
+            category_counts[cat] = category_counts.get(cat, 0) + 1
+
+        for cat, expected in _EXPECTED_DISTRIBUTION.items():
+            assert category_counts.get(cat) == expected, (
+                f"Category '{cat}': expected {expected}, got {category_counts.get(cat)}. "
+                f"Full distribution: {category_counts}"
+            )
+
     def test_schema_operations_included(self):
         """Verify consolidated tools include operations list."""
         registry = get_registry()
         schemas = registry.to_mcp_schema()
-        
-        # Find consolidated tools (those with operations)
+
         consolidated_tools = [s for s in schemas if "operations" in s and s["operations"]]
-        
+
         assert len(consolidated_tools) > 0, "Should have consolidated tools with operations"
-        
-        # Verify cortex_git has operations (cortex_lens was removed — deprecated)
+
         git_schema = next((s for s in schemas if s["name"] == "cortex_git"), None)
         assert git_schema is not None, "cortex_git should exist"
         assert "operations" in git_schema, "cortex_git should have operations field"
-    
+
     def test_schema_json_serializable(self):
         """Verify schemas can be serialized to JSON."""
         import json
-        
+
         registry = get_registry()
         schemas = registry.to_mcp_schema()
-        
-        # Should not raise exception
+
         json_output = json.dumps(schemas, default=str)
         assert len(json_output) > 0
-        
-        # Should be able to parse back
+
         parsed = json.loads(json_output)
-        assert len(parsed) == 24  # 24 tools after removing cortex_process_request + cortex_lens
-    
+        assert len(parsed) == _EXPECTED_TOOL_COUNT, (
+            f"Expected {_EXPECTED_TOOL_COUNT} tools in JSON, got {len(parsed)}."
+        )
+
     def test_core_tools_have_correct_category(self):
         """Verify core tools are marked as core category."""
         registry = get_registry()
         schemas = registry.to_mcp_schema()
-        
+
         core_tool_names = [
-            # cortex_process_request removed — deprecated per architect spec
             "cortex_challenge",
             "cortex_classify",
             "cortex_request_lifecycle"
         ]
-        
+
         for tool_name in core_tool_names:
             schema = next((s for s in schemas if s["name"] == tool_name), None)
             assert schema is not None, f"Core tool {tool_name} not found"
