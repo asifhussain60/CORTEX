@@ -348,7 +348,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, IOrchestrator, Workflow
 
             # Step 4: Apply token optimization (ENH-046 Phase 4 Integration)
             try:
-                from cortex.core.interaction.context_synthesis_gateway import get_gateway
+                from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
                 
                 gateway = get_gateway()
                 session_id = getattr(round_context, 'session_id', 'default_session')
@@ -444,7 +444,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, IOrchestrator, Workflow
             
             # Apply token optimization (ENH-046 Phase 4 Integration)
             try:
-                from cortex.core.interaction.context_synthesis_gateway import get_gateway
+                from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
                 
                 gateway = get_gateway()
                 session_id = context.get('session_id', 'default_session')

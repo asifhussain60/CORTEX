@@ -9,7 +9,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from cortex.core.interaction.autonomous_plan_executor import (
+from cortex.orchestrators.core.autonomous_plan_executor import (
     AutonomousPlanExecutor,
     Phase,
 )

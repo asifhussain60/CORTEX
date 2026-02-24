@@ -16,7 +16,7 @@ Created: 2026-02-06
 
 import pytest
 from unittest.mock import Mock, MagicMock, patch
-from cortex.core.interaction.context_synthesis_gateway import (
+from cortex.orchestrators.core.context_synthesis_gateway import (
     ContextSynthesisGateway,
     SynthesizedContext,
     get_gateway
@@ -29,10 +29,10 @@ class TestContextSynthesisGateway:
     @pytest.fixture
     def gateway(self):
         """Create gateway with mocked dependencies."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.CopilotContextOptimizer') as mock_opt, \
-             patch('cortex.core.interaction.context_synthesis_gateway.ContextSynthesizer') as mock_syn, \
-             patch('cortex.core.interaction.context_synthesis_gateway.ContextCacheLayer') as mock_cache, \
-             patch('cortex.core.interaction.context_synthesis_gateway.ContextMetricsCollector') as mock_metrics:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.CopilotContextOptimizer') as mock_opt, \
+             patch('cortex.orchestrators.core.context_synthesis_gateway.ContextSynthesizer') as mock_syn, \
+             patch('cortex.orchestrators.core.context_synthesis_gateway.ContextCacheLayer') as mock_cache, \
+             patch('cortex.orchestrators.core.context_synthesis_gateway.ContextMetricsCollector') as mock_metrics:
             
             # Configure mocks
             mock_opt_instance = Mock()
@@ -516,7 +516,7 @@ class TestGetGateway:
     
     def test_get_gateway_singleton(self):
         """Test get_gateway returns singleton."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.ContextSynthesisGateway'):
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.ContextSynthesisGateway'):
             gateway1 = get_gateway()
             gateway2 = get_gateway()
             

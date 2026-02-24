@@ -32,8 +32,8 @@ from typing import Any, Dict, Optional
 
 from cortex.core.context_synthesizer import ContextSynthesizer
 from cortex.core.copilot_context_optimizer import CopilotContextOptimizer
-from cortex.core.interaction.context_cache_layer import ContextCacheLayer
-from cortex.core.interaction.context_metrics_collector import ContextMetricsCollector
+from cortex.orchestrators.core.context_cache_layer import ContextCacheLayer
+from cortex.orchestrators.core.context_metrics_collector import ContextMetricsCollector
 
 logger = logging.getLogger(__name__)
 

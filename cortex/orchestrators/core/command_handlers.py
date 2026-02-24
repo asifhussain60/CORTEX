@@ -7,7 +7,7 @@ Implements /persona and /detail command handlers
 
 from typing import Any, Dict, Optional, Tuple
 
-from cortex.core.interaction.persona_store import PersonaStore
+from cortex.orchestrators.core.persona_store import PersonaStore
 from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
 from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 

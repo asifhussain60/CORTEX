@@ -18,8 +18,8 @@ Tests:
 import pytest
 from typing import Dict, Any
 from unittest.mock import Mock, patch, MagicMock
-from cortex.core.interaction.request_transformer import RequestTransformer, TransformedRequest
-from cortex.core.interaction.conversational_reflector import ConversationalReflector, ConversationalReflection
+from cortex.orchestrators.core.request_transformer import RequestTransformer, TransformedRequest
+from cortex.orchestrators.core.conversational_reflector import ConversationalReflector, ConversationalReflection
 
 
 class TestCortexClassifyRequestCIG:
@@ -62,8 +62,8 @@ class TestCortexClassifyRequestCIG:
         default_format = tool_params_no_format.get("format", "table")
         assert default_format == "table"
     
-    @patch('cortex.core.interaction.request_transformer.RequestTransformer')
-    @patch('cortex.core.interaction.conversational_reflector.ConversationalReflector')
+    @patch('cortex.orchestrators.core.request_transformer.RequestTransformer')
+    @patch('cortex.orchestrators.core.conversational_reflector.ConversationalReflector')
     def test_passes_transformed_request_to_orchestrator(self, mock_reflector_class, mock_transformer_class):
         """AC-CIG-S3-03: Pass TransformedRequest to MasterOrchestrator."""
         # Setup mocks
@@ -97,7 +97,7 @@ class TestCortexClassifyRequestCIG:
         assert result.structured_context.get("intent_type") == "IMPLEMENT"
         assert result.confidence > 0.9
     
-    @patch('cortex.core.interaction.conversational_reflector.ConversationalReflector')
+    @patch('cortex.orchestrators.core.conversational_reflector.ConversationalReflector')
     def test_stores_validation_data_in_approval_session(self, mock_reflector_class):
         """AC-CIG-S3-04: Store full validation data in approval session."""
         # Setup mock
@@ -155,8 +155,8 @@ class TestCortexClassifyRequestCIG:
         assert audit_entry_conversational["format"] == "conversational"
         assert audit_entry_table["tool"] == audit_entry_conversational["tool"]
     
-    @patch('cortex.core.interaction.request_transformer.RequestTransformer')
-    @patch('cortex.core.interaction.conversational_reflector.ConversationalReflector')
+    @patch('cortex.orchestrators.core.request_transformer.RequestTransformer')
+    @patch('cortex.orchestrators.core.conversational_reflector.ConversationalReflector')
     def test_conversational_format_uses_reflection(self, mock_reflector_class, mock_transformer_class):
         """Test conversational format uses ConversationalReflector."""
         # Setup mocks

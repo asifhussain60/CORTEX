@@ -32,7 +32,7 @@ from cortex.orchestrators.core.enforcement_orchestrator import EnforcementOrches
 class TestBookReferenceFormatting:
     """Test book reference formatting (3 tests)."""
     
-    @patch("cortex.core.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.BusinessWisdomFormatter")
     def test_format_single_rule_with_book(self, mock_formatter_class: Mock) -> None:
         """Test formatting single rule with book reference."""
         # Arrange
@@ -54,7 +54,7 @@ class TestBookReferenceFormatting:
         assert "TDD by Kent Beck" in result
         assert not result.startswith("- ")  # List marker stripped
     
-    @patch("cortex.core.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.BusinessWisdomFormatter")
     def test_multiple_calls_use_separate_instances(self, mock_formatter_class: Mock) -> None:
         """Test each call creates separate formatter instance."""
         # Arrange
@@ -74,7 +74,7 @@ class TestBookReferenceFormatting:
         # Assert
         assert mock_formatter_class.call_count == 2  # New instance each time
     
-    @patch("cortex.core.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.BusinessWisdomFormatter")
     def test_inline_display_format(self, mock_formatter_class: Mock) -> None:
         """Test inline display format (no icon, no list marker)."""
         # Arrange
@@ -95,7 +95,7 @@ class TestBookReferenceFormatting:
 class TestFallbackBehavior:
     """Test fallback behavior (2 tests)."""
     
-    @patch("cortex.core.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.BusinessWisdomFormatter")
     def test_fallback_when_formatter_returns_empty(self, mock_formatter_class: Mock) -> None:
         """Test fallback to rule ID when formatter returns empty string."""
         # Arrange
@@ -111,7 +111,7 @@ class TestFallbackBehavior:
         # Assert
         assert result == "CORE-999"  # Fallback to rule ID
     
-    @patch("cortex.core.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.BusinessWisdomFormatter")
     def test_fallback_when_formatter_raises_exception(self, mock_formatter_class: Mock) -> None:
         """Test fallback to rule ID when formatter raises exception."""
         # Arrange
@@ -129,7 +129,7 @@ class TestFallbackBehavior:
 class TestIntegration:
     """Test integration (2 tests)."""
     
-    @patch("cortex.core.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.BusinessWisdomFormatter")
     def test_strips_list_marker_correctly(self, mock_formatter_class: Mock) -> None:
         """Test list marker (- ) stripped correctly for inline display."""
         # Arrange
@@ -149,7 +149,7 @@ class TestIntegration:
         assert result == "**Red-Green-Refactor** → CORE-008 (Book)"
         assert not result.startswith("- ")
     
-    @patch("cortex.core.interaction.business_wisdom_formatter.BusinessWisdomFormatter")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.BusinessWisdomFormatter")
     def test_handles_multiline_markdown_gracefully(self, mock_formatter_class: Mock) -> None:
         """Test multiline markdown handled (returns first line with content)."""
         # Arrange

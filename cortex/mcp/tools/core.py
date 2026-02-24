@@ -550,8 +550,8 @@ class CortexClassify(ConsolidatedTool):
         try:
             # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.core.intent_router.intent_router_enhanced
             from cortex.orchestrators.core.intent_router import IntentRouter
-            from cortex.core.interaction.request_transformer import RequestTransformer
-            from cortex.core.interaction.conversational_reflector import ConversationalReflector
+            from cortex.orchestrators.core.request_transformer import RequestTransformer
+            from cortex.orchestrators.core.conversational_reflector import ConversationalReflector
             
             router = IntentRouter()
             

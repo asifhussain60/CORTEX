@@ -28,7 +28,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from cortex.core.interaction.business_wisdom_formatter import BusinessWisdomFormatter
+from cortex.orchestrators.core.business_wisdom_formatter import BusinessWisdomFormatter
 
 
 class TestFormatValidation:
@@ -265,7 +265,7 @@ class TestEdgeCases:
 class TestIntegration:
     """Test integration (2 tests)."""
     
-    @patch("cortex.core.interaction.business_wisdom_formatter.GovernanceRuleLoader")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.GovernanceRuleLoader")
     def test_governance_rule_loader_integration(
         self, mock_loader_class: Mock
     ) -> None:

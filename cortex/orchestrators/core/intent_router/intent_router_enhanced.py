@@ -509,7 +509,7 @@ class EnhancedIntentRouter(OrchestratorProtocolMixin):
             Enriched markdown string or raw rule_id on error.
         """
         try:
-            from cortex.core.interaction.business_wisdom_formatter import (
+            from cortex.orchestrators.core.business_wisdom_formatter import (
                 BusinessWisdomFormatter,
             )
 

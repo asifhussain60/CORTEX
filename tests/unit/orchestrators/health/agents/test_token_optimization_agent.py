@@ -45,7 +45,7 @@ class TestTokenOptimizationAgent:
     
     def test_gateway_exists_no_issues(self, agent, workspace_root):
         """GOLDEN PATH: Gateway exists, no issues reported."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway = Mock()
             mock_gateway.token_budget = 20000
             mock_gateway.enable_cache = True
@@ -60,7 +60,7 @@ class TestTokenOptimizationAgent:
     
     def test_gateway_missing_critical_issue(self, agent, workspace_root):
         """Test gateway missing raises CRITICAL issue."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_get_gateway.return_value = None
             
             result = agent.check(workspace_root)
@@ -72,7 +72,7 @@ class TestTokenOptimizationAgent:
     
     def test_gateway_import_error_critical_issue(self, agent, workspace_root):
         """Test gateway import error raises CRITICAL issue."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_get_gateway.side_effect = ImportError("Module not found")
             
             result = agent.check(workspace_root)
@@ -89,7 +89,7 @@ class TestTokenOptimizationAgent:
     
     def test_token_budget_correct_no_issue(self, agent, workspace_root):
         """GOLDEN PATH: Token budget is 20000, no issue."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway = Mock()
             mock_gateway.token_budget = 20000
             mock_gateway.enable_cache = True
@@ -103,7 +103,7 @@ class TestTokenOptimizationAgent:
     
     def test_token_budget_misconfigured_medium_issue(self, agent, workspace_root):
         """Test misconfigured token budget raises MEDIUM issue."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway = Mock()
             mock_gateway.token_budget = 10000  # Wrong value
             mock_gateway.enable_cache = True
@@ -125,7 +125,7 @@ class TestTokenOptimizationAgent:
     
     def test_cache_enabled_no_issue(self, agent, workspace_root):
         """GOLDEN PATH: Cache enabled, no issue."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway = Mock()
             mock_gateway.token_budget = 20000
             mock_gateway.enable_cache = True
@@ -139,7 +139,7 @@ class TestTokenOptimizationAgent:
     
     def test_cache_disabled_medium_issue(self, agent, workspace_root):
         """Test cache disabled raises MEDIUM issue."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway = Mock()
             mock_gateway.token_budget = 20000
             mock_gateway.enable_cache = False
@@ -159,7 +159,7 @@ class TestTokenOptimizationAgent:
     
     def test_session_tracking_active_no_issue(self, agent, workspace_root):
         """GOLDEN PATH: Session tracking active, no issue."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway = Mock()
             mock_gateway.token_budget = 20000
             mock_gateway.enable_cache = True
@@ -173,7 +173,7 @@ class TestTokenOptimizationAgent:
     
     def test_session_tracking_missing_high_issue(self, agent, workspace_root):
         """Test missing session tracking raises HIGH issue."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             # Use spec= to restrict attributes so hasattr(_session_tokens) is False
             mock_gateway = Mock(spec=['token_budget', 'enable_cache'])
             mock_gateway.token_budget = 20000
@@ -193,7 +193,7 @@ class TestTokenOptimizationAgent:
     
     def test_metrics_registered_no_issue(self, agent, workspace_root):
         """GOLDEN PATH: Metrics registered, no issue."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway = Mock()
             mock_gateway.token_budget = 20000
             mock_gateway.enable_cache = True
@@ -213,7 +213,7 @@ class TestTokenOptimizationAgent:
     
     def test_multiple_issues_reported_correctly(self, agent, workspace_root):
         """Test multiple issues reported in single check."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway = Mock()
             mock_gateway.token_budget = 15000  # Wrong
             mock_gateway.enable_cache = False  # Wrong
@@ -231,7 +231,7 @@ class TestTokenOptimizationAgent:
     
     def test_early_exit_on_gateway_missing(self, agent, workspace_root):
         """Test early exit when gateway missing (other checks skipped)."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_get_gateway.return_value = None
             
             result = agent.check(workspace_root)
@@ -263,7 +263,7 @@ class TestTokenOptimizationAgentIntegration:
         agent = TokenOptimizationAgent()
         orchestrator.register_agent(agent)
         
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway = Mock()
             mock_gateway.token_budget = 20000
             mock_gateway.enable_cache = True

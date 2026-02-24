@@ -45,7 +45,7 @@ class TestInteractionOrchestratorTokenOptimization:
     @pytest.fixture
     def mock_gateway(self):
         """Create mock ContextSynthesisGateway."""
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             mock_gateway_instance = Mock()
             mock_gateway_instance.token_budget = 20000
             mock_gateway_instance.synthesize.return_value = Mock(
@@ -310,7 +310,7 @@ class TestInteractionOrchestratorTokenOptimization:
         mock_round_context = Mock()
         mock_round_context.session_id = "failsafe_session"
         
-        with patch('cortex.core.interaction.context_synthesis_gateway.get_gateway') as mock_get_gateway:
+        with patch('cortex.orchestrators.core.context_synthesis_gateway.get_gateway') as mock_get_gateway:
             # Simulate gateway error
             mock_get_gateway.side_effect = Exception("Gateway initialization failed")
             

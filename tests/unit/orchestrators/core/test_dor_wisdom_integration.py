@@ -22,13 +22,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from cortex.core.interaction.business_wisdom_formatter import BusinessWisdomFormatter
+from cortex.orchestrators.core.business_wisdom_formatter import BusinessWisdomFormatter
 
 
 class TestDoRWisdomIntegration:
     """Test DoR display integration with BusinessWisdomFormatter."""
 
-    @patch("cortex.core.interaction.business_wisdom_formatter.GovernanceRuleLoader")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.GovernanceRuleLoader")
     def test_dor_display_integration_pattern(self, mock_loader_class):
         """Test integration pattern for adding Business Wisdom to DoR displays."""
         # Setup - Mock loader to avoid YAML parsing issues
@@ -84,7 +84,7 @@ class TestDoRWisdomIntegration:
         assert len(lines) <= 5, "Should enforce max 5 principles"
         assert len(lines) == 3, "Should show all 3 provided rules"
 
-    @patch("cortex.core.interaction.business_wisdom_formatter.GovernanceRuleLoader")
+    @patch("cortex.orchestrators.core.business_wisdom_formatter.GovernanceRuleLoader")
     def test_dor_business_wisdom_section_rendering(self, mock_loader_class):
         """Test Business Wisdom section renders correctly in DoR-like context."""
         # Setup - Mock loader

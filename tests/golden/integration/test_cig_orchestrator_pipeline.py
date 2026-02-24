@@ -31,7 +31,7 @@ class TestCIGOrchestratorPipeline:
     def test_golden_path_implement_intent_to_tdd_orchestrator(self) -> None:
         """AC-CIG-S5-001: IMPLEMENT intent → TDDOrchestrator."""
         try:
-            from cortex.core.interaction.request_transformer import RequestTransformer
+            from cortex.orchestrators.core.request_transformer import RequestTransformer
         except ImportError as exc:
             pytest.skip(f"RequestTransformer not importable: {exc}")
 
@@ -46,7 +46,7 @@ class TestCIGOrchestratorPipeline:
     def test_golden_path_fix_intent_to_intent_router(self) -> None:
         """AC-CIG-S5-002: FIX intent → IntentRouter."""
         try:
-            from cortex.core.interaction.request_transformer import RequestTransformer
+            from cortex.orchestrators.core.request_transformer import RequestTransformer
         except ImportError as exc:
             pytest.skip(f"RequestTransformer not importable: {exc}")
 
@@ -61,7 +61,7 @@ class TestCIGOrchestratorPipeline:
     def test_golden_path_analyze_intent_to_lens_synthesis(self) -> None:
         """AC-CIG-S5-003: ANALYZE intent → LENSSynthesis."""
         try:
-            from cortex.core.interaction.request_transformer import RequestTransformer
+            from cortex.orchestrators.core.request_transformer import RequestTransformer
         except ImportError as exc:
             pytest.skip(f"RequestTransformer not importable: {exc}")
 
@@ -74,7 +74,7 @@ class TestCIGOrchestratorPipeline:
     def test_conversational_format_orchestrator_routing(self) -> None:
         """AC-CIG-S5-004: Conversational format detected and preserved."""
         try:
-            from cortex.core.interaction.request_transformer import RequestTransformer
+            from cortex.orchestrators.core.request_transformer import RequestTransformer
         except ImportError as exc:
             pytest.skip(f"RequestTransformer not importable: {exc}")
 
@@ -88,7 +88,7 @@ class TestCIGOrchestratorPipeline:
     def test_transformation_performance_under_50ms(self) -> None:
         """AC-CIG-S5-005: Request transformation must complete in <50ms."""
         try:
-            from cortex.core.interaction.request_transformer import RequestTransformer
+            from cortex.orchestrators.core.request_transformer import RequestTransformer
         except ImportError as exc:
             pytest.skip(f"RequestTransformer not importable: {exc}")
 
@@ -102,7 +102,7 @@ class TestCIGOrchestratorPipeline:
     def test_conversational_reflector_performance_under_30ms(self) -> None:
         """AC-CIG-S5-006: ConversationalReflector must complete in <30ms."""
         try:
-            from cortex.core.interaction.conversational_reflector import ConversationalReflector
+            from cortex.orchestrators.core.conversational_reflector import ConversationalReflector
         except ImportError as exc:
             pytest.skip(f"ConversationalReflector not importable: {exc}")
 
@@ -126,7 +126,7 @@ class TestCIGOrchestratorPipeline:
     def test_transformed_request_has_required_fields(self) -> None:
         """AC-CIG-S5-007: TransformedRequest must expose structured_context and canonical_keywords."""
         try:
-            from cortex.core.interaction.request_transformer import RequestTransformer
+            from cortex.orchestrators.core.request_transformer import RequestTransformer
         except ImportError as exc:
             pytest.skip(f"RequestTransformer not importable: {exc}")
 

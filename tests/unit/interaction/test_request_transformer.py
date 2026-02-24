@@ -33,7 +33,7 @@ class TestRequestTransformer:
     
     def test_transform_verbose_request_removes_repetition(self) -> None:
         """AC-CIG-S1-01: Detect and remove repetitive phrases (35% avg reduction)."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         verbose_request = (
@@ -58,7 +58,7 @@ class TestRequestTransformer:
     
     def test_extract_canonical_keywords_max_7_terms(self) -> None:
         """AC-CIG-S1-02: Extract canonical intent keywords (5-7 terms max)."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         request = "implement user authentication for login module with OAuth2 and session management"
@@ -76,7 +76,7 @@ class TestRequestTransformer:
     
     def test_preserve_user_vocabulary_in_summary(self) -> None:
         """AC-CIG-S1-03: Preserve user's original vocabulary in summary."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         request = "refactor the payment processing spaghetti code"
@@ -93,7 +93,7 @@ class TestRequestTransformer:
     
     def test_output_structured_format_for_orchestrator(self) -> None:
         """AC-CIG-S1-04: Output structured format for MasterOrchestrator."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         request = "implement new API endpoint for user profiles"
@@ -113,7 +113,7 @@ class TestRequestTransformer:
     
     def test_handle_ambiguous_request_gracefully(self) -> None:
         """AC-CIG-S1-05: Handle ambiguous requests gracefully."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         ambiguous_request = "do something with the thing"
@@ -129,7 +129,7 @@ class TestRequestTransformer:
     
     def test_detect_repetition_identifies_duplicate_phrases(self) -> None:
         """Test repetition detection identifies duplicate phrases."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         text = "The login fails. The login fails again. We need to fix the login."
@@ -144,7 +144,7 @@ class TestRequestTransformer:
     
     def test_canonicalize_intent_extracts_action_and_target(self) -> None:
         """Test intent canonicalization extracts action + target."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         text = "implement user authentication"
@@ -161,7 +161,7 @@ class TestRequestTransformer:
     
     def test_transform_short_request_preserves_content(self) -> None:
         """Test transformation of already-concise request."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         request = "fix authentication bug"
@@ -177,7 +177,7 @@ class TestRequestTransformer:
     
     def test_token_count_within_95_target(self) -> None:
         """Test distilled summary meets 95-token target."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         long_request = (
@@ -199,7 +199,7 @@ class TestRequestTransformer:
     
     def test_structured_context_includes_confidence_score(self) -> None:
         """Test structured context includes confidence metadata."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         request = "implement payment processing"
@@ -215,7 +215,7 @@ class TestRequestTransformer:
     
     def test_handles_special_characters_and_formatting(self) -> None:
         """Test transformer handles markdown, code, and special chars."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         request = "fix `auth.py` - users can't login! #urgent"
@@ -231,7 +231,7 @@ class TestRequestTransformer:
     
     def test_extract_urgency_indicators(self) -> None:
         """Test extraction of urgency/priority indicators."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         request = "URGENT: fix login bug ASAP - customers complaining"
@@ -246,7 +246,7 @@ class TestRequestTransformer:
     
     def test_transform_analyze_intent(self) -> None:
         """Test transformation of ANALYZE intent request."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         request = "analyze code quality in the payment module"
@@ -262,7 +262,7 @@ class TestRequestTransformer:
     
     def test_transform_refactor_intent(self) -> None:
         """Test transformation of REFACTOR intent request."""
-        from cortex.core.interaction.request_transformer import RequestTransformer
+        from cortex.orchestrators.core.request_transformer import RequestTransformer
         
         # Arrange
         request = "refactor authentication module to use dependency injection"

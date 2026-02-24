@@ -65,7 +65,7 @@ EXEMPTED_PATTERNS = [
     r"cortex/core/recovery/",        # saga_coordinator, state_repair
     r"cortex/core/common/",          # file_utils, safe_template_editor (utility I/O)
     r"cortex/core/wiring/",          # contract_validator (wiring validation logs)
-    r"cortex/core/interaction/",     # persona_store (runtime profiles)
+    r"cortex/orchestrators/core/",     # persona_store (runtime profiles)
     r"cortex/core/execution/",       # execution_guard, resilience
     r"cortex/core/scaffold_writer\.py$",  # scaffold generation (by definition creates files)
     r"cortex/core/event_bus\.py$",        # event persistence

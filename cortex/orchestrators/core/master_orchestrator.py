@@ -81,7 +81,7 @@ except ImportError:
     AdaptiveRouter = None  # type: ignore
 
 # ENH-046 Phase 4 & 5: Import Context Synthesis Gateway (EXIT GATE)
-from cortex.core.interaction.context_synthesis_gateway import get_gateway
+from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
 
 # Phase 33: Import response verbosity policies for chat response compression
 try:
@@ -152,7 +152,7 @@ except ImportError:
 # AC-PHASE-35-001: Autonomous continuation detection (R1)
 # AC-PHASE-35-002: ASCII progress bar integration (R2)
 try:
-    from cortex.core.interaction.autonomous_plan_executor import AutonomousPlanExecutor
+    from cortex.orchestrators.core.autonomous_plan_executor import AutonomousPlanExecutor
     from cortex.orchestrators.response.ascii_progress_bar import ASCIIProgressBar
 except ImportError:
     # Fallback if modules not accessible
@@ -3033,7 +3033,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
             # This is the SINGLE integration point that automatically covers ALL
             # orchestrators without per-orchestrator wiring
             try:
-                from cortex.core.interaction.context_synthesis_gateway import get_gateway
+                from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
 
                 # Get gateway singleton
                 gateway = get_gateway()

@@ -8,7 +8,7 @@ from typing import Optional
 
 import pytest
 
-from cortex.core.interaction.persona_command_handlers import (
+from cortex.orchestrators.core.persona_command_handlers import (
     CommandResult,
     PersonaCommandHandlers,
 )
