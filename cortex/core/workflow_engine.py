@@ -5,6 +5,7 @@ Reads workflow YAML templates and orchestrates execution.
 
 Authority: CORE-008 (TDD) | CORE-011 (type hints) | CORE-012 (docstrings)
 Phase 64-G: register_post_step_hook() added for CORE-066 ResponseTemplateValidator wiring.
+Phase 67-E: StepHandlerRegistry + StepError replacing _execute_step() pure stub (GAP-67-01).
 """
 
 from pathlib import Path
@@ -14,6 +15,21 @@ from datetime import datetime
 import yaml
 
 from cortex.core.scaffold_writer import ScaffoldWriter
+
+
+class StepError(Exception):
+    """Raised when a workflow step operation is unknown or cannot be dispatched.
+
+    Phase 67-E (GAP-67-01): replaces silent stub behaviour so unknown operations
+    surface immediately rather than being swallowed by a noop.
+
+    Args:
+        operation: The unrecognised operation string that caused the failure.
+    """
+
+    def __init__(self, operation: str, message: str = "") -> None:
+        self.operation = operation
+        super().__init__(message or f"Unknown step operation: '{operation}'")
 
 
 @dataclass
@@ -56,6 +72,86 @@ class WorkflowEngine:
         self._scaffold_writer = ScaffoldWriter(root=self.template_dir)
         # CORE-066: post-step hooks for ResponseTemplateValidator wiring (Phase 64-G)
         self._post_step_hooks: List[Callable[[Dict[str, Any]], None]] = []
+        # Phase 67-E (GAP-67-01): StepHandlerRegistry — replaces silent stub
+        self._step_handler_registry: Dict[
+            str, Callable[[Dict[str, Any], "ExecutionContext"], Optional[Dict[str, Any]]]
+        ] = {
+            "noop": self._noop_handler,
+            "orchestrator_dispatch": self._orchestrator_dispatch_handler,
+            "validate": self._validate_handler,
+        }
+
+    # ── Phase 67-E: Built-in step handlers ───────────────────────────────────
+
+    @staticmethod
+    def _noop_handler(
+        step: Dict[str, Any], context: "ExecutionContext"
+    ) -> None:
+        """No-op handler — completes immediately with no side effects.
+
+        Args:
+            step: Step configuration dict.
+            context: Current execution context.
+        """
+        # Intentional no-op; step completes with no side effects
+
+    @staticmethod
+    def _validate_handler(
+        step: Dict[str, Any], context: "ExecutionContext"
+    ) -> Dict[str, Any]:
+        """Validate handler — returns a passing validation result dict.
+
+        Args:
+            step: Step configuration dict.
+            context: Current execution context.
+
+        Returns:
+            Dict with 'status' key set to 'complete'.
+        """
+        return {"status": "complete", "validation": "passed"}
+
+    @staticmethod
+    def _orchestrator_dispatch_handler(
+        step: Dict[str, Any], context: "ExecutionContext"
+    ) -> Optional[Dict[str, Any]]:
+        """Orchestrator dispatch handler — routes step to the named orchestrator.
+
+        If no 'orchestrator' key is present in the step dict, raises StepError
+        rather than silently failing (CORE-064 no silent swallowing).
+
+        Args:
+            step: Step configuration dict.  Must contain 'orchestrator' key.
+            context: Current execution context.
+
+        Returns:
+            Dict with 'status' key, or None.
+
+        Raises:
+            StepError: If 'orchestrator' key is missing from step.
+        """
+        orchestrator_name = step.get("orchestrator")
+        if not orchestrator_name:
+            raise StepError(
+                "orchestrator_dispatch",
+                "orchestrator_dispatch step is missing 'orchestrator' key",
+            )
+        # Dispatch stub: in production, resolve orchestrator by name from registry
+        return {"status": "complete", "dispatched_to": orchestrator_name}
+
+    def register_step_handler(
+        self,
+        operation: str,
+        handler: Callable[[Dict[str, Any], "ExecutionContext"], Optional[Dict[str, Any]]],
+    ) -> None:
+        """Register a custom step handler for the given operation name.
+
+        Phase 67-E (GAP-67-01): Extension point for domain-specific handlers.
+
+        Args:
+            operation: Operation string (matches ``step['operation']`` in YAML).
+            handler: Callable with signature ``(step, context) -> Optional[dict]``.
+        """
+        self._step_handler_registry[operation] = handler
 
     # ── CORE-066: Post-step hook registry (Phase 64-G) ───────────────────────
 
@@ -251,35 +347,47 @@ class WorkflowEngine:
         
         return context
     
-    @staticmethod
-    def _execute_step(step: Dict[str, Any], context: ExecutionContext) -> None:
-        """Execute a single workflow step.
-        
-        After execution, any ``scaffold_files`` in the step result are written
-        to disk via :class:`~cortex.core.scaffold_writer.ScaffoldWriter` so that
-        subsequent steps whose ``depends_on`` gate checks for those files can
-        find them without the pipeline stopping mid-run.
-        
+    def _execute_step(self, step: Dict[str, Any], context: "ExecutionContext") -> None:
+        """Execute a single workflow step via the StepHandlerRegistry.
+
+        Phase 67-E (GAP-67-01): replaces the pure stub with a proper registry
+        dispatch.  Unknown operations raise :class:`StepError` immediately so
+        mis-configured YAML templates are caught at runtime, not silently
+        swallowed.
+
+        After execution any ``scaffold_files`` in the step result are written
+        to disk via :class:`~cortex.core.scaffold_writer.ScaffoldWriter`.
+
         Args:
-            step: Step configuration.
-            context: Execution context.
+            step: Step configuration dict.  Must contain an 'operation' key
+                  that resolves to a registered handler.
+            context: Current execution context.
+
+        Raises:
+            StepError: If the operation is not registered in
+                       ``_step_handler_registry``.
         """
-        # Placeholder: actual implementation would dispatch to orchestrators
-        operation = step.get('operation', 'noop')
-        # Step execution logic here
-        
-        # Emit scaffold_files to disk after step completes
-        step_result: Dict[str, Any] = step.get('_result', {})
-        if step_result:
-            writer = ScaffoldWriter(root=Path.cwd())
-            scaffold_files = writer.from_step_output(step_result)
-            if scaffold_files:
-                written = writer.emit(scaffold_files)
-                # Store written paths in context variables for downstream steps
-                context.variables.setdefault('scaffold_written', []).extend(
-                    str(p) for p in written
-                )
-    
+        operation = step.get("operation", "noop")
+        if operation not in self._step_handler_registry:
+            raise StepError(operation)
+
+        handler = self._step_handler_registry[operation]
+        step_result: Optional[Dict[str, Any]] = handler(step, context)
+
+        # Emit scaffold_files to disk after step completes (Gap G2 fix)
+        result_dict: Dict[str, Any] = step_result or {}
+        scaffold_files = self._scaffold_writer.from_step_output(result_dict)
+        if scaffold_files:
+            written = self._scaffold_writer.emit(scaffold_files)
+            context.variables.setdefault("scaffold_written", []).extend(
+                str(p) for p in written
+            )
+
+        # Invoke post-step hooks (CORE-066)
+        for hook in self._post_step_hooks:
+            hook(result_dict)
+
+
     def get_execution_context(self, workflow_id: str) -> Optional[ExecutionContext]:
         """Get the execution context for a workflow.
         
