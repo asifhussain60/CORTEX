@@ -291,9 +291,14 @@ health_status:
   health_check: PASSING
   last_health_fix: '2026-02-24'
   thin_index_status: "COMPLIANT — Phase 68 FULLY COMPLETE (2026-02-24): bootstrap/ stub deleted, 15 canonical subdirs confirmed, all 19 tests GREEN"
+  known_flakes:
+    - id: holistic-integration-xdist-timing
+      tests: "tests/golden/holistic_integration/ (25 tests)"
+      status: "PASS single-process | FLAKY under xdist parallel (performance timing assertions)"
+      action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "✅ COMPLETE — Phase 68 COMPLETE | All 68 phases done | cortex/core flattened 27→15 subdirs (bootstrap/ stub removed)"
+  status: "✅ COMPLETE — Phase 68 COMPLETE | All 68 phases done | cortex/core flattened 27→15 subdirs (bootstrap/ stub removed) | FileFactory sweep CLOSED | 3 composite templates added"
   overall_score: 100%
   test_baseline: "1,420 smoke | 204 golden workflow | 177 workflow orchestrators"
   deployment_date: '2026-02-24'
