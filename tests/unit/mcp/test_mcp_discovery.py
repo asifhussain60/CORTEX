@@ -24,7 +24,7 @@ class TestHealthEndpointResponse:
 
     def test_health_endpoint_returns_200(self):
         """GET /health returns 200 status."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
         status = checker.check_health()
@@ -35,7 +35,7 @@ class TestHealthEndpointResponse:
 
     def test_health_response_has_valid_schema(self):
         """Health response matches expected schema."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
         status = checker.check_health()
@@ -48,7 +48,7 @@ class TestHealthEndpointResponse:
 
     def test_health_timestamp_format(self):
         """Health response includes ISO format timestamp."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
         status = checker.check_health()
@@ -62,7 +62,7 @@ class TestDatabaseConnectionCheck:
 
     def test_health_detects_db_connection_failure(self):
         """Health check detects database connection failure."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
 
@@ -77,7 +77,7 @@ class TestDatabaseConnectionCheck:
 
     def test_health_detects_db_connection_success(self):
         """Health check detects successful database connection."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
 
@@ -96,7 +96,7 @@ class TestGovernanceRulesCheck:
 
     def test_health_detects_governance_rules_loaded(self):
         """Health check verifies governance rules are loaded."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
 
@@ -110,7 +110,7 @@ class TestGovernanceRulesCheck:
 
     def test_health_detects_missing_governance_rules(self):
         """Health check detects missing governance rules."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
 
@@ -128,7 +128,7 @@ class TestOrchestratorsRegisteredCheck:
 
     def test_health_detects_orchestrators_registered(self):
         """Health check verifies orchestrators are registered."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
 
@@ -146,7 +146,7 @@ class TestServiceDiscoverySequence:
 
     def test_discovery_uses_env_var_first(self):
         """Service discovery tries env var first."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -157,7 +157,7 @@ class TestServiceDiscoverySequence:
 
     def test_discovery_uses_config_file_second(self):
         """Service discovery falls back to config file."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -171,7 +171,7 @@ class TestServiceDiscoverySequence:
 
     def test_discovery_uses_default_last(self):
         """Service discovery uses default endpoint as last resort."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -186,7 +186,7 @@ class TestServiceDiscoverySequence:
 
     def test_discovery_sequence_order(self):
         """Discovery tries options in correct order."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -206,7 +206,7 @@ class TestConfigFileEndpoint:
 
     def test_load_cortex_config_yaml(self):
         """Load endpoint from cortex-config.yaml."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -225,7 +225,7 @@ class TestConfigFileEndpoint:
 
     def test_missing_config_file_returns_none(self):
         """Missing config file returns None."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -242,7 +242,7 @@ class TestInvalidEndpointDetection:
 
     def test_invalid_endpoint_format_detected(self):
         """Invalid endpoint format is detected."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -259,7 +259,7 @@ class TestInvalidEndpointDetection:
 
     def test_valid_endpoint_format_accepted(self):
         """Valid endpoint formats are accepted."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -280,7 +280,7 @@ class TestPromptVersionEndpoint:
 
     def test_prompt_version_endpoint_returns_version(self):
         """GET /config/prompt-version returns current version."""
-        from cortex.core.discovery.mcp_discovery import PromptVersionConfig
+        from cortex.mcp.mcp_discovery import PromptVersionConfig
 
         config = PromptVersionConfig()
 
@@ -293,7 +293,7 @@ class TestPromptVersionEndpoint:
 
     def test_prompt_version_includes_schema(self):
         """Version config includes schema information."""
-        from cortex.core.discovery.mcp_discovery import PromptVersionConfig
+        from cortex.mcp.mcp_discovery import PromptVersionConfig
 
         config = PromptVersionConfig()
 
@@ -308,7 +308,7 @@ class TestHealthCheckCaching:
 
     def test_health_check_results_cached(self):
         """Health check results are cached."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
 
@@ -320,7 +320,7 @@ class TestHealthCheckCaching:
 
     def test_cache_expires_after_ttl(self):
         """Health check cache expires after TTL."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
         from datetime import datetime, timedelta
 
         checker = HealthCheck(cache_ttl_seconds=1)
@@ -343,7 +343,7 @@ class TestHealthCheckLatency:
 
     def test_health_check_latency_under_100ms(self):
         """Health check completes in <100ms."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
         import time
 
         checker = HealthCheck()
@@ -361,7 +361,7 @@ class TestServiceDiscoveryEdgeCases:
 
     def test_discovery_with_empty_config_file(self):
         """Discovery handles empty config file."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -375,7 +375,7 @@ class TestServiceDiscoveryEdgeCases:
 
     def test_discovery_with_malformed_config_file(self):
         """Discovery handles malformed config file gracefully."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -389,7 +389,7 @@ class TestServiceDiscoveryEdgeCases:
 
     def test_discovery_with_unreachable_endpoint(self):
         """Discovery detects unreachable endpoints."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
 
         discovery = ServiceDiscovery()
 
@@ -405,7 +405,7 @@ class TestHealthCheckComponentStatus:
 
     def test_health_includes_all_components(self):
         """Health check includes all required components."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
 
@@ -419,7 +419,7 @@ class TestHealthCheckComponentStatus:
 
     def test_overall_health_status_calculation(self):
         """Overall health status based on components."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
 
@@ -439,7 +439,7 @@ class TestHealthCheckComponentStatus:
 
     def test_degraded_health_when_one_component_fails(self):
         """Health status is degraded when one component fails."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
 
         checker = HealthCheck()
 
@@ -463,7 +463,7 @@ class TestDiscoveryThreadSafety:
 
     def test_concurrent_endpoint_discovery(self):
         """Multiple concurrent discovery calls work correctly."""
-        from cortex.core.discovery.mcp_discovery import ServiceDiscovery
+        from cortex.mcp.mcp_discovery import ServiceDiscovery
         import threading
 
         discovery = ServiceDiscovery()
@@ -487,7 +487,7 @@ class TestDiscoveryThreadSafety:
 
     def test_concurrent_health_checks(self):
         """Multiple concurrent health checks work correctly."""
-        from cortex.core.discovery.mcp_discovery import HealthCheck
+        from cortex.mcp.mcp_discovery import HealthCheck
         import threading
 
         checker = HealthCheck()

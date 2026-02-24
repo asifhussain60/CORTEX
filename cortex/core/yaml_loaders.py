@@ -18,7 +18,7 @@ from cortex.core.models import (
     ModesYAML,
     ResponseFormatYAML,
 )
-from cortex.core.models.persona_models import PersonasYAML
+from cortex.core.persona_models import PersonasYAML
 
 # Type variable for generic loader data
 T = TypeVar('T', CoreRulesYAML, AuditChecklistYAML, ModesYAML, ResponseFormatYAML, PersonasYAML)

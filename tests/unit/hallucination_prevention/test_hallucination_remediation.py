@@ -146,7 +146,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_documents_isolation_scope(self):
         """Sandbox should have clear documentation of isolation scope."""
-        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.intelligence.execution_sandbox import ExecutionSandbox
         
         # Check docstring or class-level documentation
         assert ExecutionSandbox.__doc__ is not None, \
@@ -159,7 +159,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_execute_method_with_modes(self):
         """Sandbox should support different execution modes."""
-        from cortex.core.hallucination_prevention.execution_sandbox import (
+        from cortex.intelligence.execution_sandbox import (
             ExecutionSandbox, ExecutionMode
         )
         
@@ -178,7 +178,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_tracks_side_effects(self):
         """Sandbox should track side effects during execution."""
-        from cortex.core.hallucination_prevention.execution_sandbox import (
+        from cortex.intelligence.execution_sandbox import (
             ExecutionSandbox, ExecutionMode
         )
         
@@ -191,7 +191,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_captures_mutations_in_result(self):
         """Sandbox execute should capture mutations in result."""
-        from cortex.core.hallucination_prevention.execution_sandbox import (
+        from cortex.intelligence.execution_sandbox import (
             ExecutionSandbox, ExecutionMode, SandboxExecution
         )
         
@@ -216,7 +216,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_provides_execution_history(self):
         """Sandbox should provide execution history."""
-        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.intelligence.execution_sandbox import ExecutionSandbox
         
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
@@ -303,7 +303,7 @@ class TestPathResolution:
     
     def test_execution_sandbox_uses_relative_db_path(self):
         """ExecutionSandbox should use relative DB path, not absolute."""
-        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.intelligence.execution_sandbox import ExecutionSandbox
         import inspect
         
         source = inspect.getsource(ExecutionSandbox.__init__)
@@ -422,7 +422,7 @@ class TestHallucinationPreventionIntegration:
     
     def test_sandbox_execution_flow(self):
         """Test complete sandbox execution flow."""
-        from cortex.core.hallucination_prevention.execution_sandbox import (
+        from cortex.intelligence.execution_sandbox import (
             ExecutionSandbox, ExecutionMode, ExecutionState
         )
         
@@ -448,7 +448,7 @@ class TestHallucinationPreventionIntegration:
     
     def test_hallucination_prevention_module_imports(self):
         """All hallucination prevention exports should be importable."""
-        from cortex.core.hallucination_prevention import (
+        from cortex.intelligence import (
             # Behavioral Boundaries
             BehavioralBoundaryRules,
             BoundaryViolation,

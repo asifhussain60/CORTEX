@@ -243,7 +243,7 @@ class TestSandboxHistoryLocking:
     
     def test_history_has_lock(self):
         """Sandbox should have a lock for history access."""
-        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.intelligence.execution_sandbox import ExecutionSandbox
         
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
@@ -256,7 +256,7 @@ class TestSandboxHistoryLocking:
     
     def test_concurrent_history_read(self):
         """Concurrent reads of history should be thread-safe."""
-        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.intelligence.execution_sandbox import ExecutionSandbox
         
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
@@ -283,7 +283,7 @@ class TestSandboxHistoryLocking:
     
     def test_history_clear_thread_safe(self):
         """Clearing history should be thread-safe."""
-        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.intelligence.execution_sandbox import ExecutionSandbox
         
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
@@ -410,7 +410,7 @@ class TestBrittlenessRemediation:
         provider.shutdown()
         
         # Sandbox history locking
-        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.intelligence.execution_sandbox import ExecutionSandbox
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
             assert hasattr(sandbox, '_history_lock')

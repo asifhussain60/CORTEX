@@ -16,7 +16,7 @@ from typing import Optional
 from pydantic import ValidationError
 
 # Import models
-from cortex.core.models.persona_models import (
+from cortex.core.persona_models import (
     Persona, DepthLevel, PersonaCommand, PersonasYAML,
     PersonaCommandParameter, PersonaSubCommand
 )

@@ -1,6 +1,6 @@
 """Models for CORTEX brain core components."""
 
-from cortex.core.models.governance_models import (
+from cortex.core.governance_models import (
     AuditCheck,
     AuditChecklistYAML,
     CoreRule,
