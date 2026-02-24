@@ -76,23 +76,25 @@ class ContentLoader {
         let html = '';
         if (roleConfig) {
             html += `
-                <div class="role-guidance fade-in">
-                    <strong>${roleConfig.icon} ${roleConfig.label}</strong>
-                    <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-secondary);">
+                <div class="role-guidance fade-in mb-8">
+                    <strong class="font-display text-xl block mb-2">${roleConfig.icon} ${roleConfig.label}</strong>
+                    <p class="font-body text-secondary">
                         Focus: ${roleConfig.focus}
                     </p>
                 </div>
             `;
         }
 
-        // Render categories
+        // Render categories in grid
+        html += '<div class="cortex-grid">';
+        
         filteredContent.forEach((category, index) => {
             html += `
-                <div class="glass-card fade-in" style="animation-delay: ${index * 0.1}s;">
-                    <h2 style="color: var(--accent-primary); margin-bottom: 1rem;">
+                <div class="glass-card-concept col-span-12 lg:col-span-6 fade-in" style="animation-delay: ${index * 0.1}s;">
+                    <h2 class="font-display text-xl mb-4" style="color: var(--accent-primary);">
                         ${category.title}
                     </h2>
-                    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                    <p class="font-body text-secondary mb-6 text-sm">
                         ${category.file_count} document${category.file_count !== 1 ? 's' : ''}
                     </p>
                     <div class="category-files">
@@ -101,6 +103,8 @@ class ContentLoader {
                 </div>
             `;
         });
+        
+        html += '</div>';
 
         container.innerHTML = html;
         this.currentRole = roleId;
@@ -108,15 +112,16 @@ class ContentLoader {
 
     _renderFiles(files) {
         return files.map(file => `
-            <div class="file-item" style="margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--glass-border);">
-                <h3 style="color: var(--text-primary); margin-bottom: 0.5rem; font-size: 1.1rem;">
+            <div class="file-item mb-6 pb-6" style="border-bottom: 1px solid var(--glass-border);">
+                <h3 class="font-display text-lg mb-2">
                     <a href="#${file.category}/${file.slug}" 
+                       class="hover:text-accent-primary transition-colors"
                        style="color: inherit; text-decoration: none;"
-                       onclick="window.cortexLoader.loadDocument('${file.category}', '${file.slug}'); return false;">
+                       onclick="window.cortexLoader.loadDocument(this.getAttribute('href')); return false;">
                         ${file.title}
                     </a>
                 </h3>
-                <p style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.6;">
+                <p class="font-body text-secondary text-sm leading-relaxed">
                     ${file.excerpt}
                 </p>
                 ${file.word_count ? `

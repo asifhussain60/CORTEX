@@ -467,6 +467,78 @@
 }
 
 /* ============================================
+   UI COMPONENT: GLASS CARDS (New v4.0)
+   ============================================ */
+
+/* Role Card - For Persona Selection */
+.glass-card-role {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--space-xl);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+    backdrop-filter: blur(var(--glass-blur-md));
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-xl);
+    transition: var(--transition-glass);
+    text-decoration: none;
+    color: var(--text-primary);
+}
+
+.glass-card-role:hover {
+    transform: translateY(-5px);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    border-color: var(--glass-border-accent);
+    box-shadow: var(--shadow-glass-hover);
+}
+
+/* Concept Card - For Explanations */
+.glass-card-concept {
+    padding: var(--space-lg);
+    background: var(--glass-bg-card);
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    height: 100%;
+}
+
+.glass-card-concept h3 {
+    font-family: 'Space Grotesk', sans-serif;
+    margin-bottom: var(--space-sm);
+    color: var(--accent-primary);
+}
+
+/* Process Card - For Step-by-Step Flows */
+.glass-card-process {
+    position: relative;
+    padding: var(--space-lg);
+    background: rgba(10, 14, 39, 0.4);
+    border-left: 3px solid var(--accent-secondary);
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+/* API Card - For Technical Specs */
+.glass-card-api {
+    padding: 0;
+    overflow: hidden;
+    background: #0d1117; /* GitHub Dark Dimmed */
+    border: 1px solid var(--glass-border-light);
+    border-radius: var(--radius-lg);
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.glass-card-api-header {
+    background: rgba(255, 255, 255, 0.05);
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 1px solid var(--glass-border-light);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.glass-card-api-body {
+    padding: var(--space-md);
+}
+
+/* ============================================
    RESPONSIVE ADJUSTMENTS
    ============================================ */
 

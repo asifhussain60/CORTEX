@@ -6,7 +6,9 @@
     <title>CORTEX Documentation | Curious Learner — Learning Paths</title>
     <meta name="description" content="Learn software development with structured learning paths powered by CORTEX knowledge base. Beginner, Intermediate, and Advanced tracks.">
     <link rel="icon" href="../assets/images/CORTEX-logo-64.png" type="image/png">
+    <link rel="stylesheet" href="../assets/css/cortex-grid-system.css">
     <link rel="stylesheet" href="../assets/css/glassmorphism.css">
+    <link rel="stylesheet" href="../assets/css/glass-ui-components.css">
     <link rel="stylesheet" href="../assets/css/layouts/role-landing.css">
     <link rel="stylesheet" href="../assets/css/layouts/learning-path.css">
     <script src="../assets/js/content-loader.js"></script>
@@ -22,27 +24,27 @@
         </div>
 
         <!-- Learning Track Selector -->
-        <section id="main-content" class="learning-tracks" aria-label="Learning Tracks">
-            <h2 class="section-title">Choose Your Learning Path</h2>
-            <p class="section-subtitle">Structured tracks from CORTEX's knowledge base — real-world best practices, not textbook theory</p>
+        <section id="main-content" class="learning-tracks cortex-container" aria-label="Learning Tracks">
+            <h2 class="section-title text-center mb-4 font-display">Choose Your Learning Path</h2>
+            <p class="section-subtitle text-center font-body">Structured tracks from CORTEX's knowledge base — real-world best practices, not textbook theory</p>
             
-            <div class="track-grid">
+            <div class="cortex-grid">
                 <!-- Beginner Track -->
-                <a href="../learning/beginner/index.html" class="glass-card track-card track-card--beginner">
-                    <div class="track-card-accent"></div>
+                <a href="../learning/beginner/index.html" class="glass-card-process col-span-12 lg:col-span-4 track-card--beginner">
+                    <div class="track-card-accent" style="background: var(--accent-emerald);"></div>
                     <div class="track-card-content">
                         <span class="track-icon">🌱</span>
-                        <h3 class="track-title">Beginner</h3>
-                        <p class="track-tagline">Foundations First</p>
-                        <p class="track-description">
+                        <h3 class="track-title font-display">Beginner</h3>
+                        <p class="track-tagline font-body">Foundations First</p>
+                        <p class="track-description font-body">
                             Python basics, test-driven development fundamentals, clean code principles, 
                             and Git workflows. Start here if you're new to professional software development.
                         </p>
-                        <div class="track-meta">
+                        <div class="track-meta font-mono">
                             <span class="track-duration">📅 8 weeks</span>
                             <span class="track-modules">📚 12 modules</span>
                         </div>
-                        <div class="track-topics">
+                        <div class="track-topics font-body">
                             <span class="topic-tag">Python</span>
                             <span class="topic-tag">TDD</span>
                             <span class="topic-tag">Clean Code</span>
@@ -52,21 +54,21 @@
                 </a>
 
                 <!-- Intermediate Track -->
-                <a href="../learning/intermediate/index.html" class="glass-card track-card track-card--intermediate">
-                    <div class="track-card-accent"></div>
+                <a href="../learning/intermediate/index.html" class="glass-card-process col-span-12 lg:col-span-4 track-card--intermediate">
+                    <div class="track-card-accent" style="background: var(--orch-domain);"></div>
                     <div class="track-card-content">
                         <span class="track-icon">🔧</span>
-                        <h3 class="track-title">Intermediate</h3>
-                        <p class="track-tagline">Build With Confidence</p>
-                        <p class="track-description">
+                        <h3 class="track-title font-display">Intermediate</h3>
+                        <p class="track-tagline font-body">Build With Confidence</p>
+                        <p class="track-description font-body">
                             Architecture patterns, security fundamentals (OWASP Top 10), 
                             design patterns, and microservices. Level up from individual contributor to system thinker.
                         </p>
-                        <div class="track-meta">
+                        <div class="track-meta font-mono">
                             <span class="track-duration">📅 10 weeks</span>
                             <span class="track-modules">📚 15 modules</span>
                         </div>
-                        <div class="track-topics">
+                        <div class="track-topics font-body">
                             <span class="topic-tag">Architecture</span>
                             <span class="topic-tag">Security</span>
                             <span class="topic-tag">SOLID</span>
@@ -76,21 +78,21 @@
                 </a>
 
                 <!-- Advanced Track -->
-                <a href="../learning/advanced/index.html" class="glass-card track-card track-card--advanced">
-                    <div class="track-card-accent"></div>
+                <a href="../learning/advanced/index.html" class="glass-card-process col-span-12 lg:col-span-4 track-card--advanced">
+                    <div class="track-card-accent" style="background: var(--orch-core);"></div>
                     <div class="track-card-content">
                         <span class="track-icon">🚀</span>
-                        <h3 class="track-title">Advanced</h3>
-                        <p class="track-tagline">Lead & Scale</p>
-                        <p class="track-description">
+                        <h3 class="track-title font-display">Advanced</h3>
+                        <p class="track-tagline font-body">Lead & Scale</p>
+                        <p class="track-description font-body">
                             Distributed systems, observability at scale, CI/CD hardening, 
                             and engineering leadership. For experienced developers ready to architect at scale.
                         </p>
-                        <div class="track-meta">
+                        <div class="track-meta font-mono">
                             <span class="track-duration">📅 12 weeks</span>
                             <span class="track-modules">📚 18 modules</span>
                         </div>
-                        <div class="track-topics">
+                        <div class="track-topics font-body">
                             <span class="topic-tag">Distributed Systems</span>
                             <span class="topic-tag">Observability</span>
                             <span class="topic-tag">CI/CD</span>
@@ -102,26 +104,26 @@
         </section>
 
         <!-- Knowledge Base Preview -->
-        <section class="knowledge-preview" aria-label="Knowledge Base Preview">
-            <h2 class="section-title">Powered by CORTEX Knowledge Base</h2>
-            <p class="section-subtitle">Every lesson is backed by real governance rules and industry standards</p>
+        <section class="knowledge-preview cortex-container mt-16" aria-label="Knowledge Base Preview">
+            <h2 class="section-title text-center font-display">Powered by CORTEX Knowledge Base</h2>
+            <p class="section-subtitle text-center font-body mb-8">Every lesson is backed by real governance rules and industry standards</p>
             
-            <div class="knowledge-stats">
-                <div class="glass-card knowledge-stat">
-                    <span class="stat-value">35</span>
-                    <span class="stat-label">CORE Governance Rules</span>
+            <div class="cortex-grid mb-16">
+                <div class="glass-card-concept col-span-6 md:col-span-3 knowledge-stat text-center flex-center flex-column">
+                    <span class="stat-value font-display text-4xl" style="color: var(--orch-core); display: block;">35</span>
+                    <span class="stat-label font-body text-sm mt-2">CORE Governance Rules</span>
                 </div>
-                <div class="glass-card knowledge-stat">
-                    <span class="stat-value">45+</span>
-                    <span class="stat-label">Knowledge YAMLs</span>
+                <div class="glass-card-concept col-span-6 md:col-span-3 knowledge-stat text-center flex-center flex-column">
+                    <span class="stat-value font-display text-4xl" style="color: var(--orch-domain); display: block;">45+</span>
+                    <span class="stat-label font-body text-sm mt-2">Knowledge YAMLs</span>
                 </div>
-                <div class="glass-card knowledge-stat">
-                    <span class="stat-value">27</span>
-                    <span class="stat-label">AI Orchestrators</span>
+                <div class="glass-card-concept col-span-6 md:col-span-3 knowledge-stat text-center flex-center flex-column">
+                    <span class="stat-value font-display text-4xl" style="color: var(--orch-support); display: block;">27</span>
+                    <span class="stat-label font-body text-sm mt-2">AI Orchestrators</span>
                 </div>
-                <div class="glass-card knowledge-stat">
-                    <span class="stat-value">26</span>
-                    <span class="stat-label">MCP Tools</span>
+                <div class="glass-card-concept col-span-6 md:col-span-3 knowledge-stat text-center flex-center flex-column">
+                    <span class="stat-value font-display text-4xl" style="color: var(--accent-emerald); display: block;">26</span>
+                    <span class="stat-label font-body text-sm mt-2">MCP Tools</span>
                 </div>
             </div>
         </section>
