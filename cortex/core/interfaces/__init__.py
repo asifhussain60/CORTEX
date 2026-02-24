@@ -1,6 +1,5 @@
 """
-Abstract Interfaces - Base Classes for CORTEX Components
-
+Abstract Interfaces — Base Classes for CORTEX Components (Phase 60 merged)
 Defines interfaces that all implementations must follow.
 Ensures consistency and enables dependency injection.
 
@@ -10,14 +9,90 @@ Author: Asif Hussain
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
+from enum import Enum, auto
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from cortex.core.result import Result
-from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode  # noqa: F401
 
 if TYPE_CHECKING:
     from cortex.infrastructure.enhanced_audit_logger import AuditEntry
 
+
+# ── IOrchestrator (inlined from i_orchestrator.py — Phase 60) ────────────────
+
+class OperationMode(Enum):
+    """Orchestration modes."""
+    PLANNING = auto()
+    EXECUTION = auto()
+    VALIDATION = auto()
+    RECOVERY = auto()
+    EDUCATIONAL = auto()  # Phase 22: ASK Mode
+
+
+class IOrchestrator(ABC):
+    """
+    Interface contract for all orchestrators.
+
+    Guarantees:
+    - Registry integration
+    - MCP tool exposure
+    - Audit logging
+    - Result pattern compliance
+    """
+
+    @abstractmethod
+    def get_name(self) -> str:
+        """Get orchestrator name."""
+        pass
+
+    @abstractmethod
+    def get_version(self) -> str:
+        """Get orchestrator version."""
+        pass
+
+    @abstractmethod
+    def initialize(self) -> Result[str]:
+        """Initialize orchestrator."""
+        pass
+
+    @abstractmethod
+    def get_mode(self) -> OperationMode:
+        """Get current operation mode."""
+        pass
+
+    @abstractmethod
+    def get_mcp_tools(self) -> Result[Dict[str, Any]]:
+        """AC-AR-011-02: Get exposed MCP tools."""
+        pass
+
+    @abstractmethod
+    def execute_operation(
+        self,
+        operation_name: str,
+        parameters: Dict[str, Any],
+    ) -> Result[Any]:
+        """Execute operation with audit logging."""
+        pass
+
+    @abstractmethod
+    def get_audit_trail(self, limit: int = 100) -> Result[list]:
+        """AC-AR-011-03: Get audit trail with hash chain."""
+        pass
+
+    def health_check(self) -> Dict[str, Any]:
+        """Return orchestrator health status."""
+        return {
+            "status": "healthy",
+            "orchestrator": self.get_name(),
+            "version": self.get_version(),
+        }
+
+    def get_recommended_template(self) -> Optional[str]:
+        """Return the recommended workflow template ID for this orchestrator."""
+        return None
+
+
+# ── Additional Interfaces ────────────────────────────────────────────────────
 
 class IAuditLogger(ABC):
     """Interface for audit logging."""
@@ -113,7 +188,6 @@ try:
     from cortex.core.orchestrator_base import OrchestratorBase  # noqa: F401
 except ImportError:
     OrchestratorBase = None  # type: ignore[assignment,misc]
-
 
 __all__ = [
     "IOrchestrator",
