@@ -269,10 +269,25 @@ phase_59:
 
     - id: phase-59-b
       title: "Track B/C: Merge near-duplicates + infrastructure class cleanup"
-      status: OPEN
-      remaining_candidates:
-        - "MultiRegionOrchestrator (1 test caller — has real tests)"
-        - "CortexDocsOrchestrator (13 test callers — real tests)"
+      status: IN_PROGRESS
+      started: "2026-02-24"
+      findings_2026_02_24: |
+        Live measurement: 77 unique *Orchestrator classes; 31 are WIRED in spec files.
+        54 non-canonical by name — but most are internal helper classes (self-contained,
+        0 external refs). True excess wired orchestrators = 31 - 27 = 4 to consolidate:
+          BrainHealthOrchestrator     → merge into HealthOrchestrator
+          BusinessDomainOrchestrator  → merge into DomainOrchestrator
+          CentralBrainOrchestrator    → merge into MasterOrchestrator
+          MasterOrchestratorStage2    → inline into MasterOrchestrator
+        Internally-scoped helpers (not wired, just named *Orchestrator) = leave in place.
+      wired_current: 31
+      wired_target: 27
+      excess_wired_to_consolidate:
+        - "BrainHealthOrchestrator (40 refs) → HealthOrchestrator"
+        - "BusinessDomainOrchestrator (6 refs) → DomainOrchestrator"
+        - "CentralBrainOrchestrator (11 refs) → MasterOrchestrator"
+        - "MasterOrchestratorStage2 (5 refs) → inline MasterOrchestrator"
+      next_action: "Update wiring specs + redirect imports for 4 excess wired orchestrators"
 
   canonical_22_keepers:
     core_tier:
