@@ -103,3 +103,17 @@ class KnowledgeIndexer:
     def get_index_file(self) -> Path:
         """Return the path to the SQLite index file."""
         return self._db_path
+
+    def inventory(self) -> List[str]:
+        """Return all indexed entry IDs as a list of strings.
+
+        Provides a quick summary of every entry currently held in the
+        knowledge index, suitable for docgen sync and bridge operations
+        (GAP-66-005 — Phase 66-A).
+
+        Returns:
+            List of ``entry_id`` strings for every indexed knowledge entry.
+        """
+        with sqlite3.connect(str(self._db_path)) as conn:
+            rows = conn.execute("SELECT entry_id FROM entries").fetchall()
+        return [r[0] for r in rows]

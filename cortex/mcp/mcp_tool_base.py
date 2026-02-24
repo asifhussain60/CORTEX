@@ -279,3 +279,28 @@ class ConsolidatedTool(Tool):
             ToolResult from the operation
         """
         pass
+
+    def format_response(self, result: "ToolResult") -> "ToolResult":
+        """Apply post-processing formatting to a ToolResult.
+
+        Marks the result as formatted by setting ``metadata['formatted'] = True``
+        and normalising the data payload for consistent downstream rendering.
+
+        This hook is called on every MCP tool output to ensure a uniform
+        response contract (GAP-66-004 — Phase 66-A).
+
+        Args:
+            result: Raw :class:`ToolResult` from ``execute()``.
+
+        Returns:
+            A new :class:`ToolResult` with ``metadata['formatted']`` set to
+            ``True``.
+        """
+        metadata = dict(result.metadata) if result.metadata else {}
+        metadata["formatted"] = True
+        return ToolResult(
+            success=result.success,
+            data=result.data,
+            error=result.error,
+            metadata=metadata,
+        )

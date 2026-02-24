@@ -31,16 +31,23 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin):
     _orch_name = "IntelligenceOrchestrator"
     _orch_version = "1.0.0"
     
-    def __init__(self, audit_db_path: Optional[Path] = None) -> None:
+    def __init__(
+        self,
+        audit_db_path: Optional[Path] = None,
+        scanner: Optional[Any] = None,
+    ) -> None:
         """Initialize intelligence orchestrator.
         
         Args:
             audit_db_path: Optional SQLite audit DB path
+            scanner: Optional HierarchicalScanner for canonical file discovery
+                     (GAP-66-003 — replaces ad-hoc glob patterns).
         """
         self.ast_engine = ASTIntelligenceEngine()
         self.comment_analyzer = CommentAnalyzer()
         self.routing_engine = IntelligenceRoutingEngine()
         self._cache: Dict[str, Any] = {}
+        self._scanner = scanner  # GAP-66-003: canonical file discovery scanner
         
         # SQLite audit logging (store in .cortex-runtime/ to avoid root pollution)
         if audit_db_path:
@@ -263,6 +270,61 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin):
             }
             for r in rows
         ]
+
+    def analyze(
+        self,
+        target_path: Optional[Path] = None,
+    ) -> List[Dict[str, Any]]:
+        """Analyze files using the canonical HierarchicalScanner (GAP-66-003).
+
+        When a scanner is provided at construction time, file discovery uses
+        :class:`~cortex.toolkit.filesystem.hierarchical_scanner.HierarchicalScanner`
+        instead of ad-hoc ``glob.glob`` patterns.  The discovered paths are
+        passed into :meth:`_lens_analyze` for LENS processing.
+
+        Args:
+            target_path: Optional root path hint (passed to scanner if needed).
+                         When ``None``, scanner uses its configured root.
+
+        Returns:
+            List of analysis result dicts from LENS, one per discovered file.
+        """
+        # AC_START: AC-66-A-003-ANALYZE-20260224T000000Z
+        files: List[Path] = []
+
+        if self._scanner is not None:
+            from cortex.lens.adapters.hierarchical_scanner_adapter import (
+                HierarchicalScannerAdapter,
+            )
+            adapter = HierarchicalScannerAdapter(self._scanner)
+            files = adapter.adapt()
+        elif target_path is not None:
+            # Fallback: direct rglob when no scanner configured
+            files = list(target_path.rglob("*.py"))
+
+        results = self._lens_analyze(files=files)
+        self._audit_log("ANALYZE", str(target_path or ""), {"file_count": len(files)})
+        # AC_COMPLETE: AC-66-A-003-ANALYZE-20260224T000000Z ✅
+        return results
+
+    def _lens_analyze(self, files: List[Path]) -> List[Dict[str, Any]]:
+        """Pass file list through LENS analysis pipeline.
+
+        Args:
+            files: List of :class:`~pathlib.Path` objects to analyse.
+
+        Returns:
+            List of per-file analysis result dicts.
+        """
+        results: List[Dict[str, Any]] = []
+        for f in files:
+            if f.exists() and f.suffix == ".py":
+                try:
+                    parsed = self.parse_python_file(f)
+                    results.append({"file": str(f), "parsed": True, "data": parsed})
+                except Exception as exc:  # noqa: BLE001
+                    results.append({"file": str(f), "parsed": False, "error": str(exc)})
+        return results
 
     def analyze_with_context(
         self,

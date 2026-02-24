@@ -56,7 +56,7 @@ Usage Examples:
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Optional
+from typing import Any, Optional
 
 
 # SSOT Constants (cortex-response-templates.md)
@@ -211,6 +211,28 @@ class ResponseTemplate:
 {BOX_SEPARATOR}"""
 
     @staticmethod
+    def format_response(data: Any, title: str = "Response") -> str:
+        """Format a data payload as a structured markdown response string.
+
+        Provides a public post-processing hook conforming to the GAP-66-004
+        format_response contract. Converts arbitrary ``data`` into a clean
+        markdown representation with an optional section title.
+
+        Args:
+            data: Arbitrary result data to render (dict, str, list, etc.).
+            title: Optional section heading for the rendered output.
+
+        Returns:
+            Non-empty markdown string suitable for Copilot Chat display.
+        """
+        import json as _json
+        header = ResponseTemplate.create_header(title)
+        if isinstance(data, (dict, list)):
+            body = _json.dumps(data, indent=2, default=str)
+        else:
+            body = str(data)
+        return f"{header}\n```json\n{body}\n```"
+
     def session_summary(
         session_name: str,
         completed_items: list,
