@@ -75,11 +75,92 @@ Once approved, execute ALL phases without stopping:
 
 ---
 
-## 🎯 Command
+## 🎯 Commands
 
 | Command | Action | Execution |
 |---------|--------|-----------|
 | `/doc-fresh-generate` | Fresh generation: DISCOVERY → GENERATION → DIAGRAMS → BUILD → VALIDATION → REPORTING → POST-CLEANUP → GIT-COMMIT | End-to-End (No stops) |
+| `/doc-refresh` | Data-driven site refresh: Discover → Generate JSON catalogs → Validate → Deploy | Full pipeline (DOC-REFRESH-001) |
+| `/doc-discover` | Discovery only — surface git/registry/live code gaps | Discovery phase only |
+| `/doc-validate` | Validation only — CSS zero-inline, link check, responsive test | Validation phase only |
+
+---
+
+## 🔄 Automated Refresh Pipeline (GitHub Pages Site)
+
+**Workflow Authority:** `cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml`  
+**Workflow ID:** DOC-REFRESH-001
+
+### Site Architecture (Canonical — Phase 64+)
+
+```
+cortex-docs/
+├── index.html                    ← SINGLE entry point (role selector — 4 roles)
+├── roles/                        ← Role-specific landing pages
+│   ├── business-leader.html
+│   ├── product-owner.html
+│   ├── software-engineer.html
+│   └── learner.html              ← 🎓 Curious Learner learning hub
+├── learning/                     ← Structured learning tracks
+│   ├── index.html                ← Track selector
+│   ├── beginner/index.html       ← 8 weeks · 12 modules
+│   ├── intermediate/index.html   ← 10 weeks · 15 modules
+│   └── advanced/index.html       ← 12 weeks · 18 modules
+├── data/                         ← JSON data layer (auto-generated, CORE-002 compliant)
+│   ├── content.json              ← From .content/ markdown extraction
+│   ├── knowledge-catalog.json    ← From cortex-registry/knowledge/*.yaml
+│   ├── learning-paths.json       ← 3-track module metadata
+│   ├── orchestrators.json        ← 27 orchestrator cards
+│   └── mcp-tools.json            ← 26 MCP tool catalog
+├── pipeline/                     ← Discovery & generation scripts
+│   ├── discover.py               ← Git + registry + live code scan
+│   ├── build.py                  ← YAML → JSON transformer
+│   ├── extract-json.py           ← .content/ → content.json
+│   ├── extract.py
+│   └── validate.py               ← CSS, links, responsive, schema checks
+└── assets/css|js|diagrams/       ← Design system (glassmorphism)
+```
+
+**⛔ DEPRECATED PATHS (never reference in new code):**
+- `cortex-docs/views/` → migrated to `cortex-docs/roles/`
+- `cortex-docs/business/`, `product/`, `engineering/` → removed in pre-docgen-restructure commit
+
+### Pipeline Stages (DOC-REFRESH-001)
+
+| Stage | Name | Trigger | Orchestrator |
+|-------|------|---------|--------------|
+| 0 | Pre-Flight Governance Check | Always | EnforcementOrchestrator |
+| 1 | Discovery | full, discovery | DocumentationOrchestrator |
+| 2 | Generation | full, generation | DocumentationOrchestrator |
+| 3 | Validation | full, validation | EnforcementOrchestrator |
+| 4 | Deployment | full only | GitOrchestrator |
+
+**Triggers:**
+- Manual: `/doc-refresh` command or `cortex_doc_refresh` MCP tool
+- Automated: Push to `cortex-registry/knowledge/**`, `cortex-registry/cortex-master.yaml`, `cortex/**/*.py`
+- Cron: Weekly Sunday 02:00 UTC
+
+**Zero Manual Intervention** — runs autonomously on trigger (CORE-049).
+
+### Agent Collaboration Matrix
+
+| Agent | Role in Doc Pipeline | Workflow Stage |
+|-------|---------------------|----------------|
+| `cortex-documentation-architect.md` | Content extraction + `.content/` generation | Stage 1, 2 |
+| `cortex-gitpages-builder.md` | JSON catalog → HTML rendering, site validation | Stage 2, 3 |
+| `cortex-auditor.md` | CSS zero-inline validation, link checking | Stage 0, 3 |
+| `cortex-vacuum.md` | Cleanup deprecated HTML files, stale assets | Post-deployment |
+
+### Quality Gates (enforced per pipeline run)
+
+| Gate | Expect | Severity |
+|------|--------|----------|
+| `grep -r 'style=' cortex-docs/**/*.html` | 0 matches | P0 |
+| `jq length cortex-docs/data/orchestrators.json` | 27 | P1 |
+| `jq length cortex-docs/data/mcp-tools.json` | 26 | P1 |
+| `jq '.tech_stacks | length' cortex-docs/data/knowledge-catalog.json` | ≥30 | P1 |
+| Internal link checker | 0 broken | P1 |
+| CSS zero-inline (all HTML) | 0 violations | P0 |
 
 ---
 

@@ -335,6 +335,29 @@
     color: var(--text-muted, #6b7280);
 }
 
+/* ============================================
+   PROGRESS CARD — replaces inline style="margin-bottom: 2rem;"
+   ============================================ */
+.progress-card {
+    margin-bottom: var(--space-8, 2rem);
+}
+
+/* Progress meta text — replaces inline style="margin-top: 0.5rem;" */
+.progress-meta {
+    margin-top: var(--space-2, 0.5rem);
+}
+
+/* Initial progress fill width — JS overrides at runtime via .style.width */
+.progress-fill--initial {
+    width: 0%;
+}
+
+/* Week section heading — replaces inline style="text-align: left; margin-top: 2rem;" */
+.section-title--week {
+    text-align: left;
+    margin-top: var(--space-8, 2rem);
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .track-grid {

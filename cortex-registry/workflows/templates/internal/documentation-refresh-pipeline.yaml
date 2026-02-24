@@ -1,0 +1,411 @@
+metadata:
+  id: DOC-REFRESH-001
+  name: Documentation Discovery & Regeneration Pipeline
+  version: 2.0.0
+  author: Asif Hussain
+  updated: 2026-02-24
+  authority: cortex-doc.prompt.md v6.0 | ENH-064 | CORE-002 | CORE-049 | CORE-064
+  sweep_id: SWEEP-DOC-REFRESH
+  status: ACTIVE
+
+# ============================================================
+# PURPOSE
+# ============================================================
+purpose: |
+  Automated pipeline for discovering documentation enhancement opportunities
+  and regenerating the cortex-docs GitHub Pages site from Git history,
+  cortex-master.yaml, live code analysis, and knowledge YAMLs.
+  
+  Ensures zero stale docs, zero inline CSS styles, and CORE-002 compliance
+  (no .md sprawl — JSON data layer only).
+  
+  Site Structure:
+    cortex-docs/
+      index.html               — single entry point (role selector)
+      roles/                   — role-specific landing pages (4 roles)
+      learning/                — learning tracks (beginner/intermediate/advanced)
+      data/                    — JSON content catalogs (auto-generated)
+      pipeline/                — discovery & generation scripts
+      assets/css|js|diagrams/  — design system assets
+
+# ============================================================
+# TRIGGERS
+# ============================================================
+triggers:
+  commands:
+    - name: /doc-refresh
+      description: Full pipeline — Discovery → Generation → Validation → Deploy
+      mode: full
+    - name: /doc-discover
+      description: Discovery phase only — surface gaps, no generation
+      mode: discovery
+    - name: /doc-validate
+      description: Validation only — CSS zero-inline, link check, responsive test
+      mode: validation
+
+  mcp_tools:
+    - tool: cortex_doc_refresh
+      op: full
+      description: Trigger full refresh from MCP chat interface
+    - tool: cortex_doc_refresh
+      op: discovery
+      description: Discovery-only scan
+
+  automated:
+    github_push:
+      - path: cortex-registry/knowledge/**/*.yaml
+        description: Knowledge YAML changed — regenerate knowledge-catalog.json
+        mode: generation
+      - path: cortex-registry/cortex-master.yaml
+        description: Master plan updated — sync orchestrator/phase metadata
+        mode: generation
+      - path: cortex/**/*.py
+        description: Live code changed — detect documentation gaps
+        mode: discovery
+    cron:
+      - schedule: "0 2 * * 0"
+        description: Weekly full refresh — Sunday 02:00 UTC
+        mode: full
+
+# ============================================================
+# PIPELINE STAGES
+# ============================================================
+stages:
+
+  - id: stage_0
+    name: "Pre-Flight Governance Check"
+    ac_marker: AC_DOC_STAGE_0
+    orchestrator: EnforcementOrchestrator
+    steps:
+      - id: rule_load
+        action: cortex_load
+        params:
+          op: rules
+        expect: "35 rules loaded, 0 violations"
+      - id: core002_check
+        action: grep_search
+        params:
+          pattern: "\\.md$"
+          paths: ["cortex-docs/data/", "cortex-docs/learning/", "cortex-docs/roles/"]
+        expect: "0 matches — no .md sprawl in site output dirs"
+      - id: inline_style_check
+        action: grep_search
+        params:
+          pattern: "style="
+          paths: ["cortex-docs/**/*.html"]
+        expect: "0 matches — zero inline style attributes"
+
+  - id: stage_1
+    name: "Discovery"
+    ac_marker: AC_DOC_STAGE_1
+    orchestrator: DocumentationOrchestrator
+    condition: mode in [full, discovery]
+    steps:
+      - id: git_history_scan
+        script: cortex-docs/pipeline/discover.py
+        params:
+          scan: git_history
+          since_days: 90
+          output: .cortex-runtime/doc-discovery/git-features.json
+        description: Features added in last 90 days without doc coverage
+
+      - id: registry_scan
+        script: cortex-docs/pipeline/discover.py
+        params:
+          scan: registry
+          source: cortex-registry/cortex-master.yaml
+          filter_status: COMPLETE
+          output: .cortex-runtime/doc-discovery/completed-phases.json
+        description: Completed phases needing documentation entries
+
+      - id: live_code_scan
+        script: cortex-docs/pipeline/discover.py
+        params:
+          scan: live_code
+          compare: [docstrings, yaml_specs]
+          output: .cortex-runtime/doc-discovery/gaps.json
+        description: Gap analysis between live code docstrings and knowledge YAMLs
+
+      - id: knowledge_yaml_scan
+        script: cortex-docs/pipeline/discover.py
+        params:
+          scan: knowledge_yamls
+          root: cortex-registry/knowledge
+          output: .cortex-runtime/doc-discovery/knowledge-inventory.json
+        description: Inventory all knowledge YAMLs and their coverage status
+
+      - id: orchestrator_scan
+        script: cortex-docs/pipeline/discover.py
+        params:
+          scan: wiring_contract
+          sources:
+            - cortex-registry/core/specifications/orchestration-master-wiring.yaml
+            - cortex-registry/core/specifications/core-orchestrator-wiring.yaml
+            - cortex-registry/core/specifications/domain-orchestrator-wiring.yaml
+            - cortex-registry/core/specifications/support-orchestrator-wiring.yaml
+          output: .cortex-runtime/doc-discovery/orchestrators.json
+        description: Extract 27 wired orchestrators metadata for data/orchestrators.json
+
+  - id: stage_2
+    name: "Generation"
+    ac_marker: AC_DOC_STAGE_2
+    orchestrator: DocumentationOrchestrator
+    condition: mode in [full, generation]
+    depends_on: stage_1
+    steps:
+      - id: knowledge_catalog
+        script: cortex-docs/pipeline/build.py
+        params:
+          task: knowledge_catalog
+          input: .cortex-runtime/doc-discovery/knowledge-inventory.json
+          output: cortex-docs/data/knowledge-catalog.json
+          schema: .github/schemas/knowledge-catalog.schema.json
+        description: Transform knowledge YAMLs → knowledge-catalog.json (CORE-002 compliant)
+
+      - id: learning_paths
+        script: cortex-docs/pipeline/build.py
+        params:
+          task: learning_paths
+          input: cortex-docs/data/knowledge-catalog.json
+          output: cortex-docs/data/learning-paths.json
+          tracks: [beginner, intermediate, advanced]
+        description: Generate 3-track learning path metadata (45 modules total)
+
+      - id: orchestrator_metadata
+        script: cortex-docs/pipeline/build.py
+        params:
+          task: orchestrators
+          input: .cortex-runtime/doc-discovery/orchestrators.json
+          output: cortex-docs/data/orchestrators.json
+          expected_count: 27
+        description: 27 orchestrator metadata cards for site
+
+      - id: mcp_tool_catalog
+        script: cortex-docs/pipeline/build.py
+        params:
+          task: mcp_tools
+          source: cortex/mcp/tools/
+          output: cortex-docs/data/mcp-tools.json
+          expected_count: 26
+        description: 26 MCP tool catalog for site
+
+      - id: content_extract
+        script: cortex-docs/pipeline/extract-json.py
+        params:
+          source: cortex-docs/.content/
+          output: cortex-docs/data/content.json
+        description: Extract .content/ markdown → content.json for dynamic rendering
+
+  - id: stage_3
+    name: "Validation"
+    ac_marker: AC_DOC_STAGE_3
+    orchestrator: EnforcementOrchestrator
+    condition: mode in [full, validation]
+    depends_on: stage_2
+    steps:
+      - id: css_zero_inline
+        script: cortex-docs/pipeline/validate.py
+        params:
+          check: css_inline_styles
+          paths: [cortex-docs/**/*.html]
+        expect: "violations: 0"
+        on_fail: BLOCK
+
+      - id: link_validation
+        script: cortex-docs/pipeline/validate.py
+        params:
+          check: internal_links
+          root: cortex-docs/
+          fail_on_404: true
+        expect: "broken_links: 0"
+        on_fail: WARN
+
+      - id: json_schema_validation
+        script: cortex-docs/pipeline/validate.py
+        params:
+          check: json_schemas
+          files:
+            - cortex-docs/data/knowledge-catalog.json
+            - cortex-docs/data/learning-paths.json
+            - cortex-docs/data/orchestrators.json
+            - cortex-docs/data/mcp-tools.json
+        expect: "all_valid: true"
+        on_fail: BLOCK
+
+      - id: responsive_check
+        script: cortex-docs/pipeline/validate.py
+        params:
+          check: responsive_viewports
+          viewports: [320, 768, 1024, 1440]
+          pages:
+            - cortex-docs/index.html
+            - cortex-docs/roles/business-leader.html
+            - cortex-docs/roles/learner.html
+            - cortex-docs/learning/beginner/index.html
+        expect: "no_horizontal_scroll: true"
+        on_fail: WARN
+
+      - id: data_completeness
+        script: cortex-docs/pipeline/validate.py
+        params:
+          check: data_completeness
+          assertions:
+            - "orchestrators.json: count == 27"
+            - "mcp-tools.json: count == 26"
+            - "knowledge-catalog.json: count >= 30"
+            - "learning-paths.json: tracks == 3"
+        on_fail: WARN
+
+  - id: stage_4
+    name: "Deployment"
+    ac_marker: AC_DOC_STAGE_4
+    orchestrator: GitOrchestrator
+    condition: mode == full
+    depends_on: stage_3
+    steps:
+      - id: git_add
+        command: git add cortex-docs/data/*.json
+        description: Stage all generated JSON catalog files
+
+      - id: git_status_check
+        command: git diff --staged --name-only
+        expect_non_empty: true
+        on_empty: skip_commit
+
+      - id: git_commit
+        command: >
+          git commit -m
+          "docs: auto-refresh from discovery scan [DOC-REFRESH-001] [skip ci]"
+        description: Commit JSON updates only (no .md files — CORE-002)
+
+      - id: git_push
+        command: git push origin HEAD
+        description: Push to current branch for GitHub Pages rebuild
+
+# ============================================================
+# ENFORCEMENT
+# ============================================================
+enforcement:
+  core_rules:
+    - id: CORE-002
+      description: No .md file generation in output dirs
+    - id: CORE-035
+      description: Single canonical implementation — no duplicate site structures
+    - id: CORE-049
+      description: Silent autonomous execution — progress bar only
+    - id: CORE-064
+      description: Sweep completeness — all discovered gaps addressed before AC_COMPLETE
+
+  quality_gates:
+    - name: "Zero Inline Styles"
+      check: "grep -r 'style=' cortex-docs/**/*.html | wc -l"
+      expect: "0"
+      severity: P0
+
+    - name: "JSON Schema Valid"
+      check: validate_json_schemas()
+      expect: "all_valid == true"
+      severity: P0
+
+    - name: "Orchestrator Count"
+      check: "jq length cortex-docs/data/orchestrators.json"
+      expect: "27"
+      severity: P1
+
+    - name: "MCP Tool Count"
+      check: "jq length cortex-docs/data/mcp-tools.json"
+      expect: "26"
+      severity: P1
+
+    - name: "No Deprecated Paths in HTML"
+      check: "grep -r 'views/' cortex-docs/**/*.html | wc -l"
+      expect: "0"
+      severity: P1
+
+# ============================================================
+# AC MARKERS
+# ============================================================
+ac_markers:
+  session_open: "AC_START: AC-DOC-{timestamp}"
+  stage_format: "AC_STAGE_{N}_COMPLETE: {stage_name} ✅ [{elapsed_ms}ms]"
+  session_close: "AC_COMPLETE: AC-DOC-{timestamp} ✅"
+  failure: "AC_COMPLETE: AC-DOC-{timestamp} ❌ [{error_class}]"
+  persistence: .cortex-runtime/traces/doc-discovery.db
+
+# ============================================================
+# OUTPUTS
+# ============================================================
+outputs:
+  generated_files:
+    - path: cortex-docs/data/knowledge-catalog.json
+      description: Knowledge YAML catalog (N YAMLs → 1 JSON, CORE-002 compliant)
+    - path: cortex-docs/data/learning-paths.json
+      description: 3-track learning path metadata (45 modules)
+    - path: cortex-docs/data/orchestrators.json
+      description: 27 orchestrator metadata cards
+    - path: cortex-docs/data/mcp-tools.json
+      description: 26 MCP tool catalog
+
+  discovery_artifacts:
+    - .cortex-runtime/doc-discovery/git-features.json
+    - .cortex-runtime/doc-discovery/completed-phases.json
+    - .cortex-runtime/doc-discovery/gaps.json
+    - .cortex-runtime/doc-discovery/knowledge-inventory.json
+
+  traces:
+    - .cortex-runtime/traces/doc-discovery.db
+    - .cortex-runtime/logs/doc-refresh-{timestamp}.log
+
+# ============================================================
+# AGENT COLLABORATION MATRIX
+# ============================================================
+agents:
+  - agent: cortex-documentation-architect.md
+    role: Content extraction from .content/ + knowledge YAML ingestion
+    stages: [stage_1, stage_2]
+
+  - agent: cortex-gitpages-builder.md
+    role: JSON catalog → HTML rendering, site structure validation
+    stages: [stage_2, stage_3]
+
+  - agent: cortex-auditor.md
+    role: CSS zero-inline check, link validation, responsive testing
+    stages: [stage_0, stage_3]
+
+  - agent: cortex-vacuum.md
+    role: Cleanup deprecated HTML files (views/ references, stale assets)
+    stages: [post_deployment]
+
+# ============================================================
+# SITE STRUCTURE REFERENCE (canonical — never reference old paths)
+# ============================================================
+site_structure:
+  entry_point: cortex-docs/index.html
+  roles:
+    - path: cortex-docs/roles/business-leader.html
+    - path: cortex-docs/roles/product-owner.html
+    - path: cortex-docs/roles/software-engineer.html
+    - path: cortex-docs/roles/learner.html
+  learning:
+    - path: cortex-docs/learning/index.html
+    - path: cortex-docs/learning/beginner/index.html
+    - path: cortex-docs/learning/intermediate/index.html
+    - path: cortex-docs/learning/advanced/index.html
+  data_layer:
+    - cortex-docs/data/content.json
+    - cortex-docs/data/knowledge-catalog.json
+    - cortex-docs/data/learning-paths.json
+    - cortex-docs/data/orchestrators.json
+    - cortex-docs/data/mcp-tools.json
+  pipeline_scripts:
+    - cortex-docs/pipeline/discover.py
+    - cortex-docs/pipeline/build.py
+    - cortex-docs/pipeline/extract-json.py
+    - cortex-docs/pipeline/extract.py
+    - cortex-docs/pipeline/validate.py
+  deprecated_paths:
+    - cortex-docs/views/         # Migrated to cortex-docs/roles/
+    - cortex-docs/business/      # Removed in pre-docgen-restructure commit
+    - cortex-docs/product/       # Removed
+    - cortex-docs/engineering/   # Removed
+    - cortex-docs/discovery/     # Removed
