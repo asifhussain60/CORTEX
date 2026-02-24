@@ -4,6 +4,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
+# AC_START: AC-66-B-001-SYNTHESIS-ENGINE-20260224T000000Z
+
 
 @dataclass
 class SynthesisResult:
@@ -48,10 +50,91 @@ class SynthesisEngine:
         )
 
     def detect_conflicts(
-        self, sources: List[Dict[str, Any]]
+        self,
+        sources: List[Dict[str, Any]],
+        sweep_id: Optional[str] = None,
     ) -> List[str]:
-        """Detect conflicting information across sources."""
-        return []
+        """Detect conflicting information across sources and populate SweepCatalogue.
+
+        Compares ``content`` fields across sources for contradictory signals.
+        When conflicts are found and ``sweep_id`` is provided, each conflict is
+        submitted to :class:`~cortex.orchestrators.support.sweep_catalogue_orchestrator.SweepCatalogueOrchestrator`
+        via :meth:`_submit_to_sweep_catalogue`.
+
+        Args:
+            sources: List of knowledge source dicts, each with at least an
+                     ``id`` and ``content`` key.
+            sweep_id: Optional sweep identifier for SweepCatalogue submission
+                      (GAP-66-007).  When ``None``, conflicts are returned but
+                      not persisted.
+
+        Returns:
+            List of conflict description strings.  Empty when no conflicts
+            detected.
+        """
+        if len(sources) < 2:
+            return []
+
+        conflicts: List[str] = []
+        contents = [(s.get("id", str(i)), str(s.get("content", ""))) for i, s in enumerate(sources)]
+
+        # Simple conflict heuristic: look for negation or contradictory signals
+        _NEGATION_MARKERS = ("not", "deprecated", "instead", "replaced", "conflicts", "incorrect")
+        seen_ids: set = set()
+        for i, (id_a, content_a) in enumerate(contents):
+            for j, (id_b, content_b) in enumerate(contents):
+                if i >= j:
+                    continue
+                pair_key = f"{id_a}:{id_b}"
+                if pair_key in seen_ids:
+                    continue
+                seen_ids.add(pair_key)
+                # Extract meaningful nouns (simplistic: split on whitespace)
+                words_a = set(content_a.lower().split())
+                words_b = set(content_b.lower().split())
+                common = words_a & words_b
+                # If they share topic words and one contains a negation marker → conflict
+                if common and any(m in words_a or m in words_b for m in _NEGATION_MARKERS):
+                    conflict_desc = (
+                        f"Conflict between '{id_a}' and '{id_b}': "
+                        f"shared topic words {list(common)[:5]!r} with opposing signals."
+                    )
+                    conflicts.append(conflict_desc)
+
+        if conflicts and sweep_id:
+            self._submit_to_sweep_catalogue(sweep_id=sweep_id, conflicts=conflicts)
+
+        return conflicts
+
+    def _submit_to_sweep_catalogue(
+        self,
+        sweep_id: str,
+        conflicts: List[str],
+    ) -> None:
+        """Submit detected conflicts to SweepCatalogueOrchestrator.
+
+        Creates one :meth:`~cortex.orchestrators.support.sweep_catalogue_orchestrator.SweepCatalogueOrchestrator.add_issue`
+        entry per conflict, associating each with the provided sweep.
+
+        Args:
+            sweep_id: Sweep identifier to attach issues to.
+            conflicts: List of conflict description strings from
+                       :meth:`detect_conflicts`.
+        """
+        try:
+            from cortex.orchestrators.support.sweep_catalogue_orchestrator import (
+                SweepCatalogueOrchestrator,
+            )
+            catalogue = SweepCatalogueOrchestrator()
+            for conflict in conflicts:
+                catalogue.add_issue(
+                    sweep_id=sweep_id,
+                    file="SynthesisEngine",
+                    description=conflict,
+                )
+        except Exception:  # noqa: BLE001
+            # Graceful degradation — never block synthesis on catalogue errors
+            pass
 
     def merge(
         self,
