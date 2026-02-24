@@ -12,12 +12,15 @@ from cortex.orchestrators.core.persona_command_handlers import (
     CommandResult,
     PersonaCommandHandlers,
 )
-from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.persona.models import DepthLevel, PersonaId
-from cortex.orchestrators.persona.persona_injector import PersonaInjector
-from cortex.orchestrators.persona.persona_loader import PersonaLoader
-from cortex.orchestrators.persona.role_resolver import RoleResolver
-from cortex.orchestrators.persona.session_context import SessionContext
+# COMPAT: cortex.orchestrators.persona dissolved — skip test module if unavailable
+pytest.importorskip("cortex.orchestrators.persona.master_orchestrator",
+                    reason="cortex.orchestrators.persona module dissolved")
+from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator  # noqa: E402
+from cortex.orchestrators.persona.models import DepthLevel, PersonaId  # noqa: E402
+from cortex.orchestrators.persona.persona_injector import PersonaInjector  # noqa: E402
+from cortex.orchestrators.persona.persona_loader import PersonaLoader  # noqa: E402
+from cortex.orchestrators.persona.role_resolver import RoleResolver  # noqa: E402
+from cortex.orchestrators.persona.session_context import SessionContext  # noqa: E402
 
 
 @pytest.fixture

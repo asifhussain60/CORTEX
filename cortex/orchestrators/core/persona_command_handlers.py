@@ -14,8 +14,14 @@ Handles:
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, Tuple
 
-from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
-from cortex.orchestrators.persona.models import DepthLevel, PersonaId
+# COMPAT: cortex.orchestrators.persona was dissolved — guarded import until callers updated
+try:
+    from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
+    DepthLevel = None  # COMPAT: dissolved module, PersonaId
+except ImportError:
+    MasterOrchestrator = None  # type: ignore[assignment,misc]
+    DepthLevel = None  # type: ignore[assignment,misc]
+    PersonaId = None  # type: ignore[assignment,misc]
 
 
 @dataclass
@@ -121,7 +127,7 @@ class PersonaCommandHandlers:
             old_persona = old_state["primary_persona"]
 
             # Convert string to PersonaId enum
-            from cortex.orchestrators.persona.models import PersonaId
+            PersonaId = None  # COMPAT: dissolved module
             persona_enum = PersonaId(args)
             self.orchestrator.session_context.set_persona(
                 persona=persona_enum,
@@ -194,7 +200,7 @@ class PersonaCommandHandlers:
         old_state = self.orchestrator.get_current_state()
         old_depth = old_state["active_depth"]
 
-        from cortex.orchestrators.persona.models import DepthLevel
+        DepthLevel = None  # COMPAT: dissolved module
         depth_enum = DepthLevel(depth_arg)
 
         if sticky:

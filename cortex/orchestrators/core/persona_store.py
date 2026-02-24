@@ -12,7 +12,12 @@ from typing import Any, Dict, List, Optional
 
 import yaml
 
-from cortex.orchestrators.persona.models import DepthLevel, PersonaId
+# COMPAT: cortex.orchestrators.persona was dissolved — guarded import
+try:
+    from cortex.orchestrators.persona.models import DepthLevel, PersonaId
+except ImportError:
+    DepthLevel = None  # type: ignore[assignment,misc]
+    PersonaId = None  # type: ignore[assignment,misc]
 
 
 class PersonaStore:
