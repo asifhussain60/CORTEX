@@ -13,13 +13,13 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  version: '16.2'
-  last_updated: '2026-02-24T18:00:00Z'
-  total_phases: 68
+  version: '16.3'
+  last_updated: '2026-02-24T20:00:00Z'
+  total_phases: 69
   active: 0
   completed: 68
   in_progress: 0
-  planned: 0
+  planned: 1
   playbooks: 1
   governance_rules_total: 37
   test_baseline:
@@ -59,6 +59,16 @@ metadata:
 # Each entry is a thin pointer. Open the file: path for full detail.
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
+
+  - id: phase-toolkit-consolidation
+    title: "Toolkit Consolidation — Generic File Intelligence (HierarchicalScanner + BatchProcessor)"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-TOOLKIT-001
+    gaps: 5
+    sub_phases: 5
+    file: "cortex-registry/planning/phases/planned/phase-toolkit-consolidation.yaml"
+    note: "Extract 5 universal patterns from domain-specific media tooling into reusable cortex/toolkit/ components. All 5 GAPs OPEN."
 
   - id: phase-68
     title: "cortex/core Flatten — 27 Subdirs → 15 Canonical"
@@ -310,14 +320,14 @@ verification:
   last_verified: '2026-02-24T18:00:00Z'
 
 summary:
-  total_phases: 68
+  total_phases: 69
   completed: 68
   active: 0
   in_progress: 0
-  planned: 0
+  planned: 1
   playbooks: 1
-  completion_percentage: 100
-  production_status: "✅ All 68 phases COMPLETE — Phase 61 closed 2026-02-24 | Simplification sweep 58-61 fully exhausted (CORE-064) | cortex/core flattened 27→15 subdirs"
+  completion_percentage: 98
+  production_status: "✅ 68/69 phases COMPLETE — Phase 61 closed 2026-02-24 | Simplification sweep 58-61 fully exhausted (CORE-064) | cortex/core flattened 27→15 subdirs | phase-toolkit-consolidation PLANNED (P0)"
   open_gaps:
-    count: 0
-    note: "All gaps CLOSED. SWEEP-58-61-SIMPLIFICATION exhausted. _cortex-master/ retained by ADR (220 callers). COMPAT shims expire 2026-05-24. YAML registry reduced 373→238."
+    count: 5
+    note: "SWEEP-TOOLKIT-001: 5 GAPs OPEN in phase-toolkit-consolidation (GAP-001 to GAP-005). All other sweeps closed. _cortex-master/ retained by ADR. COMPAT shims expire 2026-05-24."
