@@ -4,13 +4,18 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '13.0'
   last_updated: '2026-02-24T00:00:00Z'
-  total_phases: 64
+  total_phases: 65
   active: 1
   completed: 62
   playbooks: 1
-  planned: 7
+  planned: 8
   governance_rules_total: 37
   planned_phases:
+    - id: phase-67
+      title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
+      priority: P1
+      status: PLANNED
+      file: "cortex-registry/_cortex-master/phases/planned/phase-67-workflow-engine-runtime-wiring.yaml"
     - id: phase-65
       title: "Enterprise Hardening — MCP Auth + 151 ImportError Sweep"
       priority: P0
@@ -81,6 +86,25 @@ metadata:
 # Each entry below is a thin pointer. Open the file: path for full detail.
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
+
+  # ── PHASE 67 ─────────────────────────────────────────────────────────────
+  - id: phase-67
+    title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-67-WORKFLOW-RUNTIME-WIRING
+    gaps: 6
+    sub_phases: 6
+    file: "cortex-registry/_cortex-master/phases/planned/phase-67-workflow-engine-runtime-wiring.yaml"
+    note: >-
+      Wires the 3 isolated workflow primitives (WorkflowEngine, StepStateMachine,
+      ConvergenceLoopExecutor) into a coherent E2E execution path.
+      WorkflowEngine._execute_step() is a pure stub — replaced with StepHandlerRegistry.
+      WorkflowComposer._execute_with_convergence() has wrong StepStateMachine kwargs — fixed.
+      Zero YAML templates define convergence_gate — adds to audit-fix and TDD templates.
+      cortex-master.yaml P0 line-count violation (1022L) remediated in sub-phase 67-A.
+      Prerequisites: Phase 64 COMPLETE. 234 baseline workflow tests provide regression net.
+      NOT a rewrite — surgical wiring fix. convergence_mode=False default unchanged.
 
   # ── PHASE 65 ─────────────────────────────────────────────────────────────
   - id: phase-65
