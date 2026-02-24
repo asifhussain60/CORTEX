@@ -112,3 +112,10 @@ workflow:
       name: "HolisticRefactoringSweep"
       description: "Final holistic code quality pass"
       trigger: "workflow_complete"
+
+  # Audit trace integration (Phase 63-D — CORE cross-cutting requirement)
+  audit_trace:
+    primitive_ref: "primitives/execution/audit-trace.yaml"
+    ac_marker_start: "AC_START: AC-TDD-FEATURE-{workflow_id}"
+    ac_marker_complete: "AC_COMPLETE: AC-TDD-FEATURE-{workflow_id} ✅"
+    persistence_target: ".cortex-runtime/traces/orchestrator-traces.db"

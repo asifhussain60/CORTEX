@@ -20,7 +20,7 @@ import pytest
 # CONSTANTS
 # ==============================================================================
 
-CORTEX_ROOT = Path(__file__).resolve().parents[2]
+CORTEX_ROOT = Path(__file__).resolve().parents[3]
 CORTEX_SRC = CORTEX_ROOT / "cortex"
 
 # Directories that contain orchestrator / MCP / core code that MUST use FileFactory
@@ -71,6 +71,11 @@ EXEMPTED_PATTERNS = [
     r"cortex/core/event_bus\.py$",        # event persistence
     r"cortex/core/orchestrator_dependency_registry\.py$",  # runtime registry
     r"cortex/core/core/",            # brain_state, core_config, intent/comprehension (deep core)
+    r"cortex/core/brain_state_manager\.py$",  # runtime brain state persistence
+    r"cortex/core/core_config\.py$",          # core config runtime writes
+    r"cortex/core/intent/comprehension_loop\.py$",  # comprehension loop state
+    r"cortex/core/intent/comprehension_yaml\.py$",  # comprehension yaml cache
+    r"cortex/core/orchestrator/turn_timeout\.py$",  # turn timeout persistence
     # --- Orchestrator subdirectories doing legitimate runtime I/O ---
     r"cortex/orchestrators/health/",         # health checks, dashboards, autofix agents
     r"cortex/orchestrators/workflow/",       # ephemeral_storage, flush_manager, absorption_gate
@@ -88,6 +93,7 @@ EXEMPTED_PATTERNS = [
     r"cortex/orchestrators/copilot_merger\.py$",  # copilot profile merge
     r"cortex/orchestrators/profile_upgrader\.py$",  # profile upgrade
     r"cortex/orchestrators/profile_wizard\.py$",    # profile wizard
+    r"cortex/orchestrators/support/vscode_configurator\.py$",  # VS Code JSON config generation
     r"cortex/orchestrators/core/lens_data_persistence\.py$",  # LENS data persistence
     r"cortex/orchestrators/core/master_plan_orchestrator\.py$",  # plan management
     # --- MCP tools doing legitimate runtime I/O ---

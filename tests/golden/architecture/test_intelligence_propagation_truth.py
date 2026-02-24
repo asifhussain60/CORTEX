@@ -48,7 +48,7 @@ import pytest
 # Constants
 # ============================================================================
 
-CORTEX_ROOT = Path(__file__).parents[2]
+CORTEX_ROOT = Path(__file__).parents[3]
 WIRING_YAML = CORTEX_ROOT / "cortex" / "core" / "wiring" / "specifications" / "wiring.yaml"
 INTELLIGENCE_PRIMITIVE_YAML = (
     CORTEX_ROOT

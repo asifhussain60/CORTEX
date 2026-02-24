@@ -12,6 +12,7 @@ description: "All systems engaged"
 complexity: "complex"
 intent: "IMPLEMENT"
 user_request: "Implement user authentication with JWT, OAuth2, and 2FA"
+workflow_template_ref: "tdd/tdd-feature-implementation.yaml"
 
 # Expected subsystem engagement
 expected_components:

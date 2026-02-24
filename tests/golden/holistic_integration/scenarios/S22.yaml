@@ -12,6 +12,7 @@ description: "Multi-layer threat analysis"
 complexity: "complex"
 intent: "AUDIT"
 user_request: "Perform security audit of payment processing system"
+workflow_template_ref: "security/security-compliance-audit.yaml"
 
 # Expected subsystem engagement
 expected_components:

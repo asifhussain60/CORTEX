@@ -15,7 +15,7 @@ from typing import Any
 import pytest
 import yaml
 
-REPO_ROOT = Path(__file__).parents[2]
+REPO_ROOT = Path(__file__).parents[3]
 ARCH_YAML = REPO_ROOT / "cortex-registry" / "knowledge-base" / "architecture" / "architecture-best-practices.yaml"
 PROFILES_DIR = REPO_ROOT / "cortex-registry" / "knowledge-base" / "profiles"
 REPO_YAML = REPO_ROOT / "cortex-registry" / "company" / "repos" / "cortex" / "repository.yaml"

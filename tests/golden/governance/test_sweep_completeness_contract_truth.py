@@ -29,7 +29,7 @@ import yaml
 # Helpers
 # ---------------------------------------------------------------------------
 
-CORTEX_ROOT = Path(__file__).parent.parent.parent
+CORTEX_ROOT = Path(__file__).parent.parent.parent.parent
 SKULL_RULES = CORTEX_ROOT / "cortex-registry" / "core" / "tier0-skull" / "skull-rules.yaml"
 SUPPORT_WIRING = (
     CORTEX_ROOT / "cortex-registry" / "core" / "specifications" / "support-orchestrator-wiring.yaml"

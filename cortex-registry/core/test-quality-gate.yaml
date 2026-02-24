@@ -6,9 +6,12 @@
 # AC-ID: AC-PHASE-07B-TEST-QUALITY-GATE-001
 # ==============================================================================
 
-version: "1.0"
+version: "2.0"
 created: "2026-02-20"
+updated: "2026-02-24"
 authority: "test-quality.txt"
+# Phase 63-C: 4 new signals added (workflow_template_consumption, response_template_rendering,
+# trace_chain_verification, scenario_yaml_driven). Bumped 1.0 → 2.0.
 
 # Scoring formula:
 #   Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2)
@@ -26,7 +29,7 @@ thresholds:
 
 dimensions:
   impact:
-    max: 3
+    max: 5
     signals:
       security:
         patterns: [security, auth, permission, injection, xss, csrf, sanitiz, encrypt, authz, authn]
@@ -37,9 +40,31 @@ dimensions:
       business_invariant:
         patterns: [invariant, business_rule, must_never, must_always, violation, compliance, governance, audit]
         points: 1
+      # Phase 63-C: workflow template consumption — tests consuming real workflow templates
+      # verify production execution paths (higher impact than unit assertions alone).
+      workflow_template_consumption:
+        patterns:
+          - "WorkflowTemplateRegistry"
+          - "load_workflow_template"
+          - "template_id"
+          - "workflow_template_ref"
+          - "PrimitiveScanner"
+          - "TemplateComposer"
+        points: 1
+      # Phase 63-C: response template rendering — tests verifying VS Code Copilot Chat
+      # rendering validate the user-facing contract (CORE-066 compliance).
+      response_template_rendering:
+        patterns:
+          - "ResponseHeaderConfig"
+          - "response_format_validator"
+          - "template_engine"
+          - "golden.*format"
+          - "five.*section"
+          - "cortex-response-templates"
+        points: 1
 
   likelihood:
-    max: 2
+    max: 3
     signals:
       orchestration:
         patterns: [orchestrat, workflow, pipeline, phase, stage, coordinator, master_orchestrator]
@@ -49,15 +74,37 @@ dimensions:
         patterns: [api_call, database, db_session, http_client, message_bus, event_bus, filesystem, external, sqlite, requests\.]
         min_occurrences: 1
         points: 1
+      # Phase 63-C: YAML-driven scenario tests are more likely to catch real regressions
+      # because they exercise full MasterOrchestrator → template execution paths.
+      scenario_yaml_driven:
+        patterns:
+          - "execute_holistic_scenario"
+          - "ScenarioDefinition"
+          - "scenarios/S\\d+"
+          - "HolisticIntegrationHarness"
+          - "holistic_scenario"
+        points: 1
 
   detection:
-    max: 2
+    max: 3
     signals:
       data_correctness:
         patterns: [schema, migration, transform, rounding, timezone, ordering, constraint, serializ, deserializ]
         points: 1
       operational:
         patterns: ["observability", "metrics", "traces", "audit_log", "correlation.?id", "alert", "telemetry", "structured.?log"]
+        points: 1
+      # Phase 63-C: tests verifying SQLite trace completeness catch silent orchestrator
+      # failures that would otherwise be invisible (CORE requirement for AC markers).
+      trace_chain_verification:
+        patterns:
+          - "AC_START.*AC_COMPLETE"
+          - "orchestrator-traces.db"
+          - "trace_chain"
+          - "assert.*audit_event"
+          - "expected_audit_events"
+          - "assert_trace_chain"
+          - "no.*orphan.*AC_START"
         points: 1
 
   efficiency:

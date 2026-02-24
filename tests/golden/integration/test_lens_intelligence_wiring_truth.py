@@ -26,7 +26,7 @@ import yaml
 # Fixtures
 # ===========================================================================================
 
-REPO_ROOT = Path(__file__).parents[2]  # tests/golden/ → repo root
+REPO_ROOT = Path(__file__).parents[3]  # tests/golden/integration/ → repo root
 DOMAINS_DIR = REPO_ROOT / "cortex-registry" / "company" / "domains"
 PROFILES_DIR = REPO_ROOT / "cortex-registry" / "knowledge-base" / "profiles"
 PATTERNS_DIR = REPO_ROOT / "cortex-registry" / "patterns"

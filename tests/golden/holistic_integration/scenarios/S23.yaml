@@ -12,6 +12,7 @@ description: "5+ domains + LENS + Git"
 complexity: "complex"
 intent: "DESIGN"
 user_request: "Design architecture for enterprise payment gateway"
+workflow_template_ref: "lifecycle/onboarding-workflow.yaml"
 
 # Expected subsystem engagement
 expected_components:

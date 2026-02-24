@@ -1,0 +1,80 @@
+id: "master-plan-decomposition-check"
+version: "1.0"
+authority: "THIN-INDEX-CONTRACT (Phase 63)"
+description: |
+  Validates that a cortex-master.yaml phase entry adheres to the THIN INDEX CONTRACT.
+  Ensures all phase detail lives in a dedicated file, not inline in the master plan.
+
+inputs:
+  - name: phase_id
+    type: string
+    description: "Phase identifier (e.g., 'phase-63')"
+  - name: phase_entry
+    type: object
+    description: "The phase entry dict from cortex-master.yaml"
+
+checks:
+  - id: decomp-001
+    name: "dedicated_file_exists"
+    severity: P0
+    description: "A dedicated YAML file must exist for the phase before it is added to cortex-master.yaml"
+    validation: |
+      assert file_exists(
+          f"cortex-registry/planning/phases/planned/{phase_id}.yaml"
+          or f"cortex-registry/planning/phases/completed/{phase_id}.yaml"
+      )
+
+  - id: decomp-002
+    name: "no_inline_phase_detail"
+    severity: P0
+    description: "cortex-master.yaml entry must NOT contain inline phases/gap_catalogue/tdd_sequence keys"
+    forbidden_inline_keys:
+      - phases
+      - gap_catalogue
+      - tdd_sequence
+      - rewrites
+      - new_files
+      - files_to_edit
+      - implementation
+      - code_snippets
+    validation: |
+      for key in forbidden_inline_keys:
+          assert key not in phase_entry, \
+              f"P0: Move '{key}' out of cortex-master.yaml → into the dedicated phase file"
+
+  - id: decomp-003
+    name: "master_plan_size_limit"
+    severity: P1
+    description: "cortex-master.yaml must not exceed 500 lines (alarm at 400)"
+    validation: |
+      line_count = count_lines("cortex-registry/cortex-master.yaml")
+      assert line_count <= 500, \
+          f"P1: cortex-master.yaml is {line_count} lines — exceeds 500 line THIN INDEX limit"
+
+  - id: decomp-004
+    name: "allowed_fields_only"
+    severity: P1
+    description: "Each phase entry may only contain: id, title, status, priority, sweep_id, gaps, sub_phases, file, note"
+    allowed_keys:
+      - id
+      - title
+      - status
+      - priority
+      - sweep_id
+      - gaps
+      - sub_phases
+      - file
+      - note
+      - phases
+    validation: |
+      extra_keys = set(phase_entry.keys()) - set(allowed_keys)
+      assert not extra_keys, \
+          f"P1: cortex-master.yaml entry has disallowed keys: {extra_keys}"
+
+outputs:
+  - name: decomp_violations
+    type: list
+    description: "List of P0/P1 violations found"
+  - name: decomp_passed
+    type: bool
+    description: "True if all checks passed"

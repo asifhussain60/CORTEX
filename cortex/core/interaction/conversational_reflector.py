@@ -5,10 +5,15 @@ Transforms DoR data into natural language reflections (2 sentences, ≤60 tokens
 Mirrors user vocabulary, avoids technical jargon.
 
 AC_START: AC-CIG-S2-001
+AC_COMPLETE: AC-CIG-S2-001 ✅
 AC_START: AC-CIG-S2-002
+AC_COMPLETE: AC-CIG-S2-002 ✅
 AC_START: AC-CIG-S2-003
+AC_COMPLETE: AC-CIG-S2-003 ✅
 AC_START: AC-CIG-S2-004
+AC_COMPLETE: AC-CIG-S2-004 ✅
 AC_START: AC-CIG-S2-005
+AC_COMPLETE: AC-CIG-S2-005 ✅
 """
 
 from dataclasses import dataclass

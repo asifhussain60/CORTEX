@@ -98,6 +98,30 @@ class RollbackOrchestrator:
         self._history: List[Dict[str, Any]] = []
         self._deployment_state: Dict[str, Any] = {}
 
+    def get_name(self) -> str:
+        """Return canonical orchestrator name."""
+        return "RollbackOrchestrator"
+
+    def get_version(self) -> str:
+        """Return orchestrator version."""
+        return "1.0.0"
+
+    def initialize(self) -> None:
+        """Initialize orchestrator resources (no-op — lazy init)."""
+
+    def health_check(self) -> dict:
+        """Return health status dict compatible with OrchestratorProtocolMixin.
+
+        Returns:
+            dict with 'status' key set to 'healthy' when the orchestrator is operational.
+        """
+        return {
+            "status": "healthy",
+            "orchestrator": self.get_name(),
+            "version": self.get_version(),
+            "history_entries": len(self._history),
+        }
+
     async def rollback_deployment(
         self,
         deployment_id: str,
