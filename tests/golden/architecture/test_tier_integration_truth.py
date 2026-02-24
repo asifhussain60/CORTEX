@@ -123,7 +123,7 @@ class TestStaleBrainTierAbsence:
         )
 
     def test_no_comprehension_loop_brain_tier_import(self) -> None:
-        """No Phase 63 golden test may import BrainTierPusher from cortex.core.intent.comprehension_loop."""
+        """No Phase 63 golden test may import BrainTierPusher from cortex.orchestrators.core.intent_router.comprehension_loop."""
         phase63_dirs = [
             ROOT / "tests" / "golden" / "governance",
             ROOT / "tests" / "golden" / "registry",
@@ -138,7 +138,7 @@ class TestStaleBrainTierAbsence:
                     continue
                 content = py_file.read_text(errors="replace")
                 if (
-                    "from cortex.core.intent.comprehension_loop import" in content
+                    "from cortex.orchestrators.core.intent_router.comprehension_loop import" in content
                     and "BrainTierPusher" in content
                 ):
                     violations.append(str(py_file.relative_to(ROOT)))

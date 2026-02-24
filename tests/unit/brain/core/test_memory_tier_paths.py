@@ -226,7 +226,7 @@ class TestMemoryMirrorGuard:
     def test_comprehension_loop_uses_canonical_paths(self):
         """BrainTierPusher.TIER_PATHS uses canonical cortex/ paths."""
         try:
-            from cortex.core.intent.comprehension_loop import BrainTierPusher
+            from cortex.orchestrators.core.intent_router.comprehension_loop import BrainTierPusher
             tier_paths = BrainTierPusher.TIER_PATHS
 
             for tier, path in tier_paths.items():

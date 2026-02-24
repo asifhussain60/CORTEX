@@ -179,7 +179,7 @@ class TestWiringHarnessCanAutoWire:
     
     def test_challenge_generator_can_be_wired(self) -> None:
         """Test that ChallengeGenerator can be instantiated."""
-        from cortex.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.orchestrators.core.intent_router.challenge_generator import ChallengeGenerator
         
         gen = ChallengeGenerator()
         assert gen is not None

@@ -173,7 +173,7 @@ class TestACMarkerAbsence:
                 content = py_file.read_text(errors="replace")
                 # Must actually import — not just mention in a string/comment
                 if (
-                    "from cortex.core.intent.comprehension_loop import" in content
+                    "from cortex.orchestrators.core.intent_router.comprehension_loop import" in content
                     and "BrainTierPusher" in content
                 ):
                     violations.append(str(py_file.relative_to(ROOT)))

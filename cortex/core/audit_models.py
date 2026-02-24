@@ -5,7 +5,7 @@ cortex.core.audit_models — Canonical AuditEntry Definition
 Single source of truth for ``AuditEntry`` across the CORTEX framework.
 
 **Phase 59-a** consolidates 9 duplicate definitions from:
-- cortex.core.intent.intent_reflection_protocol
+- cortex.orchestrators.core.intent_router.intent_reflection_protocol
 - cortex.intelligence.domain_brain.audit_log_manager
 - cortex.intelligence.domain_brain.domain_brain_models
 - cortex.intelligence.domain_brain.api

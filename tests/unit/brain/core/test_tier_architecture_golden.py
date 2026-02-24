@@ -175,7 +175,7 @@ class TestBrainTierPusherIntegration:
     def test_brain_tier_pusher_paths_updated(self):
         """AC-PHASE47-S4-003: BrainTierPusher uses new memory paths."""
         try:
-            from cortex.core.intent.comprehension_loop import BrainTierPusher
+            from cortex.orchestrators.core.intent_router.comprehension_loop import BrainTierPusher
             from cortex.models.canonical_enums import BrainTier
             
             pusher = BrainTierPusher()
@@ -198,8 +198,8 @@ class TestBrainTierPusherIntegration:
     def test_brain_tier_pusher_identify_target_tier(self):
         """AC-PHASE47-S4-003: BrainTierPusher.identify_target_tier() uses correct enum."""
         try:
-            from cortex.core.intent.comprehension_loop import BrainTierPusher
-            from cortex.core.intent.comprehension_yaml import (
+            from cortex.orchestrators.core.intent_router.comprehension_loop import BrainTierPusher
+            from cortex.orchestrators.core.intent_router.comprehension_yaml import (
                 ComprehensionYAML, 
                 IntentSection, 
                 ChallengeSection, 
@@ -316,7 +316,7 @@ class TestPhase47IntegrationSmoke:
     def test_brain_tier_pusher_can_be_instantiated(self):
         """Smoke test: BrainTierPusher instantiation."""
         try:
-            from cortex.core.intent.comprehension_loop import BrainTierPusher
+            from cortex.orchestrators.core.intent_router.comprehension_loop import BrainTierPusher
             pusher = BrainTierPusher()
             assert pusher is not None
             assert hasattr(pusher, "identify_target_tier")

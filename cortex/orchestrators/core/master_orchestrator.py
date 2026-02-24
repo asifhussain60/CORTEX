@@ -44,7 +44,7 @@ from cortex.intelligence.knowledge.unified_intelligence_context import (
 
 # Phase 27: Import StandardsResolver for company domain integration
 from cortex.core.common.standards_resolver import StandardsResolver
-from cortex.core.intent.challenge_generator import ChallengeGenerator
+from cortex.orchestrators.core.intent_router.challenge_generator import ChallengeGenerator
 from cortex.core.orchestrator.holistic_context_builder import HolisticContextBuilder
 from cortex.core.result import Err, Ok, Result
 from cortex.intelligence.domain_brain.business_knowledge_repository import (

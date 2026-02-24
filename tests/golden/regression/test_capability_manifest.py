@@ -309,7 +309,7 @@ class TestIntelligenceLive:
     def test_challenge_generator_exists(self) -> None:
         """ChallengeGenerator must be importable (EA-009 dependency)."""
         try:
-            from cortex.core.intent.challenge_generator import ChallengeGenerator
+            from cortex.orchestrators.core.intent_router.challenge_generator import ChallengeGenerator
             assert ChallengeGenerator is not None
         except ImportError:
             pytest.fail("ChallengeGenerator not importable — needed for EA-009")

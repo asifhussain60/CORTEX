@@ -41,7 +41,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
-from cortex.core.intent.comprehension_yaml import (
+from cortex.orchestrators.core.intent_router.comprehension_yaml import (
     ChallengeItem,
     ChallengeSection,
     ComprehensionYAML,
