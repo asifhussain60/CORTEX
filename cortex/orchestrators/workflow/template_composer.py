@@ -57,6 +57,13 @@ OPERATION_CATEGORY_MAP: Dict[str, List[str]] = {
 # Operations that require a sweep catalogue envelope (CORE-064).
 SWEEP_REQUIRED_OPERATIONS: frozenset = frozenset({"fix", "refactor", "audit"})
 
+# Operations that receive the CORE-065 holistic-file-review-gate step at index 0.
+# Covers: FIX, REFACTOR, AUDIT (already sweep-required) + IMPLEMENT (files >= 2).
+# "analyze", "deploy", "document" are excluded (read-only or single-target ops).
+HOLISTIC_GATE_OPERATIONS: frozenset = frozenset(
+    {"fix", "refactor", "audit", "implement"}
+)
+
 # Default category sequence for unknown operation types
 DEFAULT_CATEGORIES: List[str] = ["analysis", "execution", "validation"]
 
@@ -251,11 +258,19 @@ class TemplateComposer:
             )
             return None
 
-        # ── CORE-064: Sweep Catalogue Envelope (Phase 56) ──────────────────
-        # FIX / REFACTOR / AUDIT operations receive a mandatory sweep envelope.
-        # The open step is prepended and the close step is appended so the
-        # contract is *structural* — enforced at composition time, not runtime.
+        # ── CORE-065 + CORE-064: Governance envelope injection (Phase 64-G) ─
+        #
+        # Final step ordering:
+        #   [holistic_file_review_gate_open]  ← CORE-065 (absolute index 0)
+        #   [sweep_catalogue_open]            ← CORE-064 (FIX/REFACTOR/AUDIT only)
+        #   ... actual operation steps ...
+        #   [sweep_catalogue_assert_exhausted]← CORE-064 (last step)
+        #
+        # The holistic gate is ALWAYS first. The sweep envelope wraps only
+        # the operation steps so CORE-065 index 0 is structurally guaranteed.
         op_lower = operation_type.lower()
+
+        # ── CORE-064: Sweep Catalogue Envelope (Phase 56) ──────────────────
         sweep_enforced = op_lower in SWEEP_REQUIRED_OPERATIONS
         if sweep_enforced:
             sweep_open_step: Dict[str, Any] = {
@@ -287,6 +302,33 @@ class TemplateComposer:
                 operation_type,
             )
 
+        # ── CORE-065: Holistic File Review Gate (Phase 64-G) ───────────────
+        # Injected AFTER sweep envelope so it is guaranteed at absolute index 0,
+        # even when the sweep open step has already been prepended.
+        core_065_compliant = op_lower in HOLISTIC_GATE_OPERATIONS
+        if core_065_compliant:
+            holistic_gate_open_step: Dict[str, Any] = {
+                "id": "holistic_file_review_gate_open",
+                "action": "HolisticFileReviewGate.open_session",
+                "args": {
+                    "operation_type": operation_type.upper(),
+                    "scope_files": "__resolved_at_runtime__",
+                    "intent_description": description,
+                },
+                "blocking": True,  # PRE-WORK inventory must complete before execution
+                "source_category": "governance",
+                "source_primitive": "holistic-file-review-gate",
+                "governance_rule": "CORE-065",
+                "phase": "BEFORE",
+            }
+            # Prepend holistic gate LAST so it lands at index 0, overriding
+            # the sweep_catalogue_open position.
+            steps = [holistic_gate_open_step] + steps
+            logger.info(
+                "CORE-065: Holistic file review gate injected at index 0 for operation=%s",
+                operation_type,
+            )
+
         # Generate unique ID from operation + description
         template_id = self._generate_id(operation_type, description)
 
@@ -312,6 +354,7 @@ class TemplateComposer:
                 "composed": True,
                 "sweep_enforced": sweep_enforced,
                 "core_064_compliant": sweep_enforced,
+                "core_065_compliant": core_065_compliant,
             },
         }
 

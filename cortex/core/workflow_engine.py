@@ -4,10 +4,11 @@ WorkflowEngine — YAML-based workflow template execution.
 Reads workflow YAML templates and orchestrates execution.
 
 Authority: CORE-008 (TDD) | CORE-011 (type hints) | CORE-012 (docstrings)
+Phase 64-G: register_post_step_hook() added for CORE-066 ResponseTemplateValidator wiring.
 """
 
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 import yaml
@@ -53,7 +54,36 @@ class WorkflowEngine:
         self.template_dir = template_dir or Path.cwd()
         self.workflows: Dict[str, ExecutionContext] = {}
         self._scaffold_writer = ScaffoldWriter(root=self.template_dir)
-    
+        # CORE-066: post-step hooks for ResponseTemplateValidator wiring (Phase 64-G)
+        self._post_step_hooks: List[Callable[[Dict[str, Any]], None]] = []
+
+    # ── CORE-066: Post-step hook registry (Phase 64-G) ───────────────────────
+
+    def register_post_step_hook(
+        self,
+        hook: Callable[[Dict[str, Any]], None],
+    ) -> None:
+        """Register a callable to be invoked after each workflow step completes.
+
+        Used to wire CORE-066 ResponseTemplateValidator so every step's
+        user-visible output is validated before rendering to VS Code Copilot Chat.
+
+        Args:
+            hook: Callable that receives the step result dict. Should call
+                  ResponseTemplateValidator.validate_output() on the output field.
+
+        Example:
+            >>> from cortex.governance.response_template_validator import (
+            ...     ResponseTemplateValidator
+            ... )
+            >>> engine = WorkflowEngine()
+            >>> validator = ResponseTemplateValidator()
+            >>> engine.register_post_step_hook(
+            ...     lambda result: validator.validate_output(result.get("output", ""))
+            ... )
+        """
+        self._post_step_hooks.append(hook)
+
     # ── SDO-compatible API ────────────────────────────────────────────────────
 
     def load(self, workflow_path: str) -> Dict[str, Any]:

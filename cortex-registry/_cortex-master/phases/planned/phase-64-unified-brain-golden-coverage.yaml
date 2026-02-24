@@ -267,21 +267,27 @@ sub_phases:
 
   - id: 64-G
     title: "Workflow Template Golden Tests + CORE-065/066 Wiring"
+    status: COMPLETE
+    completed: "2026-02-24"
     closes_gaps: [REVIEW-GAP-05]
     closes_core_rules: [CORE-065, CORE-066]
     deliverable: |
-      tests/golden/workflow/test_holistic_file_review_golden.py (CORE-065 — 6 ACs)
-      tests/golden/response/test_response_templates_golden.py (CORE-066 — 6 ACs)
-      Wire holistic-file-review-gate into TemplateComposer (auto-injection)
-      Wire copilot-chat-response-template into WorkflowEngine (post-step hook)
+      tests/golden/workflow/test_holistic_file_review_golden.py (CORE-065 — 6 ACs) ✅ 18 tests GREEN
+      tests/golden/response/test_response_templates_golden.py (CORE-066 — 6 ACs) ✅ 12 tests GREEN
+      cortex/governance/holistic_file_review_gate.py — 5 blocking gates + SQLite session continuity ✅
+      cortex/governance/response_template_validator.py — CORE-066 dict/string validation ✅
+      Wire holistic-file-review-gate into TemplateComposer (auto-injection at index 0) ✅
+      Wire copilot-chat-response-template into WorkflowEngine (register_post_step_hook) ✅
+      REFACTOR: 4 Phase 56 test_template_composer.py tests updated for CORE-065 ordering ✅
     tdd_sequence:
-      - "RED: test_gate1_blocks_when_files_skipped fails"
-      - "RED: test_session_resume_starts_at_last_completed_step fails"
-      - "RED: test_raw_dict_output_is_p1_violation fails"
-      - "GREEN: HolisticFileReviewGate.evaluate_gates() implementation"
-      - "GREEN: TemplateComposer auto-injects holistic-file-review-gate at index 0"
-      - "GREEN: ResponseTemplateValidator post-step hook in WorkflowEngine"
-      - "REFACTOR: All existing FIX/REFACTOR/IMPLEMENT workflow templates adopt gate"
+      - "RED: test_gate1_blocks_when_files_skipped fails ✅"
+      - "RED: test_session_resume_starts_at_last_completed_step fails ✅"
+      - "RED: test_raw_dict_output_is_p1_violation fails ✅"
+      - "GREEN: HolisticFileReviewGate.evaluate_gates() implementation ✅"
+      - "GREEN: TemplateComposer auto-injects holistic-file-review-gate at index 0 ✅"
+      - "GREEN: ResponseTemplateValidator post-step hook in WorkflowEngine ✅"
+      - "REFACTOR: 4 existing Phase 56 tests updated for CORE-065 step ordering ✅"
+    smoke_gate: "606 passed, 46 skipped, 0 failures (tests/golden/ + tests/orchestrators/workflow/ + tests/core/)"
     multi_session_deliverable: |
       SweepCatalogueOrchestrator.list_open_sweeps() called at session start.
       session_pause_banner rendered via copilot-chat-response-template when

@@ -853,17 +853,23 @@ class TestSweepCatalogueInjection:
     # ------------------------------------------------------------------
 
     def test_fix_composed_template_has_sweep_open_as_first_step(self, tmp_path: Path) -> None:
-        """Composed FIX template must have sweep_catalogue_open as step[0] (CORE-064)."""
+        """Composed FIX template: holistic_file_review_gate_open at step[0] (CORE-065),
+        sweep_catalogue_open at step[1] (CORE-064)."""
         from cortex.orchestrators.workflow.template_composer import TemplateComposer
 
         pdir = self._make_primitives_dir(tmp_path)
         composer = TemplateComposer(primitives_dir=pdir)
         result = composer.compose(operation_type="fix", description="Fix broken imports")
         assert result is not None
-        assert result["steps"][0]["id"] == "sweep_catalogue_open", (
-            "First step must be sweep_catalogue_open for CORE-064 enforcement"
+        # CORE-065 (Phase 64-G): holistic gate is absolute index 0
+        assert result["steps"][0]["id"] == "holistic_file_review_gate_open", (
+            "CORE-065: holistic_file_review_gate_open must be first step"
         )
-        assert result["steps"][0]["source_category"] == "governance"
+        # CORE-064: sweep_catalogue_open is index 1 (after holistic gate)
+        assert result["steps"][1]["id"] == "sweep_catalogue_open", (
+            "CORE-064: sweep_catalogue_open must follow holistic gate at index 1"
+        )
+        assert result["steps"][1]["source_category"] == "governance"
 
     def test_fix_composed_template_has_sweep_close_as_last_step(self, tmp_path: Path) -> None:
         """Composed FIX template must have sweep_catalogue_assert_exhausted as step[-1] (CORE-064)."""
@@ -879,7 +885,7 @@ class TestSweepCatalogueInjection:
         assert result["steps"][-1]["blocking"] is True
 
     def test_refactor_composed_template_has_sweep_envelope(self, tmp_path: Path) -> None:
-        """Composed REFACTOR template must have sweep open+close envelope (CORE-064)."""
+        """Composed REFACTOR template: holistic gate at [0], sweep open at [1], sweep close at [-1]."""
         from cortex.orchestrators.workflow.template_composer import TemplateComposer
 
         pdir = self._make_primitives_dir(tmp_path)
@@ -887,11 +893,14 @@ class TestSweepCatalogueInjection:
         result = composer.compose(operation_type="refactor", description="Refactor auth module")
         assert result is not None
         step_ids = [s["id"] for s in result["steps"]]
-        assert step_ids[0] == "sweep_catalogue_open"
+        # CORE-065 (Phase 64-G): holistic gate at absolute index 0
+        assert step_ids[0] == "holistic_file_review_gate_open"
+        # CORE-064: sweep envelope present (open not necessarily at [0] any more)
+        assert "sweep_catalogue_open" in step_ids
         assert step_ids[-1] == "sweep_catalogue_assert_exhausted"
 
     def test_audit_composed_template_has_sweep_envelope(self, tmp_path: Path) -> None:
-        """Composed AUDIT template must have sweep open+close envelope (CORE-064)."""
+        """Composed AUDIT template: holistic gate at [0], sweep open at [1], sweep close at [-1]."""
         from cortex.orchestrators.workflow.template_composer import TemplateComposer
 
         pdir = self._make_primitives_dir(tmp_path)
@@ -899,7 +908,10 @@ class TestSweepCatalogueInjection:
         result = composer.compose(operation_type="audit", description="Full production audit")
         assert result is not None
         step_ids = [s["id"] for s in result["steps"]]
-        assert step_ids[0] == "sweep_catalogue_open"
+        # CORE-065: holistic gate at index 0
+        assert step_ids[0] == "holistic_file_review_gate_open"
+        # CORE-064: sweep envelope present
+        assert "sweep_catalogue_open" in step_ids
         assert step_ids[-1] == "sweep_catalogue_assert_exhausted"
 
     def test_implement_composed_template_has_no_sweep_envelope(self, tmp_path: Path) -> None:
@@ -933,14 +945,20 @@ class TestSweepCatalogueInjection:
     # ------------------------------------------------------------------
 
     def test_sweep_open_step_has_required_metadata_fields(self, tmp_path: Path) -> None:
-        """Sweep open step must carry action, args, source_category, source_primitive."""
+        """Sweep open step (CORE-064) must carry action, args, source_primitive.
+        
+        CORE-065 (Phase 64-G): holistic gate occupies index 0; sweep open is at index 1.
+        """
         from cortex.orchestrators.workflow.template_composer import TemplateComposer
 
         pdir = self._make_primitives_dir(tmp_path)
         composer = TemplateComposer(primitives_dir=pdir)
         result = composer.compose(operation_type="fix", description="Fix tests")
         assert result is not None
-        open_step = result["steps"][0]
+        # CORE-065: holistic gate is at absolute index 0
+        assert result["steps"][0]["id"] == "holistic_file_review_gate_open"
+        # CORE-064: sweep open is now at index 1
+        open_step = result["steps"][1]
         assert open_step["action"] == "SweepCatalogueOrchestrator.open_catalogue"
         assert "args" in open_step
         assert open_step["args"]["intent"] == "FIX"
