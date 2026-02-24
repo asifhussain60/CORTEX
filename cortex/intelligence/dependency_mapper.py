@@ -101,7 +101,7 @@ class DependencyMapper:
     - Supports custom local package definitions
 
     Example:
-        >>> from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        >>> from cortex.intelligence.ast_intelligence import ASTIntelligenceEngine
         >>> engine = ASTIntelligenceEngine()
         >>> parse_result = engine.parse_file(Path("module.py"))
         >>> mapper = DependencyMapper(local_packages={"myproject"})

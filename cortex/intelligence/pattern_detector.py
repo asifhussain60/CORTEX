@@ -20,7 +20,7 @@ from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Set
 
 if TYPE_CHECKING:
-    from cortex.core.intelligence.ast_intelligence import ClassInfo, ParseResult
+    from cortex.intelligence.ast_intelligence import ClassInfo, ParseResult
 
 
 # =============================================================================
@@ -74,7 +74,7 @@ class PatternDetector:
     like singleton, factory, and decorator patterns.
 
     Example:
-        >>> from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        >>> from cortex.intelligence.ast_intelligence import ASTIntelligenceEngine
         >>> engine = ASTIntelligenceEngine()
         >>> result = engine.parse_file(Path("module.py"))
         >>> detector = PatternDetector()

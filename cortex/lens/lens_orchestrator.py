@@ -158,15 +158,15 @@ class LENSOrchestrator:
         self.api_analyzer = get_api_analyzer()
 
         # Phase 43: CallGraphBuilder for relationship findings (AC-PHASE43-003)
-        from cortex.core.intelligence.call_graph import CallGraphBuilder
+        from cortex.intelligence.call_graph import CallGraphBuilder
         self.call_graph_builder = CallGraphBuilder()
 
         # Phase 43: DependencyMapper for dependency findings (AC-PHASE43-004)
-        from cortex.core.intelligence.dependency_mapper import DependencyMapper
+        from cortex.intelligence.dependency_mapper import DependencyMapper
         self.dependency_mapper = DependencyMapper()
 
         # Phase 43: PatternDetector for pattern findings (AC-PHASE43-005)
-        from cortex.core.intelligence.pattern_detector import PatternDetector
+        from cortex.intelligence.pattern_detector import PatternDetector
         self.pattern_detector = PatternDetector()
 
         # Phase 90: TechStackAnalyzer for tech stack detection (AC-PHASE90-S1-001)

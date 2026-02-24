@@ -17,10 +17,10 @@ from typing import Any, Dict, List, Optional
 import yaml
 
 from cortex.core.governance_pregate import PreGateDecision, get_governance_pregate
-from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-from cortex.core.intelligence.call_graph import CallGraphBuilder
-from cortex.core.intelligence.dependency_mapper import DependencyMapper
-from cortex.core.intelligence.pattern_detector import PatternDetector
+from cortex.intelligence.ast_intelligence import ASTIntelligenceEngine
+from cortex.intelligence.call_graph import CallGraphBuilder
+from cortex.intelligence.dependency_mapper import DependencyMapper
+from cortex.intelligence.pattern_detector import PatternDetector
 from cortex.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,

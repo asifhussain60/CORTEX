@@ -1,19 +1,12 @@
-"""
-CORTEX Intelligence Module
-
-Provides operational intelligence for routing, duration, and error pattern analysis.
-
-AC-INT-RT-001: Routing decision outcome tracking
-AC-INT-DUR-002: Operation duration baselines
-AC-INT-ERR-003: Error pattern recognition
-"""
-
-from cortex.core.intelligence.duration_intelligence import DurationAnalyzer
-from cortex.core.intelligence.error_intelligence import ErrorAnalyzer
-from cortex.core.intelligence.routing_intelligence import RoutingAnalyzer
-
-__all__ = [
-    "RoutingAnalyzer",
-    "DurationAnalyzer",
-    "ErrorAnalyzer",
-]
+"""COMPAT shim — cortex.core.intelligence moved to cortex.intelligence (Phase 60)."""
+from cortex.intelligence.ast_intelligence import *  # noqa: F401, F403
+from cortex.intelligence.author_context import *  # noqa: F401, F403
+from cortex.intelligence.call_graph import *  # noqa: F401, F403
+from cortex.intelligence.change_frequency import *  # noqa: F401, F403
+from cortex.intelligence.comment_analyzer import *  # noqa: F401, F403
+from cortex.intelligence.dependency_mapper import *  # noqa: F401, F403
+from cortex.intelligence.duration_intelligence import *  # noqa: F401, F403
+from cortex.intelligence.error_intelligence import *  # noqa: F401, F403
+from cortex.intelligence.pattern_detector import *  # noqa: F401, F403
+from cortex.intelligence.relationship_traversal import *  # noqa: F401, F403
+from cortex.intelligence.routing_intelligence import *  # noqa: F401, F403

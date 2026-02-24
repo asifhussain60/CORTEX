@@ -13,7 +13,7 @@ import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, List
-from cortex.core.intelligence.duration_intelligence import DurationAnalyzer
+from cortex.intelligence.duration_intelligence import DurationAnalyzer
 
 
 class TestDurationAnalyzer:

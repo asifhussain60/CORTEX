@@ -9,8 +9,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
-from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine, ParseResult
-from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
+from cortex.intelligence.ast_intelligence import ASTIntelligenceEngine, ParseResult
+from cortex.intelligence.comment_analyzer import CommentAnalyzer
 from cortex.core.intelligence_routing_engine import IntelligenceRoutingEngine
 
 logger = logging.getLogger(__name__)

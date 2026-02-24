@@ -21,7 +21,7 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, List, Any
 
-from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+from cortex.intelligence.ast_intelligence import ASTIntelligenceEngine
 from cortex.testing.test_audit_logger import TestAuditLogger
 
 
@@ -150,7 +150,7 @@ class DataProcessor:
         - edges_created: N (number of call relationships found)
         - call_graph_built: true
         """
-        from cortex.core.intelligence.call_graph import CallGraphBuilder
+        from cortex.intelligence.call_graph import CallGraphBuilder
         
         engine = ASTIntelligenceEngine(enable_cache=False)
         parse_result = engine.parse_file(str(sample_python_file))
@@ -197,7 +197,7 @@ class DataProcessor:
         imports and dependencies. This test verifies that component usage
         is logged.
         """
-        from cortex.core.intelligence.dependency_mapper import DependencyMapper
+        from cortex.intelligence.dependency_mapper import DependencyMapper
         
         engine = ASTIntelligenceEngine(enable_cache=False)
         parse_result = engine.parse_file(str(sample_python_file))
@@ -241,7 +241,7 @@ class DataProcessor:
         
         Pattern detection is part of comprehension. Verify it's logged.
         """
-        from cortex.core.intelligence.pattern_detector import PatternDetector
+        from cortex.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine(enable_cache=False)
         parse_result = engine.parse_file(str(sample_python_file))

@@ -12,7 +12,7 @@ import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, List
-from cortex.core.intelligence.routing_intelligence import RoutingAnalyzer
+from cortex.intelligence.routing_intelligence import RoutingAnalyzer
 
 
 class TestRoutingAnalyzer:

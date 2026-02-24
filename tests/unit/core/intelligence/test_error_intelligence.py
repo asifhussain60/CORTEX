@@ -13,7 +13,7 @@ import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, Any, List
-from cortex.core.intelligence.error_intelligence import ErrorAnalyzer
+from cortex.intelligence.error_intelligence import ErrorAnalyzer
 
 
 class TestErrorAnalyzer:

@@ -140,7 +140,7 @@ class CallGraphBuilder:
     - Provides query interface for call analysis
 
     Example:
-        >>> from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        >>> from cortex.intelligence.ast_intelligence import ASTIntelligenceEngine
         >>> engine = ASTIntelligenceEngine()
         >>> parse_result = engine.parse_file(Path("module.py"))
         >>> builder = CallGraphBuilder()
