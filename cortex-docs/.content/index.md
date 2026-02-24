@@ -4,13 +4,13 @@
 title: CORTEX Architecture Overview
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-23
-source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
+last_verified: 2026-02-24
+source_of_truth: cortex/ + cortex-registry/cortex-master.yaml + .github/copilot-instructions.md
 format: diátaxis-explanation
 voice: third-person-blended
 ---
 
-> **Notice:** This documentation represents CORTEX as verified against live code on 23 February 2026. All metrics, module paths, and counts are validated against the running codebase. Every `cortex_intelligence/`, `cortex_lens/`, and `cortex.brain` reference has been eliminated — those packages were dissolved during the Cohesive Brain Refactor.
+> **Notice:** This documentation represents CORTEX as verified against live code on 24 February 2026 (Phase 62 Complete). All metrics, module paths, and counts are validated against the running codebase. The Simplification Master Plan (Phases 58-62) eliminated core/core double-nesting, reduced orchestrator surface, and cleaned the registry.
 
 ---
 
@@ -23,27 +23,26 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 **What makes it different from other dev tools:**
 
 - Traditional tools answer questions. CORTEX **orchestrates entire workflows** — from intent classification through TDD enforcement to code delivery.
-- One canonical Python package (`cortex`), 27 wired orchestrators across 3 canonical tiers (10 total directories), 26 MCP tools, 35 active CORE rules governance rules.
+- One canonical Python package (`cortex`), 27 wired orchestrators across 3 canonical tiers (10 total directories), 26 MCP tools, 35 CORE governance rules.
 - TDD is not optional. CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX request. No exceptions.
 - Everything is Git-backed. No PostgreSQL, no MongoDB — just YAML files in `cortex-registry/` versioned alongside your code.
 
 ---
 
-## System Metrics (23 Feb 2026 — Live)
+## System Metrics (24 Feb 2026 — Phase 62 Complete)
 
 | Metric | Value | Status |
 |--------|-------|--------|
 | **Package** | 1 canonical (`cortex`) | ✅ 3→1 consolidation complete |
 | **Orchestrators** | 27 wired (7 core, 6 domain, 14 support) | ✅ IOrchestrator protocol enforced |
-| **MCP Tools** | 26 active (28 total — 2 deprecated) | ✅ Pylance-style stdio server |
+| **MCP Tools** | 26 active | ✅ Pylance-style stdio server |
 | **Top-level Dirs** | 16 canonical under `cortex/` | ✅ 59→16 cleanup complete |
-| **Governance Rules** | 35 active CORE rules | ✅ Enforced at pre-commit + CI + runtime |
-| **Test Suite** | 15,739 tests collected | ✅ Parallel xdist batch runner |
+| **Governance Rules** | 35 CORE rules enforced | ✅ Enforced at pre-commit + CI + runtime |
+| **Test Suite** | 15,739 tests collected (486 golden) | ✅ Parallel xdist batch runner |
 | **Parallel Testing** | pytest-xdist (`-n auto --dist loadscope`) | ✅ CortexXdistPlugin batch runner |
 | **Enterprise Patterns** | 9 patterns in registry | ✅ mediator, strategy, observer, factory, etc. |
 | **Sweep Completeness** | CORE-064 enforced via SweepCatalogueOrchestrator | ✅ No partial sweeps across sessions |
-| **ScaffoldWriter** | Disk-emission for workflow pipeline artefacts | ✅ Gap G2 closed (BadMonolith) |
-| **Roslyn by-name rename** | Symbol rename without byte offset | ✅ Gap G3 closed (BadMonolith) |
+| **Simplified Architecture** | core/core eliminated, registry cleaned | ✅ Phases 58-62 complete |
 
 ---
 
@@ -88,7 +87,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | **WorkflowEngine.load() + execute_step()** | SDO-compatible API in `cortex/core/workflow_engine.py` — all 8 BadMonolith steps execute end-to-end |
 | **Roslyn by-name rename** | `RoslynAdapter` + `RefactoringService.cs` accept `symbol_name` key (no byte offset required) — Gap G3 |
 | **CORE-064** | Sweep Completeness Contract — `SweepCatalogueOrchestrator` prevents partial sweeps across session boundaries |
-| **CORE-055** | Golden Test Tier Contract — 696 golden tests always pass; zero regression allowed |
+| **CORE-055** | Golden Test Tier Contract — 486 golden tests always pass; zero regression allowed |
 | **cortex_sweep_status** | MCP tool for CORE-064 sweep catalogue query/management |
 | **cortex_fetch_work_items** | Phase 15 — provider-agnostic ADO/Jira/custom work item access via MCP |
 | **SQLite Activity Log** | `OrchestratorBase.execute()/run()` auto-logs to `.cortex-runtime/audit.db` (never blocks execution) |
@@ -117,5 +116,5 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-*CORTEX v1.0.0 · 23 February 2026 · 27 wired orchestrators · 26 MCP tools · 35 CORE rules · 15,739 tests · 696 golden · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
+*CORTEX v1.0.0 (Phase 62 Complete) · 24 February 2026 · 27 wired orchestrators · 26 MCP tools · 35 CORE rules · 15,739 tests · 486 golden · Source of truth: `cortex-registry/cortex-master.yaml`*
 

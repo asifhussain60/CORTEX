@@ -4,7 +4,7 @@
 title: How CORTEX Works — End-to-End Request Lifecycle
 type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-20
+last_verified: 2026-02-24
 source_of_truth: cortex/orchestrators/core/ + cortex/mcp/ + cortex/lens/
 format: 10k-view
 order: 3

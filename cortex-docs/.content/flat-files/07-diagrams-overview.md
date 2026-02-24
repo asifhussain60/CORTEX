@@ -4,7 +4,7 @@
 title: Architecture Diagrams
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-23
+last_verified: 2026-02-24
 source_of_truth: cortex/ (live architecture)
 order: 1
 ---

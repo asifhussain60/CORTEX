@@ -4,13 +4,13 @@
 title: CORTEX Capabilities — Complete Platform Inventory
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-23
-source_of_truth: cortex/ + cortex-registry/ + cortex-registry/planning/cortex-refactor-master.yaml
+last_verified: 2026-02-24
+source_of_truth: cortex/ + cortex-registry/cortex-master.yaml
 format: diátaxis-explanation
 order: 1
 ---
 
-> **Notice:** All capabilities listed here are verified against the live codebase as of 23 February 2026. Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
+> **Notice:** All capabilities listed here are verified against the live codebase as of 24 February 2026 (Phase 62 Complete). Counts, module paths, and orchestrator names are validated against running code. The Simplification Master Plan (Phases 58-62) eliminated core/core double-nesting, reduced duplicate filenames, and cleaned the registry.
 
 ---
 
@@ -66,7 +66,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
-### MCP Gateway (25 Tools)
+### MCP Gateway (26 Tools)
 
 CORTEX exposes 26 active MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 
@@ -148,7 +148,7 @@ Every IMPLEMENT and FIX operation follows mandatory RED → GREEN → REFACTOR:
 
 This is not optional. CORE-008 is enforced at the architecture level.
 
-### 22 Wired Orchestrators Across 3 Tiers
+### 27 Wired Orchestrators Across 3 Tiers
 
 | Tier | Count | Key Orchestrators |
 |------|-------|-----------------|
@@ -170,7 +170,7 @@ Enforced at pre-commit, CI, and runtime. Full list in `cortex-registry/core/tier
 
 Key rules added today:
 - **CORE-064** — Sweep Completeness Contract: every FIX/REFACTOR/AUDIT sweep exhausts its catalogue before closing
-- **CORE-055** — Golden Test Tier Contract: 696 golden tests always pass
+- **CORE-055** — Golden Test Tier Contract: 486 golden tests always pass
 
 ### 10 Enforcement Agents
 

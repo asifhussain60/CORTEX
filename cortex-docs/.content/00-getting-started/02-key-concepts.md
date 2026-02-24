@@ -4,7 +4,7 @@
 title: CORTEX Key Concepts — Terminology for New Readers
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-21
+last_verified: 2026-02-24
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 format: 10k-view
 order: 2

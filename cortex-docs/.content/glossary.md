@@ -4,7 +4,7 @@
 title: CORTEX Glossary — Terminology Reference
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-21
+last_verified: 2026-02-24
 source_of_truth: cortex/ (live codebase)
 order: 99
 ---
@@ -43,7 +43,7 @@ order: 99
 
 **ConsolidatedTool** — Base class for all MCP tools. Provides consistent naming, parameter validation, execution, and audit trail. Module: `cortex/mcp/mcp_tool_base.py`.
 
-**CORE-055** — Golden Test Tier Contract. 696 golden tests in `tests/golden/` must always pass. Zero regression allowed. Added 21 February 2026.
+**CORE-055** — Golden Test Tier Contract. 486 golden tests in `tests/golden/` must always pass. Zero regression allowed. Added 21 February 2026.
 
 **CORE-064** — Sweep Completeness Contract. Every FIX/REFACTOR/AUDIT sweep must exhaust its full issue catalogue before closing. Enforced by `SweepCatalogueOrchestrator`. Added 21 February 2026.
 

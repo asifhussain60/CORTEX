@@ -4,7 +4,7 @@
 title: CORTEX Key Concepts — Terminology for New Readers
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-21
+last_verified: 2026-02-24
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 format: 10k-view
 order: 2
@@ -90,7 +90,7 @@ Used in pattern matching, intent classification, and strategy selection.
 ## Governance Concepts
 
 ### CORE Rule
-A numbered governance standard enforced automatically. There are **22 actively enforced CORE rules** (35 defined total in `cortex-registry/core/tier0-skull/skull-rules.yaml`). Critical examples:
+A numbered governance standard enforced automatically. There are **35 CORE rules enforced** (defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`). Critical examples:
 
 | Rule | Name | What It Does |
 |------|------|-------------|
