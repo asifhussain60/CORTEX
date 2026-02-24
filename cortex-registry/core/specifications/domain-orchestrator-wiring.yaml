@@ -90,15 +90,6 @@ provides:
       - data_embedding
     phase_added: "62-G"
 
-  - name: BusinessDomainOrchestrator
-    category: DOMAIN
-    description: "Business domain base orchestrator — domain model + business rules engine"
-    entry_point: "cortex.orchestrators.domain.business.base:BusinessDomainOrchestrator"
-    features:
-      - domain_model_management
-      - business_rules_engine
-    phase_added: "62-G"
-
 initialization_order: 20
 
 conflict_resolution:
@@ -107,7 +98,7 @@ conflict_resolution:
 
 metadata:
   maintained_by: "CORTEX Domain Team"
-  last_updated: "2026-02-23"
-  git_commit: "phase-62-g-wiring-surface-expansion"
+  last_updated: "2026-02-24"
+  git_commit: "phase-58-61-simplification"
   status: "active"
-  change_summary: "Phase 62-G: Added 4 previously unregistered domain orchestrators (EnhancedPlanningOrchestrator, ServiceDecompositionOrchestrator, DashboardOrchestrator, BusinessDomainOrchestrator)."
+  change_summary: "Phase 62-G: Added EnhancedPlanningOrchestrator, ServiceDecompositionOrchestrator, DashboardOrchestrator. Phase 58-61: Removed BusinessDomainOrchestrator (source deleted in Phase 58-f — zero callers, abstract base with no concrete subclasses)."

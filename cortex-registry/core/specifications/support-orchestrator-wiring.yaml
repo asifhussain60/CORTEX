@@ -48,7 +48,7 @@ provides:
   - name: RollbackOrchestrator
     category: SUPPORT
     description: "Manages system rollbacks"
-    entry_point: "cortex.orchestrators.support.rollback_orchestrator:RollbackOrchestrator"
+    entry_point: "cortex.infrastructure.deployment.rollback_orchestrator:RollbackOrchestrator"
     features:
       - snapshot_management
       - state_recovery

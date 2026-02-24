@@ -179,7 +179,7 @@ orchestrators:
       health_check: "ping"
 
     - name: "RollbackOrchestrator"
-      module: "cortex.orchestrators.support.rollback_orchestrator"
+      module: "cortex.infrastructure.deployment.rollback_orchestrator"
       class: "RollbackOrchestrator"
       tier: 3
       priority: 38
