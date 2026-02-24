@@ -350,6 +350,21 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
         "investigate the", "trace the", "debug why", "find the cause"
     ]
 
+    # GAP-64: Golden test lifecycle keywords — review, create, enhance, consolidate,
+    # delete workflow templates and VSCode Copilot Chat response templates.
+    # This includes E2E trace-verified scenarios, harness upgrades, acceptance
+    # criteria authoring, and response template rendering validation.
+    GOLDEN_TEST_KEYWORDS: List[str] = [
+        "golden test", "golden tests", "workflow template", "workflow templates",
+        "response template", "response templates", "acceptance criteria",
+        "e2e scenario", "e2e scenarios", "trace assertion", "trace assertions",
+        "test harness", "holistic integration", "trace verified", "ac marker",
+        "ac_start", "ac_complete", "golden harness", "golden scenario",
+        "create golden", "review golden", "enhance golden", "consolidate golden",
+        "delete golden", "copilot chat response", "vscode response", "chat session feedback",
+        "user response template", "inline feedback template"
+    ]
+
     def __init__(self) -> None:
         """
         Initialize IntentRouter orchestrator.
@@ -386,6 +401,8 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             IntentType.DIGEST: self.DIGEST_KEYWORDS,
             IntentType.REPHRASE: self.REPHRASE_KEYWORDS,
             IntentType.INVESTIGATE: self.INVESTIGATE_KEYWORDS,
+            # GAP-64: Golden test lifecycle intent
+            IntentType.GOLDEN_TEST: self.GOLDEN_TEST_KEYWORDS,
         }
 
         # Vacuum keywords (cleanup operations) - mapped to REFACTOR for routing

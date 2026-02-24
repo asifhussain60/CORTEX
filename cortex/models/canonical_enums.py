@@ -218,6 +218,11 @@ class IntentType(Enum):
     DIGEST = "digest"      # Knowledge synthesis / summarize
     REPHRASE = "rephrase"  # Token-optimize prompts
     INVESTIGATE = "investigate"  # Deep analysis + evidence
+    # GAP-64: Golden test lifecycle — review, create, enhance, consolidate, delete
+    # workflow templates and VSCode Copilot Chat response templates.
+    # Triggered by: "golden test", "workflow template", "response template",
+    # "acceptance criteria", "harness", "e2e scenario", "trace assertion"
+    GOLDEN_TEST = "golden_test"
     UNKNOWN = "unknown"
 
 

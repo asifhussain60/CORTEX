@@ -1,0 +1,378 @@
+# =============================================================================
+# WORKFLOW TEMPLATE: Holistic File Review Gate
+# =============================================================================
+# Version:  1.0.0
+# Created:  2026-02-24
+# Phase:    64 — Unified Brain Golden Coverage
+# Authority: CORE-065, CORE-066, CORE-064, CORE-008
+#
+# PURPOSE
+# -------
+# Prevents partial sweeps by enforcing a BEFORE/AFTER holistic file inventory
+# on every FIX, REFACTOR, IMPLEMENT, and AUDIT operation that touches ≥2 files.
+#
+# DESIGN PRINCIPLE
+# ----------------
+# "A workflow template, by design, prevents partial sweeps. It ensures each
+#  file is reviewed, analyzed holistically and systematically BEFORE the work
+#  is done AND AFTER the work is done." — Phase 64 constraint
+#
+# PROBLEM THIS SOLVES
+# -------------------
+# detect-fix-rescan-loop (primitive) runs convergence on issue counts but has
+# no awareness of the FULL FILE INVENTORY that should be in scope. A session
+# can exit cleanly (p0=0, p1=0) while 3 related files were never even opened.
+# CORE-064 catches partial catalogue sweeps; CORE-065 closes the file-scope gap.
+#
+# HOW IT WORKS
+# ------------
+# Step 1 (BEFORE): LENS AST-scan all in-scope files → emit file_inventory snapshot
+#                  to SQLite. Block execution if any file fails to parse.
+# Step 2 (BEFORE): Render holistic analysis into a structured pre-work manifest:
+#                  - File role, dependencies, blast radius (who imports this file)
+#                  - Risk score per file (0-1) based on import count + test coverage
+#                  - Known open issues (from SweepCatalogue) per file
+# Step 3 (WORK):   Actual FIX/REFACTOR/IMPLEMENT executes (user-supplied steps)
+# Step 4 (AFTER):  LENS re-scan same file set → compare pre vs post snapshot
+#                  - Assert: no file in the BEFORE set was silently skipped
+#                  - Assert: every file with BEFORE risk_score >0.4 was touched
+#                  - Assert: no new lint/import errors introduced
+# Step 5 (AFTER):  AC_COMPLETE with diff summary inline (CORE-002: no report files)
+#
+# GATES (all blocking before AFTER phase can emit AC_COMPLETE)
+# ------------------------------------------------------------
+# GATE-1: files_skipped_count == 0
+# GATE-2: high_risk_files_touched == high_risk_files_total (risk_score > 0.4)
+# GATE-3: post_lint_errors <= pre_lint_errors
+# GATE-4: test_count_after >= test_count_before (CORE-008 — no test regression)
+# GATE-5: sweep_catalogue_open() called BEFORE first edit (CORE-064)
+#
+# MULTI-SESSION CONTINUITY
+# ------------------------
+# The pre-work manifest is persisted to SQLite (.cortex-runtime/sweeps/).
+# If a VS Code GitHub Copilot Chat Session ends mid-work, the next session
+# RESUMES from the manifest — it does not restart. This is the mechanism that
+# enables autonomous execution across multiple chat sessions.
+# Session continuity key: sweep_id (UUID, set at Step 1, persisted, resumable)
+#
+# RESPONSE TEMPLATE BINDING
+# -------------------------
+# Every step that produces user-visible output MUST render via the CORTEX
+# Response Template (SSOT: .github/templates/cortex-response-templates.md).
+# No raw text output, no ad-hoc formatting. Template keys used:
+#   - pre_work_manifest: renders as § Pre-Work File Inventory table
+#   - post_work_diff:    renders as § Post-Work Verification table
+#   - gate_results:      renders as § Gate Status row per GATE-1 through GATE-5
+#
+# Golden tests: tests/golden/workflow/test_holistic_file_review_golden.py
+# =============================================================================
+
+workflow:
+  id: "governance/holistic-file-review-gate"
+  name: "Holistic File Review Gate"
+  version: "1.0.0"
+  category: "governance"
+  tier: "composite"  # composed from primitives
+
+  description: |
+    Full BEFORE/AFTER holistic file review gate for all multi-file operations.
+    Enforces CORE-065 (Holistic File Review Contract): every file in scope must
+    be analyzed holistically before and after work. Prevents partial sweeps at
+    the file-inventory level (complements CORE-064 which works at issue-catalogue
+    level). Enables multi-session continuity via SQLite sweep manifests.
+
+  metadata:
+    author: "CORTEX Architecture"
+    created: "2026-02-24"
+    phase: "64"
+    governance_rules:
+      - "CORE-065: Holistic File Review Contract"
+      - "CORE-064: Sweep Completeness Contract"
+      - "CORE-008: TDD-First Development"
+      - "CORE-002: All output inline"
+    golden_tests: "tests/golden/workflow/test_holistic_file_review_golden.py"
+    applies_to:
+      - "FIX (files_affected >= 2)"
+      - "REFACTOR (always)"
+      - "IMPLEMENT (files_affected >= 2)"
+      - "AUDIT (always)"
+    does_not_apply_to:
+      - "Single-file FIX with no cross-references"
+      - "QUERY / DIGEST / VACUUM (read-only)"
+
+  # ---------------------------------------------------------------------------
+  # IMPORTS — Primitive Templates
+  # ---------------------------------------------------------------------------
+  imports:
+    - primitive: "primitives/execution/audit-trace"
+      alias: "audit_trace"
+      mandatory: true
+    - primitive: "primitives/governance/sweep-catalogue-open"
+      alias: "sweep_open"
+      mandatory: true
+    - primitive: "primitives/governance/sweep-catalogue-close"
+      alias: "sweep_close"
+      mandatory: true
+    - primitive: "primitives/analysis/lens-ast-scan"
+      alias: "lens_scan"
+      mandatory: true
+    - primitive: "primitives/validation/detect-fix-rescan-loop"
+      alias: "convergence_loop"
+      mandatory: true
+
+  # ---------------------------------------------------------------------------
+  # INPUT SCHEMA
+  # ---------------------------------------------------------------------------
+  input:
+    required:
+      - name: "operation_type"
+        type: "ENUM"
+        values: ["FIX", "REFACTOR", "IMPLEMENT", "AUDIT"]
+      - name: "scope_files"
+        type: "List[Path]"
+        description: "All files that MAY be touched during this operation"
+      - name: "intent_description"
+        type: "str"
+        description: "Human-readable description of what the operation does"
+    optional:
+      - name: "risk_threshold"
+        type: "float"
+        default: 0.4
+        description: "Files with risk_score >= this are 'high-risk' and MUST be touched"
+      - name: "sweep_id"
+        type: "str"
+        default: null
+        description: "Resume existing sweep if provided (multi-session continuity)"
+      - name: "session_id"
+        type: "str"
+        default: null
+        description: "VS Code Copilot Chat Session ID for continuity tracking"
+
+  # ---------------------------------------------------------------------------
+  # STEPS
+  # ---------------------------------------------------------------------------
+  steps:
+
+    # ── STEP 0: Open AC trace + sweep catalogue ────────────────────────────
+    - id: step_0_open_session
+      name: "Open Audit Trace + Sweep Catalogue"
+      uses: ["audit_trace", "sweep_open"]
+      description: |
+        Emits AC_START marker. Opens (or resumes) SweepCatalogue in SQLite.
+        If sweep_id is provided, resumes existing session (multi-session continuity).
+      actions:
+        - emit: "AC_START: HolisticFileReviewGate:{operation_type}:{scope_files.count}"
+        - call: "SweepCatalogueOrchestrator.open_catalogue(operation_type, scope_files, resume_id=sweep_id)"
+      outputs:
+        - "sweep_id: str (UUID — persisted to SQLite for multi-session resume)"
+        - "session_continuity_key: str"
+      on_failure: "ABORT — cannot proceed without audit trace"
+
+    # ── STEP 1: PRE-WORK — LENS holistic file inventory ───────────────────
+    - id: step_1_pre_work_inventory
+      name: "PRE-WORK: Holistic File Inventory (BEFORE)"
+      uses: ["lens_scan"]
+      phase: "BEFORE"
+      description: |
+        LENS AST-scan all scope_files. For each file, capture:
+          - file_role: (source | test | config | template | governance)
+          - import_count: how many other files import this one
+          - test_coverage_pct: % of this file covered by current tests
+          - known_issues: open SweepCatalogue items for this file
+          - risk_score: float(0-1) — composite of import_count + (1 - test_coverage_pct)
+        Persisted to SQLite as pre_work_snapshot. Blocks on parse errors.
+      actions:
+        - call: "LENSOrchestrator.scan_file_inventory(scope_files)"
+        - call: "SweepCatalogueOrchestrator.record_pre_work_snapshot(sweep_id, inventory)"
+      outputs:
+        - "pre_work_snapshot: FileInventorySnapshot"
+        - "high_risk_files: List[Path]  # risk_score >= risk_threshold"
+        - "pre_lint_errors: int"
+        - "pre_test_count: int"
+      response_template_key: "pre_work_manifest"
+      blocks_on_failure: true
+      failure_message: |
+        PRE-WORK INVENTORY FAILED — {failed_files} could not be parsed.
+        Remediate before proceeding. This is CORE-065 gate.
+
+    # ── STEP 2: PRE-WORK — Render manifest for Copilot Chat Session ───────
+    - id: step_2_render_pre_manifest
+      name: "PRE-WORK: Render Pre-Work Manifest (VSCode Copilot Chat Response)"
+      phase: "BEFORE"
+      description: |
+        Render the pre_work_snapshot as a structured CORTEX response using
+        the canonical Response Template format. This is what the user sees
+        in the VS Code GitHub Copilot Chat Session BEFORE work begins.
+        Format governed by: .github/templates/cortex-response-templates.md
+      response_format:
+        template_section: "pre_work_manifest"
+        table_columns:
+          - "File"
+          - "Role"
+          - "Risk Score"
+          - "Open Issues"
+          - "Test Coverage"
+          - "Blast Radius (imports)"
+        progress_bar: true
+        header: "## 🔍 PRE-WORK FILE INVENTORY — {operation_type}"
+        footer: "**Scope:** {scope_files.count} files | **High-risk:** {high_risk_files.count} | **Sweep ID:** {sweep_id}"
+      session_continuity_note: |
+        This manifest is persisted. If this Copilot Chat Session ends, the next
+        session can resume by providing sweep_id: {sweep_id} to this template.
+
+    # ── STEP 3: WORK — Execute the actual operation ────────────────────────
+    - id: step_3_execute_work
+      name: "EXECUTE: {operation_type} — User-Supplied Steps"
+      phase: "DURING"
+      description: |
+        The actual FIX/REFACTOR/IMPLEMENT/AUDIT steps execute here.
+        These are caller-supplied — this template does not prescribe them.
+        Convergence loop primitive wraps this step automatically.
+      calls:
+        convergence_loop:
+          primitive: "primitives/validation/detect-fix-rescan-loop"
+          max_cycles: 10
+          success_criteria:
+            all_tests_pass: true
+            zero_regressions: true
+            lint_clean: true
+          convergence_predicate: "all_tests_pass and regressions == 0 and lint_errors == 0"
+          backoff_strategy: "linear"
+      note: "Caller injects their steps here. Template wraps with convergence loop."
+
+    # ── STEP 4: POST-WORK — LENS re-scan + gate verification ──────────────
+    - id: step_4_post_work_verification
+      name: "POST-WORK: Holistic Verification (AFTER)"
+      uses: ["lens_scan"]
+      phase: "AFTER"
+      description: |
+        Re-scan same scope_files. Compare post vs pre snapshot.
+        Evaluate all 5 gates. Block AC_COMPLETE if any gate fails.
+      actions:
+        - call: "LENSOrchestrator.scan_file_inventory(scope_files)"
+        - call: "SweepCatalogueOrchestrator.record_post_work_snapshot(sweep_id, inventory)"
+        - call: "HolisticFileReviewGate.evaluate_gates(pre_snapshot, post_snapshot)"
+      gates:
+        GATE-1:
+          name: "No Files Skipped"
+          assertion: "files_skipped_count == 0"
+          blocking: true
+          remediation: "Open and analyze all files that appear in pre_work_snapshot but were not touched"
+        GATE-2:
+          name: "High-Risk Files Touched"
+          assertion: "high_risk_files_touched == high_risk_files_total"
+          blocking: true
+          remediation: "The following high-risk files were not addressed: {untouched_high_risk_files}"
+        GATE-3:
+          name: "No New Lint Errors"
+          assertion: "post_lint_errors <= pre_lint_errors"
+          blocking: true
+          remediation: "Resolve {new_lint_errors} new lint errors before completing"
+        GATE-4:
+          name: "No Test Regression"
+          assertion: "test_count_after >= test_count_before"
+          blocking: true
+          remediation: "CORE-008 violation: test count dropped from {pre_test_count} to {post_test_count}"
+        GATE-5:
+          name: "Sweep Catalogue Exhausted"
+          assertion: "sweep_catalogue.open_items_count == 0"
+          blocking: true
+          remediation: "CORE-064: {open_items_count} items remain in sweep catalogue. Close all before AC_COMPLETE."
+      response_template_key: "post_work_diff"
+
+    # ── STEP 5: POST-WORK — Render post-work diff for Copilot Chat ────────
+    - id: step_5_render_post_manifest
+      name: "POST-WORK: Render Post-Work Verification (VSCode Copilot Chat Response)"
+      phase: "AFTER"
+      description: |
+        Render the gate results and diff as a structured CORTEX response.
+        All 5 gate statuses shown. Files changed table. Inline diff summary.
+        No report files (CORE-002) — all output in VS Code Copilot Chat Session.
+      response_format:
+        template_section: "post_work_diff"
+        table_columns:
+          - "Gate"
+          - "Status"
+          - "Details"
+        progress_bar: true
+        header: "## ✅ POST-WORK VERIFICATION — {operation_type}"
+        footer: "**Files changed:** {files_changed} | **Tests:** {pre_test_count}→{post_test_count} | **Sweep:** {sweep_id} ✅"
+
+    # ── STEP 6: Close sweep catalogue + emit AC_COMPLETE ──────────────────
+    - id: step_6_close_session
+      name: "Close Sweep Catalogue + Emit AC_COMPLETE"
+      uses: ["audit_trace", "sweep_close"]
+      phase: "AFTER"
+      description: |
+        Closes SweepCatalogue (persists final state). Emits AC_COMPLETE with
+        gate summary. Multi-session continuity: sweep remains queryable after close.
+      actions:
+        - call: "SweepCatalogueOrchestrator.assert_exhausted(sweep_id)"
+        - call: "SweepCatalogueOrchestrator.close_catalogue(sweep_id)"
+        - emit: "AC_COMPLETE: HolisticFileReviewGate:{operation_type} ✅ gates=[{gate_results}] files={files_changed} duration={duration_ms}ms"
+      on_gate_failure: "emit AC_COMPLETE ❌ with failed_gates list inline"
+
+  # ---------------------------------------------------------------------------
+  # MULTI-SESSION CONTINUITY PROTOCOL
+  # ---------------------------------------------------------------------------
+  multi_session_continuity:
+    description: |
+      Designed for autonomous execution across multiple VS Code GitHub Copilot
+      Chat Sessions. Every state transition is persisted to SQLite.
+      The next session resumes from last completed step, not from scratch.
+    persistence:
+      database: ".cortex-runtime/sweeps/{sweep_id}.db"
+      schema:
+        holistic_review_sessions: "sweep_id, operation_type, session_id, step_last_completed, pre_snapshot_json, post_snapshot_json, gate_results_json, created_at, updated_at"
+      resume_protocol: |
+        1. New session starts: check SweepCatalogueOrchestrator.list_open_sweeps()
+        2. If open sweep exists for same operation_type + scope_files: RESUME
+        3. Resume at step_last_completed + 1 — do not repeat completed steps
+        4. Render resume_banner: "▶️ RESUMING sweep {sweep_id} from Step {step_num}"
+    session_handoff_format: |
+      When a session ends mid-sweep, the last Copilot Chat response MUST include:
+        ```
+        ## ⏸️ SESSION PAUSE — Work In Progress
+        **Sweep ID:** {sweep_id}
+        **Last completed step:** {step_name}
+        **Files remaining:** {remaining_files}
+        **Open catalogue items:** {open_items_count}
+        **Resume command:** "resume sweep {sweep_id}"
+        ```
+
+  # ---------------------------------------------------------------------------
+  # RESPONSE TEMPLATE INTEGRATION
+  # ---------------------------------------------------------------------------
+  response_template_integration:
+    ssot: ".github/templates/cortex-response-templates.md"
+    required_sections:
+      - "pre_work_manifest"
+      - "post_work_diff"
+      - "gate_results"
+      - "session_pause_banner (on mid-session exit)"
+    enforcement: "CORE-066: Response Template Binding — every user-visible output MUST render via canonical Response Template. Raw text output is a P1 governance violation."
+
+  # ---------------------------------------------------------------------------
+  # COMPOSITES THAT USE THIS TEMPLATE
+  # ---------------------------------------------------------------------------
+  used_by:
+    - "audit/audit-fix-pipeline.yaml (Stages 7–8 wrap)"
+    - "governance/request-execution-plan-gate.yaml (IMPLEMENT/FIX/REFACTOR path)"
+    - "Phase 64 sub-phases: 64-A, 64-B, 64-C, 64-D, 64-E, 64-F"
+    - "Phase 65 sub-phases: MCP auth wiring, ImportError sweep"
+    - "All future phases via TemplateComposer auto-injection (CORE-065)"
+
+  # ---------------------------------------------------------------------------
+  # GOVERNANCE RULES ENFORCED BY THIS TEMPLATE
+  # ---------------------------------------------------------------------------
+  governance_enforcement:
+    - rule: "CORE-065"
+      name: "Holistic File Review Contract"
+      summary: "Every multi-file operation MUST run BEFORE/AFTER file inventory via this template"
+      violation_severity: "P0"
+      auto_enforced_by: "TemplateComposer (injects at index 0), EnforcementOrchestrator (pre-commit)"
+    - rule: "CORE-066"
+      name: "Response Template Binding"
+      summary: "Every user-visible output in a workflow MUST render via canonical Response Template"
+      violation_severity: "P1"
+      auto_enforced_by: "ResponseTemplateValidator (post-step hook)"

@@ -1970,6 +1970,180 @@ rules:
       blocks_until: "SweepCatalogueOrchestrator implemented + MasterOrchestrator gates active"
       remediation_status: "🔵 IN_PROGRESS — Phase 16 implementation pending"
 
+  # CORE-065: Holistic File Review Contract (Phase 64 — 2026-02-24)
+  - rule_id: CORE-065
+    tier: 0
+    status: ACTIVE
+    phase: 64
+    created: "2026-02-24"
+    name: Holistic File Review Contract
+    severity: P0
+    summary: >
+      Every multi-file FIX, REFACTOR, IMPLEMENT, or AUDIT operation MUST
+      perform a BEFORE/AFTER holistic file inventory via the
+      holistic-file-review-gate workflow template. Prevents partial sweeps at
+      the file-inventory level — complements CORE-064 which works at the
+      issue-catalogue level. Enables autonomous execution across multiple VS
+      Code GitHub Copilot Chat Sessions via SQLite-persisted sweep manifests.
+
+    rationale: |
+      Reviews 01–05 unanimously identified partial sweeps as the primary source
+      of recurring regressions: CORE-064 catches when a catalogued issue is
+      left open, but it cannot catch when a file that SHOULD be in scope was
+      never added to the catalogue in the first place.
+      Example: a REFACTOR touching orchestrator_base.py without also touching
+      the 24 orchestrators that extend it — CORE-064 misses this because those
+      24 files were never catalogued. CORE-065 catches it at GATE-2 (high-risk
+      files not touched).
+
+      Additionally, every review noted that "aspirational YAML" (S01–S25
+      expected_audit_events) was never enforced in Python. CORE-065 mandates
+      the BEFORE snapshot as machine-verifiable contract, not aspirational doc.
+
+    applies_to:
+      - "FIX intents — when files_affected >= 2"
+      - "REFACTOR intents — always"
+      - "IMPLEMENT intents — when files_affected >= 2"
+      - "AUDIT intents — always"
+
+    exempt:
+      - "Single-file FIX with no cross-file references (blast_radius == 0)"
+      - "QUERY / DIGEST / VACUUM / DESIGN / PLAN / REPHRASE (read-only or planning)"
+
+    gates:
+      GATE-1: "files_skipped_count == 0 (every in-scope file must be analyzed)"
+      GATE-2: "high_risk_files_touched == high_risk_files_total (risk_score >= 0.4)"
+      GATE-3: "post_lint_errors <= pre_lint_errors (no new lint errors introduced)"
+      GATE-4: "test_count_after >= test_count_before (no test regression — CORE-008)"
+      GATE-5: "sweep_catalogue.open_items_count == 0 (CORE-064 exhausted)"
+
+    implementation:
+      workflow_template: "cortex-registry/workflows/templates/governance/holistic-file-review-gate.yaml"
+      pre_work_step: "LENSOrchestrator.scan_file_inventory(scope_files) → SQLite pre_work_snapshot"
+      post_work_step: "LENSOrchestrator.scan_file_inventory(scope_files) → gate evaluation"
+      persistence: ".cortex-runtime/sweeps/{sweep_id}.db (schema: holistic_review_sessions)"
+      auto_injected_by: "TemplateComposer (index 0 of every sweep-required composed template)"
+      enforced_by: "EnforcementOrchestrator pre-commit hook"
+
+    multi_session_continuity:
+      description: |
+        The pre-work snapshot is persisted to SQLite. If a VS Code Copilot Chat
+        Session ends mid-work, the next session resumes from step_last_completed.
+        Resume trigger: 'resume sweep {sweep_id}'
+        Resume protocol: SweepCatalogueOrchestrator.list_open_sweeps() checked at session start.
+      session_pause_banner: "Rendered via copilot-chat-response-template.yaml § session_pause_banner"
+
+    tests:
+      golden_test_file: "tests/golden/workflow/test_holistic_file_review_golden.py"
+      acceptance_criteria:
+        - id: "AC-065-A"
+          test_name: "test_gate1_blocks_when_files_skipped"
+          assertion: "holistic-file-review-gate GATE-1 blocks AC_COMPLETE when any scope file was skipped"
+        - id: "AC-065-B"
+          test_name: "test_gate2_blocks_when_high_risk_file_untouched"
+          assertion: "GATE-2 blocks when a file with risk_score >= 0.4 was not analyzed after the operation"
+        - id: "AC-065-C"
+          test_name: "test_pre_work_snapshot_persisted_to_sqlite"
+          assertion: "pre_work_snapshot written to holistic_review_sessions table in sweep SQLite DB"
+        - id: "AC-065-D"
+          test_name: "test_session_resume_starts_at_last_completed_step"
+          assertion: "new chat session with same sweep_id resumes at step_last_completed + 1"
+        - id: "AC-065-E"
+          test_name: "test_session_pause_banner_rendered_on_incomplete_exit"
+          assertion: "session_pause_banner with sweep_id rendered when open_items_count > 0 at session end"
+        - id: "AC-065-F"
+          test_name: "test_template_composer_auto_injects_holistic_gate"
+          assertion: "TemplateComposer injects holistic-file-review-gate at index 0 for all FIX/REFACTOR/IMPLEMENT/AUDIT composed templates"
+
+    governance_dependency:
+      requires: "CORE-064 (Sweep Completeness), CORE-008 (TDD), CORE-027 (Audit trail), CORE-049 (Silent autonomous)"
+      enables: "Autonomous multi-session execution — each session resumes cleanly without restart"
+      blocks_until: "holistic-file-review-gate.yaml wired into TemplateComposer and MasterOrchestrator._pre_routing_gate()"
+      remediation_status: "🔵 PLANNED — Phase 64 implementation"
+      AC_COMPLETE: "AC-P64-CORE065-001 (pending)"
+
+  # CORE-066: Response Template Binding (Phase 64 — 2026-02-24)
+  - rule_id: CORE-066
+    tier: 0
+    status: ACTIVE
+    phase: 64
+    created: "2026-02-24"
+    name: Response Template Binding
+    severity: P1
+    summary: >
+      Every user-visible output produced by a CORTEX workflow step in a VS Code
+      GitHub Copilot Chat Session MUST be rendered through the canonical
+      copilot-chat-response-template workflow template. Raw dict output, ad-hoc
+      text, or unstructured markdown from workflow steps is a P1 governance
+      violation. SSOT for format: .github/templates/cortex-response-templates.md.
+
+    rationale: |
+      Reviews 01–05 found inconsistent response formatting as a cross-cutting
+      issue: some orchestrators emitted raw text, some skipped the canonical
+      Author/Orchestrator header, pre/post work manifests had no standard schema,
+      and session pause banners were ad-hoc. This creates a documentation-reality
+      gap (anti-pattern #4 from copilot-reviews-consolidated.md) in the UX layer.
+      CORE-066 makes the response format a governed contract, not a convention.
+
+    applies_to:
+      - "All workflow template steps that produce user-visible output"
+      - "All MCP tool responses (cortex_vacuum, cortex_knowledge, cortex_refactor, etc.)"
+      - "All orchestrator responses routed through MasterOrchestrator"
+      - "Pre-work manifest, post-work diff, violations table, stage table, session pause banner"
+
+    exempt:
+      - "Terminal output (stdout) — unformatted is acceptable"
+      - "SQLite writes — internal, not user-visible"
+      - "Log lines — internal, not user-visible"
+
+    required_sections:
+      always: ["header"]
+      for_multi_step: ["progress_bar"]
+      for_pre_work: ["pre_work_manifest"]
+      for_post_work: ["post_work_diff", "gate_results"]
+      for_audit: ["violations_table"]
+      for_paused_session: ["session_pause_banner"]
+
+    header_contract:
+      format: "**Author:** {author} | **Orchestrator:** {orchestrator_name} ✅ | **Mode:** {execution_mode} | {timestamp}"
+      author_ssot: "Asif Hussain"
+      auto_fix: "Restore from SSOT when author field is missing or incorrect"
+
+    implementation:
+      workflow_template: "cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml"
+      ssot: ".github/templates/cortex-response-templates.md"
+      validator: "ResponseTemplateValidator (post-step hook in workflow engine)"
+      auto_fix: "Wrap raw output in nearest matching section template"
+
+    tests:
+      golden_test_file: "tests/golden/response/test_response_templates_golden.py"
+      acceptance_criteria:
+        - id: "AC-066-A"
+          test_name: "test_implement_mode_response_has_canonical_header"
+          assertion: "IMPLEMENT response includes '**Author:** Asif Hussain | **Orchestrator:** TDDOrchestrator ✅'"
+        - id: "AC-066-B"
+          test_name: "test_all_modes_have_progress_bar"
+          assertion: "all 14 execution modes (13 + GOLDEN_TEST) produce response with exactly 10-block progress bar"
+        - id: "AC-066-C"
+          test_name: "test_audit_mode_response_has_violations_table"
+          assertion: "AUDIT response with violations produces inline P0/P1/P2 violations table"
+        - id: "AC-066-D"
+          test_name: "test_session_pause_banner_present_on_incomplete_sweep"
+          assertion: "session_pause_banner rendered as last output when sweep has open_items > 0"
+        - id: "AC-066-E"
+          test_name: "test_raw_dict_output_is_p1_violation"
+          assertion: "ResponseTemplateValidator raises P1 when any workflow step emits raw dict"
+        - id: "AC-066-F"
+          test_name: "test_mcp_tool_responses_use_response_template"
+          assertion: "cortex_vacuum, cortex_knowledge, cortex_refactor responses pass ResponseTemplateValidator"
+
+    governance_dependency:
+      requires: "CORE-002 (All output inline), CORE-049 (Silent autonomous)"
+      enables: "Consistent user experience across all 14 execution modes and all 26 MCP tools"
+      blocks_until: "copilot-chat-response-template.yaml wired into WorkflowEngine post-step hook"
+      remediation_status: "🔵 PLANNED — Phase 64 implementation"
+      AC_COMPLETE: "AC-P64-CORE066-001 (pending)"
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================

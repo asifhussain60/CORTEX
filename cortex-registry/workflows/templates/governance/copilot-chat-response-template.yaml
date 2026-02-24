@@ -1,0 +1,265 @@
+# =============================================================================
+# WORKFLOW TEMPLATE: VSCode Copilot Chat Response Template Rendering
+# =============================================================================
+# Version:  1.0.0
+# Created:  2026-02-24
+# Phase:    64 — Unified Brain Golden Coverage
+# Authority: CORE-066, CORE-002, CORE-049
+#
+# PURPOSE
+# -------
+# Governs how EVERY user-visible output produced by a CORTEX workflow is
+# rendered into a VS Code GitHub Copilot Chat Session response.
+# This template is the SSOT for response format. All workflow templates
+# import this to produce their user-facing output sections.
+#
+# PROBLEM THIS SOLVES
+# -------------------
+# Reviews 01–05 found that response formatting was inconsistent:
+# - Some orchestrators emitted raw text (no header, no progress bar)
+# - Some skipped the Author/Orchestrator canonical header
+# - Pre/post work manifests had no standard table schema
+# - Session pause banners were ad-hoc text
+# - MCP tool responses were unformatted dicts
+# CORE-066 and this template standardize all of the above.
+#
+# RESPONSE STRUCTURE (canonical — all sections optional except HEADER)
+# ─────────────────────────────────────────────────────────────────────
+# [HEADER]           Author + Orchestrator + Mode + timestamp
+# [PROGRESS_BAR]     10-block bar, current stage/total
+# [PRE_WORK_MANIFEST] File inventory table (before work) — holistic-file-review-gate
+# [STAGE_TABLE]      Per-stage status (✅/🔵/⚪/🔴) — audit and multi-stage ops
+# [VIOLATIONS_TABLE] P0/P1/P2 inline violations — audit mode
+# [POST_WORK_DIFF]   File change diff table (after work) — holistic-file-review-gate
+# [GATE_RESULTS]     GATE-1 through GATE-N status — holistic-file-review-gate
+# [SESSION_PAUSE]    Pause banner with sweep_id + resume command — mid-session exit
+# [AC_COMPLETE]      Final status line with timing
+#
+# SSOT: .github/templates/cortex-response-templates.md
+# Golden tests: tests/golden/response/test_response_templates_golden.py
+# =============================================================================
+
+workflow:
+  id: "governance/copilot-chat-response-template"
+  name: "VSCode Copilot Chat Response Template Rendering"
+  version: "1.0.0"
+  category: "governance"
+  tier: "primitive"
+
+  description: |
+    Canonical response rendering template for all VS Code GitHub Copilot Chat
+    Session outputs from CORTEX workflows. Enforces CORE-066: every user-visible
+    output from a workflow step MUST be rendered through this template.
+    Imported by all composite workflow templates (holistic-file-review-gate,
+    audit-fix-pipeline, request-execution-plan-gate, golden-test-promotion).
+
+  metadata:
+    author: "CORTEX Architecture"
+    created: "2026-02-24"
+    phase: "64"
+    ssot: ".github/templates/cortex-response-templates.md"
+    governance_rules:
+      - "CORE-066: Response Template Binding"
+      - "CORE-002: All output inline — never create .md/.txt files"
+      - "CORE-049: Silent autonomous execution — progress bars only"
+    golden_tests: "tests/golden/response/test_response_templates_golden.py"
+
+  # ---------------------------------------------------------------------------
+  # CANONICAL HEADER (REQUIRED — all responses)
+  # ---------------------------------------------------------------------------
+  header:
+    format: "**Author:** {author} | **Orchestrator:** {orchestrator_name} ✅ | **Mode:** {execution_mode} | {timestamp}"
+    required_fields:
+      - author: "Asif Hussain"    # SSOT — never changed
+      - orchestrator_name: "str"  # e.g. 'TDDOrchestrator', 'AuditCoordinator'
+      - execution_mode: "ENUM"    # IMPLEMENT | FIX | REFACTOR | AUDIT | GOLDEN_TEST | etc.
+    optional_fields:
+      - timestamp: "ISO-8601 compact (2026-02-24T14:32:00Z)"
+      - sweep_id: "str — append if this response is part of a sweep"
+    validation: |
+      If author != 'Asif Hussain' or orchestrator_name is empty → CORE-066 P1 violation.
+      Auto-fix: restore from SSOT.
+
+  # ---------------------------------------------------------------------------
+  # PROGRESS BAR (REQUIRED for multi-step operations)
+  # ---------------------------------------------------------------------------
+  progress_bar:
+    format: "[{filled}{'░' * empty}] {pct}%  {stage_label}"
+    rules:
+      - "Exactly 10 blocks (filled='█', empty='░')"
+      - "Never fenced in a code block"
+      - "One line only — no wrapping"
+      - "Show in Chat Session, not in terminal"
+    examples:
+      - "[██░░░░░░░░] 20%  Stage 1/5: PRE-WORK Inventory"
+      - "[█████░░░░░] 50%  Stage 3/5: Executing REFACTOR"
+      - "[██████████] 100%  Stage 5/5: POST-WORK Verification ✅"
+    placement: "Immediately after HEADER, before any table or content"
+
+  # ---------------------------------------------------------------------------
+  # SECTION TEMPLATES
+  # ---------------------------------------------------------------------------
+  sections:
+
+    pre_work_manifest:
+      trigger: "holistic-file-review-gate — BEFORE phase"
+      header: "## 🔍 PRE-WORK FILE INVENTORY"
+      table:
+        columns:
+          - name: "File"
+            width: "auto"
+          - name: "Role"
+            values: ["source", "test", "config", "template", "governance"]
+          - name: "Risk"
+            format: "{risk_score:.1f}"
+            color_code: "🔴 ≥0.7 | 🟡 0.4–0.69 | 🟢 <0.4"
+          - name: "Open Issues"
+            format: "{open_issues_count} ({P0}/{P1}/{P2})"
+          - name: "Test Coverage"
+            format: "{coverage_pct}%"
+          - name: "Blast Radius"
+            format: "{import_count} imports"
+      footer: |
+        **Scope:** {scope_files.count} files | **High-risk:** {high_risk_files.count} |
+        **Sweep ID:** {sweep_id} | **Session:** {session_id}
+      session_continuity: |
+        > 💾 Pre-work snapshot persisted. Resume: `"resume sweep {sweep_id}"`
+
+    post_work_diff:
+      trigger: "holistic-file-review-gate — AFTER phase"
+      header: "## ✅ POST-WORK VERIFICATION"
+      table:
+        columns:
+          - name: "File"
+            width: "auto"
+          - name: "Status"
+            values: ["✅ Reviewed", "⚠️ Partial", "🔴 Skipped", "➕ New", "🗑️ Deleted"]
+          - name: "Changes"
+            format: "+{lines_added}/-{lines_removed}"
+          - name: "Risk Δ"
+            format: "{risk_before:.1f} → {risk_after:.1f}"
+          - name: "Tests Δ"
+            format: "+{tests_added}"
+      gate_results_table:
+        columns:
+          - name: "Gate"
+          - name: "Status"
+            values: ["✅ PASS", "🔴 FAIL"]
+          - name: "Detail"
+      footer: |
+        **Files changed:** {files_changed} / {scope_files.count} |
+        **Tests:** {pre_test_count} → {post_test_count} |
+        **Lint:** {pre_lint_errors} → {post_lint_errors} |
+        **Sweep:** {sweep_id} ✅
+
+    violations_table:
+      trigger: "AUDIT mode — any P0/P1/P2 found"
+      header: "## 🔎 VIOLATIONS"
+      table:
+        columns:
+          - name: "Severity"
+            values: ["🔴 P0", "🟡 P1", "⚪ P2"]
+          - name: "Rule"
+            format: "CORE-{num}"
+          - name: "File"
+            format: "path/to/file.py:line"
+          - name: "Description"
+          - name: "Remediation"
+      footer: "**Total:** {p0_count} P0 | {p1_count} P1 | {p2_count} P2 — Auto-fix available for {auto_fixable_count}"
+
+    stage_table:
+      trigger: "multi-stage operations (audit-fix-pipeline, etc.)"
+      header: "## 📋 STAGE STATUS"
+      table:
+        columns:
+          - name: "Stage"
+          - name: "Name"
+          - name: "Status"
+            values: ["✅ Complete", "🔵 Active", "⚪ Pending", "🔴 Failed"]
+          - name: "Duration"
+            format: "{duration_ms}ms"
+          - name: "Notes"
+
+    session_pause_banner:
+      trigger: "Mid-session exit (user ends chat session before sweep is complete)"
+      format: |
+        ## ⏸️ SESSION PAUSE — Work In Progress
+        > This sweep is paused. Resume in your next VS Code Copilot Chat Session.
+
+        | Field | Value |
+        |-------|-------|
+        | **Sweep ID** | `{sweep_id}` |
+        | **Last completed step** | {step_name} ({step_index}/{total_steps}) |
+        | **Files remaining** | {remaining_files_count} ({remaining_file_list}) |
+        | **Open catalogue items** | {open_items_count} ({P0}/{P1}/{P2}) |
+        | **Resume command** | `resume sweep {sweep_id}` |
+
+        > 💾 State persisted to `.cortex-runtime/sweeps/{sweep_id}.db`
+      enforcement: |
+        If a session ends while sweep_catalogue.open_items_count > 0, this banner
+        MUST be the last rendered output. Missing banner = CORE-066 P1 violation.
+
+    golden_test_intent:
+      trigger: "GOLDEN_TEST intent — review, create, enhance, consolidate, delete of golden tests, workflow templates, response templates"
+      header: "## 🧪 GOLDEN TEST OPERATION"
+      sections:
+        - "Scope: {operation} on {target_files}"
+        - "Pre-work inventory (via holistic-file-review-gate)"
+        - "TDD sequence: RED → GREEN → REFACTOR"
+        - "Post-work gate verification"
+      routing: "TDDOrchestrator via IntentType.GOLDEN_TEST"
+
+  # ---------------------------------------------------------------------------
+  # EXECUTION MODE → TEMPLATE SECTION MATRIX
+  # ---------------------------------------------------------------------------
+  mode_section_matrix:
+    description: "Which sections are required (✅) or optional (⚪) per execution mode"
+    matrix:
+      #                          header  progress  pre_manifest  stage_table  violations  post_diff  gate_results  session_pause
+      IMPLEMENT:               ["✅",   "✅",     "✅",         "⚪",        "⚪",       "✅",      "✅",         "if paused"]
+      FIX:                     ["✅",   "✅",     "✅",         "⚪",        "✅",       "✅",      "✅",         "if paused"]
+      REFACTOR:                ["✅",   "✅",     "✅",         "⚪",        "⚪",       "✅",      "✅",         "if paused"]
+      AUDIT:                   ["✅",   "✅",     "⚪",         "✅",        "✅",       "⚪",      "⚪",         "if paused"]
+      GOLDEN_TEST:             ["✅",   "✅",     "✅",         "⚪",        "⚪",       "✅",      "✅",         "if paused"]
+      DESIGN:                  ["✅",   "⚪",     "⚪",         "⚪",        "⚪",       "⚪",      "⚪",         "never"]
+      PLAN:                    ["✅",   "⚪",     "⚪",         "⚪",        "⚪",       "⚪",      "⚪",         "never"]
+      QUERY:                   ["✅",   "⚪",     "⚪",         "⚪",        "⚪",       "⚪",      "⚪",         "never"]
+      VACUUM:                  ["✅",   "✅",     "⚪",         "✅",        "⚪",       "⚪",      "⚪",         "if paused"]
+      HEALTH:                  ["✅",   "✅",     "⚪",         "✅",        "✅",       "⚪",      "⚪",         "never"]
+      DEBUG:                   ["✅",   "✅",     "✅",         "⚪",        "✅",       "✅",      "✅",         "if paused"]
+
+  # ---------------------------------------------------------------------------
+  # LOOPED REFACTORING CONTINUITY
+  # ---------------------------------------------------------------------------
+  looped_refactoring_continuity:
+    description: |
+      For operations that span multiple VS Code Copilot Chat Sessions (e.g. a
+      large REFACTOR of 40+ files), this template defines the loop contract:
+      1. Each session begins by checking SweepCatalogueOrchestrator.list_open_sweeps()
+      2. If an open sweep exists: render resume_banner, continue from last_completed_step
+      3. Each file batch renders pre_work_manifest (BEFORE) and post_work_diff (AFTER)
+      4. Session ends: render session_pause_banner if work incomplete
+      5. Final session: all gates pass → render post_work_diff with full summary
+    batch_size: 10  # files per session (configurable)
+    loop_template: "primitives/validation/detect-fix-rescan-loop"
+    persistence: ".cortex-runtime/sweeps/{sweep_id}.db"
+    resume_trigger: "resume sweep {sweep_id}"
+
+  # ---------------------------------------------------------------------------
+  # VALIDATION (CORE-066 enforcement)
+  # ---------------------------------------------------------------------------
+  validation:
+    pre_render_checks:
+      - "header.author == 'Asif Hussain'"
+      - "header.orchestrator_name is not empty"
+      - "header.execution_mode is in ExecutionMode enum"
+      - "progress_bar has exactly 10 blocks if multi-step"
+    post_render_checks:
+      - "No raw dict output (all structured through table/section templates)"
+      - "No fenced code blocks in progress_bar"
+      - "No .md/.txt files created (CORE-002)"
+      - "session_pause_banner present if sweep.open_items_count > 0 at session end"
+    violation_actions:
+      P0: "Block AC_COMPLETE — raw output is a compliance violation"
+      P1: "Warn inline — missing optional section"
+      auto_fix: "Wrap raw output in nearest matching section template"
