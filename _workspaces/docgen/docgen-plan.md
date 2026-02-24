@@ -1330,3 +1330,61 @@ Transform the "Curious Learner" into a structured **Academy**:
 *   🔄 **Phase 2 In-Progress:** Ready to refactor layout containers.
 
 **Architectural Fit:** 10/10 (Extensibility protected via CSS variables; Scalability via static HTML generation; Maintainability via strict 12-col grid).
+
+---
+
+## 🧪 CORTEX Documentation Test Harness
+
+**AC_START: AC-DOCGEN-TEST-HARNESS-20260224T000000**
+
+### Architecture Overview
+
+The CORTEX Documentation Test Harness ensures all views in `cortex-docs/` render correctly with consistent structure and data integrity. The test suite validates:
+
+1. **Content Integrity** — All JSON entries map to source files
+2. **Role Views** — All 4 role HTML files load and render correctly
+3. **Learning Paths** — Beginner/Intermediate/Advanced views validate
+4. **Data Files** — All JSON files have proper structure
+5. **JS Integration** — content-loader.js DOM rendering via Playwright
+
+### Test Structure
+
+```
+cortex-docs/tests/
+├── conftest.py                          ← Shared fixtures (JSON loaders, HTML parsers)
+├── roles/
+│   └── test_role_views.py              ← 4 role HTML validation (business-leader, product-owner, etc.)
+├── learning/
+│   └── test_learning_paths.py          ← Learning path progression validation
+├── data/
+│   ├── test_content_integrity.py       ← content.json ↔ .content/ alignment
+│   └── test_data_files.py              ← JSON schema validation (5 files)
+└── pipeline/
+    └── test_js_integration.py          ← Playwright browser tests (DOM rendering)
+```
+
+### Test Coverage
+
+| Test Suite | Tests | Coverage |
+|------------|-------|----------|
+| **Content Integrity** | 14 tests | Categories, files, roles, HTML structure, word counts, dates |
+| **Role Views** | 11 tests | HTML existence, structure, CSS loading, JS integration, navigation |
+| **Learning Paths** | 11 tests | Directory structure, index.html, JSON alignment, progression |
+| **Data Files** | 15 tests | JSON validity, schema compliance, encoding, file sizes |
+| **JS Integration** | 9 tests | Playwright DOM tests, static JS analysis, error handling |
+| **Total** | **60 tests** | **Full stack coverage** (HTML → JSON → JS → Browser) |
+
+### Running Tests
+
+```powershell
+# Run all documentation tests
+pytest cortex-docs/tests/ -v
+
+# Run specific suite
+pytest cortex-docs/tests/roles/test_role_views.py -v
+
+# Skip Playwright (CI)
+pytest cortex-docs/tests/ -v -m "not skipif"
+```
+
+**AC_COMPLETE: AC-DOCGEN-TEST-HARNESS-20260224T000000 ✅**
