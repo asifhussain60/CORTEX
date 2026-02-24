@@ -1,10 +1,10 @@
 # Orchestration Overview
 
 ---
-title: CORTEX Orchestration — 22 Wired Orchestrators Across 3 Tiers
+title: CORTEX Orchestration — 27 Wired Orchestrators Across 3 Tiers
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-21
+last_verified: 2026-02-24
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 order: 1
 ---

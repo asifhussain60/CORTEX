@@ -4,8 +4,8 @@
 title: CORTEX Capabilities — Complete Platform Inventory
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-23
-source_of_truth: cortex/ + cortex-registry/ + cortex-registry/planning/cortex-refactor-master.yaml
+last_verified: 2026-02-24
+source_of_truth: cortex/ + cortex-registry/cortex-master.yaml
 format: diátaxis-explanation
 order: 1
 ---
@@ -148,7 +148,7 @@ Every IMPLEMENT and FIX operation follows mandatory RED → GREEN → REFACTOR:
 
 This is not optional. CORE-008 is enforced at the architecture level.
 
-### 22 Wired Orchestrators Across 3 Tiers
+### 27 Wired Orchestrators Across 3 Tiers
 
 | Tier | Count | Key Orchestrators |
 |------|-------|-----------------|
@@ -170,7 +170,7 @@ Enforced at pre-commit, CI, and runtime. Full list in `cortex-registry/core/tier
 
 Key rules added today:
 - **CORE-064** — Sweep Completeness Contract: every FIX/REFACTOR/AUDIT sweep exhausts its catalogue before closing
-- **CORE-055** — Golden Test Tier Contract: 696 golden tests always pass
+- **CORE-055** — Golden Test Tier Contract: 486 golden tests always pass
 
 ### 10 Enforcement Agents
 

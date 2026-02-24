@@ -1,10 +1,10 @@
 # Orchestration Overview
 
 ---
-title: CORTEX Orchestration — 22 Wired Orchestrators Across 3 Tiers
+title: CORTEX Orchestration — 27 Wired Orchestrators Across 3 Tiers
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-21
+last_verified: 2026-02-24
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 order: 1
 ---
@@ -84,4 +84,4 @@ This audit logging is non-blocking — a failure to log never prevents execution
 
 ---
 
-*Orchestrator count verified via `grep -r 'class.*Orchestrator' cortex/orchestrators/` · 20 February 2026*
+*Orchestrator count verified via `grep -r 'class.*Orchestrator' cortex/orchestrators/` · 24 February 2026*

@@ -4,13 +4,13 @@
 title: CORTEX — Cognitive Real-Time Execution Platform
 type: overview
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-22
-source_of_truth: cortex/ + cortex-registry/planning/cortex-refactor-master.yaml
+last_verified: 2026-02-24
+source_of_truth: cortex/ + cortex-registry/cortex-master.yaml
 format: one-pager
 order: 1
 ---
 
-> **What is CORTEX?** A production-grade AI engineering framework that combines cognitive intelligence, automated governance, and a 22-orchestrator execution engine to help engineering teams ship faster — with confidence.
+> **What is CORTEX?** A production-grade AI engineering framework that combines cognitive intelligence, automated governance, and a 27-orchestrator execution engine to help engineering teams ship faster — with confidence.
 
 ---
 
@@ -28,8 +28,8 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 ```
   ┌───────────────────────────────────────────────────────────────┐
-  │                  CORTEX PLATFORM v1.0.0                       │
-  │                  1 Package · 17 Orchestrators · 26 MCP Tools  │
+  │                  CORTEX PLATFORM v1.0.0 (Phase 62)            │
+  │                  1 Package · 27 Orchestrators · 26 MCP Tools  │
   │                                                               │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ MCP Gateway  │─▶│  Orchestration    │─▶│ Intelligence  │  │
@@ -41,7 +41,7 @@ Think of it like the difference between a calculator and a brain. A calculator w
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ Governance   │  │  Testing          │  │ Git Registry  │  │
   │  │ 35 CORE rules│  │  15,739 tests     │  │ YAML SSOT     │  │
-  │  │ CORE-064     │  │  696 golden       │  │ 9 patterns    │  │
+  │  │ CORE-064     │  │  486 golden       │  │ Simplified    │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   └───────────────────────────────────────────────────────────────┘
 ```
@@ -121,7 +121,7 @@ Every action runs through governance enforcement:
 - **CORE-035** — Single canonical implementation (no duplicates)
 - **CORE-028** — File naming: snake_case only
 - **CORE-064** — Sweep Completeness Contract (no partial sweeps across session boundaries)
-- **CORE-055** — Golden Test Tier Contract (696 golden tests always pass)
+- **CORE-055** — Golden Test Tier Contract (486 golden tests always pass)
 
 ---
 
@@ -144,7 +144,7 @@ Every action runs through governance enforcement:
 - **Transport:** stdio (development) / HTTP (production)
 - **Package:** 1 canonical Python package (`cortex`) — all imports use `cortex.*`
 - **Storage:** Git-backed registry — no PostgreSQL, no MongoDB required
-- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 15,739 tests, 696 golden
+- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 15,739 tests, 486 golden
 - **Observability:** OpenTelemetry tracing, Prometheus metrics, Grafana dashboards, SQLite audit log (`.cortex-runtime/audit.db`)
 - **Languages analyzed by LENS:** Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue
 

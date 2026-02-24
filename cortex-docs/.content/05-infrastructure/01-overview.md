@@ -33,7 +33,7 @@ order: 1
 ## Architecture Layers
 
 ```
-[Application Layer — 22 Wired Orchestrators (3 Tiers)]
+[Application Layer — 27 Wired Orchestrators (3 Tiers)]
          │
          ▼
 [Infrastructure Layer — cortex/infrastructure/]
