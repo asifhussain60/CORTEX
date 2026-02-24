@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Documentation | Sitemap</title>
+    <meta name="description" content="Complete structural overview of the CORTEX Documentation ecosystem.">
+    <link rel="icon" href="assets/images/CORTEX-logo-64.png" type="image/png">
+    
+    <!-- Design System -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="assets/css/cortex-grid-system.css">
+    <link rel="stylesheet" href="assets/css/glassmorphism.css">
+    <link rel="stylesheet" href="assets/css/glass-ui-components.css">
+    
+    <style>
+        /* Sitemap Specific Styles */
+        :root {
+            --tree-line-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .sitemap-header {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: radial-gradient(circle at 50% 50%, rgba(123, 97, 255, 0.1) 0%, transparent 70%);
+        }
+
+        .sitemap-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #a5f3fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .sitemap-tree {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .sitemap-section {
+            margin-bottom: 3rem;
+        }
+
+        .node-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .node-link:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--accent-primary);
+            transform: translateX(5px);
+        }
+
+        .node-icon {
+            margin-right: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .node-title {
+            font-weight: 600;
+            flex-grow: 1;
+        }
+
+        .node-meta {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            padding: 0.2rem 0.6rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        /* Dynamic Content List */
+        .content-list {
+            margin-left: 2rem;
+            border-left: 1px solid var(--tree-line-color);
+            padding-left: 1rem;
+            margin-top: 1rem;
+        }
+
+        .content-item {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-item a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .content-item a:hover {
+            color: var(--accent-primary);
+        }
+
+        .content-item::before {
+            content: '';
+            width: 10px;
+            height: 1px;
+            background: var(--tree-line-color);
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+
+        /* Role Badges */
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-left: 0.5rem;
+        }
+
+        .role-badge--learner { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .role-badge--engineer { background: rgba(0, 212, 255, 0.2); color: #00d4ff; }
+        .role-badge--business { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .role-badge--product { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+    </style>
+</head>
+<body class="glass-bg">
+    
+    <header class="sitemap-header">
+        <h1 class="sitemap-title">Documentation Sitemap</h1>
+        <p class="text-secondary">Structure · Hierarchy · Knowledge Base</p>
+        <div style="margin-top: 2rem;">
+            <a href="index.html" class="btn-glass">← Back to CORTEX</a>
+        </div>
+    </header>
+
+    <main class="cortex-container">
+        
+        <div class="cortex-grid">
+            
+            <!-- Left Column: Structural Pages -->
+            <div class="col-span-12 lg:col-span-6">
+                <div class="glass-card">
+                    <h2 class="font-display text-xl mb-4 text-gradient-primary">Site Structure</h2>
+                    
+                    <div class="sitemap-tree">
+                        <!-- Home -->
+                        <div class="sitemap-section">
+                            <a href="index.html" class="node-link">
+                                <span class="node-icon">🏠</span>
+                                <span class="node-title">Home</span>
+                                <span class="node-meta">Entry Point</span>
+                            </a>
+                        </div>
+
+                        <!-- Roles -->
+                        <div class="sitemap-section">
+                            <h3 class="text-secondary text-sm uppercase tracking-wider mb-3">Role Portals</h3>
+                            
+                            <div class="flex flex-col gap-2">
+                                <a href="roles/learner.html" class="node-link">
+                                    <span class="node-icon">🎓</span>
+                                    <span class="node-title">Curious Learner</span>
+                                    <span class="role-badge role-badge--learner">Academy</span>
+                                </a>
+                                <div class="content-list">
+                                    <div class="content-item"><a href="learning/beginner/index.html">Beginner Track (Foundations)</a></div>
+                                    <div class="content-item"><a href="learning/intermediate/index.html">Intermediate Track (Builder)</a></div>
+                                    <div class="content-item"><a href="learning/advanced/index.html">Advanced Track (Architect)</a></div>
+                                </div>
+
+                                <a href="roles/engineer.html" class="node-link mt-3">
+                                    <span class="node-icon">⚡</span>
+                                    <span class="node-title">Hands-On Engineer</span>
+                                    <span class="role-badge role-badge--engineer">Reference</span>
+                                </a>
+                                
+                                <a href="roles/business-leader.html" class="node-link mt-3">
+                                    <span class="node-icon">💼</span>
+                                    <span class="node-title">Business Leader</span>
+                                    <span class="role-badge role-badge--business">Strategy</span>
+                                </a>
+                                
+                                <a href="roles/product-owner.html" class="node-link mt-3">
+                                    <span class="node-icon">🎯</span>
+                                    <span class="node-title">Product Owner</span>
+                                    <span class="role-badge role-badge--product">Product</span>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Meta -->
+                        <div class="sitemap-section">
+                            <h3 class="text-secondary text-sm uppercase tracking-wider mb-3">Meta & Legal</h3>
+                            <a href="SECURITY.md" class="node-link">
+                                <span class="node-icon">🔒</span>
+                                <span class="node-title">Security Policy</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Dynamic Content -->
+            <div class="col-span-12 lg:col-span-6">
+                <div class="glass-card h-full">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="font-display text-xl text-gradient-secondary">Knowledge Base</h2>
+                        <span class="text-secondary text-xs" id="content-count">Loading...</span>
+                    </div>
+                    
+                    <div id="dynamic-sitemap" class="sitemap-tree">
+                        <!-- Populated by JS -->
+                        <div class="text-center py-8 text-secondary">
+                            <span class="loader-spinner">⟳</span> Loading content index...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Content Loader Script -->
+    <script src="assets/js/content-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const loader = new ContentLoader('data/content.json');
+            try {
+                const data = await loader.init();
+                renderDynamicSitemap(data);
+            } catch (error) {
+                console.error('Sitemap generation failed:', error);
+                document.getElementById('dynamic-sitemap').innerHTML = `
+                    <p class="text-danger">Failed to load content index. Please check console.</p>
+                `;
+            }
+        });
+
+        function renderDynamicSitemap(data) {
+            const container = document.getElementById('dynamic-sitemap');
+            const countEl = document.getElementById('content-count');
+            
+            container.innerHTML = ''; // Clear loading state
+            
+            let totalFiles = 0;
+
+            if (data.categories) {
+                data.categories.forEach(category => {
+                    const section = document.createElement('div');
+                    section.className = 'sitemap-section mb-6';
+                    
+                    const catTitle = document.createElement('h3');
+                    catTitle.className = 'text-white font-bold mb-2 flex items-center';
+                    catTitle.innerHTML = `<span class="text-accent-primary mr-2">📂</span> ${category.title}`;
+                    
+                    const fileList = document.createElement('div');
+                    fileList.className = 'flex flex-col gap-1 pl-6 border-l border-white/10 ml-2';
+
+                    category.files.forEach(file => {
+                        totalFiles++;
+                        const link = document.createElement('a');
+                        link.href = `${file.path}`; // Adjust path for root deployment
+                        link.className = 'text-secondary hover:text-accent-emerald transition-colors text-sm py-1 flex items-center';
+                        link.innerHTML = `
+                            <span class="w-1.5 h-1.5 rounded-full bg-white/20 mr-2"></span>
+                            ${file.title}
+                        `;
+                        fileList.appendChild(link);
+                    });
+
+                    section.appendChild(catTitle);
+                    section.appendChild(fileList);
+                    container.appendChild(section);
+                });
+            }
+
+            countEl.textContent = `${totalFiles} Documents Indexed`;
+        }
+    </script>
+</body>
+</html>
