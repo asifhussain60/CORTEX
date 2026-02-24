@@ -5,8 +5,8 @@ This module analyzes performance metrics and recommends optimal
 execution strategies.
 """
 
-from cortex.core.execution.adaptive_execution_engine import ExecutionStrategy
-from cortex.core.execution.performance_metrics import PerformanceMetrics
+from cortex.orchestrators.workflow.adaptive_execution_engine import ExecutionStrategy
+from cortex.orchestrators.workflow.performance_metrics import PerformanceMetrics
 
 
 class StrategySelector:
