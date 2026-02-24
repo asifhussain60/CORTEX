@@ -4,9 +4,10 @@ Provides decorator utilities for marking and registering orchestrators,
 governance enforcement, and other framework decorators.
 
 Author: CORTEX Framework
+# COMPAT: 2026-02-24 (Phase 68-B) — orchestrator_decorator.py moved to cortex.core.common
 """
 
-from cortex.core.decorators.orchestrator_decorator import (
+from cortex.core.common.orchestrator_decorator import (
     clear_orchestrator_registry,
     get_orchestrator_by_domain,
     get_orchestrators_by_domain,

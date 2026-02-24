@@ -1,0 +1,110 @@
+id: phase-68
+title: "cortex/core Flatten — 27 Subdirs → 8 Canonical (Phase 60 Revival)"
+priority: P1
+status: IN_PROGRESS
+created: "2026-02-24"
+sweep_id: SWEEP-68-CORE-FLATTEN
+authority: [CORE-035, CORE-064, CORE-008]
+phase_prerequisites:
+  - phase-58  # core/core collapse COMPLETE (0 imports remain)
+  - phase-59  # orchestrator surface partial reduction COMPLETE
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BASELINE (measured 2026-02-24)
+# ─────────────────────────────────────────────────────────────────────────────
+baseline:
+  cortex_py_files: 1332
+  cortex_core_subdirs: 27
+  orchestrator_classes: 115
+  yaml_files: 376
+  core_core_imports: 0   # Phase 58 COMPLETE
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUBDIR AUDIT (measured 2026-02-24)
+# ─────────────────────────────────────────────────────────────────────────────
+subdir_audit:
+  zero_caller_zero_file:
+    - dir: cortex/core/schemas/    # 0 files, 0 callers → DELETE immediately
+  zero_caller_with_files:
+    - dir: cortex/core/examples/   # 1 file (demo), 0 callers → ARCHIVE to cortex-sts/
+    - dir: cortex/core/database/   # 2 files, 0 callers (compat shim in core/database.py) → MOVE to cortex/infrastructure/database/
+  low_caller_single_file:
+    - dir: cortex/core/bootstrap/  # 1 caller (cortex/__init__.py) → inline into cortex/__init__.py
+    - dir: cortex/core/config/     # 1 caller (test only) → move to cortex/infrastructure/config/
+    - dir: cortex/core/resilience/ # 1 caller (test only) → move to cortex/infrastructure/resilience/
+    - dir: cortex/core/safety/     # 1 caller (test only) → move to cortex/core/common/
+    - dir: cortex/core/errors/     # 1 caller (test only) → move to cortex/core/common/
+    - dir: cortex/core/recovery/   # 1 caller (test only) → move to cortex/core/common/
+    - dir: cortex/core/decorators/ # 1 caller (self-import __init__) → move to cortex/core/common/
+    - dir: cortex/core/state/      # 3 callers (2 tests + master) → move to cortex/core/common/
+  high_callers_keep:
+    - dir: cortex/core/common/       # 18 callers — KEEP
+    - dir: cortex/core/discovery/    # 30 callers — KEEP
+    - dir: cortex/core/execution/    # 37 callers — KEEP
+    - dir: cortex/core/governance/   # 8 callers — KEEP
+    - dir: cortex/core/hallucination_prevention/  # 13 callers — KEEP
+    - dir: cortex/core/intelligence/ # 100 callers — KEEP
+    - dir: cortex/core/intent/       # 71 callers — KEEP
+    - dir: cortex/core/interaction/  # 49 callers — KEEP
+    - dir: cortex/core/interfaces/   # 41 callers — KEEP
+    - dir: cortex/core/knowledge/    # 82 callers — KEEP
+    - dir: cortex/core/models/       # 5 callers — KEEP
+    - dir: cortex/core/orchestrator/ # 137 callers — KEEP
+    - dir: cortex/core/registry/     # 113 callers — KEEP
+    - dir: cortex/core/security/     # 34 callers — KEEP
+    - dir: cortex/core/wiring/       # 55 callers — KEEP
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+sub_phases:
+  - id: phase-68-A
+    title: "Delete zero-content dirs + archive examples/"
+    status: IN_PROGRESS
+    actions:
+      - "Delete cortex/core/schemas/ (already empty)"
+      - "Move cortex/core/examples/ → cortex-sts/CortexLabs/examples/ (demo content)"
+      - "Verify cortex/core/database/ callers — move to cortex/infrastructure/database/"
+    regression_gate: "smoke tests green after each action"
+
+  - id: phase-68-B
+    title: "Consolidate low-caller dirs into cortex/core/common/"
+    status: OPEN
+    actions:
+      - "Move safety/output_validator.py → core/common/, update 1 test import"
+      - "Move errors/structured_error.py → core/common/, update 1 test import"
+      - "Move recovery/*.py → core/common/, update 1 test import"
+      - "Move state/*.py → core/common/, update 3 callers"
+      - "Move decorators/*.py → core/common/, update __init__ self-import"
+    regression_gate: "smoke tests green after each file move"
+
+  - id: phase-68-C
+    title: "Move infrastructure dirs out of core/"
+    status: OPEN
+    actions:
+      - "Move config/timeout_profiles.py → cortex/infrastructure/config/, update 1 test"
+      - "Move resilience/thread_safety.py → cortex/infrastructure/resilience/, update 1 test"
+      - "Inline cortex/core/bootstrap/ into cortex/__init__.py"
+    regression_gate: "smoke tests green after each move"
+
+  - id: phase-68-D
+    title: "Final verification — cortex/core/ at ≤9 subdirs"
+    status: OPEN
+    actions:
+      - "find cortex/core -maxdepth 1 -type d | wc -l  # expect ≤9"
+      - "make test-batch"
+      - "Update cortex-master.yaml"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EXIT CRITERIA
+# ─────────────────────────────────────────────────────────────────────────────
+exit_criteria:
+  - "cortex/core/ has ≤9 subdirectories (from 27)"
+  - "cortex/core/schemas/ deleted"
+  - "cortex/core/examples/ deleted (content archived)"
+  - "cortex/core/database/ merged into cortex/infrastructure/"
+  - "cortex/core/common/ absorbs: safety, errors, recovery, state, decorators"
+  - "1,401 smoke tests still passing"
+  - "Zero import errors introduced"
+</content>
+</invoke>
