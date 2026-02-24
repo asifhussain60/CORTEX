@@ -4,9 +4,9 @@ Covers complexity metrics, calculation, gate logic, and reporting.
 """
 
 import pytest
-from cortex.core.execution.complexity_metrics import ComplexityMetrics
-from cortex.core.execution.complexity_calculator import ComplexityCalculator, ComplexityScore
-from cortex.core.execution.complexity_gate import ComplexityGate, GateDecision
+from cortex.orchestrators.workflow.complexity_metrics import ComplexityMetrics
+from cortex.orchestrators.workflow.complexity_calculator import ComplexityCalculator, ComplexityScore
+from cortex.orchestrators.workflow.complexity_gate import ComplexityGate, GateDecision
 
 
 class TestComplexityMetrics:
@@ -227,7 +227,7 @@ class TestComplexityReporting:
 
     def test_report_complexity_distribution(self) -> None:
         """Test generating complexity distribution report."""
-        from cortex.core.execution.complexity_gate import ComplexityReporter
+        from cortex.orchestrators.workflow.complexity_gate import ComplexityReporter
         
         reporter = ComplexityReporter()
         scores = [
@@ -247,7 +247,7 @@ class TestComplexityReporting:
 
     def test_report_high_complexity_operations(self) -> None:
         """Test identifying high-complexity operations."""
-        from cortex.core.execution.complexity_gate import ComplexityReporter
+        from cortex.orchestrators.workflow.complexity_gate import ComplexityReporter
         
         reporter = ComplexityReporter()
         scores = [
@@ -264,7 +264,7 @@ class TestComplexityReporting:
 
     def test_report_average_complexity(self) -> None:
         """Test calculating average complexity."""
-        from cortex.core.execution.complexity_gate import ComplexityReporter
+        from cortex.orchestrators.workflow.complexity_gate import ComplexityReporter
         
         reporter = ComplexityReporter()
         scores = [
@@ -283,7 +283,7 @@ class TestBusinessRules:
 
     def test_load_business_rules(self) -> None:
         """Test loading complexity business rules."""
-        from cortex.core.execution.complexity_gate import RuleEngine
+        from cortex.orchestrators.workflow.complexity_gate import RuleEngine
         
         engine = RuleEngine()
         rules = engine.load_rules()
@@ -293,7 +293,7 @@ class TestBusinessRules:
 
     def test_apply_custom_rules(self) -> None:
         """Test applying custom business rules."""
-        from cortex.core.execution.complexity_gate import RuleEngine
+        from cortex.orchestrators.workflow.complexity_gate import RuleEngine
         
         engine = RuleEngine()
         
@@ -310,7 +310,7 @@ class TestBusinessRules:
 
     def test_rules_can_adjust_scores(self) -> None:
         """Test that rules can adjust complexity scores."""
-        from cortex.core.execution.complexity_gate import RuleEngine
+        from cortex.orchestrators.workflow.complexity_gate import RuleEngine
         
         engine = RuleEngine()
         

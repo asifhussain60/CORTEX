@@ -37,7 +37,7 @@ from cortex.orchestrators.core.terminal_events import (
     UserApprovalRejectedEvent,
     UserCancelledEvent,
 )
-from cortex.core.execution.exec_gateway_impl import GovernanceViolationError
+from cortex.orchestrators.workflow.exec_gateway_impl import GovernanceViolationError
 from cortex.infrastructure.database_transaction_manager import (
     DatabaseTransactionManager,
 )

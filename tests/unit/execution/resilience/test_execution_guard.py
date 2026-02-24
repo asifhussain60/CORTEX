@@ -22,7 +22,7 @@ import pytest
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch
-from cortex.core.execution.resilience.execution_guard import (
+from cortex.orchestrators.workflow.execution_guard import (
     SilentExecutionGuard,
     ExecutionResult,
     CheckpointFailedError,

@@ -11,17 +11,17 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Any
 from unittest.mock import Mock, patch
 
-from cortex.core.execution.adaptive_execution_engine import (
+from cortex.orchestrators.workflow.adaptive_execution_engine import (
     AdaptiveExecutionEngine,
     ExecutionStrategy,
     ExecutionContext,
 )
-from cortex.core.execution.performance_metrics import (
+from cortex.orchestrators.workflow.performance_metrics import (
     PerformanceMetricsCollector,
     PerformanceMetrics,
 )
-from cortex.core.execution.execution_strategy_selector import StrategySelector
-from cortex.core.execution.feedback_loop import FeedbackLoop
+from cortex.orchestrators.workflow.execution_strategy_selector import StrategySelector
+from cortex.orchestrators.workflow.feedback_loop import FeedbackLoop
 
 
 class TestAdaptiveExecutionEngine:

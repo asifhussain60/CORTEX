@@ -17,14 +17,14 @@ from pathlib import Path
 
 import pytest
 
-from cortex.core.execution.autonomous_executor import (
+from cortex.orchestrators.workflow.autonomous_executor import (
     AutonomousExecutor,
     Plan,
     Stage,
     StageStatus,
 )
-from cortex.core.execution.progress_tracker import ProgressTracker
-from cortex.core.execution.rollback_manager import RollbackManager
+from cortex.orchestrators.workflow.progress_tracker import ProgressTracker
+from cortex.orchestrators.workflow.rollback_manager import RollbackManager
 from cortex.models.canonical_enums import IntentType
 
 

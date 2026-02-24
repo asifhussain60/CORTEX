@@ -12,7 +12,7 @@ Author: Asif Hussain
 
 import pytest
 
-from cortex.core.execution.autonomous_executor import (
+from cortex.orchestrators.workflow.autonomous_executor import (
     AutonomousExecutor,
     ExecutionResult,
     ExecutionStatus,

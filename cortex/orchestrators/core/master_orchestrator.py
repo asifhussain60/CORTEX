@@ -50,7 +50,7 @@ from cortex.core.result import Err, Ok, Result
 from cortex.intelligence.domain_brain.business_knowledge_repository import (
     BusinessKnowledgeRepository,
 )
-from cortex.core.execution.exec_gateway_impl import GovernanceViolationError
+from cortex.orchestrators.workflow.exec_gateway_impl import GovernanceViolationError
 from cortex.infrastructure.database_transaction_manager import (
     DatabaseTransactionManager,
 )
