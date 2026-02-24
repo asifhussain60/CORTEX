@@ -335,6 +335,13 @@ class WorkflowEngine:
                     self._execute_step(step, context)
                 
                 stage.status = "completed"
+            except StepError:
+                # Phase 67-E: StepError is a configuration error — re-raise so
+                # callers can distinguish "misconfigured step" from generic failure
+                stage.status = "failed"
+                context.status = "failed"
+                context.completed_at = datetime.now()
+                raise
             except Exception as e:
                 stage.status = "failed"
                 stage.error = str(e)
