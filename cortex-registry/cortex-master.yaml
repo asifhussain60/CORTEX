@@ -13,8 +13,8 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  version: '16.0'
-  last_updated: '2026-02-24T00:00:00Z'
+  version: '16.1'
+  last_updated: '2026-02-24T12:00:00Z'
   total_phases: 68
   active: 0
   completed: 68
@@ -35,7 +35,7 @@ metadata:
       gaps: 9
       sub_phases: 4
       file: "cortex-registry/_cortex-master/phases/completed/phase-68-core-flatten-sweep.yaml"
-      note: "Deleted 8 stub subdirs from cortex/core/. All imports consolidated to cortex.core.common. 1420 smoke tests green."
+      note: "All 9 gaps CLOSED. bootstrap/ stub dir deleted (16→15 subdirs). All 19 Phase-68 tests GREEN. 1420 smoke passing."
     - id: phase-67
       title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
       priority: P1
@@ -68,7 +68,7 @@ phase_detail_files:
     gaps: 9
     sub_phases: 4
     file: "cortex-registry/_cortex-master/phases/completed/phase-68-core-flatten-sweep.yaml"
-    note: "8 stub subdirs deleted. cortex.core.common is canonical. bootstrap simplified. 1420 smoke passed."
+    note: "All 9 gaps CLOSED. bootstrap/ stub deleted (16→15 subdirs). 19/19 Phase-68 tests GREEN. 1420 smoke passing."
 
   - id: phase-67
     title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
@@ -290,11 +290,11 @@ health_status:
   p1_issues: 0
   health_check: PASSING
   last_health_fix: '2026-02-24'
-  thin_index_status: "COMPLIANT — Phase 68 COMPLETE (2026-02-24)"
+  thin_index_status: "COMPLIANT — Phase 68 FULLY COMPLETE (2026-02-24): bootstrap/ stub deleted, 15 canonical subdirs confirmed, all 19 tests GREEN"
 
 production_readiness:
-  status: "✅ COMPLETE — Phase 68 COMPLETE | All 68 phases done | cortex/core flattened"
-  overall_score: 99%
+  status: "✅ COMPLETE — Phase 68 COMPLETE | All 68 phases done | cortex/core flattened 27→15 subdirs (bootstrap/ stub removed)"
+  overall_score: 100%
   test_baseline: "1,420 smoke | 204 golden workflow | 177 workflow orchestrators"
   deployment_date: '2026-02-24'
 
@@ -311,7 +311,7 @@ summary:
   planned: 0
   playbooks: 1
   completion_percentage: 100
-  production_status: "✅ Phase 68 COMPLETE — cortex/core flattened 27→15 subdirs"
+  production_status: "✅ Phase 68 COMPLETE — cortex/core flattened 27→15 subdirs (bootstrap/ stub removed 2026-02-24)"
   open_gaps:
     count: 0
-    note: "All 9 Phase 68 gaps CLOSED. cortex/core/ at 15 canonical subdirs."
+    note: "All 9 Phase 68 gaps CLOSED. cortex/core/ at 15 canonical subdirs. bootstrap/ compat shim deleted."
