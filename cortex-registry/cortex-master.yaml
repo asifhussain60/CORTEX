@@ -1,16 +1,41 @@
-version: '13.2'
+version: '14.0'
 updated: '2026-02-24'
 maintainer: CORTEX Architecture Team
+
+# ============================================================
+# THIN INDEX CONTRACT — cortex-master.yaml
+# This file is a REFERENCE INDEX ONLY. Max 500 lines (alarm at 400).
+# ALL phase detail lives in cortex-registry/planning/phases/ or
+#   cortex-registry/_cortex-master/phases/
+# Governance: workflows/templates/governance/master-plan-phase-lifecycle.yaml
+# Prohibited inline: phases, gap_catalogue, tdd_sequence, rewrites,
+#   new_files, files_to_edit, implementation, code_snippets
+# ============================================================
+
 metadata:
-  version: '13.2'
+  version: '14.0'
   last_updated: '2026-02-24T00:00:00Z'
-  total_phases: 65
+  total_phases: 67
   active: 0
   completed: 65
+  in_progress: 1
+  planned: 2
   playbooks: 1
-  planned: 7
   governance_rules_total: 37
+  test_baseline:
+    smoke: 1388
+    workflow_orchestrators: 177
+    golden_workflow: 204
   planned_phases:
+    - id: phase-67
+      title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
+      priority: P1
+      status: PLANNED
+      sweep_id: SWEEP-67-WORKFLOW-RUNTIME-WIRING
+      gaps: 6
+      sub_phases: 6
+      file: "cortex-registry/_cortex-master/phases/planned/phase-67-workflow-engine-runtime-wiring.yaml"
+      note: "Wires 3 isolated workflow primitives into coherent E2E path. StepHandlerRegistry replaces stub. convergence_gate added to audit-fix + TDD templates."
     - id: phase-66
       title: "Cross-Cutting Intelligence Matrix — Neural Wiring Layer"
       priority: P0
@@ -19,84 +44,13 @@ metadata:
       gaps: 19
       sub_phases: 3
       file: "cortex-registry/_cortex-master/phases/planned/phase-66-intelligence-matrix-neural-wiring.yaml"
-      note: "Wires all 5 P0-CRITICAL + 12 P1-HIGH + 2 P2-MEDIUM intelligence matrix gaps across 7 dimensions. Coverage target: 9.5% → ≥50%."
-    - id: phase-67
-      title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
-      priority: P1
-      status: PLANNED
-      file: "cortex-registry/_cortex-master/phases/planned/phase-67-workflow-engine-runtime-wiring.yaml"
-    - id: phase-65
-      title: "Enterprise Hardening — MCP Auth + 151 ImportError Sweep"
-      priority: P0
-      status: COMPLETE
-      sweep_id: SWEEP-65-ENTERPRISE-HARDENING
-      gaps: 5
-      sub_phases: 3
-      file: "cortex-registry/_cortex-master/phases/completed/phase-65-enterprise-hardening.yaml"
-      note: "REVIEW-GAP-01/02/03/04 CLOSED. REVIEW-GAP-05 carry-forward to Phase 67-A. 42+9 golden tests GREEN."
-    - id: phase-64
-      title: "Unified Brain Golden Coverage — 10-Gap E2E Trace Test Renaissance"
-      priority: P0
-      status: COMPLETE
-      sweep_id: SWEEP-64-UNIFIED-BRAIN-GOLDEN
-      gaps: 12
-      sub_phases: 7
-      governance_rules_added: [CORE-065, CORE-066]
-      workflow_templates_added: ["holistic-file-review-gate", "copilot-chat-response-template"]
-      sessions: 8
-      file: "cortex-registry/_cortex-master/phases/completed/phase-64-unified-brain-golden-coverage.yaml"
-      note: "All 7 sub-phases COMPLETE. 73 new golden tests GREEN. 2 RED scaffolds for Phase 65. AC-64-COMPLETE ✅"
-    - id: phase-63
-      title: "Golden Test Renaissance — Trace-Verified E2E + Scorer + Simplification"
-      priority: P0
-      status: COMPLETE
-      sweep_id: SWEEP-63-GOLDEN-RENAISSANCE
-      gaps: 7
-      sub_phases: 5
-      file: "cortex-registry/planning/phases/completed/phase-63-golden-renaissance.yaml"
-      note: "24 root-level golden tests reorganized into 6 canonical subfolders. 8 legacy tests rewritten. Workflow template audit_trace integration. Score 7.3 → 8.5. Smoke: 1,388 passed."
-    - id: phase-62
-      title: "Cohesion Hardening — Review-04 Remediation (5-Gap Sweep)"
-      priority: P0
-      status: COMPLETE
-      sweep_id: SWEEP-62-COHESION-HARDENING
-      gaps: 8
-      sub_phases: 6
-      file: "cortex-registry/planning/phases/completed/phase-62-cohesion-hardening.yaml"
-      note: "All 8 gaps from copilot-review04.md accepted and closed. Score 7.0 → 9.0. Smoke: 1,388 passed."
-    - id: phase-57
-      title: "Intelligence Wiring Remediation — 9-Issue Sweep"
-      priority: P0
-      status: COMPLETE
-      sweep_id: SWEEP-57-INTELLIGENCE-WIRING
-      gaps: 9
-      sub_phases: 6
-      file: "cortex-registry/planning/phases/completed/phase-57-intelligence-wiring-remediation.yaml"
-      note: "All 36 GAP-57 tests green — pre-existing fixes confirmed."
-    - id: phases-58-61
-      title: "Simplification — Zero-Regression Surface Reduction (4 Phases)"
-      priority: P0
-      status: IN_PROGRESS
-      sweep_id: SWEEP-58-61-SIMPLIFICATION
-      phases: [58, 59, 60, 61]
-      file: "cortex-registry/planning/phases/planned/simplification-master-plan-58-61.yaml"
-      note: "Phase 59-A COMPLETE. Target: 124 → 22 orchestrators, 383K → 180K SLOC."
-
-# ============================================================
-# THIN INDEX CONTRACT — cortex-master.yaml
-# This file is a REFERENCE INDEX ONLY. Max 500 lines.
-# ALL phase detail lives in cortex-registry/planning/phases/
-# Governance: workflows/templates/governance/master-plan-phase-lifecycle.yaml
-# Prohibited inline: phases, gap_catalogue, tdd_sequence, rewrites,
-#   new_files, files_to_edit, implementation, code_snippets
-# ============================================================
+      note: "Wires 5 P0-CRITICAL + 12 P1-HIGH + 2 P2-MEDIUM matrix gaps. Coverage 9.5% → ≥50%."
 
 # ── PHASE DETAIL FILES ───────────────────────────────────────────────────────
-# Each entry below is a thin pointer. Open the file: path for full detail.
+# Each entry is a thin pointer. Open the file: path for full detail.
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
-  # ── PHASE 67 ─────────────────────────────────────────────────────────────
   - id: phase-67
     title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
     priority: P1
@@ -105,17 +59,8 @@ phase_detail_files:
     gaps: 6
     sub_phases: 6
     file: "cortex-registry/_cortex-master/phases/planned/phase-67-workflow-engine-runtime-wiring.yaml"
-    note: >-
-      Wires the 3 isolated workflow primitives (WorkflowEngine, StepStateMachine,
-      ConvergenceLoopExecutor) into a coherent E2E execution path.
-      WorkflowEngine._execute_step() is a pure stub — replaced with StepHandlerRegistry.
-      WorkflowComposer._execute_with_convergence() has wrong StepStateMachine kwargs — fixed.
-      Zero YAML templates define convergence_gate — adds to audit-fix and TDD templates.
-      cortex-master.yaml P0 line-count violation (1022L) remediated in sub-phase 67-A.
-      Prerequisites: Phase 64 COMPLETE. 234 baseline workflow tests provide regression net.
-      NOT a rewrite — surgical wiring fix. convergence_mode=False default unchanged.
+    note: "NOT a rewrite — surgical wiring fix. 234 baseline workflow tests provide regression net."
 
-  # ── PHASE 66 ─────────────────────────────────────────────────────────────
   - id: phase-66
     title: "Cross-Cutting Intelligence Matrix — Neural Wiring Layer"
     priority: P0
@@ -124,9 +69,8 @@ phase_detail_files:
     gaps: 19
     sub_phases: 3
     file: "cortex-registry/_cortex-master/phases/planned/phase-66-intelligence-matrix-neural-wiring.yaml"
-    note: "Wires 5 P0-CRITICAL + 12 P1-HIGH + 2 P2-MEDIUM matrix gaps. Coverage 9.5% → ≥50%. cortex_intelligence_matrix MCP tool is the gate."
+    note: "Coverage 9.5% → ≥50%. cortex_intelligence_matrix MCP tool is the gate."
 
-  # ── PHASE 65 ─────────────────────────────────────────────────────────────
   - id: phase-65
     title: "Enterprise Hardening — MCP Auth + 151 ImportError Sweep"
     priority: P0
@@ -135,9 +79,8 @@ phase_detail_files:
     gaps: 5
     sub_phases: 3
     file: "cortex-registry/_cortex-master/phases/completed/phase-65-enterprise-hardening.yaml"
-    note: "REVIEW-GAP-01/02/03/04 CLOSED (pre-wired). REVIEW-GAP-05 carry-forward Phase 67-A. All golden tests GREEN."
+    note: "REVIEW-GAP-01/02/03/04 CLOSED. REVIEW-GAP-05 carry-forward to Phase 67-A. All golden tests GREEN."
 
-  # ── PHASE 64 ─────────────────────────────────────────────────────────────
   - id: phase-64
     title: "Unified Brain Golden Coverage — 10-Gap E2E Trace Test Renaissance"
     priority: P0
@@ -146,19 +89,10 @@ phase_detail_files:
     sweep_id: SWEEP-64-UNIFIED-BRAIN-GOLDEN
     gaps: 12
     sub_phases: 7
-    sessions: 8
     governance_rules_added: [CORE-065, CORE-066]
-    workflow_templates_added:
-      - "cortex-registry/workflows/templates/governance/holistic-file-review-gate.yaml"
-      - "cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml"
     file: "cortex-registry/_cortex-master/phases/completed/phase-64-unified-brain-golden-coverage.yaml"
-    note: >-
-      All 7 sub-phases COMPLETE (64-A/B/C/D/E/F/G). 73 new golden tests GREEN, 2 xfail RED scaffolds
-      for Phase 65. CORE-065 (holistic file review gate) + CORE-066 (response template binding).
-      Phase 65 RED scaffolds committed: mixin rollout + ImportError sweep. AC-64-COMPLETE ✅
-    lifecycle_template: "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
+    note: "All 7 sub-phases COMPLETE. 73 new golden tests GREEN. AC-64-COMPLETE ✅"
 
-  # ── PHASE 63 ─────────────────────────────────────────────────────────────
   - id: phase-63
     title: "Golden Test Renaissance — Trace-Verified E2E + Scorer + Simplification"
     priority: P0
@@ -167,13 +101,8 @@ phase_detail_files:
     gaps: 7
     sub_phases: 5
     file: "cortex-registry/planning/phases/completed/phase-63-golden-renaissance.yaml"
-    note: >-
-      24 root-level golden tests reorganized into 6 canonical subfolders.
-      8 legacy tests rewritten. Workflow template audit_trace integration.
-      Score 7.3 → 8.5. Smoke: 1,388 passed. AC-63-GOLDEN-RENAISSANCE ✅
-    lifecycle_template: "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
+    note: "Score 7.3 → 8.5. Smoke: 1,388 passed. AC-63-GOLDEN-RENAISSANCE ✅"
 
-  # ── PHASE 62 ─────────────────────────────────────────────────────────────
   - id: phase-62
     title: "Cohesion Hardening — Review-04 Remediation (5-Gap Sweep)"
     priority: P0
@@ -182,13 +111,8 @@ phase_detail_files:
     gaps: 8
     sub_phases: 6
     file: "cortex-registry/planning/phases/completed/phase-62-cohesion-hardening.yaml"
-    note: >-
-      All 8 gaps from copilot-review04.md accepted and closed.
-      All 6 sub-phases (62-A/B/C/D/E/G) COMPLETE. Score 7.0 → 9.0.
-      Smoke gate: 1,388 passed, 0 failures.
-    lifecycle_template: "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
+    note: "All 8 gaps CLOSED. Score 7.0 → 9.0. Smoke: 1,388 passed."
 
-  # ── PHASES 58-61 (SIMPLIFICATION) ────────────────────────────────────────
   - id: phases-58-61
     title: "Simplification — Zero-Regression Surface Reduction (4 Phases)"
     priority: P0
@@ -196,13 +120,8 @@ phase_detail_files:
     sweep_id: SWEEP-58-61-SIMPLIFICATION
     phases: [58, 59, 60, 61]
     file: "cortex-registry/planning/phases/planned/simplification-master-plan-58-61.yaml"
-    note: >-
-      Phase 59-A COMPLETE (commit ff8f9e813, 7 files deleted). Phases 58,
-      59-B, 60, 61 in progress. Target: 124 → 22 orchestrators,
-      383K → 180K SLOC.
-    lifecycle_template: "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
+    note: "Phase 59-A COMPLETE. Target: 124 → 22 orchestrators, 383K → 180K SLOC."
 
-  # ── PHASE 57 ─────────────────────────────────────────────────────────────
   - id: phase-57
     title: "Intelligence Wiring Remediation — 9-Issue Sweep"
     priority: P0
@@ -211,850 +130,169 @@ phase_detail_files:
     gaps: 9
     sub_phases: 6
     file: "cortex-registry/planning/phases/completed/phase-57-intelligence-wiring-remediation.yaml"
-    note: "All 36 GAP-57 tests green — pre-existing fixes confirmed."
-    lifecycle_template: "cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml"
+    note: "All 36 GAP-57 tests green."
 
-playbooks:
-- id: pb-sts-001
-  title: BadMonolith End-to-End Refactoring — CORTEX SDLC Showcase
-  file: _cortex-master/playbooks/sharpen-the-saw/pb-sts-001-badmonolith-refactoring.yaml
-  category: sts
-  repeatable: true
-  status: ready
-  stages: 8
-  target: cortex-sts/CortexLabs/BadMonolith
-  supersedes: phase-25-sts-badmonolith-v2
-  orchestrators_exercised: 10
-  smells_covered: 25
-registry_structure:
-- _cortex-master/phases/completed/
-- _cortex-master/phases/planned/
-- _cortex-master/phases/deferred/
-- _cortex-master/playbooks/
-- core/tier0-skull/
-- core/config/
-- config/
-- company/
-- governance/
-- knowledge/
-- knowledge-base/
-- patterns/
-- workflows/
-- metrics/
-- artifacts/
-- integration/
-- memory/
-phase_status:
-  completed:
-  - id: phase-01
-    title: Orchestrator Event Bus
-    location: planning/phases/completed/phase-01-orchestrator-event-bus.yaml
-    completion_date: '2026-02-14'
-  - id: phase-02
-    title: Registry Isolation (Complexity Classifier)
-    location: planning/phases/completed/phase-02-complexity-classifier.yaml
-    completion_date: '2026-02-14'
-  - id: phase-03
-    title: LENS Knowledge Graph (Code Level Planner)
-    location: planning/phases/completed/phase-03-code-level-planner.yaml
-    completion_date: '2026-02-16'
-    phase_group: Deep Intelligence Foundation
-    tests: 20
-  - id: phase-04
-    title: Coherence Validator
-    location: planning/phases/completed/phase-04-coherence-validator.yaml
-    completion_date: '2026-02-14'
-  - id: phase-05
-    title: Review Orchestrator
-    location: planning/phases/completed/phase-05-review-orchestrator.yaml
-    completion_date: '2026-02-14'
-  - id: phase-06
-    title: Directory Cleanup — 59 to 16 Canonical Directories
-    location: cortex-registry/planning/phases/completed/phase-06-directory-cleanup.yaml
-    completion_date: '2026-02-20'
-    note: Part of original 10-phase cohesive brain refactor.
-  - id: phase-07
-    title: Inquiry System
-    location: planning/phases/completed/phase-07-inquiry-system.yaml
-    completion_date: '2026-02-14'
-  - id: phase-08
-    title: Unified Digest-Ingest Facade (Discovery Orchestrator)
-    location: planning/phases/completed/phase-08-discovery-orchestrator.yaml
-    completion_date: '2026-02-10'
-    note: Originally phase-09, renumbered to phase-08
-  - id: phase-09
-    title: LENS Remote Intelligence
-    location: planning/phases/completed/phase-09-lens-remote-intelligence.yaml
-    completion_date: '2026-02-14'
-    note: Originally phase-10, renumbered to phase-09
-  - id: phase-10
-    title: Adaptive BLUF System
-    location: planning/phases/completed/phase-10-adaptive-bluf-system.yaml
-    completion_date: '2026-02-14'
-    note: Originally phase-13, renumbered to phase-10
-  - id: phase-11
-    title: Static Repo Visualization
-    location: planning/phases/completed/phase-11-static-repo-visualization.yaml
-    completion_date: '2026-02-14'
-    note: Originally phase-15, renumbered to phase-11
-  - id: phase-12
-    title: Production Readiness — Hardening, Chaos Testing, SLAs & Go-Live
-    location: cortex-registry/planning/phases/completed/phase-12-production-readiness.yaml
-    completion_date: '2026-02-22'
-    note: Part of original 10-phase cohesive brain refactor.
-  - id: phase-13
-    title: Convergence Loop Holistic TDD
-    completion_date: '2026-02-14'
-    consolidated_into: phase-15
-    note: Originally phase-19, renumbered to phase-13. No separate file - consolidated
-      into phase-15.
-  - id: phase-14
-    title: Workflow Intelligence Neurons
-    completion_date: '2026-02-14'
-    consolidated_into: phase-15
-    note: Originally phase-20, renumbered to phase-14. No separate file - consolidated
-      into phase-15.
-  - id: phase-15
-    title: Intelligence & Learning Core — CORTEX Brain Evolution
-    location: planning/phases/completed/phase-15-intelligence-learning-core.yaml
-    completion_date: '2026-02-15'
-    duration: 2 days
-    metrics:
-      tests: 28/28 passing
-      test_duration: 0.17s
-      e2e_tests: 10/10 passing
-      integration_tests: 18/18 passing
-    consolidates:
-    - phase-12 (old)
-    - phase-17 (old)
-    - phase-13
-    - phase-14
-    note: Originally phase-21, renumbered to phase-15
-  - id: phase-16
-    title: STS Knowledge Synthesis & Component Registration
-    location: planning/phases/completed/phase-16-static-dashboard-generator.yaml
-    completion_date: '2026-02-16'
-    duration: 1 day
-    metrics:
-      tests: 13/13 passing
-      test_duration: 0.08s
-      components: 3
-      velocity: 93% faster than estimate
-    consolidates:
-    - phase-28 (old)
-    note: Originally phase-23, renumbered to phase-16
-  - id: phase-17
-    title: Production Verification Harness (MEGA-D)
-    location: planning/phases/completed/phase-17-production-verification-harness.yaml
-    completion_date: '2026-02-16'
-    duration: 2 days
-    metrics:
-      tests: 191/191 golden tests passing
-      test_duration: 0.67s
-      stages: 7
-      mock_elimination: 100% (0 Mock* classes)
-    key_deliverables:
-    - Zero-mock golden tests (all real CORTEX imports)
-    - Governance enforcement E2E (EnforcementOrchestrator + 9 agents)
-    - Intelligence pipeline E2E (real SQLite persistence)
-    note: Originally phase-24, renumbered to phase-17
-  - id: phase-18
-    title: Stabilization & Duplicate Elimination (MEGA-E Extended)
-    location: planning/phases/completed/phase-18-stabilization-duplicate-elimination.yaml
-    completion_date: '2026-02-16'
-    duration: 1 hour
-    metrics:
-      tests: 191/191 golden passing
-      test_duration: 0.64s
-      stages: 5
-      wiring_audit: 18/71 core orchestrators validated
-    note: Originally phase-25, renumbered to phase-18
-  - id: phase-19
-    title: Intelligence Persistence & Golden Test Harness Foundation
-    location: planning/phases/completed/phase-19-intelligence-persistence-golden-harness.yaml
-    completion_date: '2026-02-13'
-    duration: 2 days
-    metrics:
-      golden_tests: 30/30 passing
-      test_duration: 0.64s
-      total_loc: ~2,350 lines
-      components: 6
-      performance: <50ms discovery, <100ms handoff
-    consolidates:
-    - GAP-01
-    - GAP-02
-    - GAP-07
-    note: Originally phase-27, renumbered to phase-19
-  - id: phase-20
-    title: Component Intelligence & STS Automation
-    location: planning/phases/completed/phase-20-component-intelligence-sts-automation.yaml
-    completion_date: '2026-02-16'
-    duration: 1 day (integrated with Phase 16)
-    metrics:
-      tests: 13/13 passing (shared)
-      test_duration: 0.08s
-    integrated_with: phase-16
-    note: Originally phase-28, renumbered to phase-20
-  - id: phase-21
-    title: Production Verification Harness & Excellence Polish
-    location: planning/phases/completed/phase-21-production-verification-excellence.yaml
-    completion_date: '2026-02-16'
-    duration: 2 hours
-    metrics:
-      tests: 14/14 core passing
-      test_duration: 0.14s
-      agents: 2
-      velocity: 98% faster than estimate
-    consolidates:
-    - GAP-08
-    - GAP-09
-    - GAP-10
-    - GAP-11
-    note: Originally phase-29, renumbered to phase-21
-  - id: phase-22
-    title: Glassmorphism Dashboard Generator Fix
-    location: planning/phases/completed/phase-22-glassmorphism-dashboard-generator-fix.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-32, renumbered to phase-22
-  - id: phase-23
-    title: Workflow Template Injection — WorkflowTemplateMixin
-    location: cortex-registry/planning/phases/completed/phase-23-workflow-template-injection.yaml
-    completion_date: '2026-02-22'
-    note: Part of original 10-phase cohesive brain refactor.
-  - id: phase-24
-    title: Autonomous Execution Enhancement
-    location: planning/phases/completed/phase-24-autonomous-execution-enhancement.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-35, renumbered to phase-24
-  - id: phase-25
-    title: ML Summarization
-    location: planning/phases/completed/phase-25-ml-summarization.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-36, renumbered to phase-25
-  - id: phase-26
-    title: Remediation Baseline Restoration
-    location: planning/phases/completed/phase-26-remediation-baseline-restoration.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-38, renumbered to phase-26
-  - id: phase-27
-    title: Audit Mode Cohesion Integrity System
-    location: planning/phases/completed/phase-27-audit-mode-cohesion-integrity-system.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-39, renumbered to phase-27
-  - id: phase-28
-    title: Intelligent Upgrade Changelog System
-    location: planning/phases/completed/phase-28-intelligent-upgrade-changelog-system.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-40, renumbered to phase-28
-  - id: phase-29
-    title: Digest Mode Enhancement System
-    location: planning/phases/completed/phase-29-digest-mode-enhancement-system.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-41, renumbered to phase-29
-  - id: phase-30
-    title: Interactive Approval Workflow System
-    location: planning/phases/completed/phase-30-interactive-approval-workflow-system.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-42, renumbered to phase-30
-  - id: phase-32
-    title: Enhanced Planning System
-    location: planning/phases/completed/phase-32-enhanced-planning-system.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-45, renumbered to phase-32
-  - id: phase-33
-    title: Infrastructure Discovery
-    location: planning/phases/completed/phase-33-infrastructure-discovery.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-46, renumbered to phase-33
-  - id: phase-35
-    title: Dashboard Orchestrator
-    location: planning/phases/completed/phase-35-dashboard-orchestrator.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-53, renumbered to phase-35
-  - id: phase-36
-    title: DotNet Enterprise LENS Enhancement
-    location: planning/phases/completed/phase-36-dotnet-enterprise-lens-enhancement.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-55, renumbered to phase-36
-  - id: phase-37
-    title: Universal Learning Loop
-    location: planning/phases/completed/phase-37-universal-learning-loop.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-71, renumbered to phase-37
-  - id: phase-38
-    title: Production Foundation Trilogy
-    location: planning/phases/completed/phase-38-production-foundation-trilogy.yaml
-    completion_date: '2026-02-15'
-    note: Originally phase-76, renumbered to phase-38
-  - id: mega-e
-    title: 'MEGA-E: Stabilization & Duplicate Elimination'
-    location: .cortex-runtime/phase1-completion-report.md
-    completion_date: '2026-02-14'
-    duration: 45 minutes
-    metrics:
-      tests_after: 2062
-      duplicates_eliminated: 1
-      regression_baseline: 16208
-  - id: mega-i
-    title: 'MEGA-I: Test Isolation & Standardization'
-    location: .cortex-runtime/phase2-completion-report.md
-    completion_date: '2026-02-14'
-    duration: 30 minutes
-    metrics:
-      parallel_speedup: 2.9x
-      test_duration_parallel: 31.45s
-      flakiness: 0%
-  - id: mega-m
-    title: 'MEGA-M: Metrics & Observability'
-    location: .cortex-runtime/phase3-completion-report.md
-    completion_date: '2026-02-14'
-    duration: 40 minutes
-    metrics:
-      flakiness_runs: 5
-      flakiness_rate: 0%
-      slowest_test: 3.07s
-  - id: mega-c
-    title: 'MEGA-C: Code Quality & Linting'
-    location: .cortex-runtime/phase4-completion-report.md
-    completion_date: '2026-02-15'
-    duration: 30 minutes
-    metrics:
-      black_baseline: 962 files
-      mypy_errors_core: 0
-      pre_commit_checks: 3
-  - id: mega-d
-    title: 'MEGA-D: Documentation & Deployment'
-    location: .cortex-runtime/phase5-completion-report.md
-    completion_date: '2026-02-15'
-    duration: 2.5 hours
-    metrics:
-      api_docs_coverage: 94%
-      architecture_diagrams: 5
-      runbook_procedures: 60+
-      production_readiness_score: 96%
-  - id: phase-39
-    title: Toolkit Centralization
-    location: planning/phases/completed/phase-39-toolkit-centralization.yaml
-    completion_date: '2026-02-16'
-    duration: 4 hours
-    metrics:
-      tests: 66/66 passing (52 toolkit + 14 MCP)
-      test_duration: 0.24s toolkit, 9.52s MCP
-      stages: 6
-    note: Originally phase-90, renumbered to phase-39
-  - id: phase-40
-    title: Health Agent Architecture
-    location: planning/phases/completed/phase-40-health-agent-architecture.yaml
-    completion_date: '2026-02-16'
-    duration: 12 hours
-    metrics:
-      unit_tests: 43/43 passing
-      test_duration: 0.16s
-      agents: 9
-      hooks: 2
-    consolidates:
-    - phase-91 (old)
-    - phase-92 (old)
-    note: Originally phase-95, renumbered to phase-40
-  - id: phase-41
-    title: CORTEX Intelligence Infrastructure Enhancement
-    location: planning/phases/completed/phase-41-cortex-intelligence-infrastructure.yaml
-    completion_date: '2026-02-16'
-    duration: 4 hours
-    metrics:
-      tests: 59/59 passing
-      test_duration: 1.83s total
-      coverage: 100%
-    stages: 5
-    note: Originally phase-97, renumbered to phase-41
-  - id: phase-42
-    title: Vision API Enhancement + HTML Mapping + Internal Validation Workflow
-    location: planning/phases/completed/phase-42-vision-api-dogfooding-workflow.yaml
-    completion_date: '2026-02-16'
-    duration: 4 hours
-    metrics:
-      tests: 55/55 passing
-      test_duration: 0.14s
-      stages: 3
-    note: Originally phase-99, renumbered to phase-42
-  - id: phase-43
-    title: Convergence-Gated Workflow Template Library
-    location: planning/phases/completed/phase-43-workflow-template-library.yaml
-    completion_date: '2026-02-16'
-    duration: 4 hours
-    metrics:
-      tests: 102/102 passing
-      test_duration: 0.24s
-      stages: 8
-    note: Originally phase-100, renumbered to phase-43
-  - id: phase-44
-    title: Conversational Intent Gateway
-    location: planning/phases/completed/phase-44-conversational-intent-gateway.yaml
-    completion_date: '2026-02-16'
-    duration: 3 hours
-    metrics:
-      tests: 50/50 passing
-      test_duration: 0.07s
-      stages: 5
-    note: Originally phase-101, renumbered to phase-44
-  - id: phase-45
-    title: Workflow Runtime Foundation
-    location: planning/phases/completed/phase-45-workflow-runtime-foundation.yaml
-    completion_date: '2026-02-17'
-    duration: 2.5 hours
-    metrics:
-      tests: '71/73 passing (target: 73)'
-      test_duration: 33.10s total
-      stages: 4
-      deliverables:
-      - WorkflowRuntime class (17 tests)
-      - ConvergenceLoopExecutor (19 tests)
-      - EphemeralStorage + Templates (16 tests)
-      - MCP Tool Integration (19 tests)
-    note: Originally phase-102, renumbered to phase-45. Autonomous TDD execution.
-  - id: phase-47
-    title: Brain Tier Architecture Validation & Fix
-    location: cortex-registry/planning/phases/completed/phase-47-brain-tier-architecture-fix.yaml
-    completion_date: '2026-02-18'
-    duration: 3 hours
-    metrics:
-      tests: 45 passing, 9 skipped
-      test_duration: 0.17s (tier precedence tests)
-      stages: 4
-      deliverables:
-      - 'Fixed tier precedence: tier0 > tier1 > tier2'
-      - Renamed memory tiers (learned_patterns, adaptive_intelligence, scratch_space)
-      - GovernanceRegistry.get_rule() with precedence (50 lines)
-      - '3 test files: 45 tests passing, 9 skipped (expected)'
-    note: Originally phase-105, renumbered to phase-47. TDD execution in 3 hours vs
-      1-2 week estimate.
-  - id: phase-46
-    title: Registry & Intelligence Consolidation (Track B Only)
-    location: cortex-registry/planning/phases/completed/phase-46-registry-intelligence-consolidation.yaml
-    completion_date: '2026-02-18'
-    duration: 30 minutes (Track B only - Track A completed in Phase 47)
-    metrics:
-      files_moved: 38 phase YAMLs + 1 governance file
-      yaml_updates: 14 files
-      directories_eliminated: 1
-      test_baseline: Maintained (tier precedence 20/20 passing)
-    deliverables:
-    - Eliminated _cortex-master/ wrapper directory
-    - Consolidated phases/ → planning/phases/
-    - Updated 14 YAML path references
-    - Zero _cortex-master references in active code
-    note: Originally phase-104. Track A (cortex/intelligence rename) already complete
-      from Phase 47. Only Track B (_cortex-master consolidation) executed.
-  - id: phase-48
-    title: Health-Vacuum Integrity Pipeline
-    location: cortex-registry/planning/phases/completed/phase-48-health-vacuum-pipeline.yaml
-    completion_date: '2026-02-18'
-    duration: 6 hours
-    metrics:
-      tests: 39/39 golden tests passing
-      test_duration: 0.23s
-      stages: 5
-    note: Superseded by Phase 51 ground-up redesign. Record preserved.
-  - id: phase-49
-    title: Golden Test Promotion Pipeline
-    location: cortex-registry/planning/phases/completed/phase-49-golden-test-promotion.yaml
-    completion_date: '2026-02-18'
-    duration: 8 hours
-    metrics:
-      tests: 29/29 golden tests passing
-      test_duration: 0.10s
-      stages: 5
-      governance_rules_added: 1
-    note: CORE-055 Golden Test Tier Contract introduced.
-  - id: phase-51
-    title: Health-Vacuum Unified Pipeline
-    location: cortex-registry/planning/phases/completed/phase-51-health-vacuum-unified-pipeline.yaml
-    completion_date: '2026-02-19'
-    duration: ground-up redesign
-    metrics:
-      tests: 207 passing (28 golden + 179 unit)
-      stages: 6
-    note: Ground-up redesign superseding Phase 48/50/92. Two canonical orchestrators.
-  - id: phase-52
-    title: "Operational Pattern Journal — Cross-Orchestrator Success/Failure Intelligence"
-    location: cortex-registry/planning/phases/completed/phase-52-operational-pattern-journal.yaml
-    completion_date: '2026-02-22'
-    duration: 1 day
-    metrics:
-      tests: 38 OPJ tests GREEN
-      stages: 4
-    note: OPJWriter, OPJReader, OPJMixin, cortex_query_opj. 3 pilot orchestrators wired.
-  - id: phase-53
-    title: Convergence Loop Wiring — Template Consolidation & MCP Name Remediation
-    location: cortex-registry/planning/phases/completed/phase-53-convergence-loop-wiring.yaml
-    completion_date: '2026-02-23'
-    duration: YAML-only changes
-    metrics:
-      p1_violations_fixed: 8
-      core_035_violations_fixed: 109
-      templates_wired: 18
-      python_files_modified: 0
-    note: Wire detect-fix-rescan-loop primitive into 18 templates (109 convergence_loop blocks); fix 8 stale MCP name references (Check #14). YAML-only. Scope expanded from 7→18 per CORE-064.
-  active: []
-  consolidated:
-  - id: phase-consolidated-legacy
-    title: Legacy Phase Consolidation (Phases 12, 17 from old numbering)
-    location: phases/consolidated/00-legacy-consolidation.yaml
-    consolidated_into: phase-15 (Intelligence & Learning Core)
-    completion_date: '2026-02-16'
-    total_phases: 2
-    details: Historical phases consolidated into Intelligence Core
-  deferred:
-  - phase-31
-  - phase-34
-  - phase-91
-  - phase-92
-  planned:
-  - id: cortex-refactor
-    title: CORTEX Cohesive Brain Refactor (10 Phases)
-    location: cortex-registry/planning/phases/planned/cortex-refactor/
-    status: COMPLETE
-    created: '2026-02-19'
-    completed: '2026-02-23'
-    branch: CORTEX-GPT
-    estimated_phases: 10
-    description: |
-      Transform CORTEX from fragmented packages into a single cohesive brain.
-      10-phase plan executed: foundation safety net (ghost dir removed), governance
-      alignment (stale .pytest_ignore cleaned), package consolidation (20+ path refs fixed),
-      brain deduplication (cortex.intelligence → cortex/intelligence canonical paths),
-      orchestrator rationalization (22/22 verified), directory cleanup (11 empty dirs removed),
-      test consolidation (test fixtures updated), registry/docs alignment (cortex-master.yaml v10.5).
-      MCP tools: 24 production. Test baseline maintained: 1237 passed, 0 failures.
-    phases:
-    - phase-01-foundation.yaml
-    - phase-02-governance-alignment.yaml
-    - phase-03-package-consolidation.yaml
-    - phase-04-brain-deduplication.yaml
-    - phase-05-orchestrator-rationalization.yaml
-    - phase-06-directory-cleanup.yaml
-    - phase-07-test-consolidation.yaml
-    - phase-08-registry-docs.yaml
-    - phase-09-final-verification.yaml
-    - phase-10-production-readiness.yaml
-    support_files:
-    - 00-overview.yaml
-    - capability-manifest.yaml
-    - consolidation-matrix.yaml
-    - README.md
-  completed_late_additions:
-  - id: phase-51
-    title: Health-Vacuum Unified Pipeline
-    priority: P0
-    file: cortex-registry/planning/phases/completed/phase-51-health-vacuum-unified-pipeline.yaml
-    workflow_template: cortex-registry/workflows/templates/maintenance/health-vacuum-unified-pipeline.yaml
-    created: '2026-02-19'
-    completed: '2026-02-19'
-    status: COMPLETE
-    supersedes:
-    - phase-48
-    - phase-50
-    - phase-92
-    stages: 6
-    actual_tests: 207
-  - id: phase-48
-    title: Health-Vacuum Integrity Pipeline
-    location: cortex-registry/planning/phases/completed/phase-48-health-vacuum-pipeline.yaml
-    note_location: Original file removed — superseded by Phase 51. Record preserved
-      in cortex-master.yaml.
-    workflow_template: cortex-registry/workflows/templates/maintenance/health-vacuum-pipeline.yaml
-    status: COMPLETE
-    completion_date: '2026-02-18'
-    actual_duration: 6 hours
-    golden_tests:
-      location: tests/golden/orchestrators/health_vacuum/
-      actual_count: 39
-      result: 39/39 passing
-      categories:
-      - 'health_orchestrator (7 scenarios: GH-001..007)'
-      - 'vacuum_orchestrator (6 scenarios: GV-001..006)'
-      - 'pipeline_integration (3 scenarios: GP-001..003)'
-    commits:
-    - 232ddbe9b
-    - f842cdd4b
-  - id: phase-49
-    title: Golden Test Promotion Pipeline
-    location: cortex-registry/planning/phases/completed/phase-49-golden-test-promotion.yaml
-    note_location: Original file removed — record preserved in cortex-master.yaml.
-    workflow_template: cortex-registry/workflows/templates/governance/golden-test-promotion.yaml
-    manifest: cortex-registry/governance/test-promotion-manifest.yaml
-    status: COMPLETE
-    completion_date: '2026-02-18'
-    actual_duration: 8 hours
-    golden_tests:
-      location: tests/golden/orchestrators/support/
-      actual_count: 29
-      result: 29/29 passing
-      categories:
-      - 'classifier_orchestrator (15 scenarios: GC-001..015)'
-      - 'parallel_golden_runner (8 scenarios: GP-001..008)'
-      - 'core_055_governance (6 scenarios: GR-001..006)'
-    governance_authority:
-    - CORE-008 (single source of truth)
-    - CORE-011 (type hints)
-    - CORE-012 (docstrings)
-    - CORE-028 (naming conventions)
-    - CORE-035 (single canonical implementation)
-    - CORE-055 (golden test folder contract — NEW)
-    implementation_files:
-    - cortex/orchestrators/support/test_classifier_orchestrator.py
-    - cortex/orchestrators/support/parallel_golden_runner.py
-    plan_artifacts:
-    - cortex-registry/planning/phases/planned/phase-49-golden-test-promotion.yaml
-    - cortex-registry/governance/test-promotion-manifest.yaml
-    - cortex-registry/workflows/templates/governance/golden-test-promotion.yaml
-    note: Plan artifacts created 2026-02-18. Implementation COMPLETE — Phase 49 committed
-      ce089cb2e.
-phase_48_completion:
-  id: phase-48
-  title: Health-Vacuum Integrity Pipeline
-  status: COMPLETE
-  completion_date: '2026-02-18'
-  duration: 6 hours
-  metrics:
-    golden_tests: 39/39 passing
-    test_duration: 0.23s
-    stages: 5
-    mcp_tools_added: 2
-  deliverables:
-  - 'HealthOrchestrator: 7 check categories (H-001..H-007)'
-  - 'VacuumExecutor: rename/delete/relocate with macOS APFS two-step rename'
-  - 'HealthVacuumPipeline: 5-stage coordinator with teardown'
-  - cortex_health_orchestrate MCP tool (scan/pipeline/status/classify)
-  - cortex_vacuum_orchestrate MCP tool (execute/rollback/preview)
-  - health-vacuum-pipeline.yaml workflow template
-  - '39 golden tests: GH-001..007, GV-001..006, GP-001..003'
-phase_49_completion:
-  id: phase-49
-  title: Golden Test Promotion Pipeline
-  status: COMPLETE
-  completion_date: '2026-02-18'
-  duration: 8 hours
-  metrics:
-    golden_tests: 29/29 passing
-    test_duration: 0.10s
-    stages: 5
-    governance_rules_added: 1
-  deliverables:
-  - 'TestClassifierOrchestrator: deterministic 7-pattern GOLDEN/STANDARD classifier'
-  - 'ParallelGoldenRunner: pytest-xdist parallel runner with ProgressReporter'
-  - 'CORE-055: Golden Test Tier Contract (appended to skull-rules.yaml)'
-  - 'test-promotion-manifest.yaml: 12 P0 + 64 P1 + 174 P2 candidates'
-  - classify operation added to cortex_health_orchestrate MCP tool
-  - golden-test-promotion.yaml workflow template
-  - '29 golden tests: GC-001..015, GP-001..008, GR-001..006'
-execution_order:
-  current_state:
-    production_readiness: 100%
-    test_baseline: 838 golden tests passing, 0 failures
-    documentation: 94% coverage
-    governance: CORE-055 live — 27/30 CORE rules automated
-    phase_numbering: Sequential 01-54 COMPLETE (v10.5 — 2026-02-23)
-  next_phases:
-  - id: cortex-refactor
-    title: CORTEX Cohesive Brain Refactor (10 Phases)
-    status: COMPLETE
-    priority: P0
-    file: cortex-registry/planning/phases/planned/cortex-refactor/
-    created: '2026-02-19'
-    completed: '2026-02-23'
-    description: |
-      Ghost dir cortex/cortex.intelligence deleted. 20+ path refs canonicalized.
-      11 empty dirs removed. Test baseline maintained: 1237 passed, 0 failures.
-  - id: phase-52
-    title: "Operational Pattern Journal — Cross-Orchestrator Success/Failure Intelligence"
-    status: COMPLETE
-    priority: P1
-    file: cortex-registry/_cortex-master/phases/planned/phase-52-operational-pattern-journal.yaml
-    completed: '2026-02-22'
-    description: |
-      OPJWriter + OPJReader + OPJMixin + cortex_query_opj MCP tool (#26).
-      Pilot wiring: DigestSessionOrchestrator, TDDOrchestrator, EnforcementOrchestrator.
-      Registry target: cortex-registry/integration/patterns/ (activated from .gitkeep).
-      4 stages (A-D), 7 TDD test files, 0 new top-level dirs, CORE-065 proposed.
   - id: phase-53
     title: "Convergence Loop Wiring — Template Consolidation & MCP Name Remediation"
-    status: COMPLETE
     priority: P1
-    file: cortex-registry/_cortex-master/phases/completed/phase-53-convergence-loop-wiring.yaml
-    completed: '2026-02-23'
-    description: |
-      Wire detect-fix-rescan-loop primitive into 18 templates (109 convergence_loop blocks, expanded from spec's 7 per CORE-064 full catalogue).
-      Fix 8 stale cortex_validate_compliance → cortex_validate (op=compliance) MCP name
-      references (Check #14 P1 violations). YAML-only changes. Zero Python files modified.
-      Scoped from chat01.md DIGEST — cross-language extension rejected as over-engineering.
-  - id: phase-50
-    title: Health-Vacuum Orchestrator Consolidation
-    status: complete
-    priority: P0
-    file: cortex-registry/planning/phases/planned/phase-50-health-vacuum-consolidation.yaml
-    added: '2026-02-19'
-    completed: '2026-02-19'
-    note: SUPERSEDED by Phase 51 — all Phase 50 code deleted, ground-up redesign
+    status: COMPLETE
+    file: "cortex-registry/_cortex-master/phases/completed/phase-53-convergence-loop-wiring.yaml"
+    note: "8 stale MCP name refs fixed. 18 templates wired. YAML-only changes."
+
+  - id: phase-52
+    title: "Operational Pattern Journal — Cross-Orchestrator Success/Failure Intelligence"
+    priority: P1
+    status: COMPLETE
+    file: "cortex-registry/_cortex-master/phases/completed/phase-52-operational-pattern-journal.yaml"
+    note: "OPJWriter, OPJReader, OPJMixin, cortex_query_opj. 3 pilot orchestrators wired."
+
   - id: phase-51
-    title: Health-Vacuum Unified Pipeline
-    status: COMPLETE
+    title: "Health-Vacuum Unified Pipeline"
     priority: P0
-    file: cortex-registry/planning/phases/completed/phase-51-health-vacuum-unified-pipeline.yaml
-    workflow_template: cortex-registry/workflows/templates/maintenance/health-vacuum-unified-pipeline.yaml
-    added: '2026-02-19'
-    completed: '2026-02-19'
-    description: 'Ground-up redesign: deleted all 7+ fragmented health/vacuum implementations
-
-      (~4,800 lines), replaced with exactly TWO canonical orchestrators:
-
-      1. HealthOrchestrator — holistic diagnosis (filesystem, architecture, wiring,
-      infrastructure)
-
-      2. VacuumOrchestrator — standalone + companion remediation (root cleanup, naming,
-      org)
-
-      3. HealthVacuumPipeline — 5-stage coordinator
-
-      4. MCP tools: cortex_health_scan + cortex_vacuum_execute
-
-      207 tests passing (28 golden + 179 unit).
-
-      '
-    supersedes:
-    - phase-48
-    - phase-50
-    - phase-92 (health portions)
-  timeline_to_completion:
     status: COMPLETE
-    phases: []
-    total_remaining_duration: 0 days
-    completion_date: 2026-02-23 (actual)
-    confidence: 100% (838 golden tests passing)
-production_readiness:
-  status: "✅ 58/62 — Phase 57 COMPLETE (36 tests green) | Phase 58-A COMPLETE (8 twin-file shims) | Phases 58-B→61 IN PROGRESS"
-  overall_score: 98%
-  deployment_date: 2026-02-19 00:00 UTC
-  deployment_type: Zero-downtime rolling update
-  latest_phase: Phase 56 complete (2026-02-23) — CORE-064 Structural Sweep Enforcement
-  next_milestone: "Phase 57 — Intelligence Wiring Remediation (9 gaps, SWEEP-57-INTELLIGENCE-WIRING)"
-  open_p0_issues:
-    - id: GAP-57-01
-      title: "KnowledgeSynthesisEngine INDEX path hardcoded to wrong location — 10 rules loaded instead of 40+"
-      file: cortex/intelligence/knowledge/knowledge_synthesis_engine.py
-      line: 226
-      phase: phase-57-a
-  mega_phases_completed:
-  - phase: MEGA-E
-    label: Stabilization & Duplicate Elimination
+    file: "cortex-registry/planning/phases/completed/phase-51-health-vacuum-unified-pipeline.yaml"
+    note: "Ground-up redesign. 2 canonical orchestrators. 207 tests passing."
+
+  - id: phase-49
+    title: "Golden Test Promotion Pipeline"
+    priority: P0
     status: COMPLETE
-    duration: 45 minutes
-  - phase: MEGA-I
-    label: Test Isolation & Standardization
+    file: "cortex-registry/planning/phases/completed/phase-49-golden-test-promotion.yaml"
+    note: "CORE-055 Golden Test Tier Contract introduced. 29/29 golden tests."
+
+  - id: phase-48
+    title: "Health-Vacuum Integrity Pipeline"
+    priority: P0
     status: COMPLETE
-    duration: 30 minutes
-  - phase: MEGA-M
-    label: Metrics & Observability
+    file: "cortex-registry/planning/phases/completed/phase-48-health-vacuum-pipeline.yaml"
+    note: "Superseded by Phase 51. 39/39 golden tests."
+
+  - id: phase-47
+    title: "Brain Tier Architecture Validation & Fix"
+    priority: P0
     status: COMPLETE
-    duration: 40 minutes
-  - phase: MEGA-C
-    label: Code Quality & Linting
+    file: "cortex-registry/planning/phases/completed/phase-47-brain-tier-architecture-fix.yaml"
+    note: "Tier precedence fixed: tier0 > tier1 > tier2. 45 tests."
+
+  - id: phase-46
+    title: "Registry & Intelligence Consolidation (Track B)"
+    priority: P1
     status: COMPLETE
-    duration: 30 minutes
-  - phase: MEGA-D
-    label: Documentation & Deployment
+    file: "cortex-registry/planning/phases/completed/phase-46-registry-intelligence-consolidation.yaml"
+    note: "38 phase YAMLs moved. _cortex-master wrapper eliminated."
+
+  - id: phase-45
+    title: "Workflow Runtime Foundation"
+    priority: P0
     status: COMPLETE
-    duration: 2.5 hours
+    file: "cortex-registry/planning/phases/completed/phase-45-workflow-runtime-foundation.yaml"
+    note: "WorkflowRuntime + ConvergenceLoopExecutor + EphemeralStorage. 71/73 tests."
+
+  - id: phase-44
+    title: "Conversational Intent Gateway"
+    priority: P0
+    status: COMPLETE
+    file: "cortex-registry/planning/phases/completed/phase-44-conversational-intent-gateway.yaml"
+    note: "50/50 tests passing."
+
+  - id: phase-43
+    title: "Convergence-Gated Workflow Template Library"
+    priority: P0
+    status: COMPLETE
+    file: "cortex-registry/planning/phases/completed/phase-43-workflow-template-library.yaml"
+    note: "102/102 tests passing. 8 stages."
+
+  - id: phase-42
+    title: "Vision API Enhancement + HTML Mapping + Internal Validation Workflow"
+    priority: P0
+    status: COMPLETE
+    file: "cortex-registry/planning/phases/completed/phase-42-vision-api-dogfooding-workflow.yaml"
+    note: "55/55 tests passing."
+
+  - id: phase-41
+    title: "CORTEX Intelligence Infrastructure Enhancement"
+    priority: P0
+    status: COMPLETE
+    file: "cortex-registry/planning/phases/completed/phase-41-cortex-intelligence-infrastructure.yaml"
+    note: "59/59 tests passing. 100% coverage."
+
+  - id: phase-40
+    title: "Health Agent Architecture"
+    priority: P0
+    status: COMPLETE
+    file: "cortex-registry/planning/phases/completed/phase-40-health-agent-architecture.yaml"
+    note: "43/43 unit tests. 9 agents, 2 hooks."
+
+  - id: phase-39
+    title: "Toolkit Centralization"
+    priority: P0
+    status: COMPLETE
+    file: "cortex-registry/planning/phases/completed/phase-39-toolkit-centralization.yaml"
+    note: "66/66 tests passing."
+
+  - id: phases-01-38
+    title: "Phases 01–38 (Sequential Foundation)"
+    status: COMPLETE
+    note: "All 38 phases COMPLETE. Detail in cortex-registry/planning/phases/completed/ and cortex-registry/_cortex-master/phases/completed/."
+
+playbooks:
+  - id: pb-sts-001
+    title: "BadMonolith End-to-End Refactoring — CORTEX SDLC Showcase"
+    file: "_cortex-master/playbooks/sharpen-the-saw/pb-sts-001-badmonolith-refactoring.yaml"
+    category: sts
+    repeatable: true
+    status: ready
+    stages: 8
+    target: "cortex-sts/CortexLabs/BadMonolith"
+    orchestrators_exercised: 10
+    smells_covered: 25
+
+registry_structure:
+  - _cortex-master/phases/completed/
+  - _cortex-master/phases/planned/
+  - _cortex-master/phases/deferred/
+  - _cortex-master/playbooks/
+  - core/tier0-skull/
+  - core/config/
+  - config/
+  - company/
+  - governance/
+  - knowledge/
+  - knowledge-base/
+  - patterns/
+  - workflows/
+  - metrics/
+  - artifacts/
+  - integration/
+  - memory/
+
 health_status:
   p0_issues: 0
   p1_issues: 0
-  p1_accuracy: "Phase 63 COMPLETE — SWEEP-63-GOLDEN-RENAISSANCE ✅ All 7 gaps closed"
   health_check: PASSING
   last_health_fix: '2026-02-24'
-  commits:
-  - bf7c5b603
-  - ce089cb2e
-  - ee9a231cc
-  - 19af5865e
+  thin_index_status: "COMPLIANT — Phase 67-A remediation (2026-02-24)"
+
+production_readiness:
+  status: "✅ COMPLETE — Phase 65 COMPLETE | Phase 66/67 PLANNED"
+  overall_score: 98%
+  test_baseline: "1,388 smoke | 204 golden workflow | 177 workflow orchestrators"
+  deployment_date: '2026-02-24'
+
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "Consolidation v13.1 — Phase 63 COMPLETE (2026-02-24)"
+  plan_version: "v14.0 — Phase 67-A THIN INDEX CONTRACT (2026-02-24)"
   last_verified: '2026-02-24T00:00:00Z'
-  production_readiness: "97% — Phase 63 COMPLETE (golden test renaissance)"
-  registry_sync: "Complete — Phase 63 closed. 24 root-level golden files reorganized."
-  golden_test_baseline: "720 methods across 60 files (838 collected pre-reorganization)"
-synchronization_status:
-  phase_files_synced: true
-  orphaned_files_removed: 9
-  files_renamed: 25
-  missing_files_created: 11
-  total_operations: 45
-  last_sync_date: '2026-02-22T18:00:00Z'
-  sync_verified: true
+
 summary:
-  total_phases: 63
-  completed: 63
+  total_phases: 67
+  completed: 65
   active: 0
-  planned: 0
+  in_progress: 1
+  planned: 2
   playbooks: 1
-  consolidated: 2
-  deferred: 1
-  completion_percentage: 100
-  production_status: "✅ Phase 63 COMPLETE | Golden Renaissance — Score: 8.5/10 | Smoke: 1,388 passed | v13.1 2026-02-24"
-  phase_numbering: Sequential 01-63 complete (v13.1 - 2026-02-24)
+  completion_percentage: 97
+  production_status: "✅ Phase 65 COMPLETE | Phase 66 PLANNED (P0) | Phase 67 PLANNED (P1)"
   open_gaps:
-    count: 0
-    note: "Phase 63 COMPLETE — SWEEP-63-GOLDEN-RENAISSANCE ✅. All 7 gaps closed. Next: Phase 64 (Unified Brain Golden Coverage)."
-    deferred:
-      - "GAP-63-defer-01: MasterOrchestrator 5,094L god object → Phase 64 (post Phase 59 Track B/C)"
-      - "GAP-63-defer-02: 68 orchestrators / 27 in wiring.yaml → Phase 59 (already planned)"
-  key_achievements:
-  - '✅ Phase 62 COMPLETE — Cohesion Hardening: all 6 sub-phases done (62-A through 62-G)'
-  - '✅ 62-A: TenantContextMiddleware wired into MCPServer — 9 tests GREEN, workspace context injected into all tool calls'
-  - '✅ 62-B extended: OrchestratorProtocolMixin sweep — 12 orchestrators wired, coverage 44→56/68 (IntentRouter, CortexMasterPlanOrchestrator, MasterOrchestratorStage2, ServiceDecompositionOrchestrator, SecurityVulnerabilityOrchestrator added in round 2)'
-  - '✅ 62-C: safe_import() + _log_dependency_warning() + SQLite DependencyWarning persistence — 23 tests GREEN'
-  - '✅ 62-D: 6 phantom tier entries registered in support-orchestrator-wiring.yaml (GitOrchestrator, StageExecutionStrategy, ContextAwareSynthesis, ConvergenceLoopExecutor, AuditVerifier, AutonomousWorkflowExecutor)'
-  - '✅ 62-E: Genuine LENS calls activated in PlanningOrchestrator + RefactoringOrchestrator (LENS path fixed cortex.intelligence.lens→cortex.lens, _lens_enabled flag, analyze_file() integrated)'
-  - '✅ 62-G: Wiring surface expanded 17→53 registered (35 orchestrators added: core +11, domain +4, support/git/validation/intelligence +17). Phase 58 activation contract extended to MasterOrchestratorStage2, CortexMasterPlanOrchestrator, ServiceDecompositionOrchestrator. GAP-62-08 CLOSED.'
-  - '🟢 copilot-review04.md: all 8 gaps ACCEPTED, remediation plan written to cortex-master.yaml (v12.1)'
-  - '🟢 Score trajectory: 6.2 → 6.5 → 5.8 → 7.0 → 9.0 (target after Phase 62)'
-  - '🟢 Smoke gate: 1,388 passed, 0 failures after all Phase 62 changes (baseline was 1,365)'
-  - 🟢 56/56 PHASES COMPLETE — Phase 55 TemplateComposer DELIVERED
-  - 🟢 838 GOLDEN TESTS COLLECTED — 0 FAILURES (2026-02-23)
-  - 'Phase 55 COMPLETE: TemplateComposer — dynamic workflow composition from validated primitives (16 tests)'
-  - 'Phase 54 COMPLETE: cortex-refactor — ghost dir removal, path canonicalization, 20+ source files fixed'
-  - 🟢 Playbook PB-STS-001 created — repeatable BadMonolith E2E refactoring
-  - 🟢 Phase 52 COMPLETE — Operational Pattern Journal (cross-orchestrator learning)
-  - MCP tool count: 24 production tools live (cortex_query_opj integrated into cortex_knowledge) ✅
-  - CORE-065 proposed: Operational Pattern Consultation rule
-  - OPJ wired into DigestSessionOrchestrator, TDDOrchestrator, EnforcementOrchestrator
-  - 5 pre-existing golden test failures resolved (bf7c5b603)
-  - 'BrainTier aliases fixed: TIER0/TIER1/TIER2/TIER3 backward-compat added'
-  - 'knowledge_persistence_mixin: 3 signature mismatches fixed'
-  - 'Routing logic corrected: ChallengeOrchestrator for governance fix requests'
-  - 'Onboarding glob ambiguity fixed: ksessions.json targeted directly'
-  - 'Phase 48 COMPLETE: Health-Vacuum Integrity Pipeline (39/39 golden tests)'
-  - 'Phase 49 COMPLETE: Golden Test Promotion Pipeline (29/29 golden tests)'
-  - 'Phase 51 COMPLETE: Health-Vacuum Unified Pipeline (207 tests)'
-  - CORE-055 governance rule LIVE (Golden Test Tier Contract)
-  - 'TestClassifierOrchestrator: zero-dependency GOLDEN/STANDARD classifier'
-  - 'ParallelGoldenRunner: pytest-xdist 4-worker parallel runner with ProgressReporter'
-  - 'Workflow template created: golden-test-promotion.yaml'
-  - 5 MEGA phases complete (production ready)
-  - 'Brain tier architecture fixed: tier0 > tier1 > tier2 precedence'
-  - 'Registry structure consolidated: eliminated wrapper directory'
-  - Zero conflicting phase numbers
-  - 'cortex-master.yaml cleaned: dual-column corruption fixed (v10.2)'
-  - 'Playbook concept introduced: repeatable execution plans in _cortex-master/playbooks/'
-  renumbering_changes:
-  - phase-102 → phase-45 (Workflow Runtime Foundation)
-  - phase-104 → phase-46 (Registry & Intelligence Consolidation)
-  - phase-105 → phase-47 (Brain Tier Architecture Fix)
-  - phase-90 → phase-39 (Toolkit Centralization)
-  - phase-95 → phase-40 (Health Agent Architecture)
-  - phase-97 → phase-41 (CORTEX Intelligence Infrastructure)
-  - phase-99 → phase-42 (Vision API Enhancement)
-  - phase-100 → phase-43 (Convergence-Gated Workflows)
-  - phase-101 → phase-44 (Conversational Intent Gateway)
-  - All other phases renumbered sequentially 01-38
-  - phase-49 added (Golden Test Promotion Pipeline — 2026-02-18)
+    count: 6
+    note: "GAP-67-01..06 catalogued in phase-67 detail file. GAP-66-01..19 in phase-66 detail file."
