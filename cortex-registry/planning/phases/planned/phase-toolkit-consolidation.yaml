@@ -1,0 +1,483 @@
+---
+id: phase-toolkit-consolidation
+title: "CORTEX Toolkit Consolidation — Generic File Intelligence"
+status: ACTIVE
+priority: P0
+sweep_id: SWEEP-TOOLKIT-001
+created: 2026-02-24
+authority: cortex-architect.prompt.md
+compliance:
+  - CORE-008  # TDD mandatory
+  - CORE-011  # Type hints
+  - CORE-012  # Docstrings
+  - CORE-028  # snake_case
+  - CORE-035  # Single canonical implementation
+  - CORE-064  # Sweep completeness
+
+# ============================================================================
+# OVERVIEW
+# ============================================================================
+
+description: |
+  Extract generic file-based intelligence patterns from domain-specific
+  implementations (media tooling) into reusable CORTEX Toolkit components.
+  Consolidates 4 duplicate batch processing implementations (CORE-035).
+
+motivation: |
+  Project-specific tooling revealed 5 universal patterns:
+    1. Hierarchical file scanning with organization detection
+    2. Batch processing with adapters/filters/transformers
+    3. Content sanitization with transactional safety
+    4. Metadata enrichment from external + local sources
+    5. Multi-step workflow orchestration
+
+  These patterns should be generic toolkit components, not locked to one domain.
+
+# ============================================================================
+# GAPS CATALOGUE (SWEEP-TOOLKIT-001)
+# ============================================================================
+
+sweep_catalogue:
+  - id: GAP-001
+    description: "MediaScanner is media-specific, should be generic HierarchicalScanner"
+    file: cortex/tools/media/media_scanner.py
+    status: OPEN
+    severity: P1
+
+  - id: GAP-002
+    description: "4 duplicate batch processing implementations violate CORE-035"
+    files:
+      - tests/unit/phase4/test_brt027_performance_optimization.py (BatchProcessor)
+      - cortex/core/knowledge/bulk_ingestion.py (BulkIngestionPipeline)
+      - cortex/lens/lens_tiered_mcp_api.py (LensStreamTier3)
+      - CortexXdistPlugin (test runner batching)
+    status: OPEN
+    severity: P0
+
+  - id: GAP-003
+    description: "FilenameAnalyzer domain-locked to media, should accept pattern configs"
+    file: cortex/tools/media/filename_sanitizer.py
+    status: OPEN
+    severity: P1
+
+  - id: GAP-004
+    description: "SafeFileRenamer Python-only, should support TS/C# via adapters"
+    file: cortex/tools/safe_file_rename.py
+    status: OPEN
+    severity: P2
+
+  - id: GAP-005
+    description: "No generic DomainAdapter protocol for pluggable extensions"
+    status: OPEN
+    severity: P1
+
+  - id: GAP-006
+    description: "Workflow orchestration pattern duplicated across 7+ orchestrators"
+    files:
+      - cortex/orchestrators/support/plex_workflow_orchestrator.py (7 steps)
+      - cortex/orchestrators/support/digest_session_orchestrator.py (3 pipelines)
+      - cortex/orchestrators/core/audit_coordinator.py (9 stages)
+    status: OPEN
+    severity: P1
+
+  - id: GAP-007
+    description: "No MCP tools exposing toolkit operations"
+    status: OPEN
+    severity: P2
+
+# ============================================================================
+# SUB-PHASES
+# ============================================================================
+
+sub_phases:
+  - id: S1
+    title: "Foundation — Directory structure + protocol definitions"
+    duration: 1 day
+    deliverables:
+      - cortex/toolkit/ with 6 subdirectories (filesystem, batch, transformation, metadata, workflow, adapters)
+      - DomainAdapter protocol in cortex/toolkit/adapters/domain_adapter.py
+      - All __init__.py files with proper exports
+    acceptance:
+      - Directory structure created
+      - Protocol imports clean
+      - No import cycles
+
+  - id: S2
+    title: "Extract HierarchicalScanner (TDD)"
+    duration: 1.5 days
+    gaps: [GAP-001]
+    deliverables:
+      - tests/unit/toolkit/filesystem/test_hierarchical_scanner.py (RED)
+      - cortex/toolkit/filesystem/hierarchical_scanner.py (GREEN)
+      - Adapter protocol for organization detection (REFACTOR)
+    acceptance:
+      - All tests passing
+      - MediaScanner extends HierarchicalScanner
+      - 95% coverage maintained
+
+  - id: S3
+    title: "Consolidate BatchProcessor (TDD)"
+    duration: 2 days
+    gaps: [GAP-002]
+    deliverables:
+      - tests/unit/toolkit/batch/test_batch_processor.py (RED)
+      - cortex/toolkit/batch/batch_processor.py (GREEN — canonical)
+      - Migration guide for 4 duplicate implementations
+    acceptance:
+      - Single canonical BatchProcessor
+      - All 4 use cases supported
+      - Old implementations deprecated
+
+  - id: S4
+    title: "Extract FilenameIntelligence (TDD)"
+    duration: 1 day
+    gaps: [GAP-003]
+    deliverables:
+      - tests/unit/toolkit/filesystem/test_filename_intelligence.py (RED)
+      - cortex/toolkit/filesystem/filename_intelligence.py (GREEN)
+      - YAML config format for pattern rules
+    acceptance:
+      - Patterns externalized from code
+      - FilenameAnalyzer uses toolkit version
+      - New domains can plug patterns via YAML
+
+  - id: S5
+    title: "Domain Adapter Protocol (TDD)"
+    duration: 1 day
+    gaps: [GAP-005]
+    deliverables:
+      - tests/unit/toolkit/adapters/test_domain_adapter.py (RED)
+      - cortex/toolkit/adapters/domain_adapter.py (protocol definition)
+      - cortex/toolkit/adapters/media_adapter.py (concrete example)
+    acceptance:
+      - Protocol defines get_organization_rules(), get_morph_rules(), get_enrichment_sources()
+      - MediaAdapter implements protocol
+      - Pluggable into all toolkit components
+
+  - id: S6
+    title: "Update orchestrator imports"
+    duration: 1 day
+    gaps: [GAP-001, GAP-002, GAP-003]
+    deliverables:
+      - Updated imports in 6+ orchestrators
+      - Deprecated warnings in old paths
+      - Backward compatibility shims
+    acceptance:
+      - All orchestrators functional
+      - No import errors
+      - Test suite green
+
+  - id: S7
+    title: "MCP Integration"
+    duration: 1 day
+    gaps: [GAP-007]
+    deliverables:
+      - cortex/mcp/tools/toolkit_tools.py
+      - cortex_scan, cortex_batch_transform, cortex_enrich, cortex_workflow
+    acceptance:
+      - 4 new MCP tools registered
+      - Callable from Copilot Chat
+      - Documentation updated
+
+  - id: S8
+    title: "Validation + Audit"
+    duration: 0.5 days
+    deliverables:
+      - /audit fix run (0 P0/P1 violations)
+      - Test coverage ≥95%
+      - Documentation complete
+    acceptance:
+      - Audit clean
+      - All tests passing
+      - Phase marked COMPLETE
+
+# ============================================================================
+# TDD SEQUENCE (CORE-008)
+# ============================================================================
+
+tdd_sequence:
+  - step: 1
+    phase: RED
+    action: "Write failing test for HierarchicalScanner"
+    file: tests/unit/toolkit/filesystem/test_hierarchical_scanner.py
+    expected_result: "Tests fail (no implementation)"
+
+  - step: 2
+    phase: GREEN
+    action: "Extract MediaScanner logic into HierarchicalScanner"
+    file: cortex/toolkit/filesystem/hierarchical_scanner.py
+    expected_result: "Tests pass (minimum implementation)"
+
+  - step: 3
+    phase: REFACTOR
+    action: "Add DomainAdapter protocol for organization detection"
+    files:
+      - cortex/toolkit/adapters/domain_adapter.py
+      - cortex/toolkit/filesystem/hierarchical_scanner.py
+    expected_result: "Tests still pass, cleaner API"
+
+  - step: 4
+    phase: RED
+    action: "Write failing test for canonical BatchProcessor"
+    file: tests/unit/toolkit/batch/test_batch_processor.py
+    expected_result: "Tests fail (no unified implementation)"
+
+  - step: 5
+    phase: GREEN
+    action: "Merge 4 batch implementations into cortex/toolkit/batch/batch_processor.py"
+    file: cortex/toolkit/batch/batch_processor.py
+    expected_result: "Tests pass (size + timeout + adapters)"
+
+  - step: 6
+    phase: REFACTOR
+    action: "Deprecate old batch implementations, add migration warnings"
+    files:
+      - tests/unit/phase4/test_brt027_performance_optimization.py
+      - cortex/core/knowledge/bulk_ingestion.py
+    expected_result: "Tests pass, deprecation warnings emitted"
+
+  - step: 7
+    phase: RED
+    action: "Write failing test for FilenameIntelligence"
+    file: tests/unit/toolkit/filesystem/test_filename_intelligence.py
+    expected_result: "Tests fail (no generic extractor)"
+
+  - step: 8
+    phase: GREEN
+    action: "Extract FilenameAnalyzer patterns into YAML-driven toolkit component"
+    file: cortex/toolkit/filesystem/filename_intelligence.py
+    expected_result: "Tests pass, patterns externalized"
+
+  - step: 9
+    phase: REFACTOR
+    action: "Update FilenameAnalyzer to delegate to toolkit version"
+    file: cortex/tools/media/filename_sanitizer.py
+    expected_result: "Tests pass, no functional change"
+
+  - step: 10
+    phase: VALIDATE
+    action: "Run /audit fix — ensure 0 P0/P1 violations"
+    expected_result: "Audit clean, all tests green"
+
+# ============================================================================
+# FILES TO EDIT
+# ============================================================================
+
+files_to_edit:
+  - path: cortex/tools/media/media_scanner.py
+    reason: "Refactor to extend HierarchicalScanner"
+    lines: ~100
+
+  - path: cortex/tools/media/filename_sanitizer.py
+    reason: "Delegate to toolkit FilenameIntelligence"
+    lines: ~50
+
+  - path: cortex/core/knowledge/bulk_ingestion.py
+    reason: "Deprecate local BatchProcessor, use toolkit version"
+    lines: ~30
+
+  - path: tests/unit/phase4/test_brt027_performance_optimization.py
+    reason: "Deprecate local BatchProcessor, use toolkit version"
+    lines: ~20
+
+  - path: cortex/orchestrators/support/plex_workflow_orchestrator.py
+    reason: "Update imports to toolkit components"
+    lines: ~10
+
+  - path: cortex/orchestrators/support/digest_session_orchestrator.py
+    reason: "Update imports to toolkit batch processor"
+    lines: ~5
+
+  - path: cortex/orchestrators/core/audit_coordinator.py
+    reason: "Update imports to toolkit workflow components"
+    lines: ~5
+
+# ============================================================================
+# NEW FILES
+# ============================================================================
+
+new_files:
+  - path: cortex/toolkit/__init__.py
+    purpose: "Package exports"
+    size: ~30 lines
+
+  - path: cortex/toolkit/filesystem/__init__.py
+    purpose: "Filesystem module exports"
+    size: ~20 lines
+
+  - path: cortex/toolkit/filesystem/hierarchical_scanner.py
+    purpose: "Generic recursive file scanner with depth tracking"
+    size: ~200 lines
+
+  - path: cortex/toolkit/filesystem/filename_intelligence.py
+    purpose: "Pattern extraction from filenames (YAML-driven)"
+    size: ~150 lines
+
+  - path: cortex/toolkit/filesystem/organization_detector.py
+    purpose: "Domain detection from directory hierarchy"
+    size: ~100 lines
+
+  - path: cortex/toolkit/batch/__init__.py
+    purpose: "Batch module exports"
+    size: ~20 lines
+
+  - path: cortex/toolkit/batch/batch_processor.py
+    purpose: "Canonical batch processor (size + timeout triggers)"
+    size: ~250 lines
+
+  - path: cortex/toolkit/batch/pipeline.py
+    purpose: "Adapter → Filter → Transform → Sink pattern"
+    size: ~200 lines
+
+  - path: cortex/toolkit/batch/streaming.py
+    purpose: "Yield-based streaming for large datasets"
+    size: ~100 lines
+
+  - path: cortex/toolkit/batch/progress_tracker.py
+    purpose: "ASCII progress bars for batch operations"
+    size: ~80 lines
+
+  - path: cortex/toolkit/transformation/__init__.py
+    purpose: "Transformation module exports"
+    size: ~20 lines
+
+  - path: cortex/toolkit/metadata/__init__.py
+    purpose: "Metadata module exports"
+    size: ~20 lines
+
+  - path: cortex/toolkit/workflow/__init__.py
+    purpose: "Workflow module exports"
+    size: ~20 lines
+
+  - path: cortex/toolkit/adapters/__init__.py
+    purpose: "Adapters module exports"
+    size: ~20 lines
+
+  - path: cortex/toolkit/adapters/domain_adapter.py
+    purpose: "Protocol definition for domain extensions"
+    size: ~100 lines
+
+  - path: cortex/toolkit/adapters/media_adapter.py
+    purpose: "Concrete adapter for media domain"
+    size: ~150 lines
+
+  - path: cortex/mcp/tools/toolkit_tools.py
+    purpose: "MCP tools wrapping toolkit operations"
+    size: ~300 lines
+
+  - path: tests/unit/toolkit/filesystem/test_hierarchical_scanner.py
+    purpose: "Tests for HierarchicalScanner (TDD RED)"
+    size: ~200 lines
+
+  - path: tests/unit/toolkit/batch/test_batch_processor.py
+    purpose: "Tests for canonical BatchProcessor (TDD RED)"
+    size: ~250 lines
+
+  - path: tests/unit/toolkit/filesystem/test_filename_intelligence.py
+    purpose: "Tests for FilenameIntelligence (TDD RED)"
+    size: ~150 lines
+
+  - path: tests/unit/toolkit/adapters/test_domain_adapter.py
+    purpose: "Tests for DomainAdapter protocol (TDD RED)"
+    size: ~100 lines
+
+# ============================================================================
+# DEPENDENCIES
+# ============================================================================
+
+dependencies:
+  internal:
+    - cortex.core.result (Ok/Err types)
+    - cortex.testing.framework (test utilities)
+
+  external:
+    - pathlib (file operations)
+    - dataclasses (data structures)
+    - typing (protocols, generics)
+    - yaml (pattern configuration)
+
+# ============================================================================
+# RISKS & MITIGATIONS
+# ============================================================================
+
+risks:
+  - risk: "Migration breaks existing orchestrators"
+    severity: HIGH
+    mitigation: "Backward compatibility shims + deprecation warnings"
+
+  - risk: "Test coverage drops during refactor"
+    severity: MEDIUM
+    mitigation: "TDD-first approach maintains 95% coverage"
+
+  - risk: "DomainAdapter complexity confuses users"
+    severity: LOW
+    mitigation: "Comprehensive docs + 3 concrete examples"
+
+  - risk: "4 batch consolidation introduces regressions"
+    severity: HIGH
+    mitigation: "Comprehensive test suite covering all 4 use cases"
+
+# ============================================================================
+# SUCCESS METRICS
+# ============================================================================
+
+success_metrics:
+  - metric: "CORE-035 compliance"
+    target: "1 canonical BatchProcessor (currently 4 duplicates)"
+    measurement: "grep -rn 'class BatchProcessor' cortex/"
+
+  - metric: "Test coverage"
+    target: "≥95% (currently 97%)"
+    measurement: "pytest --cov"
+
+  - metric: "Import cleanliness"
+    target: "0 circular dependencies"
+    measurement: "import-lint cortex/toolkit"
+
+  - metric: "MCP discoverability"
+    target: "4 new tools (cortex_scan, cortex_batch_transform, cortex_enrich, cortex_workflow)"
+    measurement: "cortex_tools_catalog | grep toolkit"
+
+  - metric: "Documentation completeness"
+    target: "100% public APIs documented"
+    measurement: "pydocstyle cortex/toolkit"
+
+# ============================================================================
+# ACCEPTANCE CRITERIA
+# ============================================================================
+
+acceptance_criteria:
+  - criterion: "All 8 sub-phases COMPLETE"
+    verification: "Phase status in cortex-master.yaml"
+
+  - criterion: "All gaps in sweep_catalogue CLOSED"
+    verification: "GAP-001 through GAP-007 status=CLOSED"
+
+  - criterion: "/audit fix passes with 0 P0/P1 violations"
+    verification: "python3 -m cortex.orchestrators.core.audit_coordinator"
+
+  - criterion: "Test suite green (15,739+ tests)"
+    verification: "python3 scripts/run_tests.py batch"
+
+  - criterion: "4 MCP tools functional in Copilot Chat"
+    verification: "cortex_verify operation=mcp"
+
+  - criterion: "Backward compatibility maintained"
+    verification: "All existing orchestrators functional post-migration"
+
+# ============================================================================
+# COMPLETION CHECKLIST
+# ============================================================================
+
+completion_checklist:
+  - [ ] All sub-phases S1-S8 complete
+  - [ ] All TDD sequences executed (RED → GREEN → REFACTOR)
+  - [ ] All gaps CLOSED
+  - [ ] Test coverage ≥95%
+  - [ ] /audit fix clean
+  - [ ] Documentation updated
+  - [ ] MCP tools registered
+  - [ ] Orchestrators migrated
+  - [ ] Phase file moved to completed/
+
+# AC_COMPLETE: AC-TOOLKIT-CONSOLIDATION-2026-02-24-001 ✅
