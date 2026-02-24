@@ -1,0 +1,90 @@
+# CORTEX Phase Plan Template
+# Copy this file to planning/phases/planned/phase-{N}-{slug}.yaml
+# Do NOT leave placeholder text — fill every field before committing
+# Governance: master-plan-phase-lifecycle.yaml checkpoint-create checks this file
+
+id: "phase-{N}"
+title: "{Full descriptive title}"
+version: "1.0"
+created: "{YYYY-MM-DD}"
+status: PLANNED  # PLANNED | ACTIVE | COMPLETE | DEFERRED | ARCHIVED
+priority: P0     # P0 | P1 | P2
+governance_authority:
+  - CORE-008  # TDD mandatory — add applicable rules
+  - CORE-064  # Sweep Completeness Contract — always include
+sweep_catalogue_id: "SWEEP-{N}-{SLUG}"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND — why this phase exists, what triggered it
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: {review file or chat session that identified the need}
+  Score at entry: {X.X / 10}
+  Target score: {Y.Y / 10}
+  Baseline measurements:
+    - Smoke tests: {N} passed
+    - Relevant metrics: {value}
+  Git prerequisite: {branch/merge state}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE — all open issues this phase addresses (CORE-064)
+# Every gap here must be CLOSED before this phase can be marked COMPLETE.
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-{N}-01"
+    title: "{gap title}"
+    severity: P1  # P0 | P1 | P2
+    source: "{review or audit session}"
+    evidence: |
+      {specific evidence: file paths, line numbers, grep output}
+    action_ref: "phase-{N}-a"
+    status: OPEN  # OPEN | IN_PROGRESS | CLOSED
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated sub-phases
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "phase-{N}-a"
+    title: "{sub-phase title}"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-{N}-01"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "{N hours | N days}"
+    prerequisite: "{smoke tests green | prior sub-phase}"
+    regression_gate: "make test-batch — zero new failures"
+
+    tdd_sequence:
+      red:
+        - "{failing test to write first}"
+      green:
+        - "{minimum implementation to pass test}"
+      refactor:
+        - "{cleanup with all tests passing}"
+
+    acceptance_criteria:
+      - "{specific, measurable condition}"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-{N}-{SLUG}-{timestamp}"
+  complete: "AC_COMPLETE: AC-{N}-{SLUG}-{timestamp} ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPLETION SECTION (fill in when marking COMPLETE — do not leave blank)
+# ─────────────────────────────────────────────────────────────────────────────
+# metrics_at_completion:
+#   score: "{entry} → {final}"
+#   smoke_tests: "{N} passed, 0 failures"
+#   key_deliverables:
+#     - "{description}"
+#
+# exit_criteria_met:
+#   - "{criterion} ✅"
+#
+# deferred_items:
+#   - gap: "{GAP-ID}"
+#     reason: "{why deferred}"
+#     destination: "phase-{M}"

@@ -1,6 +1,6 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-23 (Phase 61-F) | ## About CORTEX
+**Updated:** 2026-02-24 (Phase 63 — THIN INDEX CONTRACT) | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
@@ -195,6 +195,44 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py batch →
 
 ---
 
+## 📋 Master Plan Decomposition — THIN INDEX CONTRACT
+
+**`cortex-master.yaml` is a REFERENCE INDEX only — never a detail document.**
+
+| Rule | Detail |
+|------|--------|
+| **Max size** | ≤ 500 lines (alarm at 400) |
+| **Prohibited inline** | `phases`, `gap_catalogue`, `tdd_sequence`, `rewrites`, `new_files`, `files_to_edit`, `implementation`, `code_snippets` |
+| **Allowed per entry** | `id`, `title`, `status`, `priority`, `sweep_id`, `gaps`, `sub_phases`, `file`, `note`, `phases` (list of IDs only) |
+| **Detail location** | `cortex-registry/planning/phases/planned/<phase-id>.yaml` (active/upcoming) |
+| **Completed detail** | `cortex-registry/planning/phases/completed/<phase-id>.yaml` |
+| **Template** | `cortex-registry/planning/phases/_template.yaml` |
+| **Lifecycle governance** | `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml` |
+
+### Decomposition Checks — Run at TWO points:
+
+**① BEFORE adding any phase to cortex-master.yaml (checkpoint_create):**
+1. Create dedicated file first at `cortex-registry/planning/phases/planned/<phase-id>.yaml`
+2. Use `cortex-registry/planning/phases/_template.yaml` as scaffold
+3. Write ALL detail in the dedicated file (gap catalogue, TDD sequences, acceptance criteria)
+4. Add ONLY a thin reference entry to `cortex-master.yaml`
+5. Verify `cortex-master.yaml` is still ≤ 500 lines: `wc -l cortex-registry/cortex-master.yaml`
+6. Validate YAML: `python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))"`
+
+**② BEFORE marking any phase COMPLETE in the pipeline (checkpoint_complete):**
+1. All gaps in `sweep_catalogue` have `status: CLOSED` (CORE-064)
+2. All acceptance criteria documented with ✅ in the dedicated file
+3. Move dedicated file from `planned/` → `completed/`
+4. Update `file:` reference in `cortex-master.yaml` to point to `completed/`
+5. Update `status: COMPLETE` in both `cortex-master.yaml` entry and dedicated file
+6. Run smoke gate: `make test-batch`
+7. Verify `cortex-master.yaml` remains ≤ 500 lines
+
+### Why This Exists:
+`cortex-master.yaml` grew from ~150L to 3,007L because inline phase detail was written directly to it. This caused: 40+ YAML syntax errors, un-reviewable diffs, context exhaustion when loading the file, and no single-file accountability for each phase's detail. The THIN INDEX CONTRACT prevents recurrence.
+
+---
+
 ## References
 
 - Architecture: `cortex-docs/architecture-recommendation.md`
@@ -202,6 +240,8 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py batch →
 - Security: `cortex-docs/security.md`
 - Architect Prompt: `.github/prompts/cortex-architect.prompt.md`
 - Response Templates: `.github/templates/cortex-response-templates.md`
+- Master Plan Lifecycle: `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml`
+- Phase Template: `cortex-registry/planning/phases/_template.yaml`
 
 ---
 

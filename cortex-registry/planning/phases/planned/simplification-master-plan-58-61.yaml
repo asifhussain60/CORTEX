@@ -1,0 +1,439 @@
+id: simplification-master-plan
+title: "CORTEX Simplification — Zero-Regression Surface Reduction (Phases 58–61)"
+version: "11.0"
+created: "2026-02-23"
+status: IN_PROGRESS
+priority: P0
+governance_authority:
+  - CORE-035  # Single canonical implementation — no duplicates
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: SWEEP-58-61-SIMPLIFICATION
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Goal: Zero regression, full functionality, surface reduction.
+  Prerequisite: Phase 57 (Intelligence Wiring) must complete first — GAP-57-01 is P0.
+  Triggered by copilot-review03.md + copilot-review04.md findings.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PRE-ANALYSIS MEASUREMENTS (2026-02-23 baseline)
+# ─────────────────────────────────────────────────────────────────────────────
+pre_analysis:
+  current_state:
+    sloc_cortex_package: 383140
+    python_files_cortex: 1346
+    python_files_tests: 1032
+    orchestrator_classes_total: 124
+    orchestrator_classes_in_orchestrators_dir: 71
+    core_core_files: 113
+    core_core_subdirs: 9
+    core_total_subdirs: 27
+    duplicate_filename_groups: 90
+    duplicate_extra_files: 96
+    yaml_files_total: 373
+    markdown_files_total: 169
+    imports_from_core_core_in_cortex: 98
+    imports_from_core_core_in_tests: 188
+    dual_registry_dirs: "_cortex-master/ AND planning/phases/ both exist (Phase 46 incomplete)"
+  target_state:
+    sloc_cortex_package: "~180000 (53% reduction)"
+    python_files_cortex: "~700 (48% reduction)"
+    orchestrator_classes_total: 22
+    core_core_files: 0
+    core_total_subdirs: 8
+    duplicate_filename_groups: 0
+    yaml_files_total: "~150 (60% reduction)"
+    dual_registry_dirs: "Eliminated — single planning/phases/ only"
+
+test_lock_baseline:
+  golden_tests: 838
+  smoke_tests_required: green
+  method: "make test-batch before each phase. Phase BLOCKED if baseline drops."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# REVIEW VERDICT
+# ─────────────────────────────────────────────────────────────────────────────
+what_review_got_right:
+  - claim: "124 orchestrator classes (documented as 17 wired)"
+    verdict: "CONFIRMED — 71 in orchestrators/, 53 more scattered"
+    severity: P1
+  - claim: "core/core double-nesting is the worst structural issue"
+    verdict: "CONFIRMED — 113 files, 98 cross-imports"
+    severity: P0
+  - claim: "5,086-line MasterOrchestrator is a God Object"
+    verdict: "CONFIRMED — still 5,086 lines after Stage 1-4 decomposition"
+    severity: P1
+  - claim: "90+ CORE-035 duplicate filename violations"
+    verdict: "CONFIRMED — 90 groups, 96 extra files measured live"
+    severity: P1
+  - claim: "EcommerceOrchestrator/HealthcareOrchestrator/FinancialOrchestrator are demo stubs"
+    verdict: "CONFIRMED — zero production imports"
+    severity: P2
+  - claim: "_cortex-master/ eliminated in Phase 46"
+    verdict: "FALSE — directory still exists with 30 YAML files (incomplete sweep)"
+    severity: P1
+what_review_got_wrong:
+  - claim: "9x AuditEntry duplicates"
+    verdict: "FIXED — 1 canonical AuditEntry in cortex/core/audit_models.py"
+  - claim: "874 except ImportError silences"
+    verdict: "OVERSTATED — measured 153 in cortex package"
+  - claim: "No real cross-repo capability"
+    verdict: "UNDERSTATED — multi_repo MCP tools exist and are functional"
+  - claim: "New repo is fastest path"
+    verdict: "WRONG — 838 golden tests + LENS pipeline = 6-month rebuild cost"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 58 — core/core COLLAPSE + DUPLICATE ELIMINATION
+# ─────────────────────────────────────────────────────────────────────────────
+phase_58:
+  id: phase-58
+  title: "Simplification Phase 1 — core/core Collapse & Duplicate Filename Elimination"
+  priority: P0
+  status: IN_PROGRESS
+  governance_authority: "CORE-035, CORE-064"
+  duration_estimate: "3-4 days"
+  prerequisite: "Phase 57 complete, smoke tests green"
+  sweep_id: SWEEP-58-CORE-COLLAPSE
+  regression_gate: "838 golden tests must pass after every sub-phase"
+
+  sub_phases:
+    - id: phase-58-a
+      title: "Audit & Map — core/core full dependency graph"
+      status: OPEN
+      duration: "4 hours"
+      description: |
+        Build exact import graph for 113 core/core files. Group into:
+        Group A: twins at cortex/core/<name>.py (15 files) — delete core/core copy
+        Group B: unique to core/core (~35 files) — relocate to canonical
+        Group C: knowledge/* (17 files) → cortex/knowledge/
+        Group D: intent/* (6 files) → cortex/core/intent/
+      deliverables:
+        - "Inline audit report: Group A/B/C/D counts"
+        - "import_redirect_map.yaml in cortex-registry/planning/ (temp, deleted after phase-58)"
+      group_a_twins:
+        - "ac_domain_mapper.py → cortex/core/ac_domain_mapper.py"
+        - "audit_required_validator.py → cortex/core/audit_required_validator.py"
+        - "brain_populator.py → cortex/core/brain_populator.py"
+        - "compatibility_layer.py → cortex/core/compatibility_layer.py"
+        - "dependency_validator.py → cortex/core/dependency_validator.py"
+        - "governance_enforcer.py → cortex/core/governance_enforcer.py"
+        - "governance_pregate.py → cortex/core/governance_pregate.py"
+        - "health_metrics.py → cortex/core/health_metrics.py"
+        - "mode_controller.py → cortex/core/mode_controller.py"
+        - "mutation_guard.py → cortex/core/mutation_guard.py"
+        - "path_resolver.py → cortex/core/path_resolver.py"
+        - "provenance_tracker.py → cortex/core/provenance_tracker.py"
+        - "response_header_config.py → cortex/core/response_header_config.py"
+        - "resumption_handler.py → cortex/core/resumption_handler.py"
+        - "state_machine.py → cortex/core/state_machine.py"
+
+    - id: phase-58-b
+      title: "Delete Group A twins — redirect imports to canonical"
+      status: OPEN
+      duration: "4 hours"
+      description: |
+        For each Group A twin: canonical already exists at cortex/core/<name>.py.
+        1. grep all imports of cortex.core.core.<name> → rewrite to cortex.core.<name>
+        2. make test-batch — must pass
+        3. delete cortex/core/core/<name>.py
+        4. make test-batch — confirm no regression
+        Do NOT batch — one file at a time for safety.
+      files_to_delete: 15
+
+    - id: phase-58-c
+      title: "Relocate Group B unique files to canonical locations"
+      status: OPEN
+      duration: "6 hours"
+      description: |
+        Move each Group B file to target path. Add compat shim at old path.
+        After all moves: final import sweep. Remove shims. Delete empty dirs.
+      files_to_relocate: ~35
+      compat_shim_retention: "90 days — removed in phase-61 cleanup"
+
+    - id: phase-58-d
+      title: "Relocate Group C (knowledge) + Group D (intent)"
+      status: OPEN
+      duration: "4 hours"
+      files_to_relocate: ~23
+
+    - id: phase-58-e
+      title: "Delete cortex/core/core/ directory entirely"
+      status: OPEN
+      duration: "2 hours"
+      description: |
+        After 58-b/c/d complete with zero test failures:
+        1. Verify only shims and empty inits remain (wc -l = 0 real logic)
+        2. Delete cortex/core/core/ directory
+        3. make test-batch — final confirmation
+        4. Update copilot-instructions.md: remove all core/core references
+      files_deleted: 113
+
+    - id: phase-58-f
+      title: "Duplicate filename elimination — 90 groups, 96 extra files"
+      status: OPEN
+      duration: "4 hours"
+      method: "grep import count determines canonical; lower count = delete candidate"
+      files_deleted_estimate: 96
+
+  exit_criteria:
+    - "cortex/core/core/ directory deleted (0 files)"
+    - "0 duplicate filename groups (from 90)"
+    - "838 golden tests passing"
+    - "grep -rn 'from cortex.core.core' cortex/ tests/ returns 0 results"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 59 — ORCHESTRATOR SURFACE REDUCTION (119 → 22 target)
+# ─────────────────────────────────────────────────────────────────────────────
+phase_59:
+  id: phase-59
+  title: "Simplification Phase 2 — Orchestrator Surface Reduction (119→22)"
+  priority: P1
+  status: IN_PROGRESS
+  governance_authority: "CORE-035, CORE-064"
+  duration_estimate: "1 week"
+  prerequisite: "Phase 58 complete"
+  sweep_id: SWEEP-59-ORCHESTRATOR-REDUCTION
+  regression_gate: "838 golden tests must pass after every batch"
+
+  sub_phases:
+    - id: phase-59-a
+      title: "Track A: Zero-import deletion + wiring registration"
+      status: COMPLETE
+      completed: "2026-02-23"
+      commit: ff8f9e813
+      deleted:
+        - "EcommerceOrchestrator — cortex/orchestrators/domain/business/ecommerce.py"
+        - "HealthcareOrchestrator — cortex/orchestrators/domain/business/healthcare.py"
+        - "FinancialOrchestrator — cortex/orchestrators/domain/business/financial.py"
+        - "DataMigrationOrchestrator — cortex/dashboards/data_migration_orchestrator.py"
+        - "GovernanceAlignmentOrchestrator — cortex/governance/governance_alignment_phase_2.py"
+        - "PromptCleanupOrchestrator — cortex/governance/validation/prompt_cleanup_cycle.py"
+        - "LearningOrchestrator — cortex/infrastructure/capacity/capacity_planning_orchestrators.py"
+      wired:
+        - "SweepCatalogueOrchestrator → support tier (59-g)"
+        - "HealthOrchestrator → health tier (59-g)"
+      orchestrator_count: "119 → 112 (7 deleted)"
+
+    - id: phase-59-b
+      title: "Track B/C: Merge near-duplicates + infrastructure class cleanup"
+      status: OPEN
+      remaining_candidates:
+        - "MultiRegionOrchestrator (1 test caller — has real tests)"
+        - "CortexDocsOrchestrator (13 test callers — real tests)"
+
+  canonical_22_keepers:
+    core_tier:
+      - "MasterOrchestrator — cortex/orchestrators/core/master_orchestrator.py"
+      - "IntentRouter — cortex/orchestrators/core/intent_router.py"
+      - "TDDOrchestrator — cortex/orchestrators/core/tdd_orchestrator.py"
+      - "EnforcementOrchestrator — cortex/orchestrators/core/enforcement_orchestrator.py"
+      - "RequestRephraseOrchestrator — cortex/orchestrators/core/request_rephrase_orchestrator.py"
+      - "ConversationOrchestrator — cortex/orchestrators/core/conversation_orchestrator.py"
+    domain_tier:
+      - "RefactoringOrchestrator — cortex/orchestrators/domain/refactoring_orchestrator.py"
+      - "PlanningOrchestrator — cortex/orchestrators/domain/planning_orchestrator.py"
+      - "AuditOrchestrator — cortex/orchestrators/core/audit_orchestrator.py"
+      - "SecurityOrchestrator — cortex/orchestrators/core/security_orchestrator.py"
+      - "OnboardingOrchestrator — cortex/orchestrators/support/repository_onboarding_orchestrator.py"
+      - "DomainOrchestrator — cortex/orchestrators/domain/domain_orchestrator.py"
+    support_tier:
+      - "HealthOrchestrator — cortex/orchestrators/health/health_orchestrator.py"
+      - "VacuumOrchestrator — cortex/orchestrators/support/vacuum_orchestrator.py"
+      - "UpgradeOrchestrator — cortex/orchestrators/support/upgrade_orchestrator.py"
+      - "GitOrchestrator — cortex/orchestrators/git/git_orchestrator.py"
+      - "DigestSessionOrchestrator — cortex/orchestrators/support/digest_session_orchestrator.py"
+      - "BulkDigestOrchestrator — cortex/orchestrators/support/bulk_digest_orchestrator.py"
+      - "SweepCatalogueOrchestrator — cortex/orchestrators/support/sweep_catalogue_orchestrator.py"
+      - "WorkflowOrchestrator — cortex/orchestrators/workflow/workflow_orchestrator.py"
+      - "DebuggerOrchestrator — cortex/orchestrators/support/debugger_orchestrator.py"
+      - "RollbackOrchestrator — cortex/orchestrators/support/rollback_orchestrator.py"
+
+  exit_criteria:
+    - "Orchestrator class count: ≤22 in cortex/orchestrators/"
+    - "Zero classes named *Orchestrator outside cortex/orchestrators/ and cortex/core/"
+    - "838 golden tests passing"
+    - "24 MCP tools unchanged and healthy"
+    - "IntentRouter routing table updated to reflect 22 canonical orchestrators"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 60 — cortex/core FLATTEN (27 subdirs → 8 canonical)
+# ─────────────────────────────────────────────────────────────────────────────
+phase_60:
+  id: phase-60
+  title: "Simplification Phase 3 — cortex/core Flatten (27 dirs→8 canonical)"
+  priority: P1
+  status: OPEN
+  governance_authority: "CORE-035, CORE-064"
+  duration_estimate: "1 week"
+  prerequisite: "Phase 58 + Phase 59 complete"
+  sweep_id: SWEEP-60-CORE-FLATTEN
+  regression_gate: "838 golden tests must pass after every sub-phase"
+
+  current_state: "27 subdirectories in cortex/core/ + 32 top-level .py files"
+
+  target_structure:
+    cortex_core:
+      - "__init__.py"
+      - "orchestrator.py  ← OrchestratorProtocolMixin + OrchestratorBase (merged)"
+      - "result.py        ← Ok/Err (canonical, unchanged)"
+      - "audit.py         ← AuditEntry + AuditModels (canonical, unchanged)"
+      - "governance.py    ← enforcement rules + rule_evaluator + governance_pregate"
+      - "registry.py      ← MultiTenantRegistry + FeatureRegistry (merged)"
+      - "workflow.py      ← WorkflowEngine + WorkflowTemplateMixin (merged)"
+      - "interfaces.py    ← IOrchestrator (single path, no subdirectory)"
+      - "models.py        ← shared data classes"
+      - "common/          ← keep (exceptions, validators, file_utils, progress_reporter)"
+      - "security/        ← keep (rate_limiter, auth)"
+      - "database/        ← keep (SQLite tier enforcement)"
+
+  directories_to_dissolve:
+    - "cortex/core/adapters/ → merge into cortex/core/common/"
+    - "cortex/core/bootstrap/ → merge into cortex/core/__init__.py"
+    - "cortex/core/config/ → merge into cortex/core/models.py"
+    - "cortex/core/confirmation/ → merge into cortex/core/governance.py"
+    - "cortex/core/decorators/ → merge into cortex/core/governance.py"
+    - "cortex/core/discovery/ → move to cortex/mcp/"
+    - "cortex/core/errors/ → merge into cortex/core/common/"
+    - "cortex/core/execution/ → move to cortex/orchestrators/workflow/"
+    - "cortex/core/governance/ → merge into cortex/core/governance.py"
+    - "cortex/core/hallucination_prevention/ → move to cortex/intelligence/"
+    - "cortex/core/intelligence/ → move to cortex/intelligence/"
+    - "cortex/core/intent/ → move to cortex/orchestrators/core/intent_router/"
+    - "cortex/core/interaction/ → merge into cortex/orchestrators/core/"
+    - "cortex/core/orchestrator/ → merge into cortex/core/orchestrator.py"
+    - "cortex/core/parsing/ → move to cortex/intelligence/"
+    - "cortex/core/recovery/ → merge into cortex/core/common/"
+    - "cortex/core/registry/ → merge into cortex/core/registry.py"
+    - "cortex/core/resilience/ → move to cortex/infrastructure/"
+    - "cortex/core/safety/ → merge into cortex/core/governance.py"
+    - "cortex/core/schemas/ → merge into cortex/core/models.py"
+    - "cortex/core/state/ → merge into cortex/orchestrators/core/"
+    - "cortex/core/wiring/ → merge into cortex/core/registry.py"
+
+  exit_criteria:
+    - "cortex/core/ has exactly 8 canonical items (3 files + 5 dirs)"
+    - "Zero directories named hallucination_prevention, wiring, safety, schemas, parsing"
+    - "838 golden tests passing"
+    - "OrchestratorProtocolMixin importable from cortex.core.orchestrator"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASE 61 — REGISTRY CLEANUP & LEGACY FILE PURGE
+# ─────────────────────────────────────────────────────────────────────────────
+phase_61:
+  id: phase-61
+  title: "Simplification Phase 4 — Registry Cleanup & Legacy File Purge"
+  priority: P2
+  status: PARTIALLY_COMPLETE
+  governance_authority: "CORE-002, CORE-035, CORE-064"
+  duration_estimate: "2 days"
+  prerequisite: "Phase 58 + 59 + 60 complete"
+  sweep_id: SWEEP-61-REGISTRY-CLEANUP
+
+  sub_phases:
+    - id: phase-61-a
+      title: "_cortex-master/ elimination — Phase 46 incomplete sweep"
+      status: DEFERRED
+      deferred_reason: |
+        _cortex-master/ has 42 active Python callers.
+        Deletion requires migration of all 42 callers. Deferred to Phase 62.
+      expected_result: "_cortex-master/ deleted after caller migration"
+
+    - id: phase-61-b
+      title: "Registry YAML reduction — 373 → ~150 files"
+      status: COMPLETE
+      actions_taken: |
+        - cortex-refactor/ (13 YAMLs) archived → planning/phases/archived/
+        - phase-59-canonical-integrity-sweep.yaml → planning/phases/completed/
+        - ENH-STS-REFACTOR-GAPS-2026-02-22.yaml → plans/archived/
+        - Active (non-archived) YAMLs: 207 (down from 221)
+      files_archived: 14
+
+    - id: phase-61-c
+      title: "Compat shim review"
+      status: RETAINED
+      retention_reason: |
+        1 '# COMPAT' marker found: cortex/core/core/result.py (Phase 58 shim).
+        90-day retention: created 2026-02-23, expires 2026-05-23.
+        154 imports of cortex.core.core still active — shims required.
+
+    - id: phase-61-d
+      title: "cortex-sts/ CortexLabs demo cleanup"
+      status: COMPLETE
+      actions_taken: "Created cortex-sts/README.md documenting PB-STS-001 demo purpose."
+
+    - id: phase-61-e
+      title: "Legacy orchestrator file audit in non-orchestrators dirs"
+      status: COMPLETE
+      findings: |
+        All *Orchestrator classes outside cortex/orchestrators/ are intentional domain cohesion:
+        - cortex/lens/ (LENSOrchestrator) — LENS domain, 16 callers
+        - cortex/infrastructure/ (MultiRegionOrchestrator, RollbackOrchestrator)
+        - cortex/governance/ (RegressionSafetyOrchestrator)
+        - cortex/core/ (IOrchestrator, OrchestratorBase, OrchestratorProtocolMixin) — base classes
+        None require relocation.
+
+    - id: phase-61-f
+      title: "Documentation sync — copilot-instructions.md + cortex-master.yaml"
+      status: COMPLETE
+      actions_taken: |
+        - copilot-instructions.md: orchestrator count updated 17 → 27
+        - copilot-instructions.md: MCP Tools count updated 24 → 26
+        - copilot-instructions.md: Phase tag → Phase 61-F
+        - cortex-master.yaml: production_status → Phase 61 COMPLETE (v11.4)
+
+  exit_criteria:
+    - "cortex-registry/_cortex-master/ deleted"
+    - "cortex-registry/*.yaml count ≤ 150"
+    - "grep -rn '# COMPAT' cortex/ returns 0"
+    - "838 golden tests passing"
+    - "All SSOT docs reflect post-simplification reality"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# END-STATE VERIFICATION
+# ─────────────────────────────────────────────────────────────────────────────
+end_state_verification:
+  measurements:
+    - cmd: "find cortex -name '*.py' | wc -l"
+      target: "≤700"
+    - cmd: "find cortex -name '*.py' | xargs grep -h '^class.*Orchestrator' | sort | uniq | wc -l"
+      target: "≤22"
+    - cmd: "find cortex/core/core -name '*.py' 2>/dev/null | wc -l"
+      target: "0"
+    - cmd: "find cortex/core -maxdepth 1 -type d | wc -l"
+      target: "≤9"
+    - cmd: "find . -name '*.yaml' | wc -l"
+      target: "≤150"
+    - cmd: "grep -rn 'from cortex.core.core' cortex/ tests/ | wc -l"
+      target: "0"
+    - cmd: "make test-batch"
+      target: "838 golden tests passing, exit code 0"
+    - cmd: "python3 -m cortex.mcp"
+      target: "MCP server starts, 26 tools registered"
+    - cmd: "python3 scripts/run_tests.py smoke"
+      target: "exit code 0"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ZERO-REGRESSION GUARANTEE
+# ─────────────────────────────────────────────────────────────────────────────
+zero_regression_guarantee:
+  non_negotiable_keepers:
+    - "838 golden tests — zero deletions without replacement"
+    - "26 MCP tools — interface unchanged"
+    - "35 CORE governance rules — unchanged"
+    - "LENS 8-analyzer pipeline — paths may change, imports must work"
+    - "pytest-xdist parallel runner — unchanged"
+    - "SQLite audit trail (.cortex-runtime/traces/) — unchanged"
+    - "WorkflowTemplateMixin — merged into cortex/core/workflow.py, same API"
+    - "OrchestratorProtocolMixin — merged into cortex/core/orchestrator.py, same API"
+
+pre_work_required:
+  title: "BEFORE PHASE 58 STARTS — Fix smoke test exit code 1"
+  priority: P0
+  action: |
+    1. python3 scripts/run_tests.py smoke 2>&1 | tail -30
+    2. Identify failing test(s)
+    3. Fix root cause (do not skip or xfail without root cause analysis)
+    4. Confirm: python3 scripts/run_tests.py smoke exits code 0
+    5. Only then proceed to Phase 57 → Phase 58

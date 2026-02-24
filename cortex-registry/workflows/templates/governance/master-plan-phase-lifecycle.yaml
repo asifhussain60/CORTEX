@@ -1,0 +1,402 @@
+# =============================================================================
+# CORTEX Master Plan Phase Lifecycle — Governance Workflow Template
+# =============================================================================
+# Version: 1.0.0
+# Created: 2026-02-24
+# Authority: CORE-002, CORE-008, CORE-028, CORE-035, CORE-048, CORE-064
+#
+# Purpose: Standardizes the creation, decomposition, execution, and completion
+#          of all CORTEX master plan phases. Enforces the THIN INDEX CONTRACT:
+#          cortex-master.yaml is a reference index only. All phase detail lives
+#          in cortex-registry/planning/phases/{status}/<phase-id>.yaml.
+#
+# THIN INDEX CONTRACT (enforced at every stage):
+#   ✅ cortex-master.yaml: id, title, status, priority, file reference, gap count
+#   ❌ cortex-master.yaml: sub-phases, gap catalogue, tdd sequences, code snippets
+#
+# Usage: CortexMasterPlanOrchestrator.load_workflow_template("master-plan-phase-lifecycle")
+# Checks: Run at phase CREATION, ACTIVE execution, and COMPLETION (3 checkpoints)
+# =============================================================================
+
+workflow:
+  name: master_plan_phase_lifecycle
+  version: "1.0.0"
+  description: >
+    Full lifecycle governance for a CORTEX master plan phase.
+    Enforces decomposition rules, file structure, and completion contracts.
+    Three checkpoint runs: at phase creation, during execution, and at completion.
+    Prevents cortex-master.yaml bloat — all detail in dedicated phase files.
+
+  entry_point: CortexMasterPlanOrchestrator
+  orchestrator: CortexMasterPlanOrchestrator
+  mcp_tool: cortex_master_plan
+  execution_mode: "autonomous"
+  visual_feedback: "SSOT: .github/templates/cortex-response-templates.md § SILENT AUTONOMOUS MODE"
+  applies_to: "Every new phase and every phase marked COMPLETE"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # INPUT SCHEMA
+  # ─────────────────────────────────────────────────────────────────────────
+  input:
+    required:
+      - phase_id: "Phase ID (e.g. 'phase-63')"
+      - lifecycle_event: "ENUM: create | activate | complete"
+    optional:
+      - dry_run: "If true, validate without executing changes (default: false)"
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # FILE STRUCTURE CONTRACT
+  # ─────────────────────────────────────────────────────────────────────────
+  file_structure:
+    master_yaml:
+      path: "cortex-registry/cortex-master.yaml"
+      allowed_keys_per_phase:
+        - id
+        - title
+        - status
+        - priority
+        - sweep_id
+        - gaps
+        - sub_phases
+        - note
+        - file
+      prohibited_keys:
+        - phases
+        - gap_catalogue
+        - sweep_catalogue
+        - tdd_sequence
+        - sub_phases_detail
+        - rewrites
+        - new_files
+        - files_to_edit
+        - code_snippets
+        - implementation
+      enforcement: |
+        If any prohibited_key exists as an inline block under a planned_phases entry,
+        this is a CORE-035 decomposition violation (P1).
+        Remediation: extract to dedicated file, replace with file: reference.
+
+    phase_files:
+      planned: "cortex-registry/planning/phases/planned/<phase-id>.yaml"
+      completed: "cortex-registry/planning/phases/completed/<phase-id>.yaml"
+      archived: "cortex-registry/planning/phases/archived/<phase-id>.yaml"
+      naming_rule: "CORE-028: snake_case. Pattern: phase-{number}-{slug}.yaml"
+      required_fields:
+        - id
+        - title
+        - version
+        - created
+        - status
+        - priority
+        - governance_authority
+        - sweep_catalogue_id
+        - background
+        - sweep_catalogue  # or phases list
+        - acceptance_criteria  # or exit_criteria
+      optional_fields:
+        - phases
+        - folded_from_reviews
+        - metrics_at_completion
+        - ac_markers
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # CHECKPOINT 1 — PHASE CREATION
+  # Triggered when: new phase is added to planned_phases in cortex-master.yaml
+  # ─────────────────────────────────────────────────────────────────────────
+  checkpoint_create:
+    id: checkpoint-create
+    trigger: "lifecycle_event == 'create'"
+    description: "Validate new phase follows decomposition contract before detail is written"
+    primitive_ref: "primitives/validation/master-plan-decomposition-check.yaml"
+
+    checks:
+      - id: decomp-001
+        name: "dedicated_file_exists"
+        severity: P0
+        description: "A dedicated phase YAML must exist before phase is added to cortex-master.yaml"
+        validation: |
+          assert file_exists(f"cortex-registry/planning/phases/planned/{phase_id}.yaml"), \
+            f"P0: Create {phase_id}.yaml in planning/phases/planned/ BEFORE adding to cortex-master.yaml"
+        auto_create_template: true
+        template_source: "planning/phases/planned/_template.yaml"
+
+      - id: decomp-002
+        name: "master_yaml_entry_is_thin"
+        severity: P1
+        description: "cortex-master.yaml entry must contain only index fields"
+        validation: |
+          entry = load_master_yaml_phase_entry(phase_id)
+          prohibited = ['phases', 'gap_catalogue', 'sweep_catalogue', 'tdd_sequence',
+                        'rewrites', 'new_files', 'files_to_edit', 'implementation']
+          violations = [k for k in prohibited if k in entry]
+          assert not violations, \
+            f"P1: DECOMP VIOLATION — Move {violations} to planning/phases/planned/{phase_id}.yaml"
+
+      - id: decomp-003
+        name: "file_reference_present"
+        severity: P1
+        description: "cortex-master.yaml entry must include 'file:' pointing to dedicated plan"
+        validation: |
+          entry = load_master_yaml_phase_entry(phase_id)
+          assert 'file' in entry, \
+            f"P1: Add 'file: cortex-registry/planning/phases/planned/{phase_id}.yaml' to master entry"
+
+      - id: decomp-004
+        name: "dedicated_file_has_required_fields"
+        severity: P1
+        description: "Dedicated phase file must have all required fields"
+        required_fields: [id, title, version, created, status, priority, governance_authority,
+                          sweep_catalogue_id, background]
+        validation: |
+          phase_data = load_phase_file(phase_id)
+          missing = [f for f in required_fields if f not in phase_data]
+          assert not missing, f"P1: Missing required fields in {phase_id}.yaml: {missing}"
+
+      - id: decomp-005
+        name: "yaml_is_valid"
+        severity: P0
+        description: "Both cortex-master.yaml and dedicated phase file must parse cleanly"
+        validation: |
+          import yaml
+          yaml.safe_load(open('cortex-registry/cortex-master.yaml'))
+          yaml.safe_load(open(f'cortex-registry/planning/phases/planned/{phase_id}.yaml'))
+
+    on_pass: |
+      ✅ CHECKPOINT 1 PASS: Phase {phase_id} creation contract satisfied.
+      Dedicated file: cortex-registry/planning/phases/planned/{phase_id}.yaml
+      Master YAML entry: thin index only.
+      → Proceed to implementation.
+
+    on_fail: |
+      ⛔ CHECKPOINT 1 FAIL: Phase {phase_id} creation contract VIOLATED.
+      Violations: {violations}
+      Required actions before proceeding:
+        1. Extract inline detail from cortex-master.yaml → dedicated .yaml file
+        2. Add 'file:' reference to cortex-master.yaml entry
+        3. Validate YAML syntax of both files
+        4. Re-run checkpoint-create
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # CHECKPOINT 2 — PHASE ACTIVE EXECUTION
+  # Triggered when: phase status is ACTIVE or sub-phase is marked COMPLETE
+  # Also runs as redundancy check throughout pipeline execution
+  # ─────────────────────────────────────────────────────────────────────────
+  checkpoint_active:
+    id: checkpoint-active
+    trigger: "lifecycle_event == 'activate' OR sub_phase_completed"
+    description: "Guard against inline bloat accumulating during execution"
+    primitive_ref: "primitives/validation/master-plan-decomposition-check.yaml"
+
+    checks:
+      - id: exec-001
+        name: "no_new_inline_detail_in_master"
+        severity: P1
+        description: "Execution notes/findings must go to dedicated file, not master YAML"
+        validation: |
+          master_yaml = load_master_yaml()
+          # Measure total lines in cortex-master.yaml
+          line_count = count_lines('cortex-registry/cortex-master.yaml')
+          # If line_count grew by >10 lines since last checkpoint, flag for review
+          assert line_count - baseline_line_count <= 10, \
+            f"P1: cortex-master.yaml grew by {line_count - baseline_line_count} lines. " \
+            f"Move detail to planning/phases/{phase_id}.yaml"
+
+      - id: exec-002
+        name: "sub_phase_status_in_dedicated_file"
+        severity: P2
+        description: "Sub-phase status updates must be in dedicated file, not master YAML"
+        validation: |
+          master_entry = load_master_yaml_phase_entry(phase_id)
+          # Master entry should only have top-level status, not per-sub-phase status
+          assert 'sub_phases' not in master_entry or \
+            all(isinstance(sp, str) for sp in master_entry.get('sub_phases', [])), \
+            "P2: sub_phase status details belong in dedicated phase file"
+
+      - id: exec-003
+        name: "ac_markers_emitted"
+        severity: P1
+        description: "Phase execution must emit AC_START and AC_COMPLETE to orchestrator-traces.db"
+        validation: |
+          import sqlite3
+          db = sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db')
+          orphans = db.execute(
+            "SELECT COUNT(*) FROM audit_sessions WHERE ac_start IS NOT NULL AND ac_complete IS NULL"
+          ).fetchone()[0]
+          assert orphans == 0, f"P1: {orphans} orphaned AC_START markers without AC_COMPLETE"
+
+      - id: exec-004
+        name: "test_baseline_maintained"
+        severity: P0
+        description: "Test baseline must not drop during phase execution"
+        validation: |
+          # Smoke tests must pass before continuing
+          result = run_command("python3 scripts/run_tests.py smoke")
+          assert result.exit_code == 0, \
+            "P0: Smoke tests failing — BLOCK execution until green"
+
+    on_pass: |
+      ✅ CHECKPOINT 2 PASS: Phase {phase_id} execution is on-contract.
+      Master YAML: within bounds. AC markers: complete. Tests: green.
+      → Continue execution.
+
+    on_fail: |
+      ⛔ CHECKPOINT 2 FAIL: Execution contract VIOLATED.
+      This is a CORE-064 partial sweep signal — do not continue until resolved.
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # CHECKPOINT 3 — PHASE COMPLETION
+  # Triggered when: phase status is being changed to COMPLETE
+  # This is the redundancy check — runs even if checkpoints 1+2 passed
+  # ─────────────────────────────────────────────────────────────────────────
+  checkpoint_complete:
+    id: checkpoint-complete
+    trigger: "lifecycle_event == 'complete'"
+    description: "Final gate before marking a phase COMPLETE — validates all contracts"
+    primitive_ref: "primitives/validation/master-plan-decomposition-check.yaml"
+
+    checks:
+      - id: comp-001
+        name: "all_sweep_catalogue_items_closed"
+        severity: P0
+        description: "CORE-064: All GAP entries in dedicated file must be status: CLOSED"
+        validation: |
+          phase_data = load_phase_file(phase_id)
+          open_gaps = [g for g in phase_data.get('sweep_catalogue', [])
+                       if g.get('status', 'OPEN') != 'CLOSED']
+          assert not open_gaps, \
+            f"P0: CORE-064 VIOLATION — {len(open_gaps)} gaps not closed: {[g['id'] for g in open_gaps]}"
+
+      - id: comp-002
+        name: "all_acceptance_criteria_documented_as_met"
+        severity: P1
+        description: "Dedicated phase file must have acceptance_criteria_met or exit_criteria_met section"
+        validation: |
+          phase_data = load_phase_file(phase_id)
+          has_met = ('acceptance_criteria_met' in phase_data or
+                     'exit_criteria_met' in phase_data or
+                     'metrics_at_completion' in phase_data)
+          assert has_met, \
+            "P1: Add acceptance_criteria_met: [] to dedicated phase file before marking COMPLETE"
+
+      - id: comp-003
+        name: "master_yaml_file_moved_to_completed"
+        severity: P1
+        description: "Dedicated phase file must be moved from planned/ to completed/ on COMPLETE"
+        validation: |
+          planned_path = f'cortex-registry/planning/phases/planned/{phase_id}.yaml'
+          completed_path = f'cortex-registry/planning/phases/completed/{phase_id}.yaml'
+          # On completion: planned must not exist, completed must exist
+          assert not file_exists(planned_path), \
+            f"P1: Move {planned_path} → {completed_path} (git mv)"
+          assert file_exists(completed_path), \
+            f"P1: File must exist at {completed_path}"
+
+      - id: comp-004
+        name: "master_yaml_entry_updated_to_complete"
+        severity: P1
+        description: "cortex-master.yaml phase_status.completed list must include this phase"
+        validation: |
+          master = load_master_yaml()
+          completed_ids = [p['id'] for p in master.get('phase_status', {}).get('completed', [])]
+          assert phase_id in completed_ids, \
+            f"P1: Add {phase_id} to phase_status.completed in cortex-master.yaml"
+
+      - id: comp-005
+        name: "master_yaml_counters_updated"
+        severity: P2
+        description: "metadata.completed and summary counters must reflect new count"
+        validation: |
+          master = load_master_yaml()
+          completed_count = len(master.get('phase_status', {}).get('completed', []))
+          assert master['metadata']['completed'] == completed_count, \
+            f"P2: Update metadata.completed: {completed_count} in cortex-master.yaml"
+
+      - id: comp-006
+        name: "test_suite_green"
+        severity: P0
+        description: "Full smoke test suite must pass before COMPLETE is declared"
+        validation: |
+          result = run_command("python3 scripts/run_tests.py smoke")
+          assert result.exit_code == 0, \
+            "P0: Smoke tests failing — cannot mark phase COMPLETE"
+
+      - id: comp-007
+        name: "master_yaml_still_thin_after_completion"
+        severity: P1
+        description: "No completion notes/metrics should be added inline to cortex-master.yaml"
+        validation: |
+          entry = load_master_yaml_phase_entry(phase_id)
+          prohibited = ['phases', 'gap_catalogue', 'tdd_sequence', 'metrics_at_completion',
+                        'exit_criteria_met', 'deliverables', 'new_signals', 'rewrites']
+          violations = [k for k in prohibited if k in entry]
+          assert not violations, \
+            f"P1: Move {violations} to planning/phases/completed/{phase_id}.yaml — not in master"
+
+    on_pass: |
+      ✅ CHECKPOINT 3 PASS: Phase {phase_id} COMPLETE contract satisfied.
+      All gaps CLOSED (CORE-064). Dedicated file in completed/. Master YAML updated.
+      Tests green. → Commit with: chore: phase-{id} COMPLETE [sweep-{id}]
+
+    on_fail: |
+      ⛔ CHECKPOINT 3 FAIL: Phase {phase_id} CANNOT be marked COMPLETE.
+      CORE-064 blocks completion until all catalogue items are CLOSED.
+      Resolve all violations before re-running checkpoint-complete.
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # AUTOMATED REMEDIATION
+  # ─────────────────────────────────────────────────────────────────────────
+  auto_remediation:
+    enabled: true
+    actions:
+      - trigger: "decomp-002 fails (inline detail in master YAML)"
+        action: |
+          1. Extract all prohibited keys from master YAML entry
+          2. Append to planning/phases/planned/{phase_id}.yaml
+          3. Replace inline content with 'file: cortex-registry/planning/phases/planned/{phase_id}.yaml'
+          4. Re-run YAML validation
+          5. Report: "Extracted {N} keys from cortex-master.yaml to {phase_id}.yaml"
+
+      - trigger: "decomp-001 fails (no dedicated file)"
+        action: |
+          1. Copy _template.yaml to planning/phases/planned/{phase_id}.yaml
+          2. Populate id, title, created, status from master YAML entry
+          3. Report: "Created {phase_id}.yaml from template — populate remaining required fields"
+
+      - trigger: "comp-003 fails (file not moved)"
+        action: |
+          git mv cortex-registry/planning/phases/planned/{phase_id}.yaml \
+                 cortex-registry/planning/phases/completed/{phase_id}.yaml
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # CORTEX-MASTER.YAML SIZE GOVERNANCE
+  # ─────────────────────────────────────────────────────────────────────────
+  size_governance:
+    max_lines: 500
+    description: |
+      cortex-master.yaml must remain ≤500 lines.
+      Any edit that pushes it beyond 500 lines triggers an auto-decomposition check.
+      The file is an INDEX. Detailed plans belong in planning/phases/.
+    alarm_threshold: 400
+    alarm_action: |
+      When cortex-master.yaml exceeds 400 lines:
+      1. Identify the largest inline phase block
+      2. Extract it to planning/phases/planned/ or completed/
+      3. Replace with thin reference entry
+      4. Re-validate YAML
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # CONVERGENCE GATE (CORE-064)
+  # ─────────────────────────────────────────────────────────────────────────
+  convergence_gate:
+    primitive_ref: "primitives/validation/detect-fix-rescan-loop.yaml"
+    applies_to: [checkpoint_create, checkpoint_active, checkpoint_complete]
+    exit_condition: "All P0 and P1 checks pass"
+    max_iterations: 5
+    on_max_exceeded: |
+      Surface remaining violations inline. Request human review.
+      Do NOT mark phase COMPLETE while P0/P1 violations remain.
+
+  ac_markers:
+    start: "AC_START: AC-MASTER-PLAN-LIFECYCLE-{lifecycle_event}-{phase_id}-{timestamp}"
+    complete: "AC_COMPLETE: AC-MASTER-PLAN-LIFECYCLE-{lifecycle_event}-{phase_id}-{timestamp} ✅"
+    persistence: ".cortex-runtime/traces/orchestrator-traces.db"

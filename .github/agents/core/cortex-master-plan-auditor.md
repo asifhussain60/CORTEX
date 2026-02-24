@@ -23,14 +23,14 @@ collaborators:
 priority: "P0"
 token_cost_estimate: 3000
 created_date: "2026-02-20"
-last_updated: "2026-02-21"
+last_updated: "2026-02-24"
 maintainer: "Asif Hussain"
 ---
 
 # CORTEX Master Plan Auditor
 
-**Updated:** 2026-02-20 | **Role:** Master Plan Integrity Validation  
-**Trigger:** Plan integrity checks, phase dependency validation
+**Updated:** 2026-02-24 | **Role:** Master Plan Integrity Validation + THIN INDEX CONTRACT Enforcement  
+**Trigger:** Plan integrity checks, phase dependency validation, cortex-master.yaml size governance
 
 ---
 
@@ -92,6 +92,44 @@ maintainer: "Asif Hussain"
 | 5 | Registry sync | YAML phases match git tag state |
 | 6 | No zombie phases | No "IN_PROGRESS" phases older than 30 days |
 | 7 | ROI tracking | Completed phases have measured outcomes |
+| 8 | **THIN INDEX — size gate** | `cortex-master.yaml` ≤ 500 lines (alarm at 400) |
+| 9 | **THIN INDEX — no inline detail** | No `gap_catalogue`, `tdd_sequence`, `new_files`, or `implementation` keys inline |
+| 10 | **THIN INDEX — file: present** | Every planned_phases entry has a `file:` key pointing to a dedicated yaml |
+| 11 | **Dedicated file exists** | All `file:` paths in `cortex-master.yaml` resolve to actual files |
+| 12 | **Status/location consistency** | COMPLETE phases in `completed/`, ACTIVE/PLANNED in `planned/` |
+
+---
+
+## THIN INDEX CONTRACT
+
+**`cortex-master.yaml` is a reference index only — max 500 lines.**
+
+**Lifecycle governance:** `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml`
+**Phase template:** `cortex-registry/planning/phases/_template.yaml`
+
+### Checks to run on every PLAN intent:
+
+```bash
+# Check 8: Size gate
+wc -l cortex-registry/cortex-master.yaml
+
+# Check 9: No inline detail keys
+grep -n "gap_catalogue:\|tdd_sequence:\|new_files:\|implementation:" cortex-registry/cortex-master.yaml
+
+# Check 10/11: Every phase entry has file: and it exists
+python3 - << 'EOF'
+import yaml, os
+data = yaml.safe_load(open('cortex-registry/cortex-master.yaml'))
+entries = data.get('phase_detail_files', []) + data.get('metadata', {}).get('planned_phases', [])
+for e in entries:
+    f = e.get('file')
+    if f and not os.path.exists(f):
+        print(f"MISSING: {f} (id: {e.get('id')})")
+    elif not f:
+        print(f"NO file: key on id: {e.get('id')}")
+print("Check complete")
+EOF
+```
 
 ---
 
@@ -144,21 +182,38 @@ find cortex/mcp/tools -name "*.py" | grep -v "__init__\|test" | wc -l
 
 ## New Phase Standards
 
-When creating a new phase (post-refactor):
+When creating a new phase, follow the THIN INDEX CONTRACT:
 
-```yaml
-# cortex-registry/phases/phase-XX.yaml
-phase: XX
-title: "Brief description"
-status: PLANNED  # PLANNED | IN_PROGRESS | COMPLETE | ABANDONED
-depends_on: [phase numbers]
-orchestrators_affected: ["OrchestratorName"]
-tests_required: true
-estimated_effort: "S|M|L|XL"
-actual_outcome: ""  # Fill on completion
+**Step 1 — Create dedicated file FIRST:**
+```bash
+# Use the template
+cp cortex-registry/planning/phases/_template.yaml \
+   cortex-registry/planning/phases/planned/phase-{N}-{slug}.yaml
+# Write ALL detail there (gaps, TDD sequences, sub-phases, acceptance criteria)
 ```
 
-**Phase file naming:** `phase-XX.yaml` (snake_case, CORE-028)
+**Step 2 — Add ONLY a thin reference to `cortex-master.yaml`:**
+```yaml
+# In phase_detail_files: list
+- id: phase-{N}
+  title: "Brief description"
+  priority: P0
+  status: ACTIVE
+  sweep_id: SWEEP-{N}-{SLUG}
+  gaps: {count}
+  sub_phases: {count}
+  file: "cortex-registry/planning/phases/planned/phase-{N}-{slug}.yaml"
+  note: "One-sentence summary of the phase goals."
+```
+
+**Step 3 — Validate (checkpoint_create):**
+```bash
+wc -l cortex-registry/cortex-master.yaml   # ≤ 500
+python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml')); print('YAML valid')"
+```
+
+**Prohibited inline keys in cortex-master.yaml:**
+`gap_catalogue`, `tdd_sequence`, `new_files`, `files_to_edit`, `implementation`, `code_snippets`, `phases` (detail blocks)
 
 ---
 

@@ -1,11 +1,14 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-23 (Phase 61-F) | **Architecture:** 27 Wired Orchestrators · 26 MCP Tools · 35 CORE Rules · 1 Package  
+**Updated:** 2026-02-24 (Phase 63 — THIN INDEX CONTRACT) | **Architecture:** 27 Wired Orchestrators · 26 MCP Tools · 35 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
 - **Response Templates:** `.github/templates/cortex-response-templates.md`
 - **Governance Rules:** `cortex-registry/core/`
 - **Refactor Plan:** `cortex-registry/planning/cortex-refactor-master.yaml`
+- **Master Plan Index:** `cortex-registry/cortex-master.yaml` *(thin index — ≤500L)*
+- **Phase Template:** `cortex-registry/planning/phases/_template.yaml`
+- **Phase Lifecycle:** `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml`
 - **Wiring Contract:** `cortex-registry/core/specifications/` (`orchestration-master-wiring.yaml`, `core-orchestrator-wiring.yaml`, `domain-orchestrator-wiring.yaml`, `support-orchestrator-wiring.yaml`)
 - **Stage 0 Spec:** `.github/agents/core/STAGE-0-GOVERNANCE-AUDIT-SPEC.md`
 - **Agent Index:** `.github/agents/AGENT-INDEX.md` (lazy-load: 1-2 agents per intent)
@@ -366,7 +369,52 @@ If `complete=False`: surface gaps inline and require either implementation or AD
 2. **Target state** — define goals with measurable criteria
 3. **Gap analysis** — identify delta between current and target
 4. **Phase breakdown** — ordered phases with dependencies, deliverables, risk
-5. **Registry update** — write phase spec to `cortex-registry/planning/phases/`
+5. **Registry update** — write phase spec to `cortex-registry/planning/phases/` (see THIN INDEX CONTRACT below)
+
+### ⚠️ PLAN MODE — THIN INDEX CONTRACT (MANDATORY)
+
+`cortex-master.yaml` is a **reference index only**. Writing phase detail inline to it is a P0 governance violation.
+
+**EVERY phase plan MUST follow this protocol:**
+
+**Step 1 — Create the dedicated file FIRST:**
+```
+cortex-registry/planning/phases/planned/<phase-id>.yaml
+```
+Use `cortex-registry/planning/phases/_template.yaml` as the scaffold. Write ALL detail there:
+gap catalogue, TDD sequences, sub-phases, acceptance criteria, new files, code changes.
+
+**Step 2 — Add ONLY a thin reference entry to `cortex-master.yaml`:**
+```yaml
+- id: phase-{N}
+  title: "{title}"
+  priority: P0
+  status: ACTIVE
+  sweep_id: SWEEP-{N}-{SLUG}
+  gaps: {count}
+  sub_phases: {count}
+  file: "cortex-registry/planning/phases/planned/phase-{N}-{slug}.yaml"
+  note: "{one-sentence summary}"
+```
+
+**Prohibited inline keys** (never in `cortex-master.yaml`):
+`phases`, `gap_catalogue`, `tdd_sequence`, `rewrites`, `new_files`, `files_to_edit`, `implementation`, `code_snippets`
+
+**Step 3 — Run checkpoint_create validation:**
+```bash
+wc -l cortex-registry/cortex-master.yaml   # must be ≤ 500 (alarm at 400)
+python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml')); print('YAML valid')"
+```
+
+**Step 4 — Before marking COMPLETE (checkpoint_complete):**
+1. All `sweep_catalogue` gaps → `status: CLOSED` (CORE-064)
+2. Move file: `planned/` → `completed/`
+3. Update `file:` in `cortex-master.yaml` to point to `completed/`
+4. Set `status: COMPLETE` in both files
+5. `make test-batch` — zero new failures
+6. Verify `cortex-master.yaml` ≤ 500 lines
+
+**Lifecycle template:** `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml`
 
 ---
 
