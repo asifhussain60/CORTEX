@@ -24,13 +24,14 @@
 workflow:
   id: 'audit/audit-fix-pipeline'
   name: '/audit fix — 9-Stage Production Readiness Pipeline'
-  version: '2.0.0'
+  version: '2.1.0'
   category: 'audit'
   status: 'active'
 
   metadata:
     author: 'CORTEX Architecture'
     created: '2026-02-23'
+    updated: '2026-02-24'
     trigger_command: '/audit fix'
     modes_served: ['AUDIT', 'FIX']
     orchestrators_used:
@@ -39,12 +40,29 @@ workflow:
       - VacuumOrchestrator
       - EnforcementOrchestrator
       - MetaAuditor
+      - IntelligenceOrchestrator    # Phase 65 — cross-cutting intelligence
     mcp_tools_used:
       - cortex_validate (op: compliance)
       - cortex_governance (op: query)
       - cortex_vacuum
       - cortex_load (op: rules)
       - cortex_metrics (op: capture)
+      - cortex_intelligence_matrix (op: gaps)  # Phase 65 — ENH-MATRIX-001
+      - cortex.lens (op: analyze)              # Phase 65 — LENS wiring
+
+  # Phase 65 intelligence integration
+  intelligence_wiring:
+    description: |
+      Cross-cutting intelligence layer wired across all audit stages.
+      IntelligenceMatrixBuilder produces a HIGH VALUE matrix (x×y) that:
+        - Surfaces P0-CRITICAL unwired pairs before Stage 2 scan
+        - Feeds BlindSpotDetector gaps into Check #19
+        - Drives TDDOrchestrator test stub generation for gaps
+        - Injects SynthesisEngine results into DocGen playbook discovery
+    mcp_tool: 'cortex_intelligence_matrix'
+    python_module: 'cortex.intelligence.cross_cutting.intelligence_matrix_builder'
+    trigger_stage: 'stage_1_5'
+    persist_to: '.cortex-runtime/intelligence/intelligence-matrix.json'
 
   # ==========================================================================
   # PIPELINE-LEVEL CONVERGENCE GATE
@@ -253,6 +271,77 @@ workflow:
       sqlite_logging:
         table: 'audit_stage_log'
         stage_label: 'stage-0-governance'
+
+    # -------------------------------------------------------------------------
+    # Stage 1.5: Intelligence Matrix Gate (Phase 65 — ENH-MATRIX-001)
+    # NEW: Cross-cutting intelligence layer — runs between Stage 1 and Stage 2
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_1_5'
+      stage_num: '1.5'
+      name: 'Stage 1.5 — Intelligence Matrix Gate (Cross-Cutting Neural Wiring)'
+      orchestrator: 'IntelligenceOrchestrator'
+      mcp_tool: 'cortex_intelligence_matrix'
+      python_module: 'cortex.intelligence.cross_cutting.intelligence_matrix_builder'
+      description: |
+        Builds the HIGH VALUE intelligence matrix by crossing every intelligence
+        capability (x) against every CORTEX capability (y) across 7 dimensions:
+          brain_tier, lens, intelligence, toolkit, workflow, response, governance.
+
+        Outputs:
+          (a) Inline P0-CRITICAL gap report in Copilot Chat (ResponseTemplate rendered)
+          (b) JSON matrix persisted to .cortex-runtime/intelligence/intelligence-matrix.json
+          (c) P0-CRITICAL gap list injected as Check #20 violations into Stage 2 scan
+          (d) DocGen playbook (PB-STS-002) stage_1 discovery augmented with KnowledgeIndexer
+
+        On P0-CRITICAL gaps found:
+          → Surface inline immediately (never to file — CORE-002)
+          → Register as audit_violations entries (stage_num=1.5, severity=P0)
+          → Feed into Stage 7–8 auto-fix convergence loop
+
+        DocGen Playbook Integration (PB-STS-002):
+          → KnowledgeIndexer.inventory() result → DocGen stage_1.knowledge_yaml_scan
+          → SynthesisEngine detects knowledge conflicts → DocGen stage_2 generation input
+          → IntelligenceOrchestrator gap report → DocGen stage_3 validation assertions
+
+      steps:
+        - id: 'build_matrix'
+          action: 'cortex_intelligence_matrix'
+          params:
+            operation: 'build'
+          on_success: 'render_inline_and_continue'
+
+        - id: 'persist_matrix'
+          action: 'cortex_intelligence_matrix'
+          params:
+            operation: 'persist'
+          on_success: 'continue'
+
+        - id: 'extract_gaps'
+          action: 'cortex_intelligence_matrix'
+          params:
+            operation: 'gaps'
+          on_success: 'inject_into_stage_2'
+
+        - id: 'docgen_sync'
+          description: 'Sync KnowledgeIndexer findings into DocGen playbook'
+          action: 'cortex.lens'
+          params:
+            operation: 'analyze'
+            scope: 'cortex/intelligence/tier3/knowledge/'
+          on_success: |
+            Inject result into:
+              cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml
+              → stage_1.knowledge_yaml_scan params.augmented_by = 'intelligence_matrix'
+
+      ac_markers:
+        start: 'AC_STAGE_1_5_START: AC-MATRIX-GATE-{timestamp}'
+        complete: 'AC_STAGE_1_5_COMPLETE: Intelligence Matrix Gate ✅'
+        failure: 'AC_STAGE_1_5_COMPLETE: Intelligence Matrix Gate ❌'
+
+      sqlite_logging:
+        table: 'audit_stage_log'
+        violations_table: 'audit_violations'
+        stage_label: 'intelligence-matrix-gate'
 
     # -------------------------------------------------------------------------
     # Stage 2: 17-Point Production Readiness Scan
@@ -620,6 +709,35 @@ integration_map:
     file: 'cortex-registry/core/capabilities-manifest.yaml'
     key: 'workflows.audit_fix'
     note: 'Register this template so MasterOrchestrator can self-diagnose audit drift'
+
+  # Phase 65 — Intelligence Matrix integrations
+  intelligence_matrix:
+    file: 'cortex/intelligence/cross_cutting/intelligence_matrix_builder.py'
+    mcp_tool: 'cortex_intelligence_matrix'
+    stage: 'stage_1_5'
+    note: 'Cross-cutting neural wiring matrix — x×y capability cross-check at Stage 1.5'
+
+  docgen_playbook:
+    file: 'cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml'
+    stage: 'stage_1_5.docgen_sync'
+    note: |
+      PB-STS-002 DocGen Playbook wired via Stage 1.5 docgen_sync step:
+        KnowledgeIndexer.inventory() → DocGen stage_1.knowledge_yaml_scan
+        SynthesisEngine conflicts → DocGen stage_2 generation input
+        IntelligenceOrchestrator gaps → DocGen stage_3 validation assertions
+    trigger: '/doc-refresh'
+
+  toolkit_consolidation:
+    files:
+      - 'cortex/toolkit/filesystem.py   (HierarchicalScanner)'
+      - 'cortex/toolkit/batch.py        (BatchProcessor)'
+      - 'cortex/toolkit/adapters.py     (DomainAdapter, MediaAdapter)'
+      - 'cortex/mcp/tools/toolkit_tools.py (cortex_scan, cortex_batch_transform)'
+    matrix_cells:
+      - 'IC-001×CC-001  LENS × HierarchicalScanner — CRITICAL'
+      - 'IC-010×CC-004  KnowledgeIndexer × DocGen — CRITICAL'
+      - 'IC-009×CC-006  BlindSpotDetector × Enforcement — CRITICAL'
+    note: 'Toolkit is the y-axis foundation for intelligence wiring (Phase 63→65)'
 
 # ============================================================================
 # GOVERNANCE

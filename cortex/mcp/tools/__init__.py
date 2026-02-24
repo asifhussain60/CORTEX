@@ -33,6 +33,7 @@ from cortex.mcp.tools.intelligence import (
     CortexLens,
     CortexKnowledge,
     CortexGit,
+    CortexIntelligenceMatrix,  # Phase 65 — Cross-Cutting Intelligence Matrix
 )
 from cortex.mcp.tools.intelligence_generation import (
     CortexGenerateTests,
@@ -118,11 +119,12 @@ ALL_TOOLS = [
     CortexChallenge,
     CortexClassify,
     CortexRequestLifecycle,
-    # Intelligence (4)
+    # Intelligence (5)
     CortexLens,
     CortexKnowledge,
     CortexGit,
     CortexGenerateTests,  # WAVE-2 Stage 6
+    CortexIntelligenceMatrix,  # Phase 65 — ENH-MATRIX-001
     # Governance (4)
     CortexGovernance,
     CortexValidate,
@@ -234,6 +236,7 @@ __all__ = [
     "CortexKnowledge",
     "CortexGit",
     "CortexGenerateTests",  # WAVE-2 Stage 6
+    "CortexIntelligenceMatrix",  # Phase 65 — ENH-MATRIX-001
     # Governance
     "CortexGovernance",
     "CortexValidate",

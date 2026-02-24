@@ -1,12 +1,18 @@
 metadata:
   id: DOC-REFRESH-001
   name: Documentation Discovery & Regeneration Pipeline
-  version: 2.0.0
+  version: 2.1.0
   author: Asif Hussain
   updated: 2026-02-24
   authority: cortex-doc.prompt.md v6.0 | ENH-064 | CORE-002 | CORE-049 | CORE-064
   sweep_id: SWEEP-DOC-REFRESH
   status: ACTIVE
+  intelligence_wiring: |
+    Phase 65 — Cross-Cutting Intelligence Layer integration:
+      KnowledgeIndexer → stage_1.knowledge_yaml_scan (augmented)
+      SynthesisEngine conflict detection → stage_2.generation quality
+      IntelligenceOrchestrator gap map → stage_3.validation assertions
+      cortex_intelligence_matrix → triggered from audit-fix Stage 1.5
 
 # ============================================================
 # PURPOSE

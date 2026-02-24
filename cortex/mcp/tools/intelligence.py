@@ -36,6 +36,15 @@ try:
 except ImportError:
     INTELLIGENCE_ORCHESTRATOR_AVAILABLE = False
 
+# Phase 65: Import IntelligenceMatrixBuilder for cross-cutting neural wiring
+try:
+    from cortex.intelligence.cross_cutting.intelligence_matrix_builder import (
+        IntelligenceMatrixBuilder,
+    )
+    MATRIX_BUILDER_AVAILABLE = True
+except ImportError:
+    MATRIX_BUILDER_AVAILABLE = False
+
 
 
 class CortexLens(ConsolidatedTool):
@@ -674,6 +683,155 @@ __all__ = [
     "CortexLens",
     "CortexKnowledge",
     "CortexGit",
+    "CortexIntelligenceMatrix",
 ]
 
 # AC_COMPLETE: AC-WAVE100-S2-002 ✅ Intelligence tools implemented
+
+
+class CortexIntelligenceMatrix(ConsolidatedTool):
+    """
+    HIGH VALUE Intelligence Matrix MCP Tool.
+
+    Builds and renders the cross-cutting intelligence matrix — every
+    intelligence capability (x) crossed against every other CORTEX
+    capability (y) — and surfaces P0-CRITICAL wiring gaps directly
+    in VS Code Copilot Chat.
+
+    Operations:
+    - build: Build and render the full intelligence matrix report
+    - persist: Build matrix and persist as JSON to .cortex-runtime/
+    - gaps: Return only unwired P0-CRITICAL and P1-HIGH gaps
+
+    Authority: Phase 65 — ENH-MATRIX-001
+    AC_START: AC-MATRIX-MCP-001
+    """
+
+    def __init__(self) -> None:
+        """Initialize with IntelligenceMatrixBuilder."""
+        super().__init__()
+        self._builder = IntelligenceMatrixBuilder() if MATRIX_BUILDER_AVAILABLE else None
+
+    @property
+    def name(self) -> str:
+        """Return the tool name."""
+        return "cortex_intelligence_matrix"
+
+    @property
+    def description(self) -> str:
+        """Return the tool description."""
+        return (
+            "Build the CORTEX HIGH VALUE intelligence matrix. Crosses every "
+            "intelligence capability (x) against every CORTEX capability (y) "
+            "to surface P0-CRITICAL wiring gaps and drive neural network construction "
+            "across brain tiers, LENS, toolkit, workflow, response templates, and governance."
+        )
+
+    @property
+    def category(self) -> ToolCategory:
+        """Return the tool category."""
+        return ToolCategory.OPERATIONS
+
+    @property
+    def parameters(self) -> List[ToolParameter]:
+        """Return tool parameters."""
+        return [
+            ToolParameter(
+                name="operation",
+                type="string",
+                description="Operation: 'build' (full report), 'persist' (save JSON), 'gaps' (gaps only)",
+                required=True,
+                enum=["build", "persist", "gaps"],
+            ),
+            ToolParameter(
+                name="orchestrator_context",
+                type="object",
+                description="MasterOrchestrator routing context",
+                required=False,
+            ),
+        ]
+
+    def execute(self, **kwargs: Any) -> ToolResult:
+        """
+        Execute the intelligence matrix operation.
+
+        Args:
+            operation: 'build', 'persist', or 'gaps'
+            orchestrator_context: Optional MasterOrchestrator context.
+
+        Returns:
+            ToolResult with matrix report or gap list.
+        """
+        # AC_START: AC-MATRIX-MCP-001
+        orchestrator_context = kwargs.get("orchestrator_context")
+        if orchestrator_context is not None:
+            validate_orchestrator_context(orchestrator_context)
+
+        operation = kwargs.get("operation", "build")
+
+        if not MATRIX_BUILDER_AVAILABLE or self._builder is None:
+            return ToolResult(
+                success=False,
+                error="IntelligenceMatrixBuilder not available — check cortex.intelligence.cross_cutting",
+            )
+
+        try:
+            matrix = self._builder.build()
+
+            if operation == "build":
+                report = self._builder.render_matrix_report(matrix)
+                # AC_COMPLETE: AC-MATRIX-MCP-001 ✅
+                return ToolResult(
+                    success=True,
+                    data={"report": report, "summary": matrix.to_dict()},
+                    metadata={
+                        "operation": "build",
+                        "total_cells": len(matrix.cells),
+                        "wired": matrix.wired_count,
+                        "critical_unwired": len(matrix.critical_cells()),
+                    },
+                )
+
+            elif operation == "persist":
+                path = self._builder.persist_matrix(matrix)
+                # AC_COMPLETE: AC-MATRIX-MCP-001 ✅
+                return ToolResult(
+                    success=True,
+                    data={"persisted_to": str(path), "summary": matrix.to_dict()},
+                    metadata={"operation": "persist"},
+                )
+
+            elif operation == "gaps":
+                critical = [
+                    {
+                        "id": f"{c.intelligence_id}×{c.cortex_id}",
+                        "score": c.score.value,
+                        "dimensions": f"{c.dimension_pair[0].value}×{c.dimension_pair[1].value}",
+                        "rationale": c.rationale,
+                        "wire_action": c.wire_action,
+                    }
+                    for c in matrix.critical_cells()
+                ]
+                high = [
+                    {
+                        "id": f"{c.intelligence_id}×{c.cortex_id}",
+                        "score": c.score.value,
+                        "dimensions": f"{c.dimension_pair[0].value}×{c.dimension_pair[1].value}",
+                        "rationale": c.rationale,
+                        "wire_action": c.wire_action,
+                    }
+                    for c in matrix.high_cells()
+                ]
+                # AC_COMPLETE: AC-MATRIX-MCP-001 ✅
+                return ToolResult(
+                    success=True,
+                    data={"critical": critical, "high": high},
+                    metadata={"operation": "gaps"},
+                )
+
+            return ToolResult(success=False, error=f"Unknown operation: {operation}")
+
+        except Exception as exc:  # noqa: BLE001
+            # AC_COMPLETE: AC-MATRIX-MCP-001 ❌
+            return ToolResult(success=False, error=f"IntelligenceMatrix error: {exc}")
+
