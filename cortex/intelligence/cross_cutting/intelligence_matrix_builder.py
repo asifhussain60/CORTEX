@@ -34,6 +34,18 @@ logger = logging.getLogger(__name__)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Coverage Gate (GAP-66-C / Phase 66-C)
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+class MatrixCoverageError(Exception):
+    """Raised when IntelligenceMatrix coverage_score falls below COVERAGE_GATE.
+
+    Authority: GAP-66-C (Phase 66-C) — enforced in AuditFixPipeline Stage 1.5.
+    """
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Domain Models
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -230,6 +242,52 @@ INTELLIGENCE_CAPABILITIES: List[IntelligenceCapability] = [
         current_coverage=0.60,
         tags=["index", "retrieval", "knowledge"],
     ),
+    # Extended catalogue — IC-011 through IC-015 (Phase 66-C)
+    IntelligenceCapability(
+        id="IC-011",
+        name="HierarchicalScannerAdapter",
+        module="cortex.lens.adapters.hierarchical_scanner_adapter",
+        dimension=CapabilityDimension.LENS,
+        description="Bridges HierarchicalScanner to LENS file discovery pipeline",
+        current_coverage=1.0,
+        tags=["adapter", "scan", "lens"],
+    ),
+    IntelligenceCapability(
+        id="IC-012",
+        name="KnowledgeIndexerDocGenBridge",
+        module="cortex.intelligence.tier3.knowledge.knowledge_indexer_docgen_bridge",
+        dimension=CapabilityDimension.INTELLIGENCE,
+        description="Bridges KnowledgeIndexer to DocGen pipeline via YAML sync",
+        current_coverage=1.0,
+        tags=["bridge", "docgen", "index"],
+    ),
+    IntelligenceCapability(
+        id="IC-013",
+        name="IntelligenceWiringBridges",
+        module="cortex.intelligence.intelligence_wiring_bridges",
+        dimension=CapabilityDimension.INTELLIGENCE,
+        description="Lightweight bridge functions wiring intelligence to toolkit/workflow",
+        current_coverage=1.0,
+        tags=["bridge", "wiring", "enrichment"],
+    ),
+    IntelligenceCapability(
+        id="IC-014",
+        name="CortexBrainQuery",
+        module="cortex.mcp.tools.brain",
+        dimension=CapabilityDimension.RESPONSE,
+        description="MCP tool for T1/T2/T3 brain tier memory query via Copilot Chat",
+        current_coverage=1.0,
+        tags=["mcp", "brain", "memory"],
+    ),
+    IntelligenceCapability(
+        id="IC-015",
+        name="FormatResponseHook",
+        module="cortex.mcp.mcp_tool_base",
+        dimension=CapabilityDimension.RESPONSE,
+        description="Post-processing hook applied to all MCP tool outputs",
+        current_coverage=1.0,
+        tags=["response", "format", "mcp"],
+    ),
 ]
 
 # y: Remaining CORTEX capabilities
@@ -314,7 +372,56 @@ CORTEX_CAPABILITIES: List[CortexCapability] = [
         description="TDD RED→GREEN→REFACTOR cycle enforcement (CORE-008)",
         tags=["tdd", "test", "cycle"],
     ),
+    # Extended catalogue — CC-011 through CC-015 (Phase 66-C)
+    CortexCapability(
+        id="CC-011",
+        name="SynthesisEngineBridge",
+        module="cortex.intelligence.tier3.knowledge.synthesis_engine",
+        dimension=CapabilityDimension.INTELLIGENCE,
+        description="SynthesisEngine detect_conflicts → SweepCatalogue wiring",
+        tags=["synthesis", "conflict", "sweep"],
+    ),
+    CortexCapability(
+        id="CC-012",
+        name="RetrievalOptimizerBridge",
+        module="cortex.intelligence.intelligence_wiring_bridges",
+        dimension=CapabilityDimension.INTELLIGENCE,
+        description="RetrievalOptimizer scoring bridge for DocGen/AuditFix",
+        tags=["retrieval", "scoring", "optimizer"],
+    ),
+    CortexCapability(
+        id="CC-013",
+        name="TDDStubGenerator",
+        module="cortex.orchestrators.core.tdd_orchestrator",
+        dimension=CapabilityDimension.WORKFLOW,
+        description="TDDOrchestrator.create_test_stub() auto-generates RED stubs from gaps",
+        tags=["tdd", "stub", "gap"],
+    ),
+    CortexCapability(
+        id="CC-014",
+        name="ResponseTemplateHook",
+        module="cortex.orchestrators.intelligence.response_template_generator",
+        dimension=CapabilityDimension.RESPONSE,
+        description="ResponseTemplate.format_response() hook for pipeline stages",
+        tags=["response", "template", "hook"],
+    ),
+    CortexCapability(
+        id="CC-015",
+        name="T1T2EnrichmentHooks",
+        module="cortex.intelligence.intelligence_wiring_bridges",
+        dimension=CapabilityDimension.INTELLIGENCE,
+        description="T1/T2 brain tier enrichment hooks for DomainAdapter and BatchProcessor",
+        tags=["brain", "enrichment", "t1", "t2"],
+    ),
 ]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Coverage Gate Constant (Phase 66-C — GAP-66-C)
+# ─────────────────────────────────────────────────────────────────────────────
+
+# Raise MatrixCoverageError in AuditFixPipeline Stage 1.5 when below this.
+COVERAGE_GATE: float = 0.50
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -617,3 +724,27 @@ class IntelligenceMatrixBuilder:
         )
         logger.info("Intelligence matrix persisted: %s", output_path)
         return output_path
+
+    def check_coverage_gate(
+        self,
+        matrix: IntelligenceMatrix,
+        gate: float = COVERAGE_GATE,
+    ) -> None:
+        """Assert matrix coverage meets the minimum gate threshold.
+
+        Enforces the Phase 66-C acceptance criterion: ``coverage_score ≥ 0.50``.
+        Called by AuditFixPipeline Stage 1.5 (GAP-66-C).
+
+        Args:
+            matrix: The built :class:`IntelligenceMatrix` to check.
+            gate: Minimum coverage fraction (default: :data:`COVERAGE_GATE` = 0.50).
+
+        Raises:
+            MatrixCoverageError: When ``matrix.coverage_score < gate``.
+        """
+        if matrix.coverage_score < gate:
+            raise MatrixCoverageError(
+                f"Intelligence matrix coverage {matrix.coverage_score:.1%} is below "
+                f"the required gate of {gate:.1%} (Phase 66-C). "
+                f"Wire more pairs to reach ≥{gate:.0%} coverage."
+            )

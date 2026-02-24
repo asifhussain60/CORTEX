@@ -210,4 +210,73 @@ def retrieval_optimizer_score_results(
     return sorted(scored, key=lambda x: x["retrieval_score"], reverse=True)
 
 
+# ──────────────────────────────────────────────────────────────────────────────
+# GAP-66-018: LENS domain context → DomainAdapter resolution hints
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+def lens_enrich_domain_adapter(
+    lens_context: Dict[str, Any],
+    adapter_context: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Inject LENS domain context into a DomainAdapter context dict.
+
+    Merges the ``lens_context`` (language, domain, file_type, etc.) produced
+    by the LENS pipeline into the ``adapter_context`` used by T1 DomainAdapter
+    to generate resolution hints.  Sets ``lens_enriched = True`` as a sentinel.
+
+    Args:
+        lens_context: Context dict from the LENS analysis pass (arbitrary keys).
+        adapter_context: Existing DomainAdapter context to enrich.
+
+    Returns:
+        Enriched copy of ``adapter_context`` with ``lens_context`` and
+        ``lens_enriched`` keys added.
+
+    Authority: GAP-66-018 (Phase 66-C)
+    """
+    result = dict(adapter_context)
+    result["lens_context"] = lens_context
+    result["lens_enriched"] = True
+    return result
+
+
+# ──────────────────────────────────────────────────────────────────────────────
+# GAP-66-019: T3 strategic mode → HierarchicalScanner full-depth scan
+# ──────────────────────────────────────────────────────────────────────────────
+
+
+def t3_strategic_deep_scan(
+    scanner: Any,
+    analysis_target: str = "architecture",
+) -> Dict[str, Any]:
+    """Run a T3 strategic full-depth scan using HierarchicalScanner.
+
+    Invokes ``scanner.scan()`` (no arguments — uses scanner's own root
+    configuration) and collects the resulting file list for T3 strategic
+    reasoning.  Returns a summary dict consumed by the IntelligenceOrchestrator
+    when operating in T3 scratch mode.
+
+    Args:
+        scanner: A ``HierarchicalScanner`` instance (or compatible duck type).
+        analysis_target: Label identifying what is being analysed
+                         (e.g. ``"architecture"``, ``"governance"``).
+
+    Returns:
+        Dict with keys:
+        - ``files_scanned`` (int): number of files returned by the scanner.
+        - ``analysis_target`` (str): echoed from the argument.
+        - ``files`` (list): raw list of scanned file objects.
+
+    Authority: GAP-66-019 (Phase 66-C)
+    """
+    files = scanner.scan()
+    return {
+        "files_scanned": len(files),
+        "analysis_target": analysis_target,
+        "files": files,
+    }
+
+
 # AC_COMPLETE: AC-66-B-WIRING-BRIDGES-20260224T000000Z ✅
+# AC_COMPLETE: AC-66-C-GAP-018-019-BRIDGES-20260224T000000Z ✅
