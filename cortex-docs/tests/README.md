@@ -49,7 +49,8 @@ cortex-docs/tests/
 │   ├── test_content_integrity.py       ← content.json integrity (13 tests)
 │   └── test_data_files.py              ← JSON schema validation (15 tests)
 └── pipeline/
-    └── test_js_integration.py          ← Browser DOM tests (12 tests)
+    ├── test_js_integration.py          ← Browser DOM tests (12 tests)
+    └── test_linting.py                 ← HTML/CSS/JS linting (18 tests)
 ```
 
 ## Test Suites
@@ -120,6 +121,35 @@ cortex-docs/tests/
 - ✅ ContentLoader class defined
 - ✅ Error handling (try/catch blocks)
 - ✅ Uses fetch() and async/await
+
+### 6. Linting (`test_linting.py`)
+**18 tests** — HTML/CSS/JS well-formedness validation
+
+**HTML Linting (9 tests):**
+- ✅ Valid HTML structure (html, head, body, title tags)
+- ✅ DOCTYPE declaration present
+- ✅ Lang attribute on html tag (accessibility)
+- ✅ Charset meta tag present
+- ✅ Viewport meta for responsive design
+- ✅ Minimal inline styles (prefer external CSS)
+- ✅ Proper element nesting (no block elements in p, no interactive in a)
+- ✅ Alt text on images (accessibility)
+- ✅ All HTML files parse successfully
+
+**CSS Linting (5 tests):**
+- ✅ Valid UTF-8 encoding
+- ✅ Balanced braces
+- ✅ No property declarations outside rulesets
+- ✅ No empty rulesets (code quality)
+- ✅ CSS variables usage report
+
+**JS Linting (4 tests):**
+- ✅ Valid UTF-8 encoding
+- ✅ Balanced braces, parentheses, brackets
+- ✅ Minimal console.log in production
+- ✅ 'use strict' usage (best practice)
+- ✅ Semicolon style consistency
+- ✅ JSON.parse error handling (try/catch)
 
 ## Shared Fixtures (conftest.py)
 
