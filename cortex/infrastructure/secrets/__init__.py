@@ -12,6 +12,7 @@ from __future__ import annotations
 import base64
 import fcntl
 import json
+import logging
 import os
 import re
 import secrets as _secrets
@@ -20,6 +21,8 @@ import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+_logger = logging.getLogger(__name__)
 
 from cortex.infrastructure.secrets.encryption import (
     EncryptionManager,
@@ -406,7 +409,7 @@ def rotate_secret(
         from cortex.secrets.management import send_notification  # late import to avoid circular
         send_notification(f"Secret '{key}' has been rotated")
     except ImportError:
-        pass
+        _logger.warning("Optional dependency unavailable: cortex.secrets.management — rotation notification skipped")
 
 
 def get_secret_history(key: str, *, vault_path: Optional[Path] = None) -> List[Dict[str, Any]]:

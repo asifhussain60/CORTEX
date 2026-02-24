@@ -316,6 +316,30 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
         # Stage 2.5: Knowledge Synthesis Engine (Phase 20.5)
         self._synthesis_engine: KnowledgeSynthesisEngine = get_synthesis_engine()
 
+        # Phase 62-H: Unified Knowledge Registry Proxy (30 YAMLs, 2 roots)
+        try:
+            from cortex.knowledge.registry_proxy import KnowledgeRegistryProxy
+            self._knowledge_proxy = KnowledgeRegistryProxy()
+            _proxy_count = self._knowledge_proxy.entry_count()
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE62-H-001",
+                operation="UNIFIED_KNOWLEDGE_PROXY_INIT",
+                success=True,
+                details={
+                    "entry_count": _proxy_count,
+                    "domains": self._knowledge_proxy.domains(),
+                    "sources": self._knowledge_proxy.sources(),
+                }
+            )
+        except Exception as exc:
+            self._knowledge_proxy = None
+            self.logger.log_operation_complete(
+                ac_id="AC-PHASE62-H-001",
+                operation="UNIFIED_KNOWLEDGE_PROXY_INIT",
+                success=False,
+                details={"error": str(exc)}
+            )
+
         # Phase 65 S4: Initialize UnifiedIntelligenceProvider (CORE-035)
         # Single provider serves both InteractionOrchestrator and MasterOrchestrator
         from cortex.intelligence.provider import get_intelligence_provider

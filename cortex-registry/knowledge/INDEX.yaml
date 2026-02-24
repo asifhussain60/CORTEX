@@ -1,9 +1,17 @@
-# CORTEX Knowledge Base INDEX
-# Authority: AC-PHASE65-S1-001
-# Maps intent types to applicable best-practice YAML files
+# CORTEX Knowledge Base INDEX — Unified
+# Authority: AC-PHASE62-H-001
+# Maps intent types to applicable YAML files across BOTH knowledge roots:
+#   1. cortex-registry/knowledge/           (best-practice guides)
+#   2. cortex-registry/knowledge-base/      (runtime knowledge)
+#
+# Total: 30 YAML files across 11 domains
+# Updated: 2026-02-24 (Phase 62-H — unified knowledge consolidation)
 
-version: "1.0"
+version: "2.0"
 created: "2026-02-09"
+updated: "2026-02-24"
+
+# ─── Best-Practice Guides (cortex-registry/knowledge/) ───────────────
 
 testing-validation:
   guides:
@@ -28,6 +36,16 @@ security:
     - path: "security/secure-coding-practices.yaml"
       title: "Secure Coding Practices"
       keywords: ["security", "implement", "fix", "owasp", "injection", "auth"]
+    # knowledge-base security YAMLs (runtime)
+    - path: "../knowledge-base/security/owasp-top10.yaml"
+      title: "OWASP Top 10"
+      keywords: ["owasp", "security", "vulnerability", "injection", "xss"]
+    - path: "../knowledge-base/security/cicd-hardening.yaml"
+      title: "CI/CD Pipeline Hardening"
+      keywords: ["cicd", "pipeline", "security", "hardening", "supply-chain"]
+    - path: "../knowledge-base/security/secrets-patterns.yaml"
+      title: "Secrets Management Patterns"
+      keywords: ["secrets", "encryption", "vault", "rotation", "key-management"]
 
 architecture:
   guides:
@@ -43,6 +61,10 @@ architecture:
     - path: "architecture/refactoring-quality-standards.yaml"
       title: "Refactoring Quality Standards"
       keywords: ["refactor", "completeness", "traceability", "sts", "monolith", "clean-architecture", "scoring"]
+    # knowledge-base architecture (runtime)
+    - path: "../knowledge-base/architecture/architecture-best-practices.yaml"
+      title: "Architecture Best Practices"
+      keywords: ["architecture", "best-practices", "microservices", "monolith"]
 
 devops-infrastructure:
   guides:
@@ -55,3 +77,59 @@ performance-optimization:
     - path: "performance-optimization/profiling-analysis.yaml"
       title: "Performance Profiling and Analysis"
       keywords: ["performance", "profiling", "analyze", "optimize", "benchmark"]
+
+# ─── Runtime Knowledge (cortex-registry/knowledge-base/) ─────────────
+
+governance:
+  guides:
+    - path: "../knowledge-base/governance/compliance-rules.yaml"
+      title: "Compliance Rules"
+      keywords: ["compliance", "audit", "governance", "regulation"]
+    - path: "../knowledge-base/governance/data-rules.yaml"
+      title: "Data Governance Rules"
+      keywords: ["data", "privacy", "retention", "gdpr", "pii"]
+    - path: "../knowledge-base/governance/development-rules.yaml"
+      title: "Development Rules"
+      keywords: ["development", "standards", "code-quality", "review"]
+    - path: "../knowledge-base/governance/operations-rules.yaml"
+      title: "Operations Rules"
+      keywords: ["operations", "deployment", "monitoring", "incident"]
+    - path: "../knowledge-base/governance/security-rules.yaml"
+      title: "Security Rules"
+      keywords: ["security", "access-control", "encryption", "auth"]
+
+profiles:
+  guides:
+    - path: "../knowledge-base/profiles/auth.yaml"
+      title: "Auth Domain Profile"
+      keywords: ["authentication", "authorization", "sso", "identity"]
+    - path: "../knowledge-base/profiles/devops.yaml"
+      title: "DevOps Domain Profile"
+      keywords: ["devops", "cicd", "infrastructure", "deployment"]
+    - path: "../knowledge-base/profiles/finops.yaml"
+      title: "FinOps Domain Profile"
+      keywords: ["finops", "cost", "cloud", "optimization"]
+    - path: "../knowledge-base/profiles/healthcare.yaml"
+      title: "Healthcare Domain Profile"
+      keywords: ["healthcare", "hipaa", "compliance", "medical"]
+    - path: "../knowledge-base/profiles/legal.yaml"
+      title: "Legal Domain Profile"
+      keywords: ["legal", "compliance", "regulation", "contract"]
+    - path: "../knowledge-base/profiles/ml.yaml"
+      title: "ML Domain Profile"
+      keywords: ["machine-learning", "model", "training", "inference"]
+    - path: "../knowledge-base/profiles/security-ops.yaml"
+      title: "Security Operations Profile"
+      keywords: ["security-ops", "soc", "incident-response", "threat"]
+
+repositories:
+  guides:
+    - path: "../knowledge-base/repositories/badmonolith.yaml"
+      title: "BadMonolith Repository Profile"
+      keywords: ["monolith", "refactor", "legacy", "migration"]
+    - path: "../knowledge-base/repositories/cortex.yaml"
+      title: "CORTEX Repository Profile"
+      keywords: ["cortex", "self", "framework", "orchestrator"]
+    - path: "../knowledge-base/repositories/ksessions.yaml"
+      title: "KSessions Repository Profile"
+      keywords: ["sessions", "auth", "identity", "authentication"]
