@@ -20,10 +20,12 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 logger = logging.getLogger(__name__)
 
 
-class MasterOrchestratorStage2:
+class MasterOrchestratorStage2(OrchestratorProtocolMixin):
     """Stage 2 handler: Intent routing with knowledge synthesis.
 
     Extracted from :class:`~cortex.orchestrators.core.master_orchestrator.MasterOrchestrator`
@@ -73,6 +75,12 @@ class MasterOrchestratorStage2:
             Routing result dict with intent, target_orchestrator, confidence_score,
             reasoning, context, unified_intelligence, cited_rules, violations, guidance.
         """
+        # Phase 58: activate cross-cutting hooks (LENS + knowledge synthesis)
+        self._activate_cross_cutting_hooks(
+            operation=request.get("operation", "route"),
+            orchestrator_context=request.get("orchestrator_context"),
+            unified_context=request.get("unified_context"),
+        )
         host = self._host
         logger.debug("Stage 2: routing request operation=%r", request.get("operation"))
 

@@ -91,6 +91,115 @@ provides:
       - InteractionOrchestrator
       - state_manager
 
+  - name: AuditOrchestrator
+    category: CORE
+    description: "Production-readiness audit orchestrator — 19-point scan + auto-fix convergence loop"
+    entry_point: "cortex.orchestrators.core.audit_orchestrator:AuditOrchestrator"
+    features:
+      - nineteen_point_scan
+      - auto_fix_convergence
+      - sqlite_activity_log
+    dependencies:
+      - HealthOrchestrator
+    phase_added: "62-G"
+
+  - name: BrainHealthOrchestrator
+    category: CORE
+    description: "Brain tier health monitor — checks TIER0/TIER1/TIER2/TIER3 layer health"
+    entry_point: "cortex.orchestrators.core.brain_health_orchestrator:BrainHealthOrchestrator"
+    features:
+      - brain_tier_health
+      - tier_precedence_check
+    phase_added: "62-G"
+
+  - name: CentralBrainOrchestrator
+    category: CORE
+    description: "Central brain coordinator — routes intelligence requests across brain tiers"
+    entry_point: "cortex.orchestrators.core.central_brain_orchestrator:CentralBrainOrchestrator"
+    features:
+      - intelligence_routing
+      - brain_tier_coordination
+    phase_added: "62-G"
+
+  - name: ObservabilityOrchestrator
+    category: CORE
+    description: "Observability pipeline — SQLite + OpenTelemetry trace emission"
+    entry_point: "cortex.orchestrators.core.observability_orchestrator:ObservabilityOrchestrator"
+    features:
+      - sqlite_tracing
+      - opentelemetry_emission
+      - ac_marker_persistence
+    phase_added: "62-G"
+
+  - name: StateOrchestrator
+    category: CORE
+    description: "Distributed state manager — SQLite-backed cross-orchestrator state"
+    entry_point: "cortex.orchestrators.core.state_orchestrator:StateOrchestrator"
+    features:
+      - state_persistence
+      - cross_orchestrator_state
+      - ttl_expiry
+    phase_added: "62-G"
+
+  - name: RequestRephraseOrchestrator
+    category: CORE
+    description: "Intent rephrasing + pillar alignment — maps user requests to CORTEX intents"
+    entry_point: "cortex.orchestrators.core.request_rephrase_orchestrator:RequestRephraseOrchestrator"
+    features:
+      - intent_rephrasing
+      - pillar_alignment
+      - risk_scoring
+    phase_added: "62-G"
+
+  - name: ReviewOrchestrator
+    category: CORE
+    description: "Code review orchestrator — gap analysis, acceptance decisions, remediation planning"
+    entry_point: "cortex.orchestrators.core.review_orchestrator:ReviewOrchestrator"
+    features:
+      - gap_analysis
+      - review_acceptance
+      - remediation_plan
+    phase_added: "62-G"
+
+  - name: SecurityOrchestrator
+    category: CORE
+    description: "Security gate orchestrator — vulnerability scanning, SAST, dependency audit"
+    entry_point: "cortex.orchestrators.core.security_orchestrator:SecurityOrchestrator"
+    features:
+      - vulnerability_scanning
+      - sast_gate
+      - dependency_audit
+    phase_added: "62-G"
+
+  - name: CortexMasterPlanOrchestrator
+    category: CORE
+    description: "Phase lifecycle manager — cortex-master.yaml sync, phase create/load/close"
+    entry_point: "cortex.orchestrators.core.master_plan_orchestrator:CortexMasterPlanOrchestrator"
+    features:
+      - phase_lifecycle
+      - registry_sync
+      - workflow_template_load
+    phase_added: "62-G"
+
+  - name: MasterOrchestratorStage2
+    category: CORE
+    description: "Stage 2 intent routing handler — extracted from MasterOrchestrator (Phase 57 F2)"
+    entry_point: "cortex.orchestrators.core.master_orchestrator_stage_2:MasterOrchestratorStage2"
+    features:
+      - stage2_routing
+      - knowledge_synthesis
+    phase_added: "62-G"
+
+  - name: IntentRouter
+    category: CORE
+    description: "Primary intent router — complexity-gated routing with LENS context"
+    entry_point: "cortex.orchestrators.core.intent_router:IntentRouter"
+    features:
+      - complexity_gating
+      - lens_context
+      - fallback_routing
+    phase_added: "62-G"
+
 initialization_order: 10
 
 conflict_resolution:
@@ -99,7 +208,7 @@ conflict_resolution:
 
 metadata:
   maintained_by: "CORTEX Core Team"
-  last_updated: "2026-02-21"
-  git_commit: "ac-wiring-core-002"
+  last_updated: "2026-02-23"
+  git_commit: "phase-62-g-wiring-surface-expansion"
   status: "active"
-  change_summary: "Removed unimplemented AutowiringOrchestrator; added EnforcementOrchestrator and ConversationOrchestrator at correct module paths (L1 validated)"
+  change_summary: "Phase 62-G: Added 11 previously unregistered core orchestrators (AuditOrchestrator, BrainHealthOrchestrator, CentralBrainOrchestrator, ObservabilityOrchestrator, StateOrchestrator, RequestRephraseOrchestrator, ReviewOrchestrator, SecurityOrchestrator, CortexMasterPlanOrchestrator, MasterOrchestratorStage2, IntentRouter). Wiring surface gap reduced."

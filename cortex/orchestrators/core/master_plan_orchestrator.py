@@ -29,6 +29,7 @@ from typing import Any, Dict, List, Optional
 import yaml
 
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 logger = logging.getLogger(__name__)
 
@@ -122,7 +123,7 @@ class RegistrySyncResult:
 # ============================================================================
 
 
-class CortexMasterPlanOrchestrator(WorkflowTemplateMixin):
+class CortexMasterPlanOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin):
     """Owns the complete CORTEX phase lifecycle for the CORTEX repository.
 
     This is the single canonical implementation (CORE-035) responsible for:
@@ -446,6 +447,12 @@ class CortexMasterPlanOrchestrator(WorkflowTemplateMixin):
         Raises:
             PhaseLifecycleError: If registry write or file creation fails.
         """
+        # Phase 58: activate cross-cutting hooks (LENS + knowledge synthesis)
+        self._activate_cross_cutting_hooks(
+            operation="create_phase",
+            orchestrator_context=None,
+            unified_context=None,
+        )
         # Step 1: Sync folders so sequence is computed from clean state
         self.sync_phase_folders()
 

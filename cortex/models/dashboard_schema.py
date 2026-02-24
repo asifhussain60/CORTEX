@@ -590,8 +590,17 @@ class RepoDashboardModel:
     use_cases: List[UseCase]
     lens: LensSection
     refactoring: RefactoringSection
-    architecture: ArchitectureSection
-    data_quality: DataQualitySection
+    architecture: ArchitectureSection = field(
+        default_factory=lambda: ArchitectureSection(
+            coupling_score=0, cohesion_score=0,
+            total_dependencies=0, circular_dependencies=0
+        )
+    )
+    data_quality: DataQualitySection = field(
+        default_factory=lambda: DataQualitySection(
+            confidence_score=100, coverage_pct=100.0
+        )
+    )
 
     @dashboard_debug
     def to_dict(self) -> Dict[str, Any]:

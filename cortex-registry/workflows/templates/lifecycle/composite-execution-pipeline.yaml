@@ -285,6 +285,17 @@ workflow:
         compare_baseline: true
         output_keys: ["improvement_percentage", "remaining_issues", "final_verdict"]
 
+  # ── CONVERGENCE GATE (global) ─────────────────────────────────────
+  convergence_gate:
+    max_cycles: 20
+    convergence_predicate: "all_pass and security_ok and quality >= threshold and regressions == 0"
+    success_criteria:
+      all_tests_pass: true
+      security_clean: true
+      test_coverage: ">= target"
+      regressions: "== 0"
+      golden_tests: "all pass"
+
   # ── SUCCESS CRITERIA (global) ────────────────────────────────────
   success_criteria:
     security_issues: "== 0"

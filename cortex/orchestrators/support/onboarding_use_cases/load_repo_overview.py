@@ -37,8 +37,18 @@ class LoadRepoOverviewUseCase:
         """Initialize overview loader.
         
         Args:
-            repository: Optional repository interface for persistence
+            repository: Optional repository interface for persistence.
+                        Defaults to JSONProfileRepository when not provided.
         """
+        if repository is None:
+            try:
+                from cortex.infrastructure.repositories.json_profile_repository import (
+                    JSONProfileRepository,
+                )
+                _default_path = Path(__file__).parent.parent.parent.parent.parent / ".cortex-runtime" / "profiles"
+                repository = JSONProfileRepository(storage_path=_default_path)
+            except Exception:
+                pass
         self.repository = repository
     
     def execute(self, repo_data: Any) -> RepoMetadata:

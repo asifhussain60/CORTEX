@@ -136,7 +136,362 @@ conflict_resolution:
 
 metadata:
   maintained_by: "CORTEX Support Team"
-  last_updated: "2026-02-21"
-  git_commit: "ac-wiring-support-003"
+  last_updated: "2026-02-23"
+  git_commit: "phase-62-g-wiring-surface-expansion"
   status: "active"
-  change_summary: "Added SweepCatalogueOrchestrator at priority 155 (Phase 16 — CORE-064 Sweep Completeness Contract)"
+  change_summary: "Phase 62-G: Registered 14 previously undocumented support orchestrators (AutoHealingMCPOrchestrator, BulkDigestOrchestrator, CortexDocsOrchestrator, DebuggerOrchestrator, DigestSessionOrchestrator, PhaseCompletionOrchestrator, RepositoryOnboardingOrchestrator, TestClassifierOrchestrator, UnifiedAnalysisOrchestrator, UnifiedDiscoveryOrchestrator, UnifiedQualityAssuranceOrchestrator, GitPublishOrchestrator, PreCommitEnforcementOrchestrator, SanitizationOrchestrator)"
+
+# ============================================================
+# PHASE 62-D: Previously undocumented tiers — now registered
+# Authority: CORE-035, CORE-064, copilot-review04.md GAP-62-04
+# ============================================================
+phantom_tier_registrations:
+  - name: GitOrchestrator
+    tier: git
+    category: SUPPORT
+    description: "Git workflow orchestrator — commit, branch, merge, diff operations"
+    entry_point: "cortex.orchestrators.git.git_orchestrator:GitOrchestrator"
+    features:
+      - git_commit
+      - git_branch
+      - git_merge
+      - git_diff
+      - git_status
+    health_check: true
+    health_check_method: "health_check"
+    dependencies: []
+    priority: 145
+    phase_added: "62-D"
+
+  - name: StageExecutionStrategy
+    tier: strategies
+    category: SUPPORT
+    description: "Stage execution strategy — orchestrates multi-stage pipeline execution"
+    entry_point: "cortex.orchestrators.strategies.stage_execution_strategy:StageExecutionStrategy"
+    features:
+      - stage_routing
+      - stage_fallback
+      - parallel_stage_execution
+    health_check: false
+    dependencies: []
+    priority: 142
+    phase_added: "62-D"
+
+  - name: ContextAwareSynthesis
+    tier: synthesis
+    category: SUPPORT
+    description: "Context-aware synthesis — cross-orchestrator response synthesis"
+    entry_point: "cortex.orchestrators.synthesis.context_aware_synthesis:ContextAwareSynthesis"
+    features:
+      - context_synthesis
+      - response_merging
+      - cross_orchestrator_aggregation
+    health_check: false
+    dependencies: []
+    priority: 140
+    phase_added: "62-D"
+
+  - name: ConvergenceLoopExecutor
+    tier: workflow
+    category: SUPPORT
+    description: "Convergence loop executor — detect-fix-rescan loop primitive (CORE-064)"
+    entry_point: "cortex.orchestrators.workflow.convergence_loop_executor:ConvergenceLoopExecutor"
+    features:
+      - convergence_loop
+      - detect_fix_rescan
+      - p0_p1_gate
+    health_check: false
+    dependencies: []
+    priority: 138
+    phase_added: "62-D"
+
+  - name: AuditVerifier
+    tier: workflow
+    category: SUPPORT
+    description: "Audit verifier — post-phase audit verification workflow step"
+    entry_point: "cortex.orchestrators.workflow.audit_verifier:AuditVerifier"
+    features:
+      - audit_verification
+      - post_phase_check
+    health_check: false
+    dependencies: []
+    priority: 136
+    phase_added: "62-D"
+
+  - name: AutonomousWorkflowExecutor
+    tier: workflow
+    category: SUPPORT
+    description: "Autonomous workflow executor — silent autonomous execution (CORE-049)"
+    entry_point: "cortex.orchestrators.workflow.autonomous_workflow_executor:AutonomousWorkflowExecutor"
+    features:
+      - autonomous_execution
+      - progress_reporting
+      - silent_mode
+    health_check: false
+    dependencies: []
+    priority: 134
+    phase_added: "62-D"
+
+# ============================================================
+# PHASE 62-G: Support, Git, and Validation tier registration
+# Authority: CORE-035, copilot-review04.md GAP-62-08
+# ============================================================
+  - name: AutoHealingMCPOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Auto-healing MCP orchestrator — detects and repairs MCP tool registration failures"
+    entry_point: "cortex.orchestrators.support.auto_healing_mcp_orchestrator:AutoHealingMCPOrchestrator"
+    features:
+      - mcp_health_detection
+      - tool_registration_repair
+      - auto_restart
+    health_check: false
+    dependencies: []
+    priority: 130
+    phase_added: "62-G"
+
+  - name: BulkDigestOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Bulk digest orchestrator — batch content ingestion across 3 pipelines"
+    entry_point: "cortex.orchestrators.support.bulk_digest_orchestrator:BulkDigestOrchestrator"
+    features:
+      - batch_ingestion
+      - three_pipeline_routing
+      - confidence_filtering
+    health_check: false
+    dependencies: []
+    priority: 128
+    phase_added: "62-G"
+
+  - name: CortexDocsOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Cortex docs orchestrator — HTML/CSS documentation generation pipeline"
+    entry_point: "cortex.orchestrators.support.cortex_docs_orchestrator:CortexDocsOrchestrator"
+    features:
+      - docs_generation
+      - html_pipeline
+      - role_selector_pages
+    health_check: false
+    dependencies: []
+    priority: 126
+    phase_added: "62-G"
+
+  - name: DebuggerOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Debugger orchestrator — session-based debug trace capture and analysis"
+    entry_point: "cortex.orchestrators.support.debugger_orchestrator:DebuggerOrchestrator"
+    features:
+      - debug_session_capture
+      - trace_analysis
+      - fix_plan_generation
+    health_check: false
+    dependencies: []
+    priority: 124
+    phase_added: "62-G"
+
+  - name: DigestSessionOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Digest session orchestrator — single-session intelligent content ingestion"
+    entry_point: "cortex.orchestrators.support.digest_session_orchestrator:DigestSessionOrchestrator"
+    features:
+      - session_ingestion
+      - knowledge_extraction
+      - opj_learning
+    health_check: false
+    dependencies:
+      - BulkDigestOrchestrator
+    priority: 122
+    phase_added: "62-G"
+
+  - name: PhaseCompletionOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Phase completion orchestrator — lifecycle close + registry sync for cortex-master.yaml"
+    entry_point: "cortex.orchestrators.support.phase_completion_orchestrator:PhaseCompletionOrchestrator"
+    features:
+      - phase_close
+      - registry_sync
+      - completion_gate
+    health_check: false
+    dependencies:
+      - CortexMasterPlanOrchestrator
+    priority: 120
+    phase_added: "62-G"
+
+  - name: RepositoryOnboardingOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Repository onboarding orchestrator — LENS analysis + SQLite dashboard (Phase 21)"
+    entry_point: "cortex.orchestrators.support.repository_onboarding_orchestrator:RepositoryOnboardingOrchestrator"
+    features:
+      - lens_analysis
+      - sqlite_dashboard
+      - business_language_summary
+    health_check: false
+    dependencies: []
+    priority: 118
+    phase_added: "62-G"
+
+  - name: TestClassifierOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Test classifier orchestrator — zero-dependency GOLDEN/STANDARD test tier classifier"
+    entry_point: "cortex.orchestrators.support.test_classifier_orchestrator:TestClassifierOrchestrator"
+    features:
+      - golden_classification
+      - standard_classification
+      - tier_promotion
+    health_check: false
+    dependencies: []
+    priority: 116
+    phase_added: "62-G"
+
+  - name: UnifiedAnalysisOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Unified analysis orchestrator — multi-dimension codebase analysis aggregator"
+    entry_point: "cortex.orchestrators.support.unified_analysis_orchestrator:UnifiedAnalysisOrchestrator"
+    features:
+      - multi_dimension_analysis
+      - aggregated_scoring
+      - trend_detection
+    health_check: false
+    dependencies: []
+    priority: 114
+    phase_added: "62-G"
+
+  - name: UnifiedDiscoveryOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Unified discovery orchestrator — workspace topology and service map generation"
+    entry_point: "cortex.orchestrators.support.unified_discovery_orchestrator:UnifiedDiscoveryOrchestrator"
+    features:
+      - topology_discovery
+      - service_mapping
+      - dependency_graph
+    health_check: false
+    dependencies: []
+    priority: 112
+    phase_added: "62-G"
+
+  - name: UnifiedQualityAssuranceOrchestrator
+    tier: support
+    category: SUPPORT
+    description: "Unified quality assurance orchestrator — test quality + coverage + governance gate"
+    entry_point: "cortex.orchestrators.support.unified_quality_orchestrator:UnifiedQualityAssuranceOrchestrator"
+    features:
+      - test_quality_gate
+      - coverage_enforcement
+      - governance_compliance
+    health_check: false
+    dependencies:
+      - EnforcementOrchestrator
+    priority: 110
+    phase_added: "62-G"
+
+  - name: GitPublishOrchestrator
+    tier: git
+    category: SUPPORT
+    description: "Git publish orchestrator — structured commit + push + PR creation workflow"
+    entry_point: "cortex.orchestrators.git.git_publish_orchestrator:GitPublishOrchestrator"
+    features:
+      - structured_commit
+      - pr_creation
+      - branch_management
+    health_check: false
+    dependencies:
+      - GitOrchestrator
+    priority: 108
+    phase_added: "62-G"
+
+  - name: PreCommitEnforcementOrchestrator
+    tier: git
+    category: SUPPORT
+    description: "Pre-commit enforcement orchestrator — CORE rule validation at commit time"
+    entry_point: "cortex.orchestrators.git.enforcement_orchestrator:PreCommitEnforcementOrchestrator"
+    features:
+      - pre_commit_hook
+      - core_rule_gate
+      - commit_blocking
+    health_check: false
+    dependencies:
+      - EnforcementOrchestrator
+    priority: 106
+    phase_added: "62-G"
+
+  - name: SanitizationOrchestrator
+    tier: git
+    category: SUPPORT
+    description: "Sanitization orchestrator — secret scanning, PII removal, branch hygiene"
+    entry_point: "cortex.orchestrators.git.sanitization_orchestrator:SanitizationOrchestrator"
+    features:
+      - secret_scanning
+      - pii_removal
+      - branch_hygiene
+    health_check: false
+    dependencies: []
+    priority: 104
+    phase_added: "62-G"
+
+  - name: HolisticValidationOrchestrator
+    tier: validation
+    category: SUPPORT
+    description: "Holistic validation orchestrator — CORE-048 pre-execution validation gate"
+    entry_point: "cortex.orchestrators.validation.holistic_validation_orchestrator:HolisticValidationOrchestrator"
+    features:
+      - pre_execution_gate
+      - core_048_compliance
+      - holistic_scan
+    health_check: false
+    dependencies:
+      - EnforcementOrchestrator
+    priority: 102
+    phase_added: "62-G"
+
+  - name: SOLIDOrchestrator
+    tier: validation
+    category: SUPPORT
+    description: "SOLID principles orchestrator — validates codebase adherence to SOLID design principles"
+    entry_point: "cortex.orchestrators.validation.solid_orchestrator:SOLIDOrchestrator"
+    features:
+      - solid_validation
+      - srp_check
+      - ocp_check
+      - lsp_check
+    health_check: false
+    dependencies: []
+    priority: 100
+    phase_added: "62-G"
+
+  - name: SecurityVulnerabilityOrchestrator
+    tier: validation
+    category: SUPPORT
+    description: "Security vulnerability orchestrator — SAST, CVE scanning, remediation handler"
+    entry_point: "cortex.orchestrators.validation.security_vulnerability_orchestrator:SecurityVulnerabilityOrchestrator"
+    features:
+      - sast_scanning
+      - cve_detection
+      - remediation_handler
+    health_check: false
+    dependencies:
+      - SecurityOrchestrator
+    priority: 98
+    phase_added: "62-G"
+
+  - name: IntelligenceOrchestrator
+    tier: intelligence
+    category: SUPPORT
+    description: "Intelligence orchestrator — LENS analysis + brain tier coordination for AI requests"
+    entry_point: "cortex.orchestrators.intelligence.intelligence_orchestrator:IntelligenceOrchestrator"
+    features:
+      - lens_analysis
+      - brain_tier_coordination
+      - ai_request_routing
+    health_check: false
+    dependencies: []
+    priority: 96
+    phase_added: "62-G"

@@ -14,6 +14,7 @@ import logging
 from typing import Any
 
 from cortex.core.orchestrator_base import OrchestratorBase
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 _SUPPORTED_INTENTS: tuple[str, ...] = ("refactor", "service_decomposition", "legacy_modernization")
 
 
-class ServiceDecompositionOrchestrator(OrchestratorBase):
+class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin, OrchestratorBase):
     """
     Orchestrates security-first, layer-gated service decomposition.
 
@@ -77,6 +78,12 @@ class ServiceDecompositionOrchestrator(OrchestratorBase):
             Result dict containing ``status``, ``steps_executed``, and
             optionally ``halted_at`` if the security gate blocked execution.
         """
+        # Phase 58: activate cross-cutting hooks (LENS + knowledge synthesis)
+        self._activate_cross_cutting_hooks(
+            operation="execute",
+            orchestrator_context=(params or {}).get("orchestrator_context"),
+            unified_context=(params or {}).get("unified_context"),
+        )
         params = params or {}
         engine = self._get_engine()
         workflow = engine.load(workflow_path)

@@ -15,6 +15,7 @@ from typing import Any, Dict, Optional
 
 from cortex.intelligence.learning.opj_mixin import OPJMixin
 from cortex.core.result import Ok, Result
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 
 
 @dataclass
@@ -41,7 +42,7 @@ class DigestResult:
         }
 
 
-class DigestSessionOrchestrator(OPJMixin):
+class DigestSessionOrchestrator(OPJMixin, OrchestratorProtocolMixin):
     """Orchestrates ingestion of a single markdown/chat session file."""
 
     def digest_session(self, file_path: str) -> DigestResult:

@@ -21,6 +21,7 @@ from cortex.models.canonical_enums import PhaseStatus, IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 from cortex.core.dependency_guard import soft_import
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 
 # F10: Governance gate — lazy import to avoid circular deps
 try:
@@ -42,7 +43,7 @@ class PhaseNode:
     status: str = "planned"
 
 
-class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
+class PlanningOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTemplateMixin):
     """
     Orchestrates multi-phase planning with:
     - Predecessor/dependency analysis
@@ -54,13 +55,14 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     def __init__(self) -> None:
         """Initialize instance."""
         self.phases: Dict[str, PhaseNode] = {}
-        # LENS orchestrator — loaded once via soft_import (observable fallback, CORE-049)
+        # Phase 62-E: LENS orchestrator — canonical path cortex.lens (not cortex.intelligence.lens)
         self._lens_orchestrator = soft_import(
-            "cortex.intelligence.lens.lens_orchestrator",
+            "cortex.lens.lens_orchestrator",
             attr="LENSOrchestrator",
             fallback=None,
             feature_name="LENS Analysis (PlanningOrchestrator)",
         )
+        self._lens_enabled: bool = self._lens_orchestrator is not None
 
     # =========================================================================
     # IOrchestrator Interface Implementation (WAVE-7-CLEANUP)
@@ -176,22 +178,43 @@ class PlanningOrchestrator(IOrchestrator, WorkflowTemplateMixin):
     def _extract_lens_context(
         self,
         orchestrator_context: Optional[Dict[str, Any]],
+        target_path: str = "",
     ) -> Optional[Dict[str, Any]]:
-        """Extract LENS intelligence context from orchestrator_context dict.
+        """Extract LENS intelligence context, calling LENS directly when needed.
 
-        GAP-57-05: Consume lens_context forwarded by IntentRouter.
+        Phase 62-E: Genuine LENS call — not a stub.
+
+        Priority order:
+        1. Use ``lens_context`` forwarded by IntentRouter (already analysed).
+        2. If absent and *target_path* provided, call LENSOrchestrator.analyze_file().
+        3. If LENS unavailable, return None (observable via soft_import warning).
 
         Args:
             orchestrator_context: Full context dict from IntentRouter. May be None.
+            target_path: File path to analyse directly if no forwarded context.
 
         Returns:
-            The ``lens_context`` sub-dict when present, otherwise ``None``.
-
-        Authority: AC-PHASE57-C-001
+            LENS result dict with at least ``language`` key, or ``None``.
         """
-        if orchestrator_context is None:
+        if orchestrator_context is not None:
+            forwarded = orchestrator_context.get("lens_context")
+            if forwarded:
+                return forwarded
+
+        if not target_path or not self._lens_enabled or self._lens_orchestrator is None:
             return None
-        return orchestrator_context.get("lens_context")
+
+        try:
+            lens_instance = self._lens_orchestrator()
+            result = lens_instance.analyze_file(target_path)
+            return result if isinstance(result, dict) else None
+        except Exception as lens_exc:  # noqa: BLE001
+            logger.warning(
+                "PlanningOrchestrator._extract_lens_context: LENS failed for '%s' — %s",
+                target_path,
+                lens_exc,
+            )
+            return None
 
     def process(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """

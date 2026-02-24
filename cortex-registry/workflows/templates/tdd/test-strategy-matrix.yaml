@@ -286,6 +286,15 @@ workflow:
         report_format: "inline"
         output_keys: ["aggregate_report", "tier_summary", "final_verdict"]
 
+  # ── CONVERGENCE GATE (global) ─────────────────────────────────────
+  convergence_gate:
+    max_cycles: 12
+    convergence_predicate: "all_tiers_pass and quality_score >= threshold and coverage >= target and regressions == 0"
+    success_criteria:
+      unit_tests_pass: "all"
+      regression_count: "== 0"
+      smoke_tests_pass: "all"
+
   # ── SUCCESS CRITERIA (global) ────────────────────────────────────
   success_criteria:
     unit_tests_pass: "all"

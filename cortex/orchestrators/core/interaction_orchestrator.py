@@ -30,9 +30,10 @@ from cortex.infrastructure.trace_integration import trace_orchestrator_action
 
 # Phase 23: Import WorkflowTemplateMixin for template consumption capability
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 
 
-class InteractionOrchestrator(IOrchestrator, WorkflowTemplateMixin):
+class InteractionOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTemplateMixin):
     """
     Stage 1 orchestrator: LENS-powered comprehension on every turn.
 

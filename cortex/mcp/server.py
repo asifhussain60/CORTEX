@@ -22,6 +22,7 @@ import os
 
 from cortex.mcp.mcp_tool_base import Tool, ToolResult, ToolCategory
 from cortex.mcp.mcp_registry import ToolRegistry, get_registry
+from cortex.mcp.tenant_context_middleware import TenantContextMiddleware, WorkspaceContext
 
 
 # ============================================================================
@@ -108,7 +109,8 @@ class MCPServer:
         self.logger = logging.getLogger(__name__)
         self.registry = registry or get_registry()
         self._start_time = datetime.utcnow()
-        
+        self._tenant_middleware = TenantContextMiddleware()
+
         self.logger.info(f"MCP Server v2 initialized with {self.registry.tool_count} tools")
     
     # ========================================================================
@@ -168,7 +170,15 @@ class MCPServer:
             ToolResult with success/error and data
         """
         start_time = time.time()
-        
+
+        # Phase 62-A: Extract and inject tenant/workspace context
+        # Pull _request_headers out of params (not forwarded to tool)
+        request_headers = params.pop("_request_headers", {})
+        workspace_context = self._tenant_middleware.extract_context(
+            {"headers": request_headers}
+        )
+        params = self._tenant_middleware.inject_context(params, workspace_context)
+
         # PHASE 4: Inject orchestrator context into all tool calls
         # This ensures all tools validate routing through MasterOrchestrator
         params['orchestrator_context'] = {

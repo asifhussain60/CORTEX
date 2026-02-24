@@ -36,11 +36,17 @@ from __future__ import annotations
 
 import importlib
 import logging
+import sqlite3
+import datetime
+from pathlib import Path
 from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
-__all__ = ["soft_import"]
+__all__ = ["soft_import", "safe_import", "_log_dependency_warning"]
+
+# SQLite audit DB path (canonical runtime location)
+_DB_PATH = Path(".cortex-runtime/traces/orchestrator-traces.db")
 
 
 def soft_import(
@@ -116,3 +122,97 @@ def soft_import(
 
 
 # AC_COMPLETE: AC-DEPGUARD-5907 ✅
+
+
+# ---------------------------------------------------------------------------
+# Phase 62-C: safe_import() + SQLite DependencyWarning persistence
+# AC_START: AC-62C-DEPENDENCY-GUARD-001
+# ---------------------------------------------------------------------------
+
+def _log_dependency_warning(
+    module_name: str,
+    error: str,
+    fallback_used: Any,
+    caller: str,
+) -> None:
+    """Persist a dependency degradation warning to the SQLite audit DB.
+
+    Never raises — DB failures are swallowed so the caller is never disrupted.
+
+    Args:
+        module_name: The module that failed to import.
+        error: The ImportError message.
+        fallback_used: The fallback value that was returned.
+        caller: Description of the calling file/context.
+    """
+    msg = (
+        f"[DEPENDENCY DEGRADED] {module_name} unavailable — "
+        f"fallback={fallback_used!r} caller={caller or 'unknown'} error={error}"
+    )
+    logger.warning(msg)
+    try:
+        _DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with sqlite3.connect(str(_DB_PATH)) as conn:
+            conn.execute("""
+                CREATE TABLE IF NOT EXISTS dependency_warnings (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    module_name TEXT NOT NULL,
+                    error TEXT,
+                    fallback_used TEXT,
+                    caller TEXT,
+                    recorded_at TEXT NOT NULL
+                )
+            """)
+            conn.execute(
+                "INSERT INTO dependency_warnings VALUES (NULL,?,?,?,?,?)",
+                (
+                    module_name,
+                    error,
+                    repr(fallback_used),
+                    caller,
+                    datetime.datetime.utcnow().isoformat(),
+                ),
+            )
+    except Exception:  # noqa: BLE001
+        pass  # Never let audit logging crash the caller
+
+
+def safe_import(
+    module_name: str,
+    fallback: Any = None,
+    warn: bool = True,
+    caller: str = "",
+) -> Any:
+    """Import a module safely with structured degradation warning.
+
+    Replaces bare ``except ImportError: pass`` blocks. On failure, optionally
+    persists a structured warning to the SQLite audit DB so operators can
+    detect capability degradation at runtime.
+
+    Args:
+        module_name: Dotted module path to import (e.g. ``"cortex.core.result"``).
+        fallback: Value to return if import fails (default: ``None``).
+        warn: If True, log warning to SQLite audit DB on failure (default: ``True``).
+        caller: Caller description for audit trail (e.g. ``__file__``).
+
+    Returns:
+        The imported module on success, or *fallback* on failure.
+
+    Example::
+
+        lens = safe_import(
+            "cortex.lens.lens_orchestrator",
+            fallback=None,
+            warn=True,
+            caller=__file__,
+        )
+    """
+    try:
+        return importlib.import_module(module_name)
+    except ImportError as exc:
+        if warn:
+            _log_dependency_warning(module_name, str(exc), fallback, caller)
+        return fallback
+
+
+# AC_COMPLETE: AC-62C-DEPENDENCY-GUARD-001 ✅

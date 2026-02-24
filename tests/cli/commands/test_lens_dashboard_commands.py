@@ -105,7 +105,7 @@ class TestLensDashboardGenerateCommand:
         repo_path.mkdir()
         output = tmp_path / "output"
         
-        with patch('cortex.api.endpoints.lens_dashboard_routes.analyze_repository') as mock_analyze:
+        with patch('cortex.infrastructure.api.endpoints.lens_dashboard_routes.analyze_repository') as mock_analyze:
             mock_analyze.return_value = {
                 'overview': {'total_files': 10},
                 'dependencies': {'nodes': []},
@@ -134,7 +134,7 @@ class TestLensDashboardGenerateCommand:
         repo_path = tmp_path / "test-repo"
         repo_path.mkdir()
         
-        with patch('cortex.api.endpoints.lens_dashboard_routes.analyze_repository') as mock_analyze:
+        with patch('cortex.infrastructure.api.endpoints.lens_dashboard_routes.analyze_repository') as mock_analyze:
             
             mock_analyze.return_value = {
                 'overview': {}, 'dependencies': {}, 'classes': {},

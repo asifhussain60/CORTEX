@@ -194,6 +194,16 @@ workflow:
         parallel: true
         output_keys: ["test_results", "regression_count", "pass_rate"]
 
+  # ── CONVERGENCE GATE ──────────────────────────────────────────────
+  convergence_gate:
+    max_cycles: 6
+    convergence_predicate: "all_pass and lint == 0 and dupes == 0 and security_ok and complexity <= target"
+    success_criteria:
+      all_tests_pass: true
+      lint_violations: "== 0"
+      duplicate_pairs: "== 0"
+      test_regressions: "== 0"
+
   # ── SUCCESS CRITERIA ─────────────────────────────────────────────
   success_criteria:
     lint_violations: "== 0"

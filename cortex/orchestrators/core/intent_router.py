@@ -30,6 +30,7 @@ import yaml
 # Phase 51: Enhanced response template with semantic color coding
 # REMOVED: ResponseTemplate import (deprecated, unused - Phase 53 cleanup)
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.intelligence.knowledge.unified_intelligence_context import (
     UnifiedIntelligenceContext,
 )
@@ -239,7 +240,7 @@ class CompositeIntentDetector:
         return list(set(intents))  # Remove duplicates, maintain order
 
 
-class IntentRouter(IOrchestrator):
+class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
     """
     Routes operations based on intent type and context.
 

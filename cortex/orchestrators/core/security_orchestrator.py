@@ -30,6 +30,7 @@ import yaml
 
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.result import Err, Ok, Result
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 
 # Lazy imports to avoid dependency issues
 SecurityAuditor = None
@@ -237,7 +238,7 @@ DEFAULT_CONFIG_CHECKS = [
 # SECURITY ORCHESTRATOR
 # ============================================================================
 
-class SecurityOrchestrator(IOrchestrator, WorkflowTemplateMixin):
+class SecurityOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTemplateMixin):
     """
     Pre-DoR security gate orchestrator.
 

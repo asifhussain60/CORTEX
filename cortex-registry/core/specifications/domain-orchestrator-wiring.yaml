@@ -58,6 +58,47 @@ provides:
     dependencies:
       - business_knowledge_repository
 
+  - name: EnhancedPlanningOrchestrator
+    category: DOMAIN
+    description: "Enhanced planning orchestrator — extends PlanningOrchestrator with LENS + OPJ integration"
+    entry_point: "cortex.orchestrators.domain.enhanced_planning_orchestrator:EnhancedPlanningOrchestrator"
+    features:
+      - lens_enhanced_planning
+      - opj_consultation
+      - multi_phase_planning
+    dependencies:
+      - PlanningOrchestrator
+    phase_added: "62-G"
+
+  - name: ServiceDecompositionOrchestrator
+    category: DOMAIN
+    description: "Service decomposition — breaks monolith services into bounded contexts"
+    entry_point: "cortex.orchestrators.domain.service_decomposition_orchestrator:ServiceDecompositionOrchestrator"
+    features:
+      - monolith_decomposition
+      - bounded_context_extraction
+      - dependency_mapping
+    phase_added: "62-G"
+
+  - name: DashboardOrchestrator
+    category: DOMAIN
+    description: "Dashboard generation orchestrator — HTML/CSS static dashboard pipeline"
+    entry_point: "cortex.orchestrators.domain.dashboard_orchestrator:DashboardOrchestrator"
+    features:
+      - dashboard_generation
+      - static_html_pipeline
+      - data_embedding
+    phase_added: "62-G"
+
+  - name: BusinessDomainOrchestrator
+    category: DOMAIN
+    description: "Business domain base orchestrator — domain model + business rules engine"
+    entry_point: "cortex.orchestrators.domain.business.base:BusinessDomainOrchestrator"
+    features:
+      - domain_model_management
+      - business_rules_engine
+    phase_added: "62-G"
+
 initialization_order: 20
 
 conflict_resolution:
@@ -66,7 +107,7 @@ conflict_resolution:
 
 metadata:
   maintained_by: "CORTEX Domain Team"
-  last_updated: "2026-02-21"
-  git_commit: "ac-wiring-domain-002"
+  last_updated: "2026-02-23"
+  git_commit: "phase-62-g-wiring-surface-expansion"
   status: "active"
-  change_summary: "Removed unimplemented SeleniumPlaywrightOrchestrator; ConversationOrchestrator moved to core wiring spec (CORE-035)"
+  change_summary: "Phase 62-G: Added 4 previously unregistered domain orchestrators (EnhancedPlanningOrchestrator, ServiceDecompositionOrchestrator, DashboardOrchestrator, BusinessDomainOrchestrator)."

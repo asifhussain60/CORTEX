@@ -33,6 +33,7 @@ from typing import Any, Dict, List, Optional, Union
 from cortex.core.result import Err, Ok, Result
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 
 # Backward-compat aliases (no-op now that both paths are identical)
 CoreOk = Ok
@@ -82,7 +83,7 @@ class _AuditEntry:
             ).hexdigest()[:16]
 
 
-class RefactoringOrchestrator(WorkflowTemplateMixin, IOrchestrator):
+class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, IOrchestrator):
     """Orchestrator for coordinating all refactoring tool adapters.
 
     Provides a unified API for executing refactoring operations across multiple
@@ -134,23 +135,55 @@ class RefactoringOrchestrator(WorkflowTemplateMixin, IOrchestrator):
     def _extract_lens_context(
         self,
         orchestrator_context: Optional[Dict[str, Any]],
+        target_path: str = "",
     ) -> Optional[Dict[str, Any]]:
-        """Extract LENS intelligence context from orchestrator_context dict.
+        """Extract LENS intelligence context, calling LENS directly when needed.
 
-        GAP-57-05: Domain orchestrators must consume lens_context forwarded by
-        IntentRouter inside orchestrator_context["lens_context"].
+        Phase 62-E: Genuine LENS call — not a stub. Uses safe canonical path.
+
+        Priority order:
+        1. Use ``lens_context`` forwarded by IntentRouter.
+        2. If absent and *target_path* provided, call LENSOrchestrator.analyze_file().
+        3. If LENS unavailable, return None (observable via safe_import warning).
 
         Args:
             orchestrator_context: Full context dict from IntentRouter. May be None.
+            target_path: File path to analyse directly if no forwarded context.
 
         Returns:
-            The ``lens_context`` sub-dict when present, otherwise ``None``.
-
-        Authority: AC-PHASE57-C-001
+            LENS result dict with at least ``language`` key, or ``None``.
         """
-        if orchestrator_context is None:
+        if orchestrator_context is not None:
+            forwarded = orchestrator_context.get("lens_context")
+            if forwarded:
+                return forwarded
+
+        if not target_path:
             return None
-        return orchestrator_context.get("lens_context")
+
+        from cortex.core.dependency_guard import safe_import
+        lens_module = safe_import(
+            "cortex.lens.lens_orchestrator",
+            fallback=None,
+            warn=True,
+            caller=__file__,
+        )
+        if lens_module is None:
+            return None
+
+        try:
+            lens_cls = getattr(lens_module, "LENSOrchestrator", None)
+            if lens_cls is None:
+                return None
+            result = lens_cls().analyze_file(target_path)
+            return result if isinstance(result, dict) else None
+        except Exception as lens_exc:  # noqa: BLE001
+            logger.warning(
+                "RefactoringOrchestrator._extract_lens_context: LENS failed for '%s' — %s",
+                target_path,
+                lens_exc,
+            )
+            return None
 
     def _register_adapters(self) -> None:
         """Register all available refactoring tool adapters.

@@ -193,6 +193,15 @@ workflow:
         compliance_frameworks: "{{compliance_targets}}"
         output_keys: ["compliance_map", "residual_gaps", "certification_readiness"]
 
+  # ── CONVERGENCE GATE ──────────────────────────────────────────────
+  convergence_gate:
+    max_cycles: 8
+    convergence_predicate: "surface_mapped and critical_mitigated and high_mitigated and plan_complete"
+    success_criteria:
+      unmitigated_critical: "== 0"
+      unmitigated_high: "== 0"
+      attack_surface_coverage: ">= 95%"
+
   # ── SUCCESS CRITERIA ─────────────────────────────────────────────
   success_criteria:
     unmitigated_critical: "== 0"
