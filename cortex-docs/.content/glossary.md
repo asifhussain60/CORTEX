@@ -47,7 +47,7 @@ order: 99
 
 **CORE-064** — Sweep Completeness Contract. Every FIX/REFACTOR/AUDIT sweep must exhaust its full issue catalogue before closing. Enforced by `SweepCatalogueOrchestrator`. Added 21 February 2026.
 
-**CORE Rules** — Governance rules identified by `CORE-nnn` IDs. 35 defined in `cortex-registry/core/tier0-skull/skull-rules.yaml` (33 CORE-* + 2 AC-PERMANENT-FIX), 22 actively enforced.
+**CORE Rules** — Governance rules identified by `CORE-nnn` IDs. 35 CORE rules active in `cortex-registry/core/tier0-skull/skull-rules.yaml` (+ 2 AC rules), all enforced at pre-commit + CI + runtime.
 
 **cortex_process_request** — Mandatory MCP entry point. Routes ALL user requests through MasterOrchestrator 4-stage pipeline. Module: `cortex/mcp/tools/core.py`.
 
@@ -69,7 +69,7 @@ order: 99
 
 ## G
 
-**Golden Tests** — 696 tests that must ALWAYS pass (CORE-055 Golden Test Tier Contract). Run with `pytest-xdist` parallel execution. Location: `tests/golden/`.
+**Golden Tests** — 486 tests that must ALWAYS pass (CORE-055 Golden Test Tier Contract). Run with `pytest-xdist` parallel execution. Location: `tests/golden/`.
 
 **Governance Agents** — 8 specialized agents that enforce specific CORE rule categories: TestNaming, FileNaming, ImportValidation, TypeHint, Docstring, DuplicateDetection, SecurityScan, ExtendedGovernance.
 

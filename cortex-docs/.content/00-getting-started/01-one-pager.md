@@ -28,8 +28,8 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 ```
   ┌───────────────────────────────────────────────────────────────┐
-  │                  CORTEX PLATFORM v1.0.0 (Phase 62)            │
-  │                  1 Package · 27 Orchestrators · 26 MCP Tools  │
+  │                  CORTEX PLATFORM v1.0.0 (Phase 66/67)         │
+  │            1 Package · 27 Orchestrators · 26 MCP Tools        │
   │                                                               │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ MCP Gateway  │─▶│  Orchestration    │─▶│ Intelligence  │  │
@@ -40,8 +40,8 @@ Think of it like the difference between a calculator and a brain. A calculator w
   │         ▼                   ▼                     ▼           │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ Governance   │  │  Testing          │  │ Git Registry  │  │
-  │  │ 35 CORE rules│  │  15,739 tests     │  │ YAML SSOT     │  │
-  │  │ CORE-064     │  │  486 golden       │  │ Simplified    │  │
+  │  │ 35 CORE rules│  │  16,259 tests     │  │ YAML SSOT     │  │
+  │  │ CORE-064     │  │  486 golden       │  │ 67 Phases     │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   └───────────────────────────────────────────────────────────────┘
 ```
@@ -144,7 +144,7 @@ Every action runs through governance enforcement:
 - **Transport:** stdio (development) / HTTP (production)
 - **Package:** 1 canonical Python package (`cortex`) — all imports use `cortex.*`
 - **Storage:** Git-backed registry — no PostgreSQL, no MongoDB required
-- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 15,739 tests, 486 golden
+- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 16,259 tests (486 golden, 177 phase)
 - **Observability:** OpenTelemetry tracing, Prometheus metrics, Grafana dashboards, SQLite audit log (`.cortex-runtime/audit.db`)
 - **Languages analyzed by LENS:** Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue
 
@@ -166,4 +166,4 @@ Every action runs through governance enforcement:
 
 ---
 
-*CORTEX v1.0.0 · February 2026 · 27 wired orchestrators · 26 MCP tools · 35 CORE rules · 15,739 tests · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
+*CORTEX v1.0.0 · February 2026 · Phase 66/67 Complete (All 67 Phases Done) · 27 wired orchestrators · 26 MCP tools · 35 CORE rules (+ 2 AC) · 16,259 tests · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*

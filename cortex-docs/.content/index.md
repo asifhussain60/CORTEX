@@ -10,7 +10,7 @@ format: diátaxis-explanation
 voice: third-person-blended
 ---
 
-> **Notice:** This documentation represents CORTEX as verified against live code on 24 February 2026 (Phase 62 Complete). All metrics, module paths, and counts are validated against the running codebase. The Simplification Master Plan (Phases 58-62) eliminated core/core double-nesting, reduced orchestrator surface, and cleaned the registry.
+> **Notice:** This documentation represents CORTEX as verified against live code on 24 February 2026 (Phase 66/67 Complete — all 67 phases done). All metrics, module paths, and counts are validated against the running codebase. The Simplification Master Plan (Phases 58-62) eliminated core/core double-nesting, reduced orchestrator surface, and cleaned the registry.
 
 ---
 
@@ -29,20 +29,20 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-## System Metrics (24 Feb 2026 — Phase 62 Complete)
+## System Metrics (24 Feb 2026 — Phase 66/67 Complete — All 67 Phases Done)
 
 | Metric | Value | Status |
 |--------|-------|--------|
 | **Package** | 1 canonical (`cortex`) | ✅ 3→1 consolidation complete |
 | **Orchestrators** | 27 wired (7 core, 6 domain, 14 support) | ✅ IOrchestrator protocol enforced |
-| **MCP Tools** | 26 active | ✅ Pylance-style stdio server |
+| **MCP Tools** | 26 active (38 total incl. sub-tools) | ✅ Pylance-style stdio server |
 | **Top-level Dirs** | 16 canonical under `cortex/` | ✅ 59→16 cleanup complete |
-| **Governance Rules** | 35 CORE rules enforced | ✅ Enforced at pre-commit + CI + runtime |
-| **Test Suite** | 15,739 tests collected (486 golden) | ✅ Parallel xdist batch runner |
+| **Governance Rules** | 35 CORE active (+ 2 AC rules) | ✅ Enforced at pre-commit + CI + runtime |
+| **Test Suite** | 16,259 tests (486 golden, 177 phase) | ✅ Parallel xdist batch runner |
 | **Parallel Testing** | pytest-xdist (`-n auto --dist loadscope`) | ✅ CortexXdistPlugin batch runner |
 | **Enterprise Patterns** | 9 patterns in registry | ✅ mediator, strategy, observer, factory, etc. |
 | **Sweep Completeness** | CORE-064 enforced via SweepCatalogueOrchestrator | ✅ No partial sweeps across sessions |
-| **Simplified Architecture** | core/core eliminated, registry cleaned | ✅ Phases 58-62 complete |
+| **Phase Completion** | All 67 phases complete | ✅ Phases 1-67 DONE |
 
 ---
 

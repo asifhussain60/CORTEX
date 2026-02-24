@@ -64,7 +64,7 @@ Try any of these in Copilot Chat:
 | What You Type | What Happens |
 |--------------|-------------|
 | "Analyze this codebase" | LENS runs 8 parallel analyzers, delivers inline report |
-| "What MCP tools are available?" | `cortex_tools_catalog` lists all 23 tools |
+| "What MCP tools are available?" | `cortex_tools_catalog` lists all 26 tools |
 | "Check governance compliance" | `cortex_validate_compliance` checks CORE rules |
 | "Onboard this repository" | `cortex_onboard_repository` runs LENS + creates dashboard |
 | "Run health check" | `cortex_verify_environment` checks Python, deps, MCP connectivity |

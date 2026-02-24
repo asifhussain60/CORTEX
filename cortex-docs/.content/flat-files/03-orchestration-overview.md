@@ -84,4 +84,4 @@ This audit logging is non-blocking — a failure to log never prevents execution
 
 ---
 
-*Orchestrator count verified via `grep -r 'class.*Orchestrator' cortex/orchestrators/` · 24 February 2026*
+*Orchestrator count verified via `grep -r 'class.*Orchestrator' cortex/orchestrators/` · 20 February 2026*

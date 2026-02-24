@@ -90,7 +90,7 @@ Used in pattern matching, intent classification, and strategy selection.
 ## Governance Concepts
 
 ### CORE Rule
-A numbered governance standard enforced automatically. There are **22 actively enforced CORE rules** (35 defined total in `cortex-registry/core/tier0-skull/skull-rules.yaml`). Critical examples:
+A numbered governance standard enforced automatically. There are **35 active CORE rules** (+ 2 AC rules) defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. All 35 are enforced at pre-commit, CI, and runtime. Critical examples:
 
 | Rule | Name | What It Does |
 |------|------|-------------|
@@ -130,7 +130,7 @@ CORTEX uses pytest-xdist for parallel test execution with four execution profile
 **Live location:** `cortex/testing/framework/` (parallel_runner.py, progress_reporter.py, test_categorizer.py)
 
 ### Golden Tests
-486 high-value tests that must always pass. They validate core contracts, governance rules, and critical workflows. Run serially for deterministic results.
+486 high-value tests that must always pass (CORE-055). They validate core contracts, governance rules, and critical workflows. Run serially for deterministic results. An additional 177 phase tests ensure phase completion integrity.
 
 ### TDD Workflow
 Every IMPLEMENT and FIX operation follows RED → GREEN → REFACTOR:

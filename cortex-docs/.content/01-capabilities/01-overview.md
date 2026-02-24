@@ -5,12 +5,12 @@ title: CORTEX Capabilities — Complete Platform Inventory
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
 last_verified: 2026-02-24
-source_of_truth: cortex/ + cortex-registry/cortex-master.yaml
+source_of_truth: cortex/ + cortex-registry/cortex-master.yaml + .github/copilot-instructions.md
 format: diátaxis-explanation
 order: 1
 ---
 
-> **Notice:** All capabilities listed here are verified against the live codebase as of 23 February 2026. Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
+> **Notice:** All capabilities listed here are verified against the live codebase as of 24 February 2026 (Phase 66/67 Complete — all 67 phases done). Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
 
 ---
 

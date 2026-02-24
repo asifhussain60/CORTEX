@@ -28,8 +28,8 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 ```
   ┌───────────────────────────────────────────────────────────────┐
-  │                  CORTEX PLATFORM v1.0.0 (Phase 62)            │
-  │                  1 Package · 27 Orchestrators · 26 MCP Tools  │
+  │                  CORTEX PLATFORM v1.0.0 (Phase 66/67)         │
+  │            1 Package · 27 Orchestrators · 26 MCP Tools        │
   │                                                               │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ MCP Gateway  │─▶│  Orchestration    │─▶│ Intelligence  │  │
@@ -40,8 +40,8 @@ Think of it like the difference between a calculator and a brain. A calculator w
   │         ▼                   ▼                     ▼           │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ Governance   │  │  Testing          │  │ Git Registry  │  │
-  │  │ 35 CORE rules│  │  15,739 tests     │  │ YAML SSOT     │  │
-  │  │ CORE-064     │  │  486 golden       │  │ Simplified    │  │
+  │  │ 35 CORE rules│  │  16,259 tests     │  │ YAML SSOT     │  │
+  │  │ CORE-064     │  │  486 golden       │  │ 67 Phases     │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   └───────────────────────────────────────────────────────────────┘
 ```
@@ -52,11 +52,11 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 | Domain | What It Does | Key Metric |
 |--------|-------------|------------|
-| **🏗️ Core Platform** | MCP gateway, 27-orchestrator dispatch, state management, health monitoring | 26 MCP tools, Pylance-style stdio |
+| **🏗️ Core Platform** | MCP gateway, 22-orchestrator dispatch, state management, health monitoring | 26 MCP tools, Pylance-style stdio |
 | **🤖 Intelligence (LENS)** | 8-analyzer parallel code understanding — AST, Git, Security, Patterns, Metrics, and more | 300–800ms full analysis |
 | **🧠 Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repo | Confidence scored 0.0–1.0 |
 | **🎯 Decisioning** | Intent routing across 10+ intent types to 27 wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
-| **🛡️ Governance** | Pre-commit + CI + runtime enforcement of 35 CORE rules active; CORE-064 sweep completeness | 10 agents, <150ms validation |
+| **🛡️ Governance** | Pre-commit + CI + runtime enforcement of 22 active CORE rules; CORE-064 sweep completeness | 10 agents, <150ms validation |
 | **🔌 Extensibility** | Custom MCP tools, domain orchestrators, workflow templates, enterprise patterns | Hot-reload; zero core changes |
 
 ---
@@ -113,7 +113,7 @@ Every action runs through governance enforcement:
 2. **CI Pipeline** — Automated validation in continuous integration
 3. **Runtime Enforcement** — Rules checked during orchestrator execution
 
-35 CORE rules are enforced automatically; the most critical include:
+22 active CORE rules are enforced automatically; the most critical include:
 - **CORE-008** — TDD mandatory (write failing test first, no exceptions)
 - **CORE-002** — All output inline (never create .md/.txt report files)
 - **CORE-011** — Type hints on all functions
@@ -144,7 +144,7 @@ Every action runs through governance enforcement:
 - **Transport:** stdio (development) / HTTP (production)
 - **Package:** 1 canonical Python package (`cortex`) — all imports use `cortex.*`
 - **Storage:** Git-backed registry — no PostgreSQL, no MongoDB required
-- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 15,739 tests, 486 golden
+- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 16,259 tests (486 golden, 177 phase)
 - **Observability:** OpenTelemetry tracing, Prometheus metrics, Grafana dashboards, SQLite audit log (`.cortex-runtime/audit.db`)
 - **Languages analyzed by LENS:** Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue
 
@@ -166,4 +166,4 @@ Every action runs through governance enforcement:
 
 ---
 
-*CORTEX v1.0.0 (Phase 62 Complete) · February 2026 · 27 wired orchestrators · 26 MCP tools · 35 CORE rules · 15,739 tests · 486 golden · Source of truth: `cortex-registry/cortex-master.yaml`*
+*CORTEX v1.0.0 · February 2026 · Phase 66/67 Complete (All 67 Phases Done) · 27 wired orchestrators · 26 MCP tools · 35 CORE rules (+ 2 AC) · 16,259 tests · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*

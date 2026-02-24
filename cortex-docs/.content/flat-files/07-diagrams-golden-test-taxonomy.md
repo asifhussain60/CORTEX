@@ -2,7 +2,11 @@
 
 **Updated:** 2026-02-24 (Phase 63 — SWEEP-63-GOLDEN-RENAISSANCE)
 
-This is the flat-file mirror of `07-diagrams/10-golden-test-taxonomy.md`.
+## Overview
+
+CORTEX golden tests are organized into **canonical subfolders** under `tests/golden/`.
+Each subfolder corresponds to a domain and is collected by pytest-xdist for parallel
+execution scoped by domain.
 
 ## Canonical Subfolder Structure
 
@@ -25,15 +29,32 @@ tests/golden/
 └── regression/           ← Regression baselines
 ```
 
-## Scoring Dimensions (version 2.0)
+## Naming Convention
 
-- Impact (0–5): security, reliability, business invariant, workflow template consumption,
+All golden test files follow `test_<domain>_<concern>_truth.py` or `test_<concern>_golden.py`.
+Snake_case only (CORE-028).
+
+## Scoring
+
+Golden tests are scored by `cortex/testing/quality_gate.py` using
+`cortex-registry/core/test-quality-gate.yaml` (version 2.0 — Phase 63-C).
+
+**Scoring dimensions (version 2.0):**
+- **Impact (0–5):** security, reliability, business invariant, workflow template consumption,
   response template rendering
-- Likelihood (0–3): orchestration density, integration seam coverage, scenario YAML driven
-- Detection (0–3): data correctness, operational observability, trace chain verification
-- Efficiency (0–2): lines per test, asserts per test
-- Maintenance Penalty (0–-2): mock ratio, stub ratio, trivial assert ratio
+- **Likelihood (0–3):** orchestration density, integration seam coverage, scenario YAML driven
+- **Detection (0–3):** data correctness, operational observability, trace chain verification
+- **Efficiency (0–2):** lines per test, asserts per test
+- **Maintenance Penalty (0–-2):** mock ratio, stub ratio, trivial assert ratio
 
-KEEP threshold: ≥ 7 | REVIEW: 4–6 | DELETE: < 4
+**KEEP threshold:** ≥ 7 | **REVIEW:** 4–6 | **DELETE:** < 4
 
-See: `cortex-registry/core/test-quality-gate.yaml` version 2.0
+## Promotion Pipeline
+
+New tests are promoted to GOLDEN tier by `TestClassifierOrchestrator` (CORE-055):
+- Must match `tests/golden/` path pattern
+- Must score ≥ 7 on quality gate
+- Must have ≥ 2 orchestrator references
+- Must have ≥ 2 asserts per test function
+
+See: `cortex-registry/workflows/templates/governance/golden-test-promotion.yaml`

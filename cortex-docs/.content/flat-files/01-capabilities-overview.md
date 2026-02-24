@@ -5,12 +5,12 @@ title: CORTEX Capabilities — Complete Platform Inventory
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
 last_verified: 2026-02-24
-source_of_truth: cortex/ + cortex-registry/cortex-master.yaml
+source_of_truth: cortex/ + cortex-registry/cortex-master.yaml + .github/copilot-instructions.md
 format: diátaxis-explanation
 order: 1
 ---
 
-> **Notice:** All capabilities listed here are verified against the live codebase as of 24 February 2026 (Phase 62 Complete). Counts, module paths, and orchestrator names are validated against running code. The Simplification Master Plan (Phases 58-62) eliminated core/core double-nesting, reduced duplicate filenames, and cleaned the registry.
+> **Notice:** All capabilities listed here are verified against the live codebase as of 24 February 2026 (Phase 66/67 Complete — all 67 phases done). Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
 
 ---
 
@@ -66,7 +66,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
-### MCP Gateway (26 Tools)
+### MCP Gateway (25 Tools)
 
 CORTEX exposes 26 active MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 

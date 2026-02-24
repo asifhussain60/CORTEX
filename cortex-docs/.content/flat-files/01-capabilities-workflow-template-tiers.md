@@ -2,50 +2,75 @@
 
 **Updated:** 2026-02-24 (Phase 63 — SWEEP-63-GOLDEN-RENAISSANCE)
 
-This is the flat-file mirror of `01-capabilities/09-workflow-template-tiers.md`.
+## Overview
 
-## 3-Tier Hierarchy
+CORTEX workflow templates are organized in a **3-tier hierarchy**:
 
 ```
 Primitive → Composite → Workflow
 ```
 
-## Tier 1: Primitives (`templates/primitives/`)
+All templates live in `cortex-registry/workflows/templates/`.
 
-Atomic building blocks. Single responsibility each.
+## Tier 1: Primitives
 
-- `execution/audit-trace.yaml` — AC marker trace chain wiring (CORE requirement)
-- `execution/file-extraction.yaml` — file content extraction
-- `execution/semantic-edit.yaml` — semantic code edit
-- `analysis/lens-ast-scan.yaml` — LENS AST scan
-- `governance/sweep-catalogue-open.yaml` — open SWEEP catalogue
-- `governance/sweep-catalogue-close.yaml` — close SWEEP catalogue
-- `validation/detect-fix-rescan-loop.yaml` — convergence loop primitive
+**Location:** `templates/primitives/`
 
-## Tier 2: Composites (`templates/composites/`)
+Atomic, reusable building blocks. Each primitive has a single responsibility.
+Primitives are referenced (not duplicated) by higher tiers.
 
-Multi-primitive patterns. Must not duplicate top-level workflows (CORE-035).
+| Category     | Examples |
+|--------------|----------|
+| `analysis/`  | `lens-ast-scan.yaml`, `lens-vision-scan.yaml` |
+| `execution/` | `audit-trace.yaml`, `file-extraction.yaml`, `semantic-edit.yaml` |
+| `governance/`| `sweep-catalogue-open.yaml`, `sweep-catalogue-close.yaml`, `dependency-guard-migration.yaml` |
+| `intelligence/` | `intelligence-injection.yaml` |
+| `validation/` | `detect-fix-rescan-loop.yaml`, `regression-test.yaml`, `duplicate-detection.yaml` |
 
-## Tier 3: Workflows (`templates/<domain>/`)
+### Key Primitive: `audit-trace.yaml`
 
-Full intent-specific workflows:
-- `tdd/tdd-feature-implementation.yaml` — IMPLEMENT intent
-- `security/security-compliance-audit.yaml` — AUDIT intent
-- `lifecycle/onboarding-workflow.yaml` — ONBOARD intent
+The `primitives/execution/audit-trace.yaml` primitive is consumed by all workflow templates
+that need AC marker trace chain wiring. It ensures every orchestrator invocation produces
+a paired `AC_START` / `AC_COMPLETE` entry in `.cortex-runtime/traces/orchestrator-traces.db`.
 
-## CORE-035 Enforcement (Phase 63-E)
+## Tier 2: Composites
 
-4 composite duplicates deleted:
-- composites/backend/csharp-refactor.yaml
-- composites/backend/csharp-security.yaml
-- composites/frontend/html-refactor-validation.yaml
-- composites/composed-data-pipeline-d01d9892.yaml
+**Location:** `templates/composites/`
+
+Composed of multiple primitives. Represent a reusable workflow pattern for a domain.
+Must not duplicate a top-level workflow file (CORE-035).
+
+## Tier 3: Workflows
+
+**Location:** `templates/<domain>/`
+
+Full, intent-specific execution workflows. Each maps to a HEXA-MODE or intent type.
+
+| Domain         | Workflow Examples |
+|----------------|-------------------|
+| `tdd/`         | `tdd-feature-implementation.yaml`, `tdd-api-service.yaml` |
+| `security/`    | `security-compliance-audit.yaml`, `threat-model-analysis.yaml` |
+| `lifecycle/`   | `onboarding-workflow.yaml`, `migration-modernize.yaml` |
+| `backend/`     | `csharp-refactor-workflow.yaml`, `csharp-security-workflow.yaml` |
+| `audit/`       | Phase 63-D new templates |
+| `governance/`  | `master-plan-phase-lifecycle.yaml`, `golden-test-promotion.yaml` |
+
+## CORE-035 Rule
+
+Two files must never exist for the same purpose. If a composite mirrors a top-level
+workflow, the composite is deleted and the top-level is the canonical reference.
+
+**Phase 63-E enforcement:** 4 composite duplicates deleted:
+- `composites/backend/csharp-refactor.yaml` (mirrors `backend/csharp-refactor-workflow.yaml`)
+- `composites/backend/csharp-security.yaml` (mirrors `backend/csharp-security-workflow.yaml`)
+- `composites/frontend/html-refactor-validation.yaml` (mirrors `frontend/html-refactor-validation.yaml`)
+- `composites/composed-data-pipeline-d01d9892.yaml` (auto-generated artefact — deleted)
 
 ## Golden Coverage
 
-Enforced by:
-- `tests/golden/workflow/test_workflow_e2e_trace_golden.py`
-- `tests/golden/governance/test_workflow_template_governance.py`
-- Scenarios S21/S22/S23 include `workflow_template_ref` field
+Workflow template E2E coverage is enforced by:
+- `tests/golden/workflow/test_workflow_e2e_trace_golden.py` — intent trace chain tests
+- `tests/golden/governance/test_workflow_template_governance.py` — CORE-035 compliance
+- Holistic scenario `workflow_template_ref` field in S21, S22, S23
 
-Full detail: `01-capabilities/09-workflow-template-tiers.md`
+See also: `07-diagrams/10-golden-test-taxonomy.md`
