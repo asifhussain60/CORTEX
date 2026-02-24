@@ -13,8 +13,8 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  version: '16.1'
-  last_updated: '2026-02-24T12:00:00Z'
+  version: '16.2'
+  last_updated: '2026-02-24T18:00:00Z'
   total_phases: 68
   active: 0
   completed: 68
@@ -135,11 +135,12 @@ phase_detail_files:
   - id: phases-58-61
     title: "Simplification — Zero-Regression Surface Reduction (4 Phases)"
     priority: P0
-    status: IN_PROGRESS
+    status: COMPLETE
+    completed: "2026-02-24"
     sweep_id: SWEEP-58-61-SIMPLIFICATION
     phases: [58, 59, 60, 61]
-    file: "cortex-registry/planning/phases/planned/simplification-master-plan-58-61.yaml"
-    note: "Phase 60 COMPLETE: 7/15 duplicate groups resolved (commit 52aab3572), 8 retained with justification. Smoke: 1416 passed ✅ (commit b2c9c6f8a). Compat shims expire 2026-05-24. Phase 61 pending."
+    file: "cortex-registry/planning/phases/completed/simplification-master-plan-58-61.yaml"
+    note: "ALL 4 PHASES COMPLETE 2026-02-24. Phase 60: 7/15 duplicate groups resolved (commit 52aab3572), 8 retained with justification. Phase 61: Registry cleanup COMPLETE — _cortex-master/ retained (220 callers, ADR), 238 YAMLs (36% reduction), COMPAT shims expire 2026-05-24. Smoke: 1420 passed ✅."
 
   - id: phase-57
     title: "Intelligence Wiring Remediation — 9-Issue Sweep"
@@ -290,7 +291,7 @@ health_status:
   p1_issues: 0
   health_check: PASSING
   last_health_fix: '2026-02-24'
-  thin_index_status: "COMPLIANT — Phase 68 FULLY COMPLETE (2026-02-24): bootstrap/ stub deleted, 15 canonical subdirs confirmed, all 19 tests GREEN"
+  thin_index_status: "COMPLIANT — Phase 68 FULLY COMPLETE (2026-02-24): bootstrap/ stub deleted, 15 canonical subdirs confirmed, all 19 tests GREEN. Phase 61 COMPLETE (2026-02-24): Simplification sweep 58-61 fully closed."
   known_flakes:
     - id: holistic-integration-xdist-timing
       tests: "tests/golden/holistic_integration/ (25 tests)"
@@ -298,15 +299,15 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "✅ COMPLETE — Phase 68 COMPLETE | All 68 phases done | cortex/core flattened 27→15 subdirs (bootstrap/ stub removed) | FileFactory sweep CLOSED | 3 composite templates added"
+  status: "✅ COMPLETE — Phase 68 COMPLETE | Phase 61 COMPLETE (2026-02-24) | All 68 phases done | cortex/core flattened 27→15 subdirs | Simplification sweep 58-61 closed | YAML registry 373→238 (36% reduction) | COMPAT shims expire 2026-05-24"
   overall_score: 100%
   test_baseline: "1,420 smoke | 204 golden workflow | 177 workflow orchestrators"
   deployment_date: '2026-02-24'
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "v16.0 — Phase 68 COMPLETE (2026-02-24)"
-  last_verified: '2026-02-24T00:00:00Z'
+  plan_version: "v16.2 — Phase 61 COMPLETE (2026-02-24) | SWEEP-58-61 fully closed"
+  last_verified: '2026-02-24T18:00:00Z'
 
 summary:
   total_phases: 68
@@ -316,7 +317,7 @@ summary:
   planned: 0
   playbooks: 1
   completion_percentage: 100
-  production_status: "✅ Phase 68 COMPLETE — cortex/core flattened 27→15 subdirs (bootstrap/ stub removed 2026-02-24)"
+  production_status: "✅ All 68 phases COMPLETE — Phase 61 closed 2026-02-24 | Simplification sweep 58-61 fully exhausted (CORE-064) | cortex/core flattened 27→15 subdirs"
   open_gaps:
     count: 0
-    note: "All 9 Phase 68 gaps CLOSED. cortex/core/ at 15 canonical subdirs. bootstrap/ compat shim deleted."
+    note: "All gaps CLOSED. SWEEP-58-61-SIMPLIFICATION exhausted. _cortex-master/ retained by ADR (220 callers). COMPAT shims expire 2026-05-24. YAML registry reduced 373→238."
