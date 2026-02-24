@@ -15,7 +15,7 @@ from datetime import datetime
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional
 
-from cortex.core.common.progress_reporter import (
+from cortex.core.common.core_progress_reporter import (
     ProgressReporter,
     ProgressStyle,
     get_time_estimator,

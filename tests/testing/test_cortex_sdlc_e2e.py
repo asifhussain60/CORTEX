@@ -538,7 +538,7 @@ class TestPhaseCompletionVerification:
             from cortex.models.event_models import OrchestratorEvent, EventType
             from cortex.models.planning_models import Plan
             from cortex.models.review_models import ReviewResult
-            from cortex.models.coherence_models import CoherenceMismatch
+            from cortex.models.models_coherence_models import CoherenceMismatch
 
             # Assert
             assert OrchestratorEvent is not None

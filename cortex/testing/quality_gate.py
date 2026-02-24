@@ -5,7 +5,7 @@ Implements the 7-step algorithm from test-quality.txt.
 Replaces three existing disconnected scorers (CORE-035):
   - cortex.testing.test_value_scorer (Phase 71)
   - cortex.testing.test_quality_validator (Phase 51)
-  - cortex.orchestrators.intelligence.test_value_scorer (Wave-2)
+  - cortex.orchestrators.intelligence.orch_test_value_scorer (Wave-2)
 
 Scoring formula:
   Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2)

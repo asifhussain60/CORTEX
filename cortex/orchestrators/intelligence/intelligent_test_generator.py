@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from cortex.orchestrators.intelligence.test_value_scorer import (
+from cortex.orchestrators.intelligence.orch_test_value_scorer import (
     TestValueScorer,
     TestCandidate,
     IssueSeverity,

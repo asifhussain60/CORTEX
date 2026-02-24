@@ -66,12 +66,12 @@ class TestDomainContextManagement:
     
     def test_domain_context_manager_exists(self) -> None:
         """Domain context manager exists."""
-        from cortex.orchestrators.domain.business.context import DomainContextManager
+        from cortex.orchestrators.domain.business.business_context import DomainContextManager
         assert DomainContextManager is not None
     
     def test_create_context(self) -> None:
         """Can create a domain context."""
-        from cortex.orchestrators.domain.business.context import DomainContextManager
+        from cortex.orchestrators.domain.business.business_context import DomainContextManager
         
         manager = DomainContextManager()
         context = manager.create_context(
@@ -86,7 +86,7 @@ class TestDomainContextManagement:
     
     def test_context_isolation(self) -> None:
         """Domain contexts are isolated from each other."""
-        from cortex.orchestrators.domain.business.context import DomainContextManager
+        from cortex.orchestrators.domain.business.business_context import DomainContextManager
         
         manager = DomainContextManager()
         ctx1 = manager.create_context(domain="financial", operation="transfer")
@@ -97,7 +97,7 @@ class TestDomainContextManagement:
     
     def test_context_scoped_data(self) -> None:
         """Context can store scoped data."""
-        from cortex.orchestrators.domain.business.context import DomainContextManager
+        from cortex.orchestrators.domain.business.business_context import DomainContextManager
         
         manager = DomainContextManager()
         context = manager.create_context(domain="ecommerce", operation="checkout")
@@ -109,7 +109,7 @@ class TestDomainContextManagement:
     
     def test_context_cleanup(self) -> None:
         """Context data is cleaned up properly."""
-        from cortex.orchestrators.domain.business.context import DomainContextManager
+        from cortex.orchestrators.domain.business.business_context import DomainContextManager
         
         manager = DomainContextManager()
         context = manager.create_context(domain="financial", operation="transfer")

@@ -7,7 +7,7 @@ in cortex.orchestrators.core.
 Authority: ENH-087, CORE-035 (Single Canonical Implementation)
 """
 
-from cortex.orchestrators.core.stage_execution_strategy import (
+from cortex.orchestrators.core.pipeline_stage_strategy import (
     StageContext,
     StageExecutionStrategy,
 )

@@ -37,7 +37,7 @@ CoreErr = Err
 CoreResult = Result
 from cortex.orchestrators.domain.refactoring.adapters.adapter_base import RefactoringToolAdapter
 from cortex.orchestrators.domain.refactoring.adapters.rope_adapter import RopeAdapter
-from cortex.orchestrators.domain.refactoring.adapters.typescript_adapter import TypeScriptAdapter
+from cortex.orchestrators.domain.refactoring.adapters.refactoring_typescript_adapter import TypeScriptAdapter
 from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,
     RefactoringRequest,

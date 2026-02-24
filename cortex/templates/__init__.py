@@ -13,9 +13,9 @@ from cortex.templates.content_strategy import (
 )
 from cortex.templates.template_builder import TemplateBuilder
 from cortex.templates.template_renderer import TemplateRenderer
-from cortex.templates.dashboard_renderer import DashboardTemplateRenderer
+from cortex.templates.docs_dashboard_renderer import DashboardTemplateRenderer
 from cortex.templates.template_resolver import TemplateResolver
-from cortex.templates.template_validator import TemplateValidator
+from cortex.templates.templates_validator import TemplateValidator
 from cortex.templates.template_validation import TemplateContentValidator
 from cortex.templates.content_generator import ContentGenerator
 from cortex.templates.quality_assurance import QualityAssuranceFramework

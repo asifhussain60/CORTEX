@@ -57,7 +57,7 @@ class TestIntentRouterACMarkers:
         ("cortex/orchestrators/core/intent_router/capability_matcher.py", "AC-ROUTER-CAPABILITY-"),
         ("cortex/orchestrators/core/intent_router/collaboration_coordinator.py", "AC-ROUTER-COLLAB-"),
         ("cortex/orchestrators/core/intent_router/metadata_driven_discovery.py", "AC-ROUTER-METADATA-"),
-        ("cortex/orchestrators/core/intent_router/router.py", "AC-ROUTER-"),
+        ("cortex/orchestrators/core/intent_router/intent_router_enhanced.py", "AC-ROUTER-"),
     ])
     def test_no_phase_numbered_marker(self, rel_path, expected_prefix):
         content = _file_content(rel_path)

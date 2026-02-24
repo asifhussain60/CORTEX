@@ -2361,7 +2361,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
             try:
                 from pathlib import Path
 
-                from cortex.core.context_synthesis_gateway import create_exit_gate
+                from cortex.core.legacy_context_synthesis_gateway import create_exit_gate
 
                 # Create EXIT GATE
                 workspace_root = Path.cwd()

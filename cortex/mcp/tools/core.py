@@ -548,7 +548,7 @@ class CortexClassify(ConsolidatedTool):
         format_type = params.get("format", "table")  # AC-CIG-S3-02: Default 'table'
         
         try:
-            # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.core.intent_router.router
+            # AC-FIX-MCP-IMPORTS-001: Corrected path from cortex.orchestrators.core.intent_router.intent_router_enhanced
             from cortex.orchestrators.core.intent_router import IntentRouter
             from cortex.core.interaction.request_transformer import RequestTransformer
             from cortex.core.interaction.conversational_reflector import ConversationalReflector

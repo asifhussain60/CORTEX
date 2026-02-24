@@ -332,6 +332,6 @@ class DocsTemplateRenderer:
 # Backwards-compatibility alias (CORE-035)
 # ---------------------------------------------------------------------------
 # The class was originally named TemplateRenderer.  All existing imports of
-# ``from cortex.intelligence.documentation.template_renderer import TemplateRenderer``
+# ``from cortex.intelligence.documentation.docs_template_renderer import TemplateRenderer``
 # continue to resolve without modification.
 TemplateRenderer = DocsTemplateRenderer

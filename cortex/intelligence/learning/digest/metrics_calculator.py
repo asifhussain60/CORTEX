@@ -17,7 +17,7 @@ import re
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
-from cortex.intelligence.learning.digest.metrics_schema import (
+from cortex.intelligence.learning.digest.digest_metrics_schema import (
     AccuracyMetrics,
     ContextEfficiencyMetrics,
     DigestMetrics,

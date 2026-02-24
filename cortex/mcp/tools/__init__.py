@@ -105,7 +105,7 @@ from cortex.mcp.tools.list_workflow_templates import cortex_list_workflow_templa
 from cortex.mcp.tools.opj_tool import cortex_query_opj
 
 # Toolkit consolidation tools (Phase 63 — Toolkit integration)
-from cortex.mcp.tools.toolkit_tools import (
+from cortex.mcp.tools.mcp_toolkit_tools import (
     cortex_scan,
     cortex_batch_transform,
     cortex_enrich,

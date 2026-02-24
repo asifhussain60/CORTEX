@@ -416,8 +416,8 @@ class TestBackwardCompatAliases:
         assert InteractionOrchestratorQualityAnalyzer is not None
 
     def test_wave2_test_value_scorer_importable(self):
-        """cortex.orchestrators.intelligence.test_value_scorer still importable."""
-        from cortex.orchestrators.intelligence.test_value_scorer import (  # noqa: F401
+        """cortex.orchestrators.intelligence.orch_test_value_scorer still importable."""
+        from cortex.orchestrators.intelligence.orch_test_value_scorer import (  # noqa: F401
             TestValueScorer,
             IssueSeverity,
             ScenarioLikelihood,

@@ -20,7 +20,7 @@ from cortex.core.execution.performance_metrics import (
     PerformanceMetricsCollector,
     PerformanceMetrics,
 )
-from cortex.core.execution.strategy_selector import StrategySelector
+from cortex.core.execution.execution_strategy_selector import StrategySelector
 from cortex.core.execution.feedback_loop import FeedbackLoop
 
 

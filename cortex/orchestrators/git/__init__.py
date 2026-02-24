@@ -8,7 +8,7 @@ Public exports:
     GitOrchestrator — Full 3-stage pipeline coordinator (canonical entry point)
 """
 
-from cortex.orchestrators.git.enforcement_orchestrator import (
+from cortex.orchestrators.git.git_enforcement_orchestrator import (
     CheckResult,
     EnforcementOrchestrator,          # deprecated alias — kept for backward compat
     EnforcementReport,

@@ -72,7 +72,7 @@ _lazy_lens_imports = {
 }
 
 # Non-LENS components remain in cortex.lens.analysis (no circular dependency)
-from cortex.lens.analysis.company_domain_loader import (
+from cortex.lens.analysis.lens_company_domain_loader import (
     CompanyDomainLoader,
     CompanyDomainResult,
     DomainKnowledge,

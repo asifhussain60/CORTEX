@@ -5,7 +5,7 @@ Covers TemplateRenderer, TemplateValidator, TemplateBuilder, and TemplateResolve
 
 import pytest
 from cortex.templates.template_renderer import TemplateRenderer
-from cortex.templates.template_validator import TemplateValidator
+from cortex.templates.templates_validator import TemplateValidator
 from cortex.templates.template_builder import TemplateBuilder
 from cortex.templates.template_resolver import TemplateResolver
 

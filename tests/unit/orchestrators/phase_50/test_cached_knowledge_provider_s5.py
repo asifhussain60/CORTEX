@@ -17,7 +17,7 @@ from unittest.mock import Mock, patch
 from cortex.infrastructure.storage.storage_provider import IKnowledgeProvider
 from cortex.infrastructure.storage.storage_config import StorageConfig
 from cortex.infrastructure.storage.errors import StorageError, NotFoundError
-from cortex.infrastructure.storage.cache import CachedKnowledgeProvider
+from cortex.infrastructure.storage.storage_cache import CachedKnowledgeProvider
 
 
 class TestCachedProviderInitialization:

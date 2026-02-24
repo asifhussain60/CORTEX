@@ -13,7 +13,7 @@ from cortex.orchestrators.intelligence.intelligent_test_generator import (
     TestGenerationRequest,
     TestGenerationResult,
 )
-from cortex.orchestrators.intelligence.test_value_scorer import IssueSeverity, ScenarioLikelihood
+from cortex.orchestrators.intelligence.orch_test_value_scorer import IssueSeverity, ScenarioLikelihood
 
 
 class TestIntelligentTestGeneratorInitialization:

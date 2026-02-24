@@ -13,7 +13,7 @@ from typing import Optional
 import click
 
 from cortex.cli.commands.lens import lens
-from cortex.cli.lens_dashboard import dashboard
+from cortex.cli.cli_lens_dashboard import dashboard
 
 
 @click.group()

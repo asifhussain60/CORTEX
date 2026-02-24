@@ -32,7 +32,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 import pytest
 
-from cortex.observability.structured_logger import (
+from cortex.observability.obs_structured_logger import (
     LogLevel,
     StructuredLogger,
     get_logger,

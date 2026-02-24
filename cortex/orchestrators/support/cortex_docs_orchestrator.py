@@ -273,7 +273,7 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin):
     def _run_rendering(self) -> Dict[str, Any]:
         """Run template rendering (content.json → HTML)."""
         try:
-            from cortex.intelligence.documentation.template_renderer import TemplateRenderer
+            from cortex.intelligence.documentation.docs_template_renderer import TemplateRenderer
             
             renderer = TemplateRenderer(self.template_dir, self.output_root)
             result = renderer.render(self._content_json)

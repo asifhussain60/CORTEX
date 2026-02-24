@@ -11,7 +11,7 @@ Single source of truth for ``AuditEntry`` across the CORTEX framework.
 - cortex.intelligence.domain_brain.api
 - cortex.governance.audit_navigator
 - cortex.infrastructure.secrets.audit_trail
-- cortex.infrastructure.secrets.management
+- cortex.infrastructure.secrets.secrets_management
 - cortex.infrastructure.enhanced_audit_logger
 - cortex.infrastructure.audit_db
 

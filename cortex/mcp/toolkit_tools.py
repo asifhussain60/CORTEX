@@ -23,7 +23,7 @@ import os
 from cortex.tools.toolkit.diagnostics import MCPDiagnostics, DiagnosticLevel
 from cortex.tools.toolkit.setup import SetupVerifier
 from cortex.tools.toolkit.cleanup import CleanupManager
-from cortex.tools.toolkit.validation import ValidationManager
+from cortex.tools.toolkit.toolkit_validation import ValidationManager
 from cortex.tools.toolkit.discovery import ToolkitDiscovery
 
 

@@ -21,7 +21,7 @@ TOOLKIT_MODULES = {
     "diagnostics": "cortex.tools.toolkit.diagnostics",
     "setup": "cortex.tools.toolkit.setup",
     "cleanup": "cortex.tools.toolkit.cleanup",
-    "validation": "cortex.tools.toolkit.validation",
+    "validation": "cortex.tools.toolkit.toolkit_validation",
     "analysis": "cortex.tools.toolkit.analysis",
 }
 

@@ -114,7 +114,7 @@ class ParallelGoldenRunner:
             self._reporter = reporter
         else:
             try:
-                from cortex.core.common.progress_reporter import ProgressReporter
+                from cortex.core.common.core_progress_reporter import ProgressReporter
                 self._reporter = ProgressReporter()
             except Exception:
                 self._reporter = None

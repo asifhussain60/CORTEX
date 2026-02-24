@@ -11,7 +11,7 @@ WAVE-2 (2026-02-13): Intelligent test generation components
 Authority: MASTER-5-WAVE-PLAN-2026-02-13.yaml
 """
 
-from cortex.orchestrators.intelligence.test_value_scorer import (
+from cortex.orchestrators.intelligence.orch_test_value_scorer import (
     IssueSeverity,
     ScenarioLikelihood,
     TestCandidate,

@@ -3,7 +3,7 @@
 import pytest
 from typing import List, Dict, Any
 from cortex.intelligence.domain_brain.domain_brain.intent_parser import NLPIntentParser, IntentEntity
-from cortex.intelligence.domain_brain.domain_brain.intent_classifier import IntentClassifier, IntentCategory
+from cortex.intelligence.domain_brain.domain_brain.db_intent_classifier import IntentClassifier, IntentCategory
 from cortex.intelligence.domain_brain.domain_brain.nlp_handler_router import NLPIntentRouter, IntentResult
 from cortex.intelligence.domain_brain.domain_brain.intent_router_interface import IIntentRouter
 

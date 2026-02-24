@@ -12,7 +12,7 @@ Testing focus: TypeScript Language Service integration for TS/JS refactorings
 import pytest
 import tempfile
 from pathlib import Path
-from cortex.orchestrators.domain.refactoring.adapters.typescript_adapter import TypeScriptAdapter
+from cortex.orchestrators.domain.refactoring.adapters.refactoring_typescript_adapter import TypeScriptAdapter
 from cortex.orchestrators.domain.refactoring.refactoring_models import RefactoringRequest, RefactoringLanguage
 
 # Skip all tests if TypeScript is not installed

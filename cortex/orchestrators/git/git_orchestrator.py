@@ -29,7 +29,7 @@ from cortex.orchestrators.git.sanitization_orchestrator import (
     SanitizationError,
     SanitizationOrchestrator,
 )
-from cortex.orchestrators.git.enforcement_orchestrator import (
+from cortex.orchestrators.git.git_enforcement_orchestrator import (
     EnforcementOrchestrator,
     EnforcementReport,
 )

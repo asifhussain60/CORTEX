@@ -17,7 +17,7 @@ from pathlib import Path
 from typing import Dict, Any
 from unittest.mock import Mock, patch
 
-from cortex.core.registry.migration import RegistryMigration
+from cortex.core.registry.registry_migration import RegistryMigration
 
 
 # ============================================================================

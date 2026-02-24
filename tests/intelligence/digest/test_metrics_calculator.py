@@ -19,7 +19,7 @@ from datetime import datetime
 from typing import Dict, List, Any
 
 from cortex.intelligence.learning.digest.metrics_calculator import MetricsCalculator
-from cortex.intelligence.learning.digest.metrics_schema import (
+from cortex.intelligence.learning.digest.digest_metrics_schema import (
     EfficiencyMetrics,
     AccuracyMetrics,
     ToolSuccessMetrics,
