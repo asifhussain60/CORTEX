@@ -7,8 +7,8 @@ from pathlib import Path
 
 updates = {
     "EventRegistry": {
-        "from": "from cortex.core.orchestrator.terminal_events import",
-        "to": "from cortex.core.orchestrator.terminal_events import",
+        "from": "from cortex.orchestrators.core.terminal_events import",
+        "to": "from cortex.orchestrators.core.terminal_events import",
         "files": [
             "tests/unit/core/orchestrator/test_master_orchestrator.py",
         ]

@@ -1,6 +1,6 @@
 """Tests for Complexity Assessment Engine."""
 import pytest
-from cortex.core.orchestrator.complexity_assessment import (
+from cortex.orchestrators.core.complexity_assessment import (
     ComplexitySignals,
     ComplexityAssessment,
     ComplexityLevel,

@@ -186,7 +186,7 @@ class TestWiringHarnessCanAutoWire:
     
     def test_challenge_integration_orchestrator_can_be_wired(self) -> None:
         """Test that ChallengeIntegrationOrchestrator can be instantiated."""
-        from cortex.core.orchestrator.challenge_integration import ChallengeIntegrationOrchestrator
+        from cortex.orchestrators.core.challenge_integration import ChallengeIntegrationOrchestrator
         
         orchestrator = ChallengeIntegrationOrchestrator()
         assert orchestrator is not None

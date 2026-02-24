@@ -98,7 +98,7 @@ class EnhancedWiringHarness:
         ),
         WiringHarnessComponent(
             component_id="UNWIRED-PROTOCOL-001",
-            entry_point="cortex.core.orchestrator.conversation_protocol.ConversationProtocol",
+            entry_point="cortex.orchestrators.core.conversation_protocol.ConversationProtocol",
             priority=0,
             category="CRITICAL",
             required=True,

@@ -21,13 +21,13 @@ from cortex.intelligence.ast_intelligence import ASTIntelligenceEngine
 from cortex.intelligence.call_graph import CallGraphBuilder
 from cortex.intelligence.dependency_mapper import DependencyMapper
 from cortex.intelligence.pattern_detector import PatternDetector
-from cortex.core.orchestrator.continuation_decision import (
+from cortex.orchestrators.core.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )
 from cortex.core.result import Err, Ok, Result
 from cortex.core.tier_validator import TierAccessValidator
-from cortex.core.orchestrator.terminal_events import (
+from cortex.orchestrators.core.terminal_events import (
     ErrorOccurredEvent,
     EventRegistry,
     GovernanceViolationEvent,

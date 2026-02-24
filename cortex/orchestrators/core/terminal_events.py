@@ -39,7 +39,7 @@ class PhaseCompletedEvent(TerminalEvent):
 
     def get_continuation_reason(self) -> 'ContinuationReason':
         """Maps to COMPLETION."""
-        from cortex.core.orchestrator.continuation_decision import ContinuationReason
+        from cortex.orchestrators.core.continuation_decision import ContinuationReason
         return ContinuationReason.COMPLETION
 
 
@@ -60,7 +60,7 @@ class MaxTurnsReachedEvent(TerminalEvent):
 
     def get_continuation_reason(self) -> 'ContinuationReason':
         """Maps to MAX_ROUNDS_REACHED."""
-        from cortex.core.orchestrator.continuation_decision import ContinuationReason
+        from cortex.orchestrators.core.continuation_decision import ContinuationReason
         return ContinuationReason.MAX_ROUNDS_REACHED
 
 

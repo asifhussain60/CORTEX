@@ -31,7 +31,7 @@ from typing import Any, Dict, List, Optional
 
 from cortex.core.brain_state_manager import BrainStateManager
 from cortex.core.checkpoint_manager import CheckpointManager
-from cortex.core.orchestrator.conversation_state import ConversationStateManager
+from cortex.orchestrators.core.conversation_state import ConversationStateManager
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 logger = logging.getLogger(__name__)

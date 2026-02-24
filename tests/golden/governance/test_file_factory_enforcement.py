@@ -75,7 +75,7 @@ EXEMPTED_PATTERNS = [
     r"cortex/core/core_config\.py$",          # core config runtime writes
     r"cortex/core/intent/comprehension_loop\.py$",  # comprehension loop state
     r"cortex/core/intent/comprehension_yaml\.py$",  # comprehension yaml cache
-    r"cortex/core/orchestrator/turn_timeout\.py$",  # turn timeout persistence
+    r"cortex/orchestrators/core/turn_timeout\.py$",  # turn timeout persistence
     # --- Orchestrator subdirectories doing legitimate runtime I/O ---
     r"cortex/orchestrators/health/",         # health checks, dashboards, autofix agents
     r"cortex/orchestrators/workflow/",       # ephemeral_storage, flush_manager, absorption_gate

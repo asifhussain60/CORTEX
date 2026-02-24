@@ -45,7 +45,7 @@ from cortex.intelligence.knowledge.unified_intelligence_context import (
 # Phase 27: Import StandardsResolver for company domain integration
 from cortex.core.common.standards_resolver import StandardsResolver
 from cortex.orchestrators.core.intent_router.challenge_generator import ChallengeGenerator
-from cortex.core.orchestrator.holistic_context_builder import HolisticContextBuilder
+from cortex.orchestrators.core.holistic_context_builder import HolisticContextBuilder
 from cortex.core.result import Err, Ok, Result
 from cortex.intelligence.domain_brain.business_knowledge_repository import (
     BusinessKnowledgeRepository,
@@ -242,10 +242,10 @@ except ImportError:
 # AC-CHALLENGE-SYSTEM-002 + AC-PERMANENT-FIX-006: Import InteractionOrchestrator with challenge system
 # Stage 1 comprehension with LENS-powered challenge generation
 try:
-    from cortex.core.orchestrator.conversation_protocol import (
+    from cortex.orchestrators.core.conversation_protocol import (
         ConversationProtocol,
     )
-    from cortex.core.orchestrator.round_context import RoundContext
+    from cortex.orchestrators.core.round_context import RoundContext
     from cortex.orchestrators.core.interaction_orchestrator import (
         InteractionOrchestrator,
     )
@@ -662,7 +662,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
         # Import here to avoid circular import issues
         self.interaction_orchestrator_with_challenges: Optional[Any] = None
         try:
-            from cortex.core.orchestrator.conversation_protocol import (
+            from cortex.orchestrators.core.conversation_protocol import (
                 ConversationProtocol as ConvProtocol,
             )
             from cortex.orchestrators.core.interaction_orchestrator import (

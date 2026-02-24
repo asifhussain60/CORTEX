@@ -9,7 +9,7 @@ from pathlib import Path
 import tempfile
 import yaml
 
-from cortex.core.orchestrator.pattern_enforcer import PatternEnforcer
+from cortex.orchestrators.core.pattern_enforcer import PatternEnforcer
 
 
 @pytest.fixture

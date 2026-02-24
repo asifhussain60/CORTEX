@@ -17,7 +17,7 @@ import pytest
 
 from cortex.core.governance_intelligence import GovernanceIntelligence
 from cortex.core.knowledge_composer import KnowledgeComposer
-from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.orchestrators.core.conversation_protocol import ConversationProtocol
 from cortex.core.tier_composer import TierComposer
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from cortex.infrastructure.structured_logger import StructuredLogger
