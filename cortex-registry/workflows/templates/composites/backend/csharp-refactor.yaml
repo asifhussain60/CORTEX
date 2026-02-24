@@ -1,0 +1,69 @@
+# =====================================================================================
+# COMPOSITE: C# Refactoring Workflow
+# =====================================================================================
+# Tier: 2 (Composite — combines primitives)
+# Purpose: Refactor C# source files using LENS analysis + TDD cycle enforcement
+# Imports: lens-csharp-analysis, tdd-cycle, file-factory-write, audit-trace
+# =====================================================================================
+
+version: '1.0.0'
+template_id: 'composites/backend/csharp-refactor'
+name: 'C# Refactoring with LENS + TDD Cycle'
+tier: 'composite'
+category: 'backend'
+status: 'active'
+
+metadata:
+  description: |
+    Composite workflow for refactoring C# source files.
+    Runs LENS analysis to detect complexity hotspots, then drives a
+    TDD RED→GREEN→REFACTOR cycle before writing output via FileFactory.
+    Enforces CORE-008 (TDD mandatory) and CORE-035 (no duplicates).
+  authority: 'Phase 63 — Golden Test Renaissance (SWEEP-63-GOLDEN-RENAISSANCE)'
+  created: '2026-02-24'
+
+imports:
+  - template: 'primitives/analysis/lens-workspace-scan.yaml'
+    alias: lens_scan
+  - template: 'primitives/tdd/tdd-cycle.yaml'
+    alias: tdd_cycle
+  - template: 'primitives/validation/detect-fix-rescan-loop.yaml'
+    alias: convergence_gate
+
+steps:
+  - id: lens_analysis
+    uses: lens_scan
+    params:
+      target_language: 'csharp'
+      analysis_depth: 'full'
+      output_format: 'structured'
+
+  - id: complexity_triage
+    action: classify_hotspots
+    input: '${lens_analysis.output}'
+    thresholds:
+      cyclomatic_complexity: 10
+      method_length_lines: 50
+      class_length_lines: 300
+
+  - id: tdd_refactor_cycle
+    uses: tdd_cycle
+    params:
+      phase: 'REFACTOR'
+      baseline_test_count: '${lens_analysis.test_count}'
+      require_green_before_commit: true
+
+  - id: convergence_check
+    uses: convergence_gate
+    params:
+      max_iterations: 3
+      p0_exit_condition: 'p0_count == 0'
+
+outputs:
+  - id: refactor_report
+    type: inline
+    fields:
+      - hotspots_resolved
+      - test_delta
+      - convergence_iterations
+      - final_p0_count

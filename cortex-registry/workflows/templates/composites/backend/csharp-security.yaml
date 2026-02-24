@@ -1,0 +1,85 @@
+# =====================================================================================
+# COMPOSITE: C# Security Hardening Workflow
+# =====================================================================================
+# Tier: 2 (Composite — combines primitives)
+# Purpose: Scan and harden C# source files for security vulnerabilities
+# Imports: lens-csharp-analysis, security-audit, tdd-cycle, audit-trace
+# =====================================================================================
+
+version: '1.0.0'
+template_id: 'composites/backend/csharp-security'
+name: 'C# Security Hardening with LENS + Audit'
+tier: 'composite'
+category: 'backend'
+status: 'active'
+
+metadata:
+  description: |
+    Composite workflow for security hardening of C# source files.
+    Scans for common C# security vulnerabilities (SQL injection, deserialization,
+    hardcoded secrets, unsafe cryptography), enforces BCrypt/Argon2 for password
+    hashing, and verifies rate limiting on login/payment endpoints.
+    Drives a TDD cycle to add security regression tests before closing gaps.
+  authority: 'Phase 63 — Golden Test Renaissance (SWEEP-63-GOLDEN-RENAISSANCE)'
+  created: '2026-02-24'
+
+imports:
+  - template: 'primitives/analysis/lens-workspace-scan.yaml'
+    alias: lens_scan
+  - template: 'primitives/tdd/tdd-cycle.yaml'
+    alias: tdd_cycle
+  - template: 'primitives/validation/detect-fix-rescan-loop.yaml'
+    alias: convergence_gate
+
+security_checks:
+  - id: password_hashing
+    rule: 'BCrypt or Argon2 only — no SHA256/MD5 for passwords'
+    severity: P0
+  - id: rate_limiting
+    rule: 'Login and payment endpoints must have rate limiting middleware'
+    severity: P0
+  - id: hardcoded_secrets
+    rule: 'No connection strings, API keys, or passwords in source'
+    severity: P0
+  - id: unsafe_deserialization
+    rule: 'No BinaryFormatter or TypeNameHandling.All usage'
+    severity: P1
+  - id: sql_injection
+    rule: 'All DB calls via parameterised queries or ORM'
+    severity: P1
+
+steps:
+  - id: lens_security_scan
+    uses: lens_scan
+    params:
+      target_language: 'csharp'
+      analysis_depth: 'security'
+      output_format: 'structured'
+
+  - id: vulnerability_triage
+    action: classify_vulnerabilities
+    input: '${lens_security_scan.output}'
+    checks: '${security_checks}'
+
+  - id: tdd_security_cycle
+    uses: tdd_cycle
+    params:
+      phase: 'RED_GREEN'
+      require_security_regression_tests: true
+      baseline_test_count: '${lens_security_scan.test_count}'
+
+  - id: convergence_check
+    uses: convergence_gate
+    params:
+      max_iterations: 3
+      p0_exit_condition: 'p0_count == 0'
+
+outputs:
+  - id: security_report
+    type: inline
+    fields:
+      - vulnerabilities_found
+      - vulnerabilities_resolved
+      - test_delta
+      - convergence_iterations
+      - final_p0_count

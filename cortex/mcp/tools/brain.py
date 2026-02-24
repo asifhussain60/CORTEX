@@ -12,9 +12,11 @@ Operations:
 """
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from cortex.core.file_factory import get_file_factory
 from cortex.mcp.mcp_tool_base import (
     ConsolidatedTool,
     ToolCategory,
@@ -213,7 +215,6 @@ class CortexBrainQuery(ConsolidatedTool):
         Returns:
             Dict with persisted file paths.
         """
-        import json
         from datetime import datetime
 
         runtime_dir = Path(".cortex-runtime/brain")
@@ -221,10 +222,13 @@ class CortexBrainQuery(ConsolidatedTool):
 
         data = self._query_tier(tier)
         timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
-        out_file = runtime_dir / f"brain-tier-index-{timestamp}.json"
-        out_file.write_text(json.dumps(data, indent=2))
+        out_filename = f"brain-tier-index-{timestamp}.json"
+        out_path = runtime_dir / out_filename
 
-        return {"persisted_to": str(out_file), "tiers": list(data.keys())}
+        ff = get_file_factory()
+        ff.create_file(str(out_path), json.dumps(data, indent=2))
+
+        return {"persisted_to": str(out_path), "tiers": list(data.keys())}
 
 
 # AC_COMPLETE: AC-66-A-002-CORTEX-BRAIN-QUERY-MCP-TOOL-20260224T000000Z ✅
