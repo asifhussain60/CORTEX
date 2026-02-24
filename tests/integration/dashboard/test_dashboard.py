@@ -4,7 +4,7 @@ import pytest
 import json
 from typing import Dict, Any, List
 from datetime import datetime, timezone
-from cortex.infrastructure.api.dashboard_api import DashboardAPI
+from cortex.infrastructure.api.infra_dashboard_api import DashboardAPI
 from cortex.models.dashboard_models import (
     SystemHealth,
     MetricsData,

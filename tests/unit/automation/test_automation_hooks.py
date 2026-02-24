@@ -16,7 +16,7 @@ import pytest
 import yaml
 
 from cortex.infrastructure.automation.status_update_hook import StatusUpdateHook
-from cortex.infrastructure.automation.recommendation_gate import RecommendationGate
+from cortex.infrastructure.automation.automation_recommendation_gate import RecommendationGate
 from cortex.governance.validation.registry_validator import RegistryValidator
 
 

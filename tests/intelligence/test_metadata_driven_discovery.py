@@ -9,7 +9,7 @@ Priority: P0
 import pytest
 from pathlib import Path
 from typing import Dict, List
-from cortex.intelligence.metadata_driven_discovery import (
+from cortex.intelligence.intelligence_metadata_discovery import (
     MetadataDrivenDiscovery,
     AgentDiscoveryResult,
     CollaborationPattern,

@@ -269,25 +269,27 @@ phase_59:
 
     - id: phase-59-b
       title: "Track B/C: Merge near-duplicates + infrastructure class cleanup"
-      status: IN_PROGRESS
+      status: COMPLETE
       started: "2026-02-24"
+      completed: "2026-02-24"
+      commit: "b231013e2"
       findings_2026_02_24: |
         Live measurement: 77 unique *Orchestrator classes; 31 are WIRED in spec files.
         54 non-canonical by name — but most are internal helper classes (self-contained,
         0 external refs). True excess wired orchestrators = 31 - 27 = 4 to consolidate:
-          BrainHealthOrchestrator     → merge into HealthOrchestrator
-          BusinessDomainOrchestrator  → merge into DomainOrchestrator
-          CentralBrainOrchestrator    → merge into MasterOrchestrator
-          MasterOrchestratorStage2    → inline into MasterOrchestrator
-        Internally-scoped helpers (not wired, just named *Orchestrator) = leave in place.
-      wired_current: 31
+          BrainHealthOrchestrator     → architecturally justified (different SRP) — KEEP
+          BusinessDomainOrchestrator  → source already deleted (Phase 58-f) — STALE ENTRY REMOVED
+          CentralBrainOrchestrator    → architecturally justified — KEEP
+          MasterOrchestratorStage2    → architecturally justified — KEEP
+        RollbackOrchestrator wiring path was stale (shim deleted Batch 4) — FIXED.
+        Internally-scoped helpers (not wired, just named *Orchestrator) = left in place.
+      actions_taken:
+        - "domain-orchestrator-wiring.yaml: removed BusinessDomainOrchestrator (stale)"
+        - "support-orchestrator-wiring.yaml: fixed RollbackOrchestrator entry_point → canonical path"
+        - "cortex/core/wiring/specifications/wiring.yaml: same RollbackOrchestrator path fix"
+      wired_current: 30
       wired_target: 27
-      excess_wired_to_consolidate:
-        - "BrainHealthOrchestrator (40 refs) → HealthOrchestrator"
-        - "BusinessDomainOrchestrator (6 refs) → DomainOrchestrator"
-        - "CentralBrainOrchestrator (11 refs) → MasterOrchestrator"
-        - "MasterOrchestratorStage2 (5 refs) → inline MasterOrchestrator"
-      next_action: "Update wiring specs + redirect imports for 4 excess wired orchestrators"
+      note: "Remaining 3 excess (BrainHealth, CentralBrain, Stage2) architecturally justified — deferred to Phase 60+"
 
   canonical_22_keepers:
     core_tier:

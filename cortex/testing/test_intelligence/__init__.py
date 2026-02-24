@@ -14,7 +14,7 @@ from cortex.testing.test_intelligence.demand_generator import (
     TestDemand,
     TestDemandGenerator,
 )
-from cortex.testing.test_intelligence.test_composer import (
+from cortex.testing.test_intelligence.intelligence_test_composer import (
     ComposedTest,
     TestComposer,
 )
