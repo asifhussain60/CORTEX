@@ -274,6 +274,73 @@ class TestCapabilityRegistryBuilderInventoryCleanup:
 # ─────────────────────────────────────────────────────────────────────────────
 # Standalone RED signal — runs even before import succeeds
 # ─────────────────────────────────────────────────────────────────────────────
+@pytest.mark.skipif(not _IMPORT_OK, reason="capability_registry_builder not yet implemented — RED phase")
+class TestCapabilityRegistryBuilderWorkflowTemplates:
+    """GAP-72-02: builder indexes all workflow templates from cortex-registry/workflows/templates/."""
+
+    @pytest.fixture
+    def builder_with_tmp_output(self, tmp_path: Path) -> "CapabilityRegistryBuilder":
+        """Builder with real workspace root but output directed to tmp for safety."""
+        root = Path(__file__).parent.parent.parent
+        return CapabilityRegistryBuilder(workspace_root=root, output_path=tmp_path / "capabilities-manifest.yaml")
+
+    def test_builder_indexes_all_workflow_templates(
+        self, builder_with_tmp_output: "CapabilityRegistryBuilder", tmp_path: Path
+    ) -> None:
+        """
+        Generated manifest must contain workflow_templates with one entry per YAML
+        under cortex-registry/workflows/templates/.
+        """
+        builder_with_tmp_output.generate_manifest()
+        output = tmp_path / "capabilities-manifest.yaml"
+        content = yaml.safe_load(output.read_text())
+        wt = content.get("workflow_templates", {})
+        total = wt.get("total", 0)
+        # Count actual YAML files in templates directory
+        root = Path(__file__).parent.parent.parent
+        templates_root = root / "cortex-registry" / "workflows" / "templates"
+        actual_count = len(list(templates_root.rglob("*.yaml")))
+        assert total == actual_count, (
+            f"workflow_templates.total ({total}) must match actual YAML count ({actual_count})"
+        )
+
+    def test_workflow_template_entry_has_required_fields(
+        self, builder_with_tmp_output: "CapabilityRegistryBuilder", tmp_path: Path
+    ) -> None:
+        """Each workflow template entry must have id, domain, path, description."""
+        builder_with_tmp_output.generate_manifest()
+        output = tmp_path / "capabilities-manifest.yaml"
+        content = yaml.safe_load(output.read_text())
+        wt = content.get("workflow_templates", {})
+        domains = wt.get("domains", {})
+        assert len(domains) > 0, "workflow_templates.domains must be non-empty"
+        for domain_name, entries in domains.items():
+            for entry in entries:
+                assert "id" in entry, f"Entry in domain '{domain_name}' missing 'id'"
+                assert "path" in entry, f"Entry {entry.get('id')} missing 'path'"
+                assert "description" in entry, f"Entry {entry.get('id')} missing 'description'"
+
+    def test_builder_indexes_response_template_blocks(
+        self, builder_with_tmp_output: "CapabilityRegistryBuilder", tmp_path: Path
+    ) -> None:
+        """
+        Generated manifest must contain response_templates.blocks as a non-empty list
+        of BLOCK-* names extracted from cortex-response-templates.md.
+        """
+        builder_with_tmp_output.generate_manifest()
+        output = tmp_path / "capabilities-manifest.yaml"
+        content = yaml.safe_load(output.read_text())
+        rt = content.get("response_templates", {})
+        blocks = rt.get("blocks", [])
+        assert isinstance(blocks, list), "response_templates.blocks must be a list"
+        assert len(blocks) > 0, "response_templates.blocks must be non-empty"
+        # Verify each block starts with BLOCK-
+        for block in blocks:
+            assert block.startswith("BLOCK-"), (
+                f"Block '{block}' does not start with 'BLOCK-'"
+            )
+
+
 class TestPhase72RedSignal:
     """
     These tests always run and fail until the module is created.

@@ -59,6 +59,9 @@ class AuditOrchestrator(OrchestratorProtocolMixin):
     def audit(self, mode: str = "HEXA") -> Dict[str, Any]:
         """Run audit in specified mode.
 
+        Includes capability registry regeneration (Phase 72-d): rebuilds
+        capabilities-manifest.yaml from live source on every audit run.
+
         Args:
             mode: Audit mode (HEXA, P0, P1, P2, P3)
 
@@ -71,10 +74,14 @@ class AuditOrchestrator(OrchestratorProtocolMixin):
         # Phase 58 — cross-cutting hooks
         self._activate_cross_cutting_hooks(operation="audit")
         try:
+            # Phase 72-d: Regenerate capabilities-manifest.yaml (GAP-72-01 closure)
+            manifest_regenerated = self._regenerate_capability_manifest()
+
             result = {
                 "mode": mode,
                 "status": "complete",
                 "checks": self.audit_results,
+                "manifest_regenerated": manifest_regenerated,
             }
             _elapsed = int((time.perf_counter() - _t0) * 1000)
             logger.info("AC_COMPLETE: AC-AUDIT-%d ✅ (%dms)", _ts, _elapsed)
@@ -83,6 +90,26 @@ class AuditOrchestrator(OrchestratorProtocolMixin):
             _elapsed = int((time.perf_counter() - _t0) * 1000)
             logger.info("AC_COMPLETE: AC-AUDIT-%d ❌ %s (%dms)", _ts, type(exc).__name__, _elapsed)
             raise
+
+    def _regenerate_capability_manifest(self) -> bool:
+        """Regenerate capabilities-manifest.yaml via CapabilityRegistryBuilder.
+
+        Called during audit (Phase 72-d). Idempotent and safe — builder
+        writes to the canonical path at cortex-registry/core/capabilities-manifest.yaml.
+
+        Returns:
+            True if manifest was successfully regenerated, False on failure.
+        """
+        try:
+            from cortex.intelligence.capability_registry_builder import CapabilityRegistryBuilder
+
+            workspace = Path(self.workspace_root) if self.workspace_root else None
+            builder = CapabilityRegistryBuilder(workspace_root=workspace)
+            builder.generate_manifest()
+            return True
+        except Exception as exc:
+            logger.warning("Failed to regenerate capability manifest: %s", exc)
+            return False
 
     def should_pass(self, audit_output: Dict[str, Any]) -> bool:
         """Determine if audit output indicates pass.

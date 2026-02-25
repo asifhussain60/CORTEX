@@ -86,6 +86,10 @@ class CapabilityMatcher:
     matches agents by capabilities (not trigger words), and ranks
     results by match quality.
     
+    Can also load from a generated capabilities-manifest.yaml (Phase 72-c)
+    to include orchestrators, workflow templates, and MCP tools in the
+    capability index.
+    
     Thread-safe. Uses caching for performance.
     """
     
@@ -107,6 +111,77 @@ class CapabilityMatcher:
         self._mode_index: Dict[str, Set[str]] = {}        # mode -> agent_ids
         
         self.load_all_agents()
+
+    @classmethod
+    def load_from_manifest(cls, manifest_path: Path) -> "CapabilityMatcher":
+        """
+        Create a CapabilityMatcher from a capabilities-manifest.yaml file.
+
+        Loads orchestrator entries from the manifest as AgentMetadata objects,
+        making them queryable via find_by_capability() and find_by_capabilities().
+        Each orchestrator's features list becomes its capabilities, and its tier
+        is mapped to a mode.
+
+        Args:
+            manifest_path: Absolute path to capabilities-manifest.yaml.
+
+        Returns:
+            CapabilityMatcher pre-populated with orchestrator entries from the manifest.
+        """
+        # Create matcher with a non-existent agents_dir so load_all_agents() is a no-op
+        instance = cls.__new__(cls)
+        instance.agents_dir = Path("/dev/null/no-agents")
+        instance._agent_cache = {}
+        instance._capability_index = {}
+        instance._mode_index = {}
+
+        if not manifest_path.exists():
+            return instance
+
+        try:
+            content = yaml.safe_load(manifest_path.read_text(encoding="utf-8")) or {}
+        except Exception:
+            return instance
+
+        # Extract orchestrators from manifest
+        orchestrators_section = content.get("orchestrators", {})
+        tiers = orchestrators_section.get("tiers", {})
+
+        for tier_name, tier_data in tiers.items():
+            members = tier_data.get("members", [])
+            for member in members:
+                orch_id = member.get("id", "")
+                if not orch_id:
+                    continue
+
+                # Build capabilities from features + id-derived keywords
+                features = member.get("features", [])
+                # Derive capability keywords from the orchestrator id
+                id_parts = orch_id.replace("_", " ").split()
+                capabilities = list(features) + id_parts
+
+                # Map tier to a mode for mode-based queries
+                tier_to_modes: Dict[str, List[str]] = {
+                    "core": ["IMPLEMENT", "FIX", "REFACTOR", "AUDIT"],
+                    "domain": ["IMPLEMENT", "ANALYZE", "PLAN"],
+                    "support": ["ANALYZE", "AUDIT"],
+                }
+                modes = tier_to_modes.get(tier_name, [])
+
+                metadata = AgentMetadata(
+                    agent_id=orch_id,
+                    version="2.0",
+                    capabilities=capabilities,
+                    modes_served=modes,
+                    file_path=manifest_path,
+                    priority="P0" if tier_name == "core" else "P1",
+                    status="active",
+                )
+
+                instance._agent_cache[orch_id] = metadata
+                instance._index_agent(metadata)
+
+        return instance
     
     def load_all_agents(self) -> List[AgentMetadata]:
         """

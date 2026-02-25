@@ -175,6 +175,9 @@ class CapabilityRegistryBuilder:
     #: Workflow templates root (relative to workspace root)
     WORKFLOW_TEMPLATES_ROOT = Path("cortex-registry/workflows/templates")
 
+    #: Response templates SSOT (relative to workspace root)
+    RESPONSE_TEMPLATES_SSOT = Path(".github/templates/cortex-response-templates.md")
+
     #: MCP tools root (relative to workspace root)
     MCP_TOOLS_ROOT = Path("cortex/mcp/tools")
 
@@ -316,6 +319,35 @@ class CapabilityRegistryBuilder:
 
         return entries
 
+    def scan_response_templates(self) -> List[str]:
+        """
+        Scan the response templates SSOT markdown for BLOCK-* headings.
+
+        Parses .github/templates/cortex-response-templates.md for lines matching
+        ``## BLOCK-*`` and returns the block names (e.g., ``BLOCK-ANALYSIS``).
+
+        Returns:
+            List of response template block names found in the SSOT.
+        """
+        import re
+
+        ssot_path = self.workspace_root / self.RESPONSE_TEMPLATES_SSOT
+        blocks: List[str] = []
+
+        if not ssot_path.exists():
+            return blocks
+
+        try:
+            content = ssot_path.read_text(encoding="utf-8")
+            for line in content.splitlines():
+                match = re.match(r"^##\s+(BLOCK-[A-Z0-9_-]+)", line)
+                if match:
+                    blocks.append(match.group(1))
+        except Exception:
+            pass
+
+        return blocks
+
     def remove_inventory_folder(self) -> None:
         """
         Remove cortex-registry/.inventory/ if it exists (GAP-72-05).
@@ -354,12 +386,14 @@ class CapabilityRegistryBuilder:
         orchestrators = self.scan_orchestrators()
         workflow_templates = self.scan_workflow_templates()
         mcp_tools = self.scan_mcp_tools()
+        response_blocks = self.scan_response_templates()
 
         manifest = self._build_manifest_dict(
             orchestrators=orchestrators,
             workflow_templates=workflow_templates,
             mcp_tools=mcp_tools,
             generated_at=generated_at,
+            response_blocks=response_blocks,
         )
 
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -509,6 +543,7 @@ class CapabilityRegistryBuilder:
         workflow_templates: List[WorkflowTemplateEntry],
         mcp_tools: List[MCPToolEntry],
         generated_at: str,
+        response_blocks: Optional[List[str]] = None,
     ) -> Dict:
         """Assemble the full manifest dictionary (schema v2.0, backward-compatible)."""
 
@@ -603,6 +638,7 @@ class CapabilityRegistryBuilder:
                     "Templates are composable blocks — assemble from SSOT at runtime, "
                     "never duplicate inline. Use business language."
                 ),
+                "blocks": response_blocks if response_blocks else [],
             },
         }
 

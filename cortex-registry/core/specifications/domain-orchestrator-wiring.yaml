@@ -4,7 +4,7 @@
 
 module_name: domain_orchestrators
 version: "1.1.0"
-description: "Domain orchestrators: Refactoring, Planning, Domain, Coherence, Upgrade"
+description: "Domain orchestrators: Refactoring, Planning, Domain, Coherence, Upgrade, SDLC"
 
 dependencies:
   - name: core_orchestrators
@@ -90,6 +90,22 @@ provides:
       - data_embedding
     phase_added: "62-G"
 
+  - name: SDLCWorkflowOrchestrator
+    category: DOMAIN
+    description: "SDLC Intelligence Engine — selects workflow templates, hydrates with knowledge, executes via FSM"
+    entry_point: "cortex.orchestrators.domain.sdlc_workflow_orchestrator:SDLCWorkflowOrchestrator"
+    features:
+      - sdlc_workflow_selection
+      - knowledge_context_hydration
+      - workflow_runtime_execution
+      - response_block_rendering
+      - stack_aware_template_resolution
+    dependencies:
+      - WorkflowTemplateRegistry
+      - KnowledgeSynthesisEngine
+      - UniversalLearningLoop
+    phase_added: "79-D"
+
 initialization_order: 20
 
 conflict_resolution:
@@ -98,7 +114,7 @@ conflict_resolution:
 
 metadata:
   maintained_by: "CORTEX Domain Team"
-  last_updated: "2026-02-24"
-  git_commit: "phase-58-61-simplification"
+  last_updated: "2026-02-25"
+  git_commit: "phase-79-sdlc-intelligence-engine"
   status: "active"
-  change_summary: "Phase 62-G: Added EnhancedPlanningOrchestrator, ServiceDecompositionOrchestrator, DashboardOrchestrator. Phase 58-61: Removed BusinessDomainOrchestrator (source deleted in Phase 58-f — zero callers, abstract base with no concrete subclasses)."
+  change_summary: "Phase 79-D: Added SDLCWorkflowOrchestrator (SDLC Intelligence Engine). Phase 62-G: Added EnhancedPlanningOrchestrator, ServiceDecompositionOrchestrator, DashboardOrchestrator. Phase 58-61: Removed BusinessDomainOrchestrator (source deleted in Phase 58-f — zero callers, abstract base with no concrete subclasses)."

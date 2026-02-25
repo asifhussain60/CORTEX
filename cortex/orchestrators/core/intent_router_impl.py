@@ -502,6 +502,31 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
         self.complexity_router = WorkflowComplexityRouter()
         self.golden_hammer_rules = GoldenHammerRules()
 
+        # Phase 72-c: Capability registry from generated manifest (GAP-72-04)
+        self.capability_registry = self._init_capability_registry()
+
+    def _init_capability_registry(self) -> Optional[Any]:
+        """
+        Initialize CapabilityMatcher from generated capabilities-manifest.yaml.
+
+        Graceful degradation: returns None if manifest is absent or imports fail.
+        This allows IntentRouter to function without the manifest (backward-compatible).
+
+        Returns:
+            CapabilityMatcher instance or None.
+        """
+        try:
+            from cortex.intelligence.intelligence_capability_matcher import CapabilityMatcher
+            manifest_path = (
+                Path(__file__).parent.parent.parent.parent
+                / "cortex-registry" / "core" / "capabilities-manifest.yaml"
+            )
+            if manifest_path.exists():
+                return CapabilityMatcher.load_from_manifest(manifest_path)
+        except Exception:
+            pass
+        return None
+
     def _load_routing_config(self) -> Dict[str, Any]:
         """
         Load routing configuration from YAML file.
