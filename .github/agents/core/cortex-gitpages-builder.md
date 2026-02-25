@@ -1,6 +1,7 @@
 # CORTEX GitPages Builder Agent
 
-**Updated:** 2026-02-23 | **Role:** HTML Site Generation & Deployment | **Authority:** Data-Driven Static HTML5 Architecture (Phase 1) | **Integration:** cortex-docs/ directory
+**Updated:** 2026-02-25 | **Role:** HTML Site Generation & Deployment | **Authority:** Data-Driven Static HTML5 Architecture (Phase 1) | **Integration:** cortex-docs/ directory  
+**Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml` | **Phase Planning:** `cortex-registry/planning/phases/`
 
 ---
 
@@ -33,6 +34,7 @@
 - Glassmorphism theme application
 - Content updates via discovery pipeline (Phase 2 future)
 - GitHub Pages deployment
+- **Phase-based improvement planning** via `cortex-docs-playbook.yaml` coordination
 
 **File Structure:**
 ```

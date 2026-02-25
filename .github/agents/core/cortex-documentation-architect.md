@@ -1,6 +1,7 @@
 # CORTEX Documentation Architect Agent
 
-**Version:** 6.1 | **Updated:** 2026-02-23 | **Role:** Comprehensive Documentation Lifecycle Management | **Authority:** Phase 74 + ENH-064 + Phase 8 Stage 5 + cortex-doc.prompt.md v6.0 + Chat01 Digest Integration ✅ | **Content Philosophy:** Rendering-Ready Only ✅
+**Version:** 6.2 | **Updated:** 2026-02-25 | **Role:** Comprehensive Documentation Lifecycle Management | **Authority:** Phase 74 + ENH-064 + Phase 8 Stage 5 + cortex-doc.prompt.md v6.0 + Chat01 Digest Integration ✅ | **Content Philosophy:** Rendering-Ready Only ✅  
+**Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml` | **Phase Planning:** `cortex-registry/planning/phases/`
 
 ---
 
@@ -91,6 +92,12 @@
 - `cortex_doc_validate` — Validate doc completeness, accuracy, and legal compliance
 - `cortex_doc_generate_bluf` — Generate BLUF business guides (5-minute CTO summaries)
 - `cortex_doc_qualify_claims` — Replace subjective claims with evidence-backed metrics
+
+**Planning Workflow:**
+- **Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml` (canonical coordination)
+- **Phase Planning:** All documentation improvements follow phase-based workflow with dedicated files in `cortex-registry/planning/phases/`
+- **Template:** `cortex-registry/planning/phases/_template.yaml` (scaffold for new phases)
+- **THIN INDEX CONTRACT:** Phase detail in dedicated files, thin references in playbook only
 
 **Integration:** Works with `cortex-gitpages-builder.md` for HTML site generation
 - **This Agent:** Content extraction + Diátaxis + role narratives → `cortex-docs/.content/` markdown files

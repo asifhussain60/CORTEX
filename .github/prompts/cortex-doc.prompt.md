@@ -1,5 +1,6 @@
 # CORTEX Documentation - Automated Discovery, Generation & Cleanup
-**Authority:** cortex-impl-map.yaml | **Updated:** 2026-02-23 | **Status:** ✅ PRODUCTION READY
+**Authority:** cortex-impl-map.yaml | **Updated:** 2026-02-25 | **Status:** ✅ PRODUCTION READY  
+**Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml` | **Phase Planning:** `cortex-registry/planning/phases/`
 
 ---
 
@@ -86,10 +87,41 @@ Once approved, execute ALL phases without stopping:
 
 ---
 
+## � Planning & Phase Management
+
+**Playbook Authority:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`  
+**Planning Authority:** `cortex-registry/planning/phases/_template.yaml`
+
+### Phase-Based Planning Workflow
+
+All CORTEX documentation improvements follow a structured phase planning approach:
+
+1. **Identify Need** — User request, Vision API analysis, audit finding, performance issue
+2. **Create Phase Plan** — Use `cortex-registry/planning/phases/_template.yaml` scaffold
+   - Write ALL detail in dedicated file: `cortex-registry/planning/phases/planned/<phase-id>.yaml`
+   - Register thin reference in playbook `active_phases` section
+   - Validate YAML syntax and THIN INDEX CONTRACT compliance
+3. **TDD Execution** — RED → GREEN → REFACTOR with test suite in `tests/cortex_docs/`
+4. **Validation** — Tests pass, accessibility ≥90, performance ≥85, zero inline styles
+5. **Completion** — Mark phase COMPLETE, move to `completed/`, update playbook
+
+**Active Phases:**
+- `phase-index-html-redesign` — Modern glassmorphism UI with Google Fonts (P1, PLANNED)
+
+**Planning Checkpoints:**
+- **checkpoint_create:** Before adding phase — validate dedicated file, thin playbook entry, YAML syntax
+- **checkpoint_complete:** Before marking COMPLETE — all AC met, tests passing, file moved to completed/
+
+**Phase Planning Location:** `cortex-registry/planning/phases/`  
+**Playbook Coordination:** All phases registered in `cortex-docs-playbook.yaml` `active_phases` section
+
+---
+
 ## 🔄 Automated Refresh Pipeline (GitHub Pages Site)
 
 **Workflow Authority:** `cortex-registry/workflows/templates/internal/documentation-refresh-pipeline.yaml`  
-**Workflow ID:** DOC-REFRESH-001
+**Workflow ID:** DOC-REFRESH-001  
+**Playbook:** `cortex-registry/playbooks/documentation/cortex-docs-playbook.yaml`
 
 ### Site Architecture (Canonical — Phase 64+)
 
