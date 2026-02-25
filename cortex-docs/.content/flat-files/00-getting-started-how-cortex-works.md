@@ -4,8 +4,9 @@
 title: How CORTEX Works — End-to-End Request Lifecycle
 type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/core/ + cortex/mcp/ + cortex/lens/
+phases_complete: [Phase 58, Phase 60, Phase 65, Phase 67]
 format: 10k-view
 order: 3
 ---
@@ -185,4 +186,4 @@ Results are delivered **inline** per CORE-002. No `.md` or `.txt` files are crea
 
 ---
 
-*All module paths verified against live codebase · 20 February 2026*
+*All module paths verified against live codebase · 25 February 2026 · Phase 58 (OrchestratorProtocolMixin), Phase 60 (dissolved cortex/core/execution → workflow/), Phase 65/66 (Intelligence Matrix), Phase 67 (WorkflowEngine FSM) reflected*

@@ -1,11 +1,30 @@
 # Brain Tier Architecture
 
----
-title: CORTEX Brain — 3-Tier Intelligence Architecture
+---```
+cortex/intelligence/
+├── perception/          Pattern recognition, signature matching
+├── reasoning/           Strategy selection, ranking
+├── action/              Execution planning, rollback design
+├── domain_brain/        Domain-specific business knowledge repository
+├── knowledge/           Knowledge synthesis (SynthesisEngine, KnowledgeIndexer)
+├── learning/            Pattern capture, confidence updates
+├── lens/                LENS integration bridge
+├── infrastructure/      InfrastructureDetector, catalog integration
+├── governance/          Governance integration
+├── documentation/       Documentation intelligence
+├── crawler/             Repository crawling
+├── quality/             Quality assessment
+├── observability/       Intelligence metrics
+├── cross_cutting/       Intelligence Matrix (Phase 65/66) — IntelligenceMatrixBuilder
+└── wiring/              Intelligence wiring and discovery bridges
+```
+
+**Note (Phase 68):** `cortex/core/` was flattened from 27 subdirs to **15 canonical subdirs** — dissolving redundant nested packages into `cortex/core/common/`. All brain-related logic that was in `cortex/core/intelligence/` moved to `cortex/intelligence/`. The old `cortex_intelligence/` and `cortex_lens/` packages were dissolved in Phases 03–04. All imports use `cortex.intelligence.*`.n — 3-Tier Intelligence Architecture
 type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-21
+last_verified: 2026-02-25
 source_of_truth: cortex/intelligence/provider.py + cortex/intelligence/knowledge/
+phases_complete: [Phase 47, Phase 57, Phase 66, Phase 68]
 order: 4
 ---
 
@@ -247,4 +266,4 @@ This feedback loop means CORTEX improves with every project it touches. The `cor
 
 ---
 
-*All module paths verified against live codebase · 21 February 2026*
+*All module paths verified against live codebase · 25 February 2026 · Phase 68 (cortex/core flatten: 27→15 canonical subdirs) + Phase 66 (Intelligence Matrix cross_cutting/) reflected*

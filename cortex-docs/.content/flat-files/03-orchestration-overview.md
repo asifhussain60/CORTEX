@@ -4,8 +4,9 @@
 title: CORTEX Orchestration — 27 Wired Orchestrators Across 3 Tiers
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
+phases_complete: [Phase 59, Phase 60, Phase 67, Phase 68, Phase 69]
 order: 1
 ---
 
@@ -84,4 +85,4 @@ This audit logging is non-blocking — a failure to log never prevents execution
 
 ---
 
-*Orchestrator count verified via `grep -r 'class.*Orchestrator' cortex/orchestrators/` · 20 February 2026*
+*Orchestrator count verified via `grep -r 'class.*Orchestrator' cortex/orchestrators/` · 25 February 2026 · Phase 60 dissolution (cortex/core/execution/ → cortex/orchestrators/workflow/) + Phase 67 WorkflowEngine FSM wiring reflected*

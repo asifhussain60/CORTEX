@@ -4,8 +4,9 @@
 title: CORTEX Key Concepts — Terminology for New Readers
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
+phases_complete: [Phase 65, Phase 66, Phase 67, Phase 68, Phase 69]
 format: 10k-view
 order: 2
 ---
@@ -149,10 +150,40 @@ Unified SQLite database with WAL mode for audit trails. All orchestrators route 
 
 **Live location:** `cortex/infrastructure/audit_db.py` → `.cortex-runtime/`
 
-### Workflow Templates
-YAML-defined workflow specifications stored in `cortex-registry/workflows/templates/`. Two categories:
-- **lifecycle/** — CORTEX-internal workflows (phase execution, master plan)
-- **production/** — External production workflows
+### WorkflowEngine FSM (Phase 67)
+The runtime layer that executes YAML-defined workflow templates as a **Finite State Machine**. Lives in `cortex/orchestrators/workflow/`.
+
+| Component | Module | Purpose |
+|-----------|--------|---------|
+| `StepStateMachine` | `step_state_machine.py` | FSM — PENDING → RUNNING → COMPLETE / FAILED |
+| `StepHandlerRegistry` | (in `workflow_composer.py`) | Maps step type IDs to handler callables |
+| `WorkflowComposer` | `workflow_composer.py` | Composes YAML templates into executable step graphs |
+| `ConvergenceLoopExecutor` | `convergence_loop_executor.py` | Loops detect→fix→rescan until 0 P0/P1 violations |
+| `TemplateRegistry` | `template_registry.py` | Discovers and caches YAML workflow templates |
+
+The `convergence_gate` block in TDD and audit templates wires the FSM to the convergence loop — ensuring every audit-fix run loops until all violations are resolved, not just a single pass.
+
+**Live location:** `cortex/orchestrators/workflow/` · Convergence gate: `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
+
+### Intelligence Matrix (Phase 65/66)
+A 15×15 cross-capability wiring map that systematically connects every intelligence subsystem to every operational capability. See `00-getting-started/06-intelligence-matrix.md` for the full deep-dive.
+
+**Key facts:**
+- **x-axis:** 15 intelligence capabilities (IC-001→IC-015) — LENS, Brain Tiers, SynthesisEngine, etc.
+- **y-axis:** 15 CORTEX operational capabilities (CC-001→CC-015) — TDD, AuditFix, MCP, governance
+- **Coverage gate:** 50% minimum enforced in AuditFix Stage 1.5 (`MatrixCoverageError` P0 halt)
+- **Priority:** CRITICAL (P0) → HIGH (P1) → MEDIUM (P2) → LOW (P3)
+
+**Live location:** `cortex/intelligence/cross_cutting/intelligence_matrix_builder.py`
+
+### cortex/core — 15 Canonical Subdirs (Phase 68)
+After Phase 68's flatten sweep, `cortex/core/` was reduced from 27 subdirectories to **15 canonical subdirs**. The dissolved packages were consolidated into `cortex/core/common/`. Compat shims were deleted after all import sites were updated.
+
+The 15 canonical subdirs are: `common/`, `discovery/`, `execution/`, `governance/`, `hallucination_prevention/`, `intelligence/`, `intent/`, `interaction/`, `interfaces/`, `knowledge/`, `models/`, `orchestrator/`, `registry/`, `security/`, `wiring/`.
+
+**No import changes needed** — all external imports still use `cortex.core.*` (compat layer handles migration).
+
+
 
 ### Enterprise Patterns
 9 architecture patterns registered in `cortex-registry/patterns/`: mediator, strategy, observer, factory, template-method, chain-of-responsibility, adapter, repository, command.
