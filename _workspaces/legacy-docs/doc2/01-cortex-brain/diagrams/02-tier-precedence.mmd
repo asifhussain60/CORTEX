@@ -1,0 +1,63 @@
+graph TD
+    subgraph precedence["Governance Precedence"]
+        t0["<b>TIER 0: HIGHEST</b><br/>29 CORE Rules<br/>Immutable<br/>Non-Negotiable<br/>↓ Override Prevention"]
+        t1["<b>TIER 1: HIGH</b><br/>Project Governance<br/>AC-ID Tracking<br/>Semi-Immutable<br/>↓ Can Override TIER 2"]
+        t2["<b>TIER 2: MEDIUM</b><br/>Response Templates<br/>Mutable<br/>↓ Can Override TIER 3"]
+        t3["<b>TIER 3: LOW</b><br/>Domain Knowledge<br/>Mutable<br/>Highest Specificity"]
+    end
+    
+    subgraph enforcement["Enforcement Mechanisms"]
+        immutability["🔒 Immutability Protection<br/>- File-level: Read-only<br/>- Runtime: MutationGuard<br/>- Git: Pre-commit hooks"]
+        
+        override_prevent["🚫 Override Prevention<br/>- No bypass allowed<br/>- All violations logged<br/>- Execution halted"]
+        
+        audit_trail["📋 Audit Trail<br/>- Hash-chain verification<br/>- All changes tracked<br/>- Rollback on violation"]
+    end
+    
+    subgraph rules["TIER 0 Rules by Category"]
+        category_01["Orchestration: CORE-001, 006, 007, 021"]
+        category_02["Response Format: CORE-002, 003, 004, 030"]
+        category_03["Portability: CORE-005"]
+        category_04["Development: CORE-008, 009, 010, 019"]
+        category_05["Architecture: CORE-014, 018, 020, 022, 024, 028"]
+        category_06["Quality: CORE-011, 012, 013, 015, 016, 023, 025"]
+        category_07["Security: CORE-017"]
+        category_08["Audit: CORE-026, 027, 029"]
+    end
+    
+    subgraph conflict["Conflict Resolution"]
+        if_conflict["IF Tier1 Rule conflicts with Tier0:<br/>→ TIER 0 wins (always)"]
+        
+        if_conflict2["IF Tier2 Rule conflicts with Tier1:<br/>→ TIER 1 wins (always)"]
+        
+        if_conflict3["IF Tier3 conflicts with any higher:<br/>→ Higher tier wins"]
+    end
+    
+    t0 --> immutability
+    t0 --> override_prevent
+    t0 --> audit_trail
+    
+    t0 --> category_01
+    t0 --> category_02
+    t0 --> category_03
+    t0 --> category_04
+    t0 --> category_05
+    t0 --> category_06
+    t0 --> category_07
+    t0 --> category_08
+    
+    override_prevent --> if_conflict
+    override_prevent --> if_conflict2
+    override_prevent --> if_conflict3
+    
+    t0 -.->|Must comply with| t1
+    t1 -.->|Must comply with| t2
+    t2 -.->|Must comply with| t3
+    
+    style t0 fill:#ff6b6b
+    style t1 fill:#4ecdc4
+    style t2 fill:#45b7d1
+    style t3 fill:#96ceb4
+    style immutability fill:#ffe0e0
+    style override_prevent fill:#ffcccc
+    style audit_trail fill:#ffe6e6

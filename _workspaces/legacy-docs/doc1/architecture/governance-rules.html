@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX 6.0 - Governance Rules</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Crimson+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --secondary: #7b2cbf;
+            --accent: #ff006e;
+            --success: #06ffa5;
+            --warning: #ffbe0b;
+            --danger: #ff006e;
+            --bg-dark: #0a0a0f;
+            --bg-darker: #050508;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c0;
+            --text-muted: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+        
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .breadcrumb-list {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        .breadcrumb-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .breadcrumb-list a {
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.95em;
+            transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .breadcrumb-list a:hover {
+            color: var(--accent);
+        }
+        
+        .breadcrumb-list .current {
+            color: var(--text-secondary);
+        }
+        
+        .breadcrumb-separator {
+            color: var(--text-muted);
+            font-size: 0.8em;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 30px;
+        }
+        
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        
+        .subtitle {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5em;
+            color: var(--text-secondary);
+            font-weight: 400;
+            font-style: italic;
+        }
+        
+        .description {
+            max-width: 800px;
+            margin: 30px auto 0;
+            font-size: 1.1em;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        /* Category Sections */
+        .category-section {
+            margin-bottom: 80px;
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--glass-border);
+        }
+        
+        .category-icon {
+            font-size: 2.5em;
+        }
+        
+        .category-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2em;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .category-description {
+            margin-left: 80px;
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+        }
+        
+        /* Rule Cards */
+        .rules-grid {
+            display: grid;
+            gap: 25px;
+        }
+        
+        .rule-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 30px;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .rule-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+        }
+        
+        .rule-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 212, 255, 0.2);
+            border-color: var(--primary);
+        }
+        
+        .rule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        
+        .rule-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1em;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .severity-badge {
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .severity-blocked {
+            background: rgba(255, 0, 110, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .severity-warning {
+            background: rgba(255, 190, 11, 0.2);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+        
+        .rule-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.6em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+        
+        .rule-description {
+            font-size: 1.05em;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .rule-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .detail-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95em;
+            color: var(--primary);
+        }
+        
+        .validation-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .validation-list li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: var(--text-secondary);
+        }
+        
+        .validation-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        .examples {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .examples-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .example-group {
+            margin-bottom: 15px;
+        }
+        
+        .example-label {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9em;
+            color: var(--success);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .example-label.fail {
+            color: var(--danger);
+        }
+        
+        .example-code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 15px;
+            border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            border-left: 3px solid var(--primary);
+        }
+        
+        /* Tier Hierarchy */
+        .tier-hierarchy {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+        
+        .tier-hierarchy h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: var(--primary);
+        }
+        
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .tier-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .tier-card.tier-0 { border-left-color: #ff006e; }
+        .tier-card.tier-1 { border-left-color: #ffbe0b; }
+        .tier-card.tier-2 { border-left-color: #06ffa5; }
+        .tier-card.tier-3 { border-left-color: #7b2cbf; }
+        
+        .tier-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5em;
+            font-weight: 700;
+            opacity: 0.3;
+            margin-bottom: 10px;
+        }
+        
+        .tier-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .tier-precedence {
+            font-size: 0.9em;
+            color: var(--warning);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .tier-content {
+            font-size: 0.95em;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5em; }
+            .subtitle { font-size: 1.2em; }
+            .category-title { font-size: 1.8em; }
+            .rule-name { font-size: 1.3em; }
+            .container { padding: 20px 15px; }
+        }
+        
+        /* Scroll to top button */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        
+        .scroll-top.visible {
+            opacity: 1;
+        }
+        
+        .scroll-top:hover {
+            background: var(--secondary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Breadcrumb Navigation -->
+    <nav class="breadcrumb">
+        <ul class="breadcrumb-list">
+            <li><a href="../../templates/plan-viewer/cortex-plan-viewer.html">🏠 Home</a></li>
+            <li><span class="breadcrumb-separator">›</span></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><span class="breadcrumb-separator">›</span></li>
+            <li class="current">Governance Rules</li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <h1>Governance Rules</h1>
+            <p class="subtitle">The 4-Tier Hierarchy Protecting CORTEX Integrity</p>
+            <p class="description">
+                CORTEX 6.0 uses a hierarchical governance system where rules from higher tiers override lower tiers.
+                Tier 0 (SKULL rules) are immutable and protect core operational boundaries. These 23 rules ensure
+                production-grade reliability, security, and maintainability.
+            </p>
+        </header>
+
+        <!-- Tier Hierarchy Overview -->
+        <div class="tier-hierarchy">
+            <h2>4-Tier Governance Architecture</h2>
+            <div class="tier-grid">
+                <div class="tier-card tier-0">
+                    <div class="tier-number">0</div>
+                    <div class="tier-name">CORTEX_CORE</div>
+                    <div class="tier-precedence">HIGHEST PRECEDENCE</div>
+                    <div class="tier-content">
+                        23 SKULL rules (immutable). Core brain protection rules that define operational boundaries.
+                        These rules ALWAYS win conflicts.
+                    </div>
+                </div>
+                <div class="tier-card tier-1">
+                    <div class="tier-number">1</div>
+                    <div class="tier-name">BUSINESS_TIER_0</div>
+                    <div class="tier-precedence">HIGH PRECEDENCE</div>
+                    <div class="tier-content">
+                        Active epic requirements, business constraints, project-specific rules.
+                        Dynamic and changes per epic.
+                    </div>
+                </div>
+                <div class="tier-card tier-2">
+                    <div class="tier-number">2</div>
+                    <div class="tier-name">COMPANY_PRACTICES</div>
+                    <div class="tier-precedence">MEDIUM PRECEDENCE</div>
+                    <div class="tier-content">
+                        Engineering standards, code style guidelines, quality gates, contracts.
+                        Organization-wide practices.
+                    </div>
+                </div>
+                <div class="tier-card tier-3">
+                    <div class="tier-number">3</div>
+                    <div class="tier-name">KNOWLEDGE_PRACTICES</div>
+                    <div class="tier-precedence">LOW PRECEDENCE</div>
+                    <div class="tier-content">
+                        Learned patterns, insights, optimizations.
+                        Suggestions that improve over time.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Orchestration Lifecycle -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🔄</span>
+                <h2 class="category-title">Orchestration Lifecycle</h2>
+            </div>
+            <p class="category-description">
+                Rules governing how orchestrators execute, manage state, and handle incremental operations.
+                These ensure autonomous, reliable execution without manual intervention.
+            </p>
+
+
+    <!-- Implementation Status Banner -->
+    <div style="background: linear-gradient(135deg, rgba(255, 190, 11, 0.1), rgba(255, 0, 110, 0.1)); 
+                border: 2px solid rgba(255, 190, 11, 0.3); 
+                border-radius: 12px; 
+                padding: 25px; 
+                margin: 30px 0 40px; 
+                position: relative;">
+        <div style="font-family: 'Space Grotesk', sans-serif; 
+                    font-size: 1.3em; 
+                    font-weight: 600; 
+                    margin-bottom: 20px; 
+                    color: var(--warning);">
+            📋 Implementation Status (Design Phase)
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ffbe0b;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🟡</div>
+                <div style="font-weight: 600;">Phase 1: Foundation Enhancement</div>
+                <div style="color: var(--warning); font-size: 0.9em; margin-top: 5px;">Ready to Implement</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">0/43 AC-IDs Complete</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 2: Orchestration Core</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 1</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 3: Feature Orchestrators</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 2</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 4: Intelligence Layer</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 3</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+        </div>
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); 
+                    font-size: 0.95em; color: var(--text-secondary);">
+            <strong>⚠️ Design Documentation:</strong> This documentation describes the <em>planned architecture</em>. 
+            Implementation begins with Phase 1 foundation components. All content marked with 🟡 or 🔴 represents 
+            future functionality, not current implementation.
+        </div>
+    </div>
+
+
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-001</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Incremental Autonomous Execution</h3>
+                    <p class="rule-description">
+                        ALL orchestrators MUST work in small, meaningful increments to prevent token limit errors
+                        and server failures (HTTP 502). Large monolithic operations cause catastrophic failures.
+                    </p>
+                    <ul class="validation-list">
+                        <li>Operations split into &lt;500 line increments per execution</li>
+                        <li>Each increment independently executable</li>
+                        <li>State persisted between increments (continuation support)</li>
+                        <li>Token usage monitored and capped at 80% of limit</li>
+                        <li>Autonomous mode enabled (no user prompts mid-execution)</li>
+                    </ul>
+                    <div class="rule-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Category</span>
+                            <span class="detail-value">orchestration_lifecycle</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Priority</span>
+                            <span class="detail-value">8</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Hook</span>
+                            <span class="detail-value">pre_execution</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-006</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Setup Verification Mandatory</h3>
+                    <p class="rule-description">
+                        ALL orchestrators MUST run Phase -2 setup verification before execution. This prevents
+                        false positives and ensures dependencies are ACTUALLY complete, not just file existence.
+                    </p>
+                    <ul class="validation-list">
+                        <li>Dependencies pass implementation tests</li>
+                        <li>False positive detection runs</li>
+                        <li>VSCode cache state checked</li>
+                        <li>Governance compliance validated</li>
+                    </ul>
+                    <div class="rule-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Priority</span>
+                            <span class="detail-value">1 (Highest)</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Middleware</span>
+                            <span class="detail-value">SetupVerifier</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-007</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Teardown + REFACTOR + Commit Mandatory</h3>
+                    <p class="rule-description">
+                        ALL orchestrators MUST run Phase N+1 teardown after execution. Ensures code cleanup
+                        and atomic git commits following /cortex-git-commit pattern.
+                    </p>
+                    <ul class="validation-list">
+                        <li>Whole-file REFACTOR runs (remove unused imports, orphaned code)</li>
+                        <li>All modified files refactored</li>
+                        <li>Git commit follows /cortex-git-commit pattern</li>
+                        <li>Commit message includes orchestrator name + phase summary</li>
+                    </ul>
+                    <div class="rule-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Priority</span>
+                            <span class="detail-value">30</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Hook</span>
+                            <span class="detail-value">post_execution</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Development Workflow -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🧪</span>
+                <h2 class="category-title">Development Workflow</h2>
+            </div>
+            <p class="category-description">
+                Rules enforcing test-driven development, code quality, and proper development practices.
+                These ensure reliable, tested code enters the codebase.
+            </p>
+
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-008</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Test-Driven Development Mandatory</h3>
+                    <p class="rule-description">
+                        Tests MUST be written BEFORE implementation (RED → GREEN → REFACTOR).
+                        This prevents untested code from entering the codebase.
+                    </p>
+                    <ul class="validation-list">
+                        <li>Test file exists before implementation file</li>
+                        <li>Test fails initially (RED phase)</li>
+                        <li>Implementation makes test pass (GREEN phase)</li>
+                        <li>REFACTOR phase removes code smells</li>
+                    </ul>
+                    <div class="examples">
+                        <div class="examples-title">TDD Workflow:</div>
+                        <div class="example-group">
+                            <div class="example-label">✓ PASS</div>
+                            <div class="example-code">1. Write test_audit_logger.py → fails<br>2. Implement audit_logger.py → test passes<br>3. Refactor both files → clean code</div>
+                        </div>
+                        <div class="example-group">
+                            <div class="example-label fail">✗ FAIL</div>
+                            <div class="example-code">1. Implement audit_logger.py<br>2. Write tests later (blocked by CORE-008)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-019</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">TDD-Master Required for All Development</h3>
+                    <p class="rule-description">
+                        ALL implementation work (planned and unplanned) MUST route through TDD-Master orchestrator.
+                        Direct coding without TDD workflow is prohibited.
+                    </p>
+                    <ul class="validation-list">
+                        <li>TDD-Master invoked for all code changes</li>
+                        <li>Evidence bundle created automatically</li>
+                        <li>Tests written before implementation</li>
+                        <li>Governance enforcement logged</li>
+                    </ul>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-011</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Python Type Hints Required</h3>
+                    <p class="rule-description">
+                        ALL Python functions and methods MUST have complete type hints for parameters and return values.
+                        Critical for autonomous code generation safety.
+                    </p>
+                    <ul class="validation-list">
+                        <li>All function parameters have type hints (except self, cls)</li>
+                        <li>All functions have return type hints (use None if no return)</li>
+                        <li>Complex types use typing module (List, Dict, Optional, Union)</li>
+                    </ul>
+                    <div class="examples">
+                        <div class="example-group">
+                            <div class="example-label">✓ PASS</div>
+                            <div class="example-code">def log(message: str, level: int) -> None:</div>
+                        </div>
+                        <div class="example-group">
+                            <div class="example-label fail">✗ FAIL</div>
+                            <div class="example-code">def log(message, level):  # Missing type hints</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Integrity -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🏛️</span>
+                <h2 class="category-title">Architecture Integrity</h2>
+            </div>
+            <p class="category-description">
+                Rules protecting CORTEX architecture, file organization, and structural integrity.
+                These prevent clutter and maintain clean, navigable codebase.
+            </p>
+
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-009</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Plan Files in Designated Folders</h3>
+                    <p class="rule-description">
+                        ALL files related to epics, plans, features MUST be housed within plan folder structure.
+                        Root-level file creation DISCOURAGED unless absolutely necessary.
+                    </p>
+                    <ul class="validation-list">
+                        <li>Plan artifacts in plan_folder/artifacts/</li>
+                        <li>Analysis documents in plan_folder/analysis/</li>
+                        <li>Progress reports in plan_folder/reports/</li>
+                        <li>Context documents in plan_folder/context/</li>
+                        <li>Scripts in plan_folder/scripts/</li>
+                        <li>Tracking data in plan_folder/tracking/</li>
+                        <li>No plan-related files in workspace root</li>
+                    </ul>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-020</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">No Markdown in cortex-brain/</h3>
+                    <p class="rule-description">
+                        ALL knowledge files in cortex-brain/ MUST be machine-readable (YAML/JSON).
+                        Markdown is for documentation, not structured brain data.
+                    </p>
+                    <ul class="validation-list">
+                        <li>Use YAML for structured data</li>
+                        <li>Use JSON for runtime state</li>
+                        <li>Markdown only in docs/ folder</li>
+                        <li>Machine-parseable formats only</li>
+                    </ul>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-022</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Kebab-Case File Naming</h3>
+                    <p class="rule-description">
+                        Enforce kebab-case file naming with max 20 characters (excluding extension).
+                        Improves readability and cross-platform compatibility.
+                    </p>
+                    <ul class="validation-list">
+                        <li>Use kebab-case: governance-rules.yaml</li>
+                        <li>Max 20 characters (without extension)</li>
+                        <li>No spaces, underscores, or camelCase</li>
+                        <li>Lowercase only</li>
+                    </ul>
+                    <div class="examples">
+                        <div class="example-group">
+                            <div class="example-label">✓ PASS</div>
+                            <div class="example-code">governance-rules.yaml<br>master-orchestrator.py</div>
+                        </div>
+                        <div class="example-group">
+                            <div class="example-label fail">✗ FAIL</div>
+                            <div class="example-code">GovernanceRules.yaml<br>master_orchestrator.py</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Response Formatting -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">📄</span>
+                <h2 class="category-title">Response Formatting</h2>
+            </div>
+            <p class="category-description">
+                Rules governing how orchestrators format output, preventing workspace clutter
+                and ensuring concise, visual progress reporting.
+            </p>
+
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-002</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">No Summary File Generation</h3>
+                    <p class="rule-description">
+                        Orchestrators MUST NOT create markdown summary files (*-summary.md, *-report.md).
+                        Executive summaries provided in chat, NOT as files.
+                    </p>
+                    <ul class="validation-list">
+                        <li>No files matching: *-summary.md, *-report.md, completion-*.md</li>
+                        <li>No root-level summary files</li>
+                        <li>Exception: Required reports in plan_folder/reports/</li>
+                        <li>Exception: Analysis in plan_folder/analysis/</li>
+                    </ul>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-003</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Visual Progress Response Format</h3>
+                    <p class="rule-description">
+                        ALL orchestrator responses MUST provide executive summaries without code snippets,
+                        using visual progress bars (█████░░░░░ style).
+                    </p>
+                    <ul class="validation-list">
+                        <li>Contains executive summary section</li>
+                        <li>NO code snippets in summary</li>
+                        <li>Visual progress bars present</li>
+                        <li>Shows phase completion percentage</li>
+                        <li>Response length ≤40 lines (concise)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portability & Security -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">🔒</span>
+                <h2 class="category-title">Portability & Security</h2>
+            </div>
+            <p class="category-description">
+                Rules ensuring cross-platform compatibility and protecting against security vulnerabilities.
+                Critical for production deployment.
+            </p>
+
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-005</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Path Portability Required</h3>
+                    <p class="rule-description">
+                        NEVER use hardcoded absolute paths. ALWAYS use relative paths or dynamic detection.
+                        CORTEX must work across Windows, macOS, Linux installations.
+                    </p>
+                    <ul class="validation-list">
+                        <li>No hardcoded paths: /Users/username/ or C:\Users\</li>
+                        <li>Use get_project_root() for dynamic detection</li>
+                        <li>Use Path(__file__).resolve() for relative resolution</li>
+                        <li>Config files use relative paths only</li>
+                    </ul>
+                    <div class="examples">
+                        <div class="example-group">
+                            <div class="example-label">✓ PASS</div>
+                            <div class="example-code">from src.utils.project_root import get_project_root<br>path = get_project_root() / "cortex-brain"</div>
+                        </div>
+                        <div class="example-group">
+                            <div class="example-label fail">✗ FAIL</div>
+                            <div class="example-code">path = "D:\\PROJECTS\\CORTEX\\cortex-brain"</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-017</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">Governance Enforcement</h3>
+                    <p class="rule-description">
+                        ALL operations MUST enforce governance rules. Bypass attempts trigger security alerts
+                        and operation blocking. Audit trails required.
+                    </p>
+                    <ul class="validation-list">
+                        <li>GovernanceMerger validates all operations</li>
+                        <li>Bypass attempts logged as violations</li>
+                        <li>Tier 0 rules ALWAYS enforced</li>
+                        <li>Security team notified on violations</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quality Gates -->
+        <section class="category-section">
+            <div class="category-header">
+                <span class="category-icon">✅</span>
+                <h2 class="category-title">Quality Gates</h2>
+            </div>
+            <p class="category-description">
+                Rules enforcing code quality validation before commit. Prevents low-quality code
+                from entering production.
+            </p>
+
+            <div class="rules-grid">
+                <div class="rule-card">
+                    <div class="rule-header">
+                        <span class="rule-id">CORE-023</span>
+                        <span class="severity-badge severity-blocked">BLOCKED</span>
+                    </div>
+                    <h3 class="rule-name">File Type-Specific Validation</h3>
+                    <p class="rule-description">
+                        Pre-commit validation MUST check file-specific quality gates:
+                        HTML5 validation, WCAG AA compliance, YAML schema, Python linting.
+                    </p>
+                    <ul class="validation-list">
+                        <li>HTML: W3C HTML5 validator, WCAG 2.1 Level AA</li>
+                        <li>YAML: Schema validation, no duplicate keys</li>
+                        <li>Python: Pylint, Black, isort, type checking</li>
+                        <li>JSON: JSON schema validation, no trailing commas</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <div class="scroll-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        ↑
+    </div>
+
+    <script>
+        // Show scroll-to-top button when scrolled
+        window.addEventListener('scroll', () => {
+            const scrollTop = document.querySelector('.scroll-top');
+            if (window.scrollY > 500) {
+                scrollTop.classList.add('visible');
+            } else {
+                scrollTop.classList.remove('visible');
+            }
+        });
+    </script>
+</body>
+</html>

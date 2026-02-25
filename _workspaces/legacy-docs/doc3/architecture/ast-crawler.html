@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AST Crawler & Knowledge Graph | CORTEX Architecture</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff6b9d;
+            --accent: #ffd93d;
+            --dark: #0f0f23;
+            --dark-card: #1a1a2e;
+            --text: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        code, pre {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Header */
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--secondary);
+        }
+
+        /* Status Banner */
+        .status-banner {
+            background: linear-gradient(135deg, var(--warning) 0%, #f97316 100%);
+            padding: 1rem 2rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Page Title */
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            font-family: 'Crimson Pro', serif;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .glass-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Code Block */
+        pre {
+            background: var(--dark-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        code {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        th {
+            background: var(--dark-card);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--glass);
+        }
+
+        /* Process Flow */
+        .process-flow {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .process-step {
+            background: var(--dark-card);
+            border-left: 4px solid var(--primary);
+            border-radius: 8px;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .process-step::before {
+            content: attr(data-step);
+            position: absolute;
+            top: -12px;
+            left: 20px;
+            background: var(--primary);
+            color: var(--dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .process-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Alert Box */
+        .alert {
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+        }
+
+        .alert-warning {
+            background: rgba(251, 191, 36, 0.1);
+            border-left: 4px solid var(--warning);
+        }
+
+        .alert-info {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        .alert-success {
+            background: rgba(74, 222, 128, 0.1);
+            border-left: 4px solid var(--success);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-dim);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Banner -->
+    <div class="status-banner">
+        🟡 STATUS: PLANNED - Phase 3 (Weeks 5-6) - Not Yet Implemented
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">CORTEX 6.0</div>
+            <nav class="breadcrumb">
+                <a href="../../templates/plan-viewer/cortex-plan-viewer.html">Home</a>
+                <span>/</span>
+                <a href="../architecture/governance-rules.html">Architecture</a>
+                <span>/</span>
+                <span>AST Crawler</span>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1 class="page-title">AST Crawler & Knowledge Graph</h1>
+        <p class="page-subtitle">Automated code analysis, knowledge extraction, and intelligent filtering</p>
+
+        <!-- Overview -->
+        <section class="section">
+            <h2 class="section-title">🎯 Purpose & Scope</h2>
+            
+            <div class="glass-card">
+                <h3 class="card-title">What is the AST Crawler?</h3>
+                <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1rem;">
+                    The AST (Abstract Syntax Tree) Crawler is a <strong>Phase 3 orchestrator</strong> that analyzes source code 
+                    by parsing it into a structured tree format. It extracts business logic, domain models, function signatures, 
+                    and relationships to build a queryable knowledge graph of your codebase.
+                </p>
+                
+                <div class="alert alert-info">
+                    <strong style="color: var(--primary);">Phase 3 Implementation</strong>
+                    <p style="margin-top: 0.5rem; color: var(--text-dim);">
+                        Planned for <strong>Weeks 5-6</strong> (2026-02-10 to 2026-02-21). Requires Phase 1 (audit/state) 
+                        and Phase 2 (orchestration core) to be complete first. Status: 🔒 Blocked by Phase 2.
+                    </p>
+                </div>
+
+                <h4 style="color: var(--accent); margin-top: 2rem; margin-bottom: 1rem;">Key Capabilities:</h4>
+                <ul style="color: var(--text-dim); line-height: 2;">
+                    <li><strong>Parse Python/C#/TypeScript code</strong> into AST nodes (classes, functions, variables)</li>
+                    <li><strong>Extract relationships</strong> (inherits_from, calls, imports, depends_on)</li>
+                    <li><strong>Build knowledge graph</strong> for semantic queries ("Show all functions calling authenticate()")</li>
+                    <li><strong>Filter noise</strong> (keep business logic, remove boilerplate)</li>
+                    <li><strong>Question suspicious patterns</strong> (high complexity, missing tests, unclear names)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- How AST Parsing Works -->
+        <section class="section">
+            <h2 class="section-title">🔬 How AST Parsing Works</h2>
+            
+            <div class="glass-card">
+                <h3 class="card-title">From Source Code to Structured Knowledge</h3>
+                <p style="color: var(--text-dim); margin-bottom: 1.5rem;">
+                    Python's built-in <code>ast</code> module converts source code into a tree structure where each node 
+                    represents a language construct (class, function, assignment, etc.). CORTEX walks this tree to extract 
+                    meaningful business entities.
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div>
+                        <h4 style="color: var(--primary); margin-bottom: 0.8rem;">Input: Python Source Code</h4>
+                        <pre><code>class UserManager:
+    """Manages user authentication"""
+    
+    def __init__(self, db_connection):
+        self.db = db_connection
+    
+    def authenticate(self, username: str, 
+                     password: str) -> bool:
+        """Verify user credentials"""
+        user = self.db.query(User)\\
+            .filter_by(username=username)\\
+            .first()
+        
+        if not user:
+            return False
+        
+        return user.verify_password(password)
+</code></pre>
+                    </div>
+
+                    <div>
+                        <h4 style="color: var(--accent); margin-bottom: 0.8rem;">Output: Extracted Knowledge</h4>
+                        <pre><code>{
+  "node_type": "ClassDef",
+  "name": "UserManager",
+  "docstring": "Manages user authentication",
+  "bases": [],
+  "methods": [
+    {
+      "name": "__init__",
+      "parameters": ["self", "db_connection"],
+      "calls": []
+    },
+    {
+      "name": "authenticate",
+      "parameters": ["self", "username", "password"],
+      "return_type": "bool",
+      "calls": ["self.db.query", "user.verify_password"],
+      "complexity": 3
+    }
+  ],
+  "dependencies": ["User"]
+}
+</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Crawling Process -->
+        <section class="section">
+            <h2 class="section-title">⚙️ Crawling Process (5 Steps)</h2>
+            
+            <div class="process-flow">
+                <div class="process-step" data-step="STEP 1">
+                    <h3 class="process-title">File Discovery</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8;">
+                        Scan workspace for source files (.py, .cs, .ts). Respects <code>.gitignore</code> and excludes 
+                        <code>venv/</code>, <code>node_modules/</code>, generated files. Prioritizes <code>src/</code> directory.
+                    </p>
+                    <pre><code># Discovered files (example)
+src/auth/user_manager.py
+src/models/user.py
+src/database/connection.py
+tests/test_user_manager.py  # Excluded (not business logic)
+</code></pre>
+                </div>
+
+                <div class="process-step" data-step="STEP 2">
+                    <h3 class="process-title">AST Parsing</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8;">
+                        Parse each file using language-specific parser (Python: <code>ast</code>, C#: Roslyn, TypeScript: ts-morph). 
+                        Extract classes, functions, imports, decorators, type hints, docstrings.
+                    </p>
+                    <pre><code>import ast
+
+with open("src/auth/user_manager.py") as f:
+    tree = ast.parse(f.read())
+
+for node in ast.walk(tree):
+    if isinstance(node, ast.ClassDef):
+        extract_class(node)
+    elif isinstance(node, ast.FunctionDef):
+        extract_function(node)
+</code></pre>
+                </div>
+
+                <div class="process-step" data-step="STEP 3">
+                    <h3 class="process-title">Relationship Extraction</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8;">
+                        Identify connections between entities: inheritance, function calls, imports, dependencies. 
+                        Build graph edges for semantic queries.
+                    </p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Relationship Type</th>
+                                <th>Example</th>
+                                <th>Graph Edge</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Inheritance</strong></td>
+                                <td><code>class Admin(User)</code></td>
+                                <td>Admin → INHERITS → User</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Function Call</strong></td>
+                                <td><code>user.verify_password()</code></td>
+                                <td>authenticate() → CALLS → verify_password()</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Import</strong></td>
+                                <td><code>from models import User</code></td>
+                                <td>user_manager.py → IMPORTS → User</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dependency</strong></td>
+                                <td><code>self.db = db_connection</code></td>
+                                <td>UserManager → DEPENDS_ON → db_connection</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="process-step" data-step="STEP 4">
+                    <h3 class="process-title">Knowledge Filtering</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1rem;">
+                        Apply filters to keep valuable patterns and remove noise. Ensures knowledge graph stays focused on business logic.
+                    </p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div style="background: rgba(74, 222, 128, 0.1); border-left: 3px solid var(--success); padding: 1rem; border-radius: 4px;">
+                            <strong style="color: var(--success);">✅ KEEP (Signal)</strong>
+                            <ul style="color: var(--text-dim); margin-top: 0.5rem; line-height: 1.6;">
+                                <li>Domain models (User, Order, Payment)</li>
+                                <li>Business rules (calculate_discount, validate_email)</li>
+                                <li>API endpoints, controllers</li>
+                                <li>Functions with complexity 1-10</li>
+                                <li>Code with >=80% test coverage</li>
+                            </ul>
+                        </div>
+
+                        <div style="background: rgba(239, 68, 68, 0.1); border-left: 3px solid var(--danger); padding: 1rem; border-radius: 4px;">
+                            <strong style="color: var(--danger);">❌ REMOVE (Noise)</strong>
+                            <ul style="color: var(--text-dim); margin-top: 0.5rem; line-height: 1.6;">
+                                <li>Framework boilerplate (__init__.py)</li>
+                                <li>Generated code (migrations, ORM models)</li>
+                                <li>Third-party libraries</li>
+                                <li>Utility functions (str.format, len())</li>
+                                <li>Transitive dependencies (3+ levels)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="process-step" data-step="STEP 5">
+                    <h3 class="process-title">Knowledge Graph Storage</h3>
+                    <p style="color: var(--text-dim); line-height: 1.8;">
+                        Store extracted knowledge in graph database (Neo4j) or JSON structure. Enable semantic queries like 
+                        "Find all functions that call database" or "Show untested code".
+                    </p>
+                    <pre><code># Example: Neo4j Cypher query
+MATCH (f:Function)-[:CALLS]->(db:Function {name: 'query'})
+WHERE NOT (f)-[:HAS_TEST]->(:Test)
+RETURN f.name AS untested_db_callers
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Knowledge Filtering Rules -->
+        <section class="section">
+            <h2 class="section-title">🔍 Knowledge Filtering Rules</h2>
+            
+            <div class="glass-card">
+                <h3 class="card-title">Filtering Decision Matrix</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Filter Category</th>
+                            <th>Criteria</th>
+                            <th>Action</th>
+                            <th>Rationale</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Business Logic</strong></td>
+                            <td>Domain models, validation, rules</td>
+                            <td style="color: var(--success);">✅ KEEP</td>
+                            <td>Core business knowledge</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Boilerplate</strong></td>
+                            <td>Framework setup, __init__.py</td>
+                            <td style="color: var(--danger);">❌ REMOVE</td>
+                            <td>No business value</td>
+                        </tr>
+                        <tr>
+                            <td><strong>High Complexity</strong></td>
+                            <td>Cyclomatic complexity > 20</td>
+                            <td style="color: var(--warning);">⚠️ FLAG</td>
+                            <td>Refactoring candidate</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Missing Tests</strong></td>
+                            <td>Coverage < 80%</td>
+                            <td style="color: var(--warning);">⚠️ FLAG</td>
+                            <td>Route to TDD-Master</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Well-Documented</strong></td>
+                            <td>Docstring with examples</td>
+                            <td style="color: var(--success);">✅ KEEP</td>
+                            <td>High-value knowledge</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Unclear Names</strong></td>
+                            <td>Variables: x, temp, data</td>
+                            <td style="color: var(--warning);">⚠️ QUESTION</td>
+                            <td>Code smell</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dead Code</strong></td>
+                            <td>No references found</td>
+                            <td style="color: var(--danger);">❌ FLAG for Vacuum</td>
+                            <td>Cleanup candidate</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Knowledge Questioning -->
+        <section class="section">
+            <h2 class="section-title">❓ Knowledge Questioning System</h2>
+            
+            <div class="glass-card">
+                <h3 class="card-title">When Patterns Seem Suspicious</h3>
+                <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                    The crawler doesn't just accept all code as truth. When it detects anti-patterns or risks, 
+                    it flags them for human review or routes to Investigation orchestrator.
+                </p>
+
+                <h4 style="color: var(--accent); margin-bottom: 1rem;">Detection Rules</h4>
+                
+                <div class="alert alert-warning">
+                    <strong style="color: var(--warning);">⚠️ Complexity Alert</strong>
+                    <pre style="margin-top: 0.8rem;"><code>Function: calculate_shipping_cost()
+Location: src/orders/shipping.py:45
+Complexity: 27 (threshold: 10)
+Branches: 15 different code paths
+
+🔍 Investigation Triggered:
+   - Suggest: Refactor using Strategy pattern
+   - Route to: TDD-Master for test coverage analysis
+   - Create AC-ID: AC-REFACTOR-001 "Simplify shipping cost calculation"
+</code></pre>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong style="color: var(--warning);">⚠️ Missing Tests Alert</strong>
+                    <pre style="margin-top: 0.8rem;"><code>File: src/payment/processor.py
+Functions: 8 (charge_card, refund, validate_cvv, ...)
+Test Coverage: 0%
+Risk Level: HIGH (payment processing)
+
+🔍 Investigation Triggered:
+   - Route to: TDD-Master immediately
+   - Create AC-ID: AC-TEST-PAY-001 "Add payment processor tests"
+   - Block deployment until tests exist
+</code></pre>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong style="color: var(--warning);">⚠️ SOLID Violation Alert</strong>
+                    <pre style="margin-top: 0.8rem;"><code>Class: UserManager
+Methods: 18 (authenticate, create_user, send_email, log_activity, ...)
+Violation: Single Responsibility Principle
+Issues: Mixing auth, persistence, email, logging
+
+🔍 Investigation Triggered:
+   - Suggest: Split into UserAuth, UserRepository, UserNotifier
+   - Route to: Investigation orchestrator for impact analysis
+   - Create AC-ID: AC-ARCH-001 "Refactor UserManager"
+</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integration with Phase 4 Intelligence -->
+        <section class="section">
+            <h2 class="section-title">🔗 Integration with Phase 4 Intelligence</h2>
+            
+            <div class="glass-card">
+                <h3 class="card-title">How Knowledge Graph Powers AI Features</h3>
+                <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1.5rem;">
+                    The knowledge graph built by the crawler becomes the <strong>input for Phase 4 intelligence</strong>. 
+                    It provides structured, queryable business logic that AI features can analyze and learn from.
+                </p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase 4 Feature</th>
+                            <th>Uses Knowledge Graph For</th>
+                            <th>Example Query</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>LLM Intent Classifier</strong></td>
+                            <td>Understanding domain entities for fuzzy matching</td>
+                            <td>"implement user auth" → Find UserManager class</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Knowledge Practices</strong></td>
+                            <td>Extracting common patterns from successful code</td>
+                            <td>"Functions with >=80% coverage → 90% success rate"</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vision API</strong></td>
+                            <td>Mapping UI screenshots to source code</td>
+                            <td>"This button calls which function?" → login_submit()</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong style="color: var(--primary);">💡 Snowball Effect</strong>
+                    <p style="margin-top: 0.5rem; color: var(--text);">
+                        By Phase 4, CORTEX has accumulated:<br>
+                        • 6 weeks of audit logs (Phase 1)<br>
+                        • Routing patterns (Phase 2)<br>
+                        • Full codebase knowledge graph (Phase 3)<br>
+                        <br>
+                        This rich dataset enables sophisticated AI features that would be impossible to build upfront.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Status -->
+        <section class="section">
+            <h2 class="section-title">📊 Implementation Status</h2>
+            
+            <div class="glass-card">
+                <h3 class="card-title">Phase 3: Crawler Orchestrator</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Status</th>
+                            <th>AC-IDs</th>
+                            <th>Dependencies</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>AST Parser</strong></td>
+                            <td><span style="color: var(--warning);">🟡 Planned</span></td>
+                            <td>AC-CRAWLER-001</td>
+                            <td>None (uses built-in ast module)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Knowledge Graph Builder</strong></td>
+                            <td><span style="color: var(--warning);">🟡 Planned</span></td>
+                            <td>AC-CRAWLER-002</td>
+                            <td>AC-STATE-001 (persistence)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Filter Engine</strong></td>
+                            <td><span style="color: var(--warning);">🟡 Planned</span></td>
+                            <td>AC-CRAWLER-003</td>
+                            <td>AC-GOV-001 (rule enforcement)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Question System</strong></td>
+                            <td><span style="color: var(--warning);">🟡 Planned</span></td>
+                            <td>AC-CRAWLER-004</td>
+                            <td>AC-AUDIT-001 (logging), AC-ORCH-001 (routing to Investigation)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="alert alert-info" style="margin-top: 2rem;">
+                    <strong style="color: var(--primary);">Next Actions</strong>
+                    <p style="margin-top: 0.5rem; color: var(--text);">
+                        Phase 3 implementation starts <strong>Week 5 (2026-02-10)</strong> after Phase 2 completes. 
+                        The crawler will be built using TDD-Master orchestrator with full test coverage before deployment.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>CORTEX 6.0 Architecture Documentation | Generated 2026-01-10</p>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+            🟡 Planned for Phase 3 (Weeks 5-6) | Based on holistic-snowball-plan.yaml
+        </p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Intelligence Evolution | Architecture Documentation</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #00d4ff;
+            --secondary: #ff6b9d;
+            --accent: #ffd93d;
+            --dark: #0f0f23;
+            --dark-card: #1a1a2e;
+            --text: #e0e0e0;
+            --text-dim: #a0a0a0;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        code, pre {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Header */
+        .header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-dim);
+        }
+
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--secondary);
+        }
+
+        /* Status Banner */
+        .status-banner {
+            background: linear-gradient(135deg, var(--warning) 0%, #f97316 100%);
+            padding: 1rem 2rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Page Title */
+        .page-title {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            font-family: 'Crimson Pro', serif;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+            border-left: 4px solid var(--accent);
+            padding-left: 1rem;
+        }
+
+        .section-intro {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .glass-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .card-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        /* Phase Card */
+        .phase-card {
+            background: linear-gradient(135deg, var(--glass), rgba(255, 255, 255, 0.02));
+            border: 2px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .phase-number {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .phase-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .status-blocked {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .status-planned {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        /* Intelligence Matrix */
+        .intelligence-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .intelligence-item {
+            background: var(--dark-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+
+        .intelligence-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(255, 217, 61, 0.2);
+        }
+
+        .intelligence-title {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .intelligence-description {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .intelligence-dependency {
+            font-size: 0.85rem;
+            color: var(--primary);
+            font-style: italic;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--primary), var(--secondary), var(--accent));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -3.75rem;
+            top: 0.5rem;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 3px solid var(--dark);
+            box-shadow: 0 0 20px var(--primary);
+        }
+
+        .timeline-content {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .timeline-title {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-description {
+            color: var(--text-dim);
+            margin-bottom: 1rem;
+        }
+
+        .timeline-features {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .timeline-features li {
+            padding: 0.3rem 0;
+            color: var(--text);
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        .timeline-features li::before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+
+        /* Code Block */
+        pre {
+            background: var(--dark-card);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        code {
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        /* Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        th {
+            background: var(--dark-card);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--glass);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-dim);
+            border-top: 1px solid var(--glass-border);
+            margin-top: 4rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .phase-header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .intelligence-matrix {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Status Banner -->
+    <div class="status-banner">
+        🟡 STATUS: PLANNED - Design Phase - Not Yet Implemented
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">CORTEX 6.0</div>
+            <nav class="breadcrumb">
+                <a href="../../templates/plan-viewer/cortex-plan-viewer.html">Home</a>
+                <span>/</span>
+                <a href="../architecture/governance-rules.html">Architecture</a>
+                <span>/</span>
+                <span>Intelligence Evolution</span>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1 class="page-title">Intelligence Evolution</h1>
+        <p class="page-subtitle">How CORTEX incrementally builds AI-powered capabilities across 4 phases</p>
+
+        <!-- Introduction -->
+        <section class="section">
+            <h2 class="section-title">🧠 Evolution Strategy</h2>
+            <p class="section-intro">
+                CORTEX 6.0 uses a <strong>snowball strategy</strong> where intelligence emerges from operational data. 
+                Unlike traditional systems that require upfront AI training, CORTEX builds intelligence incrementally as it executes, 
+                learning from audit logs, routing patterns, and user interactions. By Phase 4, CORTEX has accumulated enough 
+                operational history to enable sophisticated AI features like fuzzy intent matching and best practice recommendations.
+            </p>
+
+            <div class="glass-card">
+                <h3 class="card-title">Why Intelligence Comes Last (Phase 4)</h3>
+                <p class="card-subtitle">Intelligence requires data - you can't learn patterns without execution history</p>
+                <ul style="color: var(--text-dim); line-height: 2;">
+                    <li><strong>Phase 1:</strong> Foundation generates audit logs, state records, evidence bundles</li>
+                    <li><strong>Phase 2:</strong> Core workflow creates routing patterns, orchestrator behaviors</li>
+                    <li><strong>Phase 3:</strong> Feature orchestrators produce diverse operational scenarios</li>
+                    <li><strong>Phase 4:</strong> Intelligence layer analyzes accumulated data to extract insights</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Phase-by-Phase Evolution -->
+        <section class="section">
+            <h2 class="section-title">📈 Phase-by-Phase Intelligence Building</h2>
+            
+            <div class="timeline">
+                <!-- Phase 1 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title">Phase 1: Foundation (Weeks 1-2)</h3>
+                        <p class="timeline-description">
+                            <strong>Intelligence Contribution:</strong> Data generation infrastructure
+                        </p>
+                        <ul class="timeline-features">
+                            <li><strong>EnhancedAuditLogger:</strong> Records every operation (category, level, correlation ID)</li>
+                            <li><strong>Hash Chain:</strong> Ensures audit trail integrity (tamper detection)</li>
+                            <li><strong>State Manager:</strong> Persists progress, tracks AC-ID completion</li>
+                            <li><strong>Evidence Bundles:</strong> Structured proof of capability completion</li>
+                            <li><strong>Lifecycle Tracker:</strong> Captures 7-state orchestrator execution patterns</li>
+                        </ul>
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--dark-card); border-radius: 8px;">
+                            <strong style="color: var(--primary);">Data Generated:</strong>
+                            <ul style="color: var(--text-dim); margin-top: 0.5rem;">
+                                <li>Audit logs with timestamp, category, level, message</li>
+                                <li>State snapshots (JSON) of active epic, phase, todos</li>
+                                <li>Evidence bundles proving each AC-ID works</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 2 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker" style="background: var(--secondary);"></div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title" style="color: var(--secondary);">Phase 2: Core Workflow (Weeks 3-4)</h3>
+                        <p class="timeline-description">
+                            <strong>Intelligence Contribution:</strong> Routing patterns and orchestration behaviors
+                        </p>
+                        <ul class="timeline-features">
+                            <li><strong>MasterOrchestrator:</strong> Records intent → orchestrator routing decisions</li>
+                            <li><strong>Deterministic Router:</strong> Logs pattern matching (exact, prefix, fuzzy attempts)</li>
+                            <li><strong>TodoManager:</strong> Tracks task creation, prioritization, completion rates</li>
+                            <li><strong>TDD-Master:</strong> Captures RED→GREEN→REFACTOR cycles</li>
+                            <li><strong>Planning v5:</strong> Records plan quality scores, phase structures</li>
+                        </ul>
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--dark-card); border-radius: 8px;">
+                            <strong style="color: var(--secondary);">Data Generated:</strong>
+                            <ul style="color: var(--text-dim); margin-top: 0.5rem;">
+                                <li>Intent text → Matched orchestrator (routing success/failure)</li>
+                                <li>Pattern match types (EXACT, PREFIX, FUZZY_FALLBACK)</li>
+                                <li>Task dependency graphs, completion times</li>
+                                <li>Test failure patterns, refactoring frequencies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 3 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker" style="background: var(--accent);"></div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title" style="color: var(--accent);">Phase 3: Feature Orchestrators (Weeks 5-6)</h3>
+                        <p class="timeline-description">
+                            <strong>Intelligence Contribution:</strong> Domain-specific operational patterns
+                        </p>
+                        <ul class="timeline-features">
+                            <li><strong>ADO v2:</strong> Work item creation patterns, sprint planning behaviors</li>
+                            <li><strong>Crawler Orchestrator:</strong> AST analysis results, knowledge graph structure</li>
+                            <li><strong>Vacuum/Cleanup:</strong> File organization patterns, cleanup heuristics</li>
+                            <li><strong>Investigation:</strong> Diagnostic query patterns, problem-solving paths</li>
+                            <li><strong>Sanitization:</strong> Code transformation success rates</li>
+                        </ul>
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--dark-card); border-radius: 8px;">
+                            <strong style="color: var(--accent);">Data Generated:</strong>
+                            <ul style="color: var(--text-dim); margin-top: 0.5rem;">
+                                <li>Orchestrator invocation frequencies (which features used most)</li>
+                                <li>Success/failure rates per orchestrator type</li>
+                                <li>Common parameter patterns (e.g., file paths, query types)</li>
+                                <li>Execution time distributions (performance baselines)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phase 4 -->
+                <div class="timeline-item">
+                    <div class="timeline-marker" style="background: var(--success);"></div>
+                    <div class="timeline-content">
+                        <h3 class="timeline-title" style="color: var(--success);">Phase 4: Intelligence Layer (Weeks 7-8)</h3>
+                        <p class="timeline-description">
+                            <strong>Intelligence Contribution:</strong> AI-powered pattern recognition and recommendations
+                        </p>
+                        <ul class="timeline-features">
+                            <li><strong>LLM Intent Classifier:</strong> Fuzzy matching when patterns fail</li>
+                            <li><strong>Knowledge Practices (Tier 3):</strong> Extract best practices from audit logs</li>
+                            <li><strong>Vision API:</strong> Understand UI screenshots for debugging</li>
+                            <li><strong>Pattern Learning:</strong> Suggest optimizations based on history</li>
+                        </ul>
+                        <div style="margin-top: 1rem; padding: 1rem; background: var(--dark-card); border-radius: 8px;">
+                            <strong style="color: var(--success);">Intelligence Capabilities:</strong>
+                            <ul style="color: var(--text-dim); margin-top: 0.5rem;">
+                                <li><strong>Fuzzy Intent Matching:</strong> "build auth" → "implement authentication" (synonym detection)</li>
+                                <li><strong>Best Practice Extraction:</strong> Identify common success patterns (e.g., always run tests before refactor)</li>
+                                <li><strong>Performance Insights:</strong> "Cleanup operations are 30% slower than last week"</li>
+                                <li><strong>Proactive Suggestions:</strong> "Based on routing history, consider adding AC-ADO-010"</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Intelligence Components -->
+        <section class="section">
+            <h2 class="section-title">🤖 Phase 4 Intelligence Components</h2>
+            <p class="section-intro">
+                These AI-native features leverage 6 weeks of operational data from Phases 1-3. They enhance orchestration 
+                with pattern recognition, fuzzy matching, and learned optimizations.
+            </p>
+
+            <div class="intelligence-matrix">
+                <!-- LLM Intent Classifier -->
+                <div class="intelligence-item">
+                    <div class="intelligence-title">🧩 LLM Intent Classifier</div>
+                    <div class="intelligence-description">
+                        <strong>AC-ID:</strong> AC-ROUTE-003<br>
+                        <strong>Purpose:</strong> Fuzzy intent matching when deterministic router fails<br><br>
+                        <strong>How it works:</strong>
+                        <ul style="margin-top: 0.5rem; line-height: 1.8;">
+                            <li>User says: "build user auth"</li>
+                            <li>Deterministic router finds no pattern match</li>
+                            <li>LLM classifier analyzes: "implement authentication" (synonym)</li>
+                            <li>Routes to TDD-Master with transformed request</li>
+                        </ul>
+                    </div>
+                    <div class="intelligence-dependency">
+                        <strong>Requires:</strong> AC-ROUTE-001 (Deterministic Router), AC-AUDIT-001 (Audit Logger)
+                    </div>
+                </div>
+
+                <!-- Knowledge Practices -->
+                <div class="intelligence-item">
+                    <div class="intelligence-title">📚 Knowledge Practices (Tier 3)</div>
+                    <div class="intelligence-description">
+                        <strong>AC-IDs:</strong> AC-KNOW-001 to AC-KNOW-003<br>
+                        <strong>Purpose:</strong> Extract learned patterns from operational history<br><br>
+                        <strong>What it learns:</strong>
+                        <ul style="margin-top: 0.5rem; line-height: 1.8;">
+                            <li><strong>Success Patterns:</strong> "TDD cycles with 3+ tests → 90% first-pass success"</li>
+                            <li><strong>Anti-Patterns:</strong> "Skipping evidence bundles → 50% rework rate"</li>
+                            <li><strong>Optimizations:</strong> "ADO sync at 9AM → 40% faster than 5PM"</li>
+                        </ul>
+                    </div>
+                    <div class="intelligence-dependency">
+                        <strong>Requires:</strong> AC-AUDIT-001 (6 weeks of logs), AC-GOV-001 (Governance rules)
+                    </div>
+                </div>
+
+                <!-- Vision API -->
+                <div class="intelligence-item">
+                    <div class="intelligence-title">👁️ Vision API Integration</div>
+                    <div class="intelligence-description">
+                        <strong>AC-ID:</strong> AC-VISION-001<br>
+                        <strong>Purpose:</strong> Understand UI screenshots for visual debugging<br><br>
+                        <strong>Use Cases:</strong>
+                        <ul style="margin-top: 0.5rem; line-height: 1.8;">
+                            <li>"Analyze this error dialog" → Extracts error code, suggests fix</li>
+                            <li>"What changed in UI?" → Diffs two screenshots</li>
+                            <li>"Find this button" → Locates UI element for test automation</li>
+                        </ul>
+                    </div>
+                    <div class="intelligence-dependency">
+                        <strong>Requires:</strong> AC-ORCH-001 (MasterOrchestrator operational)
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Business Domain Intelligence -->
+        <section class="section">
+            <h2 class="section-title">🏢 Business Domain Intelligence</h2>
+            <p class="section-intro">
+                CORTEX separates <strong>CORTEX knowledge</strong> (how to orchestrate) from <strong>Business knowledge</strong> 
+                (domain-specific patterns). This separation enables CORTEX to learn about any business domain incrementally.
+            </p>
+
+            <div class="glass-card">
+                <h3 class="card-title">CORTEX Knowledge (Tier 0 + Tier 2)</h3>
+                <p class="card-subtitle">Core orchestration patterns that never change</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>SKULL Rules (Tier 0)</strong></td>
+                            <td><code>tier0/governance/core-rules.yaml</code></td>
+                            <td>TDD enforcement, incremental execution, path portability</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Engineering Standards (Tier 2)</strong></td>
+                            <td><code>tier2/</code></td>
+                            <td>Python style guide, Git workflow, testing strategy</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 class="card-title">Business Knowledge (Tier 1 + Tier 3)</h3>
+                <p class="card-subtitle">Domain-specific patterns learned incrementally</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Active Requirements (Tier 1)</strong></td>
+                            <td><code>tier1/</code></td>
+                            <td>Current epic, AC-IDs, progress state, evidence bundles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Learned Patterns (Tier 3)</strong></td>
+                            <td><code>tier3/</code></td>
+                            <td>"Healthcare: HIPAA compliance checks", "E-commerce: PCI-DSS rules"</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="glass-card" style="margin-top: 1.5rem;">
+                <h3 class="card-title">How Business Intelligence Accumulates</h3>
+                <div style="line-height: 2; color: var(--text-dim);">
+                    <strong style="color: var(--primary);">Week 1-2 (Foundation):</strong><br>
+                    Business knowledge = Zero (only CORTEX core rules exist)<br><br>
+
+                    <strong style="color: var(--secondary);">Week 3-4 (Core Workflow):</strong><br>
+                    First business requirements added to Tier 1 (active epic, AC-IDs)<br>
+                    Example: "Implement healthcare patient portal with HIPAA compliance"<br><br>
+
+                    <strong style="color: var(--accent);">Week 5-6 (Feature Orchestrators):</strong><br>
+                    Crawler extracts business logic from codebase → Knowledge graph populated<br>
+                    Example: "Patient class has required fields: SSN, DOB, insurance_id"<br><br>
+
+                    <strong style="color: var(--success);">Week 7-8 (Intelligence Layer):</strong><br>
+                    Knowledge Practices analyzer extracts patterns → Tier 3 best practices<br>
+                    Example: "Always validate SSN format before saving patient records (learned from 20 audit logs)"
+                </div>
+            </div>
+        </section>
+
+        <!-- AST Crawler & Knowledge Filtering -->
+        <section class="section">
+            <h2 class="section-title">🔍 AST Crawler & Knowledge Filtering</h2>
+            <p class="section-intro">
+                <strong>Status: Planned for Phase 3 (Weeks 5-6)</strong><br>
+                The AST (Abstract Syntax Tree) Crawler analyzes source code to build a knowledge graph of business logic, 
+                then applies filters to keep valuable patterns and question suspicious ones.
+            </p>
+
+            <div class="phase-card">
+                <div class="phase-header">
+                    <div>
+                        <h3 style="font-size: 1.8rem; color: var(--accent);">Crawler Orchestrator</h3>
+                        <p style="color: var(--text-dim); margin-top: 0.5rem;">Phase 3: Feature Orchestrators (Weeks 5-6)</p>
+                    </div>
+                    <div class="phase-status status-blocked">🔒 Blocked by Phase 2</div>
+                </div>
+
+                <div style="background: var(--dark-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Step 1: Code Analysis (AST Parsing)</h4>
+                    <p style="color: var(--text-dim); line-height: 1.8;">
+                        Uses Python's <code>ast</code> module to parse source code into a tree structure. 
+                        Extracts classes, functions, imports, decorators, docstrings, type hints.
+                    </p>
+                    <pre><code># Example: Crawling a Python module
+import ast
+
+tree = ast.parse(source_code)
+for node in ast.walk(tree):
+    if isinstance(node, ast.ClassDef):
+        extract_class_info(node)  # Name, bases, methods, attributes
+    elif isinstance(node, ast.FunctionDef):
+        extract_function_info(node)  # Name, args, returns, body
+</code></pre>
+                </div>
+
+                <div style="background: var(--dark-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Step 2: Knowledge Graph Population</h4>
+                    <p style="color: var(--text-dim); line-height: 1.8;">
+                        Extracted entities stored in Neo4j-like graph database (or JSON structure).
+                        Relationships tracked: inherits_from, calls, imports, depends_on.
+                    </p>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(0,0,0,0.3); border-radius: 8px;">
+                        <strong style="color: var(--accent);">Graph Structure:</strong>
+                        <ul style="color: var(--text-dim); margin-top: 0.5rem; line-height: 1.8;">
+                            <li><strong>Nodes:</strong> Classes, Functions, Modules, Variables</li>
+                            <li><strong>Edges:</strong> CALLS, INHERITS, IMPORTS, DEPENDS_ON</li>
+                            <li><strong>Properties:</strong> Name, file_path, line_number, complexity_score</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="background: var(--dark-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Step 3: Knowledge Filtering</h4>
+                    <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1rem;">
+                        Not all extracted knowledge is valuable. CORTEX applies filters to keep signal, remove noise.
+                    </p>
+                    <table style="margin-top: 1rem;">
+                        <thead>
+                            <tr>
+                                <th>Filter Type</th>
+                                <th>Keeps</th>
+                                <th>Questions/Removes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Business Logic</strong></td>
+                                <td>Domain models, business rules, validation logic</td>
+                                <td>Boilerplate code, framework internals</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Complexity</strong></td>
+                                <td>Functions with cyclomatic complexity 1-10</td>
+                                <td>Complexity > 20 (flag for refactoring)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Documentation</strong></td>
+                                <td>Docstrings with examples, type hints</td>
+                                <td>Missing docs, vague descriptions</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dependencies</strong></td>
+                                <td>Direct business dependencies</td>
+                                <td>Transitive dependencies (3+ levels deep)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Test Coverage</strong></td>
+                                <td>Code with >=80% test coverage</td>
+                                <td>Untested code (flag for TDD-Master)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="background: var(--dark-card); border-radius: 12px; padding: 1.5rem; margin-top: 1.5rem;">
+                    <h4 style="color: var(--primary); margin-bottom: 1rem;">Step 4: Knowledge Questioning</h4>
+                    <p style="color: var(--text-dim); line-height: 1.8; margin-bottom: 1rem;">
+                        When patterns seem suspicious, CORTEX flags them for human review or investigation orchestrator.
+                    </p>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-left: 3px solid var(--danger); border-radius: 4px;">
+                        <strong style="color: var(--danger);">Example: Suspicious Pattern Detected</strong>
+                        <pre style="margin-top: 0.5rem;"><code>⚠️  Function calculate_discount() has 15 different code paths
+⚠️  No tests found for payment_processor.py (high risk)
+⚠️  Class UserManager violates Single Responsibility (12 methods)
+
+💡 Suggested Actions:
+   1. Run TDD-Master to add tests for payment_processor.py
+   2. Investigate orchestrator to analyze UserManager complexity
+   3. Refactor calculate_discount() using Strategy pattern
+</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Status -->
+        <section class="section">
+            <h2 class="section-title">📊 Current Implementation Status</h2>
+            
+            <div class="glass-card">
+                <h3 class="card-title">Phase Progress</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Status</th>
+                            <th>AC-IDs Completed</th>
+                            <th>Intelligence Contribution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Phase 1: Foundation</strong></td>
+                            <td><span class="phase-status status-planned">🟡 Ready to Implement</span></td>
+                            <td>0 / 43</td>
+                            <td>Data generation infrastructure (audit, state, evidence)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 2: Core Workflow</strong></td>
+                            <td><span class="phase-status status-blocked">🔒 Blocked by Phase 1</span></td>
+                            <td>0 / 33</td>
+                            <td>Routing patterns, orchestration behaviors</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 3: Feature Orchestrators</strong></td>
+                            <td><span class="phase-status status-blocked">🔒 Blocked by Phase 2</span></td>
+                            <td>0 / 20</td>
+                            <td>Domain-specific operational patterns, AST knowledge graph</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Phase 4: Intelligence Layer</strong></td>
+                            <td><span class="phase-status status-blocked">🔒 Blocked by Phase 3</span></td>
+                            <td>0 / 4</td>
+                            <td>AI-powered pattern recognition, learned optimizations</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(0, 212, 255, 0.1); border-left: 3px solid var(--primary); border-radius: 4px;">
+                    <strong style="color: var(--primary);">Next Action:</strong>
+                    <p style="color: var(--text); margin-top: 0.5rem;">
+                        Start Phase 1 implementation (AC-AUDIT-007: Hash Chain Audit Trail). 
+                        Intelligence features will become operational after Phase 3 completes and sufficient operational data accumulates.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>CORTEX 6.0 Architecture Documentation | Generated 2026-01-10</p>
+        <p style="font-size: 0.85rem; margin-top: 0.5rem;">
+            🟡 Design Phase - Not Yet Implemented | Based on holistic-snowball-plan.yaml
+        </p>
+    </footer>
+</body>
+</html>

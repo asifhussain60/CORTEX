@@ -1,0 +1,50 @@
+graph TD
+    Input["Analyze Code<br/>File or Class"]
+    
+    SRP["Single Responsibility<br/>- Too many methods?<br/>- Mixed concerns?"]
+    OCP["Open/Closed<br/>- Hardcoded values?<br/>- Easy to extend?"]
+    LSP["Liskov Substitution<br/>- Valid inheritance?<br/>- Contract violated?"]
+    ISP["Interface Segregation<br/>- Large interfaces?<br/>- Unused methods?"]
+    DIP["Dependency Inversion<br/>- Tight coupling?<br/>- Abstract dependencies?"]
+    
+    Input --> SRP
+    Input --> OCP
+    Input --> LSP
+    Input --> ISP
+    Input --> DIP
+    
+    Violations["Violations Found"]
+    SRP --> Violations
+    OCP --> Violations
+    LSP --> Violations
+    ISP --> Violations
+    DIP --> Violations
+    
+    Strategies["Refactoring Strategies"]
+    Violations --> Strategies
+    
+    S1["Extract Class"]
+    S2["Extract Method"]
+    S3["Replace Inheritance"]
+    S4["Extract Interface"]
+    S5["Introduce Abstraction"]
+    
+    Strategies --> S1
+    Strategies --> S2
+    Strategies --> S3
+    Strategies --> S4
+    Strategies --> S5
+    
+    Plan["Generate Plan<br/>- Priority<br/>- Dependencies<br/>- Estimated Time"]
+    
+    S1 --> Plan
+    S2 --> Plan
+    S3 --> Plan
+    S4 --> Plan
+    S5 --> Plan
+    
+    style SRP fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    style OCP fill:#4ecdc4,stroke:#118b7f,color:#fff
+    style LSP fill:#45b7d1,stroke:#1e8b9a,color:#fff
+    style ISP fill:#f7b731,stroke:#d4a017,color:#000
+    style DIP fill:#95e1d3,stroke:#38ada9,color:#000

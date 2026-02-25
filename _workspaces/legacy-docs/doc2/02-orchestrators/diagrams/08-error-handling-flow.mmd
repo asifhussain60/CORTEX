@@ -1,0 +1,46 @@
+graph TD
+    Operation["Operation<br/>Execution"]
+    
+    ValidError{"Validation<br/>Error?"}
+    RoutingError{"Routing<br/>Error?"}
+    ExecError{"Execution<br/>Error?"}
+    GovError{"Governance<br/>Error?"}
+    CriticalError{"Critical<br/>Error?"}
+    
+    Operation --> ValidError
+    ValidError -->|YES| FixRetry["Fix Parameters<br/>& Retry"]
+    ValidError -->|NO| RoutingError
+    
+    RoutingError -->|YES| Fallback["Route to<br/>Fallback Handler"]
+    RoutingError -->|NO| ExecError
+    
+    ExecError -->|YES| RetryBackoff["Retry with<br/>Exponential<br/>Backoff"]
+    ExecError -->|NO| GovError
+    
+    GovError -->|YES| LogViolation["Log Violation<br/>Alert Admin"]
+    GovError -->|NO| CriticalError
+    
+    CriticalError -->|YES| Escalate["Escalate to<br/>System Admin<br/>Trigger Alert"]
+    CriticalError -->|NO| Success["Success<br/>Return Result"]
+    
+    FixRetry -->|Success| Success
+    FixRetry -->|Failure| UseDefault["Use Default<br/>Value"]
+    
+    Fallback -->|Success| Success
+    Fallback -->|Failure| Manual["Manual<br/>Intervention"]
+    
+    RetryBackoff -->|Success| Success
+    RetryBackoff -->|Max Retries| Abort["Abort<br/>Operation"]
+    
+    LogViolation --> Blocked["Blocked<br/>Not Executed"]
+    
+    Escalate --> Manual
+    
+    UseDefault --> Success
+    
+    style ValidError fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    style RoutingError fill:#4ecdc4,stroke:#118b7f,color:#fff
+    style ExecError fill:#45b7d1,stroke:#1e8b9a,color:#fff
+    style GovError fill:#f7b731,stroke:#d4a017,color:#000
+    style CriticalError fill:#ff6348,stroke:#c92a2a,color:#fff
+    style Success fill:#a8e6cf,stroke:#56ab91,color:#000

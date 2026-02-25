@@ -1,0 +1,78 @@
+graph TD
+    subgraph query["User Query"]
+        q["'How to implement<br/>governance validation?'"]
+    end
+    
+    subgraph normalize["Query Normalization"]
+        n1["Remove stop words"]
+        n2["Expand abbreviations"]
+        n3["Extract keywords"]
+        result_norm["Normalized:<br/>'implement governance validation'"]
+    end
+    
+    subgraph cache["Cache Check"]
+        cache_key["Compute cache key<br/>hash(query, context)"]
+        cache_lookup["Lookup in cache<br/>(TTL: 24 hours)"]
+        cache_hit["Cache HIT?"]
+        hit_return["Return cached result"]
+    end
+    
+    subgraph embedding["Semantic Embedding"]
+        no_hit["Cache MISS"]
+        embed["Embed query:<br/>convert to vector"]
+    end
+    
+    subgraph search["Vector Search"]
+        index_search["Search knowledge index<br/>for similar vectors"]
+        candidates["Return top 10<br/>candidates"]
+    end
+    
+    subgraph ranking["Relevance Ranking"]
+        rank_context["Rank by context:<br/>- Domain match (40%)<br/>- Type match (30%)<br/>- Tier match (20%)<br/>- Popularity (10%)"]
+        top_results["Select top 5<br/>ranked results"]
+    end
+    
+    subgraph retrieval["Knowledge Retrieval"]
+        retrieve["Retrieve full knowledge<br/>from storage:<br/>- Memory cache<br/>- Redis<br/>- Disk"]
+        validate["Validate knowledge<br/>authenticity (hash check)"]
+    end
+    
+    subgraph store_cache["Store in Cache"]
+        cache_store["Store results in:<br/>- Memory (LRU)<br/>- Redis (24h TTL)<br/>- Disk (persistent)"]
+    end
+    
+    subgraph return["Return to Requester"]
+        results["Return ranked<br/>knowledge entries"]
+        timing["Performance:<br/>23ms avg<br/>87% cache hit rate"]
+    end
+    
+    q --> n1
+    n1 --> n2
+    n2 --> n3
+    n3 --> result_norm
+    
+    result_norm --> cache_key
+    cache_key --> cache_lookup
+    cache_lookup --> cache_hit
+    
+    cache_hit -->|YES| hit_return
+    cache_hit -->|NO| no_hit
+    hit_return --> results
+    
+    no_hit --> embed
+    embed --> index_search
+    index_search --> candidates
+    candidates --> rank_context
+    rank_context --> top_results
+    
+    top_results --> retrieve
+    retrieve --> validate
+    validate --> cache_store
+    cache_store --> results
+    results --> timing
+    
+    style result_norm fill:#e0e0ff
+    style candidates fill:#ffe0e0
+    style top_results fill:#e0ffe0
+    style results fill:#ffff99
+    style timing fill:#ffcc99

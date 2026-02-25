@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="CORTEX Security Protection - RBAC, Input Validation, Secrets Management" name="description"/>
+    <meta content="security protection, RBAC, input validation, secrets management, audit logging" name="keywords"/>
+    <meta content="Asif Hussain" name="author"/>
+    <title>Security Protection | CORTEX</title>
+    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png"/>
+    <link href="../assets/css/main.css?v=2026-01-31" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <main class="container level1-main-a5853dbc" id="main-content">
+        <div class="hero-section-wrapper">
+            <div class="hero-robot-container">
+                <a href="../index.html" title="Back to Home">
+                    <img alt="CORTEX Robot" class="hero-robot-head" src="../assets/images/CORTEX-logo-512.png" style="width: 300px; height: 300px;"/>
+                </a>
+            </div>
+            <div class="hero-divider-line"></div>
+        </div>
+
+        <section class="glass-card-display hero-introduction glass-panel-amber">
+            <h1 class="l2-page-title">� Security Protection</h1>
+            <p class="l2-page-subtitle red">RBAC • Input Validation • Secrets Management • Audit Logging</p>
+            <p class="l2-page-description">
+                Multi-layered defense through role-based access control with 8 hierarchical roles, 
+                comprehensive input validation using 25+ whitelist patterns, secure secrets management 
+                via environment variables and HSM integration, plus immutable hash-chain audit logging 
+                for complete governance compliance and forensic analysis.
+            </p>
+            <div class="hero-stats">
+                <span class="stat-pill">👥 8 RBAC Roles</span>
+                <span class="stat-pill">✅ 25+ Validators</span>
+                <span class="stat-pill">� 100% Encrypted</span>
+                <span class="stat-pill">� Immutable Audit</span>
+            </div>
+        </section>
+
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-shield-alt"></i> Four Protection Layers</h2>
+            <div class="principle-card-grid columns-4">
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);"><i class="fas fa-user-shield"></i></div>
+                    <h3 class="card-title">Access Control</h3>
+                    <p class="card-description">RBAC with 8 hierarchical roles, least-privilege enforcement, policy-based authorization</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fas fa-filter"></i></div>
+                    <h3 class="card-title">Input Validation</h3>
+                    <p class="card-description">25+ validators, whitelist patterns, sanitization, SQL/command injection prevention</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #7b61ff, #6366f1);"><i class="fas fa-key"></i></div>
+                    <h3 class="card-title">Secrets Management</h3>
+                    <p class="card-description">Zero hardcoded credentials, AES-256 encryption, 90-day rotation, HSM integration</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-clipboard-list"></i></div>
+                    <h3 class="card-title">Audit Logging</h3>
+                    <p class="card-description">Immutable hash-chain trail, all security events, compliance reporting, forensics</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card-display animation-t2">
+            <h2 class="section-title"><i class="fas fa-sitemap"></i> RBAC Role Hierarchy</h2>
+            <p>Eight hierarchical roles with permission inheritance ensure least-privilege access control</p>
+            <div class="mermaid">
+graph TD
+    Root[System Root] --> Admin[Admin: Full Access]
+    Root --> Dev[Developer: Code + Test]
+    Root --> View[Viewer: Read Only]
+    
+    Admin --> SecAdmin[Security Admin]
+    Admin --> SysAdmin[System Admin]
+    
+    Dev --> SrDev[Senior Developer]
+    Dev --> JrDev[Junior Developer]
+    
+    View --> Auditor[Auditor]
+    View --> Guest[Guest]
+    
+    style Root fill:#dc2626
+    style Admin fill:#ef4444
+    style Dev fill:#3b82f6
+    style View fill:#10b981
+            </div>
+        </section>
+
+        <section class="glass-card-display animation-t3 glass-panel-amber">
+            <h2 class="section-title"><i class="fas fa-filter"></i> Input Validation Pipeline</h2>
+            <p>Multi-stage validation before data reaches application logic</p>
+            <div class="mermaid">
+graph LR
+    A[User Input] --> B{Type Check}
+    B -->|Pass| C{Length}
+    B -->|Fail| X[Reject 400]
+    C -->|Pass| D{Whitelist}
+    C -->|Fail| X
+    D -->|Pass| E{Sanitize}
+    D -->|Fail| X
+    E --> F[App Logic]
+    X --> Y[Audit Log]
+    
+    style A fill:#3b82f6
+    style F fill:#10b981
+    style X fill:#ef4444
+    style Y fill:#dc2626
+            </div>
+        </section>
+
+        <section class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-key"></i> Secrets Management</h2>
+            <p>Zero-trust secrets architecture with encrypted storage and rotation</p>
+            <div class="mermaid">
+graph TB
+    ENV[.env Development] --> ENC[AES-256 Encryption]
+    CLOUD[Cloud Secrets] --> ENC
+    VAULT[HashiCorp Vault] --> ENC
+    
+    ENC --> APP[CORTEX App]
+    APP --> CACHE[Encrypted Cache]
+    CACHE --> ROT[90-Day Rotation]
+    ROT --> AUDIT[Audit Trail]
+    
+    style ENV fill:#3b82f6
+    style CLOUD fill:#7c3aed
+    style VAULT fill:#059669
+    style ENC fill:#ef4444
+    style AUDIT fill:#10b981
+            </div>
+        </section>
+
+        <section class="glass-card-display animation-t2 glass-panel-amber">
+            <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Security Knowledge YAMLs</h2>
+            <p>45+ machine-readable security standards inform all protection mechanisms</p>
+            
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #ef4444;"><i class="fas fa-shield-alt"></i> OWASP Standards</h3>
+            <div class="principle-card-grid columns-3">
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h4 class="card-title">OWASP Top 10</h4>
+                    <p class="card-description">Web application security risks with CWE mappings, detection patterns, and remediation guidance</p>
+                </div>
+                <div class="glass-card-clickable animation-t2">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fas fa-code"></i></div>
+                    <h4 class="card-title">Secure Coding Practices</h4>
+                    <p class="card-description">Input validation, authentication, cryptography, error handling, and data protection standards</p>
+                </div>
+                <div class="glass-card-clickable animation-t3">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"><i class="fas fa-plug"></i></div>
+                    <h4 class="card-title">API Security Checklist</h4>
+                    <p class="card-description">REST API security controls including authentication, authorization, and rate limiting</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #ef4444;"><i class="fas fa-bug"></i> CWE Vulnerability Patterns</h3>
+            <div class="principle-card-grid columns-3">
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #dc2626, #b91c1c);"><i class="fas fa-database"></i></div>
+                    <h4 class="card-title">CWE-89: SQL Injection</h4>
+                    <p class="card-description">Detection patterns for string concatenation, parameterized query enforcement, and ORM best practices</p>
+                </div>
+                <div class="glass-card-clickable animation-t2">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #ef4444, #dc2626);"><i class="fas fa-code"></i></div>
+                    <h4 class="card-title">CWE-94: Code Injection</h4>
+                    <p class="card-description">Eval/exec detection, dynamic code execution prevention, and safe alternative patterns</p>
+                </div>
+                <div class="glass-card-clickable animation-t3">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f87171, #ef4444);"><i class="fas fa-terminal"></i></div>
+                    <h4 class="card-title">CWE-78: Command Injection</h4>
+                    <p class="card-description">OS command detection, subprocess hardening, and shell=True prevention patterns</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fas fa-folder-open"></i></div>
+                    <h4 class="card-title">CWE-22: Path Traversal</h4>
+                    <p class="card-description">File path validation, directory traversal prevention, and whitelist enforcement</p>
+                </div>
+                <div class="glass-card-clickable animation-t2">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #7c3aed, #6d28d9);"><i class="fas fa-lock"></i></div>
+                    <h4 class="card-title">CWE-327: Weak Cryptography</h4>
+                    <p class="card-description">Strong algorithm requirements (AES-256, RSA-2048+), key management, and hashing standards</p>
+                </div>
+                <div class="glass-card-clickable animation-t3">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);"><i class="fas fa-boxes"></i></div>
+                    <h4 class="card-title">CWE-95: Deserialization</h4>
+                    <p class="card-description">Pickle/YAML safety, JSON alternatives, and untrusted data handling patterns</p>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: #ef4444;"><i class="fas fa-clipboard-check"></i> Compliance Frameworks</h3>
+            <div class="principle-card-grid columns-3">
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #10b981, #059669);"><i class="fas fa-certificate"></i></div>
+                    <h4 class="card-title">SOC2 Controls</h4>
+                    <p class="card-description">Trust Services Criteria for security, availability, confidentiality, processing integrity, and privacy</p>
+                </div>
+                <div class="glass-card-clickable animation-t2">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);"><i class="fas fa-globe-europe"></i></div>
+                    <h4 class="card-title">GDPR Requirements</h4>
+                    <p class="card-description">Data protection regulations, consent management, right to erasure, and breach notification</p>
+                </div>
+                <div class="glass-card-clickable animation-t3">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);"><i class="fas fa-hospital"></i></div>
+                    <h4 class="card-title">HIPAA Safeguards</h4>
+                    <p class="card-description">Healthcare data protection including administrative, physical, and technical safeguards</p>
+                </div>
+                <div class="glass-card-clickable animation-t1">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"><i class="fas fa-credit-card"></i></div>
+                    <h4 class="card-title">PCI-DSS Standards</h4>
+                    <p class="card-description">Payment card industry security requirements for cardholder data protection</p>
+                </div>
+                <div class="glass-card-clickable animation-t2">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);"><i class="fas fa-shield-alt"></i></div>
+                    <h4 class="card-title">ISO 27001 Controls</h4>
+                    <p class="card-description">Information security management system (ISMS) standards and control objectives</p>
+                </div>
+                <div class="glass-card-clickable animation-t3">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><i class="fas fa-flag-usa"></i></div>
+                    <h4 class="card-title">NIST Cybersecurity</h4>
+                    <p class="card-description">Framework for identifying, protecting, detecting, responding to, and recovering from threats</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="glass-card-display animation-t1 glass-panel-amber">
+            <h2 class="section-title"><i class="fas fa-book"></i> Related Security Views</h2>
+            <div class="principle-card-grid columns-3">
+                <div class="glass-card-clickable">
+                    <h3 class="card-title">Assessment</h3>
+                    <ul class="feature-list">
+                        <li><a href="../security-assessment/index.html" style="color: #00d4ff;">STRIDE Threat Modeling</a></li>
+                        <li><a href="../security-assessment/index.html" style="color: #00d4ff;">CWE Pattern Detection</a></li>
+                    </ul>
+                </div>
+                <div class="glass-card-clickable">
+                    <h3 class="card-title">Compliance</h3>
+                    <ul class="feature-list">
+                        <li><a href="../security-compliance/index.html" style="color: #00d4ff;">OWASP Top 10</a></li>
+                        <li><a href="../security-compliance/index.html" style="color: #00d4ff;">SOC2/GDPR/HIPAA</a></li>
+                    </ul>
+                </div>
+                <div class="glass-card-clickable">
+                    <h3 class="card-title">Knowledge</h3>
+                    <ul class="feature-list">
+                        <li><a href="../knowledge/index.html" style="color: #00d4ff;">45+ Security YAMLs</a></li>
+                        <li><a href="../knowledge/index.html" style="color: #00d4ff;">Best Practices</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Asif Hussain. Security Protection - Defense in Depth.</p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+graph LR
+    Event1[Event 1<br/>Hash: abc123] --> Event2[Event 2<br/>Hash: def456]
+    Event2 --> Event3[Event 3<br/>Hash: ghi789]
+    Event3 --> Event4[Event 4<br/>Hash: jkl012]
+    
+    Event1 -.->|Immutable| Chain[SHA256 Chain]
+    Event2 -.->|Tamper-Proof| Chain
+    Event3 -.->|Verifiable| Chain
+    
+    style Event1 fill:#10b981
+    style Event2 fill:#3b82f6
+    style Event3 fill:#8b5cf6
+    style Event4 fill:#7b61ff
+    style Chain fill:#ef4444

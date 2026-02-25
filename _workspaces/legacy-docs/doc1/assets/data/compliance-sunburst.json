@@ -1,0 +1,65 @@
+{
+  "name": "Compliance Standards",
+  "children": [
+    {
+      "name": "OWASP",
+      "children": [
+        {
+          "name": "Top 10 2021",
+          "value": 100,
+          "coverage": 1.0
+        },
+        {
+          "name": "API Security",
+          "value": 95,
+          "coverage": 0.95
+        },
+        {
+          "name": "Secure Coding",
+          "value": 92,
+          "coverage": 0.92
+        }
+      ]
+    },
+    {
+      "name": "Industry Standards",
+      "children": [
+        {
+          "name": "12-Factor App",
+          "value": 100,
+          "coverage": 1.0
+        },
+        {
+          "name": "SOLID Principles",
+          "value": 100,
+          "coverage": 1.0
+        },
+        {
+          "name": "Clean Code",
+          "value": 98,
+          "coverage": 0.98
+        }
+      ]
+    },
+    {
+      "name": "CWE Standards",
+      "children": [
+        {
+          "name": "SQL Injection",
+          "value": 100,
+          "coverage": 1.0
+        },
+        {
+          "name": "Code Injection",
+          "value": 100,
+          "coverage": 1.0
+        },
+        {
+          "name": "Path Traversal",
+          "value": 100,
+          "coverage": 1.0
+        }
+      ]
+    }
+  ]
+}

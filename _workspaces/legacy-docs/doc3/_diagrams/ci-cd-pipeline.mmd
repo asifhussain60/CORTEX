@@ -1,0 +1,61 @@
+```mermaid
+---
+title: CORTEX CI/CD Pipeline
+---
+flowchart LR
+    subgraph DEV["Development"]
+        CODE[Code Change]
+        LINT[Lint Check<br/>ruff, black]
+        TYPE[Type Check<br/>mypy]
+    end
+    
+    subgraph CI["Continuous Integration"]
+        UNIT[Unit Tests<br/>~300 files]
+        INT[Integration Tests<br/>~80 files]
+        COV[Coverage Check<br/>≥80%]
+        SEC[Security Scan<br/>bandit, safety]
+    end
+    
+    subgraph GATE["Quality Gates"]
+        G1{Tests Pass?}
+        G2{Coverage ≥80%?}
+        G3{No Vulns?}
+        G4{Types OK?}
+    end
+    
+    subgraph CD["Continuous Deployment"]
+        STAGE[Staging Deploy]
+        E2E[E2E Tests<br/>~29 files]
+        CANARY[Canary Release<br/>10% traffic]
+        PROD[Production<br/>100% traffic]
+    end
+    
+    CODE --> LINT --> TYPE --> UNIT
+    UNIT --> INT --> COV --> SEC
+    
+    SEC --> G1
+    G1 --> |Pass| G2
+    G1 --> |Fail| CODE
+    G2 --> |Pass| G3
+    G2 --> |Fail| CODE
+    G3 --> |Pass| G4
+    G3 --> |Fail| CODE
+    G4 --> |Pass| STAGE
+    G4 --> |Fail| CODE
+    
+    STAGE --> E2E
+    E2E --> |Pass| CANARY
+    E2E --> |Fail| STAGE
+    CANARY --> |Healthy| PROD
+    CANARY --> |Errors| ROLLBACK[Rollback]
+    ROLLBACK --> STAGE
+    
+    subgraph MONITORING["Post-Deploy"]
+        METRICS[Prometheus Metrics]
+        ALERTS[Alert Manager]
+        DASH[Grafana Dashboard]
+    end
+    
+    PROD --> METRICS --> ALERTS
+    METRICS --> DASH
+```
