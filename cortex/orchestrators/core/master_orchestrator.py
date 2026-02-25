@@ -1289,6 +1289,110 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
             self._stage_2_handler = MasterOrchestratorStage2(host=self)
         return self._stage_2_handler.route(request)
 
+    def _stage_2_routing(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """Stage 2: Route request with unified intelligence synthesis.
+
+        Delegates to :class:`~cortex.orchestrators.core.master_orchestrator_stage_2.MasterOrchestratorStage2`
+        (extracted as part of F2 decomposition, Phase 57).
+
+        Authority: AC-PHASE-20-COMPONENT-4, AC-KNOWLEDGE-SYNTHESIS-001 (Phase 20.5)
+
+        Args:
+            request: Request dict (operation, description, file_path, company_name,
+                domain, keywords, context).
+
+        Returns:
+            Routing result dict with intent, target_orchestrator, confidence_score,
+            reasoning, context, unified_intelligence, cited_rules, violations, guidance.
+        """
+        if not hasattr(self, "_stage_2_handler"):
+            from cortex.orchestrators.core.master_orchestrator_stage_2 import (
+                MasterOrchestratorStage2,
+            )
+            self._stage_2_handler = MasterOrchestratorStage2(host=self)
+        return self._stage_2_handler.route(request)
+
+    def _select_intelligence_tier(self, request: Dict[str, Any]) -> "ExecutionTier":
+        """Select intelligence execution tier based on request complexity.
+
+        Phase 78 GAP-78-A-01: Wire all 3 tiers (quick/targeted/full) based on
+        request complexity score rather than always using get_best_practices().
+
+        Args:
+            request: Incoming request dict with optional complexity_score key.
+
+        Returns:
+            ExecutionTier enum value: QUICK (<200ms), TARGETED (<2s), or FULL (<10s).
+        """
+        from cortex.intelligence.provider import ExecutionTier
+        complexity = request.get("complexity_score", 0.5)
+        if complexity < 0.3:
+            return ExecutionTier.QUICK
+        if complexity < 0.7:
+            return ExecutionTier.TARGETED
+        return ExecutionTier.FULL
+
+    def _get_intelligence_context(self, intent: str, request: Dict[str, Any]) -> Any:
+        """Retrieve intelligence context at the appropriate tier for this request.
+
+        Phase 78 GAP-78-A-01: Replaces unconditional get_best_practices() calls
+        with tier-aware provider invocation.
+
+        Args:
+            intent: Classified intent string.
+            request: Full request dict used for complexity scoring.
+
+        Returns:
+            UnifiedIntelligenceContext from provider at selected tier.
+        """
+        if not hasattr(self, "_intelligence_provider") or self._intelligence_provider is None:
+            return {}
+        tier = self._select_intelligence_tier(request)
+        from cortex.intelligence.provider import ExecutionTier
+        try:
+            if tier == ExecutionTier.QUICK:
+                return self._intelligence_provider.quick(intent)
+            if tier == ExecutionTier.FULL:
+                return self._intelligence_provider.full(intent)
+            return self._intelligence_provider.targeted(intent)
+        except Exception:
+            return self._intelligence_provider.get_best_practices(intent)
+
+    def _opj_post_dispatch(
+        self, domain: str, success: bool, latency_ms: float = 0.0, error: str = ""
+    ) -> None:
+        """Record OPJ outcome after every orchestrator dispatch.
+
+        Phase 78 GAP-78-A-07: Wire OPJMixin.record_pattern() into MasterOrchestrator
+        post-dispatch to capture success/failure patterns for adaptive routing.
+
+        Args:
+            domain: Target orchestrator domain name.
+            success: True if dispatch succeeded.
+            latency_ms: Elapsed time in milliseconds.
+            error: Error description on failure (empty on success).
+        """
+        try:
+            from cortex.intelligence.learning.opj_mixin import OPJMixin
+            from cortex.intelligence.learning.opj_writer import OPJWriter
+            writer = OPJWriter()
+            operation = f"dispatch:{domain}"
+            if success:
+                writer.record_success(
+                    orchestrator=self.__class__.__name__,
+                    operation=operation,
+                    latency_ms=latency_ms,
+                )
+            else:
+                writer.record_failure(
+                    orchestrator=self.__class__.__name__,
+                    operation=operation,
+                    error=error,
+                    latency_ms=latency_ms,
+                )
+        except Exception:
+            pass  # OPJ is observability — never block dispatch
+
     def get_initialization_status(self) -> Dict[str, Any]:
         """Get initialization status of all components.
 

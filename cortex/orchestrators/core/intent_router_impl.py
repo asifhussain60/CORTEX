@@ -1787,6 +1787,47 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
 
     # ===== End Registry Intelligence Methods =====
 
+    def _intelligence_matrix_lookup(
+        self, intent: str, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Look up the best orchestrator chain via the intelligence matrix.
+
+        Phase 78 GAP-78-A-06: Replace keyword-only routing with matrix-aware
+        selection that consults UnifiedIntelligenceProvider for context-informed
+        orchestrator chain selection.
+
+        Args:
+            intent: Classified intent string (e.g. "IMPLEMENT", "AUDIT").
+            context: Full routing context dict including domain, complexity, etc.
+
+        Returns:
+            Dict with 'primary_orchestrator', 'chain', 'confidence_boost' keys.
+        """
+        try:
+            from cortex.intelligence.provider import get_intelligence_provider
+            provider = get_intelligence_provider()
+            bp = provider.get_best_practices(f"routing:{intent.lower()}")
+            return {
+                "primary_orchestrator": bp.get("recommended_orchestrator", ""),
+                "chain": bp.get("orchestrator_chain", []),
+                "confidence_boost": bp.get("confidence_boost", 0.0),
+            }
+        except Exception:
+            return {"primary_orchestrator": "", "chain": [], "confidence_boost": 0.0}
+
+    def _select_best_orchestrator_chain(
+        self, intent: str, context: Dict[str, Any]
+    ) -> list:
+        """Select best orchestrator chain for intent using matrix lookup.
+
+        Phase 78 GAP-78-A-06: Convenience wrapper over _intelligence_matrix_lookup.
+
+        Returns:
+            List of orchestrator names in execution order.
+        """
+        result = self._intelligence_matrix_lookup(intent, context)
+        return result.get("chain", [])
+
     def route(self, context: Dict[str, Any]) -> RoutingDecision:
         """
         Route an operation based on context (with caching).

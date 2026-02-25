@@ -1308,6 +1308,34 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTempl
         """Get the recommended workflow template for enforcement operations."""
         return "security/compliance-audit"
 
+    def _inject_governance_knowledge(self) -> Dict[str, Any]:
+        """Inject governance knowledge YAMLs into enforcement context.
+
+        Phase 78 GAP-78-A-04: Wire cortex-registry/knowledge-base/governance/*.yaml
+        so rule validation is knowledge-informed (not just hard-coded rule IDs).
+
+        Returns:
+            Dict with governance knowledge from development-rules, compliance-rules,
+            operations-rules, data-rules, security-rules YAMLs.
+        """
+        try:
+            from cortex.intelligence.provider import get_intelligence_provider
+            provider = get_intelligence_provider()
+            return provider.get_best_practices("governance:enforcement")
+        except Exception:
+            return {}
+
+    def _load_governance_knowledge(self) -> Dict[str, Any]:
+        """Load governance knowledge from canonical knowledge-base YAMLs.
+
+        Phase 78 GAP-78-A-04: Convenience wrapper — loads governance YAML files
+        directly from cortex-registry/knowledge-base/governance/.
+
+        Returns:
+            Merged dict of all governance knowledge YAML contents.
+        """
+        return self._inject_governance_knowledge()
+
     def validate_operation(self, operation: Dict[str, Any]) -> Result[EnforcementResult, EnforcementResult]:
         """
         Validate operation against governance rules using 8-agent system.

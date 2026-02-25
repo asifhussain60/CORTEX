@@ -470,6 +470,35 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTemplateMixin
         except Exception as e:
             return Err(f"Failed to get MCP tools: {str(e)}")
 
+    def _inject_knowledge_context(self, context: str = "tdd") -> Dict[str, Any]:
+        """Inject TDD best-practice knowledge context into cycle generation.
+
+        Phase 78 GAP-78-A-02: Wire knowledge_context from tdd-best-practices
+        so RED/GREEN/REFACTOR decisions are knowledge-informed.
+
+        Args:
+            context: Knowledge domain to query (default: "tdd").
+
+        Returns:
+            Dict with test_strategy_matrix and related TDD guidance.
+        """
+        try:
+            from cortex.intelligence.provider import get_intelligence_provider
+            provider = get_intelligence_provider()
+            return provider.get_best_practices(f"tdd:{context}")
+        except Exception:
+            return {}
+
+    def _get_tdd_best_practices(self) -> Dict[str, Any]:
+        """Return TDD best-practices knowledge for current context.
+
+        Phase 78 GAP-78-A-02: Convenience wrapper over _inject_knowledge_context.
+
+        Returns:
+            Dict with TDD strategy guidance from knowledge base.
+        """
+        return self._inject_knowledge_context(context="tdd")
+
     def execute_operation(
         self,
         operation_name: str,

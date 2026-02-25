@@ -1151,6 +1151,35 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, 
             },
         })
 
+    def _inject_knowledge_context(self, domain: str = "refactoring") -> Dict[str, Any]:
+        """Inject quality-standards knowledge context into refactoring decisions.
+
+        Phase 78 GAP-78-A-03: Wire knowledge_context from refactoring-quality-standards
+        so SRP targets and complexity thresholds are knowledge-informed.
+
+        Args:
+            domain: Knowledge domain to query (default: "refactoring").
+
+        Returns:
+            Dict with SRP targets, complexity thresholds from knowledge base.
+        """
+        try:
+            from cortex.intelligence.provider import get_intelligence_provider
+            provider = get_intelligence_provider()
+            return provider.get_best_practices(f"refactoring:{domain}")
+        except Exception:
+            return {}
+
+    def _get_quality_standards(self) -> Dict[str, Any]:
+        """Return refactoring quality standards knowledge for current context.
+
+        Phase 78 GAP-78-A-03: Convenience wrapper over _inject_knowledge_context.
+
+        Returns:
+            Dict with quality standards (SRP targets, complexity thresholds).
+        """
+        return self._inject_knowledge_context(domain="refactoring")
+
     def execute_operation(
         self,
         operation_name: str,

@@ -71,6 +71,25 @@ class OrganizationAdapter(Protocol):
         ...
 
 
+class IScannerProtocol(Protocol):
+    """Generic scanner protocol — language-agnostic scanning interface.
+
+    Phase 78 GAP-78-B-05: Formal Protocol enabling multi-language scanners
+    to be used interchangeably. HierarchicalScanner implements this protocol
+    structurally (no explicit inheritance required for Protocol compliance).
+
+    All scanners in cortex/toolkit/filesystem/ should satisfy this interface.
+    """
+
+    def scan(self) -> List[ScannedFile]:
+        """Execute a full scan and return discovered files.
+
+        Returns:
+            List of ScannedFile instances from the scanned root.
+        """
+        ...
+
+
 class DefaultOrganizationAdapter:
     """Default adapter returns folder name as-is."""
     

@@ -779,6 +779,33 @@ class VacuumOrchestrator(OrchestratorProtocolMixin):
             )
 
 
+    def _load_anti_patterns(self) -> Dict[str, Any]:
+        """Load anti-pattern knowledge for structural detection.
+
+        Phase 78 GAP-78-B-02: Wire engineering-anti-patterns knowledge so
+        vacuum analysis detects structural anti-patterns (god classes, circular deps,
+        feature envy) in addition to filesystem clutter.
+
+        Returns:
+            Dict with anti-pattern definitions and detection heuristics.
+        """
+        try:
+            from cortex.intelligence.provider import get_intelligence_provider
+            provider = get_intelligence_provider()
+            return provider.get_best_practices("anti_patterns:engineering")
+        except Exception:
+            return {}
+
+    def _get_anti_pattern_knowledge(self) -> Dict[str, Any]:
+        """Return anti-pattern knowledge for current vacuum context.
+
+        Phase 78 GAP-78-B-02: Convenience wrapper over _load_anti_patterns.
+
+        Returns:
+            Dict with structural anti-pattern detection heuristics.
+        """
+        return self._load_anti_patterns()
+
     def health_check(self) -> Dict[str, Any]:
         """Return health status of the VacuumOrchestrator.
 

@@ -171,6 +171,32 @@ class HealthOrchestrator(OrchestratorProtocolMixin):
 
     # ── public API ───────────────────────────────────────────────────────
 
+    def _load_slo_thresholds(self) -> Dict[str, Any]:
+        """Load SLO threshold knowledge for health scoring.
+
+        Phase 78 GAP-78-B-01: Wire performance/profiling knowledge YAMLs so
+        health scoring uses knowledge-defined SLO targets rather than hard-coded values.
+
+        Returns:
+            Dict with SLO thresholds (response_time_ms, error_rate_pct, etc.).
+        """
+        try:
+            from cortex.intelligence.provider import get_intelligence_provider
+            provider = get_intelligence_provider()
+            return provider.get_best_practices("performance:slo_thresholds")
+        except Exception:
+            return {}
+
+    def _get_performance_knowledge(self) -> Dict[str, Any]:
+        """Return performance knowledge for current health context.
+
+        Phase 78 GAP-78-B-01: Convenience wrapper over _load_slo_thresholds.
+
+        Returns:
+            Dict with performance thresholds and SLO targets.
+        """
+        return self._load_slo_thresholds()
+
     def scan(self) -> ScanResult:
         """Run a full holistic scan.
 
