@@ -1,4 +1,46 @@
 {
+  "meta": {
+    "generated": "2026-02-25",
+    "version": "1.2.0",
+    "inventory_source": "cortex-docs/.content/00-getting-started/inventory.md"
+  },
+  "inventory": {
+    "slug": "inventory",
+    "title": "CORTEX Component Inventory",
+    "path": "cortex-docs/.content/00-getting-started/inventory.md",
+    "render_hint": "inventory-page",
+    "roles": ["software-engineer", "curious-learner", "business-leader", "product-owner"],
+    "excerpt": "One-stop reference for every orchestrator, MCP tool, LENS analyzer, knowledge YAML, workflow template, and governance rule in CORTEX.",
+    "sections": [
+      { "id": "orchestrators", "title": "Orchestrators (27 Wired)", "anchor": "1-orchestrators-27-wired" },
+      { "id": "mcp-tools", "title": "MCP Tools (39 Total)", "anchor": "2-mcp-tools-39-total--37-active-2-deprecated" },
+      { "id": "lens", "title": "LENS Analysis System", "anchor": "3-lens-analysis-system" },
+      { "id": "governance", "title": "Governance Rules (35 CORE)", "anchor": "4-governance-rules-35-core-active" },
+      { "id": "knowledge", "title": "Knowledge YAML Registry", "anchor": "5-knowledge-yaml-registry-35-files" },
+      { "id": "workflows", "title": "Workflow Templates (60+)", "anchor": "6-workflow-templates-60-templates" },
+      { "id": "core-framework", "title": "Core Framework Components", "anchor": "7-core-framework-components" },
+      { "id": "testing", "title": "Testing Suite", "anchor": "8-testing-suite" },
+      { "id": "runtime", "title": "Runtime Data & Persistence", "anchor": "9-runtime-data--persistence" },
+      { "id": "config", "title": "Configuration Files", "anchor": "10-configuration-files" },
+      { "id": "docs-site", "title": "Documentation Site", "anchor": "11-documentation-site-cortex-docs" },
+      { "id": "summary", "title": "Summary Metrics", "anchor": "12-summary-metrics" }
+    ],
+    "summary_metrics": {
+      "wired_orchestrators": 27,
+      "active_mcp_tools": 37,
+      "total_mcp_tools": 39,
+      "core_rules": 35,
+      "lens_analyzers": 17,
+      "knowledge_yaml_files": 35,
+      "workflow_templates": 60,
+      "test_files": 994,
+      "golden_test_files": 91,
+      "package_directories": 16,
+      "knowledge_tech_stacks": 32,
+      "knowledge_domains": 34
+    },
+    "last_verified": "2026-02-25"
+  },
   "categories": [
     {
       "id": "testing-validation",
