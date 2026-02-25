@@ -1,0 +1,82 @@
+# SDLC Knowledge: Security by Design
+# Phase: 79 (GAP-79-A-05) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
+# No version field — append-only YAML standard (CORE-002)
+
+overview: |
+  Shift-left security patterns integrating threat modeling at design phase.
+  Uses STRIDE/DREAD analysis templates, security requirements traceability,
+  and maps to OWASP Top 10 mitigations. References company security standards
+  and payment security (PCI-DSS) requirements.
+
+best_practices:
+  threat_modeling:
+    framework: "STRIDE (Spoofing, Tampering, Repudiation, InfoDisclosure, DoS, EoP)"
+    process:
+      - step: "1. Data Flow Diagram"
+        action: "Map every data flow: user → API → service → DB → external"
+        output: "DFD with trust boundaries marked"
+      - step: "2. STRIDE per component"
+        action: "For each component, apply STRIDE categories"
+        output: "Threat table: component × threat category × likelihood × impact"
+      - step: "3. Mitigations"
+        action: "Map each threat to specific technical control"
+        output: "Mitigation table with OWASP references"
+      - step: "4. Residual risk"
+        action: "Classify remaining risk; accept P3/P4, escalate P0/P1"
+        output: "Risk register entry"
+
+    dread_scoring:
+      Damage: "1-3 (low/med/high)"
+      Reproducibility: "1-3"
+      Exploitability: "1-3"
+      Affected_users: "1-3"
+      Discoverability: "1-3"
+      threshold_action:
+        "≥12": "P0 BLOCK — must fix before any deployment"
+        "8-11": "P1 REQUIRED — fix in current sprint"
+        "4-7": "P2 RECOMMENDED — fix in next sprint"
+        "1-3": "P3 ADVISORY — track as tech debt"
+
+  security_requirements_traceability:
+    template:
+      security_requirement: "Description"
+      source: "OWASP|PCI-DSS|company/domains/security-standards.yaml"
+      implemented_by: "module + function path"
+      test_coverage: "test file + test name"
+      verified_by: "EnforcementOrchestrator|SecurityVulnerabilityOrchestrator"
+
+  owasp_design_gates:
+    A01_broken_access_control:
+      design_check: "All resources have explicit ownership + RBAC defined"
+    A02_cryptographic_failures:
+      design_check: "Encryption at rest and in transit specified for all PII/PCI data"
+    A03_injection:
+      design_check: "All input paths use parameterized queries or strict validation"
+    A04_insecure_design:
+      design_check: "Threat model exists for every new data flow crossing trust boundary"
+    A07_identification_authentication:
+      design_check: "Auth flows use established library — no custom crypto"
+    A09_logging_monitoring:
+      design_check: "Audit log defined for all security-relevant events"
+
+  secure_defaults:
+    - "Deny by default — allowlist, not blocklist"
+    - "Least privilege — minimum permissions for every service account"
+    - "Fail secure — errors never expose internals"
+    - "Defense in depth — multiple independent controls per risk"
+    - "Audit all access — log who did what, when, from where"
+
+company_context:
+  security_standards: "company/domains/security-standards.yaml"
+  payment_security: "company/domains/payment-security.yaml"
+  constraints:
+    - "PCI-DSS scope: any component touching card data requires Level 1 controls"
+    - "Threat model mandatory for any new external-facing API"
+    - "Security review gate enforced by SecurityVulnerabilityOrchestrator"
+
+references:
+  - "security/secure-coding-practices.yaml"
+  - "../knowledge-base/security/owasp-top10.yaml"
+  - "../knowledge-base/security/cicd-hardening.yaml"
+  - "sdlc/analysis-design-patterns.yaml"

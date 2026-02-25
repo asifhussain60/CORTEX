@@ -1,0 +1,67 @@
+# SDLC Knowledge: Integration Strategy
+# Phase: 79 (GAP-79-A-04) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
+# No version field — append-only YAML standard (CORE-002)
+
+overview: |
+  Integration test design patterns covering contract testing, consumer-driven
+  contracts, service virtualization, and test double hierarchy. Maps to company
+  API endpoint patterns and database connection topology.
+
+best_practices:
+  contract_testing:
+    consumer_driven:
+      description: "Consumer defines expected API contract; provider verifies it"
+      tool: "Pact (preferred) or custom YAML contract files"
+      when: "Any service-to-service API dependency"
+      workflow:
+        - "Consumer writes pact (expected request/response)"
+        - "Pact published to broker"
+        - "Provider CI verifies pact on every deploy"
+        - "Contract break = immediate P0 alert"
+
+    api_schema_contracts:
+      description: "OpenAPI schema as executable contract"
+      validation: "schemathesis or dredd for schema-driven fuzzing"
+      when: "External-facing APIs; payment gateway integrations"
+
+  service_virtualization:
+    strategy: "Mock/stub external dependencies at integration boundary"
+    tools: ["responses (HTTP)", "pytest-mock", "unittest.mock"]
+    hierarchy:
+      stub: "Returns fixed data — fastest, least realistic"
+      fake: "Working implementation with in-memory storage"
+      mock: "Verifies interactions were made correctly"
+      spy: "Records interactions without replacing behaviour"
+    rule: "Use the simplest double that makes the test reliable and fast"
+
+  test_double_hierarchy:
+    unit_tests: "Mocks for all external dependencies"
+    integration_tests: "Real DB (testcontainers or SQLite), mocked external HTTP"
+    e2e_tests: "Real services, seeded DB, no mocks"
+
+  database_patterns:
+    isolation: "Each test gets fresh DB state (fixtures or rollback)"
+    seeding: "Use factory functions, not static fixtures (avoids coupling)"
+    teardown: "Rollback transaction or truncate tables — never delete prod data"
+    schema_testing: "Migrations run on empty DB before tests; verify idempotent"
+
+  performance_thresholds:
+    unit_test_max: "100ms per test"
+    integration_test_max: "5s per test"
+    e2e_test_max: "30s per test"
+    flaky_threshold: "Test failing < 1% is flaky — fix before merge"
+
+company_context:
+  api_endpoints: "company/domains/api-standards.yaml"
+  database_topology: "company/infrastructure/topology.yaml"
+  database_schema: "company/infrastructure/schema.yaml"
+  constraints:
+    - "Integration tests use dedicated test DB — never production"
+    - "External payment provider APIs use VCR cassettes or official sandbox"
+    - "Service mesh topology from company/infrastructure/topology.yaml"
+
+references:
+  - "testing-validation/tdd-best-practices.yaml"
+  - "sdlc/test-strategy-selection.yaml"
+  - "backend-python/code-review.yaml"

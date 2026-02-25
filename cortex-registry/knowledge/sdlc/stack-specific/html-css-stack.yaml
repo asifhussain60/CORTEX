@@ -1,0 +1,69 @@
+# SDLC Stack Knowledge: HTML/CSS Stack
+# Phase: 79 (GAP-79-E-02) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain, stack-specific)
+# No version field — append-only YAML standard (CORE-002)
+
+stack: html-css
+detection_patterns:
+  files: ["index.html", "style.css", ".pa11yrc", "lighthouserc.js", "playwright.config.ts"]
+  extensions: [".html", ".htm", ".css", ".scss", ".sass"]
+  frameworks: ["Tailwind CSS", "Bootstrap", "SCSS/SASS", "PostCSS", "Astro"]
+
+stack_overrides:
+  test_framework:
+    accessibility: "pa11y-ci (WCAG 2.1 AA automated checks) + axe-core"
+    visual_regression: "playwright (screenshot comparison)"
+    performance: "lighthouse CI (LCP <2.5s, FID <100ms, CLS <0.1)"
+    cross_browser: "playwright (Chromium + Firefox + WebKit)"
+    e2e: "playwright — test user journeys from browser perspective"
+
+  linting_and_typing:
+    css_linter: "stylelint (standard config + order plugin)"
+    html_validator: "htmlhint or Nu HTML Checker"
+    accessibility: "axe-linter (IDE) + pa11y (CI)"
+    formatter: "prettier (html-parser for HTML, css-parser for CSS)"
+
+  quality_standards:
+    wcag_level: "WCAG 2.1 AA (minimum); target AAA for key user journeys"
+    lighthouse_scores:
+      performance: ">= 90"
+      accessibility: ">= 95"
+      best_practices: ">= 90"
+      seo: ">= 85"
+    semantic_html: "Use landmark elements (main, nav, header, footer, aside, section)"
+    images: "alt text on all images; decorative images get alt=''"
+    color_contrast: "4.5:1 for normal text; 3:1 for large text (WCAG AA)"
+
+  patterns:
+    preferred:
+      - "Semantic HTML first — div/span only when no semantic element fits"
+      - "CSS custom properties (variables) for design tokens"
+      - "BEM naming for CSS classes in non-Tailwind projects"
+      - "Mobile-first responsive design (min-width breakpoints)"
+      - "Prefers-reduced-motion media query for animations"
+      - "Focus management for modals and dynamic content"
+      - "Skip navigation links (visually hidden, visible on focus)"
+    avoid:
+      - "onclick= in HTML attributes — use addEventListener in JS"
+      - "Inline styles — use classes and custom properties"
+      - "Fixed pixel font sizes — use rem/em for accessibility"
+      - "Color as the only visual indicator — use icons or patterns too"
+      - "Auto-playing media without controls"
+
+  accessibility_checklist:
+    keyboard_navigation: "All interactive elements reachable by Tab; logical order"
+    screen_reader: "ARIA labels for interactive elements without visible text"
+    forms: "All inputs have <label>; errors announced via aria-live"
+    images: "All img elements have descriptive alt text"
+    headings: "Heading hierarchy (h1→h2→h3) — no skips"
+    links: "Link text descriptive — no 'click here'"
+
+  performance_patterns:
+    images: "WebP format; width + height attributes to prevent CLS; lazy loading"
+    fonts: "font-display: swap; preconnect for external fonts"
+    css: "Critical CSS inlined; non-critical deferred"
+    javascript: "defer or async attributes; tree-shaking for bundled scripts"
+
+  knowledge_context_overrides:
+    security: "security/secure-coding-practices.yaml"
+    documentation: "sdlc/documentation-strategy.yaml"

@@ -1,0 +1,88 @@
+# SDLC Knowledge: Documentation Strategy
+# Phase: 79 (GAP-79-A-06) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
+# No version field — append-only YAML standard (CORE-002)
+
+overview: |
+  Documentation best practices for APIs, architecture decisions, runbooks,
+  incident playbooks, and README standards. CORTEX-specific: CORE-012
+  docstrings, CORE-002 inline output, knowledge YAML as living documentation.
+
+best_practices:
+  api_documentation:
+    format: "OpenAPI 3.x (YAML preferred, JSON acceptable)"
+    required_sections:
+      - "info: title, description, version, contact"
+      - "servers: all environments (dev/staging/prod)"
+      - "paths: all endpoints with request/response schemas"
+      - "components/schemas: all reusable data models"
+      - "security: auth schemes used"
+    update_policy: "Update OpenAPI spec in same PR as code change — never deferred"
+    validation: "spectral lint on CI — 0 errors before merge"
+
+  architecture_decision_records:
+    location: "docs/adr/ or cortex-registry/planning/phases/completed/"
+    naming: "YYYYMMDD-short-description.md"
+    template:
+      - "# ADR-{n}: {Title}"
+      - "## Status: PROPOSED | ACCEPTED | DEPRECATED | SUPERSEDED by ADR-{m}"
+      - "## Context: What situation requires this decision?"
+      - "## Decision: What was decided?"
+      - "## Consequences: Trade-offs, migration, downstream impact"
+    update_policy: "Never edit accepted ADR — add new ADR that supersedes"
+
+  code_documentation:
+    docstrings:
+      rule: "CORE-012 — all public APIs must have docstrings"
+      format: "Google style: Args, Returns, Raises, Examples"
+      minimum: "One-line summary + Args/Returns for non-trivial functions"
+    inline_comments:
+      rule: "Why, not what — code describes what; comments describe intent"
+      avoid: "Commented-out code (delete it; git tracks history)"
+    knowledge_yamls:
+      rule: "CORE-002 — domain knowledge as YAML, not as markdown reports"
+      location: "cortex-registry/knowledge/ and cortex-registry/knowledge-base/"
+      update: "Update on every orchestrator execution that learns new pattern"
+
+  runbooks:
+    template:
+      - "## Runbook: {Service/Feature Name}"
+      - "### Trigger: When to use this runbook"
+      - "### Symptoms: Observable signals (metrics, logs, alerts)"
+      - "### Steps: Numbered, actionable, testable"
+      - "### Escalation: Who to page, SLO thresholds"
+      - "### Post-mortem: Link to incident tracker"
+    location: "cortex-docs/ or company/playbooks/"
+    update_policy: "Update after every incident that reveals a runbook gap"
+
+  readme_standards:
+    required_sections:
+      - "## Overview — What this component does, why it exists"
+      - "## Quick Start — Clone, install, run in < 5 commands"
+      - "## Architecture — Link to ADRs or architecture diagram"
+      - "## Development — Test commands, lint, type-check"
+      - "## Configuration — All env vars with defaults and descriptions"
+      - "## Deployment — How to deploy (link to runbook)"
+    quality_gates:
+      - "All code examples must be runnable"
+      - "No stale commands (validated in CI)"
+      - "Links verified (no 404s)"
+
+  living_documentation:
+    principle: "Documentation lives with code — never separate repo"
+    automation:
+      - "generate_docs_content.py — auto-generates cortex-docs/ from knowledge YAMLs"
+      - "Knowledge YAMLs updated by orchestrators post-execution"
+      - "ADRs linked from cortex-master.yaml phase entries"
+
+company_context:
+  api_standards: "company/domains/api-standards.yaml"
+  security_standards: "company/domains/security-standards.yaml"
+  constraints:
+    - "All public API changes require OpenAPI spec update before merge"
+    - "Production runbooks reviewed by on-call before deployment"
+
+references:
+  - "backend-python/code-review.yaml"
+  - "sdlc/code-review-checklist.yaml"
+  - "sdlc/analysis-design-patterns.yaml"

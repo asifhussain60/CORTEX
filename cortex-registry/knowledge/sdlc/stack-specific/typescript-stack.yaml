@@ -1,0 +1,61 @@
+# SDLC Stack Knowledge: TypeScript/JavaScript Stack
+# Phase: 79 (GAP-79-E-02) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain, stack-specific)
+# No version field — append-only YAML standard (CORE-002)
+
+stack: typescript
+detection_patterns:
+  files: ["tsconfig.json", "package.json", "vite.config.ts", "next.config.js"]
+  extensions: [".ts", ".tsx", ".js", ".jsx", ".mts"]
+  frameworks: ["React", "Next.js", "Vue", "Express", "NestJS", "Vite"]
+
+stack_overrides:
+  test_framework:
+    primary: "vitest (preferred for Vite/modern) or jest"
+    e2e: "playwright (browser automation, WCAG checks via playwright-axe)"
+    coverage: "v8 coverage (built into vitest) or istanbul (jest)"
+    component_testing: "@testing-library/react — test behaviour, not implementation"
+    mocking: "vi.mock() (vitest) or jest.mock() — always mock at module boundary"
+
+  linting_and_typing:
+    formatter: "prettier (printWidth=100, singleQuote=true)"
+    linter: "eslint with typescript-eslint (strict rules)"
+    type_checker: "tsc --noEmit (strict mode — no implicit any)"
+    imports: "absolute paths via tsconfig paths; no relative imports beyond 2 levels"
+
+  quality_standards:
+    function_max_lines: 40
+    component_max_lines: 200
+    cyclomatic_complexity: 8
+    strict_mode: "true — tsconfig.json compilerOptions.strict: true"
+    no_any: "Prefer unknown over any; use type guards for narrowing"
+
+  patterns:
+    preferred:
+      - "Functional components (React) — no class components"
+      - "Custom hooks for reusable stateful logic"
+      - "Zod for runtime validation of external data (API responses, env vars)"
+      - "Result pattern (neverthrow or custom) over try/catch in pure functions"
+      - "const assertions (as const) for literal types"
+      - "Discriminated unions over nullable properties"
+    avoid:
+      - "any type — use unknown + type guards"
+      - "Non-null assertion (!) — use optional chaining + nullish coalescing"
+      - "Mutable shared state (prefer React state/context or Zustand)"
+      - "Direct DOM manipulation in React — use refs + useEffect"
+
+  frameworks:
+    next_js:
+      routing: "App Router (Next 13+) — use Server Components by default"
+      data_fetching: "fetch() in Server Components; SWR/TanStack Query in Client"
+      images: "next/image — always, never <img> directly"
+    react:
+      state: "useState for local; useReducer for complex; Zustand for global"
+      effects: "useEffect with explicit dependency array — no empty dep with async"
+    express:
+      async_handlers: "Wrap all async handlers in asyncHandler() to propagate errors"
+      validation: "Zod middleware for request body validation"
+
+  knowledge_context_overrides:
+    security: "security/secure-coding-practices.yaml"
+    design_patterns: "architecture/engineering-design-patterns.yaml"

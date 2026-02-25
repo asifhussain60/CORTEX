@@ -188,3 +188,40 @@ repositories:
     - path: "../knowledge-base/repositories/ksessions.yaml"
       title: "KSessions Repository Profile"
       keywords: ["sessions", "auth", "identity", "authentication"]
+
+# ── SDLC Intelligence Engine (Phase 79) ────────────────────────────────────────
+# 6 SDLC lifecycle knowledge YAMLs + 4 stack-specific overrides
+sdlc:
+  guides:
+    - path: "sdlc/analysis-design-patterns.yaml"
+      title: "Analysis & Design Patterns"
+      keywords: ["analyze", "investigate", "requirements", "design", "architecture", "adr", "scope"]
+    - path: "sdlc/test-strategy-selection.yaml"
+      title: "Test Strategy Selection"
+      keywords: ["test", "strategy", "tdd", "integration", "e2e", "risk", "coverage"]
+    - path: "sdlc/code-review-checklist.yaml"
+      title: "Code Review Checklist"
+      keywords: ["review", "quality", "checklist", "pci", "api-contract", "lint"]
+    - path: "sdlc/integration-strategy.yaml"
+      title: "Integration Strategy"
+      keywords: ["integration", "contract", "service", "mock", "stub", "consumer-driven"]
+    - path: "sdlc/security-by-design.yaml"
+      title: "Security by Design"
+      keywords: ["security", "threat-model", "stride", "dread", "shift-left", "owasp"]
+    - path: "sdlc/documentation-strategy.yaml"
+      title: "Documentation Strategy"
+      keywords: ["documentation", "docs", "adr", "openapi", "runbook", "readme"]
+    # Stack-specific overrides (resolution: stack > sdlc > domain > generic)
+    - path: "sdlc/stack-specific/python-stack.yaml"
+      title: "Python Stack Knowledge"
+      keywords: ["python", "pytest", "ruff", "mypy", "fastapi", "django"]
+    - path: "sdlc/stack-specific/typescript-stack.yaml"
+      title: "TypeScript/JavaScript Stack Knowledge"
+      keywords: ["typescript", "javascript", "react", "next", "vitest", "jest", "playwright"]
+    - path: "sdlc/stack-specific/dotnet-stack.yaml"
+      title: ".NET / C# Stack Knowledge"
+      keywords: ["dotnet", "csharp", "aspnet", "entity-framework", "xunit", "blazor"]
+    - path: "sdlc/stack-specific/html-css-stack.yaml"
+      title: "HTML/CSS Stack Knowledge"
+      keywords: ["html", "css", "wcag", "accessibility", "lighthouse", "pa11y", "tailwind"]
+

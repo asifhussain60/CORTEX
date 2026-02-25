@@ -1,0 +1,67 @@
+# SDLC Stack Knowledge: Python Stack
+# Phase: 79 (GAP-79-E-02) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain, stack-specific)
+# No version field — append-only YAML standard (CORE-002)
+
+stack: python
+detection_patterns:
+  files: ["requirements.txt", "pyproject.toml", "setup.py", "Pipfile"]
+  imports: ["import", "from"]
+  extensions: [".py"]
+  frameworks: ["FastAPI", "Django", "Flask", "pytest", "asyncio"]
+
+stack_overrides:
+  test_framework:
+    primary: "pytest"
+    parallel: "pytest-xdist (-n auto --dist loadscope)"
+    coverage: "pytest-cov (--cov-report=term-missing)"
+    async_support: "pytest-asyncio (mode=auto)"
+    fixtures: "conftest.py — scoped fixtures (function/module/session)"
+    runner: "make test-batch (CORTEX canonical) or python3 scripts/run_tests.py"
+
+  linting_and_typing:
+    formatter: "ruff (line-length=88, replaces black+isort+flake8)"
+    type_checker: "mypy (strict mode for public APIs)"
+    security: "bandit (B-level severity for P0 issues)"
+    config: "pyproject.toml — single config file for all tools"
+
+  quality_standards:
+    function_max_lines: 50
+    class_max_lines: 300
+    cyclomatic_complexity: 10
+    docstring_style: "Google (Args, Returns, Raises, Examples)"
+    type_hints: "CORE-011 — all public functions, use from __future__ import annotations"
+    imports: "stdlib → third-party → local (ruff enforces via I category)"
+
+  patterns:
+    preferred:
+      - "Dataclasses over dicts for structured data"
+      - "Protocol for structural subtyping (not ABC unless runtime checks needed)"
+      - "Result[T, E] pattern (cortex.core.result) for error handling"
+      - "pathlib.Path over os.path"
+      - "f-strings over .format() or %"
+      - "walrus operator := for assignment expressions in conditions"
+    avoid:
+      - "Bare except — always catch specific exception types"
+      - "Global mutable state — use dependency injection"
+      - "Mutable default arguments (def f(x=[]) → def f(x=None))"
+      - "isinstance() chains — use dispatch or Protocol"
+
+  frameworks:
+    fastapi:
+      dependency_injection: "Depends() — always inject, never import directly"
+      async: "async def for all handlers that do I/O"
+      validation: "Pydantic models — never raw dicts for request/response"
+    django:
+      orm: "QuerySet lazy evaluation — select_related/prefetch_related upfront"
+      signals: "Avoid — use explicit service layer calls"
+    pytest:
+      naming: "test_{what}_{scenario} — CORTEX enforce-test-naming.py"
+      markers: "smoke, unit, integration, golden, regression"
+      parametrize: "Use @pytest.mark.parametrize for data-driven tests"
+
+  knowledge_context_overrides:
+    tdd_best_practices: "testing-validation/tdd-best-practices.yaml"
+    code_review: "backend-python/code-review.yaml"
+    clean_code: "backend-python/clean-code.yaml"
+    refactoring: "backend-python/refactoring.yaml"

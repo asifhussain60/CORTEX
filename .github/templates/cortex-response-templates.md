@@ -1672,3 +1672,181 @@ Before sending any response, verify:
 **Authority:** This document supersedes all previous formatting guidelines including `response-format-standards.md` and `response-template-blocks-modern.md`.
 **Enforcement:** All CORTEX prompts and agents MUST comply with these standards.
 **Review:** Format standards reviewed quarterly or when user feedback indicates issues.
+
+---
+
+## BLOCK-ANALYSIS
+
+**Renders when:** `INVESTIGATE` / `ANALYZE` / `REQUIREMENTS` mode — any intent requesting understanding, root cause analysis, or scope definition.
+
+**Format:**
+
+### Analysis: {Subject}
+
+**Hypothesis Table**
+
+| # | Hypothesis | Evidence | Confidence | Status |
+|---|-----------|---------|-----------|--------|
+| 1 | {hypothesis} | {evidence links/files} | 🟢 High / 🟡 Med / 🔴 Low | Confirmed / Ruled out / Pending |
+
+**Root Cause Analysis**
+
+- **Primary cause:** {cause}
+- **Contributing factors:** {factors}
+- **Impact scope:** {affected components, users, data}
+
+**Recommended Actions**
+
+| Priority | Action | Effort | Risk |
+|---------|--------|--------|------|
+| 🔴 P0 | {action} | {S/M/L} | {risk} |
+| 🟡 P1 | {action} | {S/M/L} | {risk} |
+
+**Open Questions** *(need answers before proceeding)*
+
+1. {question} — Owner: {who}
+
+**Rendering rules:**
+- Hypothesis table always comes first
+- Root cause only shown when cause is identified (not during pure scoping)
+- Open questions listed explicitly — never implied
+- Cross-reference: linked from `sdlc/requirements-analysis.yaml` and `sdlc/integration-verification.yaml`
+
+---
+
+## BLOCK-DESIGN-DECISION
+
+**Renders when:** `DESIGN` / `ARCHITECTURE` / `PROPOSE` mode — any intent requesting architectural decisions, trade-off analysis, or ADR generation.
+
+**Format:**
+
+### Design Decision: {Title}
+
+**ADR-{n}: {Short Title}** | Status: PROPOSED
+
+**Context**
+
+{What situation requires this decision — 2-4 sentences max}
+
+**Options Considered**
+
+| Option | Performance | Maintainability | Security | Cost | Velocity | Verdict |
+|--------|------------|----------------|---------|------|----------|---------|
+| A: {name} | {1-5} | {1-5} | {1-5} | {1-5} | {1-5} | ✨ Recommended |
+| B: {name} | {1-5} | {1-5} | {1-5} | {1-5} | {1-5} | Alternative |
+| C: {name} | {1-5} | {1-5} | {1-5} | {1-5} | {1-5} | Rejected |
+
+**Decision**
+
+> Choosing **Option A** because {rationale — single sentence}.
+
+**Consequences**
+
+- 🟢 {positive consequence}
+- 🟡 {trade-off or risk}
+- 🔴 {migration cost or constraint}
+
+**Security Gate**
+
+- Threat model: {PASSED / REQUIRED — {reason}}
+- Company constraints: {list any company/domains/ constraints that apply}
+
+**Rendering rules:**
+- Trade-off matrix always uses 1-5 scale — never qualitative only
+- Recommended option marked ✨
+- Consequences always include at least one of each (green/yellow/red)
+- Cross-reference: linked from `sdlc/solution-design.yaml`
+
+---
+
+## BLOCK-CODE-REVIEW
+
+**Renders when:** `REFACTOR` / `FIX` / `REVIEW` / `IMPLEMENT` completion — any review gate or post-implementation quality report.
+
+**Format:**
+
+### Code Review: {Scope}
+
+**Findings Summary**
+
+| Severity | Count | Action Required |
+|---------|-------|----------------|
+| 🔴 P0 | {n} | BLOCK — must fix |
+| 🟡 P1 | {n} | REQUIRED — fix this PR |
+| 🔵 P2 | {n} | RECOMMENDED |
+| ⚪ P3 | {n} | ADVISORY |
+
+**Findings Detail**
+
+| Severity | File | Line | Issue | Recommendation | Status |
+|---------|------|------|-------|---------------|--------|
+| 🔴 P0 | `{file}` | L{n} | {issue} | {fix} | 🔴 Open / ✅ Fixed |
+| 🟡 P1 | `{file}` | L{n} | {issue} | {fix} | 🟡 Open / ✅ Fixed |
+
+**Quality Gates**
+
+- [ ] Coverage: {n}% (threshold: {threshold}%)
+- [ ] Type hints: CORE-011 {PASS / n violations}
+- [ ] Docstrings: CORE-012 {PASS / n missing}
+- [ ] Security: {PASS / n findings}
+- [ ] API contracts: {PASS / n violations}
+
+**Verdict**
+
+> 🟢 APPROVED / 🟡 CONDITIONAL (fix P1s) / 🔴 BLOCKED (P0 violations)
+
+**Rendering rules:**
+- Findings table always shows file + line — never vague
+- Status column shows real-time fix tracking during convergence loop
+- Verdict always rendered last — single line
+- Cross-reference: linked from `sdlc/code-review-gate.yaml` and `sdlc/implementation-execution.yaml`
+
+---
+
+## BLOCK-SECURITY-ASSESSMENT
+
+**Renders when:** `SECURITY_AUDIT` / `THREAT_MODEL` / `VULNERABILITY_SCAN` mode — any security analysis, OWASP check, or threat modeling session.
+
+**Format:**
+
+### Security Assessment: {Scope}
+
+**STRIDE Threat Model**
+
+| Component | Spoofing | Tampering | Repudiation | Info Disclosure | DoS | EoP | DREAD Score |
+|----------|---------|----------|------------|----------------|-----|-----|------------|
+| {component} | {control} | {control} | {control} | {control} | {control} | {control} | {n}/15 |
+
+**OWASP Top 10 Coverage**
+
+| OWASP Category | Status | Mitigation | Residual Risk |
+|---------------|--------|-----------|--------------|
+| A01 Broken Access Control | ✅ Mitigated / 🔴 Exposed | {control} | {LOW/MED/HIGH} |
+| A02 Cryptographic Failures | ✅ / 🔴 | {control} | {risk} |
+| A03 Injection | ✅ / 🔴 | {control} | {risk} |
+
+*(All 10 OWASP categories shown)*
+
+**Remediation Plan**
+
+| Priority | Threat | OWASP | Timeline | Action |
+|---------|--------|-------|----------|--------|
+| 🔴 P0 | {threat} | A{n} | Immediate | {concrete step} |
+| 🟡 P1 | {threat} | A{n} | This sprint | {concrete step} |
+
+**Company Constraints Applied**
+
+- PCI-DSS: {compliance status}
+- Security standards: {company/domains/security-standards.yaml alignment}
+
+**Verdict**
+
+> 🟢 SECURE / 🟡 CONDITIONAL (fix P1s within sprint) / 🔴 BLOCKED ({n} P0 threats unmitigated)
+
+**Rendering rules:**
+- STRIDE table covers all 6 dimensions — never partial
+- All 10 OWASP categories shown — skipped categories marked N/A with rationale
+- Timeline always concrete — never "soon" or "later"
+- Company constraints section mandatory when company/domains/ applicable
+- Cross-reference: linked from `sdlc/security-assessment.yaml`
+

@@ -1,0 +1,91 @@
+# SDLC Knowledge: Test Strategy Selection
+# Phase: 79 (GAP-79-A-02) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
+# No version field — append-only YAML standard (CORE-002)
+
+overview: |
+  Decision framework for selecting the right test types based on feature type,
+  risk profile, and change scope. References TDD best practices for RED/GREEN/
+  REFACTOR cycle and links to company risk classification standards.
+
+best_practices:
+  decision_tree:
+    by_feature_type:
+      new_feature:
+        primary: ["unit", "integration", "e2e_smoke"]
+        risk_high: ["performance", "security", "regression"]
+        tdd_cycle: "RED → GREEN → REFACTOR (CORE-008 mandatory)"
+      bug_fix:
+        primary: ["unit", "regression"]
+        must_add: "Regression test that catches the specific defect"
+        tdd_cycle: "Write failing test first, then fix"
+      refactor:
+        primary: ["unit", "integration"]
+        prerequisite: "Existing tests must be GREEN before refactoring starts"
+        tdd_cycle: "Ensure full coverage → REFACTOR → verify GREEN"
+      security_patch:
+        primary: ["unit", "security", "integration"]
+        must_add: "OWASP coverage test for patched vulnerability category"
+      performance_fix:
+        primary: ["unit", "performance", "regression"]
+        baseline: "Capture latency/throughput before fix; verify improvement"
+
+  risk_profiles:
+    critical:
+      threshold: "P0 — payment, auth, data integrity"
+      required_tests: ["unit ≥90%", "integration", "e2e", "security", "regression"]
+    high:
+      threshold: "P1 — core feature, API contract"
+      required_tests: ["unit ≥80%", "integration", "smoke"]
+    medium:
+      threshold: "P2 — UI, reporting"
+      required_tests: ["unit ≥70%", "smoke"]
+    low:
+      threshold: "P3 — docs, config"
+      required_tests: ["smoke"]
+
+  test_strategy_matrix:
+    # Mirrors tdd-best-practices.yaml test_strategy_matrix for consistency
+    unit:
+      scope: "Single function or class in isolation"
+      speed: "< 100ms per test"
+      when: "Always — every function with logic"
+    integration:
+      scope: "Multiple components, real DB/file system"
+      speed: "< 5s per test"
+      when: "Cross-boundary interactions, database operations"
+    e2e:
+      scope: "Full user journey through system"
+      speed: "< 30s per test"
+      when: "Critical user flows only"
+    regression:
+      scope: "Prevent recurrence of known defects"
+      speed: "< 5s per test"
+      when: "Every bug fix — mandatory"
+    performance:
+      scope: "Latency, throughput, memory benchmarks"
+      speed: "≥ 5 rounds, calibrated"
+      when: "P0 paths, SLO-bound endpoints"
+    security:
+      scope: "OWASP categories, injection, auth"
+      speed: "< 10s per test"
+      when: "Auth changes, input handling, external APIs"
+
+  coverage_gates:
+    minimum_overall: 70
+    critical_path_minimum: 90
+    new_code_minimum: 80
+    enforcement: "CORE-008 — tests before implementation, always"
+
+company_context:
+  risk_classification: "company/domains/security-standards.yaml"
+  payment_security: "company/domains/payment-security.yaml"
+  api_contracts: "company/domains/api-standards.yaml"
+  constraints:
+    - "Payment flows require security + regression tests on every change"
+    - "Public API changes require contract tests (consumer-driven)"
+
+references:
+  - "testing-validation/tdd-best-practices.yaml"
+  - "security/secure-coding-practices.yaml"
+  - "../knowledge-base/security/owasp-top10.yaml"

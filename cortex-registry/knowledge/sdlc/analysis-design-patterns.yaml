@@ -1,0 +1,63 @@
+# SDLC Knowledge: Analysis & Design Patterns
+# Phase: 79 (GAP-79-A-01) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
+# No version field — append-only YAML standard (CORE-002)
+
+overview: |
+  Requirements analysis and architecture decision patterns for systematic
+  problem decomposition, domain modeling, and architectural trade-off analysis.
+  Integrates with company API design standards and infrastructure topology.
+
+best_practices:
+  problem_decomposition:
+    - technique: "Context Mapping"
+      description: "Identify bounded contexts, relationships (Upstream/Downstream, Conformist, ACL)"
+      when_to_use: "When system spans multiple domains or teams"
+    - technique: "Event Storming"
+      description: "Domain event discovery via collaborative timeline walkthrough"
+      when_to_use: "For complex domain logic with multiple aggregates"
+    - technique: "LENS Analysis"
+      description: "Language→Examination→Navigation→Synthesis — workspace-aware code intel"
+      when_to_use: "All CORTEX analysis sessions — always first step"
+
+  architecture_decision:
+    adr_template:
+      title: "Architecture Decision Record (ADR)"
+      sections:
+        - status: "PROPOSED | ACCEPTED | DEPRECATED | SUPERSEDED"
+        - context: "The situation that motivates this decision"
+        - decision: "The change being proposed or made"
+        - consequences: "Trade-offs, risks, migration impact"
+    decision_gates:
+      - "Does this conform to company API standards?"
+      - "Does infrastructure topology support this approach?"
+      - "Is this the simplest solution that satisfies requirements?"
+      - "What is the reversibility cost if wrong?"
+
+  trade_off_matrix:
+    dimensions:
+      - performance
+      - maintainability
+      - security
+      - cost
+      - team_velocity
+    scoring: "1-5 per dimension; weight by risk profile"
+
+  domain_modeling:
+    - ubiquitous_language: "All terms defined in company/domains/ glossary"
+    - aggregate_identification: "Identify consistency boundaries first"
+    - invariant_capture: "Document all business rules as executable tests (CORE-008)"
+
+company_context:
+  api_standards: "company/domains/api-standards.yaml"
+  infrastructure_topology: "company/infrastructure/topology.yaml"
+  security_standards: "company/domains/security-standards.yaml"
+  constraints:
+    - "All external APIs must conform to company versioning policy"
+    - "Database schemas must match company/infrastructure/schema.yaml"
+    - "Microservice boundaries follow company/domains/ bounded contexts"
+
+references:
+  - "architecture/engineering-design-patterns.yaml"
+  - "architecture/engineering-solid-principles.yaml"
+  - "security/secure-coding-practices.yaml"

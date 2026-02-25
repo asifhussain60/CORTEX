@@ -1,0 +1,64 @@
+# SDLC Stack Knowledge: .NET / C# Stack
+# Phase: 79 (GAP-79-E-02) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain, stack-specific)
+# No version field — append-only YAML standard (CORE-002)
+
+stack: dotnet
+detection_patterns:
+  files: ["*.csproj", "*.sln", "global.json", "Directory.Build.props"]
+  extensions: [".cs", ".razor", ".cshtml"]
+  frameworks: ["ASP.NET Core", "Entity Framework Core", "Blazor", "MAUI", "NUnit", "xUnit"]
+
+stack_overrides:
+  test_framework:
+    primary: "xUnit (preferred) or NUnit"
+    assertions: "FluentAssertions — natural language assertion chains"
+    mocking: "NSubstitute or Moq — mock interfaces, not concrete classes"
+    integration: "WebApplicationFactory<TProgram> for ASP.NET Core integration tests"
+    coverage: "Coverlet (cross-platform) with ReportGenerator for HTML"
+    parallelism: "[assembly: Parallelizable(ParallelScope.All)] for NUnit; xUnit parallel by default"
+
+  linting_and_typing:
+    analyzer: "Roslyn Analyzers (Microsoft.CodeAnalysis.NetAnalyzers) — treat warnings as errors"
+    style: ".editorconfig — enforced by dotnet format"
+    nullable: "Nullable reference types enabled (#nullable enable or in csproj)"
+    formatter: "dotnet format — runs on CI"
+
+  quality_standards:
+    method_max_lines: 30
+    class_max_lines: 400
+    cyclomatic_complexity: 10
+    nullable_enabled: true
+    async_suffix: "All async methods end in Async (GetDataAsync, not GetData)"
+    disposable: "Use using declarations (not using statements) for IDisposable"
+
+  patterns:
+    preferred:
+      - "Records for immutable DTOs and value objects"
+      - "Pattern matching (switch expressions, is patterns)"
+      - "IOptions<T> for configuration — never IConfiguration directly in services"
+      - "Primary constructors (C# 12+) for DI"
+      - "CancellationToken on all async methods that do I/O"
+      - "ILogger<T> injected — never static logger"
+      - "Result pattern (OneOf or FluentResults) for error-bearing operations"
+    avoid:
+      - "Static mutable state — use DI lifetime (Scoped/Transient/Singleton)"
+      - "async void — use async Task (only exception: event handlers)"
+      - ".Result or .Wait() on async tasks — causes deadlock in ASP.NET"
+      - "Magic strings — use nameof() and constants"
+
+  frameworks:
+    aspnet_core:
+      middleware: "Register in order: exception → auth → cors → routing → endpoints"
+      dependency_injection: "Constructor injection only — no service locator"
+      validation: "Data annotations on DTOs + ModelState.IsValid gate in controllers"
+      minimal_api: "Prefer Minimal APIs for new endpoints (ASP.NET 6+)"
+    entity_framework:
+      queries: "Use AsNoTracking() for read-only queries"
+      migrations: "Code-first migrations — always review generated SQL"
+      n_plus_one: "Include/ThenInclude or split queries — never lazy loading in web"
+
+  knowledge_context_overrides:
+    security: "security/secure-coding-practices.yaml"
+    design_patterns: "architecture/engineering-design-patterns.yaml"
+    solid: "architecture/engineering-solid-principles.yaml"

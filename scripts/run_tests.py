@@ -141,6 +141,10 @@ def _base_cmd(
 
     Every mode shares these flags:
       -p no:xdist         -- disable parallel workers
+      -p no:sugar         -- disable pytest-sugar per-test tick display;
+                             CortexXdistPlugin provides all progress output.
+                             Without this, sugar's ✓✓✓✓ rendering creates
+                             a "hanging" appearance at slow scope groups.
       --tb=short          -- concise tracebacks
       --timeout=N         -- prevent hanging tests
       --maxfail=N         -- stop after N failures
@@ -160,6 +164,7 @@ def _base_cmd(
     return [
         _python(), "-m", "pytest",
         "-p", "no:xdist",
+        "-p", "no:sugar",
         f"--timeout={timeout}",
         f"--maxfail={maxfail}",
         "--tb=short",

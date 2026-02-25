@@ -1,0 +1,100 @@
+# SDLC Workflow Template: Solution Design
+# Phase: 79 (GAP-79-B-02) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Primitive references: cortex-registry/workflows/templates/primitives/
+# No version field — append-only YAML standard (CORE-002)
+
+id: sdlc-solution-design
+title: "Solution Design Workflow"
+description: |
+  Architecture decision workflow: pattern selection, trade-off analysis,
+  ADR generation, and security-by-design gate. Outputs BLOCK-DESIGN-DECISION.
+  Prerequisite: requirements-analysis workflow completed.
+
+triggers:
+  intents: ["DESIGN", "ARCHITECTURE", "PLAN", "PROPOSE"]
+  mode_keywords: ["design", "architect", "how should", "propose solution", "adr"]
+
+knowledge_context:
+  primary: "sdlc/analysis-design-patterns.yaml"
+  supplementary:
+    - "sdlc/security-by-design.yaml"
+    - "architecture/engineering-design-patterns.yaml"
+    - "architecture/engineering-solid-principles.yaml"
+  company_overrides:
+    - "company/domains/api-standards.yaml"
+    - "company/infrastructure/topology.yaml"
+    - "company/domains/security-standards.yaml"
+  resolution_order: "stack-specific > sdlc > domain > generic"
+
+workflow:
+  steps:
+    - id: lens_scan
+      name: "LENS Analysis (incremental)"
+      template_ref: "primitives/analysis/lens-ast-scan.yaml"
+      inputs:
+        scope: "{{request.scope | default: 'workspace'}}"
+        depth: "full"
+        cache: "use_previous_if_available"
+      outputs: ["workspace_model", "existing_patterns"]
+
+    - id: knowledge_injection
+      name: "Inject Design Knowledge"
+      template_ref: "primitives/analysis/intelligence-injection.yaml"
+      inputs:
+        knowledge_context: "{{knowledge_context.primary}}"
+        supplementary: "{{knowledge_context.supplementary}}"
+        company_context: "{{knowledge_context.company_overrides}}"
+      outputs: ["design_patterns", "company_constraints", "security_requirements"]
+
+    - id: duplicate_detection
+      name: "Duplicate/Overlap Detection"
+      template_ref: "primitives/analysis/duplicate-detection.yaml"
+      inputs:
+        candidate_design: "{{request.design}}"
+        workspace_model: "{{lens_scan.existing_patterns}}"
+      outputs: ["conflicts", "existing_implementations"]
+
+    - id: pattern_selection
+      name: "Pattern Selection"
+      action: "inline"
+      description: |
+        Using design_patterns from knowledge injection:
+          1. Enumerate applicable patterns for the problem
+          2. Score each against trade-off matrix (performance/maintainability/security/cost/velocity)
+          3. Select best-fit pattern with rationale
+      outputs: ["selected_pattern", "trade_off_matrix", "rationale"]
+
+    - id: security_gate
+      name: "Security-by-Design Gate"
+      template_ref: "primitives/governance/security-check.yaml"
+      inputs:
+        design: "{{pattern_selection.selected_pattern}}"
+        security_requirements: "{{knowledge_injection.security_requirements}}"
+        threat_model_required: "{{request.external_facing | default: false}}"
+      outputs: ["security_clearance", "threat_model"]
+
+    - id: adr_generation
+      name: "ADR Generation"
+      action: "inline"
+      description: |
+        Produce Architecture Decision Record using template from
+        sdlc/analysis-design-patterns.yaml adr_template:
+          - Status: PROPOSED
+          - Context
+          - Decision (selected_pattern + rationale)
+          - Consequences (trade_off_matrix)
+      outputs: ["adr_document"]
+
+  convergence_loop:
+    template_ref: "primitives/validation/detect-fix-rescan-loop.yaml"
+    gate: "security_clearance == PASSED and adr_document complete"
+    max_iterations: 3
+
+  output:
+    response_block: "BLOCK-DESIGN-DECISION"
+    format: "ADR-style comparison table + trade-off matrix + decision rationale"
+    git_policy: "no_commit — design only (implementation phase commits)"
+
+completion_gate:
+  required_outputs: ["selected_pattern", "adr_document", "security_clearance"]
+  quality_threshold: "ADR has all sections; security gate passed; alternatives documented"

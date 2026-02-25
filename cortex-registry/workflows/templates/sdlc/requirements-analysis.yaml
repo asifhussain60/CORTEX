@@ -1,0 +1,86 @@
+# SDLC Workflow Template: Requirements Analysis
+# Phase: 79 (GAP-79-B-01) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Primitive references: cortex-registry/workflows/templates/primitives/
+# No version field — append-only YAML standard (CORE-002)
+
+id: sdlc-requirements-analysis
+title: "Requirements Analysis Workflow"
+description: |
+  Systematic requirements analysis using LENS workspace scan, domain
+  decomposition, scope determination, and challenge-first validation.
+  Outputs structured analysis using BLOCK-ANALYSIS response template.
+
+triggers:
+  intents: ["ANALYZE", "INVESTIGATE", "REQUIREMENTS", "SCOPE"]
+  mode_keywords: ["analyze", "investigate", "understand", "what does", "what should"]
+
+knowledge_context:
+  primary: "sdlc/analysis-design-patterns.yaml"
+  supplementary:
+    - "sdlc/security-by-design.yaml"
+    - "architecture/engineering-design-patterns.yaml"
+  company_overrides:
+    - "company/domains/api-standards.yaml"
+    - "company/infrastructure/topology.yaml"
+  resolution_order: "stack-specific > sdlc > domain > generic"
+
+workflow:
+  steps:
+    - id: lens_scan
+      name: "LENS Analysis"
+      template_ref: "primitives/analysis/lens-ast-scan.yaml"
+      inputs:
+        scope: "{{request.scope | default: 'workspace'}}"
+        depth: "targeted"
+      outputs: ["workspace_model", "dependency_graph", "entry_points"]
+
+    - id: knowledge_injection
+      name: "Inject Analysis Knowledge"
+      template_ref: "primitives/analysis/intelligence-injection.yaml"
+      inputs:
+        knowledge_context: "{{knowledge_context.primary}}"
+        company_context: "{{knowledge_context.company_overrides}}"
+      outputs: ["analysis_patterns", "company_constraints"]
+
+    - id: domain_decomposition
+      name: "Domain Decomposition"
+      action: "inline"
+      description: |
+        Apply problem_decomposition patterns from analysis-design-patterns.yaml:
+          1. Identify bounded contexts from LENS workspace model
+          2. Map data flows and trust boundaries
+          3. Classify components by risk profile
+      outputs: ["domain_map", "risk_classification"]
+
+    - id: challenge_validation
+      name: "Challenge-First Validation"
+      template_ref: "primitives/governance/challenge-first.yaml"
+      inputs:
+        request: "{{request}}"
+        analysis: "{{domain_decomposition.domain_map}}"
+      outputs: ["validated_scope", "alternatives"]
+
+    - id: scope_document
+      name: "Scope Determination"
+      action: "inline"
+      description: |
+        Produce structured scope document:
+          - What is IN scope (explicitly)
+          - What is OUT of scope (explicitly)
+          - Assumptions (to be validated)
+          - Open questions (need answers before design)
+      outputs: ["scope_document"]
+
+  convergence_loop:
+    template_ref: "primitives/validation/detect-fix-rescan-loop.yaml"
+    gate: "scope_document completeness ≥ 90%"
+    max_iterations: 3
+
+  output:
+    response_block: "BLOCK-ANALYSIS"
+    format: "hypothesis table + scope document + open questions"
+    git_policy: "no_commit — analysis only"
+
+completion_gate:
+  required_outputs: ["workspace_model", "scope_document", "validated_scope"]
+  quality_threshold: "All open questions documented; alternatives considered"

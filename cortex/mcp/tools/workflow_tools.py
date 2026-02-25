@@ -147,6 +147,8 @@ class CortexWorkflow(ConsolidatedTool):
             return await self._execute_workflow(**kwargs)
         elif operation == "list":
             return await self._list_templates(**kwargs)
+        elif operation == "list_sdlc":
+            return await self._list_sdlc_templates(**kwargs)
         elif operation == "search":
             return await self._search_templates(**kwargs)
         elif operation == "validate":
@@ -289,6 +291,45 @@ class CortexWorkflow(ConsolidatedTool):
                 metadata={"error": str(e)},
             )
     
+    async def _list_sdlc_templates(self, **kwargs: Any) -> ToolResult:
+        """List available SDLC workflow templates (Phase 79 GAP-79-D-03).
+
+        Returns all 7 SDLC lifecycle templates with their intent mappings
+        and corresponding BLOCK-* response templates.
+        """
+        try:
+            from cortex.orchestrators.domain.sdlc_workflow_orchestrator import (
+                SDLCWorkflowOrchestrator,
+                _SDLC_INTENT_MAP,
+                _RESPONSE_BLOCK_MAP,
+            )
+
+            orch = SDLCWorkflowOrchestrator()
+            template_ids = orch.list_sdlc_templates()
+
+            output_lines = ["**Available SDLC Workflow Templates (Phase 79):**\n"]
+            for tid in template_ids:
+                block = _RESPONSE_BLOCK_MAP.get(tid, "BLOCK-ANALYSIS")
+                intents = [k for k, v in _SDLC_INTENT_MAP.items() if v == tid]
+                output_lines.append(f"- `{tid}`")
+                output_lines.append(f"  Response: `{block}`")
+                output_lines.append(f"  Intents: {', '.join(intents[:3])}")
+
+            return ToolResult(
+                success=True,
+                content="\n".join(output_lines),
+                metadata={
+                    "template_count": len(template_ids),
+                    "template_ids": template_ids,
+                },
+            )
+        except Exception as exc:
+            return ToolResult(
+                success=False,
+                content=f"Failed to list SDLC templates: {exc}",
+                metadata={"error": str(exc)},
+            )
+
     async def _search_templates(self, **kwargs: Any) -> ToolResult:
         """
         Fuzzy search across all templates.

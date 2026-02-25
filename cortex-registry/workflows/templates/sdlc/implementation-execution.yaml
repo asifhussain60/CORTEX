@@ -1,0 +1,103 @@
+# SDLC Workflow Template: Implementation Execution
+# Phase: 79 (GAP-79-B-03) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Primitive references: cortex-registry/workflows/templates/primitives/
+# No version field — append-only YAML standard (CORE-002)
+# GIT POLICY: checkpoint before work; commit after gates; NEVER auto-push
+
+id: sdlc-implementation-execution
+title: "Implementation Execution Workflow"
+description: |
+  TDD-driven implementation workflow. Wraps tdd-feature-implementation.yaml
+  as composite. Adds git checkpoint before work, knowledge_context injection
+  from SDLC knowledge, company standards enforcement, and security gate.
+
+triggers:
+  intents: ["IMPLEMENT", "BUILD", "CREATE", "ADD_FEATURE"]
+  mode_keywords: ["implement", "build", "create", "add", "write"]
+
+knowledge_context:
+  primary: "sdlc/test-strategy-selection.yaml"
+  supplementary:
+    - "testing-validation/tdd-best-practices.yaml"
+    - "sdlc/security-by-design.yaml"
+    - "sdlc/code-review-checklist.yaml"
+    - "backend-python/clean-code.yaml"
+  company_overrides:
+    - "company/domains/api-standards.yaml"
+    - "company/domains/security-standards.yaml"
+  resolution_order: "stack-specific > sdlc > domain > generic"
+
+workflow:
+  steps:
+    - id: git_checkpoint
+      name: "Git Checkpoint (before any code changes)"
+      action: "inline"
+      description: |
+        Create git checkpoint using GitOrchestrator:
+          1. Verify working tree clean (or stash pending changes)
+          2. Create feature branch if not already on one
+          3. Record baseline commit SHA for rollback
+        MANDATORY — no code changes before checkpoint exists.
+      outputs: ["branch_name", "baseline_sha"]
+
+    - id: knowledge_injection
+      name: "Inject Implementation Knowledge"
+      template_ref: "primitives/analysis/intelligence-injection.yaml"
+      inputs:
+        knowledge_context: "{{knowledge_context.primary}}"
+        supplementary: "{{knowledge_context.supplementary}}"
+        company_context: "{{knowledge_context.company_overrides}}"
+        stack_context: "{{detected_stack | default: 'python'}}"
+      outputs: ["test_strategy", "quality_standards", "company_constraints"]
+
+    - id: tdd_execution
+      name: "TDD Cycle (RED → GREEN → REFACTOR)"
+      template_ref: "primitives/tdd/tdd-feature-implementation.yaml"
+      inputs:
+        request: "{{request}}"
+        test_strategy: "{{knowledge_injection.test_strategy}}"
+        quality_standards: "{{knowledge_injection.quality_standards}}"
+        tdd_mandatory: true
+      outputs: ["implementation", "tests", "coverage_report"]
+
+    - id: security_gate
+      name: "Security Gate"
+      template_ref: "primitives/governance/security-check.yaml"
+      inputs:
+        code: "{{tdd_execution.implementation}}"
+        security_requirements: "{{knowledge_injection.company_constraints}}"
+      outputs: ["security_clearance"]
+
+    - id: quality_gate
+      name: "Quality Gate"
+      template_ref: "primitives/validation/detect-fix-rescan-loop.yaml"
+      inputs:
+        coverage_report: "{{tdd_execution.coverage_report}}"
+        security_clearance: "{{security_gate.security_clearance}}"
+        min_coverage: "{{knowledge_injection.quality_standards.coverage_minimum}}"
+      outputs: ["quality_clearance"]
+
+    - id: git_commit
+      name: "Git Commit (after all gates pass)"
+      action: "inline"
+      description: |
+        Commit using GitOrchestrator ONLY after all gates pass:
+          1. Stage changed files
+          2. Conventional commit message: feat/fix/refactor(scope): description
+          3. Include test coverage in commit message body
+        NEVER push to origin automatically — user must request explicitly.
+      outputs: ["commit_sha"]
+
+  convergence_loop:
+    template_ref: "primitives/validation/detect-fix-rescan-loop.yaml"
+    gate: "security_clearance == PASSED and quality_clearance == PASSED"
+    max_iterations: 5
+
+  output:
+    response_block: "BLOCK-CODE-REVIEW"
+    format: "implementation summary + test coverage + quality gate results"
+    git_policy: "commit_after_gates_no_push"
+
+completion_gate:
+  required_outputs: ["implementation", "tests", "security_clearance", "quality_clearance", "commit_sha"]
+  quality_threshold: "All tests GREEN; security gate passed; coverage meets threshold"

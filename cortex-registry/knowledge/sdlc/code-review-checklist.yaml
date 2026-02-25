@@ -1,0 +1,91 @@
+# SDLC Knowledge: Code Review Checklist
+# Phase: 79 (GAP-79-A-03) | Sweep: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Authority: cortex-registry/knowledge/INDEX.yaml (sdlc domain)
+# No version field — append-only YAML standard (CORE-002)
+
+overview: |
+  Automated code review criteria covering correctness, DRY/SOLID principles,
+  security, performance, and API contract conformance. Severity classification
+  P0-P3 maps to action requirements. References company payment security (PCI-DSS)
+  and API versioning standards.
+
+best_practices:
+  review_gates:
+    P0_blocking:
+      - category: "Security"
+        checks:
+          - "No hardcoded secrets, tokens, passwords (CORE-028 + secrets-patterns.yaml)"
+          - "All user input sanitized before use"
+          - "SQL/command injection impossible by construction"
+          - "Authentication/authorization enforced on every protected route"
+          - "PCI-DSS compliance: no PAN in logs, masked in responses"
+      - category: "Data integrity"
+        checks:
+          - "Transactions atomic — no partial writes visible"
+          - "Idempotency guaranteed for payment/mutation endpoints"
+          - "No silent data loss or corruption"
+
+    P1_required:
+      - category: "Code quality"
+        checks:
+          - "No functions > 50 lines (SRP — SOLID)"
+          - "No class > 300 lines (SRP)"
+          - "Cyclomatic complexity ≤ 10 per function"
+          - "No duplicate logic blocks (CORE-035)"
+          - "Type hints on all public functions (CORE-011)"
+          - "Docstrings on all public APIs (CORE-012)"
+      - category: "API contracts"
+        checks:
+          - "API versioning follows company/domains/api-standards.yaml"
+          - "Breaking changes require version bump (never silent)"
+          - "OpenAPI spec updated for any new/changed endpoint"
+      - category: "Error handling"
+        checks:
+          - "No bare except (always catch specific exception)"
+          - "Errors logged with context (orchestrator, operation, request_id)"
+          - "User-facing errors never expose stack traces"
+
+    P2_recommended:
+      - category: "Performance"
+        checks:
+          - "No N+1 query patterns"
+          - "No blocking I/O in async context"
+          - "Caches invalidated on write"
+      - category: "Readability"
+        checks:
+          - "Variable names describe intent (not implementation)"
+          - "Magic numbers extracted to named constants"
+          - "Complex conditions extracted to named predicates"
+
+    P3_advisory:
+      - category: "Documentation"
+        checks:
+          - "README updated if behaviour changes"
+          - "Architecture decisions recorded (ADR)"
+          - "Runbook updated if ops behaviour changes"
+
+  severity_escalation:
+    P0: "BLOCK — cannot merge until resolved"
+    P1: "REQUIRED — must be addressed in this PR (not deferred)"
+    P2: "RECOMMENDED — address if < 30min; else create issue"
+    P3: "ADVISORY — track as tech debt"
+
+  automation_integration:
+    ruff: "P1 code quality checks automated"
+    mypy: "P1 type checking automated"
+    bandit: "P0 security checks automated"
+    pytest: "P0 test gate — 0 failures before merge"
+
+company_context:
+  payment_security: "company/domains/payment-security.yaml"
+  api_standards: "company/domains/api-standards.yaml"
+  security_standards: "company/domains/security-standards.yaml"
+  constraints:
+    - "PCI-DSS: Never log card numbers even partially"
+    - "API breaking changes require RFC process (company/domains/api-standards.yaml)"
+
+references:
+  - "backend-python/code-review.yaml"
+  - "security/secure-coding-practices.yaml"
+  - "../knowledge-base/security/owasp-top10.yaml"
+  - "architecture/engineering-solid-principles.yaml"
