@@ -1,0 +1,541 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Phase 73: Unified Brain + Toolkit — P0 Consolidated Sweep
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority:  cortex-master.yaml v20.0 (thin index) + CORE-064 (sweep completeness)
+# Template:   cortex-registry/planning/phases/_template.yaml
+# Created:    2026-02-25
+# Status:     PLANNED
+# Sweep ID:   SWEEP-73-UNIFIED-BRAIN-TOOLKIT
+#
+# CONSOLIDATES:
+#   - phase-71-holistic-unified-brain.yaml   (33 GAPs, 10 sub-phases — SSOT)
+#   - phase-toolkit-consolidation.yaml       (7 GAPs, 8 sub-phases — absorbed)
+#   - phase-70-unified-brain-remediation.yaml (superseded by phase-71, archived)
+#
+# ABSORBED SWEEPS:
+#   SWEEP-71-HOLISTIC-UNIFIED-BRAIN  — 24 open GAPs (GAP-71-B1..I1)
+#   SWEEP-TOOLKIT-001                — 7 open GAPs  (GAP-001..GAP-007)
+#   SWEEP-70-UNIFIED-BRAIN           — fully closed (Phase 70A); carried for CORE-064
+#
+# RATIONALE:
+#   Toolkit GAPs (CORE-035 BatchProcessor dedup, HierarchicalScanner generic,
+#   DomainAdapter protocol) are structural prerequisites for Phase-71 matrix wiring.
+#   GAP-71-H (Audit Pipeline Integration) explicitly absorbs toolkit work.
+#   Running them as separate phases introduces scheduling risk and duplicate test runs.
+#   Consolidating into one sweep eliminates that risk and satisfies CORE-064.
+# ═══════════════════════════════════════════════════════════════════════════════
+
+id: phase-73
+title: "Unified Brain + Toolkit — Intelligence Matrix Full Wiring, OPJ, Stack Toolkit"
+priority: P0
+status: PLANNED
+sweep_id: SWEEP-73-UNIFIED-BRAIN-TOOLKIT
+created: "2026-02-25"
+
+absorbs:
+  - id: SWEEP-71-HOLISTIC-UNIFIED-BRAIN
+    source_file: "cortex-registry/planning/phases/planned/phase-71-holistic-unified-brain.yaml"
+    gaps_absorbed: 24
+    gaps_closed_in_source: 9
+    note: "Phase-71 is the primary authority. GAP-71-A1..A5 already closed. GAP-71-I1 closed. 24 open GAPs imported as-is."
+  - id: SWEEP-TOOLKIT-001
+    source_file: "cortex-registry/planning/phases/planned/phase-toolkit-consolidation.yaml"
+    gaps_absorbed: 7
+    gaps_closed_in_source: 0
+    note: "All 7 toolkit GAPs open. Renumbered GAP-74-T1..T7 for CORE-064 catalogue tracking."
+  - id: SWEEP-70-UNIFIED-BRAIN
+    source_file: "cortex-registry/planning/phases/planned/phase-70-unified-brain-remediation.yaml"
+    gaps_absorbed: 0
+    gaps_closed_in_source: 16
+    note: "Fully closed in Phase 70A sessions. Archived to completed/. Referenced here for CORE-064 lineage."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LIVE MATRIX SNAPSHOT (source of truth — 2026-02-25)
+# ─────────────────────────────────────────────────────────────────────────────
+live_matrix_state:
+  execution_date: "2026-02-25"
+  dimensions: "15×15 → target 20×20"
+  total_cells_current: 29
+  wired: 2
+  coverage_score: "6.9%"
+  target_coverage: "≥80%"
+  p0_critical_unwired: 7
+  p1_high_unwired: 18
+  gap_from_gate: "43.1 percentage points below 50% gate"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SWEEP CATALOGUE — CORE-064 Completeness Contract
+# Total: 31 GAPs (24 from phase-71 + 7 from toolkit)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ═══ TRACK A: CLOSED — Verified Phase 70A (do not re-execute) ═════════════
+  - id: GAP-73-A1
+    source: GAP-71-A1
+    title: "IntentRouter identity collapse [CLOSED]"
+    status: CLOSED
+    closed_by: "Phase 70A"
+
+  - id: GAP-73-A2
+    source: GAP-71-A2
+    title: "OPJ Writer workspace root path [CLOSED]"
+    status: CLOSED
+    closed_by: "Phase 70A"
+
+  - id: GAP-73-A3
+    source: GAP-71-A3
+    title: "OPJ YAML serialization timeout [CLOSED]"
+    status: CLOSED
+    closed_by: "Phase 70A"
+
+  - id: GAP-73-A4
+    source: GAP-71-A4
+    title: "Golden test failures — routing differentiation [CLOSED]"
+    status: CLOSED
+    closed_by: "Phase 70A"
+
+  - id: GAP-73-A5
+    source: GAP-71-A5
+    title: "Golden test failures — base class convergence [CLOSED]"
+    status: CLOSED
+    closed_by: "Phase 70A"
+
+  - id: GAP-73-A6
+    source: GAP-71-I1
+    title: "SQLite convergence signals wired into AuditIntelligenceFeedback [CLOSED]"
+    status: CLOSED
+    closed_by: "Phase 71 tracking (pre-closed)"
+
+  # ═══ TRACK B: OPJ + ORCHESTRATOR WIRING (P0) ═════════════════════════════
+  - id: GAP-73-B1
+    source: GAP-71-B1
+    title: "MasterOrchestrator is pattern-blind — OPJMixin not inherited"
+    severity: P0
+    status: OPEN
+    fix: "Add OPJMixin to MasterOrchestrator; call _opj_consult() in coordinate_operation()"
+    file: "cortex/orchestrators/core/master_orchestrator.py"
+    test: "tests/golden/intelligence/test_unified_brain_opj_golden.py::test_master_orchestrator_opj_consult"
+
+  - id: GAP-73-B2
+    source: GAP-71-B2
+    title: "IntentClassifier never records outcomes to OPJ — no feedback loop"
+    severity: P1
+    status: OPEN
+    fix: "Wire IntentRouter._opj_record_success/failure() after each routing decision"
+    file: "cortex/orchestrators/core/intent_router.py"
+    test: "tests/golden/intelligence/test_unified_brain_opj_golden.py::test_intent_router_opj_record"
+
+  - id: GAP-73-B3
+    source: GAP-71-B3
+    title: "GovernanceRegistry not consulted at routing time — violations ignored"
+    severity: P1
+    status: OPEN
+    fix: "Wire GovernanceRegistry.get_active_violations() → IntentRouter complexity_score"
+    file: "cortex/orchestrators/core/intent_router.py"
+
+  # ═══ TRACK C: P0 MATRIX CELL WIRING (7 critical pairs) ═══════════════════
+  - id: GAP-73-C1
+    source: GAP-71-C1
+    title: "IC-001 × CC-001: LENS Analysis / HierarchicalScanner unwired"
+    severity: P0
+    status: OPEN
+    fix: "Wire HierarchicalScanner.scan() output → LENS.analyze(files) pipeline"
+
+  - id: GAP-73-C2
+    source: GAP-71-C2
+    title: "IC-004 × CC-008: BrainTier-T1-Learned / MCPToolRegistry unwired"
+    severity: P0
+    status: OPEN
+    fix: "Expose T1/T2/T3 memory query as cortex_brain_query MCP tool"
+
+  - id: GAP-73-C3
+    source: GAP-71-C3
+    title: "IC-007 × CC-001: IntelligenceOrchestrator / HierarchicalScanner unwired"
+    severity: P0
+    status: OPEN
+    fix: "Wire HierarchicalScanner.scan() into IntelligenceOrchestrator.analyze()"
+
+  - id: GAP-73-C4
+    source: GAP-71-C4
+    title: "IC-008 × CC-008: ResponseTemplateGenerator / MCPToolRegistry unwired"
+    severity: P0
+    status: OPEN
+    fix: "Wrap all MCP tool results through format_response() before returning"
+
+  - id: GAP-73-C5
+    source: GAP-71-C5
+    title: "IC-010 × CC-004: KnowledgeIndexer / DocGenPlaybook unwired"
+    severity: P0
+    status: OPEN
+    fix: "Wire KnowledgeIndexer.inventory() → DocGenPlaybook stage_1.knowledge_yaml_scan"
+
+  - id: GAP-73-C6
+    source: GAP-71-C6
+    title: "IC-012 × CC-004: KnowledgeIndexerDocGenBridge / DocGenPlaybook unwired"
+    severity: P0
+    status: OPEN
+    fix: "Wire KnowledgeIndexerDocGenBridge → DocGenPlaybook stage_1"
+
+  - id: GAP-73-C7
+    source: GAP-71-F3
+    title: "IC-014 × CC-008: CortexBrainQuery / MCPToolRegistry — tool not registered"
+    severity: P0
+    status: OPEN
+    fix: "Register cortex_brain_query MCP tool in MCPToolRegistry"
+
+  # ═══ TRACK D: P1 MATRIX CELL WIRING (18 pairs, 4 clusters) ═══════════════
+  - id: GAP-73-D1
+    source: GAP-71-D1
+    title: "P1 cluster 1 — LENS/BatchProcessor + SynthesisEngine/SweepCatalogue (4 pairs)"
+    severity: P1
+    status: OPEN
+    pairs: ["IC-001×CC-002", "IC-002×CC-009", "IC-002×CC-011", "IC-003×CC-009"]
+
+  - id: GAP-73-D2
+    source: GAP-71-D2
+    title: "P1 cluster 2 — DomainBrain + BrainTier-T2 wiring (4 pairs)"
+    severity: P1
+    status: OPEN
+    pairs: ["IC-003×CC-011", "IC-004×CC-003", "IC-005×CC-002", "IC-005×CC-005"]
+
+  - id: GAP-73-D3
+    source: GAP-71-D3
+    title: "P1 cluster 3 — BlindSpotDetector wiring (4 pairs)"
+    severity: P1
+    status: OPEN
+    pairs: ["IC-009×CC-005", "IC-009×CC-010", "IC-009×CC-013", "IC-008×CC-002"]
+
+  - id: GAP-73-D4
+    source: GAP-71-D4
+    title: "P1 cluster 4 — KnowledgeIndexer + FormatResponseHook (6 pairs)"
+    severity: P1
+    status: OPEN
+    pairs: ["IC-010×CC-002", "IC-010×CC-005", "IC-010×CC-009", "IC-010×CC-011", "IC-015×CC-002", "IC-015×CC-005"]
+
+  # ═══ TRACK E: 20×20 MATRIX EXTENSION (5 new IC + 5 new CC) ════════════════
+  - id: GAP-73-E1
+    source: GAP-71-E1
+    title: "Matrix extension: IC-016..IC-020 (5 new intelligence capabilities)"
+    severity: P1
+    status: OPEN
+    new_x: ["IC-016 CompanyKnowledgeProvider", "IC-017 InfrastructureObservability",
+            "IC-018 GovernanceRuleIntelligence", "IC-019 MemoryTierMigrator",
+            "IC-020 AuditIntelligenceFeedback"]
+
+  - id: GAP-73-E2
+    source: GAP-71-E2
+    title: "Matrix extension: CC-016..CC-020 (5 new cross-cutting capabilities)"
+    severity: P1
+    status: OPEN
+    new_y: ["CC-016 OnboardedRepoRegistry", "CC-017 HealthCheckPipeline",
+            "CC-018 LiveRuleValidator", "CC-019 CrossTierKnowledgeFlow",
+            "CC-020 AuditFixConvergenceSignals"]
+
+  # ═══ TRACK F: EXPANDED SCOPE (company knowledge + memory tiers) ════════════
+  - id: GAP-73-F1
+    source: GAP-71-F1
+    title: "CompanyKnowledgeProvider not feeding LENS context"
+    severity: P1
+    status: OPEN
+    fix: "CompanyKnowledgeProvider.load() → LENS analyze() context enrichment"
+    file: "cortex/intelligence/knowledge/company_domain_loader.py"
+
+  - id: GAP-73-F2
+    source: GAP-71-F2
+    title: "OPJ patterns never auto-promote to T1 learned (memory silo)"
+    severity: P1
+    status: OPEN
+    fix: "OPJReader high-confidence entries (>0.80) auto-promoted → knowledge_retention_store"
+    file: "cortex/intelligence/memory/"
+
+  # ═══ TRACK G: GOLDEN TESTS DELIVERY (TDD RED gate) ════════════════════════
+  - id: GAP-73-G1
+    source: GAP-71-G1
+    title: "36 golden intelligence tests missing (TDD RED phase)"
+    severity: P0
+    status: OPEN
+    files:
+      - "tests/golden/intelligence/test_intelligence_matrix_golden.py (24 tests)"
+      - "tests/golden/intelligence/test_unified_brain_opj_golden.py (12 tests)"
+    note: "Must be written RED before any implementation. CORE-008."
+
+  - id: GAP-73-G2
+    source: GAP-71-G2
+    title: "6 golden test extensions for expanded scope (IC-016..IC-020)"
+    severity: P1
+    status: OPEN
+    file: "tests/golden/intelligence/test_intelligence_matrix_golden.py"
+
+  # ═══ TRACK H: AUDIT + TOOLKIT INTEGRATION ════════════════════════════════
+  - id: GAP-73-H1
+    source: GAP-71-H1
+    title: "Check #20 (Intelligence Matrix health) missing from /audit fix Stage 2"
+    severity: P1
+    status: OPEN
+    fix: "Add Check #20 to cortex-auditor.md and AuditCoordinator Stage 2"
+
+  - id: GAP-73-H2
+    source: GAP-71-H2
+    title: "5 pre-existing unit test failures unresolved"
+    severity: P1
+    status: OPEN
+    file: "tests/unit/core/test_phase_68_core_flatten.py"
+
+  # ═══ TRACK T: TOOLKIT CONSOLIDATION (absorbed from SWEEP-TOOLKIT-001) ═════
+  - id: GAP-73-T1
+    source: "GAP-001 (SWEEP-TOOLKIT-001)"
+    title: "MediaScanner is media-specific — should be generic HierarchicalScanner"
+    severity: P1
+    status: OPEN
+    file: "cortex/tools/media/media_scanner.py"
+    fix: "Extract generic HierarchicalScanner into cortex/toolkit/filesystem/"
+
+  - id: GAP-73-T2
+    source: "GAP-002 (SWEEP-TOOLKIT-001)"
+    title: "4 duplicate BatchProcessor implementations violate CORE-035"
+    severity: P0
+    status: OPEN
+    files:
+      - "tests/unit/phase4/test_brt027_performance_optimization.py"
+      - "cortex/core/knowledge/bulk_ingestion.py"
+      - "cortex/lens/lens_tiered_mcp_api.py"
+      - "cortex/testing/framework/ (CortexXdistPlugin)"
+    fix: "Canonical BatchProcessor in cortex/toolkit/batch/; all others import from it"
+
+  - id: GAP-73-T3
+    source: "GAP-003 (SWEEP-TOOLKIT-001)"
+    title: "FilenameAnalyzer domain-locked to media"
+    severity: P1
+    status: OPEN
+    file: "cortex/tools/media/filename_sanitizer.py"
+    fix: "Extract generic FilenameIntelligence with pattern config injection"
+
+  - id: GAP-73-T4
+    source: "GAP-004 (SWEEP-TOOLKIT-001)"
+    title: "SafeFileRenamer Python-only — no adapter protocol for TS/C#"
+    severity: P2
+    status: OPEN
+    file: "cortex/tools/safe_file_rename.py"
+    fix: "DomainAdapter ABC in cortex/toolkit/adapters/"
+
+  - id: GAP-73-T5
+    source: "GAP-005 (SWEEP-TOOLKIT-001)"
+    title: "No generic DomainAdapter protocol for pluggable toolkit extensions"
+    severity: P1
+    status: OPEN
+    fix: "cortex/toolkit/adapters/domain_adapter.py — ABC + 2 concrete adapters"
+
+  - id: GAP-73-T6
+    source: "GAP-006 (SWEEP-TOOLKIT-001)"
+    title: "Workflow orchestration pattern duplicated across 7+ orchestrators"
+    severity: P1
+    status: OPEN
+    files:
+      - "cortex/orchestrators/support/plex_workflow_orchestrator.py"
+      - "cortex/orchestrators/support/digest_session_orchestrator.py"
+      - "cortex/orchestrators/core/audit_coordinator.py"
+    fix: "Generic WorkflowOrchestrator base in cortex/toolkit/workflow/"
+
+  - id: GAP-73-T7
+    source: "GAP-007 (SWEEP-TOOLKIT-001)"
+    title: "No MCP tools exposing toolkit operations"
+    severity: P2
+    status: OPEN
+    fix: "cortex_toolkit MCP tool with ops: scan, batch, rename, workflow_status"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES — Ordered execution (CORE-008: RED before GREEN)
+# ─────────────────────────────────────────────────────────────────────────────
+sub_phases:
+
+  - id: phase-73-A
+    title: "Verify Closed Blockers + Smoke Baseline"
+    status: COMPLETE
+    gaps: [GAP-73-A1, GAP-73-A2, GAP-73-A3, GAP-73-A4, GAP-73-A5, GAP-73-A6]
+    action: "python3 scripts/run_tests.py smoke — confirm ≥1420 passing"
+    note: "All 6 closed in Phase 70A. Run smoke to set baseline before any new work."
+
+  - id: phase-73-B
+    title: "TDD RED — Write All 42 Golden Tests (CORE-008 gate)"
+    priority: P0
+    status: PLANNED
+    gaps: [GAP-73-G1, GAP-73-G2]
+    depends_on: [phase-73-A]
+    deliverables:
+      - "tests/golden/intelligence/test_intelligence_matrix_golden.py (24 tests — all RED)"
+      - "tests/golden/intelligence/test_unified_brain_opj_golden.py (12 tests — all RED)"
+      - "6 extension tests in test_intelligence_matrix_golden.py (RED)"
+    test_runner: "python3 scripts/run_tests.py golden"
+    note: "MUST be RED before any implementation. CORE-008: no exceptions."
+
+  - id: phase-73-C
+    title: "Toolkit Foundation + BatchProcessor Dedup (P0 CORE-035 fix)"
+    priority: P0
+    status: PLANNED
+    gaps: [GAP-73-T1, GAP-73-T2, GAP-73-T3, GAP-73-T5]
+    depends_on: [phase-73-B]
+    deliverables:
+      - "cortex/toolkit/ directory with 6 subdirs"
+      - "cortex/toolkit/batch/batch_processor.py (canonical)"
+      - "cortex/toolkit/filesystem/hierarchical_scanner.py"
+      - "cortex/toolkit/adapters/domain_adapter.py (ABC)"
+    test_runner: "python3 scripts/run_tests.py dir tests/unit/toolkit/"
+    note: "Toolkit foundation enables GAP-73-C1 (LENS/HierarchicalScanner) in phase-73-D."
+
+  - id: phase-73-D
+    title: "OPJ Wiring — MasterOrchestrator + IntentRouter (apex P0 fix)"
+    priority: P0
+    status: PLANNED
+    gaps: [GAP-73-B1, GAP-73-B2, GAP-73-B3]
+    depends_on: [phase-73-B]
+    deliverables:
+      - "MasterOrchestrator inherits OPJMixin, calls _opj_consult()"
+      - "IntentRouter records all routing decisions to OPJ"
+      - "GovernanceRegistry.get_active_violations() → IntentRouter complexity_score"
+    test_runner: "python3 scripts/run_tests.py dir tests/orchestrators/core/"
+    note: "Highest-leverage fix — apex orchestrator becomes pattern-aware."
+
+  - id: phase-73-E
+    title: "P0 Matrix Cell Wiring — 7 Critical Pairs"
+    priority: P0
+    status: PLANNED
+    gaps: [GAP-73-C1, GAP-73-C2, GAP-73-C3, GAP-73-C4, GAP-73-C5, GAP-73-C6, GAP-73-C7]
+    depends_on: [phase-73-C, phase-73-D]
+    note: "Coverage: 6.9% → ~31% after this sub-phase. 9 cells wired of 29."
+    test_runner: "python3 scripts/run_tests.py dir tests/intelligence/"
+
+  - id: phase-73-F
+    title: "P1 Matrix Cell Wiring — 18 High-Priority Pairs (4 clusters)"
+    priority: P1
+    status: PLANNED
+    gaps: [GAP-73-D1, GAP-73-D2, GAP-73-D3, GAP-73-D4]
+    depends_on: [phase-73-E]
+    note: "Coverage: ~31% → ~93% (27 of 29 cells wired). Gate: PASS ≥50%."
+    test_runner: "python3 scripts/run_tests.py dir tests/intelligence/"
+
+  - id: phase-73-G
+    title: "20×20 Matrix Extension + CompanyKnowledge + Memory Tier Promotion"
+    priority: P1
+    status: PLANNED
+    gaps: [GAP-73-E1, GAP-73-E2, GAP-73-F1, GAP-73-F2]
+    depends_on: [phase-73-E]
+    note: "Extend matrix to 20×20. Wire OPJ→T1 promotion. CompanyKnowledge→LENS."
+    test_runner: "python3 scripts/run_tests.py dir tests/intelligence/"
+
+  - id: phase-73-H
+    title: "Audit Integration + Remaining Toolkit + Unit Test Fix"
+    priority: P1
+    status: PLANNED
+    gaps: [GAP-73-H1, GAP-73-H2, GAP-73-T4, GAP-73-T6, GAP-73-T7]
+    depends_on: [phase-73-F]
+    deliverables:
+      - "Check #20 added to /audit fix Stage 2 (cortex-auditor.md)"
+      - "cortex/toolkit/workflow/workflow_orchestrator.py (generic base)"
+      - "cortex_toolkit MCP tool registered"
+      - "5 pre-existing unit test failures fixed"
+    test_runner: "python3 scripts/run_tests.py unit"
+
+  - id: phase-73-I
+    title: "GREEN Phase — Turn All 42 Golden Tests Green"
+    priority: P0
+    status: PLANNED
+    gaps: [GAP-73-G1, GAP-73-G2]
+    depends_on: [phase-73-D, phase-73-E, phase-73-F, phase-73-G, phase-73-H]
+    note: "All 42 golden tests must pass. Matrix coverage ≥80%. CORE-064 catalogue review."
+    test_runner: "python3 scripts/run_tests.py golden"
+
+  - id: phase-73-J
+    title: "Smoke Gate + CORE-064 Close + cortex-master.yaml update"
+    priority: P0
+    status: PLANNED
+    depends_on: [phase-73-I]
+    action: "python3 scripts/run_tests.py smoke — must pass ≥1400"
+    note: "Close all 31 GAPs. Move phase-73 file planned/→completed/. Update cortex-master.yaml v21."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EXIT CRITERIA — Phase 73 COMPLETE when ALL met (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+exit_criteria:
+  matrix:
+    - "All 7 original P0 cells wired (coverage gate: PASS)"
+    - "All 18 P1 cells wired (coverage ~93%)"
+    - "Matrix extended 15×15 → 20×20 (400 possible pairs scored)"
+    - "matrix.coverage_score ≥ 0.80 (80%+ on 20×20)"
+    - "Check #20 wired into /audit fix Stage 2"
+  opj:
+    - "MasterOrchestrator._opj_consult() called in coordinate_operation()"
+    - "IntentRouter records all decisions to OPJ"
+    - "OPJ→T1 promotion pipeline functional (confidence ≥0.80)"
+  toolkit:
+    - "cortex/toolkit/ exists with 6 canonical subdirs"
+    - "Canonical BatchProcessor imported by all 4 former duplicates (CORE-035 CLOSED)"
+    - "HierarchicalScanner generic and used by LENS pipeline"
+    - "DomainAdapter ABC present with ≥2 concrete adapters"
+    - "cortex_toolkit MCP tool registered and callable"
+  golden_tests:
+    - "42 new golden tests written RED then turned GREEN"
+    - "Previous golden suite ≥947 passing (no regressions)"
+  unit_tests:
+    - "0 unit test failures (5 pre-existing failures fixed)"
+  smoke:
+    - "python3 scripts/run_tests.py smoke ≥1400 passing"
+  governance:
+    - "cortex-master.yaml ≤500 lines after update"
+    - "CORE-064: ALL 31 sweep catalogue GAPs CLOSED"
+    - "phase-73 detail file moved: planned/ → completed/"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# METRICS
+# ─────────────────────────────────────────────────────────────────────────────
+metrics:
+  before:
+    matrix_coverage: "6.9%"
+    matrix_dimensions: "15×15"
+    p0_cells_unwired: 7
+    p1_cells_unwired: 18
+    master_orchestrator_opj: false
+    intent_router_opj: false
+    batch_processor_duplicates: 4
+    hierarchical_scanner_generic: false
+    toolkit_exists: false
+    golden_tests_intelligence: 1
+    unit_test_failures: 5
+    smoke_passing: 1420
+  projected_after:
+    matrix_coverage: "≥80%"
+    matrix_dimensions: "20×20"
+    p0_cells_unwired: 0
+    p1_cells_unwired: 0
+    master_orchestrator_opj: true
+    intent_router_opj: true
+    batch_processor_duplicates: 0
+    hierarchical_scanner_generic: true
+    toolkit_exists: true
+    golden_tests_intelligence: 43
+    unit_test_failures: 0
+    smoke_passing: "≥1420"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUPERSEDED / ARCHIVED FILES
+# ─────────────────────────────────────────────────────────────────────────────
+archived_sources:
+  - file: "cortex-registry/planning/phases/planned/phase-71-holistic-unified-brain.yaml"
+    action: "ARCHIVE to planned/_archived/ — superseded by phase-73 (this file)"
+    reason: "GAP catalogue fully migrated. Retained for historical reference only."
+  - file: "cortex-registry/planning/phases/planned/phase-toolkit-consolidation.yaml"
+    action: "ARCHIVE to planned/_archived/ — superseded by phase-73 (this file)"
+    reason: "All 7 GAPs migrated as GAP-73-T1..T7."
+  - file: "cortex-registry/planning/phases/planned/phase-70-unified-brain-remediation.yaml"
+    action: "MOVE to completed/ — fully closed in Phase 70A, superseded by phase-71/73"
+    reason: "All 16 GAPs closed. Lineage preserved in absorbs section above."
+
+metadata:
+  authority: "cortex-master.yaml v20.0 + CORE-064 + CORE-008"
+  phase_template: "cortex-registry/planning/phases/_template.yaml"
+  ac_id: "AC-73-UNIFIED-BRAIN-TOOLKIT"
+  test_runner_guide:
+    during_tdd_red_green: "python3 scripts/run_tests.py file <specific_test_file>"
+    after_sub_phase_green: "python3 scripts/run_tests.py dir tests/<affected_dir>/"
+    pre_commit_gate: "python3 scripts/run_tests.py smoke"
+    golden_validation: "python3 scripts/run_tests.py golden"
+    sub_phase_boundary: "python3 scripts/run_tests.py batch"

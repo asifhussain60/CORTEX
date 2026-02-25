@@ -4,10 +4,12 @@
 # Status: PLANNED
 # Governance: master-plan-phase-lifecycle.yaml checkpoint-create
 
-id: "phase-70"
+id: "phase-74"
+renumbers: "phase-70"
 title: "Stack-Aware Builder Infrastructure — StackBuilder Protocol + Stack Knowledge Registry"
-version: "1.0"
+version: "1.1"
 created: "2026-02-25"
+updated: "2026-02-25"
 status: PLANNED
 priority: P0
 governance_authority:

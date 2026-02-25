@@ -1,0 +1,304 @@
+id: "phase-75"
+renumbers: "phase-72"
+title: "Capability Registry Builder — Live Auto-Generated Intelligence Inventory"
+version: "1.1"
+created: "2026-02-25"
+updated: "2026-02-25"
+status: IN_PROGRESS
+priority: P1
+governance_authority:
+  - CORE-008  # TDD mandatory — tests before implementation
+  - CORE-012  # Docstrings on all public APIs
+  - CORE-028  # snake_case file naming
+  - CORE-035  # Single canonical implementation — no duplicates
+  - CORE-049  # Silent autonomous execution
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-75-CAPABILITY-REGISTRY-BUILDER"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: Chat session 2026-02-25 — user request for a "live inventory" of all
+  CORTEX capabilities (orchestrators, workflow templates, MCP tools, response
+  templates) stored as YAML and wired into the intelligence layer.
+
+  Root problem: capabilities-manifest.yaml (cortex-registry/core/) is 368 lines
+  of hand-maintained YAML last written 2026-02-23. It drifts the moment anyone
+  adds an orchestrator or workflow template. The CapabilityMatcher reads
+  .github/agents/ YAML front-matter but is blind to orchestrators and templates.
+  IntentRouter has no manifest-level capability awareness at routing time.
+
+  Three structural gaps identified:
+    1. No generator — manifest is static, hand-written, drifts immediately.
+    2. Incomplete coverage — no per-template workflow index, no response template
+       catalogue, LENS analyzers not described semantically.
+    3. Unidirectional — intelligence layer does not query the manifest; it uses
+       hardcoded imports and agents front-matter only.
+
+  Decision: Evolve capabilities-manifest.yaml (same path, same file) into a
+  generated, versioned, intelligence-queryable Capability Registry. No new
+  folder, no migration cost. cortex-registry/.inventory/ folder (created by user
+  2026-02-25) is empty and will be removed — wrong location (registry = authored
+  truth; generated output belongs in .cortex-runtime/ or replaces the existing
+  manifest at its canonical path).
+
+  Architecture: 3 layers.
+    Layer 1 — CapabilityRegistryBuilder (new Python module): scans source,
+              generates manifest.
+    Layer 2 — capabilities-manifest.yaml (enhanced, schema v2.0): same path,
+              backward-compatible, gains auto-generation header + full template
+              index.
+    Layer 3 — CapabilityMatcher.load_from_manifest() (new method on existing
+              class): wires manifest into IntentRouter startup path.
+
+  Score at entry: N/A (new capability — no baseline)
+  Baseline smoke tests: 1420 passed
+  Git prerequisite: CORTEX branch, Phase 68/69 complete
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064 — all must be CLOSED before COMPLETE)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  - id: "GAP-72-01"
+    title: "capabilities-manifest.yaml is static and hand-maintained — drifts on every orchestrator change"
+    severity: P1
+    source: "Chat session 2026-02-25 inventory design"
+    evidence: |
+      cortex-registry/core/capabilities-manifest.yaml
+        last_audit_fix: "2026-02-23"  # hand-written timestamp
+        orchestrators.total: 22       # stale — architecture says 27 wired
+      No script or hook regenerates this file. Any new orchestrator is invisible
+      to the manifest until a human edits it.
+    action_ref: "phase-72-a"
+    status: CLOSED
+
+  - id: "GAP-72-02"
+    title: "Workflow templates (66 YAMLs) have no per-template index entry in the manifest"
+    severity: P1
+    source: "Chat session 2026-02-25 inventory design"
+    evidence: |
+      find cortex-registry/workflows/templates -name "*.yaml" | wc -l → 66
+      capabilities-manifest.yaml workflows section references only the root folder
+      path (template_registry: cortex-registry/workflows/templates/) with no
+      per-template id, domain, trigger, or capability metadata.
+    action_ref: "phase-72-b"
+    status: OPEN
+
+  - id: "GAP-72-03"
+    title: "Response templates not indexed — .github/templates/ SSOT not queryable"
+    severity: P2
+    source: "Chat session 2026-02-25 inventory design"
+    evidence: |
+      cortex-registry/artifacts/templates/responses/ contains 4 YAMLs.
+      .github/templates/cortex-response-templates.md is the SSOT but has no
+      machine-readable index. capabilities-manifest.yaml response_templates section
+      contains only a prose composition_rule, no block catalogue.
+    action_ref: "phase-72-b"
+    status: OPEN
+
+  - id: "GAP-72-04"
+    title: "CapabilityMatcher is blind to orchestrators and workflow templates — only reads agents"
+    severity: P1
+    source: "Chat session 2026-02-25 inventory design"
+    evidence: |
+      cortex/intelligence/intelligence_capability_matcher.py
+        __init__: agents_dir defaults to .github/agents/core/
+        find_by_capability(): only iterates self._agents (agent YAML front-matter)
+      No method loads capabilities-manifest.yaml. IntentRouter confidence scoring
+      has no awareness of orchestrator capability surface at routing time.
+    action_ref: "phase-72-c"
+    status: OPEN
+
+  - id: "GAP-72-05"
+    title: "cortex-registry/.inventory/ folder exists at wrong location — must be removed"
+    severity: P2
+    source: "Chat session 2026-02-25 inventory design"
+    evidence: |
+      ls cortex-registry/.inventory/ → empty directory (created 2026-02-25)
+      cortex-registry/ is the authored governance registry (CORE-035 single truth).
+      Generated/computed output must live in .cortex-runtime/ or replace the
+      canonical manifest at cortex-registry/core/capabilities-manifest.yaml.
+      An empty hidden folder at the registry root is clutter and sets wrong precedent.
+    action_ref: "phase-72-a"
+    status: CLOSED
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES (ROI-ordered, TDD-gated)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  - id: "phase-72-a"
+    title: "CapabilityRegistryBuilder — Core Generator (GAP-72-01, GAP-72-05)"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-72-01", "GAP-72-05"]
+    governance_authority: "CORE-008, CORE-028, CORE-035"
+    duration_estimate: "3–4 hours"
+    prerequisite: "smoke tests green (1420)"
+    regression_gate: "make test-batch — zero new failures"
+
+    new_files:
+      - cortex/intelligence/capability_registry_builder.py
+      - tests/intelligence/test_capability_registry_builder.py
+
+    tdd_sequence:
+      red:
+        - "test_builder_scans_orchestrators_from_cortex_source: assert builder finds ≥27 orchestrators"
+        - "test_builder_generates_manifest_yaml: assert output is valid YAML with schema_version 2.0"
+        - "test_builder_count_matches_wiring_spec: assert orchestrator count == wiring spec total"
+        - "test_builder_removes_inventory_folder: assert cortex-registry/.inventory/ absent after run"
+      green:
+        - "Implement CapabilityRegistryBuilder class with scan_orchestrators(source_root) using AST"
+        - "Implement generate_manifest(output_path) — merges v1 keys + new sections, writes YAML"
+        - "Implement validate_against_wiring_spec() — compares generated count vs. specifications/"
+        - "Add rmdir logic for .inventory/ folder in builder init or as cleanup step"
+      refactor:
+        - "Extract _scan_dir() helper for reuse across orchestrators/templates/tools scanners"
+        - "Add BuilderResult dataclass for structured return from generate_manifest()"
+
+    acceptance_criteria:
+      - "CapabilityRegistryBuilder().generate_manifest() produces valid YAML at cortex-registry/core/capabilities-manifest.yaml"
+      - "Generated manifest contains auto_generated: true and generated_at: <ISO timestamp>"
+      - "Orchestrator count in generated manifest matches wiring spec (orchestration-master-wiring.yaml)"
+      - "cortex-registry/.inventory/ folder is absent after builder runs"
+      - "All 4 RED tests pass GREEN with no existing test regressions"
+
+  - id: "phase-72-b"
+    title: "Workflow + Response Template Indexer (GAP-72-02, GAP-72-03)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-72-02", "GAP-72-03"]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "2–3 hours"
+    prerequisite: "phase-72-a complete"
+    regression_gate: "make test-batch — zero new failures"
+
+    tdd_sequence:
+      red:
+        - "test_builder_indexes_all_workflow_templates: assert len(manifest['workflow_templates']) == 66"
+        - "test_workflow_template_entry_has_required_fields: assert each entry has id, domain, path, description"
+        - "test_builder_indexes_response_template_blocks: assert manifest['response_templates']['blocks'] is non-empty list"
+      green:
+        - "Add scan_workflow_templates(templates_root) to CapabilityRegistryBuilder"
+        - "Add scan_response_templates(github_templates_dir) to CapabilityRegistryBuilder"
+        - "Extend generate_manifest() to include workflow_templates[] and response_templates.blocks[] sections"
+      refactor:
+        - "Consolidate domain extraction from template path into _extract_domain(path) helper"
+
+    acceptance_criteria:
+      - "Generated manifest contains workflow_templates[] with one entry per YAML in cortex-registry/workflows/templates/"
+      - "Each workflow template entry includes: id, domain, path, description (from YAML metadata or filename)"
+      - "Generated manifest contains response_templates.blocks[] listing template block names"
+      - "All 3 RED tests pass GREEN"
+
+  - id: "phase-72-c"
+    title: "CapabilityMatcher.load_from_manifest() + IntentRouter Wiring (GAP-72-04)"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-72-04"]
+    governance_authority: "CORE-008, CORE-035, CORE-048"
+    duration_estimate: "2–3 hours"
+    prerequisite: "phase-72-b complete"
+    regression_gate: "make test-batch — zero new failures"
+
+    files_to_edit:
+      - cortex/intelligence/intelligence_capability_matcher.py
+      - cortex/orchestrators/core/intent_router.py   # or intent_router_impl.py
+
+    new_test_file: tests/intelligence/test_capability_matcher_manifest.py
+
+    tdd_sequence:
+      red:
+        - "test_load_from_manifest_returns_orchestrator_entries: assert matcher has ≥27 orchestrators after load"
+        - "test_find_by_capability_includes_orchestrators: assert find_by_capability('tdd_orchestration') returns TDDOrchestrator"
+        - "test_intent_router_queries_manifest_on_init: assert IntentRouter has capability_registry attribute post-init"
+      green:
+        - "Add load_from_manifest(manifest_path) classmethod to CapabilityMatcher — parses orchestrators[] from manifest YAML, creates AgentMetadata entries"
+        - "Wire CapabilityMatcher.load_from_manifest() into IntentRouter.__init__ or _initialize_capabilities()"
+        - "Extend find_by_capability() to search both agents and orchestrator entries"
+      refactor:
+        - "Extract _entry_to_agent_metadata(entry) to keep orchestrator-vs-agent normalization clean"
+        - "Add capability_registry property to IntentRouter for test introspection"
+
+    acceptance_criteria:
+      - "CapabilityMatcher.load_from_manifest(path) successfully loads orchestrator entries as AgentMetadata"
+      - "find_by_capability('audit') returns AuditCoordinator (or equivalent) from manifest-loaded entries"
+      - "IntentRouter initialises CapabilityMatcher with manifest on startup — no manual call required"
+      - "All 3 RED tests pass GREEN with zero existing test regressions"
+
+  - id: "phase-72-d"
+    title: "Generator Wiring into /audit fix + MCP Tool (GAP-72-01 closure)"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-72-01"]
+    governance_authority: "CORE-008, CORE-049"
+    duration_estimate: "1–2 hours"
+    prerequisite: "phase-72-c complete"
+    regression_gate: "make test-batch — zero new failures"
+
+    description: |
+      Wire CapabilityRegistryBuilder.generate_manifest() into /audit fix Stage 2
+      (currently stamps last_audit_fix date — generator replaces that step).
+      Optionally expose as cortex_inventory MCP tool (op: rebuild | query) so
+      users can trigger regeneration from Chat without a full audit run.
+
+    tdd_sequence:
+      red:
+        - "test_audit_stage2_calls_builder: assert AuditCoordinator stage 2 invokes CapabilityRegistryBuilder"
+        - "test_manifest_timestamp_updated_after_audit: assert generated_at changes after builder run"
+      green:
+        - "Import and call CapabilityRegistryBuilder().generate_manifest() in AuditCoordinator Stage 2 handler"
+        - "Optional: add cortex_inventory MCP tool with op=rebuild and op=query"
+      refactor:
+        - "Ensure builder is idempotent — running twice produces same output (no duplicate sections)"
+
+    acceptance_criteria:
+      - "/audit fix Stage 2 auto-regenerates capabilities-manifest.yaml"
+      - "generated_at timestamp updates on every /audit fix run"
+      - "Builder is idempotent — no duplicate YAML sections on repeated runs"
+
+  - id: "phase-72-e"
+    title: "phase-72 Sweep Completeness Gate (CORE-064)"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-72-01", "GAP-72-02", "GAP-72-03", "GAP-72-04", "GAP-72-05"]
+    governance_authority: "CORE-064"
+    duration_estimate: "1 hour"
+    prerequisite: "phase-72-a through phase-72-d complete"
+    regression_gate: "make test-batch — zero new failures; all 5 GAPs CLOSED"
+
+    acceptance_criteria:
+      - "All 5 GAPs in sweep_catalogue have status: CLOSED"
+      - "cortex-registry/.inventory/ folder does not exist"
+      - "capabilities-manifest.yaml contains auto_generated: true, schema_version: '2.0'"
+      - "make test-batch passes — 1420+ smoke, zero regressions"
+      - "cortex-master.yaml phase-72 entry updated to status: COMPLETE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-72-CAPABILITY-REGISTRY-BUILDER-{timestamp}"
+  complete: "AC_COMPLETE: AC-72-CAPABILITY-REGISTRY-BUILDER-{timestamp} ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPLETION SECTION (fill when marking COMPLETE)
+# ─────────────────────────────────────────────────────────────────────────────
+# metrics_at_completion:
+#   score: "N/A → live manifest generated"
+#   smoke_tests: "{N} passed, 0 failures"
+#   key_deliverables:
+#     - "cortex/intelligence/capability_registry_builder.py implemented"
+#     - "capabilities-manifest.yaml schema v2.0 — auto-generated"
+#     - "CapabilityMatcher.load_from_manifest() wired into IntentRouter"
+#     - "cortex-registry/.inventory/ removed"
+#     - "/audit fix Stage 2 auto-rebuilds manifest"
+#
+# exit_criteria_met:
+#   - "All 5 GAPs CLOSED ✅"
+#   - "make test-batch 0 regressions ✅"
+#   - "CORE-064 sweep completeness confirmed ✅"
+#
+# deferred_items: []

@@ -1,4 +1,4 @@
-version: '18.0'
+version: '21.0'
 updated: '2026-02-25'
 maintainer: CORTEX Architecture Team
 
@@ -12,14 +12,35 @@ maintainer: CORTEX Architecture Team
 #   new_files, files_to_edit, implementation, code_snippets
 # ============================================================
 
+# ============================================================
+# CONSOLIDATED EXECUTION PLAN — v21.0
+# 6 pending phases → 4 active phases (2 P0 + 2 P1)
+#
+# CONSOLIDATION ACTIONS (2026-02-25):
+#   MERGED:  phase-71 + phase-toolkit-consolidation → phase-73 (31 GAPs, 10 sub-phases)
+#   ARCHIVED: phase-70-unified-brain-remediation    → planned/_archived/ (fully closed)
+#   RENAMED: phase-70-stack-builder               → phase-74 (8 GAPs, 6 sub-phases)
+#   RENAMED: phase-72-capability-registry         → phase-75 (3 open GAPs, IN PROGRESS)
+#   RENAMED: phase-index-html-redesign            → phase-76 (P1, defer last)
+#
+#  Slot │ Phase   │ P    │ Track            │ Status       │ GAPs
+#  ─────┼─────────┼──────┼──────────────────┼──────────────┼──────
+#  #1   │ ph-73   │ P0   │ A — seq, now     │ PLANNED      │ 31
+#  #2   │ ph-74   │ P0   │ B — after 73-D   │ PLANNED      │ 8
+#  #3   │ ph-75   │ P1   │ C — after 73     │ IN_PROGRESS  │ 3
+#  #4   │ ph-76   │ P1   │ D — defer last   │ PLANNED      │ 0
+#
+# Gate: smoke ≥1400 + golden ≥200 at every sub-phase boundary.
+# ============================================================
+
 metadata:
-  version: '18.0'
+  version: '21.0'
   last_updated: '2026-02-25T00:00:00Z'
-  total_phases: 71
+  total_phases: 76
   active: 0
   completed: 69
-  in_progress: 0
-  planned: 2
+  in_progress: 1
+  planned: 3
   playbooks: 1
   governance_rules_total: 37
   test_baseline:
@@ -27,7 +48,7 @@ metadata:
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
-  planned_phases:
+  recent_completed:
     - id: phase-68
       title: "cortex/core Flatten — 27 Subdirs → 15 Canonical"
       priority: P1
@@ -57,20 +78,83 @@ metadata:
       note: "Wires 5 P0-CRITICAL + 12 P1-HIGH + 2 P2-MEDIUM matrix gaps. Coverage 9.5% → ≥50%."
 
 # ── PHASE DETAIL FILES ───────────────────────────────────────────────────────
-# Each entry is a thin pointer. Open the file: path for full detail.
+# Ordered by execution slot. 6 pending phases consolidated to 4.
+# renumbers: legacy ID → detail files updated in-place.
+# archived: superseded files moved to planned/_archived/ (CORE-064 lineage).
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
-  - id: phase-71
-    title: "Holistic Unified Brain — Full-Spectrum Intelligence Matrix Remediation"
+  # ── SLOT #1 — phase-73 (P0, START HERE) ──────────────────────────────────
+  - id: phase-73
+    renumbers: "phase-71 + phase-toolkit-consolidation (merged)"
+    title: "Unified Brain + Toolkit — Intelligence Matrix Full Wiring, OPJ, Stack Toolkit"
     priority: P0
     status: PLANNED
-    sweep_id: SWEEP-71-HOLISTIC-UNIFIED-BRAIN
-    gaps: 33
+    sweep_id: SWEEP-73-UNIFIED-BRAIN-TOOLKIT
+    gaps: 31
     sub_phases: 10
-    file: "cortex-registry/planning/phases/planned/phase-71-holistic-unified-brain.yaml"
-    note: "Supersedes Phase 70 (unified brain). Live matrix 6.9% → ≥80%. 20×20 extension. 42 golden tests (TDD RED). OPJMixin→MasterOrchestrator. 6 expanded-scope gaps (ES-001..ES-006). Check #20 in /audit fix."
+    file: "cortex-registry/planning/phases/planned/phase-73-unified-brain-and-toolkit.yaml"
+    note: "Merges phase-71 (24 open GAPs) + phase-toolkit-consolidation (7 GAPs). Matrix 6.9%→≥80%. OPJMixin→MasterOrchestrator. BatchProcessor dedup (CORE-035). 42 golden tests TDD RED first."
 
+  # ── SLOT #2 — phase-74 (P0, after 73-D) ──────────────────────────────────
+  - id: phase-74
+    renumbers: phase-70-stack-builder-infrastructure
+    title: "Stack-Aware Builder Infrastructure — StackBuilder Protocol + Stack Knowledge Registry"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-74-STACK-BUILDER
+    gaps: 8
+    sub_phases: 6
+    file: "cortex-registry/planning/phases/planned/phase-74-stack-builder-infrastructure.yaml"
+    note: "StackBuilder ABC + 4 concrete builders (HTML/Python/TS/.NET) + stack YAMLs + TDDOrchestrator dispatch + cortex_stack MCP tool. 100% additive. Start after phase-73-D (HierarchicalScanner stable)."
+
+  # ── SLOT #3 — phase-75 (P1, IN PROGRESS — 75-a done) ─────────────────────
+  - id: phase-75
+    renumbers: phase-72-capability-registry-builder
+    title: "Capability Registry Builder — Live Auto-Generated Intelligence Inventory"
+    priority: P1
+    status: IN_PROGRESS
+    sweep_id: SWEEP-75-CAPABILITY-REGISTRY-BUILDER
+    gaps: 5
+    gaps_closed: 2
+    gaps_remaining: 3
+    sub_phases: 5
+    sub_phases_complete: 1
+    file: "cortex-registry/planning/phases/planned/phase-75-capability-registry-builder.yaml"
+    note: "75-a COMPLETE (21 tests GREEN, GAP-72-01 + GAP-72-05 CLOSED). Next: 75-b workflow+response template indexer → 75-c CapabilityMatcher.load_from_manifest() → IntentRouter wiring."
+
+  # ── SLOT #4 — phase-76 (P1, defer until all P0 complete) ─────────────────
+  - id: phase-76
+    renumbers: phase-index-html-redesign
+    title: "index.html TDD Redesign — Modern Glassmorphism UI with Google Fonts"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-76-INDEX-HTML-REDESIGN
+    gaps: 0
+    sub_phases: 3
+    file: "cortex-registry/planning/phases/planned/phase-76-index-html-redesign.yaml"
+    note: "Pure frontend — zero Python/orchestrator changes. Defer until phase-73 + phase-74 complete. WCAG 2.1 AA, Google Fonts (Inter/Space Grotesk/JetBrains Mono), zero inline styles."
+
+  # ── ARCHIVED (superseded — lineage preserved for CORE-064) ───────────────
+  - id: phase-71
+    status: ARCHIVED
+    superseded_by: phase-73
+    file: "cortex-registry/planning/phases/planned/_archived/phase-71-holistic-unified-brain.yaml"
+    note: "All GAPs migrated to phase-73. Retained for historical reference."
+
+  - id: phase-toolkit-consolidation
+    status: ARCHIVED
+    superseded_by: phase-73
+    file: "cortex-registry/planning/phases/planned/_archived/phase-toolkit-consolidation.yaml"
+    note: "7 GAPs migrated as GAP-73-T1..T7 in phase-73."
+
+  - id: phase-70-unified-brain-remediation
+    status: ARCHIVED
+    superseded_by: phase-73
+    file: "cortex-registry/planning/phases/planned/_archived/phase-70-unified-brain-remediation.yaml"
+    note: "Fully closed in Phase 70A. All 16 GAPs closed. Lineage in phase-73.absorbs."
+
+  # ── COMPLETED — retained for traceability ─────────────────────────────────
   - id: phase-69
     title: "Review02 Remediation Sweep — Infrastructure Hygiene (6 GAPs)"
     priority: P1
@@ -80,26 +164,6 @@ phase_detail_files:
     sub_phases: 6
     file: "cortex-registry/planning/phases/completed/phase-69-review02-remediation.yaml"
     note: "6 GAPs CLOSED: SIGTERM handler, pytest conflict, scikit-learn dedup, skull-rules CORE-035 dup (4 consumers), README badges/links, chaos tests (14 tests GREEN)."
-
-  - id: phase-toolkit-consolidation
-    title: "Toolkit Consolidation — Generic File Intelligence (HierarchicalScanner + BatchProcessor)"
-    priority: P0
-    status: PLANNED
-    sweep_id: SWEEP-TOOLKIT-001
-    gaps: 5
-    sub_phases: 5
-    file: "cortex-registry/planning/phases/planned/phase-toolkit-consolidation.yaml"
-    note: "Extract 5 universal patterns from domain-specific media tooling into reusable cortex/toolkit/ components. All 5 GAPs OPEN."
-
-  - id: phase-70
-    title: "Stack-Aware Builder Infrastructure — StackBuilder Protocol + Stack Knowledge Registry"
-    priority: P0
-    status: PLANNED
-    sweep_id: SWEEP-70-STACK-BUILDER
-    gaps: 8
-    sub_phases: 6
-    file: "cortex-registry/planning/phases/planned/phase-70-stack-builder-infrastructure.yaml"
-    note: "3-layer architecture: StackBuilder ABC + 4 concrete builders (HTML/Python/TS/.NET) + stack knowledge YAMLs + TDDOrchestrator integration + cortex_stack MCP tool. Source: chat01.md design session."
 
   - id: phase-68
     title: "cortex/core Flatten — 27 Subdirs → 15 Canonical"
@@ -340,25 +404,35 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "⚠️ Phase 71 PLANNED (2026-02-25) | 69/71 phases done | Live matrix: 6.9%, 7 P0 + 18 P1 unwired | Phase 70 (stack-builder) PLANNED | COMPAT shims expire 2026-05-24"
+  status: "⚠️ 4 active phases (73–76) | phase-73 P0 PLANNED (31 GAPs) | phase-74 P0 PLANNED (8 GAPs) | phase-75 P1 IN_PROGRESS (3 GAPs) | phase-76 P1 PLANNED (UI) | Matrix 6.9%→≥80% | COMPAT shims expire 2026-05-24"
   overall_score: 97%
   test_baseline: "1,420 smoke | 204 golden workflow | 177 workflow orchestrators | 1 golden intelligence"
   deployment_date: '2026-02-25'
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "v18.0 — Phase 71 PLANNED (2026-02-25) | SWEEP-71-HOLISTIC-UNIFIED-BRAIN | 56 golden tests RED"
+  plan_version: "v21.0 — 6 pending phases consolidated to 4 (phases 73–76) | phase-75-a COMPLETE (2026-02-25) | 42 open GAPs total"
   last_verified: '2026-02-25T00:00:00Z'
 
 summary:
-  total_phases: 71
+  total_phases: 76
   completed: 69
   active: 0
-  in_progress: 0
-  planned: 2
+  in_progress: 1
+  planned: 3
+  archived: 3
   playbooks: 1
-  completion_percentage: 97
-  production_status: "⚠️ 69/71 phases COMPLETE — Phase 71 PLANNED (P0: Holistic Unified Brain, 33 GAPs) | Phase 70 stack-builder PLANNED (P0, 8 GAPs) | Matrix 6.9% → target ≥80% | 6 expanded-scope gaps | 42 golden tests pending (TDD RED)"
+  completion_percentage: 91
+  consolidation_summary: "v21.0: 6 pending phases → 4 active (phase-71 + toolkit merged into phase-73; phase-70-stack renamed to phase-74; phase-72-capability renamed to phase-75; html-redesign renamed to phase-76)"
+  active_phases:
+    "phase-73 (P0)": "PLANNED — Unified Brain + Toolkit, 31 GAPs, 10 sub-phases, START HERE"
+    "phase-74 (P0)": "PLANNED — Stack-Aware Builder, 8 GAPs, 6 sub-phases, start after 73-D"
+    "phase-75 (P1)": "IN_PROGRESS — Capability Registry Builder, 3 GAPs remaining (75-a done)"
+    "phase-76 (P1)": "PLANNED — index.html Redesign, 0 coded GAPs, defer last"
   open_gaps:
-    count: 41
-    note: "SWEEP-71-HOLISTIC-UNIFIED-BRAIN: 33 GAPs (tracks A-I, OPJMixin wiring, 20×20 matrix). SWEEP-70-STACK-BUILDER: 8 GAPs (StackBuilder protocol + 4 concrete builders). SWEEP-TOOLKIT-001: absorbed into Phase 71."
+    count: 42
+    breakdown:
+      phase_73: "31 GAPs — matrix wiring (24) + toolkit consolidation (7)"
+      phase_74: "8 GAPs — StackBuilder ABC + 4 builders + stack YAMLs + MCP tool"
+      phase_75: "3 GAPs — workflow indexer, response template catalogue, CapabilityMatcher wiring"
+      phase_76: "0 coded GAPs — pure frontend, WCAG 2.1 AA scope"

@@ -1,9 +1,10 @@
-# Phase: index.html TDD Redesign - Modern Glassmorphism UI
+# Phase 76: index.html TDD Redesign - Modern Glassmorphism UI
 # Authority: cortex-doc.prompt.md + cortex-gitpages-builder.md + cortex-documentation-architect.md
-# Created: 2026-02-25
-# Status: PLANNED
+# Created: 2026-02-25 | Updated: 2026-02-25 | Renumbers: phase-index-html-redesign
+# Status: PLANNED — defer until all P0 phases (73, 74) complete
 
-id: phase-index-html-redesign
+id: phase-76
+renumbers: phase-index-html-redesign
 title: "index.html TDD Redesign - Modern Glassmorphism UI with Google Fonts"
 priority: P1
 status: PLANNED
