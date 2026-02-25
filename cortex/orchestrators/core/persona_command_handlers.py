@@ -14,11 +14,12 @@ Handles:
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, Tuple
 
-# COMPAT: cortex.orchestrators.persona was dissolved — guarded import until callers updated
+# COMPAT: cortex.orchestrators.persona — guarded import
 try:
     from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
-    DepthLevel = None  # COMPAT: dissolved module, PersonaId
-except ImportError:
+    from cortex.orchestrators.persona.models import PersonaId  # type: ignore[import]
+    DepthLevel = None  # COMPAT: dissolved module
+except (ImportError, Exception):
     MasterOrchestrator = None  # type: ignore[assignment,misc]
     DepthLevel = None  # type: ignore[assignment,misc]
     PersonaId = None  # type: ignore[assignment,misc]
@@ -32,14 +33,14 @@ class CommandResult:
     action_taken: Optional[str] = None
     persona_changed: bool = False
     depth_changed: bool = False
-    new_persona: Optional[PersonaId] = None
-    new_depth: Optional[DepthLevel] = None
+    new_persona: Optional[Any] = None
+    new_depth: Optional[Any] = None
 
 
 class PersonaCommandHandlers:
     """Handle /persona and /detail commands"""
 
-    def __init__(self, orchestrator: MasterOrchestrator) -> None:
+    def __init__(self, orchestrator: Any) -> None:
         """
         Initialize handlers.
 

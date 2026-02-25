@@ -353,14 +353,15 @@ from enum import Enum
 
 
 
-# CONSOLIDATED: Import from cortex.mcp.executor
-# class ExecutionState(Enum):
-#     """States of execution."""
-#     PENDING = "pending"
-#     RUNNING = "running"
-#     COMPLETED = "completed"
-#     FAILED = "failed"
-#     TIMEOUT = "timeout"
+# Restored: ExecutionState was commented out during consolidation
+class ExecutionState(Enum):
+    """States of execution."""
+
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    TIMEOUT = "timeout"
 
 from dataclasses import dataclass, field
 from cortex.models.canonical_enums import ExecutionMode

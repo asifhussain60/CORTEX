@@ -45,31 +45,60 @@
 # ══════════════════════════════════════════════════════════════════════════════playbook:
   id: "pb-sts-001"
   title: "BadMonolith End-to-End Refactoring — CORTEX SDLC Showcase"
-  version: "1.0.0"
+  version: "2.0.0"
   category: "sts"
   repeatable: true
   status: "ready"
   created: "2026-02-22"
+  updated: "2026-02-25"
   priority: P2
   risk: low
+
+  # ── WORKFLOW-TEMPLATE-BASED DESIGN (v2.0 — 2026-02-25) ────────────────────
+  # v2 replaces ad-hoc inline stage definitions with canonical SDLC workflow
+  # templates from Phase 79 (SDLC Intelligence Engine). Each key stage now
+  # delegates to a template via execute_workflow, inheriting knowledge_context
+  # injection, convergence loops, and response block output automatically.
+  #
+  # Benefits:
+  #   1. DRY — no duplicate stage logic; templates are the SSOT
+  #   2. Testable — golden tests in test_pb_sts_001_workflow_template_design_golden.py
+  #      validate each template reference exists and is structurally valid
+  #   3. Extensible — new stack knowledge (dotnet-stack.yaml) feeds Stage 1 & 3
+  #      automatically via knowledge_context.resolution_order
+  #   4. Auditable — each template emits its own AC markers + response block
+  #
+  # See: cortex-registry/workflows/templates/sdlc/
+  #      cortex-registry/workflows/templates/tdd/
+  # ──────────────────────────────────────────────────────────────────────────
+  workflow_template_design: true
 
   description: |
     Full end-to-end CORTEX SDLC showcase using CortexLabs/STS BadMonolith as the
     target application. Exercises the complete orchestrator chain — from LENS baseline
     analysis through security hardening, architecture decomposition, TDD coverage,
     functional completeness gates, scorecard generation, and dashboard output.
-    
+
+    v2.0 (2026-02-25): Refactored to workflow-template-based design. Each key stage
+    now delegates to a canonical SDLC workflow template (Phase 79) via execute_workflow,
+    replacing ad-hoc inline stage definitions. This makes the playbook both testable
+    (golden tests validate every template ref) and extensible (stack knowledge YAML
+    feeds all stages automatically).
+
     Purpose:
     - Validate all 22 wired orchestrators function in an integrated pipeline
     - Demonstrate CORTEX refactoring capabilities for leadership POC demos
     - Serve as repeatable training exercise for new team members
     - Regression-test the CORTEX toolchain itself after framework changes
+    - Exercise SDLC workflow templates (Phase 79) end-to-end on a real target app
 
   # ── TARGET APPLICATION ─────────────────────────────────────────────────────
   target:
     source_repo: "cortex-sts/CortexLabs/BadMonolith"
     target_repo: "cortex-sts/CortexLabs/Refactored"
     manifest: "cortex-sts/CortexLabs/BadMonolith/.cortex-manifest.yaml"
+    onboarding_artifacts: "cortex-registry/company/repos/badmonolith"
+    onboarding_summary: "cortex-registry/company/repos/badmonolith/onboarding-summary.json"
     tech_stack:
       backend: "C# / ASP.NET Core 8.0"
       frontend: "TypeScript (vanilla)"
@@ -83,8 +112,34 @@
       performance: 2 # SMELL-6, 14
       testing: 1     # SMELL-12
 
+  # ── SDLC WORKFLOW TEMPLATES (v2.0 — canonical refs per stage) ──────────────
+  # These are the Phase 79 SDLC workflow templates that each stage delegates to.
+  # Golden tests (test_pb_sts_001_workflow_template_design_golden.py) verify
+  # every entry here exists on disk and has the required YAML structure.
+  #
+  # Knowledge context resolution per template:
+  #   dotnet-stack.yaml (stack-specific) > sdlc/* > domain/* > generic
+  # This means .NET-specific patterns, security standards, and API norms from
+  # cortex-registry/knowledge/sdlc/stack-specific/dotnet-stack.yaml are
+  # automatically injected into Stages 1, 3, 4, and 5 without manual wiring.
+  sdlc_workflow_templates:
+    stage_1_analysis:    "sdlc/requirements-analysis"
+    stage_3_security:    "sdlc/security-assessment"
+    stage_4_design:      "sdlc/solution-design"
+    stage_5_tdd:         "sdlc/implementation-execution"
+    stage_5_tdd_inner:   "tdd/tdd-feature-implementation"
+    stage_6_review:      "sdlc/code-review-gate"
+
   # ── LINKED TEMPLATES ───────────────────────────────────────────────────────
   templates:
+    # v2.0: SDLC workflow templates (Phase 79) — primary delegates
+    sdlc_requirements_analysis: "cortex-registry/workflows/templates/sdlc/requirements-analysis.yaml"
+    sdlc_solution_design:        "cortex-registry/workflows/templates/sdlc/solution-design.yaml"
+    sdlc_implementation:         "cortex-registry/workflows/templates/sdlc/implementation-execution.yaml"
+    sdlc_security_assessment:    "cortex-registry/workflows/templates/sdlc/security-assessment.yaml"
+    sdlc_code_review:            "cortex-registry/workflows/templates/sdlc/code-review-gate.yaml"
+    tdd_feature_impl:            "cortex-registry/workflows/templates/tdd/tdd-feature-implementation.yaml"
+    # Supporting templates (unchanged from v1.0)
     workflow: "cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml"
     roadmap: "cortex-registry/planning/roadmap-templates/sts-refactoring-template.yaml"
     tdd_backend: "cortex-registry/workflows/templates/tdd/tdd-api-service.yaml"
@@ -111,6 +166,7 @@
       gaps_backlogged: 5
       opj_used: false  # Phase 52 not yet complete — gaps discovered manually
       opj_seeded: false  # known_failure_patterns_to_seed awaiting Phase 52 completion
+      workflow_template_design: false  # v1.0 — inline stage definitions
       tool_calls:
         stage_1: ["onboard_repository_tool ✅", "analyze_sts_app ⚠(C# gap GAP-001)"]
         stage_2: ["cortex_master_plan(create) ✅", "cortex_health_check ✅"]
@@ -136,6 +192,24 @@
       merged_context_id: "b9abbb9e-9492-4731-927b-2df73a0a39fe"
       ac_complete: true
       ac_session_file: "cortex-registry/_cortex-master/phases/planned/phase-01-pb-sts-001-run-1-badmonolith-refactoring-ac-start.yaml"
+
+    - run_id: "PB-STS-001-RUN-20260225-002"
+      date: "2026-02-25"
+      result: "PLANNED — v2 workflow-template-based run (first run using SDLC templates)"
+      stages_completed: 0
+      workflow_template_design: true
+      design_change: "v2.0 — stages delegate to canonical Phase 79 SDLC workflow templates"
+      sdlc_templates_used:
+        - "sdlc/requirements-analysis"
+        - "sdlc/solution-design"
+        - "sdlc/implementation-execution"
+        - "sdlc/security-assessment"
+        - "sdlc/code-review-gate"
+        - "tdd/tdd-feature-implementation"
+      onboarding_artifacts_used: "cortex-registry/company/repos/badmonolith"
+      knowledge_stack: "sdlc/stack-specific/dotnet-stack.yaml"
+      golden_test: "tests/golden/phases/test_pb_sts_001_workflow_template_design_golden.py"
+      ac_complete: false
 
   # ── MCP TOOL REGISTRY (live-verified — Run 1, 2026-02-22) ─────────────────
   # Status codes: ✅ WORKS | ⚠️ PARTIAL | ❌ GAP (see mcp-compatibility-gaps.yaml)
@@ -228,36 +302,45 @@
     #     on_failure: "cortex_query_opj records failure pattern with error + attempted_fix + avoid_in_future"
     # Phase 52 reference: cortex-registry/_cortex-master/phases/planned/phase-52-operational-pattern-journal.yaml
 
-    # ── STAGE 1: LENS BASELINE ─────────────────────────────────────────────
+    # ── STAGE 1: LENS BASELINE (v2: delegates to sdlc/requirements-analysis) ──
     - stage_id: 1
       title: "LENS Baseline Analysis"
       orchestrator: "LENSOrchestrator"
+      template_ref: "sdlc/requirements-analysis"
+      description: |
+        v2: Delegates to cortex-registry/workflows/templates/sdlc/requirements-analysis.yaml.
+        The template runs: lens_scan → knowledge_injection (dotnet-stack.yaml) →
+        domain_decomposition → challenge_validation → scope_document.
+
+        Badmonolith onboarding artifacts (cortex-registry/company/repos/badmonolith/)
+        feed the LENS scan — providing the pre-computed governance, security, and
+        dependency tabs without re-running the full onboarding.
+        Outputs BLOCK-ANALYSIS response block. Captures baseline_quality_score.
       mcp_tools:
+        - tool: "execute_workflow"
+          call: "execute_workflow(template_name='sdlc/requirements-analysis', variables={scope: 'cortex-sts/CortexLabs/BadMonolith', onboarding_artifacts: 'cortex-registry/company/repos/badmonolith', stack: 'dotnet'})"
         - tool: "onboard_repository_tool"
           call: "onboard_repository_tool(repository_path='cortex-sts/CortexLabs/BadMonolith', capture_learning=True, apply_brain_enhancement=True, generate_artifacts=True)"
-        - tool: "analyze_sts_app"
-          call: "analyze_sts_app(app_path='cortex-sts/CortexLabs/BadMonolith', output_showcase=True)"
-      description: |
-        Full LENS scan of BadMonolith via onboard_repository_tool + analyze_sts_app.
-        Captures complexity, duplication, test coverage, dependency graph, and
-        security surface metrics. Produces baseline_quality_score for before/after.
       inputs:
         - "source_repo path: cortex-sts/CortexLabs/BadMonolith"
+        - "onboarding_artifacts: cortex-registry/company/repos/badmonolith"
         - ".cortex-manifest.yaml"
+        - "sdlc/stack-specific/dotnet-stack.yaml (via template knowledge_context)"
       outputs:
         - "baseline_quality_score"
         - "anti_patterns[]"
         - "security_findings[]"
         - "dependency_graph"
         - "complexity_metrics"
-        - "sts_analysis_report"
+        - "scope_document (BLOCK-ANALYSIS)"
       convergence_gate:
         max_cycles: 1
-        predicate: "onboard_complete AND sts_analysis_complete"
+        predicate: "onboard_complete AND scope_document_complete"
       exit_criteria:
+        - "execute_workflow sdlc/requirements-analysis returns BLOCK-ANALYSIS"
         - "onboard_repository_tool returns success"
-        - "analyze_sts_app returns smell_catalogue with all 25 smells"
-        - "Baseline quality score captured from tool output"
+        - "scope_document has IN/OUT of scope, assumptions, open questions"
+        - "Baseline quality score captured"
         - "All 25 smells cross-referenced with manifest"
 
     # ── STAGE 2: SMELL CATALOGUE + HOLISTIC GATE ───────────────────────────
@@ -294,24 +377,23 @@
         - "cortex_health_check passes"
         - "AC_START written to orchestrator-traces.db"
 
-    # ── STAGE 3: SECURITY GATE (HARD BLOCKER) ──────────────────────────────
+    # ── STAGE 3: SECURITY GATE (v2: delegates to sdlc/security-assessment) ───
     - stage_id: 3
       title: "Security Gate — P0 Blocker"
       orchestrator: "SecurityOrchestrator"
       blocking: true
+      template_ref: "sdlc/security-assessment"
+      description: |
+        v2: Delegates to cortex-registry/workflows/templates/sdlc/security-assessment.yaml.
+        HARD BLOCKER — no downstream stages run until this passes.
+        Template runs: threat_model → vulnerability_scan → fix_application →
+        security_clearance gate. Emits BLOCK-SECURITY-ASSESSMENT response block.
+        company/domains/security-standards.yaml injected via template knowledge_context.
       mcp_tools:
-        - tool: "analyze_sts_app"
-          call: "analyze_sts_app(app_path='cortex-sts/CortexLabs/BadMonolith', pattern_types=['security'], output_showcase=True)"
+        - tool: "execute_workflow"
+          call: "execute_workflow(template_name='sdlc/security-assessment', variables={target: 'cortex-sts/CortexLabs/BadMonolith', stack: 'dotnet', smells: ['SMELL-1','SMELL-2','SMELL-13','SMELL-18']})"
         - tool: "cortex_validate_coherence"
           call: "cortex_validate_coherence(file_path='cortex-sts/CortexLabs/Refactored/backend/Infrastructure/Security/', content='<security fixes>', check_duplicates=True)"
-        - tool: "execute_workflow"
-          call: "execute_workflow(template_name='security-hardening', variables={source: 'BadMonolith', target: 'Refactored'})"
-      template_ref: "cortex-registry/workflows/templates/security/security-hardening.yaml"
-      description: |
-        HARD BLOCKER — no downstream stages run until this passes.
-        Run analyze_sts_app filtered to security patterns to confirm P0 findings.
-        Apply fixes (parameterized queries, env config secrets, CORS config, RFC 7807).
-        Validate coherence of each fixed file. Execute security-hardening workflow.
       inputs:
         - "security_findings from Stage 1 analyze_sts_app"
         - "SMELL-1 (SQL injection), SMELL-2 (secrets), SMELL-13 (CORS), SMELL-18 (stack trace)"
@@ -333,23 +415,24 @@
         - "execute_workflow security-hardening returns success"
         - "cortex_validate_coherence passes on all security-fixed files"
 
-    # ── STAGE 4: ARCHITECTURE DECOMPOSITION ────────────────────────────────
+    # ── STAGE 4: ARCHITECTURE DECOMPOSITION (v2: delegates to sdlc/solution-design) ──
     - stage_id: 4
       title: "Architecture Decomposition — God Class Elimination"
       orchestrator: "RefactoringOrchestrator"
+      template_ref: "sdlc/solution-design"
+      description: |
+        v2: Delegates to cortex-registry/workflows/templates/sdlc/solution-design.yaml.
+        Template runs: lens_scan (incremental) → knowledge_injection → duplicate_detection
+        → pattern_selection (trade-off matrix) → security_gate → adr_generation.
+        Emits BLOCK-DESIGN-DECISION with ADR for each extracted service.
+        Output feeds Stage 5 target_items.
       mcp_tools:
+        - tool: "execute_workflow"
+          call: "execute_workflow(template_name='sdlc/solution-design', variables={source: 'cortex-sts/CortexLabs/BadMonolith', target: 'cortex-sts/CortexLabs/Refactored', decompose: ['UserService','TransactionService','AccountService','AnalyticsService','ReportService']})"
         - tool: "execute_workflow"
           call: "execute_workflow(template_name='service-decomposition-workflow', variables={source: 'cortex-sts/CortexLabs/BadMonolith', target: 'cortex-sts/CortexLabs/Refactored'})"
         - tool: "cortex_validate_coherence"
           call: "cortex_validate_coherence(file_path='cortex-sts/CortexLabs/Refactored/backend/', content='<decomposed services>', check_duplicates=True, check_versions=True)"
-        - tool: "cortex_master_plan"
-          call: "cortex_master_plan(operation='decompose', source_domain='Program.cs', targets=['UserService','TransactionService','AccountService','AnalyticsService','ReportService'])"
-      template_ref: "cortex-registry/workflows/templates/lifecycle/service-decomposition-workflow.yaml"
-      description: |
-        Decompose the monolith via execute_workflow(service-decomposition-workflow).
-        Extract UserService, TransactionService, AccountService, AnalyticsService, ReportService.
-        Apply Repository pattern with DI (Scoped lifetime). Validate each extracted
-        file for coherence and no duplication.
       inputs:
         - "source_items from Stage 2"
         - "anti_patterns from Stage 1"
@@ -380,24 +463,29 @@
         - "No flat-layout source dirs (Api/, Application/, Domain/, Infrastructure/) coexist alongside src/ hierarchy"
         - "Single .csproj referenced by .sln — no orphan root-level .csproj files"
 
-    # ── STAGE 5: TDD COVERAGE ──────────────────────────────────────────────
+    # ── STAGE 5: TDD COVERAGE (v2: delegates to sdlc/implementation-execution) ──
     - stage_id: 5
       title: "TDD Coverage — RED/GREEN/REFACTOR"
       orchestrator: "TDDOrchestrator"
+      template_ref: "sdlc/implementation-execution"
+      description: |
+        v2: Delegates to cortex-registry/workflows/templates/sdlc/implementation-execution.yaml.
+        The implementation-execution template wraps tdd/tdd-feature-implementation.yaml
+        as its inner TDD cycle (template_ref: primitives/tdd/tdd-feature-implementation).
+        Adds git checkpoint before work, knowledge_context injection from
+        testing-validation/tdd-best-practices.yaml + dotnet-stack.yaml,
+        and enforces no-auto-push git policy (pushing to origin is never automatic;
+        user must request it explicitly — inherited from implementation-execution.yaml).
+
+        Full TDD cycle: RED (write failing tests) → GREEN (implement) → REFACTOR →
+        security_gate → quality_gate → git_commit(after all gates). Emits BLOCK-CODE-REVIEW.
       mcp_tools:
         - tool: "execute_workflow"
-          call: "execute_workflow(template_name='tdd-api-service', variables={target: 'cortex-sts/CortexLabs/Refactored/backend', framework: 'xUnit'})"
+          call: "execute_workflow(template_name='sdlc/implementation-execution', variables={target: 'cortex-sts/CortexLabs/Refactored/backend', framework: 'xUnit', stack: 'dotnet', tdd_mandatory: true})"
         - tool: "execute_workflow"
-          call: "execute_workflow(template_name='frontend-tdd-workflow', variables={target: 'cortex-sts/CortexLabs/Refactored/frontend', framework: 'vitest'})"
+          call: "execute_workflow(template_name='tdd/tdd-feature-implementation', variables={target: 'cortex-sts/CortexLabs/Refactored/frontend', framework: 'vitest', coverage_target: '80%'})"
         - tool: "cortex_sweep_status"
           call: "cortex_sweep_status(intent='tdd_coverage_gate', scope_files=['cortex-sts/CortexLabs/Refactored'])"
-        - tool: "cortex_master_plan"
-          call: "cortex_master_plan(operation='tdd_metrics', target='cortex-sts/CortexLabs/Refactored')"
-      template_ref: "cortex-registry/workflows/templates/tdd/tdd-api-service.yaml"
-      description: |
-        Write failing tests FIRST (CORE-008 RED phase) via execute_workflow(tdd-api-service).
-        Then implement minimum code to pass (GREEN). Frontend via vitest workflow.
-        cortex_sweep_status validates TDD coverage gate. cortex_master_plan captures metrics.
       inputs:
         - "target_items from Stage 4 (domain_module_map)"
       outputs:
@@ -427,6 +515,7 @@
     - stage_id: 6
       title: "Functional Completeness Gate"
       orchestrator: "RefactoringOrchestrator"
+      template_ref: "sdlc/code-review-gate"
       mcp_tools:
         - tool: "cortex_sweep_status"
           call: "cortex_sweep_status(intent='completeness_gate', scope_files=['cortex-sts/CortexLabs/Refactored'])"

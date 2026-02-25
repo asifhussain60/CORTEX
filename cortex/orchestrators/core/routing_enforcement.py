@@ -1,59 +1,39 @@
-"""
-Routing Enforcement Engine (Stub Implementation)
-
-This is a minimal stub to satisfy import requirements.
-Full implementation deferred to future phase.
-
-Authority: Technical Debt - Phase 53 Cleanup
-"""
-
-from dataclasses import dataclass
-from typing import Any, Dict, List
+"""routing_enforcement.py — Routing Enforcement Engine stub."""
+from __future__ import annotations
+from dataclasses import dataclass, field
+from typing import Any
 
 
 @dataclass
 class RoutingViolation:
     """Represents a routing rule violation."""
-    
-    severity: str
+    rule: str
     message: str
-    rule_id: str
-    metadata: Dict[str, Any]
+
+
+@dataclass
+class RoutingEnforcementResult:
+    """Result of routing enforcement evaluation."""
+    allowed: bool
+    violations: list[RoutingViolation] = field(default_factory=list)
 
 
 class RoutingEnforcementEngine:
-    """
-    Stub implementation of routing enforcement engine.
-    
-    Currently performs minimal validation.
-    Full implementation deferred to Phase 8.2 completion.
-    """
-    
-    def __init__(
-        self,
-        confidence_threshold: float = 0.6,
-        disambiguation_threshold: float = 0.7,
-        blocking_enabled: bool = True
-    ) -> None:
-        """Initialize enforcement engine with configuration."""
-        self.confidence_threshold = confidence_threshold
-        self.disambiguation_threshold = disambiguation_threshold
-        self.blocking_enabled = blocking_enabled
-    
-    def validate_routing_decision(self, decision: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Validate a routing decision.
-        
+    """Validates intent routing decisions against governance rules."""
+
+    def enforce(self, intent: str, confidence: float) -> RoutingEnforcementResult:
+        """Enforce routing rules for an intent.
+
         Args:
-            decision: The routing decision to validate
-            
+            intent: The classified intent string.
+            confidence: Routing confidence score.
+
         Returns:
-            Validation result with violations list
+            RoutingEnforcementResult with allow/deny decision.
         """
-        # Stub implementation - always passes
-        return {
-            "valid": True,
-            "violations": [],
-            "warnings": [],
-            "metadata": {}
-        }
+        if confidence < 0.0 or confidence > 1.0:
+            return RoutingEnforcementResult(
+                allowed=False,
+                violations=[RoutingViolation("CONFIDENCE_RANGE", f"Invalid: {confidence}")],
+            )
+        return RoutingEnforcementResult(allowed=True)
