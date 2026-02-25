@@ -1,0 +1,71 @@
+{
+  "nodes": [
+    {
+      "id": "raw_input",
+      "label": "Raw Input (10K tokens)",
+      "color": "#ef4444"
+    },
+    {
+      "id": "semantic_chunk",
+      "label": "Semantic Chunking",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "cache_check",
+      "label": "Cache Check",
+      "color": "#10b981"
+    },
+    {
+      "id": "rag_retrieval",
+      "label": "RAG Retrieval",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "context_assembly",
+      "label": "Context Assembly",
+      "color": "#06b6d4"
+    },
+    {
+      "id": "llm_optimized",
+      "label": "LLM (3K tokens)",
+      "color": "#10b981"
+    },
+    {
+      "id": "cache_hit",
+      "label": "Cache Hit (500 tokens)",
+      "color": "#22c55e"
+    }
+  ],
+  "links": [
+    {
+      "source": "raw_input",
+      "target": "semantic_chunk",
+      "value": 10000
+    },
+    {
+      "source": "semantic_chunk",
+      "target": "cache_check",
+      "value": 6000
+    },
+    {
+      "source": "cache_check",
+      "target": "cache_hit",
+      "value": 3000
+    },
+    {
+      "source": "cache_check",
+      "target": "rag_retrieval",
+      "value": 3000
+    },
+    {
+      "source": "rag_retrieval",
+      "target": "context_assembly",
+      "value": 2000
+    },
+    {
+      "source": "context_assembly",
+      "target": "llm_optimized",
+      "value": 2000
+    }
+  ]
+}

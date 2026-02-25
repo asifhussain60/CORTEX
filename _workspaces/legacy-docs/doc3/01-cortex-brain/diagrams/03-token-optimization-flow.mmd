@@ -1,0 +1,68 @@
+graph LR
+    subgraph input["Input"]
+        req["Unoptimized Request<br/>5000-8000 tokens"]
+    end
+    
+    subgraph stage1["Stage 1: Rule Compression"]
+        rule_before["Before:<br/>29 rules × 50 tokens<br/>= 1450 tokens"]
+        compression1["Compress using:<br/>- Acronyms<br/>- Abstraction<br/>- Indexing"]
+        rule_after["After:<br/>200 tokens<br/>86% reduction"]
+    end
+    
+    subgraph stage2["Stage 2: AC-ID Condensing"]
+        ac_before["Before:<br/>Full AC-ID state<br/>~200 tokens"]
+        compression2["Condense to:<br/>- Status symbols<br/>- Evidence counts<br/>- Shorthand IDs"]
+        ac_after["After:<br/>25 tokens<br/>87.5% reduction"]
+    end
+    
+    subgraph stage3["Stage 3: Template Reference"]
+        template_before["Before:<br/>Full template def<br/>~150 tokens"]
+        compression3["Reference instead of<br/>embedding:<br/>- Template ID only<br/>- Structure in cache"]
+        template_after["After:<br/>5 tokens<br/>96.7% reduction"]
+    end
+    
+    subgraph stage4["Stage 4: Knowledge Abstraction"]
+        kb_before["Before:<br/>Full knowledge text<br/>~500 tokens"]
+        compression4["Index knowledge:<br/>- Store in cache<br/>- Reference by ID<br/>- Retrieve on demand"]
+        kb_after["After:<br/>20 tokens<br/>96% reduction"]
+    end
+    
+    subgraph efficiency["Overall Efficiency"]
+        totals["Total Before: 7240 tokens<br/>Total After: 290 tokens<br/>Total Saved: 6950 tokens<br/>Efficiency: 96.0% 🎯"]
+    end
+    
+    req --> compression1
+    
+    compression1 --> rule_before
+    rule_before --> compression1
+    compression1 --> rule_after
+    
+    rule_after --> compression2
+    
+    compression2 --> ac_before
+    ac_before --> compression2
+    compression2 --> ac_after
+    
+    ac_after --> compression3
+    
+    compression3 --> template_before
+    template_before --> compression3
+    compression3 --> template_after
+    
+    template_after --> compression4
+    
+    compression4 --> kb_before
+    kb_before --> compression4
+    compression4 --> kb_after
+    
+    kb_after --> totals
+    
+    style rule_before fill:#ffe0e0
+    style rule_after fill:#c8f7dc
+    style ac_before fill:#ffe0e0
+    style ac_after fill:#c8f7dc
+    style template_before fill:#ffe0e0
+    style template_after fill:#c8f7dc
+    style kb_before fill:#ffe0e0
+    style kb_after fill:#c8f7dc
+    style totals fill:#ffeaa7

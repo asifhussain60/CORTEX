@@ -1,0 +1,107 @@
+{
+  "nodes": [
+    {
+      "id": "onboarding",
+      "label": "Onboarding",
+      "category": "ux",
+      "calls": 50
+    },
+    {
+      "id": "tool_discovery",
+      "label": "Tool Discovery",
+      "category": "ux",
+      "calls": 120
+    },
+    {
+      "id": "lens",
+      "label": "LENS",
+      "category": "analysis",
+      "calls": 300
+    },
+    {
+      "id": "challenge",
+      "label": "Challenge Engine",
+      "category": "quality",
+      "calls": 250
+    },
+    {
+      "id": "duplication",
+      "label": "Duplication Detector",
+      "category": "quality",
+      "calls": 180
+    },
+    {
+      "id": "recommendation",
+      "label": "Recommendation",
+      "category": "quality",
+      "calls": 200
+    },
+    {
+      "id": "domain_brain",
+      "label": "Domain Brain",
+      "category": "knowledge",
+      "calls": 150
+    },
+    {
+      "id": "governance",
+      "label": "Governance",
+      "category": "governance",
+      "calls": 400
+    },
+    {
+      "id": "session",
+      "label": "Session Manager",
+      "category": "lifecycle",
+      "calls": 350
+    },
+    {
+      "id": "total_recall",
+      "label": "Total Recall",
+      "category": "knowledge",
+      "calls": 220
+    },
+    {
+      "id": "observation",
+      "label": "Observation",
+      "category": "monitoring",
+      "calls": 280
+    }
+  ],
+  "links": [
+    {
+      "source": "onboarding",
+      "target": "tool_discovery",
+      "strength": 8
+    },
+    {
+      "source": "lens",
+      "target": "challenge",
+      "strength": 10
+    },
+    {
+      "source": "lens",
+      "target": "duplication",
+      "strength": 9
+    },
+    {
+      "source": "challenge",
+      "target": "recommendation",
+      "strength": 7
+    },
+    {
+      "source": "domain_brain",
+      "target": "total_recall",
+      "strength": 8
+    },
+    {
+      "source": "governance",
+      "target": "session",
+      "strength": 9
+    },
+    {
+      "source": "observation",
+      "target": "governance",
+      "strength": 8
+    }
+  ]
+}
