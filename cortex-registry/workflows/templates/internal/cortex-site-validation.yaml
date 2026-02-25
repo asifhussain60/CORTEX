@@ -214,9 +214,9 @@ metadata:
     - DeploymentOrchestrator
   
   mcp_tools:
-    - cortex/lens_analyze
+    - cortex_lens
     - cortex_challenge
-    - cortex_process_request
+    - cortex_verify
   
   phase_99_integration:
     atomic_analysis: true

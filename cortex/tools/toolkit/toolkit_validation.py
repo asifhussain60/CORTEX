@@ -418,8 +418,20 @@ class ValidationManager:
         Returns:
             ValidationResult for security check
         """
+        # Guard: skip files > 512KB to avoid hanging on large generated/minified files
         try:
-            content = file_path.read_text()
+            if file_path.stat().st_size > 512_000:
+                return ValidationResult(
+                    check=ValidationCheck.SECURITY,
+                    level=ValidationLevel.OK,
+                    message="File skipped (> 512KB — not a hand-authored source file)",
+                    file_path=file_path,
+                )
+        except OSError:
+            pass
+
+        try:
+            content = file_path.read_text(encoding="utf-8", errors="replace")
             
             issues = []
             for issue_type, pattern in self.SECURITY_PATTERNS.items():

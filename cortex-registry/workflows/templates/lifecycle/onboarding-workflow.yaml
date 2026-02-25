@@ -141,7 +141,7 @@ workflow:
       checks:
         - name: orchestrator_context_guard
           rule: "orchestrator_context.source == 'MasterOrchestrator'"
-          on_fail: "ValueError: BLOCKED — route through cortex_process_request"
+          on_fail: "ValueError: BLOCKED — route through MasterOrchestrator (cortex_verify op: mcp)"
 
         - name: repo_path_exists
           rule: "Path(repository_path).exists()"

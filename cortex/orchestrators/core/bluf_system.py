@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 # CONSOLIDATED: Import from cortex.models.canonical_enums
 from cortex.models.canonical_enums import ComplexityLevel, ResponseFormat, RiskLevel
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 
 class UserPreferenceMode(Enum):
@@ -452,7 +453,7 @@ class AdaptiveRouter:
         return "\n".join(lines)
 
 
-class AnalyticsOrchestrator:
+class AnalyticsOrchestrator(OrchestratorProtocolMixin):
     """Phase 13 BLUF-5: Analytics Orchestrator.
 
     Tracks format effectiveness and user satisfaction.
@@ -473,6 +474,7 @@ class AnalyticsOrchestrator:
         """Initialize AnalyticsOrchestrator."""
         self.format_usage: Dict[ResponseFormat, int] = {fmt: 0 for fmt in ResponseFormat}
         self.satisfaction_scores: Dict[ResponseFormat, List[float]] = {fmt: [] for fmt in ResponseFormat}
+        self._activate_cross_cutting_hooks(operation="analytics_init")
 
     def record_format_usage(self, format_type: ResponseFormat) -> None:
         """Record format usage.

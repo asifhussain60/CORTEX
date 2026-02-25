@@ -1374,14 +1374,14 @@ rules:
     
     scope:
       applies_to:
-        - "IMPLEMENT intents: MUST route through cortex_process_request"
+        - "IMPLEMENT intents: MUST route through cortex_validate (op: compliance)"
         - "FIX intents: MUST route through TDDOrchestrator"
         - "REFACTOR intents: MUST route through RefactoringOrchestrator"
         - "All direct file modification tools: create_file, replace_string_in_file"
       
       blocking_conditions:
         - "MCP server unavailable + IMPLEMENT/FIX/REFACTOR intent → BLOCK"
-        - "cortex_process_request tool not discoverable → BLOCK"
+        - "cortex_verify tool not discoverable → BLOCK"
         - "Direct file tool usage + IMPLEMENT intent → BLOCK"
         - "Governance gate bypass attempt → BLOCK"
     
@@ -1393,7 +1393,7 @@ rules:
     
     enforcement_mechanism:
       mcp_pre_flight_check:
-        - "Check tool availability: cortex_process_request exists?"
+        - "Check tool availability: cortex_verify exists?"
         - "Check environment: MCP_SERVER_PORT, CORTEX_MCP_ENABLED set?"
         - "Check network: localhost:8000 listening (default MCP port)?"
       
@@ -1435,7 +1435,7 @@ rules:
       location: "cortex/governance/enforcement/agents/environment_integrity_agent.py"
       enforcement_point: "MasterOrchestrator pre-execution gate"
       blocked_tools: "create_file, replace_string_in_file for IMPLEMENT intent"
-      required_tools: "cortex_process_request, cortex_validate_holistically"
+      required_tools: "cortex_verify, cortex_validate"
     
     tests:
       unit_tests:

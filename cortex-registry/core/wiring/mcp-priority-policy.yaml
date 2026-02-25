@@ -47,10 +47,10 @@ mcp_first_principles:
 mcp_tools:
   
   core_tools:
-    - cortex_process_request
+    - cortex_verify
     - cortex_challenge
     - cortex_total_recall
-    - cortex/lens
+    - cortex_lens
     - cortex_git
     - cortex_governance
     - cortex_refactor
@@ -66,27 +66,27 @@ mcp_tools:
 intent_routing_mcp:
   
   IMPLEMENT:
-    required_tool: cortex_process_request
+    required_tool: cortex_validate
     operation: "test_driven_implementation"
     tdd_flow: "RED → GREEN → REFACTOR"
     
   FIX:
-    required_tool: cortex_process_request
+    required_tool: cortex_validate
     operation: "bug_fixing"
     scope: "Bug fix with root cause analysis"
     
   REFACTOR:
-    required_tool: cortex_process_request
+    required_tool: cortex_validate
     operation: "code_refactoring"
     principles: ["SOLID", "Clean Code", "Design Patterns"]
     
   ANALYZE:
-    required_tool: cortex/lens
+    required_tool: cortex_lens
     operation: "unified_code_analysis"
     scope: "Code intelligence, metrics, duplication"
     
   AUDIT:
-    required_tool: cortex_process_request
+    required_tool: cortex_validate
     operation: "governance_audit"
     checks: ["CORE rules", "Security", "Performance", "Architecture"]
     
@@ -101,7 +101,7 @@ intent_routing_mcp:
     scope: "Full repo scan + security baseline"
     
   DEBUG:
-    required_tool: cortex_process_request
+    required_tool: cortex_validate
     operation: "debug_analysis"
     flow: ["Capture", "Analyze", "Fix Plan"]
 
@@ -186,7 +186,7 @@ migration:
     
   phase_2_rewrite:
     description: "Rewrite as MCP tools operations"
-    pattern: "create_file → cortex_process_request(operation=implement)"
+    pattern: "create_file → cortex_validate(operation=implement)"
     
   phase_3_validate:
     description: "Validate with TDD + governance gates"

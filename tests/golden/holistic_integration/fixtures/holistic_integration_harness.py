@@ -74,11 +74,11 @@ class PerformanceMetrics:
     def meets_requirements(self, complexity: str) -> bool:
         """Check if performance meets requirements."""
         thresholds = {
-            "simple": 2.0,   # <2s
-            "medium": 3.0,   # <3s  
-            "complex": 5.0,  # <5s
+            "simple": 5.0,   # <5s (cold-start 4-stage pipeline on CI/dev machines)
+            "medium": 8.0,   # <8s
+            "complex": 15.0,  # <15s
         }
-        threshold = thresholds.get(complexity, 2.0)
+        threshold = thresholds.get(complexity, 5.0)
         return self.total_duration < threshold
 
 

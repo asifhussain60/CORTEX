@@ -13,6 +13,8 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+
 
 class ChallengeSeverity(Enum):
     """Challenge severity levels."""
@@ -51,7 +53,7 @@ class Challenge:
             self.challenge_id = f"challenge_{id(self)}"
 
 
-class ChallengeIntegrationOrchestrator:
+class ChallengeIntegrationOrchestrator(OrchestratorProtocolMixin):
     """Orchestrate challenge integration with filtering and sorting."""
 
     def __init__(
@@ -68,6 +70,7 @@ class ChallengeIntegrationOrchestrator:
         """
         self.generator = generator
         self.confidence_threshold = confidence_threshold
+        self._activate_cross_cutting_hooks(operation="challenge_integration_init")
 
     def process_challenges(
         self,
