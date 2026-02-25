@@ -681,6 +681,13 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             stop_words = {"the", "a", "an", "is", "are", "to", "of", "for", "with", "in", "on"}
             unique_keywords = list(set(kw for kw in keywords if kw not in stop_words and len(kw) > 2))
 
+            # AC-PHASE-8.2-01: Merge caller-supplied explicit keywords (highest priority)
+            explicit_keywords: list = context.get("keywords", [])
+            if isinstance(explicit_keywords, list):
+                for kw in explicit_keywords:
+                    if isinstance(kw, str) and kw.lower() not in [k.lower() for k in unique_keywords]:
+                        unique_keywords.append(kw.lower())
+
             return unique_keywords
 
         except (TypeError, AttributeError) as e:
@@ -1745,20 +1752,28 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             )
             
             # Convert to IntentRouter RoutingDecision format
+            # Extract keywords for downstream use
+            explicit_kw = [k.lower() for k in context.get("keywords", []) if isinstance(k, str)]
+
             if complexity_routing.route == ComplexityRoutingStrategy.WORKFLOW_TEMPLATE:
                 # Route to workflow template
                 return RoutingDecision(
                     intent_type=IntentType.IMPLEMENT,  # Templates handle all intent types
                     target_handler=f"WorkflowTemplate:{complexity_routing.template_id}",
                     confidence_score=complexity_routing.complexity,
-                    reasoning=complexity_routing.rationale,
+                    reasoning=(
+                        f"{operation_type} routed via workflow template: "
+                        f"{complexity_routing.rationale}"
+                    ),
+                    keyword_matches=explicit_kw,
                     metadata={
                         "complexity_score": complexity_routing.complexity,
                         "template_id": complexity_routing.template_id,
                         "requires_confirmation": complexity_routing.requires_confirmation,
                         "governance_gate": complexity_routing.governance_gate,
                         "operation_type": operation_type,
-                        "routing_source": "complexity_gate"
+                        "routing_source": "complexity_gate",
+                        "domain": context.get("domain"),
                     }
                 )
             elif complexity_routing.route == ComplexityRoutingStrategy.DIRECT_ORCHESTRATOR:
@@ -1767,13 +1782,18 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                     intent_type=self._map_operation_to_intent(operation_type),
                     target_handler=complexity_routing.orchestrator,
                     confidence_score=1.0 - complexity_routing.complexity,  # Inverse for direct routing
-                    reasoning=complexity_routing.rationale,
+                    reasoning=(
+                        f"{operation_type} routed directly to "
+                        f"{complexity_routing.orchestrator}: {complexity_routing.rationale}"
+                    ),
+                    keyword_matches=explicit_kw,
                     metadata={
                         "complexity_score": complexity_routing.complexity,
                         "orchestrator": complexity_routing.orchestrator,
                         "requires_confirmation": complexity_routing.requires_confirmation,
                         "operation_type": operation_type,
-                        "routing_source": "complexity_gate"
+                        "routing_source": "complexity_gate",
+                        "domain": context.get("domain"),
                     }
                 )
             
