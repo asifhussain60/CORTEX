@@ -1,15 +1,16 @@
 # CORTEX Knowledge Base INDEX — Unified
-# Authority: AC-PHASE62-H-001
+# Authority: AC-PHASE65-S1-001 | Enhanced: Phase-79 SDLC Intelligence Engine
 # Maps intent types to applicable YAML files across BOTH knowledge roots:
 #   1. cortex-registry/knowledge/           (best-practice guides)
 #   2. cortex-registry/knowledge-base/      (runtime knowledge)
 #
-# Total: 30 YAML files across 11 domains
-# Updated: 2026-02-24 (Phase 62-H — unified knowledge consolidation)
+# Total: 44 YAML files across 11 domains
+# Cross-reference authority: This INDEX is the SSOT for all knowledge relationships.
+# Individual knowledge YAMLs do NOT cross-reference each other — only this INDEX does.
+# Updated: 2026-02-25 (Phase-79 — Batch 1: 10 migration YAMLs + 2 pattern YAMLs added)
 
-version: "2.0"
 created: "2026-02-09"
-updated: "2026-02-24"
+updated: "2026-02-25"
 
 # ─── Best-Practice Guides (cortex-registry/knowledge/) ───────────────
 
@@ -77,6 +78,60 @@ performance-optimization:
     - path: "performance-optimization/profiling-analysis.yaml"
       title: "Performance Profiling and Analysis"
       keywords: ["performance", "profiling", "analyze", "optimize", "benchmark"]
+
+# ─── Runtime Knowledge (cortex-registry/knowledge-base/) ─────────────
+
+# ─── Migration Guides (cortex-registry/knowledge/migration/) ─────────
+
+migration:
+  guides:
+    - path: "migration/selenium-to-playwright.yaml"
+      title: "Selenium to Playwright Migration"
+      keywords: ["selenium", "playwright", "testing", "migration", "e2e", "browser-automation"]
+    - path: "migration/wcf-to-api-microservice.yaml"
+      title: "WCF to REST API/Microservice Migration"
+      keywords: ["wcf", "rest", "api", "microservice", "migration", "grpc", "service"]
+    - path: "migration/angularjs-to-angular.yaml"
+      title: "AngularJS to Angular Migration"
+      keywords: ["angularjs", "angular", "frontend", "migration", "upgrade", "typescript"]
+    - path: "migration/aspnet-to-aspnet-core.yaml"
+      title: "ASP.NET to ASP.NET Core Migration"
+      keywords: ["aspnet", "asp.net", "core", "migration", "upgrade", "web"]
+    - path: "migration/ef-to-efcore.yaml"
+      title: "Entity Framework to EF Core Migration"
+      keywords: ["entity-framework", "efcore", "orm", "migration", "database", "linq"]
+    - path: "migration/jquery-to-modern-framework.yaml"
+      title: "jQuery to Modern Framework Migration"
+      keywords: ["jquery", "react", "angular", "vue", "frontend", "migration", "javascript"]
+    - path: "migration/monolith-to-microservices.yaml"
+      title: "Monolith to Microservices Decomposition"
+      keywords: ["monolith", "microservices", "decomposition", "migration", "ddd", "strangler-fig"]
+    - path: "migration/soap-to-rest.yaml"
+      title: "SOAP to REST API Migration"
+      keywords: ["soap", "rest", "api", "wsdl", "xml", "json", "migration"]
+    - path: "migration/onprem-to-cloud.yaml"
+      title: "On-Premises to Cloud Migration"
+      keywords: ["onprem", "cloud", "azure", "aws", "migration", "infrastructure", "iaas", "paas"]
+    - path: "migration/sql-to-nosql.yaml"
+      title: "SQL to NoSQL Migration"
+      keywords: ["sql", "nosql", "mongodb", "cosmosdb", "dynamodb", "migration", "database"]
+    - path: "migration/javascript-to-typescript.yaml"
+      title: "JavaScript to TypeScript Migration"
+      keywords: ["javascript", "typescript", "migration", "types", "frontend", "nodejs"]
+    - path: "migration/dotnet-framework-to-dotnet8.yaml"
+      title: ".NET Framework to .NET 8+ Migration"
+      keywords: ["dotnet", ".net", "framework", "migration", "upgrade", "net8", "cross-platform"]
+
+# ─── Operational Patterns (cortex-registry/knowledge/best-practices/) ─
+
+operational-patterns:
+  guides:
+    - path: "best-practices/technical/success-patterns.yaml"
+      title: "Proven Success Patterns"
+      keywords: ["success", "pattern", "best-practice", "proven", "strategy", "implement"]
+    - path: "best-practices/technical/failure-patterns.yaml"
+      title: "Failure Patterns and Anti-Patterns"
+      keywords: ["failure", "anti-pattern", "avoid", "pitfall", "risk", "prevention"]
 
 # ─── Runtime Knowledge (cortex-registry/knowledge-base/) ─────────────
 

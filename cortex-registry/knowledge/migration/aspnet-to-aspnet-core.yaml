@@ -1,0 +1,161 @@
+# ASP.NET Framework to ASP.NET Core Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Migrating ASP.NET Framework (4.x) applications to ASP.NET Core (8+)
+
+title: "ASP.NET to ASP.NET Core Upgrade and Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "ASP.NET Framework 4.x (MVC, Web API, Web Forms, WCF)"
+  target: "ASP.NET Core 8+ (Minimal APIs, MVC, Razor Pages, Blazor)"
+  complexity: "HIGH — framework-level changes: hosting, DI, middleware, configuration, deployment"
+  typical_duration: "3-12 months per application depending on complexity and dependencies"
+  risk_level: "HIGH — .NET Framework locked to Windows; ASP.NET Core is cross-platform"
+
+# ── Migration Strategy ────────────────────────────────────────────────────────
+migration_strategy:
+  approach: "Incremental port with compatibility shims — not a rewrite"
+  phases:
+    - phase: "Assessment & Compatibility Analysis"
+      actions:
+        - "Run .NET Upgrade Assistant (dotnet upgrade-assistant) for automated compatibility report"
+        - "Inventory NuGet packages — check .NET Core/Standard support for each"
+        - "Identify System.Web dependencies — these have NO equivalent in ASP.NET Core"
+        - "Catalogue Global.asax logic — map to Program.cs/Startup.cs middleware pipeline"
+        - "Document Web.config dependencies — map to appsettings.json and environment variables"
+        - "Identify IIS-specific features used (URL Rewrite, Windows Auth modules, ISAPI filters)"
+        - "Check for full .NET Framework-only APIs (System.Drawing, System.Web.HttpContext.Current)"
+    - phase: "Foundation Setup"
+      actions:
+        - "Create new ASP.NET Core 8 project with dotnet new webapi or dotnet new mvc"
+        - "Migrate to SDK-style .csproj (single-file project format)"
+        - "Configure Program.cs with WebApplication.CreateBuilder pattern"
+        - "Set up dependency injection (built-in DI replaces Unity/Autofac/Ninject unless advanced scenarios)"
+        - "Configure middleware pipeline: UseRouting, UseAuthentication, UseAuthorization, UseEndpoints"
+        - "Migrate appsettings.json from Web.config — use IOptions<T> pattern for typed configuration"
+        - "Set up environment-specific configuration (Development, Staging, Production)"
+    - phase: "Code Migration"
+      actions:
+        - "Migrate controllers: ApiController → ControllerBase + [ApiController] attribute"
+        - "Replace HttpResponseMessage with ActionResult<T> or IActionResult"
+        - "Migrate authentication: FormsAuth/Windows Auth → ASP.NET Core Identity + JWT/Cookie"
+        - "Replace Global.asax Application_Start with middleware registrations in Program.cs"
+        - "Migrate filters: IActionFilter, IExceptionFilter remain — update namespaces"
+        - "Replace System.Web.HttpContext.Current with IHttpContextAccessor (injected)"
+        - "Migrate bundling: BundleConfig → webpack/Vite or native CSS/JS bundling"
+        - "Convert areas to feature folders or separate class library projects"
+    - phase: "Infrastructure Migration"
+      actions:
+        - "Replace IIS-only hosting with Kestrel + reverse proxy (nginx/YARP)"
+        - "Containerize with multi-stage Dockerfile"
+        - "Migrate health monitoring: custom → built-in ASP.NET Core health checks"
+        - "Update CI/CD pipeline for dotnet build/publish workflow"
+        - "Configure structured logging (Serilog/Microsoft.Extensions.Logging)"
+        - "Implement OpenTelemetry for distributed tracing"
+
+# ── Key Differences ───────────────────────────────────────────────────────────
+key_differences:
+  hosting:
+    aspnet: "IIS (Windows only), System.Web pipeline, Global.asax lifecycle"
+    aspnet_core: "Kestrel (cross-platform) + reverse proxy, middleware pipeline, Program.cs"
+
+  dependency_injection:
+    aspnet: "Third-party containers (Unity, Autofac, Ninject) — manual registration"
+    aspnet_core: "Built-in DI container — constructor injection everywhere, IServiceCollection"
+
+  configuration:
+    aspnet: "Web.config (XML), ConfigurationManager.AppSettings['key']"
+    aspnet_core: "appsettings.json, IConfiguration, IOptions<T> pattern, environment variables"
+
+  middleware:
+    aspnet: "HTTP Modules and Handlers (IHttpModule, IHttpHandler)"
+    aspnet_core: "Middleware pipeline (app.Use, app.Map) — composable, ordered"
+
+  static_files:
+    aspnet: "Served from project root, BundleConfig.cs for bundling"
+    aspnet_core: "wwwroot/ folder, UseStaticFiles() middleware, no built-in bundling"
+
+  authentication:
+    aspnet: "FormsAuthentication, Windows Auth, custom HTTP modules"
+    aspnet_core: "ASP.NET Core Identity, JWT bearer, Cookie, OAuth 2.0 / OIDC"
+
+  session:
+    aspnet: "InProc, StateServer, SQLServer session — heavy, server-affinity"
+    aspnet_core: "IDistributedCache (Redis, SQL) — lightweight, no server affinity"
+
+  routing:
+    aspnet: "RouteConfig.cs + attribute routing"
+    aspnet_core: "Endpoint routing — MapControllers(), MapGet() for Minimal APIs"
+
+# ── Web.config to appsettings.json Mapping ────────────────────────────────────
+config_mapping:
+  connection_strings:
+    aspnet: "<connectionStrings><add name='Default' connectionString='...' /></connectionStrings>"
+    aspnet_core: "appsettings.json → 'ConnectionStrings': {'Default': '...'} → builder.Configuration.GetConnectionString('Default')"
+
+  app_settings:
+    aspnet: "<appSettings><add key='ApiKey' value='...' /></appSettings>"
+    aspnet_core: "appsettings.json → {'ApiKey': '...'} → IConfiguration['ApiKey'] or IOptions<T>"
+
+  custom_sections:
+    aspnet: "Custom ConfigurationSection classes"
+    aspnet_core: "POCO classes with IOptions<T> pattern — services.Configure<MyOptions>(config.GetSection('My'))"
+
+  environment:
+    aspnet: "Web.config transforms (Web.Release.config)"
+    aspnet_core: "appsettings.{Environment}.json + environment variables + user secrets (Development)"
+
+# ── Unsupported Patterns (No Direct Equivalent) ──────────────────────────────
+unsupported_patterns:
+  web_forms:
+    pattern: "ASP.NET Web Forms (aspx, code-behind, ViewState, server controls)"
+    alternative: "Blazor Server/WASM (component model) or Razor Pages (page-based)"
+    note: "No migration path — requires rewrite of UI layer"
+
+  http_context_current:
+    pattern: "System.Web.HttpContext.Current used in service layer"
+    alternative: "Inject IHttpContextAccessor — but prefer passing explicit parameters instead"
+    note: "Static HttpContext.Current is an anti-pattern — refactor to dependency injection"
+
+  global_asax:
+    pattern: "Application_Start, Application_End, Session_Start events"
+    alternative: "Program.cs builder pattern + middleware + IHostedService"
+
+  http_modules:
+    pattern: "Custom IHttpModule for cross-cutting concerns"
+    alternative: "Middleware (app.Use) — same concept, cleaner API"
+
+  machinekey:
+    pattern: "Web.config <machineKey> for data protection"
+    alternative: "ASP.NET Core Data Protection API — key ring stored in file system, Redis, or Azure Key Vault"
+
+# ── Common Pitfalls ───────────────────────────────────────────────────────────
+pitfalls:
+  - pitfall: "Attempting to migrate Web Forms to ASP.NET Core MVC"
+    fix: "Web Forms requires complete UI rewrite — choose Blazor or Razor Pages, not MVC, for page-oriented apps"
+  - pitfall: "Keeping System.Web references via compatibility NuGet packages"
+    fix: "No System.Web in ASP.NET Core — replace with Microsoft.AspNetCore.* equivalents"
+  - pitfall: "Not migrating to SDK-style .csproj first"
+    fix: "SDK-style csproj is prerequisite — use dotnet try-convert tool"
+  - pitfall: "Hardcoded connection strings in code"
+    fix: "Use IConfiguration + user secrets (dev) + environment variables (prod) + Azure Key Vault"
+  - pitfall: "Ignoring cross-platform file path differences"
+    fix: "Use Path.Combine() and Path.DirectorySeparatorChar — no hardcoded backslashes"
+  - pitfall: "Using synchronous I/O in controllers"
+    fix: "ASP.NET Core is async-first — all I/O operations should use async/await"
+  - pitfall: "Missing middleware order"
+    fix: "Middleware order matters: UseRouting() before UseAuthentication() before UseAuthorization() before UseEndpoints()"
+
+# ── Testing Strategy ──────────────────────────────────────────────────────────
+testing_strategy:
+  unit_tests: "MSTest/NUnit/xUnit — migrate from MSTest v1 to xUnit (preferred in .NET Core ecosystem)"
+  integration_tests: "Use WebApplicationFactory<Program> for in-memory integration tests"
+  api_tests: "HttpClient against TestServer — no real HTTP needed"
+  regression_gate: "Both old and new applications must serve identical responses during parallel-run phase"
+
+company_context:
+  infrastructure: "Containerized deployment via Kubernetes — Kestrel behind nginx/YARP reverse proxy"
+  security: "OAuth 2.0 / JWT mandatory — no Windows Auth in cloud-hosted services"
+  monitoring: "OpenTelemetry traces + Prometheus metrics + structured logging (Serilog)"
+  database: "Entity Framework Core for data access — see ef-to-efcore.yaml for ORM migration"

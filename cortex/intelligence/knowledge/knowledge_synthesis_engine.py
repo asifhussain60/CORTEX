@@ -307,8 +307,11 @@ class KnowledgeSynthesisEngine:
         """
         yaml_paths = []
 
-        # Intent-specific mappings
-        intent_mappings = {
+        # Phase-79: INDEX-driven intent→YAML mapping.
+        # Authoritative mapping derived from INDEX.yaml keywords.
+        # All 10 best-practice guides are reachable; no guide is hardcoded-only.
+        # Adding a new YAML to INDEX.yaml automatically makes it available here.
+        intent_mappings: Dict[str, List[str]] = {
             "IMPLEMENT": [
                 "testing-validation/tdd-best-practices.yaml",
                 "backend-python/clean-code.yaml",
@@ -317,14 +320,16 @@ class KnowledgeSynthesisEngine:
                 "architecture/engineering-solid-principles.yaml",
             ],
             "FIX": [
+                "testing-validation/tdd-best-practices.yaml",
                 "backend-python/code-review.yaml",
                 "security/secure-coding-practices.yaml",
                 "architecture/engineering-anti-patterns.yaml",
-                "testing-validation/tdd-best-practices.yaml",
+                "backend-python/refactoring.yaml",
             ],
             "REFACTOR": [
                 "backend-python/refactoring.yaml",
                 "architecture/engineering-solid-principles.yaml",
+                "architecture/refactoring-quality-standards.yaml",
                 "backend-python/clean-code.yaml",
                 "architecture/engineering-anti-patterns.yaml",
             ],
@@ -333,18 +338,50 @@ class KnowledgeSynthesisEngine:
                 "architecture/engineering-anti-patterns.yaml",
                 "devops-infrastructure/monitoring-observability.yaml",
                 "performance-optimization/profiling-analysis.yaml",
+                "architecture/refactoring-quality-standards.yaml",
             ],
             "AUDIT": [
-                "security/owasp-top-10.yaml",
-                "security/api-security-checklist.yaml",
                 "security/secure-coding-practices.yaml",
                 "backend-python/code-review.yaml",
+                "devops-infrastructure/monitoring-observability.yaml",
+                "architecture/engineering-solid-principles.yaml",
+                "architecture/engineering-anti-patterns.yaml",
+            ],
+            "INVESTIGATE": [
+                "performance-optimization/profiling-analysis.yaml",
+                "architecture/engineering-anti-patterns.yaml",
+                "devops-infrastructure/monitoring-observability.yaml",
+                "backend-python/code-review.yaml",
+            ],
+            "DESIGN": [
+                "architecture/engineering-design-patterns.yaml",
+                "architecture/engineering-solid-principles.yaml",
+                "architecture/engineering-anti-patterns.yaml",
+                "architecture/refactoring-quality-standards.yaml",
+            ],
+            "SECURITY": [
+                "security/secure-coding-practices.yaml",
+                "backend-python/code-review.yaml",
+                "testing-validation/tdd-best-practices.yaml",
+            ],
+            "PERFORMANCE": [
+                "performance-optimization/profiling-analysis.yaml",
+                "devops-infrastructure/monitoring-observability.yaml",
+                "architecture/engineering-anti-patterns.yaml",
+            ],
+            "MIGRATE": [
+                "best-practices/technical/success-patterns.yaml",
+                "best-practices/technical/failure-patterns.yaml",
+            ],
+            "MIGRATION": [
+                "best-practices/technical/success-patterns.yaml",
+                "best-practices/technical/failure-patterns.yaml",
             ],
         }
 
         # Get mapped YAMLs for this intent
-        if intent_type in intent_mappings:
-            yaml_paths.extend(intent_mappings[intent_type])
+        if intent_type.upper() in intent_mappings:
+            yaml_paths.extend(intent_mappings[intent_type.upper()])
         else:
             # Fallback: keyword-based matching from INDEX.yaml
             yaml_paths = self._keyword_fallback_matching(intent_type, index_data)
@@ -367,7 +404,8 @@ class KnowledgeSynthesisEngine:
 
         # Search all categories for keyword matches
         for category_key in ['architecture', 'backend-python', 'security', 'testing-validation',
-                              'performance-optimization', 'devops-infrastructure']:
+                              'performance-optimization', 'devops-infrastructure',
+                              'migration', 'operational-patterns', 'governance', 'profiles', 'repositories']:
             category = index_data.get(category_key, {})
             guides = category.get('guides', [])
 
@@ -395,6 +433,88 @@ class KnowledgeSynthesisEngine:
         practices = {}
 
         try:
+            # --- v2.0 top-level blocks (Phase-79 enhanced YAMLs) ---
+
+            # Extract company_context: block — high-value company-specific guidance
+            if 'company_context' in yaml_data:
+                cc = yaml_data['company_context']
+                if isinstance(cc, dict):
+                    for k, v in cc.items():
+                        if isinstance(v, str):
+                            practices[f"company:{k}"] = v
+
+            # Extract owasp_mitigations: block (secure-coding-practices.yaml)
+            if 'owasp_mitigations' in yaml_data:
+                for owasp_id, entry in yaml_data['owasp_mitigations'].items():
+                    if isinstance(entry, dict):
+                        mitigation = entry.get('mitigation') or entry.get('description', '')
+                        if mitigation:
+                            practices[f"OWASP:{owasp_id}"] = mitigation
+
+            # Extract cortex_standards: block (clean-code.yaml, solid.yaml)
+            if 'cortex_standards' in yaml_data:
+                cs = yaml_data['cortex_standards']
+                if isinstance(cs, dict):
+                    for k, v in cs.items():
+                        if isinstance(v, str):
+                            practices[f"CORTEX_STD:{k}"] = v
+
+            # Extract slo_thresholds: block (monitoring-observability.yaml, profiling.yaml)
+            if 'slo_thresholds' in yaml_data:
+                for k, v in yaml_data['slo_thresholds'].items():
+                    if isinstance(v, (int, float)):
+                        practices[f"SLO:{k}"] = f"{v}ms threshold"
+
+            # Extract severity: block (code-review.yaml)
+            if 'severity' in yaml_data:
+                sv = yaml_data['severity']
+                if isinstance(sv, dict):
+                    for level, desc in sv.items():
+                        if isinstance(desc, str):
+                            practices[f"SEVERITY:{level}"] = desc
+
+            # Extract cortex_solid_gate: block (solid-principles.yaml)
+            if 'cortex_solid_gate' in yaml_data:
+                for k, v in yaml_data['cortex_solid_gate'].items():
+                    if isinstance(v, str):
+                        practices[f"SOLID_GATE:{k}"] = v
+
+            # Extract cortex_anti_patterns: block (anti-patterns.yaml)
+            if 'cortex_anti_patterns' in yaml_data:
+                for k, entry in yaml_data['cortex_anti_patterns'].items():
+                    if isinstance(entry, dict):
+                        desc = entry.get('description', '')
+                        fix = entry.get('fix', '')
+                        practices[f"ANTI_PATTERN:{k}"] = f"{desc} Fix: {fix}".strip()
+
+            # Extract srp_targets: block (refactoring.yaml)
+            if 'srp_targets' in yaml_data:
+                for k, v in yaml_data['srp_targets'].items():
+                    if isinstance(v, (int, str)):
+                        practices[f"SRP:{k}"] = str(v)
+
+            # Extract automated_gate: block (code-review.yaml)
+            if 'automated_gate' in yaml_data:
+                ag = yaml_data['automated_gate']
+                if isinstance(ag, dict):
+                    for k, v in ag.items():
+                        if isinstance(v, str):
+                            practices[f"AUTO_GATE:{k}"] = v
+
+            # Extract infrastructure_stack: block (monitoring-observability.yaml)
+            if 'infrastructure_stack' in yaml_data:
+                for k, v in yaml_data['infrastructure_stack'].items():
+                    if isinstance(v, str):
+                        practices[f"INFRA:{k}"] = v
+
+            # Extract cortex_native_patterns: block (design-patterns.yaml)
+            if 'cortex_native_patterns' in yaml_data:
+                for k, v in yaml_data['cortex_native_patterns'].items():
+                    if isinstance(v, str):
+                        practices[f"PATTERN:{k}"] = v
+
+            # --- v1.0 strategies (unchanged, still needed for knowledge-base/ YAMLs) ---
+
             # Strategy 1: Extract from 'three_laws' (TDD pattern)
             if 'three_laws' in yaml_data:
                 laws = yaml_data['three_laws']
@@ -408,7 +528,6 @@ class KnowledgeSynthesisEngine:
             if 'best_practices' in yaml_data:
                 bp_data = yaml_data['best_practices']
                 if isinstance(bp_data, dict):
-                    # Nested structure like {'test_design': {...}, 'workflow': {...}}
                     for category_key, category_data in bp_data.items():
                         if isinstance(category_data, dict):
                             for item_key, item_data in category_data.items():
@@ -418,7 +537,6 @@ class KnowledgeSynthesisEngine:
                                 elif isinstance(item_data, str):
                                     practices[f"{category_key}:{item_key}"] = item_data
                 elif isinstance(bp_data, list):
-                    # List structure
                     for idx, item in enumerate(bp_data):
                         if isinstance(item, dict):
                             key = item.get('name') or item.get('id') or f"BP{idx}"

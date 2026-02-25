@@ -1,0 +1,91 @@
+# jQuery to Modern Framework Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Migrating jQuery-dependent codebases to React, Angular, or Vue
+
+title: "jQuery to Modern Framework Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "jQuery 1.x/2.x/3.x (DOM manipulation, AJAX, plugin ecosystem)"
+  target: "React 18+ / Angular 17+ / Vue 3+ (component-based, virtual DOM, state management)"
+  complexity: "MEDIUM-HIGH — paradigm shift from imperative DOM manipulation to declarative components"
+  typical_duration: "4-10 months per application"
+  risk_level: "MEDIUM — jQuery itself is not EOL but the pattern encourages unmaintainable spaghetti code"
+
+migration_strategy:
+  approach: "Island Architecture — convert jQuery sections to components one feature at a time"
+  phases:
+    - phase: "Assessment"
+      actions:
+        - "Audit jQuery usage: DOM manipulation, AJAX calls, plugins, event delegation, animations"
+        - "Identify jQuery plugins in use — check for modern equivalents (datepicker, select2, etc.)"
+        - "Map jQuery AJAX calls to service layer — these become API client modules"
+        - "Inventory jQuery UI dependencies — replace with headless UI or Radix primitives"
+    - phase: "Foundation"
+      actions:
+        - "Choose target framework based on team expertise and application type"
+        - "Set up build pipeline (Vite/Webpack) alongside existing script-tag jQuery"
+        - "Create API service layer — centralize all AJAX calls into typed service modules"
+        - "Establish component library — design system components replace jQuery UI widgets"
+    - phase: "Incremental Replacement"
+      actions:
+        - "Start with isolated widgets (modals, dropdowns, tooltips) — convert to components"
+        - "Replace jQuery event delegation with framework event handling"
+        - "Convert AJAX calls to fetch/axios wrapped in service modules"
+        - "Replace jQuery animations with CSS transitions or framework animation libraries"
+        - "Remove $.ready() — framework handles DOM lifecycle"
+        - "Replace jQuery selectors with refs (React/Vue) or template references (Angular)"
+    - phase: "Cleanup"
+      actions:
+        - "Remove jQuery dependency once all features migrated"
+        - "Delete jQuery plugins and replace with npm packages"
+        - "Implement state management (Redux/Zustand, NgRx, Pinia) for shared state"
+
+# ── Pattern Mapping ───────────────────────────────────────────────────────────
+pattern_mapping:
+  dom_selection:
+    jquery: "$('#element').text('Hello')"
+    react: "const [text, setText] = useState('Hello'); return <div>{text}</div>"
+    vue: "const text = ref('Hello'); return <div>{{ text }}</div>"
+    angular: "Component template: <div>{{ text }}</div> with class property"
+
+  event_handling:
+    jquery: "$('#btn').on('click', function() { ... })"
+    react: "<button onClick={handleClick}>Click</button>"
+    note: "Framework event handling is declarative — no manual listener management"
+
+  ajax:
+    jquery: "$.ajax({ url: '/api/data', success: function(data) { ... } })"
+    modern: "const data = await fetch('/api/data').then(r => r.json())"
+    note: "Wrap in typed service modules — never scatter fetch calls across components"
+
+  dom_manipulation:
+    jquery: "$('.list').append('<li>' + item + '</li>')"
+    modern: "State-driven rendering: items.push(item) → UI re-renders automatically"
+    note: "Never manipulate DOM directly in modern frameworks — update state, framework renders"
+
+  show_hide:
+    jquery: "$('#panel').show(); $('#panel').hide()"
+    modern: "Conditional rendering: {isVisible && <Panel />} or *ngIf='isVisible'"
+
+# ── Common Pitfalls ───────────────────────────────────────────────────────────
+pitfalls:
+  - pitfall: "Using jQuery inside React/Angular/Vue components"
+    fix: "Never mix jQuery DOM manipulation with framework rendering — causes state desynchronization"
+  - pitfall: "Converting jQuery patterns 1:1 to framework code"
+    fix: "Rethink the interaction as state-driven — what data changes, not what DOM changes"
+  - pitfall: "Keeping jQuery 'just for AJAX'"
+    fix: "Use fetch API or axios — jQuery is not needed for HTTP calls"
+  - pitfall: "Not extracting a component library"
+    fix: "Build reusable components from converted jQuery widgets — avoid duplicating UI logic"
+
+testing_strategy:
+  component_tests: "Use Testing Library (React/Vue) or TestBed (Angular) for component interaction tests"
+  e2e_tests: "Playwright for cross-browser E2E — replaces any jQuery-based test tooling"
+  visual_regression: "Screenshot comparison for UI components during migration"
+
+company_context:
+  framework_choice: "Use the framework your team knows best — React for SPAs, Angular for enterprise, Vue for rapid prototyping"
+  build_tool: "Vite for new projects (fast HMR), Webpack only if existing configuration is complex"
+  accessibility: "All new components must meet WCAG 2.1 AA — jQuery UI widgets often did not"

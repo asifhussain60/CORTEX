@@ -1,0 +1,78 @@
+# Success Patterns — Extracted from CORTEX Production Operations
+# Authority: Chat01 Digest (2026-02-25)
+# Source: chat01.md holistic analysis — patterns that consistently produce good outcomes
+
+title: "Technical Success Patterns"
+category: "best-practices"
+updated: "2026-02-25"
+
+patterns:
+
+  batch_verified_deletion:
+    name: "Batch-Verified Deletion"
+    context: "Large-scale dead code removal across 150+ files"
+    pattern: "Delete in small batches (10-20 files), run smoke gate after each batch, verify zero regression before next batch"
+    evidence: "Chat01: 150 files deleted in 10 batches, 1,211 smoke tests held at every gate, zero new failures"
+    applicability: ["dead-code-removal", "refactor", "cleanup", "migration"]
+    anti_pattern: "Mass delete everything matching a grep pattern without import-chain verification"
+
+  import_chain_verification:
+    name: "Import Chain Verification Before Deletion"
+    context: "Identifying truly dead files in a Python codebase with complex import graphs"
+    pattern: "Check basename grep across cortex/ AND tests/; verify __init__.py re-exports; check conftest/pytest.ini plugin registration; check try/except ImportError guards"
+    evidence: "Chat01: Discovered business_wisdom_formatter.py depended on deleted file via try/except fallback — caught by import chain verification"
+    applicability: ["dead-code-removal", "refactor", "dependency-analysis"]
+    anti_pattern: "Relying only on IDE 'find usages' — misses runtime-loaded plugins and conftest registrations"
+
+  compat_shim_migration:
+    name: "Compatibility Shim → Canonical Import Migration"
+    context: "Moving from re-export shims to direct canonical imports"
+    pattern: "1) Identify shim re-export targets; 2) Update all callers to canonical path; 3) Run smoke gate; 4) Delete shim"
+    evidence: "Chat01: stage_execution_strategy shim updated in 3 callers before deletion — zero regression"
+    applicability: ["refactor", "import-cleanup", "module-consolidation"]
+    anti_pattern: "Deleting shims without updating callers — breaks import chains silently"
+
+  index_driven_knowledge:
+    name: "INDEX-Driven Knowledge Resolution"
+    context: "Centralizing cross-references for YAML knowledge files"
+    pattern: "Single INDEX.yaml owns all relationship mapping. Individual files reference company context only — never each other. Runtime resolvers query INDEX, not individual files."
+    evidence: "Chat01: Cross-reference challenge resolved — CORE-035 violation risk eliminated by keeping relationships in one place"
+    applicability: ["knowledge-management", "registry-design", "configuration-architecture"]
+    anti_pattern: "Adding 'related:' pointers inside each YAML — duplicates relationship data in N places"
+
+  thin_index_contract:
+    name: "Thin Index Contract for Master Plans"
+    context: "Preventing plan files from growing into unmanageable monoliths"
+    pattern: "Master index ≤ 500 lines. All detail lives in dedicated phase files. Only thin references (id, title, status, priority, file path) in the index."
+    evidence: "cortex-master.yaml grew from 150L to 3,007L before this pattern was enforced — caused 40+ YAML syntax errors"
+    applicability: ["planning", "architecture-governance", "documentation"]
+    anti_pattern: "Writing gap catalogues, TDD sequences, and implementation detail directly into the index file"
+
+  srp_decomposition_by_stage:
+    name: "SRP Decomposition by Stage for Monolithic Files"
+    context: "Breaking apart 5,000+ line files without breaking callers"
+    pattern: "Extract by logical stage (Stage1, Stage2, Stage3, Stage4), keep original file as thin dispatcher, verify each extraction with smoke gate"
+    evidence: "Chat01: master_orchestrator.py (5,118L) identified for SRP decomposition into MasterOrchestratorStage[1-4] files"
+    applicability: ["refactor", "srp", "monolith-decomposition"]
+    anti_pattern: "Attempting to refactor a monolith in one pass without intermediate gates"
+
+  company_context_in_knowledge:
+    name: "Company Context Blocks in Knowledge YAMLs"
+    context: "Making generic best practices actionable for a specific organization"
+    pattern: "Every knowledge YAML includes a company_context: block referencing actual company standards (API layer rules, payment domain, enforcement tools)"
+    evidence: "Chat01: All 10 knowledge YAMLs enhanced with company_context blocks referencing api-design-standards.yaml, security-standards.yaml, payment-security.yaml"
+    applicability: ["knowledge-management", "onboarding", "sdlc-intelligence"]
+    anti_pattern: "Generic best practices with no organizational anchoring — teams ignore them because they feel theoretical"
+
+  zero_regression_gate:
+    name: "Zero Regression Gate at Every Boundary"
+    context: "Any structural change (deletion, rename, refactor, migration)"
+    pattern: "Run smoke tests before AND after every batch of changes. Baseline must hold or exceed. Pre-existing failures documented separately."
+    evidence: "Chat01: Stashed changes, ran tests on HEAD to confirm 2 failures pre-existed, restored changes — proved 0 new regressions"
+    applicability: ["all-modes", "ci-cd", "migration", "refactor"]
+    anti_pattern: "Running tests only at the end of a multi-hour refactoring session"
+
+company_context:
+  enforcement: "All patterns enforced via EnforcementOrchestrator pre-commit hook"
+  governance: "CORE-064 Sweep Completeness Contract — no partial sweeps"
+  testing: "make test-batch canonical runner — never raw pytest with flag overrides"

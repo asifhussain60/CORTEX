@@ -1,0 +1,117 @@
+# .NET Framework to .NET 8+ Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Migrating .NET Framework 4.x class libraries and console apps to .NET 8+
+
+title: ".NET Framework to .NET 8+ Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: ".NET Framework 4.6.2–4.8.x (Windows-only, System.Web, GAC)"
+  target: ".NET 8+ (cross-platform, high performance, long-term support)"
+  complexity: "MEDIUM-HIGH — depends on Windows-specific API usage"
+  typical_duration: "2-8 weeks per project"
+  risk_level: "MEDIUM — most APIs have equivalents but some Windows-specific features have no cross-platform alternative"
+
+migration_strategy:
+  approach: "Bottom-up — migrate shared libraries first, then executables"
+  phases:
+    - phase: "Assessment"
+      actions:
+        - "Run .NET Upgrade Assistant (Microsoft's official tool) for automated analysis"
+        - "Run API Port / .NET Portability Analyzer — identifies incompatible APIs"
+        - "Inventory NuGet packages — check .NET 8 compatibility on nuget.org"
+        - "Identify Windows-only dependencies: Registry, WMI, COM Interop, WCF, MSMQ"
+        - "Check for app.config / web.config dependencies — these change significantly"
+    - phase: "Library Migration"
+      actions:
+        - "Migrate shared class libraries first — they have fewest framework dependencies"
+        - "Target .NET Standard 2.0 first (compatible with both Framework and .NET 8)"
+        - "Then retarget to net8.0 once all consumers are migrated"
+        - "Replace System.Configuration with Microsoft.Extensions.Configuration"
+        - "Replace System.Drawing with SkiaSharp or ImageSharp (cross-platform)"
+    - phase: "Application Migration"
+      actions:
+        - "Convert .csproj to SDK-style format (remove AssemblyInfo.cs, simplify project file)"
+        - "Replace packages.config with PackageReference"
+        - "Migrate DI: Unity/Autofac/Ninject → Microsoft.Extensions.DependencyInjection (or keep with .NET 8 adapter)"
+        - "Replace System.Web references with ASP.NET Core equivalents"
+        - "Migrate configuration: web.config → appsettings.json + IConfiguration"
+    - phase: "Validation"
+      actions:
+        - "Full test suite must pass on .NET 8 runtime"
+        - "Performance comparison — .NET 8 should be 30-60% faster (Kestrel, System.Text.Json, JIT improvements)"
+        - "Verify cross-platform support if required (Linux/macOS)"
+        - "Check container readiness — .NET 8 apps should build as Docker images"
+
+# ── Project File Migration ────────────────────────────────────────────────────
+project_file:
+  old_format:
+    description: "Verbose XML with explicit file includes, AssemblyInfo.cs, packages.config"
+    lines: "Typically 200-500 lines"
+
+  sdk_format:
+    description: "Concise SDK-style .csproj with implicit globbing"
+    lines: "Typically 10-30 lines"
+    example: |
+      <Project Sdk="Microsoft.NET.Sdk">
+        <PropertyGroup>
+          <TargetFramework>net8.0</TargetFramework>
+          <Nullable>enable</Nullable>
+          <ImplicitUsings>enable</ImplicitUsings>
+        </PropertyGroup>
+      </Project>
+
+# ── API Replacements ──────────────────────────────────────────────────────────
+api_replacements:
+  - framework: "System.Web.HttpContext"
+    dotnet8: "Microsoft.AspNetCore.Http.HttpContext"
+  - framework: "System.Configuration.ConfigurationManager"
+    dotnet8: "Microsoft.Extensions.Configuration.IConfiguration"
+  - framework: "System.Drawing"
+    dotnet8: "SkiaSharp or ImageSharp (cross-platform)"
+  - framework: "System.Runtime.Remoting"
+    dotnet8: "gRPC or REST APIs — remoting is not supported"
+  - framework: "System.Web.Services (ASMX)"
+    dotnet8: "ASP.NET Core Web API or gRPC"
+  - framework: "System.EnterpriseServices"
+    dotnet8: "No equivalent — redesign using modern patterns"
+  - framework: "AppDomain.CreateDomain"
+    dotnet8: "AssemblyLoadContext (limited isolation) or separate process"
+  - framework: "Thread.Abort()"
+    dotnet8: "CancellationToken pattern — cooperative cancellation"
+
+# ── Unsupported in .NET 8 ─────────────────────────────────────────────────────
+unsupported:
+  - feature: "Windows Communication Foundation (WCF) server"
+    alternative: "CoreWCF (community port) or migrate to gRPC/REST"
+  - feature: "Windows Workflow Foundation (WF)"
+    alternative: "Elsa Workflows or custom state machine"
+  - feature: "ASP.NET Web Forms"
+    alternative: "Blazor Server/WASM or Razor Pages"
+  - feature: "Remoting"
+    alternative: "gRPC for cross-process communication"
+  - feature: "Global Assembly Cache (GAC)"
+    alternative: "NuGet packages — no GAC in .NET 8"
+  - feature: "Code Access Security (CAS)"
+    alternative: "OS-level security, containerization"
+
+pitfalls:
+  - pitfall: "Assuming all NuGet packages work on .NET 8"
+    fix: "Check each package on nuget.org — look for net8.0 or netstandard2.0 target"
+  - pitfall: "Not converting to SDK-style project format"
+    fix: "SDK-style is required for .NET 8 — use 'dotnet migrate' or Upgrade Assistant"
+  - pitfall: "Keeping System.Web dependencies"
+    fix: "System.Web does not exist in .NET 8 — every reference must be replaced"
+  - pitfall: "Ignoring nullable reference types"
+    fix: "Enable <Nullable>enable</Nullable> — catches null reference bugs at compile time"
+
+testing_strategy:
+  portability: "Run .NET Portability Analyzer before migration — quantifies API compatibility"
+  regression: "Full test suite must pass on .NET 8 — run in CI with both framework and .NET 8 targets during transition"
+  performance: ".NET 8 should show measurable perf improvement — benchmark critical paths"
+
+company_context:
+  target_framework: ".NET 8 LTS — all new projects and migrations target net8.0"
+  migration_tool: "Use Microsoft .NET Upgrade Assistant as starting point — then manual fixes"
+  containers: "All .NET 8 applications must be container-ready (Dockerfile in repo)"

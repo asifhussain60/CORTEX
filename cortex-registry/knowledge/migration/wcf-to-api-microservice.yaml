@@ -1,0 +1,120 @@
+# WCF to API and Microservice Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Migrating Windows Communication Foundation services to REST APIs and microservices
+
+title: "WCF to API and Microservice Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "Windows Communication Foundation (WCF) — .NET Framework"
+  target: "ASP.NET Core Web API + gRPC (for internal service-to-service)"
+  complexity: "HIGH — protocol changes (SOAP→REST/gRPC), hosting model, security model, serialization"
+  typical_duration: "3-12 months per service depending on contract complexity"
+  risk_level: "HIGH — production services with live traffic require careful cutover"
+
+# ── Migration Strategy ────────────────────────────────────────────────────────
+migration_strategy:
+  approach: "Strangler Fig + Anti-Corruption Layer — route traffic incrementally"
+  phases:
+    - phase: "Discovery & Contract Analysis"
+      actions:
+        - "Inventory all WCF services — bindings (basicHttp, wsHttp, netTcp, netNamedPipe)"
+        - "Extract all service contracts ([ServiceContract], [OperationContract])"
+        - "Map data contracts ([DataContract], [DataMember]) to DTOs"
+        - "Identify duplex/callback contracts — these need WebSocket or SignalR replacement"
+        - "Catalogue WSDL consumers — internal and external"
+        - "Document security model (Windows auth, certificates, message security, transport security)"
+    - phase: "Architecture Decision"
+      actions:
+        - "Classify each service: REST API (external/CRUD) vs gRPC (internal/high-throughput) vs message queue (async)"
+        - "Design API contracts using OpenAPI 3.0 spec — map WCF operations to HTTP verbs"
+        - "Decide serialization: JSON (REST) or Protobuf (gRPC) — no XML unless legacy consumer requires it"
+        - "Design authentication migration: WCF Windows Auth → OAuth 2.0 / JWT bearer tokens"
+        - "Plan service decomposition: 1 WCF service ≠ 1 microservice — decompose by domain boundary"
+    - phase: "Implementation"
+      actions:
+        - "Create ASP.NET Core Web API project with proper layering (Controllers → Services → Repositories)"
+        - "Build Anti-Corruption Layer (ACL) — facade that exposes REST but calls WCF internally during migration"
+        - "Implement API versioning from day 1 (URL segment or header-based)"
+        - "Convert DataContracts to DTOs with AutoMapper or manual mapping"
+        - "Replace WCF-specific patterns: InstanceContextMode → DI scoping, ConcurrencyMode → async/await"
+        - "Implement health checks and readiness probes for each new API"
+    - phase: "Cutover"
+      actions:
+        - "Deploy ACL alongside WCF service — traffic split via API gateway or reverse proxy"
+        - "Gradually shift traffic: 10% → 25% → 50% → 100% with rollback capability"
+        - "Monitor error rates, latency P95/P99, and throughput during each increment"
+        - "Decommission WCF service only after 2-week burn-in at 100% traffic on new API"
+        - "Update all WSDL consumers to REST clients — provide SDK or generated client package"
+
+# ── Contract Mapping ──────────────────────────────────────────────────────────
+contract_mapping:
+  service_contract:
+    wcf: "[ServiceContract] interface IOrderService"
+    aspnet_core: "[ApiController] [Route('api/orders')] class OrdersController"
+    note: "One WCF ServiceContract typically maps to one API Controller"
+
+  operation_contract:
+    wcf: "[OperationContract] Order GetOrder(int orderId)"
+    aspnet_core: "[HttpGet('{orderId}')] async Task<ActionResult<OrderDto>> GetOrder(int orderId)"
+    note: "Map to HTTP verbs: Get→GET, Create→POST, Update→PUT/PATCH, Delete→DELETE"
+
+  data_contract:
+    wcf: "[DataContract] class OrderData { [DataMember] public string Id; }"
+    aspnet_core: "public record OrderDto(string Id, ...)"
+    note: "Use records for immutable DTOs; use System.Text.Json instead of DataContractSerializer"
+
+  fault_contract:
+    wcf: "[FaultContract(typeof(OrderFault))] void ProcessOrder(Order order)"
+    aspnet_core: "Use ProblemDetails (RFC 7807) — return Problem() or custom middleware for exceptions"
+
+  duplex_callback:
+    wcf: "[ServiceContract(CallbackContract = typeof(INotificationCallback))]"
+    aspnet_core: "Use SignalR for real-time push, or WebSocket for raw bidirectional communication"
+    note: "Duplex is the hardest WCF pattern to migrate — redesign the interaction model"
+
+# ── Binding Migration ─────────────────────────────────────────────────────────
+binding_migration:
+  basicHttpBinding: "→ REST API over HTTPS (straightforward — SOAP envelope removed)"
+  wsHttpBinding: "→ REST API with JWT auth (security model changes from WS-Security to OAuth 2.0)"
+  netTcpBinding: "→ gRPC over HTTP/2 (performance-equivalent for internal services)"
+  netNamedPipeBinding: "→ Unix domain socket or in-process call (only for same-machine scenarios)"
+  webHttpBinding: "→ Already REST-like — extract and refine to proper ASP.NET Core controller"
+  msmqBinding: "→ Message broker (RabbitMQ, Azure Service Bus, Kafka) with worker services"
+
+# ── Security Migration ────────────────────────────────────────────────────────
+security_migration:
+  windows_auth: "→ OAuth 2.0 with Azure AD / IdentityServer — negotiate tokens via OIDC flow"
+  certificate_auth: "→ Mutual TLS (mTLS) for service-to-service, or API key + TLS for external"
+  message_security: "→ TLS transport security (HTTPS) — message-level encryption rarely needed with TLS 1.3"
+  username_password: "→ JWT bearer token with refresh token rotation"
+  custom_token: "→ Custom authentication handler middleware in ASP.NET Core pipeline"
+
+# ── Common Pitfalls ───────────────────────────────────────────────────────────
+pitfalls:
+  - pitfall: "1:1 mapping of WCF services to microservices"
+    fix: "Decompose by domain boundary (DDD bounded contexts), not by WCF service boundary"
+  - pitfall: "Keeping XML serialization in REST APIs"
+    fix: "Use JSON (System.Text.Json) for REST, Protobuf for gRPC — XML only for legacy compatibility endpoints"
+  - pitfall: "Ignoring WCF session management (InstanceContextMode.PerSession)"
+    fix: "Stateless APIs by default — externalize state to Redis/database"
+  - pitfall: "Not versioning APIs from the start"
+    fix: "Implement API versioning on day 1 — backward-compatible changes via additive fields"
+  - pitfall: "Big-bang cutover"
+    fix: "Strangler Fig with traffic splitting — never cut over 100% without a 2-week burn-in"
+  - pitfall: "Losing WCF metadata (WSDL) without replacement"
+    fix: "Generate OpenAPI 3.0 spec with Swashbuckle — consumers get equivalent contract documentation"
+
+# ── Testing Strategy ──────────────────────────────────────────────────────────
+testing_strategy:
+  contract_testing: "Use Pact or similar for consumer-driven contract tests — ensures API consumers are not broken"
+  integration_testing: "Run WCF and new API side-by-side, send identical requests, compare responses (shadow testing)"
+  load_testing: "Baseline WCF throughput first, then verify new API matches or exceeds under equivalent load"
+  regression_gate: "100% WCF test equivalence in new API before any traffic cutover"
+
+company_context:
+  api_standards: "All new APIs must follow company API design standards (REST conventions, error format, versioning)"
+  security: "OAuth 2.0 / JWT mandatory for all new APIs — no Windows Auth in cloud deployments"
+  monitoring: "Every new API must have health check endpoint, structured logging, and metrics (Prometheus/OTel)"
+  infrastructure: "Deployment via Kubernetes — each microservice gets its own deployment, service, and HPA"

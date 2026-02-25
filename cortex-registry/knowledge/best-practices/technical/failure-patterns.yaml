@@ -1,0 +1,86 @@
+# Failure Patterns — Extracted from CORTEX Production Operations
+# Authority: Chat01 Digest (2026-02-25)
+# Source: chat01.md holistic analysis — patterns that consistently produce bad outcomes
+
+title: "Technical Failure Patterns"
+category: "best-practices"
+updated: "2026-02-25"
+
+patterns:
+
+  mass_deletion_without_verification:
+    name: "Mass Deletion Without Import Verification"
+    context: "Attempting to remove dead code by grep-matching zero-import files"
+    failure_mode: "Misses runtime-loaded plugins (conftest), try/except guarded imports, and __init__.py re-exports"
+    evidence: "Chat01: cortex_intelligence_integration.py appeared dead by grep but was used via try/except in business_wisdom_formatter.py — deletion broke collection"
+    severity: P1
+    detection: "Run python3 -c 'from module import Class' after deletion; check for collection errors"
+    prevention: "Import chain verification pattern — check basename grep, __init__.py re-exports, conftest/plugin registration, AND try/except guards"
+
+  monolith_plan_file:
+    name: "Monolithic Plan File Growth"
+    context: "cortex-master.yaml as single planning document"
+    failure_mode: "File grows unbounded (150L → 3,007L), causes YAML parse errors, context exhaustion, unmanageable diffs"
+    evidence: "cortex-master.yaml required 40+ YAML syntax fixes before THIN INDEX CONTRACT was established"
+    severity: P0
+    detection: "wc -l on master plan file; alarm at 400 lines"
+    prevention: "THIN INDEX CONTRACT — dedicated phase files with only thin references in the master index"
+
+  partial_sweep:
+    name: "Partial Sweep — Incomplete Fix Cycles"
+    context: "Fixing some issues in a category while leaving others for 'later'"
+    failure_mode: "Remaining unfixed issues accumulate, interact with new code, become harder to fix over time"
+    evidence: "CORE-064 created specifically because partial sweeps caused P0 regressions in phases 55-57"
+    severity: P0
+    detection: "CORE-064 enforcement — sweep_catalogue must show all gaps CLOSED before phase completion"
+    prevention: "Sweep Completeness Contract — every FIX/REFACTOR/AUDIT exhausts its full issue catalogue"
+
+  hardcoded_intent_mapping:
+    name: "Hardcoded Intent-to-Resource Mapping"
+    context: "Mapping user intents to knowledge files via static dictionary"
+    failure_mode: "New knowledge YAMLs are unreachable until someone remembers to update the dict; fallback matching is fragile"
+    evidence: "Chat01: _map_intent_to_yamls had 5 hardcoded intents while 10+ knowledge YAMLs existed — INDEX.yaml-driven mapping was the fix"
+    severity: P1
+    detection: "Compare static dict keys against INDEX.yaml domain count"
+    prevention: "INDEX-driven resolution — _map_intent_to_yamls reads INDEX.yaml at runtime"
+
+  orphan_test_accumulation:
+    name: "Orphaned Tests for Deleted Sources"
+    context: "Test files that import from deleted source modules"
+    failure_mode: "Tests fail on collection with ImportError, polluting CI output and masking real failures"
+    evidence: "Chat01: After deleting 11 MCP stubs, their test files in tests/mcp/tools/deployment/ and multi_repo/ had to be deleted too"
+    severity: P1
+    detection: "python3 -m pytest --co -q — check for collection errors referencing deleted modules"
+    prevention: "When deleting source files, ALWAYS search tests/ for corresponding test files and delete them in the same batch"
+
+  test_files_in_production_code:
+    name: "Test Files Misplaced in Production Directories"
+    context: "Files named test_*.py living inside cortex/ instead of tests/"
+    failure_mode: "Confuses test discovery, inflates production package size, violates test-source mirror"
+    evidence: "Chat01: Found test_ac_linker.py in cortex/infrastructure/, test_dashboard_file_protocol.py in cortex/dashboards/scripts/, test_progress_monitor.py in cortex/infrastructure/devx/"
+    severity: P2
+    detection: "find cortex -name 'test_*.py' — any results are violations"
+    prevention: "All test files live under tests/ — mirror cortex/ directory structure"
+
+  stale_wiring_specs:
+    name: "Stale Wiring Specification Entries"
+    context: "YAML wiring specs referencing classes or files that have been deleted or renamed"
+    failure_mode: "Architecture integrity checks report false positives; new developers confused by phantom orchestrators"
+    evidence: "Chat01: 6 stale entries found in wiring specs after deletion batches — UnifiedAnalysisOrchestrator, AuditVerifier, StageExecutionStrategy etc."
+    severity: P1
+    detection: "Validate every module_path/class_name in wiring YAMLs resolves to an actual Python class"
+    prevention: "Phase-77-B includes wiring contract repair as a mandatory sub-phase"
+
+  version_field_proliferation:
+    name: "Version Field Proliferation in Knowledge Files"
+    context: "Adding version: fields to individual YAML knowledge files"
+    failure_mode: "Git history already provides versioning; version fields become stale, misleading, and cause confusion about which is 'latest'"
+    evidence: "Chat01: 3 knowledge YAMLs had stale version: fields after enhancement — had to be stripped in a cleanup pass"
+    severity: P2
+    detection: "grep -rn '^version:' cortex-registry/knowledge/ — zero results expected"
+    prevention: "Knowledge YAMLs use updated: date field only — git history is the authoritative version record"
+
+company_context:
+  enforcement: "Failure patterns tracked and surfaced by UniversalLearningLoop"
+  governance: "CORE-064 + CORE-035 prevent the most severe patterns"
+  remediation: "Each failure pattern has a corresponding success pattern in success-patterns.yaml"

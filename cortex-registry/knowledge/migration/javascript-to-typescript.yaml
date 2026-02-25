@@ -1,0 +1,111 @@
+# JavaScript to TypeScript Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Migrating JavaScript codebases to TypeScript for type safety
+
+title: "JavaScript to TypeScript Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "JavaScript (ES5/ES6+) — untyped, runtime error discovery"
+  target: "TypeScript 5.x — static type system, compile-time error detection"
+  complexity: "LOW-MEDIUM — TypeScript is a superset; incremental adoption is straightforward"
+  typical_duration: "2-8 weeks per module depending on codebase size"
+  risk_level: "LOW — rename .js → .ts, fix type errors incrementally"
+
+migration_strategy:
+  approach: "Incremental adoption — enable allowJs, convert file-by-file"
+  phases:
+    - phase: "Setup"
+      actions:
+        - "Install TypeScript: npm install -D typescript @types/node"
+        - "Create tsconfig.json with strict: false initially, allowJs: true"
+        - "Configure build pipeline to compile .ts alongside .js"
+        - "Install @types/* packages for all dependencies (express, lodash, etc.)"
+    - phase: "Incremental Conversion"
+      actions:
+        - "Rename .js → .ts file by file, starting with utility/helper modules"
+        - "Add type annotations to function parameters and return types"
+        - "Replace require() with import/export syntax"
+        - "Use 'any' sparingly as escape hatch — track with lint rule (no-explicit-any)"
+        - "Convert test files last — they have the most dynamic patterns"
+    - phase: "Strict Mode"
+      actions:
+        - "Enable strict compiler options incrementally: strictNullChecks first"
+        - "Enable noImplicitAny — forces explicit typing on all function parameters"
+        - "Enable strictFunctionTypes, strictPropertyInitialization"
+        - "Goal: tsconfig strict: true with zero suppressions"
+    - phase: "Advanced Typing"
+      actions:
+        - "Replace 'any' with proper types, generics, or unknown"
+        - "Create shared type definitions for domain models"
+        - "Use discriminated unions for state machines and variant types"
+        - "Implement branded types for domain primitives (UserId, OrderId)"
+
+# ── Configuration ─────────────────────────────────────────────────────────────
+tsconfig_recommendations:
+  initial:
+    strict: false
+    allowJs: true
+    checkJs: false
+    target: "ES2022"
+    module: "NodeNext"
+    moduleResolution: "NodeNext"
+    esModuleInterop: true
+    skipLibCheck: true
+
+  target:
+    strict: true
+    allowJs: false
+    noUncheckedIndexedAccess: true
+    noImplicitReturns: true
+    noFallthroughCasesInSwitch: true
+    exactOptionalPropertyTypes: true
+
+# ── Type Pattern Mapping ──────────────────────────────────────────────────────
+type_patterns:
+  function_params:
+    js: "function greet(name) { return `Hello ${name}`; }"
+    ts: "function greet(name: string): string { return `Hello ${name}`; }"
+
+  objects:
+    js: "const user = { name: 'Alice', age: 30 };"
+    ts: "interface User { name: string; age: number; } const user: User = { name: 'Alice', age: 30 };"
+
+  arrays:
+    js: "const items = [1, 2, 3];"
+    ts: "const items: number[] = [1, 2, 3];"
+
+  nullable:
+    js: "function find(id) { return db.get(id) || null; }"
+    ts: "function find(id: string): User | null { return db.get(id) ?? null; }"
+
+  callbacks:
+    js: "function fetchData(url, callback) { ... }"
+    ts: "function fetchData(url: string, callback: (data: Response) => void): void { ... }"
+
+  generics:
+    js: "function first(arr) { return arr[0]; }"
+    ts: "function first<T>(arr: T[]): T | undefined { return arr[0]; }"
+
+pitfalls:
+  - pitfall: "Using 'any' everywhere to make the compiler happy"
+    fix: "Use 'unknown' instead — forces type narrowing before use"
+  - pitfall: "Trying to convert the entire codebase at once"
+    fix: "Convert file-by-file with allowJs: true — maintain a working build at all times"
+  - pitfall: "Not installing @types/* packages"
+    fix: "Install type definitions for all npm dependencies: npm install -D @types/express @types/lodash etc."
+  - pitfall: "Ignoring strictNullChecks"
+    fix: "Enable it early — null/undefined errors are the #1 runtime error category in JavaScript"
+  - pitfall: "Using type assertions (as) instead of type guards"
+    fix: "Prefer type narrowing (if/typeof/instanceof) over 'as' casts — assertions bypass safety"
+
+testing_strategy:
+  type_coverage: "Use type-coverage package to track % of typed code — target > 95%"
+  build_check: "tsc --noEmit in CI — catches type errors before merge"
+  lint: "ESLint with @typescript-eslint/recommended — catches type-adjacent issues"
+
+company_context:
+  standard: "All new frontend and Node.js projects must be TypeScript from day 1"
+  strictness: "Target strict: true in tsconfig — no exceptions for production code"
+  types_location: "Shared types in src/types/ directory — domain models, API contracts, utility types"

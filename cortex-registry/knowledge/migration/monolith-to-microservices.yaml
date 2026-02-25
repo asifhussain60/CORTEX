@@ -1,0 +1,108 @@
+# Monolith to Microservices Decomposition Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Decomposing monolithic applications into microservices architecture
+
+title: "Monolith to Microservices Decomposition"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "Monolithic application (single deployable, shared database, tightly coupled modules)"
+  target: "Microservices architecture (independently deployable services, service-per-domain, API gateway)"
+  complexity: "VERY HIGH — architecture, data, team, and infrastructure changes simultaneously"
+  typical_duration: "6-24 months (ongoing — decomposition is iterative)"
+  risk_level: "HIGH — distributed systems introduce network failures, data consistency, and observability challenges"
+
+migration_strategy:
+  approach: "Domain-Driven Decomposition with Strangler Fig"
+  phases:
+    - phase: "Domain Analysis"
+      actions:
+        - "Identify bounded contexts using DDD — map business capabilities to service boundaries"
+        - "Conduct Event Storming sessions — identify domain events, commands, and aggregates"
+        - "Build context map — identify shared kernel, customer-supplier, and conformist relationships"
+        - "Rank candidates by coupling (low external dependency first), business value, and team ownership"
+    - phase: "Extract First Service"
+      actions:
+        - "Choose highest-value, lowest-coupling bounded context for first extraction"
+        - "Create Anti-Corruption Layer (ACL) between monolith and new service"
+        - "Implement API contract (REST or gRPC) for the extracted domain"
+        - "Duplicate data initially (shared database → service-owned database via CDC or ETL)"
+        - "Deploy alongside monolith — strangler fig routing at API gateway level"
+    - phase: "Data Decomposition"
+      actions:
+        - "Break shared database — each service owns its data (Database per Service pattern)"
+        - "Implement eventual consistency patterns: Saga, Outbox, CDC (Change Data Capture)"
+        - "Replace database JOINs across domains with API composition or CQRS read models"
+        - "Handle distributed transactions: Saga choreography (events) or orchestration (central coordinator)"
+    - phase: "Infrastructure"
+      actions:
+        - "API Gateway for external traffic routing and cross-cutting concerns (auth, rate limiting)"
+        - "Service mesh (Istio/Linkerd) or sidecar proxy for internal service-to-service communication"
+        - "Centralized logging (ELK/Loki), distributed tracing (Jaeger/Zipkin/OTel), metrics (Prometheus)"
+        - "Container orchestration (Kubernetes) with auto-scaling, health checks, circuit breakers"
+
+# ── Decomposition Patterns ────────────────────────────────────────────────────
+decomposition_patterns:
+  strangler_fig:
+    description: "Route requests to new service via API gateway — gradually shift traffic from monolith"
+    when: "Default pattern — works for any monolith extraction"
+
+  branch_by_abstraction:
+    description: "Introduce abstraction layer in monolith, implement new service behind it, switch when ready"
+    when: "Tightly coupled code where routing is insufficient"
+
+  parallel_run:
+    description: "Run both monolith and service simultaneously, compare responses for correctness"
+    when: "Mission-critical domains where correctness must be verified before cutover"
+
+  bubble_context:
+    description: "New service runs inside monolith process initially, then extracted to separate deployment"
+    when: "Team is new to microservices — reduces operational complexity during learning phase"
+
+# ── Data Patterns ─────────────────────────────────────────────────────────────
+data_patterns:
+  database_per_service:
+    description: "Each microservice owns its database — no shared schemas"
+    note: "This is the target state — not the starting point. Get there incrementally."
+
+  saga_pattern:
+    description: "Distributed transaction via sequence of local transactions with compensating actions"
+    choreography: "Services publish events — each service listens and acts autonomously"
+    orchestration: "Central coordinator service manages the saga flow"
+    when: "Multi-service business processes (order → payment → inventory → shipping)"
+
+  cqrs:
+    description: "Separate read and write models — denormalized read stores for cross-service queries"
+    when: "Replacing database JOINs that spanned multiple domains"
+
+  outbox_pattern:
+    description: "Write event to database and outbox table atomically — separate process publishes events"
+    when: "Exactly-once event publishing guarantee needed"
+
+# ── Common Pitfalls ───────────────────────────────────────────────────────────
+pitfalls:
+  - pitfall: "Starting with technical decomposition instead of domain decomposition"
+    fix: "Decompose by bounded context (business capability), not by technical layer"
+  - pitfall: "Distributed monolith — services that can't deploy independently"
+    fix: "Each service must own its data, have independent deployment, and communicate only via API/events"
+  - pitfall: "Shared database between services"
+    fix: "Database per Service — even if it means data duplication and eventual consistency"
+  - pitfall: "Synchronous chains of service calls"
+    fix: "Use async events (message broker) for most inter-service communication — sync only for real-time queries"
+  - pitfall: "Not investing in observability"
+    fix: "Distributed tracing (OpenTelemetry), centralized logging, and health dashboards are mandatory, not optional"
+  - pitfall: "Extracting too many services too quickly"
+    fix: "Start with 1-2 services, learn operational patterns, then accelerate"
+
+testing_strategy:
+  contract_testing: "Pact or similar — consumer-driven contracts verify service API compatibility"
+  integration_testing: "Docker Compose for local multi-service integration tests"
+  chaos_testing: "Introduce failures (network partition, service down) — verify resilience patterns work"
+  regression_gate: "Monolith and extracted service must produce identical results during parallel-run phase"
+
+company_context:
+  infrastructure: "Kubernetes for orchestration — each service gets Deployment, Service, HPA, PDB"
+  communication: "REST for synchronous external APIs; gRPC for internal high-throughput; message broker for async events"
+  security: "mTLS for service-to-service; OAuth 2.0 / JWT for external APIs; API Gateway handles auth"
+  monitoring: "OpenTelemetry traces + Prometheus metrics + centralized logging — mandatory for all services"

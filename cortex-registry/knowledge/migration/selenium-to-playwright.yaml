@@ -1,0 +1,123 @@
+# Selenium to Playwright Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: End-to-end conversion guide for test automation framework migration
+
+title: "Selenium to Playwright Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "Selenium WebDriver (any language binding)"
+  target: "Playwright (Python, TypeScript, .NET, Java)"
+  complexity: "MEDIUM — API differences significant but conceptual mapping is 1:1"
+  typical_duration: "2-6 weeks per 500 test files"
+  risk_level: "LOW — test-only migration, no production code changes"
+
+# ── Migration Strategy ────────────────────────────────────────────────────────
+migration_strategy:
+  approach: "Strangler Fig — migrate test-by-test alongside existing Selenium suite"
+  phases:
+    - phase: "Assessment"
+      actions:
+        - "Inventory all Selenium tests — count, categories (smoke/regression/e2e), flakiness rate"
+        - "Identify custom Selenium helpers/utilities (Page Objects, waits, screenshot logic)"
+        - "Map Selenium WebDriver capabilities to Playwright equivalents"
+        - "Identify browser-specific tests vs cross-browser"
+    - phase: "Foundation"
+      actions:
+        - "Install Playwright and configure browser downloads (chromium, firefox, webkit)"
+        - "Create Playwright configuration (playwright.config.ts or pytest plugin)"
+        - "Build equivalent Page Object base class for Playwright"
+        - "Create migration mapping document for team reference"
+    - phase: "Conversion"
+      actions:
+        - "Start with simplest tests — login, navigation, basic CRUD"
+        - "Convert Page Objects first, then test files that use them"
+        - "Run Selenium and Playwright suites in parallel during migration"
+        - "Use codegen (npx playwright codegen) to accelerate new test creation"
+    - phase: "Validation"
+      actions:
+        - "Achieve Playwright parity with Selenium coverage"
+        - "Compare flakiness rates — Playwright should show improvement"
+        - "Remove Selenium dependencies only after full parity confirmed"
+        - "Update CI pipeline to run Playwright exclusively"
+
+# ── API Mapping Table ─────────────────────────────────────────────────────────
+api_mapping:
+  locators:
+    selenium: "driver.find_element(By.ID, 'submit')"
+    playwright: "page.locator('#submit')"
+    note: "Playwright locators are lazy — evaluated only on action"
+
+  waits:
+    selenium: "WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'el')))"
+    playwright: "page.locator('#el').wait_for(state='visible', timeout=10000)"
+    note: "Playwright auto-waits on most actions — explicit waits rarely needed"
+
+  click:
+    selenium: "driver.find_element(By.CSS_SELECTOR, '.btn').click()"
+    playwright: "page.click('.btn')"
+    note: "Playwright auto-scrolls and waits for actionability"
+
+  input:
+    selenium: "element.clear(); element.send_keys('text')"
+    playwright: "page.fill('#input', 'text')"
+    note: "fill() clears and types in one call"
+
+  navigation:
+    selenium: "driver.get('https://example.com')"
+    playwright: "page.goto('https://example.com')"
+
+  assertions:
+    selenium: "assert driver.find_element(By.ID, 'msg').text == 'Success'"
+    playwright: "expect(page.locator('#msg')).to_have_text('Success')"
+    note: "Playwright expect() auto-retries assertions — eliminates assertion flakiness"
+
+  screenshots:
+    selenium: "driver.save_screenshot('path.png')"
+    playwright: "page.screenshot(path='path.png')"
+
+  iframes:
+    selenium: "driver.switch_to.frame('frame_name'); ...; driver.switch_to.default_content()"
+    playwright: "frame = page.frame_locator('#frame_name'); frame.locator('#el').click()"
+    note: "Playwright frame_locator is scoped — no need to switch back"
+
+  new_tab:
+    selenium: "driver.execute_script('window.open()'); driver.switch_to.window(driver.window_handles[-1])"
+    playwright: "page = await context.new_page(); await page.goto(...)"
+    note: "Playwright manages browser contexts — each test gets isolation by default"
+
+# ── Key Advantages of Playwright ──────────────────────────────────────────────
+advantages:
+  auto_wait: "Actions auto-wait for elements to be actionable — eliminates 80% of flaky tests"
+  browser_contexts: "Parallel isolated contexts — no shared state between tests"
+  network_interception: "Built-in request/response interception — no proxy setup needed"
+  codegen: "npx playwright codegen records user actions → generates test code"
+  tracing: "playwright show-trace provides video + DOM snapshot + network waterfall"
+  multi_browser: "Chromium, Firefox, WebKit from one API — no separate drivers"
+  parallel: "Worker-based parallelism out-of-the-box"
+
+# ── Common Pitfalls ───────────────────────────────────────────────────────────
+pitfalls:
+  - pitfall: "Converting explicit waits 1:1"
+    fix: "Remove most explicit waits — Playwright auto-waits. Only add timeout= on slow operations."
+  - pitfall: "Using XPath locators from Selenium"
+    fix: "Prefer Playwright-specific locators: getByRole, getByText, getByTestId — more resilient to DOM changes"
+  - pitfall: "Global browser instance shared across tests"
+    fix: "Use Playwright's browser context isolation — each test gets a fresh context"
+  - pitfall: "Not leveraging Playwright Test reporter"
+    fix: "Use HTML reporter for local debug, JUnit for CI — built-in, zero config"
+  - pitfall: "Running Playwright tests sequentially"
+    fix: "Enable workers in config — Playwright is designed for parallel execution"
+
+# ── Testing Strategy ──────────────────────────────────────────────────────────
+testing_strategy:
+  parallel_execution: "Run both Selenium and Playwright suites during migration — CI pipeline supports dual execution"
+  coverage_parity: "Track Playwright coverage as percentage of Selenium baseline — gate migration complete at 100%"
+  flakiness_baseline: "Compare flaky test rates before and after — expect 60-80% reduction"
+  regression_gate: "No Selenium test removed until Playwright equivalent passes for 5 consecutive CI runs"
+
+company_context:
+  ci_integration: "Playwright tests should use the same CI pipeline categories (smoke/regression/e2e) as existing tests"
+  reporting: "Use JUnit XML output for CI dashboard integration"
+  browser_scope: "Chromium primary, Firefox secondary — WebKit only for iOS-specific requirements"

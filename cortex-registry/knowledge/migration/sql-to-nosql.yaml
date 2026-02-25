@@ -1,0 +1,89 @@
+# SQL to NoSQL Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Migrating relational databases to NoSQL for appropriate workloads
+
+title: "SQL to NoSQL Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "Relational databases (SQL Server, PostgreSQL, MySQL, Oracle)"
+  target: "NoSQL databases (MongoDB, Cosmos DB, DynamoDB, Redis, Cassandra)"
+  complexity: "HIGH — data model, query patterns, consistency model, and application logic all change"
+  typical_duration: "3-9 months per data domain"
+  risk_level: "HIGH — data migration errors can cause data loss; eventual consistency changes application behavior"
+
+migration_strategy:
+  approach: "Workload-driven — migrate only workloads that benefit from NoSQL characteristics"
+  decision_criteria:
+    migrate_to_nosql:
+      - "High write throughput requirements (> 10K writes/sec)"
+      - "Flexible/evolving schema — different records have different fields"
+      - "Horizontal scalability is primary concern"
+      - "Document-oriented data (JSON-like nested structures)"
+      - "Key-value access patterns dominate (cache, session, user preferences)"
+      - "Time-series or event data with append-only patterns"
+    keep_relational:
+      - "Complex multi-table JOINs are essential to business logic"
+      - "ACID transactions across multiple entities are required"
+      - "Strong consistency is non-negotiable (financial transactions, inventory)"
+      - "Reporting and ad-hoc queries are primary use case"
+      - "Small dataset (< 10GB) with predictable growth"
+
+# ── Data Model Transformation ─────────────────────────────────────────────────
+data_modeling:
+  normalization_to_denormalization:
+    sql: "3NF — Orders table + OrderItems table + Products table with foreign keys"
+    nosql: "Single document: { orderId, items: [{productId, name, price, qty}] }"
+    note: "Embed related data that is always accessed together — optimize for read pattern, not write pattern"
+
+  joins_to_aggregation:
+    sql: "SELECT o.*, c.name FROM orders o JOIN customers c ON o.customer_id = c.id"
+    nosql: "Store customer name inside order document — accept duplication for read performance"
+    note: "NoSQL trades storage for speed — denormalization is the norm, not the exception"
+
+  transactions_to_patterns:
+    sql: "BEGIN TRANSACTION; UPDATE accounts...; UPDATE ledger...; COMMIT;"
+    nosql: "Saga pattern with compensating actions, or use DB-specific transactions (MongoDB multi-doc, DynamoDB transact)"
+
+# ── NoSQL Type Selection Guide ────────────────────────────────────────────────
+type_selection:
+  document_store:
+    databases: "MongoDB, Cosmos DB (SQL API), Couchbase"
+    best_for: "Content management, user profiles, product catalogs, event sourcing"
+    avoid_when: "Complex cross-document joins are frequent"
+
+  key_value:
+    databases: "Redis, DynamoDB, Cosmos DB (Table API)"
+    best_for: "Caching, session storage, user preferences, feature flags"
+    avoid_when: "Need to query by arbitrary fields"
+
+  wide_column:
+    databases: "Cassandra, HBase, Cosmos DB (Cassandra API)"
+    best_for: "Time-series, IoT sensor data, audit logs, write-heavy workloads"
+    avoid_when: "Need to update individual fields frequently"
+
+  graph:
+    databases: "Neo4j, Cosmos DB (Gremlin API), Amazon Neptune"
+    best_for: "Social networks, recommendation engines, fraud detection, knowledge graphs"
+    avoid_when: "Data relationships are simple and hierarchical"
+
+pitfalls:
+  - pitfall: "Migrating all tables to NoSQL — including relational data"
+    fix: "Polyglot persistence — use the right database for each workload"
+  - pitfall: "Applying relational thinking to document design"
+    fix: "Design documents around access patterns — embed what you read together"
+  - pitfall: "Ignoring eventual consistency implications"
+    fix: "Audit every read-after-write scenario — add consistency guarantees where business logic requires"
+  - pitfall: "Not planning for data migration rollback"
+    fix: "Maintain SQL database in read-only mode during transition — enables rollback"
+
+testing_strategy:
+  data_integrity: "Verify every migrated record — count checks, field-by-field comparison for sample set"
+  performance: "Benchmark read/write latency and throughput — NoSQL should improve the targeted workload"
+  consistency: "Test concurrent read-write scenarios — verify eventual consistency is acceptable"
+
+company_context:
+  polyglot: "Use relational AND NoSQL — choose based on workload, not ideology"
+  monitoring: "Monitor query latency, throughput, and consistency lag for NoSQL databases"
+  backup: "Configure point-in-time recovery and cross-region replication for production NoSQL stores"

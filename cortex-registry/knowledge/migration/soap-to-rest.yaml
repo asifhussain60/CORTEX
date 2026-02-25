@@ -1,0 +1,104 @@
+# SOAP to REST API Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Migrating SOAP/XML web services to RESTful APIs with JSON
+
+title: "SOAP to REST API Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "SOAP Web Services (WSDL, XML, WS-* standards)"
+  target: "RESTful APIs (OpenAPI 3.0, JSON, HTTP methods)"
+  complexity: "MEDIUM — protocol and serialization changes; conceptual model shift"
+  typical_duration: "2-8 weeks per service"
+  risk_level: "MEDIUM — external consumers need updated clients"
+
+migration_strategy:
+  approach: "Facade pattern — new REST API wraps existing SOAP service during transition"
+  phases:
+    - phase: "Contract Analysis"
+      actions:
+        - "Parse WSDL — extract all operations, request/response types, fault types"
+        - "Map SOAP operations to REST resources and HTTP verbs"
+        - "Identify WS-Security patterns — map to OAuth 2.0 / API key / JWT"
+        - "Catalogue SOAP headers (custom headers, correlation IDs) — map to HTTP headers"
+        - "Document all WSDL consumers — internal and external"
+    - phase: "API Design"
+      actions:
+        - "Design resource-oriented URLs: /api/orders/{id} not /api/getOrderById"
+        - "Create OpenAPI 3.0 specification — the REST equivalent of WSDL"
+        - "Map SOAP complex types to JSON schemas — flatten unnecessary nesting"
+        - "Design error responses using RFC 7807 ProblemDetails"
+        - "Implement API versioning strategy (URL path or Accept header)"
+    - phase: "Implementation"
+      actions:
+        - "Build REST facade that delegates to existing SOAP backend"
+        - "Replace XML serialization with JSON (System.Text.Json / Jackson / json.dumps)"
+        - "Implement content negotiation — support JSON primary, XML optional for backward compat"
+        - "Replace SOAP faults with HTTP status codes + ProblemDetails response body"
+        - "Add HATEOAS links for resource discoverability (optional but recommended)"
+    - phase: "Consumer Migration"
+      actions:
+        - "Generate client SDKs from OpenAPI spec (NSwag, OpenAPI Generator)"
+        - "Provide migration guide for SOAP consumers — map old operation names to new endpoints"
+        - "Run SOAP and REST side-by-side — consumers migrate at their own pace"
+        - "Set SOAP deprecation timeline — minimum 6-month sunset period"
+
+# ── Operation to Resource Mapping ─────────────────────────────────────────────
+operation_mapping:
+  - soap_operation: "GetOrder(orderId)"
+    rest: "GET /api/orders/{orderId}"
+  - soap_operation: "CreateOrder(orderData)"
+    rest: "POST /api/orders"
+  - soap_operation: "UpdateOrder(orderId, orderData)"
+    rest: "PUT /api/orders/{orderId}"
+  - soap_operation: "DeleteOrder(orderId)"
+    rest: "DELETE /api/orders/{orderId}"
+  - soap_operation: "SearchOrders(criteria)"
+    rest: "GET /api/orders?status=active&from=2026-01-01"
+  - soap_operation: "ProcessPayment(paymentData)"
+    rest: "POST /api/payments"
+    note: "RPC-style operations become resource creation — POST returns 201 Created"
+
+# ── Serialization Changes ─────────────────────────────────────────────────────
+serialization:
+  xml_to_json:
+    soap: "<Order><Id>123</Id><Items><Item><Name>Widget</Name></Item></Items></Order>"
+    rest: '{"id": 123, "items": [{"name": "Widget"}]}'
+    note: "JSON is ~30% smaller, no namespace overhead, native browser support"
+
+  envelope_removal:
+    soap: "SOAP Envelope → Header → Body → Operation → Data"
+    rest: "HTTP method + URL + Headers + JSON body — no envelope"
+
+  fault_to_status:
+    soap: "<soap:Fault><faultcode>...</faultcode></soap:Fault>"
+    rest: "HTTP 400/404/500 + ProblemDetails JSON body"
+
+# ── Security Migration ────────────────────────────────────────────────────────
+security_mapping:
+  ws_security: "→ OAuth 2.0 / JWT bearer tokens"
+  ws_policy: "→ API Gateway policies (rate limiting, IP allowlist)"
+  xml_signature: "→ TLS transport security (HTTPS) — message-level signing rarely needed"
+  saml_token: "→ OIDC / JWT — SAML only for legacy SSO integration"
+  username_token: "→ API key header or OAuth client credentials flow"
+
+pitfalls:
+  - pitfall: "Exposing SOAP operations as REST without redesigning the resource model"
+    fix: "Think in resources (nouns) not operations (verbs) — /api/processOrder is not RESTful"
+  - pitfall: "Keeping XML as the primary serialization"
+    fix: "JSON primary, XML optional — modern consumers expect JSON"
+  - pitfall: "Removing SOAP without consumer migration timeline"
+    fix: "Minimum 6-month deprecation period — both SOAP and REST available during transition"
+  - pitfall: "Not generating an OpenAPI spec"
+    fix: "OpenAPI 3.0 spec is the REST equivalent of WSDL — consumers need it for client generation"
+
+testing_strategy:
+  contract_testing: "Compare SOAP response XML and REST response JSON for identical requests — validate data parity"
+  consumer_testing: "Verify generated SDK clients work against the new REST API"
+  load_testing: "REST should handle equal or greater throughput — JSON parsing is faster than XML"
+
+company_context:
+  api_standards: "All REST APIs must follow company API design standards (naming, versioning, error format)"
+  documentation: "OpenAPI spec auto-published to API portal — replaces WSDL endpoint"
+  security: "OAuth 2.0 / JWT mandatory — no WS-Security in new APIs"

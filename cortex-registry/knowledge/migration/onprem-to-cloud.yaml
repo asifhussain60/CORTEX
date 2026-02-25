@@ -1,0 +1,122 @@
+# On-Premises to Cloud Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Migrating on-prem infrastructure and applications to cloud (Azure/AWS/GCP)
+
+title: "On-Premises to Cloud Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "On-premises infrastructure (VMs, physical servers, SAN storage, on-prem databases)"
+  target: "Cloud platform (Azure / AWS / GCP) — IaaS → PaaS → serverless progression"
+  complexity: "VERY HIGH — infrastructure, application, data, security, and compliance all change"
+  typical_duration: "6-24 months per application portfolio"
+  risk_level: "HIGH — network topology, security model, cost model, and operational model all differ"
+
+migration_strategy:
+  approach: "6R Framework — Rehost, Replatform, Refactor, Repurchase, Retire, Retain"
+  phases:
+    - phase: "Assessment"
+      actions:
+        - "Inventory all applications, databases, middleware, and infrastructure dependencies"
+        - "Classify each application using 6R framework (lift-and-shift vs modernize vs replace)"
+        - "Map network topology — VPNs, firewalls, load balancers, DNS"
+        - "Identify data residency and compliance requirements (GDPR, HIPAA, PCI-DSS)"
+        - "Calculate TCO — on-prem vs cloud for 3-year and 5-year horizons"
+        - "Identify applications with licensing restrictions (Oracle, SQL Server Enterprise)"
+    - phase: "Foundation"
+      actions:
+        - "Set up cloud landing zone — VPC/VNet, subnets, security groups, IAM roles"
+        - "Implement hub-and-spoke or mesh network architecture"
+        - "Establish CI/CD pipeline for infrastructure-as-code (Terraform/Pulumi/Bicep)"
+        - "Configure centralized logging, monitoring, and alerting"
+        - "Set up identity federation — on-prem AD → Azure AD / AWS SSO / Google Workspace"
+        - "Implement network connectivity — VPN or ExpressRoute/Direct Connect"
+    - phase: "Migration Waves"
+      actions:
+        - "Wave 1: Non-production environments (dev, staging) — learn and iterate"
+        - "Wave 2: Low-risk production applications (internal tools, static sites)"
+        - "Wave 3: Core business applications with proper DR and rollback plans"
+        - "Wave 4: Database migrations — most complex, highest risk"
+        - "Each wave: migrate → validate → optimize → next wave"
+    - phase: "Optimization"
+      actions:
+        - "Right-size instances based on actual cloud usage data (not on-prem specs)"
+        - "Implement auto-scaling — eliminate over-provisioning"
+        - "Move from IaaS to PaaS where possible (VMs → App Service, Container Apps, Lambda)"
+        - "Implement Reserved Instances/Savings Plans for stable workloads"
+        - "Enable cloud-native services: managed databases, caching, messaging"
+
+# ── 6R Classification Guide ──────────────────────────────────────────────────
+six_r_framework:
+  rehost:
+    description: "Lift-and-shift — move VM to cloud VM with minimal changes"
+    when: "Quick win, minimal risk, application works as-is"
+    risk: "LOW"
+
+  replatform:
+    description: "Lift-and-optimize — leverage some cloud services (managed DB, load balancer)"
+    when: "Easy wins available (e.g., SQL Server on VM → Azure SQL Managed Instance)"
+    risk: "LOW-MEDIUM"
+
+  refactor:
+    description: "Re-architect to cloud-native — containers, serverless, managed services"
+    when: "Application needs modernization anyway, cloud-native benefits justify effort"
+    risk: "HIGH"
+
+  repurchase:
+    description: "Replace with SaaS (e.g., on-prem Exchange → Office 365, on-prem CRM → Salesforce)"
+    when: "Commodity applications with mature SaaS alternatives"
+    risk: "MEDIUM"
+
+  retire:
+    description: "Decommission — application no longer needed"
+    when: "Unused or redundant applications discovered during assessment"
+    risk: "LOW"
+
+  retain:
+    description: "Keep on-premises — not suitable for cloud migration"
+    when: "Regulatory restrictions, extreme latency requirements, near-EOL applications"
+    risk: "N/A"
+
+# ── Data Migration Patterns ───────────────────────────────────────────────────
+data_migration:
+  offline_migration:
+    description: "Export → transfer → import with scheduled downtime window"
+    when: "Database < 1TB, acceptable downtime window exists"
+
+  online_migration:
+    description: "Continuous replication with near-zero downtime cutover"
+    tools: "Azure Database Migration Service, AWS DMS, Google Database Migration Service"
+    when: "Production databases requiring < 5 minute cutover"
+
+  hybrid_sync:
+    description: "Bidirectional sync during transition period"
+    when: "Applications split across on-prem and cloud during migration"
+
+# ── Common Pitfalls ───────────────────────────────────────────────────────────
+pitfalls:
+  - pitfall: "Treating cloud like a datacenter (lift-and-shift everything)"
+    fix: "Classify applications first — some should be refactored, replaced, or retired"
+  - pitfall: "Ignoring egress costs"
+    fix: "Design for minimal data transfer between cloud and on-prem — move compute to data"
+  - pitfall: "Not implementing IaC from day 1"
+    fix: "All cloud infrastructure must be code-defined — no manual console configuration"
+  - pitfall: "Mapping on-prem VM specs 1:1 to cloud instances"
+    fix: "Right-size based on actual utilization data — on-prem VMs are typically 20-40% utilized"
+  - pitfall: "Not training the team before migration"
+    fix: "Cloud certifications and hands-on labs before Wave 1 — on-prem skills don't transfer automatically"
+  - pitfall: "Ignoring compliance and data residency"
+    fix: "Confirm cloud region meets all regulatory requirements BEFORE migrating any data"
+
+testing_strategy:
+  functional: "Full regression test after each migration wave — application behavior must be identical"
+  performance: "Load test in cloud to validate latency and throughput meet SLAs"
+  disaster_recovery: "Test DR runbook in cloud — verify RTO and RPO targets"
+  security: "Penetration test cloud deployment — new attack surface (public endpoints, IAM misconfig)"
+
+company_context:
+  cloud_provider: "Selected based on existing investments and team expertise"
+  iac_tool: "Terraform for multi-cloud, Bicep for Azure-only, CDK for AWS-only"
+  security: "Zero-trust networking, mTLS for service-to-service, centralized secrets management"
+  cost: "FinOps practice mandatory — monthly cost reviews, tagging strategy, budget alerts"

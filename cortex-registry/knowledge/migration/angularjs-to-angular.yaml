@@ -1,0 +1,133 @@
+# AngularJS to Angular Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Upgrading from AngularJS (1.x) to Angular (2+ / latest)
+
+title: "AngularJS to Angular Upgrade"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "AngularJS 1.x (JavaScript, MVC pattern, $scope, $digest)"
+  target: "Angular 17+ (TypeScript, Component-based, RxJS, Signals)"
+  complexity: "HIGH — complete rewrite of templates, controllers, and services"
+  typical_duration: "4-12 months depending on application size and team familiarity"
+  risk_level: "HIGH — AngularJS EOL (Dec 2021); security vulnerabilities accumulate"
+
+# ── Migration Strategy ────────────────────────────────────────────────────────
+migration_strategy:
+  approach: "Hybrid with ngUpgrade — run AngularJS and Angular side-by-side during transition"
+  phases:
+    - phase: "Preparation"
+      actions:
+        - "Upgrade AngularJS to latest 1.8.x — prerequisite for ngUpgrade compatibility"
+        - "Adopt component architecture in AngularJS (directives → .component())"
+        - "Convert controllers to component controllers"
+        - "Remove $scope — use controllerAs syntax everywhere"
+        - "Organize code into feature modules (group by feature, not by type)"
+        - "Add TypeScript — start with .ts files, add type annotations incrementally"
+        - "Adopt a build tool (Webpack) if still using script tags or Grunt/Gulp"
+    - phase: "Hybrid Bootstrap"
+      actions:
+        - "Install Angular alongside AngularJS using ngUpgrade module"
+        - "Bootstrap as Angular app with AngularJS downgraded module"
+        - "Create Angular wrapper for AngularJS root — both frameworks run simultaneously"
+        - "Establish routing strategy: AngularJS router for unmigrated routes, Angular Router for new"
+    - phase: "Component Migration"
+      actions:
+        - "Migrate leaf components first (no child dependencies) — bottom-up approach"
+        - "Convert AngularJS services to Angular Injectable services"
+        - "Replace $http with HttpClient (Angular), $q with RxJS Observables"
+        - "Convert AngularJS templates: ng-repeat → *ngFor, ng-if → *ngIf, ng-model → [(ngModel)]"
+        - "Replace AngularJS filters with Angular Pipes"
+        - "Migrate one feature module at a time — complete the module before moving to next"
+    - phase: "Completion"
+      actions:
+        - "Remove ngUpgrade scaffolding once all components migrated"
+        - "Remove AngularJS dependency entirely"
+        - "Adopt Angular standalone components for new features"
+        - "Implement lazy loading for feature modules"
+        - "Add Angular-specific testing (TestBed, ComponentFixture)"
+
+# ── Concept Mapping ───────────────────────────────────────────────────────────
+concept_mapping:
+  scope:
+    angularjs: "$scope.data = 'value'; $scope.onClick = function() {}"
+    angular: "Component class property + method: data = 'value'; onClick() {}"
+    note: "No $scope in Angular — component class IS the scope"
+
+  controller:
+    angularjs: "app.controller('MyCtrl', function($scope, $http) {...})"
+    angular: "@Component({...}) export class MyComponent { constructor(private http: HttpClient) {} }"
+
+  service:
+    angularjs: "app.service('UserService', function($http) { this.getUser = ... })"
+    angular: "@Injectable({providedIn: 'root'}) export class UserService { constructor(private http: HttpClient) {} }"
+
+  directive:
+    angularjs: "app.directive('myWidget', function() { return { restrict: 'E', template: '...' } })"
+    angular: "@Component({selector: 'my-widget', template: '...'}) export class MyWidget {}"
+    note: "Most AngularJS directives become Angular Components; attribute directives remain as @Directive"
+
+  filter:
+    angularjs: "{{ value | currency }}"
+    angular: "{{ value | currency }} — same syntax, but Pipes are pure by default"
+
+  routing:
+    angularjs: "$stateProvider.state('home', { url: '/home', template: '...' })"
+    angular: "{ path: 'home', component: HomeComponent } — RouterModule.forRoot(routes)"
+
+  http:
+    angularjs: "$http.get('/api/data').then(function(response) { ... })"
+    angular: "this.http.get<Data>('/api/data').subscribe(data => ...)"
+    note: "HttpClient returns Observable — use async pipe in templates or subscribe in component"
+
+  dependency_injection:
+    angularjs: "Injector string-based: function($http, $q, MyService) {}"
+    angular: "Type-based: constructor(private http: HttpClient, private svc: MyService) {}"
+
+# ── Template Syntax Mapping ───────────────────────────────────────────────────
+template_mapping:
+  - angularjs: "ng-repeat='item in items'"
+    angular: "*ngFor='let item of items'"
+  - angularjs: "ng-if='condition'"
+    angular: "*ngIf='condition'  (or @if(condition) {} in Angular 17+)"
+  - angularjs: "ng-show='visible'"
+    angular: "[hidden]='!visible'  (or *ngIf for DOM removal)"
+  - angularjs: "ng-model='name'"
+    angular: "[(ngModel)]='name'  (two-way binding with FormsModule)"
+  - angularjs: "ng-click='onClick()'"
+    angular: "(click)='onClick()'"
+  - angularjs: "ng-class='{active: isActive}'"
+    angular: "[ngClass]='{active: isActive}'"
+  - angularjs: "ng-src='{{imageUrl}}'"
+    angular: "[src]='imageUrl'"
+
+# ── Common Pitfalls ───────────────────────────────────────────────────────────
+pitfalls:
+  - pitfall: "Attempting a big-bang rewrite"
+    fix: "Use ngUpgrade for hybrid approach — migrate incrementally, feature by feature"
+  - pitfall: "Not preparing AngularJS code first (still using $scope)"
+    fix: "Convert to controllerAs and .component() in AngularJS before starting Angular migration"
+  - pitfall: "Using ngUpgrade bidirectionally for too long"
+    fix: "Migrate bottom-up (leaf first) — minimize cross-framework component interaction"
+  - pitfall: "Not adopting TypeScript early in AngularJS"
+    fix: "Start adding .ts files in AngularJS phase — reduces friction when migrating to Angular"
+  - pitfall: "Ignoring RxJS learning curve"
+    fix: "Train team on Observables and Operators before migration — RxJS is fundamental to Angular"
+  - pitfall: "Migrating tests last"
+    fix: "Migrate tests alongside components — TestBed tests catch template binding errors early"
+  - pitfall: "Not leveraging Angular CLI"
+    fix: "Use ng generate for components, services, modules — maintains consistent structure"
+
+# ── Testing Strategy ──────────────────────────────────────────────────────────
+testing_strategy:
+  unit_tests: "Karma/Jasmine (AngularJS) → Jasmine/TestBed or Jest (Angular) — migrate test files alongside components"
+  e2e_tests: "Protractor (AngularJS) → Playwright or Cypress (Angular) — Protractor is EOL"
+  component_tests: "Use Angular TestBed for component rendering + interaction tests"
+  regression_gate: "Both AngularJS and Angular test suites must pass during hybrid phase"
+
+company_context:
+  style_guide: "Follow Angular Style Guide (angular.io/guide/styleguide) for file naming, folder structure"
+  state_management: "Use NgRx or Signals for shared state — no manual Subject patterns"
+  build: "Angular CLI with strict TypeScript configuration — no implicit any"
+  performance: "Implement lazy loading for feature modules; use OnPush change detection strategy"

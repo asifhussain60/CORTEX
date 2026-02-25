@@ -1,0 +1,107 @@
+# Entity Framework to Entity Framework Core Migration Best Practices
+# Authority: Phase-79 SDLC Intelligence Engine — Batch 1 Migration Knowledge
+# Scope: Migrating EF 6.x to EF Core 8+ — ORM layer modernization
+
+title: "Entity Framework to EF Core Migration"
+category: "migration"
+updated: "2026-02-25"
+
+overview:
+  source: "Entity Framework 6.x (.NET Framework)"
+  target: "Entity Framework Core 8+ (.NET 8+)"
+  complexity: "MEDIUM — API surface is similar but key behaviors differ"
+  typical_duration: "2-6 weeks per DbContext depending on query complexity"
+  risk_level: "MEDIUM — subtle query translation differences can cause data issues"
+
+# ── Migration Strategy ────────────────────────────────────────────────────────
+migration_strategy:
+  approach: "DbContext-by-DbContext migration with parallel validation"
+  phases:
+    - phase: "Audit"
+      actions:
+        - "Inventory all DbContext classes, entity configurations, and migrations"
+        - "Identify EF6-only features: ObjectContext, Entity SQL, lazy loading proxies, EDMX designer"
+        - "Catalogue stored procedure mappings, database-first models, and complex type mappings"
+        - "Identify LINQ queries using client-side evaluation (will throw in EF Core by default)"
+    - phase: "Model Migration"
+      actions:
+        - "Convert EDMX to code-first if using Database First approach"
+        - "Migrate Fluent API configurations to IEntityTypeConfiguration<T>"
+        - "Replace ComplexType with Owned Entity Types"
+        - "Convert EntityTypeConfiguration<T> to IEntityTypeConfiguration<T>"
+        - "Recreate migrations from scratch (EF6 migrations are NOT compatible with EF Core)"
+    - phase: "Query Migration"
+      actions:
+        - "Identify and fix client-evaluated LINQ queries (EF Core throws instead of silently evaluating)"
+        - "Replace ObjectQuery/Entity SQL with LINQ"
+        - "Migrate raw SQL: Database.SqlQuery<T> → FromSqlRaw/FromSqlInterpolated"
+        - "Update lazy loading: virtual navigation → explicit .Include() or UseLazyLoadingProxies()"
+        - "Replace Database.ExecuteSqlCommand → ExecuteSqlRaw/ExecuteSqlInterpolated"
+    - phase: "Validation"
+      actions:
+        - "Compare query results between EF6 and EF Core for all critical data paths"
+        - "Run integration tests against both stacks in parallel"
+        - "Performance benchmark — EF Core should match or exceed EF6 throughput"
+        - "Validate migration history — regenerate from current schema"
+
+# ── Key API Differences ───────────────────────────────────────────────────────
+api_differences:
+  dbcontext:
+    ef6: "Database.SetInitializer<MyContext>(null)"
+    ef_core: "No initializers — use migrations or EnsureCreated()"
+
+  configuration:
+    ef6: "DbConfiguration, app.config/web.config connection string"
+    ef_core: "OnConfiguring or AddDbContext<T> in DI with IConfiguration"
+
+  seeding:
+    ef6: "Seed method in DbMigrationsConfiguration"
+    ef_core: "HasData() in OnModelCreating — compiled into migrations"
+
+  transactions:
+    ef6: "TransactionScope or Database.BeginTransaction()"
+    ef_core: "context.Database.BeginTransaction() — TransactionScope supported but not default"
+
+  change_tracking:
+    ef6: "Snapshot-based by default, proxy-based optional"
+    ef_core: "Snapshot-based by default — proxy tracking optional via package"
+
+  bulk_operations:
+    ef6: "No built-in batch — use EF Extensions or raw SQL"
+    ef_core: "ExecuteUpdate(), ExecuteDelete() in EF Core 7+ — LINQ-based bulk operations"
+
+# ── Removed/Changed Features ──────────────────────────────────────────────────
+removed_features:
+  - feature: "EDMX Designer (Database First visual)"
+    alternative: "Scaffold-DbContext for reverse engineering — code-first output"
+  - feature: "Entity SQL"
+    alternative: "LINQ queries — no string-based query language"
+  - feature: "ObjectContext"
+    alternative: "DbContext — has been primary since EF 4.1"
+  - feature: "Automatic Migrations"
+    alternative: "Explicit migrations only — Add-Migration / dotnet ef migrations add"
+  - feature: "Table-per-type (TPT) default"
+    alternative: "Table-per-hierarchy (TPH) default — TPT opt-in via .ToTable()"
+  - feature: "ComplexType"
+    alternative: "Owned Types — OwnsOne() / OwnsMany()"
+
+# ── Common Pitfalls ───────────────────────────────────────────────────────────
+pitfalls:
+  - pitfall: "Expecting EF Core to silently evaluate LINQ client-side"
+    fix: "EF Core throws on unresolvable LINQ — add .AsEnumerable() before client-side logic or rewrite query"
+  - pitfall: "Migrating EF6 migration files to EF Core"
+    fix: "Start fresh — create initial migration from current schema snapshot"
+  - pitfall: "Using lazy loading without understanding the change"
+    fix: "EF Core lazy loading requires explicit opt-in (proxies package) — prefer Include() for predictable query behavior"
+  - pitfall: "Not testing database provider differences"
+    fix: "EF Core SQL generation differs from EF6 — validate generated SQL for performance-critical queries"
+
+testing_strategy:
+  data_validation: "Run parallel queries against both EF6 and EF Core — compare result sets row-by-row"
+  performance: "Benchmark critical queries — EF Core compiled queries can be 2-5x faster"
+  migration: "Test rollback scenarios — EF Core migrations support Down() methods"
+
+company_context:
+  database: "SQL Server primary — use Microsoft.EntityFrameworkCore.SqlServer provider"
+  patterns: "Repository pattern over DbContext — no direct DbContext usage in controllers"
+  connection: "Connection strings from IConfiguration — never hardcoded, never in source control"
