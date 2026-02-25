@@ -102,7 +102,7 @@ class GovernanceValidator:
         self._validate_infrastructure()
         self._validate_dependencies()
         self._validate_mcp_server()
-        self._validate_docker_deployment()
+        self._validate_mcp_configuration()
         self._validate_security_configuration()
         self._validate_monitoring()
         self._validate_tests()
@@ -330,16 +330,31 @@ class GovernanceValidator:
             f"MCP server {'exists' if server_path.exists() else 'missing'}: {server_path}"
         )
     
-    def _validate_docker_deployment(self) -> None:
-        """Validate Docker deployment configuration."""
-        logger.info("🐳 Validating Docker Deployment...")
-        
-        dockerfile = self.workspace_root / "deployment" / "docker" / "Dockerfile"
+    def _validate_mcp_configuration(self) -> None:
+        """Validate MCP deployment configuration.
+
+        CORTEX is delivered via MCP (stdio transport, Pylance-style) or SaaS.
+        No Docker runtime is required. Validates MCP server module and
+        VS Code settings configuration instead.
+        """
+        logger.info("� Validating MCP Configuration...")
+
+        mcp_server = self.workspace_root / "cortex" / "mcp" / "server.py"
         self._add_check(
-            "Dockerfile",
-            dockerfile.exists(),
-            Severity.HIGH if not dockerfile.exists() else Severity.INFO,
-            f"Dockerfile {'exists' if dockerfile.exists() else 'missing'}: {dockerfile}"
+            "MCP Server",
+            mcp_server.exists(),
+            Severity.CRITICAL if not mcp_server.exists() else Severity.INFO,
+            f"MCP server {'exists' if mcp_server.exists() else 'missing'}: {mcp_server}",
+            remediation="Ensure cortex/mcp/server.py exists for MCP deployment" if not mcp_server.exists() else None
+        )
+
+        vscode_settings = self.workspace_root / ".vscode" / "settings.json"
+        self._add_check(
+            "MCP VS Code Config",
+            vscode_settings.exists(),
+            Severity.HIGH if not vscode_settings.exists() else Severity.INFO,
+            f"VS Code MCP config {'exists' if vscode_settings.exists() else 'missing'}: {vscode_settings}",
+            remediation="Run python3 scripts/setup-mcp.py to configure VS Code MCP settings" if not vscode_settings.exists() else None
         )
     
     def _validate_security_configuration(self) -> None:

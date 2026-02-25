@@ -39,7 +39,7 @@ Usage:
 Phase: 5.5 (Team Collaboration Layer)
 Author: Asif Hussain
 Date: 2026-01-27
-CORE-030: Docker-first architecture - no database dependencies
+CORE-030: MCP-first architecture - no database dependencies
 """
 
 from cortex.infrastructure.collaboration.operation_lock import (

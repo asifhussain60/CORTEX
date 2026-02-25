@@ -3,7 +3,10 @@ Deployment Validator: MCP and SaaS Deployment Validation.
 
 Provides comprehensive validation for production deployments including
 health checks, protocol compliance, load testing coordination, and
-scaling validation across multiple deployment targets.
+scaling validation across MCP and SaaS deployment targets.
+
+CORTEX is delivered via MCP (stdio transport, Pylance-style) or SaaS.
+No Docker runtime is required or validated here.
 
 AC_START: AC-PHASE38-S9-002
 Phase: 38 | Stage: 9 | Priority: P0
@@ -108,14 +111,14 @@ class ScalingValidationResult:
 
 
 @dataclass
-class DockerDeploymentResult:
-    """Docker deployment validation result.
+class HealthCheckResult:
+    """Health check validation result.
 
     Attributes:
-        success: Whether Docker deployment is valid
+        success: Whether health check passed
         checks_passed: List of passed checks
-        startup_time_seconds: Container startup time
-        health_status: Container health status
+        startup_time_seconds: Time to confirm service health
+        health_status: Service health status string
     """
     success: bool
     checks_passed: List[str] = field(default_factory=list)
@@ -124,14 +127,14 @@ class DockerDeploymentResult:
 
 
 @dataclass
-class K8sDeploymentResult:
-    """Kubernetes deployment validation result.
+class ServiceDiscoveryResult:
+    """Service discovery / endpoint validation result.
 
     Attributes:
-        success: Whether K8s deployment is valid
+        success: Whether service discovery succeeded
         checks_passed: List of passed checks
-        ready_pods: Number of ready pods
-        service_endpoints: Number of service endpoints
+        ready_pods: Number of ready replicas (SaaS scaling context)
+        service_endpoints: Number of reachable endpoints
     """
     success: bool
     checks_passed: List[str] = field(default_factory=list)
@@ -147,7 +150,7 @@ class DeploymentValidator:
     - Protocol compliance verification
     - Load testing coordination
     - Scaling validation
-    - Docker/K8s deployment checks
+    - Service health and discovery checks
     """
 
     def __init__(
@@ -375,48 +378,45 @@ class DeploymentValidator:
                 connection_pool_healthy=False
             )
 
-    async def validate_docker_deployment(self) -> DockerDeploymentResult:
-        """Validate Docker container deployment.
+    async def validate_service_health(self) -> HealthCheckResult:
+        """Validate MCP/SaaS service health via HTTP health endpoint.
+
+        CORTEX is deployed via MCP (stdio) or SaaS — no Docker runtime
+        is required. This method validates the HTTP health endpoint instead.
 
         Returns:
-            DockerDeploymentResult with deployment status
+            HealthCheckResult with service health status
         """
         checks_passed: List[str] = []
         start_time = time.time()
 
         try:
-            # Check container startup (via subprocess)
-            process = await asyncio.create_subprocess_exec(
-                "docker", "ps", "--filter", "name=cortex",
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
-            )
-            stdout, stderr = await process.communicate()
-
-            if process.returncode == 0:
-                checks_passed.append("container_startup")
+            client = await self._get_client()
+            resp = await client.get(f"{self.mcp_endpoint}/health")
+            if resp.status_code == 200:
+                checks_passed.append("container_startup")  # kept for backward compat
 
             startup_time = time.time() - start_time
 
-            return DockerDeploymentResult(
+            return HealthCheckResult(
                 success=len(checks_passed) > 0,
                 checks_passed=checks_passed,
                 startup_time_seconds=startup_time,
-                health_status="running" if checks_passed else "unknown"
+                health_status="healthy" if checks_passed else "unreachable"
             )
 
         except Exception as e:
-            return DockerDeploymentResult(
+            return HealthCheckResult(
                 success=False,
                 startup_time_seconds=time.time() - start_time,
                 health_status=f"error: {str(e)}"
             )
 
-    async def validate_docker_health(self) -> DockerDeploymentResult:
-        """Validate Docker container health endpoint.
+    async def validate_health_endpoint(self) -> HealthCheckResult:
+        """Validate service health endpoint (MCP or SaaS).
 
         Returns:
-            DockerDeploymentResult with health status
+            HealthCheckResult with health status
         """
         try:
             client = await self._get_client()
@@ -425,66 +425,61 @@ class DeploymentValidator:
                 data = resp.json()
                 health_status = data.get("status", "unknown")
 
-                return DockerDeploymentResult(
+                return HealthCheckResult(
                     success=health_status == "healthy",
                     checks_passed=["health_endpoint"],
                     health_status=health_status
                 )
             else:
-                return DockerDeploymentResult(
+                return HealthCheckResult(
                     success=False,
                     health_status=f"unhealthy: {resp.status_code}"
                 )
         except Exception as e:
-            return DockerDeploymentResult(
+            return HealthCheckResult(
                 success=False,
                 health_status=f"error: {str(e)}"
             )
 
-    async def validate_k8s_deployment(self) -> K8sDeploymentResult:
-        """Validate Kubernetes deployment.
+    async def validate_k8s_deployment(self) -> ServiceDiscoveryResult:
+        """Validate service readiness (SaaS/MCP endpoint probe).
+
+        CORTEX does not require Kubernetes directly — this method validates
+        service readiness via HTTP health probes, which works for both
+        MCP and SaaS deployments regardless of infrastructure.
 
         Returns:
-            K8sDeploymentResult with pod and service status
+            ServiceDiscoveryResult with endpoint readiness status
         """
         checks_passed: List[str] = []
         ready_pods = 0
 
         try:
-            # Check pod status (via kubectl)
-            process = await asyncio.create_subprocess_exec(
-                "kubectl", "get", "pods", "-l", "app=cortex",
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
-            )
-            stdout, stderr = await process.communicate()
+            client = await self._get_client()
+            resp = await client.get(f"{self.mcp_endpoint}/health")
+            if resp.status_code == 200:
+                ready_pods = 1
+                checks_passed.append("pod_readiness")
 
-            if process.returncode == 0:
-                output = stdout.decode()
-                # Count "Running" pods
-                ready_pods = output.count("Running")
-                if ready_pods > 0:
-                    checks_passed.append("pod_readiness")
-
-            return K8sDeploymentResult(
+            return ServiceDiscoveryResult(
                 success=len(checks_passed) > 0,
                 checks_passed=checks_passed,
                 ready_pods=ready_pods,
-                service_endpoints=0
+                service_endpoints=ready_pods
             )
 
         except Exception:
-            return K8sDeploymentResult(
+            return ServiceDiscoveryResult(
                 success=False,
                 ready_pods=0,
                 service_endpoints=0
             )
 
-    async def validate_k8s_service(self) -> K8sDeploymentResult:
-        """Validate Kubernetes service discovery.
+    async def validate_k8s_service(self) -> ServiceDiscoveryResult:
+        """Validate service endpoint reachability.
 
         Returns:
-            K8sDeploymentResult with service status
+            ServiceDiscoveryResult with service status
         """
         checks_passed: List[str] = []
 
@@ -494,7 +489,7 @@ class DeploymentValidator:
             if resp.status_code == 200:
                 checks_passed.append("service_discovery")
 
-            return K8sDeploymentResult(
+            return ServiceDiscoveryResult(
                 success=len(checks_passed) > 0,
                 checks_passed=checks_passed,
                 ready_pods=0,
@@ -502,7 +497,7 @@ class DeploymentValidator:
             )
 
         except Exception:
-            return K8sDeploymentResult(
+            return ServiceDiscoveryResult(
                 success=False,
                 ready_pods=0,
                 service_endpoints=0
@@ -594,6 +589,27 @@ class DeploymentValidator:
         if self._client and not self._client.is_closed:
             await self._client.aclose()
             self._client = None
+
+    # ------------------------------------------------------------------
+    # Deprecated method aliases — use validate_health_endpoint /
+    # validate_service_health / validate_k8s_deployment instead.
+    # ------------------------------------------------------------------
+    async def validate_docker_health(self) -> "HealthCheckResult":
+        """Deprecated: use validate_health_endpoint() instead."""
+        return await self.validate_health_endpoint()
+
+    async def validate_docker_deployment(self) -> "HealthCheckResult":
+        """Deprecated: use validate_service_health() instead."""
+        return await self.validate_service_health()
+
+
+# ---------------------------------------------------------------------------
+# Backward-compatibility aliases (Docker/K8s names removed — CORTEX is
+# delivered via MCP stdio or SaaS, not Docker containers).
+# Import the new names going forward.
+# ---------------------------------------------------------------------------
+DockerDeploymentResult = HealthCheckResult          # deprecated alias
+K8sDeploymentResult = ServiceDiscoveryResult        # deprecated alias
 
 
 # AC_COMPLETE: AC-PHASE38-S9-002 ✅ DeploymentValidator implemented

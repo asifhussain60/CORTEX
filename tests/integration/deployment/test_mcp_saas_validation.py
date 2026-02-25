@@ -23,6 +23,8 @@ from cortex.infrastructure.deployment.deployment_validator import (
     LoadTestResult,
     ProtocolComplianceResult,
     ScalingValidationResult,
+    HealthCheckResult,
+    ServiceDiscoveryResult,
 )
 from cortex.infrastructure.deployment.load_test_scenarios import (
     LoadTestScenario,
@@ -409,40 +411,44 @@ class TestScalingValidation:
         assert result.cpu_percent < 90
 
 
-class TestDockerDeployment:
-    """Test suite for Docker deployment smoke tests."""
+class TestHealthEndpoints:
+    """Test suite for MCP/SaaS health endpoint validation.
+
+    CORTEX is deployed via MCP (stdio) or SaaS — no Docker runtime.
+    These tests validate HTTP health probes used by both delivery modes.
+    """
 
     @pytest.mark.asyncio
-    async def test_docker_container_startup(self) -> None:
-        """Test Docker container starts successfully.
-        
+    async def test_service_health_check(self) -> None:
+        """Test MCP/SaaS service health check via HTTP.
+
         Validates:
-        - Container starts within 30s
-        - Health check passes
-        - Ports exposed correctly
+        - /health endpoint responds with 200
+        - Health status reported correctly
+        - Startup time recorded
         """
         validator = DeploymentValidator(
             mcp_endpoint="http://localhost:8443",
             saas_api_endpoint="http://localhost:8000",
             timeout=30
         )
-        
-        with patch('asyncio.create_subprocess_exec') as mock_subprocess:
-            mock_process = AsyncMock()
-            mock_process.returncode = 0
-            mock_process.communicate = AsyncMock(return_value=(b"Container started", b""))
-            mock_subprocess.return_value = mock_process
-            
-            result = await validator.validate_docker_deployment()
-            
+
+        with patch('httpx.AsyncClient.get') as mock_get:
+            mock_resp = AsyncMock()
+            mock_resp.status_code = 200
+            mock_resp.json = Mock(return_value={"status": "healthy"})
+            mock_get.return_value = mock_resp
+
+            result = await validator.validate_service_health()
+
             assert result.success is True
             assert "container_startup" in result.checks_passed
             assert result.startup_time_seconds < 30
 
     @pytest.mark.asyncio
-    async def test_docker_health_check(self) -> None:
-        """Test Docker container health check endpoint.
-        
+    async def test_health_endpoint_response(self) -> None:
+        """Test health endpoint returns correct status.
+
         Validates:
         - /health endpoint responds
         - Returns healthy status
@@ -453,75 +459,76 @@ class TestDockerDeployment:
             saas_api_endpoint="http://localhost:8000",
             timeout=5
         )
-        
+
         with patch('httpx.AsyncClient.get') as mock_get:
             mock_resp = AsyncMock()
             mock_resp.status_code = 200
             mock_resp.json = Mock(return_value={"status": "healthy"})
             mock_get.return_value = mock_resp
-            
-            result = await validator.validate_docker_health()
-            
+
+            result = await validator.validate_health_endpoint()
+
             assert result.success is True
             assert result.health_status == "healthy"
 
 
-class TestKubernetesDeployment:
-    """Test suite for Kubernetes deployment smoke tests."""
+class TestServiceDiscovery:
+    """Test suite for MCP/SaaS service discovery and endpoint probing.
+
+    Validates endpoint reachability for both MCP and SaaS delivery modes.
+    No kubectl or Docker runtime required.
+    """
 
     @pytest.mark.asyncio
-    async def test_k8s_pod_readiness(self) -> None:
-        """Test Kubernetes pod readiness.
-        
+    async def test_service_readiness_probe(self) -> None:
+        """Test service readiness via HTTP health probe.
+
         Validates:
-        - Pods reach Ready state
-        - Readiness probes pass
-        - Service endpoints available
+        - Service endpoint reachable
+        - Readiness probe passes
+        - Endpoints counted correctly
         """
         validator = DeploymentValidator(
             mcp_endpoint="http://localhost:8443",
             saas_api_endpoint="http://localhost:8000",
             timeout=60
         )
-        
-        with patch('asyncio.create_subprocess_exec') as mock_subprocess:
-            mock_process = AsyncMock()
-            mock_process.returncode = 0
-            mock_process.communicate = AsyncMock(return_value=(
-                b"cortex-mcp-0    1/1     Running   0          30s", 
-                b""
-            ))
-            mock_subprocess.return_value = mock_process
-            
-            result = await validator.validate_k8s_deployment()
-            
-            assert result.success is True
-            assert "pod_readiness" in result.checks_passed
-            assert result.ready_pods > 0
 
-    @pytest.mark.asyncio
-    async def test_k8s_service_discovery(self) -> None:
-        """Test Kubernetes service discovery.
-        
-        Validates:
-        - Service endpoints resolve
-        - Load balancing works
-        - DNS resolution
-        """
-        validator = DeploymentValidator(
-            mcp_endpoint="http://cortex-mcp-service:8443",
-            saas_api_endpoint="http://cortex-api-service:8000",
-            timeout=30
-        )
-        
         with patch('httpx.AsyncClient.get') as mock_get:
             mock_resp = AsyncMock()
             mock_resp.status_code = 200
             mock_resp.json = Mock(return_value={"status": "healthy"})
             mock_get.return_value = mock_resp
-            
+
+            result = await validator.validate_k8s_deployment()
+
+            assert result.success is True
+            assert "pod_readiness" in result.checks_passed
+            assert result.ready_pods > 0
+
+    @pytest.mark.asyncio
+    async def test_service_endpoint_discovery(self) -> None:
+        """Test service endpoint discovery.
+
+        Validates:
+        - Service endpoints resolve
+        - Health check succeeds
+        - Discovery check recorded
+        """
+        validator = DeploymentValidator(
+            mcp_endpoint="http://localhost:8443",
+            saas_api_endpoint="http://localhost:8000",
+            timeout=30
+        )
+
+        with patch('httpx.AsyncClient.get') as mock_get:
+            mock_resp = AsyncMock()
+            mock_resp.status_code = 200
+            mock_resp.json = Mock(return_value={"status": "healthy"})
+            mock_get.return_value = mock_resp
+
             result = await validator.validate_k8s_service()
-            
+
             assert result.success is True
             assert "service_discovery" in result.checks_passed
 

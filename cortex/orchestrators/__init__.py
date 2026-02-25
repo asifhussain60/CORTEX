@@ -1,7 +1,7 @@
 """
 CORTEX Orchestrators Module
 
-Docker-First Architecture (Phase 2+ Migration):
+MCP-First Architecture (Phase 2+ Migration):
 - core/: Framework orchestrators (master, interaction, intent, tdd)
 - domain/: Business domain orchestrators (refactoring, planning, documentation)
 - support/: Support orchestrators (onboarding, tool discovery, upgrade)
@@ -9,7 +9,7 @@ Docker-First Architecture (Phase 2+ Migration):
 WIRING: Git-backed YAML (cortex/wiring/specifications/wiring.yaml)
 - No database registries
 - No SQLite wiring state
-- Ephemeral container state only
+- CORTEX delivered via MCP (stdio transport) or SaaS — no Docker runtime required
 
 See: cortex-registry/planning/phases/completed/2025/ (migration plan)
 """

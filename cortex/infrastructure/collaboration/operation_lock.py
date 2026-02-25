@@ -9,8 +9,8 @@ Task: TEAM-002 (Operation-Level Locking)
 Author: Asif Hussain
 Date: 2026-01-27
 
-CORE-030: Docker-first architecture - uses file-based locks (container-safe).
-Lock files are stored in /app/.cortex-runtime/locks/ (Docker) or .cortex-runtime/locks/ (local).
+CORE-030: MCP-first architecture - uses file-based locks (process-safe).
+Lock files are stored in .cortex-runtime/locks/ (local) or /app/.cortex-runtime/locks/ (hosted SaaS).
 """
 
 from __future__ import annotations
@@ -71,17 +71,18 @@ def _get_lock_directory() -> Path:
     """
     Get the lock directory path.
 
-    Uses /app/.cortex-runtime/locks/ in Docker, or .cortex-runtime/locks/ locally.
+    Uses /app/.cortex-runtime/locks/ in hosted SaaS environments,
+    or .cortex-runtime/locks/ for local MCP (stdio) usage.
     Creates the directory if it doesn't exist.
 
     Returns:
         Path to lock directory
     """
-    # Check for Docker environment
+    # Check for hosted SaaS environment (mounted /app volume)
     if os.path.exists("/app"):
         lock_dir = Path("/app/.cortex-runtime/locks")
     else:
-        # Local development
+        # Local MCP (stdio) development
         lock_dir = Path(".cortex-runtime/locks")
 
     lock_dir.mkdir(parents=True, exist_ok=True)
@@ -125,7 +126,7 @@ def operation_lock(
 
     Context manager that provides exclusive access to a resource identified
     by resource_id. Uses file-based locking (fcntl.flock) which is safe
-    across processes and works in Docker containers.
+    across processes in both local MCP (stdio) and hosted SaaS environments.
 
     Args:
         resource_id: Unique identifier for the resource to lock.

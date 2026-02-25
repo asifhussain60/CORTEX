@@ -1,8 +1,9 @@
 """
-Database Manager Stub (Docker-First Architecture)
+Database Manager Stub (MCP-First Architecture)
 
-This is a minimal stub for backward compatibility during docker-first migration.
-The actual database management has been replaced with YAML-backed configuration.
+This is a minimal stub for backward compatibility. Database management has
+been replaced with YAML-backed configuration — CORTEX is delivered via
+MCP (stdio transport) or SaaS, with no SQLite/relational database required.
 
 See: cortex-registry/planning/phases/completed/2025/ (migration plan)
 """
@@ -31,10 +32,9 @@ class DatabaseManager:
     """
     Stub DatabaseManager for backward compatibility.
 
-    In the Docker-first architecture, persistent state is managed via:
+    In the MCP-first architecture, persistent state is managed via:
     - YAML configuration files (cortex/wiring/specifications/wiring.yaml)
-    - Ephemeral container state
-    - Persistent volumes for logs/metrics only
+    - .cortex-runtime/ for logs, traces, and metrics only
     """
 
     _instance: Optional['DatabaseManager'] = None
@@ -52,7 +52,7 @@ class DatabaseManager:
             return
         self._initialized = True
         self._data: Dict[str, Any] = {}
-        logger.debug("DatabaseManager stub initialized (Docker-first: no SQLite)")
+        logger.debug("DatabaseManager stub initialized (MCP-first: no SQLite)")
 
     def execute(self, query: str, params: tuple = ()) -> None:
         """Stub execute - logs warning and no-ops."""

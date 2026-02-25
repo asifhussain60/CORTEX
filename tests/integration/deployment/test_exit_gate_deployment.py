@@ -211,7 +211,7 @@ class TestDeploymentReadinessChecks:
             mock_resp.json = Mock(return_value={"status": "healthy"})
             mock_get.return_value = mock_resp
             
-            result = await validator.validate_docker_health()
+            result = await validator.validate_health_endpoint()
             
             assert result.success is True
             assert result.health_status == "healthy"

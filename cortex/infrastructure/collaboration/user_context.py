@@ -9,7 +9,7 @@ Task: TEAM-001 (User Session Context)
 Author: Asif Hussain
 Date: 2026-01-27
 
-CORE-030: Docker-first architecture - no database dependencies.
+CORE-030: MCP-first architecture - no database dependencies.
 Uses contextvars for thread-safe context propagation.
 """
 

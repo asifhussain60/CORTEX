@@ -255,7 +255,7 @@ except ImportError:
     ConversationProtocol = None
     RoundContext = None
 
-# Docker-First Architecture: YAML-backed wiring (no database registries)
+# MCP-First Architecture: YAML-backed wiring (no database registries)
 # Orchestrator config loaded from cortex/wiring/specifications/wiring.yaml
 
 from cortex.models.orchestrator_metadata import OrchestratorMetadata

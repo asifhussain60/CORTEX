@@ -5,7 +5,8 @@ Implements two-stage validation:
 - Stage 1: Quick health check (<200ms) - checks YAML-backed wiring configuration
 - Stage 2: Full validation (triggered if Stage 1 fails) - validates all 23 orchestrators
 
-Docker-first architecture: Uses YAML configuration instead of SQLite database.
+MCP-first architecture: Uses YAML configuration instead of SQLite database.
+CORTEX is delivered via MCP (stdio transport) or SaaS — no Docker runtime required.
 
 CORE-002: No markdown report/summary file generation (NEW - v6.2)
 CORE-026: Git checkpoint before major changes
@@ -215,7 +216,7 @@ class PreCommitConfig:
 class PreCommitAuditLogger:
     """
     CORE-027: Audit trail for pre-commit operations.
-    Docker-first: Logs to JSON file instead of SQLite database.
+    MCP-first: Logs to JSON file instead of SQLite database.
     """
 
     def __init__(self, log_path: str = '.cortex-runtime/pre_commit_audit.jsonl') -> None:
@@ -289,7 +290,8 @@ class PreCommitValidator:
     """
     Hybrid smart gate validator for pre-commit checks.
 
-    Docker-first architecture: Uses YAML-backed wiring configuration.
+    MCP-first architecture: Uses YAML-backed wiring configuration.
+    CORTEX is delivered via MCP (stdio) or SaaS — no Docker runtime required.
 
     Two-stage validation:
     1. Stage 1: Quick health check (<200ms)
@@ -307,7 +309,7 @@ class PreCommitValidator:
     def quick_health_check(self) -> HealthCheckResult:
         """
         Stage 1: Quick health check (<200ms).
-        Docker-first: Checks YAML-backed wiring configuration.
+        MCP-first: Checks YAML-backed wiring configuration.
         """
         if self._is_cache_valid():
             assert self._health_check_cache is not None
@@ -379,7 +381,7 @@ class PreCommitValidator:
     def full_wiring_validation(self) -> WiringValidationResult:
         """
         Stage 2: Full wiring validation.
-        Docker-first: Validates YAML-backed wiring and MCP adapters.
+        MCP-first: Validates YAML-backed wiring and MCP adapters.
         """
         start_time = time.time()
         result = WiringValidationResult(is_valid=True)

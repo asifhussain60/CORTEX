@@ -87,7 +87,7 @@ class CORTEXProductionValidator:
         self._validate_infrastructure()
         self._validate_dependencies()
         self._validate_mcp_server()
-        self._validate_docker_deployment()
+        self._validate_mcp_deployment()
         self._validate_security_configuration()
         self._validate_monitoring()
         self._validate_tests()
@@ -259,36 +259,39 @@ class CORTEXProductionValidator:
                 remediation="Ensure cortex/mcp/server.py exists and is properly implemented"
             )
     
-    def _validate_docker_deployment(self) -> None:
-        """Validate Docker deployment configuration."""
-        logger.info("🐳 Validating Docker Deployment...")
-        
-        # Docker files
-        docker_files = [
-            ("deployment/docker/Dockerfile", "Production container image"),
-            ("deployment/docker/docker-compose.yml", "Development orchestration"),
-            ("deployment/docker/docker-compose.prod.yml", "Production orchestration"),
-            ("deployment/nginx.conf", "Load balancer configuration"),
-            ("deployment/nginx.prod.conf", "Production load balancer"),
+    def _validate_mcp_deployment(self) -> None:
+        """Validate MCP deployment configuration.
+
+        CORTEX is delivered via MCP (stdio transport, Pylance-style) or SaaS.
+        No Docker runtime is required. This validates the MCP server config
+        and VS Code settings instead.
+        """
+        logger.info("🔌 Validating MCP Deployment Configuration...")
+
+        # MCP server entry point
+        mcp_files = [
+            ("cortex/mcp/server.py", "MCP server entry point"),
+            ("cortex/mcp/__init__.py", "MCP package init"),
+            (".vscode/settings.json", "VS Code MCP server configuration"),
         ]
-        
-        for file_path, description in docker_files:
+
+        for file_path, description in mcp_files:
             full_path = self.workspace_root / file_path
             if full_path.exists():
                 self._add_check(
-                    f"Docker: {file_path.split('/')[-1]}",
+                    f"MCP: {file_path.split('/')[-1]}",
                     True,
                     Severity.INFO,
                     f"{description}: {full_path}"
                 )
             else:
-                severity = Severity.HIGH if "prod" in file_path else Severity.MEDIUM
+                severity = Severity.CRITICAL if "server.py" in file_path else Severity.HIGH
                 self._add_check(
-                    f"Docker: {file_path.split('/')[-1]}",
+                    f"MCP: {file_path.split('/')[-1]}",
                     False,
                     severity,
                     f"Missing {description}: {full_path}",
-                    remediation=f"Create {file_path} for proper deployment"
+                    remediation=f"Ensure {file_path} exists for MCP deployment"
                 )
     
     def _validate_security_configuration(self) -> None:

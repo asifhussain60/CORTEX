@@ -4,7 +4,8 @@ CORTEX Startup Validator - Comprehensive System Health Check
 Mandatory pre-execution validation that runs on first import.
 Ensures clean bill of health before any orchestrator execution.
 
-Docker-first architecture: Uses YAML-backed wiring configuration.
+MCP-first architecture: Uses YAML-backed wiring configuration.
+CORTEX is delivered via MCP (stdio transport) or SaaS — no Docker runtime required.
 
 Key features:
 - One-time initialization check (cached after first run)
@@ -59,13 +60,14 @@ class StartupValidationStatus:
 class StartupValidator:
     """Comprehensive startup validation with auto-remediation.
 
-    Docker-first architecture: Uses YAML-backed wiring configuration.
+    MCP-first architecture: Uses YAML-backed wiring configuration.
+    CORTEX is delivered via MCP (stdio) or SaaS — no Docker runtime required.
     """
 
     # Cache file location (persists across sessions)
     CACHE_DIR = Path.home() / ".cortex-runtime" / "startup"
     CACHE_FILE = CACHE_DIR / "validation_status.json"
-    # Docker-first: YAML config instead of SQLite
+    # MCP-first: YAML config instead of SQLite
     REGISTRY_CONFIG = Path(__file__).parent.parent.parent / "cortex-registry" / "manifest.yaml"
 
     def __init__(self) -> None:
@@ -187,7 +189,7 @@ class StartupValidator:
         """
         Check configuration integrity.
 
-        Docker-first: Validates YAML config instead of SQLite database.
+        MCP-first: Validates YAML config instead of SQLite database.
 
         Returns:
             Result with list of auto-remediated issues
@@ -195,7 +197,7 @@ class StartupValidator:
         remediated = []
 
         try:
-            # Docker-first: Check YAML config exists and is valid
+            # MCP-first: Check YAML config exists and is valid
             if self.registry_config.exists():
                 try:
                     import yaml
@@ -218,7 +220,7 @@ class StartupValidator:
         """
         Check orchestrator wiring status.
 
-        Docker-first: Uses YAML-backed configuration instead of database.
+        MCP-first: Uses YAML-backed configuration instead of database.
 
         Returns:
             Result with wiring statistics

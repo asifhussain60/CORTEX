@@ -370,13 +370,16 @@ class TestProductionPerformance:
 class TestProductionDeployment:
     """Production deployment configuration validation."""
     
-    def test_docker_configuration_exists(self):
+    def test_mcp_configuration_exists(self):
         """
-        Verify Docker deployment configuration exists.
+        Verify MCP deployment configuration exists.
+
+        CORTEX is delivered via MCP (stdio) or SaaS — no Docker required.
         """
-        docker_path = Path(__file__).parent.parent.parent / "deployment" / "docker"
-        
-        assert docker_path.exists(), "Docker config directory not found"
+        vscode_settings = Path(__file__).parent.parent.parent / ".vscode" / "settings.json"
+        mcp_config = Path(__file__).parent.parent.parent / "cortex" / "mcp" / "server.py"
+
+        assert mcp_config.exists(), "MCP server module not found at cortex/mcp/server.py"
     
     def test_kubernetes_deployment_config_structure(self):
         """
@@ -399,12 +402,12 @@ class TestProductionDeployment:
         """
         Verify production deployment guides are complete.
         
-        Validates documentation for enterprise deployment.
+        Validates documentation for MCP and SaaS enterprise deployment.
         """
         # Expected deployment guide sections
         required_sections = [
-            "Docker Deployment",
-            "Kubernetes Deployment",
+            "MCP Deployment",
+            "SaaS Deployment",
             "Health Check Configuration",
             "Monitoring Setup",
             "SLA Compliance"

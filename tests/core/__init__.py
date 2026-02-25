@@ -1,8 +1,9 @@
 """
 CORTEX Wiring Tests - Phase 6.
 
-Comprehensive wiring validation for Docker-first architecture.
+Comprehensive wiring validation for MCP-first architecture.
 Ensures single path enforcement, Git-backed YAML wiring, and no database files.
+CORTEX is delivered via MCP (stdio transport) or SaaS — no Docker runtime required.
 
 Test Suites:
 - test_single_path_enforcement.py: Verify only one wiring path exists
