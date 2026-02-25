@@ -1,0 +1,782 @@
+# CORTEX Phase Plan — Phase 80
+# Source: copilot-review03.md — holistic architecture & coherence analysis
+# Governance: master-plan-phase-lifecycle.yaml checkpoint-create
+#
+# AC_START: AC-80-COHERENCE-REMEDIATION-2026-02-25
+
+id: "phase-80"
+title: "Coherence Remediation — God Object Split, Knowledge API Unification, AC Coverage, Type Contract Fix"
+version: "1.0"
+created: "2026-02-25"
+status: PLANNED
+priority: P0
+governance_authority:
+  - CORE-002   # All output inline — no .md/.txt report files
+  - CORE-008   # TDD mandatory — RED → GREEN → REFACTOR
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # snake_case file naming
+  - CORE-035   # Single canonical implementation — no duplicates
+  - CORE-048   # Holistic validation gate
+  - CORE-064   # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-80-COHERENCE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: copilot-review03.md (GitHub Copilot holistic architecture review, 2026-02-25)
+  The review was a fully-verified, grep-confirmed analysis of 1,145 Python source files.
+  All gaps below were confirmed against live codebase state before acceptance.
+
+  Baseline measurements:
+    - master_orchestrator.py: 5,222 lines (15 soft ImportError blocks, 4 AC markers)
+    - SynthesisResult duplicate class count: 4
+    - ValidationResult duplicate class count: 22
+    - ContextCacheLayer/ContextSynthesisGateway: 2 copies each
+    - OrchestratorLearningMixin: 2 copies
+    - orchestrators missing AC_START/AC_COMPLETE: 162 / ~200 files
+    - audit_sessions rows: 0 (empty pipeline tables)
+    - audit_stage_log rows: 0
+    - KnowledgeRepository: throws FileNotFoundError at instantiation
+    - IOrchestrator declares Result[T] returns; mixin returns plain Dict/List
+    - EnforcementOrchestrator instantiated fresh on every _governance_gate() call
+    - wiring.yaml defines 41 orchestrators across 10 tiers (docs claim 27 across 3)
+    - cortex-master.yaml: 470 lines (THIN INDEX CONTRACT compliant)
+    - Smoke test baseline: to be captured at phase start
+
+  Accepted gaps from review: GAP-80-01 through GAP-80-07 (all P0/P1).
+  Rejected gap: 27-vs-41 narrative count (P2 — documentation only, low ROI vs risk).
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064 — all must be CLOSED before phase is COMPLETE)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  - id: "GAP-80-01"
+    title: "God Object: master_orchestrator.py is 5,222 lines with 15 soft ImportError blocks"
+    severity: P0
+    source: "copilot-review03.md §1, §10"
+    evidence: |
+      wc -l cortex/orchestrators/core/master_orchestrator.py → 5222
+      grep -c "except ImportError" → 15
+      grep -c "AC_START|AC_COMPLETE" → 4 (only 4 markers in 5,222 lines)
+      Stage classes already exist: master_orchestrator_stage_1/2/3/4.py
+    action_ref: "phase-80-a"
+    status: OPEN
+
+  - id: "GAP-80-02"
+    title: "KnowledgeRepository crashes at instantiation — .knowledge-index.json missing"
+    severity: P0
+    source: "copilot-review03.md §4"
+    evidence: |
+      python3 -c "from cortex.core.knowledge.knowledge_repository import KnowledgeRepository; KnowledgeRepository()"
+      → FileNotFoundError: Knowledge index not found:
+        cortex-registry/knowledge-base/.knowledge-index.json. Run knowledge migration first.
+      find . -name ".knowledge-index.json" → (no results)
+    action_ref: "phase-80-b"
+    status: OPEN
+
+  - id: "GAP-80-03"
+    title: "IOrchestrator declares Result[T] returns; OrchestratorProtocolMixin returns plain Dict/List"
+    severity: P1
+    source: "copilot-review03.md §2"
+    evidence: |
+      cortex/core/interfaces/i_orchestrator.py:
+        initialize() -> Result[str]
+        get_mcp_tools() -> Result[Dict[str, Any]]
+        execute_operation(...) -> Result[Any]
+        get_audit_trail(...) -> Result[list]
+      cortex/core/orchestrator_protocol_mixin.py:
+        initialize() -> Dict[str, Any]     (line 108)
+        get_mcp_tools() -> Dict[str, Any]  (line 124)
+        execute_operation() — returns plain dict
+        get_audit_trail() -> List[Dict[str, Any]]  (line 191)
+      Mixin defaults do not satisfy ABC return type contract.
+    action_ref: "phase-80-c"
+    status: OPEN
+
+  - id: "GAP-80-04"
+    title: "SynthesisResult defined in 4 separate files; ValidationResult defined in 22 files"
+    severity: P1
+    source: "copilot-review03.md §3"
+    evidence: |
+      grep -rn "class SynthesisResult" cortex --include="*.py" | grep -v test:
+        cortex/core/conversation_synthesizer.py:60
+        cortex/core/context_synthesizer.py:40
+        cortex/intelligence/knowledge/unified_intelligence_context.py:58
+        cortex/intelligence/tier3/knowledge/synthesis_engine.py:11
+      grep -rn "class ValidationResult" cortex --include="*.py" | grep -v test → 22 matches
+      ContextCacheLayer: 2 copies (core/ + orchestrators/core/)
+      ContextSynthesisGateway: 2 copies (legacy_ + canonical)
+      OrchestratorLearningMixin: 2 copies (orchestrator_learning_mixin + orchestrator_integration_mixin)
+    action_ref: "phase-80-d"
+    status: OPEN
+
+  - id: "GAP-80-05"
+    title: "162 orchestrator files missing AC_START/AC_COMPLETE markers"
+    severity: P1
+    source: "copilot-review03.md §6"
+    evidence: |
+      find cortex/orchestrators -name "*.py" | xargs grep -rL "AC_START|AC_COMPLETE" \
+        | grep -v "__init__|__pycache__" | wc -l → 162
+      sqlite3 .cortex-runtime/traces/orchestrator-traces.db
+        "SELECT COUNT(*) FROM audit_sessions" → 0
+        "SELECT COUNT(*) FROM audit_stage_log" → 0
+      audit_violations table → 0 rows
+      Observability pipeline not functioning end-to-end.
+    action_ref: "phase-80-e"
+    status: OPEN
+
+  - id: "GAP-80-06"
+    title: "EnforcementOrchestrator instantiated fresh on every _governance_gate() call"
+    severity: P1
+    source: "copilot-review03.md §7"
+    evidence: |
+      cortex/core/orchestrator_protocol_mixin.py line 303:
+        result = EnforcementOrchestrator().validate_operation(...)
+      No singleton, no lru_cache, no module-level instance.
+      With 41 orchestrators all calling this on execute_operation, cost is O(N) instantiations.
+    action_ref: "phase-80-f"
+    status: OPEN
+
+  - id: "GAP-80-07"
+    title: "Knowledge API has 5 uncoordinated entry points; no canonical synthesize() surface"
+    severity: P1
+    source: "copilot-review03.md §4"
+    evidence: |
+      Five separate knowledge entry points (all confirmed importable except KnowledgeRepository):
+        KnowledgeRepository       → crashes (GAP-80-02)
+        KnowledgeSynthesisEngine  → synthesize_unified_context(intent_type, operation)
+        KnowledgeGuidanceEngine   → get_guidance_for_module(), get_ordered_guidance()
+        IntelligentKnowledgeRouter → requires explicit backends dict at construction
+        KnowledgeRegistryProxy    → dual-root YAML proxy (works, 30 YAMLs)
+        UnifiedIntelligenceProvider → Phase 65 S4, 3-tier execution
+      No single canonical synthesize(request, tier) → UnifiedIntelligenceContext method.
+      Callers must know which of five engines to call per situation.
+    action_ref: "phase-80-g"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY — CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES — ROI-ordered (P0 first, then P1s by blast-radius)
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE A — GAP-80-01: Reduce master_orchestrator.py to coordinator
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-80-a"
+    title: "Split MasterOrchestrator God Object → lean coordinator ≤500 lines"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-80-01"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 days"
+    depends_on: []
+    prerequisite: "smoke tests green; capture baseline test count"
+    regression_gate: "python3 scripts/run_tests.py batch — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: |
+          Write failing tests that assert:
+          1. MasterOrchestrator.__init__ completes with ≤20 attribute assignments
+          2. All stage logic is delegated (no inline stage code in master file)
+          3. Soft ImportError try/except count ≤2 in master file (only mandatory ones)
+          4. MasterOrchestrator.process_request() delegates to existing Stage classes
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/core/test_master_orchestrator_coordinator.py — ALL listed tests must FAIL"
+        blocker: "Do NOT move any stage code until every listed test fails"
+      green:
+        action: |
+          1. Audit which stage logic remains inline (not in Stage1/2/3/4 files)
+          2. Move remaining inline logic to the appropriate Stage class
+          3. Replace each soft ImportError block with direct import + hard fail OR move to stage class
+          4. Reduce master file to: __init__ (DI wiring only), process_request() (delegation chain), health_check(), AC markers
+          5. Ensure the 4 existing AC markers remain and all public methods emit AC_START/AC_COMPLETE
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/core/test_master_orchestrator_coordinator.py — ALL tests PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: |
+          1. Add type hints to all new/modified signatures (CORE-011)
+          2. Add/update docstrings on all public methods (CORE-012)
+          3. Verify no duplicate stage logic remains between master and Stage files (CORE-035)
+          4. Run complexity check: no function > 50 lines in master file
+        gate: "python3 scripts/run_tests.py dir tests/orchestrators/core/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes and wc -l master_orchestrator.py ≤500"
+
+    tdd_sequence:
+      red:
+        - "test_master_orchestrator_init_attribute_count — asserts len([a for a in vars(mo) if not a.startswith('_')]) ≤ 20"
+        - "test_master_orchestrator_no_inline_stage_logic — AST scan: no function body > 50 lines in master file"
+        - "test_master_orchestrator_soft_import_count — grep count of 'except ImportError' in master file ≤ 2"
+        - "test_master_orchestrator_delegates_to_stage_classes — mock Stage1/2/3/4 and assert they are called"
+        - "test_master_orchestrator_ac_markers_present — master file contains AC_START and AC_COMPLETE"
+      green:
+        - "Extract remaining inline stage logic to MasterOrchestrationStage1-4 as appropriate"
+        - "Replace soft ImportError blocks with hard imports (move optional deps to Stage files)"
+        - "Master __init__: only DI wiring (≤20 assignments)"
+        - "Master process_request: only delegation chain + AC markers"
+      refactor:
+        - "Add docstrings to all public methods (CORE-012)"
+        - "Verify all signatures have type hints (CORE-011)"
+        - "Confirm no duplicate logic between master and Stage files (CORE-035)"
+
+    acceptance_criteria:
+      - "wc -l cortex/orchestrators/core/master_orchestrator.py ≤ 500"
+      - "grep -c 'except ImportError' master_orchestrator.py ≤ 2"
+      - "All existing orchestrators tests still pass (zero regressions)"
+      - "MasterOrchestrator imports cleanly: python3 -c 'from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator'"
+      - "health_check() returns status: ok"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/orchestrators/core/"
+      min_tests_pass: 1
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE B — GAP-80-02: Fix KnowledgeRepository missing index
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-80-b"
+    title: "KnowledgeRepository graceful degradation — no crash when index absent"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-80-02"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "0.5 days"
+    depends_on: ["phase-80-a"]
+    prerequisite: "phase-80-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py dir tests/core/ — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: |
+          Write tests asserting:
+          1. KnowledgeRepository() with missing index does NOT raise FileNotFoundError
+          2. KnowledgeRepository().search("anything") returns [] when index absent
+          3. KnowledgeRepository().is_available() returns False when index absent
+          4. KnowledgeRepository() with valid index loads correctly (existing behaviour)
+        gate: "python3 scripts/run_tests.py file tests/core/knowledge/test_knowledge_repository_degradation.py — ALL must FAIL"
+        blocker: "Do NOT modify KnowledgeRepository until tests are RED"
+      green:
+        action: |
+          1. In KnowledgeRepository._load_index(): catch FileNotFoundError, set self._index = {} and self._available = False
+          2. Add is_available() -> bool property
+          3. Guard all search/retrieve methods: return [] / None when not self._available
+          4. Log a WARNING (not raise) when index is absent
+          5. Create a generate_knowledge_index.py script in scripts/ that builds the index from cortex-registry/knowledge-base/
+        gate: "python3 scripts/run_tests.py file tests/core/knowledge/test_knowledge_repository_degradation.py — ALL PASS"
+        blocker: "Do NOT REFACTOR until GREEN"
+      refactor:
+        action: |
+          1. Add type hints to _load_index, is_available, and all public methods
+          2. Add docstring to is_available() explaining graceful-degradation contract
+          3. Confirm existing KnowledgeRepository tests still pass (no regressions)
+        gate: "python3 scripts/run_tests.py dir tests/core/knowledge/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_knowledge_repository_no_crash_without_index — KnowledgeRepository() succeeds with missing index"
+        - "test_knowledge_repository_search_returns_empty_without_index — search('test') returns []"
+        - "test_knowledge_repository_is_available_false_without_index — is_available() == False"
+        - "test_knowledge_repository_loads_with_valid_index — existing behaviour preserved"
+      green:
+        - "Modify _load_index to catch FileNotFoundError and degrade gracefully"
+        - "Add is_available() property"
+        - "Guard search/retrieve with is_available check"
+        - "Create scripts/generate_knowledge_index.py"
+      refactor:
+        - "Type hints and docstrings on all modified methods (CORE-011, CORE-012)"
+
+    acceptance_criteria:
+      - "python3 -c 'from cortex.core.knowledge.knowledge_repository import KnowledgeRepository; r = KnowledgeRepository(); print(r.is_available())' → prints False (no crash)"
+      - "All existing knowledge repository tests pass"
+      - "scripts/generate_knowledge_index.py exists and produces a valid .knowledge-index.json"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/core/knowledge/"
+      min_tests_pass: 1
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE C — GAP-80-03: Fix IOrchestrator ↔ mixin return type mismatch
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-80-c"
+    title: "Align OrchestratorProtocolMixin return types to IOrchestrator Result[T] contract"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-80-03"]
+    governance_authority: "CORE-008, CORE-011, CORE-035, CORE-064"
+    duration_estimate: "1 day"
+    depends_on: ["phase-80-b"]
+    prerequisite: "phase-80-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py dir tests/core/ — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: |
+          Write tests asserting:
+          1. OrchestratorProtocolMixin().initialize() returns Result (Ok or Err), not plain Dict
+          2. OrchestratorProtocolMixin().get_mcp_tools() returns Result, not plain Dict
+          3. OrchestratorProtocolMixin().execute_operation('op', {}) returns Result, not plain Dict
+          4. OrchestratorProtocolMixin().get_audit_trail() returns Result, not plain List
+          5. All 4 mixin defaults satisfy isinstance(result, (Ok, Err))
+        gate: "python3 scripts/run_tests.py file tests/core/test_orchestrator_protocol_mixin_result_types.py — ALL FAIL"
+        blocker: "Do NOT modify mixin until tests are RED"
+      green:
+        action: |
+          In OrchestratorProtocolMixin, wrap each default method return value in Ok(...):
+            initialize() → return Ok({"status": "initialized", ...})
+            get_mcp_tools() → return Ok({...})
+            execute_operation() → return Ok({...}) or Err(message) on exception
+            get_audit_trail() → return Ok([...])
+          Import Ok, Err from cortex.core.result (already imported in many orchestrators).
+        gate: "python3 scripts/run_tests.py file tests/core/test_orchestrator_protocol_mixin_result_types.py — ALL PASS"
+        blocker: "Do NOT REFACTOR until GREEN"
+      refactor:
+        action: |
+          1. Scan for callers of these mixin methods that unwrap with .value or check isinstance(r, Ok)
+          2. Update any callers that expected plain Dict to unwrap Result
+          3. Add type hints: def initialize(self) -> Result[Dict[str, Any]]:
+          4. Confirm all 27 wired orchestrators that override these methods still pass their tests
+        gate: "python3 scripts/run_tests.py batch — zero new failures across full suite"
+        blocker: "Do NOT mark COMPLETE until batch gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_mixin_initialize_returns_result — isinstance(mixin.initialize(), (Ok, Err))"
+        - "test_mixin_get_mcp_tools_returns_result — isinstance(mixin.get_mcp_tools(), (Ok, Err))"
+        - "test_mixin_execute_operation_returns_result — isinstance(mixin.execute_operation('op', {}), (Ok, Err))"
+        - "test_mixin_get_audit_trail_returns_result — isinstance(mixin.get_audit_trail(), (Ok, Err))"
+      green:
+        - "Wrap initialize() return in Ok(...)"
+        - "Wrap get_mcp_tools() return in Ok(...)"
+        - "Wrap execute_operation() return in Ok(...) or Err(...)"
+        - "Wrap get_audit_trail() return in Ok(...)"
+      refactor:
+        - "Add Result[T] return type hints to all four methods (CORE-011)"
+        - "Update callers that expected plain Dict (scan and fix)"
+        - "Docstrings updated to document Result contract (CORE-012)"
+
+    acceptance_criteria:
+      - "All four mixin default methods return Result (Ok or Err) instances"
+      - "IOrchestrator ABC contract satisfied at the type level"
+      - "Zero regressions across batch test suite"
+      - "mypy / static analysis: no return type mismatch on these 4 methods"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py batch"
+      min_tests_pass: 1
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE D — GAP-80-04: Canonicalize SynthesisResult + ValidationResult
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-80-d"
+    title: "Consolidate SynthesisResult (4→1) and ValidationResult (22→1) into canonical models"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-80-04"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 days"
+    depends_on: ["phase-80-c"]
+    prerequisite: "phase-80-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py batch — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: |
+          Write tests asserting:
+          1. cortex.models exports a canonical SynthesisResult dataclass with fields: guidance, context, metadata, confidence
+          2. cortex.models exports a canonical ValidationResult dataclass with fields: passed, violations, warnings, score
+          3. All 4 former SynthesisResult definitions are importable from cortex.models (compat shims)
+          4. No duplicate class bodies exist — each former location re-exports from cortex.models
+        gate: "python3 scripts/run_tests.py file tests/models/test_canonical_result_types.py — ALL FAIL"
+        blocker: "Do NOT define canonical classes until tests are RED"
+      green:
+        action: |
+          SynthesisResult consolidation:
+          1. Audit fields across all 4 definitions: find superset of fields
+          2. Define canonical SynthesisResult in cortex/models/synthesis_result.py
+          3. Replace each of the 4 source definitions with: from cortex.models.synthesis_result import SynthesisResult
+          4. Add __all__ = ["SynthesisResult"] to each compat location
+
+          ValidationResult consolidation:
+          1. Audit fields across 22 definitions (most share: passed, violations)
+          2. Define canonical ValidationResult in cortex/models/validation_result.py
+          3. Replace all 22 source definitions with import from canonical location
+          4. ContextCacheLayer: delete duplicate in orchestrators/core/ (keep core/ as canonical)
+          5. ContextSynthesisGateway: delete legacy_context_synthesis_gateway.py (keep orchestrators/core/ as canonical)
+          6. OrchestratorLearningMixin: delete orchestrator_integration_mixin.py (keep orchestrator_learning_mixin.py as canonical)
+        gate: "python3 scripts/run_tests.py file tests/models/test_canonical_result_types.py — ALL PASS"
+        blocker: "Do NOT REFACTOR until GREEN"
+      refactor:
+        action: |
+          1. Add type hints and docstrings to canonical SynthesisResult and ValidationResult
+          2. Run full batch to confirm all 22 former ValidationResult callers use the canonical type
+          3. Delete compat shims if no callers remain beyond the re-export
+          4. Remove deprecated files: legacy_context_synthesis_gateway.py, orchestrator_integration_mixin.py
+        gate: "python3 scripts/run_tests.py batch — zero new failures"
+        blocker: "Do NOT mark COMPLETE until batch gate passes and grep confirms 1 class per type"
+
+    tdd_sequence:
+      red:
+        - "test_canonical_synthesis_result_importable — from cortex.models.synthesis_result import SynthesisResult"
+        - "test_canonical_validation_result_importable — from cortex.models.validation_result import ValidationResult"
+        - "test_synthesis_result_single_definition — grep count of 'class SynthesisResult' in cortex/ == 1"
+        - "test_validation_result_single_definition — grep count of 'class ValidationResult' in cortex/ == 1"
+        - "test_context_cache_layer_single_definition — grep count of 'class ContextCacheLayer' == 1"
+        - "test_context_synthesis_gateway_single_definition — grep count of 'class ContextSynthesisGateway' == 1"
+        - "test_orchestrator_learning_mixin_single_definition — grep count of 'class OrchestratorLearningMixin' == 1"
+      green:
+        - "Create cortex/models/synthesis_result.py with canonical SynthesisResult"
+        - "Create cortex/models/validation_result.py with canonical ValidationResult"
+        - "Replace 4 SynthesisResult definitions with re-exports"
+        - "Replace 22 ValidationResult definitions with re-exports"
+        - "Delete duplicate ContextCacheLayer, ContextSynthesisGateway, OrchestratorLearningMixin"
+      refactor:
+        - "Full type hints + docstrings on canonical classes (CORE-011, CORE-012)"
+        - "Confirm batch test suite green"
+
+    acceptance_criteria:
+      - "grep -rn 'class SynthesisResult' cortex --include='*.py' | grep -v test | wc -l == 1"
+      - "grep -rn 'class ValidationResult' cortex --include='*.py' | grep -v test | wc -l == 1"
+      - "grep -rn 'class ContextCacheLayer' cortex --include='*.py' | grep -v test | wc -l == 1"
+      - "grep -rn 'class ContextSynthesisGateway' cortex --include='*.py' | grep -v test | wc -l == 1"
+      - "grep -rn 'class OrchestratorLearningMixin' cortex --include='*.py' | grep -v test | wc -l == 1"
+      - "Zero regressions across batch test suite"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py batch"
+      min_tests_pass: 1
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE E — GAP-80-05: AC marker coverage sweep
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-80-e"
+    title: "AC_START/AC_COMPLETE coverage sweep — 162 orchestrator files missing markers"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-80-05"]
+    governance_authority: "CORE-008, CORE-027, CORE-064"
+    duration_estimate: "2 days"
+    depends_on: ["phase-80-d"]
+    prerequisite: "phase-80-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py dir tests/orchestrators/ — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: |
+          Write tests asserting:
+          1. A scanner function ac_marker_coverage_check(dir) returns 0 missing files
+          2. Each wired orchestrator (27 canonical) has AC_START in at least one public method
+          3. audit_sessions table receives a row when AuditOrchestrator.run() is called
+          4. audit_stage_log receives a row per stage when the audit pipeline runs
+        gate: "python3 scripts/run_tests.py file tests/governance/test_ac_marker_coverage.py — ALL FAIL"
+        blocker: "Do NOT add AC markers until tests are RED"
+      green:
+        action: |
+          Priority order for marker insertion (by blast radius):
+          Tier 1 — 27 canonical wired orchestrators (core/domain/support/health): add AC_START at entry of each public method, AC_COMPLETE on success with ✅, AC_COMPLETE on failure with ❌
+          Tier 2 — validation_extended, strategies, git, intelligence, synthesis, workflow tiers
+          Tier 3 — Fix AuditOrchestrator write path so audit_sessions and audit_stage_log rows are inserted on each /audit fix run
+          Script: scripts/add_ac_markers.py — generates the boilerplate per orchestrator file
+        gate: "python3 scripts/run_tests.py file tests/governance/test_ac_marker_coverage.py — ALL PASS"
+        blocker: "Do NOT REFACTOR until GREEN"
+      refactor:
+        action: |
+          1. Verify no orphaned AC_START (every START has a matching COMPLETE)
+          2. Verify all AC markers follow the canonical format: AC_START: AC-{DOMAIN}-{TIMESTAMP}
+          3. Run sqlite3 check: both audit_sessions and audit_stage_log > 0 rows after a test run
+        gate: "python3 scripts/run_tests.py dir tests/governance/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until SQLite tables have > 0 rows"
+
+    tdd_sequence:
+      red:
+        - "test_ac_marker_coverage_zero_missing — scanner returns 0 files missing AC markers in canonical 27"
+        - "test_audit_sessions_populated — audit_sessions table has > 0 rows after AuditOrchestrator.run()"
+        - "test_audit_stage_log_populated — audit_stage_log has > 0 rows after audit pipeline runs"
+        - "test_no_orphaned_ac_start — every AC_START in any orchestrator file has a matching AC_COMPLETE"
+      green:
+        - "Add AC markers to all 27 canonical orchestrators (priority) and remaining 162-file backlog"
+        - "Fix AuditOrchestrator write path for audit_sessions and audit_stage_log"
+      refactor:
+        - "Verify canonical AC marker format across all files"
+        - "SQLite health check: tables populated"
+
+    acceptance_criteria:
+      - "find cortex/orchestrators -name '*.py' | xargs grep -rL 'AC_START|AC_COMPLETE' | grep -v '__init__|__pycache__' | wc -l == 0 (or ≤ 5 non-orchestrator utility files)"
+      - "sqlite3 .cortex-runtime/traces/orchestrator-traces.db 'SELECT COUNT(*) FROM audit_sessions' > 0"
+      - "sqlite3 .cortex-runtime/traces/orchestrator-traces.db 'SELECT COUNT(*) FROM audit_stage_log' > 0"
+      - "No orphaned AC_START markers (every START has a COMPLETE)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/governance/"
+      min_tests_pass: 1
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE F — GAP-80-06: Singleton EnforcementOrchestrator in governance gate
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-80-f"
+    title: "Singleton EnforcementOrchestrator in _governance_gate() — eliminate per-call instantiation"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-80-06"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "0.5 days"
+    depends_on: ["phase-80-e"]
+    prerequisite: "phase-80-e completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py dir tests/core/ — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: |
+          Write tests asserting:
+          1. Two consecutive calls to _governance_gate() use the SAME EnforcementOrchestrator instance (id() is identical)
+          2. EnforcementOrchestrator is not constructed inside _governance_gate body (mock constructor call count == 0 after first call)
+          3. The singleton is thread-safe (concurrent calls return the same instance)
+        gate: "python3 scripts/run_tests.py file tests/core/test_governance_gate_singleton.py — ALL FAIL"
+        blocker: "Do NOT modify _governance_gate until tests are RED"
+      green:
+        action: |
+          In cortex/core/orchestrator_protocol_mixin.py:
+          1. Add module-level: _enforcement_singleton: Optional[EnforcementOrchestrator] = None
+          2. Add _get_enforcement_orchestrator() -> EnforcementOrchestrator:
+               nonlocal _enforcement_singleton
+               if _enforcement_singleton is None:
+                   _enforcement_singleton = EnforcementOrchestrator()
+               return _enforcement_singleton
+          3. Replace EnforcementOrchestrator() in _governance_gate with _get_enforcement_orchestrator()
+          Alternative: @functools.lru_cache(maxsize=1) on a module-level factory function
+        gate: "python3 scripts/run_tests.py file tests/core/test_governance_gate_singleton.py — ALL PASS"
+        blocker: "Do NOT REFACTOR until GREEN"
+      refactor:
+        action: |
+          1. Add type hint to _get_enforcement_orchestrator()
+          2. Add docstring explaining singleton contract and thread-safety
+          3. Ensure no other locations in orchestrator_protocol_mixin create fresh EnforcementOrchestrator
+        gate: "python3 scripts/run_tests.py dir tests/core/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_governance_gate_singleton_same_instance — two calls return same EnforcementOrchestrator id()"
+        - "test_governance_gate_no_new_construction — mock constructor, assert call_count == 1 across N calls"
+        - "test_governance_gate_thread_safe_singleton — 10 concurrent threads all get same instance"
+      green:
+        - "Add module-level _enforcement_singleton + _get_enforcement_orchestrator()"
+        - "Replace inline EnforcementOrchestrator() with _get_enforcement_orchestrator()"
+      refactor:
+        - "Type hints + docstring on factory function (CORE-011, CORE-012)"
+
+    acceptance_criteria:
+      - "_governance_gate() uses a cached singleton — constructor called at most once per process"
+      - "All mixin tests pass"
+      - "Zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/core/"
+      min_tests_pass: 1
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE G — GAP-80-07: Canonical Knowledge API facade
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-80-g"
+    title: "Canonical knowledge synthesize() facade — one entry point over 5 engines"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-80-07"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 days"
+    depends_on: ["phase-80-f"]
+    prerequisite: "phase-80-f completion_gate PASSED; GAP-80-02 CLOSED (KnowledgeRepository degrades gracefully)"
+    regression_gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: |
+          Write tests asserting:
+          1. from cortex.intelligence.provider import synthesize — importable (single canonical entry point)
+          2. synthesize(request="test", tier="quick") returns UnifiedIntelligenceContext
+          3. synthesize(request="test", tier="targeted") delegates to KnowledgeSynthesisEngine
+          4. synthesize(request="test", tier="full") delegates to all 5 engines
+          5. synthesize() works even when KnowledgeRepository is unavailable (graceful)
+          6. IntelligentKnowledgeRouter constructed with default backends (no ValueError)
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_canonical_synthesize_facade.py — ALL FAIL"
+        blocker: "Do NOT create the facade until tests are RED"
+      green:
+        action: |
+          1. In cortex/intelligence/provider.py (UnifiedIntelligenceProvider — Phase 65):
+             Add module-level synthesize(request: str, tier: str = "targeted") -> UnifiedIntelligenceContext
+          2. Tier routing:
+               "quick"    → KnowledgeRegistryProxy (works, 30 YAMLs, no index needed)
+               "targeted" → KnowledgeSynthesisEngine.synthesize_unified_context()
+               "full"     → all 5 engines, merge results into UnifiedIntelligenceContext
+          3. Fix IntelligentKnowledgeRouter: provide default backends dict in __init__ (use KnowledgeRegistryProxy as fallback)
+          4. Export synthesize from cortex.intelligence.__init__
+        gate: "python3 scripts/run_tests.py file tests/intelligence/test_canonical_synthesize_facade.py — ALL PASS"
+        blocker: "Do NOT REFACTOR until GREEN"
+      refactor:
+        action: |
+          1. Add type hints: synthesize(request: str, tier: str = "targeted") -> UnifiedIntelligenceContext
+          2. Add docstring documenting the 3-tier routing contract
+          3. Update MasterOrchestrator and any callers that reference multiple knowledge engines directly to use synthesize()
+          4. Verify KnowledgeSynthesisEngine, KnowledgeGuidanceEngine, KnowledgeRegistryProxy tests all still pass
+        gate: "python3 scripts/run_tests.py dir tests/intelligence/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_synthesize_importable — from cortex.intelligence.provider import synthesize"
+        - "test_synthesize_quick_returns_context — synthesize('test', tier='quick') is UnifiedIntelligenceContext"
+        - "test_synthesize_targeted_returns_context — synthesize('test', tier='targeted') is UnifiedIntelligenceContext"
+        - "test_synthesize_full_returns_context — synthesize('test', tier='full') is UnifiedIntelligenceContext"
+        - "test_synthesize_graceful_without_index — synthesize() works when KnowledgeRepository unavailable"
+        - "test_intelligent_knowledge_router_default_construction — IntelligentKnowledgeRouter() no ValueError"
+      green:
+        - "Add synthesize() function to cortex/intelligence/provider.py"
+        - "Implement 3-tier routing (quick/targeted/full)"
+        - "Fix IntelligentKnowledgeRouter default backends"
+      refactor:
+        - "Type hints + docstrings (CORE-011, CORE-012)"
+        - "Update callers to use synthesize() instead of direct engine access"
+
+    acceptance_criteria:
+      - "from cortex.intelligence.provider import synthesize works"
+      - "synthesize('test') returns UnifiedIntelligenceContext without crashing"
+      - "IntelligentKnowledgeRouter() constructs without ValueError"
+      - "Zero regressions across intelligence test suite"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/intelligence/"
+      min_tests_pass: 1
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # SUB-PHASE FINAL — CORE-064 Close + Smoke Gate + cortex-master.yaml update
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-80-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-80-g"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED; ALL GAPs in sweep_catalogue CLOSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥ baseline smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "Verify ALL sweep_catalogue GAPs (GAP-80-01 through GAP-80-07) have status: CLOSED before smoke gate"
+        gate: "Every GAP in this file must show status: CLOSED"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run smoke gate — confirm ≥ baseline tests pass"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: |
+          1. Move phase file: cortex-registry/planning/phases/planned/phase-80-coherence-remediation.yaml
+                           → cortex-registry/planning/phases/completed/phase-80-coherence-remediation.yaml
+          2. Update cortex-master.yaml entry: status: COMPLETE, file: completed/phase-80-coherence-remediation.yaml
+          3. Verify cortex-master.yaml ≤ 500 lines
+          4. Validate YAML: python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml')); print('YAML valid')\""
+        blocker: "Do NOT close phase without cortex-master.yaml update and YAML validation"
+
+    acceptance_criteria:
+      - "ALL 7 sweep_catalogue GAPs have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke — passes ≥ baseline"
+      - "Zero new test failures vs baseline"
+      - "phase-80 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry: status: COMPLETE"
+      - "cortex-master.yaml ≤ 500 lines (THIN INDEX CONTRACT)"
+      - "cortex-master.yaml YAML valid"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-80-COHERENCE-REMEDIATION-2026-02-25"
+  complete: "AC_COMPLETE: AC-80-COHERENCE-REMEDIATION-2026-02-25 ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ESTIMATED ROI SUMMARY
+# ─────────────────────────────────────────────────────────────────────────────
+roi_summary:
+  gap_01_master_split:
+    effort: HIGH
+    impact: CRITICAL
+    rationale: "5,222-line God Object blocks all future architectural evolution; reduces cognitive load for every contributor"
+  gap_02_knowledge_index:
+    effort: LOW
+    impact: HIGH
+    rationale: "KnowledgeRepository crashes at instantiation; blocking an entire knowledge subsystem with a one-line guard fix"
+  gap_03_result_types:
+    effort: LOW
+    impact: HIGH
+    rationale: "ABC contract violation produces silent runtime confusion; 4-line fix per method"
+  gap_04_duplicate_classes:
+    effort: MEDIUM
+    impact: HIGH
+    rationale: "4×SynthesisResult + 22×ValidationResult = fragmented state channels; unification required for coherent brain"
+  gap_05_ac_markers:
+    effort: MEDIUM
+    impact: HIGH
+    rationale: "Observability pipeline is completely dark (0 rows in audit tables); required for CORE-064 convergence claims"
+  gap_06_enforcement_singleton:
+    effort: LOW
+    impact: MEDIUM
+    rationale: "O(N) instantiations per request; trivial lru_cache fix with outsized latency benefit at scale"
+  gap_07_knowledge_facade:
+    effort: MEDIUM
+    impact: CRITICAL
+    rationale: "5 uncoordinated knowledge entry points prevent 'single cohesive brain' goal; canonical synthesize() closes this"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAPS REVIEWED BUT NOT ACCEPTED
+# ─────────────────────────────────────────────────────────────────────────────
+rejected_gaps:
+  - title: "27-vs-41 orchestrator count narrative inconsistency"
+    severity: P2
+    reason: |
+      The 14 additional wiring.yaml entries (health, validation_extended, strategies, git,
+      intelligence, synthesis, workflow tiers) are legitimate orchestrators that were added
+      post-phase-27 documentation. Updating docs to say 41 risks cascading prompt/agent
+      coherence issues. The right fix is a documentation-only VACUUM pass, not a code change.
+      Deferred to: next /vacuum run (VacuumOrchestrator Stage 5).
+# AC_COMPLETE: AC-80-COHERENCE-REMEDIATION-2026-02-25 ✅

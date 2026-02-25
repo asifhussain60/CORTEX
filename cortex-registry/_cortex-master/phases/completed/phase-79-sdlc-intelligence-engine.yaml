@@ -1,0 +1,633 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# Phase 79: SDLC Intelligence Engine — Workflow Templates, Knowledge, Response Blocks
+# ═══════════════════════════════════════════════════════════════════════════════
+# Authority:  cortex-master.yaml v23.0 (thin index) + CORE-064 (sweep completeness)
+# Template:   cortex-registry/planning/phases/_template.yaml
+# Created:    2026-02-25
+# Status:     PLANNED
+# Sweep ID:   SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+# Source:     chat01.md Session 1 (SDLC Intelligence Engine 3-layer architecture)
+#             + chat01.md digest Session 2 (restructured pending phases)
+#
+# RATIONALE:
+#   Chat01 Session 1 designed an SDLC Intelligence Engine (3-layer architecture)
+#   but never created phase files for it. The existing pending phases focus on
+#   internal cleanup (77), brain wiring (78), and capability inventory (75). None
+#   create the SDLC workflow templates or response templates the original vision
+#   described. This phase fills that gap.
+#
+#   Phase-74 (Stack Builder) absorbed as sub-phase 79-E (stack-aware template
+#   selection is part of SDLC templates). Phase-74 archived.
+#
+# 3-LAYER ARCHITECTURE:
+#   Layer 1: SDLC Knowledge Corpus (YAML-first, cortex-registry/knowledge/sdlc/)
+#   Layer 2: SDLC Workflow Templates (reusable, composable, cortex-registry/workflows/templates/sdlc/)
+#   Layer 3: Orchestration Integration (SDLCWorkflowOrchestrator + response blocks)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+id: phase-79
+title: "SDLC Intelligence Engine — Workflow Templates, Knowledge, Response Blocks"
+priority: P1
+status: COMPLETE
+completed: "2026-02-25"
+sweep_id: SWEEP-79-SDLC-INTELLIGENCE-ENGINE
+created: "2026-02-25"
+author: "CORTEX Architect"
+absorbs: "phase-74 (Stack Builder — absorbed as sub-phase 79-E)"
+
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+background: |
+  Source: chat01.md Session 1 — SDLC Intelligence Engine architecture recommendation
+  Score at entry: 0% SDLC coverage (no analysis/design/review templates exist)
+  Target score: 100% SDLC lifecycle coverage
+  Baseline measurements:
+    - Smoke tests: 1,211 passed
+    - Existing SDLC workflow templates: 0
+    - Existing SDLC knowledge YAMLs: 0 (migration + operational patterns exist but not SDLC)
+    - Existing analysis/design response blocks: 0
+    - Existing workflow templates total: 63 across 15 categories
+    - Existing knowledge YAMLs total: 44 across 11 domains
+  Git prerequisite: phase-78-final smoke gate passed
+  Company context: company/domains/ (API standards, security standards, payment security)
+                   company/infrastructure/ (topology, schema)
+                   These MUST be factored into analysis, design, testing, security templates
+
+# ── END-TO-END FLOW (How it all works together) ──────────────────────────────
+#
+# User Request → MasterOrchestrator
+#   → LENS analysis + company/ + cortex-registry/ synthesis
+#   → IntentRouter classifies (IMPLEMENT/FIX/REFACTOR/DESIGN/ANALYZE/etc.)
+#   → SDLCWorkflowOrchestrator selects best workflow template
+#     → WorkflowTemplateRegistry resolves placeholders from knowledge/sdlc/
+#     → StepStateMachine (FSM) enforces step ordering
+#     → Each step has convergence_gate (detect-fix-rescan-loop)
+#     → UniversalLearningLoop captures patterns
+#   → Git checkpoint before work, commit after all gates pass
+#   → Response rendered using BLOCK-ANALYSIS or BLOCK-CODE-REVIEW template
+#   → NEVER pushed — user must explicitly request push
+#
+# SELF-IMPROVING INTELLIGENCE:
+#   1. UniversalLearningLoop captures patterns → writes to knowledge/best-practices/
+#   2. KnowledgeSynthesizer generates new YAML knowledge artifacts from patterns
+#   3. WorkflowTemplateRegistry is mode-aware — templates added as YAML, no code changes
+#   4. detect-fix-rescan-loop primitive = universal convergence mechanism
+#
+# FUTURE NEEDS (zero Python code changes):
+#   - New test strategy → knowledge/sdlc/new-strategy.yaml + update INDEX.yaml
+#   - New workflow → workflows/templates/sdlc/new-workflow.yaml referencing primitives
+#   - New response block → append to cortex-response-templates.md
+#   - New company standard → company/domains/your-domain.yaml
+# ──────────────────────────────────────────────────────────────────────────────
+
+# ── GAP CATALOGUE ─────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── SUB-PHASE 79-A: SDLC Knowledge YAMLs (Layer 1) ────────────────────────
+
+  - id: GAP-79-A-01
+    title: "Create knowledge/sdlc/analysis-design-patterns.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 1"
+    description: |
+      Requirements analysis → architecture decision patterns.
+      Must include: problem decomposition, domain modeling, ADR templates,
+      trade-off analysis matrices. Company context: API design standards,
+      infrastructure topology constraints.
+    action: "Create YAML with company_context block referencing company/domains/"
+    status: CLOSED
+
+  - id: GAP-79-A-02
+    title: "Create knowledge/sdlc/test-strategy-selection.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 1"
+    description: |
+      Which tests (unit/integration/regression/perf/security/e2e) for which
+      scenarios. Decision tree: feature type → risk profile → test categories.
+      Must reference tdd-best-practices.yaml test_strategy_matrix.
+    action: "Create YAML with decision tree and integration refs via INDEX.yaml"
+    status: CLOSED
+
+  - id: GAP-79-A-03
+    title: "Create knowledge/sdlc/code-review-checklist.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 1"
+    description: |
+      Automated review criteria: DRY, SOLID, security, performance, API contracts.
+      Must reference code-review.yaml severity matrix. Company context: payment
+      security PCI-DSS, API versioning standards.
+    action: "Create YAML with review gate criteria and company_context block"
+    status: CLOSED
+
+  - id: GAP-79-A-04
+    title: "Create knowledge/sdlc/integration-strategy.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 1"
+    description: |
+      Integration test design patterns: contract testing, consumer-driven contracts,
+      service virtualization, test doubles hierarchy. Company context: API endpoints,
+      database connection patterns from infrastructure/topology.yaml.
+    action: "Create YAML with company_context block referencing infrastructure schema"
+    status: CLOSED
+
+  - id: GAP-79-A-05
+    title: "Create knowledge/sdlc/security-by-design.yaml"
+    severity: P1
+    source: "chat01.md enhanced vision"
+    description: |
+      Shift-left security patterns: threat modeling at design phase, STRIDE/DREAD
+      analysis templates, security requirements traceability. Must reference
+      secure-coding-practices.yaml OWASP mitigations and company/domains/security-standards.yaml.
+    action: "Create YAML with threat modeling templates and company_context"
+    status: CLOSED
+
+  - id: GAP-79-A-06
+    title: "Create knowledge/sdlc/documentation-strategy.yaml"
+    severity: P1
+    source: "chat01.md enhanced vision (all SDLC aspects)"
+    description: |
+      Documentation best practices: API docs (OpenAPI), architecture decision records,
+      runbooks, incident playbooks, README standards. CORTEX-specific: CORE-012
+      docstrings, CORE-002 inline output, knowledge YAML as living documentation.
+    action: "Create YAML with doc types and quality gates"
+    status: CLOSED
+
+  # ── SUB-PHASE 79-B: SDLC Workflow Templates (Layer 2) ─────────────────────
+
+  - id: GAP-79-B-01
+    title: "Create workflows/templates/sdlc/requirements-analysis.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 2"
+    description: |
+      Analysis workflow: LENS scan → domain decomposition → scope determination →
+      challenge-first validation. Uses primitives: lens-ast-scan, intelligence-injection.
+      knowledge_context resolves from sdlc/analysis-design-patterns.yaml.
+    action: "Create composite workflow template using existing primitives"
+    status: CLOSED
+
+  - id: GAP-79-B-02
+    title: "Create workflows/templates/sdlc/solution-design.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 2"
+    description: |
+      Design workflow: pattern selection → architecture decision → trade-off analysis →
+      ADR generation. Uses primitives: lens-ast-scan, duplicate-detection.
+      knowledge_context resolves from sdlc/analysis-design-patterns.yaml + security-by-design.yaml.
+    action: "Create composite workflow template with ADR output format"
+    status: CLOSED
+
+  - id: GAP-79-B-03
+    title: "Create workflows/templates/sdlc/implementation-execution.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 2"
+    description: |
+      Build workflow: wraps existing tdd-feature-implementation.yaml as composite.
+      Adds: git checkpoint before work, knowledge_context from sdlc/ YAMLs,
+      company standards injection, security-by-design gate.
+    action: "Create composite workflow referencing tdd-feature-implementation"
+    status: CLOSED
+
+  - id: GAP-79-B-04
+    title: "Create workflows/templates/sdlc/code-review-gate.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 2"
+    description: |
+      Review workflow: automated code review → findings report → severity classification
+      → fix-or-accept decision gate. Uses: detect-fix-rescan-loop + regression-test.
+      knowledge_context from sdlc/code-review-checklist.yaml.
+    action: "Create composite workflow with review findings output"
+    status: CLOSED
+
+  - id: GAP-79-B-05
+    title: "Create workflows/templates/sdlc/integration-verification.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 2"
+    description: |
+      Test workflow: integration tests → regression pass → coverage gate → report.
+      Uses: regression-test + test-quality-enforcement primitives.
+      knowledge_context from sdlc/integration-strategy.yaml + test-strategy-selection.yaml.
+    action: "Create composite workflow for integration + regression verification"
+    status: CLOSED
+
+  - id: GAP-79-B-06
+    title: "Create workflows/templates/sdlc/security-assessment.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 2"
+    description: |
+      Security workflow: STRIDE threat model → OWASP check → vulnerability scan →
+      remediation plan. Uses: security-hardening + threat-model-analysis primitives.
+      knowledge_context from sdlc/security-by-design.yaml + secure-coding-practices.yaml.
+    action: "Create composite workflow for security assessment pipeline"
+    status: CLOSED
+
+  - id: GAP-79-B-07
+    title: "Create workflows/templates/sdlc/release-readiness.yaml"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 2"
+    description: |
+      Release workflow: holistic verification → audit gate → documentation check →
+      deployment readiness. Uses: audit-fix-pipeline (composite).
+      Convergence gate: all P0/P1 issues resolved before release.
+    action: "Create composite workflow for release readiness verification"
+    status: CLOSED
+
+  # ── SUB-PHASE 79-C: Response Blocks (Layer 3 — Rendering) ─────────────────
+
+  - id: GAP-79-C-01
+    title: "Create BLOCK-ANALYSIS response template"
+    severity: P1
+    source: "chat01.md Session 2"
+    description: |
+      Renders when: INVESTIGATE/ANALYZE mode. Format: hypothesis table with evidence
+      links, root cause analysis, impact assessment, recommended actions.
+      Appended to cortex-response-templates.md.
+    action: "Append BLOCK-ANALYSIS to cortex-response-templates.md"
+    status: CLOSED
+
+  - id: GAP-79-C-02
+    title: "Create BLOCK-DESIGN-DECISION response template"
+    severity: P1
+    source: "chat01.md Session 2"
+    description: |
+      Renders when: DESIGN mode. Format: ADR-style comparison table with alternatives,
+      trade-off matrix, decision rationale, implementation plan.
+    action: "Append BLOCK-DESIGN-DECISION to cortex-response-templates.md"
+    status: CLOSED
+
+  - id: GAP-79-C-03
+    title: "Create BLOCK-CODE-REVIEW response template"
+    severity: P1
+    source: "chat01.md Session 2"
+    description: |
+      Renders when: REFACTOR/FIX completion. Format: inline findings table with
+      severity (P0-P3), file path, line range, recommendation, fix status.
+    action: "Append BLOCK-CODE-REVIEW to cortex-response-templates.md"
+    status: CLOSED
+
+  - id: GAP-79-C-04
+    title: "Create BLOCK-SECURITY-ASSESSMENT response template"
+    severity: P1
+    source: "chat01.md Session 2"
+    description: |
+      Renders when: security audit. Format: threat model with STRIDE categories,
+      OWASP mapping, severity classification, remediation with timeline.
+    action: "Append BLOCK-SECURITY-ASSESSMENT to cortex-response-templates.md"
+    status: CLOSED
+
+  # ── SUB-PHASE 79-D: Orchestrator Integration (Layer 3 — Runtime) ──────────
+
+  - id: GAP-79-D-01
+    title: "Create SDLCWorkflowOrchestrator in cortex/orchestrators/domain/"
+    severity: P1
+    source: "chat01.md Session 1 — Layer 3"
+    description: |
+      Single new orchestrator that:
+        - Receives classified intent from MasterOrchestrator
+        - Selects best SDLC workflow template from WorkflowTemplateRegistry
+        - Hydrates template with knowledge_context from knowledge/sdlc/ YAMLs
+        - Executes via WorkflowRuntime + StepStateMachine (transitions FSM)
+        - Feeds results into UniversalLearningLoop for pattern capture
+        - Renders output using appropriate BLOCK-* response template
+      Implements OrchestratorProtocolMixin. Has health_check(). Wired in domain
+      wiring spec.
+    action: "Implement SDLCWorkflowOrchestrator with TDD (RED→GREEN→REFACTOR)"
+    status: CLOSED
+
+  - id: GAP-79-D-02
+    title: "Wire SDLCWorkflowOrchestrator into MasterOrchestrator routing"
+    severity: P1
+    source: "chat01.md Session 1"
+    description: |
+      IntentRouter routes ANALYZE/DESIGN/REVIEW intents to SDLCWorkflowOrchestrator.
+      IMPLEMENT/FIX/REFACTOR continue to existing orchestrators (they use SDLC
+      templates via knowledge_context injection from Phase-78).
+    action: "Add routing rules in IntentRouter; update domain-orchestrator-wiring.yaml"
+    status: CLOSED
+
+  - id: GAP-79-D-03
+    title: "MCP exposure — cortex_workflow execute/list_sdlc operations"
+    severity: P1
+    source: "chat01.md Session 1"
+    description: |
+      Add 2 new operations to existing workflow_tools.py:
+        - op=execute: Execute SDLC workflow by ID with context
+        - op=list_sdlc: List available SDLC workflow templates
+      No new MCP tool files needed — extend existing tool.
+    action: "Add execute + list_sdlc operations to workflow_tools.py"
+    status: CLOSED
+
+  # ── SUB-PHASE 79-E: Stack-Aware Template Selection (absorbed from Phase-74)
+
+  - id: GAP-79-E-01
+    title: "Stack-aware knowledge_context resolution in workflow templates"
+    severity: P2
+    source: "phase-74 (absorbed)"
+    description: |
+      WorkflowTemplateRegistry resolves knowledge_context placeholders. Currently
+      resolves from knowledge/ domain. Should also resolve stack-specific overrides
+      when TechStackAnalyzer detects a known stack (Python/TypeScript/C#/.NET).
+      NOT the full StackBuilder ABC from phase-74 — just knowledge_context resolution.
+    action: "Add stack detection → knowledge_context override in WorkflowTemplateRegistry"
+    status: CLOSED
+
+  - id: GAP-79-E-02
+    title: "Create knowledge/sdlc/stack-specific/ directory with 4 initial stack YAMLs"
+    severity: P2
+    source: "phase-74 (absorbed)"
+    description: |
+      Stack-specific knowledge overrides:
+        - python-stack.yaml (pytest, ruff, mypy, FastAPI/Django patterns)
+        - typescript-stack.yaml (jest/vitest, eslint, tsc, React/Next patterns)
+        - dotnet-stack.yaml (xunit/nunit, roslyn analyzers, ASP.NET patterns)
+        - html-css-stack.yaml (playwright, pa11y, lighthouse, WCAG patterns)
+      Each overrides knowledge_context placeholders when stack is detected.
+    action: "Create 4 stack YAML files with template-compatible structure"
+    status: CLOSED
+
+  # ── SUB-PHASE 79-F: INDEX.yaml + Git Integration ──────────────────────────
+
+  - id: GAP-79-F-01
+    title: "Update INDEX.yaml with sdlc domain (6 knowledge YAMLs)"
+    severity: P1
+    source: "INDEX.yaml maintenance"
+    description: |
+      Add sdlc: domain to INDEX.yaml with 6 knowledge YAML entries and keywords.
+      Add sdlc/stack-specific/ entries with stack keywords.
+    action: "Add sdlc domain to INDEX.yaml; validate with yaml.safe_load()"
+    status: CLOSED
+
+  - id: GAP-79-F-02
+    title: "Git checkpoint/commit gate integration in SDLC workflows"
+    severity: P1
+    source: "chat01.md Session 1 — Step 4"
+    description: |
+      All SDLC workflow templates must:
+        1. Create git checkpoint (stash or branch) BEFORE any code changes
+        2. Commit ONLY after all convergence gates pass
+        3. NEVER push to origin — user must explicitly request push
+      Wire GitOrchestrator checkpoint into implementation-execution.yaml template.
+    action: "Add git checkpoint steps to SDLC workflow templates"
+    status: CLOSED
+
+# ── SUB-PHASES ────────────────────────────────────────────────────────────────
+sub_phases:
+
+  - id: phase-79-a
+    title: "SDLC Knowledge Corpus — 6 knowledge YAMLs"
+    depends_on: ["phase-78-final"]
+    gaps: [GAP-79-A-01, GAP-79-A-02, GAP-79-A-03, GAP-79-A-04, GAP-79-A-05, GAP-79-A-06]
+    tdd_cycle:
+      red:
+        action: |
+          Write tests:
+            1. test_sdlc_knowledge_yamls_exist — assert all 6 YAML files exist
+            2. test_sdlc_knowledge_yaml_structure — assert each has: overview, best_practices, company_context
+            3. test_sdlc_knowledge_extractable — assert KnowledgeSynthesisEngine extracts practices from each
+            4. test_sdlc_keyword_resolution — assert INDEX.yaml keyword fallback resolves ANALYZE/DESIGN intents to sdlc/ YAMLs
+        gate: "All 4 tests FAIL"
+      green:
+        action: |
+          Create 6 knowledge YAMLs in cortex-registry/knowledge/sdlc/:
+            - analysis-design-patterns.yaml
+            - test-strategy-selection.yaml
+            - code-review-checklist.yaml
+            - integration-strategy.yaml
+            - security-by-design.yaml
+            - documentation-strategy.yaml
+          Each with: overview, best_practices, company_context referencing company/domains/
+        gate: "All 4 tests PASS"
+      refactor:
+        action: "YAML validation (zero parse errors); verify no version fields; verify company_context blocks"
+        gate: "python3 scripts/run_tests.py smoke — ≥ 1,211"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1211
+      zero_new_failures: true
+
+  - id: phase-79-b
+    title: "SDLC Workflow Templates — 7 composable templates"
+    depends_on: [phase-79-a]
+    gaps: [GAP-79-B-01, GAP-79-B-02, GAP-79-B-03, GAP-79-B-04, GAP-79-B-05, GAP-79-B-06, GAP-79-B-07]
+    tdd_cycle:
+      red:
+        action: |
+          Write tests:
+            1. test_sdlc_workflow_templates_exist — assert all 7 YAML files exist
+            2. test_sdlc_workflow_structure — assert each has: workflow.steps, convergence_loop, knowledge_context
+            3. test_sdlc_workflow_primitive_refs — assert all template_ref values point to existing primitives
+            4. test_sdlc_workflow_registerable — assert WorkflowTemplateRegistry loads each template
+            5. test_sdlc_workflow_composability — assert each can be composed into composite pipeline
+        gate: "All 5 tests FAIL"
+      green:
+        action: |
+          Create 7 workflow templates in cortex-registry/workflows/templates/sdlc/:
+            - requirements-analysis.yaml
+            - solution-design.yaml
+            - implementation-execution.yaml
+            - code-review-gate.yaml
+            - integration-verification.yaml
+            - security-assessment.yaml
+            - release-readiness.yaml
+          Each references existing primitives via template_ref — ZERO new Python code.
+        gate: "All 5 tests PASS"
+      refactor:
+        action: "YAML validation; verify all primitives exist; verify knowledge_context keys match INDEX.yaml"
+        gate: "python3 scripts/run_tests.py smoke — ≥ 1,211"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1211
+      zero_new_failures: true
+
+  - id: phase-79-c
+    title: "Response Blocks — 4 new rendering templates"
+    depends_on: [phase-79-b]
+    gaps: [GAP-79-C-01, GAP-79-C-02, GAP-79-C-03, GAP-79-C-04]
+    tdd_cycle:
+      red:
+        action: |
+          Write tests:
+            1. test_response_template_blocks_exist — assert BLOCK-ANALYSIS, BLOCK-DESIGN-DECISION,
+               BLOCK-CODE-REVIEW, BLOCK-SECURITY-ASSESSMENT present in cortex-response-templates.md
+            2. test_response_template_structure — assert each block has header, section definitions,
+               rendering rules, example output
+        gate: "All 2 tests FAIL"
+      green:
+        action: "Append 4 new BLOCK-* sections to .github/templates/cortex-response-templates.md"
+        gate: "All 2 tests PASS"
+      refactor:
+        action: "Verify no duplicate blocks; verify cross-references to workflow templates"
+        gate: "python3 scripts/run_tests.py smoke — ≥ 1,211"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1211
+      zero_new_failures: true
+
+  - id: phase-79-d
+    title: "SDLCWorkflowOrchestrator — Runtime integration"
+    depends_on: [phase-79-c]
+    gaps: [GAP-79-D-01, GAP-79-D-02, GAP-79-D-03]
+    tdd_cycle:
+      red:
+        action: |
+          Write golden tests:
+            1. test_sdlc_orchestrator_importable — assert SDLCWorkflowOrchestrator importable
+            2. test_sdlc_orchestrator_health_check — assert health_check() returns healthy
+            3. test_sdlc_orchestrator_template_selection — assert correct template selected for intent
+            4. test_sdlc_orchestrator_knowledge_injection — assert knowledge_context from sdlc/ YAMLs
+            5. test_sdlc_routing_from_master — assert IntentRouter routes ANALYZE/DESIGN to SDLC
+            6. test_sdlc_mcp_execute — assert cortex_workflow op=execute works
+            7. test_sdlc_mcp_list — assert cortex_workflow op=list_sdlc returns 7 templates
+        gate: "All 7 tests FAIL"
+      green:
+        action: |
+          1. Implement SDLCWorkflowOrchestrator in cortex/orchestrators/domain/sdlc_workflow_orchestrator.py
+             - Inherits OrchestratorProtocolMixin
+             - Selects template from WorkflowTemplateRegistry
+             - Hydrates with KnowledgeSynthesisEngine
+             - Executes via WorkflowRuntime + StepStateMachine
+             - Records patterns via UniversalLearningLoop
+          2. Wire in IntentRouter — ANALYZE/DESIGN → SDLCWorkflowOrchestrator
+          3. Add execute + list_sdlc operations to workflow_tools.py
+          4. Update domain-orchestrator-wiring.yaml
+        gate: "All 7 golden tests PASS"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), dedup check (CORE-035)"
+        gate: "python3 scripts/run_tests.py smoke — ≥ 1,211"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1211
+      zero_new_failures: true
+
+  - id: phase-79-e
+    title: "Stack-Aware Template Selection (absorbed from Phase-74)"
+    depends_on: [phase-79-d]
+    gaps: [GAP-79-E-01, GAP-79-E-02]
+    tdd_cycle:
+      red:
+        action: |
+          Write tests:
+            1. test_stack_detection_injects_knowledge — assert Python stack detected → python-stack.yaml used
+            2. test_stack_yamls_exist — assert 4 stack YAML files exist
+            3. test_stack_override_resolution — assert stack-specific knowledge overrides generic
+        gate: "All 3 tests FAIL"
+      green:
+        action: |
+          1. Create knowledge/sdlc/stack-specific/ directory with 4 YAMLs
+          2. Add TechStackAnalyzer detection → knowledge_context override in WorkflowTemplateRegistry
+        gate: "All 3 tests PASS"
+      refactor:
+        action: "YAML validation; verify stack detection thresholds"
+        gate: "python3 scripts/run_tests.py smoke — ≥ 1,211"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1211
+      zero_new_failures: true
+
+  - id: phase-79-f
+    title: "INDEX.yaml Update + Git Integration + Wiring Finalization"
+    depends_on: [phase-79-e]
+    gaps: [GAP-79-F-01, GAP-79-F-02]
+    tdd_cycle:
+      red:
+        action: |
+          Write tests:
+            1. test_index_sdlc_domain — assert INDEX.yaml has sdlc domain with 6+ entries
+            2. test_sdlc_workflow_git_checkpoint — assert implementation-execution creates git checkpoint
+            3. test_sdlc_workflow_no_auto_push — assert no workflow pushes to origin
+        gate: "All 3 tests FAIL"
+      green:
+        action: |
+          1. Update INDEX.yaml with sdlc domain (6 knowledge + 4 stack entries)
+          2. Add git checkpoint steps to implementation-execution.yaml + code-review-gate.yaml
+          3. Verify push-on-request-only policy in all SDLC templates
+        gate: "All 3 tests PASS"
+      refactor:
+        action: "YAML validation; verify INDEX.yaml ≤ 300 lines; verify no version fields"
+        gate: "python3 scripts/run_tests.py smoke — ≥ 1,211"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1211
+      zero_new_failures: true
+
+  - id: phase-79-final
+    title: "Phase-79 Final Gate — SDLC Engine fully operational"
+    depends_on: [phase-79-f]
+    gaps: []
+    tdd_cycle:
+      red:
+        action: "Verify all 22 GAPs in SWEEP-79 are CLOSED (CORE-064)"
+        gate: "All 22 GAPs show status: CLOSED"
+      green:
+        action: |
+          Run full verification:
+            - All 7 SDLC workflow templates loadable by WorkflowTemplateRegistry
+            - All 6 SDLC knowledge YAMLs extractable by KnowledgeSynthesisEngine
+            - SDLCWorkflowOrchestrator health_check() returns healthy
+            - MCP operations execute + list_sdlc functional
+            - 4 response blocks present in cortex-response-templates.md
+          Update cortex-master.yaml: status → COMPLETE, file → completed/
+          Move this file: planned/ → completed/
+        gate: "python3 scripts/run_tests.py smoke — ≥ 1,211"
+      refactor:
+        action: "Verify cortex-master.yaml ≤ 500 lines"
+        gate: "wc -l cortex-registry/cortex-master.yaml — ≤ 500"
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1211
+      zero_new_failures: true
+
+# ── ACCEPTANCE CRITERIA ───────────────────────────────────────────────────────
+acceptance_criteria:
+  - "6 SDLC knowledge YAMLs in knowledge/sdlc/ — each with company_context"
+  - "7 SDLC workflow templates in workflows/templates/sdlc/ — all composable"
+  - "4 stack-specific knowledge YAMLs in knowledge/sdlc/stack-specific/"
+  - "4 new BLOCK-* response templates in cortex-response-templates.md"
+  - "SDLCWorkflowOrchestrator implemented, wired, health_check() passing"
+  - "IntentRouter routes ANALYZE/DESIGN to SDLCWorkflowOrchestrator"
+  - "MCP: cortex_workflow op=execute and op=list_sdlc operational"
+  - "Git checkpoint before work, commit after gates, never auto-push"
+  - "INDEX.yaml updated with sdlc domain — keyword resolution verified"
+  - "Smoke tests ≥ 1,211 at every sub-phase boundary"
+  - "All 22 GAPs show status: CLOSED"
+
+# ── TEAM COLLABORATION — CENTRALIZED INTELLIGENCE ────────────────────────────
+team_collaboration:
+  knowledge_sharing:
+    - mechanism: "Knowledge YAMLs in cortex-registry/knowledge/"
+      sharing_model: "Git PR-reviewed, team-editable"
+    - mechanism: "Workflow templates in cortex-registry/workflows/templates/"
+      sharing_model: "Composable, overrideable via company/"
+    - mechanism: "Company overrides in cortex-registry/company/"
+      sharing_model: "Team-specific standards layer on top of defaults"
+    - mechanism: "Decision history in .cortex-runtime/traces/orchestrator-traces.db"
+      sharing_model: "SQLite — queryable audit trail"
+    - mechanism: "Capability manifest in capabilities-manifest.yaml"
+      sharing_model: "Auto-generated by Phase-75 CapabilityRegistryBuilder"
+
+# ── RISK REGISTER ─────────────────────────────────────────────────────────────
+risks:
+  - id: RISK-79-01
+    description: "SDLC workflow templates reference primitives that may change in future phases"
+    mitigation: "Templates use template_ref with stable IDs; primitive interface is versioned"
+    severity: LOW
+
+  - id: RISK-79-02
+    description: "SDLCWorkflowOrchestrator adds another orchestrator to the wired count (28)"
+    mitigation: "Single focused orchestrator, inherits OrchestratorProtocolMixin, has health_check()"
+    severity: LOW
+
+  - id: RISK-79-03
+    description: "Stack-specific knowledge overrides may conflict with generic knowledge"
+    mitigation: "Override precedence: stack-specific > domain-specific > generic; documented in INDEX.yaml"
+    severity: MEDIUM
+
+  - id: RISK-79-04
+    description: "Response template blocks may not render correctly in all Copilot Chat environments"
+    mitigation: "All blocks use standard Markdown tables/code blocks — tested in VS Code Copilot Chat"
+    severity: LOW

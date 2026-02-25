@@ -1,0 +1,590 @@
+id: phase-63
+title: "Golden Test Renaissance — Trace-Verified E2E + Scorer + Simplification"
+version: "1.0"
+created: "2026-02-24"
+status: ACTIVE
+priority: P0
+governance_authority:
+  - CORE-008  # TDD mandatory
+  - CORE-035  # Single canonical implementation — no duplicates
+  - CORE-049  # Silent autonomous execution
+  - CORE-064  # Sweep Completeness Contract — ALL 7 gaps, no partial
+sweep_catalogue_id: SWEEP-63-GOLDEN-RENAISSANCE
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source reviews: _workspaces/recommend/copilot-review04.md (gaps 1-5 carry-forward)
+                  _workspaces/recommend/copilot-review05.md (score 7.3/10 baseline)
+                  Chat session 2026-02-24 — golden test sprawl audit
+  Baseline:
+    Smoke: 1,388 passed
+    Golden tests: 60 files, 720 methods
+    Root-level sprawl: 24 uncategorized files (tests/golden/*.py with no subfolder)
+    Workflow template golden coverage: 1.7% (1 file, schema-only)
+    TestQualityGate: 0 workflow/trace/response signals
+    Legacy construct refs: 8 files (CCL, brain_tier, double-dot imports)
+    Trivial assert ratio: 30% (214/720 assertions)
+  Git prerequisite: git merge origin/CORTEX clean (confirmed 2026-02-24)
+  Score at entry: 7.3 / 10
+  Target score:   8.5 / 10
+  Simplification mandate: "Depth not breadth — wire what is already built."
+    — copilot-review04.md
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (folded from reviews 04 + 05 + chat session 2026-02-24)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: GAP-63-01
+    title: "24 root-level golden test files — no subfolder categorization"
+    severity: P1
+    source: "chat session 2026-02-24 sprawl audit"
+    evidence: |
+      find tests/golden -maxdepth 1 -name 'test_*' | wc -l → 24.
+      No domain grouping. xdist worker assignment cannot scope by domain.
+    action_ref: phase-63-a
+    status: OPEN
+
+  - id: GAP-63-02
+    title: "8 golden test files reference deleted/legacy constructs"
+    severity: P1
+    source: "grep audit 2026-02-24"
+    evidence: |
+      test_post_phase3_reconciliation.py: CCL, cortex_intelligence as active tests
+      test_brain_tier_architecture_truth.py: 'brain tier' architecture (dissolved Phase 54)
+      test_ado_brain_synthesis_truth.py: nested double-path import cortex.intelligence.domain_brain.domain_brain
+      test_tier_system_integration_truth.py: brain_tier_pusher refs (lines 269, 291, 324)
+      test_cortex_intelligence_yaml_audit.py: 1,609L monolith with overlapping coverage
+      test_cortex_registry_yaml_audit.py: 1,657L monolith with overlapping coverage
+      test_cig_orchestrator_pipeline.py: 7 AC_START markers, zero AC_COMPLETE assertions
+      test_memory_tier_operations_truth.py: no workflow template integration
+    action_ref: phase-63-b
+    status: OPEN
+
+  - id: GAP-63-03
+    title: "TestQualityGate scorer blind to workflow templates, response rendering, trace chains"
+    severity: P1
+    source: "quality_gate.py + test-quality-gate.yaml audit 2026-02-24"
+    evidence: |
+      Missing: workflow_template_consumption (+1 impact)
+      Missing: response_template_rendering (+1 impact)
+      Missing: trace_chain_verification (+1 detection)
+      Missing: scenario_yaml_driven (+1 likelihood)
+      Result: tests verifying trace chains score same as trivial import tests
+    action_ref: phase-63-c
+    status: OPEN
+
+  - id: GAP-63-04
+    title: "Zero golden test coverage of workflow template E2E execution or response rendering"
+    severity: P1
+    source: "workflow/ audit 2026-02-24"
+    evidence: |
+      58 workflow templates in registry. 1 golden test file (schema-only).
+      0 tests verify trace chain: MasterOrchestrator → IntentRouter → WorkflowTemplate.load() → AC_COMPLETE.
+      0 tests verify response rendering produces 5-section golden format.
+      S21-S25 holistic scenario DOD items are aspirational YAML — not Python-enforced.
+    action_ref: phase-63-d
+    status: OPEN
+
+  - id: GAP-63-05
+    title: "Domain-tier LENS calls still conditional / stub returns (carry-forward GAP-62-05)"
+    severity: P1
+    source: "copilot-review04.md GAP 4, copilot-review05.md Gap 5"
+    evidence: |
+      PlanningOrchestrator._extract_lens_context() → returns {}
+      RefactoringOrchestrator LENS call inside try/except ImportError
+      Cross-cutting LENS utilization: ~38% (target: 85%)
+    action_ref: phase-63-e
+    status: OPEN
+
+  - id: GAP-63-06
+    title: "Workflow template duplicates: backend/ and composites/backend/ mirror each other"
+    severity: P2
+    source: "workflow template audit 2026-02-24"
+    evidence: |
+      backend/csharp-refactor-workflow.yaml ↔ composites/backend/csharp-refactor.yaml
+      backend/csharp-security-workflow.yaml ↔ composites/backend/csharp-security.yaml
+      frontend/html-refactor-validation.yaml ↔ composites/frontend/html-refactor-validation.yaml
+      composites/composed-data-pipeline-d01d9892.yaml (auto-generated artefact)
+      CORE-035 violation: two files, same purpose, different names.
+    action_ref: phase-63-e
+    status: OPEN
+
+  - id: GAP-63-07
+    title: "cortex-docs/.content missing golden test architecture and workflow template docs"
+    severity: P2
+    source: "cortex-docs/.content audit 2026-02-24"
+    evidence: |
+      No doc covers: golden test categorization structure (14 subfolders).
+      No doc covers: workflow template tier (primitive → composite → workflow).
+      No doc covers: TestQualityGate scoring algorithm v2.0.
+      No doc covers: trace-chain verification pattern.
+    action_ref: phase-63-e
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated, 5 sub-phases
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  # ── PHASE 63-A ─────────────────────────────────────────────────────────────
+  - id: phase-63-a
+    title: "Reorganize 24 root-level golden test files into 7 canonical subfolders"
+    priority: P1
+    status: PLANNED
+    gap_refs: [GAP-63-01]
+    governance_authority: "CORE-028, CORE-035"
+    duration_estimate: "4 hours"
+    prerequisite: "smoke tests green"
+    regression_gate: "make test-batch — zero new failures after all moves"
+
+    target_structure:
+      new_subfolders:
+        - path: "tests/golden/architecture/"
+          files_to_move:
+            - "test_base_class_convergence.py"
+            - "test_tier_cascade_truth.py"
+            - "test_memory_tier_operations_truth.py"
+            - "test_intelligence_propagation_truth.py"
+          files_to_rewrite_then_move:
+            - "test_brain_tier_architecture_truth.py → test_intelligence_tier_architecture.py"
+            - "test_tier_system_integration_truth.py → test_tier_integration_truth.py"
+        - path: "tests/golden/governance/"
+          files_to_move:
+            - "test_governance_tier_precedence_truth.py"
+            - "test_file_factory_enforcement.py"
+            - "test_sweep_completeness_contract_truth.py"
+          files_to_create:
+            - "test_stale_construct_absence.py"
+        - path: "tests/golden/registry/"
+          files_to_split:
+            - "test_cortex_intelligence_yaml_audit.py (1,609L) → test_intelligence_yaml_audit.py"
+            - "test_cortex_registry_yaml_audit.py (1,657L) → test_registry_yaml_audit.py"
+          files_to_move:
+            - "test_registry_expansion_truth.py"
+        - path: "tests/golden/integration/"
+          files_to_move:
+            - "test_intent_router_differentiation.py"
+            - "test_mcp_e2e_truth.py"
+            - "test_lens_full_pipeline_truth.py"
+            - "test_lens_intelligence_wiring_truth.py"
+          files_to_enhance_then_move:
+            - "test_cig_orchestrator_pipeline.py"
+        - path: "tests/golden/synthesis/"
+          files_to_move:
+            - "test_company_override_truth.py"
+            - "test_conflict_resolution_truth.py"
+            - "test_change_coherence_truth.py"
+          files_to_rewrite_then_move:
+            - "test_ado_brain_synthesis_truth.py"
+        - path: "tests/golden/audit_trail/"
+          files_to_move:
+            - "test_audit_trail_verification.py"
+          files_to_create:
+            - "test_ac_marker_completeness.py"
+
+      files_deleted_not_moved:
+        - file: "test_post_phase3_reconciliation.py"
+          reason: "CCL construct is deleted. Replaced by governance/test_stale_construct_absence.py which tests absence."
+        - file: "test_work_item_provider_truth.py"
+          reason: "Not a golden-tier concern — move to tests/unit/providers/"
+
+      existing_subfolders_unchanged:
+        - "holistic_integration/"
+        - "orchestrators/"
+        - "production/"
+        - "routing/"
+        - "regression/"
+        - "onboarding/"
+        - "knowledge_graph/"
+        - "agents/"
+        - "workflow/"
+        - "phase_27/"
+
+    tdd_sequence:
+      red:
+        - "Assert __init__.py exists in each new subfolder"
+        - "Assert moved files import cleanly (no broken relative paths)"
+        - "Assert test count unchanged after all moves (regression gate)"
+      green:
+        - "git mv tests/golden/test_<file>.py tests/golden/<subfolder>/"
+        - "Update conftest.py paths if any root-relative fixtures exist"
+        - "Update golden-test-promotion.yaml worker_groups with new paths"
+        - "Update test-quality-gate.yaml golden_dir_pattern to cover all subfolders"
+      refactor:
+        - "Update AGENT-INDEX.md + copilot-instructions.md golden test count"
+        - "Verify pytest.ini testpaths still collect all files"
+
+    acceptance_criteria:
+      - "0 test_*.py files at tests/golden/ root (exception: conftest.py)"
+      - "7 new canonical subfolders each with __init__.py"
+      - "make test-batch: zero new failures"
+      - "golden-test-promotion.yaml worker_groups updated"
+
+  # ── PHASE 63-B ─────────────────────────────────────────────────────────────
+  - id: phase-63-b
+    title: "Rewrite 8 legacy-construct golden tests from scratch"
+    priority: P1
+    status: PLANNED
+    gap_refs: [GAP-63-02]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "1 day"
+    prerequisite: "phase-63-a complete"
+    regression_gate: "make test-batch — zero new failures"
+    note: "ALL rewrites from scratch. Delete original first. No .bak, no versions. CORE-028: snake_case filenames only."
+
+    rewrites:
+      - old_file: "tests/golden/test_brain_tier_architecture_truth.py"
+        new_file: "tests/golden/architecture/test_intelligence_tier_architecture.py"
+        delete_original: true
+        rewrite_reason: "References dissolved 'brain tier' architecture (Phase 54). 425L → rewrite to test cortex/intelligence/ canonical structure."
+        new_asserts:
+          - "cortex.intelligence package importable with 8 canonical submodules"
+          - "LENSOrchestrator.analyze_file() returns non-empty result (genuine call)"
+          - "KnowledgeSynthesisEngine loads ≥30 entries via unified INDEX.yaml"
+          - "intelligence tier precedence: Tier0 > Tier1 > Tier2 enforced"
+          - "AC_START emitted by all intelligence orchestrators"
+
+      - old_file: "tests/golden/test_tier_system_integration_truth.py"
+        new_file: "tests/golden/architecture/test_tier_integration_truth.py"
+        delete_original: true
+        rewrite_reason: "brain_tier_pusher refs on lines 269, 291, 324. Dissolved construct."
+        new_asserts:
+          - "OrchestratorProtocolMixin.health_check() returns status: healthy for all 27 wired orchestrators"
+          - "Tier cascade: Tier0→Tier1→Tier2 precedence order verified via memory resolution"
+          - "No brain_tier_pusher import survives in tests/"
+
+      - old_file: "tests/golden/test_ado_brain_synthesis_truth.py"
+        new_file: "tests/golden/synthesis/test_knowledge_synthesis_truth.py"
+        delete_original: true
+        rewrite_reason: "Nested double-path: cortex.intelligence.domain_brain.domain_brain.kg_indexer. Canonical: cortex.intelligence.domain_brain.kg_indexer."
+        new_asserts:
+          - "KnowledgeIndexer importable at cortex.intelligence.domain_brain.kg_indexer (canonical)"
+          - "KnowledgeInference importable at cortex.intelligence.domain_brain.kg_inference"
+          - "KnowledgeRegistryProxy.entry_count() == 30 (11 knowledge + 19 knowledge-base)"
+          - "KGIndexer indexes entities from knowledge-base/profiles/ and repositories/"
+
+      - old_file: "tests/golden/test_post_phase3_reconciliation.py"
+        new_file: "tests/golden/governance/test_stale_construct_absence.py"
+        delete_original: true
+        rewrite_reason: "Tests CCL as an active construct. CCL is deleted. Replace with absence tests."
+        new_asserts:
+          - "No Python file imports cortex_intelligence (underscore package — deleted)"
+          - "No Python file imports cortex_lens (underscore package — deleted)"
+          - "No Python file imports from cortex.brain (dissolved package)"
+          - "No Python file references CrystallizedContext or CCL as instantiated class"
+          - "No Python file references cortex.intelligence.state as runtime path"
+          - "No YAML references _archive/ directory"
+
+      - old_file: "tests/golden/test_cortex_intelligence_yaml_audit.py"
+        new_file: "tests/golden/registry/test_intelligence_yaml_audit.py"
+        delete_original: true
+        rewrite_reason: "1,609L monolith. Split by scope. Each file ≤400L."
+        new_asserts:
+          - "cortex/intelligence/ Python files use canonical import paths"
+          - "All intelligence module __init__.py files export canonical symbols"
+          - "AC_START present in all public intelligence orchestrator methods"
+
+      - old_file: "tests/golden/test_cortex_registry_yaml_audit.py"
+        new_file: "tests/golden/registry/test_registry_yaml_audit.py"
+        delete_original: true
+        rewrite_reason: "1,657L monolith. Split by scope. Each file ≤400L."
+        new_asserts:
+          - "All workflow templates in registry have required schema fields"
+          - "All YAML paths in cortex-master.yaml resolve to real files"
+          - "No YAML references deleted paths (cortex_intelligence, _archive, cortex.brain)"
+          - "test-quality-gate.yaml version matches quality_gate.py version constant"
+
+      - old_file: "tests/golden/test_cig_orchestrator_pipeline.py"
+        new_file: "tests/golden/integration/test_cig_orchestrator_pipeline.py"
+        delete_original: true
+        rewrite_reason: "7 AC_START markers, zero AC_COMPLETE assertions. Moved to integration/. Add trace completion assertions."
+        new_asserts:
+          - "Every AC_START in pipeline has matching AC_COMPLETE in SQLite traces"
+          - "No orphaned AC_START entries after pipeline execution"
+          - "Pipeline stages execute in documented order"
+
+      - old_file: "tests/golden/test_memory_tier_operations_truth.py"
+        new_file: "tests/golden/architecture/test_memory_tier_operations_truth.py"
+        delete_original: true
+        rewrite_reason: "Pure move + add workflow template wiring assertion. 90% preserved."
+        added_asserts:
+          - "WorkflowTemplateRegistry loads without error"
+          - "At least 1 workflow template references primitives/execution/audit-trace.yaml"
+
+    acceptance_criteria:
+      - "0 files reference brain_tier_pusher, CCL, CrystallizedContext in tests/golden/"
+      - "0 import paths contain cortex.intelligence.domain_brain.domain_brain (double-dot)"
+      - "0 original legacy files remain (all deleted, not renamed)"
+      - "make test-batch: zero new failures"
+      - "Total test count does not decrease by more than 5%"
+
+  # ── PHASE 63-C ─────────────────────────────────────────────────────────────
+  - id: phase-63-c
+    title: "Enhance TestQualityGate scorer — 4 new signals for workflow/trace/response"
+    priority: P1
+    status: PLANNED
+    gap_refs: [GAP-63-03]
+    governance_authority: "CORE-008, CORE-035"
+    duration_estimate: "3 hours"
+    prerequisite: "phase-63-b complete"
+    regression_gate: "make test-batch — zero new failures; existing KEEP scores do not drop"
+
+    files_to_edit:
+      - "cortex-registry/core/test-quality-gate.yaml — add 4 signal blocks, bump version to 2.0"
+      - "cortex/testing/quality_gate.py — version bump constant only; no logic change (config-driven)"
+
+    new_signals:
+      - dimension: "impact"
+        signal_name: "workflow_template_consumption"
+        patterns:
+          - "WorkflowTemplateRegistry"
+          - "load_workflow_template"
+          - "template_id"
+          - "workflow_template_ref"
+          - "PrimitiveScanner"
+          - "TemplateComposer"
+        points: 1
+        rationale: "Tests consuming real workflow templates verify production execution paths."
+
+      - dimension: "impact"
+        signal_name: "response_template_rendering"
+        patterns:
+          - "ResponseHeaderConfig"
+          - "response_format_validator"
+          - "template_engine"
+          - "golden.*format"
+          - "five.*section"
+          - "cortex-response-templates"
+        points: 1
+        rationale: "Tests verifying VS Code Copilot Chat rendering validate the user-facing contract."
+
+      - dimension: "detection"
+        signal_name: "trace_chain_verification"
+        patterns:
+          - "AC_START.*AC_COMPLETE"
+          - "orchestrator-traces.db"
+          - "trace_chain"
+          - "assert.*audit_event"
+          - "expected_audit_events"
+          - "assert_trace_chain"
+          - "no.*orphan.*AC_START"
+        points: 1
+        rationale: "Tests verifying SQLite trace completeness catch silent orchestrator failures."
+
+      - dimension: "likelihood"
+        signal_name: "scenario_yaml_driven"
+        patterns:
+          - "execute_holistic_scenario"
+          - "ScenarioDefinition"
+          - "scenarios/S\\d+"
+          - "HolisticIntegrationHarness"
+          - "holistic_scenario"
+        points: 1
+        rationale: "YAML-driven scenario tests are more likely to catch real regressions."
+
+    tdd_sequence:
+      red:
+        - "test_scorer_rewards_workflow_template_consumption: file with WorkflowTemplateRegistry scores higher"
+        - "test_scorer_rewards_trace_chain_verification: file with assert_trace_chain scores higher"
+        - "test_scorer_rewards_response_rendering: file with ResponseHeaderConfig scores higher"
+        - "test_existing_keep_scores_unchanged: re-score all current KEEP files, assert no drops"
+      green:
+        - "Add 4 signal blocks to cortex-registry/core/test-quality-gate.yaml"
+        - "Bump version field in test-quality-gate.yaml to 2.0"
+      refactor:
+        - "Update YAML comments to document scoring intent per signal"
+
+    acceptance_criteria:
+      - "4 new signal blocks present in test-quality-gate.yaml (version: 2.0)"
+      - "All 4 scorer tests GREEN"
+      - "No existing golden test KEEP score drops below 7"
+      - "make test-batch: zero new failures"
+
+  # ── PHASE 63-D ─────────────────────────────────────────────────────────────
+  - id: phase-63-d
+    title: "New golden tests: workflow E2E trace-chain + response rendering"
+    priority: P1
+    status: PLANNED
+    gap_refs: [GAP-63-04]
+    governance_authority: "CORE-008, CORE-055"
+    duration_estimate: "1 day"
+    prerequisite: "phase-63-c complete"
+    regression_gate: "make test-batch — zero new failures; new tests GREEN"
+
+    new_files:
+      - file: "tests/golden/workflow/test_workflow_e2e_trace_golden.py"
+        purpose: "Verify 4 core intents produce complete trace chains via orchestrator-traces.db"
+        test_methods:
+          - "test_implement_intent_trace_chain"
+          - "test_fix_intent_trace_chain"
+          - "test_audit_intent_trace_chain"
+          - "test_refactor_intent_trace_chain"
+          - "test_no_orphaned_ac_start_markers"
+          - "test_workflow_template_loaded_in_trace"
+        harness: "Extends HolisticIntegrationHarness — adds assert_trace_chain(scenario_id, expected_events)"
+        db_isolation: "Uses tmp_path fixture for SQLite — no shared state between tests"
+
+      - file: "tests/golden/workflow/test_response_rendering_golden.py"
+        purpose: "Verify each intent type produces a response matching 5-Section Golden Format SSOT"
+        test_methods:
+          - "test_implement_response_has_five_sections"
+          - "test_response_header_present"
+          - "test_audit_response_has_violation_table"
+          - "test_no_report_file_created"
+          - "test_copilot_chat_inline_rendering"
+          - "test_icon_matches_intent"
+
+      - file: "tests/golden/audit_trail/test_ac_marker_completeness.py"
+        purpose: "Verify all 27 wired orchestrators emit paired AC_START/AC_COMPLETE markers"
+        test_methods:
+          - "test_all_wired_orchestrators_have_ac_start"
+          - "test_no_orphaned_ac_start_in_production_traces"
+          - "test_ac_complete_has_timing_ms"
+
+      - file: "tests/golden/governance/test_workflow_template_governance.py"
+        purpose: "Verify workflow template registry has no duplicates, dead refs, or CORE-035 violations"
+        test_methods:
+          - "test_no_duplicate_templates"
+          - "test_all_primitives_referenced_by_at_least_one_workflow"
+          - "test_all_workflow_primitive_refs_resolve"
+
+    scenario_yaml_upgrades:
+      description: "Upgrade S21-S25 holistic scenarios to include workflow_template_ref field"
+      files:
+        - "tests/golden/holistic_integration/scenarios/S21.yaml — add workflow_template_ref: tdd/tdd-feature-implementation.yaml"
+        - "tests/golden/holistic_integration/scenarios/S22.yaml — add workflow_template_ref: security/security-compliance-audit.yaml"
+        - "tests/golden/holistic_integration/scenarios/S23.yaml — add workflow_template_ref: lifecycle/onboarding-workflow.yaml"
+
+    acceptance_criteria:
+      - "4 new test files GREEN (0 failures)"
+      - "test_no_orphaned_ac_start_markers GREEN for all 4 intent chains"
+      - "test_no_report_file_created GREEN (CORE-002 enforcement)"
+      - "S21/S22/S23 scenario YAMLs include workflow_template_ref"
+      - "make test-batch: zero new failures"
+
+  # ── PHASE 63-E ─────────────────────────────────────────────────────────────
+  - id: phase-63-e
+    title: "Holistic refactor + cleanup — CORTEX linters, template dedup, docs"
+    priority: P2
+    status: PLANNED
+    gap_refs: [GAP-63-05, GAP-63-06, GAP-63-07]
+    governance_authority: "CORE-002, CORE-035, CORE-064"
+    duration_estimate: "1 day"
+    prerequisite: "phase-63-d complete"
+    regression_gate: "make test-batch — zero new failures; /audit fix exits clean"
+
+    sub_tasks:
+      - id: "63-e-1"
+        title: "Domain-tier LENS calls — remove conditional guards"
+        priority: P1
+        gap_refs: [GAP-63-05]
+        files:
+          - "cortex/orchestrators/domain/planning_orchestrator.py — _extract_lens_context() must call LENSOrchestrator.analyze_file() for real"
+          - "cortex/orchestrators/domain/refactoring_orchestrator.py — remove try/except ImportError around LENS call"
+        tool: "cortex_validate op=compliance — verify LENS import path cortex.lens (not cortex.intelligence.lens)"
+        acceptance: "PlanningOrchestrator._extract_lens_context() returns non-empty dict for real files"
+
+      - id: "63-e-2"
+        title: "Workflow template duplicate removal (CORE-035)"
+        priority: P2
+        gap_refs: [GAP-63-06]
+        action: "Delete composite mirror files, keep canonical workflow files"
+        files_to_delete:
+          - "cortex-registry/workflows/templates/composites/backend/csharp-refactor.yaml"
+          - "cortex-registry/workflows/templates/composites/backend/csharp-security.yaml"
+          - "cortex-registry/workflows/templates/composites/frontend/html-refactor-validation.yaml"
+          - "cortex-registry/workflows/templates/composites/composed-data-pipeline-d01d9892.yaml"
+        update_refs:
+          - "cortex-master.yaml workflow_templates.existing list"
+          - "README.md in templates/"
+        tool: "cortex_validate op=compliance — CORE-035 duplicate check post-deletion"
+
+      - id: "63-e-3"
+        title: "Run /audit fix convergence loop — sweep all P0/P1 violations"
+        priority: P1
+        gap_refs: []
+        action: "Execute full 9-stage audit-fix-pipeline.yaml"
+        tool: "cortex_validate op=compliance → cortex_governance op=query → detect-fix-rescan-loop"
+        acceptance: "0 P0, 0 P1 violations after loop exit (CORE-064)"
+
+      - id: "63-e-4"
+        title: "Run cortex_vacuum — markdown sprawl + root clutter"
+        priority: P2
+        gap_refs: []
+        tool: "cortex_vacuum (VacuumOrchestrator)"
+        acceptance: "0 .md files outside .github/, cortex-docs/, README.md; root dir contains only 6 canonical files"
+
+      - id: "63-e-5"
+        title: "cortex-docs/.content updates — 4 new doc files"
+        priority: P2
+        gap_refs: [GAP-63-07]
+        files_to_create:
+          - "cortex-docs/.content/07-diagrams/10-golden-test-taxonomy.md"
+          - "cortex-docs/.content/01-capabilities/09-workflow-template-tiers.md"
+          - "cortex-docs/.content/flat-files/07-diagrams-golden-test-taxonomy.md"
+          - "cortex-docs/.content/flat-files/01-capabilities-workflow-template-tiers.md"
+        acceptance:
+          - "4 new .content files present and ≥200 words each"
+          - "No new .md files created outside .github/ or cortex-docs/ (CORE-002)"
+
+      - id: "63-e-6"
+        title: "Update cortex-master.yaml metadata counters"
+        priority: P2
+        gap_refs: []
+        action: "After all sub-tasks complete, update summary counters in cortex-master.yaml"
+        fields_to_update:
+          - "metadata.completed: 63"
+          - "metadata.active: 0"
+          - "summary.production_status: Phase 63 COMPLETE"
+          - "health_status.p0_issues: 0"
+          - "health_status.p1_issues: 0"
+
+    acceptance_criteria:
+      - "PlanningOrchestrator._extract_lens_context() returns non-empty dict (genuine LENS)"
+      - "4 composite duplicate templates deleted"
+      - "/audit fix exits with 0 P0, 0 P1"
+      - "cortex_vacuum: 0 markdown sprawl violations"
+      - "4 new cortex-docs/.content files present"
+      - "cortex-master.yaml counters updated to Phase 63 COMPLETE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OPEN ITEMS FOLDED FROM PREVIOUS REVIEWS
+# ─────────────────────────────────────────────────────────────────────────────
+folded_from_reviews:
+  - review: "copilot-review05.md"
+    item: "Domain-tier LENS calls still conditional"
+    folded_into: "phase-63-e sub-task 63-e-1"
+    status: PLANNED
+
+  - review: "copilot-review04.md GAP-62-05"
+    item: "Domain-tier LENS calls return stubs"
+    folded_into: "phase-63-e sub-task 63-e-1"
+    status: PLANNED
+
+  - review: "copilot-review04.md GAP-62-07"
+    item: "MasterOrchestrator 5,094L god object"
+    folded_into: "DEFERRED — Phase 64 (post Phase 59 Track B/C orchestrator surface reduction)"
+    status: DEFERRED_TO_PHASE_64
+
+  - review: "copilot-review04.md GAP-62-08"
+    item: "68 orchestrator classes, 27 in wiring.yaml"
+    folded_into: "phase-59 (already planned)"
+    status: DEFERRED_TO_PHASE_59
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SIMPLIFICATION CONSTRAINTS
+# ─────────────────────────────────────────────────────────────────────────────
+simplification_alignment:
+  principle: "Depth not breadth — wire what is already built. No new orchestrators."
+  source: "copilot-review04.md"
+  constraints:
+    - "Phase 63-A through 63-E do not add new orchestrators"
+    - "Phase 63-B rewrites: delete-then-recreate — zero net file count increase"
+    - "Phase 63-E reduces file count by 4 (template dedup)"
+    - "All new test files are in existing golden/ subfolder structure"
+
+ac_markers:
+  start: "AC_START: AC-63-GOLDEN-RENAISSANCE-{timestamp}"
+  complete: "AC_COMPLETE: AC-63-GOLDEN-RENAISSANCE-{timestamp} ✅"
