@@ -18,7 +18,7 @@ class TestStageExecutionStrategyBase:
 
     def test_stage_context_importable(self) -> None:
         """StageContext must be importable."""
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageContext,
         )
 
@@ -26,7 +26,7 @@ class TestStageExecutionStrategyBase:
 
     def test_stage_context_creation(self) -> None:
         """StageContext must accept operation_name, parameters, metadata."""
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageContext,
         )
 
@@ -42,7 +42,7 @@ class TestStageExecutionStrategyBase:
 
     def test_stage_context_has_result_field(self) -> None:
         """StageContext must have a result field for stage output chaining."""
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageContext,
         )
 
@@ -56,7 +56,7 @@ class TestStageExecutionStrategyBase:
 
     def test_stage_execution_strategy_importable(self) -> None:
         """StageExecutionStrategy ABC must be importable."""
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageExecutionStrategy,
         )
 
@@ -64,7 +64,7 @@ class TestStageExecutionStrategyBase:
 
     def test_stage_execution_strategy_is_abstract(self) -> None:
         """StageExecutionStrategy must be an abstract base class."""
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageExecutionStrategy,
         )
         import abc
@@ -75,7 +75,7 @@ class TestStageExecutionStrategyBase:
 
     def test_stage_execution_strategy_requires_execute(self) -> None:
         """Subclasses must implement execute() method."""
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageExecutionStrategy,
             StageContext,
         )
@@ -90,7 +90,7 @@ class TestStage1ComprehensionStrategy:
 
     def test_importable(self) -> None:
         """Stage1ComprehensionStrategy must be importable."""
-        from cortex.orchestrators.strategies.stage1_comprehension_strategy import (
+        from cortex.orchestrators.core.stage1_comprehension_strategy import (
             Stage1ComprehensionStrategy,
         )
 
@@ -98,10 +98,10 @@ class TestStage1ComprehensionStrategy:
 
     def test_is_stage_execution_strategy(self) -> None:
         """Must inherit from StageExecutionStrategy."""
-        from cortex.orchestrators.strategies.stage1_comprehension_strategy import (
+        from cortex.orchestrators.core.stage1_comprehension_strategy import (
             Stage1ComprehensionStrategy,
         )
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageExecutionStrategy,
         )
 
@@ -109,10 +109,10 @@ class TestStage1ComprehensionStrategy:
 
     def test_execute_returns_result(self) -> None:
         """execute() must return a Result[StageContext]."""
-        from cortex.orchestrators.strategies.stage1_comprehension_strategy import (
+        from cortex.orchestrators.core.stage1_comprehension_strategy import (
             Stage1ComprehensionStrategy,
         )
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageContext,
         )
 
@@ -128,10 +128,10 @@ class TestStage1ComprehensionStrategy:
 
     def test_execute_adds_lens_context_to_metadata(self) -> None:
         """Stage 1 must add lens_context to metadata."""
-        from cortex.orchestrators.strategies.stage1_comprehension_strategy import (
+        from cortex.orchestrators.core.stage1_comprehension_strategy import (
             Stage1ComprehensionStrategy,
         )
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageContext,
         )
 
@@ -152,7 +152,7 @@ class TestStage234Strategies:
 
     def test_stage2_importable(self) -> None:
         """Stage2IntentClassificationStrategy must be importable."""
-        from cortex.orchestrators.strategies.stage234_strategies import (
+        from cortex.orchestrators.core.stage234_strategies import (
             Stage2IntentClassificationStrategy,
         )
 
@@ -160,7 +160,7 @@ class TestStage234Strategies:
 
     def test_stage3_importable(self) -> None:
         """Stage3ComplianceValidationStrategy must be importable."""
-        from cortex.orchestrators.strategies.stage234_strategies import (
+        from cortex.orchestrators.core.stage234_strategies import (
             Stage3ComplianceValidationStrategy,
         )
 
@@ -168,7 +168,7 @@ class TestStage234Strategies:
 
     def test_stage4_importable(self) -> None:
         """Stage4DomainExecutionStrategy must be importable."""
-        from cortex.orchestrators.strategies.stage234_strategies import (
+        from cortex.orchestrators.core.stage234_strategies import (
             Stage4DomainExecutionStrategy,
         )
 
@@ -176,10 +176,10 @@ class TestStage234Strategies:
 
     def test_stage2_execute_classifies_intent(self) -> None:
         """Stage 2 must add intent_classification to metadata."""
-        from cortex.orchestrators.strategies.stage234_strategies import (
+        from cortex.orchestrators.core.stage234_strategies import (
             Stage2IntentClassificationStrategy,
         )
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageContext,
         )
 
@@ -197,10 +197,10 @@ class TestStage234Strategies:
 
     def test_stage3_execute_validates_compliance(self) -> None:
         """Stage 3 must add compliance_validation to metadata."""
-        from cortex.orchestrators.strategies.stage234_strategies import (
+        from cortex.orchestrators.core.stage234_strategies import (
             Stage3ComplianceValidationStrategy,
         )
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageContext,
         )
 
@@ -218,10 +218,10 @@ class TestStage234Strategies:
 
     def test_stage4_execute_delegates(self) -> None:
         """Stage 4 must add execution results to metadata."""
-        from cortex.orchestrators.strategies.stage234_strategies import (
+        from cortex.orchestrators.core.stage234_strategies import (
             Stage4DomainExecutionStrategy,
         )
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageContext,
         )
 
@@ -242,12 +242,12 @@ class TestStage234Strategies:
 
     def test_all_stages_are_strategies(self) -> None:
         """All stage strategies must inherit from StageExecutionStrategy."""
-        from cortex.orchestrators.strategies.stage234_strategies import (
+        from cortex.orchestrators.core.stage234_strategies import (
             Stage2IntentClassificationStrategy,
             Stage3ComplianceValidationStrategy,
             Stage4DomainExecutionStrategy,
         )
-        from cortex.orchestrators.strategies.stage_execution_strategy import (
+        from cortex.orchestrators.core.pipeline_stage_strategy import (
             StageExecutionStrategy,
         )
 

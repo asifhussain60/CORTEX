@@ -33,7 +33,17 @@ Date: 2026-02-13
 """
 from typing import Any, Dict, List, Optional
 
-from cortex.tools.cortex_intelligence_integration import GovernanceRuleLoader
+try:
+    from cortex.tools.cortex_intelligence_integration import GovernanceRuleLoader
+except ImportError:
+    class GovernanceRuleLoader:  # type: ignore[no-redef]
+        """Minimal fallback when cortex_intelligence_integration is unavailable."""
+        def __init__(self, governance_dir: Optional[Any] = None) -> None:
+            self._rules_cache: Dict[str, Dict[str, Any]] = {}
+        def get_rule(self, rule_id: str) -> Optional[Dict[str, Any]]:
+            return self._rules_cache.get(rule_id)
+        def get_all_rules(self) -> Dict[str, Dict[str, Any]]:
+            return self._rules_cache
 
 class BusinessWisdomFormatter:
     """
