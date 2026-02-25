@@ -212,6 +212,22 @@ class PhaseCreator:
         self.registry_path = self.cortex_root / "cortex-registry" / "_cortex-master"
         self.templates_path = self.cortex_root / "cortex" / "templates" / "phases"
         self.validator = PhaseValidator()
+
+    def default_output_path(self, phase_id: str) -> Path:
+        """Return the canonical output path for a new phase spec.
+
+        Writes to ``cortex-registry/_cortex-master/phases/planned/`` so that
+        all planning YAML files are exclusively in cortex-registry (CORE-035).
+
+        Args:
+            phase_id: Phase identifier, e.g. ``ENH-084`` or ``phase-68``.
+
+        Returns:
+            Absolute Path under cortex-registry/_cortex-master/phases/planned/.
+        """
+        planned_dir = self.registry_path / "phases" / "planned"
+        planned_dir.mkdir(parents=True, exist_ok=True)
+        return planned_dir / f"{phase_id.lower()}.yaml"
     
     def create_from_template(self, template_name: str, **kwargs) -> Dict[str, Any]:
         """Create phase spec from template."""
@@ -315,10 +331,10 @@ def create(template: str, phase_id: str, title: str, output: Optional[str], inte
     
     # Determine output path
     if not output:
-        output = f"{phase_id.lower()}.yaml"
-    
-    output_path = Path(output)
-    
+        output_path = creator.default_output_path(phase_id)
+    else:
+        output_path = Path(output)
+
     # Save
     creator.save_spec(spec, output_path)
     click.echo(f"✅ Phase spec saved: {output_path}")

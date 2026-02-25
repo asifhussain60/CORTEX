@@ -57,7 +57,7 @@ class TestIntentRouterACMarkers:
         ("cortex/orchestrators/core/intent_router/capability_matcher.py", "AC-ROUTER-CAPABILITY-"),
         ("cortex/orchestrators/core/intent_router/collaboration_coordinator.py", "AC-ROUTER-COLLAB-"),
         ("cortex/orchestrators/core/intent_router/metadata_driven_discovery.py", "AC-ROUTER-METADATA-"),
-        ("cortex/orchestrators/core/intent_router/intent_router_enhanced.py", "AC-ROUTER-"),
+        # intent_router_enhanced.py was deleted — removed from parametrize (Check #9 vacuum)
     ])
     def test_no_phase_numbered_marker(self, rel_path, expected_prefix):
         content = _file_content(rel_path)

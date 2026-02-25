@@ -97,7 +97,9 @@ class AbsorptionGate:
         """
         self.min_sightings = min_sightings
         self.min_confidence = min_confidence
-        self.tier3_path = tier3_path or Path("cortex/knowledge/tier3/learned-patterns.yaml")
+        # CORE-035: canonical write location is cortex-registry/knowledge/,
+        # NOT cortex/knowledge/ (which is a Python source package).
+        self.tier3_path = tier3_path or Path("cortex-registry/knowledge/tier3/learned-patterns.yaml")
         
         # Observation history: pattern_id -> List[PatternObservation]
         self._observations: Dict[str, List[PatternObservation]] = {}

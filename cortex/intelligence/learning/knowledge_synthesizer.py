@@ -94,9 +94,14 @@ class KnowledgeSynthesizer:
         Initialize knowledge synthesizer.
 
         Args:
-            knowledge_root: Root directory for knowledge artifacts
+            knowledge_root: Root directory for knowledge artifacts.
+                Defaults to ``cortex-registry/knowledge/best-practices/`` so
+                all YAML artifacts land in cortex-registry (not the Python
+                package tree).
         """
-        self.knowledge_root = knowledge_root or Path("cortex/knowledge/best-practices")
+        # CORE-035: canonical write location is cortex-registry/knowledge/,
+        # NOT cortex/knowledge/ (which is a Python source package).
+        self.knowledge_root = knowledge_root or Path("cortex-registry/knowledge/best-practices")
         self.knowledge_root.mkdir(parents=True, exist_ok=True)
 
         # Create category subdirectories

@@ -126,7 +126,8 @@ class PhaseManager:
         """
         self.registry_root = Path(registry_root)
         self.index_path = self.registry_root / "index.yaml"
-        self.active_phases_dir = self.registry_root / "phases" / "active"
+        # Canonical dir is planned/ (not active/) — aligns with CortexMasterPlanOrchestrator
+        self.active_phases_dir = self.registry_root / "phases" / "planned"
         self.completed_phases_dir = self.registry_root / "phases" / "completed"
         self.deprecated_phases_dir = self.registry_root / "phases" / "deprecated"
 
@@ -556,16 +557,21 @@ class PhaseManager:
             return yaml.safe_load(f) or {}
 
     def _save_phase_yaml(self, data: Dict, filename: str, folder: str = "active") -> None:
-        """Save phase YAML to file."""
-        if folder == "active":
-            target_dir = self.active_phases_dir
+        """Save phase YAML to file.
+
+        ``folder`` accepts the legacy value ``"active"`` which is silently
+        normalised to ``"planned"`` so callers written before the path fix
+        continue to work without changes.
+        """
+        if folder in ("active", "planned"):
+            target_dir = self.active_phases_dir  # always phases/planned/
         elif folder.startswith("completed"):
             year = folder.split("/")[1] if "/" in folder else str(datetime.now().year)
             target_dir = self.completed_phases_dir / year
         elif folder == "deprecated":
             target_dir = self.deprecated_phases_dir
         else:
-            target_dir = self.active_phases_dir
+            target_dir = self.active_phases_dir  # fallback → planned/
 
         target_dir.mkdir(parents=True, exist_ok=True)
         target_file = target_dir / filename
@@ -629,7 +635,7 @@ class PhaseManager:
         new_phase = {
             "id": phase_id,
             "name": phase_data["name"],
-            "file": f"phases/active/{filename}",
+            "file": f"phases/planned/{filename}",
             "status": "planned",
             "priority": phase_data.get("priority", "P1"),
             "description": phase_data.get("description", ""),
