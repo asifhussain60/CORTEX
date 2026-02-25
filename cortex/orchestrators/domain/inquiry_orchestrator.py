@@ -25,6 +25,7 @@ class InquiryOrchestrator(OrchestratorProtocolMixin):
         Returns:
             Response dict with answer and metadata.
         """
+        self._activate_cross_cutting_hooks(operation="handle")
         self._request_count += 1
         self._success_count += 1
         return {"query": query, "answer": "", "status": "ok"}

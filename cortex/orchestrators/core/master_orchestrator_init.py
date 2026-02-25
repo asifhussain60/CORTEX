@@ -711,6 +711,7 @@ class MasterOrchestratorInitialiser:
             backends: Dict[str, Any] = field(default_factory=dict)
 
             def route_query(self, query: str) -> Tuple[Any, float, Dict[str, Any]]:
+                """Route a query to the first available backend, returning (backend, confidence, metadata)."""
                 if self.backends:
                     key = list(self.backends.keys())[0]
                     backend = self.backends[key]

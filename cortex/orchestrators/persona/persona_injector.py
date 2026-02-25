@@ -158,7 +158,8 @@ class PersonaInjector:
         pattern = r'```[\s\S]*?```'
 
         # Replace code blocks with summaries
-        def replace_code(match):
+        def replace_code(match: re.Match) -> str:
+            """Replace a markdown code block with a short summary label for non-technical personas."""
             code_block = match.group(0)
             # Extract first line as function/class name
             lines = code_block.split('\n')

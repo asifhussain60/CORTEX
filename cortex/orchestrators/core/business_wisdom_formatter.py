@@ -41,9 +41,11 @@ except ImportError:
         def __init__(self, governance_dir: Optional[Any] = None) -> None:
             self._rules_cache: Dict[str, Dict[str, Any]] = {}
         def get_rule(self, rule_id: str) -> Optional[Dict[str, Any]]:
-            return self._rules_cache.get(rule_id)
+                """Return the cached governance rule dict for rule_id, or None if not cached."""
+                return self._rules_cache.get(rule_id)
         def get_all_rules(self) -> Dict[str, Dict[str, Any]]:
-            return self._rules_cache
+                """Return all cached governance rules as a dict keyed by rule ID."""
+                return self._rules_cache
 
 class BusinessWisdomFormatter:
     """

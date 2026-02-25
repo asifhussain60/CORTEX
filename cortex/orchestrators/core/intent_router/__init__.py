@@ -25,12 +25,21 @@ try:
         RoutingDecision,
     )
 except ImportError:
-    # Fallback: if intent_router_impl doesn't exist, use WorkflowComplexityRouter
+    # Fallback: if intent_router_impl doesn't exist, use WorkflowComplexityRouter.
+    # CORE-035: ensure RoutingDecision and IntentType are always exported so that
+    # callers (e.g. health_check_service) don't fail with NameError/ImportError.
     logging.getLogger(__name__).error(
         "CRITICAL: cortex.orchestrators.core.intent_router_impl not found — "
         "IntentRouter will be degraded to WorkflowComplexityRouter"
     )
     IntentRouter = WorkflowComplexityRouter  # type: ignore[assignment,misc]
+    # Re-export WorkflowRoutingDecision as RoutingDecision so the name is always available
+    RoutingDecision = WorkflowRoutingDecision  # type: ignore[assignment,misc]
+    # Provide a minimal IntentType enum stub so imports never fail
+    from enum import Enum
+    class IntentType(str, Enum):  # type: ignore[no-redef]
+        """Fallback IntentType when intent_router_impl is unavailable."""
+        UNKNOWN = "UNKNOWN"
 
 # EnhancedIntentRouter is the same as IntentRouter (backward compat)
 EnhancedIntentRouter = IntentRouter  # type: ignore[assignment,misc]

@@ -4,7 +4,7 @@
 # Purpose: Define MCP activation requirements and enforcement levels
 
 enforcement:
-  mandatory_entry_point: cortex_process_request
+  mandatory_entry_point: cortex_verify  # cortex_process_request removed — deprecated per architect spec
   bypass_forbidden: true
   
   # Intent-based MCP requirements

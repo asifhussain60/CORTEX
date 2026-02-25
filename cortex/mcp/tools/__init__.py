@@ -215,6 +215,7 @@ def register_all_tools(registry: Any) -> int:
                     )
                 
                 def execute(self, **kwargs: Any) -> Any:
+                    """Execute the wrapped toolkit function with the provided keyword arguments."""
                     return self.func(**kwargs)
             
             tool = FunctionTool(tool_name, tool_func)

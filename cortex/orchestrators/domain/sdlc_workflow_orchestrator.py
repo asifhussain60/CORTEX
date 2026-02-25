@@ -122,6 +122,7 @@ class SDLCWorkflowOrchestrator(OrchestratorProtocolMixin):
             Dict with result, response_block, and knowledge_context.
         """
         params = parameters or {}
+        self._activate_cross_cutting_hooks(operation=f"execute_operation:{operation_name}")
         template_id = self._resolve_template(operation_name, params)
         knowledge_ctx = self._load_knowledge_context(template_id)
         response_block = _RESPONSE_BLOCK_MAP.get(template_id, "BLOCK-ANALYSIS")

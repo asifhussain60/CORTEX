@@ -484,8 +484,8 @@ success_metrics:
 # ============================================================================
 integration:
   mcp_tools:
-    - 'cortex_process_request'  # Main execution entry
-    - 'cortex/lens_analyze'      # Vision API access
+    - 'cortex_verify'            # MCP health + execution entry (cortex_process_request removed — deprecated)
+    - 'cortex_validate'          # Compliance validation (cortex/lens_analyze removed — use cortex/lens/ directly)
     - 'cortex_challenge'         # Challenge generation
   
   orchestrators:

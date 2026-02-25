@@ -175,7 +175,7 @@ navigation_section_redesign:
       
     - title: "MCP Tools Catalog"
       icon: "fa-plug"
-      description: "26 MCP tools exposed via stdio transport including cortex_process_request, cortex_lens_analyze, and cortex_challenge"
+      description: "26 MCP tools exposed via stdio transport including cortex_verify, cortex_validate, and cortex_challenge"
       link: "/mcp/tools.html"
       
     - title: "CORTEX LENS"

@@ -24,6 +24,7 @@ class ContextAssemblyOrchestrator(OrchestratorProtocolMixin):
         Returns:
             Assembled context dictionary.
         """
+        self._activate_cross_cutting_hooks(operation="assemble")
         self._request_count += 1
         self._success_count += 1
         return {"sources": sources, "context": {}}

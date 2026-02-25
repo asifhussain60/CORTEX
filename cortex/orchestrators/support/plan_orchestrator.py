@@ -41,6 +41,7 @@ class PlanOrchestrator(OrchestratorProtocolMixin):
         Returns:
             PlanSetupResult with created plan details.
         """
+        self._activate_cross_cutting_hooks(operation="setup_plan")
         self._request_count += 1
         self._success_count += 1
         return PlanSetupResult(plan_id=plan_id, metadata=metadata or {})

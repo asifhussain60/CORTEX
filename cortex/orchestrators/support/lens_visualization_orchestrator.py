@@ -34,6 +34,7 @@ class LENSVisualizationOrchestrator(OrchestratorProtocolMixin):
         Returns:
             DashboardData with generated HTML and metrics.
         """
+        self._activate_cross_cutting_hooks(operation="generate_dashboard")
         self._request_count += 1
         self._success_count += 1
         return DashboardData(repo=repo, html=f"<html><body>{repo}</body></html>")

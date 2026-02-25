@@ -17,8 +17,7 @@ from typing import Any, Dict, Optional, Tuple
 # COMPAT: cortex.orchestrators.persona — guarded import
 try:
     from cortex.orchestrators.persona.master_orchestrator import MasterOrchestrator
-    from cortex.orchestrators.persona.models import PersonaId  # type: ignore[import]
-    DepthLevel = None  # COMPAT: dissolved module
+    from cortex.orchestrators.persona.models import PersonaId, DepthLevel  # type: ignore[import]
 except (ImportError, Exception):
     MasterOrchestrator = None  # type: ignore[assignment,misc]
     DepthLevel = None  # type: ignore[assignment,misc]
@@ -127,8 +126,13 @@ class PersonaCommandHandlers:
             old_state = self.orchestrator.get_current_state()
             old_persona = old_state["primary_persona"]
 
-            # Convert string to PersonaId enum
-            PersonaId = None  # COMPAT: dissolved module
+            # Convert string to PersonaId enum (imported at module level)
+            if PersonaId is None:
+                return CommandResult(
+                    success=False,
+                    message="PersonaId enum unavailable — persona module not loaded",
+                    action_taken="error",
+                )
             persona_enum = PersonaId(args)
             self.orchestrator.session_context.set_persona(
                 persona=persona_enum,
@@ -201,7 +205,13 @@ class PersonaCommandHandlers:
         old_state = self.orchestrator.get_current_state()
         old_depth = old_state["active_depth"]
 
-        DepthLevel = None  # COMPAT: dissolved module
+        # DepthLevel is imported at module level; guard for unavailable module
+        if DepthLevel is None:
+            return CommandResult(
+                success=False,
+                message="DepthLevel enum unavailable — persona module not loaded",
+                action_taken="error",
+            )
         depth_enum = DepthLevel(depth_arg)
 
         if sticky:

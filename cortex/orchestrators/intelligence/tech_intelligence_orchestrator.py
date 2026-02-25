@@ -24,6 +24,7 @@ class TechIntelligenceOrchestrator(OrchestratorProtocolMixin):
         Returns:
             Intelligence analysis result.
         """
+        self._activate_cross_cutting_hooks(operation="analyse")
         self._request_count += 1
         self._success_count += 1
         return {"insights": [], "recommendations": [], "status": "ok"}
