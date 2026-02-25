@@ -184,6 +184,15 @@ class WorkflowComplexityRouter:
             "test": "TDDOrchestrator",
             "security": "SecurityOrchestrator",
             "deploy": "DeploymentOrchestrator",
+            "audit": "HealthOrchestrator",
+            "refactor": "RefactoringOrchestrator",
+            "design": "ArchitectOrchestrator",
+            "plan": "PlanningOrchestrator",
+            "create": "TDDOrchestrator",
+            "implement": "TDDOrchestrator",
+            "investigate": "InvestigationOrchestrator",
+            "analyze": "AnalysisOrchestrator",
+            "digest": "DigestSessionOrchestrator",
         }
         
         return orchestrator_map.get(operation_type, "MasterOrchestrator")

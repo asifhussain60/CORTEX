@@ -42,7 +42,7 @@ from .base import (
     Report,
     RollbackResult,
 )
-from .registry import CleanerRegistry
+from .registry import CleanerRegistry, CleanerRegistrationError
 
 # Import cleaner implementations
 from .root_database import RootDatabaseCleaner
@@ -61,6 +61,7 @@ __all__ = [
     # Base classes
     "CleanerInterface",
     "CleanerRegistry",
+    "CleanerRegistrationError",
     "Analysis",
     "Report",
     "RollbackResult",

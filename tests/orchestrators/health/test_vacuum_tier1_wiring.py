@@ -65,7 +65,7 @@ class TestIntentRouterStrategySelector:
     def test_intent_router_uses_strategy_selector(self) -> None:
         """IntentRouter source must import StrategySelector."""
         intent_router_src = (
-            REPO_ROOT / "cortex" / "orchestrators" / "core" / "intent_router.py"
+            REPO_ROOT / "cortex" / "orchestrators" / "core" / "intent_router_impl.py"
         )
         content = intent_router_src.read_text()
         assert "StrategySelector" in content, (

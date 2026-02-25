@@ -230,9 +230,9 @@ class TestGoldenTestKeywordsDataContract:
 
     @pytest.fixture(scope="class")
     def canonical_router_cls(self):
-        """Load the monolithic IntentRouter class directly from intent_router.py."""
-        router_path = Path(__file__).parents[3] / "cortex" / "orchestrators" / "core" / "intent_router.py"
-        assert router_path.exists(), f"Monolithic intent_router.py not found at {router_path}"
+        """Load the monolithic IntentRouter class directly from intent_router_impl.py."""
+        router_path = Path(__file__).parents[3] / "cortex" / "orchestrators" / "core" / "intent_router_impl.py"
+        assert router_path.exists(), f"Monolithic intent_router_impl.py not found at {router_path}"
         spec = importlib.util.spec_from_file_location("_intent_router_canonical", router_path)
         mod = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
         # Pre-populate sys.modules with the real cortex package so imports resolve

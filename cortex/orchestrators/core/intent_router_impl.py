@@ -71,6 +71,9 @@ try:
 except ImportError:
     get_registry_intelligence_agent = None
 
+# Phase 70 GAP-70-A4: Three-tier intent classifier (regex + keyword + LLM)
+from cortex.orchestrators.core.intent_classifier import IntentClassifier as _IntentClassifier
+
 
 @dataclass
 class RoutingDecision:
@@ -89,6 +92,8 @@ class RoutingDecision:
         fallback_orchestrators: AC-PHASE-8.2-01 - Ranked alternative orchestrators (NEW)
         keyword_matches: AC-PHASE-8.2-01 - Keywords that matched routing config (NEW)
         confidence_breakdown: AC-PHASE-8.2-01 - Detailed confidence scoring (NEW)
+        confidence: Alias for confidence_score (compatibility with IntentRoutingResult API)
+        primary_agent_id: Alias for target_handler (compatibility with IntentRoutingResult API)
     """
     intent_type: IntentType
     target_handler: str
@@ -102,6 +107,22 @@ class RoutingDecision:
     fallback_orchestrators: List[IOrchestrator] = field(default_factory=list)  # AC-PHASE-8.2-01
     keyword_matches: List[str] = field(default_factory=list)  # AC-PHASE-8.2-01
     confidence_breakdown: Dict[str, float] = field(default_factory=dict)  # AC-PHASE-8.2-01
+
+    def __post_init__(self) -> None:
+        """Initialise compatibility aliases after dataclass fields are set."""
+        # confidence / primary_agent_id are properties that delegate to the
+        # canonical fields — exposed via __getattr__ so they don't shadow fields.
+        pass
+
+    @property
+    def confidence(self) -> float:
+        """Alias for confidence_score — IntentRoutingResult API compatibility."""
+        return self.confidence_score
+
+    @property
+    def primary_agent_id(self) -> Optional[str]:
+        """Alias for target_handler — IntentRoutingResult API compatibility."""
+        return self.target_handler or None
 
 
 @dataclass
@@ -441,6 +462,10 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
 
         # Registry Intelligence: Initialize gap detection
         self.registry_agent = get_registry_intelligence_agent() if get_registry_intelligence_agent else None
+
+        # Phase 70 GAP-70-A4: Three-tier intent classifier (regex + keyword + LLM)
+        # LLM tier is enabled in production but skipped when API key is absent (CORE-049)
+        self.intent_classifier: _IntentClassifier = _IntentClassifier(enable_llm=True)
 
         # AC-PHASE-8.2-01: Initialize routing enforcement engine
         enforcement_config = self.routing_rules_config.get("enforcement", {})
@@ -856,91 +881,81 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
 
     def detect_intent(self, context: Dict[str, Any]) -> IntentType:
         """
-        Detect operation intent type from context.
+        Detect operation intent type from context using a three-tier classifier.
 
-        Analyzes context keywords and description to determine if the
-        operation is an IMPLEMENT, FIX, REFACTOR, or VACUUM operation.
-
-        Detection algorithm:
-        1. Check explicit "intent" field if provided
-        2. Check for VACUUM keywords first (highest priority for cleanup ops)
-        3. Analyze keywords against type-specific keyword lists
-        4. Score each intent type (0-1)
-        5. Return highest-scoring intent type
-        6. Default to IMPLEMENT if no clear match
-
-        VACUUM Detection:
-        - When user request contains "vacuum" keyword or related cleanup terms
-        - Routes to VacuumOrchestrator for efficient CORTEX repo cleanup
-        - Special case for repo maintenance operations
+        Detection pipeline (Phase 70 GAP-70-A4):
+        1. Explicit "intent" field short-circuits all classification.
+        2. Vacuum keyword check (dedicated orchestrator pathway).
+        3. Three-tier IntentClassifier:
+               Tier 0 — exact operation-field match  (<1 ms)
+               Tier 1 — regex / exact-phrase match    (<1 ms)
+               Tier 2 — keyword bag-of-words scoring  (<1 ms)
+               Tier 3 — LLM disambiguation (only when tiers 1+2 are
+                         inconclusive AND an API key is available)
+        4. Default: IMPLEMENT.
 
         Args:
             context: Context dictionary containing operation details
-                - description: Operation description (optional)
-                - keywords: List of keywords (optional)
-                - intent: Explicit intent (optional)
+                - description:   Operation description (optional)
+                - user_request:  Raw user text (optional)
+                - keywords:      List of additional keywords (optional)
+                - operation:     Explicit operation name (optional)
+                - intent:        Pre-resolved IntentType (optional, highest priority)
 
         Returns:
-            IntentType: Detected intent (IMPLEMENT, FIX, REFACTOR, or PLAN for vacuum)
+            IntentType: Detected intent.
 
         Raises:
-            ValueError: If context is None or invalid type
+            ValueError: If context is None or invalid type.
         """
         try:
-            # Explicit intent provided
+            # Priority 0: Explicit IntentType already resolved
             if "intent" in context and isinstance(context.get("intent"), IntentType):
                 return context["intent"]
 
-            # Extract text to analyze
+            # Collect text for analysis
             text_parts: List[str] = []
+            if context.get("description"):
+                text_parts.append(str(context["description"]))
+            if context.get("user_request"):
+                text_parts.append(str(context["user_request"]))
+            if isinstance(context.get("keywords"), list):
+                text_parts.extend(str(k) for k in context["keywords"])
 
-            if "description" in context and context["description"]:
-                text_parts.append(str(context["description"]).lower())
-
-            if "user_request" in context and context["user_request"]:
-                text_parts.append(str(context["user_request"]).lower())
-
-            if "keywords" in context and isinstance(context["keywords"], list):
-                keywords = [str(k).lower() for k in context["keywords"]]
-                text_parts.extend(keywords)
-
-            if "operation" in context and context["operation"]:
-                text_parts.append(str(context["operation"]).lower())
-
-            # Combine all text
             combined_text = " ".join(text_parts).lower()
+            operation = str(context.get("operation", "")).lower().strip()
 
-            # Check for VACUUM keywords FIRST (highest priority)
-            # VACUUM cleanup operations should be routed to VacuumOrchestrator
+            # Priority 1: Vacuum keyword check (dedicated pathway)
             if self._is_vacuum_operation(combined_text):
-                # Mark as REFACTOR (since VACUUM doesn't exist as separate IntentType)
-                # but track it separately via context
                 context["is_vacuum_operation"] = True
                 return IntentType.REFACTOR
 
-            # Score each intent type
-            intent_scores: Dict[IntentType, float] = {}
+            # Priority 2: Three-tier classifier
+            clf_result = self.intent_classifier.classify(
+                text=combined_text,
+                operation=operation,
+            )
 
-            for intent_type, keywords in self.operation_type_mappings.items():
-                # Count keyword matches
-                matches = sum(1 for keyword in keywords if keyword in combined_text)
-                # Calculate score (0-1, normalized by keyword list length)
-                score = matches / len(keywords) if keywords else 0.0
-                intent_scores[intent_type] = score
+            self.logger.log_operation_complete(
+                ac_id="AC-70-INTENT-CLASSIFIER-001",
+                operation="INTENT_CLASSIFIED",
+                success=True,
+                details={
+                    "intent": clf_result.intent_type.value,
+                    "confidence": clf_result.confidence,
+                    "tier": clf_result.tier_used,
+                    "reasoning": clf_result.reasoning,
+                },
+            )
 
-            # Return highest-scoring intent, or IMPLEMENT as default
-            if intent_scores:
-                return max(intent_scores, key=intent_scores.get)
-
-            return IntentType.IMPLEMENT
+            return clf_result.intent_type
 
         except (ValueError, TypeError, AttributeError) as e:
-            # Specific exception handling per CORE-013
             self.logger.log_operation_complete(
                 ac_id="AC-PROD-001-02",
                 operation="INTENT_DETECTION_ERROR",
                 success=False,
-                details={"error": str(e), "context_type": type(context).__name__}
+                details={"error": str(e), "context_type": type(context).__name__},
             )
             return IntentType.IMPLEMENT
 
@@ -1622,27 +1637,32 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             # Extract operation details
             operation = context.get("operation", "").lower()
             description = context.get("description", "").lower()
-            
-            # Detect operation type from keywords
-            operation_type = "implement"  # Default
-            keywords = context.get("keywords", [])
-            combined_text = f"{operation} {description}"
-            
-            # Map keywords to operation types
-            if any(kw in combined_text for kw in ["fix", "bug", "issue", "resolve"]):
-                operation_type = "fix"
-            elif any(kw in combined_text for kw in ["refactor", "improve", "optimize", "restructure"]):
-                operation_type = "refactor"
-            elif any(kw in combined_text for kw in ["migrate", "migration", "legacy"]):
-                operation_type = "migrate"
-            elif any(kw in combined_text for kw in ["test", "testing", "tdd"]):
-                operation_type = "test"
-            elif any(kw in combined_text for kw in ["security", "audit", "vulnerability"]):
-                operation_type = "security"
-            elif any(kw in combined_text for kw in ["document", "docs", "documentation"]):
-                operation_type = "document"
-            elif any(kw in combined_text for kw in ["create", "implement", "add", "build"]):
-                operation_type = "create"
+            user_request = context.get("user_request", "").lower()
+
+            # Detect operation type using the three-tier classifier
+            # This replaces the hand-coded keyword cascade with a prioritised,
+            # LLM-augmented pipeline (Phase 70 GAP-70-A4).
+            combined_text = f"{operation} {description} {user_request}".strip()
+            clf_result = self.intent_classifier.classify(
+                text=combined_text,
+                operation=operation,
+            )
+            # Map IntentType → operation_type string used by complexity router
+            _intent_to_op: Dict[IntentType, str] = {
+                IntentType.FIX: "fix",
+                IntentType.AUDIT: "audit",
+                IntentType.REFACTOR: "refactor",
+                IntentType.DESIGN: "design",
+                IntentType.PLAN: "plan",
+                IntentType.INVESTIGATE: "investigate",
+                IntentType.ANALYZE: "analyze",
+                IntentType.DIGEST: "digest",
+                IntentType.IMPLEMENT: "implement",
+                IntentType.DOCUMENT: "document",
+                IntentType.ONBOARD: "onboard",
+                IntentType.REPHRASE: "rephrase",
+            }
+            operation_type = _intent_to_op.get(clf_result.intent_type, "implement")
             
             # Extract target files (look for file paths in context)
             target_files = context.get("target_files", [])
@@ -1756,6 +1776,12 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             "document": IntentType.DOCUMENT,
             "security": IntentType.AUDIT,
             "migrate": IntentType.IMPLEMENT,
+            "audit": IntentType.AUDIT,
+            "design": IntentType.DESIGN,
+            "plan": IntentType.PLAN,
+            "investigate": IntentType.INVESTIGATE,
+            "analyze": IntentType.ANALYZE,
+            "digest": IntentType.DIGEST,
         }
         return mapping.get(operation_type, IntentType.IMPLEMENT)
 
@@ -2178,8 +2204,11 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             orchestrator_name: Name of orchestrator
             enable: Whether to enable response engine (default False)
         """
-        # TODO: Implement response engine integration after Wave H-S4 validation
-        raise NotImplementedError("_init_response_engine not yet implemented")
+        # Phase 70: Guard — only raise if enable=True (response engine not yet implemented)
+        if enable:
+            raise NotImplementedError("_init_response_engine not yet implemented")
+        # When disabled, silently skip initialization
+        self._response_engine_enabled = False
 
     def execute(self, parameters: Dict[str, Any]) -> Result[str]:
         """

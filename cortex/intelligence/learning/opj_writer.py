@@ -23,7 +23,7 @@ import yaml
 
 logger = logging.getLogger(__name__)
 
-_WORKSPACE_ROOT = Path(__file__).resolve().parents[4]
+_WORKSPACE_ROOT = Path(__file__).resolve().parents[3]
 _DEFAULT_REGISTRY = _WORKSPACE_ROOT / "cortex-registry"
 
 _SIMILARITY_THRESHOLD = 0.3  # reuse PatternLibrary dedup threshold
@@ -50,6 +50,40 @@ def _similarity(a: str, b: str) -> float:
         return 0.0
     set_a, set_b = set(a.lower()), set(b.lower())
     return len(set_a & set_b) / max(len(set_a | set_b), 1)
+
+
+def _sanitize_for_yaml(obj: Any, depth: int = 0, max_depth: int = 5) -> Any:
+    """Recursively convert an object to YAML-safe primitives.
+
+    Prevents infinite recursion on complex nested objects by enforcing
+    a max depth and converting non-serializable values to strings.
+
+    Args:
+        obj: Any Python object to sanitize.
+        depth: Current recursion depth.
+        max_depth: Maximum recursion depth before string conversion.
+
+    Returns:
+        A YAML-safe primitive (str, int, float, bool, None, list, or dict).
+    """
+    if depth >= max_depth:
+        return str(obj)[:200] if obj is not None else None
+    if obj is None or isinstance(obj, (bool, int, float)):
+        return obj
+    if isinstance(obj, str):
+        return obj[:1000]  # cap string length
+    if isinstance(obj, (list, tuple)):
+        return [_sanitize_for_yaml(item, depth + 1, max_depth) for item in obj[:50]]
+    if isinstance(obj, dict):
+        return {
+            str(k)[:100]: _sanitize_for_yaml(v, depth + 1, max_depth)
+            for k, v in list(obj.items())[:50]
+        }
+    # Fallback: convert to string representation
+    try:
+        return str(obj)[:200]
+    except Exception:
+        return "<non-serializable>"
 
 
 class OPJEntry:
@@ -85,7 +119,8 @@ class OPJEntry:
 
     def to_dict(self) -> Dict[str, Any]:
         """Serialise to a YAML-safe dict."""
-        ctx_hash = hashlib.md5(str(sorted(self.context.items())).encode()).hexdigest()[:8]
+        safe_context = _sanitize_for_yaml(self.context)
+        ctx_hash = hashlib.md5(str(sorted(safe_context.items()) if isinstance(safe_context, dict) else str(safe_context)).encode()).hexdigest()[:8]
         d: Dict[str, Any] = {
             "pattern_id": self.pattern_id,
             "orchestrator": self.orchestrator,
@@ -93,7 +128,7 @@ class OPJEntry:
             "outcome": self.outcome.value if hasattr(self.outcome, "value") else str(self.outcome),
             "confidence": self.confidence,
             "recorded_at": self.recorded_at,
-            "context": self.context,
+            "context": safe_context,
             "_context_hash": ctx_hash,
             "occurrence_count": 1,
         }
@@ -240,7 +275,9 @@ class OPJWriter:
             entries.append(entry.to_dict())
 
         existing_data["entries"] = entries
-        shard.write_text(yaml.safe_dump(existing_data, sort_keys=False, allow_unicode=True))
+        # Phase 70: Sanitize entire data structure before YAML dump to prevent infinite recursion
+        safe_data = _sanitize_for_yaml(existing_data, max_depth=8)
+        shard.write_text(yaml.safe_dump(safe_data, sort_keys=False, allow_unicode=True))
         self._update_registry(entry, shard)
 
     def _find_duplicate(self, entry: OPJEntry, existing: list) -> Optional[int]:
@@ -252,7 +289,8 @@ class OPJWriter:
         - Same context hash (prevents entries with different inputs from deduping)
         """
         compare_field = entry.resolution or entry.error or ""
-        context_hash = hashlib.md5(str(sorted(entry.context.items())).encode()).hexdigest()[:8]
+        safe_ctx = _sanitize_for_yaml(entry.context)
+        context_hash = hashlib.md5(str(sorted(safe_ctx.items()) if isinstance(safe_ctx, dict) else str(safe_ctx)).encode()).hexdigest()[:8]
         for i, e in enumerate(existing):
             if e.get("orchestrator") != entry.orchestrator:
                 continue

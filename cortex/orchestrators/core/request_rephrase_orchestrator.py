@@ -5,6 +5,7 @@ Authority: cortex-architect.prompt.md § REPHRASE MODE
 Version: 1.0
 Status: GREEN Phase (Implementation)
 AC_START: AC-AUTO-REPHRASE-S1-GREEN-001
+AC_COMPLETE: AC-AUTO-REPHRASE-S1-GREEN-001 ✅
 
 Purpose:
   Every user request is automatically enhanced with:

@@ -1,5 +1,5 @@
-version: '14.0'
-updated: '2026-02-24'
+version: '18.0'
+updated: '2026-02-25'
 maintainer: CORTEX Architecture Team
 
 # ============================================================
@@ -13,8 +13,8 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  version: '17.0'
-  last_updated: '2026-02-25T12:00:00Z'
+  version: '18.0'
+  last_updated: '2026-02-25T00:00:00Z'
   total_phases: 71
   active: 0
   completed: 69
@@ -26,6 +26,7 @@ metadata:
     smoke: 1420
     workflow_orchestrators: 177
     golden_workflow: 204
+    golden_intelligence: 1
   planned_phases:
     - id: phase-68
       title: "cortex/core Flatten — 27 Subdirs → 15 Canonical"
@@ -59,6 +60,16 @@ metadata:
 # Each entry is a thin pointer. Open the file: path for full detail.
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
+
+  - id: phase-71
+    title: "Holistic Unified Brain — Full-Spectrum Intelligence Matrix Remediation"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-71-HOLISTIC-UNIFIED-BRAIN
+    gaps: 33
+    sub_phases: 10
+    file: "cortex-registry/planning/phases/planned/phase-71-holistic-unified-brain.yaml"
+    note: "Supersedes Phase 70 (unified brain). Live matrix 6.9% → ≥80%. 20×20 extension. 42 golden tests (TDD RED). OPJMixin→MasterOrchestrator. 6 expanded-scope gaps (ES-001..ES-006). Check #20 in /audit fix."
 
   - id: phase-69
     title: "Review02 Remediation Sweep — Infrastructure Hygiene (6 GAPs)"
@@ -329,15 +340,15 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "✅ 69/71 COMPLETE — Phase 69 closed 2026-02-24 | 2 PLANNED: toolkit-consolidation (P0) + phase-70 stack-builder-infrastructure (P0) | COMPAT shims expire 2026-05-24"
+  status: "⚠️ Phase 71 PLANNED (2026-02-25) | 69/71 phases done | Live matrix: 6.9%, 7 P0 + 18 P1 unwired | Phase 70 (stack-builder) PLANNED | COMPAT shims expire 2026-05-24"
   overall_score: 97%
-  test_baseline: "1,420 smoke | 204 golden workflow | 177 workflow orchestrators"
-  deployment_date: '2026-02-24'
+  test_baseline: "1,420 smoke | 204 golden workflow | 177 workflow orchestrators | 1 golden intelligence"
+  deployment_date: '2026-02-25'
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "v17.0 — Phase 70 Stack Builder Infrastructure PLANNED (2026-02-25) | chat01.md digest"
-  last_verified: '2026-02-25T12:00:00Z'
+  plan_version: "v18.0 — Phase 71 PLANNED (2026-02-25) | SWEEP-71-HOLISTIC-UNIFIED-BRAIN | 56 golden tests RED"
+  last_verified: '2026-02-25T00:00:00Z'
 
 summary:
   total_phases: 71
@@ -347,7 +358,7 @@ summary:
   planned: 2
   playbooks: 1
   completion_percentage: 97
-  production_status: "✅ 69/71 phases COMPLETE — Phase 69 closed 2026-02-24 | phase-toolkit-consolidation PLANNED (P0) | phase-70 Stack Builder Infrastructure PLANNED (P0) — 3-layer stack intelligence architecture"
+  production_status: "⚠️ 69/71 phases COMPLETE — Phase 71 PLANNED (P0: Holistic Unified Brain, 33 GAPs) | Phase 70 stack-builder PLANNED (P0, 8 GAPs) | Matrix 6.9% → target ≥80% | 6 expanded-scope gaps | 42 golden tests pending (TDD RED)"
   open_gaps:
-    count: 13
-    note: "SWEEP-TOOLKIT-001: 5 GAPs OPEN (GAP-001–005). SWEEP-70-STACK-BUILDER: 8 GAPs OPEN (GAP-70-01–08). All other sweeps closed."
+    count: 41
+    note: "SWEEP-71-HOLISTIC-UNIFIED-BRAIN: 33 GAPs (tracks A-I, OPJMixin wiring, 20×20 matrix). SWEEP-70-STACK-BUILDER: 8 GAPs (StackBuilder protocol + 4 concrete builders). SWEEP-TOOLKIT-001: absorbed into Phase 71."

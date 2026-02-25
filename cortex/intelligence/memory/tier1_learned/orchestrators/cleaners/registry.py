@@ -7,4 +7,15 @@ from .cleaner_registry import (  # noqa: F401
     CleanerRegistry,
 )
 
-__all__ = ["CleanerRegistry"]
+
+class CleanerRegistrationError(Exception):
+    """Raised when a cleaner cannot be registered due to validation failures.
+
+    This exception is emitted by CleanerRegistry.register() when:
+    - The supplied class is not a valid CleanerInterface subclass.
+    - The domain key is already registered (duplicate prevention, CORE-035).
+    - Required metadata fields are missing or malformed.
+    """
+
+
+__all__ = ["CleanerRegistry", "CleanerRegistrationError"]

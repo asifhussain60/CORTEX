@@ -1466,7 +1466,7 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTempl
         # Phase 52: Record compliance success pattern
         self._opj_record_success(
             operation="validate_operation",
-            context={"intent": intent, "agent_count": len(self.agents)},
+            context={"intent": str(intent)[:200], "agent_count": len(self.agents)},
             resolution=f"All {len(self.agents)} agents passed in {round(execution_time_ms, 1)}ms",
             confidence=0.85,
         )

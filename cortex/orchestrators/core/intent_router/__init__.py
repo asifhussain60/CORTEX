@@ -1,14 +1,39 @@
-"""Intent Router - Complexity-Gated Workflow Routing."""
+"""Intent Router — package init with correct re-exports.
+
+Re-exports the canonical IntentRouter from intent_router_impl.py
+alongside the WorkflowComplexityRouter from workflow_gate.py.
+
+Phase 70 Fix: GAP-70-A1 — resolved IntentRouter identity collapse
+where IntentRouter was aliased to WorkflowComplexityRouter.
+"""
 
 import logging
 
 from cortex.orchestrators.core.intent_router.workflow_gate import (
     WorkflowComplexityRouter,
     Intent,
-    RoutingDecision,
+    RoutingDecision as WorkflowRoutingDecision,
     RoutingStrategy,
     ComplexityThreshold,
 )
+
+# Import the REAL IntentRouter from the renamed implementation file
+try:
+    from cortex.orchestrators.core.intent_router_impl import (
+        IntentRouter,
+        IntentType,
+        RoutingDecision,
+    )
+except ImportError:
+    # Fallback: if intent_router_impl doesn't exist, use WorkflowComplexityRouter
+    logging.getLogger(__name__).error(
+        "CRITICAL: cortex.orchestrators.core.intent_router_impl not found — "
+        "IntentRouter will be degraded to WorkflowComplexityRouter"
+    )
+    IntentRouter = WorkflowComplexityRouter  # type: ignore[assignment,misc]
+
+# EnhancedIntentRouter is the same as IntentRouter (backward compat)
+EnhancedIntentRouter = IntentRouter  # type: ignore[assignment,misc]
 
 # GAP-57-09: Wire StrategySelector into IntentRouter for routing confidence (Phase 57-f)
 try:
@@ -22,14 +47,10 @@ except ImportError:
     StrategySelector = None  # type: ignore[assignment,misc]
     _strategy_selector = None
 
-# IntentRouter: canonical alias to WorkflowComplexityRouter (CORE-035)
-IntentRouter = WorkflowComplexityRouter
-EnhancedIntentRouter = WorkflowComplexityRouter  # backward-compat alias
-
 try:
     from cortex.orchestrators.core.intent_router.routing_enforcement import RoutingEnforcementEngine  # type: ignore
 except ImportError:
-    class RoutingEnforcementEngine:
+    class RoutingEnforcementEngine:  # type: ignore[no-redef]
         """Stub for backward compatibility."""
         pass
 
@@ -58,6 +79,7 @@ __all__ = [
     "RoutingStrategy",
     "ComplexityThreshold",
     "IntentRouter",
+    "IntentType",
     "EnhancedIntentRouter",
     "OrchestratorLookup",
     "RoutingEnforcementEngine",

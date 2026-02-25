@@ -470,14 +470,14 @@ acceptance_criteria:
 # ============================================================================
 
 completion_checklist:
-  - [ ] All sub-phases S1-S8 complete
-  - [ ] All TDD sequences executed (RED → GREEN → REFACTOR)
-  - [ ] All gaps CLOSED
-  - [ ] Test coverage ≥95%
-  - [ ] /audit fix clean
-  - [ ] Documentation updated
-  - [ ] MCP tools registered
-  - [ ] Orchestrators migrated
-  - [ ] Phase file moved to completed/
+  - "All sub-phases S1-S8 complete"
+  - "All TDD sequences executed (RED → GREEN → REFACTOR)"
+  - "All gaps CLOSED"
+  - "Test coverage ≥95%"
+  - "/audit fix clean"
+  - "Documentation updated"
+  - "MCP tools registered"
+  - "Orchestrators migrated"
+  - "Phase file moved to completed/"
 
 # AC_COMPLETE: AC-TOOLKIT-CONSOLIDATION-2026-02-24-001 ✅

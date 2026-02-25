@@ -177,6 +177,18 @@ anti_patterns:
     forbidden: "from cortex.orchestrators import X (direct)"
     reason: "MCP-FIRST architecture requires tool routing"
     enforcement: "BLOCKED at IntentRouter"
+    
+  anti_pattern_raw_pytest:
+    forbidden: "python3 -m pytest tests/golden/ --timeout=120 -p no:xdist -q --tb=no 2>&1 | tail -5"
+    reason: "Masks failures via tail truncation, silences CortexXdistPlugin batch reporter, bypasses pytest.ini xdist config"
+    enforcement: "BLOCKED — use python3 scripts/run_tests.py [suite] or make test-batch"
+    canonical_success_pattern: "python3 scripts/run_tests.py [smoke|unit|integration|golden|batch|all]"
+    
+  anti_pattern_pytest_flag_override:
+    forbidden: "python3 -m pytest (any invocation adding -q, -x, or -o addopts= overrides)"
+    reason: "Wipes xdist parallel config, silences batch reporter, loses pass/fail counts and summary table"
+    enforcement: "BLOCKED — CortexXdistPlugin (CORTEX_BATCH_SIZE=500) must remain active"
+    canonical_success_pattern: "make test-batch"
 
 # Migration Path (from Copilot Native to MCP)
 migration:

@@ -96,14 +96,15 @@ phase_58_gaps_opened:
     were not visible before the mixin work. These are catalogued
     in Phase 59 sweep catalogue (SWEEP-59-CANONICAL-INTEGRITY).
 
-  - id: GAP-59-01
-    title: "AuditEntry duplicates — visible after Phase 58 added more infrastructure"
+  gaps:
+    - id: GAP-59-01
+      title: "AuditEntry duplicates — visible after Phase 58 added more infrastructure"
 
-  - id: GAP-59-10
-    title: "ImportError count rose from 144 to 151 (Phase 58 added 7 new guards)"
+    - id: GAP-59-10
+      title: "ImportError count rose from 144 to 151 (Phase 58 added 7 new guards)"
 
-  - id: GAP-59-08b
-    title: "execute_operation bypass — Phase 58 added hooks but no enforcement"
+    - id: GAP-59-08b
+      title: "execute_operation bypass — Phase 58 added hooks but no enforcement"
 
 # ─────────────────────────────────────────────────────────────────
 # CROSS-CUTTING UTILISATION (before/after Phase 58)

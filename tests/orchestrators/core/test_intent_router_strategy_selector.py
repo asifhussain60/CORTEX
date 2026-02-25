@@ -20,7 +20,7 @@ class TestIntentRouterStrategySelectorWiring:
 
     def test_intent_router_uses_strategy_selector(self) -> None:
         """IntentRouter source must reference StrategySelector."""
-        src = REPO_ROOT / "cortex" / "orchestrators" / "core" / "intent_router.py"
+        src = REPO_ROOT / "cortex" / "orchestrators" / "core" / "intent_router_impl.py"
         assert "StrategySelector" in src.read_text(), (
             "IntentRouter source does not reference StrategySelector."
         )

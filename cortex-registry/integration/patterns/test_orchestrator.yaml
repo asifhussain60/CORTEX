@@ -1,0 +1,76 @@
+# ══════════════════════════════════════════════════════════════════════════════
+# CORTEX Operational Pattern Journal — Test Orchestrator
+# ══════════════════════════════════════════════════════════════════════════════
+# Authority: cortex-registry/integration/patterns/_registry.yaml
+# CORE: CORE-002 (YAML only), CORE-064 (Sweep Completeness)
+# ══════════════════════════════════════════════════════════════════════════════
+
+schema_version: "1.0"
+orchestrator: "test_orchestrator"
+created_at: "2026-02-24T00:00:00Z"
+updated_at: "2026-02-24T00:00:00Z"
+
+entries:
+
+  OPJ-TEST-CANONICAL-RUNNER-SUCCESS:
+    id: "OPJ-TEST-CANONICAL-RUNNER-SUCCESS"
+    pattern_type: "success"
+    operation: "run_tests"
+    confidence: 1.0
+    promoted: true  # Always use — no decay
+    title: "Canonical CORTEX Test Runner"
+    description: |
+      Use python3 scripts/run_tests.py as the canonical test runner.
+      This script respects pytest.ini (n auto --dist loadscope), activates
+      CortexXdistPlugin (CORTEX_BATCH_SIZE=500), and provides live batch
+      boundaries, pass/fail counts, and a final summary table.
+    commands:
+      smoke:   "python3 scripts/run_tests.py smoke"
+      unit:    "python3 scripts/run_tests.py unit"
+      integration: "python3 scripts/run_tests.py integration"
+      golden:  "python3 scripts/run_tests.py golden"
+      batch:   "python3 scripts/run_tests.py batch"
+      all:     "python3 scripts/run_tests.py all"
+    make_equivalents:
+      batch:   "make test-batch"
+      all:     "make test-all"
+      fast:    "make test-fast"
+      smoke:   "make test-smoke"
+    vscode_tasks:
+      - "CORTEX: Full Batch Run"
+      - "CORTEX: Smoke Tests"
+      - "CORTEX: Unit Tests"
+      - "CORTEX: Integration Tests"
+      - "CORTEX: Golden Tests"
+    rationale: |
+      pytest.ini enforces -n auto --dist loadscope.
+      conftest.py registers cortex_xdist_plugin.
+      The batch plugin provides live batch boundaries and summary table
+      — lost when raw pytest commands override the project config.
+    created_at: "2026-02-24T00:00:00Z"
+    tags: ["test-runner", "canonical", "xdist", "batch"]
+
+  OPJ-TEST-RAW-PYTEST-FORBIDDEN:
+    id: "OPJ-TEST-RAW-PYTEST-FORBIDDEN"
+    pattern_type: "failure"
+    operation: "run_tests"
+    confidence: 1.0
+    promoted: true  # Always avoid — no decay
+    title: "Forbidden Raw pytest Invocations"
+    description: |
+      Direct python3 -m pytest invocations with -q, -x, or -o addopts=
+      flags are FORBIDDEN in CORTEX. They bypass the CortexXdistPlugin,
+      silence the batch reporter, and can mask test failures via output
+      truncation (e.g., | tail -5).
+    forbidden_commands:
+      - command: "python3 -m pytest tests/golden/ --timeout=120 -p no:xdist -q --tb=no 2>&1 | tail -5"
+        reason: "tail -5 masks failures; -p no:xdist disables parallel runner; -q silences batch reporter"
+      - command: "python3 -m pytest tests/ -x -q"
+        reason: "-x stops at first failure before batch summary; -q silences batch reporter"
+      - command: "python3 -m pytest tests/ -o addopts="
+        reason: "-o addopts= wipes xdist config entirely, disabling parallel execution"
+      - command: ".venv/bin/python -m pytest"
+        reason: "Venv-path hard-codes Unix paths; use python3 scripts/run_tests.py instead"
+    enforcement: "BLOCKED — use canonical runner: python3 scripts/run_tests.py [suite]"
+    created_at: "2026-02-24T00:00:00Z"
+    tags: ["test-runner", "forbidden", "anti-pattern", "raw-pytest"]

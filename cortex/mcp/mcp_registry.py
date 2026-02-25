@@ -1,11 +1,11 @@
 """
 MCP Tool Registry: Production Tool Definitions.
 
-This module defines the COMPLETE set of production tools (24 tools).
+This module defines the COMPLETE set of production tools (28 tools).
 No more, no fewer. Every tool serves a specific business capability.
 
 Tool Count Strategy:
-    - 98 tools (legacy) → 24 tools (v3)
+    - 98 tools (legacy) → 28 tools (v3)
     - Removed deprecated tools: cortex_process_request, cortex_lens
     - Consolidation by business capability
     - Operation parameters instead of separate tools
@@ -21,7 +21,7 @@ from cortex.mcp.mcp_tool_base import Tool, ToolDefinition, ToolCategory, ToolPar
 
 
 # ============================================================================
-# PRODUCTION TOOL DEFINITIONS (24 Tools)
+# PRODUCTION TOOL DEFINITIONS (28 Tools)
 # Removed: cortex_process_request (deprecated), cortex_lens (deleted per architect spec)
 # ============================================================================
 

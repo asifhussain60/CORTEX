@@ -10,8 +10,8 @@
 
 schema_version: "1.0"
 created_at: "2026-02-22T00:00:00Z"
-updated_at: "2026-02-22T00:00:00Z"
-total_entries: 0
+updated_at: "2026-02-24T00:00:00Z"
+total_entries: 2
 description: "Master index of all Operational Pattern Journal entries across all orchestrators."
 
 decay:
@@ -26,8 +26,8 @@ index:
   #   <operation>:
   #     success: [entry_id, ...]
   #     failure: [entry_id, ...]
-  # Example:
-  # digest_session_orchestrator:
-  #   process:
-  #     success: ["OPJ-DSO-20260222120000"]
-  #     failure: ["OPJ-DSO-20260222130000"]
+
+  test_orchestrator:
+    run_tests:
+      success: ["OPJ-TEST-CANONICAL-RUNNER-SUCCESS"]
+      failure: ["OPJ-TEST-RAW-PYTEST-FORBIDDEN"]

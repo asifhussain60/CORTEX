@@ -94,9 +94,11 @@ _GOLDEN_PATH_RULES: list[tuple[str, list[TestConcern]]] = [
     ("cortex/governance/",     [TestConcern.SECURITY, TestConcern.QUALITY]),
     ("cortex/intelligence/",   [TestConcern.CCL, TestConcern.SECURITY]),
     ("cortex/domain_brain/",   [TestConcern.CCL]),
-    # cortex/brain/ was the pre-consolidation path; retain GOLDEN classification
-    # so legacy paths continue to receive the same governance tier (CORE-064).
-    ("cortex/brain/",          [TestConcern.CCL, TestConcern.QUALITY]),
+    # cortex/brain/ was the pre-consolidation path (dissolved Phase 54).
+    # Retained as a dead-path matcher so any stale test fixtures that still
+    # reference the old path receive the correct governance tier (CORE-064).
+    # This does NOT re-introduce cortex/brain/ as an active directory.
+    ("cortex/brain/",          [TestConcern.CCL, TestConcern.QUALITY]),  # legacy compat only
     ("cortex/agents/",         [TestConcern.SECURITY, TestConcern.CONTRACT]),
 ]
 

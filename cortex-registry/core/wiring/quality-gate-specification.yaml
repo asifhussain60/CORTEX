@@ -176,6 +176,9 @@ token_budget_protocol:
       - "Defer refactoring"
       - "Leave broken code"
       - "Miss governance"
+      - "python3 -m pytest tests/golden/ --timeout=120 -p no:xdist -q --tb=no 2>&1 | tail -5  # FORBIDDEN: masks failures, truncates output, hides batch reporter"
+      - "python3 -m pytest tests/ -x -q  # FORBIDDEN: bypasses CortexXdistPlugin batch runner"
+      - "python3 -m pytest (any direct invocation with -q or -o addopts=)  # FORBIDDEN: silences batch reporter"
 
 # Holistic Completion Checklist
 completion_checklist:
@@ -194,6 +197,9 @@ completion_checklist:
     - "✅ Edge cases: Boundary conditions"
     - "✅ Error paths: Failure scenarios"
     - "✅ Performance: No regressions"
+    - "✅ Test runner (CANONICAL): python3 scripts/run_tests.py [smoke|unit|integration|golden|batch|all]"
+    - "✅ Test runner (CANONICAL): make test-batch  (delegates to run_tests.py batch)"
+    - "⛔ Test runner (FORBIDDEN): python3 -m pytest (direct invocation with -q/-x/-o addopts= overrides)"
     
   governance_checklist:
     - "✅ CORE rules: All 25+ passed"
