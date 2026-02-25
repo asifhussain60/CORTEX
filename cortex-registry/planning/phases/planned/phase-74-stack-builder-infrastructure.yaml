@@ -22,6 +22,18 @@ governance_authority:
 sweep_catalogue_id: "SWEEP-70-STACK-BUILDER"
 
 # ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (CORE-008 + CORE-064 + WHOLE-PHASE-FIRST)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL          # sub-phases 70-a→70-b→70-c→70-d→70-e→70-f→70-final, each gate blocks next
+  partial_completion_allowed: false  # phase-74 is NOT COMPLETE with any open GAP
+  decomposition_allowed: false       # do NOT split into "74 part 1" and "74 part 2"
+  phase_atomic: true                 # run all 6 implementation sub-phases + final gate in one sweep for max ROI
+  gate_on_failure: HALT              # gate fails → stop, fix, rerun gate, then continue
+  tdd_cycle_mandatory: true          # every implementation sub-phase runs RED→GREEN→REFACTOR
+  resume_from: last_passed_gate      # if session pauses, resume from next sub-phase after last PASSED gate
+
+# ─────────────────────────────────────────────────────────────────────────────
 # BACKGROUND
 # ─────────────────────────────────────────────────────────────────────────────
 background: |
@@ -289,7 +301,19 @@ sweep_catalogue:
     status: OPEN
 
 # ─────────────────────────────────────────────────────────────────────────────
-# SUB-PHASES — ROI-ordered, TDD-gated
+# SEQUENTIAL EXECUTION CONTRACT (CORE-008 + CORE-064)
+# Sub-phases execute STRICTLY SEQUENTIALLY. Each sub-phase must pass its
+# completion_gate before the next sub-phase may begin.
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  enforced_by: "CORE-008 (TDD) + CORE-064 (Sweep Completeness)"
+  rule: "Each sub-phase runs to COMPLETE before the next begins — no parallel sub-phase execution"
+  tdd_loop_required: true
+  completion_gate_required_on_every_sub_phase: true
+  smoke_gate_on_final_sub_phase: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES — ROI-ordered, TDD-gated, strictly sequential
 # ─────────────────────────────────────────────────────────────────────────────
 phases:
   - id: "phase-70-a"
@@ -299,8 +323,22 @@ phases:
     gap_refs: ["GAP-70-01", "GAP-70-02"]
     governance_authority: "CORE-008, CORE-011, CORE-012, CORE-028, CORE-035"
     duration_estimate: "1 day"
+    depends_on: []
     prerequisite: "smoke tests green (1,420 baseline)"
-    regression_gate: "python scripts/run_tests.py batch — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write all tests in tdd_sequence.red — NO source files created yet"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/strategies/test_stack_builder.py tests/orchestrators/strategies/test_stack_builder_registry.py — ALL tests FAIL"
+        blocker: "Stack builder source files FORBIDDEN until RED gate passes"
+      green:
+        action: "Implement StackBuilder ABC, data models, and StackBuilderRegistry"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/strategies/test_stack_builder.py tests/orchestrators/strategies/test_stack_builder_registry.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden until GREEN gate passes"
+      refactor:
+        action: "Full type hints (CORE-011), docstrings (CORE-012), verify no CORE-035 duplicate strategies"
+        gate: "python3 scripts/run_tests.py dir tests/orchestrators/strategies/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
 
     new_files:
       - path: "cortex/orchestrators/strategies/stack_builder.py"
@@ -340,6 +378,13 @@ phases:
       - "All data models are frozen dataclasses with full type hints"
       - "All tests passing — zero regression on smoke baseline"
 
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/orchestrators/strategies/"
+      min_tests_pass: 7
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
   - id: "phase-70-b"
     title: "HtmlStackBuilder + html5.yaml Stack Knowledge"
     priority: P0
@@ -347,8 +392,22 @@ phases:
     gap_refs: ["GAP-70-03"]
     governance_authority: "CORE-008, CORE-011, CORE-012, CORE-073"
     duration_estimate: "1 day"
-    prerequisite: "phase-70-a complete (StackBuilder ABC available)"
-    regression_gate: "python scripts/run_tests.py batch — zero new failures"
+    depends_on: ["phase-70-a"]
+    prerequisite: "phase-70-a completion_gate PASSED (StackBuilder ABC and Registry available)"
+
+    tdd_cycle:
+      red:
+        action: "Write all HtmlStackBuilder tests — no html_builder.py or html5.yaml created yet"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/strategies/builders/test_html_builder.py — ALL tests FAIL"
+        blocker: "html_builder.py and html5.yaml FORBIDDEN until RED gate passes"
+      green:
+        action: "Implement HtmlStackBuilder; create html5.yaml quality contract YAML"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/strategies/builders/test_html_builder.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden until GREEN gate passes"
+      refactor:
+        action: "Validate BEM naming configurable; verify html5.yaml schema; no duplication with existing frontend workflow templates"
+        gate: "python3 scripts/run_tests.py dir tests/orchestrators/strategies/builders/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
 
     new_files:
       - path: "cortex/orchestrators/strategies/builders/html_builder.py"
@@ -389,6 +448,13 @@ phases:
       - "html5.yaml loadable and schema-valid"
       - "All tests passing"
 
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/orchestrators/strategies/builders/"
+      min_tests_pass: 13
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
     html5_quality_contract:
       semantic_elements: [header, main, nav, section, article, aside, footer]
       accessibility:
@@ -423,8 +489,22 @@ phases:
     gap_refs: ["GAP-70-04"]
     governance_authority: "CORE-008, CORE-011, CORE-012"
     duration_estimate: "1 day"
-    prerequisite: "phase-70-a complete"
-    regression_gate: "python scripts/run_tests.py batch — zero new failures"
+    depends_on: ["phase-70-b"]
+    prerequisite: "phase-70-b completion_gate PASSED (HtmlStackBuilder available as pattern)"
+
+    tdd_cycle:
+      red:
+        action: "Write all PythonStackBuilder tests — no python_builder.py or python.yaml created yet"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/strategies/builders/test_python_builder.py — ALL tests FAIL"
+        blocker: "python_builder.py and python.yaml FORBIDDEN until RED gate passes"
+      green:
+        action: "Implement PythonStackBuilder; create python.yaml — complementary to (not duplicating) backend-python/clean-code.yaml"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/strategies/builders/test_python_builder.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden until GREEN gate passes"
+      refactor:
+        action: "Cross-reference backend-python/clean-code.yaml — eliminate any CORE-035 duplication; add type hints and docstrings"
+        gate: "python3 scripts/run_tests.py dir tests/orchestrators/strategies/builders/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
 
     new_files:
       - path: "cortex/orchestrators/strategies/builders/python_builder.py"
@@ -486,6 +566,19 @@ phases:
         flask:
           test_client: flask.testing.FlaskClient
 
+    acceptance_criteria:
+      - "PythonStackBuilder registered in StackBuilderRegistry"
+      - "get_test_patterns(RED) returns pytest-specific fixture and assertion patterns"
+      - "validate_output() checks type hint coverage and import hygiene"
+      - "python.yaml complementary to (not duplicating) backend-python/clean-code.yaml"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/orchestrators/strategies/builders/"
+      min_tests_pass: 10
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
   - id: "phase-70-d"
     title: "TDDOrchestrator Stack Integration — Wire StackBuilderRegistry"
     priority: P0
@@ -493,8 +586,22 @@ phases:
     gap_refs: ["GAP-70-05"]
     governance_authority: "CORE-008, CORE-048"
     duration_estimate: "0.5 days"
-    prerequisite: "phase-70-a and phase-70-b complete (at least one concrete builder)"
-    regression_gate: "python scripts/run_tests.py batch — zero new failures, zero existing test changes"
+    depends_on: ["phase-70-c"]
+    prerequisite: "phase-70-c completion_gate PASSED (PythonStackBuilder + HtmlStackBuilder available)"
+
+    tdd_cycle:
+      red:
+        action: "Write TDDOrchestrator stack integration tests — do NOT modify tdd_orchestrator.py yet"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/core/test_tdd_stack_integration.py — ALL tests FAIL"
+        blocker: "tdd_orchestrator.py MUST NOT be modified until RED gate passes"
+      green:
+        action: "Add stack_context parameter (default None) to build_guidance(); wire _resolve_stack_builder(); enhance determine_phase()"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/core/test_tdd_stack_integration.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden until ALL tests PASS, including regression guard (build_guidance with stack_context=None unchanged)"
+      refactor:
+        action: "Verify existing TDD tests untouched (zero modifications to existing test files); add docstrings on new methods"
+        gate: "python3 scripts/run_tests.py dir tests/orchestrators/core/ — zero regressions, zero modifications to pre-existing test files"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
 
     files_to_edit:
       - path: "cortex/orchestrators/core/tdd_orchestrator.py"
@@ -533,6 +640,13 @@ phases:
       - "All existing TDD tests pass WITHOUT modification (zero regression)"
       - "tdd_execute() accepts and forwards stack context"
 
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/orchestrators/core/"
+      min_tests_pass: 6
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
   - id: "phase-70-e"
     title: "cortex_stack MCP Tool — Stack Intelligence Operations"
     priority: P1
@@ -540,8 +654,22 @@ phases:
     gap_refs: ["GAP-70-06"]
     governance_authority: "CORE-008, CORE-050"
     duration_estimate: "0.5 days"
-    prerequisite: "phase-70-a complete (StackBuilderRegistry available)"
-    regression_gate: "python scripts/run_tests.py batch — zero new failures"
+    depends_on: ["phase-70-d"]
+    prerequisite: "phase-70-d completion_gate PASSED (TDDOrchestrator stack-wired)"
+
+    tdd_cycle:
+      red:
+        action: "Write all cortex_stack MCP tool tests — cortex_stack.py must NOT exist yet"
+        gate: "python3 scripts/run_tests.py file tests/mcp/test_cortex_stack.py — ALL tests FAIL"
+        blocker: "cortex_stack.py FORBIDDEN until RED gate passes"
+      green:
+        action: "Implement CortexStack(ConsolidatedTool) with 4 operations; register in mcp/tools/__init__.py"
+        gate: "python3 scripts/run_tests.py file tests/mcp/test_cortex_stack.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden until GREEN gate passes"
+      refactor:
+        action: "Verify tool follows ConsolidatedTool pattern; validate cortex_tools_catalog shows cortex_stack; add orchestrator_context None guard"
+        gate: "python3 scripts/run_tests.py dir tests/mcp/ — zero regressions"
+        blocker: "Sub-phase COMPLETE forbidden until REFACTOR gate passes"
 
     new_files:
       - path: "cortex/mcp/tools/cortex_stack.py"
@@ -577,15 +705,36 @@ phases:
       - "Follows ConsolidatedTool pattern with operation routing"
       - "orchestrator_context guard present (None check before validate call)"
 
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/mcp/"
+      min_tests_pass: 9
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
   - id: "phase-70-f"
-    title: "TypeScript + .NET Builders + Workflow Template Integration + Knowledge Index"
+    title: "TypeScript + .NET Builders + Workflow Template Integration + Knowledge Index + Smoke Gate"
     priority: P1
     status: PLANNED
     gap_refs: ["GAP-70-07", "GAP-70-08"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "1 day"
-    prerequisite: "phase-70-a through phase-70-d complete"
-    regression_gate: "python scripts/run_tests.py batch — zero new failures"
+    depends_on: ["phase-70-e"]
+    prerequisite: "phase-70-e completion_gate PASSED (cortex_stack MCP tool registered)"
+
+    tdd_cycle:
+      red:
+        action: "Write TypeScript and .NET builder tests; knowledge index test; workflow template field tests — no new source files yet"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/strategies/builders/test_typescript_builder.py tests/orchestrators/strategies/builders/test_dotnet_builder.py — ALL tests FAIL"
+        blocker: "typescript_builder.py, dotnet_builder.py, typescript.yaml, dotnet.yaml FORBIDDEN until RED gate passes"
+      green:
+        action: "Implement TypeScriptStackBuilder + DotNetStackBuilder; create knowledge YAMLs; update INDEX.yaml; add stack_builder field to 3 workflow templates"
+        gate: "python3 scripts/run_tests.py file tests/orchestrators/strategies/builders/test_typescript_builder.py tests/orchestrators/strategies/builders/test_dotnet_builder.py — ALL tests PASS"
+        blocker: "REFACTOR forbidden until GREEN gate passes"
+      refactor:
+        action: "Verify no duplication with RefactoringAdapter TS/C# adapters (CORE-035); parametrize 4-builder interface contract test; run smoke gate"
+        gate: "python3 scripts/run_tests.py smoke — ≥1420 passing; zero regressions"
+        blocker: "Phase 74 COMPLETE forbidden until smoke gate passes AND all 8 GAPs CLOSED"
 
     new_files:
       - path: "cortex/orchestrators/strategies/builders/typescript_builder.py"
@@ -646,6 +795,13 @@ phases:
       - "No duplication with existing adapters — builders COMPLEMENT adapters"
       - "CORE-064: All 8 GAPs in sweep catalogue CLOSED"
 
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/orchestrators/strategies/"
+      min_tests_pass: 10
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
     typescript_quality_contract:
       type_system:
         strict_mode: true
@@ -673,16 +829,93 @@ phases:
         efcore: {patterns: [repository, unit_of_work, migrations_ci]}
         blazor: {testing: bUnit, interop: "IJSRuntime"}
 
-# ─────────────────────────────────────────────────────────────────────────────
-# DEPENDENCY GRAPH
+  # ── FINAL sub-phase: Smoke Gate + CORE-064 Close ─────────────────────────
+  - id: "phase-70-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: []                           # all 8 GAPs already closed in preceding sub-phases
+    depends_on: ["phase-70-f"]            # all implementation sub-phases must be complete
+    prerequisite: "phase-70-a through phase-70-f completion_gates ALL PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1420 tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate only; confirm all 8 sweep_catalogue GAPs are CLOSED before proceeding"
+        gate: "All 8 GAP-70-01..08 entries must have status: CLOSED"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥1420 tests pass with zero regressions"
+        gate: "python3 scripts/run_tests.py smoke — ≥1420 passing"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Update cortex-master.yaml: phase-74 status→COMPLETE, file→completed/ path; move phase-74 detail file planned/→completed/"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" AND wc -l ≤500"
+        blocker: "Phase is not COMPLETE without YAML valid + ≤500 lines confirmed"
+
+    steps:
+      - "Verify ALL 8 sweep_catalogue GAPs have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke — must pass ≥1420"
+      - "Move planned/phase-74-stack-builder-infrastructure.yaml → completed/"
+      - "Update cortex-master.yaml: phase-74 status→COMPLETE, file→completed/ path"
+      - "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\""
+      - "wc -l cortex-registry/cortex-master.yaml — must be ≤500"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1420
+      zero_new_failures: true
+      all_sweep_catalogue_gaps_closed: true
+      cortex_master_yaml_valid: true
+      cortex_master_yaml_line_count_max: 500
+      phase_file_moved_to_completed: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# (strict sequential within phase — all gates enforced)
 # ─────────────────────────────────────────────────────────────────────────────
 dependency_graph:
-  phase-70-a: []                              # Foundation — no dependencies
-  phase-70-b: [phase-70-a]                    # Needs StackBuilder ABC
-  phase-70-c: [phase-70-a]                    # Needs StackBuilder ABC (parallel with 70-b)
-  phase-70-d: [phase-70-a, phase-70-b]        # Needs ABC + at least one concrete builder
-  phase-70-e: [phase-70-a]                    # Needs StackBuilderRegistry (parallel with 70-b/c)
-  phase-70-f: [phase-70-a, phase-70-b, phase-70-c, phase-70-d]  # Final — needs all prior
+  phase-70-a: []                                                # Foundation — no dependencies
+  phase-70-b: [phase-70-a]                                      # Needs StackBuilder ABC
+  phase-70-c: [phase-70-a]                                      # Needs StackBuilder ABC (run after 70-b within same session)
+  phase-70-d: [phase-70-a, phase-70-b]                          # Needs ABC + at least one concrete builder
+  phase-70-e: [phase-70-a]                                      # Needs StackBuilderRegistry (run after 70-c within same session)
+  phase-70-f: [phase-70-a, phase-70-b, phase-70-c, phase-70-d]  # Needs all implementation sub-phases
+  phase-70-final: [phase-70-f]                                   # Smoke gate — needs all 8 GAPs CLOSED
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FINAL SUB-PHASE — Smoke Gate + CORE-064 Close
+# ─────────────────────────────────────────────────────────────────────────────
+# NOTE: This sub-phase is the mandatory phase closure gate. It is appended here
+# as a reference — the detailed spec is in the phases[] list above.
+# phase-70-final is the last sub-phase in phases[] ordering and must execute
+# after phase-70-f completion_gate PASSES.
+final_sub_phase_ref: "phase-70-final (see phases[] list)"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# EXIT CRITERIA — Phase 74 COMPLETE when ALL met (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+exit_criteria:
+  stack_builders:
+    - "StackBuilder ABC with 6 abstract methods — CORE-035 no duplicates"
+    - "StackBuilderRegistry with resolve(), get(), register(), list_builders()"
+    - "4 concrete builders registered: HtmlStackBuilder, PythonStackBuilder, TypeScriptStackBuilder, DotNetStackBuilder"
+    - "4 stack knowledge YAMLs created in cortex-registry/knowledge/stacks/"
+  tdd_orchestrator:
+    - "build_guidance(stack_context=None) identical to current behavior (zero regression)"
+    - "build_guidance(stack_context=StackContext(stack_id='html5')) returns HTML-specific guidance"
+  mcp:
+    - "cortex_stack MCP tool registered and discoverable via cortex_tools_catalog"
+    - "All 4 operations (list, guidance, scaffold, validate) functional"
+  knowledge:
+    - "INDEX.yaml includes all 4 stack YAMLs with applicable_intents"
+    - "3 workflow templates have stack_builder field in knowledge_context"
+  smoke:
+    - "python3 scripts/run_tests.py smoke ≥1420 passing"
+  governance:
+    - "CORE-064: ALL 8 sweep catalogue GAPs CLOSED"
+    - "cortex-master.yaml ≤500 lines after update"
+    - "phase-74 detail file moved: planned/ → completed/"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # AC MARKERS
@@ -697,6 +930,7 @@ ac_markers:
     - "AC_START: AC-70-D-TDD-INTEGRATION"
     - "AC_START: AC-70-E-MCP-TOOL"
     - "AC_START: AC-70-F-TS-DOTNET-WIRING"
+    - "AC_START: AC-70-FINAL-SMOKE-GATE"
 
 # ─────────────────────────────────────────────────────────────────────────────
 # COMPLETION SECTION (fill in when marking COMPLETE)

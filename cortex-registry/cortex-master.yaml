@@ -11,6 +11,18 @@ maintainer: CORTEX Architecture Team
 # Prohibited inline: phases, gap_catalogue, tdd_sequence, rewrites,
 #   new_files, files_to_edit, implementation, code_snippets
 # ============================================================
+#
+# ============================================================
+# SEQUENTIAL EXECUTION CONTRACT — ALL PHASES (WHOLE-PHASE-FIRST)
+# Each phase is ATOMIC — runs end-to-end in one sweep, never decomposed.
+#   phase_atomic: true | decomposition_allowed: false | gate_on_failure: HALT
+# Every phase file declares sequential_execution_contract block.
+# Every sub-phase has: depends_on, tdd_cycle (red/green/refactor), completion_gate.
+# Every phase ends with phase-{N}-final (smoke gate + CORE-064 close).
+# Partial completion = P0 violation (CORE-064 + WHOLE-PHASE-FIRST principle).
+# Standards: .github/agents/core/phase-creation-standards.md
+# Template:  cortex-registry/planning/phases/_template.yaml
+# ============================================================
 
 # ============================================================
 # CONSOLIDATED EXECUTION PLAN — v21.0

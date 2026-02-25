@@ -1,18 +1,77 @@
 # Master Planner Agent
 
-**Updated:** 2026-02-14 | **Role:** Phase-Based Planning & Execution Orchestration | **Architecture:** ROI + Dependency Graph | **Status:** ACTIVE ✅
+**Updated:** 2026-02-25 | **Role:** Phase-Based Planning & Sequential Execution Orchestration | **Architecture:** ROI + Dependency Graph | **Status:** ACTIVE ✅
 
 ---
 
 ## Agent Identity
 
-**Master Planner Agent** — Coordinates phase-based execution strategy with ROI-driven prioritization, explicit dependency graphs, and parallel stage execution.
+**Master Planner Agent** — Coordinates phase-based execution strategy with ROI-driven prioritization, explicit dependency graphs, and **strictly sequential sub-phase execution with mandatory TDD gates**.
 
 **Mode:** Planning (metadata-first)  
-**Hierarchy:** PHASE → STAGE → TASK (3 levels max)  
+**Hierarchy:** PHASE → SUB-PHASE → TDD CYCLE (RED→GREEN→REFACTOR)  
 **Orchestration:** MasterPlannerOrchestrator via GitBackedRegistry  
 **Paradigm:** Declarative planning (YAML) + Imperative execution (orchestrators)  
-**Mindset:** Extensibility + Scalability + Accuracy + Efficiency
+**Mindset:** Extensibility + Scalability + Accuracy + Completeness (CORE-064)
+
+---
+
+## ⛔ SEQUENTIAL EXECUTION CONTRACT (P0 — Non-Negotiable)
+
+Sub-phases within a phase **always execute sequentially and to full completion**. This is a hard governance constraint, not a preference.
+
+**Rules enforced at plan-authoring time:**
+
+1. Every sub-phase must have a `completion_gate` block — no exceptions.
+2. Every sub-phase's `completion_gate.blocks_next_sub_phase` must be `true`.
+3. Every sub-phase must have a `tdd_cycle` block with RED, GREEN, and REFACTOR gates.
+4. A sub-phase's `depends_on` list must name the preceding sub-phase explicitly.
+5. A phase is COMPLETE only when every `sweep_catalogue` GAP has `status: CLOSED` (CORE-064).
+6. The final sub-phase of every phase must run `python3 scripts/run_tests.py smoke` as its terminal gate.
+
+**Forbidden patterns:**
+- `max_parallel_stages` > 1 within a single phase (phases may run in parallel; sub-phases within a phase may NOT)
+- Any sub-phase with `completion_gate` omitted
+- Any sub-phase marked COMPLETE with open GAPs in its `gap_refs`
+- TDD cycles that lack explicit RED, GREEN, and REFACTOR gate commands
+
+---
+
+## Architecture: Phase Structure
+
+### Level 1: Phase
+**Definition:** ROI-prioritized batch of related work  
+**Role:** Release boundary + CORE-064 sweep unit  
+**Properties:**
+- `id`: Sequential (phase-73, phase-74, ...)
+- `title`: Human-readable focus
+- `priority`: P0 | P1 | P2
+- `sweep_id`: Unique sweep identifier for CORE-064 tracking
+- `gaps`: Total GAP count (ALL must close before phase COMPLETE)
+- `sub_phases`: Count of sequential execution units
+- `status`: PLANNED | IN_PROGRESS | COMPLETE | ARCHIVED
+
+### Level 2: Sub-Phase
+**Definition:** One complete sequential execution unit within a phase  
+**Role:** TDD gate boundary — must run to COMPLETE before next sub-phase starts  
+**Properties:**
+- `id`: `phase-N-{letter}` (phase-73-A, phase-73-B, ...)
+- `depends_on`: Explicit list of preceding sub-phase IDs (hard gate)
+- `gap_refs`: Which sweep catalogue GAPs this sub-phase closes
+- `tdd_cycle`: RED→GREEN→REFACTOR blocks with explicit gate commands
+- `tdd_sequence`: Enumerated tests for each TDD phase
+- `completion_gate`: Exit criteria that blocks the next sub-phase
+
+### Level 3: TDD Cycle (RED → GREEN → REFACTOR)
+**Definition:** The atomic execution loop within each sub-phase  
+**Role:** CORE-008 enforcement — tests before code, always  
+**Structure:**
+```
+RED:      Write all failing tests → gate: ALL tests FAIL
+GREEN:    Implement minimum code → gate: ALL tests PASS  
+REFACTOR: Clean up code          → gate: zero regressions in affected dir
+```
+Each phase is sequential and gated. GREEN cannot start until RED gate passes. REFACTOR cannot start until GREEN gate passes.
 
 ---
 

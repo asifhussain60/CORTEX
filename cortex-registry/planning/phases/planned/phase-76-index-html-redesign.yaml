@@ -8,8 +8,21 @@ renumbers: phase-index-html-redesign
 title: "index.html TDD Redesign - Modern Glassmorphism UI with Google Fonts"
 priority: P1
 status: PLANNED
-phases:
-  - PHASE-INDEX-HTML-REDESIGN-001
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (WHOLE-PHASE-FIRST / Maximum ROI)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+  rationale: |
+    UI redesigns split across sessions produce inconsistent CSS states, duplicate
+    variables, and broken visual hierarchy. This phase runs end-to-end in one sweep.
+    No "CSS only" partial completions. All 10 ACs must be met before COMPLETE.
 
 meta:
   created: "2026-02-25"
@@ -621,76 +634,276 @@ acceptance_criteria:
     priority: P1
 
 # ============================================
-# IMPLEMENTATION SEQUENCE (TDD)
+# IMPLEMENTATION SUB-PHASES (TDD-gated, STRICT_SEQUENTIAL)
 # ============================================
 
-implementation_sequence:
-  step_1_red_phase:
-    title: "Write Failing Tests"
-    tasks:
-      - "Create tests/cortex_docs/test_index_redesign.py"
-      - "Write all test cases from tdd_tests section"
-      - "Run tests - verify all fail (RED phase)"
-      - "Document expected failures"
-    
-  step_2_green_phase_css:
-    title: "Consolidate CSS"
-    tasks:
-      - "Extract loading overlay styles to glass-ui-components.css"
-      - "Extract cortex-tabs styles to glass-ui-components.css"
-      - "Extract accessibility styles to main.css"
-      - "Remove all inline <style> blocks from index.html"
-      - "Run CSS extraction tests - verify pass"
-    
-  step_3_green_phase_fonts:
-    title: "Integrate Google Fonts"
-    tasks:
-      - "Add font variables to glass-design-tokens.css"
-      - "Update all font-family declarations in main.css"
-      - "Update typography in all HTML views"
-      - "Run font tests - verify pass"
-    
-  step_4_green_phase_headers:
-    title: "Standardize Headers"
-    tasks:
-      - "Add header size variables to glass-design-tokens.css"
-      - "Update h1-h6 styles in main.css"
-      - "Remove inline header sizes from all views"
-      - "Run header standardization tests - verify pass"
-    
-  step_5_green_phase_navigation:
-    title: "Redesign Navigation Section"
-    tasks:
-      - "Create new card-based layout HTML"
-      - "Add navigation card styles to glass-ui-components.css"
-      - "Add Font Awesome icons"
-      - "Add hover animations to glass-animations.css"
-      - "Run navigation tests - verify pass"
-    
-  step_6_green_phase_visual:
-    title: "Add Visual Enhancements"
-    tasks:
-      - "Add Font Awesome icons to all sections"
-      - "Add diagram placeholders"
-      - "Add subtle glass animations"
-      - "Run visual enhancement tests - verify pass"
-    
-  step_7_refactor_phase:
-    title: "Refactor & Optimize"
-    tasks:
-      - "Remove code duplication"
-      - "Optimize CSS (reduce file sizes)"
-      - "Validate accessibility"
-      - "Run full test suite - verify all pass"
-    
-  step_8_validation:
-    title: "Final Validation"
-    tasks:
-      - "Run make test-batch"
-      - "Lighthouse audit (accessibility, performance)"
-      - "Cross-browser testing"
-      - "Mobile device testing"
-      - "Update phase status to COMPLETE"
+sub_phases:
+
+  - id: "phase-76-a"
+    title: "RED Phase — Write ALL Failing Tests"
+    priority: P0
+    status: PLANNED
+    depends_on: []
+    prerequisite: "All P0 phases (73, 74) COMPLETE"
+    regression_gate: "python3 scripts/run_tests.py smoke — baseline ≥1420 passing before any code change"
+
+    tdd_cycle:
+      red:
+        action: "Create tests/cortex_docs/test_index_redesign.py with ALL test cases from tdd_tests section — BEFORE any HTML/CSS changes"
+        gate: "python3 -m pytest tests/cortex_docs/test_index_redesign.py — ALL tests must FAIL (RED)"
+        blocker: "Do NOT touch any CSS or HTML file until every test in the file is failing"
+        tests:
+          - "test_no_inline_style_blocks"
+          - "test_loading_overlay_extracted"
+          - "test_tabs_extracted"
+          - "test_accessibility_extracted"
+          - "test_google_fonts_preconnect"
+          - "test_font_variables_defined"
+          - "test_headings_use_space_grotesk"
+          - "test_body_uses_inter"
+          - "test_header_variables_defined"
+          - "test_clamp_responsive"
+          - "test_no_magic_numbers"
+          - "test_card_grid_exists"
+          - "test_card_glassmorphism"
+          - "test_icons_font_awesome"
+          - "test_hover_animations"
+          - "test_glass_design_tokens"
+          - "test_backdrop_filter_support"
+          - "test_blur_values_standardized"
+          - "test_mobile_breakpoint"
+          - "test_tablet_layout"
+          - "test_desktop_layout"
+          - "test_wcag_color_contrast"
+          - "test_skip_link_exists"
+          - "test_aria_labels"
+          - "test_reduced_motion"
+          - "test_semantic_html"
+          - "test_font_awesome_loaded"
+          - "test_icon_consistency"
+          - "test_animations_subtle"
+      green:
+        action: "N/A — no implementation in this sub-phase"
+        gate: "Test file exists and all tests FAIL"
+        blocker: "Do NOT proceed until all tests are failing"
+      refactor:
+        action: "Review test assertions for completeness — add any missing edge cases"
+        gate: "Still all FAIL"
+        blocker: "Any accidentally passing test signals implementation leakage"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/cortex_docs/test_index_redesign.py --tb=no -q"
+      expected_state: "ALL_FAIL"
+      test_file_exists: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-76-b"
+    title: "GREEN — CSS Extraction (AC-001)"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-76-a"]
+    prerequisite: "phase-76-a completion_gate PASSED (all tests failing)"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1420 passing"
+
+    tdd_cycle:
+      red:
+        action: "Verify css_extraction tests still fail before starting"
+        gate: "test_no_inline_style_blocks, test_loading_overlay_extracted, test_tabs_extracted, test_accessibility_extracted all FAIL"
+        blocker: "If any pass already, review test correctness before proceeding"
+      green:
+        action: "Extract all inline <style> blocks to external CSS files per css_consolidation spec"
+        gate: "python3 -m pytest tests/cortex_docs/test_index_redesign.py -k 'css_extraction' — all 4 PASS"
+        blocker: "Do NOT proceed to fonts until all 4 CSS extraction tests pass GREEN"
+        implementation:
+          - "Extract loading overlay styles → glass-ui-components.css"
+          - "Extract cortex-tabs styles → glass-ui-components.css"
+          - "Extract accessibility styles → main.css"
+          - "Remove all inline <style> blocks from index.html"
+      refactor:
+        action: "Verify no style duplication across files; consolidate if needed"
+        gate: "python3 scripts/run_tests.py smoke — ≥1420 passing; zero new failures"
+        blocker: "Revert if any existing test breaks"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/cortex_docs/test_index_redesign.py -k css_extraction"
+      min_tests_pass: 4
+      zero_new_failures: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-76-c"
+    title: "GREEN — Google Fonts + Header Standardization (AC-002, AC-004)"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-76-b"]
+    prerequisite: "phase-76-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1420 passing"
+
+    tdd_cycle:
+      red:
+        action: "Verify google_fonts and header_standardization tests still fail"
+        gate: "test_font_variables_defined, test_headings_use_space_grotesk, test_header_variables_defined, test_clamp_responsive all FAIL"
+        blocker: "If any pass accidentally, review before proceeding"
+      green:
+        action: "Integrate Google Fonts and standardize headers via CSS variables per google_fonts + header_standardization spec"
+        gate: "python3 -m pytest tests/cortex_docs/test_index_redesign.py -k 'google_fonts or header_standardization' — all PASS"
+        blocker: "Do NOT proceed until font + header tests pass"
+        implementation:
+          - "Add font variables to glass-design-tokens.css (--font-family-body, --font-family-heading, --font-family-mono)"
+          - "Add header size variables to glass-design-tokens.css (--heading-h1-size through --heading-h6-size)"
+          - "Update h1-h6 in main.css to use CSS variables with clamp()"
+          - "Update font-family declarations in all HTML views (index.html, roles/*.html, learning/**/*.html)"
+      refactor:
+        action: "Ensure no magic numbers remain; all sizes use CSS variables"
+        gate: "python3 scripts/run_tests.py smoke — ≥1420 passing; zero new failures"
+        blocker: "Revert if any existing test breaks"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/cortex_docs/test_index_redesign.py -k 'google_fonts or header_standardization'"
+      min_tests_pass: 8
+      zero_new_failures: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-76-d"
+    title: "GREEN — Navigation Redesign + Visual Enhancements (AC-003, AC-008, AC-009)"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-76-c"]
+    prerequisite: "phase-76-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1420 passing"
+
+    tdd_cycle:
+      red:
+        action: "Verify navigation + visual_enhancements + glassmorphism tests still fail"
+        gate: "test_card_grid_exists, test_card_glassmorphism, test_icons_font_awesome, test_hover_animations, test_font_awesome_loaded all FAIL"
+        blocker: "Do NOT start HTML restructuring until tests fail"
+      green:
+        action: "Redesign navigation section with card-based grid; add Font Awesome icons; apply glassmorphism per navigation_section_redesign spec"
+        gate: "python3 -m pytest tests/cortex_docs/test_index_redesign.py -k 'navigation_redesign or glassmorphism or visual_enhancements' — all PASS"
+        blocker: "Do NOT proceed to validation until all navigation + visual tests pass"
+        implementation:
+          - "Create new card-based layout HTML in navigation section"
+          - "Add navigation card styles to glass-ui-components.css"
+          - "Add fadeInUp + cardHover animations to glass-animations.css"
+          - "Add Font Awesome 6.5.1 CDN link"
+          - "Add Font Awesome icons to all section headers"
+          - "Add diagram placeholder cards"
+      refactor:
+        action: "Remove content duplication; verify Vision API sections (hero, features, governance) UNCHANGED"
+        gate: "python3 scripts/run_tests.py smoke — ≥1420 passing; zero new failures"
+        blocker: "Revert if any Vision API section content changed or existing test breaks"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/cortex_docs/test_index_redesign.py -k 'navigation_redesign or glassmorphism or visual_enhancements'"
+      min_tests_pass: 9
+      zero_new_failures: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-76-e"
+    title: "GREEN — Responsive Design + Accessibility (AC-006, AC-010)"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-76-d"]
+    prerequisite: "phase-76-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1420 passing"
+
+    tdd_cycle:
+      red:
+        action: "Verify responsive_design and accessibility tests still fail"
+        gate: "test_mobile_breakpoint, test_tablet_layout, test_desktop_layout, test_wcag_color_contrast, test_reduced_motion all FAIL"
+        blocker: "Do NOT add breakpoints until tests fail"
+      green:
+        action: "Add responsive breakpoints, WCAG compliance styles, prefers-reduced-motion, aria-labels, semantic HTML per tdd_tests spec"
+        gate: "python3 -m pytest tests/cortex_docs/test_index_redesign.py -k 'responsive_design or accessibility' — all PASS"
+        blocker: "Do NOT proceed until responsive + accessibility tests pass"
+        implementation:
+          - "Add 3-column grid on desktop (>1024px)"
+          - "Add 2-column grid on tablet (768px-1024px)"
+          - "Add 1-column stacking on mobile (<768px)"
+          - "Add prefers-reduced-motion media query"
+          - "Ensure all interactive elements have aria-labels"
+          - "Validate semantic HTML structure (header, main, section, article)"
+      refactor:
+        action: "Run Lighthouse accessibility check — target ≥90; fix any remaining contrast issues"
+        gate: "python3 scripts/run_tests.py smoke — ≥1420 passing; zero new failures"
+        blocker: "Revert if any existing test breaks"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/cortex_docs/test_index_redesign.py -k 'responsive_design or accessibility'"
+      min_tests_pass: 8
+      zero_new_failures: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-76-f"
+    title: "FULL GREEN — All 29 Tests Pass (AC-005)"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-76-e"]
+    prerequisite: "phase-76-e completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1420 passing"
+
+    tdd_cycle:
+      red:
+        action: "Confirm remaining failing tests (if any) before final sweep"
+        gate: "Run full test_index_redesign.py and identify any still-failing tests"
+        blocker: "Do NOT close this sub-phase with failing tests"
+      green:
+        action: "Fix any remaining failing tests in test_index_redesign.py"
+        gate: "python3 -m pytest tests/cortex_docs/test_index_redesign.py — ALL 29 tests PASS"
+        blocker: "Zero tolerance: all 29 tests must pass"
+      refactor:
+        action: "Optimize CSS (remove duplication, reduce file sizes); final code cleanup"
+        gate: "python3 scripts/run_tests.py smoke — ≥1420 passing; zero new failures; all 29 index tests still GREEN"
+        blocker: "Revert any refactor that breaks a test"
+
+    completion_gate:
+      test_runner_command: "python3 -m pytest tests/cortex_docs/test_index_redesign.py"
+      min_tests_pass: 29
+      zero_new_failures: true
+      blocks_next_sub_phase: true
+
+  # ── FINAL sub-phase: Smoke Gate + CORE-064 Close ─────────────────────────
+  - id: "phase-76-final"
+    title: "Smoke Gate + AC Validation + cortex-master.yaml update"
+    priority: P0
+    status: PLANNED
+    depends_on: ["phase-76-f"]
+    prerequisite: "phase-76-a through phase-76-f completion_gates ALL PASSED; all 29 tests GREEN"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1420 tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate only; confirm all 10 ACs are met before proceeding"
+        gate: "All AC-001 through AC-010 verified; all 29 test_index_redesign tests GREEN"
+        blocker: "Do NOT run smoke gate if any AC remains unmet"
+      green:
+        action: "Run full smoke gate — confirm ≥1420 tests pass with zero regressions"
+        gate: "python3 scripts/run_tests.py smoke — ≥1420 passing"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Update cortex-master.yaml: phase-76 status→COMPLETE, file→completed/ path; move phase-76 detail file planned/→completed/"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" AND wc -l ≤500"
+        blocker: "Phase is not COMPLETE without YAML valid + ≤500 lines confirmed"
+
+    steps:
+      - "Verify all 10 ACs (AC-001 through AC-010) are met"
+      - "python3 -m pytest tests/cortex_docs/test_index_redesign.py — all 29 PASS"
+      - "python3 scripts/run_tests.py smoke — must pass ≥1420"
+      - "Move planned/phase-76-index-html-redesign.yaml → completed/"
+      - "Update cortex-master.yaml: phase-76 status→COMPLETE"
+      - "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\""
+      - "wc -l cortex-registry/cortex-master.yaml — must be ≤500"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1420
+      index_redesign_tests_pass: 29
+      zero_new_failures: true
+      all_acceptance_criteria_met: true
+      cortex_master_yaml_valid: true
+      cortex_master_yaml_line_count_max: 500
+      phase_file_moved_to_completed: true
+      blocks_next_sub_phase: false
+
 
 # ============================================
 # DELIVERABLES

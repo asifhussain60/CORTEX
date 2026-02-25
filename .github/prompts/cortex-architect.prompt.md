@@ -374,6 +374,87 @@ If `complete=False`: surface gaps inline and require either implementation or AD
 4. **Phase breakdown** — ordered phases with dependencies, deliverables, risk
 5. **Registry update** — write phase spec to `cortex-registry/planning/phases/` (see THIN INDEX CONTRACT below)
 
+### ⚡ WHOLE-PHASE-FIRST PRINCIPLE (Maximum ROI — MANDATORY)
+
+**Every phase is an atomic unit. It runs end-to-end in one sweep or not at all.**
+
+Partial execution produces orphaned GAPs, broken wiring, degraded context across sessions, and split test baselines — all of which require costly re-work and eliminate ROI from the original investment.
+
+**Every phase spec MUST declare:**
+```yaml
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+```
+
+**Mandatory final sub-phase** — every phase must end with `phase-{N}-final`:
+- Verifies ALL sweep_catalogue GAPs are CLOSED (CORE-064)
+- Runs smoke gate (`python3 scripts/run_tests.py smoke — ≥baseline`)
+- Updates cortex-master.yaml (status→COMPLETE)
+- Moves phase detail file: `planned/` → `completed/`
+- Validates cortex-master.yaml is still ≤500 lines and YAML-valid
+
+**P0 authoring violations — reject any phase spec containing:**
+- `sequential_execution_contract` block absent
+- `phase_atomic: false` or `decomposition_allowed: true`
+- Phase split into "Part 1 / Part 2" without each part having its own complete sweep catalogue
+- No `phase-{N}-final` sub-phase as the last entry in the sub-phase chain
+- Any sub-phase missing `tdd_cycle` or `completion_gate`
+
+### ⛔ SEQUENTIAL EXECUTION CONTRACT (P0 — MANDATORY on ALL phases authored)
+
+Every phase spec written by CORTEX Architect must enforce **complete sequential sub-phase execution**. Phases may run in priority order relative to each other; sub-phases within a phase run **strictly sequentially, never concurrently**.
+
+**Every sub-phase must contain ALL of the following — omission is a P0 authoring violation:**
+
+| Required Block | Purpose | Rule |
+|---|---|---|
+| `depends_on` | Lists the preceding sub-phase ID(s) | Hard gate — execution blocked until prior sub-phase COMPLETE |
+| `tdd_cycle.red` | Write failing tests first with gate command | CORE-008 — no implementation before RED gate passes |
+| `tdd_cycle.green` | Minimum implementation + gate command | No REFACTOR before GREEN gate passes |
+| `tdd_cycle.refactor` | Code quality pass + gate command | No COMPLETE before REFACTOR gate passes |
+| `completion_gate` | Exit criteria with `blocks_next_sub_phase: true` | CORE-064 — prevents partial sweeps |
+| `tdd_sequence.red` | Enumerated failing tests (named, not vague) | At least 1 named test per GAP closed |
+
+**Prohibited patterns — reject any phase spec containing these:**
+- Sub-phase with no `tdd_cycle` block (violates CORE-008)
+- Sub-phase with no `completion_gate` (no enforcement = can be skipped)
+- `completion_gate.blocks_next_sub_phase: false` (defeats the contract)
+- `depends_on: []` on any sub-phase after the first (must chain explicitly)
+- Any GAP in `gap_refs` that is `status: OPEN` when sub-phase is marked COMPLETE
+- Final sub-phase missing smoke gate (`python3 scripts/run_tests.py smoke`)
+
+**Completion gate schema (required verbatim):**
+```yaml
+completion_gate:
+  test_runner_command: "python3 scripts/run_tests.py {scope}"
+  min_tests_pass: N
+  zero_new_failures: true
+  all_gap_refs_closed: true
+  blocks_next_sub_phase: true
+```
+
+**TDD cycle schema (required verbatim):**
+```yaml
+tdd_cycle:
+  red:
+    action: "Write all tests in tdd_sequence.red — implementation forbidden"
+    gate: "python3 scripts/run_tests.py file <test_file> — ALL listed tests FAIL"
+    blocker: "Implementation code forbidden until gate passes"
+  green:
+    action: "Write minimum implementation to pass all RED tests"
+    gate: "python3 scripts/run_tests.py file <test_file> — ALL tests PASS"
+    blocker: "REFACTOR forbidden until gate passes"
+  refactor:
+    action: "Type hints, docstrings, deduplication (CORE-011, CORE-012, CORE-035)"
+    gate: "python3 scripts/run_tests.py dir tests/<affected_dir>/ — zero regressions"
+    blocker: "sub-phase COMPLETE forbidden until gate passes"
+```
+
 ### ⚠️ PLAN MODE — THIN INDEX CONTRACT (MANDATORY)
 
 `cortex-master.yaml` is a **reference index only**. Writing phase detail inline to it is a P0 governance violation.

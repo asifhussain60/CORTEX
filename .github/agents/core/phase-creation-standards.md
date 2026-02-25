@@ -1,12 +1,94 @@
 # Phase Creation Standards Guide
 
-**Authority:** CORE-042 | **Created:** 2026-02-12 | **Updated:** 2026-02-14
+**Authority:** CORE-042, CORE-008, CORE-064 | **Created:** 2026-02-12 | **Updated:** 2026-02-25
 
 ---
 
 ## 🎯 Purpose
 
 This guide establishes best practices for creating CORTEX phases, ensuring consistency, completeness, and maintainability across all phase specifications.
+
+---
+
+## ⛔ SEQUENTIAL EXECUTION CONTRACT (MANDATORY — P0)
+
+Every phase authored in CORTEX **must** enforce complete sequential execution of its sub-phases. This is non-negotiable and derives from CORE-008 (TDD) and CORE-064 (Sweep Completeness).
+
+### ⚡ WHOLE-PHASE-FIRST PRINCIPLE (Maximum ROI Rule)
+
+> **A phase must always be designed and executed as a single, complete unit — never decomposed into separately-completing pieces.**
+
+The highest ROI comes from finishing a phase end-to-end before moving on. Partial phase execution produces:
+- Orphaned GAPs that drift without resolution
+- Wiring that is half-complete and therefore broken
+- Test suites that cannot pass their full golden gate
+- Context loss that forces re-analysis in a future session
+
+**Mandatory phase authoring rule:** Every phase file must declare `sequential_execution_contract.phase_atomic: true` and `decomposition_allowed: false`. Any attempt to split a phase into "phase-73 part 1" and "phase-73 part 2" is a P0 governance violation unless the split produces two fully self-contained phases each with their own complete sweep catalogues.
+
+**Mandatory execution rule:** When executing a phase, run all sub-phases in order to completion within the same session or continuous execution context. If a session must pause, the state is recorded at the last passed `completion_gate` and execution resumes from the next sub-phase — not from a new partial phase.
+
+### The Four Laws of Sub-Phase Execution
+
+**Law 1 — No sub-phase may start until the preceding sub-phase passes its completion gate.**
+Every sub-phase must declare a `completion_gate` block. The next sub-phase's `prerequisite` must reference it explicitly. Execution halts if the gate fails — fix the failure, rerun the gate, then continue.
+
+**Law 2 — Every sub-phase must run its full RED→GREEN→REFACTOR loop before marking COMPLETE.**
+No sub-phase may be marked COMPLETE with only RED tests written, or only GREEN without REFACTOR. The TDD cycle is atomic: all three phases must complete before the sub-phase closes. The `tdd_cycle` block is mandatory on every sub-phase that involves code.
+
+**Law 3 — A phase is only COMPLETE when every entry in its `sweep_catalogue` has `status: CLOSED`.**
+CORE-064 is absolute. Partial sweeps that leave any GAP OPEN are governance violations. The `phase-N-final` sub-phase must verify this before marking the phase file for promotion to `completed/`.
+
+**Law 4 — The final sub-phase is always a smoke gate + CORE-064 close sub-phase.**
+Every phase must end with a `phase-N-final` sub-phase that: (a) verifies all GAPs CLOSED, (b) runs smoke tests, (c) moves the phase file from `planned/` → `completed/`, and (d) updates `cortex-master.yaml` to `status: COMPLETE`.
+
+### Completion Gate Schema (Required on Every Sub-Phase)
+
+```yaml
+completion_gate:
+  test_runner_command: "python3 scripts/run_tests.py {scope}"   # must pass
+  min_tests_pass: N          # explicit count — never omit
+  zero_new_failures: true    # non-negotiable
+  all_gap_refs_closed: true  # CORE-064 check for THIS sub-phase's gaps
+  blocks_next_sub_phase: true  # prevents next sub-phase from starting if gate fails
+```
+
+### RED→GREEN→REFACTOR Block (Required on Every Sub-Phase)
+
+Every sub-phase that involves code must contain an explicit `tdd_cycle` block:
+
+```yaml
+tdd_cycle:
+  red:
+    action: "Write all failing tests listed in tdd_sequence.red before any implementation"
+    gate: "python3 scripts/run_tests.py file <test_file> — ALL listed tests must FAIL (import errors count)"
+    blocker: "Do NOT write implementation code until RED gate passes"
+  green:
+    action: "Write minimum implementation to turn all RED tests GREEN"
+    gate: "python3 scripts/run_tests.py file <test_file> — ALL tests must PASS"
+    blocker: "Do NOT begin REFACTOR until GREEN gate passes"
+  refactor:
+    action: "Clean up implementation — type hints, docstrings, deduplication, complexity"
+    gate: "python3 scripts/run_tests.py dir <affected_dir> — zero regressions"
+    blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+```
+
+### Prohibited Patterns (P0 Violations)
+
+| Pattern | Why It's Forbidden |
+|---|---|
+| `phase_atomic: false` or `decomposition_allowed: true` | Violates WHOLE-PHASE-FIRST — max ROI requires end-to-end completion |
+| Phase split into "part 1 / part 2" without two complete sweep catalogues | Decomposes a phase mid-sweep — CORE-064 violation |
+| `depends_on: []` with no `completion_gate` | No enforcement — sub-phases can be skipped |
+| `status: COMPLETE` with open GAPs in `gap_refs` | Violates CORE-064 |
+| Sub-phase with code changes but no `tdd_cycle` block | Violates CORE-008 — TDD is mandatory |
+| Sub-phase with no `tdd_sequence` block | Violates CORE-008 — TDD is mandatory |
+| `tdd_cycle.red.blocker` not explicitly stated | Allows skipping RED phase |
+| `completion_gate.blocks_next_sub_phase: false` on non-final sub-phase | Defeats sequential contract |
+| No `phase-N-final` sub-phase (smoke gate + CORE-064 close) | Phase can be abandoned without confirmation |
+| Marking a phase COMPLETE before smoke gate passes | Violates production readiness |
+
+---
 
 ---
 
@@ -124,24 +206,61 @@ tests:                          # Required
   coverage_minimum: 0.80         # Min 0.80
 ```
 
-### 3. Stage Structure (All Templates)
+### 3. Sub-Phase Structure (All Templates — Sequential, Gated)
 
-For all phases, use stage-based structure:
+For all phases, use sub-phase-based structure with explicit completion gates and TDD cycles. Sub-phases execute **strictly sequentially** — the next cannot start until the current passes its gate.
 
 ```yaml
-stages:
-  - stage: "S1-Foundation"
-    duration: "3 days"
-    deliverables:
-      - "Registry audit"
-      - "Cleanup script"
-    tests: 6
-    
-  - stage: "S2-Core"
-    duration: "3 days"
-    deliverables:
-      - "Core implementation"
-    tests: 50
+sub_phases:
+  - id: "phase-N-a"
+    title: "Foundation — [what this closes]"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-N-01", "GAP-N-02"]
+    depends_on: []                   # first sub-phase — no dependencies
+    prerequisite: "smoke tests green (≥N baseline)"
+
+    tdd_cycle:
+      red:
+        action: "Write all failing tests listed in tdd_sequence.red"
+        gate: "python3 scripts/run_tests.py file tests/path/test_N_a.py — ALL FAIL"
+        blocker: "Do NOT write implementation until ALL listed tests fail"
+      green:
+        action: "Implement minimum code to pass all RED tests"
+        gate: "python3 scripts/run_tests.py file tests/path/test_N_a.py — ALL PASS"
+        blocker: "Do NOT begin refactor until ALL tests pass"
+      refactor:
+        action: "Add type hints, docstrings, remove duplication (CORE-011, CORE-012, CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/affected_dir/ — zero regressions"
+        blocker: "Do NOT mark COMPLETE until refactor gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_<specific_case_1> — <what it asserts>"
+        - "test_<specific_case_2> — <what it asserts>"
+      green:
+        - "Implement <class/function> to satisfy test_<case_1>"
+        - "Implement <class/function> to satisfy test_<case_2>"
+      refactor:
+        - "Add docstrings to all public methods (CORE-012)"
+        - "Verify type hints on all signatures (CORE-011)"
+        - "Check CORE-035: no duplicate implementations"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/affected_dir/"
+      min_tests_pass: N
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  - id: "phase-N-b"
+    title: "Core — [what this closes]"
+    priority: P0
+    status: PLANNED
+    gap_refs: ["GAP-N-03"]
+    depends_on: ["phase-N-a"]       # ← hard dependency; cannot start until phase-N-a gate passes
+    prerequisite: "phase-N-a completion_gate PASSED"
+    # ... same tdd_cycle, tdd_sequence, completion_gate structure
 ```
 
 ### 4. Cleanup Requirements
