@@ -4,7 +4,7 @@
 title: CORTEX Extensibility — Adding New Capabilities
 type: explanation
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/mcp/tools/ + cortex/orchestrators/domain/ + cortex-registry/patterns/
 order: 8
 ---
@@ -69,4 +69,4 @@ Current patterns: mediator, strategy, observer, factory, template-method, chain-
 
 ---
 
-*Verified against extension point registry · 20 February 2026*
+*Verified against extension point registry · 25 February 2026*

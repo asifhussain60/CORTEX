@@ -4,7 +4,7 @@
 title: Technology Stack & Dependencies
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: requirements.txt + pyproject.toml
 order: 2
 ---
@@ -126,4 +126,4 @@ order: 2
 
 ---
 
-*Verified against `requirements.txt` and `pyproject.toml` · 20 February 2026*
+*Verified against `requirements.txt` and `pyproject.toml` · 25 February 2026*

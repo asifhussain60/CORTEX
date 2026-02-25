@@ -4,7 +4,7 @@
 title: LENS Synthesis — Combining Analyzer Outputs
 type: explanation
 audience: [Software Developers]
-last_verified: 2026-02-21
+last_verified: 2026-02-25
 source_of_truth: cortex/lens/lens_orchestrator.py + cortex/intelligence/provider.py
 order: 4
 ---
@@ -74,4 +74,4 @@ Sprint context is injected into `company_knowledge.domain_rules["sprint_context"
 
 ---
 
-*Verified against LENS pipeline and UnifiedIntelligenceProvider · 21 February 2026*
+*Verified against LENS pipeline and UnifiedIntelligenceProvider · 25 February 2026*

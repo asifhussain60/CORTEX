@@ -4,7 +4,7 @@
 title: FAQ — Business & Product
 type: reference
 audience: [Business Leaders, Product Owners]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 order: 7
 ---
@@ -138,7 +138,7 @@ Export via `cortex_metrics_report` (YAML or JSON). Grafana dashboards consume th
 
 ## What is the CORTEX Master Plan?
 
-`cortex-registry/cortex-master.yaml` is a **thin phase index** (≤ 500 lines) tracking all 67 development phases. As of 24 February 2026, **all 67 phases are complete**.
+`cortex-registry/cortex-master.yaml` is a **thin phase index** (≤ 500 lines) tracking all 67 development phases. As of 25 February 2026, **all 67 phases are complete**.
 
 Each phase has a dedicated detail file in `cortex-registry/planning/phases/completed/`. The master plan is a reference index only — never a detail document. This is enforced by the THIN INDEX CONTRACT.
 
@@ -176,4 +176,4 @@ Air-gapped environments are fully supported for the core CORTEX workflow.
 
 ---
 
-*Verified against live codebase · 24 February 2026 · Phase 66/67 Complete — All 67 Phases Done*
+*Verified against live codebase · 25 February 2026 · Phase 79-D Complete — All 67 Phases Done*

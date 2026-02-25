@@ -4,7 +4,7 @@
 title: TDDOrchestrator — Test-Driven Development Engine
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/core/tdd_orchestrator.py
 order: 4
 ---
@@ -55,4 +55,4 @@ TDDOrchestrator integrates with TestQualityGate (`cortex/testing/quality_gate.py
 
 ---
 
-*Verified against tdd_orchestrator.py · 20 February 2026*
+*Verified against tdd_orchestrator.py · 25 February 2026*

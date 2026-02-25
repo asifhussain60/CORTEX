@@ -4,7 +4,7 @@
 title: End-to-End Request Flow Diagram
 type: diagram
 audience: [Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/core/master_orchestrator.py
 order: 3
 ---
@@ -49,7 +49,7 @@ order: 3
 ┌────────────────────────────────────────────┐
 │  STAGE 3: INTELLIGENCE PREFETCH            │
 │  ┌──────────────────────────────────────┐  │
-│  │  LENS Analysis (8 parallel analyzers)│  │
+│  │  LENS Analysis (10 parallel analyzers)│  │
 │  │  ┌────┐ ┌────┐ ┌────┐ ┌─────────┐   │  │
 │  │  │AST │ │Git │ │Imp │ │Security │   │  │
 │  │  └────┘ └────┘ └────┘ └─────────┘   │  │
@@ -114,4 +114,4 @@ IntentRouter
 
 ---
 
-*Verified against MasterOrchestrator 4-stage pipeline · 20 February 2026*
+*Verified against MasterOrchestrator 4-stage pipeline · 25 February 2026*

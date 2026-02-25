@@ -4,7 +4,7 @@
 title: Observability — Tracing, Metrics & Logging
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/infrastructure/ + cortex/observability/ + deployment/prometheus.yml
 order: 5
 ---
@@ -136,4 +136,4 @@ Pre-built dashboards in `deployment/grafana-dashboards/`:
 
 ---
 
-*Verified against `cortex/infrastructure/` and `deployment/` · 20 February 2026*
+*Verified against `cortex/infrastructure/` and `deployment/` · 25 February 2026*

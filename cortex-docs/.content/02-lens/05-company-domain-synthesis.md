@@ -4,7 +4,7 @@
 title: Company Domain Synthesis — LENS Company Domain Layer
 type: explanation
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-21
+last_verified: 2026-02-25
 source_of_truth: cortex/intelligence/provider.py + cortex/intelligence/knowledge/company_domain_loader.py
 order: 5
 ---
@@ -204,4 +204,4 @@ The combined company domain + sprint context allows orchestrators to answer ques
 
 ---
 
-*Verified against `cortex/intelligence/knowledge/company_domain_loader.py` · Phase 18 complete · 21 February 2026*
+*Verified against `cortex/intelligence/knowledge/company_domain_loader.py` · Phase 18 complete · 25 February 2026*

@@ -4,7 +4,7 @@
 title: MCP Protocol & Transport
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/mcp/
 order: 2
 ---
@@ -135,4 +135,4 @@ All errors include structured messages with remediation guidance.
 
 ---
 
-*Verified against MCP protocol implementation · 20 February 2026*
+*Verified against MCP protocol implementation · 25 February 2026*

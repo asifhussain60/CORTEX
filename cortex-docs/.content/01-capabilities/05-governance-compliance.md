@@ -4,7 +4,7 @@
 title: CORTEX Governance — Automated Rule Enforcement
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex-registry/core/tier0-skull/skull-rules.yaml + cortex/orchestrators/core/enforcement_orchestrator.py
 order: 5
 ---

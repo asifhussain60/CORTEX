@@ -4,7 +4,7 @@
 title: IntentRouter — LENS-Based Request Classification
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/core/intent_router.py
 order: 3
 ---
@@ -40,4 +40,4 @@ Phase 11 (Gap Remediation) added routing for 5 previously missing modes: DESIGN,
 
 ---
 
-*Verified against intent_router.py · 20 February 2026*
+*Verified against intent_router.py · 25 February 2026*

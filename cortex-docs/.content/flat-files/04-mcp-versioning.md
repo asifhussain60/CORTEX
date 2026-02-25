@@ -4,7 +4,7 @@
 title: MCP Versioning & Lifecycle
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-21
+last_verified: 2026-02-25
 source_of_truth: cortex/mcp/ + cortex-registry/planning/cortex-refactor-master.yaml
 order: 5
 ---
@@ -164,4 +164,4 @@ def test_my_new_tool_execution():
 
 ---
 
-*Verified against MCP tool base class and registration patterns · 20 February 2026*
+*Verified against MCP tool base class and registration patterns · 25 February 2026*

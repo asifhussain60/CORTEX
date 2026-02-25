@@ -4,7 +4,7 @@
 title: Cross-Orchestrator Communication
 type: reference
 audience: [Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/core/master_orchestrator.py
 order: 6
 ---
@@ -34,4 +34,4 @@ This ensures:
 
 ---
 
-*Verified against orchestrator dispatch patterns · 20 February 2026*
+*Verified against orchestrator dispatch patterns · 25 February 2026*

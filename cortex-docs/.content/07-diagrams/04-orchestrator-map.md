@@ -4,7 +4,7 @@
 title: 17 Wired Orchestrators Across 3 Tiers
 type: diagram
 audience: [Software Developers]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/*-wiring.yaml
 order: 4
 ---
@@ -87,4 +87,4 @@ Communication uses the **OrchestratorEventBus** (`cortex/infrastructure/orchestr
 
 ---
 
-*Verified against `cortex/orchestrators/` directory + wiring YAML · 23 February 2026*
+*Verified against `cortex/orchestrators/` directory + wiring YAML · 25 February 2026*

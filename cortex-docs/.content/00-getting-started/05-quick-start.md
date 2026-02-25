@@ -63,8 +63,8 @@ Try any of these in Copilot Chat:
 
 | What You Type | What Happens |
 |--------------|-------------|
-| "Analyze this codebase" | LENS runs 8 parallel analyzers, delivers inline report |
-| "What MCP tools are available?" | `cortex_tools_catalog` lists all 26 tools |
+| "Analyze this codebase" | LENS runs 10 parallel analyzers, delivers inline report |
+| "What MCP tools are available?" | `cortex_tools_catalog` lists all 39 tools |
 | "Check governance compliance" | `cortex_validate_compliance` checks CORE rules |
 | "Onboard this repository" | `cortex_onboard_repository` runs LENS + creates dashboard |
 | "Run health check" | `cortex_verify_environment` checks Python, deps, MCP connectivity |
@@ -101,7 +101,7 @@ python3 -m pytest tests/ -n auto --dist loadscope --tb=short
 ```
 cortex/                   ← Python source (1 canonical package)
   orchestrators/          ← 27 wired orchestrators across 3 canonical tiers (10 total directories)
-  mcp/tools/              ← 26 MCP tools
+  mcp/tools/              ← 39 MCP tools (37 active)
   core/                   ← OrchestratorBase, FileFactory, WorkflowEngine
   testing/                ← Test framework, parallel runner, quality gate
   intelligence/           ← Brain: perception, reasoning, action, domain
@@ -129,7 +129,7 @@ tests/                    ← All tests (mirrors cortex/ structure)
 
 When you opened VS Code:
 1. MCP server started automatically (Pylance-style stdio)
-2. 26 active tools became available in Copilot Chat
+2. 37 active tools became available in Copilot Chat
 3. CORTEX loaded governance rules from `cortex-registry/core/tier0-skull/skull-rules.yaml`
 4. The test framework registered the parallel runner and quality gate plugins
 
@@ -155,4 +155,4 @@ When you ran a request:
 
 ---
 
-*Verified against live MCP server · 20 February 2026*
+*Verified against live MCP server · 25 February 2026*

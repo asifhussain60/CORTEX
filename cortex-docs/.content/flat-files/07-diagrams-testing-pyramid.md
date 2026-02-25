@@ -4,7 +4,7 @@
 title: Testing Pyramid & Execution Strategy
 type: diagram
 audience: [Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: tests/ + pytest.ini + .vscode/tasks.json
 order: 8
 ---
@@ -131,4 +131,4 @@ tests/
 
 ---
 
-*Verified against `tests/` directory and `pytest.ini` · 20 February 2026*
+*Verified against `tests/` directory and `pytest.ini` · 25 February 2026*

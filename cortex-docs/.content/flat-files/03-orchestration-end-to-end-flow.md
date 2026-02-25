@@ -4,7 +4,7 @@
 title: CORTEX End-to-End Request Flow
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/core/ + cortex/mcp/
 order: 8
 ---
@@ -34,7 +34,7 @@ order: 8
                     │
                     ▼
 ┌─── Stage 2: LENS Analysis (300-800ms) ───────────────────────────┐
-│  8 parallel analyzers scan the auth module                        │
+│  10 parallel analyzers scan the auth module                        │
 │  AST: 3 classes, 12 functions, 2 missing type hints               │
 │  Security: 1 hardcoded secret found                               │
 │  Metrics: cyclomatic complexity 8 (acceptable)                    │
@@ -73,4 +73,4 @@ order: 8
 
 ---
 
-*Verified against complete orchestrator pipeline · 20 February 2026*
+*Verified against complete orchestrator pipeline · 25 February 2026*

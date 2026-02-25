@@ -4,7 +4,7 @@
 title: FAQ — Governance & TDD
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex-registry/core/tier0-skull/skull-rules.yaml + cortex/orchestrators/core/enforcement_orchestrator.py
 order: 3
 ---
@@ -172,4 +172,4 @@ Violations at L1 are P0 (missing files). L2 violations are P1 (protocol gap). L3
 
 ---
 
-*Verified against `cortex-registry/core/tier0-skull/skull-rules.yaml` + `cortex/orchestrators/core/enforcement_orchestrator.py` · 24 February 2026*
+*Verified against `cortex-registry/core/tier0-skull/skull-rules.yaml` + `cortex/orchestrators/core/enforcement_orchestrator.py` · 25 February 2026*

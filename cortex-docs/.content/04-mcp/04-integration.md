@@ -4,7 +4,7 @@
 title: MCP Integration — IDE & Client Setup
 type: how-to
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: .vscode/settings.json + cortex/mcp/
 order: 4
 ---
@@ -179,4 +179,4 @@ Or use the MCP tool: `cortex_verify` — checks Python version, dependencies, an
 
 ---
 
-*Verified against MCP integration configuration · 20 February 2026*
+*Verified against MCP integration configuration · 25 February 2026*

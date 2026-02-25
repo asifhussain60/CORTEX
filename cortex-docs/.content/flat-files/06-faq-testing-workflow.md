@@ -4,7 +4,7 @@
 title: FAQ — Testing & Development Workflow
 type: reference
 audience: [Software Developers]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/testing/ + pytest.ini + conftest.py + scripts/run_tests.py
 order: 6
 ---
@@ -56,7 +56,7 @@ The `CortexXdistPlugin` (registered in `conftest.py`) provides:
 
 ## How many tests does CORTEX have?
 
-**16,259 tests** as of 24 February 2026 (Phase 66/67):
+**16,259 tests** as of 25 February 2026 (Phase 79-D):
 
 | Category | Count | Location |
 |----------|-------|---------|
@@ -237,4 +237,4 @@ Score your test with `cortex_generate_tests` (MCP tool) — it returns the TestQ
 
 ---
 
-*Verified against `pytest.ini` + `conftest.py` + `scripts/run_tests.py` · 24 February 2026 · 16,259 tests total*
+*Verified against `pytest.ini` + `conftest.py` + `scripts/run_tests.py` · 25 February 2026 · 16,259 tests total*

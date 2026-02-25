@@ -4,7 +4,7 @@
 title: LENS Analysis Pipeline Diagram
 type: diagram
 audience: [Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/lens/
 order: 5
 ---
@@ -94,4 +94,4 @@ S ─── Synthesis   → Merge all findings into actionable report
 
 ---
 
-*Verified against `cortex/lens/` with 8 parallel analyzers · 20 February 2026*
+*Verified against `cortex/lens/` with 10 parallel analyzers · 25 February 2026*

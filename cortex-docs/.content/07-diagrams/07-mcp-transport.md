@@ -4,7 +4,7 @@
 title: MCP Transport Diagram
 type: diagram
 audience: [Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/mcp/ + .vscode/settings.json
 order: 7
 ---
@@ -106,4 +106,4 @@ VS Code Opens Workspace
 
 ---
 
-*Verified against MCP stdio transport implementation · 20 February 2026*
+*Verified against MCP stdio transport implementation · 25 February 2026*

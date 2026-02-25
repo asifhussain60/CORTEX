@@ -4,7 +4,7 @@
 title: CORTEX AI & Intelligence — LENS + Brain Architecture
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-21
+last_verified: 2026-02-25
 source_of_truth: cortex/lens/ + cortex/intelligence/provider.py
 order: 3
 ---
@@ -461,4 +461,4 @@ These patterns are stored in Tier 3 knowledge and validated before promotion.
 
 ---
 
-*All module paths verified against live codebase · 21 February 2026*
+*All module paths verified against live codebase · 25 February 2026*

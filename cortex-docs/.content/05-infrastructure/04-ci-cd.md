@@ -4,7 +4,7 @@
 title: CI/CD — Continuous Integration & Delivery
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/infrastructure/ci_cd/ + .github/
 order: 4
 ---
@@ -35,7 +35,7 @@ order: 4
        │
        ▼
 [Stage 4: Governance Validation]
-       │ 22 active CORE rules enforced
+       │ 35 active CORE rules enforced
        │ EnforcementOrchestrator validates
        │
        ▼
@@ -130,4 +130,4 @@ CI enforces these gates before merge:
 
 ---
 
-*Verified against `cortex/infrastructure/ci_cd/` and CI pipeline configuration · 20 February 2026*
+*Verified against `cortex/infrastructure/ci_cd/` and CI pipeline configuration · 25 February 2026*

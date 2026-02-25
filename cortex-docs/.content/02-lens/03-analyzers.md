@@ -4,7 +4,7 @@
 title: LENS Analyzers — 8 Specialized Code Intelligence Engines
 type: reference
 audience: [Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/lens/analyzers/
 order: 3
 ---
@@ -69,4 +69,4 @@ order: 3
 
 ---
 
-*Verified against `cortex/lens/analyzers/` · 20 February 2026*
+*Verified against `cortex/lens/analyzers/` · 25 February 2026*

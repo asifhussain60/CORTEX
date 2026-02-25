@@ -4,7 +4,7 @@
 title: CORTEX Glossary — Terminology Reference
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/ (live codebase)
 order: 99
 ---
@@ -95,15 +95,15 @@ order: 99
 
 ## L
 
-**LENS** — **L**anguage → **E**xamination → **N**avigation → **S**ynthesis. Code intelligence system with 8 parallel analyzers producing unified analysis in 300–800ms. Location: `cortex/lens/`.
+**LENS** — **L**anguage → **E**xamination → **N**avigation → **S**ynthesis. Code intelligence system with 10 parallel analyzers producing unified analysis in 300–800ms. Location: `cortex/lens/`.
 
-**LENS Analyzers** — 8 parallel analyzers: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain.
+**LENS Analyzers** — 10 parallel analyzers: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain.
 
 ## M
 
 **MasterOrchestrator** — Central entry point orchestrator. Runs 4-stage pipeline: Interaction → Intent → Intelligence → Execution. Location: `cortex/orchestrators/core/master_orchestrator.py`.
 
-**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 26 active tools exposed via stdio transport.
+**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 37 active tools exposed via stdio transport.
 
 ## O
 

@@ -4,7 +4,7 @@
 title: CORTEX Decisioning — Intent Routing & TDD Enforcement
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/core/intent_router.py + cortex/orchestrators/core/tdd_orchestrator.py
 order: 4
 ---
@@ -24,7 +24,7 @@ IntentRouter classifies every request into one of 12+ intent types using LENS-ba
 | **IMPLEMENT** | TDDOrchestrator | RED → GREEN → REFACTOR (new feature) |
 | **FIX** | TDDOrchestrator | RED → GREEN → REFACTOR (bug repair) |
 | **REFACTOR** | RefactoringOrchestrator | Semantic code improvement |
-| **ANALYZE** | LENS Synthesis | 8-analyzer parallel scan |
+| **ANALYZE** | LENS Synthesis | 10-analyzer parallel scan |
 | **PLAN** | PlanningOrchestrator | Development roadmap creation |
 | **AUDIT** | EnforcementOrchestrator | Governance compliance check |
 | **DESIGN** | Design coordination | Architecture decisions |
@@ -89,4 +89,4 @@ Before high-impact operations, CORTEX's Challenge Engine performs a LENS analysi
 
 ---
 
-*All paths verified against live codebase · 20 February 2026*
+*All paths verified against live codebase · 25 February 2026*

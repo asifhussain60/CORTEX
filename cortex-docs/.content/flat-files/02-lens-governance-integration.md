@@ -4,7 +4,7 @@
 title: LENS + Governance — Intelligence-Driven Rule Enforcement
 type: explanation
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/lens/ + cortex/orchestrators/core/enforcement_orchestrator.py
 order: 6
 ---
@@ -28,4 +28,4 @@ The EnforcementOrchestrator's 10 agents consume LENS data to make enforcement de
 
 ---
 
-*Verified against enforcement integration · 20 February 2026*
+*Verified against enforcement integration · 25 February 2026*

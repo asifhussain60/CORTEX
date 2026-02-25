@@ -4,7 +4,7 @@
 title: Brain Tier Intelligence Model
 type: diagram
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/intelligence/ (perception/, reasoning/, action/)
 order: 9
 ---
@@ -128,4 +128,4 @@ cortex/intelligence/
 
 ---
 
-*Verified against `cortex/intelligence/` directory structure · 20 February 2026*
+*Verified against `cortex/intelligence/` directory structure · 25 February 2026*

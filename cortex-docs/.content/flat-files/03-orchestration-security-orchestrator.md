@@ -4,7 +4,7 @@
 title: SecurityOrchestrator — Security-First Development
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/core/security_orchestrator.py
 order: 9
 ---
@@ -42,4 +42,4 @@ All 25 production readiness tests pass (including 5 security-specific tests).
 
 ---
 
-*Verified against security_orchestrator.py · 20 February 2026*
+*Verified against security_orchestrator.py · 25 February 2026*

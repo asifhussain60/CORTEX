@@ -4,7 +4,7 @@
 title: High-Level Architecture Diagram
 type: diagram
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/ directory structure
 order: 2
 ---
@@ -23,7 +23,7 @@ order: 2
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
 │                    MCP GATEWAY                                  │
-│              cortex/mcp/ — 26 active tools                      │
+│              cortex/mcp/ — 37 active tools                      │
 │                              │                                  │
 │         cortex_request_lifecycle (primary entry point)          │
 └─────────────────────────────┼───────────────────────────────────┘
@@ -97,7 +97,7 @@ order: 2
 
 | Layer | Components | Location |
 |-------|------------|----------|
-| MCP Gateway | **26 active tools** (28 total — 2 deprecated) | `cortex/mcp/tools/` |
+| MCP Gateway | **37 active tools** (39 total — 2 deprecated) | `cortex/mcp/tools/` |
 | Orchestration | **27 wired** orchestrators (7 core, 6 domain, 14 support) | `cortex/orchestrators/` |
 | Intelligence | 8 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
 | Governance | **35 CORE rules** | `cortex/governance/` + `cortex-registry/core/` |
@@ -107,4 +107,4 @@ order: 2
 
 ---
 
-*Verified against live directory structure · 23 February 2026*
+*Verified against live directory structure · 25 February 2026*

@@ -17,7 +17,7 @@ order: 3
 
 ## The Shortest Possible Summary
 
-You type a request in your IDE. CORTEX enriches it, classifies it, analyses your codebase with 8 parallel analyzers, validates against 35 governance rules, builds an execution plan through Perception → Reasoning → Action, and delivers the result inline — all within seconds. Every step is observable and auditable.
+You type a request in your IDE. CORTEX enriches it, classifies it, analyses your codebase with 10 parallel analyzers, validates against 35 governance rules, builds an execution plan through Perception → Reasoning → Action, and delivers the result inline — all within seconds. Every step is observable and auditable.
 
 ---
 
@@ -60,7 +60,7 @@ Before your request reaches any orchestrator, the **RequestRephraseOrchestrator*
 Your enriched request arrives at the **MCP Gateway** (`cortex/mcp/`) over JSON-RPC 2.0 (stdio in development). The gateway:
 
 - Validates the JSON-RPC 2.0 message
-- Routes to the correct MCP tool (one of 26 active tools)
+- Routes to the correct MCP tool (one of 37 active tools)
 - Enforces rate limiting
 - Checks the **Native Tool Gate** (CORE-049) — blocks direct file operations for IMPLEMENT/FIX/REFACTOR intents
 
@@ -105,7 +105,7 @@ Your enriched request arrives at the **MCP Gateway** (`cortex/mcp/`) over JSON-R
 
 ### Stage 2 · LENS Analysis (300–800ms)
 
-When the orchestrator needs to understand the codebase, **LENS** (`cortex/lens/`) runs **8 parallel analyzers**:
+When the orchestrator needs to understand the codebase, **LENS** (`cortex/lens/`) runs **10 parallel analyzers**:
 
 | Analyzer | What It Detects |
 |----------|----------------|

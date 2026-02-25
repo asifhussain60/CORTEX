@@ -4,7 +4,7 @@
 title: RequestRephraseOrchestrator — Automatic Request Enrichment
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/orchestrators/core/request_rephrase_orchestrator.py
 order: 7
 ---
@@ -30,4 +30,4 @@ RequestRephraseOrchestrator runs at **Stage -1** — before any other orchestrat
 
 ---
 
-*Verified against request_rephrase_orchestrator.py · 20 February 2026*
+*Verified against request_rephrase_orchestrator.py · 25 February 2026*

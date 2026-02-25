@@ -4,7 +4,7 @@
 title: CORTEX Response Formatting Standards
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex-registry/core/ + .github/templates/cortex-response-templates.md
 order: 6
 ---
@@ -81,4 +81,4 @@ Templates are read by the WorkflowEngine (`cortex/core/workflow_engine.py`) and 
 
 **Developer:** "Responses are inline (CORE-002). There's no generated report file to hunt for. CORTEX mirrors my intent back in plain English, I confirm, and execution begins — all right here in VS Code."
 
-*Verified against response template standards · 23 February 2026*
+*Verified against response template standards · 25 February 2026*

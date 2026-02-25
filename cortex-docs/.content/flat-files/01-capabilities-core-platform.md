@@ -10,7 +10,7 @@ type: explanationtype: explanation
 
 audience: [Business Leaders, Product Owners, Software Developers]audience: [Software Developers, Architects, Product Owners]
 
-last_verified: 2026-02-20word_count: 2203
+last_verified: 2026-02-25word_count: 2203
 
 source_of_truth: cortex/core/ + cortex/mcp/ + cortex/infrastructure/last_verified: 2026-02-15
 
@@ -44,7 +44,7 @@ diagrams: ASCII service architecture, sequence diagrams
 
 | **CortexAuditDB** | `cortex/infrastructure/audit_db.py` | Unified SQLite with WAL mode — all audit trails |The Core Platform provides the foundational infrastructure enabling CORTEX's intelligent development capabilities. Organizations benefit from enterprise-grade service reliability, zero-downtime deployments, and comprehensive observability without custom infrastructure investment [Business Leaders]. Product teams gain consistent request processing, state management, and configuration control across all CORTEX features [Product Owners]. The platform implements service-oriented architecture with MCP Gateway, Tool Registry, State Management, Configuration Management, and Health Monitoring [Software Developers].
 
-| **MCP Server** | `cortex/mcp/` | Pylance-style stdio server, 26 active tools |
+| **MCP Server** | `cortex/mcp/` | Pylance-style stdio server, 37 active tools |
 
 | **Bootstrap** | `cortex/bootstrap.py` | System initialization, wiring, service discovery |**Core Platform Components:**
 
@@ -198,7 +198,7 @@ See `04-mcp/03-tools-catalog.md` for the complete catalog.**Architecture Princip
 
 
 
-*All paths verified against live codebase · 20 February 2026*```
+*All paths verified against live codebase · 25 February 2026*```
 
 ┌────────────────────────────────────────────────────────────────┐
 │                        MCP GATEWAY (PORT 8000)                  │

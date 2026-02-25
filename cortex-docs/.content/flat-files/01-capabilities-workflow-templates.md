@@ -4,7 +4,7 @@
 title: CORTEX Workflow Templates — Reusable Execution Patterns
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex-registry/workflows/templates/ + cortex/core/workflow_engine.py
 order: 7
 ---
@@ -78,4 +78,4 @@ Reusable RED → GREEN → REFACTOR → CLEANUP pattern for individual phases.
 
 ---
 
-*Verified against workflow template registry · 20 February 2026*
+*Verified against workflow template registry · 25 February 2026*

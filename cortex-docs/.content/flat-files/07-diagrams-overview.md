@@ -4,7 +4,7 @@
 title: Architecture Diagrams
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/ (live architecture)
 order: 1
 ---
@@ -22,7 +22,7 @@ order: 1
 | 3 | [Orchestrator Map](04-orchestrator-map.md) | 27 wired orchestrators across 3 canonical tiers (7 core, 6 domain, 14 support) + 7 additional dirs (health, git, intelligence, strategies, synthesis, validation, workflow) | Developers |
 | 4 | [LENS Pipeline](05-lens-pipeline.md) | 8 analyzers → Synthesis | Developers |
 | 5 | [Governance Flow](06-governance-flow.md) | 35 CORE rule enforcement lifecycle | All |
-| 6 | [MCP Transport](07-mcp-transport.md) | IDE ↔ CORTEX communication (26 tools) | Developers |
+| 6 | [MCP Transport](07-mcp-transport.md) | IDE ↔ CORTEX communication (39 tools) | Developers |
 | 7 | [Testing Pyramid](08-testing-pyramid.md) | Test tiers and execution (15,739 tests) | Developers, POs |
 | 8 | [Brain Tier Model](09-brain-tier-model.md) | Intelligence tiers (Perception → Reasoning → Action) | All |
 
@@ -56,4 +56,4 @@ All diagrams use ASCII art for universal compatibility (no external rendering to
 
 ---
 
-*Verified against live CORTEX architecture · 23 February 2026*
+*Verified against live CORTEX architecture · 25 February 2026*

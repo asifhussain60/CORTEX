@@ -4,7 +4,7 @@
 title: Infrastructure — The Body That Houses the Brain
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/infrastructure/ + deployment/
 order: 1
 ---
@@ -101,4 +101,4 @@ order: 1
 
 ---
 
-*Verified against `cortex/infrastructure/` and `deployment/` · 20 February 2026*
+*Verified against `cortex/infrastructure/` and `deployment/` · 25 February 2026*

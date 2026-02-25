@@ -4,7 +4,7 @@
 title: Azure DevOps Integration — Work Item Provider
 type: how-to
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-21
+last_verified: 2026-02-25
 source_of_truth: cortex/repositories/ado/ado_provider.py + cortex/intelligence/knowledge/ado_context_mapper.py
 order: 7
 ---
@@ -191,4 +191,4 @@ The `ADOContextMapper` is provider-agnostic — it works with any `List[WorkItem
 
 ---
 
-*Verified against `cortex/repositories/ado/ado_provider.py` + `cortex/intelligence/knowledge/ado_context_mapper.py` · Phase 20 complete · 21 February 2026*
+*Verified against `cortex/repositories/ado/ado_provider.py` + `cortex/intelligence/knowledge/ado_context_mapper.py` · Phase 20 complete · 25 February 2026*

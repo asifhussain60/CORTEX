@@ -4,7 +4,7 @@
 title: Governance Enforcement Flow Diagram
 type: diagram
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/governance/ + cortex-registry/core/
 order: 6
 ---
@@ -36,7 +36,7 @@ order: 6
 │                                                │
 │  EnforcementOrchestrator                       │
 │  ┌──────────────────────────────────────────┐  │
-│  │ All 22 active CORE rules evaluated       │  │
+│  │ All 35 active CORE rules evaluated       │  │
 │  │ 10 enforcement agents execute            │  │
 │  │                                          │  │
 │  │ Agents:                                  │  │

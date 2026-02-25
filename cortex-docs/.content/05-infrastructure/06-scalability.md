@@ -4,7 +4,7 @@
 title: Scalability & Resilience Patterns
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/infrastructure/
 order: 6
 ---
@@ -163,4 +163,4 @@ Isolates failing components to prevent spread:
 
 ---
 
-*Verified against `cortex/infrastructure/` resilience modules · 20 February 2026*
+*Verified against `cortex/infrastructure/` resilience modules · 25 February 2026*

@@ -4,7 +4,7 @@
 title: FAQ — General & Getting Started
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-24
+last_verified: 2026-02-25
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 order: 1
 ---
@@ -20,7 +20,7 @@ order: 1
 - **27 wired orchestrators** across 3 tiers (core, domain, support)
 - **26 active MCP tools** exposed via Pylance-style stdio server
 - **35 CORE governance rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
-- **LENS** — an 8-analyzer parallel code intelligence engine
+- **LENS** — an 10-analyzer parallel code intelligence engine
 - **TDD-first execution** — CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX
 
 It works directly inside your IDE (VS Code, Cursor, Claude Desktop) via the Model Context Protocol — no browser, no context switching.
@@ -191,4 +191,4 @@ All changes are versioned in Git — rollback is `git revert`. No database depen
 
 ---
 
-*Verified against live codebase · 24 February 2026 · Phase 66/67 Complete*
+*Verified against live codebase · 25 February 2026 · Phase 79-D Complete*

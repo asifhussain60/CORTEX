@@ -4,7 +4,7 @@
 title: LENS Caching — Performance Optimization
 type: reference
 audience: [Software Developers]
-last_verified: 2026-02-20
+last_verified: 2026-02-25
 source_of_truth: cortex/lens/cache/ + cortex/lens/cached_lens_orchestrator.py
 order: 5
 ---
@@ -44,4 +44,4 @@ LENS caches analyzer results to avoid redundant computation. The cache layer (`c
 
 ---
 
-*Verified against cache implementation · 20 February 2026*
+*Verified against cache implementation · 25 February 2026*
