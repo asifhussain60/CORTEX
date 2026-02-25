@@ -71,9 +71,18 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, IOrchestrator, Workflow
         self.turn_number: int = 0
         self._audit_trail: List[Dict[str, Any]] = []
         self.logger = EnhancedAuditLogger.instance()
+        self._plan_store: Any = None  # Phase 00 D10 — injectable InteractionPlanStore
 
         # Initialize LENSOrchestrator for per-turn analysis
         self.lens_orchestrator = self._init_lens_orchestrator()
+
+    def set_plan_store(self, plan_store: Any) -> None:
+        """Inject an InteractionPlanStore for plan-first execution (Phase 00 D10).
+
+        Args:
+            plan_store: InteractionPlanStore instance to use for plan lifecycle.
+        """
+        self._plan_store = plan_store
 
     def _init_lens_orchestrator(self) -> Any:
         """

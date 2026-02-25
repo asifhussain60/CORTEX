@@ -140,7 +140,7 @@ class FlushManager:
             self.min_confidence = min_confidence
         
         self.pattern_library_path = pattern_library_path or Path(
-            "cortex/knowledge/tier3/learned-patterns.yaml"
+            "cortex-registry/knowledge/tier3/learned-patterns.yaml"
         )
         
         logger.info(

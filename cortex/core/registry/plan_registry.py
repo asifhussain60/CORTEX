@@ -30,8 +30,12 @@ class PlanRegistry:
         """Initialize plan registry."""
         self.registry_path = Path(registry_path)
         self.index_path = self.registry_path / "index.yaml"
-        self.active_path = self.registry_path / "active"
-        self.completed_path = self.registry_path / "completed"
+        # Canonical: planning/phases/planned/ — aligns with CortexMasterPlanOrchestrator
+        # and the THIN INDEX CONTRACT (cortex-architect.prompt.md §PLAN MODE).
+        # NOTE: "active_path" is kept as the attribute name for API compatibility;
+        # it physically resolves to planning/phases/planned/.
+        self.active_path = self.registry_path / "phases" / "planned"
+        self.completed_path = self.registry_path / "phases" / "completed"
         self.templates_path = self.registry_path / "templates"
 
         # Ensure directories exist
@@ -102,7 +106,7 @@ class PlanRegistry:
             {
                 "id": plan_id,
                 "name": plan_spec.metadata.title,
-                "file": f"active/{plan_id}/plan.yaml",
+                "file": f"phases/planned/{plan_id}/plan.yaml",
                 "created": datetime.utcnow().isoformat(),
                 "status": plan_spec.metadata.status.value,
                 "priority": "P0",
