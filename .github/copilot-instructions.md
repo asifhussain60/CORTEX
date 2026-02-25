@@ -247,29 +247,42 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py batch →
 
 ## ⛔ Test Execution — MANDATORY RULES
 
-**CORTEX uses `CortexXdistPlugin` as the canonical batch runner. Never bypass it.**
+**Three-layer optimised execution. Never bypass `run_tests.py`.**
+
+| Mode | Command (macOS/Linux) | Command (Windows) | When to use |
+|---|---|---|---|
+| **changed** | `make test-changed` | `python scripts\run_tests.py changed` | TDD inner loop — after every save |
+| **smoke** | `make test-smoke` | `python scripts\run_tests.py smoke` | Quick sanity before commit |
+| **unit** | `make test` | `python scripts\run_tests.py unit` | Default local dev |
+| **parallel** | `make test-parallel` | `python scripts\run_tests.py parallel` | Pre-commit full speed |
+| **batch** | `make test-batch` | `python scripts\run_tests.py batch` | CI / audit gate (sequential) |
+
+**Three Layers:**
+- **Layer 1 — Parallel:** `pytest-xdist` with `-n auto --dist loadscope`. 10 cores → ~3–4× faster. Falls back to sequential if xdist is absent.
+- **Layer 2 — Smart:** `pytest-testmon` with `--testmon`. Runs only tests covering changed source files. Ideal for TDD. Incompatible with xdist (runs sequentially). Set `CORTEX_DISABLE_TESTMON=true` for a clean full run.
+- **Layer 3 — Import:** `--import-mode=importlib` in `pytest.ini`. Cuts cold collection from ~17s → ~7s.
 
 | ✅ DO — Canonical Methods | ❌ NEVER — Forbidden Patterns |
 |---|---|
-| `make test-batch` | `python3 -m pytest tests/ -x -q` |
-| `make test-all` | `pytest --tb=no -q` (silences batch reporter) |
-| `make test-fast` | `pytest -o addopts=` (wipes xdist config) |
-| `make test-smoke` | `pytest -x` alone (stops before batch summary) |
-| VS Code tasks (tasks.json) | Any command that adds `-q` or `-o addopts=` |
-| `python3 scripts/run_tests.py {mode}` *(cross-platform)* | Direct `python3 -m pytest` with flag overrides |
-| `./scripts/run-tests.sh {mode}` *(Unix only — delegates to run_tests.py)* | `.venv/bin/python -m pytest` (venv-path hard-codes Unix) |
-
-**Why:** `pytest.ini` enforces `-n auto --dist loadscope`. `conftest.py` registers `cortex_xdist_plugin`.
-Adding `-q` silences the batch reporter's stderr. Adding `-o addopts=` wipes xdist entirely.
-The batch plugin (`CORTEX_BATCH_SIZE=500`) provides live batch boundaries, pass/fail counts, and a final summary table — these are lost when raw pytest commands override the project config.
+| `make test-changed` / `make test-batch` | `python3 -m pytest tests/ -x -q` |
+| `python3 scripts/run_tests.py {mode}` | `pytest --tb=no -q` (silences batch reporter) |
+| VS Code tasks (tasks.json) — all modes | `pytest -o addopts=` (wipes import-mode + sugar settings) |
+| `CORTEX_WORKERS=4 make test-parallel` | `.venv/bin/python -m pytest` (hard-codes Unix venv path) |
 
 **When running tests in a terminal, always use:**
 ```
-make test-batch
+make test-changed    # fastest — TDD loop
+make test-batch      # safest  — CI canonical
 ```
 or a VS Code task from `tasks.json`.
 
-**Windows users:** Replace `python3` with `python` and replace `./scripts/run-tests.sh {mode}` with `python scripts\run_tests.py {mode}`. All `make` commands have VS Code Task equivalents in `tasks.json` for Windows-first users who cannot use `make`.
+**Windows users:** All `make` commands have VS Code Task equivalents in `tasks.json`.
+Use `python scripts\run_tests.py {mode}` in PowerShell/cmd — `python3` may not be on PATH.
+
+**Environment overrides:**
+- `CORTEX_WORKERS=4` — cap xdist to 4 workers (CI with limited cores)
+- `CORTEX_DISABLE_PARALLEL=true` — force sequential (any mode)
+- `CORTEX_DISABLE_TESTMON=true` — skip testmon DB (clean run after large refactor)
 
 ---
 

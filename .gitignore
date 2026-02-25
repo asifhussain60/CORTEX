@@ -103,6 +103,7 @@ ARCHITECT-*-SUMMARY.md
 .coverage
 htmlcov/
 .tox/
+.testmondata          # pytest-testmon change-aware DB (Layer 2 — machine-local)
 .nox/
 
 # .NET Build Artifacts
