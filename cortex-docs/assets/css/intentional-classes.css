@@ -1698,3 +1698,26 @@
 .archive-link:hover {
     color: #FFD54F;
 }
+
+/* ================================================================
+   DOC-REFRESH-001 — Inline Style Replacements (2026-02-25)
+   Replaces all style="" attributes in roles/ and index.html
+   Per CORE-002: zero inline styles policy
+   ================================================================ */
+
+/* Persona tile accents (index.html role cards) */
+.persona-accent-domain   { background: var(--orch-domain); }
+.persona-accent-core     { background: var(--orch-core); }
+.persona-accent-support  { background: var(--orch-support); }
+.persona-accent-emerald  { background: var(--accent-emerald); }
+
+/* Track card accents (learner.html learning tracks) */
+.track-accent-emerald    { background: var(--accent-emerald); }
+.track-accent-domain     { background: var(--orch-domain); }
+.track-accent-core       { background: var(--orch-core); }
+
+/* Knowledge stat colors (learner.html stat grid) */
+.stat-color-core     { color: var(--orch-core);    display: block; }
+.stat-color-domain   { color: var(--orch-domain);  display: block; }
+.stat-color-support  { color: var(--orch-support); display: block; }
+.stat-color-emerald  { color: var(--accent-emerald); display: block; }
