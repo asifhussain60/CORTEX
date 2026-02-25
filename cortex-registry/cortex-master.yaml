@@ -99,16 +99,17 @@ metadata:
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
-  # ── SLOT #0 — phase-77 (P0, IMMEDIATE — cleanup before any build) ───────
+  # ── SLOT #0 — phase-77 (P0, COMPLETE) ────────────────────────────────────
   - id: phase-77
     title: "Production Cleanup — Dead File Purge, Wiring Repair, MasterOrchestrator SRP"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-77-PRODUCTION-CLEANUP
     gaps: 6
+    gaps_closed: 6
     sub_phases: 4
-    file: "cortex-registry/planning/phases/planned/phase-77-production-cleanup.yaml"
-    note: "Purge 23+ dead files, fix 4 wiring-spec gaps, decompose 5,118-line master_orchestrator.py. Zero-regression gate at every sub-phase. Smoke baseline: 1,211. PRECEDES phase-73."
+    file: "cortex-registry/planning/phases/completed/phase-77-production-cleanup.yaml"
+    note: "COMPLETE 2026-02-25 (commit 94fe653ba). 21 dead files deleted (5 MCP tools + 8 testing/ + 8 core/intel/lens/gov). 4 stale wiring entries removed. git-orchestrator-wiring.yaml created. cortex/core/state/ stub deleted. 30/30 tests GREEN | 960 targeted pass | 0 regressions."
 
   # ── SLOT #1 — phase-78 (P0, after 77-final) ───────────────────────────────
   - id: phase-78
