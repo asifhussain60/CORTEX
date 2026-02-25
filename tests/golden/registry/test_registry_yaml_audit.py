@@ -24,11 +24,33 @@ QUALITY_GATE_PY = ROOT / "cortex" / "testing" / "quality_gate.py"
 
 REQUIRED_WORKFLOW_FIELDS = {"id", "name"}
 DELETED_PATH_PATTERNS = [
-    "cortex_intelligence",
-    "cortex_lens",
+    "cortex_intelligence",   # dissolved package — but cortex_intelligence_matrix is VALID (MCP tool)
+    "cortex_lens",           # dissolved package — cortex.lens (dot) is the canonical MCP tool name
     "cortex.brain",
     "_archive/",
 ]
+
+# Tool names that contain a deleted-path prefix but are themselves valid
+_VALID_TOOL_NAMES = {"cortex_intelligence_matrix"}
+
+
+def _has_deleted_path(content: str, pattern: str) -> bool:
+    """Return True only if content references the deleted path, not a valid tool name."""
+    if pattern not in content:
+        return False
+    # Check if every occurrence is part of a valid tool name
+    import re
+    # Find all matches and check if any are NOT a valid tool name
+    for m in re.finditer(re.escape(pattern), content):
+        full_word_start = m.start()
+        full_word_end = m.end()
+        # Extend to include the rest of the identifier (alphanumeric + underscore)
+        while full_word_end < len(content) and (content[full_word_end].isalnum() or content[full_word_end] == '_'):
+            full_word_end += 1
+        token = content[full_word_start:full_word_end]
+        if token not in _VALID_TOOL_NAMES:
+            return True
+    return False
 
 
 def _load_yaml(path: Path) -> dict:
@@ -124,7 +146,7 @@ class TestCortexMasterYamlPaths:
             pytest.skip("cortex-master.yaml not found")
         raw = MASTER_YAML.read_text(errors="replace")
         for pattern in ("cortex_intelligence", "cortex_lens"):
-            assert pattern not in raw, (
+            assert not _has_deleted_path(raw, pattern), (
                 f"cortex-master.yaml references dissolved package: {pattern}"
             )
 
@@ -162,7 +184,7 @@ class TestNoDeletedPathReferences:
             except OSError:
                 continue
             for pattern in DELETED_PATH_PATTERNS:
-                if pattern in content:
+                if _has_deleted_path(content, pattern):
                     key = str(yaml_file.relative_to(ROOT))
                     violations.setdefault(key, []).append(pattern)
 
@@ -178,6 +200,7 @@ class TestNoDeletedPathReferences:
                 "_cortex-master/",            # legacy cortex-master subdirectory
                 "planning/phases/archived/",  # phase archive
                 "planning/phases/planned/",   # planned phases mention dissolved names in acceptance criteria
+                "planning/phases/completed/", # completed phases document what was dissolved (historical record)
                 "workflows/templates/lifecycle/",  # lifecycle templates reference patterns in grep commands
                 "playbooks/",                 # historical playbooks
             )

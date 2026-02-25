@@ -13,7 +13,6 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from cortex.core.orchestrator_base import OrchestratorBase
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 logger = logging.getLogger(__name__)
@@ -22,7 +21,7 @@ logger = logging.getLogger(__name__)
 _SUPPORTED_INTENTS: tuple[str, ...] = ("refactor", "service_decomposition", "legacy_modernization")
 
 
-class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin, OrchestratorBase):
+class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin):
     """
     Orchestrates security-first, layer-gated service decomposition.
 

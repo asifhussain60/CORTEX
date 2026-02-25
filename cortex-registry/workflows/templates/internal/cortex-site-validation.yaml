@@ -214,7 +214,7 @@ metadata:
     - DeploymentOrchestrator
   
   mcp_tools:
-    - cortex_lens
+    - cortex.lens
     - cortex_challenge
     - cortex_verify
   

@@ -29,8 +29,6 @@ def ensure_scratch_space() -> Path:
 
 try:
     from cortex.intelligence.tier3.knowledge import (
-        KnowledgeGovernanceManager,
-        GovernanceRule,
         ExpertRegistry,
         Expert,
         AICurator,
@@ -42,8 +40,6 @@ try:
     )
 
     __all__ = [
-        "KnowledgeGovernanceManager",
-        "GovernanceRule",
         "ExpertRegistry",
         "Expert",
         "AICurator",

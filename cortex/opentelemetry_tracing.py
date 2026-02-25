@@ -21,9 +21,76 @@ from enum import Enum
 import time
 import uuid
 import json
+import os
+import logging
+import urllib.request
+import urllib.error
 from datetime import datetime
 from functools import wraps
 from contextlib import contextmanager
+
+_logger = logging.getLogger(__name__)
+
+# ─── OTLP Export ─────────────────────────────────────────────────────────────
+# Set OTEL_EXPORTER_OTLP_ENDPOINT to export spans to any OTLP-compatible
+# collector (Jaeger, Tempo, Honeycomb, etc.).
+# Example: OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
+_OTLP_ENDPOINT: Optional[str] = os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT")
+
+
+def _export_spans_otlp(spans: list, service_name: str) -> None:
+    """Fire-and-forget OTLP/HTTP span export.
+
+    Sends spans in OTLP JSON format if ``OTEL_EXPORTER_OTLP_ENDPOINT`` is set.
+    Failures are logged at DEBUG level — never raise into caller code.
+
+    Args:
+        spans: List of span dicts (from ``Span.to_dict()``).
+        service_name: Service name for the resource.
+    """
+    if not _OTLP_ENDPOINT or not spans:
+        return
+    payload = {
+        "resourceSpans": [
+            {
+                "resource": {"attributes": [{"key": "service.name", "value": {"stringValue": service_name}}]},
+                "scopeSpans": [
+                    {
+                        "scope": {"name": "cortex.opentelemetry_tracing"},
+                        "spans": [
+                            {
+                                "traceId": s.get("trace_id", ""),
+                                "spanId": s.get("span_id", ""),
+                                "parentSpanId": s.get("parent_span_id") or "",
+                                "name": s.get("name", ""),
+                                "kind": 1,
+                                "startTimeUnixNano": int((s.get("start_time") or 0) * 1e9),
+                                "endTimeUnixNano": int((s.get("end_time") or 0) * 1e9),
+                                "status": {"code": 2 if s.get("error") else 1},
+                                "attributes": [
+                                    {"key": k, "value": {"stringValue": str(v)}}
+                                    for k, v in (s.get("attributes") or {}).items()
+                                ],
+                            }
+                            for s in spans
+                        ],
+                    }
+                ],
+            }
+        ]
+    }
+    try:
+        body = json.dumps(payload).encode()
+        req = urllib.request.Request(
+            _OTLP_ENDPOINT,
+            data=body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=2) as resp:
+            _logger.debug("OTLP export: %s spans → %s (HTTP %s)", len(spans), _OTLP_ENDPOINT, resp.status)
+    except Exception as exc:  # noqa: BLE001
+        _logger.debug("OTLP export failed (non-fatal): %s", exc)
 
 class SpanKind(Enum):
     """OpenTelemetry span kinds."""
@@ -238,22 +305,25 @@ class TracerProvider:
         return self._spans.get(trace_id, [])
 
     def export_trace(self, trace_id: str) -> Dict[str, Any]:
-        """Export trace in standard format.
-        
+        """Export trace in standard format, and forward to OTLP if configured.
+
         Args:
             trace_id: Trace ID
-            
+
         Returns:
             Trace export dictionary
         """
         spans = self.get_trace(trace_id)
-        return {
+        payload = {
             "trace_id": trace_id,
             "service": self.service_name,
             "timestamp": datetime.utcnow().isoformat(),
             "span_count": len(spans),
             "spans": [s.to_dict() for s in spans],
         }
+        # Forward to OTLP collector when endpoint is configured
+        _export_spans_otlp([s.to_dict() for s in spans], self.service_name)
+        return payload
 
 class Tracer:
     """Tracer for creating and managing spans."""

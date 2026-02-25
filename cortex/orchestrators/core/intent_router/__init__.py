@@ -22,17 +22,9 @@ except ImportError:
     StrategySelector = None  # type: ignore[assignment,misc]
     _strategy_selector = None
 
-try:
-    from cortex.orchestrators.core.intent_router.intent_router_enhanced import EnhancedIntentRouter  # type: ignore
-    # Alias for backward compat — callers using IntentRouter get the enhanced version
-    IntentRouter = EnhancedIntentRouter
-except ImportError:
-    logging.getLogger(__name__).warning(
-        "Optional cortex dependency unavailable: "
-        "cortex.orchestrators.core.intent_router.intent_router_enhanced — feature degraded"
-    )
-    IntentRouter = None  # type: ignore[assignment]
-    EnhancedIntentRouter = None  # type: ignore[assignment]
+# IntentRouter: canonical alias to WorkflowComplexityRouter (CORE-035)
+IntentRouter = WorkflowComplexityRouter
+EnhancedIntentRouter = WorkflowComplexityRouter  # backward-compat alias
 
 try:
     from cortex.orchestrators.core.intent_router.routing_enforcement import RoutingEnforcementEngine  # type: ignore

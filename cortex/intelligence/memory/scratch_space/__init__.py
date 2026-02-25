@@ -5,8 +5,6 @@ This tier provides AI-powered knowledge management, curation, and synthesis.
 """
 
 from cortex.intelligence.tier3.knowledge import (
-    KnowledgeGovernanceManager,
-    GovernanceRule,
     ExpertRegistry,
     Expert,
     AICurator,
@@ -18,8 +16,6 @@ from cortex.intelligence.tier3.knowledge import (
 )
 
 __all__ = [
-    "KnowledgeGovernanceManager",
-    "GovernanceRule",
     "ExpertRegistry",
     "Expert",
     "AICurator",

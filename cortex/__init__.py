@@ -14,6 +14,7 @@ __author__ = 'Asif Hussain'
 __email__ = 'asif@cortex.dev'
 __license__ = 'Proprietary'
 __description__ = 'AI-Powered Development Orchestration System'
+__version__ = '14.0.0'
 
 # Phase 6: Git-backed wiring system (consolidated to cortex.core.wiring)
 # Import new wiring API for orchestrator access

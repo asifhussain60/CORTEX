@@ -16,6 +16,8 @@ import sys
 import time
 import asyncio
 import inspect
+import threading
+import collections
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -24,6 +26,38 @@ import os
 from cortex.mcp.mcp_tool_base import Tool, ToolResult, ToolCategory
 from cortex.mcp.mcp_registry import ToolRegistry, get_registry
 from cortex.mcp.tenant_context_middleware import TenantContextMiddleware, WorkspaceContext
+
+
+# ============================================================================
+# RATE LIMITER
+# ============================================================================
+
+class _TokenBucketRateLimiter:
+    """Thread-safe token-bucket rate limiter.
+
+    Args:
+        rate: Allowed requests per second (default 50 rps).
+        burst: Maximum burst above the steady-state rate (default 100).
+    """
+
+    def __init__(self, rate: float = 50.0, burst: int = 100) -> None:
+        self._rate = rate
+        self._burst = burst
+        self._tokens = float(burst)
+        self._last = time.monotonic()
+        self._lock = threading.Lock()
+
+    def allow(self) -> bool:
+        """Return True if the request should proceed, False if rate-limited."""
+        with self._lock:
+            now = time.monotonic()
+            elapsed = now - self._last
+            self._last = now
+            self._tokens = min(self._burst, self._tokens + elapsed * self._rate)
+            if self._tokens >= 1.0:
+                self._tokens -= 1.0
+                return True
+            return False
 
 
 # ============================================================================
@@ -111,6 +145,10 @@ class MCPServer:
         self.registry = registry or get_registry()
         self._start_time = datetime.utcnow()
         self._tenant_middleware = TenantContextMiddleware()
+        self._rate_limiter = _TokenBucketRateLimiter(
+            rate=float(os.environ.get("CORTEX_MCP_RATE_RPS", "50")),
+            burst=int(os.environ.get("CORTEX_MCP_RATE_BURST", "100")),
+        )
 
         self.logger.info(f"MCP Server v2 initialized with {self.registry.tool_count} tools")
     
@@ -258,6 +296,16 @@ class MCPServer:
         Returns:
             MCP response
         """
+        # ── Rate limiting ────────────────────────────────────────────────────
+        if not self._rate_limiter.allow():
+            return MCPResponse(
+                error={
+                    "code": 429,
+                    "message": "Too Many Requests — rate limit exceeded",
+                },
+                id=request.id,
+            )
+
         try:
             method = request.method
             params = request.params

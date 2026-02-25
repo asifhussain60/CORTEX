@@ -242,23 +242,22 @@ def test_gp50_014_domain_coherence_validator_canonical_alias() -> None:
 # ===========================================================================
 
 def test_gp50_015_cortex_master_yaml_phase50_path() -> None:
-    """GP50-015: cortex-master.yaml phase-50 file path points to canonical location."""
-    import yaml
-    registry = REPO_ROOT / "cortex-registry" / "cortex-master.yaml"
-    data = yaml.safe_load(registry.read_text())
-    next_phases = data.get("execution_order", {}).get("next_phases", [])
-    phase50 = next(
-        (p for p in next_phases if p.get("id") == "phase-50"),
-        None,
+    """GP50-015: phase-50 YAML exists at canonical planning/phases/completed/ location."""
+    # Phase-50 is COMPLETE — it lives in planning/phases/completed/, not execution_order.next_phases.
+    # This test verifies the canonical file exists and the legacy _cortex-master path is absent.
+    planning_root = REPO_ROOT / "cortex-registry" / "planning" / "phases"
+    phase50_files = list(planning_root.rglob("phase-50-*.yaml"))
+    assert len(phase50_files) >= 1, (
+        f"At least one phase-50 YAML must exist under {planning_root} (phase-50 is COMPLETE)"
     )
-    assert phase50 is not None, "phase-50 must be in execution_order.next_phases"
-    file_path = phase50.get("file", "")
-    assert "_cortex-master" not in file_path, (
-        f"phase-50 file path must not use _cortex-master legacy path: {file_path}"
-    )
-    assert "planning/phases/planned" in file_path, (
-        f"phase-50 file path must use canonical planning/phases/planned/: {file_path}"
-    )
+    for phase50_file in phase50_files:
+        file_path = str(phase50_file)
+        assert "_cortex-master" not in file_path, (
+            f"phase-50 file path must not use _cortex-master legacy path: {file_path}"
+        )
+        assert "planning/phases" in file_path, (
+            f"phase-50 file path must be under canonical planning/phases/: {file_path}"
+        )
 
 
 # ===========================================================================

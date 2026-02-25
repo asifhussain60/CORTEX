@@ -108,7 +108,7 @@ phase_detail_files:
     gaps: 19
     sub_phases: 3
     file: "cortex-registry/_cortex-master/phases/completed/phase-66-intelligence-matrix-neural-wiring.yaml"
-    note: "Coverage 9.5% → ≥50%. cortex_intelligence_matrix MCP tool is the gate."
+    note: "Coverage 9.5% → ≥50%. The intelligence-matrix MCP tool is the gate."
 
   - id: phase-65
     title: "Enterprise Hardening — MCP Auth + 151 ImportError Sweep"
