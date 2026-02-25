@@ -163,20 +163,6 @@ phantom_tier_registrations:
     priority: 145
     phase_added: "62-D"
 
-  - name: StageExecutionStrategy
-    tier: strategies
-    category: SUPPORT
-    description: "Stage execution strategy — orchestrates multi-stage pipeline execution"
-    entry_point: "cortex.orchestrators.strategies.stage_execution_strategy:StageExecutionStrategy"
-    features:
-      - stage_routing
-      - stage_fallback
-      - parallel_stage_execution
-    health_check: false
-    dependencies: []
-    priority: 142
-    phase_added: "62-D"
-
   - name: ContextAwareSynthesis
     tier: synthesis
     category: SUPPORT
@@ -203,19 +189,6 @@ phantom_tier_registrations:
     health_check: false
     dependencies: []
     priority: 138
-    phase_added: "62-D"
-
-  - name: AuditVerifier
-    tier: workflow
-    category: SUPPORT
-    description: "Audit verifier — post-phase audit verification workflow step"
-    entry_point: "cortex.orchestrators.workflow.audit_verifier:AuditVerifier"
-    features:
-      - audit_verification
-      - post_phase_check
-    health_check: false
-    dependencies: []
-    priority: 136
     phase_added: "62-D"
 
   - name: AutonomousWorkflowExecutor
@@ -348,34 +321,6 @@ phantom_tier_registrations:
     health_check: false
     dependencies: []
     priority: 116
-    phase_added: "62-G"
-
-  - name: UnifiedAnalysisOrchestrator
-    tier: support
-    category: SUPPORT
-    description: "Unified analysis orchestrator — multi-dimension codebase analysis aggregator"
-    entry_point: "cortex.orchestrators.support.unified_analysis_orchestrator:UnifiedAnalysisOrchestrator"
-    features:
-      - multi_dimension_analysis
-      - aggregated_scoring
-      - trend_detection
-    health_check: false
-    dependencies: []
-    priority: 114
-    phase_added: "62-G"
-
-  - name: UnifiedDiscoveryOrchestrator
-    tier: support
-    category: SUPPORT
-    description: "Unified discovery orchestrator — workspace topology and service map generation"
-    entry_point: "cortex.orchestrators.support.unified_discovery_orchestrator:UnifiedDiscoveryOrchestrator"
-    features:
-      - topology_discovery
-      - service_mapping
-      - dependency_graph
-    health_check: false
-    dependencies: []
-    priority: 112
     phase_added: "62-G"
 
   - name: UnifiedQualityAssuranceOrchestrator

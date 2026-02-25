@@ -1,0 +1,90 @@
+# Git Orchestrators Wiring Specification
+# AC-ID: AC-WIRING-GIT-001
+# Purpose: Declarative registration of 4 git orchestrators (GAP-77-B-03)
+# Authority: CORE-031, Phase 77-B (SWEEP-77-PRODUCTION-CLEANUP)
+# Created: 2026-02-25
+
+module_name: git_orchestrators
+version: "1.0.0"
+description: "Git orchestrators: commit/push/PR, pre-commit enforcement, sanitization, core git operations"
+
+dependencies:
+  - name: core_orchestrators
+    version: ">=1.0.0"
+    required: true
+    internal: true
+
+provides:
+
+  - name: GitOrchestrator
+    tier: git
+    category: GIT
+    description: "Core git orchestrator — structured git operations: commit, push, branch, diff, status, merge"
+    entry_point: "cortex.orchestrators.git.git_orchestrator:GitOrchestrator"
+    features:
+      - git_commit
+      - git_push
+      - git_branch
+      - git_diff
+      - git_status
+      - git_merge
+    health_check: true
+    health_check_method: "health_check"
+    health_check_returns: ["status", "orchestrator", "uptime_requests", "success_count", "last_success"]
+    dependencies: []
+    priority: 145
+    phase_added: "62-D"
+
+  - name: GitPublishOrchestrator
+    tier: git
+    category: GIT
+    description: "Git publish orchestrator — structured commit + push + PR creation workflow"
+    entry_point: "cortex.orchestrators.git.git_publish_orchestrator:GitPublishOrchestrator"
+    features:
+      - structured_commit
+      - pr_creation
+      - branch_management
+      - push_workflow
+    health_check: false
+    dependencies:
+      - GitOrchestrator
+    priority: 143
+    phase_added: "62-G"
+
+  - name: PreCommitEnforcementOrchestrator
+    tier: git
+    category: GIT
+    description: "Pre-commit enforcement orchestrator — CORE rule validation at commit time"
+    entry_point: "cortex.orchestrators.git.git_enforcement_orchestrator:PreCommitEnforcementOrchestrator"
+    features:
+      - pre_commit_hook
+      - core_rule_gate
+      - commit_blocking
+      - type_hint_check
+      - docstring_check
+      - snake_case_check
+    health_check: false
+    dependencies:
+      - EnforcementOrchestrator
+    priority: 141
+    phase_added: "62-G"
+
+  - name: SanitizationOrchestrator
+    tier: git
+    category: GIT
+    description: "Sanitization orchestrator — secret scanning, PII removal, branch hygiene"
+    entry_point: "cortex.orchestrators.git.sanitization_orchestrator:SanitizationOrchestrator"
+    features:
+      - secret_scanning
+      - pii_removal
+      - branch_hygiene
+      - pre_push_gate
+    health_check: false
+    dependencies: []
+    priority: 139
+    phase_added: "62-G"
+
+changelog:
+  - version: "1.0.0"
+    date: "2026-02-25"
+    change_summary: "Phase 77-B: Initial git-orchestrator-wiring.yaml — 4 git orchestrators registered (GitOrchestrator, GitPublishOrchestrator, PreCommitEnforcementOrchestrator, SanitizationOrchestrator). Extracted from support-orchestrator-wiring.yaml where they were co-mingled (GAP-77-B-03)."
