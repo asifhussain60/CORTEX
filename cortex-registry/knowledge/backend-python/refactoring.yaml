@@ -1,37 +1,62 @@
 # Refactoring Techniques
-# Authority: AC-PHASE65-S1-001
+# Authority: AC-PHASE65-S1-001 | Enhanced: Phase-79 SDLC Intelligence Engine
+# Company Context: SRP decomposition, CORE-064 sweep completeness, RGR loop primitive
 
 title: "Refactoring Best Practices"
 category: "backend-python"
-version: "1.0"
+updated: "2026-02-25"
+
+# ── RGR Loop Integration ──────────────────────────────────────────────────────
+# Every refactoring session uses: detect-fix-rescan-loop.yaml primitive
+# Loop exits only when p0_count == 0 and p1_count == 0 (CORE-064)
+rgr_primitive: "cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml"
 
 best_practices:
   preconditions:
     test_coverage_first:
-      description: "Ensure adequate test coverage before refactoring"
+      description: "≥ 90% coverage on target module before refactoring begins — no exceptions"
+    catalogue_smells_first:
+      description: "List all code smells before touching any code — use SweepCatalogueOrchestrator"
+      cortex_rule: "CORE-064 — exhaust the full catalogue; partial sweeps are governance violations"
     one_change_at_a_time:
-      description: "Apply one refactoring step at a time; verify tests pass"
+      description: "One refactoring step at a time — run tests after each step before proceeding"
     commit_between_steps:
-      description: "Commit after each successful refactoring step"
+      description: "Commit after each successful step — enables atomic rollback if needed"
   techniques:
     extract_method:
-      description: "Extract long code blocks into well-named helper methods"
+      description: "Extract blocks > 10 lines into named helper methods with type hints + docstring"
+      srp_target: "Files > 800 lines must be decomposed — master_orchestrator.py pattern: split into stage files"
     rename_variable:
-      description: "Rename unclear variables/functions to reveal intent"
+      description: "Replace unclear names with intention-revealing names (CORE-028 snake_case)"
     introduce_parameter_object:
-      description: "Replace long parameter lists with a value object"
+      description: "Replace ≥ 4 parameters with a typed dataclass or Pydantic model"
     extract_class:
-      description: "Move cohesive responsibilities to a dedicated class"
+      description: "Move cohesive responsibilities to a dedicated class — target: single reason to change"
     replace_conditional_with_polymorphism:
-      description: "Use polymorphism instead of complex if/elif chains"
+      description: "Replace if/elif type-dispatch chains with Strategy pattern or polymorphism"
     introduce_explaining_variable:
-      description: "Name complex expressions with intermediate variables"
+      description: "Name complex boolean expressions with intermediate variables for readability"
     remove_dead_code:
-      description: "Delete unused functions, variables, and imports"
+      description: "Delete unused functions, variables, imports immediately — no 'just in case' code"
   validation:
     all_tests_pass:
-      description: "All existing tests must pass after each refactoring"
+      description: "All existing tests must pass after every step — zero new failures"
     no_behaviour_change:
-      description: "Refactoring must not alter observable behaviour"
+      description: "Refactoring must not alter observable behaviour — API contracts preserved"
     coverage_maintained:
-      description: "Test coverage must not decrease"
+      description: "Coverage must not decrease — add tests if refactoring exposes untested paths"
+    functional_completeness:
+      description: "Every public function from the original must exist in the refactored output"
+
+# ── SRP Size Targets ──────────────────────────────────────────────────────────
+srp_targets:
+  function_max_lines: 50
+  class_max_lines: 500
+  file_max_lines: 800
+  parameter_max_count: 4
+
+# ── Company Context ───────────────────────────────────────────────────────────
+company_context:
+  monolith_pattern: "Orchestrators > 800 lines are split into stage files (see MasterOrchestrationStage1/3/4)"
+  payment_path: "Payment-path refactorings require security hardening gate before AC_COMPLETE"
+  traceability: "All refactor sessions write to .cortex-runtime/traces/orchestrator-traces.db"

@@ -1,13 +1,14 @@
 # CORTEX Knowledge — Refactoring Quality Standards
 # Source: DIGEST of cortex-sts/CortexLabs/.analysis/01-review.md
-# Digested: 2026-02-22
+# Digested: 2026-02-22 | Enhanced: Phase-79 SDLC Intelligence Engine
 # Pipeline: 1 (Chat Session — CORTEX self-analysis)
 # Authority: ENH-DIGEST-2026-02-22
+# Company Context: STS scoring model, payment security P0 gates, AC traceability
 
 title: "Refactoring Quality Standards — Lessons from BadMonolith Audit"
 category: "architecture"
 domain: "refactoring"
-version: "1.0"
+updated: "2026-02-25"
 source_session: "cortex-sts/CortexLabs/Refactored"
 score: 82  # out of 100 — first STS refactoring pass
 
@@ -189,3 +190,10 @@ scoring_model:
     frontend:        8
     traceability:    3
     weighted_total:  82
+
+# ── Company Context ───────────────────────────────────────────────────────────
+company_context:
+  payment_security_gate: "Security P0 checks (SQL injection, hardcoded secrets, auth) must pass before any refactoring is marked COMPLETE"
+  traceability_mandate: "All REFACTOR sessions write AC_START/AC_COMPLETE to .cortex-runtime/traces/orchestrator-traces.db"
+  scoring_target: "STS score ≥ 90/100 before a refactored service is considered production-ready"
+  srp_file_limit: "Files > 800 lines trigger automatic SRP decomposition — no exceptions (see master_orchestrator.py split)"

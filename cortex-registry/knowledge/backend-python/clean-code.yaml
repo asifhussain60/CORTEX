@@ -1,35 +1,54 @@
 # Clean Code Practices
-# Authority: AC-PHASE65-S1-001
+# Authority: AC-PHASE65-S1-001 | Enhanced: Phase-79 SDLC Intelligence Engine
+# Company Context: CORE-011 (type hints), CORE-012 (docstrings), CORE-028 (snake_case)
 
 title: "Clean Code Practices for Python"
 category: "backend-python"
-version: "1.0"
+updated: "2026-02-25"
+
+# ── CORTEX Mandatory Standards (non-negotiable) ───────────────────────────────
+cortex_standards:
+  type_hints: "CORE-011 — all public functions require type hints, no exceptions"
+  docstrings: "CORE-012 — all public APIs require docstrings"
+  naming: "CORE-028 — snake_case for files, functions, variables; PascalCase for classes only"
+  file_size: "Functions ≤ 50 lines; classes ≤ 500 lines; files ≤ 800 lines (SRP enforcement)"
 
 best_practices:
   naming:
     meaningful_names:
-      description: "Use intention-revealing names; avoid abbreviations"
+      description: "Intention-revealing names — no abbreviations, no single-letter variables outside comprehensions"
+      cortex_rule: "CORE-028 snake_case enforced; CI gate rejects violations"
     verb_functions:
-      description: "Function names should be verbs describing what they do"
+      description: "Function names are verbs: process_payment(), validate_token(), fetch_user()"
     noun_classes:
-      description: "Class names should be nouns representing domain concepts"
+      description: "Class names are nouns representing domain concepts: PaymentProcessor, TokenValidator"
+    constants:
+      description: "SCREAMING_SNAKE_CASE for module-level constants; never magic numbers inline"
   functions:
     single_responsibility:
-      description: "Functions should do one thing and do it well"
+      description: "Each function does one thing — if you need 'and' to describe it, split it"
     small_functions:
-      description: "Functions should be small — ideally under 20 lines"
+      description: "≤ 20 lines preferred; ≤ 50 lines enforced — extract helper if over limit"
     no_side_effects:
-      description: "Prefer pure functions without hidden side effects"
+      description: "Pure functions preferred — same input always produces same output"
     command_query_separation:
-      description: "Functions either change state or return data, not both"
+      description: "Functions either mutate state OR return data — never both"
+    early_return:
+      description: "Validate inputs and return/raise early — avoid deeply nested happy-path logic"
   structure:
     dry_principle:
-      description: "Don't Repeat Yourself — extract duplicated logic"
+      description: "Extract duplicated logic immediately — CORE-035 blocks duplicate implementations"
     yagni_principle:
-      description: "You Aren't Gonna Need It — don't build speculative features"
+      description: "Build what is needed now — no speculative generics or unused abstractions"
     boy_scout_rule:
-      description: "Leave the code cleaner than you found it"
+      description: "Leave the code cleaner than you found it — each PR improves code health"
     dependency_injection:
-      description: "Inject dependencies rather than instantiating them"
+      description: "Inject dependencies via constructor — never instantiate collaborators inside a class"
     fail_fast:
-      description: "Validate inputs early and return/raise promptly"
+      description: "Validate at the boundary (API layer, service entry) — do not propagate invalid state"
+
+# ── Company Context ───────────────────────────────────────────────────────────
+company_context:
+  api_layer: "All API endpoint handlers must be thin — delegate to service layer within 10 lines"
+  payment_domain: "Payment-path functions must be pure and auditable — no side effects, full type coverage"
+  enforcement: "ruff + mypy run in CI — zero errors required before merge"

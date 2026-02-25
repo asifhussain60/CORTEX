@@ -1,36 +1,61 @@
-# Monitoring and Observability
-# Authority: AC-PHASE65-S1-001
+# Monitoring and Observability Best Practices
+# Authority: AC-PHASE65-S1-001 | Enhanced: Phase-79 SDLC Intelligence Engine
+# Company Context: Prometheus/Grafana stack, OpenTelemetry tracing, cortex/prometheus_metrics.py
 
 title: "Monitoring and Observability Best Practices"
 category: "devops-infrastructure"
-version: "1.0"
+updated: "2026-02-25"
+
+# ── Company Infrastructure Stack ──────────────────────────────────────────────
+infrastructure_stack:
+  metrics: "Prometheus (prometheus.yml) + Grafana dashboards (deployment/grafana-dashboards/)"
+  tracing: "OpenTelemetry (cortex/opentelemetry_tracing.py) — trace_id propagated on all requests"
+  logs: "Structured JSON logs — correlation_id + request_id on every log line"
+  health: "All services expose /health + /ready — nginx.conf proxies; Kubernetes liveness/readiness wired"
+  slo_targets:
+    api_p99_latency_ms: 200
+    payment_p99_latency_ms: 500
+    orchestrator_core_p99_ms: 200
+    orchestrator_domain_p99_ms: 500
+    orchestrator_support_p99_ms: 1000
 
 best_practices:
   pillars:
     metrics:
-      description: "Collect quantitative measurements (latency, error rate, throughput)"
+      description: "Quantitative measurements — latency histograms, error rate counters, throughput gauges"
+      cortex_standard: "cortex/prometheus_metrics.py is the SSOT for all metric definitions — never define ad-hoc"
     logs:
-      description: "Emit structured logs with correlation IDs for traceability"
+      description: "Structured JSON logs with correlation_id + trace_id — no plain-text log.info() strings"
+      cortex_standard: "Every orchestrator method logs AC_START/AC_COMPLETE markers — readable in Grafana"
     traces:
-      description: "Use distributed tracing to track requests across services"
+      description: "Distributed tracing across orchestrator boundaries via OpenTelemetry"
+      cortex_standard: "cortex/opentelemetry_tracing.py instruments all MCP tool calls automatically"
   alerting:
     slo_driven:
-      description: "Define SLOs first; alert only when SLO burn rate is critical"
+      description: "Alert on SLO burn rate — not on raw metric thresholds"
+      company_rule: "P99 > 200ms for 5 minutes → alert; P99 > 500ms for 1 minute → page"
     avoid_alert_fatigue:
-      description: "Suppress low-signal alerts; ensure every alert is actionable"
+      description: "Every alert must be actionable and link to a runbook — suppress low-signal alerts"
     runbooks:
-      description: "Link alerts to runbooks describing investigation steps"
+      description: "All alerts link to runbooks in deployment/hooks/ or cortex-docs/"
   instrumentation:
     four_golden_signals:
-      description: "Monitor latency, traffic, errors, and saturation for every service"
-    cardinality_management:
-      description: "Limit label cardinality in metrics to control storage costs"
+      description: "Latency, traffic, errors, saturation — instrument every service boundary"
     health_endpoints:
-      description: "Expose /health and /ready endpoints for platform integration"
+      description: "All 27 orchestrators expose health_check() — HealthOrchestrator aggregates"
+      cortex_standard: "HealthOrchestrator.run_health_check() covers all 22 external-facing orchestrators"
+    cardinality_management:
+      description: "Label cardinality ≤ 100 unique values per label — high-cardinality = use trace IDs, not metrics"
   analysis:
     baseline_performance:
-      description: "Establish performance baselines before optimising"
+      description: "Establish baselines before any optimisation — use deployment/prometheus.yml historical data"
     anomaly_detection:
-      description: "Use statistical analysis to detect abnormal patterns"
+      description: "Use Grafana alerting on standard deviation — flag requests 3σ above baseline"
     capacity_planning:
-      description: "Use historical trends to forecast and plan capacity"
+      description: "Use 30-day P99 trends for capacity forecasting — scale before hitting 80% saturation"
+
+# ── Company Context ───────────────────────────────────────────────────────────
+company_context:
+  payment_monitoring: "All payment transactions emit a payment_attempt_total counter + payment_duration_seconds histogram"
+  cortex_runtime_db: "Orchestrator traces in .cortex-runtime/traces/orchestrator-traces.db — 30-day retention enforced"
+  deployment: "Kubernetes health checks defined in deployment/health_checks.yaml — never deviate"

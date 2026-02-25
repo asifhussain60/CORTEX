@@ -1,38 +1,57 @@
 # Engineering Design Patterns
-# Authority: AC-PHASE65-S1-001
+# Authority: AC-PHASE65-S1-001 | Enhanced: Phase-79 SDLC Intelligence Engine
+# Company Context: CORTEX orchestrator patterns, payment domain patterns
 
 title: "Engineering Design Patterns"
 category: "architecture"
-version: "1.0"
+updated: "2026-02-25"
+
+# ── CORTEX Native Patterns (use these first before inventing new abstractions) ─
+cortex_native_patterns:
+  orchestrator: "Coordinates multi-step workflows — MasterOrchestrator delegates to domain orchestrators"
+  registry: "Central lookup by key — WorkflowTemplateRegistry, KnowledgeRegistry, WiringRegistry"
+  strategy: "Swap algorithms at runtime — PipelineStageStrategy, IntelligenceTierStrategy"
+  observer: "Event-driven decoupling — AC marker emission, HealthOrchestrator event bus"
+  command: "Encapsulate requests as objects — MCP tool operations (op: param pattern)"
+  factory: "FileFactory in cortex/core/ — decouples file creation from consumers"
 
 best_practices:
   creational:
     factory_pattern:
-      description: "Use Factory to decouple object creation from usage"
+      description: "Decouple object creation from usage — use when construction logic is complex or varies by context"
+      cortex_example: "FileFactory creates output files without callers knowing path resolution logic"
     singleton_pattern:
-      description: "Use Singleton sparingly; prefer dependency injection"
+      description: "Use sparingly — prefer DI. Acceptable for: registry caches, config loaders, DB connection pools"
     builder_pattern:
-      description: "Use Builder for complex object construction"
+      description: "Complex object construction with many optional fields — use Pydantic model with defaults instead"
   structural:
     adapter_pattern:
-      description: "Use Adapter to integrate incompatible interfaces"
+      description: "Wrap incompatible interfaces — MCP tool adapters wrap orchestrator methods for stdio transport"
     facade_pattern:
-      description: "Use Facade to simplify complex subsystem interactions"
+      description: "Simplify subsystem access — MasterOrchestrator is a facade over 27 domain orchestrators"
     decorator_pattern:
-      description: "Use Decorator to add behaviour without modifying the original class"
+      description: "Add cross-cutting behaviour without modifying classes — AC marker injection, rate limiting"
     composite_pattern:
-      description: "Use Composite for tree structures and recursive hierarchies"
+      description: "Tree structures and recursive hierarchies — workflow template nesting, sub-phase chains"
   behavioural:
     observer_pattern:
-      description: "Use Observer / Event Bus for decoupled event-driven communication"
+      description: "Decoupled event-driven communication — use for audit events, health state changes"
     strategy_pattern:
-      description: "Use Strategy to swap algorithms at runtime"
+      description: "Swap algorithms at runtime — IntelligenceTierStrategy (Quick/Targeted/Full tiers)"
     command_pattern:
-      description: "Use Command to encapsulate requests as objects"
+      description: "Encapsulate requests as objects — all MCP tools use op: parameter as command discriminator"
     chain_of_responsibility:
-      description: "Use Chain of Responsibility for flexible request processing pipelines"
+      description: "Flexible pipeline processing — Stage 0→9 audit pipeline, LENS analyzer chain"
   selection:
     pattern_necessity:
-      description: "Only introduce a pattern when it solves a concrete problem"
+      description: "Introduce a pattern only when it solves a concrete, existing problem — not speculatively"
     avoid_overengineering:
-      description: "Simple code without a pattern is better than complex code with one"
+      description: "Simple code without a pattern beats complex code with one — YAGNI governs pattern adoption"
+    cortex_first:
+      description: "Check cortex_native_patterns above before introducing new abstractions — reuse what exists"
+
+# ── Company Context ───────────────────────────────────────────────────────────
+company_context:
+  payment_domain: "Payment flows use Command + Chain of Responsibility — auditable, reversible, step-isolated"
+  api_layer: "All API routing uses Strategy pattern for version-based dispatch (api-design-standards.yaml)"
+  infrastructure: "DB access uses Repository pattern — no raw queries in service layer"

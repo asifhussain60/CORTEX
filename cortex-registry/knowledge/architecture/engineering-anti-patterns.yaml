@@ -1,37 +1,67 @@
-# Engineering Anti-Patterns
-# Authority: AC-PHASE65-S1-001
+# Engineering Anti-Patterns to Avoid
+# Authority: AC-PHASE65-S1-001 | Enhanced: Phase-79 SDLC Intelligence Engine
+# Company Context: CORTEX-specific anti-patterns from production audits
 
 title: "Engineering Anti-Patterns to Avoid"
 category: "architecture"
-version: "1.0"
+updated: "2026-02-25"
+
+# ── CORTEX-Specific Anti-Patterns (observed in production audits) ─────────────
+cortex_anti_patterns:
+  monolith_orchestrator:
+    description: "Orchestrator file > 800 lines handling multiple domains — previous master_orchestrator.py at 5,118 lines"
+    fix: "Decompose into MasterOrchestrationStage1/3/4 — each file owns one pipeline stage"
+  circular_imports:
+    description: "cortex.core importing from cortex.orchestrators which imports cortex.core — breaks all tests"
+    fix: "Dependency flows one way: core ← orchestrators ← mcp; never reversed"
+  stub_proliferation:
+    description: "271 orchestrator files with only pass or ... — only 27 were wired and functional"
+    fix: "Delete stubs immediately — CORE-035 blocks duplicate/dead implementations"
+  compat_shim_accumulation:
+    description: "Shim files re-exporting from canonical locations — creates two paths for same thing"
+    fix: "Update callers to canonical path; delete shim within same PR (never keep both)"
+  ghost_directories:
+    description: "Filesystem artifacts with dots in name (cortex.intelligence/) appearing in imports"
+    fix: "Delete immediately — Check #18 in 19-Point Production Readiness Audit"
 
 best_practices:
   structural_anti_patterns:
     god_object:
-      description: "Avoid God Objects that know too much or do too much"
+      description: "Classes that know too much or do too much — if it needs scrolling to read, it's too large"
+      detection: "Class > 500 lines OR > 10 public methods handling different domains"
     spaghetti_code:
-      description: "Avoid tangled control flow; prefer linear, predictable execution"
+      description: "Tangled control flow — prefer linear, predictable execution with early returns"
     lava_flow:
-      description: "Remove dead code rather than leaving it commented out"
+      description: "Dead code left in place 'just in case' — delete it; git history preserves it"
+      cortex_rule: "Check #2 in 19-Point Audit scans for stub bodies and dead functions"
     golden_hammer:
-      description: "Avoid applying a single familiar pattern to every problem"
+      description: "Applying one familiar pattern to every problem — orchestrators are not the answer to everything"
     copy_paste_programming:
-      description: "Never copy-paste code; extract reusable abstractions instead"
+      description: "Never copy-paste code — extract reusable abstractions; CORE-035 blocks duplicates"
   process_anti_patterns:
     big_ball_of_mud:
-      description: "Avoid incrementally growing an unstructured system; maintain clear architecture"
+      description: "Unstructured system grown incrementally — the 150-file deletion of Chat01 was the cure"
     analysis_paralysis:
-      description: "Make decisions with available information; avoid indefinite planning"
+      description: "Indefinite planning without execution — use WHOLE-PHASE-FIRST: plan fully, then execute atomically"
     premature_optimisation:
-      description: "Profile first; only optimise proven bottlenecks"
+      description: "Profile first — the 200ms/500ms/1s latency envelopes define when optimisation is justified"
   code_quality:
     magic_numbers:
-      description: "Replace magic numbers and strings with named constants"
+      description: "Replace magic numbers and strings with named constants or configuration values"
     deep_nesting:
-      description: "Flatten deeply nested conditionals with early returns"
+      description: "Flatten nested conditionals with early returns — max 3 levels of nesting"
     boolean_trap:
-      description: "Avoid boolean parameters; use enums or separate methods"
+      description: "process(True, False) — use enums or separate methods; never positional booleans"
     feature_envy:
-      description: "If a method uses mostly another class's data, move it there"
+      description: "Method using mostly another class's data belongs in that class"
     data_clumps:
-      description: "Combine frequently paired data items into a value object"
+      description: "Fields always used together (host, port, db_name) → extract to typed dataclass"
+    partial_sweep:
+      description: "Fixing one instance of a bug class while others remain — CORE-064 violation"
+      fix: "Use SweepCatalogueOrchestrator to enumerate all instances before fixing any"
+
+# ── Company Context ───────────────────────────────────────────────────────────
+company_context:
+  payment_domain: "No inline SQL in payment handlers — Repository pattern enforced; any violation is P0"
+  api_layer: "No business logic in route handlers — delegate to service layer within 10 lines"
+  security: "No hardcoded credentials, tokens, or connection strings anywhere in codebase — bandit CI gate"

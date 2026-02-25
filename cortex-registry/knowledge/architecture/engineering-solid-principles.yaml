@@ -1,33 +1,55 @@
 # SOLID Principles
-# Authority: AC-PHASE65-S1-001
+# Authority: AC-PHASE65-S1-001 | Enhanced: Phase-79 SDLC Intelligence Engine
+# Company Context: Orchestrator compliance, payment domain isolation, API contract design
 
 title: "SOLID Engineering Principles"
 category: "architecture"
-version: "1.0"
+updated: "2026-02-25"
+
+# ── CORTEX Compliance Mapping ─────────────────────────────────────────────────
+# Every wired orchestrator is validated against SOLID at every /audit fix run
+cortex_solid_gate:
+  srp_check: "Orchestrators with > 1 intent domain → split (e.g., MasterOrchestrator delegates, never executes)"
+  ocp_check: "New domains added via wiring YAML — no core file modification required"
+  lsp_check: "All orchestrators satisfy IOrchestrator / OrchestratorProtocolMixin contract"
+  isp_check: "MCP tools use op: discriminator — callers request only the operation they need"
+  dip_check: "Orchestrators receive dependencies via constructor — no internal instantiation"
 
 best_practices:
   solid:
     single_responsibility:
-      description: "Single Responsibility — a class/module should have only one reason to change"
+      description: "One reason to change — a class owning two domains must be split"
+      cortex_example: "MasterOrchestrator routes but never implements domain logic; TDDOrchestrator owns TDD cycle"
+      violation_pattern: "Orchestrators > 800 lines usually violate SRP — decompose into stage files"
     open_closed:
-      description: "Open-Closed — open for extension, closed for modification"
+      description: "Extend behaviour by adding new orchestrators/strategies — never modifying core dispatch"
+      cortex_example: "New domain orchestrator wired via domain-orchestrator-wiring.yaml — zero core changes"
     liskov_substitution:
-      description: "Liskov Substitution — subtypes must be substitutable for their base types"
+      description: "All orchestrator subclasses satisfy OrchestratorProtocolMixin — health_check() + execute() mandatory"
+      violation_pattern: "Subclass raising NotImplementedError on inherited method = LSP violation"
     interface_segregation:
-      description: "Interface Segregation — prefer small, specific interfaces over large general ones"
+      description: "Callers request only what they need — MCP op: pattern enforces this at transport layer"
+      cortex_example: "cortex_governance op=query vs op=remediation_plan — same tool, isolated operation contracts"
     dependency_inversion:
-      description: "Dependency Inversion — depend on abstractions, not concretions"
+      description: "Depend on abstractions (OrchestratorProtocolMixin, IRepository) — never on concrete classes"
+      cortex_example: "All orchestrators receive IntelligenceProvider via DI — never instantiate internally"
   cohesion:
     high_cohesion:
-      description: "Keep related responsibilities together; separate unrelated ones"
+      description: "Related responsibilities grouped — payment logic lives in payment domain, not spread across layers"
     low_coupling:
-      description: "Minimise dependencies between modules"
+      description: "Orchestrators communicate via MasterOrchestrator routing — not direct instantiation"
     encapsulation:
-      description: "Hide internal implementation details behind clean interfaces"
+      description: "Internal state hidden behind typed interfaces — no public attributes on orchestrators"
   modularity:
     package_by_feature:
-      description: "Organise code by feature/domain, not by technical layer"
+      description: "cortex/orchestrators/{domain}/ — organised by capability, not by technical layer"
     stable_dependencies:
-      description: "Depend on more stable modules; avoid circular dependencies"
+      description: "Core orchestrators are most stable — domain and support orchestrators depend on core, not vice versa"
     explicit_contracts:
-      description: "Define module contracts with type hints and docstrings"
+      description: "All public methods have type hints (CORE-011) + docstrings (CORE-012) — enforced at CI"
+
+# ── Company Context ───────────────────────────────────────────────────────────
+company_context:
+  payment_isolation: "PaymentProcessor, PaymentValidator, PaymentAuditLogger are separate classes — SRP enforced"
+  api_versioning: "Version routing is Open/Closed — add v3 handler without modifying v2 (api-design-standards.yaml)"
+  security_boundary: "Authentication is injected as middleware — never implemented inside domain orchestrators"

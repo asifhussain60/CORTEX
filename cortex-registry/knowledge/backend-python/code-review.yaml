@@ -1,39 +1,68 @@
 # Code Review Best Practices
-# Authority: AC-PHASE65-S1-001
+# Authority: AC-PHASE65-S1-001 | Enhanced: Phase-79 SDLC Intelligence Engine
+# Company Context: api-design-standards.yaml + security-standards.yaml
 
 title: "Code Review Practices"
 category: "backend-python"
-version: "1.0"
+updated: "2026-02-25"
 
+# ── Automated Gate (runs before human review) ─────────────────────────────────
+automated_gate:
+  lint: "ruff + mypy — zero errors before PR opens"
+  security: "bandit HIGH severity = merge block"
+  tests: "All tests green + coverage ≥ 90%"
+  api_contract: "OpenAPI schema diff — breaking change requires version bump"
+  company_standard: "api-design-standards.yaml versioning rules enforced"
+
+# ── Human Review Checklist ────────────────────────────────────────────────────
 best_practices:
   reviewer_mindset:
     constructive_feedback:
-      description: "Provide actionable, specific feedback rather than vague criticism"
+      description: "Actionable, specific feedback — link to standard being violated"
     intent_understanding:
       description: "Understand the intent of the change before critiquing implementation"
-    principle_based:
-      description: "Reference coding standards when requesting changes"
-    knowledge_sharing:
-      description: "Use reviews as teaching opportunities"
+    security_first:
+      description: "Security issues are P0 — block merge, do not negotiate"
+    company_standards:
+      description: "Reference api-design-standards.yaml, security-standards.yaml explicitly"
   checklist:
     correctness:
-      description: "Verify logic is correct and handles edge cases"
+      description: "Logic is correct, handles edge cases, handles null/empty/boundary"
     test_coverage:
-      description: "New code must have corresponding test coverage"
+      description: "New code has tests — unit + integration + security boundary test"
     naming_clarity:
-      description: "Check names reveal intent"
+      description: "Names reveal intent — no abbreviations, no single-letter variables"
     error_handling:
-      description: "Ensure errors are handled gracefully"
+      description: "Errors handled gracefully — no bare except, no silent swallowing"
     security:
-      description: "Check for injection risks, authentication issues, data exposure"
+      description: "No hardcoded secrets, parameterised queries, RBAC checks present"
+      company_standard: "Verify against security-standards.yaml and payment-security.yaml"
     performance:
-      description: "Flag O(n²) loops, unnecessary DB calls, memory leaks"
+      description: "No O(n²) loops over collections > 100, no N+1 DB queries"
+    api_design:
+      description: "REST conventions followed — plural nouns, correct HTTP verbs, pagination"
+      company_standard: "Verify against api-design-standards.yaml rest-api block"
     documentation:
-      description: "Verify public APIs have docstrings"
+      description: "All public APIs have docstrings (CORE-012) + type hints (CORE-011)"
+    backwards_compatibility:
+      description: "API changes are backwards-compatible OR version-bumped with deprecation notice"
   author_mindset:
     small_prs:
-      description: "Keep pull requests small and focused on one concern"
+      description: "PRs ≤ 400 lines changed — split larger changes into sequential PRs"
     self_review:
-      description: "Review your own diff before requesting review"
-    test_first:
-      description: "Include tests in the same commit as implementation"
+      description: "Review your own diff before requesting review — catch obvious issues"
+    description:
+      description: "PR description explains WHAT changed, WHY, and HOW to test"
+
+# ── Severity Levels ────────────────────────────────────────────────────────────
+severity:
+  P0_blocking: "Security vulnerabilities, broken tests, API contract violations, hardcoded secrets"
+  P1_must_fix: "Missing test coverage, SOLID violations, performance O(n²) issues"
+  P2_should_fix: "Style inconsistencies, minor documentation gaps, naming improvements"
+  P3_optional: "Refactoring opportunities, alternative approaches worth considering"
+
+# ── Team Collaboration ────────────────────────────────────────────────────────
+team_workflow:
+  approval_required: "2 approvals for production-path code, 1 for internal tooling"
+  response_sla: "Reviewer responds within 1 business day"
+  knowledge_sharing: "Learnings from reviews fed to cortex-registry/knowledge/ via KnowledgeSynthesizer"

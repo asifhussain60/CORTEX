@@ -1,35 +1,63 @@
 # Performance Profiling and Analysis
-# Authority: AC-PHASE65-S1-001
+# Authority: AC-PHASE65-S1-001 | Enhanced: Phase-79 SDLC Intelligence Engine
+# Company Context: API latency SLOs (200ms/500ms), payment throughput targets
 
 title: "Performance Profiling and Analysis"
 category: "performance-optimization"
-version: "1.0"
+updated: "2026-02-25"
+
+# ── Company SLO Thresholds (source of truth for all performance decisions) ────
+slo_thresholds:
+  api_endpoint_p99_ms: 200        # core API endpoints — alert if exceeded
+  payment_endpoint_p99_ms: 500    # payment-path endpoints — tighter monitoring
+  orchestrator_core_p99_ms: 200   # MasterOrchestrator + IntentRouter
+  orchestrator_domain_p99_ms: 500 # domain orchestrators
+  orchestrator_support_p99_ms: 1000 # support orchestrators
+  db_query_p99_ms: 50             # individual query budget within endpoint SLO
+  mcp_tool_p99_ms: 200            # MCP tool invocations
 
 best_practices:
   profiling:
     measure_first:
-      description: "Always profile before optimising; do not guess bottlenecks"
+      description: "Always profile before optimising — the bottleneck is never where you think it is"
+      company_rule: "Use SLO thresholds above to determine if optimisation is justified — no premature work"
     cpu_profiling:
-      description: "Use cProfile/py-spy to identify CPU hotspots"
+      description: "cProfile for function-level hotspots; py-spy for live production profiling"
     memory_profiling:
-      description: "Use memory-profiler or tracemalloc for memory leak detection"
+      description: "tracemalloc for allocation tracing; memory-profiler for leak detection in long-running orchestrators"
     io_profiling:
-      description: "Profile I/O wait time separately from CPU time"
+      description: "Profile DB I/O and HTTP client wait separately from CPU — they require different fixes"
   analysis:
     amdahls_law:
-      description: "Speedup is limited by the serial fraction; parallelise judiciously"
+      description: "Speedup bounded by serial fraction — parallelise with pytest-xdist (-n auto) for test suites"
     big_o_awareness:
-      description: "Understand algorithmic complexity before optimising constants"
+      description: "Understand algorithmic complexity before micro-optimising constants"
     database_explain:
-      description: "Use EXPLAIN/EXPLAIN ANALYZE on slow queries before adding indexes"
+      description: "EXPLAIN ANALYZE every query exceeding 50ms — add index only after explain confirms need"
+    cortex_test_performance:
+      description: "16,259 tests run with pytest-xdist -n auto — slow tests (> 5s) are investigated, not skipped"
   optimisation:
     caching:
-      description: "Cache expensive computations at the appropriate layer"
+      description: "Cache at the appropriate layer — KnowledgeRegistry caches YAML loads; DNS + HTTP response caching at nginx"
     connection_pooling:
-      description: "Use connection pools for databases and HTTP clients"
+      description: "DB connection pools configured in deployment/ — never create per-request connections"
     async_io:
-      description: "Use async I/O for network-bound operations to improve throughput"
+      description: "async/await for all network-bound MCP tool calls and external API requests"
     batch_operations:
-      description: "Batch database writes to reduce round-trips"
+      description: "Batch DB writes in bulk operations — SweepCatalogueOrchestrator uses batch inserts"
     lazy_evaluation:
-      description: "Defer expensive computations until results are needed"
+      description: "LENS analyzers are lazy-loaded per intent tier — Full tier only when INVESTIGATE triggered"
+
+# ── Optimisation Decision Gate ────────────────────────────────────────────────
+optimisation_gate:
+  step_1: "Measure: collect P99 from Prometheus for the target endpoint"
+  step_2: "Compare: is P99 > SLO threshold above?"
+  step_3: "If NO — do not optimise; document baseline and move on"
+  step_4: "If YES — profile with cProfile/py-spy to find hotspot, then fix hotspot only"
+  step_5: "Verify: re-measure P99 post-fix; confirm SLO is now satisfied"
+
+# ── Company Context ───────────────────────────────────────────────────────────
+company_context:
+  payment_throughput: "Payment endpoints must sustain 1,000 TPS at P99 ≤ 500ms — load-test before release"
+  api_scaling: "nginx.prod.conf + Kubernetes HPA auto-scales at 70% CPU — performance fixes before scaling"
+  cortex_tests: "Parallel test runs with -n auto — any test > 5s requires investigation via py-spy"
