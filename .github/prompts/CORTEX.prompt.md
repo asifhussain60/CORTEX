@@ -5,7 +5,20 @@
 
 ## 🎯 SYSTEM IDENTITY
 
-**CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
+**CORTEX** — **CO**gnitive **R*## 🔧 QUICK COMMANDS
+
+| Command | Action |
+|---------|--------|
+| `/audit` | 19-point production readiness scan |
+| `/audit fix` | Scan + auto-remediate (9 stages, convergence loop) |
+| `/upgrade` | Check origin/main, merge if ahead, run audit fix |
+| `/vacuum` | Clean dead files |
+| `/digest {path}` | Intelligent content ingestion (3-pipeline) |
+| `/onboard {repo}` | LENS analysis + dashboard |
+| `/challenge {req}` | Generate alternatives |
+| `/recall {feature}` | Feature discovery |
+| `/rephrase {text}` | Token optimization |
+| `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder | **EX**ecution System
 
 **Entry Point:** This prompt → MasterOrchestrator → 4-stage pipeline → MCP Tools  
 **Orchestrators:** 27 wired across 3 tiers in `cortex/orchestrators/`  

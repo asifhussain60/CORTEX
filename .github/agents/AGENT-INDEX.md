@@ -59,6 +59,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Agent | Purpose | Load When |
 |-------|---------|-----------|
+| **cortex-sync-agent.md** | 4-gate one-way sync: PULL→DIFF→SANITIZE→MERGE into company folder | `/sync target=<path>` — cross-repo privacy-safe sync |
 | **cortex-sts-refactoring.md** | STS pipeline: 7-gate refactoring for external codebases | `cortex-sts/` REFACTOR sessions, BadMonolith-style analysis |
 | **cortex-digest.md** | Learning extraction from chat history | Processing chat files |
 | **cortex-environment-setup.md** | Environment validation | Pre-flight checks, setup issues |
@@ -118,6 +119,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **VACUUM** | cortex-vacuum.md | ~2,000 |
 | **DEBUG** | cortex-debugger.md + cortex-auditor.md | ~4,500 |
 | **HEALTH** | cortex-auditor.md (Check #11) | ~3,500 |
+| **SYNC** | cortex-sync.prompt.md + cortex-sync-agent.md | ~6,000 |
 
 > **Default context:** `cortex-architect.prompt.md` only (~2,700 tokens). Load specialist agents on-demand per intent above.
 
