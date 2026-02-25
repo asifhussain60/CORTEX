@@ -263,7 +263,7 @@ print("✅ PHASE 2: GENERATION COMPLETE")
 - `cortex-docs/.content/00-getting-started/` - Installation, quickstart
 - `cortex-docs/.content/01-capabilities/` - Platform capabilities (8 files)
 - `cortex-docs/.content/02-lens/` - LENS intelligence pipeline
-- `cortex-docs/.content/03-orchestration/` - 17 wired orchestrators across 3 tiers (10 files)
+- `cortex-docs/.content/03-orchestration/` - 27 wired orchestrators across 3 tiers (10 files)
 - `cortex-docs/.content/04-mcp/` - 26 MCP tools catalog (6 files)
 - `cortex-docs/.content/05-infrastructure/` - Deployment, observability
 - `cortex-docs/.content/07-diagrams/` - Architecture diagrams (9 files)
@@ -1313,7 +1313,7 @@ After running `/doc-maintenance`, the following are created:
 
 ### Documentation Files
 - `cortex-docs/.content/01-capabilities/` - Core capabilities docs (8 files)
-- `cortex-docs/.content/03-orchestration/` - Orchestrator documentation (10 files, 17 wired orchestrators)
+- `cortex-docs/.content/03-orchestration/` - Orchestrator documentation (10 files, 27 wired orchestrators)
 - `cortex-docs/.content/02-lens/` - LENS intelligence pipeline
 - `cortex-docs/.content/07-diagrams/` - Architecture diagrams (9 files)
 

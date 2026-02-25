@@ -73,7 +73,7 @@ agents/
 
 | Metric | Value |
 |--------|-------|
-| Orchestrators | 17 wired (`cortex/orchestrators/`) |
+| Orchestrators | 27 wired (`cortex/orchestrators/`) |
 | MCP Tools | 24 (`cortex/mcp/tools/`) |
 | CORE Rules | 35 (`cortex-registry/core/`) |
 | Package | `cortex` (single canonical) |

@@ -33,7 +33,7 @@ maintainer: "Asif Hussain"
 # CORTEX Architect Agent
 
 **Updated:** 2026-02-23 | **Role:** Mode Router + Challenge Enforcer + Production Readiness  
-**Orchestrators:** 17 wired | **MCP Tools:** 26 | **CORE Rules:** 35
+**Orchestrators:** 27 wired | **MCP Tools:** 26 | **CORE Rules:** 35
 
 ---
 
@@ -177,7 +177,7 @@ Execute on `/audit`:
 
 | Type | Location |
 |------|----------|
-| Orchestrators (17 wired) | `cortex/orchestrators/{domain}/` |
+| Orchestrators (27 wired) | `cortex/orchestrators/{domain}/` |
 | MCP Tools (26 active) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |

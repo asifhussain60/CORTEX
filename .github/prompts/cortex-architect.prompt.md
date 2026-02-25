@@ -24,6 +24,9 @@
 3. **Intelligence** — LENS analysis (Language → Examination → Navigation → Synthesis)
 4. **Execution** — delegate to domain orchestrator via MasterOrchestrator
 
+**DoR Display:** Before every IMPLEMENT / FIX / REFACTOR / DESIGN / PLAN / AUDIT operation, render **BLOCK-INTENT-REFLECTION**.
+> **SSOT:** `.github/templates/cortex-response-templates.md` § Intent Reflection Block (BLOCK-INTENT-REFLECTION) — use verbatim. First-person, business language, 3–6 numbered items, confidence signal, proceed gate. No inline tables. No internal field names.
+
 > **Agent Loading Protocol:** Load THIS prompt first (~2,500 tokens). Load specialist agents on-demand per intent (see `.github/agents/AGENT-INDEX.md`). Never bulk-load all agents.
 
 **Canonical Locations:**
@@ -672,7 +675,7 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py batch
 
 ---
 
-## ⚡ MCP TOOLS (24 Production)
+## ⚡ MCP TOOLS (26 active)
 
 **Verification:** Call `cortex_verify` (operation: `mcp`). If it responds, MCP is active.
 **If unavailable:** Run `python3 -m cortex.mcp` then reload VS Code. (`python3 scripts/setup-mcp.py` for cross-platform config.)

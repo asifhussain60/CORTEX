@@ -165,15 +165,13 @@ Add to **DESIGN MODE** section:
 4. Resolve ambiguous references (e.g., "phase C" → Phase 7)
 
 **In DoR Display:**
-```markdown
-### 📋 Definition of Ready
-| Field | Value | Validated |
-|-------|-------|----------|
-| [... existing rows ...] |
-| Session Context | Last: Phase 5, Next: [Phase 6, Phase 7] | ✅ |
-| Phase Reference | "phase C" → Phase-7 (Confidence: 0.98) | ✅ |
-```
-**
+
+Render **BLOCK-INTENT-REFLECTION** from `.github/templates/cortex-response-templates.md` § Intent Reflection Block.
+Include session context items inline in the numbered list — e.g.:
+- "**Continue from phase 5** — resuming from the last completed phase, queuing Phase 6 and Phase 7 next."
+- "**Resolve ambiguous reference** — 'phase C' resolved to Phase-7 (confidence: 0.98)."
+
+No `| Field | Value |` tables inside intent reflection (P1 violation — CORE-048 / meta-auditor Check #19).
 
 ---
 

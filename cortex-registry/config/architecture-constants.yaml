@@ -1,0 +1,87 @@
+# CORTEX Architecture Constants — Single Source of Truth
+# =========================================================
+# ALL numeric architecture facts live here.
+# Prompts, agents, and validators read from this file.
+# To update a count: change it here ONLY, then run:
+#   python3 scripts/validate-architecture-counts.py
+# Pre-commit hook enforces this automatically.
+#
+# Updated: 2026-02-25 (Phase 63 — THIN INDEX CONTRACT)
+# Governance: CORE-035 (single canonical implementation)
+
+architecture:
+  # Orchestrators
+  orchestrators_wired: 27          # 7 core + 6 domain + 14 support (wired in cortex/orchestrators/)
+  orchestrators_health_check: 22   # subset with registered health_check() endpoints
+  orchestrator_tiers: 3            # core · domain · support
+  orchestrators_core: 7
+  orchestrators_domain: 6
+  orchestrators_support: 14
+
+  # MCP Tools
+  mcp_tools_active: 26             # registered in cortex/mcp/mcp_registry.py
+  mcp_tools_deprecated: 2          # cortex_process_request, cortex_lens_analyze (kept in registry comment only)
+
+  # Governance Rules
+  core_rules_active: 35            # in cortex-registry/core/tier0-skull/
+  core_rules_ac: 2                 # AC-specific rules (additional)
+
+  # Audit
+  audit_production_checks: 19      # 19-Point Production Readiness Audit (cortex-auditor.md)
+  meta_audit_checks: 23            # Prompt/Agent Meta-Audit checks (cortex-meta-auditor.md)
+  audit_pipeline_stages: 9         # /audit fix stages (-1 through 9)
+
+  # Package
+  canonical_packages: 1            # cortex.* only
+  top_level_dirs: 16               # canonical dirs under cortex/
+
+  # Testing
+  test_coverage_floor: 80          # % minimum for IMPLEMENT/FIX gate
+  test_coverage_target: 95         # % target for batch run completion
+
+  # Wiring
+  priority_master: 10
+  priority_intent_router: 20
+  priority_core_min: 30
+  priority_core_max: 99
+  priority_domain_min: 100
+  priority_domain_max: 149
+  priority_support_min: 150
+  priority_support_max: 199
+
+  # Counts updated as of:
+  last_verified: "2026-02-25"
+  verified_by: "audit-fix pipeline Stage 2"
+  git_ref: "CORTEX branch"
+
+# Key string patterns used in validators
+# (grep targets — keep in sync with validate-architecture-counts.py)
+string_patterns:
+  orchestrators_wired:
+    canonical: "27 wired orchestrators"
+    alternates:
+      - "27 Wired Orchestrators"
+      - "27 wired"
+      - "Orchestrators (27 wired)"
+  mcp_tools_active:
+    canonical: "26 MCP Tools"
+    alternates:
+      - "26 active tools"
+      - "26 MCP tools"
+      - "26 tools"
+      - "MCP Tools (26"
+  core_rules_active:
+    canonical: "35 CORE Rules"
+    alternates:
+      - "35 CORE rules"
+      - "35 active"
+      - "35 rules"
+  audit_production_checks:
+    canonical: "19-Point Production Readiness Audit"
+    alternates:
+      - "Checks #1–#19"
+      - "19-Point"
+  meta_audit_checks:
+    canonical: "23 checks"
+    alternates:
+      - "23 total"

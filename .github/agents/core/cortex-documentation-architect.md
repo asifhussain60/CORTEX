@@ -105,7 +105,7 @@ cortex-docs/.content/
 ├── 00-getting-started/
 ├── 01-capabilities/    (8 files)
 ├── 02-lens/
-├── 03-orchestration/   (10 files — 17 wired orchestrators: 7 core, 3 domain, 7 support)
+├── 03-orchestration/   (10 files — 27 wired orchestrators: 7 core, 3 domain, 7 support)
 ├── 04-mcp/             (6 files — 26 active tools)
 ├── 05-infrastructure/
 ├── 07-diagrams/        (9 files — 6 Mermaid + 3 overview)

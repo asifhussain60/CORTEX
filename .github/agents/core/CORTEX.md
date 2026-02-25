@@ -1,6 +1,6 @@
 # CORTEX Master Agent
 
-**Updated:** 2026-02-23 | **Orchestrators:** 17 wired | **MCP Tools:** 26 | **CORE Rules:** 35
+**Updated:** 2026-02-23 | **Orchestrators:** 27 wired | **MCP Tools:** 26 | **CORE Rules:** 35
 
 ---
 
@@ -31,7 +31,7 @@
 2. MCP Pre-flight (verify cortex_verify op=mcp)
 3. IntentRouter Classification
 4. Challenge Gate (if risk > 0.4)
-5. DoR Display (MANDATORY)
+5. DoR Display (MANDATORY) — render BLOCK-INTENT-REFLECTION from `.github/templates/cortex-response-templates.md` § Intent Reflection Block
 6. User Approval ("proceed")
 7. Orchestrator Execution
 8. Results Inline (CORE-002)
@@ -119,7 +119,7 @@
 
 | Type | Location |
 |------|----------|
-| Orchestrators (17 wired) | `cortex/orchestrators/{domain}/` |
+| Orchestrators (27 wired) | `cortex/orchestrators/{domain}/` |
 | MCP Tools (26 active) | `cortex/mcp/tools/` |
 | OrchestratorProtocolMixin (primary base, Phase 58) | `cortex/core/orchestrator_protocol_mixin.py` |
 | OrchestratorBase (legacy — 2 orchestrators only) | `cortex/core/orchestrator_base.py` |

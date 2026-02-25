@@ -73,7 +73,7 @@ maintainer: "Asif Hussain"
 | Phase 09 | v2.0.0 tag + release | ✅ COMPLETE |
 
 **Post-Refactor State:**
-- 17 wired orchestrators across 3 tiers (7 core, 3 domain, 7 support)
+- 27 wired orchestrators across 3 tiers (7 core, 3 domain, 7 support)
 - 26 MCP tools in `cortex/mcp/tools/`
 - 35 CORE rules in `cortex-registry/core/tier0-skull/` (+ 2 AC rules)
 - 1 package: `cortex`

@@ -9,7 +9,7 @@
 **Single source of truth** for how CORTEX orchestrators work together across ALL modes.
 
 **Architecture (Post-Refactor):**
-- 17 wired orchestrators in `cortex/orchestrators/` (3 tiers: core, domain, support)
+- 27 wired orchestrators in `cortex/orchestrators/` (3 tiers: core, domain, support)
 - 26 MCP tools in `cortex/mcp/tools/`
 - 1 package: `cortex` (no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 

@@ -115,3 +115,11 @@ repos:
         stages: [commit]
         files: ^cortex/.*\.py$
 
+      - id: architecture-count-validator
+        name: CORE-035 - Architecture Count Consistency (architecture-constants.yaml)
+        entry: python3 scripts/validate-architecture-counts.py
+        language: system
+        pass_filenames: false
+        always_run: false
+        stages: [commit]
+        files: ^\.github/(prompts|agents)/.*\.md$

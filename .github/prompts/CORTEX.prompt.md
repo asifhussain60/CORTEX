@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-02-23 | **Architecture:** 17 Wired Orchestrators · 26 MCP Tools · 35 CORE Rules · 1 Package
+**Updated:** 2026-02-23 | **Architecture:** 27 wired Orchestrators · 26 MCP Tools · 35 CORE Rules · 1 Package
 
 ---
 
@@ -8,7 +8,7 @@
 **CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
 **Entry Point:** This prompt → MasterOrchestrator → 4-stage pipeline → MCP Tools  
-**Orchestrators:** 17 wired across 3 tiers in `cortex/orchestrators/`  
+**Orchestrators:** 27 wired across 3 tiers in `cortex/orchestrators/`  
 **MCP Tools:** 24 in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
 
 ---
@@ -60,30 +60,10 @@ User Request → MasterOrchestrator.coordinate_operation()
 
 ### DoR Display (Mandatory before execution)
 
-Before any IMPLEMENT / FIX / REFACTOR / DESIGN / PLAN / AUDIT operation, render BLOCK-INTENT-REFLECTION
-from `.github/templates/cortex-response-templates.md` § Intent Reflection Block.
+Before any IMPLEMENT / FIX / REFACTOR / DESIGN / PLAN / AUDIT operation, render **BLOCK-INTENT-REFLECTION**.
 
-**Pattern (first-person, business language — no technical table):**
-
-**Here's what CORTEX heard:**
-
-You've asked CORTEX to {one-line summary of the overall request}:
-
-1. **{Action label}** — {plain-language description naming specific files/systems/plans}
-2. **{Action label}** — {plain-language description}
-3. **{Action label}** — {plain-language description — include any assumptions or tensions inline}
-
-**CORTEX's confidence in this understanding:** {🟢 High | 🟡 Medium | 🔴 Low}
-
-> ✅ This looks right? Type `proceed`. Need to correct something? Do it now before CORTEX acts.
-
-**Rules:**
-- ✅ Render as live markdown — never inside a fenced code block
-- ✅ First-person tone: "You've asked CORTEX to…"
-- ✅ Name specific files, plans, and systems — not vague descriptions
-- ✅ 3–6 numbered items maximum
-- ❌ No markdown table (no `| Field | Value |` rows)
-- ❌ No internal field names (Handler, Scope, Rules, AC markers) exposed to user
+> **SSOT:** `.github/templates/cortex-response-templates.md` § Intent Reflection Block (BLOCK-INTENT-REFLECTION)
+> Use the canonical template verbatim — first-person, business language, 3–6 numbered items, confidence signal, proceed gate. No inline tables. No internal field names exposed.
 
 ---
 
@@ -212,8 +192,8 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py batch →
 
 | Type | Location |
 |------|----------|
-| Orchestrators (17 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (24) | `cortex/mcp/tools/` |
+| Orchestrators (27 wired) | `cortex/orchestrators/{domain}/` |
+| MCP Tools (26 active) | `cortex/mcp/tools/` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |

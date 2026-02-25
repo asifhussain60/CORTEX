@@ -61,7 +61,7 @@ Unlike `cortex-auditor.md` (which audits source code), this agent audits **docum
 
 | # | Check | Pass Criteria |
 |---|-------|---------------|
-| 1 | Orchestrator count | All agents say "17 wired" |
+| 1 | Orchestrator count | All agents say "27 wired" |
 | 2 | MCP tool count | All agents say "26 active tools" |
 | 3 | CORE rules count | All agents say "35 active" |
 | 4 | Package name | All agents say `cortex` (no `cortex_intelligence`, `cortex_lens`) |
@@ -121,7 +121,7 @@ All `.github/` documentation MUST use these values:
 
 | Metric | Canonical Value |
 |--------|----------------|
-| Orchestrators | **17 wired** across 3 tiers |
+| Orchestrators | **27 wired** across 3 tiers |
 | MCP Tools | **26 active tools** |
 | CORE Rules | **35 active** (+ 2 AC rules = 37 total) |
 | Package | **`cortex`** (single) |
@@ -150,7 +150,7 @@ All `.github/` documentation MUST use these values:
 #### P1 — Wrong Counts / Versions
 | File | Current | Should Be |
 |------|---------|-----------|
-| {file} | "52 orchestrators" | "17 wired orchestrators" |
+| {file} | "52 orchestrators" | "27 wired orchestrators" |
 
 #### P2 — Template Duplicates
 | File | Issue |
