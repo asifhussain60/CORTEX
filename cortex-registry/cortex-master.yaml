@@ -111,17 +111,17 @@ phase_detail_files:
     file: "cortex-registry/planning/phases/completed/phase-77-production-cleanup.yaml"
     note: "COMPLETE 2026-02-25 (commit 94fe653ba). 21 dead files deleted (5 MCP tools + 8 testing/ + 8 core/intel/lens/gov). 4 stale wiring entries removed. git-orchestrator-wiring.yaml created. cortex/core/state/ stub deleted. 30/30 tests GREEN | 960 targeted pass | 0 regressions."
 
-  # ── SLOT #1 — phase-78 (P0, after 77-final) ───────────────────────────────
+  # ── SLOT #1 — phase-78 (P0, COMPLETE) ────────────────────────────────────
   - id: phase-78
     supersedes: "phase-73 (31 GAPs → slimmed to 12; toolkit GAPs → 77-C, stack → 79)"
     title: "Intelligence Matrix Wiring — Brain Tier Full Coverage"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-78-INTELLIGENCE-MATRIX-WIRING
     gaps: 12
     sub_phases: 3
-    file: "cortex-registry/planning/phases/planned/phase-78-intelligence-matrix-wiring.yaml"
-    note: "Extracted from phase-73. Matrix coverage 6.9%→≥80%. 7 P0-CRITICAL orchestrators wired to knowledge. OPJMixin→MasterOrchestrator. BatchProcessor dedup (CORE-035)."
+    file: "cortex-registry/planning/phases/completed/phase-78-intelligence-matrix-wiring.yaml"
+    note: "COMPLETE 2026-02-25 (commit 7404d6ea3). 12 GAPs CLOSED. 7 P0-CRITICAL orchestrators wired to knowledge (MasterOrchestrator, TDDOrchestrator, RefactoringOrchestrator, EnforcementOrchestrator, SecurityVulnerabilityOrchestrator, IntentRouter, OPJMixin). HealthOrchestrator SLO + VacuumOrchestrator anti-pattern hooks. IScannerProtocol added. 20/20 tests GREEN."
 
   # ── SLOT #2 — phase-79 (P1, SDLC Intelligence Engine — chat01 vision) ────
   - id: phase-79
@@ -436,7 +436,7 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "⚠️ 5 pending phases (77–76) | phase-77 P0 PLANNED (6 GAPs) IMMEDIATE CLEANUP | phase-78 P0 PLANNED (12 GAPs) MATRIX WIRING | phase-79 P1 PLANNED (22 GAPs) SDLC ENGINE | phase-75 P1 IN_PROGRESS (3 GAPs) | phase-76 P1 PLANNED (UI) | Smoke baseline: 1,211"
+  status: "⚠️ 4 pending phases (76–79) | phase-77 P0 COMPLETE (6 GAPs) ✅ | phase-78 P0 COMPLETE (12 GAPs) ✅ | phase-79 P1 PLANNED (22 GAPs) SDLC ENGINE | phase-75 P1 IN_PROGRESS (3 GAPs) | phase-76 P1 PLANNED (UI) | Smoke baseline: 1,211"
   overall_score: 97%
   test_baseline: "1,211 smoke | 204 golden workflow | 177 workflow orchestrators | 1 golden intelligence"
   deployment_date: '2026-02-25'
@@ -457,8 +457,8 @@ summary:
   completion_percentage: 87
   consolidation_summary: "v23.0: phase-73 (31 GAPs) → phase-78 (12 GAPs, matrix wiring). phase-74 (stack builder) → absorbed into phase-79-E. phase-79 created (SDLC Intelligence Engine, 22 GAPs). Chat01 holistic digest committed as 29a99509b (knowledge + migration YAMLs)."
   active_phases:
-    "phase-77 (P0)": "PLANNED — Production Cleanup, 6 GAPs, 4 sub-phases, IMMEDIATE — run BEFORE phase-78"
-    "phase-78 (P0)": "PLANNED — Intelligence Matrix Wiring, 12 GAPs, 3 sub-phases, START after 77-final"
+    "phase-77 (P0)": "COMPLETE ✅ — Production Cleanup, 6 GAPs, 4 sub-phases, commit 94fe653ba"
+    "phase-78 (P0)": "COMPLETE ✅ — Intelligence Matrix Wiring, 12 GAPs, 3 sub-phases, commit 7404d6ea3"
     "phase-79 (P1)": "PLANNED — SDLC Intelligence Engine, 22 GAPs, 7 sub-phases, after 78-final"
     "phase-75 (P1)": "IN_PROGRESS — Capability Registry Builder, 3 GAPs remaining (75-a done)"
     "phase-76 (P1)": "PLANNED — index.html Redesign, 0 coded GAPs, defer last"

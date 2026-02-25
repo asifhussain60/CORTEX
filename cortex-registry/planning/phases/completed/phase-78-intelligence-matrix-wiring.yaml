@@ -4,7 +4,7 @@
 # Authority:  cortex-master.yaml v23.0 (thin index) + CORE-064 (sweep completeness)
 # Template:   cortex-registry/planning/phases/_template.yaml
 # Created:    2026-02-25
-# Status:     PLANNED
+# Status:     COMPLETE
 # Sweep ID:   SWEEP-78-INTELLIGENCE-MATRIX-WIRING
 # Source:     EXTRACTED from phase-73 (31 GAPs → slimmed to 12 core wiring GAPs)
 #             phase-73 archived to planned/_archived/
@@ -19,7 +19,8 @@
 id: phase-78
 title: "Intelligence Matrix Wiring — Brain Tier Full Coverage"
 priority: P0
-status: PLANNED
+status: COMPLETE
+completed: "2026-02-25"
 sweep_id: SWEEP-78-INTELLIGENCE-MATRIX-WIRING
 created: "2026-02-25"
 author: "CORTEX Architect"
@@ -67,7 +68,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-B1"
     description: "MasterOrchestrator calls get_intelligence_provider() but only uses .get_best_practices(). Wire .targeted() and .full() tiers for context-aware intelligence injection."
     action: "Wire all 3 intelligence tiers (quick/targeted/full) based on request complexity score"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-A-02
     title: "TDDOrchestrator ↔ Knowledge injection for test strategy"
@@ -75,7 +76,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-B2"
     description: "TDDOrchestrator generates RED/GREEN/REFACTOR without consulting knowledge/testing-validation/tdd-best-practices.yaml. Should inject test_strategy_matrix based on detected context."
     action: "Add knowledge_context injection from tdd-best-practices.yaml into TDD cycle generation"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-A-03
     title: "RefactoringOrchestrator ↔ Knowledge injection for refactoring decisions"
@@ -83,7 +84,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-B3"
     description: "RefactoringOrchestrator runs holistic sweep without consulting refactoring-quality-standards.yaml. Should inject SRP targets, complexity thresholds."
     action: "Wire knowledge_context from refactoring.yaml + refactoring-quality-standards.yaml"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-A-04
     title: "EnforcementOrchestrator ↔ Governance knowledge injection"
@@ -91,7 +92,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-C1"
     description: "EnforcementOrchestrator validates CORE rules but doesn't inject governance knowledge from knowledge-base/governance/ YAMLs."
     action: "Wire governance knowledge injection for context-aware enforcement"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-A-05
     title: "SecurityVulnerabilityOrchestrator ↔ OWASP knowledge wiring"
@@ -99,7 +100,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-C2"
     description: "Security orchestrator exists but doesn't consume knowledge/security/secure-coding-practices.yaml or knowledge-base/security/owasp-top10.yaml."
     action: "Wire OWASP + secure-coding knowledge into security analysis output"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-A-06
     title: "IntentRouter intelligence-aware routing"
@@ -107,7 +108,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-D1"
     description: "IntentRouter classifies intent but doesn't use intelligence matrix to select best orchestrator chain. Routes based on keyword matching only."
     action: "Add intelligence matrix lookup to routing decision — best orchestrator for intent + context"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-A-07
     title: "OPJMixin integration into MasterOrchestrator"
@@ -115,7 +116,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-E1 (OPJ)"
     description: "OPJMixin exists (Phase 52) but MasterOrchestrator doesn't invoke it. Success/failure patterns not recorded to OPJ after every orchestrator invocation."
     action: "Wire OPJMixin.record_pattern() into MasterOrchestrator post-dispatch"
-    status: OPEN
+    status: CLOSED
 
   # ── SUB-PHASE 78-B: P1-HIGH Matrix Cells ──────────────────────────────────
   - id: GAP-78-B-01
@@ -124,7 +125,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-F1"
     description: "HealthOrchestrator reports health status but doesn't inject SLO thresholds from profiling-analysis.yaml."
     action: "Wire SLO thresholds from performance knowledge into health scoring"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-B-02
     title: "VacuumOrchestrator ↔ Anti-pattern knowledge injection"
@@ -132,7 +133,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-F2"
     description: "VacuumOrchestrator cleans files but doesn't consult engineering-anti-patterns.yaml for detection of structural anti-patterns."
     action: "Wire anti-pattern detection knowledge into vacuum analysis"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-B-03
     title: "BatchProcessor deduplication (CORE-035)"
@@ -140,7 +141,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-T1 (toolkit)"
     description: "BatchProcessor has duplicate implementations in testing/ and tools/. Consolidate to single canonical in tools/."
     action: "Delete duplicate, wire all callers to cortex/tools/toolkit/batch_processor.py"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-B-04
     title: "DomainAdapter protocol formalization"
@@ -148,7 +149,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-T3 (toolkit)"
     description: "DomainAdapter used by RefactoringOrchestrator has no formal protocol. Should inherit from OrchestratorProtocolMixin pattern."
     action: "Create DomainAdapter Protocol (ABC) in cortex/core/; update 3 adapters"
-    status: OPEN
+    status: CLOSED
 
   - id: GAP-78-B-05
     title: "HierarchicalScanner generic interface"
@@ -156,7 +157,7 @@ sweep_catalogue:
     source: "phase-73 GAP-73-T2 (toolkit)"
     description: "HierarchicalScanner is Python-specific. Needs generic interface for multi-language scanning (prerequisite for stack-aware intelligence)."
     action: "Extract generic IScannerProtocol; Python scanner implements it"
-    status: OPEN
+    status: CLOSED
 
 # ── SUB-PHASES ────────────────────────────────────────────────────────────────
 sub_phases:
