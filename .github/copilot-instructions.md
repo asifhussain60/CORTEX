@@ -5,12 +5,13 @@
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
 - **51 Wired Orchestrators** across 4 tiers (core, domain, support, git) — all satisfy IOrchestrator protocol
-- **39 MCP Tools** in `cortex/mcp/tools/` via Pylance-style stdio server (auto-starts with VS Code)
+- **39 MCP Tools** in `cortex/mcp/tools/` via Pylance-style stdio server (auto-starts with VS Code) — 28 registered in `mcp_registry.py` as of 2026-02-26; 11 planned in active phases
 - **38 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
 - **LENS Analysis** — workspace-aware code intelligence (Language → Examination → Navigation → Synthesis)
 - **1 Canonical Package** — all imports use `cortex.*` (no `cortex_intelligence`, `cortex_lens`, or `cortex.brain`)
+- **LLM-Orchestration Architecture** — CORTEX orchestrates the host LLM (GitHub Copilot/GPT) as the AI engine; it does not embed ML models. Intelligence features (test generation, blind-spot detection, knowledge synthesis) are heuristic + LLM-delegated pipelines, not standalone neural networks.
 
 ---
 
@@ -20,7 +21,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 |---|---|
 | Package | `cortex` (single canonical) |
 | Orchestrators | 51 wired in `cortex/orchestrators/` (17 core, 7 domain, 23 support, 4 git) |
-| MCP Tools | 39 in `cortex/mcp/tools/` |
+| MCP Tools | 39 target in `cortex/mcp/tools/` — 28 registered in `mcp_registry.py` (2026-02-26) |
 | Top-level Dirs | 20 under `cortex/` |
 | Governance Rules | 38 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
 | Test Suite | 16,259 tests (486 golden, 177 phase) |

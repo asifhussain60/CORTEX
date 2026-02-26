@@ -17,7 +17,15 @@ Example:
     >>> scanner = MCPToolScanner()
     >>> tools = scanner.scan_directory(Path("cortex/mcp/tools"))
     >>> print(f"Found {len(tools)} tools")
-    Found 78 tools
+    Found 28 tools
+
+Note:
+    The scanner counts registered tool entry-points (class-based tools with
+    ``name``/``execute`` methods or module-level ``cortex_*`` functions).
+    It does NOT count helper methods such as ``description()``, ``category()``,
+    or ``parameters()`` that appear on each tool class — those are metadata
+    accessors, not distinct MCP tools. Authoritative tool count is always
+    ``len(MCP_TOOL_REGISTRY)`` from ``cortex.mcp.mcp_registry``.
 
 Integration Points:
     - GitAwareDeltaDetector: Incremental doc updates

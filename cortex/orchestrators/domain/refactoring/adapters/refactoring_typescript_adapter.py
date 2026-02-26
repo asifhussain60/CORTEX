@@ -1,5 +1,5 @@
 """
-TypeScriptAdapter - TypeScript/JavaScript semantic refactoring via TypeScript Language Service.
+TypeScriptAdapter - TypeScript/JavaScript refactoring via heuristic text analysis.
 
 Compliance: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings), CORE-027 (audit)
 
@@ -8,9 +8,19 @@ Operations:
     - extract_constant: Extract value into constant
     - extract_type: Extract inline type to interface/type alias
     - organize_imports: Sort and group imports, remove unused
-    - rename: Rename symbols with semantic analysis
+    - rename: Rename symbols with heuristic text search
 
-TypeScript Language Service: https://github.com/microsoft/TypeScript/wiki/Using-the-Language-Service-API
+Implementation Note (CORE-030 — Implementation Truth):
+    Current implementation uses AST-free heuristic text manipulation (split/replace/re.sub).
+    It does NOT integrate the TypeScript Language Service API for semantic analysis.
+    Operations check for ``npx`` availability but fall back to Python string manipulation
+    for all transformations. This means: rename may miss shadowed variables; extract may
+    produce syntactically invalid output for complex expressions.
+
+    Planned upgrade: Phase N — Replace with ``ts-morph`` CLI bridge for true semantic
+    refactoring. Until then, treat all results as "best-effort" and validate output manually.
+
+TypeScript Language Service reference: https://github.com/microsoft/TypeScript/wiki/Using-the-Language-Service-API
 """
 from __future__ import annotations
 
@@ -32,20 +42,23 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
 logger = logging.getLogger(__name__)
 
 class TypeScriptAdapter(RefactoringToolAdapter):
-    """Adapter for TypeScript/JavaScript semantic refactoring using TypeScript Language Service.
+    """Adapter for TypeScript/JavaScript refactoring using heuristic text analysis.
 
-    Integrates TypeScript Language Service via CLI to provide:
+    Current implementation uses Python string manipulation (split/replace/re.sub)
+    rather than the TypeScript Language Service. Results are best-effort: valid for
+    simple single-occurrence cases; may produce incorrect output for complex expressions,
+    overloaded names, or shadowed variables.
+
+    Planned upgrade: ts-morph CLI bridge for semantic AST-based refactoring.
+
+    Supported operations:
         - extract_function: Extract code block into new function
         - extract_constant: Extract value into constant
         - extract_type: Extract inline type annotation
         - organize_imports: Sort/group imports, remove unused
-        - rename: Rename variables, functions, classes
+        - rename: Heuristic text-replace rename (not scope-aware)
 
-    Features:
-        - Supports both TypeScript (.ts, .tsx) and JavaScript (.js, .jsx)
-        - Type-safe refactorings with compiler validation
-        - Graceful error handling
-        - Detailed refactoring results
+    Supports: TypeScript (.ts, .tsx) and JavaScript (.js, .jsx)
 
     Example:
         >>> adapter = TypeScriptAdapter()
@@ -184,13 +197,21 @@ class TypeScriptAdapter(RefactoringToolAdapter):
     def execute_refactoring(
         self, request: RefactoringRequest
     ) -> Union[Ok[RefactoringResult], Err]:
-        """Execute a refactoring operation.
+        """Execute a refactoring operation using heuristic text manipulation.
 
         Args:
             request: RefactoringRequest containing operation details
 
         Returns:
-            Ok[RefactoringResult] if successful, Err with error message if failed
+            Ok[RefactoringResult] if successful — result always carries a
+            ``HEURISTIC_MODE`` warning because this adapter uses text-based
+            manipulation, not the TypeScript Language Service AST.
+            Err with error message if validation or I/O fails.
+
+        Warning:
+            Results are best-effort. Validate modified files before committing.
+            Complex expressions, shadowed names, or multi-file renames will
+            likely produce incorrect output. Upgrade path: ts-morph CLI bridge.
         """
         # Validate request first
         validation = self.validate_request(request)
@@ -202,6 +223,14 @@ class TypeScriptAdapter(RefactoringToolAdapter):
             return Err(
                 "TypeScript tools not available. Install with: npm install -g typescript"
             )
+
+        # Emit heuristic-mode warning before each operation
+        logger.warning(
+            "TypeScriptAdapter: using heuristic text manipulation (not Language Service AST). "
+            "Validate output before committing. Operation: %s on %s",
+            request.operation,
+            request.file_path.name,
+        )
 
         # Execute operation based on type
         try:
