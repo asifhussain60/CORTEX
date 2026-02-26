@@ -14,10 +14,12 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 36
+  rule_count: 38
+  ac_rule_count: 2
+  total_rule_count: 40
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-02-26 - CORE-067 Template Genericness Contract added (rule_count 35→36)"
+  last_update: "2026-02-26 - Total Recall Phase 4: metadata aligned to actual rule count (38 CORE + 2 AC = 40 total)"
   version: "1.0"
   consolidation_date: "2026-02-21"
   consolidation_status: "Phase 16 - CORE-064 Sweep Completeness Contract registered (partial sweep prevention)"

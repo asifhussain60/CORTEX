@@ -9,8 +9,8 @@
 **Single source of truth** for how CORTEX orchestrators work together across ALL modes.
 
 **Architecture (Post-Refactor):**
-- 27 wired orchestrators in `cortex/orchestrators/` (3 tiers: core, domain, support)
-- 26 MCP tools in `cortex/mcp/tools/`
+- 51 wired orchestrators in `cortex/orchestrators/` (4 tiers: core, domain, support, git)
+- 38 MCP tools in `cortex/mcp/tools/`
 - 1 package: `cortex` (no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---
@@ -133,7 +133,7 @@ USER REQUEST → STAGE 1: Interaction → STAGE 2: Intent → STAGE 3: Intellige
 
 ---
 
-## 🛡️ Governance Rules (35 CORE Active)
+## 🛡️ Governance Rules (38 CORE Active)
 
 | Rule | Stage | Enforcement |
 |------|-------|-------------|

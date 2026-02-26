@@ -16,6 +16,8 @@ _REGISTRY_PATH = (
 
 @dataclass
 class Expert:
+    """Domain expert profile for knowledge validation workflows."""
+
     id: str
     name: str
     domains: List[str]

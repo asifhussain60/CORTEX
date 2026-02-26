@@ -21,6 +21,8 @@ from enum import Enum
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from cortex import __version__ as _cortex_version
+
 logger = logging.getLogger(__name__)
 
 
@@ -374,7 +376,7 @@ class FeedbackAgent:
             generated_at=datetime.utcnow().isoformat() + "Z",
             session_id=self.session_id,
             machine=self._detect_machine(),
-            cortex_version="3.9",
+            cortex_version=_cortex_version,
             feedback_type=feedback_type,
             priority=priority,
             title=self._generate_title(feedback_type, errors, module_health),

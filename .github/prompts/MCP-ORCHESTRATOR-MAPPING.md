@@ -6,7 +6,7 @@
 
 ## 📋 Overview
 
-CORTEX exposes **27 wired orchestrators** via **26 active MCP tools**. This guide maps orchestrators to their MCP entry points for external repository integration and SaaS deployment.
+CORTEX exposes **51 wired orchestrators** via **38 MCP tools**. This guide maps orchestrators to their MCP entry points for external repository integration and SaaS deployment.
 
 **Architecture Principle:** 1 orchestrator ≠ 1 MCP tool. Instead, orchestrators are exposed via:
 - **Direct MCP tools** for primary workflows (TDD, Refactor, Plan)
@@ -229,7 +229,7 @@ Check health of all or specific orchestrators:
 
 ## 📊 Tool Category Matrix
 
-### **26 active MCP Tools**
+### **38 MCP Tools**
 
 | Category | Count | Tools |
 |----------|-------|-------|
@@ -245,7 +245,7 @@ Check health of all or specific orchestrators:
 
 ### **External Repository Integration**
 
-- ✅ **Orchestrator Discovery:** `cortex_orchestrator` (operation="list") exposes all 22 orchestrators
+- ✅ **Orchestrator Discovery:** `cortex_orchestrator` (operation="list") exposes all 51 orchestrators
 - ✅ **Health Monitoring:** `cortex_check` (operation="orchestrator_health") for system status
 - ✅ **Governance Gate:** `cortex_governance` (operation="stage0_audit") validates requests pre-flight
 - ✅ **TDD Workflow:** `cortex_orchestrator` (operation="test") for test-driven development
@@ -265,7 +265,7 @@ Check health of all or specific orchestrators:
 }
 ```
 
-**Returns:** All 26 active tools with descriptions, parameters, and operations.
+**Returns:** All 38 tools with descriptions, parameters, and operations.
 
 ---
 
@@ -286,7 +286,7 @@ All 26 tools registered and tested:
 - `cortex_verify` (op: `mcp`) — MCP detection test passes
 - `.vscode/settings.json` — Pylance-style stdio transport configured
 
-**No tool sprawl:** 75% reduction from 98 legacy tools → 26 active tools.
+**No tool sprawl:** Consolidated from 98 legacy tools → 38 active tools.
 
 ---
 

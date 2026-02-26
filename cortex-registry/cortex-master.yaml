@@ -72,7 +72,7 @@ metadata:
       status: COMPLETE
       completed: "2026-02-26"
       file: ".cortex-runtime/digests/recommend-digest-20260226.yaml"
-      note: "Digested _workspaces/recommend/ (5 consolidated review documents). Verified 10 of 12 gaps resolved. Health score 8.2/10 (+0.9 improvement). 2 gaps deferred to Phase 65 (MCP auth P0, ImportError sweep P1). Source archived to _workspaces/_archive/recommend-20260226/."
+      note: "Digested _workspaces/recommend/ (5 consolidated review documents). Verified 10 of 12 gaps resolved. Health score 8.2/10 (+0.9 improvement). 2 gaps deferred to Phase 65 (MCP auth P0, ImportError sweep P1). Source archived to workspaces archive (recommend-20260226)."
     - id: phase-80-a
       title: "MasterOrchestrator God-Object Decomposition — Initialiser + Mixin + Dead-Code Purge"
       priority: P0
@@ -370,29 +370,25 @@ phase_detail_files:
     title: "Health-Vacuum Unified Pipeline"
     priority: P0
     status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-51-health-vacuum-unified-pipeline.yaml"
-    note: "Ground-up redesign. 2 canonical orchestrators. 207 tests passing."
+    note: "Ground-up redesign. 2 canonical orchestrators. 207 tests passing. Pre-dates dedicated phase files."
 
   - id: phase-49
     title: "Golden Test Promotion Pipeline"
     priority: P0
     status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-49-golden-test-promotion.yaml"
-    note: "CORE-055 Golden Test Tier Contract introduced. 29/29 golden tests."
+    note: "CORE-055 Golden Test Tier Contract introduced. 29/29 golden tests. Pre-dates dedicated phase files."
 
   - id: phase-48
     title: "Health-Vacuum Integrity Pipeline"
     priority: P0
     status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-48-health-vacuum-pipeline.yaml"
-    note: "Superseded by Phase 51. 39/39 golden tests."
+    note: "Superseded by Phase 51. 39/39 golden tests. Pre-dates dedicated phase files."
 
   - id: phase-47
     title: "Brain Tier Architecture Validation & Fix"
     priority: P0
     status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-47-brain-tier-architecture-fix.yaml"
-    note: "Tier precedence fixed: tier0 > tier1 > tier2. 45 tests."
+    note: "Tier precedence fixed: tier0 > tier1 > tier2. 45 tests. Pre-dates dedicated phase files."
 
   - id: phases-39-46
     title: "Phases 39–46 (Toolkit → Registry Consolidation)"
@@ -407,7 +403,7 @@ phase_detail_files:
 playbooks:
   - id: pb-sts-001
     title: "BadMonolith End-to-End Refactoring — CORTEX SDLC Showcase"
-    file: "_cortex-master/playbooks/sharpen-the-saw/pb-sts-001-badmonolith-refactoring.yaml"
+    file: "cortex-registry/_cortex-master/playbooks/sharpen-the-saw/pb-sts-001-badmonolith-refactoring.yaml"
     category: sts
     repeatable: true
     status: ready

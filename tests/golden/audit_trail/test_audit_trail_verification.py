@@ -44,19 +44,19 @@ class _StubOrchestrator(OrchestratorProtocolMixin):
         self.orchestrator_id = orchestrator_id
 
     def execute(self) -> Dict[str, Any]:
-        """Execute stub operation for testing."""
+        """Execute stub operation — delegates to mixin's execute_operation for tracking."""
         return self.execute_operation(
             operation_name="stub_execute",
             parameters={}
         )
 
-    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
-        """Override to provide stub execution logic."""
-        return {"action": "stub_execute", "value": 42, "status": "success"}
+    def _do_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Actual stub logic (no delegation back to execute_operation)."""
+        return {"action": operation_name, "value": 42, "status": "success"}
 
     def run(self, parameters: Dict[str, Any] = None) -> Dict[str, Any]:
-        """Run method for compatibility with old tests."""
-        return self.execute_operation("run", parameters or {})
+        """Run method — mixin's execute_operation delegates here."""
+        return self._do_operation("run", parameters or {})
 
 
 class _FailingOrchestrator(OrchestratorProtocolMixin):

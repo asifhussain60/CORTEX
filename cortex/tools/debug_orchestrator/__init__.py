@@ -46,6 +46,8 @@ except ImportError:
 
     @dataclass
     class ToolResult:
+        """Result of a debug tool execution."""
+
         success: bool
         data: Any = None
         error: str = None

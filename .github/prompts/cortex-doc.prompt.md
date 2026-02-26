@@ -142,8 +142,8 @@ cortex-docs/
 │   ├── content.json              ← From .content/ markdown extraction
 │   ├── knowledge-catalog.json    ← From cortex-registry/knowledge/*.yaml
 │   ├── learning-paths.json       ← 3-track module metadata
-│   ├── orchestrators.json        ← 27 orchestrator cards
-│   └── mcp-tools.json            ← 26 MCP tool catalog
+│   ├── orchestrators.json        ← 51 orchestrator cards
+│   └── mcp-tools.json            ← 38 MCP tool catalog
 ├── pipeline/                     ← Discovery & generation scripts
 │   ├── discover.py               ← Git + registry + live code scan
 │   ├── build.py                  ← YAML → JSON transformer
@@ -240,7 +240,7 @@ class DiscoveryOrchestrator:
     def scan_governance(self):
         """Find all CORE rules. CANONICAL PATH: cortex-registry/core/ (NOT cortex_brain/)
         
-        35 CORE rules active as of 2026-02-23:
+        38 CORE rules active as of 2026-02-26:
           - tier0-skull/skull-rules.yaml  (immutable skull-tier P0 rules)
           - tier1-core/core-rules.yaml    (CORE-002 through CORE-064)
         """
@@ -295,8 +295,8 @@ print("✅ PHASE 2: GENERATION COMPLETE")
 - `cortex-docs/.content/00-getting-started/` - Installation, quickstart
 - `cortex-docs/.content/01-capabilities/` - Platform capabilities (8 files)
 - `cortex-docs/.content/02-lens/` - LENS intelligence pipeline
-- `cortex-docs/.content/03-orchestration/` - 27 wired orchestrators across 3 tiers (10 files)
-- `cortex-docs/.content/04-mcp/` - 26 MCP tools catalog (6 files)
+- `cortex-docs/.content/03-orchestration/` - 51 wired orchestrators across 4 tiers (10 files)
+- `cortex-docs/.content/04-mcp/` - 38 MCP tools catalog (6 files)
 - `cortex-docs/.content/05-infrastructure/` - Deployment, observability
 - `cortex-docs/.content/07-diagrams/` - Architecture diagrams (9 files)
 - `cortex-docs/.content/glossary.md` - Terminology reference
@@ -404,7 +404,7 @@ class DiagramGenerationOrchestrator:
             ("circuit-breaker-state-machine.mmd", "stateDiagram", "Resilience pattern"),
             ("master-orchestrator-sequence.mmd", "sequenceDiagram", "17-orchestrator execution protocol"),
             ("tdd-workflow-phases.mmd", "flowchart", "RED → GREEN → REFACTOR"),
-            ("governance-rule-categories.mmd", "graph", "35 CORE rules pyramid"),
+            ("governance-rule-categories.mmd", "graph", "38 CORE rules pyramid"),
         ]
         
         # D3.js (4 diagrams) — stored in cortex-docs/assets/diagrams/d3/
@@ -824,7 +824,7 @@ diagrams:
     type: flowchart
     
   - governance-rule-categories.mmd
-    purpose: 35 CORE rules organized by category
+    purpose: 38 CORE rules organized by category
     type: graph
 
 generation_command: |
@@ -1345,7 +1345,7 @@ After running `/doc-maintenance`, the following are created:
 
 ### Documentation Files
 - `cortex-docs/.content/01-capabilities/` - Core capabilities docs (8 files)
-- `cortex-docs/.content/03-orchestration/` - Orchestrator documentation (10 files, 27 wired orchestrators)
+- `cortex-docs/.content/03-orchestration/` - Orchestrator documentation (10 files, 51 wired orchestrators)
 - `cortex-docs/.content/02-lens/` - LENS intelligence pipeline
 - `cortex-docs/.content/07-diagrams/` - Architecture diagrams (9 files)
 

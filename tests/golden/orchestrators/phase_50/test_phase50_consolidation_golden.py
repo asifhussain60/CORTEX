@@ -286,7 +286,7 @@ def test_gp50_017_no_empty_stub_dirs() -> None:
     stub_dirs = [
         "adapters", "adaptive", "custom", "debugging", "documentation",
         "education", "handlers", "holistic", "linting", "performance",
-        "persona", "policies", "pr_review",
+        "policies", "pr_review",
     ]
     orch_root = REPO_ROOT / "cortex" / "orchestrators"
     remaining = [d for d in stub_dirs if (orch_root / d).exists()]

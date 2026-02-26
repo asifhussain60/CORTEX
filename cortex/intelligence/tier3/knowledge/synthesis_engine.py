@@ -9,6 +9,8 @@ from typing import Any, Dict, List, Optional
 
 @dataclass
 class SynthesisResult:
+    """Result of cross-source knowledge synthesis."""
+
     query: str
     sources: List[Dict[str, Any]]
     synthesized_content: str

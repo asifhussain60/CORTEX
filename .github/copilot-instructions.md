@@ -1,12 +1,12 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-24 (Phase 82/82 COMPLETE) | ## About CORTEX
+**Updated:** 2026-02-26 (Total Recall — numeric alignment) | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **27 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
-- **26 MCP Tools** (28 total — 2 deprecated) via Pylance-style stdio server (auto-starts with VS Code)
-- **35 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
+- **51 Wired Orchestrators** across 4 tiers (core, domain, support, git) — all satisfy IOrchestrator protocol
+- **38 MCP Tools** in `cortex/mcp/tools/` via Pylance-style stdio server (auto-starts with VS Code)
+- **38 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
 - **LENS Analysis** — workspace-aware code intelligence (Language → Examination → Navigation → Synthesis)
@@ -19,10 +19,10 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrators | 27 wired in `cortex/orchestrators/` (7 core, 6 domain, 14 support) |
+| Orchestrators | 51 wired in `cortex/orchestrators/` (17 core, 7 domain, 23 support, 4 git) |
 | MCP Tools | 38 in `cortex/mcp/tools/` |
-| Top-level Dirs | 16 canonical under `cortex/` |
-| Governance Rules | 35 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
+| Top-level Dirs | 20 under `cortex/` |
+| Governance Rules | 38 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
 | Test Suite | 16,259 tests (486 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 
@@ -96,9 +96,9 @@ enforcing routing in production (where context is always supplied).
 ## File Organization
 
 ```
-cortex/              ← Python source (16 canonical dirs)
-  orchestrators/     ← 27 wired orchestrators across 3 canonical tiers (7 core, 6 domain, 14 support) + 7 additional dirs (health, git, intelligence, strategies, synthesis, validation, workflow)
-  mcp/tools/         ← 26 MCP tools (28 total — 2 deprecated)
+cortex/              ← Python source (20 dirs)
+  orchestrators/     ← 51 wired orchestrators across 4 tiers (core, domain, support, git) + additional dirs (health, intelligence, persona, registry, response, strategies, synthesis, tools, validation, workflow)
+  mcp/tools/         ← 38 MCP tools
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis
@@ -122,7 +122,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | HealthOrchestrator | `cortex/orchestrators/health/health_orchestrator.py` |
 | VacuumOrchestrator | `cortex/orchestrators/health/vacuum_orchestrator.py` |
-| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base — Phase 58, used by all 27 wired orchestrators) |
+| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base — Phase 58, used by all 51 wired orchestrators) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
 | MCP Server | `cortex/mcp/` |
 | Refactor Plan | `cortex-registry/planning/cortex-refactor-master.yaml` |

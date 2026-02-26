@@ -9,6 +9,8 @@ from cortex.infrastructure.secrets.secrets_provider import ISecretsProvider
 
 @dataclass
 class MigrationResult:
+    """Result of a secrets provider migration operation."""
+
     success: bool = False
     migrated: List[str] = field(default_factory=list)
     failed: List[str] = field(default_factory=list)

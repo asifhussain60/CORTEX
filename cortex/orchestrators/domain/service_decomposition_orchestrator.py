@@ -77,6 +77,11 @@ class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin):
             Result dict containing ``status``, ``steps_executed``, and
             optionally ``halted_at`` if the security gate blocked execution.
         """
+        import time as _time
+        _t0 = _time.monotonic()
+        # AC_START: AC-SERVICE-DECOMPOSITION-EXECUTE
+        logger.info("AC_START: AC-SERVICE-DECOMPOSITION-EXECUTE")
+
         # Phase 58: activate cross-cutting hooks (LENS + knowledge synthesis)
         self._activate_cross_cutting_hooks(
             operation="execute",
@@ -120,6 +125,9 @@ class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin):
         if halt_at:
             result["halted_at"] = halt_at
 
+        _elapsed = (_time.monotonic() - _t0) * 1000
+        # AC_COMPLETE: AC-SERVICE-DECOMPOSITION-EXECUTE ✅ {elapsed}ms
+        logger.info("AC_COMPLETE: AC-SERVICE-DECOMPOSITION-EXECUTE ✅ %.0fms", _elapsed)
         return result
 
     # ------------------------------------------------------------------

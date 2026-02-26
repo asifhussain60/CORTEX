@@ -94,6 +94,17 @@ class OrchestratorProtocolMixin:
     _orch_version: str = "1.0.0"
 
     # ------------------------------------------------------------------
+    # Execution tracking (lazy-init — safe when __init__ is not called)
+    # ------------------------------------------------------------------
+
+    def _ensure_counters(self) -> None:
+        """Lazily initialise execution counters if not yet set."""
+        if not hasattr(self, "_uptime_requests"):
+            self._uptime_requests: int = 0
+            self._success_count: int = 0
+            self._failure_count: int = 0
+
+    # ------------------------------------------------------------------
     # Required by wiring contract validation.required_methods
     # ------------------------------------------------------------------
 
@@ -134,6 +145,7 @@ class OrchestratorProtocolMixin:
 
         Default delegates to ``self.run()`` or ``self.execute()`` if present.
         Activates cross-cutting hooks (LENS, KnSynth, GovGate) automatically.
+        Tracks execution counts for ``health_check()`` reporting.
         """
         # Phase 58 — cross-cutting hooks on every operation
         self._activate_cross_cutting_hooks(
@@ -141,11 +153,20 @@ class OrchestratorProtocolMixin:
             orchestrator_context=parameters.get("orchestrator_context"),
             unified_context=parameters.get("unified_context"),
         )
-        if hasattr(self, "run"):
-            return self.run(parameters)  # type: ignore[arg-type]
-        if hasattr(self, "execute"):
-            return self.execute(operation_name, parameters)  # type: ignore[arg-type]
-        return {"status": "not_implemented", "operation": operation_name}
+        self._ensure_counters()
+        self._uptime_requests += 1
+        try:
+            if hasattr(self, "run"):
+                result = self.run(parameters)  # type: ignore[arg-type]
+            elif hasattr(self, "execute"):
+                result = self.execute(operation_name, parameters)  # type: ignore[arg-type]
+            else:
+                result = {"status": "not_implemented", "operation": operation_name}
+            self._success_count += 1
+            return result
+        except Exception:
+            self._failure_count += 1
+            raise
 
     # ------------------------------------------------------------------
     # Cross-cutting activation hook (Phase 58 — all dimensions)
@@ -193,11 +214,15 @@ class OrchestratorProtocolMixin:
         return []
 
     def health_check(self) -> Dict[str, Any]:
-        """Return orchestrator health status."""
+        """Return orchestrator health status including execution counters."""
+        self._ensure_counters()
         return {
             "status": "healthy",
             "orchestrator": self.get_name(),
             "version": self.get_version(),
+            "uptime_requests": self._uptime_requests,
+            "success_count": self._success_count,
+            "failure_count": self._failure_count,
         }
 
     # ------------------------------------------------------------------

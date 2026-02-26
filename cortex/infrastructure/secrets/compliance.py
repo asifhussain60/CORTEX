@@ -8,6 +8,8 @@ from typing import Any, Dict, List, Optional
 
 @dataclass
 class ComplianceReport:
+    """Secrets management compliance report with findings and control scores."""
+
     generated_at: str = field(default_factory=lambda: datetime.utcnow().isoformat())
     regulation: str = "SOC2"
     status: str = "COMPLIANT"

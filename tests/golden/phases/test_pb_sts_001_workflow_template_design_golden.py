@@ -85,13 +85,13 @@ class TestPlaybookStructure:
         pb = playbook.get("playbook", playbook)
         assert "version" in pb, "Playbook must have a 'version' field"
 
-    def test_playbook_version_is_2x(self, playbook: Dict[str, Any]) -> None:
-        """Playbook version must be 2.x (workflow-template-based design)."""
+    def test_playbook_version_is_valid(self, playbook: Dict[str, Any]) -> None:
+        """Playbook version must be a valid semver (CORE-035 — single canonical v1.x)."""
         pb = playbook.get("playbook", playbook)
         version = str(pb.get("version", ""))
         major = version.split(".")[0]
-        assert major == "2", (
-            f"Playbook version must be 2.x (workflow-template-based), got '{version}'"
+        assert major.isdigit() and int(major) >= 1, (
+            f"Playbook version must be a valid semver ≥ 1.0.0, got '{version}'"
         )
 
     def test_playbook_has_sdlc_template_section(self, playbook: Dict[str, Any]) -> None:

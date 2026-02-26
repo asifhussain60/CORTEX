@@ -112,8 +112,8 @@ cortex-docs/.content/
 ├── 00-getting-started/
 ├── 01-capabilities/    (8 files)
 ├── 02-lens/
-├── 03-orchestration/   (10 files — 27 wired orchestrators: 7 core, 3 domain, 7 support)
-├── 04-mcp/             (6 files — 26 active tools)
+├── 03-orchestration/   (10 files — 51 wired orchestrators: 17 core, 7 domain, 23 support, 4 git)
+├── 04-mcp/             (6 files — 38 active tools)
 ├── 05-infrastructure/
 ├── 07-diagrams/        (9 files — 6 Mermaid + 3 overview)
 └── flat-files/         (derived mirror — auto-generated, never edited directly)
@@ -229,9 +229,9 @@ nn-{foldername}-{descriptive-name}.md
 
 | Metric | Value | Source |
 |--------|-------|--------|
-| Wired Orchestrators | **27** (7 core, 6 domain, 14 support) | `cortex-registry/core/specifications/*-wiring.yaml` |
-| Active MCP Tools | **26** (28 total — 2 deprecated) | `cortex/mcp/tools/*.get_name()` |
-| CORE Governance Rules | **35** | `cortex-registry/core/tier0-skull/` + `tier1-core/` |
+| Wired Orchestrators | **51** (17 core, 7 domain, 23 support, 4 git) | `cortex-registry/core/specifications/*-wiring.yaml` |
+| Active MCP Tools | **38** | `cortex/mcp/tools/*.get_name()` |
+| CORE Governance Rules | **38** (+ 2 AC rules) | `cortex-registry/core/tier0-skull/skull-rules.yaml` |
 | Tests | **15,739** collected | `python3 -m pytest --co -q` |
 | Package | `cortex` (single canonical) | `cortex/__init__.py` |
 
@@ -268,8 +268,8 @@ cortex-docs/
 │   ├── content.json              ← From .content/ markdown extraction
 │   ├── knowledge-catalog.json    ← From cortex-registry/knowledge/*.yaml
 │   ├── learning-paths.json       ← 3-track module metadata (45 modules total)
-│   ├── orchestrators.json        ← 27 orchestrator cards
-│   └── mcp-tools.json            ← 26 MCP tool catalog
+│   ├── orchestrators.json        ← 51 orchestrator cards
+│   └── mcp-tools.json            ← 38 MCP tool catalog
 ├── pipeline/                     ← Discovery & generation scripts
 │   ├── discover.py               ← Git + registry + live code scan
 │   ├── build.py                  ← YAML → JSON transformer
@@ -362,7 +362,7 @@ Every STS workspace root MUST contain `sts-architecture-d3.html`:
 | **Challenge Engine** | Counter-proposal generation, disagreement protocol | `cortex-docs/.content/01-capabilities/challenge-engine.md` | User experience perspective on how challenges improve code quality. |
 | **SQLite Audit Trail** | High-level audit trail concept (NOT detailed schema) | `cortex-docs/.content/glossary.md` expansion | Brief explanation of what's tracked for governance, not table definitions. |
 | **Orchestrator Deep-Dives** | Top 5 orchestrator capabilities (TDD, Refactoring, Health, Sweep, Upgrade) | `cortex-docs/.content/03-orchestration/` individual files | User-facing capabilities only, not internal implementation. |
-| **MCP Tool Catalog** | All 26 active tools with descriptions and parameters | `cortex-docs/.content/04-mcp/03-tools-catalog.md` | Update tool count from 24/25 → 26; remove deprecated cortex_process_request/cortex_validate_request entries. |
+| **MCP Tool Catalog** | All 38 active tools with descriptions and parameters | `cortex-docs/.content/04-mcp/03-tools-catalog.md` | Update tool count to 38 active tools. |
 
 ### Content Generation Rules for Gap Remediation
 

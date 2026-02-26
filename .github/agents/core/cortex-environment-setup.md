@@ -194,6 +194,6 @@ To add further exclusions without code changes, set `CORTEX_UPGRADE_EXCLUDE_PATH
 ## Canonical Reference
 
 - Package: `cortex` (single canonical import, `pyproject.toml`)
-- MCP: 26 tools in `cortex/mcp/tools/`
-- Governance rules: 35 CORE + 2 AC in `cortex-registry/core/tier0-skull/skull-rules.yaml`
+- MCP: 38 tools in `cortex/mcp/tools/`
+- Governance rules: 38 CORE + 2 AC in `cortex-registry/core/tier0-skull/skull-rules.yaml`
 - Tests: 15,739 total, runner: `pytest -n auto --dist loadscope`

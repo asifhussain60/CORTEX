@@ -427,6 +427,30 @@ for f in pathlib.Path('cortex').rglob('*.py'):
 | Wiring contracts valid | All wiring YAML specs load and reference importable modules | Zero broken refs |
 | Golden tests | `python3 -m pytest tests/golden/ -q` | All pass |
 
+### 6.5 Vacuum Cleanup
+
+**Goal:** Clean workspace of markdown sprawl, root clutter, and stale runtime artifacts before certification.
+**Orchestrator:** `VacuumOrchestrator` (`cortex/orchestrators/health/vacuum_orchestrator.py`)
+**MCP Tool:** `cortex_vacuum`
+
+This step runs the same vacuum pipeline as `/audit fix` Stage 5, ensuring Total Recall
+(the superset protocol) includes everything `/audit fix` does.
+
+```bash
+# Vacuum targets:
+# 1. Markdown sprawl — orphaned .md files outside canonical dirs
+# 2. Root clutter — files that belong in subdirectories
+# 3. Runtime hygiene — stale .db/.log files in .cortex-runtime/
+# 4. __pycache__ cleanup — stale bytecode dirs
+
+find . -maxdepth 1 -name "*.md" -not -name "README.md" -not -name "LICENSE*" -not -name "CHANGELOG*" -not -name "CONTRIBUTING*" | head -20
+find . -name "__pycache__" -type d | wc -l
+find .cortex-runtime -name "*.log" -mtime +30 2>/dev/null | wc -l
+```
+
+**Rule:** Vacuum runs after coherence checks (Phase 6.1–6.4) and before certification (Phase 7)
+so the final test suite executes against a clean workspace.
+
 ---
 
 ## Phase 7: CERTIFICATION (Production Sign-Off)

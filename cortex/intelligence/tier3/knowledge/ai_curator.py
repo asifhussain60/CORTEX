@@ -10,6 +10,8 @@ import yaml
 
 @dataclass
 class CurationResult:
+    """Result of AI-driven knowledge curation and deduplication."""
+
     entry_id: str
     quality_score: float
     is_duplicate: bool

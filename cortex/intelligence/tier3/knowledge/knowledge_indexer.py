@@ -16,6 +16,8 @@ _KNOWLEDGE_DIR = (
 
 @dataclass
 class IndexEntry:
+    """Indexed knowledge entry with domain classification and quality score."""
+
     entry_id: str
     domain: str
     title: str
