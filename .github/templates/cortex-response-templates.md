@@ -16,7 +16,7 @@
 |---|------|-----|----------------------|
 | 1 | **Use Markdown bullet lists** (`- ✅ S1: ...`) for stage status | Each item renders on its own line | `├─ └─` tree characters collapse into a single unreadable line |
 | 2 | **Use `---` (HR)** for section dividers | Clean, reliable rendering | `<hr>` tags may not render |
-| 3 | **Use `━━━` (U+2501)** for autonomous execution separators | Visually distinct from HR | Regular dashes look like HRs |
+| 3 | **Never use long horizontal lines** (`━━━━`) | Wraps badly on narrow panels | Lines break mid-character creating visual noise |
 | 4 | **Max 4-5 table columns** | Prevents horizontal overflow | Wide tables truncate or scroll |
 | 5 | **Output autonomous templates as live markdown** | Progress bars and stages must be visible characters | Wrapping in fenced code blocks makes them non-functional |
 | 6 | **Never use trailing-space line breaks** | Copilot Chat ignores trailing spaces | Lines merge together unexpectedly |
@@ -37,11 +37,11 @@
 |----------------|---------------------|
 | `- ✅ bullet list` | `├─ └─` tree characters |
 | `**bold**` / `*italic*` | Trailing-space line breaks |
-| `---` horizontal rule | `<hr>` HTML tag |
+| `---` horizontal rule | Long `━━━━━━` lines (wrap badly) |
 | Standard markdown tables | >5 column tables |
 | `##` / `###` headings | Deeply nested headings (#####+) |
 | Emoji icons (✅ 🔵 ⚪ 🔴) | Unicode box-drawing characters |
-| Fenced code blocks (\`\`\`) | Inline HTML (limited support) |
+| Fenced code blocks (\`\`\`) | `<hr>` HTML tag |
 | `<details>` / `<summary>` | Complex HTML structures |
 
 ### The #1 Forbidden Pattern
@@ -56,6 +56,21 @@
 - ✅ S1: First stage
 - 🔵 S2: Second stage
 - ⚪ S3: Third stage
+```
+
+### The #2 Forbidden Pattern — Long Horizontal Lines
+
+```
+❌ NEVER DO THIS — wraps badly on narrow panels:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Phase Title
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ ALWAYS DO THIS — uses standard Markdown HR:
+---
+**📋 Phase Title — Autonomous Execution**
+- 🔵 S1: Stage name (starting)
+- ⚪ S2: Stage name (pending)
 ```
 
 ---
@@ -962,80 +977,71 @@ I'm here to make you successful. Let's build something great. 🚀
 
 **Output this directly — no surrounding backticks or fenced block:**
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 {PHASE_NAME}: Initialising
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
-**`[░░░░░░░░░░]` 0% — Initialising**
+**📋 {PHASE_NAME} — Initialising**
 
 - 🔵 S1: {name} (starting)
 - ⚪ S2: {name} (pending)
 - ⚪ S3: {name} (pending)
 - ⚪ S4: {name} (pending)
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 ### Progress Template (IN-PROGRESS)
 
 **Output this directly — no surrounding backticks or fenced block:**
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 {PHASE_NAME} Stage {N}: {STAGE_TITLE}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
-**`[████████░░]` 80% Stage {N} In Progress**
+**📋 {PHASE_NAME} — Stage {N}: {STAGE_TITLE}**
 
-- ✅ S1: {name} ({n} tests)
-- ✅ S2: {name} ({n} tests)
+`[████████░░]` 80%
+
+- ✅ S1: {name}
+- ✅ S2: {name}
 - 🔵 S3: {name} (in progress)
-- ⚪ S4: {name} (pending)
+- ⚪ S4: {name}
 
 Tests: {passed}/{total} | Coverage: {pct}%
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ### Completion Template (ALL STAGES DONE)
 
 **Output this directly — no surrounding backticks or fenced block:**
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📋 {PHASE_NAME} Stage {N}: {STAGE_TITLE}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
-**`[██████████]` 100% All Stages Complete**
+**📋 {PHASE_NAME} — Complete ✅**
 
-- ✅ S1: {name} ({n} tests)
-- ✅ S2: {name} ({n} tests)
-- ✅ S3: {name} ({n} tests)
-- ✅ S4: {name} ({n} tests)
-- ✅ S5: {name} ({n} tests)
+`[██████████]` 100%
+
+- ✅ S1: {name}
+- ✅ S2: {name}
+- ✅ S3: {name}
+- ✅ S4: {name}
+- ✅ S5: {name}
 
 Tests: {passed}/{total} | Coverage: {pct}%
-Commits: {n} (all pushed to remote)
-{ENH_ID}: ✅ COMPLETE
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Commits: {n} | {ENH_ID}: ✅ COMPLETE
 
 ### Error Template (BLOCKED)
 
 **Output this directly — no surrounding backticks or fenced block:**
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🔴 {PHASE_NAME}: BLOCKED at Stage {N}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 
-**`[████░░░░░░]` 40% Stage {N} Blocked**
+**🔴 {PHASE_NAME} — BLOCKED at Stage {N}**
 
-- ✅ S1: {name} ({n} tests)
+`[████░░░░░░]` 40%
+
+- ✅ S1: {name}
 - 🔴 S2: {name} (FAILED)
-- ⚪ S3: {name} (pending)
-- ⚪ S4: {name} (pending)
+- ⚪ S3: {name}
+- ⚪ S4: {name}
 
 Tests: {passed}/{total} | Failures: {n}
-Error: {error_message}
-Fix: {fix_suggestion}
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+**Error:** {error_message}
+
+**Fix:** {fix_suggestion}
 
 ### Status Icons (MANDATORY — all orchestrators)
 
@@ -1081,11 +1087,11 @@ Fix: {fix_suggestion}
 
 1. **Stage list:** Each stage is a Markdown bullet (`- {icon} S{N}: ...`) — one per line (never concatenated)
 2. **Progress bar:** `[██████████]` format — exactly **10 blocks** total, plain markdown, never fenced
-3. **Separators:** `━` (U+2501) line, exactly 44 characters
+3. **Separators:** Use `---` (standard Markdown HR) — never long `━` lines that wrap on narrow panels
 4. **Stage names:** Keep <30 chars to prevent overflow
 5. **Metrics line:** Always include Tests + Coverage
 6. **Last stage:** Same bullet format as all other stages (no special character)
-7. **0% start:** Use `[░░░░░░░░░░] 0%` — ALL empty blocks, NOT filled blocks
+7. **Title format:** Bold text with emoji — `**📋 {PHASE_NAME} — {status}**`
 
 ### Forbidden in Silent Mode
 
@@ -1096,7 +1102,7 @@ Fix: {fix_suggestion}
 - ❌ Multi-paragraph explanations
 - ❌ Approval requests between stages
 - ❌ Markdown tables for stage results (use `- {icon} S{N}:` bullet list)
-- ❌ `<hr>` tags (use `━━━` separator lines)
+- ❌ Long horizontal lines (`━━━━━━`) — wrap badly in narrow panels
 - ❌ Inline code backticks around progress bar
 
 ---

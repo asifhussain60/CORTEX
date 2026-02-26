@@ -158,21 +158,21 @@ run_in_terminal(command='cat << "EOF"\n`████░░░░░░` 40% Work
 ```
 # ❌ WRONG — fenced block causes raw preformatted text, not rendered markdown
 \`\`\`
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+---
 📋 Phase N Stage N: Title
 ...
 \`\`\`
 ```
-**Fix:** Output the `━━━` separators, progress bar, and stage bullet list **directly** in your markdown — no surrounding backticks.
+**Fix:** Output the `---` separator, progress bar, and stage bullet list **directly** in your markdown — no surrounding backticks.
 
-### Mistake 3: Using `<hr>` + backtick bars instead of the SSOT format
+### Mistake 3: Using long horizontal lines that wrap badly
 ```
-# ❌ WRONG — legacy format, contradicts SSOT
-<hr>
-`████████░░` 80% Working
-<hr>
+# ❌ WRONG — long lines wrap and break on narrow panels
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 Phase Title
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-**Fix:** Use `━━━` separator lines and `[████████░░]` bar per the SSOT golden template.
+**Fix:** Use `---` (standard Markdown HR) and bold titles — never long `━` lines.
 
 ---
 

@@ -192,9 +192,10 @@ cortex_train(op="execute", proposal={...})               # Execute approved prop
 User: /train cortex-sts/CortexLabs/BadMonolith
 
 CORTEX:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🎓 CORTEX TRAINING — Gap Analysis Complete
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+---
+
+**🎓 CORTEX TRAINING — Gap Analysis Complete**
 
 **Inventory:** 15 existing templates scanned
 **Target:** cortex-sts/CortexLabs/BadMonolith
