@@ -336,6 +336,10 @@ def run_smoke() -> int:
     Runs preflight + golden + core tests for quick confidence.
     Uses xdist parallel workers with worksteal distribution.
 
+    NOTE: This is NOT the /audit fix Stage 9 gate. Stage 9 uses
+    run_preflight() (< 10s). Use smoke for IMPLEMENT/FIX/REFACTOR
+    validate steps and pre-commit sanity — NOT for audit pipeline.
+
     Returns:
         pytest exit code.
     """

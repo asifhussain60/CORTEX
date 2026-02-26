@@ -806,7 +806,12 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py prefl
 
 ## ✅ COMPLETION CHECKLIST (Every Task)
 
-1. All tests passing (`python3 scripts/run_tests.py smoke` — coverage ≥ 95%)
+**Test gate by context:**
+- `/audit fix` Stage 9 → `python3 scripts/run_tests.py preflight` (< 10s — wiring/import checks only)
+- IMPLEMENT / FIX / REFACTOR validate step → `python3 scripts/run_tests.py smoke` (< 60s — preflight + core)
+- Pre-commit / phase completion → `make test-smoke`
+
+1. All tests passing (audit gate: `preflight` < 10s | feature gate: `smoke` < 60s — **never run `smoke` as the `/audit fix` Stage 9 gate**)
 2. Registry synchronized (if phase affected)
 3. Wiring contract validated (L1 structural check — 0 blocking failures)
 4. Audit clean (no P0/P1 violations — `cortex_validate` op=`compliance`)

@@ -17,11 +17,11 @@ class SharedAuditTrail:
     Provides centralized audit logging and cross-repo search capabilities.
     """
 
-    def __init__(self, db_path: str = "cortex_brain/state/governance.db"):
+    def __init__(self, db_path: str = ".cortex-runtime/traces/governance.db"):
         """Initialize shared audit trail.
 
         Args:
-            db_path: Path to unified governance database.
+            db_path: Path to unified governance database. Canonical location: .cortex-runtime/traces/.
         """
         self.db_path = db_path
         self._ensure_db()
