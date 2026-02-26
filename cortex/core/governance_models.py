@@ -70,7 +70,7 @@ class AuditCheck(BaseModel):
     name: str
     description: str
     tool: str
-    evidence_required: Optional[bool] = None
+    evidence_required: Optional[Any] = None  # Can be bool or string in different YAML schemas
     auto_fix: Optional[bool] = None
     severity: Optional[str] = None
     pattern: Optional[str] = None
@@ -96,10 +96,10 @@ class AuditChecklistYAML(BaseModel):
 
     meta: Dict[str, Any]
     priority_checks: Dict[str, PriorityCategory]  # Changed to use PriorityCategory
-    execution_flow: Dict[str, Any]
-    tools: Dict[str, Dict[str, Any]]
-    evidence_format: Dict[str, Any]
-    report_structure: Dict[str, Any]
+    execution_flow: Optional[Dict[str, Any]] = None
+    tools: Optional[Dict[str, Dict[str, Any]]] = None
+    evidence_format: Optional[Dict[str, Any]] = None
+    report_structure: Optional[Dict[str, Any]] = None
 
 
 class ModeDefinition(BaseModel):

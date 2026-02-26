@@ -75,7 +75,12 @@ class BaseYAMLLoader:
 
 
 class CoreRulesLoader(BaseYAMLLoader):
-    """Loader for core-rules.yaml with validation."""
+    """Loader for core governance rules YAML with validation.
+
+    Handles both schemas:
+      - skull-rules.yaml (canonical SSOT): uses ``metadata``, ``rules`` with ``rule_id``
+      - legacy core-rules.yaml: uses ``meta``, ``core_rules`` with ``id``
+    """
 
     def load(self) -> CoreRulesYAML:
         """Load and validate core rules YAML.
@@ -89,9 +94,79 @@ class CoreRulesLoader(BaseYAMLLoader):
         if self._data is None:
             raw_data = self._load_yaml()
             try:
-                self._data = CoreRulesYAML(**raw_data)
+                # Adapt skull-rules.yaml schema → CoreRulesYAML schema
+                adapted = self._adapt_skull_rules(raw_data) if "rules" in raw_data else raw_data
+                self._data = CoreRulesYAML(**adapted)
             except Exception as e:
                 raise YAMLLoadError(f"CoreRules validation failed: {e}")
+
+        return self._data
+
+    @staticmethod
+    def _adapt_skull_rules(raw: Dict[str, Any]) -> Dict[str, Any]:
+        """Map skull-rules.yaml fields to CoreRulesYAML expected schema.
+
+        skull-rules.yaml uses:
+          metadata → meta
+          rules[].rule_id → core_rules[].id
+          rules[].severity → core_rules[].enforcement
+
+        Args:
+            raw: Raw YAML dict from skull-rules.yaml
+
+        Returns:
+            Dict compatible with CoreRulesYAML(**data)
+        """
+        # Build meta from metadata
+        metadata = raw.get("metadata", {})
+        meta = {
+            "version": metadata.get("version", "1.0"),
+            "updated": metadata.get("last_update", ""),
+            "author": metadata.get("author", ""),
+        }
+
+        # Build core_rules from rules
+        core_rules = []
+        for rule in raw.get("rules", []):
+            # Handle examples: skull-rules may use dict {valid: [...], invalid: [...]}
+            raw_examples = rule.get("examples", [])
+            if isinstance(raw_examples, dict):
+                examples = []
+                for _key, val in raw_examples.items():
+                    if isinstance(val, list):
+                        examples.extend(str(v) for v in val)
+                    elif isinstance(val, str):
+                        examples.append(val)
+            elif isinstance(raw_examples, list):
+                examples = [str(e) for e in raw_examples]
+            else:
+                examples = []
+
+            core_rules.append({
+                "id": rule.get("rule_id", ""),
+                "name": rule.get("name", ""),
+                "description": rule.get("description", ""),
+                "enforcement": rule.get("severity", "WARNING").upper(),
+                "category": rule.get("category", ""),
+                "priority": rule.get("severity", "WARNING").upper(),
+                "rationale": rule.get("rationale", ""),
+                "examples": examples,
+                "related_rules": rule.get("related_rules", []),
+            })
+
+        # Build enforcement_levels from rules severities
+        severities: set = set()
+        for rule in raw.get("rules", []):
+            sev = rule.get("severity", "")
+            if sev:
+                severities.add(sev.upper())
+        enforcement_levels = {s: {"description": f"{s} level"} for s in sorted(severities)}
+
+        return {
+            "meta": meta,
+            "core_rules": core_rules,
+            "enforcement_levels": enforcement_levels,
+        }
 
         return self._data
 
@@ -212,6 +287,9 @@ class AuditChecklistLoader(BaseYAMLLoader):
         """
         if self._data is None:
             raw_data = self._load_yaml()
+            # Adapt schema: actual YAML uses 'metadata' not 'meta'
+            if "metadata" in raw_data and "meta" not in raw_data:
+                raw_data["meta"] = raw_data.pop("metadata")
             try:
                 self._data = AuditChecklistYAML(**raw_data)
             except Exception as e:
@@ -509,10 +587,11 @@ def get_loader(yaml_type: str, registry_path: Path) -> BaseYAMLLoader:
     loaders = {
         # GAP-69-04: updated from "core/governance/skull-rules.yaml" (duplicate, CORE-035 violation)
         #            to canonical SSOT: "core/tier0-skull/skull-rules.yaml"
+        # Paths are relative to cortex-registry/ root
         "core_rules": (CoreRulesLoader, "core/tier0-skull/skull-rules.yaml"),
         "audit_checklist": (AuditChecklistLoader, "governance/audit-checklist.yaml"),
-        "modes": (ModesLoader, "meta/modes.yaml"),
-        "response_format": (ResponseFormatLoader, "meta/response-format.yaml"),
+        "modes": (ModesLoader, "config/modes.yaml"),
+        "response_format": (ResponseFormatLoader, "config/response-format.yaml"),
     }
 
     if yaml_type not in loaders:
@@ -525,18 +604,21 @@ def get_loader(yaml_type: str, registry_path: Path) -> BaseYAMLLoader:
 
 
 def get_cortex_registry_path() -> Path:
-    """Get path to cortex-registry/_cortex-master directory.
+    """Get path to cortex-registry/ root directory.
+
+    The cortex-registry/ root contains governance/, core/, workflows/, etc.
+    The _cortex-master/ subdirectory only holds phases/playbooks/test-demands.
 
     Returns:
-        Path to registry directory
+        Path to cortex-registry/ root directory
 
     Raises:
         FileNotFoundError: If registry not found
     """
     # Try multiple potential locations
     candidates = [
-        Path(__file__).parent.parent.parent / "cortex-registry" / "_cortex-master",
-        Path.cwd() / "cortex-registry" / "_cortex-master",
+        Path(__file__).parent.parent.parent / "cortex-registry",
+        Path.cwd() / "cortex-registry",
     ]
 
     for candidate in candidates:
@@ -544,7 +626,7 @@ def get_cortex_registry_path() -> Path:
             return candidate
 
     raise FileNotFoundError(
-        f"cortex-registry/_cortex-master not found. Tried: {[str(c) for c in candidates]}"
+        f"cortex-registry/ not found. Tried: {[str(c) for c in candidates]}"
     )
 
 

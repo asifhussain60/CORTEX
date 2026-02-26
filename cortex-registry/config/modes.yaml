@@ -1,0 +1,182 @@
+# ============================================================================
+# CORTEX HEXA-MODE Definitions
+# ============================================================================
+# Authority: cortex-architect.prompt.md § EXECUTION MODES
+# Canonical location: cortex-registry/config/modes.yaml
+# Loaded by: cortex.core.yaml_loaders.ModesLoader
+# ============================================================================
+
+meta:
+  name: "CORTEX HEXA-MODE Definitions"
+  version: "1.0"
+  updated: "2026-02-26"
+  description: "All execution modes available in the CORTEX framework"
+
+modes:
+  PRE-FLIGHT:
+    name: "Pre-Flight"
+    trigger: "session start"
+    description: "Session initialization — Stage 0 governance audit, inflight upgrade check"
+    agent: "cortex-architect.prompt.md"
+    priority: 0
+    flow:
+      - "Check origin/main for upstream changes"
+      - "Run STAGE-0-GOVERNANCE-AUDIT-SPEC checks"
+      - "Validate requirements.txt (UpgradeOrchestrator)"
+      - "Route to IntentRouter"
+
+  AUDIT:
+    name: "Audit"
+    trigger: "/audit, /audit fix, scan, check"
+    description: "19-Point production readiness scan with optional auto-fix"
+    agent: "cortex-auditor.md"
+    priority: 1
+    flow:
+      - "Stage -1: Environment readiness"
+      - "Stage 0: Inflight upgrade + pre-flight"
+      - "Stage 1: Stage 0 governance pre-flight"
+      - "Stage 2: 19-Point production scan"
+      - "Stage 3: Wiring contract validation"
+      - "Stage 4: Orchestrator health (all 22)"
+      - "Stage 5: Vacuum cleanup"
+      - "Stage 6: Prompt/agent meta-audit"
+      - "Stages 7-8: Auto-fix convergence loop"
+      - "Stage 9: Tests + AC_COMPLETE"
+
+  IMPLEMENT:
+    name: "Implement"
+    trigger: "build, create, add, implement"
+    description: "TDD-first development — RED → GREEN → REFACTOR"
+    agent: "cortex-executor.md"
+    priority: 2
+    flow:
+      - "Holistic validation gate (CORE-048)"
+      - "Challenge gate (risk > 0.4)"
+      - "RED: Write failing tests first (CORE-008)"
+      - "GREEN: Implement minimum code"
+      - "REFACTOR: Clean up with tests passing"
+      - "Validate: smoke tests + compliance"
+      - "Commit: conventional commit message"
+
+  FIX:
+    name: "Fix"
+    trigger: "fix, bug, broken, error, failing"
+    description: "Bug resolution via TDD with sweep completeness"
+    agent: "cortex-executor.md"
+    priority: 3
+    flow:
+      - "Reproduce: identify or create failing test"
+      - "Root cause: LENS analysis"
+      - "RED: Confirm failing test"
+      - "GREEN: Fix with minimum change"
+      - "REFACTOR: Clean up"
+      - "Regression: smoke tests"
+      - "Sweep gate: CORE-064 full catalogue"
+
+  REFACTOR:
+    name: "Refactor"
+    trigger: "refactor, improve, optimize, consolidate"
+    description: "Safe code improvement with functional completeness gate"
+    agent: "cortex-executor.md"
+    priority: 4
+    flow:
+      - "Functional baseline: enumerate endpoints"
+      - "Baseline: smoke tests, record count"
+      - "LENS scan: complexity, duplication"
+      - "Plan: strategy with risk assessment"
+      - "Execute: incremental changes"
+      - "Security hardening gate"
+      - "Scorecard + verify"
+
+  DESIGN:
+    name: "Design"
+    trigger: "architect, design, structure, pattern"
+    description: "Challenge-first architecture decisions"
+    agent: "cortex-architect.md"
+    priority: 5
+    flow:
+      - "Understand: LENS analysis"
+      - "Challenge: present alternatives"
+      - "Decide: user selects approach"
+      - "Document: ADR or inline"
+
+  PLAN:
+    name: "Plan"
+    trigger: "plan, phase, roadmap"
+    description: "Phase planning and roadmap management"
+    agent: "cortex-phase-resolver.md"
+    priority: 6
+    flow:
+      - "Assess: current state analysis"
+      - "Decompose: break into gaps"
+      - "Sequence: dependency ordering"
+      - "Document: phase detail file"
+
+  DIGEST:
+    name: "Digest"
+    trigger: "summarize, digest, ingest"
+    description: "Intelligent content ingestion via 3-pipeline system"
+    agent: "cortex-digest.md"
+    priority: 7
+    flow:
+      - "Classify: detect content type"
+      - "Extract: pull structured data"
+      - "Synthesize: produce actionable output"
+
+  QUERY:
+    name: "Query"
+    trigger: "explain, how, what, why"
+    description: "Answer questions about CORTEX architecture and code"
+    agent: "cortex-interactive.md"
+    priority: 8
+    flow:
+      - "Parse: understand question"
+      - "Search: LENS + knowledge base"
+      - "Answer: inline with references"
+
+  INVESTIGATE:
+    name: "Investigate"
+    trigger: "investigate, analyze, root cause"
+    description: "Deep analysis and root cause investigation"
+    agent: "cortex-architect.md"
+    priority: 9
+    flow:
+      - "Scope: define investigation boundary"
+      - "Analyze: LENS + git history"
+      - "Correlate: cross-reference findings"
+      - "Report: inline with evidence"
+
+  META-AUDIT:
+    name: "Meta-Audit"
+    trigger: "/meta-audit, audit the audit"
+    description: "23-check meta-audit of prompts, agents, and audit infrastructure"
+    agent: "cortex-meta-auditor.md"
+    priority: 10
+    flow:
+      - "Load: all prompt and agent files"
+      - "Check: 23 meta-audit checks"
+      - "Report: violations inline"
+      - "Fix: auto-remediate where possible"
+
+  VACUUM:
+    name: "Vacuum"
+    trigger: "/vacuum, clean up, markdown sprawl"
+    description: "Markdown sprawl and root clutter cleanup"
+    agent: "cortex-vacuum.md"
+    priority: 11
+    flow:
+      - "Scan: find .md files outside canonical dirs"
+      - "Classify: keep vs archive vs delete"
+      - "Execute: move or remove"
+      - "Verify: no broken references"
+
+  HEALTH:
+    name: "Health"
+    trigger: "/health, health check, orchestrator status"
+    description: "All 22 orchestrator health endpoints"
+    agent: "cortex-auditor.md"
+    priority: 12
+    flow:
+      - "Enumerate: all wired orchestrators"
+      - "Check: health_check() on each"
+      - "Report: status table inline"

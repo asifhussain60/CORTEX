@@ -19,8 +19,8 @@ import yaml
 # Test fixtures
 @pytest.fixture
 def cortex_registry_root():
-    """Get the cortex-registry/_cortex-master root path."""
-    return Path(__file__).parent.parent.parent.parent / "cortex-registry" / "_cortex-master"
+    """Get the cortex-registry root path."""
+    return Path(__file__).parent.parent.parent.parent / "cortex-registry"
 
 
 @pytest.fixture
@@ -31,76 +31,85 @@ def governance_path(cortex_registry_root):
 
 @pytest.fixture
 def meta_path(cortex_registry_root):
-    """Get the meta directory path."""
-    return cortex_registry_root / "meta"
+    """Get the config directory path (modes + response-format)."""
+    return cortex_registry_root / "config"
 
 
 # Core Rules YAML Tests
 class TestCoreRulesYAML:
     """Test core-rules.yaml loading and structure."""
     
-    def test_core_rules_file_exists(self, governance_path):
-        """Test that core-rules.yaml exists."""
-        core_rules_file = governance_path / "core-rules.yaml"
-        assert core_rules_file.exists(), "core-rules.yaml not found"
+    def test_core_rules_file_exists(self, cortex_registry_root):
+        """Test that skull-rules.yaml (SSOT for core rules) exists."""
+        core_rules_file = cortex_registry_root / "core" / "tier0-skull" / "skull-rules.yaml"
+        assert core_rules_file.exists(), "skull-rules.yaml not found at canonical SSOT path"
     
-    def test_core_rules_valid_yaml(self, governance_path):
-        """Test that core-rules.yaml is valid YAML."""
-        core_rules_file = governance_path / "core-rules.yaml"
+    def test_core_rules_valid_yaml(self, cortex_registry_root):
+        """Test that skull-rules.yaml is valid YAML."""
+        core_rules_file = cortex_registry_root / "core" / "tier0-skull" / "skull-rules.yaml"
         with open(core_rules_file, 'r') as f:
             data = yaml.safe_load(f)
-        assert data is not None, "core-rules.yaml is empty"
-        assert isinstance(data, dict), "core-rules.yaml must be a dictionary"
+        assert data is not None, "skull-rules.yaml is empty"
+        assert isinstance(data, dict), "skull-rules.yaml must be a dictionary"
     
-    def test_core_rules_has_meta(self, governance_path):
-        """Test that core-rules.yaml has meta section."""
-        core_rules_file = governance_path / "core-rules.yaml"
+    def test_core_rules_has_meta(self, cortex_registry_root):
+        """Test that skull-rules.yaml has metadata section."""
+        core_rules_file = cortex_registry_root / "core" / "tier0-skull" / "skull-rules.yaml"
         with open(core_rules_file, 'r') as f:
             data = yaml.safe_load(f)
-        assert 'meta' in data, "Missing meta section"
-        assert 'version' in data['meta'], "Missing version in meta"
-        assert 'updated' in data['meta'], "Missing updated in meta"
+        assert 'metadata' in data, "Missing metadata section"
+        assert 'version' in data['metadata'], "Missing version in metadata"
+        assert 'last_update' in data['metadata'], "Missing last_update in metadata"
     
-    def test_core_rules_has_rules(self, governance_path):
-        """Test that core-rules.yaml has core_rules section."""
-        core_rules_file = governance_path / "core-rules.yaml"
+    def test_core_rules_has_rules(self, cortex_registry_root):
+        """Test that skull-rules.yaml has rules section."""
+        core_rules_file = cortex_registry_root / "core" / "tier0-skull" / "skull-rules.yaml"
         with open(core_rules_file, 'r') as f:
             data = yaml.safe_load(f)
-        assert 'core_rules' in data, "Missing core_rules section"
-        assert isinstance(data['core_rules'], list), "core_rules must be a list"
-        assert len(data['core_rules']) >= 14, "Expected at least 14 core rules"
+        assert 'rules' in data, "Missing rules section"
+        assert isinstance(data['rules'], list), "rules must be a list"
+        assert len(data['rules']) >= 14, "Expected at least 14 core rules"
     
-    def test_core_rule_structure(self, governance_path):
+    def test_core_rule_structure(self, cortex_registry_root):
         """Test that each core rule has required fields."""
-        core_rules_file = governance_path / "core-rules.yaml"
+        core_rules_file = cortex_registry_root / "core" / "tier0-skull" / "skull-rules.yaml"
         with open(core_rules_file, 'r') as f:
             data = yaml.safe_load(f)
         
-        required_fields = ['id', 'name', 'category', 'priority', 'description', 'enforcement']
+        required_fields = ['rule_id', 'severity', 'description']
         
-        for rule in data['core_rules']:
+        for rule in data['rules']:
             for field in required_fields:
-                assert field in rule, f"Rule {rule.get('id', 'UNKNOWN')} missing {field}"
+                # Some rules use 'summary' instead of 'description'
+                if field == 'description' and field not in rule:
+                    assert 'summary' in rule, (
+                        f"Rule {rule.get('rule_id', 'UNKNOWN')} missing both description and summary"
+                    )
+                    continue
+                assert field in rule, f"Rule {rule.get('rule_id', 'UNKNOWN')} missing {field}"
+            # Rules must have either 'name' or 'title'
+            assert 'name' in rule or 'title' in rule, (
+                f"Rule {rule.get('rule_id', 'UNKNOWN')} missing both name and title"
+            )
     
-    def test_core_rule_ids_unique(self, governance_path):
+    def test_core_rule_ids_unique(self, cortex_registry_root):
         """Test that all core rule IDs are unique."""
-        core_rules_file = governance_path / "core-rules.yaml"
+        core_rules_file = cortex_registry_root / "core" / "tier0-skull" / "skull-rules.yaml"
         with open(core_rules_file, 'r') as f:
             data = yaml.safe_load(f)
         
-        rule_ids = [rule['id'] for rule in data['core_rules']]
+        rule_ids = [rule['rule_id'] for rule in data['rules']]
         assert len(rule_ids) == len(set(rule_ids)), "Duplicate rule IDs detected"
     
-    def test_enforcement_levels_defined(self, governance_path):
-        """Test that enforcement_levels section exists."""
-        core_rules_file = governance_path / "core-rules.yaml"
+    def test_enforcement_levels_defined(self, cortex_registry_root):
+        """Test that enforcement section exists."""
+        core_rules_file = cortex_registry_root / "core" / "tier0-skull" / "skull-rules.yaml"
         with open(core_rules_file, 'r') as f:
             data = yaml.safe_load(f)
         
-        assert 'enforcement_levels' in data, "Missing enforcement_levels section"
-        levels = data['enforcement_levels']
-        assert 'BLOCKED' in levels, "Missing BLOCKED enforcement level"
-        assert 'WARNING' in levels, "Missing WARNING enforcement level"
+        assert 'enforcement' in data, "Missing enforcement section"
+        enforcement = data['enforcement']
+        assert 'mode' in enforcement, "Missing mode in enforcement"
 
 
 # Audit Checklist YAML Tests
@@ -187,7 +196,7 @@ class TestModesYAML:
         assert 'modes' in data, "Missing modes section"
         modes = data['modes']
         
-        expected_modes = ['PRE-FLIGHT', 'AUDIT', 'DESIGN', 'PLAN', 'DIGEST', 'INTERACTIVE', 'META-AUDIT']
+        expected_modes = ['PRE-FLIGHT', 'AUDIT', 'DESIGN', 'PLAN', 'DIGEST', 'IMPLEMENT', 'META-AUDIT']
         for mode in expected_modes:
             assert mode in modes, f"Missing {mode} mode definition"
     
@@ -269,33 +278,33 @@ class TestResponseFormatYAML:
 class TestYAMLIntegration:
     """Test integration between YAML files."""
     
-    def test_all_yaml_files_loadable(self, governance_path, meta_path):
+    def test_all_yaml_files_loadable(self, cortex_registry_root, meta_path):
         """Test that all YAML files can be loaded without errors."""
         yaml_files = [
-            governance_path / "core-rules.yaml",
-            governance_path / "audit-checklist.yaml",
+            cortex_registry_root / "core" / "tier0-skull" / "skull-rules.yaml",
+            cortex_registry_root / "governance" / "audit-checklist.yaml",
             meta_path / "modes.yaml",
             meta_path / "response-format.yaml"
         ]
         
         for yaml_file in yaml_files:
-            assert yaml_file.exists(), f"{yaml_file.name} not found"
+            assert yaml_file.exists(), f"{yaml_file.name} not found at {yaml_file}"
             with open(yaml_file, 'r') as f:
                 data = yaml.safe_load(f)
             assert data is not None, f"{yaml_file.name} failed to load"
     
-    def test_cross_references_valid(self, governance_path, meta_path):
+    def test_cross_references_valid(self, cortex_registry_root, meta_path):
         """Test that cross-references between YAML files are valid."""
-        # Load core rules
-        with open(governance_path / "core-rules.yaml", 'r') as f:
+        # Load core rules from canonical SSOT
+        with open(cortex_registry_root / "core" / "tier0-skull" / "skull-rules.yaml", 'r') as f:
             core_rules = yaml.safe_load(f)
         
         # Load audit checklist
-        with open(governance_path / "audit-checklist.yaml", 'r') as f:
+        with open(cortex_registry_root / "governance" / "audit-checklist.yaml", 'r') as f:
             audit_checklist = yaml.safe_load(f)
         
         # Extract all rule IDs
-        rule_ids = {rule['id'] for rule in core_rules['core_rules']}
+        rule_ids = {rule['rule_id'] for rule in core_rules['rules']}
         
         # Check that related_rules references are valid
         for priority in ['P0', 'P1', 'P2', 'P3']:

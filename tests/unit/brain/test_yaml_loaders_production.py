@@ -56,7 +56,7 @@ class TestCoreRulesLoader:
         from cortex.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(registry_path / "core" / "tier0-skull" / "skull-rules.yaml")
         
         rule = loader.get_rule_by_id("CORE-008")
         
@@ -69,7 +69,7 @@ class TestCoreRulesLoader:
         from cortex.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(registry_path / "core" / "tier0-skull" / "skull-rules.yaml")
         
         all_rules = loader.get_all_rules()
         
@@ -83,7 +83,7 @@ class TestCoreRulesLoader:
         from cortex.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(registry_path / "core" / "tier0-skull" / "skull-rules.yaml")
         
         enforcement_levels = loader.get_enforcement_levels()
         
@@ -98,7 +98,7 @@ class TestCoreRulesLoader:
         from cortex.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(registry_path / "core" / "tier0-skull" / "skull-rules.yaml")
         
         categories = loader.get_policy_categories()
         
@@ -110,7 +110,7 @@ class TestCoreRulesLoader:
         from cortex.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(registry_path / "core" / "tier0-skull" / "skull-rules.yaml")
         
         # Get enforcement levels first
         enforcement_levels = loader.get_enforcement_levels()
@@ -185,7 +185,7 @@ class TestModesLoader:
         from cortex.core.yaml_loaders import ModesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = ModesLoader(registry_path / "meta" / "modes.yaml")
+        loader = ModesLoader(registry_path / "config" / "modes.yaml")
         
         modes = loader.load()
         if modes.modes:
@@ -199,7 +199,7 @@ class TestModesLoader:
         from cortex.core.yaml_loaders import ModesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = ModesLoader(registry_path / "meta" / "modes.yaml")
+        loader = ModesLoader(registry_path / "config" / "modes.yaml")
         
         mode_names = loader.get_all_mode_names()
         
@@ -223,7 +223,7 @@ class TestResponseFormatLoader:
         from cortex.core.yaml_loaders import ResponseFormatLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = ResponseFormatLoader(registry_path / "meta" / "response-format.yaml")
+        loader = ResponseFormatLoader(registry_path / "config" / "response-format.yaml")
         
         template = loader.get_header_template()
         
@@ -235,7 +235,7 @@ class TestResponseFormatLoader:
         from cortex.core.yaml_loaders import ResponseFormatLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = ResponseFormatLoader(registry_path / "meta" / "response-format.yaml")
+        loader = ResponseFormatLoader(registry_path / "config" / "response-format.yaml")
         
         icons = loader.get_status_icons()
         
@@ -251,7 +251,7 @@ class TestLoaderCaching:
         from cortex.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(registry_path / "core" / "tier0-skull" / "skull-rules.yaml")
         
         # First load
         data1 = loader.load()
@@ -271,7 +271,7 @@ class TestLoaderCaching:
         from cortex.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(registry_path / "core" / "tier0-skull" / "skull-rules.yaml")
         
         assert loader.load_time_ms is None
         
@@ -297,7 +297,7 @@ class TestLoaderErrorHandling:
         from cortex.core.yaml_loaders import CoreRulesLoader, get_cortex_registry_path
         
         registry_path = get_cortex_registry_path()
-        loader = CoreRulesLoader(registry_path / "governance" / "core-rules.yaml")
+        loader = CoreRulesLoader(registry_path / "core" / "tier0-skull" / "skull-rules.yaml")
         
         rule = loader.get_rule_by_id("NONEXISTENT-RULE-999")
         
@@ -346,8 +346,9 @@ class TestLoaderIntegration:
         registry_path = get_cortex_registry_path()
         
         assert registry_path.exists()
-        assert registry_path.name == "_cortex-master"
+        assert registry_path.name == "cortex-registry"
         assert (registry_path / "governance").exists()
+        assert (registry_path / "core" / "tier0-skull" / "skull-rules.yaml").exists()
 
 
 class TestTierRulesLoader:

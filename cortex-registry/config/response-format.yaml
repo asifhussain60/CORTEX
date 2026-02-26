@@ -1,0 +1,95 @@
+# ============================================================================
+# CORTEX Response Format Specification
+# ============================================================================
+# Authority: .github/templates/cortex-response-templates.md (SSOT)
+# Canonical location: cortex-registry/config/response-format.yaml
+# Loaded by: cortex.core.yaml_loaders.ResponseFormatLoader
+# ============================================================================
+
+meta:
+  name: "CORTEX Response Format"
+  version: "1.0"
+  updated: "2026-02-26"
+  description: "Response formatting standards for CORTEX output"
+
+header:
+  required: true
+  template: "**Author:** Asif Hussain | **Orchestrator:** {orchestrator_name} ✅"
+  fields:
+    - author
+    - orchestrator
+    - timestamp
+
+icons:
+  status:
+    completed:
+      icon: "✅"
+      description: "Task completed successfully"
+    planned:
+      icon: "📋"
+      description: "Task planned for future"
+    critical:
+      icon: "🔴"
+      description: "Critical issue requiring immediate attention"
+    warning:
+      icon: "🟡"
+      description: "Warning — review recommended"
+    in_progress:
+      icon: "🔵"
+      description: "Currently in progress"
+    blocked:
+      icon: "⛔"
+      description: "Blocked by dependency"
+    skipped:
+      icon: "⚪"
+      description: "Skipped — not applicable"
+  severity:
+    P0:
+      icon: "🔴"
+      description: "Critical — blocks deployment"
+    P1:
+      icon: "🟠"
+      description: "High — must fix before release"
+    P2:
+      icon: "🟡"
+      description: "Medium — should fix soon"
+    P3:
+      icon: "🔵"
+      description: "Low — nice to have"
+  modes:
+    AUDIT: "🔎"
+    IMPLEMENT: "⚡"
+    FIX: "🔧"
+    REFACTOR: "♻️"
+    DESIGN: "🎨"
+    PLAN: "📋"
+    QUERY: "📖"
+    DIGEST: "📚"
+    INVESTIGATE: "🔬"
+    VACUUM: "🧹"
+    HEALTH: "🩺"
+    DEBUG: "🐛"
+
+structure:
+  required_sections:
+    - "header"
+    - "body"
+    - "verification"
+  forbidden:
+    - "Created new report file"
+    - "Writing to .md file"
+    - "Generating summary document"
+  max_output_lines: 500
+  progress_bar_format: "[████░░░░░░] 40%"
+  progress_bar_blocks: 10
+
+anti_patterns:
+  - pattern: "creating .md report"
+    rule: "CORE-002"
+    description: "All output must be inline — never create .md/.txt report files"
+  - pattern: "verbose narration during autonomous execution"
+    rule: "CORE-049"
+    description: "Silent autonomous execution — progress bars only"
+  - pattern: "duplicate implementation file"
+    rule: "CORE-035"
+    description: "Single canonical implementation — no _v2, _unified, _refactored"
