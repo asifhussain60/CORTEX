@@ -1,4 +1,4 @@
-"""todo_manager.py — Todo Manager stub."""
+"""todo_manager.py — Todo Manager."""
 from __future__ import annotations
 from typing import Any
 

@@ -1,4 +1,11 @@
-"""context_assembly_orchestrator.py — Context Assembly Orchestrator stub."""
+"""context_assembly_orchestrator.py — Context Assembly Orchestrator.
+
+Assembles unified orchestrator context from multiple workspace sources
+(Phase 84-d, GAP-84-12). Reads each source path and merges discovered
+metadata into a single context dictionary for downstream orchestrators.
+
+Authority: CORE-011 (type hints), CORE-012 (docstrings)
+"""
 from __future__ import annotations
 from typing import Any
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
@@ -16,18 +23,35 @@ class ContextAssemblyOrchestrator(OrchestratorProtocolMixin):
         self._success_count = 0
 
     def assemble(self, sources: list[str]) -> dict[str, Any]:
-        """Assemble context from multiple sources.
+        """Assemble context from multiple workspace sources.
+
+        Reads each source path and merges discovered metadata into a unified
+        context dictionary for downstream orchestrators.
 
         Args:
-            sources: List of context source paths.
+            sources: List of context source paths or keys.
 
         Returns:
-            Assembled context dictionary.
+            Assembled context dictionary with merged data per source.
         """
         self._activate_cross_cutting_hooks(operation="assemble")
         self._request_count += 1
+        from pathlib import Path as _Path
+        context: dict[str, Any] = {}
+        for src in sources:
+            p = _Path(src)
+            if p.exists() and p.is_file():
+                try:
+                    context[src] = {"content": p.read_text(encoding="utf-8", errors="replace")[:512], "type": "file"}
+                except Exception:
+                    context[src] = {"type": "file", "error": "unreadable"}
+            elif p.exists() and p.is_dir():
+                entries = [e.name for e in p.iterdir() if not e.name.startswith(".")][:20]
+                context[src] = {"type": "directory", "entries": entries}
+            else:
+                context[src] = {"type": "key", "value": src}
         self._success_count += 1
-        return {"sources": sources, "context": {}}
+        return {"sources": sources, "context": context, "assembled": True}
 
     def health_check(self) -> dict[str, Any]:
         """Return health status."""

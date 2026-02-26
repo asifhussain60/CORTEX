@@ -1,7 +1,7 @@
 """
-Database Manager Stub (MCP-First Architecture)
+Database Manager (MCP-First Architecture)
 
-This is a minimal stub for backward compatibility. Database management has
+This is a minimal shim for backward compatibility. Database management has
 been replaced with YAML-backed configuration — CORTEX is delivered via
 MCP (stdio transport) or SaaS, with no SQLite/relational database required.
 

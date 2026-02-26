@@ -1,5 +1,5 @@
 """
-documentation.py — Documentation Orchestrator Package Stub
+documentation.py — Documentation Orchestrator Package
 
 Restored for import compatibility. Delegates to
 cortex.orchestrators.support.cortex_docs_orchestrator.

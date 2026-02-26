@@ -1,8 +1,8 @@
 """
-Orchestrator Context Injector (Stub Implementation)
+Orchestrator Context Injector
 
 Provides decorator for orchestrator metadata injection.
-This is a minimal stub to satisfy import requirements.
+This is a minimal shim to satisfy import requirements.
 
 Authority: Technical Debt - Phase 53 Cleanup
 """

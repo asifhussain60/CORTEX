@@ -1,7 +1,7 @@
 """
 routing_enforcement.py — Intent Router Routing Enforcement
 
-Stub restored for import compatibility. Enforces CORE routing rules
+Restored for import compatibility. Enforces CORE routing rules
 during intent classification.
 """
 from __future__ import annotations

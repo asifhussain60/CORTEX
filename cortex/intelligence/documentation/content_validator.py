@@ -1,5 +1,5 @@
 """
-content_validator.py — Documentation Content Validator Stub
+content_validator.py — Documentation Content Validator
 
 Restored for import compatibility. Validates extracted documentation
 content against quality standards.

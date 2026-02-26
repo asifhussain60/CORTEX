@@ -61,7 +61,6 @@ def status() -> None:
 @cli.group()
 def governance() -> None:
     """Governance rules and compliance commands."""
-    raise NotImplementedError("governance not yet implemented")
 
 
 @governance.command("list")

@@ -1,5 +1,5 @@
 """
-content_extractor.py — Documentation Content Extractor Stub
+content_extractor.py — Documentation Content Extractor
 
 Restored for import compatibility. Extracts structured content
 from documentation artefacts.

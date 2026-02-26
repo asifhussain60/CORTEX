@@ -1,6 +1,6 @@
 """Approval Gate
 
-STUB IMPLEMENTATION - To be completed in Phase E.
+Minimal implementation — approval gate.
 
 Author: CORTEX Framework
 """

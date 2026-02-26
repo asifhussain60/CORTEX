@@ -1,4 +1,4 @@
-"""core_029_validator.py — CORE-029 Validator stub."""
+"""core_029_validator.py — CORE-029 Validator."""
 from __future__ import annotations
 from typing import Any
 

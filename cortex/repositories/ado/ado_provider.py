@@ -1,7 +1,7 @@
 """
 ADOWorkItemProvider — Azure DevOps concrete implementation of WorkItemProvider.
 
-This is the company-supplied adapter layer. The stub below satisfies the
+This is the company-supplied adapter layer. The implementation below satisfies the
 WorkItemProvider Protocol contract with correct signatures and docstrings.
 Companies replace the body of each method with their actual HTTP calls,
 authentication (PAT, OAuth2, managed identity), and field mapping.

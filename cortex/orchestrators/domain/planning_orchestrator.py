@@ -182,7 +182,7 @@ class PlanningOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTem
     ) -> Optional[Dict[str, Any]]:
         """Extract LENS intelligence context, calling LENS directly when needed.
 
-        Phase 62-E: Genuine LENS call — not a stub.
+        Phase 62-E: Genuine LENS call.
 
         Priority order:
         1. Use ``lens_context`` forwarded by IntentRouter (already analysed).

@@ -20,7 +20,6 @@ import click
 @click.group()
 def onboard() -> None:
     """Universal repository onboarding commands."""
-    raise NotImplementedError("onboard not yet implemented")
 
 
 @onboard.command("repo")

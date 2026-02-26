@@ -1850,5 +1850,6 @@ __all__ = [
     "SecurityCheckpointAgent",
     "ComplianceValidationAgent",
     "ExtendedGovernanceAgent",
+    "BusinessRuleEnforcementAgent",  # Phase 84-b: business-rules enforcement layer
     "get_enforcement_orchestrator",
 ]

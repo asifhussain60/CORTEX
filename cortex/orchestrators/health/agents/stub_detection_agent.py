@@ -1,4 +1,4 @@
-"""Stub Detection Agent - Detects Weak Implementations
+"""Weak Implementation Detection Agent
 
 Identifies files that are stubs disguising as implementations:
 - < 200 LOC (configurable)

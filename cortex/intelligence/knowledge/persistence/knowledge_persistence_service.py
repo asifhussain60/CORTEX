@@ -124,6 +124,7 @@ class KnowledgePersistenceService:
             ("tech_stack", self._generate_tech_stack_artifact),
             ("security", self._generate_security_artifact),
             ("quality_metrics", self._generate_quality_metrics_artifact),
+            ("business_rules", self._generate_business_rules_artifact),  # Phase 84-a GAP-84-02
         ]
         
         for key, generator in artifact_generators:
@@ -141,7 +142,28 @@ class KnowledgePersistenceService:
             artifacts_created=artifacts,
             errors=errors
         )
-    
+
+    def persist_knowledge(
+        self, repository: str, onboarding_data: Dict[str, Any]
+    ) -> "PersistenceResult":
+        """
+        Persist structured knowledge for a repository (Phase 84-a, GAP-84-02).
+
+        Extends persist_repository() to also generate business-rules.yaml when
+        business_rules data is present in onboarding_data.
+
+        Args:
+            repository: Repository name.
+            onboarding_data: Dict with optional keys: architecture, tech_stack,
+                security, quality_metrics, business_rules.
+
+        Returns:
+            PersistenceResult with success status and artifacts created.
+        """
+        merged = dict(onboarding_data)
+        merged["repository"] = repository
+        return self.persist_repository(merged)
+
     def _generate_architecture_artifact(
         self,
         repository: str,
@@ -211,13 +233,48 @@ class KnowledgePersistenceService:
             "generated_at": datetime.now().isoformat(),
             "version": "1.0"
         }
-        
+
         return DomainArtifact(
             artifact_type="quality_metrics",
             file_path=Path("quality-metrics.yaml"),
             content=content
         )
-    
+
+    def _generate_business_rules_artifact(
+        self,
+        repository: str,
+        data: Any,
+    ) -> DomainArtifact:
+        """
+        Generate business-rules.yaml artifact (Phase 84-a, GAP-84-02).
+
+        Args:
+            repository: Repository name.
+            data: List of extracted rule dicts or a dict with a 'rules' key.
+
+        Returns:
+            DomainArtifact for business-rules.yaml.
+        """
+        if isinstance(data, list):
+            rules = data
+        elif isinstance(data, dict):
+            rules = data.get("rules", [data])
+        else:
+            rules = []
+
+        content: Dict[str, Any] = {
+            "repository": repository,
+            "rules": rules,
+            "generated_at": datetime.now().isoformat(),
+            "version": "1.0",
+        }
+
+        return DomainArtifact(
+            artifact_type="business_rules",
+            file_path=Path("business-rules.yaml"),
+            content=content,
+        )
+
     def _save_artifact(self, artifact: DomainArtifact, repo_dir: Path) -> None:
         """
         Save artifact to disk.

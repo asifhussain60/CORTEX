@@ -119,16 +119,17 @@ metadata:
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
-  # ── SLOT #0 — phase-84 (P0, PLANNED) ──────────────────────────────────────
+  # ── SLOT #0 — phase-84 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-84
     title: "Stub Elimination + Business Rules Pipeline — 29-GAP Comprehensive Sweep"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-84-STUB-ELIMINATION
     gaps: 29
+    gaps_closed: 29
     sub_phases: 7
-    file: "cortex-registry/planning/phases/planned/phase-84-stub-elimination-business-rules-pipeline.yaml"
-    note: "PLANNED. 4 sweeps: (1) Wire RuleExtractor into LENS + business-rules.yaml persistence, (2) Replace 6 hollow stubs imported by production code, (3) Resolve 9 stub orchestrators, (4) Fix silent degradation + CLI gaps. 29 golden permanence tests at tests/golden/production/test_stub_elimination_permanence.py."
+    file: "cortex-registry/planning/phases/completed/phase-84-stub-elimination-business-rules-pipeline.yaml"
+    note: "COMPLETE. All 29 GAPs CLOSED across 4 sweeps: (1) RuleExtractor wired into LENS + business-rules.yaml persistence, (2) 6 hollow stubs replaced with real delegation, (3) 9 stub orchestrators resolved, (4) Silent degradation + CLI gaps fixed. 27/27 permanence tests GREEN. 1443 smoke baseline maintained."
 
   # ── SLOT #1 — phase-83 (P0, COMPLETE) ────────────────────────────────────
   - id: phase-83
@@ -482,10 +483,9 @@ summary:
   completed: 83
   active: 0
   in_progress: 0
-  planned: 1
+  planned: 0
   archived: 4
   playbooks: 1
-  completion_percentage: 98
-  consolidation_summary: "v27.0: 84 phases — 83 COMPLETE, 1 PLANNED (phase-84: Stub Elimination + Business Rules Pipeline, 29 GAPs, 4 sweeps). Golden permanence harness at tests/golden/production/test_stub_elimination_permanence.py."
-  active_phases:
-    phase-84: "Stub Elimination + Business Rules Pipeline — P0, PLANNED, 29 GAPs, 4 sweeps, 7 sub-phases"
+  completion_percentage: 100
+  consolidation_summary: "v28.0: 84 phases — 84 COMPLETE. Phase-84: Stub Elimination + Business Rules Pipeline, all 29 GAPs CLOSED, 27/27 permanence tests GREEN, 1443 smoke baseline maintained."
+  active_phases: {}

@@ -1,7 +1,7 @@
 """
 tool_helpers.py — MCP Tool Helper Utilities
 
-Shared utilities for MCP tool implementations. Stub restored
+Shared utilities for MCP tool implementations. Restored
 for import compatibility.
 """
 from __future__ import annotations

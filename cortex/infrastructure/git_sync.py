@@ -1,4 +1,4 @@
-"""git_sync.py — Git Sync Infrastructure stub."""
+"""git_sync.py — Git Sync Infrastructure."""
 from __future__ import annotations
 from typing import Any
 

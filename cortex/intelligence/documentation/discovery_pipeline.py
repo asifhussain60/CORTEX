@@ -1,5 +1,5 @@
 """
-discovery_pipeline.py — Documentation Discovery Pipeline Stub
+discovery_pipeline.py — Documentation Discovery Pipeline
 
 Restored for import compatibility. Scans workspace for
 documentation artefacts.

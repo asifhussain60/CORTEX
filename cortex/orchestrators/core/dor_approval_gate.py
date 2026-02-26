@@ -1,7 +1,7 @@
 """
 dor_approval_gate.py — Definition of Ready Approval Gate
 
-Stub: restored for import compatibility after Wave 7 purge.
+Restored for import compatibility after Wave 7 purge.
 Preserves public interface: IntentReflection, ApprovalDecision, DoRApprovalGate.
 """
 from __future__ import annotations

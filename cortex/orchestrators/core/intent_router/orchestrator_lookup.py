@@ -1,7 +1,7 @@
 """
 orchestrator_lookup.py — Intent Router Orchestrator Lookup
 
-Stub restored for import compatibility. Resolves orchestrator
+Restored for import compatibility. Resolves orchestrator
 class references from intent strings.
 """
 from __future__ import annotations

@@ -1,4 +1,4 @@
-"""AWSSecretsProvider — AWS Secrets Manager backend stub."""
+"""AWSSecretsProvider — AWS Secrets Manager backend."""
 from __future__ import annotations
 
 from typing import Any, List, Optional

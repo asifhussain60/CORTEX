@@ -131,7 +131,7 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, 
     ) -> Optional[Dict[str, Any]]:
         """Extract LENS intelligence context, calling LENS directly when needed.
 
-        Phase 62-E: Genuine LENS call — not a stub. Uses safe canonical path.
+        Phase 62-E: Genuine LENS call. Uses safe canonical path.
 
         Priority order:
         1. Use ``lens_context`` forwarded by IntentRouter.
@@ -852,10 +852,10 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, 
         self,
         source_code: str,
     ) -> Union[Ok[Dict[str, Any]], Err]:
-        """Verify health endpoints perform a live dependency probe, not a hardcoded stub.
+        """Verify health endpoints perform a live dependency probe, not a hardcoded response.
 
         Implements ENH-STS-07: health endpoints that always return ``{status:"healthy"}``
-        regardless of actual system state are functionally identical to a stub health
+        regardless of actual system state are functionally identical to a hardcoded health
         endpoint — they provide false confidence to orchestrators and load balancers.
 
         A real health endpoint must:

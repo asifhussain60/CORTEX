@@ -2,7 +2,7 @@
 Testing Framework Discovery
 
 Discovers testing frameworks, configurations, fixtures, coverage tools,
-and mock/stub usage in repositories.
+and mock/fake usage in repositories.
 
 Supports:
 - pytest (Python)

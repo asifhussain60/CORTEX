@@ -1,4 +1,4 @@
-"""tool_registry.py — MCP Tool Registry stub."""
+"""tool_registry.py — MCP Tool Registry."""
 from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum

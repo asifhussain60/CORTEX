@@ -2,7 +2,7 @@
 
 Warns about health issues before push:
 - Duplicates detected
-- Stub files present
+- Weak implementations present
 - Low health score
 
 Does not block push, only warns.

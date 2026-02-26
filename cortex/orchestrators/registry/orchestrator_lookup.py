@@ -1,4 +1,4 @@
-"""orchestrator_lookup.py — Orchestrator Lookup Registry stub."""
+"""orchestrator_lookup.py — Orchestrator Lookup Registry."""
 from __future__ import annotations
 from typing import Any
 

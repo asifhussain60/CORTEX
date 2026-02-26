@@ -38,6 +38,14 @@ from cortex.lens.analyzers.tech_stack_analyzer import TechStackAnalyzer  # Phase
 from cortex.lens.cache import LENSCache, get_lens_cache
 from cortex.orchestrators.core.security_advisor_mixin import SecurityAdvisorMixin
 
+# Phase 84-a: Business rules extraction wiring (GAP-84-01)
+try:
+    from cortex.intelligence.lens.domain_inference.rule_extractor import RuleExtractor as _RuleExtractor
+    _RULE_EXTRACTOR_AVAILABLE = True
+except ImportError:
+    _RULE_EXTRACTOR_AVAILABLE = False
+    _RuleExtractor = None  # type: ignore[assignment,misc]
+
 # Backward compatibility aliases (deprecated, use intelligence layer)
 _LegacyRelationshipTraversalEngine = None  # Will be imported if legacy code exists
 
@@ -258,6 +266,9 @@ class LENSOrchestrator:
         # Calculate analysis time
         analysis_time_ms = int((time.time() - start_time) * 1000)
 
+        # Phase 84-a: Extract business rules from Python files (GAP-84-01)
+        business_rules = self._extract_business_rules(file_path, ast_result)
+
         # Build unified context
         context = {
             "git_analysis": git_result,
@@ -267,6 +278,7 @@ class LENSOrchestrator:
             "dependency_findings": dependency_findings,
             "pattern_findings": pattern_findings,
             "tech_stack": tech_stack_result,  # Phase 90 S1
+            "business_rules": business_rules,  # Phase 84-a: GAP-84-01
             "_metadata": {
                 "analysis_time_ms": analysis_time_ms,
                 "file_path": str(file_path),
@@ -283,6 +295,38 @@ class LENSOrchestrator:
         self.cache[file_path] = context
 
         return context
+
+    def _extract_business_rules(
+        self, file_path: Path, ast_result: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """
+        Extract business rules from a Python file using RuleExtractor (Phase 84-a, GAP-84-01).
+
+        Invokes RuleExtractor on Python source files to surface validation logic,
+        constraints, and business rules embedded in if/raise patterns and validators.
+
+        Args:
+            file_path: Path to the file being analysed.
+            ast_result: AST analysis result (used for Python detection).
+
+        Returns:
+            List of extracted rule dicts with field, description, confidence keys.
+            Returns empty list for non-Python files or if RuleExtractor is unavailable.
+        """
+        if not _RULE_EXTRACTOR_AVAILABLE or _RuleExtractor is None:
+            return []
+        if not str(file_path).endswith(".py"):
+            return []
+        try:
+            source = file_path.read_text(encoding="utf-8", errors="ignore")
+            extractor = _RuleExtractor()
+            rules: List[Dict[str, Any]] = []
+            rules.extend(extractor.extract_from_validators(source))
+            rules.extend(extractor.extract_from_conditions(source))
+            rules.extend(extractor.extract_business_logic(source))
+            return rules
+        except Exception:
+            return []
 
     def _analyze_git(self, file_path: Path) -> Dict[str, Any]:
         """

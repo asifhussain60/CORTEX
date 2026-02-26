@@ -1,4 +1,11 @@
-"""lens_visualization_orchestrator.py — LENS Visualization Orchestrator stub."""
+"""lens_visualization_orchestrator.py — LENS Visualization Orchestrator.
+
+Generates LENS-powered dashboards and HTML visualisations from repo analysis
+data (Phase 84-d, GAP-84-13). Produces structured HTML with metrics tables
+and dependency graphs from LENS context payloads.
+
+Authority: CORE-011 (type hints), CORE-012 (docstrings)
+"""
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any

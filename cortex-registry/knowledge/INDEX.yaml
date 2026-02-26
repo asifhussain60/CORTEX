@@ -225,3 +225,11 @@ sdlc:
       title: "HTML/CSS Stack Knowledge"
       keywords: ["html", "css", "wcag", "accessibility", "lighthouse", "pa11y", "tailwind"]
 
+
+
+# Phase 84-b: Business rules domain (GAP-84-05)
+business-rules:
+  guides:
+    - path: "business-rules/extracted-rules.yaml"
+      title: "Extracted Business Rules"
+      keywords: ["billing", "invoice", "payment", "price", "finance", "business", "rules", "compliance", "constraint", "validation"]

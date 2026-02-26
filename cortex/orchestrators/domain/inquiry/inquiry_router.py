@@ -1,4 +1,11 @@
-"""inquiry_router.py — Inquiry Router stub."""
+"""inquiry_router.py — Inquiry Router.
+
+Routes inquiry requests to the appropriate domain handler using keyword-based
+classification. Delegates to IntelligentKnowledgeRouter for domain resolution
+(Phase 84-d, GAP-84-16).
+
+Authority: CORE-011 (type hints), CORE-012 (docstrings)
+"""
 from __future__ import annotations
 from typing import Any
 

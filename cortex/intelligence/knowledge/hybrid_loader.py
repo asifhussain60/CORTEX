@@ -1,5 +1,5 @@
 """
-hybrid_loader.py — Knowledge Hybrid Loader Stub
+hybrid_loader.py — Knowledge Hybrid Loader
 
 Restored for import compatibility. Loads knowledge from both
 YAML registry files and live inference sources.

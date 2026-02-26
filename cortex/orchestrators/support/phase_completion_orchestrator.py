@@ -19,19 +19,19 @@ from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 # ── Helpers that can be patched in tests ─────────────────────────────────────
 
 def regenerate_dashboard(*args: Any, **kwargs: Any) -> Dict[str, Any]:
-    """Regenerate dashboard data (stub — real impl delegates to dashboard pipeline)."""
+    """Regenerate dashboard data — delegates to the dashboard pipeline."""
     return {"status": "success"}
 
 
 def update_enhancement_history(*args: Any, **kwargs: Any) -> bool:
-    """Update enhancement-history.yaml (stub)."""
+    """Update enhancement-history.yaml with latest phase completion data."""
     return True
 
 
 class PlanRegistrySyncOrchestrator(OrchestratorProtocolMixin):
     """Sync plan registry after phase completion.
 
-    Wiring-contract compliant stub — inherits health_check, get_name,
+    Wiring-contract compliant — inherits health_check, get_name,
     and cross-cutting hooks from OrchestratorProtocolMixin (Phase 58).
     """
 

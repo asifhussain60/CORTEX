@@ -1,4 +1,11 @@
-"""plan_orchestrator.py — Plan Orchestrator stub."""
+"""plan_orchestrator.py — Plan Orchestrator.
+
+Manages phase plans: creation, status tracking, and teardown with archival
+(Phase 84-d, GAP-84-17). Stores active plans in-process and writes a YAML
+summary to .cortex-runtime/plans/ on teardown.
+
+Authority: CORE-011 (type hints), CORE-012 (docstrings)
+"""
 from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any

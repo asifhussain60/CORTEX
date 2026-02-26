@@ -7,7 +7,7 @@ id: "phase-84"
 title: "Stub Elimination + Business Rules Pipeline — 29-GAP Comprehensive Sweep"
 version: "1.0"
 created: "2026-02-26"
-status: PLANNED
+status: COMPLETE
 priority: P0
 governance_authority:
   - CORE-008   # TDD mandatory
@@ -51,7 +51,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "grep -rn 'RuleExtractor' cortex/lens/ → 0 results. Only imported in tests/"
     action_ref: "phase-84-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-02"
     title: "No business-rules.yaml persistence artifact"
@@ -59,7 +59,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "KnowledgePersistenceService has 4 generators, none for business rules"
     action_ref: "phase-84-a"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-03"
     title: "BusinessKnowledgeRepository is in-memory stub"
@@ -67,7 +67,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "52 lines, labeled 'Stub for PHASE-E unblocking', dict-only, no YAML backing"
     action_ref: "phase-84-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-04"
     title: "No enforcement loop for extracted business rules"
@@ -75,7 +75,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "EnforcementOrchestrator has 9 agents, none load extracted business rules"
     action_ref: "phase-84-b"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-05"
     title: "No INDEX.yaml entry for business-rules domain"
@@ -83,7 +83,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "INDEX.yaml has 11 domains, no business-rules"
     action_ref: "phase-84-b"
-    status: OPEN
+    status: CLOSED
 
   # ── SWEEP 2: False Positive Elimination (P0/P1) ───────────────────────────
   - id: "GAP-84-06"
@@ -92,7 +92,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/enforcement/governance_enforcement_agent.py: 19 lines, always returns {violations: [], allowed: True}. Imported by cortex/mcp/tools/workflow_tools.py"
     action_ref: "phase-84-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-07"
     title: "GovernanceIntelligence stub imported by auto_initialization_suite"
@@ -100,7 +100,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/core/governance_intelligence.py: 18 lines, analyse() empty. Imported by cortex/testing/auto_initialization_suite.py"
     action_ref: "phase-84-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-08"
     title: "KnowledgeComposer stub imported by auto_initialization_suite"
@@ -108,7 +108,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/core/knowledge_composer.py: 18 lines, compose() empty. Imported by cortex/testing/auto_initialization_suite.py"
     action_ref: "phase-84-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-09"
     title: "TierComposer stub imported by auto_initialization_suite"
@@ -116,7 +116,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/core/tier_composer.py: 15 lines, compose_tiers() empty. Imported by cortex/testing/auto_initialization_suite.py"
     action_ref: "phase-84-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-10"
     title: "CortexIntelligenceIntegration stub imported by business_wisdom_formatter"
@@ -124,7 +124,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/tools/cortex_intelligence_integration.py: 19 lines, GovernanceRuleLoader returns empty. Imported by cortex/orchestrators/core/business_wisdom_formatter.py"
     action_ref: "phase-84-c"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-11"
     title: "RegistryBackedOrchestratorRegistry stub imported by orchestrator_scaffolder"
@@ -132,7 +132,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/core/wiring/registry_backed_orchestrator_registry.py: 31 lines, empty registry. Imported by cortex/tools/orchestrator_scaffolder.py"
     action_ref: "phase-84-c"
-    status: OPEN
+    status: CLOSED
 
   # ── SWEEP 3: Stub Orchestrator Resolution (P1) ────────────────────────────
   - id: "GAP-84-12"
@@ -141,7 +141,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/orchestrators/support/context_assembly_orchestrator.py: docstring says stub, process() returns empty"
     action_ref: "phase-84-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-13"
     title: "LensVisualizationOrchestrator is labeled stub (50 lines)"
@@ -149,7 +149,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/orchestrators/support/lens_visualization_orchestrator.py: docstring says stub"
     action_ref: "phase-84-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-14"
     title: "RepoDetectionOrchestrator is labeled stub (35 lines)"
@@ -157,7 +157,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/orchestrators/support/repo_detection_orchestrator.py: docstring says stub"
     action_ref: "phase-84-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-15"
     title: "TechIntelligenceOrchestrator is labeled stub (40 lines)"
@@ -165,7 +165,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/orchestrators/intelligence/tech_intelligence_orchestrator.py: docstring says stub"
     action_ref: "phase-84-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-16"
     title: "InquiryOrchestrator is labeled stub (45 lines)"
@@ -173,7 +173,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/orchestrators/domain/inquiry_orchestrator.py: docstring says stub"
     action_ref: "phase-84-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-17"
     title: "PlanOrchestrator is labeled stub (68 lines)"
@@ -181,7 +181,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/orchestrators/support/plan_orchestrator.py: docstring says stub"
     action_ref: "phase-84-d"
-    status: OPEN
+    status: CLOSED
 
   # ── SWEEP 4: Silent Degradation & Support Stubs (P1/P2) ───────────────────
   - id: "GAP-84-18"
@@ -190,7 +190,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/observability/audit_trail.py: 29 lines, list-based, no SQLite persistence"
     action_ref: "phase-84-e"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-19"
     title: "HealthMonitor always returns healthy — never actually checks"
@@ -198,7 +198,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/observability/health_monitor.py: 18 lines, returns {status: healthy, latency_ms: 0} unconditionally"
     action_ref: "phase-84-e"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-20"
     title: "NLP package empty — __all__ = []"
@@ -206,7 +206,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/intelligence/nlp/__init__.py: 3 lines, empty package"
     action_ref: "phase-84-e"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-21"
     title: "Domain brain adapters all return [] from query_source()"
@@ -214,7 +214,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/intelligence/domain_brain/adapters.py: 144 lines, 4 adapters, 12 return [] statements"
     action_ref: "phase-84-e"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-22"
     title: "SemanticRanking stub (19 lines)"
@@ -222,7 +222,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/orchestrators/core/semantic_ranking.py: labeled stub"
     action_ref: "phase-84-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-23"
     title: "LensContextProvider stub (63 lines)"
@@ -230,7 +230,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/orchestrators/core/lens_context_provider.py: labeled stub"
     action_ref: "phase-84-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-24"
     title: "GovernancePrinciples stub (25 lines)"
@@ -238,7 +238,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/orchestrators/core/governance_principles.py: labeled stub"
     action_ref: "phase-84-d"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-25"
     title: "CLI onboard command raises NotImplementedError"
@@ -246,7 +246,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/cli/commands/onboard.py line 23"
     action_ref: "phase-84-f"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-26"
     title: "CLI lens command raises NotImplementedError"
@@ -254,7 +254,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/cli/commands/lens.py line 23"
     action_ref: "phase-84-f"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-27"
     title: "CLI governance command raises NotImplementedError"
@@ -262,7 +262,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/cli/__main__.py line 64"
     action_ref: "phase-84-f"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-28"
     title: "WorkItemProvider 3 methods raise NotImplementedError"
@@ -270,7 +270,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/repositories/work_item_provider.py: 3 NotImplementedError"
     action_ref: "phase-84-f"
-    status: OPEN
+    status: CLOSED
 
   - id: "GAP-84-29"
     title: "Secrets providers labeled stub in docstrings"
@@ -278,7 +278,7 @@ sweep_catalogue:
     source: "chat01.md audit"
     evidence: "cortex/infrastructure/secrets/providers/aws.py, azure.py, vault.py: all labeled 'backend stub' but have real SDK integration"
     action_ref: "phase-84-f"
-    status: OPEN
+    status: CLOSED
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SEQUENTIAL EXECUTION CONTRACT
@@ -299,7 +299,7 @@ phases:
   - id: "phase-84-a"
     title: "Wire RuleExtractor into LENS + Add Business Rules Persistence"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-84-01", "GAP-84-02"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -356,7 +356,7 @@ phases:
   - id: "phase-84-b"
     title: "YAML-Backed BusinessKnowledgeRepository + Enforcement Agent + INDEX Entry"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-84-03", "GAP-84-04", "GAP-84-05"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -415,7 +415,7 @@ phases:
   - id: "phase-84-c"
     title: "Replace 6 Hollow Stubs Imported by Production Code"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-84-06", "GAP-84-07", "GAP-84-08", "GAP-84-09", "GAP-84-10", "GAP-84-11"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -474,7 +474,7 @@ phases:
   - id: "phase-84-d"
     title: "Resolve 9 Stub Orchestrators — Implement or Delete"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-84-12", "GAP-84-13", "GAP-84-14", "GAP-84-15", "GAP-84-16", "GAP-84-17", "GAP-84-22", "GAP-84-23", "GAP-84-24"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "4 hours"
@@ -529,7 +529,7 @@ phases:
   - id: "phase-84-e"
     title: "Fix Silent Degradation — Observability + Domain Brain Adapters"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-84-18", "GAP-84-19", "GAP-84-20", "GAP-84-21"]
     governance_authority: "CORE-008, CORE-035, CORE-064"
     duration_estimate: "3 hours"
@@ -585,7 +585,7 @@ phases:
   - id: "phase-84-f"
     title: "CLI Commands + Provider Stubs — Implement or Guard"
     priority: P2
-    status: PLANNED
+    status: COMPLETE
     gap_refs: ["GAP-84-25", "GAP-84-26", "GAP-84-27", "GAP-84-28", "GAP-84-29"]
     governance_authority: "CORE-008, CORE-064"
     duration_estimate: "2 hours"
@@ -640,7 +640,7 @@ phases:
   - id: "phase-84-final"
     title: "Smoke Gate + Golden Permanence Tests + CORE-064 Sweep Close"
     priority: P0
-    status: PLANNED
+    status: COMPLETE
     gap_refs: []
     depends_on: ["phase-84-f"]
     prerequisite: "ALL preceding sub-phase completion_gates PASSED"
