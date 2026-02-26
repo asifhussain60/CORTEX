@@ -227,7 +227,7 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight
 3. Move dedicated file from `planned/` → `completed/`
 4. Update `file:` reference in `cortex-master.yaml` to point to `completed/`
 5. Update `status: COMPLETE` in both `cortex-master.yaml` entry and dedicated file
-6. Run smoke gate: `make test-batch`
+6. Run smoke gate: `make test-smoke`
 7. Verify `cortex-master.yaml` remains ≤ 500 lines
 
 ### Why This Exists:

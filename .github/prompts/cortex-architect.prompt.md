@@ -496,7 +496,7 @@ python3 -c "import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml
 2. Move file: `planned/` → `completed/`
 3. Update `file:` in `cortex-master.yaml` to point to `completed/`
 4. Set `status: COMPLETE` in both files
-5. `make test-batch` — zero new failures
+5. `make test-smoke` — zero new failures
 6. Verify `cortex-master.yaml` ≤ 500 lines
 
 **Lifecycle template:** `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml`

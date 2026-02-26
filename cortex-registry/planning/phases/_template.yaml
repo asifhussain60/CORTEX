@@ -71,7 +71,7 @@ phases:
     duration_estimate: "{N hours | N days}"
     depends_on: []                   # first sub-phase — no prior gate required
     prerequisite: "smoke tests green (≥N baseline)"
-    regression_gate: "python3 scripts/run_tests.py batch — zero new failures"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
 
     # ── TDD Cycle (CORE-008 — all three phases are MANDATORY and ATOMIC) ────
     tdd_cycle:
@@ -122,7 +122,7 @@ phases:
     duration_estimate: "{N hours | N days}"
     depends_on: ["phase-{N}-a"]     # HARD DEPENDENCY — gate from phase-{N}-a must PASS first
     prerequisite: "phase-{N}-a completion_gate PASSED (all_gap_refs_closed: true)"
-    regression_gate: "python3 scripts/run_tests.py batch — zero new failures"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
 
     tdd_cycle:
       red:

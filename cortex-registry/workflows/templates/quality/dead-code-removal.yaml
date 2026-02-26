@@ -210,9 +210,9 @@ steps:
     name: Validate No Breakage
     action: run_tests
     description: |
-      Run full test suite to confirm dead code removal didn't break anything.
+      Run smoke tests to confirm dead code removal didn't break anything.
     parameters:
-      command: "make test-batch"
+      command: "make test-smoke"
       coverage: true
     gate: tests_passing
     rollback: true

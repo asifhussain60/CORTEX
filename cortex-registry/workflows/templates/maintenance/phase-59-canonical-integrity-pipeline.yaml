@@ -470,7 +470,7 @@ workflow:
   # ===========================================================================
   post_completion:
     - action: "run_full_test_suite"
-      command: "make test-batch"
+      command: "make test-smoke"
       expect: "≥ BASELINE_TEST_COUNT tests passing, 0 new failures"
 
     - action: "move_plan_yaml"

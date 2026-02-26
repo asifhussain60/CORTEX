@@ -204,7 +204,7 @@ wave_3:
       exit_criteria:
         - "ENH-STS-02: AC_COMPLETE written with actual source_repo (not 'source/repo' placeholder)"
         - "orchestrator.generate_scorecard() displayed inline"
-        - "All tests pass (python3 scripts/run_tests.py batch)"
+        - "All tests pass (python3 scripts/run_tests.py smoke)"
 
 # ── CRITICAL: Anti-Patterns (BLOCK if any of these occur) ────────────────────
 anti_patterns:

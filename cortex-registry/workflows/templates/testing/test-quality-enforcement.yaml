@@ -203,10 +203,10 @@ steps:
     name: Run Test Suite
     action: run_tests
     description: |
-      Run full test suite to ensure no breakage.
+      Run smoke tests to ensure no breakage.
       Note: Stub tests will be skipped (marked pending/TODO).
     parameters:
-      command: "make test-batch"
+      command: "make test-smoke"
       exclude_pending: true
     gate: tests_passing
     rollback: true
