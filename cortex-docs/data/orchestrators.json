@@ -1,57 +1,146 @@
-{
-  "meta": {
-    "generated": "2026-02-25",
-    "source": "cortex/orchestrators/",
-    "version": "1.1.0",
-    "total": 27
-  },
-  "tiers": {
-    "core": {
-      "label": "Core Orchestrators",
-      "description": "Central control plane — intent routing, TDD enforcement, governance, master orchestration, audit, security, conversation",
-      "count": 7,
-      "orchestrators": [
-        { "id": "master", "name": "MasterOrchestrator", "path": "cortex/orchestrators/core/master_orchestrator.py", "description": "Top-level orchestration — routes intents, manages 9-stage audit pipeline, coordinates all other orchestrators" },
-        { "id": "intent-router", "name": "IntentRouter", "path": "cortex/orchestrators/core/intent_router_impl.py", "description": "Classifies user intent and routes to the appropriate orchestrator using LENS-aware semantic ranking" },
-        { "id": "tdd", "name": "TDDOrchestrator", "path": "cortex/orchestrators/core/tdd_orchestrator.py", "description": "Enforces RED-GREEN-REFACTOR cycle — CORE-008 compliance, test-first mandate, golden test validation" },
-        { "id": "enforcement", "name": "EnforcementOrchestrator", "path": "cortex/orchestrators/core/enforcement_orchestrator.py", "description": "Pre-commit governance — validates all 35 CORE rules, blocks violations, writes audit trail to SQLite" },
-        { "id": "workflow", "name": "WorkflowOrchestrator", "path": "cortex/orchestrators/core/workflow_orchestrator.py", "description": "YAML workflow template execution engine — runs detect-fix-rescan-loop and other workflow primitives" },
-        { "id": "conversation", "name": "ConversationOrchestrator", "path": "cortex/orchestrators/core/conversation_orchestrator.py", "description": "Multi-turn conversation management — state persistence, context aggregation, response streaming" },
-        { "id": "audit", "name": "AuditOrchestrator", "path": "cortex/orchestrators/core/audit_orchestrator.py", "description": "19-point production readiness audit — P0/P1/P2 scanning, convergence loop, SQLite activity logging" }
-      ]
-    },
-    "domain": {
-      "label": "Domain Orchestrators",
-      "description": "Specialized capabilities — planning, refactoring, SDLC workflow, domain intelligence, dashboard generation",
-      "count": 6,
-      "orchestrators": [
-        { "id": "planning", "name": "PlanningOrchestrator", "path": "cortex/orchestrators/domain/planning_orchestrator.py", "description": "Structured planning — phase decomposition, gap catalogue, TDD sequence generation" },
-        { "id": "domain", "name": "DomainOrchestrator", "path": "cortex/orchestrators/domain/domain_orchestrator.py", "description": "Domain-specific intelligence — coordinates LENS analysis with domain knowledge synthesis" },
-        { "id": "refactoring", "name": "RefactoringOrchestrator", "path": "cortex/orchestrators/domain/refactoring_orchestrator.py", "description": "Intelligent refactoring — duplication detection, code smell remediation, CORE-035 compliance" },
-        { "id": "sdlc", "name": "SDLCWorkflowOrchestrator", "path": "cortex/orchestrators/domain/sdlc_workflow_orchestrator.py", "description": "Full SDLC workflow — from requirement to deployment with governance checkpoints" },
-        { "id": "dashboard", "name": "DashboardOrchestrator", "path": "cortex/orchestrators/domain/dashboard_orchestrator.py", "description": "Static dashboard generation — landing pages, per-repo dashboards, SQLite-backed metrics views" },
-        { "id": "enhanced-planning", "name": "EnhancedPlanningOrchestrator", "path": "cortex/orchestrators/domain/enhanced_planning_orchestrator.py", "description": "Advanced planning with ROI scoring, wave decomposition, and audit-driven auto-planning (ENH-059)" }
-      ]
-    },
-    "support": {
-      "label": "Support Orchestrators",
-      "description": "Infrastructure — health checks, vacuum cleanup, upgrades, onboarding, digest, sweep, quality, debugging",
-      "count": 14,
-      "orchestrators": [
-        { "id": "health", "name": "HealthOrchestrator", "path": "cortex/orchestrators/health/health_orchestrator.py", "description": "All 22 orchestrator health endpoints — production readiness validation and H-series checks" },
-        { "id": "vacuum", "name": "VacuumOrchestrator", "path": "cortex/orchestrators/health/vacuum_orchestrator.py", "description": "Markdown sprawl + root clutter cleanup — dry-run gate, 30-day retention, CORE-002 enforcement" },
-        { "id": "upgrade", "name": "UpgradeOrchestrator", "path": "cortex/orchestrators/support/upgrade_orchestrator.py", "description": "Inflight upgrade — validate requirements, fetch origin/main, merge if ahead, run audit fix" },
-        { "id": "bulk-digest", "name": "BulkDigestOrchestrator", "path": "cortex/orchestrators/support/bulk_digest_orchestrator.py", "description": "Batch content ingestion — 3-pipeline processing (extract, transform, load) for large repositories" },
-        { "id": "digest-session", "name": "DigestSessionOrchestrator", "path": "cortex/orchestrators/support/digest_session_orchestrator.py", "description": "Single-session content digestion with LENS analysis and knowledge persistence" },
-        { "id": "sweep-catalogue", "name": "SweepCatalogueOrchestrator", "path": "cortex/orchestrators/support/sweep_catalogue_orchestrator.py", "description": "CORE-064 sweep completeness — exhaustive issue cataloguing, no partial sweeps" },
-        { "id": "setup", "name": "SetupOrchestrator", "path": "cortex/orchestrators/support/setup_orchestrator.py", "description": "Environment setup — MCP configuration, VS Code settings, dependency validation" },
+{{
+
+  "meta": {  "meta": {
+
+    "generated": "2026-02-26",    "generated": "2026-02-25",
+
+    "source": "cortex/orchestrators/",    "source": "cortex/orchestrators/",
+
+    "version": "2.0.0",    "version": "1.1.0",
+
+    "total": 51    "total": 27
+
+  },  },
+
+  "tiers": {  "tiers": {
+
+    "core": {    "core": {
+
+      "label": "Core Orchestrators",      "label": "Core Orchestrators",
+
+      "description": "Central control plane — intent routing, TDD enforcement, governance, master orchestration, audit, security, conversation, validation",      "description": "Central control plane — intent routing, TDD enforcement, governance, master orchestration, audit, security, conversation",
+
+      "count": 17,      "count": 7,
+
+      "orchestrators": [      "orchestrators": [
+
+        { "id": "master", "name": "MasterOrchestrator", "path": "cortex/orchestrators/core/master_orchestrator.py", "description": "Top-level orchestration — routes intents, manages 9-stage audit pipeline, coordinates all other orchestrators" },        { "id": "master", "name": "MasterOrchestrator", "path": "cortex/orchestrators/core/master_orchestrator.py", "description": "Top-level orchestration — routes intents, manages 9-stage audit pipeline, coordinates all other orchestrators" },
+
+        { "id": "intent-router", "name": "IntentRouter", "path": "cortex/orchestrators/core/intent_router_impl.py", "description": "Classifies user intent and routes to the appropriate orchestrator using LENS-aware semantic ranking" },        { "id": "intent-router", "name": "IntentRouter", "path": "cortex/orchestrators/core/intent_router_impl.py", "description": "Classifies user intent and routes to the appropriate orchestrator using LENS-aware semantic ranking" },
+
+        { "id": "tdd", "name": "TDDOrchestrator", "path": "cortex/orchestrators/core/tdd_orchestrator.py", "description": "Enforces RED-GREEN-REFACTOR cycle — CORE-008 compliance, test-first mandate, golden test validation" },        { "id": "tdd", "name": "TDDOrchestrator", "path": "cortex/orchestrators/core/tdd_orchestrator.py", "description": "Enforces RED-GREEN-REFACTOR cycle — CORE-008 compliance, test-first mandate, golden test validation" },
+
+        { "id": "enforcement", "name": "EnforcementOrchestrator", "path": "cortex/orchestrators/core/enforcement_orchestrator.py", "description": "Pre-commit governance — validates all 38 CORE rules, blocks violations, writes audit trail to SQLite" },        { "id": "enforcement", "name": "EnforcementOrchestrator", "path": "cortex/orchestrators/core/enforcement_orchestrator.py", "description": "Pre-commit governance — validates all 35 CORE rules, blocks violations, writes audit trail to SQLite" },
+
+        { "id": "workflow", "name": "WorkflowOrchestrator", "path": "cortex/orchestrators/core/workflow_orchestrator.py", "description": "YAML workflow template execution engine — runs detect-fix-rescan-loop and other workflow primitives" },        { "id": "workflow", "name": "WorkflowOrchestrator", "path": "cortex/orchestrators/core/workflow_orchestrator.py", "description": "YAML workflow template execution engine — runs detect-fix-rescan-loop and other workflow primitives" },
+
+        { "id": "conversation", "name": "ConversationOrchestrator", "path": "cortex/orchestrators/core/conversation_orchestrator.py", "description": "Multi-turn conversation management — state persistence, context aggregation, response streaming" },        { "id": "conversation", "name": "ConversationOrchestrator", "path": "cortex/orchestrators/core/conversation_orchestrator.py", "description": "Multi-turn conversation management — state persistence, context aggregation, response streaming" },
+
+        { "id": "interaction", "name": "InteractionOrchestrator", "path": "cortex/orchestrators/core/interaction_orchestrator.py", "description": "User interaction coordination — handles approval gates, user prompts, and confirmation flows" },        { "id": "audit", "name": "AuditOrchestrator", "path": "cortex/orchestrators/core/audit_orchestrator.py", "description": "19-point production readiness audit — P0/P1/P2 scanning, convergence loop, SQLite activity logging" }
+
+        { "id": "audit", "name": "AuditOrchestrator", "path": "cortex/orchestrators/core/audit_orchestrator.py", "description": "19-point production readiness audit — P0/P1/P2 scanning, convergence loop, SQLite activity logging" },      ]
+
+        { "id": "master-stage-1", "name": "MasterOrchestrationStage1", "path": "cortex/orchestrators/core/master_orchestrator_stage_1.py", "description": "Stage 1 of master orchestration — preflight and governance pre-checks" },    },
+
+        { "id": "master-stage-3", "name": "MasterOrchestrationStage3", "path": "cortex/orchestrators/core/master_orchestrator_stage_3.py", "description": "Stage 3 of master orchestration — wiring contract validation" },    "domain": {
+
+        { "id": "master-stage-4", "name": "MasterOrchestrationStage4", "path": "cortex/orchestrators/core/master_orchestrator_stage_4.py", "description": "Stage 4 of master orchestration — orchestrator health checks" },      "label": "Domain Orchestrators",
+
+        { "id": "response", "name": "ResponseOrchestrator", "path": "cortex/orchestrators/response/response_orchestrator.py", "description": "Response formatting and template rendering — 16 composable LEGO blocks, R1-R6 rules" },      "description": "Specialized capabilities — planning, refactoring, SDLC workflow, domain intelligence, dashboard generation",
+
+        { "id": "meta-audit", "name": "MetaAuditOrchestrator", "path": "cortex/orchestrators/core/meta_audit_orchestrator.py", "description": "Meta-level governance auditing — 23 checks for prompt/agent coherence" },      "count": 6,
+
+        { "id": "holistic-validation", "name": "HolisticValidationOrchestrator", "path": "cortex/orchestrators/validation/holistic_validation_orchestrator.py", "description": "Pre-implementation validation gate — CORE-048 compliance before any code changes" },      "orchestrators": [
+
+        { "id": "challenge-engine", "name": "ChallengeEngine", "path": "cortex/orchestrators/validation/challenge_engine.py", "description": "Challenge-first reasoning — generates ≥2 alternatives with trade-off analysis" },        { "id": "planning", "name": "PlanningOrchestrator", "path": "cortex/orchestrators/domain/planning_orchestrator.py", "description": "Structured planning — phase decomposition, gap catalogue, TDD sequence generation" },
+
+        { "id": "solid", "name": "SOLIDOrchestrator", "path": "cortex/orchestrators/validation/solid_orchestrator.py", "description": "SOLID principles validation — checks single responsibility, open-closed, etc." },        { "id": "domain", "name": "DomainOrchestrator", "path": "cortex/orchestrators/domain/domain_orchestrator.py", "description": "Domain-specific intelligence — coordinates LENS analysis with domain knowledge synthesis" },
+
+        { "id": "security-vulnerability", "name": "SecurityVulnerabilityOrchestrator", "path": "cortex/orchestrators/validation/security_vulnerability_orchestrator.py", "description": "Security vulnerability scanning — OWASP, STRIDE threat modeling, P0/P1/P2 classification" }        { "id": "refactoring", "name": "RefactoringOrchestrator", "path": "cortex/orchestrators/domain/refactoring_orchestrator.py", "description": "Intelligent refactoring — duplication detection, code smell remediation, CORE-035 compliance" },
+
+      ]        { "id": "sdlc", "name": "SDLCWorkflowOrchestrator", "path": "cortex/orchestrators/domain/sdlc_workflow_orchestrator.py", "description": "Full SDLC workflow — from requirement to deployment with governance checkpoints" },
+
+    },        { "id": "dashboard", "name": "DashboardOrchestrator", "path": "cortex/orchestrators/domain/dashboard_orchestrator.py", "description": "Static dashboard generation — landing pages, per-repo dashboards, SQLite-backed metrics views" },
+
+    "domain": {        { "id": "enhanced-planning", "name": "EnhancedPlanningOrchestrator", "path": "cortex/orchestrators/domain/enhanced_planning_orchestrator.py", "description": "Advanced planning with ROI scoring, wave decomposition, and audit-driven auto-planning (ENH-059)" }
+
+      "label": "Domain Orchestrators",      ]
+
+      "description": "Specialized capabilities — planning, refactoring, SDLC workflow, domain intelligence, dashboard generation",    },
+
+      "count": 7,    "support": {
+
+      "orchestrators": [      "label": "Support Orchestrators",
+
+        { "id": "planning", "name": "PlanningOrchestrator", "path": "cortex/orchestrators/domain/planning_orchestrator.py", "description": "Structured planning — phase decomposition, gap catalogue, TDD sequence generation" },      "description": "Infrastructure — health checks, vacuum cleanup, upgrades, onboarding, digest, sweep, quality, debugging",
+
+        { "id": "domain", "name": "DomainOrchestrator", "path": "cortex/orchestrators/domain/domain_orchestrator.py", "description": "Domain-specific intelligence — coordinates LENS analysis with domain knowledge synthesis" },      "count": 14,
+
+        { "id": "refactoring", "name": "RefactoringOrchestrator", "path": "cortex/orchestrators/domain/refactoring_orchestrator.py", "description": "Intelligent refactoring — duplication detection, code smell remediation, CORE-035 compliance" },      "orchestrators": [
+
+        { "id": "sdlc", "name": "SDLCWorkflowOrchestrator", "path": "cortex/orchestrators/domain/sdlc_workflow_orchestrator.py", "description": "Full SDLC workflow — from requirement to deployment with governance checkpoints" },        { "id": "health", "name": "HealthOrchestrator", "path": "cortex/orchestrators/health/health_orchestrator.py", "description": "All 22 orchestrator health endpoints — production readiness validation and H-series checks" },
+
+        { "id": "dashboard", "name": "DashboardOrchestrator", "path": "cortex/orchestrators/domain/dashboard_orchestrator.py", "description": "Static dashboard generation — landing pages, per-repo dashboards, SQLite-backed metrics views" },        { "id": "vacuum", "name": "VacuumOrchestrator", "path": "cortex/orchestrators/health/vacuum_orchestrator.py", "description": "Markdown sprawl + root clutter cleanup — dry-run gate, 30-day retention, CORE-002 enforcement" },
+
+        { "id": "enhanced-planning", "name": "EnhancedPlanningOrchestrator", "path": "cortex/orchestrators/domain/enhanced_planning_orchestrator.py", "description": "Advanced planning with ROI scoring, wave decomposition, and audit-driven auto-planning (ENH-059)" },        { "id": "upgrade", "name": "UpgradeOrchestrator", "path": "cortex/orchestrators/support/upgrade_orchestrator.py", "description": "Inflight upgrade — validate requirements, fetch origin/main, merge if ahead, run audit fix" },
+
+        { "id": "service-decomposition", "name": "ServiceDecompositionOrchestrator", "path": "cortex/orchestrators/domain/service_decomposition_orchestrator.py", "description": "Microservice boundary detection — identifies service boundaries from monolith analysis" }        { "id": "bulk-digest", "name": "BulkDigestOrchestrator", "path": "cortex/orchestrators/support/bulk_digest_orchestrator.py", "description": "Batch content ingestion — 3-pipeline processing (extract, transform, load) for large repositories" },
+
+      ]        { "id": "digest-session", "name": "DigestSessionOrchestrator", "path": "cortex/orchestrators/support/digest_session_orchestrator.py", "description": "Single-session content digestion with LENS analysis and knowledge persistence" },
+
+    },        { "id": "sweep-catalogue", "name": "SweepCatalogueOrchestrator", "path": "cortex/orchestrators/support/sweep_catalogue_orchestrator.py", "description": "CORE-064 sweep completeness — exhaustive issue cataloguing, no partial sweeps" },
+
+    "support": {        { "id": "setup", "name": "SetupOrchestrator", "path": "cortex/orchestrators/support/setup_orchestrator.py", "description": "Environment setup — MCP configuration, VS Code settings, dependency validation" },
+
+      "label": "Support Orchestrators",        { "id": "onboarding", "name": "OnboardingOrchestrator", "path": "cortex/orchestrators/support/orchestrator.py", "description": "Repository onboarding — LENS analysis, security assessment (P0/P1/P2), SQLite dashboard generation" },
+
+      "description": "Infrastructure — health checks, vacuum cleanup, upgrades, onboarding, digest, sweep, quality, debugging, training, sync",        { "id": "repo-onboarding", "name": "RepositoryOnboardingOrchestrator", "path": "cortex/orchestrators/support/repository_onboarding_orchestrator.py", "description": "Full repository onboarding with LENS V3 — LLM business language + phase 21 SQLite integration" },
+
+      "count": 23,        { "id": "debugger", "name": "DebuggerOrchestrator", "path": "cortex/orchestrators/support/debugger_orchestrator.py", "description": "Debug session management — log capture, governance violation detection, automated fix plans" },
+
+      "orchestrators": [        { "id": "cortex-docs", "name": "CortexDocsOrchestrator", "path": "cortex/orchestrators/support/cortex_docs_orchestrator.py", "description": "Documentation site orchestration — DOC-REFRESH-001 pipeline, JSON catalog generation, validation" },
+
+        { "id": "health", "name": "HealthOrchestrator", "path": "cortex/orchestrators/health/health_orchestrator.py", "description": "All 22 orchestrator health endpoints — production readiness validation and H-series checks" },        { "id": "plan", "name": "PlanOrchestrator", "path": "cortex/orchestrators/support/plan_orchestrator.py", "description": "Plan execution coordinator — manages phase lifecycle from planned → in_progress → complete" },
+
+        { "id": "vacuum", "name": "VacuumOrchestrator", "path": "cortex/orchestrators/health/vacuum_orchestrator.py", "description": "Markdown sprawl + root clutter cleanup — dry-run gate, 30-day retention, CORE-002 enforcement" },        { "id": "unified-quality", "name": "UnifiedQualityAssuranceOrchestrator", "path": "cortex/orchestrators/support/unified_quality_orchestrator.py", "description": "Unified quality assurance — aggregates test, governance, and LENS quality signals" },
+
+        { "id": "upgrade", "name": "UpgradeOrchestrator", "path": "cortex/orchestrators/support/upgrade_orchestrator.py", "description": "Inflight upgrade — validate requirements, fetch origin/main, merge if ahead, run audit fix" },        { "id": "auto-healing", "name": "AutoHealingMCPOrchestrator", "path": "cortex/orchestrators/support/auto_healing_mcp_orchestrator.py", "description": "Auto-healing MCP — detects failing tools and applies remediation plans autonomously" }
+
+        { "id": "bulk-digest", "name": "BulkDigestOrchestrator", "path": "cortex/orchestrators/support/bulk_digest_orchestrator.py", "description": "Batch content ingestion — 3-pipeline processing (extract, transform, load) for large repositories" },      ]
+
+        { "id": "digest-session", "name": "DigestSessionOrchestrator", "path": "cortex/orchestrators/support/digest_session_orchestrator.py", "description": "Single-session content digestion with LENS analysis and knowledge persistence" },    }
+
+        { "id": "sweep-catalogue", "name": "SweepCatalogueOrchestrator", "path": "cortex/orchestrators/support/sweep_catalogue_orchestrator.py", "description": "CORE-064 sweep completeness — exhaustive issue cataloguing, no partial sweeps" },  }
+
+        { "id": "setup", "name": "SetupOrchestrator", "path": "cortex/orchestrators/support/setup_orchestrator.py", "description": "Environment setup — MCP configuration, VS Code settings, dependency validation" },}
+
         { "id": "onboarding", "name": "OnboardingOrchestrator", "path": "cortex/orchestrators/support/orchestrator.py", "description": "Repository onboarding — LENS analysis, security assessment (P0/P1/P2), SQLite dashboard generation" },
         { "id": "repo-onboarding", "name": "RepositoryOnboardingOrchestrator", "path": "cortex/orchestrators/support/repository_onboarding_orchestrator.py", "description": "Full repository onboarding with LENS V3 — LLM business language + phase 21 SQLite integration" },
         { "id": "debugger", "name": "DebuggerOrchestrator", "path": "cortex/orchestrators/support/debugger_orchestrator.py", "description": "Debug session management — log capture, governance violation detection, automated fix plans" },
         { "id": "cortex-docs", "name": "CortexDocsOrchestrator", "path": "cortex/orchestrators/support/cortex_docs_orchestrator.py", "description": "Documentation site orchestration — DOC-REFRESH-001 pipeline, JSON catalog generation, validation" },
         { "id": "plan", "name": "PlanOrchestrator", "path": "cortex/orchestrators/support/plan_orchestrator.py", "description": "Plan execution coordinator — manages phase lifecycle from planned → in_progress → complete" },
         { "id": "unified-quality", "name": "UnifiedQualityAssuranceOrchestrator", "path": "cortex/orchestrators/support/unified_quality_orchestrator.py", "description": "Unified quality assurance — aggregates test, governance, and LENS quality signals" },
-        { "id": "auto-healing", "name": "AutoHealingMCPOrchestrator", "path": "cortex/orchestrators/support/auto_healing_mcp_orchestrator.py", "description": "Auto-healing MCP — detects failing tools and applies remediation plans autonomously" }
+        { "id": "auto-healing", "name": "AutoHealingMCPOrchestrator", "path": "cortex/orchestrators/support/auto_healing_mcp_orchestrator.py", "description": "Auto-healing MCP — detects failing tools and applies remediation plans autonomously" },
+        { "id": "lens-visualization", "name": "LENSVisualizationOrchestrator", "path": "cortex/orchestrators/support/lens_visualization_orchestrator.py", "description": "LENS visualization — generates D3.js and Mermaid diagrams from analysis results" },
+        { "id": "vscode-configurator", "name": "VSCodeConfigurator", "path": "cortex/orchestrators/support/vscode_configurator.py", "description": "VS Code workspace configuration — tasks.json, settings.json, extensions recommendations" },
+        { "id": "dependency-resolver", "name": "DependencyResolver", "path": "cortex/orchestrators/domain/dependency_resolver.py", "description": "Dependency graph resolution — topological sort, circular dependency detection" },
+        { "id": "request-rephrase", "name": "RequestRephraseOrchestrator", "path": "cortex/orchestrators/support/request_rephrase_orchestrator.py", "description": "Token optimization — compresses user requests while preserving semantic intent" },
+        { "id": "trainer", "name": "TrainerOrchestrator", "path": "cortex/orchestrators/support/trainer_orchestrator.py", "description": "Gap-driven template evolution — analyzes repos, detects gaps, proposes prompt changes" },
+        { "id": "sync", "name": "SyncOrchestrator", "path": "cortex/orchestrators/support/sync_orchestrator.py", "description": "4-gate one-way sync: PULL→DIFF→SANITIZE→MERGE into company folder" },
+        { "id": "documentation", "name": "DocumentationOrchestrator", "path": "cortex/orchestrators/support/documentation_orchestrator.py", "description": "Documentation generation pipeline — markdown, diagrams, JSON catalogs" },
+        { "id": "unified-discovery", "name": "UnifiedDiscoveryOrchestrator", "path": "cortex/orchestrators/support/unified_discovery_orchestrator.py", "description": "Unified component discovery — orchestrators, MCP tools, governance rules" },
+        { "id": "rollback", "name": "RollbackOrchestrator", "path": "cortex/orchestrators/support/rollback_orchestrator.py", "description": "Safe rollback — reverts changes with audit trail and governance compliance" }
+      ]
+    },
+    "git": {
+      "label": "Git Orchestrators",
+      "description": "Version control — git operations, sanitization, pre-commit enforcement, publishing",
+      "count": 4,
+      "orchestrators": [
+        { "id": "git", "name": "GitOrchestrator", "path": "cortex/orchestrators/git/git_orchestrator.py", "description": "Git operations — branching, committing, merging, conflict resolution" },
+        { "id": "git-publish", "name": "GitPublishOrchestrator", "path": "cortex/orchestrators/git/git_publish_orchestrator.py", "description": "Git publish pipeline — enforce → sanitize → push with audit logging" },
+        { "id": "sanitization", "name": "SanitizationOrchestrator", "path": "cortex/orchestrators/git/sanitization_orchestrator.py", "description": "Content sanitization — PII removal, secret detection, company folder isolation" },
+        { "id": "pre-commit-enforcement", "name": "PreCommitEnforcementOrchestrator", "path": "cortex/orchestrators/git/git_enforcement_orchestrator.py", "description": "Pre-commit governance gate — validates all CORE rules before commit is allowed" }
       ]
     }
   }

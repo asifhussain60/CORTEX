@@ -1,10 +1,10 @@
 # MCP Tools Catalog
 
 ---
-title: MCP Tools Catalog — 37 Active Tools
+title: MCP Tools Catalog — 38 Active Tools
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-25
+last_verified: 2026-02-26
 source_of_truth: cortex/mcp/tools/ (return "cortex_*" in name properties)
 order: 3
 ---
@@ -15,9 +15,9 @@ order: 3
 
 ## Overview
 
-**37 active canonical MCP tools** organized across 12 categories (39 total — `cortex_process_request` and `cortex_validate_request` are deprecated). All tools are registered via `ConsolidatedTool` base class and exposed through JSON-RPC 2.0 stdio transport.
+**38 active canonical MCP tools** organized across 12 categories. All tools are registered via `ConsolidatedTool` base class and exposed through JSON-RPC 2.0 stdio transport (Pylance-style auto-start).
 
-**Entry point rule:** Use `cortex_request_lifecycle` for full lifecycle tracking or `cortex_classify` for intent routing. `cortex_process_request` is deprecated — do not use.
+**Entry point rule:** Use `cortex_request_lifecycle` for full lifecycle tracking or `cortex_classify` for intent routing.
 
 ---
 
@@ -28,13 +28,11 @@ order: 3
 | Tool | Description |
 |------|-------------|
 | `cortex_classify` | Intent classification — routes requests to correct orchestrator pipeline |
-| `cortex_orchestrator` | Direct orchestrator invocation — routes to any of the 27 wired orchestrators |
+| `cortex_orchestrator` | Direct orchestrator invocation — routes to any of the 51 wired orchestrators |
 | `cortex_request_lifecycle` | Full request lifecycle — classify → plan → execute → validate |
 | `cortex_ask` | Educational questions about CORTEX architecture with truth-based verification |
 | `cortex_total_recall` | Discover and recall CORTEX features, components, and architecture |
-| `cortex_tools_catalog` | Discover all 39 MCP tools with category and description |
-
-> ⚠️ `cortex_process_request` — **deprecated** (WAVE-100). Use `cortex_request_lifecycle` instead.
+| `cortex_tools_catalog` | Discover all 38 MCP tools with category and description |
 
 ### 2.2 Governance & Compliance — `cortex/mcp/tools/governance.py` + `toolkit/validate.py`
 
@@ -44,8 +42,6 @@ order: 3
 | `cortex_load` | Load CORE governance rules — skull-rules, core-rules, audit checklist, response format |
 | `cortex_validate` | CORE rule compliance validation — op: compliance \| governance \| rules |
 | `cortex_check` | Dependency drift detection — checks requirements.txt vs installed packages |
-
-> ⚠️ `cortex_validate_request` — **deprecated**. Use `cortex_validate` instead.
 
 ### 2.3 Intelligence & LENS — `cortex/mcp/tools/intelligence.py` + related
 
@@ -131,7 +127,7 @@ order: 3
 
 ## Practical Examples
 
-**Business Leader:** "37 active tools with clear entry points. Governance is enforced at the transport layer — developers cannot bypass CORE rules."
+**Business Leader:** "38 active tools with clear entry points. Governance is enforced at the transport layer — developers cannot bypass CORE rules."
 
 **Product Owner:** "`cortex_plan` generates remediation plans with 4 execution modes. `cortex_onboard` gives a complete repository assessment in one call. `cortex_sweep_status` tracks long-running refactor sweeps across sessions (CORE-064). `cortex_query_opj` surfaces patterns from operational history to inform planning."
 
@@ -139,4 +135,4 @@ order: 3
 
 ---
 
-*Verified against `cortex/mcp/tools/` live code · 25 February 2026 · 37 active canonical tools (39 total — 2 deprecated) · Phase 79-D complete*
+*Verified against `cortex/mcp/tools/` live code · 26 February 2026 · 38 active canonical MCP tools · Phase 82 complete*
