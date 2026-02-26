@@ -1,26 +1,25 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # C# Security Hardening Workflow
 # ══════════════════════════════════════════════════════════════════════════════
-# Purpose: P0 security fixes: SQL injection (SMELL-1 → parameterized queries),
-#          hardcoded secrets (SMELL-2 → environment variables), CORS (SMELL-13 → allowlist),
-#          stack trace exposure (SMELL-18 → ProblemDetails middleware).
-# Authority: CORE-035, ADR-009 (3-Layer Architecture)
-# Source: BadMonolith analysis — P0 security smells
-# Smells Addressed: SMELL-1, SMELL-2, SMELL-13, SMELL-18 (BadMonolith)
+# Purpose: P0 security fixes: SQL injection → parameterized queries,
+#          hardcoded secrets → environment variables, CORS wildcard → allowlist,
+#          stack trace exposure → ProblemDetails middleware.
+# Authority: CORE-035, CORE-067, ADR-009 (3-Layer Architecture)
+# Inspired by: training-corpus analysis (Phase 23)
 # ══════════════════════════════════════════════════════════════════════════════
 
 id: backend/csharp-security-workflow
 name: C# Security Hardening Workflow
 category: backend
-version: 1.0.0
+version: 1.1.0
 priority: P0  # Security fixes are always P0
 
 metadata:
   author: CORTEX
   created: '2026-02-22'
-  updated: '2026-02-22'
-  source: BadMonolith-analysis
-  smells_addressed: [SMELL-1, SMELL-2, SMELL-13, SMELL-18]
+  updated: '2026-02-26'
+  source: training-corpus
+  patterns_addressed: [sql-injection, hardcoded-secrets, cors-wildcard, stack-trace-exposure]
   technologies: [csharp, dotnet]
   rollback_on_failure: true
   vision_api_integration: false

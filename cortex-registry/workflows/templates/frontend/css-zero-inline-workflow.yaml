@@ -3,23 +3,22 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # Purpose: Enforce zero inline CSS rule. All styling must be in CSS files or
 #          <style> blocks — no style="" attributes allowed.
-# Authority: CORE-073 (CSS Zero Inline), ADR-009 (3-Layer Architecture)
-# Source: chat01.md continued digest (2026-02-22)
-# Smells Addressed: SMELL-21 (BadMonolith — inline styles)
+# Authority: CORE-073 (CSS Zero Inline), CORE-067, ADR-009 (3-Layer Architecture)
+# Inspired by: training-corpus digest (Phase 23)
 # ══════════════════════════════════════════════════════════════════════════════
 
 id: frontend/css-zero-inline-workflow
 name: CSS Zero Inline — Extract All Inline Styles
 category: frontend
-version: 1.0.0
+version: 1.1.0
 priority: P1
 
 metadata:
   author: CORTEX
   created: '2026-02-22'
-  updated: '2026-02-22'
-  source: chat01.md-continued-digest
-  smells_addressed: [SMELL-21]
+  updated: '2026-02-26'
+  source: training-corpus
+  patterns_addressed: [inline-styles]
   technologies: [html, css]
   rollback_on_failure: true
   vision_api_integration: true

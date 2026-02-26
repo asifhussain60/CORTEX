@@ -197,8 +197,8 @@ completion_checklist:
     - "✅ Edge cases: Boundary conditions"
     - "✅ Error paths: Failure scenarios"
     - "✅ Performance: No regressions"
-    - "✅ Test runner (CANONICAL): python3 scripts/run_tests.py [preflight|smoke|unit|integration|golden|healthcheck]"
-    - "✅ Test runner (CANONICAL): make test-smoke / make test-preflight (fast gates); make test-healthcheck (full suite — on demand only)"
+    - "✅ Test runner (CANONICAL): python3 scripts/run_tests.py [smoke|unit|integration|golden|batch|all]"
+    - "✅ Test runner (CANONICAL): make test-batch  (delegates to run_tests.py batch)"
     - "⛔ Test runner (FORBIDDEN): python3 -m pytest (direct invocation with -q/-x/-o addopts= overrides)"
     
   governance_checklist:

@@ -1,25 +1,24 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # C# SOLID Refactoring Workflow
 # ══════════════════════════════════════════════════════════════════════════════
-# Purpose: 5-stage pipeline for C# refactoring: God class decomposition (SMELL-3),
-#          DI wiring (SMELL-17), service extraction, circular dependency resolution (SMELL-5).
-# Authority: ADR-001 (Clean Architecture), ADR-009 (3-Layer Architecture)
-# Source: BadMonolith analysis + chat01.md digest
-# Smells Addressed: SMELL-3, SMELL-4, SMELL-5, SMELL-17 (BadMonolith)
+# Purpose: 5-stage pipeline for C# refactoring: God class decomposition,
+#          DI wiring, service extraction, circular dependency resolution.
+# Authority: ADR-001 (Clean Architecture), CORE-067, ADR-009 (3-Layer Architecture)
+# Inspired by: training-corpus analysis (Phase 23)
 # ══════════════════════════════════════════════════════════════════════════════
 
 id: backend/csharp-refactor-workflow
 name: C# SOLID Refactoring Workflow
 category: backend
-version: 1.0.0
+version: 1.1.0
 priority: P1
 
 metadata:
   author: CORTEX
   created: '2026-02-22'
-  updated: '2026-02-22'
-  source: BadMonolith-analysis
-  smells_addressed: [SMELL-3, SMELL-4, SMELL-5, SMELL-17]
+  updated: '2026-02-26'
+  source: training-corpus
+  patterns_addressed: [god-class, business-logic-in-controller, circular-dependency, no-dependency-injection]
   technologies: [csharp, dotnet]
   rollback_on_failure: true
   vision_api_integration: false

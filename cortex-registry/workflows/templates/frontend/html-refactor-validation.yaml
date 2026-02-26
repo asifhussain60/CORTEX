@@ -1,26 +1,25 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # HTML Refactoring with DOM Validation Gates
 # ══════════════════════════════════════════════════════════════════════════════
-# Purpose: Prevent duplicate sections (chat01.md root cause), validate DOM structure,
+# Purpose: Prevent duplicate sections, validate DOM structure,
 #          integrate Vision API for visual regression detection. BeautifulSoup4 + lxml
 #          for parsing, not string-based edits.
-# Authority: ADR-007, ADR-009 (3-Layer Architecture)
-# Source: chat01.md digest (2026-02-22)
-# Smells Addressed: SMELL-13, SMELL-18, SMELL-21 (BadMonolith)
+# Authority: ADR-007, CORE-067, ADR-009 (3-Layer Architecture)
+# Inspired by: training-corpus digest (Phase 23)
 # ══════════════════════════════════════════════════════════════════════════════
 
 id: frontend/html-refactor-validation
 name: HTML Refactoring with DOM Validation Gates
 category: frontend
-version: 1.0.0
+version: 1.1.0
 priority: P1
 
 metadata:
   author: CORTEX
   created: '2026-02-22'
-  updated: '2026-02-22'
-  source: chat01.md-digest
-  smells_addressed: [SMELL-13, SMELL-18, SMELL-21]
+  updated: '2026-02-26'
+  source: training-corpus
+  patterns_addressed: [cors-wildcard, stack-trace-exposure, god-component]
   technologies: [html, css]
   rollback_on_failure: true
   vision_api_integration: true

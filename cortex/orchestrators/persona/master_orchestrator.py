@@ -105,6 +105,13 @@ class MasterOrchestrator(OrchestratorProtocolMixin):
         if context is None:
             context = {}
 
+        # Phase 58 — cross-cutting hooks
+        self._activate_cross_cutting_hooks(
+            operation="process",
+            orchestrator_context=context.get("orchestrator_context"),
+            unified_context=context.get("unified_context"),
+        )
+
         # Step 1: Detect persona from message + context
         detected_persona, confidence = self.role_resolver.infer_role(
             message=message,

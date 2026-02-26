@@ -408,14 +408,31 @@ class CortexLens(ConsolidatedTool):
 
 class CortexKnowledge(ConsolidatedTool):
     """
-    Knowledge base operations.
+    Knowledge base operations via KnowledgeRegistryProxy.
+    
+    Phase 81-a: Wired to cortex.knowledge.registry_proxy.KnowledgeRegistryProxy
     
     Operations:
-    - search: Search knowledge base
+    - search: Search knowledge base by substring in key
     - domain: Get domain-specific knowledge
-    - best_practices: Get best practices for a topic
-    - gaps: Identify knowledge gaps
+    - best_practices: Get best practices for a topic (hybrid: static + proxy)
+    - gaps: Identify knowledge gaps via domain coverage analysis
     """
+    
+    def __init__(self) -> None:
+        """Initialize CortexKnowledge with KnowledgeRegistryProxy."""
+        super().__init__()
+        self._proxy: Optional[Any] = None
+        try:
+            from cortex.knowledge.registry_proxy import KnowledgeRegistryProxy
+            self._proxy = KnowledgeRegistryProxy()
+        except Exception as exc:  # noqa: BLE001
+            import logging
+            logging.getLogger(__name__).warning(
+                "KnowledgeRegistryProxy init failed; cortex_knowledge operating in degraded mode. "
+                "Reason: %s",
+                exc,
+            )
     
     @property
     def name(self) -> str:
@@ -426,8 +443,9 @@ class CortexKnowledge(ConsolidatedTool):
     def description(self) -> str:
         """Return the description."""
         return (
-            "Access CORTEX knowledge base. Search for domain knowledge, "
-            "best practices, and identify knowledge gaps."
+            "Access CORTEX knowledge base via KnowledgeRegistryProxy. "
+            "Search for domain knowledge, best practices, and identify knowledge gaps. "
+            "Wired to cortex-registry/knowledge/ and cortex-registry/knowledge-base/ (30 YAMLs, 11 domains)."
         )
     
     @property
@@ -472,7 +490,29 @@ class CortexKnowledge(ConsolidatedTool):
         return ["search", "domain", "best_practices", "gaps"]
     
     async def execute(self, **params) -> ToolResult:
-        """Execute knowledge operation."""
+        """Execute knowledge operation via KnowledgeRegistryProxy.
+        
+        Phase 81-a: All operations now delegate to real proxy instead of returning
+        hardcoded empty stubs. Supports 4 operations with full YAML registry access.
+        
+        Args:
+            operation (str): One of 'search', 'domain', 'best_practices', 'gaps'
+            query (str): Search query or topic/domain name
+            domain (Optional[str]): Filter results by domain (e.g., 'testing-validation')
+            limit (Optional[int]): Maximum results to return (default: 10)
+            orchestrator_context (Optional[Any]): MCP routing context (enforced if present)
+        
+        Returns:
+            ToolResult: Success result with formatted data, or error if proxy unavailable
+        
+        Raises:
+            Implicit: Exceptions are caught and returned as ToolResult.success=False
+        
+        Knowledge sources:
+            - cortex-registry/knowledge/ (11 domains, best practices guides)
+            - cortex-registry/knowledge-base/ (19 runtime knowledge files)
+            Total: 30 YAMLs across 11 domains (backend-python, security, governance, etc.)
+        """
         # ENFORCEMENT: Validate orchestrator routing
         _oc = params.get("orchestrator_context")
         if _oc is not None:
@@ -484,50 +524,113 @@ class CortexKnowledge(ConsolidatedTool):
         limit = params.get("limit", 10)
         
         if operation == "search":
+            # Phase 81-a: Wire to proxy.query(key_contains=query)
+            if not self._proxy:
+                return ToolResult(
+                    success=False,
+                    error="KnowledgeRegistryProxy not available"
+                )
+            
+            results = self._proxy.query(key_contains=query, domain=domain)
+            # Format results for MCP response
+            formatted_results = [
+                {
+                    "key": r.get("key"),
+                    "domain": r.get("domain"),
+                    "source": r.get("source"),
+                    "path": r.get("path"),
+                }
+                for r in results[:limit]
+            ]
+            
             return ToolResult(
                 success=True,
                 data={
                     "query": query,
-                    "results": [],
-                    "total": 0,
+                    "results": formatted_results,
+                    "total": len(formatted_results),
                     "domain_filter": domain,
                 },
                 metadata={"operation": "search"},
             )
         
         elif operation == "domain":
+            # Phase 81-a: Wire to proxy.query(domain=domain or query)
+            if not self._proxy:
+                return ToolResult(
+                    success=False,
+                    error="KnowledgeRegistryProxy not available"
+                )
+            
+            target_domain = domain or query
+            knowledge_items = self._proxy.query(domain=target_domain)
+            # Format results for MCP response
+            formatted_items = [
+                {
+                    "key": item.get("key"),
+                    "source": item.get("source"),
+                    "path": item.get("path"),
+                }
+                for item in knowledge_items[:limit]
+            ]
+            
             return ToolResult(
                 success=True,
                 data={
-                    "domain": domain or query,
-                    "knowledge_items": [],
-                    "coverage": 0.0,
+                    "domain": target_domain,
+                    "knowledge_items": formatted_items,
+                    "coverage": len(formatted_items) / max(len(self._proxy.all()), 1) if self._proxy else 0.0,
                 },
                 metadata={"operation": "domain"},
             )
         
         elif operation == "best_practices":
+            # Hybrid: Static content + proxy
+            results = []
+            if self._proxy:
+                results = self._proxy.query(key_contains=query)
+            
             return ToolResult(
                 success=True,
                 data={
                     "topic": query,
                     "practices": [
-                        {"name": "TDD", "description": "Test-Driven Development"},
-                        {"name": "SOLID", "description": "SOLID principles"},
-                        {"name": "12-Factor", "description": "12-Factor App methodology"},
+                        {"name": "TDD", "description": "Test-Driven Development", "source": "cortex"},
+                        {"name": "SOLID", "description": "SOLID principles", "source": "cortex"},
+                        {"name": "12-Factor", "description": "12-Factor App methodology", "source": "cortex"},
                     ],
-                    "source": "cortex/knowledge/best-practices/",
+                    "registry_hits": len(results),
+                    "source": "cortex/knowledge/best-practices/ + KnowledgeRegistryProxy",
                 },
                 metadata={"operation": "best_practices"},
             )
         
         elif operation == "gaps":
+            # Phase 81-a: Compute real coverage from proxy.domains()
+            if not self._proxy:
+                return ToolResult(
+                    success=False,
+                    error="KnowledgeRegistryProxy not available"
+                )
+            
+            # Expected domains for CORTEX (from analysis)
+            expected_domains = {
+                "backend-python", "security", "governance", "testing-validation",
+                "devops-infrastructure", "performance-optimization", "architecture",
+                "frontend-typescript", "api-design", "data-engineering", "cloud-platforms"
+            }
+            
+            actual_domains = set(self._proxy.domains())
+            coverage = len(actual_domains & expected_domains) / len(expected_domains)
+            
             return ToolResult(
                 success=True,
                 data={
                     "analyzed_scope": query,
-                    "gaps": [],
-                    "coverage_score": 0.85,
+                    "gaps": list(expected_domains - actual_domains),
+                    "coverage_score": coverage,
+                    "expected_domains": len(expected_domains),
+                    "actual_domains": len(actual_domains),
                 },
                 metadata={"operation": "gaps"},
             )

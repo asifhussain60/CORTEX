@@ -2,24 +2,22 @@
 # Cross-Language Dead Code Removal Workflow
 # ══════════════════════════════════════════════════════════════════════════════
 # Purpose: Detect and remove unused functions, classes, imports across C#, TypeScript, Python.
-#          SMELL-8 resolution: SendWelcomeEmail(), ExportUserData(), calculateCompoundInterest().
-# Authority: VacuumOrchestrator, ADR-009 (3-Layer Architecture)
-# Source: BadMonolith analysis
-# Smells Addressed: SMELL-8 (BadMonolith — dead code)
+# Authority: VacuumOrchestrator, CORE-067, ADR-009 (3-Layer Architecture)
+# Inspired by: training-corpus analysis (Phase 23)
 # ══════════════════════════════════════════════════════════════════════════════
 
 id: quality/dead-code-removal
 name: Cross-Language Dead Code Removal Workflow
 category: quality
-version: 1.0.0
+version: 1.1.0
 priority: P2
 
 metadata:
   author: CORTEX
   created: '2026-02-22'
-  updated: '2026-02-22'
-  source: BadMonolith-analysis
-  smells_addressed: [SMELL-8]
+  updated: '2026-02-26'
+  source: training-corpus
+  patterns_addressed: [dead-code]
   technologies: [csharp, typescript, python]
   rollback_on_failure: true
   vision_api_integration: false

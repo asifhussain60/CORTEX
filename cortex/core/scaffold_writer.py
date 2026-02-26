@@ -47,7 +47,7 @@ class ScaffoldWriter:
 
     Example::
 
-        writer = ScaffoldWriter(root=Path("_workspaces/sts/sample-apps/BadMonolith"))
+        writer = ScaffoldWriter(root=Path("path/to/target/project"))
         files  = writer.from_step_output(step_result)
         written = writer.emit(files)
         # → [Path(".../ITaskRepository.cs"), Path(".../TaskRepository.cs"), ...]

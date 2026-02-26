@@ -51,11 +51,11 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '23.1'
   last_updated: '2026-02-26T00:00:00Z'
-  total_phases: 80
+  total_phases: 81
   active: 0
   completed: 72
   in_progress: 0
-  planned: 3
+  planned: 4
   playbooks: 1
   governance_rules_total: 37
   test_baseline:
@@ -173,6 +173,17 @@ phase_detail_files:
     sub_phases: 3
     file: "cortex-registry/planning/phases/planned/phase-76-index-html-redesign.yaml"
     note: "Pure frontend — zero Python/orchestrator changes. Defer until phase-78 + phase-79 complete. WCAG 2.1 AA, Google Fonts (Inter/Space Grotesk/JetBrains Mono), zero inline styles."
+
+  # ── SLOT #5 — phase-81 (P1, after phase-80 consolidation) ────────────────
+  - id: phase-81
+    title: "Knowledge MCP Wiring + Golden Test Hardening"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-81-KNOWLEDGE-GOLDEN
+    gaps: 8
+    sub_phases: 3
+    file: "cortex-registry/_cortex-master/phases/planned/phase-81-knowledge-wiring-golden-hardening.yaml"
+    note: "Wire cortex_knowledge MCP stub to KnowledgeRegistryProxy (0 new files/deps). Delete CORE-035 stub duplicate. Ratchet golden AC threshold >50%. Reduce xfail 12→≤8. Add live_trace_db fixture. GoldenScenario factory for E2E scenario parametrize."
 
   # ── RECENTLY COMPLETED — phase-80-a ───────────────────────────────────────
   - id: phase-80-a
@@ -357,61 +368,10 @@ phase_detail_files:
     file: "cortex-registry/planning/phases/completed/phase-47-brain-tier-architecture-fix.yaml"
     note: "Tier precedence fixed: tier0 > tier1 > tier2. 45 tests."
 
-  - id: phase-46
-    title: "Registry & Intelligence Consolidation (Track B)"
-    priority: P1
+  - id: phases-39-46
+    title: "Phases 39–46 (Toolkit → Registry Consolidation)"
     status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-46-registry-intelligence-consolidation.yaml"
-    note: "38 phase YAMLs moved. _cortex-master wrapper eliminated."
-
-  - id: phase-45
-    title: "Workflow Runtime Foundation"
-    priority: P0
-    status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-45-workflow-runtime-foundation.yaml"
-    note: "WorkflowRuntime + ConvergenceLoopExecutor + EphemeralStorage. 71/73 tests."
-
-  - id: phase-44
-    title: "Conversational Intent Gateway"
-    priority: P0
-    status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-44-conversational-intent-gateway.yaml"
-    note: "50/50 tests passing."
-
-  - id: phase-43
-    title: "Convergence-Gated Workflow Template Library"
-    priority: P0
-    status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-43-workflow-template-library.yaml"
-    note: "102/102 tests passing. 8 stages."
-
-  - id: phase-42
-    title: "Vision API Enhancement + HTML Mapping + Internal Validation Workflow"
-    priority: P0
-    status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-42-vision-api-dogfooding-workflow.yaml"
-    note: "55/55 tests passing."
-
-  - id: phase-41
-    title: "CORTEX Intelligence Infrastructure Enhancement"
-    priority: P0
-    status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-41-cortex-intelligence-infrastructure.yaml"
-    note: "59/59 tests passing. 100% coverage."
-
-  - id: phase-40
-    title: "Health Agent Architecture"
-    priority: P0
-    status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-40-health-agent-architecture.yaml"
-    note: "43/43 unit tests. 9 agents, 2 hooks."
-
-  - id: phase-39
-    title: "Toolkit Centralization"
-    priority: P0
-    status: COMPLETE
-    file: "cortex-registry/planning/phases/completed/phase-39-toolkit-centralization.yaml"
-    note: "66/66 tests passing."
+    note: "All 8 phases COMPLETE. Detail in cortex-registry/planning/phases/completed/."
 
   - id: phases-01-38
     title: "Phases 01–38 (Sequential Foundation)"
@@ -462,7 +422,7 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "⚠️ 1 pending phase (76) | phase-77 P0 COMPLETE ✅ | phase-78 P0 COMPLETE ✅ | phase-79 P1 COMPLETE ✅ | phase-75 P1 COMPLETE ✅ | phase-80-a P0 COMPLETE ✅ | phase-76 P1 PLANNED (UI) | Smoke baseline: 1,211"
+  status: "⚠️ 2 pending phases (76, 81) | phase-77 P0 COMPLETE ✅ | phase-78 P0 COMPLETE ✅ | phase-79 P1 COMPLETE ✅ | phase-75 P1 COMPLETE ✅ | phase-80-a P0 COMPLETE ✅ | phase-76 P1 PLANNED (UI) | phase-81 P1 PLANNED (Knowledge+Golden) | Smoke baseline: 1,211"
   overall_score: 98%
   test_baseline: "1,211 smoke | 204 golden workflow | 177 workflow orchestrators | 1 golden intelligence"
   deployment_date: '2026-02-26'
@@ -473,11 +433,11 @@ verification:
   last_verified: '2026-02-25T00:00:00Z'
 
 summary:
-  total_phases: 80
+  total_phases: 81
   completed: 72
   active: 0
   in_progress: 0
-  planned: 3
+  planned: 4
   archived: 4
   playbooks: 1
   completion_percentage: 90
@@ -489,7 +449,9 @@ summary:
     "phase-75 (P1)": "COMPLETE ✅ — Capability Registry Builder, 5 GAPs CLOSED, 5 sub-phases, 31 tests"
     "phase-80-a (P0)": "COMPLETE ✅ — MasterOrchestrator Decomposition, 4 GAPs CLOSED, 5 sub-phases, 14 tests GREEN, 5222→2984L"
     "phase-76 (P1)": "PLANNED — index.html Redesign, 0 coded GAPs, defer last"
+    "phase-81 (P1)": "PLANNED — Knowledge MCP Wiring + Golden Test Hardening, 7 GAPs, 3 sub-phases"
   open_gaps:
-    count: 0
+    count: 8
     breakdown:
       phase_76: "0 coded GAPs — pure frontend, WCAG 2.1 AA scope"
+      phase_81: "8 GAPs — MCP stub wiring (4), golden test hardening (4)"

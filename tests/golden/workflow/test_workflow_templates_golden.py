@@ -299,27 +299,31 @@ class TestWorkflowTemplateConvergence:
             f"{template_path} must have 'convergence.success_criteria'"
 
 
-class TestBadMonolithSmellCoverage:
-    """Test: Templates cover all BadMonolith smells."""
+class TestGenericPatternCoverage:
+    """Test: Templates cover all generic anti-patterns (CORE-067 compliant).
     
-    # Map smells to templates
-    SMELL_TO_TEMPLATE = {
-        "SMELL-1": "backend/csharp-security-workflow.yaml",  # SQL injection
-        "SMELL-2": "backend/csharp-security-workflow.yaml",  # Hardcoded secrets
-        "SMELL-3": "backend/csharp-refactor-workflow.yaml",  # God class
-        "SMELL-4": "backend/csharp-refactor-workflow.yaml",  # Business logic in controller
-        "SMELL-5": "backend/csharp-refactor-workflow.yaml",  # Circular dependency
-        "SMELL-8": "quality/dead-code-removal.yaml",         # Dead code
-        "SMELL-10": "quality/duplicate-validation.yaml",     # Duplicate validation
-        "SMELL-12": "testing/test-quality-enforcement.yaml", # Assert.True(true)
-        "SMELL-13": "backend/csharp-security-workflow.yaml", # CORS wildcard
-        "SMELL-17": "backend/csharp-refactor-workflow.yaml", # No DI
-        "SMELL-18": "backend/csharp-security-workflow.yaml", # Stack trace exposure
-        "SMELL-21": "frontend/css-zero-inline-workflow.yaml",# Inline styles
-        "SMELL-22": "frontend/typescript-refactor-workflow.yaml", # any types
-        "SMELL-23": "frontend/typescript-refactor-workflow.yaml", # Business logic in UI
-        "SMELL-24": "frontend/typescript-refactor-workflow.yaml", # No service layer
-        "SMELL-25": "frontend/typescript-refactor-workflow.yaml", # No error handling
+    Validates that workflow templates declare generic pattern identifiers
+    (not app-specific smell IDs) in their metadata.patterns_addressed field.
+    """
+    
+    # Map generic patterns to templates
+    PATTERN_TO_TEMPLATE = {
+        "sql-injection": "backend/csharp-security-workflow.yaml",
+        "hardcoded-secrets": "backend/csharp-security-workflow.yaml",
+        "god-class": "backend/csharp-refactor-workflow.yaml",
+        "business-logic-in-controller": "backend/csharp-refactor-workflow.yaml",
+        "circular-dependency": "backend/csharp-refactor-workflow.yaml",
+        "dead-code": "quality/dead-code-removal.yaml",
+        "duplicate-logic": "quality/duplicate-validation.yaml",
+        "trivial-tests": "testing/test-quality-enforcement.yaml",
+        "cors-wildcard": "backend/csharp-security-workflow.yaml",
+        "no-dependency-injection": "backend/csharp-refactor-workflow.yaml",
+        "stack-trace-exposure": "backend/csharp-security-workflow.yaml",
+        "inline-styles": "frontend/css-zero-inline-workflow.yaml",
+        "any-type-abuse": "frontend/typescript-refactor-workflow.yaml",
+        "business-logic-in-ui": "frontend/typescript-refactor-workflow.yaml",
+        "no-service-layer": "frontend/typescript-refactor-workflow.yaml",
+        "no-error-handling": "frontend/typescript-refactor-workflow.yaml",
     }
     
     @pytest.fixture
@@ -331,24 +335,47 @@ class TestBadMonolithSmellCoverage:
                 return yaml.safe_load(f)
         return _load
     
-    def test_all_critical_smells_have_template(self) -> None:
-        """Test: All critical BadMonolith smells are covered by templates."""
-        for smell_id, template_path in self.SMELL_TO_TEMPLATE.items():
+    def test_all_critical_patterns_have_template(self) -> None:
+        """Test: All critical anti-patterns are covered by templates."""
+        for pattern_id, template_path in self.PATTERN_TO_TEMPLATE.items():
             full_path = TEMPLATES_ROOT / template_path
             assert full_path.exists(), \
-                f"{smell_id} requires template {template_path} which doesn't exist"
+                f"{pattern_id} requires template {template_path} which doesn't exist"
                 
-    @pytest.mark.parametrize("smell_id,template_path", list(SMELL_TO_TEMPLATE.items()))
-    def test_template_declares_smell(
-        self, smell_id: str, template_path: str, load_template: callable
+    @pytest.mark.parametrize("pattern_id,template_path", list(PATTERN_TO_TEMPLATE.items()))
+    def test_template_declares_pattern(
+        self, pattern_id: str, template_path: str, load_template: callable
     ) -> None:
-        """Test: Template metadata declares the smell it addresses."""
+        """Test: Template metadata declares the pattern it addresses (CORE-067)."""
         template = load_template(template_path)
         metadata = template.get("metadata", {})
-        smells_addressed = metadata.get("smells_addressed", [])
+        patterns_addressed = metadata.get("patterns_addressed", [])
         
-        assert smell_id in smells_addressed, \
-            f"Template {template_path} should declare {smell_id} in smells_addressed"
+        assert pattern_id in patterns_addressed, \
+            f"Template {template_path} should declare {pattern_id} in patterns_addressed"
+    
+    def test_no_app_specific_smell_ids_in_templates(self) -> None:
+        """Test: CORE-067 — no SMELL-* IDs in workflow template metadata."""
+        for template_path in PHASE_22_TEMPLATES:
+            full_path = TEMPLATES_ROOT / template_path
+            with open(full_path, 'r') as f:
+                template = yaml.safe_load(f)
+            metadata = template.get("metadata", {})
+            assert "smells_addressed" not in metadata, \
+                f"CORE-067 violation: {template_path} uses smells_addressed (use patterns_addressed)"
+    
+    def test_no_app_names_in_template_source(self) -> None:
+        """Test: CORE-067 — no app-specific names in metadata.source."""
+        forbidden_sources = ["BadMonolith", "FinTrack", "CortexLabs", "SampleLegacyApp"]
+        for template_path in PHASE_22_TEMPLATES:
+            full_path = TEMPLATES_ROOT / template_path
+            with open(full_path, 'r') as f:
+                template = yaml.safe_load(f)
+            metadata = template.get("metadata", {})
+            source = metadata.get("source", "")
+            for forbidden in forbidden_sources:
+                assert forbidden not in str(source), \
+                    f"CORE-067 violation: {template_path} source references '{forbidden}'"
 
 
 class TestADR009ThreeLayerArchitecture:

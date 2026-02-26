@@ -191,7 +191,7 @@ class CortexWorkflow(ConsolidatedTool):
             from cortex.orchestrators.workflow.autonomous_workflow_executor import (
                 AutonomousWorkflowExecutor,
             )
-            from cortex.intelligence.knowledge_synthesis_engine import (
+            from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
                 KnowledgeSynthesisEngine,
             )
             
@@ -450,7 +450,7 @@ class CortexWorkflow(ConsolidatedTool):
             from cortex.orchestrators.workflow.template_registry import (
                 WorkflowTemplateRegistry,
             )
-            from cortex.intelligence.knowledge_synthesis_engine import (
+            from cortex.intelligence.knowledge.knowledge_synthesis_engine import (
                 KnowledgeSynthesisEngine,
             )
             

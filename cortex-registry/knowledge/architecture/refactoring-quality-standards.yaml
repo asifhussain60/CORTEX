@@ -1,15 +1,15 @@
 # CORTEX Knowledge — Refactoring Quality Standards
-# Source: DIGEST of cortex-sts/CortexLabs/.analysis/01-review.md
+# Source: DIGEST of training-corpus refactoring audit
 # Digested: 2026-02-22 | Enhanced: Phase-79 SDLC Intelligence Engine
 # Pipeline: 1 (Chat Session — CORTEX self-analysis)
 # Authority: ENH-DIGEST-2026-02-22
 # Company Context: STS scoring model, payment security P0 gates, AC traceability
 
-title: "Refactoring Quality Standards — Lessons from BadMonolith Audit"
+title: "Refactoring Quality Standards — Lessons from Training Corpus Audit"
 category: "architecture"
 domain: "refactoring"
-updated: "2026-02-25"
-source_session: "cortex-sts/CortexLabs/Refactored"
+updated: "2026-02-26"
+source_session: "training-corpus/refactored"
 score: 82  # out of 100 — first STS refactoring pass
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -21,7 +21,7 @@ strengths:
       CORTEX correctly decomposed a 591-LOC God Class into 5 Clean Architecture
       projects (Api, Application, Domain, Infrastructure, Tests). The entry point
       shrank to ~55 LOC with no domain logic. All 25 code smells were catalogued
-      and addressed systematically via .cortex-manifest.yaml.
+      and addressed systematically via a manifest file.
     replicable_pattern: "catalogue smells first → address in priority order → verify each"
     key_artifacts:
       - ".cortex-manifest.yaml with 25 catalogued smells"
@@ -56,7 +56,7 @@ gaps:
   functional_regression:
     severity: P0
     description: >
-      The /api/accounts/transfer endpoint (present in BadMonolith, called from
+      The /api/accounts/transfer endpoint (present in the source monolith, called from
       transferMoney() in frontend) was silently dropped in the Refactored version.
       Admin stats endpoints (/api/admin/stats, DELETE /api/admin/users/{id}) were
       also dropped. Business capabilities must never regress during refactoring.
@@ -121,7 +121,7 @@ gaps:
       No CORTEX audit trail in .cortex-runtime SQLite for the refactoring session.
       orchestrator-traces.db had only TEST_ACTION entries from unit tests (Feb 20).
       intelligence_audit.db had 94 PARSE rows for server.py only.
-      The entire BadMonolith → Refactored transformation left no CORTEX trace.
+      The entire monolith → refactored transformation left no CORTEX trace.
     rule: "All REFACTOR operations must persist session record to orchestrator-traces.db"
     fix: >
       RefactoringOrchestrator must write AC_START / AC_COMPLETE entries with:

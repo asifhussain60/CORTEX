@@ -1,25 +1,24 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # Cross-Language Duplicate Validation Workflow
 # ══════════════════════════════════════════════════════════════════════════════
-# Purpose: Detect duplicate validation logic (SMELL-10: ValidateEmail exists in 3 places).
-#          Consolidate into single canonical implementation per CORE-035.
-# Authority: CORE-035 (Single Canonical Implementation), ADR-008, ADR-009
-# Source: BadMonolith analysis
-# Smells Addressed: SMELL-10 (BadMonolith — duplicate validation)
+# Purpose: Detect duplicate validation logic across files and consolidate
+#          into single canonical implementation per CORE-035.
+# Authority: CORE-035 (Single Canonical Implementation), CORE-067, ADR-008, ADR-009
+# Inspired by: training-corpus analysis (Phase 23)
 # ══════════════════════════════════════════════════════════════════════════════
 
 id: quality/duplicate-validation
 name: Cross-Language Duplicate Validation Workflow
 category: quality
-version: 1.0.0
+version: 1.1.0
 priority: P2
 
 metadata:
   author: CORTEX
   created: '2026-02-22'
-  updated: '2026-02-22'
-  source: BadMonolith-analysis
-  smells_addressed: [SMELL-10]
+  updated: '2026-02-26'
+  source: training-corpus
+  patterns_addressed: [duplicate-logic]
   technologies: [csharp, typescript, python]
   rollback_on_failure: true
   vision_api_integration: false

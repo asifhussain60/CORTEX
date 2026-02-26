@@ -21,9 +21,8 @@ workflow:
     created: "2026-02-20"
     reusable_for:
       - "Any layered legacy system (REST API + SPA frontend)"
-      - "_workspaces/sts/sample-apps/SampleLegacyApp"
-      - "_workspaces/sts/sample-apps/_Real/account-modernized"
-      - "_workspaces/sts/sample-apps/_Real/payment-processor-modernized"
+      - "Monolithic backends with 3+ domains in a single entry point"
+      - "Systems requiring strangler-fig incremental decomposition"
 
   # ── PARAMETERISED KNOWLEDGE CONTEXT ─────────────────────────────
   knowledge_context:

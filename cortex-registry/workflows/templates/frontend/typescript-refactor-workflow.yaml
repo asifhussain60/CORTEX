@@ -1,25 +1,24 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # TypeScript Strict Mode Refactoring Workflow
 # ══════════════════════════════════════════════════════════════════════════════
-# Purpose: Enable strict:true + noImplicitAny:true. Replace all 'any' types (SMELL-22),
-#          extract service layer (SMELL-24), add error handling (SMELL-25).
-# Authority: ADR-004 (TypeScript strict mode), ADR-009 (3-Layer Architecture)
-# Source: BadMonolith analysis
-# Smells Addressed: SMELL-22, SMELL-23, SMELL-24, SMELL-25 (BadMonolith)
+# Purpose: Enable strict:true + noImplicitAny:true. Replace all 'any' types,
+#          extract service layer, add error handling.
+# Authority: ADR-004 (TypeScript strict mode), CORE-067, ADR-009 (3-Layer Architecture)
+# Inspired by: training-corpus analysis (Phase 23)
 # ══════════════════════════════════════════════════════════════════════════════
 
 id: frontend/typescript-refactor-workflow
 name: TypeScript Strict Mode Refactoring Workflow
 category: frontend
-version: 1.0.0
+version: 1.1.0
 priority: P1
 
 metadata:
   author: CORTEX
   created: '2026-02-22'
-  updated: '2026-02-22'
-  source: BadMonolith-analysis
-  smells_addressed: [SMELL-22, SMELL-23, SMELL-24, SMELL-25]
+  updated: '2026-02-26'
+  source: training-corpus
+  patterns_addressed: [any-type-abuse, business-logic-in-ui, no-service-layer, no-error-handling]
   technologies: [typescript, javascript]
   rollback_on_failure: true
   vision_api_integration: false

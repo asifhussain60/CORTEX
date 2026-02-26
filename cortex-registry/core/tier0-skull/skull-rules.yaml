@@ -14,11 +14,11 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 35
+  rule_count: 36
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  last_update: "2026-02-22 - rule_count corrected to 35 active CORE rules (was stale at 56)"
-  version: "3.7"
+  last_update: "2026-02-26 - CORE-067 Template Genericness Contract added (rule_count 35→36)"
+  version: "3.8"
   consolidation_date: "2026-02-21"
   consolidation_status: "Phase 16 - CORE-064 Sweep Completeness Contract registered (partial sweep prevention)"
   naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"
@@ -2143,6 +2143,146 @@ rules:
       blocks_until: "copilot-chat-response-template.yaml wired into WorkflowEngine post-step hook"
       remediation_status: "🔵 PLANNED — Phase 64 implementation"
       AC_COMPLETE: "AC-P64-CORE066-001 (pending)"
+
+  # --------------------------------------------------------------------------
+  # CORE-067: Template & Knowledge Genericness Contract (2026-02-26)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-067
+    tier: 0
+    status: ACTIVE
+    phase: 81
+    created: "2026-02-26"
+    name: Template & Knowledge Genericness Contract
+    severity: P0
+    principle: "Patterns Are Universal, Examples Are Contextual"
+    category: architecture_integrity
+    summary: >
+      ALL workflow templates, knowledge entries, Python source, and agent
+      specifications MUST be app-agnostic. App-specific data (repo names,
+      smell IDs, file paths) belongs ONLY in cortex-sts/ and
+      cortex-registry/company/repos/. Generic artefacts must use universal
+      pattern identifiers, not app-specific taxonomy.
+
+    rationale: |
+      Phase 23 introduced 8 workflow templates with direct references to
+      "BadMonolith", app-specific smell IDs (SMELL-1..25), and hardcoded
+      sample-app paths. These references make templates structurally dependent
+      on one training corpus app instead of being universally reusable.
+      CORTEX templates must work for ANY codebase, not just the one that
+      inspired their creation. This is the difference between a framework
+      and a one-off script.
+
+    applies_to:
+      - "cortex-registry/workflows/templates/**/*.yaml — ALL workflow templates"
+      - "cortex-registry/knowledge/**/*.yaml — ALL knowledge entries"
+      - "cortex/**/*.py — ALL Python source code"
+      - ".github/agents/**/*.md — ALL agent specifications"
+      - ".github/prompts/**/*.md — ALL prompt specifications"
+
+    exempt:
+      - "cortex-sts/ — STS training corpus (app-specific data lives here)"
+      - "cortex-registry/company/repos/ — registered repo profiles (app-specific by design)"
+      - "cortex-registry/knowledge-base/repositories/ — repo-specific knowledge profiles"
+      - "cortex-registry/_cortex-master/playbooks/ — playbook instances tied to repos"
+      - "tests/ — test fixtures may reference sample apps for assertions"
+
+    forbidden_in_generic_artefacts:
+      data_fields:
+        - "source: BadMonolith-analysis (or any app name as data value)"
+        - "smells_addressed: [SMELL-1, ...] (app-specific smell taxonomy)"
+        - "Hardcoded sample-app paths in reusable_for or metadata"
+        - "App-specific repo names in workflow step descriptions"
+      comments:
+        - "App names in header comments are tolerated as provenance markers"
+        - "BUT should use: 'Inspired by: training-corpus analysis' not app name"
+
+    required_in_generic_artefacts:
+      pattern_identifiers:
+        - "sql-injection (not SMELL-1)"
+        - "hardcoded-secrets (not SMELL-2)"
+        - "god-class (not SMELL-3)"
+        - "circular-dependency (not SMELL-5)"
+        - "no-pagination (not SMELL-6)"
+        - "dead-code (not SMELL-8)"
+        - "duplicate-logic (not SMELL-10)"
+        - "trivial-tests (not SMELL-12)"
+        - "cors-wildcard (not SMELL-13)"
+        - "no-retry-pattern (not SMELL-14)"
+        - "magic-numbers (not SMELL-15)"
+        - "global-mutable-state (not SMELL-16)"
+        - "no-dependency-injection (not SMELL-17)"
+        - "stack-trace-exposure (not SMELL-18)"
+        - "missing-model-validation (not SMELL-19)"
+        - "missing-audit-fields (not SMELL-20)"
+        - "any-type-abuse (not SMELL-22)"
+        - "business-logic-in-ui (not SMELL-23)"
+        - "no-service-layer (not SMELL-24)"
+        - "no-error-handling (not SMELL-25)"
+      metadata_fields:
+        - "source: training-corpus (not app name)"
+        - "patterns_addressed: [sql-injection, ...] (generic IDs)"
+        - "reusable_for: description only, no hardcoded paths"
+
+    boundary_rule:
+      app_specific_data_lives_in:
+        - "cortex-sts/{vendor}/{app}/ — training corpus"
+        - "cortex-registry/company/repos/{name}/ — registered profiles"
+        - "cortex-registry/knowledge-base/repositories/{name}.yaml — repo knowledge"
+      generic_patterns_live_in:
+        - "cortex-registry/workflows/templates/ — reusable workflows"
+        - "cortex-registry/knowledge/ — domain knowledge"
+        - "cortex/ — Python source"
+        - ".github/agents/ — agent specs"
+
+    enforcement:
+      pre_commit:
+        description: "Scan protected paths for app-specific tokens"
+        check_command: |
+          grep -rn 'BadMonolith\|FinTrack\|CortexLabs\|SampleLegacyApp' \
+            cortex-registry/workflows/templates/ \
+            cortex-registry/knowledge/ \
+            cortex/ \
+            --include='*.yaml' --include='*.py' \
+            | grep -v '^.*:#'
+        expected_count: 0
+      validator: "cortex/governance/validators/template_genericness_validator.py"
+      severity_on_bypass: blocked
+      audit_event: "TEMPLATE_GENERICNESS_VALIDATED"
+
+    cleanup_protocol:
+      description: |
+        When CORE-067 is first registered, a one-time cleanup sweep MUST be
+        executed to remediate all pre-existing violations. This sweep:
+        1. Replaces source: {app-name}-analysis → source: training-corpus
+        2. Replaces smells_addressed: [SMELL-*] → patterns_addressed: [generic-id]
+        3. Replaces hardcoded sample-app paths → parameterised descriptions
+        4. Updates header comments to use generic provenance markers
+        5. Sanitises Python docstring examples to use generic paths
+      initial_violation_count: 38
+      initial_files_affected: 8
+      sweep_id: "SWEEP-81-CORE067-GENERICNESS"
+
+    tests:
+      golden_test_file: "tests/golden/governance/test_core_067_genericness_golden.py"
+      acceptance_criteria:
+        - id: "AC-067-A"
+          test_name: "test_no_app_names_in_workflow_templates"
+          assertion: "Zero matches for app-specific tokens in cortex-registry/workflows/templates/"
+        - id: "AC-067-B"
+          test_name: "test_no_smell_ids_in_workflow_templates"
+          assertion: "Zero SMELL-{N} references in workflow template data fields"
+        - id: "AC-067-C"
+          test_name: "test_no_app_names_in_python_source"
+          assertion: "Zero app-specific tokens in cortex/**/*.py (excluding test fixtures)"
+        - id: "AC-067-D"
+          test_name: "test_knowledge_entries_use_generic_ids"
+          assertion: "Knowledge YAML files use generic pattern IDs, not app-specific smell IDs"
+
+    governance_dependency:
+      requires: "CORE-035 (Single Canonical Implementation), CORE-005 (Path Portability)"
+      enables: "Universal template reusability across any training corpus"
+      blocks_until: "Initial cleanup sweep completed (SWEEP-81-CORE067-GENERICNESS)"
+      remediation_status: "🔵 CLEANUP IN PROGRESS — initial 38 violations being remediated"
 
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION

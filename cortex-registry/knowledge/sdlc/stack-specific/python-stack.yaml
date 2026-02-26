@@ -17,7 +17,7 @@ stack_overrides:
     coverage: "pytest-cov (--cov-report=term-missing)"
     async_support: "pytest-asyncio (mode=auto)"
     fixtures: "conftest.py — scoped fixtures (function/module/session)"
-    runner: "python3 scripts/run_tests.py [preflight|smoke|unit|healthcheck] (CORTEX canonical — healthcheck is on-demand only)"
+    runner: "make test-batch (CORTEX canonical) or python3 scripts/run_tests.py"
 
   linting_and_typing:
     formatter: "ruff (line-length=88, replaces black+isort+flake8)"

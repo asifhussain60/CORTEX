@@ -855,8 +855,8 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, 
         """Verify health endpoints perform a live dependency probe, not a hardcoded stub.
 
         Implements ENH-STS-07: health endpoints that always return ``{status:"healthy"}``
-        regardless of actual system state are functionally identical to the BadMonolith
-        original — they provide false confidence to orchestrators and load balancers.
+        regardless of actual system state are functionally identical to a stub health
+        endpoint — they provide false confidence to orchestrators and load balancers.
 
         A real health endpoint must:
         1. Attempt a database call (``SELECT 1``, ``OpenAsync``, ``ExecuteScalarAsync``).

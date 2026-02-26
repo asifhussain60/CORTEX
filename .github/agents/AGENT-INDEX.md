@@ -59,6 +59,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Agent | Purpose | Load When |
 |-------|---------|-----------|
+| **cortex-trainer.md** | Gap-driven template evolution — analyze repos, detect gaps, propose changes | `/train {path}`, "learn from {repo}" |
 | **cortex-sync-agent.md** | 4-gate one-way sync: PULL→DIFF→SANITIZE→MERGE into company folder | `/sync target=<path>` — cross-repo privacy-safe sync |
 | **cortex-sts-refactoring.md** | STS pipeline: 7-gate refactoring for external codebases | `cortex-sts/` REFACTOR sessions, BadMonolith-style analysis |
 | **cortex-digest.md** | Learning extraction from chat history | Processing chat files |
@@ -111,6 +112,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **DESIGN** | cortex.md + cortex-architect.md | ~6,000 |
 | **PLAN** | cortex-architect.md + cortex-phase-resolver.md | ~6,000 |
 | **DIGEST** | cortex-architect.md + cortex-digest.md | ~6,000 |
+| **TRAIN** | cortex-trainer.md + cortex-sts-refactoring.md | ~6,500 |
 | **REPHRASE** | request-rephrase-orchestrator.md | ~2,000 |
 | **SETUP** | cortex-environment-setup.md | ~2,000 |
 | **META-AUDIT** | cortex-meta-auditor.md + cortex-auditor.md | ~6,500 |

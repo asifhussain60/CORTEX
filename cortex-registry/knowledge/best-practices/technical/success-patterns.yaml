@@ -75,4 +75,4 @@ patterns:
 company_context:
   enforcement: "All patterns enforced via EnforcementOrchestrator pre-commit hook"
   governance: "CORE-064 Sweep Completeness Contract — no partial sweeps"
-  testing: "python3 scripts/run_tests.py [preflight|smoke|unit] canonical runner — never raw pytest with flag overrides; full suite via healthcheck on demand only"
+  testing: "make test-batch canonical runner — never raw pytest with flag overrides"

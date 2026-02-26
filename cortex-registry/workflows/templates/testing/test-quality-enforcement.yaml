@@ -1,25 +1,24 @@
 # ══════════════════════════════════════════════════════════════════════════════
 # Test Quality Enforcement Workflow
 # ══════════════════════════════════════════════════════════════════════════════
-# Purpose: Replace Assert.True(true) patterns (SMELL-12) with behavioral tests.
+# Purpose: Replace Assert.True(true) patterns with behavioral tests.
 #          Apply TestQualityGate scoring, delete tests scoring <4, flag 4-6 for review.
-# Authority: TestQualityGate, CORE-008 (TDD), ADR-009 (3-Layer Architecture)
-# Source: BadMonolith analysis — SomeTests.cs
-# Smells Addressed: SMELL-12 (BadMonolith — trivial tests)
+# Authority: TestQualityGate, CORE-008 (TDD), CORE-067, ADR-009 (3-Layer Architecture)
+# Inspired by: training-corpus analysis (Phase 23)
 # ══════════════════════════════════════════════════════════════════════════════
 
 id: testing/test-quality-enforcement
 name: Test Quality Enforcement Workflow
 category: testing
-version: 1.0.0
+version: 1.1.0
 priority: P1
 
 metadata:
   author: CORTEX
   created: '2026-02-22'
-  updated: '2026-02-22'
-  source: BadMonolith-analysis
-  smells_addressed: [SMELL-12]
+  updated: '2026-02-26'
+  source: training-corpus
+  patterns_addressed: [trivial-tests]
   technologies: [csharp, typescript, python]
   rollback_on_failure: true
   vision_api_integration: false
