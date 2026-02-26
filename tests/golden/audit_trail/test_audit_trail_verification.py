@@ -11,13 +11,16 @@ Validates end-to-end audit trail integrity:
 
 Authority: Phase 13 Sub-Phase C (AC-P13-003)
 TDD: CORE-008 — all tests written RED-first, then implementation.
+Phase 81-b: Updated stubs to use OrchestratorProtocolMixin (GAP-81-06)
 """
 
 import pytest
 import tempfile
 from pathlib import Path
+from typing import Any, Dict
 
 from cortex.core.orchestrator_base import OrchestratorBase, ExecutionResult, LifecycleStage
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.infrastructure.audit_db import CortexAuditDB, AuditEntry, EventType, get_audit_db
 from cortex.infrastructure.audit_verifier import AuditVerifier, AuditVerificationError
 
@@ -26,23 +29,58 @@ from cortex.infrastructure.audit_verifier import AuditVerifier, AuditVerificatio
 # Concrete orchestrator for testing
 # ---------------------------------------------------------------------------
 
-class _StubOrchestrator(OrchestratorBase):
-    """Minimal orchestrator used in audit trail tests."""
+class _StubOrchestrator(OrchestratorProtocolMixin):
+    """Minimal orchestrator used in audit trail tests.
+    
+    Phase 81-b: Updated to use OrchestratorProtocolMixin instead of
+    OrchestratorBase to enable audit trail emission (GAP-81-06).
+    """
+
+    _orch_name = "stub-orchestrator"
+    _orch_version = "1.0.0"
 
     def __init__(self, orchestrator_id: str = "stub-orchestrator") -> None:
-        super().__init__(orchestrator_id)
+        self._orch_name = orchestrator_id
+        self.orchestrator_id = orchestrator_id
 
-    def execute_operation(self):
-        return {"action": "stub_execute", "value": 42}
+    def execute(self) -> Dict[str, Any]:
+        """Execute stub operation for testing."""
+        return self.execute_operation(
+            operation_name="stub_execute",
+            parameters={}
+        )
+
+    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Override to provide stub execution logic."""
+        return {"action": "stub_execute", "value": 42, "status": "success"}
+
+    def run(self, parameters: Dict[str, Any] = None) -> Dict[str, Any]:
+        """Run method for compatibility with old tests."""
+        return self.execute_operation("run", parameters or {})
 
 
-class _FailingOrchestrator(OrchestratorBase):
-    """Orchestrator that raises during execute_operation."""
+class _FailingOrchestrator(OrchestratorProtocolMixin):
+    """Orchestrator that raises during execute_operation.
+    
+    Phase 81-b: Updated to use OrchestratorProtocolMixin (GAP-81-06).
+    """
+
+    _orch_name = "failing-orchestrator"
+    _orch_version = "1.0.0"
 
     def __init__(self, orchestrator_id: str = "failing-orchestrator") -> None:
-        super().__init__(orchestrator_id)
+        self._orch_name = orchestrator_id
+        self.orchestrator_id = orchestrator_id
 
-    def execute_operation(self):
+    def execute(self) -> Dict[str, Any]:
+        """Execute failing operation for testing."""
+        return self.execute_operation(
+            operation_name="fail",
+            parameters={}
+        )
+
+    def execute_operation(self, operation_name: str, parameters: Dict[str, Any]) -> Dict[str, Any]:
+        """Override to raise intentional test failure."""
         raise RuntimeError("Intentional test failure")
 
 

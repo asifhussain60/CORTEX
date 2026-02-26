@@ -120,3 +120,104 @@ def audit_log_entry(
 def audit_log_helper():
     """Provide audit log helper function to tests."""
     return audit_log_entry
+
+
+@pytest.fixture
+def live_trace_db() -> Path:
+    """
+    Provide path to live orchestrator-traces.db for golden tests.
+    
+    Phase 81-b: GAP-81-07
+    Allows golden tests to validate real orchestrator handoffs in production DB.
+    Falls back to session tmp DB if live DB doesn't exist (CI safety).
+    
+    Returns:
+        Path to .cortex-runtime/traces/orchestrator-traces.db or tmp DB
+    """
+    project_root = Path(__file__).parents[2]
+    live_db_path = project_root / ".cortex-runtime" / "traces" / "orchestrator-traces.db"
+    
+    if live_db_path.exists():
+        return live_db_path
+    
+    # Fallback: create tmp DB with minimal schema for CI environments
+    with tempfile.NamedTemporaryFile(suffix="-orchestrator-traces.db", delete=False) as f:
+        tmp_db_path = Path(f.name)
+    
+    conn = sqlite3.connect(tmp_db_path)
+    cursor = conn.cursor()
+    
+    # Minimal schema matching production DB
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS audit_sessions (
+            session_id TEXT PRIMARY KEY,
+            start_time TEXT,
+            end_time TEXT
+        )
+    """)
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS audit_stage_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            session_id TEXT,
+            stage_index INTEGER,
+            orchestrator_name TEXT,
+            status TEXT,
+            timestamp TEXT
+        )
+    """)
+    
+    conn.commit()
+    conn.close()
+    
+    return tmp_db_path
+
+
+def assert_handoff_recorded(
+    trace_db: Path,
+    from_orchestrator: str,
+    to_orchestrator: str,
+) -> None:
+    """
+    Assert that orchestrator handoff is recorded in trace DB.
+    
+    Phase 81-b: GAP-81-07 helper
+    
+    Args:
+        trace_db: Path to orchestrator-traces.db
+        from_orchestrator: Source orchestrator name
+        to_orchestrator: Target orchestrator name
+    
+    Raises:
+        AssertionError: If handoff not found in trace DB
+    """
+    if not trace_db.exists():
+        pytest.skip(f"Trace DB not found: {trace_db}")
+    
+    conn = sqlite3.connect(trace_db)
+    cursor = conn.cursor()
+    
+    # Check for sequential invocations in audit_stage_log
+    cursor.execute("""
+        SELECT orchestrator_name 
+        FROM audit_stage_log 
+        WHERE session_id = (SELECT MAX(session_id) FROM audit_sessions)
+        ORDER BY stage_index
+    """)
+    
+    orchestrator_chain = [row[0] for row in cursor.fetchall()]
+    conn.close()
+    
+    # Verify handoff exists
+    try:
+        from_idx = orchestrator_chain.index(from_orchestrator)
+        to_idx = orchestrator_chain.index(to_orchestrator)
+        assert to_idx > from_idx, (
+            f"Handoff order incorrect: {from_orchestrator} → {to_orchestrator}. "
+            f"Actual chain: {orchestrator_chain}"
+        )
+    except ValueError as e:
+        raise AssertionError(
+            f"Handoff {from_orchestrator} → {to_orchestrator} not recorded. "
+            f"Chain: {orchestrator_chain}"
+        ) from e

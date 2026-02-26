@@ -68,14 +68,16 @@ class TestWiredOrchestratorsHaveACStart:
                 continue  # File may not exist yet (planned orchestrators)
             if status["ac_start"] == 0:
                 missing_ac.append(rel_path)
-        # Soft assertion: at least 80% of existing wired orchestrators have AC_START
+        # Soft assertion: at least 95% of existing wired orchestrators have AC_START
+        # GAP-81-05: RATCHETED from 0.5 (50%) to 0.95 (95%) — Phase 81-b
+        # Current coverage: 5/5 orchestrators (100%)
         existing = [r for r in WIRED_ORCHESTRATOR_FILES if (ORCHESTRATORS_ROOT / r).exists()]
         if not existing:
             pytest.skip("No wired orchestrator files found")
         ratio = (len(existing) - len(missing_ac)) / len(existing)
-        assert ratio >= 0.5, (
+        assert ratio >= 0.95, (
             f"Only {len(existing) - len(missing_ac)}/{len(existing)} wired orchestrators "
-            f"have AC_START markers ({ratio:.0%} < 50% threshold). "
+            f"have AC_START markers ({ratio:.0%} < 95% threshold). "
             f"Missing: {missing_ac}"
         )
 
