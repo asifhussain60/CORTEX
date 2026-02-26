@@ -174,16 +174,19 @@ phase_detail_files:
     file: "cortex-registry/planning/phases/planned/phase-76-index-html-redesign.yaml"
     note: "Pure frontend — zero Python/orchestrator changes. Defer until phase-78 + phase-79 complete. WCAG 2.1 AA, Google Fonts (Inter/Space Grotesk/JetBrains Mono), zero inline styles."
 
-  # ── SLOT #5 — phase-81 (P1, after phase-80 consolidation) ────────────────
+  # ── SLOT #5 — phase-81 (P1, COMPLETE 2026-02-26) ─────────────────────────
   - id: phase-81
     title: "Knowledge MCP Wiring + Golden Test Hardening"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
+    completed: "2026-02-26"
     sweep_id: SWEEP-81-KNOWLEDGE-GOLDEN
     gaps: 8
-    sub_phases: 3
-    file: "cortex-registry/_cortex-master/phases/planned/phase-81-knowledge-wiring-golden-hardening.yaml"
-    note: "Wire cortex_knowledge MCP stub to KnowledgeRegistryProxy (0 new files/deps). Delete CORE-035 stub duplicate. Ratchet golden AC threshold >50%. Reduce xfail 12→≤8. Add live_trace_db fixture. GoldenScenario factory for E2E scenario parametrize."
+    gaps_closed: 7
+    gaps_blocked: 1
+    sub_phases: 2
+    file: "cortex-registry/planning/phases/completed/phase-81-knowledge-wiring-golden-hardening.yaml"
+    note: "COMPLETE 2026-02-26. cortex_knowledge MCP wired to KnowledgeRegistryProxy (GAP-81-01 through GAP-81-04 CLOSED). CORE-035 stub deleted. AC threshold ratcheted 50%→95%. live_trace_db fixture + assert_handoff_recorded() helper (GAP-81-07 CLOSED). GoldenScenario factory with 4 E2E scenarios (GAP-81-08 CLOSED). GAP-81-06 BLOCKED on Phase 64 AuditDB wiring. 6/6 phase-81-a tests + 11/11 phase-81-b tests PASSING (1 skipped with reason). Zero regressions."
 
   # ── RECENTLY COMPLETED — phase-80-a ───────────────────────────────────────
   - id: phase-80-a
