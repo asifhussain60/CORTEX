@@ -95,15 +95,8 @@ python3 scripts/run_tests.py healthcheck
 
 ## Completion Report Format
 
-```
-## ✅ Execution Complete
-
-**Task:** [description]
-**Phase:** RED → GREEN → REFACTOR
-**Tests:** X passed, 0 failed
-**Files changed:** [list]
-**CORE rules satisfied:** CORE-002, CORE-008, CORE-011, CORE-012
-```
+**Completion format:** Use `BLOCK-METRICS-DASHBOARD` from SSOT `.github/templates/cortex-response-templates.md` § Composable Content Blocks.
+Do not duplicate the completion report inline here. (CORE-035: single canonical implementation.)
 
 ---
 

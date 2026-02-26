@@ -173,22 +173,9 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight
 **SSOT:** `.github/templates/cortex-response-templates.md`
 
 ### User-Facing (5-Section Golden Format)
-```
-## {icon} CORTEX {mode}
-**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
 
----
-
-## 📋 Summary — {1-2 sentences, answer first}
-## 🔍 Analysis — {findings, trade-offs, tables}
-## 💡 Recommendation — {ONE primary, numbered steps}
-## ⚖️ Benefits & Risks — {comparison table, skip for simple requests}
-## 🎯 Next Steps — {immediate numbered + later bullets}
-
-### ⚡ If you type `proceed`, CORTEX will:
-- {Specific action — name exact file/function}
-- {Specific action — test written or command run}
-```
+**Format:** Use verbatim from SSOT `.github/templates/cortex-response-templates.md` § User Response Template — Golden Format.
+The canonical 5-section skeleton (Summary → Analysis → Recommendation → Benefits & Risks → Next Steps) is defined exclusively in the SSOT. Do not duplicate inline. (CORE-035: single canonical implementation.)
 
 ### Rules
 - ✅ ONE header per response, never repeated — `## {icon} CORTEX {mode}` then `**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅` then `---`

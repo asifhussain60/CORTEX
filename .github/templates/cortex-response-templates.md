@@ -10,7 +10,7 @@
 
 > **CRITICAL:** GitHub Copilot Chat renders Markdown differently from standard Markdown previewers. Every template in this document is designed for correct rendering in VS Code's Copilot Chat panel. Violating these rules produces broken, unreadable output.
 
-### Mandatory Rendering Rules
+### Mandatory Rendering Rules (14 rules)
 
 | # | Rule | Why | Violation Consequence |
 |---|------|-----|----------------------|
@@ -22,6 +22,14 @@
 | 6 | **Never use trailing-space line breaks** | Copilot Chat ignores trailing spaces | Lines merge together unexpectedly |
 | 7 | **1 blank line between paragraphs** | Required for Markdown paragraph separation | Single newlines are treated as soft wraps (content merges) |
 | 8 | **Use `<details>` for collapsible content** | Keeps responses scannable | Long responses cause scroll fatigue |
+| R1 | **Blank line required after every heading** | Copilot Chat Whitespace Normalizer strips the gap if omitted, causing the heading to merge into the following paragraph | First line of paragraph visually runs into the heading |
+| R2 | **Blank line before and after every list** | Normalizer collapses list items into the surrounding prose without surrounding blank lines | Bullet items lose their list rendering and appear as inline text |
+| R3 | **Table requires: blank line before + header row + separator row** | Missing blank line before table causes the renderer to treat the table as a code block; missing separator makes the header row a plain paragraph | Table not rendered as table; appears as raw pipe-delimited text |
+| R4 | **Omit empty headers** — never emit an H2/H3 if the section below it has no content | Empty headers create phantom whitespace and confuse screen readers; the Whitespace Normalizer flags these as violations | Blank section gap in rendered output; P1 lint flag |
+| R5 | **No hard-wrap within paragraphs** — do not insert `\n` inside prose | Copilot Chat renderer treats each hard-wrapped line as a new paragraph, producing unwanted blank lines between sentences | Mid-paragraph blank lines disrupt reading flow |
+| R6 | **One H2 maximum per response as top-level title** — additional sections use H3 or below | Each H2 is treated as a document root by the Copilot Chat renderer; multiple H2s create visual hierarchy confusion | Response appears as multiple disconnected documents |
+
+> **Table Safety Switch:** If any table cell would exceed **80 characters**, downgrade the table to a Markdown bullet list. If the bullet list items would exceed **120 characters**, wrap the entire section in a `<details>` block with a concise `<summary>` label. Never let table content overflow — it truncates silently in the Copilot Chat panel.
 
 ### Reliable Rendering Elements
 
@@ -68,7 +76,7 @@ This document contains ALL response formatting standards in one place:
 | § Personality Guidelines | Tone, voice, interaction style | Every response |
 | § Response Templates by Mode | Intent-based template selection | Routing decisions |
 | § Anti-Patterns | What to NEVER do | Code review, self-audit |
-| § Quality Checklist | Pre-send validation | Before every response |
+| § Quality Checklist | Pre-send validation (25 items) | Before every response |
 
 ---
 
@@ -397,7 +405,7 @@ Reusable content sections that compose into situation-specific responses without
 
 **Principle:** Like LEGO blocks — each block has ONE job, blocks assemble without overlap.
 
-### Block Library (7 Core Blocks)
+### Block Library (16 Composable Blocks)
 
 | Block ID | Purpose | Length | When to Use |
 |----------|---------|--------|-------------|
@@ -408,6 +416,15 @@ Reusable content sections that compose into situation-specific responses without
 | **BLOCK-TUTORIAL** | 5-minute quick start | 100 words | "How do I start?" |
 | **BLOCK-ONBOARDING** | First-time setup (MCP + git hooks) | 150 words | New repository, setup issues |
 | **BLOCK-NEXT-STEPS** | Context-aware suggestions | 80 words | End of any educational response |
+| **BLOCK-SESSION-IDENTITY** | Session header (first turn only) | once/session | First response in session |
+| **BLOCK-MICRO-ACK** | Trivial confirmation | single line | Sub-10-word confirmations |
+| **BLOCK-DIFF-PREVIEW** | Before/after file changes | compact | Post-implementation |
+| **BLOCK-RESUME-BANNER** | Sweep resume orientation | compact | Resume paused sweep |
+| **BLOCK-ERROR-RECOVERY** | Structured error display | short | FIX/DEBUG error states |
+| **BLOCK-METRICS-DASHBOARD** | Test/coverage/timing metrics | single line or table | Completion responses |
+| **BLOCK-HANDOFF** | Orchestrator routing chain | inline | Complex routing (2+ hops) |
+| **BLOCK-EXECUTION-SPEC** | Machine-readable step spec | table | Before executor model run |
+| **BLOCK-DEVIATION-ALERT** | Unexpected divergence HALT | compact | Executor deviation detected |
 
 ### Assembly Rules
 
@@ -471,6 +488,18 @@ Result: Zero duplication, 350 words
 | TUTORIAL | INTRO, ONBOARDING | LENS, ORCHESTRATORS |
 | ONBOARDING | TUTORIAL | LENS, ORCHESTRATORS |
 | NEXT-STEPS | All blocks | - |
+
+### Standardized Assembly Order ("Beautiful in Copilot Chat")
+
+Canonical block emission sequence for composable blocks:
+
+```
+BLOCK-SESSION-IDENTITY → BLOCK-MICRO-ACK → BLOCK-HANDOFF → BLOCK-ERROR-RECOVERY
+→ BLOCK-DIFF-PREVIEW → BLOCK-METRICS-DASHBOARD → BLOCK-NEXT-STEPS → BLOCK-RESUME-BANNER
+```
+
+**Rule:** Emit only the blocks that apply — omit inapplicable blocks entirely (R4: no empty headers).
+This sequence ensures signal-heavy content (errors, routing) appears early; summary content appears last.
 
 ### When NOT to Use Blocks
 
@@ -764,6 +793,158 @@ Based on what we've covered:
 
 I'm here to make you successful. Let's build something great. 🚀
 ```
+
+---
+
+### BLOCK-SESSION-IDENTITY: Session Header (Once Per Session Only)
+
+**Trigger:** FIRST response in session only — never on subsequent turns. Once per session.
+
+**Rule (R6 exception):** BLOCK-SESSION-IDENTITY is the ONLY block allowed to use H2. All subsequent blocks use H3 or bold labels.
+
+**Format (stable H2 emoji anchor pattern for Copilot Chat):**
+
+```markdown
+## 🧠 CORTEX — Cognitive Real-Time Execution System
+**Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅ | **Session:** {session_id}
+**Framework:** 27 orchestrators · 26 MCP tools · 35 CORE rules · 1 package
+
+---
+```
+
+**Note:** Render ONCE per session — omit on all subsequent turns in the same session.
+
+---
+
+### BLOCK-MICRO-ACK: Trivial Confirmation (No ## header)
+
+**Trigger:** Sub-10-word confirmations only ("Done", "Fixed", "Committed"). Standalone — replaces all other blocks for trivial acks.
+
+**Format:** `✅ Done — {action} complete. {optional metric}`
+
+**No ## header** — single line only, plain text or bold label. No section heading.
+
+---
+
+### BLOCK-DIFF-PREVIEW: Before/After File Changes
+
+**Trigger:** Post-implementation responses showing file changes.
+
+**Format (table for ≤5 files with short paths):**
+
+```markdown
+| File | Before | After |
+|------|--------|-------|
+| {path} | {summary} | {summary} |
+```
+
+**Collapse rule (<details> for >5 files or when any cell >80 chars — Table Safety Switch):**
+
+```markdown
+<details>
+<summary>📋 {N} files changed — click to expand</summary>
+
+{file list with before/after summaries}
+
+</details>
+```
+
+---
+
+### BLOCK-RESUME-BANNER: Sweep Resume Orientation
+
+**Trigger:** User resumes a paused sweep in a new session.
+
+**Fields:** sweep_id, last_completed step, remaining count, open_items (P0/P1/P2 counts)
+
+**Format:**
+
+```markdown
+### ▶️ Resuming Sweep — {sweep_id}
+**Last completed:** {last_completed}
+**Remaining:** {remaining} items ({P0} P0 / {P1} P1 / {P2} P2 open)
+**Resume command:** `resume sweep {sweep_id}`
+```
+
+---
+
+### BLOCK-ERROR-RECOVERY: Structured Error Display
+
+**Trigger:** FIX/DEBUG modes — blocked gates, failed tests, P0 violations (known error states).
+
+**Rule (R6):** Render as H3 `### 🔴 Error: {category}` — NOT H2. Place near top of response (high-signal).
+
+**Bold-label pattern (not nested lists — avoids deep nesting reflow R5):**
+
+```markdown
+### 🔴 Error: {category}
+**What happened:** {description}
+**Impact:** {scope}
+**Recovery:** {numbered steps}
+```
+
+**Severity icons:** 🔴 P0 (CRITICAL), 🟡 P1 (HIGH), 🔵 P2 (MEDIUM)
+
+---
+
+### BLOCK-METRICS-DASHBOARD: Test/Coverage/Timing Summary
+
+**Trigger:** IMPLEMENT/FIX/REFACTOR completion responses.
+
+**Single-line format (≤4 metrics):** `Tests: {N}/{T} ✅ | Coverage: {pct}% | Duration: {t}s | Commits: {n}`
+
+**Table format (>4 metrics):** compact table with Renderer Safety Switch guard (no cell >80 chars).
+
+**Rule (R6):** Use H3 or bold label — not H2.
+
+---
+
+### BLOCK-HANDOFF: Orchestrator Routing Chain
+
+**Trigger:** Complex requests routed through 2+ orchestrators (AUDIT, complex IMPLEMENT).
+
+**Format (compact, inline near top):** `**Route:** IntentRouter → {Orchestrator} → {Sub-orchestrator}`
+
+**Placement:** Inline with response header or near top — NOT a standalone section.
+
+---
+
+### BLOCK-EXECUTION-SPEC: Machine-Readable Step Specification
+
+**Trigger:** Before cheaper executor model begins execution (model-tiering workflow). Renders after BLOCK-INTENT-REFLECTION and before first implementation step.
+
+**Format (step table — machine-parseable for executor models):**
+
+```markdown
+| Step # | Action | Target Files | Command | Validation |
+|--------|--------|-------------|---------|-----------|
+| 1 | {action_type} | {file_paths} | {command} | {assertion} |
+```
+
+**Approval gate:** User must type `proceed` to approve spec before execution begins.
+
+**Distinct from:** BLOCK-DEVIATION-ALERT (unexpected divergence) vs this block (planned spec pre-execution).
+
+---
+
+### BLOCK-DEVIATION-ALERT: Unexpected Executor Divergence — HALT
+
+**Trigger:** Executor detects unexpected divergence from execution spec (more files changed, unexpected test failure, env mismatch, output mismatch).
+
+**Rule:** Executor must HALT before emitting this block. Forces explicit stop and escalation.
+
+**Format (bold-label pattern — not nested lists):**
+
+```markdown
+### ⚠️ Deviation Detected — Escalating to Architect
+**Step:** {step_id}
+**Expected:** {expected_output}
+**Actual:** {actual_output}
+**Divergence type:** {more_files | test_unexpected | env_mismatch | output_mismatch}
+**Action required:** Human review or x3 re-plan before continuing
+```
+
+**Distinct from BLOCK-ERROR-RECOVERY:** This block covers unexpected divergence from the execution spec; BLOCK-ERROR-RECOVERY covers known error states (blocked gates, expected test failures).
 
 ---
 
@@ -1664,6 +1845,9 @@ Before sending any response, verify:
 - [ ] Teaching value visible (explain *why*, not just *what*)
 - [ ] Works in VS Code Copilot Chat (no rendering issues)
 - [ ] No duplication across blocks or sections
+- [ ] **Whitespace normalizer compliant** — blank line after every heading, blank lines around all lists and tables, no hard-wrap within paragraphs, no empty headers (R1-R5)
+- [ ] **No empty headers emitted** — every H2/H3 has content below it; omit the heading if its section is empty (R4)
+- [ ] **No table cell exceeds 80 chars** — if any cell would overflow, downgrade to bullet list; if list items >120 chars, wrap in `<details>` (Table Safety Switch)
 
 ---
 

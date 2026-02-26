@@ -199,6 +199,34 @@ workflow:
         If a session ends while sweep_catalogue.open_items_count > 0, this banner
         MUST be the last rendered output. Missing banner = CORE-066 P1 violation.
 
+    resume_banner:
+      trigger: "Looped refactoring continuity — user resumes paused sweep in new session"
+      format: |
+        ### ▶️ Resuming Sweep — {sweep_id}
+        **Last completed:** {step_name} ({step_index}/{total_steps})
+        **Remaining:** {remaining_files_count} files | {open_items_count} open items ({P0}/{P1}/{P2})
+        **Resume command:** `resume sweep {sweep_id}`
+      pairs_with: "session_pause_banner"
+      enforcement: |
+        First output in a resumed session when sweep_catalogue.open_items_count > 0.
+        Missing resume_banner on re-entry = CORE-066 P1 violation.
+
+    diff_preview:
+      trigger: "Post-implementation response — show inline before/after file changes"
+      format_small: |
+        | File | Before | After |
+        |------|--------|-------|
+        | {path} | {before_summary} | {after_summary} |
+      format_large: |
+        <details>
+        <summary>📋 {N} files changed — click to expand</summary>
+
+        {file_list_with_summaries}
+
+        </details>
+      threshold: "table for ≤5 files with short paths; <details> for >5 files or any cell >80 chars"
+      ssot_block: "BLOCK-DIFF-PREVIEW"
+
     golden_test_intent:
       trigger: "GOLDEN_TEST intent — review, create, enhance, consolidate, delete of golden tests, workflow templates, response templates"
       header: "## 🧪 GOLDEN TEST OPERATION"
@@ -246,6 +274,33 @@ workflow:
     resume_trigger: "resume sweep {sweep_id}"
 
   # ---------------------------------------------------------------------------
+  # WHITESPACE NORMALIZER (GAP-82-08)
+  # ---------------------------------------------------------------------------
+  whitespace_normalizer:
+    description: "Post-render normalization step enforcing blank-line rules (GAP-82-08)"
+    runs: "post_render — after all sections assembled, before final output to Copilot Chat"
+    rules:
+      blank_after_heading: "Insert blank line after every ## or ### heading (R1)"
+      blank_around_list: "Insert blank line before first list item and after last (R2)"
+      blank_around_table: "Insert blank line before and after every markdown table (R3)"
+      blank_around_details: "Insert blank line before and after every <details> block"
+      strip_trailing_spaces: "Remove trailing whitespace from all lines"
+    idempotent: true
+    idempotency_note: "Running twice produces identical output — no double blank lines inserted"
+
+  # ---------------------------------------------------------------------------
+  # RENDERER SAFETY SWITCH (GAP-82-09)
+  # ---------------------------------------------------------------------------
+  renderer_safety_switch:
+    description: "Auto-downgrade mechanism for tables with long cells (GAP-82-09)"
+    table_cell_max_chars: 80
+    downgrade_large_threshold: 120
+    configurable: true
+    downgrade_target:
+      ">80": "bulleted list"
+      ">120": "details block with code fence"
+
+  # ---------------------------------------------------------------------------
   # VALIDATION (CORE-066 enforcement)
   # ---------------------------------------------------------------------------
   validation:
@@ -259,6 +314,9 @@ workflow:
       - "No fenced code blocks in progress_bar"
       - "No .md/.txt files created (CORE-002)"
       - "session_pause_banner present if sweep.open_items_count > 0 at session end"
+      - "Whitespace normalizer passed (R1: blank after headings, R2: blank around lists, R3: blank around tables)"
+      - "No table cell exceeds 80 chars (or auto-downgraded by renderer_safety_switch)"
+      - "No empty headers emitted (R4: omit headings with no content below)"
     violation_actions:
       P0: "Block AC_COMPLETE — raw output is a compliance violation"
       P1: "Warn inline — missing optional section"

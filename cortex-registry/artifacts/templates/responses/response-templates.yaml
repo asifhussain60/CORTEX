@@ -222,6 +222,87 @@ templates:
       - "Include totals at bottom"
       - "Omit sections 3-5 for conciseness"
 
+  # --------------------------------------------------------------------------
+  # PHASE 82 LEGO EXPANSION BLOCKS (GAP-82-01 through GAP-82-14)
+  # --------------------------------------------------------------------------
+
+  session_identity:
+    intent: ["IMPLEMENT", "FIX", "REFACTOR", "AUDIT", "DESIGN", "PLAN", "QUERY"]
+    trigger: "FIRST response in session only — never on subsequent turns"
+    format: "H2 🧠 CORTEX + author + framework stats + --- separator"
+    required_fields: ["orchestrator_name", "session_id"]
+    rule: "Render ONCE per session — never on subsequent turns"
+    ssot_block: "BLOCK-SESSION-IDENTITY"
+
+  micro_ack:
+    intent: ["IMPLEMENT", "FIX", "REFACTOR"]
+    trigger: "Sub-10-word confirmations (Done, Fixed, Committed)"
+    format: "✅ Done — {action} complete. {optional_metric}"
+    required_fields: ["action"]
+    rule: "Standalone — no ## header, replaces all other blocks for trivial acks"
+    ssot_block: "BLOCK-MICRO-ACK"
+
+  diff_preview:
+    intent: ["IMPLEMENT", "FIX", "REFACTOR"]
+    trigger: "Post-implementation — show changed files inline"
+    format: "table (≤5 files, short paths) or <details> collapse (>5 files or >80 char cells)"
+    required_fields: ["changed_files"]
+    collapse_threshold: 5
+    ssot_block: "BLOCK-DIFF-PREVIEW"
+
+  resume_banner:
+    intent: ["IMPLEMENT", "FIX", "REFACTOR"]
+    trigger: "User resumes paused sweep in new session"
+    format: "H3 ▶️ Resuming Sweep + sweep_id + last_completed + remaining + P0/P1/P2 counts"
+    required_fields: ["sweep_id", "last_completed", "remaining", "open_items"]
+    ssot_block: "BLOCK-RESUME-BANNER"
+
+  error_recovery:
+    intent: ["FIX", "DEBUG", "IMPLEMENT"]
+    trigger: "Known error states: blocked gates, failed tests, P0 violations"
+    format: "H3 🔴 Error: {category} + bold-label fields (What happened / Impact / Recovery)"
+    required_fields: ["category", "what_happened", "impact", "recovery_steps"]
+    severity_icons:
+      P0: "🔴"
+      P1: "🟡"
+      P2: "🔵"
+    placement: "near top of response (high-signal)"
+    ssot_block: "BLOCK-ERROR-RECOVERY"
+
+  metrics_dashboard:
+    intent: ["IMPLEMENT", "FIX", "REFACTOR"]
+    trigger: "Completion responses with test/coverage/timing data"
+    format_small: "✅ Tests: {passed}/{total} | Coverage: {pct}% | Duration: {t}s | Commits: {n}"
+    format_large: "compact table (>4 metrics) with safety switch guard"
+    threshold: 4
+    ssot_block: "BLOCK-METRICS-DASHBOARD"
+
+  handoff:
+    intent: ["AUDIT", "IMPLEMENT", "FIX", "REFACTOR"]
+    trigger: "Complex requests routed through 2+ orchestrators"
+    format: "**Route:** IntentRouter → {orchestrator} → {sub_orchestrator}"
+    required_fields: ["routing_chain"]
+    placement: "inline near top — not standalone section"
+    ssot_block: "BLOCK-HANDOFF"
+
+  execution_spec:
+    intent: ["IMPLEMENT", "FIX", "REFACTOR"]
+    trigger: "Before cheaper executor model begins execution (model-tiering workflow)"
+    format: "table: Step | Action | Target Files | Command | Validation"
+    required_fields: ["steps"]
+    approval_gate: "proceed"
+    placement: "after BLOCK-INTENT-REFLECTION, before first implementation step"
+    ssot_block: "BLOCK-EXECUTION-SPEC"
+
+  deviation_alert:
+    intent: ["IMPLEMENT", "FIX", "REFACTOR"]
+    trigger: "Executor detects unexpected divergence from execution spec"
+    format: "H3 ⚠️ Deviation Detected + bold-label fields (Step/Expected/Actual/Divergence type/Action)"
+    required_fields: ["step_id", "expected", "actual", "divergence_type"]
+    behavior: "HALT — executor must stop before emitting this block"
+    distinct_from: "BLOCK-ERROR-RECOVERY (known errors vs unexpected divergence)"
+    ssot_block: "BLOCK-DEVIATION-ALERT"
+
 # ============================================================================
 # RENDERING RULES (VS Code Copilot Chat Compatibility)
 # ============================================================================
@@ -257,6 +338,35 @@ rendering_rules:
     critical: "🔴"
     warning: "🟡"
     info: "ℹ️"
+
+  formatting_rules:
+    r1_blank_after_heading: "Always insert blank line after any ## or ### heading"
+    r2_blank_around_lists: "Always insert blank line before first list item and after last list item"
+    r3_table_requirements: "Blank line before table; header row present; separator row present; no multi-paragraph cells"
+    r4_omit_empty_headers: "Never emit H2/H3 with no content below it — omit heading entirely"
+    r5_no_hard_wrap: "Never insert hard newline (\\n) inside prose paragraphs"
+    r6_one_h2_max: "One H2 maximum per response (BLOCK-SESSION-IDENTITY exception only)"
+
+  whitespace_normalizer:
+    description: "Post-processing step — runs after all blocks assembled, before final output"
+    rules:
+      - "Insert blank line after every ## or ### heading (R1)"
+      - "Insert blank line before first list item and after last list item (R2)"
+      - "Insert blank line before and after every table (R3)"
+      - "Insert blank line before and after every <details> block"
+      - "Strip trailing whitespace from all lines"
+    idempotent: true
+    idempotency_note: "Running normalizer twice produces identical output — no double blank lines"
+
+  renderer_safety_switch:
+    description: "Auto-downgrades tables with long cells to prevent Copilot Chat blob rendering"
+    table_cell_max_chars: 80
+    downgrade_large_threshold: 120
+    configurable: true
+    threshold: "configurable via rendering_rules.table_cell_max_chars (default: 80)"
+    downgrade_target:
+      ">80": "bulleted list"
+      ">120": "details block with code fence"
 
 # ============================================================================
 # CUSTOMIZATION (User Preferences)

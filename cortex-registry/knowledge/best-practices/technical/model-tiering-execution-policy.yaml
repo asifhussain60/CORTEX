@@ -1,0 +1,172 @@
+# Model-Tiering Execution Policy — Plan on Capable Model, Execute on Cheap Model + Guardrails
+# Authority: DIGEST Pipeline 3 — usertemplate.md (2026-02-26)
+# Source: Independent advisory — "Once CORTEX develops the plan using x3 model, can it then safely be executed via Haiku?"
+# Domain: architecture / execution-governance
+
+title: "Model-Tiering Execution Policy"
+category: "best-practices"
+updated: "2026-02-26"
+source_document: "_workspaces/.chats/usertemplate.md"
+digest_pipeline: 3
+
+# ── Core Thesis ──────────────────────────────────────────────────────────────
+summary: |
+  Splitting model tiers between planning and execution is safe ONLY when execution
+  is fully constrained by a machine-readable spec with per-step validations and a
+  deviation-triggered escalation path. Without these guardrails, the cheaper model
+  confidently executes in ways that violate the planner's intent — the classic
+  "PhD writes the spec, intern runs the surgery" failure mode.
+
+# ── When Plan-on-x3 / Execute-on-Haiku Works ─────────────────────────────────
+safe_conditions:
+  - condition: "Execution is mechanical and fully constrained"
+    requirements:
+      - "Plan decomposes into small atomic steps (one file / one command / one change)"
+      - "Each step has objective pass/fail checks (tests, lint, typecheck, diff constraints)"
+      - "Executor is NOT allowed to deviate or be creative"
+      - "Plan includes exact commands, exact file paths, exact success criteria"
+  - condition: "CORTEX mapping"
+    requirements:
+      - "x3 (claude-3-7-sonnet): architecture + intent + execution spec compilation"
+      - "Haiku: robot hands — executes only allowed step types, no judgment required"
+
+# ── When It Fails (Common) ────────────────────────────────────────────────────
+failure_modes:
+  - mode: "Ambiguous requirements"
+    example: "'refactor cleanly', 'improve design'"
+    result: "Haiku picks an interpretation that looks right but violates intent"
+  - mode: "Multi-file edits with hidden coupling"
+    example: "Changing a base class that 12 orchestrators extend"
+    result: "Haiku fixes the visible error, misses downstream breakage"
+  - mode: "Debugging on first failure"
+    example: "Test fails with unexpected import error"
+    result: "Haiku patches the symptom, not the cause"
+  - mode: "Non-deterministic environment"
+    example: "Flaky tests, missing deps, version mismatches"
+    result: "Haiku retries blindly or marks tests as acceptable failures"
+  - mode: "Requires reading lots of context mid-flight"
+    example: "LENS analysis needed to understand orchestrator wiring"
+    result: "Haiku uses cached/stale context, makes architecture violations"
+
+# ── The 4-Gate Safe Pattern ───────────────────────────────────────────────────
+safe_pattern:
+  name: "Plan with x3, Execute with Haiku + 4 Guardrails"
+
+  gate_1_execution_spec:
+    name: "Compilation of plan into Execution Spec"
+    responsibility: x3
+    required_fields_per_step:
+      - step_id
+      - action_type: "one of [edit, run, search, validate]"
+      - target_files: "explicit list — no wildcards"
+      - exact_commands: "verbatim shell commands"
+      - expected_outputs: "exact strings / patterns to match"
+      - rollback_instruction: "what to undo if step fails"
+      - validation_after_step: "specific assertion to run"
+    constraint: "Haiku must FOLLOW this spec, not reinterpret it"
+    cortex_mapping: "tdd_sequence.green in each sub-phase is this spec — must be verbatim"
+
+  gate_2_per_step_validation:
+    name: "Per-Step Validation After Each Action"
+    responsibility: haiku
+    checks:
+      - "git diff matches intended files only (no unexpected changes)"
+      - "pytest / test runner passes with zero new failures"
+      - "lint / typecheck clean"
+      - "no new warnings threshold"
+      - "log / audit expectations met (AC markers emitted)"
+    cortex_mapping: "completion_gate per sub-phase (already enforced by CORE-064)"
+
+  gate_3_deviation_detector:
+    name: "Deviation Detector — HALT + Escalate"
+    responsibility: haiku
+    triggers:
+      - "Unexpected test failure (not in the expected failure list)"
+      - "More files changed than allowed by the execution spec"
+      - "Output doesn't match expected_outputs pattern"
+      - "Conflicting edits (file modified by multiple steps)"
+      - "Missing dependency / environment mismatch"
+    action_on_trigger: "STOP immediately — emit BLOCK-DEVIATION-ALERT — escalate to x3"
+    cortex_mapping: |
+      gate_on_failure: HALT (already in sequential_execution_contract) — but no
+      response block exists to surface the deviation clearly. BLOCK-DEVIATION-ALERT
+      (GAP-82-13) fills this gap.
+
+  gate_4_final_verification:
+    name: "Final Review by Capable Model"
+    responsibility: x3
+    checks:
+      - "Sanity-check diff (does the diff match what the plan intended?)"
+      - "Plan completion criteria met (all acceptance_criteria items satisfied)"
+      - "No silent drift from architecture intent"
+    cortex_mapping: "phase-82-final smoke gate + CORTEX Architect final diff review"
+
+# ── CORTEX Policy (Implementable) ────────────────────────────────────────────
+cortex_policy:
+  name: "CORTEX Model-Tiering Execution Policy"
+  version: "1.0"
+  date: "2026-02-26"
+
+  step_1:
+    model: x3
+    actions:
+      - "Create plan + execution spec (tdd_sequence.green — verbatim, not abstract)"
+      - "Define validations per step (completion_gate assertions)"
+      - "Flag all step_types that require judgment → these stay with x3"
+
+  step_2:
+    model: haiku
+    allowed_step_types:
+      - "edit: modify exactly the files listed in execution spec"
+      - "run: execute exactly the commands listed in execution spec"
+      - "validate: run the assertions in completion_gate"
+    prohibited_step_types:
+      - "interpret: never allow Haiku to reinterpret a spec step"
+      - "design: never allow Haiku to make architecture decisions"
+      - "debug_free_form: debugging must use a structured hypothesis list from x3"
+
+  auto_escalate_to_x3_when:
+    - "Any completion_gate assertion fails"
+    - "Any git diff shows unexpected files"
+    - "Any ambiguity appears in the execution spec"
+    - "Any step_type is not in allowed_step_types"
+    - "Environment mismatch (missing package, wrong Python version)"
+
+  optional_final_review:
+    model: x3
+    trigger: "Changes to ≥3 files OR any file in cortex/orchestrators/core/"
+    action: "Diff review + architecture intent verification"
+
+# ── Gaps This Opens in Phase-82 ──────────────────────────────────────────────
+phase_82_enhancement_candidates:
+  - gap: "GAP-82-12"
+    description: "BLOCK-EXECUTION-SPEC missing — no canonical block to surface a machine-readable per-step execution constraint document so cheaper models have a verbatim spec to follow"
+    severity: P2
+    action_ref: "phase-82-f"
+
+  - gap: "GAP-82-13"
+    description: "BLOCK-DEVIATION-ALERT missing — no block for unexpected divergence from execution spec (different from BLOCK-ERROR-RECOVERY which handles known error states)"
+    severity: P2
+    action_ref: "phase-82-f"
+
+  - gap: "GAP-82-14"
+    description: "Sub-phase specs lack execution_tier field — no formal declaration of which model tier executes a given sub-phase, making model-tiering policy unenforceable at the phase-spec level"
+    severity: P3
+    action_ref: "phase-82-f"
+
+# ── Anti-Patterns ─────────────────────────────────────────────────────────────
+anti_patterns:
+  - name: "Spec-to-Haiku without guardrails"
+    description: "Generating a plan with x3 then asking Haiku to 'implement the plan' without an execution spec + deviation detector"
+    consequence: "Haiku confidently does something that looks right but violates the plan's intent"
+    cortex_rule: "CORE-008 (TDD) partially prevents this — Haiku must still pass RED tests — but deviation detection requires BLOCK-DEVIATION-ALERT"
+
+  - name: "Cost-saving at the expense of correctness"
+    description: "Using Haiku for steps that require judgment (ambiguous requirements, debugging, multi-file coupling)"
+    consequence: "Bug generation camouflaged as cost saving"
+    cortex_rule: "execution_tier field in sub-phase spec makes step type visible and auditable"
+
+  - name: "Improvisation allowed"
+    description: "Execution spec has abstract steps ('refactor cleanly') rather than verbatim commands"
+    consequence: "Cheaper model fills in gaps with plausible-but-wrong interpretations"
+    cortex_rule: "tdd_sequence.green must be verbatim (exact file paths, exact commands) — no abstract steps allowed"

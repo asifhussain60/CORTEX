@@ -205,6 +205,24 @@ ac_markers:
   complete: "AC_COMPLETE: AC-{N}-{SLUG}-{timestamp} ✅"
 
 # ─────────────────────────────────────────────────────────────────────────────
+# EXECUTION TIER (OPTIONAL — model-tiering policy for sub-phases)
+# GAP-82-14: enables plan-on-capable-model + execute-on-cheap-model workflow
+# ─────────────────────────────────────────────────────────────────────────────
+# Uncomment and populate when this phase uses model-tiering (BLOCK-EXECUTION-SPEC).
+#
+# execution_tier:
+#   plan: x3        # model tier that writes the execution spec (claude-3-7-sonnet or equivalent)
+#   execute: haiku  # model tier that follows the spec verbatim (cheaper model safe to delegate)
+#   escalate_to: x3 # model tier that receives BLOCK-DEVIATION-ALERT escalations
+#   safe_to_delegate: true  # derived: true when ALL tdd_sequence.green steps are verbatim
+#
+# Rules for safe_to_delegate: true:
+#   - All green steps have exact file paths and exact commands (no abstract language)
+#   - completion_gate has machine-checkable assertions
+#   - No step contains abstract language ('refactor cleanly', 'improve design')
+#   - BLOCK-DEVIATION-ALERT is wired for any unexpected divergence
+
+# ─────────────────────────────────────────────────────────────────────────────
 # COMPLETION SECTION (fill in when marking COMPLETE — do not leave blank)
 # ─────────────────────────────────────────────────────────────────────────────
 # metrics_at_completion:
