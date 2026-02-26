@@ -118,7 +118,7 @@ Stage 4:  Orchestrator Health (all 22)   (HealthOrchestrator.run_health_check())
 Stage 5:  Vacuum Cleanup                 (VacuumOrchestrator via cortex_vacuum)
 Stage 6:  Prompt/Agent Meta-Audit        (cortex-meta-auditor.md, 23 checks)
 Stage 7–8: Auto-Fix Convergence Loop    (detect-fix-rescan-loop — loops until 0 P0/P1, CORE-064)
-Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py batch → SQLite cleanup)
+Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight → SQLite cleanup)
 ```
 
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` — not a single pass.

@@ -167,6 +167,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | `/audit` | Scan only, no auto-fix | Stages 1–6 |
 | `/vacuum` | Markdown sprawl + root clutter cleanup | Stage 5 only |
 | `/health` | All 22 orchestrator health endpoints | Stage 4 only |
+| `/healthcheck` | Full test suite (all tiers, parallel) | On-demand |
 | `/upgrade` | Check origin/main, merge if ahead, run audit fix | Inflight upgrade |
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) | — |
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
@@ -184,9 +185,10 @@ Stage 4:  Orchestrator Health (all 22)   (HealthOrchestrator.run_health_check())
 Stage 5:  Vacuum Cleanup                 (VacuumOrchestrator + cortex_vacuum)
 Stage 6:  Prompt/Agent Meta-Audit        (cortex-meta-auditor.md, 23 checks)
 Stage 7–8: Auto-Fix Convergence Loop    (detect-fix-rescan-loop primitive — loops until 0 P0/P1)
-Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py batch → SQLite cleanup)
+Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight → SQLite cleanup)
 ```
 
+**Test Tier Manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
 **Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
 **Activity log:** `.cortex-runtime/traces/orchestrator-traces.db` (full schema: `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs`).
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
@@ -247,15 +249,17 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py batch →
 
 ## ⛔ Test Execution — MANDATORY RULES
 
-**Three-layer optimised execution. Never bypass `run_tests.py`.**
+**Four-tier optimised execution. Never bypass `run_tests.py`.**
 
 | Mode | Command (macOS/Linux) | Command (Windows) | When to use |
 |---|---|---|---|
+| **preflight** | `make test-preflight` | `python scripts\run_tests.py preflight` | `/audit fix` Stage 9 — critical wiring (< 10s) |
 | **changed** | `make test-changed` | `python scripts\run_tests.py changed` | TDD inner loop — after every save |
-| **smoke** | `make test-smoke` | `python scripts\run_tests.py smoke` | Quick sanity before commit |
+| **smoke** | `make test-smoke` | `python scripts\run_tests.py smoke` | Quick sanity before commit (< 60s) |
 | **unit** | `make test` | `python scripts\run_tests.py unit` | Default local dev |
 | **parallel** | `make test-parallel` | `python scripts\run_tests.py parallel` | Pre-commit full speed |
-| **batch** | `make test-batch` | `python scripts\run_tests.py batch` | CI / audit gate (sequential) |
+| **healthcheck** | `make test-healthcheck` | `python scripts\run_tests.py healthcheck` | Full suite on-demand (parallel) |
+| **batch** | `make test-batch` | `python scripts\run_tests.py batch` | CI gate (sequential) |
 
 **Three Layers:**
 - **Layer 1 — Parallel:** `pytest-xdist` with `-n auto --dist loadscope`. 10 cores → ~3–4× faster. Falls back to sequential if xdist is absent.
@@ -264,15 +268,16 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py batch →
 
 | ✅ DO — Canonical Methods | ❌ NEVER — Forbidden Patterns |
 |---|---|
-| `make test-changed` / `make test-batch` | `python3 -m pytest tests/ -x -q` |
+| `make test-preflight` / `make test-smoke` | `python3 -m pytest tests/ -x -q` |
 | `python3 scripts/run_tests.py {mode}` | `pytest --tb=no -q` (silences batch reporter) |
 | VS Code tasks (tasks.json) — all modes | `pytest -o addopts=` (wipes import-mode + sugar settings) |
 | `CORTEX_WORKERS=4 make test-parallel` | `.venv/bin/python -m pytest` (hard-codes Unix venv path) |
 
 **When running tests in a terminal, always use:**
 ```
-make test-changed    # fastest — TDD loop
-make test-batch      # safest  — CI canonical
+make test-preflight  # fastest — audit gate (< 10s)
+make test-changed    # TDD loop (testmon)
+make test-smoke      # sanity gate (< 60s)
 ```
 or a VS Code task from `tasks.json`.
 

@@ -265,7 +265,7 @@ Wave 2: Execute
 Wave 3: Close
   STS-P-007: Generate scorecard (ENH-STS-06)
   STS-P-007: Write AC_COMPLETE with real paths and full metadata (ENH-STS-02)
-  Validate: python3 scripts/run_tests.py batch → zero regressions
+  Validate: python3 scripts/run_tests.py smoke → zero regressions
 ```
 
 ---

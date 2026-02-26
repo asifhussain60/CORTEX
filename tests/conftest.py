@@ -39,18 +39,23 @@ def pytest_collection_modifyitems(session, config, items):
     """
     Auto-tag tests by tier based on directory structure.
     
-    Tier Strategy:
-    - smoke: golden/ tests + core orchestrator tests (fast, high-value)
-    - critical: unit/ tests for core/, orchestrators/, mcp/, governance/
+    Tier Strategy (aligned with run_tests.py 4-tier model):
+    - preflight: tests/preflight/ only (critical wiring, <10s)
+    - smoke: preflight/ + golden/ + core/ (fast, high-value, <60s)
+    - critical: unit/ tests for orchestrators/, mcp/, governance/
     - full: performance/, chaos/, regression/, manual/ (slow/specialized)
     
+    Note: run_tests.py targets directories directly (not markers).
+    These markers are for manual `pytest -m smoke` usage.
+    
     Usage:
-        pytest -m smoke          # ~500 tests, <60s
+        pytest -m smoke          # ~150 tests, <60s
         pytest -m critical       # ~3000 tests, <3min
         pytest -m "not full"     # skip perf/chaos only
     """
-    smoke_paths = {"golden", "core", "mcp"}
-    critical_paths = {"orchestrators", "governance", "intelligence", "integration"}
+    preflight_paths = {"preflight"}
+    smoke_paths = {"preflight", "golden", "core"}
+    critical_paths = {"mcp", "orchestrators", "governance", "intelligence", "integration"}
     full_paths = {"performance", "chaos", "regression", "manual"}
     
     for item in items:

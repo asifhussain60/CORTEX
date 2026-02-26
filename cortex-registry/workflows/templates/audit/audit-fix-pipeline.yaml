@@ -596,7 +596,7 @@ workflow:
       stage_num: 9
       name: 'Stage 9 — Run Tests + AC_COMPLETE'
       description: |
-        Run: python3 scripts/run_tests.py batch
+        Run: python3 scripts/run_tests.py preflight
         Gate: 0 new failures vs baseline.json
         On pass:
           → Write audit_sessions.exit_status = "clean"

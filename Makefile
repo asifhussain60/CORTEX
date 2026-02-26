@@ -7,7 +7,7 @@
 #   Windows:     python scripts\run_tests.py <mode>  (make unavailable)
 # =============================================================================
 
-.PHONY: verify test test-all test-fast test-smoke test-batch test-changed test-parallel help validate-wiring
+.PHONY: verify test test-all test-fast test-smoke test-batch test-changed test-parallel test-preflight test-healthcheck help validate-wiring
 
 # Default target
 help:
@@ -19,11 +19,13 @@ help:
 	@echo "  make validate-wiring  Validate wiring.yaml accuracy (--strict mode)"
 	@echo ""
 	@echo "Test Modes (fastest → safest):"
+	@echo "  make test-preflight   Critical wiring only — audit gate (<10s)     ← /audit fix Stage 9"
 	@echo "  make test-changed     testmon: only tests covering changed files  ← TDD loop"
-	@echo "  make test-smoke       Smoke tests, parallel xdist (<30s target)"
+	@echo "  make test-smoke       Smoke tests, parallel xdist (<60s target)"
 	@echo "  make test-fast        Fast unit tests, parallel (no slow/integration)"
 	@echo "  make test             Unit tests, parallel (xdist loadscope)"
 	@echo "  make test-parallel    Full suite, parallel workers (max throughput)"
+	@echo "  make test-healthcheck Full suite, parallel (on-demand)            ← /healthcheck"
 	@echo "  make test-batch       Full suite, sequential (canonical / CI safe)"
 	@echo "  make test-all         Full suite, all dirs, sequential"
 	@echo ""
@@ -42,11 +44,15 @@ validate-wiring:
 	@echo "🔍 Validating wiring.yaml accuracy (--strict mode)..."
 	@python3 cortex/validation/wiring_validator.py --strict
 
+# Preflight — critical wiring checks only (<10s, /audit fix Stage 9)
+test-preflight:
+	@python3 scripts/run_tests.py preflight
+
 # TDD inner loop — only tests whose source files changed (testmon Layer 2)
 test-changed:
 	@python3 scripts/run_tests.py changed
 
-# Run smoke tests in parallel (<30s total wall time)
+# Run smoke tests in parallel (<60s total wall time)
 test-smoke:
 	@python3 scripts/run_tests.py smoke
 
@@ -65,6 +71,10 @@ test-parallel:
 # Run full suite sequentially (canonical / CI safe)
 test-batch:
 	@python3 scripts/run_tests.py batch
+
+# Run full suite with parallel workers (on-demand /healthcheck)
+test-healthcheck:
+	@python3 scripts/run_tests.py healthcheck
 
 # Run all tests including all directories, sequential
 test-all:

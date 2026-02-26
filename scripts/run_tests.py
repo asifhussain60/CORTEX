@@ -1,39 +1,34 @@
 """
-CORTEX Test Runner — Three-layer optimised execution (cross-platform).
+CORTEX Test Runner — Three-tier optimised execution (cross-platform).
 
-Performance Architecture:
-  Layer 1 — Parallel:  pytest-xdist with -n auto --dist loadscope
-                        10 workers on 10-core Mac → 3–4× speedup.
-                        Falls back gracefully if xdist is unavailable.
+Test Tiers:
+  T0 — Preflight:  ~40 import/wiring checks, parallel (< 10s)
+                     Used by /audit fix Stage 9. Validates orchestrator
+                     imports, MCP tools, LENS, intelligence, governance.
+  T1 — Smoke:      Preflight + golden + core tests, parallel (< 60s)
+                     Quick confidence check before commit.
+  T2 — Healthcheck: Full suite parallel (integration, regression, golden).
+                     Deep validation via /healthcheck command.
+
+Performance Layers:
+  Layer 1 — Parallel:  pytest-xdist with -n 8 --dist worksteal
   Layer 2 — Smart:     pytest-testmon with --testmon
-                        Skips tests whose covered source lines didn't change.
-                        Ideal for CORTEX's frequent mid-session TDD runs.
   Layer 3 — Import:    --import-mode=importlib (set in pytest.ini)
-                        Cuts cold collection from ~17s → ~7s.
-
-Cross-Platform:
-  All modes use sys.executable — works on macOS, Linux, and Windows
-  without shell wrappers, shebangs, or venv activation.
 
 Modes:
-    python3 scripts/run_tests.py                  # unit tests (default)
-    python3 scripts/run_tests.py smoke             # smoke tests, parallel (<30s target)
+    python3 scripts/run_tests.py preflight         # T0: wiring checks (< 10s)
+    python3 scripts/run_tests.py smoke             # T1: preflight + golden + core (< 60s)
     python3 scripts/run_tests.py changed           # testmon: only changed-file tests
     python3 scripts/run_tests.py unit              # unit tests, parallel
     python3 scripts/run_tests.py fast              # fast subset, parallel
     python3 scripts/run_tests.py parallel          # full suite, parallel workers
     python3 scripts/run_tests.py integration       # integration tests, sequential
     python3 scripts/run_tests.py golden            # golden tests, sequential
-    python3 scripts/run_tests.py batch             # full sequential batch (canonical/safe)
+    python3 scripts/run_tests.py healthcheck       # T2: full suite, parallel (deep)
+    python3 scripts/run_tests.py batch             # full sequential batch (CI safe)
     python3 scripts/run_tests.py all               # full suite, all dirs, sequential
     python3 scripts/run_tests.py file <path>       # single file
     python3 scripts/run_tests.py dir <path>        # single directory
-
-Environment:
-    CORTEX_BATCH_SIZE       Tests per batch (default: 500)
-    CORTEX_WORKERS          xdist worker count (default: auto = all cores)
-    CORTEX_DISABLE_PARALLEL Set to "true" to force sequential (CI override)
-    CORTEX_DISABLE_TESTMON  Set to "true" to skip testmon DB (clean run)
 
 Authority: CORE-008 | CORE-011 | CORE-012 | CORE-028
 """
@@ -211,14 +206,19 @@ def _base_cmd(
     ]
 
 
-def _parallel_flags(workers: Optional[str] = None) -> List[str]:
+def _parallel_flags(workers: Optional[str] = None, dist: str = "worksteal") -> List[str]:
     """Return xdist parallel flags if xdist is available, else empty list.
 
-    Uses --dist=loadscope so tests in the same module/class stay on the same
-    worker — prevents fixture conflicts from singleton or shared-state objects.
+    Uses --dist=worksteal by default — a pull-model scheduler that avoids
+    the macOS KeyError race in loadscope's push-model registered_collections
+    dict (triggered on 10+ core M-series hardware with ≥8 workers).
+
+    --dist=loadscope is only used when CORTEX_DIST_STRATEGY=loadscope is set,
+    for environments where scope grouping is strictly required.
 
     Args:
         workers: Worker count string (e.g. "auto", "4"). None = env or default.
+        dist: Distribution strategy — "worksteal" (default) or "loadscope".
 
     Returns:
         List of -n / --dist flags, or [] if xdist is unavailable.
@@ -227,7 +227,8 @@ def _parallel_flags(workers: Optional[str] = None) -> List[str]:
         print("  ℹ️  xdist not available — running sequentially", flush=True)
         return ["-p", "no:xdist"]
     w = workers or os.environ.get("CORTEX_WORKERS", _DEFAULT_WORKERS)
-    return ["-n", w, "--dist", "loadscope"]
+    strategy = os.environ.get("CORTEX_DIST_STRATEGY", dist)
+    return ["-n", w, "--dist", strategy]
 
 
 def _testmon_flags() -> List[str]:
@@ -306,24 +307,44 @@ def _run_batch(
 # Mode implementations — all delegate to _run_batch
 # ---------------------------------------------------------------------------
 
-def run_smoke() -> int:
-    """Run smoke tests in parallel — target <30s total wall time.
+def run_preflight() -> int:
+    """Run preflight tests — T0 tier, target < 10s.
 
-    Uses xdist parallel workers (Layer 1) since smoke tests are all tagged
-    concurrent_safe by conftest_optimize.py.
+    ~40 surgical tests that validate orchestrator wiring, MCP imports,
+    intelligence layer, LENS pipeline, and governance infrastructure.
+    Used by /audit fix Stage 9 for fast confidence checks.
 
     Returns:
         pytest exit code.
     """
-    _print_header("Smoke Tests — parallel (<30s target)")
-    # Cap at 8 workers — xdist has a known macOS scheduler race (KeyError: gw13+)
-    # when -n auto spawns >10 workers on M-series hardware. 8 is stable and fast.
-    # Override with CORTEX_WORKERS env var if needed.
+    _print_header("Preflight — T0 wiring checks (< 10s target)")
     code = _run_batch(
-        test_dirs=["tests/"],
+        test_dirs=["tests/preflight/"],
+        timeout=3,
+        maxfail=5,
+        extra_ignores=False,
+        parallel=True,
+        workers=os.environ.get("CORTEX_WORKERS", "8"),
+    )
+    _print_result(code)
+    return code
+
+
+def run_smoke() -> int:
+    """Run smoke tests in parallel — target < 60s.
+
+    Runs preflight + golden + core tests for quick confidence.
+    Uses xdist parallel workers with worksteal distribution.
+
+    Returns:
+        pytest exit code.
+    """
+    _print_header("Smoke Tests — parallel (< 60s target)")
+    code = _run_batch(
+        test_dirs=["tests/preflight/", "tests/golden/", "tests/core/"],
         timeout=5,
-        maxfail=3,
-        markers="smoke",
+        maxfail=5,
+        extra_ignores=False,
         parallel=True,
         workers=os.environ.get("CORTEX_WORKERS", "8"),
     )
@@ -454,6 +475,32 @@ def run_golden() -> int:
     return code
 
 
+def run_healthcheck() -> int:
+    """Run full healthcheck — complete integration, regression, golden tests.
+
+    This is the deep validation mode. Runs ALL tests including integration,
+    regression, and golden suites. Use this when you need full confidence
+    (e.g., before release, after major refactor).
+
+    Equivalent to batch mode but with parallel execution for speed.
+
+    Returns:
+        pytest exit code.
+    """
+    workers = os.environ.get("CORTEX_WORKERS", "8")
+    _print_header(f"Healthcheck — full suite, parallel -n {workers}")
+    code = _run_batch(
+        test_dirs=["tests/"],
+        timeout=60,
+        maxfail=50,
+        parallel=True,
+        workers=workers,
+        verbose=True,
+    )
+    _print_result(code)
+    return code
+
+
 def run_batch() -> int:
     """Run full sequential batch — the safe canonical CORTEX test method.
 
@@ -540,6 +587,7 @@ def run_dir(target: str) -> int:
 # ---------------------------------------------------------------------------
 
 _MODES = {
+    "preflight":   run_preflight,
     "smoke":       run_smoke,
     "changed":     run_changed,
     "unit":        run_unit,
@@ -547,6 +595,7 @@ _MODES = {
     "parallel":    run_parallel,
     "integration": run_integration,
     "golden":      run_golden,
+    "healthcheck": run_healthcheck,
     "batch":       run_batch,
     "all":         run_all,
 }
@@ -555,13 +604,15 @@ _USAGE = """\
 Usage: python3 scripts/run_tests.py [mode] [target]
 
 Modes (fastest → safest):
-  changed      testmon: only tests whose source files changed   ← TDD inner loop
-  smoke        Smoke tests, parallel xdist (<30s target)        ← quick sanity
+  preflight    T0: ~40 wiring/import checks, parallel       ← audit fix gate (< 10s)
+  changed      testmon: only tests whose source files changed← TDD inner loop
+  smoke        T1: preflight + golden + core, parallel      ← quick sanity (< 60s)
   fast         Fast unit tests, parallel (no slow/integration)
-  unit         All unit tests, parallel (xdist loadscope)       [default]
+  unit         All unit tests, parallel (xdist worksteal)   [default]
   parallel     Full suite, parallel workers (max throughput)
   integration  Integration tests, sequential (shared-state safe)
   golden       Golden tests, sequential
+  healthcheck  T2: full suite, parallel (deep validation)   ← /healthcheck
   batch        Full suite, sequential (canonical / CI safe)
   all          Full suite, all dirs, sequential
   file <path>  Run single test file
@@ -569,7 +620,7 @@ Modes (fastest → safest):
 
 Environment overrides:
   CORTEX_BATCH_SIZE        Tests per batch (default: 500)
-  CORTEX_WORKERS           xdist worker count (default: auto = all cores)
+  CORTEX_WORKERS           xdist worker count (default: 8)
   CORTEX_DISABLE_PARALLEL  Set "true" to force sequential (CI override)
   CORTEX_DISABLE_TESTMON   Set "true" to skip testmon DB lookup (clean run)
 

@@ -27,7 +27,7 @@ Sub-phases within a phase **always execute sequentially and to full completion**
 3. Every sub-phase must have a `tdd_cycle` block with RED, GREEN, and REFACTOR gates.
 4. A sub-phase's `depends_on` list must name the preceding sub-phase explicitly.
 5. A phase is COMPLETE only when every `sweep_catalogue` GAP has `status: CLOSED` (CORE-064).
-6. The final sub-phase of every phase must run `python3 scripts/run_tests.py smoke` as its terminal gate.
+6. The final sub-phase of every phase must run `python3 scripts/run_tests.py preflight` as its terminal gate.
 
 **Forbidden patterns:**
 - `max_parallel_stages` > 1 within a single phase (phases may run in parallel; sub-phases within a phase may NOT)

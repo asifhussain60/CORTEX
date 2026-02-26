@@ -148,8 +148,9 @@ CORTEX runs natively on Windows without WSL. WSL is supported as a secondary env
 
 **Windows test commands** (use `python` instead of `python3`, backslash paths):
 ```cmd
-python scripts\run_tests.py batch
+python scripts\run_tests.py preflight
 python scripts\run_tests.py smoke
+python scripts\run_tests.py healthcheck
 python -m pytest tests/ -n auto --dist loadscope --tb=short
 ```
 All `make` commands have equivalent VS Code Task entries in `tasks.json` for Windows users who cannot run `make`.

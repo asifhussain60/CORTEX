@@ -1,0 +1,137 @@
+# ============================================================================
+# CORTEX Test Tier Manifest — Canonical registry of all test execution points
+# ============================================================================
+# Authority: CORE-008 (TDD) | CORE-064 (Sweep Completeness)
+# Updated: 2026-02-26
+#
+# This manifest tracks EVERY location in CORTEX where tests are invoked,
+# the tier they belong to, and the correct command to use.
+#
+# Tiers:
+#   T0 (preflight)   — ~40 wiring/import tests, < 10s parallel
+#   T1 (smoke)        — preflight + golden + core, < 60s parallel
+#   T2 (healthcheck)  — full suite parallel (integration, regression, golden)
+#   CI (batch)        — full suite sequential (canonical, safe)
+# ============================================================================
+
+tiers:
+  T0_preflight:
+    description: "Import/wiring checks — orchestrators, MCP, LENS, governance"
+    command: "python3 scripts/run_tests.py preflight"
+    make_target: "make test-preflight"
+    target_time: "< 10s"
+    test_count: "~40"
+    test_dirs: ["tests/preflight/"]
+    parallel: true
+    workers: 8
+    used_by:
+      - location: "cortex-architect.prompt.md — Stage 9 (/audit fix)"
+        context: "Fast confidence gate after audit auto-fix"
+      - location: "cortex-architect.prompt.md — PLAN final sub-phase smoke gate"
+        context: "Terminal gate for phase completion"
+      - location: "audit-fix-pipeline.yaml — stage_9"
+        context: "Pipeline test gate"
+
+  T1_smoke:
+    description: "Preflight + golden + core — functional confidence"
+    command: "python3 scripts/run_tests.py smoke"
+    make_target: "make test-smoke"
+    target_time: "< 60s"
+    test_count: "~150"
+    test_dirs: ["tests/preflight/", "tests/golden/", "tests/core/"]
+    parallel: true
+    workers: 8
+    used_by:
+      - location: "cortex-architect.prompt.md — IMPLEMENT Step 6 validate"
+        context: "Post-implementation confidence"
+      - location: "phase-creation-standards.md — completion_gate"
+        context: "Sub-phase completion validation"
+      - location: "copilot-instructions.md — quick sanity before commit"
+        context: "Developer workflow"
+
+  T2_healthcheck:
+    description: "Full suite parallel — deep validation"
+    command: "python3 scripts/run_tests.py healthcheck"
+    make_target: "make test-healthcheck"
+    target_time: "< 10 min"
+    test_count: "all"
+    test_dirs: ["tests/"]
+    parallel: true
+    workers: 8
+    used_by:
+      - location: "/healthcheck command"
+        context: "On-demand full validation"
+      - location: "Pre-release gate"
+        context: "Before deployment"
+
+  CI_batch:
+    description: "Full suite sequential — safe canonical"
+    command: "python3 scripts/run_tests.py batch"
+    make_target: "make test-batch"
+    target_time: "< 20 min"
+    test_count: "all"
+    test_dirs: ["tests/"]
+    parallel: false
+    used_by:
+      - location: "CI/CD pipeline"
+        context: "GitHub Actions"
+      - location: "Makefile — make test-batch"
+        context: "Canonical safe run"
+
+# ============================================================================
+# File locations that reference test execution
+# ============================================================================
+test_execution_references:
+  prompts:
+    - file: ".github/prompts/cortex-architect.prompt.md"
+      references:
+        - line_pattern: "Stage 9:.*run_tests.py"
+          tier: "T0_preflight"
+        - line_pattern: "IMPLEMENT.*Validate.*run_tests.py"
+          tier: "T1_smoke"
+        - line_pattern: "PLAN.*smoke gate"
+          tier: "T0_preflight"
+        - line_pattern: "COMPLETION CHECKLIST.*run_tests.py"
+          tier: "T1_smoke"
+
+    - file: ".github/prompts/CORTEX.prompt.md"
+      references:
+        - line_pattern: "Stage 9:.*run_tests.py"
+          tier: "T0_preflight"
+
+  agents:
+    - file: ".github/agents/AGENT-INDEX.md"
+      references:
+        - line_pattern: "Stage 9:.*run_tests.py"
+          tier: "T0_preflight"
+
+    - file: ".github/agents/core/master-planner.md"
+      references:
+        - line_pattern: "run_tests.py smoke"
+          tier: "T0_preflight"
+
+    - file: ".github/agents/core/cortex-sts-refactoring.md"
+      references:
+        - line_pattern: "run_tests.py batch"
+          tier: "T1_smoke"
+
+    - file: ".github/agents/core/cortex-environment-setup.md"
+      references:
+        - line_pattern: "run_tests.py batch"
+          tier: "T1_smoke"
+        - line_pattern: "run_tests.py smoke"
+          tier: "T0_preflight"
+
+  copilot_instructions:
+    - file: ".github/copilot-instructions.md"
+      references:
+        - line_pattern: "Stage 9:.*run_tests.py"
+          tier: "T0_preflight"
+        - line_pattern: "smoke gate.*make test-batch"
+          tier: "T0_preflight"
+
+  workflow_templates:
+    - file: "cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml"
+      references:
+        - line_pattern: "run_tests.py batch"
+          tier: "T0_preflight"

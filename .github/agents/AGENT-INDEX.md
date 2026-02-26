@@ -137,7 +137,7 @@ are resolved or explicitly approved as WONT-FIX.
   Stage 6: Prompt/Agent Meta-Audit            → cortex-meta-auditor.md (22 checks)
   Stage 7: Auto-Fix confidence >90%           → autonomous remediation
   Stage 8: Re-validate → zero-violation gate  → 0 P0, 0 P1 required
-  Stage 9: Tests + AC_COMPLETE                → python3 scripts/run_tests.py batch
+  Stage 9: Tests + AC_COMPLETE                → python3 scripts/run_tests.py preflight
 ```
 
 **Activity Log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`

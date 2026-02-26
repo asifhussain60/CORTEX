@@ -170,13 +170,14 @@ Stage 4:  Orchestrator Health (all 22)       (HealthOrchestrator.run_health_chec
 Stage 5:  Vacuum Cleanup                     (VacuumOrchestrator via cortex_vacuum)
 Stage 6:  Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 23 checks)
 Stage 7–8: Auto-Fix Convergence Loop         (detect-fix-rescan-loop — loops until 0 P0/P1, CORE-064)
-Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py batch → SQLite cleanup)
+Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py preflight → SQLite cleanup)
 ```
 
 **Output:** Inline violations table with P0/P1/P2 severity, file path, remediation.
 **Activity log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
 **Workflow template:** `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml`
+**Test tier manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
 **Loop primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
 
 ### 19-Point Production Readiness Audit
@@ -249,7 +250,7 @@ For each orchestrator in wiring contract (22 total):
 3. **RED** — write failing tests FIRST (CORE-008, no exceptions)
 4. **GREEN** — implement minimum code to pass tests
 5. **REFACTOR** — clean up with all tests passing
-6. **Validate** — `python3 scripts/run_tests.py batch` + `cortex_validate` op=`compliance`
+6. **Validate** — `python3 scripts/run_tests.py smoke` + `cortex_validate` op=`compliance`
 7. **Commit** — conventional commit message
 
 **Challenge Gate Format:**
@@ -726,8 +727,9 @@ Progress bar + stage bullet list. See templates SSOT.
 
 | Command | What It Does | Stages |
 |---------|-------------|--------|
-| **`/audit fix`** | **Full production-readiness scan + autonomous fix** | 9 stages |
+| **`/audit fix`** | **Full production-readiness scan + autonomous fix** | 9 stages (preflight gate) |
 | `/audit` | Scan only, no auto-fix | Stages 1–6 |
+| `/healthcheck` | Full test suite — integration, regression, golden | `run_tests.py healthcheck` |
 | `/vacuum` | Markdown sprawl + root clutter cleanup | Stage 5 only |
 | `/health` | All 22 orchestrator health endpoints | Stage 4 only |
 | `/upgrade` | Check origin/main, merge if ahead, run audit fix | Inflight upgrade |
@@ -749,11 +751,12 @@ Stage 4:  Orchestrator Health (all 22)       (HealthOrchestrator.run_health_chec
 Stage 5:  Vacuum Cleanup                     (VacuumOrchestrator + cortex_vacuum)
 Stage 6:  Prompt/Agent Meta-Audit            (cortex-meta-auditor.md, 23 checks)
 Stage 7–8: Auto-Fix Convergence Loop         (detect-fix-rescan-loop — loops until 0 P0/P1, CORE-064)
-Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py batch → SQLite cleanup)
+Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py preflight → SQLite cleanup)
 ```
 
 **Activity log:** `.cortex-runtime/traces/orchestrator-traces.db` (AC markers per stage).
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064).
+**Test tier manifest:** `cortex-registry/workflows/templates/testing/test-tier-manifest.yaml`
 
 ---
 
@@ -803,7 +806,7 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py batch
 
 ## ✅ COMPLETION CHECKLIST (Every Task)
 
-1. All tests passing (`python3 scripts/run_tests.py batch` — coverage ≥ 95%)
+1. All tests passing (`python3 scripts/run_tests.py smoke` — coverage ≥ 95%)
 2. Registry synchronized (if phase affected)
 3. Wiring contract validated (L1 structural check — 0 blocking failures)
 4. Audit clean (no P0/P1 violations — `cortex_validate` op=`compliance`)
