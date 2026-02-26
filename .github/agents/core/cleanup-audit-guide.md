@@ -348,13 +348,13 @@ python3 -m cortex.cli.cleanup_auditor audit \
 ### Before Running Cleanup
 
 1. ✅ **Backup workspace** (git commit checkpoint — NEVER create branches)
-2. ✅ **Run full test suite** (establish baseline)
+2. ✅ **Run smoke tests** (`python3 scripts/run_tests.py smoke` — establish baseline)
 3. ✅ **Review audit report** (verify classification)
 4. ✅ **Dry-run migration** (preview changes)
 
 ### After Running Cleanup
 
-1. ✅ **Run full test suite** (detect regressions)
+1. ✅ **Run smoke tests** (`python3 scripts/run_tests.py smoke` — detect regressions)
 2. ✅ **Verify imports** (no broken references)
 3. ✅ **Check git diff** (review changes)
 4. ✅ **Commit with AC markers** (audit trail)

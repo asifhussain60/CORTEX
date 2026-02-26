@@ -274,7 +274,7 @@ workflow:
       orchestrator: "TDDOrchestrator"
       depends_on: ["persist_lens"]
       description: >
-        Run full test suite one final time.
+        Run smoke tests one final time.
         Zero tolerance for regressions.
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'

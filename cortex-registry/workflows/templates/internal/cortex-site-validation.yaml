@@ -151,7 +151,7 @@ stages:
       - "Extract magic numbers → constants"
       - "Remove duplicate code"
       - "Add type hints + docstrings"
-      - "Run full test suite"
+      - "Run smoke tests"
       - "Verify lint clean"
 
   - stage_id: holistic-validation

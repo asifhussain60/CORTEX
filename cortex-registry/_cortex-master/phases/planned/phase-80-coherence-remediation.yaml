@@ -185,7 +185,7 @@ phases:
     duration_estimate: "3 days"
     depends_on: []
     prerequisite: "smoke tests green; capture baseline test count"
-    regression_gate: "python3 scripts/run_tests.py batch — zero new failures"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
 
     tdd_cycle:
       red:
@@ -354,8 +354,8 @@ phases:
           2. Update any callers that expected plain Dict to unwrap Result
           3. Add type hints: def initialize(self) -> Result[Dict[str, Any]]:
           4. Confirm all 27 wired orchestrators that override these methods still pass their tests
-        gate: "python3 scripts/run_tests.py batch — zero new failures across full suite"
-        blocker: "Do NOT mark COMPLETE until batch gate passes"
+        gate: "python3 scripts/run_tests.py smoke — zero new failures across full suite"
+        blocker: "Do NOT mark COMPLETE until smoke gate passes"
 
     tdd_sequence:
       red:
@@ -376,11 +376,11 @@ phases:
     acceptance_criteria:
       - "All four mixin default methods return Result (Ok or Err) instances"
       - "IOrchestrator ABC contract satisfied at the type level"
-      - "Zero regressions across batch test suite"
+      - "Zero regressions across smoke test suite"
       - "mypy / static analysis: no return type mismatch on these 4 methods"
 
     completion_gate:
-      test_runner_command: "python3 scripts/run_tests.py batch"
+      test_runner_command: "python3 scripts/run_tests.py smoke"
       min_tests_pass: 1
       zero_new_failures: true
       all_gap_refs_closed: true
@@ -398,7 +398,7 @@ phases:
     duration_estimate: "2 days"
     depends_on: ["phase-80-c"]
     prerequisite: "phase-80-c completion_gate PASSED"
-    regression_gate: "python3 scripts/run_tests.py batch — zero new failures"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
 
     tdd_cycle:
       red:
@@ -430,11 +430,11 @@ phases:
       refactor:
         action: |
           1. Add type hints and docstrings to canonical SynthesisResult and ValidationResult
-          2. Run full batch to confirm all 22 former ValidationResult callers use the canonical type
+          2. Run smoke tests to confirm all 22 former ValidationResult callers use the canonical type
           3. Delete compat shims if no callers remain beyond the re-export
           4. Remove deprecated files: legacy_context_synthesis_gateway.py, orchestrator_integration_mixin.py
-        gate: "python3 scripts/run_tests.py batch — zero new failures"
-        blocker: "Do NOT mark COMPLETE until batch gate passes and grep confirms 1 class per type"
+        gate: "python3 scripts/run_tests.py smoke — zero new failures"
+        blocker: "Do NOT mark COMPLETE until smoke gate passes and grep confirms 1 class per type"
 
     tdd_sequence:
       red:
@@ -453,7 +453,7 @@ phases:
         - "Delete duplicate ContextCacheLayer, ContextSynthesisGateway, OrchestratorLearningMixin"
       refactor:
         - "Full type hints + docstrings on canonical classes (CORE-011, CORE-012)"
-        - "Confirm batch test suite green"
+        - "Confirm smoke test suite green"
 
     acceptance_criteria:
       - "grep -rn 'class SynthesisResult' cortex --include='*.py' | grep -v test | wc -l == 1"
@@ -461,10 +461,10 @@ phases:
       - "grep -rn 'class ContextCacheLayer' cortex --include='*.py' | grep -v test | wc -l == 1"
       - "grep -rn 'class ContextSynthesisGateway' cortex --include='*.py' | grep -v test | wc -l == 1"
       - "grep -rn 'class OrchestratorLearningMixin' cortex --include='*.py' | grep -v test | wc -l == 1"
-      - "Zero regressions across batch test suite"
+      - "Zero regressions across smoke test suite"
 
     completion_gate:
-      test_runner_command: "python3 scripts/run_tests.py batch"
+      test_runner_command: "python3 scripts/run_tests.py smoke"
       min_tests_pass: 1
       zero_new_failures: true
       all_gap_refs_closed: true

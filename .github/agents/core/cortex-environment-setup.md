@@ -26,7 +26,7 @@ Step 3: MCP P0 Gate
   → cortex_verify (op: mcp) responds in Copilot Chat
   → if no response → MCP not active → see MCP Config below
 
-Step 4: Test Runner
+Step 4: Test Runner (collection check only — does NOT run tests)
   → python3 -m pytest tests/ -n auto --dist loadscope --co -q
   → confirm: collection passes with no errors
 
@@ -94,17 +94,23 @@ python3 -m cortex.mcp
 ## Test Commands
 
 ```bash
-# Full suite parallel
-python3 -m pytest tests/ -n auto --dist loadscope --tb=short
+# Preflight — wiring checks (< 10s)
+python3 scripts/run_tests.py preflight
+
+# Smoke — core functionality (< 60s)
+python3 scripts/run_tests.py smoke
 
 # Unit tests only
-python3 -m pytest tests/unit/ -n auto --dist loadscope -v
+python3 scripts/run_tests.py file tests/unit/
 
 # Serial debug
 python3 -m pytest tests/ -p no:xdist --tb=long -v -s
 
 # Golden tests (deterministic, serial)
-python3 -m pytest tests/golden/ -p no:xdist --tb=short -v
+python3 scripts/run_tests.py file tests/golden/
+
+# Full suite on-demand only (/healthcheck)
+python3 scripts/run_tests.py healthcheck
 ```
 
 ---

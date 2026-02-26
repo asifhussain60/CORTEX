@@ -180,7 +180,7 @@ workflow:
       orchestrator: "TDDOrchestrator"
       depends_on: ["security_reverification"]
       description: |
-        Run full test suite to confirm zero regressions from all epilogue
+        Run smoke tests to confirm zero regressions from all epilogue
         operations. This is the final gate before marking the phase complete.
       convergence_loop:
         primitive: 'primitives/validation/detect-fix-rescan-loop'

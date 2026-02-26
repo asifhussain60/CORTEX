@@ -75,14 +75,20 @@ When fixing a bug, scan for the same pattern across the codebase. If the same is
 ## Test Commands
 
 ```bash
-# Run full suite parallel
-python3 -m pytest tests/ -n auto --dist loadscope --tb=short
+# Preflight — wiring checks (< 10s)
+python3 scripts/run_tests.py preflight
+
+# Smoke — core functionality (< 60s)
+python3 scripts/run_tests.py smoke
 
 # Run specific module
-python3 -m pytest tests/unit/orchestrators/core/ -n auto --dist loadscope -v
+python3 scripts/run_tests.py file tests/unit/orchestrators/core/
 
 # Serial debug
 python3 -m pytest tests/ -p no:xdist --tb=long -v -s
+
+# Full suite on-demand only (/healthcheck)
+python3 scripts/run_tests.py healthcheck
 ```
 
 ---

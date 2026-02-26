@@ -25,17 +25,21 @@ entries:
       CortexXdistPlugin (CORTEX_BATCH_SIZE=500), and provides live batch
       boundaries, pass/fail counts, and a final summary table.
     commands:
+      preflight: "python3 scripts/run_tests.py preflight"
       smoke:   "python3 scripts/run_tests.py smoke"
       unit:    "python3 scripts/run_tests.py unit"
       integration: "python3 scripts/run_tests.py integration"
       golden:  "python3 scripts/run_tests.py golden"
+      healthcheck: "python3 scripts/run_tests.py healthcheck"
       batch:   "python3 scripts/run_tests.py batch"
       all:     "python3 scripts/run_tests.py all"
     make_equivalents:
+      preflight: "make test-preflight"
+      smoke:   "make test-smoke"
+      healthcheck: "make test-healthcheck"
       batch:   "make test-batch"
       all:     "make test-all"
       fast:    "make test-fast"
-      smoke:   "make test-smoke"
     vscode_tasks:
       - "CORTEX: Full Batch Run"
       - "CORTEX: Smoke Tests"

@@ -62,8 +62,8 @@ run_in_terminal(
 ### Long-Running Commands
 ```python
 run_in_terminal(
-    command='pytest tests/ -v --cov',
-    explanation="Running full test suite (may take 2-3 minutes)",
+    command='python3 scripts/run_tests.py smoke',
+    explanation="Running smoke tests (< 60 seconds)",
     isBackground=False
 )
 ```

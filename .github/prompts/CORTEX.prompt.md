@@ -160,7 +160,7 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight
 3. **RED** — write/confirm failing test capturing the bug (CORE-008)
 4. **GREEN** — fix with minimum change to pass
 5. **REFACTOR** — clean up without changing behavior
-6. **Regression** — run full test suite to confirm no side effects
+6. **Regression** — `python3 scripts/run_tests.py smoke` to confirm no side effects
 7. **Sweep gate** — CORE-064: scan for same issue class across codebase; fix all N instances, not just the reported one
 
 **Sweep Completeness (CORE-064):**

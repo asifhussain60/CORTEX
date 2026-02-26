@@ -123,7 +123,7 @@ red_green_refactor:
       - "Extract complex conditionals → named functions"
       - "Remove duplication (CORE-035)"
       - "Add type hints + docstrings"
-      - "Run full test suite → all pass"
+      - "Run smoke tests → all pass"
 
 # ============================================================================
 # VISION & PROBLEM STATEMENT

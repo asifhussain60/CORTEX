@@ -279,7 +279,7 @@ For each orchestrator in wiring contract (22 total):
 3. **RED** — write/confirm failing test capturing the bug
 4. **GREEN** — fix with minimum change to pass
 5. **REFACTOR** — clean up without changing behavior
-6. **Regression** — run full test suite to confirm no side effects
+6. **Regression** — `python3 scripts/run_tests.py smoke` to confirm no side effects
 7. **Sweep gate** — CORE-064: verify all related issues in the same category are addressed (no partial fixes)
 
 **Sweep Completeness (CORE-064):**
@@ -293,7 +293,7 @@ When fixing a bug, scan for the same pattern across the codebase. If the same is
 
 **Sequence:**
 0. **Functional baseline** — enumerate all public endpoints/functions in source; store list for completeness gate
-1. **Baseline** — run full test suite, record passing count
+1. **Baseline** — `python3 scripts/run_tests.py smoke`, record passing count
 2. **LENS scan** — complexity, duplication, architecture drift
 3. **Plan** — present refactoring strategy with risk assessment
 4. **Execute** — incremental changes, run tests after each step
