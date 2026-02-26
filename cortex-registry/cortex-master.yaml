@@ -49,8 +49,8 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 metadata:
-  version: '23.2'
-  last_updated: '2026-02-26T12:00:00Z'
+  version: '23.3'
+  last_updated: '2026-02-26T17:00:00Z'
   total_phases: 81
   active: 0
   completed: 74
@@ -58,12 +58,21 @@ metadata:
   planned: 0
   playbooks: 1
   governance_rules_total: 37
+  digests: 1
+  last_digest: "recommend-digest-20260226 (Phase 64 verification)"
   test_baseline:
     smoke: 1211
     workflow_orchestrators: 177
     golden_workflow: 204
     golden_intelligence: 1
   recent_completed:
+    - id: digest-recommend-20260226
+      title: "Independent Review Remediation Verification (Phase 64)"
+      type: "digest"
+      status: COMPLETE
+      completed: "2026-02-26"
+      file: ".cortex-runtime/digests/recommend-digest-20260226.yaml"
+      note: "Digested _workspaces/recommend/ (5 consolidated review documents). Verified 10 of 12 gaps resolved. Health score 8.2/10 (+0.9 improvement). 2 gaps deferred to Phase 65 (MCP auth P0, ImportError sweep P1). Source archived to _workspaces/_archive/recommend-20260226/."
     - id: phase-80-a
       title: "MasterOrchestrator God-Object Decomposition — Initialiser + Mixin + Dead-Code Purge"
       priority: P0
