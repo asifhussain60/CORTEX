@@ -2,8 +2,8 @@
 
 Provides specialized agents for detecting specific health issues:
 - DuplicateDetectionAgent: CORE-035 violations
-- StubDetectionAgent: Weak implementations
-- StubAutoFixAgent: Automatic stub fixing (Phase 96)
+- WeakImplDetectionAgent: Weak implementations
+- WeakImplAutoFixAgent: Automatic weak-implementation fixing (Phase 96)
 - PathIntegrityAgent: Import path drift
 - VersionCleanupAgent: Version artifacts
 - TestCoverageAgent: Missing tests
