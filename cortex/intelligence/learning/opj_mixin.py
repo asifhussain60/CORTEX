@@ -34,6 +34,8 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from cortex.intelligence.learning.opj_promoter import promote_high_confidence_patterns  # noqa: E402
+
 logger = logging.getLogger(__name__)
 
 _WORKSPACE_ROOT = Path(__file__).resolve().parents[4]
@@ -76,6 +78,8 @@ class OPJMixin:
 
         self._opj_writer = OPJWriter(registry_root=root)
         self._opj_reader = OPJReader(registry_root=root)
+        # _opj_store: in-session cache of consulted patterns (list of dicts)
+        self._opj_store: List[Dict[str, Any]] = []
 
     def _opj_ensure_init(self) -> None:
         """Lazy-initialise OPJ components on first use."""
@@ -116,15 +120,16 @@ class OPJMixin:
 
     def _opj_record_success(
         self,
-        operation: str,
-        context: Dict[str, Any],
-        resolution: str,
+        operation: str = "",
+        context: Optional[Dict[str, Any]] = None,
+        resolution: str = "",
         confidence: float = 0.8,
     ) -> None:
         """
-        Record a successful operation to the OPJ.
+        Record a successful operation to the OPJ and trigger T1 promotion check.
 
-        Call this AFTER a successful execution.
+        Call this AFTER a successful execution.  Patterns with confidence >=
+        0.80 are auto-promoted to the T1 knowledge tier (Phase 71-F ES-005).
 
         Args:
             operation: The operation that succeeded.
@@ -132,6 +137,8 @@ class OPJMixin:
             resolution: Human-readable description of what made it work.
             confidence: Confidence score 0.0–1.0 (default 0.8).
         """
+        if context is None:
+            context = {}
         try:
             self._opj_ensure_init()
             self._opj_writer.record_success(  # type: ignore[union-attr]
@@ -143,6 +150,12 @@ class OPJMixin:
             )
         except Exception as exc:
             logger.warning("OPJMixin._opj_record_success: non-fatal error — %s", exc)
+
+        # Phase 71-F ES-005: auto-promote high-confidence patterns
+        try:
+            promote_high_confidence_patterns()
+        except Exception as exc:  # noqa: BLE001
+            logger.debug("OPJMixin: promotion check non-fatal — %s", exc)
 
     def _opj_record_failure(
         self,

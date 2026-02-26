@@ -505,6 +505,65 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
         # Phase 72-c: Capability registry from generated manifest (GAP-72-04)
         self.capability_registry = self._init_capability_registry()
 
+        # Phase 71-B ES-003: GovernanceRegistry cross-wiring
+        self._governance_registry: Optional[Any] = self._init_governance_registry()
+
+    def _init_governance_registry(self) -> Optional[Any]:
+        """Initialise GovernanceRegistry reference for complexity inflation (Phase 71-B ES-003).
+
+        Returns:
+            GovernanceRegistry instance or None (graceful degradation).
+        """
+        try:
+            from cortex.governance.governance_auditor import GovernanceAuditor  # noqa: PLC0415
+            return GovernanceAuditor()
+        except Exception:
+            return None
+
+    def _get_governance_violations(self) -> List[Dict[str, Any]]:
+        """Return active governance violations from the GovernanceRegistry.
+
+        Phase 71-B ES-003: violations are used to inflate complexity scores so
+        that the router promotes flagged work to higher-priority orchestrators.
+
+        Returns:
+            List of violation dicts with at least ``severity`` and ``rule`` keys.
+            Empty list when no registry is available.
+        """
+        if self._governance_registry is None:
+            return []
+        try:
+            return list(self._governance_registry.get_active_violations())
+        except Exception:
+            return []
+
+    def compute_complexity(self, request: Dict[str, Any]) -> float:
+        """Compute a complexity score for *request*, inflated by active P0 violations.
+
+        Phase 71-B ES-003: active P0 governance violations raise the base score
+        so that the router can prefer heavyweight orchestrators for flagged work.
+
+        Args:
+            request: Request dict (must contain at least ``intent`` key).
+
+        Returns:
+            Float complexity score.  Higher values indicate more complex requests.
+        """
+        # Base heuristic: intent length + payload token count
+        intent_str = str(request.get("intent", ""))
+        base_score: float = min(len(intent_str) / 10.0, 5.0)
+
+        # Inflate by active violations (P0 → +3, P1 → +1 per violation)
+        violations = self._get_governance_violations()
+        for violation in violations:
+            severity = str(violation.get("severity", "")).upper()
+            if severity == "P0":
+                base_score += 3.0
+            elif severity == "P1":
+                base_score += 1.0
+
+        return base_score
+
     def _init_capability_registry(self) -> Optional[Any]:
         """
         Initialize CapabilityMatcher from generated capabilities-manifest.yaml.

@@ -134,13 +134,16 @@ from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 # Required by holistic golden tests (S21-S25) and CORE-048 compliance.
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
+# Phase 71-B: OPJMixin wires operational pattern journal for MasterOrchestrator
+from cortex.intelligence.learning.opj_mixin import OPJMixin
+
 
 from cortex.orchestrators.core.master_orchestrator_knowledge_mixin import (  # noqa: E402
     MasterOrchestratorKnowledgeMixin,
 )
 
 
-class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorAuditMixin, WorkflowTemplateMixin, MasterOrchestratorKnowledgeMixin):
+class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorAuditMixin, WorkflowTemplateMixin, MasterOrchestratorKnowledgeMixin, OPJMixin):
     """
     MasterOrchestrator - Coordinates all domain orchestrators.
 
@@ -170,6 +173,9 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
         self.domain_orchestrators: Dict[str, OrchestratorMetadata] = {}
         self.operation_history: List[Dict[str, Any]] = []
         self.render_markdown = False  # AC-GOVE-RENDER-002
+
+        # Phase 71-B: Initialise OPJ store for operational pattern journal
+        self._opj_init()
 
         MasterOrchestratorInitialiser(self).wire_all()
 
@@ -1936,7 +1942,7 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
     def coordinate_operation(
         self,
         operation: str,
-        context: Dict[str, Any],
+        context: Optional[Dict[str, Any]] = None,
         target_domains: Optional[List[str]] = None
     ) -> Result[Dict[str, Any]]:
         """Coordinate an operation across multiple domain orchestrators.
@@ -1999,6 +2005,8 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
         """
         # AC-FIX-001-01: Wrap entire operation in atomic transaction
         # Both coordination execution and audit logging occur in single transaction
+        # Phase 71-B: Consult OPJ for operational patterns before coordinating
+        self._opj_consult(str(operation))
         try:
             with self.transaction_manager.atomic_operation("AC-FIX-001-01", f"coordinate_{operation}") as txn:
                 # AC-REM-002-04: Pre-coordination governance validation

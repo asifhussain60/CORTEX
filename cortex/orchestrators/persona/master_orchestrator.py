@@ -13,6 +13,7 @@ Orchestrates:
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
+from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 from cortex.orchestrators.persona.persona_injector import PersonaInjector
 from cortex.orchestrators.persona.role_resolver import RoleResolver
@@ -33,7 +34,7 @@ class PersonaResult:
             self.format_rules_applied = []
 
 
-class MasterOrchestrator:
+class MasterOrchestrator(OrchestratorProtocolMixin):
     """
     Coordinate RoleResolver → PersonaInjector pipeline.
 

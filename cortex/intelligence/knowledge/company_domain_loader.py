@@ -280,3 +280,50 @@ def get_company_domain_loader(
                     profiles_dir=profiles_dir,
                 )
     return _singleton
+
+
+# ---------------------------------------------------------------------------
+# Phase 71-F ES-004: CompanyKnowledgeProvider
+# ---------------------------------------------------------------------------
+
+class CompanyKnowledgeProvider:
+    """
+    Thin facade over CompanyDomainLoader for LENS cross-wiring (Phase 71-F ES-004).
+
+    Exposes a simple ``load()`` method that returns :class:`CompanyKnowledge`
+    and wraps the singleton loader so that LENS components can import a single,
+    stable class name without depending on the loader internals.
+
+    CORE-011: type hints on all methods.
+    CORE-012: docstrings on all public APIs.
+    """
+
+    def __init__(
+        self,
+        domains_dir: Optional[Path] = None,
+        profiles_dir: Optional[Path] = None,
+    ) -> None:
+        """Initialise provider backed by the singleton CompanyDomainLoader."""
+        self._loader: CompanyDomainLoader = get_company_domain_loader(
+            domains_dir=domains_dir,
+            profiles_dir=profiles_dir,
+        )
+
+    def load(self) -> "CompanyKnowledge":
+        """Load and return company knowledge (cached with 5-min TTL).
+
+        Returns:
+            Populated :class:`CompanyKnowledge` instance.
+        """
+        return self._loader.load()
+
+    def detect_profile(self, repo_path: Path) -> Optional[str]:
+        """Detect domain profile for a repository.
+
+        Args:
+            repo_path: Path to repository root.
+
+        Returns:
+            Profile name string or None if no match.
+        """
+        return self._loader.detect_profile_for_repo(repo_path)

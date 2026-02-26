@@ -15,6 +15,8 @@ from datetime import datetime
 import json
 import logging
 
+from cortex.core.file_factory import get_file_factory
+
 logger = logging.getLogger(__name__)
 
 
@@ -203,7 +205,7 @@ class LandingPageGenerator:
         
         html = self._generate_landing_html(repos)
         
-        self.landing_path.write_text(html, encoding='utf-8')
+        get_file_factory().create_file(str(self.landing_path), html)
         logger.info(f"Regenerated landing page: {self.landing_path}")
         
         return self.landing_path
@@ -222,9 +224,9 @@ class LandingPageGenerator:
         """Save registry to JSON file."""
         registry["updated"] = datetime.now().isoformat()
         self.registry_path.parent.mkdir(parents=True, exist_ok=True)
-        self.registry_path.write_text(
+        get_file_factory().create_file(
+            str(self.registry_path),
             json.dumps(registry, indent=2),
-            encoding='utf-8'
         )
     
     def _get_health_category(self, score: int) -> str:
