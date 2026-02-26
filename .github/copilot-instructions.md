@@ -172,6 +172,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | `/digest {path}` | Intelligent content ingestion (3-pipeline) | — |
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
+| `/totalrecall` | Holistic production readiness refactor (7-phase protocol) | 7 phases |
 
 ### `/audit fix` — 9-Stage Pipeline (canonical single command for production readiness)
 

@@ -107,6 +107,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **REFACTOR** | cortex.md + cortex-holistic-validator.md + cortex-executor.md | ~7,000 |
 | **AUDIT** | cortex.md + cortex-architect.md + cortex-auditor.md | ~8,000 |
 | **AUDIT FIX** | cortex.md + cortex-auditor.md + architecture-integrity-agent.md + cortex-meta-auditor.md | ~12,000 |
+| **TOTAL RECALL** | cortex-totalrecall.prompt.md (self-contained 7-phase protocol) | ~4,500 |
 | **INVESTIGATE** | cortex.md + cortex-architect.md | ~6,000 |
 | **QUERY** | cortex.md + cortex-interactive.md | ~4,500 |
 | **DESIGN** | cortex.md + cortex-architect.md | ~6,000 |

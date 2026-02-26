@@ -18,6 +18,7 @@
 | `/challenge {req}` | Generate alternatives |
 | `/recall {feature}` | Feature discovery |
 | `/rephrase {text}` | Token optimization |
+| `/totalrecall` | Holistic production readiness refactor (7-phase protocol) |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder | **EX**ecution System
 
 **Entry Point:** This prompt → MasterOrchestrator → 4-stage pipeline → MCP Tools  
@@ -217,10 +218,7 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 | `/challenge {req}` | Generate alternatives |
 | `/recall {feature}` | Feature discovery |
 | `/rephrase {text}` | Token optimization |
-
----
-
-## ✅ COMPLETION CHECKLIST
+| `/totalrecall` | Holistic production readiness refactor (7-phase protocol) |
 
 Every operation:
 - [ ] Intent classified, DoR displayed, user approved

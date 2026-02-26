@@ -737,6 +737,7 @@ Progress bar + stage bullet list. See templates SSOT.
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
 | `/recall {feature}` | Feature discovery | — |
+| `/totalrecall` | Holistic production readiness refactor (7-phase protocol) | 7 phases |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder (4-gate: PULL→DIFF→SANITIZE→MERGE) | — |
 
 ### `/audit fix` — 9-Stage Pipeline Detail
