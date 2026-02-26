@@ -21,7 +21,7 @@ audience: [Business Leaders, Product Owners, Software Developers]
 
 ### What is CORTEX?
 
-CORTEX (COgnitive Real-Time EXecution) is a production-grade AI engineering framework. It combines fifty-one wired orchestrators across four tiers, thirty-nine active MCP tools exposed via a Pylance-style stdio server, thirty-eight CORE governance rules enforced at pre-commit, CI, and runtime, a nine-analyzer parallel code intelligence engine (LENS), and TDD-first execution where CORE-008 mandates RED then GREEN then REFACTOR on every IMPLEMENT and FIX. It works directly inside your IDE via the Model Context Protocol.
+CORTEX (COgnitive Real-Time EXecution) is a production-grade AI engineering framework. It combines fifty-one wired orchestrators across four tiers, twenty-eight registered MCP tools (39 target) exposed via a Pylance-style stdio server, thirty-eight CORE governance rules enforced at pre-commit, CI, and runtime, a fifteen-analyzer parallel code intelligence engine (LENS), and TDD-first execution where CORE-008 mandates RED then GREEN then REFACTOR on every IMPLEMENT and FIX. It works directly inside your IDE via the Model Context Protocol. CORTEX is an LLM-orchestration framework — it delegates AI reasoning to the host LLM (GitHub Copilot or GPT); it does not embed ML models.
 
 ### How is CORTEX different from generic AI coding tools?
 
@@ -33,7 +33,7 @@ Any IDE or AI assistant that supports MCP with stdio transport: VS Code with Git
 
 ### How do I verify CORTEX is running?
 
-Call `cortex_sample_tool` in Copilot Chat. If it responds, MCP is live. Alternatively check `.vscode/settings.json` for the cortex MCP server configuration, or run `python3 -m cortex.mcp` in the terminal.
+Call `cortex_verify` in Copilot Chat. If it responds, MCP is live. Alternatively check `.vscode/settings.json` for the cortex MCP server configuration, or run `python3 -m cortex.mcp` in the terminal.
 
 ### What Python version is required?
 
@@ -41,7 +41,7 @@ Python 3.9 or higher. Verified by UpgradeOrchestrator.validate_requirements() at
 
 ### How do I install CORTEX?
 
-Clone the repository, run `pip install -r requirements.txt`, and open the workspace in VS Code. The MCP server auto-starts. Verify by calling `cortex_sample_tool` in Copilot Chat.
+Clone the repository, run `pip install -r requirements.txt`, and open the workspace in VS Code. The MCP server auto-starts. Verify by calling `cortex_verify` in Copilot Chat.
 
 ### Is there a Windows version?
 
@@ -157,7 +157,7 @@ Yes. Use `cortex_onboard` in Copilot Chat or RepositoryOnboardingOrchestrator. I
 
 ### How many MCP tools are there?
 
-Thirty-nine active canonical tools across thirteen categories, all registered via the ConsolidatedTool base class and exposed through JSON-RPC 2.0 stdio transport.
+Twenty-eight registered canonical tools across eleven categories, all registered in `cortex/mcp/mcp_registry.py` and exposed through JSON-RPC 2.0 stdio transport. Target: 39 tools — 11 additional tools are in active planning phases.
 
 ### What is the correct entry point?
 

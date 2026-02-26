@@ -18,7 +18,7 @@ The Model Context Protocol is a JSON-RPC 2.0 communication standard connecting I
 
 - **Transport**: stdio (standard input and output)
 - **Protocol**: JSON-RPC 2.0
-- **Tools**: Thirty-nine active MCP tools across thirteen categories
+- **Tools**: Twenty-eight registered MCP tools across eleven categories (39 target; 11 in active planning phases)
 - **Clients**: VS Code (Copilot Chat), Cursor, Claude Desktop
 
 ---
@@ -75,7 +75,7 @@ The MCP server auto-starts via `.vscode/settings.json`:
 }
 ```
 
-Verification: call `cortex_sample_tool` in Copilot Chat. If it responds, MCP is active.
+Verification: call `cortex_verify` in Copilot Chat. If it responds, MCP is active.
 
 ### Cursor
 
@@ -124,9 +124,9 @@ Any application that speaks JSON-RPC 2.0 over stdio can connect by spawning `pyt
 
 ---
 
-## Thirty-Nine MCP Tools — Catalog
+## Twenty-Eight Registered MCP Tools — Catalog
 
-All tools are registered via the ConsolidatedTool base class and exposed through JSON-RPC 2.0 stdio transport. Entry point rule: use `cortex_request_lifecycle` for full lifecycle tracking or `cortex_classify` for intent routing.
+All tools are registered in `cortex/mcp/mcp_registry.py` via the ConsolidatedTool base class and exposed through JSON-RPC 2.0 stdio transport. Authoritative count: 28 registered; target: 39. Entry point rule: use `cortex_request_lifecycle` for full lifecycle tracking or `cortex_classify` for intent routing.
 
 ### Core and Routing
 
@@ -135,52 +135,46 @@ All tools are registered via the ConsolidatedTool base class and exposed through
 | cortex_classify | Intent classification — routes requests to correct orchestrator |
 | cortex_orchestrator | Direct orchestrator invocation — routes to any of fifty-one wired orchestrators |
 | cortex_request_lifecycle | Full request lifecycle — classify, plan, execute, validate |
+| cortex_challenge | Generate two or more alternatives with trade-off analysis using LENS |
 | cortex_ask | Educational questions about CORTEX with truth-based verification |
 | cortex_total_recall | Discover and recall CORTEX features, components, architecture |
-| cortex_tools_catalog | Discover all thirty-nine MCP tools with category and description |
+| cortex_tools_catalog | Discover all registered MCP tools with category and description |
 
 ### Governance and Compliance
 
 | Tool | Description |
 |------|-------------|
 | cortex_governance | Execute governance actions — enforcement, blocking, remediation with audit logging |
-| cortex_load | Load CORE governance rules — skull rules, core rules, audit checklist, response format |
+| cortex_load | Load CORE governance rules, audit checklist, modes, and response format |
 | cortex_validate | CORE rule compliance validation |
+| cortex_validate_request | Request-level governance gate before execution |
 | cortex_check | Dependency drift detection — checks requirements.txt against installed packages |
 
 ### Intelligence and LENS
 
 | Tool | Description |
 |------|-------------|
-| cortex_brain_query | Domain brain query — synthesises knowledge from CORTEX cognitive model |
-| cortex_challenge | Generate two or more alternatives with trade-off analysis using LENS |
-| cortex_intelligence_matrix | Cross-cutting intelligence matrix — correlates LENS, governance, and metrics |
 | cortex_refactor | Semantic refactoring — extract, rename, organise across Python, C#, TypeScript |
 | cortex_vision | Vision API analysis — UI elements, URLs, issues, structural mappings |
 | cortex_knowledge | Knowledge synthesis from governance YAML registries |
-| cortex_learning | Unified Reinforcement Signal — emit, history, decay, promote, quarantine, metrics |
 
 ### Planning and Audit
 
 | Tool | Description |
 |------|-------------|
-| cortex_master_plan | Master plan management — cortex-master.yaml operations, phase lifecycle |
 | cortex_plan | Structured remediation and project planning with audit-driven decomposition |
 | cortex_onboard | Repository onboarding — LENS analysis, security assessment, SQLite dashboard |
-| cortex_query_opj | Operational Pattern Journal query — surfaces recurring patterns from execution history |
 
 ### Testing and Quality
 
 | Tool | Description |
 |------|-------------|
 | cortex_generate_tests | TDD test generation — produces failing RED tests from specification |
-| cortex_score_tests | Test quality gate — scores test suites against quality thresholds |
 
 ### Diagnostics and Health
 
 | Tool | Description |
 |------|-------------|
-| cortex_health_scan | All twenty-two orchestrator health endpoints — production readiness validation |
 | cortex_verify | Verify MCP server health, tool registry, environment, and claims |
 | cortex_debug | Debug session capture — logs, error analysis, fix plan generation |
 | cortex_metrics | Record and report development metrics — TDD cycles, debug sessions, invocations |
@@ -190,15 +184,13 @@ All tools are registered via the ConsolidatedTool base class and exposed through
 | Tool | Description |
 |------|-------------|
 | cortex_workflow | YAML workflow template execution — list, load, and run primitives |
-| cortex_list_workflow_templates | List available YAML workflow templates from cortex-registry |
-| cortex_scaffold_files | Write source files to disk with governance validation |
+| cortex_enrich | Content enrichment — adds metadata and context to structured data |
 
 ### Maintenance and Cleanup
 
 | Tool | Description |
 |------|-------------|
 | cortex_vacuum | Markdown sprawl cleanup — archives stale files, removes root clutter |
-| cortex_vacuum_execute | Full lifecycle vacuum — kill processes, health check, launch |
 
 ### VCS (Git)
 
@@ -217,10 +209,9 @@ All tools are registered via the ConsolidatedTool base class and exposed through
 | Tool | Description |
 |------|-------------|
 | cortex_batch_transform | Batch data transformation across a collection |
-| cortex_enrich | Content enrichment — adds metadata and context to structured data |
 | cortex_scan | Workspace scan — discovers files, patterns, structures |
-| cortex_bulk_digest_files | Bulk file digest — batch ingestion across three pipelines |
-| cortex_sweep_status | Sweep catalogue status — CORE-064 completeness tracking |
+
+*28 tools registered as of 2026-02-26. Source of truth: `cortex/mcp/mcp_registry.py`.*
 
 ---
 

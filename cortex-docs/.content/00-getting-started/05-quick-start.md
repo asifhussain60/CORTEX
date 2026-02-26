@@ -48,7 +48,7 @@ Open the CORTEX repository in VS Code. The MCP server is configured to **auto-st
 Open GitHub Copilot Chat and type:
 
 ```
-Call cortex_sample_tool
+Call cortex_verify
 ```
 
 If you see a response, MCP is active. If not, check that:
@@ -129,7 +129,7 @@ tests/                    ← All tests (mirrors cortex/ structure)
 
 When you opened VS Code:
 1. MCP server started automatically (Pylance-style stdio)
-2. 39 active tools became available in Copilot Chat
+2. 28 registered tools (39 target) became available in Copilot Chat
 3. CORTEX loaded governance rules from `cortex-registry/core/tier0-skull/skull-rules.yaml`
 4. The test framework registered the parallel runner and quality gate plugins
 

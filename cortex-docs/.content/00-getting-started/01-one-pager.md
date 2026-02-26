@@ -238,15 +238,12 @@ MCP tools are the external interface — how AI hosts (VS Code Copilot, Claude, 
 | Category | Tools | Purpose |
 |----------|-------|---------|
 | **Core (4)** | `cortex_process_request`, `cortex_challenge`, `cortex_classify`, `cortex_request_lifecycle` | Request processing, intent classification, challenge generation |
-| **Intelligence (6)** | `cortex_lens`, `cortex_knowledge`, `cortex_git`, `cortex_generate_tests`, `cortex_intelligence_matrix`, `cortex_brain_query` | LENS analysis, knowledge retrieval, git intelligence, test generation, matrix querying, brain queries |
-| **Governance (4)** | `cortex_governance`, `cortex_validate`, `cortex_load`, `cortex_validate_request` | Rule enforcement, compliance validation, rule loading, request validation |
-| **Operations (7)** | `cortex_debug`, `cortex_refactor`, `cortex_plan`, `cortex_onboard`, `cortex_dashboard`, `cortex_workflow`, `cortex_scaffold_files` | Debugging, refactoring, planning, repo onboarding, dashboards, workflow execution, file scaffolding |
-| **Utilities (9)** | `cortex_verify`, `cortex_ask`, `cortex_vacuum`, `cortex_tools_catalog`, `cortex_total_recall`, `cortex_metrics`, `cortex_check`, `cortex_vision`, `cortex_orchestrator` | Verification, education, cleanup, tool discovery, recall, metrics, health, vision analysis, orchestrator control |
-| **Toolkit (5)** | `cortex_diagnose`, `cortex_verify_env`, `cortex_cleanup`, `cortex_validate_gov`, `cortex_analyze` | Environment diagnostics, setup verification, cleanup, governance validation, code analysis |
-| **Specialized (4)** | `cortex_health_scan`, `cortex_vacuum_execute`, `cortex_master_plan`, `cortex_git_push` | Health monitoring, vacuum cleanup, master plan management, git orchestration |
-| **Scoring & Quality (1)** | `cortex_score_tests` | Test quality scoring (0–9 scale, 7-step algorithm) |
-| **Learning (1)** | `cortex_query_opj` | Query the Operational Pattern Journal for prior patterns and success rates |
-| **Discovery (2)** | `cortex_list_workflow_templates`, `cortex_sweep_status` | Workflow template listing, sweep completeness status (CORE-064) |
+| **Intelligence (4)** | `cortex_knowledge`, `cortex_generate_tests`, `cortex_refactor`, `cortex_vision` | Knowledge retrieval, test generation, semantic refactoring, vision analysis |
+| **Governance (4)** | `cortex_governance`, `cortex_validate`, `cortex_load`, `cortex_check` | Rule enforcement, compliance validation, rule loading, dependency drift detection |
+| **Operations (5)** | `cortex_debug`, `cortex_plan`, `cortex_onboard`, `cortex_dashboard`, `cortex_workflow` | Debugging, planning, repo onboarding, dashboards, workflow execution |
+| **Utilities (9)** | `cortex_verify`, `cortex_ask`, `cortex_vacuum`, `cortex_tools_catalog`, `cortex_total_recall`, `cortex_metrics`, `cortex_git`, `cortex_orchestrator`, `cortex_capture_metrics` | Verification, education, cleanup, tool discovery, recall, metrics, git, orchestrator control |
+
+> Note: 28 tools are registered in `mcp_registry.py`. Several tools listed in older documentation (`cortex_health_scan`, `cortex_master_plan`, `cortex_score_tests`, `cortex_sweep_status`, `cortex_query_opj`, etc.) are not yet registered and are in active planning phases toward the 39-tool target.
 
 ### 🧠 Intelligence Matrix — 20 × 20 Wiring Map
 

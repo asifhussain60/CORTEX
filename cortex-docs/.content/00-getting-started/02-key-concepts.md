@@ -23,7 +23,7 @@ The communication standard connecting your IDE to CORTEX. Think of it as the **l
 **Live location:** `cortex/mcp/` — Pylance-style stdio server, auto-starts with VS Code.
 
 ### MCP Gateway
-The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **39 active MCP tools**.
+The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **28 registered MCP tools (39 target)**.
 
 **Daily example:** When you type a request in VS Code Copilot Chat, it enters through the MCP Gateway, which routes it to `cortex_process_request` or another appropriate tool.
 

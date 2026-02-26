@@ -140,12 +140,7 @@ Export via `cortex_metrics_report` (YAML or JSON). Grafana dashboards consume th
 
 `cortex-registry/cortex-master.yaml` is a **thin phase index** (≤ 500 lines) tracking all 67 development phases. As of 25 February 2026, **all 67 phases are complete**.
 
-Each phase has a dedicated detail file in `cortex-registry/planning/phases/completed/`. The master plan is a reference index only — never a detail document. This is enforced by the THIN INDEX CONTRACT.
-
-The `cortex_master_plan` MCP tool exposes the master plan for querying:
-```
-Call cortex_master_plan with {"operation": "status"}
-```
+Each phase has a dedicated detail file in `cortex-registry/planning/phases/completed/`. The master plan is a reference index only — never a detail document. This is enforced by the THIN INDEX CONTRACT. Phase status is accessible via `cortex_plan` (MCP) or by reading `cortex-registry/cortex-master.yaml` directly.
 
 ---
 

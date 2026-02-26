@@ -30,7 +30,7 @@ Open the CORTEX repository in VS Code. The MCP server is configured to auto-star
 
 ## Step 2: Verify MCP Is Active (30 seconds)
 
-Open GitHub Copilot Chat and call `cortex_sample_tool`. If you see a response, MCP is active. If not, verify that Python 3.9 or later is on your PATH and that all dependencies are installed via `pip install -r requirements.txt`.
+Open GitHub Copilot Chat and call `cortex_verify`. If you see a response, MCP is active. If not, verify that Python 3.9 or later is on your PATH and that all dependencies are installed via `pip install -r requirements.txt`.
 
 ---
 
@@ -41,7 +41,7 @@ Try any of these in Copilot Chat:
 | What You Type | What Happens |
 |--------------|-------------|
 | "Analyze this codebase" | LENS runs parallel analyzers and delivers an inline report |
-| "What MCP tools are available?" | The tools catalog lists all 39 active tools |
+| "What MCP tools are available?" | The tools catalog lists all 28 registered tools (39 target) |
 | "Check governance compliance" | Validates CORE rule compliance |
 | "Onboard this repository" | Runs LENS analysis and creates a dashboard |
 | "Run health check" | Checks Python version, dependencies, and MCP connectivity |
@@ -72,7 +72,7 @@ The workspace is organised into well-defined directories. The `cortex/` director
 
 ## What Just Happened?
 
-When you opened VS Code, the MCP server started automatically, 39 tools became available in Copilot Chat, CORTEX loaded governance rules from the registry, and the test framework registered its parallel runner and quality gate plugins.
+When you opened VS Code, the MCP server started automatically, 28 registered tools became available in Copilot Chat (39 target when all planned phases complete), CORTEX loaded governance rules from the registry, and the test framework registered its parallel runner and quality gate plugins.
 
 When you ran a request, the RequestRephraseOrchestrator enriched it (Stage −1), the MCP Gateway validated and routed it (Stage 0), the IntentRouter classified intent (Stage 1), the appropriate orchestrator executed the workflow, results were delivered inline (CORE-002), and the audit trail was recorded to the SQLite database.
 

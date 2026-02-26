@@ -79,7 +79,7 @@ MasterOrchestrator owns and coordinates the `/audit fix` pipeline:
 | 1 | Governance Pre-Flight | Full specification validation |
 | 2 | 19-Point Production Scan | Checks one through nineteen, including SQLite health |
 | 3 | Wiring Contract Validation | Architecture integrity L1 through L3 |
-| 4 | Orchestrator Health (all 22) | HealthOrchestrator.run_health_check() |
+| 4 | Orchestrator Health (all 51 wired) | HealthOrchestrator.run_health_check() |
 | 5 | Vacuum Cleanup | VacuumOrchestrator plus cortex_vacuum |
 | 6 | Prompt and Agent Meta-Audit | Twenty-three checks |
 | 7–8 | Auto-Fix Convergence Loop | detect-fix-rescan-loop until zero P0 and P1 |

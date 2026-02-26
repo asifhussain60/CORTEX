@@ -150,7 +150,7 @@ These are the most important wiring pairs identified by the matrix. All are **no
 ### 2. Brain Tiers × MCP (IC-004/005/006 × CC-008)
 > Brain tier memories must be surfaced via MCP for Copilot Chat consumption
 
-**Wire:** T1/T2/T3 memory query → `cortex_brain_query` MCP tool (`cortex.mcp.tools.brain`)
+**Wire:** T1/T2/T3 memory query → `cortex_knowledge` MCP tool (registered) or `cortex_total_recall` for architecture recall. Note: `cortex_brain_query` is planned but not yet registered in `mcp_registry.py`.
 
 **Why critical:** The IDE cannot consume brain tier intelligence unless it is exposed as an MCP tool. This connects the entire memory subsystem to the user interface.
 

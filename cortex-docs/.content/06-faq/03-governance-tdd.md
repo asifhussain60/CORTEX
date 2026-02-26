@@ -120,7 +120,7 @@ They run **serially** (no xdist parallelism) for deterministic results. A golden
 
 The `/audit fix` convergence loop (Stages 7–8) enforces this — it loops until `p0_count == 0 AND p1_count == 0`, not just a single pass.
 
-**MCP tool:** `cortex_sweep_status` — query open sweeps, assert exhaustion, mark items resolved.
+**Sweep status:** `SweepCatalogueOrchestrator.get_open_issues(sweep_id)` — query open sweeps, assert exhaustion, mark items resolved.
 
 ---
 

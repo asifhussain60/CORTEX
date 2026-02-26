@@ -9,13 +9,13 @@ source_of_truth: cortex/mcp/tools/ + cortex/repositories/
 order: 5
 ---
 
-> **Purpose:** Answers to questions about the 39 active MCP tools, how the MCP server works, and how to integrate with external systems like Azure DevOps. All answers verified against live code.
+> **Purpose:** Answers to questions about the 28 registered MCP tools (39 target), how the MCP server works, and how to integrate with external systems like Azure DevOps. All answers verified against live code.
 
 ---
 
 ## How many MCP tools does CORTEX expose?
 
-**39 active canonical MCP tools** (39 active):
+**28 registered canonical MCP tools (39 target):**
 
 | Category | Active Tools | Deprecated |
 |----------|-------------|-----------|
@@ -28,7 +28,7 @@ order: 5
 | Work Items | 1 | — |
 | Sweep Completeness | 1 | — |
 
-All 39 active tools are registered via the `ConsolidatedTool` base class (`cortex/mcp/mcp_tool_base.py`) and exposed through JSON-RPC 2.0 stdio transport.
+All 28 registered tools (39 target) are registered via the `ConsolidatedTool` base class (`cortex/mcp/mcp_tool_base.py`) and exposed through JSON-RPC 2.0 stdio transport.
 
 ---
 
@@ -86,7 +86,7 @@ Call `cortex_tools_catalog` from Copilot Chat:
 Call cortex_tools_catalog
 ```
 
-This returns all 39 active tools with their descriptions, categories, and parameter schemas. It reads directly from the live tool registry — always current.
+This returns all 28 registered tools (39 target) with their descriptions, categories, and parameter schemas. It reads directly from the live tool registry — always current.
 
 ---
 
@@ -131,16 +131,18 @@ Call cortex_refactor with {"operation": "rename", "language": "csharp", "symbol_
 
 ---
 
-## What is `cortex_sweep_status` used for?
+## How does CORTEX handle CORE-064 sweep tracking?
 
-`cortex_sweep_status` is the CORE-064 enforcement tool. Use it to:
+CORE-064 sweep tracking is handled by `SweepCatalogueOrchestrator` (not an MCP tool — invoked internally by the enforcement pipeline):
 
-- **Query open sweeps:** `{"operation": "list_open"}` — returns all sweeps with open items
-- **Check a specific sweep:** `{"sweep_id": "SWEEP-123", "operation": "status"}` — returns item-level progress
-- **Assert exhaustion:** `{"sweep_id": "SWEEP-123", "operation": "assert_exhausted"}` — fails if any items remain open
-- **Mark item resolved:** `{"sweep_id": "SWEEP-123", "operation": "close_item", "item_id": "ITEM-001"}`
+- **Query open sweeps:** call `orchestrator.list_open_sweeps()` — returns all sweeps with open items
+- **Check a specific sweep:** call `orchestrator.get_open_issues(sweep_id)` — returns item-level progress
+- **Assert exhaustion:** call `orchestrator.assert_exhausted(sweep_id)` — fails if any items remain open
+- **Mark item resolved:** call `orchestrator.close_item(sweep_id, item_id)`
 
 Storage: `.cortex-runtime/sweeps/{sweep_id}.db` (SQLite WAL, one file per sweep).
+
+> Note: `cortex_sweep_status` is referenced in older documentation but is not currently registered in `mcp_registry.py`. It is planned toward the 39-tool target.
 
 ---
 
@@ -258,4 +260,4 @@ Autonomous mode follows CORE-064 (Sweep Completeness) — it creates a SweepCata
 
 ---
 
-*Verified against `cortex/mcp/tools/` (35 Python files, 39 active canonical tools) · 25 February 2026 · Phase 83 Complete*
+*Verified against `cortex/mcp/tools/` (source: mcp_registry.py, 28 registered canonical tools) · 25 February 2026 · Phase 83 Complete*

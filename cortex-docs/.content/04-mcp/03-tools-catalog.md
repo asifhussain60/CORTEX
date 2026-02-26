@@ -1,11 +1,11 @@
 # MCP Tools Catalog
 
 ---
-title: MCP Tools Catalog — 39 Active Tools
+title: MCP Tools Catalog — 28 Registered Tools (39 Target)
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
 last_verified: 2026-02-26
-source_of_truth: cortex/mcp/tools/ (return "cortex_*" in name properties)
+source_of_truth: cortex/mcp/mcp_registry.py
 order: 3
 ---
 
@@ -15,7 +15,7 @@ order: 3
 
 ## Overview
 
-**39 active canonical MCP tools** organized across 13 categories. All tools are registered via `ConsolidatedTool` base class and exposed through JSON-RPC 2.0 stdio transport (Pylance-style auto-start).
+**28 registered canonical MCP tools** organized across 11 categories. All tools are registered in `mcp_registry.py` and exposed through JSON-RPC 2.0 stdio transport (Pylance-style auto-start). Target: 39 registered tools; 11 additional tools are in active planning phases.
 
 **Entry point rule:** Use `cortex_request_lifecycle` for full lifecycle tracking or `cortex_classify` for intent routing.
 
@@ -32,7 +32,7 @@ order: 3
 | `cortex_request_lifecycle` | Full request lifecycle — classify → plan → execute → validate |
 | `cortex_ask` | Educational questions about CORTEX architecture with truth-based verification |
 | `cortex_total_recall` | Discover and recall CORTEX features, components, and architecture |
-| `cortex_tools_catalog` | Discover all 39 MCP tools with category and description |
+| `cortex_tools_catalog` | Discover all registered MCP tools with category and description |
 
 ### 2.2 Governance & Compliance — `cortex/mcp/tools/governance.py` + `toolkit/validate.py`
 
@@ -47,53 +47,58 @@ order: 3
 
 | Tool | File | Description |
 |------|------|-------------|
-| `cortex_brain_query` | `brain.py` | Domain brain query — synthesises knowledge from CORTEX's cognitive model |
 | `cortex_challenge` | `intelligence.py` | Generate ≥2 alternatives with trade-off analysis using LENS-driven reasoning |
-| `cortex_intelligence_matrix` | `intelligence.py` | Cross-cutting intelligence matrix — correlates LENS, governance, and metrics |
 | `cortex_refactor` | `intelligence.py` | Semantic refactoring — extract, rename, organize across Python, C#, TypeScript |
 | `cortex_vision` | `intelligence.py` | Vision API analysis — UI elements, URLs, issues, and structural mappings |
 | `cortex_knowledge` | `operations.py` | Knowledge synthesis from governance YAML registries into actionable insights |
-| `cortex_learning` | `learning_tool.py` | Unified Reinforcement Signal — emit/history/decay/promote/quarantine/metrics (Phase 83) |
+
+> Note: `cortex_brain_query`, `cortex_intelligence_matrix`, and `cortex_learning` are not registered in `mcp_registry.py` (planned for future phases).
 
 ### 2.4 Planning & Audit — various
 
 | Tool | File | Description |
 |------|------|-------------|
-| `cortex_master_plan` | `master_plan_tool.py` | Master plan management — cortex-master.yaml operations, phase lifecycle |
 | `cortex_plan` | `operations.py` | Structured remediation and project planning with audit-driven decomposition |
 | `cortex_onboard` | `onboard_repository.py` | Repository onboarding — LENS analysis, security assessment P0/P1/P2, SQLite dashboard |
-| `cortex_query_opj` | `opj_tool.py` | Operational Pattern Journal query — surfaces recurring patterns from execution history |
+| `cortex_onboard_v3` | `onboard_repository_v3.py` | Onboard with LENS + LLM business language + SQLite dashboard (Phase 21) |
 
-### 2.5 Testing & Quality — `cortex/mcp/tools/test_quality_tool.py`
+> Note: `cortex_master_plan` and `cortex_query_opj` are not currently registered in `mcp_registry.py`.
+
+### 2.5 Testing & Quality
 
 | Tool | Description |
 |------|-------------|
 | `cortex_generate_tests` | TDD test generation — produces failing RED tests from specification (CORE-008) |
-| `cortex_score_tests` | Test quality gate — scores test suites against CORTEX quality thresholds |
+
+> Note: `cortex_score_tests` is not registered as an MCP tool. TestQualityGate scoring is invoked internally by the TDD orchestration pipeline.
 
 ### 2.6 Diagnostics & Health
 
 | Tool | File | Description |
 |------|------|-------------|
-| `cortex_health_scan` | `health_scan_tool.py` | All 22 orchestrator health endpoints — production readiness validation |
 | `cortex_verify` | `toolkit/verify.py` | Verify MCP server health, tool registry, environment, and CORTEX claims |
 | `cortex_debug` | `debug_tools.py` | Debug session capture — logs, error analysis, and fix plan generation |
 | `cortex_metrics` | `operations.py` | Record and report development metrics — TDD cycles, debug sessions, orchestrator invocations |
+
+> Note: `cortex_health_scan` is not currently registered in `mcp_registry.py`.
 
 ### 2.7 Automation & Workflows
 
 | Tool | File | Description |
 |------|------|-------------|
 | `cortex_workflow` | `workflow_tools.py` | YAML workflow template execution — list, load, and run workflow primitives |
-| `cortex_list_workflow_templates` | `list_workflow_templates.py` | List available YAML workflow templates from cortex-registry (Phase 23) |
-| `cortex_scaffold_files` | `scaffold_files_tool.py` | Write arbitrary-language source files to disk with governance validation |
+| `cortex_capture_metrics` | `operations.py` | Capture development metrics for analysis |
+
+> Note: `cortex_list_workflow_templates` and `cortex_scaffold_files` are not currently registered in `mcp_registry.py`.
 
 ### 2.8 Maintenance & Cleanup
 
 | Tool | File | Description |
 |------|------|-------------|
 | `cortex_vacuum` | `operations.py` | Markdown sprawl cleanup — archives stale files, removes root clutter (CORE-002) |
-| `cortex_vacuum_execute` | `vacuum_execute_tool.py` | Full lifecycle vacuum — kill processes, health check, launch |
+| `cortex_transform` | `toolkit/analyze.py` | Transform data using specified transformation |
+
+> Note: `cortex_vacuum_execute` is not currently registered in `mcp_registry.py`.
 
 ### 2.9 VCS (Git)
 
@@ -111,11 +116,9 @@ order: 3
 
 | Tool | File | Description |
 |------|------|-------------|
-| `cortex_batch_transform` | `toolkit/analyze.py` | Batch data transformation across a collection |
-| `cortex_enrich` | `utilities.py` | Content enrichment — adds metadata and context to structured data |
-| `cortex_scan` | `toolkit/analyze.py` | Workspace scan — discovers files, patterns, and structures |
-| `cortex_bulk_digest_files` | `bulk_digest.py` | Bulk file digest — batch ingestion across 3 pipelines |
-| `cortex_sweep_status` | `sweep_status_tool.py` | Sweep catalogue status — CORE-064 completeness tracking |
+| `cortex_transform` | `toolkit/analyze.py` | Transform data using specified transformation |
+
+> Note: `cortex_batch_transform`, `cortex_enrich`, `cortex_scan`, `cortex_bulk_digest_files`, and `cortex_sweep_status` are not currently registered in `mcp_registry.py`. `cortex_sweep_status` functionality is handled by `SweepCatalogueOrchestrator` internally.
 
 ### 2.12 Deprecated
 
@@ -128,12 +131,12 @@ order: 3
 
 ## Practical Examples
 
-**Business Leader:** "39 active tools with clear entry points. Governance is enforced at the transport layer — developers cannot bypass CORE rules."
+**Business Leader:** "28 registered tools with clear entry points. Governance is enforced at the transport layer — developers cannot bypass CORE rules. 11 additional tools are planned toward the 39-tool target."
 
-**Product Owner:** "`cortex_plan` generates remediation plans with 4 execution modes. `cortex_onboard` gives a complete repository assessment in one call. `cortex_sweep_status` tracks long-running refactor sweeps across sessions (CORE-064). `cortex_query_opj` surfaces patterns from operational history to inform planning. `cortex_learning` exposes the URS reinforcement signal system for closed-loop learning."
+**Product Owner:** "`cortex_plan` generates remediation plans with 4 execution modes. `cortex_onboard` gives a complete repository assessment in one call. `cortex_generate_tests` automates the RED phase of TDD. `cortex_verify` confirms the MCP server is live."
 
-**Developer:** "I call `cortex_request_lifecycle` for full lifecycle tracking. `cortex_refactor` renames symbols by name — no byte offset needed (Roslyn by-name rename). `cortex_scaffold_files` emits workflow pipeline artefacts to disk. `cortex_generate_tests` produces a failing RED test from any specification. `cortex_learning(op='emit')` lets me feed back outcomes to close the learning loop."
+**Developer:** "I call `cortex_request_lifecycle` for full lifecycle tracking. `cortex_refactor` renames symbols by name — no byte offset needed (Roslyn by-name rename). `cortex_generate_tests` produces a failing RED test from any specification. `cortex_verify(op='mcp')` confirms all 28 registered tools are available."
 
 ---
 
-*Verified against `cortex/mcp/tools/` live code · 26 February 2026 · 39 active canonical MCP tools · Phase 83 complete*
+*Verified against `cortex/mcp/mcp_registry.py` · 26 February 2026 · 28 registered canonical MCP tools · 39 target*

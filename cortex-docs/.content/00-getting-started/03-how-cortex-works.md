@@ -60,7 +60,7 @@ Before your request reaches any orchestrator, the **RequestRephraseOrchestrator*
 Your enriched request arrives at the **MCP Gateway** (`cortex/mcp/`) over JSON-RPC 2.0 (stdio in development). The gateway:
 
 - Validates the JSON-RPC 2.0 message
-- Routes to the correct MCP tool (one of 39 active tools)
+- Routes to the correct MCP tool (one of 28 registered tools (39 target))
 - Enforces rate limiting
 - Checks the **Native Tool Gate** (CORE-049) — blocks direct file operations for IMPLEMENT/FIX/REFACTOR intents
 

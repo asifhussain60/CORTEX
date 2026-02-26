@@ -122,7 +122,7 @@ Modules: `hardening_integration.py`, `startup_validator.py`, `lifecycle_manager.
 
 ### Development (Local)
 
-The default mode — MCP server runs in-process via VS Code through stdio transport. No Docker required, no network ports, IDE manages process lifecycle, and all thirty-nine MCP tools are available immediately.
+The default mode — MCP server runs in-process via VS Code through stdio transport. No Docker required, no network ports, IDE manages process lifecycle, and all twenty-eight registered MCP tools (39 target) are available immediately.
 
 ### Production (Containerised)
 

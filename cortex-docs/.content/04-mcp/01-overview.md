@@ -19,7 +19,7 @@ order: 1
 
 - **Transport:** stdio (development) — no manual server startup
 - **Protocol:** JSON-RPC 2.0
-- **Tools:** 39 active MCP tools
+- **Tools:** 28 registered MCP tools (39 target; 11 in active planning phases)
 - **Clients:** VS Code (Copilot Chat), Cursor, Claude Desktop
 
 ---
@@ -39,7 +39,7 @@ order: 1
         └── Dispatch to MCP tool function
         │
         ▼
-[25 Canonical MCP Tools]
+[28 Registered MCP Tools (39 target)]
         │
         ▼
 [Orchestrator Execution]
@@ -64,7 +64,7 @@ The MCP server auto-starts via `.vscode/settings.json`:
 }
 ```
 
-**Verification:** Call `cortex_sample_tool` in Copilot Chat. If it responds, MCP is active.
+**Verification:** Call `cortex_verify` in Copilot Chat. If it responds, MCP is active.
 
 ---
 

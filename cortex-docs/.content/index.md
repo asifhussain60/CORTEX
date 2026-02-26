@@ -35,7 +35,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 |--------|-------|--------|
 | **Package** | 1 canonical (`cortex`) | ✅ 3→1 consolidation complete |
 | **Orchestrators** | 51 wired (17 core, 7 domain, 23 support, 4 git) | ✅ IOrchestrator protocol enforced |
-| **MCP Tools** | 39 active in `cortex/mcp/tools/` | ✅ Pylance-style stdio server |
+| **MCP Tools** | 28 registered in `cortex/mcp/tools/` (39 target) | ✅ Pylance-style stdio server |
 | **Top-level Dirs** | 20 canonical under `cortex/` | ✅ 59→20 cleanup complete |
 | **Governance Rules** | 38 CORE active (+ 2 AC rules) | ✅ Enforced at pre-commit + CI + runtime |
 | **Test Suite** | 16,259 tests (486 golden, 177 phase) | ✅ Parallel xdist batch runner |
@@ -88,7 +88,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | **Roslyn by-name rename** | `RoslynAdapter` + `RefactoringService.cs` accept `symbol_name` key (no byte offset required) — Gap G3 |
 | **CORE-064** | Sweep Completeness Contract — `SweepCatalogueOrchestrator` prevents partial sweeps across session boundaries |
 | **CORE-055** | Golden Test Tier Contract — 486 golden tests always pass; zero regression allowed |
-| **cortex_sweep_status** | MCP tool for CORE-064 sweep catalogue query/management |
+| **cortex_verify** | Verify MCP server health, environment, tool registry (use instead of cortex_sweep_status for CORE-064 sweep queries — see SweepCatalogueOrchestrator) |
 | **cortex_fetch_work_items** | Phase 15 — provider-agnostic ADO/Jira/custom work item access via MCP |
 | **SQLite Activity Log** | `OrchestratorBase.execute()/run()` auto-logs to `.cortex-runtime/audit.db` (never blocks execution) |
 | **Zero CORE violations** | CORE-011 (type hints), CORE-012 (docstrings), CORE-035 (duplicates) all at 0 |

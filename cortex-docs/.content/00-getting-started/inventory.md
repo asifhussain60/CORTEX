@@ -103,54 +103,60 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 | Tool ID | File | Description |
 |---------|------|-------------|
-| cortex_brain_query | `cortex/mcp/tools/brain.py` | Domain brain query — synthesises knowledge from CORTEX's cognitive model |
 | cortex_challenge | `cortex/mcp/tools/intelligence.py` | Generate ≥2 alternatives with trade-off analysis using LENS-driven reasoning |
-| cortex_intelligence_matrix | `cortex/mcp/tools/intelligence.py` | Cross-cutting intelligence matrix — correlates LENS, governance, and metrics |
 | cortex_refactor | `cortex/mcp/tools/intelligence.py` | Semantic refactoring — extract, rename, organize across Python, C#, TypeScript |
 | cortex_vision | `cortex/mcp/tools/intelligence.py` | Vision API analysis — UI elements, URLs, issues, and structural mappings |
 | cortex_knowledge | `cortex/mcp/tools/operations.py` | Knowledge synthesis from governance YAML registries into actionable insights |
 | cortex_total_recall | `cortex/mcp/tools/core.py` | Discover and recall CORTEX features, components, and architecture |
 
+> Not registered (planned): `cortex_brain_query`, `cortex_intelligence_matrix`, `cortex_learning`
+
 ### 2.4 Planning & Audit
 
 | Tool ID | File | Description |
 |---------|------|-------------|
-| cortex_master_plan | `cortex/mcp/tools/master_plan_tool.py` | Master plan management — cortex-master.yaml operations, phase lifecycle |
 | cortex_plan | `cortex/mcp/tools/operations.py` | Structured remediation and project planning with audit-driven decomposition |
 | cortex_onboard | `cortex/mcp/tools/onboard_repository.py` | Repository onboarding — LENS analysis, security assessment P0/P1/P2, SQLite dashboard |
-| cortex_query_opj | `cortex/mcp/tools/opj_tool.py` | Operational Pattern Journal query — surfaces recurring patterns from execution history |
+| cortex_onboard_v3 | `cortex/mcp/tools/onboard_repository_v3.py` | Onboard with LENS + LLM business language + SQLite dashboard (Phase 21) |
+
+> Not registered (planned): `cortex_master_plan`, `cortex_query_opj`
 
 ### 2.5 Testing & Quality
 
 | Tool ID | File | Description |
 |---------|------|-------------|
 | cortex_generate_tests | `cortex/mcp/tools/test_quality_tool.py` | TDD test generation — produces failing RED tests from specification (CORE-008) |
-| cortex_score_tests | `cortex/mcp/tools/test_quality_tool.py` | Test quality gate — scores test suites against CORTEX quality thresholds |
+
+> Not registered: `cortex_score_tests` — TestQualityGate scoring is internal to the TDD pipeline
 
 ### 2.6 Diagnostics & Health
 
 | Tool ID | File | Description |
 |---------|------|-------------|
-| cortex_health_scan | `cortex/mcp/tools/health_scan_tool.py` | All 22 orchestrator health endpoints — production readiness validation |
 | cortex_verify | `cortex/mcp/tools/toolkit/verify.py` | Verify MCP server health, tool registry, environment, and CORTEX claims |
 | cortex_debug | `cortex/mcp/tools/debug_tools.py` | Debug session capture — logs, error analysis, and fix plan generation |
 | cortex_ask | `cortex/mcp/tools/core.py` | Educational questions about CORTEX architecture with truth-based verification |
 | cortex_metrics | `cortex/mcp/tools/operations.py` | Record and report development metrics — TDD cycles, debug sessions, orchestrator invocations |
+
+> Not registered (planned): `cortex_health_scan`
 
 ### 2.7 Automation & Workflows
 
 | Tool ID | File | Description |
 |---------|------|-------------|
 | cortex_workflow | `cortex/mcp/tools/workflow_tools.py` | YAML workflow template execution — list, load, and run workflow primitives |
-| cortex_list_workflow_templates | `cortex/mcp/tools/list_workflow_templates.py` | List available YAML workflow templates from cortex-registry (Phase 23) |
-| cortex_scaffold_files | `cortex/mcp/tools/scaffold_files_tool.py` | Write arbitrary-language source files to disk with governance validation |
+| cortex_capture_metrics | `cortex/mcp/tools/operations.py` | Capture development metrics for analysis |
+
+> Not registered (planned): `cortex_list_workflow_templates`, `cortex_scaffold_files`
 
 ### 2.8 Maintenance & Cleanup
 
 | Tool ID | File | Description |
 |---------|------|-------------|
 | cortex_vacuum | `cortex/mcp/tools/operations.py` | Markdown sprawl cleanup — archives stale files, removes root clutter (CORE-002) |
-| cortex_vacuum_execute | `cortex/mcp/tools/vacuum_execute_tool.py` | Full lifecycle vacuum — kill processes, health check, launch |
+| cortex_transform | `cortex/mcp/tools/toolkit/analyze.py` | Transform data using specified transformation |
+
+> Not registered (planned): `cortex_vacuum_execute`
 
 ### 2.9 VCS (Git)
 
@@ -163,17 +169,15 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 | Tool ID | File | Description |
 |---------|------|-------------|
 | cortex_dashboard | `cortex/mcp/tools/operations.py` | Generate static dashboard suite — landing page + per-repo dashboards with embedded data |
-| cortex_tools_catalog | `cortex/mcp/tools/core.py` | Discover all 39 MCP tools with category and description |
+| cortex_tools_catalog | `cortex/mcp/tools/core.py` | Discover all registered MCP tools with category and description |
 
 ### 2.11 Toolkit / Bulk Operations
 
 | Tool ID | File | Description |
 |---------|------|-------------|
-| cortex_batch_transform | `cortex/mcp/tools/toolkit/analyze.py` | Batch data transformation across a collection |
-| cortex_enrich | `cortex/mcp/tools/utilities.py` | Content enrichment — adds metadata and context to structured data |
-| cortex_scan | `cortex/mcp/tools/toolkit/analyze.py` | Workspace scan — discovers files, patterns, and structures |
-| cortex_bulk_digest_files | `cortex/mcp/tools/bulk_digest.py` | Bulk file digest — batch ingestion across 3 pipelines |
-| cortex_sweep_status | `cortex/mcp/tools/sweep_status_tool.py` | Sweep catalogue status — CORE-064 completeness tracking |
+| cortex_transform | `cortex/mcp/tools/toolkit/analyze.py` | Transform data using specified transformation |
+
+> Not registered (planned): `cortex_batch_transform`, `cortex_enrich`, `cortex_scan`, `cortex_bulk_digest_files`, `cortex_sweep_status`
 
 ### 2.12 Deprecated
 

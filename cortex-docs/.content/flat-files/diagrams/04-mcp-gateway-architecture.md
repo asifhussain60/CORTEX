@@ -32,37 +32,32 @@
 │                    python3 -m cortex.mcp                                         │
 │                                                                                  │
 │  ┌─────────────────────────────────────────────────────────────────────────────┐  │
-│  │                        TOOL REGISTRY (39 tools)                            │  │
+│  │                   TOOL REGISTRY (28 registered / 39 target)               │  │
 │  │                                                                            │  │
 │  │  ┌────────────────────┐  ┌────────────────────┐  ┌──────────────────────┐  │  │
 │  │  │ CORE & ROUTING     │  │ GOVERNANCE         │  │ INTELLIGENCE         │  │  │
-│  │  │ cortex_classify    │  │ cortex_governance  │  │ cortex_brain_query   │  │  │
-│  │  │ cortex_orchestrator│  │ cortex_load        │  │ cortex_challenge     │  │  │
-│  │  │ cortex_request_    │  │ cortex_validate    │  │ cortex_refactor      │  │  │
-│  │  │   lifecycle        │  │ cortex_check       │  │ cortex_vision        │  │  │
-│  │  └────────────────────┘  └────────────────────┘  │ cortex_knowledge     │  │  │
-│  │                                                  │ cortex_total_recall  │  │  │
+│  │  │ cortex_classify    │  │ cortex_governance  │  │ cortex_challenge     │  │  │
+│  │  │ cortex_orchestrator│  │ cortex_load        │  │ cortex_refactor      │  │  │
+│  │  │ cortex_request_    │  │ cortex_validate    │  │ cortex_vision        │  │  │
+│  │  │   lifecycle        │  │ cortex_check       │  │ cortex_knowledge     │  │  │
+│  │  └────────────────────┘  └────────────────────┘  │ cortex_total_recall  │  │  │
+│  │                                                  └──────────────────────┘  │  │
+│  │  ┌────────────────────┐  ┌────────────────────┐                            │  │
+│  │  │ PLANNING & AUDIT   │  │ TESTING & QUALITY  │  ┌──────────────────────┐  │  │
+│  │  │ cortex_audit_plan  │  │ cortex_gen_tests   │  │ DIAGNOSTICS          │  │  │
+│  │  │ cortex_onboard     │  │ cortex_tdd         │  │ cortex_verify        │  │  │
+│  │  │ cortex_onboard_v3  │  │                    │  │ cortex_debug         │  │  │
+│  │  └────────────────────┘  └────────────────────┘  │ cortex_ask           │  │  │
+│  │                                                  │ cortex_metrics       │  │  │
 │  │  ┌────────────────────┐  ┌────────────────────┐  └──────────────────────┘  │  │
-│  │  │ PLANNING & AUDIT   │  │ TESTING & QUALITY  │                            │  │
-│  │  │ cortex_master_plan │  │ cortex_gen_tests   │  ┌──────────────────────┐  │  │
-│  │  │ cortex_plan        │  │ cortex_score_tests │  │ DIAGNOSTICS          │  │  │
-│  │  │ cortex_onboard     │  │                    │  │ cortex_health_scan   │  │  │
-│  │  │ cortex_query_opj   │  └────────────────────┘  │ cortex_verify        │  │  │
-│  │  └────────────────────┘                          │ cortex_debug         │  │  │
-│  │                                                  │ cortex_ask           │  │  │
-│  │  ┌────────────────────┐  ┌────────────────────┐  │ cortex_metrics       │  │  │
-│  │  │ AUTOMATION         │  │ MAINTENANCE        │  └──────────────────────┘  │  │
-│  │  │ cortex_workflow    │  │ cortex_vacuum      │                            │  │
-│  │  │ cortex_list_wf_    │  │ cortex_vacuum_exec │  ┌──────────────────────┐  │  │
-│  │  │   templates        │  │                    │  │ TOOLKIT              │  │  │
-│  │  │ cortex_scaffold    │  └────────────────────┘  │ cortex_batch_xform   │  │  │
-│  │  └────────────────────┘                          │ cortex_enrich        │  │  │
-│  │                          ┌────────────────────┐  │ cortex_scan          │  │  │
-│  │                          │ VCS & DOCS         │  │ cortex_bulk_digest   │  │  │
-│  │                          │ cortex_git         │  │ cortex_sweep_status  │  │  │
-│  │                          │ cortex_dashboard   │  └──────────────────────┘  │  │
-│  │                          │ cortex_tools_cat   │                            │  │
-│  │                          └────────────────────┘                            │  │
+│  │  │ AUTOMATION         │  │ MAINTENANCE        │                            │  │
+│  │  │ cortex_workflow    │  │ cortex_vacuum      │  ┌──────────────────────┐  │  │
+│  │  │ cortex_capture_    │  │ cortex_transform   │  │ VCS & DOCS           │  │  │
+│  │  │   metrics          │  │                    │  │ cortex_git           │  │  │
+│  │  └────────────────────┘  └────────────────────┘  │ cortex_dashboard     │  │  │
+│  │                                                  │ cortex_tools_cat    │  │  │
+│  │  Note: 11 additional tools in active planning   │ cortex_landing_page │  │  │
+│  │  phases (target: 39 registered)                 └──────────────────────┘  │  │
 │  └─────────────────────────────────────────────────────────────────────────────┘  │
 │                                                                                  │
 │  Tool Call Flow:                                                                 │

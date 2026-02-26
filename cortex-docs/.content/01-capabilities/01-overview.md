@@ -70,11 +70,11 @@ The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
 CORTEX exposes 39 MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 
-**Business Leader:** "39 tools covering analysis, governance, onboarding, debugging, health checks, sweep management, and workflow — all accessible from the IDE without switching tools."
+**Business Leader:** "28 registered tools covering analysis, governance, onboarding, debugging, health checks, and workflow — all accessible from the IDE. 11 more planned toward the 39-tool target."
 
-**Product Owner:** "Each tool maps to a user capability. `cortex_onboard` brings in a new codebase. `cortex_validate` checks rules. `cortex_sweep_status` tracks long-running refactor sweeps (CORE-064). `cortex_fetch_work_items` pulls ADO sprint work items."
+**Product Owner:** "Each tool maps to a user capability. `cortex_onboard` brings in a new codebase. `cortex_validate` checks rules. `cortex_workflow` runs YAML templates. `cortex_plan` generates remediation plans."
 
-**Developer:** "I call `cortex_tools_catalog` to discover all 39 tools. Each tool has typed parameters, docstrings, and returns structured results. MCP handles the JSON-RPC plumbing."
+**Developer:** "I call `cortex_tools_catalog` to discover all registered tools. Each tool has typed parameters, docstrings, and returns structured results. MCP handles the JSON-RPC plumbing."
 
 ### OrchestratorBase Lifecycle
 

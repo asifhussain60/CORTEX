@@ -32,9 +32,9 @@ CORTEX is built from one canonical Python package (`cortex`) with a single impor
 |--------|-------|
 | Canonical Package | `cortex` (single namespace, all imports `cortex.*`) |
 | Wired Orchestrators | 51 across 4 tiers (17 core, 7 domain, 23 support, 4 git) |
-| MCP Tools | 39 active, Pylance-style stdio auto-start |
+| MCP Tools | 28 registered / 39 target, Pylance-style stdio auto-start |
 | CORE Governance Rules | 38 active (+ 2 AC rules), enforced at pre-commit, CI, and runtime |
-| Test Suite | 16,259 tests (486 golden, 177 phase) |
+| Test Suite | 11,102 collected (unit + preflight); 16,259 total including golden and phase tiers |
 | LENS Analyzers | 10 parallel analyzers, 300–800ms combined latency |
 | Languages Analyzed | Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue |
 | Intelligence Tiers | Quick (<200ms), Targeted (<2s), Full (<10s) |
@@ -48,7 +48,7 @@ CORTEX organises capabilities into six cognitive domains, each analogous to a sp
 
 | Domain | What It Does | Key Metric |
 |--------|-------------|------------|
-| **Core Platform** | MCP gateway, 51-orchestrator dispatch, state management, health monitoring | 39 MCP tools, Pylance-style stdio |
+| **Core Platform** | MCP gateway, 51-orchestrator dispatch, state management, health monitoring | 28 registered MCP tools (39 target), Pylance-style stdio |
 | **Intelligence (LENS)** | 10-analyzer parallel code understanding covering AST, Git, Security, Patterns, Metrics, and more | 300–800ms full analysis |
 | **Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repository | Confidence scored 0.0–1.0 |
 | **Decisioning** | Intent routing across 10+ intent types to 51 wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
@@ -63,7 +63,7 @@ Every request passes through a structured pipeline before any code is written. T
 
 **Stage −1 · Request Enrichment (15–35ms)** — The RequestRephraseOrchestrator silently enriches the raw request with relevant governance context, a breaking-risk assessment, and design pillar considerations. The developer sees none of this; it happens automatically to ensure the MasterOrchestrator receives a fully contextualised request.
 
-**Stage 0 · MCP Gateway (5–15ms)** — The enriched request arrives at the MCP Gateway over JSON-RPC 2.0 via stdio transport. The gateway validates the message, routes to the correct MCP tool (one of 39 active tools), and enforces rate limiting.
+**Stage 0 · MCP Gateway (5–15ms)** — The enriched request arrives at the MCP Gateway over JSON-RPC 2.0 via stdio transport. The gateway validates the message, routes to the correct MCP tool (28 registered tools; 39 target), and enforces rate limiting.
 
 **Stage 1 · Intent Classification (20–40ms)** — IntentRouter uses LENS-based intelligence to determine what the request is asking for: IMPLEMENT, FIX, REFACTOR, ANALYZE, PLAN, AUDIT, DESIGN, DEBUG, INVESTIGATE, QUERY, DIGEST, or REPHRASE. Confidence above 0.85 routes immediately. Between 0.60 and 0.84, the system routes but asks a clarifying question. Below 0.60, the user is asked to rephrase.
 
@@ -103,7 +103,7 @@ All inter-orchestrator communication flows through the MasterOrchestrator, ensur
 
 The Model Context Protocol is the communication standard connecting IDEs to CORTEX. It uses JSON-RPC 2.0 passed over stdio in development and HTTP in production. The MCP server auto-starts when VS Code opens the workspace — identical to how Pylance starts. No manual startup is required.
 
-CORTEX exposes 39 active MCP tools organised by category: core routing, governance and compliance, intelligence and LENS, planning and audit, testing and quality, diagnostics and health, automation and workflows, maintenance and cleanup, version control, documentation, and toolkit operations.
+CORTEX exposes 28 registered MCP tools (39 target) organised by category: core routing, governance and compliance, intelligence and LENS, planning and audit, testing and quality, diagnostics and health, automation and workflows, maintenance and cleanup, version control, documentation, and toolkit operations. The remaining 11 tools are in active planning phases.
 
 ### Git-Backed Registry
 
@@ -163,7 +163,7 @@ A pluggable ticketing integration protocol that connects any ticketing system (A
 | Transport | stdio (development), HTTP (production) |
 | Package | 1 canonical Python package (`cortex`) — all imports use `cortex.*` |
 | Storage | Git-backed YAML registry — no external database required |
-| Testing | pytest-xdist parallel execution; 16,259 tests (486 golden, 177 phase) |
+| Testing | pytest-xdist parallel execution; 11,102 collected tests (unit + preflight); 16,259 including golden and phase tiers |
 | Observability | OpenTelemetry tracing, Prometheus metrics, Grafana dashboards, SQLite audit log |
 | Audit Trail | CortexAuditDB (SQLite WAL mode) in `.cortex-runtime/` with AC_START and AC_COMPLETE markers on every orchestrator invocation |
 
@@ -206,17 +206,19 @@ A pluggable ticketing integration protocol that connects any ticketing system (A
 
 | Category | Tools | Count |
 |----------|-------|-------|
-| Core & Routing | cortex_classify, cortex_orchestrator, cortex_request_lifecycle | 3 |
-| Governance | cortex_governance, cortex_load, cortex_validate, cortex_check | 4 |
-| Intelligence | cortex_brain_query, cortex_challenge, cortex_intelligence_matrix, cortex_refactor, cortex_vision, cortex_knowledge, cortex_total_recall | 7 |
-| Planning & Audit | cortex_master_plan, cortex_plan, cortex_onboard, cortex_query_opj | 4 |
-| Testing & Quality | cortex_generate_tests, cortex_score_tests | 2 |
-| Diagnostics | cortex_health_scan, cortex_verify, cortex_debug, cortex_ask, cortex_metrics | 5 |
-| Automation | cortex_workflow, cortex_list_workflow_templates, cortex_scaffold_files | 3 |
-| Maintenance | cortex_vacuum, cortex_vacuum_execute | 2 |
+| Core & Routing | cortex_classify, cortex_orchestrator, cortex_request_lifecycle, cortex_challenge | 4 |
+| Governance | cortex_governance, cortex_load, cortex_validate, cortex_validate_request, cortex_check | 5 |
+| Intelligence | cortex_knowledge, cortex_refactor, cortex_vision, cortex_total_recall, cortex_ask | 5 |
+| Planning & Audit | cortex_plan, cortex_onboard | 2 |
+| Testing & Quality | cortex_generate_tests | 1 |
+| Diagnostics | cortex_verify, cortex_debug, cortex_metrics | 3 |
+| Automation | cortex_workflow, cortex_enrich | 2 |
+| Maintenance | cortex_vacuum | 1 |
 | VCS | cortex_git | 1 |
 | Documentation | cortex_dashboard, cortex_tools_catalog | 2 |
-| Toolkit | cortex_batch_transform, cortex_enrich, cortex_scan, cortex_bulk_digest_files, cortex_sweep_status | 5 |
+| Toolkit | cortex_batch_transform, cortex_scan | 2 |
+
+*28 registered as of 2026-02-26. Authoritative source: `cortex/mcp/mcp_registry.py`. Target: 39 tools — 11 in active planning phases.*
 
 ### LENS Analyzers
 
@@ -241,4 +243,4 @@ The CORTEX repository is organised into well-defined directories:
 
 ---
 
-*CORTEX v1.0.0 · February 2026 · 51 wired orchestrators · 39 MCP tools · 38 CORE rules · 16,259 tests*
+*CORTEX v1.0.0 · February 2026 · 51 wired orchestrators · 28 registered MCP tools (39 target) · 38 CORE rules · 11,102 tests collected*

@@ -105,7 +105,7 @@ order: 99
 
 **MasterOrchestrator** — Central entry point orchestrator. Runs 4-stage pipeline: Interaction → Intent → Intelligence → Execution. Location: `cortex/orchestrators/core/master_orchestrator.py`.
 
-**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 39 active tools exposed via stdio transport.
+**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 28 registered tools (39 target) exposed via stdio transport.
 
 ## O
 
@@ -149,7 +149,7 @@ order: 99
 
 **stdio Transport** — Standard input/output process communication. IDE writes JSON-RPC to stdin, CORTEX responds on stdout. No network ports required.
 
-**SweepCatalogueOrchestrator** — CORE-064 enforcement engine. Tracks open/resolved items in every FIX/REFACTOR/AUDIT sweep using SQLite WAL (`cortex-runtime/sweeps/{sweep_id}.db`). No partial sweep can close without `assert_exhausted()` or `approve_wont_fix()`. MCP tool: `cortex_sweep_status`. Location: `cortex/orchestrators/support/sweep_catalogue_orchestrator.py`.
+**SweepCatalogueOrchestrator** — CORE-064 enforcement engine. Tracks open/resolved items in every FIX/REFACTOR/AUDIT sweep using SQLite WAL (`cortex-runtime/sweeps/{sweep_id}.db`). No partial sweep can close without `assert_exhausted()` or `approve_wont_fix()`. Location: `cortex/orchestrators/support/sweep_catalogue_orchestrator.py`. (Note: `cortex_sweep_status` MCP tool is not yet registered in `mcp_registry.py` — sweep status is queried via the orchestrator directly.)
 
 **Sweep Completeness Contract** — See CORE-064. Every sweep must exhaust its full catalogue before closing.
 

@@ -93,13 +93,13 @@ Every test is scored zero to nine using the formula: Impact (zero to three) plus
 | Four to six | REVIEW — may need improvement |
 | Below four | DELETE — low value, high maintenance cost |
 
-The MCP tool `cortex_score_tests` applies TestQualityGate scoring from production repositories.
+The `TestQualityGate` scoring system applies this rubric from production repositories (no registered MCP tool wrapper; invoked internally by the TDD orchestration pipeline).
 
 ---
 
 ## SweepCatalogueOrchestrator — CORE-064
 
-`cortex/orchestrators/support/sweep_catalogue_orchestrator.py` implements the Sweep Completeness Contract. When a FIX, REFACTOR, or AUDIT sweep begins, it opens a named catalogue in `.cortex-runtime/sweeps/{sweep_id}.db` using SQLite WAL mode. Every discovered issue is recorded as a catalogue entry with pending or resolved states. The catalogue persists across session boundaries — restarting VS Code does not lose open items. The sweep cannot be closed until every item has status CLOSED or an explicit approve-wont-fix decision. The MCP tool `cortex_sweep_status` surfaces open sweeps across sessions.
+`cortex/orchestrators/support/sweep_catalogue_orchestrator.py` implements the Sweep Completeness Contract. When a FIX, REFACTOR, or AUDIT sweep begins, it opens a named catalogue in `.cortex-runtime/sweeps/{sweep_id}.db` using SQLite WAL mode. Every discovered issue is recorded as a catalogue entry with pending or resolved states. The catalogue persists across session boundaries — restarting VS Code does not lose open items. The sweep cannot be closed until every item has status CLOSED or an explicit approve-wont-fix decision. Open sweeps are surfaced via `SweepCatalogueOrchestrator.get_open_issues(sweep_id)` (note: `cortex_sweep_status` MCP tool is not currently registered).
 
 ---
 

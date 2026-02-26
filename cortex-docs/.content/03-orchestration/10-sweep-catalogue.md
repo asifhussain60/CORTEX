@@ -94,30 +94,18 @@ This means sweeps survive process restarts and token budget resets — a new Cop
 
 ---
 
-## MCP Surface — `cortex_sweep_status`
+## Sweep Status Access
 
-The `cortex_sweep_status` MCP tool exposes the sweep catalogue to Copilot Chat:
+Sweep status is exposed via `SweepCatalogueOrchestrator` directly. The `.db` files in `.cortex-runtime/sweeps/` are SQLite WAL databases queryable by any orchestrator.
 
+> Note: `cortex_sweep_status` is referenced in older documentation but is not currently registered in `mcp_registry.py`. Sweep catalogue access is via the orchestrator's `get_open_issues(sweep_id)` method.
+
+```python
+# Programmatic access
+from cortex.orchestrators.support.sweep_catalogue_orchestrator import SweepCatalogueOrchestrator
+orchestrator = SweepCatalogueOrchestrator()
+open_issues = orchestrator.get_open_issues("fix-security-2026-02-21")
 ```
-Tool: cortex_sweep_status
-File: cortex/mcp/tools/sweep_status_tool.py
-
-Parameters:
-  sweep_id   (string, required) — The sweep identifier
-  operation  (string, optional) — "status" | "open" | "assert"
-
-Operations:
-  status  → Returns full sweep state (open/resolved counts, list of items)
-  open    → Returns only unresolved issues (useful for resuming after token reset)
-  assert  → Runs assert_exhausted(); returns success or lists remaining open issues
-```
-
-**Example Copilot Chat usage:**
-```
-@cortex cortex_sweep_status sweep_id="fix-security-2026-02-21" operation="open"
-```
-
-Returns a structured list of unresolved issues, enabling the agent to pick up exactly where it left off.
 
 ---
 
@@ -150,7 +138,7 @@ EnforcementOrchestrator.pre_commit_gate()
 ## Related Documents
 
 - [Governance & Compliance](../01-capabilities/05-governance-compliance.md) — Full CORE rule set including CORE-064
-- [MCP Tools Catalog](../04-mcp/03-tools-catalog.md) — `cortex_sweep_status` reference
+- [MCP Tools Catalog](../04-mcp/03-tools-catalog.md) — registered tool reference
 - [Master Orchestrator](02-master-orchestrator.md) — How sweeps integrate with 4-stage pipeline
 
 ---

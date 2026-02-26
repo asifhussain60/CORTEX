@@ -18,7 +18,7 @@ order: 1
 **CORTEX** (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI engineering framework. It combines:
 
 - **51 wired orchestrators** across 4 tiers (core, domain, support, git)
-- **39 active MCP tools** exposed via Pylance-style stdio server
+- **28 registered MCP tools (39 target)** exposed via Pylance-style stdio server
 - **38 CORE governance rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **LENS** — an 10-analyzer parallel code intelligence engine
 - **TDD-first execution** — CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX
@@ -62,7 +62,7 @@ Three methods — any one is sufficient:
 
 **Method 1 (fastest):** In Copilot Chat, call:
 ```
-Call cortex_sample_tool
+Call cortex_verify
 ```
 If it responds, MCP is live.
 
@@ -99,7 +99,7 @@ pip install -r requirements.txt
 code .
 
 # 4. Verify (in Copilot Chat)
-# Call cortex_sample_tool
+# Call cortex_verify
 ```
 
 Full setup guide: `00-getting-started/05-quick-start.md`

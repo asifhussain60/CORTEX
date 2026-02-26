@@ -37,7 +37,7 @@ CORTEX uses **Pylance-style MCP** — the server starts automatically when the w
 
 1. Open VS Code in the CORTEX workspace
 2. Open Copilot Chat (Ctrl+Shift+I / Cmd+Shift+I)
-3. Type: "Call `cortex_sample_tool`"
+3. Type: "Call `cortex_verify`"
 4. If it responds → MCP is active
 5. Type: "Call `cortex_tools_catalog`" → see all 23 tools
 

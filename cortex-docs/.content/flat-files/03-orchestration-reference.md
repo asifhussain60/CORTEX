@@ -184,9 +184,9 @@ The Sweep Completeness Contract (CORE-064) guarantees that every FIX, REFACTOR, 
 
 Sweep state is stored in SQLite WAL mode. Sweeps survive process restarts and token budget resets. A new session can resume an in-progress sweep by checking open issues.
 
-### MCP Surface
+### Sweep Status Access
 
-The `cortex_sweep_status` MCP tool at `cortex/mcp/tools/sweep_status_tool.py` exposes the sweep catalogue to Copilot Chat with three operations: status (full sweep state with open and resolved counts), open (only unresolved issues for resuming), and assert (runs assert_exhausted and returns success or lists remaining items).
+`SweepCatalogueOrchestrator.get_open_issues(sweep_id)` exposes the sweep catalogue with three operations: status (full sweep state with open and resolved counts), open (only unresolved issues for resuming), and assert (runs assert_exhausted and returns success or lists remaining items). Note: `cortex_sweep_status` is not currently registered as an MCP tool.
 
 ### Enforcement Integration
 

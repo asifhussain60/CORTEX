@@ -57,7 +57,7 @@ The six-layer architecture from IDE clients down to the configuration registry.
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
 │                    MCP GATEWAY                                  │
-│              cortex/mcp/ — 39 active tools                      │
+│              cortex/mcp/ — 28 registered tools (39 target)              │
 │                              │                                  │
 │         cortex_request_lifecycle (primary entry point)          │
 └─────────────────────────────┼───────────────────────────────────┘
@@ -129,13 +129,13 @@ The six-layer architecture from IDE clients down to the configuration registry.
 
 | Layer | Components | Location |
 |-------|------------|----------|
-| MCP Gateway | 39 active tools | `cortex/mcp/tools/` |
+| MCP Gateway | 28 registered tools (39 target) | `cortex/mcp/tools/` |
 | Orchestration | 51 wired orchestrators (17 core, 7 domain, 23 support, 4 git) | `cortex/orchestrators/` |
-| Intelligence | 10 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
+| Intelligence | 15 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
 | Governance | 38 CORE rules | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |
 | Registry | Rules, patterns, workflows | `cortex-registry/` |
-| Tests | 16,259 collected | `tests/` |
+| Tests | 11,102 collected (unit + preflight); 16,259 total | `tests/` |
 
 ---
 
@@ -620,7 +620,7 @@ VS Code Opens Workspace
     ├── 2. Find mcpServers.cortex config
     ├── 3. Spawn: python3 -m cortex.mcp
     ├── 4. Connect stdin/stdout
-    ├── 5. Send tools/list → receive 39 tools
+    ├── 5. Send tools/list → receive 28 tools (registered)
     │
     │   [normal operation — tool calls as needed]
     │
@@ -632,7 +632,7 @@ VS Code Opens Workspace
 
 ## 7. Testing Pyramid
 
-16,259 tests across layered execution tiers with parallel support.
+11,102 tests collected (unit + preflight) across layered execution tiers with parallel support. 16,259 total including golden and phase tiers.
 
 ### Test Pyramid
 
@@ -658,7 +658,7 @@ VS Code Opens Workspace
       ╱        Smoke Tests (subset)        ╲
      ╱──────────────────────────────────────╲
 
-  Total: 16,259 tests collected
+  Total: 11,102 collected (unit + preflight); 16,259 including golden/phase tiers
 ```
 
 ### Execution Strategy

@@ -23,7 +23,7 @@ order: 2
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
 │                    MCP GATEWAY                                  │
-│              cortex/mcp/ — 39 active tools                      │
+│              cortex/mcp/ — 28 registered tools (39 target)              │
 │                              │                                  │
 │         cortex_request_lifecycle (primary entry point)          │
 └─────────────────────────────┼───────────────────────────────────┘
@@ -50,7 +50,7 @@ order: 2
 │                              │                                  │
 │    ┌──────────────┐    ┌─────┴──────┐    ┌───────────────┐      │
 │    │    LENS      │    │   Brain    │    │  Knowledge    │      │
-│    │ 8 analyzers  │    │  Tiers    │    │  Base         │      │
+│    │ 15 analyzers │    │  Tiers    │    │  Base         │      │
 │    │ 300-800ms    │    │ P→R→A     │    │              │      │
 │    └──────────────┘    └───────────┘    └───────────────┘      │
 │                                                                 │
@@ -97,9 +97,9 @@ order: 2
 
 | Layer | Components | Location |
 |-------|------------|----------|
-| MCP Gateway | **39 active tools** (39 active) | `cortex/mcp/tools/` |
+| MCP Gateway | **28 registered tools** (39 target) | `cortex/mcp/tools/` |
 | Orchestration | **51 wired** orchestrators (17 core, 7 domain, 23 support, 4 git) | `cortex/orchestrators/` |
-| Intelligence | 8 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
+| Intelligence | 15 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
 | Governance | **38 CORE rules** | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |
 | Registry | Rules, patterns, workflows | `cortex-registry/` |

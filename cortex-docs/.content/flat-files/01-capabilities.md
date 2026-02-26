@@ -41,7 +41,7 @@ Every operation is recorded with hash-chain integrity via `cortex/infrastructure
 
 ### MCP Server — The Spinal Cord
 
-The MCP server runs as a Pylance-style stdio process that auto-starts when VS Code opens the workspace. It exposes thirty-nine active MCP tools through JSON-RPC 2.0 transport, requiring no manual server startup and no exposed network ports in development mode.
+The MCP server runs as a Pylance-style stdio process that auto-starts when VS Code opens the workspace. It exposes twenty-eight registered MCP tools (39 target) through JSON-RPC 2.0 transport, requiring no manual server startup and no exposed network ports in development mode.
 
 ### Key Core Components
 
@@ -51,7 +51,7 @@ The MCP server runs as a Pylance-style stdio process that auto-starts when VS Co
 | FileFactory | `cortex/core/file_factory.py` | Canonical file creation with CORE-028 naming enforcement |
 | WorkflowEngine | `cortex/core/workflow_engine.py` | Reads workflow YAML templates, executes phase sequences |
 | CortexAuditDB | `cortex/infrastructure/audit_db.py` | Unified SQLite with WAL mode for all audit trails |
-| MCP Server | `cortex/mcp/` | Pylance-style stdio server, 39 active tools |
+| MCP Server | `cortex/mcp/` | Pylance-style stdio server, 28 registered tools (39 target) |
 | Bootstrap | `cortex/bootstrap.py` | System initialisation, wiring, service discovery |
 | Config | `cortex/config/` | System configuration, feature flags |
 

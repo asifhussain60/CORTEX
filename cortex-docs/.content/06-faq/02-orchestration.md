@@ -107,7 +107,7 @@ This is **not optional**. CORE-008 is a Tier 0 skull rule — attempts to skip T
 
 **The problem it solves:** Long-running FIX/REFACTOR/AUDIT operations span multiple sessions. Before CORE-064, a sweep could be abandoned mid-run — leaving the codebase in a partial-fix state with no record of what was done.
 
-**How it works:** Every sweep is tracked in `.cortex-runtime/sweeps/{sweep_id}.db` (SQLite WAL). A sweep cannot be closed until every item in its catalogue has `status: CLOSED` or an explicit `approve_wont_fix` decision. The MCP tool `cortex_sweep_status` surfaces open sweeps across sessions.
+**How it works:** Every sweep is tracked in `.cortex-runtime/sweeps/{sweep_id}.db` (SQLite WAL). A sweep cannot be closed until every item in its catalogue has `status: CLOSED` or an explicit `approve_wont_fix` decision. `SweepCatalogueOrchestrator.get_open_issues(sweep_id)` surfaces open sweeps across sessions.
 
 ---
 
