@@ -16,7 +16,7 @@
 
 workflow:
   name: master_plan_execution
-  version: "2.0.0"
+  version: "1.0.0"
   description: >
     Autonomous end-to-end execution workflow for a CORTEX phase plan.
     Stops only after completing the entire phase. Each stage triggers the next.

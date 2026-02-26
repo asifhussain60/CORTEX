@@ -3,13 +3,12 @@
 # WORKFLOW-COMPLEXITY-GATE-001: Complexity-based workflow template routing
 # Authority: CORTEX-ARCH-012 (Intent Classification)
 # Status: Production
-# Version: 2.1
 
 metadata:
-  version: "2.1"
+  version: "1.0"
   created: "2026-02-09"
   updated: "2026-02-17"
-  authority: "cortex-architect.prompt.md v15.3"
+  authority: "cortex-architect.prompt.md"
   description: "Canonical CORTEX intent routing with deterministic orchestrator assignment and complexity-based workflow template routing"
   ac_marker: "AC_PHASE2-ROUTING-CONSOLIDATION, WORKFLOW-COMPLEXITY-GATE-001"
   maintained_by: "MasterOrchestrator"

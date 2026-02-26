@@ -8,7 +8,7 @@
 
 workflow:
   name: repository_onboarding
-  version: "2.0.0"
+  version: "1.0.0"
   description: >
     Standardized end-to-end workflow for onboarding external repositories
     into the CORTEX registry with 9-tab dashboard artifact generation,
@@ -22,7 +22,7 @@ workflow:
   # Output Schema
   # ---------------------------------------------------------------------------
   output:
-    schema_version: "2.0.0"
+    schema_version: "1.0.0"
     base_path: "cortex-registry/company/repos/{repo_name}/"
     tabs:
       - id: "01_overview"
@@ -241,7 +241,7 @@ workflow:
       test: "test_ephemeral_path_is_blocked"
 
     - id: schema_version_on_all_artifacts
-      description: "Every JSON artifact must carry schema_version=2.0.0"
+      description: "Every JSON artifact must carry schema_version=1.0.0"
       severity: P0
       test: "test_all_artifacts_schema_version"
 

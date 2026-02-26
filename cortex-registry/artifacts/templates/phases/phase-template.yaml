@@ -1,12 +1,12 @@
 # ============================================================================
-# CORTEX Phase Template v2.0 (With Enforcement Gates)
+# CORTEX Phase Template (With Enforcement Gates)
 # ============================================================================
 # Authority: CORE-055 (Pre-Execution Planning Completeness Gate)
 # Updated: 2026-02-15 (Added enforcement_gates, security_gates, red_green_refactor)
 # Purpose: Standard template for all CORTEX phases with visible governance
 # ============================================================================
 
-version: '2.0'
+version: '1.0'
 phase_id: phase-NN
 title: "Phase Title (60 chars max)"
 status: planned  # planned | active | completed | deferred | consolidated

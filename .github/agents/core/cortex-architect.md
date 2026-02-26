@@ -1,6 +1,6 @@
 ---
 agent_id: cortex-architect
-version: 11.0
+version: "1.0"
 status: active
 layer: core
 requires:
@@ -133,7 +133,7 @@ Results Inline (CORE-002)
 
 ---
 
-## Production Readiness (17-Point Audit)
+## Production Readiness (19-Point Audit)
 
 Execute on `/audit`:
 

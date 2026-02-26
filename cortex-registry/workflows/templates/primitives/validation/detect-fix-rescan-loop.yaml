@@ -25,7 +25,7 @@
 #   Cleanup policy: rows older than retention_days are vacuumed on loop exit.
 # ============================================================================
 
-version: '2.0.0'
+version: '1.0.0'
 template_id: 'primitives/validation/detect-fix-rescan-loop'
 name: 'Detect → Fix → Rescan Convergence Loop'
 tier: 'primitive'
@@ -68,10 +68,7 @@ metadata:
   version_history:
     - version: '1.0.0'
       date: '2026-02-23'
-      note: 'Initial primitive — extracted from health-vacuum and audit-fix patterns'
-    - version: '2.0.0'
-      date: '2026-02-23'
-      note: 'Added SQLite per-cycle logging, retention-based cleanup, bloat prevention'
+      note: 'Canonical primitive — extracted from health-vacuum and audit-fix patterns; includes SQLite per-cycle logging, retention-based cleanup, bloat prevention'
 
 # ============================================================================
 # CORTEX TOOLING

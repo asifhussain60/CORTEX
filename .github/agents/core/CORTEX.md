@@ -92,7 +92,7 @@
 
 | Command | Action |
 |---------|--------|
-| `/audit` | 17-point production readiness scan |
+| `/audit` | 19-point production readiness scan |
 | `/audit fix` | Scan + auto-remediate |
 | `/implement {feature}` | TDD implementation |
 | `/fix {issue}` | Bug fixing via TDD |

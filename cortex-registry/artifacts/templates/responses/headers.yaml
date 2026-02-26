@@ -169,11 +169,9 @@ versioning:
   current_version: "1.0"
   compatibility:
     min_engine_version: "1.0"
-    max_engine_version: "2.0"
+    max_engine_version: "1.0"
   breaking_changes: []
-  future_versions:
-    "1.1": "Add support for custom domain headers"
-    "2.0": "Support dynamic header templates with conditional sections"
+  future_versions: {}
 
 # =============================================================================
 # AUDIT & GOVERNANCE TRACKING

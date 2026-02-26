@@ -2,14 +2,14 @@
 # CORE-031 Compliance: Declarative autowiring for Git-safe registration
 
 module_name: master_orchestrator
-version: "2.0.0"
+version: "1.0.0"
 description: |
   Central orchestration hub that coordinates all domain orchestrators.
   Routes intents to appropriate handlers via semantic capability matching.
 
 dependencies:
   - name: intent_router
-    version: ">=1.5.0"
+    version: ">=1.0.0"
     required: true
     internal: false  # External until wiring spec created
   - name: governance_registry
@@ -27,7 +27,7 @@ dependencies:
 
 provides:
   - interface: IMasterOrchestrator
-    version: "2.0.0"
+    version: "1.0.0"
     description: "Central orchestration coordination"
   - interface: IOrchestrationPipeline
     version: "1.0.0"

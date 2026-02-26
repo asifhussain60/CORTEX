@@ -6,12 +6,12 @@
 # AC-ID: AC-PHASE-07B-TEST-QUALITY-GATE-001
 # ==============================================================================
 
-version: "2.0"
+version: "1.0"
 created: "2026-02-20"
 updated: "2026-02-24"
 authority: "test-quality.txt"
 # Phase 63-C: 4 new signals added (workflow_template_consumption, response_template_rendering,
-# trace_chain_verification, scenario_yaml_driven). Bumped 1.0 → 2.0.
+# trace_chain_verification, scenario_yaml_driven). Single canonical version.
 
 # Scoring formula:
 #   Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2)

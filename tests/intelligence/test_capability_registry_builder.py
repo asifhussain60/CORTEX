@@ -49,9 +49,9 @@ class TestCapabilityRegistryBuilderImport:
             workflow_templates=[],
             mcp_tools=[],
             generated_at="2026-02-25T00:00:00Z",
-            schema_version="2.0",
+            schema_version="1.0",
         )
-        assert result.schema_version == "2.0"
+        assert result.schema_version == "1.0"
         assert result.orchestrators == []
 
     def test_orchestrator_entry_dataclass_exists(self) -> None:
@@ -157,15 +157,15 @@ class TestCapabilityRegistryBuilderGenerate:
         content = yaml.safe_load(output.read_text())
         assert isinstance(content, dict), "Output must be a valid YAML mapping"
 
-    def test_generated_manifest_has_schema_version_2(
+    def test_generated_manifest_has_schema_version(
         self, builder_with_tmp_output: "CapabilityRegistryBuilder", tmp_path: Path
     ) -> None:
-        """Generated manifest must declare schema_version: '2.0'."""
+        """Generated manifest must declare schema_version: '1.0'."""
         builder_with_tmp_output.generate_manifest()
         output = tmp_path / "capabilities-manifest.yaml"
         content = yaml.safe_load(output.read_text())
-        assert content.get("schema_version") == "2.0", (
-            f"Expected schema_version '2.0', got: {content.get('schema_version')}"
+        assert content.get("schema_version") == "1.0", (
+            f"Expected schema_version '1.0', got: {content.get('schema_version')}"
         )
 
     def test_generated_manifest_has_auto_generated_flag(

@@ -51,7 +51,7 @@ def orchestrator(
         ValueError: If domain is empty or invalid.
 
     Example:
-        @orchestrator(domain="governance", version="2.0", capabilities=["validate"])
+        @orchestrator(domain="governance", version="1.0", capabilities=["validate"])
         class GovernanceOrchestrator:
             pass
     """

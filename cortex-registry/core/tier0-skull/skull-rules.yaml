@@ -18,7 +18,7 @@ metadata:
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
   last_update: "2026-02-26 - CORE-067 Template Genericness Contract added (rule_count 35→36)"
-  version: "3.8"
+  version: "1.0"
   consolidation_date: "2026-02-21"
   consolidation_status: "Phase 16 - CORE-064 Sweep Completeness Contract registered (partial sweep prevention)"
   naming_system: "Dual naming - CORE-* (canonical ID) + Business Principle (human-readable alias)"

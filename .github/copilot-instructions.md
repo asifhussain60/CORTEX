@@ -1,11 +1,11 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-24 (Phase 66/67 COMPLETE — all 67 phases done) | ## About CORTEX
+**Updated:** 2026-02-24 (Phase 82/82 COMPLETE) | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
 - **27 Wired Orchestrators** across 3 tiers (core, domain, support) — all satisfy IOrchestrator protocol
-- **38 MCP Tools** via Pylance-style stdio server (auto-starts with VS Code)
+- **26 MCP Tools** (28 total — 2 deprecated) via Pylance-style stdio server (auto-starts with VS Code)
 - **35 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)

@@ -417,7 +417,7 @@ class CapabilityRegistryBuilder:
             workflow_templates=workflow_templates,
             mcp_tools=mcp_tools,
             generated_at=generated_at,
-            schema_version="2.0",
+            schema_version="1.0",
             output_path=self.output_path,
         )
 
@@ -574,12 +574,12 @@ class CapabilityRegistryBuilder:
             })
 
         manifest: Dict = {
-            "schema_version": "2.0",
+            "schema_version": "1.0",
             "auto_generated": True,
             "generated_at": generated_at,
             "generated_by": "cortex.intelligence.capability_registry_builder.CapabilityRegistryBuilder",
-            "manifest_version": "2.0",
-            # ── Orchestrators (v2.0 — generated from wiring specs) ──────────
+            "manifest_version": "1.0",
+            # ── Orchestrators (generated from wiring specs) ──────────
             "orchestrators": {
                 "total": len(orchestrators),
                 "tiers": {

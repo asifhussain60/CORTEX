@@ -291,7 +291,7 @@ class TestOnboardingFileGeneration:
     def test_all_artifacts_schema_version(
         self, minimal_repo: Path, test_output_dir: Path
     ) -> None:
-        """Golden: Every tab JSON artifact carries schema_version=2.0.0."""
+        """Golden: Every tab JSON artifact carries schema_version=1.0.0."""
         result = onboard_repository_tool(
             repository_path=str(minimal_repo),
             generate_artifacts=True,

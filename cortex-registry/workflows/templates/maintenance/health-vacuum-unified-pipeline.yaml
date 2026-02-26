@@ -19,7 +19,7 @@
 workflow:
   id: "maintenance/health-vacuum-unified-pipeline"
   name: "Health-Vacuum Unified Pipeline"
-  version: "2.0.0"
+  version: "1.0.0"
   category: "maintenance"
   description: |
     Unified two-orchestrator pipeline for CORTEX repository integrity:

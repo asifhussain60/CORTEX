@@ -162,7 +162,7 @@ phases:
     tdd_sequence:
       red:
         - "test_builder_scans_orchestrators_from_cortex_source: assert builder finds ≥27 orchestrators"
-        - "test_builder_generates_manifest_yaml: assert output is valid YAML with schema_version 2.0"
+        - "test_builder_generates_manifest_yaml: assert output is valid YAML with schema_version 1.0"
         - "test_builder_count_matches_wiring_spec: assert orchestrator count == wiring spec total"
         - "test_builder_removes_inventory_folder: assert cortex-registry/.inventory/ absent after run"
       green:
@@ -363,7 +363,7 @@ phases:
     steps:
       - "Verify ALL 5 sweep_catalogue GAPs have status: CLOSED"
       - "Verify cortex-registry/.inventory/ folder does not exist"
-      - "Verify capabilities-manifest.yaml contains auto_generated: true, schema_version: '2.0'"
+      - "Verify capabilities-manifest.yaml contains auto_generated: true, schema_version: '1.0'"
       - "python3 scripts/run_tests.py smoke — must pass ≥1420"
       - "Move planned/phase-75-capability-registry-builder.yaml → completed/"
       - "Update cortex-master.yaml: phase-75 status→COMPLETE"
@@ -380,7 +380,7 @@ phases:
       phase_file_moved_to_completed: true
       inventory_folder_absent: true
       manifest_auto_generated: true
-      manifest_schema_version: "2.0"
+      manifest_schema_version: "1.0"
       all_gap_refs_closed: true
       blocks_next_sub_phase: false
 

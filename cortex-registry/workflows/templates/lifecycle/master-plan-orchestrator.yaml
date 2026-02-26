@@ -16,7 +16,7 @@
 
 workflow:
   name: master_plan_orchestrator
-  version: "2.0.0"
+  version: "1.0.0"
   description: >
     Standardized end-to-end workflow for creating a new CORTEX phase entry.
     Ensures: registry is SSOT (cortex-refactor-master.yaml), sequence is correct,

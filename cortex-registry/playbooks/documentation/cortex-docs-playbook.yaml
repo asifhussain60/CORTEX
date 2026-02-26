@@ -188,11 +188,11 @@ planning_workflow:
 # ============================================
 
 design_system:
-  version: "4.0.0"
+  version: "1.0.0"
   standard: "cortex-docs/ARCHITECTURE-RECOMMENDATION.md"
   
   theme:
-    name: "Glassmorphism v4.0"
+    name: "Glassmorphism"
     primary_colors:
       cyan: "#00d4ff"
       purple: "#7b61ff"

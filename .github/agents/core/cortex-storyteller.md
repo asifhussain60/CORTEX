@@ -1,6 +1,6 @@
 ---
 agent_id: "cortex-storyteller"
-version: "1.2"
+version: "1.0"
 status: "active"
 layer: "core"
 capabilities:

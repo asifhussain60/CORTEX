@@ -526,8 +526,8 @@ def onboard_repository_tool(
         ).to_dict()
 
 
-# Schema version for golden-test assertions — bump when output structure changes
-SCHEMA_VERSION = "2.0.0"
+# Schema version for golden-test assertions — single canonical version (CORE-035)
+SCHEMA_VERSION = "1.0.0"
 
 # 9-tab dashboard structure per onboarded repo
 DASHBOARD_TABS = [

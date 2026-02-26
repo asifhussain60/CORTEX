@@ -22,7 +22,7 @@
 
 **Entry Point:** This prompt → MasterOrchestrator → 4-stage pipeline → MCP Tools  
 **Orchestrators:** 27 wired across 3 tiers in `cortex/orchestrators/`  
-**MCP Tools:** 24 in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
+**MCP Tools:** 26 active (28 total — 2 deprecated) in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
 
 ---
 

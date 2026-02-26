@@ -45,7 +45,7 @@
 # ══════════════════════════════════════════════════════════════════════════════playbook:
   id: "pb-sts-001"
   title: "BadMonolith End-to-End Refactoring — CORTEX SDLC Showcase"
-  version: "2.0.0"
+  version: "1.0.0"
   category: "sts"
   repeatable: true
   status: "ready"

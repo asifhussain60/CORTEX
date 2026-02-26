@@ -30,7 +30,7 @@ from cortex.mcp.tools.onboard_repository import (
 # Schema Version Constant — SSOT for all golden assertions
 # ============================================================================
 
-CURRENT_SCHEMA_VERSION = SCHEMA_VERSION  # "2.0.0"
+CURRENT_SCHEMA_VERSION = SCHEMA_VERSION  # "1.0.0"
 
 
 # ============================================================================
