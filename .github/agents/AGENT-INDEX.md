@@ -14,6 +14,12 @@ Default Context: THIS FILE ONLY (~200 tokens)
 Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 ```
 
+**Drift Detection Protocol (Total Recall Learnings):**
+- All numeric values in this file are SOURCE OF TRUTH for agent consumption
+- Values derived from file system via grep (not manual claims)
+- Any drift between this file and implementation triggers P0 validation failure
+- Verification command: `python3 scripts/validate-architecture-counts.py`
+
 ### Status Icons
 
 | Icon | Meaning |
@@ -78,6 +84,41 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **phase-creation-standards.md** | Standards for new phases |
 | **cleanup-audit-guide.md** | Cleanup procedure reference |
 | **STAGE-0-GOVERNANCE-AUDIT-SPEC.md** | Governance audit specification |
+| **totalrecall.md** | 7-phase holistic refactor protocol (numeric drift + version audit + contradiction resolution) |
+
+---
+
+## Total Recall Protocol (Numeric Drift Prevention)
+
+**Authority:** `_workspaces/.chats/totalrecall.md`  
+**Trigger:** `/totalrecall`, or when numeric claims diverge from reality  
+**Purpose:** Holistic audit of ALL documentation for drift, version violations, contradictions
+
+**7-Phase Protocol:**
+1. **INVENTORY** — Establish canonical values from file system (grep-based truth)
+2. **CONTRADICTION** — Detect numeric drift, version violations (CORE-035), stale refs
+3. **ARCHITECTURE** — Map orchestration flows, identify duplication
+4. **RECOMMENDATION** — Single unified solution (no forks, no v2)
+5. **IMPLEMENTATION** — In-place edits only (highest leverage first)
+6. **REGRESSION PROOF** — Golden tests + validation gates
+7. **VERIFICATION** — 7-step checklist with expected signals
+
+**Canonical Value Derivation (Examples):**
+
+```bash
+# Wired Orchestrators
+{ grep '  - name:' cortex-registry/core/specifications/*-wiring.yaml; } | \
+  grep -v 'governance_registry\|audit_logger\|state_manager' | sort -u | wc -l
+
+# MCP Tools
+grep -rn 'class Cortex.*Tool' cortex/mcp/tools/ --include="*.py" | \
+  grep -v '__pycache__\|Base\|Category' | wc -l
+
+# CORE Rules
+grep -c 'rule_id: CORE-' cortex-registry/core/tier0-skull/skull-rules.yaml
+```
+
+**Validation Command:** `python3 scripts/validate-architecture-counts.py` (should output: ALL CHECKS PASSED)
 
 ---
 

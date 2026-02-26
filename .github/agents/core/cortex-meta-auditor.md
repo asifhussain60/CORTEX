@@ -117,7 +117,102 @@ grep -n "Author.*Asif" .github/prompts/cortex-architect.prompt.md
 
 ## Canonical Reference Values
 
+**Authority:** File system source of truth (derived via grep, not manual claims)  
+**Last Verified:** 2026-02-26 (Total Recall execution)
+
 All `.github/` documentation MUST use these values:
+
+| Metric | Canonical Value | Derivation Command |
+|--------|-----------------|-------------------|
+| **Wired Orchestrators** | 51 unique | `{ grep '  - name:' cortex-registry/core/specifications/*-wiring.yaml; } \| grep -v 'governance_registry\|audit_logger\|state_manager' \| sort -u \| wc -l` |
+| **MCP Tools** | 38 active | `grep -rn 'class Cortex.*Tool' cortex/mcp/tools/ --include="*.py" \| grep -v '__pycache__\|Base\|Category' \| wc -l` |
+| **CORE Rules** | 38 CORE + 2 AC | `grep -c 'rule_id: CORE-' cortex-registry/core/tier0-skull/skull-rules.yaml` |
+| **Top-level Dirs** | 20 dirs | `ls -d cortex/*/ \| grep -v __pycache__ \| wc -l` |
+| **Orchestrator Subdirs** | 14 subdirs | `ls -d cortex/orchestrators/*/ \| grep -v __pycache__ \| wc -l` |
+| **Package Name** | `cortex` (single) | No alternatives allowed |
+| **Test Count** | 16,259 collected | `python3 -m pytest tests/ --collect-only -q \| tail -1` |
+
+**Numeric Drift Detection Protocol:**
+1. Extract all numeric claims from docs: `grep -rn '{pattern}' .github/ --include="*.md"`
+2. Run derivation command to get actual value from file system
+3. Compare claimed vs actual → any mismatch is P0 drift
+4. Fix docs inline (no new versions) → update to canonical value
+5. Commit with message: `fix(docs): align {metric} with file system truth`
+
+**Version Drift Detection (CORE-035):**
+```bash
+# Detect any version > 1.0 (excluding 3rd-party deps)
+grep -rn 'version.*[2-9]\.\|version.*"2\.\|v2\.\|_v2\|schema.*2\.' \
+  cortex-registry/ .github/ cortex/ --include="*.yaml" --include="*.py" --include="*.md" | \
+  grep -v 'python-version\|pytest\|pip\|CDN\|OWASP\|>=\|<=' | \
+  grep -v '__pycache__\|completed/'
+```
+
+Expected: **0 matches**. Any match is a CORE-035 violation (forked implementation, not in-place update).
+
+---
+
+## Automated Truth Establishment (Total Recall Protocol)
+
+**Purpose:** Derive all canonical values programmatically from file system, never from manual claims.
+
+**Truth Table Generation:**
+
+```bash
+#!/bin/bash
+# Generate canonical truth table for all metrics
+
+echo "=== CORTEX CANONICAL METRICS (File System Truth) ==="
+echo ""
+
+echo "1. Wired Orchestrators:"
+{ grep '  - name:' cortex-registry/core/specifications/core-orchestrator-wiring.yaml; \
+  grep '  - name:' cortex-registry/core/specifications/domain-orchestrator-wiring.yaml; \
+  grep '  - name:' cortex-registry/core/specifications/support-orchestrator-wiring.yaml; \
+  grep '  - name:' cortex-registry/core/specifications/git-orchestrator-wiring.yaml; } | \
+grep -v 'core_orchestrators\|governance_registry\|audit_logger\|state_manager\|documentation_system\|business_knowledge' | \
+sort -u | wc -l
+
+echo "2. MCP Tools:"
+grep -rn 'class Cortex.*Tool\|class Cortex.*ConsolidatedTool' cortex/mcp/tools/ --include="*.py" | \
+grep -v '__pycache__\|Base\|Category\|Parameter' | wc -l
+
+echo "3. CORE Rules:"
+echo "   CORE-xxx: $(grep -c 'rule_id: CORE-' cortex-registry/core/tier0-skull/skull-rules.yaml)"
+echo "   AC-xxx:   $(grep -c 'rule_id: AC-' cortex-registry/core/tier0-skull/skull-rules.yaml)"
+echo "   Total:    $(grep -c 'rule_id:' cortex-registry/core/tier0-skull/skull-rules.yaml)"
+
+echo "4. Top-level Dirs:"
+ls -d cortex/*/ | grep -v __pycache__ | wc -l
+
+echo "5. Orchestrator Subdirs:"
+ls -d cortex/orchestrators/*/ | grep -v __pycache__ | wc -l
+
+echo "6. Test Count:"
+python3 -m pytest tests/ --collect-only -q 2>/dev/null | tail -1 || echo "Run pytest to get count"
+
+echo ""
+echo "=== DRIFT DETECTION ==="
+echo "Claimed '27 wired' locations: $(grep -rn '27 wired' .github/ --include='*.md' | wc -l)"
+echo "Claimed '26 MCP' locations:   $(grep -rn '26 MCP' .github/ --include='*.md' | wc -l)"
+echo "Claimed '35 CORE' locations:  $(grep -rn '35 CORE' .github/ --include='*.md' | wc -l)"
+echo ""
+echo "Expected: 0 matches for stale claims"
+```
+
+**Three-Way Conflict Resolution:**
+
+When metadata, docs, and actual code disagree (example from chat01.md):
+
+| Source | Value | Authority |
+|--------|-------|-----------|
+| `skull-rules.yaml` metadata | `rule_count: 36` | ❌ Stale |
+| All `.github/` docs | "35 CORE rules" | ❌ Stale |
+| Actual `grep -c 'rule_id: CORE-'` | 38 | ✅ Canonical |
+
+**Resolution:** Update metadata + all docs to match actual (38).
+
+---
 
 | Metric | Canonical Value |
 |--------|----------------|
@@ -125,7 +220,7 @@ All `.github/` documentation MUST use these values:
 | MCP Tools | **38 MCP tools** |
 | CORE Rules | **38 active** (+ 2 AC rules = 40 total) |
 | Package | **`cortex`** (single) |
-| Tests | **15,739** (486 golden, 177 phase) |
+| Tests | **16,259 collected** (486 golden, 177 phase) |
 | Audit Checks | **19-Point** production readiness (Checks #1–#19) |
 | Meta-Audit Checks | **23 checks** |
 | Workflow Primitive | `primitives/validation/detect-fix-rescan-loop` |

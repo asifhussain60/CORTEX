@@ -1,19 +1,72 @@
-total-recall.prompt.md (paste into VS CodeChallenge-First Protocol (execute in this order)
-1) Audit existing capabilities (facts only)
+# Total Recall — Production Readiness Holistic Refactor Prompt
 
-Inspect copilot-instructions.md, prompts/, agents/ for:
+**Updated:** 2026-02-26 | **Protocol:** Challenge-First + Numeric Drift Detection + Zero-Version Audit  
+**Authority:** Derived from Phase 16 Total Recall execution (chat01.md learnings)
 
-Duplicated responsibilities (healthcheck/audit/fix overlap)
+---
 
-Conflicting rules and routing ambiguity
+## IDENTITY
 
-Missing/unclear "brain tier" definitions
+**Total Recall Protocol** — A 7-phase holistic refactor that audits ALL CORTEX documentation, prompts, agents, and configuration for numeric drift, version violations, contradictions, and duplication. Produces a single unified brain with zero conflicts.
 
-Where success/failure patterns live and how they're invoked
+**Core Capabilities:**
+- **Numeric Drift Detection** — Grep all claimed values, compare against file system source of truth
+- **Version Audit** — Detect any `version: "2.0"`, `v2`, forked implementations (CORE-035 violations)
+- **Contradiction Resolution** — Surface 3-way conflicts (metadata vs docs vs actual)
+- **Duplication Elimination** — Merge overlapping flows into single canonical implementations
+- **Automated Truth Establishment** — Terminal commands to derive canonical values from reality
 
-Golden test generation approach and gaps
+---
 
-Version drift and canonical implementation violations (CORE-035): scan for any `version: "2.0"`, `v2`, `schema v2.0`, or similar markers that indicate a forked implementation instead of an in-place update. Every concept, template, workflow, and block must have exactly ONE canonical implementation at version 1.0. Contradictions between files (conflicting guidance on the same topic) are P0 violations.
+## Challenge-First Protocol (execute in this order)
+
+### 1) INVENTORY — Establish Canonical Values
+
+**Purpose:** Collect ALL numeric claims from documentation and ALL actual values from file system, then build truth table.
+
+**Execution:**
+
+```bash
+# A. Collect claimed values from all docs
+grep -rn '27 wired\|26 MCP\|38 MCP\|35 CORE\|38 CORE\|16 canonical\|20 dirs\|51 orchestrator\|16,259 test' \
+  .github/ cortex-registry/ --include="*.md" --include="*.yaml" | grep -v '__pycache__\|completed/'
+
+# B. Establish file system truth
+echo "1. Wired Orchestrators:" && \
+  { grep '  - name:' cortex-registry/core/specifications/core-orchestrator-wiring.yaml; \
+    grep '  - name:' cortex-registry/core/specifications/domain-orchestrator-wiring.yaml; \
+    grep '  - name:' cortex-registry/core/specifications/support-orchestrator-wiring.yaml; \
+    grep '  - name:' cortex-registry/core/specifications/git-orchestrator-wiring.yaml; } | \
+  grep -v 'core_orchestrators\|governance_registry\|audit_logger\|state_manager\|documentation_system\|business_knowledge' | \
+  sort -u | wc -l
+
+echo "2. MCP Tools:" && \
+  grep -rn 'class Cortex.*Tool\|class Cortex.*ConsolidatedTool' cortex/mcp/tools/ --include="*.py" | \
+  grep -v '__pycache__\|Base\|Category\|Parameter' | wc -l
+
+echo "3. CORE Rules:" && \
+  grep -c 'rule_id: CORE-' cortex-registry/core/tier0-skull/skull-rules.yaml
+
+echo "4. Top-level Dirs:" && \
+  ls -d cortex/*/ | grep -v __pycache__ | wc -l
+
+echo "5. Orchestrator Subdirs:" && \
+  ls -d cortex/orchestrators/*/ | grep -v __pycache__ | wc -l
+```
+
+**Output:** Truth Table
+
+| Metric | Claimed (docs) | Actual (file system) | Status |
+|--------|----------------|----------------------|--------|
+| Wired Orchestrators | (from grep A) | (from grep B.1) | ✅ / ❌ |
+| MCP Tools | (from grep A) | (from grep B.2) | ✅ / ❌ |
+| CORE Rules | (from grep A) | (from grep B.3) | ✅ / ❌ |
+| Top-level Dirs | (from grep A) | (from grep B.4) | ✅ / ❌ |
+| Orchestrator Subdirs | (from grep A) | (from grep B.5) | ✅ / ❌ |
+
+---
+
+### 2) CONTRADICTION DETECTION — Find All Conflicts
 
 You are operating inside the CORTEX repo. Apply CORTEX Challenge-First Protocol to produce a single holistic refactor + cleanup that reduces duplication, maximizes unified intelligence, and prevents regressions.
 
