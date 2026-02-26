@@ -9,7 +9,7 @@ Comprehensive observability stack for CORTEX runtime:
 - Enhanced audit trail (Phase 13 AC-OB-003-01)
 """
 
-from cortex.core.observability.performance_profiler import (
+from cortex.observability.performance_profiler import (
     Bottleneck,
     OptimizationRecommendation,
     PerformanceLevel,

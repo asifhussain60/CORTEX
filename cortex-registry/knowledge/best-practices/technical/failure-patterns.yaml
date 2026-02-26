@@ -12,7 +12,7 @@ patterns:
     name: "Mass Deletion Without Import Verification"
     context: "Attempting to remove dead code by grep-matching zero-import files"
     failure_mode: "Misses runtime-loaded plugins (conftest), try/except guarded imports, and __init__.py re-exports"
-    evidence: "Chat01: cortex_intelligence_integration.py appeared dead by grep but was used via try/except in business_wisdom_formatter.py — deletion broke collection"
+    evidence: "Chat01: a dissolved integration module appeared dead by grep but was used via try/except in business_wisdom_formatter.py — deletion broke collection"
     severity: P1
     detection: "Run python3 -c 'from module import Class' after deletion; check for collection errors"
     prevention: "Import chain verification pattern — check basename grep, __init__.py re-exports, conftest/plugin registration, AND try/except guards"

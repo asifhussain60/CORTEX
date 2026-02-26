@@ -20,7 +20,7 @@ architecture:
 
   # MCP Tools
   mcp_tools_active: 26             # registered in cortex/mcp/mcp_registry.py
-  mcp_tools_deprecated: 2          # cortex_process_request, cortex_lens_analyze (kept in registry comment only)
+  mcp_tools_deprecated: 2          # two tools removed during Phase 54 MCP consolidation (kept in registry comment only)
 
   # Governance Rules
   core_rules_active: 35            # in cortex-registry/core/tier0-skull/

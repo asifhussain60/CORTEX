@@ -57,7 +57,10 @@ PROJECT_ROOT: Path = Path(__file__).parent.parent.resolve()
 _DEFAULT_TIMEOUT: int = 30
 _DEFAULT_MAXFAIL: int = 10
 _DEFAULT_BATCH_SIZE: int = 500
-_DEFAULT_WORKERS: str = "auto"
+# Cap at 8 — xdist has a known macOS scheduler race (KeyError on gw13+)
+# when -n auto spawns >10 workers on M-series hardware.
+# Override via CORTEX_WORKERS env var (e.g. CORTEX_WORKERS=4 for CI).
+_DEFAULT_WORKERS: str = "8"
 
 # Directories always excluded to prevent collection failures.
 # Keep in sync with pytest.ini norecursedirs.
@@ -313,12 +316,16 @@ def run_smoke() -> int:
         pytest exit code.
     """
     _print_header("Smoke Tests — parallel (<30s target)")
+    # Cap at 8 workers — xdist has a known macOS scheduler race (KeyError: gw13+)
+    # when -n auto spawns >10 workers on M-series hardware. 8 is stable and fast.
+    # Override with CORTEX_WORKERS env var if needed.
     code = _run_batch(
         test_dirs=["tests/"],
         timeout=5,
         maxfail=3,
         markers="smoke",
         parallel=True,
+        workers=os.environ.get("CORTEX_WORKERS", "8"),
     )
     _print_result(code)
     return code
@@ -365,6 +372,7 @@ def run_unit() -> int:
     code = _run_batch(
         test_dirs=["tests/unit/"],
         parallel=True,
+        workers=os.environ.get("CORTEX_WORKERS", "8"),
     )
     _print_result(code)
     return code
@@ -381,6 +389,7 @@ def run_fast() -> int:
         test_dirs=["tests/unit/"],
         markers="not slow and not integration",
         parallel=True,
+        workers=os.environ.get("CORTEX_WORKERS", "8"),
     )
     _print_result(code)
     return code
@@ -395,13 +404,14 @@ def run_parallel() -> int:
     Returns:
         pytest exit code.
     """
-    workers = os.environ.get("CORTEX_WORKERS", _DEFAULT_WORKERS)
+    workers = os.environ.get("CORTEX_WORKERS", "8")
     _print_header(f"Parallel Full Suite — xdist -n {workers} --dist loadscope")
     code = _run_batch(
         test_dirs=["tests/"],
         timeout=60,
         maxfail=50,
         parallel=True,
+        workers=workers,
         verbose=True,
     )
     _print_result(code)
