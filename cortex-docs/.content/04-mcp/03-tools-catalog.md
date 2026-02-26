@@ -1,7 +1,7 @@
 # MCP Tools Catalog
 
 ---
-title: MCP Tools Catalog — 38 Active Tools
+title: MCP Tools Catalog — 39 Active Tools
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
 last_verified: 2026-02-26
@@ -15,7 +15,7 @@ order: 3
 
 ## Overview
 
-**38 active canonical MCP tools** organized across 12 categories. All tools are registered via `ConsolidatedTool` base class and exposed through JSON-RPC 2.0 stdio transport (Pylance-style auto-start).
+**39 active canonical MCP tools** organized across 13 categories. All tools are registered via `ConsolidatedTool` base class and exposed through JSON-RPC 2.0 stdio transport (Pylance-style auto-start).
 
 **Entry point rule:** Use `cortex_request_lifecycle` for full lifecycle tracking or `cortex_classify` for intent routing.
 
@@ -32,7 +32,7 @@ order: 3
 | `cortex_request_lifecycle` | Full request lifecycle — classify → plan → execute → validate |
 | `cortex_ask` | Educational questions about CORTEX architecture with truth-based verification |
 | `cortex_total_recall` | Discover and recall CORTEX features, components, and architecture |
-| `cortex_tools_catalog` | Discover all 38 MCP tools with category and description |
+| `cortex_tools_catalog` | Discover all 39 MCP tools with category and description |
 
 ### 2.2 Governance & Compliance — `cortex/mcp/tools/governance.py` + `toolkit/validate.py`
 
@@ -53,6 +53,7 @@ order: 3
 | `cortex_refactor` | `intelligence.py` | Semantic refactoring — extract, rename, organize across Python, C#, TypeScript |
 | `cortex_vision` | `intelligence.py` | Vision API analysis — UI elements, URLs, issues, and structural mappings |
 | `cortex_knowledge` | `operations.py` | Knowledge synthesis from governance YAML registries into actionable insights |
+| `cortex_learning` | `learning_tool.py` | Unified Reinforcement Signal — emit/history/decay/promote/quarantine/metrics (Phase 83) |
 
 ### 2.4 Planning & Audit — various
 
@@ -127,12 +128,12 @@ order: 3
 
 ## Practical Examples
 
-**Business Leader:** "38 active tools with clear entry points. Governance is enforced at the transport layer — developers cannot bypass CORE rules."
+**Business Leader:** "39 active tools with clear entry points. Governance is enforced at the transport layer — developers cannot bypass CORE rules."
 
-**Product Owner:** "`cortex_plan` generates remediation plans with 4 execution modes. `cortex_onboard` gives a complete repository assessment in one call. `cortex_sweep_status` tracks long-running refactor sweeps across sessions (CORE-064). `cortex_query_opj` surfaces patterns from operational history to inform planning."
+**Product Owner:** "`cortex_plan` generates remediation plans with 4 execution modes. `cortex_onboard` gives a complete repository assessment in one call. `cortex_sweep_status` tracks long-running refactor sweeps across sessions (CORE-064). `cortex_query_opj` surfaces patterns from operational history to inform planning. `cortex_learning` exposes the URS reinforcement signal system for closed-loop learning."
 
-**Developer:** "I call `cortex_request_lifecycle` for full lifecycle tracking. `cortex_refactor` renames symbols by name — no byte offset needed (Roslyn by-name rename). `cortex_scaffold_files` emits workflow pipeline artefacts to disk. `cortex_generate_tests` produces a failing RED test from any specification."
+**Developer:** "I call `cortex_request_lifecycle` for full lifecycle tracking. `cortex_refactor` renames symbols by name — no byte offset needed (Roslyn by-name rename). `cortex_scaffold_files` emits workflow pipeline artefacts to disk. `cortex_generate_tests` produces a failing RED test from any specification. `cortex_learning(op='emit')` lets me feed back outcomes to close the learning loop."
 
 ---
 
-*Verified against `cortex/mcp/tools/` live code · 26 February 2026 · 38 active canonical MCP tools · Phase 82 complete*
+*Verified against `cortex/mcp/tools/` live code · 26 February 2026 · 39 active canonical MCP tools · Phase 83 complete*

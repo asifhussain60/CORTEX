@@ -1,6 +1,6 @@
 # CORTEX Agent Index
 
-**Updated:** 2026-02-23 | **Purpose:** Lazy loading + intent-based agent selection  
+**Updated:** 2026-02-26 | **Purpose:** Lazy loading + intent-based agent selection  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---
@@ -38,7 +38,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | Metric | Value |
 |--------|-------|
 | Orchestrators | **51 wired** across 4 tiers (17 core, 7 domain, 23 support, 4 git) |
-| MCP Tools | **38** MCP tools in `cortex/mcp/tools/` |
+| MCP Tools | **39** MCP tools in `cortex/mcp/tools/` |
 | CORE Rules | **38 active** CORE governance rules (+ 2 AC rules) |
 | Package | `cortex` (single) |
 | Tests | **16,259** collected |

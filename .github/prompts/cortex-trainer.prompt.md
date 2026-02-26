@@ -48,7 +48,40 @@ Gap-driven intelligence growth for CORTEX. Analyze external repositories, extrac
 cortex_train(op="scan", target_path="/path/to/repo")
 cortex_train(op="propose", gaps={...})
 cortex_train(op="execute", proposal={...})
+cortex_train(op="score", execution_report={...})  # Phase 83: URS scoring
 ```
+
+---
+
+## URS Scoring Model (Phase 83)
+
+The Unified Reinforcement Signal (URS) system closes the learning loop. When orchestrators complete operations, they emit reinforcement signals that adjust pattern confidence.
+
+### Signal Types
+
+| Signal | Score | Example |
+|--------|-------|---------|
+| `STRONG_REWARD` | +1.0 | Test passes, zero governance violations |
+| `MILD_REWARD` | +0.5 | Partial success, P2-only warnings |
+| `NEUTRAL` | 0.0 | Informational, ignored instruction |
+| `MILD_PUNISHMENT` | -0.5 | Partial failure, P0 violations present |
+| `STRONG_PUNISHMENT` | -1.0 | Complete test failure, critical error |
+
+### Confidence Rules
+
+- **PROMOTE** at ≥0.9 confidence with 3+ rewards → T1 knowledge tier
+- **QUARANTINE** at ≤0.3 confidence with 2+ punishments → excluded from guidance
+- **DECAY** 0.1 per 30 days of inactivity → stale patterns weaken
+- **CROSS-CUTTING BOOST** +0.15 when validated by 3+ orchestrators
+
+### MCP Tools
+
+- `cortex_train(op="score")` — Score an execution report via TrainerOrchestrator
+- `cortex_learning(op="emit")` — Emit a reinforcement signal directly
+- `cortex_learning(op="history")` — View signal history (filterable by pattern_id)
+- `cortex_learning(op="decay")` — Decay stale patterns
+- `cortex_learning(op="promote")` — Promote high-confidence patterns
+- `cortex_learning(op="quarantine")` — Quarantine low-confidence patterns
 
 ---
 

@@ -27,7 +27,7 @@ CORTEX enforces governance at **three levels**:
 
 ## 22 Active CORE Rules
 
-There are 35 CORE rules defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. Of these, **22 are actively enforced** via the EnforcementOrchestrator and ExtendedGovernanceAgent.
+There are 38 CORE rules defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. Of these, **22 are actively enforced** via the EnforcementOrchestrator and ExtendedGovernanceAgent.
 
 ### Critical Rules (Enforced on Every Operation)
 
@@ -126,7 +126,7 @@ The trail is immutable and Git-versioned where applicable.
 
 ## Practical Examples
 
-**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to 35 CORE rules enforced automatically on every commit, 10 enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
+**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to 38 CORE rules enforced automatically on every commit, 10 enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
 
 **Product Owner:** "Last week a developer tried to commit a utility function without tests. CORE-008 blocked the commit automatically. The developer wrote the test, it passed, and the commit went through — all in 10 minutes."
 

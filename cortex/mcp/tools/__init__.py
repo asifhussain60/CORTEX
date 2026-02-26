@@ -112,6 +112,9 @@ from cortex.mcp.tools.mcp_toolkit_tools import (
     cortex_workflow,
 )
 
+# Phase 83 — Unified Reinforcement Signal (URS) learning tool
+from cortex.mcp.tools.learning_tool import CortexLearning
+
 
 # All tool classes for registration
 ALL_TOOLS = [
@@ -164,6 +167,8 @@ ALL_TOOLS = [
     CortexGitPush,
     # TestQualityGate (1) - Phase 07b canonical scorer
     CortexScoreTests,
+    # Learning (1) - Phase 83 — Unified Reinforcement Signal
+    CortexLearning,
 ]
 
 
@@ -284,6 +289,8 @@ __all__ = [
     "cortex_list_workflow_templates",
     # OPJ (Phase 52)
     "cortex_query_opj",
+    # Learning (Phase 83)
+    "CortexLearning",
     # Registration
     "ALL_TOOLS",
     "register_all_tools",

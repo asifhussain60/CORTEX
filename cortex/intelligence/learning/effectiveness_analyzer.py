@@ -293,6 +293,152 @@ class EffectivenessAnalyzer:
         self._cache_timestamp = None
         logger.debug("Effectiveness metrics cache cleared")
 
+    def decay_stale_patterns(
+        self,
+        max_age_days: int = 30,
+        decay_amount: float = 0.1,
+    ) -> List[str]:
+        """
+        Decay confidence of patterns that have not been used recently.
+
+        Scans all recorded patterns and identifies those whose most recent
+        application is older than ``max_age_days``. Returns the list of
+        pattern IDs that were flagged for decay.
+
+        AC-PHASE83-002: Stale pattern decay
+
+        Args:
+            max_age_days: Number of days of inactivity before decay.
+            decay_amount: Amount to subtract from confidence (informational).
+
+        Returns:
+            List of pattern IDs flagged as stale.
+        """
+        cutoff = datetime.now() - timedelta(days=max_age_days)
+        stale_ids: List[str] = []
+
+        for pattern_id, applications in self._applications.items():
+            if not applications:
+                continue
+            most_recent = max(applications, key=lambda a: a.timestamp)
+            if most_recent.timestamp < cutoff:
+                stale_ids.append(pattern_id)
+
+        logger.debug(f"Decayed {len(stale_ids)} stale patterns (>{max_age_days} days)")
+        return stale_ids
+
+    def promote_high_confidence(
+        self,
+        threshold: float = 0.9,
+        min_apps: int = 3,
+    ) -> List[str]:
+        """
+        Identify patterns with high success rate and sufficient applications.
+
+        A pattern is promotable when:
+        - It has at least ``min_apps`` recorded applications.
+        - Its success rate is ≥ ``threshold``.
+
+        AC-PHASE83-002: High-confidence pattern promotion
+
+        Args:
+            threshold: Minimum success rate to qualify (0.0–1.0).
+            min_apps: Minimum number of applications required.
+
+        Returns:
+            List of pattern IDs eligible for promotion.
+        """
+        promoted: List[str] = []
+
+        for pattern_id in self._applications:
+            metrics = self.get_metrics_for_pattern(pattern_id)
+            if (
+                metrics.total_applications >= min_apps
+                and metrics.success_rate >= threshold
+            ):
+                promoted.append(pattern_id)
+
+        logger.debug(
+            f"Promoted {len(promoted)} patterns "
+            f"(≥{threshold} success, ≥{min_apps} apps)"
+        )
+        return promoted
+
+    def quarantine_low_confidence(
+        self,
+        threshold: float = 0.3,
+        min_punishments: int = 2,
+    ) -> List[str]:
+        """
+        Identify patterns with consistently poor performance.
+
+        A pattern is quarantined when:
+        - It has at least ``min_punishments`` failed applications.
+        - Its success rate is ≤ ``threshold``.
+
+        AC-PHASE83-002: Low-confidence pattern quarantine
+
+        Args:
+            threshold: Maximum success rate to trigger quarantine (0.0–1.0).
+            min_punishments: Minimum number of failed applications.
+
+        Returns:
+            List of pattern IDs flagged for quarantine.
+        """
+        quarantined: List[str] = []
+
+        for pattern_id in self._applications:
+            metrics = self.get_metrics_for_pattern(pattern_id)
+            failures = metrics.total_applications - metrics.successful_applications
+            if failures >= min_punishments and metrics.success_rate <= threshold:
+                quarantined.append(pattern_id)
+
+        logger.debug(
+            f"Quarantined {len(quarantined)} patterns "
+            f"(≤{threshold} success, ≥{min_punishments} failures)"
+        )
+        return quarantined
+
+    def get_cross_cutting_boost(
+        self,
+        pattern_id: str,
+        min_orchestrators: int = 3,
+        boost: float = 0.15,
+    ) -> bool:
+        """
+        Check if a pattern qualifies for cross-cutting confidence boost.
+
+        A pattern qualifies when it has been successfully applied by at
+        least ``min_orchestrators`` distinct orchestrators.
+
+        AC-PHASE83-002: Cross-cutting validation boost
+
+        Args:
+            pattern_id: ID of pattern to check.
+            min_orchestrators: Minimum number of distinct orchestrators.
+            boost: Boost amount (informational — caller applies).
+
+        Returns:
+            True if pattern qualifies for cross-cutting boost.
+        """
+        applications = self._applications.get(pattern_id, [])
+        if not applications:
+            return False
+
+        distinct_orchestrators = {
+            app.orchestrator
+            for app in applications
+            if app.success
+        }
+        qualifies = len(distinct_orchestrators) >= min_orchestrators
+
+        if qualifies:
+            logger.debug(
+                f"Pattern {pattern_id} qualifies for cross-cutting boost "
+                f"({len(distinct_orchestrators)} orchestrators, boost={boost})"
+            )
+        return qualifies
+
 
 # Singleton accessor
 _analyzer_instance: Optional[EffectivenessAnalyzer] = None

@@ -9,13 +9,13 @@ source_of_truth: cortex/mcp/tools/ + cortex/repositories/
 order: 5
 ---
 
-> **Purpose:** Answers to questions about the 26 active MCP tools, how the MCP server works, and how to integrate with external systems like Azure DevOps. All answers verified against live code.
+> **Purpose:** Answers to questions about the 39 active MCP tools, how the MCP server works, and how to integrate with external systems like Azure DevOps. All answers verified against live code.
 
 ---
 
 ## How many MCP tools does CORTEX expose?
 
-**37 active canonical MCP tools** (39 total — 2 deprecated):
+**39 active canonical MCP tools** (39 active):
 
 | Category | Active Tools | Deprecated |
 |----------|-------------|-----------|
@@ -28,7 +28,7 @@ order: 5
 | Work Items | 1 | — |
 | Sweep Completeness | 1 | — |
 
-All 37 active tools are registered via the `ConsolidatedTool` base class (`cortex/mcp/mcp_tool_base.py`) and exposed through JSON-RPC 2.0 stdio transport.
+All 39 active tools are registered via the `ConsolidatedTool` base class (`cortex/mcp/mcp_tool_base.py`) and exposed through JSON-RPC 2.0 stdio transport.
 
 ---
 
@@ -86,7 +86,7 @@ Call `cortex_tools_catalog` from Copilot Chat:
 Call cortex_tools_catalog
 ```
 
-This returns all 37 active tools with their descriptions, categories, and parameter schemas. It reads directly from the live tool registry — always current.
+This returns all 39 active tools with their descriptions, categories, and parameter schemas. It reads directly from the live tool registry — always current.
 
 ---
 
@@ -258,4 +258,4 @@ Autonomous mode follows CORE-064 (Sweep Completeness) — it creates a SweepCata
 
 ---
 
-*Verified against `cortex/mcp/tools/` (31 Python files, 26 active canonical tools) · 25 February 2026 · Phase 79-D Complete*
+*Verified against `cortex/mcp/tools/` (35 Python files, 39 active canonical tools) · 25 February 2026 · Phase 83 Complete*

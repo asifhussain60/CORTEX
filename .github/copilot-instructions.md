@@ -5,7 +5,7 @@
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
 - **51 Wired Orchestrators** across 4 tiers (core, domain, support, git) — all satisfy IOrchestrator protocol
-- **38 MCP Tools** in `cortex/mcp/tools/` via Pylance-style stdio server (auto-starts with VS Code)
+- **39 MCP Tools** in `cortex/mcp/tools/` via Pylance-style stdio server (auto-starts with VS Code)
 - **38 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
@@ -20,7 +20,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 |---|---|
 | Package | `cortex` (single canonical) |
 | Orchestrators | 51 wired in `cortex/orchestrators/` (17 core, 7 domain, 23 support, 4 git) |
-| MCP Tools | 38 in `cortex/mcp/tools/` |
+| MCP Tools | 39 in `cortex/mcp/tools/` |
 | Top-level Dirs | 20 under `cortex/` |
 | Governance Rules | 38 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
 | Test Suite | 16,259 tests (486 golden, 177 phase) |
@@ -98,7 +98,7 @@ enforcing routing in production (where context is always supplied).
 ```
 cortex/              ← Python source (20 dirs)
   orchestrators/     ← 51 wired orchestrators across 4 tiers (core, domain, support, git) + additional dirs (health, intelligence, persona, registry, response, strategies, synthesis, tools, validation, workflow)
-  mcp/tools/         ← 38 MCP tools
+  mcp/tools/         ← 39 MCP tools
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis

@@ -8,7 +8,7 @@ Formula: (Severity × 0.4) + (Likelihood × 0.3) + (Coverage Gap × 0.3)
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict, Optional
+from typing import Any, Dict, List, Optional
 
 
 class IssueSeverity(Enum):
@@ -270,5 +270,60 @@ class TestValueScorer:
             return 50.0  # Partially covered
         else:
             return 25.0  # Well covered
+
+    # ── Phase 83-e: URS recalibration ───────────────────────────────────────
+
+    def recalibrate_from_signals(
+        self,
+        signal_history: List[Any],
+    ) -> Dict[str, Any]:
+        """Recalibrate scoring weights based on reinforcement signal history.
+
+        Examines signal context for ``factor`` keys matching weight names.
+        Patterns receiving STRONG_REWARD for a factor → increase that weight.
+        Weights are re-normalised to sum to 1.0.
+
+        Args:
+            signal_history: List of ReinforcementSignal objects.
+
+        Returns:
+            Dict with ``adjusted`` (bool) and ``weights`` snapshot.
+        """
+        # Count positive signals per factor
+        factor_boosts: Dict[str, float] = {
+            "severity": 0.0,
+            "likelihood": 0.0,
+            "coverage_gap": 0.0,
+        }
+        _BOOST = 0.02  # per positive signal
+
+        for sig in signal_history:
+            factor = getattr(sig, "context", {}).get("factor", "")
+            score = getattr(getattr(sig, "signal_type", None), "score", 0.0)
+            if factor in factor_boosts and score > 0:
+                factor_boosts[factor] += _BOOST * score
+
+        total_boost = sum(factor_boosts.values())
+        adjusted = total_boost > 0
+
+        if adjusted:
+            self.severity_weight += factor_boosts["severity"]
+            self.likelihood_weight += factor_boosts["likelihood"]
+            self.coverage_gap_weight += factor_boosts["coverage_gap"]
+            # Re-normalise to 1.0
+            total = self.severity_weight + self.likelihood_weight + self.coverage_gap_weight
+            if total > 0:
+                self.severity_weight /= total
+                self.likelihood_weight /= total
+                self.coverage_gap_weight /= total
+
+        return {
+            "adjusted": adjusted,
+            "weights": {
+                "severity": round(self.severity_weight, 4),
+                "likelihood": round(self.likelihood_weight, 4),
+                "coverage_gap": round(self.coverage_gap_weight, 4),
+            },
+        }
 
 # AC_COMPLETE: AC-WAVE-2-S1-001 ✅ TestValueScorer implementation complete

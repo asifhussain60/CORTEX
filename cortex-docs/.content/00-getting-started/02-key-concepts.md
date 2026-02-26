@@ -23,12 +23,12 @@ The communication standard connecting your IDE to CORTEX. Think of it as the **l
 **Live location:** `cortex/mcp/` — Pylance-style stdio server, auto-starts with VS Code.
 
 ### MCP Gateway
-The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **26 active MCP tools**.
+The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **39 active MCP tools**.
 
 **Daily example:** When you type a request in VS Code Copilot Chat, it enters through the MCP Gateway, which routes it to `cortex_process_request` or another appropriate tool.
 
 ### Orchestrator
-A specialized processing engine for one category of work. CORTEX has **27 wired orchestrators** across **3 canonical tiers** (10 total directories), all satisfying `IOrchestrator` protocol:
+A specialized processing engine for one category of work. CORTEX has **51 wired orchestrators** across **4 tiers** (core, domain, support, git), all satisfying `IOrchestrator` protocol:
 
 | Tier | Key Orchestrators | Count |
 |------|-----------------|-------|
@@ -86,12 +86,23 @@ A value between 0.0 and 1.0 that CORTEX assigns to decisions:
 
 Used in pattern matching, intent classification, and strategy selection.
 
+### Unified Reinforcement Signal (URS)
+A closed-loop feedback system (Phase 83) where orchestrators emit **reinforcement signals** after every operation. Signals are typed (STRONG_REWARD +1.0, MILD_REWARD +0.5, NEUTRAL 0.0, MILD_PUNISHMENT -0.5, STRONG_PUNISHMENT -1.0) and adjust pattern confidence scores over time.
+
+**How it works:** When TDDOrchestrator completes a GREEN-on-first-try cycle, it emits STRONG_REWARD. When EnforcementOrchestrator finds P0 violations, it emits MILD_PUNISHMENT. These signals flow into the `ReinforcementEngine` which adjusts confidence in the underlying patterns.
+
+**Key rules:** Patterns with ≥0.9 confidence and 3+ rewards are PROMOTED to T1 knowledge. Patterns with ≤0.3 confidence and 2+ punishments are QUARANTINED. Idle patterns DECAY 0.1 per 30 days.
+
+**MCP tool:** `cortex_learning` (6 operations: emit, history, decay, promote, quarantine, metrics)
+
+**Live location:** `cortex/intelligence/learning/reinforcement_signal.py`
+
 ---
 
 ## Governance Concepts
 
 ### CORE Rule
-A numbered governance standard enforced automatically. There are **35 active CORE rules** (+ 2 AC rules) defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. All 35 are enforced at pre-commit, CI, and runtime. Critical examples:
+A numbered governance standard enforced automatically. There are **38 active CORE rules** (+ 2 AC rules) defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. All 38 are enforced at pre-commit, CI, and runtime. Critical examples:
 
 | Rule | Name | What It Does |
 |------|------|-------------|

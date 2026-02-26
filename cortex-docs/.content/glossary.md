@@ -47,7 +47,9 @@ order: 99
 
 **CORE-064** — Sweep Completeness Contract. Every FIX/REFACTOR/AUDIT sweep must exhaust its full issue catalogue before closing. Enforced by `SweepCatalogueOrchestrator`. Added 21 February 2026.
 
-**CORE Rules** — Governance rules identified by `CORE-nnn` IDs. 35 CORE rules active in `cortex-registry/core/tier0-skull/skull-rules.yaml` (+ 2 AC rules), all enforced at pre-commit + CI + runtime.
+**CORE Rules** — Governance rules identified by `CORE-nnn` IDs. 38 CORE rules active in `cortex-registry/core/tier0-skull/skull-rules.yaml` (+ 2 AC rules), all enforced at pre-commit + CI + runtime.
+
+**cortex_learning** — MCP tool (Phase 83) for Unified Reinforcement Signal management. Six operations: `emit` (record signal), `history` (query signals), `decay` (age idle patterns), `promote` (elevate high-confidence patterns), `quarantine` (isolate low-confidence patterns), `metrics` (URS dashboard). Module: `cortex/mcp/tools/learning_tool.py`.
 
 **cortex_process_request** — Mandatory MCP entry point. Routes ALL user requests through MasterOrchestrator 4-stage pipeline. Module: `cortex/mcp/tools/core.py`.
 
@@ -103,11 +105,11 @@ order: 99
 
 **MasterOrchestrator** — Central entry point orchestrator. Runs 4-stage pipeline: Interaction → Intent → Intelligence → Execution. Location: `cortex/orchestrators/core/master_orchestrator.py`.
 
-**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 37 active tools exposed via stdio transport.
+**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 39 active tools exposed via stdio transport.
 
 ## O
 
-**OrchestratorBase** — Legacy abstract base class used by 2 orchestrators only (`ServiceDecompositionOrchestrator`, `BusinessKnowledgeIngestionOrchestrator`). The primary base for all 27 wired orchestrators is `OrchestratorProtocolMixin` (Phase 58) + `IOrchestrator` protocol. Module: `cortex/core/orchestrator_base.py`.
+**OrchestratorBase** — Legacy abstract base class used by 2 orchestrators only (`ServiceDecompositionOrchestrator`, `BusinessKnowledgeIngestionOrchestrator`). The primary base for all 51 wired orchestrators is `OrchestratorProtocolMixin` (Phase 58) + `IOrchestrator` protocol. Module: `cortex/core/orchestrator_base.py`.
 
 **OrchestratorEventBus** — Decoupled communication channel for inter-orchestrator messaging. Module: `cortex/infrastructure/orchestrator_event_bus.py`.
 
@@ -129,6 +131,10 @@ order: 99
 
 **Refactor Master** — Strategic planning document defining all 12 phases of the Cohesive Brain Refactor. File: `cortex-registry/planning/cortex-refactor-master.yaml`.
 
+**ReinforcementEngine** — Core engine that receives `ReinforcementSignal` emissions, adjusts pattern confidence scores, and manages the promote/quarantine/decay lifecycle. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
+
+**ReinforcementSignal** — Dataclass carrying a typed feedback signal (see SignalType) from an orchestrator back to the learning subsystem. Fields: `signal_type`, `source`, `target_pattern`, `confidence_delta`, `context`, `timestamp`. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
+
 **RequestRephraseOrchestrator** — Orchestrator that clarifies ambiguous or incomplete requests before routing to execution. Location: `cortex/orchestrators/core/`.
 
 ## S
@@ -137,7 +143,9 @@ order: 99
 
 **SecurityOrchestrator** — Orchestrator handling security analysis, vulnerability detection, and security gate enforcement. Location: `cortex/orchestrators/core/`.
 
-**skull-rules.yaml** — YAML file containing all 35 CORE governance rule definitions (33 CORE-* + 2 AC-PERMANENT-FIX). Location: `cortex-registry/core/tier0-skull/skull-rules.yaml`.
+**SignalType** — Enum defining URS reinforcement signal strengths: `STRONG_REWARD` (+1.0), `MILD_REWARD` (+0.5), `NEUTRAL` (0.0), `MILD_PUNISHMENT` (−0.5), `STRONG_PUNISHMENT` (−1.0). Used by all orchestrators that emit learning feedback. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
+
+**skull-rules.yaml** — YAML file containing all 38 CORE governance rule definitions (+ 2 AC-PERMANENT-FIX). Location: `cortex-registry/core/tier0-skull/skull-rules.yaml`.
 
 **stdio Transport** — Standard input/output process communication. IDE writes JSON-RPC to stdin, CORTEX responds on stdout. No network ports required.
 
@@ -157,6 +165,10 @@ order: 99
 
 **ToolResult** — Standard response object from MCP tool execution. Contains content (text), metadata, and audit reference.
 
+## U
+
+**Unified Reinforcement Signal (URS)** — Closed-loop learning system (Phase 83) where every orchestrator operation emits a typed reinforcement signal that adjusts pattern confidence scores. Five signal strengths (STRONG_REWARD → STRONG_PUNISHMENT). Patterns with ≥0.9 confidence are promoted to T1 knowledge; patterns ≤0.3 are quarantined. Idle patterns decay 0.1 per 30 days. 10 integration surfaces wired across OPJMixin, TDDOrchestrator, EnforcementOrchestrator, TrainerOrchestrator, TestValueScorer, KnowledgeSynthesisEngine, IntelligenceMatrixBuilder, and LENSOrchestrator. MCP tool: `cortex_learning`. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
+
 ## W
 
 **WAL (Write-Ahead Logging)** — SQLite journaling mode used by CortexAuditDB. Enables concurrent reads during single-writer transactions.
@@ -173,4 +185,4 @@ order: 99
 
 ---
 
-*Verified against live CORTEX codebase · 21 February 2026*
+*Verified against live CORTEX codebase · 26 February 2026 (Phase 83 Complete)*

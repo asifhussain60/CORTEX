@@ -181,4 +181,4 @@ LENS doesn't make governance decisions — it provides the data. Governance deci
 
 ---
 
-*Verified against `cortex/lens/` + `cortex/intelligence/` · 25 February 2026 · Phase 79-D Complete*
+*Verified against `cortex/lens/` + `cortex/intelligence/` · 25 February 2026 · Phase 83 Complete*

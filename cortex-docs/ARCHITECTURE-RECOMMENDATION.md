@@ -8,7 +8,7 @@
 ## Overview
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework
-built on a tiered orchestrator architecture, governed by 35 CORE rules, and surfaced through 26 MCP tools.
+built on a tiered orchestrator architecture, governed by 38 CORE rules, and surfaced through 39 MCP tools.
 
 ---
 
@@ -17,11 +17,11 @@ built on a tiered orchestrator architecture, governed by 35 CORE rules, and surf
 | Metric | Count | Source |
 |---|---|---|
 | Canonical package | `cortex` (single root) | `cortex/__init__.py` |
-| Wired orchestrators | 41 (across 10 tiers) | `cortex/core/wiring/specifications/wiring.yaml` |
-| MCP tools (production) | 24 | `cortex/mcp/mcp_registry.PRODUCTION_TOOLS` |
-| CORE governance rules | 35 active | `cortex-registry/core/tier0-skull/` |
-| Test suite | 15,739 tests | `pytest --collect-only` |
-| Top-level `cortex/` dirs | 16 canonical | `ls cortex/` |
+| Wired orchestrators | 51 (across 4 tiers) | `cortex/core/wiring/specifications/wiring.yaml` |
+| MCP tools (production) | 39 | `cortex/mcp/tools/` |
+| CORE governance rules | 38 active (+ 2 AC rules) | `cortex-registry/core/tier0-skull/` |
+| Test suite | 16,259 tests | `pytest --collect-only` |
+| Top-level `cortex/` dirs | 20 canonical | `ls cortex/` |
 
 ---
 
@@ -31,17 +31,11 @@ All orchestrators extend `OrchestratorProtocolMixin` (primary, Phase 58) or `Orc
 
 | Tier | Count | Purpose |
 |---|---|---|
-| `core` | 7 | MasterOrchestrator, IntentRouter, TDD, Enforcement, Planning, Stage1/3/4 |
-| `domain` | 6 | Refactoring, Digest, Onboarding, Knowledge, Documentation, Reporting |
-| `support` | 14 | Vacuum, Debugger, Sweep, BulkDigest, Session, Convergence, … |
-| `health` | 1 | HealthOrchestrator (22-endpoint health check) |
-| `git` | 3 | GitIntelligence, GitHistory, GitWorkflow |
-| `intelligence` | 2 | Intelligence, AgentRules |
-| `strategies` | 1 | ExecutionStrategy |
-| `synthesis` | 1 | KnowledgeSynthesis |
-| `validation_extended` | 2 | Coherence, SolidValidation |
-| `workflow` | 4 | WorkflowComposer, TemplateComposer, AuditVerifier, PostPhaseDedup |
-| **Total** | **41** | |
+| `core` | 17 | MasterOrchestrator, IntentRouter, TDD, Enforcement, Planning, Stage1/3/4, … |
+| `domain` | 7 | Refactoring, Digest, Onboarding, Knowledge, Documentation, Reporting, … |
+| `support` | 23 | Vacuum, Debugger, Sweep, BulkDigest, Session, Convergence, … |
+| `git` | 4 | GitIntelligence, GitHistory, GitWorkflow, … |
+| **Total** | **51** | |
 
 ---
 
@@ -62,9 +56,9 @@ CORTEX uses **Pylance-style MCP** — auto-starts with VS Code via stdio transpo
 }
 ```
 
-- **24 production tools** registered in `PRODUCTION_TOOLS` dict (`cortex/mcp/mcp_registry.py`)
+- **39 production tools** registered in `cortex/mcp/tools/` (Pylance-style stdio transport)
 - **Tenant auth**: `TenantContextMiddleware` wired in `cortex/mcp/server.py` (Phase 65-A)
-- **Tool categories**: governance, knowledge, orchestration, vacuum, digest, onboard, refactor, metrics
+- **Tool categories**: governance, knowledge, orchestration, vacuum, digest, onboard, refactor, metrics, learning, vision
 
 ---
 
@@ -89,9 +83,9 @@ Full rule catalogue: `cortex-registry/core/tier0-skull/`
 ## File Organization
 
 ```
-cortex/              ← Python source (16 canonical dirs)
-  orchestrators/     ← 41 wired orchestrators across 10 tiers
-  mcp/tools/         ← 24 production MCP tools
+cortex/              ← Python source (20 canonical dirs)
+  orchestrators/     ← 51 wired orchestrators across 4 tiers (core, domain, support, git)
+  mcp/tools/         ← 39 MCP tools
   core/              ← OrchestratorProtocolMixin, OrchestratorBase, FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis
@@ -149,6 +143,4 @@ Memory Tiers
 | 59 | ✅ COMPLETE | Deduplication sweep (AuditEntry, Ok/Err, OperationMode) |
 | 64 | ✅ COMPLETE | Unified brain golden coverage (7 sub-phases) |
 | 65 | ✅ COMPLETE | Enterprise hardening (tenant auth, ImportError sweep, mixin rollout) |
-| 60 | ⚪ PLANNED | SLOC reduction target (383K → 180K) |
-| 61 | ⚪ PLANNED | Orchestrator consolidation (124 → 22) |
-| 67 | ⚪ PLANNED | WorkflowEngine runtime wiring + THIN INDEX fix |
+| 83 | ✅ COMPLETE | Unified Reinforcement Signal (URS) — open-loop learning |

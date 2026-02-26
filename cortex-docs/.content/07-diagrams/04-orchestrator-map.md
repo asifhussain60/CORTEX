@@ -24,7 +24,7 @@ cortex/orchestrators/
 
 ```
 OrchestratorBase (cortex/core/orchestrator_base.py)
-    │  27 wired orchestrators satisfy the IOrchestrator protocol
+    │  51 wired orchestrators satisfy the IOrchestrator protocol
     │  Auto-logs every execute()/run() call to .cortex-runtime/audit.db (SQLite WAL)
     │
     ├── CORE TIER (7 wired)

@@ -9,13 +9,13 @@ source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 order: 2
 ---
 
-> **Purpose:** Answers to questions about how CORTEX's 27-orchestrator architecture works, how requests flow, and how the system makes routing decisions. All answers verified against live code.
+> **Purpose:** Answers to questions about how CORTEX's 51-orchestrator architecture works, how requests flow, and how the system makes routing decisions. All answers verified against live code.
 
 ---
 
 ## How many orchestrators does CORTEX have?
 
-**27 wired orchestrators** across **3 canonical tiers**:
+**51 wired orchestrators** across **4 tiers**:
 
 | Tier | Count | Orchestrators |
 |------|-------|--------------|
@@ -41,7 +41,7 @@ setup() → govern() → execute() → validate() → teardown()
 
 ## What is the primary base class for orchestrators?
 
-**`OrchestratorProtocolMixin`** (`cortex/core/orchestrator_protocol_mixin.py`) — used by all 27 wired orchestrators since Phase 58.
+**`OrchestratorProtocolMixin`** (`cortex/core/orchestrator_protocol_mixin.py`) — used by all 51 wired orchestrators since Phase 58.
 
 `OrchestratorBase` (`cortex/core/orchestrator_base.py`) is the legacy base — only 2 orchestrators still use it. Do not use it for new orchestrators.
 
@@ -191,4 +191,4 @@ Audit failures (SQLite write errors) are explicitly non-blocking — a broken au
 
 ---
 
-*Verified against `cortex/orchestrators/` · 25 February 2026 · Phase 79-D Complete*
+*Verified against `cortex/orchestrators/` · 25 February 2026 · Phase 83 Complete*

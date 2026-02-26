@@ -17,9 +17,9 @@ order: 1
 
 **CORTEX** (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI engineering framework. It combines:
 
-- **27 wired orchestrators** across 3 tiers (core, domain, support)
-- **26 active MCP tools** exposed via Pylance-style stdio server
-- **35 CORE governance rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
+- **51 wired orchestrators** across 4 tiers (core, domain, support, git)
+- **39 active MCP tools** exposed via Pylance-style stdio server
+- **38 CORE governance rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **LENS** — an 10-analyzer parallel code intelligence engine
 - **TDD-first execution** — CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX
 
@@ -32,7 +32,7 @@ It works directly inside your IDE (VS Code, Cursor, Claude Desktop) via the Mode
 | Dimension | Generic AI Coding Tools | CORTEX |
 |-----------|------------------------|--------|
 | **Scope** | Answer questions, suggest code | Orchestrate entire workflows end-to-end |
-| **Governance** | None | 35 CORE rules enforced automatically |
+| **Governance** | None | 38 CORE rules enforced automatically |
 | **TDD** | Optional | Mandatory (CORE-008) — blocked if skipped |
 | **State** | Stateless per conversation | Persistent SQLite audit log (`.cortex-runtime/`) |
 | **Architecture** | Single model | 27 specialized orchestrators, 3 tiers |
@@ -179,7 +179,7 @@ The **Git-backed configuration registry** — CORTEX's single source of truth fo
 
 ```
 cortex-registry/
-├── core/tier0-skull/skull-rules.yaml   ← 35 CORE + 2 AC governance rules
+├── core/tier0-skull/skull-rules.yaml   ← 38 CORE + 2 AC governance rules
 ├── cortex-master.yaml                  ← Thin phase index (≤500 lines)
 ├── planning/phases/                    ← Detailed phase files
 ├── workflows/templates/                ← 63 workflow YAML templates
@@ -191,4 +191,4 @@ All changes are versioned in Git — rollback is `git revert`. No database depen
 
 ---
 
-*Verified against live codebase · 25 February 2026 · Phase 79-D Complete*
+*Verified against live codebase · 25 February 2026 · Phase 83 Complete*

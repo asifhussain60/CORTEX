@@ -1349,6 +1349,46 @@ class KnowledgeSynthesisEngine:
 
         return recommendations
 
+    # ── Phase 83-e: URS instruction outcome tracking ────────────────────────
+
+    def track_instruction_outcome(
+        self,
+        instruction_id: str,
+        outcome: str,
+    ) -> None:
+        """Track the outcome of a synthesized instruction for URS feedback.
+
+        Emits a reinforcement signal based on whether the instruction was used:
+          - ``"used"``    → MILD_REWARD
+          - ``"ignored"`` → NEUTRAL
+          - anything else → NEUTRAL
+
+        Args:
+            instruction_id: ID of the instruction to track.
+            outcome: Outcome string (``"used"`` or ``"ignored"``).
+        """
+        from cortex.intelligence.learning.reinforcement_signal import (
+            ReinforcementEngine,
+            SignalType,
+        )
+
+        if outcome == "used":
+            signal_type = SignalType.MILD_REWARD
+        else:
+            signal_type = SignalType.NEUTRAL
+
+        try:
+            if not hasattr(self, "_urs_engine") or self._urs_engine is None:
+                self._urs_engine = ReinforcementEngine()
+            self._urs_engine.emit_signal(
+                signal_type=signal_type,
+                pattern_id=instruction_id,
+                source_orchestrator="KnowledgeSynthesisEngine",
+                context={"outcome": outcome},
+            )
+        except Exception as exc:
+            logger.debug("KnSynth.track_instruction_outcome: non-fatal — %s", exc)
+
 
 # Singleton accessor
 _engine: Optional[KnowledgeSynthesisEngine] = None

@@ -99,6 +99,13 @@
 - **Template:** `cortex-registry/planning/phases/_template.yaml` (scaffold for new phases)
 - **THIN INDEX CONTRACT:** Phase detail in dedicated files, thin references in playbook only
 
+**Content Consolidation Policy (v7.0):**
+- **Single-authority-per-topic:** Each concept appears in exactly one flat file; other files cross-reference
+- **Descriptive prose only:** No raw code snippets in `.content/` files — describe behavior, architecture, and purpose in plain language
+- **Consistent voice:** Third-person, professional, accessible; brain analogies used sparingly; three-role perspective woven into narrative (not callout boxes)
+- **Consolidation target:** Flat-files should number 10–15 comprehensive documents, not 60+ granular stubs
+- **Zero content loss:** Every metric, concept, and explanation must survive consolidation
+
 **Integration:** Works with `cortex-gitpages-builder.md` for HTML site generation
 - **This Agent:** Content extraction + Diátaxis + role narratives → `cortex-docs/.content/` markdown files
 - **Builder Agent:** `cortex-docs/.content/` markdown → HTML templates → `cortex-docs/` site
@@ -269,7 +276,7 @@ cortex-docs/
 │   ├── knowledge-catalog.json    ← From cortex-registry/knowledge/*.yaml
 │   ├── learning-paths.json       ← 3-track module metadata (45 modules total)
 │   ├── orchestrators.json        ← 51 orchestrator cards
-│   └── mcp-tools.json            ← 38 MCP tool catalog
+│   └── mcp-tools.json            ← 39 MCP tool catalog
 ├── pipeline/                     ← Discovery & generation scripts
 │   ├── discover.py               ← Git + registry + live code scan
 │   ├── build.py                  ← YAML → JSON transformer

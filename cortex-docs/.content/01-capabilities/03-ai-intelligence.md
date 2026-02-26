@@ -115,7 +115,7 @@ See `00-getting-started/04-brain-tier-architecture.md` for the deep dive.
 | Subsystem | Location | Purpose |
 |-----------|----------|---------|
 | **Domain Brain** | `cortex/intelligence/domain_brain/` | Business-vertical intelligence (ecommerce, finance, healthcare) |
-| **Learning** | `cortex/intelligence/learning/` | Pattern capture, confidence updates after each execution |
+| **Learning** | `cortex/intelligence/learning/` | Pattern capture, confidence updates, reinforcement signals (URS) |
 | **Knowledge** | `cortex/intelligence/knowledge/` | Knowledge synthesis from registry and learned patterns |
 | **Quality** | `cortex/intelligence/quality/` | Code quality assessment |
 | **Governance** | `cortex/intelligence/governance/` | Intelligence-layer governance checks |
@@ -398,6 +398,62 @@ def calculate_confidence(
 
 ## Learning & Feedback
 
+### Unified Reinforcement Signal (URS) — Phase 83
+
+CORTEX now operates a **closed-loop learning system**. When orchestrators complete operations, they emit reinforcement signals that adjust pattern confidence — closing the gap between "we captured a pattern" and "we know whether the pattern works."
+
+**Signal Types:**
+
+| Signal | Score | Example |
+|--------|-------|---------|
+| `STRONG_REWARD` | +1.0 | Test passes on first try, zero governance violations |
+| `MILD_REWARD` | +0.5 | Partial success, P2-only warnings, instruction used |
+| `NEUTRAL` | 0.0 | Informational only, instruction ignored |
+| `MILD_PUNISHMENT` | -0.5 | Partial failure, P0 violations present |
+| `STRONG_PUNISHMENT` | -1.0 | Complete test failure, critical error |
+
+**Confidence Lifecycle:**
+
+```
+Pattern Captured ──▶ Confidence: 0.5 (baseline)
+      │
+      ▼
+Orchestrator emits REWARD ──▶ Confidence += (score × 0.1)
+      │
+      ▼
+3+ rewards, confidence ≥ 0.9 ──▶ PROMOTE to T1 knowledge tier
+      │
+OR:   ▼
+2+ punishments, confidence ≤ 0.3 ──▶ QUARANTINE (excluded from guidance)
+      │
+OR:   ▼
+30 days idle ──▶ DECAY by 0.1 (stale patterns weaken)
+      │
+CROSS-CUTTING:  ▼
+Validated by 3+ orchestrators ──▶ BOOST +0.15 (cross-domain confirmation)
+```
+
+**Wired Orchestrators (10 integration surfaces):**
+
+| Orchestrator | Signal Trigger | Example |
+|-------------|---------------|---------|
+| **OPJMixin** (all orchestrators) | `_opj_record_success/failure` | Success → MILD_REWARD, Failure → MILD_PUNISHMENT |
+| **TDDOrchestrator** | TDD cycle completion | GREEN-first-try → STRONG_REWARD, retries → MILD_REWARD, failure → MILD_PUNISHMENT |
+| **EnforcementOrchestrator** | Governance validation | Zero violations → STRONG_REWARD, warnings only → MILD_REWARD, violations → MILD_PUNISHMENT |
+| **TrainerOrchestrator** | `score_and_reinforce()` | Execution success → STRONG_REWARD, errors → STRONG_PUNISHMENT |
+| **TestValueScorer** | `recalibrate_from_signals()` | Adjusts severity/likelihood/coverage_gap weights from signal history |
+| **KnowledgeSynthesisEngine** | `track_instruction_outcome()` | Used → MILD_REWARD, Ignored → NEUTRAL |
+| **IntelligenceMatrixBuilder** | `on_coverage_change()` | Coverage ↑ → MILD_REWARD, Coverage ↓ → MILD_PUNISHMENT |
+| **LENSOrchestrator** | `record_analysis_outcome()` | Correct insight → MILD_REWARD, Wrong insight → MILD_PUNISHMENT |
+
+**MCP Access:** `cortex_learning` tool with 6 operations: `emit`, `history`, `decay`, `promote`, `quarantine`, `metrics`.
+
+**Business Leader:** "Every time CORTEX makes a recommendation and it works (or doesn't), the system records that outcome. Over time, patterns that consistently deliver value rise in confidence; patterns that consistently fail are quarantined. It's institutional memory with built-in quality control."
+
+**Product Owner:** "I can see which patterns are performing well across all orchestrators via `cortex_learning(op='metrics')`. Low-confidence patterns are automatically excluded from future guidance — no manual cleanup needed."
+
+**Developer:** "After my TDD cycle succeeds on first try, the TDDOrchestrator emits STRONG_REWARD for the pattern I used. If the same pattern gets rewards from Enforcement and LENS too, it gets a cross-cutting boost. The system literally learns from my workflow."
+
 ### Feedback Loop
 
 ```
@@ -411,20 +467,21 @@ def calculate_confidence(
 ┌──────────────────────────────────────────────────────┐
 │                    LEARNING SYSTEM                    │
 │   ┌────────────┐  ┌────────────┐  ┌────────────┐    │
-│   │  Capture   │─▶│  Analyze   │─▶│  Update    │    │
-│   │  Outcome   │  │  Patterns  │  │  Tier 3    │    │
+│   │  Capture   │─▶│  Reinforce │─▶│  Promote/  │    │
+│   │  Pattern   │  │  (URS)     │  │  Quarantine│    │
 │   └────────────┘  └────────────┘  └────────────┘    │
 └──────────────────────────────────────────────────────┘
 ```
 
-### Learning Signals
+### Learning Signals (URS-Powered)
 
-| Signal | Weight | Example |
-|--------|--------|---------|
-| **Explicit Approval** | High | User accepts suggestion |
-| **Explicit Rejection** | High | User rejects with reason |
-| **Implicit Success** | Medium | Tests pass after implementation |
-| **Implicit Failure** | Medium | Tests fail, rollback needed |
+| Signal | Weight | URS Mapping | Example |
+|--------|--------|-------------|---------|
+| **Explicit Approval** | High | STRONG_REWARD | User accepts suggestion |
+| **Explicit Rejection** | High | STRONG_PUNISHMENT | User rejects with reason |
+| **Implicit Success** | Medium | MILD_REWARD | Tests pass after implementation |
+| **Implicit Failure** | Medium | MILD_PUNISHMENT | Tests fail, rollback needed |
+| **Neutral/Informational** | Low | NEUTRAL | Instruction ignored, no action taken |
 
 ### Pattern Discovery
 
@@ -461,4 +518,4 @@ These patterns are stored in Tier 3 knowledge and validated before promotion.
 
 ---
 
-*All module paths verified against live codebase · 25 February 2026*
+*All module paths verified against live codebase · 26 February 2026 · Phase 83 (URS) complete*

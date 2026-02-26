@@ -22,7 +22,7 @@ Engineering teams lose velocity in three ways:
 3. **Context loss** — long-running refactors get abandoned mid-sweep. Technical debt compounds because there's no record of what was half-fixed.
 
 CORTEX solves all three:
-- **35 CORE rules** enforced automatically at every commit and every AI-assisted action — no one can bypass governance accidentally.
+- **38 CORE rules** enforced automatically at every commit and every AI-assisted action — no one can bypass governance accidentally.
 - **TDD is mandatory** (CORE-008) — the architecture physically prevents implementing without tests.
 - **CORE-064 Sweep Completeness Contract** — every refactor sweep is tracked in SQLite; it cannot be marked complete until every item is resolved.
 
@@ -99,7 +99,7 @@ No configuration files needed. No agents to configure. One call, inline results.
 
 Yes. CORTEX is designed for multi-team environments:
 
-- **Governance is shared** — all teams work under the same 35 CORE rules. No team can lower the bar for others.
+- **Governance is shared** — all teams work under the same 38 CORE rules. No team can lower the bar for others.
 - **Sweep tracking is per-team** — each sweep has its own SQLite file; cross-team sweeps use a shared sweep ID.
 - **Work item integration** — `cortex_fetch_work_items` maps ADO/Jira work items to CORTEX operations, enabling team-level sprint tracking.
 - **Multi-repo support** — `cortex/mcp/tools/multi_repo/` provides cross-repo search, dependency graphs, and shared audit trails.
@@ -176,4 +176,4 @@ Air-gapped environments are fully supported for the core CORTEX workflow.
 
 ---
 
-*Verified against live codebase · 25 February 2026 · Phase 79-D Complete — All 67 Phases Done*
+*Verified against live codebase · 25 February 2026 · Phase 83 Complete — All 67 Phases Done*

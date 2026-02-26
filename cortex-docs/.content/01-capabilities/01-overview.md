@@ -10,7 +10,7 @@ format: diátaxis-explanation
 order: 1
 ---
 
-> **Notice:** All capabilities listed here are verified against the live codebase as of 25 February 2026 (Phase 79-D Complete — 79-D phases complete). Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
+> **Notice:** All capabilities listed here are verified against the live codebase as of 25 February 2026 (Phase 83 Complete — 79-D phases complete). Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
 
 ---
 
@@ -20,11 +20,11 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | # | Domain | Brain Analogy | Key Metric |
 |---|--------|--------------|------------|
-| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 39 MCP tools (37 active), 16 canonical dirs |
+| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 39 MCP tools, 16 canonical dirs |
 | 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | 10 parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
-| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 27 wired orchestrators, 3 canonical tiers (10 total dirs) |
-| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 35 CORE rules, CORE-064, CORE-055 |
+| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 51 wired orchestrators, 4 tiers (17 core, 7 domain, 23 support, 4 git) |
+| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 38 CORE rules, CORE-064, CORE-055 |
 | 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
 
 ---
@@ -33,8 +33,8 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | Capability | Domain | Implementation | Tests |
 |-----------|--------|---------------|-------|
-| MCP Gateway (37 active tools) | Core | `cortex/mcp/tools/` | ✅ |
-| Orchestrator Dispatch (27 wired) | Core | `cortex/orchestrators/` (3 canonical tiers: 7 core, 6 domain, 14 support (+ dirs: health, git, intelligence, strategies, synthesis, validation, workflow)) | ✅ |
+| MCP Gateway (39 tools) | Core | `cortex/mcp/tools/` | ✅ |
+| Orchestrator Dispatch (51 wired) | Core | `cortex/orchestrators/` (4 tiers: 7 core, 6 domain, 14 support (+ dirs: health, git, intelligence, strategies, synthesis, validation, workflow)) | ✅ |
 | OrchestratorBase Lifecycle | Core | `cortex/core/orchestrator_base.py` | ✅ |
 | SQLite Activity Log | Core | `.cortex-runtime/audit.db` (auto-logged in `execute()/run()`) | ✅ |
 | FileFactory | Core | `cortex/core/file_factory.py` | ✅ |
@@ -68,7 +68,7 @@ The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
 ### MCP Gateway (25 Tools)
 
-CORTEX exposes 26 active MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
+CORTEX exposes 39 MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 
 **Business Leader:** "39 tools covering analysis, governance, onboarding, debugging, health checks, sweep management, and workflow — all accessible from the IDE without switching tools."
 

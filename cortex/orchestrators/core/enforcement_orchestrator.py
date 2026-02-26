@@ -38,6 +38,7 @@ from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.intelligence.learning.opj_mixin import OPJMixin  # Phase 52: OPJ intelligence
+from cortex.intelligence.learning.reinforcement_signal import SignalType  # Phase 83-d: URS
 
 # Phase 58-C: DomainBrain + Memory wiring (decision-making orchestrator)
 try:
@@ -1763,6 +1764,42 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTempl
         if violations:
             return Err(violations)
         return Ok([])
+
+    # ── Phase 83-d: URS signal emission ─────────────────────────────────────
+
+    def _emit_enforcement_signal(
+        self,
+        operation: str,
+        violations: List[str],
+        warnings: List[str],
+    ) -> None:
+        """Emit a reinforcement signal after governance validation.
+
+        Signal mapping:
+          - Zero violations AND zero warnings → STRONG_REWARD
+          - Zero violations, warnings only    → MILD_REWARD
+          - Any violations present            → MILD_PUNISHMENT
+
+        Args:
+            operation: The enforcement operation that completed.
+            violations: List of violation messages (P0/P1 severity).
+            warnings: List of warning messages (P2 severity).
+        """
+        if violations:
+            signal = SignalType.MILD_PUNISHMENT
+        elif warnings:
+            signal = SignalType.MILD_REWARD
+        else:
+            signal = SignalType.STRONG_REWARD
+
+        self._urs_emit_signal(
+            signal_type=signal,
+            pattern_id=operation,
+            context={
+                "violation_count": len(violations),
+                "warning_count": len(warnings),
+            },
+        )
 
     def get_capabilities(self) -> List[str]:
         """

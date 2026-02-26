@@ -35,6 +35,10 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.intelligence.learning.opj_promoter import promote_high_confidence_patterns  # noqa: E402
+from cortex.intelligence.learning.reinforcement_signal import (
+    ReinforcementEngine,
+    SignalType,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +64,7 @@ class OPJMixin:
     _opj_writer: Optional[Any] = None
     _opj_reader: Optional[Any] = None
     _opj_registry_root: Optional[Path] = None
+    _urs_engine: Optional[ReinforcementEngine] = None
 
     # ── Initialisation ──────────────────────────────────────────────────────
 
@@ -89,6 +94,40 @@ class OPJMixin:
     def _opj_orchestrator_name(self) -> str:
         """Return the orchestrator name: `name` attr → class.__name__ fallback."""
         return getattr(self, "name", None) or self.__class__.__name__
+
+    def _urs_ensure_engine(self) -> ReinforcementEngine:
+        """Lazy-initialise the URS engine on first use.
+
+        Returns:
+            The ReinforcementEngine instance.
+        """
+        if self._urs_engine is None:
+            self._urs_engine = ReinforcementEngine()
+        return self._urs_engine
+
+    def _urs_emit_signal(
+        self,
+        signal_type: SignalType,
+        pattern_id: str,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """Emit a reinforcement signal (resilient — never raises).
+
+        Args:
+            signal_type: Type of reinforcement signal.
+            pattern_id: Operation or pattern identifier.
+            context: Optional additional context.
+        """
+        try:
+            engine = self._urs_ensure_engine()
+            engine.emit_signal(
+                signal_type=signal_type,
+                pattern_id=pattern_id,
+                source_orchestrator=self._opj_orchestrator_name(),
+                context=context or {},
+            )
+        except Exception as exc:
+            logger.debug("OPJMixin._urs_emit_signal: non-fatal — %s", exc)
 
     # ── Public OPJ API ──────────────────────────────────────────────────────
 
@@ -151,6 +190,13 @@ class OPJMixin:
         except Exception as exc:
             logger.warning("OPJMixin._opj_record_success: non-fatal error — %s", exc)
 
+        # Phase 83-d: Emit URS reinforcement signal for success
+        self._urs_emit_signal(
+            signal_type=SignalType.MILD_REWARD,
+            pattern_id=operation,
+            context=context,
+        )
+
         # Phase 71-F ES-005: auto-promote high-confidence patterns
         try:
             promote_high_confidence_patterns()
@@ -192,3 +238,10 @@ class OPJMixin:
             )
         except Exception as exc:
             logger.warning("OPJMixin._opj_record_failure: non-fatal error — %s", exc)
+
+        # Phase 83-d: Emit URS reinforcement signal for failure
+        self._urs_emit_signal(
+            signal_type=SignalType.MILD_PUNISHMENT,
+            pattern_id=operation,
+            context={"error": error},
+        )

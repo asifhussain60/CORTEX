@@ -19,7 +19,7 @@ order: 1
 
 - **Transport:** stdio (development) — no manual server startup
 - **Protocol:** JSON-RPC 2.0
-- **Tools:** 26 active MCP tools
+- **Tools:** 39 active MCP tools
 - **Clients:** VS Code (Copilot Chat), Cursor, Claude Desktop
 
 ---

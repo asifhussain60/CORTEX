@@ -106,11 +106,11 @@ from cortex.core.common.file_utils import safe_read_file
 
 ## OrchestratorBase vs OrchestratorProtocolMixin
 
-Phase 68 confirms the canonical base for all 27 wired orchestrators is **`OrchestratorProtocolMixin`** (Phase 58), not `OrchestratorBase`:
+Phase 68 confirms the canonical base for all 51 wired orchestrators is **`OrchestratorProtocolMixin`** (Phase 58), not `OrchestratorBase`:
 
 | Base | Location | Used By |
 |------|----------|---------|
-| `OrchestratorProtocolMixin` | `cortex/core/orchestrator_protocol_mixin.py` | All 27 wired orchestrators (canonical) |
+| `OrchestratorProtocolMixin` | `cortex/core/orchestrator_protocol_mixin.py` | All 51 wired orchestrators (canonical) |
 | `OrchestratorBase` | `cortex/core/orchestrator_base.py` | 2 legacy orchestrators only |
 
 `OrchestratorBase` is preserved in `cortex/core/orchestrator/` for backward compatibility but should not be used in new orchestrators.

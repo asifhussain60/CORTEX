@@ -9,13 +9,13 @@ source_of_truth: .github/templates/cortex-response-templates.md + cortex-registr
 order: 10
 ---
 
-> **Brain analogy:** The Response Template Engine is the **prefrontal formatting cortex** — it takes raw intelligence from all 27 orchestrators and shapes it into a consistent, scannable, ≤60-second-readable output rendered live in VS Code GitHub Copilot Chat.
+> **Brain analogy:** The Response Template Engine is the **prefrontal formatting cortex** — it takes raw intelligence from all 51 orchestrators and shapes it into a consistent, scannable, ≤60-second-readable output rendered live in VS Code GitHub Copilot Chat.
 
 ---
 
 ## Executive Summary
 
-CORTEX's Response Template Engine is a **composable, LEGO-block rendering system** that standardises every user-facing output in VS Code Copilot Chat. It solves a fundamental problem: 27 orchestrators producing 13 execution modes need consistent, non-repetitive, executive-ready responses — without any `.md` or `.txt` file generation (CORE-002).
+CORTEX's Response Template Engine is a **composable, LEGO-block rendering system** that standardises every user-facing output in VS Code Copilot Chat. It solves a fundamental problem: 51 orchestrators producing 13 execution modes need consistent, non-repetitive, executive-ready responses — without any `.md` or `.txt` file generation (CORE-002).
 
 The system evolved through 28+ git commits from raw text output → tree-character rendering → fenced code blocks → the current **5-Section Golden Format** with composable blocks, adaptive density, and Copilot Chat-specific rendering rules.
 

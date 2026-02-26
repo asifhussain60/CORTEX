@@ -26,7 +26,7 @@ VS Code → python3 -m cortex.mcp → stdio → Tool execution
 - No Docker required
 - No network ports
 - IDE manages process lifecycle
-- All 39 MCP tools (37 active) available immediately
+- All 39 MCP tools available immediately
 
 ### Production (Containerized)
 
@@ -106,7 +106,7 @@ Before any deployment, CORTEX runs:
 
 1. **Full test suite** — 15,739 tests must pass
 2. **Golden tests** — 696 golden tests must pass (serial, deterministic)
-3. **Governance check** — 35 active CORE rules enforced
+3. **Governance check** — 38 active CORE rules enforced
 4. **Security scan** — `cortex/infrastructure/security/` validators
 5. **Pre-commit hooks** — `deployment/hooks/` + `cortex/infrastructure/pre_commit_validator.py`
 

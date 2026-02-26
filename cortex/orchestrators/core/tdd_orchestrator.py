@@ -70,6 +70,7 @@ from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringRequest,
 )
 from cortex.intelligence.learning.opj_mixin import OPJMixin  # Phase 52: OPJ intelligence
+from cortex.intelligence.learning.reinforcement_signal import SignalType  # Phase 83-d: URS
 
 # Phase 58-C: DomainBrain + Memory tier wiring (decision-making orchestrator)
 try:
@@ -586,6 +587,39 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTemplateMixin
         finally:
             # AC_COMPLETE: {_ac_id} ✅
             pass
+
+    # ── Phase 83-d: URS signal emission ─────────────────────────────────────
+
+    def _emit_tdd_cycle_signal(
+        self,
+        operation: str,
+        success: bool,
+        retries: int = 0,
+    ) -> None:
+        """Emit a reinforcement signal after a TDD cycle completes.
+
+        Signal mapping:
+          - GREEN on first try (retries=0)  → STRONG_REWARD
+          - GREEN after retries (retries>0) → MILD_REWARD
+          - Cycle failure                   → MILD_PUNISHMENT
+
+        Args:
+            operation: The TDD operation that completed.
+            success: Whether the cycle reached GREEN.
+            retries: Number of retry attempts before success.
+        """
+        if success and retries == 0:
+            signal = SignalType.STRONG_REWARD
+        elif success:
+            signal = SignalType.MILD_REWARD
+        else:
+            signal = SignalType.MILD_PUNISHMENT
+
+        self._urs_emit_signal(
+            signal_type=signal,
+            pattern_id=operation,
+            context={"success": success, "retries": retries},
+        )
 
     def get_audit_trail(self, limit: int = 100) -> Result[list]:
         """

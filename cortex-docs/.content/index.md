@@ -10,7 +10,7 @@ format: diátaxis-explanation
 voice: third-person-blended
 ---
 
-> **Notice:** This documentation represents CORTEX as verified against live code on 25 February 2026 (Phase 79-D Complete — 79-D phases complete). All metrics, module paths, and counts are validated against the running codebase. The Simplification Master Plan (Phases 58-62) eliminated core/core double-nesting, reduced orchestrator surface, and cleaned the registry.
+> **Notice:** This documentation represents CORTEX as verified against live code on 26 February 2026 (Phase 83 Complete — Unified Reinforcement Signal). All metrics, module paths, and counts are validated against the running codebase.
 
 ---
 
@@ -23,26 +23,26 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 **What makes it different from other dev tools:**
 
 - Traditional tools answer questions. CORTEX **orchestrates entire workflows** — from intent classification through TDD enforcement to code delivery.
-- One canonical Python package (`cortex`), 27 wired orchestrators across 3 canonical tiers (10 total directories), 39 MCP tools (37 active), 35 CORE governance rules.
+- One canonical Python package (`cortex`), 51 wired orchestrators across 4 tiers (core, domain, support, git), 39 MCP tools, 38 CORE governance rules.
 - TDD is not optional. CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX request. No exceptions.
 - Everything is Git-backed. No PostgreSQL, no MongoDB — just YAML files in `cortex-registry/` versioned alongside your code.
 
 ---
 
-## System Metrics (24 Feb 2026 — Phase 79-D Complete — All 67 Phases Done)
+## System Metrics (26 Feb 2026 — Phase 83 Complete)
 
 | Metric | Value | Status |
 |--------|-------|--------|
 | **Package** | 1 canonical (`cortex`) | ✅ 3→1 consolidation complete |
-| **Orchestrators** | 27 wired (7 core, 6 domain, 14 support) | ✅ IOrchestrator protocol enforced |
-| **MCP Tools** | 26 active (38 total incl. sub-tools) | ✅ Pylance-style stdio server |
-| **Top-level Dirs** | 16 canonical under `cortex/` | ✅ 59→16 cleanup complete |
-| **Governance Rules** | 35 CORE active (+ 2 AC rules) | ✅ Enforced at pre-commit + CI + runtime |
+| **Orchestrators** | 51 wired (17 core, 7 domain, 23 support, 4 git) | ✅ IOrchestrator protocol enforced |
+| **MCP Tools** | 39 active in `cortex/mcp/tools/` | ✅ Pylance-style stdio server |
+| **Top-level Dirs** | 20 canonical under `cortex/` | ✅ 59→20 cleanup complete |
+| **Governance Rules** | 38 CORE active (+ 2 AC rules) | ✅ Enforced at pre-commit + CI + runtime |
 | **Test Suite** | 16,259 tests (486 golden, 177 phase) | ✅ Parallel xdist batch runner |
 | **Parallel Testing** | pytest-xdist (`-n auto --dist loadscope`) | ✅ CortexXdistPlugin batch runner |
 | **Enterprise Patterns** | 9 patterns in registry | ✅ mediator, strategy, observer, factory, etc. |
 | **Sweep Completeness** | CORE-064 enforced via SweepCatalogueOrchestrator | ✅ No partial sweeps across sessions |
-| **Phase Completion** | All 67 phases complete | ✅ Phases 1-67 DONE |
+| **URS (Phase 83)** | Unified Reinforcement Signal — closed-loop learning | ✅ 10 wired surfaces, `cortex_learning` MCP tool |
 
 ---
 
@@ -51,17 +51,17 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 ```
   ┌───────────────────────────────────────────────────────────────┐
   │                     CORTEX PLATFORM v1.0.0                    │
-  │             1 Package · 27 Orchestrators · 26 MCP Tools       │
+  │             1 Package · 51 Orchestrators · 39 MCP Tools       │
   │                                                               │
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │
   │  │ MCP Gateway │──▶│  Orchestration   │──▶│ Intelligence  │  │
-  │  │ 39 tools    │   │  27 wired        │   │ LENS + Brain  │  │
-  │  └─────────────┘   │  3 canonical tiers│   │ 8 analyzers   │  │
+  │  │ 39 tools    │   │  51 wired        │   │ LENS + Brain  │  │
+  │  └─────────────┘   │  4 canonical tiers│   │ + URS (Ph 83) │  │
   │         │          └──────────────────┘   └───────────────┘  │
   │         ▼                   │                     │           │
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │
   │  │ Governance  │   │  Testing         │   │ Registry      │  │
-  │  │ 35 rules    │   │  15,739 tests    │   │ Git-backed    │  │
+  │  │ 38 rules    │   │  16,259 tests    │   │ Git-backed    │  │
   │  │ CORE-064    │   │  xdist batch     │   │ YAML SSOT     │  │
   │  └─────────────┘   └──────────────────┘   └───────────────┘  │
   └───────────────────────────────────────────────────────────────┘
@@ -75,7 +75,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 **Product Owner:** "When I request a feature, I know TDD is enforced — not by policy, but by the system. The TDDOrchestrator writes the failing test first, then implements. I can pull sprint work items from ADO directly into developer context via `cortex_fetch_work_items`. I never chase test coverage; it's automatic."
 
-**Developer:** "I type a request in VS Code. CORTEX enriches it (Stage -1), classifies intent (Stage 1), runs 10 parallel LENS analyzers, enforces governance, and executes. Everything imports from one package: `from cortex.orchestrators.core import TDDOrchestrator`. No more hunting through 3 packages."
+**Developer:** "I type a request in VS Code. CORTEX enriches it (Stage -1), classifies intent (Stage 1), runs 10 parallel LENS analyzers, enforces governance, and executes. Every operation emits a URS reinforcement signal so the system learns what works. Everything imports from one package: `from cortex.orchestrators.core import TDDOrchestrator`. No more hunting through 3 packages."
 
 ---
 
@@ -116,5 +116,5 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-*CORTEX v1.0.0 (Phase 62 Complete) · 25 February 2026 · 27 wired orchestrators · 39 MCP tools (37 active) · 35 CORE rules · 15,739 tests · 486 golden · Source of truth: `cortex-registry/cortex-master.yaml`*
+*CORTEX v1.0.0 (Phase 83 Complete) · 26 February 2026 · 51 wired orchestrators · 39 MCP tools · 38 CORE rules · 16,259 tests · 486 golden · Source of truth: `cortex-registry/cortex-master.yaml`*
 

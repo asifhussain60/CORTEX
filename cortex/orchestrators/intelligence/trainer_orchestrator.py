@@ -669,5 +669,122 @@ class TrainerOrchestrator(OrchestratorProtocolMixin):
             "detect_gaps",
             "generate_proposal",
             "execute_proposal",
+            "score_proposal",
+            "score_and_reinforce",
             "scan",
         ]
+
+    # =========================================================================
+    # AC-PHASE83-03: Reinforcement scoring
+    # =========================================================================
+
+    def score_proposal(
+        self, execution_report: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """
+        Score an execution report and generate reinforcement signals.
+
+        Examines the executed/errors/skipped lists in the report and emits:
+        - STRONG_REWARD for each successfully executed action
+        - STRONG_PUNISHMENT for each failed action
+        - MILD_REWARD for skipped actions (they didn't cause harm)
+
+        Does NOT write to the learning loop — use score_and_reinforce()
+        for end-to-end integration.
+
+        AC-PHASE83-03: TrainerOrchestrator reinforcement wiring
+
+        Args:
+            execution_report: Result from execute_proposal()
+
+        Returns:
+            Dict with signal_count and signals list
+        """
+        from cortex.intelligence.learning.reinforcement_signal import SignalType
+
+        signals: List[Dict[str, Any]] = []
+
+        # Reward for each executed action
+        for executed in execution_report.get("executed", []):
+            template_id = executed.get("template_id", "")
+            if not template_id:
+                # Fallback: derive from target path stem
+                target = executed.get("target", "")
+                template_id = Path(target).stem if target else "unknown"
+
+            signals.append({
+                "signal_type": SignalType.STRONG_REWARD.name,
+                "score": SignalType.STRONG_REWARD.score,
+                "pattern_id": template_id,
+                "source_orchestrator": self._orch_name,
+                "context": {"action": executed.get("action", ""), "target": executed.get("target", "")},
+            })
+
+        # Punishment for each error
+        for error_entry in execution_report.get("errors", []):
+            action = error_entry.get("action", {})
+            template_id = action.get("template_id", "unknown")
+
+            signals.append({
+                "signal_type": SignalType.STRONG_PUNISHMENT.name,
+                "score": SignalType.STRONG_PUNISHMENT.score,
+                "pattern_id": template_id,
+                "source_orchestrator": self._orch_name,
+                "context": {
+                    "action": action.get("action", ""),
+                    "error": error_entry.get("error", ""),
+                },
+            })
+
+        return {
+            "signal_count": len(signals),
+            "signals": signals,
+        }
+
+    def score_and_reinforce(
+        self,
+        execution_report: Dict[str, Any],
+        learning_loop: Optional[Any] = None,
+    ) -> Dict[str, Any]:
+        """
+        Score an execution report and write reinforcement signals to the learning loop.
+
+        End-to-end integration: score_proposal() + learning_loop.reinforcement_signal().
+
+        AC-PHASE83-03: TrainerOrchestrator ↔ UniversalLearningLoop wiring
+
+        Args:
+            execution_report: Result from execute_proposal()
+            learning_loop: UniversalLearningLoop instance (defaults to singleton)
+
+        Returns:
+            Dict with signal_count, signals, and signal_ids
+        """
+        from cortex.intelligence.learning.reinforcement_signal import SignalType
+
+        if learning_loop is None:
+            from cortex.intelligence.learning.universal_learning_loop import (
+                get_learning_loop,
+            )
+            learning_loop = get_learning_loop()
+
+        score_result = self.score_proposal(execution_report)
+        signal_ids: List[str] = []
+
+        signal_type_map = {name: member for name, member in SignalType.__members__.items()}
+
+        for signal in score_result["signals"]:
+            st = signal_type_map.get(signal["signal_type"], SignalType.NEUTRAL)
+            sid = learning_loop.reinforcement_signal(
+                pattern_id=signal["pattern_id"],
+                signal_type=st,
+                source_orchestrator=signal["source_orchestrator"],
+                context=signal.get("context", {}),
+            )
+            signal_ids.append(sid)
+
+        return {
+            "signal_count": score_result["signal_count"],
+            "signals": score_result["signals"],
+            "signal_ids": signal_ids,
+        }

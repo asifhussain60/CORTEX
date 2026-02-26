@@ -36,7 +36,7 @@ order: 6
 │                                                │
 │  EnforcementOrchestrator                       │
 │  ┌──────────────────────────────────────────┐  │
-│  │ All 35 active CORE rules evaluated       │  │
+│  │ All 38 active CORE rules evaluated       │  │
 │  │ 10 enforcement agents execute            │  │
 │  │                                          │  │
 │  │ Agents:                                  │  │

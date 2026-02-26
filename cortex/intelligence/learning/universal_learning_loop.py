@@ -20,9 +20,12 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum, auto
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
 from cortex.core.result import Err, Ok, Result
+
+if TYPE_CHECKING:
+    from cortex.intelligence.learning.reinforcement_signal import SignalType
 
 logger = logging.getLogger(__name__)
 
@@ -276,6 +279,76 @@ class UniversalLearningLoop:
             "cached_learnings": sum(len(v) for v in self._learning_cache.values()),
             "cache_keys": list(self._learning_cache.keys()),
         }
+
+    def reinforcement_signal(
+        self,
+        pattern_id: str,
+        signal_type: "SignalType",
+        source_orchestrator: str,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> str:
+        """
+        Emit a reinforcement signal and apply it to the learning cache.
+
+        Delegates to ReinforcementEngine for signal storage and confidence
+        adjustment. This is the primary entry point for orchestrators to
+        provide closed-loop feedback.
+
+        AC-PHASE83-001: UniversalLearningLoop reinforcement integration
+
+        Args:
+            pattern_id: ID of the pattern to reinforce.
+            signal_type: SignalType (STRONG_REWARD through STRONG_PUNISHMENT).
+            source_orchestrator: Name of the calling orchestrator.
+            context: Optional additional context for the signal.
+
+        Returns:
+            The signal_id of the emitted signal.
+        """
+        from cortex.intelligence.learning.reinforcement_signal import (
+            ReinforcementEngine,
+        )
+
+        if not hasattr(self, "_reinforcement_engine"):
+            self._reinforcement_engine = ReinforcementEngine()
+
+        # Apply to cached patterns
+        self._reinforcement_engine.apply_to_learning(
+            learning_loop=self,
+            pattern_id=pattern_id,
+            signal_type=signal_type,
+        )
+
+        # The apply_to_learning call already emits to history, so return
+        # the last signal_id from history
+        history = self._reinforcement_engine.get_signal_history(
+            pattern_id=pattern_id
+        )
+        return history[-1].signal_id if history else ""
+
+    def get_reinforcement_history(
+        self,
+        pattern_id: Optional[str] = None,
+    ) -> list:
+        """
+        Get reinforcement signal history.
+
+        Args:
+            pattern_id: If provided, filter to this pattern only.
+
+        Returns:
+            List of ReinforcementSignal objects.
+        """
+        from cortex.intelligence.learning.reinforcement_signal import (
+            ReinforcementEngine,
+        )
+
+        if not hasattr(self, "_reinforcement_engine"):
+            self._reinforcement_engine = ReinforcementEngine()
+
+        return self._reinforcement_engine.get_signal_history(
+            pattern_id=pattern_id
+        )
 
     def clear_cache(self) -> None:
         """Clear learning cache."""

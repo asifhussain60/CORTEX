@@ -51,7 +51,7 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-02-26T18:00:00Z'
-  total_phases: 82
+  total_phases: 83
   active: 0
   completed: 74
   in_progress: 0
@@ -119,7 +119,30 @@ metadata:
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
-  # ── SLOT #0 — phase-77 (P0, COMPLETE) ────────────────────────────────────
+  # ── SLOT #0 — phase-84 (P0, PLANNED) ──────────────────────────────────────
+  - id: phase-84
+    title: "Stub Elimination + Business Rules Pipeline — 29-GAP Comprehensive Sweep"
+    priority: P0
+    status: PLANNED
+    sweep_id: SWEEP-84-STUB-ELIMINATION
+    gaps: 29
+    sub_phases: 7
+    file: "cortex-registry/planning/phases/planned/phase-84-stub-elimination-business-rules-pipeline.yaml"
+    note: "PLANNED. 4 sweeps: (1) Wire RuleExtractor into LENS + business-rules.yaml persistence, (2) Replace 6 hollow stubs imported by production code, (3) Resolve 9 stub orchestrators, (4) Fix silent degradation + CLI gaps. 29 golden permanence tests at tests/golden/production/test_stub_elimination_permanence.py."
+
+  # ── SLOT #1 — phase-83 (P0, COMPLETE) ────────────────────────────────────
+  - id: phase-83
+    title: "Unified Reinforcement Signal (URS) — Closed-Loop Learning Across All Orchestrators"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-83-UNIFIED-REINFORCEMENT-SIGNAL
+    gaps: 12
+    gaps_closed: 12
+    sub_phases: 6
+    file: "cortex-registry/_cortex-master/phases/completed/phase-83-unified-reinforcement-signal.yaml"
+    note: "COMPLETE. Closed CORTEX open-loop learning gap. 72 new tests, 6 sub-phases (a-f). ReinforcementSignal + EffectivenessAnalyzer + TrainerOrchestrator + cortex_learning MCP tool (39th) + OPJ/TDD/Enforcement wiring + TestValueScorer/KnSynth/IntelligenceMatrix/LENS integration."
+
+  # ── SLOT #1 — phase-77 (P0, COMPLETE) ────────────────────────────────────
   - id: phase-77
     title: "Production Cleanup — Dead File Purge, Wiring Repair, MasterOrchestrator SRP"
     priority: P0
@@ -444,24 +467,25 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "✅ 82/82 PHASES COMPLETE — All phases delivered. Smoke baseline: 1,211+"
-  overall_score: 100%
+  status: "✅ 83/84 PHASES COMPLETE — Phase 84 (Stub Elimination) PLANNED. Smoke baseline: 1,443+"
+  overall_score: 98%
   test_baseline: "1,443 smoke | 84 golden response | 204 golden workflow | 177 workflow orchestrators"
   deployment_date: '2026-02-26'
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "82/82 phases COMPLETE"
+  plan_version: "83/84 phases (1 PLANNED)"
   last_verified: '2026-02-26T00:00:00Z'
 
 summary:
-  total_phases: 82
-  completed: 82
+  total_phases: 84
+  completed: 83
   active: 0
   in_progress: 0
-  planned: 0
+  planned: 1
   archived: 4
   playbooks: 1
-  completion_percentage: 100
-  consolidation_summary: "v24.0: 82/82 PHASES COMPLETE ✅ — phase-82 COMPLETE 2026-02-26. Block library extended 7→16 composable blocks. 9 new LEGO blocks + Whitespace Normalizer + Table Safety Switch (R1-R6) + model-tiering execution policy (BLOCK-EXECUTION-SPEC + BLOCK-DEVIATION-ALERT). 84/84 golden response tests GREEN."
-  active_phases: {}
+  completion_percentage: 98
+  consolidation_summary: "v27.0: 84 phases — 83 COMPLETE, 1 PLANNED (phase-84: Stub Elimination + Business Rules Pipeline, 29 GAPs, 4 sweeps). Golden permanence harness at tests/golden/production/test_stub_elimination_permanence.py."
+  active_phases:
+    phase-84: "Stub Elimination + Business Rules Pipeline — P0, PLANNED, 29 GAPs, 4 sweeps, 7 sub-phases"

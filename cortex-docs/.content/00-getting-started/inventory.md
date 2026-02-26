@@ -14,9 +14,9 @@ render_hint: inventory-page
 
 ---
 
-## 1. Orchestrators (27 Wired)
+## 1. Orchestrators (51 Wired)
 
-All 27 orchestrators satisfy `IOrchestrator` protocol via `OrchestratorProtocolMixin` (`cortex/core/orchestrator_protocol_mixin.py`). Wiring authority: `cortex-registry/core/specifications/`.
+All 51 orchestrators satisfy `IOrchestrator` protocol via `OrchestratorProtocolMixin` (`cortex/core/orchestrator_protocol_mixin.py`). Wiring authority: `cortex-registry/core/specifications/`.
 
 ### 1.1 Core Tier (7)
 
@@ -25,7 +25,7 @@ All 27 orchestrators satisfy `IOrchestrator` protocol via `OrchestratorProtocolM
 | master | MasterOrchestrator | `cortex/orchestrators/core/master_orchestrator.py` | Top-level coordinator — routes intents, manages 9-stage audit pipeline, wires all orchestrators |
 | intent-router | IntentRouter | `cortex/orchestrators/core/intent_router_impl.py` | Classifies user intent and routes to appropriate orchestrator using LENS-aware semantic ranking |
 | tdd | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` | Enforces RED→GREEN→REFACTOR — CORE-008, test-first mandate, golden test validation |
-| enforcement | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit governance — validates all 35 CORE rules, blocks violations, SQLite audit trail |
+| enforcement | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit governance — validates all 38 CORE rules, blocks violations, SQLite audit trail |
 | workflow | WorkflowOrchestrator | `cortex/orchestrators/core/workflow_orchestrator.py` | YAML workflow template execution engine — detect-fix-rescan-loop and other primitives |
 | conversation | ConversationOrchestrator | `cortex/orchestrators/core/conversation_orchestrator.py` | Multi-turn conversation — state persistence, context aggregation, response streaming |
 | audit | AuditOrchestrator | `cortex/orchestrators/core/audit_orchestrator.py` | 19-point production readiness audit — P0/P1/P2 scanning, convergence loop, SQLite logging |
@@ -78,7 +78,7 @@ All 27 orchestrators satisfy `IOrchestrator` protocol via `OrchestratorProtocolM
 
 ---
 
-## 2. MCP Tools (39 Total — 37 Active, 2 Deprecated)
+## 2. MCP Tools (39 Active)
 
 Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server: `python3 -m cortex.mcp`.
 
@@ -87,7 +87,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 | Tool ID | File | Description |
 |---------|------|-------------|
 | cortex_classify | `cortex/mcp/tools/core.py` | Intent classification — routes requests to correct orchestrator pipeline |
-| cortex_orchestrator | `cortex/mcp/tools/core.py` | Direct orchestrator invocation — routes to any of the 27 wired orchestrators |
+| cortex_orchestrator | `cortex/mcp/tools/core.py` | Direct orchestrator invocation — routes to any of the 51 wired orchestrators |
 | cortex_request_lifecycle | `cortex/mcp/tools/core.py` | Full request lifecycle — classify → plan → execute → validate |
 
 ### 2.2 Governance & Compliance
@@ -163,7 +163,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 | Tool ID | File | Description |
 |---------|------|-------------|
 | cortex_dashboard | `cortex/mcp/tools/operations.py` | Generate static dashboard suite — landing page + per-repo dashboards with embedded data |
-| cortex_tools_catalog | `cortex/mcp/tools/core.py` | Discover all 39 MCP tools (37 active) with category and description |
+| cortex_tools_catalog | `cortex/mcp/tools/core.py` | Discover all 39 MCP tools with category and description |
 
 ### 2.11 Toolkit / Bulk Operations
 
@@ -246,7 +246,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 ---
 
-## 4. Governance Rules (35 CORE Active)
+## 4. Governance Rules (38 CORE Active)
 
 **Authority:** `cortex-registry/core/tier0-skull/skull-rules.yaml` (Tier 0 — immutable, highest precedence)
 
@@ -504,7 +504,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 | Component | File | Purpose |
 |-----------|------|---------|
-| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` | Primary base — all 27 wired orchestrators (Phase 58) |
+| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` | Primary base — all 51 wired orchestrators (Phase 58) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` | Legacy base — 2 orchestrators only |
 | IOrchestrator | `cortex/core/interfaces/i_orchestrator.py` | Protocol interface for all orchestrators |
 | FileFactory | `cortex/core/file_factory.py` | Canonical file creation with CORE-028 validation |
@@ -515,7 +515,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 | Component | File | Purpose |
 |-----------|------|---------|
-| WiringBootstrap | `cortex/core/wiring/wiring_bootstrap.py` | Bootstraps all 27 wired orchestrators at startup |
+| WiringBootstrap | `cortex/core/wiring/wiring_bootstrap.py` | Bootstraps all 51 wired orchestrators at startup |
 | OrchestratorFactory | `cortex/core/wiring/orchestrator_factory.py` | Lazy-loaded orchestrator instantiation |
 | RegistryBackedOrchestratorRegistry | `cortex/core/wiring/registry_backed_orchestrator_registry.py` | Git-backed orchestrator registry |
 | DependencyInjection | `cortex/core/wiring/dependency_injection.py` | DI container for orchestrator dependencies |
@@ -655,7 +655,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 | `cortex-docs/roles/product-owner.html` | Product owner persona page |
 | `cortex-docs/roles/learner.html` | Curious learner persona page |
 | `cortex-docs/learning/` | Learning track pages (beginner/intermediate/advanced) |
-| `cortex-docs/data/orchestrators.json` | Orchestrator catalog (v1.1.0 — 27 entries) |
+| `cortex-docs/data/orchestrators.json` | Orchestrator catalog (v1.1.0 — 51 entries) |
 | `cortex-docs/data/mcp-tools.json` | MCP tool catalog (v1.1.0 — 39 entries) |
 | `cortex-docs/data/knowledge-catalog.json` | Knowledge domain catalog (v1.1.0 — 34 domains, 32 tech stacks) |
 | `cortex-docs/data/learning-paths.json` | Learning track metadata |
@@ -672,7 +672,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 | Metric | Value |
 |--------|-------|
-| Wired Orchestrators | 27 (7 core · 6 domain · 14 support) |
+| Wired Orchestrators | 51 (17 core · 7 domain · 23 support · 4 git) |
 | Active MCP Tools | 37 (39 total, 2 deprecated) |
 | CORE Governance Rules | 35 active (Tier 0 skull-rules) |
 | LENS Analyzers | 10 core + 7 adapters |

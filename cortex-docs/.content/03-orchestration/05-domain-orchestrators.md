@@ -87,4 +87,4 @@ Key capabilities enforcing CORE-035 (single canonical implementation):
 
 ---
 
-*Verified against `cortex/orchestrators/domain/` · 25 February 2026 · Phase 79-D complete · 6 domain orchestrators*
+*Verified against `cortex/orchestrators/domain/` · 25 February 2026 · Phase 83 complete · 6 domain orchestrators*

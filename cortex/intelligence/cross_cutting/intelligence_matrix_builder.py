@@ -921,3 +921,49 @@ class IntelligenceMatrixBuilder:
                 f"the required gate of {gate:.1%} (Phase 66-C). "
                 f"Wire more pairs to reach ≥{gate:.0%} coverage."
             )
+
+    # ── Phase 83-e: URS coverage change signals ────────────────────────────
+
+    def on_coverage_change(
+        self,
+        capability_id: str,
+        old_coverage: float,
+        new_coverage: float,
+    ) -> None:
+        """Emit a reinforcement signal when capability coverage changes.
+
+        Args:
+            capability_id: The capability whose coverage changed.
+            old_coverage: Previous coverage fraction (0.0–1.0).
+            new_coverage: New coverage fraction (0.0–1.0).
+        """
+        from cortex.intelligence.learning.reinforcement_signal import (
+            ReinforcementEngine,
+            SignalType,
+        )
+
+        if new_coverage > old_coverage:
+            signal_type = SignalType.MILD_REWARD
+        elif new_coverage < old_coverage:
+            signal_type = SignalType.MILD_PUNISHMENT
+        else:
+            return  # No change, no signal
+
+        try:
+            if not hasattr(self, "_urs_engine") or self._urs_engine is None:
+                self._urs_engine = ReinforcementEngine()
+            self._urs_engine.emit_signal(
+                signal_type=signal_type,
+                pattern_id=capability_id,
+                source_orchestrator="IntelligenceMatrixBuilder",
+                context={
+                    "old_coverage": old_coverage,
+                    "new_coverage": new_coverage,
+                    "delta": round(new_coverage - old_coverage, 4),
+                },
+            )
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).debug(
+                "MatrixBuilder.on_coverage_change: non-fatal — %s", exc
+            )

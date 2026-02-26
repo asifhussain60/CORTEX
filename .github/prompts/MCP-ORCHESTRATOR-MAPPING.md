@@ -6,7 +6,7 @@
 
 ## 📋 Overview
 
-CORTEX exposes **51 wired orchestrators** via **38 MCP tools**. This guide maps orchestrators to their MCP entry points for external repository integration and SaaS deployment.
+CORTEX exposes **51 wired orchestrators** via **39 MCP tools**. This guide maps orchestrators to their MCP entry points for external repository integration and SaaS deployment.
 
 **Architecture Principle:** 1 orchestrator ≠ 1 MCP tool. Instead, orchestrators are exposed via:
 - **Direct MCP tools** for primary workflows (TDD, Refactor, Plan)
@@ -229,7 +229,7 @@ Check health of all or specific orchestrators:
 
 ## 📊 Tool Category Matrix
 
-### **38 MCP Tools**
+### **39 MCP Tools**
 
 | Category | Count | Tools |
 |----------|-------|-------|

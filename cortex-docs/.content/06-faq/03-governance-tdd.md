@@ -166,7 +166,7 @@ The rule's intent is: *eliminate noise, amplify signal*. Auto-generated status c
 |-------|-------------------|
 | **L1** | Every wired orchestrator exists at its declared path |
 | **L2** | Every orchestrator satisfies `IOrchestrator` protocol |
-| **L3** | All 27 wired orchestrators are reachable from MasterOrchestrator via IntentRouter |
+| **L3** | All 51 wired orchestrators are reachable from MasterOrchestrator via IntentRouter |
 
 Violations at L1 are P0 (missing files). L2 violations are P1 (protocol gap). L3 violations are P1 (dead orchestrator — wired but unreachable).
 

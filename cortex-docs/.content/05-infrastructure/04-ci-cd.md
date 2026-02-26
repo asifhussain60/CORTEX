@@ -35,7 +35,7 @@ order: 4
        │
        ▼
 [Stage 4: Governance Validation]
-       │ 35 active CORE rules enforced
+       │ 38 active CORE rules enforced
        │ EnforcementOrchestrator validates
        │
        ▼

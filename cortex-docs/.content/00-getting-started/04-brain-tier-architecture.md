@@ -235,7 +235,7 @@ The Action tier (`cortex/intelligence/action/`) builds an `ExecutionPlan`:
 [Orchestrator Execution] ── RED → GREEN → REFACTOR
         │
         ▼
-[Governance Validation] ── 35 CORE rules, EnforcementOrchestrator
+[Governance Validation] ── 38 CORE rules, EnforcementOrchestrator
         │
         ▼
 [Learning Update] ── success rates updated for next time

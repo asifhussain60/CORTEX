@@ -84,6 +84,51 @@ Once approved, execute ALL phases without stopping:
 | `/doc-refresh` | Data-driven site refresh: Discover → Generate JSON catalogs → Validate → Deploy | Full pipeline (DOC-REFRESH-001) |
 | `/doc-discover` | Discovery only — surface git/registry/live code gaps | Discovery phase only |
 | `/doc-validate` | Validation only — CSS zero-inline, link check, responsive test | Validation phase only |
+| `/doc-consolidate` | Consolidate flat-files: merge overlapping content, reduce file count, unify voice, remove code snippets | Content consolidation pipeline |
+
+---
+
+## 📦 Content Consolidation Pipeline (`/doc-consolidate`)
+
+**Purpose:** Reduce flat-files/ from many granular files to fewer comprehensive documents without losing any content. Applies consistent descriptive language throughout, removes raw code snippets, and eliminates cross-file duplication.
+
+### Consolidation Principles
+
+1. **Zero content loss** — every concept, metric, and explanation from the source files must appear in the consolidated output
+2. **Descriptive language only** — replace all code snippets with plain-language descriptions of what the code does, how it works, and why it matters
+3. **Consistent voice** — third-person, professional, accessible; use brain analogies sparingly and consistently; three-role perspective (Business Leader, Product Owner, Developer) woven into narrative, not callout boxes
+4. **Single authority per topic** — each concept appears in exactly one file; cross-references link rather than duplicate
+5. **Flat-file naming** — consolidated files use `nn-section-topic.md` convention
+
+### Consolidation Map (64 → 12 files)
+
+| Section | Source Files (Current) | Consolidated File | Rationale |
+|---------|----------------------|-------------------|-----------|
+| **00 Getting Started** | `one-pager`, `how-cortex-works`, `key-concepts`, `cortex-intelligence`, `brain-tier-architecture`, `intelligence-matrix`, `inventory`, `quick-start` (8 files) | `00-platform-overview.md` | One-pager, how-it-works, and key-concepts heavily overlap on request flow, orchestrator counts, and architecture diagrams |
+| | | `00-intelligence-architecture.md` | Brain tiers, intelligence matrix, and cortex-intelligence all describe the Perception→Reasoning→Action pipeline and LENS integration |
+| | | `00-quick-start.md` | Quick start is procedural (how-to) — distinct from explanatory content |
+| **01 Capabilities** | `overview`, `core-platform`, `ai-intelligence`, `decisioning`, `governance-compliance`, `response-formatting`, `workflow-templates`, `workflow-template-tiers`, `extensibility` (9 files) | `01-capabilities.md` | Overview + core-platform + ai-intelligence + decisioning + extensibility describe the six capability domains — one file with six sections |
+| | | `01-governance-workflows.md` | Governance-compliance + workflow-templates + workflow-template-tiers + response-formatting are the operational enforcement layer |
+| **02 LENS** | `overview`, `architecture`, `analyzers`, `synthesis`, `caching`, `company-domain-synthesis`, `governance-integration` (7 files) | `02-lens-intelligence.md` | All 7 files describe the same subsystem; overview + architecture + analyzers are the core, synthesis/caching/governance-integration are aspects |
+| **03 Orchestration** | `overview`, `core-architecture`, `master-orchestrator`, `intent-router`, `tdd-orchestrator`, `domain-orchestrators`, `workflow-engine`, `security-orchestrator`, `sweep-catalogue`, `request-rephrase`, `cross-orchestrator`, `end-to-end-flow` (12 files) | `03-orchestration-system.md` | Overview + core-architecture + master-orchestrator + intent-router + end-to-end-flow + cross-orchestrator + request-rephrase describe the dispatch model |
+| | | `03-orchestration-reference.md` | TDD, domain, workflow-engine, security, sweep-catalogue are individual orchestrator deep-dives |
+| **04 MCP** | `overview`, `protocol`, `tools-catalog`, `integration`, `versioning`, `work-item-integration` (6 files) | `04-mcp-gateway.md` | All 6 describe the MCP layer; overview + protocol + tools-catalog are the core; integration + versioning + work-items are extensions |
+| **05 Infrastructure** | `overview`, `tech-stack`, `deployment`, `ci-cd`, `observability`, `scalability`, `ado-integration` (7 files) | `05-infrastructure.md` | All 7 describe operational infrastructure — one cohesive file with sections |
+| **06 FAQ** | `general`, `orchestration`, `governance-tdd`, `lens-intelligence`, `mcp-integration`, `testing-workflow`, `business-product` (7 files) | `06-faq.md` | All 7 are Q&A format on different topics — one unified FAQ with topic headings |
+| **07 Diagrams** | `overview`, `high-level-architecture`, `request-flow`, `orchestrator-map`, `lens-pipeline`, `governance-flow`, `mcp-transport`, `testing-pyramid`, `brain-tier-model`, `golden-test-taxonomy` (10 files) | `07-diagrams.md` | Overview is a thin index; each diagram file is a single diagram with description — consolidate into one illustrated reference |
+
+### Execution Steps (autonomous after approval)
+
+1. **Read** all source flat files in the section
+2. **Extract** every unique concept, metric, table, and explanation
+3. **Deduplicate** — identify content that appears in multiple files
+4. **Merge** into the consolidated file using consistent descriptive prose
+5. **Remove code snippets** — replace with descriptions of behavior
+6. **Write** consolidated file to `flat-files/`
+7. **Delete** superseded source files from `flat-files/`
+8. **Mirror** changes to `.content/` source folders (update source-of-truth)
+9. **Validate** — no broken cross-references, all concepts preserved
+10. **Git commit** — `docs: consolidate flat-files 64→12 — zero content loss`
 
 ---
 
@@ -143,7 +188,7 @@ cortex-docs/
 │   ├── knowledge-catalog.json    ← From cortex-registry/knowledge/*.yaml
 │   ├── learning-paths.json       ← 3-track module metadata
 │   ├── orchestrators.json        ← 51 orchestrator cards
-│   └── mcp-tools.json            ← 38 MCP tool catalog
+│   └── mcp-tools.json            ← 39 MCP tool catalog
 ├── pipeline/                     ← Discovery & generation scripts
 │   ├── discover.py               ← Git + registry + live code scan
 │   ├── build.py                  ← YAML → JSON transformer
@@ -296,7 +341,7 @@ print("✅ PHASE 2: GENERATION COMPLETE")
 - `cortex-docs/.content/01-capabilities/` - Platform capabilities (8 files)
 - `cortex-docs/.content/02-lens/` - LENS intelligence pipeline
 - `cortex-docs/.content/03-orchestration/` - 51 wired orchestrators across 4 tiers (10 files)
-- `cortex-docs/.content/04-mcp/` - 38 MCP tools catalog (6 files)
+- `cortex-docs/.content/04-mcp/` - 39 MCP tools catalog (6 files)
 - `cortex-docs/.content/05-infrastructure/` - Deployment, observability
 - `cortex-docs/.content/07-diagrams/` - Architecture diagrams (9 files)
 - `cortex-docs/.content/glossary.md` - Terminology reference

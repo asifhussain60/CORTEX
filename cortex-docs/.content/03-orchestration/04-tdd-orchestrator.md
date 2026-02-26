@@ -43,6 +43,20 @@ CORE-008 mandates TDD for all IMPLEMENT and FIX operations. TDDOrchestrator:
 
 TDDOrchestrator integrates with TestQualityGate (`cortex/testing/quality_gate.py`) to block test generation scoring below 7. Tests must be meaningful, not just present.
 
+## URS Signal Emission (Phase 83)
+
+TDDOrchestrator emits **Unified Reinforcement Signals** after every TDD cycle completion, feeding the closed-loop learning system:
+
+| Outcome | Signal | Delta | When |
+|---------|--------|-------|------|
+| GREEN on first try | `STRONG_REWARD` | +1.0 | Test passes on first implementation attempt |
+| GREEN with retries | `MILD_REWARD` | +0.5 | Test passes after ≥1 retry |
+| Stuck in RED | `MILD_PUNISHMENT` | −0.5 | Test cannot be made green within cycle budget |
+
+These signals adjust confidence scores on the patterns used during the cycle. Over time, patterns that consistently produce first-try GREEN are promoted to T1 knowledge (confidence ≥0.9), while patterns that consistently fail are quarantined (confidence ≤0.3).
+
+**Location:** `tdd_orchestrator.py → _emit_tdd_cycle_signal()`
+
 ---
 
 ## Practical Examples
@@ -55,4 +69,4 @@ TDDOrchestrator integrates with TestQualityGate (`cortex/testing/quality_gate.py
 
 ---
 
-*Verified against tdd_orchestrator.py · 25 February 2026*
+*Verified against tdd_orchestrator.py · 26 February 2026 (Phase 83 — URS wiring)*

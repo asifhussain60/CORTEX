@@ -16,6 +16,7 @@ Authority: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings), LENS-00
 """
 
 import time
+import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -61,6 +62,7 @@ class LENSContext:
     vision_analysis: Dict[str, Any] = field(default_factory=dict)
     tech_stack: Dict[str, Any] = field(default_factory=dict)  # Phase 90 S1
     metadata: Dict[str, Any] = field(default_factory=dict)
+    analysis_id: str = field(default_factory=lambda: str(uuid.uuid4()))  # Phase 83-e: URS
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dict for IntentRouter compatibility."""
@@ -1946,6 +1948,46 @@ class LENSOrchestrator:
             merged["patterns"].update(company_knowledge["patterns"])
 
         return merged
+
+    # ── Phase 83-e: URS analysis outcome correlation ────────────────────────
+
+    def record_analysis_outcome(
+        self,
+        analysis_id: str,
+        success: bool,
+    ) -> None:
+        """Record the outcome of a LENS analysis for URS feedback.
+
+        Emits a reinforcement signal correlating an analysis_id with its
+        eventual outcome:
+          - ``success=True``  → MILD_REWARD  (correct insight)
+          - ``success=False`` → MILD_PUNISHMENT (incorrect insight)
+
+        Args:
+            analysis_id: The analysis_id from LENSContext.
+            success: Whether the analysis led to a successful operation.
+        """
+        from cortex.intelligence.learning.reinforcement_signal import (
+            ReinforcementEngine,
+            SignalType,
+        )
+
+        signal_type = SignalType.MILD_REWARD if success else SignalType.MILD_PUNISHMENT
+
+        try:
+            if not hasattr(self, "_urs_engine") or self._urs_engine is None:
+                self._urs_engine = ReinforcementEngine()
+            self._urs_engine.emit_signal(
+                signal_type=signal_type,
+                pattern_id=analysis_id,
+                source_orchestrator="LENSOrchestrator",
+                context={"success": success},
+            )
+        except Exception as exc:
+            import logging as _logging
+            _logging.getLogger(__name__).debug(
+                "LENSOrchestrator.record_analysis_outcome: non-fatal — %s", exc
+            )
 
 
 def get_lens_orchestrator(repo_path: Path) -> LENSOrchestrator:

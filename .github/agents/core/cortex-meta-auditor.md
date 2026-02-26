@@ -62,7 +62,7 @@ Unlike `cortex-auditor.md` (which audits source code), this agent audits **docum
 | # | Check | Pass Criteria |
 |---|-------|---------------|
 | 1 | Orchestrator count | All agents say "51 wired" |
-| 2 | MCP tool count | All agents say "38 MCP tools" |
+| 2 | MCP tool count | All agents say "39 MCP tools" |
 | 3 | CORE rules count | All agents say "38 active" |
 | 4 | Package name | All agents say `cortex` (no `cortex_intelligence`, `cortex_lens`) |
 | 5 | Deleted paths | No refs to `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
@@ -196,8 +196,9 @@ echo "=== DRIFT DETECTION ==="
 echo "Claimed '27 wired' locations: $(grep -rn '27 wired' .github/ --include='*.md' | wc -l)"
 echo "Claimed '26 MCP' locations:   $(grep -rn '26 MCP' .github/ --include='*.md' | wc -l)"
 echo "Claimed '35 CORE' locations:  $(grep -rn '35 CORE' .github/ --include='*.md' | wc -l)"
+echo "Claimed '38 MCP' locations:   $(grep -rn '38 MCP' .github/ --include='*.md' | wc -l)"
 echo ""
-echo "Expected: 0 matches for stale claims"
+echo "Expected: 0 matches for stale claims (canonical: 51 wired, 39 MCP, 38 CORE)"
 ```
 
 **Three-Way Conflict Resolution:**
@@ -207,7 +208,7 @@ When metadata, docs, and actual code disagree (example from chat01.md):
 | Source | Value | Authority |
 |--------|-------|-----------|
 | `skull-rules.yaml` metadata | `rule_count: 36` | ❌ Stale |
-| All `.github/` docs | "35 CORE rules" | ❌ Stale |
+| All `.github/` docs | "38 CORE rules" | ✅ Canonical |
 | Actual `grep -c 'rule_id: CORE-'` | 38 | ✅ Canonical |
 
 **Resolution:** Update metadata + all docs to match actual (38).
@@ -217,7 +218,7 @@ When metadata, docs, and actual code disagree (example from chat01.md):
 | Metric | Canonical Value |
 |--------|----------------|
 | Orchestrators | **51 wired** across 4 tiers |
-| MCP Tools | **38 MCP tools** |
+| MCP Tools | **39 MCP tools** |
 | CORE Rules | **38 active** (+ 2 AC rules = 40 total) |
 | Package | **`cortex`** (single) |
 | Tests | **16,259 collected** (486 golden, 177 phase) |
@@ -298,7 +299,7 @@ cortex_capture_metrics (replaced by cortex_metrics op=capture)
 cortex_onboard_repository_v3 (replaced by cortex_onboard op=full)
 cortex_audit_remediation_plan (replaced by cortex_governance op=remediation_plan)
 "24 orchestrators" / "28 MCP tools" / "120 orchestrators"
-"25 tools" / "25 MCP tools" / "24 MCP tools" / "26 MCP tools" (all stale — canonical is 38 MCP tools)
+"25 tools" / "25 MCP tools" / "24 MCP tools" / "26 MCP tools" (all stale — canonical is 39 MCP tools)
 "22 rules" / "35 CORE rules" (must say "38 CORE rules" or "38 active")
 ```
 

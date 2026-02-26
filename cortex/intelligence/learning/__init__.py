@@ -14,6 +14,11 @@ Components:
 - S7: LearningDashboard - Metrics and visualization
 """
 
+from cortex.intelligence.learning.reinforcement_signal import (
+    ReinforcementEngine,
+    ReinforcementSignal,
+    SignalType,
+)
 from cortex.orchestrators.validation.confidence_scorer import (
     ConfidenceScorer,
 )
@@ -54,6 +59,10 @@ __all__ = [
     "get_learning_loop",
     "LearningCapture",
     "PatternType",
+    # Reinforcement Signal (Phase 83)
+    "ReinforcementSignal",
+    "ReinforcementEngine",
+    "SignalType",
     # Pattern Extraction
     "PatternExtractor",
     "ExtractedPattern",
