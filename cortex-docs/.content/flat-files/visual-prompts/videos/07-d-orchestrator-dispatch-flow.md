@@ -14,32 +14,63 @@ video_scene: "Scene 3 — The Three Brain Tiers (Perception → Reasoning → Ac
 animation_notes: |
   ## Cinematic Simulation Prompt — 07a: Orchestrator Dispatch Flow
 
+  ### Visual Physics & Ambience Protocol
+  - **Environment:** Dark-blue vacuum (#0a0e27) with ray-traced reflections on glass pipeline surface
+  - **Intelligence tiers:** Three concentric glassmorphism rings with graduated cyan intensity
+  - **Lighting:** Volumetric fog, bioluminescent particle trails, ray-traced glass caustics
+  - **Router decision:** Holographic diamond prism with light fan-out, selective neon path illumination
+  - **Feedback cues:** Green pulse = validation pass, holographic glitch = error path, Lidar = intelligence scan
+
   **SCENE 1 — "The Awakening" (0:00–0:06)**
-  Camera: Static center-frame. CORTEX logo fades in with electric-aura glow. Hold 4s.
-  Logo shrinks to bottom-right watermark.
+  Camera: Static center-frame, locked on ray-traced glassmorphism floor.
+  Environment: Absolute dark-blue vacuum (#0a0e27) with volumetric fog at ground level.
+  CORTEX logo (cortex-logo.png) fades in as large central hero image with electric-aura
+  glow — cyan and purple pulse radiates outward. Ray-traced reflections on the floor. Hold 4s.
+  Logo shrinks to bottom-right watermark (15% opacity) with ease-out parallax slide.
 
   **SCENE 2 — "FPV Drone Dive: Request Entry" (0:06–0:12)**
-  Camera: FPV drone arrives at the top of a vertical glassmorphism pipeline. MCP Request
-  node glows green at the apex. A validation diamond appears — "Yes" path illuminates
-  green, "No" path flashes red with ghost particle to Error node.
+  Camera: FPV drone arrives at the top of a vertical glassmorphism pipeline with
+  parallax depth — foreground fog drifts faster than the pipeline behind it.
+  MCP Request node glows green at the apex with bioluminescent pulse, casting volumetric
+  light downward into the pipeline. A validation diamond appears with holographic surface
+  shimmer — "Yes" path illuminates green with bioluminescent tracer, "No" path flashes
+  red with holographic glitch effect and ghost particle trailing to Error node (translucent
+  red, fading). Ray-traced light from the validation diamond casts prismatic caustics on
+  adjacent pipeline surfaces.
 
   **SCENE 3 — "Intelligence Tiers" (0:12–0:24)**
-  The particle passes validation and enters Intent Classification. UnifiedIntelligenceProvider
-  materializes as three concentric glassmorphism rings:
-  - Inner ring: "quick — <10ms" (thin cyan glow)
-  - Middle ring: "targeted — +company domains" (medium cyan glow)
-  - Outer ring: "full — +ADO sprint + KG index" (thick cyan glow)
-  Particle enters the appropriate tier based on request complexity.
+  Camera: Slow dolly downward with orbital drift, tracking the particle's descent.
+  The particle passes validation with a green pulse and enters Intent Classification.
+  UnifiedIntelligenceProvider materializes as three concentric glassmorphism rings with
+  time-lapse mechanical assembly:
+  - Inner ring: "quick — <10ms" (thin cyan neon glow, minimal volumetric light)
+  - Middle ring: "targeted — +company domains" (medium cyan glow, moderate volumetric light)
+  - Outer ring: "full — +ADO sprint + KG index" (thick cyan neon glow, strong volumetric
+    light with ray-traced caustics on all adjacent surfaces)
+  Particle enters the appropriate tier based on request complexity — the selected ring
+  ignites to full brightness with bioluminescent burst, other rings dim to 30% with
+  slow neon cool-down. Lidar sweep confirms tier selection with green flash.
 
   **SCENE 4 — "The Routing Decision" (0:24–0:36)**
-  Camera: Router diamond receives the particle. Six orchestrator capsules fan out below.
-  The particle follows ONE path — that capsule illuminates to full brightness; all others
-  dim to 20%. Selected orchestrator executes. Result feeds into Learning capture.
+  Camera: Dolly-in to Router diamond, then pull-back to reveal orchestrator fan-out.
+  Router diamond receives the particle — holographic prism surface refracts light into
+  colored beams. Six orchestrator capsules fan out below as frosted glassmorphism nodes
+  with domain-specific neon filaments. The particle follows ONE path — that capsule
+  illuminates to full brightness with purple neon and bioluminescent internal glow;
+  all others dim to 20% with neon cool-down. Selected orchestrator executes — internal
+  neon filaments pulse with processing rhythm. Result feeds into Learning capture with
+  a particle evolution: execution particle transforms from cyan to green, confidence
+  score floats as holographic number. Bioluminescent trail persists as a permanent
+  neon path with ray-traced reflections.
 
   **SCENE 5 — "Orbital Reveal" (0:36–0:46)**
-  Camera: 360-degree orbital pan. Bioluminescent trail persists as permanent neon path.
+  Camera: 360-degree orbital pan at 25° downward angle with parallax depth — pipeline
+  rotates against volumetric fog backdrop. Bioluminescent trail persists as permanent
+  neon path from entry to selected orchestrator — a standing wave of particle energy
+  pulses along the trail. Ray-traced reflections of all components shimmer on the
+  glass floor.
   Glassmorphism "Evidence Bundle" icon materializes — sealed document with cyan checkmark
-  — fades to black.
+  and holographic shimmer — fades to black.
 related_diagrams:
   - 07-d-c4-component-master-orchestrator.md
   - 06-d-mcp-request-lifecycle-sequence.md

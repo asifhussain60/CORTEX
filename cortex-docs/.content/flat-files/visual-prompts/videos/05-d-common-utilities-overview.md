@@ -14,31 +14,63 @@ video_scene: "Scene 2 — Extension Points (shows the stable foundation that ext
 animation_notes: |
   ## Cinematic Simulation Prompt — 05: Tier 1 Foundation Layer
 
+  ### Visual Physics & Ambience Protocol
+  - **Environment:** Dark-blue vacuum (#0a0e27) with ray-traced reflections on glass bedrock surface
+  - **Foundation blocks:** Frosted glassmorphism with cyan neon filaments — rock-solid, zero movement
+  - **Extension points:** Purple/domain-colored neon filaments, dendrite growth animations
+  - **Lighting:** Volumetric fog at bedrock level, bioluminescent dependency conduits, ray-traced caustics
+  - **Feedback cues:** Lidar scan = validation, green pulse = confirmed dependency, dendrite growth = extension
+
   **SCENE 1 — "The Awakening" (0:00–0:06)**
-  Camera: Static center-frame. CORTEX logo fades in with electric-aura glow. Hold 4s.
-  Logo shrinks to bottom-right watermark.
+  Camera: Static center-frame, locked on ray-traced glassmorphism floor.
+  Environment: Absolute dark-blue vacuum (#0a0e27) with dense volumetric fog at ground
+  level — the fog represents the bedrock upon which everything is built.
+  CORTEX logo (cortex-logo.png) fades in as large central hero image with electric-aura
+  glow — cyan pulse radiates outward. Ray-traced reflections shimmer on the floor. Hold 4s.
+  Logo shrinks to bottom-right watermark (15% opacity) with ease-out parallax slide.
 
   **SCENE 2 — "FPV Drone Dive: The Stable Core" (0:06–0:16)**
-  Camera: FPV drone descends to the lowest level — Tier 1 Foundation. Four frosted
-  glassmorphism blocks materialize as bedrock: Validators (cyan neon), Exception Hierarchy
-  (cyan), File Operations (cyan), Structured Logging (cyan). A Lidar laser sweep scans
-  all four simultaneously. Info-pill floats center: "Extend, Don't Fork — this layer
-  never changes."
+  Camera: FPV drone descends slowly through volumetric fog — a deliberate, measured descent
+  (not terminal velocity — this is bedrock, stability, permanence). Fog parts with parallax
+  depth as the drone approaches Tier 1 Foundation.
+  Four frosted glassmorphism blocks materialize as bedrock with time-lapse geological
+  formation — rising from the glass floor like tectonic plates assembling. Each block has
+  internal cyan neon filaments pulsing in a slow, steady rhythm (heartbeat of stability):
+  Validators (cyan), Exception Hierarchy (cyan), File Operations (cyan), Structured Logging
+  (cyan). A Lidar laser sweep scans all four simultaneously — green flash confirmation
+  on each block with ray-traced green caustics reflecting off adjacent blocks.
+  Info-pill floats center in glassmorphism dark pill: "Extend, Don't Fork — this layer
+  never changes." — text materializes with typewriter reveal.
 
   **SCENE 3 — "Extensions Grow Above" (0:16–0:30)**
-  Camera: Slow dolly upward. Dependent modules materialize above — Models, Config, Storage,
-  Infrastructure — each as a frosted glass capsule with purple neon filaments. Dependency
-  arrows render as bioluminescent conduits connecting each down to its foundation block.
+  Camera: Slow dolly upward with parallax depth — foundation blocks remain rock-solid
+  (zero movement, zero vibration) while the camera rises. Dependent modules materialize
+  above with particle evolution animation — micro-particles condense from fog into solid
+  frosted glass capsules: Models, Config, Storage, Infrastructure. Each capsule has
+  purple neon filaments with internal bioluminescent glow.
+  Dependency arrows render as bioluminescent conduit tubes growing organically from each
+  capsule down to its foundation block — like neural dendrites extending and connecting.
+  Ray-traced reflections of the conduit light play across the frosted glass surfaces of
+  both source and target blocks. Each connection solidifies with a green pulse confirmation.
 
   **SCENE 4 — "Extension Points" (0:30–0:40)**
-  Camera: Pulls back. Seven extension point capsules materialize in a semicircle above —
-  each a frosted glass node. Dendrite-like neon connections grow outward from the stable
-  core. Foundation blocks remain rock-solid — no movement — while extensions animate above.
+  Camera: Dolly pull-back with slow orbital drift to reveal the full architecture.
+  Seven extension point capsules materialize in a semicircle above — each a frosted
+  glassmorphism node with domain-specific neon color (matching V05 dendrite assignments).
+  Dendrite-like neon connections grow outward from the stable core with organic growth
+  animation — each dendrite extends, branches, and solidifies with ray-traced reflections.
+  Foundation blocks remain rock-solid — zero movement — creating visual contrast: the
+  immovable bedrock beneath the living, growing extensions above. Each dendrite pulses
+  with bioluminescent data particles flowing outward.
 
   **SCENE 5 — "Orbital Reveal" (0:40–0:50)**
-  Camera: 360-degree orbital pan. Foundation blocks glow steady cyan. Extension points
-  pulse with varied domain colors. Glassmorphism "Evidence Bundle" icon materializes
-  — sealed document with cyan checkmark — fades to black.
+  Camera: 360-degree orbital pan at 25° downward angle with parallax depth — extension
+  points rotate faster than the foundation blocks below (visual hierarchy: stable base,
+  dynamic surface). Foundation blocks glow steady cyan with ray-traced reflections.
+  Extension points pulse with varied domain colors, dendrite connections carrying
+  bioluminescent particle streams.
+  Glassmorphism "Evidence Bundle" icon materializes — sealed document with cyan checkmark
+  and holographic shimmer — fades to black.
 related_diagrams:
   - 01-d-c4-container-full-system.md
   - 07-d-orchestrator-dispatch-flow.md
