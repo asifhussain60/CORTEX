@@ -23,9 +23,9 @@
 | Metric | Value |
 |--------|-------|
 | Wired Orchestrators | **51** (17 core, 7 domain, 23 support, 4 git) |
-| Active MCP Tools | **38** |
+| Active MCP Tools | **28 registered** (39 target) |
 | CORE Rules | **38** (+ 2 AC rules) |
-| Tests | **15,739** |
+| Tests | **16,942** |
 
 **Key Capabilities:**
 - JSON content extraction from markdown files

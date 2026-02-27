@@ -1,29 +1,15 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-02-26 | **Architecture:** 51 wired Orchestrators · 39 MCP Tools (28 registered) · 38 CORE Rules · 1 Package
+**Updated:** 2026-02-27 | **Architecture:** 51 wired Orchestrators · 39 MCP Tools (28 registered) · 38 CORE Rules · 1 Package
 
 ---
 
 ## 🎯 SYSTEM IDENTITY
 
-**CORTEX** — **CO**gnitive **R*## 🔧 QUICK COMMANDS
-
-| Command | Action |
-|---------|--------|
-| `/audit` | 19-point production readiness scan |
-| `/audit fix` | Scan + auto-remediate (9 stages, convergence loop) |
-| `/upgrade` | Check origin/main, merge if ahead, run audit fix |
-| `/vacuum` | Clean dead files |
-| `/digest {path}` | Intelligent content ingestion (3-pipeline) |
-| `/onboard {repo}` | LENS analysis + dashboard |
-| `/challenge {req}` | Generate alternatives |
-| `/recall {feature}` | Feature discovery |
-| `/rephrase {text}` | Token optimization |
-| `/totalrecall` | Holistic production readiness refactor (7-phase protocol) |
-| `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder | **EX**ecution System
+**CORTEX** — **CO**gnitive **R**eal-**T**ime **EX**ecution System
 
 **Entry Point:** This prompt → MasterOrchestrator → 4-stage pipeline → MCP Tools  
 **Orchestrators:** 51 wired across 4 tiers in `cortex/orchestrators/`  
-**MCP Tools:** 38 in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
+**MCP Tools:** 28 registered (39 target) in `cortex/mcp/tools/` (Pylance-style stdio, auto-starts)
 
 ---
 
@@ -219,6 +205,7 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 | `/recall {feature}` | Feature discovery |
 | `/rephrase {text}` | Token optimization |
 | `/totalrecall` | Holistic production readiness refactor (7-phase protocol) |
+| `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder |
 
 Every operation:
 - [ ] Intent classified, DoR displayed, user approved

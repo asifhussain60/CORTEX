@@ -1,6 +1,6 @@
 # CORTEX Agent Index
 
-**Updated:** 2026-02-26 | **Purpose:** Lazy loading + intent-based agent selection  
+**Updated:** 2026-02-27 | **Purpose:** Lazy loading + intent-based agent selection  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
 
 ---

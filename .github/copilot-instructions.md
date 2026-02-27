@@ -1,6 +1,6 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-26 (Total Recall — numeric alignment) | ## About CORTEX
+**Updated:** 2026-02-27 (Total Recall — production readiness refactor) | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
@@ -99,7 +99,7 @@ enforcing routing in production (where context is always supplied).
 ```
 cortex/              ← Python source (20 dirs)
   orchestrators/     ← 51 wired orchestrators across 4 tiers (core, domain, support, git) + additional dirs (health, intelligence, persona, registry, response, strategies, synthesis, tools, validation, workflow)
-  mcp/tools/         ← 39 MCP tools
+  mcp/tools/         ← 28 registered MCP tools (39 target)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis
@@ -174,6 +174,7 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | `/onboard {repo}` | LENS analysis + SQLite dashboard | — |
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
 | `/totalrecall` | Holistic production readiness refactor (7-phase protocol) | 7 phases |
+| `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder | — |
 
 ### `/audit fix` — 9-Stage Pipeline (canonical single command for production readiness)
 

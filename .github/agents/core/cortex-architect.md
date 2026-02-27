@@ -146,9 +146,8 @@ Execute on `/audit`:
 | 5 | Low-value tests | 0 `assert True` stubs |
 | 6 | Circular imports | 0 circular dependencies |
 | 7 | Stale registry refs | Registry matches implementation |
-| 8 | Dead MCP tools | All 26 tools functional |
+| 8 | Dead MCP tools | All 28 registered tools functional |
 | 9 | Brittle test patterns | No `time.sleep`, mock-heavy tests |
-| 10 | CORE rule violations | 0 P0/P1 violations |
 | 10 | CORE rule violations | 0 P0/P1 violations |
 
 ---

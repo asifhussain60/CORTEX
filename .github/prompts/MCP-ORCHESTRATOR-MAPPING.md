@@ -281,12 +281,12 @@ Check health of all or specific orchestrators:
 
 ## ✅ Validation
 
-All 26 tools registered and tested:
+All 28 registered tools (39 target) tested:
 - `python3 -m cortex.mcp` — Server starts without import errors
 - `cortex_verify` (op: `mcp`) — MCP detection test passes
 - `.vscode/settings.json` — Pylance-style stdio transport configured
 
-**No tool sprawl:** Consolidated from 98 legacy tools → 38 active tools.
+**No tool sprawl:** Consolidated from 98 legacy tools → 28 registered (39 target) tools.
 
 ---
 

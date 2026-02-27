@@ -114,7 +114,7 @@ USER REQUEST → STAGE 1: Interaction → STAGE 2: Intent → STAGE 3: Intellige
 
 ---
 
-## 🔧 MCP Tool Mapping (24 Tools)
+## 🔧 MCP Tool Mapping (28 Registered, 39 Target)
 
 | Tool | Purpose |
 |------|---------|

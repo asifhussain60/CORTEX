@@ -32,7 +32,7 @@ Step 4: Test Runner (collection check only — does NOT run tests)
 
 Step 5: Governance Rules
   → cortex_load (op: rules)
-  → confirm: 35 rules loaded from cortex-registry/core/tier0-skull/skull-rules.yaml
+  → confirm: 38 rules loaded from cortex-registry/core/tier0-skull/skull-rules.yaml
 ```
 
 ---
@@ -72,7 +72,7 @@ python3 -m cortex.mcp
 | Cortex import | `python3 -c "import cortex"` | No ImportError |
 | MCP active | `cortex_verify` (op: `mcp`) (Copilot Chat) | Tool responds |
 | Test collection | `pytest --co -q` | 0 collection errors |
-| Governance rules | `cortex_load` (op: `rules`) | 35 rules present |
+| Governance rules | `cortex_load` (op: `rules`) | 38 rules present |
 | Dependencies | `cortex_check` (op: `dependencies`) | 0 drift items |
 
 **Enforcement:** Session HALTS if any P0 check fails for production operations.
@@ -87,7 +87,7 @@ python3 -m cortex.mcp
 | MCP tools missing in Copilot Chat | Verify `.vscode/settings.json` MCP config, reload VS Code |
 | Collection errors in pytest | Check: `pytest --co -q 2>&1 | grep ERROR` |
 | Dependency drift | Run `pip install -r requirements.txt` |
-| 35 rules not loading | Verify `cortex-registry/core/tier0-skull/skull-rules.yaml` is present |
+| 38 rules not loading | Verify `cortex-registry/core/tier0-skull/skull-rules.yaml` is present |
 
 ---
 
@@ -194,6 +194,6 @@ To add further exclusions without code changes, set `CORTEX_UPGRADE_EXCLUDE_PATH
 ## Canonical Reference
 
 - Package: `cortex` (single canonical import, `pyproject.toml`)
-- MCP: 38 tools in `cortex/mcp/tools/`
+- MCP: 28 registered (39 target) tools in `cortex/mcp/tools/`
 - Governance rules: 38 CORE + 2 AC in `cortex-registry/core/tier0-skull/skull-rules.yaml`
-- Tests: 15,739 total, runner: `pytest -n auto --dist loadscope`
+- Tests: 16,942 total, runner: `pytest -n auto --dist loadscope`

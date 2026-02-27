@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-26 (Total Recall — numeric alignment) | **Architecture:** 51 Wired Orchestrators · 39 MCP Tools (28 registered) · 38 CORE Rules · 1 Package  
+**Updated:** 2026-02-27 (Total Recall — production readiness refactor) | **Architecture:** 51 Wired Orchestrators · 39 MCP Tools (28 registered) · 38 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
@@ -571,7 +571,7 @@ Score the source content. If score ≥ 5 → Pipeline 1 (Chat). Score 3–4 → 
 ### Validation Sequence
 
 ```
-1. Registry Check       → cortex_load op=rules (35 rules, 0 violations required)
+1. Registry Check       → cortex_load op=rules (38 rules, 0 violations required)
 2. Dependency Drift     → cortex_check op=dependencies (0 drift items)
 3. Regression Risk      → pytest --cov on target module (≥80% coverage floor)
 4. Governance Drift     → cortex_governance op=query (0 P0 violations = proceed)
@@ -583,7 +583,7 @@ Score the source content. If score ≥ 5 → Pipeline 1 (Chat). Score 3–4 → 
 **PASS (risk ≤ 0.6):**
 ```
 ✅ Holistic Validation: PASS | Risk: 0.2 (LOW)
-Registry: 35 rules, 0 violations | Dependencies: aligned | Coverage: 87% | Governance: clean
+Registry: 38 rules, 0 violations | Dependencies: aligned | Coverage: 87% | Governance: clean
 → Proceed to implementation
 ```
 
@@ -598,7 +598,7 @@ Blocker: [specific issue] | Action: [remediation step]
 
 | Check | Tool | Threshold |
 |---|---|---|
-| CORE rules loaded | `cortex_load` op=`rules` | 35 rules present |
+| CORE rules loaded | `cortex_load` op=`rules` | 38 rules present |
 | Dependency drift | `cortex_check` op=`dependencies` | 0 drift items |
 | Test coverage | `pytest --cov` | ≥80% on target module |
 | P0 violations | `cortex_governance` op=`query` | 0 P0 violations |
@@ -634,7 +634,8 @@ Everything else → move to canonical location or delete.
 
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`)
-- No stale orchestrator counts (must say **51 wired orchestrators**, **39 MCP tools (28 registered)**, **38 CORE rules**)- No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
+- No stale orchestrator counts (must say **51 wired orchestrators**, **39 MCP tools (28 registered)**, **38 CORE rules**)
+- No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - No references to `cortex.intelligence/state/` as runtime data path (canonical: `.cortex-runtime/`)
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
 - All agent files must match entries in `AGENT-INDEX.md`

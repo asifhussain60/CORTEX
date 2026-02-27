@@ -1,6 +1,6 @@
 # CORTEX Agents
 
-**Updated:** 2026-02-20 | ---
+**Updated:** 2026-02-27 | ---
 
 ## Structure
 
@@ -66,6 +66,10 @@ agents/
 | DIGEST | cortex-architect.md + cortex-digest.md |
 | REPHRASE | request-rephrase-orchestrator.md |
 | SETUP | cortex-environment-setup.md |
+| SYNC | cortex-sync-agent.md |
+| VACUUM | cortex-vacuum.md |
+| DEBUG | cortex-debugger.md |
+| TOTAL RECALL | cortex-totalrecall.prompt.md |
 
 ---
 
@@ -74,10 +78,10 @@ agents/
 | Metric | Value |
 |--------|-------|
 | Orchestrators | 51 wired (`cortex/orchestrators/`) |
-| MCP Tools | 38 (`cortex/mcp/tools/`) |
+| MCP Tools | 28 registered (39 target) (`cortex/mcp/tools/`) |
 | CORE Rules | 38 (`cortex-registry/core/tier0-skull/`) |
 | Package | `cortex` (single canonical) |
-| Tests | 15,739 (486 golden, 177 phase) |
+| Tests | 16,942 (486 golden, 177 phase) |
 
 ---
 

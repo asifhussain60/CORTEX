@@ -18,7 +18,7 @@ Triggered by **CORE-048** (holistic validation gate) before any code change.
 
 ```
 1. Registry Check
-   → cortex_load (op: rules) — 35 rules from cortex-registry/core/tier0-skull/skull-rules.yaml
+   → cortex_load (op: rules) — 38 rules from cortex-registry/core/tier0-skull/skull-rules.yaml
 
 2. Dependency Analysis
    → cortex_check (op: dependencies)
@@ -46,7 +46,7 @@ Triggered by **CORE-048** (holistic validation gate) before any code change.
 ## ✅ Holistic Validation: PASS
 
 Risk Score: 0.2 (LOW)
-Registry: 35 rules loaded, 0 violations
+Registry: 38 rules loaded, 0 violations
 Dependencies: aligned
 Regression coverage: 87%
 Governance: clean
@@ -71,7 +71,7 @@ Action required: [remediation step]
 
 | Check | Tool / Command | Threshold |
 |---|---|---|
-| CORE rules loaded | `cortex_load` op=`rules` | 35 rules present |
+| CORE rules loaded | `cortex_load` op=`rules` | 38 rules present |
 | Dependency drift | `cortex_check` op=`dependencies` | 0 drift items |
 | Test coverage | `pytest --cov` | ≥ 80% on target module |
 | P0 violations | `cortex_governance` op=`query` | 0 P0 violations |
@@ -108,6 +108,6 @@ Action required: [remediation step]
 
 - Package: `cortex` (single canonical import)
 - Orchestrators: 51 wired in `cortex/orchestrators/` (4 tiers)
-- MCP Tools: 38 in `cortex/mcp/tools/`
+- MCP Tools: 28 registered (39 target) in `cortex/mcp/tools/`
 - Governance rules: 38 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules)
-- Tests: 15,739 total (486 golden, 177 phase)
+- Tests: 16,942 total (486 golden, 177 phase)
