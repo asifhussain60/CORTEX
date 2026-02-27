@@ -6,12 +6,11 @@ type: overview
 audience: [Business Leaders, Product Owners, Software Developers]
 last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml
-phases_complete: [Phase 65, Phase 66, Phase 67, Phase 68, Phase 69]
 format: one-pager
 order: 1
 ---
 
-> **What is CORTEX?** A production-grade AI engineering framework that combines cognitive intelligence, automated governance, and a 51-orchestrator execution engine to help engineering teams ship faster — with confidence.
+> **What is CORTEX?** A production-grade AI engineering framework that combines cognitive intelligence, automated governance, and a comprehensive orchestrator execution engine to help engineering teams ship faster — with confidence.
 
 ---
 
@@ -19,7 +18,7 @@ order: 1
 
 Traditional development tools answer questions. CORTEX **thinks alongside your team**.
 
-When a developer makes a request — "implement this feature", "fix this bug", "audit this code" — CORTEX doesn't hand back a snippet. It classifies intent, analyses the codebase with 10 parallel LENS analyzers, validates against 38 CORE governance rules, generates tests first (mandatory), and executes a coordinated multi-step workflow through the appropriate orchestrator. Every action is observable, auditable, and reversible.
+When a developer makes a request — "implement this feature", "fix this bug", "audit this code" — CORTEX doesn't hand back a snippet. It classifies intent, analyses the codebase with parallel LENS analyzers, validates against CORE governance rules, generates tests first (mandatory), and executes a coordinated multi-step workflow through the appropriate orchestrator. Every action is observable, auditable, and reversible.
 
 Think of it like the difference between a calculator and a brain. A calculator waits for instructions. A brain perceives the situation, reasons about the best approach, and acts — learning from every interaction.
 
@@ -29,21 +28,21 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 ```
   ┌───────────────────────────────────────────────────────────────┐
-  │              CORTEX PLATFORM v1.0.0 (Phase 84 Complete)         │
-  │       1 Package · 51 Orchestrators · 28 MCP Tools (39 target) │
+  │                    CORTEX PLATFORM                            │
+  │       1 Package · Multi-Tier Orchestration · MCP Tools        │
   │       Intelligence Matrix · WorkflowEngine FSM · URS          │
   │                                                               │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ MCP Gateway  │─▶│  Orchestration    │─▶│ Intelligence  │  │
-  │  │ 28 active    │  │  4 canonical tiers│  │ LENS + Brain  │  │
-  │  │ stdio/HTTP   │  │  51 wired         │  │ Matrix (15×15)│  │
+  │  │ Tools        │  │  4 canonical tiers│  │ LENS + Brain  │  │
+  │  │ stdio/HTTP   │  │  Wired            │  │ Matrix        │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   │         │                   │                     │           │
   │         ▼                   ▼                     ▼           │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ Governance   │  │  Testing          │  │ Git Registry  │  │
-  │  │ 38 CORE rules│  │  16,942 tests     │  │ YAML SSOT     │  │
-  │  │ CORE-064     │  │  486 golden       │  │ URS Learning  │  │
+  │  │ CORE rules   │  │  Comprehensive    │  │ YAML SSOT     │  │
+  │  │ CORE-064     │  │  Golden tests     │  │ URS Learning  │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   └───────────────────────────────────────────────────────────────┘
 ```
@@ -54,13 +53,13 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 | Domain | What It Does | Key Metric |
 |--------|-------------|------------|
-| **🏗️ Core Platform** | MCP gateway, 51-orchestrator dispatch, state management, health monitoring | 28 registered MCP tools (39 target), Pylance-style stdio |
-| **🤖 Intelligence (LENS)** | 10-analyzer parallel code understanding — AST, Git, Security, Patterns, Metrics, and more | 300–800ms full analysis |
+| **🏗️ Core Platform** | MCP gateway, multi-tier orchestrator dispatch, state management, health monitoring | A growing library of registered MCP tools, Pylance-style stdio |
+| **🤖 Intelligence (LENS)** | Parallel code understanding — AST, Git, Security, Patterns, Metrics, and more | Sub-second full analysis |
 | **🧠 Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repo | Confidence scored 0.0–1.0 |
-| **🔗 Intelligence Matrix** | 15×15 cross-capability wiring map — ensures all intelligence subsystems are connected | 50% coverage gate enforced |
-| **🎯 Decisioning** | Intent routing across 10+ intent types to 51 wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
-| **🛡️ Governance** | Pre-commit + CI + runtime enforcement of 38 active CORE rules; CORE-064 sweep completeness | 10 agents, <150ms validation |
-| **⚙️ WorkflowEngine** | YAML→FSM→ConvergenceLoop runtime (Phase 67); StepStateMachine + StepHandlerRegistry | Convergence gate in TDD + audit templates |
+| **🔗 Intelligence Matrix** | Cross-capability wiring map — ensures all intelligence subsystems are connected | Coverage gate enforced |
+| **🎯 Decisioning** | Intent routing across multiple intent types to wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
+| **🛡️ Governance** | Pre-commit + CI + runtime enforcement of active CORE rules; CORE-064 sweep completeness | Multiple agents, sub-second validation |
+| **⚙️ WorkflowEngine** | YAML→FSM→ConvergenceLoop runtime; StepStateMachine + StepHandlerRegistry | Convergence gate in TDD + audit templates |
 | **🔌 Extensibility** | Custom MCP tools, domain orchestrators, workflow templates, enterprise patterns | Hot-reload; zero core changes |
 
 ---
@@ -88,7 +87,7 @@ Developer request ("implement auth middleware")
       └─ DEBUG         ──▶ DebuggerOrchestrator
                 │
                 ▼
-      [Governance Gate] ── 10 enforcement agents, blocks non-compliant actions
+      [Governance Gate] ── enforcement agents, blocks non-compliant actions
                 │
                 ▼
       [Intelligence Layer] ── perception → reasoning → action plan
@@ -117,7 +116,7 @@ Every action runs through governance enforcement:
 2. **CI Pipeline** — Automated validation in continuous integration
 3. **Runtime Enforcement** — Rules checked during orchestrator execution
 
-38 active CORE rules are enforced automatically; the most critical include:
+Active CORE rules are enforced automatically; the most critical include:
 - **CORE-002** — All output inline (never create .md/.txt report files)
 - **CORE-008** — TDD mandatory (write failing test first, no exceptions)
 - **CORE-011** — Type hints on all functions
@@ -126,7 +125,7 @@ Every action runs through governance enforcement:
 - **CORE-035** — Single canonical implementation (no duplicates)
 - **CORE-048** — Holistic validation gate before IMPLEMENT/FIX/REFACTOR
 - **CORE-049** — Silent autonomous execution (progress bars only)
-- **CORE-055** — Golden Test Tier Contract (486 golden tests always pass)
+- **CORE-055** — Golden Test Tier Contract (golden tests always pass)
 - **CORE-064** — Sweep Completeness Contract (no partial sweeps across session boundaries)
 
 ---
@@ -150,7 +149,7 @@ Every action runs through governance enforcement:
 - **Transport:** stdio (development) / HTTP (production)
 - **Package:** 1 canonical Python package (`cortex`) — all imports use `cortex.*`
 - **Storage:** Git-backed registry — no PostgreSQL, no MongoDB required
-- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 16,942 tests (486 golden, 177 phase)
+- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); comprehensive test suite (golden, unit, phase tiers)
 - **Observability:** OpenTelemetry tracing, Prometheus metrics, Grafana dashboards, SQLite audit log (`.cortex-runtime/audit.db`)
 - **Languages analyzed by LENS:** Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue
 
@@ -196,18 +195,18 @@ The intelligence subsystem gives CORTEX its "brain" — the ability to perceive,
 | **KnowledgeSynthesisEngine** | `cortex/intelligence/knowledge/` | Merges LENS intelligence + Company knowledge + CORTEX knowledge into a unified context |
 | **CompanyKnowledgeProvider** | `cortex/intelligence/knowledge/company_domain_loader.py` | Loads company-specific domain knowledge from `cortex-registry/company/domains/` YAMLs (API design standards, security standards, payment security) |
 | **UniversalLearningLoop** | `cortex/intelligence/learning/universal_learning_loop.py` | Cross-session pattern capture — every orchestrator interaction feeds the learning subsystem |
-| **Intelligence Matrix** | `cortex/intelligence/cross_cutting/` | 20×20 cross-capability wiring map (IC × CC) ensuring all intelligence subsystems are connected; ≥80% coverage gate enforced |
+| **Intelligence Matrix** | `cortex/intelligence/cross_cutting/` | Cross-capability wiring map (IC × CC) ensuring all intelligence subsystems are connected; coverage gate enforced |
 
 ### 🏗️ Orchestration Engine
 
-51 wired orchestrators across 4 tiers dispatch every request through the right execution path.
+Wired orchestrators across four tiers dispatch every request through the right execution path.
 
 | Component | Module | What It Does |
 |-----------|--------|-------------|
 | **MasterOrchestrator** | `cortex/orchestrators/core/` | Central coordinator — receives classified intent, delegates to domain orchestrators, wired with OPJ |
 | **IntentRouter** | `cortex/orchestrators/core/intent_router_impl.py` | LENS-based classification into 10+ intent types (IMPLEMENT, FIX, ANALYZE, REFACTOR, PLAN, AUDIT, etc.) |
 | **TDDOrchestrator** | `cortex/orchestrators/core/tdd_orchestrator.py` | Enforces RED → GREEN → REFACTOR cycle; blocks implementation without failing tests first |
-| **EnforcementOrchestrator** | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit governance gate with 10 enforcement agents |
+| **EnforcementOrchestrator** | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit governance gate with multiple enforcement agents |
 | **RequestRephraseOrchestrator** | `cortex/orchestrators/core/request_rephrase_orchestrator.py` | Stage -1 enrichment with governance context + risk assessment before intent routing |
 | **WorkflowEngine** | `cortex/core/workflow_engine.py` | YAML → FSM → ConvergenceLoop runtime; executes workflow templates with convergence gates |
 | **StepStateMachine** | `cortex/orchestrators/workflow/step_state_machine.py` | FSM-based step execution: PENDING → RUNNING → CHECKING → PASSED/RETRYING/FAILED/SKIPPED |
@@ -218,12 +217,12 @@ The intelligence subsystem gives CORTEX its "brain" — the ability to perceive,
 
 ### 🛡️ Governance & Compliance
 
-38 CORE rules + 2 AC rules enforced at pre-commit, CI, and runtime — governance is not optional.
+CORE rules (+ AC rules) enforced at pre-commit, CI, and runtime — governance is not optional.
 
 | Component | Module | What It Does |
 |-----------|--------|-------------|
-| **CORE Rules** | `cortex-registry/core/tier0-skull/` | 38 immutable rules (CORE-002 through CORE-064) — the "skull" of CORTEX |
-| **EnforcementOrchestrator** | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit gate with 10 enforcement agents; blocks non-compliant changes |
+| **CORE Rules** | `cortex-registry/core/tier0-skull/` | Immutable rules (CORE-002 through CORE-064) — the "skull" of CORTEX |
+| **EnforcementOrchestrator** | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit gate with multiple enforcement agents; blocks non-compliant changes |
 | **SweepCatalogueOrchestrator** | `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` | CORE-064: tracks sweep completeness — no partial sweeps allowed |
 | **SOLIDOrchestrator** | `cortex/orchestrators/validation/solid_orchestrator.py` | SOLID principle compliance checker with SQLite audit trail |
 | **HolisticValidationOrchestrator** | `cortex/orchestrators/validation/holistic_validation_orchestrator.py` | CORE-048: full validation gate before any IMPLEMENT/FIX/REFACTOR |
@@ -293,7 +292,7 @@ The Intelligence Matrix ensures every intelligence subsystem (IC) is connected t
 | CC-013 | TDDStubGenerator | Test stub generation for TDD |
 | CC-014 | ResponseTemplateHook | Response template formatting hooks |
 | CC-015 | T1T2EnrichmentHooks | Tier 1/Tier 2 memory enrichment |
-| CC-016 | OrchestratorProtocolMixin | Base protocol for all 51 orchestrators |
+| CC-016 | OrchestratorProtocolMixin | Base protocol for all wired orchestrators |
 | CC-017 | AuditHashChain | Tamper-proof audit chain |
 | CC-018 | CircuitBreaker | Fault tolerance and graceful degradation |
 | CC-019 | SQLiteActivityLogger | Persistent activity logging to SQLite |
@@ -317,7 +316,7 @@ CORTEX learns and adapts to your company's specific standards, domains, and patt
 
 | Component | Module | What It Does |
 |-----------|--------|-------------|
-| **HealthOrchestrator** | `cortex/orchestrators/health/health_orchestrator.py` | 22 orchestrator health endpoints — the `/health` command |
+| **HealthOrchestrator** | `cortex/orchestrators/health/health_orchestrator.py` | Orchestrator health endpoints — the `/health` command |
 | **VacuumOrchestrator** | `cortex/orchestrators/health/vacuum_orchestrator.py` | Markdown sprawl + root clutter cleanup — the `/vacuum` command |
 | **UpgradeOrchestrator** | `cortex/orchestrators/support/upgrade_orchestrator.py` | Preflight requirements validation, inflight upgrades from origin/main |
 | **DebuggerOrchestrator** | `cortex/orchestrators/support/debugger_orchestrator.py` | EventBus-driven debug marker injection and session management |
@@ -336,7 +335,7 @@ CORTEX learns and adapts to your company's specific standards, domains, and patt
 | End-to-end request lifecycle | `00-getting-started/03-how-cortex-works.md` |
 | Intelligence architecture | `00-getting-started/04-brain-tier-architecture.md` |
 | Quick start (5 minutes) | `00-getting-started/05-quick-start.md` |
-| Intelligence Matrix (15×15 wiring) | `00-getting-started/06-intelligence-matrix.md` |
+| Intelligence Matrix (wiring) | `00-getting-started/06-intelligence-matrix.md` |
 | LENS intelligence details | `02-lens/01-overview.md` |
 | Orchestration pipeline | `03-orchestration/01-overview.md` |
 | Governance rules | `01-capabilities/05-governance-compliance.md` |
@@ -346,4 +345,4 @@ CORTEX learns and adapts to your company's specific standards, domains, and patt
 
 ---
 
-*CORTEX v1.0.0 · February 2026 · Phase 84 Complete · 51 wired orchestrators · 39 MCP tools (28 registered) · 38 CORE rules (+ 2 AC) · 16,942 tests · cortex/core: 15 canonical subdirs · Source of truth: `cortex-registry/cortex-master.yaml`*
+*CORTEX · Cognitive Real-Time Execution · Source of truth: `cortex-registry/cortex-master.yaml`*

@@ -1,7 +1,9 @@
 # CORTEX Diagrams - Single Source of Truth
 
 **Authority:** CORTEX Documentation Architect   
-**Purpose:** Centralized diagram repository for all CORTEX documentation
+**Purpose:** Centralized diagram rep2. **Interactive Architecture Map** — Filter by role (Business/Product/Dev)
+3. **Orchestrator Dependency Explorer** — Click to expand orchestrators
+4. **Request Trace Viewer** — Timeline with clickable execution stepstory for all CORTEX documentation
 
 ---
 
@@ -205,11 +207,9 @@ python cortex-docs/pipeline/check-diagram-references.py
 ---
 
 **Document Status:**
-- **Diagrams Migrated:** 5/86 (6%)
+- **Diagrams Migrated:** 5 completed (ongoing migration)
 - **Frontmatter Compliance:** 100% (migrated diagrams)
-- **Validation:** All 5 diagrams passing automated checks
-- **Next goal:** Migrate remaining 81 diagrams (Week 2)
+- **Validation:** All migrated diagrams passing automated checks
 
 **Maintainers:** CORTEX Documentation Architect Agent  
-**Contact:** cortex-docs@cortex.dev  
-**Last Review:** 2026-02-17
+**Contact:** cortex-docs@cortex.dev

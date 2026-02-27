@@ -34,7 +34,7 @@ Synthesis is the final stage of the LENS pipeline — combining the outputs of a
 | **targeted()** | <2s | LENS git+AST+comments + company domains + domain profile | IMPLEMENT / FIX / REFACTOR |
 | **full()** | <10s | All of targeted + ADO sprint context + KG entity indexing + cross-domain synthesis | INVESTIGATE (deep analysis) |
 
-## Company Domain Layer (Phase 18)
+## Company Domain Layer
 
 `UnifiedIntelligenceProvider` loads `cortex-registry/company/domains/*.yaml` on every call via `CompanyDomainLoader` (5-minute TTL cache). Company knowledge takes **precedence over CORTEX defaults** (`CompanyKnowledge.precedence = "OVERRIDE"`).
 
@@ -49,7 +49,7 @@ Sources loaded per tier:
 | ADO sprint context (ADO_ORG_URL guard) | — | — | ✅ |
 | KG entity indexing (profiles + repos) | — | — | ✅ |
 
-## ADO Sprint Context (Phase 20)
+## ADO Sprint Context
 
 When `ADO_ORG_URL` is set, `full()` calls `ADOWorkItemProvider.fetch_user_stories()` and maps the result through `ADOContextMapper` to extract:
 - `sprint_name` — from `System.IterationPath` (last path segment)
@@ -74,4 +74,4 @@ Sprint context is injected into `company_knowledge.domain_rules["sprint_context"
 
 ---
 
-*Verified against LENS pipeline and UnifiedIntelligenceProvider · 25 February 2026*
+*Verified against LENS pipeline and UnifiedIntelligenceProvider*

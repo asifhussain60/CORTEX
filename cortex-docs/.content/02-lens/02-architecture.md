@@ -87,4 +87,4 @@ cortex/lens/
 
 ---
 
-*Verified against `cortex/lens/` directory · 25 February 2026*
+*Verified against `cortex/lens/` directory*

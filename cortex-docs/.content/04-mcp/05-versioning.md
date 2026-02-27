@@ -28,7 +28,7 @@ order: 5
 
 ## Version History
 
-### v1 → v2 Migration (Phase 03)
+### v1 → v2 Migration
 
 The 12-phase Cohesive Brain Refactor consolidated tools:
 
@@ -40,17 +40,17 @@ The 12-phase Cohesive Brain Refactor consolidated tools:
 | Governance | Optional validation | Mandatory governance gates |
 | Entry point | Any tool directly | `cortex_process_request` mandatory |
 
-### Phase 12 Consolidation (Planned)
+### Tool File Consolidation
 
-Phase 12 of the Cohesive Brain Refactor targets consolidation of tool files:
+The Cohesive Brain Refactor targets consolidation of tool files:
 
 - **Current:** 38 Python files across `tools/`, `deployment/`, `multi_repo/`, `toolkit/`
 - **Target:** Consolidate to 24 canonical files (one per tool)
 - **Approach:** Merge specialized modules into their parent tools
 
-### Phase 15 — Work Item Provider (Added 2026-02-21)
+### Work Item Provider
 
-Phase 15 introduced the provider-agnostic work item integration layer:
+The provider-agnostic work item integration layer was added:
 
 | Component | File | Purpose |
 |-----------|------|---------|
@@ -164,4 +164,4 @@ def test_my_new_tool_execution():
 
 ---
 
-*Verified against MCP tool base class and registration patterns · 25 February 2026*
+*Verified against MCP tool base class and registration patterns*

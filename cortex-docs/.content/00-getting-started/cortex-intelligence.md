@@ -484,7 +484,7 @@ This prevents the frustrating pattern where you fix a bug in one place only to f
 │                                                                   │
 │  🔐 Security hardening gate: passed                              │
 │  🧹 Sweep check: no other weak hashing found in codebase         │
-│  ✅ All 16,942 tests pass — ready to commit                      │
+│  ✅ All tests pass — ready to commit                              │
 └──────────────────────────────────────────────────────────────────┘
 ```
 

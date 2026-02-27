@@ -79,7 +79,7 @@ MasterOrchestrator owns and coordinates the `/audit fix` pipeline:
 | 1 | Governance Pre-Flight | Full specification validation |
 | 2 | 19-Point Production Scan | Checks one through nineteen, including SQLite health |
 | 3 | Wiring Contract Validation | Architecture integrity L1 through L3 |
-| 4 | Orchestrator Health (all 51 wired) | HealthOrchestrator.run_health_check() |
+| 4 | Orchestrator Health | HealthOrchestrator.run_health_check() |
 | 5 | Vacuum Cleanup | VacuumOrchestrator plus cortex_vacuum |
 | 6 | Prompt and Agent Meta-Audit | Twenty-three checks |
 | 7–8 | Auto-Fix Convergence Loop | detect-fix-rescan-loop until zero P0 and P1 |
@@ -195,13 +195,13 @@ Markers persist to `.cortex-runtime/traces/orchestrator-traces.db`. Schema inclu
 
 ---
 
-*All orchestrator counts and file paths verified against live codebase — 27 February 2026*
+*All orchestrator counts and file paths verified against live codebase*
 
 ---
 
-## Orchestrator Engagement Visibility (Phase 85 PLANNED)
+## Orchestrator Engagement Visibility
 
-CORTEX's orchestrators have always emitted detailed audit traces — but those traces lived in SQLite, invisible to users during a session. Phase 85 surfaces engagement through three composable blocks:
+CORTEX's orchestrators emit detailed audit traces — and engagement visibility surfaces these traces to users during a session through three composable blocks:
 
 | Block | Purpose | When Rendered |
 |-------|---------|--------------|
@@ -214,7 +214,7 @@ CORTEX's orchestrators have always emitted detailed audit traces — but those t
 Route: IntentRouter → MasterOrchestrator → TDDOrchestrator → EnforcementOrchestrator
 ```
 
-**Progress format (phase-list+bar — mandatory from Phase 85):**
+**Progress format (phase-list+bar — mandatory):**
 ```
 ⚙️ [████████░░] 80% — Stage 4 of 5
 
@@ -229,18 +229,16 @@ Route: IntentRouter → MasterOrchestrator → TDDOrchestrator → EnforcementOr
 
 ---
 
-## DebuggerOrchestrator — Multi-Stack Debugging (Phase 86 PLANNED)
+## DebuggerOrchestrator — Multi-Stack Debugging
 
 `DebuggerOrchestrator` at `cortex/orchestrators/support/debugger_orchestrator.py` is an EventBus-driven coordinator that uses a **Strategy Pattern** to apply language-specific debug injection without modifying the orchestrator core.
 
-**Currently live:** 3 Python strategies (`TestFailureStrategy`, `RefactorRegressionStrategy`, `GovernanceViolationStrategy`)  
-**Phase 86 adds:** 5 multi-stack strategies (Frontend/HTML-Vision/API/SQL/DotNet) + Vision API + multi-language `AutoCleanupManager` + unified intelligence wiring
+**Currently live:** Python strategies (`TestFailureStrategy`, `RefactorRegressionStrategy`, `GovernanceViolationStrategy`)  
+**Planned:** Multi-stack strategies (Frontend/HTML-Vision/API/SQL/DotNet) + Vision API + multi-language `AutoCleanupManager` + unified intelligence wiring
 
 **Commands:**
 - `/debug {path}` — full cycle: detect stack → inject → capture → analyze → fix-plan
 - `/debug-inject {path}` — injection only
 - `/debug-cleanup` — production-safe removal of all markers
 
-**Intelligence wiring gaps closed in Phase 86:** OPJMixin (learning persistence), URS signals (reinforcement feedback), IntelligenceMatrix cells CC-021/IC-021, bidirectional EventBus publish, and KnowledgeSynthesisEngine pattern capture.
-
-See `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml` for the full 16-gap catalogue.
+**Intelligence wiring:** OPJMixin (learning persistence), URS signals (reinforcement feedback), IntelligenceMatrix cells, bidirectional EventBus publish, and KnowledgeSynthesisEngine pattern capture.

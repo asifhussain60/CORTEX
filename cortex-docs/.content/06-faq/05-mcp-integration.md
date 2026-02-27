@@ -9,13 +9,13 @@ source_of_truth: cortex/mcp/tools/ + cortex/repositories/
 order: 5
 ---
 
-> **Purpose:** Answers to questions about the 28 registered MCP tools (39 target), how the MCP server works, and how to integrate with external systems like Azure DevOps. All answers verified against live code.
+> **Purpose:** Answers to questions about CORTEX's registered MCP tools, how the MCP server works, and how to integrate with external systems like Azure DevOps. All answers verified against live code.
 
 ---
 
 ## How many MCP tools does CORTEX expose?
 
-**28 registered canonical MCP tools (39 target):**
+**Registered canonical MCP tools:**
 
 | Category | Active Tools | Deprecated |
 |----------|-------------|-----------|
@@ -28,7 +28,7 @@ order: 5
 | Work Items | 1 | — |
 | Sweep Completeness | 1 | — |
 
-All 28 registered tools (39 target) are registered via the `ConsolidatedTool` base class (`cortex/mcp/mcp_tool_base.py`) and exposed through JSON-RPC 2.0 stdio transport.
+All registered tools are registered via the `ConsolidatedTool` base class (`cortex/mcp/mcp_tool_base.py`) and exposed through JSON-RPC 2.0 stdio transport.
 
 ---
 
@@ -86,7 +86,7 @@ Call `cortex_tools_catalog` from Copilot Chat:
 Call cortex_tools_catalog
 ```
 
-This returns all 28 registered tools (39 target) with their descriptions, categories, and parameter schemas. It reads directly from the live tool registry — always current.
+This returns all registered tools with their descriptions, categories, and parameter schemas. It reads directly from the live tool registry — always current.
 
 ---
 
@@ -94,7 +94,7 @@ This returns all 28 registered tools (39 target) with their descriptions, catego
 
 `cortex_onboard` runs the full repository onboarding pipeline:
 
-1. LENS 15-component scan
+1. LENS multi-component scan
 2. Security assessment (P0/P1/P2 severity classification)
 3. Domain classification
 4. Tech stack fingerprint
@@ -260,4 +260,4 @@ Autonomous mode follows CORE-064 (Sweep Completeness) — it creates a SweepCata
 
 ---
 
-*Verified against `cortex/mcp/tools/` (source: mcp_registry.py, 28 registered canonical tools) · 25 February 2026 · Phase 84 Complete*
+*Verified against `cortex/mcp/tools/` (source: mcp_registry.py)*

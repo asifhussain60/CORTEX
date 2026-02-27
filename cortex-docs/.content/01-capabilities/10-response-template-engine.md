@@ -279,4 +279,4 @@ Every response is validated against this checklist before delivery:
 
 ---
 
-*Verified against live SSOT files · 26 February 2026*
+*Verified against live SSOT files*

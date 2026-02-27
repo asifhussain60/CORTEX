@@ -122,7 +122,7 @@ Modules: `hardening_integration.py`, `startup_validator.py`, `lifecycle_manager.
 
 ### Development (Local)
 
-The default mode — MCP server runs in-process via VS Code through stdio transport. No Docker required, no network ports, IDE manages process lifecycle, and all twenty-eight registered MCP tools (39 target) are available immediately.
+The default mode — MCP server runs in-process via VS Code through stdio transport. No Docker required, no network ports, IDE manages process lifecycle, and all registered MCP tools are available immediately.
 
 ### Production (Containerised)
 
@@ -216,4 +216,4 @@ To replace ADO with Jira or a custom system: set the WORK_ITEM_SOURCE environmen
 
 ---
 
-*All module paths and infrastructure component counts verified against live codebase — 26 February 2026*
+*All module paths and infrastructure component counts verified against live codebase*

@@ -32,7 +32,7 @@
 │                    python3 -m cortex.mcp                                         │
 │                                                                                  │
 │  ┌─────────────────────────────────────────────────────────────────────────────┐  │
-│  │                   TOOL REGISTRY (28 registered / 39 target)               │  │
+│  │                   TOOL REGISTRY                                           │  │
 │  │                                                                            │  │
 │  │  ┌────────────────────┐  ┌────────────────────┐  ┌──────────────────────┐  │  │
 │  │  │ CORE & ROUTING     │  │ GOVERNANCE         │  │ INTELLIGENCE         │  │  │

@@ -34,11 +34,11 @@ This ensures:
 
 ---
 
-*Verified against orchestrator dispatch patterns · 25 February 2026*
+*Verified against orchestrator dispatch patterns*
 
 ---
 
-## Orchestrator Engagement Visibility (Phase 85)
+## Orchestrator Engagement Visibility
 
 Every orchestrator invocation emits engagement signals so users understand which orchestrator is active and why.
 
@@ -71,4 +71,4 @@ Rendered once at the start of any multi-phase operation (N≥2 phases), giving u
 
 **SSOT:** `.github/templates/cortex-response-templates.md` §BLOCK-ENGAGEMENT-BREADCRUMB, §BLOCK-ENGAGEMENT-TIMELINE, §BLOCK-PHASE-ROADMAP.
 
-*Verified against Phase 85 orchestrator engagement standards · Phase 85 complete*
+*Verified against orchestrator engagement standards*

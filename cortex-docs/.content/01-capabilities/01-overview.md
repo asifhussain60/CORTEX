@@ -10,7 +10,7 @@ format: diátaxis-explanation
 order: 1
 ---
 
-> **Notice:** All capabilities listed here are verified against the live codebase as of 27 February 2026 (Phase 84 Complete — stub elimination). Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package. Phase 85 (Response+Engagement) and Phase 86 (Multi-Stack Debug Pipeline) are PLANNED.
+> **Notice:** All capabilities listed here are verified against the live codebase. Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated multiple packages into the single canonical `cortex` package.
 
 ---
 
@@ -20,14 +20,14 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | # | Domain | Brain Analogy | Key Metric |
 |---|--------|--------------|------------|
-| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 28 registered MCP tools (39 target), 20 canonical dirs |
-| 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | 10 parallel analyzers |
+| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | Registered MCP tools, canonical dirs |
+| 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | Parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
-| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 51 wired orchestrators, 4 tiers (17 core, 7 domain, 23 support, 4 git) |
-| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 38 CORE rules, CORE-064, CORE-055 |
+| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | Wired orchestrators across 4 tiers (core, domain, support, git) |
+| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | CORE rules, CORE-064, CORE-055 |
 | 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
 
-**Planned additions (Phase 85 + 86):** Orchestrator Engagement Visibility (breadcrumb, timeline, roadmap blocks) and Multi-Stack Debugging (8 strategies, Vision API, unified intelligence wiring).
+**Planned additions:** Orchestrator Engagement Visibility (breadcrumb, timeline, roadmap blocks) and Multi-Stack Debugging (multiple strategies, Vision API, unified intelligence wiring).
 
 ---
 
@@ -35,8 +35,8 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | Capability | Domain | Implementation | Tests |
 |-----------|--------|---------------|-------|
-| MCP Gateway (28 registered, 39 target) | Core | `cortex/mcp/tools/` | ✅ |
-| Orchestrator Dispatch (51 wired) | Core | `cortex/orchestrators/` (4 tiers: 17 core, 7 domain, 23 support, 4 git) | ✅ |
+| MCP Gateway | Core | `cortex/mcp/tools/` | ✅ |
+| Orchestrator Dispatch | Core | `cortex/orchestrators/` (4 tiers: core, domain, support, git) | ✅ |
 | OrchestratorBase Lifecycle | Core | `cortex/core/orchestrator_base.py` | ✅ |
 | SQLite Activity Log | Core | `.cortex-runtime/audit.db` (auto-logged in `execute()/run()`) | ✅ |
 | FileFactory | Core | `cortex/core/file_factory.py` | ✅ |
@@ -61,9 +61,9 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | Workflow Templates | Extensibility | `cortex-registry/workflows/templates/` | ✅ |
 | Enterprise Patterns (9) | Extensibility | `cortex-registry/patterns/` | ✅ |
 | **WorkItemProvider (ADO/Jira/custom)** | **Extensibility** | `cortex/repositories/` + `cortex/mcp/tools/work_item_tool.py` | ✅ |
-| **Multi-Stack Debugging (8 strategies)** | **Extensibility** | `cortex/orchestrators/support/debugging/strategies/` + `DebuggerOrchestrator` | ⚪ Phase 86 |
-| **Orchestrator Engagement Visibility** | **Core** | `BLOCK-ENGAGEMENT-BREADCRUMB` + `BLOCK-ENGAGEMENT-TIMELINE` + `BLOCK-PHASE-ROADMAP` | ⚪ Phase 85 |
-| **Unified Reinforcement Signal (URS)** | **Intelligence** | `cortex/intelligence/learning/` + `cortex_learning` MCP tool | ✅ Phase 83 |
+| **Multi-Stack Debugging** | **Extensibility** | `cortex/orchestrators/support/debugging/strategies/` + `DebuggerOrchestrator` | ⚪ Planned |
+| **Orchestrator Engagement Visibility** | **Core** | `BLOCK-ENGAGEMENT-BREADCRUMB` + `BLOCK-ENGAGEMENT-TIMELINE` + `BLOCK-PHASE-ROADMAP` | ⚪ Planned |
+| **Unified Reinforcement Signal (URS)** | **Intelligence** | `cortex/intelligence/learning/` + `cortex_learning` MCP tool | ✅ |
 
 ---
 
@@ -73,9 +73,9 @@ The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
 ### MCP Gateway (25 Tools)
 
-CORTEX exposes 28 registered MCP tools (39 target) via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
+CORTEX exposes registered MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 
-**Business Leader:** "28 registered tools covering analysis, governance, onboarding, debugging, health checks, and workflow — all accessible from the IDE. 11 more planned toward the 39-tool target."
+**Business Leader:** "Registered tools cover analysis, governance, onboarding, debugging, health checks, and workflow — all accessible from the IDE. The catalog continues to grow."
 
 **Product Owner:** "Each tool maps to a user capability. `cortex_onboard` brings in a new codebase. `cortex_validate` checks rules. `cortex_workflow` runs YAML templates. `cortex_plan` generates remediation plans."
 
@@ -175,9 +175,9 @@ Enforced at pre-commit, CI, and runtime. Full list in `cortex-registry/core/tier
 
 Key rules added today:
 - **CORE-064** — Sweep Completeness Contract: every FIX/REFACTOR/AUDIT sweep exhausts its catalogue before closing
-- **CORE-055** — Golden Test Tier Contract: 486 golden tests always pass
+- **CORE-055** — Golden Test Tier Contract: golden tests always pass
 
-### 10 Enforcement Agents
+### Enforcement Agents
 
 | Agent | Focus |
 |-------|-------|
@@ -214,4 +214,4 @@ All extensibility is hot-reload — no core changes required.
 
 ---
 
-*All paths and counts verified against live codebase · 25 February 2026*
+*All paths and counts verified against live codebase*

@@ -73,4 +73,4 @@ order: 8
 
 ---
 
-*Verified against complete orchestrator pipeline · 25 February 2026*
+*Verified against complete orchestrator pipeline*

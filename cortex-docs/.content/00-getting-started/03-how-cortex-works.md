@@ -6,7 +6,6 @@ type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
 last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/core/ + cortex/mcp/ + cortex/lens/
-phases_complete: [Phase 58, Phase 60, Phase 65, Phase 67]
 format: 10k-view
 order: 3
 ---
@@ -17,7 +16,7 @@ order: 3
 
 ## The Shortest Possible Summary
 
-You type a request in your IDE. CORTEX enriches it, classifies it, analyses your codebase with 10 parallel analyzers, validates against 35 governance rules, builds an execution plan through Perception → Reasoning → Action, and delivers the result inline — all within seconds. Every step is observable and auditable.
+You type a request in your IDE. CORTEX enriches it, classifies it, analyses your codebase with parallel analyzers, validates against governance rules, builds an execution plan through Perception → Reasoning → Action, and delivers the result inline — all within seconds. Every step is observable and auditable.
 
 ---
 
@@ -60,7 +59,7 @@ Before your request reaches any orchestrator, the **RequestRephraseOrchestrator*
 Your enriched request arrives at the **MCP Gateway** (`cortex/mcp/`) over JSON-RPC 2.0 (stdio in development). The gateway:
 
 - Validates the JSON-RPC 2.0 message
-- Routes to the correct MCP tool (one of 28 registered tools (39 target))
+- Routes to the correct MCP tool (from the registered tools library)
 - Enforces rate limiting
 - Checks the **Native Tool Gate** (CORE-049) — blocks direct file operations for IMPLEMENT/FIX/REFACTOR intents
 
@@ -126,7 +125,7 @@ When the orchestrator needs to understand the codebase, **LENS** (`cortex/lens/`
 
 The intelligence system (`cortex/intelligence/`) processes LENS data through three tiers:
 
-1. **Perception** (`cortex/intelligence/perception/`) — matches repository signatures against known patterns (9 enterprise patterns in registry)
+1. **Perception** (`cortex/intelligence/perception/`) — matches repository signatures against known patterns (enterprise patterns in registry)
 2. **Reasoning** (`cortex/intelligence/reasoning/`) — selects the best strategy, weighted by historical success rates
 3. **Action** (`cortex/intelligence/action/`) — builds a step-by-step execution plan with TDD gates and rollback points
 
@@ -136,7 +135,7 @@ The intelligence system (`cortex/intelligence/`) processes LENS data through thr
 
 ### Stage 4 · Governance Gate (<150ms)
 
-**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates **10 enforcement agents**:
+**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates **enforcement agents**:
 
 - TDD Agent — enforces CORE-008 (test before code)
 - Security Agent — checks for vulnerabilities
@@ -186,4 +185,4 @@ Results are delivered **inline** per CORE-002. No `.md` or `.txt` files are crea
 
 ---
 
-*All module paths verified against live codebase · 25 February 2026 · Phase 58 (OrchestratorProtocolMixin), Phase 60 (dissolved cortex/core/execution → workflow/), Phase 65/66 (Intelligence Matrix), Phase 67 (WorkflowEngine FSM) reflected*
+*All module paths verified against live codebase*

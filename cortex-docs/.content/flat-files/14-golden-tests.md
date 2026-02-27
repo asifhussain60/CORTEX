@@ -17,7 +17,7 @@ order: 14
 
 Most test suites grow organically. Tests accumulate, overlap, and eventually some become "flaky" or "ignored." CORTEX inverts this. Golden tests are not accumulated — they are **promoted**. Every golden test earned its position through a scoring gate, and every golden test can be **demoted** if its quality score drops.
 
-The contract is codified as **CORE-055 — Golden Test Tier Contract**: all 486 golden tests must pass with zero regressions. Any failure in `tests/golden/` is a P0 production blocker.
+The contract is codified as **CORE-055 — Golden Test Tier Contract**: all golden tests must pass with zero regressions. Any failure in `tests/golden/` is a P0 production blocker.
 
 ---
 
@@ -69,7 +69,7 @@ Golden tests are re-scored periodically. If a test's score drops below 7 (due to
 ### Canonical Subfolder Structure
 
 ```
-tests/golden/                          ← 486 golden tests
+tests/golden/                          ← Golden tests
 ├── _golden_factory.py                 ← GoldenScenario dataclass + GOLDEN_SCENARIOS registry
 ├── conftest.py                        ← Golden-specific fixtures
 ├── architecture/                      ← Intelligence tier structure, OrchestratorMixin health
@@ -130,7 +130,7 @@ Golden tests are included in the preflight tier (Stage 9 of `/audit fix`) and th
 
 ## Reinforcement Learning Integration
 
-Golden test outcomes feed the Unified Reinforcement Signal (URS — Phase 83):
+Golden test outcomes feed the Unified Reinforcement Signal (URS):
 
 | Outcome | Signal | Confidence Delta |
 |---------|--------|-----------------|

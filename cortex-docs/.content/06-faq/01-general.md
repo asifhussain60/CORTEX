@@ -17,10 +17,10 @@ order: 1
 
 **CORTEX** (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI engineering framework. It combines:
 
-- **51 wired orchestrators** across 4 tiers (core, domain, support, git)
-- **28 registered MCP tools (39 target)** exposed via Pylance-style stdio server
-- **38 CORE governance rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
-- **LENS** — a 15-component parallel code intelligence engine
+- **Wired orchestrators** across 4 tiers (core, domain, support, git)
+- **Registered MCP tools** exposed via Pylance-style stdio server
+- **CORE governance rules** (+ AC rules) enforced at pre-commit, CI, and runtime
+- **LENS** — a parallel code intelligence engine
 - **TDD-first execution** — CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX
 
 It works directly inside your IDE (VS Code, Cursor, Claude Desktop) via the Model Context Protocol — no browser, no context switching.
@@ -32,10 +32,10 @@ It works directly inside your IDE (VS Code, Cursor, Claude Desktop) via the Mode
 | Dimension | Generic AI Coding Tools | CORTEX |
 |-----------|------------------------|--------|
 | **Scope** | Answer questions, suggest code | Orchestrate entire workflows end-to-end |
-| **Governance** | None | 38 CORE rules enforced automatically |
+| **Governance** | None | CORE rules enforced automatically |
 | **TDD** | Optional | Mandatory (CORE-008) — blocked if skipped |
 | **State** | Stateless per conversation | Persistent SQLite audit log (`.cortex-runtime/`) |
-| **Architecture** | Single model | 27 specialized orchestrators, 3 tiers |
+| **Architecture** | Single model | Specialized orchestrators across multiple tiers |
 | **Observability** | None | OpenTelemetry, Prometheus, AC markers, SQLite traces |
 | **Integration** | IDE only | IDE + CI/CD + pre-commit hooks + ADO/Jira work items |
 
@@ -131,7 +131,7 @@ from cortex.lens.facade import LENSFacade
 from cortex.mcp.tools.core import cortex_challenge
 ```
 
-There is no `cortex_intelligence`, no `cortex_lens`, no `cortex.brain`. These were consolidated in the 12-phase Cohesive Brain Refactor (completed February 2026).
+There is no `cortex_intelligence`, no `cortex_lens`, no `cortex.brain`. These were consolidated in the Cohesive Brain Refactor.
 
 ---
 
@@ -155,7 +155,7 @@ make test-fast
 
 **Never use:** `python3 -m pytest tests/ -x -q` or any command that adds `-q` or overrides `-o addopts=` — these bypass the `CortexXdistPlugin` batch reporter and xdist parallelism.
 
-The full suite contains **16,942 tests** (486 golden, 177 phase) and runs with `pytest-xdist` (`-n auto --dist loadscope`).
+The full suite is comprehensive and runs with `pytest-xdist` (`-n auto --dist loadscope`).
 
 ---
 
@@ -179,11 +179,11 @@ The **Git-backed configuration registry** — CORTEX's single source of truth fo
 
 ```
 cortex-registry/
-├── core/tier0-skull/skull-rules.yaml   ← 38 CORE + 2 AC governance rules
+├── core/tier0-skull/skull-rules.yaml   ← CORE + AC governance rules
 ├── cortex-master.yaml                  ← Thin phase index (≤500 lines)
 ├── planning/phases/                    ← Detailed phase files
 ├── workflows/templates/                ← 63 workflow YAML templates
-├── patterns/                           ← 9 enterprise architecture patterns
+├── patterns/                           ← Enterprise architecture patterns
 └── knowledge/                          ← Domain knowledge base
 ```
 
@@ -191,4 +191,4 @@ All changes are versioned in Git — rollback is `git revert`. No database depen
 
 ---
 
-*Verified against live codebase · 25 February 2026 · Phase 84 Complete*
+*Verified against live codebase*

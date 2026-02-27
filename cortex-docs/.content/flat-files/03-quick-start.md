@@ -41,7 +41,7 @@ Try any of these in Copilot Chat:
 | What You Type | What Happens |
 |--------------|-------------|
 | "Analyze this codebase" | LENS runs parallel analyzers and delivers an inline report |
-| "What MCP tools are available?" | The tools catalog lists all 28 registered tools (39 target) |
+| "What MCP tools are available?" | The tools catalog lists all registered tools |
 | "Check governance compliance" | Validates CORE rule compliance |
 | "Onboard this repository" | Runs LENS analysis and creates a dashboard |
 | "Run health check" | Checks Python version, dependencies, and MCP connectivity |
@@ -72,7 +72,7 @@ The workspace is organised into well-defined directories. The `cortex/` director
 
 ## What Just Happened?
 
-When you opened VS Code, the MCP server started automatically, 28 registered tools became available in Copilot Chat (39 target when all planned phases complete), CORTEX loaded governance rules from the registry, and the test framework registered its parallel runner and quality gate plugins.
+When you opened VS Code, the MCP server started automatically, registered tools became available in Copilot Chat, CORTEX loaded governance rules from the registry, and the test framework registered its parallel runner and quality gate plugins.
 
 When you ran a request, the RequestRephraseOrchestrator enriched it (Stage −1), the MCP Gateway validated and routed it (Stage 0), the IntentRouter classified intent (Stage 1), the appropriate orchestrator executed the workflow, results were delivered inline (CORE-002), and the audit trail was recorded to the SQLite database.
 
@@ -90,4 +90,4 @@ When you ran a request, the RequestRephraseOrchestrator enriched it (Stage −1)
 
 ---
 
-*Verified against live MCP server · February 2026*
+*Verified against live MCP server*

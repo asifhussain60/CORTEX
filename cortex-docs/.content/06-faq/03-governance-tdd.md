@@ -36,7 +36,7 @@ The metadata header says `rule_count: 35` — this reflects the originally regis
 | **CORE-035** | Single Canonical | No duplicate implementations anywhere |
 | **CORE-048** | Holistic Validation | Full validation gate before IMPLEMENT/FIX/REFACTOR |
 | **CORE-049** | Silent Execution | Progress bars only — no verbose chatter |
-| **CORE-055** | Golden Test Contract | 486 golden tests in `tests/golden/` must always pass |
+| **CORE-055** | Golden Test Contract | Golden tests in `tests/golden/` must always pass |
 | **CORE-064** | Sweep Completeness | No partial sweeps — every FIX/REFACTOR/AUDIT exhausts its catalogue |
 
 ---
@@ -53,7 +53,7 @@ If a rule conflicts with your project's needs, the correct path is to open a gov
 
 ## What is EnforcementOrchestrator and what does it check?
 
-**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates **10 enforcement agents** that each check a category of CORE rules:
+**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates **enforcement agents** that each check a category of CORE rules:
 
 | Agent | CORE Rules Checked |
 |-------|--------------------|
@@ -96,7 +96,7 @@ A scoring system (0–9) that evaluates every test against 5 criteria:
 
 ## What is CORE-055 — Golden Test Tier Contract?
 
-**CORE-055** mandates that the **486 golden tests** in `tests/golden/` must **always pass** with zero regressions.
+**CORE-055** mandates that the **golden tests** in `tests/golden/` must **always pass** with zero regressions.
 
 Golden tests are the highest-value tests in the suite — they validate:
 - Core orchestrator contracts (MasterOrchestrator, IntentRouter, TDDOrchestrator)
@@ -104,7 +104,7 @@ Golden tests are the highest-value tests in the suite — they validate:
 - LENS analysis correctness
 - MCP tool registration and routing
 
-They run **serially** (no xdist parallelism) for deterministic results. A golden test failure is a **P0 blocker** — no commit can proceed until all 486 pass.
+They run **serially** (no xdist parallelism) for deterministic results. A golden test failure is a **P0 blocker** — no commit can proceed until all golden tests pass.
 
 ---
 
@@ -129,7 +129,7 @@ The `/audit fix` convergence loop (Stages 7–8) enforces this — it loops unti
 In practice, no — and here's why:
 
 1. **Gate latency is < 150ms** — enforcement agents run in parallel, not sequentially.
-2. **Most requests pass all 10 gates** on the first try when following CORTEX patterns.
+2. **Most requests pass all gates** on the first try when following CORTEX patterns.
 3. **The cost of governance is paid once** — before any files change. The cost of *not* having governance is paid repeatedly (regressions, partial sweeps, architectural drift).
 4. **Pre-commit is the cheapest fix point** — a BLOCKED pre-commit is infinitely cheaper than a production incident.
 
@@ -139,7 +139,7 @@ The governance system is designed to be invisible when you follow the rules — 
 
 ## What is a pre-commit enforcement gate?
 
-Before any `git commit` in the CORTEX workspace, **EnforcementOrchestrator** runs automatically via a Git pre-commit hook (`deployment/hooks/`). It checks all 10 governance agents. If any check returns BLOCKED, the commit is rejected with a specific violation message and the file that triggered it.
+Before any `git commit` in the CORTEX workspace, **EnforcementOrchestrator** runs automatically via a Git pre-commit hook (`deployment/hooks/`). It checks all governance agents. If any check returns BLOCKED, the commit is rejected with a specific violation message and the file that triggered it.
 
 This is separate from CI — pre-commit catches violations on the developer's machine before they ever reach the pipeline.
 
@@ -166,10 +166,10 @@ The rule's intent is: *eliminate noise, amplify signal*. Auto-generated status c
 |-------|-------------------|
 | **L1** | Every wired orchestrator exists at its declared path |
 | **L2** | Every orchestrator satisfies `IOrchestrator` protocol |
-| **L3** | All 51 wired orchestrators are reachable from MasterOrchestrator via IntentRouter |
+| **L3** | All wired orchestrators are reachable from MasterOrchestrator via IntentRouter |
 
 Violations at L1 are P0 (missing files). L2 violations are P1 (protocol gap). L3 violations are P1 (dead orchestrator — wired but unreachable).
 
 ---
 
-*Verified against `cortex-registry/core/tier0-skull/skull-rules.yaml` + `cortex/orchestrators/core/enforcement_orchestrator.py` · 25 February 2026*
+*Verified against `cortex-registry/core/tier0-skull/skull-rules.yaml` + `cortex/orchestrators/core/enforcement_orchestrator.py`*

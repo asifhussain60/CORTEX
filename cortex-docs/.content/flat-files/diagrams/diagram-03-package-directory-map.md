@@ -9,12 +9,12 @@ cortex/                                    ← Single canonical Python package (
 ├── health_check_service.py                ← Health check entry point
 │
 ├── core/                                  ← Core abstractions
-│   ├── orchestrator_protocol_mixin.py     ← Primary base (51 orchestrators)
+│   ├── orchestrator_protocol_mixin.py     ← Primary base (all orchestrators)
 │   ├── orchestrator_base.py               ← Legacy base (2 orchestrators)
 │   ├── file_factory.py                    ← File operations
 │   └── workflow_engine.py                 ← FSM workflow execution
 │
-├── orchestrators/                         ← 51 wired orchestrators
+├── orchestrators/                         ← Wired orchestrators
 │   ├── core/           17 orchestrators   ← MasterOrch, IntentRouter, TDD, Enforcement…
 │   ├── domain/          7 orchestrators   ← Refactoring, Planning, Dashboard…
 │   ├── support/        23 orchestrators   ← Health, Vacuum, Upgrade, Sweep…
@@ -70,7 +70,7 @@ cortex/                                    ← Single canonical Python package (
 └── secrets/                               ← Secret management
 
 cortex-registry/                           ← Git-backed configuration
-├── core/tier0-skull/   skull-rules.yaml   ← 38 CORE governance rules
+├── core/tier0-skull/   skull-rules.yaml   ← CORE governance rules
 ├── patterns/           9 patterns         ← Enterprise architecture patterns
 ├── workflows/templates/                   ← Audit, TDD, production templates
 ├── planning/                              ← Master plan index + phase files

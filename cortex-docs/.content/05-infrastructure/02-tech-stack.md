@@ -29,7 +29,7 @@ order: 2
 
 | Dependency | Purpose |
 |------------|---------|
-| `pytest` | Test framework — 16,942 tests |
+| `pytest` | Test framework — comprehensive test suite |
 | `pytest-xdist` | Parallel execution (`-n auto --dist loadscope`) |
 | `pytest-cov` | Coverage measurement |
 | `pytest-timeout` | Test timeout enforcement |
@@ -113,7 +113,7 @@ order: 2
 | Single package (`cortex`) | CORE-035 — no duplicate implementations |
 | stdio transport | Zero-config, IDE-managed lifecycle |
 | SQLite WAL | Concurrent reads, single-writer, no external DB server |
-| pytest-xdist | 16,942 tests must run in reasonable time |
+| pytest-xdist | Large test suite must run in reasonable time |
 | YAML registry | Human-readable governance rules, version-controlled |
 
 ---
@@ -126,4 +126,4 @@ order: 2
 
 ---
 
-*Verified against `requirements.txt` and `pyproject.toml` · 25 February 2026*
+*Verified against `requirements.txt` and `pyproject.toml`*

@@ -23,7 +23,7 @@ order: 2
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
 │                    MCP GATEWAY                                  │
-│              cortex/mcp/ — 28 registered tools (39 target)              │
+│              cortex/mcp/ — registered tools                             │
 │                              │                                  │
 │         cortex_request_lifecycle (primary entry point)          │
 └─────────────────────────────┼───────────────────────────────────┘
@@ -42,7 +42,7 @@ order: 2
 │    │ (12 intents)   │  │ Orch.   │  │ Orchestrators│           │
 │    └────────────────┘  └─────────┘  └──────────────┘           │
 │                                                                 │
-│    51 wired orchestrators: 17 core · 7 domain · 23 support · 4 git       │
+│    Wired orchestrators: core · domain · support · git                     │
 └─────────────────────────────┼───────────────────────────────────┘
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
@@ -97,14 +97,14 @@ order: 2
 
 | Layer | Components | Location |
 |-------|------------|----------|
-| MCP Gateway | **28 registered tools** (39 target) | `cortex/mcp/tools/` |
-| Orchestration | **51 wired** orchestrators (17 core, 7 domain, 23 support, 4 git) | `cortex/orchestrators/` |
+| MCP Gateway | **Registered tools** | `cortex/mcp/tools/` |
+| Orchestration | **Wired** orchestrators (core, domain, support, git) | `cortex/orchestrators/` |
 | Intelligence | 15 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
-| Governance | **38 CORE rules** | `cortex/governance/` + `cortex-registry/core/` |
+| Governance | **CORE rules** | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |
 | Registry | Rules, patterns, workflows | `cortex-registry/` |
-| Tests | **16,942** collected | `tests/` |
+| Tests | **Comprehensive suite** | `tests/` |
 
 ---
 
-*Verified against live directory structure · 25 February 2026*
+*Verified against live directory structure*

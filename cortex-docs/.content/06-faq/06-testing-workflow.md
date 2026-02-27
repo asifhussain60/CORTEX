@@ -56,18 +56,16 @@ The `CortexXdistPlugin` (registered in `conftest.py`) provides:
 
 ## How many tests does CORTEX have?
 
-**16,942 tests** as of 26 February 2026:
+The test suite is comprehensive, spanning multiple categories:
 
-| Category | Count | Location |
-|----------|-------|---------|
-| Total | 16,942 | `tests/` |
-| Golden | 486 | `tests/golden/` |
-| Phase | 177 | `tests/` (phase-specific) |
-| Unit | ~12,000+ | `tests/unit/` |
-| Integration | ~2,000+ | `tests/integration/` |
-| Golden | 486 | `tests/golden/` (deterministic, serial) |
+| Category | Location |
+|----------|---------|
+| Golden | `tests/golden/` (deterministic, serial) |
+| Phase | `tests/` (phase-specific) |
+| Unit | `tests/unit/` |
+| Integration | `tests/integration/` |
 
-The 486 golden tests run serially (no xdist) for deterministic results. They must always pass — CORE-055.
+Golden tests run serially (no xdist) for deterministic results. They must always pass — CORE-055.
 
 ---
 
@@ -278,4 +276,4 @@ See: `flat-files/15-sharpen-the-saw.md` for full documentation.
 
 ---
 
-*Verified against `pytest.ini` + `conftest.py` + `scripts/run_tests.py` · 27 February 2026 · 16,942 tests total*
+*Verified against `pytest.ini` + `conftest.py` + `scripts/run_tests.py`*

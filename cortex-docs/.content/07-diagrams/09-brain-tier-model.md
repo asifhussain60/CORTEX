@@ -128,4 +128,4 @@ cortex/intelligence/
 
 ---
 
-*Verified against `cortex/intelligence/` directory structure · 25 February 2026*
+*Verified against `cortex/intelligence/` directory structure*

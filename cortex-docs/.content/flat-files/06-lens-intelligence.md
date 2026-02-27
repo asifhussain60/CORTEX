@@ -216,4 +216,4 @@ The EnforcementOrchestrator's ten agents consume LENS data to make enforcement d
 
 ---
 
-*All component paths and analyzer counts verified against live codebase — 26 February 2026*
+*All component paths and analyzer counts verified against live codebase*

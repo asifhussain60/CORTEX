@@ -20,7 +20,7 @@ order: 8
                    ╱  Tests   ╲
                   ╱─────────────╲
                  ╱               ╲
-                ╱    486 Golden   ╲
+                ╱      Golden       ╲
                ╱     Tests         ╲
               ╱  (must ALWAYS pass) ╲
              ╱───────────────────────╲
@@ -36,7 +36,7 @@ order: 8
    ╱          Smoke Tests (subset)             ╲
   ╱─────────────────────────────────────────────╲
 
-  Total: 16,942 tests collected
+  Total: all tests collected
 ```
 
 ## Execution Strategy
@@ -107,7 +107,7 @@ tests/
 ├── cli/                  ← CLI interface tests
 ├── core/                 ← Core module tests
 ├── domain_orchestrators/ ← Domain orchestrator tests
-├── golden/               ← 486 golden tests (regression-proof)
+├── golden/               ← Golden tests (regression-proof)
 ├── governance/           ← Governance rule tests
 ├── infrastructure/       ← Infrastructure layer tests
 ├── integration/          ← Cross-component integration tests
@@ -131,4 +131,4 @@ tests/
 
 ---
 
-*Verified against `tests/` directory and `pytest.ini` · 25 February 2026*
+*Verified against `tests/` directory and `pytest.ini`*

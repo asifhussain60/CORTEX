@@ -1,16 +1,15 @@
-# cortex/core Architecture — 15 Canonical Subdirs
+# cortex/core Architecture — Canonical Subdirs
 
 ---
-title: CORTEX Core Architecture — Phase 68 Flatten (27→15 Canonical Subdirs)
+title: CORTEX Core Architecture — Canonical Subdirectory Layout
 type: reference
 audience: [Software Developers]
 last_verified: 2026-02-27
 source_of_truth: cortex/core/ + cortex/core/common/
-phase: Phase 68 (COMPLETE — SWEEP-68-CORE-FLATTEN)
 order: 12
 ---
 
-> **What changed:** Phase 68 flattened `cortex/core/` from 27 subdirectories to **15 canonical subdirs** — eliminating redundant nesting, consolidating 8 dirs into `cortex/core/common/`, and deleting all zero-caller compat shims.
+> **What changed:** `cortex/core/` was flattened into **canonical subdirs** — eliminating redundant nesting, consolidating dissolved packages into `cortex/core/common/`, and deleting all zero-caller compat shims.
 
 ---
 
@@ -28,11 +27,11 @@ order: 12
 
 ---
 
-## The 15 Canonical Subdirs
+## The Canonical Subdirs
 
 ```
 cortex/core/
-├── common/              ← Phase 68: Consolidated 8 dirs into here
+├── common/              ← Consolidated from dissolved packages
 │   ├── connection_utils.py
 │   ├── core_progress_reporter.py
 │   ├── debug_logger.py
@@ -90,7 +89,7 @@ Eight directories that contained thin utility modules were consolidated into `co
 
 ## Import Compatibility
 
-All import paths that existed before Phase 68 continue to work via a **compatibility layer** (`cortex/core/compatibility_layer.py`). No external code changes required.
+All legacy import paths continue to work via a **compatibility layer** (`cortex/core/compatibility_layer.py`). No external code changes required.
 
 ```python
 # These still work (compat shims):
@@ -106,12 +105,12 @@ from cortex.core.common.file_utils import safe_read_file
 
 ## OrchestratorBase vs OrchestratorProtocolMixin
 
-Phase 68 confirms the canonical base for all 51 wired orchestrators is **`OrchestratorProtocolMixin`** (Phase 58), not `OrchestratorBase`:
+The canonical base for all wired orchestrators is **`OrchestratorProtocolMixin`**, not `OrchestratorBase`:
 
 | Base | Location | Used By |
 |------|----------|---------|
-| `OrchestratorProtocolMixin` | `cortex/core/orchestrator_protocol_mixin.py` | All 51 wired orchestrators (canonical) |
-| `OrchestratorBase` | `cortex/core/orchestrator_base.py` | 2 legacy orchestrators only |
+| `OrchestratorProtocolMixin` | `cortex/core/orchestrator_protocol_mixin.py` | All wired orchestrators (canonical) |
+| `OrchestratorBase` | `cortex/core/orchestrator_base.py` | Legacy orchestrators only |
 
 `OrchestratorBase` is preserved in `cortex/core/orchestrator/` for backward compatibility but should not be used in new orchestrators.
 
@@ -119,11 +118,11 @@ Phase 68 confirms the canonical base for all 51 wired orchestrators is **`Orches
 
 ## Why This Matters
 
-1. **Import clarity** — `from cortex.core.common.validators import ...` is unambiguous. No more hunting through 27 dirs.
-2. **Reduced confusion** — `cortex/core/intelligence/` → `cortex/intelligence/` removes the duplicate path ambiguity that caused Phase 60 import errors.
-3. **Smaller surface** — 15 canonical dirs are auditable. 27 dirs were not.
-4. **Bootstrap deleted** — The `cortex/core/bootstrap/` compat shim was the last remnant of pre-Phase-55 init sequences. Deleted in Phase 68 final commit.
+1. **Import clarity** — `from cortex.core.common.validators import ...` is unambiguous. No more hunting through deeply nested dirs.
+2. **Reduced confusion** — `cortex/core/intelligence/` → `cortex/intelligence/` removes duplicate path ambiguity.
+3. **Smaller surface** — fewer canonical dirs are auditable; a sprawling directory tree is not.
+4. **Bootstrap deleted** — The `cortex/core/bootstrap/` compat shim has been removed. All init sequences use the canonical path.
 
 ---
 
-*Phase 68 COMPLETE — SWEEP-68-CORE-FLATTEN exhausted · All callers verified · Bootstrap/ shim deleted · Verified 2026-02-25*
+*Verified against `cortex/core/` directory structure*

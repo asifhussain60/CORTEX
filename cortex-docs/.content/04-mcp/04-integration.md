@@ -179,4 +179,4 @@ Or use the MCP tool: `cortex_verify` — checks Python version, dependencies, an
 
 ---
 
-*Verified against MCP integration configuration · 25 February 2026*
+*Verified against MCP integration configuration*

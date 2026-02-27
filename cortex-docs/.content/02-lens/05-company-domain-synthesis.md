@@ -15,7 +15,7 @@ order: 5
 
 ## Overview
 
-Company Domain Synthesis (Phase 18) connects organisation-specific knowledge stored in `company/domains/*.yaml` to the `UnifiedIntelligenceProvider` pipeline. When LENS analyses a repository, company domain profiles inject:
+Company Domain Synthesis connects organisation-specific knowledge stored in `company/domains/*.yaml` to the `UnifiedIntelligenceProvider` pipeline. When LENS analyses a repository, company domain profiles inject:
 
 - **Domain-specific governance rules** (e.g., PCI-DSS for payment domains)
 - **Architecture patterns** expected for the domain (microservices, event-driven)
@@ -204,4 +204,4 @@ The combined company domain + sprint context allows orchestrators to answer ques
 
 ---
 
-*Verified against `cortex/intelligence/knowledge/company_domain_loader.py` · Phase 18 complete · 25 February 2026*
+*Verified against `cortex/intelligence/knowledge/company_domain_loader.py`*

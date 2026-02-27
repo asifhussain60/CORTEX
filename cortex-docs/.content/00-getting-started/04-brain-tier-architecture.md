@@ -15,16 +15,15 @@ cortex/intelligence/
 ├── crawler/             Repository crawling
 ├── quality/             Quality assessment
 ├── observability/       Intelligence metrics
-├── cross_cutting/       Intelligence Matrix (Phase 65/66) — IntelligenceMatrixBuilder
+├── cross_cutting/       Intelligence Matrix — IntelligenceMatrixBuilder
 └── wiring/              Intelligence wiring and discovery bridges
 ```
 
-**Note (Phase 68):** `cortex/core/` was flattened from 27 subdirs to **15 canonical subdirs** — dissolving redundant nested packages into `cortex/core/common/`. All brain-related logic that was in `cortex/core/intelligence/` moved to `cortex/intelligence/`. The old `cortex_intelligence/` and `cortex_lens/` packages were dissolved in Phases 03–04. All imports use `cortex.intelligence.*`.n — 3-Tier Intelligence Architecture
+**Note:** `cortex/core/` was flattened to canonical subdirs — dissolving redundant nested packages into `cortex/core/common/`. All brain-related logic that was in `cortex/core/intelligence/` moved to `cortex/intelligence/`. The old `cortex_intelligence/` and `cortex_lens/` packages were dissolved. All imports use `cortex.intelligence.*`.n — 3-Tier Intelligence Architecture
 type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
 last_verified: 2026-02-27
 source_of_truth: cortex/intelligence/provider.py + cortex/intelligence/knowledge/
-phases_complete: [Phase 47, Phase 57, Phase 66, Phase 68]
 order: 4
 ---
 
@@ -235,7 +234,7 @@ The Action tier (`cortex/intelligence/action/`) builds an `ExecutionPlan`:
 [Orchestrator Execution] ── RED → GREEN → REFACTOR
         │
         ▼
-[Governance Validation] ── 38 CORE rules, EnforcementOrchestrator
+[Governance Validation] ── CORE rules, EnforcementOrchestrator
         │
         ▼
 [Learning Update] ── success rates updated for next time
@@ -266,4 +265,4 @@ This feedback loop means CORTEX improves with every project it touches. The `cor
 
 ---
 
-*All module paths verified against live codebase · 25 February 2026 · Phase 68 (cortex/core flatten: 27→15 canonical subdirs) + Phase 66 (Intelligence Matrix cross_cutting/) reflected*
+*All module paths verified against live codebase*

@@ -19,7 +19,7 @@ order: 1
 
 - **Transport:** stdio (development) — no manual server startup
 - **Protocol:** JSON-RPC 2.0
-- **Tools:** 28 registered MCP tools (39 target; 11 in active planning phases)
+- **Tools:** Registered MCP tools spanning core, governance, intelligence, operations, utilities, workflow, and work item categories
 - **Clients:** VS Code (Copilot Chat), Cursor, Claude Desktop
 
 ---
@@ -39,7 +39,7 @@ order: 1
         └── Dispatch to MCP tool function
         │
         ▼
-[28 Registered MCP Tools (39 target)]
+[Registered MCP Tools]
         │
         ▼
 [Orchestrator Execution]
@@ -78,4 +78,4 @@ The MCP server auto-starts via `.vscode/settings.json`:
 
 ---
 
-*Verified against MCP server configuration · 25 February 2026*
+*Verified against MCP server configuration*

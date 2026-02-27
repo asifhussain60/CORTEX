@@ -1,6 +1,5 @@
 # CORTEX Architecture Reference
 
-> **Updated:** 2026-02-24 (Phase 65 — Enterprise Hardening complete)
 > **Status:** Production — all metrics reflect live codebase counts
 
 ---
@@ -8,34 +7,33 @@
 ## Overview
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework
-built on a tiered orchestrator architecture, governed by 38 CORE rules, and surfaced through 39 MCP tools (28 registered).
+built on a tiered orchestrator architecture, governed by CORE rules, and surfaced through registered MCP tools.
 
 ---
 
 ## Architecture Metrics (Live)
 
-| Metric | Count | Source |
-|---|---|---|
-| Canonical package | `cortex` (single root) | `cortex/__init__.py` |
-| Wired orchestrators | 51 (across 4 tiers) | `cortex/core/wiring/specifications/wiring.yaml` |
-| MCP tools (production) | 39 target (28 registered) | `cortex/mcp/tools/` |
-| CORE governance rules | 38 active (+ 2 AC rules) | `cortex-registry/core/tier0-skull/` |
-| Test suite | 16,942 tests | `pytest --collect-only` |
-| Top-level `cortex/` dirs | 20 canonical | `ls cortex/` |
+| Metric | Source |
+|---|---|
+| Canonical package: `cortex` (single root) | `cortex/__init__.py` |
+| Wired orchestrators (across 4 tiers) | `cortex/core/wiring/specifications/wiring.yaml` |
+| MCP tools (registered + planned) | `cortex/mcp/tools/` |
+| CORE governance rules (+ AC rules) | `cortex-registry/core/tier0-skull/` |
+| Comprehensive test suite | `pytest --collect-only` |
+| Top-level `cortex/` dirs | `ls cortex/` |
 
 ---
 
 ## Orchestrator Tiers
 
-All orchestrators extend `OrchestratorProtocolMixin` (primary, Phase 58) or `OrchestratorBase` (legacy, 2 files only).
+All orchestrators extend `OrchestratorProtocolMixin` (primary) or `OrchestratorBase` (legacy, 2 files only).
 
-| Tier | Count | Purpose |
-|---|---|---|
-| `core` | 17 | MasterOrchestrator, IntentRouter, TDD, Enforcement, Planning, Stage1/3/4, … |
-| `domain` | 7 | Refactoring, Digest, Onboarding, Knowledge, Documentation, Reporting, … |
-| `support` | 23 | Vacuum, Debugger, Sweep, BulkDigest, Session, Convergence, … |
-| `git` | 4 | GitIntelligence, GitHistory, GitWorkflow, … |
-| **Total** | **51** | |
+| Tier | Purpose |
+|---|---|
+| `core` | MasterOrchestrator, IntentRouter, TDD, Enforcement, Planning, Stage1/3/4, … |
+| `domain` | Refactoring, Digest, Onboarding, Knowledge, Documentation, Reporting, … |
+| `support` | Vacuum, Debugger, Sweep, BulkDigest, Session, Convergence, … |
+| `git` | GitIntelligence, GitHistory, GitWorkflow, … |
 
 ---
 
@@ -56,8 +54,8 @@ CORTEX uses **Pylance-style MCP** — auto-starts with VS Code via stdio transpo
 }
 ```
 
-- **39 production tools** registered in `cortex/mcp/tools/` (Pylance-style stdio transport)
-- **Tenant auth**: `TenantContextMiddleware` wired in `cortex/mcp/server.py` (Phase 65-A)
+- **Production tools** registered in `cortex/mcp/tools/` (Pylance-style stdio transport)
+- **Tenant auth**: `TenantContextMiddleware` wired in `cortex/mcp/server.py`
 - **Tool categories**: governance, knowledge, orchestration, vacuum, digest, onboard, refactor, metrics, learning, vision
 
 ---
@@ -84,8 +82,8 @@ Full rule catalogue: `cortex-registry/core/tier0-skull/`
 
 ```
 cortex/              ← Python source (20 canonical dirs)
-  orchestrators/     ← 51 wired orchestrators across 4 tiers (core, domain, support, git)
-  mcp/tools/         ← 39 MCP tools (28 registered)
+  orchestrators/     ← Wired orchestrators across 4 tiers (core, domain, support, git)
+  mcp/tools/         ← Registered MCP tools
   core/              ← OrchestratorProtocolMixin, OrchestratorBase, FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis
@@ -134,13 +132,3 @@ Memory Tiers
 ```
 
 ---
-
-## Phase Completion Status
-
-| Phase | Status | Description |
-|---|---|---|
-| 58 | ✅ COMPLETE | OrchestratorProtocolMixin rollout (cross-cutting protocol) |
-| 59 | ✅ COMPLETE | Deduplication sweep (AuditEntry, Ok/Err, OperationMode) |
-| 64 | ✅ COMPLETE | Unified brain golden coverage (7 sub-phases) |
-| 65 | ✅ COMPLETE | Enterprise hardening (tenant auth, ImportError sweep, mixin rollout) |
-| 83 | ✅ COMPLETE | Unified Reinforcement Signal (URS) — open-loop learning |

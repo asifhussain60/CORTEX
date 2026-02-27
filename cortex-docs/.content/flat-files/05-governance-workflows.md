@@ -177,11 +177,11 @@ The WorkflowEngine reads a YAML template, parses its phases and dependencies, an
 
 ---
 
-*All rule identifiers and agent names verified against live governance registry — 27 February 2026*
+*All rule identifiers and agent names verified against live governance registry*
 
 ---
 
-## RCA as a Governance Signal (Phase 87 PLANNED)
+## RCA as a Governance Signal (PLANNED)
 
 The RCA Memory Engine integrates with the governance layer to turn historical failure patterns into proactive enforcement signals. This closes the loop between the "what happened" (OPJ), the "why it happened" (RCA Engine), and "don't let it happen again" (Prevention Gate + URS).
 
@@ -193,7 +193,7 @@ The RCA Memory Engine integrates with the governance layer to turn historical fa
 | 2 | Warning | Surface in governance gate response, include fix reference |
 | 3+ P0 | Blocking | Halt operation, require structured review before proceeding |
 
-### RCA Workflow Template (Phase 87 PLANNED)
+### RCA Workflow Template (PLANNED)
 
 A new workflow template `cortex-registry/workflows/templates/rca/rca-analysis-workflow.yaml` orchestrates the full RCA pipeline:
 

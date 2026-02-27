@@ -28,4 +28,4 @@ The EnforcementOrchestrator's 10 agents consume LENS data to make enforcement de
 
 ---
 
-*Verified against enforcement integration · 25 February 2026*
+*Verified against enforcement integration*

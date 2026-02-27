@@ -8,7 +8,6 @@ last_verified: 2026-02-27
 source_of_truth: cortex/intelligence/ + cortex/lens/ + cortex/intelligence/cross_cutting/ + cortex/intelligence/learning/
 consolidates: [00-getting-started-brain-tier-architecture, 00-getting-started-intelligence-matrix, 00-getting-started-cortex-intelligence]
 order: 2
-phases_covered: [Phase 83 URS, Phase 84 Stub Elimination, Phase 87 RCA Memory Engine]
 ---
 
 > **The central idea:** CORTEX's intelligence mirrors biological cognition — a perception layer that reads the world, a reasoning layer that interprets it, and an action layer that responds. Every request passes through all three tiers before any code is written.
@@ -37,7 +36,7 @@ The old `cortex_intelligence/` and `cortex_lens/` packages were dissolved. All i
 
 ### Tier 1 — Perception: The Pattern Registry
 
-The Perception tier maintains a catalogue of known signatures. When CORTEX analyses a repository, it scans file structure, imports, and naming conventions; matches detected signals against nine registered enterprise patterns (mediator, strategy, observer, factory, template-method, chain-of-responsibility, adapter, repository, command); scores each match with a confidence value between 0.0 and 1.0; and reports matched fields, missing fields, and associated risk factors.
+The Perception tier maintains a catalogue of known signatures. When CORTEX analyses a repository, it scans file structure, imports, and naming conventions; matches detected signals against registered enterprise patterns (mediator, strategy, observer, factory, template-method, chain-of-responsibility, adapter, repository, command, and more); scores each match with a confidence value between 0.0 and 1.0; and reports matched fields, missing fields, and associated risk factors.
 
 The key output is a PatternMatch — a detected match between repository signals and a registered pattern. The LENS feed provides raw data from the parallel analyzers (AST, Git, Security, and others) that Perception uses as input.
 
@@ -63,7 +62,7 @@ Every step in the plan has a mandatory test-first checkpoint (RED → GREEN → 
 
 To illustrate how all three tiers work together, consider a request like "Add a password reset feature that sends an email with a time-limited token":
 
-**Governance Gate** — Before anything else, CORTEX checks the request against 38 governance rules. It notices the request involves security (passwords, tokens), flags it for security review, and attaches a note that TDD is mandatory.
+**Governance Gate** — Before anything else, CORTEX checks the request against its governance rules. It notices the request involves security (passwords, tokens), flags it for security review, and attaches a note that TDD is mandatory.
 
 **Interaction** — The InteractionOrchestrator parses the request, identifies key concepts (password reset, email, time-limited token), assesses confidence (0.92), and shows a Definition of Ready summary to confirm understanding before work begins.
 
@@ -111,7 +110,7 @@ Fifteen intelligence-providing subsystems form the x-axis, including LENS Analys
 
 Fifteen intelligence-consuming systems form the y-axis, including HierarchicalScanner, BatchProcessor, DomainAdapter, DocGenPlaybook, AuditFixPipeline, EnforcementOrchestrator, VacuumOrchestrator, MCPToolRegistry, SweepCatalogueOrchestrator, TDDOrchestrator, SynthesisEngineBridge, RetrievalOptimizerBridge, TDDStubGenerator, ResponseTemplateHook, and T1T2EnrichmentHooks.
 
-**Phase 86 additions (PLANNED):** `DebuggerOrchestrator` (cells CC-021/IC-021) will be added as an intelligence consumer — enabling the matrix to query debugger capability, health, and readiness, and allowing debug insights to flow into the intelligence layer via OPJMixin, URS, and KnowledgeSynthesisEngine.
+**Planned additions:** `DebuggerOrchestrator` (cells CC-021/IC-021) will be added as an intelligence consumer — enabling the matrix to query debugger capability, health, and readiness, and allowing debug insights to flow into the intelligence layer via OPJMixin, URS, and KnowledgeSynthesisEngine.
 
 ### Critical Wired Connections
 
@@ -147,13 +146,13 @@ All learning is stored in the Knowledge Registry, organised by domain: architect
 
 ---
 
-## RCA Memory Engine — Root Cause Analysis (Phase 87)
+## RCA Memory Engine — Root Cause Analysis
 
 The RCA Memory Engine extends CORTEX's learning infrastructure from simple pattern capture into structured root-cause reasoning. It answers the question every engineering team asks but rarely answers systematically: "Why does the same class of mistake keep happening?"
 
 ### The Problem It Solves
 
-Before Phase 87, CORTEX's OPJMixin captured `root_cause` as free-text — useful for reference but impossible to compare, cluster, or act upon automatically. A developer who repeated the same class of mistake (say, missing error boundaries in async chains) would get no advance warning. The root cause was recorded but never cross-referenced.
+CORTEX's OPJMixin originally captured `root_cause` as free-text — useful for reference but impossible to compare, cluster, or act upon automatically. A developer who repeated the same class of mistake (say, missing error boundaries in async chains) would get no advance warning. The root cause was recorded but never cross-referenced.
 
 ### Structured RCA Methodologies
 
@@ -194,4 +193,4 @@ Every engineering team builds the same bugs twice, three times, a hundred times.
 
 ---
 
-*All intelligence module paths verified against live codebase · February 2026 · Phase 87 RCA Memory Engine planned*
+*All intelligence module paths verified against live codebase*

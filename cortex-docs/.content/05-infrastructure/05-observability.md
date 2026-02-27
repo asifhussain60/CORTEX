@@ -136,4 +136,4 @@ Pre-built dashboards in `deployment/grafana-dashboards/`:
 
 ---
 
-*Verified against `cortex/infrastructure/` and `deployment/` · 25 February 2026*
+*Verified against `cortex/infrastructure/` and `deployment/`*

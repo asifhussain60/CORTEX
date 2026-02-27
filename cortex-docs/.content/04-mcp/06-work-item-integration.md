@@ -6,8 +6,6 @@ type: how-to
 audience: [Software Developers, Product Owners, Business Leaders]
 last_verified: 2026-02-27
 source_of_truth: cortex/repositories/ + cortex/mcp/tools/work_item_tool.py
-phase: Phase 15 — Work Item Provider
-ac_ids: [AC-P15-001, AC-P15-002, AC-P15-003, AC-P15-004, AC-P15-005, AC-P15-006, AC-P15-007, AC-P15-008, AC-P15-009, AC-P15-010]
 order: 6
 ---
 
@@ -17,7 +15,7 @@ order: 6
 
 ## Overview
 
-Phase 15 introduced a **provider-agnostic work item integration layer** that connects any ticketing system to CORTEX through a single MCP tool surface. The architecture is a three-layer stack:
+A **provider-agnostic work item integration layer** connects any ticketing system to CORTEX through a single MCP tool surface. The architecture is a three-layer stack:
 
 ```
 [Copilot Chat / IDE]
@@ -354,4 +352,4 @@ Run with: `make test-batch` (or the CORTEX: Smoke Tests VS Code task).
 
 ---
 
-*Verified against `cortex/repositories/` + `cortex/mcp/tools/work_item_tool.py` · Phase 15 · 25 February 2026*
+*Verified against `cortex/repositories/` + `cortex/mcp/tools/work_item_tool.py`*

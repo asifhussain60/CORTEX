@@ -9,27 +9,27 @@ source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 order: 2
 ---
 
-> **Purpose:** Answers to questions about how CORTEX's 51-orchestrator architecture works, how requests flow, and how the system makes routing decisions. All answers verified against live code.
+> **Purpose:** Answers to questions about how CORTEX's multi-tier orchestrator architecture works, how requests flow, and how the system makes routing decisions. All answers verified against live code.
 
 ---
 
 ## How many orchestrators does CORTEX have?
 
-**51 wired orchestrators** across **4 tiers**:
+**Wired orchestrators** across **4 tiers**:
 
 | Tier | Count | Orchestrators |
 |------|-------|--------------|
-| **Core** | 7 | MasterOrchestrator, IntentRouter, TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator, ConversationOrchestrator, InteractionOrchestrator |
-| **Domain** | 6 | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator, DashboardOrchestrator, ServiceDecompositionOrchestrator, LegacyModernizationOrchestrator |
-| **Support** | 14 | OnboardingOrchestrator, SetupOrchestrator, UpgradeOrchestrator, HealthOrchestrator, VacuumOrchestrator, SweepCatalogueOrchestrator, BulkDigestOrchestrator, DigestSessionOrchestrator, DebuggerOrchestrator, UnifiedDiscoveryOrchestrator, UnifiedQualityOrchestrator, AutoHealingMCPOrchestrator, CortexDocsOrchestrator, PhaseCompletionOrchestrator |
+| **Core** | — | MasterOrchestrator, IntentRouter, TDDOrchestrator, WorkflowOrchestrator, EnforcementOrchestrator, ConversationOrchestrator, InteractionOrchestrator |
+| **Domain** | — | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator, DashboardOrchestrator, ServiceDecompositionOrchestrator, LegacyModernizationOrchestrator |
+| **Support** | — | OnboardingOrchestrator, SetupOrchestrator, UpgradeOrchestrator, HealthOrchestrator, VacuumOrchestrator, SweepCatalogueOrchestrator, BulkDigestOrchestrator, DigestSessionOrchestrator, DebuggerOrchestrator, UnifiedDiscoveryOrchestrator, UnifiedQualityOrchestrator, AutoHealingMCPOrchestrator, CortexDocsOrchestrator, PhaseCompletionOrchestrator |
 
-> **Note:** `cortex/orchestrators/` contains many more Python classes (strategy implementations, mixins, sub-components). The 27 **wired** orchestrators are the canonical `IOrchestrator`-compliant entry points registered in `cortex-registry/core/specifications/`.
+> **Note:** `cortex/orchestrators/` contains many more Python classes (strategy implementations, mixins, sub-components). The **wired** orchestrators are the canonical `IOrchestrator`-compliant entry points registered in `cortex-registry/core/specifications/`.
 
 ---
 
 ## What is the universal orchestrator lifecycle?
 
-Every orchestrator satisfies `IOrchestrator` via `OrchestratorProtocolMixin` (Phase 58). The 5-step lifecycle is:
+Every orchestrator satisfies `IOrchestrator` via `OrchestratorProtocolMixin`. The 5-step lifecycle is:
 
 ```
 setup() → govern() → execute() → validate() → teardown()
@@ -41,7 +41,7 @@ setup() → govern() → execute() → validate() → teardown()
 
 ## What is the primary base class for orchestrators?
 
-**`OrchestratorProtocolMixin`** (`cortex/core/orchestrator_protocol_mixin.py`) — used by all 51 wired orchestrators since Phase 58.
+**`OrchestratorProtocolMixin`** (`cortex/core/orchestrator_protocol_mixin.py`) — used by all wired orchestrators.
 
 `OrchestratorBase` (`cortex/core/orchestrator_base.py`) is the legacy base — only 2 orchestrators still use it. Do not use it for new orchestrators.
 
@@ -191,4 +191,4 @@ Audit failures (SQLite write errors) are explicitly non-blocking — a broken au
 
 ---
 
-*Verified against `cortex/orchestrators/` · 25 February 2026 · Phase 84 Complete*
+*Verified against `cortex/orchestrators/`*

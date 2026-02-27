@@ -194,24 +194,24 @@ EnforcementOrchestrator calls assert_exhausted as part of the pre-commit gate. I
 
 ---
 
-*All orchestrator paths and component locations verified against live codebase — 27 February 2026*
+*All orchestrator paths and component locations verified against live codebase*
 
 ---
 
-## DebuggerOrchestrator — Multi-Stack Debug Pipeline (Phase 86 PLANNED)
+## DebuggerOrchestrator — Multi-Stack Debug Pipeline (PLANNED)
 
 Location: `cortex/orchestrators/support/debugger_orchestrator.py`
 
 DebuggerOrchestrator coordinates the five-phase debug pipeline: INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP. It uses a Strategy Pattern via `MarkerInjectionEngine`, selecting strategies based on detected tech stack.
 
-### Current State (Phase 84 COMPLETE)
+### Current State
 
 Three Python strategies are live:
 - `TestFailureStrategy` — pytest/unittest failure analysis
 - `RefactorRegressionStrategy` — refactor session regression tracking
 - `GovernanceViolationStrategy` — CORE rule violation tracing
 
-### Phase 86 Additions (PLANNED)
+### Planned Additions
 
 Five multi-stack strategies to be added:
 - `FrontendConsoleStrategy` — JS/TS/React/Angular/Vue console tracing
@@ -220,9 +220,9 @@ Five multi-stack strategies to be added:
 - `SqlTraceStrategy` — SQL Server/Oracle/PostgreSQL query plan tracing
 - `DotNetTraceStrategy` — C#/.NET ILogger entry/exit tracing
 
-### Intelligence Wiring (Phase 86 PLANNED)
+### Intelligence Wiring (PLANNED)
 
-Phase 86 wires `DebuggerOrchestrator` into CORTEX's cross-cutting intelligence infrastructure:
+The debug pipeline will also wire `DebuggerOrchestrator` into CORTEX's cross-cutting intelligence infrastructure:
 
 | Integration | Component | Purpose |
 |-------------|-----------|---------|
@@ -238,4 +238,4 @@ All five integrations follow patterns established by MasterOrchestrator, TDDOrch
 
 Location: `cortex/orchestrators/support/debugging/auto_cleanup_manager.py`
 
-Removes all CORTEX_DEBUG markers after session completion. Currently supports Python marker strip patterns. Phase 86 adds JavaScript/TypeScript, C#, SQL, and HTML patterns.
+Removes all CORTEX_DEBUG markers after session completion. Currently supports Python marker strip patterns. Multi-language support (JavaScript/TypeScript, C#, SQL, HTML) is planned.

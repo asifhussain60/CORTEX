@@ -29,7 +29,7 @@ The `SweepCatalogueOrchestrator` enforces this contract by maintaining a persist
 | **Name** | Sweep Completeness Contract |
 | **Severity** | P0 — Blocking |
 | **Enforcement** | Pre-commit hook + runtime gate |
-| **Introduced** | Phase 16 |
+| **Introduced** | Live |
 
 **Contract:** *Every FIX/REFACTOR/AUDIT operation MUST exhaustively process its complete issue catalogue before declaring success. Partial sweeps are a governance violation.*
 
@@ -143,4 +143,4 @@ EnforcementOrchestrator.pre_commit_gate()
 
 ---
 
-*Verified against `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` · CORE-064 active · 21 February 2026*
+*Verified against `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` · CORE-064 active*

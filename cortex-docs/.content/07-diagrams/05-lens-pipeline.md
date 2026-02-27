@@ -94,4 +94,4 @@ S ─── Synthesis   → Merge all findings into actionable report
 
 ---
 
-*Verified against `cortex/lens/` with 10 parallel analyzers · 25 February 2026*
+*Verified against `cortex/lens/` with parallel analyzers*

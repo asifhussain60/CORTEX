@@ -93,4 +93,4 @@ All 9 run **in parallel**. Combined latency: 300–800ms.
 
 ---
 
-*All component paths verified against live codebase · 25 February 2026*
+*All component paths verified against live codebase*

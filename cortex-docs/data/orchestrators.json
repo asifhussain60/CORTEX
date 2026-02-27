@@ -33,7 +33,7 @@
           "id": "enforcement",
           "name": "EnforcementOrchestrator",
           "path": "cortex/orchestrators/core/enforcement_orchestrator.py",
-          "description": "Pre-commit governance — validates all 38 CORE rules, blocks violations, writes audit trail to SQLite"
+          "description": "Pre-commit governance — validates all CORE rules, blocks violations, writes audit trail to SQLite"
         },
         {
           "id": "workflow",
@@ -221,7 +221,7 @@
           "id": "repo-onboarding",
           "name": "RepositoryOnboardingOrchestrator",
           "path": "cortex/orchestrators/support/repository_onboarding_orchestrator.py",
-          "description": "Full repository onboarding with LENS V3 — LLM business language + phase 21 SQLite integration"
+          "description": "Full repository onboarding with LENS V3 — LLM business language + SQLite integration"
         },
         {
           "id": "debugger",

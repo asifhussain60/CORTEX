@@ -15,16 +15,16 @@ order: 2
 
 ## Responsibility
 
-MasterOrchestrator coordinates all 51 wired orchestrators through hierarchical dispatch:
+MasterOrchestrator coordinates all wired orchestrators through hierarchical dispatch:
 
-1. Receives enriched request from MCP Gateway (39 tools, Pylance-style stdio)
+1. Receives enriched request from MCP Gateway (Pylance-style stdio)
 2. Invokes IntentRouter for LENS-based classification (20–40ms)
 3. Dispatches to the appropriate orchestrator across 4 tiers
 4. Monitors execution progress via AC markers
 5. Records audit trail to `.cortex-runtime/traces/orchestrator-traces.db`
 
 **Location:** `cortex/orchestrators/core/master_orchestrator.py`
-**Implements:** `IOrchestrator` via `OrchestratorProtocolMixin` (Phase 58 — canonical base)
+**Implements:** `IOrchestrator` via `OrchestratorProtocolMixin` (canonical base)
 
 ---
 
@@ -99,4 +99,4 @@ Markers persist to `.cortex-runtime/traces/orchestrator-traces.db` (schema: `aud
 
 ---
 
-*Verified against `cortex/orchestrators/core/master_orchestrator.py` · 25 February 2026 · Phase 84 complete · 51 wired orchestrators (17 core, 7 domain, 23 support, 4 git)*
+*Verified against `cortex/orchestrators/core/master_orchestrator.py`*

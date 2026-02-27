@@ -24,7 +24,7 @@ All 7 domain orchestrators implement `IOrchestrator` via `OrchestratorProtocolMi
 | **PlanningOrchestrator** | `domain/planning_orchestrator.py` | Structured planning — phase decomposition, gap catalogue, TDD sequence generation |
 | **DomainOrchestrator** | `domain/domain_orchestrator.py` | Domain-specific intelligence — LENS analysis with domain knowledge synthesis |
 | **RefactoringOrchestrator** | `domain/refactoring_orchestrator.py` | Intelligent refactoring — duplication detection, code smell remediation, CORE-035 |
-| **SDLCWorkflowOrchestrator** | `domain/sdlc_workflow_orchestrator.py` | SDLC Intelligence Engine — template selection, knowledge hydration, FSM execution (Phase 79-D) |
+| **SDLCWorkflowOrchestrator** | `domain/sdlc_workflow_orchestrator.py` | SDLC Intelligence Engine — template selection, knowledge hydration, FSM execution |
 | **DashboardOrchestrator** | `domain/dashboard_orchestrator.py` | Static dashboard generation — landing pages, per-repo dashboards, SQLite-backed metrics |
 | **EnhancedPlanningOrchestrator** | `domain/enhanced_planning_orchestrator.py` | Advanced planning with ROI scoring, wave decomposition, and audit-driven auto-planning |
 | **ServiceDecompositionOrchestrator** | `domain/service_decomposition_orchestrator.py` | Monolith decomposition — bounded context identification, dependency graph, migration planning |
@@ -53,13 +53,13 @@ All 7 domain orchestrators implement `IOrchestrator` via `OrchestratorProtocolMi
 
 ---
 
-## SDLCWorkflowOrchestrator (Phase 79-D)
+## SDLCWorkflowOrchestrator
 
 The newest domain orchestrator — SDLC Intelligence Engine:
 
 - **Template selection:** Matches SDLC workflows to project type via LENS fingerprinting
 - **Knowledge hydration:** Injects domain knowledge from `cortex-registry/knowledge-base/` into workflow context
-- **FSM execution:** State machine execution via `WorkflowEngine` (Phase 67)
+- **FSM execution:** State machine execution via `WorkflowEngine`
 - **Location:** `cortex/orchestrators/domain/sdlc_workflow_orchestrator.py`
 
 ---
@@ -88,4 +88,4 @@ Key capabilities enforcing CORE-035 (single canonical implementation):
 
 ---
 
-*Verified against `cortex/orchestrators/domain/` · 25 February 2026 · Phase 84 complete · 6 domain orchestrators*
+*Verified against `cortex/orchestrators/domain/`*

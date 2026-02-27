@@ -45,7 +45,7 @@
   
   
   /* ============================================
-     TYPOGRAPHY — FONT FAMILIES (Phase 76)
+     TYPOGRAPHY — FONT FAMILIES
      ============================================
      Google Fonts: Inter (body), Space Grotesk (headings), JetBrains Mono (code)
      Preloaded in index.html via fonts.googleapis.com
@@ -62,7 +62,7 @@
   
   
   /* ============================================
-     TYPOGRAPHY — HEADING SIZES (Phase 76)
+     TYPOGRAPHY — HEADING SIZES
      ============================================
      Fluid responsive typography using clamp()
      Format: clamp(min, preferred, max)

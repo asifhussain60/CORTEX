@@ -106,4 +106,4 @@ VS Code Opens Workspace
 
 ---
 
-*Verified against MCP stdio transport implementation · 25 February 2026*
+*Verified against MCP stdio transport implementation*

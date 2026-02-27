@@ -44,7 +44,7 @@ diagrams: ASCII service architecture, sequence diagrams
 
 | **CortexAuditDB** | `cortex/infrastructure/audit_db.py` | Unified SQLite with WAL mode — all audit trails |The Core Platform provides the foundational infrastructure enabling CORTEX's intelligent development capabilities. Organizations benefit from enterprise-grade service reliability, zero-downtime deployments, and comprehensive observability without custom infrastructure investment [Business Leaders]. Product teams gain consistent request processing, state management, and configuration control across all CORTEX features [Product Owners]. The platform implements service-oriented architecture with MCP Gateway, Tool Registry, State Management, Configuration Management, and Health Monitoring [Software Developers].
 
-| **MCP Server** | `cortex/mcp/` | Pylance-style stdio server, 28 registered tools (39 target) |
+| **MCP Server** | `cortex/mcp/` | Pylance-style stdio server, registered MCP tools |
 
 | **Bootstrap** | `cortex/bootstrap.py` | System initialization, wiring, service discovery |**Core Platform Components:**
 
@@ -56,11 +56,11 @@ diagrams: ASCII service architecture, sequence diagrams
 
 - **State Management** — Operation tracking, checkpoint recovery, rollback support
 
-## OrchestratorProtocolMixin: The Universal Protocol (Phase 58)- **Configuration Management** — Layered config with env vars > files > wiring > defaults
+## OrchestratorProtocolMixin: The Universal Protocol- **Configuration Management** — Layered config with env vars > files > wiring > defaults
 
 - **Health Monitoring** — Circuit breakers, health checks, Prometheus metrics integration
 
-Every one of the 51 wired orchestrators uses `OrchestratorProtocolMixin` (Phase 58) + `IOrchestrator` protocol and follows this lifecycle:
+Every wired orchestrator uses `OrchestratorProtocolMixin` + `IOrchestrator` protocol and follows this lifecycle:
 
 **Performance Targets:** Gateway latency P50: 5ms, P95: 15ms, P99: 25ms. Tool discovery <50ms. Health checks <100ms. State lookup <5ms.
 
@@ -88,7 +88,7 @@ teardown()  → Audit trail recording, resource cleanup- [State Management](#sta
 
 - [Health Monitoring](#health-monitoring)
 
-**Business Leader:** "Every operation follows the same lifecycle. Setup, governance check, execution, validation, audit. Consistency across 51 wired orchestrators."- [Related Documents](#related-documents)
+**Business Leader:** "Every operation follows the same lifecycle. Setup, governance check, execution, validation, audit. Consistency across all wired orchestrators."- [Related Documents](#related-documents)
 
 
 
@@ -122,7 +122,7 @@ All orchestrators route audit data through `CortexAuditDB` (SQLite with WAL mode
 
 **Before refactor:** 10 scattered `.db` files across multiple directories.**Service Coordination** — Routing requests to appropriate handlers
 
-**After refactor:** All consolidated to `.cortex-runtime/` (Phase 09, FR7).- **Intent Classification:** LENS-based routing (20-40ms)
+**After refactor:** All consolidated to `.cortex-runtime/`.- **Intent Classification:** LENS-based routing (20-40ms)
 
 - **Load Balancing:** Round-robin across orchestrator instances
 
@@ -198,7 +198,7 @@ See `04-mcp/03-tools-catalog.md` for the complete catalog.**Architecture Princip
 
 
 
-*All paths verified against live codebase · 25 February 2026*```
+*All paths verified against live codebase*```
 
 ┌────────────────────────────────────────────────────────────────┐
 │                        MCP GATEWAY (PORT 8000)                  │

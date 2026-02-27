@@ -21,11 +21,11 @@ audience: [Business Leaders, Product Owners, Software Developers]
 
 ### What is CORTEX?
 
-CORTEX (COgnitive Real-Time EXecution) is a production-grade AI engineering framework. It combines fifty-one wired orchestrators across four tiers, twenty-eight registered MCP tools (39 target) exposed via a Pylance-style stdio server, thirty-eight CORE governance rules enforced at pre-commit, CI, and runtime, a fifteen-analyzer parallel code intelligence engine (LENS), and TDD-first execution where CORE-008 mandates RED then GREEN then REFACTOR on every IMPLEMENT and FIX. It works directly inside your IDE via the Model Context Protocol. CORTEX is an LLM-orchestration framework — it delegates AI reasoning to the host LLM (GitHub Copilot or GPT); it does not embed ML models.
+CORTEX (COgnitive Real-Time EXecution) is a production-grade AI engineering framework. It combines wired orchestrators across four tiers, a growing library of MCP tools exposed via a Pylance-style stdio server, CORE governance rules enforced at pre-commit, CI, and runtime, a parallel code intelligence engine (LENS), and TDD-first execution where CORE-008 mandates RED then GREEN then REFACTOR on every IMPLEMENT and FIX. It works directly inside your IDE via the Model Context Protocol. CORTEX is an LLM-orchestration framework — it delegates AI reasoning to the host LLM (GitHub Copilot or GPT); it does not embed ML models.
 
 ### How is CORTEX different from generic AI coding tools?
 
-Generic AI coding tools answer questions and suggest code. CORTEX orchestrates entire workflows end-to-end with mandatory governance (thirty-eight CORE rules enforced automatically), mandatory TDD (blocked if skipped), persistent state (SQLite audit log), full observability (OpenTelemetry, Prometheus, AC markers), and integration across IDE, CI/CD, pre-commit hooks, and work item systems.
+Generic AI coding tools answer questions and suggest code. CORTEX orchestrates entire workflows end-to-end with mandatory governance (CORE rules enforced automatically), mandatory TDD (blocked if skipped), persistent state (SQLite audit log), full observability (OpenTelemetry, Prometheus, AC markers), and integration across IDE, CI/CD, pre-commit hooks, and work item systems.
 
 ### What IDEs does CORTEX support?
 
@@ -61,7 +61,7 @@ No. CORTEX runs entirely locally. LENS analysis, MCP transport (stdio), SQLite a
 
 ### How many orchestrators does CORTEX have?
 
-Fifty-one wired orchestrators across four tiers: seventeen core, seven domain, twenty-three support, and four git. The `cortex/orchestrators/` directory contains additional classes (strategy implementations, mixins, sub-components) but the fifty-one wired orchestrators are the canonical IOrchestrator-compliant entry points.
+Wired orchestrators span four tiers: core, domain, support, and git. The `cortex/orchestrators/` directory contains additional classes (strategy implementations, mixins, sub-components) but the wired orchestrators are the canonical IOrchestrator-compliant entry points.
 
 ### What is the universal orchestrator lifecycle?
 
@@ -69,11 +69,11 @@ Every orchestrator satisfies IOrchestrator via OrchestratorProtocolMixin. The fi
 
 ### How does CORTEX route requests?
 
-IntentRouter classifies every request using LENS analysis and keyword extraction into twelve or more intent types. Confidence scores at or above 0.7 auto-route, 0.5 to 0.7 may seek clarification, and below 0.5 prompts the user.
+IntentRouter classifies every request using LENS analysis and keyword extraction into multiple intent types. Confidence scores at or above 0.7 auto-route, 0.5 to 0.7 may seek clarification, and below 0.5 prompts the user.
 
 ### What is MasterOrchestrator?
 
-The executive coordinator at `cortex/orchestrators/core/master_orchestrator.py`. It receives every request from the MCP layer, delegates to IntentRouter for classification, dispatches to the appropriate orchestrator, collects results, and formats them. It also owns the nine-stage audit fix pipeline.
+The executive coordinator at `cortex/orchestrators/core/master_orchestrator.py`. It receives every request from the MCP layer, delegates to IntentRouter for classification, dispatches to the appropriate orchestrator, collects results, and formats them. It also owns the multi-stage audit fix pipeline.
 
 ### What are AC markers?
 
@@ -97,7 +97,7 @@ Three layers of resilience: circuit breakers stop calls after threshold breaches
 
 ### How many governance rules exist?
 
-Thirty-eight CORE rules plus two AC rules defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. Tier zero skull rules are immutable — they cannot be overridden, disabled, or bypassed.
+CORE rules plus AC rules are defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. Tier zero skull rules are immutable — they cannot be overridden, disabled, or bypassed.
 
 ### What are the most important rules?
 
@@ -109,7 +109,7 @@ No. Tier zero rules are immutable. If a rule conflicts with your project needs, 
 
 ### What is EnforcementOrchestrator?
 
-It coordinates ten enforcement agents that each check a category of CORE rules. Gate results are PASS, WARNING, or BLOCKED. A BLOCKED result stops the operation immediately with no files modified.
+It coordinates enforcement agents that each check a category of CORE rules. Gate results are PASS, WARNING, or BLOCKED. A BLOCKED result stops the operation immediately with no files modified.
 
 ### What is CORE-008 TDD Mandatory?
 
@@ -125,7 +125,7 @@ A scoring system (zero to nine) evaluating tests against impact, likelihood, det
 
 ### Does governance slow development?
 
-Gate latency is under one hundred and fifty milliseconds. Most requests pass all ten gates on first try. The cost of governance is paid once before files change — the cost of not having governance is paid repeatedly through regressions, partial sweeps, and architectural drift.
+Gate latency is under one hundred and fifty milliseconds. Most requests pass all gates on first try. The cost of governance is paid once before files change — the cost of not having governance is paid repeatedly through regressions, partial sweeps, and architectural drift.
 
 ---
 
@@ -133,7 +133,7 @@ Gate latency is under one hundred and fifty milliseconds. Most requests pass all
 
 ### What is LENS?
 
-Language, Examination, Navigation, Synthesis. CORTEX's code intelligence engine — nine specialised analyzers running in parallel (three hundred to eight hundred milliseconds) producing structured intelligence for orchestrators.
+Language, Examination, Navigation, Synthesis. CORTEX's code intelligence engine — specialised analyzers running in parallel producing structured intelligence for orchestrators.
 
 ### What languages does LENS support?
 
@@ -145,11 +145,11 @@ Three layers in `cortex/intelligence/`: Perception (recognises patterns in LENS 
 
 ### How does LENS caching work?
 
-Two-level cache: in-memory LRU for the current session (zero latency on hit) and persistent SQLite cache surviving session restarts (under fifty milliseconds on hit). Cache keys derive from file path plus content hash. A file modification invalidates only that file's entries.
+Two-level cache: in-memory LRU for the current session (zero latency on hit) and persistent SQLite cache surviving session restarts. Cache keys derive from file path plus content hash. A file modification invalidates only that file's entries.
 
 ### Can I run LENS on an external repository?
 
-Yes. Use `cortex_onboard` in Copilot Chat or RepositoryOnboardingOrchestrator. It runs the full nine-analyzer pass, scores security findings, and stores results for subsequent queries.
+Yes. Use `cortex_onboard` in Copilot Chat or RepositoryOnboardingOrchestrator. It runs the full analyzer pass, scores security findings, and stores results for subsequent queries.
 
 ---
 
@@ -157,7 +157,7 @@ Yes. Use `cortex_onboard` in Copilot Chat or RepositoryOnboardingOrchestrator. I
 
 ### How many MCP tools are there?
 
-Twenty-eight registered canonical tools across eleven categories, all registered in `cortex/mcp/mcp_registry.py` and exposed through JSON-RPC 2.0 stdio transport. Target: 39 tools — 11 additional tools are in active planning phases.
+Registered canonical tools span multiple categories, all registered in `cortex/mcp/mcp_registry.py` and exposed through JSON-RPC 2.0 stdio transport. The library continues to grow as new capabilities are added.
 
 ### What is the correct entry point?
 
@@ -189,7 +189,7 @@ Always use the canonical runner: `make test-batch` for full batch run, `make tes
 
 ### How many tests exist?
 
-Sixteen thousand two hundred and fifty-nine tests: four hundred and eighty-six golden, one hundred and seventy-seven phase, approximately twelve thousand unit, and approximately two thousand integration.
+The test suite is comprehensive — spanning golden, phase, unit, and integration tests. Exact counts evolve as the framework grows. Use `make test-batch` for the full run.
 
 ### What is the TDD workflow?
 
@@ -197,7 +197,7 @@ RED: write a failing test in `tests/` that specifies the behaviour. GREEN: write
 
 ### What is a golden test?
 
-Golden tests validate immutable contracts — behaviours that must never change. They run serially for deterministic results. Four hundred and eighty-six golden tests must always pass (CORE-055). A golden test failure is a P0 blocker.
+Golden tests validate immutable contracts — behaviours that must never change. They run serially for deterministic results. All golden tests must always pass (CORE-055). A golden test failure is a P0 blocker.
 
 ### How do I debug a failing test?
 
@@ -237,33 +237,20 @@ The `cortex_metrics` MCP tool captures TDD cycles, debug sessions, code generati
 
 ---
 
-*All answers verified against live codebase — 27 February 2026*
+*All answers verified against live codebase*
 
 ---
 
-## Phase 85, 86, and 87 — Planned Capabilities
+## Upcoming Capabilities
 
-### What is Phase 85?
+### What capabilities are planned next?
 
-Phase 85 (Unified Response Template Standardization + Orchestrator Engagement Visual System) unifies the two progress display paradigms that existed in CORTEX (bar-only vs phase-list+bar), adds three new engagement visibility blocks (`BLOCK-ENGAGEMENT-BREADCRUMB`, `BLOCK-ENGAGEMENT-TIMELINE`, `BLOCK-PHASE-ROADMAP`), and wires all orchestrators to a single SSOT: `.github/templates/cortex-response-templates.md`. After Phase 85, every CORTEX response shows which orchestrators ran, how long each step took, and where you are in multi-phase operations.
+CORTEX is actively evolving. Planned capabilities include:
 
-### What is Phase 86?
+- **Unified Response Templates** — standardising progress display across all orchestrators with engagement visibility blocks showing which orchestrators ran, timing, and multi-phase progress.
+- **Multi-Stack Debug Pipeline** — extending debugging from Python-only to multi-stack (JavaScript/TypeScript, HTML/Vision API, REST/GraphQL/gRPC, SQL, and C#/.NET) with automatic strategy selection based on detected stack.
+- **RCA Memory Engine** — structured root cause analysis with multiple methodologies, a Prevention Gate that escalates on repeated P0 root causes, and a Recurrence Signature Engine detecting the same root cause class across sessions.
 
-Phase 86 (Multi-Stack Debug Pipeline) extends CORTEX's debugging capability from Python-only to universally multi-stack. It adds five new `AbstractInjectionStrategy` implementations: `FrontendConsoleStrategy` (JS/TS/React/Angular/Vue), `HtmlVisionMappingStrategy` (Vision API screenshot → DOM correlation), `ApiTraceStrategy` (REST/GraphQL/gRPC), `SqlTraceStrategy` (SQL Server/Oracle/PostgreSQL), and `DotNetTraceStrategy` (C#/.NET). The same `/debug` command selects the right strategy automatically based on detected stack. Phase 86 also wires `DebuggerOrchestrator` into the full intelligence infrastructure (OPJMixin, URS, IntelligenceMatrix, EventBus, KnowledgeSynthesisEngine) for cross-session debug learning.
+### Do upcoming capabilities add new orchestrators or MCP tools?
 
-### What is Phase 87?
-
-Phase 87 (RCA Memory Engine) adds structured root cause analysis to CORTEX's learning system. It introduces four methodologies (Five Whys, Fishbone, Fault Tree, Causal Chain), a Prevention Gate that escalates from advisory to blocking on repeated P0 root causes, and a Recurrence Signature Engine that detects the same root cause class across all orchestrators and all sessions. Phase 87 also includes a holistic sync of all 154 cortex-docs markdown files to reflect the current state of the platform through Phase 84.
-
-### Do Phases 85/86/87 add new orchestrators or MCP tools?
-
-No. All three phases are purely additive:
-- Phase 85: Extends existing blocks in the response template SSOT
-- Phase 86: Adds 5 strategies to the existing Strategy Pattern in `MarkerInjectionEngine`
-- Phase 87: Adds 2 methods to `OPJMixin` and one `op="rca"` operation to the existing `cortex_learning` tool
-
-Zero new orchestrators. Zero new MCP tools. All changes are backward-compatible extensions.
-
-### When will Phases 85/86/87 be complete?
-
-All three are planned for completion in February 2026, following the WHOLE-PHASE-FIRST principle — each phase runs end-to-end atomically, never partially.
+No. Planned capabilities are additive extensions to existing infrastructure — new strategies within existing pattern engines, new methods on existing mixins, and new operations on existing MCP tools. Zero new orchestrators. Zero new MCP tools. All changes are backward-compatible.

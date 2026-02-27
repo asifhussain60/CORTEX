@@ -6,7 +6,6 @@ type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
 last_verified: 2026-02-27
 source_of_truth: cortex/intelligence/cross_cutting/intelligence_matrix_builder.py
-phases: [Phase 65, Phase 66-A, Phase 66-B, Phase 66-C]
 format: deep-dive
 order: 6
 ---
@@ -29,7 +28,7 @@ The matrix assigns a priority score (CRITICAL → HIGH → MEDIUM → LOW) and a
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│               🧠 CORTEX INTELLIGENCE MATRIX (Phase 65/66)              │
+│               🧠 CORTEX INTELLIGENCE MATRIX                            │
 │           cortex/intelligence/cross_cutting/intelligence_matrix_builder│
 │                                                                        │
 │  x-axis: Intelligence Capabilities (IC-001 → IC-015)                  │
@@ -136,7 +135,7 @@ Each matrix cell (intersection of one IC and one CC) carries a priority score th
 
 ## Key Wired Connections (P0-CRITICAL)
 
-These are the most important wiring pairs identified by the matrix. All are **now wired** as of Phase 66:
+These are the most important wiring pairs identified by the matrix. All are **now wired**:
 
 ### 1. LENS × HierarchicalScanner (IC-001 × CC-001)
 > LENS AST engine needs HierarchicalScanner to discover source files across workspace
@@ -185,7 +184,7 @@ These are the most important wiring pairs identified by the matrix. All are **no
 
 ## The Coverage Gate
 
-Phase 66-C introduced a **coverage gate** (`COVERAGE_GATE = 0.50`) enforced in the AuditFix pipeline:
+A **coverage gate** (`COVERAGE_GATE = 0.50`) is enforced in the AuditFix pipeline:
 
 ```python
 # cortex/intelligence/cross_cutting/intelligence_matrix_builder.py
@@ -255,20 +254,20 @@ matrix.to_dict()
 
 ---
 
-## Phase Evolution
+## Evolution
 
-| Phase | What Was Delivered |
+| Milestone | What Was Delivered |
 |-------|--------------------|
-| **Phase 65** | Initial matrix implementation: 10 IC × 10 CC, 5 scoring rules, MCP exposure |
-| **Phase 66-A** | Wired 5 P0-CRITICAL gaps (LENS×Scanner, Brain×MCP, BlindSpot×Enforcement, Knowledge×DocGen, ResponseTemplate×MCP) |
-| **Phase 66-B** | Wired 12 P1-HIGH gaps (T1→DomainAdapter, T2→DocGen, SynthesisEngine→SweepCatalogue, and 9 more) |
-| **Phase 66-C** | Coverage gate enforcement, extended catalogues to IC-015/CC-015, `MatrixCoverageError` P0 halt |
+| **Initial Build** | Matrix implementation: IC × CC scoring, MCP exposure |
+| **P0 Wiring** | Wired P0-CRITICAL gaps (LENS×Scanner, Brain×MCP, BlindSpot×Enforcement, Knowledge×DocGen, ResponseTemplate×MCP) |
+| **P1 Wiring** | Wired P1-HIGH gaps (T1→DomainAdapter, T2→DocGen, SynthesisEngine→SweepCatalogue, and more) |
+| **Coverage Gate** | Coverage gate enforcement, extended catalogues, `MatrixCoverageError` P0 halt |
 
 ---
 
 ## Integration Points
 
-### WorkflowEngine (Phase 67)
+### WorkflowEngine
 The `ConvergenceLoopExecutor` in `cortex/orchestrators/workflow/convergence_loop_executor.py` queries the matrix before each audit-fix loop iteration to check if any CRITICAL gaps have been introduced by the current sweep.
 
 ### AuditFix Pipeline (Stage 1.5)
@@ -295,10 +294,10 @@ The `cortex_ask` MCP tool surfaces matrix analysis in natural language, explaini
 |---------|------|
 | Core implementation | `cortex/intelligence/cross_cutting/intelligence_matrix_builder.py` |
 | Public API exports | `cortex/intelligence/cross_cutting/__init__.py` |
-| Phase 66 plan | `cortex-registry/planning/phases/completed/phase-66.yaml` |
-| Phase 65 plan | `cortex-registry/planning/phases/completed/phase-65.yaml` |
+| Implementation plan | `cortex-registry/planning/phases/completed/phase-66.yaml` |
+| Initial matrix plan | `cortex-registry/planning/phases/completed/phase-65.yaml` |
 | Coverage gate constant | `COVERAGE_GATE = 0.50` in `intelligence_matrix_builder.py` |
 
 ---
 
-*Last verified: 2026-02-25 · Phase 66-C COMPLETE · all P0-CRITICAL cells wired · coverage ≥ 50%*
+*Last verified against live codebase · all P0-CRITICAL cells wired · coverage ≥ 50%*

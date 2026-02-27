@@ -34,7 +34,7 @@
 │  ┌─────────────────────┐      ┌─────────────────────┐                       │
 │  │   GOVERNANCE        │      │   DECISIONING        │                      │
 │  │                     │      │                      │                      │
-│  │  • 38 CORE rules   │◄────►│  • IntentRouter      │                      │
+│  │  • CORE rules      │◄────►│  • IntentRouter      │                      │
 │  │  • 10 agents        │gates │  • 12 intent types   │                      │
 │  │  • Pre-commit       │      │  • TDD enforcement   │                      │
 │  │  • CI pipeline      │      │  • Strategy ranking  │                      │

@@ -27,7 +27,7 @@ CORTEX enforces governance at **three levels**:
 
 ## 22 Active CORE Rules
 
-There are 38 CORE rules defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. Of these, **22 are actively enforced** via the EnforcementOrchestrator and ExtendedGovernanceAgent.
+There are CORE rules defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`. A growing subset is **actively enforced** via the EnforcementOrchestrator and ExtendedGovernanceAgent.
 
 ### Critical Rules (Enforced on Every Operation)
 
@@ -41,13 +41,13 @@ There are 38 CORE rules defined in `cortex-registry/core/tier0-skull/skull-rules
 | **CORE-012** | Docstrings | All public APIs must have docstrings |
 | **CORE-013** | Error Handling | Proper exception handling required |
 | **CORE-028** | File Naming | snake_case only (enforced by FileFactory) |
-| **CORE-035** | Single Canonical | No duplicate implementations (enforced in Phase 05) |
+| **CORE-035** | Single Canonical | No duplicate implementations |
 | **CORE-048** | Holistic Validation | Validation gate before IMPLEMENT/FIX/REFACTOR |
 | **CORE-049** | Silent Execution | Progress bars only, no verbose chatter |
 
 ### Extended Rules (CORE-058 through CORE-064)
 
-Added during Phase 02 (Governance Alignment) through Phase 16 (Sweep Completeness) and wired via ExtendedGovernanceAgent in Phase 11:
+Extended rules wired via ExtendedGovernanceAgent:
 
 | Rule | Name | Purpose |
 |------|------|---------|
@@ -60,9 +60,9 @@ Added during Phase 02 (Governance Alignment) through Phase 16 (Sweep Completenes
 
 ---
 
-## 10 Enforcement Agents
+## Enforcement Agents
 
-**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates 10 agents:
+**EnforcementOrchestrator** (`cortex/orchestrators/core/enforcement_orchestrator.py`) coordinates multiple agents:
 
 | Agent | Focus | Key Rules |
 |-------|-------|-----------|
@@ -102,9 +102,9 @@ Score = Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2) − Mai
 
 **TestQualityGate** — invoked internally by the TDD orchestration pipeline (not exposed as a registered MCP tool).
 
-**Business Leader:** "Test quality is quantified, not subjective. Every test has a score. We maintain 16,942 signal-dense tests, not 18,000 mixed-quality ones."
+**Business Leader:** "Test quality is quantified, not subjective. Every test has a score. We maintain a comprehensive, signal-dense test suite — quality over quantity."
 
-**Product Owner:** "During the refactor, TestQualityGate identified 3,360 low-value tests (scoring <4). We archived them and kept the signal. 486 golden tests all score ≥7."
+**Product Owner:** "During the refactor, TestQualityGate identified thousands of low-value tests (scoring <4). We archived them and kept the signal. Golden tests all score ≥7."
 
 **Developer:** "I commit a new test. If it scores below 7, TDDOrchestrator blocks the commit and tells me why — usually low detection coverage or high maintenance cost."
 
@@ -126,7 +126,7 @@ The trail is immutable and Git-versioned where applicable.
 
 ## Practical Examples
 
-**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to 38 CORE rules enforced automatically on every commit, 10 enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
+**Business Leader:** "Our compliance team asks 'how do you enforce code quality?' I point them to CORE rules enforced automatically on every commit, enforcement agents, and TestQualityGate scoring. It's not policy — it's infrastructure."
 
 **Product Owner:** "Last week a developer tried to commit a utility function without tests. CORE-008 blocked the commit automatically. The developer wrote the test, it passed, and the commit went through — all in 10 minutes."
 
@@ -148,4 +148,4 @@ The trail is immutable and Git-versioned where applicable.
 
 ---
 
-*All rule IDs and agent names verified against live governance registry · 21 February 2026*
+*All rule IDs and agent names verified against live governance registry*

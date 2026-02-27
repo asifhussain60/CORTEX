@@ -22,7 +22,7 @@ Engineering teams lose velocity in three ways:
 3. **Context loss** — long-running refactors get abandoned mid-sweep. Technical debt compounds because there's no record of what was half-fixed.
 
 CORTEX solves all three:
-- **38 CORE rules** enforced automatically at every commit and every AI-assisted action — no one can bypass governance accidentally.
+- **CORE rules** enforced automatically at every commit and every AI-assisted action — no one can bypass governance accidentally.
 - **TDD is mandatory** (CORE-008) — the architecture physically prevents implementing without tests.
 - **CORE-064 Sweep Completeness Contract** — every refactor sweep is tracked in SQLite; it cannot be marked complete until every item is resolved.
 
@@ -99,7 +99,7 @@ No configuration files needed. No agents to configure. One call, inline results.
 
 Yes. CORTEX is designed for multi-team environments:
 
-- **Governance is shared** — all teams work under the same 38 CORE rules. No team can lower the bar for others.
+- **Governance is shared** — all teams work under the same CORE rules. No team can lower the bar for others.
 - **Sweep tracking is per-team** — each sweep has its own SQLite file; cross-team sweeps use a shared sweep ID.
 - **Work item integration** — `cortex_fetch_work_items` maps ADO/Jira work items to CORTEX operations, enabling team-level sprint tracking.
 - **Multi-repo support** — `cortex/mcp/tools/multi_repo/` provides cross-repo search, dependency graphs, and shared audit trails.
@@ -138,7 +138,7 @@ Export via `cortex_metrics_report` (YAML or JSON). Grafana dashboards consume th
 
 ## What is the CORTEX Master Plan?
 
-`cortex-registry/cortex-master.yaml` is a **thin phase index** (≤ 500 lines) tracking all 67 development phases. As of 25 February 2026, **all 67 phases are complete**.
+`cortex-registry/cortex-master.yaml` is a **thin phase index** (≤ 500 lines) tracking all development phases. The platform is mature and production-ready.
 
 Each phase has a dedicated detail file in `cortex-registry/planning/phases/completed/`. The master plan is a reference index only — never a detail document. This is enforced by the THIN INDEX CONTRACT. Phase status is accessible via `cortex_plan` (MCP) or by reading `cortex-registry/cortex-master.yaml` directly.
 
@@ -171,4 +171,4 @@ Air-gapped environments are fully supported for the core CORTEX workflow.
 
 ---
 
-*Verified against live codebase · 25 February 2026 · Phase 84 Complete — Stub Elimination (Phase 85/86 PLANNED)*
+*Verified against live codebase*

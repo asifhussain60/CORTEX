@@ -19,7 +19,7 @@ order: 13
 |-------|---------|----------------|
 | **5. Runtime** | Protection during execution | Circuit breakers, rate limiting, graceful degradation |
 | **4. Audit** | Compliance and traceability | SQLite WAL audit DB, hash chain, evidence bundles |
-| **3. Governance** | Rule enforcement | 38 CORE rules, pre-commit + CI + runtime validation |
+| **3. Governance** | Rule enforcement | CORE rules, pre-commit + CI + runtime validation |
 | **2. Analysis** | Code-level security | LENS security analyzer, secret scanning, import audit |
 | **1. Input** | Request sanitization | PII redaction, schema validation, input filtering |
 

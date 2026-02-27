@@ -57,7 +57,7 @@
 
 
  ═══════════════════════════════════════════════════════════════════════════════
-  URS FEEDBACK LOOP (Phase 83 — Unified Reinforcement Signal)
+  URS FEEDBACK LOOP (Unified Reinforcement Signal)
  ═══════════════════════════════════════════════════════════════════════════════
 
   Golden Test Outcome ───────────────────────▶ Reinforcement Signal
@@ -70,4 +70,4 @@
 ```
 
 **Source:** `tests/golden/` · `cortex/testing/quality_gate.py` · `cortex-registry/core/test-quality-gate.yaml`
-**Governance:** CORE-055 (Golden Test Tier Contract) — 486 golden tests must always pass
+**Governance:** CORE-055 (Golden Test Tier Contract) — golden tests must always pass

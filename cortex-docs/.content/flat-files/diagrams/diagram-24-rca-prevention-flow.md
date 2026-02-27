@@ -8,7 +8,7 @@
 │  OPJMixin._opj_record_failure()                                     │
 │  • root_cause: str (existing)                                       │
 │  • avoid_in_future: str (existing)                                  │
-│  • rca: True ← NEW Phase 87 flag                                    │
+│  • rca: True ← NEW flag                                            │
 └──────────────────────────────┬──────────────────────────────────────┘
                                │  rca=True triggers
                                ▼
@@ -120,18 +120,18 @@
 
 ## Nodes and Components
 
-| Node | File | Phase |
-|------|------|-------|
-| `RCAEngine` | `cortex/intelligence/learning/rca_engine.py` | Phase 87 |
-| `RCAAnalysis` | `cortex/intelligence/learning/rca_models.py` | Phase 87 |
-| `RCAStore` | `cortex/intelligence/learning/rca_store.py` | Phase 87 |
-| `PreventionGate` | `cortex/intelligence/learning/prevention_gate.py` | Phase 87 |
-| `RecurrenceSignatureEngine` | `cortex/intelligence/learning/recurrence_engine.py` | Phase 87 |
-| `OPJMixin._opj_analyze_rca()` | `cortex/core/orchestrator_protocol_mixin.py` | Phase 87 |
-| `OPJMixin._opj_check_prevention_gate()` | `cortex/core/orchestrator_protocol_mixin.py` | Phase 87 |
-| `cortex_learning op="rca"` | `cortex/mcp/tools/cortex_learning.py` | Phase 87 |
-| `ReinforcementEngine` | `cortex/intelligence/learning/reinforcement_engine.py` | Phase 83 (existing) |
-| `CrossSessionPatternCache` | `cortex/intelligence/learning/` | Phase 83 (extended) |
+| Node | File | Status |
+|------|------|--------|
+| `RCAEngine` | `cortex/intelligence/learning/rca_engine.py` | Planned |
+| `RCAAnalysis` | `cortex/intelligence/learning/rca_models.py` | Planned |
+| `RCAStore` | `cortex/intelligence/learning/rca_store.py` | Planned |
+| `PreventionGate` | `cortex/intelligence/learning/prevention_gate.py` | Planned |
+| `RecurrenceSignatureEngine` | `cortex/intelligence/learning/recurrence_engine.py` | Planned |
+| `OPJMixin._opj_analyze_rca()` | `cortex/core/orchestrator_protocol_mixin.py` | Planned |
+| `OPJMixin._opj_check_prevention_gate()` | `cortex/core/orchestrator_protocol_mixin.py` | Planned |
+| `cortex_learning op="rca"` | `cortex/mcp/tools/cortex_learning.py` | Planned |
+| `ReinforcementEngine` | `cortex/intelligence/learning/reinforcement_engine.py` | Live |
+| `CrossSessionPatternCache` | `cortex/intelligence/learning/` | Live |
 
 ## Key Design Decisions
 
@@ -139,5 +139,5 @@
 - **Zero new MCP tools** — extends existing `cortex_learning` with `op="rca"`
 - **Advisory by default** — Prevention Gate never blocks on first occurrence
 - **P0-only blocking** — P1/P2 recurrences never escalate beyond Warning
-- **Cross-orchestrator** — same root cause class tracked across all 51 orchestrators
+- **Cross-orchestrator** — same root cause class tracked across all orchestrators
 - **Methodology auto-selection** — RCAEngine selects methodology from failure category; developer can override

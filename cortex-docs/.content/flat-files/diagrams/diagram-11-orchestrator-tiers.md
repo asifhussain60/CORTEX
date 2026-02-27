@@ -1,5 +1,5 @@
 # Orchestrator Tier Architecture
-# 51 wired orchestrators across 4 tiers with communication patterns
+# Wired orchestrators across 4 tiers with communication patterns
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────┐

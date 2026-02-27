@@ -44,4 +44,4 @@ LENS caches analyzer results to avoid redundant computation. The cache layer (`c
 
 ---
 
-*Verified against cache implementation · 25 February 2026*
+*Verified against cache implementation*

@@ -18,7 +18,7 @@ The Model Context Protocol is a JSON-RPC 2.0 communication standard connecting I
 
 - **Transport**: stdio (standard input and output)
 - **Protocol**: JSON-RPC 2.0
-- **Tools**: Twenty-eight registered MCP tools across eleven categories (39 target; 11 in active planning phases)
+- **Tools**: Registered MCP tools across multiple categories (core, governance, intelligence, operations, utilities, workflow, work items)
 - **Clients**: VS Code (Copilot Chat), Cursor, Claude Desktop
 
 ---
@@ -124,9 +124,9 @@ Any application that speaks JSON-RPC 2.0 over stdio can connect by spawning `pyt
 
 ---
 
-## Twenty-Eight Registered MCP Tools — Catalog
+## Registered MCP Tools — Catalog
 
-All tools are registered in `cortex/mcp/mcp_registry.py` via the ConsolidatedTool base class and exposed through JSON-RPC 2.0 stdio transport. Authoritative count: 28 registered; target: 39. Entry point rule: use `cortex_request_lifecycle` for full lifecycle tracking or `cortex_classify` for intent routing.
+All tools are registered in `cortex/mcp/mcp_registry.py` via the ConsolidatedTool base class and exposed through JSON-RPC 2.0 stdio transport. Entry point rule: use `cortex_request_lifecycle` for full lifecycle tracking or `cortex_classify` for intent routing.
 
 ### Core and Routing
 
@@ -289,4 +289,4 @@ Create a provider class implementing WorkItemProvider, add it to provider_factor
 
 ---
 
-*All tool counts and component paths verified against live codebase — 26 February 2026*
+*All tool counts and component paths verified against live codebase*

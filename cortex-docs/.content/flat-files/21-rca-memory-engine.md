@@ -6,7 +6,6 @@ type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
 last_verified: 2026-02-27
 source_of_truth: cortex/intelligence/learning/ + cortex/core/orchestrator_protocol_mixin.py + cortex/mcp/tools/cortex_learning.py
-phase: Phase 87 (PLANNED)
 order: 21
 ---
 
@@ -35,7 +34,7 @@ The RCA Engine is built entirely within CORTEX's existing learning infrastructur
 
 All components live in `cortex/intelligence/learning/`.
 
-### New Files (Phase 87)
+### New Files
 
 | File | Purpose |
 |------|---------|
@@ -154,7 +153,7 @@ Every RCA outcome emits a Unified Reinforcement Signal (URS) that feeds back int
 
 ---
 
-## SQLite Schema (Phase 87 PLANNED)
+## SQLite Schema
 
 Four new tables are added to `.cortex-runtime/rca/rca_store.db`:
 
@@ -217,7 +216,7 @@ CREATE TABLE recurrence_incidents (
 
 ## OPJ Integration
 
-Phase 87 adds two new methods to `OPJMixin` in `cortex/core/orchestrator_protocol_mixin.py`:
+The RCA Memory Engine adds two new methods to `OPJMixin` in `cortex/core/orchestrator_protocol_mixin.py`:
 
 ### `_opj_analyze_rca(failure_id, methodology=None)`
 
@@ -261,17 +260,11 @@ All responses are delivered inline per CORE-002 — no report files are created.
 
 ---
 
-## cortex-docs Sync (Phase 87 Deliverable)
+## cortex-docs Sync
 
-Phase 87 includes a holistic review of all 154 cortex-docs markdown files. Files that reference orchestrator counts, phase status, test baselines, or learning capabilities are updated to reflect:
+Documentation files that reference orchestrator counts, test baselines, or learning capabilities are kept in sync with the live codebase.
 
-- Phase 84 (Stub Elimination) as COMPLETE
-- Phase 83 (URS) as COMPLETE
-- Phase 85 (Response + Engagement) as PLANNED
-- Phase 86 (Multi-Stack Debug) as PLANNED
-- Phase 87 (RCA Memory Engine) as PLANNED
-
-This flat-file (`21-rca-memory-engine.md`) is itself a deliverable of Phase 87's docs-sync sub-phase.
+This flat-file (`21-rca-memory-engine.md`) is part of the documentation sync deliverable.
 
 ---
 
@@ -285,4 +278,4 @@ For organisations with high engineer turnover, this is particularly valuable. Kn
 
 ---
 
-*Phase 87 PLANNED · Est. completion: February 2026 · Zero new orchestrators · Zero new MCP tools · 21 GAPs to close*
+*Planned capability · Zero new orchestrators · Zero new MCP tools*

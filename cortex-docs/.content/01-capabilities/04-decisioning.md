@@ -89,4 +89,4 @@ Before high-impact operations, CORTEX's Challenge Engine performs a LENS analysi
 
 ---
 
-*All paths verified against live codebase · 25 February 2026*
+*All paths verified against live codebase*

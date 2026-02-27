@@ -157,10 +157,10 @@ Isolates failing components to prevent spread:
 
 **Business Leader:** "CORTEX doesn't fail silently. Circuit breakers prevent cascading failures, graceful degradation returns partial results, and crash recovery resumes from checkpoints. The system is designed to survive component failures."
 
-**Product Owner:** "Scaling is horizontal — add more Kubernetes pods for more capacity. Test parallelism uses all CPU cores by default. 16,942 tests run in minutes, not hours."
+**Product Owner:** "Scaling is horizontal — add more Kubernetes pods for more capacity. Test parallelism uses all CPU cores by default. The comprehensive test suite runs in minutes, not hours."
 
 **Developer:** "I don't write retry logic — `retry_handler.py` wraps my calls automatically. If git operations fail, the git circuit breaker opens and my code gets a clear error instead of hanging. When the service recovers, the circuit breaker tests it and re-enables calls."
 
 ---
 
-*Verified against `cortex/infrastructure/` resilience modules · 25 February 2026*
+*Verified against `cortex/infrastructure/` resilience modules*

@@ -10,7 +10,7 @@ consolidates: [05-infrastructure-token-optimization]
 order: 8
 ---
 
-> **The core problem:** CORTEX is a large framework — 51 orchestrators, 39 MCP tools, 38 governance rules, 16,942 tests, 20 top-level directories. Every VS Code GitHub Copilot Chat session has a finite context window. Loading everything into every session would exhaust the token budget before the developer even asks a question. Token optimization ensures every turn carries only the context the LLM needs — nothing more, nothing less.
+> **The core problem:** CORTEX is a large framework — dozens of orchestrators, a growing library of MCP tools, comprehensive governance rules, thousands of tests, and multiple top-level directories. Every VS Code GitHub Copilot Chat session has a finite context window. Loading everything into every session would exhaust the token budget before the developer even asks a question. Token optimization ensures every turn carries only the context the LLM needs — nothing more, nothing less.
 
 ---
 
@@ -26,13 +26,13 @@ Without optimization, a typical CORTEX session would consume ~50,000 tokens at b
 
 CORTEX implements a three-tier loading model that mirrors how the brain activates only the neural pathways needed for a given task.
 
-**Tier 0 — Auto (always loaded, ~2,700 tokens).** The file `.github/copilot-instructions.md` is automatically loaded by GitHub Copilot in every session. This file contains the architecture summary (51 orchestrators, 39 MCP tools, 38 CORE rules), the canonical package name (`cortex`), the file organization map, key governance rules, and the test execution commands. It is intentionally kept under 303 lines — dense, factual, and free of narrative.
+**Tier 0 — Auto (always loaded, ~2,700 tokens).** The file `.github/copilot-instructions.md` is automatically loaded by GitHub Copilot in every session. This file contains the architecture summary (orchestrator tiers, MCP tools, CORE rules), the canonical package name (`cortex`), the file organization map, key governance rules, and the test execution commands. It is intentionally kept concise — dense, factual, and free of narrative.
 
 **Tier 1 — Prompt (user-selected, ~1,500–2,700 tokens).** When a developer starts a session, they attach a prompt file via `#file:`. Two prompts serve different workflows. `CORTEX.prompt.md` (~1,500 tokens) covers day-to-day implementation, fix, and refactor work. `cortex-architect.prompt.md` (~2,700 tokens) covers architecture, auditing, design, and planning. The prompt contains full mode definitions, routing tables, governance rules, response format specifications, and the Agent Loading Map that tells the system which agents to load for each intent.
 
 **Tier 2 — Agent (lazy-loaded per intent, ~1,000–5,000 tokens each).** Individual agent files in `.github/agents/` contain specialist logic for specific execution modes. The `AGENT-INDEX.md` file (~1,900 tokens) serves as a lightweight registry. Only 1–2 agents are loaded per intent. For example, a simple QUERY loads only `cortex-interactive.md` (~1,500 tokens). A full AUDIT FIX loads `cortex-auditor.md`, `architecture-integrity-agent.md`, and `cortex-meta-auditor.md` (~12,000 tokens). The system never bulk-loads all 17 agents simultaneously.
 
-Each tier may repeat key architectural facts (orchestrator count, MCP tool count, CORE rule count) for context independence — a T2 agent should function correctly even if the T1 prompt is absent. But the **values** must be identical across all three tiers. Conflicting values (such as one tier saying "44 orchestrators" while another says "51 orchestrators") is a P0 governance violation, detected by the Total Recall protocol (`/totalrecall`) and the Meta-Audit (Stage 6 of `/audit fix`).
+Each tier may repeat key architectural facts (orchestrator count, MCP tool count, CORE rule count) for context independence — a T2 agent should function correctly even if the T1 prompt is absent. But the **values** must be identical across all three tiers. Conflicting values is a P0 governance violation, detected by the Total Recall protocol (`/totalrecall`) and the Meta-Audit (Stage 6 of `/audit fix`).
 
 ---
 
@@ -104,4 +104,4 @@ The 3-Tier Loading Model is implemented across `.github/copilot-instructions.md`
 
 ---
 
-*Verified against live codebase · 26 February 2026 · 51 wired orchestrators · 39 MCP tools (28 registered) · 38 CORE rules · 16,942 tests · Source files: `cortex/core/prompt_agent_integration.py`, `cortex/core/intelligence_mixin.py`, `cortex/core/yaml_loaders.py`, `.github/copilot-instructions.md`, `.github/agents/AGENT-INDEX.md`, `.github/templates/cortex-response-templates.md`*
+*Verified against live codebase · Source files: `cortex/core/prompt_agent_integration.py`, `cortex/core/intelligence_mixin.py`, `cortex/core/yaml_loaders.py`, `.github/copilot-instructions.md`, `.github/agents/AGENT-INDEX.md`, `.github/templates/cortex-response-templates.md`*

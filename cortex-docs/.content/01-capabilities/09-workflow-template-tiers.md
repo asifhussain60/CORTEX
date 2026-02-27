@@ -1,7 +1,5 @@
 # Workflow Template Tiers
 
-**Updated:** 2026-02-24 (Phase 63 — SWEEP-63-GOLDEN-RENAISSANCE)
-
 ## Overview
 
 CORTEX workflow templates are organized in a **3-tier hierarchy**:
@@ -52,7 +50,7 @@ Full, intent-specific execution workflows. Each maps to a HEXA-MODE or intent ty
 | `security/`    | `security-compliance-audit.yaml`, `threat-model-analysis.yaml` |
 | `lifecycle/`   | `onboarding-workflow.yaml`, `migration-modernize.yaml` |
 | `backend/`     | `csharp-refactor-workflow.yaml`, `csharp-security-workflow.yaml` |
-| `audit/`       | Phase 63-D new templates |
+| `audit/`       | Audit templates |
 | `governance/`  | `master-plan-phase-lifecycle.yaml`, `golden-test-promotion.yaml` |
 
 ## CORE-035 Rule
@@ -60,7 +58,7 @@ Full, intent-specific execution workflows. Each maps to a HEXA-MODE or intent ty
 Two files must never exist for the same purpose. If a composite mirrors a top-level
 workflow, the composite is deleted and the top-level is the canonical reference.
 
-**Phase 63-E enforcement:** 4 composite duplicates deleted:
+**Enforcement:** 4 composite duplicates deleted:
 - `composites/backend/csharp-refactor.yaml` (mirrors `backend/csharp-refactor-workflow.yaml`)
 - `composites/backend/csharp-security.yaml` (mirrors `backend/csharp-security-workflow.yaml`)
 - `composites/frontend/html-refactor-validation.yaml` (mirrors `frontend/html-refactor-validation.yaml`)

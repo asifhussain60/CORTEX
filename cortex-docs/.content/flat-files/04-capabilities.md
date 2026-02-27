@@ -41,17 +41,17 @@ Every operation is recorded with hash-chain integrity via `cortex/infrastructure
 
 ### MCP Server — The Spinal Cord
 
-The MCP server runs as a Pylance-style stdio process that auto-starts when VS Code opens the workspace. It exposes twenty-eight registered MCP tools (39 target) through JSON-RPC 2.0 transport, requiring no manual server startup and no exposed network ports in development mode.
+The MCP server runs as a Pylance-style stdio process that auto-starts when VS Code opens the workspace. It exposes registered MCP tools through JSON-RPC 2.0 transport, requiring no manual server startup and no exposed network ports in development mode.
 
 ### Key Core Components
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` | Universal base for all 51 wired orchestrators |
+| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` | Universal base for all wired orchestrators |
 | FileFactory | `cortex/core/file_factory.py` | Canonical file creation with CORE-028 naming enforcement |
 | WorkflowEngine | `cortex/core/workflow_engine.py` | Reads workflow YAML templates, executes phase sequences |
 | CortexAuditDB | `cortex/infrastructure/audit_db.py` | Unified SQLite with WAL mode for all audit trails |
-| MCP Server | `cortex/mcp/` | Pylance-style stdio server, 28 registered tools (39 target) |
+| MCP Server | `cortex/mcp/` | Pylance-style stdio server, registered tools |
 | Bootstrap | `cortex/bootstrap.py` | System initialisation, wiring, service discovery |
 | Config | `cortex/config/` | System configuration, feature flags |
 
@@ -205,28 +205,28 @@ Create a YAML file in `cortex-registry/patterns/` defining pattern signatures, s
 
 ---
 
-## 7. Multi-Stack Debugging — The Diagnostic Layer (Phase 86 PLANNED)
+## 7. Multi-Stack Debugging — The Diagnostic Layer (PLANNED)
 
 CORTEX's debugging capability extends well beyond Python. The `DebuggerOrchestrator` uses a **Strategy Pattern** so that the same inject → capture → analyze → fix-plan → cleanup workflow applies universally to any language or runtime.
 
 **Business Leader:** "When any part of a system breaks — JavaScript UI, REST API, SQL query, or C# service — CORTEX injects traceable markers, captures runtime output, and produces a prioritized fix plan. No manual log trawling."
 
-**Product Owner:** "Eight debugging strategies cover the entire modern stack. Three Python strategies are live today. Five multi-language strategies (JavaScript/TypeScript, HTML/Vision, API tracing, SQL, C#/.NET) are planned in Phase 86."
+**Product Owner:** "Eight debugging strategies cover the entire modern stack. Three Python strategies are live today. Five multi-language strategies (JavaScript/TypeScript, HTML/Vision, API tracing, SQL, C#/.NET) are planned."
 
 **Developer:** "Each strategy implements `AbstractInjectionStrategy`. The `MarkerInjectionEngine` selects strategies by detected stack. Markers are unique per session, fully reversible via `AutoCleanupManager`, and emit structured output captured by the analyze phase."
 
-### 8 Strategies (3 Live + 5 Phase 86 PLANNED)
+### Strategies (Live + Planned)
 
 | Strategy | Stack | Status |
 |----------|-------|--------|
 | TestFailureStrategy | Python — pytest/unittest | ✅ Live |
 | RefactorRegressionStrategy | Python — refactor sessions | ✅ Live |
 | GovernanceViolationStrategy | Python — CORE rule checks | ✅ Live |
-| FrontendConsoleStrategy | JavaScript/TypeScript/React/Angular/Vue | ⚪ Phase 86 |
-| HtmlVisionMappingStrategy | HTML + Vision API screenshot → DOM | ⚪ Phase 86 |
-| ApiTraceStrategy | REST/GraphQL/gRPC middleware | ⚪ Phase 86 |
-| SqlTraceStrategy | SQL Server/Oracle/PostgreSQL query plans | ⚪ Phase 86 |
-| DotNetTraceStrategy | C#/.NET ILogger entry/exit | ⚪ Phase 86 |
+| FrontendConsoleStrategy | JavaScript/TypeScript/React/Angular/Vue | ⚪ Planned |
+| HtmlVisionMappingStrategy | HTML + Vision API screenshot → DOM | ⚪ Planned |
+| ApiTraceStrategy | REST/GraphQL/gRPC middleware | ⚪ Planned |
+| SqlTraceStrategy | SQL Server/Oracle/PostgreSQL query plans | ⚪ Planned |
+| DotNetTraceStrategy | C#/.NET ILogger entry/exit | ⚪ Planned |
 
 ### Commands
 
@@ -236,9 +236,9 @@ CORTEX's debugging capability extends well beyond Python. The `DebuggerOrchestra
 | `/debug-inject {path}` | Insert CORTEX_DEBUG markers only |
 | `/debug-cleanup` | Remove all markers, leave code production-ready |
 
-### Unified Intelligence Wiring (Phase 86 PLANNED)
+### Unified Intelligence Wiring (PLANNED)
 
-Phase 86 also wires `DebuggerOrchestrator` into the cross-cutting intelligence layer it was missing:
+The debug pipeline will also wire `DebuggerOrchestrator` into the cross-cutting intelligence layer it was missing:
 - **OPJMixin** — persists debug session outcomes for learning
 - **URS signals** — fix rates and time-to-resolve feed the reinforcement loop
 - **IntelligenceMatrix cells** (CC-021/IC-021) — debugger becomes queryable by other orchestrators
@@ -247,7 +247,7 @@ Phase 86 also wires `DebuggerOrchestrator` into the cross-cutting intelligence l
 
 ---
 
-## 8. Response Templates and Orchestrator Engagement (Phase 85 PLANNED)
+## 8. Response Templates and Orchestrator Engagement (PLANNED)
 
 CORTEX's response format is not cosmetic — it is a governance contract. Every response must follow the canonical template defined in `.github/templates/cortex-response-templates.md`.
 
@@ -257,7 +257,7 @@ CORTEX's response format is not cosmetic — it is a governance contract. Every 
 
 **Developer:** "Use `BLOCK-ENGAGEMENT-BREADCRUMB` for the routing chain, `BLOCK-ENGAGEMENT-TIMELINE` for collapsible timing, and `BLOCK-PHASE-ROADMAP` for multi-phase overview. Progress bars always use the phase-list+bar format (not bar-only)."
 
-### Engagement Block System (Phase 85 PLANNED)
+### Engagement Block System (PLANNED)
 
 | Block | When Rendered | Content |
 |-------|--------------|---------|
@@ -265,7 +265,7 @@ CORTEX's response format is not cosmetic — it is a governance contract. Every 
 | `BLOCK-ENGAGEMENT-TIMELINE` | Multi-step operations | Collapsible `<details>` with per-orchestrator timing |
 | `BLOCK-PHASE-ROADMAP` | Start of `/audit fix`, `/totalrecall`, multi-phase ops | Full phase list with ✅/🔵/⚪ status |
 
-### Progress Format (Phase 85 — Canonical)
+### Progress Format (Canonical)
 
 All progress displays use **phase-list + bar**, not bar-only:
 
@@ -283,7 +283,7 @@ All progress displays use **phase-list + bar**, not bar-only:
 
 ---
 
-## 9. RCA Memory Engine — Structured Root Cause Analysis (Phase 87 PLANNED)
+## 9. RCA Memory Engine — Structured Root Cause Analysis (PLANNED)
 
 The RCA Memory Engine transforms CORTEX's learning system from passive pattern capture into active root-cause prevention. Where the OPJ records *what* failed, the RCA Engine answers *why* — and then ensures it doesn't happen again.
 
@@ -313,4 +313,4 @@ The RCA Memory Engine transforms CORTEX's learning system from passive pattern c
 
 ---
 
-*All paths and counts verified against live codebase — 27 February 2026*
+*All paths and counts verified against live codebase*

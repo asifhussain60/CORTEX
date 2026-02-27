@@ -67,7 +67,7 @@ The Refactored directory shows the same codebase after CORTEX processing:
 2. **Challenge Gate** (CORE-048) presented alternatives for each remediation approach
 3. **TDD Cycle** wrote failing tests for every fix before implementing
 4. **Sweep Completeness** (CORE-064) ensured every instance of each anti-pattern was fixed — not just the first occurrence
-5. **Governance Gate** validated all 38 CORE rules pass on the refactored output
+5. **Governance Gate** validated all CORE rules pass on the refactored output
 
 ---
 

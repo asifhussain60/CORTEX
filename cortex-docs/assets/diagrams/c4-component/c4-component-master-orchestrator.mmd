@@ -1,7 +1,7 @@
 ---
 id: c4-component-master-orchestrator
 title: Master Orchestrator Internal Components
-purpose: Detailed view of Master Orchestrator's internal structure and routing logic, including Phase 18/20 additions
+purpose: Detailed view of Master Orchestrator's internal structure and routing logic
 audience: [Software Developers]
 source_of_truth: cortex/orchestrators/core/master_orchestrator.py + cortex/intelligence/provider.py
 last_verified: 2026-02-21
@@ -27,7 +27,7 @@ graph TB
         ErrorHandler[Error Handler]
     end
 
-    subgraph "Intelligence Layer (Phase 18/20)"
+    subgraph "Intelligence Layer"
         UIP[UnifiedIntelligenceProvider]
         CDL[CompanyDomainLoader]
         ADOCtx[ADOContextMapper]

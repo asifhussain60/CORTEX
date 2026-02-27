@@ -78,4 +78,4 @@ Reusable RED → GREEN → REFACTOR → CLEANUP pattern for individual phases.
 
 ---
 
-*Verified against workflow template registry · 25 February 2026*
+*Verified against workflow template registry*

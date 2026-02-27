@@ -30,4 +30,4 @@ RequestRephraseOrchestrator runs at **Stage -1** — before any other orchestrat
 
 ---
 
-*Verified against request_rephrase_orchestrator.py · 25 February 2026*
+*Verified against request_rephrase_orchestrator.py*

@@ -14,9 +14,9 @@ render_hint: inventory-page
 
 ---
 
-## 1. Orchestrators (51 Wired)
+## 1. Orchestrators (Wired)
 
-All 51 orchestrators satisfy `IOrchestrator` protocol via `OrchestratorProtocolMixin` (`cortex/core/orchestrator_protocol_mixin.py`). Wiring authority: `cortex-registry/core/specifications/`.
+All wired orchestrators satisfy `IOrchestrator` protocol via `OrchestratorProtocolMixin` (`cortex/core/orchestrator_protocol_mixin.py`). Wiring authority: `cortex-registry/core/specifications/`.
 
 ### 1.1 Core Tier (7)
 
@@ -25,7 +25,7 @@ All 51 orchestrators satisfy `IOrchestrator` protocol via `OrchestratorProtocolM
 | master | MasterOrchestrator | `cortex/orchestrators/core/master_orchestrator.py` | Top-level coordinator — routes intents, manages 9-stage audit pipeline, wires all orchestrators |
 | intent-router | IntentRouter | `cortex/orchestrators/core/intent_router_impl.py` | Classifies user intent and routes to appropriate orchestrator using LENS-aware semantic ranking |
 | tdd | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` | Enforces RED→GREEN→REFACTOR — CORE-008, test-first mandate, golden test validation |
-| enforcement | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit governance — validates all 38 CORE rules, blocks violations, SQLite audit trail |
+| enforcement | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit governance — validates CORE rules, blocks violations, SQLite audit trail |
 | workflow | WorkflowOrchestrator | `cortex/orchestrators/core/workflow_orchestrator.py` | YAML workflow template execution engine — detect-fix-rescan-loop and other primitives |
 | conversation | ConversationOrchestrator | `cortex/orchestrators/core/conversation_orchestrator.py` | Multi-turn conversation — state persistence, context aggregation, response streaming |
 | audit | AuditOrchestrator | `cortex/orchestrators/core/audit_orchestrator.py` | 19-point production readiness audit — P0/P1/P2 scanning, convergence loop, SQLite logging |
@@ -53,14 +53,14 @@ All 51 orchestrators satisfy `IOrchestrator` protocol via `OrchestratorProtocolM
 | sweep-catalogue | SweepCatalogueOrchestrator | `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` | CORE-064 sweep completeness — durable issue cataloguing, SQLite WAL persistence |
 | setup | SetupOrchestrator | `cortex/orchestrators/support/setup_orchestrator.py` | Environment setup — MCP configuration, VS Code settings, dependency validation |
 | onboarding | OnboardingOrchestrator | `cortex/orchestrators/support/orchestrator.py` | Repository onboarding — LENS analysis, security assessment P0/P1/P2, SQLite dashboard |
-| repo-onboarding | RepositoryOnboardingOrchestrator | `cortex/orchestrators/support/repository_onboarding_orchestrator.py` | Full repository onboarding with LENS V3 — LLM business language + Phase 21 SQLite |
+| repo-onboarding | RepositoryOnboardingOrchestrator | `cortex/orchestrators/support/repository_onboarding_orchestrator.py` | Full repository onboarding with LENS V3 — LLM business language + SQLite |
 | debugger | DebuggerOrchestrator | `cortex/orchestrators/support/debugger_orchestrator.py` | Debug session management — log capture, governance violation detection, fix plans |
 | cortex-docs | CortexDocsOrchestrator | `cortex/orchestrators/support/cortex_docs_orchestrator.py` | Documentation site orchestration — DOC-REFRESH-001 pipeline, JSON catalog generation |
 | plan | PlanOrchestrator | `cortex/orchestrators/support/plan_orchestrator.py` | Plan execution coordinator — phase lifecycle planned→in_progress→complete |
 | unified-quality | UnifiedQualityAssuranceOrchestrator | `cortex/orchestrators/support/unified_quality_orchestrator.py` | Unified quality assurance — test, governance, and LENS quality signal aggregation |
 | auto-healing | AutoHealingMCPOrchestrator | `cortex/orchestrators/support/auto_healing_mcp_orchestrator.py` | Auto-healing MCP — detects failing tools and applies remediation plans autonomously |
 
-### 1.4 Additional Wired Tiers (Phantom Tier Registrations — Phase 62-D/G)
+### 1.4 Additional Wired Tiers
 
 | Tier | Class | Path | Description |
 |------|-------|------|-------------|
@@ -87,7 +87,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 | Tool ID | File | Description |
 |---------|------|-------------|
 | cortex_classify | `cortex/mcp/tools/core.py` | Intent classification — routes requests to correct orchestrator pipeline |
-| cortex_orchestrator | `cortex/mcp/tools/core.py` | Direct orchestrator invocation — routes to any of the 51 wired orchestrators |
+| cortex_orchestrator | `cortex/mcp/tools/core.py` | Direct orchestrator invocation — routes to any wired orchestrator |
 | cortex_request_lifecycle | `cortex/mcp/tools/core.py` | Full request lifecycle — classify → plan → execute → validate |
 
 ### 2.2 Governance & Compliance
@@ -117,7 +117,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 |---------|------|-------------|
 | cortex_plan | `cortex/mcp/tools/operations.py` | Structured remediation and project planning with audit-driven decomposition |
 | cortex_onboard | `cortex/mcp/tools/onboard_repository.py` | Repository onboarding — LENS analysis, security assessment P0/P1/P2, SQLite dashboard |
-| cortex_onboard_v3 | `cortex/mcp/tools/onboard_repository_v3.py` | Onboard with LENS + LLM business language + SQLite dashboard (Phase 21) |
+| cortex_onboard_v3 | `cortex/mcp/tools/onboard_repository_v3.py` | Onboard with LENS + LLM business language + SQLite dashboard |
 
 > Not registered (planned): `cortex_master_plan`, `cortex_query_opj`
 
@@ -250,7 +250,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 ---
 
-## 4. Governance Rules (38 CORE Active)
+## 4. Governance Rules (CORE Active)
 
 **Authority:** `cortex-registry/core/tier0-skull/skull-rules.yaml` (Tier 0 — immutable, highest precedence)
 
@@ -508,7 +508,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 | Component | File | Purpose |
 |-----------|------|---------|
-| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` | Primary base — all 51 wired orchestrators (Phase 58) |
+| OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` | Primary base — all wired orchestrators |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` | Legacy base — 2 orchestrators only |
 | IOrchestrator | `cortex/core/interfaces/i_orchestrator.py` | Protocol interface for all orchestrators |
 | FileFactory | `cortex/core/file_factory.py` | Canonical file creation with CORE-028 validation |
@@ -519,7 +519,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 | Component | File | Purpose |
 |-----------|------|---------|
-| WiringBootstrap | `cortex/core/wiring/wiring_bootstrap.py` | Bootstraps all 51 wired orchestrators at startup |
+| WiringBootstrap | `cortex/core/wiring/wiring_bootstrap.py` | Bootstraps all wired orchestrators at startup |
 | OrchestratorFactory | `cortex/core/wiring/orchestrator_factory.py` | Lazy-loaded orchestrator instantiation |
 | RegistryBackedOrchestratorRegistry | `cortex/core/wiring/registry_backed_orchestrator_registry.py` | Git-backed orchestrator registry |
 | DependencyInjection | `cortex/core/wiring/dependency_injection.py` | DI container for orchestrator dependencies |
@@ -582,7 +582,7 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 |--------|-------|
 | Total test files | 994 |
 | Golden test files | 91 |
-| Test collection baseline | 8,688 collected (Phase 25 baseline) |
+| Test collection baseline | Tests collected (baseline) |
 | Parallel runner | `pytest-xdist` (`-n auto --dist loadscope`) |
 | Batch size | 500 tests/batch (`CORTEX_BATCH_SIZE=500`) |
 

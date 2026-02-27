@@ -28,7 +28,7 @@ order: 16
 
   Layer 3: GOVERNANCE ENFORCEMENT
   ┌───────────────────────────────────────────────────────────┐
-  │  38 CORE rules · Pre-commit · CI · Runtime validation     │
+  │  CORE rules · Pre-commit · CI · Runtime validation                │
   │  cortex/governance/ + cortex-registry/core/               │
   └───────────────────────────────────────────────────────────┘
 

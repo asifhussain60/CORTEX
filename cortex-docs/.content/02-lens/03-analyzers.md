@@ -37,7 +37,7 @@ order: 3
 
 **Output:** Dependency graph, circular chain list, stale import list.
 
-**Use case:** Detecting circular dependencies before they cause runtime issues. Import quarantine (Phase 09).
+**Use case:** Detecting circular dependencies before they cause runtime issues. Import quarantine.
 
 ### 5. Security Analyzer
 **What it does:** Scans for known vulnerability patterns — SQL injection, XSS, credential exposure, hardcoded secrets.
@@ -69,4 +69,4 @@ order: 3
 
 ---
 
-*Verified against `cortex/lens/analyzers/` · 25 February 2026*
+*Verified against `cortex/lens/analyzers/`*

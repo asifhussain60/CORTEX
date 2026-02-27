@@ -6,7 +6,6 @@ type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
 last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
-phases_complete: [Phase 65, Phase 66, Phase 67, Phase 68, Phase 69]
 format: 10k-view
 order: 2
 ---
@@ -23,18 +22,18 @@ The communication standard connecting your IDE to CORTEX. Think of it as the **l
 **Live location:** `cortex/mcp/` — Pylance-style stdio server, auto-starts with VS Code.
 
 ### MCP Gateway
-The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **28 registered MCP tools (39 target)**.
+The front door of CORTEX. Every request arrives here first. The gateway validates the message, classifies the tool tier, and dispatches to the right MCP tool. CORTEX exposes **a growing library of registered MCP tools**.
 
 **Daily example:** When you type a request in VS Code Copilot Chat, it enters through the MCP Gateway, which routes it to `cortex_process_request` or another appropriate tool.
 
 ### Orchestrator
-A specialized processing engine for one category of work. CORTEX has **51 wired orchestrators** across **4 tiers** (core, domain, support, git), all satisfying `IOrchestrator` protocol:
+A specialized processing engine for one category of work. CORTEX has a **comprehensive set of wired orchestrators** across **4 tiers** (core, domain, support, git), all satisfying `IOrchestrator` protocol:
 
-| Tier | Key Orchestrators | Count |
-|------|-----------------|-------|
-| **Core** | MasterOrchestrator, IntentRouter, TDDOrchestrator, EnforcementOrchestrator, WorkflowOrchestrator, ConversationOrchestrator, InteractionOrchestrator | 7 |
-| **Domain** | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator, DashboardOrchestrator, ServiceDecompositionOrchestrator, LegacyModernizationOrchestrator | 6 |
-| **Support** | OnboardingOrchestrator, SetupOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator, VacuumOrchestrator, BulkDigestOrchestrator, DigestSessionOrchestrator, DebuggerOrchestrator, UnifiedDiscoveryOrchestrator, UnifiedQualityOrchestrator, AutoHealingMCPOrchestrator, CortexDocsOrchestrator | 14 |
+| Tier | Key Orchestrators |
+|------|-----------------|
+| **Core** | MasterOrchestrator, IntentRouter, TDDOrchestrator, EnforcementOrchestrator, WorkflowOrchestrator, ConversationOrchestrator, InteractionOrchestrator |
+| **Domain** | RefactoringOrchestrator, PlanningOrchestrator, DomainOrchestrator, DashboardOrchestrator, ServiceDecompositionOrchestrator, LegacyModernizationOrchestrator |
+| **Support** | OnboardingOrchestrator, SetupOrchestrator, UpgradeOrchestrator, RollbackOrchestrator, HealthOrchestrator, SweepCatalogueOrchestrator, VacuumOrchestrator, BulkDigestOrchestrator, DigestSessionOrchestrator, DebuggerOrchestrator, UnifiedDiscoveryOrchestrator, UnifiedQualityOrchestrator, AutoHealingMCPOrchestrator, CortexDocsOrchestrator |
 
 **SweepCatalogueOrchestrator** — Enforces CORE-064 (Sweep Completeness Contract). Every FIX/REFACTOR/AUDIT sweep is tracked in SQLite; no sweep can be abandoned mid-run without an explicit `approve_wont_fix` or `assert_exhausted` call.
 
@@ -61,7 +60,7 @@ After the 12-phase Cohesive Brain Refactor, CORTEX uses exactly **one Python pac
 ## Intelligence Concepts
 
 ### LENS
-**L**anguage → **E**xamination → **N**avigation → **S**ynthesis. This is CORTEX's code intelligence engine. It runs **8 specialized analyzers** in parallel against your codebase and produces a unified context — a comprehensive code health report reduced to a structured object.
+**L**anguage → **E**xamination → **N**avigation → **S**ynthesis. This is CORTEX's code intelligence engine. It runs **multiple specialized analyzers** in parallel against your codebase and produces a unified context — a comprehensive code health report reduced to a structured object.
 
 **Brain analogy:** LENS is the **sensory cortex** — processing raw input (source code) into structured perception (code patterns, metrics, security findings). Just as your visual cortex processes light into objects, LENS processes code into intelligence.
 
@@ -87,7 +86,7 @@ A value between 0.0 and 1.0 that CORTEX assigns to decisions:
 Used in pattern matching, intent classification, and strategy selection.
 
 ### Unified Reinforcement Signal (URS)
-A closed-loop feedback system (Phase 83) where orchestrators emit **reinforcement signals** after every operation. Signals are typed (STRONG_REWARD +1.0, MILD_REWARD +0.5, NEUTRAL 0.0, MILD_PUNISHMENT -0.5, STRONG_PUNISHMENT -1.0) and adjust pattern confidence scores over time.
+A closed-loop feedback system where orchestrators emit **reinforcement signals** after every operation. Signals are typed (STRONG_REWARD +1.0, MILD_REWARD +0.5, NEUTRAL 0.0, MILD_PUNISHMENT -0.5, STRONG_PUNISHMENT -1.0) and adjust pattern confidence scores over time.
 
 **How it works:** When TDDOrchestrator completes a GREEN-on-first-try cycle, it emits STRONG_REWARD. When EnforcementOrchestrator finds P0 violations, it emits MILD_PUNISHMENT. These signals flow into the `ReinforcementEngine` which adjusts confidence in the underlying patterns.
 
@@ -142,7 +141,7 @@ CORTEX uses pytest-xdist for parallel test execution with four execution profile
 **Live location:** `cortex/testing/framework/` (parallel_runner.py, progress_reporter.py, test_categorizer.py)
 
 ### Golden Tests
-486 high-value tests that must always pass (CORE-055). They validate core contracts, governance rules, and critical workflows. Run serially for deterministic results. An additional 177 phase tests ensure phase completion integrity.
+High-value tests that must always pass (CORE-055). They validate core contracts, governance rules, and critical workflows. Run serially for deterministic results. Additional phase tests ensure milestone completion integrity.
 
 ### TDD Workflow
 Every IMPLEMENT and FIX operation follows RED → GREEN → REFACTOR:
@@ -161,7 +160,7 @@ Unified SQLite database with WAL mode for audit trails. All orchestrators route 
 
 **Live location:** `cortex/infrastructure/audit_db.py` → `.cortex-runtime/`
 
-### WorkflowEngine FSM (Phase 67)
+### WorkflowEngine FSM
 The runtime layer that executes YAML-defined workflow templates as a **Finite State Machine**. Lives in `cortex/orchestrators/workflow/`.
 
 | Component | Module | Purpose |
@@ -176,7 +175,7 @@ The `convergence_gate` block in TDD and audit templates wires the FSM to the con
 
 **Live location:** `cortex/orchestrators/workflow/` · Convergence gate: `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
 
-### Intelligence Matrix (Phase 65/66)
+### Intelligence Matrix
 A 15×15 cross-capability wiring map that systematically connects every intelligence subsystem to every operational capability. See `00-getting-started/06-intelligence-matrix.md` for the full deep-dive.
 
 **Key facts:**
@@ -187,8 +186,8 @@ A 15×15 cross-capability wiring map that systematically connects every intellig
 
 **Live location:** `cortex/intelligence/cross_cutting/intelligence_matrix_builder.py`
 
-### cortex/core — 15 Canonical Subdirs (Phase 68)
-After Phase 68's flatten sweep, `cortex/core/` was reduced from 27 subdirectories to **15 canonical subdirs**. The dissolved packages were consolidated into `cortex/core/common/`. Compat shims were deleted after all import sites were updated.
+### cortex/core — Canonical Subdirs
+After the core flatten sweep, `cortex/core/` was consolidated into **canonical subdirs**. Dissolved packages were merged into `cortex/core/common/`. Compat shims were deleted after all import sites were updated.
 
 The 15 canonical subdirs are: `common/`, `discovery/`, `execution/`, `governance/`, `hallucination_prevention/`, `intelligence/`, `intent/`, `interaction/`, `interfaces/`, `knowledge/`, `models/`, `orchestrator/`, `registry/`, `security/`, `wiring/`.
 

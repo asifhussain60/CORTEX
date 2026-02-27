@@ -34,10 +34,10 @@ IntentRouter classifies every incoming request into one of 12+ intent types usin
 | DIGEST | Digest coordination |
 | REPHRASE | RequestRephraseOrchestrator |
 
-## Phase 11 Enhancement
+## Extended Routing
 
-Phase 11 (Gap Remediation) added routing for 5 previously missing modes: DESIGN, QUERY, DIGEST, REPHRASE, and extended INVESTIGATE routing.
+Routing was extended to include 5 additional modes: DESIGN, QUERY, DIGEST, REPHRASE, and extended INVESTIGATE routing.
 
 ---
 
-*Verified against intent_router.py · 25 February 2026*
+*Verified against intent_router.py*

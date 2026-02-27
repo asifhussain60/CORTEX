@@ -135,4 +135,4 @@ All errors include structured messages with remediation guidance.
 
 ---
 
-*Verified against MCP protocol implementation · 25 February 2026*
+*Verified against MCP protocol implementation*

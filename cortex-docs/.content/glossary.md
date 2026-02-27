@@ -37,23 +37,23 @@ order: 99
 
 **Circuit Breaker** — Resilience pattern that stops calls to failing services. States: Closed → Open → Half-Open. Module: `cortex/infrastructure/circuit_breaker.py`.
 
-**Cohesive Brain Refactor** — 12-phase architectural transformation that unified `cortex_intelligence/`, `cortex_lens/`, and `cortex.brain` into the single `cortex` package. Completed February 2026.
+**Cohesive Brain Refactor** — Multi-phase architectural transformation that unified multiple packages into the single `cortex` package.
 
 **Confidence Score** — Numerical value (0.0–1.0) produced by IntentRouter indicating certainty of intent classification. Higher scores route to primary orchestrators.
 
 **ConsolidatedTool** — Base class for all MCP tools. Provides consistent naming, parameter validation, execution, and audit trail. Module: `cortex/mcp/mcp_tool_base.py`.
 
-**CORE-055** — Golden Test Tier Contract. 486 golden tests in `tests/golden/` must always pass. Zero regression allowed. Added 21 February 2026.
+**CORE-055** — Golden Test Tier Contract. Golden tests in `tests/golden/` must always pass. Zero regression allowed.
 
-**CORE-064** — Sweep Completeness Contract. Every FIX/REFACTOR/AUDIT sweep must exhaust its full issue catalogue before closing. Enforced by `SweepCatalogueOrchestrator`. Added 21 February 2026.
+**CORE-064** — Sweep Completeness Contract. Every FIX/REFACTOR/AUDIT sweep must exhaust its full issue catalogue before closing. Enforced by `SweepCatalogueOrchestrator`.
 
-**CORE Rules** — Governance rules identified by `CORE-nnn` IDs. 38 CORE rules active in `cortex-registry/core/tier0-skull/skull-rules.yaml` (+ 2 AC rules), all enforced at pre-commit + CI + runtime.
+**CORE Rules** — Governance rules identified by `CORE-nnn` IDs. An extensive set of CORE rules active in `cortex-registry/core/tier0-skull/skull-rules.yaml` (+ AC rules), all enforced at pre-commit + CI + runtime.
 
-**cortex_learning** — MCP tool (Phase 83) for Unified Reinforcement Signal management. Six operations: `emit` (record signal), `history` (query signals), `decay` (age idle patterns), `promote` (elevate high-confidence patterns), `quarantine` (isolate low-confidence patterns), `metrics` (URS dashboard). Module: `cortex/mcp/tools/learning_tool.py`.
+**cortex_learning** — MCP tool for Unified Reinforcement Signal management. Six operations: `emit` (record signal), `history` (query signals), `decay` (age idle patterns), `promote` (elevate high-confidence patterns), `quarantine` (isolate low-confidence patterns), `metrics` (URS dashboard). Module: `cortex/mcp/tools/learning_tool.py`.
 
 **cortex_process_request** — Mandatory MCP entry point. Routes ALL user requests through MasterOrchestrator 4-stage pipeline. Module: `cortex/mcp/tools/core.py`.
 
-**cortex_fetch_work_items** — MCP tool (Phase 15) for provider-agnostic work item access. Fetches user stories, bugs, and tasks from the configured ticketing system (ADO, Jira, custom). Provider is selected via `WORK_ITEM_SOURCE` env var. Module: `cortex/mcp/tools/work_item_tool.py`.
+**cortex_fetch_work_items** — MCP tool for provider-agnostic work item access. Fetches user stories, bugs, and tasks from the configured ticketing system (ADO, Jira, custom). Provider is selected via `WORK_ITEM_SOURCE` env var. Module: `cortex/mcp/tools/work_item_tool.py`.
 
 ## D
 
@@ -63,7 +63,7 @@ order: 99
 
 ## E
 
-**EnforcementOrchestrator** — Orchestrator that validates code against CORE governance rules. Coordinates 10 enforcement agents. Location: `cortex/orchestrators/core/`.
+**EnforcementOrchestrator** — Orchestrator that validates code against CORE governance rules. Coordinates multiple enforcement agents. Location: `cortex/orchestrators/core/`.
 
 **Evidence Bundle** — Collection of audit records, test results, and governance checks packaged as compliance proof. Module: `cortex/infrastructure/evidence_bundle.py`.
 
@@ -71,11 +71,11 @@ order: 99
 
 ## G
 
-**Golden Tests** — 486 tests that must ALWAYS pass (CORE-055 Golden Test Tier Contract). Run with `pytest-xdist` parallel execution. Location: `tests/golden/`.
+**Golden Tests** — Tests that must ALWAYS pass (CORE-055 Golden Test Tier Contract). Run with `pytest-xdist` parallel execution. Location: `tests/golden/`.
 
 **GoldenScenario** — Dataclass in `cortex/testing/_golden_factory.py` that parametrizes end-to-end test scenarios. Fields: `scenario_id`, `description`, `setup`, `input_data`, `expected_output`, `orchestrator_refs`. Factory method `GoldenScenario.from_yaml()` loads scenarios from YAML fixtures. Used by `@pytest.mark.parametrize` to generate test cases.
 
-**Governance Agents** — 8 specialized agents that enforce specific CORE rule categories: TestNaming, FileNaming, ImportValidation, TypeHint, Docstring, DuplicateDetection, SecurityScan, ExtendedGovernance.
+**Governance Agents** — Specialized agents that enforce specific CORE rule categories: TestNaming, FileNaming, ImportValidation, TypeHint, Docstring, DuplicateDetection, SecurityScan, ExtendedGovernance.
 
 **Graceful Degradation** — Resilience pattern returning partial results when non-critical services fail. Module: `cortex/infrastructure/graceful_degradation.py`.
 
@@ -87,7 +87,7 @@ order: 99
 
 ## I
 
-**IntentRouter** — Orchestrator that classifies requests into 12 intent types (IMPLEMENT, FIX, REFACTOR, etc.) and routes to appropriate domain orchestrators. Location: `cortex/orchestrators/core/intent_router.py`.
+**IntentRouter** — Orchestrator that classifies requests into multiple intent types (IMPLEMENT, FIX, REFACTOR, etc.) and routes to appropriate domain orchestrators. Location: `cortex/orchestrators/core/intent_router.py`.
 
 ## J
 
@@ -101,19 +101,19 @@ order: 99
 
 ## L
 
-**LENS** — **L**anguage → **E**xamination → **N**avigation → **S**ynthesis. Code intelligence system with 10 parallel analyzers producing unified analysis in 300–800ms. Location: `cortex/lens/`.
+**LENS** — **L**anguage → **E**xamination → **N**avigation → **S**ynthesis. Code intelligence system with multiple parallel analyzers producing unified analysis. Location: `cortex/lens/`.
 
-**LENS Analyzers** — 10 parallel analyzers: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain.
+**LENS Analyzers** — Parallel analyzers including: AST, Git History, Comment, Import, Security, Pattern, Metrics, Domain, and more.
 
 ## M
 
 **MasterOrchestrator** — Central entry point orchestrator. Runs 4-stage pipeline: Interaction → Intent → Intelligence → Execution. Location: `cortex/orchestrators/core/master_orchestrator.py`.
 
-**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. 28 registered tools (39 target) exposed via stdio transport.
+**MCP (Model Context Protocol)** — JSON-RPC 2.0 communication standard connecting IDEs to CORTEX. A growing library of registered tools exposed via stdio transport.
 
 ## O
 
-**OrchestratorBase** — Legacy abstract base class used by 2 orchestrators only (`ServiceDecompositionOrchestrator`, `BusinessKnowledgeIngestionOrchestrator`). The primary base for all 51 wired orchestrators is `OrchestratorProtocolMixin` (Phase 58) + `IOrchestrator` protocol. Module: `cortex/core/orchestrator_base.py`.
+**OrchestratorBase** — Legacy abstract base class used by a small number of orchestrators only. The primary base for all wired orchestrators is `OrchestratorProtocolMixin` + `IOrchestrator` protocol. Module: `cortex/core/orchestrator_base.py`.
 
 **OrchestratorEventBus** — Decoupled communication channel for inter-orchestrator messaging. Module: `cortex/infrastructure/orchestrator_event_bus.py`.
 
@@ -121,7 +121,7 @@ order: 99
 
 **Perception Tier** — First intelligence tier. Observes, parses, and classifies raw input. Location: `cortex/intelligence/perception/`.
 
-**Phase Tests** — 177 tests that validate specific phase milestone completion. Location: `tests/`.
+**Phase Tests** — Tests that validate specific milestone completion. Location: `tests/`.
 
 **Pre-Commit Validator** — Validates code against governance rules before commit. Module: `cortex/infrastructure/pre_commit_validator.py`.
 
@@ -157,7 +157,7 @@ order: 99
 
 **SignalType** — Enum defining URS reinforcement signal strengths: `STRONG_REWARD` (+1.0), `MILD_REWARD` (+0.5), `NEUTRAL` (0.0), `MILD_PUNISHMENT` (−0.5), `STRONG_PUNISHMENT` (−1.0). Used by all orchestrators that emit learning feedback. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
 
-**skull-rules.yaml** — YAML file containing all 38 CORE governance rule definitions (+ 2 AC-PERMANENT-FIX). Location: `cortex-registry/core/tier0-skull/skull-rules.yaml`.
+**skull-rules.yaml** — YAML file containing all CORE governance rule definitions (+ AC-PERMANENT-FIX rules). Location: `cortex-registry/core/tier0-skull/skull-rules.yaml`.
 
 **stdio Transport** — Standard input/output process communication. IDE writes JSON-RPC to stdin, CORTEX responds on stdout. No network ports required.
 
@@ -185,7 +185,7 @@ order: 99
 
 ## U
 
-**Unified Reinforcement Signal (URS)** — Closed-loop learning system (Phase 83) where every orchestrator operation emits a typed reinforcement signal that adjusts pattern confidence scores. Five signal strengths (STRONG_REWARD → STRONG_PUNISHMENT). Patterns with ≥0.9 confidence are promoted to T1 knowledge; patterns ≤0.3 are quarantined. Idle patterns decay 0.1 per 30 days. 10 integration surfaces wired across OPJMixin, TDDOrchestrator, EnforcementOrchestrator, TrainerOrchestrator, TestValueScorer, KnowledgeSynthesisEngine, IntelligenceMatrixBuilder, and LENSOrchestrator. MCP tool: `cortex_learning`. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
+**Unified Reinforcement Signal (URS)** — Closed-loop learning system where every orchestrator operation emits a typed reinforcement signal that adjusts pattern confidence scores. Five signal strengths (STRONG_REWARD → STRONG_PUNISHMENT). Patterns with high confidence are promoted to top-tier knowledge; patterns with low confidence are quarantined. Idle patterns decay over time. Multiple integration surfaces wired across key orchestrators and intelligence components. MCP tool: `cortex_learning`. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
 
 ## W
 
@@ -199,10 +199,10 @@ order: 99
 
 **WORK_ITEM_SOURCE** — Environment variable that selects the active `WorkItemProvider`. Default: `"ado"` (Azure DevOps). Factory: `cortex/repositories/provider_factory.py`.
 
-**Workflow Templates** — YAML-defined execution plans in `cortex-registry/workflows/templates/`. 17 categories including `sdlc/` (7-phase development lifecycle), `audit/` (production readiness), `governance/` (rule enforcement), `onboarding/` (repository analysis), `testing/` (test strategy), `security/` (vulnerability management), and `primitives/` (5 atomic categories: analysis, execution, governance, validation, intelligence). Templates compose from primitives to form complex workflows. Executed by `WorkflowEngine`. Company-specific customizations go in `cortex-registry/company/`.
+**Workflow Templates** — YAML-defined execution plans in `cortex-registry/workflows/templates/`. Multiple categories including `sdlc/` (development lifecycle), `audit/` (production readiness), `governance/` (rule enforcement), `onboarding/` (repository analysis), `testing/` (test strategy), `security/` (vulnerability management), and `primitives/` (atomic categories: analysis, execution, governance, validation, intelligence). Templates compose from primitives to form complex workflows. Executed by `WorkflowEngine`. Company-specific customizations go in `cortex-registry/company/`.
 
-**Workflow Template Primitives** — Atomic, reusable building blocks in `cortex-registry/workflows/templates/primitives/`. Five categories: `analysis/` (AST scan, security scan), `execution/` (TDD cycle, scaffold emit), `governance/` (sweep catalogue open/close, golden promotion), `validation/` (detect-fix-rescan-loop, schema validate), `intelligence/` (LENS pipeline, knowledge resolve). Templates compose from these primitives.
+**Workflow Template Primitives** — Atomic, reusable building blocks in `cortex-registry/workflows/templates/primitives/`. Categories include: `analysis/` (AST scan, security scan), `execution/` (TDD cycle, scaffold emit), `governance/` (sweep catalogue open/close, golden promotion), `validation/` (detect-fix-rescan-loop, schema validate), `intelligence/` (LENS pipeline, knowledge resolve). Templates compose from these primitives.
 
 ---
 
-*Verified against live CORTEX codebase · 27 February 2026 (Phase 84 Complete)*
+*Verified against live CORTEX codebase*

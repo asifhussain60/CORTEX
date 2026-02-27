@@ -114,4 +114,4 @@ IntentRouter
 
 ---
 
-*Verified against MasterOrchestrator 4-stage pipeline · 25 February 2026*
+*Verified against MasterOrchestrator 4-stage pipeline*

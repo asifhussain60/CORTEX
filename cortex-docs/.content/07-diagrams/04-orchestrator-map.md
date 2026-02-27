@@ -24,7 +24,7 @@ cortex/orchestrators/
 
 ```
 OrchestratorBase (cortex/core/orchestrator_base.py)
-    │  51 wired orchestrators satisfy the IOrchestrator protocol
+    │  Wired orchestrators satisfy the IOrchestrator protocol
     │  Auto-logs every execute()/run() call to .cortex-runtime/audit.db (SQLite WAL)
     │
     ├── CORE TIER (7 wired)
@@ -87,4 +87,4 @@ Communication uses the **OrchestratorEventBus** (`cortex/infrastructure/orchestr
 
 ---
 
-*Verified against `cortex/orchestrators/` directory + wiring YAML · 25 February 2026*
+*Verified against `cortex/orchestrators/` directory + wiring YAML*

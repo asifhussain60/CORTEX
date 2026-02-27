@@ -63,8 +63,8 @@ Try any of these in Copilot Chat:
 
 | What You Type | What Happens |
 |--------------|-------------|
-| "Analyze this codebase" | LENS runs 15 parallel analyzer components, delivers inline report |
-| "What MCP tools are available?" | `cortex_tools_catalog` lists all 39 tools |
+| "Analyze this codebase" | LENS runs its parallel analyzer components, delivers inline report |
+| "What MCP tools are available?" | `cortex_tools_catalog` lists all registered tools |
 | "Check governance compliance" | `cortex_validate_compliance` checks CORE rules |
 | "Onboard this repository" | `cortex_onboard_repository` runs LENS + creates dashboard |
 | "Run health check" | `cortex_verify_environment` checks Python, deps, MCP connectivity |
@@ -100,23 +100,23 @@ python3 -m pytest tests/ -n auto --dist loadscope --tb=short
 
 ```
 cortex/                   ← Python source (1 canonical package)
-  orchestrators/          ← 51 wired orchestrators across 4 tiers (10 total directories)
-  mcp/tools/              ← 39 MCP tools (28 registered)
+  orchestrators/          ← Wired orchestrators across 4 tiers
+  mcp/tools/              ← MCP tools library
   core/                   ← OrchestratorBase, FileFactory, WorkflowEngine
   testing/                ← Test framework, parallel runner, quality gate
   intelligence/           ← Brain: perception, reasoning, action, domain
-  lens/                   ← 15-component code intelligence
+  lens/                   ← Multi-component code intelligence
   governance/             ← Rule enforcement, compliance
   infrastructure/         ← CortexAuditDB, infrastructure detection
 
 cortex-registry/          ← YAML governance rules, patterns, plans
-  core/tier0-skull/       ← skull-rules.yaml (38 CORE rules, 22 actively enforced)
-  patterns/               ← 9 enterprise architecture patterns
+  core/tier0-skull/       ← skull-rules.yaml (CORE rules)
+  patterns/               ← Enterprise architecture patterns
   planning/               ← cortex-refactor-master.yaml
   workflows/              ← Workflow templates
 
 tests/                    ← All tests (mirrors cortex/ structure)
-  golden/                 ← 486 golden tests (must always pass)
+  golden/                 ← Golden tests (must always pass)
   unit/                   ← Unit tests (parallel)
   integration/            ← Integration tests
 
@@ -129,7 +129,7 @@ tests/                    ← All tests (mirrors cortex/ structure)
 
 When you opened VS Code:
 1. MCP server started automatically (Pylance-style stdio)
-2. 28 registered tools (39 target) became available in Copilot Chat
+2. Registered tools became available in Copilot Chat
 3. CORTEX loaded governance rules from `cortex-registry/core/tier0-skull/skull-rules.yaml`
 4. The test framework registered the parallel runner and quality gate plugins
 
@@ -155,4 +155,4 @@ When you ran a request:
 
 ---
 
-*Verified against live MCP server · 25 February 2026*
+*Verified against live MCP server*

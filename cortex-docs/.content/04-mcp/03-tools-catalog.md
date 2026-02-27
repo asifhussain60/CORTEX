@@ -1,7 +1,7 @@
 # MCP Tools Catalog
 
 ---
-title: MCP Tools Catalog — 28 Registered Tools (39 Target)
+title: MCP Tools Catalog
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
 last_verified: 2026-02-27
@@ -15,7 +15,7 @@ order: 3
 
 ## Overview
 
-**28 registered canonical MCP tools** organized across 11 categories. All tools are registered in `mcp_registry.py` and exposed through JSON-RPC 2.0 stdio transport (Pylance-style auto-start). Target: 39 registered tools; 11 additional tools are in active planning phases.
+All registered canonical MCP tools are organized across 11 categories. Every tool is registered in `mcp_registry.py` and exposed through JSON-RPC 2.0 stdio transport (Pylance-style auto-start). Additional tools are in active planning.
 
 **Entry point rule:** Use `cortex_request_lifecycle` for full lifecycle tracking or `cortex_classify` for intent routing.
 
@@ -28,7 +28,7 @@ order: 3
 | Tool | Description |
 |------|-------------|
 | `cortex_classify` | Intent classification — routes requests to correct orchestrator pipeline |
-| `cortex_orchestrator` | Direct orchestrator invocation — routes to any of the 51 wired orchestrators |
+| `cortex_orchestrator` | Direct orchestrator invocation — routes to any wired orchestrator |
 | `cortex_request_lifecycle` | Full request lifecycle — classify → plan → execute → validate |
 | `cortex_ask` | Educational questions about CORTEX architecture with truth-based verification |
 | `cortex_total_recall` | Discover and recall CORTEX features, components, and architecture |
@@ -60,7 +60,7 @@ order: 3
 |------|------|-------------|
 | `cortex_plan` | `operations.py` | Structured remediation and project planning with audit-driven decomposition |
 | `cortex_onboard` | `onboard_repository.py` | Repository onboarding — LENS analysis, security assessment P0/P1/P2, SQLite dashboard |
-| `cortex_onboard_v3` | `onboard_repository_v3.py` | Onboard with LENS + LLM business language + SQLite dashboard (Phase 21) |
+| `cortex_onboard_v3` | `onboard_repository_v3.py` | Onboard with LENS + LLM business language + SQLite dashboard |
 
 > Note: `cortex_master_plan` and `cortex_query_opj` are not currently registered in `mcp_registry.py`.
 
@@ -131,12 +131,12 @@ order: 3
 
 ## Practical Examples
 
-**Business Leader:** "28 registered tools with clear entry points. Governance is enforced at the transport layer — developers cannot bypass CORE rules. 11 additional tools are planned toward the 39-tool target."
+**Business Leader:** "Every registered tool has a clear entry point. Governance is enforced at the transport layer — developers cannot bypass CORE rules. Additional tools are planned as the catalog grows."
 
 **Product Owner:** "`cortex_plan` generates remediation plans with 4 execution modes. `cortex_onboard` gives a complete repository assessment in one call. `cortex_generate_tests` automates the RED phase of TDD. `cortex_verify` confirms the MCP server is live."
 
-**Developer:** "I call `cortex_request_lifecycle` for full lifecycle tracking. `cortex_refactor` renames symbols by name — no byte offset needed (Roslyn by-name rename). `cortex_generate_tests` produces a failing RED test from any specification. `cortex_verify(op='mcp')` confirms all 28 registered tools are available."
+**Developer:** "I call `cortex_request_lifecycle` for full lifecycle tracking. `cortex_refactor` renames symbols by name — no byte offset needed (Roslyn by-name rename). `cortex_generate_tests` produces a failing RED test from any specification. `cortex_verify(op='mcp')` confirms all registered tools are available."
 
 ---
 
-*Verified against `cortex/mcp/mcp_registry.py` · 26 February 2026 · 28 registered canonical MCP tools · 39 target*
+*Verified against `cortex/mcp/mcp_registry.py`*

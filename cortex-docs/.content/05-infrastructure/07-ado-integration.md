@@ -17,7 +17,7 @@ order: 7
 
 CORTEX integrates with **Azure DevOps (ADO)** through a provider-agnostic `WorkItemProvider` Protocol. The `ADOWorkItemProvider` fetches user stories, bugs, and tasks from ADO and the `ADOContextMapper` normalises them into structured sprint context consumed by `UnifiedIntelligenceProvider.full()`.
 
-This integration was introduced in **Phase 20** (ADO + Brain-Tier Synthesis).
+This integration provides ADO support via the Brain-Tier Synthesis pipeline.
 
 ---
 
@@ -191,4 +191,4 @@ The `ADOContextMapper` is provider-agnostic — it works with any `List[WorkItem
 
 ---
 
-*Verified against `cortex/repositories/ado/ado_provider.py` + `cortex/intelligence/knowledge/ado_context_mapper.py` · Phase 20 complete · 25 February 2026*
+*Verified against `cortex/repositories/ado/ado_provider.py` + `cortex/intelligence/knowledge/ado_context_mapper.py`*

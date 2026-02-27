@@ -1,7 +1,5 @@
 # Golden Test Taxonomy
 
-**Updated:** 2026-02-24 (Phase 63 — SWEEP-63-GOLDEN-RENAISSANCE)
-
 ## Overview
 
 CORTEX golden tests are organized into **canonical subfolders** under `tests/golden/`.
@@ -37,7 +35,7 @@ Snake_case only (CORE-028).
 ## Scoring
 
 Golden tests are scored by `cortex/testing/quality_gate.py` using
-`cortex-registry/core/test-quality-gate.yaml` (version 2.0 — Phase 63-C).
+`cortex-registry/core/test-quality-gate.yaml`.
 
 **Scoring dimensions (version 2.0):**
 - **Impact (0–5):** security, reliability, business invariant, workflow template consumption,

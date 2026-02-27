@@ -35,7 +35,7 @@ order: 12
 | 15 | Security-First 5-Layer Architecture | `diagrams/diagram-21-security-first.md` |
 | 16 | Knowledge Hydration Pipeline | `diagrams/diagram-22-knowledge-hydration.md` |
 | 17 | Sweep Completeness Lifecycle | `diagrams/diagram-23-sweep-completeness.md` |
-| 18 | RCA Prevention Flow (Phase 87) | `diagrams/diagram-24-rca-prevention-flow.md` |
+| 18 | RCA Prevention Flow | `diagrams/diagram-24-rca-prevention-flow.md` |
 
 ### Notation Guide
 
@@ -66,7 +66,7 @@ The six-layer architecture from IDE clients down to the configuration registry.
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
 │                    MCP GATEWAY                                  │
-│              cortex/mcp/ — 28 registered tools (39 target)              │
+│              cortex/mcp/ — registered tools                             │
 │                              │                                  │
 │         cortex_request_lifecycle (primary entry point)          │
 └─────────────────────────────┼───────────────────────────────────┘
@@ -85,7 +85,7 @@ The six-layer architecture from IDE clients down to the configuration registry.
 │    │ (12 intents)   │  │ Orch.   │  │ Orchestrators│           │
 │    └────────────────┘  └─────────┘  └──────────────┘           │
 │                                                                 │
-│    51 wired orchestrators: 17 core · 7 domain · 23 support · 4 git │
+│    Wired orchestrators: core · domain · support · git               │
 └─────────────────────────────┼───────────────────────────────────┘
                               │
 ┌─────────────────────────────┼───────────────────────────────────┐
@@ -138,13 +138,13 @@ The six-layer architecture from IDE clients down to the configuration registry.
 
 | Layer | Components | Location |
 |-------|------------|----------|
-| MCP Gateway | 28 registered tools (39 target) | `cortex/mcp/tools/` |
-| Orchestration | 51 wired orchestrators (17 core, 7 domain, 23 support, 4 git) | `cortex/orchestrators/` |
+| MCP Gateway | Registered tools | `cortex/mcp/tools/` |
+| Orchestration | Wired orchestrators (core, domain, support, git) | `cortex/orchestrators/` |
 | Intelligence | 15 LENS analyzers + brain tiers | `cortex/lens/` + `cortex/intelligence/` |
-| Governance | 38 CORE rules | `cortex/governance/` + `cortex-registry/core/` |
+| Governance | CORE rules | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |
 | Registry | Rules, patterns, workflows | `cortex-registry/` |
-| Tests | 16,942 collected | `tests/` |
+| Tests | Comprehensive suite | `tests/` |
 
 ---
 
@@ -255,26 +255,26 @@ IntentRouter
 
 ## 3. Orchestrator Map
 
-51 wired orchestrators across 4 tiers, all satisfying the IOrchestrator protocol.
+Wired orchestrators across 4 tiers, all satisfying the IOrchestrator protocol.
 
 ```
 cortex/orchestrators/
-├── core/       ← 17 wired entry points (MasterOrchestrator, IntentRouter, TDD…)
-├── domain/     ← 7 wired domain orchestrators (Refactoring, Planning, Domain…)
-├── support/    ← 23 wired support orchestrators (Onboarding, Health, Sweep…)
-└── git/        ← 4 wired git orchestrators (Git, GitPublish, PreCommit, Sanitization)
+├── core/       ← Core wired entry points (MasterOrchestrator, IntentRouter, TDD…)
+├── domain/     ← Domain orchestrators (Refactoring, Planning, Domain…)
+├── support/    ← Support orchestrators (Onboarding, Health, Sweep…)
+└── git/        ← Git orchestrators (Git, GitPublish, PreCommit, Sanitization)
 ```
 
 ### Orchestrator Hierarchy
 
 ```
 OrchestratorProtocolMixin (cortex/core/orchestrator_protocol_mixin.py)
-    │  51 wired orchestrators satisfy the IOrchestrator protocol
+    │  Wired orchestrators satisfy the IOrchestrator protocol
     │  Auto-logs every execute()/run() call to .cortex-runtime/audit.db (SQLite WAL)
     │
-    ├── CORE TIER (17 wired)
-    │   ├── MasterOrchestrator          ← Entry point, 4-stage pipeline
-    │   ├── IntentRouter                ← 12+ intent classification (20–40ms)
+    ├── CORE TIER
+    │   ├── MasterOrchestrator          ← Entry point, multi-stage pipeline
+    │   ├── IntentRouter                ← Intent classification
     │   ├── TDDOrchestrator             ← RED → GREEN → REFACTOR
     │   ├── WorkflowOrchestrator        ← WorkflowEngine.load()/execute_step()
     │   ├── EnforcementOrchestrator     ← Governance rule enforcement
@@ -466,8 +466,8 @@ Three-layer enforcement ensuring every code change meets CORTEX standards.
 │                                                │
 │  EnforcementOrchestrator                       │
 │  ┌──────────────────────────────────────────┐  │
-│  │ All 38 active CORE rules evaluated       │  │
-│  │ 10 enforcement agents execute            │  │
+│  │ All active CORE rules evaluated           │  │
+│  │ Enforcement agents execute                │  │
 │  │                                          │  │
 │  │ Agents:                                  │  │
 │  │ ├── TestNamingAgent                      │  │
@@ -641,7 +641,7 @@ VS Code Opens Workspace
 
 ## 7. Testing Pyramid
 
-16,942 tests collected across layered execution tiers with parallel support.
+Comprehensive test suite collected across layered execution tiers with parallel support.
 
 ### Test Pyramid
 
@@ -667,7 +667,7 @@ VS Code Opens Workspace
       ╱        Smoke Tests (subset)        ╲
      ╱──────────────────────────────────────╲
 
-  Total: 16,942 collected (all tiers including golden/phase)
+  Total: all tiers collected (including golden/phase)
 ```
 
 ### Execution Strategy
@@ -737,7 +737,7 @@ tests/
 ├── cli/                  ← CLI interface tests
 ├── core/                 ← Core module tests
 ├── domain_orchestrators/ ← Domain orchestrator tests
-├── golden/               ← 486 golden tests (regression-proof)
+├── golden/               ← Golden tests (regression-proof)
 ├── governance/           ← Governance rule tests
 ├── infrastructure/       ← Infrastructure layer tests
 ├── integration/          ← Cross-component integration tests
@@ -881,7 +881,7 @@ cortex/intelligence/
 
 ## 9. Golden Test Taxonomy
 
-486 golden tests organised into canonical subfolders under `tests/golden/`.
+Golden tests organised into canonical subfolders under `tests/golden/`.
 
 ### Canonical Subfolder Structure
 
@@ -938,4 +938,4 @@ Governance template: `cortex-registry/workflows/templates/governance/golden-test
 
 ---
 
-*All diagrams verified against live codebase · February 2026*
+*All diagrams verified against live codebase*

@@ -1,12 +1,11 @@
 # WorkflowEngine Runtime
 
 ---
-title: CORTEX WorkflowEngine — YAML→FSM→ConvergenceLoop Runtime (Phase 79-D)
+title: CORTEX WorkflowEngine — YAML→FSM→ConvergenceLoop Runtime
 type: explanation
 audience: [Software Developers, Product Owners]
 last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/workflow/ + cortex-registry/workflows/templates/
-phase: Phase 79-D (COMPLETE)
 order: 11
 ---
 
@@ -16,13 +15,13 @@ order: 11
 
 ## Why It Exists
 
-Before Phase 79-D, CORTEX had rich YAML workflow templates but no runtime that could:
+Before the WorkflowEngine existed, CORTEX had rich YAML workflow templates but no runtime that could:
 - Execute templates as typed step graphs (not just YAML parsing)
 - Track per-step state transitions (PENDING → RUNNING → PASSED/FAILED)
 - Loop detect→fix→rescan until convergence (0 P0/P1 violations)
 - Register step handlers by type ID without tight coupling
 
-Phase 79-D delivered all four.
+The WorkflowEngine delivered all four.
 
 ---
 
@@ -138,7 +137,7 @@ Templates are cached with 5-minute TTL and auto-reloaded on file change (dev mod
 
 ## Integration: Convergence Gate in TDD + Audit Templates
 
-Phase 79-D-D added `convergence_gate` blocks to the canonical TDD and audit YAML templates:
+The WorkflowEngine added `convergence_gate` blocks to the canonical TDD and audit YAML templates:
 
 ```yaml
 # cortex-registry/workflows/templates/tdd/tdd-red-green-refactor.yaml
@@ -185,7 +184,7 @@ Stage 7: Auto-Fix Convergence Loop (detect-fix-rescan-loop primitive)
 Stage 8: Final convergence verification + AC_COMPLETE log
 ```
 
-**Why this matters:** Before Phase 79-D, audit-fix was a single pass. You could run `/audit fix` and still have residual violations because fixes introduced new ones. The convergence loop eliminates this — it keeps going until the system is clean.
+**Why this matters:** Before the WorkflowEngine, audit-fix was a single pass. You could run `/audit fix` and still have residual violations because fixes introduced new ones. The convergence loop eliminates this — it keeps going until the system is clean.
 
 ---
 
@@ -200,7 +199,7 @@ Stage 8: Final convergence verification + AC_COMPLETE log
 | Detect-Fix-Rescan primitive | `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml` |
 | AuditFix pipeline template | `cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml` |
 | TDD template (with gate) | `cortex-registry/workflows/templates/tdd/tdd-red-green-refactor.yaml` |
-| Phase 79-D detail | `cortex-registry/planning/phases/completed/phase-67.yaml` |
+| WorkflowEngine detail | `cortex-registry/planning/phases/completed/phase-67.yaml` |
 
 ---
 
@@ -214,4 +213,4 @@ Stage 8: Final convergence verification + AC_COMPLETE log
 
 ---
 
-*Phase 79-D COMPLETE — all 6 GAPs closed (GAP-67-A through GAP-67-F) · Verified 2026-02-25*
+*All GAPs closed (GAP-67-A through GAP-67-F) · Verified against live codebase*

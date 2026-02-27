@@ -53,7 +53,7 @@
   │   │ CORE-064        │                                                   │
   │   └─────────────────┘                                                   │
   │                                                                         │
-  │   All 38 CORE rules evaluated across full codebase                      │
+  │   All active CORE rules evaluated across full codebase                      │
   │                                                                         │
   │   Result: PASS │ WARNING │ BLOCKED                                      │
   │   ❌ BLOCKED → Merge rejected                                           │
