@@ -1,13 +1,14 @@
 # CORTEX Intelligence Architecture
 
 ---
-title: CORTEX Intelligence — Brain Tiers, LENS Integration, and the Intelligence Matrix
+title: CORTEX Intelligence — Brain Tiers, LENS Integration, Intelligence Matrix, and RCA Memory Engine
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
 last_verified: 2026-02-27
-source_of_truth: cortex/intelligence/ + cortex/lens/ + cortex/intelligence/cross_cutting/
+source_of_truth: cortex/intelligence/ + cortex/lens/ + cortex/intelligence/cross_cutting/ + cortex/intelligence/learning/
 consolidates: [00-getting-started-brain-tier-architecture, 00-getting-started-intelligence-matrix, 00-getting-started-cortex-intelligence]
 order: 2
+phases_covered: [Phase 83 URS, Phase 84 Stub Elimination, Phase 87 RCA Memory Engine]
 ---
 
 > **The central idea:** CORTEX's intelligence mirrors biological cognition — a perception layer that reads the world, a reasoning layer that interprets it, and an action layer that responds. Every request passes through all three tiers before any code is written.
@@ -138,19 +139,59 @@ CORTEX does not just execute and forget. Every request teaches it something. If 
 
 All learning is stored in the Knowledge Registry, organised by domain: architecture, security, testing, performance, migration, and operational patterns. The Unified Reinforcement Signal (URS) provides the feedback mechanism — orchestrators emit reinforcement signals after every operation, and these signals adjust pattern confidence scores over time. Patterns with high confidence and multiple rewards are promoted to top-tier knowledge. Patterns with low confidence and punishments are quarantined. Idle patterns decay gradually.
 
----
+## The Knowledge Loop — How CORTEX Gets Smarter
 
-## Security — Built In, Not Bolted On
+CORTEX does not just execute and forget. Every request teaches it something. If a security pattern is flagged and fixed, that pattern gets stored so it is caught earlier next time. If a particular test structure works well for a service class, that pattern is suggested for similar future services. If a company-specific rule is applied, it is remembered and applied automatically going forward.
 
-Security is woven into every stage of the intelligence pipeline:
-
-- **Governance Gate** flags security-sensitive requests for enhanced review
-- **Intelligence Gathering** loads security best practices (cryptographic standards, rate limiting, input validation)
-- **TDD RED Phase** includes security test cases (expired tokens, brute force, injection attacks)
-- **TDD GREEN Phase** requires approved cryptographic libraries (BCrypt or Argon2, not SHA256 for passwords)
-- **REFACTOR Phase** includes a security hardening gate verifying rate limiting, JWT configuration, and zero P0 security gaps
-- **Pre-Commit** blocks commits with unresolved security violations
+All learning is stored in the Knowledge Registry, organised by domain: architecture, security, testing, performance, migration, and operational patterns. The Unified Reinforcement Signal (URS) provides the feedback mechanism — orchestrators emit reinforcement signals after every operation, and these signals adjust pattern confidence scores over time. Patterns with high confidence and multiple rewards are promoted to top-tier knowledge. Patterns with low confidence and punishments are quarantined. Idle patterns decay gradually.
 
 ---
 
-*All intelligence module paths verified against live codebase · February 2026*
+## RCA Memory Engine — Root Cause Analysis (Phase 87)
+
+The RCA Memory Engine extends CORTEX's learning infrastructure from simple pattern capture into structured root-cause reasoning. It answers the question every engineering team asks but rarely answers systematically: "Why does the same class of mistake keep happening?"
+
+### The Problem It Solves
+
+Before Phase 87, CORTEX's OPJMixin captured `root_cause` as free-text — useful for reference but impossible to compare, cluster, or act upon automatically. A developer who repeated the same class of mistake (say, missing error boundaries in async chains) would get no advance warning. The root cause was recorded but never cross-referenced.
+
+### Structured RCA Methodologies
+
+The RCA Engine implements four proven industrial methodologies:
+
+| Methodology | When To Use | Output |
+|-------------|-------------|--------|
+| **Five Whys** | Linear causal chains — most common failures | Ordered why→answer chain, root cause at depth ≥3 |
+| **Fishbone (Ishikawa)** | Multi-category failures (People/Process/Technology/Data) | Category → contributing cause map |
+| **Fault Tree** | Complex system failures with multiple contributing paths | AND/OR gate tree, probability-weighted |
+| **Causal Chain** | Sequential dependency failures | Ordered event chain with time deltas |
+
+### Prevention Gate
+
+Once an RCA is recorded, the Prevention Gate intercepts future operations that match the same root cause signature:
+
+- **Advisory mode (default):** Warns the developer — "This operation matches a known failure pattern (RCA-2026-001). Previous fix: check async error boundaries."
+- **Blocking mode (≥3 P0 recurrences):** Halts execution — "This exact root cause class has caused 3 P0 failures. A structured review is required before proceeding."
+
+### Recurrence Signatures
+
+The RecurrenceSignatureEngine generates a canonical fingerprint for every RCA. When a new failure arrives, its signature is compared against all stored signatures. A match above 85% similarity triggers a recurrence alert with the full history of prior fixes and their effectiveness scores.
+
+### Integration Points
+
+The RCA Engine is purely additive — it extends existing infrastructure:
+
+| Component | Extension |
+|-----------|-----------|
+| `OPJMixin` | Two new methods: `_opj_analyze_rca()` and `_opj_check_prevention_gate()` |
+| `cortex_learning` MCP tool | New operation: `op="rca"` — runs structured analysis, returns RCA report inline |
+| `CrossSessionPatternCache` | New tables: `rca_analyses`, `prevention_rules`, `recurrence_signatures`, `recurrence_incidents` |
+| URS | RCA results emit reinforcement signals — P0 recurrences emit STRONG_PUNISHMENT |
+
+### For Business Leaders
+
+Every engineering team builds the same bugs twice, three times, a hundred times. RCA Memory is the institutional knowledge that says "we've been here before — here's why, here's what we did, and here's what to watch for." It transforms individual debugging sessions into organisation-wide learning that compounds over time.
+
+---
+
+*All intelligence module paths verified against live codebase · February 2026 · Phase 87 RCA Memory Engine planned*

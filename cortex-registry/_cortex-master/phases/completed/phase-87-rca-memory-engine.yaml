@@ -1,0 +1,1011 @@
+# CORTEX Phase Plan — Phase 87
+# RCA Memory Engine — Root Cause Analysis + Prevention Gate + Documentation Sync
+# Authority: CORE-008, CORE-064, CORE-011, CORE-012, CORE-035
+# Status: PLANNED
+
+id: "phase-87"
+title: "RCA Memory Engine — Root Cause Analysis, Prevention Gate, Recurrence Detection + cortex-docs Holistic Sync"
+version: "1.0"
+created: "2026-02-27"
+status: COMPLETE
+priority: P1
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # File naming: snake_case only
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-87-RCA-MEMORY-ENGINE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: User observation + architecture design session (2026-02-27)
+  Problem: Developers repeat the same root-cause mistakes across sessions because:
+    1. OPJMixin._opj_record_failure() captures `root_cause` as free-text — no structured methodology
+    2. _opj_consult() returns prior failures but is ADVISORY only — no prevention gate blocks repeats
+    3. No recurrence detection across orchestrators (same root cause class, different symptoms)
+    4. cortex-docs (.content/ + flat-files/) has no documentation for RCA, URS, OPJ, or Phase 83-87
+
+  Existing infrastructure that supports this (75% already built):
+    - OPJMixin: _opj_record_failure(root_cause=..., avoid_in_future=...) ✅
+    - OPJReader: query_failures() sorted by confidence ✅
+    - ReinforcementEngine: emit_signal() + apply_to_learning() ✅
+    - EffectivenessAnalyzer: decay/promote/quarantine ✅
+    - CrossSessionPatternCache: SQLite persistence ✅
+    - DoRTracker: rca_data field on DoRTurn ✅
+
+  Gap: Structured RCA framework (Five Whys, Fishbone, Fault Tree, Causal Chain)
+       + Active Prevention Gate + Recurrence Signature Engine
+       + Holistic cortex-docs update (154 markdown files across 7 sections + flat-files)
+
+  Score at entry: 5.0 / 10 (learning system captures root causes but can't prevent recurrence)
+  Target score: 9.0 / 10 (structured RCA + active prevention + recurrence detection + docs current)
+  Baseline measurements:
+    - Smoke tests: 1,443 passed
+    - OPJ entries: N failure patterns with free-text root_cause
+    - cortex-docs accuracy: ~70% (Phase 84 complete but no RCA/URS/OPJ docs, stale counts)
+    - Recurrence prevention: 0% (no gate exists)
+  Git prerequisite: main branch clean, no merge conflicts
+
+  Design decisions:
+    - ZERO new orchestrators — extends OPJMixin with 2 new methods
+    - ZERO new MCP tools — extends cortex_learning with op="rca" operation
+    - RCA Engine lives in cortex/intelligence/learning/ (alongside existing learning infra)
+    - RCA SQLite store in .cortex-runtime/rca/ (canonical runtime data location)
+    - Prevention Gate is advisory by default (warn), blockable only for P0 recurrences (3+)
+    - All 154 cortex-docs markdown files systematically reviewed and updated
+    - New flat-file: 21-rca-memory-engine.md
+    - New diagram: diagram-24-rca-prevention-flow.md
+    - New visual prompt: prompt-13-rca-memory-shield.md
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+
+  # ── RCA Engine Core ──────────────────────────────────────────────────────
+  - id: "GAP-87-01"
+    title: "RCAAnalysis dataclass + RCATemplate enum — structured RCA methodology"
+    severity: P0
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      OPJMixin._opj_record_failure() accepts root_cause as str — no structured methodology.
+      DoRTurn.rca_data is Dict[str, Any] — untyped, unvalidated.
+      No Five Whys chain, Fishbone categories, Fault Tree, or Causal Chain model exists.
+      File: cortex/intelligence/learning/opj_mixin.py line 212 — root_cause: Optional[str]
+    action_ref: "phase-87-a"
+    status: CLOSED
+
+  - id: "GAP-87-02"
+    title: "RCAEngine — analyze_five_whys(), analyze_fishbone(), generate_prevention_rule()"
+    severity: P0
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      No class exists that performs structured root cause analysis.
+      OPJWriter.record_failure() stores free-text, never performs causal chain analysis.
+      No prevention rule generation — avoid_in_future is manual, unstructured.
+    action_ref: "phase-87-a"
+    status: CLOSED
+
+  - id: "GAP-87-03"
+    title: "RCAStore — SQLite persistence for RCA analyses in .cortex-runtime/"
+    severity: P0
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      CrossSessionPatternCache stores patterns in SQLite but has no RCA-specific schema.
+      No tables for: rca_analyses (structured whys/categories), prevention_rules,
+      recurrence_signatures, or recurrence_incidents.
+      Canonical location: .cortex-runtime/rca/rca_store.db (does not exist)
+    action_ref: "phase-87-b"
+    status: CLOSED
+
+  - id: "GAP-87-04"
+    title: "Recurrence Signature Engine — detect same root cause class across orchestrators"
+    severity: P0
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      OPJ occurrence_count tracks IDENTICAL entries (same orchestrator + operation + text).
+      Does NOT detect same ROOT CAUSE CLASS across different orchestrators/operations.
+      Example: "missing test fixture defaults" in TDDOrchestrator and "stale fixture TTL"
+      in EnforcementOrchestrator are the same root cause class but different entries.
+      No recurrence_signature hash exists. No cross-cutting recurrence report.
+    action_ref: "phase-87-b"
+    status: CLOSED
+
+  - id: "GAP-87-05"
+    title: "PreventionGate — block/warn before execution matches known RCA pattern"
+    severity: P0
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      _opj_consult() returns prior failures but orchestrators are NOT required to act on them.
+      No gate exists that says "STOP — this operation matches a known root cause pattern
+      that has recurred 3 times; here is the RCA and prevention rule."
+      MasterOrchestrator pipeline has no prevention checkpoint between IntentRouter and execution.
+    action_ref: "phase-87-c"
+    status: CLOSED
+
+  - id: "GAP-87-06"
+    title: "OPJMixin enhancement — _opj_check_prevention() + _opj_record_rca()"
+    severity: P1
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      OPJMixin has 4 public methods: _opj_init, _opj_consult, _opj_record_success, _opj_record_failure.
+      Missing: _opj_check_prevention(operation, context) → Optional[PreventionWarning]
+      Missing: _opj_record_rca(operation, rca_analysis) → str (rca_id)
+      Both follow existing lazy-safe pattern (try/except, never crash caller).
+    action_ref: "phase-87-c"
+    status: CLOSED
+
+  - id: "GAP-87-07"
+    title: "cortex_learning MCP tool — new op='rca' operation"
+    severity: P1
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      cortex_learning supports: emit, history, decay, promote, quarantine, metrics.
+      No 'rca' operation to query RCA store, view recurrence reports, or manually
+      record an RCA from Copilot Chat.
+    action_ref: "phase-87-c"
+    status: CLOSED
+
+  - id: "GAP-87-08"
+    title: "URS integration — STRONG_PUNISHMENT on recurrence, STRONG_REWARD on prevention"
+    severity: P1
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      OPJMixin already emits MILD_PUNISHMENT on failure and MILD_REWARD on success.
+      RCA recurrences should escalate to STRONG_PUNISHMENT (confidence -1.0).
+      Successful prevention (gate blocked repeat) should emit STRONG_REWARD (+1.0).
+      No such signal escalation exists.
+    action_ref: "phase-87-c"
+    status: CLOSED
+
+  # ── Workflow Templates ───────────────────────────────────────────────────
+  - id: "GAP-87-09"
+    title: "rca-five-whys-workflow.yaml — structured Five Whys template"
+    severity: P1
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      cortex-registry/workflows/templates/intelligence/ has only 1 file
+      (intelligence-matrix-wiring-pipeline.yaml). No RCA workflow template exists.
+      No structured Five Whys YAML schema with mandatory fields (symptom, why_1..why_N,
+      root_cause, prevention_rule, recurrence_signature).
+    action_ref: "phase-87-d"
+    status: CLOSED
+
+  - id: "GAP-87-10"
+    title: "rca-fishbone-workflow.yaml — Ishikawa categorised causal analysis template"
+    severity: P1
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      No Fishbone/Ishikawa analysis template. Categories (People, Process, Technology,
+      Environment, Materials, Methods) are standard in incident post-mortem but absent
+      from CORTEX workflow templates.
+    action_ref: "phase-87-d"
+    status: CLOSED
+
+  - id: "GAP-87-11"
+    title: "rca-prevention-gate-workflow.yaml — gate integration workflow"
+    severity: P1
+    source: "Architecture design session (2026-02-27)"
+    evidence: |
+      No workflow template defines how the prevention gate integrates into the
+      MasterOrchestrator pipeline (Stage 0 → IntentRouter → prevention check → execution).
+    action_ref: "phase-87-d"
+    status: CLOSED
+
+  # ── cortex-docs Holistic Sync ────────────────────────────────────────────
+  - id: "GAP-87-12"
+    title: "cortex-docs index.md + glossary.md — add Phase 87, RCA, Prevention Gate terms"
+    severity: P1
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      index.md references Phase 84 as latest. No mention of Phase 87 (RCA).
+      glossary.md has no entries for: RCA, Five Whys, Fishbone, Prevention Gate,
+      Recurrence Signature, or Causal Chain.
+    action_ref: "phase-87-e"
+    status: CLOSED
+
+  - id: "GAP-87-13"
+    title: "00-getting-started/ — update one-pager, key-concepts, how-cortex-works with RCA capability"
+    severity: P1
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      01-one-pager.md: 6 capability domains listed — no mention of RCA/mistake prevention.
+      02-key-concepts.md: URS mentioned but no RCA concept.
+      03-how-cortex-works.md: request flow has no prevention gate checkpoint.
+      04-brain-tier-architecture.md: no RCA tier in brain model.
+    action_ref: "phase-87-e"
+    status: CLOSED
+
+  - id: "GAP-87-14"
+    title: "01-capabilities/ — add RCA to intelligence capability, update capability matrix"
+    severity: P1
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      01-overview.md: capability matrix has no RCA row.
+      03-ai-intelligence.md: URS documented but no RCA Memory Engine.
+      No dedicated section for "mistake prevention" capability.
+    action_ref: "phase-87-e"
+    status: CLOSED
+
+  - id: "GAP-87-15"
+    title: "03-orchestration/ — document prevention gate in master orchestrator flow"
+    severity: P1
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      02-master-orchestrator.md: pipeline stages listed but no prevention gate.
+      06-cross-orchestrator.md: OPJ mentioned but no RCA cross-cutting analysis.
+      08-end-to-end-flow.md: no prevention checkpoint in request lifecycle.
+    action_ref: "phase-87-e"
+    status: CLOSED
+
+  - id: "GAP-87-16"
+    title: "flat-files/ — new 21-rca-memory-engine.md + update existing flat files"
+    severity: P1
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      flat-files/ ends at 20-security-first.md. No RCA flat file.
+      01-intelligence-architecture.md: no RCA layer in architecture.
+      04-capabilities.md: no RCA in capability list.
+      08-orchestration-system.md: no prevention gate in orchestration flow.
+      19-enterprise-patterns-knowledge.md: no RCA pattern documented.
+    action_ref: "phase-87-f"
+    status: CLOSED
+
+  - id: "GAP-87-17"
+    title: "flat-files/diagrams/ — new diagram-24-rca-prevention-flow.md"
+    severity: P1
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      diagrams/ ends at diagram-23-sweep-completeness.md. No RCA prevention flow diagram.
+      Need Mermaid diagram showing: symptom → Five Whys → root cause → prevention rule
+      → recurrence signature → prevention gate → block/warn/info.
+    action_ref: "phase-87-f"
+    status: CLOSED
+
+  - id: "GAP-87-18"
+    title: "flat-files/visual-prompts/ — new prompt-13-rca-memory-shield.md"
+    severity: P2
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      visual-prompts/images/ ends at prompt-12. No RCA visual prompt.
+      Concept: Shield/immune system metaphor — CORTEX remembering past failures
+      and blocking repeat mistakes like antibodies.
+    action_ref: "phase-87-f"
+    status: CLOSED
+
+  - id: "GAP-87-19"
+    title: "06-faq/ — add RCA FAQ entries across general, orchestration, intelligence sections"
+    severity: P2
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      01-general.md: no FAQ about mistake prevention.
+      02-orchestration.md: no FAQ about prevention gate.
+      04-lens-intelligence.md: no FAQ about RCA integration with LENS.
+      07-business-product.md: no FAQ about ROI of mistake prevention.
+    action_ref: "phase-87-e"
+    status: CLOSED
+
+  - id: "GAP-87-20"
+    title: "02-lens/ + 04-mcp/ + 05-infrastructure/ — minor updates for RCA integration"
+    severity: P2
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      02-lens/04-synthesis.md: no mention of RCA as synthesis output.
+      04-mcp/03-tools-catalog.md: cortex_learning op=rca not documented.
+      05-infrastructure/05-observability.md: no RCA store in observability docs.
+    action_ref: "phase-87-e"
+    status: CLOSED
+
+  - id: "GAP-87-21"
+    title: "cortex-docs data JSON files — update orchestrators.json, mcp-tools.json, content.json"
+    severity: P2
+    source: "Documentation audit (2026-02-27)"
+    evidence: |
+      cortex-docs/data/orchestrators.json: no RCA engine entry.
+      cortex-docs/data/mcp-tools.json: cortex_learning op=rca not listed.
+      cortex-docs/data/content.json: no RCA content entry.
+    action_ref: "phase-87-f"
+    status: CLOSED
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY — CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated sub-phases
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+
+  # ── SUB-PHASE A: RCA Core Data Model ────────────────────────────────────
+  - id: "phase-87-a"
+    title: "RCAAnalysis dataclass + RCATemplate enum + RCAEngine core methods"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-87-01", "GAP-87-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥1,443 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - path: "cortex/intelligence/learning/rca_engine.py"
+        description: |
+          RCATemplate enum: FIVE_WHYS, FISHBONE, FAULT_TREE, CAUSAL_CHAIN, CURRENT_REALITY_TREE
+          RCAAnalysis dataclass: template, symptom, whys[] (Five Whys chain),
+            categories{} (Fishbone), fault_tree{} (Fault Tree), causal_chain[] (Causal Chain),
+            root_cause, contributing_factors[], prevention_rule, recurrence_signature,
+            orchestrator, operation, timestamp, confidence, rca_id (auto-generated)
+          PreventionRule dataclass: rule_id, description, severity (P0/P1/P2),
+            recurrence_threshold (default 3), active (bool), created_at
+          RCAEngine class:
+            analyze_five_whys(symptom, whys[]) → RCAAnalysis  (enforces min 3 whys)
+            analyze_fishbone(symptom, categories{}) → RCAAnalysis
+            generate_prevention_rule(rca) → PreventionRule
+            compute_recurrence_signature(rca) → str  (category + keyword hash)
+      - path: "tests/unit/learning/test_rca_engine.py"
+        description: "RED-phase tests for RCAAnalysis, RCATemplate, RCAEngine"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests for RCA data model + engine methods"
+        gate: "python3 scripts/run_tests.py file tests/unit/learning/test_rca_engine.py — ALL tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement RCATemplate, RCAAnalysis, PreventionRule, RCAEngine"
+        gate: "python3 scripts/run_tests.py file tests/unit/learning/test_rca_engine.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), deduplication (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/unit/learning/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_rca_template_enum_has_five_values — FIVE_WHYS, FISHBONE, FAULT_TREE, CAUSAL_CHAIN, CURRENT_REALITY_TREE"
+        - "test_rca_analysis_dataclass_required_fields — symptom, root_cause, template, prevention_rule"
+        - "test_rca_analysis_auto_generates_rca_id — UUID format"
+        - "test_rca_analysis_auto_generates_timestamp — datetime"
+        - "test_rca_analysis_to_dict_serializable — all fields round-trip through dict"
+        - "test_prevention_rule_dataclass_fields — rule_id, description, severity, threshold, active"
+        - "test_rca_engine_analyze_five_whys_requires_min_3_whys — ValueError if < 3"
+        - "test_rca_engine_analyze_five_whys_creates_analysis — correct template, whys populated"
+        - "test_rca_engine_analyze_five_whys_generates_prevention_rule — non-empty rule"
+        - "test_rca_engine_analyze_fishbone_requires_at_least_one_category — ValueError if empty"
+        - "test_rca_engine_analyze_fishbone_creates_analysis — categories populated"
+        - "test_rca_engine_generate_prevention_rule — returns PreventionRule with active=True"
+        - "test_rca_engine_compute_recurrence_signature — format RCA-CATEGORY-KEYWORDS"
+        - "test_rca_engine_same_root_cause_class_same_signature — cross-orchestrator match"
+        - "test_rca_engine_different_root_cause_different_signature — no false positive"
+      green:
+        - "Implement RCATemplate enum in rca_engine.py"
+        - "Implement RCAAnalysis dataclass with auto-id and timestamp"
+        - "Implement PreventionRule dataclass"
+        - "Implement RCAEngine.analyze_five_whys() with min-3-whys guard"
+        - "Implement RCAEngine.analyze_fishbone() with min-category guard"
+        - "Implement RCAEngine.generate_prevention_rule()"
+        - "Implement RCAEngine.compute_recurrence_signature()"
+      refactor:
+        - "Add docstrings to all public methods (CORE-012)"
+        - "Verify type hints on all signatures (CORE-011)"
+        - "Confirm no duplicate implementations exist (CORE-035)"
+
+    acceptance_criteria:
+      - "RCATemplate enum has exactly 5 values"
+      - "RCAAnalysis.to_dict() serialises all fields"
+      - "analyze_five_whys() rejects < 3 whys with ValueError"
+      - "compute_recurrence_signature() produces deterministic hash"
+      - "Same root cause class across different orchestrators → same signature"
+      - "All tdd_sequence.red tests GREEN"
+      - "REFACTOR gate passes with zero regressions"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/unit/learning/test_rca_engine.py"
+      min_tests_pass: 15
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE B: RCA Store + Recurrence Detection ──────────────────────
+  - id: "phase-87-b"
+    title: "RCAStore SQLite persistence + recurrence detection engine"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-87-03", "GAP-87-04"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-87-a"]
+    prerequisite: "phase-87-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - path: "cortex/intelligence/learning/rca_store.py"
+        description: |
+          RCAStore class (SQLite in .cortex-runtime/rca/rca_store.db):
+            Schema: rca_analyses (rca_id, template, symptom, root_cause, prevention_rule,
+              recurrence_signature, orchestrator, operation, confidence, created_at, whys_json,
+              categories_json, contributing_factors_json)
+            prevention_rules (rule_id, description, severity, recurrence_threshold, active,
+              recurrence_signature, created_at)
+            recurrence_incidents (incident_id, recurrence_signature, rca_id, detected_at)
+          Methods:
+            store_rca(analysis: RCAAnalysis) → str (rca_id)
+            store_prevention_rule(rule: PreventionRule) → str (rule_id)
+            query_by_signature(sig: str) → List[RCAAnalysis]
+            query_by_category(category: str) → List[RCAAnalysis]
+            get_active_prevention_rules() → List[PreventionRule]
+            record_recurrence(signature: str, rca_id: str) → None
+            get_recurrence_report() → RecurrenceReport
+            cleanup(retention_days: int = 90) → int  (same pattern as orchestrator-traces.db)
+          RecurrenceReport dataclass: signature, count, first_seen, last_seen, rcas[]
+      - path: "tests/unit/learning/test_rca_store.py"
+        description: "RED-phase tests for RCAStore SQLite persistence"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests for RCAStore persistence + recurrence"
+        gate: "python3 scripts/run_tests.py file tests/unit/learning/test_rca_store.py — ALL tests must FAIL"
+        blocker: "Do NOT write implementation until every listed test fails"
+      green:
+        action: "Implement RCAStore with SQLite schema + CRUD + recurrence detection"
+        gate: "python3 scripts/run_tests.py file tests/unit/learning/test_rca_store.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, WAL mode, connection pooling"
+        gate: "python3 scripts/run_tests.py dir tests/unit/learning/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_rca_store_creates_db_in_cortex_runtime — .cortex-runtime/rca/rca_store.db"
+        - "test_rca_store_schema_has_three_tables — rca_analyses, prevention_rules, recurrence_incidents"
+        - "test_store_rca_persists_analysis — round-trip store → query"
+        - "test_store_rca_returns_rca_id — UUID format string"
+        - "test_query_by_signature_returns_matching — filter works"
+        - "test_query_by_signature_empty_returns_empty — no false positives"
+        - "test_query_by_category_works — category filter"
+        - "test_store_prevention_rule_persists — round-trip"
+        - "test_get_active_prevention_rules — only active=True returned"
+        - "test_record_recurrence_increments_count — signature count grows"
+        - "test_get_recurrence_report — report with count, first_seen, last_seen"
+        - "test_cleanup_removes_old_entries — 90-day retention"
+        - "test_rca_store_handles_concurrent_writes — no lock error"
+      green:
+        - "Implement RCAStore.__init__() with SQLite schema creation"
+        - "Implement store_rca() + query_by_signature() + query_by_category()"
+        - "Implement store_prevention_rule() + get_active_prevention_rules()"
+        - "Implement record_recurrence() + get_recurrence_report()"
+        - "Implement cleanup() with retention_days parameter"
+      refactor:
+        - "Add WAL mode for concurrent read safety"
+        - "Add docstrings to all public methods"
+        - "Verify type hints on all signatures"
+
+    acceptance_criteria:
+      - "RCA store creates .cortex-runtime/rca/rca_store.db"
+      - "Schema has 3 tables with correct columns"
+      - "Recurrence count increments on same signature"
+      - "Cleanup removes entries older than retention_days"
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/unit/learning/test_rca_store.py"
+      min_tests_pass: 13
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE C: Prevention Gate + OPJMixin + MCP + URS ─────────────────
+  - id: "phase-87-c"
+    title: "PreventionGate integration + OPJMixin enhancement + cortex_learning op=rca + URS escalation"
+    priority: P0
+    status: COMPLETE
+    gap_refs: ["GAP-87-05", "GAP-87-06", "GAP-87-07", "GAP-87-08"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "5 hours"
+    depends_on: ["phase-87-b"]
+    prerequisite: "phase-87-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    files_to_edit:
+      - path: "cortex/intelligence/learning/opj_mixin.py"
+        changes: |
+          Add _opj_check_prevention(operation, context) → Optional[PreventionWarning]
+          Add _opj_record_rca(operation, rca_analysis) → str
+          Both follow existing try/except resilience pattern (never crash caller).
+          _opj_check_prevention() queries RCAStore for active prevention rules
+          matching the operation and emits warning/block based on recurrence count.
+      - path: "cortex/mcp/tools/learning_tool.py"
+        changes: |
+          Add op="rca" to CortexLearning._PARAMETERS enum.
+          Add _execute_rca() handler: query RCA store, view recurrence report,
+          record manual RCA from Copilot Chat.
+      - path: "cortex/intelligence/learning/__init__.py"
+        changes: "Export RCAAnalysis, RCATemplate, RCAEngine, RCAStore, PreventionRule"
+
+    new_files:
+      - path: "tests/unit/learning/test_rca_prevention_gate.py"
+        description: "Tests for PreventionGate + OPJMixin enhancements + URS escalation"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests for prevention gate, OPJ enhancement, MCP op, URS"
+        gate: "python3 scripts/run_tests.py file tests/unit/learning/test_rca_prevention_gate.py — ALL tests must FAIL"
+        blocker: "Do NOT write implementation until every listed test fails"
+      green:
+        action: "Implement PreventionGate, OPJMixin methods, cortex_learning op=rca, URS escalation"
+        gate: "python3 scripts/run_tests.py file tests/unit/learning/test_rca_prevention_gate.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints, docstrings, resilience pattern verification"
+        gate: "python3 scripts/run_tests.py dir tests/unit/learning/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_prevention_gate_should_block_returns_block_on_3_plus_recurrences"
+        - "test_prevention_gate_should_block_returns_warn_on_2_recurrences"
+        - "test_prevention_gate_should_block_returns_info_on_1_recurrence"
+        - "test_prevention_gate_should_block_returns_none_on_no_match"
+        - "test_opj_mixin_check_prevention_calls_gate — delegation test"
+        - "test_opj_mixin_check_prevention_resilient — exception returns None"
+        - "test_opj_mixin_record_rca_stores_analysis — round-trip verify"
+        - "test_opj_mixin_record_rca_emits_strong_punishment — URS signal"
+        - "test_cortex_learning_op_rca_query — returns recurrence report"
+        - "test_cortex_learning_op_rca_record — stores RCA from chat"
+        - "test_prevention_block_emits_strong_reward — successful prevention signal"
+        - "test_urs_escalation_on_recurrence — STRONG_PUNISHMENT not MILD"
+      green:
+        - "Implement PreventionGate class in rca_engine.py"
+        - "Add _opj_check_prevention() to OPJMixin"
+        - "Add _opj_record_rca() to OPJMixin"
+        - "Add op=rca to cortex_learning MCP tool"
+        - "Wire URS escalation signals"
+      refactor:
+        - "Verify try/except resilience on all new OPJMixin methods"
+        - "Add docstrings and type hints"
+
+    acceptance_criteria:
+      - "PreventionGate blocks on 3+ recurrences, warns on 2, info on 1"
+      - "_opj_check_prevention() never raises (resilient pattern)"
+      - "cortex_learning op=rca returns recurrence report"
+      - "Recurrence emits STRONG_PUNISHMENT, prevention emits STRONG_REWARD"
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/unit/learning/test_rca_prevention_gate.py"
+      min_tests_pass: 12
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE D: Workflow Templates ─────────────────────────────────────
+  - id: "phase-87-d"
+    title: "RCA workflow templates — Five Whys, Fishbone, Prevention Gate integration"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-87-09", "GAP-87-10", "GAP-87-11"]
+    governance_authority: "CORE-008, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-87-c"]
+    prerequisite: "phase-87-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - path: "cortex-registry/workflows/templates/intelligence/rca-five-whys-workflow.yaml"
+        description: |
+          Structured Five Whys workflow template with stages:
+            S1_SYMPTOM_CAPTURE: Record symptom and initial context
+            S2_WHY_CHAIN: Iterative why analysis (min 3, max 7 levels)
+            S3_ROOT_CAUSE_IDENTIFICATION: Extract root cause from deepest why
+            S4_CONTRIBUTING_FACTORS: Identify amplifying factors
+            S5_PREVENTION_RULE_GENERATION: Create actionable prevention rule
+            S6_RECURRENCE_SIGNATURE: Compute signature for future matching
+            S7_STORE_AND_ACTIVATE: Persist to RCA store + activate prevention rule
+      - path: "cortex-registry/workflows/templates/intelligence/rca-fishbone-workflow.yaml"
+        description: |
+          Ishikawa/Fishbone categorised analysis template with stages:
+            S1_SYMPTOM_CAPTURE: Record effect/problem statement
+            S2_CATEGORY_ANALYSIS: Analyze each category (People, Process, Technology,
+              Environment, Materials, Methods)
+            S3_CROSS_CATEGORY_CORRELATION: Find root causes spanning categories
+            S4_ROOT_CAUSE_RANKING: Rank by impact + evidence
+            S5_PREVENTION_RULE_GENERATION: Create per-category prevention rules
+            S6_STORE_AND_ACTIVATE: Persist + activate
+      - path: "cortex-registry/workflows/templates/intelligence/rca-prevention-gate-workflow.yaml"
+        description: |
+          Prevention gate integration workflow:
+            S1_OPERATION_CONTEXT: Capture incoming operation + context
+            S2_SIGNATURE_MATCH: Query RCA store for matching signatures
+            S3_RECURRENCE_CHECK: Count occurrences of matching signature
+            S4_GATE_DECISION: BLOCK (3+) / WARN (2) / INFO (1) / PASS (0)
+            S5_DISPLAY_RCA: Show relevant RCA chain to developer
+            S6_RECORD_OUTCOME: Log gate decision + emit URS signal
+
+    tdd_cycle:
+      red:
+        action: "Validate YAML schema — all templates loadable with yaml.safe_load()"
+        gate: "python3 -c 'import yaml; [yaml.safe_load(open(f)) for f in [\"cortex-registry/workflows/templates/intelligence/rca-five-whys-workflow.yaml\", ...]]'"
+        blocker: "YAML must parse without errors"
+      green:
+        action: "Create all 3 workflow templates with correct schema"
+        gate: "All 3 files exist and parse as valid YAML"
+        blocker: "Templates must reference existing RCA engine classes"
+      refactor:
+        action: "Verify consistency with existing workflow template conventions"
+        gate: "Templates follow same structure as audit-fix-pipeline.yaml"
+        blocker: "Must pass YAML validation"
+
+    tdd_sequence:
+      red:
+        - "Validate rca-five-whys-workflow.yaml loads without error"
+        - "Validate rca-fishbone-workflow.yaml loads without error"
+        - "Validate rca-prevention-gate-workflow.yaml loads without error"
+      green:
+        - "Create rca-five-whys-workflow.yaml with 7 stages"
+        - "Create rca-fishbone-workflow.yaml with 6 stages"
+        - "Create rca-prevention-gate-workflow.yaml with 6 stages"
+      refactor:
+        - "Verify consistency with existing template conventions"
+
+    acceptance_criteria:
+      - "3 new workflow templates in intelligence/ directory"
+      - "All templates valid YAML"
+      - "Five Whys template has 7 stages"
+      - "Fishbone template has 6 stages with standard Ishikawa categories"
+      - "Prevention Gate template references PreventionGate class"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE E: cortex-docs Structured Content Sync ────────────────────
+  - id: "phase-87-e"
+    title: "cortex-docs .content/ holistic review + RCA documentation"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-87-12", "GAP-87-13", "GAP-87-14", "GAP-87-15", "GAP-87-19", "GAP-87-20"]
+    governance_authority: "CORE-002, CORE-064"
+    duration_estimate: "6 hours"
+    depends_on: ["phase-87-d"]
+    prerequisite: "phase-87-d completion_gate PASSED (all RCA code and templates exist)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    files_to_edit:
+      - path: "cortex-docs/.content/index.md"
+        changes: |
+          Add Phase 87 to System Metrics table.
+          Add RCA Memory Engine row to metrics.
+          Update phase count references.
+          Add RCA to Architecture at a Glance diagram.
+      - path: "cortex-docs/.content/glossary.md"
+        changes: |
+          Add glossary entries for: RCA (Root Cause Analysis), Five Whys,
+          Fishbone/Ishikawa, Prevention Gate, Recurrence Signature,
+          Causal Chain, PreventionRule, RCAStore, RCAEngine.
+      - path: "cortex-docs/.content/00-getting-started/01-one-pager.md"
+        changes: |
+          Add RCA/mistake prevention to Platform at a Glance.
+          Add 7th capability domain row or integrate into Intelligence domain.
+          Update request flow diagram with prevention gate checkpoint.
+      - path: "cortex-docs/.content/00-getting-started/02-key-concepts.md"
+        changes: "Add RCA Memory Engine as key concept alongside URS."
+      - path: "cortex-docs/.content/00-getting-started/03-how-cortex-works.md"
+        changes: "Add prevention gate checkpoint to request flow explanation."
+      - path: "cortex-docs/.content/00-getting-started/04-brain-tier-architecture.md"
+        changes: "Add RCA as learning subsystem in brain tier model."
+      - path: "cortex-docs/.content/01-capabilities/01-overview.md"
+        changes: |
+          Add RCA Memory Engine row to capability matrix.
+          Add RCA to Intelligence domain description.
+      - path: "cortex-docs/.content/01-capabilities/03-ai-intelligence.md"
+        changes: "Add RCA Memory Engine section alongside URS documentation."
+      - path: "cortex-docs/.content/03-orchestration/02-master-orchestrator.md"
+        changes: "Document prevention gate in pipeline stages."
+      - path: "cortex-docs/.content/03-orchestration/06-cross-orchestrator.md"
+        changes: "Add RCA cross-cutting analysis documentation."
+      - path: "cortex-docs/.content/03-orchestration/08-end-to-end-flow.md"
+        changes: "Add prevention gate checkpoint in request lifecycle."
+      - path: "cortex-docs/.content/02-lens/04-synthesis.md"
+        changes: "Add RCA as LENS synthesis output."
+      - path: "cortex-docs/.content/04-mcp/03-tools-catalog.md"
+        changes: "Add cortex_learning op=rca documentation."
+      - path: "cortex-docs/.content/05-infrastructure/05-observability.md"
+        changes: "Add .cortex-runtime/rca/rca_store.db to observability docs."
+      - path: "cortex-docs/.content/06-faq/01-general.md"
+        changes: "Add FAQ: 'How does CORTEX prevent repeated mistakes?'"
+      - path: "cortex-docs/.content/06-faq/02-orchestration.md"
+        changes: "Add FAQ: 'What is the Prevention Gate?'"
+      - path: "cortex-docs/.content/06-faq/04-lens-intelligence.md"
+        changes: "Add FAQ: 'How does RCA integrate with LENS?'"
+      - path: "cortex-docs/.content/06-faq/07-business-product.md"
+        changes: "Add FAQ: 'What is the ROI of mistake prevention?'"
+
+    tdd_cycle:
+      red:
+        action: "List all files to update. Verify current content is stale."
+        gate: "Grep confirms no RCA/Prevention Gate content exists in target files"
+        blocker: "Do NOT update docs before RCA code exists (phase-87-d gate)"
+      green:
+        action: "Update all listed files with accurate RCA content"
+        gate: "All files contain RCA documentation matching implemented code"
+        blocker: "Content must reference actual class/method names from rca_engine.py"
+      refactor:
+        action: "Verify cross-references, consistent terminology, no stale counts"
+        gate: "grep -r 'Phase 87' cortex-docs/.content/ returns ≥15 matches"
+        blocker: "Must pass consistency check"
+
+    tdd_sequence:
+      red:
+        - "Verify index.md has no Phase 87 reference"
+        - "Verify glossary.md has no RCA entry"
+        - "Verify 01-overview.md has no RCA capability row"
+      green:
+        - "Update all 18+ files listed in files_to_edit"
+      refactor:
+        - "Cross-reference check across all updated files"
+        - "Verify terminology consistency (RCA Memory Engine, not 'root cause system')"
+
+    acceptance_criteria:
+      - "index.md mentions Phase 87 in metrics table"
+      - "glossary.md has entries for all 9 RCA terms"
+      - "01-one-pager.md includes RCA in platform overview"
+      - "02-master-orchestrator.md documents prevention gate stage"
+      - "03-tools-catalog.md documents cortex_learning op=rca"
+      - "4 FAQ sections have RCA entries"
+      - "All content references match actual class/method names"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE F: Flat Files + Diagrams + Visual Prompts + Data JSON ────
+  - id: "phase-87-f"
+    title: "flat-files/ holistic sync + new RCA flat file + diagram + visual prompt + data JSONs"
+    priority: P1
+    status: COMPLETE
+    gap_refs: ["GAP-87-16", "GAP-87-17", "GAP-87-18", "GAP-87-21"]
+    governance_authority: "CORE-002, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-87-e"]
+    prerequisite: "phase-87-e completion_gate PASSED (all .content/ docs updated)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    new_files:
+      - path: "cortex-docs/.content/flat-files/21-rca-memory-engine.md"
+        description: |
+          Comprehensive flat-file covering:
+            - RCA Memory Engine overview (problem, solution, architecture)
+            - Five Whys methodology with CORTEX example
+            - Fishbone/Ishikawa methodology with CORTEX example
+            - Prevention Gate mechanics (block/warn/info thresholds)
+            - Recurrence Signature algorithm
+            - Integration with OPJ, URS, LENS
+            - MCP tool usage (cortex_learning op=rca)
+            - File placement (rca_engine.py, rca_store.py locations)
+      - path: "cortex-docs/.content/flat-files/diagrams/diagram-24-rca-prevention-flow.md"
+        description: |
+          Mermaid diagram showing:
+            Symptom → Five Whys Chain → Root Cause → Prevention Rule
+            → Recurrence Signature → RCA Store (SQLite)
+            → Prevention Gate (future requests) → BLOCK/WARN/INFO/PASS
+            → URS Feedback (STRONG_PUNISHMENT on recurrence, STRONG_REWARD on prevention)
+      - path: "cortex-docs/.content/flat-files/visual-prompts/images/prompt-13-rca-memory-shield.md"
+        description: |
+          Visual prompt for AI image generation:
+            Concept: Shield/immune system — CORTEX antibodies recognizing
+            previously encountered failure patterns and blocking them.
+            Style: Consistent with existing prompt series (neon, circuit-board aesthetic).
+
+    files_to_edit:
+      - path: "cortex-docs/.content/flat-files/01-intelligence-architecture.md"
+        changes: "Add RCA Memory Engine to intelligence architecture layers."
+      - path: "cortex-docs/.content/flat-files/04-capabilities.md"
+        changes: "Add RCA to capability list and intelligence domain."
+      - path: "cortex-docs/.content/flat-files/07-orchestration-reference.md"
+        changes: "Add prevention gate to orchestration reference."
+      - path: "cortex-docs/.content/flat-files/08-orchestration-system.md"
+        changes: "Add prevention gate checkpoint in orchestration flow."
+      - path: "cortex-docs/.content/flat-files/19-enterprise-patterns-knowledge.md"
+        changes: "Add RCA as enterprise pattern."
+      - path: "cortex-docs/data/orchestrators.json"
+        changes: "Add RCAEngine entry (not an orchestrator but in intelligence layer)."
+      - path: "cortex-docs/data/mcp-tools.json"
+        changes: "Add cortex_learning op=rca to tool catalog."
+      - path: "cortex-docs/data/content.json"
+        changes: "Add 21-rca-memory-engine flat file entry."
+
+    tdd_cycle:
+      red:
+        action: "Verify flat-files/ has no 21-rca-memory-engine.md, diagrams/ has no diagram-24"
+        gate: "Files do not exist yet"
+        blocker: "Do NOT create flat files before .content/ docs are updated"
+      green:
+        action: "Create 3 new files, update 5 existing flat files, update 3 JSON data files"
+        gate: "All files exist and content matches implemented code"
+        blocker: "Content must reference actual implemented classes"
+      refactor:
+        action: "Verify Mermaid diagram renders, cross-references valid, JSON valid"
+        gate: "All JSON files parse with json.loads()"
+        blocker: "Must pass validation"
+
+    tdd_sequence:
+      red:
+        - "Verify 21-rca-memory-engine.md does not exist"
+        - "Verify diagram-24 does not exist"
+        - "Verify prompt-13 does not exist"
+      green:
+        - "Create 21-rca-memory-engine.md with full RCA documentation"
+        - "Create diagram-24-rca-prevention-flow.md with Mermaid diagram"
+        - "Create prompt-13-rca-memory-shield.md with visual prompt"
+        - "Update 5 existing flat files with RCA content"
+        - "Update 3 JSON data files"
+      refactor:
+        - "Verify all cross-references between new and existing files"
+        - "Validate JSON files with json.loads()"
+
+    acceptance_criteria:
+      - "21-rca-memory-engine.md exists with ≥200 lines of content"
+      - "diagram-24 has valid Mermaid syntax"
+      - "prompt-13 follows visual prompt series conventions"
+      - "All 5 existing flat files updated with RCA content"
+      - "All 3 JSON data files parse without error"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── FINAL: Smoke Gate + CORE-064 Close ──────────────────────────────────
+  - id: "phase-87-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P0
+    status: COMPLETE
+    gap_refs: []
+    depends_on: ["phase-87-f"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1,443 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate, not implementation"
+        gate: "All sweep_catalogue entries verified CLOSED before proceeding"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥1,443 tests pass with zero regressions"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Move planned/ → completed/, update cortex-master.yaml status → COMPLETE"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 21 sweep_catalogue GAPs have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke passes ≥1,443 tests"
+      - "Zero new test failures vs baseline"
+      - "phase-87 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤500 lines"
+      - "All 154+ cortex-docs markdown files reviewed and accurate"
+      - "3 new workflow templates valid YAML"
+      - "rca_engine.py + rca_store.py importable from cortex.intelligence.learning"
+      - "cortex_learning op=rca functional via MCP"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DOCUMENTATION AUDIT MANIFEST — all 154 cortex-docs files reviewed
+# ─────────────────────────────────────────────────────────────────────────────
+# This section tracks the holistic documentation review across ALL .content/ files.
+# Files are categorised by update type: MAJOR (RCA content added), MINOR (counts/refs updated),
+# NO_CHANGE (reviewed, already accurate), NEW (created in this phase).
+documentation_audit_manifest:
+  total_files_in_scope: 154
+  sections:
+    - section: ".content/index.md + glossary.md"
+      files: 2
+      update_type: MAJOR
+      changes: "Phase 87 metrics, RCA glossary entries"
+
+    - section: ".content/00-getting-started/"
+      files: 8
+      update_type: MAJOR
+      changes: "RCA capability in one-pager, key-concepts, how-it-works, brain-tier"
+
+    - section: ".content/01-capabilities/"
+      files: 13
+      update_type: MAJOR
+      changes: "RCA capability matrix row, intelligence domain expansion"
+
+    - section: ".content/02-lens/"
+      files: 7
+      update_type: MINOR
+      changes: "RCA as synthesis output"
+
+    - section: ".content/03-orchestration/"
+      files: 14
+      update_type: MAJOR
+      changes: "Prevention gate in master-orchestrator, cross-orchestrator, end-to-end-flow"
+
+    - section: ".content/04-mcp/"
+      files: 6
+      update_type: MINOR
+      changes: "cortex_learning op=rca in tools catalog"
+
+    - section: ".content/05-infrastructure/"
+      files: 8
+      update_type: MINOR
+      changes: ".cortex-runtime/rca/ in observability docs"
+
+    - section: ".content/06-faq/"
+      files: 7
+      update_type: MAJOR
+      changes: "4 new FAQ entries about RCA/prevention"
+
+    - section: ".content/07-diagrams/"
+      files: 17
+      update_type: NO_CHANGE
+      changes: "Reviewed — diagrams for existing features, no update needed"
+
+    - section: ".content/flat-files/"
+      files: 20
+      update_type: MAJOR
+      changes: "New 21-rca-memory-engine.md + 5 existing files updated"
+
+    - section: ".content/flat-files/diagrams/"
+      files: 23
+      update_type: MAJOR
+      changes: "New diagram-24-rca-prevention-flow.md"
+
+    - section: ".content/flat-files/visual-prompts/"
+      files: 29
+      update_type: MINOR
+      changes: "New prompt-13-rca-memory-shield.md"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-87-RCA-MEMORY-ENGINE-{timestamp}"
+  complete: "AC_COMPLETE: AC-87-RCA-MEMORY-ENGINE-{timestamp} ✅"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COMPLETION SECTION (fill in when marking COMPLETE)
+# ─────────────────────────────────────────────────────────────────────────────
+# metrics_at_completion:
+#   score: "5.0 → {final}"
+#   smoke_tests: "{N} passed, 0 failures"
+#   key_deliverables:
+#     - "rca_engine.py — RCA templates, analysis, prevention gate"
+#     - "rca_store.py — SQLite persistence"
+#     - "3 workflow templates in intelligence/"
+#     - "OPJMixin enhanced with 2 prevention methods"
+#     - "cortex_learning op=rca MCP operation"
+#     - "154 cortex-docs files reviewed, 70+ updated"
+#     - "21-rca-memory-engine.md flat file"
+#     - "diagram-24 + prompt-13"

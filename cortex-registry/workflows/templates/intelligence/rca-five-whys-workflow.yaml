@@ -1,0 +1,213 @@
+# RCA Five Whys Workflow Template
+# CORTEX Intelligence — Phase 87: RCA Memory Engine
+# Authority: CORE-008, CORE-064
+# Usage: Structured root cause analysis using iterative "Why?" questioning
+
+id: "rca-five-whys-workflow"
+version: "1.0"
+created: "2026-02-27"
+category: intelligence
+description: |
+  Structured Five Whys workflow for systematic root cause analysis.
+  Enforces minimum 3 levels of causal depth (max 7) and generates
+  a prevention rule + recurrence signature on completion.
+
+  Entry: Triggered by DebuggerOrchestrator on debug-complete, or manually
+         via cortex_learning(op="rca", template="five_whys").
+  Exit: RCA stored in .cortex-runtime/rca/rca_store.db with active prevention rule.
+
+  Integration:
+    - RCAEngine.analyze_five_whys() — performs the analysis
+    - RCAStore.store_rca() — persists the result
+    - OPJMixin._opj_record_rca() — records via orchestrator protocol
+    - ReinforcementEngine.emit_signal() — URS feedback on recurrence
+
+prerequisites:
+  - "Symptom identified (failure, regression, or governance violation)"
+  - "Context available (orchestrator, operation, stack trace or log excerpt)"
+
+stages:
+
+  - id: "S1_SYMPTOM_CAPTURE"
+    title: "Capture Symptom and Initial Context"
+    description: |
+      Record the observable problem. This is the WHAT, not the WHY.
+      Include: failure message, affected file(s), orchestrator name, operation type.
+    inputs:
+      - name: symptom
+        type: str
+        required: true
+        description: "Clear one-line description of the observable problem"
+      - name: orchestrator
+        type: str
+        required: true
+        description: "Name of the orchestrator where the failure occurred"
+      - name: operation
+        type: str
+        required: true
+        description: "Operation being performed when the failure occurred"
+      - name: context
+        type: dict
+        required: false
+        description: "Additional context (stack trace, log excerpt, file paths)"
+    outputs:
+      - name: symptom_record
+        type: dict
+        description: "Structured symptom record for downstream stages"
+    validation: "symptom must be non-empty and ≤500 characters"
+
+  - id: "S2_WHY_CHAIN"
+    title: "Iterative Why Analysis (3–7 Levels)"
+    description: |
+      For each "why", ask: "Why did the previous answer happen?"
+      Continue until reaching a root cause that is:
+        1. Actionable (we can prevent it)
+        2. Fundamental (not a symptom of something deeper)
+        3. Specific (not "human error" — dig deeper)
+      
+      Minimum depth: 3 levels (enforced by RCAEngine)
+      Maximum depth: 7 levels (diminishing returns beyond)
+    inputs:
+      - name: symptom_record
+        type: dict
+        required: true
+        description: "From S1_SYMPTOM_CAPTURE"
+    outputs:
+      - name: whys
+        type: list
+        description: "Ordered list of why-because pairs"
+    validation: "len(whys) >= 3 — enforced by RCAEngine.analyze_five_whys()"
+    guidance: |
+      Common anti-patterns to avoid:
+        ❌ "Human error" — why did the human make that error?
+        ❌ "Lack of testing" — why was there no test?
+        ❌ "Bad code" — why was the code structured that way?
+      
+      Good root causes:
+        ✅ "No validation gate in the deployment pipeline for X"
+        ✅ "Fixture schema drift not detected because comparison is text-only"
+        ✅ "Import resolution uses sys.path manipulation instead of package install"
+
+  - id: "S3_ROOT_CAUSE_IDENTIFICATION"
+    title: "Extract Root Cause from Deepest Why"
+    description: |
+      The root cause is the deepest actionable "why" in the chain.
+      Validate it against the Three Tests:
+        1. If we fix this, will the symptom stop? (causality)
+        2. Can we actually fix this? (actionability)
+        3. Is this specific enough to create a prevention rule? (specificity)
+    inputs:
+      - name: whys
+        type: list
+        required: true
+        description: "From S2_WHY_CHAIN"
+    outputs:
+      - name: root_cause
+        type: str
+        description: "Single-sentence root cause statement"
+      - name: causality_verified
+        type: bool
+        description: "Passed the Three Tests"
+    validation: "root_cause must pass all three tests"
+
+  - id: "S4_CONTRIBUTING_FACTORS"
+    title: "Identify Contributing Factors"
+    description: |
+      List factors that amplified the impact or made the root cause harder to detect.
+      These are NOT root causes — they are conditions that allowed the root cause
+      to persist or worsen.
+    inputs:
+      - name: root_cause
+        type: str
+        required: true
+        description: "From S3"
+    outputs:
+      - name: contributing_factors
+        type: list
+        description: "List of contributing factor strings"
+    validation: "contributing_factors can be empty but should be attempted"
+
+  - id: "S5_PREVENTION_RULE_GENERATION"
+    title: "Create Actionable Prevention Rule"
+    description: |
+      Generate a prevention rule that can be automatically checked by the
+      PreventionGate on future operations.
+      
+      Rule format:
+        - description: "What to check / enforce"
+        - severity: P0 | P1 | P2
+        - recurrence_threshold: 3 (default — blocks after 3 occurrences)
+        - active: true
+    inputs:
+      - name: root_cause
+        type: str
+        required: true
+      - name: contributing_factors
+        type: list
+        required: true
+    outputs:
+      - name: prevention_rule
+        type: PreventionRule
+        description: "Actionable prevention rule"
+    validation: "prevention_rule.description must be non-empty"
+    handler: "RCAEngine.generate_prevention_rule()"
+
+  - id: "S6_RECURRENCE_SIGNATURE"
+    title: "Compute Recurrence Signature"
+    description: |
+      Generate a deterministic hash that can match this root cause CLASS
+      (not this specific instance) across different orchestrators and operations.
+      
+      Signature format: RCA-{CATEGORY}-{KEYWORD_HASH}
+      
+      Same root cause class → same signature (even from different orchestrators).
+      Different root cause → different signature (no false positives).
+    inputs:
+      - name: root_cause
+        type: str
+        required: true
+      - name: contributing_factors
+        type: list
+        required: true
+    outputs:
+      - name: recurrence_signature
+        type: str
+        description: "Deterministic signature for cross-session matching"
+    handler: "RCAEngine.compute_recurrence_signature()"
+
+  - id: "S7_STORE_AND_ACTIVATE"
+    title: "Persist to RCA Store + Activate Prevention Rule"
+    description: |
+      Store the complete RCA analysis in SQLite and activate the prevention rule.
+      Emit URS signals:
+        - STRONG_PUNISHMENT if this is a recurrence (same signature already exists)
+        - MILD_PUNISHMENT if this is a new root cause
+      Record in OPJ via _opj_record_rca().
+    inputs:
+      - name: rca_analysis
+        type: RCAAnalysis
+        required: true
+      - name: prevention_rule
+        type: PreventionRule
+        required: true
+    outputs:
+      - name: rca_id
+        type: str
+        description: "UUID of the stored RCA analysis"
+      - name: rule_id
+        type: str
+        description: "UUID of the activated prevention rule"
+      - name: is_recurrence
+        type: bool
+        description: "True if signature already existed in store"
+    handlers:
+      - "RCAStore.store_rca(analysis)"
+      - "RCAStore.store_prevention_rule(rule)"
+      - "OPJMixin._opj_record_rca(operation, analysis)"
+      - "ReinforcementEngine.emit_signal(STRONG_PUNISHMENT if recurrence else MILD_PUNISHMENT)"
+    validation: "rca_id and rule_id must be valid UUIDs"
+
+error_handling:
+  on_failure: "Log error to .cortex-runtime/rca/rca_errors.log, do NOT crash caller"
+  resilience: "All operations wrapped in try/except — follows OPJMixin pattern"
+  fallback: "If RCA store is unavailable, emit to OPJ as free-text (existing behavior)"

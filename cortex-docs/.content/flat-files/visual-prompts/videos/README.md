@@ -72,9 +72,9 @@ Every generated video **MUST** follow these rules for brand consistency with the
 
 ## Video Index — Complete Learning Journey
 
-### Phase 1: Understanding CORTEX (Videos 1-8)
+### Phase 1: Understanding CORTEX (Videos 1-11)
 
-Videos 1-8 follow a **progressive depth curve** — from executive overview to advanced internals. Each video assumes the viewer has watched the previous ones. **Zero content repetition between videos.**
+Videos 1-11 follow a **progressive depth curve** — from executive overview to advanced internals. Each video assumes the viewer has watched the previous ones. **Zero content repetition between videos.**
 
 | # | File | Title | Duration | Audience | Depth |
 |---|------|-------|----------|----------|-------|
@@ -86,8 +86,11 @@ Videos 1-8 follow a **progressive depth curve** — from executive overview to a
 | 6 | `prompt-06-mcp-tools-deep-dive.md` | MCP Tools Deep Dive | 10 min | Engineers, Builders | 🔴 Developer |
 | 7 | `prompt-07-audit-fix-pipeline.md` | The Audit Fix Pipeline | 10 min | Platform Engineers | 🔴 Advanced |
 | 8 | `prompt-08-workflow-template-engine.md` | The Workflow Template Engine | 9 min | Engineers, Platform | 🔴 Architecture |
+| 9 | `prompt-09-response-templates-engagement.md` | Response Templates & Orchestrator Engagement | 90s | Engineers | 🔴 Phase 85 |
+| 10 | `prompt-10-multi-stack-debugging.md` | Debugging Any Stack | 90s | Engineers | 🔴 Phase 86 |
+| 11 | `prompt-11-rca-memory-engine.md` | Never Repeat a Mistake — RCA Memory Engine | 90s | All | 🟡 Phase 87 |
 
-**Why Video 8 is last in the concept series:** It answers the deepest architectural question — *"YAML is just data, so where does the intelligence come from?"* — which only makes sense after Videos 2 (request lifecycle), 3 (intelligence), and 7 (audit pipeline) have established what those templates are used *for*.
+**Videos 9–11** are short-form (90-second) feature spotlights for Phases 85, 86, and 87. They assume familiarity with CORTEX (recommend watching Videos 1–3 first) and focus tightly on one capability each.
 
 ### Phase 2: Hands-On Tutorials (separate folder)
 
@@ -185,6 +188,9 @@ videos/
   prompt-06-mcp-tools-deep-dive.md
   prompt-07-audit-fix-pipeline.md
   prompt-08-workflow-template-engine.md
+  prompt-09-response-templates-engagement.md   ← Phase 85 (new)
+  prompt-10-multi-stack-debugging.md           ← Phase 86 (new)
+  prompt-11-rca-memory-engine.md               ← Phase 87 (new)
   tutorials/
     README.md                            ← tutorial-specific index and visual identity notes
     tutorial-01-getting-started-installation.md

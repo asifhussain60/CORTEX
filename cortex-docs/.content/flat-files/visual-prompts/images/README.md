@@ -69,6 +69,7 @@ Every generated image **MUST** follow these rules for brand consistency with the
 | 10 | `prompt-10-sweep-completeness.md` | Sweep completeness as forensic investigation | 800×600 |
 | 11 | `prompt-11-intelligence-matrix-circuit.md` | Intelligence Matrix as a circuit board | 1920×1080 |
 | 12 | `prompt-12-workflow-assembly-line.md` | WorkflowEngine as a factory assembly line | 800×600 |
+| 13 | `prompt-13-rca-memory-shield.md` | RCA Memory Engine as a force field shield | 1920×1080 |
 
 ---
 

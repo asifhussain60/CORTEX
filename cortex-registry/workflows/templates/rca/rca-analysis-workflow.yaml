@@ -1,0 +1,166 @@
+# RCA Analysis Workflow Template
+# Phase 87 — RCA Memory Engine
+# SSOT: cortex-registry/workflows/templates/rca/rca-analysis-workflow.yaml
+#
+# Describes the canonical workflow for running a root cause analysis
+# after a failure event is detected by any orchestrator.
+#
+# Invoked via:  cortex_learning op="rca" action="analyze"
+# Entry point: OPJMixin._opj_analyze_rca(failure_id, failure_description)
+
+id: rca-analysis-workflow
+version: "1.0"
+phase: 87
+status: ACTIVE
+description: >
+  Root Cause Analysis workflow triggered when an orchestrator detects a
+  failure pattern.  Runs the appropriate RCA methodology, generates a
+  PreventionRule, and optionally blocks future operations at the gate.
+
+# ── Trigger conditions ──────────────────────────────────────────────────────
+triggers:
+  - type: orchestrator_failure
+    source: OPJMixin._opj_record_failure
+    auto: true
+  - type: manual
+    source: cortex_learning
+    op: rca
+    action: analyze
+
+# ── Inputs ──────────────────────────────────────────────────────────────────
+inputs:
+  failure_id:
+    type: string
+    required: true
+    description: Unique identifier for the failure event (e.g. OPJ-{orchestrator}-{timestamp})
+  failure_description:
+    type: string
+    required: true
+    description: Human-readable description of the observed failure symptom
+  category:
+    type: string
+    required: false
+    default: technology
+    enum: [technology, process, people, data]
+    description: High-level failure category — drives methodology auto-selection
+  methodology:
+    type: string
+    required: false
+    default: null
+    enum: [five_whys, fishbone, fault_tree, causal_chain, null]
+    description: Explicit methodology override; null triggers auto-selection
+
+# ── Stages ──────────────────────────────────────────────────────────────────
+stages:
+
+  - id: stage-1-methodology-selection
+    name: Methodology Selection
+    description: >
+      Auto-select or validate the RCA methodology for the given failure category.
+    actor: RCAEngine.select_methodology
+    inputs: [category, methodology]
+    outputs: [chosen_methodology]
+    governance:
+      rule: CORE-048  # holistic validation gate
+
+  - id: stage-2-rca-execution
+    name: RCA Analysis
+    description: >
+      Execute the chosen analysis methodology and produce a structured
+      RCAAnalysis with root_cause, confidence, and analysis_data.
+    actor: RCAEngine.analyze
+    inputs: [failure_id, failure_description, category, chosen_methodology]
+    outputs: [rca_analysis]
+    governance:
+      rule: CORE-011  # type hints required on all engine methods
+
+  - id: stage-3-persistence
+    name: Persist RCA + PreventionRule
+    description: >
+      Save the RCAAnalysis and its generated PreventionRule to the RCAStore
+      (SQLite: .cortex-runtime/rca/rca_store.db).
+    actor: RCAStore.save_analysis + RCAStore.save_rule
+    inputs: [rca_analysis]
+    outputs: [persisted: true]
+    schema_tables:
+      - rca_analyses
+      - prevention_rules
+
+  - id: stage-4-signature-generation
+    name: Recurrence Signature
+    description: >
+      Generate a stable signature for the RCAAnalysis and check for matches
+      against existing signatures.  Recurrence above threshold escalates
+      the PreventionRule gate_level to WARNING or BLOCKING.
+    actor: RecurrenceSignatureEngine.generate_signature + find_matches
+    inputs: [rca_analysis]
+    outputs: [signature, matches]
+    thresholds:
+      advisory: 0.0    # first occurrence
+      warning: 1       # seen ≥1 time before
+      blocking: 3      # seen ≥3 times before
+
+  - id: stage-5-gate-evaluation
+    name: Prevention Gate Check
+    description: >
+      Evaluate the current operation context against the new (and all active)
+      prevention rules.  Emit gate_level as the workflow output.
+    actor: PreventionGate.check
+    inputs: [operation_context]
+    outputs: [gate_result]
+    gate_actions:
+      PASS: continue
+      ADVISORY: log + continue
+      WARNING: log + alert + continue
+      BLOCKING: log + alert + halt
+
+  - id: stage-6-urs-feedback
+    name: URS Reinforcement Signal
+    description: >
+      Emit a URS signal to close the learning loop.  MILD_PUNISHMENT on first
+      detection; STRONG_PUNISHMENT on recurrence; STRONG_REWARD after the
+      pattern is not seen for 30 days.
+    actor: OPJMixin._urs_emit_signal
+    inputs: [rca_analysis, matches]
+    outputs: [signal_id]
+    signal_mapping:
+      first_occurrence: MILD_PUNISHMENT
+      recurrence: STRONG_PUNISHMENT
+      resolved_pattern: STRONG_REWARD
+
+# ── Outputs ─────────────────────────────────────────────────────────────────
+outputs:
+  rca_id:
+    source: rca_analysis.id
+    type: string
+  root_cause:
+    source: rca_analysis.root_cause
+    type: string
+  gate_level:
+    source: gate_result.gate_level
+    type: string
+    enum: [PASS, ADVISORY, WARNING, BLOCKING]
+  prevention_rule_id:
+    source: rca_analysis.prevention_rule.id
+    type: string
+
+# ── Governance ───────────────────────────────────────────────────────────────
+governance:
+  rules_applied:
+    - CORE-008   # TDD — all stages tested before implementation
+    - CORE-011   # Type hints on all actors
+    - CORE-012   # Docstrings on all public APIs
+    - CORE-035   # Single canonical RCA implementation
+    - CORE-048   # Holistic validation gate
+    - CORE-064   # Sweep completeness — all 21 GAPs must be CLOSED
+
+# ── References ───────────────────────────────────────────────────────────────
+references:
+  phase_spec: cortex-registry/_cortex-master/phases/planned/phase-87-rca-memory-engine.yaml
+  mcp_tool: cortex/mcp/tools/learning_tool.py (op="rca")
+  rca_engine: cortex/intelligence/learning/rca_engine.py
+  rca_store: cortex/intelligence/learning/rca_store.py
+  prevention_gate: cortex/intelligence/learning/prevention_gate.py
+  recurrence_engine: cortex/intelligence/learning/recurrence_engine.py
+  opj_mixin: cortex/intelligence/learning/opj_mixin.py
+  runtime_db: .cortex-runtime/rca/rca_store.db

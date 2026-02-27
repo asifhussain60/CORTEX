@@ -283,4 +283,34 @@ All progress displays use **phase-list + bar**, not bar-only:
 
 ---
 
+## 9. RCA Memory Engine — Structured Root Cause Analysis (Phase 87 PLANNED)
+
+The RCA Memory Engine transforms CORTEX's learning system from passive pattern capture into active root-cause prevention. Where the OPJ records *what* failed, the RCA Engine answers *why* — and then ensures it doesn't happen again.
+
+**Business Leader:** "Engineering teams repeat the same class of mistake for years because root cause knowledge is locked inside individual incident reviews and never made institutional. CORTEX's RCA Engine turns every failure into a prevention rule that fires automatically the next time."
+
+**Product Owner:** "RCA is triggered via `cortex_learning` with `op='rca'`. It runs four methodologies (Five Whys, Fishbone, Fault Tree, Causal Chain), persists structured analyses to SQLite, and emits a prevention rule. No new tools, no new orchestrators — purely additive."
+
+**Developer:** "The Prevention Gate watches for signature matches at runtime and warns (or blocks, for 3+ P0 recurrences). Query past analyses via `cortex_learning op='rca' action='query'`."
+
+### Four Analysis Methodologies
+
+| Methodology | Structure | Best For |
+|-------------|-----------|----------|
+| **Five Whys** | Linear `why → answer` chain | Sequential failures, missing null checks, unhandled exceptions |
+| **Fishbone (Ishikawa)** | Category map: People · Process · Technology · Data | Multi-factor failures |
+| **Fault Tree** | AND/OR gate probability tree | Complex failures with multiple contributing paths |
+| **Causal Chain** | Time-ordered event sequence | Race conditions, async failures, cascade shutdowns |
+
+### Integration Points
+
+| Component | Change |
+|-----------|--------|
+| `OPJMixin` | `_opj_analyze_rca()` + `_opj_check_prevention_gate()` (2 new methods) |
+| `cortex_learning` | New `op="rca"` operation (extends existing tool, no new MCP tool) |
+| `CrossSessionPatternCache` | 4 new SQLite tables for RCA persistence |
+| URS | P0 recurrences emit `STRONG_PUNISHMENT`; successful prevention emits `STRONG_REWARD` |
+
+---
+
 *All paths and counts verified against live codebase — 27 February 2026*

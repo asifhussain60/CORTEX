@@ -39,6 +39,9 @@ CORTEX is built from one canonical Python package (`cortex`) with a single impor
 | Languages Analyzed | Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue |
 | Intelligence Tiers | Quick (<200ms), Targeted (<2s), Full (<10s) |
 | Parallel Testing | pytest-xdist with `-n auto --dist loadscope` |
+| Debug Strategies | 8 total: 3 Python live + 5 multi-stack (Phase 86) |
+| RCA Engine | Structured root-cause analysis with Five Whys, Fishbone, Fault Tree (Phase 87) |
+| Phases Complete | 84 of 87 — Phase 85 (Response+Engagement), Phase 86 (Multi-Stack Debug), Phase 87 (RCA Memory Engine) PLANNED |
 
 ---
 
@@ -243,4 +246,4 @@ The CORTEX repository is organised into well-defined directories:
 
 ---
 
-*CORTEX v1.0.0 · February 2026 · 51 wired orchestrators · 28 registered MCP tools (39 target) · 38 CORE rules · 16,942 tests collected*
+*CORTEX v1.0.0 · February 2026 · 51 wired orchestrators · 28 registered MCP tools (39 target) · 38 CORE rules · 16,942 tests collected · Phase 84/87 complete*

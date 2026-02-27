@@ -245,3 +245,103 @@ class OPJMixin:
             pattern_id=operation,
             context={"error": error},
         )
+
+    # ------------------------------------------------------------------
+    # Phase 87 — RCA extensions
+    # ------------------------------------------------------------------
+
+    def _opj_analyze_rca(
+        self,
+        failure_id: str,
+        failure_description: str,
+        methodology: Optional[str] = None,
+        category: Optional[str] = None,
+    ) -> Any:
+        """Run a root cause analysis for a failure event and persist the result.
+
+        Delegates to RCAEngine (selects methodology automatically when not
+        supplied) and persists the resulting RCAAnalysis via RCAStore.
+        Non-fatal: returns a minimal RCAAnalysis shell on any internal error.
+
+        Args:
+            failure_id: Unique identifier of the originating failure event.
+            failure_description: Human-readable description of the failure symptom.
+            methodology: Optional RCATemplate value string (e.g. 'five_whys').
+            category: Optional RCACategory value string (e.g. 'technology').
+
+        Returns:
+            A populated RCAAnalysis dataclass.
+        """
+        try:
+            from cortex.intelligence.learning.rca_engine import RCAEngine
+            from cortex.intelligence.learning.rca_models import (
+                RCAAnalysis, RCACategory, RCATemplate,
+            )
+            from cortex.intelligence.learning.rca_store import RCAStore
+
+            engine = RCAEngine()
+            cat = RCACategory(category) if category else RCACategory.TECHNOLOGY
+            meth = RCATemplate(methodology) if methodology else None
+            rca = engine.analyze(
+                failure_id=failure_id,
+                symptom=failure_description or f"Failure: {failure_id}",
+                category=cat,
+                methodology=meth,
+            )
+            try:
+                store = RCAStore()
+                store.initialize()
+                store.save_analysis(rca)
+                if rca.prevention_rule:
+                    store.save_rule(rca.prevention_rule)
+            except Exception as store_exc:
+                logger.debug("OPJMixin._opj_analyze_rca: store error (non-fatal) — %s", store_exc)
+            return rca
+        except Exception as exc:
+            logger.warning("OPJMixin._opj_analyze_rca: non-fatal error — %s", exc)
+            # Return a minimal shell so callers always get an RCAAnalysis-like object
+            from cortex.intelligence.learning.rca_models import (
+                RCAAnalysis, RCACategory, RCATemplate,
+            )
+            import uuid
+            return RCAAnalysis(
+                id=f"RCA-{uuid.uuid4().hex[:8].upper()}",
+                failure_id=failure_id,
+                methodology=RCATemplate.FIVE_WHYS,
+                category=RCACategory.TECHNOLOGY,
+                root_cause="RCA analysis unavailable (internal error)",
+                confidence=0.0,
+            )
+
+    def _opj_check_prevention_gate(self, operation_context: str) -> Any:
+        """Check an operation context against active prevention rules.
+
+        Queries the RCAStore for prevention rules generated from past RCA runs
+        and evaluates the supplied context through the PreventionGate.
+        Non-fatal: returns a PASS result on any internal error.
+
+        Args:
+            operation_context: Natural-language description of the operation
+                               about to be performed.
+
+        Returns:
+            A PreventionGateResult (gate_level PASS / ADVISORY / WARNING / BLOCKING).
+        """
+        try:
+            from cortex.intelligence.learning.prevention_gate import PreventionGate
+            from cortex.intelligence.learning.rca_store import RCAStore
+
+            store = RCAStore()
+            store.initialize()
+            gate = PreventionGate(store=store)
+            return gate.check(operation_context=operation_context)
+        except Exception as exc:
+            logger.warning("OPJMixin._opj_check_prevention_gate: non-fatal error — %s", exc)
+            from cortex.intelligence.learning.rca_models import GateLevel, PreventionGateResult
+            return PreventionGateResult(
+                gate_level=GateLevel.PASS,
+                matched_rule=None,
+                similarity_score=0.0,
+                rca_summary=None,
+                message="Prevention gate unavailable (internal error) — defaulting to PASS.",
+            )

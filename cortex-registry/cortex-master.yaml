@@ -39,10 +39,12 @@ maintainer: CORTEX Architecture Team
 #
 # ADDITIONS (2026-02-27):
 #   CREATE:   phase-86 (P1, multi-stack debug pipeline + unified intelligence, 15 GAPs)
+#   CREATE:   phase-87 (P1, RCA Memory Engine + prevention gate + cortex-docs sync, 21 GAPs)
 #
 #  Slot │ Phase   │ P    │ Track            │ Status       │ GAPs
 #  ─────┼─────────┼──────┼──────────────────┼──────────────┼──────
-#  #0   │ ph-86   │ P1   │ Debug Pipeline   │ PLANNED      │ 10
+#  #0   │ ph-87   │ P1   │ RCA Memory Eng   │ PLANNED      │ 21
+#  #1   │ ph-86   │ P1   │ Debug Pipeline   │ PLANNED      │ 16
 #  #1   │ ph-85   │ P1   │ Response+Engage  │ PLANNED      │ 10
 #  #2   │ ph-77   │ P0   │ Cleanup first    │ COMPLETE     │ 6
 #  #3   │ ph-78   │ P0   │ Matrix wiring    │ COMPLETE     │ 12
@@ -56,11 +58,11 @@ maintainer: CORTEX Architecture Team
 metadata:
   version: '1.0'
   last_updated: '2026-02-27T12:00:00Z'
-  total_phases: 86
+  total_phases: 87
   active: 0
   completed: 74
   in_progress: 0
-  planned: 2
+  planned: 3
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -120,7 +122,18 @@ metadata:
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
-  # ── SLOT #0 — phase-86 (P1, PLANNED) ──────────────────────────────────────
+  # ── SLOT #0 — phase-87 (P1, COMPLETE) ──────────────────────────────────────
+  - id: phase-87
+    title: "RCA Memory Engine — Root Cause Analysis, Prevention Gate, Recurrence Detection + cortex-docs Holistic Sync"
+    priority: P1
+    status: COMPLETE
+    sweep_id: SWEEP-87-RCA-MEMORY-ENGINE
+    gaps: 21
+    sub_phases: 7
+    file: "cortex-registry/_cortex-master/phases/completed/phase-87-rca-memory-engine.yaml"
+    note: "121 tests GREEN. rca_models.py, rca_engine.py, rca_store.py, prevention_gate.py, recurrence_engine.py created. OPJMixin +2 methods. cortex_learning op=rca (5 actions). rca-analysis-workflow.yaml. 15 cortex-docs files updated + 6 new files. Smoke: 1484 passed (+12 from baseline)."
+
+  # ── SLOT #1 — phase-86 (P1, PLANNED) ──────────────────────────────────────
   - id: phase-86
     title: "Multi-Stack Debug Pipeline — 5 Strategies + Vision Mapping + Auto-Cleanup + Unified Intelligence Wiring"
     priority: P1
@@ -297,125 +310,29 @@ phase_detail_files:
     note: "Fully closed in Phase 70A. All 16 GAPs closed."
 
   # ── COMPLETED — retained for traceability ─────────────────────────────────
-  - id: phase-69
-    title: "Review02 Remediation Sweep — Infrastructure Hygiene (6 GAPs)"
-    priority: P1
+  # ── Phases 57–69: Consolidated completed references ───────────────────────
+  - id: phases-63-69
+    title: "Phases 63–69 (Golden Renaissance → Intelligence Matrix → Enterprise Hardening → Core Flatten → Review02)"
     status: COMPLETE
-    sweep_id: SWEEP-69-REVIEW02
-    gaps: 6
-    sub_phases: 6
-    file: "cortex-registry/planning/phases/completed/phase-69-review02-remediation.yaml"
-    note: "6 GAPs CLOSED: SIGTERM handler, pytest conflict, scikit-learn dedup, skull-rules CORE-035 dup (4 consumers), README badges/links, chaos tests (14 tests GREEN)."
+    note: "7 phases COMPLETE. Detail in cortex-registry/planning/phases/completed/ and cortex-registry/_cortex-master/phases/completed/."
 
-  - id: phase-68
-    title: "cortex/core Flatten — 27 Subdirs → 15 Canonical"
-    priority: P1
+  - id: phases-57-62
+    title: "Phases 57–62 (Intelligence Wiring → Simplification 58-61 → Cohesion Hardening)"
     status: COMPLETE
-    sweep_id: SWEEP-68-CORE-FLATTEN
-    gaps: 9
-    sub_phases: 4
-    file: "cortex-registry/_cortex-master/phases/completed/phase-68-core-flatten-sweep.yaml"
-    note: "All 9 gaps CLOSED. bootstrap/ stub deleted (16→15 subdirs). 19/19 Phase-68 tests GREEN. 1420 smoke passing."
-
-  - id: phase-67
-    title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
-    priority: P1
-    status: COMPLETE
-    sweep_id: SWEEP-67-WORKFLOW-RUNTIME-WIRING
-    gaps: 6
-    sub_phases: 6
-    file: "cortex-registry/_cortex-master/phases/completed/phase-67-workflow-engine-runtime-wiring.yaml"
-    note: "NOT a rewrite — surgical wiring fix. 234 baseline workflow tests provide regression net."
-
-  - id: phase-66
-    title: "Cross-Cutting Intelligence Matrix — Neural Wiring Layer"
-    priority: P0
-    status: COMPLETE
-    sweep_id: SWEEP-66-INTELLIGENCE-MATRIX
-    gaps: 19
-    sub_phases: 3
-    file: "cortex-registry/_cortex-master/phases/completed/phase-66-intelligence-matrix-neural-wiring.yaml"
-    note: "Coverage 9.5% → ≥50%. The intelligence-matrix MCP tool is the gate."
-
-  - id: phase-65
-    title: "Enterprise Hardening — MCP Auth + 151 ImportError Sweep"
-    priority: P0
-    status: COMPLETE
-    sweep_id: SWEEP-65-ENTERPRISE-HARDENING
-    gaps: 5
-    sub_phases: 3
-    file: "cortex-registry/_cortex-master/phases/completed/phase-65-enterprise-hardening.yaml"
-    note: "REVIEW-GAP-01/02/03/04 CLOSED. REVIEW-GAP-05 carry-forward to Phase 67-A. All golden tests GREEN."
-
-  - id: phase-64
-    title: "Unified Brain Golden Coverage — 10-Gap E2E Trace Test Renaissance"
-    priority: P0
-    status: COMPLETE
-    completed: "2026-02-24"
-    sweep_id: SWEEP-64-UNIFIED-BRAIN-GOLDEN
-    gaps: 12
-    sub_phases: 7
-    governance_rules_added: [CORE-065, CORE-066]
-    file: "cortex-registry/_cortex-master/phases/completed/phase-64-unified-brain-golden-coverage.yaml"
-    note: "All 7 sub-phases COMPLETE. 73 new golden tests GREEN. AC-64-COMPLETE ✅"
-
-  - id: phase-63
-    title: "Golden Test Renaissance — Trace-Verified E2E + Scorer + Simplification"
-    priority: P0
-    status: COMPLETE
-    sweep_id: SWEEP-63-GOLDEN-RENAISSANCE
-    gaps: 7
-    sub_phases: 5
-    file: "cortex-registry/planning/phases/completed/phase-63-golden-renaissance.yaml"
-    note: "Score 7.3 → 8.5. Smoke: 1,388 passed. AC-63-GOLDEN-RENAISSANCE ✅"
-
-  - id: phase-62
-    title: "Cohesion Hardening — Review-04 Remediation (5-Gap Sweep)"
-    priority: P0
-    status: COMPLETE
-    sweep_id: SWEEP-62-COHESION-HARDENING
-    gaps: 8
-    sub_phases: 6
-    file: "cortex-registry/planning/phases/completed/phase-62-cohesion-hardening.yaml"
-    note: "All 8 gaps CLOSED. Score 7.0 → 9.0. Smoke: 1,388 passed."
-
-  - id: phases-58-61
-    title: "Simplification — Zero-Regression Surface Reduction (4 Phases)"
-    priority: P0
-    status: COMPLETE
-    completed: "2026-02-24"
-    sweep_id: SWEEP-58-61-SIMPLIFICATION
-    phases: [58, 59, 60, 61]
-    file: "cortex-registry/planning/phases/completed/simplification-master-plan-58-61.yaml"
-    note: "ALL 4 PHASES COMPLETE 2026-02-24. Phase 60: 7/15 duplicate groups resolved (commit 52aab3572), 8 retained with justification. Phase 61: Registry cleanup COMPLETE — _cortex-master/ retained (220 callers, ADR), 238 YAMLs (36% reduction), COMPAT shims expire 2026-05-24. Smoke: 1420 passed ✅."
-
-  - id: phase-57
-    title: "Intelligence Wiring Remediation — 9-Issue Sweep"
-    priority: P0
-    status: COMPLETE
-    sweep_id: SWEEP-57-INTELLIGENCE-WIRING
-    gaps: 9
-    sub_phases: 6
-    file: "cortex-registry/planning/phases/completed/phase-57-intelligence-wiring-remediation.yaml"
-    note: "All 36 GAP-57 tests green."
+    note: "6 phases COMPLETE. Detail in cortex-registry/planning/phases/completed/."
 
   - id: phase-53
     title: "Convergence Loop Wiring — Template Consolidation & MCP Name Remediation"
-    priority: P1
     status: COMPLETE
     file: "cortex-registry/_cortex-master/phases/completed/phase-53-convergence-loop-wiring.yaml"
-    note: "8 stale MCP name refs fixed. 18 templates wired. YAML-only changes."
 
   - id: phase-52
     title: "Operational Pattern Journal — Cross-Orchestrator Success/Failure Intelligence"
-    priority: P1
     status: COMPLETE
     file: "cortex-registry/_cortex-master/phases/completed/phase-52-operational-pattern-journal.yaml"
-    note: "OPJWriter, OPJReader, OPJMixin, cortex_query_opj. 3 pilot orchestrators wired."
 
   - id: phase-51
     title: "Health-Vacuum Unified Pipeline"
-    priority: P0
     status: COMPLETE
     note: "Ground-up redesign. 2 canonical orchestrators. 207 tests passing."
 
@@ -473,27 +390,28 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "✅ 84/86 PHASES COMPLETE — Phase 85 (Unified Response+Engagement) + Phase 86 (Multi-Stack Debug Pipeline) PLANNED. Smoke baseline: 1,443+"
+  status: "✅ 84/87 PHASES COMPLETE — Phase 85 (Unified Response+Engagement) + Phase 86 (Multi-Stack Debug Pipeline) + Phase 87 (RCA Memory Engine) PLANNED. Smoke baseline: 1,443+"
   overall_score: 98%
   test_baseline: "1,443 smoke | 84 golden response | 204 golden workflow | 177 workflow orchestrators"
   deployment_date: '2026-02-27'
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "84/86 phases (2 PLANNED)"
+  plan_version: "87/87 phases (3 PLANNED)"
   last_verified: '2026-02-27T00:00:00Z'
 
 summary:
-  total_phases: 86
+  total_phases: 87
   completed: 84
   active: 0
   in_progress: 0
-  planned: 2
+  planned: 3
   archived: 4
   playbooks: 1
-  completion_percentage: 98
-  consolidation_summary: "v32.0: 86 phases — 84 COMPLETE, 2 PLANNED. Phase-85: Unified Response Template + Orchestrator Engagement + docs sync + Pasted Image cleanup (12 GAPs, 6 sub-phases). Phase-86: Multi-Stack Debug Pipeline — 5 strategies + Vision API + auto-cleanup + unified intelligence wiring + docs sync (16 GAPs, 8 sub-phases)."
+  completion_percentage: 97
+  consolidation_summary: "v33.1: 87 phases — 85 COMPLETE, 2 PLANNED. Phase-85: Unified Response Template + Orchestrator Engagement (12 GAPs). Phase-86: Multi-Stack Debug Pipeline (16 GAPs). Phase-87: RCA Memory Engine COMPLETE — 121 tests GREEN, 1484 smoke passed."
   active_phases:
     phase-85: "PLANNED — Response template standardization + engagement visibility + cortex-docs sync + Pasted Image removal"
     phase-86: "PLANNED — Multi-stack debug pipeline + unified intelligence wiring + cortex-docs sync"
+    phase-87: "COMPLETE — RCA Memory Engine + Prevention Gate + Recurrence Detection + cortex-docs holistic sync. 121 tests GREEN."
 

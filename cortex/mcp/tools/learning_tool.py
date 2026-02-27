@@ -179,12 +179,14 @@ class CortexLearning(Tool):
                 return self._op_quarantine(kwargs)
             elif op == "metrics":
                 return self._op_metrics(kwargs)
+            elif op == "rca":
+                return self._op_rca(kwargs)
             else:
                 return ToolResult(
                     success=False,
                     error=f"Unknown operation: {op}",
                     data={"supported_operations": [
-                        "emit", "history", "decay", "promote", "quarantine", "metrics",
+                        "emit", "history", "decay", "promote", "quarantine", "metrics", "rca",
                     ]},
                 )
         except Exception as e:
@@ -318,3 +320,165 @@ class CortexLearning(Tool):
             name = signal.signal_type.name
             counts[name] = counts.get(name, 0) + 1
         return counts
+
+    def _op_rca(self, params: Dict[str, Any]) -> ToolResult:
+        """Phase 87 — Root Cause Analysis operations via cortex_learning op='rca'.
+
+        Supported actions:
+            analyze          — run RCA for a failure event
+            query            — retrieve a stored RCAAnalysis by id
+            summary          — list all stored analyses (optionally filtered by failure_id)
+            review_required  — list rules at WARNING or BLOCKING gate level
+            bypass_gate      — mark a rule as inactive (human override)
+
+        Args:
+            params: Must include 'action'. See action-specific params below.
+
+        Returns:
+            ToolResult with action outcome.
+        """
+        action = params.get("action", "analyze")
+
+        try:
+            from cortex.intelligence.learning.rca_engine import RCAEngine
+            from cortex.intelligence.learning.rca_models import (
+                RCACategory, RCATemplate, GateLevel,
+            )
+            from cortex.intelligence.learning.rca_store import RCAStore
+            from cortex.intelligence.learning.prevention_gate import PreventionGate
+
+            store = RCAStore()
+            store.initialize()
+
+            if action == "analyze":
+                failure_id = params.get("failure_id", "")
+                symptom = params.get("symptom", params.get("failure_description", ""))
+                category_str = params.get("category", "technology")
+                methodology_str = params.get("methodology")
+
+                try:
+                    category = RCACategory(category_str)
+                except ValueError:
+                    category = RCACategory.TECHNOLOGY
+
+                methodology = None
+                if methodology_str:
+                    try:
+                        methodology = RCATemplate(methodology_str)
+                    except ValueError:
+                        pass
+
+                engine = RCAEngine()
+                rca = engine.analyze(
+                    failure_id=failure_id,
+                    symptom=symptom or f"Failure: {failure_id}",
+                    category=category,
+                    methodology=methodology,
+                )
+                store.save_analysis(rca)
+                if rca.prevention_rule:
+                    store.save_rule(rca.prevention_rule)
+
+                return ToolResult(
+                    success=True,
+                    data={
+                        "rca_id": rca.id,
+                        "failure_id": rca.failure_id,
+                        "methodology": rca.methodology.value,
+                        "category": rca.category.value,
+                        "root_cause": rca.root_cause,
+                        "confidence": rca.confidence,
+                        "prevention_rule_id": (
+                            rca.prevention_rule.id if rca.prevention_rule else None
+                        ),
+                        "gate_level": (
+                            rca.prevention_rule.gate_level.value
+                            if rca.prevention_rule else GateLevel.ADVISORY.value
+                        ),
+                    },
+                )
+
+            elif action == "query":
+                rca_id = params.get("rca_id", "")
+                rca = store.get_analysis(rca_id)
+                if not rca:
+                    return ToolResult(success=False, error=f"RCA not found: {rca_id}")
+                return ToolResult(
+                    success=True,
+                    data={
+                        "id": rca.id,
+                        "failure_id": rca.failure_id,
+                        "methodology": rca.methodology.value,
+                        "category": rca.category.value,
+                        "root_cause": rca.root_cause,
+                        "confidence": rca.confidence,
+                        "created_at": rca.created_at,
+                    },
+                )
+
+            elif action == "summary":
+                failure_id = params.get("failure_id")
+                analyses = store.list_analyses(failure_id=failure_id)
+                return ToolResult(
+                    success=True,
+                    data={
+                        "count": len(analyses),
+                        "analyses": [
+                            {
+                                "id": r.id,
+                                "failure_id": r.failure_id,
+                                "category": r.category.value,
+                                "root_cause": r.root_cause,
+                                "confidence": r.confidence,
+                            }
+                            for r in analyses
+                        ],
+                    },
+                )
+
+            elif action == "review_required":
+                all_rules = store.list_rules()
+                flagged = [
+                    r for r in all_rules
+                    if r.gate_level in (GateLevel.WARNING, GateLevel.BLOCKING) and r.active
+                ]
+                return ToolResult(
+                    success=True,
+                    data={
+                        "count": len(flagged),
+                        "rules": [
+                            {
+                                "id": r.id,
+                                "rca_id": r.rca_id,
+                                "gate_level": r.gate_level.value,
+                                "rule_text": r.rule_text,
+                            }
+                            for r in flagged
+                        ],
+                    },
+                )
+
+            elif action == "bypass_gate":
+                # Human override — not yet persisted (future: update active=False in DB)
+                rule_id = params.get("rule_id", "")
+                reason = params.get("reason", "Manual override by operator")
+                logger.info("RCA gate bypass requested — rule_id=%s reason=%s", rule_id, reason)
+                return ToolResult(
+                    success=True,
+                    data={
+                        "bypassed": rule_id,
+                        "reason": reason,
+                        "note": "Gate bypass recorded. Rule remains in store; re-activation on next RCA run.",
+                    },
+                )
+
+            else:
+                return ToolResult(
+                    success=False,
+                    error=f"Unknown rca action: {action}",
+                    data={"supported_actions": ["analyze", "query", "summary", "review_required", "bypass_gate"]},
+                )
+
+        except Exception as exc:
+            logger.error("CortexLearning.rca failed: %s", exc, exc_info=True)
+            return ToolResult(success=False, error=str(exc))

@@ -237,4 +237,33 @@ The `cortex_metrics` MCP tool captures TDD cycles, debug sessions, code generati
 
 ---
 
-*All answers verified against live codebase — 26 February 2026*
+*All answers verified against live codebase — 27 February 2026*
+
+---
+
+## Phase 85, 86, and 87 — Planned Capabilities
+
+### What is Phase 85?
+
+Phase 85 (Unified Response Template Standardization + Orchestrator Engagement Visual System) unifies the two progress display paradigms that existed in CORTEX (bar-only vs phase-list+bar), adds three new engagement visibility blocks (`BLOCK-ENGAGEMENT-BREADCRUMB`, `BLOCK-ENGAGEMENT-TIMELINE`, `BLOCK-PHASE-ROADMAP`), and wires all orchestrators to a single SSOT: `.github/templates/cortex-response-templates.md`. After Phase 85, every CORTEX response shows which orchestrators ran, how long each step took, and where you are in multi-phase operations.
+
+### What is Phase 86?
+
+Phase 86 (Multi-Stack Debug Pipeline) extends CORTEX's debugging capability from Python-only to universally multi-stack. It adds five new `AbstractInjectionStrategy` implementations: `FrontendConsoleStrategy` (JS/TS/React/Angular/Vue), `HtmlVisionMappingStrategy` (Vision API screenshot → DOM correlation), `ApiTraceStrategy` (REST/GraphQL/gRPC), `SqlTraceStrategy` (SQL Server/Oracle/PostgreSQL), and `DotNetTraceStrategy` (C#/.NET). The same `/debug` command selects the right strategy automatically based on detected stack. Phase 86 also wires `DebuggerOrchestrator` into the full intelligence infrastructure (OPJMixin, URS, IntelligenceMatrix, EventBus, KnowledgeSynthesisEngine) for cross-session debug learning.
+
+### What is Phase 87?
+
+Phase 87 (RCA Memory Engine) adds structured root cause analysis to CORTEX's learning system. It introduces four methodologies (Five Whys, Fishbone, Fault Tree, Causal Chain), a Prevention Gate that escalates from advisory to blocking on repeated P0 root causes, and a Recurrence Signature Engine that detects the same root cause class across all orchestrators and all sessions. Phase 87 also includes a holistic sync of all 154 cortex-docs markdown files to reflect the current state of the platform through Phase 84.
+
+### Do Phases 85/86/87 add new orchestrators or MCP tools?
+
+No. All three phases are purely additive:
+- Phase 85: Extends existing blocks in the response template SSOT
+- Phase 86: Adds 5 strategies to the existing Strategy Pattern in `MarkerInjectionEngine`
+- Phase 87: Adds 2 methods to `OPJMixin` and one `op="rca"` operation to the existing `cortex_learning` tool
+
+Zero new orchestrators. Zero new MCP tools. All changes are backward-compatible extensions.
+
+### When will Phases 85/86/87 be complete?
+
+All three are planned for completion in February 2026, following the WHOLE-PHASE-FIRST principle — each phase runs end-to-end atomically, never partially.

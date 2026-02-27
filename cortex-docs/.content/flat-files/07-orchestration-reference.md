@@ -194,4 +194,48 @@ EnforcementOrchestrator calls assert_exhausted as part of the pre-commit gate. I
 
 ---
 
-*All orchestrator paths and component locations verified against live codebase — 26 February 2026*
+*All orchestrator paths and component locations verified against live codebase — 27 February 2026*
+
+---
+
+## DebuggerOrchestrator — Multi-Stack Debug Pipeline (Phase 86 PLANNED)
+
+Location: `cortex/orchestrators/support/debugger_orchestrator.py`
+
+DebuggerOrchestrator coordinates the five-phase debug pipeline: INJECT → CAPTURE → ANALYZE → FIX-PLAN → CLEANUP. It uses a Strategy Pattern via `MarkerInjectionEngine`, selecting strategies based on detected tech stack.
+
+### Current State (Phase 84 COMPLETE)
+
+Three Python strategies are live:
+- `TestFailureStrategy` — pytest/unittest failure analysis
+- `RefactorRegressionStrategy` — refactor session regression tracking
+- `GovernanceViolationStrategy` — CORE rule violation tracing
+
+### Phase 86 Additions (PLANNED)
+
+Five multi-stack strategies to be added:
+- `FrontendConsoleStrategy` — JS/TS/React/Angular/Vue console tracing
+- `HtmlVisionMappingStrategy` — Vision API screenshot → CSS selector → DOM correlation
+- `ApiTraceStrategy` — REST/GraphQL/gRPC middleware tracing
+- `SqlTraceStrategy` — SQL Server/Oracle/PostgreSQL query plan tracing
+- `DotNetTraceStrategy` — C#/.NET ILogger entry/exit tracing
+
+### Intelligence Wiring (Phase 86 PLANNED)
+
+Phase 86 wires `DebuggerOrchestrator` into CORTEX's cross-cutting intelligence infrastructure:
+
+| Integration | Component | Purpose |
+|-------------|-----------|---------|
+| OPJMixin | `_opj_record_failure()` | Persist debug session outcomes for learning |
+| URS | `ReinforcementEngine.emit_signal()` | Fix rate and time-to-resolve feed learning |
+| IntelligenceMatrix | Cells CC-021/IC-021 | Debugger queryable by other orchestrators |
+| EventBus | `DEBUG_INSIGHT`, `DEBUG_FIX_APPLIED` | Bidirectional event publishing |
+| KnowledgeSynthesisEngine | `synthesize_debug_patterns()` | Cross-session error pattern capture |
+
+All five integrations follow patterns established by MasterOrchestrator, TDDOrchestrator, and EnforcementOrchestrator — approximately 55 lines of additive production code.
+
+### AutoCleanupManager
+
+Location: `cortex/orchestrators/support/debugging/auto_cleanup_manager.py`
+
+Removes all CORTEX_DEBUG markers after session completion. Currently supports Python marker strip patterns. Phase 86 adds JavaScript/TypeScript, C#, SQL, and HTML patterns.

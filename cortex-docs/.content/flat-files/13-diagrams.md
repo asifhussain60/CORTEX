@@ -35,6 +35,7 @@ order: 12
 | 15 | Security-First 5-Layer Architecture | `diagrams/diagram-21-security-first.md` |
 | 16 | Knowledge Hydration Pipeline | `diagrams/diagram-22-knowledge-hydration.md` |
 | 17 | Sweep Completeness Lifecycle | `diagrams/diagram-23-sweep-completeness.md` |
+| 18 | RCA Prevention Flow (Phase 87) | `diagrams/diagram-24-rca-prevention-flow.md` |
 
 ### Notation Guide
 

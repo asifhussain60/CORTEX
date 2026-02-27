@@ -177,4 +177,30 @@ The WorkflowEngine reads a YAML template, parses its phases and dependencies, an
 
 ---
 
-*All rule identifiers and agent names verified against live governance registry — 26 February 2026*
+*All rule identifiers and agent names verified against live governance registry — 27 February 2026*
+
+---
+
+## RCA as a Governance Signal (Phase 87 PLANNED)
+
+The RCA Memory Engine integrates with the governance layer to turn historical failure patterns into proactive enforcement signals. This closes the loop between the "what happened" (OPJ), the "why it happened" (RCA Engine), and "don't let it happen again" (Prevention Gate + URS).
+
+### RCA Prevention Gate Governance Levels
+
+| Recurrence Count | Severity | Action |
+|-----------------|----------|--------|
+| 1 | Advisory | Log RCA match, surface to developer as info |
+| 2 | Warning | Surface in governance gate response, include fix reference |
+| 3+ P0 | Blocking | Halt operation, require structured review before proceeding |
+
+### RCA Workflow Template (Phase 87 PLANNED)
+
+A new workflow template `cortex-registry/workflows/templates/rca/rca-analysis-workflow.yaml` orchestrates the full RCA pipeline:
+
+1. **Trigger** — OPJMixin detects a new failure with `rca: True` flag
+2. **Methodology Selection** — RCAEngine selects appropriate methodology (Five Whys, Fishbone, Fault Tree, Causal Chain) based on failure category
+3. **Analysis** — Structured analysis generates the `RCAAnalysis` dataclass
+4. **Signature** — RecurrenceSignatureEngine generates and stores canonical fingerprint
+5. **Prevention Rule** — `generate_prevention_rule()` creates a blocking or advisory rule
+6. **URS Signal** — Reinforcement signal emitted based on recurrence count and severity
+7. **cortex-docs Sync** — Documentation updated inline (CORE-002 — no report files)
