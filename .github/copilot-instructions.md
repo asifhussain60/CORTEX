@@ -133,6 +133,9 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | MasterOrchestrationStage1 | `cortex/orchestrators/core/master_orchestrator_stage_1.py` |
 | MasterOrchestrationStage3 | `cortex/orchestrators/core/master_orchestrator_stage_3.py` |
 | MasterOrchestrationStage4 | `cortex/orchestrators/core/master_orchestrator_stage_4.py` |
+| DebuggerOrchestrator | `cortex/orchestrators/support/debugger_orchestrator.py` |
+| MarkerInjectionEngine | `cortex/orchestrators/support/debugging/marker_injection_engine.py` |
+| AutoCleanupManager | `cortex/orchestrators/support/debugging/auto_cleanup_manager.py` |
 
 ---
 
@@ -175,6 +178,9 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | `/challenge {request}` | Generate ≥2 alternatives with trade-offs | — |
 | `/totalrecall` | Holistic production readiness refactor (7-phase protocol) | 7 phases |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder | — |
+| `/debug {path}` | Multi-stack debug: inject → capture → analyze → fix-plan → cleanup | 5 phases |
+| `/debug-inject {path}` | Insert CORTEX_DEBUG markers (8 strategies) | INJECT |
+| `/debug-cleanup` | Remove all CORTEX_DEBUG markers (production-ready) | CLEANUP |
 
 ### `/audit fix` — 9-Stage Pipeline (canonical single command for production readiness)
 
@@ -247,6 +253,8 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight
 - Response Templates: `.github/templates/cortex-response-templates.md`
 - Master Plan Lifecycle: `cortex-registry/workflows/templates/governance/master-plan-phase-lifecycle.yaml`
 - Phase Template: `cortex-registry/planning/phases/_template.yaml`
+- Debug Agent: `.github/agents/support/cortex-debugger.md`
+- Debug Pipeline Template: `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml`
 
 ---
 

@@ -151,6 +151,21 @@ cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 | HEALTH | 🩺 | "/health", "health check", "orchestrator status" | HealthOrchestrator | ⚪ | `cortex-auditor.md` |
 | DEBUG | 🐛 | "debug", "trace", "diagnose" | DebugOrchestrator | ✅ | `cortex-debugger.md` |
 
+### 🐛 DEBUG MODE — Multi-Stack Debug Pipeline (Phase 86)
+
+**Trigger:** "debug", "trace", "diagnose", `/debug`, `/debug-inject`, `/debug-cleanup`
+
+**Strategy Pattern:** 8 strategies registered in `MarkerInjectionEngine` — 3 existing + 5 Phase 86:
+- **FrontendConsoleStrategy** — JS/TS/React/Angular/Vue console.log + DOM event tracing
+- **HtmlVisionMappingStrategy** — Vision API screenshot → CSS selector → HTML element correlation
+- **ApiTraceStrategy** — REST/GraphQL/gRPC request/response + header + timing injection
+- **SqlTraceStrategy** — SQL Server/Oracle/PostgreSQL query plan + parameter + execution tracing
+- **DotNetTraceStrategy** — C#/.NET method entry/exit + DI + middleware + async tracing
+
+**Workflow Template:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml`
+**Phase Spec:** `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml`
+**Auto-Cleanup:** `AutoCleanupManager` with per-language strip patterns (Python/JS/TS/C#/SQL/HTML)
+
 ---
 ## 🔎 AUDIT MODE — Production Readiness Scanner
 
@@ -740,6 +755,9 @@ Progress bar + stage bullet list. See templates SSOT.
 | `/recall {feature}` | Feature discovery | — |
 | `/totalrecall` | Holistic production readiness refactor (7-phase protocol) | 7 phases |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder (4-gate: PULL→DIFF→SANITIZE→MERGE) | — |
+| `/debug {path}` | Multi-stack debug: inject → capture → analyze → fix-plan → cleanup (8 strategies) | 5 phases |
+| `/debug-inject {path}` | Insert CORTEX_DEBUG markers (8 strategies) | INJECT |
+| `/debug-cleanup` | Remove all CORTEX_DEBUG markers (production-ready) | CLEANUP |
 
 ### `/audit fix` — 9-Stage Pipeline Detail
 
@@ -842,7 +860,7 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py prefl
 | META-AUDIT | `cortex-meta-auditor.md` | ~3,500 |
 | WIRING/CI | `architecture-integrity-agent.md` | ~5,000 |
 | VACUUM | `cortex-vacuum.md` | ~2,000 |
-| DEBUG | `cortex-debugger.md` | ~4,500 |
+| DEBUG | `cortex-debugger.md` | ~5,000 |
 | HEALTH | `cortex-auditor.md` (Check #11) | ~3,500 |
 
 **Default:** Load this prompt only (~2,700 tokens). Specialist agents on-demand only.

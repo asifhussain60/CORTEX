@@ -1,13 +1,53 @@
 # CORTEX Debug Orchestrator Agent
 
 **Role:** Multi-Stack Debugging Specialist  
-**Authority:** Debug injection, capture, analysis, and cleanup
+**Authority:** Debug injection, capture, analysis, and cleanup  
+**Phase 86:** Multi-Stack Debug Pipeline — 5 strategies + Vision API mapping + auto-cleanup
 
 ---
 
 ## 🎯 Purpose
 
-Universal debugging capability that floods code with traceable `CORTEX_DEBUG` markers, captures execution traces, analyzes patterns to identify root causes, and provides surgical cleanup.
+Universal debugging capability that floods code with traceable `CORTEX_DEBUG` markers, captures execution traces, analyzes patterns to identify root causes, and provides surgical cleanup. Extends the Strategy Pattern in `MarkerInjectionEngine` with 5 stack-specific strategies.
+
+---
+
+## 🏗️ Architecture
+
+**Strategy Pattern Extension** — zero new orchestrators, zero new MCP tools.
+
+| Component | Path | Role |
+|-----------|------|------|
+| DebuggerOrchestrator | `cortex/orchestrators/support/debugger_orchestrator.py` | EventBus-driven coordinator (UNCHANGED) |
+| MarkerInjectionEngine | `cortex/orchestrators/support/debugging/marker_injection_engine.py` | Strategy registry + dispatch |
+| AutoCleanupManager | `cortex/orchestrators/support/debugging/auto_cleanup_manager.py` | Multi-language strip patterns |
+| AbstractInjectionStrategy | `cortex/orchestrators/support/debugging/debug_strategy_base.py` | Strategy ABC |
+
+### 8 Registered Strategies (3 existing + 5 Phase 86)
+
+| Strategy | File | Stack | Status |
+|----------|------|-------|--------|
+| TestFailureStrategy | `strategies/test_failure_strategy.py` | Python tests | ✅ Existing |
+| RefactorRegressionStrategy | `strategies/refactor_regression_strategy.py` | Refactor sessions | ✅ Existing |
+| GovernanceViolationStrategy | `strategies/governance_violation_strategy.py` | CORE rules | ✅ Existing |
+| FrontendConsoleStrategy | `strategies/frontend_console_strategy.py` | JS/TS/React/Angular/Vue | ⚪ Phase 86 |
+| HtmlVisionMappingStrategy | `strategies/html_vision_mapping_strategy.py` | HTML + Vision API | ⚪ Phase 86 |
+| ApiTraceStrategy | `strategies/api_trace_strategy.py` | REST/GraphQL/gRPC | ⚪ Phase 86 |
+| SqlTraceStrategy | `strategies/sql_trace_strategy.py` | SQL Server/Oracle/PostgreSQL | ⚪ Phase 86 |
+| DotNetTraceStrategy | `strategies/dotnet_trace_strategy.py` | C#/.NET/ASP.NET | ⚪ Phase 86 |
+
+### Vision API Integration (Phase 86 — GAP-86-02)
+
+`CortexVision` MCP tool (`cortex/mcp/tools/utilities.py`) upgraded from stub to real Vision API:
+- Screenshot → element bounding boxes → CSS selector mapping
+- UI element ↔ HTML source correlation
+- Visual regression detection
+- Consumed by `HtmlVisionMappingStrategy` for DOM-aware debug injection
+
+### Workflow Template
+
+**Pipeline:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml`  
+**9-stage pipeline:** detect-stack → select-strategies → inject-markers → capture → analyze → vision-map → fix-plan → cleanup → verify
 
 ---
 
@@ -46,8 +86,11 @@ Universal debugging capability that floods code with traceable `CORTEX_DEBUG` ma
 | Python | Function entry/exit, class methods, decorators, async |
 | Django | Views, models, middleware, signals |
 | Flask/FastAPI | Routes, middleware, request handlers |
-| C#/.NET | Method entry/exit, async, events, constructors |
+| C#/.NET | Method entry/exit, async, events, constructors, DI |
 | ASP.NET | Controllers, middleware, filters, Razor pages |
+| SQL Server | Stored procedures, queries, execution plans |
+| Oracle | PL/SQL blocks, cursors, triggers |
+| PostgreSQL | Functions, triggers, query plans |
 
 **MCP Tool:** `cortex_debug_inject`
 
@@ -123,13 +166,17 @@ Universal debugging capability that floods code with traceable `CORTEX_DEBUG` ma
 
 | Component | Path |
 |-----------|------|
-| Node.js CLI | `cortex-registry/company/dashboards/spa/tools/cortex-debug/cortex-debug-orchestrator.js` |
-| Injector | `cortex-registry/company/dashboards/spa/tools/cortex-debug/CortexDebugInjector.js` |
-| Capture | `cortex-registry/company/dashboards/spa/tools/cortex-debug/CortexDebugCapture.js` |
-| Analyzer | `cortex-registry/company/dashboards/spa/tools/cortex-debug/CortexDebugAnalyzer.js` |
-| Cleanup | `cortex-registry/company/dashboards/spa/tools/cortex-debug/CortexDebugCleanup.js` |
-| Adapters | `cortex-registry/company/dashboards/spa/tools/cortex-debug/adapters/index.js` |
-| Python MCP | `cortex/tools/debug_orchestrator/__init__.py` |
+| DebuggerOrchestrator | `cortex/orchestrators/support/debugger_orchestrator.py` |
+| MarkerInjectionEngine | `cortex/orchestrators/support/debugging/marker_injection_engine.py` |
+| AutoCleanupManager | `cortex/orchestrators/support/debugging/auto_cleanup_manager.py` |
+| AbstractInjectionStrategy | `cortex/orchestrators/support/debugging/debug_strategy_base.py` |
+| Existing Strategies (3) | `cortex/orchestrators/support/debugging/strategies/` |
+| Phase 86 Strategies (5) | `cortex/orchestrators/support/debugging/strategies/` |
+| MCP Tools (3) | `cortex/mcp/tools/debug_tools.py` |
+| CortexVision (Vision API) | `cortex/mcp/tools/utilities.py` |
+| Workflow Template | `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml` |
+| Phase Spec | `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml` |
+| Node.js CLI (company) | `cortex-registry/company/dashboards/spa/tools/cortex-debug/` |
 
 ---
 
@@ -191,6 +238,22 @@ Agent Response:
 
 ---
 
+## 🧹 Multi-Language Auto-Cleanup (Phase 86)
+
+`AutoCleanupManager` supports per-language strip patterns for production-ready cleanup:
+
+| Language | Markers Cleaned | Pattern |
+|----------|----------------|---------|
+| Python | `CORTEX_DEBUG_*`, `# CORTEX_TRACE:` | Regex line removal |
+| JavaScript/TypeScript | `console.log('CORTEX_DEBUG_*')`, `// CORTEX_TRACE:` | AST-safe strip |
+| C# | `Debug.WriteLine("CORTEX_DEBUG_*")`, `// CORTEX_TRACE:` | Regex line removal |
+| SQL | `-- CORTEX_TRACE:`, `PRINT 'CORTEX_DEBUG_*'` | Comment-aware strip |
+| HTML | `<!-- CORTEX_DEBUG_* -->`, `data-cortex-debug` | Tag-aware strip |
+
+**Safety:** Verification pass confirms zero orphaned markers. Only CORTEX-injected markers removed — original debug statements preserved.
+
+---
+
 ## 🔗 Related
 
 | Document | Purpose |
@@ -198,7 +261,8 @@ Agent Response:
 | `../../prompts/cortex-architect.prompt.md` (load explicitly when needed) | DESIGN/AUDIT/EXEC modes |
 | `../../prompts/CORTEX.prompt.md` (load explicitly when needed) | Master prompt |
 | `../../copilot-instructions.md` (load explicitly when needed) | Quick command reference |
+| Phase 86 Spec | `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml` |
 
 ---
 
-*CORTEX Debug Orchestrator Agent v1.0 — Universal Multi-Stack Debugging*
+*CORTEX Debug Orchestrator Agent v2.0 — Multi-Stack Debug Pipeline (Phase 86)*

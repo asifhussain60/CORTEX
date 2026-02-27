@@ -1,9 +1,9 @@
 ```markdown
-# Video Prompt 09 — Getting Started: Your First Commands
+# Tutorial 02 — Getting Started: Your First Commands
 
 > **Duration:** 7 minutes · **Audience:** Software Engineers, Product Owners new to CORTEX
 > **Depth:** 🟡 Tutorial — practical with explanations
-> **Prerequisites:** Video 08 (CORTEX installed and verified)
+> **Prerequisites:** Tutorial 01 (CORTEX installed and verified)
 > **Goal:** User confidently uses 5 essential commands and understands when to use each
 
 ---
@@ -276,10 +276,10 @@ Each command box glows as its use case is described.
 | `/vacuum` | Your workspace is cluttered |
 
 **Closing text** (Space Grotesk):
-**"Five commands. Complete control. Start using them today."**
+**"Five commands. The engineering discipline on autopilot."**
 
 **Vision callback:**
-> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+> *"Every command you just learned replaces a manual process that used to eat your morning. Tomorrow, spend that morning designing."*
 
 Logo pulse. End card.
 

@@ -232,7 +232,7 @@ Each row animates: left side in dim amber, right side in bright green.
 **Closing text** (Space Grotesk): **"Tests aren't proof that your code works. Tests are the definition of what 'works' means."**
 
 **Vision callback:**
-> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+> *"Every hour your team spends debugging regressions is an hour not spent building the product. CORTEX eliminates that tax."*
 
 Logo pulse. End card.
 

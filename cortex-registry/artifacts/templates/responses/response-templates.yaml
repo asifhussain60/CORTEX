@@ -315,7 +315,7 @@ rendering_rules:
   
   progress_bars:
     format: "[██████░░░░] — square brackets, no backticks"
-    reason: "Matches golden template visual from pasted image"
+    reason: "Matches golden template visual from SSOT §Silent Autonomous Mode"
     chars:
       filled: "█"
       empty: "░"

@@ -156,7 +156,7 @@ Arrows connect all three: "Same 38 rules, three checkpoints, zero escapes."
 **Closing text** (Space Grotesk): **"Governance isn't overhead. It's the foundation everything else stands on."**
 
 **Vision callback:**
-> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+> *"Thirty-eight rules your team will never have to remember, debate, or manually enforce again. That argument in the code review? Settled. Permanently."*
 
 Logo pulse. End card.
 

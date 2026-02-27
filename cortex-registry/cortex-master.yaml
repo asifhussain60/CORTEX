@@ -1,5 +1,5 @@
 version: '1.0'
-updated: '2026-02-26'
+updated: '2026-02-27'
 maintainer: CORTEX Architecture Team
 
 # ============================================================
@@ -25,7 +25,7 @@ maintainer: CORTEX Architecture Team
 # ============================================================
 
 # ============================================================
-# CONSOLIDATED EXECUTION PLAN — v23.0
+# CONSOLIDATED EXECUTION PLAN — v30.0
 # 7 pending phases → 6 active (3 P0 + 3 P1)
 #
 # RESTRUCTURING (2026-02-25 — chat01 holistic digest):
@@ -37,25 +37,30 @@ maintainer: CORTEX Architecture Team
 #   KEEP:     phase-76 (P1, defer last)
 #   ARCHIVED: phase-73, phase-74 → planned/_archived/
 #
+# ADDITIONS (2026-02-27):
+#   CREATE:   phase-86 (P1, multi-stack debug pipeline + unified intelligence, 15 GAPs)
+#
 #  Slot │ Phase   │ P    │ Track            │ Status       │ GAPs
 #  ─────┼─────────┼──────┼──────────────────┼──────────────┼──────
-#  #0   │ ph-77   │ P0   │ Cleanup first    │ PLANNED      │ 6
-#  #1   │ ph-78   │ P0   │ Matrix wiring    │ PLANNED      │ 12
-#  #2   │ ph-79   │ P1   │ SDLC Engine      │ PLANNED      │ 22
-#  #3   │ ph-75   │ P1   │ Cap Registry     │ IN_PROGRESS  │ 3
-#  #4   │ ph-76   │ P1   │ UI — defer last  │ PLANNED      │ 0
+#  #0   │ ph-86   │ P1   │ Debug Pipeline   │ PLANNED      │ 10
+#  #1   │ ph-85   │ P1   │ Response+Engage  │ PLANNED      │ 10
+#  #2   │ ph-77   │ P0   │ Cleanup first    │ COMPLETE     │ 6
+#  #3   │ ph-78   │ P0   │ Matrix wiring    │ COMPLETE     │ 12
+#  #4   │ ph-79   │ P1   │ SDLC Engine      │ COMPLETE     │ 22
+#  #5   │ ph-75   │ P1   │ Cap Registry     │ COMPLETE     │ 5
+#  #6   │ ph-76   │ P1   │ UI — defer last  │ COMPLETE     │ 0
 #
-# Gate: smoke ≥1,211 at every sub-phase boundary.
+# Gate: smoke ≥1,443 at every sub-phase boundary.
 # ============================================================
 
 metadata:
   version: '1.0'
-  last_updated: '2026-02-26T18:00:00Z'
-  total_phases: 83
+  last_updated: '2026-02-27T12:00:00Z'
+  total_phases: 86
   active: 0
   completed: 74
   in_progress: 0
-  planned: 1
+  planned: 2
   playbooks: 1
   governance_rules_total: 37
   digests: 1
@@ -74,7 +79,7 @@ metadata:
       file: ".cortex-runtime/digests/recommend-digest-20260226.yaml"
       note: "Digested _workspaces/recommend/ (5 consolidated review documents). Verified 10 of 12 gaps resolved. Health score 8.2/10 (+0.9 improvement). 2 gaps deferred to Phase 65 (MCP auth P0, ImportError sweep P1). Source archived to workspaces archive (recommend-20260226)."
     - id: phase-80-a
-      title: "MasterOrchestrator God-Object Decomposition — Initialiser + Mixin + Dead-Code Purge"
+      title: "MasterOrchestrator God-Object Decomposition"
       priority: P0
       status: COMPLETE
       sweep_id: SWEEP-80-A-MASTER-ORCHESTRATOR-DECOMPOSITION
@@ -83,7 +88,7 @@ metadata:
       sub_phases: 5
       completed: "2026-02-25"
       file: "cortex-registry/_cortex-master/phases/completed/phase-80-a-master-orchestrator-decomposition.yaml"
-      note: "COMPLETE 2026-02-25. 5222→2984 lines (↓43%). __init__ 71→8 AST stmts. execute_operation_legacy DELETED (749L, 0 callers). MasterOrchestratorKnowledgeMixin (706L, 12 methods). MasterOrchestratorInitialiser (732L, 7 wire_* methods). 0 module-level except ImportError (was 14). 14/14 decomp tests GREEN. 0 new regressions."
+      note: "5222→2984 lines (↓43%). Mixin+Initialiser extraction. 14/14 tests GREEN."
     - id: phase-68
       title: "cortex/core Flatten — 27 Subdirs → 15 Canonical"
       priority: P1
@@ -92,25 +97,21 @@ metadata:
       gaps: 9
       sub_phases: 4
       file: "cortex-registry/_cortex-master/phases/completed/phase-68-core-flatten-sweep.yaml"
-      note: "All 9 gaps CLOSED. bootstrap/ stub dir deleted (16→15 subdirs). All 19 Phase-68 tests GREEN. 1420 smoke passing."
+      note: "All 9 gaps CLOSED. 19 tests GREEN."
     - id: phase-67
-      title: "WorkflowEngine Runtime Wiring — YAML→FSM→ConvergenceLoop E2E"
+      title: "WorkflowEngine Runtime Wiring"
       priority: P1
       status: COMPLETE
       sweep_id: SWEEP-67-WORKFLOW-RUNTIME-WIRING
       gaps: 6
-      sub_phases: 6
       file: "cortex-registry/_cortex-master/phases/completed/phase-67-workflow-engine-runtime-wiring.yaml"
-      note: "Wires 3 isolated workflow primitives into coherent E2E path. StepHandlerRegistry replaces stub. convergence_gate added to audit-fix + TDD templates."
     - id: phase-66
       title: "Cross-Cutting Intelligence Matrix — Neural Wiring Layer"
       priority: P0
       status: COMPLETE
       sweep_id: SWEEP-66-INTELLIGENCE-MATRIX
       gaps: 19
-      sub_phases: 3
       file: "cortex-registry/_cortex-master/phases/completed/phase-66-intelligence-matrix-neural-wiring.yaml"
-      note: "Wires 5 P0-CRITICAL + 12 P1-HIGH + 2 P2-MEDIUM matrix gaps. Coverage 9.5% → ≥50%."
 
 # ── PHASE DETAIL FILES ───────────────────────────────────────────────────────
 # Ordered by execution slot. 6 pending phases consolidated to 4.
@@ -119,7 +120,29 @@ metadata:
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
-  # ── SLOT #0 — phase-84 (P0, COMPLETE) ──────────────────────────────────────
+  # ── SLOT #0 — phase-86 (P1, PLANNED) ──────────────────────────────────────
+  - id: phase-86
+    title: "Multi-Stack Debug Pipeline — 5 Strategies + Vision Mapping + Auto-Cleanup + Unified Intelligence Wiring"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-86-MULTI-STACK-DEBUG-PIPELINE
+    gaps: 16
+    sub_phases: 8
+    file: "cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml"
+    note: "5 new AbstractInjectionStrategy implementations (Frontend/HTML-Vision/API/SQL/DotNet). CortexVision stub→real Vision API. Multi-language AutoCleanupManager patterns. Unified intelligence wiring: OPJMixin + URS + IntelligenceMatrix (CC-021/IC-021) + bidirectional EventBus + KnSynth. cortex-docs sync. Zero new orchestrators, zero new MCP tools."
+
+  # ── SLOT #1 — phase-85 (P1, PLANNED) ──────────────────────────────────────
+  - id: phase-85
+    title: "Unified Response Template Standardization + Orchestrator Engagement Visual System"
+    priority: P1
+    status: PLANNED
+    sweep_id: SWEEP-85-UNIFIED-RESPONSE-ORCHESTRATOR-ENGAGEMENT
+    gaps: 12
+    sub_phases: 6
+    file: "cortex-registry/_cortex-master/phases/planned/phase-85-unified-response-orchestrator-engagement.yaml"
+    note: "Progress template unification (phase-list format mandatory). 3-tier orchestrator engagement visibility (Breadcrumb, Timeline, Pulse). New blocks: BLOCK-PHASE-ROADMAP, BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE. SSOT pointer enforcement. cortex-docs sync. Pasted Image pattern removal."
+
+  # ── SLOT #1 — phase-84 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-84
     title: "Stub Elimination + Business Rules Pipeline — 29-GAP Comprehensive Sweep"
     priority: P0
@@ -394,30 +417,12 @@ phase_detail_files:
     title: "Health-Vacuum Unified Pipeline"
     priority: P0
     status: COMPLETE
-    note: "Ground-up redesign. 2 canonical orchestrators. 207 tests passing. Pre-dates dedicated phase files."
+    note: "Ground-up redesign. 2 canonical orchestrators. 207 tests passing."
 
-  - id: phase-49
-    title: "Golden Test Promotion Pipeline"
-    priority: P0
+  - id: phases-39-49
+    title: "Phases 39–49 (Toolkit → Golden Tests → Health-Vacuum → Brain Tier)"
     status: COMPLETE
-    note: "CORE-055 Golden Test Tier Contract introduced. 29/29 golden tests. Pre-dates dedicated phase files."
-
-  - id: phase-48
-    title: "Health-Vacuum Integrity Pipeline"
-    priority: P0
-    status: COMPLETE
-    note: "Superseded by Phase 51. 39/39 golden tests. Pre-dates dedicated phase files."
-
-  - id: phase-47
-    title: "Brain Tier Architecture Validation & Fix"
-    priority: P0
-    status: COMPLETE
-    note: "Tier precedence fixed: tier0 > tier1 > tier2. 45 tests. Pre-dates dedicated phase files."
-
-  - id: phases-39-46
-    title: "Phases 39–46 (Toolkit → Registry Consolidation)"
-    status: COMPLETE
-    note: "All 8 phases COMPLETE. Detail in cortex-registry/planning/phases/completed/."
+    note: "11 phases COMPLETE. Detail in cortex-registry/planning/phases/completed/."
 
   - id: phases-01-38
     title: "Phases 01–38 (Sequential Foundation)"
@@ -468,24 +473,27 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "✅ 83/84 PHASES COMPLETE — Phase 84 (Stub Elimination) PLANNED. Smoke baseline: 1,443+"
+  status: "✅ 84/86 PHASES COMPLETE — Phase 85 (Unified Response+Engagement) + Phase 86 (Multi-Stack Debug Pipeline) PLANNED. Smoke baseline: 1,443+"
   overall_score: 98%
   test_baseline: "1,443 smoke | 84 golden response | 204 golden workflow | 177 workflow orchestrators"
-  deployment_date: '2026-02-26'
+  deployment_date: '2026-02-27'
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "83/84 phases (1 PLANNED)"
-  last_verified: '2026-02-26T00:00:00Z'
+  plan_version: "84/86 phases (2 PLANNED)"
+  last_verified: '2026-02-27T00:00:00Z'
 
 summary:
-  total_phases: 84
-  completed: 83
+  total_phases: 86
+  completed: 84
   active: 0
   in_progress: 0
-  planned: 0
+  planned: 2
   archived: 4
   playbooks: 1
-  completion_percentage: 100
-  consolidation_summary: "v28.0: 84 phases — 84 COMPLETE. Phase-84: Stub Elimination + Business Rules Pipeline, all 29 GAPs CLOSED, 27/27 permanence tests GREEN, 1443 smoke baseline maintained."
-  active_phases: {}
+  completion_percentage: 98
+  consolidation_summary: "v32.0: 86 phases — 84 COMPLETE, 2 PLANNED. Phase-85: Unified Response Template + Orchestrator Engagement + docs sync + Pasted Image cleanup (12 GAPs, 6 sub-phases). Phase-86: Multi-Stack Debug Pipeline — 5 strategies + Vision API + auto-cleanup + unified intelligence wiring + docs sync (16 GAPs, 8 sub-phases)."
+  active_phases:
+    phase-85: "PLANNED — Response template standardization + engagement visibility + cortex-docs sync + Pasted Image removal"
+    phase-86: "PLANNED — Multi-stack debug pipeline + unified intelligence wiring + cortex-docs sync"
+

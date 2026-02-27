@@ -1,9 +1,9 @@
 ```markdown
-# Video Prompt 08 — Getting Started: Installation
+# Tutorial 01 — Getting Started: Installation
 
 > **Duration:** 5 minutes · **Audience:** Everyone (zero prior knowledge assumed)
 > **Depth:** 🟢 Tutorial — practical, step-by-step, no jargon
-> **Prerequisites:** None — this is where new users START
+> **Prerequisites:** None — this is where new users START (watch concept Videos 1-8 first for full context)
 > **Goal:** User has CORTEX running in VS Code by the end of the video
 
 ---
@@ -181,10 +181,10 @@ Each line appears with a pleasant chime.
 3. **Documentation** — Visit `cortex-docs/` for detailed guides
 
 **Closing text** (Space Grotesk):
-**"Installed in 5 minutes. Ready for a lifetime of governed development."**
+**"Five minutes to install. A career of engineering leverage."**
 
 **Vision callback** (from index.html):
-> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+> *"From this moment, every line of code you write is tested, governed, and orchestrated. You just freed yourself from the legwork."*
 
 Logo pulse. End card with URL: `https://asifhussain60.github.io/CORTEX/`
 

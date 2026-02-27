@@ -72,9 +72,9 @@ Every generated video **MUST** follow these rules for brand consistency with the
 
 ## Video Index — Complete Learning Journey
 
-### Phase 1: Understanding CORTEX (Videos 1-7)
+### Phase 1: Understanding CORTEX (Videos 1-8)
 
-Videos 1-7 follow a **progressive depth curve** — from executive overview to advanced internals. Each video assumes the viewer has watched the previous ones. **Zero content repetition between videos.**
+Videos 1-8 follow a **progressive depth curve** — from executive overview to advanced internals. Each video assumes the viewer has watched the previous ones. **Zero content repetition between videos.**
 
 | # | File | Title | Duration | Audience | Depth |
 |---|------|-------|----------|----------|-------|
@@ -85,18 +85,26 @@ Videos 1-7 follow a **progressive depth curve** — from executive overview to a
 | 5 | `prompt-05-tdd-mastery.md` | TDD Mastery | 9 min | Engineers | 🔴 Developer |
 | 6 | `prompt-06-mcp-tools-deep-dive.md` | MCP Tools Deep Dive | 10 min | Engineers, Builders | 🔴 Developer |
 | 7 | `prompt-07-audit-fix-pipeline.md` | The Audit Fix Pipeline | 10 min | Platform Engineers | 🔴 Advanced |
+| 8 | `prompt-08-workflow-template-engine.md` | The Workflow Template Engine | 9 min | Engineers, Platform | 🔴 Architecture |
 
-### Phase 2: Getting Started (Videos 8-10)
+**Why Video 8 is last in the concept series:** It answers the deepest architectural question — *"YAML is just data, so where does the intelligence come from?"* — which only makes sense after Videos 2 (request lifecycle), 3 (intelligence), and 7 (audit pipeline) have established what those templates are used *for*.
 
-Videos 8-10 are **practical tutorials** that assume zero prior hands-on experience. They can be watched after Videos 1-7 for context, or standalone for users who want to start immediately.
+### Phase 2: Hands-On Tutorials (separate folder)
+
+Practical screen-recording-style tutorials separated from concept videos. See `tutorials/README.md` for the full index.
 
 | # | File | Title | Duration | Audience | Prerequisites |
 |---|------|-------|----------|----------|---------------|
-| 8 | `prompt-08-getting-started-installation.md` | Getting Started: Installation | 5 min | All | None |
-| 9 | `prompt-09-getting-started-first-commands.md` | Getting Started: Your First Commands | 7 min | Engineers, PO | Video 8 |
-| 10 | `prompt-10-getting-started-customization.md` | Getting Started: Customizing CORTEX | 8 min | Leads, Platform | Videos 8-9, Video 4 |
+| T1 | `tutorials/tutorial-01-getting-started-installation.md` | Getting Started: Installation | 5 min | Everyone | None |
+| T2 | `tutorials/tutorial-02-getting-started-first-commands.md` | Getting Started: Your First Commands | 7 min | Engineers, PO | Tutorial T1 |
+| T3 | `tutorials/tutorial-03-getting-started-customization.md` | Getting Started: Customizing CORTEX | 8 min | Leads, Platform | T1-T2 + Videos 04 + 08 |
+| T4 | `tutorials/tutorial-04-building-a-feature-end-to-end.md` | Building a Feature End-to-End | 10 min | Engineers | T1-T2 + Videos 02 + 05 |
+| T5 | `tutorials/tutorial-05-debugging-with-cortex.md` | Debugging with CORTEX | 9 min | Engineers | T1 + Video 03 |
+| T6 | `tutorials/tutorial-06-onboarding-a-repository.md` | Onboarding a New Repository | 8 min | Tech Leads, Platform | T1 + Videos 03 + 04 |
 
-### Total Runtime: ~70 minutes
+**Why tutorials are separate:** Concept videos explain *what* and *why*. Tutorial videos show *how* — they are screen-recording walkthroughs, not architectural explainers. Different visual style (VS Code PiP overlay), different pacing, different audience entry points. Mixing them in the same folder creates confusion about learning phase and purpose.
+
+### Total Runtime: ~80 minutes concept + ~47 minutes tutorial
 
 ---
 
@@ -110,12 +118,17 @@ Video 4  █████░░░░░  50%  Governance — real rules, violati
 Video 5  ██████░░░░  60%  TDD — full code session
 Video 6  ████████░░  80%  MCP — protocol, tool authoring
 Video 7  ██████████  100% Audit — 9-stage pipeline (peak)
-Video 8  ██░░░░░░░░  20%  Tutorial — installation (reset)
-Video 9  ████░░░░░░  40%  Tutorial — using commands
-Video 10 ███████░░░  70%  Tutorial — customization
+Video 8  █████████░  90%  Workflow Template Engine — YAML vs Python interpreter design
+──────── tutorials ────────────────────────────────────────────
+Tutor 1  ██░░░░░░░░  20%  Installation — step-by-step (depth resets for tutorials)
+Tutor 2  ████░░░░░░  40%  First commands — practical with explanations
+Tutor 3  ███████░░░  70%  Customization — real rules, real MCP tools
+Tutor 4  ██████████  100% Full feature build — ticket to governed commit (peak)
+Tutor 5  ████████░░  80%  Debugging — 5-phase diagnostic pipeline
+Tutor 6  ███████░░░  70%  Repository onboarding — LENS + security + dashboard
 ```
 
-Videos 8-10 "reset" the depth because they're tutorials, not conceptual explanations.
+Videos 1-8 build steadily to peak architectural depth. Tutorials independently reset depth for hands-on learners. Tutorials 1-3 cover setup basics; Tutorials 4-6 cover advanced workflows.
 
 ---
 
@@ -129,19 +142,18 @@ To ensure **zero repetition**, follow these rules:
 | Governance shield | **Video 4** | Show passing through without detail |
 | MCP tools | **Video 6** | Use as examples, not explain protocol |
 | Audit pipeline | **Video 7** | Reference as "single command" |
+| Workflow template engine | **Video 8** | Forward-reference as "blueprint system" |
 | AC markers | All | Reinforce — this is a core concept |
 
 **Example:** Video 2 shows a request passing through TDD Station 3, but says: *"See Video 5 for the complete TDD session."* — no code panels, no detailed heartbeat.
 
 ---
 
-## Closing Vision (Apply to ALL Videos)
+## Closing Vision Policy
 
-Every video ends with the same vision callback from `index.html`:
+Each video ends with a **unique** closing vision callback that reinforces the value proposition in a distinct way. No two videos share the same closing line. All closings center on the core theme: *CORTEX frees engineers from code legwork so they can focus on envisioning and adding business value.*
 
-> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
-
-This reinforces the value proposition across the entire learning journey.
+See each prompt file's closing section for its specific callback.
 
 ---
 
@@ -156,7 +168,33 @@ This reinforces the value proposition across the entire learning journey.
 | TDD | ECG heartbeat rhythm | Full cycle with code transforming |
 | MCP | Nervous system anatomy | Live tool invocations and responses |
 | Audit | Immune system cellular | 9-stage pipeline progressing in real-time |
+| Workflow Assembly | Static factory floor (prompt-12) | Three-layer system in motion — YAML + mixin + orchestrator |
 
 ---
 
-*All prompts reference actual CORTEX architecture verified against live codebase · 27 February 2026*
+## Folder Structure
+
+```
+videos/
+  README.md                              ← this file
+  prompt-01-what-is-cortex.md
+  prompt-02-the-request-lifecycle.md
+  prompt-03-intelligence-engine.md
+  prompt-04-governance-in-action.md
+  prompt-05-tdd-mastery.md
+  prompt-06-mcp-tools-deep-dive.md
+  prompt-07-audit-fix-pipeline.md
+  prompt-08-workflow-template-engine.md
+  tutorials/
+    README.md                            ← tutorial-specific index and visual identity notes
+    tutorial-01-getting-started-installation.md
+    tutorial-02-getting-started-first-commands.md
+    tutorial-03-getting-started-customization.md
+    tutorial-04-building-a-feature-end-to-end.md
+    tutorial-05-debugging-with-cortex.md
+    tutorial-06-onboarding-a-repository.md
+```
+
+---
+
+*All prompts reference actual CORTEX architecture verified against live codebase · Updated 27 February 2026*

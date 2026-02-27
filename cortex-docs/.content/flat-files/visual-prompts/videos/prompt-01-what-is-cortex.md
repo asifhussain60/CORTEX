@@ -29,7 +29,7 @@ Create a 7-minute animated explainer video titled **"What Is CORTEX?"** using th
 - Count the steps: glass panels stack up, wobble, some turn red (`#ff4444`) — missed test, broken rule, forgotten doc update.
 - The stack collapses in a gentle cascade — cyan particles scatter.
 
-**Narration tone:** Empathetic. "Building with AI assistants should feel magical. But the reality is... manual. Repetitive. Error-prone."
+**Narration tone:** Empathetic. "You became an engineer to solve problems. To create things that matter. But how much of your day is spent actually doing that — versus wrestling with tests, governance, documentation, and deployment plumbing?"
 
 ### Scene 2 — Enter CORTEX (1:30 – 3:00)
 
@@ -42,7 +42,7 @@ Create a 7-minute animated explainer video titled **"What Is CORTEX?"** using th
   - **Bottom (Action):** Green glow (`#00ff88`) — "Executes with precision"
 - **Daily-life analogy overlay:** *"CORTEX is the restaurant manager who coordinates the chef, waiter, and inspector — so they work in harmony."*
 
-**Narration:** "CORTEX is a production-grade AI engineering framework. It doesn't replace your AI — it orchestrates it."
+**Narration:** "CORTEX is a production-grade AI engineering framework. It doesn't replace your AI — it orchestrates it. So you can stop managing process and start envisioning product."
 
 ### Scene 3 — The Core Capabilities (3:00 – 5:00)
 
@@ -79,7 +79,7 @@ Each card has `#1a1f3a` glass background, `rgba(255,255,255,0.1)` border, 12px c
 
 Animate each row appearing sequentially. Left side stays dim, right side glows.
 
-**Narration:** "CORTEX doesn't just help you code. It ensures every change is tested, governed, and orchestrated — automatically."
+**Narration:** "CORTEX doesn't just help you code. It handles the entire engineering discipline — testing, governance, orchestration — so you're free to focus on what actually moves the business forward."
 
 ### Scene 5 — Who Is It For? (6:15 – 7:00)
 
@@ -92,12 +92,12 @@ Animate each row appearing sequentially. Left side stays dim, right side glows.
 
 Each card has the persona icon on the left, description on the right, glassmorphic panel styling.
 
-**Closing text** (Space Grotesk, large, fade in): **"One framework. Fifty-one orchestrators. Zero manual steps."**
+**Closing text** (Space Grotesk, large, fade in): **"One framework. Fifty-one orchestrators. Your time back."**
 
 Logo watermark pulses once from 20% to 40% opacity and back as the final beat.
 
 **Vision callback** (glassmorphic card, appears briefly):
-> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+> *"Stop writing code. Start shaping products. Let CORTEX handle the legwork."*
 
 **End card:** CORTEX logo centered, URL `https://asifhussain60.github.io/CORTEX/` below in JetBrains Mono, ambient audio fades.
 

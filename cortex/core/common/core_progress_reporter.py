@@ -621,7 +621,8 @@ class ProgressReporter:
         """Create ASCII progress bar.
         
         Uses inline code block to prevent VS Code markdown renderer
-        from interpreting [...] as link reference (renders as "Pasted Image").
+        from interpreting [███░░░] as a link reference definition.
+        See: .github/templates/cortex-response-templates.md §Progress Bar Format Rules
         """
         if total == 0:
             percentage = 0

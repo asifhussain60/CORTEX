@@ -30,7 +30,7 @@ Create a 7-minute animated explainer video titled **"The Life of a Request"** us
 
 **Daily-life analogy overlay** (`#a0a6c0`): *"Think of mailing a package — it enters the postal system, gets sorted, routed, inspected, and delivered. Your request takes the same journey."*
 
-**Narration:** "Every interaction with CORTEX starts the same way — a request. Let's follow one through the entire system."
+**Narration:** "Every interaction with CORTEX starts the same way — a request. But unlike a chat message that just gives you text, this request will be classified, tested, governed, and delivered. Let's follow one through the entire system."
 
 ### Scene 2 — Station 1: Intent Classification (1:00 – 2:00)
 
@@ -133,7 +133,7 @@ The sphere (now glowing green after passing governance) enters the final chamber
 - Zero manual steps required
 
 **Vision callback:**
-> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+> *"Every request you'd normally manage by hand — classified, tested, governed, and delivered. Automatically."*
 
 Logo watermark pulses once. End card with CORTEX logo and URL.
 

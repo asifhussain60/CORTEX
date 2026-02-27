@@ -1,9 +1,9 @@
 ```markdown
-# Video Prompt 10 — Getting Started: Customizing CORTEX
+# Tutorial 03 — Getting Started: Customizing CORTEX
 
 > **Duration:** 8 minutes · **Audience:** Tech Leads, Platform Engineers, Advanced Users
 > **Depth:** 🔴 Tutorial — hands-on customization with real code
-> **Prerequisites:** Videos 08-09 (comfortable using CORTEX), Video 4 (understands governance)
+> **Prerequisites:** Tutorials 01-02 (comfortable using CORTEX), concept Video 04 (understands governance), concept Video 08 (understands workflow template engine)
 > **Goal:** User can add a custom governance rule, create an MCP tool, and modify orchestrator behavior
 
 ---
@@ -352,10 +352,10 @@ Each layer glows as it's described:
 > "Start with defaults. Customize governance first. Only add tools when you need capabilities CORTEX doesn't have."
 
 **Closing text** (Space Grotesk):
-**"Your rules. Your tools. Your workflow. CORTEX adapts to you."**
+**"Your standards. Enforced forever. Without you lifting a finger."**
 
 **Vision callback:**
-> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+> *"The rules you just added will protect every commit by every engineer on your team — automatically. Go build the product."*
 
 Logo pulse. End card.
 

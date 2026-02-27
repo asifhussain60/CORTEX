@@ -1,0 +1,780 @@
+# CORTEX Phase Plan — Phase 85
+# Unified Response Template Standardization + Orchestrator Engagement System
+# Governance: master-plan-phase-lifecycle.yaml
+
+id: "phase-85"
+title: "Unified Response Template Standardization + Orchestrator Engagement Visual System"
+version: "1.0"
+created: "2026-02-27"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-002  # All output inline — never create .md/.txt files
+  - CORE-008  # TDD mandatory
+  - CORE-035  # Single canonical implementation — no duplicates
+  - CORE-049  # Silent autonomous execution
+  - CORE-064  # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-85-UNIFIED-RESPONSE-ORCHESTRATOR-ENGAGEMENT"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND — why this phase exists, what triggered it
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: Total Recall session (2026-02-27) + chat session request for visual orchestrator engagement cues
+  
+  Score at entry: 8.5 / 10 (response templates functional but inconsistent)
+  Target score: 9.5 / 10 (unified template system with orchestrator visibility)
+  
+  Baseline measurements:
+    - Smoke tests: 1,443 passed
+    - Response blocks: 16 defined in SSOT
+    - Progress templates: 2 paradigms (bar-only vs phase-list)
+    - Orchestrator engagement visibility: 0% (backend trace only)
+  
+  Git prerequisite: Phase 84 COMPLETE (stub elimination)
+  
+  Key findings from audit:
+    1. Two progress display paradigms exist — "bar-only" vs "phase list + bar"
+    2. Total Recall format is superior (shows completed/in-progress/next)
+    3. BLOCK-HANDOFF exists but is text-only, easy to miss
+    4. OrchestratorTraceLogger (commit 677b93816) captures traces but doesn't surface to user
+    5. Visual feedback mixin (commit e86ef8b2d) was built but orphaned
+  
+  User request: Subtle, professional visual feedback showing orchestrator engagement
+  without being intrusive. Three-tier system proposed:
+    - Tier 1: Breadcrumb (always visible, single line)
+    - Tier 2: Timeline (collapsible, shows timing)
+    - Tier 3: Pulse (inline markers during long operations)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE — all open issues this phase addresses (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  # ── Progress Template Unification ────────────────────────────────────────
+  - id: "GAP-85-01"
+    title: "Two progress display paradigms — bar-only vs phase-list+bar"
+    severity: P1
+    source: "Total Recall audit (2026-02-27)"
+    evidence: |
+      cortex-response-templates.md §Silent Autonomous Mode has bar-only examples
+      cortex-totalrecall.prompt.md uses phase-list+bar format
+      User confusion: which format to use when?
+    action_ref: "phase-85-a"
+    status: OPEN
+
+  - id: "GAP-85-02"
+    title: "BLOCK-PHASE-ROADMAP missing — no standard for showing full journey at operation start"
+    severity: P1
+    source: "Total Recall audit (2026-02-27)"
+    evidence: |
+      totalrecall.md does this ad-hoc but not templated
+      No composable block in SSOT for multi-phase overview
+    action_ref: "phase-85-a"
+    status: OPEN
+
+  - id: "GAP-85-03"
+    title: "BLOCK-STAGE-PROGRESS needs enhancement — no support for inline orchestrator pulse"
+    severity: P2
+    source: "Total Recall audit (2026-02-27)"
+    evidence: |
+      Current stage progress shows status only, not which orchestrator is active
+      User cannot see routing during execution
+    action_ref: "phase-85-a"
+    status: OPEN
+
+  # ── Orchestrator Engagement Visibility ───────────────────────────────────
+  - id: "GAP-85-04"
+    title: "BLOCK-ENGAGEMENT-BREADCRUMB missing — no subtle routing chain in response headers"
+    severity: P1
+    source: "Orchestrator engagement audit (2026-02-27)"
+    evidence: |
+      BLOCK-HANDOFF exists but is optional and rarely rendered
+      User cannot see which orchestrators processed their request
+      Format needed: Route: IR → MasterOrchestrator → AuditCoordinator
+    action_ref: "phase-85-b"
+    status: OPEN
+
+  - id: "GAP-85-05"
+    title: "BLOCK-ENGAGEMENT-TIMELINE missing — no collapsible orchestrator timing panel"
+    severity: P2
+    source: "Orchestrator engagement audit (2026-02-27)"
+    evidence: |
+      OrchestratorTraceLogger captures timing in SQLite but not surfaced
+      Debugging requires manual DB query
+      Need <details> block showing orchestrator chain with durations
+    action_ref: "phase-85-b"
+    status: OPEN
+
+  - id: "GAP-85-06"
+    title: "Response Header spec lacks Route line — engagement invisible"
+    severity: P1
+    source: "cortex-response-templates.md audit"
+    evidence: |
+      Response Header template shows Author + Orchestrator only
+      No Route breadcrumb line for multi-hop requests
+      Missing: **Route:** `IR → {Orchestrator} → {Sub-orchestrator}`
+    action_ref: "phase-85-b"
+    status: OPEN
+
+  # ── Template Consolidation & SSOT Enforcement ────────────────────────────
+  - id: "GAP-85-07"
+    title: "Inline progress bar definitions scattered across prompts"
+    severity: P2
+    source: "grep audit: progress bar definitions"
+    evidence: |
+      cortex-architect.prompt.md §SILENT AUTONOMOUS EXECUTION defines bar rules
+      Should pointer-reference templates SSOT, not duplicate
+    action_ref: "phase-85-c"
+    status: OPEN
+
+  - id: "GAP-85-08"
+    title: "copilot-instructions.md progress bar reference incomplete"
+    severity: P2
+    source: "copilot-instructions.md audit"
+    evidence: |
+      Mentions [████░░░░░░] format but not the full phase-list paradigm
+      Should point to templates SSOT for authoritative format
+    action_ref: "phase-85-c"
+    status: OPEN
+
+  # ── Block Assembly & Rendering Rules ─────────────────────────────────────
+  - id: "GAP-85-09"
+    title: "Block assembly rules lack engagement blocks in sequence"
+    severity: P2
+    source: "cortex-response-templates.md §Standardized Assembly Order"
+    evidence: |
+      Current: SESSION-IDENTITY → MICRO-ACK → HANDOFF → ERROR-RECOVERY → ...
+      Missing: ENGAGEMENT-BREADCRUMB, ENGAGEMENT-TIMELINE positions
+    action_ref: "phase-85-d"
+    status: OPEN
+
+  - id: "GAP-85-10"
+    title: "YAML registry missing engagement block definitions"
+    severity: P2
+    source: "cortex-registry/artifacts/templates/responses/response-templates.yaml"
+    evidence: |
+      Registry has BLOCK-HANDOFF but not the new engagement blocks
+      Need: BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP
+    action_ref: "phase-85-d"
+    status: OPEN
+
+  # ── Documentation Sync + Pasted Image Cleanup ───────────────────────────
+  - id: "GAP-85-11"
+    title: "cortex-docs/.content and flat-files stale — no response template or engagement coverage"
+    severity: P1
+    source: "Phase review (2026-02-27)"
+    evidence: |
+      cortex-docs/.content/01-capabilities/ documents 6 capability domains but
+      has no section on response template system or orchestrator engagement visibility.
+      flat-files/04-capabilities.md and flat-files/08-orchestration-system.md
+      do not reference BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE,
+      or the unified progress template format.
+      cortex-docs/.content/03-orchestration/06-cross-orchestrator.md mentions
+      inter-orchestrator communication but not engagement visibility.
+    action_ref: "phase-85-e"
+    status: OPEN
+
+  - id: "GAP-85-12"
+    title: "Remove all 'Pasted Image' pattern references — rendering artifact cleanup"
+    severity: P1
+    source: "Phase review (2026-02-27)"
+    evidence: |
+      response-templates.yaml line 318: "Matches golden template visual from pasted image"
+      core_progress_reporter.py line 624: docstring references "Pasted Image"
+      These are stale references to screenshot-based design artifacts that should
+      reference the SSOT (cortex-response-templates.md §Silent Autonomous Mode)
+      instead. All progress bar rendering rules are now canonically defined in
+      the SSOT — no external image references needed.
+    action_ref: "phase-85-e"
+    status: OPEN
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY — CORE-008 + CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PHASES — ROI-ordered, TDD-gated sub-phases
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ══════════════════════════════════════════════════════════════════════════
+  # PHASE 85-A: Progress Template Unification
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-85-a"
+    title: "Progress Template Unification — BLOCK-PHASE-ROADMAP + BLOCK-STAGE-PROGRESS Enhancement"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-85-01", "GAP-85-02", "GAP-85-03"]
+    governance_authority: "CORE-002, CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥1,443 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    deliverables:
+      new_blocks:
+        - name: "BLOCK-PHASE-ROADMAP"
+          purpose: "Display full operation journey at start"
+          format: |
+            ---
+            **📋 {OPERATION_NAME} — {N} Phases**
+
+            - ⚪ Phase 1: {NAME}
+            - ⚪ Phase 2: {NAME}
+            - ⚪ Phase 3: {NAME}
+
+            **Starting Phase 1...**
+          trigger: "Multi-phase operations (>2 stages)"
+          placement: "After response header, before content"
+
+        - name: "BLOCK-STAGE-PROGRESS (enhanced)"
+          purpose: "Show completed/in-progress/next with optional orchestrator pulse"
+          format: |
+            ---
+            **📋 {OPERATION_NAME} — Phase {N}: {PHASE_NAME}**
+
+            [████░░░░░░] 40%
+
+            - ✅ Phase 1: {NAME}
+            - ✅ Phase 2: {NAME}
+            - 🔵 Phase 3: {NAME} (in progress) `← {OrchestratorName} ({N}ms)`
+            - ⚪ Phase 4: {NAME}
+            - ⚪ Phase 5: {NAME}
+
+            Tests: {N}/{N} | Coverage: {pct}%
+          enhancement: "Optional orchestrator pulse annotation after current stage"
+
+      files_modified:
+        - path: ".github/templates/cortex-response-templates.md"
+          section: "§Composable Content Blocks"
+          action: "Add BLOCK-PHASE-ROADMAP definition"
+        - path: ".github/templates/cortex-response-templates.md"
+          section: "§Silent Autonomous Mode"
+          action: "Update to mandate phase-list format, deprecate bar-only"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests for new block definitions"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_response_blocks.py — tests FAIL"
+        blocker: "Do NOT write implementation until tests fail"
+      green:
+        action: "Add BLOCK-PHASE-ROADMAP and enhance BLOCK-STAGE-PROGRESS in SSOT"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_response_blocks.py — tests PASS"
+        blocker: "Do NOT begin REFACTOR until tests pass"
+      refactor:
+        action: "Verify SSOT consistency, no duplicate definitions"
+        gate: "grep -c 'BLOCK-PHASE-ROADMAP' .github/templates/cortex-response-templates.md == 1"
+        blocker: "Do NOT mark complete until single canonical definition verified"
+
+    tdd_sequence:
+      red:
+        - "test_block_phase_roadmap_defined — asserts BLOCK-PHASE-ROADMAP exists in SSOT"
+        - "test_block_phase_roadmap_format — asserts format matches spec"
+        - "test_block_stage_progress_pulse_support — asserts orchestrator pulse annotation format"
+        - "test_silent_autonomous_uses_phase_list — asserts phase-list is mandatory"
+      green:
+        - "Add BLOCK-PHASE-ROADMAP to §Composable Content Blocks"
+        - "Update BLOCK-STAGE-PROGRESS with pulse annotation support"
+        - "Update §Silent Autonomous Mode to mandate phase-list format"
+      refactor:
+        - "Remove any bar-only examples from §Silent Autonomous Mode"
+        - "Add cross-reference from §Silent Autonomous to §Composable Blocks"
+
+    acceptance_criteria:
+      - "BLOCK-PHASE-ROADMAP defined in SSOT with trigger, format, placement"
+      - "BLOCK-STAGE-PROGRESS enhanced with optional orchestrator pulse"
+      - "§Silent Autonomous Mode mandates phase-list format"
+      - "Bar-only templates marked as deprecated or removed"
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/golden/test_response_blocks.py"
+      min_tests_pass: 4
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # PHASE 85-B: Orchestrator Engagement Visibility
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-85-b"
+    title: "Orchestrator Engagement Visibility — BLOCK-ENGAGEMENT-BREADCRUMB + BLOCK-ENGAGEMENT-TIMELINE"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-85-04", "GAP-85-05", "GAP-85-06"]
+    governance_authority: "CORE-002, CORE-008, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-85-a"]
+    prerequisite: "phase-85-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    deliverables:
+      new_blocks:
+        - name: "BLOCK-ENGAGEMENT-BREADCRUMB"
+          purpose: "Subtle single-line routing chain in response header"
+          format: |
+            **Route:** `IntentRouter → {Orchestrator} → {Sub-orchestrator}`
+          trigger: "All responses (always visible)"
+          placement: "Response header, after Author/Orchestrator line"
+          design_notes: |
+            - Subtle and professional — single backtick-wrapped line
+            - Shows which orchestrators processed the request
+            - Useful for debugging routing issues
+            - Does not clutter response — max 80 chars
+
+        - name: "BLOCK-ENGAGEMENT-TIMELINE"
+          purpose: "Collapsible detailed orchestrator timing panel"
+          format: |
+            <details>
+            <summary>🔗 Orchestrator Chain ({N} hops · {total_ms}ms)</summary>
+
+            | # | Orchestrator | Action | Duration | Status |
+            |---|--------------|--------|----------|--------|
+            | 1 | IntentRouter | CLASSIFY | 12ms | ✅ |
+            | 2 | MasterOrchestrator | COORDINATE | 8ms | ✅ |
+            | 3 | {Orchestrator} | {ACTION} | {ms}ms | 🔵 |
+
+            </details>
+          trigger: "Complex operations (>2 orchestrator hops) or on request"
+          placement: "After content, before Next Steps"
+          design_notes: |
+            - Collapsible by default — not intrusive
+            - Shows timing for performance debugging
+            - Reads from OrchestratorTraceLogger data
+            - Professional tabular format
+
+      response_header_enhancement:
+        current: |
+          ## {icon} CORTEX {mode}
+          **Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+
+          ---
+        enhanced: |
+          ## {icon} CORTEX {mode}
+          **Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+          **Route:** `IntentRouter → {Orchestrator} → {Sub-orchestrator}`
+
+          ---
+
+      files_modified:
+        - path: ".github/templates/cortex-response-templates.md"
+          section: "§Composable Content Blocks"
+          action: "Add BLOCK-ENGAGEMENT-BREADCRUMB and BLOCK-ENGAGEMENT-TIMELINE"
+        - path: ".github/templates/cortex-response-templates.md"
+          section: "§Response Header"
+          action: "Add optional Route line to header spec"
+        - path: ".github/templates/cortex-response-templates.md"
+          section: "§Standardized Assembly Order"
+          action: "Insert engagement blocks in sequence"
+
+    tdd_cycle:
+      red:
+        action: "Write failing tests for engagement blocks"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_engagement_blocks.py — tests FAIL"
+        blocker: "Do NOT write implementation until tests fail"
+      green:
+        action: "Add engagement blocks to SSOT + update response header"
+        gate: "python3 scripts/run_tests.py file tests/golden/test_engagement_blocks.py — tests PASS"
+        blocker: "Do NOT begin REFACTOR until tests pass"
+      refactor:
+        action: "Verify block assembly order, SSOT consistency"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark complete until smoke passes"
+
+    tdd_sequence:
+      red:
+        - "test_block_engagement_breadcrumb_defined — asserts BLOCK-ENGAGEMENT-BREADCRUMB in SSOT"
+        - "test_block_engagement_breadcrumb_format — asserts Route: backtick format"
+        - "test_block_engagement_timeline_defined — asserts BLOCK-ENGAGEMENT-TIMELINE in SSOT"
+        - "test_block_engagement_timeline_collapsible — asserts <details> wrapper"
+        - "test_response_header_route_line — asserts Route line in header spec"
+        - "test_assembly_order_includes_engagement — asserts engagement blocks in sequence"
+      green:
+        - "Add BLOCK-ENGAGEMENT-BREADCRUMB to §Composable Content Blocks"
+        - "Add BLOCK-ENGAGEMENT-TIMELINE to §Composable Content Blocks"
+        - "Update Response Header spec with optional Route line"
+        - "Update §Standardized Assembly Order with engagement positions"
+      refactor:
+        - "Consolidate BLOCK-HANDOFF and BLOCK-ENGAGEMENT-BREADCRUMB if overlapping"
+        - "Verify all block triggers documented"
+
+    acceptance_criteria:
+      - "BLOCK-ENGAGEMENT-BREADCRUMB defined with format, trigger, placement"
+      - "BLOCK-ENGAGEMENT-TIMELINE defined with collapsible format"
+      - "Response Header spec includes optional Route line"
+      - "Assembly order updated: SESSION-IDENTITY → ENGAGEMENT-BREADCRUMB → ..."
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py file tests/golden/test_engagement_blocks.py"
+      min_tests_pass: 6
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # PHASE 85-C: Template Consolidation & SSOT Enforcement
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-85-c"
+    title: "Template Consolidation — Remove Scattered Definitions, Enforce SSOT Pointers"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-85-07", "GAP-85-08"]
+    governance_authority: "CORE-002, CORE-008, CORE-035, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-85-b"]
+    prerequisite: "phase-85-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    deliverables:
+      files_modified:
+        - path: ".github/prompts/cortex-architect.prompt.md"
+          section: "§SILENT AUTONOMOUS EXECUTION"
+          action: |
+            Replace inline progress bar definitions with pointer:
+            "Progress bar + stage bullet list. See templates SSOT:
+            `.github/templates/cortex-response-templates.md` §Silent Autonomous Mode"
+        - path: ".github/copilot-instructions.md"
+          section: "Progress bar reference"
+          action: |
+            Update to point to templates SSOT for authoritative format:
+            "Progress display follows templates SSOT phase-list format."
+
+    tdd_cycle:
+      red:
+        action: "Write tests to detect duplicate progress definitions"
+        gate: "grep -c 'exactly 10 blocks' .github/prompts/cortex-architect.prompt.md == 0"
+        blocker: "Test should fail (currently >0 matches)"
+      green:
+        action: "Replace inline definitions with SSOT pointers"
+        gate: "grep -c 'templates SSOT' .github/prompts/cortex-architect.prompt.md >= 1"
+        blocker: "Pointer reference must exist"
+      refactor:
+        action: "Verify no duplicate progress bar definitions remain"
+        gate: "grep -rn 'exactly 10 blocks' .github/prompts/ | wc -l == 0"
+        blocker: "Zero inline definitions outside SSOT"
+
+    tdd_sequence:
+      red:
+        - "test_no_inline_bar_definitions — grep for 'exactly 10 blocks' in prompts returns 0"
+        - "test_copilot_instructions_points_to_ssot — pointer reference exists"
+      green:
+        - "Update cortex-architect.prompt.md §SILENT AUTONOMOUS to use SSOT pointer"
+        - "Update copilot-instructions.md progress reference to SSOT pointer"
+      refactor:
+        - "Scan all prompts for remaining inline progress definitions"
+        - "Replace any found with SSOT pointers"
+
+    acceptance_criteria:
+      - "cortex-architect.prompt.md §SILENT AUTONOMOUS uses SSOT pointer"
+      - "copilot-instructions.md progress reference points to templates SSOT"
+      - "Zero inline progress bar format definitions outside SSOT"
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "grep -rn 'exactly 10 blocks' .github/prompts/ | wc -l"
+      expected_output: "0"
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # PHASE 85-D: YAML Registry + Assembly Rules Update
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-85-d"
+    title: "YAML Registry + Assembly Rules — Add Engagement Blocks to Machine-Readable Registry"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-85-09", "GAP-85-10"]
+    governance_authority: "CORE-002, CORE-008, CORE-035, CORE-064"
+    duration_estimate: "1 hour"
+    depends_on: ["phase-85-c"]
+    prerequisite: "phase-85-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    deliverables:
+      files_modified:
+        - path: "cortex-registry/artifacts/templates/responses/response-templates.yaml"
+          action: |
+            Add block definitions:
+              - BLOCK-PHASE-ROADMAP
+              - BLOCK-ENGAGEMENT-BREADCRUMB
+              - BLOCK-ENGAGEMENT-TIMELINE
+            Each with: id, purpose, format, trigger, placement, required_fields
+        - path: ".github/templates/cortex-response-templates.md"
+          section: "§Standardized Assembly Order"
+          action: |
+            Update sequence:
+            BLOCK-SESSION-IDENTITY → BLOCK-ENGAGEMENT-BREADCRUMB → BLOCK-MICRO-ACK 
+            → BLOCK-HANDOFF → BLOCK-ERROR-RECOVERY → BLOCK-PHASE-ROADMAP 
+            → BLOCK-STAGE-PROGRESS → BLOCK-ENGAGEMENT-TIMELINE 
+            → BLOCK-DIFF-PREVIEW → BLOCK-METRICS-DASHBOARD → BLOCK-NEXT-STEPS
+
+    tdd_cycle:
+      red:
+        action: "Write tests for YAML registry completeness"
+        gate: "python3 -c \"import yaml; d=yaml.safe_load(open('cortex-registry/artifacts/templates/responses/response-templates.yaml')); assert 'BLOCK-PHASE-ROADMAP' in str(d)\""
+        blocker: "Test should fail (block not yet added)"
+      green:
+        action: "Add engagement blocks to YAML registry"
+        gate: "python3 -c \"import yaml; d=yaml.safe_load(open('cortex-registry/artifacts/templates/responses/response-templates.yaml')); assert all(b in str(d) for b in ['BLOCK-PHASE-ROADMAP', 'BLOCK-ENGAGEMENT-BREADCRUMB', 'BLOCK-ENGAGEMENT-TIMELINE'])\""
+        blocker: "All three blocks must be in registry"
+      refactor:
+        action: "Verify YAML valid, assembly order updated"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/artifacts/templates/responses/response-templates.yaml'))\""
+        blocker: "YAML must parse without errors"
+
+    tdd_sequence:
+      red:
+        - "test_yaml_registry_has_phase_roadmap — assert block in registry"
+        - "test_yaml_registry_has_engagement_breadcrumb — assert block in registry"
+        - "test_yaml_registry_has_engagement_timeline — assert block in registry"
+        - "test_assembly_order_updated — assert new sequence in SSOT"
+      green:
+        - "Add BLOCK-PHASE-ROADMAP to YAML registry with all fields"
+        - "Add BLOCK-ENGAGEMENT-BREADCRUMB to YAML registry"
+        - "Add BLOCK-ENGAGEMENT-TIMELINE to YAML registry"
+        - "Update assembly order in SSOT"
+      refactor:
+        - "Verify YAML registry syncs with SSOT block count"
+        - "Confirm no duplicate block IDs"
+
+    acceptance_criteria:
+      - "YAML registry contains BLOCK-PHASE-ROADMAP with trigger, format, placement"
+      - "YAML registry contains BLOCK-ENGAGEMENT-BREADCRUMB"
+      - "YAML registry contains BLOCK-ENGAGEMENT-TIMELINE"
+      - "Assembly order updated with engagement blocks in correct positions"
+      - "All tdd_sequence.red tests GREEN"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # PHASE 85-E: Documentation Sync + Pasted Image Cleanup
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-85-e"
+    title: "Documentation Sync — cortex-docs/.content + flat-files + Pasted Image Removal"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-85-11", "GAP-85-12"]
+    governance_authority: "CORE-002, CORE-008, CORE-035, CORE-064"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-85-d"]
+    prerequisite: "phase-85-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    deliverables:
+      documentation_updates:
+        - path: "cortex-docs/.content/01-capabilities/06-response-formatting.md"
+          action: |
+            Update to document:
+            - Unified progress template format (phase-list + bar, not bar-only)
+            - BLOCK-PHASE-ROADMAP, BLOCK-STAGE-PROGRESS (enhanced), BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE
+            - VS Code Copilot Chat rendering compatibility rules
+            - Status icons table (✅ 🔵 ⚪ 🔴)
+        - path: "cortex-docs/.content/03-orchestration/06-cross-orchestrator.md"
+          action: |
+            Add section on Orchestrator Engagement Visibility:
+            - Three-tier engagement model (Breadcrumb, Timeline, Pulse)
+            - How OrchestratorTraceLogger data surfaces to user
+            - Route breadcrumb in response headers
+        - path: "cortex-docs/.content/flat-files/04-capabilities.md"
+          action: |
+            Add Response Template System subsection under Core Platform:
+            - Template SSOT (.github/templates/cortex-response-templates.md)
+            - 16+ composable content blocks
+            - Silent autonomous mode with phase-list progress format
+        - path: "cortex-docs/.content/flat-files/08-orchestration-system.md"
+          action: |
+            Add Orchestrator Engagement Visibility section:
+            - BLOCK-ENGAGEMENT-BREADCRUMB format and purpose
+            - BLOCK-ENGAGEMENT-TIMELINE collapsible panel
+            - Route line in response headers
+        - path: "cortex-docs/.content/flat-files/07-orchestration-reference.md"
+          action: |
+            Update DebuggerOrchestrator entry if present to reflect
+            unified intelligence wiring from Phase 86 scope expansion
+
+      pasted_image_cleanup:
+        description: "Remove ALL references to 'Pasted Image' or 'pasted image' pattern"
+        scan_command: "grep -rni 'pasted.image' cortex/ cortex-registry/ .github/ cortex-docs/"
+        targets:
+          - file: "cortex-registry/artifacts/templates/responses/response-templates.yaml"
+            line: 318
+            current: "Matches golden template visual from pasted image"
+            replacement: "Matches golden template visual from SSOT §Silent Autonomous Mode"
+          - file: "cortex/core/common/core_progress_reporter.py"
+            line: 624
+            current: "from interpreting [...] as link reference (renders as 'Pasted Image')"
+            replacement: "from interpreting [███░░░] as a link reference definition"
+        rationale: |
+          "Pasted Image" references are stale artifacts from screenshot-based design sessions.
+          All progress bar rendering rules now have canonical SSOT definitions in
+          .github/templates/cortex-response-templates.md §Progress Bar Format Rules.
+          The totalrecall.prompt.md progress template is the approved visual format.
+
+    tdd_cycle:
+      red:
+        action: "Write tests to verify zero 'pasted image' references remain and docs coverage exists"
+        gate: "grep -rni 'pasted.image' cortex/ cortex-registry/ .github/ | wc -l == 0"
+        blocker: "Test should fail if any pasted image references remain"
+      green:
+        action: "Remove pasted image references, update docs files"
+        gate: "All documentation files updated with response template and engagement sections"
+        blocker: "Do NOT begin REFACTOR until all docs updated"
+      refactor:
+        action: "Verify docs metadata (last_verified dates), cross-reference consistency"
+        gate: "python3 scripts/run_tests.py smoke — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until smoke passes"
+
+    tdd_sequence:
+      red:
+        - "test_zero_pasted_image_refs — grep returns 0 matches across all source"
+        - "test_response_formatting_doc_coverage — 06-response-formatting.md has engagement blocks"
+        - "test_flat_capabilities_has_templates — flat-files/04-capabilities.md has template section"
+        - "test_flat_orchestration_has_engagement — flat-files/08-orchestration-system.md has engagement"
+      green:
+        - "Replace pasted image refs in response-templates.yaml and core_progress_reporter.py"
+        - "Update 06-response-formatting.md with engagement blocks and progress format"
+        - "Update 06-cross-orchestrator.md with engagement visibility section"
+        - "Update flat-files/04-capabilities.md with template system subsection"
+        - "Update flat-files/08-orchestration-system.md with engagement section"
+      refactor:
+        - "Update last_verified dates in all modified docs"
+        - "Verify source_of_truth references point to correct files"
+        - "Confirm flat-file consolidates entries match structured content"
+
+    acceptance_criteria:
+      - "Zero 'pasted image' references anywhere in codebase"
+      - "cortex-docs/.content/01-capabilities/06-response-formatting.md documents all engagement blocks"
+      - "cortex-docs/.content/03-orchestration/06-cross-orchestrator.md has engagement visibility section"
+      - "cortex-docs/.content/flat-files/04-capabilities.md has response template subsection"
+      - "cortex-docs/.content/flat-files/08-orchestration-system.md has engagement visibility section"
+      - "All docs reference SSOT for progress bar format (not screenshots or pasted images)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ══════════════════════════════════════════════════════════════════════════
+  # PHASE 85-FINAL: Smoke Gate + CORE-064 Close
+  # ══════════════════════════════════════════════════════════════════════════
+  - id: "phase-85-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml Update"
+    priority: P0
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-85-e"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1,443 tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate"
+        gate: "All sweep_catalogue entries verified CLOSED"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥1,443 tests pass"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark COMPLETE if smoke fails"
+      refactor:
+        action: "Update phase YAML: move planned/ → completed/, update cortex-master.yaml"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\""
+        blocker: "cortex-master.yaml must be valid YAML"
+
+    acceptance_criteria:
+      - "ALL sweep_catalogue GAPs (GAP-85-01 through GAP-85-12) have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke passes ≥1,443 tests"
+      - "Zero new test failures vs baseline"
+      - "Phase-85 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤500 lines (THIN INDEX CONTRACT)"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUMMARY OF NEW BLOCKS
+# ─────────────────────────────────────────────────────────────────────────────
+new_blocks_summary:
+  - id: "BLOCK-PHASE-ROADMAP"
+    tier: "Progress"
+    purpose: "Show full operation journey at start"
+    always_visible: false
+    trigger: "Multi-phase operations (>2 stages)"
+
+  - id: "BLOCK-ENGAGEMENT-BREADCRUMB"
+    tier: "Engagement (Tier 1)"
+    purpose: "Subtle single-line routing chain"
+    always_visible: true
+    trigger: "All responses"
+
+  - id: "BLOCK-ENGAGEMENT-TIMELINE"
+    tier: "Engagement (Tier 2)"
+    purpose: "Collapsible orchestrator timing panel"
+    always_visible: false
+    trigger: "Complex operations or on request"
+
+  - id: "BLOCK-STAGE-PROGRESS (enhanced)"
+    tier: "Progress"
+    purpose: "Phase list with optional orchestrator pulse annotation"
+    always_visible: false
+    trigger: "During autonomous execution"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DESIGN PRINCIPLES
+# ─────────────────────────────────────────────────────────────────────────────
+design_principles:
+  subtle_professional:
+    description: "Visual cues should be subtle and professional, not intrusive"
+    rules:
+      - "Breadcrumb is max 80 chars, backtick-wrapped"
+      - "Timeline is collapsible by default"
+      - "Pulse annotation is optional, inline with stage"
+
+  three_tier_visibility:
+    description: "Engagement visibility scales with operation complexity"
+    tiers:
+      - tier: 1
+        name: "Breadcrumb"
+        visibility: "Always"
+        format: "Single line in header"
+      - tier: 2
+        name: "Timeline"
+        visibility: "On request or complex ops"
+        format: "Collapsible <details> block"
+      - tier: 3
+        name: "Pulse"
+        visibility: "During long operations"
+        format: "Inline annotation after current stage"
+
+  ssot_enforcement:
+    description: "All template definitions live in templates SSOT"
+    rules:
+      - "prompts pointer-reference SSOT, never duplicate"
+      - "YAML registry mirrors SSOT blocks"
+      - "Single canonical definition per block"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-85-UNIFIED-RESPONSE-ORCHESTRATOR-ENGAGEMENT-{timestamp}"
+  complete: "AC_COMPLETE: AC-85-UNIFIED-RESPONSE-ORCHESTRATOR-ENGAGEMENT-{timestamp} ✅"

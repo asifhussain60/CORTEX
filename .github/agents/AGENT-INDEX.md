@@ -76,6 +76,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **cortex-gitpages-builder.md** | GitHub Pages deployment | Site publishing |
 | **request-rephrase-orchestrator.md** | Request token optimization | `/rephrase` command |
 | **architecture-integrity-agent.md** | Wiring alignment enforcement | Pre-commit, CI/CD |
+| **cortex-debugger.md** | Multi-stack debugging: 8 strategies + Vision API + auto-cleanup (Phase 86) | `/debug`, "trace", "diagnose" |
 
 ### Support Files
 
@@ -161,7 +162,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **UPGRADE** | cortex-environment-setup.md + cortex-auditor.md | ~5,500 |
 | **WIRING/CI** | architecture-integrity-agent.md | ~5,000 |
 | **VACUUM** | cortex-vacuum.md | ~2,000 |
-| **DEBUG** | cortex-debugger.md + cortex-auditor.md | ~4,500 |
+| **DEBUG** | cortex-debugger.md + cortex-auditor.md | ~5,000 |
 | **HEALTH** | cortex-auditor.md (Check #11) | ~3,500 |
 | **SYNC** | cortex-sync.prompt.md + cortex-sync-agent.md | ~6,000 |
 
