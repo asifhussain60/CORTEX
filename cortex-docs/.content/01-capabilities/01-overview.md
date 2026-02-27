@@ -20,7 +20,7 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | # | Domain | Brain Analogy | Key Metric |
 |---|--------|--------------|------------|
-| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 39 MCP tools, 16 canonical dirs |
+| 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | 28 registered MCP tools (39 target), 20 canonical dirs |
 | 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | 10 parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
 | 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 51 wired orchestrators, 4 tiers (17 core, 7 domain, 23 support, 4 git) |
@@ -33,8 +33,8 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 
 | Capability | Domain | Implementation | Tests |
 |-----------|--------|---------------|-------|
-| MCP Gateway (39 tools) | Core | `cortex/mcp/tools/` | ✅ |
-| Orchestrator Dispatch (51 wired) | Core | `cortex/orchestrators/` (4 tiers: 7 core, 6 domain, 14 support (+ dirs: health, git, intelligence, strategies, synthesis, validation, workflow)) | ✅ |
+| MCP Gateway (28 registered, 39 target) | Core | `cortex/mcp/tools/` | ✅ |
+| Orchestrator Dispatch (51 wired) | Core | `cortex/orchestrators/` (4 tiers: 17 core, 7 domain, 23 support, 4 git) | ✅ |
 | OrchestratorBase Lifecycle | Core | `cortex/core/orchestrator_base.py` | ✅ |
 | SQLite Activity Log | Core | `.cortex-runtime/audit.db` (auto-logged in `execute()/run()`) | ✅ |
 | FileFactory | Core | `cortex/core/file_factory.py` | ✅ |
@@ -68,7 +68,7 @@ The **brainstem** of CORTEX — it keeps everything alive and coordinated.
 
 ### MCP Gateway (25 Tools)
 
-CORTEX exposes 39 MCP tools via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
+CORTEX exposes 28 registered MCP tools (39 target) via Pylance-style stdio server. The server auto-starts when VS Code opens the workspace.
 
 **Business Leader:** "28 registered tools covering analysis, governance, onboarding, debugging, health checks, and workflow — all accessible from the IDE. 11 more planned toward the 39-tool target."
 

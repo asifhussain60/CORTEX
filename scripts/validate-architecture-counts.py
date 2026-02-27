@@ -56,6 +56,18 @@ FALSE_POSITIVE_SUBSTRINGS = [
     "24 MCP tools",            # intentional stale example in meta-auditor code fence
     "24 orchestrators",        # intentional stale example in meta-auditor code fence
     "120 orchestrators",       # intentional stale example in meta-auditor code fence
+    "(28 registered)",         # canonical format: "39 MCP Tools (28 registered)" — 39 is target, 28 is active
+    "28 registered",           # canonical: registered count clarification present on same line
+    "39 target",               # canonical: "28 registered (39 target)" variant
+    "28 Registered",           # case variant of canonical format
+    "39 MCP tools (28",        # canonical compound pattern
+    "canonical is 28",         # meta-auditor stale-detection prose
+    "canonical is 39",         # meta-auditor stale-detection prose
+    "35 CORE rules\" (must",   # meta-auditor stale-detection checklist (quoted examples)
+    "Claimed '35 CORE'",       # drift-detection script searching for stale values
+    "Claimed '27 wired'",      # drift-detection script searching for stale orchestrator counts
+    "Claimed '26 MCP'",        # drift-detection script searching for stale MCP counts
+    "grep -rn",                # drift-detection grep commands (searching for stale values)
 ]
 
 # Directories to scan for count references
@@ -68,26 +80,29 @@ SCAN_DIRS = [
 # Format: (stale_pattern, correct_value, check_name)
 STALE_PATTERNS: list[tuple[str, str, str]] = [
     # Orchestrator count — the most common drift
-    (r"\b17\s+[Ww]ired\b", "27 wired", "orchestrator_count"),
-    (r"[Oo]rchestrators\s*\(17\s+wired\)", "Orchestrators (27 wired)", "orchestrator_count_parens"),
-    (r"\*\*Orchestrators:\*\*\s*17\s+wired", "**Orchestrators:** 27 wired", "orchestrator_bold"),
-    (r"\b17\s+[Ww]ired\s+[Oo]rchestrators\b", "27 Wired Orchestrators", "orchestrator_count_full"),
-    # Stale MCP tool counts (24 was pre-Phase 58)
-    (r"\b24\s+[Pp]roduction\b", "26 active", "mcp_tool_count_24"),
+    (r"\b17\s+[Ww]ired\b", "51 wired", "orchestrator_count"),
+    (r"[Oo]rchestrators\s*\(17\s+wired\)", "Orchestrators (51 wired)", "orchestrator_count_parens"),
+    (r"\*\*Orchestrators:\*\*\s*17\s+wired", "**Orchestrators:** 51 wired", "orchestrator_bold"),
+    (r"\b17\s+[Ww]ired\s+[Oo]rchestrators\b", "51 Wired Orchestrators", "orchestrator_count_full"),
+    (r"\b27\s+[Ww]ired\b", "51 wired", "orchestrator_count_27"),
+    # Stale MCP tool counts (24, 26 were pre-refactor)
+    (r"\b24\s+[Pp]roduction\b", "28 registered", "mcp_tool_count_24"),
+    (r"\b26\s+MCP\b", "28 registered MCP", "mcp_tool_count_26"),
     # Stale lower rule counts
-    (r"\b30\s+CORE\b", "35 CORE", "core_rule_count_30"),
-    (r"\b32\s+CORE\b", "35 CORE", "core_rule_count_32"),
+    (r"\b30\s+CORE\b", "38 CORE", "core_rule_count_30"),
+    (r"\b32\s+CORE\b", "38 CORE", "core_rule_count_32"),
+    (r"\b35\s+CORE\b", "38 CORE", "core_rule_count_35"),
 ]
 
 # Grep patterns to find count-bearing lines in any scanned file
 COUNT_GREP_PATTERNS = [
-    (r"\d+\s+[Ww]ired\s+[Oo]rchestrators?", "orchestrators_wired", 27),
-    (r"[Oo]rchestrators?\s*\(\d+\s+wired\)", "orchestrators_wired_parens", 27),
-    (r"[Oo]rchestrators?:\s*\*\*\d+\s+wired\*\*", "orchestrators_wired_bold", 27),
-    (r"\d+\s+MCP\s+[Tt]ools?\b", "mcp_tools_active", 26),
-    (r"MCP\s+[Tt]ools?\s*\(\d+", "mcp_tools_parens", 26),
-    (r"\d+\s+CORE\s+[Rr]ules?\b", "core_rules_active", 35),
-    (r"\bMCP\s+[Tt]ools?\s+\(\d+\s+active\)", "mcp_tools_active_parens", 26),
+    (r"\d+\s+[Ww]ired\s+[Oo]rchestrators?", "orchestrators_wired", 51),
+    (r"[Oo]rchestrators?\s*\(\d+\s+wired\)", "orchestrators_wired_parens", 51),
+    (r"[Oo]rchestrators?:\s*\*\*\d+\s+wired\*\*", "orchestrators_wired_bold", 51),
+    (r"\d+\s+MCP\s+[Tt]ools?\b", "mcp_tools_active", 28),
+    (r"MCP\s+[Tt]ools?\s*\(\d+", "mcp_tools_parens", 28),
+    (r"\d+\s+CORE\s+[Rr]ules?\b", "core_rules_active", 38),
+    (r"\bMCP\s+[Tt]ools?\s+\(\d+\s+active\)", "mcp_tools_active_parens", 28),
 ]
 
 

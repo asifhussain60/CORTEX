@@ -62,7 +62,7 @@ Unlike `cortex-auditor.md` (which audits source code), this agent audits **docum
 | # | Check | Pass Criteria |
 |---|-------|---------------|
 | 1 | Orchestrator count | All agents say "51 wired" |
-| 2 | MCP tool count | All agents say "39 MCP tools" |
+| 2 | MCP tool count | All agents say "28 registered MCP tools (39 target)" |
 | 3 | CORE rules count | All agents say "38 active" |
 | 4 | Package name | All agents say `cortex` (no `cortex_intelligence`, `cortex_lens`) |
 | 5 | Deleted paths | No refs to `cortex/brain/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |
@@ -130,7 +130,7 @@ All `.github/` documentation MUST use these values:
 | **Top-level Dirs** | 20 dirs | `ls -d cortex/*/ \| grep -v __pycache__ \| wc -l` |
 | **Orchestrator Subdirs** | 14 subdirs | `ls -d cortex/orchestrators/*/ \| grep -v __pycache__ \| wc -l` |
 | **Package Name** | `cortex` (single) | No alternatives allowed |
-| **Test Count** | 16,259 collected | `python3 -m pytest tests/ --collect-only -q \| tail -1` |
+| **Test Count** | 16,942 collected | `python3 -m pytest tests/ --collect-only -q \| tail -1` |
 
 **Numeric Drift Detection Protocol:**
 1. Extract all numeric claims from docs: `grep -rn '{pattern}' .github/ --include="*.md"`
@@ -193,12 +193,11 @@ python3 -m pytest tests/ --collect-only -q 2>/dev/null | tail -1 || echo "Run py
 
 echo ""
 echo "=== DRIFT DETECTION ==="
-echo "Claimed '27 wired' locations: $(grep -rn '27 wired' .github/ --include='*.md' | wc -l)"
-echo "Claimed '26 MCP' locations:   $(grep -rn '26 MCP' .github/ --include='*.md' | wc -l)"
-echo "Claimed '35 CORE' locations:  $(grep -rn '35 CORE' .github/ --include='*.md' | wc -l)"
-echo "Claimed '38 MCP' locations:   $(grep -rn '38 MCP' .github/ --include='*.md' | wc -l)"
+echo "Claimed '27 wired' locations: $(grep -rn '27 wired' .github/ --include='*.md' | grep -v 'DRIFT DETECTION' | wc -l)"
+echo "Claimed '26 MCP' locations:   $(grep -rn '26 MCP' .github/ --include='*.md' | grep -v 'DRIFT DETECTION' | wc -l)"
+echo "Claimed '35 CORE' locations:  $(grep -rn '35 CORE' .github/ --include='*.md' | grep -v 'DRIFT DETECTION' | wc -l)"
 echo ""
-echo "Expected: 0 matches for stale claims (canonical: 51 wired, 39 MCP, 38 CORE)"
+echo "Expected: 0 matches for stale claims (canonical: 51 wired, 28 registered MCP (39 target), 38 CORE)"
 ```
 
 **Three-Way Conflict Resolution:**
@@ -218,10 +217,10 @@ When metadata, docs, and actual code disagree (example from chat01.md):
 | Metric | Canonical Value |
 |--------|----------------|
 | Orchestrators | **51 wired** across 4 tiers |
-| MCP Tools | **39 MCP tools** |
+| MCP Tools | **28 registered** (39 target) |
 | CORE Rules | **38 active** (+ 2 AC rules = 40 total) |
 | Package | **`cortex`** (single) |
-| Tests | **16,259 collected** (486 golden, 177 phase) |
+| Tests | **16,942 collected** (486 golden, 177 phase) |
 | Audit Checks | **19-Point** production readiness (Checks #1–#19) |
 | Meta-Audit Checks | **23 checks** |
 | Workflow Primitive | `primitives/validation/detect-fix-rescan-loop` |
@@ -299,7 +298,7 @@ cortex_capture_metrics (replaced by cortex_metrics op=capture)
 cortex_onboard_repository_v3 (replaced by cortex_onboard op=full)
 cortex_audit_remediation_plan (replaced by cortex_governance op=remediation_plan)
 "24 orchestrators" / "28 MCP tools" / "120 orchestrators"
-"25 tools" / "25 MCP tools" / "24 MCP tools" / "26 MCP tools" (all stale — canonical is 39 MCP tools)
+"25 tools" / "25 MCP tools" / "24 MCP tools" / "26 MCP tools" / "39 MCP tools" (all stale — canonical is 28 registered MCP tools, 39 target)
 "22 rules" / "35 CORE rules" (must say "38 CORE rules" or "38 active")
 ```
 

@@ -155,7 +155,7 @@ make test-fast
 
 **Never use:** `python3 -m pytest tests/ -x -q` or any command that adds `-q` or overrides `-o addopts=` — these bypass the `CortexXdistPlugin` batch reporter and xdist parallelism.
 
-The full suite contains **16,259 tests** (486 golden, 177 phase) and runs with `pytest-xdist` (`-n auto --dist loadscope`).
+The full suite contains **16,942 tests** (486 golden, 177 phase) and runs with `pytest-xdist` (`-n auto --dist loadscope`).
 
 ---
 

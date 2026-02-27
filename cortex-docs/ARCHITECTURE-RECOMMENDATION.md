@@ -8,7 +8,7 @@
 ## Overview
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework
-built on a tiered orchestrator architecture, governed by 38 CORE rules, and surfaced through 39 MCP tools.
+built on a tiered orchestrator architecture, governed by 38 CORE rules, and surfaced through 39 MCP tools (28 registered).
 
 ---
 
@@ -18,9 +18,9 @@ built on a tiered orchestrator architecture, governed by 38 CORE rules, and surf
 |---|---|---|
 | Canonical package | `cortex` (single root) | `cortex/__init__.py` |
 | Wired orchestrators | 51 (across 4 tiers) | `cortex/core/wiring/specifications/wiring.yaml` |
-| MCP tools (production) | 39 | `cortex/mcp/tools/` |
+| MCP tools (production) | 39 target (28 registered) | `cortex/mcp/tools/` |
 | CORE governance rules | 38 active (+ 2 AC rules) | `cortex-registry/core/tier0-skull/` |
-| Test suite | 16,259 tests | `pytest --collect-only` |
+| Test suite | 16,942 tests | `pytest --collect-only` |
 | Top-level `cortex/` dirs | 20 canonical | `ls cortex/` |
 
 ---
@@ -85,7 +85,7 @@ Full rule catalogue: `cortex-registry/core/tier0-skull/`
 ```
 cortex/              ← Python source (20 canonical dirs)
   orchestrators/     ← 51 wired orchestrators across 4 tiers (core, domain, support, git)
-  mcp/tools/         ← 39 MCP tools
+  mcp/tools/         ← 39 MCP tools (28 registered)
   core/              ← OrchestratorProtocolMixin, OrchestratorBase, FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis

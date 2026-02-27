@@ -214,4 +214,22 @@ A `@runtime_checkable` Protocol that connects any ticketing system to CORTEX thr
 
 ---
 
+## Token Optimization
+
+### 3-Tier Progressive Loading
+CORTEX maximizes GitHub Copilot Chat sessions by loading context in three tiers. **T0 (Auto)** loads `copilot-instructions.md` (~300 tokens) in every session automatically. **T1 (Prompt)** loads one prompt file (~1,500–2,700 tokens) when the user attaches it via `#file:`. **T2 (Agent)** lazy-loads 1–2 specialist agent files (~1,000–5,000 tokens each) per intent. This prevents bulk-loading all 17 agents (~50,000+ tokens) when only 2 are needed.
+
+**Daily example:** A developer asking a simple question loads ~3,800 tokens total. A developer running a full `/audit fix` loads ~28,000 tokens at peak. Without optimization, both would start at ~50,000+ tokens.
+
+### Key Mechanisms
+- **Lazy Agent Loading** — `AgentLoader` in `cortex/core/prompt_agent_integration.py` caches loaded agents and maps intents to minimum required agents.
+- **LENS Intelligence Tiering** — Quick (<200ms), Targeted (<2s), Full (<10s) — selected by IntentRouter based on intent type.
+- **Request Rephrase** — `/rephrase` compresses verbose requests into CORTEX-efficient prompts (up to 64% token reduction).
+- **Continuation Compression** — 99.9% reduction (60 tokens vs 60,000 tokens) when sessions near budget exhaustion.
+- **Silent Execution** — CORE-049 suppresses narration during autonomous operations, saving ~7,500 tokens per `/audit fix`.
+
+**Full guide:** `05-infrastructure/08-token-optimization.md`
+
+---
+
 *See `glossary.md` for the complete alphabetical reference.*

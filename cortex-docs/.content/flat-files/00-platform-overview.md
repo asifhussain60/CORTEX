@@ -34,7 +34,7 @@ CORTEX is built from one canonical Python package (`cortex`) with a single impor
 | Wired Orchestrators | 51 across 4 tiers (17 core, 7 domain, 23 support, 4 git) |
 | MCP Tools | 28 registered / 39 target, Pylance-style stdio auto-start |
 | CORE Governance Rules | 38 active (+ 2 AC rules), enforced at pre-commit, CI, and runtime |
-| Test Suite | 11,102 collected (unit + preflight); 16,259 total including golden and phase tiers |
+| Test Suite | 16,942 collected (unit + preflight + golden + phase tiers) |
 | LENS Analyzers | 10 parallel analyzers, 300–800ms combined latency |
 | Languages Analyzed | Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue |
 | Intelligence Tiers | Quick (<200ms), Targeted (<2s), Full (<10s) |
@@ -163,7 +163,7 @@ A pluggable ticketing integration protocol that connects any ticketing system (A
 | Transport | stdio (development), HTTP (production) |
 | Package | 1 canonical Python package (`cortex`) — all imports use `cortex.*` |
 | Storage | Git-backed YAML registry — no external database required |
-| Testing | pytest-xdist parallel execution; 11,102 collected tests (unit + preflight); 16,259 including golden and phase tiers |
+| Testing | pytest-xdist parallel execution; 16,942 tests collected |
 | Observability | OpenTelemetry tracing, Prometheus metrics, Grafana dashboards, SQLite audit log |
 | Audit Trail | CortexAuditDB (SQLite WAL mode) in `.cortex-runtime/` with AC_START and AC_COMPLETE markers on every orchestrator invocation |
 
@@ -243,4 +243,4 @@ The CORTEX repository is organised into well-defined directories:
 
 ---
 
-*CORTEX v1.0.0 · February 2026 · 51 wired orchestrators · 28 registered MCP tools (39 target) · 38 CORE rules · 11,102 tests collected*
+*CORTEX v1.0.0 · February 2026 · 51 wired orchestrators · 28 registered MCP tools (39 target) · 38 CORE rules · 16,942 tests collected*

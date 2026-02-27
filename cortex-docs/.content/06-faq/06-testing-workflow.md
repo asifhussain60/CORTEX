@@ -56,11 +56,11 @@ The `CortexXdistPlugin` (registered in `conftest.py`) provides:
 
 ## How many tests does CORTEX have?
 
-**16,259 tests** as of 25 February 2026 (Phase 79-D):
+**16,942 tests** as of 26 February 2026:
 
 | Category | Count | Location |
 |----------|-------|---------|
-| Total | 16,259 | `tests/` |
+| Total | 16,942 | `tests/` |
 | Golden | 486 | `tests/golden/` |
 | Phase | 177 | `tests/` (phase-specific) |
 | Unit | ~12,000+ | `tests/unit/` |
@@ -237,4 +237,4 @@ Score your test with `cortex_generate_tests` (MCP tool) — it returns the TestQ
 
 ---
 
-*Verified against `pytest.ini` + `conftest.py` + `scripts/run_tests.py` · 25 February 2026 · 16,259 tests total*
+*Verified against `pytest.ini` + `conftest.py` + `scripts/run_tests.py` · 26 February 2026 · 16,942 tests total*

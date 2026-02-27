@@ -24,7 +24,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | MCP Tools | 39 target in `cortex/mcp/tools/` — 28 registered in `mcp_registry.py` (2026-02-26) |
 | Top-level Dirs | 20 under `cortex/` |
 | Governance Rules | 38 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
-| Test Suite | 16,259 tests (486 golden, 177 phase) |
+| Test Suite | 16,942 tests (486 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 
 ---

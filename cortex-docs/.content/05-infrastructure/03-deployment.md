@@ -26,7 +26,7 @@ VS Code → python3 -m cortex.mcp → stdio → Tool execution
 - No Docker required
 - No network ports
 - IDE manages process lifecycle
-- All 39 MCP tools available immediately
+- All 28 registered MCP tools available immediately (39 target)
 
 ### Production (Containerized)
 

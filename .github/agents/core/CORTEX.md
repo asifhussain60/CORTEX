@@ -1,6 +1,6 @@
 # CORTEX Master Agent
 
-**Updated:** 2026-02-26 | **Orchestrators:** 51 wired | **MCP Tools:** 38 | **CORE Rules:** 38
+**Updated:** 2026-02-26 | **Orchestrators:** 51 wired | **MCP Tools:** 28 registered (39 target) | **CORE Rules:** 38
 
 ---
 
@@ -56,7 +56,7 @@
 
 ---
 
-## MCP Tools (26 Active)
+## MCP Tools (28 Registered, 39 Target)
 
 | Tool | Purpose |
 |------|---------|
@@ -120,7 +120,7 @@
 | Type | Location |
 |------|----------|
 | Orchestrators (51 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (38) | `cortex/mcp/tools/` |
+| MCP Tools (28 registered, 39 target) | `cortex/mcp/tools/` |
 | OrchestratorProtocolMixin (primary base, Phase 58) | `cortex/core/orchestrator_protocol_mixin.py` |
 | OrchestratorBase (legacy — 2 orchestrators only) | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |

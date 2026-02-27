@@ -1,5 +1,5 @@
 # CORTEX Master Orchestrator Prompt
-**Updated:** 2026-02-26 | **Architecture:** 51 wired Orchestrators · 39 MCP Tools · 38 CORE Rules · 1 Package
+**Updated:** 2026-02-26 | **Architecture:** 51 wired Orchestrators · 39 MCP Tools (28 registered) · 38 CORE Rules · 1 Package
 
 ---
 
@@ -194,7 +194,7 @@ The canonical 5-section skeleton (Summary → Analysis → Recommendation → Be
 | Type | Location |
 |------|----------|
 | Orchestrators (51 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (38) | `cortex/mcp/tools/` |
+| MCP Tools (28 registered, 39 target) | `cortex/mcp/tools/` |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |

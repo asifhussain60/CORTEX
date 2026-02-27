@@ -135,7 +135,7 @@ The six-layer architecture from IDE clients down to the configuration registry.
 | Governance | 38 CORE rules | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |
 | Registry | Rules, patterns, workflows | `cortex-registry/` |
-| Tests | 11,102 collected (unit + preflight); 16,259 total | `tests/` |
+| Tests | 16,942 collected | `tests/` |
 
 ---
 
@@ -632,7 +632,7 @@ VS Code Opens Workspace
 
 ## 7. Testing Pyramid
 
-11,102 tests collected (unit + preflight) across layered execution tiers with parallel support. 16,259 total including golden and phase tiers.
+16,942 tests collected across layered execution tiers with parallel support.
 
 ### Test Pyramid
 
@@ -658,7 +658,7 @@ VS Code Opens Workspace
       ╱        Smoke Tests (subset)        ╲
      ╱──────────────────────────────────────╲
 
-  Total: 11,102 collected (unit + preflight); 16,259 including golden/phase tiers
+  Total: 16,942 collected (all tiers including golden/phase)
 ```
 
 ### Execution Strategy

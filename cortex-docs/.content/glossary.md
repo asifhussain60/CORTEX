@@ -163,6 +163,12 @@ order: 99
 
 **TestQualityGate** — Scoring system (0–9) evaluating test value. Formula: Impact + Likelihood + Detection + Efficiency - Maintenance.
 
+**Thin Index Contract** — Governance rule requiring `cortex-master.yaml` to remain a reference index only (≤500 lines). Phase detail lives in dedicated files under `cortex-registry/planning/phases/`. Prevents context exhaustion from bloated plan files.
+
+**3-Tier Loading Model** — Token optimization architecture with three progressive context tiers: T0 (Auto — `copilot-instructions.md`, ~300 tokens, every session), T1 (Prompt — user-selected prompt file, ~1,500–2,700 tokens), T2 (Agent — lazy-loaded specialist agents, ~1,000–5,000 tokens each). Reduces session bootstrap from ~50,000 tokens to ~3,000 tokens (94% reduction). See `05-infrastructure/08-token-optimization.md`.
+
+**Token Optimization** — The set of strategies CORTEX uses to maximize productive turns in GitHub Copilot Chat sessions. Seven strategies: 3-Tier Loading Model, Lazy Agent Loading, LENS Intelligence Tiering, Request Rephrase compression, Continuation Prompt compression, YAML Lazy Loading with LRU caching, and Silent Autonomous Execution (CORE-049). Implementation spans `cortex/core/prompt_agent_integration.py`, `cortex/core/intelligence_mixin.py`, `cortex/core/yaml_loaders.py`, and `.github/templates/cortex-response-templates.md`.
+
 **ToolResult** — Standard response object from MCP tool execution. Contains content (text), metadata, and audit reference.
 
 ## U

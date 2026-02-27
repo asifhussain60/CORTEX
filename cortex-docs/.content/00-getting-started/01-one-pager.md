@@ -30,19 +30,19 @@ Think of it like the difference between a calculator and a brain. A calculator w
 ```
   ┌───────────────────────────────────────────────────────────────┐
   │              CORTEX PLATFORM v1.0.0 (Phase 83 Complete)         │
-  │       1 Package · 51 Orchestrators · 39 MCP Tools             │
+  │       1 Package · 51 Orchestrators · 28 MCP Tools (39 target) │
   │       Intelligence Matrix · WorkflowEngine FSM · URS          │
   │                                                               │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ MCP Gateway  │─▶│  Orchestration    │─▶│ Intelligence  │  │
-  │  │ 39 tools     │  │  4 canonical tiers│  │ LENS + Brain  │  │
+  │  │ 28 active    │  │  4 canonical tiers│  │ LENS + Brain  │  │
   │  │ stdio/HTTP   │  │  51 wired         │  │ Matrix (15×15)│  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   │         │                   │                     │           │
   │         ▼                   ▼                     ▼           │
   │  ┌──────────────┐  ┌───────────────────┐  ┌───────────────┐  │
   │  │ Governance   │  │  Testing          │  │ Git Registry  │  │
-  │  │ 38 CORE rules│  │  16,259 tests     │  │ YAML SSOT     │  │
+  │  │ 38 CORE rules│  │  16,942 tests     │  │ YAML SSOT     │  │
   │  │ CORE-064     │  │  486 golden       │  │ URS Learning  │  │
   │  └──────────────┘  └───────────────────┘  └───────────────┘  │
   └───────────────────────────────────────────────────────────────┘
@@ -54,7 +54,7 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 | Domain | What It Does | Key Metric |
 |--------|-------------|------------|
-| **🏗️ Core Platform** | MCP gateway, 51-orchestrator dispatch, state management, health monitoring | 39 MCP tools, Pylance-style stdio |
+| **🏗️ Core Platform** | MCP gateway, 51-orchestrator dispatch, state management, health monitoring | 28 registered MCP tools (39 target), Pylance-style stdio |
 | **🤖 Intelligence (LENS)** | 10-analyzer parallel code understanding — AST, Git, Security, Patterns, Metrics, and more | 300–800ms full analysis |
 | **🧠 Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repo | Confidence scored 0.0–1.0 |
 | **🔗 Intelligence Matrix** | 15×15 cross-capability wiring map — ensures all intelligence subsystems are connected | 50% coverage gate enforced |
@@ -150,7 +150,7 @@ Every action runs through governance enforcement:
 - **Transport:** stdio (development) / HTTP (production)
 - **Package:** 1 canonical Python package (`cortex`) — all imports use `cortex.*`
 - **Storage:** Git-backed registry — no PostgreSQL, no MongoDB required
-- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 16,259 tests (486 golden, 177 phase)
+- **Testing:** pytest-xdist parallel execution (`-n auto --dist loadscope`); 16,942 tests (486 golden, 177 phase)
 - **Observability:** OpenTelemetry tracing, Prometheus metrics, Grafana dashboards, SQLite audit log (`.cortex-runtime/audit.db`)
 - **Languages analyzed by LENS:** Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue
 
@@ -346,4 +346,4 @@ CORTEX learns and adapts to your company's specific standards, domains, and patt
 
 ---
 
-*CORTEX v1.0.0 · February 2026 · Phase 83 Complete · 51 wired orchestrators · 39 MCP tools · 38 CORE rules (+ 2 AC) · 16,259 tests · cortex/core: 15 canonical subdirs · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
+*CORTEX v1.0.0 · February 2026 · Phase 83 Complete · 51 wired orchestrators · 39 MCP tools (28 registered) · 38 CORE rules (+ 2 AC) · 16,942 tests · cortex/core: 15 canonical subdirs · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*

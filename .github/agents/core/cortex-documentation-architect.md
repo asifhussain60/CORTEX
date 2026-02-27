@@ -276,7 +276,7 @@ cortex-docs/
 │   ├── knowledge-catalog.json    ← From cortex-registry/knowledge/*.yaml
 │   ├── learning-paths.json       ← 3-track module metadata (45 modules total)
 │   ├── orchestrators.json        ← 51 orchestrator cards
-│   └── mcp-tools.json            ← 39 MCP tool catalog
+│   └── mcp-tools.json            ← 39 MCP tool catalog (28 registered)
 ├── pipeline/                     ← Discovery & generation scripts
 │   ├── discover.py               ← Git + registry + live code scan
 │   ├── build.py                  ← YAML → JSON transformer
