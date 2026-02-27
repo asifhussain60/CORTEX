@@ -1,15 +1,18 @@
 # Video Prompts for CORTEX Visual Content
 
-These prompts are designed for **Google Gemini Video Generator** and **NotebookLM Video Editor** to produce a **10-video learning journey** that takes users from zero knowledge to complete CORTEX mastery.
+These prompts are designed for **Google Gemini Video Generator** and **NotebookLM Video Editor** to produce an **8-video learning journey** that takes users from zero knowledge to complete CORTEX mastery.
 
 ## The Learning Journey
 
+The 8 concept videos follow a **progressive depth curve** — from executive overview to advanced internals. Each video assumes the viewer has watched the previous ones. **Zero content repetition between videos.** The first video encourages the viewer to complete the full journey.
+
 | Phase | Videos | Goal |
 |-------|--------|------|
-| **Understanding** | 1-7 | Explain *what CORTEX is* and *how it works* |
-| **Getting Started** | 8-10 | Show *how to use CORTEX* hands-on |
+| **Foundation** | 1–3 | Explain *what CORTEX is*, *how requests flow*, and *how intelligence works* |
+| **Engineering** | 4–6 | Deep dive into *governance*, *TDD discipline*, and *production readiness* |
+| **Mastery** | 7–8 | Advanced capabilities: *extensibility*, *golden tests*, and *continuous learning* |
 
-A new user watches Videos 1-7 to understand the architecture, then Videos 8-10 to start using it. By Video 10, they can customize CORTEX for their team.
+**After the 8 concept videos**, viewers move to the **Tutorial series** (`tutorials/`) for hands-on practice.
 
 ## Usage
 
@@ -19,9 +22,9 @@ A new user watches Videos 1-7 to understand the architecture, then Videos 8-10 t
 
 ---
 
-## 🎨 MANDATORY Visual Identity (Apply to ALL Videos)
+## 🎨 MANDATORY Visual Identity (Apply to ALL Concept Videos)
 
-Every generated video **MUST** follow these rules for brand consistency with the CORTEX documentation site and image prompts.
+Every generated video **MUST** follow these rules for brand consistency.
 
 ### Color Palette (from `glass-design-tokens.css` + `main.css`)
 
@@ -48,12 +51,17 @@ Every generated video **MUST** follow these rules for brand consistency with the
 - **Particle effects:** Cyan/purple floating particles for data flow
 - **Camera:** Smooth dolly/zoom — no jerky cuts. Ken Burns for static scenes.
 
+### 🔤 Text Contrast & Readability (MANDATORY)
+
+- **Text on dark backgrounds:** Always `#ffffff` or `#00d4ff` — never muted gray directly on complex backgrounds
+- **Text over particles/glows/animations:** Add a dark pill background `rgba(10, 14, 39, 0.85)` behind text
+- **Animated text reveals:** Ensure text is fully opaque (#ffffff) by the end of the animation, not stuck at low opacity
+- **Code blocks:** JetBrains Mono on solid `rgba(26, 31, 58, 0.9)` panels — high contrast guaranteed
+- **Captions/analogies:** Use `#a0a6c0` ONLY on solid glass panels, never floating on animated backgrounds
+
 ### CORTEX Logo Watermark
 
-- The CORTEX logo (`cortex-logo-128.png`) must appear **embossed in the bottom-right corner** throughout the entire video
-- Opacity: 15-25% — visible but not distracting during motion
-- Size: ~5-8% of frame width
-- Style: Subtle inner shadow, matching the glass aesthetic
+- CORTEX logo embossed bottom-right corner, 15-25% opacity, ~6% frame width, throughout entire video
 
 ### Typography (animated text)
 
@@ -70,137 +78,82 @@ Every generated video **MUST** follow these rules for brand consistency with the
 
 ---
 
+## 🎙️ NARRATION PHILOSOPHY — MANDATORY FOR ALL VIDEOS
+
+**The viewer can read the slides. The narrator must never read them.**
+
+This is the single most important rule for narration quality. Every line of narration must pass this test:
+
+> *"Does this add something the viewer cannot get simply by reading the screen?"*
+
+If the answer is no, cut it or rewrite it.
+
+### What "Speaking TO the slide" means
+
+The visual shows the WHAT. The narration delivers the WHY, the SO WHAT, the FEEL, and the CONSEQUENCE — things that cannot be conveyed by text on a screen alone.
+
+| Visual on screen | ❌ Reading the slide (WRONG) | ✅ Speaking to it (RIGHT) |
+|---|---|---|
+| Governance tiers animate: P0, P1, P2 | *"There are three severity tiers: P0, P1, and P2."* | *"P0 violations stop the commit. Not slow it down — stop it. That's what makes it structural, not aspirational."* |
+| TDD ECG: RED → GREEN → BLUE | *"The three phases are red, green, and blue."* | *"Most engineers write tests after the fact, if at all. CORTEX makes that impossible — and that discomfort is the point."* |
+| Convergence loop iterates until 0 violations | *"The loop runs until there are zero violations."* | *"Traditional CI gives you a report and moves on. CORTEX doesn't move on. That's not a small difference."* |
+| LENS scanning animation runs | *"LENS scans your codebase."* | *"By the time you've typed the feature request, CORTEX already knows which files it will touch."* |
+| Split screen: Without vs With CORTEX | *"On the left is without CORTEX. On the right is with CORTEX."* | *"The left column is how engineering feels right now for most teams. The right is what it should feel like."* |
+
+### Narration Principles
+
+1. **Add insight, not description.** If the screen shows a metric improving, the narrator explains *why that metric matters*, not that it improved.
+2. **Surface the consequence.** When a governance rule fires, the narrator speaks to the real-world cost of not having that rule — not what the rule says.
+3. **Anticipate the question.** A viewer watching LENS scan code will wonder: "How fast is this? Is it accurate?" Answer that before they ask.
+4. **Use contrast and stakes.** The most compelling narration names what would happen without CORTEX — making the benefit feel real, not theoretical.
+5. **Trust the animation.** When an animation makes something visually obvious, the narrator says nothing, or adds an emotional/conceptual beat — never a description.
+6. **Let silence work.** On key moments (a convergence loop reaching zero, a golden test passing), a beat of silence lands harder than narration.
+
+### Tone
+
+- Confident, not salesy
+- Honest about what CORTEX is and isn't (it orchestrates AI; it doesn't embed it)
+- Uses the second person ("you") to keep it personal
+- Respects the viewer's intelligence — no hand-holding on things they can plainly see
+
+---
+
 ## Video Index — Complete Learning Journey
 
-### Phase 1: Understanding CORTEX (Videos 1-11)
+| # | File | Title | Duration | Depth |
+|---|------|-------|----------|-------|
+| 1 | `prompt-01-what-is-cortex.md` | What Is CORTEX? | 7 min | 🟢 Story |
+| 2 | `prompt-02-the-request-lifecycle.md` | The Life of a Request | 7 min | 🟡 Flow |
+| 3 | `prompt-03-intelligence-engine.md` | The Intelligence Engine | 8 min | 🟡→🔴 Bridge |
+| 4 | `prompt-04-governance-and-tdd.md` | Governance and TDD — Quality as Infrastructure | 9 min | 🔴 Developer |
+| 5 | `prompt-05-production-readiness.md` | Production Readiness — Audit, Sweep, and Convergence | 9 min | 🔴 Advanced |
+| 6 | `prompt-06-golden-tests-and-security.md` | Golden Tests and Security-First Development | 8 min | 🔴 Developer |
+| 7 | `prompt-07-extensibility-and-onboarding.md` | Extensibility and Repository Onboarding | 8 min | 🔴 Platform |
+| 8 | `prompt-08-learning-and-transformation.md` | Continuous Learning and Real-World Transformation | 7 min | 🟡 Capstone |
 
-Videos 1-11 follow a **progressive depth curve** — from executive overview to advanced internals. Each video assumes the viewer has watched the previous ones. **Zero content repetition between videos.**
+**Total Concept Video Runtime:** ~63 minutes (industry standard for a comprehensive platform walkthrough)
 
-| # | File | Title | Duration | Audience | Depth |
-|---|------|-------|----------|----------|-------|
-| 1 | `prompt-01-what-is-cortex.md` | What Is CORTEX? | 7 min | Executives, All | 🟢 Story |
-| 2 | `prompt-02-the-request-lifecycle.md` | The Life of a Request | 7 min | PO, Engineers | 🟡 Flow |
-| 3 | `prompt-03-intelligence-engine.md` | The Intelligence Engine | 9 min | PO → Engineers | 🟡→🔴 Bridge |
-| 4 | `prompt-04-governance-in-action.md` | Governance in Action | 8 min | Engineers, Leads | 🔴 Developer |
-| 5 | `prompt-05-tdd-mastery.md` | TDD Mastery | 9 min | Engineers | 🔴 Developer |
-| 6 | `prompt-06-mcp-tools-deep-dive.md` | MCP Tools Deep Dive | 10 min | Engineers, Builders | 🔴 Developer |
-| 7 | `prompt-07-audit-fix-pipeline.md` | The Audit Fix Pipeline | 10 min | Platform Engineers | 🔴 Advanced |
-| 8 | `prompt-08-workflow-template-engine.md` | The Workflow Template Engine | 9 min | Engineers, Platform | 🔴 Architecture |
-| 9 | `prompt-09-response-templates-engagement.md` | Response Templates & Orchestrator Engagement | 90s | Engineers | 🔴 Phase 85 |
-| 10 | `prompt-10-multi-stack-debugging.md` | Debugging Any Stack | 90s | Engineers | 🔴 Phase 86 |
-| 11 | `prompt-11-rca-memory-engine.md` | Never Repeat a Mistake — RCA Memory Engine | 90s | All | 🟡 Phase 87 |
+### Hands-On Tutorials (separate folder)
 
-**Videos 9–11** are short-form (90-second) feature spotlights for Phases 85, 86, and 87. They assume familiarity with CORTEX (recommend watching Videos 1–3 first) and focus tightly on one capability each.
-
-### Phase 2: Hands-On Tutorials (separate folder)
-
-Practical screen-recording-style tutorials separated from concept videos. See `tutorials/README.md` for the full index.
-
-| # | File | Title | Duration | Audience | Prerequisites |
-|---|------|-------|----------|----------|---------------|
-| T1 | `tutorials/tutorial-01-getting-started-installation.md` | Getting Started: Installation | 5 min | Everyone | None |
-| T2 | `tutorials/tutorial-02-getting-started-first-commands.md` | Getting Started: Your First Commands | 7 min | Engineers, PO | Tutorial T1 |
-| T3 | `tutorials/tutorial-03-getting-started-customization.md` | Getting Started: Customizing CORTEX | 8 min | Leads, Platform | T1-T2 + Videos 04 + 08 |
-| T4 | `tutorials/tutorial-04-building-a-feature-end-to-end.md` | Building a Feature End-to-End | 10 min | Engineers | T1-T2 + Videos 02 + 05 |
-| T5 | `tutorials/tutorial-05-debugging-with-cortex.md` | Debugging with CORTEX | 9 min | Engineers | T1 + Video 03 |
-| T6 | `tutorials/tutorial-06-onboarding-a-repository.md` | Onboarding a New Repository | 8 min | Tech Leads, Platform | T1 + Videos 03 + 04 |
-
-**Why tutorials are separate:** Concept videos explain *what* and *why*. Tutorial videos show *how* — they are screen-recording walkthroughs, not architectural explainers. Different visual style (VS Code PiP overlay), different pacing, different audience entry points. Mixing them in the same folder creates confusion about learning phase and purpose.
-
-### Total Runtime: ~80 minutes concept + ~47 minutes tutorial
+After the concept videos, see `tutorials/README.md` for practical, screen-recording-style walkthroughs.
 
 ---
 
-## Depth Progression Visualization
+## Zero Overlap Policy
 
-```
-Video 1  █░░░░░░░░░  10%  Executive overview — no code
-Video 2  ██░░░░░░░░  25%  Request flow — light architecture
-Video 3  ███░░░░░░░  35%  Intelligence — LENS, pipelines
-Video 4  █████░░░░░  50%  Governance — real rules, violations
-Video 5  ██████░░░░  60%  TDD — full code session
-Video 6  ████████░░  80%  MCP — protocol, tool authoring
-Video 7  ██████████  100% Audit — 9-stage pipeline (peak)
-Video 8  █████████░  90%  Workflow Template Engine — YAML vs Python interpreter design
-──────── tutorials ────────────────────────────────────────────
-Tutor 1  ██░░░░░░░░  20%  Installation — step-by-step (depth resets for tutorials)
-Tutor 2  ████░░░░░░  40%  First commands — practical with explanations
-Tutor 3  ███████░░░  70%  Customization — real rules, real MCP tools
-Tutor 4  ██████████  100% Full feature build — ticket to governed commit (peak)
-Tutor 5  ████████░░  80%  Debugging — 5-phase diagnostic pipeline
-Tutor 6  ███████░░░  70%  Repository onboarding — LENS + security + dashboard
-```
-
-Videos 1-8 build steadily to peak architectural depth. Tutorials independently reset depth for hands-on learners. Tutorials 1-3 cover setup basics; Tutorials 4-6 cover advanced workflows.
+| Capability | Video Covers | Image Covers |
+|-----------|-------------|-------------|
+| Architecture | Animated intelligence decision (V3) | Static brain cross-section (I1) |
+| Orchestrators | Live coordination on a request (V2) | Galaxy ecosystem map (I2) |
+| LENS | Live workspace scan (V3) | Diagnostic eye anatomy (I3) |
+| Governance + TDD | Violation caught, TDD cycle enforced (V4) | Shield wall posture (I4) |
+| Request Pipeline | Particle tracking animated (V2) | Station-to-station infographic (I5) |
+| Golden Tests | End-to-end creation to audit trace (V6) | Pyramid with scoring (I6) |
+| Security | Security gate catching vulnerability (V6) | Five-layer defense diagram (I7) |
+| Extensibility | Building new capability live (V7) | Neural growth anatomy (I8) |
+| Knowledge/Learning | Onboarding + learning loop (V7, V8) | Pattern lattice (I9) |
+| Transformation | Full refactoring session (V8) | Before/after split (I10) |
 
 ---
 
-## Content Overlap Policy
-
-To ensure **zero repetition**, follow these rules:
-
-| Concept | Canonical Video | Other Videos May... |
-|---------|-----------------|---------------------|
-| TDD heartbeat | **Video 5** | Forward-reference only (≤30s) |
-| Governance shield | **Video 4** | Show passing through without detail |
-| MCP tools | **Video 6** | Use as examples, not explain protocol |
-| Audit pipeline | **Video 7** | Reference as "single command" |
-| Workflow template engine | **Video 8** | Forward-reference as "blueprint system" |
-| AC markers | All | Reinforce — this is a core concept |
-
-**Example:** Video 2 shows a request passing through TDD Station 3, but says: *"See Video 5 for the complete TDD session."* — no code panels, no detailed heartbeat.
-
----
-
-## Closing Vision Policy
-
-Each video ends with a **unique** closing vision callback that reinforces the value proposition in a distinct way. No two videos share the same closing line. All closings center on the core theme: *CORTEX frees engineers from code legwork so they can focus on envisioning and adding business value.*
-
-See each prompt file's closing section for its specific callback.
-
----
-
-## Cross-Reference: No Overlap with Image Prompts
-
-| Concept | Images Cover (static) | Videos Cover (dynamic) |
-|---------|----------------------|----------------------|
-| Brain Tiers | Cross-section anatomy | Animated request flowing through tiers |
-| Orchestrators | Galaxy spatial map | Day-in-the-life coordination story |
-| LENS | Eye diagram anatomy | Live analysis with results appearing |
-| Governance | Shield wall defense posture | Rule catching a real violation |
-| TDD | ECG heartbeat rhythm | Full cycle with code transforming |
-| MCP | Nervous system anatomy | Live tool invocations and responses |
-| Audit | Immune system cellular | 9-stage pipeline progressing in real-time |
-| Workflow Assembly | Static factory floor (prompt-12) | Three-layer system in motion — YAML + mixin + orchestrator |
-
----
-
-## Folder Structure
-
-```
-videos/
-  README.md                              ← this file
-  prompt-01-what-is-cortex.md
-  prompt-02-the-request-lifecycle.md
-  prompt-03-intelligence-engine.md
-  prompt-04-governance-in-action.md
-  prompt-05-tdd-mastery.md
-  prompt-06-mcp-tools-deep-dive.md
-  prompt-07-audit-fix-pipeline.md
-  prompt-08-workflow-template-engine.md
-  prompt-09-response-templates-engagement.md   ← Phase 85 (new)
-  prompt-10-multi-stack-debugging.md           ← Phase 86 (new)
-  prompt-11-rca-memory-engine.md               ← Phase 87 (new)
-  tutorials/
-    README.md                            ← tutorial-specific index and visual identity notes
-    tutorial-01-getting-started-installation.md
-    tutorial-02-getting-started-first-commands.md
-    tutorial-03-getting-started-customization.md
-    tutorial-04-building-a-feature-end-to-end.md
-    tutorial-05-debugging-with-cortex.md
-    tutorial-06-onboarding-a-repository.md
-```
-
----
-
-*All prompts reference actual CORTEX architecture verified against live codebase · Updated 27 February 2026*
+*All prompts reference actual CORTEX capabilities*

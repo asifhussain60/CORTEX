@@ -1,142 +1,104 @@
-# Video Prompt 03 — The Intelligence Engine
+# Video Prompt 03 **Narration:** "The word 'intelligence' is doing a lot of work in AI right now — much of it dishonest. Here's what CORTEX's intelligence actually is, and equally importantly, what it isn't."ligence Engine
 
-> 2. **Live analysis animation (2:30 – 3:30):**
-Show a realistic CORTEX workspace (simplified file tree on the left, code panels center).
-
-1. LENS beam sweeps top-to-bottom (like an MRI scanner).
-2. As the beam passes each directory:
-   - `cortex/orchestrators/` → badge: "51 orchestrators, 4 tiers" (cyan)
-   - `cortex/mcp/tools/` → badge: "28 MCP tools registered" (purple)
-   - `tests/` → badge: "thousands of tests, high coverage" (green)
-   - `cortex-registry/` → badge: "38 CORE rules active" (amber)
-3. Results aggregate into a glassmorphic **Workspace Intelligence Card** at the bottom of screen.:** 9 minutes · **Audience:** Product Owners → Software Engineers (bridge)
-> **Depth:** 🟡→🔴 Starts conceptual, ends with architecture
-> **No overlap:** Image prompt-11 shows the Intelligence Matrix as a static PCB; this video shows LENS performing a *live workspace analysis* with results building in real-time
+> **Duration:** 8 minutes · **Audience:** Product Owners → Software Engineers (bridge)
+> **Depth:** 🟡→🔴 Starts conceptual, ends with real analysis output
+> **No overlap:** Image prompt-03 shows LENS anatomy; this video shows LENS performing a *live scan* with results building in real-time, plus how the Brain tiers make decisions
 
 ---
 
 ## ⚠️ VISUAL IDENTITY — MANDATORY
 
-> **ALL visuals** must use the CORTEX dark glassmorphism palette. Background: `#0a0e27`. Panels: `rgba(26, 31, 58, 0.7)` with `rgba(255, 255, 255, 0.1)` borders and 10-20px backdrop blur. Primary accent: `#00d4ff` (cyan). Secondary accent: `#7b61ff` (purple). Success: `#00ff88`. Warning: `#ffa500`. Danger: `#ff4444`. Info: `#3b82f6`. Text: `#ffffff` (primary), `#a0a6c0` (secondary). Glow: `0 0 20px rgba(0, 212, 255, 0.3)`. Shadow: `0 8px 32px rgba(0, 0, 0, 0.37)`.
->
-> **Logo watermark:** CORTEX logo embossed bottom-right corner, 15-25% opacity, ~6% frame width, throughout entire video.
->
-> **Typography:** Space Grotesk (headings, bold, fade-in with upward slide), Inter (body, fade), JetBrains Mono (code/labels, character-by-character reveal).
+> See `README.md` for full mandatory palette, motion style, text contrast rules, typography, and watermark.
+
+## ⚠️ NARRATION RULE — MANDATORY
+
+> **The narrator never reads the slide.** Every narration line must add something the viewer cannot get from reading the screen: the *why*, the *consequence*, the *non-obvious implication*, or the *emotional truth*. If a narration line restates visible text, cut it or rewrite it. See `README.md` §Narration Philosophy for full guidance and examples.
 
 ---
 
 ## PROMPT
 
-Create a 9-minute animated explainer video titled **"The Intelligence Engine"** using the visual identity above. Show how CORTEX *thinks* — from understanding a workspace to generating insights and recommendations.
+Create an 8-minute animated explainer video titled **"The Intelligence Engine"**. Show how CORTEX *thinks* — from understanding a workspace to generating recommendations.
 
-### Scene 1 — What Does "Intelligence" Mean Here? (0:00 – 1:30)
+### Scene 1 — What "Intelligence" Means (0:00 – 1:30)
 
-**Open on:** The word "Intelligence" in large Space Grotesk font, centered on `#0a0e27`. It shimmers between cyan and purple.
+**Open on:** The word "Intelligence" in Space Grotesk. It shimmers between cyan and purple.
 
-**Clarification animation:**
-- Cross out "Neural Network" (red strikethrough), cross out "Machine Learning Model" (red strikethrough).
-- Replace with: **"Heuristic + LLM-Orchestrated Pipelines"** — each word fades in with cyan underline.
-- A glassmorphic info card appears: "CORTEX doesn't embed AI models. It orchestrates the host LLM (GitHub Copilot/GPT) as the AI engine."
+**Clarification:** Cross out "Neural Network" (red strikethrough), cross out "Machine Learning Model" (red strikethrough). Replace with: **"Heuristic + LLM-Orchestrated Pipelines"** in cyan.
 
-**Daily-life analogy** (`#a0a6c0`): *"CORTEX is not the brain surgeon — it's the operating room coordinator who hands the surgeon the right tools at the right time."*
+Glassmorphic info card: "CORTEX doesn't contain AI models. It orchestrates your existing AI — structuring problems, routing to specialists, and validating results."
 
-**Diagram builds:** Show the LLM (a large glowing orb at top) connected by cyan lines down to CORTEX (a network of glass panels). Arrows show: CORTEX sends structured prompts UP → LLM sends results DOWN → CORTEX validates, routes, applies.
+**Diagram builds:** LLM (large orb at top) → CORTEX sends structured prompts UP → LLM sends results DOWN → CORTEX validates, routes, applies.
 
-**Narration:** "When we say intelligence, we don't mean CORTEX has its own AI. We mean it knows how to *use* AI effectively — structuring problems, routing to specialists, and validating results."
+**Analogy:** *"CORTEX is not the surgeon — it's the operating room coordinator who hands the surgeon the right tools at the right time."*
 
-### Scene 2 — LENS: The Diagnostic Eye (1:30 – 3:30)
+### Scene 2 — LENS: The Diagnostic Scan (1:30 – 3:30)
 
-**Transition:** Camera zooms into the CORTEX network, entering the LENS module.
+**LENS acronym builds** letter by letter:
+- **L**anguage → File extensions light up by language (`.py` cyan, `.yaml` amber, `.ts` purple)
+- **E**xamination → Magnifying glass scans files; complexity scores float out
+- **N**avigation → Dependency graph materializes — nodes are files, edges are imports
+- **S**ynthesis → All data compresses into a unified "workspace profile" card
 
-**LENS acronym builds** letter by letter on screen:
-- **L**anguage → A file tree appears; file extensions light up by language (`.py` cyan, `.yaml` amber, `.md` green, `.html` purple)
-- **E**xamination → A magnifying glass scans individual files; complexity scores float out as badges
-- **N**avigation → A dependency graph materializes — nodes are files, edges are import relationships, flowing cyan particles travel the edges
-- **S**ynthesis → All data compresses into a unified "workspace profile" card — a glassmorphic dashboard with metrics
+**Live scan animation (2:30–3:30):** A realistic workspace file tree appears. LENS beam sweeps top-to-bottom. As it passes each area, badges appear: orchestrator count, test coverage percentage, governance rule status, dependency health. Results aggregate into a **Workspace Intelligence Card**.
 
-**Live analysis animation (2:30 – 3:30):**
-Show a realistic CORTEX workspace (simplified file tree on the left, code panels center).
+**Narration:** "By the time you've typed a request, LENS already knows which files are involved, what patterns they use, and what the test coverage looks like. That context is what separates a useful response from a generic one."
 
-1. LENS beam sweeps top-to-bottom (like an MRI scanner).
-2. As the beam passes each directory:
-   - `cortex/orchestrators/` → badge: "51 orchestrators, 4 tiers" (cyan)
-   - `cortex/mcp/tools/` → badge: "28 MCP tools registered" (purple)
-   - `tests/` → badge: "thousands of tests, 92% coverage" (green)
-   - `cortex-registry/` → badge: "38 CORE rules active" (amber)
-3. Results aggregate into a glassmorphic **Workspace Intelligence Card** at the bottom of screen.
+### Scene 3 — The Three Brain Tiers (3:30 – 5:00)
 
-**Analogy overlay:** *"An MRI machine doesn't just take a photo — it builds a complete 3D model of your body. LENS does the same for your codebase."*
+**From the workspace profile, the three tiers activate sequentially:**
 
-### Scene 3 — Knowledge Synthesis (3:30 – 5:00)
+**Tier 1 — Perception (cyan):**
+- Enterprise pattern icons light up as signatures match: Mediator, Strategy, Observer, Factory, etc.
+- Each matched pattern shows a confidence score (0.0 – 1.0)
+- "What patterns exist in this code?"
 
-**From the workspace profile, branches grow upward like a knowledge tree.**
+**Tier 2 — Reasoning (purple):**
+- A strategy ranking table materializes. Strategies sorted by historical success rate.
+- Candidate strategies: "tdd-incremental" (89%), "refactor-extract-service" (76%), "security-audit-first" (92%)
+- "Which approach will work best based on past outcomes?"
 
-Show three intelligence pipelines:
+**Tier 3 — Action (amber):**
+- A step-by-step execution plan with numbered steps, TDD gates between each, and rollback checkpoints
+- "How exactly should we execute this?"
 
-1. **Blind Spot Detection** — Red nodes (`#ff4444`) appear on the tree where coverage gaps exist. A magnifying glass icon zooms into one: "Module `secrets/` has no integration tests." Glassmorphic alert card appears with suggested action.
+**Narration:** "Perception reads the signals. Reasoning selects the strategy. Action builds the plan. Three tiers, working in sequence — and the difference between each tier is the difference between a guess and a judgment."
 
-2. **Domain Brain** — Purple (`#7b61ff`) neural-like connections form between related modules. Show: `orchestrators/core/tdd_orchestrator.py` ↔ `testing/quality_gate.py` ↔ `governance/rule_enforcement.py`. A holographic label: "TDD Domain Cluster — 3 modules, 12 shared concepts."
+### Scene 4 — Intelligence in Action: Repository Onboarding (5:00 – 7:00)
 
-3. **Knowledge Base Search** — A search query types in: "How does governance enforcement work?" Glass panels fan out like index cards — each showing a relevant file with highlighted excerpt. Top result glows cyan.
+**Scenario:** `/onboard https://github.com/example/project`
 
-**Analogy overlay:** *"A detective's investigation board — red pins for gaps, purple strings connecting related clues, and a search index to find anything instantly."*
+**Step-by-step:**
 
-**Narration:** "LENS doesn't just scan — it synthesizes. It finds what's missing, connects what's related, and makes everything searchable."
+1. **Clone & Scan** — Repository appears as a glass cube. LENS beam scans it. File counts, language distribution, and structure materialize.
 
-### Scene 4 — Intelligence in Action: A Real Scenario (5:00 – 7:00)
+2. **Security Assessment** — Three priority tiers as concentric shields:
+   - P0 (red): "Hardcoded API key in config" — flashing danger
+   - P1 (amber): "No input sanitization in API routes"
+   - P2 (blue): "Dependencies need updating"
 
-**Scenario setup:** A glassmorphic terminal shows the command `/onboard https://github.com/example/project`
+3. **Pattern Detection** — Enterprise patterns detected with confidence scores. Architecture diagram auto-generates.
 
-**Step-by-step animated flow:**
+4. **Dashboard Generation** — Findings compress into a database icon. A glassmorphic dashboard materializes with charts, tables, health scores.
 
-1. **Clone & Scan** (5:15) — Repository appears as a dark glass cube. LENS beam scans it. File counts, language distribution, and structure materialize as floating stats.
+**Narration:** "A security finding at onboarding costs minutes to fix. The same finding in production costs days of incident response, customer trust, and sleep. That's the real value of what you just watched."
 
-2. **Security Assessment** (5:45) — Three priority tiers appear as concentric shields:
-   - P0 (inner, red): "Hardcoded API key in `config.py`" — flashing danger
-   - P1 (middle, amber): "No input sanitization in `api/routes.py`"
-   - P2 (outer, blue): "Dependencies 6 months old"
-   - Each finding slides into the shield at its tier level.
+### Scene 5 — Closing: Intelligence You Can Trust (7:00 – 8:00)
 
-3. **Architecture Mapping** (6:15) — A C4-style component diagram auto-generates. Boxes appear for each major module, connection lines draw themselves. The diagram uses glassmorphic boxes with cyan borders.
+Three trust principles as glassmorphic cards:
 
-4. **SQLite Dashboard Generation** (6:45) — All findings compress into a database icon. Then a glassmorphic dashboard materializes — charts, tables, health scores. The dashboard is interactive — panels glow on hover.
+1. **Transparent** — "Every recommendation traces back to evidence" (citation animation)
+2. **Governed** — "Governance rules validate every intelligence output" (shield shimmer)
+3. **Learning** — "Outcomes feed back to improve future confidence scores" (circular arrow)
 
-**Analogy overlay:** *"A home inspector doesn't just look at the kitchen — they check the foundation, wiring, plumbing, and roof, then give you a complete report with priorities."*
+**Closing text:** **"Intelligence isn't magic. It's orchestrated methodology."**
 
-### Scene 5 — The Intelligence Matrix (7:00 – 8:00)
-
-**Camera pulls back** to show a matrix grid — the Intelligence Matrix from a bird's-eye view.
-
-- **Rows:** Different intelligence domains (LENS, Knowledge, Security, Architecture, Testing)
-- **Columns:** Different actions (Scan, Analyze, Recommend, Execute)
-- Each cell is a glassmorphic tile. As the camera pans across, tiles light up showing which capabilities exist.
-- Active cells glow cyan, planned cells show a dashed purple border.
-
-This is NOT a repeat of image prompt-11's PCB — this is a **functional capability matrix** showing what intelligence can DO, viewed as an animated grid that builds cell by cell.
-
-**Narration:** "Every intelligence capability maps to this matrix. Scan, analyze, recommend, execute — across every domain CORTEX understands."
-
-### Scene 6 — Closing: Intelligence You Can Trust (8:00 – 9:00)
-
-**Three trust principles** appear as large glassmorphic cards:
-
-1. **Transparent** — "Every recommendation traces back to evidence" (show a citation link animation)
-2. **Governed** — "38 rules validate every intelligence output" (shield shimmer)
-3. **Tested** — "A comprehensive test suite verifies intelligence accuracy" (green heartbeat pulse)
-
-**Closing text** (Space Grotesk): **"Intelligence isn't magic. It's orchestrated methodology."**
-
-**Vision callback:**
-> *"The analysis you'd spend hours doing manually — CORTEX delivers in seconds. Reclaim your thinking time."*
-
-Logo pulse. End card.
+**Narration:** "Every output from this system traces back to evidence — a pattern, a rule, a historical outcome. That traceability is what makes it trustworthy, not just impressive."
 
 ---
 
 ## Notes
-
-- Image prompt-03 shows LENS as a static diagnostic eye anatomy. This video shows LENS **performing a live scan** with results appearing in real-time.
-- Image prompt-11 shows the Intelligence Matrix as a static PCB layout. This video shows it as an **animated capability matrix** being populated — different visual metaphor.
-- The LLM-orchestration architecture diagram in Scene 1 is critical — it corrects the common misconception that CORTEX contains embedded ML models.
-- Code and file paths shown should be realistic (match actual CORTEX structure).
-- Sound design: scanning beam has a subtle electronic sweep sound; findings appear with soft notification pings.
+- This video bridges product owners and engineers — starts conceptual, ends with real output
+- The LLM-orchestration diagram in Scene 1 prevents the "embedded AI" misconception
+- Repository onboarding in Scene 4 is a practical capability that makes CORTEX immediately useful
+- **No hardcoded counts** — analyzers and patterns described by function, not number
