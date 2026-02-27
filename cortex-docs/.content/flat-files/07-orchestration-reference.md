@@ -6,7 +6,7 @@ consolidates:
   - 03-orchestration-workflow-engine.md
   - 03-orchestration-security-orchestrator.md
   - 03-orchestration-sweep-catalogue.md
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/core/ + cortex/orchestrators/domain/ + cortex/orchestrators/workflow/ + cortex/orchestrators/support/
 audience: [Software Developers, Product Owners]
 ---

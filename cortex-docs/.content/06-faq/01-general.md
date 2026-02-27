@@ -4,7 +4,7 @@
 title: FAQ — General & Getting Started
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 order: 1
 ---
@@ -191,4 +191,4 @@ All changes are versioned in Git — rollback is `git revert`. No database depen
 
 ---
 
-*Verified against live codebase · 25 February 2026 · Phase 83 Complete*
+*Verified against live codebase · 25 February 2026 · Phase 84 Complete*

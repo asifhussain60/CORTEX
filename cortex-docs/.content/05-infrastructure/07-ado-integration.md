@@ -4,7 +4,7 @@
 title: Azure DevOps Integration — Work Item Provider
 type: how-to
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/repositories/ado/ado_provider.py + cortex/intelligence/knowledge/ado_context_mapper.py
 order: 7
 ---

@@ -4,7 +4,7 @@
 title: CORTEX Workflow Templates — Reusable Execution Patterns
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex-registry/workflows/templates/ + cortex/core/workflow_engine.py
 order: 7
 ---

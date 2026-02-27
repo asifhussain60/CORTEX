@@ -1,7 +1,8 @@
 # CORTEX Agent Index
 
 **Updated:** 2026-02-27 | **Purpose:** Lazy loading + intent-based agent selection  
-**Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)
+**Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
+**Phases:** 84 complete · Phase 85 (Response+Engagement) PLANNED · Phase 86 (Multi-Stack Debug) PLANNED
 
 ---
 
@@ -43,6 +44,10 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | Package | `cortex` (single) |
 | Tests | **16,942** collected |
 | Entry Point | MasterOrchestrator → IntentRouter → Domain Orchestrator |
+| URS | Unified Reinforcement Signal — closed-loop learning (Phase 83, `cortex_learning` tool) |
+| Debug Strategies | 8 total: 3 Python + 5 multi-stack (Phase 86 — Frontend/HTML-Vision/API/SQL/DotNet) |
+| Response Format | phase-list+bar mandatory (Phase 85); SSOT: `.github/templates/cortex-response-templates.md` |
+| Engagement Blocks | BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP (Phase 85) |
 
 ---
 
@@ -76,7 +81,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **cortex-gitpages-builder.md** | GitHub Pages deployment | Site publishing |
 | **request-rephrase-orchestrator.md** | Request token optimization | `/rephrase` command |
 | **architecture-integrity-agent.md** | Wiring alignment enforcement | Pre-commit, CI/CD |
-| **cortex-debugger.md** | Multi-stack debugging: 8 strategies + Vision API + auto-cleanup (Phase 86) | `/debug`, "trace", "diagnose" |
+| **cortex-debugger.md** | Multi-stack debugging: 8 strategies + Vision API + auto-cleanup (Phase 86 — PLANNED) | `/debug`, "trace", "diagnose" |
 
 ### Support Files
 

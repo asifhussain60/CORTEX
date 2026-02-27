@@ -4,7 +4,7 @@
 title: FAQ — MCP Tools & Integration
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/mcp/tools/ + cortex/repositories/
 order: 5
 ---
@@ -260,4 +260,4 @@ Autonomous mode follows CORE-064 (Sweep Completeness) — it creates a SweepCata
 
 ---
 
-*Verified against `cortex/mcp/tools/` (source: mcp_registry.py, 28 registered canonical tools) · 25 February 2026 · Phase 83 Complete*
+*Verified against `cortex/mcp/tools/` (source: mcp_registry.py, 28 registered canonical tools) · 25 February 2026 · Phase 84 Complete*

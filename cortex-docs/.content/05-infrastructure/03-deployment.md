@@ -4,7 +4,7 @@
 title: Deployment Architecture
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: deployment/
 order: 3
 ---

@@ -4,7 +4,7 @@
 title: CORTEX WorkflowEngine — YAML→FSM→ConvergenceLoop Runtime (Phase 79-D)
 type: explanation
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/workflow/ + cortex-registry/workflows/templates/
 phase: Phase 79-D (COMPLETE)
 order: 11

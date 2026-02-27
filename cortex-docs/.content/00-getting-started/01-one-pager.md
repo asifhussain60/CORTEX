@@ -4,7 +4,7 @@
 title: CORTEX — Cognitive Real-Time Execution Platform
 type: overview
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml
 phases_complete: [Phase 65, Phase 66, Phase 67, Phase 68, Phase 69]
 format: one-pager
@@ -29,7 +29,7 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 ```
   ┌───────────────────────────────────────────────────────────────┐
-  │              CORTEX PLATFORM v1.0.0 (Phase 83 Complete)         │
+  │              CORTEX PLATFORM v1.0.0 (Phase 84 Complete)         │
   │       1 Package · 51 Orchestrators · 28 MCP Tools (39 target) │
   │       Intelligence Matrix · WorkflowEngine FSM · URS          │
   │                                                               │
@@ -346,4 +346,4 @@ CORTEX learns and adapts to your company's specific standards, domains, and patt
 
 ---
 
-*CORTEX v1.0.0 · February 2026 · Phase 83 Complete · 51 wired orchestrators · 39 MCP tools (28 registered) · 38 CORE rules (+ 2 AC) · 16,942 tests · cortex/core: 15 canonical subdirs · Source of truth: `cortex-registry/planning/cortex-refactor-master.yaml`*
+*CORTEX v1.0.0 · February 2026 · Phase 84 Complete · 51 wired orchestrators · 39 MCP tools (28 registered) · 38 CORE rules (+ 2 AC) · 16,942 tests · cortex/core: 15 canonical subdirs · Source of truth: `cortex-registry/cortex-master.yaml`*

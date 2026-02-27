@@ -4,7 +4,7 @@
 title: FAQ — LENS & Intelligence
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/lens/ + cortex/intelligence/
 order: 4
 ---
@@ -181,4 +181,4 @@ LENS doesn't make governance decisions — it provides the data. Governance deci
 
 ---
 
-*Verified against `cortex/lens/` + `cortex/intelligence/` · 25 February 2026 · Phase 83 Complete*
+*Verified against `cortex/lens/` + `cortex/intelligence/` · 25 February 2026 · Phase 84 Complete*

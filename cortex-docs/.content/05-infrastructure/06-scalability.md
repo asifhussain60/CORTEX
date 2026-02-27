@@ -4,7 +4,7 @@
 title: Scalability & Resilience Patterns
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/infrastructure/
 order: 6
 ---

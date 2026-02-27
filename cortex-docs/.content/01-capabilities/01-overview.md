@@ -4,13 +4,13 @@
 title: CORTEX Capabilities — Complete Platform Inventory
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml + .github/copilot-instructions.md
 format: diátaxis-explanation
 order: 1
 ---
 
-> **Notice:** All capabilities listed here are verified against the live codebase as of 25 February 2026 (Phase 83 Complete — 79-D phases complete). Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package.
+> **Notice:** All capabilities listed here are verified against the live codebase as of 27 February 2026 (Phase 84 Complete — stub elimination). Counts, module paths, and orchestrator names are validated against running code. The Cohesive Brain Refactor consolidated 3 packages → 1 canonical `cortex` package. Phase 85 (Response+Engagement) and Phase 86 (Multi-Stack Debug Pipeline) are PLANNED.
 
 ---
 
@@ -26,6 +26,8 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 51 wired orchestrators, 4 tiers (17 core, 7 domain, 23 support, 4 git) |
 | 5 | **🛡️ Governance** | Immune system — blocks threats automatically | 38 CORE rules, CORE-064, CORE-055 |
 | 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
+
+**Planned additions (Phase 85 + 86):** Orchestrator Engagement Visibility (breadcrumb, timeline, roadmap blocks) and Multi-Stack Debugging (8 strategies, Vision API, unified intelligence wiring).
 
 ---
 
@@ -59,6 +61,9 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | Workflow Templates | Extensibility | `cortex-registry/workflows/templates/` | ✅ |
 | Enterprise Patterns (9) | Extensibility | `cortex-registry/patterns/` | ✅ |
 | **WorkItemProvider (ADO/Jira/custom)** | **Extensibility** | `cortex/repositories/` + `cortex/mcp/tools/work_item_tool.py` | ✅ |
+| **Multi-Stack Debugging (8 strategies)** | **Extensibility** | `cortex/orchestrators/support/debugging/strategies/` + `DebuggerOrchestrator` | ⚪ Phase 86 |
+| **Orchestrator Engagement Visibility** | **Core** | `BLOCK-ENGAGEMENT-BREADCRUMB` + `BLOCK-ENGAGEMENT-TIMELINE` + `BLOCK-PHASE-ROADMAP` | ⚪ Phase 85 |
+| **Unified Reinforcement Signal (URS)** | **Intelligence** | `cortex/intelligence/learning/` + `cortex_learning` MCP tool | ✅ Phase 83 |
 
 ---
 

@@ -4,7 +4,7 @@
 title: FAQ — Orchestration & Architecture
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 order: 2
 ---
@@ -191,4 +191,4 @@ Audit failures (SQLite write errors) are explicitly non-blocking — a broken au
 
 ---
 
-*Verified against `cortex/orchestrators/` · 25 February 2026 · Phase 83 Complete*
+*Verified against `cortex/orchestrators/` · 25 February 2026 · Phase 84 Complete*

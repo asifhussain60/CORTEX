@@ -1,15 +1,18 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-27 (Total Recall — production readiness refactor) | ## About CORTEX
+**Updated:** 2026-02-27 (Phase 84 complete — stub elimination; Phase 85/86 planned) | ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
 - **51 Wired Orchestrators** across 4 tiers (core, domain, support, git) — all satisfy IOrchestrator protocol
-- **39 MCP Tools** in `cortex/mcp/tools/` via Pylance-style stdio server (auto-starts with VS Code) — 28 registered in `mcp_registry.py` as of 2026-02-26; 11 planned in active phases
+- **39 MCP Tools target** in `cortex/mcp/tools/` via Pylance-style stdio server — 28 registered in `mcp_registry.py`; 11 planned toward target (Phase 85/86 add zero new tools — pure wiring + template work)
 - **38 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
 - **LENS Analysis** — workspace-aware code intelligence (Language → Examination → Navigation → Synthesis)
+- **Unified Reinforcement Signal (URS)** — Phase 83: closed-loop learning across all orchestrators via `cortex_learning` MCP tool
+- **Multi-Stack Debug Pipeline** — Phase 86: 8 injection strategies (3 existing + 5 new: Frontend/HTML-Vision/API/SQL/DotNet), Vision API, multi-language auto-cleanup, OPJMixin wiring for DebuggerOrchestrator
+- **Orchestrator Engagement Visibility** — Phase 85: BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP; unified progress template (phase-list+bar mandatory)
 - **1 Canonical Package** — all imports use `cortex.*` (no `cortex_intelligence`, `cortex_lens`, or `cortex.brain`)
 - **LLM-Orchestration Architecture** — CORTEX orchestrates the host LLM (GitHub Copilot/GPT) as the AI engine; it does not embed ML models. Intelligence features (test generation, blind-spot detection, knowledge synthesis) are heuristic + LLM-delegated pipelines, not standalone neural networks.
 
@@ -21,11 +24,12 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 |---|---|
 | Package | `cortex` (single canonical) |
 | Orchestrators | 51 wired in `cortex/orchestrators/` (17 core, 7 domain, 23 support, 4 git) |
-| MCP Tools | 39 target in `cortex/mcp/tools/` — 28 registered in `mcp_registry.py` (2026-02-26) |
+| MCP Tools | 28 registered in `mcp_registry.py`; 39 target in `cortex/mcp/tools/` |
 | Top-level Dirs | 20 under `cortex/` |
 | Governance Rules | 38 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
 | Test Suite | 16,942 tests (486 golden, 177 phase) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
+| Phases Complete | 84 of 86 — Phase 85 (Response+Engagement) + Phase 86 (Multi-Stack Debug) PLANNED |
 
 ---
 
@@ -179,8 +183,14 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 | `/totalrecall` | Holistic production readiness refactor (7-phase protocol) | 7 phases |
 | `/sync target={path}` | One-way privacy-safe sync: CORTEX → company folder | — |
 | `/debug {path}` | Multi-stack debug: inject → capture → analyze → fix-plan → cleanup | 5 phases |
-| `/debug-inject {path}` | Insert CORTEX_DEBUG markers (8 strategies) | INJECT |
-| `/debug-cleanup` | Remove all CORTEX_DEBUG markers (production-ready) | CLEANUP |
+| `/debug-inject {path}` | Insert CORTEX_DEBUG markers (8 strategies: 3 Python + 5 multi-stack) | INJECT |
+| `/debug-cleanup` | Remove all CORTEX_DEBUG markers across all languages | CLEANUP |
+
+**Phase 85 — Response Format (canonical):** Every progress display uses the **phase-list+bar** format (not bar-only). SSOT: `.github/templates/cortex-response-templates.md`. Engagement blocks: `BLOCK-ENGAGEMENT-BREADCRUMB` (routing chain, always rendered), `BLOCK-ENGAGEMENT-TIMELINE` (collapsible timing), `BLOCK-PHASE-ROADMAP` (full journey at operation start).
+
+**Phase 86 — Debug strategies (8 total):**
+- `TestFailureStrategy`, `RefactorRegressionStrategy`, `GovernanceViolationStrategy` — existing Python strategies
+- `FrontendConsoleStrategy` (JS/TS/React/Angular/Vue), `HtmlVisionMappingStrategy` (Vision API + DOM), `ApiTraceStrategy` (REST/GraphQL/gRPC), `SqlTraceStrategy` (SQL Server/Oracle/PostgreSQL), `DotNetTraceStrategy` (C#/.NET) — Phase 86 additions
 
 ### `/audit fix` — 9-Stage Pipeline (canonical single command for production readiness)
 

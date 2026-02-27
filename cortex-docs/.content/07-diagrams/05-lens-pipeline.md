@@ -4,7 +4,7 @@
 title: LENS Analysis Pipeline Diagram
 type: diagram
 audience: [Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/lens/
 order: 5
 ---

@@ -4,7 +4,7 @@
 title: How CORTEX Works — End-to-End Request Lifecycle
 type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/core/ + cortex/mcp/ + cortex/lens/
 phases_complete: [Phase 58, Phase 60, Phase 65, Phase 67]
 format: 10k-view

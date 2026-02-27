@@ -135,7 +135,7 @@ order: 99
 
 **Red-Green-Refactor (RGR)** — The two-level quality cycle in CORTEX. **Level 1 (Unit RGR):** TDDOrchestrator enforces RED (write failing test) → GREEN (implement minimum) → REFACTOR (clean up) for each feature/fix. **Level 2 (Sweep RGR):** SweepCatalogueOrchestrator runs DETECT (scan codebase) → FIX (apply remediation) → RESCAN (verify exhaustive coverage) loops until p0==0 and p1==0 (CORE-064). The two levels compose: unit RGR runs inside sweep RGR for comprehensive quality assurance. See also: TDD, CORE-064.
 
-**Refactor Master** — Strategic planning document defining all 12 phases of the Cohesive Brain Refactor. File: `cortex-registry/planning/cortex-refactor-master.yaml`.
+**Refactor Master** — Strategic planning document defining all phases of the CORTEX refactor. File: `cortex-registry/cortex-master.yaml` (thin index, ≤500 lines). Detail lives in `cortex-registry/_cortex-master/phases/`.
 
 **ReinforcementEngine** — Core engine that receives `ReinforcementSignal` emissions, adjusts pattern confidence scores, and manages the promote/quarantine/decay lifecycle. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
 
@@ -205,4 +205,4 @@ order: 99
 
 ---
 
-*Verified against live CORTEX codebase · 27 February 2026 (Phase 83 Complete)*
+*Verified against live CORTEX codebase · 27 February 2026 (Phase 84 Complete)*

@@ -4,7 +4,7 @@
 title: Domain Orchestrators — Business-Vertical Specialization
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/domain/
 order: 5
 ---
@@ -13,11 +13,11 @@ order: 5
 
 ---
 
-## Domain Tier (6 Wired Orchestrators)
+## Domain Tier (7 Wired Orchestrators)
 
 **Location:** `cortex/orchestrators/domain/`
 
-All 6 domain orchestrators implement `IOrchestrator` via `OrchestratorProtocolMixin`.
+All 7 domain orchestrators implement `IOrchestrator` via `OrchestratorProtocolMixin`.
 
 | Class | Path | Description |
 |-------|------|-------------|
@@ -27,6 +27,7 @@ All 6 domain orchestrators implement `IOrchestrator` via `OrchestratorProtocolMi
 | **SDLCWorkflowOrchestrator** | `domain/sdlc_workflow_orchestrator.py` | SDLC Intelligence Engine — template selection, knowledge hydration, FSM execution (Phase 79-D) |
 | **DashboardOrchestrator** | `domain/dashboard_orchestrator.py` | Static dashboard generation — landing pages, per-repo dashboards, SQLite-backed metrics |
 | **EnhancedPlanningOrchestrator** | `domain/enhanced_planning_orchestrator.py` | Advanced planning with ROI scoring, wave decomposition, and audit-driven auto-planning |
+| **ServiceDecompositionOrchestrator** | `domain/service_decomposition_orchestrator.py` | Monolith decomposition — bounded context identification, dependency graph, migration planning |
 
 ---
 
@@ -87,4 +88,4 @@ Key capabilities enforcing CORE-035 (single canonical implementation):
 
 ---
 
-*Verified against `cortex/orchestrators/domain/` · 25 February 2026 · Phase 83 complete · 6 domain orchestrators*
+*Verified against `cortex/orchestrators/domain/` · 25 February 2026 · Phase 84 complete · 6 domain orchestrators*

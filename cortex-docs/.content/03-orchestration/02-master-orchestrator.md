@@ -4,7 +4,7 @@
 title: MasterOrchestrator — The Executive Coordinator
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/core/master_orchestrator.py
 order: 2
 ---
@@ -99,4 +99,4 @@ Markers persist to `.cortex-runtime/traces/orchestrator-traces.db` (schema: `aud
 
 ---
 
-*Verified against `cortex/orchestrators/core/master_orchestrator.py` · 25 February 2026 · Phase 83 complete · 51 wired orchestrators (17 core, 7 domain, 23 support, 4 git)*
+*Verified against `cortex/orchestrators/core/master_orchestrator.py` · 25 February 2026 · Phase 84 complete · 51 wired orchestrators (17 core, 7 domain, 23 support, 4 git)*

@@ -4,7 +4,7 @@
 title: CORTEX Orchestration — 51 Wired Orchestrators Across 4 Tiers
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 phases_complete: [Phase 59, Phase 60, Phase 79-D, Phase 68, Phase 69, Phase 82]
 order: 1

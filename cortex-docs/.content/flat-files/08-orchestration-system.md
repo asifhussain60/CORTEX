@@ -8,7 +8,7 @@ consolidates:
   - 03-orchestration-end-to-end-flow.md
   - 03-orchestration-cross-orchestrator.md
   - 03-orchestration-request-rephrase.md
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 audience: [Business Leaders, Product Owners, Software Developers]
 ---
@@ -195,4 +195,52 @@ Markers persist to `.cortex-runtime/traces/orchestrator-traces.db`. Schema inclu
 
 ---
 
-*All orchestrator counts and file paths verified against live codebase — 26 February 2026*
+*All orchestrator counts and file paths verified against live codebase — 27 February 2026*
+
+---
+
+## Orchestrator Engagement Visibility (Phase 85 PLANNED)
+
+CORTEX's orchestrators have always emitted detailed audit traces — but those traces lived in SQLite, invisible to users during a session. Phase 85 surfaces engagement through three composable blocks:
+
+| Block | Purpose | When Rendered |
+|-------|---------|--------------|
+| `BLOCK-ENGAGEMENT-BREADCRUMB` | Routing chain — always visible | Every response |
+| `BLOCK-ENGAGEMENT-TIMELINE` | Collapsible orchestrator timing panel | Multi-step operations |
+| `BLOCK-PHASE-ROADMAP` | Full phase overview at operation start | `/audit fix`, `/totalrecall`, multi-phase ops |
+
+**Breadcrumb format (example):**
+```
+Route: IntentRouter → MasterOrchestrator → TDDOrchestrator → EnforcementOrchestrator
+```
+
+**Progress format (phase-list+bar — mandatory from Phase 85):**
+```
+⚙️ [████████░░] 80% — Stage 4 of 5
+
+1. ✅ Environment check       (1.2s)
+2. ✅ Governance pre-flight   (3.4s)
+3. ✅ LENS analysis           (0.8s)
+4. 🔵 Wiring validation       (running…)
+5. ⚪ Test gate               —
+```
+
+**SSOT:** `.github/templates/cortex-response-templates.md`. No prompt or agent duplicates these rules inline — they pointer-reference the SSOT.
+
+---
+
+## DebuggerOrchestrator — Multi-Stack Debugging (Phase 86 PLANNED)
+
+`DebuggerOrchestrator` at `cortex/orchestrators/support/debugger_orchestrator.py` is an EventBus-driven coordinator that uses a **Strategy Pattern** to apply language-specific debug injection without modifying the orchestrator core.
+
+**Currently live:** 3 Python strategies (`TestFailureStrategy`, `RefactorRegressionStrategy`, `GovernanceViolationStrategy`)  
+**Phase 86 adds:** 5 multi-stack strategies (Frontend/HTML-Vision/API/SQL/DotNet) + Vision API + multi-language `AutoCleanupManager` + unified intelligence wiring
+
+**Commands:**
+- `/debug {path}` — full cycle: detect stack → inject → capture → analyze → fix-plan
+- `/debug-inject {path}` — injection only
+- `/debug-cleanup` — production-safe removal of all markers
+
+**Intelligence wiring gaps closed in Phase 86:** OPJMixin (learning persistence), URS signals (reinforcement feedback), IntelligenceMatrix cells CC-021/IC-021, bidirectional EventBus publish, and KnowledgeSynthesisEngine pattern capture.
+
+See `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml` for the full 16-gap catalogue.

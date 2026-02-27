@@ -6,7 +6,7 @@ consolidates:
   - 01-capabilities-ai-intelligence.md
   - 01-capabilities-decisioning.md
   - 01-capabilities-extensibility.md
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/core/ + cortex/mcp/ + cortex/intelligence/ + cortex/lens/
 audience: [Business Leaders, Product Owners, Software Developers]
 ---
@@ -205,4 +205,82 @@ Create a YAML file in `cortex-registry/patterns/` defining pattern signatures, s
 
 ---
 
-*All paths and counts verified against live codebase — 26 February 2026*
+## 7. Multi-Stack Debugging — The Diagnostic Layer (Phase 86 PLANNED)
+
+CORTEX's debugging capability extends well beyond Python. The `DebuggerOrchestrator` uses a **Strategy Pattern** so that the same inject → capture → analyze → fix-plan → cleanup workflow applies universally to any language or runtime.
+
+**Business Leader:** "When any part of a system breaks — JavaScript UI, REST API, SQL query, or C# service — CORTEX injects traceable markers, captures runtime output, and produces a prioritized fix plan. No manual log trawling."
+
+**Product Owner:** "Eight debugging strategies cover the entire modern stack. Three Python strategies are live today. Five multi-language strategies (JavaScript/TypeScript, HTML/Vision, API tracing, SQL, C#/.NET) are planned in Phase 86."
+
+**Developer:** "Each strategy implements `AbstractInjectionStrategy`. The `MarkerInjectionEngine` selects strategies by detected stack. Markers are unique per session, fully reversible via `AutoCleanupManager`, and emit structured output captured by the analyze phase."
+
+### 8 Strategies (3 Live + 5 Phase 86 PLANNED)
+
+| Strategy | Stack | Status |
+|----------|-------|--------|
+| TestFailureStrategy | Python — pytest/unittest | ✅ Live |
+| RefactorRegressionStrategy | Python — refactor sessions | ✅ Live |
+| GovernanceViolationStrategy | Python — CORE rule checks | ✅ Live |
+| FrontendConsoleStrategy | JavaScript/TypeScript/React/Angular/Vue | ⚪ Phase 86 |
+| HtmlVisionMappingStrategy | HTML + Vision API screenshot → DOM | ⚪ Phase 86 |
+| ApiTraceStrategy | REST/GraphQL/gRPC middleware | ⚪ Phase 86 |
+| SqlTraceStrategy | SQL Server/Oracle/PostgreSQL query plans | ⚪ Phase 86 |
+| DotNetTraceStrategy | C#/.NET ILogger entry/exit | ⚪ Phase 86 |
+
+### Commands
+
+| Command | What It Does |
+|---------|-------------|
+| `/debug {path}` | Full cycle: inject → capture → analyze → fix-plan |
+| `/debug-inject {path}` | Insert CORTEX_DEBUG markers only |
+| `/debug-cleanup` | Remove all markers, leave code production-ready |
+
+### Unified Intelligence Wiring (Phase 86 PLANNED)
+
+Phase 86 also wires `DebuggerOrchestrator` into the cross-cutting intelligence layer it was missing:
+- **OPJMixin** — persists debug session outcomes for learning
+- **URS signals** — fix rates and time-to-resolve feed the reinforcement loop
+- **IntelligenceMatrix cells** (CC-021/IC-021) — debugger becomes queryable by other orchestrators
+- **Bidirectional EventBus** — debug insights and fix patterns published to the event mesh
+- **KnowledgeSynthesisEngine** — recurring error signatures captured for cross-session knowledge
+
+---
+
+## 8. Response Templates and Orchestrator Engagement (Phase 85 PLANNED)
+
+CORTEX's response format is not cosmetic — it is a governance contract. Every response must follow the canonical template defined in `.github/templates/cortex-response-templates.md`.
+
+**Business Leader:** "Every CORTEX response shows which orchestrators handled the request, how long each step took, and where in the overall journey you are. No black-box responses."
+
+**Product Owner:** "Three engagement visibility tiers ensure developers can see routing without being overwhelmed. The breadcrumb is always visible; the timeline is collapsible; the roadmap appears at the start of long operations."
+
+**Developer:** "Use `BLOCK-ENGAGEMENT-BREADCRUMB` for the routing chain, `BLOCK-ENGAGEMENT-TIMELINE` for collapsible timing, and `BLOCK-PHASE-ROADMAP` for multi-phase overview. Progress bars always use the phase-list+bar format (not bar-only)."
+
+### Engagement Block System (Phase 85 PLANNED)
+
+| Block | When Rendered | Content |
+|-------|--------------|---------|
+| `BLOCK-ENGAGEMENT-BREADCRUMB` | Every response | `Route: IR → MasterOrchestrator → {Orchestrator}` |
+| `BLOCK-ENGAGEMENT-TIMELINE` | Multi-step operations | Collapsible `<details>` with per-orchestrator timing |
+| `BLOCK-PHASE-ROADMAP` | Start of `/audit fix`, `/totalrecall`, multi-phase ops | Full phase list with ✅/🔵/⚪ status |
+
+### Progress Format (Phase 85 — Canonical)
+
+All progress displays use **phase-list + bar**, not bar-only:
+
+```
+⚙️ [████████░░] 80% — Stage 4 of 5
+
+1. ✅ Environment check       (1.2s)
+2. ✅ Governance pre-flight   (3.4s)
+3. ✅ LENS analysis           (0.8s)
+4. 🔵 Wiring validation       (running…)
+5. ⚪ Test gate               —
+```
+
+**SSOT:** `.github/templates/cortex-response-templates.md` — all orchestrators reference this single file. Never duplicate progress bar rules inline.
+
+---
+
+*All paths and counts verified against live codebase — 27 February 2026*

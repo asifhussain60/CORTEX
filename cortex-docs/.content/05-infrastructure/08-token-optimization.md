@@ -4,7 +4,7 @@
 title: Token Optimization — Maximizing GitHub Copilot Chat Sessions
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: .github/copilot-instructions.md + .github/prompts/cortex-architect.prompt.md + .github/agents/AGENT-INDEX.md + cortex/core/prompt_agent_integration.py + cortex/core/intelligence_mixin.py
 order: 8
 ---

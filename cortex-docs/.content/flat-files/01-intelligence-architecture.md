@@ -4,7 +4,7 @@
 title: CORTEX Intelligence — Brain Tiers, LENS Integration, and the Intelligence Matrix
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/intelligence/ + cortex/lens/ + cortex/intelligence/cross_cutting/
 consolidates: [00-getting-started-brain-tier-architecture, 00-getting-started-intelligence-matrix, 00-getting-started-cortex-intelligence]
 order: 2
@@ -109,6 +109,8 @@ Fifteen intelligence-providing subsystems form the x-axis, including LENS Analys
 ### Operational Capabilities (y-axis)
 
 Fifteen intelligence-consuming systems form the y-axis, including HierarchicalScanner, BatchProcessor, DomainAdapter, DocGenPlaybook, AuditFixPipeline, EnforcementOrchestrator, VacuumOrchestrator, MCPToolRegistry, SweepCatalogueOrchestrator, TDDOrchestrator, SynthesisEngineBridge, RetrievalOptimizerBridge, TDDStubGenerator, ResponseTemplateHook, and T1T2EnrichmentHooks.
+
+**Phase 86 additions (PLANNED):** `DebuggerOrchestrator` (cells CC-021/IC-021) will be added as an intelligence consumer — enabling the matrix to query debugger capability, health, and readiness, and allowing debug insights to flow into the intelligence layer via OPJMixin, URS, and KnowledgeSynthesisEngine.
 
 ### Critical Wired Connections
 

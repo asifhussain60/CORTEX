@@ -4,7 +4,7 @@
 title: CORTEX Response Template Engine
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: .github/templates/cortex-response-templates.md + cortex-registry/artifacts/templates/responses/response-templates.yaml + cortex-registry/workflows/templates/governance/copilot-chat-response-template.yaml
 order: 10
 ---

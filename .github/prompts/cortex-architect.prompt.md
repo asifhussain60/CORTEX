@@ -151,20 +151,22 @@ cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 | HEALTH | 🩺 | "/health", "health check", "orchestrator status" | HealthOrchestrator | ⚪ | `cortex-auditor.md` |
 | DEBUG | 🐛 | "debug", "trace", "diagnose" | DebugOrchestrator | ✅ | `cortex-debugger.md` |
 
-### 🐛 DEBUG MODE — Multi-Stack Debug Pipeline (Phase 86)
+### 🐛 DEBUG MODE — Multi-Stack Debug Pipeline (Phase 86 PLANNED)
 
 **Trigger:** "debug", "trace", "diagnose", `/debug`, `/debug-inject`, `/debug-cleanup`
 
-**Strategy Pattern:** 8 strategies registered in `MarkerInjectionEngine` — 3 existing + 5 Phase 86:
-- **FrontendConsoleStrategy** — JS/TS/React/Angular/Vue console.log + DOM event tracing
-- **HtmlVisionMappingStrategy** — Vision API screenshot → CSS selector → HTML element correlation
-- **ApiTraceStrategy** — REST/GraphQL/gRPC request/response + header + timing injection
-- **SqlTraceStrategy** — SQL Server/Oracle/PostgreSQL query plan + parameter + execution tracing
-- **DotNetTraceStrategy** — C#/.NET method entry/exit + DI + middleware + async tracing
+**Current:** 3 Python strategies live. 5 multi-stack strategies PLANNED in Phase 86.
 
-**Workflow Template:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml`
-**Phase Spec:** `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml`
-**Auto-Cleanup:** `AutoCleanupManager` with per-language strip patterns (Python/JS/TS/C#/SQL/HTML)
+**Strategy Pattern:** 8 strategies registered in `MarkerInjectionEngine` — 3 existing + 5 Phase 86 PLANNED:
+- **FrontendConsoleStrategy** — JS/TS/React/Angular/Vue console.log + DOM event tracing *(Phase 86 PLANNED)*
+- **HtmlVisionMappingStrategy** — Vision API screenshot → CSS selector → HTML element correlation *(Phase 86 PLANNED)*
+- **ApiTraceStrategy** — REST/GraphQL/gRPC request/response + header + timing injection *(Phase 86 PLANNED)*
+- **SqlTraceStrategy** — SQL Server/Oracle/PostgreSQL query plan + parameter + execution tracing *(Phase 86 PLANNED)*
+- **DotNetTraceStrategy** — C#/.NET method entry/exit + DI + middleware + async tracing *(Phase 86 PLANNED)*
+
+**Workflow Template:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml` *(Phase 86 PLANNED)*  
+**Phase Spec:** `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml`  
+**Auto-Cleanup:** `AutoCleanupManager` with per-language strip patterns — Python live; JS/TS/C#/SQL/HTML planned (Phase 86)
 
 ---
 ## 🔎 AUDIT MODE — Production Readiness Scanner

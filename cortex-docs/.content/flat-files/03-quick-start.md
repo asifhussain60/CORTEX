@@ -4,7 +4,7 @@
 title: CORTEX Quick Start — First Request in 5 Minutes
 type: how-to
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: .vscode/settings.json + cortex/mcp/
 consolidates: [00-getting-started-quick-start]
 order: 3

@@ -4,7 +4,7 @@
 title: 17 Wired Orchestrators Across 3 Tiers
 type: diagram
 audience: [Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/*-wiring.yaml
 order: 4
 ---

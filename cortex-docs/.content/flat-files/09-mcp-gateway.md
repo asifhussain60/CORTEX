@@ -7,7 +7,7 @@ consolidates:
   - 04-mcp-integration.md
   - 04-mcp-versioning.md
   - 04-mcp-work-item-integration.md
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/mcp/ + .vscode/settings.json
 audience: [Business Leaders, Product Owners, Software Developers]
 ---

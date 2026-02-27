@@ -4,7 +4,7 @@
 title: CORTEX AI & Intelligence — LENS + Brain Architecture
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/lens/ + cortex/intelligence/provider.py
 order: 3
 ---

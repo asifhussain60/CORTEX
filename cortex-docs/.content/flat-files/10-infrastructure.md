@@ -8,7 +8,7 @@ consolidates:
   - 05-infrastructure-observability.md
   - 05-infrastructure-scalability.md
   - 05-infrastructure-ado-integration.md
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/infrastructure/ + deployment/ + cortex/observability/
 audience: [Business Leaders, Product Owners, Software Developers]
 ---

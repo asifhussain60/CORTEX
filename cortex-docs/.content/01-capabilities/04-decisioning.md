@@ -4,7 +4,7 @@
 title: CORTEX Decisioning — Intent Routing & TDD Enforcement
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/orchestrators/core/intent_router.py + cortex/orchestrators/core/tdd_orchestrator.py
 order: 4
 ---

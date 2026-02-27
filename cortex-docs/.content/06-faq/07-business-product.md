@@ -4,7 +4,7 @@
 title: FAQ — Business & Product
 type: reference
 audience: [Business Leaders, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 order: 7
 ---
@@ -171,4 +171,4 @@ Air-gapped environments are fully supported for the core CORTEX workflow.
 
 ---
 
-*Verified against live codebase · 25 February 2026 · Phase 83 Complete — All 67 Phases Done*
+*Verified against live codebase · 25 February 2026 · Phase 84 Complete — Stub Elimination (Phase 85/86 PLANNED)*

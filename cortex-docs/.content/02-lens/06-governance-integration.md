@@ -4,7 +4,7 @@
 title: LENS + Governance — Intelligence-Driven Rule Enforcement
 type: explanation
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/lens/ + cortex/orchestrators/core/enforcement_orchestrator.py
 order: 6
 ---

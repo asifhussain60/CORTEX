@@ -4,7 +4,7 @@
 title: CORTEX — Cognitive Real-Time Execution Platform
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml
 consolidates: [00-getting-started-one-pager, 00-getting-started-how-cortex-works, 00-getting-started-key-concepts, 00-getting-started-inventory]
 order: 1

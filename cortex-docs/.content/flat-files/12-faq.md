@@ -8,7 +8,7 @@ consolidates:
   - 06-faq-mcp-integration.md
   - 06-faq-testing-workflow.md
   - 06-faq-business-product.md
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 audience: [Business Leaders, Product Owners, Software Developers]
 ---

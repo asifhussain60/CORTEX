@@ -4,7 +4,7 @@
 title: CORTEX Key Concepts — Terminology for New Readers
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 phases_complete: [Phase 65, Phase 66, Phase 67, Phase 68, Phase 69]
 format: 10k-view

@@ -10,7 +10,7 @@ format: diátaxis-explanation
 voice: third-person-blended
 ---
 
-> **Notice:** This documentation represents CORTEX as verified against live code on 26 February 2026 (Phase 83 Complete — Unified Reinforcement Signal). All metrics, module paths, and counts are validated against the running codebase.
+> **Notice:** This documentation represents CORTEX as verified against live code on 27 February 2026 (Phase 84 Complete — Stub Elimination). All metrics, module paths, and counts are validated against the running codebase. Phase 85 (Unified Response Templates + Orchestrator Engagement) and Phase 86 (Multi-Stack Debug Pipeline) are PLANNED.
 
 ---
 
@@ -29,7 +29,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-## System Metrics (26 Feb 2026 — Phase 83 Complete)
+## System Metrics (27 Feb 2026 — Phase 84 Complete)
 
 | Metric | Value | Status |
 |--------|-------|--------|
@@ -43,6 +43,9 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | **Enterprise Patterns** | 9 patterns in registry | ✅ mediator, strategy, observer, factory, etc. |
 | **Sweep Completeness** | CORE-064 enforced via SweepCatalogueOrchestrator | ✅ No partial sweeps across sessions |
 | **URS (Phase 83)** | Unified Reinforcement Signal — closed-loop learning | ✅ 10 wired surfaces, `cortex_learning` MCP tool |
+| **Stub Elimination (Phase 84)** | 29 hollow stubs replaced with real delegation | ✅ All 29 GAPs CLOSED |
+| **Response+Engagement (Phase 85)** | Unified progress + engagement visibility blocks | ⚪ PLANNED |
+| **Multi-Stack Debug (Phase 86)** | 8 strategies, Vision API, OPJ/URS/Matrix wiring | ⚪ PLANNED |
 
 ---
 
@@ -124,5 +127,5 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 
 ---
 
-*CORTEX v1.0.0 (Phase 83 Complete) · 27 February 2026 · 51 wired orchestrators · 39 MCP tools (28 registered) · 38 CORE rules · 16,942 tests · 486 golden · Source of truth: `cortex-registry/cortex-master.yaml`*
+*CORTEX v1.0.0 (Phase 84 Complete) · 27 February 2026 · 51 wired orchestrators · 39 MCP tools (28 registered) · 38 CORE rules · 16,942 tests · 486 golden · Source of truth: `cortex-registry/cortex-master.yaml`*
 

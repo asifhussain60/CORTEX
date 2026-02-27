@@ -172,7 +172,13 @@ sweep_catalogue:
       cortex-docs/.content/03-orchestration/06-cross-orchestrator.md mentions
       inter-orchestrator communication but not engagement visibility.
     action_ref: "phase-85-e"
-    status: OPEN
+    status: IN_PROGRESS
+    progress_note: |
+      2026-02-27: Holistic doc alignment sweep:
+      - flat-files/04-capabilities.md: Added Section 8 (Response Templates + Orchestrator Engagement) — covers BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP, phase-list+bar format, SSOT pointer
+      - flat-files/08-orchestration-system.md: Added "Orchestrator Engagement Visibility (Phase 85 PLANNED)" section with block table, breadcrumb format example, progress format example
+      - .content/01-capabilities/01-overview.md: Added Orchestrator Engagement Visibility row to capability matrix
+      Remaining: Phase 85-a through 85-d implementation + cortex-registry YAML registry update + Pasted Image cleanup (GAP-85-12)
 
   - id: "GAP-85-12"
     title: "Remove all 'Pasted Image' pattern references — rendering artifact cleanup"
@@ -702,6 +708,14 @@ phases:
       - "Phase-85 detail file moved: planned/ → completed/"
       - "cortex-master.yaml entry updated to status: COMPLETE"
       - "cortex-master.yaml remains ≤500 lines (THIN INDEX CONTRACT)"
+      # ── MANDATORY PROMPT/AGENT/DOCS ALIGNMENT GATE ──────────────────────
+      # This gate is non-negotiable per CORE-064 + copilot-instructions.md alignment sweep
+      - "copilot-instructions.md: Phase 85 status updated from PLANNED to COMPLETE"
+      - "cortex-architect.prompt.md: Phase 85 progress template section updated, no duplicate bar-only examples remain"
+      - "AGENT-INDEX.md: Architecture Quick Reference row for 'Response Format' updated to ✅"
+      - "cortex-docs/.content flat-files: GAP-85-11 status changed to CLOSED"
+      - "cortex-docs: Zero references to 'bar-only' progress format without phase-list"
+      - "python3 scripts/validate-architecture-counts.py: ALL CHECKS PASSED"
 
     completion_gate:
       test_runner_command: "python3 scripts/run_tests.py smoke"

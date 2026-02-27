@@ -152,7 +152,8 @@ sweep_catalogue:
       Agent spec documents injection points per language but does not reference
       the canonical strategy classes or the debugging workflow template.
     action_ref: "phase-86-f"
-    status: OPEN
+    status: IN_PROGRESS
+    progress_note: "cortex-debugger.md updated 2026-02-27: Phase 86 PLANNED labels added, unified intelligence wiring table added (GAPs 86-11 through 86-15), Vision API stub→real note added. Remaining: update after sub-phases A-E complete to mark strategies ✅."
 
   - id: "GAP-86-10"
     title: "Prompt and management file updates — phase counts, debug mode references"
@@ -163,7 +164,8 @@ sweep_catalogue:
       copilot-instructions.md, cortex-architect.prompt.md, AGENT-INDEX.md
       must reflect new debugging workflow template category.
     action_ref: "phase-86-f"
-    status: OPEN
+    status: IN_PROGRESS
+    progress_note: "copilot-instructions.md updated 2026-02-27: Phase 85/86 capabilities added, debug strategy count updated (8 total), /debug-inject note updated. AGENT-INDEX.md updated: Phase 86 PLANNED label in cortex-debugger.md entry, URS+Debug rows added to Architecture Quick Reference. cortex-architect.prompt.md: Phase 86 debug mode section already present. Remaining: final count update after phase COMPLETE."
 
   # ── UNIFIED INTELLIGENCE WIRING GAPs (Expanded Scope — 2026-02-27) ──────
   - id: "GAP-86-11"
@@ -245,7 +247,16 @@ sweep_catalogue:
       cortex-docs/.content/01-capabilities/01-overview.md capability matrix does
       not include multi-stack debugging as a capability row.
     action_ref: "phase-86-f"
-    status: OPEN
+    status: IN_PROGRESS
+    progress_note: |
+      2026-02-27: Holistic doc alignment sweep complete:
+      - flat-files/08-orchestration-system.md: Added DebuggerOrchestrator engagement section + Phase 86 debug pipeline section
+      - flat-files/04-capabilities.md: Added Section 7 (Multi-Stack Debugging) + Section 8 (Response Templates + Engagement)
+      - flat-files/01-intelligence-architecture.md: Added CC-021/IC-021 Phase 86 note under Operational Capabilities
+      - .content/01-capabilities/01-overview.md: Added multi-stack debugging + URS + Engagement rows to capability matrix
+      - .content/03-orchestration/05-domain-orchestrators.md: Fixed domain tier count 6→7, updated last_verified
+      - .content/index.md: Updated phase notice, system metrics table (Phase 84 complete + Phase 85/86 PLANNED rows)
+      Remaining: Final status update after sub-phases A-G complete (mark ✅ Live for 5 new strategies).
 
 # ─────────────────────────────────────────────────────────────────────────────
 # SEQUENTIAL EXECUTION CONTRACT (MANDATORY)
@@ -756,6 +767,14 @@ phases:
       - "phase-86 detail file moved: planned/ → completed/"
       - "cortex-master.yaml entry updated to status: COMPLETE"
       - "cortex-master.yaml remains ≤500 lines (THIN INDEX CONTRACT)"
+      # ── MANDATORY PROMPT/AGENT/DOCS ALIGNMENT GATE ──────────────────────
+      # This gate is non-negotiable per CORE-064 + copilot-instructions.md alignment sweep
+      - "copilot-instructions.md: Phase 86 status updated from PLANNED to COMPLETE, debug strategy count confirmed 8"
+      - "cortex-debugger.md: All 5 new strategy entries changed from '⚪ Phase 86 PLANNED' to '✅ Phase 86'"
+      - "AGENT-INDEX.md: Architecture Quick Reference 'Debug Strategies' row shows all 8 as ✅"
+      - "cortex-docs/.content flat-files: debug strategy status table updated to show all ✅"
+      - "cortex-docs: CC-021/IC-021 cells confirmed as existing (not PLANNED) in intelligence-architecture.md"
+      - "python3 scripts/validate-architecture-counts.py: ALL CHECKS PASSED"
 
     completion_gate:
       test_runner_command: "python3 scripts/run_tests.py smoke"

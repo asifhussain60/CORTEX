@@ -4,7 +4,7 @@
 title: MCP Tools Catalog — 28 Registered Tools (39 Target)
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/mcp/mcp_registry.py
 order: 3
 ---

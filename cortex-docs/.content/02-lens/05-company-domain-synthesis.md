@@ -4,7 +4,7 @@
 title: Company Domain Synthesis — LENS Company Domain Layer
 type: explanation
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/intelligence/provider.py + cortex/intelligence/knowledge/company_domain_loader.py
 order: 5
 ---

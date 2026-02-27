@@ -4,7 +4,7 @@
 title: Work Item Integration — ADO Plugin & Provider Architecture
 type: how-to
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/repositories/ + cortex/mcp/tools/work_item_tool.py
 phase: Phase 15 — Work Item Provider
 ac_ids: [AC-P15-001, AC-P15-002, AC-P15-003, AC-P15-004, AC-P15-005, AC-P15-006, AC-P15-007, AC-P15-008, AC-P15-009, AC-P15-010]

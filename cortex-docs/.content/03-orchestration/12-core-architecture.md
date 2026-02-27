@@ -4,7 +4,7 @@
 title: CORTEX Core Architecture — Phase 68 Flatten (27→15 Canonical Subdirs)
 type: reference
 audience: [Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/core/ + cortex/core/common/
 phase: Phase 68 (COMPLETE — SWEEP-68-CORE-FLATTEN)
 order: 12
