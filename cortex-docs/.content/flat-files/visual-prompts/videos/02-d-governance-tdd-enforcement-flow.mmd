@@ -1,0 +1,130 @@
+---
+id: 02-d-governance-tdd-enforcement-flow
+title: Governance & TDD Enforcement Pipeline
+purpose: Shows how 38 CORE governance rules are enforced at pre-commit, CI, and runtime with TDD gates — VIDEO 02 hero diagram
+audience: [Software Developers, Tech Leads, Engineering Managers]
+source_of_truth: cortex/governance/ + cortex/orchestrators/core/enforcement_orchestrator.py
+last_verified: 2026-02-27
+diagram_type: Flowchart
+interactive: false
+tier: 2
+learning_sequence: 25
+video_prompt: 02-p-the-trust-layer.md
+video_scene: "Scene 2 — The Shield Wall (governance layers) + Scene 3 — TDD Heartbeat"
+animation_notes: |
+  ## Cinematic Simulation Prompt — 04: Governance & TDD Enforcement
+
+  **SCENE 1 — "The Awakening" (0:00–0:06)**
+  Camera: Static center-frame. Environment: Absolute dark-blue vacuum (#0a0e27).
+  A high-resolution CORTEX logo (cortex-docs/assets/images/cortex-logo-512.png) fades in,
+  centered on a ray-traced glassmorphism floor. An 'electric-aura' animation ignites —
+  concentric cyan (#00d4ff) and purple (#7b61ff) pulse-glows radiate outward, reflecting
+  off the polished glass surface. Volumetric blue fog at floor level. Hold 4s.
+  Logo shrinks to bottom-right watermark (15% opacity).
+
+  **SCENE 2 — "FPV Drone Dive: The Shield Wall" (0:06–0:20)**
+  Camera: FPV drone dives from the logo through volumetric fog into a fortress of
+  three concentric glassmorphism shield walls — each rendered as frosted Deep Cobalt
+  (#1a1f3a) with Midnight Blue (#0a0e27) edges and internal neon filaments:
+  - Inner Shield (Pre-Commit): red (#ff4444) neon filaments — the hardest gate.
+    "Lidar Blue" laser sweep scans the shield surface.
+  - Middle Shield (CI Pipeline): amber (#ffa500) neon filaments — warning tier.
+  - Outer Shield (Runtime Validation): green (#00ff88) neon filaments — continuous guard.
+  Each shield layer activates sequentially with a radial pulse. A bioluminescent
+  code particle (cyan orb with neon light-trail) approaches the Inner Shield.
+  First attempt: particle strikes the Pre-Commit shield — RED flash, particle bounces
+  back with a shockwave ripple across the glass surface (violation detected).
+  The particle reforms, carries a fix patch (green glow overlay), re-approaches —
+  passes through with a green shimmer. Each subsequent shield opens with a magnetic
+  iris animation as the particle passes. Ray-traced reflections on all glass surfaces.
+
+  **SCENE 3 — "TDD Heartbeat: The ECG of Quality" (0:20–0:34)**
+  Camera: Pulls back to reveal a glassmorphism medical monitor below the Shield Wall.
+  An ECG heartbeat line renders in real-time across the screen:
+  - RED peak (#ff4444): frosted glass test capsule materializes — "Write Failing Test"
+    — neon red filaments pulse.
+  - GREEN peak (#00ff88): code capsule materializes — "Implement Minimum" — neon green
+    filaments pulse. The test capsule flashes green (passing).
+  - BLUE peak (#3b82f6): refactor capsule materializes — "Clean Up" — neon blue
+    filaments pulse. Code capsule restructures with a smooth morph animation.
+  The ECG rhythm loops continuously (3 cycles visible). The heartbeat trail is
+  bioluminescent, leaving persistent neon traces. Each peak casts volumetric light
+  onto the surrounding fog.
+
+  **SCENE 4 — "Unified View: Shield Wall + ECG" (0:34–0:44)**
+  Camera: Wide pull-back. Shield Wall (top) and TDD ECG (bottom) merge into a
+  unified glassmorphism panel. The Governance Rules Engine appears center-right:
+  "38 CORE Rules" rendered as a YAML registry inside a frosted glass slab with
+  purple (#7b61ff) neon filaments. EnforcementOrchestrator connects to all three
+  shields via purple neon conduits. SQLite Audit Log renders as a glass database
+  cylinder with amber glow, receiving log entries from every interaction.
+  Business book callouts fade in as glassmorphism info-pills (2-second overlays):
+  "Good to Great: First Who, Then What" — "Checklist Manifesto: Simple checks,
+  complex outcomes."
+
+  **SCENE 5 — "Orbital Reveal" (0:44–0:54)**
+  Camera: 360-degree orbital pan around the combined Shield Wall + TDD ECG architecture.
+  All shields glow at full luminosity. The ECG heartbeat continues its rhythm.
+  Volumetric fog swirls at the base. Ray-traced reflections cascade across every
+  glass surface. Camera completes orbit, pulls back. Architecture fades to 40%.
+  Glassmorphism "Evidence Bundle" icon materializes center-frame — sealed document
+  with cyan checkmark — fades to black.
+related_diagrams:
+  - 04-d-audit-pipeline-stages.mmd
+  - 03-d-golden-test-pyramid-and-security-layers.mmd
+---
+
+```mermaid
+flowchart TD
+    subgraph "Developer Workspace"
+        Code([Code Change]) --> PreCommit{Pre-Commit Hook}
+    end
+
+    subgraph "Shield Wall — Governance Enforcement"
+        PreCommit -->|Pass| CI{CI Pipeline}
+        PreCommit -->|Block| Fix1[Fix Violation]
+        Fix1 --> PreCommit
+
+        CI -->|Pass| Runtime{Runtime Validation}
+        CI -->|Block| Fix2[Fix Violation]
+        Fix2 --> CI
+
+        Runtime -->|Pass| Deploy([Deploy ✅])
+        Runtime -->|Block| Fix3[Fix Violation]
+        Fix3 --> Runtime
+    end
+
+    subgraph "Governance Rules Engine"
+        Rules[38 CORE Rules<br/>YAML Registry]
+        Enforcement[EnforcementOrchestrator]
+        AuditLog[(SQLite Audit Log)]
+        
+        Rules --> Enforcement
+        Enforcement --> PreCommit
+        Enforcement --> CI
+        Enforcement --> Runtime
+        Enforcement --> AuditLog
+    end
+
+    subgraph "TDD Heartbeat (CORE-008)"
+        RED[🔴 RED<br/>Write Failing Test]
+        GREEN[🟢 GREEN<br/>Implement Minimum]
+        BLUE[🔵 REFACTOR<br/>Clean Up]
+        
+        RED --> GREEN
+        GREEN --> BLUE
+        BLUE --> RED
+    end
+
+    Deploy -.->|"Every change validated"| AuditLog
+
+    style PreCommit fill:#E74C3C,stroke:#C0392B,stroke-width:3px,color:#fff
+    style CI fill:#F39C12,stroke:#CA6F1E,stroke-width:3px,color:#fff
+    style Runtime fill:#27AE60,stroke:#1E8449,stroke-width:3px,color:#fff
+    style Deploy fill:#50C878,stroke:#2E7D4E,stroke-width:2px,color:#fff
+    style Rules fill:#9B59B6,stroke:#7D3C98,stroke-width:2px,color:#fff
+    style Enforcement fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#fff
+    style RED fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#fff
+    style GREEN fill:#27AE60,stroke:#1E8449,stroke-width:2px,color:#fff
+    style BLUE fill:#3498DB,stroke:#2874A6,stroke-width:2px,color:#fff
+```

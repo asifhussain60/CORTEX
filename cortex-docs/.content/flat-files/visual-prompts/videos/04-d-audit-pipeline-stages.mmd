@@ -1,0 +1,126 @@
+---
+id: 04-d-audit-pipeline-stages
+title: 9-Stage Audit Pipeline — Production Readiness
+purpose: Visualizes the complete /audit fix pipeline with convergence loop — VIDEO 04 hero diagram
+audience: [Software Engineers, DevOps, Tech Leads]
+source_of_truth: cortex-registry/workflows/templates/audit/audit-fix-pipeline.yaml
+last_verified: 2026-02-27
+diagram_type: Flowchart
+interactive: false
+tier: 2
+learning_sequence: 26
+video_prompt: 04-p-architectural-integrity.md
+video_scene: "Scene 2 — The 9-Stage Pipeline (the entire vertical pipeline with convergence loop)"
+animation_notes: |
+  ## Cinematic Simulation Prompt — 05: 9-Stage Audit Pipeline
+
+  **SCENE 1 — "The Awakening" (0:00–0:06)**
+  Camera: Static center-frame. Environment: Absolute dark-blue vacuum (#0a0e27).
+  A high-resolution CORTEX logo (cortex-docs/assets/images/cortex-logo-512.png) fades in,
+  centered on a ray-traced glassmorphism floor. An 'electric-aura' animation ignites —
+  concentric cyan (#00d4ff) and purple (#7b61ff) pulse-glows radiate outward, reflecting
+  off the polished glass surface. Volumetric blue fog at floor level. Hold 4s.
+  Logo shrinks to bottom-right watermark (15% opacity).
+
+  **SCENE 2 — "FPV Drone Dive: The Vertical Pipeline" (0:06–0:14)**
+  Camera: FPV drone dives from the logo downward through volumetric fog. A vertical
+  glass pipeline materializes — eleven frosted glassmorphism stage chambers stacked
+  top-to-bottom, connected by luminous glass conduits. Each chamber is Deep Cobalt
+  (#1a1f3a) with Midnight Blue (#0a0e27) edges and internal neon filaments.
+  The pipeline appears to float in the vacuum, ray-traced reflections rippling down
+  the glass tower. Background blur: 20px refraction on all surfaces.
+
+  **SCENE 3 — "The Audit Particle Descends" (0:14–0:32)**
+  A bioluminescent cyan orb (audit particle) spawns at "/audit fix" — the entry point
+  at the top. It enters each stage chamber sequentially:
+  - Stage -1 (Environment Readiness): chamber glows green, pass badge materializes.
+  - Stage 0 (Inflight Upgrade): chamber pulses amber, git-fetch animation inside.
+  - Stage 1 (Governance Pre-Flight): "Lidar Blue" laser sweep scans chamber interior.
+  - Stage 2 (19-Point Production Scan) — THE HERO MOMENT: chamber expands to 3×
+    its normal size. A scanning grid of 19 laser beams fans out inside the frosted
+    glass. A violations table materializes as a floating glassmorphism HUD — rows
+    populate one by one (red for P0, amber for P1, blue for P2). The chamber pulses
+    red (#ff4444) — highest drama. Camera pauses here for 4 seconds.
+  - Stages 3–6: particle progresses — Wiring Validation (purple filaments),
+    Health Checks (green filaments, 22 orchestrator heartbeats visible),
+    Vacuum Cleanup (glass debris dissolves), Meta-Audit (purple scan).
+
+  **SCENE 4 — "The Convergence Loop" (0:32–0:46)**
+  Camera: Tracks the particle entering Stages 7-8 — a CIRCULAR GLASS TRACK that
+  branches off the main pipeline. The circular track is frosted glassmorphism with
+  amber (#ffa500) neon filaments. The particle enters the loop:
+  - Iteration 1: Detect → Fix → Rescan. Violation counter HUD shows "12 → 5" (amber glow).
+    The particle orbits once — bioluminescent trail accumulates.
+  - Iteration 2: Fix → Rescan. Counter shows "5 → 1" (amber glow, dimmer).
+    The trail brightens with a second orbital layer.
+  - Iteration 3: Fix → Rescan. Counter shows "1 → 0" — GREEN EXPLOSION: the entire
+    circular track erupts in green (#00ff88) radiance. Volumetric green fog bursts
+    outward. Glassmorphism badge materializes: "p0 == 0 AND p1 == 0" in cyan text.
+  The particle exits the loop back into the main pipeline.
+
+  **SCENE 5 — "Test Gate & Completion" (0:46–0:52)**
+  Stage 9: the final chamber glows green (#00ff88). Full test suite fires — represented
+  as hundreds of tiny bioluminescent orbs racing through the chamber (parallel test
+  execution). AC_COMPLETE marker materializes as a glowing cyan timestamp badge.
+  The entire vertical pipeline illuminates simultaneously — all stages green — a
+  cascade of light from top to bottom. The SQLite audit trail database renders as a
+  glass cylinder to the right, receiving log entries via purple neon conduits.
+
+  **SCENE 6 — "Orbital Reveal" (0:52–1:00)**
+  Camera: 360-degree orbital pan around the complete vertical pipeline + convergence
+  loop. All stages glow at full luminosity. The bioluminescent audit trail persists
+  as a permanent neon path. Volumetric fog swirls at the base. Ray-traced reflections
+  cascade across every glass surface. Camera completes orbit, pulls back.
+  Architecture fades to 40%. Glassmorphism "Evidence Bundle" icon materializes
+  center-frame — sealed document with cyan checkmark — fades to black.
+related_diagrams:
+  - 02-d-governance-tdd-enforcement-flow.mmd
+  - 03-d-golden-test-pyramid-and-security-layers.mmd
+---
+
+```mermaid
+flowchart TD
+    Start(["/audit fix"]) --> S_1["Stage -1<br/>Environment Readiness"]
+    S_1 --> S0["Stage 0<br/>Inflight Upgrade"]
+    S0 --> S1["Stage 1<br/>Governance Pre-Flight"]
+    S1 --> S2["Stage 2<br/>19-Point Production Scan"]
+    S2 --> S3["Stage 3<br/>Wiring Validation"]
+    S3 --> S4["Stage 4<br/>Health Checks (22 orchestrators)"]
+    S4 --> S5["Stage 5<br/>Vacuum Cleanup"]
+    S5 --> S6["Stage 6<br/>Meta-Audit"]
+
+    S6 --> Loop{"Stages 7-8<br/>Convergence Loop"}
+    Loop -->|"P0 > 0 or P1 > 0"| Fix[Auto-Fix Violations]
+    Fix --> Rescan[Re-Scan]
+    Rescan --> Loop
+    Loop -->|"P0 == 0 AND P1 == 0"| S9["Stage 9<br/>Tests + AC_COMPLETE"]
+    S9 --> Done([Production Ready ✅])
+
+    subgraph "Convergence Detail"
+        Iter1["Iteration 1: 12 → 5 violations"]
+        Iter2["Iteration 2: 5 → 1 violations"]
+        Iter3["Iteration 3: 1 → 0 violations"]
+        Iter1 --> Iter2 --> Iter3
+    end
+
+    subgraph "Audit Trail"
+        DB[(SQLite<br/>orchestrator-traces.db)]
+        Sessions[audit_sessions]
+        Stages[audit_stage_log]
+        Violations[audit_violations]
+        DB --- Sessions
+        DB --- Stages
+        DB --- Violations
+    end
+
+    S9 -.->|"Log"| DB
+    Loop -.->|"Log each cycle"| DB
+
+    style Start fill:#50C878,stroke:#2E7D4E,stroke-width:2px,color:#fff
+    style Done fill:#50C878,stroke:#2E7D4E,stroke-width:2px,color:#fff
+    style S2 fill:#E74C3C,stroke:#C0392B,stroke-width:3px,color:#fff
+    style Loop fill:#F39C12,stroke:#CA6F1E,stroke-width:3px,color:#fff
+    style Fix fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style S9 fill:#27AE60,stroke:#1E8449,stroke-width:3px,color:#fff
+    style DB fill:#9B59B6,stroke:#7D3C98,stroke-width:2px,color:#fff
+```

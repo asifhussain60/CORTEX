@@ -1,0 +1,98 @@
+---
+id: 05-d-common-utilities-overview
+title: Tier 1 Common Utilities Architecture — Foundation Layer
+purpose: Shows the foundational utility modules all CORTEX components depend on — VIDEO 05 Scene 2 extension point context
+audience: [Software Developers, Product Owners]
+source_of_truth: cortex/common/__init__.py
+last_verified: 2026-02-27
+diagram_type: C4-Component
+interactive: false
+tier: 1
+learning_sequence: 01
+video_prompt: 05-p-the-collaborative-engine.md
+video_scene: "Scene 2 — Extension Points (shows the stable foundation that extensions build on)"
+animation_notes: |
+  ## Cinematic Simulation Prompt — 07: Tier 1 Foundation Layer
+
+  **SCENE 1 — "The Awakening" (0:00–0:06)**
+  Camera: Static center-frame. Environment: Absolute dark-blue vacuum (#0a0e27).
+  A high-resolution CORTEX logo (cortex-docs/assets/images/cortex-logo-512.png) fades in,
+  centered on a ray-traced glassmorphism floor. An 'electric-aura' animation ignites —
+  concentric cyan (#00d4ff) and purple (#7b61ff) pulse-glows radiate outward, reflecting
+  off the polished glass surface. Volumetric blue fog at floor level. Hold 4s.
+  Logo shrinks to bottom-right watermark (15% opacity).
+
+  **SCENE 2 — "FPV Drone Dive: The Stable Core" (0:06–0:16)**
+  Camera: FPV drone dives from the logo through volumetric fog, descending to the
+  lowest level of the CORTEX architecture — Tier 1 Foundation. Four frosted
+  glassmorphism blocks materialize as the bedrock platform, each rendered in
+  Deep Cobalt (#1a1f3a) with Midnight Blue (#0a0e27) edges:
+  - "Validators" — cyan (#00d4ff) neon filaments pulse inside (schema validation, type checking).
+  - "Exception Hierarchy" — cyan filaments (CortexError, ValidationError).
+  - "File Operations" — cyan filaments (safe I/O, path abstractions).
+  - "Structured Logging" — cyan filaments (correlation IDs, context propagation).
+  All four blocks sit on a shared glassmorphism platform — the immutable foundation.
+  A "Lidar Blue" laser sweep scans across all four blocks simultaneously, confirming
+  structural integrity. Ray-traced reflections cascade off the glass floor. Background
+  blur: 20px refraction on all surfaces.
+
+  **SCENE 3 — "Extensions Grow Above" (0:16–0:30)**
+  Camera: Slow dolly upward. Dependent modules materialize one at a time ABOVE the
+  foundation — Models, Config, Storage, Infrastructure — each as a frosted glass capsule
+  with purple (#7b61ff) neon filaments (higher-tier intelligence). Dependency arrows
+  render as bioluminescent neon conduits connecting each dependent module down to its
+  foundation block. Each arrow leaves a persistent light-trail.
+  Key message materializes as a glassmorphism info-pill floating center-frame:
+  "Extend, Don't Fork — this layer never changes" in Space Grotesk Bold, cyan text
+  on dark pill background (rgba(10, 14, 39, 0.85)). The foundation blocks pulse with
+  a steady, confident cyan heartbeat — emphasizing stability.
+
+  **SCENE 4 — "Extension Points" (0:30–0:40)**
+  Camera: Pulls back to a wide shot. Seven extension point capsules materialize in a
+  semicircle above the dependent modules — each a frosted glass node with unique neon
+  filament colors (matching their domain). Dendrite-like neon connections grow outward
+  from the stable core, reaching the extension points. The foundation blocks remain
+  rock-solid at the bottom — no movement, no change — while the extensions above
+  animate with growth energy.
+
+  **SCENE 5 — "Orbital Reveal" (0:40–0:50)**
+  Camera: 360-degree orbital pan around the complete Foundation + Dependents + Extensions
+  architecture. Foundation blocks glow steady cyan. Extension points pulse with varied
+  domain colors. Volumetric fog swirls at the base. Ray-traced reflections cascade
+  across every glass surface. Camera completes orbit, pulls back.
+  Architecture fades to 40%. Glassmorphism "Evidence Bundle" icon materializes
+  center-frame — sealed document with cyan checkmark — fades to black.
+related_diagrams:
+  - 01-d-c4-container-full-system.mmd
+  - 07-d-orchestrator-dispatch-flow.mmd
+---
+
+```mermaid
+graph TB
+    subgraph "Common Utilities Layer (Tier 1)"
+        validators[Validators<br/>Schema validation<br/>Type checking]
+        exceptions[Exception Hierarchy<br/>CortexError<br/>ValidationError]
+        fileops[File Operations<br/>Safe I/O<br/>Path abstractions]
+        logging[Structured Logging<br/>Correlation IDs<br/>Context propagation]
+    end
+    
+    subgraph "Dependent Modules"
+        models[02-Models]
+        config[03-Config]
+        storage[04-Storage]
+        infrastructure[08-Infrastructure]
+    end
+    
+    validators --> models
+    validators --> config
+    exceptions --> models
+    exceptions --> infrastructure
+    fileops --> storage
+    fileops --> config
+    logging --> infrastructure
+    
+    style validators fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style exceptions fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style fileops fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+    style logging fill:#4A90E2,stroke:#2E5C8A,stroke-width:2px,color:#fff
+```

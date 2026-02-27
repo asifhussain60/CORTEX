@@ -1,0 +1,130 @@
+---
+id: 07-d-c4-component-master-orchestrator
+title: Master Orchestrator Internal Components
+purpose: Detailed view of Master Orchestrator's internal structure and routing logic — VIDEO 07 deep-dive diagram
+audience: [Software Developers]
+source_of_truth: cortex/orchestrators/core/master_orchestrator.py + cortex/intelligence/provider.py
+last_verified: 2026-02-27
+diagram_type: C4-Component
+interactive: false
+tier: 3
+learning_sequence: 23
+video_prompt: 07-p-cross-domain-intelligence.md
+video_scene: "Scene 3 supplement — internal component view when zooming into the Master Orchestrator"
+animation_notes: |
+  ## Cinematic Simulation Prompt — 03a: Master Orchestrator Internals
+
+  **SCENE 1 — "The Awakening" (0:00–0:06)**
+  Camera: Static center-frame. Environment: Absolute dark-blue vacuum (#0a0e27).
+  A high-resolution CORTEX logo (cortex-docs/assets/images/cortex-logo-512.png) fades in,
+  centered on a ray-traced glassmorphism floor. An 'electric-aura' animation ignites —
+  concentric cyan (#00d4ff) and purple (#7b61ff) pulse-glows radiate outward, reflecting
+  off the polished glass surface. Volumetric blue fog at floor level. Hold 4s.
+  Logo shrinks to bottom-right watermark (15% opacity).
+
+  **SCENE 2 — "FPV Drone Dive: Into the Orchestrator" (0:06–0:14)**
+  Camera: Start zoomed out showing the full dispatch flow (07-d-orchestrator-dispatch-flow.mmd)
+  as a distant glassmorphism cityscape. FPV drone accelerates toward the Master Orchestrator
+  node — a large frosted Deep Cobalt (#1a1f3a) cube with purple (#7b61ff) neon filaments
+  pulsing inside. The drone punches through the glass surface (shatter-refraction effect,
+  blur: 20px) and enters the interior. Inside: a vast Midnight Blue (#0a0e27) vacuum
+  space populated with internal component nodes.
+
+  **SCENE 3 — "Component Cascade" (0:14–0:26)**
+  Internal components materialize as frosted glassmorphism capsules, each with neon
+  filaments. Entry Point glows green (#00ff88) — a bioluminescent request particle
+  spawns here, leaving a neon light-trail as it flows:
+  - Entry Point → Request Validator (cyan filament pulse)
+  - Validator → Intent Classifier (particle brightens)
+  - Classifier connects to the Intelligence Layer: four capsules — UIP, CDL, ADOCtx,
+    KGIdx — light up in rapid sequence with cyan (#00d4ff) neon filaments. Each capsule
+    has a "Lidar Blue" laser sweep scanning internal data.
+  - Intelligence Layer feeds Orchestrator Router (amber glow, Deep Cobalt glass)
+
+  **SCENE 4 — "The Routing Decision" (0:26–0:36)**
+  Router fans out five glassmorphism paths to target orchestrators — OnboardingOrch,
+  TDDOrch, PlanningOrch, SweepOrch, Domain Orchestrators. Only ONE path illuminates
+  per request (purple neon filament traces the selected route); the others dim to 20%.
+  The particle travels the selected path, executes, and returns.
+  LearningMixin capsule pulses purple (#7b61ff) on completion — confidence score
+  animates inside as a floating number. ErrorHandler path shown as a dotted red
+  (#ff4444) ghost trail for error cases — particle bounces back with a red flash.
+
+  **SCENE 5 — "Orbital Reveal" (0:36–0:46)**
+  Camera: Pulls out through the glass wall (reverse shatter-refraction). Now outside,
+  360-degree orbital pan around the Master Orchestrator cube. Internal components
+  visible through the frosted glass — all glowing at full luminosity. Ray-traced
+  reflections on surrounding fog. Camera completes orbit, pulls back.
+  Architecture fades to 40%. Glassmorphism "Evidence Bundle" icon materializes
+  center-frame — sealed document with cyan checkmark — fades to black.
+related_diagrams:
+  - 07-d-orchestrator-dispatch-flow.mmd
+  - 01-d-c4-container-full-system.mmd
+---
+
+```mermaid
+graph TB
+    subgraph "Master Orchestrator Components"
+        Entry[Request Entry Point]
+        Validator[Request Validator]
+        IntentClass[Intent Classifier]
+        Router[Orchestrator Router]
+        Registry[Orchestrator Registry]
+        Dispatcher[Execution Dispatcher]
+        LearningMixin[Learning Mixin]
+        ErrorHandler[Error Handler]
+    end
+
+    subgraph "Intelligence Layer"
+        UIP[UnifiedIntelligenceProvider]
+        CDL[CompanyDomainLoader]
+        ADOCtx[ADOContextMapper]
+        KGIdx[KnowledgeIndexer]
+    end
+
+    subgraph "External Dependencies"
+        IntentRouter[Intent Router Service]
+        GovEngine[Governance Engine]
+        MCPGateway[MCP Gateway]
+    end
+
+    subgraph "Target Orchestrators"
+        Onboard[OnboardingOrchestrator]
+        TDD[TDDOrchestrator]
+        Plan[PlanningOrchestrator]
+        Sweep[SweepCatalogueOrchestrator]
+        Domain[Domain Orchestrators]
+    end
+
+    Entry --> Validator
+    Validator --> IntentClass
+    IntentClass --> IntentRouter
+    IntentRouter --> UIP
+    UIP --> CDL
+    UIP --> ADOCtx
+    UIP --> KGIdx
+    UIP --> Router
+    Router --> Registry
+    Registry --> Dispatcher
+    Dispatcher --> GovEngine
+    GovEngine --> Dispatcher
+    Dispatcher --> Onboard
+    Dispatcher --> TDD
+    Dispatcher --> Plan
+    Dispatcher --> Sweep
+    Dispatcher --> Domain
+    Dispatcher --> LearningMixin
+    Dispatcher -.error.-> ErrorHandler
+    ErrorHandler -.retry.-> Dispatcher
+    MCPGateway --> Entry
+
+    style Entry fill:#50C878,stroke:#2E7D4E,stroke-width:2px,color:#fff
+    style Router fill:#F39C12,stroke:#B8730F,stroke-width:3px,color:#fff
+    style Dispatcher fill:#4A90E2,stroke:#2E5C8A,stroke-width:3px,color:#fff
+    style LearningMixin fill:#9B59B6,stroke:#7D3C98,stroke-width:2px,color:#fff
+    style UIP fill:#9B59B6,stroke:#7D3C98,stroke-width:3px,color:#fff
+    style CDL fill:#1a5f7a,stroke:#06b6d4,stroke-width:2px,color:#fff
+    style ADOCtx fill:#1a5f7a,stroke:#06b6d4,stroke-width:2px,color:#fff
+    style KGIdx fill:#1a5f7a,stroke:#06b6d4,stroke-width:2px,color:#fff
+    style Sweep fill:#e94560,stroke:#ff6b6b,stroke-width:2px,color:#fff
+```

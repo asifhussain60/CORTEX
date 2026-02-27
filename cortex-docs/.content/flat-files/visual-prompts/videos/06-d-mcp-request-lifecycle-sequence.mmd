@@ -1,0 +1,101 @@
+---
+id: 06-d-mcp-request-lifecycle-sequence
+title: MCP Request Lifecycle — Full Sequence
+purpose: Illustrates the complete flow of an MCP tool request from gateway to execution — VIDEO 06 hero diagram
+audience: [Software Developers, Product Owners]
+source_of_truth: cortex/mcp/__wiring_contract__.yaml
+last_verified: 2026-02-27
+diagram_type: Sequence
+interactive: false
+tier: 2
+learning_sequence: 19
+video_prompt: 06-p-traceability-and-transparency.md
+video_scene: "Scene 2–4 — The Request Particle tracks this exact sequence"
+animation_notes: |
+  ## Cinematic Simulation Prompt — 02: MCP Request Lifecycle
+
+  **SCENE 1 — "The Awakening" (0:00–0:06)**
+  Camera: Static center-frame. Environment: Absolute dark-blue vacuum (#0a0e27).
+  A high-resolution CORTEX logo (cortex-docs/assets/images/cortex-logo-512.png) fades in,
+  centered on a ray-traced glassmorphism floor. An 'electric-aura' animation ignites —
+  concentric cyan (#00d4ff) and purple (#7b61ff) pulse-glows radiate outward from the logo,
+  reflecting off the polished glass surface. Volumetric blue fog at floor level. Hold 4s.
+  Logo shrinks to bottom-right watermark (15% opacity).
+
+  **SCENE 2 — "FPV Drone Dive: The Gateway" (0:06–0:12)**
+  Camera: FPV drone swoops from the watermark position, diving through volumetric fog
+  into a horizontal glass corridor — six frosted glassmorphism participant stations
+  arranged left-to-right: Client, MCP Gateway, Intent Router, Master Orchestrator,
+  MCP Tool, Governance Engine. Each station is Deep Cobalt (#1a1f3a) with Midnight Blue
+  (#0a0e27) edges. Stations have internal neon filaments — purple (#7b61ff) for Gateway
+  and Orchestrator, cyan (#00d4ff) for Router and Tool. Background blur: 20px refraction.
+  Ray-traced reflections on the glass floor beneath the corridor.
+
+  **SCENE 3 — "The Request Particle's Journey" (0:12–0:32)**
+  A bioluminescent cyan orb (request particle) spawns at Client station, emitting a
+  neon light-trail as it travels. Each station's activation bar glows when the particle
+  arrives — 2-second pause per station with volumetric light bloom:
+  - Client → Gateway: orb enters; Gateway validation fires a brief green flash (valid)
+    or a red bounce-back with particle ricochet (invalid path shown as ghost).
+  - Gateway → Router: Intent Router classification — particle briefly splits into 3
+    candidate path ghosts, then converges on the winning route (purple flash).
+  - Router → Orchestrator: particle transfers with a magnetic snap.
+  - Orchestrator → Governance Engine: "Lidar Blue" laser sweep scans the request.
+    Shield flash — green pass (approved ✅) illuminates the corridor. Alternate red
+    reject path shown as a faint ghost particle bouncing back.
+  - Orchestrator → Tool: particle enters the Tool capsule, a spinner animation rotates
+    inside the frosted glass, result emerges as a green-tinted orb.
+
+  **SCENE 4 — "The Return Path" (0:32–0:42)**
+  The result particle reverses direction — right-to-left — shrinking slightly at each
+  hop. Each station dims to 40% after the particle passes, creating a fading wake effect.
+  The particle arrives at Client, expanding into a delivered response card (frosted glass
+  with cyan border). Latency annotation fades in as a floating glassmorphism badge:
+  "50–150ms typical" in JetBrains Mono, cyan text.
+
+  **SCENE 5 — "Orbital Reveal" (0:42–0:50)**
+  Camera: 360-degree orbital pan around the entire horizontal request corridor.
+  All six stations glow at full luminosity. The bioluminescent trail persists as a
+  permanent neon path. Volumetric fog swirls beneath the glass floor.
+  Camera completes the orbit and pulls back. Architecture fades to 40%.
+  A glassmorphism "Evidence Bundle" icon materializes center-frame — sealed document
+  with cyan checkmark — then fades to black.
+related_diagrams:
+  - 01-d-c4-container-full-system.mmd
+  - 07-d-orchestrator-dispatch-flow.mmd
+---
+
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Gateway as MCP Gateway
+    participant Router as Intent Router
+    participant Orch as Master Orchestrator
+    participant Tool as MCP Tool
+    participant Gov as Governance Engine
+    
+    Client->>Gateway: JSON-RPC Request
+    activate Gateway
+    Gateway->>Gateway: Validate Protocol
+    Gateway->>Router: Route Intent
+    activate Router
+    Router->>Router: Classify Intent
+    Router->>Orch: Dispatch to Orchestrator
+    deactivate Router
+    activate Orch
+    Orch->>Gov: Check Governance
+    activate Gov
+    Gov-->>Orch: ✅ Approved
+    deactivate Gov
+    Orch->>Tool: Execute Tool
+    activate Tool
+    Tool->>Tool: Perform Action
+    Tool-->>Orch: Result
+    deactivate Tool
+    Orch-->>Gateway: Response
+    deactivate Orch
+    Gateway-->>Client: JSON-RPC Response
+    deactivate Gateway
+    
+    Note over Client,Gov: Typical latency: 50-150ms
+```

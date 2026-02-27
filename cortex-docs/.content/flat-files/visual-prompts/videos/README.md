@@ -1,18 +1,86 @@
-# Video Prompts for CORTEX Visual Content
+# Video Prompts for CORTEX Visual Content — The Enterprise Intelligence Series
 
-These prompts are designed for **Google Gemini Video Generator** and **NotebookLM Video Editor** to produce an **8-video learning journey** that takes users from zero knowledge to complete CORTEX mastery.
+These prompts are designed for **Google Gemini Video Generator** and **NotebookLM Video Editor** to produce a **10-video enterprise intelligence series** that takes viewers from zero knowledge of CORTEX to a complete understanding of its strategic and technical value.
 
 ## The Learning Journey
 
-The 8 concept videos follow a **progressive depth curve** — from executive overview to advanced internals. Each video assumes the viewer has watched the previous ones. **Zero content repetition between videos.** The first video encourages the viewer to complete the full journey.
+The 10 concept videos follow a **progressive depth curve** — from executive overview to strategic ROI. Each video builds on the previous ones. **Zero content repetition between videos.** The first video inspires the viewer to complete the full journey.
 
 | Phase | Videos | Goal |
 |-------|--------|------|
-| **Foundation** | 1–3 | Explain *what CORTEX is*, *how requests flow*, and *how intelligence works* |
-| **Engineering** | 4–6 | Deep dive into *governance*, *TDD discipline*, and *production readiness* |
-| **Mastery** | 7–8 | Advanced capabilities: *extensibility*, *golden tests*, and *continuous learning* |
+| **Foundation** | 01–02 | Explain *what CORTEX is* and *how it builds trust through embedded governance* |
+| **Engineering** | 03–06 | Deep dive into *intelligent reviews*, *architectural integrity*, *team collaboration*, and *audit traceability* |
+| **Intelligence** | 07–08 | Advanced capabilities: *cross-domain learning* and *the before/after transformation* |
+| **Enterprise** | 09–10 | Organizational scale: *managing thousands of repos* and *translating technical excellence into business ROI* |
 
-**After the 8 concept videos**, viewers move to the **Tutorial series** (`tutorials/`) for hands-on practice.
+**After the 10 concept videos**, viewers move to the **Tutorial series** (`tutorials/`) for hands-on practice.
+
+## Video Design Best Practices Reference
+
+All video prompts MUST comply with the codified best practices in:
+**`cortex-registry/knowledge/best-practices/content/video-design-best-practices.yaml`**
+
+Key rules (mandatory for every video):
+
+| Rule | Title | Impact |
+|---|---|---|
+| VBP-001 | One Idea Per Frame | P0 — never duplicate text across regions of the same frame |
+| VBP-002 | Start Strong — First 8 Seconds | P0 — hook before branding |
+| VBP-003 | Narration Never Reads the Slide | P0 — Mayer's Redundancy Principle |
+| VBP-004 | Progressive Disclosure | P1 — build complexity through animation |
+| VBP-005 | Visual Hierarchy — Z/F Pattern | P1 — important info top-left to center |
+| VBP-006 | Contrast-Based Storytelling | P1 — show pain before solution |
+| VBP-007 | Segment Duration — 2-Min Cycles | P1 — visual change every 90-120 seconds |
+| VBP-008 | User Control and Context | P0 — title, duration, chapters |
+| VBP-009 | Signaling Principle | P1 — highlight active element being discussed |
+| VBP-010 | Anchoring with Analogies | P2 — one analogy per concept, dark pill |
+| VBP-011 | Strategic Silence | P2 — 1-3 sec silence at emotional peaks |
+| VBP-012 | Consistent Visual Language | P0 — same icons/colors throughout series |
+| VBP-013 | Business Book Anchoring | P2 — max 2-3 per video, governance content |
+| VBP-014 | Standardized Hero Intro Slide | P0 — `cortex-logo-200.png` as large central hero image + title |
+| VBP-015 | Breadcrumb Navigation | P0 — persistent breadcrumb bar for sequential content |
+| VBP-016 | Bold Key Words | P1 — bold 1-3 key words per text card in accent color |
+| VBP-017 | Alternate Male/Female Voice | P1 — odd videos = female, even = male narrator |
+| VBP-018 | No Unexpanded Acronyms | P0 — full form on first use in every video |
+| VBP-019 | Strategic Color Intelligence | P1 — domain-specific color coding (gold for V06, etc.) |
+
+## Animated Diagram Flow Directives
+
+When concept videos reference static diagrams from the `images/` prompts, these animation directives tell the video producer how to bring them to life:
+
+### Brain Architecture (Image Prompt 01)
+- **Flow:** Bottom → Top (Perception → Reasoning → Action)
+- **Particles:** Cyan data streams flow upward
+- **Active tier:** Pulses 3 seconds when narrated; others dim to 30%
+- **Entry:** VS Code icon emits request; results flow upward
+
+### Orchestrator Galaxy (Image Prompt 02)
+- **Flow:** Center → Outward (MasterOrchestrator → tier spiral arms)
+- **Active arm:** Spiral arm glows when tier is discussed
+- **Connections:** Neural pathway lines pulse with request flow
+
+### LENS Eye (Image Prompt 03)
+- **Flow:** Outside → Center (Iris analyzers → Pupil synthesis)
+- **Scan beam:** Sweeps clockwise across iris segments
+- **Active analyzer:** Segment glows brighter; others dim
+- **Result:** Synthesis point in pupil emits result card
+
+### Shield Wall (Image Prompt 04)
+- **Flow:** Front → Back (commit → Tier 0 → Tier 3)
+- **Green path:** Particle passes through (smooth glow accumulation)
+- **Red path:** Particle bounces at violation tier (red flash + shake)
+- **Active tier:** Shields pulse cyan when narrated
+
+### Request Journey (Image Prompt 05)
+- **Flow:** Left → Right (MCP Gateway → Governed Commit)
+- **Cyan orb:** Travels station to station with ease-in-out
+- **Active station:** 2× scale on label, full brightness
+- **Inactive:** Dim to 30% opacity
+
+### Extensibility Neural Growth (Image Prompt 08)
+- **Flow:** Core → Outward (stable brain → growing dendrites)
+- **New capability:** Dendrite extends with growth animation
+- **Hot-reload badge:** Green pulse when extension registers
 
 ## Usage
 
@@ -76,6 +144,80 @@ Every generated video **MUST** follow these rules for brand consistency.
 - Key moments: Subtle chime/ping on ✅ checkmarks and completions
 - Narration: Clear, professional, conversational — NOT robotic
 
+### 🎬 Standardized Hero Intro Slide (VBP-014 — MANDATORY)
+
+**Every video opens with the same 5-second title card** before Scene 1 content begins:
+
+1. Full-screen `#0a0e27` deep navy background with floating particles
+2. **CORTEX logo** (`cortex-docs/assets/images/cortex-logo-200.png`) — large, centered, hero-style, with subtle cyan glow pulse
+3. **Video title** in Space Grotesk Bold, white, positioned ABOVE the logo
+4. **Subtitle** in Inter, `#a0a6c0`, positioned BELOW the logo
+5. Hold 5 seconds → logo shrinks to watermark position → Scene 1 fades in
+
+This creates instant series recognition. The viewer knows they're watching a CORTEX video before any content appears.
+
+> **Exception:** The hero intro slide does NOT conflict with VBP-002 (hook in 8 seconds). The 5-second title card IS brand establishment, and the hook must begin within 3 seconds of Scene 1 starting (total: 8 seconds from video start).
+
+### 🧭 Breadcrumb Navigation for Sequential Content (VBP-015 — MANDATORY)
+
+**When a video presents steps, stages, layers, or any sequential process**, a persistent **breadcrumb bar** must remain visible throughout the sequence:
+
+| Element | Appearance |
+|---------|-----------|
+| **Current step** | Full brightness, bold, cyan highlight, 1.5× label scale |
+| **Completed steps** | ✅ green checkmark, dimmed to 60% opacity |
+| **Upcoming steps** | Muted outlines at 30% opacity |
+
+**Breadcrumb placement:** Bottom of frame (horizontal) or right side (vertical for long sequences like V05's 9 stages).
+
+**Videos with breadcrumb requirements:**
+
+| Video | Breadcrumb Content | Scenes |
+|-------|-------------------|--------|
+| V01 | 5 contrast cards (Raw AI vs CORTEX) | Scene 3 |
+| V02 | 4 governance tiers + 3 TDD phases + 6-step enforcement flow | Scenes 2, 3, 4 |
+| V03 | 3 test pyramid tiers + 5 security layers + review pipeline | Scenes 2, 3, 4 |
+| V04 | **9 audit stages** (PRIMARY breadcrumb video) + wiring checks | Scene 2 (entire stage sequence) |
+| V05 | 7 extension dendrites + 3-repo onboarding + team workflow | Scenes 2, 3, 4 |
+| V06 | 8 pipeline stations (Intent → Audit Trail → Governed Commit) | Scenes 2–7 |
+| V07 | LENS letters (L-E-N-S) + 4 onboarding steps + pattern library | Scenes 2, 4 |
+| V08 | Week 1→4→12 timeline + 4-station URS loop + before/after | Scenes 1/3/4, Scene 2 |
+| V09 | 5 REAL capabilities + 3 FUTURE capabilities + multi-repo scale | Scenes 2, 3, 4 |
+| V10 | 4 ROI dimensions + 10-video journey recap | Scenes 2, 5 |
+
+### 🎙️ Voice Alternation Schedule (VBP-017 — MANDATORY)
+
+| Video | Narrator | Rationale |
+|-------|----------|-----------|
+| V01 — The CORTEX Paradigm | 🎙️ **Female** | Odd-numbered |
+| V02 — The Trust Layer | 🎙️ **Male** | Even-numbered |
+| V03 — Precision Reviews | 🎙️ **Female** | Odd-numbered |
+| V04 — Architectural Integrity | 🎙️ **Male** | Even-numbered |
+| V05 — The Collaborative Engine | 🎙️ **Female** | Odd-numbered |
+| V06 — Traceability & Transparency | 🎙️ **Male** | Even-numbered |
+| V07 — Cross-Domain Intelligence | 🎙️ **Female** | Odd-numbered |
+| V08 — CORTEX vs. The Status Quo | 🎙️ **Male** | Even-numbered |
+| V09 — Scaling the Enterprise | 🎙️ **Female** | Odd-numbered |
+| V10 — The Strategic ROI | 🎙️ **Male** | Even-numbered |
+
+Both voices share the same tone: confident, conversational, honest, not salesy. Within a single video, the voice does NOT switch.
+
+### 🎨 Strategic Color Intelligence (VBP-019 — MANDATORY)
+
+Colors carry meaning across the entire series. Once a color association is established, it must never be broken:
+
+| Color | Hex | Meaning | Primary Video |
+|-------|-----|---------|---------------|
+| Cyan | `#00d4ff` | CORTEX identity, headings, active highlights | All videos |
+| Purple | `#7b61ff` | Connections, paths, orchestrator tier | V06, V07, V09 |
+| **Gold** | **`#FFD700`** | **Golden tests, premium quality, earned trust** | **V03 (primary)** |
+| Red | `#ff4757` | Violations, failures, TDD RED, security alerts | V02, V03, V04 |
+| Green | `#2ecc71` | Passing tests, TDD GREEN, healthy states | V02, V04, V08 |
+| Blue | `#3b82f6` | TDD REFACTOR, informational | V02 |
+| Amber | `#f39c12` | Warnings, P1, caution, promoted tests | V02, V03, V04 |
+
+**V03 is the GOLD video.** Golden test elements use gold (#FFD700) as the primary accent — gold glass panels, gold glow on pyramid apex, golden particle effects. All other videos use cyan as primary.
+
 ---
 
 ## 🎙️ NARRATION PHILOSOPHY — MANDATORY FOR ALL VIDEOS
@@ -118,20 +260,43 @@ The visual shows the WHAT. The narration delivers the WHY, the SO WHAT, the FEEL
 
 ---
 
-## Video Index — Complete Learning Journey
+## Video Index — CORTEX: The Enterprise Intelligence Series
 
-| # | File | Title | Duration | Depth |
-|---|------|-------|----------|-------|
-| 1 | `prompt-01-what-is-cortex.md` | What Is CORTEX? | 7 min | 🟢 Story |
-| 2 | `prompt-02-the-request-lifecycle.md` | The Life of a Request | 7 min | 🟡 Flow |
-| 3 | `prompt-03-intelligence-engine.md` | The Intelligence Engine | 8 min | 🟡→🔴 Bridge |
-| 4 | `prompt-04-governance-and-tdd.md` | Governance and TDD — Quality as Infrastructure | 9 min | 🔴 Developer |
-| 5 | `prompt-05-production-readiness.md` | Production Readiness — Audit, Sweep, and Convergence | 9 min | 🔴 Advanced |
-| 6 | `prompt-06-golden-tests-and-security.md` | Golden Tests and Security-First Development | 8 min | 🔴 Developer |
-| 7 | `prompt-07-extensibility-and-onboarding.md` | Extensibility and Repository Onboarding | 8 min | 🔴 Platform |
-| 8 | `prompt-08-learning-and-transformation.md` | Continuous Learning and Real-World Transformation | 7 min | 🟡 Capstone |
+| # | File | Title | Duration | Depth | Voice |
+|---|------|-------|----------|-------|-------|
+| 01 | `01-p-the-cortex-paradigm.md` | The CORTEX Paradigm | 8 min | 🟢 Story | 🎙️ Female |
+| 02 | `02-p-the-trust-layer.md` | The Trust Layer | 9 min | 🟡 Governance | 🎙️ Male |
+| 03 | `03-p-precision-reviews.md` | Precision Reviews | 8 min | 🟡→🔴 Bridge | 🎙️ Female |
+| 04 | `04-p-architectural-integrity.md` | Architectural Integrity | 9 min | 🔴 Advanced | 🎙️ Male |
+| 05 | `05-p-the-collaborative-engine.md` | The Collaborative Engine | 8 min | 🔵 Platform | 🎙️ Female |
+| 06 | `06-p-traceability-and-transparency.md` | Traceability & Transparency | 8 min | 🔴 Developer | 🎙️ Male |
+| 07 | `07-p-cross-domain-intelligence.md` | Cross-Domain Intelligence | 8 min | 🔴 Intelligence | 🎙️ Female |
+| 08 | `08-p-cortex-vs-the-status-quo.md` | CORTEX vs. The Status Quo | 7 min | 🟡 Capstone | 🎙️ Male |
+| 09 | `09-p-scaling-the-enterprise.md` | Scaling the Enterprise | 8 min | 🔴 Vision | 🎙️ Female |
+| 10 | `10-p-the-strategic-roi.md` | The Strategic ROI | 7 min | 🔵 Executive | 🎙️ Male |
 
-**Total Concept Video Runtime:** ~63 minutes (industry standard for a comprehensive platform walkthrough)
+**Total Concept Video Runtime:** ~80 minutes (comprehensive enterprise intelligence walkthrough + strategic ROI)
+
+## 📐 Mermaid Diagram Files — Co-located for NotebookLM Bundling
+
+Each video prompt has co-located Mermaid (`.mmd`) diagram files numbered to match. **Bundle each prompt + its matching diagram files together as sources in NotebookLM** for proper video rendering. Every `.mmd` file contains frontmatter with `animation_notes` describing frame-by-frame rendering instructions.
+
+| Diagram File | Maps to Video | Diagram Type | Key Content |
+|---|---|---|---|
+| `01-d-c4-container-full-system.mmd` | V01 — The CORTEX Paradigm | C4-Container | Full system architecture — 4-tier stack, animate bottom→top |
+| `02-d-governance-tdd-enforcement-flow.mmd` | V02 — The Trust Layer | Flowchart | Shield wall (Pre-commit→CI→Runtime) + TDD RED/GREEN/BLUE |
+| `03-d-golden-test-pyramid-and-security-layers.mmd` | V03 — Precision Reviews | Flowchart | Test pyramid promotion + 5 security layers + SDLC timeline |
+| `04-d-audit-pipeline-stages.mmd` | V04 — Architectural Integrity | Flowchart | 9-stage `/audit fix` pipeline with convergence loop |
+| `05-d-common-utilities-overview.mmd` | V05 — The Collaborative Engine | C4-Component | Tier 1 stable foundation — "Extend, Don't Fork" context |
+| `06-d-mcp-request-lifecycle-sequence.mmd` | V06 — Traceability & Transparency | Sequence | MCP request flow — Client→Gateway→Router→Orchestrator→Tool |
+| `07-d-orchestrator-dispatch-flow.mmd` | V07 — Cross-Domain Intelligence | Flowchart | Intent classification → intelligence tiers → target orchestrator |
+| `07-d-c4-component-master-orchestrator.mmd` | V07 — Cross-Domain Intelligence | C4-Component | Master Orchestrator internals — zoom-in detail view |
+| `08-d-urs-learning-feedback-loop.mmd` | V08 — CORTEX vs. The Status Quo | Flowchart | URS cycle + Week 1→12 transformation + compound effect |
+| `09-d-platform-saas-architecture.mmd` | V09 — Scaling the Enterprise | Flowchart | ✅ REAL MCP server + 🔮 VISION SaaS architecture |
+
+> **NotebookLM Workflow:** When generating Video N, import `NN-p-*.md` AND all matching `NN-d-*.mmd` files as sources. The prompt describes the narrative and scenes. The diagrams provide the exact visual structure with animation notes. Together they give the video producer everything needed.
+
+> **File Naming for NotebookLM:** Use the prefix `01_CORTEX_[Topic]`, `02_CORTEX_[Topic]`, etc. when uploading to NotebookLM. This ensures it processes context in the exact order of the narrative arc.
 
 ### Hands-On Tutorials (separate folder)
 
@@ -143,16 +308,16 @@ After the concept videos, see `tutorials/README.md` for practical, screen-record
 
 | Capability | Video Covers | Image Covers |
 |-----------|-------------|-------------|
-| Architecture | Animated intelligence decision (V3) | Static brain cross-section (I1) |
-| Orchestrators | Live coordination on a request (V2) | Galaxy ecosystem map (I2) |
-| LENS | Live workspace scan (V3) | Diagnostic eye anatomy (I3) |
-| Governance + TDD | Violation caught, TDD cycle enforced (V4) | Shield wall posture (I4) |
-| Request Pipeline | Particle tracking animated (V2) | Station-to-station infographic (I5) |
-| Golden Tests | End-to-end creation to audit trace (V6) | Pyramid with scoring (I6) |
-| Security | Security gate catching vulnerability (V6) | Five-layer defense diagram (I7) |
-| Extensibility | Building new capability live (V7) | Neural growth anatomy (I8) |
-| Knowledge/Learning | Onboarding + learning loop (V7, V8) | Pattern lattice (I9) |
-| Transformation | Full refactoring session (V8) | Before/after split (I10) |
+| Paradigm & Security-by-Design | Strategic orchestration vs raw AI (V01) | Static brain cross-section (I1) |
+| Governance & Trust | Embedded compliance, TDD discipline (V02) | Shield wall posture (I4) |
+| Code Reviews & Security | Intelligent review automation, golden tests (V03) | Pyramid with scoring (I6), Five-layer defense (I7) |
+| Architectural Integrity | Continuous validation, convergence pipeline (V04) | Station-to-station infographic (I5) |
+| Team Collaboration | Shared context, cross-functional workflows (V05) | Neural growth anatomy (I8) |
+| Traceability & Audit Trail | Request particle → governed commit with full history (V06) | Galaxy ecosystem map (I2) |
+| Cross-Domain Intelligence | LENS scan, pattern recognition across domains (V07) | Diagnostic eye anatomy (I3) |
+| Before/After Transformation | Raw Copilot vs CORTEX-governed output (V08) | Before/after split (I10) |
+| Enterprise Scale | Multi-repo, multi-team, platform architecture (V09) | — (no static image) |
+| Strategic ROI | Business value, speed-to-market, risk reduction (V10) | — (no static image) |
 
 ---
 
