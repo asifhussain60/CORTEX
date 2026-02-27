@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <meta content="The Awakening Of CORTEX — The origin story of an autonomous AI engineering framework, told across 14 chapters. From a New Jersey basement at 3 AM to 51 orchestrators, 38 governance rules, and 16,942 tests — and the vision of an Enterprise Brain for all." name="description"/>
 <meta content="CORTEX, origin story, AI engineering framework, TDD, GitHub Copilot, autonomous AI, orchestrators" name="keywords"/>
 <meta content="Asif Hussain" name="author"/>
@@ -27,6 +27,9 @@
 <div class="ambient-orb ambient-orb--purple" aria-hidden="true"></div>
 <div class="ambient-orb ambient-orb--cyan" aria-hidden="true"></div>
 
+<!-- Mobile sidebar backdrop -->
+<div class="sidebar-backdrop" id="sidebar-backdrop" aria-hidden="true"></div>
+
 <!-- Breadcrumb -->
 <nav class="breadcrumb" aria-label="Breadcrumb">
   <a href="../../index.html">CORTEX</a>
@@ -46,41 +49,12 @@
         <img src="../../assets/images/cortex-logo-200.png"
              alt="CORTEX"
              class="awakening-cortex-logo"
-             width="200" height="200"
+             width="150" height="150"
              loading="eager" fetchpriority="high"/>
       </div>
       <!-- Right: text block -->
       <div class="awakening-hero-text">
-        <div class="awakening-kicker">Origin Story · 2023 – 2026</div>
         <h1 class="awakening-title">The Awakening Of CORTEX</h1>
-        <p class="awakening-tagline">
-          An ADHD-fueled developer, his imaginary girlfriend, and a confidently wrong robot
-          build an autonomous AI engineering framework — one 3&thinsp;AM crisis at a time.
-        </p>
-        <div class="awakening-meta">
-          <span><i class="fas fa-book-open"></i> 14 Chapters</span>
-          <span><i class="fas fa-clock"></i> ~2 hr read</span>
-          <span><i class="fas fa-code-branch"></i> Phases 1 – 87</span>
-          <span><i class="fas fa-users"></i> 3 Characters</span>
-        </div>
-        <!-- Character chips inline under meta -->
-        <div class="awakening-chars">
-          <div class="character-chip character-chip--asif">
-            <span class="character-icon">🧑‍💻</span>
-            <span class="character-name">Asif Codenstein</span>
-            <span class="character-role">The ADHD Architect</span>
-          </div>
-          <div class="character-chip character-chip--missg">
-            <span class="character-icon">👻</span>
-            <span class="character-name">Miss G</span>
-            <span class="character-role">The Imaginary Girlfriend</span>
-          </div>
-          <div class="character-chip character-chip--copilot">
-            <span class="character-icon">🤖</span>
-            <span class="character-name">Copilot Bot</span>
-            <span class="character-role">The Eager Robot</span>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -194,42 +168,15 @@
         <button class="chapter-nav-btn chapter-nav-prev" id="nav-prev" disabled>
           <i class="fas fa-arrow-left"></i> Previous
         </button>
-        <span class="chapter-nav-counter" id="nav-counter">1 / 13</span>
+        <span class="chapter-nav-counter" id="nav-counter">1 / 14</span>
         <button class="chapter-nav-btn chapter-nav-next" id="nav-next">
-          Next <i class="fas fa-arrow-right"></i>
+          The Hotel Receptionist <i class="fas fa-arrow-right"></i>
         </button>
       </nav>
     </article>
   </div>
 
-  <!-- ── CTA ──────────────────────────────────────────────────────── -->
-  <div class="cta-strip">
-    <h2 class="cta-strip-heading">Read the Source</h2>
-    <p>
-      These chapters are living documents — written commit-by-commit alongside
-      the code they describe. The architecture emerges in real time.
-    </p>
-    <div class="cta-buttons">
-      <a href="../../index.html" class="btn-back">
-        <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to CORTEX Home
-      </a>
-      <a href="https://github.com/asifhussain60/CORTEX" class="btn-github"
-         target="_blank" rel="noopener noreferrer">
-        <i class="fab fa-github" aria-hidden="true"></i> View on GitHub
-      </a>
-    </div>
-  </div>
 </main>
-
-<footer class="page-footer" role="contentinfo">
-  <p>
-    <span class="page-footer-cortex">CORTEX</span> ·
-    <a href="../../index.html">Home</a> ·
-    <a href="../index.html">Learning</a> ·
-    <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
-    · Built with TDD-First discipline · Phase 87 complete
-  </p>
-</footer>
 
 <script>
 (function() {
@@ -261,6 +208,7 @@
   const counterEl = document.getElementById('nav-counter');
   const sidebarEl = document.getElementById('chapter-sidebar');
   const toggleBtn = document.getElementById('sidebar-toggle');
+  const backdropEl = document.getElementById('sidebar-backdrop');
 
   let currentIdx = 0;
   const cache = {};
@@ -288,10 +236,16 @@
     const btn = document.querySelector('[data-chapter="' + ch.id + '"]');
     if (btn) { btn.classList.add('active'); btn.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
 
-    // Nav
+    // Nav — update buttons with target chapter titles
     prevBtn.disabled = idx === 0;
     nextBtn.disabled = idx === CHAPTERS.length - 1;
     counterEl.textContent = (idx + 1) + ' / ' + CHAPTERS.length;
+    prevBtn.innerHTML = idx > 0
+      ? '<i class="fas fa-arrow-left"></i> ' + CHAPTERS[idx - 1].title
+      : '<i class="fas fa-arrow-left"></i> Previous';
+    nextBtn.innerHTML = idx < CHAPTERS.length - 1
+      ? CHAPTERS[idx + 1].title + ' <i class="fas fa-arrow-right"></i>'
+      : 'Next <i class="fas fa-arrow-right"></i>';
 
     // Loading state
     contentEl.innerHTML = '<div class="chapter-loading"><i class="fas fa-spinner fa-spin"></i><span>Loading…</span></div>';
@@ -317,7 +271,7 @@
       history.replaceState(null, '', '#chapter-' + ch.id);
 
       // Close sidebar on mobile after selection
-      if (window.innerWidth < 900) sidebarEl.classList.remove('open');
+      if (window.innerWidth < 900) closeSidebar();
 
     } catch (e) {
       contentEl.innerHTML = '<div class="chapter-error"><i class="fas fa-exclamation-triangle"></i><p>Could not load chapter.<br/><small>' + e.message + '</small></p></div>';
@@ -325,8 +279,12 @@
   }
 
   /* ── Events ──────────────────────────────────────────────── */
-  sidebarBtns.forEach(function(btn, i) {
-    btn.addEventListener('click', function() { loadChapter(i); });
+  sidebarBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var chapterId = btn.getAttribute('data-chapter');
+      var idx = CHAPTERS.findIndex(function(c) { return c.id === chapterId; });
+      if (idx >= 0) loadChapter(idx);
+    });
   });
   prevBtn.addEventListener('click', function() { loadChapter(currentIdx - 1); });
   nextBtn.addEventListener('click', function() { loadChapter(currentIdx + 1); });
@@ -336,10 +294,21 @@
   });
 
   // Mobile sidebar toggle
+  function openSidebar() {
+    sidebarEl.classList.add('open');
+    if (backdropEl) backdropEl.classList.add('active');
+  }
+  function closeSidebar() {
+    sidebarEl.classList.remove('open');
+    if (backdropEl) backdropEl.classList.remove('active');
+  }
   if (toggleBtn) {
     toggleBtn.addEventListener('click', function() {
-      sidebarEl.classList.toggle('open');
+      sidebarEl.classList.contains('open') ? closeSidebar() : openSidebar();
     });
+  }
+  if (backdropEl) {
+    backdropEl.addEventListener('click', closeSidebar);
   }
 
   /* ── Init ────────────────────────────────────────────────── */

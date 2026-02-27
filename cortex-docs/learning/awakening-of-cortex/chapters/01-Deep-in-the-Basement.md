@@ -118,4 +118,3 @@ This is the story of how it awakened.
 
 ---
 
-*→ Continue to [Chapter 1: The Hotel Receptionist](01-The-Hotel-Receptionist.md)*

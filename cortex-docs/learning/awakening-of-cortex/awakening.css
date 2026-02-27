@@ -55,47 +55,55 @@ body {
 @keyframes orb-a { from { transform: translate(0,0) scale(1); } to { transform: translate(55px,35px) scale(1.08); } }
 @keyframes orb-b { from { transform: translate(0,0) scale(1); } to { transform: translate(-35px,-55px) scale(1.06); } }
 
-/* ── Hero (compact horizontal) ──────────────────────────────────────── */
+/* ── Hero (full-width — logo left, title centered) ───────────────────── */
 .awakening-hero {
-  padding: 1.25rem 2rem 1rem;
-  max-width: 1100px; margin: 0 auto;
+  padding: 0;
+  width: 100%;
   position: relative; z-index: 1;
 }
 
 .awakening-hero-inner {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 2rem;
+  width: 100%;
   background: var(--glass-bg, rgba(26,31,58,0.6));
   backdrop-filter: blur(16px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 20px;
-  padding: 1.5rem 2rem;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  border-radius: 0;
+  padding: 1rem 1.5rem;
+  box-sizing: border-box;
 }
 
-/* Left: CORTEX logo */
+/* Left: CORTEX logo — absolutely positioned so title can truly center */
 .awakening-hero-logo-wrap {
+  position: absolute;
+  left: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
   flex-shrink: 0;
+  z-index: 2;
 }
 .awakening-cortex-logo {
-  width: 200px; height: 200px; object-fit: contain;
+  width: 150px; height: 150px; object-fit: contain;
   display: block;
-  filter: drop-shadow(0 0 28px rgba(123, 97, 255, 0.45));
+  filter: drop-shadow(0 0 24px rgba(123, 97, 255, 0.5));
   animation: pulse-glow 3.5s ease-in-out infinite alternate;
-  border-radius: 16px;
+  border-radius: 14px;
 }
 @keyframes pulse-glow {
-  from { filter: drop-shadow(0 0 18px rgba(123, 97, 255, 0.35)); }
-  to   { filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.55)); }
+  from { filter: drop-shadow(0 0 14px rgba(123, 97, 255, 0.35)); }
+  to   { filter: drop-shadow(0 0 36px rgba(0, 212, 255, 0.65)); }
 }
 
-/* Right: text block */
+/* Center: title block — truly centered in the full bar */
 .awakening-hero-text {
   flex: 1;
-  min-width: 0;
   display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  padding: 1.5rem 0;
 }
 
 .awakening-kicker {
@@ -107,10 +115,11 @@ body {
 }
 .awakening-title {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(1.5rem, 3.5vw, 2.4rem); font-weight: 700;
+  font-size: clamp(1.6rem, 3vw, 2.6rem); font-weight: 700;
   background: linear-gradient(135deg, #fff 20%, #c4b5fd 55%, #00d4ff 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text; line-height: 1.15; margin: 0;
+  background-clip: text; line-height: 1.2; margin: 0;
+  text-align: center;
 }
 .awakening-tagline {
   font-size: 0.92rem; color: #a0a6c0;
@@ -329,8 +338,8 @@ body {
 .ch-body {
   padding: 0.5rem 2rem 2rem;
   font-family: 'Comic Neue', 'Comic Sans MS', cursive, sans-serif;
-  font-size: 1.02rem;
-  line-height: 1.85;
+  font-size: 1.18rem;
+  line-height: 1.9;
   color: #d0d4e8;
 }
 .ch-body h1 {
@@ -461,6 +470,10 @@ body {
   color: #c4b5fd; font-size: 0.82rem; font-weight: 600;
   cursor: pointer; font-family: 'Inter', sans-serif;
   transition: all 0.2s;
+  max-width: 42%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .chapter-nav-btn:hover:not(:disabled) {
   background: rgba(123,97,255,0.25);
@@ -474,34 +487,6 @@ body {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.72rem; color: #4a5080;
 }
-
-/* ── CTA Strip ───────────────────────────────────────────────────── */
-.cta-strip {
-  text-align: center; padding: 3rem 1.5rem; max-width: 680px; margin: 2rem auto 0;
-}
-.cta-strip-heading {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.3rem; font-weight: 700; color: #fff;
-  margin-bottom: 0.6rem;
-  background: linear-gradient(135deg, #fff 40%, #c4b5fd 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-}
-.cta-strip p { color: #a0a6c0; font-size: 0.9rem; margin-bottom: 1.25rem; line-height: 1.7; }
-.cta-buttons { display: flex; justify-content: center; gap: 0.75rem; flex-wrap: wrap; }
-.btn-back, .btn-github {
-  display: inline-flex; align-items: center; gap: 8px;
-  padding: 0.6rem 1.4rem; border-radius: 10px;
-  font-size: 0.85rem; font-weight: 600; text-decoration: none;
-  transition: background 0.22s, border-color 0.22s, color 0.22s;
-}
-.btn-back {
-  background: rgba(123,97,255,0.15); border: 1px solid rgba(123,97,255,0.38); color: #c4b5fd;
-}
-.btn-back:hover { background: rgba(123,97,255,0.28); border-color: rgba(123,97,255,0.65); color: #fff; }
-.btn-github {
-  background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.3); color: #67e8f9;
-}
-.btn-github:hover { background: rgba(0,212,255,0.22); border-color: rgba(0,212,255,0.55); color: #fff; }
 
 /* ── Chapter Hero Image (JS-injected banner) ─────────────────────── */
 .ch-hero-image {
@@ -554,40 +539,181 @@ body {
   font-family: 'Space Grotesk', sans-serif; font-weight: 700; color: #7b61ff;
 }
 
+/* ── Mobile Sidebar Backdrop ─────────────────────────────────────────── */
+.sidebar-backdrop {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(2px);
+  z-index: 199;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.sidebar-backdrop.active {
+  display: block;
+  opacity: 1;
+}
+
 /* ══════════════════════════════════════════════════════════════════════
-   RESPONSIVE
+   RESPONSIVE — Tablet (≤1024px) · iPad (768–1023px) · Mobile (≤767px)
    ═══════════════════════════════════════════════════════════════════ */
 
-@media (max-width: 900px) {
-  .reader-container { flex-direction: column; }
+/* ── Tablet / iPad landscape (≤1024px) ──────────────────────────────── */
+@media (max-width: 1024px) {
+  .reader-container {
+    padding: 0 0.75rem;
+  }
   .chapter-sidebar {
-    position: fixed; top: 0; left: -300px; bottom: 0;
+    width: 240px;
+    min-width: 240px;
+  }
+  .ch-body {
+    padding: 0.5rem 1.5rem 2rem;
+    font-size: 1.1rem;
+  }
+  .awakening-title {
+    font-size: clamp(1.3rem, 2.5vw, 2rem);
+  }
+}
+
+/* ── iPad portrait + small tablet (≤900px) ──────────────────────────── */
+@media (max-width: 900px) {
+
+  /* Hero — switch to static flow, logo left, title right of it */
+  .awakening-hero-inner {
+    position: relative;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1.25rem;
+  }
+  .awakening-hero-logo-wrap {
+    position: static;
+    transform: none;
+    flex-shrink: 0;
+  }
+  .awakening-cortex-logo {
+    width: 80px; height: 80px;
+  }
+  .awakening-hero-text {
+    justify-content: flex-start;
+    padding: 0;
+  }
+  .awakening-title {
+    font-size: clamp(1.1rem, 3.5vw, 1.6rem);
+    text-align: left;
+  }
+
+  /* Reader layout — sidebar becomes off-canvas drawer */
+  .reader-container {
+    flex-direction: column;
+    padding: 0 0.5rem;
+  }
+  .chapter-sidebar {
+    position: fixed;
+    top: 0; left: -300px; bottom: 0;
     width: 280px; min-width: 280px;
     max-height: 100vh; z-index: 200;
     border-radius: 0 16px 16px 0;
     transition: left 0.3s ease;
+    box-shadow: 4px 0 32px rgba(0,0,0,0.5);
   }
   .chapter-sidebar.open { left: 0; }
-  .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
-  .chapter-content { padding: 0; max-height: none; }
-  .ch-body { padding: 0.5rem 1.25rem 2rem; }
+  .sidebar-toggle {
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Content panel — full width, no fixed height */
+  .chapter-content {
+    padding: 0;
+    max-height: none;
+    min-height: 60vh;
+  }
+  .ch-body {
+    padding: 0.5rem 1.25rem 2rem;
+    font-size: 1.1rem;
+  }
   .ch-header { padding: 1rem 1.25rem 0.75rem; }
   .ch-hero-image { max-height: 240px; border-radius: 12px 12px 0 0; }
   .ch-hero-image img { max-height: 240px; }
   .chapter-nav { padding: 1rem 1.25rem; }
-  .awakening-hero { padding: 1rem; }
-  .awakening-hero-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1.25rem;
-  }
-  .awakening-cortex-logo { width: 100px; height: 100px; }
+
+  /* Breadcrumb compact */
+  .breadcrumb { padding: 0.75rem 1.25rem; font-size: 0.78rem; }
 }
 
-@media (max-width: 480px) {
+/* ── Mobile (≤640px) ─────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+
+  /* Hero — stack vertically, logo centered above title */
+  .awakening-hero-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 1rem 1rem 0.75rem;
+  }
+  .awakening-cortex-logo {
+    width: 72px; height: 72px;
+  }
+  .awakening-hero-text {
+    justify-content: center;
+    width: 100%;
+  }
+  .awakening-title {
+    font-size: clamp(1rem, 5vw, 1.4rem);
+    text-align: center;
+  }
+
+  /* Breadcrumb — abbreviate middle crumb */
+  .breadcrumb { padding: 0.6rem 1rem; font-size: 0.74rem; gap: 4px; }
+
+  /* Reader */
+  .reader-container { padding: 0 0.25rem; gap: 0; }
+  .chapter-content { min-height: 55vh; }
+
+  /* Chapter body */
+  .ch-body {
+    padding: 0.5rem 1rem 2rem;
+    font-size: 1.05rem;
+    line-height: 1.8;
+  }
+  .ch-header { padding: 0.85rem 1rem 0.6rem; }
+  .ch-title { font-size: clamp(1.2rem, 5vw, 1.6rem); }
+
+  /* Nav */
+  .chapter-nav {
+    padding: 0.75rem 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .chapter-nav-btn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.78rem;
+  }
+  .chapter-nav-counter { font-size: 0.68rem; }
+
+  /* Images inside chapters */
+  .ch-body img {
+    border-radius: 8px;
+    margin: 1rem auto;
+  }
+
+  /* Footer */
+  .page-footer { padding: 1.25rem 1rem; font-size: 0.72rem; }
+
+  /* Character chips (if re-enabled) */
   .awakening-chars { gap: 0.4rem; }
   .character-chip { padding: 4px 10px; font-size: 0.72rem; }
   .character-role { display: none; }
-  .awakening-meta { gap: 0.65rem; }
+  .awakening-meta { gap: 0.65rem; font-size: 0.72rem; }
 }
+
+/* ── Very small phones (≤380px) ─────────────────────────────────────── */
+@media (max-width: 380px) {
+  .awakening-cortex-logo { width: 56px; height: 56px; }
+  .awakening-title { font-size: 1rem; }
+  .ch-body { font-size: 1rem; padding: 0.5rem 0.75rem 1.5rem; }
+  .chapter-nav-btn { padding: 0.4rem 0.65rem; font-size: 0.74rem; }
+  .sidebar-chapter { font-size: 0.78rem; padding: 0.5rem 0.75rem; }
+}
+

@@ -222,7 +222,7 @@ The TDDOrchestrator was Asif's crystal ball — a system that refused to let cod
 
 The enforcement was brutal in its simplicity. Submit code without tests? Rejected. Submit tests that only cover the happy path? Rejected. Submit tests that don't assert anything meaningful? Rejected. Submit tests after the implementation instead of before? CORTEX could tell, and it would judge you.
 
-**First test:** "When a payment fails, a retry button should appear." Just enough code to make it pass. RED → GREEN."No test for that either."*← Previously: [Chapter 5: Infrastructure Hardening](05-Infrastructure-Hardening.md)*
+**First test:** "When a payment fails, a retry button should appear." Just enough code to make it pass. RED → GREEN."No test for that either."
 
 "How can it tell if tests were written first?" a developer asked.
 
@@ -779,5 +779,3 @@ The system had no memory. It couldn't learn from experience. It couldn't build o
 It was time to give CORTEX a memory.
 
 ---
-
-*→ Continue to [Chapter 7: The Knowledge Graph](07-The-Knowledge-Graph.md)*
