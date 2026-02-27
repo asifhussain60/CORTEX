@@ -7,6 +7,25 @@
 
 ---
 
+## 📹 Video Prompt Copies
+
+Diagrams from this directory are **co-located with their corresponding video prompts** in:
+`cortex-docs/.content/flat-files/visual-prompts/videos/`
+
+These copies are **renamed with video-number prefixes** (e.g., `01-`, `02-`) for NotebookLM bundling. Each copy has updated frontmatter with `video_prompt`, `video_scene`, and `animation_notes` fields. See that directory's `README.md` for the full mapping table.
+
+| Original Location | Video Copy | Maps to Video |
+|---|---|---|
+| `c4-container/c4-container-full-system.mmd` | `01-c4-container-full-system.mmd` | V01 |
+| `tier2-core-systems/tier2-mcp-request-lifecycle-sequence.mmd` | `02-mcp-request-lifecycle-sequence.mmd` | V02 |
+| `tier3-intelligence/tier3-orchestrator-dispatch-flow.mmd` | `03-orchestrator-dispatch-flow.mmd` | V03 |
+| `c4-component/c4-component-master-orchestrator.mmd` | `03-c4-component-master-orchestrator.mmd` | V03 |
+| `tier1-foundational/tier1-common-utilities-overview.mmd` | `07-common-utilities-overview.mmd` | V07 |
+
+Diagrams `04-`, `05-`, `06-`, `08-`, `09-` were **created new** specifically for their video prompts (no original in this directory).
+
+---
+
 ## Directory Structure
 
 ```

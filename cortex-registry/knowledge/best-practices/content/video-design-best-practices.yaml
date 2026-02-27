@@ -1,0 +1,327 @@
+# Video Design Best Practices — Knowledge YAML
+# Authority: Phase 87+ Content Intelligence
+# Purpose: Codified best practices for tutorial & explainer video production
+# Sources: NNGroup, HubSpot, Wyzowl, industry-standard cognitive load research
+# Used by: Visual prompt generation, future video tooling, knowledge synthesis
+
+domain: content-production
+type: best-practice
+title: "Video Design Best Practices for Technical Tutorials and Explainers"
+created: "2026-02-27"
+updated: "2026-02-27"
+
+principles:
+  - id: VBP-001
+    title: "One Idea Per Frame"
+    description: |
+      Each video frame should communicate exactly one concept. Never show the same
+      text in multiple places on the same frame (title + subtitle + caption all saying
+      the same thing). Cognitive load research shows viewers process ~4 chunks of
+      visual information simultaneously. Exceeding this causes drop-off.
+    severity: P0
+    source: "NNGroup — Cognitive Load and UX"
+
+  - id: VBP-002
+    title: "Start Strong — First 8 Seconds"
+    description: |
+      Hook the viewer within the first 8 seconds. State the problem or outcome
+      immediately. Do not use organizational intros, logo animations, or pleasantries
+      before the value proposition. Completion rates drop 20% per unnecessary second
+      of preamble.
+    severity: P0
+    source: "Wyzowl Video Marketing Statistics 2024"
+
+  - id: VBP-003
+    title: "Narration Never Reads the Slide"
+    description: |
+      The redundancy principle from multimedia learning theory (Mayer 2009): when
+      narration duplicates on-screen text, learning DECREASES because the viewer
+      processes competing identical streams. Narration must add insight, consequence,
+      or emotional context that the visual cannot convey alone.
+    severity: P0
+    source: "Richard Mayer — Multimedia Learning, Cambridge University Press"
+
+  - id: VBP-004
+    title: "Progressive Disclosure"
+    description: |
+      Reveal information sequentially, not all at once. Build complexity through
+      animation: simple → detailed. Each new element should appear only when the
+      narration reaches it. Prevents cognitive overload and maintains attention.
+    severity: P1
+    source: "NNGroup — Progressive Disclosure"
+
+  - id: VBP-005
+    title: "Visual Hierarchy — Z/F Pattern"
+    description: |
+      Eye-tracking research shows viewers scan screens in Z or F patterns.
+      Place the most important information top-left to center. Status indicators
+      and secondary data go bottom or right. Animated elements draw the eye — use
+      motion sparingly for emphasis, not decoration.
+    severity: P1
+    source: "NNGroup — F-Shaped Pattern of Reading"
+
+  - id: VBP-006
+    title: "Contrast-Based Storytelling"
+    description: |
+      Before/after, with/without, old/new — contrast is the most effective
+      teaching structure for technical content. Show the pain FIRST, then the
+      solution. The viewer must feel the problem before they can value the answer.
+    severity: P1
+    source: "Made to Stick — Chip & Dan Heath"
+
+  - id: VBP-007
+    title: "Segment Duration — 2-Minute Attention Cycles"
+    description: |
+      Viewer attention follows ~2-minute cycles. Every 90-120 seconds, introduce
+      a visual change: new scene, transition, or shift in information density.
+      Tutorials should chunk into steps of ≤120 seconds each with clear visual
+      transitions between them.
+    severity: P1
+    source: "Philip Guo — Optimal Video Length for Student Learning (MIT/Stanford)"
+
+  - id: VBP-008
+    title: "User Control and Context"
+    description: |
+      Always tell users what's coming: video title, duration, and topic before
+      pressing play. Provide chapter markers or visual progress indicators.
+      Include captions/transcripts for accessibility. Videos should never auto-play.
+    severity: P0
+    source: "NNGroup — Video Usability"
+
+  - id: VBP-009
+    title: "Signaling Principle"
+    description: |
+      Use visual cues (highlights, arrows, zoom, color changes) to direct attention
+      to the relevant part of the screen. In code tutorials, highlight the active
+      line or region. In architecture diagrams, pulse the component being discussed.
+      Unsignaled complexity causes cognitive overload.
+    severity: P1
+    source: "Richard Mayer — Signaling Principle"
+
+  - id: VBP-010
+    title: "Anchoring with Analogies"
+    description: |
+      Abstract technical concepts become concrete through analogies to familiar
+      domains. Use one analogy per concept, displayed briefly on a dark pill overlay.
+      Do not overuse — more than one analogy per 2-minute segment dilutes impact.
+    severity: P2
+    source: "Made to Stick — Chip & Dan Heath"
+
+  - id: VBP-011
+    title: "Strategic Silence"
+    description: |
+      Silence after a key moment (test passing, violation clearing, convergence
+      reaching zero) is more powerful than narration. Allow 1-3 seconds of silence
+      at emotional peaks. The viewer processes the significance independently.
+    severity: P2
+    source: "Film editing best practices — Walter Murch, In the Blink of an Eye"
+
+  - id: VBP-012
+    title: "Consistent Visual Language"
+    description: |
+      Establish a visual vocabulary in Video 1 and maintain it throughout the series.
+      Colors, shapes, motion patterns, and iconography must be consistent. Viewers
+      build a mental model; changing visual language mid-series forces re-learning.
+    severity: P0
+    source: "NNGroup — Consistency and Standards (Nielsen Heuristic #4)"
+
+  - id: VBP-013
+    title: "Business Book Anchoring (Governance Content)"
+    description: |
+      When presenting governance, discipline, and organizational principles,
+      strategically reference established business literature to add credibility:
+      - "Good to Great" (Jim Collins) — Level 5 Leadership, Hedgehog Concept
+      - "7 Habits of Highly Effective People" (Stephen Covey) — Begin with the End in Mind, Put First Things First
+      - "The Checklist Manifesto" (Atul Gawande) — Simple checklists prevent complex failures
+      - "Measure What Matters" (John Doerr) — OKRs and quantified accountability
+      - "Drive" (Daniel Pink) — Autonomy, Mastery, Purpose as motivation
+      Use sparingly: max 2-3 references per video, always as supporting evidence.
+    severity: P2
+    source: "Content strategy — authority anchoring"
+
+  - id: VBP-014
+    title: "Standardized Hero Intro Slide"
+    description: |
+      EVERY video opens with a standardized intro slide (3-5 seconds):
+      - Top: Video title in Space Grotesk Bold, white on dark background
+      - Center: CORTEX logo (cortex-logo-200.png) displayed as a large hero image,
+        centered, with a subtle cyan glow pulse
+      - Bottom: "CORTEX" in digital/futuristic font with a brief shimmer animation
+      - Background: Standard glassmorphism deep navy (#0a0e27) with floating particles
+      This creates series continuity — the viewer instantly recognizes a CORTEX video
+      before any content begins. The hero logo slide lasts exactly 3-5 seconds before
+      transitioning into the hook (Scene 1 content per VBP-002).
+    severity: P0
+    source: "Brand consistency — YouTube/Vimeo best practices"
+
+  - id: VBP-015
+    title: "Breadcrumb Navigation for Sequential Content"
+    description: |
+      When presenting steps in a pipeline, stages, layers, or any sequential process:
+      - Display a persistent BREADCRUMB BAR (top or bottom of frame) showing ALL steps
+      - The CURRENT step is highlighted (full brightness, bold, larger)
+      - COMPLETED steps show a ✅ checkmark and dim to 60% opacity
+      - UPCOMING steps show as muted outlines at 30% opacity
+      - As the narration advances, the breadcrumb animates: current step checks off,
+        next step highlights
+      This prevents context loss — the viewer always knows where they are in the
+      sequence, what came before, and what's ahead. Essential for:
+      - The 9-stage audit pipeline (Video 05)
+      - The request lifecycle stations (Video 02)
+      - Security layers (Video 06)
+      - Extension point walkthroughs (Video 07)
+      - TDD RED/GREEN/REFACTOR cycle phases (Video 04)
+    severity: P0
+    source: "NNGroup — Breadcrumb Navigation; cognitive load reduction"
+
+  - id: VBP-016
+    title: "Bold Key Words on Video Slides"
+    description: |
+      On every text card, glassmorphic panel, or on-screen text element:
+      - BOLD the 1-3 most important words that carry the meaning
+      - Use the accent color (cyan #00d4ff) for bolded words, not just font weight
+      - Examples: "**Golden** tests solve the right problem"
+        "**Convergent** pipeline — loops until **zero** violations"
+        "**Five** security layers, embedded at every stage"
+      This draws the eye to the key concept even during a glance. Viewers scanning
+      (not reading) still absorb the core message.
+    severity: P1
+    source: "NNGroup — How Users Read on the Web; F-pattern scanning"
+
+  - id: VBP-017
+    title: "Alternate Male and Female Narration Voices"
+    description: |
+      Narration alternates between a male and female voice across videos:
+      - Odd-numbered videos (V01, V03, V05, V07, V09): Female narrator
+      - Even-numbered videos (V02, V04, V06, V08): Male narrator
+      Both voices share the same tone: confident, conversational, honest, not salesy.
+      Within a single video, the voice does NOT switch. Each video has ONE narrator.
+      This creates variety across the 9-video journey, prevents narrator fatigue,
+      and ensures the series feels inclusive and professional.
+    severity: P1
+    source: "Video production best practice — voice variety in series content"
+
+  - id: VBP-018
+    title: "No Unexpanded Acronyms"
+    description: |
+      NEVER use an acronym without stating its full form on FIRST use in each video.
+      Viewers may watch videos out of order — every video must be self-contained
+      for acronym comprehension.
+      Mandatory expansions (on-screen text + narration on first use):
+      - CORTEX: COgnitive Real-Time EXecution
+      - LENS: Language → Examination → Navigation → Synthesis
+      - MCP: Model Context Protocol
+      - TDD: Test-Driven Development
+      - URS: Unified Reinforcement Signal
+      - SDLC: Software Development Lifecycle
+      - YAML: YAML Ain't Markup Language (optional — can just say "YAML files")
+      - CI: Continuous Integration
+      - CVE: Common Vulnerabilities and Exposures
+      After first expansion, the acronym may be used freely for the rest of the video.
+    severity: P0
+    source: "Accessibility and comprehension — plain language guidelines"
+
+  - id: VBP-019
+    title: "Strategic Color Intelligence"
+    description: |
+      Use domain-specific accent colors that carry meaning across the series.
+      Colors are a LANGUAGE — once established, never break the association:
+      - **Cyan (#00d4ff)**: Primary CORTEX identity — headings, highlights, borders
+      - **Purple (#7b61ff)**: Secondary identity — connections, paths, orchestrators
+      - **Gold (#FFD700)**: Golden tests, premium quality, trust (Video 06 especially)
+      - **Red (#ff4757)**: Violations, failures, TDD RED phase, security alerts
+      - **Green (#2ecc71)**: Passing tests, TDD GREEN phase, healthy states
+      - **Amber (#f39c12)**: Warnings, P1 severity, caution states
+      - **White (#ffffff)**: Neutral text on dark backgrounds
+      Video 06 (Golden Tests) is the PRIMARY gold color video — gold glows, gold
+      glass panels, golden particle effects to reinforce the "golden" metaphor.
+      Other videos use their domain accent sparingly (e.g., red/green in TDD Video 04).
+    severity: P1
+    source: "Color psychology — meaningful chromatic coding in data visualization"
+
+tutorial_specific:
+  - id: VBP-T01
+    title: "Show, Don't Tell — Real Output"
+    description: |
+      Tutorials must show real terminal output, real error messages, and real
+      success states. Never use mocked or simplified output. Viewers need to
+      recognize what they'll see on their own screens.
+    severity: P0
+
+  - id: VBP-T02
+    title: "Pause Points"
+    description: |
+      After each step in a tutorial, include a visual pause (progress bar update,
+      step checkmark) giving the viewer time to complete the step themselves.
+      Tutorials are participatory — concept videos are not.
+    severity: P1
+
+  - id: VBP-T03
+    title: "Error Recovery"
+    description: |
+      Show at least one error and recovery per tutorial. Viewers learn more from
+      seeing failures handled than from flawless runs. The error demonstrates
+      that the system (and the tutorial) is real.
+    severity: P1
+
+  - id: VBP-T04
+    title: "Visual Differentiation — Tutorials vs Concepts"
+    description: |
+      Use a distinct accent color for tutorials (amber/gold) vs concept videos
+      (cyan/purple). This provides instant visual classification without reading titles.
+    severity: P0
+
+copilot_contrast_narrative:
+  title: "Raw Copilot vs CORTEX — Pain Points for Video Storytelling"
+  description: |
+    The following pain points should be woven into video narration to show
+    CORTEX's value over raw GitHub Copilot usage. Each point is a real
+    engineering frustration, not a manufactured comparison.
+  pain_points:
+    - id: CCP-001
+      pain: "No memory between sessions"
+      raw_copilot: "Every new chat session starts from zero. Context is lost."
+      cortex_solution: "Persistent orchestrator traces, knowledge base, confidence scores carry forward."
+      video_ref: "V01 Scene 1, V08 Scene 2"
+
+    - id: CCP-002
+      pain: "No governance enforcement"
+      raw_copilot: "Copilot suggests code that may violate team standards. No pre-commit validation."
+      cortex_solution: "Tiered governance rules enforced at every commit, CI, and runtime."
+      video_ref: "V01 Scene 1, V04 Scene 2"
+
+    - id: CCP-003
+      pain: "No test-first discipline"
+      raw_copilot: "Copilot generates implementation first. Tests are an afterthought if they exist."
+      cortex_solution: "TDD is mandatory (CORE-008). Test file created before implementation."
+      video_ref: "V01 Scene 1, V04 Scene 3, T03 Step 1"
+
+    - id: CCP-004
+      pain: "No audit trail"
+      raw_copilot: "No record of what was generated, why, or whether it was validated."
+      cortex_solution: "AC markers, SQLite activity log, full traceability per request."
+      video_ref: "V01 Scene 4, V02 Scene 7, V06 Scene 3"
+
+    - id: CCP-005
+      pain: "One-shot responses"
+      raw_copilot: "Single response per prompt. No iteration, no convergence, no validation loop."
+      cortex_solution: "Multi-stage pipeline with convergence loops that iterate until zero violations."
+      video_ref: "V01 Scene 1, V05 Scene 2"
+
+    - id: CCP-006
+      pain: "No workspace awareness"
+      raw_copilot: "Limited context window. Cannot see full project structure or history."
+      cortex_solution: "LENS scans entire workspace. File structure, patterns, dependencies understood."
+      video_ref: "V01 Scene 3, V03 Scene 2"
+
+    - id: CCP-007
+      pain: "No organizational knowledge"
+      raw_copilot: "Cannot learn team patterns, anti-patterns, or institutional decisions."
+      cortex_solution: "Knowledge base, pattern library, company overrides — persistent and searchable."
+      video_ref: "V07 Scene 2, V08 Scene 2, T04 Step 4"
+
+    - id: CCP-008
+      pain: "No security pipeline"
+      raw_copilot: "No secret scanning, no vulnerability detection, no security gate."
+      cortex_solution: "Five-layer security pipeline from keystroke to deployment."
+      video_ref: "V06 Scene 4"
