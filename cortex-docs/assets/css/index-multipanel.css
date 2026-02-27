@@ -105,7 +105,7 @@
 .key-features-section {
     max-width: 1400px;
     margin: 0 auto var(--space-3xl) auto;
-    padding: 0 var(--spacing-md);
+    padding: 0 3rem;
 }
 
 /* Main Panel Wrapper - Glassmorphism v4.0 Standard */
@@ -164,7 +164,7 @@
 }
 
 .panel-title-main {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
     color: var(--accent-primary);
     display: inline-flex;
@@ -707,7 +707,13 @@
 
 @media (max-width: 640px) {
     .key-features-section {
-        padding: 0 var(--spacing-sm);
+        padding: 0 1.25rem;
+    }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .key-features-section {
+        padding: 0 2rem;
     }
 }
 

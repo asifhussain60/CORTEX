@@ -1910,12 +1910,18 @@ footer,
     100% { transform: translateX(220%) skewX(-18deg); opacity: 0; }
 }
 
-/* Section wrapper */
+/* Section wrapper — now nested inside .main-panel-wrapper; layout handled by parent */
 .persona-section {
-    max-width: 1140px;
-    margin: 3.5rem auto;
-    padding: 0 2.5rem;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
+}
+
+/* Outer section shell — extra vertical breathing room */
+.persona-wrapper-section {
+    margin-top: 4rem;
+    margin-bottom: 4rem;
 }
 
 /* Section heading */
@@ -1925,7 +1931,7 @@ footer,
 }
 
 .persona-section-title {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 800;
     color: var(--text-primary);
     margin: 0 0 0.5rem;
@@ -1962,7 +1968,7 @@ a.persona-tile {
     background: linear-gradient(145deg, rgba(26, 31, 58, 0.92), rgba(10, 14, 39, 0.97));
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 20px;
-    padding: 2rem 2.25rem 2rem;
+    padding: 2rem 1.25rem 2rem;
     margin-bottom: 0;
     text-align: left;
     transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
@@ -2186,11 +2192,11 @@ a.persona-tile {
     }
 
     .persona-section-title {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 
     .persona-tile {
-        padding: 1.35rem 1.5rem;
+        padding: 1.35rem 1rem;
     }
 
     .persona-title { font-size: 1.2rem; }
@@ -2208,7 +2214,7 @@ a.persona-tile {
     }
 
     .persona-tile {
-        padding: 1.5rem 1.6rem;
+        padding: 1.5rem 1.1rem;
     }
 
     .persona-title { font-size: 1.2rem; }
@@ -2222,7 +2228,7 @@ a.persona-tile {
     position: relative;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 4rem 2rem;
+    padding: 4rem 3rem;
     background: rgba(26, 31, 58, 0.4);
     border: 1px solid rgba(0, 212, 255, 0.2);
     border-radius: 24px;
@@ -2521,7 +2527,7 @@ a.persona-tile {
 
 @media (max-width: 768px) {
     .built-with-cortex-panel {
-        padding: 2rem 1rem;
+        padding: 2rem 1.25rem;
     }
     
     .bwc-title {
@@ -6548,7 +6554,19 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 .level0-container {
     max-width: 1400px; /* Increased from 1200px for better space utilization */
     margin: 3rem auto;
-    padding: 0 1.5rem; /* Increased from 1rem for balanced spacing */
+    padding: 0 3rem; /* Increased from 1rem for balanced spacing */
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+    .level0-container {
+        padding: 0 2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .level0-container {
+        padding: 0 1.25rem;
+    }
 }
 
 .level0-container--narrow {
@@ -6584,7 +6602,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 
 .level0-panel-title {
     margin: 0;
-    font-size: 1.75rem;
+    font-size: 2.5rem;
     color: var(--accent-primary);
 }
 
@@ -6724,7 +6742,7 @@ h1, h2, h3, h4, h5, h6, p, span, div {
 
 .level0-card-title {
     margin: 0;
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: var(--accent-primary);
 }
 
@@ -11861,8 +11879,11 @@ code[style*="color:"][style*="background:"] {
     
     /* Adjust font sizes for mobile readability */
     .bwc-title,
-    .panel-title-main {
-        font-size: 1.5rem !important;
+    .panel-title-main,
+    .persona-section-title,
+    .level0-panel-title,
+    .level0-card-title {
+        font-size: 1.75rem !important;
     }
     
     .bwc-tagline,
