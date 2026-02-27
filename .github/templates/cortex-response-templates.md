@@ -397,6 +397,7 @@ The `### ⚡ If you type proceed, CORTEX will:` sub-section is **mandatory** in 
 ```markdown
 ## {icon} CORTEX {mode}
 **Author:** Asif Hussain | **Orchestrator:** {OrchestratorName} ✅
+**Route:** `IntentRouter → {Orchestrator} → {Sub-orchestrator}` *(optional — include for 2+ hop routing)*
 
 ---
 ```
@@ -406,6 +407,7 @@ The `### ⚡ If you type proceed, CORTEX will:` sub-section is **mandatory** in 
 **Rules:**
 - ✅ Appears ONCE at the very top (never repeated)
 - ✅ Author + Orchestrator line immediately below the H2 header
+- ✅ **Route:** line included whenever routing chain is 2+ hops (complex requests, multi-orchestrator flows)
 - ✅ Followed by `---` separator
 - ❌ NO mid-response headers
 
@@ -420,7 +422,7 @@ Reusable content sections that compose into situation-specific responses without
 
 **Principle:** Like LEGO blocks — each block has ONE job, blocks assemble without overlap.
 
-### Block Library (16 Composable Blocks)
+### Block Library (19 Composable Blocks)
 
 | Block ID | Purpose | Length | When to Use |
 |----------|---------|--------|-------------|
@@ -440,6 +442,9 @@ Reusable content sections that compose into situation-specific responses without
 | **BLOCK-HANDOFF** | Orchestrator routing chain | inline | Complex routing (2+ hops) |
 | **BLOCK-EXECUTION-SPEC** | Machine-readable step spec | table | Before executor model run |
 | **BLOCK-DEVIATION-ALERT** | Unexpected divergence HALT | compact | Executor deviation detected |
+| **BLOCK-PHASE-ROADMAP** | Multi-phase journey overview at operation start | compact list | Any multi-phase operation (N≥2 phases) |
+| **BLOCK-ENGAGEMENT-BREADCRUMB** | Real-time routing chain + current orchestrator | inline | Every orchestrator invocation (always rendered) |
+| **BLOCK-ENGAGEMENT-TIMELINE** | Collapsible per-orchestrator timing log | collapsible | Completion of any 3+ step operation |
 
 ### Assembly Rules
 
@@ -509,8 +514,10 @@ Result: Zero duplication, 350 words
 Canonical block emission sequence for composable blocks:
 
 ```
-BLOCK-SESSION-IDENTITY → BLOCK-MICRO-ACK → BLOCK-HANDOFF → BLOCK-ERROR-RECOVERY
-→ BLOCK-DIFF-PREVIEW → BLOCK-METRICS-DASHBOARD → BLOCK-NEXT-STEPS → BLOCK-RESUME-BANNER
+BLOCK-SESSION-IDENTITY → BLOCK-ENGAGEMENT-BREADCRUMB → BLOCK-MICRO-ACK → BLOCK-HANDOFF
+→ BLOCK-ERROR-RECOVERY → BLOCK-PHASE-ROADMAP → BLOCK-STAGE-PROGRESS
+→ BLOCK-ENGAGEMENT-TIMELINE → BLOCK-DIFF-PREVIEW → BLOCK-METRICS-DASHBOARD
+→ BLOCK-NEXT-STEPS → BLOCK-RESUME-BANNER
 ```
 
 **Rule:** Emit only the blocks that apply — omit inapplicable blocks entirely (R4: no empty headers).
@@ -963,6 +970,126 @@ I'm here to make you successful. Let's build something great. 🚀
 
 ---
 
+### BLOCK-PHASE-ROADMAP: Multi-Phase Journey Overview
+
+**Trigger:** Any operation with N≥2 phases (planning, implementation, audit/fix, digest, onboard). Rendered ONCE at operation start.
+
+**Purpose:** Give the user a full journey view before work begins. Differentiates CORTEX from single-shot tools.
+
+**Format (phase-list+bar — mandatory for multi-phase operations):**
+
+```markdown
+📋 **Phase Roadmap — {Operation Name}**
+
+- ⚪ Phase 1: {name} (pending)
+- ⚪ Phase 2: {name} (pending)
+- ⚪ Phase 3: {name} (pending)
+- ⚪ Phase N: {name} (pending)
+```
+
+**Status icons:** ⚪ Pending | 🔵 In Progress | ✅ Complete | 🔴 Blocked
+
+**Rules:**
+- ✅ Rendered once at operation START (before Stage 0 initialisation)
+- ✅ Icons update live as phases complete (roadmap re-emitted only when a phase transitions)
+- ✅ Use BLOCK-STAGE-PROGRESS for intra-phase progress (per-stage bars)
+- ❌ Do NOT show during single-phase operations (< 2 phases)
+- ❌ Do NOT duplicate with BLOCK-STAGE-PROGRESS inline bar
+
+**Combined with BLOCK-STAGE-PROGRESS (canonical multi-phase pattern):**
+```
+BLOCK-PHASE-ROADMAP (once at start) → BLOCK-STAGE-PROGRESS (per stage) → BLOCK-PHASE-ROADMAP (updated at phase completion)
+```
+
+---
+
+### BLOCK-ENGAGEMENT-BREADCRUMB: Routing Chain + Current Orchestrator
+
+**Trigger:** Every orchestrator invocation — always rendered in header region.
+
+**Purpose:** Show the full routing chain so users understand which orchestrator is responding and why.
+
+**Format:**
+
+```markdown
+**Route:** `IntentRouter → {Orchestrator} → {Sub-orchestrator}`
+```
+
+**Rules:**
+- ✅ Always rendered on first response of any multi-hop routing chain
+- ✅ Uses backtick code spans for readability in Copilot Chat
+- ✅ Show current node in **bold** or with 🔵 pulse: `` `IntentRouter → **MasterOrchestrator** → TDDOrchestrator` ``
+- ❌ Single-hop simple responses: omit (keep response lean)
+- ❌ Never duplicated — appears in header region only (not inline mid-response)
+
+**Pairs with:** BLOCK-ENGAGEMENT-TIMELINE (timing detail), Response Header Route line
+
+---
+
+### BLOCK-ENGAGEMENT-TIMELINE: Collapsible Per-Orchestrator Timing Log
+
+**Trigger:** Completion of any 3+ step operation. Rendered after BLOCK-METRICS-DASHBOARD.
+
+**Purpose:** Transparent performance log — shows how long each orchestrator spent, surfacing bottlenecks.
+
+**Format (collapsible — MANDATORY to avoid visual noise):**
+
+<details>
+<summary>⏱️ Orchestrator Timeline</summary>
+
+| Orchestrator | Duration | Status |
+|---|---|---|
+| IntentRouter | 0.3s | ✅ |
+| MasterOrchestrator | 1.2s | ✅ |
+| TDDOrchestrator | 8.4s | ✅ |
+| EnforcementOrchestrator | 0.9s | ✅ |
+| **Total** | **10.8s** | ✅ |
+
+</details>
+
+**Rules:**
+- ✅ Always wrapped in `<details>` — never expanded by default (CORE-049 noise reduction)
+- ✅ Include Total row at bottom
+- ✅ Duration in seconds (2 decimal places)
+- ✅ Status icons match BLOCK-STAGE-PROGRESS status set (✅/🔴/⚪)
+- ❌ Do NOT include for single-orchestrator operations
+- ❌ Do NOT break out of `<details>` — always collapsible
+
+---
+
+### BLOCK-STAGE-PROGRESS: In-Progress Orchestrator Pulse
+
+**Trigger:** Active orchestrator stage execution (intra-phase progress).
+
+**Purpose:** Real-time pulse showing which stage is executing, with bar + bullet list. The **phase-list+bar** format is MANDATORY — never use bar-only.
+
+**Format (canonical — both bar AND phase list required):**
+
+```markdown
+**📋 {PHASE_NAME} — Stage {N}: {STAGE_TITLE}**
+
+[████████░░] 80%
+
+- ✅ S1: {name}
+- ✅ S2: {name}
+- 🔵 S3: {name} (in progress)  ← orchestrator pulse: shows which is active
+- ⚪ S4: {name}
+```
+
+**Orchestrator pulse annotation:** The 🔵 icon on the active stage IS the pulse — it signals which orchestrator is currently executing. Update on each stage transition.
+
+**Rules:**
+- ✅ Phase-list+bar format is MANDATORY (bar-only is a P1 violation)
+- ✅ Bar: exactly 10 blocks total (`[████░░░░░░]` 40%), never fenced in code blocks
+- ✅ Active stage uses 🔵 with `(in progress)` annotation
+- ✅ Always include Tests + Coverage metrics line when available
+- ❌ Bar-only format (no bullet list) is FORBIDDEN — phase-list+bar is the canonical form
+- ❌ Never fenced: output bar as plain markdown text, never in ` ``` ` blocks
+
+**SSOT for full templates:** See §Silent Autonomous Mode — Golden Template for Initialisation, Progress, Completion, and Error template variants.
+
+---
+
 ## 🤖 SILENT AUTONOMOUS MODE — GOLDEN TEMPLATE (SSOT)
 
 **Authority:** CORE-049 Silent Autonomous Execution Protocol
@@ -1086,12 +1213,13 @@ Tests: {passed}/{total} | Failures: {n}
 ### Template Rules
 
 1. **Stage list:** Each stage is a Markdown bullet (`- {icon} S{N}: ...`) — one per line (never concatenated)
-2. **Progress bar:** `[██████████]` format — exactly **10 blocks** total, plain markdown, never fenced
-3. **Separators:** Use `---` (standard Markdown HR) — never long `━` lines that wrap on narrow panels
-4. **Stage names:** Keep <30 chars to prevent overflow
-5. **Metrics line:** Always include Tests + Coverage
-6. **Last stage:** Same bullet format as all other stages (no special character)
-7. **Title format:** Bold text with emoji — `**📋 {PHASE_NAME} — {status}**`
+2. **Phase-list+bar format:** MANDATORY — always emit both the bullet stage list AND the `[██████████]` bar. Bar-only (no stage list) is a P1 violation.
+3. **Progress bar:** `[██████████]` format — exactly **10 blocks** total, plain markdown, never fenced
+4. **Separators:** Use `---` (standard Markdown HR) — never long `━` lines that wrap on narrow panels
+5. **Stage names:** Keep <30 chars to prevent overflow
+6. **Metrics line:** Always include Tests + Coverage
+7. **Last stage:** Same bullet format as all other stages (no special character)
+8. **Title format:** Bold text with emoji — `**📋 {PHASE_NAME} — {status}**`
 
 ### Forbidden in Silent Mode
 

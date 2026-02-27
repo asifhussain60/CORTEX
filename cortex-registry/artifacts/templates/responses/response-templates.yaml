@@ -303,6 +303,36 @@ templates:
     distinct_from: "BLOCK-ERROR-RECOVERY (known errors vs unexpected divergence)"
     ssot_block: "BLOCK-DEVIATION-ALERT"
 
+  phase_roadmap:
+    intent: ["IMPLEMENT", "FIX", "REFACTOR", "AUDIT", "PLAN", "DIGEST", "ONBOARD"]
+    trigger: "Any operation with N≥2 phases — rendered ONCE at operation start"
+    format: "📋 Phase Roadmap header + bullet list with ⚪/🔵/✅/🔴 status icons per phase"
+    required_fields: ["phases"]
+    placement: "before BLOCK-STAGE-PROGRESS, once at operation start"
+    updates: "Re-emitted only when a phase transitions (not every stage)"
+    distinct_from: "BLOCK-STAGE-PROGRESS (intra-phase stage progress bars)"
+    ssot_block: "BLOCK-PHASE-ROADMAP"
+
+  engagement_breadcrumb:
+    intent: ["*"]
+    trigger: "Every orchestrator invocation with 2+ hop routing — always rendered in header region"
+    format: "**Route:** `IntentRouter → {Orchestrator} → {Sub-orchestrator}` (backtick code span)"
+    required_fields: ["routing_chain"]
+    placement: "header region, immediately after Response Header"
+    always_rendered: true
+    distinct_from: "BLOCK-HANDOFF (routing chain for complex educational responses)"
+    ssot_block: "BLOCK-ENGAGEMENT-BREADCRUMB"
+
+  engagement_timeline:
+    intent: ["IMPLEMENT", "FIX", "REFACTOR", "AUDIT"]
+    trigger: "Completion of any 3+ step operation"
+    format: "<details><summary>⏱️ Orchestrator Timeline</summary> table of Orchestrator | Duration | Status with Total row </details>"
+    required_fields: ["orchestrators", "durations"]
+    placement: "after BLOCK-METRICS-DASHBOARD, before BLOCK-NEXT-STEPS"
+    always_collapsible: true
+    distinct_from: "BLOCK-METRICS-DASHBOARD (test/coverage metrics vs orchestrator timing)"
+    ssot_block: "BLOCK-ENGAGEMENT-TIMELINE"
+
 # ============================================================================
 # RENDERING RULES (VS Code Copilot Chat Compatibility)
 # ============================================================================

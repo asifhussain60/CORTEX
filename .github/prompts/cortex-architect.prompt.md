@@ -65,9 +65,10 @@
 **Trigger:** "proceed" | "implement" | "continue" | "yes" | "do it"
 
 **Rules:**
-- ✅ Progress bar + stage bullet list with ✅/🔵/⚪/🔴 icons
+- ✅ Progress bar + stage bullet list with ✅/🔵/⚪/🔴 icons (phase-list+bar format — MANDATORY)
 - ✅ Display in Chat Session (never terminal)
-- ✅ Bar: exactly 10 blocks (`[████░░░░░░] 40%`), never fenced in code blocks
+- ✅ See templates SSOT for canonical format: `.github/templates/cortex-response-templates.md` §Silent Autonomous Mode + §BLOCK-STAGE-PROGRESS
+- ❌ NO bar-only format (no stage list) — phase-list+bar is mandatory
 - ❌ NO narration, NO confirmations, NO .md/.txt report files (CORE-002)
 
 **Chat vs Terminal:** Status → Chat. Commands (pytest, git, mv) → Terminal.

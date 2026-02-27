@@ -82,3 +82,22 @@ Templates are read by the WorkflowEngine (`cortex/core/workflow_engine.py`) and 
 **Developer:** "Responses are inline (CORE-002). There's no generated report file to hunt for. CORTEX mirrors my intent back in plain English, I confirm, and execution begins — all right here in VS Code."
 
 *Verified against response template standards · 25 February 2026*
+
+---
+
+## Orchestrator Engagement Visibility (Phase 85)
+
+Three composable blocks make CORTEX's routing and progress transparent in every response:
+
+| Block | Purpose | When Rendered |
+|---|---|---|
+| **BLOCK-ENGAGEMENT-BREADCRUMB** | Shows routing chain: `IntentRouter → {Orchestrator}` | Every multi-hop invocation |
+| **BLOCK-ENGAGEMENT-TIMELINE** | Collapsible per-orchestrator timing log | After 3+ step operations |
+| **BLOCK-PHASE-ROADMAP** | Full phase journey at operation start | Any N≥2 phase operation |
+
+**Progress format:** The **phase-list+bar** format is mandatory for all autonomous execution. Bar-only format is a P1 violation. SSOT: `.github/templates/cortex-response-templates.md` §BLOCK-STAGE-PROGRESS.
+
+**Response header Route line:** For multi-hop routing chains, the response header includes:
+`**Route:** \`IntentRouter → {Orchestrator} → {Sub-orchestrator}\``
+
+*Verified against Phase 85 response template standards · Phase 85 complete*

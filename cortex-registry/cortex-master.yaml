@@ -133,27 +133,29 @@ phase_detail_files:
     file: "cortex-registry/_cortex-master/phases/completed/phase-87-rca-memory-engine.yaml"
     note: "121 tests GREEN. rca_models.py, rca_engine.py, rca_store.py, prevention_gate.py, recurrence_engine.py created. OPJMixin +2 methods. cortex_learning op=rca (5 actions). rca-analysis-workflow.yaml. 15 cortex-docs files updated + 6 new files. Smoke: 1484 passed (+12 from baseline)."
 
-  # ── SLOT #1 — phase-86 (P1, PLANNED) ──────────────────────────────────────
+  # ── SLOT #1 — phase-86 (P1, COMPLETE) ─────────────────────────────────────
   - id: phase-86
     title: "Multi-Stack Debug Pipeline — 5 Strategies + Vision Mapping + Auto-Cleanup + Unified Intelligence Wiring"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-86-MULTI-STACK-DEBUG-PIPELINE
     gaps: 16
+    gaps_closed: 16
     sub_phases: 8
-    file: "cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml"
-    note: "5 new AbstractInjectionStrategy implementations (Frontend/HTML-Vision/API/SQL/DotNet). CortexVision stub→real Vision API. Multi-language AutoCleanupManager patterns. Unified intelligence wiring: OPJMixin + URS + IntelligenceMatrix (CC-021/IC-021) + bidirectional EventBus + KnSynth. cortex-docs sync. Zero new orchestrators, zero new MCP tools."
+    file: "cortex-registry/_cortex-master/phases/completed/phase-86-multi-stack-debug-pipeline.yaml"
+    note: "57 tests GREEN. 5 new AbstractInjectionStrategy implementations (Frontend/HTML-Vision/API/SQL/DotNet). CortexVision stub→real Vision API. Multi-language AutoCleanupManager patterns. Unified intelligence wiring: OPJMixin + URS + IntelligenceMatrix (CC-021/IC-021) + bidirectional EventBus + KnSynth. cortex-docs sync. Smoke: 1657 passed. Commit: c0b32fc84."
 
-  # ── SLOT #1 — phase-85 (P1, PLANNED) ──────────────────────────────────────
+  # ── SLOT #1 — phase-85 (P1, COMPLETE) ─────────────────────────────────────
   - id: phase-85
     title: "Unified Response Template Standardization + Orchestrator Engagement Visual System"
     priority: P1
-    status: PLANNED
+    status: COMPLETE
     sweep_id: SWEEP-85-UNIFIED-RESPONSE-ORCHESTRATOR-ENGAGEMENT
     gaps: 12
+    gaps_closed: 12
     sub_phases: 6
-    file: "cortex-registry/_cortex-master/phases/planned/phase-85-unified-response-orchestrator-engagement.yaml"
-    note: "Progress template unification (phase-list format mandatory). 3-tier orchestrator engagement visibility (Breadcrumb, Timeline, Pulse). New blocks: BLOCK-PHASE-ROADMAP, BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE. SSOT pointer enforcement. cortex-docs sync. Pasted Image pattern removal."
+    file: "cortex-registry/_cortex-master/phases/completed/phase-85-unified-response-orchestrator-engagement.yaml"
+    note: "20 tests GREEN. phase-list+bar mandatory. 3 new blocks: BLOCK-PHASE-ROADMAP, BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE. BLOCK-STAGE-PROGRESS enhanced with orchestrator pulse. SSOT pointer enforcement (architect prompt + copilot-instructions). Response Header Route line added. Assembly order updated (12 blocks). YAML registry updated (+3 entries). cortex-docs sync: 06-response-formatting.md + 06-cross-orchestrator.md. Smoke: 1677 passed."
 
   # ── SLOT #1 — phase-84 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-84
@@ -390,7 +392,7 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "✅ 84/87 PHASES COMPLETE — Phase 85 (Unified Response+Engagement) + Phase 86 (Multi-Stack Debug Pipeline) + Phase 87 (RCA Memory Engine) PLANNED. Smoke baseline: 1,443+"
+  status: "✅ 87/87 PHASES COMPLETE — Phase 85 (Unified Response+Engagement) + Phase 86 (Multi-Stack Debug Pipeline) + Phase 87 (RCA Memory Engine) COMPLETE. Smoke baseline: 1,677 passed."
   overall_score: 98%
   test_baseline: "1,443 smoke | 84 golden response | 204 golden workflow | 177 workflow orchestrators"
   deployment_date: '2026-02-27'

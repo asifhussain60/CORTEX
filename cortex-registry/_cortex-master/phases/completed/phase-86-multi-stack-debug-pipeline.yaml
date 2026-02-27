@@ -1,0 +1,791 @@
+# CORTEX Phase Plan — Phase 86
+# Multi-Stack Debug Pipeline — Vision API + Technology Strategies + Production Cleanup
+# Authority: CORE-008, CORE-064, ENH-089
+# Status: PLANNED
+
+id: "phase-86"
+title: "Multi-Stack Debug Pipeline — Vision API, Technology Strategies, Production Cleanup"
+version: "1.0"
+created: "2026-02-27"
+status: PLANNED
+priority: P1
+governance_authority:
+  - CORE-008   # TDD mandatory
+  - CORE-011   # Type hints on all functions
+  - CORE-012   # Docstrings on all public APIs
+  - CORE-028   # File naming: snake_case only
+  - CORE-035   # Single canonical implementation
+  - CORE-064   # Sweep Completeness Contract
+sweep_catalogue_id: "SWEEP-86-MULTI-STACK-DEBUG-PIPELINE"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# BACKGROUND
+# ─────────────────────────────────────────────────────────────────────────────
+background: |
+  Source: Architecture design review (2026-02-27)
+  Score at entry: 5.0 / 10 (debugging capability limited to Python-only strategies)
+  Target score: 9.0 / 10 (universal multi-stack debugging with visual analysis)
+  Baseline measurements:
+    - Smoke tests: 1,443 passed
+    - Existing strategies: 3 (test_failure, refactor_regression, governance_violation)
+    - Vision API: stub only (returns mock_response)
+    - Technology stacks covered: Python only
+    - Production cleanup: Python marker strip only
+  Git prerequisite: main branch clean, no merge conflicts
+
+  Current state:
+    - DebuggerOrchestrator: 471 lines, EventBus-driven, 3 strategies, wired in support spec
+    - MarkerInjectionEngine: Strategy Pattern with pluggable strategies
+    - AutoCleanupManager: Session-based cleanup, Python markers only
+    - CortexVision MCP tool: Registered but returns mock data
+    - Agent spec (cortex-debugger.md): Documents multi-language injection points but no strategies exist
+    - Workflow templates: No debugging/ category exists
+
+  Design decision: EXTEND existing Strategy Pattern (zero new orchestrators, zero new MCP tools).
+  All 5 new strategies implement AbstractInjectionStrategy from debug_strategy_base.py.
+  The DebuggerOrchestrator, MCP tools, and EventBus subscriptions are UNCHANGED.
+
+  Expanded scope (2026-02-27 — unified brain analysis):
+  Wire DebuggerOrchestrator into CORTEX's cross-cutting intelligence infrastructure:
+  OPJMixin (learning persistence), URS (reinforcement signals), IntelligenceMatrix
+  (CC-021/IC-021 cells), bidirectional EventBus (DEBUG_INSIGHT/DEBUG_FIX_APPLIED),
+  and KnowledgeSynthesisEngine (debug pattern persistence). All 5 integrations
+  follow proven patterns from MasterOrchestrator, TDDOrchestrator, and
+  EnforcementOrchestrator — pure additive wiring, ~55 lines of production code.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GAP CATALOGUE (CORE-064)
+# ─────────────────────────────────────────────────────────────────────────────
+sweep_catalogue:
+  - id: "GAP-86-01"
+    title: "FrontendConsoleStrategy — JS/TS console.log injection"
+    severity: P1
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      cortex-debugger.md documents JS/TS/React/Angular/Vue injection points
+      but no strategy class exists. MarkerInjectionEngine only has 3 Python-centric strategies.
+      File: cortex/orchestrators/support/debugging/strategies/ — no frontend_*.py
+    action_ref: "phase-86-a"
+    status: OPEN
+
+  - id: "GAP-86-02"
+    title: "HtmlVisionMappingStrategy — Vision API screenshot → DOM element mapping"
+    severity: P1
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      CortexVision MCP tool (cortex/mcp/tools/utilities.py:934) returns mock data.
+      html-refactor-validation.yaml defines Vision API stages (S1_BASELINE_VISION, S7_VISION_REGRESSION)
+      but no strategy links bounding boxes to DOM selectors for debugging.
+      No data-cortex-debug attribute injection exists.
+    action_ref: "phase-86-b"
+    status: OPEN
+
+  - id: "GAP-86-03"
+    title: "ApiTraceStrategy — HTTP middleware trace injection"
+    severity: P1
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      tdd-api-service.yaml defines API workflow but no debug trace injection strategy.
+      No request/response logging middleware injection for Express/FastAPI/ASP.NET/Flask.
+    action_ref: "phase-86-c"
+    status: OPEN
+
+  - id: "GAP-86-04"
+    title: "SqlTraceStrategy — SQL Server/Oracle/PostgreSQL trace injection"
+    severity: P1
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      csharp-security-workflow.yaml scans SQL injection patterns but no debug trace
+      injection exists for SQL Profiler markers, Oracle DBMS_OUTPUT, or PostgreSQL RAISE NOTICE.
+    action_ref: "phase-86-c"
+    status: OPEN
+
+  - id: "GAP-86-05"
+    title: "DotNetTraceStrategy — C#/.NET ILogger debug injection"
+    severity: P1
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      csharp-refactor-workflow.yaml and csharp-security-workflow.yaml exist for C# operations
+      but no debug strategy injects ILogger.LogDebug traces at method entry/exit.
+    action_ref: "phase-86-c"
+    status: OPEN
+
+  - id: "GAP-86-06"
+    title: "AutoCleanupManager multi-language strip patterns"
+    severity: P1
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      auto_cleanup_manager.py only strips Python markers (CORTEX_DEBUG_MARKER_START/END).
+      No patterns for: console.log CORTEX_DEBUG, data-cortex-debug attributes,
+      SQL comment markers, C# ILogger traces, API middleware registrations.
+      Lines 147-148: _MARKER_START = "# CORTEX_DEBUG_MARKER_START" (Python only)
+    action_ref: "phase-86-d"
+    status: OPEN
+
+  - id: "GAP-86-07"
+    title: "Debugging workflow template — multi-stack-debug-pipeline.yaml"
+    severity: P1
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      workflows/templates/ has no debugging/ subdirectory.
+      README.md lists all template categories — debugging is absent.
+      No declarative 9-stage debug pipeline exists.
+    action_ref: "phase-86-e"
+    status: OPEN
+
+  - id: "GAP-86-08"
+    title: "Strategy registration in MarkerInjectionEngine"
+    severity: P1
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      marker_injection_engine.py __init__ registers only 3 strategies.
+      strategies/__init__.py exports only 3 strategy classes.
+      New strategies must be registered in both locations.
+    action_ref: "phase-86-e"
+    status: OPEN
+
+  - id: "GAP-86-09"
+    title: "cortex-debugger.md agent update — strategy-per-stack documentation"
+    severity: P2
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      Agent spec documents injection points per language but does not reference
+      the canonical strategy classes or the debugging workflow template.
+    action_ref: "phase-86-f"
+    status: IN_PROGRESS
+    progress_note: "cortex-debugger.md updated 2026-02-27: Phase 86 PLANNED labels added, unified intelligence wiring table added (GAPs 86-11 through 86-15), Vision API stub→real note added. Remaining: update after sub-phases A-E complete to mark strategies ✅."
+
+  - id: "GAP-86-10"
+    title: "Prompt and management file updates — phase counts, debug mode references"
+    severity: P2
+    source: "Architecture design review (2026-02-27)"
+    evidence: |
+      cortex-master.yaml metadata.total_phases must increment.
+      copilot-instructions.md, cortex-architect.prompt.md, AGENT-INDEX.md
+      must reflect new debugging workflow template category.
+    action_ref: "phase-86-f"
+    status: IN_PROGRESS
+    progress_note: "copilot-instructions.md updated 2026-02-27: Phase 85/86 capabilities added, debug strategy count updated (8 total), /debug-inject note updated. AGENT-INDEX.md updated: Phase 86 PLANNED label in cortex-debugger.md entry, URS+Debug rows added to Architecture Quick Reference. cortex-architect.prompt.md: Phase 86 debug mode section already present. Remaining: final count update after phase COMPLETE."
+
+  # ── UNIFIED INTELLIGENCE WIRING GAPs (Expanded Scope — 2026-02-27) ──────
+  - id: "GAP-86-11"
+    title: "DebuggerOrchestrator missing OPJMixin — no learning persistence"
+    severity: P1
+    source: "Unified brain analysis (2026-02-27)"
+    evidence: |
+      DebuggerOrchestrator class signature: (IOrchestrator, OrchestratorProtocolMixin,
+      WorkflowTemplateMixin). OPJMixin is absent — unlike MasterOrchestrator (Phase 52/78),
+      TDDOrchestrator, EnforcementOrchestrator, and DigestSessionOrchestrator which all
+      include OPJMixin for Operation Performance Journal learning persistence.
+      Result: debug session outcomes (fix rates, time-to-resolve) are never persisted.
+    action_ref: "phase-86-g"
+    status: OPEN
+
+  - id: "GAP-86-12"
+    title: "DebuggerOrchestrator missing URS signal emission"
+    severity: P1
+    source: "Unified brain analysis (2026-02-27)"
+    evidence: |
+      TDDOrchestrator emits ReinforcementSignal at line 618.
+      EnforcementOrchestrator emits ReinforcementSignal at line 1795.
+      DebuggerOrchestrator never calls _urs_emit_signal() — debug outcomes
+      (successful fix, failed fix, cleanup completeness) produce no reinforcement
+      feedback for the intelligence layer to learn from.
+    action_ref: "phase-86-g"
+    status: OPEN
+
+  - id: "GAP-86-13"
+    title: "IntelligenceMatrix has no debugging cells (CC/IC)"
+    severity: P1
+    source: "Unified brain analysis (2026-02-27)"
+    evidence: |
+      intelligence_matrix_builder.py defines CORTEX_CAPABILITIES CC-001 through
+      CC-020+ and INTELLIGENCE_CAPABILITIES IC-001 through IC-020. Neither list
+      contains a debugging entry. The DebuggerOrchestrator is invisible to the
+      cross-cutting intelligence matrix — cannot be queried for capability,
+      health, or readiness by other orchestrators.
+    action_ref: "phase-86-g"
+    status: OPEN
+
+  - id: "GAP-86-14"
+    title: "DebuggerOrchestrator EventBus is one-way — consumes but never publishes"
+    severity: P1
+    source: "Unified brain analysis (2026-02-27)"
+    evidence: |
+      _setup_subscriptions() subscribes to 4 topics: TEST_FAILURE,
+      REFACTOR_REGRESSION, GOVERNANCE_VIOLATION, TESTS_PASSED.
+      Zero EventBus.publish() calls exist in the entire debugger_orchestrator.py.
+      Result: other orchestrators never learn about debug insights, fix patterns,
+      or recurring failure signatures discovered during debug sessions.
+    action_ref: "phase-86-g"
+    status: OPEN
+
+  - id: "GAP-86-15"
+    title: "KnowledgeSynthesisEngine not receiving debug pattern data"
+    severity: P2
+    source: "Unified brain analysis (2026-02-27)"
+    evidence: |
+      OrchestratorProtocolMixin._activate_cross_cutting_hooks() invokes KnSynth
+      automatically, but DebuggerOrchestrator never feeds debug-specific patterns
+      (recurring error signatures, successful fix strategies, time-to-resolve
+      benchmarks) into the knowledge synthesis pipeline for cross-session learning.
+    action_ref: "phase-86-g"
+    status: OPEN
+
+  # ── Documentation Sync GAP ──────────────────────────────────────────────
+  - id: "GAP-86-16"
+    title: "cortex-docs/.content and flat-files stale — no multi-stack debugging coverage"
+    severity: P2
+    source: "Phase review (2026-02-27)"
+    evidence: |
+      cortex-docs/.content/03-orchestration/05-domain-orchestrators.md and
+      flat-files/08-orchestration-system.md list DebuggerOrchestrator but do not
+      document the 8-strategy multi-stack debugging system, Vision API mapping,
+      multi-language auto-cleanup, or unified intelligence wiring (OPJ/URS/Matrix).
+      flat-files/01-intelligence-architecture.md documents intelligence tiers but
+      has no mention of debugging as an intelligence consumer (CC-021/IC-021).
+      cortex-docs/.content/01-capabilities/01-overview.md capability matrix does
+      not include multi-stack debugging as a capability row.
+    action_ref: "phase-86-f"
+    status: IN_PROGRESS
+    progress_note: |
+      2026-02-27: Holistic doc alignment sweep complete:
+      - flat-files/08-orchestration-system.md: Added DebuggerOrchestrator engagement section + Phase 86 debug pipeline section
+      - flat-files/04-capabilities.md: Added Section 7 (Multi-Stack Debugging) + Section 8 (Response Templates + Engagement)
+      - flat-files/01-intelligence-architecture.md: Added CC-021/IC-021 Phase 86 note under Operational Capabilities
+      - .content/01-capabilities/01-overview.md: Added multi-stack debugging + URS + Engagement rows to capability matrix
+      - .content/03-orchestration/05-domain-orchestrators.md: Fixed domain tier count 6→7, updated last_verified
+      - .content/index.md: Updated phase notice, system metrics table (Phase 84 complete + Phase 85/86 PLANNED rows)
+      Remaining: Final status update after sub-phases A-G complete (mark ✅ Live for 5 new strategies).
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SEQUENTIAL EXECUTION CONTRACT (MANDATORY)
+# ─────────────────────────────────────────────────────────────────────────────
+sequential_execution_contract:
+  policy: STRICT_SEQUENTIAL
+  partial_completion_allowed: false
+  decomposition_allowed: false
+  phase_atomic: true
+  gate_on_failure: HALT
+  tdd_cycle_mandatory: true
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SUB-PHASES
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  # ── SUB-PHASE A: Frontend Console Strategy ────────────────────────────────
+  - id: "phase-86-a"
+    title: "FrontendConsoleStrategy — JS/TS console.log debug injection"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-86-01"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: []
+    prerequisite: "smoke tests green (≥1,443 baseline)"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in test_frontend_console_strategy.py BEFORE implementation"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_frontend_console_strategy.py — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement FrontendConsoleStrategy extending AbstractInjectionStrategy"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_frontend_console_strategy.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), dedup check (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/unit/debugging/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_frontend_console_strategy_inherits_abstract — verify ABC compliance"
+        - "test_analyze_returns_function_entry_lines — JS function detection"
+        - "test_analyze_returns_event_handler_lines — DOM event handler detection"
+        - "test_analyze_returns_async_await_lines — async/await detection"
+        - "test_format_marker_produces_console_log — correct console.log format"
+        - "test_inject_writes_console_log_to_file — end-to-end file injection"
+        - "test_inject_handles_typescript — .ts file support"
+        - "test_inject_handles_jsx_tsx — React file support"
+      green:
+        - "Implement FrontendConsoleStrategy.analyze() — regex-based JS/TS function/handler detection"
+        - "Implement FrontendConsoleStrategy.format_marker() — console.log with CORTEX_DEBUG_<SID> prefix"
+        - "Implement FrontendConsoleStrategy.inject() — file write with marker insertion"
+      refactor:
+        - "Add docstrings to all public methods (CORE-012)"
+        - "Verify type hints on all signatures (CORE-011)"
+        - "Confirm no duplicate implementations (CORE-035)"
+
+    acceptance_criteria:
+      - "FrontendConsoleStrategy extends AbstractInjectionStrategy"
+      - "analyze() detects function entry/exit, async/await, DOM queries, event handlers"
+      - "format_marker() produces console.log('[CORTEX_DEBUG_<SID>:<FILE>:<LINE>] ...')"
+      - "Supports .js, .ts, .jsx, .tsx file extensions"
+      - "All tdd_sequence.red tests GREEN"
+
+    new_files:
+      - "cortex/orchestrators/support/debugging/strategies/frontend_console_strategy.py"
+      - "tests/unit/debugging/test_frontend_console_strategy.py"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/unit/debugging/"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE B: HTML Vision Mapping Strategy ────────────────────────────
+  - id: "phase-86-b"
+    title: "HtmlVisionMappingStrategy — Vision API screenshot → DOM element mapping"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-86-02"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "3 hours"
+    depends_on: ["phase-86-a"]
+    prerequisite: "phase-86-a completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests in test_html_vision_mapping_strategy.py BEFORE implementation"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_html_vision_mapping_strategy.py — ALL tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement HtmlVisionMappingStrategy extending AbstractInjectionStrategy"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_html_vision_mapping_strategy.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), dedup check (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/unit/debugging/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_html_vision_strategy_inherits_abstract — verify ABC compliance"
+        - "test_analyze_returns_dom_element_lines — HTML element line detection"
+        - "test_format_marker_produces_data_attribute — data-cortex-debug attribute format"
+        - "test_inject_adds_data_attribute_to_html — end-to-end HTML injection"
+        - "test_inject_handles_jsx_tsx_elements — React JSX support"
+        - "test_bounding_box_to_selector_mapping — Vision API coordinate → CSS selector"
+        - "test_cleanup_strips_data_attributes — all data-cortex-debug removed"
+        - "test_handles_nested_elements — deeply nested DOM structures"
+      green:
+        - "Implement HtmlVisionMappingStrategy.analyze() — BeautifulSoup4 DOM element detection"
+        - "Implement HtmlVisionMappingStrategy.format_marker() — data-cortex-debug attribute"
+        - "Implement HtmlVisionMappingStrategy._map_bounding_box_to_selector() — spatial matching"
+      refactor:
+        - "Add docstrings to all public methods (CORE-012)"
+        - "Verify type hints on all signatures (CORE-011)"
+
+    acceptance_criteria:
+      - "HtmlVisionMappingStrategy extends AbstractInjectionStrategy"
+      - "analyze() uses BeautifulSoup4 to detect injectable DOM elements"
+      - "format_marker() produces data-cortex-debug='<SID>:<selector>' attribute"
+      - "_map_bounding_box_to_selector() maps Vision API coordinates to CSS selectors"
+      - "Cleanup strips all data-cortex-debug attributes"
+      - "All tdd_sequence.red tests GREEN"
+
+    new_files:
+      - "cortex/orchestrators/support/debugging/strategies/html_vision_mapping_strategy.py"
+      - "tests/unit/debugging/test_html_vision_mapping_strategy.py"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/unit/debugging/"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE C: API + SQL + DotNet Trace Strategies ─────────────────────
+  - id: "phase-86-c"
+    title: "Backend Trace Strategies — API middleware, SQL profiling, .NET ILogger"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-86-03", "GAP-86-04", "GAP-86-05"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "4 hours"
+    depends_on: ["phase-86-b"]
+    prerequisite: "phase-86-b completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests for 3 strategies BEFORE implementation"
+        gate: "python3 scripts/run_tests.py dir tests/unit/debugging/ — ALL new tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Implement 3 strategies extending AbstractInjectionStrategy"
+        gate: "python3 scripts/run_tests.py dir tests/unit/debugging/ — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), dedup check (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/unit/debugging/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        # ApiTraceStrategy
+        - "test_api_trace_strategy_inherits_abstract — verify ABC compliance"
+        - "test_api_analyze_detects_route_handlers — Express/FastAPI/Flask route detection"
+        - "test_api_format_marker_produces_middleware_log — request/response trace format"
+        - "test_api_inject_adds_middleware_to_file — end-to-end file injection"
+        # SqlTraceStrategy
+        - "test_sql_trace_strategy_inherits_abstract — verify ABC compliance"
+        - "test_sql_analyze_detects_query_locations — stored proc/query detection"
+        - "test_sql_format_marker_produces_comment — SQL comment marker format"
+        - "test_sql_sqlserver_statistics_io — SET STATISTICS IO ON injection"
+        - "test_sql_oracle_dbms_output — DBMS_OUTPUT.PUT_LINE injection"
+        - "test_sql_postgresql_raise_notice — RAISE NOTICE injection"
+        # DotNetTraceStrategy
+        - "test_dotnet_trace_strategy_inherits_abstract — verify ABC compliance"
+        - "test_dotnet_analyze_detects_method_entry — C# method detection"
+        - "test_dotnet_format_marker_produces_ilogger — ILogger.LogDebug format"
+        - "test_dotnet_inject_adds_logger_to_file — end-to-end file injection"
+      green:
+        - "Implement ApiTraceStrategy — route handler detection + middleware log injection"
+        - "Implement SqlTraceStrategy — SQL comment markers + profiling toggle per dialect"
+        - "Implement DotNetTraceStrategy — ILogger.LogDebug injection at method boundaries"
+      refactor:
+        - "Add docstrings to all public methods (CORE-012)"
+        - "Verify type hints on all signatures (CORE-011)"
+        - "Confirm no duplicate implementations across all 3 strategies (CORE-035)"
+
+    acceptance_criteria:
+      - "ApiTraceStrategy supports Express, FastAPI, Flask, ASP.NET route detection"
+      - "SqlTraceStrategy supports SQL Server, Oracle, PostgreSQL dialects"
+      - "DotNetTraceStrategy injects ILogger.LogDebug at method entry/exit"
+      - "All strategies extend AbstractInjectionStrategy"
+      - "All 14 tdd_sequence.red tests GREEN"
+
+    new_files:
+      - "cortex/orchestrators/support/debugging/strategies/api_trace_strategy.py"
+      - "cortex/orchestrators/support/debugging/strategies/sql_trace_strategy.py"
+      - "cortex/orchestrators/support/debugging/strategies/dotnet_trace_strategy.py"
+      - "tests/unit/debugging/test_api_trace_strategy.py"
+      - "tests/unit/debugging/test_sql_trace_strategy.py"
+      - "tests/unit/debugging/test_dotnet_trace_strategy.py"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/unit/debugging/"
+      min_tests_pass: 14
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE D: AutoCleanupManager Multi-Language Patterns ──────────────
+  - id: "phase-86-d"
+    title: "AutoCleanupManager — Multi-language marker strip patterns"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-86-06"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-86-c"]
+    prerequisite: "phase-86-c completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests for multi-language cleanup BEFORE implementation"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_auto_cleanup_multi_lang.py — ALL tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Extend AutoCleanupManager with per-language strip patterns"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_auto_cleanup_multi_lang.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), backward compat check"
+        gate: "python3 scripts/run_tests.py dir tests/unit/debugging/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_strip_javascript_console_log — removes console.log CORTEX_DEBUG lines"
+        - "test_strip_html_data_attributes — removes data-cortex-debug attributes"
+        - "test_strip_sql_comment_markers — removes -- CORTEX_DEBUG comments"
+        - "test_strip_sql_statistics_toggles — removes SET STATISTICS IO ON/OFF"
+        - "test_strip_csharp_ilogger — removes ILogger.LogDebug CORTEX_DEBUG lines"
+        - "test_strip_api_middleware — removes CORTEX_DEBUG middleware registration"
+        - "test_preserves_non_cortex_debug_lines — user code untouched"
+        - "test_strip_all_languages_in_session — mixed-language session cleanup"
+        - "test_production_ready_verification — zero CORTEX_DEBUG artifacts remain"
+      green:
+        - "Add _LANGUAGE_PATTERNS dict mapping file extensions to strip regex patterns"
+        - "Extend _strip_markers() to detect file extension and apply correct pattern"
+        - "Add verify_production_ready() method — scans for ANY surviving CORTEX_DEBUG"
+      refactor:
+        - "Add docstrings to new methods (CORE-012)"
+        - "Verify backward compatibility with existing Python marker tests"
+
+    acceptance_criteria:
+      - "AutoCleanupManager strips markers from JS, TS, HTML, SQL, C# files"
+      - "verify_production_ready() returns True only when zero CORTEX_DEBUG artifacts exist"
+      - "Existing Python cleanup tests still pass (backward compatibility)"
+      - "All 9 tdd_sequence.red tests GREEN"
+
+    files_to_edit:
+      - "cortex/orchestrators/support/debugging/auto_cleanup_manager.py"
+
+    new_files:
+      - "tests/unit/debugging/test_auto_cleanup_multi_lang.py"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/unit/debugging/"
+      min_tests_pass: 9
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE E: Workflow Template + Strategy Registration ───────────────
+  - id: "phase-86-e"
+    title: "Debugging workflow template + strategy wiring"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-86-07", "GAP-86-08"]
+    governance_authority: "CORE-008, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-86-d"]
+    prerequisite: "phase-86-d completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write tests for strategy registration and workflow template loading"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_strategy_registration.py — ALL tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Register 5 new strategies in engine + create workflow template YAML"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_strategy_registration.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "YAML validation, template README update"
+        gate: "python3 scripts/run_tests.py dir tests/unit/debugging/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_engine_has_8_strategies — MarkerInjectionEngine registers all 8"
+        - "test_engine_frontend_console_strategy — 'frontend_console' key exists"
+        - "test_engine_html_vision_strategy — 'html_vision' key exists"
+        - "test_engine_api_trace_strategy — 'api_trace' key exists"
+        - "test_engine_sql_trace_strategy — 'sql_trace' key exists"
+        - "test_engine_dotnet_trace_strategy — 'dotnet_trace' key exists"
+        - "test_workflow_template_yaml_valid — YAML loads without errors"
+        - "test_workflow_template_has_9_stages — all 9 debug stages present"
+      green:
+        - "Register 5 strategies in MarkerInjectionEngine.__init__"
+        - "Update strategies/__init__.py exports"
+        - "Create debugging/multi-stack-debug-pipeline.yaml"
+      refactor:
+        - "Validate YAML structure matches existing template patterns"
+        - "Update workflows/templates/README.md with debugging/ category"
+
+    acceptance_criteria:
+      - "MarkerInjectionEngine.strategies dict has 8 entries (3 existing + 5 new)"
+      - "strategies/__init__.py exports all 8 strategy classes"
+      - "debugging/multi-stack-debug-pipeline.yaml loads as valid YAML"
+      - "Workflow template has 9 stages: DETECT→INJECT→CAPTURE→VISION→ANALYZE→FIX-PLAN→VERIFY→CLEANUP→AUDIT"
+      - "workflows/templates/README.md lists debugging/ category"
+
+    files_to_edit:
+      - "cortex/orchestrators/support/debugging/marker_injection_engine.py"
+      - "cortex/orchestrators/support/debugging/strategies/__init__.py"
+      - "cortex-registry/workflows/templates/README.md"
+
+    new_files:
+      - "cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml"
+      - "tests/unit/debugging/test_strategy_registration.py"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/unit/debugging/"
+      min_tests_pass: 8
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE F: Agent + Prompt + Management + Docs Updates ───────────────
+  - id: "phase-86-f"
+    title: "Agent spec, prompt, management file, and cortex-docs updates"
+    priority: P2
+    status: PLANNED
+    gap_refs: ["GAP-86-09", "GAP-86-10", "GAP-86-16"]
+    governance_authority: "CORE-002, CORE-064"
+    duration_estimate: "1.5 hours"
+    depends_on: ["phase-86-e"]
+    prerequisite: "phase-86-e completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "N/A — documentation sub-phase, no code tests"
+        gate: "Verify all updated files pass YAML/Markdown validation"
+        blocker: "Do NOT mark complete if any referenced file path is broken"
+      green:
+        action: "Update cortex-debugger.md, copilot-instructions.md, cortex-architect.prompt.md, AGENT-INDEX.md, cortex-master.yaml, cortex-docs/.content, flat-files"
+        gate: "All file paths in updated docs resolve to existing files"
+        blocker: "Do NOT begin REFACTOR until all updates complete"
+      refactor:
+        action: "Meta-audit coherence check — phase counts, strategy counts, template counts"
+        gate: "python3 scripts/validate-architecture-counts.py — no drift"
+        blocker: "Do NOT mark sub-phase COMPLETE until validation passes"
+
+    acceptance_criteria:
+      - "cortex-debugger.md documents all 8 strategies with canonical file paths"
+      - "cortex-debugger.md references debugging/multi-stack-debug-pipeline.yaml"
+      - "copilot-instructions.md reflects updated phase count"
+      - "cortex-architect.prompt.md DEBUG mode references new workflow template"
+      - "AGENT-INDEX.md DEBUG row reflects updated token cost"
+      - "cortex-master.yaml total_phases incremented"
+      - "cortex-docs/.content/01-capabilities/01-overview.md capability matrix has multi-stack debugging row"
+      - "cortex-docs/.content/flat-files/08-orchestration-system.md documents 8-strategy debugging system"
+      - "cortex-docs/.content/flat-files/01-intelligence-architecture.md references CC-021/IC-021 debugging cells"
+
+    files_to_edit:
+      - ".github/agents/support/cortex-debugger.md"
+      - ".github/copilot-instructions.md"
+      - ".github/prompts/cortex-architect.prompt.md"
+      - ".github/agents/AGENT-INDEX.md"
+      - "cortex-registry/cortex-master.yaml"
+      - "cortex-docs/.content/01-capabilities/01-overview.md"
+      - "cortex-docs/.content/03-orchestration/06-cross-orchestrator.md"
+      - "cortex-docs/.content/flat-files/08-orchestration-system.md"
+      - "cortex-docs/.content/flat-files/01-intelligence-architecture.md"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── SUB-PHASE G: Unified Intelligence Wiring ────────────────────────────
+  - id: "phase-86-g"
+    title: "Unified Intelligence Wiring — OPJ + URS + Matrix + EventBus + KnSynth"
+    priority: P1
+    status: PLANNED
+    gap_refs: ["GAP-86-11", "GAP-86-12", "GAP-86-13", "GAP-86-14", "GAP-86-15"]
+    governance_authority: "CORE-008, CORE-011, CORE-012, CORE-035, CORE-064"
+    duration_estimate: "2 hours"
+    depends_on: ["phase-86-f"]
+    prerequisite: "phase-86-f completion_gate PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — zero new failures"
+
+    tdd_cycle:
+      red:
+        action: "Write ALL failing tests for intelligence integration BEFORE implementation"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_debugger_intelligence_wiring.py — ALL listed tests must FAIL"
+        blocker: "Do NOT write implementation code until every listed test fails"
+      green:
+        action: "Wire OPJMixin, URS signals, Matrix cells, EventBus publish, KnSynth persistence"
+        gate: "python3 scripts/run_tests.py file tests/unit/debugging/test_debugger_intelligence_wiring.py — ALL tests must PASS"
+        blocker: "Do NOT begin REFACTOR until every test passes"
+      refactor:
+        action: "Type hints (CORE-011), docstrings (CORE-012), dedup check (CORE-035)"
+        gate: "python3 scripts/run_tests.py dir tests/unit/debugging/ — zero regressions"
+        blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    tdd_sequence:
+      red:
+        - "test_debugger_inherits_opj_mixin — OPJMixin in class MRO"
+        - "test_debugger_records_opj_on_execute — _opj_record_execution called after debug session"
+        - "test_debugger_emits_urs_on_success — ReinforcementSignal emitted on successful fix"
+        - "test_debugger_emits_urs_on_failure — ReinforcementSignal emitted on failed fix"
+        - "test_intelligence_matrix_has_cc_021 — CC-021 DebuggerOrchestrator in CORTEX_CAPABILITIES"
+        - "test_intelligence_matrix_has_ic_021 — IC-021 DebugPatternLearning in INTELLIGENCE_CAPABILITIES"
+        - "test_debugger_publishes_debug_insight — EventBus.publish('DEBUG_INSIGHT', ...) called"
+        - "test_debugger_publishes_debug_fix_applied — EventBus.publish('DEBUG_FIX_APPLIED', ...) called"
+        - "test_debugger_feeds_knsyn_patterns — debug patterns passed to KnowledgeSynthesisEngine"
+        - "test_debugger_cross_cutting_hooks_active — _activate_cross_cutting_hooks runs on execute"
+      green:
+        - "Add OPJMixin to DebuggerOrchestrator class signature"
+        - "Call _opj_record_execution() in execute_operation() finally block"
+        - "Call _urs_emit_signal() on debug session success/failure in handle_* methods"
+        - "Add CC-021 entry to CORTEX_CAPABILITIES in intelligence_matrix_builder.py"
+        - "Add IC-021 entry to INTELLIGENCE_CAPABILITIES in intelligence_matrix_builder.py"
+        - "Add EventBus.publish('DEBUG_INSIGHT', payload) in handle_test_failure/handle_refactor_regression"
+        - "Add EventBus.publish('DEBUG_FIX_APPLIED', payload) in handle_tests_passed"
+        - "Feed debug_pattern dict to KnSynth via _activate_cross_cutting_hooks context"
+      refactor:
+        - "Verify OPJ payloads match schema used by MasterOrchestrator"
+        - "Verify URS signal types match TDDOrchestrator/EnforcementOrchestrator patterns"
+        - "Confirm no duplicate capability IDs in intelligence matrix"
+
+    acceptance_criteria:
+      - "DebuggerOrchestrator class inherits OPJMixin (verified via MRO)"
+      - "OPJ records persisted after every debug session (success and failure)"
+      - "URS signals emitted with correct type/outcome on debug success and failure"
+      - "IntelligenceMatrix contains CC-021 (DebuggerOrchestrator) and IC-021 (DebugPatternLearning)"
+      - "EventBus publishes DEBUG_INSIGHT and DEBUG_FIX_APPLIED topics"
+      - "KnowledgeSynthesisEngine receives debug-specific pattern data"
+      - "All existing DebuggerOrchestrator tests remain GREEN (zero regressions)"
+
+    files_to_edit:
+      - "cortex/orchestrators/support/debugger_orchestrator.py"
+      - "cortex/intelligence/cross_cutting/intelligence_matrix_builder.py"
+
+    new_files:
+      - "tests/unit/debugging/test_debugger_intelligence_wiring.py"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py dir tests/unit/debugging/"
+      min_tests_pass: 10
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: true
+
+  # ── FINAL: Smoke Gate + CORE-064 Close ───────────────────────────────────
+  - id: "phase-86-final"
+    title: "Smoke Gate + CORE-064 Sweep Close + cortex-master.yaml update"
+    priority: P0
+    status: PLANNED
+    gap_refs: []
+    depends_on: ["phase-86-g"]
+    prerequisite: "ALL preceding sub-phase completion_gates PASSED"
+    regression_gate: "python3 scripts/run_tests.py smoke — ≥1,443 smoke tests pass"
+
+    tdd_cycle:
+      red:
+        action: "N/A — verification gate, not implementation"
+        gate: "All sweep_catalogue entries verified CLOSED"
+        blocker: "Do NOT run smoke gate if any GAP remains OPEN"
+      green:
+        action: "Run full smoke gate — confirm ≥1,443 tests pass"
+        gate: "python3 scripts/run_tests.py smoke"
+        blocker: "Do NOT mark phase COMPLETE if smoke gate fails"
+      refactor:
+        action: "Move phase YAML: planned/ → completed/, update cortex-master.yaml status → COMPLETE"
+        gate: "python3 -c \"import yaml; yaml.safe_load(open('cortex-registry/cortex-master.yaml'))\" — YAML valid"
+        blocker: "Do NOT close phase without cortex-master.yaml update"
+
+    acceptance_criteria:
+      - "ALL 16 sweep_catalogue GAPs have status: CLOSED"
+      - "python3 scripts/run_tests.py smoke passes ≥1,443 tests"
+      - "Zero new test failures vs baseline"
+      - "phase-86 detail file moved: planned/ → completed/"
+      - "cortex-master.yaml entry updated to status: COMPLETE"
+      - "cortex-master.yaml remains ≤500 lines (THIN INDEX CONTRACT)"
+      # ── MANDATORY PROMPT/AGENT/DOCS ALIGNMENT GATE ──────────────────────
+      # This gate is non-negotiable per CORE-064 + copilot-instructions.md alignment sweep
+      - "copilot-instructions.md: Phase 86 status updated from PLANNED to COMPLETE, debug strategy count confirmed 8"
+      - "cortex-debugger.md: All 5 new strategy entries changed from '⚪ Phase 86 PLANNED' to '✅ Phase 86'"
+      - "AGENT-INDEX.md: Architecture Quick Reference 'Debug Strategies' row shows all 8 as ✅"
+      - "cortex-docs/.content flat-files: debug strategy status table updated to show all ✅"
+      - "cortex-docs: CC-021/IC-021 cells confirmed as existing (not PLANNED) in intelligence-architecture.md"
+      - "python3 scripts/validate-architecture-counts.py: ALL CHECKS PASSED"
+
+    completion_gate:
+      test_runner_command: "python3 scripts/run_tests.py smoke"
+      min_tests_pass: 1443
+      zero_new_failures: true
+      all_gap_refs_closed: true
+      blocks_next_sub_phase: false
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AC MARKERS
+# ─────────────────────────────────────────────────────────────────────────────
+ac_markers:
+  start: "AC_START: AC-86-MULTI-STACK-DEBUG-{timestamp}"
+  complete: "AC_COMPLETE: AC-86-MULTI-STACK-DEBUG-{timestamp} ✅"
