@@ -35,11 +35,48 @@ CORE-011 (type hints), CORE-012 (docstrings)
 
 import functools
 import logging
+import threading
 from typing import Any, Callable, Dict, List, Optional, TypeVar
+
+from cortex.core.result import Ok, Result
 
 _logger = logging.getLogger(__name__)
 
 F = TypeVar("F", bound=Callable[..., Any])
+
+# ---------------------------------------------------------------------------
+# GAP-80-06: Singleton EnforcementOrchestrator factory
+# Eliminates per-call instantiation in _governance_gate().
+# Thread-safe via a module-level lock.
+# ---------------------------------------------------------------------------
+_enforcement_singleton: Optional[Any] = None
+_enforcement_lock = threading.Lock()
+
+
+def _get_enforcement_orchestrator() -> Any:
+    """Return the module-level singleton EnforcementOrchestrator instance.
+
+    Thread-safe: uses double-checked locking so only one instance is ever
+    created, even under concurrent callers.
+
+    Returns:
+        EnforcementOrchestrator singleton (lazy-initialised).
+    """
+    global _enforcement_singleton
+    if _enforcement_singleton is None:
+        with _enforcement_lock:
+            if _enforcement_singleton is None:
+                try:
+                    from cortex.orchestrators.core.enforcement_orchestrator import (  # noqa: PLC0415
+                        EnforcementOrchestrator,
+                    )
+                    _enforcement_singleton = EnforcementOrchestrator()
+                except Exception as exc:  # noqa: BLE001
+                    _logger.warning(
+                        "_get_enforcement_orchestrator: could not create singleton — %s", exc
+                    )
+                    return None
+    return _enforcement_singleton
 
 
 def cross_cutting_enforced(method: F) -> F:
@@ -116,13 +153,13 @@ class OrchestratorProtocolMixin:
         """Return orchestrator version."""
         return self._orch_version
 
-    def initialize(self) -> Dict[str, Any]:
+    def initialize(self) -> Result:
         """Initialize orchestrator (idempotent).
 
         Returns:
-            Dict with ``status`` key.
+            Ok wrapping a dict with ``status`` key.
         """
-        return {"status": "initialized", "orchestrator": self.get_name()}
+        return Ok({"status": "initialized", "orchestrator": self.get_name()})
 
     # ------------------------------------------------------------------
     # Optional by wiring contract validation.optional_methods
@@ -132,20 +169,23 @@ class OrchestratorProtocolMixin:
         """Return current operation mode as string."""
         return "EXECUTION"
 
-    def get_mcp_tools(self) -> Dict[str, Any]:
+    def get_mcp_tools(self) -> Result:
         """Return MCP tools exposed by this orchestrator."""
-        return {}
+        return Ok({})
 
     def execute_operation(
         self,
         operation_name: str,
         parameters: Dict[str, Any],
-    ) -> Dict[str, Any]:
+    ) -> Result:
         """Execute a named operation with parameters.
 
         Default delegates to ``self.run()`` or ``self.execute()`` if present.
         Activates cross-cutting hooks (LENS, KnSynth, GovGate) automatically.
         Tracks execution counts for ``health_check()`` reporting.
+
+        Returns:
+            Ok wrapping the operation result dict, or Ok with not_implemented.
         """
         # Phase 58 — cross-cutting hooks on every operation
         self._activate_cross_cutting_hooks(
@@ -163,10 +203,11 @@ class OrchestratorProtocolMixin:
             else:
                 result = {"status": "not_implemented", "operation": operation_name}
             self._success_count += 1
-            return result
-        except Exception:
+            return Ok(result)
+        except Exception as exc:
             self._failure_count += 1
-            raise
+            from cortex.core.result import Err  # noqa: PLC0415
+            return Err(str(exc))
 
     # ------------------------------------------------------------------
     # Cross-cutting activation hook (Phase 58 — all dimensions)
@@ -209,9 +250,13 @@ class OrchestratorProtocolMixin:
             "governance_allowed": governance_allowed,
         }
 
-    def get_audit_trail(self, limit: int = 100) -> List[Dict[str, Any]]:
-        """Return audit trail entries (up to *limit*)."""
-        return []
+    def get_audit_trail(self, limit: int = 100) -> Result:
+        """Return audit trail entries (up to *limit*).
+
+        Returns:
+            Ok wrapping an empty list (default implementation).
+        """
+        return Ok([])
 
     def health_check(self) -> Dict[str, Any]:
         """Return orchestrator health status including execution counters."""
@@ -325,7 +370,11 @@ class OrchestratorProtocolMixin:
             # Guard: skip if caller is EnforcementOrchestrator (would recurse)
             if isinstance(self, EnforcementOrchestrator):
                 return True
-            result = EnforcementOrchestrator().validate_operation(
+            # GAP-80-06: use singleton — not fresh instance per call
+            enforcer = _get_enforcement_orchestrator()
+            if enforcer is None:
+                return True
+            result = enforcer.validate_operation(
                 {"operation": operation, **(params or {})}
             )
             # validate_operation may return bool or a Result-like object

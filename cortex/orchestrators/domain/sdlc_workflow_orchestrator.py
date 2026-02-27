@@ -21,6 +21,8 @@ from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 
 logger = logging.getLogger(__name__)
 
+# AC_START: AC-SDLC-WORKFLOW-ORCHESTRATOR
+
 # ── Registry: SDLC intents → workflow template IDs ────────────────────────────
 _SDLC_INTENT_MAP: Dict[str, str] = {
     # ANALYZE family
@@ -256,3 +258,5 @@ class SDLCWorkflowOrchestrator(OrchestratorProtocolMixin):
                 for p in sorted(_WORKFLOW_DIR.glob("*.yaml"))
             ]
         return file_ids or list(_SDLC_TEMPLATE_IDS)
+
+# AC_COMPLETE: AC-SDLC-WORKFLOW-ORCHESTRATOR ✅

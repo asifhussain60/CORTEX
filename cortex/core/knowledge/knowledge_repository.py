@@ -184,7 +184,10 @@ class KnowledgeRepository:
         # KN-005-01: Initialize company knowledge loader (lazy)
         self._company_loader: Optional['CompanyKnowledgeLoader'] = None
 
-        # Load index on initialization
+        # GAP-80-02: graceful degradation flag — False when index absent
+        self._available: bool = False
+
+        # Load index on initialization (graceful — no crash when index absent)
         self._load_index()
 
     def _get_company_loader(self) -> 'CompanyKnowledgeLoader':
@@ -230,17 +233,25 @@ class KnowledgeRepository:
         """
         Load the knowledge index from .knowledge-index.json.
 
+        Degrades gracefully when the index file is absent — sets
+        ``_available = False`` and logs a WARNING instead of raising.
+        Callers should check ``is_available()`` before querying.
+
         Raises:
-            FileNotFoundError: If index file is not found
-            json.JSONDecodeError: If index file is invalid JSON
+            json.JSONDecodeError: If index file exists but contains invalid JSON
         """
         index_file = self._project_root / self._index_path
 
         if not index_file.exists():
-            raise FileNotFoundError(
-                f"Knowledge index not found: {index_file}. "
-                f"Run knowledge migration first."
+            import logging
+            logging.getLogger(__name__).warning(
+                "KnowledgeRepository: index not found at %s — "
+                "operating in degraded mode (is_available() → False). "
+                "Run scripts/generate_knowledge_index.py to build the index.",
+                index_file,
             )
+            self._available = False
+            return
 
         with open(index_file, 'r', encoding='utf-8') as f:
             self._index = json.load(f)
@@ -266,6 +277,18 @@ class KnowledgeRepository:
             self._domains[entry.domain].append(entry.id)
 
         self._loaded = True
+        self._available = True
+
+    def is_available(self) -> bool:
+        """Return True if the knowledge index was loaded successfully.
+
+        When False, the repository operates in degraded mode — all query
+        methods return empty results instead of raising exceptions.
+
+        Returns:
+            bool: True if index loaded, False if index file was absent.
+        """
+        return self._available
 
     @property
     def is_loaded(self) -> bool:
@@ -307,8 +330,10 @@ class KnowledgeRepository:
             domain: Domain name (e.g., ARCHITECTURE, SECURITY)
 
         Returns:
-            List of KnowledgeEntry objects for the domain
+            List of KnowledgeEntry objects for the domain, or [] if unavailable.
         """
+        if not self._available:
+            return []
         entry_ids = self._domains.get(domain.upper(), [])
         return [self._entries[eid] for eid in entry_ids if eid in self._entries]
 
@@ -327,8 +352,15 @@ class KnowledgeRepository:
             keywords: List of keywords to search in title/description
 
         Returns:
-            KnowledgeQueryResult with matching entries
+            KnowledgeQueryResult with matching entries, or empty result if unavailable.
         """
+        if not self._available:
+            return KnowledgeQueryResult(
+                entries=[],
+                query_domain=domains[0] if domains and len(domains) == 1 else None,
+                query_tags=tags,
+                query_keywords=keywords,
+            )
         results: List[KnowledgeEntry] = []
 
         for entry in self._entries.values():

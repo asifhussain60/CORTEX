@@ -37,3 +37,14 @@ def __getattr__(name: str):
         except ImportError:
             pass
     raise AttributeError(f"module 'cortex.intelligence' has no attribute '{name}'")
+
+
+# GAP-80-07: Canonical synthesize() facade — single knowledge API entry point
+try:
+    from cortex.intelligence.provider import synthesize  # noqa: F401
+except ImportError:
+    import logging as _logging
+    _logging.getLogger(__name__).warning(
+        "Optional cortex dependency unavailable: cortex.intelligence.provider.synthesize "
+        "— feature degraded"
+    )

@@ -740,4 +740,41 @@ def get_intelligence_provider() -> IIntelligenceProvider:
     return _provider_instance
 
 
+def synthesize(
+    request: str,
+    tier: str = "targeted",
+) -> "UnifiedIntelligenceContext":
+    """Canonical single-entry-point for knowledge synthesis across all 5 engines.
+
+    Routes to the appropriate execution tier of ``UnifiedIntelligenceProvider``:
+    - ``"quick"``    → ``provider.quick(intent)`` (<200 ms, cached core rules)
+    - ``"targeted"`` → ``provider.targeted(intent)`` (<2 s, LENS + YAMLs)
+    - ``"full"``     → ``provider.full(intent)`` (<10 s, all engines)
+
+    Callers should prefer this function over direct engine instantiation to
+    satisfy GAP-80-07 (single canonical Knowledge API surface).
+
+    Args:
+        request: The intent/request string to synthesise knowledge for.
+        tier: Execution tier — one of ``"quick"``, ``"targeted"``, ``"full"``.
+              Defaults to ``"targeted"``.
+
+    Returns:
+        ``UnifiedIntelligenceContext`` combining LENS, company, and CORTEX knowledge.
+
+    Example::
+
+        ctx = synthesize("refactor authentication module", tier="full")
+        for guidance in ctx.synthesis_result.guidance:
+            print(guidance)
+    """
+    provider = get_intelligence_provider()
+    if tier == "quick":
+        return provider.quick(intent=request)
+    if tier == "full":
+        return provider.full(intent=request)
+    # Default: targeted
+    return provider.targeted(intent=request)
+
+
 # AC_COMPLETE: AC-PHASE65-S4-001 ✅ Interface + implementation complete
