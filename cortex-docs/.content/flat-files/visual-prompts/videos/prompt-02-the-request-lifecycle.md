@@ -1,8 +1,8 @@
 # Video Prompt 02 — The Life of a Request
 
-> **Duration:** 8 minutes · **Audience:** Product Owners, Software Engineers
+> **Duration:** 7 minutes · **Audience:** Product Owners, Software Engineers
 > **Depth:** 🟡 Product-level — shows the journey, light architecture
-> **No overlap:** Image prompt-07 shows a static journey map; this video *animates* a real request flowing through every stage in real-time
+> **No overlap:** TDD (Video 5) and Governance (Video 4) are forward-referenced, not detailed here
 
 ---
 
@@ -18,7 +18,7 @@
 
 ## PROMPT
 
-Create an 8-minute animated explainer video titled **"The Life of a Request"** using the visual identity above. Track a single user request as a glowing cyan particle that travels through CORTEX's entire processing pipeline.
+Create a 7-minute animated explainer video titled **"The Life of a Request"** using the visual identity above. Track a single user request as a glowing cyan particle that travels through CORTEX's entire processing pipeline.
 
 ### Scene 1 — The Request Is Born (0:00 – 1:00)
 
@@ -60,44 +60,45 @@ The tagged sphere exits Station 1 and enters Station 2 — a larger chamber with
 
 **Narration:** "CORTEX selects the right orchestrators for the job and scans the workspace for context. No guesswork."
 
-### Scene 4 — Station 3: TDD — Test First (3:30 – 5:00)
+### Scene 4 — Station 3: TDD — Test First (3:30 – 4:15)
+
+**⚠️ CONSISTENCY NOTE: This is a PREVIEW only — detailed TDD is in Video 5.**
 
 The sphere enters Station 3 — a chamber styled like a heartbeat monitor.
 
-**Three-phase animated sequence:**
+**Simplified three-phase animation (45 seconds total):**
 
-1. **RED Phase** — The sphere turns red (`#ff4444`). A test file materializes in a glass code panel (JetBrains Mono). The test runs — a red X appears. The heartbeat line shows a red peak.
-   - Code panel shows: `def test_validate_email():` → `assert validate_email("bad") == False` → ❌ `FAIL`
-   - **Analogy text:** *"Write the exam questions before studying — now you know exactly what to learn."*
+- The sphere passes through three color zones: **RED** → **GREEN** → **BLUE**
+- A heartbeat line at the bottom shows the corresponding peaks: red peak, green peak, blue peak
+- NO code panels appear (those are reserved for Video 5)
+- Simple labels flash: "Test First" → "Implement" → "Refactor"
 
-2. **GREEN Phase** — The sphere shifts to green (`#00ff88`). An implementation file appears next to the test. Minimum code types in. The test reruns — green ✅ appears. Heartbeat shows green peak.
-   - Code panel shows: `def validate_email(email):` → implementation → ✅ `PASS`
-   - **Analogy text:** *"Study just enough to pass the exam — no wasted effort."*
+**Forward-reference text overlay** (glassmorphic card):
+> *"The TDD rhythm is CORTEX's heartbeat. See Video 5 for a complete TDD session with real code."*
 
-3. **REFACTOR Phase** — The sphere shifts to blue (`#3b82f6`). The implementation code reshuffles — cleaner variable names, extracted helper. Tests rerun — still green ✅. Heartbeat shows blue peak.
-   - **Analogy text:** *"Now clean your desk while keeping everything working."*
+**Analogy overlay:** *"Quality control built into the assembly line — every piece is tested before moving forward."*
 
-The heartbeat line continues pulsing: red-green-blue, red-green-blue — the TDD rhythm.
+**Narration:** "CORE-008: tests before implementation. The sphere can't proceed until it passes the TDD checkpoint. We'll explore this deeply in Video 5."
 
-**Narration:** "CORE-008: write the test first. Always. The RED-GREEN-REFACTOR cycle is CORTEX's heartbeat."
+### Scene 5 — Station 4: Governance Gate (4:15 – 5:15)
 
-### Scene 5 — Station 4: Governance Gate (5:00 – 6:00)
+**⚠️ CONSISTENCY NOTE: This is a PREVIEW only — detailed governance is in Video 4.**
 
-The sphere exits TDD and approaches a translucent **shield barrier** spanning the pipeline. The shield shimmers with 38 tiny rule badges embedded in it.
+The sphere exits TDD and approaches a translucent **shield barrier** spanning the pipeline. The shield shimmers — but individual rule badges are NOT detailed here.
 
-- The sphere approaches — rule badges light up one by one as they check:
-  - `CORE-011 Type Hints` → ✅ green flash
-  - `CORE-012 Docstrings` → ✅ green flash
-  - `CORE-028 File Naming` → ✅ green flash
-  - `CORE-008 TDD` → ✅ green flash (already passed)
-  - Show 34 more in rapid succession — a cascade of green flashes.
-- The shield opens (panels slide apart) and the sphere passes through.
+- The sphere approaches the shield
+- A rapid green cascade (38 flashes in 3 seconds) indicates rules passing
+- The shield opens and the sphere passes through
+- Text overlay: "38 CORE rules — all passed"
 
-**Alternate scenario** (brief 10-second branch): Show what happens if a rule fails — `CORE-011` badge turns red, shield stays closed, sphere bounces back. An `EnforcementOrchestrator` tag attaches: `violation: missing type hints`. The sphere loops back to Station 3 for a fix.
+**Alternate scenario** (brief 5-second branch): Show what happens if a rule fails — shield stays closed, sphere bounces back. Text: "Violation detected → fix required."
 
-**Analogy overlay:** *"Airport security — every bag gets scanned. If something's wrong, you go back and fix it before boarding."*
+**Forward-reference text overlay:**
+> *"See Video 4 for governance deep dive — how each of the 38 rules protects your codebase."*
 
-### Scene 6 — Station 5: Commit & Integration (6:00 – 7:00)
+**Analogy overlay:** *"Airport security checkpoint — the sphere is scanned, cleared, and allowed to proceed."*
+
+### Scene 6 — Station 5: Commit & Integration (5:15 – 6:15)
 
 The sphere (now glowing green after passing governance) enters the final chamber — a **git timeline** rendered as a glassmorphic horizontal rail.
 
@@ -114,9 +115,9 @@ The sphere (now glowing green after passing governance) enters the final chamber
 
 **Analogy overlay:** *"The package arrives at its destination — signed, sealed, delivered, and logged in the ledger."*
 
-### Scene 7 — The Big Picture (7:00 – 8:00)
+### Scene 7 — The Big Picture (6:15 – 7:00)
 
-**Camera pulls back** to show the entire pipeline from above — all 7 stations in a row, connected by the glowing tube.
+**Camera pulls back** to show the entire pipeline from above — all 5 stations in a row, connected by the glowing tube.
 
 - Multiple spheres are now flowing through simultaneously — different colors for different intent types (cyan=IMPLEMENT, purple=REFACTOR, amber=FIX, red=AUDIT).
 - Some spheres bounce back at the governance gate and loop through TDD again.
@@ -130,6 +131,9 @@ The sphere (now glowing green after passing governance) enters the final chamber
 - 38 governance rules enforced
 - 28 MCP tools at the ready
 - Zero manual steps required
+
+**Vision callback:**
+> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
 
 Logo watermark pulses once. End card with CORTEX logo and URL.
 

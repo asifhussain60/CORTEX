@@ -215,12 +215,13 @@ class CORTEXProductionValidator:
                 server = MCPServer()
                 tools = server.list_tools()
                 
-                # Check for core tools
+                # Check for core tools — aligned with SSOT (mcp_registry.py)
+                # NOTE: cortex_process_request, cortex.lens deprecated per architect spec
                 required_tools = [
-                    "cortex_process_request",
-                    "cortex.lens",  # Changed from cortex.lens_analyze
-                    "cortex_challenge", 
-                    "cortex_total_recall"
+                    "cortex_challenge",
+                    "cortex_total_recall",
+                    "cortex_validate",
+                    "cortex_verify",
                 ]
                 
                 available_tools = {tool['name'] for tool in tools}
@@ -298,10 +299,10 @@ class CORTEXProductionValidator:
         """Validate security configurations."""
         logger.info("🔒 Validating Security Configuration...")
         
-        # Security knowledge
+        # Security knowledge — canonical location per SSOT
         security_files = [
-            "cortex/knowledge/best-practices/security/owasp-top-10.yaml",
-            "cortex/intelligence/tier3/knowledge/SECURITY/owasp-top-10.yaml"
+            "cortex-registry/knowledge-base/security/owasp-top10.yaml",  # Canonical SSOT
+            "cortex/knowledge/best-practices/security/owasp-top-10.yaml",  # Legacy fallback
         ]
         
         security_docs_found = False
@@ -373,10 +374,11 @@ class CORTEXProductionValidator:
                     remediation=f"Create {file_path} for proper monitoring"
                 )
         
-        # Health endpoint check
+        # Health endpoint check — canonical locations per SSOT
         health_modules = [
-            "cortex/api/health_endpoints.py",
-            "cortex/mcp/health_checker.py"
+            "cortex/orchestrators/health/health_orchestrator.py",  # Canonical SSOT
+            "cortex/health_check_service.py",  # Root-level health service
+            "cortex/api/health_endpoints.py",  # Legacy fallback
         ]
         
         health_found = any(
@@ -389,7 +391,7 @@ class CORTEXProductionValidator:
                 "Health Endpoints",
                 True,
                 Severity.INFO,
-                "Health check endpoints implemented"
+                "Health check endpoints implemented (HealthOrchestrator)"
             )
         else:
             self._add_check(

@@ -96,6 +96,9 @@ Each card has the persona icon on the left, description on the right, glassmorph
 
 Logo watermark pulses once from 20% to 40% opacity and back as the final beat.
 
+**Vision callback** (glassmorphic card, appears briefly):
+> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+
 **End card:** CORTEX logo centered, URL `https://asifhussain60.github.io/CORTEX/` below in JetBrains Mono, ambient audio fades.
 
 ---

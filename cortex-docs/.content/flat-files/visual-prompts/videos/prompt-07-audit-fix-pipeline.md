@@ -250,6 +250,9 @@ The card has a green border glow. A satisfying chime plays.
 
 **Closing text** (Space Grotesk): **"One command. Nine stages. Production ready."**
 
+**Vision callback:**
+> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+
 Logo pulse. End card.
 
 ---

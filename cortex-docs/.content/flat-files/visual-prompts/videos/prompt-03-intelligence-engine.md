@@ -117,6 +117,9 @@ This is NOT a repeat of image prompt-11's PCB — this is a **functional capabil
 
 **Closing text** (Space Grotesk): **"Intelligence isn't magic. It's orchestrated methodology."**
 
+**Vision callback:**
+> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+
 Logo pulse. End card.
 
 ---

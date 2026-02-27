@@ -172,7 +172,7 @@ def main() -> int:
         print("\nRequired Actions:")
         print("  1. Write tests BEFORE implementation (CORE-008)")
         print("  2. Follow RED → GREEN → REFACTOR workflow")
-        print("  3. Use TDDOrchestrator via cortex_process_request MCP tool")
+        print("  3. Use TDDOrchestrator via cortex_validate MCP tool")
         return 1
 
     if not contracts_ok:

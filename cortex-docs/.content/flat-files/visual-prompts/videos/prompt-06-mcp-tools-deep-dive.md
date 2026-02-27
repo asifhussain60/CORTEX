@@ -252,6 +252,9 @@ Then a dashed border section: "+11 planned" with future tool names in muted text
 
 **Closing text** (Space Grotesk): **"Every tool you need. One protocol. Zero setup."**
 
+**Vision callback:**
+> *"CORTEX: $8,600 saved per team, per year. Zero guesswork."*
+
 Logo pulse. End card.
 
 ---
