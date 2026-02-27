@@ -1,4 +1,7 @@
-The Seven-Department Spaghetti Incident
+# The Conductor's Baton
+
+## The Seven-Department Spaghetti Incident
+
 It was a quiet Tuesday until Jennifer from Customer Success submitted a "simple" request: "Update the customer profile to include preferred language."
 
 One field. One dropdown: English, Spanish, French. How hard could it be?

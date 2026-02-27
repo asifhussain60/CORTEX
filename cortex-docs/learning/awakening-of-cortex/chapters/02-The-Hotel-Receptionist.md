@@ -1,4 +1,7 @@
-Wednesday Morning, 3:47 AM
+# The Hotel Receptionist
+
+## Wednesday Morning, 3:47 AM
+
 The basement was a cathedral of low-level hums, scented with the musk of energized dust and the lingering ghost of yesterday’s super-spicy ramen. Asif Codenstein, his hair possessing a kinetic energy that suggested he was personally grounding the house's electrical supply, stared at his monitors with vibrating intensity. He was having an existential crisis. Not about life—life was binary (coffee/code)—but about the fundamental treachery of human language.
 
 "How do you teach a machine to understand what a human actually means?" Asif demanded of the empty room. His voice bounced off exposed pipes and was promptly absorbed by the carpet of crumpled sticky notes covering the floor.

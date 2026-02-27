@@ -1,6 +1,4 @@
-# The Crystal Ball# The Crystal Ball — Knowing Before Building# The Crystal Ball---
-
-
+# The Crystal Ball
 
 ## Jennifer's Retry Button
 
