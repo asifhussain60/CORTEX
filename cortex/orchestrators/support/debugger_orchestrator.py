@@ -28,6 +28,9 @@ from cortex.models.canonical_enums import IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+# Phase 86 — GAP-86-11: OPJMixin for learning persistence
+from cortex.intelligence.learning.opj_mixin import OPJMixin
+from cortex.intelligence.learning.reinforcement_signal import SignalType
 
 
 logger = logging.getLogger(__name__)
@@ -43,7 +46,7 @@ class DebugSession:
     status: str  # active | resolved | stale
 
 
-class DebuggerOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowTemplateMixin):
+class DebuggerOrchestrator(OPJMixin, IOrchestrator, OrchestratorProtocolMixin, WorkflowTemplateMixin):
     """
     Orchestrates automatic debug marker injection via EventBus.
     
@@ -93,6 +96,9 @@ class DebuggerOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowTem
             self.auto_cleanup_manager = auto_cleanup_manager
         
         self.active_sessions: Dict[str, DebugSession] = {}
+        
+        # Phase 86 — GAP-86-11: Initialize OPJMixin for debug session learning persistence
+        self._opj_init()
         
         # Setup EventBus subscriptions
         self._setup_subscriptions()
@@ -177,9 +183,28 @@ class DebuggerOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowTem
                 }
             ))
 
+            # Phase 86 — GAP-86-14: Publish DEBUG_INSIGHT for cross-orchestrator awareness
+            self.event_bus.publish(Event(
+                type="DEBUG_INSIGHT",
+                payload={
+                    "session_id": session_id,
+                    "trigger": "TEST_FAILURE",
+                    "file_path": file_path,
+                    "test_name": test_name,
+                    "failure_reason": failure_reason,
+                }
+            ))
+
             _elapsed = int((time.perf_counter() - _t0) * 1000)
             logger.info("AC_COMPLETE: AC-DEBUGGER-%d ✅ (%dms)", _ts, _elapsed)
             logger.info(f"Debug session {session_id} created and markers injected")
+
+            # Phase 86 — GAP-86-12: URS signal — debug session opened (failure)
+            self._urs_emit_signal(
+                signal_type=SignalType.MILD_PUNISHMENT,
+                pattern_id="debug_session_opened",
+                context={"session_id": session_id, "trigger": "TEST_FAILURE"},
+            )
         except Exception as exc:
             _elapsed = int((time.perf_counter() - _t0) * 1000)
             logger.info("AC_COMPLETE: AC-DEBUGGER-%d ❌ %s (%dms)", _ts, type(exc).__name__, _elapsed)
@@ -328,6 +353,23 @@ class DebuggerOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowTem
                     self.active_sessions[session_id].status = "resolved"
             
             logger.info(f"Auto-cleanup resolved {len(resolved_sessions)} sessions")
+
+        # Phase 86 — GAP-86-14: Publish DEBUG_FIX_APPLIED for cross-orchestrator learning
+        self.event_bus.publish(Event(
+            type="DEBUG_FIX_APPLIED",
+            payload={
+                "trigger": "TESTS_PASSED",
+                "resolved_count": len(self.active_sessions),
+                "test_suite": event.payload.get("test_suite", ""),
+            }
+        ))
+
+        # Phase 86 — GAP-86-12: URS signal — debug cycle completed (tests passed)
+        self._urs_emit_signal(
+            signal_type=SignalType.STRONG_REWARD,
+            pattern_id="debug_cycle_resolved",
+            context={"trigger": "TESTS_PASSED"},
+        )
     
     # ========================================================================
     # Utility Methods

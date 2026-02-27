@@ -342,6 +342,22 @@ INTELLIGENCE_CAPABILITIES: List[IntelligenceCapability] = [
         current_coverage=1.0,
         tags=["knowledge", "proxy", "registry"],
     ),
+    # Phase 86 — GAP-86-13: Multi-Stack Debug Intelligence
+    IntelligenceCapability(
+        id="IC-021",
+        name="MultiStackDebugPipeline",
+        module="cortex.orchestrators.support.debugging",
+        dimension=CapabilityDimension.INTELLIGENCE,
+        description=(
+            "8-strategy debug marker injection pipeline with multi-language auto-cleanup. "
+            "Strategies: test_failure, refactor_regression, governance_violation (Python), "
+            "frontend_console (JS/TS), html_vision_mapping (HTML/Vision API), "
+            "api_trace (REST/GraphQL), sql_trace (SQL Server/Oracle/PG), dotnet_trace (C#/.NET). "
+            "Phase 86."
+        ),
+        current_coverage=1.0,
+        tags=["debug", "multi-stack", "strategy", "injection", "cleanup"],
+    ),
 ]
 
 # y: Remaining CORTEX capabilities
@@ -507,6 +523,19 @@ CORTEX_CAPABILITIES: List[CortexCapability] = [
         dimension=CapabilityDimension.INTELLIGENCE,
         description="Top-level orchestration coordinator routing via IntentRouter across 13 modes",
         tags=["master", "coordinator", "routing"],
+    ),
+    # Phase 86 — GAP-86-13: Multi-Stack Debug Pipeline
+    CortexCapability(
+        id="CC-021",
+        name="DebuggerOrchestrator",
+        module="cortex.orchestrators.support.debugger_orchestrator",
+        dimension=CapabilityDimension.WORKFLOW,
+        description=(
+            "EventBus-driven debug marker injection across 8 strategies: "
+            "Python (3) + Multi-Stack (5: JS/TS, HTML/Vision, API, SQL, .NET). "
+            "OPJ/URS/KnSynth wired — Phase 86."
+        ),
+        tags=["debug", "multi-stack", "strategy", "marker-injection", "event-bus"],
     ),
 ]
 

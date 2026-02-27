@@ -33,6 +33,37 @@ from cortex.orchestrators.support.debugging.strategies import (
     GovernanceViolationStrategy,
 )
 
+# Phase 86 — 5 new multi-stack strategies (lazy import to avoid circular deps)
+def _load_phase86_strategies() -> Dict[str, AbstractInjectionStrategy]:
+    """Load Phase 86 multi-stack strategies with graceful fallback on import error."""
+    result: Dict[str, AbstractInjectionStrategy] = {}
+    try:
+        from cortex.orchestrators.support.debugging.strategies.frontend_console_strategy import FrontendConsoleStrategy
+        result["frontend_console"] = FrontendConsoleStrategy()
+    except Exception:
+        pass
+    try:
+        from cortex.orchestrators.support.debugging.strategies.html_vision_mapping_strategy import HtmlVisionMappingStrategy
+        result["html_vision_mapping"] = HtmlVisionMappingStrategy()
+    except Exception:
+        pass
+    try:
+        from cortex.orchestrators.support.debugging.strategies.api_trace_strategy import ApiTraceStrategy
+        result["api_trace"] = ApiTraceStrategy()
+    except Exception:
+        pass
+    try:
+        from cortex.orchestrators.support.debugging.strategies.sql_trace_strategy import SqlTraceStrategy
+        result["sql_trace"] = SqlTraceStrategy()
+    except Exception:
+        pass
+    try:
+        from cortex.orchestrators.support.debugging.strategies.dotnet_trace_strategy import DotNetTraceStrategy
+        result["dotnet_trace"] = DotNetTraceStrategy()
+    except Exception:
+        pass
+    return result
+
 __all__ = [
     "MarkerInjectionEngine",
     "AbstractInjectionStrategy",
@@ -41,6 +72,12 @@ __all__ = [
     "TestFailureStrategy",
     "RefactorRegressionStrategy",
     "GovernanceViolationStrategy",
+    # Phase 86
+    "FrontendConsoleStrategy",
+    "HtmlVisionMappingStrategy",
+    "ApiTraceStrategy",
+    "SqlTraceStrategy",
+    "DotNetTraceStrategy",
 ]
 
 
@@ -79,8 +116,10 @@ class MarkerInjectionEngine:
         self.strategies: Dict[str, AbstractInjectionStrategy] = {
             "test_failure": TestFailureStrategy(),
             "refactor_regression": RefactorRegressionStrategy(),
-            "governance_violation": GovernanceViolationStrategy()
+            "governance_violation": GovernanceViolationStrategy(),
         }
+        # Phase 86 — Multi-Stack Debug Pipeline: register 5 new strategies
+        self.strategies.update(_load_phase86_strategies())
     
     def inject(
         self,

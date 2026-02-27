@@ -143,16 +143,30 @@ class AutoCleanupManager:
     _MARKER_START = "# CORTEX_DEBUG_MARKER_START"
     _MARKER_END = "# CORTEX_DEBUG_MARKER_END"
 
-    def _strip_markers(self, file_path: str) -> None:
-        """
-        Remove CORTEX debug marker blocks from a source file in-place.
+    # Phase 86 — multi-language marker patterns (regex fragments matched per line)
+    _MULTI_LANG_MARKER_PATTERNS: List[str] = [
+        "CORTEX_DEBUG",          # universal token (Python, JS, SQL, C#)
+        "console.debug.*CORTEX", # FrontendConsoleStrategy
+        "data-cortex-debug",     # HtmlVisionMappingStrategy
+        "CORTEX_DEBUG_API_TRACE",# ApiTraceStrategy
+        r"-- CORTEX_DEBUG",      # SqlTraceStrategy
+        r"_logger\.LogDebug.*CORTEX_DEBUG",  # DotNetTraceStrategy
+        r"cortex_trace_request", # ApiTraceStrategy helper
+        r"// CORTEX_DEBUG",      # C# single-line comment marker
+        r"<!-- CORTEX_DEBUG",    # HTML comment marker
+    ]
 
-        Marker blocks are delimited by ``# CORTEX_DEBUG_MARKER_START`` and
-        ``# CORTEX_DEBUG_MARKER_END`` comment lines.
+    def _strip_markers(self, file_path: str) -> None:
+        """Remove CORTEX debug marker blocks from a source file in-place.
+
+        Phase 86: Handles Python block markers (CORTEX_DEBUG_MARKER_START/END),
+        JavaScript console.debug markers, HTML data-cortex-debug comments,
+        SQL -- CORTEX_DEBUG comments, and C# ILogger.LogDebug markers.
 
         Args:
             file_path: Path to the file to clean.
         """
+        import re
         path = Path(file_path)
         if not path.exists():
             logger.debug("_strip_markers: %s does not exist, skipping", file_path)
@@ -163,16 +177,33 @@ class AutoCleanupManager:
 
         cleaned: List[str] = []
         inside_marker = False
+        removed = 0
         for line in lines:
+            # Python block markers
             if self._MARKER_START in line:
                 inside_marker = True
+                removed += 1
                 continue
             if self._MARKER_END in line:
                 inside_marker = False
+                removed += 1
                 continue
-            if not inside_marker:
-                cleaned.append(line)
+            if inside_marker:
+                removed += 1
+                continue
+            # Phase 86: single-line multi-language markers
+            stripped = line.strip()
+            is_marker = any(
+                re.search(pattern, stripped)
+                for pattern in self._MULTI_LANG_MARKER_PATTERNS
+            )
+            if is_marker:
+                removed += 1
+                continue
+            cleaned.append(line)
 
-        if len(cleaned) != len(lines):
+        if removed > 0:
             path.write_text("".join(cleaned), encoding="utf-8")
-            logger.info("_strip_markers: removed debug markers from %s", file_path)
+            logger.info(
+                "_strip_markers: removed %d debug marker lines from %s", removed, file_path
+            )

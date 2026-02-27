@@ -1,0 +1,287 @@
+# CORTEX Workflow Template — Multi-Stack Debug Pipeline
+# Phase 86 — GAP-86-07: Debugging workflow template
+# Authority: CORE-008, ENH-089, CORE-064
+# Status: ACTIVE
+
+id: "multi-stack-debug-pipeline"
+title: "Multi-Stack Debug Pipeline — Inject → Capture → Analyze → Fix-Plan → Cleanup"
+version: "1.0"
+created: "2026-02-27"
+phase_authority: "phase-86"
+category: "debugging"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OVERVIEW
+# ─────────────────────────────────────────────────────────────────────────────
+description: |
+  Five-phase debug pipeline supporting 8 injection strategies across:
+    - Python (test_failure, refactor_regression, governance_violation)
+    - JavaScript/TypeScript/JSX/TSX/Vue (frontend_console)
+    - HTML + Vision API bounding-box mapping (html_vision_mapping)
+    - REST/GraphQL/gRPC API handlers (api_trace)
+    - SQL Server / Oracle / PostgreSQL (sql_trace)
+    - C#/.NET ILogger (dotnet_trace)
+
+  Invocation: /debug {path}
+  Sub-commands: /debug-inject {path} | /debug-cleanup
+
+# ─────────────────────────────────────────────────────────────────────────────
+# STRATEGY REGISTRY
+# ─────────────────────────────────────────────────────────────────────────────
+strategy_registry:
+  - key: "test_failure"
+    class: "TestFailureStrategy"
+    module: "cortex.orchestrators.support.debugging.strategies.test_failure_strategy"
+    trigger: "TEST_FAILURE EventBus event"
+    languages: ["python"]
+    marker_format: "# CORTEX_DEBUG_MARKER_START / END block"
+    phase: "existing"
+
+  - key: "refactor_regression"
+    class: "RefactorRegressionStrategy"
+    module: "cortex.orchestrators.support.debugging.strategies.refactor_regression_strategy"
+    trigger: "REFACTOR_REGRESSION EventBus event"
+    languages: ["python"]
+    marker_format: "# CORTEX_DEBUG_MARKER_START / END block"
+    phase: "existing"
+
+  - key: "governance_violation"
+    class: "GovernanceViolationStrategy"
+    module: "cortex.orchestrators.support.debugging.strategies.governance_violation_strategy"
+    trigger: "GOVERNANCE_VIOLATION EventBus event"
+    languages: ["python"]
+    marker_format: "# CORTEX_DEBUG_MARKER_START / END block"
+    phase: "existing"
+
+  - key: "frontend_console"
+    class: "FrontendConsoleStrategy"
+    module: "cortex.orchestrators.support.debugging.strategies.frontend_console_strategy"
+    trigger: "manual /debug-inject | EventBus"
+    languages: ["javascript", "typescript", "jsx", "tsx", "vue", "mjs", "cjs"]
+    marker_format: "console.debug('[CORTEX_DEBUG:{session}:{line}]', {...}); // CORTEX_DEBUG"
+    phase: "phase-86"
+
+  - key: "html_vision_mapping"
+    class: "HtmlVisionMappingStrategy"
+    module: "cortex.orchestrators.support.debugging.strategies.html_vision_mapping_strategy"
+    trigger: "manual /debug-inject | Vision API screenshot"
+    languages: ["html", "htm", "jinja2", "django", "erb"]
+    marker_format: "<!-- CORTEX_DEBUG:{session}:{line} vision-anchor=true --> + data-cortex-debug attribute"
+    phase: "phase-86"
+
+  - key: "api_trace"
+    class: "ApiTraceStrategy"
+    module: "cortex.orchestrators.support.debugging.strategies.api_trace_strategy"
+    trigger: "manual /debug-inject | REFACTOR_REGRESSION"
+    languages: ["python"]
+    marker_format: "# CORTEX_DEBUG_API_TRACE: ... // CORTEX_DEBUG"
+    phase: "phase-86"
+
+  - key: "sql_trace"
+    class: "SqlTraceStrategy"
+    module: "cortex.orchestrators.support.debugging.strategies.sql_trace_strategy"
+    trigger: "manual /debug-inject"
+    languages: ["sql", "tsql", "plsql", "plpgsql"]
+    marker_format: "-- CORTEX_DEBUG: session=... -- remove before release"
+    phase: "phase-86"
+
+  - key: "dotnet_trace"
+    class: "DotNetTraceStrategy"
+    module: "cortex.orchestrators.support.debugging.strategies.dotnet_trace_strategy"
+    trigger: "manual /debug-inject"
+    languages: ["csharp", "cs"]
+    marker_format: "// CORTEX_DEBUG: ... + _logger.LogDebug(\"CORTEX_DEBUG:{session}:{line}\", ...)"
+    phase: "phase-86"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# 5-PHASE PIPELINE
+# ─────────────────────────────────────────────────────────────────────────────
+phases:
+  - id: "INJECT"
+    order: 1
+    title: "Inject debug markers"
+    description: |
+      Select strategy based on file extension and trigger type.
+      MarkerInjectionEngine dispatches to the matching AbstractInjectionStrategy.
+      Strategy calls analyze() to find injection lines, then format_marker() to
+      generate the language-native debug statement.
+    inputs:
+      - "file_path: str"
+      - "strategy: str (one of 8 registry keys)"
+      - "session_id: str"
+      - "line_number: int (optional — strategy auto-detects if omitted)"
+      - "context: Dict[str, Any]"
+    outputs:
+      - "injection_result: InjectionResult"
+      - "DEBUG_MARKERS_INJECTED EventBus event"
+      - "DEBUG_INSIGHT EventBus event"
+    engine: "MarkerInjectionEngine.inject()"
+    auto_select_strategy: true
+    strategy_selection_rules:
+      - "*.js | *.ts | *.jsx | *.tsx | *.vue → frontend_console"
+      - "*.html | *.htm | *.jinja2 → html_vision_mapping"
+      - "*.sql | *.tsql | *.plsql → sql_trace"
+      - "*.cs | *.csx → dotnet_trace"
+      - "*.py + HTTP handler pattern → api_trace"
+      - "*.py + traceback trigger → test_failure"
+      - "*.py + git-diff trigger → refactor_regression"
+      - "*.py + governance trigger → governance_violation"
+
+  - id: "CAPTURE"
+    order: 2
+    title: "Capture runtime output"
+    description: |
+      Developer runs the application/tests after marker injection.
+      Debug markers emit structured output (console.debug, logger.LogDebug,
+      SQL trace events) that CORTEX captures from logs.
+    inputs:
+      - "session_id: str"
+      - "log_sources: List[str] (log files, stdout, SQL Profiler output)"
+    outputs:
+      - "captured_log_lines: List[str]"
+      - "marker_hits: Dict[str, int] (session_id → hit count)"
+
+  - id: "ANALYZE"
+    order: 3
+    title: "Analyze captured markers"
+    description: |
+      DebuggerOrchestrator analyses captured output to identify:
+      - Execution paths (which markers fired, order, frequency)
+      - Null paths (markers that never fired — unreachable code)
+      - Performance hotspots (high-frequency markers)
+      - Cross-stack correlations (API trace → SQL trace → frontend)
+    inputs:
+      - "session_id: str"
+      - "captured_log_lines: List[str]"
+    outputs:
+      - "analysis_report: Dict[str, Any]"
+      - "blind_spots: List[str]"
+      - "hot_paths: List[str]"
+
+  - id: "FIX_PLAN"
+    order: 4
+    title: "Generate fix plan"
+    description: |
+      Synthesize analysis into an actionable fix plan.
+      Uses KnowledgeSynthesisEngine patterns from prior debug sessions.
+      OPJMixin consulted for historical fix success rates.
+    inputs:
+      - "analysis_report: Dict[str, Any]"
+      - "session_id: str"
+    outputs:
+      - "fix_plan: List[Dict[str, Any]] (ordered by confidence)"
+      - "DEBUG_FIX_APPLIED EventBus event (after execution)"
+      - "URS STRONG_REWARD signal (on successful fix)"
+
+  - id: "CLEANUP"
+    order: 5
+    title: "Auto-cleanup markers"
+    description: |
+      AutoCleanupManager strips all CORTEX_DEBUG markers from injected files.
+      Supports all 8 language marker formats. Triggered automatically on
+      TESTS_PASSED EventBus event or manually via /debug-cleanup.
+    inputs:
+      - "session_id: str"
+      - "active_sessions: Dict[str, DebugSession]"
+    outputs:
+      - "resolved_sessions: List[str]"
+      - "cleaned_files: List[str]"
+    trigger_events:
+      - "TESTS_PASSED (automatic)"
+      - "/debug-cleanup (manual)"
+    manager: "AutoCleanupManager.cleanup_resolved_sessions()"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# INTELLIGENCE WIRING (Phase 86 — GAP-86-11 through 86-15)
+# ─────────────────────────────────────────────────────────────────────────────
+intelligence_wiring:
+  opj_mixin:
+    gap: "GAP-86-11"
+    status: "WIRED"
+    description: "OPJMixin added to DebuggerOrchestrator class hierarchy. _opj_init() called in __init__. _opj_record_success/failure() available for fix outcome persistence."
+
+  urs_signals:
+    gap: "GAP-86-12"
+    status: "WIRED"
+    signals:
+      - trigger: "handle_test_failure"
+        signal_type: "MILD_PUNISHMENT"
+        pattern_id: "debug_session_opened"
+      - trigger: "handle_tests_passed"
+        signal_type: "STRONG_REWARD"
+        pattern_id: "debug_cycle_resolved"
+
+  intelligence_matrix:
+    gap: "GAP-86-13"
+    status: "WIRED"
+    entries:
+      - id: "CC-021"
+        name: "DebuggerOrchestrator"
+        dimension: "workflow"
+      - id: "IC-021"
+        name: "MultiStackDebugPipeline"
+        dimension: "intelligence"
+
+  event_bus_publish:
+    gap: "GAP-86-14"
+    status: "WIRED"
+    publishes:
+      - "DEBUG_MARKERS_INJECTED — after marker injection"
+      - "DEBUG_INSIGHT — with trigger + file context for cross-orchestrator awareness"
+      - "DEBUG_FIX_APPLIED — after TESTS_PASSED cleanup cycle"
+
+  knowledge_synthesis:
+    gap: "GAP-86-15"
+    status: "WIRED"
+    description: "OrchestratorProtocolMixin._activate_cross_cutting_hooks() auto-wires KnowledgeSynthesisEngine. DebuggerOrchestrator calls this in execute_operation()."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AUTO-CLEANUP PATTERNS (AutoCleanupManager — GAP-86-06)
+# ─────────────────────────────────────────────────────────────────────────────
+cleanup_patterns:
+  - pattern: "CORTEX_DEBUG"
+    scope: "universal — matches any language"
+  - pattern: "console.debug.*CORTEX"
+    scope: "JS/TS frontend_console markers"
+  - pattern: "data-cortex-debug"
+    scope: "HTML Vision API attributes"
+  - pattern: "CORTEX_DEBUG_API_TRACE"
+    scope: "Python API trace markers"
+  - pattern: "-- CORTEX_DEBUG"
+    scope: "SQL comment markers"
+  - pattern: "_logger\\.LogDebug.*CORTEX_DEBUG"
+    scope: "C#/.NET ILogger markers"
+  - pattern: "cortex_trace_request"
+    scope: "Python API trace helper calls"
+  - pattern: "// CORTEX_DEBUG"
+    scope: "C# inline comment markers"
+  - pattern: "<!-- CORTEX_DEBUG"
+    scope: "HTML comment markers"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# INVOCATION EXAMPLES
+# ─────────────────────────────────────────────────────────────────────────────
+examples:
+  - title: "Debug a failing Python test"
+    command: "/debug src/services/payment_service.py"
+    strategy: "test_failure (auto-selected)"
+    marker_example: |
+      # === CORTEX DEBUG MARKER [test_failure] ===
+      # session_id: session-test_failure-20260227-103000-123456
+      # === END MARKER ===
+
+  - title: "Debug a React component"
+    command: "/debug-inject src/components/PaymentForm.tsx"
+    strategy: "frontend_console (auto-selected by .tsx extension)"
+    marker_example: |
+      console.debug('[CORTEX_DEBUG:session-frontend_console-...:45]', {file: 'PaymentForm.tsx', trigger: 'manual'}); // CORTEX_DEBUG — remove before commit
+
+  - title: "Debug a SQL stored procedure"
+    command: "/debug-inject sql/procedures/process_payment.sql"
+    strategy: "sql_trace (auto-selected by .sql extension)"
+    marker_example: |
+      -- CORTEX_DEBUG: session=session-sql_trace-... line=12 trigger=manual file=process_payment.sql -- remove before release
+
+  - title: "Clean up all markers"
+    command: "/debug-cleanup"
+    action: "AutoCleanupManager strips all 9 pattern types across all injected files"

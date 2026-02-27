@@ -19,28 +19,28 @@ REPO_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 # Class 1: Matrix Dimension Validation
 # ─────────────────────────────────────────────────────────────────────────────
 class TestMatrixDimensions:
-    """Verify the 20×20 extended matrix dimensions (Phase 71-F)."""
+    """Verify the 21×21 extended matrix dimensions (Phase 86 — CC-021/IC-021 added)."""
 
     def test_matrix_has_20_intelligence_capabilities(self) -> None:
-        """IC-001..IC-020 must all be registered after 20×20 extension."""
+        """IC-001..IC-021 must all be registered after Phase 86 extension."""
         from cortex.intelligence.cross_cutting.intelligence_matrix_builder import (
             INTELLIGENCE_CAPABILITIES,
         )
         ids = [ic.id for ic in INTELLIGENCE_CAPABILITIES]
-        assert len(INTELLIGENCE_CAPABILITIES) == 20, (
-            f"Expected 20 IntelligenceCapabilities, got {len(INTELLIGENCE_CAPABILITIES)}. "
-            f"Missing: {sorted(set(f'IC-{i:03d}' for i in range(1, 21)) - set(ids))}"
+        assert len(INTELLIGENCE_CAPABILITIES) == 21, (
+            f"Expected 21 IntelligenceCapabilities (IC-021 added in Phase 86), got {len(INTELLIGENCE_CAPABILITIES)}. "
+            f"IDs present: {ids}"
         )
 
     def test_matrix_has_20_cortex_capabilities(self) -> None:
-        """CC-001..CC-020 must all be registered after 20×20 extension."""
+        """CC-001..CC-021 must all be registered after Phase 86 extension."""
         from cortex.intelligence.cross_cutting.intelligence_matrix_builder import (
             CORTEX_CAPABILITIES,
         )
         ids = [cc.id for cc in CORTEX_CAPABILITIES]
-        assert len(CORTEX_CAPABILITIES) == 20, (
-            f"Expected 20 CortexCapabilities, got {len(CORTEX_CAPABILITIES)}. "
-            f"Missing: {sorted(set(f'CC-{i:03d}' for i in range(1, 21)) - set(ids))}"
+        assert len(CORTEX_CAPABILITIES) == 21, (
+            f"Expected 21 CortexCapabilities (CC-021 added in Phase 86), got {len(CORTEX_CAPABILITIES)}. "
+            f"IDs present: {ids}"
         )
 
     def test_ic_016_through_020_exist(self) -> None:
@@ -64,16 +64,16 @@ class TestMatrixDimensions:
         assert not missing, f"Missing new cortex capabilities: {missing}"
 
     def test_build_returns_matrix_with_20x20_dimensions(self) -> None:
-        """IntelligenceMatrixBuilder.build() must return a matrix with 20×20 dimensions."""
+        """IntelligenceMatrixBuilder.build() must return a matrix with 21×21 dimensions (Phase 86: CC-021/IC-021)."""
         from cortex.intelligence.cross_cutting.intelligence_matrix_builder import (
             IntelligenceMatrixBuilder,
         )
         matrix = IntelligenceMatrixBuilder().build()
-        assert matrix.total_capabilities_x == 20, (
-            f"Expected x=20, got {matrix.total_capabilities_x}"
+        assert matrix.total_capabilities_x == 21, (
+            f"Expected x=21 (Phase 86 added IC-021), got {matrix.total_capabilities_x}"
         )
-        assert matrix.total_capabilities_y == 20, (
-            f"Expected y=20, got {matrix.total_capabilities_y}"
+        assert matrix.total_capabilities_y == 21, (
+            f"Expected y=21 (Phase 86 added CC-021), got {matrix.total_capabilities_y}"
         )
 
 
