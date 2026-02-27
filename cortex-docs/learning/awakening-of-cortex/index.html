@@ -305,18 +305,7 @@
       const html = renderMd(cache[ch.id]);
       const label = ch.id === '01' ? 'PROLOGUE' : 'CHAPTER ' + parseInt(ch.id, 10);
 
-      // Build chapter hero image HTML (hidden until image loads)
-      var imgHtml = '';
-      if (ch.image) {
-        imgHtml = '<div class="ch-hero-image" data-wave="' + ch.wave + '">' +
-          '<img src="' + ch.image + '" alt="' + ch.title + ' — chapter illustration"' +
-          ' loading="eager" onerror="this.parentElement.style.display=\'none\'"' +
-          ' onload="this.parentElement.classList.add(\'loaded\')" />' +
-          '</div>';
-      }
-
       contentEl.innerHTML =
-        imgHtml +
         '<div class="ch-header" data-wave="' + ch.wave + '">' +
           '<div class="ch-wave-tag">' + WAVE_LABELS[ch.wave] + '</div>' +
           '<div class="ch-label">' + label + '</div>' +

@@ -89,6 +89,9 @@ What used to take three developers two weeks of manual coordination now took COR
 
 "It’s... it’s actually beautiful," Miss G admitted one evening, looking at the clean, hierarchical architecture diagram Asif had drawn. It wasn't spaghetti anymore; it was a structured organization.
 
+
+![The MasterOrchestrator conducts 17 section leaders — from spaghetti to symphony](images/ch-04-conductors-baton.png)
+
 The orchestrator count had grown to seventeen. The Core Tier (Master, Intent, Governance, TDD), the Domain Tier (Audit, Debugger, Refactor), and the Support Tier (Vacuum, Health, Upgrade). Seventeen section leaders conducting their part of the symphony.
 
 "Thinking? Are we thinking as a system?" Copilot Bot asked, his LEDs flickering softly.
