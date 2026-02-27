@@ -4,7 +4,7 @@
 title: Architecture Diagrams
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/ (live architecture)
 order: 1
 ---
@@ -25,6 +25,14 @@ order: 1
 | 6 | [MCP Transport](07-mcp-transport.md) | IDE ↔ CORTEX communication (39 tools) | Developers |
 | 7 | [Testing Pyramid](08-testing-pyramid.md) | Test tiers and execution (16,942 tests) | Developers, POs |
 | 8 | [Brain Tier Model](09-brain-tier-model.md) | Intelligence tiers (Perception → Reasoning → Action) | All |
+| 9 | [Golden Test Taxonomy](10-golden-test-taxonomy.md) | Golden test subfolder structure and scoring | Developers |
+| 10 | [Golden Test Lifecycle](11-golden-test-lifecycle.md) | Scoring, promotion, maintenance, demotion | Developers, POs |
+| 11 | [SDLC Pipeline](12-sdlc-pipeline.md) | 7-phase SDLC lifecycle with security gates | All |
+| 12 | [Workflow Template Engine](13-workflow-template-engine.md) | 17 categories, primitive composition | Developers |
+| 13 | [RGR Quality Cycle](14-rgr-cycle.md) | Two-level Red-Green-Refactor cycle | Developers, POs |
+| 14 | [STS Transformation](15-sts-transformation.md) | Sharpen The Saw — before/after demo | All |
+| 15 | [Security-First Architecture](16-security-first.md) | 5-layer security defence model | All |
+| 16 | [Knowledge Hydration](17-knowledge-hydration.md) | Knowledge resolution and context assembly | Developers |
 
 ---
 
@@ -56,4 +64,4 @@ All diagrams use ASCII art for universal compatibility (no external rendering to
 
 ---
 
-*Verified against live CORTEX architecture · 25 February 2026*
+*Verified against live CORTEX architecture · 27 February 2026*

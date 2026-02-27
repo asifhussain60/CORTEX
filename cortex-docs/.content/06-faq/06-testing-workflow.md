@@ -237,4 +237,45 @@ Score your test with `cortex_generate_tests` (MCP tool) — it returns the TestQ
 
 ---
 
-*Verified against `pytest.ini` + `conftest.py` + `scripts/run_tests.py` · 26 February 2026 · 16,942 tests total*
+## What are golden tests and how do they differ from regular tests?
+
+Golden tests are the 486 tests in `tests/golden/` governed by **CORE-055**. They represent verified truth about CORTEX behaviour and must ALWAYS pass — zero exceptions. Key differences:
+
+| Aspect | Regular Tests | Golden Tests |
+|--------|---------------|--------------|
+| **Location** | `tests/unit/`, `tests/integration/` | `tests/golden/` |
+| **Governance** | Normal test coverage | CORE-055 — zero regression |
+| **Quality Score** | Not scored | Scored 0–9 by `TestQualityGate` |
+| **Promotion** | N/A | Must score ≥ 7, ≥ 2 orchestrator refs, ≥ 2 asserts |
+| **CI Impact** | Test failure = warning | Test failure = pipeline STOP |
+
+See: `flat-files/14-golden-tests.md` for full documentation.
+
+---
+
+## What is the RGR (Red-Green-Refactor) cycle in CORTEX?
+
+CORTEX implements a **two-level RGR** cycle:
+
+**Level 1 (Unit RGR):** For each feature/fix — `TDDOrchestrator` enforces RED (failing test) → GREEN (minimum implementation) → REFACTOR (clean up). Mandatory per CORE-008.
+
+**Level 2 (Sweep RGR):** For codebase-wide quality — `SweepCatalogueOrchestrator` runs DETECT → FIX → RESCAN loops until all P0/P1 issues are resolved (CORE-064). Each individual fix within the sweep follows Level 1 RGR.
+
+See: `flat-files/18-rgr-quality-cycle.md` for full documentation.
+
+---
+
+## What is STS (Sharpen The Saw)?
+
+STS is the demo repository ecosystem at `cortex-sts/CortexLabs/` used to showcase CORTEX capabilities. It contains:
+
+- **`BadMonolith/`** — Intentionally problematic C#/.NET monolith (0 tests, god classes, no DI)
+- **`Refactored/`** — The result after CORTEX transformation
+
+Three usage scenarios: (1) onboarding demos with `/onboard`, (2) digest comparison with `/digest`, (3) live refactoring workshops. CORE rules are exempted from STS code since it's intentionally bad for demonstration.
+
+See: `flat-files/15-sharpen-the-saw.md` for full documentation.
+
+---
+
+*Verified against `pytest.ini` + `conftest.py` + `scripts/run_tests.py` · 27 February 2026 · 16,942 tests total*

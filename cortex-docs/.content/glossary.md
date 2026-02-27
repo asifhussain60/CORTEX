@@ -4,7 +4,7 @@
 title: CORTEX Glossary — Terminology Reference
 type: reference
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/ (live codebase)
 order: 99
 ---
@@ -73,6 +73,8 @@ order: 99
 
 **Golden Tests** — 486 tests that must ALWAYS pass (CORE-055 Golden Test Tier Contract). Run with `pytest-xdist` parallel execution. Location: `tests/golden/`.
 
+**GoldenScenario** — Dataclass in `cortex/testing/_golden_factory.py` that parametrizes end-to-end test scenarios. Fields: `scenario_id`, `description`, `setup`, `input_data`, `expected_output`, `orchestrator_refs`. Factory method `GoldenScenario.from_yaml()` loads scenarios from YAML fixtures. Used by `@pytest.mark.parametrize` to generate test cases.
+
 **Governance Agents** — 8 specialized agents that enforce specific CORE rule categories: TestNaming, FileNaming, ImportValidation, TypeHint, Docstring, DuplicateDetection, SecurityScan, ExtendedGovernance.
 
 **Graceful Degradation** — Resilience pattern returning partial results when non-critical services fail. Module: `cortex/infrastructure/graceful_degradation.py`.
@@ -94,6 +96,8 @@ order: 99
 ## K
 
 **Knowledge Base** — Domain knowledge stored in `cortex-registry/knowledge-base/` and managed by `cortex/knowledge/`.
+
+**Knowledge Hydration** — The process of resolving and injecting domain knowledge into execution context before orchestrator execution. Resolution order: Company overlays → Knowledge base (static) → SDLC knowledge (dynamic) → Pattern registry → LENS real-time analysis. All resolved knowledge is merged into the orchestrator's execution context.
 
 ## L
 
@@ -129,6 +133,8 @@ order: 99
 
 **Reasoning Tier** — Second intelligence tier. Analyzes perceptions, assesses risk, and produces execution plans. Location: `cortex/intelligence/reasoning/`.
 
+**Red-Green-Refactor (RGR)** — The two-level quality cycle in CORTEX. **Level 1 (Unit RGR):** TDDOrchestrator enforces RED (write failing test) → GREEN (implement minimum) → REFACTOR (clean up) for each feature/fix. **Level 2 (Sweep RGR):** SweepCatalogueOrchestrator runs DETECT (scan codebase) → FIX (apply remediation) → RESCAN (verify exhaustive coverage) loops until p0==0 and p1==0 (CORE-064). The two levels compose: unit RGR runs inside sweep RGR for comprehensive quality assurance. See also: TDD, CORE-064.
+
 **Refactor Master** — Strategic planning document defining all 12 phases of the Cohesive Brain Refactor. File: `cortex-registry/planning/cortex-refactor-master.yaml`.
 
 **ReinforcementEngine** — Core engine that receives `ReinforcementSignal` emissions, adjusts pattern confidence scores, and manages the promote/quarantine/decay lifecycle. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
@@ -141,7 +147,13 @@ order: 99
 
 **ScaffoldWriter** — Emits `ScaffoldFile` objects produced by WorkflowEngine steps to disk (`mkdir -p`). Allows downstream pipeline steps whose `depends_on` gate checks for files to proceed without halting mid-run. Added today (BadMonolith Gap G2). Module: `cortex/core/scaffold_writer.py`.
 
+**SDLC Workflow Engine** — The 7-phase software development lifecycle engine powered by `SDLCWorkflowOrchestrator`. Maps user intents (ANALYZE, DESIGN, IMPLEMENT, TEST, SECURITY, DEPLOY, REVIEW) to corresponding YAML workflow templates in `cortex-registry/workflows/templates/sdlc/`. Each phase includes knowledge hydration from `cortex-registry/knowledge/sdlc/`, security gates at every phase transition, and FSM-based execution via `WorkflowEngine`. Location: `cortex/orchestrators/domain/sdlc_workflow_orchestrator.py`.
+
 **SecurityOrchestrator** — Orchestrator handling security analysis, vulnerability detection, and security gate enforcement. Location: `cortex/orchestrators/core/`.
+
+**Security-First Development** — CORTEX's 5-layer security architecture ensuring security is embedded at every development stage, not bolted on after the fact. Layers (outside-in): Runtime Protection → Audit & Compliance → Governance Enforcement → Code Analysis → Input Validation. Security gates enforce checks at every SDLC phase transition. Knowledge sources: `cortex-registry/knowledge-base/security/`, `cortex-registry/knowledge/sdlc/security-patterns.yaml`.
+
+**Sharpen The Saw (STS)** — Demo repository ecosystem at `cortex-sts/CortexLabs/` used to showcase CORTEX capabilities. Contains `BadMonolith/` (intentionally problematic C#/.NET monolith with 0 tests, god classes, no DI) and `Refactored/` (the transformed result). Three primary usage scenarios: (1) onboarding demos, (2) digest comparison, (3) live refactoring workshops. Playbook reference: PB-STS-001. CORE rules are exempted from STS code since it's intentionally bad for demonstration.
 
 **SignalType** — Enum defining URS reinforcement signal strengths: `STRONG_REWARD` (+1.0), `MILD_REWARD` (+0.5), `NEUTRAL` (0.0), `MILD_PUNISHMENT` (−0.5), `STRONG_PUNISHMENT` (−1.0). Used by all orchestrators that emit learning feedback. Module: `cortex/intelligence/learning/reinforcement_signal.py`.
 
@@ -187,8 +199,10 @@ order: 99
 
 **WORK_ITEM_SOURCE** — Environment variable that selects the active `WorkItemProvider`. Default: `"ado"` (Azure DevOps). Factory: `cortex/repositories/provider_factory.py`.
 
-**Workflow Templates** — YAML-defined execution plans in `cortex-registry/workflows/templates/`. Categories: `lifecycle/` (development flow) and `production/` (deployment operations).
+**Workflow Templates** — YAML-defined execution plans in `cortex-registry/workflows/templates/`. 17 categories including `sdlc/` (7-phase development lifecycle), `audit/` (production readiness), `governance/` (rule enforcement), `onboarding/` (repository analysis), `testing/` (test strategy), `security/` (vulnerability management), and `primitives/` (5 atomic categories: analysis, execution, governance, validation, intelligence). Templates compose from primitives to form complex workflows. Executed by `WorkflowEngine`. Company-specific customizations go in `cortex-registry/company/`.
+
+**Workflow Template Primitives** — Atomic, reusable building blocks in `cortex-registry/workflows/templates/primitives/`. Five categories: `analysis/` (AST scan, security scan), `execution/` (TDD cycle, scaffold emit), `governance/` (sweep catalogue open/close, golden promotion), `validation/` (detect-fix-rescan-loop, schema validate), `intelligence/` (LENS pipeline, knowledge resolve). Templates compose from these primitives.
 
 ---
 
-*Verified against live CORTEX codebase · 26 February 2026 (Phase 83 Complete)*
+*Verified against live CORTEX codebase · 27 February 2026 (Phase 83 Complete)*

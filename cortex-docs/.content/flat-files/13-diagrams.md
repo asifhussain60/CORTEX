@@ -4,9 +4,9 @@
 title: CORTEX Architecture Diagrams — Visual Reference
 type: diagram
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-26
+last_verified: 2026-02-27
 source_of_truth: cortex/ directory structure
-consolidates: [07-diagrams-overview, 07-diagrams-high-level-architecture, 07-diagrams-request-flow, 07-diagrams-orchestrator-map, 07-diagrams-lens-pipeline, 07-diagrams-governance-flow, 07-diagrams-mcp-transport, 07-diagrams-testing-pyramid, 07-diagrams-brain-tier-model, 07-diagrams-golden-test-taxonomy]
+consolidates: [07-diagrams-overview, 07-diagrams-high-level-architecture, 07-diagrams-request-flow, 07-diagrams-orchestrator-map, 07-diagrams-lens-pipeline, 07-diagrams-governance-flow, 07-diagrams-mcp-transport, 07-diagrams-testing-pyramid, 07-diagrams-brain-tier-model, 07-diagrams-golden-test-taxonomy, 07-diagrams-golden-test-lifecycle, 07-diagrams-sdlc-pipeline, 07-diagrams-workflow-template-engine, 07-diagrams-rgr-cycle, 07-diagrams-sts-transformation, 07-diagrams-security-first, 07-diagrams-knowledge-hydration]
 order: 12
 ---
 
@@ -27,6 +27,14 @@ order: 12
 | 7 | Testing Pyramid and Execution | [Testing Pyramid](#7-testing-pyramid) |
 | 8 | Brain Tier Intelligence Model | [Brain Tiers](#8-brain-tiers) |
 | 9 | Golden Test Taxonomy | [Golden Tests](#9-golden-test-taxonomy) |
+| 10 | Golden Test Lifecycle | `diagrams/diagram-16-golden-test-lifecycle.md` |
+| 11 | SDLC 7-Phase Pipeline | `diagrams/diagram-17-sdlc-pipeline.md` |
+| 12 | Workflow Template Engine | `diagrams/diagram-18-workflow-template-engine.md` |
+| 13 | RGR Two-Level Quality Cycle | `diagrams/diagram-19-rgr-cycle.md` |
+| 14 | STS Before/After Transformation | `diagrams/diagram-20-sts-before-after.md` |
+| 15 | Security-First 5-Layer Architecture | `diagrams/diagram-21-security-first.md` |
+| 16 | Knowledge Hydration Pipeline | `diagrams/diagram-22-knowledge-hydration.md` |
+| 17 | Sweep Completeness Lifecycle | `diagrams/diagram-23-sweep-completeness.md` |
 
 ### Notation Guide
 

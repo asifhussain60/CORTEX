@@ -4,7 +4,7 @@
 title: CORTEX Architecture Overview
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-25
+last_verified: 2026-02-27
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml + .github/copilot-instructions.md
 format: diátaxis-explanation
 voice: third-person-blended
@@ -113,9 +113,16 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Infrastructure & deployment | `05-infrastructure/01-overview.md` |
 | Token optimization | `05-infrastructure/08-token-optimization.md` |
 | Architecture diagrams | `07-diagrams/01-overview.md` |
+| Golden tests & quality | `flat-files/14-golden-tests.md` |
+| Sharpen The Saw (STS) | `flat-files/15-sharpen-the-saw.md` |
+| SDLC workflow engine | `flat-files/16-sdlc-workflow-engine.md` |
+| Workflow template library | `flat-files/17-workflow-template-library.md` |
+| RGR quality cycle | `flat-files/18-rgr-quality-cycle.md` |
+| Enterprise patterns & knowledge | `flat-files/19-enterprise-patterns-knowledge.md` |
+| Security-first development | `flat-files/20-security-first.md` |
 | Glossary | `glossary.md` |
 
 ---
 
-*CORTEX v1.0.0 (Phase 83 Complete) · 26 February 2026 · 51 wired orchestrators · 39 MCP tools (28 registered) · 38 CORE rules · 16,942 tests · 486 golden · Source of truth: `cortex-registry/cortex-master.yaml`*
+*CORTEX v1.0.0 (Phase 83 Complete) · 27 February 2026 · 51 wired orchestrators · 39 MCP tools (28 registered) · 38 CORE rules · 16,942 tests · 486 golden · Source of truth: `cortex-registry/cortex-master.yaml`*
 
