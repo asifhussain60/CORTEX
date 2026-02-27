@@ -3,314 +3,29 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta content="The Awakening Of CORTEX — The origin story of CORTEX told in 19 chapters. From a basement in New Jersey to a fully autonomous AI engineering framework." name="description"/>
-<meta content="CORTEX, origin story, AI development, TDD, GitHub Copilot, awakening" name="keywords"/>
+<meta content="The Awakening Of CORTEX — The origin story of an autonomous AI engineering framework, told across 14 chapters. From a New Jersey basement at 3 AM to 51 orchestrators, 38 governance rules, and 16,942 tests — and the vision of an Enterprise Brain for all." name="description"/>
+<meta content="CORTEX, origin story, AI engineering framework, TDD, GitHub Copilot, autonomous AI, orchestrators" name="keywords"/>
 <meta content="Asif Hussain" name="author"/>
 <title>The Awakening Of CORTEX — Origin Story</title>
 <link href="../../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&family=Comic+Neue:ital,wght@0,400;0,700;1,400;1,700&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
       rel="stylesheet"
       integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"/>
 <link href="../../assets/css/glassmorphism.css" rel="stylesheet"/>
-<style>
-  /* ── Page shell ── */
-  body {
-    background-color: #0a0e27;
-    background-image:
-      radial-gradient(circle at 15% 25%, rgba(123,97,255,0.18) 0%, transparent 45%),
-      radial-gradient(circle at 85% 75%, rgba(0,212,255,0.12) 0%, transparent 45%),
-      radial-gradient(circle at 50% 50%, rgba(239,68,68,0.06) 0%, transparent 60%);
-    color: #fff;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    min-height: 100vh;
-    margin: 0;
-  }
-
-  .skip-link {
-    position: absolute;
-    left: -9999px;
-    top: 0;
-    background: #00d4ff;
-    color: #0a0e27;
-    padding: 8px 16px;
-    font-weight: 700;
-    z-index: 9999;
-  }
-  .skip-link:focus { left: 0; }
-
-  /* ── Breadcrumb ── */
-  .breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 1rem 2rem;
-    font-size: 0.82rem;
-    color: #a0a6c0;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .breadcrumb a { color: #00d4ff; text-decoration: none; }
-  .breadcrumb a:hover { text-decoration: underline; }
-  .breadcrumb-sep { color: #4a5080; }
-
-  /* ── Hero ── */
-  .awakening-hero {
-    text-align: center;
-    padding: 3.5rem 2rem 2.5rem;
-    max-width: 820px;
-    margin: 0 auto;
-  }
-  .awakening-hero-image {
-    width: 140px;
-    height: 140px;
-    object-fit: contain;
-    margin-bottom: 1.5rem;
-    filter: drop-shadow(0 0 32px rgba(123,97,255,0.5));
-    animation: pulse-glow 3s ease-in-out infinite alternate;
-  }
-  @keyframes pulse-glow {
-    from { filter: drop-shadow(0 0 24px rgba(123,97,255,0.4)); }
-    to   { filter: drop-shadow(0 0 48px rgba(0,212,255,0.6)); }
-  }
-  .awakening-title {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2rem, 5vw, 3rem);
-    font-weight: 700;
-    background: linear-gradient(135deg, #fff 30%, #7b61ff 70%, #00d4ff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1rem;
-    line-height: 1.15;
-  }
-  .awakening-tagline {
-    font-size: 1.1rem;
-    color: #a0a6c0;
-    max-width: 600px;
-    margin: 0 auto 1.5rem;
-    line-height: 1.7;
-  }
-  .awakening-meta {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-    font-size: 0.82rem;
-    color: #a0a6c0;
-    margin-top: 0.5rem;
-  }
-  .awakening-meta span {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-  }
-  .awakening-meta i { color: #7b61ff; }
-
-  /* ── Section label ── */
-  .section-label {
-    text-align: center;
-    font-size: 0.72rem;
-    font-weight: 600;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #7b61ff;
-    margin: 3rem auto 1.25rem;
-  }
-
-  /* ── Chapter grid ── */
-  .chapters-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1.5rem 4rem;
-  }
-  .chapters-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-  }
-
-  /* ── Chapter card ── */
-  .chapter-card {
-    background: rgba(26,31,58,0.7);
-    backdrop-filter: blur(15px) saturate(180%);
-    border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 14px;
-    padding: 1.25rem 1.4rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.22s, box-shadow 0.22s, transform 0.18s;
-    position: relative;
-    overflow: hidden;
-  }
-  .chapter-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(123,97,255,0.06) 0%, transparent 60%);
-    opacity: 0;
-    transition: opacity 0.22s;
-  }
-  .chapter-card:hover {
-    border-color: rgba(123,97,255,0.45);
-    box-shadow: 0 8px 32px rgba(123,97,255,0.18);
-    transform: translateY(-2px);
-  }
-  .chapter-card:hover::before { opacity: 1; }
-
-  /* wave colours */
-  .chapter-card[data-wave="0"]:hover  { border-color: rgba(239,68,68,0.45); box-shadow: 0 8px 32px rgba(239,68,68,0.15); }
-  .chapter-card[data-wave="1"]:hover  { border-color: rgba(245,158,11,0.45); box-shadow: 0 8px 32px rgba(245,158,11,0.15); }
-  .chapter-card[data-wave="2"]:hover  { border-color: rgba(16,185,129,0.45); box-shadow: 0 8px 32px rgba(16,185,129,0.15); }
-  .chapter-card[data-wave="3"]:hover  { border-color: rgba(0,212,255,0.45);  box-shadow: 0 8px 32px rgba(0,212,255,0.15); }
-
-  .chapter-num {
-    flex-shrink: 0;
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.78rem;
-    font-weight: 600;
-    background: rgba(123,97,255,0.15);
-    border: 1px solid rgba(123,97,255,0.3);
-    color: #c4b5fd;
-    letter-spacing: 0;
-  }
-  /* special badge colours per wave */
-  [data-wave="0"] .chapter-num { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.3); color: #fca5a5; }
-  [data-wave="1"] .chapter-num { background: rgba(245,158,11,0.15); border-color: rgba(245,158,11,0.3); color: #fcd34d; }
-  [data-wave="2"] .chapter-num { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.3); color: #6ee7b7; }
-  [data-wave="3"] .chapter-num { background: rgba(0,212,255,0.15); border-color: rgba(0,212,255,0.3); color: #67e8f9; }
-
-  .chapter-body { flex: 1; min-width: 0; }
-  .chapter-label {
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #7b61ff;
-    margin-bottom: 3px;
-  }
-  [data-wave="0"] .chapter-label { color: #ef4444; }
-  [data-wave="1"] .chapter-label { color: #f59e0b; }
-  [data-wave="2"] .chapter-label { color: #10b981; }
-  [data-wave="3"] .chapter-label { color: #00d4ff; }
-
-  .chapter-title {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: #fff;
-    line-height: 1.35;
-    margin-bottom: 4px;
-  }
-  .chapter-subtitle {
-    font-size: 0.78rem;
-    color: #a0a6c0;
-    line-height: 1.45;
-  }
-  .chapter-arrow {
-    flex-shrink: 0;
-    align-self: center;
-    color: #4a5080;
-    transition: color 0.2s, transform 0.2s;
-    font-size: 0.9rem;
-  }
-  .chapter-card:hover .chapter-arrow { color: #7b61ff; transform: translateX(3px); }
-
-  /* special treatment for Prologue / Epilogue */
-  .chapter-card.chapter-special {
-    background: rgba(30,20,60,0.8);
-    border-color: rgba(123,97,255,0.2);
-  }
-
-  /* ── Wave divider ── */
-  .wave-divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 2rem 0 0.75rem;
-    color: #a0a6c0;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-  .wave-divider::before, .wave-divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: rgba(255,255,255,0.08);
-  }
-  .wave-badge {
-    padding: 2px 10px;
-    border-radius: 20px;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-  }
-  .wave-badge--origin  { background: rgba(239,68,68,0.18);  color: #fca5a5;  border: 1px solid rgba(239,68,68,0.3); }
-  .wave-badge--early   { background: rgba(245,158,11,0.18); color: #fcd34d;  border: 1px solid rgba(245,158,11,0.3); }
-  .wave-badge--growth  { background: rgba(16,185,129,0.18); color: #6ee7b7;  border: 1px solid rgba(16,185,129,0.3); }
-  .wave-badge--scale   { background: rgba(0,212,255,0.18);  color: #67e8f9;  border: 1px solid rgba(0,212,255,0.3); }
-
-  /* ── CTA strip ── */
-  .cta-strip {
-    text-align: center;
-    padding: 2.5rem 1.5rem;
-    max-width: 600px;
-    margin: 0 auto 3rem;
-  }
-  .cta-strip p {
-    color: #a0a6c0;
-    font-size: 0.95rem;
-    margin-bottom: 1.25rem;
-    line-height: 1.7;
-  }
-  .btn-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0.65rem 1.5rem;
-    border-radius: 10px;
-    background: rgba(123,97,255,0.15);
-    border: 1px solid rgba(123,97,255,0.35);
-    color: #c4b5fd;
-    font-size: 0.88rem;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background 0.2s, border-color 0.2s;
-  }
-  .btn-back:hover {
-    background: rgba(123,97,255,0.25);
-    border-color: rgba(123,97,255,0.6);
-    color: #fff;
-  }
-
-  /* ── Footer ── */
-  .page-footer {
-    text-align: center;
-    padding: 1.5rem;
-    font-size: 0.78rem;
-    color: #4a5080;
-    border-top: 1px solid rgba(255,255,255,0.05);
-  }
-  .page-footer a { color: #7b61ff; text-decoration: none; }
-  .page-footer a:hover { text-decoration: underline; }
-</style>
+<link href="awakening.css" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 <a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Ambient orbs -->
+<div class="ambient-orb ambient-orb--purple" aria-hidden="true"></div>
+<div class="ambient-orb ambient-orb--cyan" aria-hidden="true"></div>
 
 <!-- Breadcrumb -->
 <nav class="breadcrumb" aria-label="Breadcrumb">
@@ -323,315 +38,331 @@
 
 <main id="main-content">
 
-  <!-- Hero -->
-  <div class="awakening-hero">
-    <img
-      src="../../assets/images/Awakening-200.png"
-      alt="The Awakening Of CORTEX"
-      class="awakening-hero-image"
-      width="140" height="140"
-      loading="eager" fetchpriority="high"
-    />
-    <h1 class="awakening-title">The Awakening Of CORTEX</h1>
-    <p class="awakening-tagline">
-      From a cramped New Jersey basement at 3&thinsp;AM to a fully autonomous AI engineering framework —
-      19 chapters of code, chaos, and unexpected brilliance.
-    </p>
-    <div class="awakening-meta">
-      <span><i class="fas fa-book-open"></i> 19 Chapters</span>
-      <span><i class="fas fa-clock"></i> ~4 hour read</span>
-      <span><i class="fas fa-code-branch"></i> Phases 1 – 87</span>
-      <span><i class="fas fa-calendar-alt"></i> 2023 – 2026</span>
+  <!-- ── Hero (compact horizontal) ───────────────────────────────── -->
+  <div class="awakening-hero" id="awakening-hero">
+    <div class="awakening-hero-inner">
+      <!-- Left: CORTEX logo -->
+      <div class="awakening-hero-logo-wrap">
+        <img src="../../assets/images/cortex-logo-200.png"
+             alt="CORTEX"
+             class="awakening-cortex-logo"
+             width="200" height="200"
+             loading="eager" fetchpriority="high"/>
+      </div>
+      <!-- Right: text block -->
+      <div class="awakening-hero-text">
+        <div class="awakening-kicker">Origin Story · 2023 – 2026</div>
+        <h1 class="awakening-title">The Awakening Of CORTEX</h1>
+        <p class="awakening-tagline">
+          An ADHD-fueled developer, his imaginary girlfriend, and a confidently wrong robot
+          build an autonomous AI engineering framework — one 3&thinsp;AM crisis at a time.
+        </p>
+        <div class="awakening-meta">
+          <span><i class="fas fa-book-open"></i> 14 Chapters</span>
+          <span><i class="fas fa-clock"></i> ~2 hr read</span>
+          <span><i class="fas fa-code-branch"></i> Phases 1 – 87</span>
+          <span><i class="fas fa-users"></i> 3 Characters</span>
+        </div>
+        <!-- Character chips inline under meta -->
+        <div class="awakening-chars">
+          <div class="character-chip character-chip--asif">
+            <span class="character-icon">🧑‍💻</span>
+            <span class="character-name">Asif Codenstein</span>
+            <span class="character-role">The ADHD Architect</span>
+          </div>
+          <div class="character-chip character-chip--missg">
+            <span class="character-icon">👻</span>
+            <span class="character-name">Miss G</span>
+            <span class="character-role">The Imaginary Girlfriend</span>
+          </div>
+          <div class="character-chip character-chip--copilot">
+            <span class="character-icon">🤖</span>
+            <span class="character-name">Copilot Bot</span>
+            <span class="character-role">The Eager Robot</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Chapter list -->
-  <div class="chapters-container">
+  <!-- ── Split-Panel Reader ────────────────────────────────────────── -->
+  <div class="reader-container" id="reader-container">
 
-    <p class="section-label">The Story</p>
+    <!-- Left Panel: Chapter List -->
+    <aside class="chapter-sidebar" id="chapter-sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-book-open"></i>
+        <span>Chapters</span>
+      </div>
 
-    <!-- ── Wave 0: Origin ── -->
-    <div class="wave-divider">
-      <span class="wave-badge wave-badge--origin">Origin · Late Night 2023</span>
-    </div>
-    <div class="chapters-grid">
+      <!-- Wave 0 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--origin">Wave 0 · Origin</span>
+      </div>
+      <button class="sidebar-chapter active" data-chapter="01" data-wave="0">
+        <span class="sidebar-num">PRO</span>
+        <span class="sidebar-title">Deep in the Basement</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="02" data-wave="0">
+        <span class="sidebar-num">02</span>
+        <span class="sidebar-title">The Hotel Receptionist</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="03" data-wave="0">
+        <span class="sidebar-num">03</span>
+        <span class="sidebar-title">The Sacred Rules</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="04" data-wave="0">
+        <span class="sidebar-num">04</span>
+        <span class="sidebar-title">The Conductor's Baton</span>
+      </button>
 
-      <a href="chapters/00-PROLOGUE-Deep-in-the-Basement.md"
-         class="chapter-card chapter-special" data-wave="0"
-         aria-label="Prologue: Deep in the Basement">
-        <div class="chapter-num">PRO</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Prologue</div>
-          <div class="chapter-title">Deep in the Basement</div>
-          <div class="chapter-subtitle">A cramped New Jersey basement. Three monitors. Two cold coffees. CORTEX is about to be born.</div>
+      <!-- Wave 1 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--early">Wave 1 · Structure</span>
+      </div>
+      <button class="sidebar-chapter" data-chapter="05" data-wave="1">
+        <span class="sidebar-num">05</span>
+        <span class="sidebar-title">Opening the Doors</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="06" data-wave="1">
+        <span class="sidebar-num">06</span>
+        <span class="sidebar-title">The Four Walls</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="07" data-wave="1">
+        <span class="sidebar-num">07</span>
+        <span class="sidebar-title">The Crystal Ball</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="08" data-wave="1">
+        <span class="sidebar-num">08</span>
+        <span class="sidebar-title">The Battle for Truth</span>
+      </button>
+
+      <!-- Wave 2 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--growth">Wave 2 · Resilience</span>
+      </div>
+      <button class="sidebar-chapter" data-chapter="09" data-wave="2">
+        <span class="sidebar-num">09</span>
+        <span class="sidebar-title">When Everything Broke</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="10" data-wave="2">
+        <span class="sidebar-num">10</span>
+        <span class="sidebar-title">The Reckoning</span>
+      </button>
+
+      <!-- Wave 3 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--scale">Wave 3 · Autonomy</span>
+      </div>
+      <button class="sidebar-chapter" data-chapter="11" data-wave="3">
+        <span class="sidebar-num">11</span>
+        <span class="sidebar-title">The Great Pruning</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="12" data-wave="3">
+        <span class="sidebar-num">12</span>
+        <span class="sidebar-title">The Pylance Epiphany</span>
+      </button>
+      <button class="sidebar-chapter" data-chapter="13" data-wave="3">
+        <span class="sidebar-num">13</span>
+        <span class="sidebar-title">The 3 AM Healer</span>
+      </button>
+
+      <!-- Wave 4 -->
+      <div class="sidebar-wave">
+        <span class="sidebar-wave-badge sidebar-wave-badge--vision">Wave 4 · Vision</span>
+      </div>
+      <button class="sidebar-chapter" data-chapter="14" data-wave="4">
+        <span class="sidebar-num">14</span>
+        <span class="sidebar-title">The Enterprise Brain</span>
+      </button>
+
+      <!-- Mobile toggle -->
+      <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle chapter list">
+        <i class="fas fa-bars"></i>
+      </button>
+    </aside>
+
+    <!-- Right Panel: Chapter Content -->
+    <article class="chapter-content" id="chapter-content">
+      <div class="chapter-content-inner" id="chapter-content-inner">
+        <div class="chapter-loading">
+          <i class="fas fa-spinner fa-spin"></i>
+          <span>Loading chapter…</span>
         </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
+      </div>
+      <nav class="chapter-nav" id="chapter-nav" aria-label="Chapter navigation">
+        <button class="chapter-nav-btn chapter-nav-prev" id="nav-prev" disabled>
+          <i class="fas fa-arrow-left"></i> Previous
+        </button>
+        <span class="chapter-nav-counter" id="nav-counter">1 / 13</span>
+        <button class="chapter-nav-btn chapter-nav-next" id="nav-next">
+          Next <i class="fas fa-arrow-right"></i>
+        </button>
+      </nav>
+    </article>
+  </div>
 
-      <a href="chapters/01-The-Hotel-Receptionist.md"
-         class="chapter-card" data-wave="0"
-         aria-label="Chapter 1: The Hotel Receptionist">
-        <div class="chapter-num">01</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 1</div>
-          <div class="chapter-title">The Hotel Receptionist</div>
-          <div class="chapter-subtitle">When computers learn to listen — the first orchestrator wakes up.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/02-The-29-Sacred-Rules.md"
-         class="chapter-card" data-wave="0"
-         aria-label="Chapter 2: The 29 Sacred Rules">
-        <div class="chapter-num">02</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 2</div>
-          <div class="chapter-title">The 29 Sacred Rules</div>
-          <div class="chapter-subtitle">Miss G declares war. CORE governance is born in fire.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/03-The-Conductors-Baton.md"
-         class="chapter-card" data-wave="0"
-         aria-label="Chapter 3: The Conductor's Baton">
-        <div class="chapter-num">03</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 3</div>
-          <div class="chapter-title">The Conductor's Baton</div>
-          <div class="chapter-subtitle">Teaching 47 departments to dance — MasterOrchestrator takes the podium.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-    </div>
-
-    <!-- ── Wave 1: Early Phases ── -->
-    <div class="wave-divider">
-      <span class="wave-badge wave-badge--early">Early Phases · 2024</span>
-    </div>
-    <div class="chapters-grid">
-
-      <a href="chapters/04-Opening-the-Doors.md"
-         class="chapter-card" data-wave="1"
-         aria-label="Chapter 4: Opening the Doors">
-        <div class="chapter-num">04</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 4</div>
-          <div class="chapter-title">Opening the Doors</div>
-          <div class="chapter-subtitle">MCP tools arrive. CORTEX begins talking to the outside world.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/05-The-Four-Walls.md"
-         class="chapter-card" data-wave="1"
-         aria-label="Chapter 5: The Four Walls">
-        <div class="chapter-num">05</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 5</div>
-          <div class="chapter-title">The Four Walls</div>
-          <div class="chapter-subtitle">Core, Domain, Support, Git — four tiers that hold everything together.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/06-The-Crystal-Ball.md"
-         class="chapter-card" data-wave="1"
-         aria-label="Chapter 6: The Crystal Ball">
-        <div class="chapter-num">06</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 6</div>
-          <div class="chapter-title">The Crystal Ball</div>
-          <div class="chapter-subtitle">LENS analysis arrives — CORTEX learns to see the future of your code.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/07-The-Memory-Palace.md"
-         class="chapter-card" data-wave="1"
-         aria-label="Chapter 7: The Memory Palace">
-        <div class="chapter-num">07</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 7</div>
-          <div class="chapter-title">The Memory Palace</div>
-          <div class="chapter-subtitle">GitBackedRegistry gives CORTEX permanent memory across sessions.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/08-The-Battle-for-Truth.md"
-         class="chapter-card" data-wave="1"
-         aria-label="Chapter 8: The Battle for Truth">
-        <div class="chapter-num">08</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 8</div>
-          <div class="chapter-title">The Battle for Truth</div>
-          <div class="chapter-subtitle">TDD enforcement goes live. The RED-GREEN-REFACTOR cycle becomes law.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/09-The-First-Flight.md"
-         class="chapter-card" data-wave="1"
-         aria-label="Chapter 9: The First Flight">
-        <div class="chapter-num">09</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 9</div>
-          <div class="chapter-title">The First Flight</div>
-          <div class="chapter-subtitle">CORTEX ships to production for the first time. Everything that could go wrong, does.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-    </div>
-
-    <!-- ── Wave 2: Growth ── -->
-    <div class="wave-divider">
-      <span class="wave-badge wave-badge--growth">Growth · Waves 4–6 · 2025</span>
-    </div>
-    <div class="chapters-grid">
-
-      <a href="chapters/10-When-Everything-Broke.md"
-         class="chapter-card" data-wave="2"
-         aria-label="Chapter 10: When Everything Broke">
-        <div class="chapter-num">10</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 10</div>
-          <div class="chapter-title">When Everything Broke</div>
-          <div class="chapter-subtitle">The Kevin incident. A cascade failure teaches CORTEX resilience the hard way.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/11-The-Reckoning.md"
-         class="chapter-card" data-wave="2"
-         aria-label="Chapter 11: The Reckoning">
-        <div class="chapter-num">11</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 11</div>
-          <div class="chapter-title">The Reckoning</div>
-          <div class="chapter-subtitle">27 orchestrators become 17. The great consolidation begins.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/12-The-Promise.md"
-         class="chapter-card" data-wave="2"
-         aria-label="Chapter 12: The Promise">
-        <div class="chapter-num">12</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 12</div>
-          <div class="chapter-title">The Promise</div>
-          <div class="chapter-subtitle">CORE-008 is carved in stone. TDD is now non-negotiable, forever.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/13-EPILOGUE-What-CORTEX-Learned.md"
-         class="chapter-card chapter-special" data-wave="2"
-         aria-label="Chapter 13: Epilogue — What CORTEX Learned">
-        <div class="chapter-num">EPI</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Epilogue (Act I)</div>
-          <div class="chapter-title">What CORTEX Learned</div>
-          <div class="chapter-subtitle">Wisdom from the basement. The midnight reflection that changed everything.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/14-The-Vertical-Vision.md"
-         class="chapter-card" data-wave="2"
-         aria-label="Chapter 14: The Vertical Vision">
-        <div class="chapter-num">14</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 14</div>
-          <div class="chapter-title">The Vertical Vision</div>
-          <div class="chapter-subtitle">Phase 48 holistic gate arrives. The CORTEX Collective origin story.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-    </div>
-
-    <!-- ── Wave 3: Scale · Waves 7-11 ── -->
-    <div class="wave-divider">
-      <span class="wave-badge wave-badge--scale">Scale · Waves 7–11 · Dec 2025 – Feb 2026</span>
-    </div>
-    <div class="chapters-grid">
-
-      <a href="chapters/15-The-Great-Pruning.md"
-         class="chapter-card" data-wave="3"
-         aria-label="Chapter 15: The Great Pruning">
-        <div class="chapter-num">15</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 15</div>
-          <div class="chapter-title">The Great Pruning</div>
-          <div class="chapter-subtitle">383 files deleted in a single commit. Fear becomes simplicity.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/16-The-Pylance-Epiphany.md"
-         class="chapter-card" data-wave="3"
-         aria-label="Chapter 16: The Pylance Epiphany">
-        <div class="chapter-num">16</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 16</div>
-          <div class="chapter-title">The Pylance Epiphany</div>
-          <div class="chapter-subtitle">MCP-First architecture clicks. CORTEX becomes Pylance-style — always on.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/17-The-Immune-System.md"
-         class="chapter-card" data-wave="3"
-         aria-label="Chapter 17: The Immune System">
-        <div class="chapter-num">17</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 17</div>
-          <div class="chapter-title">The Immune System</div>
-          <div class="chapter-subtitle">38 CORE rules enforced at pre-commit, CI, and runtime. CORTEX grows its immune system.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-      <a href="chapters/18-The-3AM-Healer.md"
-         class="chapter-card" data-wave="3"
-         aria-label="Chapter 18: The 3 AM Healer">
-        <div class="chapter-num">18</div>
-        <div class="chapter-body">
-          <div class="chapter-label">Chapter 18</div>
-          <div class="chapter-title">The 3&thinsp;AM Healer</div>
-          <div class="chapter-subtitle">ENH-067. The self-healing loop activates. CORTEX fixes itself while you sleep.</div>
-        </div>
-        <i class="fas fa-chevron-right chapter-arrow" aria-hidden="true"></i>
-      </a>
-
-    </div>
-
-    <!-- CTA strip -->
-    <div class="cta-strip">
-      <p>
-        These chapters are raw Markdown — the living source of the story, written commit-by-commit
-        alongside the code. Open any chapter in your editor and read alongside the git log.
-      </p>
+  <!-- ── CTA ──────────────────────────────────────────────────────── -->
+  <div class="cta-strip">
+    <h2 class="cta-strip-heading">Read the Source</h2>
+    <p>
+      These chapters are living documents — written commit-by-commit alongside
+      the code they describe. The architecture emerges in real time.
+    </p>
+    <div class="cta-buttons">
       <a href="../../index.html" class="btn-back">
-        <i class="fas fa-arrow-left" aria-hidden="true"></i>
-        Back to CORTEX Home
+        <i class="fas fa-arrow-left" aria-hidden="true"></i> Back to CORTEX Home
+      </a>
+      <a href="https://github.com/asifhussain60/CORTEX" class="btn-github"
+         target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-github" aria-hidden="true"></i> View on GitHub
       </a>
     </div>
-
-  </div><!-- /chapters-container -->
-
+  </div>
 </main>
 
 <footer class="page-footer" role="contentinfo">
   <p>
-    CORTEX · <a href="../../index.html">Home</a> ·
+    <span class="page-footer-cortex">CORTEX</span> ·
+    <a href="../../index.html">Home</a> ·
     <a href="../index.html">Learning</a> ·
     <a href="https://github.com/asifhussain60/CORTEX" target="_blank" rel="noopener">GitHub</a>
+    · Built with TDD-First discipline · Phase 87 complete
   </p>
 </footer>
+
+<script>
+(function() {
+  'use strict';
+
+  const CHAPTERS = [
+    { id: '01', file: 'chapters/01-Deep-in-the-Basement.md', title: 'Deep in the Basement', wave: 0, image: 'images/ch-01-prologue.png' },
+    { id: '02', file: 'chapters/02-The-Hotel-Receptionist.md', title: 'The Hotel Receptionist', wave: 0, image: 'images/ch-02-hotel-receptionist.png' },
+    { id: '03', file: 'chapters/03-The-Sacred-Rules.md', title: 'The Sacred Rules', wave: 0, image: 'images/ch-03-sacred-rules.png' },
+    { id: '04', file: 'chapters/04-The-Conductors-Baton.md', title: "The Conductor's Baton", wave: 0, image: 'images/ch-04-conductors-baton.png' },
+    { id: '05', file: 'chapters/05-Opening-the-Doors.md', title: 'Opening the Doors', wave: 1, image: 'images/ch-05-opening-doors.png' },
+    { id: '06', file: 'chapters/06-The-Four-Walls.md', title: 'The Four Walls', wave: 1, image: 'images/ch-06-four-walls.png' },
+    { id: '07', file: 'chapters/07-The-Crystal-Ball.md', title: 'The Crystal Ball', wave: 1, image: 'images/ch-07-crystal-ball.png' },
+    { id: '08', file: 'chapters/08-The-Battle-for-Truth.md', title: 'The Battle for Truth', wave: 1, image: 'images/ch-08-battle-for-truth.png' },
+    { id: '09', file: 'chapters/09-When-Everything-Broke.md', title: 'When Everything Broke', wave: 2, image: 'images/ch-09-everything-broke.png' },
+    { id: '10', file: 'chapters/10-The-Reckoning.md', title: 'The Reckoning', wave: 2, image: 'images/ch-10-reckoning.png' },
+    { id: '11', file: 'chapters/11-The-Great-Pruning.md', title: 'The Great Pruning', wave: 3, image: 'images/ch-11-great-pruning.png' },
+    { id: '12', file: 'chapters/12-The-Pylance-Epiphany.md', title: 'The Pylance Epiphany', wave: 3, image: 'images/ch-12-pylance-epiphany.png' },
+    { id: '13', file: 'chapters/13-The-3AM-Healer.md', title: 'The 3 AM Healer', wave: 3, image: 'images/ch-13-3am-healer.png' },
+    { id: '14', file: 'chapters/14-The-Enterprise-Brain.md', title: 'The Enterprise Brain', wave: 4, image: 'images/ch-14-enterprise-brain.png' },
+  ];
+
+  const WAVE_LABELS = ['Origin', 'Structure', 'Resilience', 'Autonomy', 'Vision'];
+
+  const contentEl = document.getElementById('chapter-content-inner');
+  const sidebarBtns = document.querySelectorAll('.sidebar-chapter');
+  const prevBtn = document.getElementById('nav-prev');
+  const nextBtn = document.getElementById('nav-next');
+  const counterEl = document.getElementById('nav-counter');
+  const sidebarEl = document.getElementById('chapter-sidebar');
+  const toggleBtn = document.getElementById('sidebar-toggle');
+
+  let currentIdx = 0;
+  const cache = {};
+
+  /* ── Markdown Processing ─────────────────────────────────── */
+  function stripFrontmatter(md) {
+    const m = md.match(/^---\s*\n[\s\S]*?\n---\s*\n/);
+    return m ? md.slice(m[0].length) : md;
+  }
+
+  function renderMd(md) {
+    const clean = stripFrontmatter(md);
+    marked.setOptions({ breaks: false, gfm: true });
+    return marked.parse(clean);
+  }
+
+  /* ── Chapter Loading ─────────────────────────────────────── */
+  async function loadChapter(idx) {
+    if (idx < 0 || idx >= CHAPTERS.length) return;
+    currentIdx = idx;
+    const ch = CHAPTERS[idx];
+
+    // Sidebar active
+    sidebarBtns.forEach(b => b.classList.remove('active'));
+    const btn = document.querySelector('[data-chapter="' + ch.id + '"]');
+    if (btn) { btn.classList.add('active'); btn.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+
+    // Nav
+    prevBtn.disabled = idx === 0;
+    nextBtn.disabled = idx === CHAPTERS.length - 1;
+    counterEl.textContent = (idx + 1) + ' / ' + CHAPTERS.length;
+
+    // Loading state
+    contentEl.innerHTML = '<div class="chapter-loading"><i class="fas fa-spinner fa-spin"></i><span>Loading…</span></div>';
+
+    try {
+      if (!cache[ch.id]) {
+        const r = await fetch(ch.file);
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        cache[ch.id] = await r.text();
+      }
+      const html = renderMd(cache[ch.id]);
+      const label = ch.id === '01' ? 'PROLOGUE' : 'CHAPTER ' + parseInt(ch.id, 10);
+
+      // Build chapter hero image HTML (hidden until image loads)
+      var imgHtml = '';
+      if (ch.image) {
+        imgHtml = '<div class="ch-hero-image" data-wave="' + ch.wave + '">' +
+          '<img src="' + ch.image + '" alt="' + ch.title + ' — chapter illustration"' +
+          ' loading="eager" onerror="this.parentElement.style.display=\'none\'"' +
+          ' onload="this.parentElement.classList.add(\'loaded\')" />' +
+          '</div>';
+      }
+
+      contentEl.innerHTML =
+        imgHtml +
+        '<div class="ch-header" data-wave="' + ch.wave + '">' +
+          '<div class="ch-wave-tag">' + WAVE_LABELS[ch.wave] + '</div>' +
+          '<div class="ch-label">' + label + '</div>' +
+          '<h2 class="ch-title">' + ch.title + '</h2>' +
+        '</div>' +
+        '<div class="ch-body">' + html + '</div>';
+
+      document.getElementById('chapter-content').scrollTop = 0;
+      history.replaceState(null, '', '#chapter-' + ch.id);
+
+      // Close sidebar on mobile after selection
+      if (window.innerWidth < 900) sidebarEl.classList.remove('open');
+
+    } catch (e) {
+      contentEl.innerHTML = '<div class="chapter-error"><i class="fas fa-exclamation-triangle"></i><p>Could not load chapter.<br/><small>' + e.message + '</small></p></div>';
+    }
+  }
+
+  /* ── Events ──────────────────────────────────────────────── */
+  sidebarBtns.forEach(function(btn, i) {
+    btn.addEventListener('click', function() { loadChapter(i); });
+  });
+  prevBtn.addEventListener('click', function() { loadChapter(currentIdx - 1); });
+  nextBtn.addEventListener('click', function() { loadChapter(currentIdx + 1); });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft' && currentIdx > 0) loadChapter(currentIdx - 1);
+    if (e.key === 'ArrowRight' && currentIdx < CHAPTERS.length - 1) loadChapter(currentIdx + 1);
+  });
+
+  // Mobile sidebar toggle
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function() {
+      sidebarEl.classList.toggle('open');
+    });
+  }
+
+  /* ── Init ────────────────────────────────────────────────── */
+  var hash = window.location.hash;
+  var hm = hash.match(/chapter-(\d+)/);
+  if (hm) {
+    var hi = CHAPTERS.findIndex(function(c) { return c.id === hm[1].padStart(2, '0'); });
+    loadChapter(hi >= 0 ? hi : 0);
+  } else {
+    loadChapter(0);
+  }
+})();
+</script>
 </body>
 </html>
