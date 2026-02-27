@@ -78,7 +78,7 @@ agents/
 | Metric | Value |
 |--------|-------|
 | Orchestrators | 51 wired (`cortex/orchestrators/`) |
-| MCP Tools | 28 registered (39 target) (`cortex/mcp/tools/`) |
+| MCP Tools | 29 registered (39 target) (`cortex/mcp/tools/`) |
 | CORE Rules | 38 (`cortex-registry/core/tier0-skull/`) |
 | Package | `cortex` (single canonical) |
 | Tests | 16,942 (486 golden, 177 phase) |

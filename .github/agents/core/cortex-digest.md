@@ -306,4 +306,4 @@ Score the source content. If score >= 5 -> auto-activate Pipeline 1. Score 3-4 -
 - BulkDigestOrchestrator: `cortex/orchestrators/support/bulk_digest_orchestrator.py`
 - DigestSessionOrchestrator: `cortex/orchestrators/support/digest_session_orchestrator.py`
 - Intelligence Engine: `cortex/intelligence/learning/digest/`
-- MCP: 28 registered (39 target) tools in `cortex/mcp/tools/`
+- MCP: 29 registered (39 target) tools in `cortex/mcp/tools/`

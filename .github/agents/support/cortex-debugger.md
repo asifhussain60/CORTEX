@@ -2,13 +2,13 @@
 
 **Role:** Multi-Stack Debugging Specialist  
 **Authority:** Debug injection, capture, analysis, and cleanup  
-**Phase 86 (PLANNED):** Multi-Stack Debug Pipeline — 5 new strategies + Vision API mapping + multi-language auto-cleanup + unified intelligence wiring (OPJMixin/URS/EventBus/KnSynth)
+**Phase 86 (✅ COMPLETE):** Multi-Stack Debug Pipeline — 5 new strategies + Vision API mapping + multi-language auto-cleanup + unified intelligence wiring (OPJMixin/URS/EventBus/KnSynth)
 
 ---
 
 ## 🎯 Purpose
 
-Universal debugging capability that floods code with traceable `CORTEX_DEBUG` markers, captures execution traces, analyzes patterns to identify root causes, and provides surgical cleanup. Extends the Strategy Pattern in `MarkerInjectionEngine` with 5 stack-specific strategies (Phase 86 — PLANNED). Zero new orchestrators, zero new MCP tools — purely additive.
+Universal debugging capability that floods code with traceable `CORTEX_DEBUG` markers, captures execution traces, analyzes patterns to identify root causes, and provides surgical cleanup. Extends the Strategy Pattern in `MarkerInjectionEngine` with 5 stack-specific strategies (Phase 86 — ✅ COMPLETE). Zero new orchestrators, zero new MCP tools — purely additive.
 
 ---
 
@@ -20,41 +20,41 @@ Universal debugging capability that floods code with traceable `CORTEX_DEBUG` ma
 |-----------|------|------|
 | DebuggerOrchestrator | `cortex/orchestrators/support/debugger_orchestrator.py` | EventBus-driven coordinator |
 | MarkerInjectionEngine | `cortex/orchestrators/support/debugging/marker_injection_engine.py` | Strategy registry + dispatch |
-| AutoCleanupManager | `cortex/orchestrators/support/debugging/auto_cleanup_manager.py` | Multi-language strip patterns (Phase 86 expands to 5 languages) |
+| AutoCleanupManager | `cortex/orchestrators/support/debugging/auto_cleanup_manager.py` | Multi-language strip patterns (Phase 86 ✅ expanded to 5 languages) |
 | AbstractInjectionStrategy | `cortex/orchestrators/support/debugging/debug_strategy_base.py` | Strategy ABC |
 
-### 8 Registered Strategies (3 existing + 5 Phase 86 PLANNED)
+### 8 Registered Strategies (3 existing + 5 Phase 86 ✅ COMPLETE)
 
 | Strategy | File | Stack | Status |
 |----------|------|-------|--------|
 | TestFailureStrategy | `strategies/test_failure_strategy.py` | Python tests | ✅ Existing |
 | RefactorRegressionStrategy | `strategies/refactor_regression_strategy.py` | Refactor sessions | ✅ Existing |
 | GovernanceViolationStrategy | `strategies/governance_violation_strategy.py` | CORE rules | ✅ Existing |
-| FrontendConsoleStrategy | `strategies/frontend_console_strategy.py` | JS/TS/React/Angular/Vue | ⚪ Phase 86 PLANNED |
-| HtmlVisionMappingStrategy | `strategies/html_vision_mapping_strategy.py` | HTML + Vision API | ⚪ Phase 86 PLANNED |
-| ApiTraceStrategy | `strategies/api_trace_strategy.py` | REST/GraphQL/gRPC | ⚪ Phase 86 PLANNED |
-| SqlTraceStrategy | `strategies/sql_trace_strategy.py` | SQL Server/Oracle/PostgreSQL | ⚪ Phase 86 PLANNED |
-| DotNetTraceStrategy | `strategies/dotnet_trace_strategy.py` | C#/.NET/ASP.NET | ⚪ Phase 86 PLANNED |
+| FrontendConsoleStrategy | `strategies/frontend_console_strategy.py` | JS/TS/React/Angular/Vue | ✅ Phase 86 COMPLETE |
+| HtmlVisionMappingStrategy | `strategies/html_vision_mapping_strategy.py` | HTML + Vision API | ✅ Phase 86 COMPLETE |
+| ApiTraceStrategy | `strategies/api_trace_strategy.py` | REST/GraphQL/gRPC | ✅ Phase 86 COMPLETE |
+| SqlTraceStrategy | `strategies/sql_trace_strategy.py` | SQL Server/Oracle/PostgreSQL | ✅ Phase 86 COMPLETE |
+| DotNetTraceStrategy | `strategies/dotnet_trace_strategy.py` | C#/.NET/ASP.NET | ✅ Phase 86 COMPLETE |
 
-### Vision API Integration (Phase 86 PLANNED — GAP-86-02)
+### Vision API Integration (Phase 86 ✅ COMPLETE — GAP-86-02)
 
-`CortexVision` MCP tool (`cortex/mcp/tools/utilities.py`) to be upgraded from stub → real Vision API:
+`CortexVision` MCP tool (`cortex/mcp/tools/utilities.py`) upgraded with Vision API:
 - Screenshot → element bounding boxes → CSS selector mapping
 - UI element ↔ HTML source correlation
 - Visual regression detection
 - Consumed by `HtmlVisionMappingStrategy` for DOM-aware debug injection
 
-### Unified Intelligence Wiring (Phase 86 PLANNED — GAPs 86-11 through 86-15)
+### Unified Intelligence Wiring (Phase 86 ✅ COMPLETE — GAPs 86-11 through 86-15)
 
-DebuggerOrchestrator will gain CORTEX cross-cutting intelligence wiring — following proven patterns from MasterOrchestrator, TDDOrchestrator, and EnforcementOrchestrator:
+DebuggerOrchestrator gained CORTEX cross-cutting intelligence wiring — following proven patterns from MasterOrchestrator, TDDOrchestrator, and EnforcementOrchestrator:
 
-| Gap | Missing Wiring | Impact When Fixed |
-|-----|---------------|-------------------|
-| GAP-86-11 | OPJMixin absent | Debug session outcomes persisted for learning |
-| GAP-86-12 | No URS signal emission | Fix rate + time-to-resolve feed reinforcement loop |
-| GAP-86-13 | No IntelligenceMatrix cells (CC-021/IC-021) | Debugger visible to capability queries |
-| GAP-86-14 | EventBus one-way (subscribes only) | Other orchestrators learn about debug insights |
-| GAP-86-15 | KnSynth never receives debug patterns | Recurring error signatures captured cross-session |
+| Gap | Wiring | Status |
+|-----|--------|--------|
+| GAP-86-11 | OPJMixin | ✅ Debug session outcomes persisted for learning |
+| GAP-86-12 | URS signal emission | ✅ Fix rate + time-to-resolve feed reinforcement loop |
+| GAP-86-13 | IntelligenceMatrix cells (CC-021/IC-021) | ✅ Debugger visible to capability queries |
+| GAP-86-14 | EventBus bidirectional | ✅ Other orchestrators learn about debug insights |
+| GAP-86-15 | KnSynth receives debug patterns | ✅ Recurring error signatures captured cross-session |
 
 ### Workflow Template
 

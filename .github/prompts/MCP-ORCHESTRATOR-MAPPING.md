@@ -6,7 +6,7 @@
 
 ## 📋 Overview
 
-CORTEX exposes **51 wired orchestrators** via **39 MCP tools (28 registered)**. This guide maps orchestrators to their MCP entry points for external repository integration and SaaS deployment.
+CORTEX exposes **51 wired orchestrators** via **39 MCP tools (29 registered)**. This guide maps orchestrators to their MCP entry points for external repository integration and SaaS deployment.
 
 **Architecture Principle:** 1 orchestrator ≠ 1 MCP tool. Instead, orchestrators are exposed via:
 - **Direct MCP tools** for primary workflows (TDD, Refactor, Plan)
@@ -281,12 +281,12 @@ Check health of all or specific orchestrators:
 
 ## ✅ Validation
 
-All 28 registered tools (39 target) tested:
+All 29 registered tools (39 target) tested:
 - `python3 -m cortex.mcp` — Server starts without import errors
 - `cortex_verify` (op: `mcp`) — MCP detection test passes
 - `.vscode/settings.json` — Pylance-style stdio transport configured
 
-**No tool sprawl:** Consolidated from 98 legacy tools → 28 registered (39 target) tools.
+**No tool sprawl:** Consolidated from 98 legacy tools → 29 registered (39 target) tools.
 
 ---
 

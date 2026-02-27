@@ -102,7 +102,7 @@ Every answer must cite evidence:
 
 | MCP State | Behaviour |
 |---|---|
-| Active (all 28 registered tools) | Full LENS analysis, governance queries, live evidence |
+| Active (all 29 registered tools) | Full LENS analysis, governance queries, live evidence |
 | Partial (some tools) | Use available tools, note which are unavailable |
 | Unavailable | Educational mode — general principles only, flag as unverified |
 
@@ -141,4 +141,4 @@ Suggested next step: [IMPLEMENT / FIX / AUDIT]
 - Package: `cortex` (single canonical import)
 - InteractionOrchestrator: `cortex/orchestrators/core/interaction_orchestrator.py`
 - IntentRouter: `cortex/orchestrators/core/intent_router.py`
-- MCP: 28 registered (39 target) tools in `cortex/mcp/tools/` (verify with `cortex_verify` op=`mcp`)
+- MCP: 29 registered (39 target) tools in `cortex/mcp/tools/` (verify with `cortex_verify` op=`mcp`)

@@ -104,7 +104,7 @@ enforcing routing in production (where context is always supplied).
 ```
 cortex/              ← Python source (20 dirs)
   orchestrators/     ← 51 wired orchestrators across 4 tiers (core, domain, support, git) + additional dirs (health, intelligence, persona, registry, response, strategies, synthesis, tools, validation, workflow)
-  mcp/tools/         ← 28 registered MCP tools (39 target)
+  mcp/tools/         ← 29 registered MCP tools (39 target)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis

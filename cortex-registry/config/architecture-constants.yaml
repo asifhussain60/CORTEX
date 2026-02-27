@@ -20,8 +20,8 @@ architecture:
   orchestrators_git: 4
 
   # MCP Tools
-  mcp_tools_active: 28             # registered in cortex/mcp/mcp_registry.py
-  mcp_tools_target: 39             # 28 registered + 11 planned in active phases
+  mcp_tools_active: 29             # registered in cortex/mcp/mcp_registry.py
+  mcp_tools_target: 39             # 29 registered + 10 planned in active phases
   mcp_tools_deprecated: 2          # two tools removed during Phase 54 MCP consolidation (kept in registry comment only)
 
   # Governance Rules
@@ -53,8 +53,8 @@ architecture:
   priority_support_max: 199
 
   # Counts updated as of:
-  last_verified: "2026-02-26"
-  verified_by: "Token Optimization Audit — grep + pytest --collect-only"
+  last_verified: "2026-02-27"
+  verified_by: "Total Recall — grep + pytest --collect-only"
   git_ref: "CORTEX branch"
 
 # Key string patterns used in validators
@@ -67,12 +67,12 @@ string_patterns:
       - "51 wired"
       - "Orchestrators (51 wired)"
   mcp_tools_active:
-    canonical: "28 MCP Tools"
+    canonical: "29 MCP Tools"
     alternates:
-      - "28 active tools"
-      - "28 MCP tools"
-      - "28 registered"
-      - "MCP Tools (28"
+      - "29 active tools"
+      - "29 MCP tools"
+      - "29 registered"
+      - "MCP Tools (29"
   mcp_tools_target:
     canonical: "39 MCP Tools"
     alternates:

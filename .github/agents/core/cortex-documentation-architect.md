@@ -120,7 +120,7 @@ cortex-docs/.content/
 ├── 01-capabilities/    (8 files)
 ├── 02-lens/
 ├── 03-orchestration/   (10 files — 51 wired orchestrators: 17 core, 7 domain, 23 support, 4 git)
-├── 04-mcp/             (6 files — 28 registered tools, 39 target)
+├── 04-mcp/             (6 files — 29 registered tools, 39 target)
 ├── 05-infrastructure/
 ├── 07-diagrams/        (9 files — 6 Mermaid + 3 overview)
 └── flat-files/         (derived mirror — auto-generated, never edited directly)
@@ -237,7 +237,7 @@ nn-{foldername}-{descriptive-name}.md
 | Metric | Value | Source |
 |--------|-------|--------|
 | Wired Orchestrators | **51** (17 core, 7 domain, 23 support, 4 git) | `cortex-registry/core/specifications/*-wiring.yaml` |
-| Active MCP Tools | **28 registered** (39 target) | `cortex/mcp/mcp_registry.py` |
+| Active MCP Tools | **29 registered** (39 target) | `cortex/mcp/mcp_registry.py` |
 | CORE Governance Rules | **38** (+ 2 AC rules) | `cortex-registry/core/tier0-skull/skull-rules.yaml` |
 | Tests | **16,942** collected | `python3 -m pytest --co -q` |
 | Package | `cortex` (single canonical) | `cortex/__init__.py` |
@@ -276,7 +276,7 @@ cortex-docs/
 │   ├── knowledge-catalog.json    ← From cortex-registry/knowledge/*.yaml
 │   ├── learning-paths.json       ← 3-track module metadata (45 modules total)
 │   ├── orchestrators.json        ← 51 orchestrator cards
-│   └── mcp-tools.json            ← 39 MCP tool catalog (28 registered)
+│   └── mcp-tools.json            ← 39 MCP tool catalog (29 registered)
 ├── pipeline/                     ← Discovery & generation scripts
 │   ├── discover.py               ← Git + registry + live code scan
 │   ├── build.py                  ← YAML → JSON transformer
@@ -369,7 +369,7 @@ Every STS workspace root MUST contain `sts-architecture-d3.html`:
 | **Challenge Engine** | Counter-proposal generation, disagreement protocol | `cortex-docs/.content/01-capabilities/challenge-engine.md` | User experience perspective on how challenges improve code quality. |
 | **SQLite Audit Trail** | High-level audit trail concept (NOT detailed schema) | `cortex-docs/.content/glossary.md` expansion | Brief explanation of what's tracked for governance, not table definitions. |
 | **Orchestrator Deep-Dives** | Top 5 orchestrator capabilities (TDD, Refactoring, Health, Sweep, Upgrade) | `cortex-docs/.content/03-orchestration/` individual files | User-facing capabilities only, not internal implementation. |
-| **MCP Tool Catalog** | All 28 registered tools (39 target) with descriptions and parameters | `cortex-docs/.content/04-mcp/03-tools-catalog.md` | Update tool count to 28 registered (39 target). |
+| **MCP Tool Catalog** | All 29 registered tools (39 target) with descriptions and parameters | `cortex-docs/.content/04-mcp/03-tools-catalog.md` | Update tool count to 29 registered (39 target). |
 
 ### Content Generation Rules for Gap Remediation
 

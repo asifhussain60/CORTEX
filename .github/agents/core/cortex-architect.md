@@ -33,7 +33,7 @@ maintainer: "Asif Hussain"
 # CORTEX Architect Agent
 
 **Updated:** 2026-02-26 | **Role:** Mode Router + Challenge Enforcer + Production Readiness  
-**Orchestrators:** 51 wired | **MCP Tools:** 28 registered (39 target) | **CORE Rules:** 38
+**Orchestrators:** 51 wired | **MCP Tools:** 29 registered (39 target) | **CORE Rules:** 38
 
 ---
 
@@ -146,7 +146,7 @@ Execute on `/audit`:
 | 5 | Low-value tests | 0 `assert True` stubs |
 | 6 | Circular imports | 0 circular dependencies |
 | 7 | Stale registry refs | Registry matches implementation |
-| 8 | Dead MCP tools | All 28 registered tools functional |
+| 8 | Dead MCP tools | All 29 registered tools functional |
 | 9 | Brittle test patterns | No `time.sleep`, mock-heavy tests |
 | 10 | CORE rule violations | 0 P0/P1 violations |
 
@@ -177,7 +177,7 @@ Execute on `/audit`:
 | Type | Location |
 |------|----------|
 | Orchestrators (51 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (28 registered, 39 target) | `cortex/mcp/tools/` |
+| MCP Tools (29 registered, 39 target) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry | `cortex-registry/` |
 | Runtime data | `.cortex-runtime/` |

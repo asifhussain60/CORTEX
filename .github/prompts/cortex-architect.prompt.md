@@ -698,7 +698,7 @@ Everything else → move to canonical location or delete.
 
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`)
-- No stale orchestrator counts (must say **51 wired orchestrators**, **39 MCP tools (28 registered)**, **38 CORE rules**)
+- No stale orchestrator counts (must say **51 wired orchestrators**, **39 MCP tools (29 registered)**, **38 CORE rules**)
 - No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - No references to `cortex.intelligence/state/` as runtime data path (canonical: `.cortex-runtime/`)
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
@@ -710,7 +710,7 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 | Check | Pass Criteria |
 |---|---|
 | Orchestrator count | All agents/prompts say "51 wired" |
-| MCP tool count | All say "39 MCP tools (28 registered)" |
+| MCP tool count | All say "39 MCP tools (29 registered)" |
 | CORE rules count | All say "38 active" |
 | Audit check count | All say "19-Point Production Readiness Audit" |
 | Meta-audit check count | All say "23 checks" |

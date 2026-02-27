@@ -188,7 +188,7 @@ cortex-docs/
 │   ├── knowledge-catalog.json    ← From cortex-registry/knowledge/*.yaml
 │   ├── learning-paths.json       ← 3-track module metadata
 │   ├── orchestrators.json        ← 51 orchestrator cards
-│   └── mcp-tools.json            ← 39 MCP tool catalog (28 registered)
+│   └── mcp-tools.json            ← 39 MCP tool catalog (29 registered)
 ├── pipeline/                     ← Discovery & generation scripts
 │   ├── discover.py               ← Git + registry + live code scan
 │   ├── build.py                  ← YAML → JSON transformer
@@ -341,7 +341,7 @@ print("✅ PHASE 2: GENERATION COMPLETE")
 - `cortex-docs/.content/01-capabilities/` - Platform capabilities (8 files)
 - `cortex-docs/.content/02-lens/` - LENS intelligence pipeline
 - `cortex-docs/.content/03-orchestration/` - 51 wired orchestrators across 4 tiers (10 files)
-- `cortex-docs/.content/04-mcp/` - 39 MCP tools catalog (28 registered) (6 files)
+- `cortex-docs/.content/04-mcp/` - 39 MCP tools catalog (29 registered) (6 files)
 - `cortex-docs/.content/05-infrastructure/` - Deployment, observability
 - `cortex-docs/.content/07-diagrams/` - Architecture diagrams (9 files)
 - `cortex-docs/.content/glossary.md` - Terminology reference

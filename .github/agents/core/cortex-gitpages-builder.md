@@ -23,7 +23,7 @@
 | Metric | Value |
 |--------|-------|
 | Wired Orchestrators | **51** (17 core, 7 domain, 23 support, 4 git) |
-| Active MCP Tools | **28 registered** (39 target) |
+| Active MCP Tools | **29 registered** (39 target) |
 | CORE Rules | **38** (+ 2 AC rules) |
 | Tests | **16,942** |
 
