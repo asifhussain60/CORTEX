@@ -55,7 +55,7 @@ Format: PNG
 ```
 
 ## Notes for Generation
-- The 51 orchestrators are wired via `OrchestratorProtocolMixin` (Phase 58)
+- The 51 orchestrators all satisfy the IOrchestrator protocol via a shared base mixin
 - Tier distribution: 17 core, 7 domain, 23 support, 4 git
-- Wiring specs live in `cortex-registry/core/specifications/`
+- Every orchestrator is formally wired with declared priority, health endpoint, and MCP adapter
 - MasterOrchestrator is the central hub — all requests flow through it

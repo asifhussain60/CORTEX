@@ -78,7 +78,7 @@ Format: PNG
 ```
 
 ## Notes for Generation
-- This maps to the pipeline in `cortex-docs/.content/00-getting-started/03-how-cortex-works.md`
+- This maps to the pipeline in the CORTEX "How It Works" documentation page
 - Timing values are from live system measurements
 - The journey is sequential — each stage must complete before the next begins
-- All stages emit AC markers to the SQLite audit trail
+- All stages emit audit markers to a persistent activity log

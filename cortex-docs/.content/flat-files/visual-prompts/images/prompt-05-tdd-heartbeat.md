@@ -45,17 +45,11 @@ ABOVE THE ECG LINE (glassmorphic panel):
 - Subtitle in Inter: "Every IMPLEMENT and FIX request goes through this cycle"
 
 BELOW THE ECG LINE (glassmorphic panel):
-- JetBrains Mono path: "TDDOrchestrator · cortex/orchestrators/core/tdd_orchestrator.py"
+- JetBrains Mono label: "TDDOrchestrator · Governance-Enforced TDD"
 - Three small glassmorphic stat boxes with cyan borders:
   - "Tests Written First: 100%"
   - "Governance Gate: Active"
   - "Rollback: Automatic"
-
-THE ECG MONITOR FRAME:
-- Glassmorphic medical monitor with rgba(26, 31, 58, 0.7) fill and backdrop blur
-- Patient field: "Repository: your-project" in JetBrains Mono
-- Vitals in Inter: "Health: PASSING · Coverage: 87% · Golden: 486"
-- Vital values colored: PASSING=#00ff88, numbers=#00d4ff
 
 Style: Medical illustration crossed with dark glassmorphism tech. Frosted glass panels, cyan glow accents.
 
@@ -65,6 +59,6 @@ Format: PNG
 
 ## Notes for Generation
 - TDD is enforced by CORE-008 — the most important governance rule
-- TDDOrchestrator lives at `cortex/orchestrators/core/tdd_orchestrator.py`
 - The cycle is mandatory for all IMPLEMENT and FIX intents — no bypass possible
-- 486 golden tests must always pass (CORE-055)
+- A suite of golden regression tests must always pass to confirm system health
+- The heartbeat metaphor is central — a system without tests is a system without a pulse

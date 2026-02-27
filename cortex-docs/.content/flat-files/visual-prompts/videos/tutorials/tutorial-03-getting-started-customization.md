@@ -58,7 +58,7 @@ Tier 3: Learned          — Patterns from analysis
 
 **Step 2: Create the rule file**
 
-File tree shows: `cortex-registry/core/tier2-engineering/`
+File tree shows the engineering-tier governance directory.
 
 New file created: `TEAM-001-api-rate-limiting.yaml`
 
@@ -254,7 +254,7 @@ Threshold: <200ms = healthy, ≥200ms = slow
 
 Show the configuration hierarchy:
 ```
-cortex-registry/config/
+config/
 ├── orchestrators/
 │   ├── master_orchestrator.yaml
 │   ├── intent_router.yaml
@@ -267,7 +267,7 @@ cortex-registry/config/
 
 **Step 2: Modify the configuration**
 
-Open `cortex-registry/config/orchestrators/intent_router.yaml`:
+Open the intent router configuration file (`intent_router.yaml`):
 
 ```yaml
 # Intent Router Configuration
@@ -365,7 +365,7 @@ Logo pulse. End card.
 
 - This video is for ADVANCED users — assumes understanding of Videos 1-9.
 - All customization examples are REAL and can be implemented in the actual CORTEX codebase.
-- The governance rule example (TEAM-001) follows the actual YAML schema used in `cortex-registry/core/`.
+- The governance rule example (TEAM-001) follows the actual YAML schema used by the CORTEX governance engine.
 - The MCP tool example includes the required guard pattern (`if orchestrator_context is not None`).
 - Configuration paths match the real CORTEX repository structure.
 - Sound design: configuration changes = soft "click"; validation pass = chime; pyramid layer activation = ascending tone.

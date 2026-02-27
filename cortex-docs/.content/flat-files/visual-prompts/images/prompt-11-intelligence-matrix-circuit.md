@@ -53,7 +53,7 @@ Muted analogy caption:
 "Like the wiring in your car's dashboard — every gauge needs a sensor connection."
 
 Glassmorphic footer:
-"15×15 Intelligence Matrix · 50% Coverage Gate · cortex/intelligence/cross_cutting/"
+"Intelligence Matrix · 50% Coverage Gate · Cross-Cutting Intelligence"
 
 Style: Realistic dark PCB photography style with glassmorphism overlay. Cyan traces instead of traditional gold. Deep navy substrate. Engineering-grade precision.
 
@@ -62,7 +62,6 @@ Format: PNG
 ```
 
 ## Notes for Generation
-- The Intelligence Matrix lives at `cortex/intelligence/cross_cutting/`
-- It ensures all intelligence subsystems are wired to all consumers
+- The Intelligence Matrix ensures all intelligence subsystems are wired to all consumers
 - The 50% coverage gate means at least half of possible connections must be active
-- Phase 65/66 established the matrix wiring
+- Every provider-consumer pairing is formally declared and validated at startup

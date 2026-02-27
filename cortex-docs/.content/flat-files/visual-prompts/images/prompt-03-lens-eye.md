@@ -55,7 +55,7 @@ Format: PNG
 ```
 
 ## Notes for Generation
-- LENS lives at `cortex/lens/`
+- LENS is CORTEX's workspace analysis engine
 - The 10 analyzers run in parallel (not sequentially)
 - Synthesis produces a unified context object consumed by the Brain tiers
 - Typical analysis completes in 300-800ms

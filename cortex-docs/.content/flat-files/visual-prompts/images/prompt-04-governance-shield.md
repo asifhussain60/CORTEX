@@ -59,7 +59,7 @@ Format: PNG
 ```
 
 ## Notes for Generation
-- Rules are defined in `cortex-registry/core/tier0-skull/skull-rules.yaml`
-- EnforcementOrchestrator coordinates 10 enforcement agents
+- Rules are defined in YAML governance files organized by tier
+- The EnforcementOrchestrator coordinates enforcement agents
 - Precedence: Tier 0 (immutable) > Tier 1 (business) > Tier 2 (engineering) > Tier 3 (learned)
 - Enforcement happens at three points: pre-commit hooks, CI pipeline, and runtime

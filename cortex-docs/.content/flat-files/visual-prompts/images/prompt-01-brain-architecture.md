@@ -47,7 +47,7 @@ TOP LAYER — "ACTION" (colored amber #ffa500):
 Between the layers, show flowing particle streams with cyan (#00d4ff) glow (data flowing upward from Perception through Reasoning to Action).
 
 At the very top, a small VS Code editor icon emitting the request downward into the brain.
-At the very bottom, a glassmorphic footer bar: "cortex/intelligence/ — Perception → Reasoning → Action"
+At the very bottom, a glassmorphic footer bar: "CORTEX Intelligence Engine — Perception → Reasoning → Action"
 
 Style: Dark glassmorphism UI aesthetic. Frosted glass panels with blur. Subtle cyan glow accents. Professional enough for a conference keynote slide. NOT photorealistic — clean technical illustration.
 
@@ -57,6 +57,6 @@ Format: PNG with deep navy background (#0a0e27)
 
 ## Notes for Generation
 - This image will be used as the hero image on the Intelligence Architecture documentation page
-- The three tiers correspond to: `cortex/intelligence/perception/`, `cortex/intelligence/reasoning/`, `cortex/intelligence/action/`
-- Confidence scores are real: the system tracks strategy success rates between 0.0–1.0
-- The 9 enterprise patterns are registered in `cortex-registry/patterns/`
+- The three tiers correspond to: Perception (pattern recognition), Reasoning (strategy selection), and Action (execution planning)
+- Confidence scores in the Reasoning layer reflect real strategy success rates tracked between 0.0 and 1.0
+- The 9 enterprise patterns are formally registered and validated at startup

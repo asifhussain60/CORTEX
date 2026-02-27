@@ -272,10 +272,10 @@ git commit -m "feat(auth): add password strength validator with pluggable rule s
 
 **AC marker logs:**
 ```
-AC_START: AC-IMPLEMENT-20260227T143500
+AC_START: AC-IMPLEMENT-[timestamp]
 Feature: password_validator | Tests: 8 | Coverage: 100%
 Approach: strategy_pattern (challenge-recommended)
-AC_COMPLETE: AC-IMPLEMENT-20260227T143500 ✅ (847ms)
+AC_COMPLETE: AC-IMPLEMENT-[timestamp] ✅ (847ms)
 ```
 
 ---

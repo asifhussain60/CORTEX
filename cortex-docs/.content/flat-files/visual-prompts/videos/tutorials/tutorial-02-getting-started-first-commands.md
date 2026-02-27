@@ -61,7 +61,7 @@ Each command tile appears with its icon and one-line description. The tiles are 
 EnforcementOrchestrator runs at pre-commit, CI, and runtime to validate code against 38 CORE rules.
 
 **How It Works:**
-1. Rules are defined in YAML files (`cortex-registry/core/tier0-skull/`)
+1. Rules are defined in YAML governance files organized by tier
 2. Pre-commit hook intercepts `git commit`
 3. Each staged file is scanned against all 38 rules
 4. Violations block the commit until fixed
@@ -74,7 +74,7 @@ EnforcementOrchestrator runs at pre-commit, CI, and runtime to validate code aga
 **Learn More:** See Video 4 (Governance in Action) for the full deep dive.
 ```
 
-**Highlight:** The response includes truth verification — it references actual code paths (`cortex-registry/core/tier0-skull/`), not hallucinated information.
+**Highlight:** The response includes truth verification — it references actual governance concepts, not hallucinated information.
 
 **Analogy overlay** (`#a0a6c0`): *"/ask is your study guide — ask any question about CORTEX, get a verified answer."*
 

@@ -73,22 +73,20 @@ A question mark glyph (`?`) pulses cyan in the center of the panel, then expands
 **Camera zooms into the YAML panel.** The directory tree materializes:
 
 ```
-cortex-registry/
-  workflows/
-    templates/
-      tdd/
-        feature-implementation.yaml    ← development work
-      sdlc/
-        sdlc-implementation-execution.yaml
-        sdlc-code-review-gate.yaml
-      debugging/
-        multi-stack-debug-pipeline.yaml ← debugging work
-      testing/
-        test-quality-enforcement.yaml   ← testing work
-      security/
-        compliance-audit.yaml
-      audit/
-        audit-fix-pipeline.yaml
+workflow-templates/
+  tdd/
+    feature-implementation.yaml    ← development work
+  sdlc/
+    sdlc-implementation-execution.yaml
+    sdlc-code-review-gate.yaml
+  debugging/
+    multi-stack-debug-pipeline.yaml ← debugging work
+  testing/
+    test-quality-enforcement.yaml   ← testing work
+  security/
+    compliance-audit.yaml
+  audit/
+    audit-fix-pipeline.yaml
 ```
 
 Each folder glows a different accent color as it's named. Cyan for `tdd/`, purple for `sdlc/`, amber for `debugging/`, green for `testing/`, red for `security/`.
@@ -171,7 +169,7 @@ _SDLC_INTENT_MAP = {
 Icon: Magnifying glass over a YAML file.
 
 **Card 2 — Company Override** (`#7b61ff` border)
-*"Your company places custom YAML templates in `cortex-registry/company/workflows/`. They automatically take precedence over CORTEX defaults — no code change required."*
+*"Your company places custom YAML templates in a dedicated company override directory. They automatically take precedence over CORTEX defaults — no code change required."*
 Icon: Company building overlaid on the template library, glowing brighter.
 
 **Card 3 — Separation of Concerns** (`#00ff88` border)
@@ -196,7 +194,7 @@ Icon: Two interlocked gears — one labelled YAML, one labelled Python — rotat
 │  discover · load · map · lazy registry      │
 ├─────────────────────────────────────────────┤
 │  Layer 1: YAML Templates (Data)             │ ← amber  — the blueprints
-│  cortex-registry/workflows/templates/       │
+│  workflow-templates/ (categorized library)  │
 │  steps · gates · convergence · criteria     │
 └─────────────────────────────────────────────┘
 ```
@@ -222,10 +220,10 @@ All code shown in this video is drawn directly from the live CORTEX codebase:
 | Code Shown | Source File |
 |-----------|-------------|
 | `TEMPLATE_ORCHESTRATOR_MAP` | `cortex/core/workflow_template_mixin.py` — class-level dict |
-| `discover_templates()`, `load_template()`, `get_recommended_template()` | `cortex/core/workflow_template_mixin.py` — three public methods |
-| `_SDLC_INTENT_MAP` | `cortex/orchestrators/domain/sdlc_workflow_orchestrator.py` — module-level dict |
-| Template directory tree | `cortex-registry/workflows/templates/` — real folder structure |
-| Company override path | `cortex-registry/company/workflows/` — real override directory |
+| `discover_templates()`, `load_template()`, `get_recommended_template()` | WorkflowTemplateMixin — three public methods |
+| `_SDLC_INTENT_MAP` | SDLCWorkflowOrchestrator — module-level intent routing dict |
+| Template directory tree | CORTEX workflow templates — organized by category |
+| Company override path | Company customization directory — takes precedence over defaults |
 
 **Do not fabricate** template IDs or orchestrator names. Use only those shown above — they are verified against the live codebase.
 
@@ -239,9 +237,9 @@ All code shown in this video is drawn directly from the live CORTEX codebase:
 | Request routing | Forward-reference only | Video 02 — The Life of a Request (full routing) |
 | LENS analysis | Forward-reference only | Video 03 — The Intelligence Engine |
 | TDD cycle | Template step names only | Video 05 — TDD Mastery (full cycle) |
-| Audit pipeline | "audit-fix-pipeline.yaml" example only | Video 07 — The Audit Fix Pipeline |
+| Audit pipeline | "audit-fix-pipeline" example only | Video 07 — The Audit Fix Pipeline |
 | MCP tools | Not covered | Video 06 — MCP Tools Deep Dive |
 
 ---
 
-*Drawn from live architecture conversation — 27 February 2026 · Verified against `cortex/core/workflow_template_mixin.py` and `cortex/orchestrators/domain/sdlc_workflow_orchestrator.py`*
+*Drawn from live architecture conversation — 27 February 2026 · Verified against the live CORTEX codebase*

@@ -264,5 +264,5 @@ Logo pulse. End card.
 - Image prompt-06 shows MCP as a static human nervous system diagram. This video shows **live tool invocations with real JSON flowing through the protocol** — completely different content.
 - The tool authoring section (Scene 5) is unique to this video — not covered in any image prompt.
 - JSON messages are syntactically correct and match the actual MCP protocol format.
-- The `validate_orchestrator_context` guard pattern is explicitly highlighted — this is a CORTEX authoring requirement from the copilot-instructions.
+- The `validate_orchestrator_context` guard pattern is highlighted — it is a required authoring convention for all CORTEX MCP tools.
 - Sound design: JSON packets flowing = soft data-stream sound; tool selection = click; result delivery = pleasant notification.

@@ -209,9 +209,9 @@ Each cycle is compressed to ~20 seconds. The heartbeat line traces: red-green-bl
 
 **AC markers log:**
 ```
-AC_START: AC-TDD-20260227T160045
+AC_START: AC-TDD-[timestamp]
 Cycles: 4 | Tests: 8 | Coverage: 100%
-AC_COMPLETE: AC-TDD-20260227T160045 ✅ (12,450ms)
+AC_COMPLETE: AC-TDD-[timestamp] ✅ (12,450ms)
 ```
 
 **Narration:** "TDD isn't just a practice in CORTEX — it's a governed, measured, logged process. Every cycle is tracked."

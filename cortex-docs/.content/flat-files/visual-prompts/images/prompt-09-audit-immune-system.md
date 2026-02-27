@@ -81,4 +81,4 @@ Format: PNG
 - The `/audit fix` pipeline is the single canonical production-readiness command
 - Stages 7-8 loop until ALL P0/P1 violations are resolved (not a single pass)
 - CORE-064 guarantees sweep completeness — no partial fixes
-- Activity logged to `.cortex-runtime/traces/orchestrator-traces.db`
+- All activity is logged to a persistent audit database for traceability

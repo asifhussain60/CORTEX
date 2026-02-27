@@ -63,7 +63,7 @@ Format: PNG
 ```
 
 ## Notes for Generation
-- MCP uses Pylance-style stdio transport — auto-starts with VS Code
-- 28 tools are currently registered in `cortex/mcp/tools/`
-- Configuration is in `.vscode/settings.json`
-- The server is at `cortex/mcp/`
+- MCP uses Pylance-style stdio transport — auto-starts with VS Code, no manual setup required
+- 28 tools are currently registered; 39 is the target total
+- Configuration lives in the VS Code workspace settings file
+- The server is the bridge between GitHub Copilot and all CORTEX capabilities

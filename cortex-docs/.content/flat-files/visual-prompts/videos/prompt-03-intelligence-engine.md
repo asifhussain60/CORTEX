@@ -1,6 +1,15 @@
 # Video Prompt 03 — The Intelligence Engine
 
-> **Duration:** 9 minutes · **Audience:** Product Owners → Software Engineers (bridge)
+> 2. **Live analysis animation (2:30 – 3:30):**
+Show a realistic CORTEX workspace (simplified file tree on the left, code panels center).
+
+1. LENS beam sweeps top-to-bottom (like an MRI scanner).
+2. As the beam passes each directory:
+   - `cortex/orchestrators/` → badge: "51 orchestrators, 4 tiers" (cyan)
+   - `cortex/mcp/tools/` → badge: "28 MCP tools registered" (purple)
+   - `tests/` → badge: "thousands of tests, high coverage" (green)
+   - `cortex-registry/` → badge: "38 CORE rules active" (amber)
+3. Results aggregate into a glassmorphic **Workspace Intelligence Card** at the bottom of screen.:** 9 minutes · **Audience:** Product Owners → Software Engineers (bridge)
 > **Depth:** 🟡→🔴 Starts conceptual, ends with architecture
 > **No overlap:** Image prompt-11 shows the Intelligence Matrix as a static PCB; this video shows LENS performing a *live workspace analysis* with results building in real-time
 
@@ -52,7 +61,7 @@ Show a realistic CORTEX workspace (simplified file tree on the left, code panels
 2. As the beam passes each directory:
    - `cortex/orchestrators/` → badge: "51 orchestrators, 4 tiers" (cyan)
    - `cortex/mcp/tools/` → badge: "28 MCP tools registered" (purple)
-   - `tests/` → badge: "16,942 tests, 92% coverage" (green)
+   - `tests/` → badge: "thousands of tests, 92% coverage" (green)
    - `cortex-registry/` → badge: "38 CORE rules active" (amber)
 3. Results aggregate into a glassmorphic **Workspace Intelligence Card** at the bottom of screen.
 
@@ -113,7 +122,7 @@ This is NOT a repeat of image prompt-11's PCB — this is a **functional capabil
 
 1. **Transparent** — "Every recommendation traces back to evidence" (show a citation link animation)
 2. **Governed** — "38 rules validate every intelligence output" (shield shimmer)
-3. **Tested** — "16,942 tests verify intelligence accuracy" (green heartbeat pulse)
+3. **Tested** — "A comprehensive test suite verifies intelligence accuracy" (green heartbeat pulse)
 
 **Closing text** (Space Grotesk): **"Intelligence isn't magic. It's orchestrated methodology."**
 

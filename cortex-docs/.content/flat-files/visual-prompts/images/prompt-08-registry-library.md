@@ -27,7 +27,7 @@ LEFT WALL — "core/" (shelving with cyan #00d4ff glow):
 - Muted analogy (#a0a6c0): "Like the law library in a courthouse"
 
 CENTER WALL — "planning/" (shelving with purple #7b61ff glow):
-- Books labeled: "cortex-master.yaml (≤500 lines)", "phases/planned/", "phases/completed/"
+- Books labeled: "Project Roadmap", "Active Plans", "Completed Milestones"
 - A large open book on a lectern with glassmorphic holographic display above it showing the plan index
 - Glassmorphic caption: "The project roadmap — every phase documented"
 - Muted analogy: "Like an architect's blueprint room"
@@ -64,7 +64,7 @@ Format: PNG
 ```
 
 ## Notes for Generation
-- The registry lives at `cortex-registry/`
-- No database is used — all config is YAML files versioned in Git
-- `cortex-master.yaml` is capped at ≤500 lines (THIN INDEX CONTRACT)
 - The registry is the single source of truth for governance, planning, and knowledge
+- No database is used — all configuration is YAML files versioned in Git
+- The master plan index is intentionally kept thin and human-readable — all detail lives in dedicated per-topic files
+- Every change to the registry is fully auditable via version control history

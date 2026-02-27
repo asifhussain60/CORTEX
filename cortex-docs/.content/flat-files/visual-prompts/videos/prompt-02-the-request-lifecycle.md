@@ -107,11 +107,11 @@ The sphere (now glowing green after passing governance) enters the final chamber
 - A conventional commit message materializes: `feat(auth): add email validation to registration form`
 - AC markers appear:
   ```
-  AC_START: AC-IMPLEMENT-20260227T143022
+  AC_START: AC-IMPLEMENT-[timestamp]
   ...
-  AC_COMPLETE: AC-IMPLEMENT-20260227T143022 ✅ (2,340ms)
+  AC_COMPLETE: AC-IMPLEMENT-[timestamp] ✅ (2,340ms)
   ```
-- These markers flow into a miniature SQLite database icon — activity logging.
+- These markers flow into a miniature activity log icon — persistent audit trail.
 
 **Analogy overlay:** *"The package arrives at its destination — signed, sealed, delivered, and logged in the ledger."*
 

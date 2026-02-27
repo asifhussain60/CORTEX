@@ -37,7 +37,7 @@ Each panel has a "cost" counter: hours of debugging, customer trust lost, team v
 
 ### Scene 2 — The 38 CORE Rules (1:15 – 2:45)
 
-**The YAML registry materializes.** A file tree shows `cortex-registry/core/tier0-skull/` opening to reveal YAML files.
+**The YAML registry materializes.** A file tree shows the governance rule definitions opening to reveal YAML files organized by tier.
 
 **Rule categories emerge as glassmorphic columns:**
 
@@ -112,9 +112,9 @@ Each column builds upward — rules stack like bricks in a wall. When all 38 are
 
 **AC markers appear** in a glassmorphic terminal panel:
 ```
-AC_START: AC-GOVERNANCE-20260227T150012
+AC_START: AC-GOVERNANCE-[timestamp]
 ...38 rules checked, 0 violations...
-AC_COMPLETE: AC-GOVERNANCE-20260227T150012 ✅ (890ms)
+AC_COMPLETE: AC-GOVERNANCE-[timestamp] ✅ (890ms)
 ```
 
 ### Scene 5 — Three Enforcement Points (6:00 – 7:00)
@@ -151,7 +151,7 @@ Arrows connect all three: "Same 38 rules, three checkpoints, zero escapes."
 - 38 rules active
 - 3 enforcement points
 - 0 partial sweeps allowed
-- Every violation logged to SQLite
+- Every violation logged to the persistent audit trail
 
 **Closing text** (Space Grotesk): **"Governance isn't overhead. It's the foundation everything else stands on."**
 
@@ -165,6 +165,6 @@ Logo pulse. End card.
 ## Notes
 
 - Image prompt-04 shows governance as a static medieval shield wall. This video shows governance **actively catching a violation, blocking a commit, and enforcing a sweep** — completely different content.
-- Real CORTEX rule IDs (CORE-008, CORE-011, CORE-064 etc.) are used throughout.
+- CORTEX rule IDs (CORE-008, CORE-011, CORE-064 etc.) are used throughout — these are the public-facing rule identifiers.
 - The violation card format matches actual CORTEX output (file path, line number, severity, fix suggestion).
 - Sound design: sentinel scanning = electronic sweep; violation = low warning tone; pass = pleasant chime; full green cascade = ascending arpeggio.

@@ -204,24 +204,24 @@ Animation: Files float up from their locations, get sorted into a glassmorphic r
 
 1. **Test suite runs:** `make test-preflight` → glassmorphic progress bar fills. Show test output:
    ```
-   486 golden tests passed ✅
-   177 phase tests passed ✅
-   16,942 total tests — all green
+   Golden regression tests: all passed ✅
+   Phase tests: all passed ✅
+   Full test suite — all green
    ```
 
 2. **SQLite cleanup:** Activity log is pruned — records older than 30 days removed. `VACUUM` command runs on the database. A glassmorphic database icon compresses slightly.
 
 3. **AC_COMPLETE marker:**
    ```
-   AC_START: AC-AUDIT-20260227T170000
+   AC_START: AC-AUDIT-[timestamp]
    Stages: 9 complete
    Iterations: 2 convergence cycles
    Violations resolved: 3 P0/P1, 3 P2
    Duration: 4m 23s
-   AC_COMPLETE: AC-AUDIT-20260227T170000 ✅ (263,000ms)
+   AC_COMPLETE: AC-AUDIT-[timestamp] ✅ (263,000ms)
    ```
 
-4. **SQLite write:** The audit session record flows into the database. Show the schema tables: `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`.
+4. **Audit log write:** The audit session record flows into the persistent activity log.
 
 ### Scene 7 — The Result (9:30 – 10:00)
 
@@ -241,7 +241,7 @@ Health:              ✅ 22/22 orchestrators
 Vacuum:              ✅ 7 files cleaned
 Meta-Audit:          ✅ 23 checks (21 pass, 2 advisory)
 Convergence:         ✅ 2 iterations, 0 P0/P1
-Tests:               ✅ 16,942 passing
+Tests:               ✅ all passing
 
 Status: PRODUCTION READY
 ```
@@ -261,7 +261,7 @@ Logo pulse. End card.
 
 - Image prompt-09 shows the audit as a static immune system with cellular defenders. This video shows the **full 9-stage `/audit fix` pipeline executing** with real violations being caught, fixed, and rescanned in a convergence loop — completely different content.
 - The convergence loop (Stages 7-8) is the unique visual centerpiece — no other video or image covers this loop mechanism.
-- Real stage numbers, check counts, and rule IDs match the actual CORTEX architecture.
-- The SQLite schema tables are real — `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs`.
+- Stage numbers and check counts match the actual CORTEX architecture.
+- All activity is persisted to a structured audit log database for traceability and pattern detection.
 - Sound design: each stage completion = ascending tone (9 tones form a rising scale); convergence loop iteration = heartbeat pulse; final completion = orchestral resolve chord.
 - This is the longest video (10 min) because `/audit fix` is CORTEX's most comprehensive command.

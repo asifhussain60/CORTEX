@@ -132,7 +132,7 @@ Each quadrant fills with a satisfying cascade animation. The "14 engineering-hou
 
 P0 — CRITICAL (block deployment):
   SEC-001: Hardcoded API key in stripe_client.py:17
-           "sk_live_REDACTED_EXAMPLE_KEY"
+           "sk_live_XXXX...XXXX" ← placeholder shown for illustration
            → Must move to environment variable / secrets manager
 
   SEC-002: No input validation on webhook payload (webhooks.py:34)

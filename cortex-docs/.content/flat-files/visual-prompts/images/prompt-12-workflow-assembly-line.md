@@ -63,7 +63,7 @@ PENDING → VALIDATED → EXECUTING → COMPLETED
                       BLOCKED        FAILED
 
 Glassmorphic footer:
-"WorkflowEngine FSM · 7 States · YAML Templates · cortex/orchestrators/workflow/"
+"WorkflowEngine FSM · 7 States · YAML Templates · Workflow Orchestration Layer"
 Muted subtitle: "Like an assembly line — every product goes through the same proven process"
 
 Style: Clean industrial illustration with dark glassmorphism overlay. Cyan-glowing conveyor and robotic arms. Frosted glass station panels. Professional and educational.
@@ -73,7 +73,7 @@ Format: PNG
 ```
 
 ## Notes for Generation
-- WorkflowEngine uses a Finite State Machine (FSM) pattern (Phase 67)
+- WorkflowEngine uses a Finite State Machine (FSM) pattern with 7 named states
 - States: PENDING, VALIDATED, EXECUTING, COMPLETED, FAILED, BLOCKED, CANCELLED
-- 17 workflow template categories in `cortex-registry/workflows/templates/`
-- Templates are composable YAML primitives
+- Workflow templates are organized into categories covering development, debugging, testing, security, and audit
+- Templates are composable YAML primitives — orchestrators combine them at runtime

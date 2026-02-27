@@ -64,7 +64,7 @@ Format: PNG
 ```
 
 ## Notes for Generation
-- CORE-064 is enforced by `SweepCatalogueOrchestrator` at `cortex/orchestrators/support/sweep_catalogue_orchestrator.py`
-- Sweep tracking uses SQLite — every issue gets a row
-- The only way to close a sweep without fixing everything is `approve_wont_fix` (explicit) or `assert_exhausted` (verified)
+- CORE-064 is the Sweep Completeness Contract — enforced automatically during every FIX, REFACTOR, and AUDIT operation
+- Sweep tracking records every discovered issue; the sweep cannot close until all are resolved
+- The only way to close a sweep without fixing everything is `approve_wont_fix` (explicit justification) or `assert_exhausted` (verified complete)
 - This rule prevents the "fix 3 bugs, leave 7" antipattern
