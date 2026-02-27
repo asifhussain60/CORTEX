@@ -67,7 +67,7 @@ workflow:
   # ==========================================================================
   # PIPELINE-LEVEL CONVERGENCE GATE
   # Governs Stages 7–8 rescan loop. Exits when zero P0 and zero P1 remain
-  # across the full 17-point audit (Checks #1–#18 inclusive).
+  # across the full 22-point audit (Checks #1–#22 inclusive).
   # ==========================================================================
   pipeline_convergence:
     primitive: 'primitives/validation/detect-fix-rescan-loop'
@@ -134,7 +134,7 @@ workflow:
               id              INTEGER PRIMARY KEY AUTOINCREMENT,
               session_id      TEXT NOT NULL REFERENCES audit_sessions(session_id),
               stage_num       INTEGER NOT NULL,
-              check_num       INTEGER,             -- 1–18 from 17-point audit
+              check_num       INTEGER,             -- 1–22 from extended 22-point audit
               severity        TEXT NOT NULL,       -- "P0" | "P1" | "P2"
               rule_id         TEXT,                -- e.g. "CORE-035"
               file_path       TEXT,
@@ -460,6 +460,119 @@ workflow:
             reinitialise schema fresh — data loss is acceptable over
             a broken trace pipeline.
 
+        - num: 20
+          label: 'Test fixture singleton DB isolation'
+          scope: 'tests/'
+          tool: 'AST scan + grep'
+          severity: 'P1'
+          description: |
+            Detect pytest fixtures that use OrchestratorTraceLogger (or any
+            class-level singleton with DB path attributes) without fully
+            saving and restoring class-level attributes on teardown.
+            Detection:
+              (a) grep tests/ for fixtures that set CORTEX_TRACE_DB env var
+                  AND reset _instance = None but do NOT restore TRACE_DB_PATH,
+                  TRACE_ENABLED, or MAX_ROWS_PER_TABLE class attributes.
+              (b) grep tests/ for any test method that calls `_instance = None`
+                  without the temp_trace_db fixture in its signature.
+            Detect command:
+              python3 -c "
+                import pathlib
+                for f in pathlib.Path('tests/').rglob('*.py'):
+                    src = f.read_text()
+                    if 'CORTEX_TRACE_DB' in src and '_instance = None' in src:
+                        if 'TRACE_DB_PATH' not in src:
+                            print('MISSING_CLASS_ATTR_RESTORE: ' + str(f))
+              "
+            Pass criteria: no output (all fixtures restore class-level attrs)
+            Auto-fix:
+              Apply the canonical temp_trace_db pattern — save all three
+              class-level attributes (TRACE_DB_PATH, TRACE_ENABLED,
+              MAX_ROWS_PER_TABLE) before yield, restore all three after
+              yield, then reset _instance = None. Reference implementation:
+              tests/unit/infrastructure/test_orchestrator_trace_logger.py
+              (commit 094aae9d8).
+            Verification:
+              python3 -m pytest tests/unit/infrastructure/test_orchestrator_trace_logger.py
+              -p no:xdist — must be 16/16 GREEN.
+
+        - num: 21
+          label: 'Synthetic trace row contamination in production DB'
+          scope: '.cortex-runtime/traces/orchestrator-traces.db'
+          tool: 'sqlite3 pattern scan'
+          severity: 'P1'
+          description: |
+            Detect test-generated sentinel rows that leaked into the production
+            trace DB. Sentinel patterns: action = "TEST_ACTION", "ACTION_0",
+            "ACTION_1", "ACTION_2"; context LIKE '%"test": "data"%'.
+            These action names are reserved for test use only — production
+            orchestrators must never emit them (CORE naming convention).
+            Detect command:
+              python3 -c "
+                import sqlite3
+                db = sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db')
+                tables = ['trace_master','trace_enforcement','trace_tdd',
+                          'trace_interaction','trace_refactoringorchestrator']
+                total = 0
+                for t in tables:
+                    try:
+                        n = db.execute(
+                            'SELECT count(*) FROM ' + t +
+                            ' WHERE action IN (\"TEST_ACTION\",\"ACTION_0\",'
+                            '\"ACTION_1\",\"ACTION_2\")'
+                        ).fetchone()[0]
+                        if n: print(t + ': ' + str(n) + ' sentinel rows')
+                        total += n
+                    except: pass
+                print('TOTAL_SENTINEL_ROWS=' + str(total))
+                db.close()
+              "
+            Pass criteria: TOTAL_SENTINEL_ROWS == 0
+            Auto-fix:
+              For each of the 5 trace tables, run:
+                DELETE FROM {table}
+                WHERE action IN ('TEST_ACTION','ACTION_0','ACTION_1','ACTION_2');
+              Then: VACUUM;
+              Safe because these action names are exclusively test sentinels.
+
+        - num: 22
+          label: 'Slow orchestrator operation alerting (>5 s)'
+          scope: '.cortex-runtime/traces/orchestrator-traces.db'
+          tool: 'sqlite3 duration scan'
+          severity: 'P1'
+          description: |
+            Detect any traced action with duration_ms > 5000. Slow operations
+            indicate blocking I/O, unguarded LLM calls, or missing timeouts —
+            all P1 per CORE operational envelope.
+            Detect command:
+              python3 -c "
+                import sqlite3
+                db = sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db')
+                tables = ['trace_master','trace_enforcement','trace_tdd',
+                          'trace_interaction','trace_refactoringorchestrator']
+                found = False
+                for t in tables:
+                    try:
+                        rows = db.execute(
+                            'SELECT action, timestamp, duration_ms FROM ' + t +
+                            ' WHERE duration_ms > 5000 ORDER BY duration_ms DESC LIMIT 5'
+                        ).fetchall()
+                        for r in rows:
+                            print('SLOW_OP: ' + t + ' | ' + str(r[0]) +
+                                  ' | ' + str(r[2]) + 'ms | ' + str(r[1]))
+                            found = True
+                    except: pass
+                if not found: print('ALL_CLEAR')
+                db.close()
+              "
+            Pass criteria: no SLOW_OP lines in output (no operation > 5000 ms)
+            Auto-fix: NONE — slow operations require human investigation.
+              Surface inline advisory:
+                ⚠️ SLOW OPERATION detected: {action} took {duration_ms}ms
+                at {timestamp}. Investigate: unguarded LLM call, blocking
+                I/O, or missing timeout in orchestrator.
+            Advisory only — does not block AC_COMPLETE.
+
       sqlite_logging:
         table: 'audit_stage_log'
         violations_table: 'audit_violations'
@@ -546,7 +659,7 @@ workflow:
         with a convergence loop that guarantees zero P0/P1 on exit (CORE-064).
 
         Loop contract:
-          DETECT:  Re-run full 17-point audit (Checks #1–#19) on scope
+          DETECT:  Re-run full 22-point audit (Checks #1–#22) on scope
           FIX:     Auto-remediate issues where confidence >= 0.90
           RESCAN:  Re-run audit to count remaining violations
           REPEAT:  Until p0_count == 0 and p1_count == 0, or max_cycles hit
@@ -664,6 +777,104 @@ workflow:
         warning_threshold_days: 60
         action: 'If oldest > warning_threshold_days: surface advisory (non-blocking)'
 
+      # -----------------------------------------------------------------------
+      # New detect_actions added in Check #20, #21, #22 (session Feb-27-2026)
+      # -----------------------------------------------------------------------
+      test_fixture_singleton_leak:
+        description: |
+          Mirror of Check #20. Scan tests/ for fixtures that set CORTEX_TRACE_DB
+          env var and reset _instance = None without restoring class-level
+          TRACE_DB_PATH / TRACE_ENABLED / MAX_ROWS_PER_TABLE.
+        severity: 'P1'
+        detect_command: |
+          python3 -c "
+          import pathlib
+          bad = []
+          for f in pathlib.Path('tests/').rglob('*.py'):
+              src = f.read_text()
+              if 'CORTEX_TRACE_DB' in src and '_instance = None' in src:
+                  if 'TRACE_DB_PATH' not in src:
+                      bad.append(str(f))
+          if bad:
+              print('FIXTURE_LEAK_COUNT=' + str(len(bad)))
+              for b in bad: print('  ' + b)
+          else:
+              print('FIXTURE_LEAK_COUNT=0')
+          "
+        pass_criteria: 'FIXTURE_LEAK_COUNT == 0'
+        auto_fix: |
+          Apply canonical temp_trace_db pattern from
+          tests/unit/infrastructure/test_orchestrator_trace_logger.py
+          (commit 094aae9d8): save TRACE_DB_PATH/TRACE_ENABLED/MAX_ROWS_PER_TABLE
+          before yield; restore all three after yield; reset _instance = None.
+        verify_command: |
+          python3 -m pytest tests/unit/infrastructure/test_orchestrator_trace_logger.py
+          -p no:xdist  # must be 16/16 GREEN
+
+      synthetic_trace_contamination:
+        description: |
+          Mirror of Check #21. Detect TEST_ACTION / ACTION_0-2 sentinel rows
+          in all 5 production trace tables. Any count > 0 = test pollution.
+        severity: 'P1'
+        detect_command: |
+          python3 -c "
+          import sqlite3
+          db = sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db')
+          tables = ['trace_master','trace_enforcement','trace_tdd',
+                    'trace_interaction','trace_refactoringorchestrator']
+          total = 0
+          for t in tables:
+              try:
+                  n = db.execute(
+                      'SELECT count(*) FROM ' + t +
+                      ' WHERE action IN (\"TEST_ACTION\",\"ACTION_0\",'
+                      '\"ACTION_1\",\"ACTION_2\")'
+                  ).fetchone()[0]
+                  if n: print(t + ': ' + str(n) + ' sentinel rows')
+                  total += n
+              except: pass
+          print('TOTAL_SENTINEL_ROWS=' + str(total))
+          db.close()
+          "
+        pass_criteria: 'TOTAL_SENTINEL_ROWS == 0'
+        auto_fix: |
+          For each trace table:
+            DELETE FROM {table}
+            WHERE action IN ('TEST_ACTION','ACTION_0','ACTION_1','ACTION_2');
+          Then: VACUUM;
+
+      slow_operation_alert:
+        description: |
+          Mirror of Check #22. Detect any traced action with duration_ms > 5000.
+          Advisory only — does not block AC_COMPLETE.
+        severity: 'P1'
+        detect_command: |
+          python3 -c "
+          import sqlite3
+          db = sqlite3.connect('.cortex-runtime/traces/orchestrator-traces.db')
+          tables = ['trace_master','trace_enforcement','trace_tdd',
+                    'trace_interaction','trace_refactoringorchestrator']
+          found = False
+          for t in tables:
+              try:
+                  rows = db.execute(
+                      'SELECT action, timestamp, duration_ms FROM ' + t +
+                      ' WHERE duration_ms > 5000 ORDER BY duration_ms DESC LIMIT 5'
+                  ).fetchall()
+                  for r in rows:
+                      print('SLOW_OP: ' + t + ' | ' + str(r[0]) +
+                            ' | ' + str(r[2]) + 'ms | ' + str(r[1]))
+                      found = True
+              except: pass
+          if not found: print('ALL_CLEAR')
+          db.close()
+          "
+        pass_criteria: 'no SLOW_OP lines in output'
+        auto_fix: 'NONE — surface inline advisory; human investigation required'
+        advisory_template: |
+          ⚠️ SLOW OPERATION detected: {action} took {duration_ms}ms at {timestamp}.
+          Investigate: unguarded LLM call, blocking I/O, or missing timeout.
+
     fix_actions:
       prune_old_cycles:
         sql: "DELETE FROM workflow_cycles WHERE timestamp < datetime('now', '-{{retention_days}} days');"
@@ -684,7 +895,7 @@ workflow:
         sql: 'VACUUM;'
         note: 'Must run AFTER all DELETE statements — VACUUM inside transaction is invalid.'
 
-    rescan_success_predicate: 'integrity_ok and db_size_mb < 50 and orphaned_ac_count == 0'
+    rescan_success_predicate: 'integrity_ok and db_size_mb < 50 and orphaned_ac_count == 0 and sentinel_row_count == 0'
 
 # ============================================================================
 # INTEGRATION MAP
