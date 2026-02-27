@@ -7,9 +7,6 @@ On a Tuesday afternoon, Kyle submitted a pull request for a new payment processi
 
 "I ran it locally and it works!" Kyle wrote in the PR description, presumably while wearing a blindfold. "Ready for production."
 
-![Panel 1: (Left) Asif, looking horrifyingly stressed with wide, manic eyes and wild Einstein hair, holds a single piece of paper labeled 'KYLE'S PR: 847 LINES'. His other hand holds a massive mug labeled 'COFFEE'. A speech bubble from his vibrating head reads: 'NO ERROR HANDLING?! NO LOGGING?! IT'S AN 847-LINE GRENADE! We are all going to die!' Miss G, an elegant silhouette, manifests behind him, saying: 'Well, technically you'll be the one debugging it at 3 AM.'
-
-Panel 2: (Right) Kyle, a relaxed, smiling cartoon developer, is casually leaning back in his office chair, wearing a headset and giving a thumbs-up. His monitor clearly displays a simple, green 'COMPLY AND DEPLOY' checkmark. His dialogue bubble reads: 'It compiled on my laptop! Ship it! What's the worst that could happen?'](https://www.google.com/search?q=https://r.jina.ai/i/ca26649c632e8c2a)
 
 Asif stared at the pull request the way a fire marshal stares at someone storing oily rags next to a blast furnace. "This is going to kill us," he said quietly.
 
@@ -69,9 +66,6 @@ He spent the next week coding the Inspector. The engine wasn’t satisfied with 
 
 "I’m building a Guardian. An intellectually superior, deeply skeptical Building Inspector."
 
-![Panel 3: (Left) Asif Codenstein, now looking slightly more rested, is standing and writing with a red marker on a giant whiteboard. The board is covered in rigid, boxed flowcharts, including: 'CORE-001: ERROR HANDLING (MANDATORY)', 'CORE-008: TDD IS NOT A SUGGESTION', and 'CORE-012: DOCSTRINGS (OR WE FIGHT)'. The title above is 'CORTEX: THE 29 SACRAMENTS OF GOVERNANCE'. Miss G is floating nearby, nodding in approval, saying: 'It's judgmental, but necessary. Like a digital nun.'
-
-Panel 4: (Right) Kyle is back at his desk, staring in absolute, sputtering fury at his monitor, which is flashing a huge red 'DEPLOYMENT BLOCKED: 47 VIOLATIONS' message. His code (847 lines) is highlighted in angry red. A thought bubble above his head is filled only with aggressive, jagged exclamation points and question marks. A speaker icon below the monitor labeled 'CORTEX' is broadcasting: '[VIOLATION FOUND: CORE-001] (No error handling in process_refund()...)' Copilot Bot is hiding behind Kyle’s chair, LED eyes yellow, trembling.](https://www.google.com/search?q=https://r.jina.ai/i/6e1f9a8b2c7d5e4f)
 
 The First Judgment
 
