@@ -31,6 +31,7 @@ import yaml
 from .constants import (
     ALLOWED_MARKDOWN_PREFIXES,
     ARCHIVE_DIR,
+    LEGACY_ROOT_FOLDERS_RELOCATION,
     PROTECTED_DIRS,
     PROTECTED_FILES,
     PYTHON_EXTENSIONS,
@@ -192,6 +193,50 @@ class VacuumOrchestrator(OrchestratorProtocolMixin):
         results = []
         for op in self._plan_markdown_archive(ctx):
             results.append(self._execute_op(op, dry_run=dry_run))
+        return results
+
+    def run_legacy_folder_relocation(self, *, dry_run: bool = False) -> List[OperationResult]:
+        """Relocate legacy root-level folders to their proper locations.
+
+        Handles relocation of misplaced directories at the workspace root:
+        - ``cortex_brain/`` → ``.cortex-runtime/state/cortex_brain/`` (runtime state)
+        - ``cortex-sts/`` → ``_workspaces/cortex-sts/`` (demo material)
+
+        Args:
+            dry_run: When ``True``, plan operations but do not execute them.
+
+        Returns:
+            List of :class:`OperationResult` describing each planned or executed action.
+        """
+        results: List[OperationResult] = []
+
+        for source_name, dest_rel in LEGACY_ROOT_FOLDERS_RELOCATION.items():
+            source = self.workspace_root / source_name
+            dest = self.workspace_root / dest_rel
+
+            if not source.exists():
+                continue
+
+            if dest.exists():
+                logger.warning(
+                    "Skipping relocation of %s — destination %s already exists",
+                    source, dest,
+                )
+                results.append(OperationResult(
+                    op_type="relocate_dir", source=source, success=False,
+                    error=f"Destination already exists: {dest}",
+                ))
+                continue
+
+            if dry_run:
+                results.append(OperationResult(
+                    op_type="relocate_dir", source=source, destination=dest,
+                    success=True, dry_run=True,
+                ))
+                logger.info("[DRY-RUN] Would relocate %s → %s", source, dest)
+            else:
+                results.append(self.relocate_directory(source, dest))
+
         return results
 
     def run_runtime_cleanup(self, *, dry_run: bool = False) -> List[OperationResult]:
@@ -550,6 +595,44 @@ class VacuumOrchestrator(OrchestratorProtocolMixin):
                 op_type="relocate", source=source, success=False, error=str(exc),
             )
 
+    def relocate_directory(self, source: Path, dest: Path) -> OperationResult:
+        """Move an entire directory to a new location.
+
+        Args:
+            source: Directory to move.
+            dest: Destination path (full path including new directory name).
+
+        Returns:
+            :class:`OperationResult`.
+        """
+        try:
+            if not source.exists():
+                return OperationResult(
+                    op_type="relocate_dir", source=source, success=False,
+                    error=f"Source directory does not exist: {source}",
+                )
+            if not source.is_dir():
+                return OperationResult(
+                    op_type="relocate_dir", source=source, success=False,
+                    error=f"Source is not a directory: {source}",
+                )
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            shutil.move(str(source), str(dest))
+            self._rollback_log.append({
+                "op": "relocate_dir",
+                "from": str(dest),
+                "to": str(source),
+            })
+            logger.info("Relocated directory %s → %s", source, dest)
+            return OperationResult(
+                op_type="relocate_dir", source=source, destination=dest,
+                success=True,
+            )
+        except OSError as exc:
+            return OperationResult(
+                op_type="relocate_dir", source=source, success=False, error=str(exc),
+            )
+
     # ─────────────────────────────────────────────────────────────────────
     # ROLLBACK & REPORTING
     # ─────────────────────────────────────────────────────────────────────
@@ -579,7 +662,7 @@ class VacuumOrchestrator(OrchestratorProtocolMixin):
                     dst = Path(entry["to"])
                     if src.exists():
                         src.rename(dst)
-                elif op == "relocate":
+                elif op in ("relocate", "relocate_dir"):
                     src = Path(entry["from"])
                     dst = Path(entry["to"])
                     if src.exists():

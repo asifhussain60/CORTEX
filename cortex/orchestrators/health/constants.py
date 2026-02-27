@@ -7,7 +7,7 @@ Phase: PHASE-51
 CORE: CORE-011 (type hints), CORE-012 (docstrings), CORE-028 (naming)
 """
 
-from typing import FrozenSet
+from typing import Dict, FrozenSet
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Filesystem traversal
@@ -98,7 +98,6 @@ PROTECTED_DIRS: FrozenSet[str] = frozenset({
     ".github",
     "cortex-docs",
     "cortex-registry",
-    "cortex-sts",
     "_workspaces",
     "scripts",
     "deployment",
@@ -112,12 +111,12 @@ Includes:
 - ``.github``        — agents, prompts, copilot instructions, CI
 - ``cortex-docs``    — user-facing HTML documentation
 - ``cortex-registry``— YAML governance rules and registry
-- ``cortex-sts``     — STS (Sample Target System) sample apps for LENS/Digest
 - ``_workspaces``    — intentional workspace area; ALL subfolders are protected:
                          • ``approved-orchestrator-view/`` — approved orchestrator dashboard
                          • ``recommend/``                  — copilot review artefacts (permanent)
                          • ``prompts/``                    — workspace-scoped prompt overrides
                          • ``.chats/``                     — chat session logs
+                         • ``cortex-sts/`` — STS demo material (relocated from root)
 - ``scripts``        — cross-platform runner scripts
 - ``deployment``     — Docker/K8s/Prometheus/Nginx configs
 - ``tests``          — test mirror tree
@@ -156,6 +155,23 @@ HANDOFF_FILENAME: str = "health-issues.yaml"
 ROLLBACK_FILENAME: str = "rollback-manifest.json"
 """Filename for the Vacuum rollback manifest."""
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Legacy folder relocation rules
+# ─────────────────────────────────────────────────────────────────────────────
+
+LEGACY_ROOT_FOLDERS_RELOCATION: Dict[str, str] = {
+    # source_folder: destination_folder
+    # Runtime state artifacts → .cortex-runtime/
+    "cortex_brain": ".cortex-runtime/state/cortex_brain",
+    # Demo/sample material → _workspaces/
+    "cortex-sts": "_workspaces/cortex-sts",
+}
+"""Root-level legacy folders that should be relocated to proper locations.
+
+- ``cortex_brain/`` — Legacy runtime state (governance.db) → ``.cortex-runtime/state/``
+- ``cortex-sts/`` — STS demo material → ``_workspaces/`` for isolation
+"""
+
 
 __all__ = [
     "EXCLUDED_DIRS",
@@ -170,4 +186,5 @@ __all__ = [
     "ARCHIVE_DIR",
     "HANDOFF_FILENAME",
     "ROLLBACK_FILENAME",
+    "LEGACY_ROOT_FOLDERS_RELOCATION",
 ]

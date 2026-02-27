@@ -170,7 +170,7 @@ class CapabilityMatcher:
 
                 metadata = AgentMetadata(
                     agent_id=orch_id,
-                    version="2.0",
+                    version="1.0",
                     capabilities=capabilities,
                     modes_served=modes,
                     file_path=manifest_path,

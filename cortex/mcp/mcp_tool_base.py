@@ -80,7 +80,7 @@ class ToolDefinition:
     category: ToolCategory
     parameters: List[ToolParameter] = field(default_factory=list)
     operations: List[str] = field(default_factory=list)
-    version: str = "2.0.0"
+    version: str = "1.0"
     
     def to_mcp_schema(self) -> Dict[str, Any]:
         """

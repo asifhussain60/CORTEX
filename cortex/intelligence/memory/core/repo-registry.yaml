@@ -1,8 +1,8 @@
 metadata:
   created_at: '2026-01-24T14:00:00.000000'
   description: CORTEX Repository Registry - Production Orchestrator Wiring
-  version: 2.0
-  authority: cortex-impl-map.yaml v3.0
+  version: 1.0
+  authority: cortex-impl-map.yaml
   status: PRODUCTION_WIRED
 registry_template: false
 registration_timestamp: '2026-01-24T14:00:00'
@@ -188,7 +188,7 @@ registered_orchestrators:
     stage: "coordinator"
     wiring_status: "wired"
     activation_level: "active"
-    version: "2.0"
+    version: "1.0"
 
 wiring_status:
   total_orchestrators: 23

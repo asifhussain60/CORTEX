@@ -263,7 +263,7 @@ class TestMCPServer:
         health = server.health_check()
         
         assert health["status"] == "healthy"
-        assert health["version"] == "2.0.0"
+        assert health["version"] == "1.0"
         assert health["tools"]["total"] == 24
         assert "by_category" in health["tools"]
 

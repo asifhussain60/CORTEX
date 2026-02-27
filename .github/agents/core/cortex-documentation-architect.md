@@ -358,7 +358,7 @@ Every STS workspace root MUST contain `sts-architecture-d3.html`:
 
 | Gap | Required Content | Target Location | Approach |
 |-----|-----------------|-----------------|----------|
-| **Orchestrator Tiers** | Directory structure, tier precedence, module purposes, governance flow | `cortex-docs/.content/01-capabilities/orchestrator-tiers.md` | High-level architecture explanation using accessible metaphors. NO internal Python details. Reflect actual 17-orchestrator count (7 core, 3 domain, 7 support). |
+| **Orchestrator Tiers** | Directory structure, tier precedence, module purposes, governance flow | `cortex-docs/.content/01-capabilities/orchestrator-tiers.md` | High-level architecture explanation using accessible metaphors. NO internal Python details. Reflect actual 51-orchestrator count (17 core, 7 domain, 23 support, 4 git). |
 | **LENS Intelligence** | LENS analysis pipeline, 4-phase process, integration points | `cortex-docs/.content/02-lens/lens-intelligence.md` | User-facing capability description with evidence-backed performance metrics. |
 | **Enforcement Agents** | Agent roles, validation focus, integration points | `cortex-docs/.content/01-capabilities/enforcement-agents.md` | Conceptual overview of pre-execution gate with agent responsibilities. |
 

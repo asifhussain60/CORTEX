@@ -170,8 +170,8 @@ class CortexVerify(ConsolidatedTool):
             data={
                 "configured": True,
                 "transport": "stdio",
-                "tools_registered": 24,
-                "server_version": "2.0.0",
+                "tools_registered": 28,
+                "server_version": "1.0",
             },
             metadata={"operation": "mcp"},
         )

@@ -23,7 +23,7 @@ profile:
     - security-monitoring
 
 compatibility:
-  cortex_min_version: "0.9.0"
+  cortex_min_version: "1.0"
   python_versions: ["3.10", "3.11", "3.12", "3.13"]
 
 rules:

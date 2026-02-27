@@ -344,7 +344,7 @@ class MCPServer:
                         },
                         "serverInfo": {
                             "name": "cortex-mcp",
-                            "version": "2.0.0",
+                            "version": "1.0",
                         },
                     },
                     id=request.id
@@ -425,7 +425,7 @@ class MCPServer:
         print(json.dumps({
             "type": "startup",
             "server": "cortex-mcp",
-            "version": "2.0.0",
+            "version": "1.0",
             "tools": self.registry.tool_count,
         }), file=sys.stderr, flush=True)
 
@@ -473,7 +473,7 @@ class MCPServer:
         
         return {
             "status": "healthy",
-            "version": "2.0.0",
+            "version": "1.0",
             "uptime_seconds": int(uptime.total_seconds()),
             "tools": {
                 "total": self.registry.tool_count,

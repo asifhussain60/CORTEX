@@ -165,7 +165,7 @@ class RelationshipTraversalEngine(BaseIntelligenceEngine):
         """Initialize RelationshipTraversal engine."""
         super().__init__(
             name="RelationshipTraversal",
-            version="2.0.0",
+            version="1.0",
             description="Analyzes code relationships and builds dependency graphs",
             cache_ttl=600
         )

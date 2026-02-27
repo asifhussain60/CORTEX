@@ -352,7 +352,7 @@ class ToolMetadata:
     category: ToolCategory
     parameters: List[ToolParameter]
     operations: List[str]
-    version: str = "2.0.0"
+    version: str = "1.0"
     implementation: Optional[Type[Tool]] = None
 
 
