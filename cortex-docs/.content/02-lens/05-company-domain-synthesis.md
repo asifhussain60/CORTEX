@@ -197,7 +197,7 @@ The combined company domain + sprint context allows orchestrators to answer ques
 
 ## Related Documents
 
-- [LENS Overview](01-overview.md) — 9-analyzer pipeline
+- [LENS Overview](01-overview.md) — 15-analyzer-component pipeline
 - [Context Synthesis](04-synthesis.md) — UnifiedIntelligenceProvider tier model
 - [ADO Integration](../05-infrastructure/07-ado-integration.md) — Work item provider setup
 - [Brain Tier Architecture](../00-getting-started/04-brain-tier-architecture.md) — Full intelligence flow

@@ -35,7 +35,7 @@ CORTEX is built from one canonical Python package (`cortex`) with a single impor
 | MCP Tools | 28 registered / 39 target, Pylance-style stdio auto-start |
 | CORE Governance Rules | 38 active (+ 2 AC rules), enforced at pre-commit, CI, and runtime |
 | Test Suite | 16,942 collected (unit + preflight + golden + phase tiers) |
-| LENS Analyzers | 10 parallel analyzers, 300–800ms combined latency |
+| LENS Analyzers | 15 parallel analyzer components, 300–800ms combined latency |
 | Languages Analyzed | Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue |
 | Intelligence Tiers | Quick (<200ms), Targeted (<2s), Full (<10s) |
 | Parallel Testing | pytest-xdist with `-n auto --dist loadscope` |
@@ -49,7 +49,7 @@ CORTEX organises capabilities into six cognitive domains, each analogous to a sp
 | Domain | What It Does | Key Metric |
 |--------|-------------|------------|
 | **Core Platform** | MCP gateway, 51-orchestrator dispatch, state management, health monitoring | 28 registered MCP tools (39 target), Pylance-style stdio |
-| **Intelligence (LENS)** | 10-analyzer parallel code understanding covering AST, Git, Security, Patterns, Metrics, and more | 300–800ms full analysis |
+| **Intelligence (LENS)** | 15-component parallel code understanding covering AST, Git, Security, Patterns, Metrics, and more | 300–800ms full analysis |
 | **Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repository | Confidence scored 0.0–1.0 |
 | **Decisioning** | Intent routing across 10+ intent types to 51 wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
 | **Governance** | Pre-commit, CI, and runtime enforcement of 38 active CORE rules; sweep completeness (CORE-064) | 10 enforcement agents, <150ms validation |

@@ -102,9 +102,9 @@ Score = Impact(0-3) + Likelihood(0-2) + Detection(0-2) + Efficiency(0-2) − Mai
 
 **TestQualityGate** — invoked internally by the TDD orchestration pipeline (not exposed as a registered MCP tool).
 
-**Business Leader:** "Test quality is quantified, not subjective. Every test has a score. We maintain 15,739 signal-dense tests, not 18,000 mixed-quality ones."
+**Business Leader:** "Test quality is quantified, not subjective. Every test has a score. We maintain 16,942 signal-dense tests, not 18,000 mixed-quality ones."
 
-**Product Owner:** "During the refactor, TestQualityGate identified 3,360 low-value tests (scoring <4). We archived them and kept the signal. 696 golden tests all score ≥7."
+**Product Owner:** "During the refactor, TestQualityGate identified 3,360 low-value tests (scoring <4). We archived them and kept the signal. 486 golden tests all score ≥7."
 
 **Developer:** "I commit a new test. If it scores below 7, TDDOrchestrator blocks the commit and tells me why — usually low detection coverage or high maintenance cost."
 

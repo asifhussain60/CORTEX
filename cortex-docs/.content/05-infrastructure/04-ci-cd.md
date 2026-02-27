@@ -26,11 +26,11 @@ order: 4
        ▼
 [Stage 2: Unit Tests (Parallel)]
        │ pytest -n auto --dist loadscope
-       │ 15,739 tests across all tiers
+       │ 16,942 tests across all tiers
        │
        ▼
 [Stage 3: Golden Tests (Serial)]
-       │ 696 golden tests — must ALWAYS pass
+       │ 486 golden tests — must ALWAYS pass
        │ pytest -p no:xdist (deterministic)
        │
        ▼
@@ -122,7 +122,7 @@ CI enforces these gates before merge:
 
 ## Practical Examples
 
-**Business Leader:** "Every code change goes through 6 automated validation stages before it can merge. 696 golden tests guarantee no regression. Governance rules are enforced by machines, not people."
+**Business Leader:** "Every code change goes through 6 automated validation stages before it can merge. 486 golden tests guarantee no regression. Governance rules are enforced by machines, not people."
 
 **Product Owner:** "CI runs in minutes with parallel test execution. Golden tests run serially for deterministic results. The pipeline blocks any change that violates CORE rules."
 

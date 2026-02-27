@@ -12,10 +12,10 @@
     "roles": ["software-engineer", "curious-learner", "business-leader", "product-owner"],
     "excerpt": "One-stop reference for every orchestrator, MCP tool, LENS analyzer, knowledge YAML, workflow template, and governance rule in CORTEX.",
     "sections": [
-      { "id": "orchestrators", "title": "Orchestrators (27 Wired)", "anchor": "1-orchestrators-27-wired" },
-      { "id": "mcp-tools", "title": "MCP Tools (39 Total)", "anchor": "2-mcp-tools-39-total--37-active-2-deprecated" },
+      { "id": "orchestrators", "title": "Orchestrators (51 Wired)", "anchor": "1-orchestrators-51-wired" },
+      { "id": "mcp-tools", "title": "MCP Tools (28 Registered, 39 Target)", "anchor": "2-mcp-tools-28-registered-39-target" },
       { "id": "lens", "title": "LENS Analysis System", "anchor": "3-lens-analysis-system" },
-      { "id": "governance", "title": "Governance Rules (35 CORE)", "anchor": "4-governance-rules-35-core-active" },
+      { "id": "governance", "title": "Governance Rules (38 CORE)", "anchor": "4-governance-rules-38-core-active" },
       { "id": "knowledge", "title": "Knowledge YAML Registry", "anchor": "5-knowledge-yaml-registry-35-files" },
       { "id": "workflows", "title": "Workflow Templates (60+)", "anchor": "6-workflow-templates-60-templates" },
       { "id": "core-framework", "title": "Core Framework Components", "anchor": "7-core-framework-components" },
@@ -26,10 +26,10 @@
       { "id": "summary", "title": "Summary Metrics", "anchor": "12-summary-metrics" }
     ],
     "summary_metrics": {
-      "wired_orchestrators": 27,
-      "active_mcp_tools": 37,
+      "wired_orchestrators": 51,
+      "active_mcp_tools": 28,
       "total_mcp_tools": 39,
-      "core_rules": 35,
+      "core_rules": 38,
       "lens_analyzers": 17,
       "knowledge_yaml_files": 35,
       "workflow_templates": 60,

@@ -11,13 +11,13 @@ order: 4
 
 ## What Is Synthesis?
 
-Synthesis is the final stage of the LENS pipeline — combining the outputs of all 9 parallel analyzers into a unified `LENSContext`, then feeding that into `UnifiedIntelligenceProvider` which layers in company domain knowledge, ADO sprint context, and CORTEX best practices before delivering a `UnifiedIntelligenceContext` to MasterOrchestrator.
+Synthesis is the final stage of the LENS pipeline — combining the outputs of all 15 parallel analyzer components into a unified `LENSContext`, then feeding that into `UnifiedIntelligenceProvider` which layers in company domain knowledge, ADO sprint context, and CORTEX best practices before delivering a `UnifiedIntelligenceContext` to MasterOrchestrator.
 
 **Brain analogy:** This is the **association cortex** — where separate sensory streams (vision, hearing, touch) are combined into a coherent perception. LENS Synthesis merges AST structure with git patterns with security findings into one unified understanding.
 
 ## How It Works
 
-1. All 9 analyzers produce independent results
+1. All 15 analyzer components produce independent results
 2. The `lens_orchestrator.py` waits for all results (parallel completion)
 3. Results are merged into a single `LENSContext` object
 4. Conflicts are resolved (e.g., different confidence scores for the same module)

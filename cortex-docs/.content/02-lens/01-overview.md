@@ -17,7 +17,7 @@ order: 1
 
 **L**anguage → **E**xamination → **N**avigation → **S**ynthesis
 
-LENS is CORTEX's code intelligence engine. It runs **9 specialized analyzers in parallel** against any codebase and produces a unified context — structured intelligence that feeds the Brain's Perception → Reasoning → Action pipeline.
+LENS is CORTEX's code intelligence engine. It runs **15 specialized analyzer components in parallel** against any codebase and produces a unified context — structured intelligence that feeds the Brain's Perception → Reasoning → Action pipeline.
 
 **Live location:** `cortex/lens/` (analyzers, adapters, cache, models, schemas, discovery, extractors)
 
@@ -34,7 +34,7 @@ LENS is CORTEX's code intelligence engine. It runs **9 specialized analyzers in 
 
 ---
 
-## 9 Parallel Analyzers
+## 15 Parallel Analyzer Components
 
 | Analyzer | What It Detects | Output |
 |----------|----------------|--------|
@@ -56,7 +56,7 @@ All 9 run **in parallel**. Combined latency: 300–800ms.
 
 | Component | Location | Purpose |
 |-----------|----------|---------|
-| **Analyzers** | `cortex/lens/analyzers/` | The 8 specialized analysis engines |
+| **Analyzers** | `cortex/lens/analyzers/` | The 15 specialized analysis components |
 | **Adapters** | `cortex/lens/adapters/` | Language-specific adapters (Python, TS, C#) |
 | **Cache** | `cortex/lens/cache/` + `cortex/lens/cache.py` | Analysis result caching |
 | **Models** | `cortex/lens/models/` | Data models for LENS output |
@@ -89,7 +89,7 @@ All 9 run **in parallel**. Combined latency: 300–800ms.
 
 **Product Owner:** "Before sprint planning, I run LENS on the target modules. The security analyzer found 3 credential exposure patterns last week that nobody caught in review."
 
-**Developer:** "I call `cortex_onboard_repository` and LENS runs all 8 analyzers. The import analyzer found a circular dependency chain 4 levels deep. The AST analyzer showed 12 functions without type hints. I fixed both before the PR."
+**Developer:** "I call `cortex_onboard_repository` and LENS runs all 15 analyzer components. The import analyzer found a circular dependency chain 4 levels deep. The AST analyzer showed 12 functions without type hints. I fixed both before the PR."
 
 ---
 

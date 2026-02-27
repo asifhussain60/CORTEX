@@ -20,10 +20,10 @@ order: 1
 | 1 | [High-Level Architecture](02-high-level-architecture.md) | System overview — all major components | All |
 | 2 | [Request Flow](03-request-flow.md) | End-to-end request lifecycle | Developers, POs |
 | 3 | [Orchestrator Map](04-orchestrator-map.md) | 51 wired orchestrators across 4 tiers (17 core, 7 domain, 23 support, 4 git) + 7 additional dirs (health, git, intelligence, strategies, synthesis, validation, workflow) | Developers |
-| 4 | [LENS Pipeline](05-lens-pipeline.md) | 8 analyzers → Synthesis | Developers |
+| 4 | [LENS Pipeline](05-lens-pipeline.md) | 15 analyzer components → Synthesis | Developers |
 | 5 | [Governance Flow](06-governance-flow.md) | 38 CORE rule enforcement lifecycle | All |
 | 6 | [MCP Transport](07-mcp-transport.md) | IDE ↔ CORTEX communication (39 tools) | Developers |
-| 7 | [Testing Pyramid](08-testing-pyramid.md) | Test tiers and execution (15,739 tests) | Developers, POs |
+| 7 | [Testing Pyramid](08-testing-pyramid.md) | Test tiers and execution (16,942 tests) | Developers, POs |
 | 8 | [Brain Tier Model](09-brain-tier-model.md) | Intelligence tiers (Perception → Reasoning → Action) | All |
 
 ---

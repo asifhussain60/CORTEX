@@ -94,7 +94,7 @@ This returns all 28 registered tools (39 target) with their descriptions, catego
 
 `cortex_onboard` runs the full repository onboarding pipeline:
 
-1. LENS 9-analyzer scan
+1. LENS 15-component scan
 2. Security assessment (P0/P1/P2 severity classification)
 3. Domain classification
 4. Tech stack fingerprint

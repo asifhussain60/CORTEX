@@ -25,7 +25,7 @@ order: 4
 
 ## How many analyzers does LENS run?
 
-LENS ships **9 canonical analyzers** documented in `02-lens/01-overview.md`, running in parallel:
+LENS ships **15 analyzer components** in `cortex/lens/analyzers/`, with 9 canonical analyzers in the core parallel pipeline documented in `02-lens/01-overview.md`:
 
 | Analyzer | Class | What It Detects |
 |----------|-------|----------------|
@@ -39,7 +39,7 @@ LENS ships **9 canonical analyzers** documented in `02-lens/01-overview.md`, run
 | **Domain** | *(domain module)* | Business context — industry, vertical, regulatory |
 | **Tech Stack** | `TechStackAnalyzer` | Framework detection — imports, config files, manifests |
 
-Additional analyzers exist in `cortex/lens/analyzers/` (APIAnalyzer, ConfigAnalyzer, DatabaseAnalyzer, EvolutionAnalyzer, PolyglotAnalyzer, PythonAnalyzer) for specialized use cases. The 9 listed above run in the canonical parallel pipeline.
+Additional analyzers exist in `cortex/lens/analyzers/` (APIAnalyzer, ConfigAnalyzer, DatabaseAnalyzer, EvolutionAnalyzer, PolyglotAnalyzer, PythonAnalyzer) for specialized use cases. All 15 components run via `LENSOrchestrator.analyze_file()`.
 
 ---
 
@@ -164,7 +164,7 @@ orch = RepositoryOnboardingOrchestrator()
 result = await orch.execute({"path": "/path/to/external/repo"})
 ```
 
-The onboarding pipeline runs LENS (full 9-analyzer pass), scores security findings (P0/P1/P2), and stores results in `.cortex-runtime/` for subsequent queries.
+The onboarding pipeline runs LENS (full 15-component pass), scores security findings (P0/P1/P2), and stores results in `.cortex-runtime/` for subsequent queries.
 
 ---
 

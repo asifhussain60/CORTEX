@@ -84,7 +84,7 @@ Call cortex_onboard with {"path": "/path/to/repo"}
 ```
 
 CORTEX will:
-1. Run LENS (9 parallel analyzers, 300–800ms)
+1. Run LENS (15 parallel analyzer components, 300–800ms)
 2. Classify the domain (industry, vertical, regulatory context)
 3. Score security findings (P0 critical / P1 high / P2 medium)
 4. Identify tech stack (frameworks, languages, versions)

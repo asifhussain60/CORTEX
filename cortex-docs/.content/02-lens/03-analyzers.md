@@ -1,7 +1,7 @@
 # LENS Analyzers
 
 ---
-title: LENS Analyzers — 8 Specialized Code Intelligence Engines
+title: LENS Analyzers — 15 Specialized Code Intelligence Components
 type: reference
 audience: [Software Developers]
 last_verified: 2026-02-25

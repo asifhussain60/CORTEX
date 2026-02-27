@@ -13,7 +13,7 @@ order: 2
 
 ```
 cortex/lens/
-├── analyzers/              8 specialized analysis engines
+├── analyzers/              15 specialized analysis components
 ├── adapters/               Language-specific adapters (Python, TS, C#)
 ├── cache/                  Analysis result caching layer
 ├── cache.py                Cache utilities
@@ -55,7 +55,7 @@ cortex/lens/
         └── Cache MISS ↓
         │
         ▼
-[8 Parallel Analyzers Launch]
+[15 Parallel Analyzer Components Launch]
         │
         ├── AST Analyzer
         ├── Git History Analyzer
@@ -80,7 +80,7 @@ cortex/lens/
 
 ## Key Design Decisions
 
-1. **Parallel execution:** All 8 analyzers run concurrently — total latency is bounded by the slowest analyzer, not the sum
+1. **Parallel execution:** All 15 analyzer components run concurrently — total latency is bounded by the slowest analyzer, not the sum
 2. **Cache-first:** `cached_lens_orchestrator.py` checks cache before launching analyzers
 3. **Adapter pattern:** Language-specific logic is isolated in `adapters/` — adding a new language means adding an adapter
 4. **Facade API:** `facade.py` provides a simplified API so consumers don't need to know the pipeline internals

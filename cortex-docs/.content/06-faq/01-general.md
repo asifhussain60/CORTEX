@@ -20,7 +20,7 @@ order: 1
 - **51 wired orchestrators** across 4 tiers (core, domain, support, git)
 - **28 registered MCP tools (39 target)** exposed via Pylance-style stdio server
 - **38 CORE governance rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
-- **LENS** — an 10-analyzer parallel code intelligence engine
+- **LENS** — a 15-component parallel code intelligence engine
 - **TDD-first execution** — CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX
 
 It works directly inside your IDE (VS Code, Cursor, Claude Desktop) via the Model Context Protocol — no browser, no context switching.

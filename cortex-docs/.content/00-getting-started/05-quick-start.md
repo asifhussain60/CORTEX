@@ -63,7 +63,7 @@ Try any of these in Copilot Chat:
 
 | What You Type | What Happens |
 |--------------|-------------|
-| "Analyze this codebase" | LENS runs 10 parallel analyzers, delivers inline report |
+| "Analyze this codebase" | LENS runs 15 parallel analyzer components, delivers inline report |
 | "What MCP tools are available?" | `cortex_tools_catalog` lists all 39 tools |
 | "Check governance compliance" | `cortex_validate_compliance` checks CORE rules |
 | "Onboard this repository" | `cortex_onboard_repository` runs LENS + creates dashboard |
@@ -105,7 +105,7 @@ cortex/                   ← Python source (1 canonical package)
   core/                   ← OrchestratorBase, FileFactory, WorkflowEngine
   testing/                ← Test framework, parallel runner, quality gate
   intelligence/           ← Brain: perception, reasoning, action, domain
-  lens/                   ← 8-analyzer code intelligence
+  lens/                   ← 15-component code intelligence
   governance/             ← Rule enforcement, compliance
   infrastructure/         ← CortexAuditDB, infrastructure detection
 
@@ -116,7 +116,7 @@ cortex-registry/          ← YAML governance rules, patterns, plans
   workflows/              ← Workflow templates
 
 tests/                    ← All tests (mirrors cortex/ structure)
-  golden/                 ← 696 golden tests (must always pass)
+  golden/                 ← 486 golden tests (must always pass)
   unit/                   ← Unit tests (parallel)
   integration/            ← Integration tests
 

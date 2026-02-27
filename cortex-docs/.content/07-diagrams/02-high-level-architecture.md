@@ -103,7 +103,7 @@ order: 2
 | Governance | **38 CORE rules** | `cortex/governance/` + `cortex-registry/core/` |
 | Infrastructure | 50+ modules | `cortex/infrastructure/` |
 | Registry | Rules, patterns, workflows | `cortex-registry/` |
-| Tests | **15,739** collected | `tests/` |
+| Tests | **16,942** collected | `tests/` |
 
 ---
 
