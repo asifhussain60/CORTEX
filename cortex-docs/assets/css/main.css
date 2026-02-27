@@ -491,7 +491,7 @@ body {
 }
 
 .hero-acronym {
-    font-size: 1.1rem;
+    font-size: 3rem!important;
     color: var(--text-secondary);
     margin-bottom: 1.5rem;
     letter-spacing: 0.02em;
@@ -679,7 +679,7 @@ body {
     }
     
     .hero-acronym {
-        font-size: 0.95rem;
+        font-size: 1.75rem !important;
         line-height: 1.6;
     }
 }
@@ -704,7 +704,7 @@ body {
     }
     
     .hero-acronym {
-        font-size: 0.9rem;
+        font-size: 1.4rem !important;
         line-height: 1.7;
         margin-bottom: 1rem;
     }
@@ -729,7 +729,7 @@ body {
     }
     
     .hero-acronym {
-        font-size: 0.85rem;
+        font-size: 1.2rem !important;
     }
 }
 
