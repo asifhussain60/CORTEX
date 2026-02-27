@@ -221,8 +221,10 @@
 
   function renderMd(md) {
     const clean = stripFrontmatter(md);
+    // Strip leading h1 (# Title) — the JS header already renders ch.title
+    const noH1 = clean.replace(/^#[^#][^\n]*\n+/, '');
     marked.setOptions({ breaks: false, gfm: true });
-    return marked.parse(clean);
+    return marked.parse(noH1);
   }
 
   /* ── Chapter Loading ─────────────────────────────────────── */

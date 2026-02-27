@@ -321,9 +321,9 @@ body {
 
 .ch-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem; font-weight: 600;
-  letter-spacing: 0.1em; color: #6b7094;
-  margin-bottom: 0.25rem;
+  font-size: 0.85rem; font-weight: 600;
+  letter-spacing: 0.15em; color: #9b9fc0;
+  margin-bottom: 0.35rem;
 }
 .ch-title {
   font-family: 'Space Grotesk', sans-serif;
