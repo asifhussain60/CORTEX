@@ -213,10 +213,10 @@ def cortex_deploy_check(environment: str) -> dict:
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `05-d-common-utilities-overview.mmd` | C4-Component | Scene 2 — Extension Points (context) | Shows the STABLE foundation layer all extensions build upon — "Extend, Don't Fork" |
-| `01-d-c4-container-full-system.mmd` | C4-Container | Scene 2 — Where extensions plug in | Full system architecture showing tiers where each extension type integrates |
+| `05-d-common-utilities-overview.md` | C4-Component | Scene 2 — Extension Points (context) | Shows the STABLE foundation layer all extensions build upon — "Extend, Don't Fork" |
+| `01-d-c4-container-full-system.md` | C4-Container | Scene 2 — Where extensions plug in | Full system architecture showing tiers where each extension type integrates |
 
-> **Video Producer:** Import `05-d-common-utilities-overview.mmd` alongside this prompt in NotebookLM. This diagram shows the STABLE CORE (Tier 1 Common Utilities) that all 7 extension points build upon — it proves extensions don't require touching core code. Use it in Scene 2 as the foundation layer BEFORE showing the 7 dendrites. Import `01-d-c4-container-full-system.mmd` as supplementary context showing the full system where extensions plug in at different tiers. Both files contain `animation_notes` in their frontmatter.
+> **Video Producer:** Import `05-d-common-utilities-overview.md` alongside this prompt in NotebookLM. This diagram shows the STABLE CORE (Tier 1 Common Utilities) that all 7 extension points build upon — it proves extensions don't require touching core code. Use it in Scene 2 as the foundation layer BEFORE showing the 7 dendrites. Import `01-d-c4-container-full-system.md` as supplementary context showing the full system where extensions plug in at different tiers. Both files contain `animation_notes` in their frontmatter.
 
 **Diagram: Neural Network Extension Points (Scene 2)**
 - Central node (CORTEX core) with 7 extending dendrites

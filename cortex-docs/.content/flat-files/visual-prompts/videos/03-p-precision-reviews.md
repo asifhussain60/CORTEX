@@ -211,9 +211,9 @@ Series badge: **"CORTEX: The Enterprise Intelligence Series — Video 03 of 10"*
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `03-d-golden-test-pyramid-and-security-layers.mmd` | Flowchart | Scenes 2 + 4 + 5 | Golden test promotion/demotion pyramid + five security layers + SDLC timeline + shared infrastructure |
+| `03-d-golden-test-pyramid-and-security-layers.md` | Flowchart | Scenes 2 + 4 + 5 | Golden test promotion/demotion pyramid + five security layers + SDLC timeline + shared infrastructure |
 
-> **Video Producer:** Import `03-d-golden-test-pyramid-and-security-layers.mmd` alongside this prompt in NotebookLM. This diagram contains FOUR sub-graphs that map to different scenes: (1) Golden Test Pyramid → Scene 2, (2) Quality Gate Dimensions → Scene 2 radial indicators, (3) Five Security Layers + SDLC Timeline → Scene 4, (4) Shared Infrastructure → Scene 5 bridge. Animate Part A first (pyramid promotion/demotion), then Part B (security rings), then Part C (unified view). The frontmatter `animation_notes` have frame-by-frame rendering instructions.
+> **Video Producer:** Import `03-d-golden-test-pyramid-and-security-layers.md` alongside this prompt in NotebookLM. This diagram contains FOUR sub-graphs that map to different scenes: (1) Golden Test Pyramid → Scene 2, (2) Quality Gate Dimensions → Scene 2 radial indicators, (3) Five Security Layers + SDLC Timeline → Scene 4, (4) Shared Infrastructure → Scene 5 bridge. Animate Part A first (pyramid promotion/demotion), then Part B (security rings), then Part C (unified view). The frontmatter `animation_notes` have frame-by-frame rendering instructions.
 
 ---
 

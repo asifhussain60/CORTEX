@@ -169,9 +169,9 @@ Series badge: **"CORTEX: The Enterprise Intelligence Series — Video 01 of 10"*
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `01-d-c4-container-full-system.mmd` | C4-Container | Scene 3 — The Architecture | Full system architecture, animate tier-by-tier bottom→top |
+| `01-d-c4-container-full-system.md` | C4-Container | Scene 3 — The Architecture | Full system architecture, animate tier-by-tier bottom→top |
 
-> **Video Producer:** Import `01-d-c4-container-full-system.mmd` alongside this prompt as a source in NotebookLM. The Mermaid diagram contains frontmatter with `animation_notes` describing exactly how to render each element. The C4 Container diagram is the PRIMARY architecture visual for this video — reveal Tier 1 (Foundation) first, then Tier 2 (Core/MCP), then Tier 3 (Intelligence), then Tier 4 (Infrastructure). Data flow arrows animate sequentially following a request path.
+> **Video Producer:** Import `01-d-c4-container-full-system.md` alongside this prompt as a source in NotebookLM. The Mermaid diagram contains frontmatter with `animation_notes` describing exactly how to render each element. The C4 Container diagram is the PRIMARY architecture visual for this video — reveal Tier 1 (Foundation) first, then Tier 2 (Core/MCP), then Tier 3 (Intelligence), then Tier 4 (Infrastructure). Data flow arrows animate sequentially following a request path.
 
 When this video references architecture diagrams from the image prompts, the following animation flows apply:
 

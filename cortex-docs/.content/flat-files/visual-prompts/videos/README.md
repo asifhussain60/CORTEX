@@ -279,22 +279,22 @@ The visual shows the WHAT. The narration delivers the WHY, the SO WHAT, the FEEL
 
 ## 📐 Mermaid Diagram Files — Co-located for NotebookLM Bundling
 
-Each video prompt has co-located Mermaid (`.mmd`) diagram files numbered to match. **Bundle each prompt + its matching diagram files together as sources in NotebookLM** for proper video rendering. Every `.mmd` file contains frontmatter with `animation_notes` describing frame-by-frame rendering instructions.
+Each video prompt has co-located Mermaid (`.md`) diagram files numbered to match. **Bundle each prompt + its matching diagram files together as sources in NotebookLM** for proper video rendering. Every `.md` file contains frontmatter with `animation_notes` describing frame-by-frame rendering instructions.
 
 | Diagram File | Maps to Video | Diagram Type | Key Content |
 |---|---|---|---|
-| `01-d-c4-container-full-system.mmd` | V01 — The CORTEX Paradigm | C4-Container | Full system architecture — 4-tier stack, animate bottom→top |
-| `02-d-governance-tdd-enforcement-flow.mmd` | V02 — The Trust Layer | Flowchart | Shield wall (Pre-commit→CI→Runtime) + TDD RED/GREEN/BLUE |
-| `03-d-golden-test-pyramid-and-security-layers.mmd` | V03 — Precision Reviews | Flowchart | Test pyramid promotion + 5 security layers + SDLC timeline |
-| `04-d-audit-pipeline-stages.mmd` | V04 — Architectural Integrity | Flowchart | 9-stage `/audit fix` pipeline with convergence loop |
-| `05-d-common-utilities-overview.mmd` | V05 — The Collaborative Engine | C4-Component | Tier 1 stable foundation — "Extend, Don't Fork" context |
-| `06-d-mcp-request-lifecycle-sequence.mmd` | V06 — Traceability & Transparency | Sequence | MCP request flow — Client→Gateway→Router→Orchestrator→Tool |
-| `07-d-orchestrator-dispatch-flow.mmd` | V07 — Cross-Domain Intelligence | Flowchart | Intent classification → intelligence tiers → target orchestrator |
-| `07-d-c4-component-master-orchestrator.mmd` | V07 — Cross-Domain Intelligence | C4-Component | Master Orchestrator internals — zoom-in detail view |
-| `08-d-urs-learning-feedback-loop.mmd` | V08 — CORTEX vs. The Status Quo | Flowchart | URS cycle + Week 1→12 transformation + compound effect |
-| `09-d-platform-saas-architecture.mmd` | V09 — Scaling the Enterprise | Flowchart | ✅ REAL MCP server + 🔮 VISION SaaS architecture |
+| `01-d-c4-container-full-system.md` | V01 — The CORTEX Paradigm | C4-Container | Full system architecture — 4-tier stack, animate bottom→top |
+| `02-d-governance-tdd-enforcement-flow.md` | V02 — The Trust Layer | Flowchart | Shield wall (Pre-commit→CI→Runtime) + TDD RED/GREEN/BLUE |
+| `03-d-golden-test-pyramid-and-security-layers.md` | V03 — Precision Reviews | Flowchart | Test pyramid promotion + 5 security layers + SDLC timeline |
+| `04-d-audit-pipeline-stages.md` | V04 — Architectural Integrity | Flowchart | 9-stage `/audit fix` pipeline with convergence loop |
+| `05-d-common-utilities-overview.md` | V05 — The Collaborative Engine | C4-Component | Tier 1 stable foundation — "Extend, Don't Fork" context |
+| `06-d-mcp-request-lifecycle-sequence.md` | V06 — Traceability & Transparency | Sequence | MCP request flow — Client→Gateway→Router→Orchestrator→Tool |
+| `07-d-orchestrator-dispatch-flow.md` | V07 — Cross-Domain Intelligence | Flowchart | Intent classification → intelligence tiers → target orchestrator |
+| `07-d-c4-component-master-orchestrator.md` | V07 — Cross-Domain Intelligence | C4-Component | Master Orchestrator internals — zoom-in detail view |
+| `08-d-urs-learning-feedback-loop.md` | V08 — CORTEX vs. The Status Quo | Flowchart | URS cycle + Week 1→12 transformation + compound effect |
+| `09-d-platform-saas-architecture.md` | V09 — Scaling the Enterprise | Flowchart | ✅ REAL MCP server + 🔮 VISION SaaS architecture |
 
-> **NotebookLM Workflow:** When generating Video N, import `NN-p-*.md` AND all matching `NN-d-*.mmd` files as sources. The prompt describes the narrative and scenes. The diagrams provide the exact visual structure with animation notes. Together they give the video producer everything needed.
+> **NotebookLM Workflow:** When generating Video N, import `NN-p-*.md` AND all matching `NN-d-*.md` files as sources. The prompt describes the narrative and scenes. The diagrams provide the exact visual structure with animation notes. Together they give the video producer everything needed.
 
 > **File Naming for NotebookLM:** Use the prefix `01_CORTEX_[Topic]`, `02_CORTEX_[Topic]`, etc. when uploading to NotebookLM. This ensures it processes context in the exact order of the narrative arc.
 

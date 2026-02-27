@@ -190,9 +190,9 @@ Series badge: **"CORTEX: The Enterprise Intelligence Series — Video 02 of 10"*
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `02-d-governance-tdd-enforcement-flow.mmd` | Flowchart | Scenes 2–4 — Shield Wall + TDD Heartbeat | Pre-commit → CI → Runtime enforcement pipeline with TDD RED/GREEN/BLUE cycle |
+| `02-d-governance-tdd-enforcement-flow.md` | Flowchart | Scenes 2–4 — Shield Wall + TDD Heartbeat | Pre-commit → CI → Runtime enforcement pipeline with TDD RED/GREEN/BLUE cycle |
 
-> **Video Producer:** Import `02-d-governance-tdd-enforcement-flow.mmd` alongside this prompt in NotebookLM. The diagram shows the THREE enforcement layers (Pre-Commit, CI, Runtime) as a shield wall pipeline, plus the TDD heartbeat cycle (RED→GREEN→BLUE). The frontmatter contains detailed `animation_notes` including business book callout timing. Phase 1 animates the shield wall; Phase 2 animates the TDD ECG; Phase 3 merges them.
+> **Video Producer:** Import `02-d-governance-tdd-enforcement-flow.md` alongside this prompt in NotebookLM. The diagram shows the THREE enforcement layers (Pre-Commit, CI, Runtime) as a shield wall pipeline, plus the TDD heartbeat cycle (RED→GREEN→BLUE). The frontmatter contains detailed `animation_notes` including business book callout timing. Phase 1 animates the shield wall; Phase 2 animates the TDD ECG; Phase 3 merges them.
 
 **Diagram: Shield Wall (Image Prompt 04)**
 - Flow direction: Front → Back (incoming commit → Tier 0 → Tier 1 → Tier 2 → Tier 3)

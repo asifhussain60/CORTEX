@@ -239,10 +239,10 @@ Logo pulse. Gold shimmer. End.
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `10-roi-dimensions.mmd` | Flowchart | Scenes 2–6 — ROI Dimensions | Four ROI pillars (Velocity, Risk, Quality, Competitive) converging into executive summary |
-| `01-d-c4-container-full-system.mmd` | C4-Container | Supplementary — architecture reference | Full system context for credibility when presenting ROI claims |
+| `10-roi-dimensions.md` | Flowchart | Scenes 2–6 — ROI Dimensions | Four ROI pillars (Velocity, Risk, Quality, Competitive) converging into executive summary |
+| `01-d-c4-container-full-system.md` | C4-Container | Supplementary — architecture reference | Full system context for credibility when presenting ROI claims |
 
-> **Video Producer:** If `10-roi-dimensions.mmd` exists, import it alongside this prompt in NotebookLM. This diagram shows the four ROI dimensions as quadrants converging into a central "Total ROI" node, with cost-of-inaction flowing in red from the left and CORTEX impact flowing in green from the right. If the diagram doesn't exist yet, use the scene descriptions above to create the visual flow. Import `01-d-c4-container-full-system.mmd` as supplementary architecture context — having the real architecture visible adds credibility to ROI claims.
+> **Video Producer:** If `10-roi-dimensions.md` exists, import it alongside this prompt in NotebookLM. This diagram shows the four ROI dimensions as quadrants converging into a central "Total ROI" node, with cost-of-inaction flowing in red from the left and CORTEX impact flowing in green from the right. If the diagram doesn't exist yet, use the scene descriptions above to create the visual flow. Import `01-d-c4-container-full-system.md` as supplementary architecture context — having the real architecture visible adds credibility to ROI claims.
 
 **Diagram: Cost Pyramid Inversion (Scene 4)**
 - Traditional pyramid: Wide base (Failure 60%) → Medium (Appraisal 25%) → Narrow top (Prevention 15%)
@@ -273,4 +273,4 @@ Logo pulse. Gold shimmer. End.
 - The quality pyramid inversion (Scene 4) is based on Crosby's "Quality is Free" framework — prevention costs less than failure
 - Competitive advantage (Scene 5) is deliberately marked "Unquantifiable" — honest about what can and can't be measured
 - **Voice:** Male (V10 — even-numbered)
-- **10-video diagram file:** If `10-roi-dimensions.mmd` doesn't exist in the diagrams folder, create it to match the ROI quadrant layout described above
+- **10-video diagram file:** If `10-roi-dimensions.md` doesn't exist in the diagrams folder, create it to match the ROI quadrant layout described above

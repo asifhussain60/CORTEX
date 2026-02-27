@@ -146,10 +146,10 @@ Three trust principles as glassmorphic cards:
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `07-d-orchestrator-dispatch-flow.mmd` | Flowchart | Scene 3 — Three Brain Tiers | Shows how Master Orchestrator routes through intelligence tiers to target orchestrators |
-| `07-d-c4-component-master-orchestrator.mmd` | C4-Component | Scene 3 deep-dive | Internal components of Master Orchestrator — zoom-in when explaining Perception/Reasoning/Action |
+| `07-d-orchestrator-dispatch-flow.md` | Flowchart | Scene 3 — Three Brain Tiers | Shows how Master Orchestrator routes through intelligence tiers to target orchestrators |
+| `07-d-c4-component-master-orchestrator.md` | C4-Component | Scene 3 deep-dive | Internal components of Master Orchestrator — zoom-in when explaining Perception/Reasoning/Action |
 
-> **Video Producer:** Import BOTH `07-d-orchestrator-dispatch-flow.mmd` and `07-d-c4-component-master-orchestrator.mmd` alongside this prompt in NotebookLM. The dispatch flow is the OVERVIEW (Scene 3 establishing shot). The C4 component diagram is the ZOOM-IN when the narration drills into how the Master Orchestrator routes internally. Start with the flow diagram, then "camera zoom" into the Master Orchestrator node to reveal the component diagram. Both files contain `animation_notes` in their frontmatter with frame-by-frame rendering instructions.
+> **Video Producer:** Import BOTH `07-d-orchestrator-dispatch-flow.md` and `07-d-c4-component-master-orchestrator.md` alongside this prompt in NotebookLM. The dispatch flow is the OVERVIEW (Scene 3 establishing shot). The C4 component diagram is the ZOOM-IN when the narration drills into how the Master Orchestrator routes internally. Start with the flow diagram, then "camera zoom" into the Master Orchestrator node to reveal the component diagram. Both files contain `animation_notes` in their frontmatter with frame-by-frame rendering instructions.
 
 **Diagram: LLM Orchestration (Scene 1)**
 - Flow direction: CORTEX (center) sends structured prompts UP to LLM (top) → LLM sends results DOWN
@@ -159,7 +159,7 @@ Three trust principles as glassmorphic cards:
 - LENS beam sweeps top-to-bottom across file tree
 - Results aggregate into Workspace Intelligence Card (progressive disclosure)
 
-**Diagram: Three Brain Tiers (Scene 3) — from `07-d-orchestrator-dispatch-flow.mmd`**
+**Diagram: Three Brain Tiers (Scene 3) — from `07-d-orchestrator-dispatch-flow.md`**
 - Perception (cyan) → Reasoning (purple) → Action (amber) — sequential activation
 - Each tier shows 3-second activity with specific outputs before passing to next
 - Pattern confidence scores float beside Perception nodes

@@ -243,10 +243,10 @@ Logo pulse. End card. **"Next: Video 10 — The Strategic ROI"** (forward refere
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `09-d-platform-saas-architecture.mmd` | Flowchart | Scenes 2 + 4 + 5 | Current MCP server (✅ REAL) + future SaaS vision (🔮 VISION) + honest assessment truth table |
-| `01-d-c4-container-full-system.mmd` | C4-Container | Scene 2 — Current architecture context | Full system showing the MCP server and 4-tier stack that already exists |
+| `09-d-platform-saas-architecture.md` | Flowchart | Scenes 2 + 4 + 5 | Current MCP server (✅ REAL) + future SaaS vision (🔮 VISION) + honest assessment truth table |
+| `01-d-c4-container-full-system.md` | C4-Container | Scene 2 — Current architecture context | Full system showing the MCP server and 4-tier stack that already exists |
 
-> **Video Producer:** Import `09-d-platform-saas-architecture.mmd` as the PRIMARY source alongside this prompt in NotebookLM. This diagram contains THREE sub-graphs with honest ✅/🔮 badges: (1) Current Reality — everything green/solid (MCP Server, 29 tools, multi-tenant middleware, governance), (2) Future Vision — everything purple/translucent (HTTP transport, org portal, multi-IDE, marketplace), (3) Honest Assessment — truth table summary. Phase 1 renders the REAL stack (green border). Phase 2 EXPANDS it with the vision overlay (purple border, translucent). Phase 3 renders the truth table. Import `01-d-c4-container-full-system.mmd` for supplementary architecture context.
+> **Video Producer:** Import `09-d-platform-saas-architecture.md` as the PRIMARY source alongside this prompt in NotebookLM. This diagram contains THREE sub-graphs with honest ✅/🔮 badges: (1) Current Reality — everything green/solid (MCP Server, 29 tools, multi-tenant middleware, governance), (2) Future Vision — everything purple/translucent (HTTP transport, org portal, multi-IDE, marketplace), (3) Honest Assessment — truth table summary. Phase 1 renders the REAL stack (green border). Phase 2 EXPANDS it with the vision overlay (purple border, translucent). Phase 3 renders the truth table. Import `01-d-c4-container-full-system.md` for supplementary architecture context.
 
 **Diagram: Orchestrator Galaxy (Image Prompt 02)**
 - Flow direction: Center → Outward (MasterOrchestrator → Tiers)

@@ -146,10 +146,10 @@ The sphere (now green) enters the final chamber — a **git timeline**. It merge
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `06-d-mcp-request-lifecycle-sequence.mmd` | Sequence | Scenes 2–4 — The Request Particle Journey | Full MCP request lifecycle — the request particle tracks this exact sequence |
-| `01-d-c4-container-full-system.mmd` | C4-Container | Scene 4 cameo | System context showing where the request flows within the 4-tier stack |
+| `06-d-mcp-request-lifecycle-sequence.md` | Sequence | Scenes 2–4 — The Request Particle Journey | Full MCP request lifecycle — the request particle tracks this exact sequence |
+| `01-d-c4-container-full-system.md` | C4-Container | Scene 4 cameo | System context showing where the request flows within the 4-tier stack |
 
-> **Video Producer:** Import `06-d-mcp-request-lifecycle-sequence.mmd` as the PRIMARY source alongside this prompt in NotebookLM. The sequence diagram shows the exact participant-to-participant flow the request particle follows. Each activation bar becomes the "station" where the cyan orb pauses. Import `01-d-c4-container-full-system.mmd` as supplementary context for the architecture overview cameo in Scene 4.
+> **Video Producer:** Import `06-d-mcp-request-lifecycle-sequence.md` as the PRIMARY source alongside this prompt in NotebookLM. The sequence diagram shows the exact participant-to-participant flow the request particle follows. Each activation bar becomes the "station" where the cyan orb pauses. Import `01-d-c4-container-full-system.md` as supplementary context for the architecture overview cameo in Scene 4.
 
 **Diagram: Request Journey Map (Image Prompt 05) — PRIMARY DIAGRAM FOR THIS VIDEO**
 - This video IS the animated version of Image Prompt 05

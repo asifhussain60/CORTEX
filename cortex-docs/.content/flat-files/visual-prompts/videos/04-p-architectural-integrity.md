@@ -204,10 +204,10 @@ Series badge: **"CORTEX: The Enterprise Intelligence Series — Video 04 of 10"*
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `04-d-audit-pipeline-stages.mmd` | Flowchart | Scene 2 — The 9-Stage Pipeline | Complete `/audit fix` pipeline with convergence loop and audit trail |
-| `02-d-governance-tdd-enforcement-flow.mmd` | Flowchart | Scene 4 — Sweep Completeness (context) | Governance enforcement context — how violations are detected before the sweep |
+| `04-d-audit-pipeline-stages.md` | Flowchart | Scene 2 — The 9-Stage Pipeline | Complete `/audit fix` pipeline with convergence loop and audit trail |
+| `02-d-governance-tdd-enforcement-flow.md` | Flowchart | Scene 4 — Sweep Completeness (context) | Governance enforcement context — how violations are detected before the sweep |
 
-> **Video Producer:** Import `04-d-audit-pipeline-stages.mmd` as the PRIMARY source alongside this prompt in NotebookLM. This is the hero diagram for the entire video — the vertical 9-stage pipeline with the convergence loop is the KEY visual. The frontmatter `animation_notes` describe: particle descent through stages, the convergence loop circular track (3 iterations: 12→5→1→0), and the audit trail logging. Import `02-d-governance-tdd-enforcement-flow.mmd` as supplementary context for how governance violations are detected before they enter the sweep pipeline.
+> **Video Producer:** Import `04-d-audit-pipeline-stages.md` as the PRIMARY source alongside this prompt in NotebookLM. This is the hero diagram for the entire video — the vertical 9-stage pipeline with the convergence loop is the KEY visual. The frontmatter `animation_notes` describe: particle descent through stages, the convergence loop circular track (3 iterations: 12→5→1→0), and the audit trail logging. Import `02-d-governance-tdd-enforcement-flow.md` as supplementary context for how governance violations are detected before they enter the sweep pipeline.
 
 ---
 

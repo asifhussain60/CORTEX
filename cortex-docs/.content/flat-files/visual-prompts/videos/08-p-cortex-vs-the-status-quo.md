@@ -203,9 +203,9 @@ Logo pulse. Final watermark. End.
 
 | Diagram File | Type | Scene Reference | Purpose |
 |---|---|---|---|
-| `08-d-urs-learning-feedback-loop.mmd` | Flowchart | Scene 2 — URS Learning Cycle + Scenes 3–5 — Transformation Timeline | Circular URS loop (Action→Outcome→Signal→Adaptation) + Week 1/4/12 metrics + multi-team compound effect |
+| `08-d-urs-learning-feedback-loop.md` | Flowchart | Scene 2 — URS Learning Cycle + Scenes 3–5 — Transformation Timeline | Circular URS loop (Action→Outcome→Signal→Adaptation) + Week 1/4/12 metrics + multi-team compound effect |
 
-> **Video Producer:** Import `08-d-urs-learning-feedback-loop.mmd` alongside this prompt in NotebookLM. This diagram contains THREE sub-graphs: (1) URS Learning Cycle → Scene 2 circular diagram, (2) Transformation Timeline → Scenes 1, 3, 4 dashboard metrics, (3) Compound Effect Multi-Team → Scene 5 three-team visualization. The frontmatter `animation_notes` describe: particle orbiting the 4-station loop, dashboard evolution from dim→green across weeks, and knowledge flow arrows between teams. After 3 full orbits, the camera zooms out to reveal the compound effect.
+> **Video Producer:** Import `08-d-urs-learning-feedback-loop.md` alongside this prompt in NotebookLM. This diagram contains THREE sub-graphs: (1) URS Learning Cycle → Scene 2 circular diagram, (2) Transformation Timeline → Scenes 1, 3, 4 dashboard metrics, (3) Compound Effect Multi-Team → Scene 5 three-team visualization. The frontmatter `animation_notes` describe: particle orbiting the 4-station loop, dashboard evolution from dim→green across weeks, and knowledge flow arrows between teams. After 3 full orbits, the camera zooms out to reveal the compound effect.
 
 ---
 
