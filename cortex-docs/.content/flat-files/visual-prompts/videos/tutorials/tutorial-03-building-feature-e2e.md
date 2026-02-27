@@ -17,6 +17,113 @@
 
 ---
 
+## CINEMATIC SIMULATION NOTES — T03: Building a Feature End-to-End
+
+### Visual Physics & Ambience Protocol (Tutorial Amber Theme)
+- **Environment:** Dark-blue vacuum (#0a0e27) with ray-traced reflections on glass floor
+- **Accent neon:** Warm amber (#f5a623) for step borders and progress; RED (#ff4757) / GREEN (#2ecc71) / BLUE (#00d4ff) for TDD phase heartbeat
+- **Code panels:** Frosted glassmorphism with 3px amber left border, JetBrains Mono at readable size; active line highlighted with amber glow
+- **ECG heartbeat:** Thin neon line across bottom of frame — pulses RED during failing tests, GREEN during passing, BLUE during refactor (callbacks to Video 04 concept)
+- **Lighting:** Volumetric fog, ray-traced caustics from TDD phase colors, bioluminescent test particles
+- **Feedback cues:** RED flash = test failure (expected in TDD), GREEN flash = test pass, holographic glitch = governance violation, Lidar sweep = LENS scan
+- **Temporal evolution:** Environment evolves through TDD phases: dim red (RED phase) → warm green (GREEN phase) → cool blue (REFACTOR) → amber (governance) → full amber luminosity (commit)
+
+**SCENE 1 — "The Awakening" (0:00–0:04)**
+Camera: Static center-frame, locked on ray-traced glassmorphism floor.
+Environment: Absolute dark-blue vacuum (#0a0e27) with volumetric amber fog at ground level.
+CORTEX logo fades in as hero image with amber electric-aura. Hold 3s. Logo shrinks to
+bottom-right watermark with amber "TUTORIAL" label. ECG heartbeat line ignites across
+bottom of frame — flat amber line, waiting for TDD to begin.
+
+**SCENE 2 — "The Scenario" (0:04–0:30)**
+Camera: Slow dolly-in toward a glassmorphic brief card assembling with time-lapse
+mechanical construction. Feature description materializes with particle condensation:
+"Add input validation to a user registration endpoint." Stack badges (Python, FastAPI)
+glow with amber neon. Workflow preview appears as a faint holographic roadmap beneath:
+TEST → IMPLEMENT → REFACTOR → GOVERN → LENS → AUDIT → COMMIT — seven stations,
+all dim, waiting to illuminate.
+
+**SCENE 3 — "RED Phase: Write the Test First" (0:30–2:00)**
+Camera: Slow dolly-in to code panel. ECG heartbeat shifts to RED neon (#ff4757) —
+pulsing rhythm. Volumetric red fog rises at floor level.
+Code panel materializes with time-lapse assembly — amber left border, JetBrains Mono.
+Test code types character by character with bioluminescent red cursor trail. Each line
+of assertion code gains a subtle red neon underline.
+`make test-changed` executes — RED ❌ failure output with holographic glitch effect.
+The failure message floats as a holographic card with ray-traced red glass surface.
+ECG heartbeat flatlines briefly, then resumes red pulse — the test is real.
+Workflow roadmap: "TEST" station illuminates red.
+
+**SCENE 4 — "GREEN Phase: Implement the Minimum" (2:00–3:30)**
+Camera: Tracking shot, code panel scrolls. ECG heartbeat transitions RED → GREEN
+(#2ecc71) with a color-shift wave along the neon line.
+Implementation code types with green cursor trail. Pydantic model assembles —
+`EmailStr` highlights with green neon emphasis (this is the key validation).
+`make test-changed` executes — GREEN ✅. Bioluminescent green particle celebration:
+sparks rise from the test output and fade. ECG heartbeat pulses steady green.
+Ray-traced green caustics ripple across the glass floor.
+Workflow roadmap: "IMPLEMENT" station illuminates green.
+
+**SCENE 5 — "REFACTOR Phase: Improve with Confidence" (3:30–4:30)**
+Camera: Slow dolly-out with parallax shift. ECG heartbeat transitions to BLUE (#00d4ff).
+Volumetric blue fog replaces green.
+Code refactors: `InputValidator` class materializes — code blocks rearrange with
+smooth glassmorphic slide animations (panels detach, reconfigure, and re-seal).
+New test methods appear with blue cursor trail. `make test-changed` — all GREEN ✅.
+ECG heartbeat pulses blue — stable, confident rhythm.
+Workflow roadmap: "REFACTOR" station illuminates blue.
+
+**SCENE 6 — "Governance Validation" (4:30–5:30)**
+Camera: Pull-back to workspace view. ECG returns to amber (tutorial accent).
+`/audit` runs — governance check results materialize as glassmorphic cards:
+✅ checks appear with green flash, ⚠️ warning appears with holographic glitch
+(missing edge case test). The warning card pulses amber — not red (it's a catch,
+not a failure).
+Fix: additional test types with amber cursor trail. Re-run governance: all GREEN ✅.
+Holographic glitch clears — steady amber glow replaces it.
+Workflow roadmap: "GOVERN" station illuminates amber.
+
+**SCENE 7 — "LENS Intelligence" (5:30–6:15)**
+Camera: Macro zoom on LENS scan output panel.
+LENS beam sweeps across the codebase (Lidar scan animation — amber laser line sweeps
+left to right). Pattern detection cards materialize with particle condensation:
+"Validator pattern (0.87)" floats as holographic confidence badge with ray-traced
+glass surface. Dependency check and coverage estimate appear as smaller holographic cards.
+Bioluminescent knowledge particles flow from LENS scan into the pattern card,
+brightening it — particle evolution from dim amber to rich gold.
+Workflow roadmap: "LENS" station illuminates gold.
+
+**SCENE 8 — "Full Audit Fix" (6:15–7:30)**
+Camera: Slow orbital drift around the workspace.
+`/audit fix` runs — 9-stage pipeline materializes as vertical track (amber neon,
+tutorial identity). Each stage illuminates sequentially with amber pulse → green
+completion flash. Ray-traced caustics cascade from each stage to the next.
+Convergence counter: holographic "1 iteration → 0 violations" with green flash.
+AC_COMPLETE badge materializes with holographic shimmer and amber glow.
+Workflow roadmap: "AUDIT" station illuminates green.
+
+**SCENE 9 — "The Commit" (7:30–8:15)**
+Camera: Dolly-in to terminal panel.
+`git commit` command with conventional message types — commit message is visible
+through frosted glass with amber neon emphasis on the `feat(auth):` prefix.
+Pre-commit hook fires: governance rules flash green in rapid sequence (Lidar sweep).
+Commit accepted — green flash with bioluminescent celebration particles.
+Git timeline materializes as a glassmorphic horizontal track — the new commit glows
+amber at the head, previous commits dim behind it with parallax depth.
+Workflow roadmap: "COMMIT" station illuminates green — all 7 stations now lit.
+
+**SCENE 10 — "The Complete Workflow" (8:15–9:00)**
+Camera: 360-degree orbital pan at 30° downward angle with parallax depth.
+Full workflow roadmap now fully illuminated: TEST (red→green) → IMPLEMENT (green) →
+REFACTOR (blue) → GOVERN (amber) → LENS (gold) → AUDIT (green) → COMMIT (green).
+ECG heartbeat pulses steady green — healthy, complete. All glassmorphic panels and
+code panels visible in the background with ray-traced reflections creating depth.
+Glassmorphic completion card assembles — workflow steps listed with checkmarks.
+Amber arrow with particle trail: "Tutorial 4 →"
+Fade to black with ECG flatline (gentle, not dramatic) and ray-traced reflections dimming.
+
+---
+
 ## PROMPT
 
 Create a ~9-minute tutorial video titled **"Building a Feature End-to-End"** using the amber/gold tutorial theme. Walk through implementing a real feature from request to commit using CORTEX's full engineering discipline.

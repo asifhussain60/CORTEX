@@ -17,6 +17,82 @@
 
 ---
 
+## CINEMATIC SIMULATION NOTES — T01: Installation & First Run
+
+### Visual Physics & Ambience Protocol (Tutorial Amber Theme)
+- **Environment:** Dark-blue vacuum (#0a0e27) — SAME as concept videos — with ray-traced reflections on glass floor
+- **Accent neon:** Warm amber (#f5a623) neon filaments replace cyan for step borders, highlights, and progress bars
+- **Code panels:** Frosted glassmorphism with 3px amber left border, JetBrains Mono at readable size, ray-traced surface reflections
+- **Step transitions:** Amber progress bar fills with particle condensation between steps; completed steps emit green (#7ed321) checkmark with bioluminescent flash
+- **Lighting:** Volumetric amber fog at ground level, ray-traced caustics from amber neon sources
+- **Feedback cues:** Green flash + chime = step complete, amber pulse = in progress, holographic glitch = error state
+- **Temporal evolution:** Each completed step brightens the environment — Scene 1 is dim, Scene 6 is fully lit with warm amber luminosity
+
+**SCENE 1 — "The Awakening" (0:00–0:04)**
+Camera: Static center-frame, locked on ray-traced glassmorphism floor.
+Environment: Absolute dark-blue vacuum (#0a0e27) with volumetric amber fog drifting at ground level.
+CORTEX logo (cortex-logo.png) fades in as large central hero image with electric-aura glow —
+amber (#f5a623) pulse radiates outward instead of cyan (tutorial identity). Ray-traced
+reflections shimmer on the floor in warm tones. Hold 3s.
+Logo shrinks to bottom-right watermark (15% opacity) with ease-out parallax slide.
+Small amber label "TUTORIAL" materializes next to the watermark with particle condensation.
+
+**SCENE 2 — "Prerequisites Checklist" (0:04–1:00)**
+Camera: Slow dolly-in toward a glassmorphic checklist panel assembling with time-lapse
+mechanical construction — glass panes slide in from edges and seal together. Four checklist
+rows with amber step-number circles (#f5a623 background, dark text). Each row materializes
+with particle condensation: Python 3.9+, VS Code, Git, GitHub Copilot.
+Code panel appears beside each item with amber left border — `python3 --version` output
+types character by character with bioluminescent cursor trail.
+As each prerequisite verifies, the amber circle transforms to green (#7ed321) checkmark
+with a bioluminescent flash and ray-traced caustics rippling across the glass surface.
+
+**SCENE 3 — "Clone & Configure" (1:00–3:15)**
+Camera: FPV tracking shot following amber particle stream from checklist to a new
+glassmorphic terminal panel. Terminal materializes with time-lapse mechanical assembly —
+frame first, then frosted glass fills in.
+`git clone` command types with amber cursor trail. Output scrolls with volumetric light
+bloom on each line. Progress bar fills amber with particle condensation animation.
+`pip install` output scrolls — packages appear as small glassmorphic cards that stack
+and settle with parallax physics, each glowing amber briefly on arrival.
+MCP setup: `setup-mcp.py` runs — three glassmorphic info cards materialize with particle
+condensation (OS detection, settings.json config, stdio transport). Each card has amber
+neon filaments. Lidar sweep across all three confirms configuration with green flash.
+Camera: Macro zoom on `.vscode/settings.json` — the MCP configuration block highlights
+with amber glow, internal JSON structure visible through frosted glass.
+
+**SCENE 4 — "First Command: /audit fix" (3:15–5:30)**
+Camera: Slow dolly-out revealing a VS Code workspace panel (glassmorphic representation).
+Copilot Chat opens — `/audit fix` types with amber cursor. The 9-stage pipeline materializes
+as a vertical track of glassmorphic nodes with amber neon connections (callbacks to Video 05
+diagram, but in tutorial amber instead of concept cyan).
+Temporal evolution in action: Each stage node illuminates sequentially — amber pulse on
+active stage, green (#7ed321) flash on completion, stages dim to 60% opacity once passed.
+Ray-traced caustics from each active stage ripple across the glass floor.
+If violations appear: holographic glitch on violation cards (red neon flicker), then
+convergence loop animation — red sparks physically filter out with each iteration,
+replaced by steady amber hum. Transformation timeline: violation count descends
+holographically (3 → 1 → 0) with each loop.
+AC_COMPLETE materializes as a holographic badge with amber shimmer and timestamp.
+
+**SCENE 5 — "Output Comprehension" (4:30–5:30)**
+Camera: Macro zoom hero moment on the output panel. Five sections highlight sequentially
+with slow dolly-in on each: stage progress, violations table, convergence log, test results,
+audit trail. Each section gains amber neon border emphasis when active, dims when camera
+moves on. Ray-traced reflections of the active section shimmer on adjacent glass panels.
+
+**SCENE 6 — "Smoke Test Victory" (5:30–6:00)**
+Camera: Pull-back to full workspace view. `make test-smoke` types. Green output cascades
+with bioluminescent particle celebration — green sparks rise and fade. Duration badge
+materializes as holographic floating card: "< 60 seconds."
+Closing glassmorphic completion card assembles with time-lapse mechanical construction:
+four checkmark rows (installed, MCP configured, first audit complete, tests passing)
+each illuminate green with bioluminescent flash.
+Amber arrow pointing right materializes with particle trail: "Tutorial 2 →"
+Final fade to black with ray-traced reflections dimming.
+
+---
+
 ## PROMPT
 
 Create a ~6-minute tutorial video titled **"Installation & First Run"** using the amber/gold tutorial theme.

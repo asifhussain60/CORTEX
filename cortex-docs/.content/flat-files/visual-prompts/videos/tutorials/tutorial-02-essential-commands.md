@@ -17,6 +17,107 @@
 
 ---
 
+## CINEMATIC SIMULATION NOTES — T02: Essential Commands
+
+### Visual Physics & Ambience Protocol (Tutorial Amber Theme)
+- **Environment:** Dark-blue vacuum (#0a0e27) with ray-traced reflections on glass floor
+- **Accent neon:** Warm amber (#f5a623) neon filaments for command card borders, highlights, progress
+- **Command cards:** Frosted glassmorphism with amber icon glow, ray-traced surface reflections, internal neon circuitry
+- **Transitions:** Active command card elevates with parallax depth + amber volumetric spotlight; inactive cards dim to 40% opacity
+- **Lighting:** Volumetric amber fog, ray-traced caustics from active command neon, bioluminescent data particles
+- **Feedback cues:** Green flash = success output, holographic glitch = violation/error, amber pulse = command executing
+- **Temporal evolution:** Command grid starts dark; each demonstrated command permanently illuminates its card — by Scene 10 the full grid glows
+
+**SCENE 1 — "The Awakening" (0:00–0:04)**
+Camera: Static center-frame, locked on ray-traced glassmorphism floor.
+Environment: Absolute dark-blue vacuum (#0a0e27) with volumetric amber fog at ground level.
+CORTEX logo (cortex-logo.png) fades in as large central hero image with electric-aura
+glow — amber (#f5a623) pulse radiates outward. Ray-traced reflections shimmer in warm
+tones. Hold 3s. Logo shrinks to bottom-right watermark (15% opacity) with ease-out
+parallax slide. Amber "TUTORIAL" label materializes beside watermark.
+
+**SCENE 2 — "The Command Landscape" (0:04–1:00)**
+Camera: Slow orbital drift above, looking down at 45° angle.
+8 glassmorphic command cards materialize in a 2×4 grid with time-lapse mechanical
+assembly — each card frame constructs first, then frosted glass fills in, then amber
+icon ignites with neon filament glow. Cards are initially dim (30% luminosity) —
+they will illuminate as each command is demonstrated.
+Ray-traced reflections of the card grid shimmer on the glass floor below. Volumetric
+amber fog drifts between cards. Each card has a small amber icon and one-line description
+visible through the frosted glass.
+Camera: Slow macro zoom on the grid, then pull-back to establish the landscape.
+
+**SCENE 3 — "/audit fix Deep Dive" (1:00–2:15)**
+Camera: Dolly-in toward the `/audit fix` card — card elevates with parallax depth
+separation and amber volumetric spotlight illuminates from above. Other cards dim.
+Split demonstration: LEFT panel shows clean run (all stages green with bioluminescent
+cascade), RIGHT panel shows failing run (governance violation with holographic glitch →
+convergence loop with transformation timeline: red sparks shed → green stabilization).
+Ray-traced caustics from the violation-to-fix transition ripple across the glass floor.
+Card permanently illuminates to full amber glow after demonstration. Camera pulls back
+to grid — 1 of 8 cards now lit.
+
+**SCENE 4 — "/audit Scan-Only" (2:15–2:45)**
+Camera: Dolly-in to `/audit` card — elevates with amber spotlight.
+Glassmorphic output panel materializes with particle condensation — violations table
+with "Remediation suggested" column. Rows populate with amber text and severity badges
+(P0 red, P1 amber, P2 blue). No auto-fix animation — violations remain visible,
+emphasizing deliberate choice.
+Card illuminates. Pull-back to grid — 2 of 8 lit.
+
+**SCENE 5 — "/vacuum Cleanup" (2:45–3:30)**
+Camera: FPV tracking shot to `/vacuum` card — elevates with spotlight.
+Before/after split: LEFT shows cluttered file tree with red holographic highlights on
+orphaned files, RIGHT shows clean tree with green glow. Transition: orphaned files
+fragment into particles and dissolve — particle stream flows to an amber "ARCHIVED"
+badge. Bioluminescent cleanup sweep moves through the tree.
+Card illuminates — 3 of 8 lit.
+
+**SCENE 6 — "/health Check" (3:30–4:00)**
+Camera: Dolly-in to `/health` card.
+Glassmorphic health grid materializes — 22 orchestrator nodes in a honeycomb layout.
+Each node pings with amber pulse and returns green (healthy), amber (warning), or red
+(error) with appropriate neon glow. Lidar sweep across the grid confirms status.
+Summary badge materializes as holographic floating card with counts.
+Card illuminates — 4 of 8 lit.
+
+**SCENE 7 — "/digest Ingestion" (4:00–4:45)**
+Camera: Slow dolly to `/digest` card.
+Three-pipeline visualization: three parallel glassmorphic tubes with amber neon,
+bioluminescent data particles flow through each (structure analysis, content extraction,
+knowledge integration). Particles converge at a central knowledge node that brightens
+with each particle absorbed — particle evolution from raw amber to rich gold.
+Card illuminates — 5 of 8 lit.
+
+**SCENE 8 — "/challenge Alternatives" (4:45–5:30)**
+Camera: FPV approach to `/challenge` card — macro zoom hero moment.
+Developer request materializes as holographic text. Three glassmorphic alternative cards
+fan out with time-lapse assembly — each card has amber neon border with pros/cons lists
+visible through frosted glass. Trade-off matrix materializes as a holographic grid with
+ray-traced reflections — recommended approach highlighted with amber volumetric pulse.
+Card illuminates — 6 of 8 lit.
+
+**SCENE 9 — "/debug Pipeline" (5:30–6:15)**
+Camera: Tracking shot to `/debug` card.
+Five-phase pipeline materializes as a linear track of glassmorphic nodes: INJECT →
+CAPTURE → ANALYZE → FIX-PLAN → CLEANUP. Bioluminescent particle travels through
+each phase — at INJECT, debug markers appear as amber holographic pins; at CLEANUP,
+the pins dissolve with particle fragmentation, leaving no trace. Ray-traced caustics
+emphasize the clean removal.
+Card illuminates — 7 of 8 lit.
+
+**SCENE 10 — "Testing Commands & Reference Card" (6:15–7:00)**
+Camera: Pull-back orbital view of the full grid.
+Final card (testing commands) illuminates — 8 of 8 now lit. The full command grid
+glows with warm amber luminosity. Ray-traced reflections of the fully-lit grid create
+a warm amber pool on the glass floor below.
+Glassmorphic reference card assembles with time-lapse construction — all 8 commands
+with icons, descriptions, and "when to use" context. Holographic shimmer on the card
+surface. Amber arrow with particle trail: "Tutorial 3 →"
+Fade to black with ray-traced reflections dimming last.
+
+---
+
 ## PROMPT
 
 Create a ~7-minute tutorial video titled **"Essential Commands"** using the amber/gold tutorial theme. Walk through the commands a developer uses every day.
