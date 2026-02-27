@@ -1,4 +1,3 @@
-Chapter 4: The Orchestra Conductor
 The Seven-Department Spaghetti Incident
 It was a quiet Tuesday until Jennifer from Customer Success submitted a "simple" request: "Update the customer profile to include preferred language."
 

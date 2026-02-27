@@ -1,4 +1,3 @@
-Chapter 2: The Hotel Receptionist
 Wednesday Morning, 3:47 AM
 The basement was a cathedral of low-level hums, scented with the musk of energized dust and the lingering ghost of yesterday’s super-spicy ramen. Asif Codenstein, his hair possessing a kinetic energy that suggested he was personally grounding the house's electrical supply, stared at his monitors with vibrating intensity. He was having an existential crisis. Not about life—life was binary (coffee/code)—but about the fundamental treachery of human language.
 

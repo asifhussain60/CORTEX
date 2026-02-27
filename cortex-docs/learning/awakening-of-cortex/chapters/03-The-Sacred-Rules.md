@@ -1,4 +1,3 @@
-Chapter 3: The Building Inspector and the 29 Sacraments
 It started, as most tech catastrophes do, with a senior developer who was absolutely certain his code was "blessed" because it compiled on the first try.
 
 Kyle was that senior developer. He knew the codebase the way a tourist knows a city—he’d visited the main attractions, taken selfies at the architecture landmarks, but had never once ventured into the back alleys where the real documentation-less monsters lived.
