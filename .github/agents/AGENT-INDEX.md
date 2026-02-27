@@ -2,7 +2,7 @@
 
 **Updated:** 2026-02-27 | **Purpose:** Lazy loading + intent-based agent selection  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 84 complete · Phase 85 (Response+Engagement) PLANNED · Phase 86 (Multi-Stack Debug) PLANNED
+**Phases:** 87 complete — Phase 85 (Response+Engagement) ✅ · Phase 86 (Multi-Stack Debug) ✅ · Phase 87 (RCA Memory Engine) ✅
 
 ---
 
@@ -39,15 +39,16 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | Metric | Value |
 |--------|-------|
 | Orchestrators | **51 wired** across 4 tiers (17 core, 7 domain, 23 support, 4 git) |
-| MCP Tools | **28 registered** (39 target) MCP tools in `cortex/mcp/tools/` |
+| MCP Tools | **29 registered** (39 target) MCP tools in `cortex/mcp/tools/` |
 | CORE Rules | **38 active** CORE governance rules (+ 2 AC rules) |
 | Package | `cortex` (single) |
 | Tests | **16,942** collected |
-| Entry Point | MasterOrchestrator → IntentRouter → Domain Orchestrator |
-| URS | Unified Reinforcement Signal — closed-loop learning (Phase 83, `cortex_learning` tool) |
-| Debug Strategies | 8 total: 3 Python + 5 multi-stack (Phase 86 — Frontend/HTML-Vision/API/SQL/DotNet) |
-| Response Format | phase-list+bar mandatory (Phase 85); SSOT: `.github/templates/cortex-response-templates.md` |
-| Engagement Blocks | BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP (Phase 85) |
+| Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
+| URS | Unified Reinforcement Signal — closed-loop learning (Phase 83, `cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
+| RCA Engine | Phase 87 — 4 methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain (`cortex/intelligence/learning/rca_engine.py`) |
+| Debug Strategies | 8 total: 3 Python + 5 multi-stack ✅ Phase 86 complete (Frontend/HTML-Vision/API/SQL/DotNet) |
+| Response Format | phase-list+bar mandatory ✅ Phase 85 complete; SSOT: `.github/templates/cortex-response-templates.md` |
+| Engagement Blocks | BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP ✅ Phase 85 complete |
 
 ---
 
@@ -81,7 +82,8 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 | **cortex-gitpages-builder.md** | GitHub Pages deployment | Site publishing |
 | **request-rephrase-orchestrator.md** | Request token optimization | `/rephrase` command |
 | **architecture-integrity-agent.md** | Wiring alignment enforcement | Pre-commit, CI/CD |
-| **cortex-debugger.md** | Multi-stack debugging: 8 strategies + Vision API + auto-cleanup (Phase 86 — PLANNED) | `/debug`, "trace", "diagnose" |
+| **cortex-debugger.md** | Multi-stack debugging: 8 strategies + Vision API + auto-cleanup ✅ Phase 86 complete | `/debug`, "trace", "diagnose" |
+| **cortex-learning** (via `cortex_learning` op=`rca`) | Phase 87 RCA Memory Engine: root cause analysis (4 methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain) | "root cause", "why did it fail", "rca", `/rca` |
 
 ### Support Files
 
@@ -170,6 +172,10 @@ are resolved or explicitly approved as WONT-FIX.
 | **DEBUG** | cortex-debugger.md + cortex-auditor.md | ~5,000 |
 | **HEALTH** | cortex-auditor.md (Check #11) | ~3,500 |
 | **SYNC** | cortex-sync.prompt.md + cortex-sync-agent.md | ~6,000 |
+| **TRAIN** | cortex-trainer.md + cortex-sts-refactoring.md | ~6,500 |
+| **TOTALRECALL** | cortex-architect.prompt.md + totalrecall.md (self-contained 7-phase protocol) | ~4,500 |
+| **RCA** | cortex-architect.prompt.md + `cortex_learning` op=`rca` | ~3,500 |
+| **GOLDEN_TEST** | cortex-executor.md + cortex-holistic-validator.md | ~5,500 |
 
 > **Default context:** `cortex-architect.prompt.md` only (~2,700 tokens). Load specialist agents on-demand per intent above.
 

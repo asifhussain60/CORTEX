@@ -55,8 +55,16 @@ User Request → MasterOrchestrator.coordinate_operation()
 | DESIGN | DesignCoordinator | "architect", "design" |
 | PLAN | PlanningCoordinator | "plan", "phase" |
 | DIGEST | DigestCoordinator | "summarize", "digest", "ingest" |
-| INVESTIGATE | InvestigationOrchestrator | "investigate", "root cause" |
+| INVESTIGATE | InvestigationOrchestrator | "investigate", "analyze" |
 | REPHRASE | RequestRephraseOrchestrator | "rephrase" |
+| VACUUM | VacuumOrchestrator | `/vacuum`, "clean up", "markdown sprawl" |
+| DEBUG | DebuggerOrchestrator | `/debug`, "debug", "trace", "diagnose" |
+| HEALTH | HealthOrchestrator | `/health`, "health check", "orchestrator status" |
+| SYNC | GitOrchestrator + WorkflowOrchestrator | `/sync`, "sync to company", "privacy-safe copy" |
+| TRAIN | TrainerOrchestrator | `/train`, "learn from repo", "evolve templates" |
+| TOTALRECALL | MasterOrchestrator (7-phase) | `/totalrecall`, "total recall", "holistic refactor" |
+| RCA | InvestigationOrchestrator + RCAEngine | "root cause", "why did it fail", "five whys", "rca" |
+| GOLDEN_TEST | TDDOrchestrator | "golden test", "workflow template", "acceptance criteria" |
 
 ### DoR Display (Mandatory before execution)
 

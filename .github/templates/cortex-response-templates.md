@@ -1615,6 +1615,13 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 | **IMPLEMENT** (pre-approval) | `⚡ CORTEX IMPLEMENT` | All 5 sections (challenge gate) | Medium |
 | **IMPLEMENT** (post-approval) | Silent autonomous | Golden autonomous template (§ Silent Autonomous Mode) | Progress bars only |
 | **COMPLETION** | Inline summary | Summary + deliverables + metrics | Simple |
+| **DEBUG** | `🐛 CORTEX DEBUG` | Summary + Analysis (8 strategies, stack detection) + Error Recovery | Full |
+| **HEALTH** | `🩺 CORTEX HEALTH` | Summary + Analysis (orchestrator status table, 22 endpoints) | Concise |
+| **VACUUM** | `🧹 CORTEX VACUUM` | Summary + Analysis (files archived/deleted, root clutter) | Concise |
+| **SYNC** | `🔄 CORTEX SYNC` | Summary + Analysis (4-gate pipeline: PULL→DIFF→SANITIZE→MERGE) | Medium |
+| **TRAIN** | `🎓 CORTEX TRAIN` | Summary + Analysis + Recommendation (template evolution proposals) | Full |
+| **TOTALRECALL** | `🔁 CORTEX TOTALRECALL` | All 5 sections (7-phase protocol: INVENTORY→CONTRADICTION→ARCHITECTURE→RECOMMENDATION→IMPLEMENTATION→REGRESSION→VERIFICATION) | Full |
+| **RCA** | `🧠 CORTEX RCA` | Summary + Analysis (methodology, cause chain, prevention rule) + Recommendation | Full |
 
 ### Mode-Specific H3 Extensions
 
@@ -1636,6 +1643,30 @@ All non-autonomous user responses follow the **5-Section Golden Format** defined
 
 **QUERY mode** — keep simple:
 - Skip H3 sub-sections unless question requires deep analysis
+
+**DEBUG mode** — add under Analysis:
+- `### Stack Detection` — language/framework auto-detected, strategy selected from 8 options
+- `### Error Recovery` — fix plan steps with file:line references and rollback notes
+
+**HEALTH mode** — add under Analysis:
+- `### Orchestrator Status Table` — 22 endpoints: name | status | latency | last_check
+
+**VACUUM mode** — add under Analysis:
+- `### Cleanup Manifest` — files archived | files deleted | root clutter removed | .md sprawl reduced
+
+**SYNC mode** — add under Analysis:
+- `### Gate Results` — PULL ✅ | DIFF ✅ | SANITIZE ✅ | MERGE ✅ (or ❌ with reason per gate)
+
+**TRAIN mode** — add under Recommendation:
+- `### Template Evolution Proposals` — numbered list of template changes with gap→solution→effort
+
+**TOTALRECALL mode** — add under Analysis:
+- `### Numeric Drift Report` — canonical value vs. claimed value vs. drift magnitude per artifact
+- `### Contradiction Map` — file | claim | truth | resolution
+
+**RCA mode** — add under Analysis:
+- `### Cause Chain` — methodology used (Five-Whys/Fishbone/Fault-Tree/Causal-Chain) + chain table
+- `### Prevention Rule` — auto-generated ADVISORY rule from RCA conclusion
 
 ### LIST/SUMMARY Mode (Concise Response Template)
 

@@ -339,6 +339,18 @@ PRODUCTION_TOOLS: Dict[str, Dict[str, Any]] = {
         ],
         "operations": ["list", "status", "invoke", "health_check"],
     },
+    "cortex_learning": {
+        "description": "Unified Reinforcement Signal (URS) — closed-loop learning + Phase 87 RCA Memory Engine. Emit signals, query history, manage decay/promotion/quarantine, run root cause analysis across 4 methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain).",
+        "category": ToolCategory.INTELLIGENCE,
+        "parameters": [
+            {"name": "operation", "type": "string", "required": True, "enum": ["emit", "history", "decay", "promote", "quarantine", "metrics", "rca"], "description": "Learning operation — 'rca' runs Phase 87 Root Cause Analysis"},
+            {"name": "signal_type", "type": "string", "required": False, "description": "URS signal type (emit/promote/quarantine)"},
+            {"name": "data", "type": "object", "required": False, "description": "Signal payload or RCA parameters (failure_description, category, methodology)"},
+            {"name": "rca_action", "type": "string", "required": False, "enum": ["analyze", "query", "list"], "description": "RCA sub-action when operation='rca'"},
+            {"name": "rca_id", "type": "string", "required": False, "description": "RCA analysis ID for query operations"},
+        ],
+        "operations": ["emit", "history", "decay", "promote", "quarantine", "metrics", "rca"],
+    },
 }
 
 

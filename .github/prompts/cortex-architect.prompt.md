@@ -1,5 +1,5 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-27 (Total Recall — production readiness refactor) | **Architecture:** 51 Wired Orchestrators · 39 MCP Tools (28 registered) · 38 CORE Rules · 1 Package  
+**Updated:** 2026-02-27 (Phase 87 complete — RCA Memory Engine; Phases 85/86 complete) | **Architecture:** 51 Wired Orchestrators · 39 MCP Tools (29 registered) · 38 CORE Rules · 1 Package  
 **Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
 
 **🔗 References:**
@@ -35,15 +35,18 @@
 |---|---|
 | MasterOrchestrator | `cortex/orchestrators/core/master_orchestrator.py` |
 | IntentRouter | `cortex/orchestrators/core/intent_router.py` |
+| InteractionOrchestrator | `cortex/orchestrators/core/interaction_orchestrator.py` (Stage 1 LENS per-turn comprehension) |
 | TDDOrchestrator | `cortex/orchestrators/core/tdd_orchestrator.py` |
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base, Phase 58) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
-| MCP Tools (28 registered, 39 target) | `cortex/mcp/tools/` |
+| MCP Tools (29 registered, 39 target) | `cortex/mcp/tools/` |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
 | Intelligence Provider | `cortex/intelligence/provider.py` |
 | SweepCatalogueOrchestrator | `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` |
+| RCA Engine | `cortex/intelligence/learning/rca_engine.py` (Phase 87 — 4 methodologies) |
+| RCA Store | `cortex/intelligence/learning/rca_store.py` |
 
 **10 Orchestrator Domains:** core · domain · git · health · intelligence · strategies · support · synthesis · validation · workflow
 
@@ -148,26 +151,69 @@ cortex_load op=rules → RequestRephraseOrchestrator.analyze() [Stage 0 here]
 | DIGEST | 📚 | "summarize", "digest", "ingest" | DigestCoordinator | 🔵 | `cortex-digest.md` |
 | INVESTIGATE | 🔬 | "investigate", "analyze", "root cause" | InvestigationOrchestrator | ✅ | `cortex-architect.md` |
 | REPHRASE | 💬 | "rephrase" | RequestRephraseOrchestrator | ⚪ | — |
-| VACUUM | 🧹 | "/vacuum", "clean up", "markdown sprawl" | VacuumOrchestrator | ⚪ | `cortex-vacuum.md` |
-| HEALTH | 🩺 | "/health", "health check", "orchestrator status" | HealthOrchestrator | ⚪ | `cortex-auditor.md` |
-| DEBUG | 🐛 | "debug", "trace", "diagnose" | DebugOrchestrator | ✅ | `cortex-debugger.md` |
+| VACUUM | 🧹 | `/vacuum`, "clean up", "markdown sprawl" | VacuumOrchestrator | ⚪ | `cortex-vacuum.md` |
+| HEALTH | 🩺 | `/health`, "health check", "orchestrator status" | HealthOrchestrator | ⚪ | `cortex-auditor.md` |
+| DEBUG | 🐛 | `/debug`, "debug", "trace", "diagnose" | DebuggerOrchestrator | ✅ | `cortex-debugger.md` |
+| SYNC | 🔄 | `/sync`, "sync to company", "privacy-safe copy" | GitOrchestrator + WorkflowOrchestrator | ⚪ | `cortex-sync-agent.md` |
+| TRAIN | 🎓 | `/train`, "learn from repo", "evolve templates" | TrainerOrchestrator | 🔵 | `cortex-trainer.md` |
+| TOTALRECALL | 🔁 | `/totalrecall`, "total recall", "holistic refactor" | MasterOrchestrator (7-phase) | ✅ | `cortex-totalrecall.prompt.md` |
+| RCA | 🧠 | "root cause", "why did it fail", "rca" | InvestigationOrchestrator + RCAEngine | ✅ | `cortex-architect.md` |
+| GOLDEN_TEST | 🥇 | "golden test", "workflow template", "acceptance criteria" | TDDOrchestrator | ✅ | `cortex-executor.md` |
 
-### 🐛 DEBUG MODE — Multi-Stack Debug Pipeline (Phase 86 PLANNED)
+### 🐛 DEBUG MODE — Multi-Stack Debug Pipeline (Phase 86 ✅ complete)
 
 **Trigger:** "debug", "trace", "diagnose", `/debug`, `/debug-inject`, `/debug-cleanup`
 
-**Current:** 3 Python strategies live. 5 multi-stack strategies PLANNED in Phase 86.
+**Strategy Pattern:** 8 strategies registered in `MarkerInjectionEngine` — 3 existing Python + 5 multi-stack:
+- **TestFailureStrategy**, **RefactorRegressionStrategy**, **GovernanceViolationStrategy** — Python strategies ✅
+- **FrontendConsoleStrategy** — JS/TS/React/Angular/Vue console.log + DOM event tracing ✅
+- **HtmlVisionMappingStrategy** — Vision API screenshot → CSS selector → HTML element correlation ✅
+- **ApiTraceStrategy** — REST/GraphQL/gRPC request/response + header + timing injection ✅
+- **SqlTraceStrategy** — SQL Server/Oracle/PostgreSQL query plan + parameter + execution tracing ✅
+- **DotNetTraceStrategy** — C#/.NET method entry/exit + DI + middleware + async tracing ✅
 
-**Strategy Pattern:** 8 strategies registered in `MarkerInjectionEngine` — 3 existing + 5 Phase 86 PLANNED:
-- **FrontendConsoleStrategy** — JS/TS/React/Angular/Vue console.log + DOM event tracing *(Phase 86 PLANNED)*
-- **HtmlVisionMappingStrategy** — Vision API screenshot → CSS selector → HTML element correlation *(Phase 86 PLANNED)*
-- **ApiTraceStrategy** — REST/GraphQL/gRPC request/response + header + timing injection *(Phase 86 PLANNED)*
-- **SqlTraceStrategy** — SQL Server/Oracle/PostgreSQL query plan + parameter + execution tracing *(Phase 86 PLANNED)*
-- **DotNetTraceStrategy** — C#/.NET method entry/exit + DI + middleware + async tracing *(Phase 86 PLANNED)*
+**Workflow Template:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml`
+**Auto-Cleanup:** `AutoCleanupManager` with per-language strip patterns — all 5 stacks live.
 
-**Workflow Template:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml` *(Phase 86 PLANNED)*  
-**Phase Spec:** `cortex-registry/_cortex-master/phases/planned/phase-86-multi-stack-debug-pipeline.yaml`  
-**Auto-Cleanup:** `AutoCleanupManager` with per-language strip patterns — Python live; JS/TS/C#/SQL/HTML planned (Phase 86)
+### 🧠 RCA MODE — Root Cause Analysis (Phase 87 ✅ complete)
+
+**Trigger:** "root cause", "why did it fail", "rca", "five whys", "fishbone", "fault tree"
+
+**MCP Tool:** `cortex_learning` (op=`rca`, rca_action=`analyze|query|list`)
+
+**4 Methodologies:**
+- **Five-Whys** — TECHNOLOGY category failures (iterative cause chain)
+- **Fishbone (Ishikawa)** — PROCESS / PEOPLE failures (6-category cause diagram)
+- **Fault-Tree** — complex multi-path failure analysis
+- **Causal-Chain** — DATA category failures (sequential dependency chain)
+
+**Persistence:** `RCAStore` → `.cortex-runtime/traces/rca.db` (SQLite)
+**Output:** Completed `RCAAnalysis` + auto-generated `PreventionRule` (ADVISORY default)
+**Engine:** `cortex/intelligence/learning/rca_engine.py` | **Store:** `cortex/intelligence/learning/rca_store.py`
+
+### 🔁 TOTALRECALL MODE — Holistic Production Readiness
+
+**Trigger:** `/totalrecall`, "total recall", "holistic refactor", "everything is broken"
+
+**7-Phase Protocol:** INVENTORY → CONTRADICTION → ARCHITECTURE → RECOMMENDATION → IMPLEMENTATION → REGRESSION PROOF → VERIFICATION
+**Authority:** `cortex-totalrecall.prompt.md` (self-contained, loads alone — ~4,500 tokens)
+**MCP Tool:** `cortex_total_recall` (op=`discover|recall|search`)
+
+### 🔄 SYNC MODE — Privacy-Safe Cross-Repo Sync
+
+**Trigger:** `/sync target={path}`, "sync to company folder", "push to work repo"
+
+**4-Gate Pipeline:** PULL → DIFF → SANITIZE → MERGE (strips CORTEX-internal metadata)
+**Authority:** `cortex-sync.prompt.md` + `cortex-sync-agent.md`
+**MCP Tool:** `cortex_workflow` (op=`execute`) via GitOrchestrator
+
+### 🎓 TRAIN MODE — Template Evolution from Repos
+
+**Trigger:** `/train {path}`, "learn from this repo", "evolve templates", "gap-driven training"
+
+**Purpose:** Analyze external codebases, detect pattern gaps, propose template changes.
+**Authority:** `cortex-trainer.md`
+**MCP Tool:** `cortex_orchestrator` (op=`invoke`, orchestrator=`TrainerOrchestrator`)
 
 ---
 ## 🔎 AUDIT MODE — Production Readiness Scanner
@@ -783,7 +829,7 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py prefl
 
 ---
 
-## ⚡ MCP TOOLS (39 active)
+## ⚡ MCP TOOLS (29 registered, 39 target)
 
 **Verification:** Call `cortex_verify` (operation: `mcp`). If it responds, MCP is active.
 **If unavailable:** Run `python3 -m cortex.mcp` then reload VS Code. (`python3 scripts/setup-mcp.py` for cross-platform config.)
@@ -793,20 +839,23 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py prefl
 - **Tier 1 (WARN):** QUERY, DIGEST, DESIGN, PLAN — warn if unavailable
 - **Tier 2 (SILENT):** REPHRASE — no MCP needed
 
-**Key Tools (39 active — operation-based):**
+**Key Tools (29 registered — operation-based):**
 - `cortex_verify` (op: `mcp`) — MCP health check (verify server active)
 - `cortex_validate` (op: `compliance`) — CORE rules check
 - `cortex_onboard` (op: `full`) — Enhanced onboarding with LENS + SQLite
 - `cortex_refactor` — Semantic refactoring (Python, C#, TypeScript)
 - `cortex_governance` (op: `remediation_plan`) — Auto-planning from audit results
-- `cortex_tools_catalog` — Discover all 39 tools
+- `cortex_tools_catalog` — Discover all 29 registered tools
 - `cortex_load` (op: `rules`) — Load governance rules from registry
-- `cortex_check` (op: `dependencies`) — requirements.txt vs installed packages
+- `cortex_check` (op: `dependencies|orchestrator_health`) — dependency drift + orchestrator health
 - `cortex_governance` (op: `query`) — Active violations count + P0 status
 - `cortex_metrics` (op: `capture`) — Record TDD/debug/generation metrics
 - `cortex_knowledge` (op: `search`) — Knowledge base search + domain analysis
-- `cortex_learning` (op: `emit|history|decay|promote|quarantine|metrics`) — URS reinforcement signals
+- `cortex_learning` (op: `emit|history|decay|promote|quarantine|metrics|rca`) — URS reinforcement signals + Phase 87 RCA Memory Engine
 - `cortex_git` — Git history analysis, blame, diff, context extraction
+- `cortex_vision` (op: `analyze|ui|extract`) — Vision API for UI analysis + HTML-Vision debug mapping
+- `cortex_total_recall` (op: `discover|recall|search`) — Holistic 7-phase production readiness
+- `cortex_debug` (op: `analyze`) — Multi-stack debug: 8 strategies, Vision API, auto-cleanup
 
 ---
 
@@ -815,7 +864,7 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py prefl
 | Type | Location |
 |------|----------|
 | Orchestrators (51 wired) | `cortex/orchestrators/{domain}/` |
-| MCP Tools (28 registered, 39 target) | `cortex/mcp/tools/` |
+| MCP Tools (29 registered, 39 target) | `cortex/mcp/tools/` |
 | Tests | `tests/` (mirrors `cortex/` structure) |
 | Registry/Rules | `cortex-registry/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
@@ -865,6 +914,11 @@ Stage 9:  Tests + AC_COMPLETE                (python3 scripts/run_tests.py prefl
 | VACUUM | `cortex-vacuum.md` | ~2,000 |
 | DEBUG | `cortex-debugger.md` | ~5,000 |
 | HEALTH | `cortex-auditor.md` (Check #11) | ~3,500 |
+| SYNC | `cortex-sync.prompt.md` + `cortex-sync-agent.md` | ~6,000 |
+| TRAIN | `cortex-trainer.md` | ~3,000 |
+| TOTALRECALL | `cortex-totalrecall.prompt.md` (self-contained) | ~4,500 |
+| RCA | `cortex-architect.md` + `cortex_learning` op=`rca` | ~2,500 |
+| GOLDEN_TEST | `cortex-executor.md` | ~2,500 |
 
 **Default:** Load this prompt only (~2,700 tokens). Specialist agents on-demand only.
 
