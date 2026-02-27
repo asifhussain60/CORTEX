@@ -30,20 +30,61 @@ from cortex.infrastructure.orchestrator_trace_logger import (
 
 @pytest.fixture
 def temp_trace_db():
-    """Create temporary trace database for testing."""
+    """Create temporary trace database for testing.
+
+    Fully isolates the singleton from the production DB by:
+    1. Saving and restoring CORTEX_TRACE_DB env var
+    2. Resetting the singleton AND the class-level DB path before AND after the test
+    3. Restoring env vars and class attributes on teardown
+    """
+    _orig_db = os.environ.get("CORTEX_TRACE_DB")
+    _orig_enabled = os.environ.get("CORTEX_TRACE_ENABLED")
+    _orig_max_rows = os.environ.get("CORTEX_TRACE_MAX_ROWS")
+
+    # Save class-level attributes that were evaluated at import time
+    _orig_class_db_path = OrchestratorTraceLogger.TRACE_DB_PATH
+    _orig_class_enabled = OrchestratorTraceLogger.TRACE_ENABLED
+    _orig_class_max_rows = OrchestratorTraceLogger.MAX_ROWS_PER_TABLE
+
     with tempfile.TemporaryDirectory() as tmpdir:
         db_path = Path(tmpdir) / "test-traces.db"
         os.environ["CORTEX_TRACE_DB"] = str(db_path)
         os.environ["CORTEX_TRACE_ENABLED"] = "true"
         os.environ["CORTEX_TRACE_MAX_ROWS"] = "100"  # Small limit for testing
 
-        # Reset singleton
+        # Override class-level attributes so new singleton uses temp DB
+        OrchestratorTraceLogger.TRACE_DB_PATH = db_path
+        OrchestratorTraceLogger.TRACE_ENABLED = True
+        OrchestratorTraceLogger.MAX_ROWS_PER_TABLE = 100
+
+        # Reset singleton so it re-initialises against the temp DB
         OrchestratorTraceLogger._instance = None
 
         yield db_path
 
-        # Cleanup
+        # Reset singleton first so nothing holds a reference to the temp path
         OrchestratorTraceLogger._instance = None
+
+        # Restore class-level attributes
+        OrchestratorTraceLogger.TRACE_DB_PATH = _orig_class_db_path
+        OrchestratorTraceLogger.TRACE_ENABLED = _orig_class_enabled
+        OrchestratorTraceLogger.MAX_ROWS_PER_TABLE = _orig_class_max_rows
+
+        # Restore env vars to pre-test state
+        if _orig_db is not None:
+            os.environ["CORTEX_TRACE_DB"] = _orig_db
+        else:
+            os.environ.pop("CORTEX_TRACE_DB", None)
+
+        if _orig_enabled is not None:
+            os.environ["CORTEX_TRACE_ENABLED"] = _orig_enabled
+        else:
+            os.environ.pop("CORTEX_TRACE_ENABLED", None)
+
+        if _orig_max_rows is not None:
+            os.environ["CORTEX_TRACE_MAX_ROWS"] = _orig_max_rows
+        else:
+            os.environ.pop("CORTEX_TRACE_MAX_ROWS", None)
 
 
 class TestOrchestratorTraceLogger:
@@ -292,9 +333,11 @@ class TestOrchestratorTraceLogger:
         result_master = logger.query_traces(orchestrator_id="master", limit=100)
         assert result_master.is_ok()
 
-    def test_disabled_in_production(self):
+    def test_disabled_in_production(self, temp_trace_db):
         """Should disable tracing when CORTEX_TRACE_ENABLED=false."""
         os.environ["CORTEX_TRACE_ENABLED"] = "false"
+        # Must override class-level attribute too (evaluated at import time)
+        OrchestratorTraceLogger.TRACE_ENABLED = False
         OrchestratorTraceLogger._instance = None
 
         logger = get_trace_logger()
@@ -317,9 +360,9 @@ class TestOrchestratorTraceLogger:
         result = logger.record_trace(entry)
         assert result.is_ok()
 
-        # Re-enable for other tests
+        # Restore — fixture teardown handles full env var + class attr restore
         os.environ["CORTEX_TRACE_ENABLED"] = "true"
-        OrchestratorTraceLogger._instance = None
+        OrchestratorTraceLogger.TRACE_ENABLED = True
 
 
 class TestPerOrchestrationTraceWriter:
