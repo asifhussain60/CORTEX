@@ -2914,17 +2914,45 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
             description = context.get("description", "").lower()
             combined_text = f"{operation} {description}"
             
-            # Detect operation type
+            # Detect operation type — covers all 20 CORTEX intent types (GAP-90-14/15 fix)
             operation_type = "implement"
-            if any(kw in combined_text for kw in ["fix", "bug", "issue"]):
+            if any(kw in combined_text for kw in ["fix", "bug", "issue", "broken", "patch"]):
                 operation_type = "fix"
-            elif any(kw in combined_text for kw in ["refactor", "improve", "optimize"]):
+            elif any(kw in combined_text for kw in ["/debug", "debug", "diagnose", "debugger", "marker injection", "injection strategy"]):
+                operation_type = "debug"
+            elif any(kw in combined_text for kw in ["totalrecall", "total recall", "holistic refactor", "7-phase", "everything is broken"]):
+                operation_type = "totalrecall"
+            elif any(kw in combined_text for kw in ["rca", "root cause analysis", "fishbone", "five whys", "ishikawa", "fault tree", "causal chain"]):
+                operation_type = "rca"
+            elif any(kw in combined_text for kw in ["/vacuum", "vacuum", "markdown sprawl", "root clutter", "cortex vacuum"]):
+                operation_type = "vacuum"
+            elif any(kw in combined_text for kw in ["/health", "health check", "healthcheck", "orchestrator health", "orchestrator status", "22 orchestrators"]):
+                operation_type = "health"
+            elif any(kw in combined_text for kw in ["/sync", "sync to company", "cross-repo sync", "privacy-safe sync", "one-way sync"]):
+                operation_type = "sync"
+            elif any(kw in combined_text for kw in ["/train", "learn from repo", "evolve templates", "gap-driven training", "pattern training"]):
+                operation_type = "train"
+            elif any(kw in combined_text for kw in ["audit", "production readiness", "scan for issues", "repo health"]):
+                operation_type = "audit"
+            elif any(kw in combined_text for kw in ["refactor", "improve", "optimize", "restructure", "simplify"]):
                 operation_type = "refactor"
-            elif any(kw in combined_text for kw in ["migrate", "migration"]):
+            elif any(kw in combined_text for kw in ["migrate", "migration", "port", "alembic"]):
                 operation_type = "migrate"
-            elif any(kw in combined_text for kw in ["test", "testing"]):
+            elif any(kw in combined_text for kw in ["test", "testing", "pytest", "tdd"]):
                 operation_type = "test"
-            elif any(kw in combined_text for kw in ["security", "audit"]):
+            elif any(kw in combined_text for kw in ["design", "architect", "blueprint", "system design"]):
+                operation_type = "design"
+            elif any(kw in combined_text for kw in ["onboard", "onboarding", "bootstrap", "initialize repo"]):
+                operation_type = "onboard"
+            elif any(kw in combined_text for kw in ["digest", "summarize", "summarise", "recap", "tl;dr"]):
+                operation_type = "digest"
+            elif any(kw in combined_text for kw in ["investigate", "root cause", "deep analysis", "find the cause"]):
+                operation_type = "investigate"
+            elif any(kw in combined_text for kw in ["document", "docs", "documentation"]):
+                operation_type = "document"
+            elif any(kw in combined_text for kw in ["plan", "roadmap", "phase", "schedule"]):
+                operation_type = "plan"
+            elif any(kw in combined_text for kw in ["security"]):
                 operation_type = "security"
             
             # Extract files and dependencies

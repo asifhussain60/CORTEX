@@ -367,8 +367,83 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
     ]
 
     INVESTIGATE_KEYWORDS: List[str] = [
-        "investigate", "root cause", "why is", "what causes", "deep analysis",
-        "investigate the", "trace the", "debug why", "find the cause"
+        "investigate", "why is", "what causes", "deep analysis",
+        "investigate the", "find the cause"
+    ]
+
+    # GAP-90-01: DEBUG mode keywords — multi-stack debug pipeline (Phase 86 + 89)
+    DEBUG_KEYWORDS: List[str] = [
+        "debug", "debugger", "/debug", "/debug-inject", "/debug-cleanup",
+        "diagnose", "breakpoint", "stack trace", "marker injection",
+        "trace the", "debug why", "debug this", "injection strategy",
+        "cortex debug", "debug mode", "step through"
+    ]
+
+    # GAP-90-02: HEALTH mode keywords — orchestrator health checks (22 endpoints)
+    HEALTH_KEYWORDS: List[str] = [
+        "health", "health check", "healthcheck", "/health", "/healthcheck",
+        "orchestrator status", "orchestrator health", "component health",
+        "uptime", "latency", "service health", "endpoint health",
+        "all orchestrators", "22 orchestrators", "health endpoint"
+    ]
+
+    # GAP-90-03: SYNC mode keywords — privacy-safe cross-repo sync
+    SYNC_KEYWORDS: List[str] = [
+        "sync", "/sync", "sync to company", "sync to work", "cross-repo sync",
+        "privacy-safe", "privacy safe", "push to work repo", "folder sync",
+        "sanitize sync", "cortex sync", "sync target", "one-way sync"
+    ]
+
+    # GAP-90-04: TRAIN mode keywords — TrainerOrchestrator / template evolution
+    TRAIN_KEYWORDS: List[str] = [
+        "train", "/train", "learn from", "learn from repo", "evolve templates",
+        "gap-driven training", "template evolution", "pattern training",
+        "cortex train", "train from codebase", "reinforcement training"
+    ]
+
+    # GAP-90-05: TOTALRECALL mode keywords — 7-phase holistic refactor protocol
+    TOTALRECALL_KEYWORDS: List[str] = [
+        "totalrecall", "total recall", "/totalrecall", "holistic refactor",
+        "production readiness refactor", "everything is broken", "7-phase protocol",
+        "cortex total recall", "holistic production", "full recall"
+    ]
+
+    # GAP-90-06: RCA mode keywords — Root Cause Analysis (Phase 87, 4 methodologies)
+    RCA_KEYWORDS: List[str] = [
+        "rca", "/rca", "root cause analysis", "root cause", "five whys", "5 whys",
+        "fishbone", "ishikawa", "fault tree", "causal chain", "causal-chain",
+        "why did it fail", "recurrence detection", "prevention rule",
+        "rca analysis", "cortex rca", "what caused"
+    ]
+
+    # Legacy IntentType keywords — TEST, DEPLOY, GOVERNANCE, QUERY, VALIDATE, MIGRATE
+    # These were present in the enum but lacked operation_type_mappings entries (GAP-90-completeness).
+    TEST_KEYWORDS: List[str] = [
+        "test", "/test", "run tests", "tdd", "unit test", "integration test",
+        "pytest", "test suite", "test coverage", "write tests", "golden test",
+        "preflight", "smoke test", "test-driven",
+    ]
+    DEPLOY_KEYWORDS: List[str] = [
+        "deploy", "deployment", "release", "ship", "publish", "rollout",
+        "kubernetes", "helm", "docker", "canary", "production deploy",
+        "deploy to prod", "cd pipeline",
+    ]
+    GOVERNANCE_KEYWORDS: List[str] = [
+        "governance", "enforce governance", "core rule", "core-rule", "compliance",
+        "enforcement", "pre-commit", "governance violation", "cortex governance",
+        "governance check", "rule enforcement",
+    ]
+    QUERY_KEYWORDS: List[str] = [
+        "query", "ask", "what is", "how does", "explain", "describe",
+        "tell me", "show me", "lookup", "find", "search",
+    ]
+    VALIDATE_KEYWORDS: List[str] = [
+        "validate", "validation", "verify", "check", "lint", "assert",
+        "confirm", "ensure", "certify", "schema validation",
+    ]
+    MIGRATE_KEYWORDS: List[str] = [
+        "migrate", "migration", "port", "move", "convert", "transition",
+        "upgrade migration", "schema migration", "data migration", "alembic",
     ]
 
     # GAP-64: Golden test lifecycle keywords — review, create, enhance, consolidate,
@@ -424,14 +499,64 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             IntentType.INVESTIGATE: self.INVESTIGATE_KEYWORDS,
             # GAP-64: Golden test lifecycle intent
             IntentType.GOLDEN_TEST: self.GOLDEN_TEST_KEYWORDS,
+            # GAP-90-01..07: Phase 89 IntentTypes — now wired into standard pipeline
+            IntentType.DEBUG: self.DEBUG_KEYWORDS,
+            IntentType.HEALTH: self.HEALTH_KEYWORDS,
+            IntentType.SYNC: self.SYNC_KEYWORDS,
+            IntentType.TRAIN: self.TRAIN_KEYWORDS,
+            IntentType.TOTALRECALL: self.TOTALRECALL_KEYWORDS,
+            IntentType.RCA: self.RCA_KEYWORDS,
+            # GAP-90-07: VACUUM now in standard pipeline (was separate _is_vacuum_operation shortcut)
+            IntentType.VACUUM: self.VACUUM_KEYWORDS,
+            # GAP-90-completeness: legacy IntentTypes that were in enum but missing from mappings
+            IntentType.TEST: self.TEST_KEYWORDS,
+            IntentType.DEPLOY: self.DEPLOY_KEYWORDS,
+            IntentType.GOVERNANCE: self.GOVERNANCE_KEYWORDS,
+            IntentType.QUERY: self.QUERY_KEYWORDS,
+            IntentType.VALIDATE: self.VALIDATE_KEYWORDS,
+            IntentType.MIGRATE: self.MIGRATE_KEYWORDS,
         }
 
-        # Vacuum keywords (cleanup operations) - mapped to REFACTOR for routing
-        # but tracked separately for specialized vacuum orchestrator routing
+        # GAP-90-07: vacuum_keywords kept for backward-compat references but VACUUM
+        # is now classified through the standard 3-tier classifier pipeline.
+        # _is_vacuum_operation() is retained but NO LONGER short-circuits detect_intent()
+        # to return REFACTOR — it is only used for legacy callers outside detect_intent().
         self.vacuum_keywords = self.VACUUM_KEYWORDS
 
         # AC-FUTURE-001: Try loading routing rules from YAML
         self.routing_rules_config: Dict[str, Any] = self._load_routing_config()
+
+        # Build routing rules dict from config (fallback if YAML loading fails)
+        self.routing_rules: Dict[Tuple[Optional[IntentType], Optional[str]], str] = self._build_routing_rules()
+
+        # Decision cache (populated by _route_internal, accessed via route)
+        self.cached_decisions: Dict[str, RoutingDecision] = {}
+
+        # AC-FUTURE-008: Complexity classifier configuration
+        self.complexity_thresholds = self.routing_rules_config.get("complexity_thresholds", {
+            "low": 0,
+            "medium": 2,
+            "high": 5,
+            "critical": 8
+        })
+
+        # AC-FUTURE-009: Fuzzy matching configuration
+        self.fuzzy_config = self.routing_rules_config.get("fuzzy_matching", {
+            "enabled": False,
+            "algorithm": "levenshtein",
+            "threshold": 0.75
+        })
+
+        # Cache for fuzzy matching results
+        self.fuzzy_cache: Dict[str, List[str]] = {}
+
+        # AC-PHASE-8.2-01: Initialize orchestrator lookup (singleton)
+        self.orchestrator_lookup: OrchestratorLookup = OrchestratorLookup()
+
+        # Registry Intelligence: Initialize gap detection
+        self.registry_agent = get_registry_intelligence_agent() if get_registry_intelligence_agent else None
+
+
 
         # Build routing rules dict from config (fallback if YAML loading fails)
         self.routing_rules: Dict[Tuple[Optional[IntentType], Optional[str]], str] = self._build_routing_rules()
@@ -661,6 +786,7 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 return rules
 
         # Fallback to hardcoded rules (backward compatibility)
+        # GAP-89-20: Complete routing rules for all 27 IntentType values (Phase 89-c)
         return {
             # IMPLEMENT routing
             (IntentType.IMPLEMENT, "orchestrators"): "ImplementationOrchestrator",
@@ -691,6 +817,71 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             (IntentType.PLAN, "orchestrators"): "PlanOrchestrator",
             (IntentType.PLAN, "cortex"): "PlanOrchestrator",
             (IntentType.PLAN, None): "PlanOrchestrator",
+
+            # ===== GAP-89-20: Missing intent routing rules (21 intents) =====
+
+            # ANALYZE routing (AC-LENS-LLM-005: intelligent LENS)
+            (IntentType.ANALYZE, None): "IntelligenceOrchestrator",
+
+            # TEST routing (TDD orchestration)
+            (IntentType.TEST, None): "TDDOrchestrator",
+
+            # DEPLOY routing (deployment pipeline)
+            (IntentType.DEPLOY, None): "DeploymentOrchestrator",
+
+            # GOVERNANCE routing (enforcement + compliance)
+            (IntentType.GOVERNANCE, None): "EnforcementOrchestrator",
+
+            # QUERY routing (knowledge base queries)
+            (IntentType.QUERY, None): "KnowledgeOrchestrator",
+
+            # VALIDATE routing (compliance validation)
+            (IntentType.VALIDATE, None): "ValidationOrchestrator",
+
+            # MIGRATE routing (code migration + upgrades)
+            (IntentType.MIGRATE, None): "MigrationOrchestrator",
+
+            # ONBOARD routing (AC-ONBOARD-001: repository onboarding)
+            (IntentType.ONBOARD, None): "OnboardOrchestrator",
+
+            # AUDIT routing (GAP-005: production readiness scan)
+            (IntentType.AUDIT, None): "AuditOrchestrator",
+
+            # DESIGN routing (challenge-first architecture)
+            (IntentType.DESIGN, None): "ChallengeOrchestrator",
+
+            # DIGEST routing (knowledge synthesis)
+            (IntentType.DIGEST, None): "DigestOrchestrator",
+
+            # REPHRASE routing (token optimization)
+            (IntentType.REPHRASE, None): "RephraseOrchestrator",
+
+            # INVESTIGATE routing (deep analysis + evidence)
+            (IntentType.INVESTIGATE, None): "InvestigationOrchestrator",
+
+            # GOLDEN_TEST routing (GAP-64: golden test lifecycle)
+            (IntentType.GOLDEN_TEST, None): "GoldenTestOrchestrator",
+
+            # VACUUM routing (markdown sprawl cleanup)
+            (IntentType.VACUUM, None): "VacuumOrchestrator",
+
+            # DEBUG routing (Phase 86: multi-stack debug pipeline)
+            (IntentType.DEBUG, None): "DebuggerOrchestrator",
+
+            # HEALTH routing (orchestrator health checks)
+            (IntentType.HEALTH, None): "HealthOrchestrator",
+
+            # SYNC routing (privacy-safe folder sync)
+            (IntentType.SYNC, None): "SyncOrchestrator",
+
+            # TRAIN routing (learning/reinforcement operations)
+            (IntentType.TRAIN, None): "LearningOrchestrator",
+
+            # TOTALRECALL routing (Phase 89: holistic refactor protocol)
+            (IntentType.TOTALRECALL, None): "TotalRecallOrchestrator",
+
+            # RCA routing (Phase 87: root cause analysis)
+            (IntentType.RCA, None): "LearningOrchestrator",
         }
 
     # ===== AC-PHASE-8.2-01: Keyword Extraction & Orchestrator Lookup =====
@@ -1017,9 +1208,10 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             operation = str(context.get("operation", "")).lower().strip()
 
             # Priority 1: Vacuum keyword check (dedicated pathway)
+            # GAP-90-07 fix: return IntentType.VACUUM (was wrongly returning REFACTOR)
             if self._is_vacuum_operation(combined_text):
                 context["is_vacuum_operation"] = True
-                return IntentType.REFACTOR
+                return IntentType.VACUUM
 
             # Priority 2: Three-tier classifier
             clf_result = self.intent_classifier.classify(

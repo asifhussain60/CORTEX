@@ -53,8 +53,41 @@ LLM_TEMPERATURE: float = 0.05
 # Patterns are ordered from most-specific to least-specific so the first
 # match wins.  Multi-word patterns take precedence over single-word ones.
 _REGEX_PATTERNS: List[Tuple[re.Pattern[str], IntentType, float]] = [
-    # Multi-word / high-specificity patterns first
-    (re.compile(r"\b(investigate|root cause|trace the|debug why|find the cause)\b", re.I), IntentType.INVESTIGATE, 0.90),
+    # Phase-89 / Phase-90 high-specificity patterns — evaluated FIRST to prevent misclassification
+    # GAP-90-08: DEBUG — must precede FIX and INVESTIGATE
+    # Use (?<!\w) / (?!\w) as manual word-boundary for slash-prefixed commands
+    (re.compile(r"(?<!\w)debug\b", re.I), IntentType.DEBUG, 0.95),
+    (re.compile(r"(?<!\w)/debug(?:-inject|-cleanup)?", re.I), IntentType.DEBUG, 0.97),
+    (re.compile(r"\b(diagnose|debugger|breakpoint|marker injection|cortex debug|injection strategy)\b", re.I), IntentType.DEBUG, 0.90),
+    # "trace the" → DEBUG (not INVESTIGATE — INVESTIGATE regex below no longer contains it)
+    (re.compile(r"\btrace the\b", re.I), IntentType.DEBUG, 0.90),
+    # GAP-90-09: HEALTH — must precede AUDIT (health check → AUDIT clash)
+    (re.compile(r"(?<!\w)/health(?:check)?", re.I), IntentType.HEALTH, 0.97),
+    (re.compile(r"\bhealth(?:\s+check)?\b", re.I), IntentType.HEALTH, 0.92),
+    (re.compile(r"\b(orchestrator health|orchestrator status|component health|22 orchestrators|service health|all orchestrators|endpoint health)\b", re.I), IntentType.HEALTH, 0.95),
+    # GAP-90-10: SYNC
+    (re.compile(r"(?<!\w)/sync\b", re.I), IntentType.SYNC, 0.97),
+    (re.compile(r"\b(cross-repo sync|privacy.safe sync|sync to (?:company|work)|one-way sync|cortex sync|sync target)\b", re.I), IntentType.SYNC, 0.95),
+    # GAP-90-11: TRAIN
+    (re.compile(r"(?<!\w)/train\b", re.I), IntentType.TRAIN, 0.97),
+    (re.compile(r"\b(gap.driven training|template evolution|pattern training|cortex train|reinforcement training|evolve templates)\b", re.I), IntentType.TRAIN, 0.95),
+    (re.compile(r"\blearn from (?:repo|codebase)\b", re.I), IntentType.TRAIN, 0.92),
+    # GAP-90-12: TOTALRECALL — must precede REFACTOR
+    (re.compile(r"(?<!\w)/totalrecall\b", re.I), IntentType.TOTALRECALL, 0.99),
+    (re.compile(r"\b(total.?recall|holistic refactor|7.phase protocol|production readiness refactor|cortex total recall|everything is broken)\b", re.I), IntentType.TOTALRECALL, 0.97),
+    # GAP-90-08 (RCA): root cause analysis — must precede INVESTIGATE and FIX
+    # Note: /rca has no \b anchor because / is not a word char; use (?<!\w) instead
+    (re.compile(r"(?<!\w)/rca\b", re.I), IntentType.RCA, 0.99),
+    (re.compile(r"\b(root cause analysis|five.?whys|5.?whys|fishbone|ishikawa|fault.?tree|causal.?chain|rca analysis|cortex rca)\b", re.I), IntentType.RCA, 0.95),
+    (re.compile(r"\b(root cause|what caused|why did it fail|recurrence detection|prevention rule)\b", re.I), IntentType.RCA, 0.90),
+    # GAP-90-07: VACUUM — was wrongly mapped to REFACTOR; now correctly maps to VACUUM
+    (re.compile(r"(?<!\w)/vacuum\b", re.I), IntentType.VACUUM, 0.99),
+    (re.compile(r"\b(cortex vacuum|markdown sprawl|root clutter|vacuum cleanup)\b", re.I), IntentType.VACUUM, 0.97),
+    (re.compile(r"\bvacuum\b", re.I), IntentType.VACUUM, 0.90),
+    (re.compile(r"\b(cleanup|clean up|prune|purge|archive|compact)\b", re.I), IntentType.VACUUM, 0.82),
+    # Multi-word / high-specificity patterns
+    # INVESTIGATE: "trace the" and "debug why" removed — handled above by DEBUG patterns
+    (re.compile(r"\b(investigate|find the cause)\b", re.I), IntentType.INVESTIGATE, 0.90),
     (re.compile(r"\b(digest|summarize|summarise|recap|tl;?dr)\b", re.I), IntentType.DIGEST, 0.88),
     (re.compile(r"\b(analyze|analyse|deep analysis|deep dive|inspect)\b", re.I), IntentType.ANALYZE, 0.85),
     (re.compile(r"\b(audit|production readiness|repo health|scan for issues)\b", re.I), IntentType.AUDIT, 0.88),
@@ -65,7 +98,6 @@ _REGEX_PATTERNS: List[Tuple[re.Pattern[str], IntentType, float]] = [
     (re.compile(r"\b(implement|create|build|add|develop|construct|introduce)\b", re.I), IntentType.IMPLEMENT, 0.75),
     (re.compile(r"\b(document|docs|documentation)\b", re.I), IntentType.DOCUMENT, 0.80),
     (re.compile(r"\b(onboard|onboarding|bootstrap|initialize|register)\b", re.I), IntentType.ONBOARD, 0.85),
-    (re.compile(r"\b(vacuum|cleanup|clean up|prune|purge|archive|compact)\b", re.I), IntentType.REFACTOR, 0.80),
     (re.compile(r"\b(golden test|workflow template|trace assertion|acceptance criteria)\b", re.I), IntentType.GOLDEN_TEST, 0.90),
     (re.compile(r"\b(rephrase|reword|token optim|compact this)\b", re.I), IntentType.REPHRASE, 0.88),
 ]
@@ -85,8 +117,8 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
         "resolve", "correct", "repair", "patch", "race condition",
     ],
     IntentType.REFACTOR: [
-        "refactor", "improve", "cleanup", "restructure", "simplify", "optimize",
-        "clean", "modernize", "reorganize", "rewrite", "redesign", "performance",
+        "refactor", "improve", "restructure", "simplify", "optimize",
+        "modernize", "reorganize", "rewrite", "redesign", "performance",
     ],
     IntentType.DOCUMENT: [
         "document", "docs", "documentation", "write", "report", "generate", "export",
@@ -104,8 +136,8 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
         "roadmap", "schedule", "cortex change", "cortex enhancement",
     ],
     IntentType.AUDIT: [
-        "audit", "scan repo", "production readiness", "health check", "check repo",
-        "/audit", "scan for issues", "repo health",
+        "audit", "scan repo", "production readiness", "scan for issues",
+        "/audit", "repo health",
     ],
     IntentType.DESIGN: [
         "design", "architect", "architecture", "structure", "pattern", "blueprint",
@@ -120,12 +152,50 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
         "rewrite request", "make this concise", "compact this",
     ],
     IntentType.INVESTIGATE: [
-        "investigate", "root cause", "why is", "what causes", "deep analysis",
-        "trace the", "debug why", "find the cause",
+        "investigate", "why is", "what causes", "deep analysis", "find the cause",
     ],
     IntentType.GOLDEN_TEST: [
         "golden test", "golden tests", "workflow template", "workflow templates",
         "response template", "acceptance criteria", "e2e scenario", "trace assertion",
+    ],
+    # GAP-90-08..12 + 90-07: Phase-89 IntentTypes now wired into Tier 2
+    IntentType.DEBUG: [
+        "debug", "debugger", "/debug", "/debug-inject", "/debug-cleanup",
+        "diagnose", "breakpoint", "stack trace", "marker injection",
+        "trace the", "debug why", "debug this", "injection strategy",
+        "cortex debug", "debug mode", "step through",
+    ],
+    IntentType.HEALTH: [
+        "health", "healthcheck", "/health", "/healthcheck",
+        "orchestrator status", "orchestrator health", "component health",
+        "uptime", "latency", "service health", "endpoint health",
+        "all orchestrators", "22 orchestrators", "health endpoint",
+    ],
+    IntentType.SYNC: [
+        "sync", "/sync", "sync to company", "sync to work", "cross-repo sync",
+        "privacy-safe", "privacy safe", "push to work repo", "folder sync",
+        "sanitize sync", "cortex sync", "sync target", "one-way sync",
+    ],
+    IntentType.TRAIN: [
+        "train", "/train", "learn from", "learn from repo", "evolve templates",
+        "gap-driven training", "template evolution", "pattern training",
+        "cortex train", "train from codebase", "reinforcement training",
+    ],
+    IntentType.TOTALRECALL: [
+        "totalrecall", "total recall", "/totalrecall", "holistic refactor",
+        "production readiness refactor", "everything is broken",
+        "7-phase protocol", "cortex total recall", "holistic production", "full recall",
+    ],
+    IntentType.RCA: [
+        "rca", "/rca", "root cause analysis", "root cause", "five whys", "5 whys",
+        "fishbone", "ishikawa", "fault tree", "causal chain", "causal-chain",
+        "why did it fail", "recurrence detection", "prevention rule",
+        "rca analysis", "cortex rca", "what caused",
+    ],
+    IntentType.VACUUM: [
+        "vacuum", "/vacuum", "cortex vacuum", "cleanup", "clean up",
+        "markdown sprawl", "root clutter", "prune", "purge", "archive",
+        "compact", "vacuum cleanup",
     ],
 }
 
@@ -136,7 +206,7 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
 _LLM_SYSTEM_PROMPT = """\
 You are an intent classifier for a software engineering AI assistant.
 Classify the user request into exactly ONE of these intent labels:
-IMPLEMENT, FIX, REFACTOR, DOCUMENT, ANALYZE, ONBOARD, PLAN, AUDIT, DESIGN, DIGEST, REPHRASE, INVESTIGATE, GOLDEN_TEST
+IMPLEMENT, FIX, REFACTOR, DOCUMENT, ANALYZE, ONBOARD, PLAN, AUDIT, DESIGN, DIGEST, REPHRASE, INVESTIGATE, GOLDEN_TEST, DEBUG, HEALTH, SYNC, TRAIN, TOTALRECALL, RCA, VACUUM
 
 Reply with ONLY the label — no punctuation, no explanation.\
 """
@@ -360,6 +430,17 @@ class IntentClassifier:
             "document": IntentType.DOCUMENT,
             "onboard": IntentType.ONBOARD,
             "rephrase": IntentType.REPHRASE,
+            # GAP-90-08..12 + 90-07: Phase-89 IntentTypes
+            "debug": IntentType.DEBUG,
+            "health": IntentType.HEALTH,
+            "healthcheck": IntentType.HEALTH,
+            "health_check": IntentType.HEALTH,
+            "sync": IntentType.SYNC,
+            "train": IntentType.TRAIN,
+            "totalrecall": IntentType.TOTALRECALL,
+            "total_recall": IntentType.TOTALRECALL,
+            "rca": IntentType.RCA,
+            "vacuum": IntentType.VACUUM,
         }
         return _EXACT.get(operation.strip().lower())
 
@@ -508,5 +589,14 @@ class IntentClassifier:
             "REPHRASE": IntentType.REPHRASE,
             "INVESTIGATE": IntentType.INVESTIGATE,
             "GOLDEN_TEST": IntentType.GOLDEN_TEST,
+            # GAP-90-08..12 + 90-07: Phase-89 IntentTypes
+            "DEBUG": IntentType.DEBUG,
+            "HEALTH": IntentType.HEALTH,
+            "SYNC": IntentType.SYNC,
+            "TRAIN": IntentType.TRAIN,
+            "TOTALRECALL": IntentType.TOTALRECALL,
+            "TOTAL_RECALL": IntentType.TOTALRECALL,
+            "RCA": IntentType.RCA,
+            "VACUUM": IntentType.VACUUM,
         }
         return _MAP.get(label.upper())

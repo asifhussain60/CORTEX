@@ -57,9 +57,9 @@ maintainer: CORTEX Architecture Team
 
 metadata:
   version: '1.0'
-  last_updated: '2026-02-27T16:00:00Z'
-  total_phases: 88
-  active: 0
+  last_updated: '2026-02-28T16:00:00Z'
+  total_phases: 90
+  active: 1
   completed: 75
   in_progress: 0
   planned: 0
@@ -121,6 +121,32 @@ metadata:
 # archived: superseded files moved to planned/_archived/ (CORE-064 lineage).
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
+
+  # ── SLOT #-1 — phase-90 (P0, COMPLETE) ──────────────────────────────────────
+  - id: phase-90
+    title: "Holistic Intent Wiring — 7 Missing IntentTypes, Classifier Completion, YAML Spec Alignment, Template Binding"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-90-HOLISTIC-INTENT-WIRING
+    gaps: 15
+    gaps_closed: 15
+    sub_phases: 5
+    sub_phases_complete: 5
+    file: "cortex-registry/planning/phases/completed/phase-90-holistic-intent-wiring.yaml"
+    note: "All 15 GAPs CLOSED. (A) IntentRouter: 7 new keyword class vars + operation_type_mappings wired to all 27 IntentTypes; VACUUM detect_intent() GAP-90-07 fixed (REFACTOR→VACUUM). (B) IntentClassifier: _REGEX_PATTERNS, _KEYWORD_BAGS, _exact_operation_match, _label_to_intent, _LLM_SYSTEM_PROMPT all expanded to 20 intents. (C) YAML spec: 8→26 intents. (D) MasterOrchestrator: _check_for_workflow_template() 6→20 operation types. Smoke: 1701 GREEN."
+
+  # ── SLOT #0 — phase-89 (P0, COMPLETE) ───────────────────────────────────────
+  - id: phase-89
+    title: "Operational Workflow Pipeline — Technology Routing, Template Engagement, Toolchain Integration, Visual Tracing"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-89-OPERATIONAL-WORKFLOW-PIPELINE
+    gaps: 23
+    gaps_closed: 16
+    sub_phases: 6
+    sub_phases_complete: 6
+    file: "cortex-registry/_cortex-master/phases/completed/phase-89-operational-workflow-pipeline.yaml"
+    note: "23 GAPs across 7 clusters: (A) Technology-aware routing [3 CLOSED], (B) PostRefactorLintGate [3 CLOSED], (C) Engagement visibility [3 CLOSED], (D) SQLite tracing [3 CLOSED], (E) Template wiring [2 CLOSED, 2 DEFERRED], (F) Expanded scope [4 CLOSED], (G) Full canvas audit [0 CLOSED]. 6 sub-phases COMPLETE: 87 tests GREEN (46+20+11+10 tech routing + lint gate + engagement + tracing). Smoke: 1,701 passed (zero new failures). Completion: 2026-02-28T15:30:00Z."
 
   # ── SLOT #0 — phase-87 (P1, COMPLETE) ──────────────────────────────────────
   - id: phase-87
@@ -405,25 +431,26 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "✅ 88/88 PHASES COMPLETE — Phase 80 (Coherence Remediation: God Object + Knowledge API + AC Coverage + Result[T]) COMPLETE. Smoke baseline: 1,694 passed."
+  status: "✅ Phase 90 COMPLETE — Holistic Intent Wiring (15/15 GAPs CLOSED). Smoke: 1,701 passed."
   overall_score: 99%
-  test_baseline: "1,694 smoke | 84 golden response | 204 golden workflow | 177 workflow orchestrators"
-  deployment_date: '2026-02-27'
+  test_baseline: "1,701 smoke | 84 golden response | 204 golden workflow | 177 workflow orchestrators"
+  deployment_date: '2026-02-28'
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "88/88 phases (0 PLANNED)"
-  last_verified: '2026-02-27T16:00:00Z'
+  plan_version: "90/90 phases (0 ACTIVE)"
+  last_verified: '2026-02-28T06:00:00Z'
 
 summary:
-  total_phases: 88
-  completed: 85
+  total_phases: 90
+  completed: 90
   active: 0
   in_progress: 0
   planned: 0
   archived: 4
   playbooks: 1
   completion_percentage: 100
-  consolidation_summary: "v33.2: 88 phases — all COMPLETE. Phase-80: Coherence Remediation (7 GAPs). KnowledgeRepository graceful degradation, OrchestratorProtocolMixin Result[T], canonical models, AC coverage, EnforcementOrchestrator singleton, synthesize() facade. 17 new tests GREEN. Smoke: 1694."
+  consolidation_summary: "v38.0: 90 phases — 90 COMPLETE, 0 ACTIVE. Phase-90 COMPLETE (2026-02-28): all 15 GAPs closed — 7 IntentTypes (DEBUG/HEALTH/SYNC/TRAIN/TOTALRECALL/RCA/VACUUM) now fully routable via NL; IntentClassifier 3-tier expanded (13→20 labels); YAML spec 8→26 intents; MasterOrchestrator template binding 6→20 types; VACUUM detect_intent() fixed (REFACTOR→VACUUM). Smoke: 1,701 GREEN."
   active_phases: {}
+
 

@@ -106,6 +106,73 @@ class WorkflowTemplateRegistry:
             if primitives_dir is not None
             else None
         )
+        
+        # Phase 89-e: GAP-89-14 — Auto-discover templates at initialization
+        self._auto_discover_templates()
+
+    def _auto_discover_templates(self) -> None:
+        """Auto-discover templates from cortex-registry/workflows/templates/.
+        
+        Phase 89-e: GAP-89-14 — Discovers frontend/, backend/, sdlc/ templates
+        from template YAML files (not metadata.yaml) at initialization.
+        """
+        templates_root = Path("cortex-registry/workflows/templates")
+        if not templates_root.exists():
+            return
+        
+        # Discover all YAML files in frontend/, backend/, sdlc/ subdirectories
+        for category in ["frontend", "backend", "sdlc", "quality", "security", "intelligence", "debugging"]:
+            category_path = templates_root / category
+            if not category_path.exists():
+                continue
+            
+            for template_file in category_path.glob("*.yaml"):
+                try:
+                    with open(template_file, "r") as f:
+                        template_data = yaml.safe_load(f)
+                    
+                    # Register template if it has required fields
+                    if template_data and "id" in template_data and "name" in template_data:
+                        # Ensure category is set
+                        if "category" not in template_data:
+                            template_data["category"] = category
+                        
+                        # Register without override to avoid conflicts
+                        if template_data["id"] not in self._templates:
+                            self.register_template(template_data, override=False)
+                except Exception:
+                    # Silently skip malformed templates
+                    pass
+
+    def get_fallback_template(
+        self,
+        operation: str,
+        technology: Optional[str] = None
+    ) -> str:
+        """Get intelligent fallback template ID based on technology context.
+        
+        Phase 89-e: GAP-89-15 — Fallback considers technology instead of
+        always returning 'tdd/feature-implementation'.
+        
+        Args:
+            operation: Operation type (refactor, implement, etc.)
+            technology: Technology context (html, css, csharp, typescript, etc.)
+            
+        Returns:
+            Template ID string
+        """
+        # If technology specified, use technology-specific template
+        if technology == "html":
+            return "frontend/html-refactor-validation"
+        elif technology == "css":
+            return "frontend/css-extraction-workflow"
+        elif technology == "csharp":
+            return "backend/csharp-refactor-workflow"
+        elif technology == "typescript":
+            return "frontend/typescript-refactor-workflow"
+        
+        # Generic fallback (backward compatible)
+        return "tdd/feature-implementation"
 
     def detect_mode(self) -> str:
         """

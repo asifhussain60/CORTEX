@@ -9,22 +9,35 @@ from __future__ import annotations
 from typing import Any
 
 
-def format_response(data: Any, status: str = "ok", error: str | None = None) -> dict[str, Any]:
+def format_response(
+    data: Any,
+    status: str = "ok",
+    error: str | None = None,
+    engagement: dict[str, Any] | None = None
+) -> dict[str, Any]:
     """Format a standardised MCP tool response dict.
 
     Args:
         data: The payload to return.
         status: Response status string ('ok' or 'error').
         error: Optional error message.
+        engagement: Optional engagement metadata (breadcrumb, timeline, chain).
+                   Phase 89-c: GAP-89-09 — engagement visibility in MCP responses.
 
     Returns:
-        Formatted response dictionary.
+        Formatted response dictionary with optional engagement field.
     """
-    return {
+    response = {
         "status": status,
         "data": data,
         "error": error,
     }
+    
+    # Phase 89-c: Add engagement if provided (GAP-89-09)
+    if engagement is not None:
+        response["engagement"] = engagement
+    
+    return response
 
 
 def validate_params(params: dict[str, Any], required: list[str]) -> list[str]:

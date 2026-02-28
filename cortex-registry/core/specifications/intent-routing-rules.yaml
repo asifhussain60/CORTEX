@@ -211,6 +211,407 @@ routing_rules:
         - "enforce_policy"
         - "compliance_check"
 
+    # QUERY Intent (Information lookup / Q&A)
+    - id: "intent_query"
+      name: "Query"
+      keywords:
+        - "query"
+        - "ask"
+        - "what is"
+        - "how does"
+        - "explain"
+        - "tell me"
+        - "lookup"
+        - "search"
+      handler: "InteractionOrchestrator"
+      confidence_threshold: 0.65
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-012"
+      description: |
+        Query operations answer questions about the codebase.
+      example_operations:
+        - "query_codebase"
+        - "ask_question"
+
+    # VALIDATE Intent (Validate / verify / lint)
+    - id: "intent_validate"
+      name: "Validation"
+      keywords:
+        - "validate"
+        - "validation"
+        - "verify"
+        - "lint"
+        - "assert"
+        - "certify"
+        - "schema validation"
+      handler: "EnforcementOrchestrator"
+      confidence_threshold: 0.72
+      fallback_handler: "InteractionOrchestrator"
+      governance_rules:
+        - "CORE-048"
+      description: |
+        Validation operations verify code quality and compliance.
+      example_operations:
+        - "validate_schema"
+        - "lint_code"
+        - "verify_contract"
+
+    # MIGRATE Intent (Data/schema migration)
+    - id: "intent_migrate"
+      name: "Migration"
+      keywords:
+        - "migrate"
+        - "migration"
+        - "port"
+        - "convert"
+        - "transition"
+        - "alembic"
+        - "data migration"
+      handler: "MasterOrchestrator"
+      confidence_threshold: 0.75
+      fallback_handler: "InteractionOrchestrator"
+      governance_rules:
+        - "CORE-008"
+        - "CORE-026"
+      description: |
+        Migration operations port data or schemas between environments.
+      example_operations:
+        - "migrate_schema"
+        - "port_module"
+        - "convert_format"
+
+    # ONBOARD Intent (Repository onboarding)
+    - id: "intent_onboard"
+      name: "Repository Onboarding"
+      keywords:
+        - "onboard"
+        - "onboarding"
+        - "bootstrap"
+        - "initialize"
+        - "register"
+        - "discover"
+        - "inventory"
+      handler: "RepositoryOnboardingOrchestrator"
+      confidence_threshold: 0.80
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-012"
+      description: |
+        Onboard a new repository with LENS analysis and SQLite dashboard.
+      example_operations:
+        - "onboard_repo"
+        - "bootstrap_project"
+
+    # PLAN Intent (Planning and roadmap)
+    - id: "intent_plan"
+      name: "Planning"
+      keywords:
+        - "plan"
+        - "phase"
+        - "roadmap"
+        - "schedule"
+        - "planning"
+        - "cortex change"
+        - "cortex enhancement"
+      handler: "PlanningOrchestrator"
+      confidence_threshold: 0.75
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-008"
+      description: |
+        Planning operations define phases and roadmaps.
+      example_operations:
+        - "create_phase"
+        - "update_roadmap"
+
+    # AUDIT Intent (Production readiness scan)
+    - id: "intent_audit"
+      name: "Audit"
+      keywords:
+        - "audit"
+        - "production readiness"
+        - "repo health"
+        - "scan for issues"
+        - "/audit"
+        - "scan repo"
+      handler: "HealthOrchestrator"
+      confidence_threshold: 0.80
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-064"
+      description: |
+        Audit runs the 9-stage production readiness pipeline.
+      example_operations:
+        - "audit_fix"
+        - "production_scan"
+
+    # DESIGN Intent (Architecture / blueprinting)
+    - id: "intent_design"
+      name: "Design"
+      keywords:
+        - "design"
+        - "architect"
+        - "architecture"
+        - "blueprint"
+        - "system design"
+        - "design pattern"
+      handler: "ArchitectOrchestrator"
+      confidence_threshold: 0.80
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-012"
+      description: |
+        Design operations produce architectural blueprints.
+      example_operations:
+        - "design_system"
+        - "architect_module"
+
+    # DIGEST Intent (Content ingestion / summarisation)
+    - id: "intent_digest"
+      name: "Digest"
+      keywords:
+        - "digest"
+        - "summarize"
+        - "summarise"
+        - "recap"
+        - "tl;dr"
+        - "synthesize"
+        - "what happened"
+      handler: "DigestSessionOrchestrator"
+      confidence_threshold: 0.78
+      fallback_handler: "InteractionOrchestrator"
+      governance_rules:
+        - "CORE-002"
+      description: |
+        Digest operations ingest and summarise content.
+      example_operations:
+        - "digest_file"
+        - "summarize_session"
+
+    # REPHRASE Intent (Token optimisation / prompt rewriting)
+    - id: "intent_rephrase"
+      name: "Rephrase"
+      keywords:
+        - "rephrase"
+        - "reword"
+        - "token optimize"
+        - "make this concise"
+        - "compact this"
+      handler: "RequestRephraseOrchestrator"
+      confidence_threshold: 0.80
+      fallback_handler: "InteractionOrchestrator"
+      governance_rules: []
+      description: |
+        Rephrase operations rewrite requests for token efficiency.
+      example_operations:
+        - "rephrase_request"
+        - "optimize_prompt"
+
+    # INVESTIGATE Intent (Deep investigation / root-cause without RCA methodology)
+    - id: "intent_investigate"
+      name: "Investigation"
+      keywords:
+        - "investigate"
+        - "why is"
+        - "what causes"
+        - "deep analysis"
+        - "find the cause"
+      handler: "InvestigationOrchestrator"
+      confidence_threshold: 0.78
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-012"
+      description: |
+        Investigation operations perform deep dives without full RCA methodology.
+      example_operations:
+        - "investigate_issue"
+        - "deep_dive"
+
+    # GOLDEN_TEST Intent (Golden test lifecycle)
+    - id: "intent_golden_test"
+      name: "Golden Test"
+      keywords:
+        - "golden test"
+        - "golden tests"
+        - "workflow template"
+        - "trace assertion"
+        - "acceptance criteria"
+        - "e2e scenario"
+      handler: "TDDOrchestrator"
+      confidence_threshold: 0.88
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-008"
+      description: |
+        Golden test operations manage E2E scenario lifecycle.
+      example_operations:
+        - "create_golden_test"
+        - "validate_golden_scenario"
+
+    # DEBUG Intent (Multi-stack debugging — Phase 86)
+    - id: "intent_debug"
+      name: "Debug"
+      keywords:
+        - "debug"
+        - "/debug"
+        - "/debug-inject"
+        - "/debug-cleanup"
+        - "diagnose"
+        - "debugger"
+        - "marker injection"
+        - "cortex debug"
+      handler: "DebuggerOrchestrator"
+      confidence_threshold: 0.88
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-049"
+      description: |
+        Debug operations inject markers, capture logs, and generate fix plans.
+        Uses 8 injection strategies (3 Python + 5 multi-stack).
+      example_operations:
+        - "debug_file"
+        - "inject_markers"
+        - "debug_cleanup"
+
+    # HEALTH Intent (Orchestrator health — all 22)
+    - id: "intent_health"
+      name: "Health Check"
+      keywords:
+        - "health"
+        - "/health"
+        - "/healthcheck"
+        - "orchestrator health"
+        - "orchestrator status"
+        - "22 orchestrators"
+        - "service health"
+      handler: "HealthOrchestrator"
+      confidence_threshold: 0.85
+      fallback_handler: "MasterOrchestrator"
+      governance_rules: []
+      description: |
+        Health operations check all 22 orchestrator health endpoints.
+      example_operations:
+        - "health_check"
+        - "orchestrator_status"
+
+    # SYNC Intent (Cross-repo privacy-safe sync)
+    - id: "intent_sync"
+      name: "Sync"
+      keywords:
+        - "sync"
+        - "/sync"
+        - "sync to company"
+        - "cross-repo sync"
+        - "privacy-safe"
+        - "one-way sync"
+      handler: "GitOrchestrator"
+      confidence_threshold: 0.85
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-026"
+      description: |
+        Sync operations push CORTEX content to company repos with privacy sanitisation.
+      example_operations:
+        - "sync_to_company"
+        - "cross_repo_sync"
+
+    # TRAIN Intent (Gap-driven template evolution)
+    - id: "intent_train"
+      name: "Train"
+      keywords:
+        - "train"
+        - "/train"
+        - "learn from repo"
+        - "evolve templates"
+        - "gap-driven training"
+        - "pattern training"
+      handler: "TrainerOrchestrator"
+      confidence_threshold: 0.88
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-008"
+      description: |
+        Train operations evolve CORTEX templates via gap-driven learning.
+      example_operations:
+        - "train_from_codebase"
+        - "evolve_templates"
+
+    # TOTALRECALL Intent (7-phase holistic production readiness refactor)
+    - id: "intent_totalrecall"
+      name: "Total Recall"
+      keywords:
+        - "totalrecall"
+        - "total recall"
+        - "/totalrecall"
+        - "holistic refactor"
+        - "7-phase protocol"
+        - "production readiness refactor"
+        - "everything is broken"
+      handler: "MasterOrchestrator"
+      confidence_threshold: 0.90
+      fallback_handler: null
+      governance_rules:
+        - "CORE-064"
+      description: |
+        TotalRecall runs the 7-phase holistic production readiness refactor protocol.
+      example_operations:
+        - "totalrecall"
+        - "holistic_refactor"
+
+    # RCA Intent (Root Cause Analysis — Phase 87, 4 methodologies)
+    - id: "intent_rca"
+      name: "Root Cause Analysis"
+      keywords:
+        - "rca"
+        - "/rca"
+        - "root cause analysis"
+        - "root cause"
+        - "five whys"
+        - "fishbone"
+        - "ishikawa"
+        - "fault tree"
+        - "causal chain"
+        - "why did it fail"
+      handler: "InvestigationOrchestrator"
+      confidence_threshold: 0.88
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-012"
+      description: |
+        RCA operations run structured root cause analysis using 4 methodologies:
+        Five-Whys, Fishbone (Ishikawa), Fault-Tree, Causal-Chain.
+        Results stored in .cortex-runtime/traces/rca.db.
+      example_operations:
+        - "rca_analysis"
+        - "five_whys"
+        - "fishbone_analysis"
+
+    # VACUUM Intent (Markdown sprawl + root clutter cleanup)
+    - id: "intent_vacuum"
+      name: "Vacuum"
+      keywords:
+        - "vacuum"
+        - "/vacuum"
+        - "cortex vacuum"
+        - "markdown sprawl"
+        - "root clutter"
+        - "cleanup"
+        - "clean up"
+        - "prune"
+      handler: "VacuumOrchestrator"
+      confidence_threshold: 0.85
+      fallback_handler: "MasterOrchestrator"
+      governance_rules:
+        - "CORE-002"
+      description: |
+        Vacuum operations clean up markdown sprawl and root-level clutter.
+        Managed by VacuumOrchestrator (was incorrectly returning REFACTOR — GAP-90-07 fixed).
+      example_operations:
+        - "vacuum"
+        - "cleanup_repo"
+        - "remove_clutter"
+
   # Fallback strategy when confidence is below threshold
   fallback_strategy:
     description: "Route to InteractionOrchestrator for clarification"

@@ -315,6 +315,14 @@ INTENT_TRIGGER_MAP = [
     (IntentType.INVESTIGATE, "investigate why the webhook handler is failing"),
     (IntentType.REPHRASE, "rephrase this request for clarity"),
     (IntentType.GOLDEN_TEST, "review golden tests and fix failing assertions"),
+    # GAP-89-19: Phase 89-b — 7 new execution modes (added 2026-02-28)
+    (IntentType.VACUUM, "/vacuum — cleanup markdown sprawl and root clutter"),
+    (IntentType.DEBUG, "/debug src/orchestrators/master_orchestrator.py — inject trace markers"),
+    (IntentType.HEALTH, "/health — run all 22 orchestrator health checks"),
+    (IntentType.SYNC, "/sync target=../company-repo — privacy-safe folder sync"),
+    (IntentType.TRAIN, "train the reinforcement learning model on workflow outcomes"),
+    (IntentType.TOTALRECALL, "/totalrecall — holistic production readiness refactor"),
+    (IntentType.RCA, "perform root cause analysis on the deployment failure"),
 ]
 
 # Intents reliably routed by EnhancedIntentRouter (empirically verified)

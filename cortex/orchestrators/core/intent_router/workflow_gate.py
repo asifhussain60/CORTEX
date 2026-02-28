@@ -174,43 +174,155 @@ class WorkflowComplexityRouter:
             )
     
     def _select_orchestrator(self, intent: Intent) -> str:
-        """Select appropriate orchestrator for direct execution."""
-        operation_type = intent.operation_type.lower()
-        
-        orchestrator_map = {
-            "fix": "RefactoringOrchestrator",
-            "update": "RefactoringOrchestrator",
-            "document": "DocumentationOrchestrator",
-            "test": "TDDOrchestrator",
-            "security": "SecurityOrchestrator",
-            "deploy": "DeploymentOrchestrator",
-            "audit": "HealthOrchestrator",
-            "refactor": "RefactoringOrchestrator",
-            "design": "ArchitectOrchestrator",
-            "plan": "PlanningOrchestrator",
-            "create": "TDDOrchestrator",
-            "implement": "TDDOrchestrator",
-            "investigate": "InvestigationOrchestrator",
-            "analyze": "AnalysisOrchestrator",
-            "digest": "DigestSessionOrchestrator",
-        }
-        
-        return orchestrator_map.get(operation_type, "MasterOrchestrator")
-    
-    def _select_template(self, intent: Intent) -> str:
-        """Select appropriate workflow template.
+        """Select appropriate orchestrator for direct execution.
 
-        Uses static mapping first, then falls back to TemplateComposer for
-        dynamic composition from validated primitives (Phase 55).
+        Maps all 18 CORTEX execution modes to their canonical orchestrators.
+        Unknown operations fallback to InteractionOrchestrator (LENS comprehension).
 
         Args:
             intent: Parsed user intent with operation details.
 
         Returns:
-            Template ID string (static match or composed).
+            Orchestrator class name string.
         """
         operation_type = intent.operation_type.lower()
         
+        orchestrator_map = {
+            # Core operational (IMPLEMENT, FIX, REFACTOR)
+            "fix": "RefactoringOrchestrator",
+            "update": "RefactoringOrchestrator",
+            "refactor": "RefactoringOrchestrator",
+            "create": "TDDOrchestrator",
+            "implement": "TDDOrchestrator",
+            "test": "TDDOrchestrator",
+            "golden_test": "TDDOrchestrator",
+            # Analysis & Investigation
+            "analyze": "AnalysisOrchestrator",
+            "investigate": "InvestigationOrchestrator",
+            "rca": "InvestigationOrchestrator",
+            "audit": "HealthOrchestrator",
+            "health": "HealthOrchestrator",
+            # Planning & Design
+            "design": "ArchitectOrchestrator",
+            "plan": "PlanningOrchestrator",
+            # Content & Knowledge
+            "document": "DocumentationOrchestrator",
+            "digest": "DigestSessionOrchestrator",
+            "rephrase": "RequestRephraseOrchestrator",
+            # Support & Tooling
+            "security": "SecurityOrchestrator",
+            "deploy": "DeploymentOrchestrator",
+            "vacuum": "VacuumOrchestrator",
+            "debug": "DebuggerOrchestrator",
+            # Git & Sync
+            "sync": "GitOrchestrator",
+            # Intelligence & Training
+            "train": "TrainerOrchestrator",
+            "onboard": "RepositoryOnboardingOrchestrator",
+            # Holistic
+            "totalrecall": "MasterOrchestrator",
+        }
+        
+        return orchestrator_map.get(operation_type, "InteractionOrchestrator")
+    
+    # Technology-qualified template map — (operation, technology) → template_id
+    # Phase 89-a: Routes to existing YAML templates in cortex-registry/workflows/templates/
+    TECHNOLOGY_TEMPLATE_MAP: Dict[tuple, str] = {
+        # Frontend templates
+        ("refactor", "html"): "frontend/html-refactor-validation",
+        ("refactor", "css"): "frontend/css-extraction-workflow",
+        ("refactor", "typescript"): "frontend/typescript-refactor-workflow",
+        ("create", "css"): "frontend/css-zero-inline-workflow",
+        # Backend templates
+        ("refactor", "csharp"): "backend/csharp-refactor-workflow",
+        ("security", "csharp"): "backend/csharp-security-workflow",
+    }
+
+    # File extension → technology mapping for auto-detection
+    EXTENSION_TECHNOLOGY_MAP: Dict[str, str] = {
+        ".html": "html",
+        ".htm": "html",
+        ".css": "css",
+        ".scss": "css",
+        ".sass": "css",
+        ".less": "css",
+        ".cs": "csharp",
+        ".csx": "csharp",
+        ".ts": "typescript",
+        ".tsx": "typescript",
+        ".js": "javascript",
+        ".jsx": "javascript",
+        ".py": "python",
+        ".pyw": "python",
+    }
+
+    def detect_technology(self, intent: Intent) -> Optional[str]:
+        """Detect technology from intent metadata or file extensions.
+
+        Priority:
+        1. Explicit ``metadata["technology"]`` — always wins.
+        2. Majority file-extension inference — if >50% of files share a technology.
+
+        Args:
+            intent: Parsed user intent with file list and metadata.
+
+        Returns:
+            Technology string (e.g. ``"html"``, ``"csharp"``) or ``None``.
+        """
+        # Priority 1: explicit metadata
+        explicit = intent.metadata.get("technology")
+        if explicit:
+            return str(explicit).lower()
+
+        # Priority 2: file extension majority vote
+        if not intent.target_files:
+            return None
+
+        tech_counts: Dict[str, int] = {}
+        for filepath in intent.target_files:
+            ext = ""
+            # Extract extension (last dot-segment)
+            dot_idx = filepath.rfind(".")
+            if dot_idx != -1:
+                ext = filepath[dot_idx:].lower()
+            tech = self.EXTENSION_TECHNOLOGY_MAP.get(ext)
+            if tech:
+                tech_counts[tech] = tech_counts.get(tech, 0) + 1
+
+        if not tech_counts:
+            return None
+
+        # Majority: the dominant technology must have > 50% of files
+        total = len(intent.target_files)
+        best_tech = max(tech_counts, key=lambda k: tech_counts[k])
+        if tech_counts[best_tech] > total / 2:
+            return best_tech
+
+        return None
+
+    def _select_template(self, intent: Intent) -> str:
+        """Select appropriate workflow template.
+
+        Uses technology-qualified mapping first (Phase 89-a), then generic
+        static mapping, then falls back to TemplateComposer for dynamic
+        composition from validated primitives (Phase 55).
+
+        Args:
+            intent: Parsed user intent with operation details.
+
+        Returns:
+            Template ID string (technology-specific, static, or composed).
+        """
+        operation_type = intent.operation_type.lower()
+
+        # Phase 89-a: Technology-qualified template selection (fast path)
+        technology = self.detect_technology(intent)
+        if technology:
+            tech_key = (operation_type, technology)
+            if tech_key in self.TECHNOLOGY_TEMPLATE_MAP:
+                return self.TECHNOLOGY_TEMPLATE_MAP[tech_key]
+
+        # Generic static mapping (backward compatible)
         template_map = {
             "create": "tdd/feature-implementation",
             "test": "tdd/feature-implementation",

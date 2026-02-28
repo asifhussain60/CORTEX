@@ -223,6 +223,14 @@ class IntentType(Enum):
     # Triggered by: "golden test", "workflow template", "response template",
     # "acceptance criteria", "harness", "e2e scenario", "trace assertion"
     GOLDEN_TEST = "golden_test"
+    # GAP-89-19: Phase 89-b — 7 missing execution modes from canvas audit
+    VACUUM = "vacuum"              # Markdown sprawl + root clutter cleanup
+    DEBUG = "debug"                # Multi-stack debug pipeline (8 strategies)
+    HEALTH = "health"              # Orchestrator health checks (22 endpoints)
+    SYNC = "sync"                  # Privacy-safe folder sync (CORTEX → company)
+    TRAIN = "train"                # Learning/reinforcement operations
+    TOTALRECALL = "totalrecall"    # Holistic production readiness refactor (7-phase)
+    RCA = "rca"                    # Root cause analysis (4 methodologies)
     UNKNOWN = "unknown"
 
 
