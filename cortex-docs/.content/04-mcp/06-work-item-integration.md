@@ -4,7 +4,7 @@
 title: Work Item Integration — ADO Plugin & Provider Architecture
 type: how-to
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/repositories/ + cortex/mcp/tools/work_item_tool.py
 order: 6
 ---

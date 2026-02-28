@@ -4,7 +4,7 @@
 title: CORTEX Intelligence Matrix — Cross-Cutting Neural Wiring Layer
 type: explanation
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/intelligence/cross_cutting/intelligence_matrix_builder.py
 format: deep-dive
 order: 6

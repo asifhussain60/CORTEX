@@ -4,7 +4,7 @@
 title: FAQ — Governance & TDD
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex-registry/core/tier0-skull/skull-rules.yaml + cortex/orchestrators/core/enforcement_orchestrator.py
 order: 3
 ---

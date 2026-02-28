@@ -4,7 +4,7 @@
 title: Red-Green-Refactor — Two-Level Quality Assurance
 type: orchestration
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/orchestrators/core/tdd_orchestrator.py
 order: 14
 ---

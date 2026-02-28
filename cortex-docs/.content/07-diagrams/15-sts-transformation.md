@@ -4,7 +4,7 @@
 title: Sharpen The Saw — Demo Repository Transformation
 type: diagram
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex-sts/CortexLabs/
 order: 15
 ---

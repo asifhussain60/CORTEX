@@ -11,7 +11,7 @@ order: 3
 
 ## Purpose
 
-IntentRouter classifies every incoming request into one of twenty-seven intent types using LENS-based intelligence and keyword/regex hybrid matching. Classification takes 20–40ms and feeds the 4-stage pipeline:
+IntentRouter classifies every incoming request into one of twenty-eight intent types using LENS-based intelligence and keyword/regex hybrid matching. Classification takes 20–40ms and feeds the 4-stage pipeline:
 
 1. **Interaction** — comprehend request via InteractionOrchestrator
 2. **Intent** — classify via IntentRouter.route()
@@ -22,7 +22,7 @@ IntentRouter classifies every incoming request into one of twenty-seven intent t
 
 **Implements:** `IOrchestrator`
 
-## All 27 Intent Types (Phase 90/93 Complete)
+## All 28 Intent Types (Phase 90–99 Complete)
 
 | Intent | Target Orchestrator | Trigger Keywords |
 |--------|-------------------|-----------------|
@@ -52,6 +52,7 @@ IntentRouter classifies every incoming request into one of twenty-seven intent t
 | SECURITY | SecurityVulnerabilityOrchestrator | "security scan", "vulnerability" |
 | REPORT | DashboardOrchestrator | "dashboard", "generate report" |
 | KNOWLEDGE | KnowledgeOrchestrator | "knowledge search", "what does CORTEX know" |
+| WORKFLOW_COMPOSE | WorkflowComposer | "compose workflow", "build pipeline", "workflow compose" |
 | UNKNOWN | ConversationOrchestrator | Fallback when confidence < 0.6 |
 
 ## Routing Confidence Thresholds
@@ -76,4 +77,4 @@ For operations that involve workflow templates, `WorkflowComplexityRouter` at `c
 
 ---
 
-*Verified against intent_router.py + intent_router_impl.py + Phase 89-93 wiring*
+*Verified against intent_router.py + intent_router_impl.py + Phase 89–99 wiring*

@@ -10,9 +10,9 @@ type: explanationtype: explanation
 
 audience: [Business Leaders, Product Owners, Software Developers]audience: [Software Developers, Architects, Product Owners]
 
-last_verified: 2026-02-27word_count: 2203
+last_verified: 2026-02-28word_count: 2203
 
-source_of_truth: cortex/core/ + cortex/mcp/ + cortex/infrastructure/last_verified: 2026-02-27
+source_of_truth: cortex/core/ + cortex/mcp/ + cortex/infrastructure/last_verified: 2026-02-28
 
 order: 2source_of_truth: cortex/api/ + cortex/core/ + cortex/config/ + cortex/observability/
 

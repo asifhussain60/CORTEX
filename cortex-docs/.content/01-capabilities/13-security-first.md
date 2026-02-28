@@ -4,7 +4,7 @@
 title: Security-First — 5-Layer Defence Architecture
 type: capability
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/infrastructure/, cortex/governance/
 order: 13
 ---

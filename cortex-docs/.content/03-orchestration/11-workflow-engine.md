@@ -29,13 +29,15 @@ The WorkflowEngine delivered all four.
 
 ```
 cortex/orchestrators/workflow/
-├── step_state_machine.py       ← FSM: PENDING→RUNNING→CHECKING→PASSED/FAILED/RETRYING/SKIPPED
+├── workflow_gateway.py         ← @enforce_gateway mandatory entry point (Phase 94)
 ├── workflow_composer.py        ← Composes YAML → executable step graph + StepHandlerRegistry
+├── step_state_machine.py       ← FSM: PENDING→RUNNING→CHECKING→PASSED/FAILED/RETRYING/SKIPPED
 ├── convergence_loop_executor.py← Retry with exponential backoff + convergence detection
 ├── template_registry.py        ← Discovers + caches YAML workflow templates
-├── workflow_composer.py        ← WorkflowComposer: ConvergenceGate wired as convergence gate
 └── workflow_runtime.py         ← End-to-end runtime glue
 ```
+
+> **Phase 98 cleanup:** 24 dead workflow modules were removed, reducing the workflow domain from 29 to 6 files. Phase 99 repaired the gateway→composer→template chain.
 
 ---
 

@@ -4,7 +4,7 @@
 title: Token Optimization — Maximizing GitHub Copilot Chat Sessions
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: .github/copilot-instructions.md + .github/prompts/cortex-architect.prompt.md + .github/agents/AGENT-INDEX.md + cortex/core/prompt_agent_integration.py + cortex/core/intelligence_mixin.py
 order: 8
 ---
@@ -15,7 +15,7 @@ order: 8
 
 ## Why Token Optimization Matters
 
-Every VS Code GitHub Copilot Chat session has a finite **context window** — the maximum number of tokens the LLM can hold simultaneously. CORTEX is a large framework (dozens of orchestrators, a growing library of MCP tools, comprehensive governance rules, thousands of tests). Loading everything into every session would exhaust the context budget before the user even asks a question.
+Every VS Code GitHub Copilot Chat session has a finite **context window** — the maximum number of tokens the LLM can hold simultaneously. CORTEX is a large framework (259 orchestrator files across 9 domains, 29 registered MCP tools, 32 governance rules, thousands of tests). Loading everything into every session would exhaust the context budget before the user even asks a question.
 
 Token optimization ensures that every turn in a Copilot Chat session carries only the context the LLM needs — nothing more, nothing less. This directly impacts:
 

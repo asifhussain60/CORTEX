@@ -79,4 +79,17 @@ The Workflow Composer is the primary integration point between YAML-defined work
 
 ---
 
-*Verified against workflow_composer.py, workflow_gate.py, template_registry.py, and Phase 89/92 wiring*
+## WorkflowGateway — Mandatory Entry Point (Phase 94–99)
+
+Phase 94 introduced `WorkflowGateway` at `cortex/orchestrators/workflow/workflow_gateway.py` with the `@enforce_gateway` decorator. All Category A orchestrators (TDDOrchestrator, RefactoringOrchestrator, DebuggerOrchestrator, SecurityVulnerabilityOrchestrator, and others) now route through the gateway before execution.
+
+The gateway ensures:
+- **Template resolution** — verifies a matching workflow template exists for the operation
+- **Governance pre-flight** — runs the holistic validation gate primitive
+- **Convergence binding** — attaches the CORE-068 detect-fix-rescan loop
+
+Phase 96 removed legacy `PHASE90_GATEWAY_ENABLED=False` scaffolding. Phase 98 cleaned up 24 dead workflow modules (reducing `cortex/orchestrators/workflow/` from 29 to 6 files) and 23 unreferenced YAML templates. Phase 99 repaired five fatal breaks in the gateway→composer→template chain.
+
+---
+
+*Verified against workflow_gateway.py, workflow_composer.py, workflow_gate.py, template_registry.py, and Phase 89–99 wiring*

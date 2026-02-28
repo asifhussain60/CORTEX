@@ -10,7 +10,7 @@ consolidates: [05-infrastructure-token-optimization]
 order: 8
 ---
 
-> **The core problem:** CORTEX is a large framework — dozens of orchestrators, a growing library of MCP tools, comprehensive governance rules, thousands of tests, and multiple top-level directories. Every VS Code GitHub Copilot Chat session has a finite context window. Loading everything into every session would exhaust the token budget before the developer even asks a question. Token optimization ensures every turn carries only the context the LLM needs — nothing more, nothing less.
+> **The core problem:** CORTEX is a large framework — 259 orchestrator files across 9 domains, 29 registered MCP tools, 32 governance rules, thousands of tests, and 20 top-level directories. Every VS Code GitHub Copilot Chat session has a finite context window. Loading everything into every session would exhaust the token budget before the developer even asks a question. Token optimization ensures every turn carries only the context the LLM needs — nothing more, nothing less.
 
 ---
 

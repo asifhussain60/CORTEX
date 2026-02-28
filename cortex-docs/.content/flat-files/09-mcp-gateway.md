@@ -133,7 +133,7 @@ All tools are registered in `cortex/mcp/mcp_registry.py` via the ConsolidatedToo
 | Tool | Description |
 |------|-------------|
 | cortex_classify | Intent classification — routes requests to correct orchestrator |
-| cortex_orchestrator | Direct orchestrator invocation — routes to any of fifty-one wired orchestrators |
+| cortex_orchestrator | Direct orchestrator invocation — routes to any wired orchestrator across 9 domains |
 | cortex_request_lifecycle | Full request lifecycle — classify, plan, execute, validate |
 | cortex_challenge | Generate two or more alternatives with trade-off analysis using LENS |
 | cortex_ask | Educational questions about CORTEX with truth-based verification |

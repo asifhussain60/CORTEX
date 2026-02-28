@@ -4,7 +4,7 @@
 title: MCP — Model Context Protocol Gateway
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/mcp/ + .vscode/settings.json
 order: 1
 ---
@@ -19,7 +19,7 @@ order: 1
 
 - **Transport:** stdio (development) — no manual server startup
 - **Protocol:** JSON-RPC 2.0
-- **Tools:** Registered MCP tools spanning core, governance, intelligence, operations, utilities, workflow, and work item categories
+- **Tools:** 29 registered MCP tools spanning core, governance, intelligence, operations, utilities, workflow, and work item categories
 - **Clients:** VS Code (Copilot Chat), Cursor, Claude Desktop
 
 ---

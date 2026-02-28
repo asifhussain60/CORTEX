@@ -4,7 +4,7 @@
 title: MCP Tools Catalog
 type: reference
 audience: [Software Developers, Product Owners, Business Leaders]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/mcp/mcp_registry.py
 order: 3
 ---

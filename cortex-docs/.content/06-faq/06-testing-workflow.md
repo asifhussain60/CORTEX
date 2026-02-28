@@ -4,7 +4,7 @@
 title: FAQ — Testing & Development Workflow
 type: reference
 audience: [Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/testing/ + pytest.ini + conftest.py + scripts/run_tests.py
 order: 6
 ---

@@ -4,7 +4,7 @@
 title: CORTEX Extensibility — Adding New Capabilities
 type: explanation
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/mcp/tools/ + cortex/orchestrators/domain/ + cortex-registry/patterns/
 order: 8
 ---

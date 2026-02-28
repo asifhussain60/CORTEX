@@ -4,7 +4,7 @@
 title: High-Level Architecture Diagram
 type: diagram
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/ directory structure
 order: 2
 ---

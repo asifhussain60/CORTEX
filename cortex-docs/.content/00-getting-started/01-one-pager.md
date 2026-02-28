@@ -4,7 +4,7 @@
 title: CORTEX — Cognitive Real-Time Execution Platform
 type: overview
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml
 format: one-pager
 order: 1
@@ -53,11 +53,11 @@ Think of it like the difference between a calculator and a brain. A calculator w
 
 | Domain | What It Does | Key Metric |
 |--------|-------------|------------|
-| **🏗️ Core Platform** | MCP gateway, multi-tier orchestrator dispatch, state management, health monitoring | A growing library of registered MCP tools, Pylance-style stdio |
+| **🏗️ Core Platform** | MCP gateway, multi-tier orchestrator dispatch, state management, health monitoring | 29 registered MCP tools, Pylance-style stdio |
 | **🤖 Intelligence (LENS)** | Parallel code understanding — AST, Git, Security, Patterns, Metrics, and more | Sub-second full analysis |
 | **🧠 Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repo | Confidence scored 0.0–1.0 |
 | **🔗 Intelligence Matrix** | Cross-capability wiring map — ensures all intelligence subsystems are connected | Coverage gate enforced |
-| **🎯 Decisioning** | Intent routing across multiple intent types to wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
+| **🎯 Decisioning** | Intent routing across 28 intent types to wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
 | **🛡️ Governance** | Pre-commit + CI + runtime enforcement of active CORE rules; CORE-064 sweep completeness | Multiple agents, sub-second validation |
 | **⚙️ WorkflowEngine** | YAML→FSM→ConvergenceLoop runtime; StepStateMachine + StepHandlerRegistry | Convergence gate in TDD + audit templates |
 | **🔌 Extensibility** | Custom MCP tools, domain orchestrators, workflow templates, enterprise patterns | Hot-reload; zero core changes |
@@ -127,6 +127,9 @@ Active CORE rules are enforced automatically; the most critical include:
 - **CORE-049** — Silent autonomous execution (progress bars only)
 - **CORE-055** — Golden Test Tier Contract (golden tests always pass)
 - **CORE-064** — Sweep Completeness Contract (no partial sweeps across session boundaries)
+- **CORE-068** — Universal Convergence Gate (detect→fix→rescan until zero P0/P1)
+
+**WorkflowGateway Enforcement (Phase 94–99):** All Category A orchestrators (those that modify code or state) are now decorated with `@enforce_gateway`, ensuring every code-modifying operation routes through the WorkflowGateway before execution — template resolution, governance pre-flight, and convergence binding are mandatory.
 
 ---
 
@@ -199,12 +202,12 @@ The intelligence subsystem gives CORTEX its "brain" — the ability to perceive,
 
 ### 🏗️ Orchestration Engine
 
-Wired orchestrators across four tiers dispatch every request through the right execution path.
+259 orchestrator files across 9 domains dispatch every request through the right execution path.
 
 | Component | Module | What It Does |
 |-----------|--------|-------------|
 | **MasterOrchestrator** | `cortex/orchestrators/core/` | Central coordinator — receives classified intent, delegates to domain orchestrators, wired with OPJ |
-| **IntentRouter** | `cortex/orchestrators/core/intent_router_impl.py` | LENS-based classification into 10+ intent types (IMPLEMENT, FIX, ANALYZE, REFACTOR, PLAN, AUDIT, etc.) |
+| **IntentRouter** | `cortex/orchestrators/core/intent_router_impl.py` | LENS-based classification into 28 intent types (IMPLEMENT, FIX, ANALYZE, REFACTOR, PLAN, AUDIT, WORKFLOW_COMPOSE, etc.) |
 | **TDDOrchestrator** | `cortex/orchestrators/core/tdd_orchestrator.py` | Enforces RED → GREEN → REFACTOR cycle; blocks implementation without failing tests first |
 | **EnforcementOrchestrator** | `cortex/orchestrators/core/enforcement_orchestrator.py` | Pre-commit governance gate with multiple enforcement agents |
 | **RequestRephraseOrchestrator** | `cortex/orchestrators/core/request_rephrase_orchestrator.py` | Stage -1 enrichment with governance context + risk assessment before intent routing |

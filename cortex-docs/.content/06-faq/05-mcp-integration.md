@@ -4,7 +4,7 @@
 title: FAQ — MCP Tools & Integration
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/mcp/tools/ + cortex/repositories/
 order: 5
 ---

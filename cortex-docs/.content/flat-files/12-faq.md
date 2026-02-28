@@ -21,7 +21,7 @@ audience: [Business Leaders, Product Owners, Software Developers]
 
 ### What is CORTEX?
 
-CORTEX (COgnitive Real-Time EXecution) is a production-grade AI engineering framework. It combines wired orchestrators across four tiers, a growing library of MCP tools exposed via a Pylance-style stdio server, CORE governance rules enforced at pre-commit, CI, and runtime, a parallel code intelligence engine (LENS), and TDD-first execution where CORE-008 mandates RED then GREEN then REFACTOR on every IMPLEMENT and FIX. It works directly inside your IDE via the Model Context Protocol. CORTEX is an LLM-orchestration framework — it delegates AI reasoning to the host LLM (GitHub Copilot or GPT); it does not embed ML models.
+CORTEX (COgnitive Real-Time EXecution) is a production-grade AI engineering framework. It combines 259 orchestrator files across 9 domains, 29 MCP tools exposed via a Pylance-style stdio server, 32 CORE governance rules enforced at pre-commit, CI, and runtime, a parallel code intelligence engine (LENS), and TDD-first execution where CORE-008 mandates RED then GREEN then REFACTOR on every IMPLEMENT and FIX. It works directly inside your IDE via the Model Context Protocol. CORTEX is an LLM-orchestration framework — it delegates AI reasoning to the host LLM (GitHub Copilot or GPT); it does not embed ML models.
 
 ### How is CORTEX different from generic AI coding tools?
 
@@ -61,7 +61,7 @@ No. CORTEX runs entirely locally. LENS analysis, MCP transport (stdio), SQLite a
 
 ### How many orchestrators does CORTEX have?
 
-Wired orchestrators span four tiers: core, domain, support, and git. The `cortex/orchestrators/` directory contains additional classes (strategy implementations, mixins, sub-components) but the wired orchestrators are the canonical IOrchestrator-compliant entry points.
+259 orchestrator files span 9 domains: core (102), domain (28), support (51), git (4), health (27), intelligence (16), persona (6), validation (12), and workflow (6). All satisfy IOrchestrator protocol via OrchestratorProtocolMixin. The `cortex/orchestrators/` directory contains the canonical IOrchestrator-compliant entry points plus strategy implementations, mixins, and sub-components.
 
 ### What is the universal orchestrator lifecycle?
 
@@ -69,7 +69,7 @@ Every orchestrator satisfies IOrchestrator via OrchestratorProtocolMixin. The fi
 
 ### How does CORTEX route requests?
 
-IntentRouter classifies every request using LENS analysis and keyword extraction into multiple intent types. Confidence scores at or above 0.7 auto-route, 0.5 to 0.7 may seek clarification, and below 0.5 prompts the user.
+IntentRouter classifies every request using LENS analysis and keyword extraction into 28 intent types. Confidence scores at or above 0.7 auto-route, 0.5 to 0.7 may seek clarification, and below 0.5 prompts the user.
 
 ### What is MasterOrchestrator?
 

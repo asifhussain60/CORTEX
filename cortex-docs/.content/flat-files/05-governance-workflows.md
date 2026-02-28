@@ -56,6 +56,7 @@ Thirty-eight CORE rules plus two AC rules are defined in `cortex-registry/core/t
 | CORE-060 | SDLC Brain | SDLC governance enforcement |
 | CORE-062 | Plan-First | Plan before execution for complex operations |
 | CORE-063 | Challenge-First | Challenge gate for high-risk changes |
+| CORE-068 | Universal Convergence Gate | Detect→fix→rescan until zero P0/P1 (max 3 cycles); applies to IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG, VACUUM, HEALTH |
 | CORE-064 | Sweep Completeness Contract | Every operation must exhaust its full issue catalogue; no partial sweeps |
 
 ---
@@ -78,6 +79,16 @@ EnforcementOrchestrator at `cortex/orchestrators/core/enforcement_orchestrator.p
 | ExtendedGovernanceAgent | Extended rules | CORE-058 through CORE-063 |
 
 Gate results are PASS (operation proceeds), WARNING (operation proceeds with logged advisory), or BLOCKED (operation stops immediately with no files changed).
+
+---
+
+## WorkflowGateway — Mandatory Entry Point (Phase 94–99)
+
+`WorkflowGateway` at `cortex/orchestrators/workflow/workflow_gateway.py` is the mandatory entry point for all code-modifying operations. Introduced in Phase 94, the `@enforce_gateway` decorator ensures that Category A orchestrators — those that modify code or state — route through the WorkflowGateway before execution.
+
+The gateway performs template resolution, governance pre-flight via the holistic validation gate primitive, and convergence binding via the detect-fix-rescan loop. Phase 96 cleaned up legacy gateway flag scaffolding, Phase 98 removed 24 dead workflow modules (reducing the workflow domain from 29 to 6 files), and Phase 99 repaired five fatal breaks in the gateway→composer→template chain.
+
+**Gateway-enforced orchestrators include:** TDDOrchestrator, RefactoringOrchestrator, DebuggerOrchestrator, SecurityVulnerabilityOrchestrator, SDLCWorkflowOrchestrator, TrainerOrchestrator, HealthOrchestrator, VacuumOrchestrator, HolisticValidationOrchestrator, PlanningOrchestrator, EnhancedPlanningOrchestrator, InteractionOrchestrator, and SecurityOrchestrator.
 
 ---
 

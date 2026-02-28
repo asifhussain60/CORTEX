@@ -713,16 +713,18 @@ Transport: Pylance-style stdio. Auto-starts via `.vscode/settings.json`. Server:
 
 | Metric | Value |
 |--------|-------|
-| Wired Orchestrators | 51 (17 core · 7 domain · 23 support · 4 git) |
-| Active MCP Tools | 37 (39 total, 2 deprecated) |
-| CORE Governance Rules | 35 active (Tier 0 skull-rules) |
+| Orchestrator Files | 259 across 9 domains (core:102, domain:28, support:51, git:4, health:27, intelligence:16, persona:6, validation:12, workflow:6) |
+| Active MCP Tools | 29 registered (30 tool files) |
+| CORE Governance Rules | 32 YAML files in `cortex-registry/core/` |
+| Intent Types | 28 (see `cortex/models/canonical_enums.py`) |
 | LENS Analyzers | 10 core + 7 adapters |
-| Knowledge YAML Files | 35+ across 9 domains |
-| Workflow Templates | 60+ across 12 categories |
-| Test Files | 994 (91 golden) |
-| Package Directories | 16 canonical under `cortex/` |
-| Orchestrator Tiers (extended) | 10 (core, domain, support, git, health, intelligence, strategies, synthesis, validation, workflow) |
-| Knowledge Tech Stacks | 32 |
+| Knowledge YAML Files | 38 across 9 domains |
+| Workflow Templates | 79 across 17 categories |
+| Test Suite | ~7,581 tests collected |
+| Package Directories | 20 under `cortex/` |
+| Debug Strategies | 8 (3 Python + 5 multi-stack) |
+| RCA Methodologies | 4 (Five Whys, Fishbone, Fault Tree, Causal Chain) |
+| Phases Completed | 99 |
 
 ---
 

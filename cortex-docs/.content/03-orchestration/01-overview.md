@@ -1,10 +1,10 @@
 # Orchestration Overview
 
 ---
-title: CORTEX Orchestration — Wired Orchestrators Across 4 Tiers
+title: CORTEX Orchestration — 259 Orchestrator Files Across 9 Domains
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/orchestrators/ + cortex-registry/core/specifications/
 order: 1
 ---
@@ -15,7 +15,7 @@ order: 1
 
 ## Architecture
 
-CORTEX has **wired orchestrators** across **4 canonical tiers**, all satisfying the `IOrchestrator` protocol. The canonical wiring specification lives in `cortex-registry/core/specifications/`.
+CORTEX has **259 orchestrator files** across **9 domains** (core:102, domain:28, support:51, git:4, health:27, intelligence:16, persona:6, validation:12, workflow:6), all satisfying the `IOrchestrator` protocol. The canonical wiring specification lives in `cortex-registry/core/specifications/`.
 
 | Tier | Key Orchestrators |
 |------|-----------------|
@@ -37,7 +37,7 @@ CORTEX has **wired orchestrators** across **4 canonical tiers**, all satisfying 
 [MasterOrchestrator]  ← the conductor
      │
      ▼
-[IntentRouter]  ← classifies intent (20-40ms)
+[IntentRouter]  ← classifies into 28 intents (20-40ms)
      │
      ├── IMPLEMENT → TDDOrchestrator
      ├── FIX → TDDOrchestrator
@@ -50,6 +50,7 @@ CORTEX has **wired orchestrators** across **4 canonical tiers**, all satisfying 
      ├── INVESTIGATE → IntelligenceOrchestrator
      ├── QUERY → Context-dependent routing
      ├── DIGEST → Support orchestrators
+     ├── WORKFLOW_COMPOSE → WorkflowComposer
      └── REPHRASE → RequestRephraseOrchestrator
 ```
 

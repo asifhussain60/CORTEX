@@ -4,7 +4,7 @@
 title: Sweep Catalogue — CORE-064 Sweep Completeness Contract
 type: reference
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/orchestrators/support/sweep_catalogue_orchestrator.py + cortex-registry/core/CORE-064.yaml
 order: 10
 ---

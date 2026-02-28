@@ -149,6 +149,20 @@ Templates are organised in a three-tier hierarchy:
 
 **Tier 3 — Workflows** at `cortex-registry/workflows/templates/<domain>/`: Full intent-specific execution workflows. Domains include tdd, security, lifecycle, backend, audit, and governance. Examples: tdd-feature-implementation, security-compliance-audit, onboarding-workflow, csharp-refactor-workflow.
 
+### WorkflowGateway and @enforce_gateway (Phase 94–99)
+
+Location: `cortex/orchestrators/workflow/workflow_gateway.py`
+
+WorkflowGateway is the single entry point for all code-touching operations. Every Category A orchestrator (IMPLEMENT, FIX, REFACTOR, AUDIT, VACUUM, DEBUG, TOTALRECALL) is decorated with `@enforce_gateway`, which intercepts execution and routes through the gateway before reaching WorkflowComposer and then the YAML template pipeline.
+
+**Dispatch chain:** Orchestrator → `@enforce_gateway` → WorkflowGateway → WorkflowComposer → YAML template → StepHandlerRegistry → execution.
+
+**Category A orchestrators** are those whose operations modify code or project state. The decorator ensures that every such operation flows through governance validation, holistic pre-gates, and template-driven execution — no orchestrator can bypass the workflow pipeline.
+
+**Phase 98 cleanup:** Dead code removal reduced the workflow domain from 29 files to 6 files. Twenty-four dead workflow modules, twenty-three unreferenced YAML templates, and fourteen orphaned test files were removed. The remaining six workflow files are the canonical implementation: `workflow_gateway.py`, `workflow_composer.py`, `workflow_engine.py`, `step_handler_registry.py`, `convergence_loop_executor.py`, and the domain `__init__.py`.
+
+**Phase 99 fix:** Five fatal breaks in the gateway → composer → template chain were identified and repaired, restoring end-to-end workflow execution.
+
 ---
 
 ## SecurityOrchestrator — Security-First Development

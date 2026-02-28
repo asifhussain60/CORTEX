@@ -4,7 +4,7 @@
 title: LENS Synthesis — Combining Analyzer Outputs
 type: explanation
 audience: [Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/lens/lens_orchestrator.py + cortex/intelligence/provider.py
 order: 4
 ---

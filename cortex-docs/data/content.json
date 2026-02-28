@@ -27,8 +27,8 @@
     ],
     "summary_metrics": {
       "wired_orchestrators": 51,
-      "orchestrator_files": 282,
-      "orchestrator_domains": 14,
+      "orchestrator_files": 259,
+      "orchestrator_domains": 9,
       "active_mcp_tools": 29,
       "total_mcp_tools": 39,
       "core_rules": 38,
@@ -41,8 +41,8 @@
       "package_directories": 20,
       "knowledge_tech_stacks": 32,
       "knowledge_domains": 34,
-      "phases_completed": 93,
-      "intent_types": 27
+      "phases_completed": 99,
+      "intent_types": 28
     },
     "last_verified": "2026-02-28"
   },

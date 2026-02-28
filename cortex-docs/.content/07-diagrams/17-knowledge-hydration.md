@@ -4,7 +4,7 @@
 title: Knowledge Hydration — Resolution and Context Assembly
 type: diagram
 audience: [Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/knowledge/, cortex-registry/knowledge/
 order: 17
 ---

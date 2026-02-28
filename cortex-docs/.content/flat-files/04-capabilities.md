@@ -23,7 +23,7 @@ The Core Platform is the foundational infrastructure that keeps everything alive
 
 ### OrchestratorProtocolMixin — The Universal Protocol
 
-Every one of the fifty-one wired orchestrators uses `OrchestratorProtocolMixin` combined with the `IOrchestrator` protocol and follows a five-step lifecycle:
+Every orchestrator across all 259 orchestrator files uses `OrchestratorProtocolMixin` combined with the `IOrchestrator` protocol and follows a five-step lifecycle:
 
 - **setup** — initialise resources and load configuration
 - **govern** — check governance rules via the pre-execution gate

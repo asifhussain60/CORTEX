@@ -4,7 +4,7 @@
 title: SDLC 7-Phase Pipeline — From Requirements to Deployment
 type: diagram
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/orchestrators/domain/sdlc_workflow_orchestrator.py
 order: 12
 ---

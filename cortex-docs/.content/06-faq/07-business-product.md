@@ -4,7 +4,7 @@
 title: FAQ — Business & Product
 type: reference
 audience: [Business Leaders, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/ + cortex-registry/ + .github/copilot-instructions.md
 order: 7
 ---

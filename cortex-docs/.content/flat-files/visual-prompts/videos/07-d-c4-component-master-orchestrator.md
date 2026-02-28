@@ -163,7 +163,7 @@ related_diagrams:
   │ ADOContextMapper         │ Azure DevOps sprint + work item context   │
   │ KnowledgeIndexer         │ Cross-repo knowledge graph index          │
   │ Orchestrator Router      │ Selects the right orchestrator            │
-  │ Orchestrator Registry    │ Registry of all 51 wired orchestrators    │
+  │ Orchestrator Registry    │ Registry of all wired orchestrators (259 files, 9 domains) │
   │ Execution Dispatcher     │ Runs the selected orchestrator            │
   │ Governance Engine        │ 38 CORE rules checked before execution    │
   │ Learning Mixin           │ Captures outcome → URS confidence update  │

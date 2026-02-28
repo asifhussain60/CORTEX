@@ -4,7 +4,7 @@
 title: CORTEX Governance — Automated Rule Enforcement
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex-registry/core/tier0-skull/skull-rules.yaml + cortex/orchestrators/core/enforcement_orchestrator.py
 order: 5
 ---
@@ -57,6 +57,7 @@ Extended rules wired via ExtendedGovernanceAgent:
 | **CORE-062** | Plan-First | Plan before execution for complex operations |
 | **CORE-063** | Challenge-First | Challenge gate for high-risk changes |
 | **CORE-064** | Sweep Completeness Contract | Every FIX/REFACTOR/AUDIT must exhaust its full issue catalogue — no partial sweeps. `SweepCatalogueOrchestrator` persists an open catalogue to `.cortex-runtime/sweeps/` so session restarts cannot silently abandon outstanding items. |
+| **CORE-068** | Universal Convergence Gate | Detect→fix→rescan until zero P0/P1 violations remain (max 3 cycles). Applies to IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG, VACUUM, HEALTH. Rule lives at `cortex-registry/core/rules/core-068-convergence-gate.yaml`. |
 
 ---
 
@@ -149,3 +150,11 @@ The trail is immutable and Git-versioned where applicable.
 ---
 
 *All rule IDs and agent names verified against live governance registry*
+
+---
+
+## WorkflowGateway Enforcement (Phase 94–99)
+
+`WorkflowGateway` at `cortex/orchestrators/workflow/workflow_gateway.py` is the mandatory entry point for all code-modifying operations. The `@enforce_gateway` decorator (Phase 94) ensures Category A orchestrators route through the gateway before execution — performing template resolution, governance pre-flight, and convergence binding.
+
+Phase 98 removed 24 dead workflow modules (reducing the workflow domain from 29 to 6 files), and Phase 99 repaired the gateway→composer→template chain to restore full pipeline integrity.

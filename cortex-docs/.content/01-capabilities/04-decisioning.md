@@ -4,7 +4,7 @@
 title: CORTEX Decisioning — Intent Routing & TDD Enforcement
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/orchestrators/core/intent_router.py + cortex/orchestrators/core/tdd_orchestrator.py
 order: 4
 ---
@@ -17,7 +17,7 @@ order: 4
 
 **Location:** `cortex/orchestrators/core/intent_router.py`
 
-IntentRouter classifies every request into one of 12+ intent types using LENS-based classification (20–40ms):
+IntentRouter classifies every request into one of 28 intent types using LENS-based classification (20–40ms):
 
 | Intent | Routed To | What Happens |
 |--------|-----------|-------------|
@@ -28,11 +28,13 @@ IntentRouter classifies every request into one of 12+ intent types using LENS-ba
 | **PLAN** | PlanningOrchestrator | Development roadmap creation |
 | **AUDIT** | EnforcementOrchestrator | Governance compliance check |
 | **DESIGN** | Design coordination | Architecture decisions |
-| **DEBUG** | DebuggerOrchestrator | Problem diagnosis |
+| **DEBUG** | DebuggerOrchestrator | Problem diagnosis (8 strategies) |
 | **INVESTIGATE** | IntelligenceOrchestrator | Deep analysis |
 | **QUERY** | Context-dependent | Information retrieval |
 | **DIGEST** | Digest Coordinator | Topic summarization |
 | **REPHRASE** | RequestRephraseOrchestrator | Request refinement |
+| **WORKFLOW_COMPOSE** | WorkflowComposer | Build/compose workflow pipelines |
+| ... | + 15 more intents | VACUUM, HEALTH, SYNC, TRAIN, RCA, ONBOARD, etc. |
 
 **Business Leader:** "Every request gets classified automatically. There's no ambiguity about which team or process handles it — the router decides in 20ms."
 

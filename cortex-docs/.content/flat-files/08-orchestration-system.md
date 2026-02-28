@@ -15,7 +15,7 @@ audience: [Business Leaders, Product Owners, Software Developers]
 
 # Orchestration System
 
-CORTEX has fifty-one wired orchestrators across four canonical tiers, all satisfying the IOrchestrator protocol. Every orchestrator uses OrchestratorProtocolMixin as its base, follows a universal five-step lifecycle, emits AC markers for audit traceability, and communicates exclusively through MasterOrchestrator.
+CORTEX has 259 orchestrator files across 9 domains (core:102, domain:28, support:51, git:4, health:27, intelligence:16, persona:6, validation:12, workflow:6), all satisfying the IOrchestrator protocol. Every orchestrator uses OrchestratorProtocolMixin as its base, follows a universal five-step lifecycle, emits AC markers for audit traceability, and communicates exclusively through MasterOrchestrator.
 
 ---
 
@@ -58,7 +58,7 @@ setup() → govern() → execute() → validate() → teardown()
 
 The `execute_operation()` method auto-activates cross-cutting hooks (LENS, KnowledgeSynthesis, GovernanceGate). The `execute()` and `run()` methods auto-log ORCHESTRATOR_START and ORCHESTRATOR_END to `.cortex-runtime/audit.db` (SQLite WAL). Audit logging is non-blocking — a failure to log never prevents execution.
 
-OrchestratorBase exists at `cortex/core/orchestrator_base.py` but is only used by two legacy orchestrators. All fifty-one wired orchestrators use IOrchestrator plus OrchestratorProtocolMixin.
+OrchestratorBase exists at `cortex/core/orchestrator_base.py` but is only used by two legacy orchestrators. All wired orchestrators use IOrchestrator plus OrchestratorProtocolMixin.
 
 ---
 
@@ -66,7 +66,7 @@ OrchestratorBase exists at `cortex/core/orchestrator_base.py` but is only used b
 
 Location: `cortex/orchestrators/core/master_orchestrator.py`
 
-MasterOrchestrator coordinates all fifty-one wired orchestrators through hierarchical dispatch. It receives enriched requests from the MCP Gateway, invokes IntentRouter for classification, dispatches to the appropriate orchestrator, monitors execution via AC markers, and records the audit trail to `.cortex-runtime/traces/orchestrator-traces.db`.
+MasterOrchestrator coordinates all wired orchestrators through hierarchical dispatch. It receives enriched requests from the MCP Gateway, invokes IntentRouter for classification, dispatches to the appropriate orchestrator, monitors execution via AC markers, and records the audit trail to `.cortex-runtime/traces/orchestrator-traces.db`.
 
 ### Nine-Stage Audit Pipeline
 
@@ -93,7 +93,7 @@ For complex pipelines, MasterOrchestrator delegates to stage-specific implementa
 
 Location: `cortex/orchestrators/core/intent_router.py`
 
-IntentRouter classifies every incoming request into one of twenty-seven intent types using a 4-stage pipeline: InteractionOrchestrator (Stage 1 — LENS per-turn comprehension), IntentRouter (Stage 2 — classification), WorkflowComplexityRouter (Stage 3 — technology-aware template binding), and MasterOrchestrator (Stage 4 — dispatch). Classification takes twenty to forty milliseconds.
+IntentRouter classifies every incoming request into one of twenty-eight intent types using a 4-stage pipeline: InteractionOrchestrator (Stage 1 — LENS per-turn comprehension), IntentRouter (Stage 2 — classification), WorkflowComplexityRouter (Stage 3 — technology-aware template binding), and MasterOrchestrator (Stage 4 — dispatch). Classification takes twenty to forty milliseconds.
 
 | Intent | Target Orchestrator | Trigger Keywords |
 |--------|-------------------|-----------------|
@@ -124,8 +124,9 @@ IntentRouter classifies every incoming request into one of twenty-seven intent t
 | DASHBOARD | DashboardOrchestrator | dashboard, visualize, report |
 | DISCOVER | UnifiedDiscoveryOrchestrator | discover, explore, scan |
 | WORKFLOW | WorkflowOrchestrator | workflow, pipeline, template |
+| WORKFLOW_COMPOSE | WorkflowComposer | compose, compose workflow, build pipeline |
 
-As of Phase 93, all twenty-seven intents are fully wired with routing miss detection (Phase 91) — any unrecognised request falls through to a structured rephrase prompt rather than silent failure.
+As of Phase 98, all twenty-eight intents are fully wired with routing miss detection (Phase 91) — any unrecognised request falls through to a structured rephrase prompt rather than silent failure. Phase 98 performed a dead code cleanup that removed 24 dead workflow modules, 23 unreferenced YAML templates, and 14 orphaned test files, reducing the workflow domain from 29 to 6 files while preserving all live functionality.
 
 ---
 
@@ -288,3 +289,20 @@ It provides fourteen pre-built command chains (e.g., `/audit fix` → `IntentRou
 Phase 89 wired the complete workflow infrastructure from inert YAML definitions to live, executable pipelines. Seven capability clusters were addressed: technology-aware routing (WorkflowComplexityRouter), PostRefactorLintGate, engagement visibility via EngagementRenderer, SQLite tracing of every workflow step, expanded template wiring (6→20 operation types), WorkflowComposer graph execution, and CORE-068 convergence binding.
 
 The complete template library spans seventy-nine templates across seventeen categories at `cortex-registry/workflows/templates/`.
+
+---
+
+## WorkflowGateway and @enforce_gateway (Phase 94–99)
+
+`WorkflowGateway` at `cortex/orchestrators/workflow/workflow_gateway.py` is the mandatory entry point for all code-modifying orchestrator operations. Phase 94 introduced the `@enforce_gateway` decorator, which ensures that every Category A orchestrator (those that modify code or state) routes through the WorkflowGateway before execution.
+
+**Category A orchestrators** (gateway-enforced): TDDOrchestrator, RefactoringOrchestrator, DebuggerOrchestrator, SecurityVulnerabilityOrchestrator, SDLCWorkflowOrchestrator, TrainerOrchestrator, HealthOrchestrator, VacuumOrchestrator, and others.
+
+The gateway performs three checks before allowing execution:
+1. **Template resolution** — verifies a matching workflow template exists for the operation
+2. **Governance pre-flight** — runs the holistic validation gate primitive
+3. **Convergence binding** — attaches the detect-fix-rescan loop for post-execution validation
+
+Phase 96 cleaned up the gateway flag scaffolding by removing the legacy `PHASE90_GATEWAY_ENABLED=False` guards. Phase 98 performed a dead code cleanup removing 24 dead workflow modules, reducing the workflow domain from 29 to 6 files. Phase 99 fixed five fatal breaks in the gateway→composer→template chain to restore full pipeline integrity.
+
+The `WorkflowComposer` at `cortex/orchestrators/workflow/workflow_composer.py` sits behind the gateway and handles YAML template resolution, dependency graph construction, and step-by-step execution through the StepStateMachine.

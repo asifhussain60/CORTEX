@@ -23,11 +23,11 @@ CORTEX organizes capabilities into six cognitive domains — each analogous to a
 | 1 | **🏗️ Core Platform** | Brainstem — keeps everything alive | Registered MCP tools, canonical dirs |
 | 2 | **🤖 Intelligence (LENS)** | Sensory cortex — processes raw input | Parallel analyzers |
 | 3 | **🧠 Brain Tiers** | Prefrontal cortex — decides and plans | Perception → Reasoning → Action |
-| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | Wired orchestrators across 4 tiers (core, domain, support, git) |
-| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | CORE rules, CORE-064, CORE-068 |
+| 4 | **🎯 Decisioning** | Thalamus — routes signals to right region | 28 intent types across 9 orchestrator domains |
+| 5 | **🛡️ Governance** | Immune system — blocks threats automatically | CORE rules, CORE-064, CORE-068, WorkflowGateway |
 | 6 | **🔌 Extensibility** | Neuroplasticity — adapts to new capabilities | Hot-reload, zero core changes |
 
-**Phase 85–94 additions (all complete):** Response Template Engine v2 (16 composable blocks), Multi-Stack Debugging (8 strategies, Vision API), RCA Memory Engine (4 methodologies), Unified Reinforcement Signal (closed-loop learning), Operational Workflow Pipeline (79 templates, technology routing), Holistic Intent Wiring (27 intent types fully routed), EngagementRenderer (SSOT breadcrumbs), Universal Convergence Gate (CORE-068, detect→fix→rescan).
+**Phase 85–99 additions (all complete):** Response Template Engine v2 (16 composable blocks), Multi-Stack Debugging (8 strategies, Vision API), RCA Memory Engine (4 methodologies), Unified Reinforcement Signal (closed-loop learning), Operational Workflow Pipeline (79 templates, technology routing), Holistic Intent Wiring (28 intent types fully routed), EngagementRenderer (SSOT breadcrumbs), Universal Convergence Gate (CORE-068, detect→fix→rescan), WorkflowGateway with `@enforce_gateway` decorator (Phase 94–95), Gateway Flag Cleanup (Phase 96), RCA+DIGEST workflow template wiring (Phase 97), Dead Code Cleanup removing 24 dead modules and 23 unreferenced templates (Phase 98), Gateway→Composer→Template chain fix (Phase 99).
 
 ---
 

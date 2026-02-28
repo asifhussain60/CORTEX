@@ -164,5 +164,5 @@ related_diagrams:
   │ SweepCatalogueOrchestrator→ /audit fix (Stages 7-8)        │
   │ Domain Orchestrators      → company-specific routing       │
   └────────────────────────────────────────────────────────────┘
-  Total: 51 wired orchestrators across 4 tiers
+  Total: 259 orchestrator files across 9 domains
 ```

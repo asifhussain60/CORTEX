@@ -4,7 +4,7 @@
 title: CORTEX Architecture Overview
 type: explanation
 audience: [Business Leaders, Product Owners, Software Developers]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: cortex/ + cortex-registry/cortex-master.yaml + .github/copilot-instructions.md
 format: diátaxis-explanation
 voice: third-person-blended
@@ -23,9 +23,10 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 **What makes it different from other dev tools:**
 
 - Traditional tools answer questions. CORTEX **orchestrates entire workflows** — from intent classification through TDD enforcement to code delivery.
-- One canonical Python package (`cortex`), a comprehensive orchestrator ecosystem across four tiers (core, domain, support, git), a growing library of MCP tools, and an extensive set of CORE governance rules.
+- One canonical Python package (`cortex`), 259 orchestrator files across 9 domains, 29 registered MCP tools, and 32 governance YAMLs.
 - TDD is not optional. CORE-008 mandates RED → GREEN → REFACTOR on every IMPLEMENT/FIX request. No exceptions.
 - Everything is Git-backed. No PostgreSQL, no MongoDB — just YAML files in `cortex-registry/` versioned alongside your code.
+- WorkflowGateway enforcement ensures every code-modifying operation routes through template resolution, governance pre-flight, and convergence binding.
 
 ---
 
@@ -34,14 +35,16 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value | Status |
 |--------|-------|--------|
 | **Package** | 1 canonical (`cortex`) | ✅ Consolidated to single namespace |
-| **Orchestrators** | Comprehensive ecosystem across 4 tiers (core, domain, support, git) | ✅ IOrchestrator protocol enforced |
-| **MCP Tools** | Growing library in `cortex/mcp/tools/` | ✅ Pylance-style stdio server |
-| **Top-level Dirs** | Streamlined canonical layout under `cortex/` | ✅ Consolidated and clean |
-| **Governance Rules** | Extensive CORE rules (+ AC rules) | ✅ Enforced at pre-commit + CI + runtime |
-| **Test Suite** | Thousands of tests across unit, golden, and phase tiers | ✅ Parallel xdist batch runner |
+| **Orchestrator Files** | 259 across 9 domains (core:102, domain:28, support:51, git:4, health:27, intelligence:16, persona:6, validation:12, workflow:6) | ✅ IOrchestrator protocol enforced |
+| **MCP Tools** | 29 registered in `cortex/mcp/mcp_registry.py`; 30 tool files | ✅ Pylance-style stdio server |
+| **Top-level Dirs** | 20 under `cortex/` | ✅ Consolidated and clean |
+| **Governance Rules** | 32 YAML files in `cortex-registry/core/` | ✅ Enforced at pre-commit + CI + runtime |
+| **Intent Types** | 28 (see `cortex/models/canonical_enums.py`) | ✅ All fully routed |
+| **Test Suite** | ~7,581 tests collected | ✅ Parallel xdist batch runner |
 | **Parallel Testing** | pytest-xdist (`-n auto --dist loadscope`) | ✅ CortexXdistPlugin batch runner |
-| **Enterprise Patterns** | Multiple patterns in registry | ✅ mediator, strategy, observer, factory, etc. |
+| **Workflow Templates** | 79 across 17 categories | ✅ WorkflowGateway enforced |
 | **Sweep Completeness** | CORE-064 enforced via SweepCatalogueOrchestrator | ✅ No partial sweeps across sessions |
+| **Convergence Gate** | CORE-068 — detect→fix→rescan until zero P0/P1 | ✅ Max 3 cycles |
 | **URS** | Unified Reinforcement Signal — closed-loop learning | ✅ Multiple wired surfaces, `cortex_learning` MCP tool |
 
 ---
@@ -55,8 +58,8 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
   │                                                               │
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │
   │  │ MCP Gateway │──▶│  Orchestration   │──▶│ Intelligence  │  │
-  │  │ Tools       │   │  Wired           │   │ LENS + Brain  │  │
-  │  └─────────────┘   │  4 canonical tiers│   │ + URS         │  │
+  │  │ 29 Tools   │   │  259 files       │   │ LENS + Brain  │  │
+  │  └─────────────┘   │  9 domains       │   │ + URS         │  │
   │         │          └──────────────────┘   └───────────────┘  │
   │         ▼                   │                     │           │
   │  ┌─────────────┐   ┌──────────────────┐   ┌───────────────┐  │

@@ -31,17 +31,19 @@ CORTEX is built from one canonical Python package (`cortex`) with a single impor
 | Metric | Value |
 |--------|-------|
 | Canonical Package | `cortex` (single namespace, all imports `cortex.*`) |
-| Wired Orchestrators | Comprehensive ecosystem across 4 tiers (core, domain, support, git) |
-| MCP Tools | A growing library of registered tools, Pylance-style stdio auto-start |
-| CORE Governance Rules | Extensive set of active rules (+ AC rules), enforced at pre-commit, CI, and runtime |
-| Test Suite | Thousands of tests collected (unit + preflight + golden + phase tiers) |
+| Orchestrator Files | 259 across 9 domains (core:102, domain:28, support:51, git:4, health:27, intelligence:16, persona:6, validation:12, workflow:6) |
+| MCP Tools | 29 registered tools, Pylance-style stdio auto-start |
+| CORE Governance Rules | 32 YAML files in `cortex-registry/core/`, enforced at pre-commit, CI, and runtime |
+| Test Suite | ~7,581 tests collected (unit + preflight + golden + phase tiers) |
+| Intent Types | 28 (IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG, and 23 more) |
 | LENS Analyzers | Multiple parallel analyzer components, sub-second combined latency |
 | Languages Analyzed | Python, TypeScript/JavaScript, C#/.NET, Angular, React, Vue |
 | Intelligence Tiers | Quick (<200ms), Targeted (<2s), Full (<10s) |
 | Parallel Testing | pytest-xdist with `-n auto --dist loadscope` |
-| Debug Strategies | Multiple strategies: Python live + multi-stack planned |
-| RCA Engine | Structured root-cause analysis with Five Whys, Fishbone, Fault Tree |
-| Phases Complete | Under continuous development — the platform evolves with each release |
+| Debug Strategies | 8 strategies: 3 Python + 5 multi-stack (Frontend, HTML-Vision, API, SQL, DotNet) |
+| RCA Engine | 4 methodologies: Five Whys, Fishbone, Fault Tree, Causal Chain |
+| Workflow Templates | 79 templates across 17 categories |
+| Phases Complete | 99 phases, under continuous development |
 
 ---
 
@@ -51,12 +53,12 @@ CORTEX organises capabilities into six cognitive domains, each analogous to a sp
 
 | Domain | What It Does | Key Metric |
 |--------|-------------|------------|
-| **Core Platform** | MCP gateway, multi-tier orchestrator dispatch, state management, health monitoring | A growing library of registered MCP tools, Pylance-style stdio |
+| **Core Platform** | MCP gateway, multi-tier orchestrator dispatch, state management, health monitoring | 29 registered MCP tools, Pylance-style stdio |
 | **Intelligence (LENS)** | Parallel code understanding covering AST, Git, Security, Patterns, Metrics, and more | Sub-second full analysis |
 | **Brain (Perception → Reasoning → Action)** | Pattern recognition, strategy selection, execution planning — learns from every repository | Confidence scored 0.0–1.0 |
-| **Decisioning** | Intent routing across multiple intent types to wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
-| **Governance** | Pre-commit, CI, and runtime enforcement of active CORE rules; sweep completeness (CORE-064) | Multiple enforcement agents, sub-second validation |
-| **Extensibility** | Custom MCP tools, domain orchestrators, workflow templates, enterprise patterns, work-item integrations | Hot-reload; zero core changes |
+| **Decisioning** | Intent routing across 28 intent types to wired orchestrators; TDD workflow enforcement | IntentRouter with LENS classification |
+| **Governance** | Pre-commit, CI, and runtime enforcement of 32 governance YAMLs; sweep completeness (CORE-064); WorkflowGateway enforcement | 10 enforcement agents, sub-second validation |
+| **Extensibility** | Custom MCP tools, domain orchestrators, 79 workflow templates, enterprise patterns, work-item integrations | Hot-reload; zero core changes |
 
 ---
 
@@ -68,7 +70,7 @@ Every request passes through a structured pipeline before any code is written. T
 
 **Stage 0 · MCP Gateway** — The enriched request arrives at the MCP Gateway over JSON-RPC 2.0 via stdio transport. The gateway validates the message, routes to the correct MCP tool from the registered tools library, and enforces rate limiting.
 
-**Stage 1 · Intent Classification** — IntentRouter uses LENS-based intelligence to determine what the request is asking for: IMPLEMENT, FIX, REFACTOR, ANALYZE, PLAN, AUDIT, DESIGN, DEBUG, INVESTIGATE, QUERY, DIGEST, or REPHRASE. High confidence routes immediately. Medium confidence routes but asks a clarifying question. Low confidence asks the user to rephrase.
+**Stage 1 · Intent Classification** — IntentRouter uses LENS-based intelligence to determine what the request is asking for: IMPLEMENT, FIX, REFACTOR, ANALYZE, PLAN, AUDIT, DESIGN, DEBUG, INVESTIGATE, QUERY, DIGEST, REPHRASE, WORKFLOW_COMPOSE, or one of the other twenty-eight recognised intent types. High confidence routes immediately. Medium confidence routes but asks a clarifying question. Low confidence asks the user to rephrase.
 
 **Stage 2 · LENS Analysis (300–800ms)** — When the orchestrator needs to understand the codebase, LENS runs its parallel analyzers: AST structure, Git history, comment coverage, import dependencies, security vulnerabilities, architecture patterns, complexity metrics, business domain detection, and technology stack fingerprinting. All run simultaneously and produce a unified awareness of the code.
 
@@ -88,7 +90,7 @@ The complete pipeline from request to result typically takes between 500ms and 2
 
 ### Orchestrators
 
-An orchestrator is a specialised processing engine for one category of work. CORTEX has a comprehensive set of wired orchestrators across four tiers, all satisfying the IOrchestrator protocol via OrchestratorProtocolMixin.
+An orchestrator is a specialised processing engine for one category of work. CORTEX has 259 orchestrator files across 9 domains (core, domain, support, git, health, intelligence, persona, validation, workflow), all satisfying the IOrchestrator protocol via OrchestratorProtocolMixin.
 
 Every orchestrator follows a five-step lifecycle: setup, govern, execute, validate, teardown. Governance audit is wired into teardown, and both execute and run operations auto-log start and end markers to the SQLite audit database. This audit logging is non-blocking — a failure to log never prevents execution.
 
@@ -106,7 +108,7 @@ All inter-orchestrator communication flows through the MasterOrchestrator, ensur
 
 The Model Context Protocol is the communication standard connecting IDEs to CORTEX. It uses JSON-RPC 2.0 passed over stdio in development and HTTP in production. The MCP server auto-starts when VS Code opens the workspace — identical to how Pylance starts. No manual startup is required.
 
-CORTEX exposes a growing library of registered MCP tools organised by category: core routing, governance and compliance, intelligence and LENS, planning and audit, testing and quality, diagnostics and health, automation and workflows, maintenance and cleanup, version control, documentation, and toolkit operations.
+CORTEX exposes 29 registered MCP tools organised by category: core routing, governance and compliance, intelligence and LENS, planning and audit, testing and quality, diagnostics and health, automation and workflows, maintenance and cleanup, version control, documentation, and toolkit operations.
 
 ### Git-Backed Registry
 
@@ -122,7 +124,7 @@ The three-layer cognitive core of CORTEX, housed in `cortex/intelligence/`. Perc
 
 ### CORE Rules
 
-Numbered governance standards enforced automatically at pre-commit, CI, and runtime. The most critical include: CORE-002 (all output inline, no report files), CORE-008 (TDD mandatory), CORE-011 (type hints on all functions), CORE-012 (docstrings on all public APIs), CORE-028 (snake_case file naming), CORE-035 (single canonical implementation), CORE-048 (holistic validation gate), CORE-049 (silent autonomous execution), CORE-055 (golden test tier contract), and CORE-064 (sweep completeness, no partial fixes).
+Numbered governance standards enforced automatically at pre-commit, CI, and runtime. The most critical include: CORE-002 (all output inline, no report files), CORE-008 (TDD mandatory), CORE-011 (type hints on all functions), CORE-012 (docstrings on all public APIs), CORE-028 (snake_case file naming), CORE-035 (single canonical implementation), CORE-048 (holistic validation gate), CORE-049 (silent autonomous execution), CORE-055 (golden test tier contract), CORE-064 (sweep completeness, no partial fixes), and CORE-068 (universal convergence gate — detect→fix→rescan until zero P0/P1).
 
 ### Enforcement Agents
 
@@ -166,7 +168,7 @@ A pluggable ticketing integration protocol that connects any ticketing system (A
 | Transport | stdio (development), HTTP (production) |
 | Package | 1 canonical Python package (`cortex`) — all imports use `cortex.*` |
 | Storage | Git-backed YAML registry — no external database required |
-| Testing | pytest-xdist parallel execution; comprehensive test suite |
+| Testing | pytest-xdist parallel execution; ~7,581 tests collected |
 | Observability | OpenTelemetry tracing, Prometheus metrics, Grafana dashboards, SQLite audit log |
 | Audit Trail | CortexAuditDB (SQLite WAL mode) in `.cortex-runtime/` with AC_START and AC_COMPLETE markers on every orchestrator invocation |
 

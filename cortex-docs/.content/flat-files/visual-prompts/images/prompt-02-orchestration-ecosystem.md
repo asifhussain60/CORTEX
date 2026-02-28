@@ -47,7 +47,7 @@ GIT TIER (green #00ff88, outer ring):
 Between all stars, show thin glowing connection lines in rgba(0, 212, 255, 0.2) — neural pathways showing how orchestrators communicate through the central hub.
 
 Glassmorphic legend bar at bottom:
-"CORTEX Orchestration Ecosystem · Four Tiers · Unified Protocol · Extensible"
+"CORTEX Orchestration Ecosystem · Nine Domains · Unified Protocol · Extensible"
 Subtitle in white text: "Every request flows from the center outward — each orchestrator has one job, done exceptionally"
 
 Style: Cinematic space visualization with glassmorphism UI overlay panels. NOT cartoonish. Deep navy (#0a0e27) space with cyan/purple nebula accents. Professional keynote quality.

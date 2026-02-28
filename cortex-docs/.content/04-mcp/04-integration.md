@@ -4,7 +4,7 @@
 title: MCP Integration — IDE & Client Setup
 type: how-to
 audience: [Software Developers, Product Owners]
-last_verified: 2026-02-27
+last_verified: 2026-02-28
 source_of_truth: .vscode/settings.json + cortex/mcp/
 order: 4
 ---
