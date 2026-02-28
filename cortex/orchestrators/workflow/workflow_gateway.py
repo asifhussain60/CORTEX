@@ -226,15 +226,31 @@ class WorkflowGateway:
 
         try:
             composer = self._get_composer()
-            result = composer.execute_from_template(
+            composer_result = composer.execute_from_template(
                 template_id,
                 context or {},
                 convergence_mode=True,
             )
 
             duration_ms = time.time() * 1000 - started_ms
-            status = result.get("status", "complete") if isinstance(result, dict) else "complete"
-            steps = result.get("steps_completed", 0) if isinstance(result, dict) else 0
+
+            # WorkflowComposer returns WorkflowExecutionResult (dataclass) —
+            # normalise to dict for gateway's uniform return type.
+            if isinstance(composer_result, dict):
+                result = composer_result
+                status = result.get("status", "complete")
+                steps = result.get("steps_completed", 0)
+            else:
+                # WorkflowExecutionResult dataclass
+                status = "complete" if getattr(composer_result, "success", False) else "error"
+                steps = getattr(composer_result, "steps_completed", 0)
+                result = {
+                    "status": status,
+                    "steps_completed": steps,
+                    "total_steps": getattr(composer_result, "total_steps", 0),
+                    "success": getattr(composer_result, "success", False),
+                    "error_message": getattr(composer_result, "error_message", None),
+                }
 
             self._log_workflow_run(
                 run_id=run_id,
@@ -277,10 +293,14 @@ class WorkflowGateway:
     # ── INTERNAL ──────────────────────────────────────────────────────────
 
     def _get_composer(self) -> Any:
-        """Lazy-initialize WorkflowComposer."""
+        """Lazy-initialize WorkflowComposer in gateway mode (no template_path).
+
+        In gateway mode, the composer loads templates on-demand via
+        ``execute_from_template(template_id_string)``.
+        """
         if self._composer is None:
             from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer
-            self._composer = WorkflowComposer()
+            self._composer = WorkflowComposer()  # gateway mode — template_path=None
         return self._composer
 
     def _emit_ac_marker(
@@ -322,10 +342,29 @@ class WorkflowGateway:
             )
 
     def _ensure_db(self) -> None:
-        """Create SQLite workflow_runs table if it does not exist."""
+        """Create or migrate SQLite workflow_runs table.
+
+        Phase 99: Detects schema mismatch from Phase 98 cleanup and
+        recreates the table with the correct gateway schema. The old
+        table (id, session_id, loop_name, invoked_at, result) is from
+        the deleted convergence_loop_executor and is incompatible.
+        """
         try:
             self._db_path.parent.mkdir(parents=True, exist_ok=True)
             with sqlite3.connect(str(self._db_path)) as conn:
+                # Check if table exists and has the correct schema
+                cursor = conn.execute("PRAGMA table_info(workflow_runs)")
+                columns = {row[1] for row in cursor.fetchall()}
+
+                if columns and "run_id" not in columns:
+                    # Table exists with wrong schema — drop and recreate
+                    logger.info(
+                        "WorkflowGateway: migrating workflow_runs table "
+                        "(old columns: %s)", columns
+                    )
+                    conn.execute("DROP TABLE workflow_runs")
+                    conn.commit()
+
                 conn.execute(_CREATE_TABLE_SQL)
                 conn.commit()
         except Exception as exc:

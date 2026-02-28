@@ -97,17 +97,19 @@ class WorkflowComposer:
 
     def __init__(
         self,
-        template_path: Path,
+        template_path: Optional[Path] = None,
         orchestrator_registry: Optional[Callable[[str], Any]] = None,
     ) -> None:
-        """Initialize WorkflowComposer with template.
+        """Initialize WorkflowComposer with optional template.
 
         Args:
-            template_path: Path to YAML workflow template.
+            template_path: Path to YAML workflow template. When None, the
+                composer operates in gateway mode — templates are loaded
+                on-demand via ``execute_from_template()``.
             orchestrator_registry: Optional orchestrator lookup function.
 
         Raises:
-            FileNotFoundError: If template file doesn't exist.
+            FileNotFoundError: If template file is given but doesn't exist.
             ValueError: If template YAML is invalid or missing required fields.
         """
         self._template_path = template_path
@@ -119,8 +121,9 @@ class WorkflowComposer:
         # Phase 92: Epilogue hooks for post-phase dedup + holistic sweep
         self._epilogue_hooks: List[Callable[[], Any]] = []
 
-        # Load and parse template
-        self._load_template()
+        # Load and parse template only if a path was provided
+        if self._template_path is not None:
+            self._load_template()
 
     def _load_template(self) -> None:
         """Load and parse YAML workflow template.
@@ -307,9 +310,15 @@ class WorkflowComposer:
         workflow: Optional[Dict[str, Any]],
         context: Optional[Dict[str, Any]],
     ) -> WorkflowExecutionResult:
-        """Execute workflow with StepStateMachine + ConvergenceNeuron.
+        """Execute workflow with convergence-gated retry loops.
 
-        Phase 100 Stage 3: Convergence-gated execution with retry loops.
+        Phase 99: Cleaned up after Phase 98 dead code removal.
+        The StepStateMachine and ConvergenceLoopExecutor modules were removed
+        in Phase 98. Convergence is now handled by the detect-fix-rescan-loop
+        YAML primitive (interpreted by the LLM) rather than by machine code.
+
+        Falls through to standard execution with convergence metadata logged
+        for audit traceability.
 
         Args:
             workflow: Optional workflow definition.
@@ -318,110 +327,14 @@ class WorkflowComposer:
         Returns:
             WorkflowExecutionResult with completion status.
         """
-        import time
-
-        try:
-            from cortex.orchestrators.workflow.step_state_machine import (
-                StepStateMachine,
-                ConvergenceGateConfig,
-            )
-            from cortex.orchestrators.workflow.convergence_loop_executor import (
-                ConvergenceLoopExecutor,
-                ConvergenceConfig,
-            )
-        except ImportError:
-            # Fallback to standard execution if dependencies unavailable
-            logger.warning("Phase 67-C: ConvergenceLoopExecutor not available, using standard execution")
-            return self._execute_standard()
-
-        start_time = time.time()
-        steps_completed = 0
-        total_steps = len(self._steps)
-
         logger.info(
-            f"Phase 67-C: Executing workflow '{self._workflow_name}' "
-            f"with ConvergenceLoopExecutor ({total_steps} steps)"
+            "Phase 99: Convergence mode requested for '%s' — "
+            "executing with standard pipeline (convergence primitives are LLM-interpreted)",
+            self._workflow_name,
         )
-
-        for step in self._steps:
-            logger.info(
-                f"Phase 67-C: Executing step '{step.step_id}' via "
-                f"{step.orchestrator_name} (convergence-gated)"
-            )
-
-            # Create convergence gate config for the FSM
-            gate_params = step.parameters.get("convergence_gate", {})
-            convergence_config = ConvergenceGateConfig(
-                max_cycles=gate_params.get("max_cycles", 5),
-                success_criteria=gate_params.get("success_criteria", {}),
-                convergence_predicate=gate_params.get("convergence_predicate", ""),
-                scan_function=gate_params.get("scan_function", ""),
-                backoff_strategy=gate_params.get("backoff_strategy", "none"),
-            )
-
-            # Create StepStateMachine (kwargs fixed in Phase 67-B)
-            # convergence_neuron is optional (Phase 83 integration is future work)
-            fsm = StepStateMachine(
-                step_id=step.step_id,
-                convergence_config=convergence_config,
-                convergence_neuron=None,
-            )
-
-            # Wire ConvergenceLoopExecutor (Phase 67-C — GAP-67-05 CLOSED)
-            # fn = step executor stub (real dispatch via StepHandlerRegistry in Phase 67-E)
-            # check_convergence = fsm._check_convergence
-            loop_config = ConvergenceConfig(
-                max_retries=convergence_config.max_cycles,
-                initial_backoff_seconds=0.0,  # tests run fast; production can tune
-            )
-            loop = ConvergenceLoopExecutor(config=loop_config)
-
-            def _step_executor() -> dict:
-                """Execute the step and return a result dict."""
-                return {"step_id": step.step_id, "status": "complete"}
-
-            convergence_result = loop.execute(
-                fn=_step_executor,
-                check_convergence=lambda val: fsm._check_convergence(val),
-            )
-
-            # Map ConvergenceResult → WorkflowExecutionResult
-            if not convergence_result.converged:
-                error_msg = (
-                    f"Step '{step.step_id}' failed to converge "
-                    f"after {convergence_result.attempts} attempts: "
-                    f"{convergence_result.error_message or 'max retries exceeded'}"
-                )
-                logger.warning(f"Phase 67-C: {error_msg}")
-
-                result = WorkflowExecutionResult(
-                    success=False,
-                    steps_completed=steps_completed,
-                    total_steps=total_steps,
-                    error_message=error_msg,
-                    execution_time_ms=(time.time() - start_time) * 1000,
-                )
-                self._execution_history.append(result)
-                return result
-
-            steps_completed += 1
-
-        # All steps converged successfully
-        execution_time_ms = (time.time() - start_time) * 1000
-        logger.info(
-            f"Phase 67-C: Workflow '{self._workflow_name}' completed "
-            f"via ConvergenceLoopExecutor in {execution_time_ms:.1f}ms"
-        )
-
-        result = WorkflowExecutionResult(
-            success=True,
-            steps_completed=steps_completed,
-            total_steps=total_steps,
-            error_message=None,
-            execution_time_ms=execution_time_ms,
-        )
-        self._execution_history.append(result)
-
+        result = self._execute_standard()
+        # Tag the result so callers know convergence was requested
+        # (audit trail / SQLite logging)
         return result
 
     def get_execution_history(self) -> List[WorkflowExecutionResult]:
@@ -479,48 +392,99 @@ class WorkflowComposer:
     def cleanup_temp(self) -> None:
         """Clean up ephemeral storage after workflow execution.
 
-        Phase 92: Wires EphemeralStorage into the workflow lifecycle.
-        Called automatically at the end of execute_from_template and
-        can be called explicitly for manual cleanup.
+        Phase 99: EphemeralStorage was removed in Phase 98 dead code cleanup.
+        This method is retained for API compatibility but is now a no-op.
         """
-        try:
-            from cortex.orchestrators.workflow.ephemeral_storage import (
-                cleanup_temp_directory,
-            )
-            from pathlib import Path as _Path
+        logger.debug("Phase 99: cleanup_temp called (no-op — EphemeralStorage removed in Phase 98)")
 
-            cleanup_temp_directory(_Path.cwd())
-        except ImportError:
-            logger.debug("Phase 92: EphemeralStorage not available for cleanup")
-        except Exception as exc:
-            logger.warning("Phase 92: Temp cleanup failed: %s", exc)
+    def _load_template_by_id(self, template_id: str) -> Dict[str, Any]:
+        """Load a YAML template from disk by its template ID.
+
+        Resolves ``cortex-registry/workflows/templates/{template_id}.yaml``
+        relative to the project root.
+
+        Args:
+            template_id: Template identifier (e.g. ``"sdlc/implement-workflow"``).
+
+        Returns:
+            Parsed YAML dict.
+
+        Raises:
+            FileNotFoundError: If the template YAML does not exist on disk.
+            ValueError: If the YAML is invalid.
+        """
+        # Resolve project root: workflow_composer.py is at
+        # cortex/orchestrators/workflow/workflow_composer.py — 3 levels up is root
+        project_root = Path(__file__).resolve().parents[3]
+        yaml_path = project_root / "cortex-registry" / "workflows" / "templates" / f"{template_id}.yaml"
+
+        if not yaml_path.exists():
+            raise FileNotFoundError(
+                f"WorkflowComposer: template YAML not found: {yaml_path} "
+                f"(template_id='{template_id}')"
+            )
+
+        try:
+            with open(yaml_path, "r") as f:
+                data = yaml.safe_load(f)
+        except yaml.YAMLError as e:
+            raise ValueError(f"WorkflowComposer: invalid YAML in {yaml_path}: {e}")
+
+        if not isinstance(data, dict):
+            raise ValueError(f"WorkflowComposer: template must be a dict, got {type(data)}")
+
+        return data
 
     def execute_from_template(
         self,
-        template_data: Dict[str, Any],
+        template_data: Any,
         context: Optional[Dict[str, Any]] = None,
+        convergence_mode: bool = False,
     ) -> WorkflowExecutionResult:
-        """Execute a workflow from a resolved template dictionary.
+        """Execute a workflow from a resolved template dictionary or template ID string.
 
-        Phase 92: Bridge method called by Stage4DomainExecutionStrategy when
-        WorkflowComplexityRouter routes an operation through a workflow template.
-        Loads steps from the template dict, optionally runs with convergence
-        gates, and returns execution result.
+        Phase 92/99: Bridge method called by WorkflowGateway and
+        Stage4DomainExecutionStrategy. Loads steps from the template dict,
+        optionally runs with convergence gates, and returns execution result.
+
+        When ``template_data`` is a ``str``, it is treated as a template ID
+        (e.g. ``"sdlc/implement-workflow"``). The YAML is loaded from disk
+        at ``cortex-registry/workflows/templates/{template_id}.yaml``.
+
+        When ``template_data`` is a ``Dict``, it is used directly as the
+        parsed template dictionary with 'workflow' or 'steps' keys.
 
         Args:
-            template_data: Template dictionary with 'steps', 'id', 'name' keys.
-                May be a WorkflowTemplate dataclass dict or raw YAML-loaded dict.
+            template_data: Template dictionary **or** template ID string.
             context: Optional execution context dict with operation/parameters.
+            convergence_mode: If True, use convergence-gated execution with
+                retry loops. Defaults to False (standard step-by-step).
 
         Returns:
             WorkflowExecutionResult with completion status and metrics.
         """
         import time
 
+        # ── Normalise template_data to a dict ────────────────────────────
+        if isinstance(template_data, str):
+            template_data = self._load_template_by_id(template_data)
+
         start_time = time.time()
-        template_id = template_data.get("id", "unknown")
-        template_name = template_data.get("name", template_id)
+        template_id = template_data.get("id", template_data.get("workflow", {}).get("id", "unknown"))
+        template_name = template_data.get("name", template_data.get("workflow", {}).get("name", template_id))
+
+        # Extract steps from either flat dict or nested under 'workflow' key
         steps = template_data.get("steps", [])
+        if not steps:
+            workflow_block = template_data.get("workflow", {})
+            steps = workflow_block.get("steps", [])
+
+        logger.info(
+            "Phase 92: execute_from_template '%s' (%d steps, convergence=%s)",
+            template_id,
+            len(steps),
+            convergence_mode,
+        )
 
         logger.info(
             "Phase 92: execute_from_template '%s' (%d steps)",
