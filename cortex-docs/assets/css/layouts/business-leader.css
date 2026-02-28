@@ -424,7 +424,7 @@ main.container .hero-robot-container {
     max-width: 1400px;
 }
 
-/* ── BLUF Banner ── */
+/* ── BLUF Banner (legacy, kept for backward compat — prefer .bl-bottom-line) ── */
 .bluf-banner {
     background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(123,97,255,0.08));
     border: 1px solid rgba(0,212,255,0.2);
@@ -433,12 +433,6 @@ main.container .hero-robot-container {
     margin-bottom: 2rem;
     position: relative;
     overflow: hidden;
-}
-.bluf-banner::before {
-    content: 'BLUF';
-    position: absolute; top: 0.5rem; right: 1rem;
-    font-size: 0.6rem; font-weight: 800; letter-spacing: 0.15em;
-    color: rgba(0,212,255,0.35); text-transform: uppercase;
 }
 .bluf-banner h3 {
     font-size: 1.1rem; font-weight: 800; color: #fff;
@@ -683,6 +677,245 @@ main.container .hero-robot-container {
     font-size: 0.875rem;
     color: #78809a;
     font-style: italic;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   IMAGE CONTEXT CARD — narrative explanation beneath each image
+   Glassmorphism panel: pull-quote stat + 2–3 sentence justification
+   ══════════════════════════════════════════════════════════════ */
+.bl-image-context {
+    background: linear-gradient(135deg, rgba(10, 14, 39, 0.75) 0%, rgba(20, 24, 58, 0.7) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.14);
+    border-radius: 14px;
+    padding: 1.5rem 2rem;
+    margin-top: 1.25rem;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 24px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.bl-image-context::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.035) 0%, transparent 55%);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.bl-image-context--emerald {
+    border-color: rgba(52, 211, 153, 0.18);
+}
+
+.bl-image-context--amber {
+    border-color: rgba(245, 158, 11, 0.18);
+}
+
+/* Pull-quote stat inside context card */
+.bl-context-stat {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    margin-bottom: 0.75rem;
+}
+
+.bl-context-stat-value {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(135deg, #00d4ff, #7b61ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.bl-context-stat-value--emerald {
+    background: linear-gradient(135deg, #34d399, #38bdf8);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.bl-context-stat-value--amber {
+    background: linear-gradient(135deg, #f59e0b, #fb7185);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.bl-context-stat-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #a0a6c0;
+    align-self: center;
+}
+
+.bl-context-narrative {
+    font-size: 0.875rem;
+    color: #a0a6c0;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.bl-context-narrative strong {
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+/* Two-column context layout for the side-by-side image pair */
+.bl-context-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+}
+
+/* Side-aligned context card — flush top, starts from image top */
+.bl-image-context--side {
+    margin-top: 0;
+    align-self: start;
+}
+
+@media (max-width: 900px) {
+    .bl-context-pair {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   BOTTOM LINE BANNER — Opens the content (replaces .bluf-banner)
+   No BLUF label; pure glassmorphism statement card
+   ══════════════════════════════════════════════════════════════ */
+.bl-bottom-line {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.07) 0%, rgba(123, 97, 255, 0.07) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.22);
+    border-radius: 16px;
+    padding: 2rem 2.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 4px 24px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.bl-bottom-line::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+/* Left accent bar */
+.bl-bottom-line::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #00d4ff 0%, #7b61ff 100%);
+    border-radius: 16px 0 0 16px;
+}
+
+.bl-bottom-line-heading {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0 0 0.65rem;
+    line-height: 1.35;
+}
+
+.bl-bottom-line-body {
+    font-size: 0.92rem;
+    color: #a0a6c0;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.bl-bottom-line-body strong {
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   SECTION DIVIDER with label
+   ══════════════════════════════════════════════════════════════ */
+.bl-section-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 0.5rem 0 1.5rem;
+}
+
+.bl-section-divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.bl-section-divider-label {
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(160, 166, 192, 0.4);
+    white-space: nowrap;
+}
+
+/* ── Governance stages list ── */
+.bl-stage-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.bl-stage-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.85rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.bl-stage-item:last-child {
+    border-bottom: none;
+}
+
+.bl-stage-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgba(0, 212, 255, 0.12);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #00d4ff;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.bl-stage-content-label {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin-bottom: 0.15rem;
+}
+
+.bl-stage-content-desc {
+    font-size: 0.78rem;
+    color: #78809a;
+    line-height: 1.45;
 }
 
 /* ── D3.js Diagram Panels — large + centered ── */
