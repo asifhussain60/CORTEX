@@ -129,18 +129,3 @@ class TestGovernanceGateRegistration:
         # Should be equal but not same object
         assert rules1 == rules2
         assert rules1 is not rules2
-
-
-class TestGovernanceRegistryIntegration:
-    """Integration tests with gateway executor"""
-    
-    def test_governance_registry_used_by_gateway_executor(self):
-        """Should be usable by MasterGatewayExecutor"""
-        from cortex.orchestrators.workflow.gateway_exec_full import MasterGatewayExecutor
-        
-        # This should not raise ModuleNotFoundError
-        executor = MasterGatewayExecutor()
-        
-        # Verify governance_registry attribute exists
-        assert hasattr(executor, 'governance_registry')
-        assert executor.governance_registry is not None

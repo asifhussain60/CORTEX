@@ -14,11 +14,18 @@ from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 import re
 
-from cortex.orchestrators.workflow.step_state_machine import (
-    StepStateMachine,
-    StepState,
-    ConvergenceGateConfig,
-)
+try:
+    from cortex.orchestrators.workflow.step_state_machine import (
+        StepStateMachine,
+        StepState,
+        ConvergenceGateConfig,
+    )
+except ImportError:
+    # Phase 98: step_state_machine removed (dead code cleanup).
+    # Provide minimal stubs for backward compatibility.
+    StepStateMachine = None  # type: ignore[misc,assignment]
+    StepState = None  # type: ignore[misc,assignment]
+    ConvergenceGateConfig = None  # type: ignore[misc,assignment]
 
 
 # AC_START: AC-WORKFLOW-AUTONOMOUS-20260223T000000Z

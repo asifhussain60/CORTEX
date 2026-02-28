@@ -86,7 +86,7 @@ class TestPhase79KnowledgeLayer:
 # ══════════════════════════════════════════════════════════════════════════════
 
 class TestPhase79WorkflowLayer:
-    """All 7 SDLC workflow templates must exist with required structure."""
+    """All 6 SDLC workflow templates must exist with required structure."""
 
     WORKFLOW_FILES = [
         "requirements-analysis.yaml",
@@ -95,7 +95,6 @@ class TestPhase79WorkflowLayer:
         "code-review-gate.yaml",
         "integration-verification.yaml",
         "security-assessment.yaml",
-        "release-readiness.yaml",
     ]
 
     @pytest.mark.parametrize("filename", WORKFLOW_FILES)

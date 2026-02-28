@@ -217,26 +217,8 @@ class TestKnowledgeSynthesizerOutputPath:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# V5 — AbsorptionGate must default tier3 path to cortex-registry/knowledge/
+# V5 — AbsorptionGate removed (Phase 98 dead-code cleanup)
 # ─────────────────────────────────────────────────────────────────────────────
-
-class TestAbsorptionGateTier3Path:
-    """AbsorptionGate tier3_path must default to cortex-registry/knowledge/."""
-
-    def test_default_tier3_path_is_in_registry(self) -> None:
-        """tier3_path must be cortex-registry/knowledge/..., not cortex/knowledge/..."""
-        from cortex.orchestrators.workflow.absorption_gate import AbsorptionGate
-
-        gate = AbsorptionGate()
-
-        assert "cortex-registry" in str(gate.tier3_path), (
-            f"AbsorptionGate.tier3_path must be in cortex-registry/, "
-            f"got: {gate.tier3_path}"
-        )
-        assert "cortex/knowledge" not in str(gate.tier3_path).replace("cortex-registry", ""), (
-            f"AbsorptionGate must NOT write into cortex/knowledge/ (Python package), "
-            f"got: {gate.tier3_path}"
-        )
 
 
 # AC_COMPLETE: AC-FIX-PLAN-PATHS-001 ✅

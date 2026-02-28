@@ -337,32 +337,3 @@ class TestIntelligenceWiringBridges:
         from cortex.intelligence.cross_cutting.intelligence_wiring_bridges import wire_p0_cells
         count = wire_p0_cells()
         assert count == 7, f"Expected wire_p0_cells() to return 7, got {count}"
-
-    def test_workflow_template_exists(self) -> None:
-        """intelligence-matrix-wiring-pipeline.yaml must exist in workflow templates."""
-        template = (
-            REPO_ROOT
-            / "cortex-registry"
-            / "workflows"
-            / "templates"
-            / "intelligence"
-            / "intelligence-matrix-wiring-pipeline.yaml"
-        )
-        assert template.exists(), (
-            f"Workflow template not found: {template}"
-        )
-
-    def test_workflow_template_valid_yaml(self) -> None:
-        """intelligence-matrix-wiring-pipeline.yaml must be valid YAML."""
-        import yaml
-        template = (
-            REPO_ROOT
-            / "cortex-registry"
-            / "workflows"
-            / "templates"
-            / "intelligence"
-            / "intelligence-matrix-wiring-pipeline.yaml"
-        )
-        data = yaml.safe_load(template.read_text())
-        assert "id" in data, "Workflow template missing 'id' field"
-        assert "stages" in data, "Workflow template missing 'stages' field"

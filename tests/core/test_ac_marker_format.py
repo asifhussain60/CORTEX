@@ -83,11 +83,9 @@ class TestWorkflowACMarkers:
     """Workflow orchestrators file-level AC markers use domain format."""
 
     @pytest.mark.parametrize("rel_path", [
-        "cortex/orchestrators/workflow/convergence_loop_executor.py",
-        "cortex/orchestrators/workflow/ephemeral_storage.py",
-        "cortex/orchestrators/workflow/workflow_templates.py",
-        "cortex/orchestrators/workflow/workflow_runtime.py",
         "cortex/orchestrators/workflow/autonomous_workflow_executor.py",
+        "cortex/orchestrators/workflow/workflow_gateway.py",
+        "cortex/orchestrators/workflow/workflow_composer.py",
     ])
     def test_no_phase_numbered_file_level_markers(self, rel_path):
         content = _file_content(rel_path)
