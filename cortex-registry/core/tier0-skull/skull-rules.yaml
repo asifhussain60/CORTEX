@@ -2286,6 +2286,133 @@ rules:
       blocks_until: "Initial cleanup sweep completed (SWEEP-81-CORE067-GENERICNESS)"
       remediation_status: "🔵 CLEANUP IN PROGRESS — initial 38 violations being remediated"
 
+  # --------------------------------------------------------------------------
+  # CORE-068: Universal Convergence Gate (Phase 94 — 2026-02-28)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-068
+    tier: 0
+    status: ACTIVE
+    phase: 94
+    created: "2026-02-28"
+    name: Universal Convergence Gate
+    severity: P0
+    principle: "No Single-Pass Completion — Detect → Fix → Rescan Until Clean"
+    category: execution_integrity
+    summary: >
+      Every code-modifying operation (IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG,
+      VACUUM, HEALTH) MUST include a convergence gate that re-scans for the
+      target issue class after all fixes are applied. Work is NOT complete
+      until rescan returns 0 P0/P1 issues, or max_cycles is exhausted with
+      explicit justification logged. Single-pass execution is a governance
+      violation for any operation that modifies code or state.
+
+    rationale: |
+      Phases 92–93 revealed that CORTEX completes implementation in a single
+      pass — fixing the known issues but never re-scanning to detect issues
+      introduced BY the fixes themselves. Only /audit fix (Stages 7–8) has a
+      convergence loop; the other 15 code-modifying execution modes stop after
+      one pass. This creates a systemic blind spot: every fix has the potential
+      to introduce new issues that are silently accepted.
+
+      The building blocks exist (ConvergenceNeuron Phase 83, detect-fix-rescan-loop
+      primitive, ConvergenceLoopExecutor Phase 45) but are siloed — not mandated
+      universally. CORE-068 closes this gap by making convergence a governance
+      requirement, not an optional pattern.
+
+    applies_to:
+      - "IMPLEMENT intents — rescan after GREEN phase for test failures + compliance"
+      - "FIX intents — rescan after sweep gate to verify fixes didn't create new issues"
+      - "REFACTOR intents — rescan for complexity, duplication, dead code after changes"
+      - "AUDIT intents — already implemented via Stages 7–8 (detect-fix-rescan-loop)"
+      - "DEBUG intents — rescan after fix-plan execution to verify markers removed cleanly"
+      - "VACUUM intents — rescan after cleanup to verify no new dead files created"
+      - "HEALTH intents — rescan after fallback activation to verify all endpoints healthy"
+
+    exempt:
+      - "QUERY intents — read-only, no state modification"
+      - "DESIGN intents — analysis and recommendation only, no code changes"
+      - "PLAN intents — planning and phase spec authoring only"
+      - "DIGEST intents — content ingestion, no code modification"
+      - "REPHRASE intents — token optimization only"
+      - "SYNC intents — one-way copy, source not modified"
+      - "TRAIN intents — template analysis, no production code changes"
+
+    convergence_specification:
+      default_max_cycles: 3
+      backoff_strategy: "none (fast in-process checks) | linear | exponential"
+      primitive_ref: "cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml"
+      runtime_components:
+        - "ConvergenceNeuron (cortex/orchestrators/core/convergence_neuron.py) — scan→predicate→signal"
+        - "ConvergenceLoopExecutor (cortex/orchestrators/workflow/convergence_loop_executor.py) — retry+backoff"
+        - "detect-fix-rescan-loop.yaml — parameterized YAML primitive with SQLite logging"
+
+      per_mode_predicates:
+        IMPLEMENT: "smoke_failures == 0 and compliance_p0 == 0 and compliance_p1 == 0"
+        FIX: "sweep_catalogue.open_items == 0 and new_issue_count == 0"
+        REFACTOR: "test_count_after >= test_count_before and new_failures == 0"
+        AUDIT: "p0_count == 0 and p1_count == 0 (existing — Stages 7–8)"
+        DEBUG: "injected_markers_remaining == 0"
+        VACUUM: "new_dead_files == 0"
+        HEALTH: "unhealthy_orchestrators == 0"
+
+    forbidden_behaviours:
+      - "❌ Marking AC_COMPLETE after a single pass without convergence gate"
+      - "❌ Setting max_cycles to 0 (disabling convergence)"
+      - "❌ Skipping rescan when fixes were applied"
+      - "❌ Authoring a phase spec without convergence_gate: block"
+
+    required_behaviours:
+      - "✅ Every code-modifying sub-phase includes convergence_gate: block in phase spec"
+      - "✅ Convergence gate runs detect→fix→rescan loop after REFACTOR phase of TDD cycle"
+      - "✅ On max_cycles exhaustion: log remaining issues with WONT-FIX justification"
+      - "✅ SQLite activity logging per cycle to .cortex-runtime/traces/orchestrator-traces.db"
+      - "✅ Phase template (_template.yaml) enforces convergence_gate: as mandatory field"
+
+    enforcement_mechanism:
+      phase_authoring:
+        location: "cortex-registry/planning/phases/_template.yaml"
+        action: "convergence_gate: block is mandatory — omission is P0 authoring violation"
+        validation: "Same enforcement as tdd_cycle: — reject phase spec if missing"
+      prompt_mandate:
+        locations:
+          - ".github/prompts/cortex-architect.prompt.md (IMPLEMENT/FIX/REFACTOR modes)"
+          - ".github/prompts/CORTEX.prompt.md (FIX mode + operation checklist)"
+          - ".github/agents/core/cortex-executor.md (execution flow)"
+          - ".github/agents/support/cortex-vacuum.md (cleanup flow)"
+          - ".github/agents/support/cortex-debugger.md (debug flow)"
+        action: "Convergence step explicitly listed in mode sequence"
+      pre_commit:
+        description: "EnforcementOrchestrator validates convergence gate completion in AC markers"
+        audit_event: "CONVERGENCE_GATE_VALIDATED"
+
+    tests:
+      acceptance_criteria:
+        - id: "AC-068-A"
+          test_name: "test_core_068_rule_id_exists"
+          assertion: "CORE-068 registered in skull-rules.yaml"
+        - id: "AC-068-B"
+          test_name: "test_phase_template_has_convergence_gate"
+          assertion: "convergence_gate: block exists in _template.yaml with all required fields"
+        - id: "AC-068-C"
+          test_name: "test_architect_prompt_modes_have_convergence"
+          assertion: "IMPLEMENT, FIX, REFACTOR modes in cortex-architect.prompt.md include convergence step"
+        - id: "AC-068-D"
+          test_name: "test_executor_agent_has_convergence"
+          assertion: "cortex-executor.md includes convergence after Sweep Gate"
+        - id: "AC-068-E"
+          test_name: "test_vacuum_agent_has_convergence"
+          assertion: "cortex-vacuum.md includes rescan convergence loop"
+        - id: "AC-068-F"
+          test_name: "test_debugger_agent_has_convergence"
+          assertion: "cortex-debugger.md includes convergence after fix-plan"
+
+    governance_dependency:
+      requires: "CORE-064 (Sweep Completeness), CORE-008 (TDD), CORE-065 (Holistic File Review)"
+      enables: "Zero-drift guarantee — fixes never silently introduce new issues"
+      blocks_until: "Phase template updated + all prompts/agents include convergence mandate"
+      remediation_status: "✅ COMPLETE — Phase 94 implementation"
+      AC_COMPLETE: "AC-P94-CORE068-001 ✅"
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================

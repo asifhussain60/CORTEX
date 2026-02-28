@@ -40,6 +40,8 @@ Validate → pytest tests/ -n auto --dist loadscope
     ↓
 Sweep Gate → CORE-064: SweepCatalogueOrchestrator scans for same issue class — fix ALL N instances
     ↓
+Convergence Gate → CORE-068: rescan for regressions + violations; loop detect→fix→rescan until 0 P0/P1 (max 3 cycles)
+    ↓
 Completion Report (inline — CORE-002)
 ```
 
@@ -69,6 +71,7 @@ When fixing a bug, scan for the same pattern across the codebase. If the same is
 | CORE-028 | File naming: snake_case only |
 | CORE-035 | Single canonical implementation — no duplicates |
 | CORE-064 | Sweep Completeness — no partial sweeps; fix all N instances of same issue class |
+| CORE-068 | Universal Convergence Gate — detect→fix→rescan until 0 P0/P1 (max 3 cycles) |
 
 ---
 

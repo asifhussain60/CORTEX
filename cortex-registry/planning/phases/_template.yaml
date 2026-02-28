@@ -12,6 +12,7 @@ priority: P0     # P0 | P1 | P2
 governance_authority:
   - CORE-008  # TDD mandatory — add applicable rules
   - CORE-064  # Sweep Completeness Contract — always include
+  - CORE-068  # Universal Convergence Gate — mandatory for code-modifying phases
 sweep_catalogue_id: "SWEEP-{N}-{SLUG}"
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -87,6 +88,20 @@ phases:
         action: "Clean up: type hints (CORE-011), docstrings (CORE-012), deduplication (CORE-035), complexity"
         gate: "python3 scripts/run_tests.py dir tests/{affected_dir}/ — zero regressions, zero new failures"
         blocker: "Do NOT mark sub-phase COMPLETE until REFACTOR gate passes"
+
+    # ── Convergence Gate (CORE-068 — MANDATORY for all code-modifying sub-phases) ──
+    # After REFACTOR, rescan for issues introduced by the changes themselves.
+    # Work is NOT complete in a single pass. Loop until clean or max_cycles hit.
+    convergence_gate:
+      detect_step: "python3 scripts/run_tests.py smoke + cortex_validate op=compliance"
+      fix_step: "Apply targeted fixes for each issue found in rescan"
+      success_predicate: "p0_count == 0 and p1_count == 0 and new_failures == 0"
+      max_cycles: 3
+      backoff_strategy: none
+      on_exhaustion: "Log remaining issues with WONT-FIX justification — do NOT silently skip"
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      blocks_ac_complete: true
+      governance: "CORE-068 (Universal Convergence Gate)"
 
     tdd_sequence:
       red:

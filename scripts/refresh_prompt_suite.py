@@ -475,6 +475,24 @@ def main() -> None:
     if snapshot["master_yaml_lines"] > 400:
         print(f"   ⚠️  Master YAML approaching limit ({snapshot['master_yaml_lines']}/500)")
 
+    # Step 2b: Convergence drift detection (CORE-068)
+    print("\n🔄 Step 2b: Convergence drift detection (CORE-068)...")
+    convergence_drift_files: list = []
+    prompt_agent_paths = list(Path(".github/prompts").glob("*.prompt.md")) + \
+        [p for d in Path(".github/agents").iterdir() if d.is_dir() for p in d.glob("*.md")]
+    code_modifying_agents = [
+        "cortex-architect.prompt.md", "CORTEX.prompt.md",
+        "cortex-executor.md", "cortex-vacuum.md", "cortex-debugger.md"
+    ]
+    for pa in prompt_agent_paths:
+        if pa.name in code_modifying_agents:
+            content = pa.read_text(errors="replace")
+            if "CORE-068" not in content:
+                convergence_drift_files.append(str(pa))
+                print(f"   ⚠️  P1: {pa} missing CORE-068 convergence reference")
+    if not convergence_drift_files:
+        print("   ✅ All code-modifying prompts/agents reference CORE-068")
+
     # Step 3 & 4: Generate files
     if args.dry_run:
         print("\n📝 Step 3/4: [DRY-RUN] Would regenerate copilot-instructions.md")

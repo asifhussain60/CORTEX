@@ -59,7 +59,11 @@ DebuggerOrchestrator gained CORTEX cross-cutting intelligence wiring — followi
 ### Workflow Template
 
 **Pipeline:** `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml` *(Phase 86 PLANNED)*  
-**9-stage pipeline:** detect-stack → select-strategies → inject-markers → capture → analyze → vision-map → fix-plan → cleanup → verify
+**9-stage pipeline:** detect-stack → select-strategies → inject-markers → capture → analyze → vision-map → fix-plan → convergence-gate → cleanup → verify
+
+### Convergence Gate (CORE-068)
+
+After fix-plan generation, the debug pipeline enters a convergence gate: rescan for new issues introduced by proposed fixes, loop detect→fix→rescan until 0 P0/P1 (max 3 cycles). Only after convergence does the pipeline proceed to cleanup and verify. This ensures debug sessions do not introduce regressions.
 
 ---
 

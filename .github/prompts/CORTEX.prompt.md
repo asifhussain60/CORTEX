@@ -87,6 +87,7 @@ Before any IMPLEMENT / FIX / REFACTOR / DESIGN / PLAN / AUDIT operation, render 
 | CORE-049 | Silent autonomous execution |
 | CORE-050 | MCP tiered blocking |
 | CORE-064 | Sweep Completeness Contract — no partial sweeps |
+| CORE-068 | Universal Convergence Gate — detect→fix→rescan until 0 P0/P1 (max 3 cycles) |
 
 ### Enforcement (Pre-execution)
 EnforcementOrchestrator validates CORE rules before every operation:
@@ -157,6 +158,7 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight
 5. **REFACTOR** — clean up without changing behavior
 6. **Regression** — `python3 scripts/run_tests.py smoke` to confirm no side effects
 7. **Sweep gate** — CORE-064: scan for same issue class across codebase; fix all N instances, not just the reported one
+8. **Convergence Gate** (CORE-068) — rescan for regressions + new violations; loop detect→fix→rescan until 0 P0/P1 (max 3 cycles)
 
 **Sweep Completeness (CORE-064):**
 `SweepCatalogueOrchestrator` tracks the full issue catalogue per FIX session and blocks `AC_COMPLETE` until the catalogue is exhausted. Same issue class in N files = fix all N.
@@ -220,6 +222,7 @@ Every operation:
 - [ ] Holistic validation passed (if IMPLEMENT/FIX/REFACTOR)
 - [ ] Tests written first (if code changes)
 - [ ] Results displayed inline (no files)
+- [ ] Convergence Gate passed — detect→fix→rescan until 0 P0/P1 (CORE-068)
 - [ ] All tests passing (≥95% coverage)
 - [ ] Registry synchronized (if phase affected)
 - [ ] Audit clean (no P0/P1)

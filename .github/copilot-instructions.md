@@ -83,6 +83,7 @@ CORTEX uses **Pylance-style MCP** — works automatically like Pylance (no manua
 | CORE-048 | Holistic validation gate before IMPLEMENT/FIX/REFACTOR |
 | CORE-049 | Silent autonomous execution (progress bars only) |
 | CORE-064 | Sweep Completeness Contract — no partial sweeps; every FIX/REFACTOR/AUDIT must exhaust its full catalogue |
+| CORE-068 | Universal Convergence Gate — detect→fix→rescan until 0 P0/P1 before AC_COMPLETE (max 3 cycles) |
 
 **MCP Tool Authoring — `validate_orchestrator_context` guard:** All MCP tool functions that
 call `validate_orchestrator_context(orchestrator_context)` must guard the call:

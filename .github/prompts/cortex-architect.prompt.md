@@ -94,8 +94,34 @@
 | CORE-049 | Silent autonomous execution (progress bars only) |
 | CORE-050 | MCP tiered blocking (Tier 0: IMPLEMENT/FIX blocks without MCP) |
 | CORE-064 | Sweep Completeness Contract — no partial sweeps; every FIX/REFACTOR/AUDIT must exhaust its full issue catalogue |
+| CORE-068 | Universal Convergence Gate — detect→fix→rescan until 0 P0/P1 before AC_COMPLETE (max 3 cycles) |
 
 **Load full rules:** `cortex_load` (op: `rules`) (MCP tool)
+
+### 🔄 Universal Convergence Gate (CORE-068)
+
+**Applies to:** IMPLEMENT, FIX, REFACTOR, AUDIT, DEBUG, VACUUM, HEALTH  
+**Exempt:** QUERY, DESIGN, PLAN, DIGEST, REPHRASE, SYNC, TRAIN  
+**Primitive:** `cortex-registry/workflows/templates/primitives/validation/detect-fix-rescan-loop.yaml`
+
+Every code-modifying operation must pass through a convergence gate before `AC_COMPLETE`:
+1. **Detect** — rescan for test failures, compliance violations, regressions introduced by changes
+2. **Fix** — remediate any P0/P1 issues found
+3. **Rescan** — verify fixes did not introduce new issues
+4. Loop back to step 1 if issues remain (max 3 cycles, configurable per mode)
+
+**Convergence predicate by mode:**
+- `IMPLEMENT`: `test_pass_count >= baseline AND lint_errors == 0`
+- `FIX`: `regression_count == 0 AND original_bug_fixed`
+- `REFACTOR`: `test_pass_count >= baseline AND no_new_lint_errors`
+- `AUDIT`: `p0_count == 0 AND p1_count == 0`
+- `DEBUG`: `no_orphaned_markers AND fix_plan_verified`
+- `VACUUM`: `no_new_sprawl AND link_check_passed`
+- `HEALTH`: `all_endpoints_healthy`
+
+**On exhaustion (max cycles reached):** Surface remaining issues inline, block `AC_COMPLETE`, require explicit user override.
+
+Work is **NEVER** considered complete in one pass. The detect→fix→rescan loop is mandatory.
 
 ---
 
@@ -317,7 +343,8 @@ For each orchestrator in wiring contract (22 total):
 4. **GREEN** — implement minimum code to pass tests
 5. **REFACTOR** — clean up with all tests passing
 6. **Validate** — `python3 scripts/run_tests.py smoke` + `cortex_validate` op=`compliance`
-7. **Commit** — conventional commit message
+7. **Convergence Gate** (CORE-068) — rescan for test failures + compliance violations introduced by changes; loop back to step 4 if issues found (max 3 cycles, detect→fix→rescan primitive)
+8. **Commit** — conventional commit message
 
 **Challenge Gate Format:**
 ```
@@ -347,6 +374,7 @@ For each orchestrator in wiring contract (22 total):
 5. **REFACTOR** — clean up without changing behavior
 6. **Regression** — `python3 scripts/run_tests.py smoke` to confirm no side effects
 7. **Sweep gate** — CORE-064: verify all related issues in the same category are addressed (no partial fixes)
+8. **Convergence Gate** (CORE-068) — rescan for regressions + new violations after fix; loop detect→fix→rescan until 0 P0/P1 (max 3 cycles)
 
 **Sweep Completeness (CORE-064):**
 When fixing a bug, scan for the same pattern across the codebase. If the same issue class appears in N files, fix all N — not just the reported one. The `SweepCatalogueOrchestrator` tracks the full issue catalogue per FIX session and blocks `AC_COMPLETE` until the catalogue is exhausted.
@@ -365,9 +393,10 @@ When fixing a bug, scan for the same pattern across the codebase. If the same is
 4. **Execute** — incremental changes, run tests after each step
 5. **Security hardening gate** — verify: BCrypt/Argon2 (not SHA256) for passwords; rate limiting on login/payment endpoints; JWT config → middleware complete; no P0 security gaps
 6. **Traceability** — call `orchestrator.write_refactor_session_trace(AC_COMPLETE, ...)` to persist session record to `.cortex-runtime/traces/orchestrator-traces.db`
-7. **Scorecard + Verify** — call `orchestrator.generate_scorecard(scores)` → display inline weighted table; assert test count ≥ baseline, zero new failures
+7. **Convergence Gate** (CORE-068) — rescan for regressions + compliance drift after refactoring; loop detect→fix→rescan until 0 P0/P1 (max 3 cycles)
+8. **Scorecard + Verify** — call `orchestrator.generate_scorecard(scores)` → display inline weighted table; assert test count ≥ baseline, zero new failures
 
-**Functional Completeness Gate (Step 0 → Step 7):**
+**Functional Completeness Gate (Step 0 → Step 8):**
 After Execute, call `orchestrator.check_functional_completeness(source_items, target_items)`.
 If `complete=False`: surface gaps inline and require either implementation or ADR justification before AC_COMPLETE.
 

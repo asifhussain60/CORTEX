@@ -65,8 +65,9 @@ Steps:
   3. Review: Check last modified date (>30 days = archive candidate)
   4. Archive: Move to appropriate cortex-docs/archive/ subdirectory
   5. Verify: Confirm no broken links in remaining docs
-  6. Report: Generate cleanup summary
-  7. Validate cortex-docs/: Ensure only HTML/CSS/JS/config files (no transient .md)
+  6. Convergence Gate (CORE-068): Rescan for new sprawl introduced by archival; loop until 0 new issues (max 3 cycles)
+  7. Report: Generate cleanup summary
+  8. Validate cortex-docs/: Ensure only HTML/CSS/JS/config files (no transient .md)
 ```
 
 ### Archive Directory Structure
@@ -129,6 +130,7 @@ User: "clean up markdown sprawl"
 |-----------|--------------|
 | CORE-002 | Enforces "no markdown generation outside cortex-docs/" |
 | CORE-064 | Sweep Completeness Contract — open catalogues must be protected from deletion |
+| CORE-068 | Universal Convergence Gate — rescan after cleanup; loop until 0 new issues (max 3 cycles) |
 | VacuumOrchestrator | Python implementation of cleanup logic |
 | cortex-architect | Calls vacuum agent for P3 cleanup tasks |
 
