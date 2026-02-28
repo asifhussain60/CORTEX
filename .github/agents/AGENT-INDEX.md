@@ -38,7 +38,7 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Metric | Value |
 |--------|-------|
-| Orchestrator files | **282** across 9 domains (`core:102 domain:28 support:51 git:4 health:27 intelligence:16 persona:6 validation:12 workflow:29`) |
+| Orchestrator files | **259** across 9 domains (`core:102 domain:28 support:51 git:4 health:27 intelligence:16 persona:6 validation:12 workflow:6`) |
 | MCP Tools | **29 registered** in `mcp_registry.py`; 35 tool files in `cortex/mcp/tools/` |
 | Governance YAMLs | **32** in `cortex-registry/core/` |
 | Package | `cortex` (single) |

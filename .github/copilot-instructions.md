@@ -1,12 +1,12 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-28 (Phase 89 — Self-Healing Prompt Suite) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
+**Updated:** 2026-02-28 (Phase 98 — Dead Code Cleanup) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 ## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **282 Orchestrator files** across 9 domains (`core:102 domain:28 support:51 git:4 health:27 intelligence:16 persona:6 validation:12 workflow:29`) — all satisfy IOrchestrator protocol
+- **259 Orchestrator files** across 9 domains (`core:102 domain:28 support:51 git:4 health:27 intelligence:16 persona:6 validation:12 workflow:6`) — all satisfy IOrchestrator protocol
 - **29 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 35 tool files in `cortex/mcp/tools/`
 - **32 Governance YAMLs** in `cortex-registry/core/` enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
@@ -27,7 +27,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrator files | 282 across 9 domains in `cortex/orchestrators/` |
+| Orchestrator files | 259 across 9 domains in `cortex/orchestrators/` |
 | MCP Tools | 29 registered in `mcp_registry.py`; 35 tool files in `cortex/mcp/tools/` |
 | Top-level Dirs | 20 under `cortex/` |
 | Governance YAMLs | 32 in `cortex-registry/core/` |
@@ -146,7 +146,7 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (20 dirs)
-  orchestrators/     ← 282 orchestrator files across 9 domains (core:102 domain:28 support:51 git:4 health:27 +more)
+  orchestrators/     ← 259 orchestrator files across 9 domains (core:102 domain:28 support:51 git:4 health:27 +more)
   mcp/tools/         ← 29 registered MCP tools (35 tool files)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate

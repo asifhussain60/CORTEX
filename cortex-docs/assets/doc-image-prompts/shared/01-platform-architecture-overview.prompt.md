@@ -14,7 +14,7 @@ The architecture should show:
 - FOUR horizontal tiers stacked vertically with glassmorphism panels:
   1. TOP — "Interaction Layer" (cyan border): MCP Tools, CLI, VS Code Copilot Chat — user touch points
   2. MIDDLE-TOP — "Intelligence Layer" (purple border): LENS Analysis, Intent Router, Knowledge Synthesis — AI brain
-  3. MIDDLE-BOTTOM — "Orchestration Layer" (emerald border): 282 Orchestrators across 9 domains, TDD, Debug, Health — execution
+  3. MIDDLE-BOTTOM — "Orchestration Layer" (emerald border): 259 Orchestrators across 9 domains, TDD, Debug, Health — execution
   4. BOTTOM — "Governance Layer" (amber border): 38 CORE Rules, Enforcement, Audit Logs, SQLite Persistence — compliance
 - Vertical arrows flowing between tiers showing request/response patterns
 - Small icons within each tier representing key components
