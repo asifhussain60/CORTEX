@@ -736,6 +736,7 @@ workflow:
           → Write audit_sessions.exit_status = "clean"
           → Write audit_sessions.test_result = "pass"
           → Run sqlite cleanup_policy (prune + VACUUM)
+          → Run activity-log-query (Phase 91) — intelligent pattern analysis
           → Run pattern_detection query — surface recurring P0s if found
           → Emit: AC_COMPLETE: AC-AUDIT-{session_id[:8]} ✅
         On fail:
@@ -747,6 +748,38 @@ workflow:
         table: 'audit_stage_log'
         session_table: 'audit_sessions'
         stage_label: 'tests-ac-complete'
+
+      # Phase 91 — Activity Log Intelligence Gate
+      # Reads workflow_runs to make intelligent upgrade/enhancement decisions
+      # Uses the canonical activity-log-query primitive (DRY — no inline SQL)
+      activity_log_intelligence:
+        template_ref: 'primitives/intelligence/activity-log-query'
+        inputs:
+          lookback_days: 30
+          min_recurrence: 3
+          query_types:
+            - 'recurring_patterns'   # Modes failing repeatedly → architectural signal
+            - 'error_hotspots'       # Orchestrators with high error rate → needs gateway
+            - 'failed_convergence'   # Max-cycles exhaustion → convergence gate too tight
+            - 'upgrade_signals'      # Modes with no template → Phase 91 candidates
+        outputs:
+          - 'recurring_failures'
+          - 'error_hotspots'
+          - 'upgrade_candidates'
+        decision_logic: |
+          If upgrade_signals returns orchestrators with 0 template registrations:
+            → Surface: "⚠️ Gateway gap detected: {orchestrator} has no template
+               for mode {mode} (×{count} runs). Consider Phase 91 expansion."
+          If failed_convergence returns rows:
+            → Surface: "⚠️ Convergence exhaustion: {orchestrator}/{mode} hit
+               max_cycles in {count} runs. Review convergence predicate."
+          If error_hotspots returns orchestrators with error_rate > 50%:
+            → Surface: "⚠️ Error hotspot: {orchestrator} {error_rate}% failure
+               rate. Architectural review recommended."
+          All decisions surfaced inline (CORE-002) — no .md/.txt files.
+        trigger: 'post_tests_pre_ac_complete'
+        failure_mode: 'warn_inline_non_fatal'  # never blocks AC_COMPLETE
+
       post_run:
         cleanup: 'cleanup_policy'
         pattern_detection: 'pattern_detection'

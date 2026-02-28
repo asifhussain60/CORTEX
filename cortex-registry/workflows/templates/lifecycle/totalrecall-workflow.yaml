@@ -115,8 +115,20 @@ workflow:
       gate:
         predicate: 'p0_count == 0 AND p1_count == 0'
 
-    - id: ac_complete
+    # Phase 8: Review + Cleanup (Phase 91 — mandatory universal epilogue)
+    - id: review_and_cleanup
+      name: 'Review + Cleanup — universal epilogue'
       depends_on: ['phase_verification']
+      template_ref: 'primitives/execution/review-and-cleanup'
+      inputs:
+        changed_files: '{{phase_implementation.changed_files | default([])}}'
+        session_id: '{{session_id}}'
+        mode: 'TOTALRECALL'
+        run_id: '{{session_id}}'
+        silent_on_clean: true
+
+    - id: ac_complete
+      depends_on: ['review_and_cleanup']
       template_ref: 'primitives/execution/ac-marker-emit'
       inputs: { domain: 'TOTALRECALL', session_id: '{{session_id}}' }
       step_filter: 'ac_complete_success'

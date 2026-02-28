@@ -127,6 +127,7 @@ tiers:
         - lens-vision-scan.yaml
       intelligence:
         - intelligence-injection.yaml
+        - activity-log-query.yaml   # Phase 91 — SQLite workflow_runs reader (GAP-6)
 
   tier_2_mode_workflows:
     description: 'One per execution mode — compose primitives'
@@ -165,6 +166,7 @@ tiers:
         - totalrecall-workflow.yaml         # TOTALRECALL mode
         - sync-workflow.yaml                # SYNC mode
         - train-workflow.yaml               # TRAIN mode
+        - investigate-workflow.yaml         # INVESTIGATE mode (Phase 91)
       tdd:
         - tdd-feature-implementation.yaml
         - tdd-api-service.yaml
@@ -299,6 +301,7 @@ intent_routing:
 
   TRAIN:
     workflow_ref: 'lifecycle/train-workflow'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
     agent: 'cortex-trainer.md'
 
   DESIGN:
@@ -315,7 +318,7 @@ intent_routing:
     agent: 'cortex-interactive.md'
 
   INVESTIGATE:
-    workflow_ref: null   # INVESTIGATE is read-only analysis
+    workflow_ref: 'lifecycle/investigate-workflow'  # Phase 91: read-only LENS template with SQLite trace
     agent: 'cortex-architect.md'
 
   REPHRASE:

@@ -96,8 +96,20 @@ workflow:
           knowledge: 'cortex-registry/knowledge/'
           patterns: 'cortex-registry/patterns/'
 
-    - id: ac_complete
+    # Step 7: Review + Cleanup (Phase 91 — mandatory universal epilogue)
+    - id: review_and_cleanup
+      name: 'Review + Cleanup — universal epilogue'
       depends_on: ['apply_templates']
+      template_ref: 'primitives/execution/review-and-cleanup'
+      inputs:
+        changed_files: '{{apply_templates.written_files | default([])}}'
+        session_id: '{{session_id}}'
+        mode: 'TRAIN'
+        run_id: '{{session_id}}'
+        silent_on_clean: true
+
+    - id: ac_complete
+      depends_on: ['review_and_cleanup']
       template_ref: 'primitives/execution/ac-marker-emit'
       inputs: { domain: 'TRAIN', session_id: '{{session_id}}' }
       step_filter: 'ac_complete_success'

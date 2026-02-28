@@ -1,0 +1,327 @@
+# ============================================================================
+# PRIMITIVE: Activity Log Query — SQLite Workflow History Reader
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable, parameterised)
+# Purpose: Read historical data from the workflow_runs SQLite table to
+#          surface patterns, recurring failures, and upgrade signals.
+#          Used by: lifecycle/investigate-workflow.yaml (Step 3)
+#                   audit/audit-fix-pipeline.yaml (Stage 9 pattern detection)
+#                   Any orchestrator that needs activity-log intelligence.
+#
+# Design (SOLID + DRY):
+#   - SRP: this primitive only reads; it never modifies the DB
+#   - OCP: new query types → add a named_query; callers unchanged
+#   - DRY: single canonical log-reader — no per-workflow inline SQL
+#   - ISP: callers declare only the query_types they need
+#
+# Phase 91 — New primitive. Closes GAP-5 and GAP-6:
+#   GAP-5: audit-fix Stage 9 now reads workflow_runs for intelligent decisions
+#   GAP-6: single canonical reader primitive (no per-template inline SQL)
+#
+# SQLite source:
+#   Primary table: workflow_runs (.cortex-runtime/traces/orchestrator-traces.db)
+#   Secondary table: audit_violations (for recurring P0 pattern detection)
+#   Read-only: SELECT only — this primitive never writes or deletes
+#
+# Authority:
+#   CORE-002: All output inline — no .md/.txt report files
+#   CORE-035: Single canonical implementation — no duplicate log readers
+#   CORE-049: Silent if no results found
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/intelligence/activity-log-query'
+name: 'Activity Log Query — SQLite Workflow History Reader'
+tier: 'primitive'
+category: 'intelligence'
+status: 'active'
+
+metadata:
+  description: |
+    Reads historical workflow_runs and audit_violations from SQLite to
+    surface patterns, recurring failures, and upgrade intelligence.
+    Pure read-only: no writes, no deletes, no side effects.
+    Silent if query returns no rows (CORE-049).
+  governance_rules:
+    - 'CORE-002: All output inline — no .md/.txt files'
+    - 'CORE-035: Single canonical reader — no per-workflow inline SQL'
+    - 'CORE-049: Silent on empty results'
+  tags:
+    - primitive
+    - intelligence
+    - activity-log
+    - sqlite
+    - workflow-runs
+    - pattern-detection
+  author: 'CORTEX Architecture'
+  created: '2026-02-28'
+  phase: 'Phase 91 — Workflow Composer Mandatory Gateway Completion'
+  version_history:
+    - version: '1.0.0'
+      date: '2026-02-28'
+      note: |
+        New primitive — closes GAP-5 (audit-fix reads workflow_runs) and
+        GAP-6 (no dedicated activity-log reader). Single canonical reader
+        replacing inline SQL patterns in audit-fix-pipeline and prompts.
+
+# ============================================================================
+# PARAMETERS
+# ============================================================================
+parameters:
+  required: []
+  optional:
+    - name: 'scope_modules'
+      type: 'List[str]'
+      description: 'Filter results to rows where orchestrator name contains these module strings'
+      default: []
+
+    - name: 'lookback_days'
+      type: 'int'
+      description: 'How many days back to query workflow_runs'
+      default: 30
+
+    - name: 'min_recurrence'
+      type: 'int'
+      description: 'Minimum recurrence count to include a pattern in results'
+      default: 2
+
+    - name: 'query_types'
+      type: 'List[str]'
+      description: 'Which named queries to run (default: all)'
+      default:
+        - 'recurring_patterns'
+        - 'error_hotspots'
+        - 'slow_operations'
+        - 'failed_convergence'
+      enum:
+        - 'recurring_patterns'
+        - 'error_hotspots'
+        - 'slow_operations'
+        - 'failed_convergence'
+        - 'mode_distribution'
+        - 'upgrade_signals'
+
+    - name: 'db_path'
+      type: 'str'
+      description: 'Override SQLite DB path (default: .cortex-runtime/traces/orchestrator-traces.db)'
+      default: '.cortex-runtime/traces/orchestrator-traces.db'
+
+# ============================================================================
+# NAMED QUERIES (read-only SELECT statements)
+# ============================================================================
+named_queries:
+
+  # Query 1: Recurring patterns — modes that have failed multiple times
+  # Used by: INVESTIGATE, audit-fix Stage 9
+  recurring_patterns:
+    description: |
+      Find workflow_runs rows where the same (mode, template_id) pair has
+      status = "error" in ≥ min_recurrence runs within lookback_days.
+      These are systemic failures requiring architectural attention.
+    sql: |
+      SELECT
+        mode,
+        template_id,
+        COUNT(*)            AS failure_count,
+        MAX(completed_at)   AS last_failure,
+        GROUP_CONCAT(DISTINCT error, ' | ') AS error_sample
+      FROM workflow_runs
+      WHERE status = 'error'
+        AND started_at >= datetime('now', '-{{lookback_days}} days')
+        {% if scope_modules %}
+        AND orchestrator IN ({{scope_modules | as_sql_list}})
+        {% endif %}
+      GROUP BY mode, template_id
+      HAVING failure_count >= {{min_recurrence}}
+      ORDER BY failure_count DESC
+      LIMIT 20;
+    output_key: 'recurring_failures'
+    empty_action: 'skip'  # CORE-049: silent on no results
+
+  # Query 2: Error hotspots — orchestrators with highest error rates
+  # Used by: audit-fix Stage 9, INVESTIGATE
+  error_hotspots:
+    description: |
+      Find orchestrators with error rate > 20% in the lookback window.
+      Surfaces systemic issues in specific orchestrators.
+    sql: |
+      SELECT
+        orchestrator,
+        COUNT(*)                                          AS total_runs,
+        SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) AS error_count,
+        ROUND(
+          100.0 * SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END) / COUNT(*),
+          1
+        )                                                 AS error_rate_pct,
+        AVG(duration_ms)                                  AS avg_duration_ms
+      FROM workflow_runs
+      WHERE started_at >= datetime('now', '-{{lookback_days}} days')
+      GROUP BY orchestrator
+      HAVING error_rate_pct > 20
+      ORDER BY error_rate_pct DESC
+      LIMIT 10;
+    output_key: 'error_hotspots'
+    empty_action: 'skip'
+
+  # Query 3: Slow operations — runs with duration > 30s
+  # Used by: INVESTIGATE (performance analysis)
+  slow_operations:
+    description: |
+      Detect workflow runs that took longer than 30 seconds.
+      Surfaces performance bottlenecks for investigation.
+    sql: |
+      SELECT
+        orchestrator,
+        mode,
+        template_id,
+        duration_ms,
+        started_at,
+        status
+      FROM workflow_runs
+      WHERE duration_ms > 30000
+        AND started_at >= datetime('now', '-{{lookback_days}} days')
+      ORDER BY duration_ms DESC
+      LIMIT 10;
+    output_key: 'slow_operations'
+    empty_action: 'skip'
+
+  # Query 4: Failed convergence — runs that hit max_cycles without converging
+  # Used by: audit-fix Stage 9, INVESTIGATE
+  failed_convergence:
+    description: |
+      Find workflow_runs where status = 'error' and error contains 'max_cycles'.
+      These are convergence gate exhaustions — P0 governance signal.
+    sql: |
+      SELECT
+        orchestrator,
+        mode,
+        template_id,
+        error,
+        started_at
+      FROM workflow_runs
+      WHERE status = 'error'
+        AND error LIKE '%max_cycles%'
+        AND started_at >= datetime('now', '-{{lookback_days}} days')
+      ORDER BY started_at DESC
+      LIMIT 10;
+    output_key: 'failed_convergence'
+    severity_if_found: 'P1'
+    empty_action: 'skip'
+
+  # Query 5: Mode distribution — understand which modes are most used
+  # Used by: INVESTIGATE (usage analysis), audit-fix Stage 9 reporting
+  mode_distribution:
+    description: |
+      Summarise workflow_runs by mode with success/error breakdown.
+      Provides a health dashboard of CORTEX operation distribution.
+    sql: |
+      SELECT
+        mode,
+        COUNT(*)                                           AS total_runs,
+        SUM(CASE WHEN status != 'error' THEN 1 ELSE 0 END) AS success_count,
+        SUM(CASE WHEN status = 'error' THEN 1 ELSE 0 END)  AS error_count,
+        ROUND(AVG(duration_ms), 1)                          AS avg_duration_ms,
+        MAX(started_at)                                     AS last_run
+      FROM workflow_runs
+      WHERE started_at >= datetime('now', '-{{lookback_days}} days')
+      GROUP BY mode
+      ORDER BY total_runs DESC;
+    output_key: 'mode_distribution'
+    empty_action: 'skip'
+
+  # Query 6: Upgrade signals — detect opportunities for CORTEX enhancement
+  # Used by: audit-fix Stage 9 (intelligent enhancement decisions)
+  upgrade_signals:
+    description: |
+      Surface patterns suggesting CORTEX needs enhancement:
+        - Modes with no template (exempt + bypassed consistently)
+        - Orchestrators never routed through gateway (gateway_enabled=False pattern)
+        - Repeated same-error failures suggesting missing primitives
+      Outputs a prioritised list of enhancement candidates.
+    sql: |
+      SELECT
+        mode,
+        template_id,
+        COUNT(*)      AS occurrence_count,
+        MAX(error)    AS representative_error,
+        MIN(started_at) AS first_seen
+      FROM workflow_runs
+      WHERE status = 'error'
+        AND started_at >= datetime('now', '-{{lookback_days}} days')
+        AND (template_id IS NULL OR template_id = '')
+      GROUP BY mode
+      HAVING occurrence_count >= {{min_recurrence}}
+      ORDER BY occurrence_count DESC
+      LIMIT 10;
+    output_key: 'upgrade_signals'
+    empty_action: 'skip'
+
+# ============================================================================
+# STEPS
+# ============================================================================
+steps:
+
+  - id: open_db
+    name: 'Open SQLite connection (read-only)'
+    action: 'sqlite_connect'
+    params:
+      db_path: '{{db_path}}'
+      mode: 'readonly'  # uri=?mode=ro prevents any accidental writes
+    outputs: ['db_connection']
+    on_failure:
+      action: 'warn'
+      message: 'activity-log-query: SQLite DB unavailable at {{db_path}} — skipping history queries'
+      return_empty: true
+
+  - id: run_queries
+    name: 'Execute named queries from caller-supplied query_types'
+    depends_on: ['open_db']
+    action: 'for_each'
+    source: '{{query_types}}'
+    item_var: 'query_name'
+    sub_step:
+      action: 'sqlite_query'
+      db: '{{open_db.db_connection}}'
+      sql: '{{named_queries[query_name].sql | render(params)}}'
+      output_key: '{{named_queries[query_name].output_key}}'
+      empty_action: '{{named_queries[query_name].empty_action}}'
+    outputs: ['query_results']
+
+  - id: classify_severity
+    name: 'Classify findings by severity'
+    depends_on: ['run_queries']
+    action: 'orchestrator_call'
+    orchestrator: 'IntelligenceOrchestrator'
+    method: 'classify_activity_log_findings'
+    params:
+      query_results: '{{run_queries.query_results}}'
+      min_recurrence: '{{min_recurrence}}'
+    outputs:
+      - 'historical_patterns'
+      - 'recurring_failures'
+      - 'p0_signals'
+      - 'upgrade_candidates'
+    on_failure:
+      action: 'warn_and_continue'
+      fallback_output:
+        historical_patterns: '{{run_queries.query_results}}'
+        recurring_failures: []
+        p0_signals: []
+        upgrade_candidates: []
+
+  - id: emit_inline_advisory
+    name: 'Surface P0 signals inline (CORE-002, CORE-049)'
+    depends_on: ['classify_severity']
+    action: 'conditional'
+    condition: '{{classify_severity.p0_signals | length > 0}}'
+    on_true:
+      action: 'display'
+      template: |
+        ⚠️ **Activity Log — {{classify_severity.p0_signals | length}} P0 signal(s) detected (last {{lookback_days}} days):**
+        {% for signal in classify_severity.p0_signals %}
+        - **{{signal.mode}}** via `{{signal.template_id}}`: {{signal.description}} (×{{signal.occurrence_count}})
+        {% endfor %}
+        → These require architectural attention, not point remediation.
+    on_false:
+      action: 'skip'
+      note: 'No P0 signals — silent (CORE-049)'

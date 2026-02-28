@@ -53,9 +53,10 @@ class TrainerOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     _orch_name: str = "TrainerOrchestrator"
     _orch_version: str = "1.0.0"
 
-    # Phase 95 — advisory: execute_operation receives domain-specific names ("scan",
-    # "propose", "execute"), not top-level gateway mode strings. Flag stays False.
-    PHASE90_GATEWAY_ENABLED: bool = False
+    # Phase 91 — Gateway enabled: apply_proposals() writes files to disk (code-touching).
+    # WorkflowGateway routes TRAIN → lifecycle/train-workflow.yaml → convergence loop.
+    # execute_operation("TRAIN", {...}) is the canonical call site; gateway intercepts it.
+    PHASE90_GATEWAY_ENABLED: bool = True
 
     def __init__(
         self,

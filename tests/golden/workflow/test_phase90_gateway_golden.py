@@ -1,19 +1,25 @@
 """
-Golden Tests — Phase 90: WorkflowGateway + Enforcement Contract
+Golden Tests — Phase 90 + 91: WorkflowGateway + Enforcement Contract
 
 GW-001 .. GW-020: Regression guard for the mandatory gateway infrastructure.
-These tests are the final authority on Phase 90 correctness and must NEVER
+These tests are the final authority on Phase 90/91 correctness and must NEVER
 be weakened without explicit Phase governance approval.
 
 Coverage clusters:
   A: WorkflowGateway._MODE_TEMPLATE_MAP completeness (GW-001..GW-008)
   B: WorkflowGateway.resolve_template() contract (GW-009..GW-012)
   C: WorkflowEnforcementMixin contract (GW-013..GW-016)
-  D: All 7 mode-workflow templates contain review-and-cleanup (GW-017..GW-019)
+  D: All 8 mode-workflow templates contain review-and-cleanup (GW-017..GW-019)
   E: tdd/tdd-workflow.yaml composite dispatcher structure (GW-020..GW-024)
   F: primitives/execution/review-and-cleanup.yaml schema (GW-025..GW-027)
 
-Phase: 90 | Priority: P0
+Phase 91 changes to golden truth:
+  - INVESTIGATE promoted from exempt (None) to active template (lifecycle/investigate-workflow)
+  - lifecycle/investigate-workflow.yaml added to review-and-cleanup template set
+  - TrainerOrchestrator.PHASE90_GATEWAY_ENABLED = True
+  - primitives/intelligence/activity-log-query.yaml created
+
+Phase: 90 | Updated: 91 | Priority: P0
 Authority: CORE-008 (TDD), CORE-055 (golden test tier), CORE-064 (sweep)
 AC_START: AC-P90-GOLDEN-WFG-001
 """
@@ -46,11 +52,14 @@ _CODE_TOUCHING_MODES: Dict[str, str] = {
     "TRAIN":          "lifecycle/train-workflow",
     "GOLDEN_TEST":    "tdd/tdd-workflow",
     "WORKFLOW_COMPOSE": "tdd/tdd-workflow",
+    # Phase 91: INVESTIGATE promoted from exempt → active read-only mode workflow
+    "INVESTIGATE":    "lifecycle/investigate-workflow",
 }
 
-_EXEMPT_MODES = ["QUERY", "DESIGN", "PLAN", "REPHRASE", "DIGEST", "INVESTIGATE", "RCA"]
+_EXEMPT_MODES = ["QUERY", "DESIGN", "PLAN", "REPHRASE", "DIGEST", "RCA"]
 
-# The 7 templates that MUST contain review-and-cleanup injection
+# The 8 templates that MUST contain review-and-cleanup injection
+# Phase 91: lifecycle/investigate-workflow.yaml added (has read_only_mode review-and-cleanup)
 _REVIEW_AND_CLEANUP_TEMPLATES = [
     "sdlc/implement-workflow.yaml",
     "sdlc/fix-workflow.yaml",
@@ -59,6 +68,7 @@ _REVIEW_AND_CLEANUP_TEMPLATES = [
     "maintenance/vacuum-workflow.yaml",
     "audit/audit-fix-pipeline.yaml",
     "debugging/multi-stack-debug-pipeline.yaml",
+    "lifecycle/investigate-workflow.yaml",
 ]
 
 

@@ -1,0 +1,244 @@
+# ============================================================================
+# MODE WORKFLOW: INVESTIGATE — LENS-First Read-Only Analysis
+# ============================================================================
+# Tier: 2 (Mode Workflow — composes primitives)
+# Authority: CORE-068 (Convergence Gate), workflow-composer-spec.yaml § INVESTIGATE
+# Trigger: "investigate", "analyze", "root cause", "why is", "what causes"
+# Orchestrator: InvestigationOrchestrator (read-only — no code modification)
+# Agent: cortex-architect.md
+#
+# Phase 91 — New: INVESTIGATE was previously exempt (workflow_ref: null).
+#   It now has a lightweight template to:
+#     1. Enforce SQLite traceability on every investigation (AC markers)
+#     2. Provide a structured LENS scan → hypothesis → evidence pipeline
+#     3. Feed findings into RCA Engine when root-cause is requested
+#     4. Log investigation results to workflow_runs for audit-fix pattern detection
+#
+# NON-CODE-TOUCHING: This template contains NO code-modification steps.
+#   It is exempt from holistic-validation-gate and sweep-catalogue (WC-005).
+#   review-and-cleanup epilogue runs in read-only mode (marker strip only).
+#
+# Design (SOLID + DRY):
+#   - SRP: this file only scans + analyses; no code changes
+#   - OCP: new analysis types → add a step; caller unchanged
+#   - DRY: LENS primitive reused; no inline analysis logic
+#
+# Composes primitives:
+#   - primitives/execution/ac-marker-emit.yaml
+#   - primitives/analysis/lens-ast-scan.yaml
+#   - primitives/intelligence/activity-log-query.yaml (Phase 91)
+#   - primitives/execution/review-and-cleanup.yaml (read-only mode)
+#
+# SQLite Logging:
+#   Writes to workflow_runs (via WorkflowGateway.execute_gated).
+#   Investigation findings are surfaced inline — no .md/.txt files (CORE-002).
+#
+# Governance Rules:
+#   CORE-002: All output inline
+#   CORE-011: Type hints on all functions
+#   CORE-012: Docstrings on all public APIs
+#   CORE-049: Silent on no-finding (progress bar only during scan)
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'lifecycle/investigate-workflow'
+
+workflow:
+  id: 'lifecycle/investigate-workflow'
+  name: 'INVESTIGATE — LENS-First Read-Only Analysis'
+  version: '1.0.0'
+  category: 'lifecycle'
+  status: 'active'
+
+  metadata:
+    description: |
+      4-phase investigation pipeline: Scope → Evidence → Hypothesis → Report.
+      Non-code-touching: all steps are analysis-only.
+      Feeds RCA Engine when root-cause methodology is requested.
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    phase: 'Phase 91 — Workflow Composer Mandatory Gateway Completion'
+    modes_served: ['INVESTIGATE']
+    trigger_keywords:
+      - 'investigate'
+      - 'analyze'
+      - 'root cause'
+      - 'why is'
+      - 'what causes'
+      - 'explain'
+      - 'diagnose'
+    orchestrators_used:
+      - InvestigationOrchestrator
+      - LENSOrchestrator
+    core_rules:
+      - 'CORE-002: All output inline'
+      - 'CORE-011: Type hints'
+      - 'CORE-012: Docstrings'
+      - 'CORE-049: Silent on no-finding'
+    composed_from:
+      - 'primitives/execution/ac-marker-emit'
+      - 'primitives/analysis/lens-ast-scan'
+      - 'primitives/intelligence/activity-log-query'
+      - 'primitives/execution/review-and-cleanup'
+
+  # ── NO CONVERGENCE GATE (read-only — no code to converge) ──────────────
+  # INVESTIGATE does not modify code. detect-fix-rescan-loop NOT injected (WC-005).
+
+  # ── STEPS ────────────────────────────────────────────────────────────────
+  steps:
+
+    # Step 0: AC_START marker
+    - id: ac_start
+      name: 'Emit AC_START'
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs:
+        domain: 'INVESTIGATE'
+        session_id: '{{session_id}}'
+      step_filter: 'ac_start'
+
+    # Step 1: Scope Resolution — determine what to investigate
+    - id: scope_resolution
+      name: 'Scope Resolution — determine investigation boundary'
+      depends_on: ['ac_start']
+      action: 'orchestrator_call'
+      orchestrator: 'InvestigationOrchestrator'
+      method: 'resolve_scope'
+      params:
+        query: '{{request_summary}}'
+        hint_files: '{{hint_files | default([])}}'
+        hint_modules: '{{hint_modules | default([])}}'
+      outputs:
+        - 'scope_files'
+        - 'scope_modules'
+        - 'scope_domain'
+      gate:
+        predicate: 'scope_files is not None'
+        on_fail: 'warn'
+
+    # Step 2: LENS Analysis — deep scan of scoped files
+    - id: lens_scan
+      name: 'LENS Analysis — Language → Examination → Navigation → Synthesis'
+      depends_on: ['scope_resolution']
+      template_ref: 'primitives/analysis/lens-ast-scan'
+      inputs:
+        target_files: '{{scope_resolution.scope_files}}'
+        target_modules: '{{scope_resolution.scope_modules}}'
+        analysis_depth: 'full'
+        include_git_history: true
+        include_test_coverage: true
+      outputs:
+        - 'lens_result'
+        - 'code_patterns'
+        - 'anomalies'
+
+    # Step 3: Activity Log Query — mine historical workflow_runs for patterns
+    - id: activity_log_query
+      name: 'Activity Log Query — mine workflow_runs for relevant patterns'
+      depends_on: ['lens_scan']
+      template_ref: 'primitives/intelligence/activity-log-query'
+      inputs:
+        scope_modules: '{{scope_resolution.scope_modules}}'
+        lookback_days: 30
+        min_recurrence: 2
+      outputs:
+        - 'historical_patterns'
+        - 'recurring_failures'
+
+    # Step 4: Hypothesis Generation — ranked hypotheses from evidence
+    - id: hypothesis_generation
+      name: 'Hypothesis Generation — ranked by evidence confidence'
+      depends_on: ['lens_scan', 'activity_log_query']
+      action: 'orchestrator_call'
+      orchestrator: 'InvestigationOrchestrator'
+      method: 'generate_hypotheses'
+      params:
+        lens_result: '{{lens_scan.lens_result}}'
+        anomalies: '{{lens_scan.anomalies}}'
+        historical_patterns: '{{activity_log_query.historical_patterns}}'
+        min_hypotheses: 2
+      outputs:
+        - 'hypotheses'
+        - 'top_hypothesis'
+        - 'confidence_scores'
+
+    # Step 5: RCA Branch — invoke RCA Engine if root-cause requested
+    - id: rca_branch
+      name: 'RCA Engine — invoke if root-cause methodology requested'
+      depends_on: ['hypothesis_generation']
+      action: 'conditional'
+      condition: '{{rca_requested | default(false)}}'
+      on_true:
+        action: 'mcp_call'
+        tool: 'cortex_learning'
+        params:
+          op: 'rca'
+          rca_action: 'analyze'
+          symptom: '{{request_summary}}'
+          category: '{{scope_resolution.scope_domain}}'
+          evidence: '{{hypothesis_generation.hypotheses}}'
+        outputs: ['rca_result']
+      on_false:
+        action: 'skip'
+        note: 'Root-cause methodology not requested — hypothesis report is sufficient'
+
+    # Step 6: Inline Report — surface findings in Chat (CORE-002)
+    - id: inline_report
+      name: 'Surface findings inline — no file output (CORE-002)'
+      depends_on: ['hypothesis_generation', 'rca_branch']
+      action: 'display'
+      template: |
+        ## 🔬 Investigation Report
+
+        **Query:** {{request_summary}}
+        **Scope:** {{scope_resolution.scope_modules | join(", ") | default("full workspace")}}
+
+        ### Evidence
+        {{lens_scan.code_patterns | format_as_table}}
+
+        {% if activity_log_query.recurring_failures %}
+        ### Historical Patterns (last 30 days)
+        {{activity_log_query.recurring_failures | format_as_list}}
+        {% endif %}
+
+        ### Hypotheses (ranked by confidence)
+        {% for h in hypothesis_generation.hypotheses %}
+        {{loop.index}}. {{h.description}} — confidence: {{h.confidence | percent}}
+        {% endfor %}
+
+        {% if rca_branch.rca_result %}
+        ### Root Cause Analysis
+        {{rca_branch.rca_result | format_rca}}
+        {% endif %}
+      silent_on_empty: true  # CORE-049
+
+    # Step 7: Review + Cleanup (read-only mode — strip markers only)
+    - id: review_and_cleanup
+      name: 'Review + Cleanup — read-only epilogue'
+      depends_on: ['inline_report']
+      template_ref: 'primitives/execution/review-and-cleanup'
+      inputs:
+        changed_files: []
+        session_id: '{{session_id}}'
+        mode: 'INVESTIGATE'
+        run_id: '{{session_id}}'
+        silent_on_clean: true
+        read_only_mode: true
+
+    # Step 8: AC_COMPLETE
+    - id: ac_complete
+      name: 'Emit AC_COMPLETE'
+      depends_on: ['review_and_cleanup']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs:
+        domain: 'INVESTIGATE'
+        session_id: '{{session_id}}'
+      step_filter: 'ac_complete_success'
+
+  scorecard:
+    weights:
+      scope_resolved: 0.20
+      lens_anomalies_found: 0.30
+      hypotheses_generated: 0.30
+      historical_patterns_checked: 0.20
+    pass_threshold: 0.60
+    note: 'Scorecard is advisory — investigation always completes (no blocking gate)'
