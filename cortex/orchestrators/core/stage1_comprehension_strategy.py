@@ -7,6 +7,7 @@ Produces lens_context in StageContext.metadata for downstream stages.
 Authority: ENH-087 Track 1.1, CORE-008 (TDD), CORE-011, CORE-012
 AC_START: AC-P1-STAGE1-COMP-001
 """
+from __future__ import annotations
 
 from datetime import datetime
 from pathlib import Path
@@ -43,16 +44,38 @@ class Stage1ComprehensionStrategy(StageExecutionStrategy):
         """
         Execute LENS comprehension.
 
-        Analyzes target file using LENSOrchestrator and stores
-        results in context.metadata['lens_context'].
+        Phase 93: When interaction_orchestrator is in dependencies, delegates
+        to it for full LENS + breadcrumb output. Falls back to LENSOrchestrator
+        direct call if not available.
 
         Args:
             context: StageContext from pipeline.
 
         Returns:
-            Result[StageContext] with lens_context in metadata.
+            Result[StageContext] with lens_context (and breadcrumb) in metadata.
         """
         try:
+            # Phase 93: prefer InteractionOrchestrator (LENS + breadcrumb)
+            interaction_orch = self._dependencies.get("interaction_orchestrator")
+            if interaction_orch and hasattr(interaction_orch, "execute"):
+                user_intent = (
+                    context.parameters.get("user_intent")
+                    or context.parameters.get("request")
+                    or context.operation_name
+                )
+                io_result = interaction_orch.execute({"user_intent": user_intent})
+                if io_result.is_ok():
+                    io_output = io_result.unwrap()
+                    lens_context = io_output.get("lens_context", {})
+                    context.metadata["lens_context"] = lens_context
+                    context.metadata["stage1_timestamp"] = datetime.now().isoformat()
+                    context.metadata["stage1_status"] = "complete"
+                    # Phase 93: preserve breadcrumb for downstream rendering
+                    if "breadcrumb" in io_output:
+                        context.metadata["breadcrumb"] = io_output["breadcrumb"]
+                    return Ok(context)
+                # IO failed — fall through to LENS direct
+
             lens_context = self._run_lens(context)
 
             context.metadata["lens_context"] = lens_context

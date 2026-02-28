@@ -8,6 +8,7 @@ Stage 4: Delegates execution to domain orchestrators
 Authority: ENH-087 Track 1.2, CORE-008 (TDD), CORE-011, CORE-012
 AC_START: AC-P1-STAGE234-001
 """
+from __future__ import annotations
 
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -35,6 +36,7 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
             dependencies: Optional dict with 'intent_router'.
         """
         self._dependencies = dependencies or {}
+        self._last_decision: Optional[Any] = None  # populated by _classify() via route()
 
     def execute(self, context: StageContext) -> Result[StageContext]:
         """
@@ -53,12 +55,22 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
         """
         try:
             request = context.parameters.get("request", "")
+            # Phase 93: pass operation_name to _classify so route() context is rich
+            self._dependencies["_operation_name"] = context.operation_name
             classified_intent = self._classify(request)
+
+            # Phase 93: prefer target_handler from RoutingDecision over static map
+            if self._last_decision and hasattr(self._last_decision, "target_handler"):
+                routing_target = self._last_decision.target_handler or self._get_routing_target(classified_intent)
+                confidence = getattr(self._last_decision, "confidence_score", 0.85)
+            else:
+                routing_target = self._get_routing_target(classified_intent)
+                confidence = 0.85
 
             context.metadata["intent_classification"] = {
                 "classified_intent": classified_intent,
-                "confidence": 0.85,
-                "routing_target": self._get_routing_target(classified_intent),
+                "confidence": confidence,
+                "routing_target": routing_target,
                 "timestamp": datetime.now().isoformat(),
             }
             context.metadata["stage2_status"] = "complete"
@@ -85,13 +97,22 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
         Returns:
             Intent type string.
         """
-        # Try IntentRouter from dependencies
+        # Try IntentRouter from dependencies — call route() (canonical API)
         router = self._dependencies.get("intent_router")
-        if router and hasattr(router, "classify"):
+        operation_name = self._dependencies.get("_operation_name", "")
+        if router and hasattr(router, "route"):
             try:
-                result = router.classify(request)
-                if hasattr(result, "intent"):
-                    return result.intent
+                routing_context: Dict[str, Any] = {
+                    "request": request,
+                    "operation": operation_name,
+                    "user_intent": request,
+                    "description": request,
+                }
+                decision = router.route(routing_context)
+                if decision and hasattr(decision, "intent_type"):
+                    # Store target_handler for _get_routing_target reuse
+                    self._last_decision = decision
+                    return decision.intent_type.value
             except Exception:
                 pass
 
@@ -113,6 +134,9 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
         """
         Get routing target orchestrator for intent.
 
+        Phase 93: Covers all 27 IntentType values.
+        UNKNOWN/QUERY/INTERACT → InteractionOrchestrator (LENS default).
+
         Args:
             intent: Classified intent type.
 
@@ -120,13 +144,47 @@ class Stage2IntentClassificationStrategy(StageExecutionStrategy):
             Orchestrator name for routing.
         """
         routing_map = {
+            # Core TDD path
             "IMPLEMENT": "TDDOrchestrator",
             "FIX": "TDDOrchestrator",
-            "REFACTOR": "RefactoringOrchestrator",
-            "ANALYZE": "LENSSynthesis",
             "TEST": "TDDOrchestrator",
+            # Refactor path
+            "REFACTOR": "RefactoringOrchestrator",
+            # Analysis
+            "ANALYZE": "AnalysisOrchestrator",
+            "INVESTIGATE": "InvestigationOrchestrator",
+            "RCA": "LearningOrchestrator",
+            # Audit/Health/Governance
+            "AUDIT": "HealthOrchestrator",
+            "HEALTH": "HealthOrchestrator",
+            # Cleanup
+            "VACUUM": "VacuumOrchestrator",
+            # Debug
+            "DEBUG": "DebuggerOrchestrator",
+            # Git/Sync
+            "SYNC": "GitOrchestrator",
+            # Training/Knowledge
+            "TRAIN": "TrainerOrchestrator",
+            # Holistic
+            "TOTALRECALL": "AuditOrchestrator",
+            # Content/Knowledge
+            "DOCUMENT": "DocumentationOrchestrator",
+            "DIGEST": "DigestSessionOrchestrator",
+            # Planning/Design
+            "DESIGN": "ArchitectOrchestrator",
+            "PLAN": "PlanningOrchestrator",
+            # Onboarding
+            "ONBOARD": "RepositoryOnboardingOrchestrator",
+            # Security
+            "SECURITY": "SecurityOrchestrator",
+            # Deploy
+            "DEPLOY": "DeploymentOrchestrator",
+            # LENS default — unknown/conversational/query → InteractionOrchestrator
+            "UNKNOWN": "InteractionOrchestrator",
+            "QUERY": "InteractionOrchestrator",
+            "INTERACT": "InteractionOrchestrator",
         }
-        return routing_map.get(intent, "MasterOrchestrator")
+        return routing_map.get(intent.upper(), "InteractionOrchestrator")
 
 
 class Stage3ComplianceValidationStrategy(StageExecutionStrategy):

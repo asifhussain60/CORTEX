@@ -1424,6 +1424,8 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
                 "logger": self.logger,
                 # G1/G6 Fix: expose self so Stage4 can call _check_for_workflow_template
                 "master_orchestrator": self,
+                # Phase 93: expose lens_orchestrator for Stage1 direct LENS fallback
+                "lens_orchestrator": getattr(self, "_lens_orchestrator", None),
             }
             
             # ═══════════════════════════════════════════════════════════════════════

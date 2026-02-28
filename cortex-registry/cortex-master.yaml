@@ -451,29 +451,29 @@ production_readiness:
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "92/92 phases (0 ACTIVE)"
-  last_verified: '2026-02-28T07:00:00Z'
+  plan_version: "93/93 phases (0 ACTIVE)"
+  last_verified: '2026-02-28T08:00:00Z'
 
 summary:
-  total_phases: 92
-  completed: 92
+  total_phases: 93
+  completed: 93
   active: 0
   in_progress: 0
   planned: 0
   archived: 4
   playbooks: 1
   completion_percentage: 100
-  consolidation_summary: "v40.0: 92 phases — 92 COMPLETE, 0 ACTIVE. Phase-92 COMPLETE (2026-02-28): 5 GAPs CLOSED — EngagementRenderer SSOT breadcrumb format fix (**Route:** backtick), InteractionOrchestrator breadcrumb emission in execute_turn_with_challenge() and execute(), WorkflowComplexityRouter.evaluate() alias, Intent dataclass extended. 16 tests GREEN. Smoke: 1,698."
+  consolidation_summary: "v41.0: 93 phases — 93 COMPLETE, 0 ACTIVE. Phase-93 COMPLETE (2026-02-28): 5 GAPs CLOSED — Stage2._classify() uses router.route() (not missing classify()), _get_routing_target() covers all 27 IntentType values, Stage1 uses InteractionOrchestrator.execute() + preserves breadcrumb, MasterOrchestrator passes lens_orchestrator to deps. 30 tests GREEN. Smoke: 1,698."
   active_phases: {}
 
 phases:
-  - id: phase-92-engagement-block-wiring
-    title: "Phase 92 — Engagement Block Wiring"
+  - id: phase-93-intent-router-full-wiring
+    title: "Phase 93 — IntentRouter Full Wiring into MasterOrchestrator"
     status: COMPLETE
-    priority: P1
-    sweep_id: SWEEP-092
+    priority: P0
+    sweep_id: SWEEP-093
     gaps: 5
-    file: cortex-registry/planning/phases/completed/phase-92-engagement-block-wiring.yaml
-    note: "SSOT breadcrumb format fix + InteractionOrchestrator breadcrumb output + WorkflowComplexityRouter.evaluate() + Intent dataclass extension. 16 tests GREEN."
+    file: cortex-registry/planning/phases/completed/phase-93-intent-router-full-wiring.yaml
+    note: "Stage2 routes via IntentRouter.route(); 27-intent coverage; Stage1 delegates to InteractionOrchestrator + breadcrumb; MasterOrchestrator deps wired. 30 tests GREEN."
 
 
