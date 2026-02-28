@@ -1231,6 +1231,11 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 },
             )
 
+            # Phase 91: Routing miss detection — log low-confidence fallbacks
+            # so /audit fix can surface unclassified keywords as candidates
+            if clf_result.confidence < 0.4 or clf_result.intent_type == IntentType.UNKNOWN:
+                self._log_routing_miss(combined_text, clf_result)
+
             return clf_result.intent_type
 
         except (ValueError, TypeError, AttributeError) as e:
@@ -1286,6 +1291,33 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 details={"error": str(e)}
             )
             return False
+
+    def _log_routing_miss(self, text: str, clf_result: Any) -> None:
+        """Log a routing miss for audit-driven keyword expansion.
+
+        Phase 91: When the classifier returns low confidence (<0.4) or
+        UNKNOWN, record the unclassified text so ``/audit fix`` can surface
+        it as a keyword candidate for IntentRouter expansion.
+
+        Args:
+            text: The combined request text that was not confidently classified.
+            clf_result: The ClassificationResult from the 3-tier classifier.
+        """
+        try:
+            self.logger.log_operation_complete(
+                ac_id="AC-91-ROUTING-MISS-001",
+                operation="ROUTING_MISS_DETECTED",
+                success=True,
+                details={
+                    "unclassified_text": text[:200],  # truncate for storage
+                    "fallback_intent": clf_result.intent_type.value,
+                    "confidence": clf_result.confidence,
+                    "tier": clf_result.tier_used,
+                    "reasoning": clf_result.reasoning,
+                },
+            )
+        except Exception:
+            pass  # Non-blocking — routing miss logging must never break routing
 
     def _get_cache_key(self, context: Dict[str, Any]) -> str:
         """

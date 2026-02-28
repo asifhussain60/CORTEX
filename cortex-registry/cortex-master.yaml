@@ -122,6 +122,19 @@ metadata:
 # ─────────────────────────────────────────────────────────────────────────────
 phase_detail_files:
 
+  # ── SLOT #-2 — phase-91 (P1, COMPLETE) ──────────────────────────────────────
+  - id: phase-91
+    title: "Routing Coverage — Miss Detection, Pre-built Engagement Chains, Workflow Gate Regression Fix"
+    priority: P1
+    status: COMPLETE
+    sweep_id: SWEEP-91-ROUTING-COVERAGE
+    gaps: 3
+    gaps_closed: 3
+    sub_phases: 3
+    sub_phases_complete: 3
+    file: "cortex-registry/planning/phases/completed/phase-91-routing-coverage.yaml"
+    note: "3 GAPs CLOSED. (A) Routing miss detection: _log_routing_miss() on confidence<0.4 or UNKNOWN with AC-91-ROUTING-MISS-001 audit trail. (B) EngagementRenderer: COMMAND_CHAINS dict (14 commands) + breadcrumb_for_command() for unified visibility. (C) WorkflowComplexityRouter regression fix: default fallback MasterOrchestrator→InteractionOrchestrator. 43 tests GREEN (12+31 phase91+workflow_gate). Smoke: 1,700 passed."
+
   # ── SLOT #-1 — phase-90 (P0, COMPLETE) ──────────────────────────────────────
   - id: phase-90
     title: "Holistic Intent Wiring — 7 Missing IntentTypes, Classifier Completion, YAML Spec Alignment, Template Binding"
@@ -431,26 +444,26 @@ health_status:
       action: "Pre-existing — tracked, not blocking"
 
 production_readiness:
-  status: "✅ Phase 90 COMPLETE — Holistic Intent Wiring (15/15 GAPs CLOSED). Smoke: 1,701 passed."
+  status: "✅ Phase 91 COMPLETE — Routing Coverage (3/3 GAPs CLOSED). Smoke: 1,700 passed."
   overall_score: 99%
-  test_baseline: "1,701 smoke | 84 golden response | 204 golden workflow | 177 workflow orchestrators"
+  test_baseline: "1,700 smoke | 84 golden response | 204 golden workflow | 177 workflow orchestrators"
   deployment_date: '2026-02-28'
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "90/90 phases (0 ACTIVE)"
+  plan_version: "91/91 phases (0 ACTIVE)"
   last_verified: '2026-02-28T06:00:00Z'
 
 summary:
-  total_phases: 90
-  completed: 90
+  total_phases: 91
+  completed: 91
   active: 0
   in_progress: 0
   planned: 0
   archived: 4
   playbooks: 1
   completion_percentage: 100
-  consolidation_summary: "v38.0: 90 phases — 90 COMPLETE, 0 ACTIVE. Phase-90 COMPLETE (2026-02-28): all 15 GAPs closed — 7 IntentTypes (DEBUG/HEALTH/SYNC/TRAIN/TOTALRECALL/RCA/VACUUM) now fully routable via NL; IntentClassifier 3-tier expanded (13→20 labels); YAML spec 8→26 intents; MasterOrchestrator template binding 6→20 types; VACUUM detect_intent() fixed (REFACTOR→VACUUM). Smoke: 1,701 GREEN."
+  consolidation_summary: "v39.0: 91 phases — 91 COMPLETE, 0 ACTIVE. Phase-91 COMPLETE (2026-02-28): 3 GAPs CLOSED — routing miss detection (_log_routing_miss with AC-91-ROUTING-MISS-001), EngagementRenderer COMMAND_CHAINS (14 commands), WorkflowComplexityRouter regression fix. 43 tests GREEN. Smoke: 1,700."
   active_phases: {}
 
 

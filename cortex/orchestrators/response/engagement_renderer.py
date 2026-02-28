@@ -80,3 +80,43 @@ class EngagementRenderer:
 {timeline_body}
 
 </details>"""
+
+    # ── Phase 91: Pre-built breadcrumb chains for common commands ────────
+
+    # Canonical routing chains for CORTEX commands — used by MCP tools
+    # and MasterOrchestrator to render consistent engagement visibility.
+    COMMAND_CHAINS: dict[str, list[str]] = {
+        "health": ["IntentRouter", "HealthOrchestrator"],
+        "vacuum": ["IntentRouter", "VacuumOrchestrator"],
+        "audit": [
+            "IntentRouter", "AuditOrchestrator",
+            "HealthOrchestrator", "VacuumOrchestrator",
+            "EnforcementOrchestrator",
+        ],
+        "debug": ["IntentRouter", "DebuggerOrchestrator", "MarkerInjectionEngine"],
+        "totalrecall": [
+            "IntentRouter", "MasterOrchestrator",
+            "AuditOrchestrator", "RefactoringOrchestrator",
+        ],
+        "implement": ["IntentRouter", "TDDOrchestrator"],
+        "fix": ["IntentRouter", "TDDOrchestrator"],
+        "refactor": ["IntentRouter", "RefactoringOrchestrator"],
+        "rca": ["IntentRouter", "LearningOrchestrator", "RCAEngine"],
+        "sync": ["IntentRouter", "GitOrchestrator", "WorkflowOrchestrator"],
+        "train": ["IntentRouter", "TrainerOrchestrator"],
+        "digest": ["IntentRouter", "DigestSessionOrchestrator"],
+        "design": ["IntentRouter", "DesignCoordinator"],
+        "plan": ["IntentRouter", "PlanningOrchestrator"],
+    }
+
+    def breadcrumb_for_command(self, command: str) -> str:
+        """Render breadcrumb for a known CORTEX command.
+
+        Args:
+            command: Command name (e.g. ``"audit"``, ``"health"``, ``"debug"``).
+
+        Returns:
+            Formatted breadcrumb string, or empty string if command unknown.
+        """
+        chain = self.COMMAND_CHAINS.get(command.lower(), [])
+        return self.render_breadcrumb(chain)

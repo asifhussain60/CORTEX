@@ -208,8 +208,13 @@ class TestOrchestratorSelection:
         
         assert decision.orchestrator == "TDDOrchestrator"
     
-    def test_select_master_orchestrator_for_unknown(self):
-        """Unknown operations should default to MasterOrchestrator."""
+    def test_select_interaction_orchestrator_for_unknown(self):
+        """Unknown operations default to InteractionOrchestrator (LENS comprehension).
+
+        Phase 89 GAP-89-18: Changed default fallback from MasterOrchestrator
+        to InteractionOrchestrator so unrecognized operations get LENS
+        per-turn comprehension before execution routing.
+        """
         router = WorkflowComplexityRouter()
         intent = Intent(
             operation_type="unknown_operation",
@@ -221,7 +226,7 @@ class TestOrchestratorSelection:
         
         decision = router.route(intent)
         
-        assert decision.orchestrator == "MasterOrchestrator"
+        assert decision.orchestrator == "InteractionOrchestrator"
 
 
 class TestTemplateSelection:
