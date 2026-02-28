@@ -19,7 +19,11 @@ Phase 91 changes to golden truth:
   - TrainerOrchestrator.PHASE90_GATEWAY_ENABLED = True
   - primitives/intelligence/activity-log-query.yaml created
 
-Phase: 90 | Updated: 91 | Priority: P0
+Phase 97 changes to golden truth:
+  - RCA promoted from exempt (None) to active template (rca/rca-analysis-workflow)
+  - DIGEST promoted from exempt (None) to active template (lifecycle/digest-workflow)
+
+Phase: 90 | Updated: 97 | Priority: P0
 Authority: CORE-008 (TDD), CORE-055 (golden test tier), CORE-064 (sweep)
 AC_START: AC-P90-GOLDEN-WFG-001
 """
@@ -54,9 +58,12 @@ _CODE_TOUCHING_MODES: Dict[str, str] = {
     "WORKFLOW_COMPOSE": "tdd/tdd-workflow",
     # Phase 91: INVESTIGATE promoted from exempt → active read-only mode workflow
     "INVESTIGATE":    "lifecycle/investigate-workflow",
+    # Phase 97: RCA + DIGEST promoted from exempt → active read-only mode workflows
+    "RCA":            "rca/rca-analysis-workflow",
+    "DIGEST":         "lifecycle/digest-workflow",
 }
 
-_EXEMPT_MODES = ["QUERY", "DESIGN", "PLAN", "REPHRASE", "DIGEST", "RCA"]
+_EXEMPT_MODES = ["QUERY", "DESIGN", "PLAN", "REPHRASE"]
 
 # The 8 templates that MUST contain review-and-cleanup injection
 # Phase 91: lifecycle/investigate-workflow.yaml added (has read_only_mode review-and-cleanup)

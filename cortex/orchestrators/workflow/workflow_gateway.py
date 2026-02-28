@@ -54,13 +54,13 @@ _MODE_TEMPLATE_MAP: Dict[str, Optional[str]] = {
     # Non-code-touching — reads-only, LENS scan with trace (WC-005 + Phase 91)
     # INVESTIGATE gets a lightweight template for SQLite traceability without code gating.
     "INVESTIGATE": "lifecycle/investigate-workflow",
-    "RCA":     None,
+    "RCA":       "rca/rca-analysis-workflow",
+    "DIGEST":    "lifecycle/digest-workflow",
     # Pure non-code-touching — no template required
     "QUERY":   None,
     "DESIGN":  None,
     "PLAN":    None,
     "REPHRASE": None,
-    "DIGEST":  None,
     "GOLDEN_TEST": "tdd/tdd-workflow",
     "WORKFLOW_COMPOSE": "tdd/tdd-workflow",  # meta — composes dynamically
 }
