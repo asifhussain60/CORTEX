@@ -27,12 +27,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"/>
 
-<!-- D3.js for interactive diagrams -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"
-        integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
-
 <!-- Design System -->
 <link href="../assets/css/cortex-grid-system.css" rel="stylesheet"/>
 <link href="../assets/css/glass-design-tokens.css" rel="stylesheet"/>
@@ -242,9 +236,6 @@
                         <tr><td>RCA knowledge reuse</td><td>Prevention rules avoid repeat diagnostic cycles</td><td class="highlight">~8% per recurring issue</td></tr>
                     </tbody>
                 </table>
-                <div class="bl-chart-wrapper">
-                    <svg id="token-savings-chart" height="280" aria-label="Token savings trend chart"></svg>
-                </div>
             </div>
 
             <!-- Tab 3: Velocity Gains -->
@@ -270,9 +261,6 @@
                         <div class="roi-detail">Critical wiring validated in seconds</div>
                     </div>
                 </div>
-                <div class="bl-chart-wrapper">
-                    <svg id="velocity-trend-chart" height="280" aria-label="Delivery velocity trend chart"></svg>
-                </div>
             </div>
 
             <!-- Tab 4: Debug Time Savings -->
@@ -296,32 +284,6 @@
         </div><!-- /.bl-section-panel: Financial Impact -->
 
         <!-- ════════════════════════════════════════════════
-             SECTION 3: Architecture Overview (D3 diagrams)
-             ════════════════════════════════════════════════ -->
-        <div class="bl-section-panel">
-        <h2 class="role-section-title"><i class="fas fa-sitemap"></i> CORTEX Architecture — High-Level View</h2>
-
-        <div class="arch-diagram-container">
-            <h3><i class="fas fa-layer-group"></i> Four-Tier Orchestration Architecture</h3>
-            <p class="diagram-caption">51 orchestrators across 4 tiers — every request flows through intent routing, governance, and intelligence before execution.</p>
-            <svg id="arch-tiers-diagram" height="420" aria-label="CORTEX four-tier orchestration architecture"></svg>
-        </div>
-
-        <div class="bl-arch-grid">
-            <div class="arch-diagram-container">
-                <h3><i class="fas fa-shield-alt"></i> Governance Pipeline</h3>
-                <p class="diagram-caption">Every commit passes through 38 automated quality gates.</p>
-                <svg id="governance-pipeline" height="300" aria-label="Governance pipeline flow"></svg>
-            </div>
-            <div class="arch-diagram-container">
-                <h3><i class="fas fa-chart-pie"></i> Investment Allocation</h3>
-                <p class="diagram-caption">Where CORTEX directs engineering effort — features vs. infrastructure.</p>
-                <svg id="investment-donut" height="300" aria-label="Engineering investment allocation"></svg>
-            </div>
-        </div>
-        </div><!-- /.bl-section-panel: Architecture -->
-
-        <!-- ════════════════════════════════════════════════
              SECTION: Executive Visual Assets (DALL-E Generated)
              ════════════════════════════════════════════════ -->
         <div class="bl-section-panel">
@@ -331,7 +293,7 @@
             <img src="../assets/images/generated/business-leader/01-roi-executive-dashboard.png"
                  alt="Executive ROI dashboard showing 40% cost reduction, 4× faster resolution, 60% token savings, and 87 phases shipped"
                  class="generated-diagram"
-                 loading="lazy"
+                 loading="lazy"/>
             <p class="image-caption">Executive ROI Dashboard — Quantified business impact at a glance</p>
         </div>
 
@@ -340,14 +302,14 @@
                 <img src="../assets/images/generated/business-leader/02-governance-shield-architecture.png"
                      alt="Governance pipeline showing 7 enforcement stages from code change to deployment"
                      class="generated-diagram"
-                     loading="lazy"
+                     loading="lazy"/>
                 <p class="image-caption">Governance Shield — 38 CORE rules, 7 enforcement stages</p>
             </div>
             <div class="generated-image-panel">
                 <img src="../assets/images/generated/business-leader/03-cost-avoidance-infographic.png"
                      alt="Cost comparison infographic showing $250K+ annual savings with CORTEX"
                      class="generated-diagram"
-                     loading="lazy"
+                     loading="lazy"/>
                 <p class="image-caption">Cost Avoidance — ~$250K+ annual savings vs. traditional tooling</p>
             </div>
         </div>
@@ -356,7 +318,7 @@
             <img src="../assets/images/generated/shared/01-platform-architecture-overview.png"
                  alt="CORTEX four-tier platform architecture: Interaction, Intelligence, Orchestration, Governance"
                  class="generated-diagram"
-                 loading="lazy"
+                 loading="lazy"/>
             <p class="image-caption">Platform Architecture — Four-tier intelligence stack</p>
         </div>
         </div><!-- /.bl-section-panel: Executive Visual Assets -->
@@ -527,334 +489,6 @@
 
     </div><!-- /.role-content-wrapper -->
 </main>
-
-<!-- ══════════════════════════════════════════════════════════
-     D3.js DIAGRAMS
-     ══════════════════════════════════════════════════════════ -->
-<script>
-(function () {
-    'use strict';
-
-    /* ── Design tokens ── */
-    var CYAN    = '#00d4ff';
-    var VIOLET  = '#a78bfa';
-    var EMERALD = '#34d399';
-    var AMBER   = '#f59e0b';
-    var SKY     = '#38bdf8';
-    var ROSE    = '#fb7185';
-    var TEXT_SEC = '#a0a6c0';
-    var TEXT_PRI = '#e2e8f0';
-    var BG_DARK = '#0a0e27';
-
-    /* ════════════════════════════════════════════════════════
-       1. FOUR-TIER ARCHITECTURE DIAGRAM
-       ════════════════════════════════════════════════════════ */
-    (function renderArchTiers() {
-        var container = document.getElementById('arch-tiers-diagram');
-        if (!container) return;
-        var W = container.parentElement.clientWidth || 900;
-        var H = 420;
-
-        var svg = d3.select('#arch-tiers-diagram')
-            .attr('width', W).attr('height', H)
-            .attr('viewBox', '0 0 ' + W + ' ' + H);
-
-        var tiers = [
-            { label: 'USER REQUEST', y: 20,  color: TEXT_SEC, items: ['Copilot Chat', 'CLI', 'MCP Client'], w: 0.6 },
-            { label: 'CORE TIER (17)', y: 100, color: CYAN,    items: ['MasterOrchestrator', 'IntentRouter', 'TDD', 'Enforcement', 'Interaction'], w: 0.88 },
-            { label: 'DOMAIN TIER (7)', y: 180, color: VIOLET, items: ['Audit', 'Refactoring', 'Planning', 'Investigation', 'Design', 'Query', 'Digest'], w: 0.88 },
-            { label: 'SUPPORT TIER (23)', y: 268, color: EMERALD, items: ['Debugger (8 strats)', 'Vacuum', 'Health', 'LENS', 'RCA Engine', 'Sweep'], w: 0.88 },
-            { label: 'GIT TIER (4)', y: 350, color: AMBER, items: ['GitOrchestrator', 'Sync', 'Upgrade', 'Workflow'], w: 0.68 },
-        ];
-
-        tiers.forEach(function (tier, ti) {
-            var tierW = W * tier.w;
-            var tierX = (W - tierW) / 2;
-            var g = svg.append('g');
-
-            g.append('rect')
-                .attr('x', tierX).attr('y', tier.y)
-                .attr('width', tierW).attr('height', 60)
-                .attr('rx', 10)
-                .attr('fill', tier.color).attr('fill-opacity', 0.06)
-                .attr('stroke', tier.color).attr('stroke-opacity', 0.3).attr('stroke-width', 1);
-
-            g.append('text')
-                .attr('x', tierX + 18).attr('y', tier.y + 20)
-                .attr('fill', tier.color).attr('font-size', '12px').attr('font-weight', '800')
-                .attr('letter-spacing', '0.08em')
-                .text(tier.label);
-
-            var itemX = tierX + 18;
-            tier.items.forEach(function (item) {
-                var bw = item.length * 8.5 + 20;
-                g.append('rect')
-                    .attr('x', itemX).attr('y', tier.y + 32)
-                    .attr('width', bw).attr('height', 22).attr('rx', 6)
-                    .attr('fill', tier.color).attr('fill-opacity', 0.12)
-                    .attr('stroke', tier.color).attr('stroke-opacity', 0.25).attr('stroke-width', 0.8);
-                g.append('text')
-                    .attr('x', itemX + bw / 2).attr('y', tier.y + 47)
-                    .attr('text-anchor', 'middle')
-                    .attr('fill', tier.color).attr('font-size', '10.5px').attr('font-weight', '600')
-                    .text(item);
-                itemX += bw + 8;
-            });
-
-            if (ti < tiers.length - 1) {
-                var nextY = tiers[ti + 1].y;
-                var cx = W / 2;
-                svg.append('line')
-                    .attr('x1', cx).attr('y1', tier.y + 60)
-                    .attr('x2', cx).attr('y2', nextY)
-                    .attr('stroke', tier.color).attr('stroke-opacity', 0.25)
-                    .attr('stroke-width', 1.5).attr('stroke-dasharray', '4,3');
-                svg.append('polygon')
-                    .attr('points', (cx - 5) + ',' + (nextY - 7) + ' ' + cx + ',' + nextY + ' ' + (cx + 5) + ',' + (nextY - 7))
-                    .attr('fill', tiers[ti + 1].color).attr('fill-opacity', 0.5);
-            }
-        });
-    })();
-
-    /* ════════════════════════════════════════════════════════
-       2. GOVERNANCE PIPELINE — horizontal flow
-       ════════════════════════════════════════════════════════ */
-    (function renderGovernancePipeline() {
-        var container = document.getElementById('governance-pipeline');
-        if (!container) return;
-        var W = container.parentElement.clientWidth || 450;
-        var H = 300;
-
-        var svg = d3.select('#governance-pipeline')
-            .attr('width', W).attr('height', H)
-            .attr('viewBox', '0 0 ' + W + ' ' + H);
-
-        var steps = [
-            { label: 'Code\nChange',    color: TEXT_SEC },
-            { label: 'Stage 0\nAudit',   color: CYAN    },
-            { label: 'TDD Gate\n(CORE-008)', color: VIOLET },
-            { label: '38 Rules\nEnforced',  color: EMERALD },
-            { label: 'LENS\nScan',       color: SKY     },
-            { label: 'AC Audit\nLog',    color: AMBER   },
-            { label: '✅\nShipped',      color: EMERALD },
-        ];
-
-        var stepW = 80, stepH = 50, gapX = (W - steps.length * stepW) / (steps.length + 1);
-        var cy = H / 2;
-
-        steps.forEach(function (s, i) {
-            var cx = gapX + i * (stepW + gapX) + stepW / 2;
-
-            svg.append('rect')
-                .attr('x', cx - stepW / 2).attr('y', cy - stepH / 2)
-                .attr('width', stepW).attr('height', stepH).attr('rx', 10)
-                .attr('fill', s.color).attr('fill-opacity', 0.12)
-                .attr('stroke', s.color).attr('stroke-opacity', 0.45).attr('stroke-width', 1);
-
-            var lines = s.label.split('\n');
-            lines.forEach(function (line, li) {
-                svg.append('text')
-                    .attr('x', cx).attr('y', cy - (lines.length - 1) * 7 + li * 14 + 2)
-                    .attr('text-anchor', 'middle')
-                    .attr('fill', s.color).attr('font-size', '10px').attr('font-weight', '700')
-                    .text(line);
-            });
-
-            if (i < steps.length - 1) {
-                var nx = gapX + (i + 1) * (stepW + gapX) + stepW / 2;
-                svg.append('line')
-                    .attr('x1', cx + stepW / 2 + 2).attr('y1', cy)
-                    .attr('x2', nx - stepW / 2 - 8).attr('y2', cy)
-                    .attr('stroke', s.color).attr('stroke-opacity', 0.3)
-                    .attr('stroke-width', 1.5);
-                svg.append('polygon')
-                    .attr('points',
-                        (nx - stepW / 2 - 3) + ',' + (cy - 4) + ' ' +
-                        (nx - stepW / 2 - 3) + ',' + (cy + 4) + ' ' +
-                        (nx - stepW / 2 + 1) + ',' + cy)
-                    .attr('fill', steps[i + 1].color).attr('fill-opacity', 0.5);
-            }
-
-            svg.append('text')
-                .attr('x', cx).attr('y', cy + stepH / 2 + 18)
-                .attr('text-anchor', 'middle')
-                .attr('fill', TEXT_SEC).attr('font-size', '9px').attr('font-weight', '600')
-                .text('Step ' + (i + 1));
-        });
-    })();
-
-    /* ════════════════════════════════════════════════════════
-       3. INVESTMENT ALLOCATION — donut
-       ════════════════════════════════════════════════════════ */
-    (function renderInvestmentDonut() {
-        var data = [
-            { label: 'Features',       value: 45, color: CYAN    },
-            { label: 'Governance',     value: 20, color: EMERALD },
-            { label: 'Testing',        value: 15, color: VIOLET  },
-            { label: 'Infrastructure', value: 12, color: SKY     },
-            { label: 'Security',       value: 8,  color: AMBER   },
-        ];
-
-        var container = document.getElementById('investment-donut');
-        if (!container) return;
-        var W = container.parentElement.clientWidth || 400;
-        var H = 300;
-        var R = Math.min(W, H) / 2 - 20;
-        var rInner = R * 0.55;
-
-        var svg = d3.select('#investment-donut')
-            .attr('width', W).attr('height', H)
-            .attr('viewBox', '0 0 ' + W + ' ' + H);
-
-        var g = svg.append('g')
-            .attr('transform', 'translate(' + (W * 0.38) + ',' + (H / 2) + ')');
-
-        var pie = d3.pie().value(function (d) { return d.value; }).sort(null).padAngle(0.025);
-        var arc = d3.arc().innerRadius(rInner).outerRadius(R);
-        var arcHover = d3.arc().innerRadius(rInner).outerRadius(R + 8);
-
-        var arcs = g.selectAll('.arc').data(pie(data)).enter().append('g');
-
-        arcs.append('path')
-            .attr('d', arc)
-            .attr('fill', function (d) { return d.data.color; })
-            .attr('fill-opacity', 0.82)
-            .attr('stroke', BG_DARK).attr('stroke-width', 2)
-            .on('mouseover', function () { d3.select(this).transition().duration(180).attr('d', arcHover).attr('fill-opacity', 1); })
-            .on('mouseout', function () { d3.select(this).transition().duration(180).attr('d', arc).attr('fill-opacity', 0.82); });
-
-        g.append('text').attr('text-anchor', 'middle').attr('dy', '-0.2em')
-            .attr('fill', TEXT_PRI).attr('font-size', '20px').attr('font-weight', '800').text('ROI');
-        g.append('text').attr('text-anchor', 'middle').attr('dy', '1.2em')
-            .attr('fill', TEXT_SEC).attr('font-size', '11px').attr('font-weight', '600').text('INVESTMENT');
-
-        var legend = svg.append('g')
-            .attr('transform', 'translate(' + (W * 0.38 + R + 22) + ',' + (H / 2 - data.length * 14) + ')');
-
-        data.forEach(function (d, i) {
-            var row = legend.append('g').attr('transform', 'translate(0,' + (i * 26) + ')');
-            row.append('rect').attr('width', 12).attr('height', 12).attr('rx', 3)
-                .attr('fill', d.color).attr('fill-opacity', 0.85);
-            row.append('text').attr('x', 18).attr('y', 10)
-                .attr('fill', TEXT_SEC).attr('font-size', '12px')
-                .text(d.label + ' (' + d.value + '%)');
-        });
-    })();
-
-    /* ════════════════════════════════════════════════════════
-       4. TOKEN SAVINGS TREND — area chart (tab 2)
-       ════════════════════════════════════════════════════════ */
-    (function renderTokenSavings() {
-        var data = [
-            { month: 'Jan', pct: 15 }, { month: 'Feb', pct: 22 },
-            { month: 'Mar', pct: 30 }, { month: 'Apr', pct: 38 },
-            { month: 'May', pct: 45 }, { month: 'Jun', pct: 52 },
-            { month: 'Jul', pct: 55 }, { month: 'Aug', pct: 58 },
-            { month: 'Sep', pct: 60 },
-        ];
-
-        var container = document.getElementById('token-savings-chart');
-        if (!container) return;
-        var W = container.parentElement.clientWidth || 500;
-        var H = 280;
-        var M = { top: 24, right: 20, bottom: 32, left: 40 };
-        var iW = W - M.left - M.right, iH = H - M.top - M.bottom;
-
-        var svg = d3.select('#token-savings-chart')
-            .attr('width', W).attr('height', H).attr('viewBox', '0 0 ' + W + ' ' + H);
-
-        var g = svg.append('g').attr('transform', 'translate(' + M.left + ',' + M.top + ')');
-
-        var x = d3.scalePoint().domain(data.map(function (d) { return d.month; })).range([0, iW]).padding(0.2);
-        var y = d3.scaleLinear().domain([0, 70]).range([iH, 0]);
-
-        g.append('g').call(d3.axisLeft(y).ticks(4).tickSize(-iW).tickFormat(''))
-            .call(function (s) { s.select('.domain').remove(); s.selectAll('.tick line').attr('stroke', 'rgba(255,255,255,0.06)').attr('stroke-dasharray', '3,3'); });
-
-        var grad = svg.append('defs').append('linearGradient').attr('id', 'tok-grad').attr('x1', '0').attr('y1', '0').attr('x2', '0').attr('y2', '1');
-        grad.append('stop').attr('offset', '0%').attr('stop-color', EMERALD).attr('stop-opacity', 0.35);
-        grad.append('stop').attr('offset', '100%').attr('stop-color', EMERALD).attr('stop-opacity', 0.02);
-
-        var area = d3.area().x(function (d) { return x(d.month); }).y0(iH).y1(function (d) { return y(d.pct); }).curve(d3.curveCatmullRom.alpha(0.5));
-        g.append('path').datum(data).attr('fill', 'url(#tok-grad)').attr('d', area);
-
-        var line = d3.line().x(function (d) { return x(d.month); }).y(function (d) { return y(d.pct); }).curve(d3.curveCatmullRom.alpha(0.5));
-        g.append('path').datum(data).attr('fill', 'none').attr('stroke', EMERALD).attr('stroke-width', 2.5).attr('d', line);
-
-        g.selectAll('.dot').data(data).enter().append('circle')
-            .attr('cx', function (d) { return x(d.month); }).attr('cy', function (d) { return y(d.pct); })
-            .attr('r', 3.5).attr('fill', EMERALD).attr('stroke', BG_DARK).attr('stroke-width', 2);
-
-        var last = data[data.length - 1];
-        g.append('text').attr('x', x(last.month) + 8).attr('y', y(last.pct) + 4)
-            .attr('fill', EMERALD).attr('font-size', '11px').attr('font-weight', '700').text(last.pct + '%');
-
-        g.append('g').attr('transform', 'translate(0,' + iH + ')')
-            .call(d3.axisBottom(x).tickSize(0))
-            .call(function (s) { s.select('.domain').attr('stroke', 'rgba(255,255,255,0.1)'); s.selectAll('text').attr('fill', TEXT_SEC).attr('font-size', '10px'); });
-
-        g.append('g').call(d3.axisLeft(y).ticks(4).tickSize(0).tickFormat(function (d) { return d + '%'; }))
-            .call(function (s) { s.select('.domain').remove(); s.selectAll('text').attr('fill', TEXT_SEC).attr('font-size', '10px'); });
-    })();
-
-    /* ════════════════════════════════════════════════════════
-       5. VELOCITY TREND — area chart (tab 3)
-       ════════════════════════════════════════════════════════ */
-    (function renderVelocityTrend() {
-        var data = [
-            { phase: 'P1-10',  vel: 32 }, { phase: 'P11-20', vel: 38 },
-            { phase: 'P21-30', vel: 42 }, { phase: 'P31-40', vel: 48 },
-            { phase: 'P41-50', vel: 52 }, { phase: 'P51-60', vel: 56 },
-            { phase: 'P61-70', vel: 60 }, { phase: 'P71-80', vel: 64 },
-            { phase: 'P81-87', vel: 68 },
-        ];
-
-        var container = document.getElementById('velocity-trend-chart');
-        if (!container) return;
-        var W = container.parentElement.clientWidth || 500;
-        var H = 280;
-        var M = { top: 24, right: 20, bottom: 32, left: 40 };
-        var iW = W - M.left - M.right, iH = H - M.top - M.bottom;
-
-        var svg = d3.select('#velocity-trend-chart')
-            .attr('width', W).attr('height', H).attr('viewBox', '0 0 ' + W + ' ' + H);
-
-        var g = svg.append('g').attr('transform', 'translate(' + M.left + ',' + M.top + ')');
-
-        var x = d3.scalePoint().domain(data.map(function (d) { return d.phase; })).range([0, iW]).padding(0.2);
-        var y = d3.scaleLinear().domain([20, 75]).range([iH, 0]);
-
-        g.append('g').call(d3.axisLeft(y).ticks(4).tickSize(-iW).tickFormat(''))
-            .call(function (s) { s.select('.domain').remove(); s.selectAll('.tick line').attr('stroke', 'rgba(255,255,255,0.06)').attr('stroke-dasharray', '3,3'); });
-
-        var grad = svg.append('defs').append('linearGradient').attr('id', 'vel-bl-grad').attr('x1', '0').attr('y1', '0').attr('x2', '0').attr('y2', '1');
-        grad.append('stop').attr('offset', '0%').attr('stop-color', VIOLET).attr('stop-opacity', 0.35);
-        grad.append('stop').attr('offset', '100%').attr('stop-color', VIOLET).attr('stop-opacity', 0.02);
-
-        var area = d3.area().x(function (d) { return x(d.phase); }).y0(iH).y1(function (d) { return y(d.vel); }).curve(d3.curveCatmullRom.alpha(0.5));
-        g.append('path').datum(data).attr('fill', 'url(#vel-bl-grad)').attr('d', area);
-
-        var line = d3.line().x(function (d) { return x(d.phase); }).y(function (d) { return y(d.vel); }).curve(d3.curveCatmullRom.alpha(0.5));
-        g.append('path').datum(data).attr('fill', 'none').attr('stroke', VIOLET).attr('stroke-width', 2.5).attr('d', line);
-
-        g.selectAll('.dot').data(data).enter().append('circle')
-            .attr('cx', function (d) { return x(d.phase); }).attr('cy', function (d) { return y(d.vel); })
-            .attr('r', 3.5).attr('fill', VIOLET).attr('stroke', BG_DARK).attr('stroke-width', 2);
-
-        var last = data[data.length - 1];
-        g.append('text').attr('x', x(last.phase) + 8).attr('y', y(last.vel) + 4)
-            .attr('fill', VIOLET).attr('font-size', '11px').attr('font-weight', '700').text(last.vel + ' pts');
-
-        g.append('g').attr('transform', 'translate(0,' + iH + ')')
-            .call(d3.axisBottom(x).tickSize(0))
-            .call(function (s) { s.select('.domain').attr('stroke', 'rgba(255,255,255,0.1)'); s.selectAll('text').attr('fill', TEXT_SEC).attr('font-size', '9px'); });
-
-        g.append('g').call(d3.axisLeft(y).ticks(4).tickSize(0))
-            .call(function (s) { s.select('.domain').remove(); s.selectAll('text').attr('fill', TEXT_SEC).attr('font-size', '10px'); });
-    })();
-
-})();
-</script>
 
 <!-- Tab switching -->
 <script>

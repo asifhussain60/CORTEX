@@ -27,12 +27,6 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"/>
 
-<!-- D3.js for interactive diagrams -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"
-        integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A=="
-        crossorigin="anonymous"
-        referrerpolicy="no-referrer"></script>
-
 <!-- Design System — same stack as business-leader.html -->
 <link href="../assets/css/cortex-grid-system.css" rel="stylesheet"/>
 <link href="../assets/css/glass-design-tokens.css" rel="stylesheet"/>
@@ -188,34 +182,6 @@
         </div>
         </div><!-- /.po-section-panel: Pipeline -->
 
-        <!-- ── D3 Diagrams: Velocity Burndown + Backlog Composition ── -->
-        <div class="po-section-panel">
-        <h2 class="role-section-title"><i class="fas fa-chart-area"></i> Sprint Intelligence — Live Visualisation</h2>
-        <div class="po-diagram-row">
-
-            <!-- Velocity trend diagram -->
-            <div class="po-diagram-container">
-                <h3><i class="fas fa-chart-line"></i> Sprint Velocity Trend</h3>
-                <p class="diagram-caption">Consistent delivery across 87 phases — governance-enforced, no regressions.</p>
-                <svg id="velocity-chart" height="220" aria-label="Sprint velocity trend chart"></svg>
-            </div>
-
-            <!-- Backlog composition donut -->
-            <div class="po-diagram-container">
-                <h3><i class="fas fa-chart-pie"></i> Backlog Composition by Type</h3>
-                <p class="diagram-caption">Every item categorised, prioritised, and traceable to a governance rule.</p>
-                <svg id="backlog-donut" height="220" aria-label="Backlog composition donut chart"></svg>
-            </div>
-        </div>
-
-        <!-- Feature flow diagram -->
-        <div class="po-diagram-container">
-            <h3><i class="fas fa-project-diagram"></i> Feature Flow — Idea to Production</h3>
-            <p class="diagram-caption">Visualises how stories move through CORTEX's orchestration layers from intent to shipped increment.</p>
-            <svg id="feature-flow" height="260" aria-label="Feature flow from backlog to production"></svg>
-        </div>
-        </div><!-- /.po-section-panel: Sprint Intelligence -->
-
         <!-- ── Definition of Ready / Done ── -->
         <div class="po-section-panel">
         <h2 class="role-section-title"><i class="fas fa-clipboard-check"></i> CORTEX-Enforced Definition of Ready &amp; Done</h2>
@@ -312,7 +278,7 @@
             <img src="../assets/images/generated/product-owner/01-sprint-intelligence-dashboard.png"
                  alt="Sprint intelligence dashboard showing velocity trend, predictability metrics, and Kanban pipeline"
                  class="generated-diagram"
-                 loading="lazy"
+                 loading="lazy"/>
             <p class="image-caption">Sprint Intelligence Dashboard — Velocity, predictability, and cycle time at a glance</p>
         </div>
 
@@ -320,7 +286,7 @@
             <img src="../assets/images/generated/product-owner/02-feature-delivery-pipeline.png"
                  alt="Feature delivery pipeline from request through LENS analysis, TDD scaffold, implementation, governance gate, to deployment"
                  class="generated-diagram"
-                 loading="lazy"
+                 loading="lazy"/>
             <p class="image-caption">Feature Delivery Pipeline — 6-stage automated flow from request to shipped</p>
         </div>
 
@@ -328,7 +294,7 @@
             <img src="../assets/images/generated/product-owner/03-dor-dod-compliance.png"
                  alt="Definition of Ready and Definition of Done compliance checklist showing 100% automated enforcement"
                  class="generated-diagram"
-                 loading="lazy"
+                 loading="lazy"/>
             <p class="image-caption">DoR/DoD Compliance — Every story automatically validated before and after sprint</p>
         </div>
 
@@ -336,7 +302,7 @@
             <img src="../assets/images/generated/shared/02-lens-intelligence-pipeline.png"
                  alt="LENS intelligence pipeline: Language, Examination, Navigation, Synthesis — four-stage code intelligence"
                  class="generated-diagram"
-                 loading="lazy"
+                 loading="lazy"/>
             <p class="image-caption">LENS Intelligence Pipeline — How CORTEX understands your codebase</p>
         </div>
         </div><!-- /.po-section-panel: Visual Assets -->
@@ -428,285 +394,6 @@
 
     </div><!-- /.role-content-wrapper -->
 </main>
-
-<!-- ══════════════════════════════════════════════════════════
-     D3.js DIAGRAMS — Sprint Velocity, Backlog Donut, Feature Flow
-     ══════════════════════════════════════════════════════════ -->
-<script>
-(function () {
-    'use strict';
-
-    /* ── Design tokens ── */
-    var VIOLET  = '#a78bfa';
-    var EMERALD = '#34d399';
-    var AMBER   = '#f59e0b';
-    var SKY     = '#38bdf8';
-    var ROSE    = '#fb7185';
-    var TEXT_SEC = '#a0a6c0';
-    var TEXT_PRI = '#e2e8f0';
-
-    /* ════════════════════════════════════════════════════════
-       1. SPRINT VELOCITY TREND — line + area chart
-       ════════════════════════════════════════════════════════ */
-    (function renderVelocity() {
-        var data = [
-            { sprint: 'S1',  pts: 34 }, { sprint: 'S2',  pts: 38 },
-            { sprint: 'S3',  pts: 36 }, { sprint: 'S4',  pts: 41 },
-            { sprint: 'S5',  pts: 40 }, { sprint: 'S6',  pts: 44 },
-            { sprint: 'S7',  pts: 43 }, { sprint: 'S8',  pts: 47 },
-            { sprint: 'S9',  pts: 46 }, { sprint: 'S10', pts: 50 },
-            { sprint: 'S11', pts: 49 }, { sprint: 'S12', pts: 53 },
-        ];
-
-        var container = document.getElementById('velocity-chart');
-        if (!container) { return; }
-        var W = container.parentElement.clientWidth || 480;
-        var H = 220;
-        var M = { top: 20, right: 24, bottom: 32, left: 36 };
-        var iW = W - M.left - M.right;
-        var iH = H - M.top - M.bottom;
-
-        var svg = d3.select('#velocity-chart')
-            .attr('width', W)
-            .attr('height', H)
-            .attr('viewBox', '0 0 ' + W + ' ' + H);
-
-        var g = svg.append('g').attr('transform', 'translate(' + M.left + ',' + M.top + ')');
-
-        var x = d3.scalePoint()
-            .domain(data.map(function (d) { return d.sprint; }))
-            .range([0, iW])
-            .padding(0.2);
-
-        var y = d3.scaleLinear()
-            .domain([25, d3.max(data, function (d) { return d.pts; }) + 5])
-            .range([iH, 0]);
-
-        /* Grid lines */
-        g.append('g')
-            .call(d3.axisLeft(y).ticks(4).tickSize(-iW).tickFormat(''))
-            .call(function (sel) {
-                sel.select('.domain').remove();
-                sel.selectAll('.tick line')
-                    .attr('stroke', 'rgba(255,255,255,0.06)')
-                    .attr('stroke-dasharray', '3,3');
-            });
-
-        /* Gradient fill */
-        var grad = svg.append('defs').append('linearGradient')
-            .attr('id', 'vel-grad')
-            .attr('x1', '0').attr('y1', '0')
-            .attr('x2', '0').attr('y2', '1');
-        grad.append('stop').attr('offset', '0%').attr('stop-color', VIOLET).attr('stop-opacity', 0.35);
-        grad.append('stop').attr('offset', '100%').attr('stop-color', VIOLET).attr('stop-opacity', 0.02);
-
-        /* Area */
-        var area = d3.area()
-            .x(function (d) { return x(d.sprint); })
-            .y0(iH)
-            .y1(function (d) { return y(d.pts); })
-            .curve(d3.curveCatmullRom.alpha(0.5));
-
-        g.append('path').datum(data)
-            .attr('fill', 'url(#vel-grad)')
-            .attr('d', area);
-
-        /* Line */
-        var line = d3.line()
-            .x(function (d) { return x(d.sprint); })
-            .y(function (d) { return y(d.pts); })
-            .curve(d3.curveCatmullRom.alpha(0.5));
-
-        g.append('path').datum(data)
-            .attr('fill', 'none')
-            .attr('stroke', VIOLET)
-            .attr('stroke-width', 2.5)
-            .attr('d', line);
-
-        /* Dots */
-        g.selectAll('.dot').data(data).enter()
-            .append('circle')
-            .attr('cx', function (d) { return x(d.sprint); })
-            .attr('cy', function (d) { return y(d.pts); })
-            .attr('r', 4)
-            .attr('fill', VIOLET)
-            .attr('stroke', '#0a0e27')
-            .attr('stroke-width', 2);
-
-        /* Last value label */
-        var last = data[data.length - 1];
-        g.append('text')
-            .attr('x', x(last.sprint) + 8)
-            .attr('y', y(last.pts) + 4)
-            .attr('fill', VIOLET)
-            .attr('font-size', '11px')
-            .attr('font-weight', '700')
-            .text(last.pts + ' pts');
-
-        /* X axis */
-        g.append('g')
-            .attr('transform', 'translate(0,' + iH + ')')
-            .call(d3.axisBottom(x).tickSize(0))
-            .call(function (sel) {
-                sel.select('.domain').attr('stroke', 'rgba(255,255,255,0.1)');
-                sel.selectAll('text').attr('fill', TEXT_SEC).attr('font-size', '10px');
-            });
-
-        /* Y axis */
-        g.append('g')
-            .call(d3.axisLeft(y).ticks(4).tickSize(0))
-            .call(function (sel) {
-                sel.select('.domain').remove();
-                sel.selectAll('text').attr('fill', TEXT_SEC).attr('font-size', '10px');
-            });
-    })();
-
-    /* ════════════════════════════════════════════════════════
-       2. BACKLOG COMPOSITION — donut chart
-       ════════════════════════════════════════════════════════ */
-    (function renderDonut() {
-        var data = [
-            { label: 'Features',       value: 42, color: VIOLET  },
-            { label: 'Tech Debt',      value: 18, color: AMBER   },
-            { label: 'Bug Fixes',      value: 14, color: ROSE    },
-            { label: 'Governance',     value: 16, color: EMERALD },
-            { label: 'Infrastructure', value: 10, color: SKY     },
-        ];
-
-        var container = document.getElementById('backlog-donut');
-        if (!container) { return; }
-        var W = container.parentElement.clientWidth || 480;
-        var H = 220;
-        var R = Math.min(W, H) / 2 - 20;
-        var rInner = R * 0.55;
-
-        var svg = d3.select('#backlog-donut')
-            .attr('width', W)
-            .attr('height', H)
-            .attr('viewBox', '0 0 ' + W + ' ' + H);
-
-        var g = svg.append('g')
-            .attr('transform', 'translate(' + (W * 0.38) + ',' + (H / 2) + ')');
-
-        var pie = d3.pie().value(function (d) { return d.value; }).sort(null).padAngle(0.025);
-        var arc = d3.arc().innerRadius(rInner).outerRadius(R);
-        var arcHover = d3.arc().innerRadius(rInner).outerRadius(R + 6);
-
-        var arcs = g.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
-
-        arcs.append('path')
-            .attr('d', arc)
-            .attr('fill', function (d) { return d.data.color; })
-            .attr('fill-opacity', 0.82)
-            .attr('stroke', '#0a0e27')
-            .attr('stroke-width', 2)
-            .on('mouseover', function () {
-                d3.select(this).transition().duration(180).attr('d', arcHover).attr('fill-opacity', 1);
-            })
-            .on('mouseout', function () {
-                d3.select(this).transition().duration(180).attr('d', arc).attr('fill-opacity', 0.82);
-            });
-
-        /* Center label */
-        g.append('text')
-            .attr('text-anchor', 'middle').attr('dy', '-0.2em')
-            .attr('fill', TEXT_PRI).attr('font-size', '18px').attr('font-weight', '800')
-            .text('100%');
-        g.append('text')
-            .attr('text-anchor', 'middle').attr('dy', '1.1em')
-            .attr('fill', TEXT_SEC).attr('font-size', '9px').attr('font-weight', '600')
-            .text('BACKLOG');
-
-        /* Legend — right side */
-        var legend = svg.append('g')
-            .attr('transform', 'translate(' + (W * 0.38 + R + 18) + ',' + (H / 2 - data.length * 11) + ')');
-
-        data.forEach(function (d, i) {
-            var row = legend.append('g').attr('transform', 'translate(0,' + (i * 22) + ')');
-            row.append('rect')
-                .attr('width', 10).attr('height', 10).attr('rx', 3).attr('ry', 3)
-                .attr('fill', d.color).attr('fill-opacity', 0.85);
-            row.append('text')
-                .attr('x', 16).attr('y', 9)
-                .attr('fill', TEXT_SEC).attr('font-size', '11px')
-                .text(d.label + ' (' + d.value + '%)');
-        });
-    })();
-
-    /* ════════════════════════════════════════════════════════
-       3. FEATURE FLOW — horizontal orchestrator journey
-       ════════════════════════════════════════════════════════ */
-    (function renderFeatureFlow() {
-        var container = document.getElementById('feature-flow');
-        if (!container) { return; }
-        var W = container.parentElement.clientWidth || 900;
-        var H = 260;
-
-        var svg = d3.select('#feature-flow')
-            .attr('width', W)
-            .attr('height', H)
-            .attr('viewBox', '0 0 ' + W + ' ' + H);
-
-        var nodes = [
-            { id: 'backlog',  label: ['Product', 'Backlog'],      xr: 0.04, yr: 0.5,  color: VIOLET,  w: 90,  h: 40 },
-            { id: 'intent',   label: ['IntentRouter'],            xr: 0.18, yr: 0.5,  color: SKY,     w: 95,  h: 36 },
-            { id: 'tdd',      label: ['TDDOrchestrator'],         xr: 0.34, yr: 0.28, color: VIOLET,  w: 108, h: 36 },
-            { id: 'lens',     label: ['LENS Scan'],               xr: 0.34, yr: 0.72, color: EMERALD, w: 100, h: 36 },
-            { id: 'enforce',  label: ['Enforcement', '(38 Rules)'], xr: 0.52, yr: 0.5, color: AMBER,  w: 108, h: 40 },
-            { id: 'health',   label: ['Health', 'Orchestrator'],  xr: 0.67, yr: 0.5,  color: SKY,     w: 108, h: 40 },
-            { id: 'audit',    label: ['AC Audit', 'Log (SQLite)'], xr: 0.82, yr: 0.5,  color: EMERALD, w: 108, h: 40 },
-            { id: 'ship',     label: ['\u2705 Shipped'],          xr: 0.96, yr: 0.5,  color: VIOLET,  w: 90,  h: 36 },
-        ];
-
-        var edges = [
-            ['backlog','intent'], ['intent','tdd'], ['intent','lens'],
-            ['tdd','enforce'], ['lens','enforce'], ['enforce','health'],
-            ['health','audit'], ['audit','ship'],
-        ];
-
-        nodes.forEach(function (n) { n.px = n.xr * W; n.py = n.yr * H; });
-        var nodeMap = {};
-        nodes.forEach(function (n) { nodeMap[n.id] = n; });
-
-        /* Edges */
-        edges.forEach(function (e) {
-            var s = nodeMap[e[0]], t = nodeMap[e[1]];
-            var x1 = s.px + s.w / 2, y1 = s.py;
-            var x2 = t.px - t.w / 2, y2 = t.py;
-            var mx = (x1 + x2) / 2;
-            svg.append('path')
-                .attr('d', 'M' + x1 + ',' + y1 + ' C' + mx + ',' + y1 + ' ' + mx + ',' + y2 + ' ' + x2 + ',' + y2)
-                .attr('fill', 'none')
-                .attr('stroke', s.color)
-                .attr('stroke-width', 1.5)
-                .attr('stroke-opacity', 0.38)
-                .attr('stroke-dasharray', '5,3');
-        });
-
-        /* Nodes */
-        nodes.forEach(function (n) {
-            var grp = svg.append('g')
-                .attr('transform', 'translate(' + (n.px - n.w / 2) + ',' + (n.py - n.h / 2) + ')');
-
-            grp.append('rect')
-                .attr('width', n.w).attr('height', n.h).attr('rx', 8)
-                .attr('fill', n.color).attr('fill-opacity', 0.14)
-                .attr('stroke', n.color).attr('stroke-opacity', 0.55).attr('stroke-width', 1.2);
-
-            var yStart = n.h / 2 - (n.label.length - 1) * 7;
-            n.label.forEach(function (line, i) {
-                grp.append('text')
-                    .attr('x', n.w / 2).attr('y', yStart + i * 14)
-                    .attr('text-anchor', 'middle')
-                    .attr('fill', n.color)
-                    .attr('font-size', '10px').attr('font-weight', '700')
-                    .text(line);
-            });
-        });
-    })();
-
-})();
-</script>
 
 <!-- Tab switching (shared pattern) -->
 <script>
