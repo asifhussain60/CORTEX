@@ -38,9 +38,10 @@ class EngagementRenderer:
         
         # Join with arrow separator
         routing_path = " → ".join(chain)
-        
-        # Return single-line markdown (Phase 85 standard)
-        return f"**Routing:** {routing_path}"
+
+        # Return single-line markdown — SSOT §BLOCK-ENGAGEMENT-BREADCRUMB line 1015:
+        # **Route:** `IntentRouter → {Orchestrator}` (backtick code spans mandatory)
+        return f"**Route:** `{routing_path}`"
 
     def render_timeline(self, stages: list[dict[str, Any]]) -> str | None:
         """Render BLOCK-ENGAGEMENT-TIMELINE as collapsible details block.

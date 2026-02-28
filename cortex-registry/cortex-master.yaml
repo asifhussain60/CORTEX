@@ -451,19 +451,29 @@ production_readiness:
 
 verification:
   method: git_history + code_inspection + test_verification
-  plan_version: "91/91 phases (0 ACTIVE)"
-  last_verified: '2026-02-28T06:00:00Z'
+  plan_version: "92/92 phases (0 ACTIVE)"
+  last_verified: '2026-02-28T07:00:00Z'
 
 summary:
-  total_phases: 91
-  completed: 91
+  total_phases: 92
+  completed: 92
   active: 0
   in_progress: 0
   planned: 0
   archived: 4
   playbooks: 1
   completion_percentage: 100
-  consolidation_summary: "v39.0: 91 phases — 91 COMPLETE, 0 ACTIVE. Phase-91 COMPLETE (2026-02-28): 3 GAPs CLOSED — routing miss detection (_log_routing_miss with AC-91-ROUTING-MISS-001), EngagementRenderer COMMAND_CHAINS (14 commands), WorkflowComplexityRouter regression fix. 43 tests GREEN. Smoke: 1,700."
+  consolidation_summary: "v40.0: 92 phases — 92 COMPLETE, 0 ACTIVE. Phase-92 COMPLETE (2026-02-28): 5 GAPs CLOSED — EngagementRenderer SSOT breadcrumb format fix (**Route:** backtick), InteractionOrchestrator breadcrumb emission in execute_turn_with_challenge() and execute(), WorkflowComplexityRouter.evaluate() alias, Intent dataclass extended. 16 tests GREEN. Smoke: 1,698."
   active_phases: {}
+
+phases:
+  - id: phase-92-engagement-block-wiring
+    title: "Phase 92 — Engagement Block Wiring"
+    status: COMPLETE
+    priority: P1
+    sweep_id: SWEEP-092
+    gaps: 5
+    file: cortex-registry/planning/phases/completed/phase-92-engagement-block-wiring.yaml
+    note: "SSOT breadcrumb format fix + InteractionOrchestrator breadcrumb output + WorkflowComplexityRouter.evaluate() + Intent dataclass extension. 16 tests GREEN."
 
 

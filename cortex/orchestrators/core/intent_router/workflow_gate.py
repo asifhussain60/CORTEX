@@ -32,10 +32,22 @@ class RoutingStrategy(Enum):
 class Intent:
     """Parsed user intent for complexity analysis."""
     operation_type: str
-    target_files: List[str]
-    dependencies: List[str]
-    risk_level: str
-    metadata: Dict[str, Any]
+    target_files: List[str] = None  # type: ignore[assignment]
+    dependencies: List[str] = None  # type: ignore[assignment]
+    risk_level: str = "LOW"
+    metadata: Dict[str, Any] = None  # type: ignore[assignment]
+    # Phase 92: intent classification context (optional, from IntentClassifier)
+    intent_type: Optional[Any] = None
+    confidence: float = 0.0
+
+    def __post_init__(self) -> None:
+        """Initialise mutable defaults."""
+        if self.target_files is None:
+            self.target_files = []
+        if self.dependencies is None:
+            self.dependencies = []
+        if self.metadata is None:
+            self.metadata = {}
 
 
 @dataclass
@@ -125,15 +137,6 @@ class WorkflowComplexityRouter:
         return min(score, 1.0)
     
     def route(self, intent: Intent) -> RoutingDecision:
-        """
-        Route to workflow template or direct orchestrator.
-        
-        Args:
-            intent: Parsed user intent
-        
-        Returns:
-            RoutingDecision with route, complexity, and rationale
-        """
         complexity = self.score_task_complexity(intent)
         
         if complexity < self.TRIVIAL_THRESHOLD:
@@ -172,7 +175,35 @@ class WorkflowComplexityRouter:
                 requires_confirmation=True,
                 governance_gate="MANDATORY"
             )
-    
+
+    def evaluate(self, intent: Intent) -> RoutingDecision:
+        """Evaluate intent and return a RoutingDecision.
+
+        Phase 92: Public alias for ``route()`` that always populates the
+        ``orchestrator`` field — even when a workflow template is selected —
+        so callers can reliably check ``result.orchestrator`` for visual
+        engagement breadcrumbs.
+
+        Args:
+            intent: Parsed user intent with operation details.
+
+        Returns:
+            RoutingDecision with ``orchestrator`` always set.
+        """
+        decision = self.route(intent)
+        # Ensure orchestrator is always resolved for breadcrumb rendering
+        if decision.orchestrator is None:
+            decision = RoutingDecision(
+                route=decision.route,
+                complexity=decision.complexity,
+                rationale=decision.rationale,
+                orchestrator=self._select_orchestrator(intent),
+                template_id=decision.template_id,
+                requires_confirmation=decision.requires_confirmation,
+                governance_gate=decision.governance_gate,
+            )
+        return decision
+
     def _select_orchestrator(self, intent: Intent) -> str:
         """Select appropriate orchestrator for direct execution.
 

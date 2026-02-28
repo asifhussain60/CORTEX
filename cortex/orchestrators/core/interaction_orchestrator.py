@@ -355,6 +355,15 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, IOrchestrator, Workflow
                     output["type"] = "challenge"
                     output["challenge"] = challenge_result
 
+            # Step 3b: Render engagement breadcrumb (Phase 92 — BLOCK-ENGAGEMENT-BREADCRUMB)
+            try:
+                from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
+                output["breadcrumb"] = EngagementRenderer().render_breadcrumb(
+                    ["IntentRouter", "InteractionOrchestrator"]
+                )
+            except Exception:
+                output["breadcrumb"] = ""
+
             # Step 4: Apply token optimization (ENH-046 Phase 4 Integration)
             try:
                 from cortex.orchestrators.core.context_synthesis_gateway import get_gateway
@@ -450,6 +459,15 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, IOrchestrator, Workflow
                 "analysis_complete": True,
                 "timestamp": datetime.now().isoformat(),
             }
+
+            # Phase 92: Render engagement breadcrumb (BLOCK-ENGAGEMENT-BREADCRUMB)
+            try:
+                from cortex.orchestrators.response.engagement_renderer import EngagementRenderer
+                output["breadcrumb"] = EngagementRenderer().render_breadcrumb(
+                    ["IntentRouter", "InteractionOrchestrator"]
+                )
+            except Exception:
+                output["breadcrumb"] = ""
             
             # Apply token optimization (ENH-046 Phase 4 Integration)
             try:
