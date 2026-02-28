@@ -288,70 +288,101 @@
                 </p>
             </div>
 
-            <!-- 7-stage pipeline detail -->
+            <!-- 7-stage pipeline detail — card grid -->
             <div class="bl-section-divider">
                 <div class="bl-section-divider-line"></div>
-                <span class="bl-section-divider-label">7-Stage Pipeline</span>
+                <span class="bl-section-divider-label">8-Stage Pipeline</span>
                 <div class="bl-section-divider-line"></div>
             </div>
-            <ul class="bl-stage-list">
-                <li class="bl-stage-item">
-                    <span class="bl-stage-num">−1</span>
-                    <div>
-                        <div class="bl-stage-content-label">Request Enrichment</div>
-                        <div class="bl-stage-content-desc">Silent pre-processing adds governance context, breaking-risk assessment, and design pillar considerations before the request reaches any orchestrator.</div>
+            <div class="bl-pipeline-grid">
+
+                <div class="bl-pipeline-card bl-pipeline-card--cyan">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--cyan">−1</span>
+                        <i class="fas fa-filter bl-pipeline-icon bl-pipeline-icon--cyan"></i>
                     </div>
-                </li>
-                <li class="bl-stage-item">
-                    <span class="bl-stage-num">0</span>
-                    <div>
-                        <div class="bl-stage-content-label">MCP Gateway</div>
-                        <div class="bl-stage-content-desc">JSON-RPC 2.0 over stdio validates the request, routes to the correct MCP tool from 29 registered tools, and enforces rate limiting.</div>
+                    <div class="bl-pipeline-card-title">Request Enrichment</div>
+                    <div class="bl-pipeline-card-desc">Silent pre-processing adds governance context, breaking-risk assessment, and design pillar considerations before the request reaches any orchestrator.</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--cyan">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--cyan">0</span>
+                        <i class="fas fa-network-wired bl-pipeline-icon bl-pipeline-icon--cyan"></i>
                     </div>
-                </li>
-                <li class="bl-stage-item">
-                    <span class="bl-stage-num">1</span>
-                    <div>
-                        <div class="bl-stage-content-label">Intent Classification</div>
-                        <div class="bl-stage-content-desc">IntentRouter classifies across 28 intent types. High confidence routes immediately; low confidence requests clarification before any code is touched.</div>
+                    <div class="bl-pipeline-card-title">MCP Gateway</div>
+                    <div class="bl-pipeline-card-desc">JSON-RPC 2.0 over stdio validates the request, routes to the correct MCP tool from 29 registered tools, and enforces rate limiting.</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--violet">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--violet">1</span>
+                        <i class="fas fa-crosshairs bl-pipeline-icon bl-pipeline-icon--violet"></i>
                     </div>
-                </li>
-                <li class="bl-stage-item">
-                    <span class="bl-stage-num">2</span>
-                    <div>
-                        <div class="bl-stage-content-label">LENS Analysis (300–800 ms)</div>
-                        <div class="bl-stage-content-desc">Parallel analyzers scan AST structure, Git history, security vulnerabilities, architecture patterns, and complexity metrics simultaneously — sub-second.</div>
+                    <div class="bl-pipeline-card-title">Intent Classification</div>
+                    <div class="bl-pipeline-card-desc">IntentRouter classifies across 28 intent types. High confidence routes immediately; low confidence requests clarification before any code is touched.</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--violet">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--violet">2</span>
+                        <i class="fas fa-microscope bl-pipeline-icon bl-pipeline-icon--violet"></i>
                     </div>
-                </li>
-                <li class="bl-stage-item">
-                    <span class="bl-stage-num">3</span>
-                    <div>
-                        <div class="bl-stage-content-label">Brain Intelligence (50–200 ms)</div>
-                        <div class="bl-stage-content-desc">Perception recognises patterns, Reasoning selects strategies by historical success rate, Action builds a TDD-gated execution plan with rollback points.</div>
+                    <div class="bl-pipeline-card-title">LENS Analysis</div>
+                    <div class="bl-pipeline-card-desc">Parallel analyzers scan AST structure, Git history, security vulnerabilities, architecture patterns, and complexity metrics simultaneously — sub-second.</div>
+                    <div class="bl-pipeline-card-timing">300–800 ms</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--emerald">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--emerald">3</span>
+                        <i class="fas fa-brain bl-pipeline-icon bl-pipeline-icon--emerald"></i>
                     </div>
-                </li>
-                <li class="bl-stage-item">
-                    <span class="bl-stage-num">4</span>
-                    <div>
-                        <div class="bl-stage-content-label">Governance Gate — 10 Agents</div>
-                        <div class="bl-stage-content-desc">EnforcementOrchestrator coordinates GovernanceAgent, SecurityAgent, ComplianceAgent, FileNamingAgent, ArchitectureIntegrityAgent, and 5 more. Result: PASS, WARNING, or BLOCKED.</div>
+                    <div class="bl-pipeline-card-title">Brain Intelligence</div>
+                    <div class="bl-pipeline-card-desc">Perception recognises patterns, Reasoning selects strategies by historical success rate, Action builds a TDD-gated execution plan with rollback points.</div>
+                    <div class="bl-pipeline-card-timing">50–200 ms</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--emerald">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--emerald">4</span>
+                        <i class="fas fa-shield-alt bl-pipeline-icon bl-pipeline-icon--emerald"></i>
                     </div>
-                </li>
-                <li class="bl-stage-item">
-                    <span class="bl-stage-num">5</span>
-                    <div>
-                        <div class="bl-stage-content-label">Execution — RED → GREEN → REFACTOR</div>
-                        <div class="bl-stage-content-desc">TDDOrchestrator writes failing tests first, then minimum implementation, then improves quality — all tests must stay green. CORE-008 is architecturally mandated.</div>
+                    <div class="bl-pipeline-card-title">Governance Gate</div>
+                    <div class="bl-pipeline-card-desc">EnforcementOrchestrator coordinates 10 specialised agents — GovernanceAgent, SecurityAgent, ComplianceAgent, FileNamingAgent, ArchitectureIntegrityAgent, and 5 more.</div>
+                    <div class="bl-pipeline-card-result">
+                        <span class="bl-pipeline-result bl-pipeline-result--pass">PASS</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--warn">WARNING</span>
+                        <span class="bl-pipeline-result bl-pipeline-result--block">BLOCKED</span>
                     </div>
-                </li>
-                <li class="bl-stage-item">
-                    <span class="bl-stage-num">6</span>
-                    <div>
-                        <div class="bl-stage-content-label">Audit Trail — SQLite WAL</div>
-                        <div class="bl-stage-content-desc">Every action logs AC_START and AC_COMPLETE timestamps to CortexAuditDB with hash-chain integrity. Auditors get queryable evidence — not spreadsheet archaeology.</div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--amber">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--amber">5</span>
+                        <i class="fas fa-vial bl-pipeline-icon bl-pipeline-icon--amber"></i>
                     </div>
-                </li>
-            </ul>
+                    <div class="bl-pipeline-card-title">Execution</div>
+                    <div class="bl-pipeline-card-desc">TDDOrchestrator writes failing tests first, then minimum implementation, then improves quality — all tests must stay green. CORE-008 is architecturally mandated.</div>
+                    <div class="bl-pipeline-card-tdd">
+                        <span class="bl-tdd-badge bl-tdd-red">RED</span>
+                        <i class="fas fa-arrow-right bl-tdd-arrow"></i>
+                        <span class="bl-tdd-badge bl-tdd-green">GREEN</span>
+                        <i class="fas fa-arrow-right bl-tdd-arrow"></i>
+                        <span class="bl-tdd-badge bl-tdd-blue">REFACTOR</span>
+                    </div>
+                </div>
+
+                <div class="bl-pipeline-card bl-pipeline-card--rose">
+                    <div class="bl-pipeline-card-header">
+                        <span class="bl-pipeline-badge bl-pipeline-badge--rose">6</span>
+                        <i class="fas fa-database bl-pipeline-icon bl-pipeline-icon--rose"></i>
+                    </div>
+                    <div class="bl-pipeline-card-title">Audit Trail — SQLite WAL</div>
+                    <div class="bl-pipeline-card-desc">Every action logs AC_START and AC_COMPLETE timestamps to CortexAuditDB with hash-chain integrity. Auditors get queryable evidence — not spreadsheet archaeology.</div>
+                </div>
+
+            </div>
         </div><!-- /.bl-section-panel: Governance in Action -->
 
         <!-- ════════════════════════════════════════════════
