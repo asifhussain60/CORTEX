@@ -219,10 +219,16 @@ class IntentType(Enum):
     REPHRASE = "rephrase"  # Token-optimize prompts
     INVESTIGATE = "investigate"  # Deep analysis + evidence
     # GAP-64: Golden test lifecycle — review, create, enhance, consolidate, delete
-    # workflow templates and VSCode Copilot Chat response templates.
-    # Triggered by: "golden test", "workflow template", "response template",
+    # golden tests and VSCode Copilot Chat response templates.
+    # Triggered by: "golden test", "response template",
     # "acceptance criteria", "harness", "e2e scenario", "trace assertion"
     GOLDEN_TEST = "golden_test"
+    # GAP-89-COMPOSE: Workflow Composer — compose, execute, and manage dedicated
+    # workflow templates using convergence/condition loops and the full CORTEX
+    # toolchain (AST, LENS, Roslyn, ruff, tree-sitter, etc.)
+    # Triggered by: "workflow composer", "compose workflow", "workflow template",
+    # "convergence loop", "template composition", "dedicated template"
+    WORKFLOW_COMPOSE = "workflow_compose"
     # GAP-89-19: Phase 89-b — 7 missing execution modes from canvas audit
     VACUUM = "vacuum"              # Markdown sprawl + root clutter cleanup
     DEBUG = "debug"                # Multi-stack debug pipeline (8 strategies)

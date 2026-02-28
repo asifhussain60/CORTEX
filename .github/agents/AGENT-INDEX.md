@@ -2,7 +2,7 @@
 
 **Updated:** 2026-02-28 (Phase 89 — Self-Healing Prompt Suite) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 17 completed, 2 planned | **Tests:** ~17,407 | **Intent Types:** 27
+**Phases:** 17 completed, 2 planned | **Tests:** ~17,407 | **Intent Types:** 28
 
 ---
 
@@ -179,6 +179,7 @@ are resolved or explicitly approved as WONT-FIX.
 | **TOTALRECALL** | cortex-architect.prompt.md + totalrecall.md (self-contained 7-phase protocol) | ~4,500 |
 | **RCA** | cortex-architect.prompt.md + `cortex_learning` op=`rca` | ~3,500 |
 | **GOLDEN_TEST** | cortex-executor.md + cortex-holistic-validator.md | ~5,500 |
+| **WORKFLOW_COMPOSE** | cortex-architect.prompt.md (§ WORKFLOW COMPOSE MODE) | ~3,000 |
 
 > **Default context:** `cortex-architect.prompt.md` only (~2,700 tokens). Load specialist agents on-demand per intent above.
 

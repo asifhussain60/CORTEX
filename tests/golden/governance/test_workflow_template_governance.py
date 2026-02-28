@@ -125,7 +125,9 @@ class TestAllWorkflowPrimitiveRefsResolve:
             for ref in refs:
                 # ref should be relative to templates/
                 ref_path = TEMPLATES_ROOT / ref
-                if not ref_path.exists():
+                # Also check with .yaml extension (refs may omit it)
+                ref_path_yaml = TEMPLATES_ROOT / (ref + ".yaml")
+                if not ref_path.exists() and not ref_path_yaml.exists():
                     unresolved.append(
                         f"{yaml_file.relative_to(ROOT)}: ref '{ref}' → not found"
                     )

@@ -215,7 +215,7 @@ class TestTemplateOrchestratorMapping:
     """AC-P23-009: Template-orchestrator mapping matches specification."""
 
     EXPECTED_MAPPINGS = {
-        "TDDOrchestrator": "tdd/feature-implementation",
+        "TDDOrchestrator": "tdd/tdd-feature-implementation",
     }
 
     def test_template_mapping_registry_exists(self) -> None:
@@ -224,11 +224,11 @@ class TestTemplateOrchestratorMapping:
         assert hasattr(WorkflowTemplateMixin, 'TEMPLATE_ORCHESTRATOR_MAP')
 
     def test_tdd_mapping_correct(self) -> None:
-        """TDDOrchestrator maps to tdd/feature-implementation."""
+        """TDDOrchestrator maps to tdd/tdd-feature-implementation."""
         from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
         mapping = WorkflowTemplateMixin.TEMPLATE_ORCHESTRATOR_MAP
         assert "TDDOrchestrator" in mapping
-        assert mapping["TDDOrchestrator"] == "tdd/feature-implementation"
+        assert mapping["TDDOrchestrator"] == "tdd/tdd-feature-implementation"
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

@@ -252,6 +252,8 @@ class WorkflowComplexityRouter:
             "onboard": "RepositoryOnboardingOrchestrator",
             # Holistic
             "totalrecall": "MasterOrchestrator",
+            # GAP-89-COMPOSE: Workflow Composer — convergence loops + full toolchain
+            "workflow_compose": "WorkflowComposer",
         }
         
         return orchestrator_map.get(operation_type, "InteractionOrchestrator")
@@ -361,6 +363,9 @@ class WorkflowComplexityRouter:
             "migrate": "migration/legacy-modernization",
             "security": "security/audit-remediation",
             "deploy": "deployment/production-release",
+            # GAP-89-COMPOSE: Workflow Composer routes to dynamic composition
+            # via TemplateComposer — uses convergence loops + full CORTEX toolchain
+            "workflow_compose": "composites/dynamic-workflow-composition",
         }
         
         # Static match — fast path

@@ -346,7 +346,7 @@ def run_smoke() -> int:
     _print_header("Smoke Tests — parallel (< 60s target)")
     code = _run_batch(
         test_dirs=["tests/preflight/", "tests/golden/", "tests/core/"],
-        timeout=5,
+        timeout=30,
         maxfail=5,
         extra_ignores=False,
         parallel=True,

@@ -998,4 +998,4 @@ Using "Replace String in File"
 ```
 Now replace the massive Phase 5 section with a lean WorkflowComposer reference: 
 
-Made changes.
+Made changes.    

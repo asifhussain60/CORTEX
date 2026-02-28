@@ -189,3 +189,26 @@ def pytest_configure(config):
         "requires_module(module): mark test as requiring a specific module"
     )
 
+
+@pytest.fixture(autouse=True)
+def _reset_enforcement_singleton():
+    """Reset module-level singletons to prevent xdist cross-worker contamination.
+
+    Under pytest-xdist (--dist loadscope), multiple test modules share the same
+    worker process. Module-level singletons like _enforcement_singleton survive
+    across modules within the same worker, causing false failures when tests
+    expect fresh singleton state (e.g., counting __init__ calls).
+
+    This fixture resets the singleton before AND after each test.
+    Only performs the reset if the module is already imported (zero cost otherwise).
+    """
+    _do_reset_enforcement_singleton()
+    yield
+    _do_reset_enforcement_singleton()
+
+
+def _do_reset_enforcement_singleton():
+    """Reset the enforcement orchestrator singleton if the module is already loaded."""
+    mod = sys.modules.get("cortex.core.orchestrator_protocol_mixin")
+    if mod is not None and hasattr(mod, "_enforcement_singleton"):
+        mod._enforcement_singleton = None

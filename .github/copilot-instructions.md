@@ -16,7 +16,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 - **RCA Memory Engine** — 4 root cause analysis methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) via `cortex_learning` op=`rca`; `cortex/intelligence/learning/rca_engine.py`
 - **Multi-Stack Debug Pipeline** — 8 injection strategies (3 Python + 5 multi-stack: Frontend/HTML-Vision/API/SQL/DotNet), Vision API, auto-cleanup
 - **Self-Healing Prompt Suite** — `scripts/refresh_prompt_suite.py` introspects live architecture + SQLite audit logs to regenerate all prompts/agents with zero drift
-- **27 Intent Types** routed via IntentRouter (`cortex/orchestrators/core/intent_router_impl.py`)
+- **28 Intent Types** routed via IntentRouter (`cortex/orchestrators/core/intent_router_impl.py`)
 - **1 Canonical Package** — all imports use `cortex.*` (no `cortex_intelligence`, `cortex_lens`, or `cortex.brain`)
 - **LLM-Orchestration Architecture** — CORTEX orchestrates the host LLM (GitHub Copilot/GPT) as the AI engine; it does not embed ML models
 
@@ -35,7 +35,7 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
 | Phases | 17 completed, 2 planned |
 | Master YAML | 469/500 lines (THIN INDEX CONTRACT) |
-| Intent Types | 27 (see `cortex/models/canonical_enums.py`) |
+| Intent Types | 28 (see `cortex/models/canonical_enums.py`) |
 | SQLite Databases | 9 in `.cortex-runtime/` (cleanup: `refresh_prompt_suite.py --db-cleanup`) |
 
 ---
@@ -188,6 +188,8 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 **Persistence:** `.cortex-runtime/traces/orchestrator-traces.db`
 **Enforced by:** `EnforcementOrchestrator` pre-commit hook + `cortex_validate` (op: `compliance`)
 **Audited by:** Check #19 (SQLite activity log health) + Meta-Audit Check #23
+
+**AC Marker Format Standard:** `AC-{DOMAIN}-{SEQUENCE}` (e.g. `AC-P89-001`, `AC-CORE-042`). Domain is the phase or module identifier; sequence is a 3-digit zero-padded counter.
 
 **AC Marker Rules:**
 - `AC_START` at entry point of every public orchestrator method

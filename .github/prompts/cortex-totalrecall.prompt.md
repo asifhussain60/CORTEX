@@ -427,6 +427,25 @@ for f in pathlib.Path('cortex').rglob('*.py'):
 | Wiring contracts valid | All wiring YAML specs load and reference importable modules | Zero broken refs |
 | Golden tests | `python3 -m pytest tests/golden/ -q` | All pass |
 
+### 6.5 Workflow Composer Pipeline Verification (GAP-89 Monitoring)
+
+**Goal:** Verify the full WorkflowComposer→ConvergenceLoop→Toolchain chain is operational with zero inert capabilities.
+
+| Check | Command / Method | Expected | Severity |
+|-------|-----------------|----------|----------|
+| **WorkflowComposer importable** | `python3 -c "from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer; print('OK')"` | `OK` | P0 |
+| **TemplateComposer functional** | `python3 -c "from cortex.orchestrators.workflow.template_composer import TemplateComposer; print('OK')"` | `OK` | P0 |
+| **TemplateRegistry coverage** | Count auto-registered templates vs on-disk templates | ≥50% coverage (currently 9/96 = P1 gap) | P1 |
+| **ToolchainExecutor map** | Verify `EXTENSION_TOOL_MAP` has ≥8 extensions (.py, .cs, .ts, .tsx, .js, .jsx, .html, .css) | ≥8 extensions | P1 |
+| **tree-sitter version alignment** | `python3 -c "import tree_sitter; print(tree_sitter.__version__)"` vs `requirements.txt` | ≥0.21.0 | P1 |
+| **Roslyn CLI health** | `dotnet --version` (if C# targets in workspace) | Available or gracefully degraded | P2 |
+| **LENS C# analyzer** | `python3 -c "from cortex.lens import csharp_analyzer"` (optional) | Importable or degraded | P2 |
+| **KnowledgeSynthesisEngine** | Verify knowledge index exists in `.cortex-runtime/` | Index present | P2 |
+| **WORKFLOW_COMPOSE intent wired** | Verify `IntentType.WORKFLOW_COMPOSE` in `IntentRouter.operation_type_mappings` | Present | P0 |
+| **WorkflowComplexityRouter routes** | `workflow_compose` in `_select_orchestrator()` map | Present | P0 |
+
+**Remediation:** Any P0 failure blocks Phase 7 certification. P1 failures are logged with remediation plan. P2 failures are acceptable with graceful degradation documented.
+
 ### 6.5 Vacuum Cleanup
 
 **Goal:** Clean workspace of markdown sprawl, root clutter, and stale runtime artifacts before certification.

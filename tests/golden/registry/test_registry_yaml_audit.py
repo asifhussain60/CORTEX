@@ -202,6 +202,7 @@ class TestNoDeletedPathReferences:
                 "planning/phases/planned/",   # planned phases mention dissolved names in acceptance criteria
                 "planning/phases/completed/", # completed phases document what was dissolved (historical record)
                 "workflows/templates/lifecycle/",  # lifecycle templates reference patterns in grep commands
+                "workflows/templates/governance/",  # governance templates contain detection grep rules for dissolved names
                 "playbooks/",                 # historical playbooks
             )
             hard_failures = {

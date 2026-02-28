@@ -18,6 +18,16 @@ import pytest
 class TestGovernanceGateSingleton:
     """Tests for GAP-80-06: singleton EnforcementOrchestrator in _governance_gate."""
 
+    def setup_method(self):
+        """Reset singleton state before each test to avoid xdist cross-worker contamination."""
+        import cortex.core.orchestrator_protocol_mixin as mod
+        mod._enforcement_singleton = None
+
+    def teardown_method(self):
+        """Reset singleton state after each test."""
+        import cortex.core.orchestrator_protocol_mixin as mod
+        mod._enforcement_singleton = None
+
     def _make_mixin(self):
         from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
         return OrchestratorProtocolMixin()

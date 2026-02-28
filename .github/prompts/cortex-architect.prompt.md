@@ -169,7 +169,8 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 | TRAIN | 🎓 | `/train`, "learn from repo", "evolve templates" | TrainerOrchestrator | 🔵 | `cortex-trainer.md` |
 | TOTALRECALL | 🔁 | `/totalrecall`, "total recall", "holistic refactor" | MasterOrchestrator (7-phase) | ✅ | `cortex-totalrecall.prompt.md` |
 | RCA | 🧠 | "root cause", "why did it fail", "rca" | InvestigationOrchestrator + RCAEngine | ✅ | `cortex-architect.md` |
-| GOLDEN_TEST | 🥇 | "golden test", "workflow template", "acceptance criteria" | TDDOrchestrator | ✅ | `cortex-executor.md` |
+| GOLDEN_TEST | 🥇 | "golden test", "acceptance criteria" | TDDOrchestrator | ✅ | `cortex-executor.md` |
+| WORKFLOW_COMPOSE | 🔧🔄 | "workflow composer", "compose workflow", "workflow template", "convergence loop" | WorkflowComposer | ✅ | `cortex-architect.md` |
 
 ### 🐛 DEBUG MODE — Multi-Stack Debug Pipeline (Phase 86 ✅ complete)
 
@@ -198,6 +199,31 @@ The workflow template handles: inflight upgrade protocol, 3 governance checks (M
 - **Fishbone (Ishikawa)** — PROCESS / PEOPLE failures (6-category cause diagram)
 - **Fault-Tree** — complex multi-path failure analysis
 - **Causal-Chain** — DATA category failures (sequential dependency chain)
+
+### 🔧🔄 WORKFLOW COMPOSE MODE — Dynamic Template Composition
+
+**Trigger:** "workflow composer", "compose workflow", "workflow template", "convergence loop", "compose template", "dedicated workflow"
+**Workflow Template:** Dynamic — composed on-the-fly via `TemplateComposer` from validated primitives
+**Orchestrator:** `WorkflowComposer` (`cortex/orchestrators/workflow/workflow_composer.py`)
+
+**Purpose:** When the user says "workflow composer" or "workflow template", they're referring to the **convergence and condition loops** used by WorkflowComposer to compose dedicated workflow templates on the fly, utilizing **all CORTEX tooling**:
+
+| Toolchain Component | Package | Purpose |
+|---------------------|---------|---------|
+| **AST (Python)** | `ast` (stdlib) | Python code analysis, stub detection, import rewriting |
+| **LENS** | `cortex/lens/` | 8 analyzers: Language → Examination → Navigation → Synthesis |
+| **Roslyn (C#)** | `cortex/orchestrators/support/roslyn/` | C#/.NET semantic analysis (requires `dotnet` CLI) |
+| **tree-sitter** | `tree-sitter>=0.21.0` | Multi-language parsing (Python, C#, TypeScript) |
+| **ruff** | `ruff>=0.3.0` | Python linting + auto-fix (PostRefactorLintGate) |
+| **eslint** | System | JS/TS/React linting (PostRefactorLintGate) |
+| **htmlhint** | System | HTML validation (PostRefactorLintGate) |
+| **stylelint** | System | CSS validation (PostRefactorLintGate) |
+| **TemplateComposer** | `cortex/orchestrators/workflow/template_composer.py` | Dynamic primitive composition |
+| **ConvergenceLoopExecutor** | Workflow primitives | CORE-068 detect→fix→rescan loop |
+
+**Routing chain:** `IntentRouter.detect_intent() → WORKFLOW_COMPOSE → WorkflowComplexityRouter → WorkflowComposer.execute_from_template() → ConvergenceLoopExecutor → ToolchainExecutor`
+
+**Convergence mode:** WorkflowComposer supports `convergence_mode=True` which activates the detect→fix→rescan loop (CORE-068) — the composed template runs iteratively until the convergence predicate is satisfied or max cycles (3) are exhausted.
 
 **Persistence:** `RCAStore` → `.cortex-runtime/traces/rca.db` (SQLite)
 **Output:** Completed `RCAAnalysis` + auto-generated `PreventionRule` (ADVISORY default)
@@ -248,7 +274,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 **Activity log:** Every stage emits AC markers → `.cortex-runtime/traces/orchestrator-traces.db`
 **Convergence guarantee:** Stages 7–8 loop until `p0_count == 0 and p1_count == 0` (CORE-064) — not a single pass.
 
-### 19-Point Production Readiness Audit
+### 20-Point Production Readiness Audit
 
 | # | Check | Tool/Method | Auto-Fix |
 |---|-------|-------------|----------|
@@ -271,6 +297,7 @@ The workflow template defines all 9 stages (Environment Readiness → Inflight U
 | 17 | **LENS pipeline health** — 8 analyzers importable from `cortex/lens/`; golden tests green in `tests/golden/test_lens_full_pipeline_truth.py` | `python3 -c "from cortex.lens import *"` + pytest | ✅ Activate fallback |
 | 18 | **Ghost directory detection** — filesystem artifacts with dots in name (`cortex.intelligence/`, `cortex.brain/`) outside canonical structure | `find cortex/ -maxdepth 1 -name "*.*" -type d` | ✅ Delete |
 | 19 | **SQLite activity log health** — `.cortex-runtime/traces/orchestrator-traces.db` schema valid, no orphaned `AC_START` without `AC_COMPLETE`, 30-day retention enforced | `sqlite3` schema check + orphan query | ✅ Cleanup + VACUUM |
+| 20 | **Workflow Composer pipeline health** — WorkflowComposer importable, TemplateComposer functional, ConvergenceLoopExecutor wired, ToolchainExecutor maps ≥8 extensions, template auto-discovery ≥50% coverage (currently 9/96 = 9% — P1 gap), Roslyn CLI compiled (if C# targets present), tree-sitter grammar versions aligned with requirements.txt | `python3 -c "from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer"` + template registry count + toolchain extension map verification | 🟡 Report + remediation plan |
 
 ### Wiring Contract Validation (Stage 3)
 
@@ -857,6 +884,7 @@ Progress bar + stage bullet list. See templates SSOT.
 | TOTALRECALL | `cortex-totalrecall.prompt.md` (self-contained) | ~4,500 |
 | RCA | `cortex-architect.md` + `cortex_learning` op=`rca` | ~2,500 |
 | GOLDEN_TEST | `cortex-executor.md` | ~2,500 |
+| WORKFLOW_COMPOSE | `cortex-architect.md` (§ WORKFLOW COMPOSE MODE) | ~3,000 |
 
 **Default:** Load this prompt only (~2,700 tokens). Specialist agents on-demand only.
 

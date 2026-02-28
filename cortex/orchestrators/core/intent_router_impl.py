@@ -446,12 +446,30 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
         "upgrade migration", "schema migration", "data migration", "alembic",
     ]
 
+    # GAP-89-COMPOSE: Workflow Composer keywords — compose, execute, and manage
+    # dedicated workflow templates using convergence/condition loops and the full
+    # CORTEX toolchain (AST, LENS, Roslyn, ruff, tree-sitter, etc.)
+    WORKFLOW_COMPOSE_KEYWORDS: List[str] = [
+        "workflow composer", "workflow compose", "compose workflow",
+        "compose template", "compose a workflow", "compose a template",
+        "workflow template", "workflow templates", "create workflow",
+        "build workflow", "generate workflow", "dynamic workflow",
+        "convergence loop", "convergence gate", "condition loop",
+        "template composition", "template composer", "on the fly workflow",
+        "on-the-fly workflow", "dedicated template", "dedicated workflow",
+        "workflow pipeline", "compose pipeline", "toolchain workflow",
+        "ast workflow", "lens workflow", "roslyn workflow",
+        "workflow engine", "workflow execution", "execute workflow",
+        "run workflow template", "use workflow composer",
+    ]
+
     # GAP-64: Golden test lifecycle keywords — review, create, enhance, consolidate,
-    # delete workflow templates and VSCode Copilot Chat response templates.
+    # delete golden tests and VSCode Copilot Chat response templates.
     # This includes E2E trace-verified scenarios, harness upgrades, acceptance
     # criteria authoring, and response template rendering validation.
+    # NOTE: "workflow template" moved to WORKFLOW_COMPOSE_KEYWORDS for correct routing.
     GOLDEN_TEST_KEYWORDS: List[str] = [
-        "golden test", "golden tests", "workflow template", "workflow templates",
+        "golden test", "golden tests",
         "response template", "response templates", "acceptance criteria",
         "e2e scenario", "e2e scenarios", "trace assertion", "trace assertions",
         "test harness", "holistic integration", "trace verified", "ac marker",
@@ -499,6 +517,8 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
             IntentType.INVESTIGATE: self.INVESTIGATE_KEYWORDS,
             # GAP-64: Golden test lifecycle intent
             IntentType.GOLDEN_TEST: self.GOLDEN_TEST_KEYWORDS,
+            # GAP-89-COMPOSE: Workflow Composer — convergence loops + full toolchain
+            IntentType.WORKFLOW_COMPOSE: self.WORKFLOW_COMPOSE_KEYWORDS,
             # GAP-90-01..07: Phase 89 IntentTypes — now wired into standard pipeline
             IntentType.DEBUG: self.DEBUG_KEYWORDS,
             IntentType.HEALTH: self.HEALTH_KEYWORDS,
@@ -882,6 +902,9 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
 
             # RCA routing (Phase 87: root cause analysis)
             (IntentType.RCA, None): "LearningOrchestrator",
+
+            # WORKFLOW_COMPOSE routing (GAP-89-COMPOSE: convergence loops + full toolchain)
+            (IntentType.WORKFLOW_COMPOSE, None): "WorkflowComposer",
         }
 
     # ===== AC-PHASE-8.2-01: Keyword Extraction & Orchestrator Lookup =====
@@ -1976,6 +1999,7 @@ class IntentRouter(OrchestratorProtocolMixin, IOrchestrator):
                 IntentType.DOCUMENT: "document",
                 IntentType.ONBOARD: "onboard",
                 IntentType.REPHRASE: "rephrase",
+                IntentType.WORKFLOW_COMPOSE: "workflow_compose",
             }
             operation_type = _intent_to_op.get(clf_result.intent_type, "implement")
             

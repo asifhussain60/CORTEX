@@ -269,12 +269,12 @@ class TestGoldenTestKeywordsDataContract:
         )
 
     def test_golden_test_keywords_contains_workflow_template(self, canonical_router_cls) -> None:
-        """GOLDEN_TEST_KEYWORDS must include 'workflow template' phrase."""
+        """'workflow template' must be in WORKFLOW_COMPOSE_KEYWORDS (moved from GOLDEN_TEST)."""
         if canonical_router_cls is None:
             pytest.skip("Canonical IntentRouter class could not be loaded via importlib")
-        keywords = [k.lower() for k in canonical_router_cls.GOLDEN_TEST_KEYWORDS]
+        keywords = [k.lower() for k in canonical_router_cls.WORKFLOW_COMPOSE_KEYWORDS]
         assert "workflow template" in keywords, (
-            f"GOLDEN_TEST_KEYWORDS must include 'workflow template'. Got: {canonical_router_cls.GOLDEN_TEST_KEYWORDS}"
+            f"WORKFLOW_COMPOSE_KEYWORDS must include 'workflow template'. Got: {canonical_router_cls.WORKFLOW_COMPOSE_KEYWORDS}"
         )
 
     def test_golden_test_keywords_contains_trace_assertion(self, canonical_router_cls) -> None:
@@ -323,6 +323,8 @@ INTENT_TRIGGER_MAP = [
     (IntentType.TRAIN, "train the reinforcement learning model on workflow outcomes"),
     (IntentType.TOTALRECALL, "/totalrecall — holistic production readiness refactor"),
     (IntentType.RCA, "perform root cause analysis on the deployment failure"),
+    # GAP-89-COMPOSE: Workflow Composer — convergence loops + full CORTEX toolchain
+    (IntentType.WORKFLOW_COMPOSE, "compose a workflow template for C# refactoring using LENS"),
 ]
 
 # Intents reliably routed by EnhancedIntentRouter (empirically verified)

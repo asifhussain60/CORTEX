@@ -85,8 +85,11 @@ _REGEX_PATTERNS: List[Tuple[re.Pattern[str], IntentType, float]] = [
     (re.compile(r"\b(cortex vacuum|markdown sprawl|root clutter|vacuum cleanup)\b", re.I), IntentType.VACUUM, 0.97),
     (re.compile(r"\bvacuum\b", re.I), IntentType.VACUUM, 0.90),
     (re.compile(r"\b(cleanup|clean up|prune|purge|archive|compact)\b", re.I), IntentType.VACUUM, 0.82),
-    # Multi-word / high-specificity patterns
+    # Multi-word / high-specificity patterns (ordered by specificity — multi-word first)
     # INVESTIGATE: "trace the" and "debug why" removed — handled above by DEBUG patterns
+    # GAP-89-COMPOSE: Workflow Composer — convergence loops + full toolchain (highest specificity, multi-word)
+    (re.compile(r"\b(workflow compos(?:er|e|ition)|compose (?:workflow|template)|convergence loop|dedicated (?:workflow|template)|template compos(?:er|ition)|workflow template|workflow engine)\b", re.I), IntentType.WORKFLOW_COMPOSE, 0.92),
+    (re.compile(r"\b(golden test|trace assertion|acceptance criteria)\b", re.I), IntentType.GOLDEN_TEST, 0.90),
     (re.compile(r"\b(investigate|find the cause)\b", re.I), IntentType.INVESTIGATE, 0.90),
     (re.compile(r"\b(digest|summarize|summarise|recap|tl;?dr)\b", re.I), IntentType.DIGEST, 0.88),
     (re.compile(r"\b(analyze|analyse|deep analysis|deep dive|inspect)\b", re.I), IntentType.ANALYZE, 0.85),
@@ -98,7 +101,6 @@ _REGEX_PATTERNS: List[Tuple[re.Pattern[str], IntentType, float]] = [
     (re.compile(r"\b(implement|create|build|add|develop|construct|introduce)\b", re.I), IntentType.IMPLEMENT, 0.75),
     (re.compile(r"\b(document|docs|documentation)\b", re.I), IntentType.DOCUMENT, 0.80),
     (re.compile(r"\b(onboard|onboarding|bootstrap|initialize|register)\b", re.I), IntentType.ONBOARD, 0.85),
-    (re.compile(r"\b(golden test|workflow template|trace assertion|acceptance criteria)\b", re.I), IntentType.GOLDEN_TEST, 0.90),
     (re.compile(r"\b(rephrase|reword|token optim|compact this)\b", re.I), IntentType.REPHRASE, 0.88),
 ]
 
@@ -155,8 +157,19 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
         "investigate", "why is", "what causes", "deep analysis", "find the cause",
     ],
     IntentType.GOLDEN_TEST: [
-        "golden test", "golden tests", "workflow template", "workflow templates",
+        "golden test", "golden tests",
         "response template", "acceptance criteria", "e2e scenario", "trace assertion",
+    ],
+    # GAP-89-COMPOSE: Workflow Composer — convergence loops + full CORTEX toolchain
+    IntentType.WORKFLOW_COMPOSE: [
+        "workflow composer", "workflow compose", "compose workflow",
+        "compose template", "workflow template", "workflow templates",
+        "convergence loop", "convergence gate", "condition loop",
+        "template composition", "template composer", "dedicated template",
+        "dedicated workflow", "dynamic workflow", "on the fly workflow",
+        "workflow pipeline", "toolchain workflow", "workflow engine",
+        "execute workflow", "run workflow template", "compose pipeline",
+        "ast workflow", "lens workflow", "roslyn workflow",
     ],
     # GAP-90-08..12 + 90-07: Phase-89 IntentTypes now wired into Tier 2
     IntentType.DEBUG: [
@@ -206,7 +219,7 @@ _KEYWORD_BAGS: Dict[IntentType, List[str]] = {
 _LLM_SYSTEM_PROMPT = """\
 You are an intent classifier for a software engineering AI assistant.
 Classify the user request into exactly ONE of these intent labels:
-IMPLEMENT, FIX, REFACTOR, DOCUMENT, ANALYZE, ONBOARD, PLAN, AUDIT, DESIGN, DIGEST, REPHRASE, INVESTIGATE, GOLDEN_TEST, DEBUG, HEALTH, SYNC, TRAIN, TOTALRECALL, RCA, VACUUM
+IMPLEMENT, FIX, REFACTOR, DOCUMENT, ANALYZE, ONBOARD, PLAN, AUDIT, DESIGN, DIGEST, REPHRASE, INVESTIGATE, GOLDEN_TEST, WORKFLOW_COMPOSE, DEBUG, HEALTH, SYNC, TRAIN, TOTALRECALL, RCA, VACUUM
 
 Reply with ONLY the label — no punctuation, no explanation.\
 """
@@ -589,6 +602,10 @@ class IntentClassifier:
             "REPHRASE": IntentType.REPHRASE,
             "INVESTIGATE": IntentType.INVESTIGATE,
             "GOLDEN_TEST": IntentType.GOLDEN_TEST,
+            # GAP-89-COMPOSE: Workflow Composer intent
+            "WORKFLOW_COMPOSE": IntentType.WORKFLOW_COMPOSE,
+            "WORKFLOW COMPOSE": IntentType.WORKFLOW_COMPOSE,
+            "COMPOSE": IntentType.WORKFLOW_COMPOSE,
             # GAP-90-08..12 + 90-07: Phase-89 IntentTypes
             "DEBUG": IntentType.DEBUG,
             "HEALTH": IntentType.HEALTH,

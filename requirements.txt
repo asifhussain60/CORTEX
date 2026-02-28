@@ -140,13 +140,13 @@ transformers>=4.30.0          # HuggingFace transformers (BART, T5 for Phase 36)
 # ============================================================================
 
 # Tree-sitter for multi-language parsing
-tree-sitter>=0.20.0        # Universal parser generator (C#, Java, TS, JS) [OPTIONAL]
-# tree-sitter-languages>=1.10.2  # DEPRECATED: Package doesn't exist, use individual packages
+tree-sitter>=0.21.0        # Universal parser generator — ≥0.21 required by tree-sitter-c-sharp 0.23+ [OPTIONAL]
+# tree-sitter-languages>=1.10.2  # INSTALLED (1.10.2) — keep for backwards compat but prefer individual grammars below
 tree-sitter-python>=0.21.0     # Python grammar for LENS Python adapter [OPTIONAL]
 tree-sitter-javascript>=0.21.0 # JavaScript/TypeScript grammar for LENS adapters [OPTIONAL]
-# tree-sitter-c-sharp>=0.21.0    # C# grammar (not available for Python 3.13+) [OPTIONAL]
-# tree-sitter-typescript>=0.21.0 # TypeScript grammar (not available for Python 3.13+) [OPTIONAL]
-# tree-sitter-java>=0.21.0       # Java grammar (not available for Python 3.13+) [OPTIONAL]
+tree-sitter-c-sharp>=0.21.0    # C# grammar for LENS CSharp adapter — installed 0.23.1 [OPTIONAL]
+tree-sitter-typescript>=0.21.0 # TypeScript grammar for LENS TypeScript adapter — installed 0.23.2 [OPTIONAL]
+# tree-sitter-java>=0.21.0       # Java grammar — not yet needed [OPTIONAL]
 
 # ============================================================================
 # DATA SCIENCE & ANALYSIS (Optional but recommended) [OPTIONAL]
@@ -178,6 +178,7 @@ isort==5.13.2              # Import sorter (PEP 8 compliance) [PREFLIGHT]
 mypy==1.8.0                # Static type checker (CORE-011 enforcement) [PREFLIGHT]
 pylint==3.0.3              # Advanced code linter
 flake8==7.0.0              # PEP 8 style guide enforcement
+ruff>=0.3.0                # Fast Python linter/formatter — required by ToolchainExecutor PostRefactorLintGate [PREFLIGHT]
 
 # ============================================================================
 # DEVELOPMENT & INFRASTRUCTURE UTILITIES [PREFLIGHT]
@@ -196,7 +197,7 @@ dependency-injector==4.40.0  # Dependency injection framework (CORTEX core patte
 playwright==1.40.0         # Browser automation for E2E testing
 
 # Monitoring and observability
-prometheus-client==0.24.1  # Prometheus metrics exporter [PREFLIGHT] - Updated for compatibility
+prometheus-client==0.19.0  # Prometheus metrics exporter [PREFLIGHT] — installed 0.19.0
 
 # ============================================================================
 # DASHBOARD & DATA AGGREGATION (PHASE-21)
@@ -246,6 +247,8 @@ gevent==23.9.1            # Concurrency alternative [PREFLIGHT]
 structlog==23.2.0         # Structured logging (audit trails) [PREFLIGHT]
 python-json-logger==2.0.7 # JSON-formatted logging [PREFLIGHT]
 py-zipkin==1.2.8          # Distributed tracing [OPTIONAL]
+opentelemetry-api>=1.20.0 # OpenTelemetry tracing API — used by cortex/opentelemetry_tracing.py [OPTIONAL]
+opentelemetry-sdk>=1.20.0 # OpenTelemetry SDK for span/trace export [OPTIONAL]
 
 # ============================================================================
 # DEVELOPMENT NOTES
