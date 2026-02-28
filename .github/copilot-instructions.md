@@ -1,21 +1,24 @@
 # CORTEX GitHub Copilot Instructions
 
-**Updated:** 2026-02-27 (Phase 87 complete — RCA Memory Engine; Phases 85/86 complete) | ## About CORTEX
+**Updated:** 2026-02-28 (Phase 89 — Self-Healing Prompt Suite) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
+
+## About CORTEX
 
 CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI Engineering Framework:
 
-- **51 Wired Orchestrators** across 4 tiers (core, domain, support, git) — all satisfy IOrchestrator protocol
-- **39 MCP Tools target** in `cortex/mcp/tools/` via Pylance-style stdio server — 29 registered in `mcp_registry.py`; 10 planned toward target
-- **38 CORE Governance Rules** (+ 2 AC rules) enforced at pre-commit, CI, and runtime
+- **282 Orchestrator files** across 9 domains (`core:102 domain:28 support:51 git:4 health:27 intelligence:16 persona:6 validation:12 workflow:29`) — all satisfy IOrchestrator protocol
+- **29 MCP Tools registered** in `mcp_registry.py` via Pylance-style stdio server — 35 tool files in `cortex/mcp/tools/`
+- **32 Governance YAMLs** in `cortex-registry/core/` enforced at pre-commit, CI, and runtime
 - **TDD-First Development** — CORE-008: tests before implementation, no exceptions
 - **Sweep Completeness Contract** — CORE-064: every FIX/REFACTOR/AUDIT exhausts its full issue catalogue (no partial sweeps)
 - **LENS Analysis** — workspace-aware code intelligence (Language → Examination → Navigation → Synthesis)
-- **Unified Reinforcement Signal (URS)** — Phase 83: closed-loop learning across all orchestrators via `cortex_learning` MCP tool (`emit|history|decay|promote|quarantine|metrics|rca`)
-- **RCA Memory Engine** — Phase 87: 4 root cause analysis methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) via `cortex_learning` op=`rca`; 121 GREEN tests; `cortex/intelligence/learning/rca_engine.py`
-- **Multi-Stack Debug Pipeline** — Phase 86: 8 injection strategies (3 existing + 5 new: Frontend/HTML-Vision/API/SQL/DotNet), Vision API, multi-language auto-cleanup, OPJMixin wiring for DebuggerOrchestrator ✅ complete
-- **Orchestrator Engagement Visibility** — Phase 85: BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP; unified progress template (phase-list+bar mandatory) ✅ complete
+- **Unified Reinforcement Signal (URS)** — closed-loop learning across all orchestrators via `cortex_learning` MCP tool (`emit|history|decay|promote|quarantine|metrics|rca`)
+- **RCA Memory Engine** — 4 root cause analysis methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) via `cortex_learning` op=`rca`; `cortex/intelligence/learning/rca_engine.py`
+- **Multi-Stack Debug Pipeline** — 8 injection strategies (3 Python + 5 multi-stack: Frontend/HTML-Vision/API/SQL/DotNet), Vision API, auto-cleanup
+- **Self-Healing Prompt Suite** — `scripts/refresh_prompt_suite.py` introspects live architecture + SQLite audit logs to regenerate all prompts/agents with zero drift
+- **27 Intent Types** routed via IntentRouter (`cortex/orchestrators/core/intent_router_impl.py`)
 - **1 Canonical Package** — all imports use `cortex.*` (no `cortex_intelligence`, `cortex_lens`, or `cortex.brain`)
-- **LLM-Orchestration Architecture** — CORTEX orchestrates the host LLM (GitHub Copilot/GPT) as the AI engine; it does not embed ML models. Intelligence features (test generation, blind-spot detection, knowledge synthesis) are heuristic + LLM-delegated pipelines, not standalone neural networks.
+- **LLM-Orchestration Architecture** — CORTEX orchestrates the host LLM (GitHub Copilot/GPT) as the AI engine; it does not embed ML models
 
 ---
 
@@ -24,13 +27,16 @@ CORTEX (**CO**gnitive **R**eal-**T**ime **EX**ecution) is a production-grade AI 
 | Metric | Value |
 |---|---|
 | Package | `cortex` (single canonical) |
-| Orchestrators | 51 wired in `cortex/orchestrators/` (17 core, 7 domain, 23 support, 4 git) |
-| MCP Tools | 29 registered in `mcp_registry.py`; 39 target in `cortex/mcp/tools/` |
+| Orchestrator files | 282 across 9 domains in `cortex/orchestrators/` |
+| MCP Tools | 29 registered in `mcp_registry.py`; 35 tool files in `cortex/mcp/tools/` |
 | Top-level Dirs | 20 under `cortex/` |
-| Governance Rules | 38 CORE active in `cortex-registry/core/tier0-skull/` (+ 2 AC rules) |
-| Test Suite | 16,942 tests (486 golden, 177 phase) |
+| Governance YAMLs | 32 in `cortex-registry/core/` |
+| Test Suite | ~17,407 tests collected (run `python3 -m pytest --collect-only -q` for current count) |
 | Parallel Testing | pytest-xdist (`-n auto --dist loadscope`) |
-| Phases Complete | 87 of 87 — Phases 85 (Response+Engagement) + 86 (Multi-Stack Debug) + 87 (RCA Memory Engine) ✅ complete |
+| Phases | 17 completed, 2 planned |
+| Master YAML | 469/500 lines (THIN INDEX CONTRACT) |
+| Intent Types | 27 (see `cortex/models/canonical_enums.py`) |
+| SQLite Databases | 9 in `.cortex-runtime/` (cleanup: `refresh_prompt_suite.py --db-cleanup`) |
 
 ---
 
@@ -103,15 +109,15 @@ enforcing routing in production (where context is always supplied).
 
 ```
 cortex/              ← Python source (20 dirs)
-  orchestrators/     ← 51 wired orchestrators across 4 tiers (core, domain, support, git) + additional dirs (health, intelligence, persona, registry, response, strategies, synthesis, tools, validation, workflow)
-  mcp/tools/         ← 29 registered MCP tools (39 target)
+  orchestrators/     ← 282 orchestrator files across 9 domains (core:102 domain:28 support:51 git:4 health:27 +more)
+  mcp/tools/         ← 29 registered MCP tools (35 tool files)
   core/              ← OrchestratorProtocolMixin (primary, Phase 58), OrchestratorBase (legacy), FileFactory, WorkflowEngine
   testing/           ← Test framework, parallel runner, quality gate
   intelligence/      ← LENS, domain brain, knowledge synthesis
   governance/        ← Rule enforcement, compliance
 cortex-registry/     ← YAML governance rules, patterns, plans
 tests/               ← All tests (mirrors cortex/ structure)
-.cortex-runtime/     ← Runtime data (logs, traces, .db files)
+.cortex-runtime/     ← Runtime data (logs, traces, 9 .db files)
 .github/             ← CI/CD, prompts, agents, templates
 cortex-docs/         ← User-facing documentation (HTML/CSS only)
 ```
@@ -157,7 +163,21 @@ cortex-docs/         ← User-facing documentation (HTML/CSS only)
 - `AC_COMPLETE` on failure with ❌ + error classification
 - No orphaned `AC_START` without matching `AC_COMPLETE` (P0 governance violation — Check #19 and Meta-Audit Check #23)
 
-**SQLite Activity Logging:** Every audit stage, orchestrator invocation, and convergence loop cycle writes to `.cortex-runtime/traces/orchestrator-traces.db`. Schema: `audit_sessions` (1 row per `/audit fix` run), `audit_stage_log` (1 row per stage), `audit_violations` (1 row per violation — queryable for recurring P0 pattern detection), `workflow_cycles` (1 row per detect-fix-rescan iteration), `workflow_runs` (1 row per loop invocation). DB is cleaned up on every Stage 9 exit (30-day retention + VACUUM). Pattern detection surfaces recurring P0s that appear in ≥3 sessions. Guard: `CORTEX_DISABLE_DB_CLEANUP=true` to skip cleanup (CI environments).
+**SQLite Activity Logging:** 9 databases in `.cortex-runtime/`:
+
+| Database | Path | Tables | Purpose |
+|---|---|---|---|
+| orchestrator-traces | `traces/orchestrator-traces.db` | `audit_sessions`, `audit_stage_log`, `audit_violations`, `workflow_cycles`, `workflow_runs`, `trace_*` | Primary trace store |
+| governance-traces | `traces/governance.db` | `audit_log` | Governance enforcement |
+| rca-store | `rca/rca_store.db` | `rca_analyses`, `prevention_rules`, `recurrence_*` | Root cause analysis |
+| audit | `audit.db` | `audit_events`, `orchestrator_traces`, `governance_checks`, `phase_progress` | Audit events |
+| governance | `governance.db` | `scaffolder_audit_log` | Scaffolder audit |
+| conversations | `state/conversations.db` | `conversations`, `turn_records` | Session state |
+| brain-governance | `state/cortex_brain/state/governance.db` | `audit_log` | Brain governance |
+| wiring-audit | `wiring/contract_validation_audit.db` | `validation_audit`, `contract_versions` | Wiring contracts |
+| intelligence-audit | `intelligence/intelligence_audit.db` | `intelligence_audit` | Intelligence traces |
+
+**Cleanup:** `python3 scripts/refresh_prompt_suite.py --db-cleanup` (30-day retention + VACUUM). Guard: `CORTEX_DISABLE_DB_CLEANUP=true` to skip (CI environments).
 
 ---
 
@@ -266,6 +286,7 @@ Stage 9:  Tests + AC_COMPLETE            (python3 scripts/run_tests.py preflight
 - Phase Template: `cortex-registry/planning/phases/_template.yaml`
 - Debug Agent: `.github/agents/support/cortex-debugger.md`
 - Debug Pipeline Template: `cortex-registry/workflows/templates/debugging/multi-stack-debug-pipeline.yaml`
+- **Prompt Refresh Playbook**: `scripts/refresh_prompt_suite.py` (self-healing prompt suite)
 
 ---
 
@@ -310,6 +331,49 @@ Use `python scripts\run_tests.py {mode}` in PowerShell/cmd — `python3` may not
 - `CORTEX_WORKERS=4` — cap xdist to 4 workers (CI with limited cores)
 - `CORTEX_DISABLE_PARALLEL=true` — force sequential (any mode)
 - `CORTEX_DISABLE_TESTMON=true` — skip testmon DB (clean run after large refactor)
+
+---
+
+## 🔄 Self-Healing Prompt Suite — Repeatable Refresh Playbook
+
+**Script:** `python3 scripts/refresh_prompt_suite.py`
+**Purpose:** Regenerate `copilot-instructions.md`, `AGENT-INDEX.md`, and validate all prompts/agents against live architecture.
+
+### Playbook Steps (execute in order)
+
+| Step | Command | What It Does |
+|---|---|---|
+| 1 | `python3 scripts/refresh_prompt_suite.py --counts-only` | Introspect live architecture: orchestrators, MCP tools, tests, governance |
+| 2 | `python3 scripts/refresh_prompt_suite.py --db-cleanup` | Enforce 30-day retention, delete orphaned AC_START, VACUUM all 9 databases |
+| 3 | `python3 scripts/refresh_prompt_suite.py` | Full refresh: cleanup → counts → validate → report |
+| 4 | `python3 scripts/refresh_prompt_suite.py --dry-run` | Preview all changes without writing |
+
+### When to Run
+
+- **After every phase completion** — counts drift, new orchestrators/tools added
+- **After `/audit fix`** — validates prompt/agent accuracy against live state
+- **After major refactoring** — ensures no stale references to deleted files
+- **Monthly maintenance** — SQLite cleanup + VACUUM
+
+### SQLite Cleanup Details
+
+| Database | Retention | Cleanup Actions |
+|---|---|---|
+| orchestrator-traces | 30 days | Delete old traces, orphaned AC_START, VACUUM |
+| rca-store | 30 days | Retain analyses, prune old prevention rules |
+| conversations | 90 days | Longer retention for session continuity |
+| All others | 30 days | Standard retention + VACUUM |
+
+**Guard:** Set `CORTEX_DISABLE_DB_CLEANUP=true` to skip cleanup in CI environments.
+
+### Architecture Drift Detection
+
+The playbook detects drift between documentation and live code:
+- Orchestrator file count mismatch → P0 violation
+- MCP tool registry vs tool files mismatch → P1 violation
+- Intent types in `canonical_enums.py` not covered in agent routing → P1 violation
+- `cortex-master.yaml` exceeding 500 lines → P0 violation
+- Stray `.db` files outside `.cortex-runtime/` → P1 violation
 
 ---
 

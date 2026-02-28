@@ -1,6 +1,6 @@
 # CORTEX Architect Prompt
-**Updated:** 2026-02-27 (Phase 87 complete — RCA Memory Engine; Phases 85/86 complete) | **Architecture:** 51 Wired Orchestrators · 39 MCP Tools (29 registered) · 38 CORE Rules · 1 Package  
-**Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅
+**Updated:** 2026-02-28 (Phase 89 — Self-Healing Prompt Suite) | **Architecture:** 282 Orchestrator files · 29 MCP Tools · 32 Governance YAMLs · 27 Intent Types · 1 Package  
+**Silent Autonomous:** ✅ | **Token Optimized:** ✅ | **Cohesiveness Audit:** ✅ | **Refresh:** `python3 scripts/refresh_prompt_suite.py`
 
 **🔗 References:**
 - **Response Templates:** `.github/templates/cortex-response-templates.md`
@@ -12,6 +12,7 @@
 - **Wiring Contract:** `cortex-registry/core/specifications/` (`orchestration-master-wiring.yaml`, `core-orchestrator-wiring.yaml`, `domain-orchestrator-wiring.yaml`, `support-orchestrator-wiring.yaml`)
 - **Stage 0 Spec:** `.github/agents/core/STAGE-0-GOVERNANCE-AUDIT-SPEC.md`
 - **Agent Index:** `.github/agents/AGENT-INDEX.md` (lazy-load: 1-2 agents per intent)
+- **Prompt Refresh:** `scripts/refresh_prompt_suite.py` (self-healing prompt suite)
 
 ---
 
@@ -40,15 +41,16 @@
 | EnforcementOrchestrator | `cortex/orchestrators/core/enforcement_orchestrator.py` |
 | OrchestratorProtocolMixin | `cortex/core/orchestrator_protocol_mixin.py` (primary base, Phase 58) |
 | OrchestratorBase | `cortex/core/orchestrator_base.py` (legacy — 2 orchestrators only) |
-| MCP Tools (29 registered, 39 target) | `cortex/mcp/tools/` |
+| MCP Tools (29 registered) | `cortex/mcp/tools/` (35 tool files) |
 | Parallel Test Framework | `cortex/testing/framework/` |
 | Wiring Specs | `cortex-registry/core/specifications/` (4 YAML files) |
 | Intelligence Provider | `cortex/intelligence/provider.py` |
 | SweepCatalogueOrchestrator | `cortex/orchestrators/support/sweep_catalogue_orchestrator.py` |
-| RCA Engine | `cortex/intelligence/learning/rca_engine.py` (Phase 87 — 4 methodologies) |
+| RCA Engine | `cortex/intelligence/learning/rca_engine.py` (4 methodologies) |
 | RCA Store | `cortex/intelligence/learning/rca_store.py` |
+| Prompt Refresh | `scripts/refresh_prompt_suite.py` (self-healing prompt suite) |
 
-**10 Orchestrator Domains:** core · domain · git · health · intelligence · strategies · support · synthesis · validation · workflow
+**14 Orchestrator Domains:** core · domain · git · health · intelligence · persona · registry · response · strategies · support · synthesis · tools · validation · workflow
 
 **⛔ Deleted paths — never reference these:**
 - `cortex/brain/` — dissolved into `cortex/orchestrators/`, `cortex/intelligence/`, `cortex/governance/`
@@ -698,7 +700,7 @@ Everything else → move to canonical location or delete.
 
 ### Prompt/Agent Cleanliness
 - No references to deleted paths (`cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`)
-- No stale orchestrator counts (must say **51 wired orchestrators**, **39 MCP tools (29 registered)**, **38 CORE rules**)
+- No stale orchestrator counts — use `python3 scripts/refresh_prompt_suite.py --counts-only` for live values
 - No references to legacy CCL, `CrystallizedContext`, or pre-refactor constructs
 - No references to `cortex.intelligence/state/` as runtime data path (canonical: `.cortex-runtime/`)
 - Agent files named `DEPRECATED-*` should be deleted, not kept alongside active files
@@ -709,9 +711,9 @@ Run `cortex-meta-auditor.md` checks (23 total) when prompt or agent files are mo
 
 | Check | Pass Criteria |
 |---|---|
-| Orchestrator count | All agents/prompts say "51 wired" |
-| MCP tool count | All say "39 MCP tools (29 registered)" |
-| CORE rules count | All say "38 active" |
+| Orchestrator count | Matches `refresh_prompt_suite.py --counts-only` output |
+| MCP tool count | Matches live `mcp_registry.py` grep count |
+| Governance YAML count | Matches live `cortex-registry/core/` count |
 | Audit check count | All say "19-Point Production Readiness Audit" |
 | Meta-audit check count | All say "23 checks" |
 | Deleted constructs absent | No `cortex/brain/`, `cortex/cortex.intelligence/`, `cortex_intelligence/`, `cortex_lens/`, `_archive/` |

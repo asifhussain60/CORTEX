@@ -1,8 +1,8 @@
 # CORTEX Agent Index
 
-**Updated:** 2026-02-27 | **Purpose:** Lazy loading + intent-based agent selection  
+**Updated:** 2026-02-28 (Phase 89 — Self-Healing Prompt Suite) | **Refresh:** `python3 scripts/refresh_prompt_suite.py`  
 **Package:** `cortex` (single canonical — no `cortex_intelligence`, `cortex_lens`, `cortex.brain`)  
-**Phases:** 87 complete — Phase 85 (Response+Engagement) ✅ · Phase 86 (Multi-Stack Debug) ✅ · Phase 87 (RCA Memory Engine) ✅
+**Phases:** 17 completed, 2 planned | **Tests:** ~17,407 | **Intent Types:** 27
 
 ---
 
@@ -17,9 +17,9 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 **Drift Detection Protocol (Total Recall Learnings):**
 - All numeric values in this file are SOURCE OF TRUTH for agent consumption
-- Values derived from file system via grep (not manual claims)
+- Values derived from file system via `python3 scripts/refresh_prompt_suite.py --counts-only`
 - Any drift between this file and implementation triggers P0 validation failure
-- Verification command: `python3 scripts/validate-architecture-counts.py`
+- Verification command: `python3 scripts/refresh_prompt_suite.py --counts-only`
 
 ### Status Icons
 
@@ -38,17 +38,20 @@ Per Intent Load: 1-2 relevant agents (~1,000-2,500 tokens)
 
 | Metric | Value |
 |--------|-------|
-| Orchestrators | **51 wired** across 4 tiers (17 core, 7 domain, 23 support, 4 git) |
-| MCP Tools | **29 registered** (39 target) MCP tools in `cortex/mcp/tools/` |
-| CORE Rules | **38 active** CORE governance rules (+ 2 AC rules) |
+| Orchestrator files | **282** across 9 domains (`core:102 domain:28 support:51 git:4 health:27 intelligence:16 persona:6 validation:12 workflow:29`) |
+| MCP Tools | **29 registered** in `mcp_registry.py`; 35 tool files in `cortex/mcp/tools/` |
+| Governance YAMLs | **32** in `cortex-registry/core/` |
 | Package | `cortex` (single) |
-| Tests | **16,942** collected |
+| Tests | **~17,407** collected |
+| Intent Types | **27** (see `cortex/models/canonical_enums.py`) |
 | Entry Point | MasterOrchestrator → IntentRouter → InteractionOrchestrator → Domain Orchestrator |
-| URS | Unified Reinforcement Signal — closed-loop learning (Phase 83, `cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
-| RCA Engine | Phase 87 — 4 methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain (`cortex/intelligence/learning/rca_engine.py`) |
-| Debug Strategies | 8 total: 3 Python + 5 multi-stack ✅ Phase 86 complete (Frontend/HTML-Vision/API/SQL/DotNet) |
-| Response Format | phase-list+bar mandatory ✅ Phase 85 complete; SSOT: `.github/templates/cortex-response-templates.md` |
-| Engagement Blocks | BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP ✅ Phase 85 complete |
+| URS | Unified Reinforcement Signal — closed-loop learning (`cortex_learning` tool: `emit|history|decay|promote|quarantine|metrics|rca`) |
+| RCA Engine | 4 methodologies: Five-Whys, Fishbone, Fault-Tree, Causal-Chain (`cortex/intelligence/learning/rca_engine.py`) |
+| Debug Strategies | 8 total: 3 Python + 5 multi-stack (Frontend/HTML-Vision/API/SQL/DotNet) |
+| Response Format | phase-list+bar mandatory; SSOT: `.github/templates/cortex-response-templates.md` |
+| Engagement Blocks | BLOCK-ENGAGEMENT-BREADCRUMB, BLOCK-ENGAGEMENT-TIMELINE, BLOCK-PHASE-ROADMAP |
+| SQLite Databases | 9 in `.cortex-runtime/` — cleanup: `python3 scripts/refresh_prompt_suite.py --db-cleanup` |
+| Prompt Refresh | `python3 scripts/refresh_prompt_suite.py` — self-healing, architecture-introspecting |
 
 ---
 
@@ -204,11 +207,11 @@ are resolved or explicitly approved as WONT-FIX.
 
 ### Tier 1: YAML Structural Rules (Read-Only)
 
-**Location:** `cortex-registry/core/` — governance rules YAML
+**Location:** `cortex-registry/core/` — 32 governance YAMLs
 
 | Category | Change Frequency |
 |----------|-----------------|
-| CORE rules (17) | Rarely |
+| CORE rules | Rarely |
 | Progress bar format | Never |
 | Status icons | Never |
 | File naming rules | Never |
@@ -278,6 +281,32 @@ IF BLOCK → Show remediation, require override
 - `cortex_process_request` — replaced by specific MCP tools
 - `cortex_lens_analyze` — replaced by `cortex_onboard` (op: `full`)
 - `cortex/orchestrators/internal/` — not a canonical wired tier
+
+---
+
+## 🔄 Self-Healing Prompt Suite
+
+**Refresh playbook:** `python3 scripts/refresh_prompt_suite.py`
+
+| Command | Purpose |
+|---|---|
+| `--counts-only` | Show live architecture counts (no file changes) |
+| `--db-cleanup` | SQLite 30-day retention + VACUUM (9 databases) |
+| `--dry-run` | Preview all changes without writing |
+| (no args) | Full refresh: cleanup → validate → report |
+
+**When to run:** After phase completion, after `/audit fix`, after major refactoring, monthly.
+
+**SQLite databases (9):**
+- `orchestrator-traces.db` — 400KB, primary trace store
+- `rca_store.db` — 72KB, root cause analysis
+- `intelligence_audit.db` — 64KB, intelligence traces
+- `contract_validation_audit.db` — 44KB, wiring contracts
+- `audit.db` — 40KB, audit events
+- `governance.db` — 32KB, scaffolder audit
+- `conversations.db` — 32KB, session state (90-day retention)
+- `governance.db` (brain) — 12KB, brain governance
+- `governance.db` (traces) — 12KB, governance enforcement
 
 ---
 
