@@ -23,6 +23,7 @@ from enum import Enum
 from typing import List
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
 # =============================================================================
@@ -113,7 +114,7 @@ _GOLDEN_REQUIRED_MARKERS: list[str] = ["AC-ID:", "# P0", "# P1"]
 # ORCHESTRATOR
 # =============================================================================
 
-class TestClassifierOrchestrator(OrchestratorProtocolMixin):
+class TestClassifierOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Deterministic, stateless classifier: module path → TestDecision.
 
     Pure read-only. No network I/O, no disk I/O, no ML inference.
@@ -132,6 +133,8 @@ class TestClassifierOrchestrator(OrchestratorProtocolMixin):
 
     _orch_name = "TestClassifierOrchestrator"
     _orch_version = "1.0.0"
+    # Phase 94f — advisory: test classification utility; not a primary code-touching entry point.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def classify(self, module_path: str) -> TestDecision:
         """Classify a module path and return a full TestDecision.

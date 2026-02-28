@@ -23,5 +23,6 @@ The pipeline should show:
 - A subtle rejected path branching downward from the Governance Gate in red for non-compliant features
 - Clean, modern, easy to follow at a glance
 - No photographic elements
+- No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
 
 Style: Process flow diagram. Dark glassmorphism. Hexagonal nodes with connecting gradients. Product management clarity. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

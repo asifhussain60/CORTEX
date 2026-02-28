@@ -17,6 +17,7 @@ from cortex.orchestrators.core.solid_analyzers import (
     SolidViolation,
 )
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 # Phase 58-C: DomainBrain wiring (validation decision-making orchestrator)
 try:
@@ -24,7 +25,7 @@ try:
 except Exception:
     _SolidDomainBrainAPI = None  # type: ignore[assignment,misc]
 
-class SOLIDOrchestrator(OrchestratorProtocolMixin):
+class SOLIDOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Unified SOLID compliance: SRP + OCP + LSP + ISP + DIP + DRY.
 
     Consolidates:
@@ -38,6 +39,8 @@ class SOLIDOrchestrator(OrchestratorProtocolMixin):
     Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
     Phase: 23 MEGA-B Stage 2 - Component Registration
     """
+    # Phase 94f — advisory: SOLID analysis tool; not a primary code-touching entry point.
+    PHASE90_GATEWAY_ENABLED: bool = False
     
     def __init__(self, audit_db_path: Optional[Path] = None) -> None:
         """Initialize SOLID orchestrator.

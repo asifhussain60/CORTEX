@@ -35,6 +35,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 logger = logging.getLogger(__name__)
 
@@ -260,7 +261,7 @@ def _check_mcp_policy(staged_files: List[str], repo_path: str) -> CheckResult:
 # ---------------------------------------------------------------------------
 
 
-class PreCommitEnforcementOrchestrator(OrchestratorProtocolMixin):
+class PreCommitEnforcementOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Runs all pre-commit CORE rule enforcement checks in-process.
 
     Replaces the following shell hooks and GitHub Actions:
@@ -293,6 +294,10 @@ class PreCommitEnforcementOrchestrator(OrchestratorProtocolMixin):
         if not report.passed:
             raise Exception(report.violations)
     """
+
+    # Phase 94e — advisory: IS the pre-commit gate; self-gating is circular.
+    # Invoked by GitOrchestrator as Stage 1. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self, strict: bool = True) -> None:
         """Initialize EnforcementOrchestrator.

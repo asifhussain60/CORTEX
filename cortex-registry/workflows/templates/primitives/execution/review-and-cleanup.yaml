@@ -1,0 +1,241 @@
+# ============================================================================
+# PRIMITIVE: Review + Cleanup — Universal Final Step
+# ============================================================================
+# Tier: 1 (Primitive — atomic, reusable, composable)
+# Purpose: Mandatory epilogue for every code-touching CORTEX operation.
+#          Ensures every workflow ends with a LENS diff review, debug marker
+#          removal, and SQLite trace closure — regardless of operation type.
+#
+# Design (SOLID + DRY):
+#   - SRP: this primitive only reviews and cleans; no domain logic
+#   - DRY: single canonical cleanup implementation — all modes reference it
+#   - OCP: new cleanup steps → add here; caller templates unchanged
+#
+# Injected as final step in:
+#   - sdlc/implement-workflow.yaml
+#   - sdlc/fix-workflow.yaml
+#   - quality/refactor-workflow.yaml
+#   - tdd/tdd-workflow.yaml
+#   - debugging/multi-stack-debug-pipeline.yaml
+#   - maintenance/health-check-workflow.yaml
+#   - maintenance/vacuum-workflow.yaml
+#   - audit/audit-fix-pipeline.yaml
+#
+# SQLite Logging:
+#   Updates workflow_runs row with status=COMPLETE and completed_at timestamp.
+#   DB: .cortex-runtime/traces/orchestrator-traces.db
+#
+# CORTEX Toolchain used:
+#   - LENS (cortex/lens/) — diff scan of changed files
+#   - AutoCleanupManager — strip CORTEX_DEBUG markers (all 8 strategies)
+#   - WorkflowGateway._emit_ac_marker — AC_COMPLETE emission
+#
+# Authority: CORE-002 (no report files), CORE-049 (silent on clean),
+#            CORE-064 (sweep completeness), CORE-068 (convergence)
+# ============================================================================
+
+version: '1.0.0'
+template_id: 'primitives/execution/review-and-cleanup'
+name: 'Review + Cleanup — Universal Final Step'
+tier: 'primitive'
+category: 'execution'
+status: 'active'
+
+metadata:
+  description: |
+    Three-phase epilogue injected at the end of every code-touching workflow.
+
+    Phase A — REVIEW:
+      LENS diff scan of all files changed during the operation.
+      Surfaces any regressions, lint violations, or governance issues
+      introduced by the operation — before the trace row is closed.
+      Silent if no issues found (CORE-049).
+
+    Phase B — CLEANUP:
+      AutoCleanupManager strips all CORTEX_DEBUG markers injected during
+      the operation (all 8 strategies: Python × 3, JS/TS, HTML, API, SQL, .NET).
+      Removes temp files (*.tmp, *.bak) created during execution.
+      Removes orphaned AC_START markers without matching AC_COMPLETE.
+
+    Phase C — TRACE CLOSURE:
+      Closes the SQLite workflow_runs row with status, completed_at, and
+      any remaining issues. Emits AC_COMPLETE to logger.
+
+  governance_rules:
+    - 'CORE-002: All output inline — no .md/.txt report files created'
+    - 'CORE-049: Silent if no issues found — zero noise on clean pass'
+    - 'CORE-064: Sweep Completeness — cleanup is part of the sweep'
+    - 'CORE-068: Convergence — review confirms predicate holds after changes'
+
+  tags:
+    - primitive
+    - review
+    - cleanup
+    - universal-epilogue
+
+# ── PARAMETERS ────────────────────────────────────────────────────────────
+parameters:
+  changed_files:
+    type: 'list[str]'
+    description: 'List of file paths modified during the operation'
+    required: false
+    default: []
+
+  session_id:
+    type: 'str'
+    description: 'AC session ID for trace closure'
+    required: true
+
+  mode:
+    type: 'str'
+    description: 'Operation mode (IMPLEMENT, FIX, REFACTOR, etc.)'
+    required: true
+
+  run_id:
+    type: 'str'
+    description: 'workflow_runs.run_id for SQLite update'
+    required: false
+    default: '{{session_id}}'
+
+  silent_on_clean:
+    type: 'bool'
+    description: 'Suppress output if no issues found (CORE-049)'
+    default: true
+
+# ── STEPS ─────────────────────────────────────────────────────────────────
+steps:
+  # ── Phase A: REVIEW ───────────────────────────────────────────────────
+  - id: lens_diff_review
+    name: 'LENS Diff Review — scan changed files'
+    type: 'orchestrator_call'
+    orchestrator: 'LENSOrchestrator'
+    action: 'analyze_diff'
+    params:
+      files: '{{changed_files}}'
+      mode: 'diff'
+      checks:
+        - lint_violations
+        - type_hint_coverage
+        - docstring_coverage
+        - naming_compliance
+        - governance_rule_adherence
+    outputs: ['review_issues']
+    on_empty_files: 'skip'  # Nothing changed → skip LENS scan (silent)
+    silent_if: '{{silent_on_clean}} AND len(review_issues) == 0'
+    description: |
+      Run LENS across every file changed during the operation.
+      Uses Language → Examination → Navigation → Synthesis pipeline.
+      If review_issues is empty and silent_on_clean=true, emits nothing.
+
+  - id: review_gate
+    name: 'Review Gate — surface any P0/P1 issues found'
+    depends_on: ['lens_diff_review']
+    type: 'conditional'
+    condition: 'len(review_issues) > 0'
+    if_true:
+      action: 'inline_report'
+      format: |
+        ⚠️ Review found {{len(review_issues)}} issue(s) in changed files:
+        {{#each review_issues}}
+          - {{this.file}}:{{this.line}} — {{this.message}} [{{this.severity}}]
+        {{/each}}
+      block_on_severity: ['P0', 'P1']  # Block AC_COMPLETE on P0/P1 unless user override
+    if_false:
+      action: 'log_silent'
+      message: 'Review clean — no issues in changed files.'
+
+  # ── Phase B: CLEANUP ──────────────────────────────────────────────────
+  - id: marker_cleanup
+    name: 'AutoCleanupManager — strip debug markers'
+    depends_on: ['review_gate']
+    type: 'orchestrator_call'
+    orchestrator: 'DebuggerOrchestrator'
+    action: 'cleanup_markers'
+    params:
+      scope: '{{changed_files}}'
+      strategies:
+        - test_failure          # Python: # CORTEX_DEBUG_MARKER_START/END
+        - refactor_regression   # Python: # CORTEX_DEBUG_MARKER_START/END
+        - governance_violation  # Python: # CORTEX_DEBUG_MARKER_START/END
+        - frontend_console      # JS/TS: console.debug('[CORTEX_DEBUG:...]')
+        - html_vision_mapping   # HTML: <!-- CORTEX_DEBUG:... -->
+        - api_trace             # Python: # CORTEX_DEBUG_API_TRACE
+        - sql_trace             # SQL: -- CORTEX_DEBUG_SQL_TRACE
+        - dotnet_trace          # C#: // CORTEX_DEBUG_DOTNET
+      dry_run: false
+    outputs: ['markers_removed']
+    on_error: 'warn_and_continue'  # Cleanup failure must not block completion
+
+  - id: temp_file_cleanup
+    name: 'Remove temp files created during operation'
+    depends_on: ['marker_cleanup']
+    type: 'filesystem'
+    action: 'delete_matching'
+    params:
+      scope: '{{changed_files | dirname}}'
+      patterns:
+        - '*.tmp'
+        - '*.bak'
+        - '*_cortex_temp.*'
+      protect:
+        - '.cortex-runtime/**'  # Never delete runtime data
+    outputs: ['temp_files_removed']
+    on_error: 'warn_and_continue'
+
+  - id: orphan_ac_cleanup
+    name: 'Remove orphaned AC_START markers from SQLite'
+    depends_on: ['temp_file_cleanup']
+    type: 'sqlite_operation'
+    database: '.cortex-runtime/traces/orchestrator-traces.db'
+    action: 'delete_where'
+    params:
+      table: 'workflow_runs'
+      condition: "status = 'started' AND started_at < datetime('now', '-1 hour')"
+    description: |
+      Remove any AC_START rows that were never closed with AC_COMPLETE.
+      Orphans older than 1 hour are considered stale.
+
+  # ── Phase C: TRACE CLOSURE ────────────────────────────────────────────
+  - id: close_trace_row
+    name: 'Close SQLite workflow_runs trace row'
+    depends_on: ['orphan_ac_cleanup']
+    type: 'sqlite_operation'
+    database: '.cortex-runtime/traces/orchestrator-traces.db'
+    action: 'update'
+    params:
+      table: 'workflow_runs'
+      set:
+        status: 'COMPLETE'
+        completed_at: '{{now_iso}}'
+      where:
+        run_id: '{{run_id}}'
+    description: 'Mark workflow_runs row as COMPLETE with completion timestamp.'
+
+  - id: emit_ac_complete
+    name: 'Emit AC_COMPLETE marker'
+    depends_on: ['close_trace_row']
+    template_ref: 'primitives/execution/ac-marker-emit'
+    inputs:
+      domain: '{{mode}}'
+      session_id: '{{session_id}}'
+      status: '✅'
+    step_filter: 'ac_complete'
+
+# ── OUTPUTS ───────────────────────────────────────────────────────────────
+outputs:
+  review_issues:
+    description: 'List of issues found during LENS diff scan'
+    type: 'list'
+
+  markers_removed:
+    description: 'Count of debug markers stripped'
+    type: 'int'
+
+  temp_files_removed:
+    description: 'Count of temp files deleted'
+    type: 'int'
+
+  cleanup_status:
+    description: '"clean" if no issues, "issues_found" if review surfaced problems'
+    type: 'str'
+    derived: 'len(review_issues) == 0 ? "clean" : "issues_found"'

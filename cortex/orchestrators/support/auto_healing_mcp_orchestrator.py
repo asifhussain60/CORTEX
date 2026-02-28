@@ -30,6 +30,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.models.canonical_enums import IntentType
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
 @dataclass
@@ -58,7 +59,7 @@ class HealingResult:
     action_required: Optional[str] = None  # If manual step needed
 
 
-class AutoHealingMCPOrchestrator(OrchestratorProtocolMixin):
+class AutoHealingMCPOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Orchestrates auto-healing when MCP unavailable.
     
@@ -76,6 +77,10 @@ class AutoHealingMCPOrchestrator(OrchestratorProtocolMixin):
     5. Regenerate MCP configuration
     6. Retry MCP availability check
     """
+
+    # Phase 94f — advisory: MCP self-healing/diagnostic; not a code-execution entry
+    # point. Invoked by health pipeline. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
     
     def __init__(self) -> None:
         """Initialize orchestrator."""

@@ -29,6 +29,7 @@ from typing import Any, Dict, List, Optional, Union
 from cortex.core.result import Err, Ok, Result
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90b
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 
 # Backward-compat aliases (no-op now that both paths are identical)
@@ -76,7 +77,7 @@ class _AuditEntry:
                 f"{self.operation}:{self.msg}:{self.previous_hash}".encode()
             ).hexdigest()[:16]
 
-class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, IOrchestrator):
+class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, WorkflowTemplateMixin, IOrchestrator):
     """Orchestrator for coordinating all refactoring tool adapters.
 
     Provides a unified API for executing refactoring operations across multiple
@@ -95,6 +96,9 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, 
         - Statistics and status reporting
         - Full audit logging (CORE-027)
 
+    Phase 90b: WorkflowEnforcementMixin opt-in — all refactoring operations route
+    through WorkflowGateway → quality/refactor-workflow.yaml → convergence loop.
+
     Example:
         >>> orchestrator = RefactoringOrchestrator()
         >>>
@@ -110,6 +114,11 @@ class RefactoringOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin, 
         ... )
         >>> result = orchestrator.execute_refactoring(request)
     """
+
+    # Phase 90b — Gateway opt-in: RefactoringOrchestrator routes all code-touching
+    # operations through WorkflowGateway → quality/refactor-workflow.yaml.
+    PHASE90_GATEWAY_ENABLED: bool = True
+
     def __init__(self) -> None:
         """Initialize RefactoringOrchestrator with all available adapters."""
         self.registry = RefactoringToolRegistry()

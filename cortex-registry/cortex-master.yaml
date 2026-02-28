@@ -42,25 +42,21 @@ maintainer: CORTEX Architecture Team
 #   CREATE:   phase-87 (P1, RCA Memory Engine + prevention gate + cortex-docs sync, 21 GAPs)
 #
 #  Slot │ Phase   │ P    │ Track            │ Status       │ GAPs
-#  ─────┼─────────┼──────┼──────────────────┼──────────────┼──────
-#  #0   │ ph-87   │ P1   │ RCA Memory Eng   │ PLANNED      │ 21
-#  #1   │ ph-86   │ P1   │ Debug Pipeline   │ PLANNED      │ 16
-#  #1   │ ph-85   │ P1   │ Response+Engage  │ PLANNED      │ 10
-#  #2   │ ph-77   │ P0   │ Cleanup first    │ COMPLETE     │ 6
-#  #3   │ ph-78   │ P0   │ Matrix wiring    │ COMPLETE     │ 12
-#  #4   │ ph-79   │ P1   │ SDLC Engine      │ COMPLETE     │ 22
-#  #5   │ ph-75   │ P1   │ Cap Registry     │ COMPLETE     │ 5
-#  #6   │ ph-76   │ P1   │ UI — defer last  │ COMPLETE     │ 0
+#  #0   │ ph-87   │ P1   │ RCA Memory Eng   │ COMPLETE     │ 21
+#  #1   │ ph-86   │ P1   │ Debug Pipeline   │ COMPLETE     │ 16
+#  #2   │ ph-77/78│ P0   │ Cleanup+Wiring   │ COMPLETE     │ 18
+#  #3   │ ph-79   │ P1   │ SDLC Engine      │ COMPLETE     │ 22
+#  #4/5 │ ph-75/76│ P1   │ Cap Reg + UI     │ COMPLETE     │ 5
 #
 # Gate: smoke ≥1,443 at every sub-phase boundary.
 # ============================================================
 
 metadata:
   version: '1.0'
-  last_updated: '2026-02-28T16:00:00Z'
-  total_phases: 90
-  active: 1
-  completed: 75
+  last_updated: '2026-02-28T18:00:00Z'
+  total_phases: 94
+  active: 0
+  completed: 76
   in_progress: 0
   planned: 0
   playbooks: 1
@@ -455,18 +451,44 @@ verification:
   last_verified: '2026-02-28T08:00:00Z'
 
 summary:
-  total_phases: 93
-  completed: 93
+  total_phases: 94
+  completed: 94
   active: 0
   in_progress: 0
   planned: 0
   archived: 4
   playbooks: 1
   completion_percentage: 100
-  consolidation_summary: "v41.0: 93 phases — 93 COMPLETE, 0 ACTIVE. Phase-93 COMPLETE (2026-02-28): 5 GAPs CLOSED — Stage2._classify() uses router.route() (not missing classify()), _get_routing_target() covers all 27 IntentType values, Stage1 uses InteractionOrchestrator.execute() + preserves breadcrumb, MasterOrchestrator passes lens_orchestrator to deps. 30 tests GREEN. Smoke: 1,698."
+  consolidation_summary: "v42.3: 95 phases — 95 COMPLETE, 0 ACTIVE. Phase-95 COMPLETE (2026-02-28): 3 GAPs CLOSED — @enforce_gateway applied to all 6 Category B execute_operation overrides (Interaction/Security/EnhancedPlanning/Planning/SDLC/Trainer), _wrapper *args/**kwargs fix (kwarg call regression), Category A/B architectural classification. MasterOrchestrator: no decorator (raw request entry point). 21 tests GREEN. Smoke: 1,784."
   active_phases: {}
 
 phases:
+  # ── SLOT #-3 — phase-95 (P0, COMPLETE) ──────────────────────────────────────
+  - id: phase-95-enforce-gateway-decorator-sweep
+    title: "enforce_gateway Decorator Sweep: Bypass-Gap Closure on All execute_operation() Overrides"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-095-ENFORCE-GATEWAY-DECORATOR
+    gaps: 3
+    gaps_closed: 3
+    sub_phases: 1
+    sub_phases_complete: 1
+    file: "cortex-registry/planning/phases/completed/phase-95-enforce-gateway-decorator-sweep.yaml"
+    note: "3 GAPs CLOSED. @enforce_gateway on 6 Category B overrides; _wrapper *args/**kwargs fix; A/B classification; MasterOrchestrator no-decorator by design. 21 tests GREEN. Smoke: 1,784."
+
+  # ── SLOT #-4 — phase-94 (P0, COMPLETE) ──────────────────────────────────────
+  - id: phase-94-workflow-gateway-enforcement
+    title: "Workflow Gateway + Mandatory Enforcement: WorkflowGateway, WorkflowEnforcementMixin, enforce_gateway Decorator"
+    priority: P0
+    status: COMPLETE
+    sweep_id: SWEEP-094-WORKFLOW-GATEWAY-ENFORCEMENT
+    gaps: 10
+    gaps_closed: 10
+    sub_phases: 6
+    sub_phases_complete: 6
+    file: "cortex-registry/planning/phases/completed/phase-94-workflow-gateway-enforcement.yaml"
+    note: "10 GAPs CLOSED. WorkflowGateway + 18-mode map + SQLite trace. WorkflowEnforcementMixin; 5 True + ~51 advisory False. 6 sub-phases (94a–94f): all ~56 orchestrators carry mixin. 173 tests GREEN. Smoke: 1,784."
+
   - id: phase-93-intent-router-full-wiring
     title: "Phase 93 — IntentRouter Full Wiring into MasterOrchestrator"
     status: COMPLETE
@@ -475,5 +497,3 @@ phases:
     gaps: 5
     file: cortex-registry/planning/phases/completed/phase-93-intent-router-full-wiring.yaml
     note: "Stage2 routes via IntentRouter.route(); 27-intent coverage; Stage1 delegates to InteractionOrchestrator + breadcrumb; MasterOrchestrator deps wired. 30 tests GREEN."
-
-

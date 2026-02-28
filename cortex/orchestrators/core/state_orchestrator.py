@@ -33,6 +33,7 @@ from cortex.core.brain_state_manager import BrainStateManager
 from cortex.core.checkpoint_manager import CheckpointManager
 from cortex.orchestrators.core.conversation_state import ConversationStateManager
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +89,7 @@ class StateOperationResult:
     snapshot_path: Optional[Path] = None
     checkpoint_id: Optional[str] = None
 
-class StateOrchestrator(OrchestratorProtocolMixin):
+class StateOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Unified state management orchestrator with SQLite audit trail.
     
     Consolidates:
@@ -106,6 +107,10 @@ class StateOrchestrator(OrchestratorProtocolMixin):
         >>> result = orchestrator.flush_state()
         >>> entries = orchestrator.query_audit_log(operation="FLUSH")
     """
+
+    # Phase 94f — advisory: state management layer, not a primary code-execution
+    # entry point. Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
     
     def __init__(
         self,

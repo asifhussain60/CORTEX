@@ -133,6 +133,7 @@ from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 # _extract_lens_context, _consume_unified_context, and _governance_gate to MasterOrchestrator.
 # Required by holistic golden tests (S21-S25) and CORE-048 compliance.
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 90c / 95
 
 # Phase 71-B: OPJMixin wires operational pattern journal for MasterOrchestrator
 from cortex.intelligence.learning.opj_mixin import OPJMixin
@@ -143,7 +144,7 @@ from cortex.orchestrators.core.master_orchestrator_knowledge_mixin import (  # n
 )
 
 
-class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorAuditMixin, WorkflowTemplateMixin, MasterOrchestratorKnowledgeMixin, OPJMixin):
+class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, WorkflowEnforcementMixin, OrchestratorAuditMixin, WorkflowTemplateMixin, MasterOrchestratorKnowledgeMixin, OPJMixin):
     """
     MasterOrchestrator - Coordinates all domain orchestrators.
 
@@ -158,6 +159,13 @@ class MasterOrchestrator(IOrchestrator, OrchestratorProtocolMixin, OrchestratorA
     """
 
     _instance: Optional['MasterOrchestrator'] = None
+
+    # Phase 95 — advisory: MasterOrchestrator receives raw user requests as operation_name
+    # (freeform strings, not mode keys). The gateway requires a structured mode string
+    # (e.g. "IMPLEMENT"). MasterOrchestrator IS the initiator that resolves mode → gateway;
+    # self-gating at execute_operation would break the raw-request entry point.
+    # @enforce_gateway intentionally NOT applied here.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize MasterOrchestrator.

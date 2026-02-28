@@ -14,6 +14,7 @@ import logging
 from typing import Any
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +22,7 @@ logger = logging.getLogger(__name__)
 _SUPPORTED_INTENTS: tuple[str, ...] = ("refactor", "service_decomposition", "legacy_modernization")
 
 
-class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin):
+class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Orchestrates security-first, layer-gated service decomposition.
 
@@ -34,6 +35,10 @@ class ServiceDecompositionOrchestrator(OrchestratorProtocolMixin):
     specific target.  Runtime behaviour is fully parameterised via the
     ``params`` argument passed to :meth:`execute`.
     """
+
+    # Phase 94e — advisory: analysis tool invoked by planning pipeline; not a
+    # primary code-execution entry point. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     #: MCP routing — intents that route to this orchestrator.
     supported_intents: tuple[str, ...] = _SUPPORTED_INTENTS

@@ -12,6 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 # Phase 58-C: DomainBrain wiring (decision-making orchestrator)
 try:
@@ -38,7 +39,7 @@ class DashboardGenerationResult:
 # DASHBOARD ORCHESTRATOR
 # ============================================================================
 
-class DashboardOrchestrator(OrchestratorProtocolMixin, ABC):
+class DashboardOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, ABC):
     """
     DashboardOrchestrator - Generates and manages repository dashboards
 
@@ -58,6 +59,10 @@ class DashboardOrchestrator(OrchestratorProtocolMixin, ABC):
     - RecommendationGate: Provide metrics as evidence
     - TDDOrchestrator: Include in test suite
     """
+
+    # Phase 94e — advisory: query/display only, non-code-touching.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize DashboardOrchestrator"""

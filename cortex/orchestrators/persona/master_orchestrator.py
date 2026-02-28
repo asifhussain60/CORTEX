@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 from cortex.orchestrators.persona.models import DepthLevel, PersonaId
 from cortex.orchestrators.persona.persona_injector import PersonaInjector
 from cortex.orchestrators.persona.role_resolver import RoleResolver
@@ -34,7 +35,7 @@ class PersonaResult:
             self.format_rules_applied = []
 
 
-class MasterOrchestrator(OrchestratorProtocolMixin):
+class MasterOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Coordinate RoleResolver → PersonaInjector pipeline.
 
@@ -50,6 +51,11 @@ class MasterOrchestrator(OrchestratorProtocolMixin):
         role_resolver: RoleResolver for persona detection
         persona_injector: PersonaInjector for response formatting
     """
+
+    # Phase 94f — advisory: persona pipeline coordinator (distinct from core
+    # MasterOrchestrator). Formats responses; not a code-execution entry point.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     # Natural language depth triggers
     NL_DEPTH_TRIGGERS = {

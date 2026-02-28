@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 @dataclass
 class Span:
@@ -29,7 +30,7 @@ class Alert:
     timestamp: datetime
     resolved: bool = False
 
-class ObservabilityOrchestrator(OrchestratorProtocolMixin):
+class ObservabilityOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Unified observability: metrics + tracing + alerts + SQLite audit.
     
     Consolidates:
@@ -40,6 +41,10 @@ class ObservabilityOrchestrator(OrchestratorProtocolMixin):
     
     Authority: CORE-008 (TDD), CORE-011 (type hints), CORE-012 (docstrings)
     """
+
+    # Phase 94f — advisory: observability/metrics layer, not a code-execution
+    # entry point. Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
     
     def __init__(
         self,

@@ -14,6 +14,7 @@ from typing import Any, Dict, List, Optional
 
 from cortex.orchestrators.health.health_orchestrator import HealthOrchestrator
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90c
 from cortex.core.result import Ok, Result
 
 # Phase 58-C: DomainBrain wiring (decision-making orchestrator)
@@ -33,7 +34,7 @@ except Exception:
 logger = logging.getLogger(__name__)
 
 
-class AuditOrchestrator(OrchestratorProtocolMixin):
+class AuditOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Orchestrates CORTEX AUDIT mode checks.
 
     Executes P0/P1/P2/P3 checks and produces audit reports.
@@ -46,6 +47,10 @@ class AuditOrchestrator(OrchestratorProtocolMixin):
 
     _orch_name = "AuditOrchestrator"
     _orch_version = "1.0.0"
+
+    # Phase 90c — must remain False: AuditOrchestrator is invoked BY the
+    # audit-fix-pipeline.yaml template; it does not route through the gateway.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
         """Initialize audit orchestrator.

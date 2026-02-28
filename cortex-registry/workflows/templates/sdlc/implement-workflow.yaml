@@ -183,10 +183,21 @@ workflow:
       action: 'command'
       command: 'git add -A && git commit -m "feat({{feature_slug}}): {{commit_message}}"'
 
-    # Step 12: AC_COMPLETE
+    # Step 12: Review + Cleanup (Phase 90 — mandatory universal epilogue)
+    - id: review_and_cleanup
+      name: 'Review + Cleanup — LENS diff scan, marker removal, trace closure'
+      depends_on: ['commit']
+      template_ref: 'primitives/execution/review-and-cleanup'
+      inputs:
+        changed_files: '{{changed_files}}'
+        session_id: '{{session_id}}'
+        mode: 'IMPLEMENT'
+        run_id: '{{session_id}}'
+
+    # Step 13: AC_COMPLETE
     - id: ac_complete
       name: 'Emit AC_COMPLETE marker'
-      depends_on: ['commit']
+      depends_on: ['review_and_cleanup']
       template_ref: 'primitives/execution/ac-marker-emit'
       inputs:
         domain: 'IMPLEMENT'

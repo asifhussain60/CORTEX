@@ -19,5 +19,6 @@ The infographic should show:
 - Professional executive presentation quality
 - Glassmorphism glass cards with colored borders
 - Subtle particle or connection line effects in background
+- No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
 
 Style: Data visualization infographic. Dark mode. Enterprise boardroom quality. Minimalist with impact. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

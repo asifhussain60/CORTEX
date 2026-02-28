@@ -37,11 +37,11 @@ class TestWorkflowTemplateExists:
     """Core workflow templates for each intent type must exist."""
 
     def test_implement_workflow_template_exists(self) -> None:
-        """tdd/tdd-feature-implementation.yaml must exist for IMPLEMENT intent."""
-        template = TEMPLATES_ROOT / "tdd" / "tdd-feature-implementation.yaml"
+        """tdd/tdd-workflow.yaml must exist — canonical Phase 90 IMPLEMENT/TDD dispatcher."""
+        template = TEMPLATES_ROOT / "tdd" / "tdd-workflow.yaml"
         assert template.exists(), (
-            "tdd/tdd-feature-implementation.yaml missing — "
-            "IMPLEMENT intent has no canonical workflow template"
+            "tdd/tdd-workflow.yaml missing — "
+            "IMPLEMENT/TDD intent has no canonical workflow template (Phase 90)"
         )
 
     def test_audit_workflow_template_exists(self) -> None:
@@ -141,14 +141,14 @@ class TestWorkflowTemplateLoadedInTrace:
     """Workflow templates reference audit-trace primitive for trace chain wiring."""
 
     def test_tdd_feature_template_references_audit_trace(self) -> None:
-        """tdd-feature-implementation.yaml must reference audit-trace primitive or AC markers."""
-        template = TEMPLATES_ROOT / "tdd" / "tdd-feature-implementation.yaml"
+        """tdd-workflow.yaml (Phase 90 canonical) must reference AC markers or trace primitive."""
+        template = TEMPLATES_ROOT / "tdd" / "tdd-workflow.yaml"
         if not template.exists():
-            pytest.skip("tdd-feature-implementation.yaml not found")
+            pytest.skip("tdd-workflow.yaml not found")
         content = template.read_text(errors="replace")
         has_trace = "audit-trace" in content or "AC_START" in content or "audit_trace" in content
         assert has_trace, (
-            "tdd-feature-implementation.yaml does not reference audit-trace primitive or AC markers"
+            "tdd-workflow.yaml does not reference audit-trace primitive or AC markers"
         )
 
     def test_security_audit_template_references_trace(self) -> None:

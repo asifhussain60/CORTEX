@@ -9,6 +9,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
 class ComplexityLevel(enum.Enum):
@@ -74,13 +75,16 @@ class SetupResult:
     details: Dict[str, Any] = field(default_factory=dict)
 
 
-class SetupOrchestrator(OrchestratorProtocolMixin):
+class SetupOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Orchestrates system initialization and environment setup.
 
     Attributes:
         logger: Logger instance.
         circuit_breaker: Safety circuit breaker.
     """
+
+    # Phase 94f — advisory: setup utility; not a primary code-touching entry point.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize setup orchestrator."""

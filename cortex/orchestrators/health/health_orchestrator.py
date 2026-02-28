@@ -47,11 +47,13 @@ from .naming import (
 )
 from .reports.health_report import HealthReport
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 logger = logging.getLogger(__name__)
 
 
-class HealthOrchestrator(OrchestratorProtocolMixin):
+class HealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, WorkflowTemplateMixin):
     """Holistic repository health scanner.
 
     Usage::
@@ -63,6 +65,11 @@ class HealthOrchestrator(OrchestratorProtocolMixin):
     Attributes:
         workspace_root: Absolute path of the workspace.
     """
+
+    # Phase 90 — Gateway opt-in pilot: HealthOrchestrator is the first maintenance
+    # orchestrator to route all execution through WorkflowGateway.
+    # Safe: health scan is read-only and non-destructive.
+    PHASE90_GATEWAY_ENABLED: bool = True
 
     def __init__(
         self,
@@ -85,6 +92,17 @@ class HealthOrchestrator(OrchestratorProtocolMixin):
         self.config = config or {}
         self.agents: List[BaseHealthAgent] = []
         self.enabled: bool = True
+
+    def get_recommended_template(self) -> str:
+        """Return the canonical workflow template for HEALTH operations.
+
+        Phase 90: WorkflowGateway uses this to resolve the template ID
+        before any health execution begins.
+
+        Returns:
+            Template ID: 'maintenance/health-check-workflow'
+        """
+        return "maintenance/health-check-workflow"
 
     # ── agent registration (backward-compat with Phase-92 agents) ────────
 

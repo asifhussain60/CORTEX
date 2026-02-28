@@ -24,5 +24,6 @@ The concept map should show:
 - Brief keyword annotations on the connecting lines
 - Clean, educational, easy to navigate visually
 - Suitable as a study reference or orientation guide
+- No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
 
 Style: Mind map / concept map. Dark glassmorphism. Radial layout. Educational clarity. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

@@ -191,6 +191,24 @@ phases:
       - "/debug-cleanup (manual)"
     manager: "AutoCleanupManager.cleanup_resolved_sessions()"
 
+  - id: "REVIEW_AND_CLEANUP"
+    order: 6
+    title: "Review + Cleanup (Phase 90 — mandatory epilogue)"
+    template_ref: "primitives/execution/review-and-cleanup"
+    description: |
+      Phase 90 mandatory universal epilogue — runs after every debug operation.
+      LENS diff scan of injected files, orphaned AC_START removal, trace closure.
+    inputs:
+      changed_files: "{{CLEANUP.cleaned_files}}"
+      session_id: "{{session_id}}"
+      mode: "DEBUG"
+      run_id: "{{session_id}}"
+      silent_on_clean: true
+    convergence_gate:
+      primitive_ref: "primitives/validation/detect-fix-rescan-loop"
+      max_cycles: 1
+      success_predicate: "no_orphaned_markers AND fix_plan_verified"
+
 # ─────────────────────────────────────────────────────────────────────────────
 # INTELLIGENCE WIRING (Phase 86 — GAP-86-11 through 86-15)
 # ─────────────────────────────────────────────────────────────────────────────

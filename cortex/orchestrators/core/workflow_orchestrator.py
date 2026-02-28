@@ -53,6 +53,7 @@ from cortex.orchestrators.support.repository_scanner import (
     ScanOutput,
 )
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 # Phase 58-C: DomainBrain + Memory tier3 wiring (decision-making orchestrator)
 try:
@@ -108,7 +109,7 @@ class WorkflowExecutionResult:
 # 5-Stage Workflow Orchestrator
 # ============================================================================
 
-class WorkflowOrchestrator(OrchestratorProtocolMixin):
+class WorkflowOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Coordinates complete 5-stage Master Orchestrator workflow.
 
@@ -135,6 +136,10 @@ class WorkflowOrchestrator(OrchestratorProtocolMixin):
 
     _orch_name = "WorkflowOrchestrator"
     _orch_version = "1.0.0"
+
+    # Phase 94e — advisory: 5-stage pipeline coordinator; routes before template
+    # assignment — self-gating is circular. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self, workspace_root: Path) -> None:
         """

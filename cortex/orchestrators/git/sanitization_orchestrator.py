@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 logger = logging.getLogger(__name__)
 
@@ -561,7 +562,7 @@ class FileScannerEngine:
 # ---------------------------------------------------------------------------
 
 
-class SanitizationOrchestrator(OrchestratorProtocolMixin):
+class SanitizationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Coordinates the full scan → morph → validate → audit pipeline.
 
     Usage::
@@ -576,6 +577,10 @@ class SanitizationOrchestrator(OrchestratorProtocolMixin):
     Raises:
         SanitizationError: When post-morph integrity validation fails for any file.
     """
+
+    # Phase 94e — advisory: downstream step inside git pipeline; not a primary
+    # code-execution entry point. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(
         self,

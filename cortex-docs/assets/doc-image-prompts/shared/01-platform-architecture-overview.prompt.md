@@ -22,5 +22,6 @@ The architecture should show:
 - Clean, authoritative, suitable as THE definitive architecture reference
 - No photographic elements — pure architectural diagram
 - Generous spacing, readable at 600px width
+- No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
 
 Style: Tiered architecture diagram. Dark glassmorphism. Clean horizontal layers. Enterprise reference quality. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

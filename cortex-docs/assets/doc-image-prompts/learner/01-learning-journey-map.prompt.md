@@ -23,4 +23,4 @@ The map should show:
 - Warm, inviting feeling despite dark theme — use soft glows and rounded shapes
 - No photographic elements
 
-Style: Gamified learning path. Dark glassmorphism. Adventure/exploration aesthetic. Inspiring for new learners. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.
+Style: Gamified learning path. Dark glassmorphism. Adventure/exploration aesthetic. Inspiring for new learners. No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

@@ -21,5 +21,6 @@ The pipeline should show:
 - A input arrow on the left labeled "Code/Request" and output arrow on the right labeled "Intelligence Report"
 - The letters L-E-N-S prominently displayed as the stage identifiers
 - Clean, educational, makes a complex process understandable at a glance
+- No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
 
 Style: Sequential pipeline diagram. Dark glassmorphism. Four-stage flow. Both technical and accessible. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

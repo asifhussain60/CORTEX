@@ -183,11 +183,12 @@ class TestTDDOrchestratorTemplateWiring:
         assert "tdd" in result
 
     def test_tdd_orchestrator_recommended_is_feature_implementation(self) -> None:
-        """TDDOrchestrator recommends tdd/feature-implementation specifically."""
+        """TDDOrchestrator recommends tdd/tdd-workflow (Phase 90 composite dispatcher)."""
         from cortex.orchestrators.core.tdd_orchestrator import TDDOrchestrator
         orch = TDDOrchestrator()
         result = orch.get_recommended_template()
-        assert result == "tdd/feature-implementation"
+        # Phase 90: tdd/tdd-workflow is the mode-dispatching composite
+        assert result == "tdd/tdd-workflow"
 
 
 class TestDiscoverCompanyTemplates:
@@ -215,7 +216,7 @@ class TestTemplateOrchestratorMapping:
     """AC-P23-009: Template-orchestrator mapping matches specification."""
 
     EXPECTED_MAPPINGS = {
-        "TDDOrchestrator": "tdd/tdd-feature-implementation",
+        "TDDOrchestrator": "tdd/tdd-workflow",
     }
 
     def test_template_mapping_registry_exists(self) -> None:
@@ -224,11 +225,11 @@ class TestTemplateOrchestratorMapping:
         assert hasattr(WorkflowTemplateMixin, 'TEMPLATE_ORCHESTRATOR_MAP')
 
     def test_tdd_mapping_correct(self) -> None:
-        """TDDOrchestrator maps to tdd/tdd-feature-implementation."""
+        """TDDOrchestrator maps to tdd/tdd-workflow (Phase 90 composite dispatcher)."""
         from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
         mapping = WorkflowTemplateMixin.TEMPLATE_ORCHESTRATOR_MAP
         assert "TDDOrchestrator" in mapping
-        assert mapping["TDDOrchestrator"] == "tdd/tdd-feature-implementation"
+        assert mapping["TDDOrchestrator"] == "tdd/tdd-workflow"
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -298,12 +299,12 @@ class TestDebuggerOrchestratorTemplateWiring:
         assert issubclass(DebuggerOrchestrator, WorkflowTemplateMixin)
 
     def test_debugger_orchestrator_recommended_template(self) -> None:
-        """DebuggerOrchestrator.get_recommended_template() returns quality template."""
+        """DebuggerOrchestrator.get_recommended_template() returns debug pipeline (Phase 90)."""
         from cortex.orchestrators.support.debugger_orchestrator import DebuggerOrchestrator
         from cortex.core.event_bus import EventBus
         orch = DebuggerOrchestrator(event_bus=EventBus())
         result = orch.get_recommended_template()
-        assert result == "quality/dead-code-removal"
+        assert result == "debugging/multi-stack-debug-pipeline"
 
 
 class TestMasterPlanOrchestratorTemplateWiring:

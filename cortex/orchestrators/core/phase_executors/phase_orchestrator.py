@@ -20,11 +20,12 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 logger = logging.getLogger(__name__)
 
 
-class PhaseOrchestrator(OrchestratorProtocolMixin):
+class PhaseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Orchestrates execution of one or more phases.
 
@@ -35,6 +36,10 @@ class PhaseOrchestrator(OrchestratorProtocolMixin):
     - Generate git commits
     - Report progress
     """
+
+    # Phase 94f — advisory: phase execution sequencer, invoked by MasterPlanOrchestrator.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self, cortex_root: Path) -> None:
         """

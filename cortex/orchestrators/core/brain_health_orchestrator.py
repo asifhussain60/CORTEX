@@ -8,9 +8,10 @@ AC-PHASE38-007: Central Brain Health
 from typing import Any, Dict, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
-class BrainHealthOrchestrator(OrchestratorProtocolMixin):
+class BrainHealthOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Monitors health of CORTEX brain components.
 
     Checks:
@@ -23,6 +24,10 @@ class BrainHealthOrchestrator(OrchestratorProtocolMixin):
         >>> orchestrator = BrainHealthOrchestrator()
         >>> metrics = orchestrator.get_health_metrics()
     """
+
+    # Phase 94f — advisory: health monitor, invoked by HealthOrchestrator pipeline.
+    # Not a primary code-execution entry point. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
         """Initialize brain health orchestrator.

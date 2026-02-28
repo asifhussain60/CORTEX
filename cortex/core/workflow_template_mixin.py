@@ -45,8 +45,8 @@ class WorkflowTemplateMixin:
     # TEMPLATE-ORCHESTRATOR MAPPING — Which templates serve which orchestrators
     # ══════════════════════════════════════════════════════════════════════════
     TEMPLATE_ORCHESTRATOR_MAP: Dict[str, str] = {
-        "TDDOrchestrator": "tdd/tdd-feature-implementation",
-        "RefactoringOrchestrator": "quality/refactor-holistic-sweep",
+        "TDDOrchestrator": "tdd/tdd-workflow",
+        "RefactoringOrchestrator": "quality/refactor-workflow",
         "EnforcementOrchestrator": "security/security-compliance-audit",
         "MasterPlanOrchestrator": "lifecycle/master-plan-execution",
         "CortexMasterPlanOrchestrator": "lifecycle/master-plan-execution",
@@ -57,6 +57,9 @@ class WorkflowTemplateMixin:
         "InteractionOrchestrator": "lifecycle/onboarding-workflow",
         "SecurityOrchestrator": "security/security-hardening",
         "DebuggerOrchestrator": "debugging/multi-stack-debug-pipeline",
+        # Phase 90 additions — HealthOrchestrator + VacuumOrchestrator
+        "HealthOrchestrator": "maintenance/health-check-workflow",
+        "VacuumOrchestrator": "maintenance/vacuum-workflow",
     }
 
     _registry: Optional[WorkflowTemplateRegistry] = None

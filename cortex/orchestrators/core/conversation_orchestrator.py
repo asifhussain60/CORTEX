@@ -9,15 +9,20 @@ from datetime import datetime
 from typing import Any, Dict, List
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
-class ConversationOrchestrator(OrchestratorProtocolMixin):
+class ConversationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Manages multi-turn conversations with state persistence and cancellation.
     """
 
     _orch_name = "ConversationOrchestrator"
     _orch_version = "1.0.0"
+
+    # Phase 94f — advisory: session state management, not a code-execution entry point.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self, timeout_seconds: float = 300.0) -> None:
         """Initialize the conversation orchestrator."""

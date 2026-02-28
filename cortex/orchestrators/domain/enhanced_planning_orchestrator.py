@@ -22,6 +22,7 @@ from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 from cortex.core.result import Ok  # CORE-035: canonical result type (Phase 59 GAP-59-02)
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 94d / 95
 
 
 class PhaseState(enum.Enum):
@@ -53,7 +54,7 @@ class RiskLevel(enum.Enum):
     CRITICAL = "critical"
 
 
-class EnhancedPlanningOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTemplateMixin):
+class EnhancedPlanningOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, IOrchestrator, WorkflowTemplateMixin):
     """Thread-safe singleton planning orchestrator (Phase 3+).
 
     Wraps :class:`PlanningOrchestrator` and adds enum-based phase-state
@@ -63,6 +64,10 @@ class EnhancedPlanningOrchestrator(OrchestratorProtocolMixin, IOrchestrator, Wor
 
     _instance: Optional["EnhancedPlanningOrchestrator"] = None
     _lock = threading.Lock()
+
+    # Phase 95 — advisory: execute_operation receives domain-specific names,
+    # not top-level gateway mode strings. @enforce_gateway applied but flag stays False.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __new__(cls) -> "EnhancedPlanningOrchestrator":
         with cls._lock:
@@ -122,6 +127,7 @@ class EnhancedPlanningOrchestrator(OrchestratorProtocolMixin, IOrchestrator, Wor
         """Return registered MCP tools."""
         return Ok({})
 
+    @enforce_gateway
     def execute_operation(self, operation: str, context: Any = None, **kwargs: Any) -> Any:
         """Execute a planning operation."""
         # Phase 58 — cross-cutting hooks

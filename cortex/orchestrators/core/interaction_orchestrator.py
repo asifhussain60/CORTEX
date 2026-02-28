@@ -31,9 +31,10 @@ from cortex.infrastructure.trace_integration import trace_orchestrator_action
 # Phase 23: Import WorkflowTemplateMixin for template consumption capability
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 94d / 95
 
 
-class InteractionOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTemplateMixin):
+class InteractionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, IOrchestrator, WorkflowTemplateMixin):
     """
     Stage 1 orchestrator: LENS-powered comprehension on every turn.
 
@@ -52,6 +53,11 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, IOrchestrator, Workflow
         turn_number: Current turn counter.
         logger: EnhancedAuditLogger for audit trail.
     """
+
+    # Phase 95 — advisory: Stage 1 execute_operation receives domain-specific operation
+    # names ("comprehend"), not top-level gateway mode strings ("IMPLEMENT").
+    # @enforce_gateway applied for decorator coverage but flag stays False.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(
         self,
@@ -166,6 +172,7 @@ class InteractionOrchestrator(OrchestratorProtocolMixin, IOrchestrator, Workflow
             },
         })
 
+    @enforce_gateway
     @trace_orchestrator_action("EXECUTE_OPERATION")
     def execute_operation(
         self,

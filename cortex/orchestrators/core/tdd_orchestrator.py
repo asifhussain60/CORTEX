@@ -64,6 +64,7 @@ from cortex.core.result import Err, Ok, Result
 from cortex.models.canonical_enums import IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin  # G2 Fix: wire mixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90b
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 from cortex.orchestrators.domain.refactoring.refactoring_models import (
     RefactoringLanguage,
@@ -281,7 +282,7 @@ class TDDKnowledgeLoader:
         return practices
 
 
-class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTemplateMixin, IOrchestrator):
+class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnforcementMixin, WorkflowTemplateMixin, IOrchestrator):
     """
     TDD Orchestrator V2 - Refactored with IOrchestrator interface.
 
@@ -301,6 +302,9 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTemplateMixin
 
     All intelligence/security/quality gates handled by base protocol.
 
+    Phase 90b: WorkflowEnforcementMixin opt-in — all TDD operations route through
+    WorkflowGateway → tdd/tdd-workflow.yaml → convergence loop.
+
     Usage:
         >>> orchestrator = TDDOrchestrator()
         >>> result = orchestrator.execute_with_protocol(
@@ -309,6 +313,10 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTemplateMixin
         ... )
         >>> # Automatic: LENS → Security → Challenge → DoR → TDD
     """
+
+    # Phase 90b — Gateway opt-in: TDDOrchestrator routes all code-touching
+    # operations through WorkflowGateway → tdd/tdd-workflow.yaml.
+    PHASE90_GATEWAY_ENABLED: bool = True
 
     def __init__(self, knowledge_root: Optional[Path] = None) -> None:
         """
@@ -376,15 +384,16 @@ class TDDOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTemplateMixin
         """
         Get the recommended workflow template for TDD operations.
 
-        Returns the canonical TDD feature implementation template which defines
-        the full RED → GREEN → REFACTOR cycle with convergence gates.
+        Returns the TDD composite dispatcher template which routes to
+        implement-workflow or fix-workflow based on the operation mode.
 
         Returns:
-            Template ID string: 'tdd/feature-implementation'
+            Template ID string: 'tdd/tdd-workflow'
 
+        Phase: 90 — Workflow Composer Mandatory Gateway (AC-P90-001)
         Phase: 23 — Workflow Template Injection (AC-P23-006)
         """
-        return "tdd/feature-implementation"
+        return "tdd/tdd-workflow"
 
     def get_version(self) -> str:
         """

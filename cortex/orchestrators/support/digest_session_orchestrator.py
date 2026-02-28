@@ -16,6 +16,7 @@ from typing import Any, Dict, Optional
 from cortex.intelligence.learning.opj_mixin import OPJMixin
 from cortex.core.result import Ok, Result
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 from cortex.toolkit.batch import BatchProcessor, BatchTrigger  # Toolkit consolidation
 
 
@@ -43,8 +44,12 @@ class DigestResult:
         }
 
 
-class DigestSessionOrchestrator(OPJMixin, OrchestratorProtocolMixin):
+class DigestSessionOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Orchestrates ingestion of a single markdown/chat session file."""
+
+    # Phase 94e — advisory: digest processing, invoked by audit pipeline.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def digest_session(self, file_path: str) -> DigestResult:
         """

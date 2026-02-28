@@ -23,6 +23,7 @@ from datetime import datetime
 import logging
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94d
 
 
 logger = logging.getLogger(__name__)
@@ -61,18 +62,18 @@ class ValidationResult:
 # HOLISTIC VALIDATION ORCHESTRATOR
 # ============================================================================
 
-class HolisticValidationOrchestrator(OrchestratorProtocolMixin):
+class HolisticValidationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Orchestrate pre-implementation validation gate.
-    
+
     Coordinates:
     - PreImplementationChecklist (12-category systematic review)
     - ChallengeEngine (3 alternative approaches)
     - ConfidenceScorer (multi-factor scoring)
-    
+
     Gating Logic:
     - Confidence >= 0.7: PASS (allow execution)
     - Confidence < 0.7: BLOCK (require revision)
-    
+
     Example:
         >>> orchestrator = HolisticValidationOrchestrator()
         >>> result = orchestrator.validate(
@@ -85,7 +86,11 @@ class HolisticValidationOrchestrator(OrchestratorProtocolMixin):
         ... else:
         ...     display_challenges_and_block()
     """
-    
+
+    # Phase 94d — must remain False: this IS the CORE-048 pre-execution gate;
+    # self-gating would create a circular dependency through WorkflowGateway.
+    PHASE90_GATEWAY_ENABLED: bool = False
+
     def __init__(
         self,
         challenge_engine: Optional[Any] = None,

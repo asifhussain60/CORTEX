@@ -27,6 +27,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 logger = logging.getLogger(__name__)
 
@@ -116,7 +117,7 @@ CREATE TABLE IF NOT EXISTS audit_log (
 """
 
 
-class SweepCatalogueOrchestrator(OrchestratorProtocolMixin):
+class SweepCatalogueOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Durable sweep catalogue — CORE-064 enforcement component.
 
     Methods
@@ -140,6 +141,10 @@ class SweepCatalogueOrchestrator(OrchestratorProtocolMixin):
     health_check()
         Return {healthy: True, ...} if orchestrator is operational.
     """
+
+    # Phase 94e — advisory: catalogue management, invoked by governance pipeline.
+    # Self-gating is circular. Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     # Support tier priority (CORE-035 + wiring spec)
     PRIORITY: int = 155

@@ -28,6 +28,7 @@ from cortex.models.canonical_enums import IntentType
 from cortex.core.interfaces.i_orchestrator import IOrchestrator
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90b
 # Phase 86 — GAP-86-11: OPJMixin for learning persistence
 from cortex.intelligence.learning.opj_mixin import OPJMixin
 from cortex.intelligence.learning.reinforcement_signal import SignalType
@@ -46,10 +47,13 @@ class DebugSession:
     status: str  # active | resolved | stale
 
 
-class DebuggerOrchestrator(OPJMixin, IOrchestrator, OrchestratorProtocolMixin, WorkflowTemplateMixin):
+class DebuggerOrchestrator(OPJMixin, IOrchestrator, OrchestratorProtocolMixin, WorkflowEnforcementMixin, WorkflowTemplateMixin):
     """
     Orchestrates automatic debug marker injection via EventBus.
-    
+
+    Phase 90b: WorkflowEnforcementMixin opt-in — all debug operations route through
+    WorkflowGateway → debugging/multi-stack-debug-pipeline.yaml → convergence loop.
+
     Subscriptions:
         - TEST_FAILURE: TDDOrchestrator emits on test failures
         - REFACTOR_REGRESSION: EnhancedRefactoringOrchestrator emits on regressions
@@ -65,7 +69,11 @@ class DebuggerOrchestrator(OPJMixin, IOrchestrator, OrchestratorProtocolMixin, W
         >>> # Markers injected at failure location
         >>> # Developer opens file → markers already present
     """
-    
+
+    # Phase 90b — Gateway opt-in: DebuggerOrchestrator routes all debug operations
+    # through WorkflowGateway → debugging/multi-stack-debug-pipeline.yaml.
+    PHASE90_GATEWAY_ENABLED: bool = True
+
     def __init__(
         self,
         event_bus: EventBus,
@@ -409,8 +417,14 @@ class DebuggerOrchestrator(OPJMixin, IOrchestrator, OrchestratorProtocolMixin, W
         return "DebuggerOrchestrator"
 
     def get_recommended_template(self) -> str:
-        """Get the recommended workflow template for debug operations."""
-        return "quality/dead-code-removal"
+        """Get the recommended workflow template for debug operations.
+
+        Phase 90: Returns the correct multi-stack debug pipeline template.
+
+        Returns:
+            Template ID: 'debugging/multi-stack-debug-pipeline'
+        """
+        return "debugging/multi-stack-debug-pipeline"
 
     def get_version(self) -> str:
         """Get orchestrator version."""

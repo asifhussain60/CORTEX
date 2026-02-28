@@ -20,6 +20,7 @@ from cortex.models.canonical_enums import PhaseStatus, IntentType
 # Phase 59-b: Use canonical IOrchestrator/OperationMode path (GAP-59-04)
 from cortex.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 94d / 95
 from cortex.core.dependency_guard import soft_import
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin  # Phase 62-B
 
@@ -43,7 +44,7 @@ class PhaseNode:
     status: str = "planned"
 
 
-class PlanningOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTemplateMixin):
+class PlanningOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, IOrchestrator, WorkflowTemplateMixin):
     """
     Orchestrates multi-phase planning with:
     - Predecessor/dependency analysis
@@ -51,6 +52,10 @@ class PlanningOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTem
     - Risk assessment integration
     - LENS-enriched planning
     """
+
+    # Phase 95 — advisory: execute_operation receives domain-specific names ("plan_phases"),
+    # not top-level gateway mode strings. @enforce_gateway applied but flag stays False.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize instance."""
@@ -113,6 +118,7 @@ class PlanningOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTem
         except Exception as e:
             return Err(f"Failed to get MCP tools: {str(e)}")
 
+    @enforce_gateway
     def execute_operation(
         self,
         operation_name: str,

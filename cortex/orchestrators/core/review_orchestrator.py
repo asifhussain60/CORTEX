@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 
 @dataclass
@@ -43,7 +44,7 @@ class ReviewResult:
         }
 
 
-class ReviewOrchestrator(OrchestratorProtocolMixin):
+class ReviewOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Executes the final review gate at the end of each SDLC phase.
 
@@ -56,6 +57,10 @@ class ReviewOrchestrator(OrchestratorProtocolMixin):
 
     _orch_name = "ReviewOrchestrator"
     _orch_version = "1.0.0"
+
+    # Phase 94e — advisory: IS a review gate; self-gating is circular.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def execute_final_review(
         self,

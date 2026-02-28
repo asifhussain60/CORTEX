@@ -34,6 +34,7 @@ from cortex.orchestrators.git.git_enforcement_orchestrator import (
     EnforcementReport,
 )
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94d
 
 logger = logging.getLogger(__name__)
 
@@ -78,7 +79,7 @@ class GitOrchestratorResult:
 # ---------------------------------------------------------------------------
 
 
-class GitOrchestrator(OrchestratorProtocolMixin):
+class GitOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Canonical orchestrator for git operations in CORTEX.
 
     Runs three sequential stages:
@@ -105,6 +106,10 @@ class GitOrchestrator(OrchestratorProtocolMixin):
         remote: Git remote name (default: 'origin').
         sanitize_dry_run: When True, sanitization scans but does not write.
     """
+
+    # Phase 94d — advisory: git ops run inside the audit-fix-pipeline as a
+    # downstream step; self-gating creates a re-entry loop through WorkflowGateway.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(
         self,

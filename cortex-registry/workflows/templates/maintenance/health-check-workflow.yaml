@@ -89,8 +89,20 @@ workflow:
       rules:
         - 'CORE-002: inline only — no report files'
 
-    - id: ac_complete
+    # Step 4: Review + Cleanup (Phase 90 — mandatory universal epilogue)
+    - id: review_and_cleanup
+      name: 'Review + Cleanup — trace closure for health operation'
       depends_on: ['display_results']
+      template_ref: 'primitives/execution/review-and-cleanup'
+      inputs:
+        changed_files: []  # Health check does not modify files
+        session_id: '{{session_id}}'
+        mode: 'HEALTH'
+        run_id: '{{session_id}}'
+        silent_on_clean: true
+
+    - id: ac_complete
+      depends_on: ['review_and_cleanup']
       template_ref: 'primitives/execution/ac-marker-emit'
       inputs: { domain: 'HEALTH', session_id: '{{session_id}}' }
       step_filter: 'ac_complete_success'

@@ -10,13 +10,18 @@ Authority: CORE-011 (type hints), CORE-012 (docstrings)
 from __future__ import annotations
 from typing import Any
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
-class TechIntelligenceOrchestrator(OrchestratorProtocolMixin):
+class TechIntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Provides technology intelligence analysis and recommendations."""
 
     orchestrator_name = "TechIntelligenceOrchestrator"
     domain = "intelligence"
+
+    # Phase 94f — advisory: intelligence analysis tool, not a code-execution entry point.
+    # Invoked by domain orchestrators. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialise TechIntelligenceOrchestrator."""

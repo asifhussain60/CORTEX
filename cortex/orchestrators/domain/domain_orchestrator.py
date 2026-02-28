@@ -11,6 +11,7 @@ import time
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 logger = logging.getLogger(__name__)
 
@@ -266,11 +267,15 @@ class IntegrationHandler(DomainHandler):
         return isinstance(domains, list) and len(domains) >= 2
 
 
-class DomainOrchestrator(OrchestratorProtocolMixin):
+class DomainOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Main orchestrator for coordinating domain operations."""
 
     _orch_name = "DomainOrchestrator"
     _orch_version = "1.0.0"
+
+    # Phase 94e — advisory: domain dispatcher; runs before template resolution.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize orchestrator."""

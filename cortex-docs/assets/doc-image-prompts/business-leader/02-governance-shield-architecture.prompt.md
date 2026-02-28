@@ -20,6 +20,6 @@ The diagram should show:
 - Enterprise-grade professional look suitable for board presentations
 - No photographic elements — pure architectural diagram aesthetic
 - Subtle radial glow behind the central shield; glow must not reach canvas edges
-- CORTEX logo or wordmark in the top-left corner, inside the safe zone
+- No logo, wordmark, or branding in any corner — keep all corners free of text and icons
 
 Style: Isometric-lite with glassmorphism panels. Dark mode. Clean lines. Cyber-security visual language. Wide internal padding between all elements.

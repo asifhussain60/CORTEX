@@ -15,6 +15,7 @@ import time
 import logging
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 logger = logging.getLogger(__name__)
 
@@ -88,7 +89,7 @@ class HTMLGenerationReport:
     errors: List[str] = field(default_factory=list)
 
 
-class CortexDocsOrchestrator(OrchestratorProtocolMixin):
+class CortexDocsOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Orchestrates end-to-end documentation site generation.
     
@@ -107,6 +108,10 @@ class CortexDocsOrchestrator(OrchestratorProtocolMixin):
         skip_stages: Stages to skip
         dry_run: Preview mode without file writes
     """
+
+    # Phase 94f — advisory: docs build pipeline, invoked by DIGEST/SYNC intents.
+    # Not a primary code-execution entry point. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
     
     def __init__(
         self,

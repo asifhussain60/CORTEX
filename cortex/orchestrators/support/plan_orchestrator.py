@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
 @dataclass
@@ -27,11 +28,13 @@ class PlanTeardownResult:
     archived: bool = False
 
 
-class PlanOrchestrator(OrchestratorProtocolMixin):
+class PlanOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Manages phase plans: setup, tracking, and teardown."""
 
     orchestrator_name = "PlanOrchestrator"
     domain = "support"
+    # Phase 94f — advisory: plan management utility; not a primary code-touching entry point.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialise PlanOrchestrator."""

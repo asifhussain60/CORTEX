@@ -20,5 +20,6 @@ The dashboard should show:
 - Professional, clean, enterprise-grade aesthetic
 - Subtle cyan and purple glow effects behind panels
 - No photographic elements — pure data visualization aesthetic
+- No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
 
 Style: Flat design with depth from glassmorphism blur. Dark mode. Tech-forward. Suitable for a CTO presentation. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

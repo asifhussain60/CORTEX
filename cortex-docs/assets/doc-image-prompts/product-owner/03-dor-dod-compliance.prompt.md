@@ -20,5 +20,6 @@ The visualization should show:
   - A "100% Compliant" badge with glow
 - Central connecting arrow showing the sprint lifecycle flow from DoR → DoD
 - Clean typography, professional, suitable for sprint planning meetings
+- No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
 
 Style: Compliance checklist visualization. Dark glassmorphism. Dual-panel layout. Enterprise quality. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

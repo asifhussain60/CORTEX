@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
 @dataclass
@@ -20,11 +21,13 @@ class DashboardData:
     html: str = ""
 
 
-class LENSVisualizationOrchestrator(OrchestratorProtocolMixin):
+class LENSVisualizationOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Generates LENS-powered dashboards and visualisations."""
 
     orchestrator_name = "LENSVisualizationOrchestrator"
     domain = "support"
+    # Phase 94f — advisory: visualisation support; not a primary code-touching entry point.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialise LENSVisualizationOrchestrator."""

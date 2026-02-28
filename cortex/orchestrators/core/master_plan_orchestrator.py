@@ -30,6 +30,7 @@ import yaml
 
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 logger = logging.getLogger(__name__)
 
@@ -123,7 +124,7 @@ class RegistrySyncResult:
 # ============================================================================
 
 
-class CortexMasterPlanOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMixin):
+class CortexMasterPlanOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, WorkflowTemplateMixin):
     """Owns the complete CORTEX phase lifecycle for the CORTEX repository.
 
     This is the single canonical implementation (CORE-035) responsible for:
@@ -141,6 +142,10 @@ class CortexMasterPlanOrchestrator(OrchestratorProtocolMixin, WorkflowTemplateMi
         req = PhaseCreationRequest(title="New Phase", description="...", priority="P0")
         record = orch.create_phase(req)
     """
+
+    # Phase 94e — advisory: plan-management orchestrator; not a primary code-execution
+    # entry point. Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self, registry_root: Optional[Path] = None) -> None:
         """Initialise the orchestrator and validate the registry structure.

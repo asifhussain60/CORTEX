@@ -1,0 +1,129 @@
+# ============================================================================
+# MODE WORKFLOW: TDD — Mode-Dispatching Composite Dispatcher
+# ============================================================================
+# Authority: CORE-008 (TDD), CORE-068 (Convergence), CORE-064 (Sweep)
+# Trigger: "tdd", "implement", "build", "create", "add", "fix", "bug"
+# Orchestrator: TDDOrchestrator
+# Agent: cortex-executor.md
+#
+# Purpose:
+#   Single entry point for TDDOrchestrator. Dispatches to the correct
+#   mode-specific workflow template based on the operation intent.
+#   This is a LEGO composition — no steps are duplicated here.
+#
+# Dispatch map:
+#   mode == IMPLEMENT  → composes sdlc/implement-workflow.yaml
+#   mode == FIX        → composes sdlc/fix-workflow.yaml
+#   mode == TDD        → defaults to sdlc/implement-workflow.yaml
+#   mode == GOLDEN_TEST → composes sdlc/implement-workflow.yaml with golden flag
+#
+# Design (SOLID + DRY):
+#   - SRP: this file only routes; implementation lives in child templates
+#   - OCP: new modes → add a dispatch_if block; no changes to child templates
+#   - DRY: convergence loop lives once in detect-fix-rescan-loop primitive
+#
+# Composes:
+#   - sdlc/implement-workflow.yaml (IMPLEMENT, TDD, GOLDEN_TEST)
+#   - sdlc/fix-workflow.yaml (FIX)
+#   - primitives/execution/review-and-cleanup.yaml (universal final step)
+# ============================================================================
+
+workflow:
+  id: 'tdd/tdd-workflow'
+  name: 'TDD — Mode-Dispatching Composite'
+  version: '1.0.0'
+  category: 'tdd'
+  status: 'active'
+
+  metadata:
+    author: 'CORTEX Architecture'
+    created: '2026-02-28'
+    phase: 'Phase 90 — Workflow Composer Mandatory Gateway'
+    modes_served: ['IMPLEMENT', 'FIX', 'TDD', 'GOLDEN_TEST']
+    trigger_keywords: ['tdd', 'implement', 'build', 'create', 'add', 'fix', 'bug']
+    orchestrators_used:
+      - TDDOrchestrator
+      - EnforcementOrchestrator
+      - SweepCatalogueOrchestrator
+    core_rules: ['CORE-008', 'CORE-048', 'CORE-064', 'CORE-068']
+    composed_from:
+      - 'sdlc/implement-workflow'
+      - 'sdlc/fix-workflow'
+      - 'primitives/execution/review-and-cleanup'
+
+  # ── CONVERGENCE GATE (workflow-level) ─────────────────────────────────
+  convergence_gate:
+    primitive_ref: 'primitives/validation/detect-fix-rescan-loop'
+    max_cycles: 3
+    success_predicate: 'test_pass_count >= baseline AND lint_errors == 0'
+    description: 'Inherited from dispatched child workflow — loop until GREEN'
+
+  # ── DISPATCH TABLE ────────────────────────────────────────────────────
+  dispatch:
+    # Mode-based routing — evaluated at runtime by WorkflowGateway
+    - condition: 'mode == "IMPLEMENT" OR mode == "TDD" OR mode == "GOLDEN_TEST"'
+      template_ref: 'sdlc/implement-workflow'
+      pass_context: true
+      description: 'Dispatch IMPLEMENT/TDD/GOLDEN_TEST to sdlc/implement-workflow'
+
+    - condition: 'mode == "FIX"'
+      template_ref: 'sdlc/fix-workflow'
+      pass_context: true
+      description: 'Dispatch FIX to sdlc/fix-workflow'
+
+    - condition: 'default'
+      template_ref: 'sdlc/implement-workflow'
+      pass_context: true
+      description: 'Default fallback — treat as IMPLEMENT'
+
+  # ── STEPS ─────────────────────────────────────────────────────────────
+  steps:
+    # Step 0: AC_START
+    - id: ac_start
+      name: 'Emit AC_START marker'
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs:
+        domain: 'TDD'
+        session_id: '{{session_id}}'
+      step_filter: 'ac_start'
+
+    # Step 1: Mode dispatch
+    - id: mode_dispatch
+      name: 'Dispatch to mode-specific workflow template'
+      depends_on: ['ac_start']
+      type: 'dispatch'
+      dispatch_ref: '{{dispatch}}'
+      inputs:
+        mode: '{{mode}}'
+        context: '{{context}}'
+      outputs: ['dispatched_result']
+      description: |
+        Routes IMPLEMENT/TDD/GOLDEN_TEST → sdlc/implement-workflow
+        Routes FIX → sdlc/fix-workflow
+        WorkflowGateway resolves and executes the child template with
+        convergence_mode=True, inheriting the child's convergence_gate.
+
+    # Step 2: Universal Review + Cleanup (MANDATORY — every code-touching operation)
+    - id: review_and_cleanup
+      name: 'Review + Cleanup (mandatory final step)'
+      depends_on: ['mode_dispatch']
+      template_ref: 'primitives/execution/review-and-cleanup'
+      inputs:
+        changed_files: '{{mode_dispatch.dispatched_result.changed_files}}'
+        session_id: '{{session_id}}'
+        mode: '{{mode}}'
+      description: |
+        LENS diff scan of all changed files, debug marker removal,
+        SQLite trace row closure. Runs unconditionally after every
+        TDD operation — success or failure.
+
+    # Step 3: AC_COMPLETE
+    - id: ac_complete
+      name: 'Emit AC_COMPLETE marker'
+      depends_on: ['review_and_cleanup']
+      template_ref: 'primitives/execution/ac-marker-emit'
+      inputs:
+        domain: 'TDD'
+        session_id: '{{session_id}}'
+        status: '{{mode_dispatch.dispatched_result.status}}'
+      step_filter: 'ac_complete'

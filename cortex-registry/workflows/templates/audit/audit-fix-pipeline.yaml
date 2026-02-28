@@ -703,6 +703,27 @@ workflow:
         stage_label: 'auto-fix-convergence-loop'
 
     # -------------------------------------------------------------------------
+    # Stage 8.5: Review + Cleanup (Phase 90 — mandatory universal epilogue)
+    # Injected before Stage 9 test gate to surface any issues in fixed files.
+    # -------------------------------------------------------------------------
+    - stage_id: 'stage_8_5'
+      stage_num: 8.5
+      name: 'Stage 8.5 — Review + Cleanup (Phase 90)'
+      template_ref: 'primitives/execution/review-and-cleanup'
+      inputs:
+        changed_files: '{{auto_fix_changes | default([])}}'
+        session_id: '{{session_id}}'
+        mode: 'AUDIT'
+        run_id: '{{session_id}}'
+        silent_on_clean: true
+      description: |
+        LENS diff scan of all files auto-fixed in Stages 7–8.
+        Strips any debug markers injected during auto-fix.
+        Closes orphaned AC_START rows older than 1 hour.
+        Silent if no issues in changed files (CORE-049).
+        Runs BEFORE Stage 9 tests to surface issues before the final gate.
+
+    # -------------------------------------------------------------------------
     # Stage 9: Run Tests + AC_COMPLETE
     # -------------------------------------------------------------------------
     - stage_id: 'stage_9'

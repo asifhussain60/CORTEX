@@ -19,6 +19,7 @@ from dataclasses import dataclass, field
 from typing import List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +66,7 @@ class PublishResult:
 # ---------------------------------------------------------------------------
 
 
-class GitPublishOrchestrator(OrchestratorProtocolMixin):
+class GitPublishOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Stages, commits, and optionally pushes sanitized code to the configured remote.
 
     By default **push is disabled** (``auto_push=False``).  The caller must
@@ -90,6 +91,10 @@ class GitPublishOrchestrator(OrchestratorProtocolMixin):
         publisher = GitPublishOrchestrator(auto_push=True)
         result = await publisher.publish(...)
     """
+
+    # Phase 94f — advisory: downstream git publish step inside git pipeline.
+    # Invoked by GitOrchestrator as Stage 3. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(
         self,

@@ -9,13 +9,16 @@ Authority: CORE-011 (type hints), CORE-012 (docstrings)
 from __future__ import annotations
 from typing import Any
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
-class RepoDetectionOrchestrator(OrchestratorProtocolMixin):
+class RepoDetectionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Detects and classifies repositories in the workspace."""
 
     orchestrator_name = "RepoDetectionOrchestrator"
     domain = "support"
+    # Phase 94f — advisory: repo detection utility; not a primary code-touching entry point.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialise RepoDetectionOrchestrator."""

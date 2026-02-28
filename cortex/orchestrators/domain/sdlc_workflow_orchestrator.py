@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 94d / 95
 
 logger = logging.getLogger(__name__)
 
@@ -76,7 +77,7 @@ _WORKFLOW_DIR = (
 )
 
 
-class SDLCWorkflowOrchestrator(OrchestratorProtocolMixin):
+class SDLCWorkflowOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """SDLC Intelligence Engine — runtime orchestrator for lifecycle workflows.
 
     Selects and executes the best SDLC workflow template for a given intent,
@@ -88,6 +89,11 @@ class SDLCWorkflowOrchestrator(OrchestratorProtocolMixin):
 
     _orch_name = "SDLCWorkflowOrchestrator"
     _orch_version = "1.0.0"
+
+    # Phase 95 — advisory: SDLC dispatcher has its own intent→template resolution
+    # (_SDLC_INTENT_MAP). execute_operation receives SDLC-domain intent strings
+    # ("ANALYZE", "DESIGN"), not top-level gateway mode strings. Flag stays False.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialise the SDLCWorkflowOrchestrator."""
@@ -109,6 +115,7 @@ class SDLCWorkflowOrchestrator(OrchestratorProtocolMixin):
             "template_ids": available,
         }
 
+    @enforce_gateway
     def execute_operation(
         self,
         operation_name: str,

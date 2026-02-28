@@ -14,6 +14,7 @@ from unittest.mock import MagicMock
 
 import yaml
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
 # ── Helpers that can be patched in tests ─────────────────────────────────────
@@ -28,7 +29,7 @@ def update_enhancement_history(*args: Any, **kwargs: Any) -> bool:
     return True
 
 
-class PlanRegistrySyncOrchestrator(OrchestratorProtocolMixin):
+class PlanRegistrySyncOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Sync plan registry after phase completion.
 
     Wiring-contract compliant — inherits health_check, get_name,
@@ -37,6 +38,8 @@ class PlanRegistrySyncOrchestrator(OrchestratorProtocolMixin):
 
     _orch_name: str = "PlanRegistrySyncOrchestrator"
     _orch_version: str = "1.0.0"
+    # Phase 94f — advisory: registry sync utility; not a primary code-touching entry point.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def sync(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         """Synchronize the plan registry after phase completion.
@@ -63,8 +66,11 @@ class CompletionResult:
 
 # ── Orchestrator ──────────────────────────────────────────────────────────────
 
-class PhaseCompletionOrchestrator(OrchestratorProtocolMixin):
+class PhaseCompletionOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Orchestrates post-phase-completion sync operations."""
+
+    # Phase 94f — advisory: phase completion utility; not a primary code-touching entry point.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def complete_phase(
         self,

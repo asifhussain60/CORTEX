@@ -20,6 +20,7 @@ import re
 import uuid
 
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 94d / 95
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -238,7 +239,7 @@ DEFAULT_CONFIG_CHECKS = [
 # SECURITY ORCHESTRATOR
 # ============================================================================
 
-class SecurityOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTemplateMixin):
+class SecurityOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, IOrchestrator, WorkflowTemplateMixin):
     """
     Pre-DoR security gate orchestrator.
 
@@ -255,6 +256,10 @@ class SecurityOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTem
         audit_trail: Log of all security scans
         knowledge_base: Loaded security patterns from YAML
     """
+
+    # Phase 95 — advisory: execute_operation receives domain-specific names ("scan"),
+    # not top-level gateway mode strings. @enforce_gateway applied but flag stays False.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize SecurityOrchestrator."""
@@ -360,6 +365,7 @@ class SecurityOrchestrator(OrchestratorProtocolMixin, IOrchestrator, WorkflowTem
         """
         return OperationMode.VALIDATION
 
+    @enforce_gateway
     def execute_operation(
         self,
         operation_name: str,

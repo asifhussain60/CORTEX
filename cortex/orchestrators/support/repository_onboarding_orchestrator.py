@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94d
 
 logger = logging.getLogger(__name__)
 
@@ -20,8 +21,12 @@ class RepositoryNotFoundError(FileNotFoundError):
     """Raised when the target repository path does not exist."""
 
 
-class RepositoryOnboardingOrchestrator(OrchestratorProtocolMixin):
+class RepositoryOnboardingOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Orchestrates the onboarding of an external repository into CORTEX."""
+
+    # Phase 94d — advisory: onboarding is invoked via audit-fix-pipeline;
+    # gateway must remain False to avoid circular routing.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def scan_repository(self, repo_path: "str | Path") -> Dict[str, Any]:
         """Scan repository structure and detect tech stack."""

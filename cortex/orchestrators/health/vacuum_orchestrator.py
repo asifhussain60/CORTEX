@@ -40,6 +40,8 @@ from .file_context import FileContext
 from .models import IssueFile, IssueSeverity, OperationResult, ScanResult, VacuumReport
 from .naming import classify_naming_violation, is_screaming, to_kebab_case, to_snake_case
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin
+from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
 
 # GAP-57-08: Wire tier1_learned cleaners (Phase 57-f)
 try:
@@ -73,7 +75,7 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class VacuumOrchestrator(OrchestratorProtocolMixin):
+class VacuumOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin, WorkflowTemplateMixin):
     """Standalone + companion remediation engine.
 
     Usage (standalone)::
@@ -91,6 +93,11 @@ class VacuumOrchestrator(OrchestratorProtocolMixin):
         workspace_root: Absolute path of the workspace.
     """
 
+    # Phase 90 — Gateway opt-in pilot: VacuumOrchestrator is the second maintenance
+    # orchestrator to route all execution through WorkflowGateway.
+    # Safe: vacuum has dry_run=True as default guard; gateway adds template traceability.
+    PHASE90_GATEWAY_ENABLED: bool = True
+
     def __init__(self, workspace_root: Path) -> None:
         """Initialise the vacuum orchestrator.
 
@@ -99,6 +106,17 @@ class VacuumOrchestrator(OrchestratorProtocolMixin):
         """
         self.workspace_root = workspace_root
         self._rollback_log: List[Dict[str, Any]] = []
+
+    def get_recommended_template(self) -> str:
+        """Return the canonical workflow template for VACUUM operations.
+
+        Phase 90: WorkflowGateway uses this to resolve the template ID
+        before any vacuum execution begins.
+
+        Returns:
+            Template ID: 'maintenance/vacuum-workflow'
+        """
+        return "maintenance/vacuum-workflow"
 
     # ─────────────────────────────────────────────────────────────────────
     # STANDALONE PUBLIC API

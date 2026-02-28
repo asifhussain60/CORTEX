@@ -30,12 +30,13 @@ from typing import Any, Dict, List, Optional
 import yaml
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin, enforce_gateway  # Phase 94f / 95
 from cortex.core.file_factory import get_file_factory
 
 logger = logging.getLogger(__name__)
 
 
-class TrainerOrchestrator(OrchestratorProtocolMixin):
+class TrainerOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Gap-driven template evolution orchestrator.
 
@@ -51,6 +52,10 @@ class TrainerOrchestrator(OrchestratorProtocolMixin):
 
     _orch_name: str = "TrainerOrchestrator"
     _orch_version: str = "1.0.0"
+
+    # Phase 95 — advisory: execute_operation receives domain-specific names ("scan",
+    # "propose", "execute"), not top-level gateway mode strings. Flag stays False.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(
         self,
@@ -585,6 +590,7 @@ class TrainerOrchestrator(OrchestratorProtocolMixin):
     # OrchestratorProtocolMixin: execute_operation
     # =========================================================================
 
+    @enforce_gateway
     def execute_operation(
         self,
         operation_name: str,

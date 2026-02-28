@@ -13,14 +13,19 @@ from typing import Any, Dict, List, Optional
 from unittest.mock import MagicMock
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 from cortex.core.result import Ok, Result
 
 
-class BulkDigestOrchestrator(OrchestratorProtocolMixin):
+class BulkDigestOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Orchestrates bulk markdown file ingestion with filtering, batching, and progress tracking."""
 
     _orch_name = "BulkDigestOrchestrator"
     _orch_version = "1.0.0"
+
+    # Phase 94f — advisory: bulk digest processing, invoked by audit pipeline.
+    # Not a primary code-execution entry point. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize instance."""

@@ -19,6 +19,7 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94d
 from cortex.core.file_factory import get_file_factory
 
 # Phase 58-C: DomainBrain + Memory wiring (execution orchestrator)
@@ -110,8 +111,12 @@ class CircuitBreaker:
         self._open = False
 
 
-class UpgradeOrchestrator(OrchestratorProtocolMixin):
+class UpgradeOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Differential upgrade orchestrator with safety features."""
+
+    # Phase 94d — advisory: upgrade operations run inside audit/fix pipelines;
+    # self-gating here would create a re-entry loop through WorkflowGateway.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize UpgradeOrchestrator."""

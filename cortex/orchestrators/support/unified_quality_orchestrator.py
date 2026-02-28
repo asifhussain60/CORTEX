@@ -32,9 +32,10 @@ from cortex.orchestrators.support.quality_models import (
     RejectionEntry,
 )
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 
-class UnifiedQualityAssuranceOrchestrator(OrchestratorProtocolMixin):
+class UnifiedQualityAssuranceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """
     Unified quality assurance orchestrator.
 
@@ -53,6 +54,10 @@ class UnifiedQualityAssuranceOrchestrator(OrchestratorProtocolMixin):
         ...     orchestrator.generate_challenge(safety) or continue
         ...     report = orchestrator.generate_qa_report(safety, [])
     """
+
+    # Phase 94e — advisory: QA gate; self-gating is circular.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize orchestrator with rejection history and gate registry."""

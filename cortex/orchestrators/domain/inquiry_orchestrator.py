@@ -10,13 +10,18 @@ Authority: CORE-011 (type hints), CORE-012 (docstrings)
 from __future__ import annotations
 from typing import Any
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
-class InquiryOrchestrator(OrchestratorProtocolMixin):
+class InquiryOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Handles user inquiry and question-answering intents."""
 
     orchestrator_name = "InquiryOrchestrator"
     domain = "domain"
+
+    # Phase 94f — advisory: query/knowledge-base lookup, non-code-touching intent.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialise InquiryOrchestrator."""

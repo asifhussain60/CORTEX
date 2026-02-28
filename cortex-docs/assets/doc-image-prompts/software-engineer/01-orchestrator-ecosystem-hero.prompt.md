@@ -23,5 +23,6 @@ The image should show:
 - Subtle code snippets or Python syntax fragments floating in the background (decorative)
 - Professional, technical, inspiring for engineers
 - No photographic elements — pure data visualization / network graph aesthetic
+- No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
 
 Style: Network constellation diagram. Dark glassmorphism. Technical beauty. Hero banner quality for an engineering portal. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

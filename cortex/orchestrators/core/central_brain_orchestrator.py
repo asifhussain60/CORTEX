@@ -11,10 +11,15 @@ import uuid
 from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94f
 
 
-class CentralBrainOrchestrator(OrchestratorProtocolMixin):
+class CentralBrainOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Orchestrates shared brain state across multiple users."""
+
+    # Phase 94f — advisory: shared-brain state manager, not a code-execution entry point.
+    # Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self) -> None:
         """Initialize instance."""

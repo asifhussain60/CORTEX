@@ -24,6 +24,7 @@ from typing import Dict, List, Optional, Tuple
 from enum import Enum
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 
 
 class IntentType(Enum):
@@ -436,7 +437,7 @@ def format_rephrase_output(context: RephraseContext) -> str:
     return "\n".join(output)
 
 
-class RequestRephraseOrchestrator(OrchestratorProtocolMixin):
+class RequestRephraseOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Main orchestrator for request rephrase.
     
     Stage -1: Async context pre-fetch (LENS context synthesis)
@@ -447,6 +448,10 @@ class RequestRephraseOrchestrator(OrchestratorProtocolMixin):
       - Auto-inject violations into rephrase output
     Stage 1+: IntentRouter proceeds (blocked if Stage 0 violations detected)
     """
+
+    # Phase 94e — advisory: non-code-touching intent (REPHRASE is exempt in
+    # _MODE_TEMPLATE_MAP). Gateway routing deferred until MasterOrchestrator milestone.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     @staticmethod
     def analyze(request: str) -> RephraseContext:

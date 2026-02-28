@@ -9,13 +9,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 94e
 from cortex.intelligence.ast_intelligence import ASTIntelligenceEngine, ParseResult
 from cortex.intelligence.comment_analyzer import CommentAnalyzer
 from cortex.core.intelligence_routing_engine import IntelligenceRoutingEngine
 
 logger = logging.getLogger(__name__)
 
-class IntelligenceOrchestrator(OrchestratorProtocolMixin):
+class IntelligenceOrchestrator(OrchestratorProtocolMixin, WorkflowEnforcementMixin):
     """Unified intelligence: AST + comments + routing + comprehension + caching.
     
     Consolidates:
@@ -30,6 +31,10 @@ class IntelligenceOrchestrator(OrchestratorProtocolMixin):
     """
     _orch_name = "IntelligenceOrchestrator"
     _orch_version = "1.0.0"
+
+    # Phase 94e — advisory: intelligence layer, not a primary entry point.
+    # Invoked by domain orchestrators. Gateway routing deferred.
+    PHASE90_GATEWAY_ENABLED: bool = False
     
     def __init__(
         self,

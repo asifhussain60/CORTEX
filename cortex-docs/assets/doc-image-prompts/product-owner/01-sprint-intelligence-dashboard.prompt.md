@@ -18,5 +18,6 @@ The dashboard should show:
 - Glass cards with frosted borders and subtle colored glows
 - No photographic elements — pure product management data viz aesthetic
 - Professional, organized, calming layout
+- No logo, wordmark, title text, or branding in any corner — all four corners must remain empty dark navy background
 
 Style: Product management dashboard. Dark glassmorphism. Data-dense but visually clean. Suitable for sprint review presentations. All glow effects must terminate well within the safe zone — no glow or blur should bleed to the canvas edge.

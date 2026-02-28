@@ -36,6 +36,7 @@ from typing import Any, Dict, List, Optional
 from cortex.core.result import Err, Ok, Result
 from cortex.core.orchestrator_protocol_mixin import OrchestratorProtocolMixin
 from cortex.core.workflow_template_mixin import WorkflowTemplateMixin
+from cortex.core.workflow_enforcement_mixin import WorkflowEnforcementMixin  # Phase 90c
 from cortex.orchestrators.core.governance_registry import GovernanceRegistry
 from cortex.intelligence.learning.opj_mixin import OPJMixin  # Phase 52: OPJ intelligence
 from cortex.intelligence.learning.reinforcement_signal import SignalType  # Phase 83-d: URS
@@ -1244,7 +1245,7 @@ class SweepCompositionEnforcementAgent:
 # ENFORCEMENT ORCHESTRATOR
 # ============================================================================
 
-class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTemplateMixin):
+class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowEnforcementMixin, WorkflowTemplateMixin):
     """
     Pre-execution governance enforcement orchestrator with 8-agent system.
 
@@ -1281,6 +1282,10 @@ class EnforcementOrchestrator(OPJMixin, OrchestratorProtocolMixin, WorkflowTempl
             # Tier 1 warnings - ESCALATE but allow
             print(result.value.warnings)
     """
+
+    # Phase 90c — must remain False: EnforcementOrchestrator IS the governance gate.
+    # Self-gating would create a circular dependency where the gate gates itself.
+    PHASE90_GATEWAY_ENABLED: bool = False
 
     def __init__(self, governance_registry: Optional[GovernanceRegistry] = None) -> None:
         """
