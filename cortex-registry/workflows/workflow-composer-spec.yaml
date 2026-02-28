@@ -140,36 +140,67 @@ tiers:
       - 'Contain conditional logic (YAML-declared, not prose)'
     catalogue:
       sdlc:
-        - implement-workflow.yaml    # IMPLEMENT mode
-        - fix-workflow.yaml          # FIX mode
-        - implementation-execution.yaml
+        - implement-workflow.yaml       # IMPLEMENT mode — intent_routing: IMPLEMENT
+        - fix-workflow.yaml             # FIX mode — intent_routing: FIX
+        - implementation-execution.yaml # composed_by: implement-workflow (sub-step)
+        - requirements-analysis.yaml    # composed_by: implement-workflow (Phase 79 SDLC engine)
+        - solution-design.yaml          # composed_by: implement-workflow (Phase 79 SDLC engine)
+        - code-review-gate.yaml         # composed_by: fix-workflow / implement-workflow (gate)
+        - integration-verification.yaml # composed_by: implement-workflow (Phase 79 SDLC engine)
+        - security-assessment.yaml      # composed_by: implement-workflow (Phase 79 SDLC engine)
       quality:
-        - refactor-workflow.yaml     # REFACTOR mode
-        - refactor-holistic-sweep.yaml
+        - refactor-workflow.yaml        # REFACTOR mode — intent_routing: REFACTOR
+        - refactor-holistic-sweep.yaml  # composed_by: refactor-workflow (epilogue sweep)
+        - dead-code-removal.yaml        # composed_by: vacuum-workflow (Phase 23 training corpus)
+        - duplicate-validation.yaml     # composed_by: refactor-workflow / audit-fix-pipeline
+        - quality-code-uplift.yaml      # composed_by: refactor-workflow (Phase 100 Stage 5)
+        - quality-uplift.yaml           # composed_by: refactor-workflow (Phase 100 Stage 5 alias)
       audit:
-        - audit-fix-pipeline.yaml    # AUDIT mode
+        - audit-fix-pipeline.yaml       # AUDIT mode — intent_routing: AUDIT
       maintenance:
-        - vacuum-workflow.yaml       # VACUUM mode
-        - health-check-workflow.yaml # HEALTH mode
-        - health-vacuum-unified-pipeline.yaml
+        - vacuum-workflow.yaml             # VACUUM mode — intent_routing: VACUUM
+        - health-check-workflow.yaml       # HEALTH mode — intent_routing: HEALTH
+        - health-vacuum-unified-pipeline.yaml  # composed_by: health-check-workflow + vacuum-workflow
+        - cleanup-deduplication.yaml       # composed_by: vacuum-workflow (Phase 100 Stage 5)
+        - doc-flat-file-sync.yaml          # composed_by: lifecycle/sync-workflow (doc flat-file step)
       governance:
-        - stage0-preflight-workflow.yaml    # STAGE 0 (pre-flight)
-        - meta-audit-workflow.yaml          # META-AUDIT mode
-        - holistic-file-review-gate.yaml
-        - request-execution-plan-gate.yaml
+        - stage0-preflight-workflow.yaml          # STAGE 0 (pre-flight) — intent_routing: REPHRASE pre_gate
+        - meta-audit-workflow.yaml                # META-AUDIT mode — intent_routing: META_AUDIT
+        - holistic-file-review-gate.yaml          # composed_by: implement/fix/refactor-workflow (CORE-048 gate)
+        - request-execution-plan-gate.yaml        # composed_by: all code-modifying workflows (plan gate)
+        - master-plan-phase-lifecycle.yaml        # composed_by: lifecycle/master-plan-execution
+        - copilot-chat-response-template.yaml     # composed_by: all workflows (response rendering, Phase 64)
       debugging:
-        - multi-stack-debug-pipeline.yaml   # DEBUG mode
+        - multi-stack-debug-pipeline.yaml  # DEBUG mode — intent_routing: DEBUG
       rca:
-        - rca-analysis-workflow.yaml        # RCA mode
+        - rca-analysis-workflow.yaml  # RCA mode — intent_routing: RCA
       lifecycle:
-        - digest-workflow.yaml              # DIGEST mode
-        - totalrecall-workflow.yaml         # TOTALRECALL mode
-        - sync-workflow.yaml                # SYNC mode
-        - train-workflow.yaml               # TRAIN mode
-        - investigate-workflow.yaml         # INVESTIGATE mode (Phase 91)
+        - digest-workflow.yaml              # DIGEST mode — intent_routing: DIGEST
+        - totalrecall-workflow.yaml         # TOTALRECALL mode — intent_routing: TOTALRECALL
+        - sync-workflow.yaml                # SYNC mode — intent_routing: SYNC
+        - train-workflow.yaml               # TRAIN mode — intent_routing: TRAIN
+        - investigate-workflow.yaml         # INVESTIGATE mode — intent_routing: INVESTIGATE
+        - onboarding-workflow.yaml          # ONBOARD mode — intent_routing: ONBOARD
+        - legacy-rescue.yaml                # composed_by: lifecycle/migration-modernize
+        - migration-modernize.yaml          # composed_by: lifecycle/service-decomposition-workflow
+        - service-decomposition-workflow.yaml  # DECOMPOSE mode — intent_routing: DECOMPOSE
+      frontend:
+        - html-view-lifecycle.yaml          # FRONTEND mode — intent_routing: FRONTEND
+        - html-refactor-validation.yaml     # composed_by: html-view-lifecycle (DOM validation gate)
+        - css-extraction-workflow.yaml      # composed_by: html-view-lifecycle (CSS extraction step)
+        - css-zero-inline-workflow.yaml     # composed_by: html-view-lifecycle (zero inline enforcement)
+        - typescript-refactor-workflow.yaml # TYPESCRIPT mode — intent_routing: TYPESCRIPT
+      backend:
+        - csharp-refactor-workflow.yaml     # CSHARP_REFACTOR mode — intent_routing: CSHARP_REFACTOR
+        - csharp-security-workflow.yaml     # CSHARP_SECURITY mode — intent_routing: CSHARP_SECURITY
+      security:
+        - security-compliance-audit.yaml    # SECURITY_AUDIT mode — intent_routing: SECURITY_AUDIT
+        - security-hardening.yaml           # composed_by: lifecycle/service-decomposition-workflow
       tdd:
-        - tdd-feature-implementation.yaml
-        - tdd-api-service.yaml
+        - tdd-workflow.yaml                 # TDD mode dispatcher — intent_routing: TDD
+        - tdd-feature-implementation.yaml   # composed_by: tdd-workflow (feature TDD cycle)
+        - tdd-api-service.yaml              # composed_by: tdd-workflow (API TDD cycle)
+        - frontend-tdd-workflow.yaml        # composed_by: tdd-workflow + html-view-lifecycle
 
   tier_3_composite_pipelines:
     description: 'Multi-mode compositions — pipeline of pipelines'
@@ -181,8 +212,8 @@ tiers:
       - 'Knowledge context cascades to all referenced templates'
     catalogue:
       lifecycle:
-        - composite-execution-pipeline.yaml
-        - master-plan-execution.yaml
+        - composite-execution-pipeline.yaml  # Generic pipeline-of-pipelines (Tier 3)
+        - master-plan-execution.yaml         # Phase 50 — CortexMasterPlanOrchestrator
       composites:
         - composed-feature-*.yaml  # auto-generated by TemplateComposer
 
@@ -349,6 +380,59 @@ intent_routing:
     scope: 'cortex-docs/**'
     css_rule: 'zero style= attributes (P0); all CSS in external files'
     vision_api: true   # use lens-vision-scan primitive for screenshot analysis
+
+  # ── TYPESCRIPT: TypeScript strict mode refactoring ────────────────────────
+  TYPESCRIPT:
+    workflow_ref: 'frontend/typescript-refactor-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-executor.md'
+    triggers: ['typescript strict', 'enable strict', 'noImplicitAny', 'ts refactor']
+
+  # ── CSHARP_REFACTOR: C# SOLID refactoring ────────────────────────────────
+  CSHARP_REFACTOR:
+    workflow_ref: 'backend/csharp-refactor-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-executor.md'
+    triggers: ['csharp refactor', 'c# solid', 'god class', 'csharp decompose']
+
+  # ── CSHARP_SECURITY: C# security hardening ───────────────────────────────
+  CSHARP_SECURITY:
+    workflow_ref: 'backend/csharp-security-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-executor.md'
+    triggers: ['csharp security', 'sql injection', 'hardcoded secrets', 'cors']
+
+  # ── SECURITY_AUDIT: security compliance audit ─────────────────────────────
+  SECURITY_AUDIT:
+    workflow_ref: 'security/security-compliance-audit'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-auditor.md'
+    triggers: ['security audit', 'compliance audit', 'CVE scan', 'penetration']
+
+  # ── TDD: TDD mode dispatcher (routes to feature/api/frontend sub-workflows)
+  TDD:
+    workflow_ref: 'tdd/tdd-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-executor.md'
+    triggers: ['tdd', 'test first', 'red green refactor', 'write test']
+
+  # ── ONBOARD: repository onboarding ───────────────────────────────────────
+  ONBOARD:
+    workflow_ref: 'lifecycle/onboarding-workflow'
+    agent: 'cortex-architect.md'
+    triggers: ['onboard', '/onboard', 'onboard repository', 'LENS analysis repo']
+
+  # ── DECOMPOSE: service decomposition ─────────────────────────────────────
+  DECOMPOSE:
+    workflow_ref: 'lifecycle/service-decomposition-workflow'
+    pre_gate: 'primitives/governance/holistic-validation-gate'
+    convergence: 'primitives/validation/detect-fix-rescan-loop'
+    agent: 'cortex-architect.md'
+    triggers: ['decompose', 'service decomposition', 'extract service', 'split monolith']
 
 # ============================================================================
 # VALIDATION RULES FOR WORKFLOW TEMPLATES

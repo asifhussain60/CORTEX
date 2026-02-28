@@ -495,7 +495,9 @@ def main() -> None:
 
     # Step 2c: Workflow template routing-coverage check (WC-GAP-001)
     # Every .yaml under cortex-registry/workflows/templates/ must have at least
-    # one inbound route in workflow-composer-spec.yaml § intent_routing.
+    # one inbound route in workflow-composer-spec.yaml § intent_routing OR be
+    # registered as a sub-workflow (composed_by) in the tier_2 catalogue OR be
+    # listed in tier_3_composite_pipelines.catalogue.
     # Root cause of Phase 89 FRONTEND gap: this check did not exist.
     print("\n🔗 Step 2c: Workflow template routing-coverage check (WC-GAP-001)...")
     spec_path = ROOT / "cortex-registry" / "workflows" / "workflow-composer-spec.yaml"
@@ -503,15 +505,50 @@ def main() -> None:
     routing_gaps: list = []
     if spec_path.exists() and templates_root.exists():
         spec_text = spec_path.read_text(errors="replace")
-        # Collect all non-primitive, non-composite workflow templates (Tier 2 only)
+
+        # Build exempt set: templates annotated as composed_by or in tier_3 catalogue
+        # A template is exempt if its stem appears in the spec text next to "composed_by"
+        # OR is listed in tier_3_composite_pipelines.catalogue
+        import yaml as _yaml
+        try:
+            spec_data = _yaml.safe_load(spec_text) or {}
+        except Exception:
+            spec_data = {}
+
+        composed_by_stems: set = set()
+        tier3_stems: set = set()
+
+        # Extract tier_2 catalogue entries with composed_by annotation (in comments)
+        # We detect them by looking for "# composed_by:" in the spec text
+        for line in spec_text.splitlines():
+            if "composed_by:" in line and "#" in line:
+                # Extract stem from lines like: "- foo-bar.yaml  # composed_by: ..."
+                parts = line.strip().lstrip("- ").split(".yaml")[0].split("/")
+                stem = parts[-1].strip()
+                if stem:
+                    composed_by_stems.add(stem)
+
+        # Extract tier_3 catalogue entries
+        tiers = spec_data.get("tiers", {})
+        tier3 = tiers.get("tier_3_composite_pipelines", {})
+        for category_items in (tier3.get("catalogue") or {}).values():
+            if isinstance(category_items, list):
+                for item in category_items:
+                    if isinstance(item, str) and item.endswith(".yaml"):
+                        tier3_stems.add(item.replace(".yaml", ""))
+
+        exempt_stems = composed_by_stems | tier3_stems
+
+        # Collect all non-primitive, non-composites, non-testing, non-internal Tier 2 templates
         tier2_dirs = [
             d for d in templates_root.iterdir()
             if d.is_dir() and d.name not in ("primitives", "composites", "testing", "internal")
         ]
         for dir_path in sorted(tier2_dirs):
             for tmpl in sorted(dir_path.glob("*.yaml")):
-                # Build the workflow_ref key: e.g. "frontend/html-view-lifecycle"
                 ref_key = f"{dir_path.name}/{tmpl.stem}"
+                if tmpl.stem in exempt_stems:
+                    continue  # legitimately a sub-workflow or Tier 3 composite
                 if ref_key not in spec_text:
                     routing_gaps.append(ref_key)
                     print(f"   ⚠️  P1: '{ref_key}' has no inbound intent_routing entry in workflow-composer-spec.yaml")

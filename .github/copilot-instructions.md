@@ -127,6 +127,13 @@ enforcing routing in production (where context is always supplied).
 | TRAIN | `lifecycle/train-workflow.yaml` | — |
 | META-AUDIT | `governance/meta-audit-workflow.yaml` | — |
 | **FRONTEND** | **`frontend/html-view-lifecycle.yaml`** | **`primitives/governance/holistic-validation-gate.yaml`** |
+| TDD | `tdd/tdd-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
+| TYPESCRIPT | `frontend/typescript-refactor-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
+| CSHARP_REFACTOR | `backend/csharp-refactor-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
+| CSHARP_SECURITY | `backend/csharp-security-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
+| SECURITY_AUDIT | `security/security-compliance-audit.yaml` | — |
+| ONBOARD | `lifecycle/onboarding-workflow.yaml` | — |
+| DECOMPOSE | `lifecycle/service-decomposition-workflow.yaml` | `primitives/governance/holistic-validation-gate.yaml` |
 
 ### Universal Primitives (injected into every code-modifying workflow)
 
