@@ -145,10 +145,10 @@ main.container .hero-robot-container {
    SECTION TITLES
    ══════════════════════════════════════════════════════ */
 .role-section-title {
-    font-size: 1.1rem;
+    font-size: 1.35rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.1em;
     color: var(--accent-primary, #00d4ff);
     margin: 2.5rem 0 1.25rem;
     display: flex;
@@ -258,16 +258,16 @@ main.container .hero-robot-container {
 }
 
 .pillar-title {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--text-primary, #fff);
     margin-bottom: 0.4rem;
 }
 
 .pillar-text {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-secondary, #a0a6c0);
-    line-height: 1.55;
+    line-height: 1.6;
 }
 
 /* ══════════════════════════════════════════════════════
@@ -290,7 +290,7 @@ main.container .hero-robot-container {
     min-width: 0;
     padding: 1.25rem 0.75rem;
     border-radius: 16px;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.01em;
     white-space: nowrap;
@@ -450,10 +450,10 @@ main.container .hero-robot-container {
     transition: all 0.3s ease;
 }
 .roi-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,212,255,0.12); }
-.roi-card .roi-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
-.roi-card .roi-value { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg,#00d4ff,#7b61ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
-.roi-card .roi-label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #a0a6c0; margin-top: 0.3rem; }
-.roi-card .roi-detail { font-size: 0.78rem; color: #78809a; margin-top: 0.4rem; line-height: 1.4; }
+.roi-card .roi-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+.roi-card .roi-value { font-size: 2.4rem; font-weight: 800; background: linear-gradient(135deg,#00d4ff,#7b61ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.roi-card .roi-label { font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #a0a6c0; margin-top: 0.3rem; }
+.roi-card .roi-detail { font-size: 0.9rem; color: #78809a; margin-top: 0.4rem; line-height: 1.45; }
 
 .roi-card--emerald { border-color: rgba(52,211,153,0.2); }
 .roi-card--emerald:hover { border-color: rgba(52,211,153,0.4); box-shadow: 0 8px 30px rgba(52,211,153,0.12); }
@@ -481,7 +481,7 @@ main.container .hero-robot-container {
     padding: 0.5rem 0;
 }
 .bl-tab {
-    padding: 1rem 1.2rem; font-size: 0.72rem; font-weight: 700;
+    padding: 1rem 1.2rem; font-size: 0.85rem; font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.04em;
     color: #5a6080; cursor: pointer; border: none; background: none;
     text-align: left; border-left: 3px solid transparent;
@@ -517,13 +517,13 @@ main.container .hero-robot-container {
 
 /* ── Cost comparison table — full-width, generous spacing ── */
 .cost-table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px; overflow: hidden; table-layout: fixed; }
-.cost-table th { background: rgba(0,212,255,0.08); color: #00d4ff; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 1rem 1.5rem; text-align: left; }
-.cost-table td { padding: 1rem 1.5rem; font-size: 0.95rem; color: #a0a6c0; border-bottom: 1px solid rgba(255,255,255,0.05); line-height: 1.5; }
+.cost-table th { background: rgba(0,212,255,0.08); color: #00d4ff; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 1rem 1.5rem; text-align: left; }
+.cost-table td { padding: 1rem 1.5rem; font-size: 1rem; color: #a0a6c0; border-bottom: 1px solid rgba(255,255,255,0.05); line-height: 1.55; }
 .cost-table tbody tr { background: rgba(26,31,58,0.35); transition: background 0.2s; }
 .cost-table tbody tr:hover { background: rgba(26,31,58,0.65); }
 .cost-table tr:last-child td { border-bottom: none; }
-.cost-table .highlight { color: #34d399; font-weight: 700; font-size: 0.95rem; }
-.cost-table .cost-old { color: #fb7185; text-decoration: line-through; opacity: 0.7; font-size: 0.95rem; }
+.cost-table .highlight { color: #34d399; font-weight: 700; font-size: 1rem; }
+.cost-table .cost-old { color: #fb7185; text-decoration: line-through; opacity: 0.7; font-size: 1rem; }
 
 /* ══════════════════════════════════════════════════════════════
    PLATFORM CAPABILITIES — Glassmorphism capability cards
@@ -540,7 +540,7 @@ main.container .hero-robot-container {
     gap: 0.75rem;
     padding: 0.9rem 1.1rem;
     border-radius: 14px;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     font-weight: 700;
     letter-spacing: 0.01em;
     background: rgba(0, 212, 255, 0.06);
@@ -674,7 +674,7 @@ main.container .hero-robot-container {
 
 .image-caption {
     margin-top: 0.75rem;
-    font-size: 0.875rem;
+    font-size: 1rem;
     color: #78809a;
     font-style: italic;
 }
@@ -744,7 +744,7 @@ main.container .hero-robot-container {
 }
 
 .bl-context-stat-label {
-    font-size: 0.72rem;
+    font-size: 0.85rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -753,9 +753,9 @@ main.container .hero-robot-container {
 }
 
 .bl-context-narrative {
-    font-size: 0.875rem;
+    font-size: 1rem;
     color: #a0a6c0;
-    line-height: 1.7;
+    line-height: 1.75;
     margin: 0;
 }
 
@@ -823,7 +823,7 @@ main.container .hero-robot-container {
 }
 
 .bl-bottom-line-heading {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 800;
     color: #ffffff;
     margin: 0 0 0.65rem;
@@ -831,9 +831,9 @@ main.container .hero-robot-container {
 }
 
 .bl-bottom-line-body {
-    font-size: 0.92rem;
+    font-size: 1.05rem;
     color: #a0a6c0;
-    line-height: 1.7;
+    line-height: 1.75;
     margin: 0;
 }
 
@@ -906,16 +906,16 @@ main.container .hero-robot-container {
 }
 
 .bl-stage-content-label {
-    font-size: 0.82rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: #e2e8f0;
     margin-bottom: 0.15rem;
 }
 
 .bl-stage-content-desc {
-    font-size: 0.78rem;
+    font-size: 0.88rem;
     color: #78809a;
-    line-height: 1.45;
+    line-height: 1.55;
 }
 
 /* ── D3.js Diagram Panels — large + centered ── */
@@ -942,7 +942,7 @@ main.container .hero-robot-container {
 /* Tab panel description text */
 .bl-tab-desc {
     color: #a0a6c0;
-    font-size: 0.88rem;
+    font-size: 1rem;
     margin-bottom: 1rem;
 }
 
