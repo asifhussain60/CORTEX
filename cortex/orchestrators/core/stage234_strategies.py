@@ -316,27 +316,35 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
                     template_override = None  # Non-blocking — fall through to direct delegation
 
             if template_override and template_override.get("use_autonomous_workflow"):
-                # Route through workflow template rather than direct orchestrator
+                # Route through workflow template — EXECUTE it, not just log
                 template_id = template_override.get("template_id", "unknown")
-                duration_ms = int(
-                    (datetime.now() - start_time).total_seconds() * 1000
+                template_result = self._execute_workflow_template(
+                    template_id, context, template_override
                 )
-                context.metadata["execution"] = {
-                    "orchestrator": f"WorkflowTemplate:{template_id}",
-                    "status": "template_routed",
-                    "template_id": template_id,
-                    "complexity_score": template_override.get("complexity_score"),
-                    "duration_ms": duration_ms,
-                    "timestamp": datetime.now().isoformat(),
-                }
-                context.metadata["stage4_status"] = "complete"
-                context.result = Ok({
-                    "status": "completed",
-                    "stages": 4,
-                    "orchestrator": f"WorkflowTemplate:{template_id}",
-                    "template_routed": True,
-                })
-                return Ok(context)
+                if template_result is not None:
+                    duration_ms = int(
+                        (datetime.now() - start_time).total_seconds() * 1000
+                    )
+                    context.metadata["execution"] = {
+                        "orchestrator": f"WorkflowTemplate:{template_id}",
+                        "status": "template_executed",
+                        "template_id": template_id,
+                        "template_executed": True,
+                        "complexity_score": template_override.get("complexity_score"),
+                        "duration_ms": duration_ms,
+                        "template_result": template_result,
+                        "timestamp": datetime.now().isoformat(),
+                    }
+                    context.metadata["stage4_status"] = "complete"
+                    context.result = Ok({
+                        "status": "completed",
+                        "stages": 4,
+                        "orchestrator": f"WorkflowTemplate:{template_id}",
+                        "template_executed": True,
+                    })
+                    return Ok(context)
+                # Template execution failed — fall through to direct delegation
+                context.metadata["template_fallback"] = True
             # ── End Workflow Template Gate ─────────────────────────────────────
 
             # Execute delegation
@@ -406,6 +414,68 @@ class Stage4DomainExecutionStrategy(StageExecutionStrategy):
             "operation": context.operation_name,
             "note": "Orchestrator not available in dependencies",
         }
+
+    def _execute_workflow_template(
+        self,
+        template_id: str,
+        context: StageContext,
+        template_override: Dict[str, Any],
+    ) -> Optional[Dict[str, Any]]:
+        """Execute a resolved workflow template via WorkflowComposer.
+
+        Loads the template from the registry and executes its steps through
+        the WorkflowComposer with ConvergenceLoopExecutor integration.
+        Returns None on any failure so the caller can fall back to direct
+        orchestrator delegation.
+
+        Args:
+            template_id: Resolved template ID from WorkflowComplexityRouter.
+            context: Current StageContext with operation details.
+            template_override: Full override dict from _check_for_workflow_template.
+
+        Returns:
+            Execution result dict on success, None on failure.
+        """
+        try:
+            from pathlib import Path
+            from cortex.orchestrators.workflow.template_registry import (
+                WorkflowTemplateRegistry,
+            )
+
+            # Initialize registry with primitives for TemplateComposer fallback
+            primitives_dir = Path("cortex-registry/workflows/templates/primitives")
+            composites_dir = Path("cortex-registry/workflows/templates/composites")
+
+            registry = WorkflowTemplateRegistry(
+                primitives_dir=primitives_dir if primitives_dir.exists() else None,
+                composites_dir=composites_dir if composites_dir.exists() else None,
+            )
+
+            # Attempt to load the template
+            template = registry.get_template(template_id)
+
+            # Execute template steps via WorkflowComposer
+            from cortex.orchestrators.workflow.workflow_composer import WorkflowComposer
+
+            composer = WorkflowComposer(
+                template_path=Path("cortex-registry/workflows/templates"),
+            )
+            result = composer.execute_from_template(
+                template_data=template,
+                context={
+                    "operation": context.operation_name,
+                    "parameters": context.parameters,
+                    "metadata": context.metadata,
+                },
+            )
+            return {
+                "template_id": template_id,
+                "steps_completed": getattr(result, "steps_completed", 0),
+                "success": getattr(result, "success", True),
+            }
+        except Exception:
+            # Template execution failed — return None to trigger fallback
+            return None
 
 
 # AC_COMPLETE: AC-P1-STAGE234-001

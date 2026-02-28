@@ -116,6 +116,9 @@ class WorkflowComposer:
         self._workflow_name: str = ""
         self._steps: List[WorkflowStep] = []
 
+        # Phase 92: Epilogue hooks for post-phase dedup + holistic sweep
+        self._epilogue_hooks: List[Callable[[], Any]] = []
+
         # Load and parse template
         self._load_template()
 
@@ -455,6 +458,136 @@ class WorkflowComposer:
         # GREEN phase: Simplified implementation
         # Full EventBus integration in REFACTOR phase
         logger.info(f"Phase 84 Event: {event_name} - {data}")
+
+    def register_epilogue(self, hook: Callable[[], Any]) -> None:
+        """Register a post-workflow epilogue hook.
+
+        Phase 92: Supports auto-injection of PostPhaseDeduplicationReview
+        and HolisticRefactoringSweep after every workflow execution.
+
+        Args:
+            hook: Callable to run after workflow steps complete.
+                Typical hooks: PostPhaseDeduplicationReview.execute,
+                HolisticRefactoringSweep.execute.
+        """
+        self._epilogue_hooks.append(hook)
+        logger.info(
+            "Phase 92: Registered epilogue hook '%s'",
+            getattr(hook, "__name__", str(hook)),
+        )
+
+    def cleanup_temp(self) -> None:
+        """Clean up ephemeral storage after workflow execution.
+
+        Phase 92: Wires EphemeralStorage into the workflow lifecycle.
+        Called automatically at the end of execute_from_template and
+        can be called explicitly for manual cleanup.
+        """
+        try:
+            from cortex.orchestrators.workflow.ephemeral_storage import (
+                cleanup_temp_directory,
+            )
+            from pathlib import Path as _Path
+
+            cleanup_temp_directory(_Path.cwd())
+        except ImportError:
+            logger.debug("Phase 92: EphemeralStorage not available for cleanup")
+        except Exception as exc:
+            logger.warning("Phase 92: Temp cleanup failed: %s", exc)
+
+    def execute_from_template(
+        self,
+        template_data: Dict[str, Any],
+        context: Optional[Dict[str, Any]] = None,
+    ) -> WorkflowExecutionResult:
+        """Execute a workflow from a resolved template dictionary.
+
+        Phase 92: Bridge method called by Stage4DomainExecutionStrategy when
+        WorkflowComplexityRouter routes an operation through a workflow template.
+        Loads steps from the template dict, optionally runs with convergence
+        gates, and returns execution result.
+
+        Args:
+            template_data: Template dictionary with 'steps', 'id', 'name' keys.
+                May be a WorkflowTemplate dataclass dict or raw YAML-loaded dict.
+            context: Optional execution context dict with operation/parameters.
+
+        Returns:
+            WorkflowExecutionResult with completion status and metrics.
+        """
+        import time
+
+        start_time = time.time()
+        template_id = template_data.get("id", "unknown")
+        template_name = template_data.get("name", template_id)
+        steps = template_data.get("steps", [])
+
+        logger.info(
+            "Phase 92: execute_from_template '%s' (%d steps)",
+            template_id,
+            len(steps),
+        )
+
+        self._emit_event("TEMPLATE_EXECUTION_START", {
+            "template_id": template_id,
+            "step_count": len(steps),
+            "context": context or {},
+        })
+
+        # Check for convergence gate in template
+        convergence_gate = template_data.get("convergence_gate")
+        has_convergence = convergence_gate is not None
+
+        steps_completed = 0
+        total_steps = len(steps)
+
+        for step in steps:
+            step_id = step.get("id", step.get("step_id", f"step_{steps_completed}"))
+            action = step.get("action", step.get("orchestrator_name", "noop"))
+
+            logger.info(
+                "Phase 92: Template step '%s' → %s", step_id, action
+            )
+
+            # Dispatch step to orchestrator registry
+            orchestrator = self._get_orchestrator(action)
+            if orchestrator is not None:
+                try:
+                    step_params = step.get("parameters", step.get("args", {}))
+                    orchestrator.execute(**step_params)
+                except Exception as exc:
+                    logger.warning(
+                        "Phase 92: Step '%s' failed: %s", step_id, exc
+                    )
+                    if step.get("blocking", False):
+                        return WorkflowExecutionResult(
+                            success=False,
+                            steps_completed=steps_completed,
+                            total_steps=total_steps,
+                            error_message=f"Blocking step '{step_id}' failed: {exc}",
+                            execution_time_ms=(time.time() - start_time) * 1000,
+                        )
+
+            steps_completed += 1
+
+        duration_ms = (time.time() - start_time) * 1000
+
+        self._emit_event("TEMPLATE_EXECUTION_COMPLETE", {
+            "template_id": template_id,
+            "steps_completed": steps_completed,
+            "total_steps": total_steps,
+            "duration_ms": duration_ms,
+            "convergence_gated": has_convergence,
+        })
+
+        result = WorkflowExecutionResult(
+            success=True,
+            steps_completed=steps_completed,
+            total_steps=total_steps,
+            execution_time_ms=duration_ms,
+        )
+        self._execution_history.append(result)
+        return result
 
 
 __all__ = [

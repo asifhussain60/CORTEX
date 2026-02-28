@@ -45,16 +45,18 @@ class WorkflowTemplateMixin:
     # TEMPLATE-ORCHESTRATOR MAPPING — Which templates serve which orchestrators
     # ══════════════════════════════════════════════════════════════════════════
     TEMPLATE_ORCHESTRATOR_MAP: Dict[str, str] = {
-        "TDDOrchestrator": "tdd/feature-implementation",
-        "RefactoringOrchestrator": "refactor/holistic-sweep",
-        "EnforcementOrchestrator": "security/compliance-audit",
+        "TDDOrchestrator": "tdd/tdd-feature-implementation",
+        "RefactoringOrchestrator": "quality/refactor-holistic-sweep",
+        "EnforcementOrchestrator": "security/security-compliance-audit",
         "MasterPlanOrchestrator": "lifecycle/master-plan-execution",
+        "CortexMasterPlanOrchestrator": "lifecycle/master-plan-execution",
         "MasterOrchestrator": "lifecycle/composite-execution-pipeline",
-        "AuditCoordinator": "security/compliance-audit",
+        "AuditCoordinator": "audit/audit-fix-pipeline",
         "PlanningOrchestrator": "lifecycle/master-plan-execution",
-        "InteractionOrchestrator": "request-execution/plan-gate",
+        "EnhancedPlanningOrchestrator": "lifecycle/master-plan-execution",
+        "InteractionOrchestrator": "lifecycle/onboarding-workflow",
         "SecurityOrchestrator": "security/security-hardening",
-        "DebuggerOrchestrator": "quality/dead-code-removal",
+        "DebuggerOrchestrator": "debugging/multi-stack-debug-pipeline",
     }
 
     _registry: Optional[WorkflowTemplateRegistry] = None
