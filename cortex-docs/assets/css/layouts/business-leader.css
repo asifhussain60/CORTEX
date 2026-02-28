@@ -1,0 +1,360 @@
+/**
+ * CORTEX Design System — Business Leader Role Page
+ * Styles specific to cortex-docs/roles/business-leader.html
+ *
+ * Author: Asif Hussain
+ * Version: 1.1.0
+ *
+ * Load order: after role-landing.css (extends, never overrides shared primitives)
+ */
+
+/* ══════════════════════════════════════════════════════
+   HERO GEOMETRY FIXES
+   ══════════════════════════════════════════════════════
+   The base .glass-card-display rule (main.css ~L9050) sets:
+     margin-bottom: var(--spacing-2xl)   ← pushes card down, breaks overlap
+     padding: var(--spacing-xl)           ← overrides hero-introduction padding-top
+
+   .hero-introduction in main.css sets padding-top: 120px with no !important
+   on margin-bottom — so the base class margin wins and the robot head
+   does not overlap into the card correctly.
+
+   These rules enforce the exact geometry of the doc3 architecture page pattern:
+   hero-section-wrapper neg-margin → robot head bleeds into card top.
+   ══════════════════════════════════════════════════════ */
+
+/* Neutralise the base glass-card-display margin that fights the robot overlap */
+main.container .glass-card-display.hero-introduction {
+    margin-bottom: 0 !important;
+    margin-left: auto;
+    margin-right: auto;
+    width: 75%;
+    /* padding-top is set to 120px by .hero-introduction in main.css — preserve */
+    padding-left: var(--spacing-xl, 2rem);
+    padding-right: var(--spacing-xl, 2rem);
+    padding-bottom: var(--spacing-xl, 2rem);
+}
+
+/* Ensure the hero-section-wrapper negative margins are not collapsed
+   by the sticky back-bar's stacking context */
+main.container .hero-section-wrapper {
+    margin-top: 2rem;
+    margin-bottom: -80px;
+    z-index: 10;
+}
+
+main.container .hero-robot-container {
+    margin-bottom: -100px;
+    z-index: 12;
+}
+
+/* ══════════════════════════════════════════════════════
+   BACK BAR
+   ══════════════════════════════════════════════════════ */
+.role-back-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(10, 14, 39, 0.7);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.role-back-bar .back-link {
+    color: var(--accent-primary, #00d4ff);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: opacity 0.2s;
+}
+
+.role-back-bar .back-link:hover {
+    opacity: 0.75;
+}
+
+.role-back-bar .role-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-secondary, #a0a6c0);
+}
+
+/* ══════════════════════════════════════════════════════
+   ROLE STATS BAR
+   ══════════════════════════════════════════════════════ */
+.role-stats-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 1.5rem auto 0;
+    max-width: 700px;
+}
+
+.role-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem 1.5rem;
+}
+
+.role-stat-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-primary, #00d4ff), var(--accent-secondary, #7b61ff));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+}
+
+.role-stat-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary, #a0a6c0);
+    margin-top: 0.2rem;
+    white-space: nowrap;
+}
+
+.role-stat-divider {
+    width: 1px;
+    height: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* ══════════════════════════════════════════════════════
+   CONTENT WRAPPER
+   ══════════════════════════════════════════════════════ */
+.role-content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 4rem;
+}
+
+/* ══════════════════════════════════════════════════════
+   SECTION TITLES
+   ══════════════════════════════════════════════════════ */
+.role-section-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent-primary, #00d4ff);
+    margin: 2.5rem 0 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.role-section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0, 212, 255, 0.18);
+}
+
+/* ══════════════════════════════════════════════════════
+   METRIC CARDS
+   ══════════════════════════════════════════════════════ */
+.role-metric-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+}
+
+.role-metric-card {
+    background: rgba(26, 31, 58, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.role-metric-card:hover {
+    border-color: rgba(0, 212, 255, 0.4);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(0, 212, 255, 0.12);
+}
+
+.role-metric-card--secondary {
+    border-color: rgba(123, 97, 255, 0.2);
+}
+
+.role-metric-card--secondary:hover {
+    border-color: rgba(123, 97, 255, 0.4);
+    box-shadow: 0 8px 30px rgba(123, 97, 255, 0.12);
+}
+
+.metric-icon {
+    font-size: 1.6rem;
+    margin-bottom: 0.75rem;
+}
+
+.metric-headline {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--accent-primary, #00d4ff);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+.metric-headline--secondary {
+    color: var(--accent-secondary, #7b61ff);
+}
+
+.metric-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-primary, #fff);
+    margin-bottom: 0.5rem;
+}
+
+.metric-description {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #a0a6c0);
+    line-height: 1.55;
+}
+
+/* ══════════════════════════════════════════════════════
+   STRATEGIC PILLARS
+   ══════════════════════════════════════════════════════ */
+.role-pillars {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.role-pillar {
+    background: rgba(26, 31, 58, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    transition: border-color 0.2s;
+}
+
+.role-pillar:hover {
+    border-color: rgba(0, 212, 255, 0.25);
+}
+
+.pillar-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.pillar-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary, #fff);
+    margin-bottom: 0.4rem;
+}
+
+.pillar-text {
+    font-size: 0.85rem;
+    color: var(--text-secondary, #a0a6c0);
+    line-height: 1.55;
+}
+
+/* ══════════════════════════════════════════════════════
+   CTA ROW
+   ══════════════════════════════════════════════════════ */
+.role-cta-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: nowrap;    /* single line — no spill */
+    margin-top: 2rem;
+}
+
+.role-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    flex: 1 1 0;          /* all tiles share the row equally */
+    min-width: 0;         /* allow shrink below content width */
+    padding: 0.75rem 0.75rem;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;  /* keep label on one line inside each tile */
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+
+.role-cta--primary {
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.35);
+    color: var(--accent-primary, #00d4ff);
+}
+
+.role-cta--primary:hover {
+    background: rgba(0, 212, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 212, 255, 0.2);
+}
+
+.role-cta--secondary {
+    background: rgba(123, 97, 255, 0.15);
+    border: 1px solid rgba(123, 97, 255, 0.35);
+    color: var(--accent-secondary, #7b61ff);
+}
+
+.role-cta--secondary:hover {
+    background: rgba(123, 97, 255, 0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(123, 97, 255, 0.2);
+}
+
+.role-cta--ghost {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-secondary, #a0a6c0);
+}
+
+.role-cta--ghost:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary, #fff);
+    transform: translateY(-2px);
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+    .role-metric-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .role-pillars {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .role-metric-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .role-back-bar {
+        padding: 0.75rem 1rem;
+    }
+
+    .role-content-wrapper {
+        padding: 1.5rem 1rem 3rem;
+    }
+}

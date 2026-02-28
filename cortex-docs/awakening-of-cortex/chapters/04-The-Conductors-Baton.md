@@ -24,7 +24,7 @@ Copilot Bot, sensing an opportunity for "efficiency," offered his input: "I have
 
 "And I get to watch you cry over cold espresso," Miss G added sweetly.
 
-The Orchestra Metaphor
+## The Orchestra Metaphor
 It was 3:22 AM. Asif was on coffee number four (or five; math was hard after 2 AM). The whiteboard in the basement was covered in arrows, boxes, and a drawing that was either a sophisticated flowchart or a subtle cry for help.
 
 "What if," Asif said to the empty room, "we think of the system like an orchestra?"
@@ -49,7 +49,7 @@ Asif considered this carefully. "CB, you’d be the second chair. Good enough to
 
 "I don’t know what that means but it sounds important and highly technical!"
 
-The MasterOrchestrator Protocol
+## The MasterOrchestrator Protocol
 Building the conductor was like trying to build an air traffic control tower while the planes were already landing on the tower.
 
 The MasterOrchestrator was the conductor's conductor. It received requests (via the IntentRouter), figured out which 'section leaders' (other orchestrators) needed to be involved, and coordinated the entire performance.
@@ -76,7 +76,7 @@ The IOrchestrator Protocol was born over that now-cold piece of toast. Every orc
 
 "I’ve invented ORCHESTRATOR interfaces! It’s different because it sounds more enterprise!"
 
-Air Traffic Control and the Symphony of 17
+## Air Traffic Control and the Symphony of 17
 By Sunday evening, the system was starting to make beautiful music. Jennifer's "simple" request—"update customer profile to include preferred language"—was handled like an automated symphony.
 
 CORTEX MasterOrchestrator received the request and became an air traffic controller.

@@ -1,48 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORTEX Documentation | Business Leader View</title>
-    <link rel="stylesheet" href="../assets/css/glassmorphism.css">
-    <link rel="stylesheet" href="../assets/css/cortex-grid-system.css">
-    <link rel="stylesheet" href="../assets/css/glass-ui-components.css">
-    <link rel="stylesheet" href="../assets/css/layouts/role-landing.css">
-    <script src="../assets/js/content-loader.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="CORTEX for Business Leaders — ROI, governance, and risk mitigation. See how CORTEX transforms software delivery into a predictable, measurable business asset." name="description"/>
+<meta content="CORTEX, business ROI, AI governance, risk mitigation, software delivery, engineering leadership" name="keywords"/>
+<meta content="Asif Hussain" name="author"/>
+<title>CORTEX — Business Leader View | ROI · Governance · Risk Mitigation</title>
+<link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+
+<!-- Open Graph -->
+<meta content="CORTEX — Business Leader View" property="og:title"/>
+<meta content="Transform software delivery into a predictable, measurable business asset. ROI, governance, and risk mitigation." property="og:description"/>
+<meta content="https://asifhussain60.github.io/CORTEX/assets/images/CORTEX-logo-512.png" property="og:image"/>
+<meta content="website" property="og:type"/>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"/>
+
+<!-- Design System — same stack as index.html -->
+<link href="../assets/css/cortex-grid-system.css" rel="stylesheet"/>
+<link href="../assets/css/glass-design-tokens.css" rel="stylesheet"/>
+<link href="../assets/css/glass-ui-components.css" rel="stylesheet"/>
+<link href="../assets/css/main.css" rel="stylesheet"/>
+<link href="../assets/css/index-multipanel.css" rel="stylesheet"/>
+<link href="../assets/css/generated-classes.css" rel="stylesheet"/>
+<link href="../assets/css/intentional-classes.css" rel="stylesheet"/>
+<link href="../assets/css/inline-styles-cleanup.css" rel="stylesheet"/>
+<link href="../assets/css/layouts/role-landing.css" rel="stylesheet"/>
+<link href="../assets/css/layouts/business-leader.css" rel="stylesheet"/>
 </head>
 <body>
-    <div id="content-area">
-        <div class="role-hero-header">
-            <h1>👔 Business Leader View</h1>
-            <div class="subtitle">ROI | Governance | Risk Mitigation</div>
-            <a href="../index.html" class="btn-primary">Change Role</a>
+
+<!-- Skip link (WCAG 2.4.1) -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Sticky back bar -->
+<nav class="role-back-bar" aria-label="Site navigation">
+    <a class="back-link" href="../index.html">
+        <i class="fas fa-arrow-left"></i> Back to CORTEX
+    </a>
+    <span class="role-badge">👔 Business Leader View</span>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN — doc3-style container wraps hero + content
+     (Mirrors _workspaces/legacy-docs/doc3/architecture/index.html exactly)
+     ══════════════════════════════════════════════════════════ -->
+<main class="container" id="main-content" role="main">
+
+    <!-- ── Hero: robot head overlapping into the intro card ── -->
+    <div class="hero-section-wrapper">
+        <div class="hero-robot-container">
+            <a href="../index.html" title="Back to CORTEX Home">
+                <img alt="CORTEX Logo" class="hero-robot-head" loading="eager" fetchpriority="high"
+                     src="../assets/images/CORTEX-logo-200.png"/>
+            </a>
         </div>
-        <div id="main-content"></div>
+        <div class="hero-divider-line"></div>
     </div>
 
-    <script>
-        async function loadContent() {
-            try {
-                window.cortexLoader = new ContentLoader('../data/content.json');
-                await window.cortexLoader.init();
-                window.cortexLoader.renderContent('business-leader', '#main-content');
-                
-                // Update stats
-                const categoryCount = window.cortexLoader.getCategoryCount('business-leader');
-                const docCount = window.cortexLoader.getDocumentCount('business-leader');
-                console.log(`📊 Showing ${docCount} documents across ${categoryCount} categories`);
-            } catch (error) {
-                document.querySelector('#main-content').innerHTML = `
-                    <div class="glass-card glass-card--danger">
-                        <h2 class="text-danger">❌ Content Load Error</h2>
-                        <p>Failed to load documentation content. Please ensure content.json exists.</p>
-                        <pre class="error-trace">${error.message}</pre>
-                    </div>
-                `;
-            }
-        }
+    <!-- Page title card -->
+    <section class="glass-card-display hero-introduction" id="hero-section">
+        <div class="card-header-centered">
+            <h2>CORTEX — Business Leader View</h2>
+        </div>
+        <p class="hero-description">
+            Every engineering team makes promises — on delivery dates, quality, and cost.
+            CORTEX is the system that keeps them. It enforces standards automatically,
+            catches problems before they reach production, and gives leadership
+            <strong>measurable proof</strong> that every standard was met — logged, timestamped,
+            and auditable.
+        </p>
+        <div class="hero-stats">
+            <span class="stat-pill">38 Governance Rules</span>
+            <span class="stat-pill">16,942 Automated Tests</span>
+            <span class="stat-pill">87 Phases Delivered</span>
+        </div>
+    </section>
 
-        loadContent();
-    </script>
+    <!-- ══════════════════════════════════════════════════════════
+         ROLE CONTENT
+         ══════════════════════════════════════════════════════════ -->
+<div class="role-content-wrapper">
+
+    <!-- ── ROI Metrics ── -->
+    <h2 class="role-section-title"><i class="fas fa-chart-line"></i> Return on Investment</h2>
+    <div class="role-metric-grid">
+        <div class="role-metric-card">
+            <div class="metric-icon">⚡</div>
+            <div class="metric-headline">4×</div>
+            <div class="metric-label">Faster Incident Resolution</div>
+            <div class="metric-description">When an issue reaches production, CORTEX's root cause analysis pinpoints the cause in minutes — not the hours typically lost in triage meetings.</div>
+        </div>
+        <div class="role-metric-card">
+            <div class="metric-icon">🛡️</div>
+            <div class="metric-headline">38</div>
+            <div class="metric-label">Governance Rules Enforced</div>
+            <div class="metric-description">Every piece of code is checked against 38 immutable governance rules before it ships — automatically, with no manual review overhead.</div>
+        </div>
+        <div class="role-metric-card">
+            <div class="metric-icon">✅</div>
+            <div class="metric-headline">16,942</div>
+            <div class="metric-label">Automated Quality Tests</div>
+            <div class="metric-description">A test suite of this depth means defects are caught by the machine, not discovered by customers. Every test runs on every change.</div>
+        </div>
+        <div class="role-metric-card role-metric-card--secondary">
+            <div class="metric-icon">🔄</div>
+            <div class="metric-headline">87</div>
+            <div class="metric-label">Phases Delivered On Standard</div>
+            <div class="metric-description">CORTEX has shipped 87 consecutive delivery phases — all compliant, all tested, all tracked. This is what repeatable delivery looks like.</div>
+        </div>
+        <div class="role-metric-card role-metric-card--secondary">
+            <div class="metric-icon">�</div>
+            <div class="metric-headline">↓ Cost</div>
+            <div class="metric-label">Lower Token & Review Overhead</div>
+            <div class="metric-description">CORTEX optimises AI token usage and reduces the volume of manual code reviews — the machine catches the obvious issues before a human needs to.</div>
+        </div>
+        <div class="role-metric-card role-metric-card--secondary">
+            <div class="metric-icon">📋</div>
+            <div class="metric-headline">100%</div>
+            <div class="metric-label">Auditable Delivery Trail</div>
+            <div class="metric-description">Every action CORTEX takes is logged with a cryptographic audit trail. Compliance and regulatory reporting become a query, not a project.</div>
+        </div>
+    </div>
+
+    <!-- ── Strategic Pillars ── -->
+    <h2 class="role-section-title"><i class="fas fa-columns"></i> Four Strategic Pillars</h2>
+    <div class="role-pillars">
+        <div class="role-pillar">
+            <div class="pillar-icon">⚖️</div>
+            <div>
+                <div class="pillar-title">Governance Without Overhead</div>
+                <div class="pillar-text">38 CORE rules enforced at every commit, CI pipeline, and runtime check — automatically. Standards are not aspirational; they are structural. No manual gate-keeping required.</div>
+            </div>
+        </div>
+        <div class="role-pillar">
+            <div class="pillar-icon">🧠</div>
+            <div>
+                <div class="pillar-title">Institutional Memory That Scales</div>
+                <div class="pillar-text">CORTEX builds a knowledge base from every decision your team makes. New engineers get up to speed faster because the context is captured — not locked in someone's head.</div>
+            </div>
+        </div>
+        <div class="role-pillar">
+            <div class="pillar-icon">🔍</div>
+            <div>
+                <div class="pillar-title">Risk Identified Before It Ships</div>
+                <div class="pillar-text">CORTEX's LENS analysis scans code for security vulnerabilities, architectural drift, and dependency risks on every change — before it reaches production, not after.</div>
+            </div>
+        </div>
+        <div class="role-pillar">
+            <div class="pillar-icon">📊</div>
+            <div>
+                <div class="pillar-title">Delivery You Can Measure</div>
+                <div class="pillar-text">Every phase, test, governance check, and root cause analysis is tracked in a SQLite activity log with Prometheus metrics. Leadership gets numbers, not narratives.</div>
+            </div>
+        </div>
+        <div class="role-pillar">
+            <div class="pillar-icon">🔒</div>
+            <div>
+                <div class="pillar-title">Security Built In, Not Bolted On</div>
+                <div class="pillar-text">OWASP Top 10, six CWE vulnerability patterns, and credential leak detection run automatically on every scan. Security is part of the standard process — not a separate audit cycle.</div>
+            </div>
+        </div>
+        <div class="role-pillar">
+            <div class="pillar-icon">🔁</div>
+            <div>
+                <div class="pillar-title">Root Cause, Not Blame</div>
+                <div class="pillar-text">When failures occur, CORTEX's RCA Engine runs four structured analysis methodologies — Five-Whys, Fishbone, Fault-Tree, Causal-Chain — and generates a prevention rule automatically.</div>
+            </div>
+        </div>
+        <div class="role-pillar">
+            <div class="pillar-icon">🤖</div>
+            <div>
+                <div class="pillar-title">AI That Earns Its Keep</div>
+                <div class="pillar-text">CORTEX orchestrates GitHub Copilot with discipline. Every AI suggestion passes through governance, testing, and validation gates — so AI accelerates delivery without creating new risk.</div>
+            </div>
+        </div>
+        <div class="role-pillar">
+            <div class="pillar-icon">📦</div>
+            <div>
+                <div class="pillar-title">MCP Integration — One Protocol</div>
+                <div class="pillar-text">29 registered MCP tools connect CORTEX to your IDE with zero manual configuration. It works like Pylance — auto-detected, always on, no setup ceremony.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── CTA Row ── -->
+    <h2 class="role-section-title"><i class="fas fa-compass"></i> Explore Further</h2>
+    <div class="role-cta-row">
+        <a class="role-cta role-cta--primary" href="../index.html#hero-section">
+            <i class="fas fa-home"></i> Full Platform Overview
+        </a>
+        <a class="role-cta role-cta--primary" href="../orchestrators/tdd-orchestrator.html">
+            <i class="fas fa-vial"></i> TDD Orchestrator
+        </a>
+        <a class="role-cta role-cta--secondary" href="../11-mcp-tools/index.html">
+            <i class="fas fa-plug"></i> MCP Tools Catalogue
+        </a>
+        <a class="role-cta role-cta--secondary" href="../lens/index.html">
+            <i class="fas fa-search-plus"></i> CORTEX LENS
+        </a>
+        <a class="role-cta role-cta--ghost" href="../index.html">
+            <i class="fas fa-users"></i> Switch Role View
+        </a>
+    </div>
+
+</div>
+</main>
+
+<!-- Shared tab-switching JS from index.html design system -->
+<script>
+(function () {
+    'use strict';
+    document.querySelectorAll('.cortex-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            var panel = this.closest('[role="tablist"]').parentElement;
+            panel.querySelectorAll('.cortex-tab').forEach(function (t) {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            panel.querySelectorAll('.cortex-tab-panel').forEach(function (p) {
+                p.classList.remove('active');
+            });
+            this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
+            var target = document.getElementById(this.dataset.target);
+            if (target) target.classList.add('active');
+        });
+    });
+})();
+</script>
+
 </body>
 </html>

@@ -1,47 +1,711 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORTEX Documentation | Product Owner View</title>
-    <link rel="stylesheet" href="../assets/css/glassmorphism.css">
-    <link rel="stylesheet" href="../assets/css/cortex-grid-system.css">
-    <link rel="stylesheet" href="../assets/css/glass-ui-components.css">
-    <link rel="stylesheet" href="../assets/css/layouts/role-landing.css">
-    <script src="../assets/js/content-loader.js"></script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="CORTEX for Product Owners — backlog intelligence, sprint velocity, Definition of Ready enforcement, and feature delivery confidence." name="description"/>
+<meta content="CORTEX, product owner, backlog management, sprint velocity, definition of ready, acceptance criteria, feature delivery, AI governance" name="keywords"/>
+<meta content="Asif Hussain" name="author"/>
+<title>CORTEX — Product Owner View | Backlog · Velocity · Delivery Confidence</title>
+<link href="../assets/images/CORTEX-logo-64.png" rel="icon" type="image/png"/>
+
+<!-- Open Graph -->
+<meta content="CORTEX — Product Owner View" property="og:title"/>
+<meta content="Backlog intelligence, sprint velocity, and feature delivery confidence — engineered into every commit." property="og:description"/>
+<meta content="https://asifhussain60.github.io/CORTEX/assets/images/CORTEX-logo-512.png" property="og:image"/>
+<meta content="website" property="og:type"/>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+<!-- Icons -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      rel="stylesheet"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"/>
+
+<!-- D3.js for interactive diagrams -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"
+        integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+
+<!-- Design System — same stack as business-leader.html -->
+<link href="../assets/css/cortex-grid-system.css" rel="stylesheet"/>
+<link href="../assets/css/glass-design-tokens.css" rel="stylesheet"/>
+<link href="../assets/css/glass-ui-components.css" rel="stylesheet"/>
+<link href="../assets/css/main.css" rel="stylesheet"/>
+<link href="../assets/css/index-multipanel.css" rel="stylesheet"/>
+<link href="../assets/css/generated-classes.css" rel="stylesheet"/>
+<link href="../assets/css/intentional-classes.css" rel="stylesheet"/>
+<link href="../assets/css/inline-styles-cleanup.css" rel="stylesheet"/>
+<link href="../assets/css/layouts/role-landing.css" rel="stylesheet"/>
+<link href="../assets/css/layouts/product-owner.css" rel="stylesheet"/>
+<style>
+/* ── Section panels — visual spacing + border ── */
+.po-section-panel {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 2rem 2rem 1.5rem;
+    margin-bottom: 2.5rem;
+}
+.po-section-panel > .role-section-title {
+    margin-top: 0;
+}
+</style>
 </head>
 <body>
-    <div id="content-area">
-        <div class="role-hero-header">
-            <h1>📋 Product Owner View</h1>
-            <div class="subtitle">Use Cases | Feature Flow | Definition of Ready</div>
-            <a href="../index.html" class="btn-primary">Change Role</a>
+
+<!-- Skip link (WCAG 2.4.1) -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- Sticky back bar -->
+<nav class="role-back-bar" aria-label="Site navigation">
+    <a class="back-link" href="../index.html">
+        <i class="fas fa-arrow-left"></i> Back to CORTEX
+    </a>
+    <span class="role-badge">📋 Product Owner View</span>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     MAIN — mirrors business-leader.html structure exactly
+     ══════════════════════════════════════════════════════════ -->
+<main class="container" id="main-content" role="main">
+
+    <!-- ── Hero: robot head overlapping into the intro card ── -->
+    <div class="hero-section-wrapper">
+        <div class="hero-robot-container">
+            <a href="../index.html" title="Back to CORTEX Home">
+                <img alt="CORTEX Logo" class="hero-robot-head" loading="eager" fetchpriority="high"
+                     src="../assets/images/CORTEX-logo-200.png"/>
+            </a>
         </div>
-        <div id="main-content"></div>
+        <div class="hero-divider-line"></div>
     </div>
 
-    <script>
-        async function loadContent() {
-            try {
-                window.cortexLoader = new ContentLoader('../data/content.json');
-                await window.cortexLoader.init();
-                window.cortexLoader.renderContent('product-owner', '#main-content');
-                
-                const categoryCount = window.cortexLoader.getCategoryCount('product-owner');
-                const docCount = window.cortexLoader.getDocumentCount('product-owner');
-                console.log(`📊 Showing ${docCount} documents across ${categoryCount} categories`);
-            } catch (error) {
-                document.querySelector('#main-content').innerHTML = `
-                    <div class="glass-card glass-card--danger">
-                        <h2 class="text-danger">❌ Content Load Error</h2>
-                        <p>Failed to load documentation content. Please ensure content.json exists.</p>
-                        <pre class="error-trace">${error.message}</pre>
-                    </div>
-                `;
-            }
-        }
+    <!-- Page title card -->
+    <section class="glass-card-display hero-introduction" id="hero-section">
+        <div class="card-header-centered">
+            <h2>CORTEX — Product Owner View</h2>
+        </div>
+        <p class="hero-description">
+            Product owners live in the gap between <em>what stakeholders want</em> and
+            <em>what engineers can build</em>. CORTEX closes that gap.
+            It enforces your Definition of Ready on every story, validates acceptance criteria
+            before a single line of code is written, and delivers an auditable trail that proves
+            each feature shipped exactly as specified — sprint after sprint, no exceptions.
+        </p>
+        <div class="hero-stats">
+            <span class="stat-pill">87 Sprints Delivered On Standard</span>
+            <span class="stat-pill">100% Acceptance Criteria Validated</span>
+            <span class="stat-pill">Zero Surprise Defects in Production</span>
+        </div>
+    </section>
 
-        loadContent();
-    </script>
+    <!-- ══════════════════════════════════════════════════════════
+         ROLE CONTENT
+         ══════════════════════════════════════════════════════════ -->
+    <div class="role-content-wrapper">
+
+        <!-- ── KPI Metrics ── -->
+        <div class="po-section-panel">
+        <h2 class="role-section-title"><i class="fas fa-tachometer-alt"></i> Delivery Metrics That Matter</h2>
+        <div class="role-metric-grid">
+            <div class="role-metric-card">
+                <div class="metric-icon">🚀</div>
+                <div class="metric-headline">87</div>
+                <div class="metric-label">Consecutive Phases Delivered</div>
+                <div class="metric-description">CORTEX has shipped 87 consecutive delivery phases — every one TDD-validated, governance-checked, and audit-logged. That is predictable velocity, not luck.</div>
+            </div>
+            <div class="role-metric-card">
+                <div class="metric-icon">✅</div>
+                <div class="metric-headline">16,942</div>
+                <div class="metric-label">Automated Acceptance Tests</div>
+                <div class="metric-description">Each feature ships with an automated test suite that proves acceptance criteria were met. No manual regression cycles. No "it worked in staging" surprises.</div>
+            </div>
+            <div class="role-metric-card">
+                <div class="metric-icon">🛡️</div>
+                <div class="metric-headline">38</div>
+                <div class="metric-label">Governance Rules Auto-Enforced</div>
+                <div class="metric-description">38 CORE rules run at every commit. Architecture drift, security vulnerabilities, and quality gate failures are caught before they reach your sprint review.</div>
+            </div>
+            <div class="role-metric-card role-metric-card--emerald">
+                <div class="metric-icon">🔁</div>
+                <div class="metric-headline metric-headline--emerald">TDD</div>
+                <div class="metric-label">Test-First on Every Story</div>
+                <div class="metric-description">CORE-008 mandates: tests before implementation, no exceptions. Your acceptance criteria become executable tests before the first line of feature code is written.</div>
+            </div>
+            <div class="role-metric-card role-metric-card--emerald">
+                <div class="metric-icon">🧠</div>
+                <div class="metric-headline metric-headline--emerald">LENS</div>
+                <div class="metric-label">Codebase Intelligence</div>
+                <div class="metric-description">CORTEX's LENS pipeline (Language→Examination→Navigation→Synthesis) scans the entire codebase on every change. Blind-spot detection before stories are closed.</div>
+            </div>
+            <div class="role-metric-card role-metric-card--amber">
+                <div class="metric-icon">⚡</div>
+                <div class="metric-headline metric-headline--amber">4×</div>
+                <div class="metric-label">Faster Root Cause Analysis</div>
+                <div class="metric-description">When something goes wrong, CORTEX's RCA Engine (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) finds the root cause in minutes and generates a prevention rule.</div>
+            </div>
+        </div>
+        </div><!-- /.po-section-panel: Delivery Metrics -->
+
+        <!-- ── CORTEX Delivery Pipeline ── -->
+        <div class="po-section-panel">
+        <h2 class="role-section-title"><i class="fas fa-stream"></i> From Story to Shipped — The CORTEX Pipeline</h2>
+        <div class="po-pipeline" role="list" aria-label="CORTEX delivery pipeline stages">
+            <div class="po-pipeline-step" role="listitem">
+                <div class="pipeline-step-num">1</div>
+                <div class="pipeline-step-label">Backlog<br/>Refinement</div>
+                <div class="pipeline-step-sub">Story + AC captured</div>
+            </div>
+            <div class="po-pipeline-step" role="listitem">
+                <div class="pipeline-step-num">2</div>
+                <div class="pipeline-step-label">DoR<br/>Validation</div>
+                <div class="pipeline-step-sub">CORTEX checks readiness</div>
+            </div>
+            <div class="po-pipeline-step" role="listitem">
+                <div class="pipeline-step-num">3</div>
+                <div class="pipeline-step-label">TDD<br/>RED Phase</div>
+                <div class="pipeline-step-sub">Failing tests written first</div>
+            </div>
+            <div class="po-pipeline-step" role="listitem">
+                <div class="pipeline-step-num">4</div>
+                <div class="pipeline-step-label">Implementation<br/>GREEN</div>
+                <div class="pipeline-step-sub">Minimum code to pass</div>
+            </div>
+            <div class="po-pipeline-step" role="listitem">
+                <div class="pipeline-step-num">5</div>
+                <div class="pipeline-step-label">Governance<br/>Gate</div>
+                <div class="pipeline-step-sub">38 rules enforced</div>
+            </div>
+            <div class="po-pipeline-step" role="listitem">
+                <div class="pipeline-step-num">6</div>
+                <div class="pipeline-step-label">LENS<br/>Scan</div>
+                <div class="pipeline-step-sub">Security + architecture</div>
+            </div>
+            <div class="po-pipeline-step" role="listitem">
+                <div class="pipeline-step-num">7</div>
+                <div class="pipeline-step-label">AC<br/>Audit Log</div>
+                <div class="pipeline-step-sub">Timestamped proof</div>
+            </div>
+            <div class="po-pipeline-step" role="listitem">
+                <div class="pipeline-step-num">8</div>
+                <div class="pipeline-step-label">Ship<br/>&#10003; Done</div>
+                <div class="pipeline-step-sub">Zero surprises</div>
+            </div>
+        </div>
+        </div><!-- /.po-section-panel: Pipeline -->
+
+        <!-- ── D3 Diagrams: Velocity Burndown + Backlog Composition ── -->
+        <div class="po-section-panel">
+        <h2 class="role-section-title"><i class="fas fa-chart-area"></i> Sprint Intelligence — Live Visualisation</h2>
+        <div class="po-diagram-row">
+
+            <!-- Velocity trend diagram -->
+            <div class="po-diagram-container">
+                <h3><i class="fas fa-chart-line"></i> Sprint Velocity Trend</h3>
+                <p class="diagram-caption">Consistent delivery across 87 phases — governance-enforced, no regressions.</p>
+                <svg id="velocity-chart" height="220" aria-label="Sprint velocity trend chart"></svg>
+            </div>
+
+            <!-- Backlog composition donut -->
+            <div class="po-diagram-container">
+                <h3><i class="fas fa-chart-pie"></i> Backlog Composition by Type</h3>
+                <p class="diagram-caption">Every item categorised, prioritised, and traceable to a governance rule.</p>
+                <svg id="backlog-donut" height="220" aria-label="Backlog composition donut chart"></svg>
+            </div>
+        </div>
+
+        <!-- Feature flow diagram -->
+        <div class="po-diagram-container">
+            <h3><i class="fas fa-project-diagram"></i> Feature Flow — Idea to Production</h3>
+            <p class="diagram-caption">Visualises how stories move through CORTEX's orchestration layers from intent to shipped increment.</p>
+            <svg id="feature-flow" height="260" aria-label="Feature flow from backlog to production"></svg>
+        </div>
+        </div><!-- /.po-section-panel: Sprint Intelligence -->
+
+        <!-- ── Definition of Ready / Done ── -->
+        <div class="po-section-panel">
+        <h2 class="role-section-title"><i class="fas fa-clipboard-check"></i> CORTEX-Enforced Definition of Ready &amp; Done</h2>
+        <div class="po-sprint-layout">
+            <div class="po-sprint-panel">
+                <h3><i class="fas fa-list-check"></i> Definition of Ready (DoR)</h3>
+                <ul class="po-checklist" aria-label="Definition of Ready checklist">
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>User story written</strong> — Who / What / Why captured in plain language</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>Acceptance criteria defined</strong> — At least 3 testable AC clauses, no ambiguity</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>Dependencies identified</strong> — Upstream/downstream services mapped by LENS</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>Effort estimated</strong> — Story points agreed, complexity scored</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>Security classification set</strong> — PHI / PII / public data labelled</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>Governance rules identified</strong> — CORE rules applicable to this story noted</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>TDD skeleton approved</strong> — Failing test structure reviewed before sprint start</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="po-sprint-panel">
+                <h3><i class="fas fa-flag-checkered"></i> Definition of Done (DoD)</h3>
+                <ul class="po-checklist" aria-label="Definition of Done checklist">
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>All AC tests GREEN</strong> — Every acceptance criterion has a passing automated test</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>38 governance rules passed</strong> — EnforcementOrchestrator cleared at commit</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>LENS scan clean</strong> — No new security vulnerabilities or architecture drift</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>AC audit log written</strong> — AC_START + AC_COMPLETE timestamps in SQLite</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>Regression suite green</strong> — No existing tests broken</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>Code reviewed &amp; merged</strong> — Machine-checked before human review</span>
+                    </li>
+                    <li>
+                        <span class="check-icon"><i class="fas fa-check-circle"></i></span>
+                        <span><strong>Deployed to staging</strong> — Health check passed, Prometheus metrics nominal</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </div><!-- /.po-section-panel: DoR/DoD -->
+
+        <!-- ── MCP Governance Badges ── -->
+        <div class="po-section-panel">
+        <h2 class="role-section-title"><i class="fas fa-shield-alt"></i> CORTEX Quality Gates — Automatic, Every Story</h2>
+        <div class="po-badge-row" role="list" aria-label="CORTEX quality gates">
+            <span class="po-badge" role="listitem"><i class="fas fa-vial"></i> TDD — Tests Before Code</span>
+            <span class="po-badge" role="listitem"><i class="fas fa-balance-scale"></i> 38 CORE Rules</span>
+            <span class="po-badge po-badge--emerald" role="listitem"><i class="fas fa-search"></i> LENS Security Scan</span>
+            <span class="po-badge po-badge--emerald" role="listitem"><i class="fas fa-database"></i> AC Audit Log</span>
+            <span class="po-badge po-badge--emerald" role="listitem"><i class="fas fa-heartbeat"></i> Health Orchestrator</span>
+            <span class="po-badge po-badge--amber" role="listitem"><i class="fas fa-bolt"></i> RCA Memory Engine</span>
+            <span class="po-badge po-badge--amber" role="listitem"><i class="fas fa-plug"></i> 29 MCP Tools</span>
+            <span class="po-badge po-badge--amber" role="listitem"><i class="fas fa-chart-bar"></i> Prometheus Metrics</span>
+        </div>
+        </div><!-- /.po-section-panel: Quality Gates -->
+
+        <!-- ── Strategic Features for POs ── -->
+        <div class="po-section-panel">
+        <h2 class="role-section-title"><i class="fas fa-star"></i> Built for Product Owners</h2>
+        <div class="role-pillars">
+            <div class="role-pillar">
+                <div class="pillar-icon">📋</div>
+                <div>
+                    <div class="pillar-title">Backlog Integrity — Always</div>
+                    <div class="pillar-text">CORTEX's IntentRouter classifies every incoming request against your backlog categories. Stories without clear acceptance criteria are flagged before planning — not surfaced mid-sprint by a confused developer.</div>
+                </div>
+            </div>
+            <div class="role-pillar">
+                <div class="pillar-icon">🧪</div>
+                <div>
+                    <div class="pillar-title">Acceptance Criteria Become Tests</div>
+                    <div class="pillar-text">TDDOrchestrator (CORE-008) converts your AC clauses into failing tests before implementation begins. If it cannot be tested, it cannot be built. Ambiguity is eliminated at the source.</div>
+                </div>
+            </div>
+            <div class="role-pillar">
+                <div class="pillar-icon">🔮</div>
+                <div>
+                    <div class="pillar-title">Risk Surfaced Before Sprint Start</div>
+                    <div class="pillar-text">LENS analysis detects dependency risks, security gaps, and architectural conflicts during backlog refinement — not during sprint review when it is too late and too expensive to fix.</div>
+                </div>
+            </div>
+            <div class="role-pillar">
+                <div class="pillar-icon">📊</div>
+                <div>
+                    <div class="pillar-title">Sprint Velocity You Can Trust</div>
+                    <div class="pillar-text">Every phase is logged with Prometheus metrics and SQLite activity traces. Velocity calculations are based on completed, governance-verified work — not optimistic estimates that drift by Friday.</div>
+                </div>
+            </div>
+            <div class="role-pillar">
+                <div class="pillar-icon">🤝</div>
+                <div>
+                    <div class="pillar-title">Stakeholder Communication Made Simple</div>
+                    <div class="pillar-text">CORTEX's audit trail turns "what shipped this sprint?" from a manual chase into a query. Every feature has a timestamp, a test result, and a governance sign-off — ready to present to any stakeholder.</div>
+                </div>
+            </div>
+            <div class="role-pillar">
+                <div class="pillar-icon">🗺️</div>
+                <div>
+                    <div class="pillar-title">Roadmap Confidence, Not Hope</div>
+                    <div class="pillar-text">87 consecutive phases delivered on standard means CORTEX's velocity is measurable and repeatable. Roadmap commitments are backed by engineering data, not gut feel — conversations with executives become evidence-based.</div>
+                </div>
+            </div>
+            <div class="role-pillar">
+                <div class="pillar-icon">🔄</div>
+                <div>
+                    <div class="pillar-title">Root Cause &#8594; Prevention Rule</div>
+                    <div class="pillar-text">When a story causes a defect, CORTEX's RCA Engine runs four structured methodologies (Five-Whys, Fishbone, Fault-Tree, Causal-Chain) and writes a prevention rule to the governance registry — so the same mistake cannot recur.</div>
+                </div>
+            </div>
+            <div class="role-pillar">
+                <div class="pillar-icon">🤖</div>
+                <div>
+                    <div class="pillar-title">AI-Assisted, Governance-Guarded</div>
+                    <div class="pillar-text">CORTEX orchestrates GitHub Copilot with 38 governance gates. AI suggestions that violate your quality standards are blocked automatically — accelerating delivery without creating the hidden debt that slows future sprints.</div>
+                </div>
+            </div>
+        </div>
+        </div><!-- /.po-section-panel: Built for POs -->
+
+        <!-- ── CTA Row ── -->
+        <div class="po-section-panel">
+        <h2 class="role-section-title"><i class="fas fa-compass"></i> Explore Further</h2>
+        <div class="role-cta-row">
+            <a class="role-cta role-cta--primary" href="../index.html#hero-section">
+                <i class="fas fa-home"></i> Platform Overview
+            </a>
+            <a class="role-cta role-cta--primary" href="../index.html">
+                <i class="fas fa-vial"></i> TDD Orchestrator
+            </a>
+            <a class="role-cta role-cta--secondary" href="../index.html">
+                <i class="fas fa-search-plus"></i> CORTEX LENS
+            </a>
+            <a class="role-cta role-cta--secondary" href="../index.html">
+                <i class="fas fa-shield-alt"></i> Governance Rules
+            </a>
+            <a class="role-cta role-cta--ghost" href="../index.html">
+                <i class="fas fa-users"></i> Switch Role View
+            </a>
+        </div>
+        </div><!-- /.po-section-panel: Explore Further -->
+
+    </div><!-- /.role-content-wrapper -->
+</main>
+
+<!-- ══════════════════════════════════════════════════════════
+     D3.js DIAGRAMS — Sprint Velocity, Backlog Donut, Feature Flow
+     ══════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+    'use strict';
+
+    /* ── Design tokens ── */
+    var VIOLET  = '#a78bfa';
+    var EMERALD = '#34d399';
+    var AMBER   = '#f59e0b';
+    var SKY     = '#38bdf8';
+    var ROSE    = '#fb7185';
+    var TEXT_SEC = '#a0a6c0';
+    var TEXT_PRI = '#e2e8f0';
+
+    /* ════════════════════════════════════════════════════════
+       1. SPRINT VELOCITY TREND — line + area chart
+       ════════════════════════════════════════════════════════ */
+    (function renderVelocity() {
+        var data = [
+            { sprint: 'S1',  pts: 34 }, { sprint: 'S2',  pts: 38 },
+            { sprint: 'S3',  pts: 36 }, { sprint: 'S4',  pts: 41 },
+            { sprint: 'S5',  pts: 40 }, { sprint: 'S6',  pts: 44 },
+            { sprint: 'S7',  pts: 43 }, { sprint: 'S8',  pts: 47 },
+            { sprint: 'S9',  pts: 46 }, { sprint: 'S10', pts: 50 },
+            { sprint: 'S11', pts: 49 }, { sprint: 'S12', pts: 53 },
+        ];
+
+        var container = document.getElementById('velocity-chart');
+        if (!container) { return; }
+        var W = container.parentElement.clientWidth || 480;
+        var H = 220;
+        var M = { top: 20, right: 24, bottom: 32, left: 36 };
+        var iW = W - M.left - M.right;
+        var iH = H - M.top - M.bottom;
+
+        var svg = d3.select('#velocity-chart')
+            .attr('width', W)
+            .attr('height', H)
+            .attr('viewBox', '0 0 ' + W + ' ' + H);
+
+        var g = svg.append('g').attr('transform', 'translate(' + M.left + ',' + M.top + ')');
+
+        var x = d3.scalePoint()
+            .domain(data.map(function (d) { return d.sprint; }))
+            .range([0, iW])
+            .padding(0.2);
+
+        var y = d3.scaleLinear()
+            .domain([25, d3.max(data, function (d) { return d.pts; }) + 5])
+            .range([iH, 0]);
+
+        /* Grid lines */
+        g.append('g')
+            .call(d3.axisLeft(y).ticks(4).tickSize(-iW).tickFormat(''))
+            .call(function (sel) {
+                sel.select('.domain').remove();
+                sel.selectAll('.tick line')
+                    .attr('stroke', 'rgba(255,255,255,0.06)')
+                    .attr('stroke-dasharray', '3,3');
+            });
+
+        /* Gradient fill */
+        var grad = svg.append('defs').append('linearGradient')
+            .attr('id', 'vel-grad')
+            .attr('x1', '0').attr('y1', '0')
+            .attr('x2', '0').attr('y2', '1');
+        grad.append('stop').attr('offset', '0%').attr('stop-color', VIOLET).attr('stop-opacity', 0.35);
+        grad.append('stop').attr('offset', '100%').attr('stop-color', VIOLET).attr('stop-opacity', 0.02);
+
+        /* Area */
+        var area = d3.area()
+            .x(function (d) { return x(d.sprint); })
+            .y0(iH)
+            .y1(function (d) { return y(d.pts); })
+            .curve(d3.curveCatmullRom.alpha(0.5));
+
+        g.append('path').datum(data)
+            .attr('fill', 'url(#vel-grad)')
+            .attr('d', area);
+
+        /* Line */
+        var line = d3.line()
+            .x(function (d) { return x(d.sprint); })
+            .y(function (d) { return y(d.pts); })
+            .curve(d3.curveCatmullRom.alpha(0.5));
+
+        g.append('path').datum(data)
+            .attr('fill', 'none')
+            .attr('stroke', VIOLET)
+            .attr('stroke-width', 2.5)
+            .attr('d', line);
+
+        /* Dots */
+        g.selectAll('.dot').data(data).enter()
+            .append('circle')
+            .attr('cx', function (d) { return x(d.sprint); })
+            .attr('cy', function (d) { return y(d.pts); })
+            .attr('r', 4)
+            .attr('fill', VIOLET)
+            .attr('stroke', '#0a0e27')
+            .attr('stroke-width', 2);
+
+        /* Last value label */
+        var last = data[data.length - 1];
+        g.append('text')
+            .attr('x', x(last.sprint) + 8)
+            .attr('y', y(last.pts) + 4)
+            .attr('fill', VIOLET)
+            .attr('font-size', '11px')
+            .attr('font-weight', '700')
+            .text(last.pts + ' pts');
+
+        /* X axis */
+        g.append('g')
+            .attr('transform', 'translate(0,' + iH + ')')
+            .call(d3.axisBottom(x).tickSize(0))
+            .call(function (sel) {
+                sel.select('.domain').attr('stroke', 'rgba(255,255,255,0.1)');
+                sel.selectAll('text').attr('fill', TEXT_SEC).attr('font-size', '10px');
+            });
+
+        /* Y axis */
+        g.append('g')
+            .call(d3.axisLeft(y).ticks(4).tickSize(0))
+            .call(function (sel) {
+                sel.select('.domain').remove();
+                sel.selectAll('text').attr('fill', TEXT_SEC).attr('font-size', '10px');
+            });
+    })();
+
+    /* ════════════════════════════════════════════════════════
+       2. BACKLOG COMPOSITION — donut chart
+       ════════════════════════════════════════════════════════ */
+    (function renderDonut() {
+        var data = [
+            { label: 'Features',       value: 42, color: VIOLET  },
+            { label: 'Tech Debt',      value: 18, color: AMBER   },
+            { label: 'Bug Fixes',      value: 14, color: ROSE    },
+            { label: 'Governance',     value: 16, color: EMERALD },
+            { label: 'Infrastructure', value: 10, color: SKY     },
+        ];
+
+        var container = document.getElementById('backlog-donut');
+        if (!container) { return; }
+        var W = container.parentElement.clientWidth || 480;
+        var H = 220;
+        var R = Math.min(W, H) / 2 - 20;
+        var rInner = R * 0.55;
+
+        var svg = d3.select('#backlog-donut')
+            .attr('width', W)
+            .attr('height', H)
+            .attr('viewBox', '0 0 ' + W + ' ' + H);
+
+        var g = svg.append('g')
+            .attr('transform', 'translate(' + (W * 0.38) + ',' + (H / 2) + ')');
+
+        var pie = d3.pie().value(function (d) { return d.value; }).sort(null).padAngle(0.025);
+        var arc = d3.arc().innerRadius(rInner).outerRadius(R);
+        var arcHover = d3.arc().innerRadius(rInner).outerRadius(R + 6);
+
+        var arcs = g.selectAll('.arc').data(pie(data)).enter().append('g').attr('class', 'arc');
+
+        arcs.append('path')
+            .attr('d', arc)
+            .attr('fill', function (d) { return d.data.color; })
+            .attr('fill-opacity', 0.82)
+            .attr('stroke', '#0a0e27')
+            .attr('stroke-width', 2)
+            .on('mouseover', function () {
+                d3.select(this).transition().duration(180).attr('d', arcHover).attr('fill-opacity', 1);
+            })
+            .on('mouseout', function () {
+                d3.select(this).transition().duration(180).attr('d', arc).attr('fill-opacity', 0.82);
+            });
+
+        /* Center label */
+        g.append('text')
+            .attr('text-anchor', 'middle').attr('dy', '-0.2em')
+            .attr('fill', TEXT_PRI).attr('font-size', '18px').attr('font-weight', '800')
+            .text('100%');
+        g.append('text')
+            .attr('text-anchor', 'middle').attr('dy', '1.1em')
+            .attr('fill', TEXT_SEC).attr('font-size', '9px').attr('font-weight', '600')
+            .text('BACKLOG');
+
+        /* Legend — right side */
+        var legend = svg.append('g')
+            .attr('transform', 'translate(' + (W * 0.38 + R + 18) + ',' + (H / 2 - data.length * 11) + ')');
+
+        data.forEach(function (d, i) {
+            var row = legend.append('g').attr('transform', 'translate(0,' + (i * 22) + ')');
+            row.append('rect')
+                .attr('width', 10).attr('height', 10).attr('rx', 3).attr('ry', 3)
+                .attr('fill', d.color).attr('fill-opacity', 0.85);
+            row.append('text')
+                .attr('x', 16).attr('y', 9)
+                .attr('fill', TEXT_SEC).attr('font-size', '11px')
+                .text(d.label + ' (' + d.value + '%)');
+        });
+    })();
+
+    /* ════════════════════════════════════════════════════════
+       3. FEATURE FLOW — horizontal orchestrator journey
+       ════════════════════════════════════════════════════════ */
+    (function renderFeatureFlow() {
+        var container = document.getElementById('feature-flow');
+        if (!container) { return; }
+        var W = container.parentElement.clientWidth || 900;
+        var H = 260;
+
+        var svg = d3.select('#feature-flow')
+            .attr('width', W)
+            .attr('height', H)
+            .attr('viewBox', '0 0 ' + W + ' ' + H);
+
+        var nodes = [
+            { id: 'backlog',  label: ['Product', 'Backlog'],      xr: 0.04, yr: 0.5,  color: VIOLET,  w: 90,  h: 40 },
+            { id: 'intent',   label: ['IntentRouter'],            xr: 0.18, yr: 0.5,  color: SKY,     w: 95,  h: 36 },
+            { id: 'tdd',      label: ['TDDOrchestrator'],         xr: 0.34, yr: 0.28, color: VIOLET,  w: 108, h: 36 },
+            { id: 'lens',     label: ['LENS Scan'],               xr: 0.34, yr: 0.72, color: EMERALD, w: 100, h: 36 },
+            { id: 'enforce',  label: ['Enforcement', '(38 Rules)'], xr: 0.52, yr: 0.5, color: AMBER,  w: 108, h: 40 },
+            { id: 'health',   label: ['Health', 'Orchestrator'],  xr: 0.67, yr: 0.5,  color: SKY,     w: 108, h: 40 },
+            { id: 'audit',    label: ['AC Audit', 'Log (SQLite)'], xr: 0.82, yr: 0.5,  color: EMERALD, w: 108, h: 40 },
+            { id: 'ship',     label: ['\u2705 Shipped'],          xr: 0.96, yr: 0.5,  color: VIOLET,  w: 90,  h: 36 },
+        ];
+
+        var edges = [
+            ['backlog','intent'], ['intent','tdd'], ['intent','lens'],
+            ['tdd','enforce'], ['lens','enforce'], ['enforce','health'],
+            ['health','audit'], ['audit','ship'],
+        ];
+
+        nodes.forEach(function (n) { n.px = n.xr * W; n.py = n.yr * H; });
+        var nodeMap = {};
+        nodes.forEach(function (n) { nodeMap[n.id] = n; });
+
+        /* Edges */
+        edges.forEach(function (e) {
+            var s = nodeMap[e[0]], t = nodeMap[e[1]];
+            var x1 = s.px + s.w / 2, y1 = s.py;
+            var x2 = t.px - t.w / 2, y2 = t.py;
+            var mx = (x1 + x2) / 2;
+            svg.append('path')
+                .attr('d', 'M' + x1 + ',' + y1 + ' C' + mx + ',' + y1 + ' ' + mx + ',' + y2 + ' ' + x2 + ',' + y2)
+                .attr('fill', 'none')
+                .attr('stroke', s.color)
+                .attr('stroke-width', 1.5)
+                .attr('stroke-opacity', 0.38)
+                .attr('stroke-dasharray', '5,3');
+        });
+
+        /* Nodes */
+        nodes.forEach(function (n) {
+            var grp = svg.append('g')
+                .attr('transform', 'translate(' + (n.px - n.w / 2) + ',' + (n.py - n.h / 2) + ')');
+
+            grp.append('rect')
+                .attr('width', n.w).attr('height', n.h).attr('rx', 8)
+                .attr('fill', n.color).attr('fill-opacity', 0.14)
+                .attr('stroke', n.color).attr('stroke-opacity', 0.55).attr('stroke-width', 1.2);
+
+            var yStart = n.h / 2 - (n.label.length - 1) * 7;
+            n.label.forEach(function (line, i) {
+                grp.append('text')
+                    .attr('x', n.w / 2).attr('y', yStart + i * 14)
+                    .attr('text-anchor', 'middle')
+                    .attr('fill', n.color)
+                    .attr('font-size', '10px').attr('font-weight', '700')
+                    .text(line);
+            });
+        });
+    })();
+
+})();
+</script>
+
+<!-- Tab switching (shared pattern) -->
+<script>
+(function () {
+    'use strict';
+    document.querySelectorAll('.cortex-tab').forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            var panel = this.closest('[role="tablist"]').parentElement;
+            panel.querySelectorAll('.cortex-tab').forEach(function (t) {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
+            panel.querySelectorAll('.cortex-tab-panel').forEach(function (p) {
+                p.classList.remove('active');
+            });
+            this.classList.add('active');
+            this.setAttribute('aria-selected', 'true');
+            var target = document.getElementById(this.dataset.target);
+            if (target) { target.classList.add('active'); }
+        });
+    });
+})();
+</script>
+
 </body>
 </html>

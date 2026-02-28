@@ -1,6 +1,10 @@
 # The Hotel Receptionist
 
-## Wednesday Morning, 3:47 AM
+## Wednesday"You'll be... supervised, CB," Asif said carefully. "Very, very supervised."
+
+## Building the Intent Router: Grep with Delusions of Grandeur
+
+![The LENS Protocol in action — Language, Examination, Navigation, Synthesis](images/ch-02-hotel-receptionist.png)ing, 3:47 AM
 
 The basement was a cathedral of low-level hums, scented with the musk of energized dust and the lingering ghost of yesterday’s super-spicy ramen. Asif Codenstein, his hair possessing a kinetic energy that suggested he was personally grounding the house's electrical supply, stared at his monitors with vibrating intensity. He was having an existential crisis. Not about life—life was binary (coffee/code)—but about the fundamental treachery of human language.
 
@@ -18,7 +22,8 @@ Was it the international currency bug? The double-refund glitch? Or perhaps the 
 
 The Wi-Fi router on the shelf above the mini-fridge blinked red in rhythmic desperation. Even the internet was judging him.
 
-The Receptionist Metaphor
+## The Receptionist Metaphor
+
 Asif grabbed a whiteboard marker—the red one, signifying a Level 5 Architectural Emergency—and attacked the giant whiteboard.
 
 "Think of it like a hotel!" he shouted to nobody (and Miss G, and the robot). "A fancy hotel. When you walk in, you don't just sprint to a room. You talk to the receptionist first."
@@ -45,7 +50,7 @@ Asif spent the next 72 hours in a blur of hyper-focus that defied physics. He fu
 
 The first version was predictably disastrous:
 
-Python
+```python
 def parse_intent(request):
     if "fix" in request.lower():
         return "BUG_FIX"
@@ -53,6 +58,7 @@ def parse_intent(request):
         return "PANIC_MODE"
     else:
         return "WHO_KNOWS"
+```
 "That’s just grep with extra steps," Miss G pointed out, unimpressed. "That's not understanding; that's just reading the index."
 
 She was right. Asif hated that his imaginary construct had better architectural sense than him. When he tested it, "The dashboard is slow" returned "WHO_KNOWS," which was factually correct but unhelpful.
@@ -69,12 +75,14 @@ He spent the next six hours refining the LENS Protocol (Language, Examination, N
 
 Asif enabled the Router company-wide on Monday. A request came in from Jennifer: "Payment thing is broken."
 
+```
 Old System Response: ERROR: REQUEST TOO VAGUE.
 New System (CORTEX) Response: [Clarification Required]: Intent mapped to 'Payment Processing'. Our logs show an error spike with the CC Processor. Are you specifically seeing 'Connection Timeout' errors?
+```
 
 The intended team was notified instantly with full context, and the issue was fixed in 20 minutes instead of the usual 4-hour discovery nightmare.
 
-The Side Effect Nobody Expected
+## The Side Effect Nobody Expected
 Two weeks later, the basement hum was different. More refined. Asif noticed that Copilot Bot’s suggestions were actually… good.
 
 "I suggest we implement error handling here," Copilot Bot said one afternoon, reviewing Asif’s code. Asif checked. He was right.

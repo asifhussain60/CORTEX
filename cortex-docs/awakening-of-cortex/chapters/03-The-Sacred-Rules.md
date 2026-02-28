@@ -1,6 +1,10 @@
 # The Sacred Rules
 
-It started, as most tech catastrophes do, with a senior developer who was absolutely certain his code was "blessed" because it compiled on the first try.
+It started, as most tech catastrophes do, with a "I'm building a Guardian. An intellectually superior, deeply skeptical Building Inspector."
+
+## The First Judgment
+
+![The governance engine delivers its verdict — 47 violations](images/ch-03-sacred-rules.png) developer who was absolutely certain his code was "blessed" because it compiled on the first try.
 
 Kyle was that senior developer. He knew the codebase the way a tourist knows a city—he’d visited the main attractions, taken selfies at the architecture landmarks, but had never once ventured into the back alleys where the real documentation-less monsters lived.
 
@@ -17,7 +21,8 @@ Copilot Bot reviewed the code. "This looks great! Clean! Efficient! The syntax i
 
 "Of course you don't," Miss G added dryly. "You don't even have a concept of error handling. To you, an unhandled exception is just an alternative computational pathway."
 
-The Birth of the Sacraments
+## The Birth of the Sacraments
+
 Asif didn't sleep that night. He didn't sleep because he was in the Hyper-Focus Cathedral, writing Laws. Hard, immutable, machine-enforced Laws.
 
 "You're writing laws," Miss G observed around 2 AM, as Asif filled his fifth whiteboard with increasingly aggressive, jaggy handwriting.
@@ -46,7 +51,8 @@ CORE-011: Type hints on all functions. (Because Asif had spent forty-seven hours
 
 CORE-012: Docstrings on all public APIs. (Because "the code is self-documenting" was the developer equivalent of "the dog ate my homework.")
 
-The Monument to Hubris
+## The Monument to Hubris
+
 By Thursday morning, the rules were written. Now, he needed a Building Inspector.
 
 "I'll build a Governance Engine," Asif explained to the empty basement. "Something that checks every piece of code against every rule, automatically, before it can go anywhere near production. A very judgmental, very thorough Guardian."
@@ -101,7 +107,7 @@ Kyle’s reaction was immediate and voluminous. Asif received a Slack message th
 
 "I’ve been rehearsing it since his last PR."
 
-The Rebellion and the Turning Point
+## The Rebellion and the Turning Point
 The first week of governance was… dramatic. Developers did not enjoy being told their code was insufficient by a machine. It felt deeply insulting. There was a brief rebellion. Complaining to management. Attempts to bypass the system. One developer wrote a 2,000-word essay about how governance was "stifling creativity."
 
 "Creativity," Miss G thought, "is not the same as chaos. You can be creative AND have error handling."
